@@ -13,7 +13,7 @@ updated: 2026-07-05
 
 ## 🎯 FOCO ATIVO (só isso importa pro Hermes)
 
-```
+```text
 🤖 Bot     @srver1bot
 📢 Canal   -1003669176367   Status CentralDark   ← POSTA AQUI
 👥 Grupo   -5365750004      Central Dark - Grupo Da Evoluçao   (espelho automático do canal)
@@ -66,3 +66,12 @@ Ver **AULA-014** (mapa-telegram-refresh). Se aparecer bot/grupo novo NO FOCO ATI
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+
+## 🧠 Conselho das Inteligências
+
+A topologia consolidada do Conselho, Grupo da Evolução, MTProto, Bot API, MCP, Biblioteca, BRAIN e Hermes vive em:
+
+- [[CONSELHO-INTELIGENCIAS-CENTRALDARK]]
+
+Este mapa continua dono das rotas Telegram; o Conselho é capacidade composta e **não substitui** este owner.

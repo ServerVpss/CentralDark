@@ -6,7 +6,6 @@ import { ProtectedRoute } from "@/compartilhado/auth/ProtectedRoute";
 import { AdminRoute } from "@/compartilhado/auth/AdminRoute";
 
 import Portal from "@/paginas/portal-publico/pages/Portal";
-import Status from "@/paginas/portal-publico/pages/Status";
 import Index from "@/funcionalidades/telepainel/pages/Index";
 import Bots from "@/funcionalidades/telepainel/pages/Bots";
 import BotSettingsPage from "@/funcionalidades/telepainel/pages/BotSettings";
@@ -26,11 +25,9 @@ import TesteModulos from "@/funcionalidades/telepainel/pages/TesteModulos";
 import UsuariosPainel from "@/funcionalidades/telepainel/pages/UsuariosPainel";
 import UsuarioPerfil from "@/funcionalidades/telepainel/pages/UsuarioPerfil";
 import PonteMCP from "@/funcionalidades/telepainel/pages/PonteMCP";
-import MegaPainel from "@/funcionalidades/telepainel/pages/MegaPainel";
-import Cofre from "@/funcionalidades/telepainel/pages/Cofre";
 import MapaSite from "@/funcionalidades/telepainel/pages/MapaSite";
 import AiProxyConfig from "@/funcionalidades/telepainel/pages/AiProxyConfig";
-import HermesPanel from "@/funcionalidades/hermes-panel/pages/HermesPanel";
+import HermesPanel from "@/funcionalidades/hermes/pages/HermesPanel";
 
 type RotaTP = { path: string; element: JSX.Element; adminOnly?: boolean };
 
@@ -49,9 +46,6 @@ const rotas: RotaTP[] = [
   { path: "audit", element: <SubscriptionAudit />, adminOnly: true },
   { path: "menu-tips", element: <MenuTips />, adminOnly: true },
   { path: "database", element: <DatabaseInfo />, adminOnly: true },
-  { path: "status", element: <Status />, adminOnly: true },
-  { path: "mega-painel", element: <MegaPainel />, adminOnly: true },
-  { path: "cofre", element: <Cofre />, adminOnly: true },
   { path: "teste-modulos", element: <TesteModulos />, adminOnly: true },
   { path: "usuarios-painel", element: <UsuariosPainel />, adminOnly: true },
   { path: "usuarios-painel/:id", element: <UsuarioPerfil />, adminOnly: true },
@@ -59,6 +53,8 @@ const rotas: RotaTP[] = [
   { path: "mapa", element: <MapaSite />, adminOnly: true },
   { path: "consciencia", element: <ConscienciaViva />, adminOnly: true },
   { path: "hermes", element: <HermesPanel />, adminOnly: true },
+  // Guardião removido do TelePainel por decisão do CHEFE: ele não pertence ao módulo público/Builder Booth.
+  // Próxima integração deve convergir para o painel admin CentralDark/Omni/MCP, sem criar painel paralelo.
   { path: "ai-proxy", element: <AiProxyConfig />, adminOnly: true },
 ];
 

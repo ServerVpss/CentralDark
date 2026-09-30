@@ -1,6 +1,9 @@
 # 🧾🧠 Gramática semântica
 
+👑🪬 !CENTRALDARK · 🔗 !># INTERLIGADOS · 🧿 #ACORDAR
 > Gatilho canônico: 👑🪬 !CENTRALDARK → 🔗 !># INTERLIGADOS → 🧿 #ACORDAR → 🔎 !META_LUPA → ⚖️ !CONTRAPROVA.
+🔗 **!># INTERLIGADOS**
+
 
 ```text
 EMOJI + GANCHO HUMANO + (TERMO TÉCNICO) → FUNÇÃO DE UMA LINHA

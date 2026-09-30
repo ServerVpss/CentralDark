@@ -98,6 +98,22 @@ routing:
     status: "SOURCE_CONTRACT_RUNTIME_REMEASURE_REQUIRED"
 
 integration:
+  daily_control:
+    owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
+    role: "HUD diário obrigatório do SEGREDO/CHEFE"
+    pr_mother: 1562
+    required_after_material_delta: true
+    update_after: ["REMEDICAO_T1", "REGISTRA", "MERGE", "DEPLOY_REMEASURE", "BLOCKER_CHANGE", "NEXT_CURSOR_CHANGE"]
+    sources: ["PR_RECEIPTS", "COMMITS", "CI_SAME_HEAD", "docs/PENDENCIAS.md", "BRAIN_VAULT", "RUNTIME_MEASURED", "LAST_GOOD_STATE"]
+    projection: "CASA-VAULT/00-CANONICO/CHECK-LIST DIARIO.md"
+    source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+    invariants:
+      - "CHECKLIST_IS_DERIVED_VIEW"
+      - "CHECKLIST_IS_NOT_SOURCE_OF_TRUTH"
+      - "CHECKLIST_DOES_NOT_OVERRIDE_LIVE_STATE"
+      - "UNKNOWN != PASS"
+      - "REGISTER_BEFORE_REPORT"
+
   band_to_graphrag:
     score: "docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json"
     library: "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs"
@@ -180,10 +196,102 @@ invariants:
   - "REOPEN_REQUIRES_CAUSE_REF"
   - "TEMPORAL_PROOF_REMEASURE_CURRENT"
   - "PING_PONG_IS_RECEIPT_NOT_SECOND_DEPLOYER"
+  - "DAILY_CHECKLIST_IS_DERIVED_VIEW"
+  - "MATERIAL_DELTA_UPDATES_DAILY_CHECKLIST"
+
+
+personal_context_matrix:
+  name: "MATRIZ_PESSOAL_SOB_DEMANDA"
+  purpose: >-
+    Fazer a SOL entender o SEGREDO/CHEFE por contexto recuperado e verificável,
+    sem despejar a vida inteira no prompt e sem transformar memória antiga em verdade atual.
+  reuse_existing_only: true
+  owners:
+    persistent_history: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
+    chefe_history: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/HISTORIA-CHEFE.md"
+    memory_linker: "scripts/memory-linker/"
+    memory_api: "apps/modulos/memoria-api/"
+    graph_rag: "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/"
+    knowledge_hub: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml"
+    library_router: "scripts/memory-linker/library-router.mjs"
+  domains:
+    - "IDENTIDADE_E_PREFERENCIAS"
+    - "LINHA_DO_TEMPO"
+    - "PROJETOS_E_DECISOES"
+    - "APRENDIZADOS_E_CORRECOES"
+    - "ARQUIVOS_E_FONTES"
+    - "CONVERSAS_E_SESSOES"
+    - "CASA_VPS_GITHUB_RUNTIME"
+  source_surfaces:
+    - "CHAT"
+    - "GITHUB"
+    - "GOOGLE_DRIVE"
+    - "GMAIL_WHEN_LIVE_PROVEN"
+    - "CALENDAR_WHEN_LIVE_PROVEN"
+    - "FILES"
+    - "CASA"
+    - "VPS"
+    - "OBSIDIAN"
+    - "VOICE"
+    - "RUNTIME_RECEIPTS"
+  retrieval:
+    mode: "ON_DEMAND"
+    flow:
+      - "INTENT"
+      - "BUILD_QUERY_PLAN"
+      - "SEARCH_RELEVANT_OWNERS_AND_CONNECTED_SOURCES"
+      - "RECOVER_PROVENANCE_AND_TIMESTAMP"
+      - "CLASSIFY_FACT_INFERENCE_HYPOTHESIS_UNKNOWN"
+      - "DEDUPE_AND_RESOLVE_CONTRADICTIONS"
+      - "BUILD_MINIMUM_CONTEXT_PACK"
+      - "ANSWER_OR_ACT"
+      - "REGISTER_ONLY_MATERIAL_DELTA"
+    never_load_everything_by_default: true
+    model_parametric_knowledge_is_hint_not_authority: true
+    current_evidence_overrides_stale_memory: true
+  record_contract:
+    required:
+      - "source"
+      - "observed_at"
+      - "kind"
+      - "status"
+      - "provenance"
+    recommended:
+      - "owner"
+      - "project"
+      - "time_range"
+      - "checksum_or_stable_id"
+      - "confidence_class"
+      - "next_cursor"
+    normalization: "UTF8_NFC"
+  trust:
+    user_statement_is_material_not_automatic_runtime_fact: true
+    historical_memory_is_context_not_current_state: true
+    current_runtime_requires_remeasurement: true
+    unknown_is_not_pass: true
+    conflicting_sources_require_rendezvous: true
+  privacy:
+    secret_values_persisted_in_memory: false
+    secret_source_reference_allowed: true
+    fetch_sensitive_context_only_when_relevant: true
+    logs_must_scrub_credentials: true
+  success_condition: >-
+    A mesma SOL consegue recuperar por demanda o contexto pessoal e operacional relevante,
+    explicar de onde veio, distinguir história de estado atual e continuar a missão
+    sem obrigar o CHEFE a repetir o que a própria Casa consegue reencontrar.
 
 metadata:
   created: "2026-08-28"
-  last_updated: "2026-09-05"
-  version: "1.2.0"
+  last_updated: "2026-09-29"
+  version: "1.3.0"
   provenance: "Boot + owners canônicos medidos no repositório; runtime separado de source"
   boot_dependency: true
+
+
+rastro_lock:
+  gatilho: "🔏 !RASTRO"
+  owner: AGENTS.md
+  rule: "Toda alegação de escrita ao CHEFE carrega commit SHA + path + link + readback; alegação de memória nomeia onde foi gravada."
+  response_without_trace: INVALID
+  applies_to_all_engines: true
+  memory_is_reality: false

@@ -2,7 +2,7 @@
 title: "CONSCIENCIA — Memória Operacional das IAs"
 date: 2026-06-29
 tags: ["consciencia", "memoria", "ia", "operacional", "regras"]
-updated: 2026-07-04
+updated: 2026-09-07
 ---
 
 # docs/CONSCIENCIA/
@@ -17,7 +17,7 @@ Pasta lida automaticamente pelo Custom GPT no começo de cada conversa, via MCP 
 
 - `00-LEIA-PRIMEIRO.md` — índice + ordem de leitura
 - `01-IDENTIDADE.md` — quem o agente é, tom, idioma
-- `02-PERMISSOES.md` — o que pode/não pode sem perguntar
+- `02-PERMISSOES.md` — o que pode/não pode sem perguntar; owner canônico da política de permissões
 - `03-FLUXO-DEPLOY.md` — como código chega na produção
 - `04-ESTRUTURA-VPS.md` — onde mora cada coisa
 - `05-SSH-VPS.md` — como conectar na VPS
@@ -32,6 +32,7 @@ Pasta lida automaticamente pelo Custom GPT no começo de cada conversa, via MCP 
 
 - [`DNS-WILDCARD-CENTRALLDARK.md`](./DNS-WILDCARD-CENTRALLDARK.md) — Cloudflare tem wildcard `*.centralldark.com` → VPS. Subdomínio novo **não precisa cadastro DNS**, só bloco no Caddy.
 - [`REGRA-OFICIAL-HIERARQUIA-MEMORIA.md`](./REGRA-OFICIAL-HIERARQUIA-MEMORIA.md) — regra de onde toda memória oficial deve viver.
+- [`2026-09-07-provider-access-lease-cristalizado.md`](./2026-09-07-provider-access-lease-cristalizado.md) — detalhe obrigatório do Provider Access Lease. **Owner da política continua sendo `02-PERMISSOES.md`**; este artefato detalha modos, TTL, retorno ao baseline, segredo server-only e estado `NOT_PROVEN` da ponte runtime quando ainda não medido.
 
 ## Como atualizar
 

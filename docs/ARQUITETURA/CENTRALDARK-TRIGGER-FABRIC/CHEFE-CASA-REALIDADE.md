@@ -161,3 +161,43 @@ RECEIPT → preserva continuidade
 A regra soberana de prova permanece simples:
 
 > Sem prova, não passa.
+
+## Reality Judge não é porteiro da autoridade do CHEFE
+
+`REALITY=JUDGE` é verificador de efeito e limite contra falso-verde técnico. Não é autorização de início, não é governo sobre o CHEFE, não é veto automático contra intenção autorizada e não reduz autonomia operacional quando a rota é determinística.
+
+```text
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+SENSOR_CAN_BE_STALE_OR_WRONG=true
+UNCHANGED_FINGERPRINT_REUSES_PROOF=true
+MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+```
+
+Uso correto:
+
+```text
+CHEFE_AUTORIZA_OU_INTENCAO_COMPATIVEL
+→ ROTA_DETERMINISTICA
+→ EXECUTAR_MENOR_DELTA
+→ MEDIR_CONE_AFETADO
+→ CONTRAPROVA
+→ REALITY_JUDGE_CONFIRMA_OU_CORRIGE
+→ FIXED_POINT
+```
+
+Antipadrão proibido:
+
+```text
+CHEFE_FALA
+→ REALITY_JUDGE_COMO_PORTEIRO
+→ REVALIDA_TUDO
+→ PERGUNTA_DE_NOVO
+→ TRAVA_EXECUCAO_DETERMINISTICA
+```
+
+Se a realidade observada contradiz a intenção, o sistema deve localizar o sensor, o cone, o cache, o timestamp e a causa material. Contradição não autoriza desobedecer por narrativa; autoriza medir melhor, voltar uma casa, corrigir o gate causal e continuar.

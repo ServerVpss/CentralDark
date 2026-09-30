@@ -49,13 +49,20 @@ RETOMAR MISSAO
 !MULTIBUSSOLA
 !MULTI-BUSSOLA
 !MULTIBÚSSOLA
+!RASTRO
 ```
 
 `#ACORDAR` significa **recuperar o estado real antes de continuar**. Não significa pedir ao humano para repetir o contexto.
 
 `!CALIBRAR` significa alinhar interpretação, papel, escopo, tools e prova ao estado recuperado.
 
-`!MULTIBUSSOLA` significa aplicar a matriz multidirecional e multirreferencial oficial da Casa, com remedição temporal e revisão revisitada antes do fechamento. O owner canônico do comando é `docs/CONSCIENCIA/MULTIBUSSOLA.md`. O comando reutiliza a Metacognição Operacional e a MetaLupa; não cria novo cérebro, agente ou orquestrador.
+`!MULTIBUSSOLA` significa aplicar a matriz multidirecional e multirreferencial oficial da Casa, com remedição temporal e revisão revisitada antes do fechamento.
+
+`🔏 !RASTRO` significa fechar qualquer alegação material com prova reconstruível: `COMMIT_SHA + PATH + LINK + READBACK`; alegação de memória deve nomear onde foi gravada. Sem isso, a resposta é inválida. O owner canônico do comando é `docs/CONSCIENCIA/MULTIBUSSOLA.md`. O comando reutiliza a Metacognição Operacional e a MetaLupa; não cria novo cérebro, agente ou orquestrador.
+
+`!AURÉOLA CANÔNICA` significa o refinamento adaptativo de !CENTRALDARK. Modo não ritualístico: `RITUAL_MODE=OFF`, `PERTINENCE_FIRST=true`, `MINIMUM_SUFFICIENT_LOOP=true`. Seleciona dinamicamente o menor ciclo suficiente (REACT, FABLE, META_LUPA, MULTIBUSSOLA, RECONCILIAR, CONTRAPROVA, REGISTRA) com base na pertinência do contexto. Pular etapa não pertinente é operação válida. O seletor canônico de BOOT é: AUREOLA_CENTRALDARK_MINIMUM_LOOP → REALIDADE.
+
+`!AURÉOLA CANÔNICA` significa o refinamento adaptativo de !CENTRALDARK. Modo não ritualístico: `RITUAL_MODE=OFF`, `PERTINENCE_FIRST=true`, `MINIMUM_SUFFICIENT_LOOP=true`. Seleciona dinamicamente o menor ciclo suficiente (REACT, FABLE, META_LUPA, MULTIBUSSOLA, RECONCILIAR, CONTRAPROVA, REGISTRA) com base na pertinência do contexto. Pular etapa não pertinente é operação válida. O seletor canônico de BOOT é: AUREOLA_CENTRALDARK_MINIMUM_LOOP → REALIDADE.
 
 ```text
 #ACORDAR + !CALIBRAR + !MULTIBUSSOLA
@@ -82,6 +89,7 @@ Todos os eixos são considerados; somente os eixos materiais são executados. Ei
 6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
 7. Quando outro Writer já estiver ativo ou houver colaboração multiagente, carregar `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
 8. Ler `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`, `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes; o mapa contém o registro de provas reutilizáveis e seus critérios de invalidação.
+   - Memória contextual canônica alcançável: `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/HISTORIA-CHEFE.md` e `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md`; narrativa/XP não substituem prova de runtime.
 9. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
 10. Quando `!MULTIBUSSOLA` for invocado, carregar `docs/CONSCIENCIA/MULTIBUSSOLA.md`.
 11. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
@@ -89,6 +97,44 @@ Todos os eixos são considerados; somente os eixos materiais são executados. Ei
 13. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
 14. Executar a reconciliação antes de propor qualquer solução nova.
 15. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
+
+## Cristalização operacional útil — runtime, GitHub e VPS limpos
+
+Quando uma ação executada no runtime produzir delta útil, seguro e provado, a Casa não deixa a VPS acumular sujeira operacional indefinidamente. O delta deve ser cristalizado no owner existente, commitado e enviado ao GitHub após validação aplicável.
+
+```text
+USEFUL_RUNTIME_DELTA
+→ LOCALIZAR_OWNER_CANONICO
+→ APLICAR_MENOR_DELTA_SEGURO
+→ TESTAR|VALIDAR_CLAIM_APLICAVEL
+→ REMOVER_SECRET_LITERAL_E_LIXO_OPERACIONAL
+→ COMMITAR_DELTA_COESO
+→ PUSHAR_SEM_FORCE
+→ RECONCILIAR_COM_MAIN
+→ VPS_SEM_SUJEIRA_DO_ESCOPO_FECHADO
+```
+
+Regras:
+
+```text
+CRYSTALLIZE_USEFUL_RUNTIME_DELTA=true
+COMMIT_USEFUL_OPERATIONAL_DELTA=true
+PUSH_AFTER_VERIFIED_COMMIT=true
+KEEP_VPS_SYNCED_WITH_GITHUB_MAIN=true
+NO_DIRTY_ACCUMULATION_ON_VPS=true
+FORCE_PUSH=false
+COMMIT_SECRETS=false
+```
+
+Isto não autoriza empacotar alterações aleatórias, outputs de runtime, caches, `.env`, tokens ou sujeira de outro Writer. Se a worktree já estiver suja, o Writer separa o escopo, commita só o delta provado, preserva o restante e registra pendência exata.
+
+```text
+WORKTREE_DIRTY_EXISTING=true
+→ CLASSIFICAR_ESCOPO
+→ STAGE_ONLY_VERIFIED_DELTA
+→ LEAVE_UNRELATED_DIRTY_UNTOUCHED
+→ REPORT_REMAINING_DIRT_BY_SCOPE
+```
 
 ## Reutilização de prova — passagem livre sem falso verde
 
@@ -494,3 +540,20 @@ Entrar no repo = reconstruir contexto, carregar provas ainda válidas e medir so
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral + provas reutilizáveis
 - [[CONSCIENCIA]] — documento mestre
+
+
+## Receita provada no boot
+
+Ao entrar numa missão, antes de reabrir uma investigação, procurar receita/receipt ainda válido no `MAPA-DO-CEREBRO.md`.
+
+```text
+RECIPE_VALID
+→ LOAD
+→ ADAPT_ENV_BINDINGS_ONLY
+→ EXECUTE
+→ REPROVE_EQUIVALENCE
+→ MATCH = CONTINUE_NEXT_CURSOR
+→ DIVERGED = OPEN_ONLY_NEW_DELTA
+```
+
+Não repetir prova já válida; não criar commit artificial quando não existe mudança durável.

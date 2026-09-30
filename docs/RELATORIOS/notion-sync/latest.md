@@ -1,3 +1,6 @@
+# 🧠 Notion Sync — 2026-09-15T02:04:39.491Z
+
+- **Commit fonte:** `5f7b095f186fc33d781936f569e05cfd02a4d480`
 # 🧠 Notion Sync — 2026-09-16T17:43:05.782Z
 
 - **Commit fonte:** `b6d689a75c9f87efe6e0add547e27284dc9529ec`
@@ -6,6 +9,7 @@
 - **Target:** `all`
 - **Bases rodadas:** regras, pendencias, decisoes, aprendizados, estrutura
 - **Bases ignoradas:** —
+- **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 44 erros
 - **Resumo:** ✨ 0 criadas · ♻️ 490 atualizadas · ❌ 38 erros
 
 ## Por base
@@ -15,6 +19,8 @@
 | regras | 4 | 0 | 4 | 0 | 0 |
 | pendencias | 1 | 0 | 1 | 0 | 0 |
 | decisoes | 39 | 0 | 39 | 0 | 0 |
+| aprendizados | 46 | 0 | 34 | 0 | 12 |
+| estrutura | 444 | 0 | 412 | 0 | 32 |
 | aprendizados | 43 | 0 | 34 | 0 | 9 |
 | estrutura | 441 | 0 | 412 | 0 | 29 |
 
@@ -109,6 +115,9 @@
 | aprendizados | erro | #47 — LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge |
 | aprendizados | erro | #48 — COMMIT_LIMPO — Commit não é vassoura de git status |
 | aprendizados | erro | #49 — AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado |
+| aprendizados | erro | #50 — X/Grok no Guardião usa o pool Hermes (igual Codex); CLI de feedback não colide evento |
+| aprendizados | erro | #51 — Guardião: log/reflexo por botão + cadeado no cristalizado |
+| aprendizados | erro | #52 — Usar pode, redesenhar não — melhorar o que já existe |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/00-LEIA-PRIMEIRO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-ENTRADA/ARQUITETURA-CENTRALDARK-2026.md |
 | estrutura | atualizado | docs/CONSCIENCIA/00-LEIA-PRIMEIRO.md |
@@ -390,6 +399,7 @@
 | estrutura | atualizado | docs/CONSCIENCIA/MATRIZ-ORQUESTRACAO-PERFIS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MCP-FLUXO.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MEGA-PAINEL-SUGESTOES-IA.md |
+| estrutura | erro | docs/CONSCIENCIA/MEGAZORD-001-RECEIPT.md |
 | estrutura | atualizado | docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MISSAO-CONVERGENCIA-TRIPLA-FORMULA-20260816.md |
 | estrutura | atualizado | docs/CONSCIENCIA/MODO-SEGREDO.md |
@@ -397,6 +407,8 @@
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/INSTALAR-VPS.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTIFY/README.md |
 | estrutura | atualizado | docs/CONSCIENCIA/NOTION-MAPA.md |
+| estrutura | erro | docs/CONSCIENCIA/OMNI-MEGAZORD-AUTONOMY-V3.md |
+| estrutura | erro | docs/CONSCIENCIA/OMNI-MEGAZORD-LOOP.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-CARD-HERMES.md |
 | estrutura | atualizado | docs/CONSCIENCIA/PADRAO-EMOJIS.md |
 | estrutura | erro | docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md |

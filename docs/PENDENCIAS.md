@@ -508,7 +508,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Problema:** prefixos numéricos duplicados — `00`, `01`, `02`, `11`, `12` (triplicado!), `21` — além de possíveis números fora de ordem / buracos na sequência. Bagunça visual que o Pivete quer eliminar (regra: pastas/arquivos organizados, sem número torto).
 - **Onde:** `docs/CONSCIENCIA/*.md`.
 - **Cuidado (por isso não foi feito de imediato):** é ÁREA PROTEGIDA (CLAUDE.md Seção 9) e renomear arquivo quebra os wikilinks `[[...]]` do Obsidian. Tem que **renumerar E corrigir todos os links** que apontam pra cada arquivo no mesmo passo, senão o grafo do Pivete fica com bolinhas quebradas.
-- **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO PIVETE).
+- **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO SEGREDO).
 
 ### 14. Claude Code via proxy nos 2 modos (terminal + extensão VSCode) — 🟡 ABERTO (30/06/2026)
 - **Objetivo:** quando a conta principal cair, o Pivete continua trabalhando via proxy `claude.ap7.site` — tanto no terminal quanto na extensão do VSCode.
@@ -781,3 +781,135 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
 - **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
 - **Critério pra fechar:** Os 3 canvas vazios removidos do PR #1369 (não pertencem ao escopo), e o commit reescrito ou seguido de commit corretivo cuja mensagem descreva o que realmente contém. Nenhum commit do PR anuncia prova que não esteja no diff.
+
+---
+
+## 🟢 #143 — GPU dedicada na VPS — capacidade futura
+**Status:** pendente futuro / não bloqueia o runtime atual  
+**Data de registro:** 20/09/2026  
+**Fato medido:** a VPS `vmi3256920` não expõe aceleração GPU no estado atual: `nvidia-smi=ABSENT`, `rocminfo=ABSENT`, `/dev/dri=ABSENT`; o adaptador VGA observado é virtual/emulado.  
+**Intenção:** quando a VPS migrar para host/plano com GPU, habilitar capacidade de inferência/render híbrida sem criar segundo router.
+
+**Como fechar:**
+1. Repetir hardware probe no host novo.
+2. Medir GPU, VRAM, driver e backend compatível.
+3. Ligar a capacidade ao `RUNTIME-PLUG-CONTRACT.yml` e ao OmniRouter existente.
+4. Provar `LOCAL_GPU_CASA → VPS_GPU → provider opcional` por benchmark/health.
+5. Atualizar o cockpit com SHA/runtime receipt.
+
+**Hoje:**
+```text
+VPS_GPU=UNAVAILABLE_BY_CURRENT_PROBE
+FUTURE_CAPABILITY=RECORDED
+CURRENT_RUNTIME_BLOCKED_BY_THIS=false
+UNKNOWN != PASS
+```
+
+---
+
+### 🚨🔴🔒 PENDÊNCIA CRÍTICA FUTURA — PASSO 2 · WORKSPACE HERMES EM DISCO DEDICADO
+
+**Status:** 🔴 **FUTURO / BLOQUEADO / NÃO EXECUTAR AGORA**  
+**Data:** 23/09/2026  
+**Ordem explícita do SEGREDO/CHEFE:** este é o **SEGUNDO PASSO**. O passo atual é somente sanear/remover duplicatas comprovadas. **Não mexer no perfil/pasta Pivete nesta etapa.**
+
+```text
+PR_ROLE=FUTURE_CRITICAL_PENDING
+DO_NOT_EXECUTE_NOW=true
+LOCKED=true
+STEP=2
+STEP_1=REMOVE_ONLY_PROVEN_DUPLICATES_AND_LEAVE_CURRENT_CASA_CLEAN
+STEP_1_TOUCH_PIVETE_PROFILE=false
+UNLOCK_CONDITION=STEP_1_FIXED_POINT_AND_EXPLICIT_CHEFE_REOPEN
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+CURRENT > HISTORY
+UNKNOWN != PASS
+REALITY = JUDGE
+```
+
+**Intenção futura preservada, sem implantação:** estudar a promoção de um disco dedicado mais rápido para ser a fronteira integral de trabalho do HERMES — workspace, worktrees, build, temp, cache, logs, artifacts e tools — mantendo os demais discos como capacidades do mesmo sistema (por exemplo, garimpo/entrada bruta/arquivo) e preparando futura contenção Docker sem criar uma segunda CentralDark.
+
+**Evidência de hardware fornecida pelo CHEFE em 23/09/2026:**
+- `C:` = XPG GAMMIX S70 BLADE, NVMe PCIe x4 — fast lane atual; não decidir seu papel futuro neste PR.
+- `D:` = KINGSTON SA400S37480G, SSD 447.1 GB — **candidato forte** a workspace dedicado, ainda não promovido.
+- `E:`, `F:` e `J:` = partições do mesmo Hitachi HDS5C1010CLA382, HDD 5700 RPM — trocar E→F não constitui ganho de disco físico.
+
+**Guardrail:** modelo, letra de unidade ou path candidato **não viram decisão arquitetural sem benchmark/medição CURRENT + consumidores + rollback**. A futura migração deve fazer path virar configuração, não espalhar hardcode novo.
+
+**Não fazer neste PR / agora:**
+- não mover `E:\CentralDark`;
+- não promover `D:` a workspace;
+- não alterar `Pivete`/perfil/pastas por causa desta pendência;
+- não criar Docker/containers;
+- não mudar C:/E:/D: em runtime;
+- não apagar dados;
+- não iniciar garimpo automático.
+
+**Critério para destravar futuramente:**
+1. saneamento de duplicatas do passo 1 chega a FIXED_POINT;
+2. topologia C:/D:/E:/F:/J: é remedida ao vivo;
+3. benchmark compatível com carga Git/Node/build/arquivos pequenos discrimina o disco alvo;
+4. todos os consumidores de paths são inventariados;
+5. rollback e migração reversível são provados;
+6. SEGREDO/CHEFE reabre explicitamente o passo 2.
+
+**NEXT_CURSOR futuro:** `STEP1_DUPLICATE_CLEANUP_FIXED_POINT → REMEASURE_STORAGE → BENCHMARK → PATH_CONSUMERS → MIGRATION_PLAN → DOCKER_BOUNDARY_PLAN`.
+
+
+---
+
+### 🟢 PENDÊNCIA FUTURA — KIT DE INTEGRAÇÃO · AGENTES CLOUD + EVENT BUS + KASTRA EDGE
+
+**Status:** 🟢 **FUTURO / LEMBRANÇA / NÃO EXECUTAR AGORA**  
+**Data:** 30/09/2026
+
+**Intenção do CHEFE:** futuramente trazer para dentro da CentralDark o comportamento observado agora entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos vivos, assinando o mesmo owner, recebendo mudanças em tempo real, herdando o estado compartilhado e continuando a missão sem depender da Casa permanecer ligada.
+
+```text
+DO_NOT_EXECUTE_NOW=true
+FUTURE_EXPLORATION=true
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+CURRENT > HISTORY
+UNKNOWN != PASS
+```
+
+**Kit futuro a explorar/reusar:**
+- **Cloud Agent Runtime:** executor remoto persistente que continua ativo fora da Casa.
+- **GitHub/Event Bus:** PRs/issues/comments/checks como barramento auditável de handoff entre agentes.
+- **Subscriptions/Watch:** agente assina PR/owner e recebe delta material em tempo real.
+- **Shared State/Ledger:** estado e receipts compartilhados; sem "memória mágica" entre modelos.
+- **PR-MÃE #1562:** rendezvous/ledger canônico para convergência dos agentes.
+- **CentralDark API/MCP Admin:** uma porta de controle para providers, runtimes, tools e executores.
+- **Cloud ↔ VPS ↔ Casa:** VPS como runtime always-on; Casa como edge opcional; cloud agents como executores adicionais do mesmo sistema.
+- **Handoff multi-modelo:** ChatGPT/SOL, Claude, Codex, Hermes e futuros agentes continuam o mesmo owner por eventos/estado compartilhado.
+- **Kastra Edge:** candidato futuro para política/auditoria local de ações de agentes no Windows/Casa, com ALLOW/DENY/APPROVAL.
+- **Observabilidade/receipts:** toda continuidade deve deixar rastro verificável de evento → execução → resultado → readback.
+
+**Exemplo de fluxo desejado futuramente:**
+
+```text
+CHEFE
+→ api.centralldark.com / MCP
+→ owner canônico
+→ evento/PR/issue
+→ agentes cloud inscritos
+→ executor adequado
+→ VPS/CENTRALDARK-OS/Casa quando aplicável
+→ prova
+→ contraprova
+→ receipt
+→ estado compartilhado
+→ próximo agente continua sem redescobrir
+```
+
+**Quando reabrir:** medir primeiro quais partes já existem no CentralDark atual (MCP Admin, GitHub, subscriptions, PR-MÃE, Hermes, Cloud executors, provider-control, ledger). Implementar somente o delta faltante; não criar segundo cérebro, segundo orquestrador ou arquitetura V1/V2/V3.
+
+**Critério de exploração futura:** provar pelo menos um handoff completo em que um agente grava delta no owner, outro agente cloud recebe automaticamente, executa a continuação correta e registra receipt do mesmo estado, sem intervenção manual para transportar contexto.
+
+**Kastra Edge especificamente:** medir produto ao vivo, integrações suportadas, política ALLOW/DENY/APPROVAL, auditoria local/offline e encaixe com CentralDark antes de adoção.
+### 57. Vault canônico de segredos CentralDark pós-rebuild — 🟡 ABERTO (30/09/2026, 05:20 BRT)
+- **Sintoma:** Segredos e tokens estão espalhados em arquivos, pastas e ambientes diferentes, dificultando auditoria, rotação, revogação e acesso controlado por agentes.
+- **Onde mexer:** CentralDark/VPS, MCP Admin, API CentralDark, documentação de segurança e rotina de rebuild/formatação.
+- **Critério pra fechar:** Criar um cofre canônico com nomes padronizados por provider/runtime/bot/domínio, registrar dono/finalidade/status/rotação/último teste, remover duplicatas antigas, impedir segredo em desktop/repo/log e fazer agentes acessarem segredos somente pela API/MCP CentralDark com auditoria.

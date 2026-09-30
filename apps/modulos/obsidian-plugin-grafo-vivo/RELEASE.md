@@ -49,4 +49,4 @@ Se precisar republicar sem bumpar versão (ex: recuperar release deletada):
 
 ## Como o auto-updater consome
 
-O plugin no Obsidian consulta a edge function `grafo.centralldark.com/api/live` (que espelha o release mais recente) e baixa os 3 assets diretamente dos releases do GitHub. Zero passo manual pra usuário final.
+O plugin no Obsidian consulta a edge function `api.centralldark.com/api/graph?mode=vivo` (que espelha o release mais recente) e baixa os 3 assets diretamente dos releases do GitHub. Zero passo manual pra usuário final.

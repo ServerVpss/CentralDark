@@ -189,6 +189,193 @@ FORMAT_VERIFIED=SIM|NAO|UNVERIFIABLE
 
 O objetivo é preservar o **mental e a inteligência** contidos nas abas, não preservar bytes temporários do aplicativo.
 
+## Modo GARIMPO_UNIVERSAL — múltiplas canetas, um cristal
+
+`!GARIMPO_UNIVERSAL` é um **modo subordinado deste owner**, não uma skill/engine paralela. Ele existe para permitir que Chat, Voz, Work/Cowork, Code Agents, SOL, Hermes e outros motores autorizados garimpem o mesmo objetivo em paralelo sem fabricar verdades concorrentes.
+
+```text
+MULTI_SURFACE_PARALLEL_CANDIDATES=true
+MULTI_MODEL_PARALLEL_READERS=true
+ONE_CANONICAL_FINALIZER_PER_SCOPE=true
+PARALLEL_CANDIDATE_IS_NOT_CANONICAL_WRITE=true
+MULTIPLE_SURFACES_ARE_NOT_MULTIPLE_BRAINS=true
+MODEL_IS_REPLACEABLE=true
+REALITY_IS_JUDGE=true
+```
+
+Cada caneta entrega **candidato + proveniência**, nunca autoridade automática:
+
+```text
+ENGINE_ID
+SURFACE_ID
+SESSION_ID
+INTENT_ID
+OWNER
+CAPABILITY
+SCOPE
+FINDING
+EVIDENCE_REF
+COUNTERPROOF_REF
+STATUS
+```
+
+Identidade semântica para dedupe:
+
+```text
+SEMANTIC_IDENTITY = OWNER + CAPABILITY + SCOPE
+
+SAME_FINDING_WITHOUT_NEW_EVIDENCE=DROP_DUPLICATE
+ALREADY_PROVEN_AND_ABSORBED=NO_CHANGE
+HISTORICAL_ONLY=DO_NOT_PROMOTE
+UNKNOWN=DO_NOT_PROMOTE
+USEFUL_DELTA=ROUTE_TO_EXISTING_OWNER
+```
+
+Fluxo canônico:
+
+```text
+CHAT|VOICE|WORK|COWORK|CODE_AGENT|HERMES|SOL
+→ SESSION-INTELLIGENCE-HARVESTER
+→ CLASSIFY + DEDUPE
+→ REUSE_BEFORE_CREATE
+→ EXISTING_OWNER
+→ MINIMAL_DELTA
+→ PROOF
+→ INDEPENDENT_COUNTERPROOF
+→ CANONICAL_FINALIZER
+→ RECEIPT
+→ NEXT_CURSOR
+```
+
+“Várias canetas” significa liberdade de leitura, análise, teste e produção de candidatos. **Não** significa várias mutações canônicas concorrentes no mesmo escopo. O finalizador mede a ponta viva antes de promover, absorve apenas o delta sobrevivente e descarta rascunho obsoleto.
+
+Continuidade determinística:
+
+```text
+LAST_GOOD_STATE
+→ INPUT_DIFF
+→ REUSE_PROOF
+  OU
+→ TARGETED_REVALIDATION
+
+PROVEN_PATH
+→ REPLAY_RECIPE
+→ ADAPT_ONLY_ENVIRONMENT_BINDINGS
+→ SAME_PROOF_LOGIC
+→ COMPARE_EFFECT
+→ DIVERGED ? NEW_DELTA : REUSE_CRYSTAL
+```
+
+Atalho operacional:
+
+```text
+!CENTRALDARK !GARIMPO_UNIVERSAL
+```
+
+Esse atalho entra no Trigger Fabric, preserva a intenção do CHEFE/SEGREDO e escolhe somente as fontes materialmente pertinentes. Ele não obriga varredura total quando o pedido é estreito.
+
+### Resgate de sessão perdida (CHEFE, 2026-09-27)
+
+Mesmo comando em qualquer sessão antiga, de qualquer motor. A sessão vira **sensor**, não arquiteta: todas as sessões entram no moinho, só vira commit o que sobrevive ao cruzamento com o que já existe.
+
+```text
+ALL_SESSIONS_ENTER_THE_MILL=true
+ALL_SESSIONS_BECOME_COMMIT=false
+SESSION_ENDS_IN=NO_CHANGE|DELTA_UTIL_PROMOVIDO|BLOCKED_EXACT
+SESSION_ENDS_IN_SIMILAR_NEW_THING=FAIL_DUPLICATE_ARCHITECTURE
+NEW_PATH_ONLY_IF=EXISTING_OWNER_IMPOSSIBLE_PROVEN
+FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true
+```
+
+Cristalizado só com a cadeia inteira — arquivo sozinho não é cristal:
+
+```text
+FILE → LOADER → CONSUMER → TRIGGER → REAL_EXECUTION → EVIDENCE → COUNTERPROOF
+FILE_EXISTS_IS_NOT_LOADED=true
+SKILL_EXISTS_IS_NOT_USED=true
+RULE_EXISTS_IS_NOT_ENFORCED=true
+COMMIT_EXISTS_IS_NOT_MAIN_CURRENT=true
+MAIN_CURRENT_IS_NOT_RUNTIME=true
+```
+
+Promoção: delta útil vai pelo PR filho compatível do #1562 ou, quando a regra vigente autoriza, direto na main **só depois** do portão verde na ponta rebaseada (receita `MULTI_PEN_MAIN_GATE_PATH`); recibo no #1562 no mesmo ciclo.
+
+Registro obrigatório de cada sessão garimpada:
+
+```text
+SESSION_SOURCE= · SESSION_FINGERPRINT= · MAIN_HEAD_BEFORE= · MAIN_HEAD_AFTER=
+REUSED_CRYSTALS= · USEFUL_DELTAS= · DUPLICATES_DROPPED= · CONTRADICTIONS=
+OWNERS= · CHILD_PR= · PR_MOTHER=#1562 · COMMITS= · SAME_HEAD= · MERGE=
+DEPLOY= · RUNTIME= · RECEIPTS= · NEXT_CURSOR= · FIXED_POINT=
+```
+
+Ponto fixo do resgate:
+
+```text
+SESSION_MATERIAL_CLASSIFIED=100%
+USEFUL_DELTA_ROUTED=100%
+DUPLICATE_ARCHITECTURE=0
+UNBOUND_CRYSTAL=0
+OWNER_UNKNOWN=0 · CONSUMER_UNKNOWN=0
+MAIN_CURRENT_PROVEN=true
+SOUL_SYNC_CURRENT=true
+```
+
+
+### Compressão canônica — pedreira → diamante (CHEFE, 2026-09-27)
+
+Compressão canônica não é resumir a conversa nem apagar a trajetória. A pedreira inteira continua como proveniência; o que atravessa para o próximo executor é o menor estado suficiente para **replay determinístico da capacidade provada**.
+
+```text
+CANONICAL_COMPRESSION_IS_NOT_SUMMARY=true
+FULL_TRAJECTORY_IS_INPUT_NOT_RUNTIME_PAYLOAD=true
+UNKNOWN_MATERIAL_MUST_STAY_UNKNOWN=true
+NEXT_EXECUTOR_MUST_NOT_REDISCOVER_PROVEN_PATH=true
+
+CRYSTAL =
+  PROVEN_STATE
+  + OWNER
+  + FINGERPRINT
+  + REPLAY_RECIPE
+  + PROOF
+  + COUNTERPROOF
+  + EXPECTED_EFFECT
+  + RECEIPT
+  + NEXT_CURSOR
+```
+
+Fluxo:
+
+```text
+PEDREIRA
+(chat|voice|work|code|branch|log|erro|historia)
+→ GARIMPO
+→ CURRENT + DEDUPE
+→ DELTA_UTIL
+→ OWNER_EXISTENTE
+→ PROOF ↔ COUNTERPROOF
+→ CRYSTAL
+→ PROXIMO_EXECUTOR
+```
+
+Regra de replay:
+
+```text
+SAME_FINGERPRINT
+→ REUSE_CRYSTAL
+→ MESMA_RECEITA
+→ ADAPT_ONLY_BINDINGS
+→ MESMA_LOGICA_DE_PROVA
+
+CHANGED_FINGERPRINT
+→ REVALIDATE_AFFECTED_CONE_ONLY
+
+DIVERGED_EFFECT
+→ NEW_DELTA
+```
+
+A compressão é válida somente se preservar o que permite ao próximo executor reproduzir e comparar o efeito. `RECEIPT != PROOF`, `FINGERPRINT_MATCH != RUNTIME_PASS` e `UNKNOWN != PASS` continuam valendo. A história pode ser longa; o cristal operacional deve ser pequeno, verificável e reutilizável.
+
 ## Output Format
 
 Não inventar probabilidade/confiança numérica. Use classe epistemológica + evidência observável.

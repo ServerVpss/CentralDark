@@ -1,6 +1,6 @@
 # 🕸️ CentralDark Grafo Vivo — Plugin Obsidian
 
-Plugin custom pra ver o ecossistema **CentralDark** se movimentando em tempo real dentro do seu Obsidian. Consome o mesmo `/api/graph` que roda em `grafo.centralldark.com`, mas renderiza numa view lateral do vault.
+Plugin custom pra ver o ecossistema **CentralDark** se movimentando em tempo real dentro do seu Obsidian. Consome o mesmo `/api/graph` que roda em `api.centralldark.com`, mas renderiza numa view lateral do vault.
 
 Nada de mexer no Juggl ou no Graph nativo — esse aqui é **nosso**, sobrevive a update do Obsidian.
 
@@ -52,13 +52,80 @@ Vai em **Configurações → CentralDark Grafo Vivo**:
 
 | Opção | Padrão |
 |-------|--------|
-| URL do grafo | `https://status.centralldark.com/graph-data.json` |
-| Intervalo de atualização | 30 segundos |
+| URL do grafo | `https://grafo.centralldark.com/api/graph?mode=vivo` |
+| Intervalo de atualização | 15 segundos |
 | Abrir nota ao clicar | ✅ ativado |
+| Enviar notas ao Hub | ✅ ativado |
+| Auto-sync de notas | ✅ ativado |
+| URL de ingestão do Hub | `https://api.centralldark.com/memoria/ingest` |
+| Manifesto BRAIN vivo | `https://api.centralldark.com/memoria/manifest?scope=brain&mode=vivo` |
+| Auto-update do plugin | ✅ ativado |
+
+O token do Hub fica **somente local** nas configurações do Obsidian. Não versionar, não colar em chat, não commitar.
 
 ---
 
-## 📐 Formato esperado do JSON
+## 🧠 Rota BRAIN + Hub + Obsidian
+
+```text
+Obsidian note/create/modify
+→ CentralDark Grafo Vivo autosync
+→ POST /memoria/ingest
+→ CANDIDATE event
+→ BRAIN ledger/manifest
+→ CI/CD valida contrato
+→ receipt
+→ grafo/manifest atualiza
+→ plugin reabre por obsidian_path
+```
+
+Regras:
+
+```text
+NOTE_SYNC != TRUTH_PROMOTION
+DOCUMENTED != EXECUTED
+ARQUIVO_GUARDADO != ARQUIVO_SEGURO
+CI_PENDING_IS_NOT_PASS
+MERGE_IS_NOT_DEPLOY
+REALIDADE_IS_JUDGE
+```
+
+---
+
+## 🧩 Obsidian Local REST API + MCP
+
+O plugin pode coexistir com o plugin comunitário **Local REST API** do Obsidian. Essa ponte é útil para Kanban, automações locais e agentes MCP acessarem o vault pelo canal local autenticado.
+
+Rota conceitual:
+
+```text
+Telegram/Bot/API/HERMES
+→ VPS Hub /memoria/ingest
+→ CI/CD/receipt
+→ BRAIN manifest
+→ Obsidian plugin lê manifest
+→ Local REST API/MCP pode abrir, buscar ou patchar nota localmente
+→ mudança local volta pelo autosync
+→ novo CANDIDATE no Hub
+```
+
+Cadeados obrigatórios:
+
+```text
+LOCAL_REST_API_IS_LOCAL_BRIDGE=true
+LOCAL_REST_API_TOKEN_LOCAL_ONLY=true
+NO_TOKEN_IN_REPO=true
+NO_PUBLIC_EXPOSED_OBSIDIAN_API=true
+PATCH_NOTE != PROMOTE_TRUTH
+KANBAN_MOVE != DEPLOY
+KANBAN_CARD != CI_GREEN
+```
+
+Para Kanban: a movimentação de card pode virar evento candidato, mas promoção de estado continua passando por CI/CD + receipt. O Kanban organiza fluxo; ele não substitui Greg, Dex nem Realidade.
+
+---
+
+## 📐 Formato esperado do JSON do grafo
 
 ```json
 {
@@ -89,6 +156,7 @@ Campos:
 - **v0.3** 🔄 Sincronizar nós como notas vazias em `docs/CONSCIENCIA/00-MAPA/nodes/` pra aparecer no Graph nativo também.
 - **v0.4** ✅ Modo 3D real com `3d-force-graph` bundleado, controles, setores, glow/pulso, labels de agente.
 - **v0.5** 🔄 Ícones custom por categoria (SVG inline).
+- **v0.6** 🔄 Kanban/Local REST API/MCP como ponte local autenticada, sem expor token e sem promover estado sem CI/CD.
 
 ---
 

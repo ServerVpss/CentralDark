@@ -10,17 +10,25 @@ autoridade ou permissao de mutacao. O feedback material e roteado para o
 Persistent Gap Sweep do MEGAZORD; sinal repetido sem ganho de informacao
 reutiliza prova/cristal em vez de recomeçar raciocinio.
 
-Nao executa mutacao de negocio, merge, deploy ou runtime. Ele resolve o fluxo,
-protege claims e devolve JSON para o consumidor real do motor.
+O boot normal nao executa mutacao de negocio, merge, deploy ou runtime. O
+subcomando replay-run pode executar somente receita SEALED_PROVEN marcada
+como executavel, com fingerprint compativel e bindings declarados. Receita
+mutante exige autorizacao mecanica explicita (--allow-mutation).
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import os
 import re
+import shutil
+import subprocess
+import tempfile
 import unicodedata
 from pathlib import Path
+
+from centraldark_master_cycle import resolve as resolve_master_cycle
 
 FABRIC = Path("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC")
 TRIGGERS = FABRIC / "TRIGGERS.yml"
@@ -28,13 +36,39 @@ MASTER = FABRIC / "MASTER-CYCLE.yml"
 ENGINE = FABRIC / "ENGINE_BINDING.yml"
 MEGAZORD = FABRIC / "MEGAZORD-CENTRALDARK.yml"
 LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"
+RUNTIME_PREFLIGHT_LINT = FABRIC / "RUNTIME-PREFLIGHT-LINT.yml"
+BOOT = Path("CENTRALDARK_AI_BOOT.yaml")
+CANONICAL_CONSUMPTION_GATE = Path("scripts/centraldark/canonical-consumption-gate.mjs")
+CANONICAL_LEARNINGS = Path("docs/CONSCIENCIA/APRENDIZADOS.md")
+COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
+METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
+PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO = True
 
 CANONICAL_CHAIN = [
     "DESTINATION_LOCK", "ACORDAR", "CALIBRAR", "MULTIBUSSOLA", "META_LUPA",
     "RECONCILIAR", "DELTA_UTIL", "CONTRAPROVA", "REMEDICAO",
-    "SEMANTIC_GREEN", "FIXED_POINT", "POST_GREEN_LOCK", "REGISTRA", "BOOT",
+    "SEMANTIC_GREEN", "FIXED_POINT", "POST_GREEN_LOCK", "REGISTRA", "RASTRO", "BOOT",
 ]
+
+RUNTIME_PREFLIGHT_REQUIRED_RECEIPT_FIELDS = (
+    "observed_at",
+    "surface",
+    "command_class",
+    "wrapper_lint_result",
+    "target_runtime_result",
+    "invalidated_probe_if_any",
+    "unknowns_remaining",
+    "next_cursor",
+)
+
+BRIDGE_OWNERSHIP_REQUIRED_FIELDS = (
+    "pid_parent_tree",
+    "package_version",
+    "profile_or_session",
+    "socket_state",
+    "handoff_or_canary_before_kill",
+)
 
 
 def strip_accents(value: str) -> str:
@@ -45,23 +79,19 @@ def normalize_command(value: str) -> str:
     value = strip_accents(value.strip()).upper()
     value = re.sub(r"^[!#]+", "", value)
     value = re.sub(r"[\s_-]+", "", value)
-    return value
+    return value.rstrip(",.;:!?")
 
 
 def explicit_command_context(value: str) -> bool:
-    """Evita ativar gatilho por simples mencao no meio de prosa."""
-    s = value.lstrip()
-    if not s:
+    """Leitor único: a decisão de gatilho é do ciclo mestre (texto).
+
+    CHEFE 2026-09-27: marcador simples resolve — no texto, "#ACORDAR"/"!ACORDAR"
+    disparam; a palavra solta "acordar" em prosa não. Sem lista própria aqui.
+    """
+    if not value.strip():
         return False
-    first = s.splitlines()[0].strip()
-    first_token = first.split()[0] if first.split() else ""
-    normalized = normalize_command(first_token)
-    known = {
-        "CENTRALDARK", "CDARK", "ACORDAR", "ACORDA", "CALIBRAR", "MULTIBUSSOLA",
-        "METALUPA", "RECONCILIAR", "DELTAUTIL", "DELTAUTILS", "CONTRAPROVA",
-        "REMEDICAO", "FIXEDPOINT", "REGISTRA", "BOOT",
-    }
-    return normalized in known
+    receipt = resolve_master_cycle(value, chefe_source=True, input_mode="text")
+    return bool(receipt.get("master_cycle_active"))
 
 
 def classify_realtime_feedback(value: str) -> dict:
@@ -83,15 +113,235 @@ def classify_realtime_feedback(value: str) -> dict:
     }
 
 
+def runtime_preflight_contract_state(repo: Path) -> dict:
+    path = repo / RUNTIME_PREFLIGHT_LINT
+    if not path.is_file():
+        return {
+            "status": "INVALID",
+            "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+            "checks": {"file_present": False},
+        }
+    text = path.read_text(encoding="utf-8")
+    required_tokens = (
+        "schema: centraldark.runtime-preflight-lint.v1",
+        "executable_consumer_required: true",
+        "wrapper_parse_fail_is_not_target_fail: true",
+        "invalid_probe_must_not_become_fact: true",
+        "cron_path_drift:",
+        "bridge_ownership:",
+    )
+    checks = {"file_present": True}
+    for token in required_tokens:
+        checks[token] = token in text
+    checks["required_receipt_fields_complete"] = all(
+        f"  - {field}" in text for field in RUNTIME_PREFLIGHT_REQUIRED_RECEIPT_FIELDS
+    )
+    checks["bridge_ownership_fields_complete"] = all(
+        f"      - {field}" in text for field in BRIDGE_OWNERSHIP_REQUIRED_FIELDS
+    )
+    return {
+        "status": "BOUND" if all(checks.values()) else "INVALID",
+        "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+        "checks": checks,
+    }
+
+
+def _present_evidence(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return False
+    if isinstance(value, (list, tuple, dict, set)):
+        return bool(value)
+    return bool(str(value).strip())
+
+
+def lint_runtime_command(
+    repo: Path,
+    command: str,
+    shell: str,
+    host_mode: str,
+    required_paths: list[str] | None = None,
+    *,
+    surface: str = "runtime_probe",
+    command_class: str = "runtime_probe",
+    bridge_evidence: dict | None = None,
+    observed_at: str = "UNKNOWN",
+) -> dict:
+    contract = runtime_preflight_contract_state(repo)
+    reasons: list[str] = []
+    shell_norm = shell.strip().lower()
+    host_norm = host_mode.strip().lower()
+    surface_norm = surface.strip() or "runtime_probe"
+    command_class_norm = command_class.strip() or "runtime_probe"
+
+    if contract["status"] != "BOUND":
+        reasons.append("PREFLIGHT_CONTRACT_INVALID")
+
+    if host_norm in {"js_template", "javascript_template", "ts_template", "typescript_template"}:
+        if re.search(r"(?<!\\)\$\{[^}\n]+\}", command):
+            reasons.append("HOST_TEMPLATE_INTERPOLATION_RISK")
+
+    if shell_norm in {"powershell", "powershell.exe", "pwsh", "pwsh.exe"}:
+        pid_collision = re.search(
+            r"(?im)(^\s*\$pid\s*=|foreach\s*\(\s*\$pid\b|for\s*\([^)]*\$pid\s*=)",
+            command,
+        )
+        if pid_collision:
+            reasons.append("POWERSHELL_PID_AUTOMATIC_VARIABLE_COLLISION")
+
+    missing_paths: list[str] = []
+    for raw in required_paths or []:
+        raw = raw.strip()
+        if not raw:
+            continue
+        path = Path(raw)
+        if not path.is_absolute():
+            path = repo / path
+        if not path.exists():
+            missing_paths.append(raw)
+    if missing_paths:
+        reasons.append("MISSING_REQUIRED_PATH")
+
+    bridge_claim = (
+        surface_norm == "desktop_bridge_ownership_claim"
+        or command_class_norm == "desktop_bridge_ownership_claim"
+    )
+    missing_bridge_evidence: list[str] = []
+    if bridge_claim:
+        evidence = bridge_evidence or {}
+        for field in BRIDGE_OWNERSHIP_REQUIRED_FIELDS:
+            if not _present_evidence(evidence.get(field)):
+                missing_bridge_evidence.append(field)
+        if missing_bridge_evidence:
+            reasons.append("BRIDGE_OWNERSHIP_EVIDENCE_INCOMPLETE")
+
+    wrapper_result = "PASS" if not reasons else "FAIL_CLOSED"
+    target_result = "UNKNOWN_UNTIL_TARGET_PROBE" if not reasons else "NOT_EXECUTED_INVALID_WRAPPER"
+    invalidated = [] if not reasons else list(reasons)
+    unknowns = ["TARGET_RUNTIME_RESULT"] if not reasons else []
+    next_cursor = "EXECUTE_TARGET_PROBE" if not reasons else "FIX_PREFLIGHT_AND_RETRY"
+
+    return {
+        "status": "PASS" if not reasons else "FAIL_CLOSED",
+        "owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+        "observed_at": observed_at,
+        "surface": surface_norm,
+        "command_class": command_class_norm,
+        "shell": shell_norm,
+        "host_mode": host_norm,
+        "wrapper_lint_result": wrapper_result,
+        "target_runtime_result": target_result,
+        "invalidated_probe_if_any": invalidated,
+        "unknowns_remaining": unknowns,
+        "next_cursor": next_cursor,
+        "reasons": reasons,
+        "missing_paths": missing_paths,
+        "missing_bridge_evidence": missing_bridge_evidence,
+        "wrapper_parse_fail_is_not_target_fail": True,
+        "invalid_probe_must_not_become_fact": True,
+    }
+
+
 def require_files(repo: Path) -> dict[str, str]:
     result = {}
-    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT):
+    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, RUNTIME_PREFLIGHT_LINT, BOOT, CANONICAL_CONSUMPTION_GATE, CANONICAL_LEARNINGS, COGNITIVE_CAPABILITIES, METACOGNITION):
         p = repo / rel
         if not p.exists():
             raise SystemExit(f"MISSING_CANONICAL_OWNER={rel.as_posix()}")
         result[rel.as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
     return result
 
+
+def cognitive_bios_state(repo: Path) -> dict:
+    boot_text = (repo / BOOT).read_text(encoding="utf-8")
+    capabilities_text = (repo / COGNITIVE_CAPABILITIES).read_text(encoding="utf-8")
+    metacognition_text = (repo / METACOGNITION).read_text(encoding="utf-8")
+
+    checks = {
+        "boot_block": "cognitive_bios:" in boot_text,
+        "adaptive_policy_role": 'role: "ADAPTIVE_BOOT_POLICY_LAYER"' in boot_text,
+        "firmware_mutation_forbidden": "firmware_mutation: false" in boot_text,
+        "native_os_kernel_mutation_forbidden": "native_os_kernel_mutation: false" in boot_text,
+        "hud_required": "COGNITIVE_BIOS_STATUS" in boot_text and "FIXED_POINT_STATE" in boot_text,
+        "operational_reflex_bound": "INSTINTO_SUPERIOR=OPERATIONAL_REFLEX" in capabilities_text,
+        "metacognition_bound": "META_METACOGNICAO_OPERACIONAL" in metacognition_text,
+        "zero_silent_learning_bound": "ZERO_SILENT_LEARNING=true" in metacognition_text,
+    }
+    loaded = all(checks.values())
+    return {
+        "status": "LOADED" if loaded else "INVALID",
+        "role": "ADAPTIVE_BOOT_POLICY_LAYER",
+        "checks": checks,
+        "hud": {
+            "COGNITIVE_BIOS_STATUS": "LOADED" if loaded else "INVALID",
+            "COGNITIVE_MODE": "ADAPTIVE",
+            "ACTIVE_FRONTS": "UNKNOWN_UNTIL_RUNTIME_CONTEXT",
+            "REFLEX_STATE": "READY_IF_EQUIVALENT_CONTEXT_ELSE_STOP_REFLEX",
+            "CURRENT_OWNER": "UNKNOWN_UNTIL_RECONCILIATION",
+            "WRITER": "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED",
+            "EVIDENCE_STATE": "CONTRACT_LOADED_NOT_RUNTIME_PROOF",
+            "COGNITIVE_DEBT": "UNKNOWN",
+            "RUNTIME_TARGET": "UNKNOWN_UNTIL_RUNTIME_CONTEXT",
+            "NEXT_CURSOR": "REMEASURE_CURRENT_REALITY",
+            "FIXED_POINT_STATE": "NOT_PROVEN",
+        },
+        "law": "ADAPT_INTENSITY_AND_ROUTE; NEVER_AUTHORITY_OR_HUMAN_GOAL",
+    }
+
+
+
+def canonical_consumption_gate_state(repo: Path) -> dict:
+    """Fail-closed: todos os aprendizados numerados precisam ser consumidos direto do canônico."""
+    gate = repo / CANONICAL_CONSUMPTION_GATE
+    commands = {
+        "all_numbered_learnings": ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "ALL"],
+    }
+    receipts = {}
+    for name, command in commands.items():
+        try:
+            proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, timeout=15, check=False)
+        except FileNotFoundError:
+            return {"status": "INVALID", "reason": "NODE_RUNTIME_NOT_AVAILABLE", "owner": CANONICAL_CONSUMPTION_GATE.as_posix()}
+        except subprocess.TimeoutExpired:
+            return {"status": "INVALID", "reason": f"GATE_TIMEOUT={name}", "owner": CANONICAL_CONSUMPTION_GATE.as_posix()}
+        try:
+            payload = json.loads(proc.stdout or "{}")
+        except json.JSONDecodeError:
+            payload = {"ok": False, "reason": "GATE_OUTPUT_NOT_JSON"}
+        receipts[name] = {
+            "exit_code": proc.returncode,
+            "ok": bool(payload.get("ok")) if isinstance(payload, dict) else False,
+            "learning": payload.get("learning") if isinstance(payload, dict) else None,
+            "source": payload.get("source") if isinstance(payload, dict) else None,
+            "count": payload.get("count") if isinstance(payload, dict) else None,
+            "first": payload.get("first") if isinstance(payload, dict) else None,
+            "last": payload.get("last") if isinstance(payload, dict) else None,
+            "includes_learning_80": payload.get("includes_learning_80") if isinstance(payload, dict) else None,
+            "duplicate_numbers": payload.get("duplicate_numbers") if isinstance(payload, dict) else None,
+            "missing_numbers": payload.get("missing_numbers") if isinstance(payload, dict) else None,
+            "numbering_unique": payload.get("numbering_unique") if isinstance(payload, dict) else None,
+            "stdout_sha256": hashlib.sha256((proc.stdout or "").encode("utf-8")).hexdigest(),
+        }
+    bound = all(
+        x["exit_code"] == 0
+        and x["ok"]
+        and x.get("learning") == "ALL"
+        and (x.get("count") or 0) > 0
+        and x.get("includes_learning_80") is True
+        for x in receipts.values()
+    )
+    return {
+        "status": "BOUND" if bound else "INVALID",
+        "owner": CANONICAL_CONSUMPTION_GATE.as_posix(),
+        "canonical_source": CANONICAL_LEARNINGS.as_posix(),
+        "CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR": True,
+        "REPLAY_BEFORE_REDISCOVERY": True,
+        "SEARCH_MISS_IS_NOT_STOP_CONDITION": True,
+        "ALL_NUMBERED_LEARNINGS_REQUIRED": True,
+        "UNKNOWN_MEDIVEL_E_FALHA_DE_METODO": True,
+        "receipts": receipts,
+    }
 
 def discover_registry(repo: Path) -> dict:
     trigger_text = (repo / TRIGGERS).read_text(encoding="utf-8")
@@ -110,6 +360,232 @@ def discover_registry(repo: Path) -> dict:
 def lock_key(claim_key: str, owner: str) -> str:
     payload = f"{claim_key.strip()}|{owner.strip()}".encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
+
+
+_BINDING_KEY = re.compile(r"^[A-Z_][A-Z0-9_]*$")
+_ENV_PLACEHOLDER = re.compile(r"\$\{([A-Z_][A-Z0-9_]*)\}")
+
+
+def dependency_fingerprint(material: list[str]) -> str:
+    normalized = sorted({str(item).strip() for item in material if str(item).strip()})
+    payload = json.dumps(normalized, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def parse_bindings(values: list[str]) -> dict[str, str]:
+    bindings: dict[str, str] = {}
+    for raw in values:
+        if "=" not in raw:
+            raise ValueError("BINDING_MUST_BE_KEY_EQUALS_VALUE")
+        key, value = raw.split("=", 1)
+        key = key.strip()
+        if not _BINDING_KEY.fullmatch(key):
+            raise ValueError(f"INVALID_BINDING_KEY={key}")
+        if key in bindings and bindings[key] != value:
+            raise ValueError(f"CONFLICTING_BINDING={key}")
+        bindings[key] = value
+    return bindings
+
+
+def _step_receipt(command_template: str, proc: subprocess.CompletedProcess[str]) -> dict:
+    stdout = proc.stdout or ""
+    stderr = proc.stderr or ""
+    return {
+        "command_template_sha256": hashlib.sha256(command_template.encode("utf-8")).hexdigest(),
+        "exit_code": proc.returncode,
+        "stdout_sha256": hashlib.sha256(stdout.encode("utf-8")).hexdigest(),
+        "stderr_sha256": hashlib.sha256(stderr.encode("utf-8")).hexdigest(),
+        "stdout_bytes": len(stdout.encode("utf-8")),
+        "stderr_bytes": len(stderr.encode("utf-8")),
+    }
+
+
+def _resolve_replay_shell(shell: str | None) -> str | None:
+    # CLI historically defaults to /bin/bash. On Windows that value must mean
+    # "auto-discover Git Bash", otherwise the truthy default prevents the
+    # Windows discovery branch from ever running.
+    if os.name == "nt" and shell and shell.replace("\\", "/").lower() == "/bin/bash":
+        shell = None
+
+    if shell:
+        candidate = Path(shell)
+        if candidate.is_absolute():
+            return str(candidate) if candidate.exists() else None
+        return shutil.which(shell)
+
+    if os.name == "nt":
+        for raw in (
+            r"C:\Program Files\Git\bin\bash.exe",
+            r"C:\Program Files\Git\usr\bin\bash.exe",
+        ):
+            candidate = Path(raw)
+            if candidate.exists():
+                return str(candidate)
+
+        found = shutil.which("bash")
+        if found and "windowsapps" not in found.lower() and "system32" not in found.lower():
+            return found
+        return None
+
+    found = shutil.which("bash")
+    if found:
+        return found
+    fallback = Path("/bin/bash")
+    return str(fallback) if fallback.exists() else None
+
+
+def _run_replay_command(
+    command: str,
+    *,
+    resolved_shell: str,
+    repo: Path,
+    env: dict[str, str],
+    timeout_seconds: int,
+) -> subprocess.CompletedProcess[str]:
+    if os.name == "nt" and resolved_shell.lower().endswith("bash.exe"):
+        return subprocess.run(
+            [resolved_shell, "-lc", command],
+            cwd=repo,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=timeout_seconds,
+            check=False,
+        )
+    return subprocess.run(
+        command,
+        shell=True,
+        executable=resolved_shell,
+        cwd=repo,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=timeout_seconds,
+        check=False,
+    )
+
+
+def execute_proven_recipe(
+    *,
+    entry: dict,
+    current_fingerprint: str | None,
+    bindings: dict[str, str],
+    repo: Path,
+    shell: str | None = None,
+    timeout_seconds: int = 60,
+    allow_mutation: bool = False,
+) -> dict:
+    if entry.get("state") != "SEALED_PROVEN":
+        return {"verdict": "DENY", "action": "CLAIM_NOT_SEALED_PROVEN", "executed": False, "reinterpret_from_zero": False}
+
+    decision = proven_path_replay_decision(entry, current_fingerprint)
+    if decision.get("verdict") != "PASS":
+        return {**decision, "executed": False, "binding_names": sorted(bindings)}
+
+    recipe = entry.get("proven_path_replay") or {}
+    if recipe.get("commands_executable") is not True:
+        return {"verdict": "BLOCKED", "action": "RECIPE_NOT_EXECUTABLE_YET", "executed": False, "reinterpret_from_zero": False}
+
+    policy = recipe.get("execution_policy", "READ_ONLY")
+    if policy == "MUTATING_AUTHORIZED_ONLY" and not allow_mutation:
+        return {"verdict": "BLOCKED", "action": "MUTATION_AUTHORITY_FLAG_REQUIRED", "executed": False, "reinterpret_from_zero": False}
+
+    declared = set(recipe.get("environment_bindings") or [])
+    supplied = set(bindings)
+    undeclared = sorted(supplied - declared)
+    commands = list(recipe.get("execution_commands") or [])
+    proofs = list(recipe.get("proof_commands") or [])
+    placeholders = set()
+    for command in commands + proofs:
+        placeholders.update(_ENV_PLACEHOLDER.findall(command))
+    missing = sorted(placeholders - supplied)
+    undeclared_placeholders = sorted(placeholders - declared)
+    if undeclared or missing or undeclared_placeholders:
+        return {
+            "verdict": "DENY", "action": "BINDING_CONTRACT_MISMATCH", "executed": False,
+            "undeclared_bindings": undeclared, "missing_bindings": missing,
+            "undeclared_placeholders": undeclared_placeholders, "binding_names": sorted(supplied),
+            "reinterpret_from_zero": False,
+        }
+
+    resolved_shell = _resolve_replay_shell(shell)
+    if not resolved_shell:
+        return {
+            "verdict": "BLOCKED",
+            "action": "REPLAY_SHELL_UNAVAILABLE",
+            "executed": False,
+            "requested_shell": shell,
+            "platform": os.name,
+            "binding_names": sorted(supplied),
+            "reinterpret_from_zero": False,
+        }
+
+    env = os.environ.copy()
+    effective_bindings = dict(bindings)
+    if os.name == "nt" and resolved_shell.lower().endswith("bash.exe"):
+        for key, value in effective_bindings.items():
+            match = re.fullmatch(r"([A-Za-z]):[\\/](.*)", value)
+            if match:
+                drive = match.group(1).lower()
+                rest = match.group(2).replace("\\", "/")
+                effective_bindings[key] = f"/{drive}/{rest}"
+    env.update(effective_bindings)
+    exec_receipts = []
+    proof_receipts = []
+    execution_complete = True
+    for command in commands:
+        try:
+            proc = _run_replay_command(
+                command,
+                resolved_shell=resolved_shell,
+                repo=repo,
+                env=env,
+                timeout_seconds=timeout_seconds,
+            )
+            exec_receipts.append(_step_receipt(command, proc))
+            if proc.returncode != 0:
+                execution_complete = False
+                break
+        except subprocess.TimeoutExpired:
+            exec_receipts.append({"command_template_sha256": hashlib.sha256(command.encode("utf-8")).hexdigest(), "exit_code": None, "timeout": True})
+            execution_complete = False
+            break
+
+    for command in proofs:
+        try:
+            proc = _run_replay_command(
+                command,
+                resolved_shell=resolved_shell,
+                repo=repo,
+                env=env,
+                timeout_seconds=timeout_seconds,
+            )
+            proof_receipts.append(_step_receipt(command, proc))
+        except subprocess.TimeoutExpired:
+            proof_receipts.append({"command_template_sha256": hashlib.sha256(command.encode("utf-8")).hexdigest(), "exit_code": None, "timeout": True})
+
+    proof_pass = bool(proofs) and all(item.get("exit_code") == 0 for item in proof_receipts)
+    execution_pass = execution_complete and len(exec_receipts) == len(commands) and all(item.get("exit_code") == 0 for item in exec_receipts)
+    schema = recipe.get("result_schema", "centraldark.proven-replay.result.v1")
+    effect_match = execution_pass and proof_pass
+    verdict = "REUSE_CRYSTAL" if effect_match else "DELTA_NEW"
+    return {
+        "schema": schema,
+        "verdict": verdict,
+        "action": "REUSE_PROVEN_PATH_NO_RETHINK" if effect_match else "REVALIDATE_AFFECTED_CONE_ONLY",
+        "executed": True,
+        "execution_policy": policy,
+        "dependency_fingerprint": current_fingerprint,
+        "binding_names": sorted(supplied),
+        "execution": exec_receipts,
+        "proof": proof_receipts,
+        "execution_pass": execution_pass,
+        "proof_pass": proof_pass,
+        "expected_effect": recipe.get("expected_effect", "PROOF_COMMANDS_PASS"),
+        "expected_effect_match": effect_match,
+        "raw_output_byte_equality_required": False,
+        "reinterpret_from_zero": False,
+    }
 
 
 def load_registry(path: Path) -> dict:
@@ -132,6 +608,9 @@ def cmd_boot(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
     source_hashes = require_files(repo)
     registry = discover_registry(repo)
+    bios = cognitive_bios_state(repo)
+    preflight_contract = runtime_preflight_contract_state(repo)
+    canonical_consumption = canonical_consumption_gate_state(repo)
     active = explicit_command_context(args.input)
     normalized = normalize_command(args.input.splitlines()[0].split()[0]) if args.input.strip() else ""
     result = {
@@ -144,6 +623,10 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "discovered": registry,
         "source_sha256": source_hashes,
         "feedback": classify_realtime_feedback(args.input),
+        "cognitive_bios": bios,
+        "runtime_preflight_contract": preflight_contract,
+        "canonical_consumption": canonical_consumption,
+        "hud": bios["hud"],
         "rules": {
             "case_insensitive": True,
             "bang_hash_equivalent_at_command_entry": True,
@@ -154,10 +637,60 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "one_writer_per_scope": True,
             "realtime_feedback_persistent_per_mission": True,
             "realtime_feedback_user_repetition_required": False,
+            "runtime_preflight_lint_required": True,
+            "canonical_consumption_gate_required": True,
+            "consultar_canonico_antecede_investigar": True,
+            "search_miss_is_not_stop_condition": True,
+            "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
+            "proven_path_replay_lock": True,
+            "proven_path_must_not_be_reinterpreted_from_zero": PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO,
+            "same_fingerprint_reuses_proven_recipe": True,
+            "proven_path_runtime_action": "REUSE_PROVEN_PATH_NO_RETHINK",
+            "proven_path_replay_consumer": "replay-run",
+            "same_fingerprint_and_proof_pass": "REUSE_CRYSTAL",
+            "proof_divergence": "DELTA_NEW",
         },
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
-    return 0 if active else 4
+    if not active:
+        return 4
+    return 0 if bios["status"] == "LOADED" and preflight_contract["status"] == "BOUND" and canonical_consumption["status"] == "BOUND" else 7
+
+
+def cmd_preflight_lint(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_files(repo)
+    try:
+        bridge_evidence = json.loads(args.bridge_evidence_json)
+    except json.JSONDecodeError:
+        print(json.dumps({
+            "status": "FAIL_CLOSED",
+            "reason": "INVALID_BRIDGE_EVIDENCE_JSON",
+            "wrapper_parse_fail_is_not_target_fail": True,
+            "invalid_probe_must_not_become_fact": True,
+        }, indent=2, ensure_ascii=False))
+        return 8
+    if not isinstance(bridge_evidence, dict):
+        print(json.dumps({
+            "status": "FAIL_CLOSED",
+            "reason": "BRIDGE_EVIDENCE_MUST_BE_OBJECT",
+            "wrapper_parse_fail_is_not_target_fail": True,
+            "invalid_probe_must_not_become_fact": True,
+        }, indent=2, ensure_ascii=False))
+        return 8
+    result = lint_runtime_command(
+        repo=repo,
+        command=args.command,
+        shell=args.shell,
+        host_mode=args.host_mode,
+        required_paths=args.required_path,
+        surface=args.surface,
+        command_class=args.command_class,
+        bridge_evidence=bridge_evidence,
+        observed_at=args.observed_at,
+    )
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["status"] == "PASS" else 8
 
 
 def cmd_feedback(args: argparse.Namespace) -> int:
@@ -170,6 +703,38 @@ def cmd_feedback(args: argparse.Namespace) -> int:
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0 if result["feedback"]["active"] else 4
+
+
+def proven_path_replay_decision(entry: dict, current_fingerprint: str | None) -> dict:
+    recipe = entry.get("proven_path_replay") or {}
+    sealed_fingerprint = recipe.get("dependency_fingerprint")
+    if not recipe:
+        return {
+            "verdict": "UNKNOWN",
+            "action": "NO_PROVEN_PATH_RECIPE",
+            "reinterpret_from_zero": False,
+        }
+    if not sealed_fingerprint or sealed_fingerprint == "UNKNOWN" or not current_fingerprint:
+        return {
+            "verdict": "UNKNOWN",
+            "action": "FINGERPRINT_REQUIRED",
+            "reinterpret_from_zero": False,
+        }
+    if current_fingerprint != sealed_fingerprint:
+        return {
+            "verdict": "REVALIDATE",
+            "action": "REVALIDATE_AFFECTED_CONE_ONLY",
+            "sealed_fingerprint": sealed_fingerprint,
+            "current_fingerprint": current_fingerprint,
+            "reinterpret_from_zero": False,
+        }
+    return {
+        "verdict": "PASS",
+        "action": "REUSE_PROVEN_PATH_NO_RETHINK",
+        "recipe": recipe,
+        "adapt_environment_bindings_only": True,
+        "reinterpret_from_zero": False,
+    }
 
 
 def cmd_seal(args: argparse.Namespace) -> int:
@@ -192,10 +757,262 @@ def cmd_seal(args: argparse.Namespace) -> int:
         "observed_at": args.observed_at,
         "counterproof": "PASS",
         "receipt_ref": args.receipt,
+        "proven_path_replay": {
+            "marker": "PROVEN_PATH_REPLAY_LOCK",
+            "dependency_fingerprint": dependency_fingerprint(args.fingerprint_material) if args.fingerprint_material else args.dependency_fingerprint,
+            "fingerprint_material_count": len(args.fingerprint_material),
+            "execution_commands": args.recipe_command,
+            "proof_commands": args.proof_command,
+            "expected_results": args.expected_result,
+            "expected_effect": args.expected_effect,
+            "result_schema": args.result_schema,
+            "environment_bindings": args.environment_binding,
+            "commands_executable": args.commands_executable,
+            "execution_policy": args.execution_policy,
+            "proof_commands_read_only": True,
+            "self_test_command": args.self_test_command,
+            "self_test_result": args.self_test_result,
+            "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+            "raw_output_byte_equality_required": False,
+        },
     }
     data["claims"][args.claim] = entry
     atomic_write_json(path, data)
     print(json.dumps({"action": "SEALED", **entry}, indent=2, ensure_ascii=False))
+    return 0
+
+
+def cmd_fingerprint(args: argparse.Namespace) -> int:
+    fingerprint = dependency_fingerprint(args.material)
+    print(json.dumps({
+        "schema": "centraldark.dependency-fingerprint.v1",
+        "algorithm": "SHA256",
+        "material_count": len({x.strip() for x in args.material if x.strip()}),
+        "dependency_fingerprint": fingerprint,
+        "material_values_exposed": False,
+    }, indent=2, ensure_ascii=False))
+    return 0
+
+
+def cmd_replay(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_files(repo)
+    data = load_registry(repo / args.registry)
+    entry = data["claims"].get(args.claim)
+    if not entry:
+        print(json.dumps({
+            "verdict": "DENY",
+            "reason": "CLAIM_NOT_SEALED",
+            "reinterpret_from_zero": False,
+        }, indent=2, ensure_ascii=False))
+        return 5
+    if args.owner and entry.get("owner") != args.owner:
+        print(json.dumps({
+            "verdict": "DENY",
+            "reason": "OWNER_MISMATCH",
+            "expected_owner": entry.get("owner"),
+            "supplied_owner": args.owner,
+            "reinterpret_from_zero": False,
+        }, indent=2, ensure_ascii=False))
+        return 6
+    result = proven_path_replay_decision(entry, args.dependency_fingerprint)
+    result.update({
+        "claim": args.claim,
+        "owner": entry.get("owner"),
+        "lock_key": entry.get("lock_key"),
+    })
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["verdict"] == "PASS" else 7
+
+
+def cmd_replay_run(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_files(repo)
+    data = load_registry(repo / args.registry)
+    entry = data["claims"].get(args.claim)
+    if not entry:
+        print(json.dumps({"verdict": "DENY", "reason": "CLAIM_NOT_SEALED", "reinterpret_from_zero": False}, indent=2, ensure_ascii=False))
+        return 5
+    if args.owner and entry.get("owner") != args.owner:
+        print(json.dumps({"verdict": "DENY", "reason": "OWNER_MISMATCH", "expected_owner": entry.get("owner"), "supplied_owner": args.owner, "reinterpret_from_zero": False}, indent=2, ensure_ascii=False))
+        return 6
+    try:
+        bindings = parse_bindings(args.binding)
+    except ValueError as exc:
+        print(json.dumps({"verdict": "DENY", "reason": str(exc), "reinterpret_from_zero": False}, indent=2, ensure_ascii=False))
+        return 8
+    current_fingerprint = args.dependency_fingerprint
+    if args.fingerprint_material:
+        current_fingerprint = dependency_fingerprint(args.fingerprint_material)
+    result = execute_proven_recipe(
+        entry=entry, current_fingerprint=current_fingerprint, bindings=bindings,
+        repo=repo, shell=args.shell, timeout_seconds=args.timeout, allow_mutation=args.allow_mutation,
+    )
+    result.update({"claim": args.claim, "owner": entry.get("owner"), "lock_key": entry.get("lock_key")})
+    if args.receipt_out:
+        receipt_path = Path(args.receipt_out)
+        if not receipt_path.is_absolute():
+            receipt_path = repo / receipt_path
+        atomic_write_json(receipt_path, result)
+        result["receipt_out"] = str(receipt_path)
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result.get("verdict") == "REUSE_CRYSTAL" else 7
+
+
+def cmd_self_test(args: argparse.Namespace) -> int:
+    fp = dependency_fingerprint(["OWNER=owner", "VERSION=1"])
+    workspace_ref = "$" + "{WORKSPACE}"
+    good_entry = {
+        "owner": "owner",
+        "state": "SEALED_PROVEN",
+        "proven_path_replay": {
+            "marker": "PROVEN_PATH_REPLAY_LOCK",
+            "dependency_fingerprint": fp,
+            "execution_commands": [f'printf ok > "{workspace_ref}/value.txt"'],
+            "proof_commands": [f'test "$(cat "{workspace_ref}/value.txt")" = ok'],
+            "expected_results": ["PASS"],
+            "expected_effect": "VALUE_FILE_EQUALS_OK",
+            "result_schema": "centraldark.proven-replay.result.v1",
+            "environment_bindings": ["WORKSPACE"],
+            "commands_executable": True,
+            "execution_policy": "READ_ONLY",
+            "proof_commands_read_only": True,
+            "self_test_command": "self-test",
+            "self_test_result": "PASS",
+        },
+    }
+    same = proven_path_replay_decision(good_entry, fp)
+    changed = proven_path_replay_decision(
+        good_entry,
+        dependency_fingerprint(["OWNER=owner", "VERSION=2"]),
+    )
+    missing = proven_path_replay_decision({"owner": "owner"}, fp)
+    absent_current = proven_path_replay_decision(good_entry, None)
+    absent_seal = proven_path_replay_decision(
+        {"proven_path_replay": {"marker": "PROVEN_PATH_REPLAY_LOCK"}},
+        fp,
+    )
+
+    assert same["verdict"] == "PASS"
+    assert same["action"] == "REUSE_PROVEN_PATH_NO_RETHINK"
+    assert same["reinterpret_from_zero"] is False
+    assert changed["verdict"] == "REVALIDATE"
+    assert changed["action"] == "REVALIDATE_AFFECTED_CONE_ONLY"
+    assert missing["verdict"] == "UNKNOWN"
+    assert absent_current["verdict"] == "UNKNOWN"
+    assert absent_current["action"] == "FINGERPRINT_REQUIRED"
+    assert absent_seal["verdict"] == "UNKNOWN"
+    assert absent_seal["action"] == "FINGERPRINT_REQUIRED"
+
+    with tempfile.TemporaryDirectory() as td:
+        replay = execute_proven_recipe(
+            entry=good_entry,
+            current_fingerprint=fp,
+            bindings={"WORKSPACE": td},
+            repo=Path(td),
+        )
+        assert replay["verdict"] == "REUSE_CRYSTAL"
+        assert replay["execution_pass"] is True
+        assert replay["proof_pass"] is True
+        assert replay["expected_effect_match"] is True
+        assert replay["binding_names"] == ["WORKSPACE"]
+
+    print(json.dumps({
+        "status": "PASS",
+        "tests": 16,
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "same_fingerprint": same["action"],
+        "changed_fingerprint": changed["action"],
+        "missing_current_fingerprint": absent_current["action"],
+        "missing_sealed_fingerprint": absent_seal["action"],
+        "executable_replay": "REUSE_CRYSTAL",
+    }, indent=2, ensure_ascii=False))
+    return 0
+
+
+def cmd_reseal_fingerprint(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_files(repo)
+    path = repo / args.registry
+    data = load_registry(path)
+    entry = data["claims"].get(args.claim)
+    if not entry:
+        print(json.dumps({"verdict": "DENY", "reason": "CLAIM_NOT_SEALED"}, indent=2))
+        return 5
+    if entry.get("state") != "SEALED_PROVEN":
+        print(json.dumps({"verdict": "DENY", "reason": "CLAIM_NOT_SEALED_PROVEN"}, indent=2))
+        return 6
+    if args.owner and entry.get("owner") != args.owner:
+        print(json.dumps({
+            "verdict": "DENY",
+            "reason": "OWNER_MISMATCH",
+            "expected_owner": entry.get("owner"),
+            "supplied_owner": args.owner,
+        }, indent=2))
+        return 6
+    expected_key = entry.get("lock_key")
+    if args.lock_key != expected_key:
+        print(json.dumps({"verdict": "DENY", "reason": "DIFFERENT_LOCK_KEY", "lock_key": expected_key}, indent=2))
+        return 6
+    if not args.cause_ref.strip():
+        print(json.dumps({"verdict": "DENY", "reason": "MISSING_REOPEN_CAUSE_REF"}, indent=2))
+        return 6
+    if args.counterproof_result != "PASS":
+        print(json.dumps({"verdict": "DENY", "reason": "COUNTERPROOF_NOT_PASS"}, indent=2))
+        return 6
+    if not args.current_target_remeasured:
+        print(json.dumps({"verdict": "DENY", "reason": "CURRENT_TARGET_NOT_REMEASURED"}, indent=2))
+        return 6
+
+    recipe = entry.get("proven_path_replay") or {}
+    old_fp = recipe.get("dependency_fingerprint")
+    new_fp = (
+        dependency_fingerprint(args.fingerprint_material)
+        if args.fingerprint_material
+        else args.dependency_fingerprint
+    )
+    if not new_fp or new_fp == "UNKNOWN":
+        print(json.dumps({"verdict": "DENY", "reason": "NEW_FINGERPRINT_REQUIRED"}, indent=2))
+        return 6
+    if new_fp == old_fp:
+        print(json.dumps({
+            "verdict": "PASS",
+            "action": "REUSE_PROOF",
+            "claim": args.claim,
+            "lock_key": expected_key,
+            "dependency_fingerprint": old_fp,
+        }, indent=2))
+        return 0
+
+    history = entry.setdefault("reopen_history", [])
+    history.append({
+        "cause_ref": args.cause_ref,
+        "observed_at": args.observed_at,
+        "old_dependency_fingerprint": old_fp,
+        "new_dependency_fingerprint": new_fp,
+        "counterproof": "PASS",
+        "current_target_remeasured": True,
+        "scope": "AFFECTED_CONE_ONLY",
+    })
+    recipe["dependency_fingerprint"] = new_fp
+    recipe["fingerprint_material_count"] = len(args.fingerprint_material)
+    entry["observed_at"] = args.observed_at
+    entry["counterproof"] = "PASS"
+    if args.evidence_ref:
+        entry["evidence_ref"] = args.evidence_ref
+    if args.receipt_ref:
+        entry["receipt_ref"] = args.receipt_ref
+    atomic_write_json(path, data)
+    print(json.dumps({
+        "verdict": "PASS",
+        "action": "RESEALED_SAME_CLAIM",
+        "claim": args.claim,
+        "lock_key": expected_key,
+        "old_dependency_fingerprint": old_fp,
+        "new_dependency_fingerprint": new_fp,
+        "reopen_scope": "AFFECTED_CONE_ONLY",
+        "reinterpret_from_zero": False,
+    }, indent=2, ensure_ascii=False))
     return 0
 
 
@@ -238,6 +1055,18 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--input", required=True)
     b.set_defaults(func=cmd_boot)
 
+    pf = sub.add_parser("preflight-lint")
+    pf.add_argument("--repo", default=".")
+    pf.add_argument("--shell", required=True)
+    pf.add_argument("--host-mode", default="literal")
+    pf.add_argument("--command", required=True)
+    pf.add_argument("--required-path", action="append", default=[])
+    pf.add_argument("--surface", default="runtime_probe")
+    pf.add_argument("--command-class", default="runtime_probe")
+    pf.add_argument("--bridge-evidence-json", default="{}")
+    pf.add_argument("--observed-at", default="UNKNOWN")
+    pf.set_defaults(func=cmd_preflight_lint)
+
     f = sub.add_parser("feedback")
     f.add_argument("--repo", default=".")
     f.add_argument("--input", required=True)
@@ -252,7 +1081,65 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--evidence", required=True)
     s.add_argument("--observed-at", required=True)
     s.add_argument("--receipt", required=True)
+    s.add_argument("--dependency-fingerprint", default="UNKNOWN")
+    s.add_argument("--fingerprint-material", action="append", default=[])
+    s.add_argument("--recipe-command", action="append", default=[])
+    s.add_argument("--proof-command", action="append", default=[])
+    s.add_argument("--expected-result", action="append", default=[])
+    s.add_argument("--expected-effect", default="PROOF_COMMANDS_PASS")
+    s.add_argument("--result-schema", default="centraldark.proven-replay.result.v1")
+    s.add_argument("--environment-binding", action="append", default=[])
+    s.add_argument("--commands-executable", action="store_true")
+    s.add_argument("--execution-policy", choices=["READ_ONLY", "WORKSPACE_LOCAL_ONLY", "MUTATING_AUTHORIZED_ONLY"], default="READ_ONLY")
+    s.add_argument("--self-test-command", default="")
+    s.add_argument("--self-test-result", default="")
     s.set_defaults(func=cmd_seal)
+
+    rp = sub.add_parser("replay")
+    rp.add_argument("--repo", default=".")
+    rp.add_argument("--registry", default=DEFAULT_REGISTRY.as_posix())
+    rp.add_argument("--claim", required=True)
+    rp.add_argument("--owner")
+    rp.add_argument("--dependency-fingerprint")
+    rp.set_defaults(func=cmd_replay)
+
+    fp = sub.add_parser("fingerprint")
+    fp.add_argument("--material", action="append", default=[], required=True)
+    fp.set_defaults(func=cmd_fingerprint)
+
+    rr = sub.add_parser("replay-run")
+    rr.add_argument("--repo", default=".")
+    rr.add_argument("--registry", default=DEFAULT_REGISTRY.as_posix())
+    rr.add_argument("--claim", required=True)
+    rr.add_argument("--owner")
+    rr.add_argument("--dependency-fingerprint")
+    rr.add_argument("--fingerprint-material", action="append", default=[])
+    rr.add_argument("--binding", action="append", default=[])
+    rr.add_argument("--shell", default="/bin/bash")
+    rr.add_argument("--timeout", type=int, default=60)
+    rr.add_argument("--allow-mutation", action="store_true")
+    rr.add_argument("--receipt-out")
+    rr.set_defaults(func=cmd_replay_run)
+
+    st = sub.add_parser("self-test")
+    st.add_argument("--repo", default=".")
+    st.set_defaults(func=cmd_self_test)
+
+    rs = sub.add_parser("reseal-fingerprint")
+    rs.add_argument("--repo", default=".")
+    rs.add_argument("--registry", default=DEFAULT_REGISTRY.as_posix())
+    rs.add_argument("--claim", required=True)
+    rs.add_argument("--owner")
+    rs.add_argument("--lock-key", required=True)
+    rs.add_argument("--cause-ref", required=True)
+    rs.add_argument("--counterproof-result", choices=["PASS", "FAIL", "UNKNOWN"], required=True)
+    rs.add_argument("--current-target-remeasured", action="store_true")
+    rs.add_argument("--dependency-fingerprint")
+    rs.add_argument("--fingerprint-material", action="append", default=[])
+    rs.add_argument("--observed-at", required=True)
+    rs.add_argument("--evidence-ref", default="")
+    rs.add_argument("--receipt-ref", default="")
+    rs.set_defaults(func=cmd_reseal_fingerprint)
 
     r = sub.add_parser("reopen-check")
     r.add_argument("--repo", default=".")

@@ -1,4 +1,4 @@
-name: estado-retomada
+name: ⚙️ estado-retomada
 
 # Regenera docs/ESTADO-DA-RETOMADA.md a partir de evidencia real do checkout.
 # Ninguem edita o arquivo a mao; quem quiser mudar o que e medido muda o script.
@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   gerar:
-    name: Gerar ESTADO DA RETOMADA
+    name: 🧩 Gerar ESTADO DA RETOMADA
     runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: 24
 
-      - name: Publicar estado com writer-safe-push
+      - name: 🔹 Publicar estado com writer-safe-push
         shell: bash
         env:
           WRITER_TAG: ESTADO_RETOMADA

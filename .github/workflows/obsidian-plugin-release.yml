@@ -1,4 +1,4 @@
-name: Obsidian Plugin Release
+name: ⚙️ Obsidian Plugin Release
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ler versão do manifest e checar tag existente
+      - name: 🔹 Ler versão do manifest e checar tag existente
         id: info
         working-directory: apps/modulos/obsidian-plugin-grafo-vivo
         run: |
@@ -52,7 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Validar SHA-256 dos assets contra checksums.json
+      - name: 🔹 Validar SHA-256 dos assets contra checksums.json
         working-directory: apps/modulos/obsidian-plugin-grafo-vivo
         run: |
           set -euo pipefail
@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Extrair notas do changelog.json
+      - name: 🔹 Extrair notas do changelog.json
         id: notas
         working-directory: apps/modulos/obsidian-plugin-grafo-vivo
         env:
@@ -109,7 +109,7 @@ jobs:
           '
           echo "notes_path=apps/modulos/obsidian-plugin-grafo-vivo/release-notes.md" >> "$GITHUB_OUTPUT"
 
-      - name: Criar GitHub Release com assets
+      - name: 🔹 Criar GitHub Release com assets
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.detect.outputs.tag }}

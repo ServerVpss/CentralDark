@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import json, sys, re
+import json, sys, re, subprocess
 
 ROOT=Path(sys.argv[1] if len(sys.argv)>1 else '.').resolve()
 checks=[]
@@ -14,6 +14,70 @@ def check(path, needles=(), classification='PROVEN_IN_REPO'):
             if needle not in text: missing.append(needle)
         ok=ok and not missing
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':missing})
+
+def check_command(name, argv, classification='EXECUTABLE_CONTRACT_TEST'):
+    try:
+        proc=subprocess.run(argv,cwd=ROOT,text=True,capture_output=True,timeout=60,check=False)
+        ok=proc.returncode==0
+        detail=(proc.stdout+'\n'+proc.stderr).strip()[-4000:]
+    except Exception as exc:
+        ok=False
+        detail=f'{type(exc).__name__}: {exc}'
+    checks.append({'path':name,'classification':classification,'ok':ok,'missing':[] if ok else [detail]})
+
+def check_values(path, expected, classification='PROVEN_VALUE_IN_REPO'):
+    """Valor real, não trecho: toda ocorrência ativa (fora de comentário) de KEY
+    (KEY=v ou KEY: v) precisa ter o valor exigido; contradição ou valor trocado reprova."""
+    p=ROOT/path
+    if not p.exists():
+        checks.append({'path':path,'classification':classification,'ok':False,'missing':['FILE_MISSING']}); return
+    text=p.read_text(encoding='utf-8',errors='replace'); problems=[]
+    for key,want in expected.items():
+        pat=re.compile(r'(?<![A-Za-z0-9_])'+re.escape(key)+r'\s*[:=]\s*"?([^\s"#`|,;)]+)')
+        found=[]
+        for line in text.splitlines():
+            active=line.split(' #',1)[0]
+            if active.lstrip().startswith('#') and not active.lstrip().startswith('# '):
+                continue
+            found+=pat.findall(active)
+        if not found: problems.append(f'{key}: ausente')
+        elif any(f!=want for f in found): problems.append(f'{key}: {found} esperado {want}')
+    checks.append({'path':path,'classification':classification,'ok':not problems,'missing':problems})
+
+SOUL_AFFECTING_OWNERS=('AGENTS.md','LEIA-ME-IA.md','CLAUDE.md','CENTRALDARK_AI_BOOT.yaml','docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml')
+
+def _git_blob_sha1(path):
+    """Hash the working-tree owner with Git's configured clean filters.
+
+    This avoids checkout-only CRLF false positives without collapsing two
+    genuinely distinct committed blobs into the same synthetic hash.
+    """
+    proc=subprocess.run(
+        ['git','hash-object','--path',path,path],
+        cwd=ROOT,text=True,capture_output=True,check=False,
+    )
+    value=(proc.stdout or '').strip()
+    if proc.returncode != 0 or not re.fullmatch(r'[0-9a-f]{40}', value):
+        raise RuntimeError(f'GIT_HASH_OBJECT_FAILED:{path}:{(proc.stderr or "").strip()}')
+    return value
+
+def check_soul_sync(classification='SOUL_SYNC_CURRENT_FOR_FIXED_POINT'):
+    """SOUL guarda a impressão dos donos que afetam a alma; divergência = SOUL atrasada = sem ponto fixo."""
+    soul='docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md'
+    text=(ROOT/soul).read_text(encoding='utf-8',errors='replace')
+    m=re.search(r'SOUL_SYNC_ANCHOR_BEGIN\n(.*?)\nSOUL_SYNC_ANCHOR_END',text,re.S)
+    problems=[]
+    if not m:
+        problems.append('SOUL_SYNC_ANCHOR ausente na SOUL')
+    else:
+        anchored=dict(l.split('=',1) for l in m.group(1).strip().splitlines() if '=' in l)
+        for owner in SOUL_AFFECTING_OWNERS:
+            cur=_git_blob_sha1(owner)
+            if anchored.get(owner)!=cur:
+                problems.append(f'SOUL_STALE: {owner} mudou (âncora {anchored.get(owner)} ≠ atual {cur}) → rever SOUL §2.4 e atualizar a âncora')
+    result={'path':soul,'classification':classification,'ok':not problems,'missing':problems}
+    checks.append(result)
+    return result
 
 def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
     p=ROOT/path
@@ -53,6 +117,32 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.y
  'one_optional_arm_off_does_not_fail_organism: true',
  'classification_when_failure_proven: REQUIRED_UNAVAILABLE',
 ], classification='CAPABILITY_OFF_NEUTRALITY_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml',[
+ 'HERMES_AGENT_BODY_IS_NOT_REPLACEABLE_MODEL: true',
+ 'OPTIONAL_EXTERNAL_OFF_MUST_NOT_BLOCK_BOOT: true',
+ 'classification: DEGRADED_NON_BLOCKING',
+ 'DEGRADED_NON_BLOCKING:',
+ 'TOOLS_FIELD_PRESERVED',
+ 'TOOL_CHOICE_PRESERVED',
+ 'TOOL_CALLS_PRESERVED',
+ 'TOOL_CALL_ID_PRESERVED',
+ 'ARGUMENTS_PRESERVED',
+ 'TOOL_RESULT_CONTINUATION_PRESERVED',
+ 'STREAMING_PRESERVED_WHEN_USED',
+ 'TIMEOUT_AND_ERROR_SEMANTICS_PRESERVED',
+ 'FALLBACK_DOES_NOT_REENTER_CALLER_HERMES',
+ 'failure_means: DO_NOT_PROMOTE_GATEWAY_AS_HERMES_BACKEND_YET',
+], classification='HERMES_GATEWAY_PROMOTION_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md',[
+ 'CHATGPT_CAN_OPERATE_CASA_SEGREDO=true',
+ 'TRANSPORT=REMOTE_DESKTOP_COMMANDER',
+ 'DEVICE=SEGREDO',
+ 'DIRECT_FILE_OPERATIONS=true',
+ 'DIRECT_PROCESS_EXECUTION=true',
+ 'DIRECT_TERMINAL_EXECUTION=true',
+ 'OBSERVABLE_ACTIONS_REQUIRED=true',
+ 'CENTRALDARK_REMAINS_CONTROL_PLANE=true',
+], classification='CHATGPT_CASA_OPERATION_CONTRACT')
 check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkCockpitShell.client.tsx',[
  'DISABLED/OFF != FAIL',
  'FAIL REQUIRES EXPECTED ACTIVE',
@@ -85,8 +175,58 @@ check('LEIA-ME-IA.md',[
  'NO_BLIND_OVERWRITE=true',
  'DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true',
 ], classification='HUMAN_OBJECTIVE_AND_REMOTE_REALITY_BOUNDARY')
+check('LEIA-ME-IA.md',[
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT=true',
+ 'PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER=true',
+ 'UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN=true',
+ 'ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA=false',
+ 'PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED=true',
+ 'GRILL_ME_MATERIAL_PREFLIGHT=true',
+ 'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
+], classification='MATERIAL_FIRST_COGNITIVE_ROUTE_CONTRACT')
+check('AGENTS.md',[
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
+ 'GRAPHRAG_SEMANTIC_LINKER',
+], classification='MATERIAL_FIRST_AGENT_SEMANTICS')
+check('AGENTS.md',[
+ 'CREATE_PR_MERGEABLE_SNAPSHOT_IS_NOT_FINAL=true',
+ 'REMEASURE_PR_LIVE_BEFORE_HUMAN_RETURN=true',
+ 'SAME_HEAD_GATES_CLOSED_ON_CURRENT_HEAD_REQUIRED=true',
+ 'PENDING_QUEUED_SKIPPED_UNKNOWN_ARE_NOT_PASS=true',
+ 'POST_PR_CONTINUE_UNTIL_MERGED_OR_MATERIAL_BLOCKER=true',
+ 'RETURN_WITH_OPEN_ELIGIBLE_PR=FORBIDDEN',
+], classification='POST_PR_FAST_PATH_CONTINUATION_GUARD')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'SOUL_MATERIAL_FIRST_COGNITIVE_ROUTE=true',
+ 'HISTORICAL_SUCCESS_IS_NOT_CURRENT_PASS=true',
+ 'CURRENT_USE_REQUIRES_EQUIVALENT_CONDITIONS_OR_REMEASURE=true',
+], classification='MATERIAL_FIRST_SOUL_BINDING')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml',[
+ 'material_first_cognitive_route:',
+ 'KNOWLEDGE_COLLECTOR',
+ 'GRAPHRAG_MASTER',
+ 'SEMANTIC_LINKER',
+ 'ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA: false',
+], classification='MATERIAL_FIRST_GRAPH_BINDING')
+check('scripts/lupa/portable-kernel.mjs',[
+ "id: 'MATERIAL_FIRST_COGNITIVE_CRYSTALLIZATION'",
+ 'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+ 'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
+], classification='MATERIAL_FIRST_PORTABLE_KERNEL_BINDING')
+
 check('CENTRALDARK_AI_BOOT.yaml',[
  'adaptive_payload: true',
+ 'source_of_truth: "ServerVpss/CentralDark + runtime medido"',
+ 'model: LIVING_CANON',
+ 'persistent_canon: ServerVpss/CentralDark',
+ 'live_state: MEASURED_RUNTIME',
+ 'final_judge: REALITY',
+ 'owner: central-horario',
+ 'timezone: America/Sao_Paulo',
+ 'human_display_label: BRT',
+ 'machine_storage: UTC_RFC3339',
  'observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"',
  'role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"',
  'writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"',
@@ -188,11 +328,31 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'mandatory_before_human_return: true',
  'no_new_workflow_when_owner_exists: true',
  'yellow_status_semantics: FORBIDDEN',
+ 'create_pr_mergeable_snapshot_is_final: false',
+ 'remeasure_live_mergeability_before_human_return: true',
+ 'queued_or_in_progress_auxiliary_is_material_blocker: false',
+ 'post_pr_continue_until_merged_or_material_blocker: true',
+ 'return_with_open_eligible_pr: FORBIDDEN',
+ 'centraldark_pattern_monitor:',
+ 'outside_percent_red_threshold: 80',
+ 'unknown_prevents_green: true',
+ 'metric_scope: OBSERVED_MEASURABLE_DIMENSIONS_ONLY',
+ 'global_behavior_claim_from_partial_telemetry: FORBIDDEN',
+ 'refresh_source: /admin/api/operational-snapshot',
  'github_hosted_runner: FORBIDDEN',
  'scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS',
  'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',
  'operational_rule_learning:',
  'proven_operational_rule_must_bind_to_runtime: true',
+ 'discover_existing_channels_before_blocked: true',
+ 'ephemeral_helper_is_not_canonical_asset: true',
+ 'user_report_is_signal_not_proof: true',
+ 'meaningful_discovery_must_compare_canonical_owner: true',
+ 'USER_REPORTED_ERROR',
+ 'NEW_DISCOVERY',
+ 'CLEAN_EPHEMERAL_HELPERS_AFTER_PROOF',
+ 'mode: EVENT_DRIVEN',
+ 'no_post_task_value: SAFE_DELETE',
  'BIND_RULE_TO_ENGINE_OR_GATE',
  'POSITIVE_TEST',
  'NEGATIVE_TEST',
@@ -272,15 +432,152 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: BOT_ENTRY','event: PRE_HUMAN_RETURN','event: RESUME',
  'event: ANY_PR_OR_COMMIT','event: CI_RUNNER_ROUTE_FAILURE',
+ 'event: USER_REPORTED_ERROR','event: NEW_DISCOVERY',
+ 'report_is_proof: false','no_material_delta: NO_CHANGE',
  'BYTE_IDENTICAL -> PROCESS_ONCE_KEEP_PROVENANCE',
  'GITHUB_HOSTED_RUNNER -> FAIL_CLOSED',
  'SAME_FAILURE_NO_NEW_INFO -> REUSE_CRYSTAL',
  'explicit_triggers: ["!CENTRALDARK", "#CENTRALDARK"]',
 ])
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'id: TIK_TAK',
+ 'canonical_rule: REGRA-ZERO-CENTRALDARK',
+ 'semantic_family: AUTOMATION_FACTORY_OUTER_LOOP',
+ 'wraps_master_cycle: true',
+ 'GEOFF: AUTOMATION_FACTORY',
+ 'IAN: STRUCTURAL_SKEPTIC',
+ 'GREG: OBSERVABILITY_PROOF',
+ 'DEX: HUMAN_AGENT_COORDINATION',
+ 'does_not_fanout_agents: true',
+ 'is_swarm_trigger: false',
+ 'creates_new_brain_or_router: false',
+ 'TIK_TAK -> REMEASURE_CURRENT_STATE + /GOAL + GEOFF + IAN + GREG + DEX + HERMES + REALIDADE',
+], classification='TIK_TAK_OUTER_LOOP_NO_SWARM_REGRESSION')
+check('docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',[
+ '"GREG_VERDICT_REQUIRED_BEFORE_GREEN"',
+ '"DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA"',
+], classification='TIK_TAK_HARD_GATES_REGISTERED')
+check('scripts/trigger-fabric/rastro_fiscal.py',[
+ 'TRACE_PRESENT != TRACE_VALID',
+ 'class GitHubBackend',
+ 'class FakeBackend',
+ 'def verify_text(',
+ 'RESPONSE_WITHOUT_TRACE',
+ 'def _ledger_comment_id(',
+ 'issues/comments/{comment_id}',
+ 'comments?per_page=100&page={page}',
+], classification='RASTRO_FISCAL_EXECUTABLE')
+check('scripts/trigger-fabric/test_rastro_fiscal.py',[
+ 'test_true_complete_trace_passes',
+ 'test_fake_commit_fails',
+ 'test_false_path_fails',
+ 'test_content_does_not_support_claim_fails',
+ 'test_old_head_presented_as_current_fails',
+ 'test_gravei_without_trace_fails',
+ 'test_memory_without_location_fails',
+ 'test_github_unavailable_is_unknown',
+ 'test_direct_main_without_ledger_fails',
+ 'test_ledger_exact_comment_ref_is_checked_directly',
+ 'test_ledger_over_100_comments_starts_from_newest_page',
+], classification='RASTRO_FISCAL_COUNTERPROOF')
+check_command(
+ 'scripts/trigger-fabric/test_rastro_fiscal.py',
+ [sys.executable, str(ROOT/'scripts/trigger-fabric/test_rastro_fiscal.py')],
+ classification='RASTRO_FISCAL_EXECUTABLE_TESTS',
+)
+
+check_command(
+ 'scripts/trigger-fabric/test_centraldark_master_cycle.py',
+ [sys.executable, str(ROOT/'scripts/trigger-fabric/test_centraldark_master_cycle.py')],
+ classification='MASTER_CYCLE_TEXT_VOICE_DISPATCH_TESTS',
+)
+check_command(
+ 'scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py',
+ [sys.executable, str(ROOT/'scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py')],
+ classification='UNIFIED_SURFACE_PARITY_COUNTERPROOF_TESTS',
+)
+check_command(
+ 'scripts/trigger-fabric/validate_unified_surface_parity_contract.py',
+ [sys.executable, str(ROOT/'scripts/trigger-fabric/validate_unified_surface_parity_contract.py')],
+ classification='UNIFIED_SURFACE_PARITY_EXECUTABLE_CONTRACT',
+)
+
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml',[
+ 'FIXED_POINT_ROUTE_IS_DETERMINISTIC: true',
+ 'SAME_FINGERPRINT_NO_FULL_REPLAY: true',
+ 'event_type: centraldark_sentinel_route',
+ 'same_fingerprint: REUSE_PROOF_NO_REPEAT',
+ 'changed_fingerprint: REVALIDATE_AFFECTED_CHAIN_ONLY',
+ 'runner: scripts/sentinela/run.mjs',
+ 'kernel_runtime: scripts/trigger-fabric/system_sentinel.py',
+], classification='SENTINEL_DETERMINISTIC_FIXED_ROUTE_CONTRACT')
+check('scripts/trigger-fabric/system_sentinel.py',[
+ 'FIXED_ROUTE = [',
+ '"INTENT"',
+ '"CONTRACT_CURRENT"',
+ '"SENSOR"',
+ '"T0"',
+ '"REALITY_JUDGE"',
+ '"HUD"',
+ '"NEXT_CURSOR"',
+ '"REUSE_PROOF_NO_REPEAT"',
+ '"REVALIDATE_AFFECTED_CHAIN_ONLY"',
+ 'FIXED_POINT_SEALED',
+ '--route-json',
+], classification='SENTINEL_DETERMINISTIC_FIXED_ROUTE_RUNTIME')
+check('.github/workflows/sentinela-divergencias.yml',[
+ 'centraldark_sentinel_route',
+ 'CENTRALDARK_SENTINEL_STATE_PATH',
+ 'python3 scripts/trigger-fabric/system_sentinel.py --self-test',
+ 'node scripts/sentinela/run.mjs',
+], classification='SENTINEL_EXISTING_RUNNER_API_BINDING')
+check('.github/workflows/hermes-core-signal-watch.yml',[
+ "event_type: 'centraldark_sentinel_route'",
+ "source: 'coderabbit'",
+ 'CODERABBIT_SENTINEL_ROUTE=DISPATCHED',
+], classification='CODERABBIT_TO_SENTINEL_API_ROUTE')
+check('.github/workflows/dependabot-auto-merge.yml',[
+ "event_type: 'centraldark_sentinel_route'",
+ "source: 'dependabot'",
+ 'DEPENDABOT_SENTINEL_ROUTE=DISPATCHED',
+], classification='DEPENDABOT_TO_SENTINEL_API_ROUTE')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
+ 'agent_runtimes:', 'role: EXECUTION_CONTINUITY_RUNTIME', 'model_catalog_member: false', 'selectable_as_engine: false',
  'SELF_HEALING_FAILURE_LOOP','ANY_PR_OR_COMMIT_GATE','CANONICAL_SELF_HOSTED_RUNNER_POLICY'
-])
+], classification='ENGINE_AND_AGENT_RUNTIME_SPLIT')
+check('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
+ 'DEFAULT_FALLBACK_CHAIN = "nous,google,claude-code,xai,abacus,openai"',
+ 'hermes_is_agent_runtime_not_engine',
+ 'if normalized == "hermes":',
+ 'ENGINE_PROVIDERS = frozenset(',
+ 'default_engine_config_valid',
+], classification='OMNI_ROUTER_HERMES_NOT_ENGINE')
+check_absent('apps/modulos/elite-gateway/scripts/centraldark_omni_router.py',[
+ r'HERMES_BASE_URL|HERMES_AUTH_TOKEN|HERMES_MODEL',
+ r'DEFAULT_FALLBACK_CHAIN\s*=\s*["\'][^"\']*hermes',
+ r'providers\s*=\s*\[[^\]]*["\']hermes["\']',
+ r'for provider in \[[^\]]*["\']hermes["\']',
+], classification='OMNI_ROUTER_NO_HERMES_MODEL_SURFACE')
+check_absent('scripts/boot_omni_router.py',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE.{0,16}hermes',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/launch_omni_router_direct.py',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE.{0,16}hermes',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/launch_omni_router.sh',[
+ r'HERMES_BASE_URL',
+ r'CENTRALDARK_DEFAULT_ENGINE=\"hermes\"',
+], classification='OMNI_LAUNCHER_HERMES_NOT_ENGINE')
+check_absent('scripts/auto-redeploy-failover.mjs',[
+ r'fallbackChain:\s*\[[^\]]*[\"\']hermes[\"\']',
+], classification='OMNI_FAILOVER_HERMES_NOT_ENGINE')
+check('docs/ARQUITETURA/CENTRALDARK-OMNI-ROUTER.md',[
+ 'Hermes permanece fora do cat',
+ 'provider/engine do cat',
+], classification='OMNI_DOC_HERMES_NOT_ENGINE')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'UNIVERSAL_EVOLUTION_CARACOL',
  'ALL_CURRENT_SKILLS',
@@ -298,7 +595,10 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
 ], classification='UNIVERSAL_EVOLUTION_CARACOL_CONTRACT')
 check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
  'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml','OUTPUT_GUARD','LAST_GOOD_STATE','WORKING/FORJA != PASS',
- 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false'
+ 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false',
+ 'DISCOVER_EXISTING_CHANNELS_BEFORE_BLOCKED=true','USER_REPORTED_ERROR_IS_SIGNAL_NOT_PROOF=true',
+ 'EPHEMERAL_HELPER_IS_CANONICAL_ASSET=false','SAFE_TEMP_CLEANUP_AFTER_PROOF=true',
+ 'MEANINGFUL_DISCOVERY_COMPARE_CANONICAL_OWNER=true'
 ])
 check('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
  'const INTERVAL  = 5000',
@@ -309,9 +609,30 @@ check('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
 ])
 check('apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs',['export async function atualizarGrafo()','export async function buscarContexto'])
 check('scripts/memory-linker/README.md',['NO_NEW_INFORMATION=STOP=true','DIRECT_CANONICAL_MUTATION=false','AUTONOMY_QUEUE_DIRECT_APPLY=false'])
+check('scripts/casa/discover-operational-channels.ps1',[
+ 'NEW_ATTEMPT_FAILED != EXISTING_CHANNEL_DEAD','Get-NetTCPConnection -State Established','OwningProcess'
+], classification='OPERATIONAL_CHANNEL_DISCOVERY_RUNTIME')
+check('docs/CONSCIENCIA/APRENDIZADOS/2026-09-14-descoberta-canais-operacionais-xp.md',[
+ 'NEW_ATTEMPT_FAILED != EXISTING_CHANNEL_DEAD',
+ 'DISCOVER_EXISTING_CHANNELS -> CLASSIFY -> REUSE_BEFORE_CREATE',
+ 'XP é métrica do sistema, não autoridade',
+ 'TEMP_USED != CANONICAL_ASSET','TEMP_HELPER_CLEANUP=PASS'
+], classification='OPERATIONAL_CHANNEL_DISCOVERY_CRYSTAL')
 check('scripts/memory-linker/dream-review-run.mjs')
 check('scripts/memory-linker/pattern-discovery.mjs')
-check('.agents/skills/session-intelligence-harvester/SKILL.md',['Run on session end (hook).'],'DECLARED_HOOK_NOT_RUNTIME_PROOF')
+check('.agents/skills/session-intelligence-harvester/SKILL.md',['Run on session end (hook).'],'SESSION_END_HOOK_CONTRACT')
+check('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ 'def emit_session_harvest_candidate()',
+ '"kind": "session.harvest"',
+ '"owner": HARVEST_OWNER',
+ 'MEMORIA_INGEST_TOKEN',
+ 'MEMORIA_INGEST_RECEIPT_INVALID',
+ 'SAME_SESSION_DELTA_FINGERPRINT',
+], classification='SESSION_END_HARVEST_BRIDGE_IMPLEMENTED_RUNTIME_PROOF_PENDING')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'event: SESSION_END',
+ 'status: IMPLEMENTED_RUNTIME_PROOF_PENDING',
+], classification='SESSION_END_TRIGGER_BINDING')
 check('.agents/skills/knowledge-compiler/SKILL.md',[
  'MUITO MINERIO ENTRA',
  'POUCO OURO SAI',
@@ -325,6 +646,20 @@ check('.github/workflows/porta-de-entrada.yml',[
  'GITHUB_HOSTED_RUNNER_ALLOWED=0','SELF_HEALING_CONTRACT_REQUIRED=1'
 ])
 check('.github/workflows/autonomia-promocao.yml',['Juiz determinístico','github-pr-confirmado-label.mjs'])
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml',[
+ 'UPDATE_BRANCH_RUNNER_LOCK: GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN',
+ 'required_runner: ubuntu-latest',
+ 'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE: true',
+ 'HYBRID_MODE_PENDING_VPS_PROOF: true',
+ 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE: true',
+], classification='UPDATE_BRANCH_RUNNER_LOCK_CONTRACT')
+check('.github/workflows/pr-update-branch-deterministic.yml',[
+ 'runs-on: ubuntu-latest',
+ 'UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN',
+ 'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true',
+ 'HYBRID_MODE_PENDING_VPS_PROOF=true',
+ 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true',
+], classification='UPDATE_BRANCH_RUNNER_LOCK_ENFORCED')
 check('.github/workflows/trigger-fabric-package.yml',['Trigger Fabric Full Package','Fresh-extraction counterproof'])
 check('docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md',['👑 PERMITO-SEGREDO','✅ PR CONFIRMADO','Label roteia trabalho; **nunca concede autoridade humana**.'])
 check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
@@ -349,6 +684,9 @@ forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
 # vps-reboot-forensic precisa de saída pra API Contabo/Cloudflare. Autorizado
 # por PERMITO-SEGREDO no cabeçalho de cada arquivo. Isentar, não remover.
 runner_policy_exempt=frozenset({
+    # Fluxo de COSTURA provado: precisa GitHub-hosted enquanto self-hosted/VPS estiver offline.
+    # Cadeado formal: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml
+    '.github/workflows/pr-update-branch-deterministic.yml',
     '.github/workflows/vps-reboot-forensic.yml',
     '.github/workflows/vps-wake-hosted-ssh.yml',
 })
@@ -392,6 +730,96 @@ if branch_exempted or sha_exempted:
         if not c['ok']:
             c['exempted'] = True
             c['exemption_reason'] = f'branch_exempt:{current_branch}' if branch_exempted else f'sha_exempt:{current_sha}'
+
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
+ 'marker: PROVEN_CRYSTAL_MAIN_FAST_PATH',
+ 'same_fingerprint: PASSAGE_OPEN',
+ 'reproof_policy: AFFECTED_CONE_ONLY',
+ 'full_ci_reproof_for_unchanged_proven_crystal: false',
+ 'direct_main_allowed_when_authorized: true',
+ 'rule: PROVEN_CRYSTAL_REPLAY_BEFORE_REDISCOVERY',
+ 'docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml',
+ '.agents/skills/centraldark-unified-surface-parity/SKILL.md',
+], classification='PROVEN_CRYSTAL_MAIN_FAST_PATH_CONTRACT')
+
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'unified_surface_parity_contract: LOADED',
+ 'proven_crystal_registra: "PASSAGE_OPEN_TO_MAIN_WITH_AFFECTED_CONE_ONLY"',
+ 'unchanged_proven_crystal_full_ci_reproof: false',
+ 'centraldark_invocation_semantics:',
+ 'same_semantics_across_text_voice_work_desktop: true',
+], classification='CENTRALDARK_BOOT_PROVEN_CRYSTAL_BINDING')
+
+check('LEIA-ME-IA.md',[
+ 'CENTRALDARK_UNIFIED_SURFACE_PARITY_REQUIRED=true',
+ 'PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH=true',
+ 'PROVEN_CRYSTAL_FULL_CI_REPROOF=false',
+ 'PROVEN_CRYSTAL_REVALIDATE=AFFECTED_CONE_ONLY',
+], classification='CENTRALDARK_CORE_PROVEN_CRYSTAL_BINDING')
+
+check('AGENTS.md',[
+ 'PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH=true',
+ 'PROVEN_CRYSTAL_FULL_CI_REPROOF=false',
+ 'PROVEN_CRYSTAL_SAME_FINGERPRINT=PASSAGE_OPEN',
+ 'PROVEN_CRYSTAL_DIVERGENCE=REOPEN_AFFECTED_CONE_ONLY',
+ 'CENTRALDARK_UNIFIED_SURFACE_PARITY_OWNER=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml',
+], classification='AGENT_PROVEN_CRYSTAL_FAST_PATH_BINDING')
+check_values('AGENTS.md',{
+ 'PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH':'true','PROVEN_CRYSTAL_FULL_CI_REPROOF':'false',
+ 'PROVEN_CRYSTAL_SAME_FINGERPRINT':'PASSAGE_OPEN','PROVEN_CRYSTAL_DIVERGENCE':'REOPEN_AFFECTED_CONE_ONLY',
+}, classification='AGENT_PROVEN_CRYSTAL_FAST_PATH_VALUES')
+for _own_error_rules_file in ('AGENTS.md','CLAUDE.md'):
+    check_values(_own_error_rules_file,{'PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD':'true','TEST_HARNESS_DERIVES_FILES_FROM_OWNER':'true','TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE':'true','SEAL_STORES_REPLAY_INPUTS':'true','PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW':'true','RETRACT_FALSE_ALARM_IN_SAME_RECEIPT':'true','SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING':'true','ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE':'true'}, classification='CLAUDE_OWN_ERRORS_BECOME_RULES')
+check_values('AGENTS.md',{'PARALLEL_PATHS_ALLOWED':'true','PARALLEL_SYSTEM_OR_OWNER':'FORBIDDEN','PARALLEL_PATHS_CONVERGE_TO_ONE_INTENT_AND_ONE_LIVE_STATE':'true'}, classification='PARALLEL_PATHS_CONVERGE_NOT_PARALLEL_SYSTEM')
+check_values('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',{'STOP_FOR_CHEFE_ONLY_HUMAN_ONLY_INPUT':'true','WHOLE_ARCHITECTURE_ONE_BATCH':'true','PARALLEL_PATHS_CONVERGE_TO_ONE_LIVE_STATE':'true','STALLED_WITHOUT_EXACT_DEPENDENCY_MAP_IS_AGENT_DEBT':'true','PARALLEL_PATHS_ALLOWED':'true','PARALLEL_SYSTEM_OR_OWNER':'FORBIDDEN'}, classification='SOUL_CHEFE_2026_09_27_OPERATIONAL_LAW')
+check_soul_sync()
+check_values('.agents/skills/session-intelligence-harvester/SKILL.md',{'ALL_SESSIONS_BECOME_COMMIT':'false','FILE_EXISTS_IS_NOT_LOADED':'true','SKILL_EXISTS_IS_NOT_USED':'true','RULE_EXISTS_IS_NOT_ENFORCED':'true','FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE':'true'}, classification='LOST_SESSION_RESCUE_IN_HARVESTER_OWNER')
+check_values('LEIA-ME-IA.md',{
+ 'CENTRALDARK_UNIFIED_SURFACE_PARITY_REQUIRED':'true','PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH':'true',
+ 'PROVEN_CRYSTAL_FULL_CI_REPROOF':'false','PROVEN_CRYSTAL_REVALIDATE':'AFFECTED_CONE_ONLY',
+}, classification='CENTRALDARK_CORE_PROVEN_CRYSTAL_VALUES')
+check_values('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',{
+ 'same_fingerprint':'PASSAGE_OPEN','reproof_policy':'AFFECTED_CONE_ONLY',
+ 'full_ci_reproof_for_unchanged_proven_crystal':'false','direct_main_allowed_when_authorized':'true',
+}, classification='PROVEN_CRYSTAL_MAIN_FAST_PATH_VALUES')
+check_values('CENTRALDARK_AI_BOOT.yaml',{
+ 'unified_surface_parity_contract':'LOADED','unchanged_proven_crystal_full_ci_reproof':'false',
+ 'same_semantics_across_text_voice_work_desktop':'true',
+}, classification='CENTRALDARK_BOOT_PROVEN_CRYSTAL_VALUES')
+
+check_values('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',{
+ 'CHEFE_AUTHORITY_IS_SINGLETON':'true',
+ 'DETERMINISTIC_ROUTE_FIRST':'true',
+ 'REALITY_JUDGE_AFTER_EFFECT':'true',
+ 'REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM':'true',
+ 'REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION':'true',
+ 'CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR':'true',
+ 'OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL':'true',
+}, classification='REALITY_JUDGE_NOT_GATEKEEPER_CONTRACT')
+check('docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md',[
+ 'REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true',
+ 'TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true',
+], classification='CHEFE_AUTHORITY_DURABLE_MEMORY')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md',[
+ 'REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true',
+ 'REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true',
+], classification='FREQUENCY_CANNOT_OVERRIDE_CHEFE_AUTHORITY')
+
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'MODELO=MOTOR_SUBSTITUIVEL',
+ 'ONE_SYSTEM_ONLY=true',
+ 'MEMORIA=CANONICA_E_COMPARTILHADA',
+], classification='CENTRALDARK_PERSISTENT_IDENTITY_CONTRACT')
+check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
+ 'CENTRALDARK_IS_PERSISTENT_INTELLIGENCE=true',
+ 'EXECUTOR_SESSION_IS_NOT_OWNER_OF_SYSTEM_LEARNING=true',
+ 'MODEL_OR_EXECUTOR_IS_REPLACEABLE_CARRIER=true',
+ 'MATERIAL_LEARNING_RETURNS_TO_CENTRALDARK_CORE=true',
+ 'NEXT_EXECUTOR_INHERITS_CANONICAL_STATE=true',
+ 'EXECUTOR_ATTRIBUTION_PRESERVES_PROVENANCE_NOT_AUTHORITY=true',
+ 'REALITY_JUDGE_IS_POST_EFFECT_FALSIFIER=true',
+ 'REALITY_JUDGE_IS_NOT_SYSTEM_LEARNING_OWNER=true',
+], classification='CENTRALDARK_LEARNING_OUTLIVES_EXECUTOR_CONTRACT')
 
 failed=[c for c in checks if not c['ok'] and not c.get('exempted', False)]
 print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))

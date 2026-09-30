@@ -7,7 +7,7 @@ updated: 2026-08-28
 
 # Visualização Mermaid — Padrão Obrigatório da Casa
 
-**Decisão do SEGREDO/CHEFE (PERMITO PIVETE):** toda informação estruturada na
+**Decisão do SEGREDO/CHEFE (PERMITO SEGREDO):** toda informação estruturada na
 CentralDark deve poder ser expressa em **Mermaid** (.mmd). Isso fortalece os
 fluxos: cada conceito vira diagrama + texto, não só prosa.
 

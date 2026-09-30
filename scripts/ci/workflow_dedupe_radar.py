@@ -17,6 +17,8 @@ import argparse
 import hashlib
 import json
 import re
+import os
+import subprocess
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Iterable
@@ -279,6 +281,39 @@ def render_markdown(report: dict) -> str:
     return "\n".join(lines)
 
 
+def changed_workflow_paths(root: Path) -> set[str]:
+    """Return workflow files changed against the PR base when git context exists.
+
+    Visual canon debt is repository-wide, but PR gates must not turn historical
+    debt into a false-red for unrelated deltas. In pull_request context, block
+    the changed workflow files only; full-repo scans still report every finding.
+    """
+    base_ref = os.environ.get("GITHUB_BASE_REF") or "main"
+    candidates = [f"origin/{base_ref}", base_ref, "origin/main"]
+    base = None
+    for candidate in candidates:
+        probe = subprocess.run(
+            ["git", "-C", str(root), "merge-base", candidate, "HEAD"],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+        )
+        if probe.returncode == 0 and probe.stdout.strip():
+            base = probe.stdout.strip()
+            break
+    if not base:
+        return set()
+    diff = subprocess.run(
+        ["git", "-C", str(root), "diff", "--name-only", f"{base}...HEAD", "--", ".github/workflows"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+    )
+    if diff.returncode != 0:
+        return set()
+    return {line.strip() for line in diff.stdout.splitlines() if line.strip().endswith((".yml", ".yaml"))}
+
+
 def self_test() -> int:
     sample = """name: 🧪 x
 on: push
@@ -330,7 +365,21 @@ def main() -> int:
     if args.fail_on_exact and report["exact_duplicate_jobs"]:
         return 4
     if args.fail_on_visual_canon and report["visual_canon"]["violations"]:
-        return 5
+        changed = changed_workflow_paths(Path(args.root).resolve())
+        if changed:
+            new_scope_violations = [
+                item for item in report["visual_canon"]["violations"]
+                if item["path"] in changed
+            ]
+            report["visual_canon"]["fail_scope"] = "CHANGED_WORKFLOWS_ONLY"
+            report["visual_canon"]["changed_workflows"] = sorted(changed)
+            report["visual_canon"]["blocking_violations"] = new_scope_violations
+            if new_scope_violations:
+                return 5
+        else:
+            report["visual_canon"]["fail_scope"] = "FULL_REPO_NO_BASELINE"
+            report["visual_canon"]["blocking_violations"] = report["visual_canon"]["violations"]
+            return 5
     return 0
 
 

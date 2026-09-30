@@ -189,12 +189,18 @@ try {
     commitSha = execFileSync('git', ['-C', RAIZ, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
     commitStatus = 'COMMITTED';
 
-    try {
-      execFileSync('git', ['-C', RAIZ, 'push', 'origin', 'main'], { stdio: 'pipe' });
-      pushStatus = 'PUSHED';
-    } catch (error) {
-      pushStatus = 'FAILED';
-      gitError = `PUSH_FAILED:${error.message}`;
+    // Fail-closed: only explicit MEMORY_GIT_PUSH=1 allows push to origin/main.
+    if (process.env.MEMORY_GIT_PUSH !== '1') {
+      pushStatus = 'BLOCKED_BY_MEMORY_GIT_PUSH';
+      console.log('MEMORY_GIT_PUSH gate: push skipped (set MEMORY_GIT_PUSH=1 to allow)');
+    } else {
+      try {
+        execFileSync('git', ['-C', RAIZ, 'push', 'origin', 'main'], { stdio: 'pipe' });
+        pushStatus = 'PUSHED';
+      } catch (error) {
+        pushStatus = 'FAILED';
+        gitError = `PUSH_FAILED:${error.message}`;
+      }
     }
   }
 } catch (error) {

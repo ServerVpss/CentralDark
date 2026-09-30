@@ -54,6 +54,141 @@ function redact(value) {
     .replace(/\b(?:sk|ghp|github_pat|xox[baprs])-[-A-Za-z0-9_]{12,}/g, '[REDACTED]');
 }
 
+function nullableText(value, max = 4000) {
+  const text = redact(value ?? '').trim();
+  return text ? text.slice(0, max) : null;
+}
+
+function nullableNumber(value) {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+}
+
+function sourceKind(event) {
+  const hay = `${event?.source || ''} ${event?.sender || ''}`.toLowerCase();
+  if (hay.includes('dependabot')) return 'dependabot';
+  if (hay.includes('coderabbit') || hay.includes('code rabbit')) return 'coderabbit';
+  if (hay.includes('zendrive')) return 'zendrive';
+  if (hay.includes('hermes')) return 'hermes';
+  return 'external_review';
+}
+
+function inferSeverity(event) {
+  const explicit = nullableText(event?.metadata?.severity, 16)?.toLowerCase();
+  if (explicit && ['critical', 'high', 'medium', 'low'].includes(explicit)) return explicit;
+  const body = `${event?.subject || ''}
+${event?.body || ''}`.toLowerCase();
+  if (/\bcritical|cr[ií]tico\b/.test(body)) return 'critical';
+  if (/\bhigh|alta gravidade|p0|p1\b/.test(body)) return 'high';
+  if (/\blow|baixa gravidade\b/.test(body)) return 'low';
+  return 'medium';
+}
+
+function inferCategory(event, kind) {
+  const explicit = nullableText(event?.metadata?.category, 64);
+  if (explicit) return explicit;
+  if (kind === 'dependabot') return 'dependency_update';
+  const hay = `${event?.subject || ''}
+${event?.body || ''}`.toLowerCase();
+  if (/typecheck|lint|quality gate|quality_gate/.test(hay)) return 'quality_gate_gap';
+  if (/security|secret|vulnerab/.test(hay)) return 'security_review';
+  if (/conflict|merge conflict/.test(hay)) return 'merge_conflict';
+  return 'code_review';
+}
+
+function inferOwner(kind, category) {
+  if (kind === 'dependabot' || category === 'merge_conflict') {
+    return '.agents/skills/git-conflict-resolve-house-standard/SKILL.md';
+  }
+  if (category === 'quality_gate_gap') return '.agents/skills/auditoria-pr/SKILL.md';
+  return '.agents/skills/auditoria-pr/SKILL.md';
+}
+
+function intentFromPrBody(body) {
+  const text = String(body || '');
+  const story = text.match(/(?:ID da hist[oó]ria|Story ID)\s*:?\s*([^\n#]+)/i)?.[1]?.trim() || null;
+  const acSection = text.match(/(?:Crit[eé]rios de aceita[cç][aã]o(?: abordados)?|Acceptance Criteria)\s*\n([\s\S]*?)(?=\n#{1,4}\s|$)/i)?.[1] || '';
+  const acceptance = acSection
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^\s*[-*]\s*(?:\[[ xX]\]\s*)?/, '').trim())
+    .filter(Boolean)
+    .slice(0, 20);
+  return { story_id: story, acceptance_criteria: acceptance };
+}
+
+export function normalizeReviewFinding(event = {}) {
+  const metadata = event?.metadata && typeof event.metadata === 'object' ? event.metadata : {};
+  const intent = event?.intent && typeof event.intent === 'object' ? event.intent : {};
+  const kind = sourceKind(event);
+  const category = inferCategory(event, kind);
+  const bodyIntent = intentFromPrBody(metadata.pr_body);
+  const headSha = nullableText(metadata.head_sha || intent.head_sha, 64);
+  const observedAt = nullableText(event.observed_at, 64) || new Date().toISOString();
+  const initialState = kind === 'dependabot' ? 'OBSERVED' : 'CANDIDATE';
+  const nextCursor = kind === 'dependabot'
+    ? 'APPLY_DEPENDABOT_POLICY_AND_SAME_HEAD_GATES'
+    : 'HERMES_REPRODUCE_TEST_COUNTERPROVE';
+  return {
+    schema: 'centraldark.review-finding.v1',
+    state: initialState,
+    authority: false,
+    pr: {
+      number: nullableNumber(metadata.pr_number || intent.pr_number),
+      head_sha: headSha,
+      base_sha: nullableText(metadata.base_sha || intent.base_sha, 64),
+      url: nullableText(event.url, 1000),
+    },
+    intent: {
+      story_id: nullableText(intent.story_id || metadata.story_id || bodyIntent.story_id, 160),
+      acceptance_criteria: Array.isArray(intent.acceptance_criteria) && intent.acceptance_criteria.length
+        ? intent.acceptance_criteria.map((item) => nullableText(item, 500)).filter(Boolean).slice(0, 20)
+        : bodyIntent.acceptance_criteria.map((item) => nullableText(item, 500)).filter(Boolean).slice(0, 20),
+      scope: nullableText(intent.scope || metadata.scope, 160),
+      change_type: nullableText(intent.change_type || metadata.change_type, 160),
+    },
+    finding: {
+      source: kind,
+      source_ref: nullableText(event.source, 160),
+      sender: nullableText(event.sender, 160),
+      file: nullableText(metadata.file, 1000),
+      line_start: nullableNumber(metadata.line_start),
+      line_end: nullableNumber(metadata.line_end),
+      category,
+      severity: inferSeverity(event),
+      claim: nullableText(event.body || event.subject, 8000),
+      suggested_action: nullableText(metadata.suggested_action, 2000),
+    },
+    provenance: {
+      observed_at: observedAt,
+      reviewer_snapshot_sha: headSha,
+    },
+    verification: {
+      current_head_sha: headSha,
+      still_valid: 'UNKNOWN',
+      reproduced: 'UNKNOWN',
+      test: 'UNKNOWN',
+      counterproof: 'UNKNOWN',
+    },
+    routing: {
+      owner: inferOwner(kind, category),
+      capability: kind === 'dependabot' ? 'dependency_reconciliation' : 'code_review',
+      writer: 'OWNER_RESOLVES_AFTER_REPRODUCTION',
+      judge: 'META_LUPA_REALITY',
+    },
+    result: {
+      state: initialState,
+      receipt: null,
+      next_cursor: nextCursor,
+    },
+    invariants: [
+      'REVIEW_IS_NOT_PROOF',
+      'CURRENT_HEAD_REVALIDATION_REQUIRED',
+      'UNKNOWN_IS_NOT_PASS',
+      'WRITER_AND_JUDGE_SEPARATED',
+    ],
+  };
+}
+
 async function log(...args) {
   await mkdir(LOGDIR, { recursive: true });
   const line = `[${new Date().toISOString()}] ${args.map(redact).join(' ')}\n`;
@@ -260,11 +395,11 @@ async function runOnce(directEvent = null) {
 
   let signal = { state: 'UNKNOWN', reason: 'ZENDRIVE_REVIEW_NOT_PROVEN', receipt: null };
   let mineral = { state: 'UNKNOWN', reason: 'NO_SIGNAL_TO_MINERALIZE', receipt: null };
+  const reviewEvent = directEvent || (zendrive.state === 'PROVADO' ? zendriveSignal(zendrive) : null);
+  const reviewFinding = reviewEvent ? normalizeReviewFinding(reviewEvent) : null;
 
-  if (directEvent) {
-    signal = await runSignalWatcher(directEvent);
-  } else if (zendrive.state === 'PROVADO') {
-    signal = await runSignalWatcher(zendriveSignal(zendrive));
+  if (reviewEvent) {
+    signal = await runSignalWatcher(reviewEvent);
   }
   if (signal.state === 'PROVADO' && signal.receipt) {
     mineral = await mineralize(signal.receipt);
@@ -277,6 +412,7 @@ async function runOnce(directEvent = null) {
     role: 'REVIEW_ONLY',
     sources: { rabbit_a: rabbitA, rabbit_b: rabbitB, zendrive },
     known_conflict_paths: knownConflictPaths,
+    review_finding: reviewFinding,
     legacy_numeric_aggregate: {
       state: hasAnyBalance ? 'PROVADO' : 'UNKNOWN',
       value: aggregated,
@@ -294,6 +430,8 @@ async function runOnce(directEvent = null) {
       'HERMES_PROVES_AND_TESTS',
       'REVIEW_IS_NOT_PROOF',
       'REVIEW_IS_NOT_MERGE_AUTHORITY',
+      'REVIEW_FINDING_IS_CANDIDATE',
+      'CURRENT_HEAD_REVALIDATION_REQUIRED',
       'MISSING_DATA_IS_NOT_ZERO',
       'UNKNOWN_IS_NOT_PASS',
       'NEVER_DISCARD_LEARNING',
@@ -320,7 +458,10 @@ async function main() {
   setInterval(() => runOnce().catch((error) => log('loop error', error?.message || error)), interval);
 }
 
-main().catch(async (error) => {
-  await log('bridge fatal', error?.stack || error?.message || error);
-  process.exitCode = 1;
-});
+const IS_MAIN = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (IS_MAIN) {
+  main().catch(async (error) => {
+    await log('bridge fatal', error?.stack || error?.message || error);
+    process.exitCode = 1;
+  });
+}

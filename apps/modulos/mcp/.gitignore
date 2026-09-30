@@ -13,6 +13,11 @@ dist/**/*.map
 dist/**/*.bak*
 dist/**/*.d.ts
 
+# Rollback/promote leftovers (deploy atômico) — não sujam o Verificador:
+.dist-failed.*/
+.dist-backup.*/
+.dist-release.*/
+
 # Segredos e dependências continuam SEMPRE ignorados:
 .env
 .env.*

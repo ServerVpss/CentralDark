@@ -18,8 +18,9 @@ ROUTER_SCRIPT = r"/root/CentralDark/apps/modulos/elite-gateway/scripts/centralda
 env = os.environ.copy()
 env["HERMES_BASE_URL"] = "http://127.0.0.1:8899"
 env["CENTRALDARK_DEFAULT_ENGINE"] = "antigravity"
-# Use a non-conflicting port for the router
-router_port = "8100"
+# Canonical runtime port for the Omni Router.
+# This must match deploy probes, Hermes OPENAI_BASE_URL, and micro-deploy receipts.
+router_port = "8099"
 env["CENTRALDARK_ROUTER_PORT"] = router_port
 
 env["CENTRALDARK_ROUTER_TOKEN"] = ""

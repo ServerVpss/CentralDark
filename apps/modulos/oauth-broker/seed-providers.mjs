@@ -9,6 +9,7 @@ const sb = createClient(process.env.HUB_SUPABASE_URL, process.env.HUB_SUPABASE_S
 });
 
 const providers = [
+  { id: "figma", display_name: "Figma / FigJam", color: "#a259ff", icon: "Fg", scopes: "files:read", auth_type: "api_key", tier: 1, enabled: true },
   { id: "claude", display_name: "Claude (Anthropic)", color: "#d97706", icon: "C", scopes: "messages", auth_type: "api_key", tier: 1, enabled: true },
   { id: "groq",   display_name: "Groq",               color: "#f55036", icon: "Gq", scopes: "chat.completions", auth_type: "api_key", tier: 1, enabled: true },
 ];

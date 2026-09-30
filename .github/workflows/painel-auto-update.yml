@@ -68,13 +68,12 @@ jobs:
               fi
 
               git add -- apps/modulos/status/painel-data.json
-              git commit -m "📊 painel: registrar estado da main ${GITHUB_SHA:0:7}
-
-🧾 Origem: push na main
-🔗 SHA observado: ${GITHUB_SHA}
-🤖 Autor: CentralDark Bot
-
-Co-authored-by: SegredoiDev <bot@centralldark.com>"
+              git commit \
+                -m "📊 painel: registrar estado da main ${GITHUB_SHA:0:7}" \
+                -m "🧾 Origem: push na main" \
+                -m "🔗 SHA observado: ${GITHUB_SHA}" \
+                -m "🤖 Autor: CentralDark Bot" \
+                -m "Co-authored-by: SegredoiDev <bot@centralldark.com>"
 
               HEAD_SHA="$(git rev-parse HEAD)"
               echo "🚪 Gate global pré-main base=${BASE_SHA:0:12} head=${HEAD_SHA:0:12}"

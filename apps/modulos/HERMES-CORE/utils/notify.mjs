@@ -48,12 +48,38 @@ function montarCard(titulo, mensagem) {
     linhaTopo,
     '╚' + '═'.repeat(largura - 2) + '╝',
     '',
+    '⭕ !AURÉOLA CANÔNICA',
+    '👑 CHEFE — recado da CentralDark:',
     mensagem,
+    '',
+    '🔎 !CONTRAPROVA: a notificação informa o evento; a prova continua no rastro correspondente.',
+    '⚖️ REALIDADE É O JUIZ.',
   ].join('\n');
 }
 
 function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+let nextTelegramAllowedAt = 0;
+let lastPayloadFingerprint = '';
+let lastPayloadAt = 0;
+
+function parseRetryAfter(texto) {
+  try {
+    const parsed = JSON.parse(texto);
+    return Number(parsed?.parameters?.retry_after || 0);
+  } catch {
+    const m = String(texto).match(/retry after\s+(\d+)/i);
+    return m ? Number(m[1]) : 0;
+  }
+}
+
+function fingerprint(texto) {
+  let hash = 0;
+  for (const ch of String(texto)) hash = ((hash << 5) - hash + ch.charCodeAt(0)) | 0;
+  return String(hash);
 }
 
 export async function notificar(titulo = 'Hermes', mensagem = '', destino) {
@@ -72,6 +98,18 @@ export async function notificar(titulo = 'Hermes', mensagem = '', destino) {
   }
 
   const cardHtml = `<pre>${escapeHtml(montarCard(titulo, mensagem))}</pre>`;
+  const payloadFingerprint = fingerprint(`${chat}:${cardHtml}`);
+  const now = Date.now();
+  if (payloadFingerprint === lastPayloadFingerprint && now - lastPayloadAt < 30_000) {
+    console.log('[notify] duplicado suprimido por 30s');
+    return { ok: false, reason: 'duplicate_suppressed' };
+  }
+  if (now < nextTelegramAllowedAt) {
+    const waitMs = nextTelegramAllowedAt - now;
+    console.warn('[notify] aguardando backoff telegram', Math.ceil(waitMs / 1000));
+    await sleep(waitMs);
+  }
+
   try {
     const r = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
       method: 'POST',
@@ -84,9 +122,18 @@ export async function notificar(titulo = 'Hermes', mensagem = '', destino) {
       }),
     });
     if (!r.ok) {
-      console.warn('[notify] telegram falhou', r.status, (await r.text()).slice(0, 200));
+      const body = await r.text().catch(() => '');
+      if (r.status === 429) {
+        const retryAfter = parseRetryAfter(body) || 30;
+        nextTelegramAllowedAt = Date.now() + (retryAfter + 1) * 1000;
+        console.warn('[notify] telegram rate_limited', { retry_after: retryAfter });
+        return { ok: false, status: r.status, retry_after: retryAfter };
+      }
+      console.warn('[notify] telegram falhou', r.status, body.slice(0, 200));
       return { ok: false, status: r.status };
     }
+    lastPayloadFingerprint = payloadFingerprint;
+    lastPayloadAt = Date.now();
     console.log('[notify] enviado');
     return { ok: true, status: r.status };
   } catch (e) {

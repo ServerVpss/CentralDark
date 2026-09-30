@@ -2,11 +2,16 @@
 import { createHash } from 'node:crypto';
 import {
   existsSync,
+  mkdtempSync,
   readFileSync,
   readdirSync,
+  rmSync,
   statSync,
+  writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
+import { tmpdir } from 'node:os';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 
@@ -216,6 +221,98 @@ export function proofAfterAction(actionResult = {}, postProbe = {}, counterproof
   };
 }
 
+
+export function runFullGate(explicitPath) {
+  const identity = resolvePdfReference(explicitPath);
+  const policy = {
+    pass: ARTIFACT_IDENTITY_POLICY.UNKNOWN_IS_NOT_PASS === true &&
+      ARTIFACT_IDENTITY_POLICY.ARTIFACT_NAME_IS_NOT_IDENTITY === true &&
+      ARTIFACT_IDENTITY_POLICY.EMPTY_PATH_IS_NOT_ARTIFACT_MISSING === true,
+    required: [
+      'UNKNOWN_IS_NOT_PASS',
+      'ARTIFACT_NAME_IS_NOT_IDENTITY',
+      'EMPTY_PATH_IS_NOT_ARTIFACT_MISSING',
+    ],
+  };
+
+  let selfTestResult;
+  try {
+    selfTestResult = selfTest();
+  } catch (error) {
+    selfTestResult = { status: 'FAIL', error: String(error?.stack || error) };
+  }
+
+  const testPath = path.join(__dirname, 'pdf-conformance-cc2003.test.mjs');
+  const nodeTestRun = spawnSync(process.execPath, ['--test', testPath], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
+  const nodeTest = {
+    pass: nodeTestRun.status === 0,
+    exitCode: nodeTestRun.status,
+    stdout: (nodeTestRun.stdout || '').trim(),
+    stderr: (nodeTestRun.stderr || '').trim(),
+  };
+
+  let tamper = {
+    pass: false,
+    status: 'UNKNOWN',
+    reason: 'IDENTITY_REQUIRED_BEFORE_TAMPER',
+  };
+
+  if (identity.status === 'PROVED_IN_SCOPE' && identity.path) {
+    const tempRoot = mkdtempSync(path.join(tmpdir(), 'centraldark-pdf-gate-'));
+    try {
+      const original = readFileSync(identity.path);
+      const modified = Buffer.from(original);
+      if (modified.length > 0) modified[0] ^= 0xff;
+
+      const tamperedPath = path.join(tempRoot, 'tlc23.pdf');
+      writeFileSync(tamperedPath, modified);
+      const inspected = inspectArtifact(tamperedPath);
+      tamper = {
+        pass: inspected.status === 'REFUTED_IN_SCOPE' &&
+          inspected.reason === 'BYTE_IDENTITY_MISMATCH',
+        status: inspected.status,
+        reason: inspected.reason,
+        sizeBytes: inspected.sizeBytes,
+        sha256: inspected.sha256,
+      };
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  }
+
+  const steps = {
+    identity: {
+      pass: identity.status === 'PROVED_IN_SCOPE' && identity.identityMatch === true,
+      status: identity.status,
+      reason: identity.reason,
+      path: identity.path,
+      sha256: identity.sha256,
+      sizeBytes: identity.sizeBytes,
+    },
+    policy,
+    selfTest: {
+      pass: selfTestResult?.status === 'PASS',
+      status: selfTestResult?.status || 'FAIL',
+      error: selfTestResult?.error || null,
+    },
+    nodeTest,
+    tamper,
+  };
+
+  const promoted = Object.values(steps).every((step) => step.pass === true);
+  return {
+    schema: 'centraldark.pdf-gate.v1',
+    source: CC2003_SOURCE.title,
+    requiredChain: 'TLC23/HORN->PDF_GATE->COUNTERPROOF->PASS',
+    steps,
+    pdfGatePromoted: promoted,
+    finalPassClaimed: promoted,
+  };
+}
+
 export function selfTest() {
   assert.equal(CC2003_SOURCE.expectedSizeBytes, 206674);
   assert.equal(CC2003_SOURCE.expectedSha256, 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1');
@@ -242,6 +339,15 @@ export function selfTest() {
 }
 
 function main() {
+  const pdfArgIndex = process.argv.indexOf('--pdf');
+  const explicitPath = pdfArgIndex >= 0 ? process.argv[pdfArgIndex + 1] : undefined;
+
+  if (process.argv.includes('--gate')) {
+    const result = runFullGate(explicitPath);
+    console.log(JSON.stringify(result, null, 2));
+    process.exit(result.pdfGatePromoted ? 0 : 1);
+  }
+
   if (process.argv.includes('--self-test')) {
     console.log(JSON.stringify(selfTest(), null, 2));
     process.exit(0);
@@ -250,7 +356,7 @@ function main() {
   if (process.argv.includes('--info')) {
     console.log(JSON.stringify({
       status: 'READY',
-      usage: 'node scripts/lupa/pdf-conformance-cc2003.mjs --self-test | --pdf <path> | [no path = resolve known identity]',
+      usage: 'node scripts/lupa/pdf-conformance-cc2003.mjs --gate [--pdf <path>] | --self-test | --pdf <path> | [no path = resolve known identity]',
       source: CC2003_SOURCE,
       policy: ARTIFACT_IDENTITY_POLICY,
       knownRoots: knownSearchRoots(),
@@ -258,8 +364,6 @@ function main() {
     return;
   }
 
-  const pdfArgIndex = process.argv.indexOf('--pdf');
-  const explicitPath = pdfArgIndex >= 0 ? process.argv[pdfArgIndex + 1] : undefined;
   const result = resolvePdfReference(explicitPath);
   console.log(JSON.stringify(result, null, 2));
   process.exit(result.status === 'PROVED_IN_SCOPE' ? 0 : result.status === 'REFUTED_IN_SCOPE' ? 1 : 2);

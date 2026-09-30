@@ -12,9 +12,15 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
-import { startHubMissionConsumer } from "./hub-mission-consumer.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
-import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, } from "./admin.js";
+import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
+import { handleBuildkiteWebhook } from "./buildkite-integration.js";
+import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
+import { getLinearPublicStatus } from "./tools/integrations.js";
+import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
 process.on("uncaughtException", (err) => {
@@ -75,10 +81,31 @@ app.use((_req, res, next) => {
 app.options(/.*/, (_req, res) => {
     res.sendStatus(204);
 });
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({
+    limit: "2mb",
+    verify: (req, _res, buf) => {
+        const url = String(req.originalUrl || req.url || "");
+        if (url.startsWith("/integrations/buildkite/webhook")) {
+            req.rawBody = Buffer.from(buf);
+        }
+    },
+}));
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 // V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
+
+app.post("/integrations/buildkite/webhook", (req, res) => {
+    const result = handleBuildkiteWebhook(req, res);
+    if (result?.ok) {
+        pushAdminLog("info", "buildkite_webhook_event", {
+            cid: req.cid,
+            path: req.path,
+            event: result.event,
+            event_id: result.receipt?.event_id || null,
+            action_executed: false,
+        });
+    }
+});
 // ─────────────────────────────── Health ──────────────────────────────────
 app.get("/health", (_req, res) => {
     res.json({
@@ -92,6 +119,74 @@ app.get("/health", (_req, res) => {
 });
 // V2: healthcheck profundo (Health Score consumido pelo painel /admin)
 app.get("/health/deep", healthDeep);
+app.get("/linear/status", async (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    const status = await getLinearPublicStatus();
+    res.status(status.ok ? 200 : 503).json(status);
+});
+app.get("/figma/status", async (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    const status = await getFigmaPublicStatus();
+    res.status(status.ok ? 200 : 503).json(status);
+});
+// Um coração: heartbeat que monitora o próprio monitor. Público via api.centralldark.com.
+const HEART_FILE = "/root/CentralDark/logs/heartbeat-api.json";
+app.get("/heartbeat", (_req, res) => {
+    const nowIso = new Date().toISOString();
+    const nowMs = Date.now();
+    let prev = null;
+    try {
+        prev = JSON.parse(readFileSync(HEART_FILE, "utf8"));
+    }
+    catch { /* first beat */ }
+    const lagMs = prev?.t ? nowMs - Date.parse(prev.t) : null;
+    const hub = getHubMissionConsumerStatus();
+    const sse = getSseDiagnostics();
+    const ingestScheduled = scheduleAgentLogIngest();
+    const observability = getAgentObservabilityStatus();
+    const self = lagMs == null ? "first_beat" : (lagMs < 120000 ? "alive" : "stale");
+    const body = {
+        ok: true,
+        heart: "one",
+        route: "api.centralldark.com/heartbeat",
+        t: nowIso,
+        prev_t: prev?.t || null,
+        lag_ms: lagMs,
+        self,
+        service: "mcp-centraldark",
+        version: "0.4.0",
+        hub_mission: {
+            enabled: hub.enabled,
+            status: hub.status,
+            lastError: hub.lastError || null,
+            lastPollAt: hub.lastPollAt || null,
+        },
+        sse: {
+            conexoesAtivas: sse.conexoesAtivas,
+            eventosPorMinuto: sse.eventosPorMinuto,
+            ultimoEventoHaMs: sse.ultimoEventoHaMs,
+        },
+        observability: {
+            log_root: observability.layout.root,
+            tracked_sources: observability.tracked_sources,
+            last_ingest_status: observability.last_ingest.status,
+            last_ingest_at: observability.last_ingest.at,
+            ingest_scheduled: ingestScheduled,
+        },
+        operational,
+        status_key: {
+            source: "mcp-heartbeat",
+            scope: "heart",
+            artifact: "/heartbeat",
+            timestamp: nowIso,
+        },
+    };
+    try {
+        writeFileSync(HEART_FILE, JSON.stringify({ t: nowIso, lag_ms: lagMs, self }, null, 2) + "\n", { mode: 0o600 });
+    }
+    catch { /* disk fail não derruba o coração */ }
+    res.json(body);
+});
 // ─────────────── #148: rotas que o dossie apontou como 404 mudo ───────────
 // MOTIVO  > a varredura da issue #148 achou 404 generico em /favicon.ico,
 //           /sse, GET /token e GET /register. 404 nao diz ao cliente se a
@@ -145,6 +240,7 @@ app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
 
 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
+app.use("/admin/grafo", adminGraphProxy);
 app.get("/admin", adminGet);
 app.post("/admin/login", adminLogin);
 app.get("/admin/logout", adminLogout);
@@ -152,6 +248,12 @@ app.get("/admin/api/rotas", adminRotas);
 app.get("/admin/api/tools", adminTools);
 app.get("/admin/api/logs", adminBuscarLogs);
 app.get("/admin/api/metricas", adminMetricas);
+app.get("/admin/api/grok/control", adminGrokControlGet);
+app.post("/admin/api/grok/control", adminGrokControlPost);
+app.get("/admin/api/buildkite/status", adminBuildkiteStatus);
+app.get("/admin/api/operational-snapshot", adminOperationalSnapshot);
+app.get("/admin/api/linear", adminLinear);
+app.get("/admin/api/tailscale", adminTailscale);
 app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
@@ -227,6 +329,9 @@ app.get("/openapi.json", (_req, res) => {
         "/tools.json": { get: { summary: "Manifesto publico do catalogo de tools", operationId: "toolsCatalog", responses: respostaJson } },
         "/health": { get: { summary: "Healthcheck", operationId: "health", responses: respostaJson } },
         "/health/deep": { get: { summary: "Healthcheck profundo", operationId: "healthDeep", responses: respostaJson } },
+        "/linear/status": { get: { summary: "Status seguro da integração Linear", operationId: "linearStatus", responses: respostaJson } },
+        "/figma/status": { get: { summary: "Status seguro da integração Figma/FigJam", operationId: "figmaStatus", responses: respostaJson } },
+        "/heartbeat": { get: { summary: "Heartbeat + snapshot operacional determinístico", operationId: "heartbeat", responses: respostaJson } },
         "/status.json": { get: { summary: "Status dos conectores", operationId: "statusJson", responses: respostaJson } },
         "/register": { post: { summary: "OAuth 2.1 Dynamic Client Registration", operationId: "oauthRegister", responses: respostaJson } },
         "/authorize": { get: { summary: "OAuth 2.1 authorize (PKCE S256)", operationId: "oauthAuthorize", responses: { "200": { description: "Tela de consentimento" }, "302": { description: "Redirect com code" } } } },
@@ -315,6 +420,10 @@ app.get("/.well-known/oauth-protected-resource/mcp", getProtectedResourceMetadat
 app.get("/mcp/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-protected-resource/admin/mcp", getProtectedResourceMetadata);
+// Compatibilidade fail-safe para clientes que invertem a rota admin.
+// O metadata devolve o resource canônico /admin/mcp; não nasce segundo MCP.
+app.get("/.well-known/oauth-protected-resource/mcp/admin", getProtectedResourceMetadata);
+app.get("/mcp/admin/.well-known/oauth-protected-resource", getProtectedResourceMetadata);
 app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
@@ -491,6 +600,7 @@ app.post("/mcp", (req, res) => {
         cid: req.cid,
         admin: false,
         callerUser: r.callerUser,
+        clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-public").slice(0, 160),
         oauthScope: r.oauthScope,
     }).catch((err) => {
         l.error("mcp_handler_unhandled", { error: String(err) });
@@ -534,6 +644,7 @@ app.post("/admin/mcp", (req, res) => {
         cid: req.cid,
         admin: true,
         callerUser: auth.callerUser,
+        clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-admin").slice(0, 160),
         oauthScope: auth.oauthScope,
     }).catch((err) => {
         l.error("mcp_admin_handler_unhandled", { error: String(err) });
@@ -549,6 +660,39 @@ app.post("/admin/mcp", (req, res) => {
 });
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
+});
+// Alias de compatibilidade: /mcp/admin converge para o MESMO handler /admin/mcp.
+// Mantemos o método e o corpo (sem redirect HTTP) porque clientes MCP/OAuth podem
+// não preservar POST/Authorization em redirects. O resource canônico continua /admin/mcp.
+app.post("/mcp/admin", (req, res) => {
+    const l = withCid(req.cid);
+    const auth = requireAdminScope(req, res);
+    if (!auth) return;
+    l.info("mcp_admin_compat_request_authorized", {
+        method: req.body?.method || "unknown",
+        actor: auth.callerUser,
+        canonicalPath: "/admin/mcp",
+        requestedPath: "/mcp/admin",
+    });
+    handleMcpRequest(req, res, auth.token, {
+        cid: req.cid,
+        admin: true,
+        callerUser: auth.callerUser,
+        oauthScope: auth.oauthScope,
+    }).catch((err) => {
+        l.error("mcp_admin_compat_handler_unhandled", { error: String(err) });
+        if (!res.headersSent) {
+            res.status(500).json({
+                jsonrpc: "2.0",
+                error: { code: -32603, message: "Erro interno do servidor MCP admin", data: { cid: req.cid } },
+                id: null,
+                cid: req.cid,
+            });
+        }
+    });
+});
+app.get("/mcp/admin", (req, res) => {
+    unauthorizedAdmin(req, res, "Rota compatível; resource canônico: /admin/mcp.");
 });
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
