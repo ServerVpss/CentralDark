@@ -1,0 +1,27 @@
+{
+  "id": "reality-judge-is-not-execution-permission",
+  "date": "2026-09-30",
+  "authority": "CHEFE",
+  "rules": {
+    "CHEFE_AUTORIDADE_FINAL": true,
+    "DETERMINISTIC_ROUTE_FIRST": true,
+    "REALITY_JUDGE_AFTER_EFFECT": true,
+    "REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM": true,
+    "REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION": true,
+    "REALITY_SIGNAL_CAN_BE_PARTIAL_OR_STALE": true,
+    "MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE": true,
+    "UNCHANGED_FINGERPRINT_REUSES_PROOF": true
+  },
+  "allowed": [
+    "executar rota deterministica conhecida",
+    "medir somente o cone afetado",
+    "usar reality judge para confirmar efeito",
+    "usar reality judge para impedir falso PASS"
+  ],
+  "forbidden": [
+    "usar REALITY=JUDGE como porteiro antes de cada acao",
+    "retirar autoridade do CHEFE por ritual de revalidacao",
+    "travar fluxo deterministico quando existe proximo teste seguro",
+    "revalidar tudo sem delta material"
+  ]
+}
