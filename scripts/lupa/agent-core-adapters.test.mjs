@@ -17,6 +17,7 @@ const ADAPTERS = Object.freeze([
   ["CHATGPT.md", "CHATGPT"],
   [CLAUDE_BRIDGE, "CLAUDE"],
   ["GEMINI.md", "GEMINI"],
+  ["GROK.md", "GROK"],
   ["CODEX.md", "CODEX"],
   [CLAUDE_AUTOLOAD, "CLAUDE_CODE"],
   [".cursor/rules/centraldark-governanca.mdc", "CURSOR"],
@@ -291,4 +292,32 @@ test("prompt universal é ponte gerada, não segunda governança manual", () => 
   ]) {
     assert.equal(forbidden.test(content), false, `PORTABLE_BRIDGE_REDEFINED_POLICY:${forbidden}`);
   }
+});
+
+
+test("check-list diário obrigatório é herdado pelo core sem virar segunda autoridade", () => {
+  const core = read(CORE);
+  const brain = read("SECOND-BRAIN.yml");
+  const rem = read("docs/CONSCIENCIA/REMEDICAO.md");
+  const checklist = read("docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md");
+
+  assert.ok(core.includes("docs/CONSCIENCIA/REMEDICAO.md"), "CORE_DOES_NOT_LOAD_REMEDICAO");
+  assert.ok(checklist, "DAILY_CHECKLIST_OWNER_MISSING");
+
+  for (const marker of [
+    "CHECKLIST_IS_DERIVED_VIEW=true",
+    "CHECKLIST_IS_NOT_SOURCE_OF_TRUTH=true",
+    "CHECKLIST_DOES_NOT_OVERRIDE_LIVE_STATE=true",
+    "REGISTER_BEFORE_REPORT=true",
+  ]) {
+    assert.ok(checklist.includes(marker), `DAILY_CHECKLIST_MARKER_MISSING:${marker}`);
+  }
+
+  assert.ok(brain.includes('owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"'));
+  assert.ok(brain.includes("required_after_material_delta: true"));
+  assert.ok(brain.includes("MATERIAL_DELTA_UPDATES_DAILY_CHECKLIST"));
+
+  assert.ok(rem.includes("DAILY_CHECKLIST_UPDATE_REQUIRED_FOR_MATERIAL_DELTA=true"));
+  assert.ok(rem.includes("DAILY_CHECKLIST_OWNER=docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"));
+  assert.ok(rem.includes("T1 → !REGISTRA → RECEIPT/COMMIT/LEDGER → 🪡 CHECK-LIST DIARIO → READBACK → RELATO AO CHEFE"));
 });
