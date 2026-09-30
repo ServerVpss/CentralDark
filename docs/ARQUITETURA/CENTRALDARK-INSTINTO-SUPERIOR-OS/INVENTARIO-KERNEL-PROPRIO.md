@@ -842,17 +842,38 @@ VPS_INSTANCE_EXACT_MATCH=PASS (instanceId 203256920, displayName CENTRALDARK-OS,
 GATE_B=PASS (4/4 providers provados)
 ```
 
-### 13.8 Gate C — snapshot parcial (medição read-only)
+### 13.8 Gate C — recovery toolchain validation
+
+**Medido em:** 2026-09-30T11:23Z | **Superfície:** Claude Code Remote via MCP Admin | **HEAD:** `0fbbd4c3e8`
 
 ```text
 SNAPSHOT_EXISTS=PASS (snap1790430960, name "central", created 2026-09-26)
 SNAPSHOT_AUTO_DELETE=2026-10-26 (~26 dias restantes)
 SNAPSHOT_BASE_IMAGE=ubuntu-22.04
 ROLLBACK_API_PATH=POST /v1/compute/instances/203256920/snapshots/snap1790430960/rollback
-ROLLBACK_TESTED=NO (read-only phase, endpoint identificado mas não invocado)
-VNC_RESCUE_TESTED=NO (requer painel Contabo)
-GATE_C=PARTIAL_PASS (snapshot existe e é recuperável via API; rollback e VNC não testados)
+VAULT_ARCHIVE_INTEGRITY=PASS (SHA256 match b492b06f…e8bd4e58, 16MB, archive valid)
+BOOTSTRAP_RESTORE_READONLY=PASS (canonical files OK, vault OK, installer found)
+INSTALL_CHECK=PASS (all deps: node v22.23.2, npm 10.9.8, PM2 7.0.1, Caddy v2.11.4, Docker, ports 80/443/3100/9000/9100)
+HYDRATE_SCRIPT=PRESENT (scripts/vps/hydrate-provider-secrets.sh, executable)
+CANONICAL_FILES=ALL_FOUND (install.sh, CENTRALDARK_AI_BOOT.yaml, LEIA-ME-IA.md, AGENTS.md)
+ROLLBACK_TESTED=NO (destructive — requires CHEFE authorization)
+VNC_RESCUE_TESTED=NO (requer painel Contabo — human frontier)
+GATE_C=TOOLCHAIN_VALIDATED (recovery pipeline validated end-to-end in read-only; only destructive rollback invocation and VNC remain human-frontier)
 ```
+
+**Recovery procedure validated (read-only):**
+
+1. Contabo snapshot `snap1790430960` → rollback via API (CHEFE authorization required)
+2. Vault archive → `centraldark-os-bootstrap-restore.sh` with `CENTRALDARK_RESTORE_APPLY=1`
+3. Secrets → `hydrate-provider-secrets.sh` (requires env vars from GitHub Secrets or BOOTSTRAP-NEXT.env)
+4. System → `install.sh` (verified: all deps present, all ports active)
+5. Runtime → PM2 ecosystem start (per process, never `restart all`)
+6. Health → MCP health + port checks + receipt
+
+**What remains human-frontier:**
+- Contabo rollback invocation (destructive, requires CHEFE + Contabo OAuth)
+- VNC/Rescue mode (Contabo web panel only)
+- Secret env vars supply for hydrate (GitHub Secrets or manual)
 
 ### 13.7 Fase A — Vault status — FULL PASS
 
@@ -972,19 +993,16 @@ Mutação de provider só pode aparecer verde depois do readback correspondente.
 ### 14.5 Estado atual conhecido
 
 ```text
-GATE_B=PASS
-CONTABO_READ=PASS
-CLOUDFLARE_READ=PASS
-TAILSCALE_READ=PASS
-BUILDKITE_READ=PASS
+GATE_A=FULL_PASS (2026-09-30, SHA256=b492b06f…e8bd4e58, 1949 entries, bootstrap READONLY PASS)
+GATE_B=PASS (4/4 providers: Cloudflare, Tailscale, Buildkite, Contabo)
+GATE_C=TOOLCHAIN_VALIDATED (2026-09-30T11:23Z, vault integrity PASS, bootstrap PASS, install --check PASS, hydrate present; rollback+VNC=human frontier)
 SNAPSHOT_EXISTS=PASS
 ROLLBACK_PATH_IDENTIFIED=PASS
-GATE_A=FULL_PASS (2026-09-30, SHA256=b492b06f…e8bd4e58, 1949 entries, bootstrap READONLY PASS)
 INSTINTO_SUPERIOR_FULL_ADMIN=NOT_IMPLEMENTED
 CLEAN_REINSTALL=NOT_STARTED
 ```
 
-Próximo delta do agente cloud: Gate C (rollback validation), completar restore real testável e começar a costura da superfície administrativa Instinto Superior no owner existente.
+Próximo delta: Gates E→H (Instinto Superior como painel-mãe operacional), reutilizando owners existentes. Gate C permanece TOOLCHAIN_VALIDATED até CHEFE autorizar rollback destrutivo + VNC.
 
 
 ### 14.6 Regra de continuidade sem espera humana desnecessária
