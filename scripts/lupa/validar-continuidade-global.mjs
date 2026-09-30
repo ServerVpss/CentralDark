@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join, resolve } from "node:path";
 
 const argv = process.argv.slice(2);
@@ -16,6 +17,7 @@ const EXTENSION = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.jso
 const PORTA_VIVA = "docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md";
 const GATE = ".github/workflows/porta-de-entrada.yml";
 const SHARED_WRITER_PUSH = "scripts/lupa/writer-safe-push-main.sh";
+const COMMIT_COMPASS_OWNER = "DELTA-CONTINUO.md";
 const REMOVED_MAIN_WRITERS = Object.freeze([
   {
     path: ".github/workflows/linear-pendencias-sync.yml",
@@ -76,6 +78,266 @@ const hasAll = (actual, expected) => {
   const set = new Set(Array.isArray(actual) ? actual : []);
   return expected.every((item) => set.has(item));
 };
+
+
+function git(args) {
+  return execFileSync("git", args, {
+    cwd: ROOT,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  }).trim();
+}
+
+function parseCommitCompass(message) {
+  const trailers = {};
+  for (const line of String(message || "").split("\n")) {
+    const match = line.match(/^(CentralDark-[A-Za-z-]+):\s*(.+)$/);
+    if (match) trailers[match[1]] = match[2].trim();
+  }
+  return trailers;
+}
+
+function scopeCoversPath(scopeSpec, filePath) {
+  const scopes = String(scopeSpec || "")
+    .split(";")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return scopes.some((scope) => {
+    if (scope.endsWith("/**")) return filePath.startsWith(scope.slice(0, -3));
+    return filePath === scope;
+  });
+}
+
+function readCompassSession() {
+  const raw = git(["log", "--first-parent", "-n", "200", "--format=%H%x1f%B%x1e", "HEAD"]);
+  const records = raw
+    .split("\x1e")
+    .map((chunk) => chunk.trim())
+    .filter(Boolean)
+    .map((chunk) => {
+      const splitAt = chunk.indexOf("\x1f");
+      const sha = splitAt >= 0 ? chunk.slice(0, splitAt).trim() : "";
+      const message = splitAt >= 0 ? chunk.slice(splitAt + 1).trim() : "";
+      return { sha, message, trailers: parseCommitCompass(message) };
+    });
+
+  if (records.length === 0) return { enforced: false, active: false, closing: false, records: [] };
+
+  const closing = records[0].trailers["CentralDark-Compass-End"] === "true";
+  const selected = [];
+  let foundStart = false;
+
+  for (let index = 0; index < records.length; index += 1) {
+    const record = records[index];
+    if (index > 0 && record.trailers["CentralDark-Compass-End"] === "true" && !foundStart) {
+      return { enforced: false, active: false, closing: false, records: [] };
+    }
+    selected.push(record);
+    if (record.trailers["CentralDark-Compass-Start"] === "true") {
+      foundStart = true;
+      break;
+    }
+  }
+
+  if (!foundStart) return { enforced: false, active: false, closing: false, records: [] };
+  return {
+    enforced: true,
+    active: !closing,
+    closing,
+    records: selected.reverse(),
+  };
+}
+
+function commitFacts(sha) {
+  const parentSha = git(["rev-parse", `${sha}^`]);
+  const changedPaths = git(["diff-tree", "--no-commit-id", "--name-only", "-r", parentSha, sha])
+    .split("\n")
+    .map((path) => path.trim())
+    .filter(Boolean);
+  return { parentSha, changedPaths };
+}
+
+function validateCompassPayload({ trailers, parentSha, changedPaths, expectedPdfSha }) {
+  const errors = [];
+  const required = [
+    "CentralDark-Compass",
+    "CentralDark-Writer",
+    "CentralDark-Scope",
+    "CentralDark-Parent",
+    "CentralDark-PR-Mother",
+    "CentralDark-PR-Child",
+    "CentralDark-Finalizer",
+    "CentralDark-PDF-Gate",
+    "CentralDark-Next",
+  ];
+  for (const key of required) {
+    if (!trailers[key]) errors.push(`COMMIT_COMPASS_TRAILER_MISSING:${key}`);
+  }
+  if (trailers["CentralDark-Compass"] && trailers["CentralDark-Compass"] !== "v1") {
+    errors.push("COMMIT_COMPASS_VERSION_INVALID");
+  }
+  if (trailers["CentralDark-Parent"] && trailers["CentralDark-Parent"] !== parentSha) {
+    errors.push(`COMMIT_COMPASS_PARENT_MISMATCH:expected=${parentSha}:actual=${trailers["CentralDark-Parent"]}`);
+  }
+  if (trailers["CentralDark-Finalizer"] && trailers["CentralDark-Finalizer"] !== "ONE") {
+    errors.push("COMMIT_COMPASS_FINALIZER_NOT_ONE");
+  }
+  if (trailers["CentralDark-PDF-Gate"] && trailers["CentralDark-PDF-Gate"] !== `PASS:${expectedPdfSha}`) {
+    errors.push("COMMIT_COMPASS_PDF_GATE_INVALID");
+  }
+  for (const path of changedPaths) {
+    if (!scopeCoversPath(trailers["CentralDark-Scope"], path)) {
+      errors.push(`COMMIT_COMPASS_SCOPE_VIOLATION:${path}`);
+    }
+  }
+  return errors;
+}
+
+function validateCommitCompass(ownerText) {
+  const errors = [];
+  const ownerTokens = [
+    "COMMIT_IS_COORDINATION_PRIMITIVE=true",
+    "COMMENTS_ARE_RECEIPTS_NOT_COORDINATION_AUTHORITY=true",
+    "MULTI_WRITER_REQUIRES_COMMIT_TRAILERS=true",
+    "TWO_WRITERS_SAME_PATH=false",
+    "FINALIZER_ONE=true",
+    "PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+    "ACTION_IS_NOT_PROOF=true",
+  ];
+  for (const token of ownerTokens) {
+    if (!ownerText.includes(token)) errors.push(`COMMIT_COMPASS_OWNER_TOKEN_MISSING:${token}`);
+  }
+
+  const pdfMatch = ownerText.match(/PDF_GATE_TLC23_SHA256=([a-f0-9]{64})/);
+  if (!pdfMatch) errors.push("COMMIT_COMPASS_PDF_SHA_MISSING");
+
+  let session = { enforced: false, active: false, closing: false, records: [] };
+  let currentSha = null;
+  let parentSha = null;
+  let currentTrailers = {};
+  let currentPaths = [];
+  const adopted = [];
+  const pathOwners = new Map();
+
+  try {
+    session = readCompassSession();
+    currentSha = git(["rev-parse", "HEAD"]);
+    parentSha = git(["rev-parse", "HEAD^"]);
+    currentTrailers = parseCommitCompass(git(["log", "-1", "--format=%B", "HEAD"]));
+    currentPaths = commitFacts(currentSha).changedPaths;
+  } catch (error) {
+    errors.push(`COMMIT_COMPASS_GIT_READ_FAILED:${error?.message || error}`);
+  }
+
+  if (session.enforced && pdfMatch) {
+    const adoptionBySha = new Map();
+
+    session.records.forEach((record, index) => {
+      const adoptedSha = record.trailers["CentralDark-Adopt-Commit"];
+      if (!adoptedSha) return;
+      adoptionBySha.set(adoptedSha, {
+        index,
+        adopterSha: record.sha,
+        writer: record.trailers["CentralDark-Adopt-Writer"] || "",
+        scope: record.trailers["CentralDark-Adopt-Scope"] || "",
+      });
+    });
+
+    const anchor = session.records[0]?.trailers ?? {};
+    const anchorMother = anchor["CentralDark-PR-Mother"] || null;
+    const anchorChild = anchor["CentralDark-PR-Child"] || null;
+
+    session.records.forEach((record, index) => {
+      const facts = commitFacts(record.sha);
+      let writer = "";
+      let scope = "";
+
+      if (record.trailers["CentralDark-Compass"] === "v1") {
+        errors.push(...validateCompassPayload({
+          trailers: record.trailers,
+          parentSha: facts.parentSha,
+          changedPaths: facts.changedPaths,
+          expectedPdfSha: pdfMatch[1],
+        }));
+        writer = record.trailers["CentralDark-Writer"] || "";
+        scope = record.trailers["CentralDark-Scope"] || "";
+
+        if (anchorMother && record.trailers["CentralDark-PR-Mother"] !== anchorMother) {
+          errors.push(`COMMIT_COMPASS_MOTHER_DRIFT:${record.sha}`);
+        }
+        if (anchorChild && record.trailers["CentralDark-PR-Child"] !== anchorChild) {
+          errors.push(`COMMIT_COMPASS_CHILD_DRIFT:${record.sha}`);
+        }
+      } else {
+        const adoption = adoptionBySha.get(record.sha);
+        if (!adoption || adoption.index <= index) {
+          errors.push(`COMMIT_COMPASS_UNADOPTED_COMMIT:${record.sha}`);
+          return;
+        }
+        if (!adoption.writer) errors.push(`COMMIT_COMPASS_ADOPT_WRITER_MISSING:${record.sha}`);
+        if (!adoption.scope) errors.push(`COMMIT_COMPASS_ADOPT_SCOPE_MISSING:${record.sha}`);
+        for (const path of facts.changedPaths) {
+          if (!scopeCoversPath(adoption.scope, path)) {
+            errors.push(`COMMIT_COMPASS_ADOPT_SCOPE_VIOLATION:${record.sha}:${path}`);
+          }
+        }
+        writer = adoption.writer;
+        scope = adoption.scope;
+        adopted.push({ sha: record.sha, writer, scope, adopter_sha: adoption.adopterSha });
+      }
+
+      if (!writer) return;
+      for (const path of facts.changedPaths) {
+        const previous = pathOwners.get(path);
+        if (previous && previous !== writer) {
+          errors.push(`COMMIT_COMPASS_CROSS_WRITER_PATH_COLLISION:${path}:first=${previous}:second=${writer}`);
+        } else {
+          pathOwners.set(path, writer);
+        }
+      }
+    });
+  }
+
+  return {
+    active: session.active,
+    enforced: session.enforced,
+    closing: session.closing,
+    sessionCommits: session.records.map((record) => record.sha),
+    currentSha,
+    parentSha,
+    trailers: currentTrailers,
+    changedPaths: currentPaths,
+    adopted,
+    pathOwners: Object.fromEntries(pathOwners),
+    errors,
+    expectedPdfSha: pdfMatch?.[1] ?? null,
+  };
+}
+
+function counterproveCommitCompass(report) {
+  if (!report.enforced) return true;
+  if (report.errors.length > 0 || !report.parentSha || !report.expectedPdfSha) return false;
+
+  const base = { ...report.trailers };
+  const variants = [];
+
+  const missingWriter = { ...base };
+  delete missingWriter["CentralDark-Writer"];
+  variants.push(missingWriter);
+  variants.push({ ...base, "CentralDark-Parent": "0".repeat(40) });
+  variants.push({ ...base, "CentralDark-Scope": "__forbidden__/**" });
+  variants.push({ ...base, "CentralDark-Finalizer": "MANY" });
+  variants.push({ ...base, "CentralDark-PDF-Gate": "PASS:" + "0".repeat(64) });
+
+  return variants.every((trailers) => validateCompassPayload({
+    trailers,
+    parentSha: report.parentSha,
+    changedPaths: report.changedPaths,
+    expectedPdfSha: report.expectedPdfSha,
+  }).length > 0);
+}
+
 
 function validateMainWriter(path, text, sharedScriptText) {
   const errors = [];
@@ -312,6 +574,8 @@ let contractText = "";
 let portaText = "";
 let gateText = "";
 let sharedScriptText = "";
+let commitCompassOwnerText = "";
+let commitCompassReport = { active: false, errors: [] };
 const writerTexts = {};
 const errors = [];
 try {
@@ -321,13 +585,17 @@ try {
   portaText = read(PORTA_VIVA);
   gateText = read(GATE);
   sharedScriptText = read(SHARED_WRITER_PUSH);
+  commitCompassOwnerText = read(COMMIT_COMPASS_OWNER);
   for (const path of MAIN_WRITERS) writerTexts[path] = read(path);
 } catch (error) {
   errors.push(`CONTINUIDADE_GLOBAL_LOAD:${error?.code || error?.name || "ERROR"}`);
 }
 if (contract && extension) {
   errors.push(...validate(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText));
+  commitCompassReport = validateCommitCompass(commitCompassOwnerText);
+  errors.push(...commitCompassReport.errors);
   if (errors.length === 0 && !counterprove(contract, extension, contractText, portaText, gateText, writerTexts, sharedScriptText)) errors.push("CONTINUIDADE_GLOBAL_COUNTERPROOF_FAILED");
+  if (errors.length === 0 && !counterproveCommitCompass(commitCompassReport)) errors.push("COMMIT_COMPASS_COUNTERPROOF_FAILED");
 }
 
 const report = {
@@ -339,6 +607,22 @@ const report = {
   main_writers: MAIN_WRITERS,
   removed_main_writers: REMOVED_MAIN_WRITERS,
   shared_writer_push: SHARED_WRITER_PUSH,
+  commit_compass: {
+    owner: COMMIT_COMPASS_OWNER,
+    active: commitCompassReport.active,
+    enforced: commitCompassReport.enforced ?? false,
+    closing: commitCompassReport.closing ?? false,
+    session_commits: commitCompassReport.sessionCommits ?? [],
+    adopted: commitCompassReport.adopted ?? [],
+    path_owners: commitCompassReport.pathOwners ?? {},
+    current_sha: commitCompassReport.currentSha ?? null,
+    parent_sha: commitCompassReport.parentSha ?? null,
+    writer: commitCompassReport.trailers?.["CentralDark-Writer"] ?? null,
+    scope: commitCompassReport.trailers?.["CentralDark-Scope"] ?? null,
+    finalizer: commitCompassReport.trailers?.["CentralDark-Finalizer"] ?? null,
+    next: commitCompassReport.trailers?.["CentralDark-Next"] ?? null,
+    counterproof: commitCompassReport.active && commitCompassReport.errors.length === 0 ? "ENFORCED" : "INACTIVE_OR_BLOCKED",
+  },
   input_authority_boundary: errors.some((item) => item.includes("AUTHORITY") || item.includes("INPUT_BOUNDARY")) ? "BLOCKED" : "PASS",
   counterproof: errors.length === 0 ? "PASS" : "BLOCKED",
   errors,
