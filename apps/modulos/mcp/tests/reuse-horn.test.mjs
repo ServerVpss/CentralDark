@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { decideReuseBeforeCreate, hornFixedPoint, REUSE_HORN_CONTRACT } from "../src/tools/aprendizado/reuse-horn.js";
+import { decideReuseBeforeCreate, hornFixedPoint, REUSE_HORN_CONTRACT } from "../src/tools/aprendizado/reuse-horn-core.js";
 
 test("Horn propaga até ponto fixo estável", () => {
     const out = hornFixedPoint(["A"], [
@@ -13,31 +13,77 @@ test("Horn propaga até ponto fixo estável", () => {
 });
 
 test("owner+capability existentes no mesmo escopo convergem para EXTEND_EXISTING", () => {
-    const out = decideReuseBeforeCreate({ capability: "MCP OAuth", scope: "apps/modulos/mcp", owner_present: true, capability_present: true, same_scope: true, evidence_present: true, regression_absent: true });
+    const out = decideReuseBeforeCreate({
+        capability: "MCP OAuth",
+        scope: "apps/modulos/mcp",
+        owner_present: true,
+        capability_present: true,
+        same_scope: true,
+        evidence_present: true,
+        regression_absent: true,
+    });
     assert.equal(out.decision, "EXTEND_EXISTING");
     assert.equal(out.pass, true);
     assert.ok(out.fixed_point.facts.includes("REUSE_REQUIRED"));
 });
 
 test("criação mínima só nasce quando owner e capability são gap medidos", () => {
-    const out = decideReuseBeforeCreate({ capability: "capacidade realmente nova", scope: "novo escopo medido", owner_present: false, capability_present: false, same_scope: false, evidence_present: true, regression_absent: true });
+    const out = decideReuseBeforeCreate({
+        capability: "capacidade realmente nova",
+        scope: "novo escopo medido",
+        owner_present: false,
+        capability_present: false,
+        same_scope: false,
+        evidence_present: true,
+        regression_absent: true,
+    });
     assert.equal(out.decision, "CREATE_MINIMAL");
     assert.equal(out.pass, true);
 });
 
 test("UNKNOWN nunca vira PASS", () => {
-    const out = decideReuseBeforeCreate({ capability: "MCP OAuth", scope: "apps/modulos/mcp", owner_present: true, capability_present: true, same_scope: true, evidence_present: false, regression_absent: false });
+    const out = decideReuseBeforeCreate({
+        capability: "MCP OAuth",
+        scope: "apps/modulos/mcp",
+        owner_present: true,
+        capability_present: true,
+        same_scope: true,
+        evidence_present: false,
+        regression_absent: false,
+    });
     assert.equal(out.decision, "BLOCKED_UNKNOWN");
     assert.equal(out.pass, false);
     assert.equal(out.measurable.unknown_is_not_pass, false);
 });
 
 test("erro observado exige aprendizado + receipt antes do verde", () => {
-    const blocked = decideReuseBeforeCreate({ capability: "OAuth invalid_client", scope: "apps/modulos/mcp", owner_present: true, capability_present: true, same_scope: true, evidence_present: true, regression_absent: true, error_observed: true, learning_present: false, receipt_present: false });
+    const blocked = decideReuseBeforeCreate({
+        capability: "OAuth invalid_client",
+        scope: "apps/modulos/mcp",
+        owner_present: true,
+        capability_present: true,
+        same_scope: true,
+        evidence_present: true,
+        regression_absent: true,
+        error_observed: true,
+        learning_present: false,
+        receipt_present: false,
+    });
     assert.equal(blocked.pass, false);
     assert.ok(blocked.fixed_point.facts.includes("LEARNING_REQUIRED"));
 
-    const closed = decideReuseBeforeCreate({ capability: "OAuth invalid_client", scope: "apps/modulos/mcp", owner_present: true, capability_present: true, same_scope: true, evidence_present: true, regression_absent: true, error_observed: true, learning_present: true, receipt_present: true });
+    const closed = decideReuseBeforeCreate({
+        capability: "OAuth invalid_client",
+        scope: "apps/modulos/mcp",
+        owner_present: true,
+        capability_present: true,
+        same_scope: true,
+        evidence_present: true,
+        regression_absent: true,
+        error_observed: true,
+        learning_present: true,
+        receipt_present: true,
+    });
     assert.equal(closed.decision, "EXTEND_EXISTING");
     assert.equal(closed.pass, true);
     assert.ok(closed.fixed_point.facts.includes("LEARNING_REUSABLE"));

@@ -12,10 +12,12 @@ const PORT = process.env.PORT || 8090;
 const AUTH_KEY = process.env.ARSENAL_ADAPTER_KEY || 'arsenal-key-local';
 const PROVIDER_BASE = process.env.PROVIDER_BASE || 'https://openrouter.ai/api/v1';
 const PROVIDER_KEY = process.env.PROVIDER_KEY || '';
+const GRAPH_PANEL_BASE = (process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030').replace(/\/+$/, '');
 const REGRAS_PATH = process.env.REGRAS_PATH || '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/regras.json';
 const DEBATES_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/DEBATES';
 const EVOLUCAO_DIR = '/root/CentralDark/docs/CONSCIENCIA/ARSENAL/EVOLUCAO';
 const PENDENCIAS_PATH = '/root/CentralDark/docs/PENDENCIAS.md';
+const GRAPH_PANEL_URL = process.env.GRAPH_PANEL_URL || 'http://127.0.0.1:3030/api/graph';
 
 const MODELS = [
   { id: 'arsenal-router',   name: '🎯 Arsenal Router (rápido)' },
@@ -288,6 +290,44 @@ const server = http.createServer(async (req, res) => {
   });
   req._auditSetModel = (m) => { modelForAudit = m; };
 
+  // Leitura sanitizada do grafo pela API oficial, após o mesmo gate de autenticação.
+  // O GraphPanel continua sendo o único owner interno em 127.0.0.1:3030.
+  if (req.method === 'GET' && pathOnly === '/api/graph') {
+    try {
+      const incoming = new URL(rawUrl, 'http://centraldark.local');
+      const upstreamUrl = new URL('/api/graph', `${GRAPH_PANEL_BASE}/`);
+      incoming.searchParams.forEach((value, key) => upstreamUrl.searchParams.append(key, value));
+      const upstream = await fetch(upstreamUrl, {
+        headers: { Accept: 'application/json' },
+        signal: AbortSignal.timeout(5000),
+      });
+      const body = await upstream.text();
+      res.writeHead(upstream.status, {
+        'Content-Type': upstream.headers.get('content-type') || 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'X-Request-Id': requestId,
+      });
+      return res.end(body);
+    } catch {
+      return json(res, 502, { error: 'graph_upstream_unavailable', request_id: requestId });
+    }
+  }
+
+  // Grafo Vivo atrás da API única CentralDark. Consumidores internos não chamam grafo.centralldark.com diretamente.
+  if (req.method === 'GET' && pathOnly === '/api/graph') {
+    try {
+      const query = rawUrl.includes('?') ? rawUrl.slice(rawUrl.indexOf('?')) : '';
+      const upstream = `${GRAPH_PANEL_URL}${query}`;
+      const r = await fetch(upstream, { headers: { 'accept': 'application/json' } });
+      const text = await r.text();
+      res.statusCode = r.status;
+      res.setHeader('content-type', r.headers.get('content-type') || 'application/json; charset=utf-8');
+      res.setHeader('cache-control', 'no-store');
+      return res.end(text);
+    } catch (e) {
+      return json(res, 502, { error: 'graph_proxy_failed', message: e.message, request_id: requestId });
+    }
+  }
 
   if (pathOnly === '/v1/chat/completions' || pathOnly === '/chat/completions') {
     let body = '';
@@ -368,6 +408,74 @@ const server = http.createServer(async (req, res) => {
       try { res.end(); } catch {}
     }
   }
+  if (pathOnly === '/v1/messages') {
+    let body = '';
+    for await (const chunk of req) body += chunk;
+    try {
+      const payload = JSON.parse(body || '{}');
+      const requestedModel = payload.model || 'arsenal-router';
+      const modo = MODEL_ALIASES[requestedModel]
+        || (requestedModel.startsWith('arsenal-') ? requestedModel : null);
+      req._auditSetModel?.(modo ? `${requestedModel}->${modo}` : `passthrough:${requestedModel}`);
+
+      const msgs = [];
+      if (payload.system) {
+        msgs.push({
+          role: 'system',
+          content: typeof payload.system === 'string' ? payload.system : JSON.stringify(payload.system),
+        });
+      }
+      for (const m of (payload.messages || [])) {
+        const content = typeof m.content === 'string'
+          ? m.content
+          : (Array.isArray(m.content)
+              ? m.content.map(part => part?.text || part?.content || '').join('\n')
+              : String(m.content || ''));
+        msgs.push({ role: m.role || 'user', content });
+      }
+
+      let resposta;
+      if (modo) {
+        const MODOS = {
+          'arsenal-router': modoRouter,
+          'arsenal-parallel': modoParallel,
+          'arsenal-debate': modoDebate,
+          'arsenal-hermes': modoHermes,
+        };
+        const rodar = MODOS[modo] || modoRouter;
+        const regras = await lerRegras();
+        resposta = await rodar(regras, msgs);
+      } else {
+        const catalogo = await fetchAbacusCatalog();
+        if (!catalogo.includes(requestedModel)) {
+          return json(res, 400, {
+            type: 'error',
+            error: { type: 'invalid_request_error', message: `modelo desconhecido: ${requestedModel}` },
+          });
+        }
+        resposta = await callProvider(requestedModel, msgs);
+      }
+
+      const msgId = 'msg_' + Math.random().toString(36).slice(2, 14);
+      return json(res, 200, {
+        id: msgId,
+        type: 'message',
+        role: 'assistant',
+        model: requestedModel,
+        content: [{ type: 'text', text: resposta }],
+        stop_reason: 'end_turn',
+        stop_sequence: null,
+        usage: { input_tokens: 0, output_tokens: 0 },
+      });
+    } catch (e) {
+      console.error('erro /v1/messages:', e);
+      return json(res, 500, {
+        type: 'error',
+        error: { type: 'api_error', message: e.message },
+      });
+    }
+  }
+
   json(res, 404, { error: 'not found' });
 });
 

@@ -10,6 +10,7 @@ import { createScopedLogger } from '~/utils/logger';
 import { createFilesContext, extractPropertiesFromMessage } from './utils';
 import { discussPrompt } from '~/lib/common/prompts/discuss-prompt';
 import type { DesignScheme } from '~/types/design-scheme';
+import { NARRATED_TOOL_CALL_TRACE_PROMPT } from './narrated-tool-call-trace';
 
 export type Messages = Message[];
 
@@ -273,6 +274,9 @@ export async function streamText(props: {
     ),
   );
 
+  const baseSystemPrompt = chatMode === 'build' ? systemPrompt : discussPrompt();
+  const runtimeSystemPrompt = `${baseSystemPrompt}\n\n${NARRATED_TOOL_CALL_TRACE_PROMPT}`;
+
   const streamParams = {
     model: provider.getModelInstance({
       model: modelDetails.name,
@@ -280,7 +284,7 @@ export async function streamText(props: {
       apiKeys,
       providerSettings,
     }),
-    system: chatMode === 'build' ? systemPrompt : discussPrompt(),
+    system: runtimeSystemPrompt,
     ...tokenParams,
     messages: convertToCoreMessages(processedMessages as any),
     ...filteredOptions,

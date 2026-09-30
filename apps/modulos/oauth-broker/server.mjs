@@ -7,6 +7,11 @@ import { createClient } from "@supabase/supabase-js";
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
+import net from "node:net";
+import { execFile, spawn } from "node:child_process";
+import { promisify } from "node:util";
+
+const execFileAsync = promisify(execFile);
 
 for (const f of ["/root/CentralDark/apps/modulos/hub/.env","/root/CentralDark/apps/modulos/oauth-broker/.env"]) {
   if (fs.existsSync(f)) { const d = (await import("dotenv")).default; d.config({ path: f, override: false }); }
@@ -64,20 +69,139 @@ app.use((req,res,next)=>{ const st=Date.now();
   const bp = req.body && Object.keys(req.body).length ? Object.fromEntries(Object.entries(req.body).map(([k,v])=>[k, /key|token|secret|password/i.test(k)?`***${String(v).slice(-4)}`:v])) : undefined;
   res.on("finish",()=>logAction({kind:"http",method:req.method,path:req.path,status:res.statusCode,ms:Date.now()-st,ip:req.ip,body:bp})); next(); });
 
-app.get("/health",(_q,r)=>r.json({ok:true,service:"oauth-broker",version:"2.2"}));
+const TAILSCALE_HOME_HOST = process.env.TAILSCALE_HOME_HOST || "segredo";
+const TAILSCALE_HOME_IP = process.env.TAILSCALE_HOME_IP || "100.123.93.25";
+let tailscaleLoginChild = null;
+let tailscaleLoginUrl = null;
+
+function probeTcp(host, port, timeoutMs=1200){
+  return new Promise((resolve)=>{
+    const sock=net.createConnection({host,port});
+    let done=false;
+    const finish=(value)=>{ if(done)return; done=true; try{sock.destroy();}catch{} resolve(value); };
+    sock.setTimeout(timeoutMs);
+    sock.once("connect",()=>finish("OPEN"));
+    sock.once("timeout",()=>finish("CLOSED_OR_FILTERED"));
+    sock.once("error",()=>finish("CLOSED_OR_FILTERED"));
+  });
+}
+
+async function tailscaleSnapshot(){
+  try{
+    const {stdout}=await execFileAsync("tailscale",["status","--json"],{timeout:5000,maxBuffer:2*1024*1024});
+    const j=JSON.parse(stdout);
+    const peers=Object.values(j.Peer||{});
+    const peer=peers.find((x)=>String(x?.HostName||"").toLowerCase()===TAILSCALE_HOME_HOST.toLowerCase())
+      || peers.find((x)=>Array.isArray(x?.TailscaleIPs)&&x.TailscaleIPs.includes(TAILSCALE_HOME_IP))
+      || null;
+    const [rdp,ssh]=await Promise.all([probeTcp(TAILSCALE_HOME_IP,3389),probeTcp(TAILSCALE_HOME_IP,22)]);
+    const running=j.BackendState==="Running" && Boolean(j.Self?.Online);
+    return {
+      ok:running,
+      backend_state:j.BackendState||"UNKNOWN",
+      tailnet:j.CurrentTailnet?.Name||null,
+      magic_dns:j.CurrentTailnet?.MagicDNSSuffix||j.MagicDNSSuffix||null,
+      self:{host:j.Self?.HostName||null,online:Boolean(j.Self?.Online),ips:j.TailscaleIPs||j.Self?.TailscaleIPs||[]},
+      home:{host:TAILSCALE_HOME_HOST,ip:TAILSCALE_HOME_IP,online:peer?.Online??null,rdp_3389:rdp,ssh_22:ssh},
+      route_base:"TAILSCALE",
+      login_required:!running
+    };
+  }catch(e){
+    return {ok:false,backend_state:"UNKNOWN",error:String(e?.message||e),route_base:"TAILSCALE",login_required:true};
+  }
+}
+
+function startTailscaleHumanLogin(){
+  if(tailscaleLoginChild && !tailscaleLoginChild.killed){
+    if(tailscaleLoginUrl) return Promise.resolve(tailscaleLoginUrl);
+    return Promise.reject(new Error("login Tailscale já em andamento"));
+  }
+  tailscaleLoginUrl=null;
+  const child=spawn("tailscale",["login","--timeout=2m"],{stdio:["ignore","pipe","pipe"]});
+  tailscaleLoginChild=child;
+  return new Promise((resolve,reject)=>{
+    let settled=false;
+    const scan=(buf)=>{
+      const text=String(buf||"");
+      const m=text.match(/https:\/\/login\.tailscale\.com\/\S+/);
+      if(m && !settled){
+        settled=true;
+        tailscaleLoginUrl=m[0].replace(/[)\],.;]+$/,"");
+        resolve(tailscaleLoginUrl);
+      }
+    };
+    child.stdout.on("data",scan);
+    child.stderr.on("data",scan);
+    child.once("error",(e)=>{ if(!settled){settled=true;reject(e);} tailscaleLoginChild=null; });
+    child.once("exit",(code)=>{ tailscaleLoginChild=null; if(!settled && code!==0){settled=true;reject(new Error("tailscale login saiu "+code));} });
+    setTimeout(()=>{
+      if(!settled){
+        settled=true;
+        try{child.kill("SIGTERM");}catch{}
+        reject(new Error("URL de autenticação Tailscale não apareceu no prazo"));
+      }
+    },8000);
+  });
+}
+
+app.get("/health",(_q,r)=>r.json({ok:true,service:"oauth-broker",version:"2.3-tailscale"}));
+
+app.get("/api/tailscale/status", async (_req,res)=>{
+  const snap=await tailscaleSnapshot();
+  return res.status(snap.ok?200:503).json(snap);
+});
+
+app.get("/oauth/tailscale/start", async (req,res)=>{
+  const redirectTo=String(req.query.redirect_to||PUBLIC_BASE);
+  const snap=await tailscaleSnapshot();
+  if(snap.ok){
+    const u=new URL(redirectTo);
+    u.searchParams.set("tailscale","connected");
+    return res.redirect(302,u.toString());
+  }
+  try{
+    const authUrl=await startTailscaleHumanLogin();
+    logAction({kind:"tailscale_login_started",provider_id:"tailscale"});
+    return res.redirect(302,authUrl);
+  }catch(e){
+    return res.status(503).send("<!doctype html><meta charset=utf-8><title>Tailscale</title><body><h1>Tailscale login humano</h1><p>"+String(e?.message||e).replace(/[<>&]/g,"")+"</p></body>");
+  }
+});
+
+app.post("/api/tailscale/logout", async (req,res)=>{
+  if(req.body?.confirm!=="DISCONNECT_TAILSCALE_ROUTE"){
+    return res.status(409).json({ok:false,error:"confirmation_required",required:"DISCONNECT_TAILSCALE_ROUTE"});
+  }
+  try{
+    await execFileAsync("tailscale",["logout"],{timeout:10000});
+    logAction({kind:"tailscale_logout",provider_id:"tailscale"});
+    return res.json({ok:true,route_base:"DISCONNECTED"});
+  }catch(e){
+    return res.status(500).json({ok:false,error:String(e?.message||e)});
+  }
+});
 
 app.get("/api/keys/list", async (req,res)=>{
   try{ const uid=toUuid(req.query.user_id); if(!uid) return res.status(400).json({ok:false,error:"faltou user_id"});
     const {data,error}=await sb.from("oauth_connections").select("id,provider_id,expires_at,status,account_label,consent_at,scopes_granted,last_test_at,last_test_status").eq("user_id",uid).order("consent_at",{ascending:false});
     if(error) return res.status(500).json({ok:false,error:error.message});
-    return res.json({ok:true,items:data||[]});
+    const items=[...(data||[])];
+    const ts=await tailscaleSnapshot();
+    if(ts.ok){
+      items.push({id:"runtime-tailscale",provider_id:"tailscale",expires_at:null,status:"active",account_label:ts.tailnet||"tailnet",consent_at:null,scopes_granted:"route-base",last_test_at:new Date().toISOString(),last_test_status:"ok"});
+    }
+    return res.json({ok:true,items});
   }catch(e){return res.status(500).json({ok:false,error:e.message});}
 });
 
 app.get("/api/providers", async (_q,res)=>{
   try{ const {data,error}=await sb.from("oauth_providers").select("*").eq("enabled",true).order("display_name");
     if(error) return res.status(500).json({ok:false,error:error.message});
-    return res.json({ok:true,items:data||[]});
+    const items=[...(data||[])];
+    if(!items.some((x)=>x.id==="tailscale")){
+      items.push({id:"tailscale",display_name:"Tailscale",color:"#242424",icon:"TS",scopes:"tailnet route + human login",auth_type:"oauth",tier:1,enabled:true});
+    }
+    return res.json({ok:true,items});
   }catch(e){return res.status(500).json({ok:false,error:e.message});}
 });
 
@@ -162,6 +286,11 @@ const PROVIDER_TEST = {
     const r = await fetch("https://api.notion.com/v1/users/me", { headers:{ Authorization:`Bearer ${t}`, "Notion-Version":"2022-06-28" }});
     const j = await r.json().catch(()=>({}));
     return { ok:r.ok, http:r.status, detail: r.ok ? (j.name||j.bot?.workspace_name||"ok") : (j.message||"erro") };
+  },
+  figma: async (t) => {
+    const r = await fetch("https://api.figma.com/v1/me", { headers:{ "X-Figma-Token":t, Accept:"application/json" }});
+    const j = await r.json().catch(()=>({}));
+    return { ok:r.ok, http:r.status, detail: r.ok ? (j.handle||j.email||"figma-ok") : (j.err||j.message||"erro") };
   },
   github: async (t) => {
     const r = await fetch("https://api.github.com/user", { headers:{ Authorization:`Bearer ${t}`, "User-Agent":"CentralDark-HUB" }});

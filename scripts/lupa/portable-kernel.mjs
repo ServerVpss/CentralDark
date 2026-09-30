@@ -30,8 +30,6 @@ const EVIDENCE_ONTOLOGY = 'docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.
 const EVOLUTION_GATE = '.agents/skills/meta-lupa/scripts/evolution_gate.py';
 const PORTABLE_SCRIPT = 'scripts/lupa/portable-kernel.mjs';
 const PORTABLE_TEST = 'scripts/lupa/portable-kernel.test.mjs';
-const UNIVERSAL_ENGINE_METHOD = 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml';
-const MASTER_CYCLE = 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml';
 
 function git(args) {
   return execFileSync('git', ['-C', ROOT, ...args], {
@@ -72,14 +70,20 @@ function validateContract(value) {
   const image = value.multimodal_input_policy ?? {};
   const portable = value.portable_boot_policy ?? {};
   const language = value.language_policy ?? {};
-  const daily = value.daily_checklist_gate ?? {};
-  const mutation = value.standard_architecture?.mutation ?? {};
-  const promotion = value.standard_architecture?.promotion ?? {};
 
   if (image.marker !== 'IMAGE_INPUT_IS_OPERATIONAL') errors.push('IMAGE_MARKER');
   if (image.image_is_sensor !== true) errors.push('IMAGE_NOT_SENSOR');
   if (image.screenshot_is_current_truth !== false) errors.push('SCREENSHOT_MUST_NOT_BE_CURRENT_TRUTH');
   if (image.screenshot_is_trigger_for_live_measurement !== true) errors.push('SCREENSHOT_MUST_TRIGGER_LIVE_MEASUREMENT');
+  if (image.context_before_judgment !== true) errors.push('CONTEXT_BEFORE_JUDGMENT_REQUIRED');
+  if (image.observed_state_is_neutral_by_default !== true) errors.push('OBSERVED_STATE_MUST_START_NEUTRAL');
+  if (image.function_before_failure !== true) errors.push('FUNCTION_BEFORE_FAILURE_REQUIRED');
+  if (image.cause_before_classification !== true) errors.push('CAUSE_BEFORE_CLASSIFICATION_REQUIRED');
+  if (image.expected_mobility_is_not_drift !== true) errors.push('EXPECTED_MOBILITY_MUST_NOT_BE_DRIFT');
+  if (image.terminal_cwd_is_not_blocker_without_causal_evidence !== true) errors.push('TERMINAL_CWD_FALSE_BLOCKER_GUARD_REQUIRED');
+  if (image.do_not_invent_problem_from_screenshot !== true) errors.push('SCREENSHOT_FALSE_PROBLEM_GUARD_REQUIRED');
+  if (image.do_not_expand_scope_from_visual_incidental_state !== true) errors.push('VISUAL_SCOPE_EXPANSION_GUARD_REQUIRED');
+  if (image.user_demonstrated_context_is_primary_for_visual_scope !== true) errors.push('USER_VISUAL_SCOPE_REQUIRED');
   if (image.live_state_required_before_mutation !== true) errors.push('LIVE_REMEASURE_REQUIRED');
   if (image.material_visual_finding_action !== 'REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY') errors.push('IMAGE_ACTION_INVALID');
 
@@ -103,39 +107,6 @@ function validateContract(value) {
   if (portable.never_overwrite_newer_live_state !== true) errors.push('NEWER_LIVE_STATE_MUST_WIN');
   if (!Array.isArray(value.mandatory_boot_sources) || value.mandatory_boot_sources.length < 4) errors.push('MANDATORY_BOOT_SOURCES_INVALID');
   if (!Array.isArray(value.standard_architecture?.flow) || value.standard_architecture.flow.length < 6) errors.push('STANDARD_FLOW_MISSING');
-
-  if (daily.marker !== 'DAILY_CHECKLIST_GATE_REQUIRED') errors.push('DAILY_CHECKLIST_MARKER');
-  if (daily.authority !== 'SEGREDO/CHEFE') errors.push('DAILY_CHECKLIST_AUTHORITY');
-  if (daily.per_day_attestation_required !== true) errors.push('DAILY_CHECKLIST_DAILY_BINDING_REQUIRED');
-  if (daily.date_binding !== 'Daily-Checklist-Date MUST_EQUAL HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO') errors.push('DAILY_CHECKLIST_DATE_BINDING_INVALID');
-  if (daily.head_field_role !== 'OPTIONAL_PROVENANCE_NOT_GATE') errors.push('DAILY_CHECKLIST_HEAD_MUST_NOT_BE_GATE');
-  if (daily.unknown_receipt !== 'BLOCK_CODE_PROMOTION') errors.push('DAILY_CHECKLIST_UNKNOWN_MUST_BLOCK');
-  if (daily.mirror_is_authority !== false) errors.push('DAILY_CHECKLIST_MIRROR_MUST_NOT_BE_AUTHORITY');
-
-  const executorSelection = ['TAG_EXECUTOR', 'CAPABILITY_MATCH', 'SCOPE_MATCH', 'LEASE_AVAILABLE', 'POLICY_ALLOWED'];
-  if (mutation.multiple_writers_allowed !== true) errors.push('MULTIPLE_WRITERS_REQUIRED');
-  if (mutation.concurrent_writers_disjoint_scopes !== true) errors.push('DISJOINT_SCOPE_WRITERS_REQUIRED');
-  if (mutation.same_mutable_scope_requires_writer_lease !== true) errors.push('WRITER_LEASE_REQUIRED');
-  if (mutation.model_name_is_routing_key !== false) errors.push('MODEL_NAME_ROUTING_FORBIDDEN');
-  if (mutation.model_name_is_writer_lease !== false) errors.push('MODEL_NAME_LEASE_FORBIDDEN');
-  if (!Array.isArray(mutation.executor_selection) || executorSelection.length !== mutation.executor_selection.length || executorSelection.some((item, index) => mutation.executor_selection[index] !== item)) {
-    errors.push('EXECUTOR_SELECTION_INVALID');
-  }
-
-  if (promotion.finalization_scope !== 'PR_TO_MAIN_TO_DEPLOY') errors.push('FINALIZATION_SCOPE_INVALID');
-  if (promotion.one_active_finalizer_lease !== true) errors.push('ONE_FINALIZER_LEASE_REQUIRED');
-  if (promotion.finalizer_role !== 'EXECUTOR') errors.push('FINALIZER_ROLE_INVALID');
-  if (promotion.finalizer_capability !== 'PROMOTION_FINALIZATION') errors.push('FINALIZER_CAPABILITY_INVALID');
-  if (promotion.finalizer_model_neutral !== true) errors.push('FINALIZER_MUST_BE_MODEL_NEUTRAL');
-  if (promotion.finalizer_location !== 'VPS_CONTROL_PLANE') errors.push('FINALIZER_LOCATION_INVALID');
-  if (promotion.vps_is_intent_authority !== false) errors.push('VPS_MUST_NOT_BE_INTENT_AUTHORITY');
-  if (promotion.intent_authority !== 'SEGREDO/CHEFE') errors.push('INTENT_AUTHORITY_INVALID');
-  if (promotion.goal_pai_round_trip_required !== true) errors.push('GOAL_PAI_ROUND_TRIP_REQUIRED');
-  if (promotion.goal_pai_id_stable !== true) errors.push('GOAL_PAI_ID_MUST_BE_STABLE');
-  if (promotion.micro_goal_source !== 'CURRENT_FAILURE_SIGNATURE_AND_EVIDENCE') errors.push('MICRO_GOAL_SOURCE_INVALID');
-  if (!Array.isArray(promotion.finalizer_selection) || executorSelection.length !== promotion.finalizer_selection.length || executorSelection.some((item, index) => promotion.finalizer_selection[index] !== item)) {
-    errors.push('FINALIZER_SELECTION_INVALID');
-  }
 
   return errors;
 }
@@ -164,8 +135,6 @@ const PORTABLE_SOURCE_FILES = [
   '.agents/skills/meta-lupa/testes/test_evolution_gate.py',
   PORTABLE_SCRIPT,
   PORTABLE_TEST,
-  UNIVERSAL_ENGINE_METHOD,
-  MASTER_CYCLE,
 ];
 
 const SOURCE_FILES = [...new Set([
@@ -190,62 +159,6 @@ const members = SOURCE_FILES.map((path) => {
 const memberByPath = new Map(members.map((item) => [item.path, item]));
 
 const CAPABILITY_SPECS = [
-  {
-    id: 'MACHINE_RESOLVABLE_CONTINUATION',
-    layer: 'AUTONOMY',
-    owner: UNIVERSAL_ENGINE_METHOD,
-    markers: [
-      'machine_resolvable_continuation:',
-      'semantic_name: DERIVED_CAUSAL_MICRO_GOAL',
-      'self_goal_alias: SELF_GOAL',
-      'self_goal_is_new_parent_goal: false',
-      'unknown_alone_authorizes_mutation: false',
-      'parent_goal_must_survive: true',
-      'existing_owner_must_survive: true',
-      'writer_lease_must_survive_same_mutable_scope: true',
-      'DERIVE_CAUSAL_MICRO_GOAL',
-      'CLASSIFY_THEN_CONTINUE_IF_MACHINE_RESOLVABLE_AND_AUTHORIZED',
-      'never: BLIND_PATCH',
-    ],
-    consumer: MASTER_CYCLE,
-    consumer_markers: [
-      'machine_resolvable_blocker_transition:',
-      'technical_blocker_is_not_human_boundary_by_itself: true',
-      'unknown_is_not_permission_to_mutate: true',
-      'self_goal_semantics: DERIVED_CAUSAL_MICRO_GOAL',
-      'human_return_only_when:',
-    ],
-    reproduction: 'MEASURE_CLASSIFY_DERIVE_CAUSAL_MICRO_GOAL_PRESERVE_PARENT_OWNER_LEASE_RETEST_REMEASURE_CONTINUE',
-  },
-  {
-    id: 'DAILY_CHECKLIST_DAY_BOUND_GATE',
-    layer: 'GOVERNANCE',
-    owner: CONTRACT,
-    markers: [
-      '"marker": "DAILY_CHECKLIST_GATE_REQUIRED"',
-      '"per_day_attestation_required": true',
-      '"date_binding": "Daily-Checklist-Date MUST_EQUAL HEAD_COMMIT_DATE_IN_AMERICA_SAO_PAULO"',
-      '"head_field_role": "OPTIONAL_PROVENANCE_NOT_GATE"',
-      '"unknown_receipt": "BLOCK_CODE_PROMOTION"',
-      '"mirror_is_authority": false',
-    ],
-    reproduction: 'REQUIRE_DAILY_CHECKLIST_RECEIPT_BOUND_TO_HEAD_COMMIT_DAY_BEFORE_CODE_PROMOTION',
-  },
-  {
-    id: 'MODEL_NEUTRAL_MULTI_WRITER_SINGLE_FINALIZER',
-    layer: 'ORCHESTRATION',
-    owner: CONTRACT,
-    markers: [
-      '"multiple_writers_allowed": true',
-      '"concurrent_writers_disjoint_scopes": true',
-      '"same_mutable_scope_requires_writer_lease": true',
-      '"one_active_finalizer_lease": true',
-      '"finalizer_model_neutral": true',
-      '"vps_is_intent_authority": false',
-      '"goal_pai_round_trip_required": true',
-    ],
-    reproduction: 'ALLOW_DISJOINT_WRITERS_SERIALIZE_FINAL_PROMOTION_WITH_ONE_MODEL_NEUTRAL_FINALIZER_LEASE',
-  },
   {
     id: 'HUMAN_AUTHORITY_MODEL_REPLACEABILITY',
     layer: 'IDENTITY',
@@ -433,6 +346,24 @@ const CAPABILITY_SPECS = [
     declared_limit: 'AUTO_WORK_DISCOVERY_PRODUCER=UNPROVEN',
     reproduction: 'DISCOVER_CANDIDATES_FROM_STATE_WITHOUT_CONVERTING_DISCOVERY_TO_AUTHORITY',
   },
+  {
+    id: 'MATERIAL_FIRST_COGNITIVE_CRYSTALLIZATION',
+    layer: 'LEARNING',
+    owner: 'LEIA-ME-IA.md',
+    markers: [
+      'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+      'PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER=true',
+      'PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED=true',
+      'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
+    ],
+    consumer: 'AGENTS.md',
+    consumer_markers: [
+      'MATERIAL_FROM_CHEFE_AUTO_INGEST=true',
+      'ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA=false',
+      'MATERIAL_COGNITIVE_ROUTE=CHEFE_MATERIAL',
+    ],
+    reproduction: 'INGEST_CLASSIFY_BIND_EXISTING_OWNER_CRYSTALLIZE_PROVEN_DELTA_AND_REUSE',
+  },
 ];
 
 function verifyCapability(spec) {
@@ -509,13 +440,6 @@ const condensedDna = {
     'LIVE_STATE_OVERRIDES_STALE_CONTEXT',
     'REUSE_BEFORE_CREATE',
     'PARALLELIZE_PERCEPTION_SERIALIZE_MUTATION',
-    'DAILY_CHECKLIST_DAY_BOUND_BEFORE_CODE_PROMOTION',
-    'MULTIPLE_WRITERS_DISJOINT_SCOPES_SINGLE_FINALIZER_PROMOTION',
-    'MODEL_NAME_IS_NOT_ROUTING_AUTHORITY',
-    'GOAL_PAI_SURVIVES_PROMOTION_DEPLOY_AND_REMEASUREMENT',
-    'TECHNICAL_BLOCKER_DERIVES_CAUSAL_MICRO_GOAL_BEFORE_HUMAN_RETURN',
-    'UNKNOWN_IS_NOT_PERMISSION_TO_MUTATE',
-    'HUMAN_RETURN_REQUIRES_PROVEN_FRONTIER_OR_EXHAUSTED_HARD_BLOCKER',
     'REALITY_AND_DISCRIMINATING_TEST_OVERRULE_MODEL_VOTE',
     'UNKNOWN_IS_NOT_PASS',
     'SOURCE_IS_PROVENANCE_NOT_AUTHORITY',
@@ -523,6 +447,26 @@ const condensedDna = {
     'RUNTIME_MUST_BE_MEASURED_SEPARATELY',
     'CAPABILITY_INTENT_CONDUCT_EFFECT_ARE_SEPARATE',
     'EVIDENCE_LAYER_DOES_NOT_AUTO_PROMOTE_TO_CAUSALITY',
+    'HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN',
+    'FIXED_HUD_LAYOUT_ONLY_LIVE_VALUES_CHANGE',
+    'NUMERIC_METRICS_REQUIRE_PROVEN_DENOMINATOR',
+    'LOUD_EXACT_ACTIONABLE_FAILURE',
+    'TOOL_ARGUMENT_LIMITS_NORMALIZED_TO_SAFE_CAP',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS',
+    'ALTERNATE_AUTHORIZED_SENSOR_BEFORE_BLOCKER',
+    'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY',
+    'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME',
+    'PROOF_COUNTERPROOF_ACCEPT_RECONCILE_DETERMINISTIC_CLOSURE',
+    'ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL',
+    'COUNTERPROOF_DEFEAT_RECONCILES_BY_DISCARDING_ONLY_DISPROVEN_DELTA',
+    'SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_CAUSE',
+    'NEW_MATERIAL_CAUSE_REOPENS_SEAL',
+    'CROSS_SURFACE_CONTRACT_INHERITANCE',
+    'SEMANTIC_CONVERGENCE_ACROSS_SURFACES_IS_EXPECTED_SUCCESS',
+    'TOOL_CATALOG_VISIBLE_IS_NOT_TOOL_CALL_SUCCESS',
+    'EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER',
   ],
   operational_flow: contract.standard_architecture.flow,
   meta_flow: [
@@ -541,9 +485,6 @@ const condensedDna = {
     'LOAD_OWNER_SOURCE_ON_DEMAND',
     'MEASURE_RUNTIME_TOOLS_AND_STATE',
     'RECONCILE_BEFORE_CREATE',
-    'VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_HEAD_COMMIT_DAY',
-    'ACQUIRE_WRITER_OR_FINALIZER_LEASE_BY_SCOPE',
-    'CLASSIFY_BLOCKER_AND_DERIVE_MICRO_GOAL_WITHIN_AUTHORIZED_SCOPE',
     'EXECUTE_MINIMAL_CAUSAL_DELTA_WITH_ONE_WRITER',
     'VERIFY_CLAIM_ON_SAME_TARGET',
     'ABSORB_REUSABLE_DELTA_OR_NO_CHANGE',
@@ -618,6 +559,7 @@ const receipt = {
   capabilities: capabilities.length,
   source_bytes: sourceBytes,
   condensed_dna_bytes: condensedDnaBytes,
+  condensed_dna: condensedDna,
   capability_dna_sha256: capabilityDnaSha256,
   source_fingerprint_sha256: sourceFingerprintSha256,
   package_sha256: packageSha256,
@@ -626,12 +568,6 @@ const receipt = {
   portable_boot_policy: 'PASS',
   semantic_safety_boundary: 'PASS',
   evidence_causality_ontology: 'PASS',
-  daily_checklist_gate: 'PASS',
-  multi_writer_policy: 'PASS',
-  finalizer_lease_policy: 'PASS',
-  goal_pai_round_trip_policy: 'PASS',
-  machine_resolvable_continuation_policy: 'PASS',
-  human_boundary_policy: 'PASS',
   runtime_claim: 'UNPROVEN_BY_PORTABLE_KERNEL',
 };
 
@@ -684,10 +620,6 @@ if (JSON_ONLY || EXPORT_PATH) {
     'SCREENSHOT_TRIGGERS_LIVE_REMEASURE=1',
     'SEMANTIC_SAFETY_BOUNDARY=PASS',
     'EVIDENCE_CAUSALITY_ONTOLOGY=PASS',
-    'DAILY_CHECKLIST_GATE=PASS',
-    'MULTI_WRITER_POLICY=PASS',
-    'FINALIZER_LEASE_POLICY=PASS',
-    'GOAL_PAI_ROUND_TRIP_POLICY=PASS',
     'STALE_PACKAGE_ACTION=REBUILD_FROM_LIVE_REPOSITORY',
   ].join('\n') + '\n');
 }

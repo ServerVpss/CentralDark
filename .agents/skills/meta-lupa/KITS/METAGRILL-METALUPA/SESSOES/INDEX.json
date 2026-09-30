@@ -17,6 +17,35 @@
       "file": "2026-09-11-SESSAO-COMPLETA-CENTRALDARK.md",
       "receipt": "../INTERLIGADOS/RECEIPTS/2026-09-11-SESSAO-COMPLETA-CENTRALDARK.md",
       "status": "CRISTALIZADO_NA_MAIN"
+    },
+    {
+      "id": "SESSION_CRYSTAL_CENTRALDARK_20260918",
+      "date": "2026-09-18",
+      "file": "2026-09-18-SESSAO-PROVADA-CENTRALDARK.md",
+      "receipt": "../INTERLIGADOS/RECEIPTS/2026-09-18-SESSAO-PROVADA-PR-MAE-1562.md",
+      "pr_mother": 1562,
+      "status": "SUBPR_PENDING_MAIN"
+    },
+    {
+      "id": "HISTORY_RESILIENT_CENTRALDARK_20260919",
+      "date": "2026-09-19",
+      "file": "2026-09-19-CENTRALDARK-O-FILME-HISTORIA-RESILIENTE.md",
+      "pr_mother": 1562,
+      "child_pr": 1577,
+      "resilience_test": "apps/modulos/fixed-point-fabric/tests/test_history_resilience.py",
+      "status": "SUBPR_PENDING_CI",
+      "authority": "DERIVED_HISTORY_NOT_CURRENT_AUTHORITY"
+    },
+    {
+      "id": "SESSION_CRYSTAL_CENTRALDARK_20260929",
+      "date": "2026-09-29",
+      "file": "2026-09-29-SESSAO-COMPLETA-HIBRIDA-CENTRALDARK.md",
+      "receipt": "../INTERLIGADOS/RECEIPTS/2026-09-29-SESSAO-COMPLETA-HIBRIDA-CENTRALDARK.md",
+      "brain_pointer": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-CRISTAL-SESSAO-HIBRIDA-CENTRALDARK.md",
+      "pr_mother": 1562,
+      "child_pr": 1577,
+      "status": "SUBPR_PENDING_MAIN",
+      "authority": "DURABLE_CONTEXT_NOT_CURRENT_RUNTIME_AUTHORITY"
     }
   ]
 }

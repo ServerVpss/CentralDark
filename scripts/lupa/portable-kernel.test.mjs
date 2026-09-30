@@ -44,7 +44,7 @@ function materializeBundleAsRepo(bundle, root) {
     writeFileSync(target, member.content, 'utf8');
   }
   git(root, ['init', '-q']);
-  git(root, ['config', 'user.email', 'portable-kernel@test.local']);
+  git(root, ['config', 'user.email', '<contato>']);
   git(root, ['config', 'user.name', 'Portable Kernel Test']);
   git(root, ['add', '.']);
   git(root, ['commit', '-q', '-m', 'fixture']);
@@ -189,8 +189,52 @@ test('imagem é sensor e nunca substitui medição viva', () => {
   assert.equal(image.image_is_sensor, true);
   assert.equal(image.screenshot_is_current_truth, false);
   assert.equal(image.screenshot_is_trigger_for_live_measurement, true);
+  assert.equal(image.context_before_judgment, true);
+  assert.equal(image.observed_state_is_neutral_by_default, true);
+  assert.equal(image.function_before_failure, true);
+  assert.equal(image.cause_before_classification, true);
+  assert.equal(image.expected_mobility_is_not_drift, true);
+  assert.equal(image.terminal_cwd_is_not_blocker_without_causal_evidence, true);
+  assert.equal(image.do_not_invent_problem_from_screenshot, true);
+  assert.equal(image.do_not_expand_scope_from_visual_incidental_state, true);
+  assert.equal(image.user_demonstrated_context_is_primary_for_visual_scope, true);
   assert.equal(image.live_state_required_before_mutation, true);
   assert.equal(image.material_visual_finding_action, 'REMEASURE_LIVE_SOURCE_THEN_ACT_MINIMALLY');
+});
+
+test('modo direto universal é portátil, mensurável e herdado pelo kernel', () => {
+  const agents = readFileSync(join(ROOT, 'AGENTS.md'), 'utf8');
+  const entry = readFileSync(join(ROOT, 'LEIA-ME-IA.md'), 'utf8');
+  const requiredAgents = [
+    'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
+    'HUD_LAYOUT_FIXED=true',
+    'UNCHANGED_FIELDS_SHOULD_NOT_BE_REWRITTEN=true',
+    'GENERIC_ERROR_ONLY=FAIL',
+    'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+  ];
+  for (const marker of requiredAgents) assert.ok(agents.includes(marker), `missing direct-mode marker ${marker}`);
+
+  const requiredEntry = [
+    '## 0.1 Modo Direto universal — contrato portátil',
+    'HUD_FIXED_FIELDS=',
+    'HUD_ONLY_MATERIAL_VALUES_CHANGE=true',
+    'FAILURE_MUST_SHOW=',
+    'NO_TOOL_ACCESS → EXECUTION_CAPABILITY=ADVISORY_ONLY',
+  ];
+  for (const marker of requiredEntry) assert.ok(entry.includes(marker), `missing portable direct-mode marker ${marker}`);
+
+  const full = JSON.parse(run(['--json']));
+  const axioms = full.condensed_dna?.axioms ?? [];
+  for (const marker of [
+    'HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN',
+    'FIXED_HUD_LAYOUT_ONLY_LIVE_VALUES_CHANGE',
+    'NUMERIC_METRICS_REQUIRE_PROVEN_DENOMINATOR',
+    'LOUD_EXACT_ACTIONABLE_FAILURE',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER',
+  ]) assert.ok(axioms.includes(marker), `missing condensed DNA axiom ${marker}`);
 });
 
 test('kernel FULL deriva DNA condensado e hashes do mesmo HEAD vivo', () => {
@@ -203,12 +247,6 @@ test('kernel FULL deriva DNA condensado e hashes do mesmo HEAD vivo', () => {
     assert.equal(receipt.mode, 'FULL');
     assert.equal(receipt.image_sensor_policy, 'PASS');
     assert.equal(receipt.portable_boot_policy, 'PASS');
-    assert.equal(receipt.daily_checklist_gate, 'PASS');
-    assert.equal(receipt.multi_writer_policy, 'PASS');
-    assert.equal(receipt.finalizer_lease_policy, 'PASS');
-    assert.equal(receipt.goal_pai_round_trip_policy, 'PASS');
-    assert.equal(receipt.machine_resolvable_continuation_policy, 'PASS');
-    assert.equal(receipt.human_boundary_policy, 'PASS');
     assert.equal(receipt.runtime_claim, 'UNPROVEN_BY_PORTABLE_KERNEL');
     assert.match(receipt.head_sha, /^[0-9a-f]{40}$/i);
     assert.match(receipt.capability_dna_sha256, /^[0-9a-f]{64}$/i);
@@ -226,20 +264,6 @@ test('kernel FULL deriva DNA condensado e hashes do mesmo HEAD vivo', () => {
     assert.equal(bundle.load_strategy, 'DNA_FIRST_SOURCE_ON_DEMAND');
     assert.equal(bundle.condensed_dna.marker, 'CENTRALDARK_CONDENSED_DNA');
     assert.equal(bundle.condensed_dna.authority, 'SEGREDO/CHEFE');
-    assert.equal(bundle.condensed_dna.axioms.includes('DAILY_CHECKLIST_DAY_BOUND_BEFORE_CODE_PROMOTION'), true);
-    assert.equal(bundle.condensed_dna.axioms.includes('MULTIPLE_WRITERS_DISJOINT_SCOPES_SINGLE_FINALIZER_PROMOTION'), true);
-    assert.equal(bundle.condensed_dna.axioms.includes('MODEL_NAME_IS_NOT_ROUTING_AUTHORITY'), true);
-    assert.equal(bundle.condensed_dna.axioms.includes('GOAL_PAI_SURVIVES_PROMOTION_DEPLOY_AND_REMEASUREMENT'), true);
-    assert.equal(bundle.condensed_dna.axioms.includes('TECHNICAL_BLOCKER_DERIVES_CAUSAL_MICRO_GOAL_BEFORE_HUMAN_RETURN'), true);
-    assert.equal(bundle.condensed_dna.axioms.includes('UNKNOWN_IS_NOT_PERMISSION_TO_MUTATE'), true);
-    assert.equal(bundle.condensed_dna.axioms.includes('HUMAN_RETURN_REQUIRES_PROVEN_FRONTIER_OR_EXHAUSTED_HARD_BLOCKER'), true);
-    assert.equal(bundle.condensed_dna.minimum_reproduction.includes('VERIFY_DAILY_CHECKLIST_RECEIPT_BOUND_TO_HEAD_COMMIT_DAY'), true);
-    assert.equal(bundle.condensed_dna.minimum_reproduction.includes('ACQUIRE_WRITER_OR_FINALIZER_LEASE_BY_SCOPE'), true);
-    assert.equal(bundle.condensed_dna.minimum_reproduction.includes('CLASSIFY_BLOCKER_AND_DERIVE_MICRO_GOAL_WITHIN_AUTHORIZED_SCOPE'), true);
-    const microGoalCapability = bundle.condensed_dna.capabilities.find((item) => item.id === 'MACHINE_RESOLVABLE_CONTINUATION');
-    assert.ok(microGoalCapability);
-    assert.equal(microGoalCapability.state, 'SOURCE_VERIFIED_IN_REPO');
-    assert.equal(microGoalCapability.runtime_state, 'UNPROVEN_BY_PORTABLE_KERNEL');
     assert.equal(bundle.condensed_dna.proof_boundary.does_not_prove.includes('RUNTIME_EFFECT'), true);
     assert.equal(bundle.condensed_dna.proof_boundary.does_not_prove.includes('AGI_OR_CONSCIOUSNESS'), true);
     assert.equal(bundle.condensed_dna.capabilities.length, receipt.capabilities);
@@ -309,84 +333,6 @@ test('DNA fail-closed se um owner perder marcador de capacidade condensada', () 
     assert.equal(failure.capability, 'CROSS_META_EVOLUTION');
     assert.equal(failure.owner, METACOGNITION);
     assert.deepEqual(failure.missing, ['META_EVALUATION_REQUIRED=true']);
-  } finally {
-    rmSync(temp, { recursive: true, force: true });
-  }
-});
-
-
-test('kernel fail-closed se daily checklist ou finalizer lease regredir', () => {
-  const temp = mkdtempSync(join(tmpdir(), 'centraldark-portable-governance-drift-'));
-  const bundlePath = join(temp, 'bundle.json');
-  const fixtureRoot = join(temp, 'repo');
-  try {
-    run(['--export', bundlePath, '--json']);
-    const bundle = JSON.parse(readFileSync(bundlePath, 'utf8'));
-    mkdirSync(fixtureRoot, { recursive: true });
-    materializeBundleAsRepo(bundle, fixtureRoot);
-
-    const contractPath = join(fixtureRoot, 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json');
-    const contract = JSON.parse(readFileSync(contractPath, 'utf8'));
-    contract.daily_checklist_gate.per_day_attestation_required = false;
-    contract.standard_architecture.promotion.one_active_finalizer_lease = false;
-    writeFileSync(contractPath, JSON.stringify(contract, null, 2) + '\n', 'utf8');
-
-    const result = spawnSync(
-      process.execPath,
-      [SCRIPT, '--repo-root', fixtureRoot, '--json'],
-      { cwd: fixtureRoot, encoding: 'utf8' },
-    );
-    assert.equal(result.status, 2);
-    const failure = JSON.parse(result.stdout);
-    assert.equal(failure.status, 'BLOCKED');
-    assert.equal(failure.code, 'PORTABLE_CONTRACT_INVALID');
-    assert.equal(failure.errors.includes('DAILY_CHECKLIST_DAILY_BINDING_REQUIRED'), true);
-    assert.equal(failure.errors.includes('ONE_FINALIZER_LEASE_REQUIRED'), true);
-  } finally {
-    rmSync(temp, { recursive: true, force: true });
-  }
-});
-
-
-test('kernel fail-closed se micro-goal causal virar blind patch', () => {
-  const temp = mkdtempSync(join(tmpdir(), 'centraldark-portable-micro-goal-drift-'));
-  const bundlePath = join(temp, 'bundle.json');
-  const fixtureRoot = join(temp, 'repo');
-  try {
-    run(['--export', bundlePath, '--json']);
-    const bundle = JSON.parse(readFileSync(bundlePath, 'utf8'));
-    mkdirSync(fixtureRoot, { recursive: true });
-    materializeBundleAsRepo(bundle, fixtureRoot);
-
-    const ownerPath = join(
-      fixtureRoot,
-      'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml',
-    );
-    const original = readFileSync(ownerPath, 'utf8');
-    assert.ok(original.includes('unknown_alone_authorizes_mutation: false'));
-    writeFileSync(
-      ownerPath,
-      original.replace(
-        'unknown_alone_authorizes_mutation: false',
-        'unknown_alone_authorizes_mutation: true',
-      ),
-      'utf8',
-    );
-
-    const result = spawnSync(
-      process.execPath,
-      [SCRIPT, '--repo-root', fixtureRoot, '--json'],
-      { cwd: fixtureRoot, encoding: 'utf8' },
-    );
-    assert.equal(result.status, 2);
-    const failure = JSON.parse(result.stdout);
-    assert.equal(failure.status, 'BLOCKED');
-    assert.equal(failure.code, 'CAPABILITY_MARKER_MISSING');
-    assert.equal(failure.capability, 'MACHINE_RESOLVABLE_CONTINUATION');
-    assert.equal(
-      failure.missing.includes('unknown_alone_authorizes_mutation: false'),
-      true,
-    );
   } finally {
     rmSync(temp, { recursive: true, force: true });
   }

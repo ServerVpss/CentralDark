@@ -8,6 +8,43 @@ ENGINE=CLAUDE_CODE
 
 Esta regra existe somente para garantir descoberta automática no Claude Code. Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e execute o roteamento canônico definido ali.
 
+
+## Gate obrigatório antes da primeira resposta operacional
+
+```text
+CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR=true
+REPLAY_BEFORE_REDISCOVERY=true
+CANONICAL_CONSUMPTION_GATE=scripts/centraldark/canonical-consumption-gate.mjs
+CANONICAL_LEARNING_SOURCE=docs/CONSCIENCIA/APRENDIZADOS.md
+CANONICAL_LEARNING_MODE=ALL_NUMBERED_LEARNINGS
+CANONICAL_LEARNING_GATE_ARGS=--learning ALL
+SEARCH_MISS_IS_NOT_STOP_CONDITION=true
+SEARCH_MISS_FALLBACK=DIRECT_CANONICAL_PATH_READ
+TITLE_ONLY_IS_NOT_LEARNING_CONSUMED=true
+TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
+UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
+```
+
+Claude não pede ao CHEFE para mandar reler um aprendizado quando GitHub/path canônico
+está acessível. Busca zero cai automaticamente para leitura direta do arquivo. O boot consome TODOS os aprendizados numerados antes do primeiro roteamento; a seleção por pertinência vem depois desse inventário.
+`#ACORDAR` só fecha depois do consumo do registro canônico.
+
+```text
+RASTRO_FISCAL_BEFORE_CURRENT_LEDGER_RETURN=true
+PR_BODY_IS_HISTORY_NOT_CURRENT=true
+LEDGER_CURRENT_REQUIRES_EXPLICIT_CURRENT_MAIN=true
+EXACT_COMMENT_ID_DIRECT_LOOKUP_BEFORE_PAGINATION=true
+MEASURABLE_CURRENT_UNKNOWN_IS_FAIL=true
+LOCAL_BLOCKED_IS_NOT_GLOBAL_BLOCKER=true
+LOCAL_CAPABILITY_GAP_REQUIRES_CROSS_SURFACE_HANDOFF=true
+HUMAN_FRONTIER_REQUIRES_EXHAUSTED_AUTHORIZED_BODIES=true
+CAPABILITY_HANDOFF_RECEIPT_BEFORE_TERMINAL_BLOCKED=true
+TLC23_CAGE_OWNER=.agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
+TLC23_CAGE_BYPASS_FORBIDDEN=true
+TLC23_CAGE_GREEN_REQUIRES_COMPLETE_BODY=true
+TLC23_CAGE_NO_CHANGE_IS_NOT_GREEN=true
+```
+
 ```text
 ONE_SOL=true
 ONE_CORE=true
@@ -61,3 +98,15 @@ CENTRALDARK_AI_BOOT
 .agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 FALHA_DE_RECONCILIACAO_DE_CONTEXTO
+
+## Tool Call visibility contract
+
+```text
+TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR
+SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT
+```
+
+A execução real de ferramenta e a renderização lateral/JSON da Tool Call são capacidades distintas.
+Ausência do renderer não prova ausência de execução; resultado de ferramenta não prova que a lateral foi renderizada.
+Estados de visibilidade: `PROVED_BY_PLATFORM_RECEIPT | USER_CONFIRMED_VISIBILITY | PLATFORM_UNAVAILABLE | UNKNOWN`.
+Confirmação visual do CHEFE prova observação humana da UI, não receipt interno da plataforma.

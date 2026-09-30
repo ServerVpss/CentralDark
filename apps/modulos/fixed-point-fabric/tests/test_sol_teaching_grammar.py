@@ -15,6 +15,27 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true", self.boot)
         self.assertIn("MODEL_CHANGE_CHANGES_RESPONSE_CONTRACT=false", self.boot)
 
+    def test_exact_component_naming_is_global(self):
+        boot_required = [
+            "EXACT_COMPONENT_NAMING_REQUIRED=true",
+            "GENERIC_SENSOR_WORD_AS_STANDALONE=FORBIDDEN",
+            "GLOBAL_COMMUNICATION_SURFACES=TELEGRAM_BOT|CHATGPT|AI_CHATS|HUB|WEBSITE|CLI|RECEIPTS|STATUS_MESSAGES",
+            "SAME_NAMING_CONTRACT_ACROSS_SURFACES=true",
+            "UNKNOWN_COMPONENT_MUST_BE_CALLED_UNKNOWN_NOT_SENSOR=true",
+        ]
+        response_required = [
+            "EXACT_COMPONENT_NAMING_REQUIRED=true",
+            "GENERIC_SENSOR_WORD_AS_STANDALONE=FORBIDDEN",
+            "NAME_BEFORE_CATEGORY=true",
+            "REMOTE_DESKTOP_COMMANDER_UNAVAILABLE != VPS_DOWN",
+        ]
+        for item in boot_required:
+            with self.subTest(owner="boot", item=item):
+                self.assertIn(item, self.boot)
+        for item in response_required:
+            with self.subTest(owner="response", item=item):
+                self.assertIn(item, self.response)
+
     def test_response_owner_already_requires_work_study_teach(self):
         self.assertIn("WORK_STUDY_TEACH_REQUIRED=true", self.response)
         self.assertIn("BAIANES_FACIL_DEFAULT=true", self.response)

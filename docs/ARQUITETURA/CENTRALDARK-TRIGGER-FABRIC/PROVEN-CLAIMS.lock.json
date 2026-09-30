@@ -1,5 +1,886 @@
 {
   "schema": "centraldark.proven-claims-lock.v1",
   "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
-  "claims": {}
+  "claims": {
+    "TAILSCALE_WINDOWS_CONNECTIVITY_PATH": {
+      "claim_key": "TAILSCALE_WINDOWS_CONNECTIVITY_PATH",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml",
+      "lock_key": "9fec03a4990e29c22aa5455d60ccd80dda1768ed2230b131870558f6d564e68b",
+      "state": "SEALED_PROVEN",
+      "proof_target": "VPS_TAILSCALE_TO_WINDOWS_SEGREDO_CONNECTIVITY",
+      "evidence_ref": "PR_MOTHER_1562_COMMENT_5829464147 + CURRENT_REMEASURE_2026-09-25T09:35Z",
+      "observed_at": "2026-09-25T09:35:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "f9f598483810e5d5681e5c61790e6f5aa524072585d481a85e24a40b8eb685d4",
+        "execution_commands": [
+          "systemctl is-active tailscaled",
+          "tailscale status",
+          "tailscale ping -c 3 --timeout 5s ${TAILSCALE_PEER_NAME}",
+          "TCP_PROBE ${TAILSCALE_PEER_IP}:${RDP_PORT}"
+        ],
+        "proof_commands": [
+          "tailscaled == active",
+          "peer name resolves in tailscale status",
+          "3/3 ping returns",
+          "TCP/3389 opens"
+        ],
+        "expected_results": [
+          "TAILSCALE_DAEMON=ACTIVE",
+          "PEER_SEGREDO=PRESENT",
+          "PING=PASS",
+          "RDP_PORT=OPEN",
+          "DIRECT_P2P_NOT_REQUIRED_FOR_CONNECTIVITY_PASS"
+        ],
+        "environment_bindings": [
+          "TAILSCALE_PEER_NAME",
+          "TAILSCALE_PEER_IP_DISCOVERED_AT_RUNTIME",
+          "RDP_PORT"
+        ],
+        "self_test_command": "remeasure same path from VPS without hardcoding peer IP",
+        "self_test_result": "PASS_3_OF_3_VIA_DERP_SAO_AND_TCP3389_OPEN",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "TAILSCALE_NETWORK_LOGS_API_READ_PATH": {
+      "claim_key": "TAILSCALE_NETWORK_LOGS_API_READ_PATH",
+      "owner": "apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js",
+      "lock_key": "5e645acaac30dca25af0af3ae3ebd7ace72bad90c2157f5dcc4d47c7d7d38229",
+      "state": "SEALED_PROVEN",
+      "proof_target": "TAILSCALE_NETWORK_FLOW_LOGS_READ_WITH_EXISTING_VAULT_CREDENTIAL",
+      "evidence_ref": "PR_MOTHER_1562_COMMENT_5829524277 + CURRENT_REMEASURE_2026-09-25T09:42Z",
+      "observed_at": "2026-09-25T09:42:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "69a0e14a67e8ab98e9aacf696bda98601d1af903bf3c57c6bf60090a97413a03",
+        "execution_commands": [
+          "resolve existing TAILSCALE_API_KEY reference without printing value",
+          "GET /api/v2/tailnet/-/logging/network?start=${START}&end=${END}",
+          "parse JSON/NDJSON envelope without exposing secrets"
+        ],
+        "proof_commands": [
+          "credential reference present",
+          "HTTP status == 200",
+          "response parses and exposes logs envelope"
+        ],
+        "expected_results": [
+          "CREDENTIAL_REF=PRESENT",
+          "HTTP=200",
+          "PARSE=PASS",
+          "SECRET_EXPOSED=false"
+        ],
+        "environment_bindings": [
+          "TAILSCALE_CREDENTIAL_REFERENCE",
+          "START",
+          "END",
+          "TAILNET"
+        ],
+        "self_test_command": "15 minute current window read",
+        "self_test_result": "PASS_HTTP_200_LOGS_ENVELOPE",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "TAILSCALE_MCP_TOOL_SOURCE_PROOF_PR1691": {
+      "claim_key": "TAILSCALE_MCP_TOOL_SOURCE_PROOF_PR1691",
+      "owner": "apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js",
+      "lock_key": "563a362f726e2393f01553891f23a6a31a25b672128393636355d1c9f6591d4b",
+      "state": "SEALED_PROVEN",
+      "proof_target": "SOURCE_ONLY_PR1691_HEAD_3a07f200ad03972500ebce42d4b5107fafab69b6",
+      "evidence_ref": "PR_MOTHER_1562_COMMENT_5829640719",
+      "observed_at": "2026-09-25T08:43:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "7600d6e0ef127c14bd0b55fbeae8736c53da9e616d0c9769c162c62984d39881",
+        "execution_commands": [
+          "checkout exact PR #1691 head",
+          "node --check provider-control/admin catalog files",
+          "run provider-control + secret-boundary tests",
+          "build catalog summary",
+          "call four Tailscale read-only tools against live provider"
+        ],
+        "proof_commands": [
+          "syntax PASS",
+          "16/16 targeted tests PASS",
+          "catalog has exactly four tailscale_* tools",
+          "duplicateNames=0",
+          "all four readOnly=true destructive=false",
+          "live provider calls return HTTP 200"
+        ],
+        "expected_results": [
+          "SOURCE_PROOF=PASS",
+          "CATALOG_SOURCE_TOOL_COUNT=130",
+          "TAILSCALE_TOOLS=4",
+          "RUNTIME_DEPLOYED=NOT_CLAIMED"
+        ],
+        "environment_bindings": [
+          "PR_HEAD",
+          "TAILSCALE_CREDENTIAL_REFERENCE",
+          "TAILNET"
+        ],
+        "self_test_command": "exact-head isolated catalog and live provider proof",
+        "self_test_result": "PASS_SOURCE_ONLY_NOT_DEPLOYED",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "MICRODEPLOY_AUTONOMOUS_DIAGNOSIS_PATH": {
+      "claim_key": "MICRODEPLOY_AUTONOMOUS_DIAGNOSIS_PATH",
+      "owner": ".github/workflows/vps-exec-selfhosted.yml",
+      "lock_key": "91e59acad1e6d906ff901152bfbc58af6ef569022d4a272a6d3c37b795f11616",
+      "state": "SEALED_PROVEN",
+      "proof_target": "AUTONOMOUS_MICRODEPLOY_TRIGGER_QUEUE_GATE_DIAGNOSIS",
+      "evidence_ref": "PR_MOTHER_1562_COMMENT_5828750835 + CURRENT_RUN_36119747877",
+      "observed_at": "2026-09-25T09:43:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "5f0121cbbe1c79e7218ae53fe194358cf4988084e817a257a27e68fc42828d0b",
+        "execution_commands": [
+          "measure current main SHA",
+          "find canonical VPS deploy run for exact SHA",
+          "classify trigger event/status",
+          "measure self-hosted runner services and queued sample",
+          "if gate ran inspect exact failed job log",
+          "separate AUTO_TRIGGER from RUNTIME_DEPLOY_COMPLETION"
+        ],
+        "proof_commands": [
+          "exact SHA run identified",
+          "queue/capacity classified",
+          "gate result extracted when available",
+          "downstream deploy not called PASS unless runtime proof exists"
+        ],
+        "expected_results": [
+          "AUTO_TRIGGER_CLASSIFIED",
+          "RUNNER_QUEUE_CLASSIFIED",
+          "GATE_CLASSIFIED_OR_QUEUED",
+          "NO_FALSE_RUNTIME_PASS"
+        ],
+        "environment_bindings": [
+          "MAIN_SHA",
+          "WORKFLOW_RUN_ID",
+          "JOB_ID",
+          "RUNNER_NAME"
+        ],
+        "self_test_command": "current main deploy run and queue sample remeasurement",
+        "self_test_result": "PASS_DIAGNOSTIC_PATH_CURRENT_RUN_QUEUED_SAMPLE_42",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "HUD_RUDY_SOURCE_CONTRACT_PR1691": {
+      "claim_key": "HUD_RUDY_SOURCE_CONTRACT_PR1691",
+      "owner": "AGENTS.md",
+      "lock_key": "de8d5c8b84dc100b645325c98531840e8643df34e5573cbc1dcb23bd4c852a2f",
+      "state": "SEALED_PROVEN",
+      "proof_target": "SOURCE_ONLY_PR1691_HUD_RUDY_HYBRID_CONTRACT",
+      "evidence_ref": "PR_MOTHER_1562_COMMENTS_5829403379_5829464147",
+      "observed_at": "2026-09-25T08:36:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "12ad2de57043c205e9b1298f05f3c39ccc52d06371e88b65f11cc2a316334cde",
+        "execution_commands": [
+          "checkout exact PR #1691 head",
+          "parse AGENTS/BOOT/AI_BOOT/bot mandatory rules",
+          "node --check MCP server",
+          "verify H01..H16 identity/order and MCP_OR_REPO binding"
+        ],
+        "proof_commands": [
+          "syntax/parse PASS",
+          "H01..H16 fixed identity present",
+          "MCP connection OR repo context sufficient in source contract",
+          "UNKNOWN_IS_NOT_GREEN present"
+        ],
+        "expected_results": [
+          "SOURCE_CONTRACT=PASS",
+          "RUNTIME_HANDSHAKE=NOT_CLAIMED",
+          "MAIN_PROMOTION=NOT_CLAIMED"
+        ],
+        "environment_bindings": [
+          "PR_HEAD",
+          "CLIENT_SURFACE",
+          "MCP_CONNECTION",
+          "REPO_CONTEXT"
+        ],
+        "self_test_command": "exact-head source contract parse/readback",
+        "self_test_result": "PASS_SOURCE_ONLY_CI_AND_DEPLOY_NOT_PROVEN",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "LIVE_FABRIC_PUBLIC_STATUS_GRAPH_PATH": {
+      "claim_key": "LIVE_FABRIC_PUBLIC_STATUS_GRAPH_PATH",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-LIVE-EXECUTION-FABRIC.md",
+      "lock_key": "7c09647325030c5ab3a343e723ec9466a57aefbf6e6f9151d581b09c091110bf",
+      "state": "SEALED_PROVEN",
+      "proof_target": "PUBLIC_LIVE_FABRIC_STATUS_AND_GRAPH",
+      "evidence_ref": "CURRENT_REMEASURE_2026-09-25T09:41Z",
+      "observed_at": "2026-09-25T09:41:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "be70e6a443e9204a4ce03cc27bebc9d1f0d2b8d9beb8af330fdd618580c9e8ca",
+        "execution_commands": [
+          "GET api.centralldark.com/api/live-fabric/status",
+          "GET api.centralldark.com/api/live-fabric/graph",
+          "GET admin.centralldark.com/api/live-fabric/status",
+          "GET admin.centralldark.com/api/live-fabric/graph"
+        ],
+        "proof_commands": [
+          "all four endpoints return HTTP 200",
+          "response bodies non-empty"
+        ],
+        "expected_results": [
+          "API_STATUS=200",
+          "API_GRAPH=200",
+          "ADMIN_STATUS=200",
+          "ADMIN_GRAPH=200"
+        ],
+        "environment_bindings": [
+          "PUBLIC_API_HOST",
+          "ADMIN_HOST"
+        ],
+        "self_test_command": "four-endpoint current probe",
+        "self_test_result": "PASS_ALL_4_HTTP_200",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "MCP_HEALTH_DEEP_TOOLS_PATH": {
+      "claim_key": "MCP_HEALTH_DEEP_TOOLS_PATH",
+      "owner": "apps/modulos/mcp/src/index.js",
+      "lock_key": "3c1dfb0f6ff76e6f4b12a83aefcca85f2dc95e653b19b7c49ac248683b3772a3",
+      "state": "SEALED_PROVEN",
+      "proof_target": "CURRENT_MCP_RUNTIME_HEALTH_DEEP_AND_TOOL_CATALOG",
+      "evidence_ref": "CURRENT_REMEASURE_2026-09-25T09:41Z",
+      "observed_at": "2026-09-25T09:41:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "5a6ec574d21224c9c389027098b04e97d042788ecd1a69cfe076bed6d2ad13be",
+        "execution_commands": [
+          "GET 127.0.0.1:9100/health",
+          "GET 127.0.0.1:9100/health/deep",
+          "GET 127.0.0.1:9100/tools.json"
+        ],
+        "proof_commands": [
+          "all endpoints HTTP 200",
+          "health version observed",
+          "deep status healthy score 100",
+          "tools catalog count matches health"
+        ],
+        "expected_results": [
+          "HTTP=200",
+          "VERSION=0.4.0",
+          "TOOL_COUNT=126",
+          "DEEP_STATUS=healthy",
+          "DEEP_SCORE=100"
+        ],
+        "environment_bindings": [
+          "MCP_HOST",
+          "MCP_PORT"
+        ],
+        "self_test_command": "local runtime triple probe",
+        "self_test_result": "PASS_126_TOOLS_DEEP_SCORE_100",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "META_LUPA_PR410_SCOPE_AND_POINT_FIXED_GUARD_PATH": {
+      "claim_key": "META_LUPA_PR410_SCOPE_AND_POINT_FIXED_GUARD_PATH",
+      "owner": ".agents/skills/meta-lupa",
+      "state": "SEALED_PROVEN",
+      "proof_target": "PR410_SCOPE_PROVENANCE_AND_POINT_FIXED_AUTOLUPA_GUARD",
+      "evidence_ref": "PR_410_MERGE_061b6822 + CORRECTION_33793caf + LUPA_CONFORMANCE_RUN_36125690934",
+      "observed_at": "2026-09-25T10:45:24Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/CONSCIENCIA/APRENDIZADOS.md#4-auditoria-nao-vale-sem-head_sha-declarado-4-escopos-3-lacunas-falsas-no-pr-410",
+      "residual_risk": [
+        "META_LUPA_ENGINE_STILL_ACCEPTS_POINT_FIXED_WITHOUT_AUTOLUPA_AT_WRITE_TIME",
+        "CI_GUARDRAIL_IS_CURRENT_ENFORCEMENT_OWNER",
+        "TWO_LEGACY_FINALS_REMAIN_APPEND_ONLY_WITH_50_XP_DEBT_EXPOSED"
+      ],
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "d644c8f4ef5ca2ee596a6c87d423b0a80197572df9db90d6de9ae4e8176a4411",
+        "execution_commands": [
+          "measure current main SHA and bind every absence/existence claim to the same ref",
+          "fetch PR #410 metadata and confirm merged=true with merge commit 061b6822e06c2bd81186f8dbaf982724f01fd8e0",
+          "verify Meta-Lupa resources relative to .agents/skills/meta-lupa at the bound ref",
+          "run python testes/test_selo_ponto_fixo.py",
+          "run python guardrails/validar_selo_ponto_fixo.py",
+          "verify lupa-conformance executes test_lupa.py, guardrail and discriminating regression on the same HEAD",
+          "compare result schema and enforcement effect without rewriting append-only ledger history"
+        ],
+        "proof_commands": [
+          "resource existence is checked with explicit ref/HEAD instead of unscoped find",
+          "PR #410 receipt exposure fix remains reachable",
+          "14 discriminating regression cases pass",
+          "new point-fixed claim without AutoLupa fails closed",
+          "current ledger reports no new violations while two legacy violations remain visible",
+          "same-head lupa-conformance completes successfully"
+        ],
+        "expected_results": [
+          "PR410_MERGED=true",
+          "FALSE_ABSENCE_FINDINGS=REJECTED_BY_REF_SCOPING",
+          "RECEIPT_EXPOSURE_FIX=PASS",
+          "POINT_FIXED_WITHOUT_AUTOLUPA=BLOCKED_BY_CI_GUARDRAIL",
+          "REGRESSION_TOTAL=14",
+          "LEGACY_VIOLATIONS=2",
+          "LEGACY_XP_DEBT=50",
+          "NEW_VIOLATIONS=0",
+          "LUPA_CONFORMANCE_SAME_HEAD=PASS",
+          "LEDGER_HISTORY_REWRITTEN=false"
+        ],
+        "environment_bindings": [
+          "CURRENT_MAIN_SHA",
+          "META_LUPA_SKILL_ROOT",
+          "META_LUPA_LEDGER_PATH",
+          "PR_410_REF",
+          "LUPA_CONFORMANCE_RUN_ID"
+        ],
+        "self_test_command": "same-ref PR #410 metadata + Meta-Lupa guardrail/regression + same-head lupa-conformance",
+        "self_test_result": "PASS_MAIN_3a8e0113_RUN_36126342593_REGRESSION_14_OF_14",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      },
+      "lock_key": "1a76880eefb428d5b7e61f4e8571985f715ec84233e765c39b1405cab2870509"
+    },
+    "PROVEN_REPLAY_EXECUTOR_PATH": {
+      "claim_key": "PROVEN_REPLAY_EXECUTOR_PATH",
+      "owner": "scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+      "lock_key": "650b355d88d3054d7febc6f0718691cc2f4adbcc4ded6353354952a21546ed93",
+      "state": "SEALED_PROVEN",
+      "proof_target": "EXECUTABLE_SEAL_FINGERPRINT_REPLAY_COMPARE_RECEIPT",
+      "evidence_ref": "27_TESTS_PASS+SELF_TEST_PASS+REPLAY_REVALIDATION",
+      "observed_at": "2026-09-25T11:06:23Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "74c7c98d6fee33d967f2dd016dbdc7d0ef1af16f76a584295bbc95925c10a356",
+        "fingerprint_material_count": 3,
+        "execution_commands": [
+          "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py self-test --repo ."
+        ],
+        "proof_commands": [
+          "python3 -m py_compile scripts/trigger-fabric/centraldark_full_trigger_boot.py scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py fingerprint --material OWNER=replay --material VERSION=1 >/dev/null"
+        ],
+        "expected_results": [
+          "PASS"
+        ],
+        "expected_effect": "UNIT_SELFTEST_AND_FINGERPRINT_PASS",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py self-test --repo .",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      },
+      "reopen_history": [
+        {
+          "cause_ref": "MAIN_ef43f073_FAIL_CLOSED_MISSING_FINGERPRINT_PLUS_RESEAL_RUNTIME",
+          "observed_at": "2026-09-25T11:06:23Z",
+          "old_dependency_fingerprint": "375b7ed5728143790eb9b358ae5e7e31ee2a313ccb1c6da481d3e4a62431215a",
+          "new_dependency_fingerprint": "74c7c98d6fee33d967f2dd016dbdc7d0ef1af16f76a584295bbc95925c10a356",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        }
+      ]
+    },
+    "CASA_GARIMPO_REMOTE_BRIDGE_SOURCE_PATH": {
+      "claim_key": "CASA_GARIMPO_REMOTE_BRIDGE_SOURCE_PATH",
+      "owner": "scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json",
+      "lock_key": "8da41b44a49e2bc5f1e777ede81a9c0cd35e3c760ea4e502631e3dd3552eaf78",
+      "state": "SEALED_PROVEN",
+      "proof_target": "SOURCE_CONFIG_DEVICE_LABEL_WORKDIR_REMOTE_MCP",
+      "evidence_ref": "SESSION_RECEIPTS_PLUS_CURRENT_MAIN_SOURCE_2026-09-25",
+      "observed_at": "2026-09-25T10:50:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "5d2f3585c6611b6132b6c4aabc8f2c184dd2ac02bfe2b43f5b228e1ea8f75c69",
+        "fingerprint_material_count": 2,
+        "execution_commands": [
+          "python3 -c 'import json; j=json.load(open(\"scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json\")); assert j[\"device_label\"]==\"SEGREDO\"; assert j[\"workdir\"].endswith(\"GARIMPO-CHEFE\"); assert \"desktopcommander.app\" in j.get(\"remote_mcp\",\"\")'"
+        ],
+        "proof_commands": [
+          "python3 -c 'from pathlib import Path; t=Path(\"scripts/remote-bridge/CentralDark-Remote-One.go\").read_text(); assert \"GARIMPO-CHEFE\" in t and \"desktop-commander\" in t'"
+        ],
+        "expected_results": [
+          "SOURCE_PATH_PASS"
+        ],
+        "expected_effect": "SOURCE_PROVES_GARIMPO_WORKDIR_AND_SEGREDO_LABEL_NOT_IDENTITY_CAUSE",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "source-readback",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "GH_AUTH_CONTEXT_RESOLUTION_PATH": {
+      "claim_key": "GH_AUTH_CONTEXT_RESOLUTION_PATH",
+      "owner": "GH_CLI_AUTH_CONTEXT",
+      "lock_key": "003a810447d1cc7fd9610b2c463527bcbcd9882cd1194bc3d3307b64eb4ce645",
+      "state": "SEALED_PROVEN",
+      "proof_target": "CANONICAL_GH_CONFIG_CONTEXT_WITHOUT_REAUTH",
+      "evidence_ref": "VPS_RUNTIME_CURRENT_HOME_ISOLATION_AND_CANONICAL_GH_CONFIG_PASS_2026-09-25",
+      "observed_at": "2026-09-25T10:50:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "9c4c046144d9f9a87fd7cae855e732daa08e6ff5d0d43f553294f1661e328850",
+        "fingerprint_material_count": 2,
+        "execution_commands": [
+          "test -f \"$CANONICAL_GH_CONFIG_DIR/hosts.yml\"",
+          "GH_CONFIG_DIR=\"$CANONICAL_GH_CONFIG_DIR\" gh auth status --hostname github.com >/dev/null"
+        ],
+        "proof_commands": [
+          "GH_CONFIG_DIR=\"$CANONICAL_GH_CONFIG_DIR\" gh api user -q .login | grep -Eq \".+\""
+        ],
+        "expected_results": [
+          "AUTH_CONTEXT_PASS"
+        ],
+        "expected_effect": "CANONICAL_CONTEXT_AUTHENTICATES_WITHOUT_NEW_LOGIN",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [
+          "CANONICAL_GH_CONFIG_DIR"
+        ],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "canonical-gh-config-probe",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "SELF_HOSTED_RUNNER_CAPACITY_DIAGNOSIS_PATH": {
+      "claim_key": "SELF_HOSTED_RUNNER_CAPACITY_DIAGNOSIS_PATH",
+      "owner": "GITHUB_ACTIONS_SELF_HOSTED_RUNNERS",
+      "lock_key": "9f57de5f0d4d408c6368d6b6746c81da4d9532ca6ae792ba83d5f9455e260e7a",
+      "state": "SEALED_PROVEN",
+      "proof_target": "RUNNER_AND_HOST_CAPACITY_SENSOR_SEQUENCE",
+      "evidence_ref": "VPS_8CPU_LOAD_SWAP_DISK_RUNNERS_MEASURED_2026-09-25",
+      "observed_at": "2026-09-25T10:50:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "9567d027a227e1959c06045b342b94c5b028b885248c5a9a5403e9366b43b637",
+        "fingerprint_material_count": 4,
+        "execution_commands": [
+          "nproc >/dev/null",
+          "uptime >/dev/null",
+          "free -b >/dev/null",
+          "df -P / >/dev/null",
+          "GH_CONFIG_DIR=\"$CANONICAL_GH_CONFIG_DIR\" gh api \"repos/$REPO_SLUG/actions/runners\" >/dev/null"
+        ],
+        "proof_commands": [
+          "command -v systemctl >/dev/null && command -v gh >/dev/null",
+          "test -f \"$CANONICAL_GH_CONFIG_DIR/hosts.yml\""
+        ],
+        "expected_results": [
+          "CAPACITY_SENSORS_EXECUTABLE"
+        ],
+        "expected_effect": "CAPACITY_CAN_BE_REMEASURED_WITH_DECLARED_GH_AUTH_CONTEXT_AND_WITHOUT_AUTO_START",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [
+          "REPO_SLUG",
+          "CANONICAL_GH_CONFIG_DIR"
+        ],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "capacity-sensor-probe",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      }
+    },
+    "PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT": {
+      "claim_key": "PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "lock_key": "a5ea4b5e42ea44846d96f8fa6fac91a24975e2c9241284b09281c3b2f4cb54b6",
+      "state": "SEALED_PROVEN",
+      "proof_target": "MACHINE_CONSUMABLE_REPLAY_CONTRACT_FOR_PROVEN_PATHS",
+      "evidence_ref": "CHEFE_DELTA_2026-09-25T21:21-03:00 + CURRENT_MAIN_28a45d3eef2e4077496a88462a8004ce2a088456",
+      "observed_at": "2026-09-26T00:21:38Z",
+      "counterproof": "PASS",
+      "receipt_ref": "PR_MOTHER_1562 + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "ffe0c4dd2f5ec38bc62c6e1241abe9202339e34d6f69b0953131a96cb8a50b31",
+        "fingerprint_material_count": 8,
+        "fingerprint_material": [
+          "CONTRACT_SCHEMA=centraldark.proven-deterministic-lock.v1",
+          "OWNER=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+          "REGISTRY=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+          "CONSUMER=scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+          "RECIPE_REQUIRED_FIELDS=owner,objective,preconditions,execution_sequence,environment_bindings,dependency_fingerprint,proof,counterproof,expected_result_format_effect,evidence,next_cursor",
+          "LAW=REPLAY_BEFORE_REDISCOVERY",
+          "RESULT_SCHEMA=centraldark.proven-replay.result.v1",
+          "PR_MOTHER=1562"
+        ],
+        "execution_commands": [
+          "test -f docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
+          "test -f docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+          "python3 - <<'PY'\nimport json\nfrom pathlib import Path\nlock=Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml').read_text(encoding='utf-8')\nfor token in ['PROVEN_PATH_BECOMES_EXECUTABLE_RECIPE: true','RECIPE_MUST_LIVE_IN_REPOSITORY: true','RECIPE_MUST_BE_MACHINE_CONSUMABLE: true','REPLAY_BEFORE_REDISCOVERY: true','ADAPT_ENV_BINDINGS_ONLY: true']:\n    assert token in lock, token\nj=json.loads(Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json').read_text(encoding='utf-8'))\nassert 'PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT' in j['claims']\nPY"
+        ],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 - <<'PY'\nimport json\nfrom pathlib import Path\nentry=json.loads(Path('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json').read_text(encoding='utf-8'))['claims']['PROVEN_PATH_EXECUTABLE_RECIPE_CONTRACT']\nr=entry['proven_path_replay']\nassert entry['state']=='SEALED_PROVEN'\nassert r['commands_executable'] is True\nassert r['execution_policy']=='READ_ONLY'\nassert r['dependency_fingerprint']=='ffe0c4dd2f5ec38bc62c6e1241abe9202339e34d6f69b0953131a96cb8a50b31'\nassert r['expected_effect']=='NEXT_EXECUTOR_CAN_REPLAY_WITHOUT_REDISCOVERY'\nassert r['raw_output_byte_equality_required'] is False\nPY"
+        ],
+        "expected_results": [
+          "CONTRACT_FLAGS_PRESENT",
+          "REGISTRY_CLAIM_PRESENT",
+          "RECIPE_FIELDS_MACHINE_CONSUMABLE",
+          "NO_REDISCOVERY_REQUIRED"
+        ],
+        "expected_effect": "NEXT_EXECUTOR_CAN_REPLAY_WITHOUT_REDISCOVERY",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+        "self_test_result": "PASS_EXPECTED_BY_SAME_HEAD_CI",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "required_recipe_fields": [
+          "owner",
+          "objective",
+          "preconditions",
+          "execution_sequence",
+          "environment_bindings",
+          "dependency_fingerprint",
+          "proof",
+          "counterproof",
+          "expected_result_format_effect",
+          "evidence",
+          "next_cursor"
+        ],
+        "replay_outcomes": {
+          "same_fingerprint_same_proof": "REUSE_CRYSTAL",
+          "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+          "same_fingerprint_proof_diverged": "DELTA_NEW",
+          "undeclared_binding": "DENY_FAIL_CLOSED"
+        }
+      }
+    },
+    "UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH": {
+      "claim_key": "UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH",
+      "owner": "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+      "lock_key": "90d8dcc29002ba3363da63ae7727cf83d6335712c4df264da73bc8953900f1ba",
+      "state": "SEALED_PROVEN",
+      "proof_target": "validador de CENTRALDARK_UNIFIED_SURFACE_PARITY_01 aprova o conjunto limpo e reprova os 6 ataques reais (valor falso em comentário, lei removida, duplicata falsa, versão paralela afirmada, substitui Hermes, substitui SOL) sem reprovar a negação",
+      "evidence_ref": "suíte 18/18 com recibo PASS real; suíte reprova validador c9b0968",
+      "observed_at": "2026-09-27T02:56:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851670095",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "49f76c543ca56dfb66c5a3dcaf4fdf20441ae9c676bad08ca74b50f1ddfadebf",
+        "fingerprint_material_count": 2,
+        "execution_commands": [],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py"
+        ],
+        "expected_results": [
+          "UNIFIED_SURFACE_PARITY_CONTRACT=PASS",
+          "Ran 8 tests ... OK"
+        ],
+        "expected_effect": "VALIDATOR_PASS_AND_ALL_8_COUNTERPROOF_TESTS_PASS",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+        "self_test_result": "PASS_8_OF_8",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "fingerprint_material_files": {
+          "VALIDATOR_BLOB": "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "COUNTERPROOF_TEST_BLOB": "scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py"
+        },
+        "fingerprint_material_rule": "<KEY>=<git hash-object path>",
+        "replay_command": "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py replay-run --claim UNIFIED_SURFACE_PARITY_VALIDATOR_COUNTERPROOF_PATH --fingerprint-material VALIDATOR_BLOB=$(git hash-object scripts/trigger-fabric/validate_unified_surface_parity_contract.py) --fingerprint-material COUNTERPROOF_TEST_BLOB=$(git hash-object scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py)"
+      },
+      "reopen_history": [
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/eb8993e — SOL ligou 3 donos novos ao validador; rasgo Claude: contradição KEY=false passava na skill de voz e no roteador",
+          "observed_at": "2026-09-27T02:00:00Z",
+          "old_dependency_fingerprint": "1f2d524267d675a13a510d1902ee8ebe23ed7dbefe1529b730ed04ade609fc76",
+          "new_dependency_fingerprint": "937260ba5e0092ed1e905cfab93b61a3479a5042cdec0f30c8284885e69d6229",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/4effa8b — rota comum escrita como família; faltavam DELTAÚTIL/FIXED_POINT/RASTRO/BOOT do dono ADM-GATILHOS",
+          "observed_at": "2026-09-27T02:05:00Z",
+          "old_dependency_fingerprint": "937260ba5e0092ed1e905cfab93b61a3479a5042cdec0f30c8284885e69d6229",
+          "new_dependency_fingerprint": "d0e17ee3f35856163fc8f34c8ea6e0184e909a1942032f2b8154896aba1ab192",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/c9b0968 — portão de publicação lia só 1ª linha de status e aceitava PASS sem leitura de volta da release",
+          "observed_at": "2026-09-27T02:15:00Z",
+          "old_dependency_fingerprint": "d0e17ee3f35856163fc8f34c8ea6e0184e909a1942032f2b8154896aba1ab192",
+          "new_dependency_fingerprint": "a1e4669a7e2329026367da82cd7fc26518065c4b46591bd62d3278ccd570ebf9",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/c9b0968 — portão de publicação; re-selo corrigido após teste de PASS completo conflitar com campo declarado",
+          "observed_at": "2026-09-27T02:20:00Z",
+          "old_dependency_fingerprint": "a1e4669a7e2329026367da82cd7fc26518065c4b46591bd62d3278ccd570ebf9",
+          "new_dependency_fingerprint": "5989037ee6aab904c397ba906fa35cd5f03eddab7d7b1054c7195459ce8b1b5e",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "https://github.com/ServerVpss/CentralDark/commit/dc63ce0 — plugin publicado (PASS real) quebrou testes ancorados em UNKNOWN; testes agora fixam o estado do recibo",
+          "observed_at": "2026-09-27T02:35:00Z",
+          "old_dependency_fingerprint": "5989037ee6aab904c397ba906fa35cd5f03eddab7d7b1054c7195459ce8b1b5e",
+          "new_dependency_fingerprint": "8aed5edd1155d29ab0a6ed6bea14d262f5b903746e5067c5c7cdea76f8ac64fa",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "18600f5 (outra caneta) acrescentou exigência de garimpo universal ao validador; suíte 18/18 segue verde",
+          "observed_at": "2026-09-27T02:56:00Z",
+          "old_dependency_fingerprint": "8aed5edd1155d29ab0a6ed6bea14d262f5b903746e5067c5c7cdea76f8ac64fa",
+          "new_dependency_fingerprint": "49f76c543ca56dfb66c5a3dcaf4fdf20441ae9c676bad08ca74b50f1ddfadebf",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        }
+      ],
+      "provenance": {
+        "lock_placed_by_pen": "CLAUDE",
+        "pen_identity_rule": "PEN_ID=COMMIT_SHA; CONNECTOR!=AUTOR; ACCOUNT!=CANETA; trailer Co-Authored-By: Claude = caneta Claude",
+        "seal_commit": "54a1d767122d15641a79a6ff35781195125c1582",
+        "reseal_commits": [
+          "6545c34bb7965e7ffd371c6e42862fe36cb83df3",
+          "5ed8cb9f5f8a1774b703b86ddfded0a61c497135",
+          "f4ed61d9e4782417aa76f6d9513903642b97f2ba",
+          "75be41654300395b9e53c7e7b36d9e73f6fb5063",
+          "557a1abd44dc57b1b6b5495f490ea16e9e48fdcf"
+        ],
+        "recipe_hardening_commits": [
+          "ab3d904ca776fa528c721042cb615d8e4b1f2feb"
+        ],
+        "ledger": "https://github.com/ServerVpss/CentralDark/pull/1562"
+      },
+      "lock_access": {
+        "state": "OPEN_BY_PROOF",
+        "same_fingerprint": "PASSAGE_OPEN",
+        "core_binding": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#proven_crystal_main_fast_path",
+        "open_to": [
+          "CLAUDE",
+          "QUALQUER_CANETA_AUTORIZADA"
+        ],
+        "reopen_via": "centraldark_full_trigger_boot.py reseal-fingerprint --cause-ref <causa> (proof verde antes)",
+        "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+        "revalidate_is_not_green": true,
+        "chefe_authorization": "CHEFE 2026-09-27 23:47 BRT: cadeados postos pelo Claude abertos e atribuídos ao Claude; registrar na main validado e provado"
+      }
+    },
+    "MULTI_PEN_MAIN_GATE_PATH": {
+      "claim_key": "MULTI_PEN_MAIN_GATE_PATH",
+      "owner": "scripts/trigger-fabric/verify_repo_contract.py",
+      "lock_key": "4140e68eb6a6e89f5ce434ea556ae7b99918fbd9ace61aae20e59fc056a88e25",
+      "state": "SEALED_PROVEN",
+      "proof_target": "portão único que toda caneta (Claude, ChatGPT texto/voz/Work, Cowork) roda antes de subir na main: ciclo mestre texto=voz, partida, validador de paridade, contraprova do validador e verificação geral",
+      "evidence_ref": "verify verde; toda-sessão-vira-commit reprova",
+      "observed_at": "2026-09-27T03:58:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5851904401",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "d8e7b582a3e64f93d2680dad598e538ee0f042a4fe5057d05b8c235824bc6f49",
+        "fingerprint_material_count": 7,
+        "execution_commands": [],
+        "proof_commands": [
+          "python3 scripts/trigger-fabric/test_centraldark_master_cycle.py",
+          "python3 scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "python3 scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+          "python3 scripts/trigger-fabric/verify_repo_contract.py"
+        ],
+        "expected_results": [
+          "5 comandos exit 0"
+        ],
+        "expected_effect": "ALL_FIVE_GATE_COMMANDS_EXIT_0_BEFORE_PUSH",
+        "result_schema": "centraldark.proven-replay.result.v1",
+        "environment_bindings": [],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "python3 scripts/trigger-fabric/verify_repo_contract.py",
+        "self_test_result": "PASS",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "fingerprint_material_files": [
+          "scripts/trigger-fabric/test_centraldark_master_cycle.py",
+          "scripts/trigger-fabric/centraldark_master_cycle.py",
+          "scripts/trigger-fabric/test_centraldark_full_trigger_boot.py",
+          "scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+          "scripts/trigger-fabric/validate_unified_surface_parity_contract.py",
+          "scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py",
+          "scripts/trigger-fabric/verify_repo_contract.py"
+        ],
+        "fingerprint_material_rule": "<basename>=<git hash-object path>",
+        "replay_command": "python3 scripts/trigger-fabric/centraldark_full_trigger_boot.py replay-run --claim MULTI_PEN_MAIN_GATE_PATH --timeout 180 $(for f in scripts/trigger-fabric/test_centraldark_master_cycle.py scripts/trigger-fabric/centraldark_master_cycle.py scripts/trigger-fabric/test_centraldark_full_trigger_boot.py scripts/trigger-fabric/centraldark_full_trigger_boot.py scripts/trigger-fabric/validate_unified_surface_parity_contract.py scripts/trigger-fabric/test_validate_unified_surface_parity_contract.py scripts/trigger-fabric/verify_repo_contract.py; do printf -- '--fingerprint-material %s=%s ' \"$(basename $f)\" \"$(git hash-object $f)\"; done)"
+      },
+      "reopen_history": [
+        {
+          "cause_ref": "df995f2 a12bd4b cc8e25a 3366002 18600f5 mudaram arquivos do portão sem re-selar; df995f2 desfez ab3d904 (base velha) — restaurado",
+          "observed_at": "2026-09-27T02:55:00Z",
+          "old_dependency_fingerprint": "45081086821285c804abfa234c81f0884388e90be399d753acd364009c8c1e3e",
+          "new_dependency_fingerprint": "f59684c58b9b050377086a60c0260718eeb1f74046bf33e37e2da60ef44ecb61",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "CHEFE 2026-09-27: marcador simples resolve — partida delega tudo ao mestre (leitor único); acordar solto no texto = neutro",
+          "observed_at": "2026-09-27T03:05:00Z",
+          "old_dependency_fingerprint": "f59684c58b9b050377086a60c0260718eeb1f74046bf33e37e2da60ef44ecb61",
+          "new_dependency_fingerprint": "a7a2f716fd7520e3b6d8ce115ea270eb67066e5c1f797b06fdcdcd0515232bc4",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "81aec41 (outra caneta) acrescentou fiscal do fast-path de cristal provado ao verify_repo_contract; 5 comandos verdes",
+          "observed_at": "2026-09-27T03:02:00Z",
+          "old_dependency_fingerprint": "a7a2f716fd7520e3b6d8ce115ea270eb67066e5c1f797b06fdcdcd0515232bc4",
+          "new_dependency_fingerprint": "6ce0e4c238b6ddff3906d9206f56607f071c547c61ebbfef8766abe90db196c1",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "fiscal do fast-path (81aec41) aceitava contradição e valor trocado em comentário → check_values no verify_repo_contract",
+          "observed_at": "2026-09-27T03:12:00Z",
+          "old_dependency_fingerprint": "6ce0e4c238b6ddff3906d9206f56607f071c547c61ebbfef8766abe90db196c1",
+          "new_dependency_fingerprint": "d8455bae2a7eab5156019302308d261709ed8160eacf9b17c6d6f2da0d993dca",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "erros próprios do Claude viram regra: fiscal CLAUDE_OWN_ERRORS_BECOME_RULES no verify_repo_contract",
+          "observed_at": "2026-09-27T03:20:00Z",
+          "old_dependency_fingerprint": "d8455bae2a7eab5156019302308d261709ed8160eacf9b17c6d6f2da0d993dca",
+          "new_dependency_fingerprint": "f543b10cd5df815f1e1e504eb3c73bcbd9277d8ce3e5133cb80e0741eed9e3ce",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "fechamento da sessão: +2 regras de erro próprio (motivo antes de julgar; responder a intenção pedida) no fiscal",
+          "observed_at": "2026-09-27T03:26:00Z",
+          "old_dependency_fingerprint": "f543b10cd5df815f1e1e504eb3c73bcbd9277d8ce3e5133cb80e0741eed9e3ce",
+          "new_dependency_fingerprint": "266c583f8ae481a7e17df0ca7c892197a902f3ece344ce555b7aa7fb2d9adb5e",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "CHEFE 27/09 00:33: caminho paralelo != sistema paralelo — fiscal PARALLEL_PATHS_CONVERGE_NOT_PARALLEL_SYSTEM",
+          "observed_at": "2026-09-27T03:36:00Z",
+          "old_dependency_fingerprint": "266c583f8ae481a7e17df0ca7c892197a902f3ece344ce555b7aa7fb2d9adb5e",
+          "new_dependency_fingerprint": "5ac3d92def0a61d60a727945cd608efc079dbe0c433eafc8e7e9b3cdde7567aa",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "SOUL atualizada por ordem do CHEFE: fiscal SOUL_CHEFE_2026_09_27_OPERATIONAL_LAW",
+          "observed_at": "2026-09-27T03:45:00Z",
+          "old_dependency_fingerprint": "5ac3d92def0a61d60a727945cd608efc079dbe0c433eafc8e7e9b3cdde7567aa",
+          "new_dependency_fingerprint": "e10713cea184ccf7bb138d3390b8a3c1afbaa26b2a3956666ec527f3df591191",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "regra global do CHEFE: SOUL sempre atual — check_soul_sync no verify_repo_contract; ponto fixo exige SOUL_SYNC_CURRENT",
+          "observed_at": "2026-09-27T03:50:00Z",
+          "old_dependency_fingerprint": "e10713cea184ccf7bb138d3390b8a3c1afbaa26b2a3956666ec527f3df591191",
+          "new_dependency_fingerprint": "45088f7a93ef462f75c8929c2035ec3c802dabc2c5b4d5373d4875aa578377d2",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        },
+        {
+          "cause_ref": "resgate de sessão perdida absorvido no harvester: fiscal LOST_SESSION_RESCUE_IN_HARVESTER_OWNER",
+          "observed_at": "2026-09-27T03:58:00Z",
+          "old_dependency_fingerprint": "45088f7a93ef462f75c8929c2035ec3c802dabc2c5b4d5373d4875aa578377d2",
+          "new_dependency_fingerprint": "d8e7b582a3e64f93d2680dad598e538ee0f042a4fe5057d05b8c235824bc6f49",
+          "counterproof": "PASS",
+          "current_target_remeasured": true,
+          "scope": "AFFECTED_CONE_ONLY"
+        }
+      ],
+      "provenance": {
+        "lock_placed_by_pen": "CLAUDE",
+        "pen_identity_rule": "PEN_ID=COMMIT_SHA; CONNECTOR!=AUTOR; ACCOUNT!=CANETA; trailer Co-Authored-By: Claude = caneta Claude",
+        "seal_commit": "ab3d904ca776fa528c721042cb615d8e4b1f2feb",
+        "reseal_commits": [
+          "557a1abd44dc57b1b6b5495f490ea16e9e48fdcf",
+          "474a75036f25a463ca68373dfb14bd743ae520cc"
+        ],
+        "recipe_hardening_commits": [],
+        "ledger": "https://github.com/ServerVpss/CentralDark/pull/1562"
+      },
+      "lock_access": {
+        "state": "OPEN_BY_PROOF",
+        "same_fingerprint": "PASSAGE_OPEN",
+        "core_binding": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#proven_crystal_main_fast_path",
+        "open_to": [
+          "CLAUDE",
+          "QUALQUER_CANETA_AUTORIZADA"
+        ],
+        "reopen_via": "centraldark_full_trigger_boot.py reseal-fingerprint --cause-ref <causa> (proof verde antes)",
+        "changed_fingerprint": "REVALIDATE_AFFECTED_CONE_ONLY",
+        "revalidate_is_not_green": true,
+        "chefe_authorization": "CHEFE 2026-09-27 23:47 BRT: cadeados postos pelo Claude abertos e atribuídos ao Claude; registrar na main validado e provado"
+      }
+    }
+  }
 }

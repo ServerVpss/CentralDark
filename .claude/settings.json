@@ -23,6 +23,17 @@
     "boot_endpoint": "https://mcp.centralldark.com/hermes/boot"
   },
   "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/memory-linker/precompact-session-digest.mjs"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",

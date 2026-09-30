@@ -1,0 +1,39 @@
+schema: centraldark.forja-viva.visual-naming-registry.v1
+status: CANDIDATE_UNTIL_TESTED_ON_RUNTIME
+owner: docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/FORJA_VIVA_CONTINUIDADE.md
+authority: SEGREDO/CHEFE
+
+rules:
+  visual_name_is_identity_authority: false
+  visual_name_is_new_agent: false
+  visual_name_is_new_brain: false
+  visual_name_is_proof: false
+  human_facing_version_suffix_forbidden: true
+  one_visual_identity_owner: true
+
+entries:
+  - id: FORJA_VIVA_ICON
+    canonical_name: "Capetinha da Forja"
+    kind: VISUAL_IDENTITY
+    semantic_role: "forja viva / temperatura / respiração / trabalho em andamento"
+    owner_reused: docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/FORJA_VIVA_CONTINUIDADE.md
+    runtime_binding: EXISTING_FORJA_VIVA_SURFACES
+    status: CANDIDATE_UNTIL_RENDERED_AND_OBSERVED
+
+  - id: FORJA_SKIN
+    canonical_name: "Forja"
+    kind: VISUAL_SKIN
+    aliases: ["forge"]
+    status: DEFINED_NOT_GLOBAL_PASS
+
+  - id: OPERATIONAL_SKIN
+    canonical_name: "Operacional"
+    kind: VISUAL_SKIN
+    aliases: ["operational"]
+    status: DEFINED_NOT_GLOBAL_PASS
+
+  - id: EMERALD_SKIN
+    canonical_name: "Emerald"
+    kind: VISUAL_SKIN
+    aliases: ["emerald"]
+    status: DEFINED_NOT_GLOBAL_PASS

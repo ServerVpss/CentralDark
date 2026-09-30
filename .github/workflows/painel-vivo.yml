@@ -1,4 +1,4 @@
-name: painel-vivo
+name: ⚙️ painel-vivo
 
 on:
   workflow_dispatch:
@@ -47,7 +47,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Publicar painel vivo com writer-safe-push
+      - name: 🔹 Publicar painel vivo com writer-safe-push
         shell: bash
         env:
           PAINEL_EVENTO: ${{ inputs.evento }}

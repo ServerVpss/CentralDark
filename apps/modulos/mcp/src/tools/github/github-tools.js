@@ -1,11 +1,22 @@
 import { z } from "zod";
 const API = "https://api.github.com";
 const ALLOWED_REPOS = new Set(["ServerVpss/CentralDark", "ServerVpss/clone-deck", "segredounlock/clone-deck"]);
-const CO_AUTHOR = "SegredoiDev <segredounlock@users.noreply.github.com>";
+const CO_AUTHOR = "SegredoiDev <<conta-bot>>";
 const MAX_GITHUB_READ_BYTES = 120_000;
 const MAX_COMMIT_FILE_BYTES = 500_000;
 const MAX_COMMIT_FILES = 25;
 const DENY_PATH = /(^|\/)(\.env|secrets?|credenciais|tokens?|sessions?|sessao|sessão|cofre|\.ssh)(\/|$)|\.(pem|key|p12|pfx|sqlite|sqlite3|db|dump|bak|backup)$/i;
+
+class GitHubApiError extends Error {
+    constructor(status, apiPath, body = null) {
+        super(`GitHub ${status}: ${apiPath}`);
+        this.name = "GitHubApiError";
+        this.status = status;
+        this.apiPath = apiPath;
+        this.body = body;
+    }
+}
+
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
@@ -52,7 +63,7 @@ async function gh(token, apiPath, init = {}) {
         body = text.slice(0, 500);
     }
     if (!res.ok) {
-        throw new Error(`GitHub ${res.status}: ${apiPath}`);
+        throw new GitHubApiError(res.status, apiPath, body);
     }
     return body;
 }
@@ -112,7 +123,30 @@ export const githubTools = [
             const { owner, repo } = pick(input.owner, input.repo);
             const filePath = safePath(input.path);
             const q = input.ref ? `?ref=${encodeURIComponent(input.ref)}` : "";
-            const out = (await gh(token, `/repos/${owner}/${repo}/contents/${encodePath(filePath)}${q}`));
+            let out;
+            try {
+                out = await gh(token, `/repos/${owner}/${repo}/contents/${encodePath(filePath)}${q}`);
+            }
+            catch (error) {
+                if (error instanceof GitHubApiError && error.status === 404) {
+                    return ok({
+                        status: "NAO_ENCONTRADO_NO_GITHUB_REF",
+                        owner,
+                        repo,
+                        path: filePath,
+                        ref: input.ref ?? null,
+                        sourceScope: "GIT_COMMITTED_OBJECT_ONLY",
+                        worldAbsenceProven: false,
+                        runtimeLocalMayExist: true,
+                        alternateAuthorizedRoutes: [
+                            { tool: "read_file", root: "project", path: filePath },
+                            { tool: "search_files", root: "project", path: filePath.split("/").slice(0, -1).join("/") || ".", query: filePath.split("/").pop() },
+                        ],
+                        nextAction: "MEASURE_ALTERNATE_SENSOR_BEFORE_DECLARING_MISSING_OR_BLOCKED",
+                    });
+                }
+                throw error;
+            }
             if (!out.content || out.encoding !== "base64") {
                 return ok({ status: "NAO_E_ARQUIVO_TEXTO", owner, repo, path: filePath, meta: out });
             }

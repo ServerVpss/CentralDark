@@ -1,5 +1,5 @@
 // Card de conexao do Telegram como USUARIO (MTProto) via gramjs na VPS
-// Endpoint: https://status.centralldark.com/mtproto/*
+// Controle same-origin da CentralDark; o backend fala MTProto direto com o Telegram.
 import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
@@ -8,7 +8,7 @@ import { Send, Phone, KeyRound, CheckCircle2, XCircle, Loader2, LogOut, ShieldAl
 import { useToast } from "@/shared/hooks/use-toast";
 import { cn } from "@/shared/lib/utils";
 
-const API = "https://status.centralldark.com/mtproto";
+const API = "/api/telegram/mtproto";
 
 type Me = { id: string; firstName?: string; username?: string; phone?: string };
 type Step = "phone" | "code" | "password" | "connected";

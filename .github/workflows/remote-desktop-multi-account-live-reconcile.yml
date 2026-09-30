@@ -1,0 +1,90 @@
+name: ⚙️ Remote Desktop multi-account live reconcile
+
+on:
+  push:
+    branches:
+      - fix/desktop-commander-pid-census-20260916
+    paths:
+      - 'infra/systemd/**'
+      - 'scripts/vps/deploy-desktop-commander-multi-account.sh'
+      - '.github/workflows/remote-desktop-multi-account-live-reconcile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-vps:
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    steps:
+      - name: 🔹 Checkout exact branch HEAD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          TARGET_SHA="$GITHUB_SHA" REPO_DIR=/root/CentralDark BRANCH=main \
+            bash scripts/vps/deploy-guards-dispatcher.sh --gate-only
+          echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$GITHUB_SHA"
+
+      - name: 🔹 Prove target and deploy canonical multi-account bridge
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "HEAD=$(git rev-parse HEAD)"
+          echo "HOST=$(hostname)"
+          test "$(hostname)" = "vmi3256920"
+          bash -n scripts/vps/deploy-desktop-commander-multi-account.sh
+          bash -n infra/systemd/centraldark-desktop-commander-profile.sh
+          bash -n infra/systemd/centraldark-desktop-commander-watchdog.sh
+          SOURCE_HEAD="$GITHUB_SHA" bash scripts/vps/deploy-desktop-commander-multi-account.sh "$GITHUB_WORKSPACE"
+
+      - name: 🔹 Counterproof two isolated services
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          a="$(systemctl is-active centraldark-desktop-commander.service)"
+          b="$(systemctl is-active centraldark-desktop-commander-conta2.service)"
+          p1="$(systemctl show -p MainPID --value centraldark-desktop-commander.service)"
+          p2="$(systemctl show -p MainPID --value centraldark-desktop-commander-conta2.service)"
+          set -e
+          echo "PRINCIPAL_ACTIVE=$a MAINPID=$p1"
+          echo "CONTA2_ACTIVE=$b MAINPID=$p2"
+          test "$a" = active
+          test "$b" = active
+          test -n "$p1" && test "$p1" != 0
+          test -n "$p2" && test "$p2" != 0
+          test "$p1" != "$p2"
+          env1="$(systemctl show -p Environment --value centraldark-desktop-commander.service)"
+          env2="$(systemctl show -p Environment --value centraldark-desktop-commander-conta2.service)"
+          test "$env1" != "$env2"
+          echo "TWO_ISOLATED_REMOTE_PROCESSES=PASS"
+
+      - name: 🔹 Emit live receipts without secrets
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          for f in /run/centraldark-desktop-commander.service.watchdog.state /run/centraldark-desktop-commander-conta2.service.watchdog.state; do
+            echo "--- $f"
+            if [ -f "$f" ]; then
+              grep -E '^(OBSERVED_AT|SERVICE|ACTIVE|MAIN_PID|CONTROL_GROUP|MAIN_PID_IN_CGROUP|EXPECTED_IN_CGROUP|LOG_STATE|VERDICT|REASON)=' "$f"
+            else
+              echo "WATCHDOG_STATE_MISSING=$f"
+            if test -f "$f"; then
+              if grep -E '^(OBSERVED_AT|SERVICE|ACTIVE|MAIN_PID|CONTROL_GROUP|MAIN_PID_IN_CGROUP|EXPECTED_IN_CGROUP|LOG_STATE|VERDICT|REASON)=' "$f"; then
+                :
+              else
+                echo "NO_RECEIPT_FIELDS=$f"
+              fi
+            else
+              echo "STATE_FILE_MISSING=$f"
+            fi
+          done

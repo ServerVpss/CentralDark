@@ -12,6 +12,10 @@ import { log } from "./log.js";
 import { withCid } from "./correlation.js";
 import { config } from "./config.js";
 import { injectPatternAdmin } from "./admin-patterns-ui.js";
+import { getBuildkiteStatus } from "./buildkite-integration.js";
+import { getGrokControlDashboard, setGrokControlSelection } from "./grok-control.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { getLinearAdminSnapshot } from "./tools/integrations.js";
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
 function secret() {
@@ -215,6 +219,8 @@ main{padding:24px 28px 40px;max-width:1400px;margin:0 auto}
 .filters{display:grid;grid-template-columns:repeat(4,1fr) auto auto;gap:8px;margin-bottom:12px}
 .filters input,.filters select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:8px;font-size:12px;font-family:inherit}
 .filters input:focus,.filters select:focus{outline:none;border-color:var(--em)}
+#p-grok select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:8px;font-size:12px;font-family:inherit}
+#p-grok label{color:var(--muted);font-size:11px}
 .btn{background:linear-gradient(135deg,var(--em),var(--em2));color:#052e2b;border:none;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;letter-spacing:.3px;transition:transform .1s}
 .btn:hover{transform:translateY(-1px)}
 .btn.ghost{background:transparent;color:var(--em2);border:1px solid var(--border2)}
@@ -225,6 +231,8 @@ pre.snippet{background:var(--bg2);border:1px solid var(--border);border-radius:1
 .etapa.ok{border-left:3px solid var(--em2)}
 .etapa.err{border-left:3px solid var(--err)}
 .diag-actions{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.graph-shell{height:calc(100vh - 190px);min-height:620px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#02070c;box-shadow:inset 0 0 32px rgba(16,185,129,.08)}
+.graph-shell iframe{display:block;width:100%;height:100%;border:0;background:#02070c}
 __PATTERN_ADMIN_STYLE__
 @media(max-width:900px){.hero{grid-template-columns:1fr 1fr 1fr}.grid{grid-template-columns:1fr}.conector-grid{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}}
 </style></head>
@@ -234,12 +242,21 @@ __PATTERN_ADMIN_STYLE__
   <div class="meta"><span>versão <b id="ver">?</b></span><span id="clock">--:--:--</span><a href="/admin/logout" class="btn ghost" style="text-decoration:none;padding:6px 12px">sair</a></div>
 </header>
 <nav class="tabs">
-  <div class="tab active" data-p="visao">Visão Geral</div>
-  <div class="tab" data-p="tools">Ferramentas</div>
+  <div class="tab active" data-p="visao">👁️ Visão Geral</div>
+  <div class="tab" data-p="tools">🧰 Ferramentas</div>
+  <div class="tab" data-p="linear">📋 Linear</div>
+  <div class="tab" data-p="grafo">🌌 Grafo Celestial</div>
   __PATTERN_ADMIN_TAB__
   <div class="tab" data-p="audit">Auditoria</div>
+  <div class="tab" data-p="grok">Grok</div>
+  <div class="tab" data-p="buildkite">Buildkite</div>
   <div class="tab" data-p="conector">Conector</div>
   <div class="tab" data-p="diag">Diagnóstico</div>
+  <div class="tab" data-p="audit">🧾 Auditoria</div>
+  <div class="tab" data-p="conector">🔌 Conector</div>
+  <div class="tab" data-p="diag">🩺 Diagnóstico</div>
+  <div class="tab" data-p="omni">🌀 Omni</div>
+  <div class="tab" data-p="tailscale">🌐 Tailscale</div>
 </nav>
 <main>
 
@@ -260,10 +277,57 @@ __PATTERN_ADMIN_STYLE__
       <div class="card"><h2>Dependências <span class="badge">health/deep</span></h2><div id="checks"></div></div>
       <div class="card"><h2>Processo <span class="badge">runtime</span></h2><div id="proc"></div></div>
     </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Fluxo determinístico <span class="badge">heartbeat · logs · MCP · forensic</span></h2>
+      <div id="operationalFlow" class="log-box" style="height:260px"></div>
+    </div>
   </div>
 
   <div class="pane" id="p-tools">
     <div class="card"><h2>Catálogo de ferramentas MCP <span class="badge" id="toolCountBadge">carregando…</span></h2><div id="tools"></div></div>
+  </div>
+
+  <div class="pane" id="p-linear">
+    <div class="hero" style="grid-template-columns:2fr 1fr 1fr">
+      <div class="kpi hero-score">
+        <div class="lbl">Linear · rota CentralDark</div>
+        <div class="val" id="linearState">UNKNOWN</div>
+        <div class="bar"><div id="linearBar" style="width:0%"></div></div>
+      </div>
+      <div class="kpi"><div class="lbl">Issues visíveis</div><div class="val" id="linearIssueCount">-</div></div>
+      <div class="kpi"><div class="lbl">Última leitura</div><div class="val" id="linearCheckedAt" style="font-size:16px">-</div></div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h2>Rotas <span class="badge">server-side · segredo não vai pro browser</span></h2>
+        <div class="row"><span>Status seguro</span><span class="info">/linear/status</span></div>
+        <div class="row"><span>Snapshot admin</span><span class="info">/admin/api/linear</span></div>
+        <div class="row"><span>Owner</span><span>apps/modulos/mcp/src/tools/integrations.js</span></div>
+        <div class="diag-actions" style="margin-top:14px">
+          <a class="btn" href="https://linear.app/segredo/team/SEG" target="_blank" rel="noopener" style="text-decoration:none">📋 Abrir Board SEG</a>
+          <a class="btn ghost" href="https://linear.app/segredo/settings/ai/coding-sessions" target="_blank" rel="noopener" style="text-decoration:none">⚙ Coding sessions</a>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Conta / workspace <span class="badge">sem token exposto</span></h2>
+        <div id="linearMeta"><div class="row"><span>Estado</span><span class="warn">carregando…</span></div></div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
+      <h2>Trabalho recente no Linear <span class="badge">atualiza a cada 30s</span></h2>
+      <div id="linearIssues"><div class="delta-empty">carregando…</div></div>
+    </div>
+  </div>
+
+  <div class="pane" id="p-grafo">
+    <div class="card" style="padding:12px">
+      <h2>Grafo Celestial <span class="badge">mesmo painel · mesmo login · sem subdomínio próprio</span></h2>
+      <div class="graph-shell">
+        <iframe src="/admin/grafo/" title="Grafo Celestial CentralDark" loading="lazy" referrerpolicy="same-origin"></iframe>
+      </div>
+    </div>
   </div>
 
   __PATTERN_ADMIN_PANE__
@@ -301,6 +365,81 @@ __PATTERN_ADMIN_STYLE__
     </div>
     <div style="height:14px"></div>
     <div class="card"><h2>Stream bruto ao vivo <span class="badge">SSE /admin/logs/stream</span></h2><div id="log" class="log-box"></div></div>
+  </div>
+
+  <div class="pane" id="p-grok">
+    <div class="card">
+      <h2>🧠 Grok · modos do organismo <span class="badge" id="grokActivation">carregando…</span></h2>
+      <p style="color:var(--muted);font-size:12px;margin:0 0 14px">
+        Seleção = default das próximas invocações do adapter canônico. SELECTED != ACTIVE; log/runtime continua sendo o juiz.
+      </p>
+      <div class="delta-grid">
+        <div class="delta-kpi"><div class="lbl">Processo vivo</div><div class="val" id="grokRunning">-</div></div>
+        <div class="delta-kpi"><div class="lbl">Binário ativo</div><div class="val" id="grokActiveVersion">-</div></div>
+        <div class="delta-kpi"><div class="lbl">Instalado</div><div class="val" id="grokInstalledVersion">-</div></div>
+        <div class="delta-kpi"><div class="lbl">Seleção</div><div class="val" id="grokSelectedMode">-</div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h2>Seletor <span class="badge">GROK-BUILD-ADAPTER</span></h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <label>Invocação<select id="grokInvocation" style="width:100%;margin-top:4px"></select></label>
+            <label>Agente<select id="grokAgent" style="width:100%;margin-top:4px"></select></label>
+            <label>Permissão<select id="grokPermission" style="width:100%;margin-top:4px"></select></label>
+            <label>Modelo<select id="grokModel" style="width:100%;margin-top:4px"></select></label>
+            <label>Reasoning<select id="grokEffort" style="width:100%;margin-top:4px"></select></label>
+            <div style="display:flex;flex-direction:column;gap:7px;justify-content:center">
+              <label><input id="grokSubagents" type="checkbox"/> subagentes</label>
+              <label><input id="grokPlan" type="checkbox"/> plan mode disponível</label>
+            </div>
+          </div>
+          <div class="diag-actions" style="margin-top:14px;margin-bottom:0">
+            <button class="btn" onclick="salvarGrok()">💾 Salvar default Grok</button>
+            <button class="btn ghost" onclick="carregarGrok()">🔄 Remedir</button>
+          </div>
+          <div id="grokSaveStatus" style="margin-top:10px;color:var(--muted);font-size:12px"></div>
+        </div>
+        <div class="card">
+          <h2>Evidência <span class="badge">dump sanitizado</span></h2>
+          <div id="grokEvidence"></div>
+          <div style="height:10px"></div>
+          <h2>Permissões fortes <span class="badge">não selecionáveis no Admin</span></h2>
+          <div id="grokLockedPermissions"></div>
+        </div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="card">
+        <h2>Padrão observado <span class="badge">console + events + unified</span></h2>
+        <div id="grokPattern"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pane" id="p-buildkite">
+    <div class="card">
+      <h2>Buildkite · setor observado <span class="badge">mesmo funil CentralDark</span></h2>
+      <div class="delta-grid">
+        <div class="delta-kpi"><div class="lbl">Receiver</div><div class="val" id="bkReceiver">-</div></div>
+        <div class="delta-kpi"><div class="lbl">Eventos</div><div class="val" id="bkEvents">0</div></div>
+        <div class="delta-kpi"><div class="lbl">Falhas</div><div class="val" id="bkFailures">0</div></div>
+        <div class="delta-kpi"><div class="lbl">Taxa medida</div><div class="val" id="bkRate">UNKNOWN</div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h2>Capacidades observadas <span class="badge">não inventa ativo</span></h2>
+          <div id="bkObserved"></div>
+        </div>
+        <div class="card">
+          <h2>Fronteira → Hermes <span class="badge">advice != action</span></h2>
+          <div id="bkRouting"></div>
+        </div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="card">
+        <h2>Últimos eventos Buildkite <span class="badge">logs/sectors/buildkite</span></h2>
+        <div id="bkRecent" class="log-box" style="height:260px"></div>
+      </div>
+    </div>
   </div>
 
   <div class="pane" id="p-conector">
@@ -359,6 +498,53 @@ auth: bearer &lt;TOKEN&gt;  (opcional)</pre>
     </div>
   </div>
 
+  <div class="pane" id="p-omni">
+    <div class="hero">
+      <div class="kpi hero-score">
+        <div class="lbl">Omni Router</div>
+        <div class="val" id="omniHealth">medindo...</div>
+        <div class="bar"><div id="omniHealthBar" style="width:0%"></div></div>
+      </div>
+      <div class="kpi"><div class="lbl">Live Fabric</div><div class="val" id="omniFabric">-</div></div>
+      <div class="kpi"><div class="lbl">Git Head</div><div class="val" id="omniHead" style="font-size:14px">UNKNOWN</div></div>
+      <div class="kpi"><div class="lbl">Dirty</div><div class="val" id="omniDirty">UNKNOWN</div></div>
+      <div class="kpi"><div class="lbl">Receipts</div><div class="val" id="omniReceipts">UNKNOWN</div></div>
+      <div class="kpi"><div class="lbl">NEXT_CURSOR</div><div class="val" id="omniCursor" style="font-size:14px">UNKNOWN</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Live Execution Fabric <span class="badge">mesmo admin · mesmo design · Omni :8099</span></h2>
+      <div class="diag-actions">
+        <button class="btn" onclick="startOmniFabric()">🌀 Iniciar job medido</button>
+        <button class="btn ghost" onclick="loadOmniPanel()">🔎 Remedir agora</button>
+      </div>
+      <div class="grid">
+        <div>
+          <h2>Grafo vivo <span class="badge">/api/live-fabric/graph</span></h2>
+          <div id="omniGraph" class="log-box" style="height:360px">aguardando...</div>
+        </div>
+        <div>
+          <h2>Prova runtime <span class="badge">status + models + fabric</span></h2>
+          <div id="omniRaw" class="log-box" style="height:360px">aguardando...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pane" id="p-tailscale">
+    <div class="hero" style="grid-template-columns:2fr repeat(4,1fr)">
+      <div class="kpi hero-score"><div class="lbl">Tailscale · rota-base</div><div class="val" id="tsState">medindo...</div><div class="bar"><div id="tsBar" style="width:0%"></div></div></div>
+      <div class="kpi"><div class="lbl">VPS</div><div class="val" id="tsVps" style="font-size:14px">UNKNOWN</div></div>
+      <div class="kpi"><div class="lbl">Casa SEGREDO</div><div class="val" id="tsHome" style="font-size:14px">UNKNOWN</div></div>
+      <div class="kpi"><div class="lbl">RDP 3389</div><div class="val" id="tsRdp">-</div></div>
+      <div class="kpi"><div class="lbl">SSH 22</div><div class="val" id="tsSsh">-</div></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h2>Espinha permanente <span class="badge">VPS ↔ Tailscale ↔ Casa</span></h2><div id="tsMeta"></div><div class="diag-actions" style="margin-top:14px"><button class="btn" onclick="loadTailscalePanel()">🔎 Remedir</button><a class="btn ghost" href="https://hub.centralldark.com/?provider=tailscale" target="_blank" rel="noopener" style="text-decoration:none">🔐 Hub de Contas</a></div></div>
+      <div class="card"><h2>Login humano <span class="badge">GitHub dentro do Tailscale</span></h2><p style="color:var(--muted);font-size:13px">Se a rota já estiver conectada, o login não reinicia. Se cair, o Hub abre o consentimento oficial do Tailscale.</p><div class="diag-actions"><a class="btn" href="https://hub.centralldark.com/oauth/tailscale/start?redirect_to=https%3A%2F%2Fadmin.centralldark.com%2Fadmin%3Ftab%3Dtailscale" style="text-decoration:none">🌐 Entrar / reconciliar Tailscale</a></div></div>
+    </div>
+  </div>
+
 </main>
 <script>
 const $ = (id) => document.getElementById(id);
@@ -375,14 +561,103 @@ function dataHoraBr(valor){
 function ts(){return horaBr()}
 setInterval(()=>$('clock').textContent=ts(),1000);
 
-document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+function activateAdminTab(name){
+  const t = document.querySelector('.tab[data-p="'+name+'"]');
+  const pane = $('p-'+name);
+  if(!t || !pane) return false;
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.pane').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');
-  $('p-'+t.dataset.p).classList.add('active');
-}));
+  pane.classList.add('active');
+  if(name === 'omni') loadOmniPanel();
+  if(name === 'tailscale') loadTailscalePanel();
+  return true;
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activateAdminTab(t.dataset.p)));
+const requestedAdminTab = new URLSearchParams(location.search).get('tab');
+if(requestedAdminTab) activateAdminTab(requestedAdminTab);
 
 __PATTERN_ADMIN_SCRIPT__
+
+async function omniJson(url, opts){
+  const r = await fetch(url, Object.assign({cache:'no-store'}, opts || {}));
+  const text = await r.text();
+  let body = text;
+  try { body = JSON.parse(text); } catch {}
+  return { ok:r.ok, status:r.status, data:body };
+}
+function omniPretty(value){
+  try { return JSON.stringify(value, null, 2); } catch { return String(value); }
+}
+async function loadTailscalePanel(){
+  const state=$('tsState'), bar=$('tsBar'), vps=$('tsVps'), home=$('tsHome'), rdp=$('tsRdp'), ssh=$('tsSsh'), meta=$('tsMeta');
+  if(state) state.textContent='medindo...';
+  try{
+    const r=await fetch('/admin/api/tailscale',{cache:'no-store'});
+    const j=await r.json();
+    const pass=Boolean(j.ok && j.backend_state==='Running' && j.self?.online && (j.home?.online !== false));
+    if(state){ state.textContent=pass?'CONNECTED':'UNKNOWN'; state.className='val '+(pass?'ok':'warn'); }
+    if(bar) bar.style.width=pass?'100%':'25%';
+    if(vps) vps.textContent=(j.self?.host||'VPS')+' '+(j.self?.ips?.[0]||'');
+    if(home) home.textContent=(j.home?.host||'SEGREDO')+' '+(j.home?.ip||'');
+    if(rdp){rdp.textContent=j.home?.rdp_3389||'UNKNOWN'; rdp.className='val '+(j.home?.rdp_3389==='OPEN'?'ok':'warn');}
+    if(ssh){ssh.textContent=j.home?.ssh_22||'UNKNOWN'; ssh.className='val '+(j.home?.ssh_22==='OPEN'?'ok':'warn');}
+    if(meta) meta.innerHTML=[
+      ['Backend',j.backend_state||'UNKNOWN'],['Tailnet',j.tailnet||'UNKNOWN'],['MagicDNS',j.magic_dns||'UNKNOWN'],['Rota-base',j.route_base||'TAILSCALE'],['Login necessário',String(Boolean(j.login_required))]
+    ].map(([a,b])=>'<div class="row"><span>'+esc(a)+'</span><span>'+esc(b)+'</span></div>').join('');
+  }catch(e){
+    if(state){state.textContent='UNKNOWN';state.className='val warn';}
+    if(meta) meta.innerHTML='<div class="row"><span>Erro</span><span class="err">'+esc(String(e))+'</span></div>';
+  }
+}
+
+async function loadOmniPanel(){
+  const raw = $('omniRaw');
+  const graph = $('omniGraph');
+  if(!raw || !graph) return;
+  try {
+    const [health, models, fabric, graphResp] = await Promise.all([
+      omniJson('/api/omni/status'),
+      omniJson('/api/omni/models'),
+      omniJson('/api/live-fabric/status'),
+      omniJson('/api/live-fabric/graph')
+    ]);
+    const healthPass = Boolean(health.ok && health.data && health.data.ok);
+    const fabricPass = Boolean(fabric.ok && fabric.data && fabric.data.ok);
+    $('omniHealth').textContent = healthPass ? 'PASS / '+health.status : 'DEGRADED / '+health.status;
+    $('omniHealth').className = 'val '+(healthPass ? 'ok' : 'err');
+    $('omniHealthBar').style.width = healthPass ? '100%' : '25%';
+    $('omniFabric').textContent = fabricPass ? 'PASS / '+fabric.status : 'UNKNOWN / '+fabric.status;
+    $('omniFabric').className = 'val '+(fabricPass ? 'ok' : 'warn');
+    $('omniHead').textContent = fabric.data?.git?.head || 'UNKNOWN';
+    $('omniDirty').textContent = String(fabric.data?.git?.dirty_count ?? 'UNKNOWN');
+    $('omniReceipts').textContent = String(fabric.data?.receipts?.count ?? 'UNKNOWN');
+    $('omniCursor').textContent = fabric.data?.next_cursor || 'UNKNOWN';
+    graph.textContent = omniPretty(graphResp.data);
+    raw.textContent = omniPretty({omni:health.data, models:models.data, liveFabric:fabric.data});
+  } catch (err) {
+    $('omniHealth').textContent = 'OFFLINE / UNKNOWN';
+    $('omniHealth').className = 'val err';
+    $('omniHealthBar').style.width = '0%';
+    raw.textContent = String(err);
+  }
+}
+async function startOmniFabric(){
+  const raw = $('omniRaw');
+  if(!raw) return;
+  try {
+    const r = await omniJson('/api/live-fabric/start', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({scope:'VPS_DIRTY_TREE', entrypoint:'admin_panel', dry_run:true})
+    });
+    raw.textContent = omniPretty(r.data);
+  } catch (err) {
+    raw.textContent = String(err);
+  }
+  await loadOmniPanel();
+}
+
 
 const deltaState = { total: 0, groups: new Map(), lastAt: null };
 function htmlEscape(valor){
@@ -504,6 +779,38 @@ async function carregarHealth(){
   $('kpiSse').textContent = j.sseAtivas ?? '0';
 }
 
+async function carregarOperational(){
+  const box = $('operationalFlow');
+  if (!box) return;
+  try {
+    const r = await fetch('/admin/api/operational-snapshot');
+    const j = await r.json();
+    if (typeof renderPatternAlignment === 'function') renderPatternAlignment(j);
+    const flow = (j.deterministicFlow || []).join(' → ');
+    const fronts = (j.fronts || []).map(f =>
+      '<div class="row"><span>'+htmlEscape(f.id+' · '+f.source)+'</span><span class="'+(f.state === 'UNKNOWN' || f.state === 'STALE' ? 'warn' : 'ok')+'">'+htmlEscape(f.state)+'</span></div>'
+    ).join('');
+    const rules = j.rules || {};
+    const policyRows = [
+      ['Reuso', rules.reuseProvenCrystalBeforeReinvestigate ? 'REUSE_PROOF · não medir de novo sem delta' : 'UNKNOWN'],
+      ['Offline', rules.sensorFailureIsWorldFailure === false ? 'sensor offline ≠ mundo quebrado' : 'UNKNOWN'],
+      ['Fixed Point', rules.fixedPointIsVerificationCheckpointNotLearningGate ? 'checkpoint de prova · não trava aprendizado' : 'UNKNOWN'],
+      ['Revalidação', rules.changedTargetRevalidatesAffectedChainOnly ? 'somente cadeia afetada' : 'UNKNOWN'],
+    ].map(([label,state]) =>
+      '<div class="row"><span>'+htmlEscape(label)+'</span><span class="'+(state === 'UNKNOWN' ? 'warn' : 'ok')+'">'+htmlEscape(state)+'</span></div>'
+    ).join('');
+    box.innerHTML =
+      '<div class="row"><span>Contrato</span><span class="info">'+htmlEscape(j.schema || '-')+'</span></div>'+
+      '<div class="row"><span>Veredito</span><span class="'+(String(j.verdict||'').includes('UNKNOWN') ? 'warn' : 'ok')+'">'+htmlEscape(j.verdict || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Fluxo</span><span>'+htmlEscape(flow)+'</span></div>'+
+      '<div class="row"><span>Forensic</span><span>'+htmlEscape(j.forensic?.status || 'UNKNOWN')+'</span></div>'+
+      policyRows+
+      fronts;
+  } catch (err) {
+    box.textContent = 'operational snapshot indisponível: '+String(err);
+  }
+}
+
 async function carregarMetricas(){
   const r = await fetch('/admin/api/metricas'); const j = await r.json();
   $('kpiErros').textContent = j.erros ?? '-';
@@ -520,6 +827,183 @@ async function carregarTools(){
     list.map(t=>'<span class="tag" title="'+(t.description||'').replace(/"/g,'&quot;')+'">'+t.name+'</span>').join('')+
     '</div>'
   ).join('');
+}
+
+let GROK_CONTROL = null;
+
+function preencherGrokSelect(id, items, selected){
+  const el=$(id); if(!el) return;
+  el.innerHTML='';
+  for(const item of items||[]){
+    if(item.admin_selectable === false) continue;
+    const opt=document.createElement('option');
+    opt.value=item.id;
+    const evidence=item.evidence ? ' · '+item.evidence : '';
+    opt.textContent=item.id+evidence;
+    if(item.id===selected) opt.selected=true;
+    el.appendChild(opt);
+  }
+}
+
+function renderGrokControl(j){
+  GROK_CONTROL=j;
+  const catalog=j.catalog||{}, state=j.state||{}, ev=catalog.evidence||{}, runtime=ev.runtime||{}, observed=ev.observed||{}, caps=ev.capabilities||{};
+  $('grokActivation').textContent=j.activation?.state||'UNKNOWN';
+  $('grokRunning').textContent=runtime.process_running?'RUNNING':'UNKNOWN';
+  $('grokActiveVersion').textContent=runtime.active_binary_version_from_path||'UNKNOWN';
+  $('grokInstalledVersion').textContent=runtime.installed_version||'UNKNOWN';
+  $('grokSelectedMode').textContent=(state.invocation_mode||'?')+' / '+(state.agent_profile||'?');
+
+  preencherGrokSelect('grokInvocation',catalog.invocation_modes,state.invocation_mode);
+  preencherGrokSelect('grokAgent',catalog.agent_profiles,state.agent_profile);
+  preencherGrokSelect('grokPermission',catalog.permission_modes,state.permission_mode);
+  preencherGrokSelect('grokModel',catalog.models,state.model);
+  preencherGrokSelect('grokEffort',catalog.reasoning_efforts,state.reasoning_effort);
+  $('grokSubagents').checked=state.subagents_enabled===true;
+  $('grokPlan').checked=state.plan_enabled===true;
+
+  const selected=j.selected_evidence||{};
+  $('grokEvidence').innerHTML=
+    '<div class="row"><span>Modo selecionado</span><span>'+htmlEscape(selected.invocation_mode||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Agente selecionado</span><span>'+htmlEscape(selected.agent_profile||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Modelo</span><span>'+htmlEscape(selected.model||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Snapshot</span><span>'+htmlEscape(ev.captured_at?dataHoraBr(ev.captured_at):'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>SELECTED = ACTIVE?</span><span class="warn">NÃO · requer log de execução</span></div>';
+
+  const locked=(catalog.permission_modes||[]).filter(x=>x.admin_selectable===false);
+  $('grokLockedPermissions').innerHTML=locked.length
+    ? locked.map(x=>'<span class="tag" title="exige missão explícita + writer scope">'+htmlEscape(x.id)+'</span>').join(' ')
+    : '<span class="ok">nenhuma</span>';
+
+  const sub=observed.subagents||{};
+  const tools=Object.entries(observed.tools||{}).slice(0,12);
+  const watcher=ev.watcher_pattern||{};
+  $('grokPattern').innerHTML=
+    '<div class="row"><span>Eventos capturados</span><span>'+String(observed.event_lines??0)+'</span></div>'+
+    '<div class="row"><span>Subagentes</span><span>'+String(sub.spawned??0)+' spawn · '+String(sub.completed??0)+' completos · '+String(sub.failed??0)+' falhas</span></div>'+
+    '<div class="row"><span>Tipos observados</span><span>'+htmlEscape(Object.keys(sub.types||{}).join(', ')||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Scheduler / monitor</span><span>'+String(observed.scheduler_create_calls??0)+' create · '+String(observed.monitor_calls??0)+' monitor</span></div>'+
+    '<div class="row"><span>Retries / falhas inference</span><span>'+String(observed.inference_retries??0)+' / '+String(observed.inference_failures??0)+'</span></div>'+
+    '<div class="row"><span>Watcher exato?</span><span class="'+(watcher.bounded_to_exact_run?'ok':'warn')+'">'+(watcher.bounded_to_exact_run?'SIM':'NÃO · risco cristalizado')+'</span></div>'+
+    '<div class="row"><span>Personas disponíveis</span><span>'+htmlEscape((caps.personas||[]).join(', ')||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Roles disponíveis</span><span>'+htmlEscape((caps.roles||[]).join(', ')||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Workflows</span><span>'+htmlEscape((caps.workflows||[]).join(', ')||'UNKNOWN')+'</span></div>'+
+    '<div class="row"><span>Tools top</span><span>'+htmlEscape(tools.map(([k,v])=>k+'='+v).join(' · ')||'UNKNOWN')+'</span></div>';
+}
+
+async function carregarGrok(){
+  const status=$('grokSaveStatus');
+  try{
+    const r=await fetch('/admin/api/grok/control');
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
+    renderGrokControl(j);
+    if(status) status.textContent='Estado remedido. Seleção não é prova de execução.';
+  }catch(err){
+    if(status) status.textContent='❌ '+String(err);
+  }
+}
+
+async function salvarGrok(){
+  const status=$('grokSaveStatus');
+  const payload={
+    invocation_mode:$('grokInvocation').value,
+    agent_profile:$('grokAgent').value,
+    permission_mode:$('grokPermission').value,
+    model:$('grokModel').value,
+    reasoning_effort:$('grokEffort').value,
+    subagents_enabled:$('grokSubagents').checked,
+    plan_enabled:$('grokPlan').checked,
+  };
+  try{
+    if(status) status.textContent='salvando default operacional…';
+    const r=await fetch('/admin/api/grok/control',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload),
+    });
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error||('HTTP '+r.status));
+    renderGrokControl(j);
+    if(status) status.textContent='✅ Default salvo. Próxima invocação do adapter consome; execução ainda precisa ser observada.';
+  }catch(err){
+    if(status) status.textContent='❌ '+String(err);
+  }
+}
+
+async function carregarBuildkite(){
+  const box = $('bkRecent');
+  try {
+    const r = await fetch('/admin/api/buildkite/status');
+    const j = await r.json();
+    $('bkReceiver').textContent = j.receiver_ready ? 'READY' : 'BLOCKED';
+    $('bkEvents').textContent = String(j.events ?? 0);
+    $('bkFailures').textContent = String(j.failures ?? 0);
+    const rate = j.measured_failure_rate;
+    $('bkRate').textContent = rate
+      ? (rate.rate*100).toFixed(1)+'%'
+      : 'UNKNOWN';
+    const observed = j.observed || {};
+    $('bkObserved').innerHTML =
+      '<div class="row"><span>Webhook secret</span><span class="'+(j.webhook_secret_configured?'ok':'warn')+'">'+(j.webhook_secret_configured?'CONFIGURADO':'AUSENTE')+'</span></div>'+
+      '<div class="row"><span>API token</span><span class="'+(j.api_token_configured?'ok':'warn')+'">'+(j.api_token_configured?'CONFIGURADO':'OPCIONAL/AUSENTE')+'</span></div>'+
+      '<div class="row"><span>Pipelines observados</span><span>'+htmlEscape((observed.pipelines||[]).join(', ') || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Agents observados</span><span>'+htmlEscape((observed.agents||[]).join(', ') || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Queues observadas</span><span>'+htmlEscape((observed.queues||[]).join(', ') || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>IC95% falha</span><span>'+(rate ? ((rate.low*100).toFixed(1)+'–'+(rate.high*100).toFixed(1)+'% · n='+j.finished_sample) : 'UNKNOWN · sem amostra')+'</span></div>';
+    const h = j.hermes || {};
+    const advice = j.routing_advice || {};
+    $('bkRouting').innerHTML =
+      '<div class="row"><span>Conselho</span><span class="'+(advice.state==='ESCALATE_FRONTIER_FOR_REROUTE'?'warn':'ok')+'">'+htmlEscape(advice.state||'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Motivo</span><span>'+htmlEscape(advice.reason||'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Hermes amostra</span><span>'+String(h.sample??0)+'</span></div>'+
+      '<div class="row"><span>Hermes falha medida</span><span>'+(h.measured_failure_rate==null?'UNKNOWN':(h.measured_failure_rate*100).toFixed(1)+'%')+'</span></div>'+
+      '<div class="row"><span>Hermes p95</span><span>'+(h.p95_duration_ms==null?'UNKNOWN':Math.round(h.p95_duration_ms)+' ms')+'</span></div>'+
+      '<div class="row"><span>Ação automática</span><span class="warn">'+(advice.action_executed?'EXECUTADA':'NÃO EXECUTADA')+'</span></div>';
+    if (box) {
+      const rows=(j.recent_events||[]).slice().reverse();
+      box.innerHTML = rows.length ? rows.map(e =>
+        '<div class="'+htmlEscape(e.level||'info')+'">['+htmlEscape(horaBr(e.timestamp))+'] '+htmlEscape(e.badge||'')+' '+htmlEscape(e.data?.event||e.kind)+' · '+htmlEscape(e.message||'')+'</div>'
+      ).join('') : '<div class="warn">Nenhum evento Buildkite observado ainda. Receiver pronto != entrega externa provada.</div>';
+    }
+  } catch (err) {
+    if (box) box.innerHTML='<div class="err">Buildkite status: '+htmlEscape(String(err))+'</div>';
+async function carregarLinear(){
+  const state = $('linearState');
+  const count = $('linearIssueCount');
+  const checked = $('linearCheckedAt');
+  const meta = $('linearMeta');
+  const box = $('linearIssues');
+  if (!state || !count || !checked || !meta || !box) return;
+  try {
+    const r = await fetch('/admin/api/linear?limit=25', { cache: 'no-store' });
+    const j = await r.json();
+    state.textContent = j.status || 'UNKNOWN';
+    $('linearBar').style.width = j.ok ? '100%' : (j.configured ? '50%' : '0%');
+    count.textContent = Array.isArray(j.issues) ? String(j.issues.length) : '0';
+    checked.textContent = j.checkedAt ? horaBr(j.checkedAt) : '-';
+    meta.innerHTML =
+      '<div class="row"><span>Conexão</span><span class="'+(j.ok?'ok':'warn')+'">'+htmlEscape(j.status || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Workspace</span><span>'+htmlEscape(j.organization?.name || 'UNKNOWN')+'</span></div>'+
+      '<div class="row"><span>Operador</span><span>'+htmlEscape(j.viewer?.name || 'UNKNOWN')+'</span></div>';
+    if (!Array.isArray(j.issues) || !j.issues.length) {
+      box.innerHTML = '<div class="delta-empty">Nenhum item retornado. UNKNOWN não vira PASS.</div>';
+      return;
+    }
+    box.innerHTML = j.issues.map(issue =>
+      '<div class="row">'+
+        '<span><b>'+htmlEscape(issue.identifier || '-')+'</b> · '+htmlEscape(issue.title || '-')+
+          '<br><small>'+htmlEscape(issue.team?.key || '-')+' · '+htmlEscape(issue.state?.name || 'UNKNOWN')+'</small></span>'+
+        '<span><a class="btn ghost" style="text-decoration:none;padding:6px 10px" href="'+htmlEscape(issue.url || '#')+'" target="_blank" rel="noopener">abrir ↗</a></span>'+
+      '</div>'
+    ).join('');
+  } catch (err) {
+    state.textContent = 'UNKNOWN';
+    count.textContent = '-';
+    checked.textContent = '-';
+    meta.innerHTML = '<div class="row"><span>Estado</span><span class="warn">UNKNOWN</span></div>';
+    box.innerHTML = '<div class="delta-empty">Linear indisponível: '+htmlEscape(String(err))+'</div>';
+  }
 }
 
 function conectarLogs(){
@@ -583,10 +1067,13 @@ async function rodarE2E(){
   }
 }
 
-function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); }
+function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarGrok(); carregarBuildkite(); }
+function recarregar(){ carregarHealth(); carregarTools(); carregarMetricas(); carregarOperational(); carregarLinear(); }
 recarregar();
 setInterval(carregarHealth, 15000);
 setInterval(carregarMetricas, 15000);
+setInterval(carregarOperational, 15000);
+setInterval(carregarLinear, 30000);
 conectarLogs();
 </script>
 </body></html>`;
@@ -608,6 +1095,45 @@ export function adminGet(req, res) {
         return;
     }
     res.type("text/html").send(injectPatternAdmin(NOC_HTML));
+}
+export async function adminGraphProxy(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).type("text/plain").send("Admin auth required.");
+        return;
+    }
+    if (req.method !== "GET" && req.method !== "HEAD") {
+        res.setHeader("Allow", "GET, HEAD");
+        res.status(405).type("text/plain").send("Somente leitura.");
+        return;
+    }
+    try {
+        const upstreamPath = req.url && req.url.startsWith("/") ? req.url : "/";
+        const upstream = await fetch(`http://127.0.0.1:3030${upstreamPath}`, {
+            method: req.method,
+            headers: { accept: req.headers.accept || "*/*" },
+        });
+        res.status(upstream.status);
+        for (const header of ["content-type", "cache-control", "etag", "last-modified", "location"]) {
+            const value = upstream.headers.get(header);
+            if (value)
+                res.setHeader(header, value);
+        }
+        res.setHeader("X-Content-Type-Options", "nosniff");
+        if (req.method === "HEAD") {
+            res.end();
+            return;
+        }
+        const body = Buffer.from(await upstream.arrayBuffer());
+        res.end(body);
+    }
+    catch (error) {
+        res.status(502).json({
+            ok: false,
+            error: "graph_panel_unavailable",
+            message: "Grafo Celestial indisponível no runtime local.",
+            detail: error?.message || String(error),
+        });
+    }
 }
 export function adminLogin(req, res) {
     const l = withCid(req.cid);
@@ -660,10 +1186,15 @@ export function adminRotas(req, res) {
             { metodo: "POST", path: "/token", protegido: true },
             { metodo: "POST", path: "/mcp", protegido: true },
             { metodo: "GET", path: "/admin", protegido: true },
+            { metodo: "GET", path: "/admin/grafo/*", protegido: true },
             { metodo: "GET", path: "/admin/logs/stream", protegido: true },
             { metodo: "POST", path: "/admin/api/e2e", protegido: true },
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
             { metodo: "GET", path: "/admin/api/metricas", protegido: true },
+            { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
+            { metodo: "GET", path: "/admin/api/linear", protegido: true },
+            { metodo: "GET", path: "/admin/api/tailscale", protegido: true },
+            { metodo: "GET", path: "/linear/status", protegido: false },
         ],
     });
 }
@@ -697,6 +1228,47 @@ export function adminTools(req, res) {
         (categorias[c] ||= []).push({ name: t.name, description: t.description });
     }
     res.json({ total: summary.toolCount, categorias });
+}
+export function adminOperationalSnapshot(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    res.setHeader("Cache-Control", "no-store");
+    res.json(getOperationalSnapshot());
+}
+export async function adminLinear(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    res.setHeader("Cache-Control", "no-store");
+    const limit = Math.max(1, Math.min(Number(req.query.limit) || 25, 100));
+    const snapshot = await getLinearAdminSnapshot(limit);
+    res.status(snapshot.ok ? 200 : 503).json(snapshot);
+}
+export async function adminTailscale(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    res.setHeader("Cache-Control", "no-store");
+    try {
+        const upstream = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
+            headers: { accept: "application/json" },
+            signal: AbortSignal.timeout(7000),
+        });
+        const body = await upstream.text();
+        res.status(upstream.status).type("application/json").send(body);
+    }
+    catch (error) {
+        res.status(503).json({
+            ok: false,
+            backend_state: "UNKNOWN",
+            route_base: "TAILSCALE",
+            error: "tailscale_status_unavailable",
+        });
+    }
 }
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────
 export function adminBuscarLogs(req, res) {
@@ -747,6 +1319,44 @@ export function adminMetricas(req, res) {
             requests++;
     }
     res.json({ janelaMin: 5, erros, warns, requests, sseAtivas: subscribers.size });
+}
+export function adminGrokControlGet(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    res.setHeader("Cache-Control", "no-store");
+    res.json(getGrokControlDashboard());
+}
+export function adminGrokControlPost(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    const l = withCid(req.cid);
+    try {
+        const result = setGrokControlSelection(req.body || {}, "admin");
+        l.info("admin_grok_mode_selected", {
+            mode: result.state?.invocation_mode,
+            agent: result.state?.agent_profile,
+            model: result.state?.model,
+            selected_is_runtime_proof: false,
+        });
+        res.setHeader("Cache-Control", "no-store");
+        res.json(result);
+    }
+    catch (error) {
+        l.warn("admin_grok_mode_rejected", { error: String(error?.message || error).slice(0, 180) });
+        res.status(400).json({ ok: false, error: String(error?.message || error) });
+    }
+}
+export function adminBuildkiteStatus(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
+    const since = Math.min(Math.max(Number(req.query.since_minutes) || 1440, 1), 10080);
+    res.json(getBuildkiteStatus({ since_minutes: since, limit: 1200 }));
 }
 // ─── Teste E2E: DCR → authorize → token → tools/list ──────────────────
 async function fazerRequest(url, opts = {}) {
@@ -932,8 +1542,43 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: tools.ms,
         detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (toolsError || tools.erro || tools.texto),
     });
+    if (comAdmin) {
+        const grokStarted = performance.now();
+        const grok = getGrokControlDashboard();
+        const hasMode = Array.isArray(grok.catalog?.invocation_modes)
+            && grok.catalog.invocation_modes.some((item) => item.id === grok.state?.invocation_mode);
+        const hasAgent = Array.isArray(grok.catalog?.agent_profiles)
+            && grok.catalog.agent_profiles.some((item) => item.id === grok.state?.agent_profile);
+        etapas.push({
+            nome: "Grok mode control → adapter canônico",
+            ok: grok.status === "OK" && hasMode && hasAgent && grok.proof_boundary?.SELECTED_IS_NOT_ACTIVE === true,
+            status: 200,
+            ms: Math.round(performance.now() - grokStarted),
+            detalhe: [
+                "mode=" + (grok.state?.invocation_mode || "UNKNOWN"),
+                "agent=" + (grok.state?.agent_profile || "UNKNOWN"),
+                "activation=" + (grok.activation?.state || "UNKNOWN"),
+                "selected!=active",
+            ].join(" · "),
+        });
+    }
+    const bkStarted = performance.now();
+    const bk = getBuildkiteStatus({ since_minutes: 60, limit: 100 });
+    etapas.push({
+        nome: "Buildkite sensor → funil CentralDark",
+        ok: bk.receiver_ready === true,
+        status: 200,
+        ms: Math.round(performance.now() - bkStarted),
+        detalhe: [
+            "receiver=" + (bk.receiver_ready ? "READY" : "BLOCKED"),
+            "secret=" + (bk.webhook_secret_configured ? "CONFIGURED" : "NOT_CONFIGURED"),
+            "events=" + bk.events,
+            "external=" + bk.proof_boundary.external_buildkite_delivery,
+        ].join(" · "),
+    });
     const allOk = etapas.every(e => e.ok !== false);
-    return { ok: allOk, falhouEm: allOk ? null : "tools/list", etapas };
+    const firstFailed = etapas.find((e) => e.ok === false);
+    return { ok: allOk, falhouEm: allOk ? null : (firstFailed?.nome || "UNKNOWN"), etapas };
 }
 export async function adminE2E(req, res) {
     if (!isAdmin(req)) {

@@ -13,6 +13,13 @@ bot_entry_activates_master_session: true
 explicit_trigger_activates_master_session: true
 master_session_remains_active: true
 subsequent_chefe_material_is_delta_candidate: true
+subsequent_chefe_material_is_active_intent_delta_first: true
+preserve_compatible_active_intent: true
+recalculate_intent_alignment_each_material_turn: true
+intent_replacement_requires: EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY
+pertinence_first: true
+minimum_sufficient_loop: true
+triggers_are_conditional_not_ritual: true
 
 master_precedence:
   human_notation: "#CENTRALDARK > #ACORDAR"
@@ -43,11 +50,23 @@ expands_to:
   - REMEDICAO
   - FIXED_POINT
   - REGISTRA
+  - RASTRO
   - BOOT
 
-canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
-canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
-canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !BOOT"
+canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !BOOT"
+canonical_machine_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !BOOT"
+canonical_chain: "!CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !BOOT"
+canonical_visual_chain: "⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🔏 !RASTRO → 🚀 !BOOT"
+aureola_visible_route_debugger:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  visible_fields: [CURRENT_PHASE, MULTIBUSSOLA_AXIS, DESTINATION_OWNER, NEXT_GATE]
+  material_fields: [ACTION, PROOF, WOUND, NEXT_CURSOR]
+  compare: [INTENT_ROUTE, ACTUAL_ROUTE]
+  mismatch_action: STOP_AND_RECONCILE
+  route_trace_is_private_reasoning: false
+  route_trace_is_technical_proof: false
+  bible_reference_is_semantic_cue_not_proof: true
+  material_discovery_is_learning_candidate_not_fact: true
 
 continuous_delta_contract:
   scope: ACTIVE_MASTER_SESSION
@@ -65,8 +84,10 @@ continuous_delta_contract:
   correlated_views_are_independent_proofs: false
   screenshot_proves: VISIBLE_MANIFESTATION_ONLY
   runtime_claim_requires_runtime_evidence: true
+  DELTA_CONTINUO_REQUIRED: true
+  NEW_MATERIAL_RESTARTS_MISSION: false
   cross_chat_transport_requires_channel_evidence: true
-  process: [CAPTURE, LINK_DESTINATION, DEDUPE, CLASSIFY, FIND_OWNER, PROVE_OR_PRESERVE_UNKNOWN, ABSORB_MINIMAL_DELTA, COUNTERPROVE, REMEASURE]
+  process: [CAPTURE, LINK_DESTINATION, LINK_TO_ACTIVE_GOAL, DEDUPE, CLASSIFY, FIND_OWNER, PROVE_OR_PRESERVE_UNKNOWN, ABSORB_MINIMAL_DELTA, COUNTERPROVE, REMEASURE, UPDATE_HUD, PERSIST_NEXT_CURSOR]
   classifications: [DUPLICATE, PARTIAL, NEW, SUPERSEDED, CANDIDATE, UNKNOWN, PROVED]
 
 phase_contracts:
@@ -78,6 +99,25 @@ phase_contracts:
   CALIBRAR:
     meaning: ALIGN_INTENT_ROLE_SCOPE_TOOLS_PROOF
     owner: "LEIA-ME-IA.md + AGENTS.md"
+    emoji: "🎯"
+    intent_alignment:
+      threshold_percent: 80
+      percentage_means: INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS
+      inputs: [CURRENT_EXPLICIT_INTENT, RECOVERED_APPLICABLE_CONTEXT, COMPATIBLE_PRIOR_LEARNING, CANONICAL_RULES, CURRENT_REALITY]
+      subtract: [MATERIAL_AMBIGUITY, MATERIAL_CONTRADICTION]
+      new_teaching: REMIX_MINIMUM_DELTA_IN_EXISTING_RULE
+      output: [REFINED_INTENT, INTENT_ALIGNMENT_CONFIDENCE_PERCENT]
+      gte_threshold_and_scope_authorized: EXECUTE_MINIMUM_COMPLETE_PATH
+      below_threshold_or_material_contradiction: ASK_ONLY_INDISPENSABLE_GAP
+      continuous_recalibration: true
+      new_chefe_material: DELTA_TO_ACTIVE_INTENT_FIRST
+      preserve_compatible_active_intent: true
+      replacement_requires: EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY
+      pertinence_first: true
+      minimum_sufficient_loop: true
+      triggers_are_conditional_not_ritual: true
+      do_not_parrot_chefe: true
+      align_thought_not_wording: true
   MULTIBUSSOLA:
     meaning: MULTIAXIS_MATERIAL_PERCEPTION
     owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
@@ -113,30 +153,15 @@ phase_contracts:
         - APPLICABLE_GATES_PASS
         - NO_WRITER_CONFLICT
         - NO_MATERIAL_UNKNOWN
-      gate_classification:
-        MATERIAL_REQUIRED:
-          meaning: WORKFLOW_DECLARED_IN_PROMOTION_DENOMINATOR
-          queued_pending_blocks: true
-          skipped_without_explicit_not_applicable_proof_blocks: true
-          must_pass_on_current_head: true
-        INFORMATIONAL:
-          meaning: WORKFLOW_OUTSIDE_PROMOTION_DENOMINATOR
-          queued_pending_blocks: false
-          failure_blocks_by_itself: false
-        NOT_APPLICABLE_PROVEN:
-          meaning: EXPLICIT_SCOPE_PROOF_REQUIRED
-          skipped_alone_is_proof: false
-      invariants:
-        queued_is_not_pass: true
-        queued_is_not_automatic_blocker_when_informational: true
-        pending_is_not_automatic_blocker_when_informational: true
-        latest_run_wins_same_workflow: true
-        older_pass_must_not_mask_newer_skipped_failure_or_cancelled: true
-        conflict_resolution_is_not_approval: true
-        sync_is_not_approval: true
-        squash_is_promotion_not_conflict_remedy: true
-        head_change_invalidates_only_head_bound_proof: true
       no_reask_same_scope: true
+  RASTRO:
+    token: "!RASTRO"
+    owner: "AGENTS.md + docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md"
+    purpose: "SELAR_PROVA_E_RASTREABILIDADE_ANTES_DO_PROXIMO_CICLO"
+    required_output: [COMMIT_SHA, PATH, LINK, READBACK, MEMORY_LOCATION_WHEN_CLAIMED]
+    response_without_trace: INVALID
+    applies_to_all_engines: true
+
   BOOT:
     meaning: RETURN_NEXT_CYCLE_RECOVERABLE
     owner: LEIA-ME-IA.md
@@ -162,6 +187,18 @@ supporting_methods:
     private_chain_of_thought_exposed: false
     record_only: [DECISAO, EVIDENCIA, ACAO, RESULTADO, LACUNA, PROXIMO_TESTE]
     promotion_gate: META_LUPA_SAME_CONTROL
+
+measure_before_creation_semantic_binding:
+  owner: AGENTS.md#medir-antes-de-criar--melhorar-o-que-ja-existe
+  formula: "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
+  verse_reference: "1Ts 5:21"
+  verse_semantic: "EXAMINAR_TUDO_RETENDE_O_BEM"
+  meaning: "medir e comparar toda capacidade existente; preservar UNKNOWN; distinguir documentação de execução; reter somente o que a realidade provar útil"
+  applies_to: [ALL_CURRENT_AND_FUTURE_AGENTS, ALL_CURRENT_AND_FUTURE_ENGINES, ALL_CURRENT_AND_FUTURE_CLIS]
+  sequence: [MEASURE_EXISTING_REALITY, FIND_EXISTING_OWNER, REUSE_BEFORE_CREATE, PRESERVE_UNKNOWN, REQUIRE_EXECUTION_PROOF, COUNTERPROVE, RETAIN_PROVEN_GOOD]
+  verse_is_semantic_cue_not_proof: true
+  creates_new_owner: false
+  improves_existing_owner: true
 
 execution_model:
   human_intent_owner: SEGREDO/CHEFE
@@ -251,6 +288,59 @@ standard_flow:
   head_integrity: TESTED_HEAD_EQUALS_COMMITTED_HEAD_EQUALS_PUSHED_PR_HEAD
   failure_flow: [OBSERVED_FAILURE, FIND_OWNER, CREATE_FALSIFIER, PATCH_EXISTING_OWNER, ADD_NEGATIVE_TEST, RUN_EXISTING_TESTS, COUNTERPROVE, REGISTER_RECEIPT, GENERALIZE_IF_REUSABLE]
   scope_compression_failure: AGENT_REDUCED_HUMAN_OBJECTIVE_WITHOUT_AUTHORIZATION
+
+global_contract_enforcer:
+  marker: CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
+  creates_new_dispatcher: false
+  mode: EXTEND_EXISTING_TRIGGER_FABRIC_AND_AGENT_CALL
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+  mutation_gate: scripts/agent-call.mjs
+  deploy_gate: scripts/vps/deploy-guards-dispatcher.sh
+  runtime_preflight_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PREFLIGHT-LINT.yml
+  runtime_preflight_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_preflight_lint
+  runtime_preflight_required_before: [MUTATION, DEPLOY, KILL, RESTART, DIRTY_SYNC, MULTI_SHELL_FANOUT, RUNTIME_GREEN_CLAIM]
+  runtime_preflight_unknown_or_fail: FAIL_CLOSED
+  runtime_preflight_does_not_replace_target_runtime_test: true
+  read_only_can_observe_without_mutation_gate: true
+  before_every_mutation:
+    - RECOVER_RELEVANT_CONTEXT
+    - MEASURE_GITHUB_T0
+    - MEASURE_VPS_T0
+    - CLASSIFY_CROSS_SURFACE_DRIFT
+    - RECONCILE
+    - OWNER_PROVEN
+    - ONE_WRITER_PROVEN
+    - RUNTIME_PREFLIGHT_LINT_PASS_WHEN_APPLICABLE
+    - PREFLIGHT_PASS
+    - COUNTERPROOF_PLAN_READY
+    - ROLLBACK_PREPARED_AND_IDENTIFIED
+    - GLOBAL_ENTRY_GATE_PASS
+  after_every_mutation:
+    - MEASURE_GITHUB_T1
+    - MEASURE_VPS_T1
+    - COUNTERPROOF_PASS
+    - RUNTIME_PROOF_IF_APPLICABLE
+    - SAME_HEAD_CI_IF_PROMOTING
+    - RECEIPT_WRITTEN
+    - HUD_LIVE_DATA_UPDATED
+    - GLOBAL_EXIT_GATE_PASS
+    - FIXED_POINT_OR_NEXT_CURSOR
+  fail_closed:
+    - FAIL
+    - UNKNOWN
+    - BLOCKED
+    - BLOCKED_TRANSIENT
+    - QUEUED
+    - PENDING
+    - IN_PROGRESS
+    - CANCELLED
+    - SKIPPED_WITHOUT_PROVEN_NOT_APPLICABLE
+  human_boundary_only:
+    - SECRET_MFA_OR_EXCLUSIVE_CONSENT
+    - PHYSICAL_ACTION
+    - IRREVERSIBLE_OUT_OF_SCOPE_AUTHORIZATION
+    - NEW_HUMAN_INTENT_REQUIRED
+    - EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED
 
 architecture_flow:
   - CHEFE_INTENT
@@ -396,6 +486,35 @@ communication_interface:
       EVENT_SNAPSHOT_IS_NOT_CURRENT: true
       LIVE_LABEL_REMEASUREMENT_REQUIRED_FOR_CURRENT_CLAIM: true
 
+  standing_goal_protocol:
+    owner: .agents/skills/cot-react-loop/SKILL.md
+    surface: /goal
+    surface_role: READ_ONLY_INTROSPECTION
+    parent_goal: STABLE_UNTIL_MATERIAL_TERMINAL_STATE
+    micro_goal: DERIVED_FROM_CURRENT_WOUND
+    phase_contract: REHYDRATE_NOT_REINVENT
+    execute_with_judgment_means: NEXT_STEP_INSIDE_ALREADY_AUTHORIZED_SCOPE
+    progress_denominator: MATERIAL_DELIVERABLES_NOT_ITERATION_COUNT
+    continuation_flow:
+      - REHYDRATE_MISSION_AND_PHASE_CONTRACT
+      - ACT
+      - OBSERVE
+      - COMPARE_REQUIRED_DELIVERABLES
+      - UPDATE_EVIDENCE_MAP
+      - CONTINUE_UNTIL_PROVEN_SUCCESS_OR_LEGITIMATE_STOP
+    invariants:
+      PREAMBLE_IS_PROGRESS: false
+      ITERATION_COUNTER_IS_PROGRESS: false
+      PLANNING_TEXT_IS_DELIVERABLE: false
+      MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE: true
+      STANDING_GOAL_SURVIVES_TURN: true
+      STANDING_GOAL_SURVIVES_TOOL_FAILURE: true
+      CHILD_FAILURE_DOES_NOT_REPLACE_PARENT_GOAL: true
+      CURRENT_WOUND_DRIVES_NEXT_MICRO_GOAL: true
+      GOAL_SURFACE_DOES_NOT_CREATE_NEW_GOAL: true
+      GOAL_SURFACE_DOES_NOT_EXPAND_AUTHORIZATION: true
+      GOAL_REOPENS_ONLY_ON_NEW_MATERIAL_EVIDENCE_OR_CONTRADICTION: true
+
   continuity_hud:
     enabled_for_material_execution: true
     owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
@@ -452,44 +571,6 @@ communication_interface:
       WAITING_FOR_USER_IS_NOT_HUMAN_BOUNDARY: true
       NEW_EVIDENCE_IS_NOT_NEW_CONTRACT: true
 
-  machine_resolvable_blocker_transition:
-    semantic_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml
-    technical_blocker_is_not_human_boundary_by_itself: true
-    unknown_is_not_permission_to_mutate: true
-    self_goal_semantics: DERIVED_CAUSAL_MICRO_GOAL
-    self_goal_preserves_parent_goal: true
-    self_goal_preserves_existing_owner: true
-    same_mutable_scope_requires_writer_lease: true
-    flow:
-      - MEASURE_CURRENT
-      - CLASSIFY_FAILURE_SIGNATURE
-      - VERIFY_AUTHORIZED_SCOPE
-      - VERIFY_EXISTING_OWNER
-      - VERIFY_WRITER_LEASE
-      - DERIVE_CAUSAL_MICRO_GOAL
-      - EXECUTE_MINIMAL_SAFE_REMEDIATION
-      - RETEST
-      - COUNTERPROOF
-      - REMEASURE
-      - UPDATE_RECEIPT
-      - CONTINUE_NEXT_CURSOR
-    false_human_boundary_signals:
-      - ASKED_USER
-      - WAITING_FOR_USER
-      - NEXT_STEP_EXISTS
-      - UNKNOWN
-      - CI_FAILURE
-      - RUN_FAILURE
-      - NEED_RETRY
-      - NEED_REMEASURE
-      - NEED_RECONCILE
-      - MAIN_CHANGED
-      - CURRENT_STATE_CHANGED
-    human_return_only_when:
-      - PROVEN_HUMAN_FRONTIER
-      - EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED
-      - NEW_HUMAN_INTENT_REQUIRED
-
   mechanical_payload_fast_path:
     trigger: HUMAN_NEEDS_ONLY_COPY_PASTE_PAYLOAD_AND_NO_MATERIAL_DECISION_OR_RISK
     behavior: RETURN_ONLY_REQUESTED_PAYLOAD
@@ -503,6 +584,52 @@ communication_interface:
       - EXACTNESS
       - REQUIRED_WARNING_IF_MATERIAL
       - BLOCKED_OR_UNKNOWN_IF_MATERIAL
+
+log_incident_crystallization:
+  marker: CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED
+  sensor: /admin/api/logs
+  sensor_owner: apps/modulos/mcp/src/admin.js
+  deterministic_fanout_gate: scripts/agent-call.mjs --log-incident-fanout
+  use_existing_trigger_fabric: true
+  creates_new_logger: false
+  creates_new_orchestrator: false
+  on_material_signal:
+    - CAPTURE_CORRELATION_CONTEXT
+    - FAN_OUT_PARALLEL_READ_ONLY
+    - AUTH_OAUTH
+    - MCP_RUNTIME
+    - HUB_DATABASE
+    - ROUTING_NETWORK
+    - PROCESS_RUNTIME
+    - GITHUB_CI
+    - CONFIG_PROVENANCE
+    - SCREEN_OPTIONAL
+    - RENDEZVOUS
+    - IDENTIFY_EXISTING_OWNER
+    - REMEDIATE_BY_SCOPE
+    - T1_AFFECTED_SCOPE
+    - RESCAN_ADMIN_API_LOGS
+    - COUNTERPROOF
+    - RECEIPT
+    - CONTINUE_TO_CRYSTALLIZATION
+  parallelism:
+    readers_parallel: true
+    same_scope_mutation_parallel: false
+    disjoint_scope_mutation_parallel_only_if_proven_independent: true
+    one_active_writer_per_mutable_scope: true
+  stop_condition:
+    all_material_log_incidents_resolved: true
+    all_affected_t1_pass: true
+    no_unresolved_cross_sensor_contradiction: true
+    same_head_ci_when_git_changed: true
+    runtime_proof_when_runtime_changed: true
+    exact_blocker_allowed: true
+  invariants:
+    ADMIN_API_LOGS_200_IS_NOT_GLOBAL_PASS: true
+    LOG_SILENCE_IS_NOT_GLOBAL_PASS: true
+    NEW_ERROR_DURING_FIX_IS_SAME_MISSION_DELTA: true
+    UNKNOWN_STAYS_UNKNOWN: true
+    UNRESOLVED_MATERIAL_ERROR_BLOCKS_FIXED_POINT: true
 
 delta_harvest:
   canonical_signal: "!DELTA UTILS"
@@ -589,3 +716,71 @@ semantic_memory_links:
   semantic_link_is_proof: false
   graph_is_authority: false
   musical_metaphor_is_navigation_only: true
+
+adaptive_backcheck_contract:
+  owner: "AGENTS.md#metodo-adaptativo-mesma-regua-avanco--backcheck-ponto-suficiente"
+  creates_new_method: false
+  reuse_existing_live_editing: true
+  reuse_existing_agent_call: true
+  forward_window_default: 20
+  backcheck_window_default: 5
+  rewind_on_local_error_default: 1
+  windows_are_adaptive: true
+  backcheck_is_audit_not_rework: true
+  local_repair_before_full_rollback: true
+  rejoin_same_trail: true
+  no_silent_reroute: true
+  replay_before_rediscovery: true
+  flow: [EDIT, FORWARD_N, BACKCHECK_K, AUDIT, LOCAL_REPAIR_IF_NEEDED, RETEST, REJOIN_SAME_TRAIL, CONTINUE]
+
+probabilistic_fixed_point_contract:
+  global_100_percent_claim_forbidden: true
+  probabilistic_system_expects_error: true
+  error_is_correction_signal: true
+  binary_deterministic_gate_may_reach_100_percent_in_narrow_scope: true
+  fixed_point_is_perfection: false
+  human_satisfaction_can_close_iterative_scope: true
+  satisfaction_band_reference: "80..95"
+  satisfaction_band_is_universal_gate: false
+  fixed_point_requires: [CURRENT_GOAL_SUFFICIENT, AUDITABLE, REPAIRABLE, NO_MATERIAL_BLOCKER]
+
+multi_agent_same_ruler:
+  one_ai_is_system_unit: false
+  same_ruler_for_all_engines: true
+  majority_is_proof: false
+  confidence_is_proof: false
+  divergence_without_discriminating_proof: UNKNOWN
+  forced_winner: false
+  unknown_recovery: RETURN_TO_LAST_PROVEN_CHECKPOINT
+
+
+workflow_reconciliation_binding:
+  owner: .github/workflows/dependabot-auto-merge.yml
+  executor: scripts/dependabot/reconcile-open-prs.mjs
+  proof_denominator: scripts/github-autonomia-green-guard.mjs#DEFAULT_REQUIRED_WORKFLOWS
+  promotion_owner: .github/workflows/autonomia-promocao.yml
+  authorization_owner: scripts/github-autonomia-promocao.mjs#authorizationFor
+  no_model_required_for_transition: true
+  no_parallel_promoter: true
+  protected_ledger_pr: 1562
+  observation_identity: [repository, pr_number, current_head, current_base, workflow_id, run_attempt]
+  positive_horn_rules:
+    - "APPROVE_EXECUTION <- AUTHORIZED, SAME_REPO, BASE_MAIN, CURRENT_HEAD_MATCH, ACTION_REQUIRED"
+    - "RERUN_CANDIDATE <- CURRENT_HEAD_MATCH, LATEST_RUN, COMPLETED_FAILURE, ATTEMPT_BELOW_LIMIT"
+    - "PROOF_PASS <- SAME_PR_HEAD, ALL_REQUIRED_WORKFLOWS_SUCCESS"
+    - "PROMOTION_CANDIDATE <- AUTHORIZED, PROOF_PASS, CURRENT_BASE, CANONICAL_CONTRACT_PASS"
+  state_actions:
+    ACTION_REQUIRED: APPROVE_CURRENT_AUTHORIZED_EXECUTION
+    MISSING: PUBLISH_MISSING_AND_ROUTE_EXISTING_OWNER
+    SKIPPED_REQUIRED: PUBLISH_FAILURE_NO_PASS
+    PENDING: OBSERVE_NO_DUPLICATE_RERUN
+    FAIL_LATEST: RERUN_WITH_LIMIT_OR_REMEDIATE_CAUSAL_OWNER
+    STALE_HEAD_OR_BASE: INVALIDATE_OLD_PROOF_AND_RECONCILE
+    PROOF_PASS: ROUTE_CANONICAL_PROMOTER
+  directions: [FORWARD_INTENT_TO_EFFECT, REVERSE_RECEIPT_TO_OWNER, INVERSE_INVALID_PREMISE_COUNTERPROOF]
+  green_global_scope: CURRENT_AUTHORIZED_PROMOTION_SCOPE
+  green_global_requires: [CURRENT_FINGERPRINT, ALL_REQUIRED_GATES_PASS, CANONICAL_CONTRACT_PASS, NO_UNRESOLVED_MATERIAL_BLOCKER]
+  stale_is_green: false
+  external_prerequisites: [GITHUB_API, AUTHORIZED_TOKEN, MATCHING_RUNNER, CURRENT_SOURCE]
+  missing_external_prerequisite: EXACT_BLOCKER_AND_NEXT_CURSOR_NOT_FALSE_PASS
+  method_adapter: TLC23_FINITE_OPERATIONAL_FACTS_NOT_UNBOUNDED_HERBRAND_DECIDABILITY

@@ -26,6 +26,7 @@
   "decision_chain": [
     "SIGNAL",
     "CLASSIFY_TERRITORY",
+    "MEASURE_BEFORE_CREATION",
     "RESOLVE_CANDIDATE_SKILLS",
     "READ_SKILL_MD",
     "READ_INTERLIGADOS_MD_IF_PRESENT",
@@ -148,6 +149,15 @@
     "REUSE_BEFORE_CREATE=true",
     "UNKNOWN != PASS",
     "SKILL_ROUTE_PROVEN_IN_SOURCE != SKILL_EXECUTED_NOW",
-    "REALITY_IS_JUDGE=true"
-  ]
+    "REALITY_IS_JUDGE=true",
+    "MEASURE_BEFORE_CREATION_REQUIRED=true",
+    "DOCUMENTED != EXECUTED"
+  ],
+  "pre_creation_law": {
+    "emoji": "👁️",
+    "id": "MEASURE_BEFORE_CREATION",
+    "formula": "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE",
+    "applies_to": "ALL_CURRENT_AND_FUTURE_SKILLS_OWNERS_ROUTERS_WORKFLOWS_SURFACES",
+    "new_owner_created": false
+  }
 }

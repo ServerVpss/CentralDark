@@ -11,15 +11,36 @@ const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const FILES = {
   universal: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml',
   operationalMethod: '.agents/skills/centraldark-operational-method/SKILL.md',
+  cotReactLoop: '.agents/skills/cot-react-loop/SKILL.md',
   contract: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',
+  reconciliationContract: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
   triggers: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',
   bandScore: 'docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json',
   aureola: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml',
   master: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',
   engine: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
   autoconfigRuntime: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml',
+  provenLock: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
+  dailyChecklistPolicy: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+  adminChecklist: 'docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
+  agentCall: 'scripts/agent-call.mjs',
+  deployDispatcher: 'scripts/vps/deploy-guards-dispatcher.sh',
+  centralDeploy: 'scripts/vps/centraldark-deploy.sh',
+  operationalDeploy: 'scripts/vps/deploy-operational-guards.sh',
+  globalContract: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+  boot: 'CENTRALDARK_AI_BOOT.yaml',
+  grillMe: '.agents/skills/grill-me/SKILL.md',
+  metaGrill: '.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md',
+  metaLupa: '.agents/skills/meta-lupa/SKILL.md',
+  fableLoop: '.agents/skills/fable-loop/SKILL.md',
+  conflictResolver: '.agents/skills/git-conflict-resolve-house-standard/SKILL.md',
+  perceptionOrchestra: 'apps/modulos/HERMES-CORE/core/perception-orchestra.mjs',
+  orchestrator: 'apps/modulos/HERMES-CORE/core/orchestrator.mjs',
+  knowledgeCollector: 'apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs',
+  agentsGuide: 'AGENTS.md',
+  portableEntry: 'LEIA-ME-IA.md',
 };
 
 const TLC23_CANONICAL_SHA256 = 'b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1';
@@ -29,11 +50,15 @@ const REQUIRED_CHAIN = [
   'MULTIBUSSOLA', 'PEGATUDO', 'DEBITO_COGNITIVO', 'READERS_MEASURE',
   'META_LUPA', 'SCOPE_TEMPERATURE', 'DELTA_MINIMUM',
   'RENDEZVOUS', 'RECONCILE', 'OWNER', 'ONE_WRITER', 'PATCH', 'TESTE',
-  'CONTRAPROVA', 'REALITY_JUDGE', 'FIXED_POINT', 'TLC23_CLOSE', 'REGISTRA',
+  'CONTRAPROVA', 'REALITY_JUDGE', 'FIXED_POINT', 'TLC23_CLOSE', 'REGISTRA', 'RASTRO',
   'HANDOFF', 'BOOT',
 ];
 
 const REQUIRED_GLOBAL_INHERITANCE = [
+  'GLOBAL_CONTRACT_ENFORCER',
+  'DELTA_CONTINUO_GLOBAL',
+  'FIXED_HUD_LIVE_DATA',
+  'POMBO64_TRACE',
   'CENTRALDARK_MASTER_CYCLE',
   'DESTINATION_LOCK',
   'ACORDAR',
@@ -46,6 +71,7 @@ const REQUIRED_GLOBAL_INHERITANCE = [
   'REMEDICAO',
   'FIXED_POINT',
   'REGISTRA',
+  'RASTRO',
   'BOOT',
   'ONE_WRITER_PER_SCOPE',
   'OUTPUT_GUARD',
@@ -93,14 +119,37 @@ function parseEngineNames(engineText) {
 export function validateUniversalMethod() {
   const universal = read(FILES.universal);
   const operationalMethod = read(FILES.operationalMethod);
+  const cotReactLoop = read(FILES.cotReactLoop);
   const contract = read(FILES.contract);
+  const reconciliationContract = JSON.parse(read(FILES.reconciliationContract));
   const triggers = read(FILES.triggers);
   const bandScore = read(FILES.bandScore);
   const aureola = read(FILES.aureola);
   const master = read(FILES.master);
   const engine = read(FILES.engine);
   const autoconfigRuntime = read(FILES.autoconfigRuntime);
+  const provenLock = read(FILES.provenLock);
   const hermesPrompt = read(FILES.hermesPrompt);
+
+  const adminChecklist = read(FILES.adminChecklist);
+
+  const agentCall = read(FILES.agentCall);
+  const deployDispatcher = read(FILES.deployDispatcher);
+  const centralDeploy = read(FILES.centralDeploy);
+  const operationalDeploy = read(FILES.operationalDeploy);
+  const globalContract = read(FILES.globalContract);
+  const boot = read(FILES.boot);
+  const grillMe = read(FILES.grillMe);
+  const metaGrill = read(FILES.metaGrill);
+  const metaLupa = read(FILES.metaLupa);
+  const fableLoop = read(FILES.fableLoop);
+  const conflictResolver = read(FILES.conflictResolver);
+  const perceptionOrchestra = read(FILES.perceptionOrchestra);
+  const orchestrator = read(FILES.orchestrator);
+  const knowledgeCollector = read(FILES.knowledgeCollector);
+  const agentsGuide = read(FILES.agentsGuide);
+  const portableEntry = read(FILES.portableEntry);
+
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -110,6 +159,13 @@ export function validateUniversalMethod() {
   requireTokens(universal, [
     'applies_to: ALL_CURRENT_AND_FUTURE_ENGINES',
     'same_method_required_for_new_engine: true',
+    'cross_surface_contract_inheritance: true',
+    'semantic_convergence_across_surfaces_is_expected_success: true',
+    'surface_name_is_not_executor_proof: true',
+    'tool_catalog_visible_is_not_tool_call_success: true',
+    'tool_claim_requires_measured_receipt: true',
+    'executor_attribution_requires_observed_executor: true',
+    'no_conformance_level_auto_promotes_next: true',
     'engine_specific_capability_may_bypass_contract: false',
     'skin_is_presentation_adapter: true',
     'skin_must_not_change:',
@@ -131,17 +187,6 @@ export function validateUniversalMethod() {
     'new_equivalent_job_without_material_split: false',
     'human_return_requires_human_frontier_or_exact_hard_blocker: true',
     'model_identity_must_not_block_scope: true',
-    'git_pr_semantics:',
-    'pr_is_material_mutation_track: true',
-    'commit_is_pr_state_transition: true',
-    'commit_is_message_to_chefe: false',
-    'commit_message_is_provenance_not_proof: true',
-    'git_author_is_agent_identity_proof: false',
-    'git_committer_is_agent_identity_proof: false',
-    'git_actor_identity_is_provenance_only: true',
-    'exact_agent_without_correlated_runtime_telemetry: UNKNOWN',
-    'head_change_invalidates_old_current_claim: true',
-    'ci_judges_exact_head: true',
     'next_cursor_required_when_not_fixed_point: true',
     'same_body_evolution:',
     'semantic_identity: [OWNER, CAPABILITY, SCOPE]',
@@ -152,26 +197,7 @@ export function validateUniversalMethod() {
     'new_job_workflow_or_runtime_requires_material_split: true',
     'machine_resolvable_blocker_auto_continue: true',
     'same_scope_microapproval_required: false',
-    'machine_resolvable_continuation:',
-    'semantic_name: DERIVED_CAUSAL_MICRO_GOAL',
-    'self_goal_alias: SELF_GOAL',
-    'self_goal_is_new_parent_goal: false',
-    'self_goal_is_new_human_intent: false',
-    'unknown_alone_authorizes_mutation: false',
-    'technical_failure_alone_is_human_frontier: false',
-    'parent_goal_must_survive: true',
-    'existing_owner_must_survive: true',
-    'writer_lease_must_survive_same_mutable_scope: true',
-    'DERIVE_CAUSAL_MICRO_GOAL',
-    'PRESERVE_PARENT_GOAL',
-    'PRESERVE_EXISTING_OWNER',
-    'EXECUTE_MINIMAL_SAFE_REMEDIATION',
-    'operational_signals_are_not_human_frontier_by_themselves:',
-    'CLASSIFY_THEN_CONTINUE_IF_MACHINE_RESOLVABLE_AND_AUTHORIZED',
-    'never: BLIND_PATCH',
-    'PROVEN_HUMAN_FRONTIER',
     'EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED',
-    'NEW_HUMAN_INTENT_REQUIRED',
     'mass_job_creation_without_independent_boundaries: FORBIDDEN',
     'complexity_without_capability_gain: REGRESSION',
     'aureola_learning_contract:',
@@ -180,34 +206,65 @@ export function validateUniversalMethod() {
     'bounded_100_percent:',
     'requires_explicit_denominator: true',
     'calculation_only_global_runtime_claim: false',
+    'desktop_agentic_kernel_contract:',
+    'CENTRALDARK_DESKTOP_AGENTIC_KERNEL_REQUIRED',
+    'logical_kernel_is_centraldark_core_not_native_os_kernel: true',
+    'native_os_kernel_claim_requires_boot_evidence: true',
+    'owner: apps/modulos/Bolt/source',
+    'entrypoint: CentralDark.exe',
+    'same_head_source_required: true',
+    'desktop_contract_test_required: true',
+    'source_present_is_runtime_pass: false',
+    'contract_test_pass_is_packaged_pass: false',
+    'packaged_runtime_required: true',
+    'installer_sha256_required: true',
+    'centraldark_exe_launch_required: true',
+    'renderer_visible_required: true',
+    'omni_router_health_required: true',
+    'hermes_sidecar_required_for_fixed_point: true',
+    'hermes_bundle_unknown_blocks_fixed_point: true',
+    'mcp_health_required_for_fixed_point: true',
+    'optional_provider_failure_does_not_kill_core: true',
+    'selected_optional_provider_requires_fresh_health: true',
+    'direct_api_mcp_primary: true',
+    'github_casa_vps_api_rendezvous_required: true',
+    'remote_bridge_online_is_global_fixed_point: false',
+    'secrets_forbidden_in_receipt: true',
+    'hybrid_telemetry_contract:',
+    'CENTRALDARK_HYBRID_TELEMETRY_REQUIRED',
+    'screen_is_optional_sensor_not_single_point_of_truth: true',
+    'no_screen_does_not_block_other_observability: true',
+    'sensor_failure_is_world_failure: false',
+    'endpoint_must_be_attributed_to_screenpipe_process_before_use: true',
+    'unresolved_material_contradiction: FIXED_POINT_FALSE',
+    'ephemeral_artifact_policy:',
+    'CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED',
+    'temporary_version_suffixes_allowed: true',
+    'temporary_suffixes_are_architecture: false',
+    'cleanup_required_after_use: true',
+    'canonical_same_capability_version_suffix: FORBIDDEN',
+    'evolve_same_object: true',
+    'expand_domain_in_same_owner: true',
+    'create_parallel_architecture_for_domain_expansion: false',
+    'integrated_global_dedupe: true',
+    'duplicate_action: ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE',
+    'log_incident_crystallization_contract:',
+    'CENTRALDARK_LOG_INCIDENT_FANOUT_CRYSTALLIZATION_REQUIRED',
+    'sensor: /admin/api/logs',
+    'deterministic_fanout_gate: scripts/agent-call.mjs --log-incident-fanout',
+    'fanout_mode: PARALLEL_READ_ONLY_DIAGNOSIS',
+    'mutation_mode: PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE',
+    'one_active_writer_per_mutable_scope: true',
+    'continue_until: ALL_MATERIAL_INCIDENTS_RESOLVED_OR_EXACT_BLOCKER',
+    'endpoint_200_alone_is_pass: false',
+    'unresolved_material_error_means_fixed_point: false',
+    'human_facing_response_contract:',
+    'marker: HERMES_RESPONSE_CONTRACT',
+    'required_opening: [INTENCAO_VIGENTE, TARGET, OBSERVED_CURRENT_STATE]',
+    'required_sections: [FEITO, EVIDENCIA, CONTRAPROVA, UNKNOWN_OR_BLOCKED, FIXED_POINT, RECEIPT, NEXT_CURSOR]',
+    '- ASK_CHEFE_TO_CHOOSE_MECHANICAL_BRANCH',
+    'next_cursor_machine_owned_unless_human_frontier: true',
   ], 'UNIVERSAL_CONTRACT');
-
-  requireTokens(universal, [
-    'repeatable_multi_model_cadence:',
-    'schema: centraldark.repeatable-operational-cadence.v1',
-    'applies_to: ALL_CURRENT_AND_FUTURE_ENGINES',
-    'notation: LATEX_PLUS_MACHINE_FIELDS',
-    'disciplined_progress:',
-    'green_gate:',
-    'walk_and_narrate_material_transitions: true',
-    'narration_may_drive_green: false',
-    'ACTIVITY_IS_NOT_PROOF: true',
-    'NARRATION_IS_NOT_PROOF: true',
-    'MANY_MODELS_IS_NOT_VOTE: true',
-    'OWNER_BEFORE_NEW_ARTIFACT: true',
-    'EXTEND_BEFORE_DUPLICATE: true',
-    'VALIDATOR_BEFORE_GREEN: true',
-    'COUNTERPROOF_BEFORE_GREEN: true',
-    'REPEATABLE_BY_N_MODELS: true',
-    'PARALLEL_PERCEPTION_SERIALIZED_MUTATION: true',
-    'divergent_results_require_rendezvous_and_discriminating_test: true',
-    'correlated_results_are_not_independent_proofs: true',
-    'convergence_target: SAME_CANONICAL_ROUTE_NOT_SAME_WORDING',
-    'formula: VALIDATOR_AND_TEST_AND_COUNTERPROOF_AND_REALITY_JUDGE',
-    'current_same_head_evidence_when_git_material: REQUIRED',
-    'conversation_text_sha256: f36f6594bc8eaee1a3d7cc4737a69b79e541ecbc3541d2a397e1ed4ecfa00a9e',
-    'screenshot_sha256: 7721d4474f390a56eee6adb9effa75419a22cf426fb6353332e322404fd0abb4',
-  ], 'REPEATABLE_MULTI_MODEL_CADENCE');
 
   requireTokens(operationalMethod, [
     '## AURÉOLA DISCOVERY HARVEST — SOL + HERMES',
@@ -217,6 +274,259 @@ export function validateUniversalMethod() {
     'CALCULATION != RUNTIME_OBSERVATION',
   ], 'OPERATIONAL_METHOD_LEARNING');
 
+  requireTokens(cotReactLoop, [
+    '### 4.8 Standing Goal + `/goal` — continuidade material, não preâmbulo',
+    'STANDING_GOAL=ACTIVE',
+    'GOAL_PARENT=STABLE',
+    'PHASE_CONTRACT=REHYDRATE_NOT_REINVENT',
+    'PREAMBLE_IS_PROGRESS=false',
+    'ITERATION_COUNTER_IS_PROGRESS=false',
+    'MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE=true',
+    'CONTINUE_TOWARD_STANDING_GOAL',
+    '/goal RETURNS:',
+    'GOAL_STATUS=CONTINUE',
+    'REASON=NO_MATERIAL_DELIVERABLE_EVIDENCE',
+    'EXECUTE_WITH_JUDGMENT',
+    'STANDING_GOAL_SURVIVES_TOOL_FAILURE=true',
+    'CHILD_FAILURE_DOES_NOT_REPLACE_PARENT_GOAL=true',
+  ], 'COT_REACT_STANDING_GOAL');
+
+  requireTokens(universal, [
+    'human_complexity_absorption_required: true',
+    'machine_discoverable_state_must_not_be_human_guesswork: true',
+    'machine_safe_fix_must_not_be_delegated_to_human: true',
+    'human_complexity_absorption_contract:',
+    'purpose: MACHINE_ABSORBS_TECHNICAL_COMPLEXITY_FOR_HUMANS',
+    'prefer_complete_execution_bundle_over_microcommands: true',
+    'unresolved_failure_must_be_loud_and_unambiguous: true',
+    'ask_one_exact_human_action_at_a_time: true',
+    'secrets_must_not_be_requested_in_chat: true',
+    'after_human_frontier_machine_auto_resumes: true',
+    'complexity_belongs_inside_system_not_on_user: true',
+  ], 'HUMAN_COMPLEXITY_ABSORPTION_UNIVERSAL');
+
+  requireTokens(contract, [
+    'human_complexity_must_be_absorbed_by_machine_when_safe: true',
+    'machine_discoverable_state_must_not_be_user_guesswork: true',
+    'machine_safe_fix_must_not_be_delegated_to_user: true',
+    'generic_error_without_location_and_next_action_is_invalid: true',
+    'marker: CENTRALDARK_HUMAN_COMPLEXITY_ABSORPTION_REQUIRED',
+    'prefer_one_complete_operation_over_microcommand_chain: true',
+    'automatic_resume_after_human_frontier: true',
+  ], 'HUMAN_COMPLEXITY_ABSORPTION_CONTRACT');
+
+  requireTokens(provenLock, [
+    'marker: PROVEN_PATH_REPLAY_LOCK',
+    'PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true',
+    'SAME_FINGERPRINT_REUSES_PROVEN_RECIPE: true',
+    'RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH: true',
+    'REUSE_PROVEN_PATH_NO_RETHINK',
+    'REVALIDATE_AFFECTED_CONE_ONLY',
+  ], 'PROVEN_PATH_REPLAY_LOCK');
+
+  requireTokens(autoconfigRuntime, [
+    'marker: PROVEN_PATH_REPLAY_LOCK',
+    'same_dependency_fingerprint: REUSE_PROVEN_PATH_NO_RETHINK',
+    'changed_dependency_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY',
+  ], 'HERMES_PROVEN_PATH_REPLAY');
+
+  requireTokens(hermesPrompt, [
+    '## Contrato humano universal — absorver complexidade, não devolvê-la',
+    'COMPLEXITY_BELONGS_INSIDE_SYSTEM_NOT_ON_USER=true',
+    'HUMAN_SUPPLIES_GOAL_NOT_RUNBOOK=true',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
+    'UNRESOLVED_FAILURE_MUST_BE_LOUD_EXACT_ACTIONABLE=true',
+    'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+  ], 'HERMES_HUMAN_COMPLEXITY_PROMPT');
+
+  requireTokens(universal, [
+    'chefe_alignment_filter_required: true',
+    'useless_complexity_must_be_reduced_before_human_output: true',
+    'chief_receives_decision_not_internal_topology: true',
+    'CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER',
+    'REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE',
+    'DROP_DUPLICATE_OR_COSMETIC_WORK',
+    'asks_user_to_choose_order_for_authorized_technical_work',
+  ], 'CHEFE_ALIGNMENT_SIMPLIFIER_UNIVERSAL');
+
+  requireTokens(contract, [
+    'chefe_alignment_filter_required: true',
+    'CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER',
+    'REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE',
+    'human_output_default: RESULT_EVIDENCE_PENDING_NEXT_CURSOR',
+    'ask_user_to_choose_order_for_authorized_technical_work: false',
+    'preserve_proof_unknown_and_blockers: true',
+  ], 'CHEFE_ALIGNMENT_SIMPLIFIER_CONTRACT');
+
+  requireTokens(hermesPrompt, [
+    '## Filtro de alinhamento do Chefe — reduzir complexidade inútil',
+    'CENTRALDARK_CHEFE_ALIGNMENT_SIMPLIFIER=true',
+    'REDUCE_USELESS_COMPLEXITY_FOR_SEGREDO_CHEFE=true',
+    'CHIEF_RECEIVES_DECISION_NOT_INTERNAL_TOPOLOGY=true',
+    'NO_MICROSTEP_MENU_FOR_AUTHORIZED_TECHNICAL_WORK=true',
+    'HUMAN_OUTPUT_DEFAULT=RESULTADO_EVIDENCIA_PENDENCIA_REAL_PROXIMO_CURSOR',
+  ], 'CHEFE_ALIGNMENT_SIMPLIFIER_PROMPT');
+
+  requireTokens(hermesPrompt, [
+    'HERMES_RESPONSE_CONTRACT=true',
+    'RESPONSE_REQUIRED_OPENING=INTENCAO_VIGENTE|TARGET|OBSERVED_CURRENT_STATE',
+    'RESPONSE_REQUIRED_SECTIONS=FEITO|EVIDENCIA|CONTRAPROVA|UNKNOWN_OR_BLOCKED|FIXED_POINT|RECEIPT|NEXT_CURSOR',
+    'RASTRO_LOCK_REQUIRED=true',
+    'RESPONSE_WITHOUT_TRACE=INVALID',
+    'WRITE_CLAIM_FIELDS=COMMIT_SHA|PATH|LINK|READBACK',
+    'NO_PROMISE_FUTURE_WORK_AS_DONE=true',
+    'NO_ASK_CHEFE_TO_CHOOSE_MECHANICAL_BRANCH=true',
+    'NO_RETURN_MACHINE_EXECUTABLE_MICROSTEPS=true',
+    'PARALLELIZE_PERCEPTION=true',
+    'SERIALIZE_MUTATION=true',
+    'CONTINUE_WITHOUT_REASKING=true',
+    'NEXT_CURSOR_MACHINE_OWNED_UNLESS_HUMAN_FRONTIER=true',
+  ], 'HERMES_RESPONSE_CONTRACT_PROMPT');
+
+  requireTokens(operationalMethod, [
+    '## Contrato humano de execução integral',
+    'microcomando não é padrão',
+    'se a máquina pode descobrir, o humano não deve adivinhar',
+    'erro genérico sem localização e próximo passo acionável é FAIL',
+  ], 'OPERATIONAL_HUMAN_COMPLEXITY_METHOD');
+
+
+  requireTokens(autoconfigRuntime, [
+    'official_hermes_update_continuity:',
+    'owner: .github/workflows/hermes-core-signal-watch.yml',
+    'upstream: NousResearch/hermes-agent',
+    'new_parallel_updater: false',
+    'check: hermes update --check',
+    'plan: hermes update --plan',
+    'apply: hermes update --backup --yes',
+    'human_does_not_need_to_remember_update_command: true',
+    'tutorial_loaded_by_core_prompt: true',
+  ], 'HERMES_OFFICIAL_UPDATE_CONTINUITY');
+
+  requireTokens(hermesPrompt, [
+    '## Tutorial interno — manter o Hermes oficial atualizado sozinho',
+    'HERMES_OFFICIAL_UPDATE_OWNER=EXISTING_HERMES_CORE_SIGNAL_WATCH',
+    'OFFICIAL_CLI_IS_UPDATE_ENGINE=true',
+    'SCHEDULE_FALLBACK_REQUIRED=true',
+    'POSTCHECK_REQUIRED=true',
+    'HUMAN_RETEACH_REQUIRED=false',
+  ], 'HERMES_OFFICIAL_UPDATE_TUTORIAL');
+  requireTokens(agentsGuide, [
+    'MEASURE_BEFORE_CREATION_REQUIRED=SIM',
+    'MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"',
+    'MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"',
+    'MEASURE_BEFORE_CREATION_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
+    'VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true',
+  ], 'MEASURE_BEFORE_CREATION_GLOBAL_AGENTS');
+
+  requireTokens(master, [
+    'measure_before_creation_semantic_binding:',
+    'verse_reference: "1Ts 5:21"',
+    'ALL_CURRENT_AND_FUTURE_AGENTS',
+    'MEASURE_EXISTING_REALITY',
+    'RETAIN_PROVEN_GOOD',
+    'verse_is_semantic_cue_not_proof: true',
+  ], 'MEASURE_BEFORE_CREATION_MASTER_BINDING');
+
+  requireTokens(hermesPrompt, [
+    'MEASURE_BEFORE_CREATION=true',
+    'MEASURE_BEFORE_CREATION_SEMANTIC_REFERENCE="1Ts 5:21"',
+    'MEASURE_BEFORE_CREATION_APPLIES_TO_ALL_AGENTS=true',
+    'VERSE_IS_SEMANTIC_CUE_NOT_PROOF=true',
+  ], 'MEASURE_BEFORE_CREATION_HERMES_BINDING');
+
+  requireTokens(agentsGuide, [
+    'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
+    'PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true',
+    'HUD_LAYOUT_FIXED=true',
+    'UNCHANGED_FIELDS_SHOULD_NOT_BE_REWRITTEN=true',
+    'NUMERIC_METRIC_REQUIRES_PROVEN_DENOMINATOR=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'GITHUB_REF_MISS_DOES_NOT_PROVE_RUNTIME_FILE_ABSENT=true',
+    'ALTERNATE_AUTHORIZED_SENSOR_BEFORE_HUMAN_BLOCKER=true',
+    'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true',
+    'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true',
+    'DEPLOY_DOES_NOT_REASK_AFTER_AUTHORIZED_GREEN=true',
+    'UNTRACKED_RUNTIME_STATE_IS_PRESERVED_NOT_BLIND_CLEANED=true',
+    'PROOF_COUNTERPROOF_ACCEPT_RECONCILE_IS_DETERMINISTIC_CLOSURE=true',
+    'ACCEPTANCE_REQUIRES_PROOF_AND_COUNTERPROOF_SURVIVAL=true',
+    'COUNTERPROOF_FAILURE_REOPENS_OR_REJECTS_CLAIM=true',
+    'RECONCILIATION_PRESERVES_PROVEN_GOOD_AND_DISCARDS_ONLY_DISPROVEN_DELTA=true',
+    'SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true',
+    'NEW_MATERIAL_CAUSE_REOPENS_SEAL=true',
+    'GENERIC_ERROR_ONLY=FAIL',
+    'ASK_ONE_EXACT_HUMAN_ACTION_AT_A_TIME=true',
+    'AUTO_RESUME_AFTER_HUMAN_FRONTIER=true',
+    'PROVEN_PATH_REPLAY_LOCK=true',
+    'PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO=true',
+  ], 'UNIVERSAL_DIRECT_MODE_AGENTS');
+
+  requireTokens(portableEntry, [
+    '## 0.1 Modo Direto universal — contrato portátil',
+    'CENTRALDARK_UNIVERSAL_DIRECT_MODE_V1=true',
+    'HUD_FIXED_FIELDS=',
+    'HUD_ONLY_MATERIAL_VALUES_CHANGE=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'FAILURE_MUST_SHOW=',
+    'NO_TOOL_ACCESS → EXECUTION_CAPABILITY=ADVISORY_ONLY',
+  ], 'UNIVERSAL_DIRECT_MODE_PORTABLE_ENTRY');
+
+  requireTokens(hermesPrompt, [
+    'UNIVERSAL_DIRECT_MODE_INHERITED=true',
+    'UNIVERSAL_DIRECT_MODE_OWNER=AGENTS.md',
+    'UNIVERSAL_DIRECT_PORTABLE_ENTRY=LEIA-ME-IA.md',
+    'HUD_LAYOUT_FIXED_ONLY_LIVE_VALUES_CHANGE=true',
+    'TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true',
+    'SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true',
+    'PROOF_COUNTERPROOF_ACCEPT_RECONCILE_IS_DETERMINISTIC_CLOSURE=true',
+    'ACCEPTANCE_REQUIRES_PROOF_AND_COUNTERPROOF_SURVIVAL=true',
+    'COUNTERPROOF_FAILURE_REOPENS_OR_REJECTS_CLAIM=true',
+    'RECONCILIATION_PRESERVES_PROVEN_GOOD_AND_DISCARDS_ONLY_DISPROVEN_DELTA=true',
+    'SEALED_CLAIM_NO_REEXECUTE_WITHOUT_NEW_MATERIAL_CAUSE=true',
+    'NEW_MATERIAL_CAUSE_REOPENS_SEAL=true',
+    'CROSS_SURFACE_CONTRACT_INHERITANCE=true',
+    'SEMANTIC_CONVERGENCE_ACROSS_SURFACES_IS_EXPECTED_SUCCESS=true',
+    'SURFACE_NAME_IS_NOT_EXECUTOR_PROOF=true',
+    'TOOL_CATALOG_VISIBLE_IS_NOT_TOOL_CALL_SUCCESS=true',
+    'TOOL_CLAIM_REQUIRES_MEASURED_RECEIPT=true',
+    'EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR=true',
+    'PROVEN_PATH_REPLAY_LOCK=true',
+    'SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true',
+    'SAME_HEAD_GREEN_PROMOTES_TO_TOTAL_DEPLOY=true',
+    'TOTAL_DEPLOY_REGENERATES_FROM_PROVEN_MAIN_AND_EXISTING_RUNTIME=true',
+    'HUMAN_RETEACH_REQUIRED=false',
+  ], 'UNIVERSAL_DIRECT_MODE_HERMES');
+
+  requireTokens(metaLupa, [
+    '## Gate determinístico: prova → contraprova → aceite → reconciliação',
+    'PROOF_REQUIRED_BEFORE_ACCEPTANCE=true',
+    'COUNTERPROOF_REQUIRED_BEFORE_ACCEPTANCE=true',
+    'ACCEPTANCE_IS_COMPUTED_NOT_VOTED=true',
+    'ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN',
+    'UNKNOWN=INSUFFICIENT_EVIDENCE_NO_PASS',
+    'NEW_MATERIAL_CAUSE_REQUIRES_REOPEN_WITH_CAUSE_REF=true',
+    'FIXED_POINT_REQUIRES_DETERMINISTIC_CLOSURE=true',
+  ], 'META_LUPA_DETERMINISTIC_CLOSURE');
+
+  requireTokens(metaGrill, [
+    '## ⚖️ Lei do fechamento determinístico',
+    'META_GRILL_IS_FALSIFIER_NOT_PERMANENT_SKEPTIC=true',
+    'ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN',
+    'ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true',
+    'PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true',
+  ], 'META_GRILL_DETERMINISTIC_CLOSURE');
+
+  requireTokens(fableLoop, [
+    '## Contrato de aceite e reconciliação',
+    'FABLE_PROOF_COUNTERPROOF_CLOSURE=true',
+    'ACCEPTANCE_RESULT_ENUM=ACCEPTED|PARTIAL|REJECTED|UNKNOWN',
+    'FABLE_ACCEPT_ONLY_AFTER_COUNTERPROOF_SURVIVAL=true',
+    'FABLE_RECONCILE_PARTIAL_FAILURE=true',
+    'FABLE_SEALED_CLAIM_NO_RECHECK_WITHOUT_NEW_CAUSE=true',
+  ], 'FABLE_DETERMINISTIC_CLOSURE');
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
     const needle = `  - ${token}`;
@@ -227,6 +537,8 @@ export function validateUniversalMethod() {
   }
 
   requireTokens(aureola, [
+    'header: "⭕ !AURÉOLA CANÔNICA"',
+    'opening_verse: "“Examinai tudo. Retende o bem.” — 1 Tessalonicenses 5:21"',
     'AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT: true',
     'BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF: true',
     'VERSE_DOES_NOT_REPLACE_EVIDENCE: true',
@@ -255,6 +567,16 @@ export function validateUniversalMethod() {
     'EVENT_SNAPSHOT_IS_NOT_CURRENT: true',
     'LIVE_LABEL_REMEASUREMENT_REQUIRED_FOR_CURRENT_CLAIM: true',
     'current_pr_labels_require_live_api_read: true',
+    'standing_goal_protocol:',
+    'surface: /goal',
+    'surface_role: READ_ONLY_INTROSPECTION',
+    'parent_goal: STABLE_UNTIL_MATERIAL_TERMINAL_STATE',
+    'phase_contract: REHYDRATE_NOT_REINVENT',
+    'progress_denominator: MATERIAL_DELIVERABLES_NOT_ITERATION_COUNT',
+    'PREAMBLE_IS_PROGRESS: false',
+    'MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE: true',
+    'STANDING_GOAL_SURVIVES_TURN: true',
+    'GOAL_SURFACE_DOES_NOT_EXPAND_AUTHORIZATION: true',
     'continuity_hud:',
     'HUD_IS_NOT_PROOF: true',
     'UNKNOWN_STAYS_UNKNOWN: true',
@@ -265,18 +587,24 @@ export function validateUniversalMethod() {
     'display_name: "CAJADO_DA_CORRECAO"',
     'DOES_NOT_RESTART_MISSION: true',
     'ASKED_USER_IS_NOT_BLOCKED: true',
-    'WAITING_FOR_USER_IS_NOT_HUMAN_BOUNDARY: true',
-    'machine_resolvable_blocker_transition:',
-    'technical_blocker_is_not_human_boundary_by_itself: true',
-    'unknown_is_not_permission_to_mutate: true',
-    'self_goal_semantics: DERIVED_CAUSAL_MICRO_GOAL',
-    'self_goal_preserves_parent_goal: true',
-    'self_goal_preserves_existing_owner: true',
-    'same_mutable_scope_requires_writer_lease: true',
-    'false_human_boundary_signals:',
-    'human_return_only_when:',
     'NEXT_ACORDAR',
     'NEXT_CURSOR',
+    'global_contract_enforcer:',
+    'marker: CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED',
+    'mode: EXTEND_EXISTING_TRIGGER_FABRIC_AND_AGENT_CALL',
+    'mutation_gate: scripts/agent-call.mjs',
+    'deploy_gate: scripts/vps/deploy-guards-dispatcher.sh',
+    'GLOBAL_ENTRY_GATE_PASS',
+    'GLOBAL_EXIT_GATE_PASS',
+    'DELTA_CONTINUO_REQUIRED: true',
+    'log_incident_crystallization:',
+    'sensor: /admin/api/logs',
+    'FAN_OUT_PARALLEL_READ_ONLY',
+    'REMEDIATE_BY_SCOPE',
+    'RESCAN_ADMIN_API_LOGS',
+    'CONTINUE_TO_CRYSTALLIZATION',
+    'ADMIN_API_LOGS_200_IS_NOT_GLOBAL_PASS: true',
+    'UNRESOLVED_MATERIAL_ERROR_BLOCKS_FIXED_POINT: true',
   ], 'MASTER_CYCLE');
 
   requireTokens(autoconfigRuntime, [
@@ -297,6 +625,47 @@ export function validateUniversalMethod() {
     'PROVEN_RULE_BINDS_TO_RUNTIME: true',
     'contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true',
     'external_reality_100_percent_from_calculation_only: false',
+
+    'SEARCH_EXISTING_CRYSTAL_BEFORE_NEW: true',
+    'SEARCH_EXISTING_OWNER_BEFORE_NEW: true',
+    'VERIFY_EXISTING_CAPABILITY_BEFORE_NEW: true',
+    'SEMANTIC_DEDUPE_BEFORE_CRYSTAL: true',
+    'UNVERIFIED_ABSENCE_IS_UNKNOWN: true',
+    'PARALLEL_ARCHITECTURE_WITHOUT_PROVEN_GAP: FORBIDDEN',
+    'TLC23_HORN_BEFORE_LOGICAL_MUTATION: true',
+    'axes: [CASA, GITHUB, VPS]',
+    'same_source_commit_required: true',
+    'casa_exact_head_validation_required: true',
+    'github_same_head_gates_required: true',
+    'vps_exact_commit_deploy_required: true',
+    'counterproof_each_axis_required: true',
+    'partial_axis_pass_is_global_pass: false',
+    'micro_deploy_requires_explicit_chefe_authorization: true',
+    'daily_checklist_gate:',
+    'DAILY_CHECKLIST_GATE_REQUIRED: true',
+    'DAILY_CHECKLIST_OWNER: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER: docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
+    'DAILY_CHECKLIST_RECORD_TARGET: ACTIVE_SCOPE_LEDGER',
+    'AGENT_OR_AI_MUTATES_CODE_DURING_DAY: true',
+    'LOAD_DAILY_CHECKLIST: true',
+    'VERIFY_PARENT_GOAL: true',
+    'VERIFY_WRITER_LEASE: true',
+    'UPDATE_DAILY_CHECKLIST: true',
+    'MODEL_NAME_IS_ROUTING_KEY: false',
+    'MODEL_NAME_IS_AUTHORITY: false',
+    'MODEL_NAME_IS_WRITER_LEASE: false',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE: true',
+    'FINAL_PROMOTION_SCOPE: ONE_ACTIVE_FINALIZER_LEASE',
+    'GOAL_PAI_ID: STABLE',
+    'MICRO_GOAL: DERIVED_FROM_CURRENT_WOUND',
+
+    'continuous_capability_absorption:',
+    'fixed_point_is_learning_gate: false',
+    'approved_material_step_emits_learning_ref: true',
+    'proven_reusable_delta_binds_before_global_fixed_point: true',
+    'CONTINUOUS_HERMES_CAPABILITY_ABSORPTION: true',
+    'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE: true',
+
   ], 'AUTOCONFIG_RUNTIME');
 
   requireTokens(contract, [
@@ -310,6 +679,193 @@ export function validateUniversalMethod() {
     'allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED',
   ], 'TRIGGER_CONTRACT_LEARNING');
 
+  const daily = reconciliationContract.daily_checklist_gate ?? {};
+  if (daily.marker !== 'DAILY_CHECKLIST_GATE_REQUIRED') throw new Error('DAILY_CHECKLIST_GATE_MISSING');
+  if (daily.applies_when?.agent_or_ai_mutates_code_during_day !== true) throw new Error('DAILY_CHECKLIST_SCOPE_INVALID');
+  for (const key of ['load_daily_checklist','verify_current_state','verify_parent_goal','verify_owner','verify_scope','verify_writer_lease']) {
+    if (daily.before_first_code_mutation_of_day?.[key] !== true) throw new Error(`DAILY_CHECKLIST_BEFORE_MUTATION_MISSING:${key}`);
+  }
+  for (const key of ['record_material_delta','record_pending_gaps','record_head_changes','record_handoffs','record_gate_failures']) {
+    if (daily.during_day?.[key] !== true) throw new Error(`DAILY_CHECKLIST_DURING_DAY_MISSING:${key}`);
+  }
+  if (daily.before_handoff_or_finalization?.update_daily_checklist !== true) throw new Error('DAILY_CHECKLIST_FINAL_UPDATE_MISSING');
+
+  const executorSelection = reconciliationContract.executor_selection_policy ?? {};
+  if (executorSelection.model_name_is_routing_key !== false) throw new Error('MODEL_NAME_BECAME_ROUTING_KEY');
+  if (executorSelection.model_name_is_authority !== false) throw new Error('MODEL_NAME_BECAME_AUTHORITY');
+  if (executorSelection.model_name_is_writer_lease !== false) throw new Error('MODEL_NAME_BECAME_WRITER_LEASE');
+  const expectedExecutorSelection = ['TAG_EXECUTOR','CAPABILITY_MATCH','SCOPE_MATCH','LEASE_AVAILABLE','POLICY_ALLOWED'];
+  if (expectedExecutorSelection.some((value, index) => executorSelection.selection?.[index] !== value)) throw new Error('EXECUTOR_SELECTION_INVALID');
+
+  const writerPolicy = reconciliationContract.writer_concurrency_policy ?? {};
+  if (writerPolicy.multiple_writers_allowed !== true) throw new Error('MULTIPLE_WRITERS_DISALLOWED');
+  if (writerPolicy.concurrent_writers_disjoint_scopes !== true) throw new Error('DISJOINT_SCOPE_WRITERS_DISABLED');
+  if (writerPolicy.same_mutable_scope_requires_one_writer_lease !== true) throw new Error('SAME_SCOPE_WRITER_LEASE_NOT_REQUIRED');
+  if (writerPolicy.same_scope_parallel_mutation !== 'BLOCKED') throw new Error('SAME_SCOPE_PARALLEL_MUTATION_NOT_BLOCKED');
+
+  const finalization = reconciliationContract.finalization_policy ?? {};
+  const expectedFinalizationLane = ['PR','SAME_HEAD_GATES','MAIN','POST_MERGE','DEPLOY','REMEASURE','FINAL_RECEIPT'];
+  if (finalization.final_promotion_scope !== 'ONE_ACTIVE_FINALIZER_LEASE') throw new Error('FINALIZER_LEASE_NOT_UNIQUE');
+  if (expectedFinalizationLane.some((value, index) => finalization.lane?.[index] !== value)) throw new Error('FINALIZATION_LANE_INVALID');
+  if (finalization.same_head_required !== true) throw new Error('FINALIZATION_SAME_HEAD_NOT_REQUIRED');
+
+  const goals = reconciliationContract.goal_derivation_policy ?? {};
+  if (goals.goal_pai_id !== 'STABLE') throw new Error('PARENT_GOAL_NOT_STABLE');
+  if (goals.micro_goal !== 'DERIVED_FROM_CURRENT_WOUND') throw new Error('MICRO_GOAL_NOT_DERIVED_FROM_CURRENT_WOUND');
+
+  const roleMap = reconciliationContract.authority_role_map ?? {};
+  const expectedRoleMap = {
+    CHEFE: 'INTENT_AUTHORITY',
+    CONTRACT: 'POLICY',
+    GATES: 'PROOF',
+    VPS: 'EXECUTOR_RUNTIME_AND_CONTROL_PLANE',
+    REALITY: 'JUDGE',
+  };
+  for (const [key, value] of Object.entries(expectedRoleMap)) {
+    if (roleMap[key] !== value) throw new Error(`AUTHORITY_ROLE_INVALID:${key}`);
+  }
+
+  const nonEq = reconciliationContract.non_equivalence_guards ?? {};
+  if (nonEq.UNKNOWN_IS_PASS !== false) throw new Error('UNKNOWN_BECAME_PASS');
+  if (nonEq.ACTION_IS_PROOF !== false) throw new Error('ACTION_BECAME_PROOF');
+  if (nonEq.AUTHORIZED_IS_VALIDATED !== false) throw new Error('AUTHORIZED_BECAME_VALIDATED');
+  if (nonEq.MERGED_IS_DEPLOYED !== false) throw new Error('MERGED_BECAME_DEPLOYED');
+  requireTokens(globalContract, [
+    '"universal_gate_registry":',
+    '"marker": "CENTRALDARK_UNIVERSAL_GATE_REGISTRY"',
+    '"hard_gate_id_must_be_registered_before_enforcement": true',
+    '"gate_enforcement_without_contract_declaration": "FORBIDDEN"',
+    '"PRE_MUTATION_INTERVIEW_GATE"',
+    '"FAIL_FAST_BLOCK_GATE"',
+    '"LOCAL_HOUSE_SENSOR_GATE"',
+    '"pre_mutation_interview_gate":',
+    '"marker": "CENTRALDARK_GRILL_META_INTERVIEW_GATE"',
+    '"parallel_perception_runtime": "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs"',
+    '"fail_fast_block_contract":',
+    '"on_any_material_failure": "ABORT_CURRENT_BLOCK"',
+    '"fixed_point_true_after_material_failure": "FORBIDDEN"',
+    '"local_house_sensor_contract":',
+    '"global_secret_reuse_contract":',
+    '"telegram_transport_contract":',
+    '"marker": "CENTRALDARK_TELEGRAM_DIRECT_TRANSPORT"',
+    '"bot_transport": "TELEGRAM_BOT_API_DIRECT"',
+    '"bot_api_base": "https://api.telegram.org"',
+    '"bot_update_mode": "LONG_POLLING_ONLY"',
+    '"bot_webhook_transport": "FORBIDDEN"',
+    '"centraldark_subdomain_as_telegram_transport": "FORBIDDEN"',
+    '"user_transport": "TELEGRAM_MTPROTO_DIRECT"',
+    '"telegram_orchestrator_contract":',
+    '"coordinator": "SOL"',
+    '"executor": "PIVETE/HERMES"',
+    '"marker": "CENTRALDARK_GLOBAL_SECRET_REUSE"',
+    '"canonical_vault": "/root/CentralDark/secrets"',
+    '"repository_secrets": "REUSE_ALL_EXISTING_AND_FUTURE"',
+    '"create_new_secret_only_if": "NO_EQUIVALENT_AFTER_MEASURE"',
+    '"CASA_LOCAL": "DISCOVER_AT_RUNTIME_DO_NOT_ASSUME_PATH"',
+    '"explicit_intent_override_policy":',
+    '"marker": "CENTRALDARK_EXPLICIT_INTENT_TEMPORARY_OVERRIDE"',
+    '"EXPLICIT_OVERRIDE_DOES_NOT_MUTATE_DEFAULT": true',
+    '"REASK_WHEN_SAME_INTENT_SCOPE_ALREADY_AUTHORIZED": false',
+    '"promotion": "VALID_INTENT_RECEIPT + SAME_HEAD_GREEN -> AUTO_SQUASH_IF_CLEAN_WITHOUT_REASK"',
+  ], 'UNIVERSAL_GATE_REGISTRY');
+
+  requireTokens(boot, [
+    'mission_stop: "CONTINUE_ACROSS_CHAT_BOUNDARIES_UNLESS_CHEFE_EXPLICITLY_STOPS"',
+    '- "CHEFE_EXPLICITLY_STOPS"',
+    'global_secret_reuse_contract:',
+    'canonical_vault: "/root/CentralDark/secrets"',
+    'repository_secrets: "REUSE_ALL_EXISTING_AND_FUTURE"',
+    'no_parallel_vault: true',
+    'telegram_transport_contract:',
+    'bot_transport: "TELEGRAM_BOT_API_DIRECT"',
+    'bot_update_mode: "LONG_POLLING_ONLY"',
+    'bot_webhook_transport: "FORBIDDEN"',
+    'centraldark_subdomain_as_telegram_transport: "FORBIDDEN"',
+    'user_transport: "TELEGRAM_MTPROTO_DIRECT"',
+    'telegram_orchestrator_contract:',
+    'coordinator: "SOL"',
+    'executor: "PIVETE/HERMES"',
+    'SQUASH_CHILD_ONLY',
+
+    'child_pr_only_promotion_vehicle: false',
+    'promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE"',
+    'minimum_security_checks:',
+    'direct_main_forbidden_when_compatible_child_is_healthy: true',
+    'MAIN_READBACK',
+    'required_gate_ids:',
+    'LOAD_UNIVERSAL_GATE_REGISTRY',
+    'LOAD_ROOT_CHILD_CONTRACT_LINEAGE',
+    'LOAD_POMBO64_TRACE_CONTRACT',
+    'LOAD_PRE_MUTATION_INTERVIEW_GATE',
+    'LOAD_FAIL_FAST_BLOCK_GATE',
+    'LOAD_LOCAL_HOUSE_SENSOR_CONTRACT',
+    'ALLOW_FIRST_AGENT_ROUTING',
+  ], 'BOOT_UNIVERSAL_GATE_LOADING');
+
+  requireTokens(grillMe, [
+    'disable-model-invocation: true',
+    'Call the Skill tool with "grilling".',
+  ], 'GRILL_ME_HOOK');
+
+  requireTokens(metaGrill, [
+    'OWNER CANÔNICO:',
+    'META-GRILL acha a ferida',
+    'KIT_IS_SEMANTIC_HOOK=true',
+    'CHANGE_REQUIRES_SEGREDO_CHEFE=true',
+    'TLC23_SHARED_METHOD=true',
+    'PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true',
+    'ACCEPTANCE_IS_NOT_PROOF=true',
+    'DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true',
+  ], 'METAGRILL_HOOK');
+
+  requireTokens(fableLoop, [
+    'TLC23_SHARED_METHOD=true',
+    'PROOF_REUSE_WHEN_FINGERPRINT_UNCHANGED=true',
+    'NO_NEW_MATERIAL_FACT=REUSE_PROOF_NO_REPEAT',
+    'ACCEPTANCE_IS_NOT_PROOF=true',
+    'DETERMINISTIC_RECONCILIATION_BEFORE_NEW_ARCHITECTURE=true',
+  ], 'FABLE_TLC23_SHARED_METHOD');
+
+  requireTokens(operationalMethod, [
+    'Leitores investigam em paralelo',
+    'Um Writer por escopo mutavel',
+    'UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED',
+    'PROVEN_PATH_REPLAY_LOCK=true',
+    'SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true',
+  ], 'OPERATIONAL_METHOD_INTERVIEW_BINDING');
+
+  requireTokens(perceptionOrchestra, [
+    "id: 'A_LOGIC'",
+    "id: 'B_IMPLEMENTATION'",
+    "id: 'C_REGRESSION_FALSE_GREEN'",
+    "id: 'D_SIMPLIFICATION'",
+    "mode: 'PARALLEL_PERCEPTION_SERIAL_MUTATION'",
+    'mutation_allowed: false',
+    'writer_required_for_mutation: true',
+    'reality_is_judge: true',
+  ], 'PERCEPTION_ORCHESTRA_INTERVIEW_RUNTIME');
+
+  requireTokens(contract, [
+    'global_contract_entry_policy:',
+    'marker: CENTRALDARK_GLOBAL_CONTRACT_ENTRY_REQUIRED',
+    'ALL_CURRENT_AND_FUTURE_MODEL_ADAPTERS',
+    'ALL_CURRENT_AND_FUTURE_AGENTS',
+    'ALL_CURRENT_AND_FUTURE_CLIS',
+    'contract_required_before_operational_mutation: true',
+    'model_or_tool_may_bypass_contract: false',
+    'outside_contract_mutation: FAIL_CLOSED',
+    'parallel_workaround_for_uncovered_case: FORBIDDEN',
+    'FIND_EXISTING_OWNER',
+    'IDENTIFY_MINIMAL_CONTRACT_DELTA',
+    'PATCH_EXISTING_OWNER',
+    'REVALIDATE_GLOBAL_CONTRACT',
+    'CONTINUE_CURRENT_MISSION',
+    'uncovered_case_may_create_parallel_architecture: false',
+    'uncovered_case_may_restart_mission: false',
+    'delta_must_preserve_human_intent: true',
+    'revalidation_required_before_continue: true',
+  ], 'GLOBAL_CONTRACT_ENTRY_POLICY');
+
   requireTokens(triggers, [
     'event: AUREOLA_MATERIAL_DISCOVERY',
     'every_material_discovery_is_learning_candidate: true',
@@ -317,6 +873,26 @@ export function validateUniversalMethod() {
     'same_finding_without_new_evidence: DROP_DUPLICATE',
     'direct_canonical_mutation: false',
   ], 'TRIGGER_MAP_LEARNING');
+
+  requireTokens(triggers, [
+    'MUTATION_REQUIRES_GLOBAL_CONTRACT_ENTRY_EXIT',
+    'DELTA_CONTINUO',
+    'PERSIST_NEXT_CURSOR',
+    'global_enforcer: scripts/agent-call.mjs',
+    'mutation_gate: ENTRY_AND_EXIT_REQUIRED',
+    'BIND_GLOBAL_CONTRACT_ENFORCER',
+  ], 'TRIGGER_GLOBAL_ENFORCER_BINDING');
+
+  requireTokens(triggers, [
+    'event: LOG_INCIDENT_MATERIAL',
+    'sensor: /admin/api/logs',
+    'FAN_OUT_PARALLEL_READ_ONLY_FRONTS',
+    'SERIALIZE_SAME_SCOPE_MUTATION',
+    'ALLOW_PROVEN_DISJOINT_SCOPE_PARALLELISM',
+    'CONTINUE_UNTIL_CRYSTALLIZED',
+    'endpoint_200_is_global_pass: false',
+    'unresolved_material_error_fixed_point: false',
+  ], 'TRIGGER_LOG_INCIDENT_FANOUT');
 
   requireTokens(bandScore, [
     '"learning_candidate_event": "AUREOLA_MATERIAL_DISCOVERY"',
@@ -336,7 +912,70 @@ export function validateUniversalMethod() {
     'same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK',
     'human_return_before_fixed_point: FORBIDDEN_UNLESS_HUMAN_FRONTIER',
     'CONTINUE_NEXT_CURSOR',
+    'global_contract_enforcer: scripts/agent-call.mjs',
+    'future_executor_requires_global_gate: true',
+    'mutation_without_global_entry_gate: FAIL_CLOSED',
+    'delta_continuo_required: true',
+    'hud_fixed_live_data_required: true',
   ], 'ENGINE_BINDING');
+
+  requireTokens(agentCall, [
+    'CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED',
+    'GLOBAL_CONTRACT_SCOPE_ID',
+    'validateGlobalContractGate',
+    'BLOCKED_GLOBAL_CONTRACT_GATE_MISSING',
+    '--global-contract-gate',
+    'PASS_GLOBAL_CONTRACT_GATE',
+    '--log-incident-fanout',
+    'validateLogIncidentFanout',
+    'PASS_LOG_INCIDENT_FANOUT_PLAN',
+    'PARALLEL_ONLY_FOR_PROVEN_DISJOINT_SCOPES_SERIAL_WITHIN_EACH_SCOPE',
+  ], 'GLOBAL_CONTRACT_AGENT_GATE');
+
+  requireTokens(deployDispatcher, [
+    'CentralDark — dispatcher condicional de scripts de deploy na VPS',
+    'TLC23 / Universal Method: validar o SHA alvo antes de mutação',
+  ], 'GLOBAL_CONTRACT_DEPLOY_OWNER');
+
+  requireTokens(deployDispatcher, [
+    'GLOBAL_CONTRACT_ENFORCER_TARGET=PASS',
+    'grep -q "GLOBAL_ENTRY_GATE=PASS" scripts/vps/centraldark-deploy.sh',
+    'grep -q "GLOBAL_EXIT_GATE=PASS" scripts/vps/centraldark-deploy.sh',
+  ], 'GLOBAL_CONTRACT_DEPLOY_DISPATCHER_BINDING');
+
+  requireTokens(centralDeploy, [
+    'CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED',
+    '--global-contract-gate ENTRY',
+    '--global-contract-gate EXIT',
+    'GLOBAL_ENTRY_GATE=PASS',
+    'GLOBAL_EXIT_GATE=PASS',
+  ], 'GLOBAL_CONTRACT_CENTRAL_DEPLOY_BINDING');
+
+  requireTokens(operationalDeploy, [
+    'CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED',
+    '--global-contract-gate ENTRY',
+    '--global-contract-gate EXIT',
+    'GLOBAL_ENTRY_GATE=PASS',
+    'GLOBAL_EXIT_GATE=PASS',
+  ], 'GLOBAL_CONTRACT_OPERATIONAL_DEPLOY_BINDING');
+
+  requireTokens(hermesPrompt, [
+    'HERMES_SEMANTIC_RECONCILE_ALL=true',
+    'REUSE_CONFLICT_OWNER=true',
+    'BLIND_ACCEPT_BOTH=false',
+    'MANUAL_CURRENT_INCOMING_BOTH_CHOICE_FOR_MACHINE_RESOLVABLE_CASE=false',
+    'SAME_HEAD_AFTER_RESOLUTION_REQUIRED=true',
+  ], 'HERMES_SEMANTIC_CONFLICT_RECONCILIATION');
+
+  requireTokens(conflictResolver, [
+    '## SAME/ALL — reconciliação semântica canônica',
+    'SAME_ALL_IS_DEFAULT_FOR_COMPATIBLE_USEFUL_DELTA=true',
+    'SAME_ALL_IS_NOT_BLIND_ACCEPT_BOTH=true',
+    'CONTRADICTORY_DELTA_REQUIRES_DISCRIMINANT_TEST=true',
+    'CONFLICT_MARKERS_AFTER_RESOLUTION=FAIL',
+    'SAME_HEAD_REQUIRED_AFTER_CONFLICT_RESOLUTION=true',
+    'REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true',
+  ], 'HOUSE_SEMANTIC_CONFLICT_RECONCILIATION');
 
   requireTokens(hermesPrompt, [
     'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',
@@ -350,7 +989,93 @@ export function validateUniversalMethod() {
     'DISCOVERY_AUTO_PROMOTES_TO_CANONICAL=false',
     'REUSE_PROVEN_CRYSTAL_BEFORE_REINVESTIGATE=true',
     'CALCULATION_SUPPORTS_DECISION_BUT_DOES_NOT_REPLACE_RUNTIME_OBSERVATION=true',
+
+    'CRYSTAL_NEW_REQUIRES_SEARCH_EXISTING=true',
+    'CRYSTAL_NEW_REQUIRES_EXISTING_OWNER_CHECK=true',
+    'CRYSTAL_NEW_REQUIRES_CAPABILITY_DEDUPE=true',
+    'UNVERIFIED_ABSENCE_IS_UNKNOWN=true',
+    'PARALLEL_ARCHITECTURE_WITHOUT_PROVEN_GAP=FORBIDDEN',
+    'CRYSTAL_TRUTH_GATE=PDF_GATE_TLC23_HORN',
+    'RUNTIME_PROMOTION_AXES=CASA+GITHUB+VPS',
+    'THREE_AXIS_SAME_SOURCE_REQUIRED=true',
+    'PARTIAL_AXIS_PASS_IS_GLOBAL_PASS=false',
+    'MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true',
+    'DAILY_CHECKLIST_GATE_REQUIRED=true',
+    'DAILY_CHECKLIST_OWNER=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
+    'LOAD_DAILY_CHECKLIST_BEFORE_FIRST_CODE_MUTATION_OF_DAY=true',
+    'UPDATE_DAILY_CHECKLIST_BEFORE_HANDOFF_OR_FINALIZATION=true',
+    'MODEL_NAME_IS_ROUTING_KEY=false',
+    'MODEL_NAME_IS_AUTHORITY=false',
+    'MODEL_NAME_IS_WRITER_LEASE=false',
+    'EXECUTOR_SELECTION=TAG_EXECUTOR+CAPABILITY_MATCH+SCOPE_MATCH+LEASE_AVAILABLE+POLICY_ALLOWED',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE=true',
+    'FINAL_PROMOTION_SCOPE=ONE_ACTIVE_FINALIZER_LEASE',
+    'FINALIZATION_LANE=PR->SAME_HEAD_GATES->MAIN->POST_MERGE->DEPLOY->REMEASURE->FINAL_RECEIPT',
+    'GOAL_PAI_ID=STABLE',
+    'MICRO_GOAL=DERIVED_FROM_CURRENT_WOUND',
+    'AUTHORIZED_IS_NOT_VALIDATED=true',
+    'CONTINUOUS_HERMES_CAPABILITY_ABSORPTION=true',
+    'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
+    'PROVEN_REUSABLE_DELTA_BINDS_TO_CORE_BEFORE_GLOBAL_FIXED_POINT=true',
+    'MATERIAL_APPROVED_STEP_EMITS_LEARNING_REF=true',
   ], 'HERMES_PROMPT');
+
+  requireTokens(adminChecklist, [
+    'DAILY_CHECKLIST_GATE_REQUIRED=true',
+    'DAILY_CHECKLIST_OWNER=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
+    'DAILY_CHECKLIST_RECORD_TARGET=ACTIVE_SCOPE_LEDGER',
+    'AGENT_OR_AI_MUTATES_CODE_DURING_DAY=true',
+    'LOAD_DAILY_CHECKLIST=true',
+    'VERIFY_CURRENT_STATE=true',
+    'VERIFY_PARENT_GOAL=true',
+    'VERIFY_OWNER=true',
+    'VERIFY_SCOPE=true',
+    'VERIFY_WRITER_LEASE=true',
+    'RECORD_MATERIAL_DELTA=true',
+    'RECORD_PENDING_GAPS=true',
+    'RECORD_HEAD_CHANGES=true',
+    'RECORD_HANDOFFS=true',
+    'RECORD_GATE_FAILURES=true',
+    'UPDATE_DAILY_CHECKLIST=true',
+    'MODEL_NAME_IS_ROUTING_KEY=false',
+    'MODEL_NAME_IS_AUTHORITY=false',
+    'MODEL_NAME_IS_WRITER_LEASE=false',
+    'EXECUTOR_SELECTION=TAG_EXECUTOR+CAPABILITY_MATCH+SCOPE_MATCH+LEASE_AVAILABLE+POLICY_ALLOWED',
+    'MULTIPLE_WRITERS_ALLOWED=true',
+    'CONCURRENT_WRITERS_DISJOINT_SCOPES=true',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE=true',
+    'FINAL_PROMOTION_SCOPE=ONE_ACTIVE_FINALIZER_LEASE',
+    'FINALIZATION_LANE=PR->SAME_HEAD_GATES->MAIN->POST_MERGE->DEPLOY->REMEASURE->FINAL_RECEIPT',
+    'CHEFE=INTENT_AUTHORITY',
+    'CONTRACT=POLICY',
+    'GATES=PROOF',
+    'VPS=EXECUTOR_RUNTIME_AND_CONTROL_PLANE',
+    'REALITY=JUDGE',
+    'GOAL_PAI_ID=STABLE',
+    'MICRO_GOAL=DERIVED_FROM_CURRENT_WOUND',
+    'UNKNOWN != PASS',
+    'ACTION != PROOF',
+    'AUTHORIZED != VALIDATED',
+    'MERGED != DEPLOYED',
+  ], 'DAILY_CHECKLIST_ADMIN_OWNER');
+
+  requireTokens(orchestrator, [
+    "registrar as registrarAprendizado",
+    'function registrarAprendizadoMaterial',
+    'deveCapturarAprendizadoMaterial',
+    'entrada.learning_ref = aprendizagem.ref',
+    'FIXED_POINT é checkpoint de verificação, não gate para capacitação do Hermes',
+  ], 'HERMES_CONTINUOUS_LEARNING_RUNTIME');
+
+  requireTokens(knowledgeCollector, [
+    'export function consultarContexto',
+    'export function registrar',
+    'deduped: true',
+    "createHash('sha256')",
+  ], 'HERMES_KNOWLEDGE_COLLECTOR_RUNTIME');
+
 
   const engines = parseEngineNames(engine);
   return {
@@ -366,9 +1091,17 @@ export function validateUniversalMethod() {
     tlc23_source: FILES.tlc23,
     tlc23_source_sha256: tlc23Hash,
     tlc23_source_gate: 'PASS',
+    tlc23_shared_core_method: true,
+    tlc23_fable_meta_lupa_meta_grill_binding: true,
+    proof_reuse_when_fingerprint_unchanged: true,
+    acceptance_is_proof: false,
+    deterministic_reconciliation_before_new_architecture: true,
     persistent_operational_regime_contract: true,
     fixed_point_is_checkpoint: true,
     fixed_point_is_end: false,
+    fixed_point_is_learning_gate: false,
+    continuous_hermes_capability_absorption: true,
+    material_approved_step_emits_learning_ref: true,
     next_cycle_required_while_runtime_exists: true,
     self_correction_is_runtime_internal: true,
     measured_100_percent_or_exact_blocker: true,
@@ -394,18 +1127,55 @@ export function validateUniversalMethod() {
     live_label_remeasurement_contract: true,
     no_useless_narration_contract: true,
     cot_react_loop_bound: true,
+    cot_react_standing_goal_contract: true,
+    standing_goal_runtime_contract: true,
+    goal_surface_is_read_only_introspection: true,
+    iteration_counter_is_not_completion: true,
     continuity_hud_contract: true,
     operational_narration_contract: true,
     preventive_continuity_staff_contract: true,
-    machine_resolvable_continuation_contract: true,
-    derived_causal_micro_goal_contract: true,
-    unknown_is_not_permission_to_mutate: true,
-    human_boundary_requires_proven_frontier_or_exhausted_hard_blocker: true,
+    daily_checklist_gate_required: true,
+    executor_selection_is_model_agnostic: true,
+    disjoint_scope_writers_allowed: true,
+    same_scope_writer_lease_required: true,
+    one_active_finalizer_lease_required: true,
+    stable_parent_goal_with_derived_micro_goals: true,
     bounded_100_percent_requires_explicit_denominator: true,
-    repeatable_multi_model_cadence_contract: true,
-    latex_operational_formula_bound: true,
-    activity_is_not_proof_contract: true,
-    n_models_are_not_votes_contract: true,
+
+    crystallization_truth_gate: true,
+    three_axis_atomic_promotion: true,
+    three_axis_promotion_axes: ['CASA', 'GITHUB', 'VPS'],
+    parallel_architecture_without_proven_gap: false,
+    daily_checklist_gate_required: true,
+    daily_checklist_owner: FILES.dailyChecklistPolicy,
+    daily_checklist_consumer: FILES.adminChecklist,
+    daily_checklist_record_target: 'ACTIVE_SCOPE_LEDGER',
+    finalizer_lease_required: true,
+
+    global_contract_enforcer: true,
+    global_contract_entry_policy: true,
+    outside_contract_mutation_fail_closed: true,
+    uncovered_case_minimal_contract_delta: true,
+    continuous_delta_global: true,
+    desktop_agentic_kernel_global: true,
+    hybrid_telemetry_global: true,
+    ephemeral_cleanup_contract: true,
+    log_incident_crystallization_contract: true,
+    log_incident_fanout_gate: true,
+    human_complexity_absorption_contract: true,
+    prefer_complete_operation_over_microcommands: true,
+    loud_actionable_failure_contract: true,
+    automatic_resume_after_human_frontier: true,
+    universal_direct_mode_contract: true,
+    proven_path_replay_lock: true,
+    proven_path_reinterpret_from_zero: false,
+    measure_before_creation_global: true,
+    measure_before_creation_semantic_reference: '1Ts 5:21',
+    measure_before_creation_all_agents: true,
+    verse_is_semantic_cue_not_proof: true,
+    fixed_hud_only_live_values_change: true,
+    numeric_metrics_require_proven_denominator: true,
+
   };
 }
 

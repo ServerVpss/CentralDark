@@ -10,3 +10,4 @@ $rows = foreach($c in $tcp){
 $result=[pscustomobject]@{measured_at_utc=(Get-Date).ToUniversalTime().ToString('o'); ssh_established=$rows.Count; channels=$rows; semantics='NEW_ATTEMPT_FAILED != EXISTING_CHANNEL_DEAD'}
 if($Json){$result|ConvertTo-Json -Depth 5}else{$result; $rows|Format-Table -Auto}
 if($rows.Count -eq 0){exit 2}
+if($rows.Count -eq 0){exit 2}

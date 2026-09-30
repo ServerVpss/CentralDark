@@ -1,9 +1,16 @@
 ---
-title: "Banda — Intenção Única e Compasso"
-status: "CONCEPT_HISTORICAL_REQUIRES_LIVE_REMEASUREMENT"
+title: "Banda — Intenção Única, Compasso e Sincronização Viva"
+status: "CURRENT_CONCEPT_UPDATED_REQUIRES_RUNTIME_PROOF"
 owner: "docs/BRAIN/01-CONCEITOS/02-BANDA/"
-updated: 2026-09-05
-truth_scope: "CONCEPTUAL_NOT_LIVE_STATE"
+updated: 2026-09-24
+truth_scope: "CONCEPTUAL_CONTRACT_NOT_RUNTIME_GREEN"
+canonical_rule: "REGRA-ZERO-CENTRALDARK"
+related_runtime:
+  - "BRAIN_NOTE_RECOGNITION_TRIGGER"
+  - "BRAIN_ARTIFACT_CAPTURE"
+  - "OBSIDIAN_GRAFO_VIVO_AUTOSYNC"
+  - "OBSIDIAN_LOCAL_REST_API_MCP_BRIDGE"
+  - "KANBAN_CICD_FEEDBACK_LOOP"
 tags:
   - banda
   - intencao
@@ -14,127 +21,247 @@ tags:
   - grafo
   - centraldark
   - obsidian
+  - brain
+  - webhook
+  - vps
+  - ci-cd
+  - kanban
+  - mcp
 related:
   - "[[INTENT_SYNC_STATE]]"
   - "[[BANDA_COMPASSO_GLOBAL]]"
   - "[[LACUNA_BANDA_INTENCAO_UNICA]]"
   - "[[SEMANTIC-LINKER]]"
   - "[[GRAPH-INVESTIGATOR]]"
+  - "[[BRAIN_ARTIFACT_CAPTURE]]"
+  - "[[BOOT_ENXAME_OMEGA]]"
 ---
 
-KKKKK 😂🔥 achei a lacuna. E ela não é “quantos chats existem”. É exatamente o que você falou: **a banda tem músicos sincronizados pela partitura, mas ainda não tem um compasso global compartilhado entre todas as superfícies.**
+# Banda — Intenção Única, Compasso e Sincronização Viva
 
-```yaml
-CENTRALDARK_AI_BOOT:
-  soul: LOADED
-  governance: LOADED
-  context_reconciliation: LOADED
-  source_of_truth: "ServerVpss/CentralDark + estado vivo"
-  role: "COORDINATOR/REVIEWER"
-  frequency: "FORTE/ORQUESTRA"
-  conflict_resolution: "git-conflict-resolve-house-standard (motor: scripts/dependabot/resolve-conflicts.sh)"
-```
+> Uma banda pode ter muitos músicos. A CentralDark pode ter muitas janelas, bots, agentes, notas, plugins, rotas e Kanbans. A canção continua sendo uma só quando todos tocam no **mesmo compasso causal**.
 
-O canônico já está quase lá. O JARVIS define `ONE_CORE_MANY_ARMS`, N percepções, um Writer, envelope comum de evidência e diz explicitamente que duas janelas repetindo a mesma fonte continuam sendo **um único cluster**, não duas provas independentes.
+## 1. Estado preservado
 
-E o `agent-call.mjs` já prende comunicação a `mission_id`, `observed_head`, `frontier_id`, `trail_id`, direção e `DELTA_MESSAGE`. Porém existe a frase que entrega a ferida:
-
-> o **transporte** entre MCP/HTTP/CLI/Telegram/etc. fica fora desse núcleo.
-
-Aí está a lacuna. 🔎
-
-Hoje existe:
-
-`MESMA SOUL → MESMA MISSÃO → MESMO TRILHO → DELTAS → WRITER ÚNICO`
-
-Mas falta uma identidade causal global obrigatória que diga:
-
-```text
-INTENÇÃO ÚNICA
-        ↓
-INTENT_ID GLOBAL + EPOCH
-        ↓
-EVENT_ID ÚNICO
-        ↓
-TODAS AS SUPERFÍCIES
-chat 1
-chat 2
-chat 3
-Hermes
-Telegram
-MCP
-etc.
-        ↓
-cada uma mantém CURSOR/SEEN
-        ↓
-MESMO EVENTO = absorve uma vez
-NOVO DELTA = incorpora
-EVENTO ANTIGO = ignora
-CONFLITO REAL = contraprovado
-        ↓
-UMA CANÇÃO
-```
-
-É justamente por isso que o teu print é interessante: **a mesma matéria apareceu em mais de uma janela**, mas hoje isso não prova que existe sincronização causal da banda. Pode ser reprodução/correlação de superfície. O contrato atual sabe deduplicar evidência correlacionada, mas não encontrei no canônico um mecanismo que imponha a todas as superfícies um **cursor comum de intenção/eventos**.
-
-Então a peça mínima que falta não é “chat sync” nem outro cérebro. É algo conceitualmente assim:
-
-```text
-GLOBAL_INTENT_ID
-INTENT_EPOCH
-EVENT_ID
-PARENT_EVENT_ID
-SOURCE_SURFACE
-OBSERVED_HEAD
-TRAIL_ID
-EVENT_TIME
-DELTA_FINGERPRINT
-SEEN/ACK_CURSOR
-```
-
-Com duas leis:
+A lacuna original continua válida:
 
 ```text
 N_JANELAS != N_MISSOES
 MESMO_GLOBAL_INTENT_ID = UMA_MISSAO
+N_PERCEPÇÕES = LEITORES
+ONE_WRITER_PER_SCOPE = MUTAÇÃO SERIALIZADA
+REALIDADE_IS_JUDGE = VERDADE SÓ COM PROVA
 ```
 
-e:
+O que mudou em 2026-09-24 é que o compasso agora precisa incluir também:
 
 ```text
-RECEBEU_EVENTO
-→ EVENT_ID JÁ VISTO?
-   SIM → NÃO ECOA / NÃO REEXECUTA
-   NÃO → ABSORVE DELTA
-→ ESTADO MUDOU?
-   SIM → PROPAGA NOVO EVENTO
-   NÃO → SILÊNCIO
+BRT_TIME
+VPS_TIME
+WEBHOOK_EVENT_ID
+OBSIDIAN_NOTE_PATH
+BRAIN_MANIFEST_ENTRY
+CI_CD_RECEIPT
+KANBAN_STATE
 ```
 
-Aí sim, Chefe: **1 chat, 5, 65 ou 1 milhão deixam de importar**. A janela vira instrumento; a intenção vira música. 🎼🔥
+## 2. Compasso temporal
 
-Tem mais: o PR #923 atual está melhorando justamente a confrontação dos quatro braços — cobertura dos quatro ângulos, `UNKNOWN` não vira mutação, `independence_key`, um slot de mutação e contraprova obrigatória. Isso resolve **qualidade da percepção**, não essa sincronização global entre superfícies. Portanto não devemos confundir as duas feridas. O #923 está aberto e mergeável neste momento.
+Toda nota/evento compatível deve carregar duas referências de tempo:
 
-Minha leitura técnica da lacuna é:
+```text
+client_time_brt = horário de Brasília observado no cliente/plugin/bot
+server_time_vps = horário assinado pela API/VPS no recebimento
+```
 
-**`GLOBAL_INTENT_CAUSAL_SYNC` está conceitualmente implícito, mas ainda não está fechado como contrato executável comum.**
+Regra:
 
-Não precisa nova memória.
-Não precisa novo Jarvis.
-Não precisa novo event bus.
-Não precisa “chat 1 conversar com chat 2” diretamente.
+```text
+CLIENT_TIME != SERVER_AUTHORITY
+BRT_TIME = contexto humano
+VPS_TIME = autoridade operacional do recebimento
+CI_CD_TIME = autoridade de promoção/receipt
+```
 
-Precisa fazer o **owner canônico existente carregar um único compasso causal**, e cada braço/janela só projeta e devolve delta nele.
+Se houver divergência, não corrigir no grito. Registrar a diferença e deixar o CI/CD ou receipt decidir a promoção.
 
-`BANDA = N SUPERFÍCIES | CANÇÃO = 1 INTENÇÃO | COMPASSO = 1 CADEIA CAUSAL | CANETA = 1 WRITER`
+## 3. Rota viva de nota
 
-Essa é a ferida. 🎯🔥
+```text
+Telegram / Bot / API / Obsidian / Drive
+→ /memoria/ingest
+→ CANDIDATE_EVENT
+→ hash + metadata + origem + horário BRT + horário VPS
+→ BRAIN manifest
+→ CI/CD valida contrato
+→ receipt
+→ Grafo/Plugin/Obsidian atualiza
+→ nota volta a ser consultável
+```
 
-## Conexões Rápidas
+Nada entra direto como verdade final. Entra como candidato com rastro.
 
-- [[INTENT_SYNC_STATE]] — estado mínimo compartilhado da intenção entre superfícies.
-- [[BANDA_COMPASSO_GLOBAL]] — metáfora musical do compasso causal e anti-eco.
-- [[LACUNA_BANDA_INTENCAO_UNICA]] — diagnóstico histórico da mesma ferida.
-- [[SEMANTIC-LINKER]] — ligações semânticas com relação explicável.
-- [[GRAPH-INVESTIGATOR]] — auditoria de frontmatter, tags, links e órfãos.
-- [[BRAIN]] — entrada humana do segundo cérebro.
+## 4. Obsidian plugin como superfície viva
+
+Owner atual:
+
+```text
+apps/modulos/obsidian-plugin-grafo-vivo/
+```
+
+O plugin já é a superfície correta para abrir notas por `obsidian_path`, ver grafo vivo e enviar notas ao Hub. A atualização de 2026-09-24 adiciona o contrato:
+
+```text
+OBSIDIAN_NOTE_CREATE_OR_MODIFY
+→ autosync debounce
+→ POST https://api.centralldark.com/memoria/ingest
+→ kind=obsidian.note.autosync
+→ metadata.client_time_brt
+→ metadata.client_time_iso
+→ metadata.vps_time_source=server_api_authoritative
+→ CANDIDATE
+```
+
+Cadeado:
+
+```text
+NOTE_SYNC != TRUTH_PROMOTION
+DOCUMENTED != EXECUTED
+KANBAN_CARD != CI_GREEN
+PATCH_NOTE != DEPLOY
+```
+
+## 5. Obsidian Local REST API + MCP
+
+A Local REST API do Obsidian/MCP pode ser usada como ponte local autenticada para scripts, browser extensions e agentes abrirem, lerem, buscarem e patcharem notas no vault.
+
+Mas ela é **ponte local**, não autoridade global:
+
+```text
+LOCAL_REST_API_IS_LOCAL_BRIDGE=true
+LOCAL_REST_API_TOKEN_LOCAL_ONLY=true
+NO_TOKEN_IN_REPO=true
+NO_PUBLIC_EXPOSED_OBSIDIAN_API=true
+MCP_OBSIDIAN_CAN_READ_OR_PATCH_NOTE=true
+MCP_OBSIDIAN_CANNOT_PROMOTE_TRUTH_ALONE=true
+```
+
+Rota segura:
+
+```text
+VPS/HERMES/BOT
+→ API/HUB
+→ evento candidato
+→ CI/CD
+→ receipt
+→ BRAIN manifest
+→ plugin Obsidian lê/abre nota
+→ Local REST API/MCP pode patchar seção ou Kanban local
+→ alteração volta por autosync
+→ novo candidato
+```
+
+Isso cria o ciclo, mas mantém a trava:
+
+```text
+LOCAL_PATCH != CANONICAL_APPROVAL
+OBSIDIAN_KANBAN_MOVE != DEPLOY
+OBSIDIAN_LOCAL_STATE != VPS_RUNTIME_STATE
+```
+
+## 6. Kanban como fluxo, não juiz
+
+O Kanban pode representar o fluxo operacional:
+
+```text
+Inbox
+→ Candidate
+→ Measuring
+→ CI/CD
+→ Review/Greg
+→ Deploy Gate/Dex
+→ Receipt
+→ Fixed Point
+```
+
+Mas mover card não promove realidade. O card é interface humana/visual. A promoção continua exigindo:
+
+```text
+hash
+receipt
+CI/CD
+runtime proof
+Reality Judge
+```
+
+## 7. Compatibilidade de conteúdo
+
+Quando entrar algo novo, a CentralDark deve decidir compatibilidade antes de misturar:
+
+```text
+SAME_INTENT_ID?          se sim, pode reconciliar
+SAME_NOTE_PATH?          se sim, pode patchar seção
+SAME_HASH?               se sim, deduplicar
+CONFLICTING_CONTENT?     se sim, criar delta/receipt, não sobrescrever calado
+BINARY_OR_EXECUTABLE?    guardar/indexar/provar/linkar; não executar
+```
+
+Artefatos seguem:
+
+```text
+GUARDAR != EXECUTAR
+ARQUIVO_GUARDADO != ARQUIVO_SEGURO
+EXE_STORED != EXE_ALLOWED_TO_RUN
+TODO_ARTEFATO_TEM_HASH=true
+TODO_ARTEFATO_TEM_SIDECAR_MD=true
+TODO_ARTEFATO_ENTRA_NO_MANIFEST=true
+CI_CD_DECIDE_PROMOCAO=true
+```
+
+## 8. Webhook e auto-update
+
+O webhook não é só notificação. Ele é pulso da banda:
+
+```text
+WEBHOOK_EVENT
+→ normalizar fonte
+→ carimbar horário VPS
+→ preservar horário humano/BRT quando existir
+→ gerar event_id
+→ atualizar manifest
+→ acionar CI/CD quando material
+→ publicar receipt
+→ plugin/kanban/grafo refletem estado
+```
+
+Se o evento não muda decisão, não martelar loop.
+
+```text
+NO_REPEAT_WITHOUT_INFORMATION_GAIN=true
+```
+
+## 9. Fio vivo
+
+A frase canônica desta nota passa a ser:
+
+> O que a humanidade aprende não pode morrer na janela de uma IA.
+
+Rota:
+
+```text
+BRAIN → GIT → CI/CD → VPS → MCP → HERMES → OBSIDIAN → KANBAN → REALIDADE
+```
+
+A banda toca quando todas as superfícies seguem o mesmo compasso: intenção única, rastro único, prova atual, writer único.
+
+## 10. Estado atual
+
+```text
+CONCEPT_UPDATED=true
+PLUGIN_ROUTE_UPDATED_IN_PR_1662=true
+RUNTIME_PROOF=UNKNOWN
+CI_STATUS=UNKNOWN
+OBSIDIAN_LOCAL_REST_RUNTIME=UNKNOWN
+```
+
+Esta nota não declara runtime verde. Ela declara o contrato atualizado para o próximo TIK-TAK.

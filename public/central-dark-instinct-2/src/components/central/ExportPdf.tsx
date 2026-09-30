@@ -36,11 +36,7 @@ export function ExportPdf({ compacto = false }: { compacto?: boolean }) {
         onClick={() => exportar("completo")}
         aria-label={t("pdf.full")}
       >
-        {ocupado ? (
-          <Loader2 className="size-4 animate-spin" />
-        ) : (
-          <FileDown className="size-4" />
-        )}
+        {ocupado ? <Loader2 className="size-4 animate-spin" /> : <FileDown className="size-4" />}
         <span className="hidden sm:inline">PDF</span>
       </Button>
     );
@@ -48,20 +44,11 @@ export function ExportPdf({ compacto = false }: { compacto?: boolean }) {
 
   return (
     <div className="flex flex-wrap justify-center gap-3 print:hidden">
-      <Button
-        size="lg"
-        className="glow-gold min-h-11"
-        onClick={() => exportar("completo")}
-      >
+      <Button size="lg" className="glow-gold min-h-11" onClick={() => exportar("completo")}>
         <FileDown className="mr-1 size-4" />
         {t("pdf.full")}
       </Button>
-      <Button
-        size="lg"
-        variant="outline"
-        className="min-h-11"
-        onClick={() => exportar("chave")}
-      >
+      <Button size="lg" variant="outline" className="min-h-11" onClick={() => exportar("chave")}>
         {t("pdf.key")}
       </Button>
     </div>

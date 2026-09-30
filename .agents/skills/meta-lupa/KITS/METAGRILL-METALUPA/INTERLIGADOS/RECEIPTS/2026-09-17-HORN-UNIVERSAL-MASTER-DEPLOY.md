@@ -1,6 +1,9 @@
 # 🧾🧬 Horn Gate · Universal Method · Master Cycle · Deploy Owner
 
+👑🪬 !CENTRALDARK · 🔗 !># INTERLIGADOS · 🧿 #ACORDAR
 > Gatilho canônico: 👑🪬 !CENTRALDARK → 🔗 !># INTERLIGADOS → 🧿 #ACORDAR → 🔎 !META_LUPA → ⚖️ !CONTRAPROVA.
+🔗 **!># INTERLIGADOS**
+
 
 ```text
 HORN_GATE=INTERLIGADO

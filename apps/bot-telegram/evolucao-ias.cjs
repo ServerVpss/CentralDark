@@ -125,6 +125,10 @@ const CONFIG = {
   },
 };
 
+function iaConfigurada(iaId) {
+  return Boolean(CONFIG.apis?.[iaId]?.key);
+}
+
 // =========================================================================
 // PERSONALIDADES DAS IAs
 // =========================================================================
@@ -606,7 +610,8 @@ Instruções:
     }
   } catch (err) {
     console.error(`[evolucao-ias] Erro ao chamar ${personalidade.nome}:`, err.message);
-    texto = fallbackMensagem(iaId, topico);
+    console.warn(`[evolucao-ias] BLOCKED/UNKNOWN: ${personalidade.nome} não publicou; fallback sintético desativado.`);
+    return null;
   }
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
@@ -684,7 +689,8 @@ NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela igno
     }
   } catch (err) {
     console.error(`[evolucao-ias] Erro ao chamar ${personalidade.nome} (resposta):`, err.message);
-    texto = fallbackResposta(iaId, iaAlvoId);
+    console.warn(`[evolucao-ias] BLOCKED/UNKNOWN: ${personalidade.nome} não respondeu; fallback sintético desativado.`);
+    return null;
   }
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
@@ -743,8 +749,14 @@ async function executarCiclo(estado) {
   console.log('[evolucao-ias] Novo ciclo iniciando...');
   console.log('='.repeat(60));
 
-  // 1. Escolhe qual IA vai postar (a que menos postou, com peso aleatório)
-  const contagens = IAs.map(id => ({
+  const iasAtivas = IAs.filter(iaConfigurada);
+  if (iasAtivas.length === 0) {
+    console.warn('[evolucao-ias] BLOCKED/UNKNOWN: nenhuma API de IA configurada; ciclo encerrado sem publicar conteúdo sintético.');
+    return null;
+  }
+
+  // 1. Escolhe qual IA vai postar (somente entre IAs com provider configurado)
+  const contagens = iasAtivas.map(id => ({
     id,
     count: estado.contador[id] || 0,
   }));
@@ -752,7 +764,7 @@ async function executarCiclo(estado) {
   // Dá preferência pra quem menos postou, mas com aleatoriedade
   const iaPrincipal = Math.random() < 0.7
     ? contagens[0].id  // 70% chance: quem menos postou
-    : IAs[Math.floor(Math.random() * IAs.length)]; // 30% chance: aleatório
+    : iasAtivas[Math.floor(Math.random() * iasAtivas.length)]; // 30% chance: aleatório
 
   // 2. Posta mensagem inicial
   const result = await postarMensagemInicial(iaPrincipal, estado);
@@ -765,7 +777,7 @@ async function executarCiclo(estado) {
   await delay(3000 + Math.random() * 4000);
 
   // 4. As outras IAs podem responder
-  const outrasIAs = IAs.filter(id => id !== iaPrincipal);
+  const outrasIAs = iasAtivas.filter(id => id !== iaPrincipal);
   for (const iaId of outrasIAs) {
     if (Math.random() < CONFIG.chanceResponder) {
       await delay(2000 + Math.random() * 3000);
@@ -797,29 +809,28 @@ function intervaloAleatorio() {
 // =========================================================================
 
 async function modoTeste() {
-  console.log('[evolucao-ias] 🧪 MODO TESTE — postando mensagens de cada IA...\n');
+  console.log('[evolucao-ias] 🧪 TESTE REAL — somente providers configurados');
 
   const estado = carregarEstado();
+  const ativas = IAs.filter(iaConfigurada);
+  if (ativas.length === 0) {
+    console.warn('[evolucao-ias] BLOCKED/UNKNOWN: nenhuma API configurada; teste não publicará fallback sintético.');
+    return;
+  }
 
-  for (const iaId of IAs) {
+  for (const iaId of ativas) {
     const personalidade = PERSONALIDADES[iaId];
-    console.log(`[evolucao-ias] Testando ${personalidade.nome}...`);
-
-    const topico = TOPICOS[Math.floor(Math.random() * TOPICOS.length)];
-    const texto = fallbackMensagem(iaId, topico);
-    const msg = formatarMensagem(iaId, texto, `🧪 Mensagem de teste — ${personalidade.nome} está operacional!`);
-
-    const result = await enviarMensagem(msg, iaId);
+    console.log(`[evolucao-ias] Testando provider real: ${personalidade.nome}...`);
+    const result = await postarMensagemInicial(iaId, estado);
     if (result) {
-      console.log(`[evolucao-ias] ✅ Teste ${personalidade.nome} OK (msg #${result.message_id})`);
+      console.log(`[evolucao-ias] ✅ Provider real ${personalidade.nome} respondeu (msg #${result.message_id})`);
     } else {
-      console.error(`[evolucao-ias] ❌ Teste ${personalidade.nome} falhou`);
+      console.error(`[evolucao-ias] ❌ Provider real ${personalidade.nome} falhou`);
     }
-
     await delay(2000);
   }
 
-  console.log('\n[evolucao-ias] 🧪 Teste concluído.');
+  console.log('\n[evolucao-ias] 🧪 Teste real concluído.');
 }
 
 // =========================================================================
@@ -886,7 +897,7 @@ async function main() {
 
   if (chavesFaltando.length > 0) {
     console.warn(`[evolucao-ias] ⚠️ APIs sem chave: ${chavesFaltando.join(', ')}`);
-    console.warn('[evolucao-ias] ⚠️ IAs sem chave usarão fallback (mensagens pré-escritas)');
+    console.warn('[evolucao-ias] ⚠️ IAs sem chave ficam BLOCKED/UNKNOWN e não publicam conteúdo sintético.');
     console.warn('');
   }
 

@@ -1,29 +1,35 @@
-# Welcome to your Lovable project
+# CentralDark — Instinto Superior
 
-This project was built with [Lovable](https://lovable.dev).
+Corpo visual final da CentralDark. Este repositório reúne a landing trilíngue, autenticação Supabase, sala administrativa, cockpit de estado, comparação de repositório, Hermes, exportação e inventário do roteador.
 
-## Build with Lovable
+## Autoridade e publicação
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+- Código visual canônico: `ServerVpss/CentralDark/public/central-dark-instinct-2`.
+- Contratos, runtime, governança e código visual convergem no mesmo repositório: `ServerVpss/CentralDark`.
+- `ServerVpss/centraldark-instinto-superior` + Lovable: projeção/editor compatível; não são segunda autoridade nem owner paralelo.
+- URL conhecida: <https://centraldark-instinto-superior.lovable.app>.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+Uma URL conhecida ou uma sincronização declarada não prova que o HEAD está publicado. O cockpit só promove deploy quando consegue medir e comparar os SHAs; ausência de fonte aparece como `UNKNOWN`.
 
-## Development
+## Desenvolvimento
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requer Node.js 22 e npm.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm ci
+npm run lint
+npm run build
 npm run dev
 ```
 
-## Built with
+## Rotas materiais
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+- `/`: corpo visual e doutrina.
+- `/auth` e `/auth/callback`: e-mail/senha e OAuth PKCE.
+- `/reset-password`: recuperação e troca de senha.
+- `/cockpit`: entrada e estado público sem fingir runtime.
+- `/sala-controle`: superfície autenticada e autorização administrativa real.
+- `/repositorio`: leitura e comparação estrutural determinística do GitHub.
+- `/roteador`: capacidades declaradas do Omni Router e probes vivos separados.
+
+Veja `docs/CONVERGENCIA-CAPACIDADES-2026-09-25.md` para a matriz de reaproveitamento.

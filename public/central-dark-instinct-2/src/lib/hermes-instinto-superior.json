@@ -1,0 +1,92 @@
+{
+  "celula": {
+    "w": 192,
+    "h": 208
+  },
+  "grade": {
+    "cols": 16,
+    "rows": 16
+  },
+  "movimentos": [
+    {
+      "id": "idle",
+      "linha": 0,
+      "quadros": 16
+    },
+    {
+      "id": "running-right",
+      "linha": 1,
+      "quadros": 16
+    },
+    {
+      "id": "running-left",
+      "linha": 2,
+      "quadros": 16
+    },
+    {
+      "id": "waving",
+      "linha": 3,
+      "quadros": 16
+    },
+    {
+      "id": "jumping",
+      "linha": 4,
+      "quadros": 16
+    },
+    {
+      "id": "failed",
+      "linha": 5,
+      "quadros": 16
+    },
+    {
+      "id": "waiting",
+      "linha": 6,
+      "quadros": 16
+    },
+    {
+      "id": "sitting",
+      "linha": 7,
+      "quadros": 16
+    },
+    {
+      "id": "review",
+      "linha": 8,
+      "quadros": 16
+    },
+    {
+      "id": "alert",
+      "linha": 9,
+      "quadros": 16
+    },
+    {
+      "id": "crouching",
+      "linha": 10,
+      "quadros": 16
+    },
+    {
+      "id": "channeling",
+      "linha": 11,
+      "quadros": 16
+    },
+    {
+      "id": "back-view",
+      "linha": 12,
+      "quadros": 16
+    },
+    {
+      "id": "dash",
+      "linha": 13,
+      "quadros": 16
+    },
+    {
+      "id": "walking",
+      "linha": 14,
+      "quadros": 16
+    },
+    {
+      "id": "autonomous-reveal",
+      "linha": 15,
+      "quadros": 16
+    }
+  ]
+}

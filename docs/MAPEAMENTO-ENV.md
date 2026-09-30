@@ -129,3 +129,17 @@ Depois, atualizar este documento manualmente com caminhos sanitizados e classifi
 Status atual: **mapeamento inicial criado com base na varredura atual da VPS**.
 
 Nada foi removido, migrado ou exposto.
+
+## Casa (Windows `SEGREDO`) — mapa para re-derivar após formatação (2026-09-26)
+
+Regra do CHEFE: chave é descartável; guarda-se **onde** fica e **qual** nome, nunca o valor. Após formatar: gerar de novo no provedor e gravar no mesmo lugar.
+
+| Onde na Casa | O que re-derivar (só nomes) |
+|---|---|
+| `%LOCALAPPDATA%\hermes\.env` | `OPENROUTER_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALLOWED_USERS` (demais linhas são ajustes sem segredo: `A2A_PORT`, `BROWSER_*`, `BROWSERBASE_*`, `TERMINAL_*`, `*_TOOLS_DEBUG`, `WHATSAPP_ENABLED`) |
+| `%LOCALAPPDATA%\hermes\auth.json` | login do Hermes nos provedores de modelo → refazer login |
+| `%LOCALAPPDATA%\hermes\mcp-tokens\` | OAuth dos conectores do Hermes: buildkite, cloudflare, figma, linear, notion, supabase, todoist, vercel → reconectar cada um |
+| `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\profiles\{Segredo,Fulano}\auth\` | sessão da ponte (OAuth + DPAPI) → refazer login pela `CentralDarkBridge` |
+| GitHub / Supabase CLI / Claude / Desktop Commander | `gh auth login`, `supabase login`, login dos apps, `desktop-commander remote` (novo device) |
+
+`E:\CentralDark\vault` **não é cofre de chave**: é vault Obsidian; a nota de ideia foi preservada no ramo `preservacao/casa-arquivos-20260926`.

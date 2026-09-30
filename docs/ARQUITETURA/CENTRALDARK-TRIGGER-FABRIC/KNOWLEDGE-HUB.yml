@@ -146,7 +146,7 @@ entry_surfaces:
     direct_canonical_write: writer_authorized_only
   obsidian_plugin:
     route:
-      read_graph: "https://grafo.centralldark.com/api/graph?mode=vivo"
+      read_graph: "https://api.centralldark.com/api/graph?mode=vivo"
       knowledge_ingest: "https://api.centralldark.com/memoria/ingest"
     event_class: OBSIDIAN_NOTE_OR_PLUGIN_EVENT
     authentication: BEARER_RUNTIME_SECRET
@@ -327,3 +327,52 @@ proof_boundaries:
 slogan:
   technical: "ONE HUB, MANY INGRESSES, ONE WRITER, REALITY JUDGES"
   operational: "TUDO ENTRA PELO MESMO NÚCLEO; SÓ O OURO PROVADO SOBE"
+
+material_first_cognitive_route:
+  status: ACTIVE
+  authority: SEGREDO/CHEFE
+  source_is_authority: false
+  graph_is_authority: false
+  historical_success_is_current_pass: false
+  fixed_point_is_learning_gate: false
+  ingress:
+    - CHEFE_MATERIAL
+    - AGENT_MATERIAL
+    - ERROR
+    - CORRECTION
+    - TEST_FAILURE
+    - CONTRADICTION
+  flow:
+    - GRILL_ME_READ_ONLY
+    - EPISTEMIC_CLASSIFICATION
+    - LEARNING_REF
+    - SEARCH_EXISTING_CRYSTAL
+    - EXISTING_CANONICAL_OWNER
+    - SESSION_INTELLIGENCE_HARVESTER
+    - MEMORY_LINKER
+    - KNOWLEDGE_COMPILER
+    - KNOWLEDGE_COLLECTOR
+    - DECISOR
+    - ORCHESTRATOR
+    - EXECUTOR_CRITIC
+    - GRAPHRAG_MASTER
+    - SEMANTIC_LINKER
+    - RECEIPT
+    - NEXT_CURSOR
+  owners:
+    material_ingest: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md
+    learning_owner: apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs
+    decision_consumer: apps/modulos/HERMES-CORE/core/decisor.mjs
+    runtime_producer: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+    graph_rag: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/
+    semantic_linker: scripts/memory-linker/
+  rules:
+    MATERIAL_FROM_CHEFE_AUTO_INGEST: true
+    MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT: true
+    PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER: true
+    UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN: true
+    ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA: false
+    SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
+    REPEATED_CHEFE_RETEACH_AFTER_PROMOTION: LEARNING_TRANSFER_FAIL
+    CURRENT_EQUIVALENCE_OR_REMEASURE_REQUIRED: true
+

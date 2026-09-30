@@ -5,102 +5,6 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 
 ---
 
-<!-- CENTRALDARK_PLACAR_VIVO_BEGIN -->
-## 🧭 PLACAR VIVO — PR-MÃE #1562 / 2026-09-18
-
-> Snapshot operacional. `CURRENT > HISTORY`. Este bloco deve ser **substituído**, não duplicado, a cada remedição material.
-
-```text
-PR_MOTHER=#1562
-PR_MOTHER_ROLE=RENDEZVOUS_LEDGER_NOT_WRITER
-PR_MOTHER_STATE=OPEN
-PR_MOTHER_MERGEABLE=true
-PR_MOTHER_HEAD=9c2284c0e665f5ffebfbe3577d62777943ae49b5
-
-ACTIVE_FINALIZER_CANDIDATE=#1579
-PLACAR_PREVIOUS_HEAD=3dec6be7936b3c9dad968eff16ac30ac0ecff8a3
-DAILY_CHECKLIST=PASS
-CI_SAME_HEAD=RUNNING
-GLOBAL_FIXED_POINT=NOT_PROVEN
-```
-
-### Fileira 1 — Funil / PR-mãe
-
-| PR | Escopo | Estado vivo | Prova atual | Próximo gate |
-|---|---|---|---|---|
-| #1562 | rendezvous/ledger permanente | OPEN · mergeable=true | mãe não é writer e não deve mergear | receber receipts dos filhos |
-| #1572 | gate do funil PR-mãe | OPEN · mergeable=true | Lupa/codex/lupa-conformance PASS; porta falha com `INTERLIGADOS_SCAN_RULE_INVALID` + `INTERLIGADOS_PROOF_BOUNDARY_INVALID` | corrigir owner/regra Interligados e rerodar SAME_HEAD |
-
-### Fileira 2 — Continuidade / cérebro / runtime
-
-| PR | Escopo | Estado vivo | Prova atual | Próximo gate |
-|---|---|---|---|---|
-| #1573 | preservar ouro em missão interrompida | OPEN · mergeable=false | sem workflow SAME_HEAD observado | reconciliar mergeability antes de qualquer promoção |
-| #1574 | Hermes runtime Casa+VPS | OPEN · mergeable=true | vários gates PASS; porta bloqueia porque áreas protegidas `.agents/`, `apps/modulos/HERMES-CORE/`, `docs/CONSCIENCIA/` foram alteradas sem label `👑 PERMITO-SEGREDO`; codex ainda queued | resolver autorização/label sem burlar gate e rerodar SAME_HEAD |
-| #1576 | one-core + Grok + Obsidian | OPEN · mergeable=true | codex/lupa/CodeQL/grafo PASS; porta falha com a mesma assinatura de #1572: `INTERLIGADOS_SCAN_RULE_INVALID` + `INTERLIGADOS_PROOF_BOUNDARY_INVALID` | corrigir causa compartilhada Interligados e rerodar SAME_HEAD |
-
-### Fileira 3 — MCP / finalização
-
-| PR | Escopo | Estado vivo | Prova atual | Próximo gate |
-|---|---|---|---|---|
-| #1578 | MCP CentralDark direto como rota primária | OPEN · mergeable=false | sem workflow SAME_HEAD observado | reconciliar branch/base e obter gates |
-| #1579 | checklist diário + writer/finalizer lease | OPEN · mergeable=true | workflows do HEAD novo estão queued/pending | medir conclusão; nenhum verde antecipado |
-
-### Feridas materiais consolidadas
-
-```text
-F1=INTERLIGADOS_RULE_AND_PROOF_BOUNDARY
-  afeta comprovadamente #1572 e #1576
-  assinatura:
-    INTERLIGADOS_SCAN_RULE_INVALID
-    INTERLIGADOS_PROOF_BOUNDARY_INVALID
-  regra: corrigir uma causa compartilhada no owner canônico, não dois remendos
-
-F2=PROTECTED_AREA_AUTHORIZATION_GATE
-  afeta comprovadamente #1574
-  causa:
-    áreas protegidas alteradas sem label 👑 PERMITO-SEGREDO
-  warnings adicionais:
-    secrets/ ausente no checkout
-    apps/modulos/clone-deck/ ausente no checkout
-  warnings != causa principal
-
-F3=MERGEABILITY_FALSE
-  afeta observadamente #1573 e #1578
-  regra: reconciliar base/branch sem apagar delta útil
-
-F4=FINALIZER_SAME_HEAD_RUNNING
-  afeta #1579
-  regra: queued/pending != PASS
-
-F5=RUNTIME_END_TO_END
-  só depois de child PR promovido
-  main → post-merge → micro-deploy aplicável → !REMEDIÇÃO → receipt → volta ao #1562
-```
-
-### Ordem mínima do que falta
-
-1. Esperar/medir os workflows do HEAD atual do #1579 e classificar PASS/FAIL/UNKNOWN.
-2. Corrigir **uma vez** o owner/regra Interligados que causa a mesma falha em #1572 e #1576; rerodar ambos no respectivo SAME_HEAD.
-3. Em #1574, resolver o gate de autorização das áreas protegidas pela via canônica (`👑 PERMITO-SEGREDO` quando realmente autorizado); não transformar warning de caminho ausente em causa-raiz.
-4. Resolver `mergeable=false` de #1573 e #1578 com reconciliação semântica e contraprova.
-5. Promover **somente SUB-PR comprovado**; #1562 permanece ledger, nunca veículo de merge.
-6. Após promoção: remedir `main`, executar somente o micro-deploy causal aplicável, medir runtime correspondente e devolver receipt ao #1562.
-7. Só declarar `GLOBAL_FIXED_POINT=PROVEN` quando SAME_HEAD + Reality Judge + runtime aplicável + receipt final estiverem provados.
-
-```text
-MERGEABLE=true != CI_PASS
-WORKFLOW_QUEUED != PASS
-SOURCE_PRESENT != RUNTIME_PROVEN
-WARNING != ROOT_CAUSE
-SAME_ERROR_SIGNATURE_CAN_SHARE_FIX=true
-DIFFERENT_ERROR_SIGNATURE_MUST_NOT_BE_FORCE_MERGED=true
-UNKNOWN != PASS
-```
-
-<!-- CENTRALDARK_PLACAR_VIVO_END -->
-
-
 ## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído
 **Status:** concluído (código pronto, executado na VPS)
 **Sintoma:** site só responde pelo preview do Lovable; domínios próprios ainda não apontam.
@@ -604,7 +508,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Problema:** prefixos numéricos duplicados — `00`, `01`, `02`, `11`, `12` (triplicado!), `21` — além de possíveis números fora de ordem / buracos na sequência. Bagunça visual que o Pivete quer eliminar (regra: pastas/arquivos organizados, sem número torto).
 - **Onde:** `docs/CONSCIENCIA/*.md`.
 - **Cuidado (por isso não foi feito de imediato):** é ÁREA PROTEGIDA (CLAUDE.md Seção 9) e renomear arquivo quebra os wikilinks `[[...]]` do Obsidian. Tem que **renumerar E corrigir todos os links** que apontam pra cada arquivo no mesmo passo, senão o grafo do Pivete fica com bolinhas quebradas.
-- **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO PIVETE).
+- **Decisão do Pivete (30/06):** "só deixa anotado" — não atacar agora; ir ajustando aos poucos pela regra do escoteiro ao passar por cada arquivo, ou em tarefa dedicada com plano quando ele autorizar (PERMITO SEGREDO).
 
 ### 14. Claude Code via proxy nos 2 modos (terminal + extensão VSCode) — 🟡 ABERTO (30/06/2026)
 - **Objetivo:** quando a conta principal cair, o Pivete continua trabalhando via proxy `claude.ap7.site` — tanto no terminal quanto na extensão do VSCode.
@@ -878,18 +782,134 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
 - **Critério pra fechar:** Os 3 canvas vazios removidos do PR #1369 (não pertencem ao escopo), e o commit reescrito ou seguido de commit corretivo cuja mensagem descreva o que realmente contém. Nenhum commit do PR anuncia prova que não esteja no diff.
 
-### 57. CHECK-LIST DIÁRIO obrigatório para IA/agente que muta código — 🟡 EM VALIDAÇÃO (18/09/2026)
-- **Intenção do CHEFE:** toda IA/agente que alterar código no dia precisa passar pelo CHECK-LIST DIÁRIO; múltiplos writers podem trabalhar em escopos distintos, mas a faixa final `PR → main → deploy` usa um único `FINALIZER_LEASE` por vez.
-- **Owner canônico reutilizado:** `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` + `scripts/lupa/validar-porta-de-entrada.mjs`. Nenhum workflow, engine, agente ou painel novo foi criado.
-- **Gate determinístico:** PR com mutação de código deve carregar `Daily-Checklist: PASS`, `Daily-Checklist-Date`, `Daily-Checklist-Goal` e `Daily-Checklist-Writer`. A data deve coincidir com a data do commit HEAD em `America/Sao_Paulo`; `Daily-Checklist-Head`, se presente, é somente proveniência e não gate.
-- **Seleção de executor:** `TAG_EXECUTOR + CAPABILITY_MATCH + SCOPE_MATCH + LEASE_AVAILABLE + POLICY_ALLOWED`. Nome/modelo é proveniência, não routing key, autoridade ou lease.
-- **Writer/finalizer:** vários writers são permitidos em escopos disjuntos; mesmo escopo mutável exige writer lease; promoção final exige `ONE_ACTIVE_FINALIZER_LEASE` model-neutral no control plane da VPS.
-- **GOAL_PAI:** autoridade permanece `SEGREDO/CHEFE`; a VPS executa/controla o fluxo, mas não vira autoridade de intenção. GOAL_PAI deve sobreviver ida→execução→main→deploy→remedição→retorno.
-- **Continuidade autônoma sem falso HUMAN_BOUNDARY:** obstáculo técnico, `UNKNOWN`, `CI_FAILURE`, `RUN_FAILURE`, `NEED_RETRY`, `NEED_REMEASURE`, `NEED_RECONCILE` ou mudança de `main/current state` não viram retorno humano por si só. O fluxo obrigatório é `MEASURE_CURRENT → CLASSIFY_FAILURE_SIGNATURE → VERIFY_AUTHORIZED_SCOPE → VERIFY_EXISTING_OWNER → VERIFY_WRITER_LEASE → DERIVE_CAUSAL_MICRO_GOAL → EXECUTE_MINIMAL_SAFE_REMEDIATION → RETEST → COUNTERPROOF → REMEASURE → UPDATE_RECEIPT → CONTINUE_NEXT_CURSOR`.
-- **SELF_GOAL:** é apenas alias semântico de `DERIVED_CAUSAL_MICRO_GOAL`; não cria novo GOAL_PAI, nova intenção humana, novo owner ou nova arquitetura. `UNKNOWN` sozinho **não** autoriza mutação e `BLIND_PATCH` é proibido.
-- **HUMAN_BOUNDARY real:** retorno humano só é válido com `PROVEN_HUMAN_FRONTIER`, `EXACT_HARD_BLOCKER_AFTER_AUTHORIZED_ROUTES_EXHAUSTED` ou `NEW_HUMAN_INTENT_REQUIRED`. Trabalho seguro independente permanece permitido.
-- **Kernel portátil:** `UNIVERSAL-ENGINE-METHOD.yml` + `MASTER-CYCLE.yml` agora viajam no `portable-kernel` como capability `MACHINE_RESOLVABLE_CONTINUATION`; o kernel falha fechado se `unknown_alone_authorizes_mutation` regredir para `true`.
-- **Contraprova integrada local:** overlay dos 8 arquivos do #1579 sobre `main=b5b71b520be2742ec3b1f372725d9e798f751570` passou YAML parse, JS syntax, `UNIVERSAL_ENGINE_METHOD_SELF_TEST=PASS` e `portable-kernel.test.mjs=9/9 PASS`; runtime effect continua `UNPROVEN_BY_PORTABLE_KERNEL`.
-- **Espelho operacional solicitado:** `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`. Há rotas/contas distintas observadas, mas esta sessão ainda não recebeu receipt direto do alvo Windows `SEGREDO`; portanto **LOCAL_VAULT_UPDATED=UNKNOWN/NOT_EXECUTED** e não recebe falso PASS.
-- **Critério para fechar:** contrato + validator passam; SAME_HEAD CI do SUB-PR passa; receipt diário corresponde ao dia do commit HEAD em `America/Sao_Paulo`; PR promove pelo funil #1562; depois a Casa recebe/remece o espelho local sem sobrescrever estado mais novo.
-- **Estado desta rodada:** `CONTRACT_DELTA=COMMITTED_ON_CHILD_BRANCH`; `VALIDATOR_DELTA=COMMITTED_ON_CHILD_BRANCH`; `MACHINE_RESOLVABLE_CONTINUATION=LOCAL_COUNTERPROOF_PASS`; `PORTABLE_KERNEL=9/9_LOCAL_PASS`; `LOCAL_VAULT_UPDATED=NOT_EXECUTED`; `SAME_HEAD_CI=UNKNOWN_AFTER_NEW_HEAD`; `MAIN=NOT_YET`; `RUNTIME_BINDING=NOT_CLAIMED`.
+---
+
+## 🟢 #143 — GPU dedicada na VPS — capacidade futura
+**Status:** pendente futuro / não bloqueia o runtime atual  
+**Data de registro:** 20/09/2026  
+**Fato medido:** a VPS `vmi3256920` não expõe aceleração GPU no estado atual: `nvidia-smi=ABSENT`, `rocminfo=ABSENT`, `/dev/dri=ABSENT`; o adaptador VGA observado é virtual/emulado.  
+**Intenção:** quando a VPS migrar para host/plano com GPU, habilitar capacidade de inferência/render híbrida sem criar segundo router.
+
+**Como fechar:**
+1. Repetir hardware probe no host novo.
+2. Medir GPU, VRAM, driver e backend compatível.
+3. Ligar a capacidade ao `RUNTIME-PLUG-CONTRACT.yml` e ao OmniRouter existente.
+4. Provar `LOCAL_GPU_CASA → VPS_GPU → provider opcional` por benchmark/health.
+5. Atualizar o cockpit com SHA/runtime receipt.
+
+**Hoje:**
+```text
+VPS_GPU=UNAVAILABLE_BY_CURRENT_PROBE
+FUTURE_CAPABILITY=RECORDED
+CURRENT_RUNTIME_BLOCKED_BY_THIS=false
+UNKNOWN != PASS
+```
+
+---
+
+### 🚨🔴🔒 PENDÊNCIA CRÍTICA FUTURA — PASSO 2 · WORKSPACE HERMES EM DISCO DEDICADO
+
+**Status:** 🔴 **FUTURO / BLOQUEADO / NÃO EXECUTAR AGORA**  
+**Data:** 23/09/2026  
+**Ordem explícita do SEGREDO/CHEFE:** este é o **SEGUNDO PASSO**. O passo atual é somente sanear/remover duplicatas comprovadas. **Não mexer no perfil/pasta Pivete nesta etapa.**
+
+```text
+PR_ROLE=FUTURE_CRITICAL_PENDING
+DO_NOT_EXECUTE_NOW=true
+LOCKED=true
+STEP=2
+STEP_1=REMOVE_ONLY_PROVEN_DUPLICATES_AND_LEAVE_CURRENT_CASA_CLEAN
+STEP_1_TOUCH_PIVETE_PROFILE=false
+UNLOCK_CONDITION=STEP_1_FIXED_POINT_AND_EXPLICIT_CHEFE_REOPEN
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+CURRENT > HISTORY
+UNKNOWN != PASS
+REALITY = JUDGE
+```
+
+**Intenção futura preservada, sem implantação:** estudar a promoção de um disco dedicado mais rápido para ser a fronteira integral de trabalho do HERMES — workspace, worktrees, build, temp, cache, logs, artifacts e tools — mantendo os demais discos como capacidades do mesmo sistema (por exemplo, garimpo/entrada bruta/arquivo) e preparando futura contenção Docker sem criar uma segunda CentralDark.
+
+**Evidência de hardware fornecida pelo CHEFE em 23/09/2026:**
+- `C:` = XPG GAMMIX S70 BLADE, NVMe PCIe x4 — fast lane atual; não decidir seu papel futuro neste PR.
+- `D:` = KINGSTON SA400S37480G, SSD 447.1 GB — **candidato forte** a workspace dedicado, ainda não promovido.
+- `E:`, `F:` e `J:` = partições do mesmo Hitachi HDS5C1010CLA382, HDD 5700 RPM — trocar E→F não constitui ganho de disco físico.
+
+**Guardrail:** modelo, letra de unidade ou path candidato **não viram decisão arquitetural sem benchmark/medição CURRENT + consumidores + rollback**. A futura migração deve fazer path virar configuração, não espalhar hardcode novo.
+
+**Não fazer neste PR / agora:**
+- não mover `E:\CentralDark`;
+- não promover `D:` a workspace;
+- não alterar `Pivete`/perfil/pastas por causa desta pendência;
+- não criar Docker/containers;
+- não mudar C:/E:/D: em runtime;
+- não apagar dados;
+- não iniciar garimpo automático.
+
+**Critério para destravar futuramente:**
+1. saneamento de duplicatas do passo 1 chega a FIXED_POINT;
+2. topologia C:/D:/E:/F:/J: é remedida ao vivo;
+3. benchmark compatível com carga Git/Node/build/arquivos pequenos discrimina o disco alvo;
+4. todos os consumidores de paths são inventariados;
+5. rollback e migração reversível são provados;
+6. SEGREDO/CHEFE reabre explicitamente o passo 2.
+
+**NEXT_CURSOR futuro:** `STEP1_DUPLICATE_CLEANUP_FIXED_POINT → REMEASURE_STORAGE → BENCHMARK → PATH_CONSUMERS → MIGRATION_PLAN → DOCKER_BOUNDARY_PLAN`.
+
+
+---
+
+### 🟢 PENDÊNCIA FUTURA — KIT DE INTEGRAÇÃO · AGENTES CLOUD + EVENT BUS + KASTRA EDGE
+
+**Status:** 🟢 **FUTURO / LEMBRANÇA / NÃO EXECUTAR AGORA**  
+**Data:** 30/09/2026
+
+**Intenção do CHEFE:** futuramente trazer para dentro da CentralDark o comportamento observado agora entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos vivos, assinando o mesmo owner, recebendo mudanças em tempo real, herdando o estado compartilhado e continuando a missão sem depender da Casa permanecer ligada.
+
+```text
+DO_NOT_EXECUTE_NOW=true
+FUTURE_EXPLORATION=true
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+CURRENT > HISTORY
+UNKNOWN != PASS
+```
+
+**Kit futuro a explorar/reusar:**
+- **Cloud Agent Runtime:** executor remoto persistente que continua ativo fora da Casa.
+- **GitHub/Event Bus:** PRs/issues/comments/checks como barramento auditável de handoff entre agentes.
+- **Subscriptions/Watch:** agente assina PR/owner e recebe delta material em tempo real.
+- **Shared State/Ledger:** estado e receipts compartilhados; sem "memória mágica" entre modelos.
+- **PR-MÃE #1562:** rendezvous/ledger canônico para convergência dos agentes.
+- **CentralDark API/MCP Admin:** uma porta de controle para providers, runtimes, tools e executores.
+- **Cloud ↔ VPS ↔ Casa:** VPS como runtime always-on; Casa como edge opcional; cloud agents como executores adicionais do mesmo sistema.
+- **Handoff multi-modelo:** ChatGPT/SOL, Claude, Codex, Hermes e futuros agentes continuam o mesmo owner por eventos/estado compartilhado.
+- **Kastra Edge:** candidato futuro para política/auditoria local de ações de agentes no Windows/Casa, com ALLOW/DENY/APPROVAL.
+- **Observabilidade/receipts:** toda continuidade deve deixar rastro verificável de evento → execução → resultado → readback.
+
+**Exemplo de fluxo desejado futuramente:**
+
+```text
+CHEFE
+→ api.centralldark.com / MCP
+→ owner canônico
+→ evento/PR/issue
+→ agentes cloud inscritos
+→ executor adequado
+→ VPS/CENTRALDARK-OS/Casa quando aplicável
+→ prova
+→ contraprova
+→ receipt
+→ estado compartilhado
+→ próximo agente continua sem redescobrir
+```
+
+**Quando reabrir:** medir primeiro quais partes já existem no CentralDark atual (MCP Admin, GitHub, subscriptions, PR-MÃE, Hermes, Cloud executors, provider-control, ledger). Implementar somente o delta faltante; não criar segundo cérebro, segundo orquestrador ou arquitetura V1/V2/V3.
+
+**Critério de exploração futura:** provar pelo menos um handoff completo em que um agente grava delta no owner, outro agente cloud recebe automaticamente, executa a continuação correta e registra receipt do mesmo estado, sem intervenção manual para transportar contexto.
+
+**Kastra Edge especificamente:** medir produto ao vivo, integrações suportadas, política ALLOW/DENY/APPROVAL, auditoria local/offline e encaixe com CentralDark antes de adoção.
+### 57. Vault canônico de segredos CentralDark pós-rebuild — 🟡 ABERTO (30/09/2026, 05:20 BRT)
+- **Sintoma:** Segredos e tokens estão espalhados em arquivos, pastas e ambientes diferentes, dificultando auditoria, rotação, revogação e acesso controlado por agentes.
+- **Onde mexer:** CentralDark/VPS, MCP Admin, API CentralDark, documentação de segurança e rotina de rebuild/formatação.
+- **Critério pra fechar:** Criar um cofre canônico com nomes padronizados por provider/runtime/bot/domínio, registrar dono/finalidade/status/rotação/último teste, remover duplicatas antigas, impedir segredo em desktop/repo/log e fazer agentes acessarem segredos somente pela API/MCP CentralDark com auditoria.

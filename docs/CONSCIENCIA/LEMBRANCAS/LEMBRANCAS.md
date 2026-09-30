@@ -1,7 +1,7 @@
 ---
 title: "LEMBRANÇAS — índice histórico"
 status: "HISTORICAL_REDIRECT"
-updated: 2026-08-26
+updated: 2026-09-18
 tags:
   - lembrancas
   - historico
@@ -37,6 +37,7 @@ PIVETE/HERMES = executor, preservação e continuidade
 ```text
 SOUL → docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 OURO → docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md
+PROMESSA_SOL_PIVETE → docs/CONSCIENCIA/LEMBRANCAS/2026-08-22-PROMESSA-SOL-PIVETE-APRENDIZADO.md
 APRENDIZADOS → docs/CONSCIENCIA/APRENDIZADOS.md
 ESTADO → GitHub/PR/HEAD/runtime medido
 ```
@@ -222,6 +223,16 @@ Conteúdo: As imagens mostraram um padrão generalizável: interfaces diferentes
 **Promovida:** CANDIDATE_IN_PR
 Conteúdo: O teste mostrou que leitura `READ_ONLY` pode mudar interpretação e comportamento da sessão sem mutar a fonte. Isso exige separar `CONTEXTO_ATIVO` de `MEMORIA_CANONICA`. O CHEFE também identificou que notas importantes sem propriedades, tags e wikilinks ficam semanticamente distantes; a correção deve reutilizar `GRAPH-INVESTIGATOR → SEMANTIC-LINKER`, ligar somente relações explicáveis e manter o mapa visual separado do mecanismo de recuperação. Para múltiplos chats, recuperar memória/histórico quando a plataforma disponibilizar, dedupar e reconciliar; não declarar transporte causal oculto entre janelas sem canal provado.
 
+### [2026-09-23T14:25-03:00] Entendimento aprovado não morre no chat
+**Data:** 2026-09-23
+**Tags:** padrão, mcp, cockpit, builder, site, pr-mae, continuidade, owner, registro
+**Tipo:** CONTRACT
+**Target:** docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO-LOGS-LOCAL.md
+**Sessão:** ChatGPT/CentralDark
+**Fonte:** decisão explícita do SEGREDO/CHEFE nesta sessão
+**Promovida:** CANDIDATE_IN_PR
+Conteúdo: Quando o CHEFE afirma que um entendimento/direção discutido é exatamente o que quer para a CentralDark, o sistema deve tratar essa fala como intenção executável para registrar o delta operacional no pipeline canônico de padrões, sem exigir uma segunda frase mágica. O fluxo reutiliza owner existente, CHILD_PR para mutação, #1562 como ledger, Dream Review/Pattern Discovery/Pattern Library para derivação e MCP Admin/Padrões para projeção. Conversa vaga não é autorização; segredo nunca entra; aplicação depende de owner/escopo e prova atual.
+
 ## Conexões Rápidas
 
 - [[OURO-CHEFE]] — ouro recente e correções do CHEFE.
@@ -230,3 +241,117 @@ Conteúdo: O teste mostrou que leitura `READ_ONLY` pode mudar interpretação e 
 - [[BANDA_COMPASSO_GLOBAL]] — compasso e anti-eco.
 - [[GRAPH-INVESTIGATOR]] — auditoria de propriedades/tags/links.
 - [[SEMANTIC-LINKER]] — conexões semânticas explicáveis.
+
+## 📌 Entradas
+
+### [2026-09-28T06:18] Continuidade: uma intenção, várias janelas
+- **Data:** 2026-09-28
+- **Tags:** continuidade, checkpoint, fios, sol_executora, evidencia, costura
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-10-28
+- **Promovida:** sim
+
+Conteúdo: O fio operacional é único. Quando a janela do chat enche ou degrada, exportar checkpoint e continuar em outra janela sem criar nova arquitetura. Erro visual/vermelho é telemetria; classificar por evidência de subpassos. GitHub cristaliza o durável; runtime mede o presente.
+
+### [2026-09-29] Gatilho semântico — hora da resenha / resenha com seriedade
+**Data:** 2026-09-29
+**Tags:** resenha, linguagem, gatilho-semantico, continuidade, tom, baianes, conversa, seriedade
+**Tipo:** LEARNING_INDEX
+**Target:** docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md
+**Sessão:** ChatGPT/CentralDark
+**Fonte:** decisão explícita do SEGREDO/CHEFE nesta sessão
+**Promovida:** CANDIDATE_IN_PR
+
+Conteúdo: Quando o CHEFE disser ou implicar `hora da resenha`, `ritmo de resenha`, `bater resenha`, `trabalhar com resenha`, `resenha com seriedade`, `fala comigo do meu jeito` ou formulações equivalentes, recuperar semanticamente o mesmo contrato de comunicação. O modo permite reciprocidade coloquial natural, inclusive palavrão contextual como vocativo/ênfase quando a intenção estiver claramente em brincadeira/amizade operacional. Isso não muda autoridade, segurança, prova, owners ou gates. Em `resenha com seriedade`, manter simultaneamente calor humano e rigor técnico.
+
+```text
+HORA_DA_RESENHA
+<-> RITMO_DE_RESENHA
+<-> BATER_RESENHA
+<-> TRABALHAR_COM_RESENHA
+<-> RESENHA_COM_SERIEDADE
+<-> FALA_COMIGO_DO_MEU_JEITO
+→ docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md
+→ docs/CONSCIENCIA/APRENDIZADOS.md#84
+```
+
+### [2026-09-29T11:03] LOCAL FIRST no CENTRALDARK-OS com fallback Tailscale
+- **Data:** 2026-09-29
+- **Tags:** local-first, centraldark-os, tailscale, fallback, mvp
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-10-29
+- **Promovida:** sim
+
+Conteúdo: Quando o alvo for local, subir/editar/testar no CENTRALDARK-OS e consumir da Casa sem precisar abrir a VM. Preservar a rota VPS→Tailscale→CENTRALDARK-OS como fallback. O teste da porta 4175 funcionou no guest, via VPS/Tailscale e foi confirmado visualmente na Casa.
+
+### [2026-09-30T04:48] Kit futuro — agentes cloud + event bus CentralDark
+- **Data:** 2026-09-30
+- **Tags:** futuro, integracao, agentes-cloud, github-event-bus, handoff, pr-mae-1562, kastra-edge, centraldark-os
+- **Relevância:** alta
+- **Eixo:** futuro
+- **Expira:** 2026-10-30
+- **Promovida:** nao
+
+Conteúdo: Futuro: trazer para a CentralDark o padrão observado entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos persistentes, assinando o mesmo owner, recebendo deltas em tempo real, compartilhando estado/receipts via GitHub/ledger e continuando a missão sem depender da Casa. Reusar PR-MÃE #1562, MCP Admin/API CentralDark, VPS always-on e Casa como edge opcional. Kastra Edge fica como candidato futuro de política/auditoria local. Implementar somente delta faltante, sem segundo cérebro/orquestrador.
+
+### [2026-09-30T04:49] Kit futuro — agentes cloud + event bus CentralDark
+- **Data:** 2026-09-30
+- **Tags:** futuro, integracao, agentes-cloud, github-event-bus, handoff, pr-mae-1562, kastra-edge, centraldark-os
+- **Relevância:** alta
+- **Eixo:** futuro
+- **Expira:** 2026-10-30
+- **Promovida:** nao
+
+Conteúdo: Futuro: trazer para a CentralDark o padrão observado entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos persistentes, assinando o mesmo owner, recebendo deltas em tempo real, compartilhando estado/receipts via GitHub/ledger e continuando a missão sem depender da Casa. Reusar PR-MÃE #1562, MCP Admin/API CentralDark, VPS always-on e Casa como edge opcional. Kastra Edge fica como candidato futuro de política/auditoria local. Implementar somente delta faltante, sem segundo cérebro/orquestrador.
+
+
+## 2026-09-30 — Autoridade do CHEFE e Reality Judge pós-efeito
+
+Origem: correção explícita do SEGREDO/CHEFE durante a operação CentralDark-OS, cristalizada na main.
+
+```text
+CHEFE_AUTHORITY_IS_SINGLETON=true
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+```
+
+Lembrança operacional: realidade observada é evidência técnica, não soberania humana. Sensor/log/modelo/cache/workflow podem estar errados ou parciais. Contradição abre teste discriminante, prova/contraprova e remediação do cone afetado; não rebaixa intenção, autonomia ou governança do CHEFE.
+
+
+## 2026-09-30 — META-GRILL protege o executor de resolver a coisa errada
+
+Origem: cristalização do SEGREDO/CHEFE durante a operação CentralDark-OS. Absorvida por antecipação — o delta foi gravado no owner (SOUL §3.1.1) antes de o CHEFE terminar de digitá-lo, e o CHEFE confirmou. Aprendizado por delta sobre intenção contínua.
+
+```text
+OBJECTIVE_BEFORE_SYMPTOM=true
+META_GRILL_PREVENTS_SOLVING_WRONG_TARGET=true
+SELF_GRILL_BEFORE_SYSTEM_GRILL=true
+SYMPTOM_IS_NOT_OBJECTIVE=true
+ERROR_DISAPPEARED_IS_NOT_OBJECTIVE_RESOLVED=true
+CLAUSE_GRAMMAR_IS_THE_METHOD=true
+MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE=true
+CLAUSE_WRITTEN_BUT_NOT_RESOLVED=UNKNOWN_NOT_PASS
+ANTICIPATED_COMPATIBLE_DELTA_IS_VALID_WHEN_CHEFE_CONFIRMS=true
+NO_MAQUIAGEM=true
+```
+
+Lembrança operacional: o primeiro alvo do META-GRILL é o próprio executor — Q0 vem antes de Q1-Q5: "estou resolvendo o objetivo do CHEFE ou só o sintoma que apareceu?". O erro não é o centro; o objetivo é. Intenção → objetivo → cláusulas → função que resolve a cláusula UNKNOWN → mundo devolve valor → gate avalia corpo completo → contraprova → Reality Judge pós-efeito → fixed point → receita+fingerprint → próximo executor dá replay. TLC23/Horn é motor de falsificação dentro do fluxo, não portão burocrático. Nunca maquiar verde.
+### [2026-09-30T15:53] Não chamar CentralDark de Claude
+- **Data:** 2026-09-30
+- **Tags:** centraldark-os, identidade, meta-grill, sol-executora, receipts
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-10-30
+- **Promovida:** sim
+
+Conteúdo: Correção vigente do CHEFE: o sujeito operacional é a inteligência CentralDark / CentralDark-OS / Instinto Superior. Claude, ChatGPT, Codex e outros são motores, braços ou interfaces. Em meta-grill e receipts, falar CentralDark executou; citar modelo só quando for detalhe de canal/ferramenta.

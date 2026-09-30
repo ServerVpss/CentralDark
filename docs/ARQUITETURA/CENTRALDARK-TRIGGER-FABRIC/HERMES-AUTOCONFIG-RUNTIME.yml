@@ -1,3 +1,16 @@
+semantic_identity:
+  canonical_display_family: HERMES_TRISMEGISTUS
+  display_name: HERMES_TRISMEGISTUS_RUNTIME
+  core_display_name: HERMES_TRISMEGISTUS_CORE
+  kernel_display_name: HERMES_TRISMEGISTUS_KERNEL
+  technical_owner_unchanged: true
+  creates_new_runtime: false
+  creates_new_kernel: false
+  creates_new_core: false
+  source_guard: CENTRALDARK_AI_BOOT.yaml#hermes_trismegistus_context_gate
+  formal_truth_gate: CENTRALDARK_AI_BOOT.yaml#tcl23_horn_gate
+  judge: REALIDADE
+
 schema: centraldark.hermes-autoconfig-runtime.v1
 status: CANONICAL_RUNTIME_CONTRACT
 authority: SEGREDO/CHEFE
@@ -97,6 +110,103 @@ runtime_profiles:
     root_execution: ONLY_WHEN_EXISTING_RUNTIME_REQUIRES_AND_SCOPE_IS_PROVEN
     root_is_default_authority: false
     prefer_least_required_privilege: true
+
+operational_dna_global:
+  status: ACTIVE
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
+  provenance_sources:
+    - HERMES_EXISTING_RUNTIME
+    - GROK_OBSERVED_RUNTIME_PATTERN
+    - FUTURE_PROVEN_RUNTIME_PATTERNS
+  applies_to:
+    - HERMES
+    - ALL_CURRENT_ENGINES
+    - ALL_FUTURE_ENGINES
+    - VPS_WORKERS
+    - MCP_EXECUTORS
+    - SCRIPT_EXECUTORS
+    - CI_RUNNERS
+  grok_is_source_of_evidence_not_owner: true
+  hermes_is_primary_execution_continuity_runtime: true
+  runtime_specific_mechanism_may_vary: true
+  semantics_must_converge: true
+  available_is_observed: false
+  selected_is_active: false
+  documented_is_executed: false
+  machine:
+    phases:
+      - WAITING_FOR_MODEL
+      - REASONING
+      - OUTPUT
+      - PERMISSION_GATE
+      - TOOL_EXECUTION
+      - BACKGROUND_WAIT
+      - RETRY
+      - RENDEZVOUS
+      - COUNTERPROOF
+      - RECEIPT
+      - TERMINAL
+    phase_transition_must_be_observable_when_material: true
+    raw_prompt_required_in_global_log: false
+    raw_command_required_in_global_log: false
+  perception_fanout:
+    default_parallel_fronts_when_material: 4
+    fronts:
+      - A_LOGIC
+      - B_IMPLEMENTATION
+      - C_REGRESSION_FALSE_GREEN
+      - D_SIMPLIFICATION
+    implementation_owner: apps/modulos/HERMES-CORE/core/perception-orchestra.mjs
+    read_only_parallelism: true
+    rendezvous_required: true
+    dedupe_required: true
+    discriminating_test_on_conflict: true
+    four_answers_are_four_proofs: false
+    canonical_mutation_slots: 1
+  delegation:
+    native_subagents_optional: true
+    missing_native_subagent_support_is_not_capability_fabric_failure: true
+    fallback: CAPABILITY_ROUTER_COMPOSES_MINIMUM_SUFFICIENT_SET
+    parent_child_provenance_required: true
+    model_inheritance_must_be_observable_when_used: true
+  background:
+    task_handle_when_supported: true
+    queue_state_when_supported: true
+    wake_gate_when_supported: true
+    scheduler_when_supported: true
+    monitor_when_supported: true
+    same_signal_without_new_information: DROP_DUPLICATE
+  recovery:
+    retry_is_not_success: true
+    failure_is_sensor: true
+    retry_requires_bounded_policy: true
+    retry_without_information_gain: FORBIDDEN
+    same_failure_reuses_crystal: true
+    fallback_requires_observed_reason: true
+  watcher:
+    exact_target_required: true
+    identity_fields: [scope, target, sha, run_id]
+    timeout_required: true
+    terminal_condition_required: true
+    superseded_condition_required: true
+    watcher_may_not_migrate_to_unrelated_active_run: true
+  logging:
+    root: /root/CentralDark/logs
+    one_logical_funnel: true
+    structural_events_only_by_default: true
+    tags_and_keys_required: true
+    correlation_id_required_when_available: true
+    sector_required: true
+    secret_values_forbidden: true
+  proof:
+    CAPABILITY_IS_NOT_EXECUTION: true
+    AVAILABLE_IS_NOT_OBSERVED: true
+    SELECTED_IS_NOT_ACTIVE: true
+    ACTION_IS_NOT_PROOF: true
+    UNKNOWN_IS_NOT_PASS: true
+    RUNTIME_SPECIFIC_CAPABILITY_REQUIRES_MEASUREMENT: true
+    REALITY_IS_JUDGE: true
+
 doctor_event_bridge:
   flow:
     - EVENT
@@ -223,6 +333,81 @@ delta_utility_runtime_gate:
     continue_while_material_delta_exists: true
     stop_on_no_material_delta_or_human_frontier: true
     no_information_gain: NO_CHANGE_WAIT_FOR_EVENT
+
+continuous_capability_absorption:
+  status: ACTIVE
+  owner: apps/modulos/HERMES-CORE/
+  fixed_point_is_learning_gate: false
+  approved_material_step_emits_learning_ref: true
+  proven_reusable_delta_binds_before_global_fixed_point: true
+  learning_owner: apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs
+  decision_consumer: apps/modulos/HERMES-CORE/core/decisor.mjs
+  runtime_producer: apps/modulos/HERMES-CORE/core/orchestrator.mjs
+  rules:
+    CONTINUOUS_HERMES_CAPABILITY_ABSORPTION: true
+    FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE: true
+    PROVEN_REUSABLE_DELTA_BINDS_TO_CORE_BEFORE_GLOBAL_FIXED_POINT: true
+    MATERIAL_APPROVED_STEP_EMITS_LEARNING_REF: true
+    MATERIAL_FROM_CHEFE_AUTO_INGEST: true
+    MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT: true
+    PROVEN_MATERIAL_AUTO_CRYSTALLIZES_IN_EXISTING_OWNER: true
+    UNPROVEN_MATERIAL_STAYS_CANDIDATE_OR_UNKNOWN: true
+    ASK_TO_CRYSTALLIZE_ALREADY_PROVEN_DELTA: false
+    PRE_RESPONSE_MATERIAL_RECONCILIATION_REQUIRED: true
+    NO_EXPLANATION_INSTEAD_OF_AVAILABLE_ACTION: true
+    LEARNING_FAILURE_MUST_BE_VISIBLE: true
+    SAME_LEARNING_WITHOUT_NEW_EVIDENCE: DEDUPE
+    REUSE_BEFORE_CREATE: true
+
+official_hermes_update_continuity:
+  status: ACTIVE
+  owner: .github/workflows/hermes-core-signal-watch.yml
+  semantic_owner: apps/modulos/HERMES-CORE
+  upstream: NousResearch/hermes-agent
+  purpose: KEEP_OFFICIAL_HERMES_CURRENT_WITHOUT_HUMAN_MICROMANAGEMENT
+  reuse_before_create: true
+  new_parallel_updater: false
+  official_cli_is_update_engine: true
+  trigger_model:
+    webhook_accelerator:
+      event: repository_dispatch:hermes_official_update_check
+      optional: true
+    schedule_fallback:
+      owner: existing_hermes_core_signal_watch_schedule
+      required: true
+  deterministic_flow:
+    - HERMES_UPDATE_CHECK
+    - IF_NO_CHANGE_WRITE_RECEIPT_AND_STOP
+    - HERMES_UPDATE_PLAN
+    - HERMES_UPDATE_BACKUP_YES
+    - OFFICIAL_BUILD_AND_DEPENDENCY_REFRESH
+    - HERMES_GATEWAY_RESTART_WHEN_MANAGED
+    - CENTRALDARK_HERMES_PM2_RESTART_WHEN_PRESENT
+    - HERMES_UPDATE_POSTCHECK
+    - VERSION_REMEASURE
+    - RECEIPT
+  commands:
+    check: hermes update --check
+    plan: hermes update --plan
+    apply: hermes update --backup --yes
+    gateway_restart: hermes gateway restart
+  safety:
+    bounded_lock: true
+    update_only_when_official_check_reports_delta: true
+    full_backup_before_apply: true
+    official_updater_rollback_semantics_preserved: true
+    secret_output_forbidden: true
+    generic_failure_forbidden: true
+    exact_failure_step_required: true
+    post_update_check_must_report_current: true
+    unknown_is_not_pass: true
+  human_contract:
+    human_does_not_need_to_remember_update_command: true
+    human_does_not_receive_microcommand_chain: true
+    machine_handles_check_plan_backup_update_restart_and_verify: true
+    human_return_only_on_human_frontier_or_exact_hard_blocker: true
+  runtime_receipt: ~/.hermes/logs/update_receipts/centraldark-official-update-last.json
+  tutorial_loaded_by_core_prompt: true
 
 fixed_point:
   require:
@@ -425,6 +610,79 @@ progressive_autonomy:
         KEEP_CLOSE_TO_CANONICAL_OWNER: true
         AUTOMATE_WHEN_REPETITION_JUSTIFIES: true
         REUSE_BEFORE_REINVESTIGATE: true
+        SEARCH_EXISTING_CRYSTAL_BEFORE_NEW: true
+        SEARCH_EXISTING_OWNER_BEFORE_NEW: true
+        VERIFY_EXISTING_CAPABILITY_BEFORE_NEW: true
+        SEMANTIC_DEDUPE_BEFORE_CRYSTAL: true
+        UNVERIFIED_ABSENCE_IS_UNKNOWN: true
+        PARALLEL_ARCHITECTURE_WITHOUT_PROVEN_GAP: FORBIDDEN
+        TRUTH_GATE_OWNER: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/PDF-GATE-GLOBAL-CENTRALDARK.md
+        TLC23_HORN_BEFORE_LOGICAL_MUTATION: true
+        THREE_AXIS_ATOMIC_PROMOTION:
+          axes: [CASA, GITHUB, VPS]
+          same_source_commit_required: true
+          casa_exact_head_validation_required: true
+          github_same_head_gates_required: true
+          vps_exact_commit_deploy_required: true
+          counterproof_each_axis_required: true
+          partial_axis_pass_is_global_pass: false
+          micro_deploy_requires_explicit_chefe_authorization: true
+
+  daily_checklist_gate:
+    DAILY_CHECKLIST_GATE_REQUIRED: true
+    DAILY_CHECKLIST_OWNER: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
+    DAILY_CHECKLIST_CONSUMER: docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md
+    DAILY_CHECKLIST_RECORD_TARGET: ACTIVE_SCOPE_LEDGER
+    APPLIES_WHEN:
+      AGENT_OR_AI_MUTATES_CODE_DURING_DAY: true
+    BEFORE_FIRST_CODE_MUTATION_OF_DAY:
+      LOAD_DAILY_CHECKLIST: true
+      VERIFY_CURRENT_STATE: true
+      VERIFY_PARENT_GOAL: true
+      VERIFY_OWNER: true
+      VERIFY_SCOPE: true
+      VERIFY_WRITER_LEASE: true
+    DURING_DAY:
+      RECORD_MATERIAL_DELTA: true
+      RECORD_PENDING_GAPS: true
+      RECORD_HEAD_CHANGES: true
+      RECORD_HANDOFFS: true
+      RECORD_GATE_FAILURES: true
+    BEFORE_HANDOFF_OR_FINALIZATION:
+      UPDATE_DAILY_CHECKLIST: true
+    MODEL_NAME_IS_ROUTING_KEY: false
+    MODEL_NAME_IS_AUTHORITY: false
+    MODEL_NAME_IS_WRITER_LEASE: false
+    EXECUTOR_SELECTION:
+      - TAG_EXECUTOR
+      - CAPABILITY_MATCH
+      - SCOPE_MATCH
+      - LEASE_AVAILABLE
+      - POLICY_ALLOWED
+    MULTIPLE_WRITERS_ALLOWED: true
+    CONCURRENT_WRITERS_DISJOINT_SCOPES: true
+    SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE: true
+    FINAL_PROMOTION_SCOPE: ONE_ACTIVE_FINALIZER_LEASE
+    FINALIZATION_LANE:
+      - PR
+      - SAME_HEAD_GATES
+      - MAIN
+      - POST_MERGE
+      - DEPLOY
+      - REMEASURE
+      - FINAL_RECEIPT
+    CHEFE: INTENT_AUTHORITY
+    CONTRACT: POLICY
+    GATES: PROOF
+    VPS: EXECUTOR_RUNTIME_AND_CONTROL_PLANE
+    REALITY: JUDGE
+    GOAL_PAI_ID: STABLE
+    MICRO_GOAL: DERIVED_FROM_CURRENT_WOUND
+    truth_boundaries:
+      UNKNOWN_IS_NOT_PASS: true
+      ACTION_IS_NOT_PROOF: true
+      AUTHORIZED_IS_NOT_VALIDATED: true
+      MERGED_IS_NOT_DEPLOYED: true
 
   state_discipline:
     UNKNOWN_IS_NOT_PASS: true
@@ -541,3 +799,70 @@ aureola_learning_loop:
     correlated_views_are_independent_proofs: false
     contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true
     external_reality_100_percent_from_calculation_only: false
+
+universal_operational_dna:
+  status: ACTIVE
+  provenance:
+    grok_observed_pattern: EXPLICIT_PARALLEL_FANOUT_WITH_PARENT_RENDEZVOUS
+    hermes_existing_owner: apps/modulos/HERMES-CORE/core/perception-orchestra.mjs
+  rule: REUSE_EXISTING_PERCEPTION_ORCHESTRA_NOT_SECOND_SCHEDULER
+  phases:
+    - DISCOVER
+    - FANOUT
+    - RENDEZVOUS
+    - DEDUPE
+    - COUNTERPROOF
+    - REMEASURE
+    - REALITY_JUDGE
+    - RECEIPT
+    - NEXT_CURSOR
+  fanout:
+    default_fronts: 4
+    roles:
+      - A_LOGIC
+      - B_IMPLEMENTATION
+      - C_REGRESSION_FALSE_GREEN
+      - D_SIMPLIFICATION
+    parallel_read_only: true
+    mutation_after_rendezvous_only: true
+    mutation_serialized_by_writer_scope: true
+  retry:
+    requires_information_gain: true
+    same_failure_without_new_information: NO_RETRY
+  evidence:
+    FOUR_ANSWERS_ARE_FOUR_PROOFS: false
+    CORRELATED_EVIDENCE_INFLATION_BLOCKED: true
+    UNKNOWN_IS_NOT_PASS: true
+proven_path_replay:
+  marker: PROVEN_PATH_REPLAY_LOCK
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  runtime_consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  enabled: true
+  human_reteach_same_proven_path: false
+  agent_reinterpret_same_proven_path: false
+  PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO: true
+  same_dependency_fingerprint: REUSE_PROVEN_PATH_NO_RETHINK
+  changed_dependency_fingerprint: REVALIDATE_AFFECTED_CONE_ONLY
+  adaptation_scope:
+    allowed:
+      - WORKSPACE_PATH
+      - HOST
+      - RUNTIME_BINDING
+      - AUTH_REFERENCE
+      - TOOL_ENTRYPOINT
+    forbidden:
+      - HUMAN_GOAL
+      - PROOF_LOGIC
+      - EXPECTED_EFFECT
+      - CANONICAL_OWNER
+  loop:
+    - LOAD_SEALED_RECIPE
+    - ADAPT_ENVIRONMENT_BINDINGS_ONLY
+    - EXECUTE_SAME_SEQUENCE
+    - RUN_SAME_PROOF
+    - COMPARE_EXPECTED_EFFECT
+    - DIVERGENCE_TO_DELTA
+    - COUNTERPROOF
+    - REALITY_JUDGE
+    - RECEIPT
+

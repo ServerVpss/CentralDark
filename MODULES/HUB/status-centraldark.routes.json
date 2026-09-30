@@ -1,0 +1,89 @@
+{
+  "schema": "centraldark.modules.hub.status_routes.v1",
+  "updated_at": "2026-09-24T12:12:00-03:00",
+  "purpose": "Mapa das superficies que devem aparecer em status.centraldark ou no Hub visual. Este arquivo nao executa chamadas; ele declara rotas e invariantes.",
+  "runtime_owner": "apps/modulos/hub",
+  "routes": [
+    {
+      "id": "status.github.head",
+      "label": "GitHub HEAD / main",
+      "source_connection": "github-repository-canonical",
+      "route": "/status/github/head",
+      "card_hint": "GitHubHeadCard",
+      "must_show": ["head_sha", "branch", "commit_message", "checks_state", "last_verified_at"],
+      "pass_rule": "HEAD medido + checks/status conclusivos. Sem checks = PENDING/UNKNOWN."
+    },
+    {
+      "id": "status.hub.domain_expansion",
+      "label": "EXPANSAO DE DOMINIO / Trigger Fabric",
+      "source_connection": "hub-domain-expansion-trigger",
+      "route": "/status/hub/domain-expansion",
+      "card_hint": "DomainExpansionTriggerCard",
+      "must_show": ["enabled", "canonical_phrase", "last_expansion_commit", "ci_state", "next_sector", "blocked_reason"],
+      "pass_rule": "So PASS quando trigger existe, owner foi medido, delta passou por CI/receipt e NEXT_CURSOR foi registrado."
+    },
+    {
+      "id": "status.github.email_signal",
+      "label": "GitHub/Gmail event signal",
+      "source_connection": "github-actions-email-signal",
+      "route": "/status/events/github-email",
+      "card_hint": "EventSignalCard",
+      "must_show": ["subject", "commit_hint", "received_at", "classified_as", "verified_against_github"],
+      "pass_rule": "Sempre EVENT_ONLY ate consulta GitHub confirmar estado."
+    },
+    {
+      "id": "status.telegram.bot",
+      "label": "Telegram Bot API / Security SOL",
+      "source_connection": "telegram-bot-api-security-sol",
+      "route": "/status/telegram/bot",
+      "card_hint": "TelegramBotStatusCard",
+      "must_show": ["process", "bot_identity", "admin_binding", "last_message", "brain_write_state"],
+      "pass_rule": "Processo vivo + getMe/admin binding + resposta ou receipt de nota."
+    },
+    {
+      "id": "status.telegram.mtproto",
+      "label": "Telegram MTProto user bridge",
+      "source_connection": "telegram-mtproto-user-bridge",
+      "route": "/status/telegram/mtproto",
+      "card_hint": "TelegramMTProtoCard",
+      "must_show": ["health_http", "status", "configured", "hasSession", "pm2_owner"],
+      "pass_rule": "CONFIG_BLOCKED e READY sao estados diferentes. Conta conectada exige hasSession true + status READY."
+    },
+    {
+      "id": "status.vps.pm2",
+      "label": "VPS / PM2 runtime",
+      "source_connection": "vps-runtime",
+      "route": "/status/vps/pm2",
+      "card_hint": "Pm2RuntimeCard",
+      "must_show": ["pm2_home", "processes", "errored", "dirty_files", "head_sha"],
+      "pass_rule": "Processo online no PM2 owner correto + health payload valido."
+    },
+    {
+      "id": "status.mcp.health",
+      "label": "MCP health/deep",
+      "source_connection": "mcp-centraldark",
+      "route": "/status/mcp/health",
+      "card_hint": "McpHealthCard",
+      "must_show": ["health", "health_deep", "score", "criticalFailures"],
+      "pass_rule": "Payload validado; tela admin/login nao conta como health."
+    },
+    {
+      "id": "status.meta_lupa.reward",
+      "label": "Meta-Lupa reward/posterior",
+      "source_connection": "meta-lupa-reward-engine",
+      "route": "/status/meta-lupa/reward",
+      "card_hint": "RewardLedgerCard",
+      "must_show": ["xp_delta", "penalties", "posterior", "receipt", "human_feedback"],
+      "pass_rule": "XP so promove com receipt. Elogio do CHEFE e feedback humano, nao prova tecnica sozinho."
+    }
+  ],
+  "ui_controls": {
+    "config_source": "MODULES/HUB/controls/notifications-and-sensors.json",
+    "registry_source": "MODULES/HUB/hub-connections.registry.json",
+    "trigger_source": "MODULES/HUB/triggers/domain-expansion.trigger.json",
+    "playbook_source": "MODULES/HUB/playbooks/EXPANSAO-DE-DOMINIO.md",
+    "allow_toggle_in_ui": true,
+    "write_back_mode": "planned",
+    "write_back_requires_receipt": true
+  }
+}

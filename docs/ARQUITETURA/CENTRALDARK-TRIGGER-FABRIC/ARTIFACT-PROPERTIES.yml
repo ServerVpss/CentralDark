@@ -93,6 +93,31 @@ groups:
       required: false
       type: list
       description: Notas/owners relacionados; qualidade acima de quantidade
+  G_LIFECYCLE:
+    artifact_class:
+      required: false
+      type: enum
+      values: [SOURCE, WORKTREE, BUILD, TEMP, CACHE, LOG, RECEIPT, RUNTIME_STATE]
+    lifecycle_state:
+      required: false
+      type: enum
+      values: [ACTIVE, RECONSTRUCTIBLE, PERSISTED, CLEANUP_ELIGIBLE, EXPIRED, REMOVED]
+    environment_id:
+      required: false
+      type: enum
+      values: [CASA, GITHUB, VPS, EXTERNAL]
+    mission_id:
+      required: false
+      type: string
+    parent_event_id:
+      required: false
+      type: string
+    cleanup_eligible:
+      required: false
+      type: boolean
+    expires_at:
+      required: false
+      type: datetime
     relation_types:
       required: false
       type: list
@@ -124,6 +149,16 @@ rules:
   same_name_different_hash: FAIL_CLOSED
   unresolved_known_identity: UNKNOWN
   unknown_is_not_pass: true
+  agent_created_artifact_requires_lifecycle_classification: true
+  temp_is_not_canonical_asset: true
+  cache_is_reconstructible_not_authority: true
+  npm_npx_cache_node_modules_is_source_code: false
+  package_manager_cache_must_not_be_copied_into_apps_modulos: true
+  source_dependency_promotion_requires_existing_owner_or_manifest: true
+  casa_tmp_owner: E:\CentralDark\_tmp
+  casa_cache_owner: E:\CentralDark\cache
+  casa_site_build_preview_owner: C:\CentralDark
+  same_taxonomy_does_not_mean_same_environment_state: true
 
 identity_resolution:
   applies_to: ALL_ENGINES_AND_SURFACES
