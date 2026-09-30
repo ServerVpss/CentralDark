@@ -688,3 +688,27 @@ updated: 2026-08-27
 - **Data:** 2026-09-30
 - **Contexto:** Durante a operação CentralDark-OS surgiu risco de interpretar `REALITY=JUDGE` como gate global antes de cada ação, travando execução determinística, revalidando tudo, perguntando de novo ou reduzindo a autoridade do CHEFE sob o pretexto de prudência.
 - **Aprendizado:** `REALITY=JUDGE` verifica efeito observado e impede falso PASS técnico; não concede permissão para começar, não substitui a intenção do CHEFE, não veta rota determinística já autorizada e não transforma sensor, log, modelo, workflow, screenshot ou plataforma em autoridade humana. Até a leitura da realidade pode estar incompleta, atrasada, contaminada por cache, sensor ruim ou cone errado. Portanto: `DETERMINISTIC_ROUTE_FIRST=true`; `REALITY_JUDGE_AFTER_EFFECT=true`; `REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true`; `REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true`; `CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true`; `OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true`; `UNCHANGED_FINGERPRINT_REUSES_PROOF=true`; `MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true`. Se houver rota determinística conhecida e autorização compatível, execute o menor delta, meça o cone afetado e use Reality Judge para confirmar ou corrigir, nunca como burocracia de bloqueio prévio.
+
+
+### 98. Receita replay-able — diagnóstico e fix determinístico de falha de workflow GitHub
+- **Categoria:** ci-cd-receita-executavel
+- **Data:** 2026-09-30
+- **Owner:** `.github/workflows/` (workflow afetado) + este índice · Autoridade final: CHEFE
+- **Objetivo:** dado um workflow com `conclusion: failure` na main/PR, achar a cláusula que realmente impede o objetivo (workflow verde) e aplicar o menor delta no owner existente, sem maquiar.
+- **Pré-condições:** acesso `mcp__github__actions_list` / `get_job_logs`; checkout local do repo; Python + Node para validar YAML/JS.
+- **Sequência executável (replay antes de redescobrir):**
+  1. `actions_list method=list_workflow_runs branch=main status=completed` → listar runs `failure`.
+  2. Para cada run: se `total_count` de jobs = 0 e `created==updated` (instantâneo) → **startup_failure** (config/YAML inválido que o GitHub rejeita); senão `get_job_logs failed_only=true` → falha de job.
+  3. Startup_failure: `python3 -c "import yaml; yaml.safe_load(open(f))"` acha o ponto; se YAML passa no Python mas GitHub rejeita, comparar o bloco com workflows irmãos que funcionam (o run mostra o **path** como `name` em vez do `name:` = GitHub não parseou).
+  4. Aplicar menor delta no owner; validar: `yaml.safe_load` + `node --check` (JS de github-script: embrulhar em `async function(){...}` antes do check, pois top-level `return`/`await` é legal lá).
+  5. Push → o próprio run do workflow no head novo é o REALITY=JUDGE. `name` voltar ao `name:` correto = startup resolvido.
+- **Fingerprints observados → causa → fix (bindings variáveis = arquivo/linha):**
+  - `ScannerError mapping values are not allowed here` dentro de `run: |` → linha de continuação de string shell multi-linha em coluna 1 quebrando o block scalar → indentar OU trocar `git commit -m "multi\nlinha"` por múltiplos `-m` indentados.
+  - `STEP_SUMMARY_WRITE_FAILED=require is not defined` em arquivo `.mjs` → ESM não tem `require` → `import { X } from 'node:fs'` no topo.
+  - startup_failure em 100% dos runs + run `name` = filepath + `workflow_run:` sem `workflows:` → `workflow_run` exige a chave `workflows:` → adicionar (reusar lista dos workflows irmãos).
+  - job `SELO_POST_FAILED ... Resource not accessible by integration` (403) em evento `pull_request` para sensor que só posta receipt → sensor não deve travar CI → `catch`: 403/`not accessible` → `core.warning`, erro real → `core.setFailed`.
+- **Prova:** selo-fabric 42 runs startup_failure → após `workflows:` parseia (name correto) → após best-effort job `SUCCESS` medido no PR head. painel/`.mjs` validados por `yaml.safe_load`/`node --check`.
+- **Contraprova:** branches sem o fix continuam startup-falhando no mesmo commit-window; comparação com irmão provado (hermes/dependabot têm `workflows:`).
+- **Resultado esperado:** workflow parseia e roda; sensor verde onde tem write, warning onde é read-only; exit semantics intencionais (ex: `failOnBlocked`) preservadas.
+- **Cristal:** `STARTUP_FAILURE=0_JOBS+INSTANT+NAME_IS_PATH`; `PYTHON_YAML_PASS != GITHUB_YAML_PASS`; `SENSOR_POST_FAILURE != CI_GATE`; `MENOR_DELTA_NO_OWNER`; `REUSE_IRMAO_PROVADO`; `SAME_FINGERPRINT_SAME_FIX=REUSE`; `CHANGED_FINGERPRINT=REVALIDATE_CONE`.
+- **NEXT_CURSOR:** mesmo fingerprint reaparece → aplicar este fix direto; fingerprint novo → medir, corrigir, e anexar aqui como binding adicional.
