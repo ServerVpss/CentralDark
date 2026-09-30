@@ -109,7 +109,6 @@ rollback() {
 trap rollback EXIT ERR
 
 for rel in "${FILES[@]}"; do
-  git -C "$SCRATCH" cat-file -e "$SOURCE:$rel" 2>/dev/null || { echo "SOURCE_FILE_MISSING=$rel"; exit 26; }
   if [[ -e "$REPO/$rel" ]]; then
     mkdir -p "$BACKUP/$(dirname "$rel")"
     cp -a "$REPO/$rel" "$BACKUP/$rel"
@@ -117,9 +116,18 @@ for rel in "${FILES[@]}"; do
     mkdir -p "$BACKUP/.absent/$(dirname "$rel")"
     : > "$BACKUP/.absent/$rel"
   fi
-  mkdir -p "$REPO/$(dirname "$rel")"
-  cp -a "$SCRATCH/$rel" "$REPO/$rel"
-  cmp -s "$SCRATCH/$rel" "$REPO/$rel" || { echo "PROMOTION_HASH_MISMATCH=$rel"; exit 27; }
+
+  if git -C "$SCRATCH" cat-file -e "$SOURCE:$rel" 2>/dev/null; then
+    mkdir -p "$REPO/$(dirname "$rel")"
+    cp -a "$SCRATCH/$rel" "$REPO/$rel"
+    cmp -s "$SCRATCH/$rel" "$REPO/$rel" || { echo "PROMOTION_HASH_MISMATCH=$rel"; exit 27; }
+  else
+    echo "PROMOTION_DELETE=$rel"
+    if [[ -e "$REPO/$rel" ]]; then
+      mkdir -p "$BACKUP/.deleted/$(dirname "$rel")"
+      mv "$REPO/$rel" "$BACKUP/.deleted/$rel"
+    fi
+  fi
 done
 promoted=1
 
