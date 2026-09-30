@@ -2198,3 +2198,18 @@ WRAPPER_PREFLIGHT_FAIL
 `BRIDGE_OWNERSHIP_CLAIM_REQUIRES_COMPLETE_EVIDENCE=true`.
 
 Este preflight é extensão do método existente, não segundo gate/owner. Falha do wrapper impede promover conclusão sobre o alvo; PASS do wrapper apenas autoriza executar a prova real.
+
+### Reality Judge não é permissão de execução
+
+`REALITY_IS_JUDGE` limita falso-verde e valida o efeito observado. Não é porteiro antes da ação, não reduz a autoridade do CHEFE e não autoriza revalidar tudo quando há rota determinística e fingerprint preservado.
+
+```text
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+DETERMINISTIC_ROUTE_FIRST=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+```
+
+Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrigir o menor gate causal e continuar. Não transformar prudência em bloqueio.
