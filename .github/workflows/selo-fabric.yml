@@ -330,10 +330,12 @@ jobs:
                 core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
             } catch (e) {
               const status = e.status || e.response?.status;
-              const readOnly = Number(status) === 403 && /Resource not accessible by integration|Resource not accessible by personal access token/i.test(e.message || '');
+              const message = String(e.message || '');
+              const readOnlyMessage = /Resource not accessible by integration|Resource not accessible by personal access token/i.test(message);
+              const readOnly = readOnlyMessage && (!status || Number(status) === 403);
               if (readOnly) {
-                core.warning(`SELO_POST_SKIPPED_READONLY event=${event} status=${status || '-'} error=${e.message}`);
+                core.warning(`SELO_POST_SKIPPED_READONLY event=${event} status=${status || '403/implicit'} error=${message}`);
               } else {
-                core.setFailed(`SELO_POST_FAILED event=${event} error=${e.message}`);
+                core.setFailed(`SELO_POST_FAILED event=${event} status=${status || '-'} error=${message}`);
               }
             }
