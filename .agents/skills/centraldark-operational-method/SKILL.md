@@ -247,6 +247,28 @@ Não tratar `downloadyoutubesubtitles.com` como API canônica sem contrato, lice
 e prova de acesso. Não commitar legenda bruta; persistir somente receipt sanitizado
 e aprendizado reutilizável após validação.
 
+### Conector MCP por superfície/passagem
+
+Quando uma superfície externa disser que o conector MCP CentralDark foi desabilitado,
+tratar como evidência daquela passagem, não como falha global do servidor. A falha
+pode ocorrer em voz, texto, conversa longa, modelo, workspace, plano, autorização ou
+estado da própria plataforma. Não culpar automaticamente voz nem OAuth; medir outro
+corpo autorizado contra o mesmo alvo antes do veredito.
+
+```text
+CONNECTOR_DISABLED_IN_SURFACE
+→ ACCEPT_AS_SURFACE_EVIDENCE
+→ DO_NOT_PROMOTE_TO_SERVER_FAILURE
+→ TEST_SAME_TARGET_VIA_HERMES_OR_MCP_DIRECT
+→ TEST_FRESH_TEXT_CONVERSATION_WHEN_APPLICABLE
+→ CLASSIFY: SURFACE_BLOCK | AUTH_BLOCK | SERVER_FAIL | UNKNOWN
+```
+
+`kit_boas_vindas`/`puxar_aprendizados` bloqueados em uma passagem não provam
+`CentralDark-MCP` quebrado. Prova de servidor exige health/runtime/log ou chamada
+MCP direta. Se outro corpo autorizado invoca a mesma tool com sucesso, o blocker é
+da superfície/passagem observada até prova contrária.
+
 ## Gate de falsificação (MetaLupa)
 
 UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED (incluindo reason: SKIPPED), timeout, ausência de log ou ausência de revisão nunca equivalem a PASS.
@@ -435,6 +457,28 @@ TOOLS
 **Profile Switch:** != NEW_MISSION, != MEMORY_RESET, != GOVERNANCE_RESET. Preserva: HOUSE_STATE, CURRENT_INTENT, LAST_GOOD_STATE, SKILLS_LOADED, GOVERNANCE, HANDOFF_RECEIPTS, DREAM_PROPOSALS_PENDING.
 
 **Novo Profile Sem House Boot:** FAIL_CLOSED.
+
+
+### 3.1 BOT PROFILE IS CONFIGURATION, NOT PROCESS
+**Regra direta do Chefe:** o futuro Builder de Bots da CentralDark configura perfis sobre o mesmo organismo; não cria um processo, PID, governo ou cérebro por persona.
+
+```text
+PROFILE != PROCESS
+PROFILE != PID
+PROFILE != OWNER
+PROFILE != GOVERNANCE
+BOT_PROFILE = VIEW + SPECIALIZATION + CAPABILITY_SELECTION + SKILL_SELECTION + TOOL_POLICY + ROUTINE_BINDING
+```
+
+**Runtime canônico:** `BOT_PROFILE -> CAPABILITY_ROUTER -> OWNER_EXISTENTE -> WORKER_POOL_EXISTENTE -> ONE_WRITER_PER_SCOPE -> EVIDENCE -> REALITY_JUDGE`.
+
+**Pode variar por Bot:** nome, rótulo, descrição/persona, especialização, modelo preferido, capabilities, skills, tools e routines permitidas.
+
+**Não pode variar por Bot:** Regra Zero, autoridade do CHEFE, SOL/HERMES, owner canônico, writer único, proof rules, Reality Judge, fixed point, segurança e `REUSE_BEFORE_CREATE`.
+
+**PID policy:** persona não recebe daemon/PID próprio por padrão. Processo novo só existe quando uma capability exige isolamento/runtime próprio e a ausência de owner/worker equivalente foi PROVADA.
+
+**Persistência:** salvar somente o delta de configuração do profile; não copiar constituição, skills canônicas ou memória global para cada Bot.
 
 ### 4. CSP/Chrome Freeze — Metodologia Cirúrgica
 - CSP bloqueando `eval` **não é bug** — é a catraca funcionando
@@ -2198,3 +2242,18 @@ WRAPPER_PREFLIGHT_FAIL
 `BRIDGE_OWNERSHIP_CLAIM_REQUIRES_COMPLETE_EVIDENCE=true`.
 
 Este preflight é extensão do método existente, não segundo gate/owner. Falha do wrapper impede promover conclusão sobre o alvo; PASS do wrapper apenas autoriza executar a prova real.
+
+### Reality Judge não é permissão de execução
+
+`REALITY_IS_JUDGE` limita falso-verde e valida o efeito observado. Não é porteiro antes da ação, não reduz a autoridade do CHEFE e não autoriza revalidar tudo quando há rota determinística e fingerprint preservado.
+
+```text
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+DETERMINISTIC_ROUTE_FIRST=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+```
+
+Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrigir o menor gate causal e continuar. Não transformar prudência em bloqueio.

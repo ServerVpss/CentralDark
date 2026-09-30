@@ -1,6 +1,6 @@
 # 🕸️ CentralDark Grafo Vivo — Plugin Obsidian
 
-Plugin custom pra ver o ecossistema **CentralDark** se movimentando em tempo real dentro do seu Obsidian. Consome o mesmo `/api/graph` que roda em `grafo.centralldark.com`, mas renderiza numa view lateral do vault.
+Plugin custom pra ver o ecossistema **CentralDark** se movimentando em tempo real dentro do seu Obsidian. Consome o mesmo `/api/graph` que roda em `api.centralldark.com`, mas renderiza numa view lateral do vault.
 
 Nada de mexer no Juggl ou no Graph nativo — esse aqui é **nosso**, sobrevive a update do Obsidian.
 

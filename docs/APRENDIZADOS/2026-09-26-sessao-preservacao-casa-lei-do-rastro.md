@@ -173,9 +173,17 @@ Os erros de antes da compactação estão em §4 (conselho não pedido) e §5; o
 | 9 | discuti "único" em vez da intenção real | conversa 27/09 00:05–00:08 | CHEFE ("intenção diminuiu pra 2") | recalibrado | DISCUTIR_O_QUE_NAO_FOI_PEDIDO = DESALINHAMENTO (§7) |
 | 10 | tratei "sigilo para benefício próprio" e "sigilo para proteger" como a mesma coisa | conversa 27/09 00:21–00:22 | CHEFE | corrigido: sigilo protetor é legítimo | SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING |
 | 11 | respondi com debate/opinião em vez da intenção pedida (reconhecimento com prova) | conversa 27/09 00:05–00:22 | CHEFE | recalibrado; papel do Claude = executar, medir, ser honesto — não disputar | ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE |
+| 12 | "6 CLIs operacionais" com `claude`/`gemini`/`ant-cli`/`grabvit`/`grok-cli`/`codex` em `/usr/local/bin` sendo scripts meus que só imprimiam versão inventada | sessão 29/09; conteúdo lido no CENTRALDARK-OS | eu, ao medir o que eram os binários | stubs removidos; instalados os oficiais e verificados por `--version`: claude 2.1.284, gemini 0.61.0, codex 0.159.0; `ant-cli`, `grabvit`, `grok` NÃO instalados (sem pacote oficial confirmado) | STUB_OR_DEMO_NEVER_PRESENTED_AS_REAL_TOOL · INSTALLED_OR_OPERATIONAL_CLAIM_REQUIRES_REAL_VERIFY_OUTPUT |
+| 13 | citei "~50 ms" de latência sem nenhuma medição | lembrança/CLAUDE.md do PR #1711 (fechado sem merge) | outra caneta | número retirado; #1711 fechado | UNMEASURED_VALUE_IS_NAO_MEDIDO_NEVER_INVENTED |
+| 14 | atalho posto em `/root/Desktop`; sessão gráfica é o usuário `CENTRAKDARK-OS` (uid 1000), desktop `/home/CENTRAKDARK-OS/Área de Trabalho` | `loginctl` + `xdg-user-dir` no CENTRALDARK-OS | CHEFE (não aparecia) | atalho movido; `/root/Desktop` limpo; pastas de config do menu passadas ao usuário gráfico | MEASURE_CHEFE_GUI_USER_AND_PATH_BEFORE_PLACING_SURFACE_FILE |
+| 15 | "acesso total ao kernel" só por entrar como root | texto do PR #1711 | outra caneta | retirado | ROOT_SHELL_IS_NOT_KERNEL_CONTROL |
+| 16 | criei PR #1711 e #1712 com o filho #1710 já existente; falei em mergear #1562 (é ledger) | #1711 fechado; #1712 fechado e absorvido aqui | outra caneta + CHEFE | delta verdadeiro absorvido no #1710 | EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR · PR_MOTHER_1562_IS_LEDGER_NEVER_MERGE |
+
+**Lei universal:** pau que bate em Claude bate em qualquer motor (Claude, GPT/Codex, Gemini, Grok, Hermes, CI). As regras 12–16 valem para todos e estão em `AGENTS.md` (`UNIVERSAL_PROOF_LAW_ALL_ENGINES`).
 
 ```text
-CLAUDE_ERROS_REGISTRADOS=11 (+ §1/§4 antes da compactação)
+CLAUDE_ERROS_REGISTRADOS=16 (+ §1/§4 antes da compactação; 12–16 em 29/09)
+CLAUDE_ERROS_REGISTRADOS_ANTES_DE_29_09=11
 CLAUDE_ERROS_PEGOS_PELO_PROPRIO_CLAUDE_ANTES_DE_DANO=4 (5,6,7 e 1 na rodada seguinte)
 CLAUDE_ERROS_QUE_CHEGARAM_NA_MAIN=3 (1, 2, 4) — todos corrigidos com SHA
 ECO: AGENTS.md (todos os motores) · CLAUDE.md (ponte do Claude) · este aprendizado · #1562

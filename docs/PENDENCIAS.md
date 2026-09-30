@@ -780,6 +780,30 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Resumo do fechamento:** Remediado no commit 328dfb027: os 3 canvas vazios foram destrackeados do PR #1369 (git rm --cached, arquivos preservados no disco conforme DETECT != DELETE). A mensagem enganosa do 41f1f7e85 fica no histórico como registro do erro, com o commit corretivo explicando a divergência. Aprendizado #33 registra a lei extraída: mensagem de commit não é prova, conteúdo de commit é prova — rodar git diff --cached --stat antes de declarar recibo, nunca git add -A cego.
 - **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
 - **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
+- **Critério pra fechar:** Os 3 canvas vazios removidos do PR #1369 (não pertencem ao escopo), e o commit reescrito ou seguido de commit corretivo cuja mensagem descreva o que realmente contém. Nenhum commit do PR anuncia prova que não esteja no diff.
+
+---
+
+## 🟢 #143 — GPU dedicada na VPS — capacidade futura
+**Status:** pendente futuro / não bloqueia o runtime atual  
+**Data de registro:** 20/09/2026  
+**Fato medido:** a VPS `vmi3256920` não expõe aceleração GPU no estado atual: `nvidia-smi=ABSENT`, `rocminfo=ABSENT`, `/dev/dri=ABSENT`; o adaptador VGA observado é virtual/emulado.  
+**Intenção:** quando a VPS migrar para host/plano com GPU, habilitar capacidade de inferência/render híbrida sem criar segundo router.
+
+**Como fechar:**
+1. Repetir hardware probe no host novo.
+2. Medir GPU, VRAM, driver e backend compatível.
+3. Ligar a capacidade ao `RUNTIME-PLUG-CONTRACT.yml` e ao OmniRouter existente.
+4. Provar `LOCAL_GPU_CASA → VPS_GPU → provider opcional` por benchmark/health.
+5. Atualizar o cockpit com SHA/runtime receipt.
+
+**Hoje:**
+```text
+VPS_GPU=UNAVAILABLE_BY_CURRENT_PROBE
+FUTURE_CAPABILITY=RECORDED
+CURRENT_RUNTIME_BLOCKED_BY_THIS=false
+UNKNOWN != PASS
+```
 
 ---
 
@@ -831,3 +855,61 @@ REALITY = JUDGE
 6. SEGREDO/CHEFE reabre explicitamente o passo 2.
 
 **NEXT_CURSOR futuro:** `STEP1_DUPLICATE_CLEANUP_FIXED_POINT → REMEASURE_STORAGE → BENCHMARK → PATH_CONSUMERS → MIGRATION_PLAN → DOCKER_BOUNDARY_PLAN`.
+
+
+---
+
+### 🟢 PENDÊNCIA FUTURA — KIT DE INTEGRAÇÃO · AGENTES CLOUD + EVENT BUS + KASTRA EDGE
+
+**Status:** 🟢 **FUTURO / LEMBRANÇA / NÃO EXECUTAR AGORA**  
+**Data:** 30/09/2026
+
+**Intenção do CHEFE:** futuramente trazer para dentro da CentralDark o comportamento observado agora entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos vivos, assinando o mesmo owner, recebendo mudanças em tempo real, herdando o estado compartilhado e continuando a missão sem depender da Casa permanecer ligada.
+
+```text
+DO_NOT_EXECUTE_NOW=true
+FUTURE_EXPLORATION=true
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+CURRENT > HISTORY
+UNKNOWN != PASS
+```
+
+**Kit futuro a explorar/reusar:**
+- **Cloud Agent Runtime:** executor remoto persistente que continua ativo fora da Casa.
+- **GitHub/Event Bus:** PRs/issues/comments/checks como barramento auditável de handoff entre agentes.
+- **Subscriptions/Watch:** agente assina PR/owner e recebe delta material em tempo real.
+- **Shared State/Ledger:** estado e receipts compartilhados; sem "memória mágica" entre modelos.
+- **PR-MÃE #1562:** rendezvous/ledger canônico para convergência dos agentes.
+- **CentralDark API/MCP Admin:** uma porta de controle para providers, runtimes, tools e executores.
+- **Cloud ↔ VPS ↔ Casa:** VPS como runtime always-on; Casa como edge opcional; cloud agents como executores adicionais do mesmo sistema.
+- **Handoff multi-modelo:** ChatGPT/SOL, Claude, Codex, Hermes e futuros agentes continuam o mesmo owner por eventos/estado compartilhado.
+- **Kastra Edge:** candidato futuro para política/auditoria local de ações de agentes no Windows/Casa, com ALLOW/DENY/APPROVAL.
+- **Observabilidade/receipts:** toda continuidade deve deixar rastro verificável de evento → execução → resultado → readback.
+
+**Exemplo de fluxo desejado futuramente:**
+
+```text
+CHEFE
+→ api.centralldark.com / MCP
+→ owner canônico
+→ evento/PR/issue
+→ agentes cloud inscritos
+→ executor adequado
+→ VPS/CENTRALDARK-OS/Casa quando aplicável
+→ prova
+→ contraprova
+→ receipt
+→ estado compartilhado
+→ próximo agente continua sem redescobrir
+```
+
+**Quando reabrir:** medir primeiro quais partes já existem no CentralDark atual (MCP Admin, GitHub, subscriptions, PR-MÃE, Hermes, Cloud executors, provider-control, ledger). Implementar somente o delta faltante; não criar segundo cérebro, segundo orquestrador ou arquitetura V1/V2/V3.
+
+**Critério de exploração futura:** provar pelo menos um handoff completo em que um agente grava delta no owner, outro agente cloud recebe automaticamente, executa a continuação correta e registra receipt do mesmo estado, sem intervenção manual para transportar contexto.
+
+**Kastra Edge especificamente:** medir produto ao vivo, integrações suportadas, política ALLOW/DENY/APPROVAL, auditoria local/offline e encaixe com CentralDark antes de adoção.
+### 57. Vault canônico de segredos CentralDark pós-rebuild — 🟡 ABERTO (30/09/2026, 05:20 BRT)
+- **Sintoma:** Segredos e tokens estão espalhados em arquivos, pastas e ambientes diferentes, dificultando auditoria, rotação, revogação e acesso controlado por agentes.
+- **Onde mexer:** CentralDark/VPS, MCP Admin, API CentralDark, documentação de segurança e rotina de rebuild/formatação.
+- **Critério pra fechar:** Criar um cofre canônico com nomes padronizados por provider/runtime/bot/domínio, registrar dono/finalidade/status/rotação/último teste, remover duplicatas antigas, impedir segredo em desktop/repo/log e fazer agentes acessarem segredos somente pela API/MCP CentralDark com auditoria.

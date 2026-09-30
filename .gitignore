@@ -102,7 +102,10 @@ scripts/memory-linker/.next_run
 scripts/memory-linker/analyst-decision.json
 scripts/memory-linker/last-report.json
 scripts/memory-linker/pattern-library.json
-scripts/sync-loop.sh
+# scripts/sync-loop.sh foi promovido a fonte canônica reconstruível em 2026-09-15.
+# Matéria Drive bruta fica runtime até Dream Review/MetaLupa promover delta útil.
+scripts/memory-linker/inbox/*-drive-chefe-deltaunificadocentraldark-*.txt
+scripts/memory-linker/inbox/*-drive-chefe-deltaunificadocentraldark-*.provenance.json
 apps/modulos/elite-gateway/venv/
 apps/modulos/elite-gateway/config/
 
@@ -141,7 +144,15 @@ scratch/
 node_modules/.cache
 .bun/
 .bunx/
+# CentralDark workspace lifecycle (Casa/VPS runtime state; never canonical source)
+_tmp/
+cache/
 
 # PostHog setup session cache (local, not application source)
 .posthog-wizard-cache/
 _DIAGNOSTICS/
+
+# runtime output do GraphPanel/Status - nao versionar, escrito ao vivo por processo
+apps/modulos/status/painel-data.json
+apps/modulos/status/graph-data.json
+apps/modulos/graph-panel/data/graph.json

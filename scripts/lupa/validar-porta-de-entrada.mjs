@@ -677,6 +677,23 @@ if (!contract) {
   const tempPolicy = contract.ephemeral_artifact_policy ?? {};
   if (tempPolicy.marker !== "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED") errors.push("CONTRATO_TEMP_POLICY_MARKER_AUSENTE");
   if (tempPolicy.temporary_suffixes_allowed !== true) errors.push("CONTRATO_TEMP_POLICY_NAO_PERMITE_COORDENACAO_EFEMERA");
+  const tempCleanupTool = tempPolicy.cleanup?.tool;
+  if (tempCleanupTool !== "scripts/centraldark/ephemeral-workspace.mjs") errors.push("CONTRATO_TEMP_POLICY_SEM_FERRAMENTA_EXECUTAVEL");
+  if (tempPolicy.cleanup?.marker_file !== ".centraldark-ephemeral.json") errors.push("CONTRATO_TEMP_POLICY_MARKER_FILE_AUSENTE");
+  if (tempPolicy.cleanup?.cleanup_readback_required !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_READBACK_FINAL");
+  if (tempPolicy.cleanup?.blind_delete_without_marker !== "FORBIDDEN") errors.push("CONTRATO_TEMP_POLICY_PERMITE_DELETE_CEGO");
+  if (tempPolicy.cleanup?.self_test_required_by_gate !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_SELF_TEST_GATE");
+  const tempCleanupToolPath = typeof tempCleanupTool === "string" ? join(ROOT, tempCleanupTool) : "";
+  if (!tempCleanupToolPath || !existsSync(tempCleanupToolPath)) {
+    errors.push("CONTRATO_TEMP_TOOL_NAO_EXISTE");
+  } else if (tempPolicy.cleanup?.self_test_required_by_gate === true) {
+    try {
+      const cleanupProof = execFileSync(process.execPath, [tempCleanupToolPath, "--self-test"], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+      if (!cleanupProof.includes('"selfTest":"PASS"')) errors.push("CONTRATO_TEMP_TOOL_SELF_TEST_SEM_PASS");
+    } catch (error) {
+      errors.push(`CONTRATO_TEMP_TOOL_SELF_TEST_FAIL:${error?.status ?? "UNKNOWN"}`);
+    }
+  }
   if (tempPolicy.cleanup?.delete_after_use !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_LIMPEZA_FINAL");
   if (tempPolicy.cleanup?.final_temp_residue_target !== "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP") errors.push("CONTRATO_TEMP_POLICY_RESIDUO_SEM_ALVO_ZERO");
   if (tempPolicy.canonical_architecture?.version_suffix_for_same_capability !== "FORBIDDEN") errors.push("CONTRATO_CANONICO_PERMITE_V1V2V3");
@@ -766,6 +783,53 @@ if (!contract) {
   if (rules.model_vote_is_truth_mechanism !== false) errors.push("ARQUITETURA_VOTACAO_DE_MODELO_COMO_VERDADE");
   if (rules.same_finding_without_new_evidence !== "DROP_DUPLICATE") errors.push("ARQUITETURA_ANTI_ECO_AUSENTE");
   if (rules.derived_projection_is_source_of_truth !== false) errors.push("ARQUITETURA_PROJECAO_DERIVADA_COMO_AUTORIDADE");
+
+  const preArchitecture = contract.pre_architecture_reconciliation ?? {};
+  if (preArchitecture.marker !== "PRE_ARCHITECTURE_RECONCILIATION_REQUIRED") errors.push("PRE_ARCHITECTURE_GATE_AUSENTE");
+  if (preArchitecture.owner !== CONTRATO_RECONCILIACAO) errors.push("PRE_ARCHITECTURE_OWNER_INVALIDO");
+  const preSequence = [
+    "RECOVER_CHEFE_INTENT",
+    "SEARCH_EXISTING",
+    "VERIFY_OWNER",
+    "VERIFY_CAPABILITY",
+    "VERIFY_GAP",
+    "VERIFY_CURRENT_RUNTIME",
+    "PDF_TLC23_HORN_WHEN_APPLICABLE",
+    "REALITY_JUDGE",
+    "REUSE_OR_EXTEND",
+  ];
+  if (!Array.isArray(preArchitecture.sequence) || preSequence.some((step, index) => preArchitecture.sequence[index] !== step)) {
+    errors.push("PRE_ARCHITECTURE_SEQUENCE_INVALIDA");
+  }
+  if (preArchitecture.decision?.existing_complete !== "REUSE") errors.push("PRE_ARCHITECTURE_REUSE_INVALIDO");
+  if (preArchitecture.decision?.existing_partial !== "EXTEND_MINIMALLY") errors.push("PRE_ARCHITECTURE_EXTEND_INVALIDO");
+  if (preArchitecture.decision?.gap_not_proven !== "UNKNOWN_DO_NOT_CREATE") errors.push("PRE_ARCHITECTURE_UNKNOWN_INVALIDO");
+  if (preArchitecture.invariants?.PARALLEL_ARCH_WITHOUT_PROVEN_GAP !== "BLOCK") errors.push("PRE_ARCHITECTURE_PARALLEL_GAP_NOT_BLOCKED");
+
+  const adminAuthority = contract.admin_authority_policy ?? {};
+  if (adminAuthority.marker !== "ADMIN_AUTHORITY_IS_NOT_PROOF") errors.push("ADMIN_AUTHORITY_POLICY_AUSENTE");
+  if (adminAuthority.semantics?.ADMIN_AUTHENTICATED_TRUE !== "AUTHORITY_TO_OPERATE_PRIVILEGED_PATHS") errors.push("ADMIN_AUTH_SEM_AUTORIDADE_OPERACIONAL");
+  if (adminAuthority.semantics?.ADMIN_AUTHENTICATED_FALSE !== "PRIVILEGED_OPERATION_FORBIDDEN") errors.push("ADMIN_AUTH_FALSE_NAO_BLOQUEIA");
+  if (adminAuthority.semantics?.AUTHENTICATED_IS_PROVED !== false) errors.push("ADMIN_AUTH_VIROU_PROVA");
+  if (adminAuthority.semantics?.AUTHORIZED_IS_VALIDATED !== false) errors.push("ADMIN_AUTH_VIROU_VALIDACAO");
+  if (adminAuthority.semantics?.EXECUTED_IS_PASSED !== false) errors.push("EXECUCAO_VIROU_PASS");
+  if (adminAuthority.semantics?.ADMIN_IS_BYPASS !== false) errors.push("ADMIN_BYPASS_INDEVIDO");
+  if (adminAuthority.privileged_execution?.admin_required !== true) errors.push("ADMIN_NAO_OBRIGATORIO_PARA_PRIVILEGIADO");
+  if (adminAuthority.privileged_execution?.proof_gates_remain_required !== true) errors.push("ADMIN_REMOVEU_GATES");
+
+  const domains = contract.canonical_domain_policy ?? {};
+  if (domains.marker !== "CENTRALDARK_CANONICAL_PUBLIC_SURFACES") errors.push("CANONICAL_DOMAIN_POLICY_AUSENTE");
+  if (domains.canonical?.["centralldark.com"] !== "ONE_SITE_HUMAN_COCKPIT") errors.push("CANONICAL_SITE_INVALIDO");
+  if (domains.canonical?.["admin.centralldark.com"] !== "ONE_ADMIN_PANEL") errors.push("CANONICAL_ADMIN_INVALIDO");
+  if (domains.canonical?.["api.centralldark.com"] !== "ONE_MACHINE_API") errors.push("CANONICAL_API_INVALIDO");
+  if (domains.canonical?.["mcp.centralldark.com"] !== "MCP_PROTOCOL_SURFACE") errors.push("CANONICAL_MCP_INVALIDO");
+  if (domains.hub?.role !== "INTERNAL_ADMIN_CAPABILITY") errors.push("HUB_ROLE_INVALIDO");
+  if (domains.hub?.public_product !== false) errors.push("HUB_PUBLIC_PRODUCT_FORBIDDEN");
+  if (domains.hub?.new_panel !== false) errors.push("HUB_NEW_PANEL_FORBIDDEN");
+  if (domains.hub?.canonical_public_destination !== false) errors.push("HUB_CANONICAL_DESTINATION_FORBIDDEN");
+  if (domains.expansion_rule?.new_public_subdomain_requires_proven_material_gap !== true) errors.push("NEW_PUBLIC_SUBDOMAIN_GAP_NOT_REQUIRED");
+  if (domains.expansion_rule?.active_consumer_compatibility_must_be_measured_before_removal !== true) errors.push("LEGACY_CONSUMER_MEASUREMENT_NOT_REQUIRED");
+
   if (contract.complexity_policy?.never_expose_internal_governance_as_user_bureaucracy !== true) {
     errors.push("CONTRATO_RECONCILIACAO_GOVERNANCA_EXPOSTA_AO_USUARIO");
   }
@@ -861,6 +925,75 @@ if (!contract) {
   if (workflow.deterministic_first !== true) errors.push("AI_DETERMINISTICO_NAO_PRIORITARIO");
   if (workflow.ai_unavailable !== "DETERMINISTIC_FALLBACK_OR_FAIL_CLOSED") errors.push("AI_SEM_FALLBACK_DETERMINISTICO");
   if (workflow.rate_limit_timeout_model_offline_is_pass !== false) errors.push("AI_INDISPONIVEL_PODE_VIRAR_PASS");
+
+  const daily = contract.daily_checklist_gate ?? {};
+  if (daily.marker !== "DAILY_CHECKLIST_GATE_REQUIRED") errors.push("DAILY_CHECKLIST_GATE_AUSENTE");
+  if (daily.applies_when?.agent_or_ai_mutates_code_during_day !== true) errors.push("DAILY_CHECKLIST_ESCOPO_INVALIDO");
+  const beforeMutation = daily.before_first_code_mutation_of_day ?? {};
+  for (const key of ["load_daily_checklist","verify_current_state","verify_parent_goal","verify_owner","verify_scope","verify_writer_lease"]) {
+    if (beforeMutation[key] !== true) errors.push(`DAILY_CHECKLIST_BEFORE_MUTATION_AUSENTE:${key}`);
+  }
+  const duringDay = daily.during_day ?? {};
+  for (const key of ["record_material_delta","record_pending_gaps","record_head_changes","record_handoffs","record_gate_failures"]) {
+    if (duringDay[key] !== true) errors.push(`DAILY_CHECKLIST_DURING_DAY_AUSENTE:${key}`);
+  }
+  if (daily.before_handoff_or_finalization?.update_daily_checklist !== true) errors.push("DAILY_CHECKLIST_FINAL_UPDATE_AUSENTE");
+  if (daily.no_new_material_delta !== "NO_CHANGE") errors.push("DAILY_CHECKLIST_NO_CHANGE_INVALIDO");
+  if (daily.checklist_role !== "OPERATIONAL_HUD_NOT_SOURCE_OF_TRUTH") errors.push("DAILY_CHECKLIST_VIROU_FONTE_DA_VERDADE");
+
+  const executorSelection = contract.executor_selection_policy ?? {};
+  if (executorSelection.marker !== "EXECUTOR_SELECTION_BY_CAPABILITY_SCOPE_LEASE_POLICY") errors.push("EXECUTOR_SELECTION_POLICY_AUSENTE");
+  if (executorSelection.model_name_is_routing_key !== false) errors.push("MODEL_NAME_VIROU_ROUTING_KEY");
+  if (executorSelection.model_name_is_authority !== false) errors.push("MODEL_NAME_VIROU_AUTHORITY");
+  if (executorSelection.model_name_is_writer_lease !== false) errors.push("MODEL_NAME_VIROU_WRITER_LEASE");
+  const expectedExecutorSelection = ["TAG_EXECUTOR","CAPABILITY_MATCH","SCOPE_MATCH","LEASE_AVAILABLE","POLICY_ALLOWED"];
+  if (!Array.isArray(executorSelection.selection) || expectedExecutorSelection.some((item, index) => executorSelection.selection[index] !== item)) {
+    errors.push("EXECUTOR_SELECTION_INVALIDA");
+  }
+
+  const writerPolicy = contract.writer_concurrency_policy ?? {};
+  if (writerPolicy.marker !== "DISJOINT_SCOPE_CONCURRENCY_WITH_SINGLE_SCOPE_LEASE") errors.push("WRITER_CONCURRENCY_POLICY_AUSENTE");
+  if (writerPolicy.multiple_writers_allowed !== true) errors.push("MULTIPLE_WRITERS_DISALLOWED");
+  if (writerPolicy.concurrent_writers_disjoint_scopes !== true) errors.push("DISJOINT_SCOPE_WRITERS_NAO_PERMITIDOS");
+  if (writerPolicy.same_mutable_scope_requires_one_writer_lease !== true) errors.push("WRITER_LEASE_MESMO_ESCOPO_NAO_OBRIGATORIO");
+  if (writerPolicy.same_scope_parallel_mutation !== "BLOCKED") errors.push("WRITER_MESMO_ESCOPO_PARALELO_NAO_BLOQUEADO");
+  if (writerPolicy.lease_is_capability_not_persona !== true) errors.push("WRITER_LEASE_VIROU_PERSONA");
+
+  const finalization = contract.finalization_policy ?? {};
+  if (finalization.marker !== "ONE_ACTIVE_FINALIZER_LEASE") errors.push("FINALIZER_LEASE_POLICY_AUSENTE");
+  if (finalization.final_promotion_scope !== "ONE_ACTIVE_FINALIZER_LEASE") errors.push("FINALIZER_LEASE_NAO_UNICO");
+  const expectedFinalizationLane = ["PR","SAME_HEAD_GATES","MAIN","POST_MERGE","DEPLOY","REMEASURE","FINAL_RECEIPT"];
+  if (!Array.isArray(finalization.lane) || expectedFinalizationLane.some((item, index) => finalization.lane[index] !== item)) {
+    errors.push("FINALIZATION_LANE_INVALIDA");
+  }
+  if (finalization.same_head_required !== true) errors.push("FINALIZATION_SEM_SAME_HEAD");
+  if (finalization.merge_is_not_deploy !== true) errors.push("MERGE_CONFUNDIDO_COM_DEPLOY");
+  if (finalization.deploy_is_not_runtime_proof !== true) errors.push("DEPLOY_CONFUNDIDO_COM_RUNTIME_PROOF");
+
+  const goals = contract.goal_derivation_policy ?? {};
+  if (goals.marker !== "STABLE_PARENT_GOAL_DERIVED_MICRO_GOALS") errors.push("GOAL_DERIVATION_POLICY_AUSENTE");
+  if (goals.goal_pai_id !== "STABLE") errors.push("GOAL_PAI_NAO_ESTAVEL");
+  if (goals.micro_goal !== "DERIVED_FROM_CURRENT_WOUND") errors.push("MICRO_GOAL_NAO_DERIVADO_DA_FERIDA");
+  if (goals.child_failure_does_not_replace_parent_goal !== true) errors.push("FALHA_FILHA_SUBSTITUI_GOAL_PAI");
+  if (goals.current_wound_drives_next_micro_goal !== true) errors.push("FERIDA_ATUAL_NAO_DIRIGE_MICRO_GOAL");
+
+  const roleMap = contract.authority_role_map ?? {};
+  const expectedRoleMap = {
+    CHEFE: "INTENT_AUTHORITY",
+    CONTRACT: "POLICY",
+    GATES: "PROOF",
+    VPS: "EXECUTOR_RUNTIME_AND_CONTROL_PLANE",
+    REALITY: "JUDGE",
+  };
+  for (const [key, value] of Object.entries(expectedRoleMap)) {
+    if (roleMap[key] !== value) errors.push(`AUTHORITY_ROLE_INVALIDO:${key}`);
+  }
+
+  const nonEq = contract.non_equivalence_guards ?? {};
+  if (nonEq.UNKNOWN_IS_PASS !== false) errors.push("UNKNOWN_VIROU_PASS");
+  if (nonEq.ACTION_IS_PROOF !== false) errors.push("ACTION_VIROU_PROOF");
+  if (nonEq.AUTHORIZED_IS_VALIDATED !== false) errors.push("AUTHORIZED_VIROU_VALIDATED");
+  if (nonEq.MERGED_IS_DEPLOYED !== false) errors.push("MERGED_VIROU_DEPLOYED");
 }
 
 // A dívida histórica pode continuar arquivada, mas estes entrypoints ativos não

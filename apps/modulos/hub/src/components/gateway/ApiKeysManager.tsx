@@ -1,18 +1,17 @@
 // Gerenciador de API Keys do Gateway CentralDark (api.centralldark.com).
-// Usa as edge functions já existentes hub-create-api-key / hub-revoke-api-key
-// (schema api.api_keys, projeto lyoigsqluyktoclwdaft). Só visível para admin (RoleGuard).
+// Toda leitura/escrita passa pelas edge functions admin; o frontend não acessa api.api_keys direto.
 import React, { useCallback, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Badge } from '@/shared/ui/badge';
 import { KeyRound, Plus, RefreshCw, Copy, Check, Ban, AlertTriangle, ShieldCheck } from 'lucide-react';
-import { hubClient, hubAuth } from '@/integrations/supabase/hub-client';
+import { hubAuth } from '@/integrations/supabase/hub-client';
 import { logButton } from '@/lib/buttonLog';
 
 const FN_BASE = `${import.meta.env.VITE_HUB_SUPABASE_URL || 'https://lyoigsqluyktoclwdaft.supabase.co'}/functions/v1`;
 
-interface ApiKeyRow {
+type ApiKeyRow = {
   id: string;
   prefix: string;
   label: string;
@@ -21,25 +20,24 @@ interface ApiKeyRow {
   owner_email: string | null;
   created_at: string;
   revoked_at: string | null;
-}
+};
 
-async function callFn(path: string, body: unknown) {
+async function callFn(path: string, options: { method?: 'GET' | 'POST'; body?: unknown } = {}) {
   const { data: sessionData } = await hubAuth.auth.getSession();
   const token = sessionData.session?.access_token;
   if (!token) throw new Error('Sessão expirada — faça login novamente.');
 
+  const method = options.method || 'POST';
   const res = await fetch(`${FN_BASE}/${path}`, {
-    method: 'POST',
+    method,
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(body),
+    body: method === 'POST' ? JSON.stringify(options.body ?? {}) : undefined,
   });
   const json = await res.json().catch(() => ({}));
-  if (!res.ok || json?.error) {
-    throw new Error(json?.error || `Falha na chamada (${res.status})`);
-  }
+  if (!res.ok || json?.error) throw new Error(json?.error || `Falha na chamada (${res.status})`);
   return json;
 }
 
@@ -65,24 +63,18 @@ export function ApiKeysManager() {
   const [rows, setRows] = useState<ApiKeyRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [creating, setCreating] = useState(false);
   const [label, setLabel] = useState('');
   const [newSecret, setNewSecret] = useState<string | null>(null);
   const [createError, setCreateError] = useState<string | null>(null);
-
   const [revokingId, setRevokingId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const { data, error: qErr } = await hubClient
-        .from('api_keys')
-        .select('id, prefix, label, status, scopes, owner_email, created_at, revoked_at')
-        .order('created_at', { ascending: false });
-      if (qErr) throw qErr;
-      setRows((data as ApiKeyRow[]) || []);
+      const json = await callFn('hub-create-api-key', { method: 'GET' });
+      setRows((json.keys as ApiKeyRow[]) || []);
     } catch (e: any) {
       setError(e.message || 'Falha ao listar API keys.');
     } finally {
@@ -101,8 +93,7 @@ export function ApiKeysManager() {
     try {
       logButton('gateway.api-key.create', { label });
       const json = await callFn('hub-create-api-key', {
-        label: label.trim() || 'sem-label',
-        scopes: ['read'],
+        body: { label: label.trim() || 'sem-label', scopes: ['read'] },
       });
       setNewSecret(json.secret_show_once);
       setLabel('');
@@ -118,7 +109,7 @@ export function ApiKeysManager() {
     setRevokingId(id);
     try {
       logButton('gateway.api-key.revoke', { id });
-      await callFn('hub-revoke-api-key', { id });
+      await callFn('hub-revoke-api-key', { body: { id } });
       await load();
     } catch (e: any) {
       setError(e.message || 'Falha ao revogar key.');
@@ -139,7 +130,6 @@ export function ApiKeysManager() {
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Gerar nova key */}
         <div className="rounded border border-emerald-500/20 bg-black/20 p-3 space-y-3">
           <div className="flex flex-wrap gap-2">
             <Input
@@ -185,7 +175,6 @@ export function ApiKeysManager() {
           </div>
         )}
 
-        {/* Lista */}
         <div className="overflow-x-auto rounded border border-border/50">
           <table className="w-full text-xs">
             <thead className="bg-black/30 text-muted-foreground">
@@ -212,13 +201,7 @@ export function ApiKeysManager() {
                     <td className="px-3 py-2 font-mono">{r.prefix}</td>
                     <td className="px-3 py-2">{r.label}</td>
                     <td className="px-3 py-2">
-                      <Badge
-                        className={
-                          isActive
-                            ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40'
-                            : 'bg-red-500/20 text-red-200 border-red-500/40'
-                        }
-                      >
+                      <Badge className={isActive ? 'bg-emerald-500/20 text-emerald-200 border-emerald-500/40' : 'bg-red-500/20 text-red-200 border-red-500/40'}>
                         {isActive ? '🟢 ativa' : '🔴 revogada'}
                       </Badge>
                     </td>
@@ -234,11 +217,7 @@ export function ApiKeysManager() {
                           disabled={revokingId === r.id}
                           onClick={() => handleRevoke(r.id)}
                         >
-                          {revokingId === r.id ? (
-                            <RefreshCw className="h-3 w-3 animate-spin" />
-                          ) : (
-                            <Ban className="h-3 w-3" />
-                          )}
+                          {revokingId === r.id ? <RefreshCw className="h-3 w-3 animate-spin" /> : <Ban className="h-3 w-3" />}
                           Revogar
                         </Button>
                       )}

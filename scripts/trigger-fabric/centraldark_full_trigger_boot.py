@@ -22,6 +22,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import unicodedata
@@ -37,6 +38,8 @@ MEGAZORD = FABRIC / "MEGAZORD-CENTRALDARK.yml"
 LOCK_CONTRACT = FABRIC / "PROVEN-DETERMINISTIC-LOCK.yml"
 RUNTIME_PREFLIGHT_LINT = FABRIC / "RUNTIME-PREFLIGHT-LINT.yml"
 BOOT = Path("CENTRALDARK_AI_BOOT.yaml")
+CANONICAL_CONSUMPTION_GATE = Path("scripts/centraldark/canonical-consumption-gate.mjs")
+CANONICAL_LEARNINGS = Path("docs/CONSCIENCIA/APRENDIZADOS.md")
 COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
 METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
@@ -242,7 +245,7 @@ def lint_runtime_command(
 
 def require_files(repo: Path) -> dict[str, str]:
     result = {}
-    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, RUNTIME_PREFLIGHT_LINT, BOOT, COGNITIVE_CAPABILITIES, METACOGNITION):
+    for rel in (TRIGGERS, MASTER, ENGINE, MEGAZORD, LOCK_CONTRACT, RUNTIME_PREFLIGHT_LINT, BOOT, CANONICAL_CONSUMPTION_GATE, CANONICAL_LEARNINGS, COGNITIVE_CAPABILITIES, METACOGNITION):
         p = repo / rel
         if not p.exists():
             raise SystemExit(f"MISSING_CANONICAL_OWNER={rel.as_posix()}")
@@ -286,6 +289,59 @@ def cognitive_bios_state(repo: Path) -> dict:
         "law": "ADAPT_INTENSITY_AND_ROUTE; NEVER_AUTHORITY_OR_HUMAN_GOAL",
     }
 
+
+
+def canonical_consumption_gate_state(repo: Path) -> dict:
+    """Fail-closed: todos os aprendizados numerados precisam ser consumidos direto do canônico."""
+    gate = repo / CANONICAL_CONSUMPTION_GATE
+    commands = {
+        "all_numbered_learnings": ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "ALL"],
+    }
+    receipts = {}
+    for name, command in commands.items():
+        try:
+            proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, timeout=15, check=False)
+        except FileNotFoundError:
+            return {"status": "INVALID", "reason": "NODE_RUNTIME_NOT_AVAILABLE", "owner": CANONICAL_CONSUMPTION_GATE.as_posix()}
+        except subprocess.TimeoutExpired:
+            return {"status": "INVALID", "reason": f"GATE_TIMEOUT={name}", "owner": CANONICAL_CONSUMPTION_GATE.as_posix()}
+        try:
+            payload = json.loads(proc.stdout or "{}")
+        except json.JSONDecodeError:
+            payload = {"ok": False, "reason": "GATE_OUTPUT_NOT_JSON"}
+        receipts[name] = {
+            "exit_code": proc.returncode,
+            "ok": bool(payload.get("ok")) if isinstance(payload, dict) else False,
+            "learning": payload.get("learning") if isinstance(payload, dict) else None,
+            "source": payload.get("source") if isinstance(payload, dict) else None,
+            "count": payload.get("count") if isinstance(payload, dict) else None,
+            "first": payload.get("first") if isinstance(payload, dict) else None,
+            "last": payload.get("last") if isinstance(payload, dict) else None,
+            "includes_learning_80": payload.get("includes_learning_80") if isinstance(payload, dict) else None,
+            "duplicate_numbers": payload.get("duplicate_numbers") if isinstance(payload, dict) else None,
+            "missing_numbers": payload.get("missing_numbers") if isinstance(payload, dict) else None,
+            "numbering_unique": payload.get("numbering_unique") if isinstance(payload, dict) else None,
+            "stdout_sha256": hashlib.sha256((proc.stdout or "").encode("utf-8")).hexdigest(),
+        }
+    bound = all(
+        x["exit_code"] == 0
+        and x["ok"]
+        and x.get("learning") == "ALL"
+        and (x.get("count") or 0) > 0
+        and x.get("includes_learning_80") is True
+        for x in receipts.values()
+    )
+    return {
+        "status": "BOUND" if bound else "INVALID",
+        "owner": CANONICAL_CONSUMPTION_GATE.as_posix(),
+        "canonical_source": CANONICAL_LEARNINGS.as_posix(),
+        "CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR": True,
+        "REPLAY_BEFORE_REDISCOVERY": True,
+        "SEARCH_MISS_IS_NOT_STOP_CONDITION": True,
+        "ALL_NUMBERED_LEARNINGS_REQUIRED": True,
+        "UNKNOWN_MEDIVEL_E_FALHA_DE_METODO": True,
+        "receipts": receipts,
+    }
 
 def discover_registry(repo: Path) -> dict:
     trigger_text = (repo / TRIGGERS).read_text(encoding="utf-8")
@@ -344,13 +400,78 @@ def _step_receipt(command_template: str, proc: subprocess.CompletedProcess[str])
     }
 
 
+def _resolve_replay_shell(shell: str | None) -> str | None:
+    # CLI historically defaults to /bin/bash. On Windows that value must mean
+    # "auto-discover Git Bash", otherwise the truthy default prevents the
+    # Windows discovery branch from ever running.
+    if os.name == "nt" and shell and shell.replace("\\", "/").lower() == "/bin/bash":
+        shell = None
+
+    if shell:
+        candidate = Path(shell)
+        if candidate.is_absolute():
+            return str(candidate) if candidate.exists() else None
+        return shutil.which(shell)
+
+    if os.name == "nt":
+        for raw in (
+            r"C:\Program Files\Git\bin\bash.exe",
+            r"C:\Program Files\Git\usr\bin\bash.exe",
+        ):
+            candidate = Path(raw)
+            if candidate.exists():
+                return str(candidate)
+
+        found = shutil.which("bash")
+        if found and "windowsapps" not in found.lower() and "system32" not in found.lower():
+            return found
+        return None
+
+    found = shutil.which("bash")
+    if found:
+        return found
+    fallback = Path("/bin/bash")
+    return str(fallback) if fallback.exists() else None
+
+
+def _run_replay_command(
+    command: str,
+    *,
+    resolved_shell: str,
+    repo: Path,
+    env: dict[str, str],
+    timeout_seconds: int,
+) -> subprocess.CompletedProcess[str]:
+    if os.name == "nt" and resolved_shell.lower().endswith("bash.exe"):
+        return subprocess.run(
+            [resolved_shell, "-lc", command],
+            cwd=repo,
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=timeout_seconds,
+            check=False,
+        )
+    return subprocess.run(
+        command,
+        shell=True,
+        executable=resolved_shell,
+        cwd=repo,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=timeout_seconds,
+        check=False,
+    )
+
+
 def execute_proven_recipe(
     *,
     entry: dict,
     current_fingerprint: str | None,
     bindings: dict[str, str],
     repo: Path,
-    shell: str = "/bin/bash",
+    shell: str | None = None,
     timeout_seconds: int = 60,
     allow_mutation: bool = False,
 ) -> dict:
@@ -387,14 +508,40 @@ def execute_proven_recipe(
             "reinterpret_from_zero": False,
         }
 
+    resolved_shell = _resolve_replay_shell(shell)
+    if not resolved_shell:
+        return {
+            "verdict": "BLOCKED",
+            "action": "REPLAY_SHELL_UNAVAILABLE",
+            "executed": False,
+            "requested_shell": shell,
+            "platform": os.name,
+            "binding_names": sorted(supplied),
+            "reinterpret_from_zero": False,
+        }
+
     env = os.environ.copy()
-    env.update(bindings)
+    effective_bindings = dict(bindings)
+    if os.name == "nt" and resolved_shell.lower().endswith("bash.exe"):
+        for key, value in effective_bindings.items():
+            match = re.fullmatch(r"([A-Za-z]):[\\/](.*)", value)
+            if match:
+                drive = match.group(1).lower()
+                rest = match.group(2).replace("\\", "/")
+                effective_bindings[key] = f"/{drive}/{rest}"
+    env.update(effective_bindings)
     exec_receipts = []
     proof_receipts = []
     execution_complete = True
     for command in commands:
         try:
-            proc = subprocess.run(command, shell=True, executable=shell, cwd=repo, env=env, capture_output=True, text=True, timeout=timeout_seconds, check=False)
+            proc = _run_replay_command(
+                command,
+                resolved_shell=resolved_shell,
+                repo=repo,
+                env=env,
+                timeout_seconds=timeout_seconds,
+            )
             exec_receipts.append(_step_receipt(command, proc))
             if proc.returncode != 0:
                 execution_complete = False
@@ -406,7 +553,13 @@ def execute_proven_recipe(
 
     for command in proofs:
         try:
-            proc = subprocess.run(command, shell=True, executable=shell, cwd=repo, env=env, capture_output=True, text=True, timeout=timeout_seconds, check=False)
+            proc = _run_replay_command(
+                command,
+                resolved_shell=resolved_shell,
+                repo=repo,
+                env=env,
+                timeout_seconds=timeout_seconds,
+            )
             proof_receipts.append(_step_receipt(command, proc))
         except subprocess.TimeoutExpired:
             proof_receipts.append({"command_template_sha256": hashlib.sha256(command.encode("utf-8")).hexdigest(), "exit_code": None, "timeout": True})
@@ -457,6 +610,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     registry = discover_registry(repo)
     bios = cognitive_bios_state(repo)
     preflight_contract = runtime_preflight_contract_state(repo)
+    canonical_consumption = canonical_consumption_gate_state(repo)
     active = explicit_command_context(args.input)
     normalized = normalize_command(args.input.splitlines()[0].split()[0]) if args.input.strip() else ""
     result = {
@@ -471,6 +625,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "feedback": classify_realtime_feedback(args.input),
         "cognitive_bios": bios,
         "runtime_preflight_contract": preflight_contract,
+        "canonical_consumption": canonical_consumption,
         "hud": bios["hud"],
         "rules": {
             "case_insensitive": True,
@@ -483,6 +638,9 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "realtime_feedback_persistent_per_mission": True,
             "realtime_feedback_user_repetition_required": False,
             "runtime_preflight_lint_required": True,
+            "canonical_consumption_gate_required": True,
+            "consultar_canonico_antecede_investigar": True,
+            "search_miss_is_not_stop_condition": True,
             "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
             "proven_path_replay_lock": True,
             "proven_path_must_not_be_reinterpreted_from_zero": PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO,
@@ -496,7 +654,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if not active:
         return 4
-    return 0 if bios["status"] == "LOADED" and preflight_contract["status"] == "BOUND" else 7
+    return 0 if bios["status"] == "LOADED" and preflight_contract["status"] == "BOUND" and canonical_consumption["status"] == "BOUND" else 7
 
 
 def cmd_preflight_lint(args: argparse.Namespace) -> int:

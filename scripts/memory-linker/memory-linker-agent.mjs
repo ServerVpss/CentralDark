@@ -68,9 +68,7 @@ function scanDir(dir) {
       const f = path.join(d, e.name);
       if (e.isDirectory()) {
         walk(f);
-      } else if (e.isSymbolicLink()) {
-        continue;
-      } else if (/\.(?:md|canvas|base|json)$/i.test(e.name)) {
+      } else if (e.name.endsWith('.md')) {
         try {
           out.push(ensureRegularFileInsideRootSync(dir, f));
         } catch (error) {
@@ -123,7 +121,10 @@ const SKIP_PREFIXO = ['INDEX', 'README'];
 const CONSCIENCIA_ROOT = path.join(RAIZ, 'docs/CONSCIENCIA');
 const BRAIN_ROOT = path.join(RAIZ, 'docs/BRAIN');
 
-const allFiles = scanDir(path.join(RAIZ, 'docs'));
+const allFiles = [
+  ...scanDir(CONSCIENCIA_ROOT),
+  ...scanDir(BRAIN_ROOT),
+];
 
 // Um basename pode existir em mais de uma pasta. Para resolução de wikilink,
 // qualquer destino real com aquele basename satisfaz o elo; duplicidade é
@@ -139,10 +140,7 @@ function indexAlias(alias, file) {
 }
 
 for (const f of allFiles) {
-  const ext = path.extname(f);
-  const basename = path.basename(f, ext);
-  indexAlias(basename, f);
-  indexAlias(path.basename(f), f);
+  indexAlias(path.basename(f, '.md'), f);
 
   for (const root of [CONSCIENCIA_ROOT, BRAIN_ROOT]) {
     const rel = path.relative(root, f);
@@ -153,27 +151,6 @@ for (const f of allFiles) {
 
   const repoRel = path.relative(RAIZ, f).split(path.sep).join('/').replace(/\.md$/i, '');
   indexAlias(repoRel, f);
-}
-
-// Um link para uma pasta do vault resolve pelo README dessa pasta.
-for (const f of allFiles) {
-  if (path.basename(f).toLowerCase() !== 'readme.md') continue;
-  const dir = path.dirname(f);
-  const relDir = path.relative(RAIZ, dir).split(path.sep).join('/');
-  indexAlias(relDir, f);
-  indexAlias(path.relative(CONSCIENCIA_ROOT, dir), f);
-  indexAlias(path.relative(BRAIN_ROOT, dir), f);
-}
-
-// Aliases históricos comprovados para owners que foram renomeados.
-const historicalAliases = new Map([
-  ['07 - APRENDIZADOS & MEMÓRIAS/README', path.join(BRAIN_ROOT, '07-APRENDIZADOS-MEMORIAS/README.md')],
-  ['08 - APRENDIZADOS & MEMÓRIAS/README', path.join(BRAIN_ROOT, '07-APRENDIZADOS-MEMORIAS/README.md')],
-  ['BIBLIOTECA/README', path.join(BRAIN_ROOT, '03-DOCUMENTACAO/02-BIBLIOTECA/README.md')],
-  ['INFRA/DEPENDENCIAS', path.join(RAIZ, 'docs/INSTALADOR/02-dependencias.md')],
-]);
-for (const [alias, target] of historicalAliases) {
-  if (fs.existsSync(target)) indexAlias(alias, target);
 }
 
 const allMentioned = new Set();
@@ -191,9 +168,7 @@ for (const f of allFiles) {
 
   for (const link of wikilinks(content)) {
     allMentioned.add(link);
-    // Links conceituais sem destino de arquivo são nós semânticos, não links quebrados.
-    // Links com caminho/arquivo continuam sujeitos à verificação material.
-    if (!fileIndex.has(link) && (link.includes('/') || /\.[a-z0-9]+$/i.test(link))) {
+    if (!fileIndex.has(link)) {
       if (!brokenLinks.has(link)) brokenLinks.set(link, []);
       brokenLinks.get(link).push(name);
     }

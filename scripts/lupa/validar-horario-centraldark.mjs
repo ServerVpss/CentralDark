@@ -2,6 +2,7 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = process.cwd();
 const OWNER_DIR = path.join(ROOT, 'central-horario');
@@ -43,6 +44,23 @@ function walk(dir, out = []) {
 
 function relative(file) {
   return path.relative(ROOT, file).replaceAll('\\', '/');
+}
+
+function argValue(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : null;
+}
+
+function changedPaths(baseRef) {
+  const ref = String(baseRef || '').trim();
+  if (!ref) return new Set();
+  try {
+    execFileSync('git', ['rev-parse', '--verify', `${ref}^{commit}`], { cwd: ROOT, stdio: 'ignore' });
+    const text = execFileSync('git', ['diff', '--name-only', `${ref}...HEAD`, '--'], { cwd: ROOT, encoding: 'utf8' });
+    return new Set(text.split(/\r?\n/).filter(Boolean).map((x) => x.replaceAll('\\', '/')));
+  } catch {
+    return null;
+  }
 }
 
 function bootstrapOk(surface) {
@@ -154,6 +172,36 @@ for (const file of files) {
   }
 }
 
+const files = walk(ROOT);
+const baseRef = argValue('--base-ref') || process.env.BASE_SHA || process.env.GITHUB_EVENT_BEFORE || 'HEAD^';
+const changed = changedPaths(baseRef);
+if (changed === null) {
+  console.error(`CENTRALDARK_TIME_GATE=BLOCKED base_ref_unavailable=${baseRef}`);
+  process.exit(2);
+}
+const newFindings = findings.filter((finding) => changed.has(finding.file));
+const legacyFindings = findings.filter((finding) => !changed.has(finding.file));
+const output = {
+  ok: newFindings.length === 0,
+  canonical_timezone: 'America/Sao_Paulo',
+  human_display: 'BRT',
+  machine_storage: 'UTC_RFC3339',
+  scope_policy: 'SCAN_ALL_RATCHET_NEW_DELTA',
+  base_ref: baseRef,
+  bootstrapped_web_surfaces: WEB_SURFACES.filter(bootstrapOk).map((surface) => surface.root),
+  scanned_files: files.length,
+  changed_files: changed.size,
+  new_findings: newFindings,
+  legacy_debt: legacyFindings,
+};
+
+console.log(JSON.stringify(output, null, 2));
+if (legacyFindings.length) console.warn(`CENTRALDARK_TIME_LEGACY_DEBT=${legacyFindings.length}`);
+if (newFindings.length) {
+  console.error(`CENTRALDARK_TIME_GATE=FAIL new_findings=${newFindings.length}`);
+  process.exit(1);
+}
+console.log('CENTRALDARK_TIME_GATE=PASS new_findings=0');
 const ciBase = resolveCiBase();
 let mode = 'FULL_AUDIT';
 let deltaFindings = findings;

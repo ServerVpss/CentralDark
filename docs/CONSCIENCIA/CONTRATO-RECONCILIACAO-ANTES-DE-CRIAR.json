@@ -754,10 +754,21 @@
       "block_explicit_changes_requested",
       "route_merge_conflict_to_single_resolver_and_block_squash_until_same_head",
       "update_branch_if_base_moved",
+      "require_six_green_workflows_on_same_head",
       "revalidate_live_head_and_base",
       "squash_merge",
       "record_receipt"
     ],
+    "green_first_required_workflows": [
+      "porta-de-entrada",
+      "codex-validate",
+      "lupa-conformance",
+      "Lupa Drift Guard",
+      "PR auto-review (Codex + checklist)",
+      "Pipeline — Telegram + Painel"
+    ],
+    "non_pass_required_workflow_action": "DEFERRED_ZERO_MERGE",
+    "fast_path_waits_for_required_technical_gates": true,
     "fast_path_waits_for_full_external_convergence": false,
     "adversarial_mode_remains_in_same_engine": true,
     "adversarial_mode_requires_explicit_chefe_request": true
@@ -914,6 +925,191 @@
     "CHILD_CONTRACT_LINEAGE_RESULT"
   ],
   "receipt_visibility": "INTERNAL_BY_DEFAULT; SHOW_ONLY_ON_AUDIT_OR_BLOCKER",
+  "pre_architecture_reconciliation": {
+    "marker": "PRE_ARCHITECTURE_RECONCILIATION_REQUIRED",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "applies_before": [
+      "PROPOSE_ARCHITECTURE",
+      "CREATE_COMPONENT",
+      "CREATE_OWNER",
+      "CREATE_WORKFLOW",
+      "CREATE_PUBLIC_SURFACE"
+    ],
+    "sequence": [
+      "RECOVER_CHEFE_INTENT",
+      "SEARCH_EXISTING",
+      "VERIFY_OWNER",
+      "VERIFY_CAPABILITY",
+      "VERIFY_GAP",
+      "VERIFY_CURRENT_RUNTIME",
+      "PDF_TLC23_HORN_WHEN_APPLICABLE",
+      "REALITY_JUDGE",
+      "REUSE_OR_EXTEND"
+    ],
+    "decision": {
+      "existing_complete": "REUSE",
+      "existing_partial": "EXTEND_MINIMALLY",
+      "gap_not_proven": "UNKNOWN_DO_NOT_CREATE",
+      "proven_material_gap": "CREATE_MINIMAL_INSIDE_CANONICAL_OWNER_SCOPE"
+    },
+    "invariants": {
+      "SEARCH_BEFORE_INVENT": true,
+      "REUSE_BEFORE_CREATE": true,
+      "CURRENT_OVER_HISTORY": true,
+      "UNKNOWN_IS_NOT_PASS": true,
+      "PARALLEL_ARCH_WITHOUT_PROVEN_GAP": "BLOCK",
+      "NEW_NAME_DOES_NOT_CREATE_NEW_OWNER": true,
+      "NEW_IDEA_DOES_NOT_RESET_PARENT_GOAL": true
+    }
+  },
+  "admin_authority_policy": {
+    "marker": "ADMIN_AUTHORITY_IS_NOT_PROOF",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "semantics": {
+      "ADMIN_AUTHENTICATED_TRUE": "AUTHORITY_TO_OPERATE_PRIVILEGED_PATHS",
+      "ADMIN_AUTHENTICATED_FALSE": "PRIVILEGED_OPERATION_FORBIDDEN",
+      "AUTHENTICATED_IS_PROVED": false,
+      "AUTHORIZED_IS_VALIDATED": false,
+      "EXECUTED_IS_PASSED": false,
+      "ADMIN_IS_BYPASS": false
+    },
+    "privileged_execution": {
+      "admin_required": true,
+      "may_execute_ci_cd_when_authorized": true,
+      "proof_gates_remain_required": true,
+      "required_gates": [
+        "SEARCH_EXISTING",
+        "VERIFY_OWNER",
+        "VERIFY_CAPABILITY",
+        "VERIFY_GAP",
+        "TEST",
+        "COUNTERPROOF",
+        "REALITY_JUDGE"
+      ]
+    },
+    "formulas": {
+      "authority_to_operate": "ADMIN_AUTHENTICATED && POLICY_ALLOWS",
+      "authority_to_claim_pass": "EVIDENCE_CURRENT && REQUIRED_GATES_PASS && REALITY_JUDGE_PASS"
+    }
+  },
+  "canonical_domain_policy": {
+    "marker": "CENTRALDARK_CANONICAL_PUBLIC_SURFACES",
+    "authority": "SEGREDO/CHEFE",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "canonical": {
+      "centralldark.com": "ONE_SITE_HUMAN_COCKPIT",
+      "admin.centralldark.com": "ONE_ADMIN_PANEL",
+      "api.centralldark.com": "ONE_MACHINE_API",
+      "mcp.centralldark.com": "MCP_PROTOCOL_SURFACE"
+    },
+    "internal_capabilities_under_admin": [
+      "HUB",
+      "HERMES",
+      "LOGS",
+      "VPS",
+      "PRS",
+      "GRAPH",
+      "DEVICES"
+    ],
+    "hub": {
+      "role": "INTERNAL_ADMIN_CAPABILITY",
+      "public_product": false,
+      "new_panel": false,
+      "canonical_public_destination": false,
+      "legacy_subdomain": "hub.centralldark.com",
+      "legacy_subdomain_policy": "COMPATIBILITY_ONLY_WHILE_PROVEN_CURRENT_CONSUMER_REQUIRES"
+    },
+    "expansion_rule": {
+      "historical_subdomains_do_not_become_canonical_by_existence": true,
+      "new_public_subdomain_requires_proven_material_gap": true,
+      "stale_dns_or_caddy_entry_is_not_authority": true,
+      "active_consumer_compatibility_must_be_measured_before_removal": true
+    }
+  },
+  "daily_checklist_gate": {
+    "marker": "DAILY_CHECKLIST_GATE_REQUIRED",
+    "applies_when": {
+      "agent_or_ai_mutates_code_during_day": true
+    },
+    "before_first_code_mutation_of_day": {
+      "load_daily_checklist": true,
+      "verify_current_state": true,
+      "verify_parent_goal": true,
+      "verify_owner": true,
+      "verify_scope": true,
+      "verify_writer_lease": true
+    },
+    "during_day": {
+      "record_material_delta": true,
+      "record_pending_gaps": true,
+      "record_head_changes": true,
+      "record_handoffs": true,
+      "record_gate_failures": true
+    },
+    "before_handoff_or_finalization": {
+      "update_daily_checklist": true
+    },
+    "no_new_material_delta": "NO_CHANGE",
+    "checklist_role": "OPERATIONAL_HUD_NOT_SOURCE_OF_TRUTH",
+    "current_over_history": true,
+    "unknown_is_not_pass": true
+  },
+  "executor_selection_policy": {
+    "marker": "EXECUTOR_SELECTION_BY_CAPABILITY_SCOPE_LEASE_POLICY",
+    "model_name_is_routing_key": false,
+    "model_name_is_authority": false,
+    "model_name_is_writer_lease": false,
+    "selection": [
+      "TAG_EXECUTOR",
+      "CAPABILITY_MATCH",
+      "SCOPE_MATCH",
+      "LEASE_AVAILABLE",
+      "POLICY_ALLOWED"
+    ]
+  },
+  "writer_concurrency_policy": {
+    "marker": "DISJOINT_SCOPE_CONCURRENCY_WITH_SINGLE_SCOPE_LEASE",
+    "multiple_writers_allowed": true,
+    "concurrent_writers_disjoint_scopes": true,
+    "same_mutable_scope_requires_one_writer_lease": true,
+    "same_scope_parallel_mutation": "BLOCKED",
+    "lease_is_capability_not_persona": true
+  },
+  "finalization_policy": {
+    "marker": "ONE_ACTIVE_FINALIZER_LEASE",
+    "final_promotion_scope": "ONE_ACTIVE_FINALIZER_LEASE",
+    "lane": [
+      "PR",
+      "SAME_HEAD_GATES",
+      "MAIN",
+      "POST_MERGE",
+      "DEPLOY",
+      "REMEASURE",
+      "FINAL_RECEIPT"
+    ],
+    "same_head_required": true,
+    "merge_is_not_deploy": true,
+    "deploy_is_not_runtime_proof": true
+  },
+  "goal_derivation_policy": {
+    "marker": "STABLE_PARENT_GOAL_DERIVED_MICRO_GOALS",
+    "goal_pai_id": "STABLE",
+    "micro_goal": "DERIVED_FROM_CURRENT_WOUND",
+    "child_failure_does_not_replace_parent_goal": true,
+    "current_wound_drives_next_micro_goal": true
+  },
+  "authority_role_map": {
+    "CHEFE": "INTENT_AUTHORITY",
+    "CONTRACT": "POLICY",
+    "GATES": "PROOF",
+    "VPS": "EXECUTOR_RUNTIME_AND_CONTROL_PLANE",
+    "REALITY": "JUDGE"
+  },
+  "non_equivalence_guards": {
+    "UNKNOWN_IS_PASS": false,
+    "ACTION_IS_PROOF": false,
+    "AUTHORIZED_IS_VALIDATED": false,
+    "MERGED_IS_DEPLOYED": false
   "universal_operational_contract": {
     "marker": "CENTRALDARK_UNIVERSAL_OPERATIONAL_CONTRACT_REQUIRED",
     "status": "MANDATORY",
@@ -1852,6 +2048,11 @@
       "CLEANUP_AT_END_OR_TTL_REQUIRED"
     ],
     "cleanup": {
+      "tool": "scripts/centraldark/ephemeral-workspace.mjs",
+      "marker_file": ".centraldark-ephemeral.json",
+      "cleanup_readback_required": true,
+      "blind_delete_without_marker": "FORBIDDEN",
+      "self_test_required_by_gate": true,
       "delete_after_use": true,
       "cleanup_on_success": true,
       "cleanup_on_failure_when_safe": true,
@@ -1890,13 +2091,41 @@
         "ROUTE",
         "WORKFLOW",
         "SERVICE",
-        "CONFIG"
+        "CONFIG",
+        "PORT",
+        "PUBLISHED_PAGE",
+        "ARTIFACT"
       ],
       "before_create": "SEARCH_AND_RECONCILE",
       "duplicate_found": "ABSORB_DELTA_INTO_EXISTING_OWNER_THEN_RETIRE_DUPLICATE",
       "duplicate_runtime_must_be_stopped_only_after_owner_and_consumer_proof": true,
       "historical_copy_is_not_owner": true,
-      "temporary_copy_is_not_owner": true
+      "temporary_copy_is_not_owner": true,
+      "unify_existing_parallels": {
+        "marker": "ONE_SURVIVOR_EVOLVES",
+        "authority": "SEGREDO/CHEFE",
+        "origin": "CHEFE 2026-09-28: nao criar arquitetura paralela; evoluir o mesmo que existe",
+        "sequence": [
+          "INVENTORY_ALL_COPIES_READ_ONLY",
+          "PICK_SURVIVOR_EXISTING_OWNER_KEEP_ITS_ADDRESS",
+          "ABSORB_USEFUL_CONTENT_INTO_SURVIVOR_WITH_DATE_AND_PROVENANCE",
+          "PROVE_EQUIVALENCE_OR_ABSORPTION_BEFORE_RETIRE",
+          "RETIRE_LEFTOVERS_ON_CHEFE_ORDER",
+          "REMEASURE_COUNT_EQUALS_ONE"
+        ],
+        "survivor_is_existing_not_new": true,
+        "survivor_keeps_existing_link_or_port": true,
+        "old_snapshot_stays_inside_survivor_labeled_by_date": true,
+        "old_snapshot_is_history_not_current_state": true,
+        "wrong_scope_snapshot_must_be_labeled": true,
+        "destructive_commands_not_carried_into_history": true,
+        "irreversible_retire_requires_chefe_order": true,
+        "proven_instances": [
+          "5fd21b0: ponte paralela removida; Cockpit reaproveita o client Supabase ja autenticado",
+          "2026-09-28 Casa: 8080 e 4175 serviam o mesmo TelePanel (mesmo SHA256); 8080 desligada, 4175 fica",
+          "2026-09-28 artefatos: tres paginas viraram o Painel CentralDark no link ja existente; sobras apagadas por ordem do CHEFE"
+        ]
+      }
     },
     "vps_cleanliness": {
       "operational_root_must_not_accumulate_temp_artifacts": true,

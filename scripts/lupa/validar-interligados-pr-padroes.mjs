@@ -107,11 +107,12 @@ try { triggers = JSON.parse(read(TRIGGERS)); } catch { errors.push(`INTERLIGADOS
 if (registry) {
   if (registry.status !== "CANONICAL_PATTERN_LAYER_ON_MAIN") errors.push("INTERLIGADOS_REGISTRY_STATUS_INVALID");
   if (registry.owner !== OWNER) errors.push(`INTERLIGADOS_OWNER_INVALID:${registry.owner ?? "missing"}`);
-  if (registry.scan?.rule !== "CRYSTALLIZE_SURVIVING_PATTERN_ONLY; DO_NOT_PROMOTE_UNPROVEN_IMPLEMENTATION") {
-    errors.push("INTERLIGADOS_SCAN_RULE_INVALID");
+  if (registry.refresh?.promotion_rule !== "PROMOTE_STABLE_NON_TEMPORAL_PATTERN_ONLY; DEDUPE_SYNONYMS; KEEP_RUNTIME_SEPARATE") {
+    errors.push("INTERLIGADOS_REFRESH_RULE_INVALID");
+    errors.push("INTERLIGADOS_REFRESH_PROMOTION_RULE_INVALID");
   }
-  if (registry.scan?.history_rule !== "CURRENT > HISTORY") errors.push("INTERLIGADOS_CURRENT_OVER_HISTORY_MISSING");
-  if (registry.proof_boundary !== "SOURCE_PATTERN_CRYSTALLIZED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT") {
+  if (registry.refresh?.history_rule !== "CURRENT > HISTORY") errors.push("INTERLIGADOS_CURRENT_OVER_HISTORY_MISSING");
+  if (registry.proof_boundary !== "SOURCE_PATTERN_CRYSTALLIZED != IMPLEMENTATION_PROMOTED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT") {
     errors.push("INTERLIGADOS_PROOF_BOUNDARY_INVALID");
   }
 
@@ -195,7 +196,22 @@ function walkMarkdown(relativeDir) {
 
 const emojiRegex = /[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/u;
 const triggerTokens = ["!CENTRALDARK", "!># INTERLIGADOS", "#ACORDAR", "!CALIBRAR", "!MULTIBÚSSOLA", "!META_LUPA", "!RECONCILIAR", "!CONTRAPROVA", "!REGISTRA"];
-for (const path of walkMarkdown(BASE)) {
+
+// Receipts e deltas são proveniência: exigir um gatilho operacional neles
+// reescreveria história para satisfazer o contrato visual atual.
+// O gate continua exigindo emoji em todo Markdown, mas exige gatilho apenas
+// nas superfícies operacionais que podem realmente ser invocadas.
+function isProvenanceOnlyMarkdown(relativePath) {
+  return relativePath.includes("/RECEIPTS/") ||
+    /\/PADROES-PR\/DELTA-[^/]+\.md$/.test(relativePath) ||
+    relativePath.endsWith("/PADROES-PR/RUNTIME-REMEASURE-ONLY.md");
+}
+
+const markdownPaths = walkMarkdown(BASE);
+let triggerRequiredCount = 0;
+let provenanceOnlyCount = 0;
+
+for (const path of markdownPaths) {
   const text = read(path);
   if (!emojiRegex.test(text)) errors.push(`INTERLIGADOS_MD_WITHOUT_EMOJI:${path}`);
   const isProvenanceSurface =

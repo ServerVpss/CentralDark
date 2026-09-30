@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "capability_id": "centraldark-reuse-runtime",
+  "desired": {
+    "enabled": true,
+    "auto_activate_on_demand": true,
+    "stop_after_use": true,
+    "local_only": false,
+    "mcp_only": false,
+    "health_status_required": true,
+    "no_model_wake_without_delta": true
+  },
+  "constraints": {
+    "create_new_router": false,
+    "create_new_brain": false,
+    "create_new_daemon": false,
+    "direct_main_write": false
+  }
+}

@@ -6,8 +6,8 @@ import { readdir, readFile, writeFile, mkdir, rename, appendFile, stat, cp, rm, 
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname, extname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exec, execSync } from 'node:child_process';
-import { randomBytes, createHash } from 'node:crypto';
+import { exec } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
 import { createServer as httpCreateServer } from 'node:http';
 import { renameComRetry as renameComRetryUtil } from '../utils/fs-safe.mjs';
 import { continuityBlockReceipt, validateContinuityState } from './continuity-guard.mjs';
@@ -114,38 +114,6 @@ async function notificar(titulo, mensagem, destino = 'ambos') {
 
 function slugify(s) {
   return s.toLowerCase().replace(/[^\w-]+/g, '-').replace(/^-|-$/g, '').slice(0, 50) || `m-${Date.now()}`;
-}
-
-function seedContinuityState(missao, slug, current = {}) {
-  let headSha = String(current?.head_sha || '').trim();
-  if (!/^[0-9a-f]{40}$/i.test(headSha)) {
-    try {
-      headSha = execSync('git rev-parse HEAD', { cwd: '/root/CentralDark', encoding: 'utf8' }).trim();
-    } catch {
-      headSha = '0000000000000000000000000000000000000000';
-    }
-  }
-
-  const control = (value, fallback) => {
-    if (value && typeof value === 'object' && !Array.isArray(value)) return value;
-    return { head_sha: headSha, ...fallback };
-  };
-
-  return {
-    objetivo: current.objetivo || String(missao || '').slice(0, 2000) || slug,
-    autoridade: current.autoridade || 'SEGREDO/CHEFE',
-    coordenador: current.coordenador || 'SOL',
-    escritor: current.escritor || 'HERMES/PIVETE',
-    escopo: current.escopo || ['apps/modulos/HERMES-CORE/**', 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/**'],
-    ambiente: current.ambiente || 'VPS:vmi3256920:/root/CentralDark',
-    classe_de_acao: current.classe_de_acao || 'AUTONOMOUS_RECONCILIATION',
-    baseline: control(current.baseline, { source: 'git-rev-parse-head' }),
-    backup: control(current.backup, { strategy: 'PRESERVE_DIRTY_STATE_BEFORE_MUTATION' }),
-    rollback: control(current.rollback, { strategy: 'OWNER_SCOPED_RESTORE_FROM_RECEIPT_OR_BACKUP' }),
-    receipt: control(current.receipt, { mission: slug }),
-    head_sha: headSha,
-    ...current,
-  };
 }
 
 async function pegarProximaMissao() {
@@ -301,7 +269,6 @@ async function retomarOrfas() {
 }
 
 async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, continuityState = {}) {
-  continuityState = seedContinuityState(missao, slug, continuityState);
   const logPath = join(dir, 'hermes.log');
   const statePath = join(dir, 'state.json');
   const finalReceiptPath = join(dir, 'finalization-receipt.json');
@@ -316,8 +283,6 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
   let terminalState = 'RUNNING';
   let terminalReason = null;
   let finalMessage = null;
-  let lastFailureSignature = null;
-  let repeatedFailureCount = 0;
 
   while (true) {
     etapa++;
@@ -376,7 +341,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
           ok: false,
           critic: bloqueio,
         });
-        await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
+        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
         registrarEtapa(false);
         registrarFalha();
         await notificar(
@@ -398,7 +363,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
           ok: false,
           critic: bloqueio,
         });
-        await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: 'FINALIZATION_GATE_BLOCKED' }, null, 2));
+        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: 'FINALIZATION_GATE_BLOCKED' }, null, 2));
         registrarEtapa(false);
         await notificar(
           'Hermes: conclusão BLOQUEADA ⛔',
@@ -453,9 +418,15 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     }
 
     historico.push(entrada);
-    await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas }, null, 2));
-    registrarEtapa(resultado.ok);
-    await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: null }, null, 2));
+    const runningState = {
+      ...continuityState,
+      missao,
+      historico,
+      retomadas,
+      terminal_state: 'RUNNING',
+      terminal_reason: null,
+    };
+    await writeFile(statePath, JSON.stringify(runningState, null, 2));
     registrarEtapa(etapaAprovada);
 
     const emoji = etapaAprovada ? '✅' : '⚠️';
@@ -467,41 +438,26 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     );
 
     if (!etapaAprovada) {
-      const failureSignature = createHash('sha256').update(JSON.stringify({
-        ferramenta,
-        resultado: String(resultado.saida || '').replace(/\b\d+\b/g, '#').slice(0, 1200),
-        critic: String(parecer?.parecer || '').replace(/\b\d+\b/g, '#').slice(0, 600),
-      })).digest('hex');
-
-      if (failureSignature === lastFailureSignature) repeatedFailureCount++;
-      else {
-        lastFailureSignature = failureSignature;
-        repeatedFailureCount = 1;
-      }
-      falhasSeguidas = repeatedFailureCount;
-      await lg(`🧬 failure_signature=${failureSignature.slice(0,12)} repeats=${repeatedFailureCount}/${MAX_FALHAS}`);
-
-      if (repeatedFailureCount >= MAX_FALHAS) {
+      falhasSeguidas++;
+      if (falhasSeguidas >= MAX_FALHAS) {
         terminalState = 'BLOCKED';
         terminalReason = 'MAX_FALHAS_EXECUTOR_OR_CRITIC';
-        await lg(`🔴 pausando após ${MAX_FALHAS} repetições da mesma falha/reprovação sem ganho material`);
+        await lg(`🔴 pausando após ${MAX_FALHAS} falhas/reprovações seguidas`);
         registrarFalha();
         await notificar(
           `Hermes: PAUSEI 🔴`,
-          `❌ <b>${slug}</b>\n${MAX_FALHAS} repetições da mesma falha/reprovação sem ganho material na etapa ${etapa}.\nÚltimo resultado:\n<pre>${String(resultado.saida || parecer?.parecer || '').slice(0,500).replace(/</g,'&lt;')}</pre>`
+          `❌ <b>${slug}</b>\n${MAX_FALHAS} falhas/reprovações seguidas na etapa ${etapa}.\nÚltimo resultado:\n<pre>${String(resultado.saida || parecer?.parecer || '').slice(0,500).replace(/</g,'&lt;')}</pre>`
         );
         break;
       }
     } else {
       falhasSeguidas = 0;
-      repeatedFailureCount = 0;
-      lastFailureSignature = null;
     }
 
     await new Promise(r => setTimeout(r, 2000));
   }
 
-  await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
+  await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
 
   if (terminalState !== 'CONCLUIDA') {
     await lg(`⏸️ missão permanece em-andamento: state=${terminalState} reason=${terminalReason || 'UNKNOWN'}`);
@@ -513,7 +469,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     terminalState = 'BLOCKED';
     terminalReason = `MOVE_CONCLUIDAS_FAILED:${movida.reason || 'UNKNOWN'}`;
     registrarFalha();
-    await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2)).catch(() => {});
+    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2)).catch(() => {});
     await notificar(
       'Hermes: conclusão BLOQUEADA ⛔',
       `⛔ <b>${slug}</b>\nGate final passou, mas a promoção física para concluídas falhou.\nMotivo: <code>${String(movida.reason || 'UNKNOWN').replace(/</g,'&lt;')}</code>\nNenhum verde final foi emitido.`,
@@ -525,7 +481,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
   registrarConclusao();
   await writeFile(
     join(movida.path, 'state.json'),
-    JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: 'CONCLUIDA', terminal_reason: terminalReason }, null, 2)
+    JSON.stringify({ missao, historico, retomadas, terminal_state: 'CONCLUIDA', terminal_reason: terminalReason }, null, 2)
   ).catch(() => {});
   await notificar(
     `Hermes: MISSÃO CONCLUÍDA 🎉`,

@@ -1,6 +1,6 @@
 {
   "servico": "CentralDark-MCP",
-  "pm2_id": 26,
+  "pm2_id": 9,
   "pm2_name": "CentralDark-MCP",
   "pm2_status": "online",
   "senha_no_disco": true,
@@ -9,5 +9,5 @@
   "authorize_saudavel": true,
   "status": "ok",
   "emoji": "🟢",
-  "checado_em": "2026-09-18T08:17:04Z"
+  "checado_em": "2026-09-12T02:54:02Z"
 }

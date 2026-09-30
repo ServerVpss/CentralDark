@@ -11,7 +11,9 @@ const ROOT = path.resolve(__dirname, '..', '..', '..', '..');
 const FILES = {
   universal: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml',
   operationalMethod: '.agents/skills/centraldark-operational-method/SKILL.md',
+  cotReactLoop: '.agents/skills/cot-react-loop/SKILL.md',
   contract: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',
+  reconciliationContract: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
   triggers: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',
   bandScore: 'docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json',
   aureola: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml',
@@ -20,6 +22,8 @@ const FILES = {
   autoconfigRuntime: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml',
   provenLock: 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml',
   hermesPrompt: 'apps/modulos/HERMES-CORE/prompts/hermes-core.md',
+  dailyChecklistPolicy: 'docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+  adminChecklist: 'docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
   agentCall: 'scripts/agent-call.mjs',
   deployDispatcher: 'scripts/vps/deploy-guards-dispatcher.sh',
@@ -115,7 +119,9 @@ function parseEngineNames(engineText) {
 export function validateUniversalMethod() {
   const universal = read(FILES.universal);
   const operationalMethod = read(FILES.operationalMethod);
+  const cotReactLoop = read(FILES.cotReactLoop);
   const contract = read(FILES.contract);
+  const reconciliationContract = JSON.parse(read(FILES.reconciliationContract));
   const triggers = read(FILES.triggers);
   const bandScore = read(FILES.bandScore);
   const aureola = read(FILES.aureola);
@@ -124,6 +130,9 @@ export function validateUniversalMethod() {
   const autoconfigRuntime = read(FILES.autoconfigRuntime);
   const provenLock = read(FILES.provenLock);
   const hermesPrompt = read(FILES.hermesPrompt);
+
+  const adminChecklist = read(FILES.adminChecklist);
+
   const agentCall = read(FILES.agentCall);
   const deployDispatcher = read(FILES.deployDispatcher);
   const centralDeploy = read(FILES.centralDeploy);
@@ -140,6 +149,7 @@ export function validateUniversalMethod() {
   const knowledgeCollector = read(FILES.knowledgeCollector);
   const agentsGuide = read(FILES.agentsGuide);
   const portableEntry = read(FILES.portableEntry);
+
   const tlc23Hash = sha256(readBuffer(FILES.tlc23));
 
   if (tlc23Hash !== TLC23_CANONICAL_SHA256) {
@@ -263,6 +273,23 @@ export function validateUniversalMethod() {
     'CONTRACT_COVERAGE = PASSED_DEFINED_CHECKS / ALL_DEFINED_CHECKS',
     'CALCULATION != RUNTIME_OBSERVATION',
   ], 'OPERATIONAL_METHOD_LEARNING');
+
+  requireTokens(cotReactLoop, [
+    '### 4.8 Standing Goal + `/goal` — continuidade material, não preâmbulo',
+    'STANDING_GOAL=ACTIVE',
+    'GOAL_PARENT=STABLE',
+    'PHASE_CONTRACT=REHYDRATE_NOT_REINVENT',
+    'PREAMBLE_IS_PROGRESS=false',
+    'ITERATION_COUNTER_IS_PROGRESS=false',
+    'MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE=true',
+    'CONTINUE_TOWARD_STANDING_GOAL',
+    '/goal RETURNS:',
+    'GOAL_STATUS=CONTINUE',
+    'REASON=NO_MATERIAL_DELIVERABLE_EVIDENCE',
+    'EXECUTE_WITH_JUDGMENT',
+    'STANDING_GOAL_SURVIVES_TOOL_FAILURE=true',
+    'CHILD_FAILURE_DOES_NOT_REPLACE_PARENT_GOAL=true',
+  ], 'COT_REACT_STANDING_GOAL');
 
   requireTokens(universal, [
     'human_complexity_absorption_required: true',
@@ -540,6 +567,16 @@ export function validateUniversalMethod() {
     'EVENT_SNAPSHOT_IS_NOT_CURRENT: true',
     'LIVE_LABEL_REMEASUREMENT_REQUIRED_FOR_CURRENT_CLAIM: true',
     'current_pr_labels_require_live_api_read: true',
+    'standing_goal_protocol:',
+    'surface: /goal',
+    'surface_role: READ_ONLY_INTROSPECTION',
+    'parent_goal: STABLE_UNTIL_MATERIAL_TERMINAL_STATE',
+    'phase_contract: REHYDRATE_NOT_REINVENT',
+    'progress_denominator: MATERIAL_DELIVERABLES_NOT_ITERATION_COUNT',
+    'PREAMBLE_IS_PROGRESS: false',
+    'MISSING_REQUIRED_EVIDENCE_FORCE_CONTINUE: true',
+    'STANDING_GOAL_SURVIVES_TURN: true',
+    'GOAL_SURFACE_DOES_NOT_EXPAND_AUTHORIZATION: true',
     'continuity_hud:',
     'HUD_IS_NOT_PROOF: true',
     'UNKNOWN_STAYS_UNKNOWN: true',
@@ -588,12 +625,47 @@ export function validateUniversalMethod() {
     'PROVEN_RULE_BINDS_TO_RUNTIME: true',
     'contract_coverage_may_equal_100_percent_when_all_defined_conditions_verified: true',
     'external_reality_100_percent_from_calculation_only: false',
+
+    'SEARCH_EXISTING_CRYSTAL_BEFORE_NEW: true',
+    'SEARCH_EXISTING_OWNER_BEFORE_NEW: true',
+    'VERIFY_EXISTING_CAPABILITY_BEFORE_NEW: true',
+    'SEMANTIC_DEDUPE_BEFORE_CRYSTAL: true',
+    'UNVERIFIED_ABSENCE_IS_UNKNOWN: true',
+    'PARALLEL_ARCHITECTURE_WITHOUT_PROVEN_GAP: FORBIDDEN',
+    'TLC23_HORN_BEFORE_LOGICAL_MUTATION: true',
+    'axes: [CASA, GITHUB, VPS]',
+    'same_source_commit_required: true',
+    'casa_exact_head_validation_required: true',
+    'github_same_head_gates_required: true',
+    'vps_exact_commit_deploy_required: true',
+    'counterproof_each_axis_required: true',
+    'partial_axis_pass_is_global_pass: false',
+    'micro_deploy_requires_explicit_chefe_authorization: true',
+    'daily_checklist_gate:',
+    'DAILY_CHECKLIST_GATE_REQUIRED: true',
+    'DAILY_CHECKLIST_OWNER: docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER: docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
+    'DAILY_CHECKLIST_RECORD_TARGET: ACTIVE_SCOPE_LEDGER',
+    'AGENT_OR_AI_MUTATES_CODE_DURING_DAY: true',
+    'LOAD_DAILY_CHECKLIST: true',
+    'VERIFY_PARENT_GOAL: true',
+    'VERIFY_WRITER_LEASE: true',
+    'UPDATE_DAILY_CHECKLIST: true',
+    'MODEL_NAME_IS_ROUTING_KEY: false',
+    'MODEL_NAME_IS_AUTHORITY: false',
+    'MODEL_NAME_IS_WRITER_LEASE: false',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE: true',
+    'FINAL_PROMOTION_SCOPE: ONE_ACTIVE_FINALIZER_LEASE',
+    'GOAL_PAI_ID: STABLE',
+    'MICRO_GOAL: DERIVED_FROM_CURRENT_WOUND',
+
     'continuous_capability_absorption:',
     'fixed_point_is_learning_gate: false',
     'approved_material_step_emits_learning_ref: true',
     'proven_reusable_delta_binds_before_global_fixed_point: true',
     'CONTINUOUS_HERMES_CAPABILITY_ABSORPTION: true',
     'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE: true',
+
   ], 'AUTOCONFIG_RUNTIME');
 
   requireTokens(contract, [
@@ -607,6 +679,57 @@ export function validateUniversalMethod() {
     'allowed_when: ALL_DEFINED_SCOPE_CONDITIONS_ARE_DETERMINISTICALLY_VERIFIED',
   ], 'TRIGGER_CONTRACT_LEARNING');
 
+  const daily = reconciliationContract.daily_checklist_gate ?? {};
+  if (daily.marker !== 'DAILY_CHECKLIST_GATE_REQUIRED') throw new Error('DAILY_CHECKLIST_GATE_MISSING');
+  if (daily.applies_when?.agent_or_ai_mutates_code_during_day !== true) throw new Error('DAILY_CHECKLIST_SCOPE_INVALID');
+  for (const key of ['load_daily_checklist','verify_current_state','verify_parent_goal','verify_owner','verify_scope','verify_writer_lease']) {
+    if (daily.before_first_code_mutation_of_day?.[key] !== true) throw new Error(`DAILY_CHECKLIST_BEFORE_MUTATION_MISSING:${key}`);
+  }
+  for (const key of ['record_material_delta','record_pending_gaps','record_head_changes','record_handoffs','record_gate_failures']) {
+    if (daily.during_day?.[key] !== true) throw new Error(`DAILY_CHECKLIST_DURING_DAY_MISSING:${key}`);
+  }
+  if (daily.before_handoff_or_finalization?.update_daily_checklist !== true) throw new Error('DAILY_CHECKLIST_FINAL_UPDATE_MISSING');
+
+  const executorSelection = reconciliationContract.executor_selection_policy ?? {};
+  if (executorSelection.model_name_is_routing_key !== false) throw new Error('MODEL_NAME_BECAME_ROUTING_KEY');
+  if (executorSelection.model_name_is_authority !== false) throw new Error('MODEL_NAME_BECAME_AUTHORITY');
+  if (executorSelection.model_name_is_writer_lease !== false) throw new Error('MODEL_NAME_BECAME_WRITER_LEASE');
+  const expectedExecutorSelection = ['TAG_EXECUTOR','CAPABILITY_MATCH','SCOPE_MATCH','LEASE_AVAILABLE','POLICY_ALLOWED'];
+  if (expectedExecutorSelection.some((value, index) => executorSelection.selection?.[index] !== value)) throw new Error('EXECUTOR_SELECTION_INVALID');
+
+  const writerPolicy = reconciliationContract.writer_concurrency_policy ?? {};
+  if (writerPolicy.multiple_writers_allowed !== true) throw new Error('MULTIPLE_WRITERS_DISALLOWED');
+  if (writerPolicy.concurrent_writers_disjoint_scopes !== true) throw new Error('DISJOINT_SCOPE_WRITERS_DISABLED');
+  if (writerPolicy.same_mutable_scope_requires_one_writer_lease !== true) throw new Error('SAME_SCOPE_WRITER_LEASE_NOT_REQUIRED');
+  if (writerPolicy.same_scope_parallel_mutation !== 'BLOCKED') throw new Error('SAME_SCOPE_PARALLEL_MUTATION_NOT_BLOCKED');
+
+  const finalization = reconciliationContract.finalization_policy ?? {};
+  const expectedFinalizationLane = ['PR','SAME_HEAD_GATES','MAIN','POST_MERGE','DEPLOY','REMEASURE','FINAL_RECEIPT'];
+  if (finalization.final_promotion_scope !== 'ONE_ACTIVE_FINALIZER_LEASE') throw new Error('FINALIZER_LEASE_NOT_UNIQUE');
+  if (expectedFinalizationLane.some((value, index) => finalization.lane?.[index] !== value)) throw new Error('FINALIZATION_LANE_INVALID');
+  if (finalization.same_head_required !== true) throw new Error('FINALIZATION_SAME_HEAD_NOT_REQUIRED');
+
+  const goals = reconciliationContract.goal_derivation_policy ?? {};
+  if (goals.goal_pai_id !== 'STABLE') throw new Error('PARENT_GOAL_NOT_STABLE');
+  if (goals.micro_goal !== 'DERIVED_FROM_CURRENT_WOUND') throw new Error('MICRO_GOAL_NOT_DERIVED_FROM_CURRENT_WOUND');
+
+  const roleMap = reconciliationContract.authority_role_map ?? {};
+  const expectedRoleMap = {
+    CHEFE: 'INTENT_AUTHORITY',
+    CONTRACT: 'POLICY',
+    GATES: 'PROOF',
+    VPS: 'EXECUTOR_RUNTIME_AND_CONTROL_PLANE',
+    REALITY: 'JUDGE',
+  };
+  for (const [key, value] of Object.entries(expectedRoleMap)) {
+    if (roleMap[key] !== value) throw new Error(`AUTHORITY_ROLE_INVALID:${key}`);
+  }
+
+  const nonEq = reconciliationContract.non_equivalence_guards ?? {};
+  if (nonEq.UNKNOWN_IS_PASS !== false) throw new Error('UNKNOWN_BECAME_PASS');
+  if (nonEq.ACTION_IS_PROOF !== false) throw new Error('ACTION_BECAME_PROOF');
+  if (nonEq.AUTHORIZED_IS_VALIDATED !== false) throw new Error('AUTHORIZED_BECAME_VALIDATED');
+  if (nonEq.MERGED_IS_DEPLOYED !== false) throw new Error('MERGED_BECAME_DEPLOYED');
   requireTokens(globalContract, [
     '"universal_gate_registry":',
     '"marker": "CENTRALDARK_UNIVERSAL_GATE_REGISTRY"',
@@ -866,11 +989,77 @@ export function validateUniversalMethod() {
     'DISCOVERY_AUTO_PROMOTES_TO_CANONICAL=false',
     'REUSE_PROVEN_CRYSTAL_BEFORE_REINVESTIGATE=true',
     'CALCULATION_SUPPORTS_DECISION_BUT_DOES_NOT_REPLACE_RUNTIME_OBSERVATION=true',
+
+    'CRYSTAL_NEW_REQUIRES_SEARCH_EXISTING=true',
+    'CRYSTAL_NEW_REQUIRES_EXISTING_OWNER_CHECK=true',
+    'CRYSTAL_NEW_REQUIRES_CAPABILITY_DEDUPE=true',
+    'UNVERIFIED_ABSENCE_IS_UNKNOWN=true',
+    'PARALLEL_ARCHITECTURE_WITHOUT_PROVEN_GAP=FORBIDDEN',
+    'CRYSTAL_TRUTH_GATE=PDF_GATE_TLC23_HORN',
+    'RUNTIME_PROMOTION_AXES=CASA+GITHUB+VPS',
+    'THREE_AXIS_SAME_SOURCE_REQUIRED=true',
+    'PARTIAL_AXIS_PASS_IS_GLOBAL_PASS=false',
+    'MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true',
+    'DAILY_CHECKLIST_GATE_REQUIRED=true',
+    'DAILY_CHECKLIST_OWNER=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
+    'LOAD_DAILY_CHECKLIST_BEFORE_FIRST_CODE_MUTATION_OF_DAY=true',
+    'UPDATE_DAILY_CHECKLIST_BEFORE_HANDOFF_OR_FINALIZATION=true',
+    'MODEL_NAME_IS_ROUTING_KEY=false',
+    'MODEL_NAME_IS_AUTHORITY=false',
+    'MODEL_NAME_IS_WRITER_LEASE=false',
+    'EXECUTOR_SELECTION=TAG_EXECUTOR+CAPABILITY_MATCH+SCOPE_MATCH+LEASE_AVAILABLE+POLICY_ALLOWED',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE=true',
+    'FINAL_PROMOTION_SCOPE=ONE_ACTIVE_FINALIZER_LEASE',
+    'FINALIZATION_LANE=PR->SAME_HEAD_GATES->MAIN->POST_MERGE->DEPLOY->REMEASURE->FINAL_RECEIPT',
+    'GOAL_PAI_ID=STABLE',
+    'MICRO_GOAL=DERIVED_FROM_CURRENT_WOUND',
+    'AUTHORIZED_IS_NOT_VALIDATED=true',
     'CONTINUOUS_HERMES_CAPABILITY_ABSORPTION=true',
     'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true',
     'PROVEN_REUSABLE_DELTA_BINDS_TO_CORE_BEFORE_GLOBAL_FIXED_POINT=true',
     'MATERIAL_APPROVED_STEP_EMITS_LEARNING_REF=true',
   ], 'HERMES_PROMPT');
+
+  requireTokens(adminChecklist, [
+    'DAILY_CHECKLIST_GATE_REQUIRED=true',
+    'DAILY_CHECKLIST_OWNER=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',
+    'DAILY_CHECKLIST_CONSUMER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
+    'DAILY_CHECKLIST_RECORD_TARGET=ACTIVE_SCOPE_LEDGER',
+    'AGENT_OR_AI_MUTATES_CODE_DURING_DAY=true',
+    'LOAD_DAILY_CHECKLIST=true',
+    'VERIFY_CURRENT_STATE=true',
+    'VERIFY_PARENT_GOAL=true',
+    'VERIFY_OWNER=true',
+    'VERIFY_SCOPE=true',
+    'VERIFY_WRITER_LEASE=true',
+    'RECORD_MATERIAL_DELTA=true',
+    'RECORD_PENDING_GAPS=true',
+    'RECORD_HEAD_CHANGES=true',
+    'RECORD_HANDOFFS=true',
+    'RECORD_GATE_FAILURES=true',
+    'UPDATE_DAILY_CHECKLIST=true',
+    'MODEL_NAME_IS_ROUTING_KEY=false',
+    'MODEL_NAME_IS_AUTHORITY=false',
+    'MODEL_NAME_IS_WRITER_LEASE=false',
+    'EXECUTOR_SELECTION=TAG_EXECUTOR+CAPABILITY_MATCH+SCOPE_MATCH+LEASE_AVAILABLE+POLICY_ALLOWED',
+    'MULTIPLE_WRITERS_ALLOWED=true',
+    'CONCURRENT_WRITERS_DISJOINT_SCOPES=true',
+    'SAME_MUTABLE_SCOPE_REQUIRES_ONE_WRITER_LEASE=true',
+    'FINAL_PROMOTION_SCOPE=ONE_ACTIVE_FINALIZER_LEASE',
+    'FINALIZATION_LANE=PR->SAME_HEAD_GATES->MAIN->POST_MERGE->DEPLOY->REMEASURE->FINAL_RECEIPT',
+    'CHEFE=INTENT_AUTHORITY',
+    'CONTRACT=POLICY',
+    'GATES=PROOF',
+    'VPS=EXECUTOR_RUNTIME_AND_CONTROL_PLANE',
+    'REALITY=JUDGE',
+    'GOAL_PAI_ID=STABLE',
+    'MICRO_GOAL=DERIVED_FROM_CURRENT_WOUND',
+    'UNKNOWN != PASS',
+    'ACTION != PROOF',
+    'AUTHORIZED != VALIDATED',
+    'MERGED != DEPLOYED',
+  ], 'DAILY_CHECKLIST_ADMIN_OWNER');
 
   requireTokens(orchestrator, [
     "registrar as registrarAprendizado",
@@ -886,6 +1075,7 @@ export function validateUniversalMethod() {
     'deduped: true',
     "createHash('sha256')",
   ], 'HERMES_KNOWLEDGE_COLLECTOR_RUNTIME');
+
 
   const engines = parseEngineNames(engine);
   return {
@@ -937,10 +1127,31 @@ export function validateUniversalMethod() {
     live_label_remeasurement_contract: true,
     no_useless_narration_contract: true,
     cot_react_loop_bound: true,
+    cot_react_standing_goal_contract: true,
+    standing_goal_runtime_contract: true,
+    goal_surface_is_read_only_introspection: true,
+    iteration_counter_is_not_completion: true,
     continuity_hud_contract: true,
     operational_narration_contract: true,
     preventive_continuity_staff_contract: true,
+    daily_checklist_gate_required: true,
+    executor_selection_is_model_agnostic: true,
+    disjoint_scope_writers_allowed: true,
+    same_scope_writer_lease_required: true,
+    one_active_finalizer_lease_required: true,
+    stable_parent_goal_with_derived_micro_goals: true,
     bounded_100_percent_requires_explicit_denominator: true,
+
+    crystallization_truth_gate: true,
+    three_axis_atomic_promotion: true,
+    three_axis_promotion_axes: ['CASA', 'GITHUB', 'VPS'],
+    parallel_architecture_without_proven_gap: false,
+    daily_checklist_gate_required: true,
+    daily_checklist_owner: FILES.dailyChecklistPolicy,
+    daily_checklist_consumer: FILES.adminChecklist,
+    daily_checklist_record_target: 'ACTIVE_SCOPE_LEDGER',
+    finalizer_lease_required: true,
+
     global_contract_enforcer: true,
     global_contract_entry_policy: true,
     outside_contract_mutation_fail_closed: true,
@@ -964,6 +1175,7 @@ export function validateUniversalMethod() {
     verse_is_semantic_cue_not_proof: true,
     fixed_hud_only_live_values_change: true,
     numeric_metrics_require_proven_denominator: true,
+
   };
 }
 

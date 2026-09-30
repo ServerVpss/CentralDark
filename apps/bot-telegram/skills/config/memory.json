@@ -298,42 +298,6 @@
       "msgCount": 2,
       "lastMsg": "❌ Resposta vazia da API.",
       "timestamp": 1789177707301
-    },
-    {
-      "input": "Oi",
-      "skill": "find-skills",
-      "result": "success",
-      "timestamp": 1789554802545
-    },
-    {
-      "input": "Oi",
-      "skill": "find-skills",
-      "result": "success",
-      "timestamp": 1789555005544
-    },
-    {
-      "type": "session",
-      "chatId": 1901426549,
-      "agent": "orquestrador",
-      "cogMode": null,
-      "msgCount": 4,
-      "lastMsg": "❌ Resposta vazia da API.",
-      "timestamp": 1789556805597
-    },
-    {
-      "input": "Oi",
-      "skill": "find-skills",
-      "result": "success",
-      "timestamp": 1789579238923
-    },
-    {
-      "type": "session",
-      "chatId": 1901426549,
-      "agent": "orquestrador",
-      "cogMode": null,
-      "msgCount": 6,
-      "lastMsg": "❌ Resposta vazia da API.",
-      "timestamp": 1789581039200
     }
   ]
 }

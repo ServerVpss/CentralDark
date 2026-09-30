@@ -1,112 +1,560 @@
 {
-  "timestamp": "2026-09-17T17:15:01.957Z",
-  "observedAt": "2026-09-17T17:15:01.957Z",
-  "baseReport": "2026-09-17T16:46:59.836Z",
-  "baseFingerprint": "f29b981024cdd978e3103bb0020f59aa53e61624696b82f723d15ac2afcd1d8a",
-  "migratedLegacyReport": false,
-  "decisionFingerprint": "1ec3eb7002748942d86f57ef72a74d748761b8a3ad4b122fcef3ea5f45094c67",
-  "criticos": [],
+  "timestamp": "2026-07-05T22:15:01.800Z",
+  "baseReport": "2026-07-05T21:30:05.124Z",
+  "criticos": [
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "MCP",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "OBSIDIAN-WRITER",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TUTORIAL-OBSIDIAN",
+        "BRAIN",
+        "BRAIN",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TUTORIAL-OBSIDIAN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "OBSIDIAN",
+      "origens": [
+        "00-POSTURA-PIVETE",
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "00-POSTURA-PIVETE",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "GITHUB",
+      "origens": [
+        "00-POSTURA-PIVETE",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "00-POSTURA-PIVETE",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "SKILLS",
+      "origens": [
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "PM2",
+      "origens": [
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "HUB",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-HUBBOT",
+      "origens": [
+        "BRAIN",
+        "MOC-PM2",
+        "BRAIN",
+        "MOC-PM2"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "TELEGRAM",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-MCP",
+      "origens": [
+        "BRAIN",
+        "MOC-MCP",
+        "BRAIN",
+        "MOC-MCP"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-GUARDIAOCONSCIENCIA",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-WEBHOOKDEPLOY",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "VPS",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-CONTASADMIN",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CENTRALDARK-RESPIRACAO",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "ZENTINEL",
+      "origens": [
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "ELITE-GATEWAY",
+      "origens": [
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "CLAUDE",
+      "origens": [
+        "BRAIN",
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "BRAINSTORMING",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "MEMORIA-LONGA",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado-critico",
+      "link": "PAINEL-STATUS",
+      "origens": [
+        "BRAIN",
+        "BRAIN",
+        "BRAIN",
+        "BRAIN"
+      ]
+    }
+  ],
   "altos": [
     {
+      "tipo": "link-quebrado",
+      "link": "-N \"$STDIN_DATA\"",
+      "origens": [
+        "08-HISTORICO-DECISOES"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "LINK",
+      "origens": [
+        "12-GUIA-PIVETE",
+        "SEMANTIC-LINKER",
+        "12-GUIA-PIVETE",
+        "SEMANTIC-LINKER"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "FERRAMENTAS-DO-MCP",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "METACOGNICAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "ORQUESTRADOR",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "GUIA-DO-PIVETE",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "ARQUITETURA",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "FEDERACAO-DE-MEMORIA",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "EXEMPLO-MOC-MCP",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "MCP-ANTIGO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "NOVO-MCP-HUB",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CONSCIENCIA-V1",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CONSCIENCIA-V2",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CONVERSA-29-06-2026",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "IDEA-FEDERACAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "ARQUITETURA-DO-SISTEMA",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "GUARDIAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "FLUXO-DE-INFORMACAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "COMO-REGISTRAR-IDEIAS",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CONSCIOUSNESS",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "ISSUES-AGENT",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "COMO-ESCOLHER-FERRAMENTA",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "WHATSAPP-INTEGRACAO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "AUTO-APRIMORAMENTO",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "NOTIFICACOES-AMIGAVEIS",
+      "origens": [
+        "TECNICAS-DE-LINKAGEM-SEMANTICA",
+        "TECNICAS-DE-LINKAGEM-SEMANTICA"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "IA",
+      "origens": [
+        "00-POSTURA-PIVETE",
+        "MAPA-DOS-BOTS",
+        "00-POSTURA-PIVETE",
+        "MAPA-DOS-BOTS"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "CENTRALDARK",
+      "origens": [
+        "00-POSTURA-PIVETE",
+        "MAPA-DOS-BOTS",
+        "00-POSTURA-PIVETE",
+        "MAPA-DOS-BOTS"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "LINKS",
+      "origens": [
+        "GUIA-PROMPTS",
+        "TUTORIAL-OBSIDIAN",
+        "GUIA-PROMPTS",
+        "TUTORIAL-OBSIDIAN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "`",
+      "origens": [
+        "TUTORIAL-OBSIDIAN",
+        "TUTORIAL-OBSIDIAN"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "08 - APRENDIZADOS & MEMÓRIAS",
+      "origens": [
+        "README",
+        "README"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "07 - REUNIÕES & NOTAS",
+      "origens": [
+        "README",
+        "README"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "-Z \"$MSG\"",
+      "origens": [
+        "07-EXEMPLOS-PRATICOS",
+        "07-EXEMPLOS-PRATICOS"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "SINCRONIA-4-POINT",
+      "origens": [
+        "PROTOCOLO-INICIALIZACAO",
+        "PROTOCOLO-INICIALIZACAO"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "...",
+      "origens": [
+        "PENDENCIAS"
+      ]
+    },
+    {
+      "tipo": "link-quebrado",
+      "link": "INFRA/DEPENDENCIAS",
+      "origens": [
+        "PENDENCIAS"
+      ]
+    },
+    {
       "tipo": "orfas-excessivas",
-      "count": 407,
+      "count": 351,
       "lista": [
-        "00-COMECE-AQUI",
+        "ARQUITETURA-CENTRALDARK-2026",
         "00-PORTA-DE-ENTRADA-IA",
-        "001-gemini-sugere-aula-pipeline",
-        "001-pre-carregar-graph",
-        "001-token-bot-vs-sessao-user"
+        "REGRA-OFICIAL-MULTI-AGENTE-SEMANTICO",
+        "01-IDENTIDADE",
+        "01-REGRAS-DA-EQUIPE-IA"
       ]
     }
   ],
   "autoFix": [
     {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "00-LEIA-PRIMEIRO"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "01-IDENTIDADE"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "01-REGRAS-DA-EQUIPE-IA"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "12-GUIA-PIVETE"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-06-20-padrao-resposta-pivete"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-05-FULL-TRIGGER-BOOT-PROVEN-LOCK"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-05-LOCAL-PUBLICADO-ZENDRIVE-RABBIT-MINERAL"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-05-PERMITO-SEGREDO-DEPLOY-CLASSES"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-05-STATUS-BADGE-FABRIC-FIXED-POINT"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-05-WINDOWS-INSTALLER-AUTOUPDATE"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-05-WORKFLOW-DEDUPE-RADAR"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-05-WORKFLOW-STARTUP-FAILURE-MINERAL"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-06-VERTEX-INVERSO-RODADA2-PEPITAS-PROVADAS"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-06-VERTEX-INVERSO-RODADA3-PEPITAS-PROVADAS"
+      "tipo": "sem-frontmatter",
+      "arquivo": "missao"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "2026-09-06-VERTEX-INVERSO-RODADA4-PEPITAS-PROVADAS"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-08-CI-MENOS-E-MAIS-JUIZ-PORTA"
+      "arquivo": "missao"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "2026-09-08-GARIMPO-CHEFE-PR-MAIN-DELTA-CONTINUO"
+      "arquivo": "missao"
     },
     {
       "tipo": "sem-frontmatter",
-      "arquivo": "2026-09-14-descoberta-canais-operacionais-xp"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "2026-09-16-cristalizacao-deltas-fechados"
-    },
-    {
-      "tipo": "sem-conexoes-rapidas",
-      "arquivo": "21-PADRAO-APRESENTACAO"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "ADMINISTRAVEIS.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "APRENDIZADOS-INDEX.json"
+      "arquivo": "missao"
     },
     {
       "tipo": "sem-frontmatter",
@@ -114,130 +562,106 @@
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "centraldark-gpt-prompt"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "COCKPIT-AVANCO.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "CONTRATO-DISSONANCIA-OPERACIONAL-CONTROLADA.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "CONTRATO-REMOTE-TRAY-CANONICO"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "DELTA-UTIL-FULL-CENTRALDARK-HARNESS-20260909"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "ERROS-REGISTRADOS.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json"
+      "arquivo": "00-LEIA-PRIMEIRO"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "GAPS-ONLY"
+      "arquivo": "ARQUITETURA-MCP-V2"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "GUIA-COMUNICACAO-SEGREDO-CHEFE"
+      "arquivo": "RECONECTAR-CONECTOR"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "HERMES-CADEIA-OPERACIONAL"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "hermes-casa-sync.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "last-snapshot.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "MANIFEST-R02.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "MANIFEST.json"
+      "arquivo": "SYSTEM-PROMPT-ADMIN"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "MATRIZ-ORQUESTRACAO-PERFIS"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "MCP-REUSE-HORN-FIXED-POINT"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "models-map.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "obsidian.json"
+      "arquivo": "SYSTEM-PROMPT-USUARIO"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "PADRAO-EMOJIS"
+      "arquivo": "URLS-DESCOBERTA"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "PADRAO-GRAFO-VIVO-MARKDOWN"
+      "arquivo": "00-LEIA-PRIMEIRO"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "PADRAO-LINKS-CLICAVEIS-SEGREDO-CHEFE"
+      "arquivo": "00-COMECE-AQUI"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "PADRAO-RESPOSTA-SEGREDO-CHEFE"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "PDF-CONFORMANCE-CC2003"
+      "arquivo": "01-O-QUE-E-DARKAI"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "PIVETE-07-HERMES-CADEIA"
+      "arquivo": "02-COMO-FUNCIONA-POR-DENTRO"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "POMBO-LINEAGE-RULE"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "POMBO-LINEAGE.json"
-    },
-    {
-      "tipo": "sem-frontmatter",
-      "arquivo": "PROOF-OWNERSHIP.json"
+      "arquivo": "03-CATALOGO-DE-MODELOS"
     },
     {
       "tipo": "sem-conexoes-rapidas",
-      "arquivo": "proxima-ia"
+      "arquivo": "04-USANDO-NO-TERMINAL-LOCAL"
     },
     {
-      "tipo": "sem-frontmatter",
-      "arquivo": "RECEIPT-TEMPLATE.json"
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "05-USANDO-NA-VPS"
     },
     {
-      "tipo": "sem-frontmatter",
-      "arquivo": "regras.json"
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "06-ENSINANDO-OUTRAS-IAS"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "07-EXEMPLOS-PRATICOS"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "08-TECNICAS-QUE-USO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "09-ARQUITETURA-E-ORQUESTRACAO"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "10-TROUBLESHOOTING"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "COMO-ENSINAR-OUTRA-IA"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "COMO-USAR"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "INSTALAR-NA-VPS"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "PROMPT-MEGA-ESTABILIZAR"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "PROMPT-UNIVERSAL"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "QUICKSTART"
+    },
+    {
+      "tipo": "sem-conexoes-rapidas",
+      "arquivo": "INVENTARIO-PM2-VPS"
     }
   ],
-  "totalCritico": 0,
-  "totalAlto": 1,
-  "totalAutoFix": 54
+  "totalCritico": 21,
+  "totalAlto": 36,
+  "totalAutoFix": 30
 }

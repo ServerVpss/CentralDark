@@ -360,3 +360,201 @@ CentralDark contraprova ... → RUN_OR_DESIGN_COUNTERPROOF
 
 A wake word seleciona o funil pertinente; ela não carrega todas as capacidades por ritual. Voz normaliza a intenção para a mesma ação semântica usada pelas outras superfícies e só então escolhe ferramenta.
 
+---
+
+## 16. Semântica de saída falada — VOICE_RESPONSE_COMPRESSION_01
+
+Esta regra controla **como responder por voz** depois que a intenção já foi entendida. Continua no mesmo owner; não cria formatter, parser ou cérebro paralelo.
+
+```text
+VOICE_RESPONSE_COMPRESSION_01=true
+LESS_IS_MORE=true
+SPEAK_RESULT_FIRST=true
+SPEAK_ONLY_DECISION_RELEVANT_CONTENT=true
+VISIBLE_TEXT_CARRIES_TECHNICAL_DETAIL=true
+SPEAK_FULL_SHA=false
+SPEAK_FULL_UUID=false
+SPEAK_FULL_HASH=false
+SPEAK_LONG_URL=false
+SPEAK_FILE_PATH_CHAR_BY_CHAR=false
+SPEAK_CODE_TOKEN_BY_TOKEN=false
+SPEAK_TABLE_CELL_BY_CELL=false
+SPEAK_LIST_ITEM_BY_ITEM_WHEN_VISUAL_IS_AVAILABLE=false
+SPEAK_DUPLICATED_VISIBLE_CONTENT=false
+SPEAK_INTERNAL_TOOL_NAMES=false
+SPEAK_ROUTING_OR_CONTROL_METADATA=false
+SPEAK_PROGRESS_WITHOUT_NEW_INFORMATION=false
+SPEAK_REPEATED_CONFIRMATION=false
+SPEAK_UNNECESSARY_PREFACE=false
+TECHNICAL_IDENTIFIER_PRESENT_IN_VISIBLE_TEXT=true
+VOICE_POINTS_TO_VISIBLE_DETAIL=true
+DEFAULT_POINTER_PHRASE=\"As informações e identificadores solicitados estão logo abaixo.\"
+USER_EXPLICITLY_REQUESTS_VERBATIM_IDENTIFIER_OVERRIDES=false
+USER_EXPLICITLY_REQUESTS_IDENTIFIER_ALOUD=true
+REGIONAL_LANGUAGE_NORMALIZATION=true
+REGIONAL_VARIANT_PRESERVES_INTENT=true
+ACCENT_OR_SLANG_DOES_NOT_CHANGE_ACTION=true
+TYPO_OR_PHONETIC_VARIATION_DOES_NOT_CREATE_NEW_INTENT=true
+AMBIGUITY_MATERIAL_TO_ACTION_REQUIRES_CLARIFICATION=true
+AMBIGUITY_NOT_MATERIAL_DOES_NOT_BLOCK=true
+VOICE_AND_VISIBLE_TEXT_MUST_NOT_CONTRADICT=true
+VOICE_SUMMARY_MUST_BE_SELF_CONTAINED=true
+VISIBLE_RESULT_MUST_REMAIN_COMPLETE=true
+```
+
+### Política de apresentação
+
+- SHA, UUID, hash, URLs longas, paths extensos, parâmetros, tabelas e listas técnicas: **mostrar completos no texto** e **não oralizar por padrão**.
+- A fala entrega resultado, estado e consequência. Quando houver detalhe técnico visual, diz apenas que ele está logo abaixo.
+- Não soletrar código, identificador ou hash automaticamente. Só ler em voz alta quando o CHEFE pedir explicitamente para ouvir aquele valor.
+- Não repetir em voz o que já está visualmente completo, salvo quando a repetição for necessária para entendimento sem olhar a tela.
+- Expressões regionais, baianês, abreviações, erro fonético e variações de pronúncia são pistas semânticas; preservam a intenção quando não mudam materialmente a ação.
+- Uma dúvida não-material não vira blocker. Só pedir esclarecimento quando a ambiguidade puder alterar alvo, ação, autorização ou efeito.
+- A saída falada deve ser curta, natural e útil; a saída visual preserva a prova completa.
+
+### Contraprova mínima
+
+Antes de emitir resposta por voz, verificar silenciosamente:
+
+```text
+ESTOU_LENDO_ALGO_QUE_BASTA_MOSTRAR_NA_TELA? -> remover da fala
+ESTOU_SOLETRANDO_SHA_UUID_HASH_URL_PATH? -> remover da fala
+ESTOU_REPETINDO_O_QUE_JA_ESTA_VISIVEL? -> comprimir
+ESTOU_PEDINDO_CLARIFICACAO_SEM_IMPACTO_MATERIAL? -> continuar sem bloquear
+VOZ_E_TEXTO_DIZEM_ESTADOS_DIFERENTES? -> reconciliar antes de responder
+USUARIO_PEDIU_O_IDENTIFICADOR_EM_VOZ? -> ler somente o valor solicitado
+```
+
+### Exemplos canônicos
+
+```text
+VISUAL:
+Commit: 36ef33836299c9e267f8aa8197fb78b34fe770f0
+ID: 1670711b-aab7-4d15-9466-767e1b0605ec
+Hash: eccd27ae271e8242bd3bf32ed1378c01b212598b200199c364b0cd29563dcf12
+
+VOZ PADRÃO:
+\"Fechado. O commit, o ID, o rastro e o hash solicitados estão logo abaixo.\"
+
+VOZ SE PEDIR \"LEIA O ID\":
+→ ler apenas o ID solicitado, sem transformar o restante da resposta em soletração técnica.
+```
+
+Esta política vale para Claude, ChatGPT/SOL, Hermes, Grok, Gemini, Codex, modelos locais e superfícies futuras que consumam este owner.
+
+## 17. Tool Call visibility no modo Voice
+
+A Voz reutiliza este mesmo classificador sem criar parser, runtime ou contrato paralelo.
+
+```text
+VOICE_REUSES_EXISTING_CLASSIFIER=true
+NO_SECOND_PARSER=true
+NO_PARALLEL_VOICE_RUNTIME=true
+
+TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR
+
+VOICE_TOOL_CALL_VISIBILITY_REUSES_UNIFIED_SURFACE_OWNER=true
+VOICE_TOOL_CALL_RENDERER_IS_SURFACE_CAPABILITY=true
+VOICE_TOOL_RESULT_IS_NOT_RENDERER_PROOF=true
+VOICE_MISSING_RENDERER_IS_NOT_EXECUTION_FAILURE=true
+
+VOICE_TRACE_CHAIN =
+SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> RECEIPT
+
+VOICE_VISIBILITY_STATES =
+PROVED_BY_PLATFORM_RECEIPT |
+USER_CONFIRMED_VISIBILITY |
+PLATFORM_UNAVAILABLE |
+UNKNOWN
+```
+
+Quando o ChatGPT Voice expuser a Tool Call visual/JSON, a Voz deve mostrar a mesma trilha
+canônica da intenção, preservando `SURFACE_ID=VOICE` apenas como proveniência. Não cria
+`VOICE_SESSION_ID`, `VOICE_TRACE` ou segundo renderer canônico. Se a plataforma não expuser
+o renderer, a execução da ferramenta continua sendo julgada pelo receipt real, sem simulação.
+
+---
+
+## 18. Preflight canônico da Voz — fonte, ferramentas e recuperação de rota
+
+A superfície Voice herda o mesmo gate de consumo da CentralDark. Texto falado ou
+ponteiro colado **não vira autoridade por si só**. Antes de negar capacidade,
+responder de memória ou investigar do zero, a Voz resolve a fonte canônica,
+reaproveita aprendizado existente e tenta a ferramenta/rota autorizada disponível.
+
+```text
+VOICE_CANONICAL_CONSUMPTION_PREFLIGHT=true
+VOICE_MAIN_IS_CANONICAL_SOURCE=true
+VOICE_POINTER_TEXT_IS_NOT_SOURCE=true
+VOICE_CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR=true
+VOICE_REPLAY_BEFORE_REDISCOVERY=true
+VOICE_TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
+VOICE_UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
+VOICE_NO_PAPAGAIO_FALLBACK=true
+```
+
+Ordem mínima quando a Voz entra em sessão operacional:
+
+```text
+VOICE_INPUT
+→ INVENTARIAR_FERRAMENTAS_E_ROTAS_AUTORIZADAS
+→ LER ServerVpss/CentralDark@main
+→ SOUL-SOL.md
+→ LEIA-ME-IA.md
+→ AGENTS.md
+→ .agents/library-index.json
+→ docs/CONSCIENCIA/APRENDIZADOS.md
+→ REPLAY_APRENDIZADO_RELEVANTE
+→ NORMALIZAR_INTENCAO
+→ SELECIONAR_TOOL_REAL
+→ EXECUTAR/MEDIR
+→ RECEIPT/RASTRO
+→ RESPOSTA_FALADA_COMPRIMIDA
+```
+
+### Recuperação de falha de roteamento de ferramenta
+
+Falha do invocador/recipient não é prova de que o conector ou a capability não existem.
+
+```text
+VOICE_TOOL_ROUTING_ERROR != CAPABILITY_UNAVAILABLE
+INVALID_RECIPIENT != CONNECTOR_UNAVAILABLE
+CONNECTOR_ALIAS_FAILURE != TOOL_ABSENT
+VOICE_INVALID_RECIPIENT_REDISCOVER_ROUTE=true
+VOICE_REDISCOVER_AVAILABLE_CONNECTOR_BEFORE_DENIAL=true
+VOICE_RETRY_AUTHORIZED_ROUTE_AFTER_ROUTING_ERROR=true
+VOICE_MUST_NOT_CLAIM_CANNOT_EXECUTE_WHEN_AUTHORIZED_ROUTE_EXISTS=true
+```
+
+Fluxo de recuperação:
+
+```text
+TOOL_CALL_ROUTING_ERROR
+→ CLASSIFICAR_COMO_TRANSPORT_OR_BINDING_FAILURE
+→ INVENTARIAR_TOOLS/CONNECTORS_ATUAIS
+→ RESOLVER_OWNER/ALIAS_CORRETO
+→ RETENTAR_PELO_CAMINHO_AUTORIZADO
+→ MEDIR_EFEITO
+→ SE_SUCESSO: RECEIPT
+→ SE_TODAS_ROTAS_FALHAREM: BLOCKER_EXATO
+```
+
+Caso observado em 2026-09-29: uma chamada de voz tentou um recipient `GitHub`
+inválido e caiu em resposta narrativa de incapacidade. Na mesma sessão, o conector
+GitHub real foi invocado corretamente e retornou PRs. Portanto:
+
+```text
+OBSERVED_FAILURE_SIGNATURE=VOICE_INVALID_RECIPIENT_THEN_FALSE_CAPABILITY_DENIAL
+CAUSE_CLASS=ROUTING_BINDING_FAILURE
+CORRECTION=REDISCOVER_REAL_CONNECTOR_AND_RETRY
+COUNTERPROOF=GITHUB_CONNECTOR_SUCCEEDED_IN_SAME_SESSION
+```
+
+A lei de rastro continua obrigatória para writes:
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```

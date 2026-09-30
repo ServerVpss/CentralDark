@@ -1,4 +1,4 @@
-name: ⚙️ PR auto-review (Codex + checklist)
+name: ⚙️ PR auto-review CentralDark — checklist determinístico
 
 on:
   pull_request:
@@ -111,7 +111,7 @@ jobs:
               '- [x] `git diff --check`',
               '- [x] Scanner no self-hosted sobre o diff; nenhum script do PR foi executado na VPS por este passo',
               `- [x] Classificação de path operacional: ${touchedSensitive ? 'TOCADO' : 'não tocado'}`,
-              '- [ ] Revisão final Codex visível',
+              '- [ ] Revisão final CentralDark visível',
               '',
               `HEAD: ${head}`,
               '',

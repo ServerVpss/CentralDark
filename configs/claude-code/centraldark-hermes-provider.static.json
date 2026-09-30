@@ -1,0 +1,47 @@
+{
+  "schema": "centraldark.claude.provider.static.v1",
+  "status": "CONFIG_TEMPLATE_NO_SECRETS",
+  "intent": "Claude Code deve chamar Hermes e demais provedores por baixo da API CentralDark, sem depender de descoberta quebrada em /v1/models.",
+  "provider": {
+    "name": "CentralDark Hermes",
+    "type": "openai-compatible",
+    "base_url": "http://127.0.0.1:8099/",
+    "models_discovery": "skip_when_unreachable",
+    "manual_models": [
+      "auto",
+      "hermes/default",
+      "claude-code/default",
+      "google/gemini-3-flash-preview",
+      "google/gemini-2.0-flash",
+      "google/gemini-2.5-pro",
+      "cerebras/gpt-oss-120b",
+      "ionos/openai/gpt-oss-120b",
+      "arsenal-router",
+      "arsenal-parallel",
+      "arsenal-debate",
+      "arsenal-hermes"
+    ]
+  },
+  "routing": {
+    "entrypoint": "CentralDark Omni Router",
+    "local_port": 8099,
+    "health_path": "/health",
+    "models_path": "/v1/models",
+    "chat_path": "/v1/chat/completions"
+  },
+  "rules": [
+    "GitHub guarda configuracao sem segredo.",
+    "VPS/Casa guardam chaves reais em variaveis locais.",
+    "Claude Code chama a API CentralDark.",
+    "Hermes executa por baixo quando selecionado pelo router.",
+    "Se /v1/models falhar, usar lista manual de modelos.",
+    "Sem segredo em commit, log ou recibo."
+  ],
+  "proof_needed": [
+    "porta 8099 viva",
+    "/health responde",
+    "/v1/models responde ou modelos manuais configurados",
+    "/v1/chat/completions retorna resposta",
+    "recibo sem segredo"
+  ]
+}

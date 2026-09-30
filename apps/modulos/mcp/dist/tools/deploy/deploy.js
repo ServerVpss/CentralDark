@@ -90,17 +90,16 @@ export const deployTools = [
             // 4. PM2 — processos com restart anormal ou parados
             let pm2Summary = [];
             try {
-                const res = await runShell("pm2 jlist 2>/dev/null", { timeoutMs: 15_000 });
-                // pm2 jlist pode emitir linhas de aviso antes do JSON — extrai só o array
-                const jsonStart = res.stdout.indexOf("[");
-                const raw = jsonStart >= 0 ? res.stdout.slice(jsonStart) : res.stdout;
-                const list = JSON.parse(raw);
+                // Projeta só campos não sensíveis ANTES de runShell sanitizar a saída.
+                // Isso evita corromper o JSON bruto do PM2 (que contém env/secrets) e fixa o daemon canônico.
+                const res = await runShell("PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | python3 -c 'import sys,json; d=json.load(sys.stdin); print(json.dumps([[p.get(\"name\"),p.get(\"pm2_env\",{}).get(\"status\"),p.get(\"pm2_env\",{}).get(\"restart_time\",0),p.get(\"pm2_env\",{}).get(\"pm_uptime\",0)] for p in d]))'", { timeoutMs: 15_000 });
+                const list = JSON.parse(res.stdout.trim());
                 const now = Date.now();
-                pm2Summary = list.map((p) => ({
-                    name: p.name,
-                    status: p.pm2_env.status,
-                    restarts: p.pm2_env.restart_time,
-                    uptime_min: Math.round((now - p.pm2_env.pm_uptime) / 60_000),
+                pm2Summary = list.map(([name, status, restarts, pmUptime]) => ({
+                    name,
+                    status,
+                    restarts,
+                    uptime_min: Math.round((now - pmUptime) / 60_000),
                 }));
                 const stopped = pm2Summary.filter((p) => p.status !== "online");
                 if (stopped.length > 0) {

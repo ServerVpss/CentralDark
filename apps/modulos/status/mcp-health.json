@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-09-18T08:17:03Z",
+  "updatedAt": "2026-09-12T02:54:01Z",
   "url": "https://mcp.centralldark.com/health",
   "lastCheck": {
     "status": "ok",
     "httpCode": 200,
-    "latencyMs": 629,
+    "latencyMs": 152,
     "restarted": false
   },
   "last24h": {
-    "checks": 11311,
-    "failures": 1275,
-    "autoRestarts": 632,
-    "uptimePct": 88.73
+    "checks": 4,
+    "failures": 2,
+    "autoRestarts": 0,
+    "uptimePct": 50.00
   },
-  "lastFailureAt": "2026-09-17T11:02:02Z",
-  "lastRestartAt": "2026-09-17T11:02:02Z"
+  "lastFailureAt": "2026-09-12T01:16:14Z",
+  "lastRestartAt": null
 }

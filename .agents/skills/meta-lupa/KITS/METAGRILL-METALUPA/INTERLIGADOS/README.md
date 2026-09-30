@@ -62,6 +62,7 @@ SKILLS/INTERLIGACAO-OPERACIONAL.json → cadeia máquina: intenção → skill �
 SKILLS/MAPA-MENTAL-OPERACIONAL.md    → mapa visual das skills, gatilhos e cadeia de decisão
 RUNTIME/FRONTEIRAS-REAIS.md          → somente o que ainda precisa Casa/VPS/runtime atual
 RUNTIME/API-TOOL-RESOURCE-BRIDGE.md  → ponte recurso temporário ↔ path estável
+RUNTIME/LOCAL-FIRST-MULTI-ACCOUNT-ROUTE.md → rota curta local + multi-account + fallback VPS/Tailscale + lei PR-filho→PR-mãe→main
 RECEIPTS/                            → rastros desta cristalização
 ```
 
@@ -83,6 +84,50 @@ RECEIPTS/                            → rastros desta cristalização
 ```
 
 Os paths físicos continuam como já existem. **MAIÚSCULAS + EMOJIS são memória visual**, não renome de pasta. Isso evita quebrar imports, hashes e referências.
+
+## ⏰🪡 COSTURA VIVA — TIK-TAK
+
+A COSTURA não é uma etapa única. Em PRs alimentadas continuamente, ela opera como laço orientado a eventos: `main` avança, PRs atrasadas recebem a base atual, o novo HEAD dispara nova medição e qualquer avanço posterior da `main` reabre somente o cone necessário.
+
+```text
+⏰ TIK
+MAIN_CURRENT muda
+→ 🔄 sweep de Update branch
+→ 🪡 branch do PR recebe CURRENT
+
+⏰ TAK
+PR_HEAD muda
+→ synchronize
+→ 🔍 remede HEAD + behind_by + checks/reviews
+→ conflito? owner git-conflict-resolve-house-standard
+→ resolvido? commit/push só na branch do PR
+→ same-head prova
+→ próxima mudança retorna ao TIK
+```
+
+```text
+COSTURA_NAME_ONLY=true
+NO_VERSIONED_COSTURA=true
+EVENT_DRIVEN_NEAR_REAL_TIME=true
+STRICT_ZERO_LATENCY_REAL_TIME=false
+CURRENT_MAIN_REMEASURE_EACH_CYCLE=true
+CURRENT_PR_HEAD_REMEASURE_EACH_CYCLE=true
+OLD_UP_TO_DATE_SNAPSHOT_IS_HISTORY_AFTER_MAIN_ADVANCES=true
+OLD_REVIEW_IS_STALE_AFTER_HEAD_ADVANCES=true
+NO_STALE_GREEN=true
+```
+
+A regra de astúcia é: **não esperar acumular dívida para depois reconciliar tudo**. Cada evento alimenta a próxima costura; se dois eventos cruzarem no tempo, o estado mais novo vence por remedição, nunca por memória do run anterior.
+
+Ações humanas e equivalentes de máquina convergem no mesmo owner:
+
+```text
+Update branch      → sincronizar base na branch do PR
+Accept Both        → mecanismo de composição, quando semanticamente válido
+Mark as resolved   → registrar arquivo resolvido no índice
+Commit merge       → gravar a resolução na branch do PR
+Merge PR / squash  → promoção separada
+```
 
 ## 🔒 LEIS
 

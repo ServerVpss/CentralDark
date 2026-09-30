@@ -2,7 +2,3 @@ infra/systemd/*.sh text eol=lf
 infra/systemd/*.service text eol=lf
 infra/systemd/*.timer text eol=lf
 scripts/dependabot/*.sh text eol=lf
-infra/systemd/*.sh text eol=lf
-infra/systemd/*.service text eol=lf
-infra/systemd/*.timer text eol=lf
-scripts/dependabot/*.sh text eol=lf

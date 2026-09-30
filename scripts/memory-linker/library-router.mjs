@@ -1,3 +1,5 @@
+import { evaluateHornGoal } from '../../apps/modulos/HERMES-CORE/core/horn-proof-gate.mjs';
+
 const ALLOWED_FORMATS = new Set([
   'pdf', 'epub', 'jwpub',
   'gdoc', 'gdrive-md', 'gdrive-folder', 'txt',
@@ -112,6 +114,43 @@ function validateIngestedHash(source, sourceId) {
   }
 }
 
+export function evaluateLibraryEntryHornGate({ entry, source } = {}) {
+  const facts = [];
+  const sourceClass = normalizeToken(source?.classification);
+
+  if (normalizeToken(source?.source_id)) facts.push('SOURCE_KNOWN');
+  if (String(entry?.reference ?? '').trim()) facts.push('REFERENCE_PRESENT');
+  if (Array.isArray(entry?.tags)) facts.push('TAGS_ARRAY');
+  if (Array.isArray(entry?.links)) facts.push('LINKS_ARRAY');
+  if (Array.isArray(entry?.emojis)) facts.push('EMOJIS_ARRAY');
+  if (Array.isArray(entry?.use)) facts.push('USE_ARRAY');
+  if (sourceClass !== 'sensitive_quarantine' && sourceClass !== 'sensitive-quarantine') {
+    facts.push('SOURCE_NOT_QUARANTINED');
+  }
+
+  return evaluateHornGoal({
+    facts,
+    rules: [
+      {
+        id: 'library-structural-entry',
+        if: ['SOURCE_KNOWN', 'REFERENCE_PRESENT', 'TAGS_ARRAY', 'LINKS_ARRAY', 'EMOJIS_ARRAY', 'USE_ARRAY'],
+        then: 'LIBRARY_STRUCTURALLY_VALID',
+      },
+      {
+        id: 'library-route-sector-horn',
+        if: ['LIBRARY_STRUCTURALLY_VALID', 'SOURCE_NOT_QUARANTINED'],
+        then: 'SECTOR_HORN_ROUTED',
+      },
+      {
+        id: 'library-entry-accepted-after-horn',
+        if: ['SECTOR_HORN_ROUTED'],
+        then: 'LIBRARY_ENTRY_ACCEPTED',
+      },
+    ],
+    goal: 'LIBRARY_ENTRY_ACCEPTED',
+  });
+}
+
 export function validateCatalog(catalog) {
   if (!catalog || typeof catalog !== 'object') throw new Error('CATALOG_MUST_BE_OBJECT');
   if (catalog.schema_version !== 1) throw new Error('UNSUPPORTED_SCHEMA_VERSION');
@@ -158,9 +197,12 @@ export function validateCatalog(catalog) {
     assertArray(entry.emojis ?? [], `entry:${id}:emojis`);
     assertArray(entry.use ?? [], `entry:${id}:use`);
     if (entry.text != null && typeof entry.text !== 'string') throw new Error(`ENTRY_TEXT_MUST_BE_STRING:${id}`);
+
+    const horn = evaluateLibraryEntryHornGate({ entry, source: sourceById.get(sourceId) });
+    if (horn.state !== 'PROVEN') throw new Error(`LIBRARY_HORN_GATE_NOT_PROVEN:${id}:${horn.state}`);
   }
 
-  return { status: 'PASS', sources: sourceIds.size, entries: entryIds.size };
+  return { status: 'PASS', sources: sourceIds.size, entries: entryIds.size, horn_sector_gate: 'PROVEN_FOR_ALL_ENTRIES' };
 }
 
 export function deriveSourceIdentity(source) {

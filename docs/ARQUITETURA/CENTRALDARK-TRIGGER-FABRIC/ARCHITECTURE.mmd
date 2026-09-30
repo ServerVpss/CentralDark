@@ -52,6 +52,14 @@ flowchart TD
   SAVED --> INGEST
   DOCSENSOR --> INGEST
   LIVEOBS --> INGEST
+
+  OLHO["OLHO BIÔNICO ANTI-FLASH<br/>PROFILE / NOT ENGINE"]
+  DERIVED["DERIVED OUTPUT<br/>artifact + receipt"]
+  MONITORS["MONITORES DA CASA<br/>preview / painel"]
+  DOCSENSOR -. visual source .-> OLHO
+  OLHO --> DERIVED
+  DERIVED -. derived view only .-> MONITORS
+  MONITORS -. observation feedback .-> INGEST
   INGEST --> REAR
 
   EVID --> REAR["CEREBRO DE RETAGUARDA / MEMORY LAYER<br/>materia + fragmentos + historico + proveniencia"]
@@ -90,8 +98,10 @@ flowchart TD
     MAUS["OpenMausBot<br/>agent roster/UX"]
     LOVE["Open-Lovable<br/>builder pattern source"]
     GROK["Grok Build<br/>future engine candidate"]
-    EXT_REDACTED["AIOS/[EXT_REDACTED]<br/>external learning candidates"]
+
+    EXTLEARN["AIOS/[EXT_REDACTED]<br/>external learning candidates"]
     AIOS_EXT["AIOS/[EXT_REDACTED]<br/>external learning candidates"]
+
   end
 
   ODS -. capability only after measurement .-> OMNI
@@ -99,7 +109,9 @@ flowchart TD
   MAUS -. view only .-> JARVIS
   LOVE -. reference only .-> TOOLS
   GROK -. invocation must be proven .-> OMNI
-  EXT_REDACTED -. delta only / no control plane .-> HARVEST
+
+  EXTLEARN -. delta only / no control plane .-> HARVEST
   AIOS_EXT -. delta only / no control plane .-> HARVEST
+
 
   LOCAL["LOCAL AI RUNTIME<br/>UNKNOWN / DEFERRED"] -. measure first .-> ODS

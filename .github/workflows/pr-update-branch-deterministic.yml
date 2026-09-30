@@ -13,6 +13,15 @@
 # - não faz merge, squash, deploy nem ignora checks.
 # - conflito/UNKNOWN não vira PASS.
 # - pull_request_target executa somente código confiável da base/main.
+#
+# 🛡️ CADEADO DO GUARDIÃO — NÃO trocar o runner deste fluxo para self-hosted.
+# Regressão provada: self-hosted offline deixou a COSTURA em fila.
+# Este fluxo fica em GitHub-hosted até VPS/self-hosted ficar PROVADO online
+# e o CHEFE autorizar modo híbrido.
+# UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN
+# SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true
+# HYBRID_MODE_PENDING_VPS_PROOF=true
+# CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true
 
 name: 🔄 PR Update Branch — determinístico
 
@@ -42,13 +51,17 @@ permissions:
   actions: read
 
 concurrency:
-  group: update-branch-${{ github.event_name }}-${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || github.sha }}
-  cancel-in-progress: false
+  # push na main: todas as varreduras no mesmo grupo; a mais nova (main mais recente) substitui a anterior já obsoleta.
+  # Demais eventos mantêm o comportamento anterior (grupo por PR/SHA, sem cancelar).
+  group: update-branch-${{ github.event_name }}-${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || (github.event_name == 'push' && 'main') || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 
 jobs:
   update-branch:
     name: 🔄🪡 PUT /pulls/{PR}/update-branch + estabilização
     if: github.repository == 'ServerVpss/CentralDark'
+    # 🛡️ Runner lock: GitHub-hosted mantém a onda viva sem depender da VPS offline.
+    # Futuro híbrido só com runner self-hosted online provado + autorização explícita do CHEFE.
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -101,3 +114,7 @@ jobs:
           echo 'APPROVAL=NOT_DONE'
           echo 'DEPLOY=NOT_DONE'
           echo 'UNKNOWN_IS_PASS=0'
+          echo 'UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN'
+          echo 'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true'
+          echo 'HYBRID_MODE_PENDING_VPS_PROOF=true'
+          echo 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true'

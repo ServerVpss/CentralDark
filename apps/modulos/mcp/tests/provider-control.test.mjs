@@ -8,6 +8,7 @@ import {
   buildProviderRequest,
   deepRedact,
   providerCredentialStatus,
+  tailscaleTools,
   validateFinancialGuard,
 } from "../src/modes/admin/tools/admin-provider-control.js";
 
@@ -95,6 +96,16 @@ test("tailscale devices.list monta path oficial", () => {
   assert.equal(req.path, "/tailnet/-/devices");
 });
 
+test("tailscale network.logs monta endpoint oficial e exige janela allowlisted", () => {
+  const req = buildProviderRequest("tailscale", "network.logs", {
+    tailnet: "-",
+    query: { start: "2026-09-25T08:00:00.000Z", end: "2026-09-25T08:15:00.000Z" },
+  });
+  assert.equal(req.method, "GET");
+  assert.equal(req.path, "/tailnet/-/logging/network?start=2026-09-25T08%3A00%3A00.000Z&end=2026-09-25T08%3A15%3A00.000Z");
+  assert.equal(matrix("tailscale", "network.logs").permission, "logs:network:read");
+});
+
 test("redaction remove token senha e material de pagamento", () => {
   const redacted = deepRedact({
     token: "abc",
@@ -172,4 +183,19 @@ test("fingerprints nao carregam ator bruto", () => {
   const fingerprint = __test.actorFingerprint(actor);
   assert.equal(fingerprint.includes(actor), false);
   assert.match(fingerprint, /^[0-9a-f]{24}$/);
+});
+
+
+test("tools dedicadas Tailscale reutilizam owners existentes e ficam read-only", () => {
+  assert.deepEqual(
+    tailscaleTools.map((tool) => tool.name),
+    ["tailscale_status", "tailscale_bridge_status", "tailscale_devices_list", "tailscale_dns_nameservers", "tailscale_network_logs"],
+test("tools dedicadas Tailscale reutilizam provider-control e ficam read-only", () => {
+  assert.deepEqual(
+    tailscaleTools.map((tool) => tool.name),
+    ["tailscale_status", "tailscale_devices_list", "tailscale_dns_nameservers", "tailscale_network_logs"],
+  );
+  assert.ok(tailscaleTools.every((tool) => tool.annotations.readOnlyHint === true));
+  assert.ok(tailscaleTools.every((tool) => tool.annotations.destructiveHint === false));
+  assert.equal(new Set(tailscaleTools.map((tool) => tool.name)).size, tailscaleTools.length);
 });

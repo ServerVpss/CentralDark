@@ -80,6 +80,19 @@ jobs:
       - name: 🔹 Validar continuidade global e fronteira de autoridade da entrada
         run: node scripts/lupa/validar-continuidade-global.mjs
 
+      - name: Testar obrigação universal de diagrama e rota
+        run: node --test scripts/lupa/diagram-route-gate.test.mjs
+
+      - name: Gate universal — função/app/botão/gatilho/gancho precisa de seta e rota
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          node scripts/lupa/diagram-route-gate.mjs --base-ref "$BASE_SHA" --head-ref "$HEAD_SHA"
+
+      - name: Gate INTERLIGADOS — padrões de PR e dívida runtime explícita
+
       - name: 🔹 Gate INTERLIGADOS — padrões de PR e dívida runtime explícita
         run: node scripts/lupa/validar-interligados-pr-padroes.mjs
 
@@ -149,6 +162,11 @@ jobs:
         run: |
           set -euo pipefail
           # FABLE JUDGE: before=40 zeros → SEM_BASE — do not pass null OID as merge-base/diff base
+          if [ "${BASE_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            git fetch origin main --depth=1
+            BASE_SHA="$(git rev-parse origin/main)"
+            echo "IDENTIDADE_BASE_FALLBACK=origin/main:${BASE_SHA}"
+          fi
           if [ -n "${BASE_SHA}" ] && [ "${BASE_SHA}" != "0000000000000000000000000000000000000000" ]; then
             node scripts/lupa/validar-identidade-operacional.mjs \
               --base-ref "$BASE_SHA" \
@@ -272,6 +290,11 @@ jobs:
         run: |
           set -uo pipefail
           status=0
+          if [ "${BASE_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            git fetch origin main --depth=1
+            BASE_SHA="$(git rev-parse origin/main)"
+            echo "REPORT_BASE_FALLBACK=origin/main:${BASE_SHA}"
+          fi
           python3 scripts/trigger-fabric/verify_repo_contract.py . || status=1
           node apps/modulos/mapeamento/core/validar-mapa.mjs \
             --repo-root "$GITHUB_WORKSPACE" \
@@ -280,6 +303,7 @@ jobs:
             --approved "$AUTHORITY_APPROVED" || status=1
           node scripts/lupa/validar-continuidade-global.mjs --json || status=1
           node scripts/lupa/validar-interligados-pr-padroes.mjs --json || status=1
+          node scripts/lupa/diagram-route-gate.mjs --base-ref "$BASE_SHA" --head-ref "$HEAD_SHA" || status=1
           node scripts/lupa/validar-porta-de-entrada.mjs \
             --base-sha "$BASE_SHA" \
             --head-sha "$HEAD_SHA" \

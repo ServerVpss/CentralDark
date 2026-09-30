@@ -1,7 +1,7 @@
 ---
 title: "CLAUDE.md"
 date: 2026-08-24
-updated: 2026-09-25T19:35:00-03:00
+updated: 2026-09-28T16:35:00-03:00
 status: DERIVED_VIEW
 tags: [boot, contrato, claude, ponte, intencao, live-editing]
 category: "A-Agentes"
@@ -11,6 +11,16 @@ source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 owner: AGENTS.md
 consumer: Claude Code / engines Claude
+session_crystal: "CHAT_HOUSE_COSTURA"
+session_memory: "docs/CONSCIENCIA/APRENDIZADOS.md#62-chat--casa--costura-viva-execução-conversacional-sensor-de-evento-e-identidade-por-evidência"
+executor_trigger: "!EXECUTOR_CENTRALDARK"
+executor_owner: "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md"
+costura_owner: ".agents/skills/git-conflict-resolve-house-standard/SKILL.md"
+dependabot_autonomy_owner: ".github/workflows/dependabot-auto-merge.yml"
+semantic_formula: "CHEFE_FALA -> INTENCAO -> FERRAMENTA_AUTORIZADA -> ACAO -> READBACK -> MAIN_ADVANCE -> COSTURA -> PR_HEAD_CURRENT -> SAME_HEAD_PROOF -> NOVO_EVENTO_REENTRA"
+tik_tak_formula: "MAIN_CURRENT -> UPDATE_BRANCH -> PR_HEAD_CURRENT -> SYNCHRONIZE -> REMEASURE -> CHECKS_CURRENT_HEAD -> REENTER_ON_NEW_MAIN"
+gmail_notification_truth_scope: "NOTIFICATION_CONTENT_ONLY"
+ui_identity_rule: "UI_PATTERN != PRODUCT_IDENTITY"
 ---
 
 # CLAUDE.md — ponte para o contrato canônico
@@ -43,6 +53,58 @@ ENGINE_IS_OWNER=false
 COPY_BRAIN=false
 SEGREDO/CHEFE > SOL > PIVETE/HERMES
 ```
+
+
+## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+
+Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
+
+```text
+CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
+NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
+RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=true
+META_GRILL_BEFORE_MUTATION=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+RETURN_SAME_ARTIFACT_EVOLVED=true
+VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
+GREEN_STATE_MUST_BE_PRESERVED=true
+EXPERIMENT_MUST_NOT_DESTROY_LAST_PROVEN_STATE=true
+PROVEN_DELTA_ONLY_RETURNS_TO_GREEN_STATE=true
+REPLAY_BEFORE_REDISCOVERY=true
+NO_V1_V2_V3_PARALLEL_OWNER=true
+LEGACY_PRESERVATION=true
+LEGACY_IS_COMPATIBILITY_NOT_SECOND_OWNER=true
+ONE_SYSTEM_ONLY=true
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+```text
+CHEFE_FALA
+→ RECUPERA_FIO
+→ META_GRILL
+→ MEDE_CURRENT
+→ REUSE_BEFORE_CREATE
+→ OWNER_EXISTENTE
+→ MENOR_DELTA
+→ TESTE
+→ BACKCHECK
+→ CONTRAPROVA
+→ SE_ERRO: VOLTA_UMA_CASA
+→ COSTURA
+→ RETESTE
+→ READBACK
+→ REMEDIÇÃO
+→ SE_VERDE: PRESERVA_GREEN_STATE
+→ SE_EXPERIMENTO: ISOLA
+→ SE_PROVADO: ABSORVE_SOMENTE_DELTA
+→ CRISTALIZA
+→ NEXT_CURSOR
+```
+
 
 ## Claude ↔ subagentes, sem inversão de autoridade
 
@@ -548,3 +610,115 @@ ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE=true
 CLAUDE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_1562
 ```
 
+
+
+## 🪬 Cristal semântico da sessão — Chat → Casa → COSTURA
+
+Claude Code herda o mesmo cristal do core; não cria versão paralela.
+
+```text
+EXECUTOR_TRIGGER=!EXECUTOR_CENTRALDARK
+EXECUTOR_REQUIRES_AUTHORIZED_HOUSE_TOOL=true
+COSTURA_NAME_ONLY=true
+NO_VERSIONED_COSTURA=true
+EVENT_DRIVEN_NEAR_REAL_TIME=true
+STRICT_ZERO_LATENCY_REAL_TIME=false
+CURRENT_MAIN_REMEASURE_EACH_CYCLE=true
+CURRENT_PR_HEAD_REMEASURE_EACH_CYCLE=true
+NO_STALE_GREEN=true
+GMAIL_NOTIFICATION_RECEIVED=PROVABLE_EVENT
+GMAIL_NOTIFICATION!=GLOBAL_GITHUB_STATE
+UI_PATTERN!=PRODUCT_IDENTITY
+WHOLE_SURFACE_EVIDENCE_REQUIRED=true
+DEPENDABOT_WORKFLOW_AUTO_APPROVAL_SCOPE=dependabot[bot]+same_repo+base_main+exact_current_head+action_required
+WORKFLOW_RUN_APPROVAL!=PR_REVIEW_APPROVAL
+DEPENDABOT_AUTO_APPROVAL_ROLLBACK_BASE=d5137a91518aa52a0c39072b7afb7e495108f01d
+DEPENDABOT_AUTO_APPROVAL_CHANGE=afad4177a76659afec503af610dbec6c813b6c37
+```
+
+Fórmula herdada:
+
+`CHEFE FALA → intenção → ferramenta autorizada → ação → readback → main avança → COSTURA → HEAD CURRENT → prova same-head → evento novo reentra no TIK-TAK`.
+
+## 🔗 Claude · acesso operacional ao CENTRALDARK-OS sem arquitetura paralela
+
+Claude deve reutilizar o owner `🔗 !># INTERLIGADOS` e a rota viva já cristalizada. **CLI não é requisito para acesso**; CLI é somente uma interface humana opcional.
+
+```text
+CLI_REQUIRED_FOR_ACCESS=false
+CLI_OPTIONAL_FOR_HUMAN_UX=true
+NO_NEW_TRIGGER_FOR_THIS_ROUTE=true
+NO_NEW_PR_IF_EQUIVALENT_CHILD_ALREADY_EXISTS=true
+NO_DESKTOP_SHORTCUT_UNLESS_CHEFE_EXPLICITLY_REQUESTS=true
+ROOT_DESKTOP_IS_NOT_THE_CHEFE_DESKTOP=true
+KERNEL_ACCESS_CLAIM_REQUIRES_KERNEL_SPECIFIC_EVIDENCE=true
+ROOT_SHELL_ACCESS != KERNEL_CONTROL
+```
+
+Ordem de seleção da rota:
+
+```text
+TARGET=CENTRALDARK-OS
+1. LOCAL_DIRECT_EXECUTOR, se a superfície atual realmente o expõe e o readback prova efeito
+2. DIRECT_TAILSCALE_SSH, se a shell atual alcança o peer e a autenticação foi medida
+3. VPS_DESKTOP_COMMANDER → TAILSCALE_SSH → CENTRALDARK-OS, fallback provado
+```
+
+A rota mais curta vence **sem matar a rota anterior**:
+
+```text
+PRIMARY_FAILS != SYSTEM_FAILS
+FALLBACK_SURVIVES=true
+DO_NOT_KILL_PROVEN_FALLBACK=true
+ROUTE_UNAVAILABLE → TRY_NEXT_AUTHORIZED_ROUTE
+UNKNOWN_ONLY_AFTER_AUTHORIZED_ROUTES_ARE_EXHAUSTED=true
+```
+
+Acesso shell suficiente para operar arquivos/processos não exige inventar uma "AI CLI Runtime". Se o CHEFE pedir uma CLI, ela deve ser tratada como UX sobre a mesma rota, não como novo transporte, owner, daemon ou cérebro.
+
+Para desenvolvimento local:
+
+```text
+EDIT/RUN_IN_CENTRALDARK_OS
+→ BIND_SERVICE_TO_APPROPRIATE_INTERFACE
+→ LOCAL_READBACK
+→ TAILSCALE_READBACK_WHEN_REMOTE_CONSUMPTION_IS_INTENDED
+→ CASA_VISUAL_CONFIRMATION_IS_USER_EVIDENCE
+→ PROMOTE_ONLY_THE_PROVEN_DELTA
+```
+
+Prova cristalizada de referência: a porta 4175 foi servida no CENTRALDARK-OS, respondeu localmente e via Tailscale; a Casa confirmou visualmente o consumo. Isso prova a topologia daquele teste, não transforma servidor HTTP temporário em serviço de produção.
+
+Rastro GitHub:
+
+```text
+MATERIAL_DELTA
+→ EXISTING_EQUIVALENT_CHILD_PR
+→ CHILD_COMMIT + READBACK
+→ CHILD_RECEIPT
+→ PR_MOTHER_1562_RECEIPT
+→ MAIN_PROMOTION_WHEN_APPLICABLE_GATES_PASS
+```
+
+`PR_MOTHER_1562_MERGE_FORBIDDEN=true`: #1562 é ledger/rendezvous, não PR para merge.
+
+
+
+## Autoridade CHEFE × Reality Judge — binding obrigatório
+
+Este adapter herda a SOUL CURRENT. REALITY=JUDGE significa verificação técnica pós-efeito e bloqueio de falso PASS; não é permissão para executar, não é autoridade humana e não reduz a intenção/autonomia/governança do SEGREDO/CHEFE.
+
+```text
+CHEFE_AUTHORITY_IS_SINGLETON=true
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+```
+
+Divergência de sensor/cache/log/modelo/workflow abre teste discriminante e correção do cone afetado; não abre veto humano concorrente.
