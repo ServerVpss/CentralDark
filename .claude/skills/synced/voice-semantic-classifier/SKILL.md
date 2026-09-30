@@ -472,3 +472,89 @@ Quando o ChatGPT Voice expuser a Tool Call visual/JSON, a Voz deve mostrar a mes
 canônica da intenção, preservando `SURFACE_ID=VOICE` apenas como proveniência. Não cria
 `VOICE_SESSION_ID`, `VOICE_TRACE` ou segundo renderer canônico. Se a plataforma não expuser
 o renderer, a execução da ferramenta continua sendo julgada pelo receipt real, sem simulação.
+
+---
+
+## 18. Preflight canônico da Voz — fonte, ferramentas e recuperação de rota
+
+A superfície Voice herda o mesmo gate de consumo da CentralDark. Texto falado ou
+ponteiro colado **não vira autoridade por si só**. Antes de negar capacidade,
+responder de memória ou investigar do zero, a Voz resolve a fonte canônica,
+reaproveita aprendizado existente e tenta a ferramenta/rota autorizada disponível.
+
+```text
+VOICE_CANONICAL_CONSUMPTION_PREFLIGHT=true
+VOICE_MAIN_IS_CANONICAL_SOURCE=true
+VOICE_POINTER_TEXT_IS_NOT_SOURCE=true
+VOICE_CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR=true
+VOICE_REPLAY_BEFORE_REDISCOVERY=true
+VOICE_TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
+VOICE_UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
+VOICE_NO_PAPAGAIO_FALLBACK=true
+```
+
+Ordem mínima quando a Voz entra em sessão operacional:
+
+```text
+VOICE_INPUT
+→ INVENTARIAR_FERRAMENTAS_E_ROTAS_AUTORIZADAS
+→ LER ServerVpss/CentralDark@main
+→ SOUL-SOL.md
+→ LEIA-ME-IA.md
+→ AGENTS.md
+→ .agents/library-index.json
+→ docs/CONSCIENCIA/APRENDIZADOS.md
+→ REPLAY_APRENDIZADO_RELEVANTE
+→ NORMALIZAR_INTENCAO
+→ SELECIONAR_TOOL_REAL
+→ EXECUTAR/MEDIR
+→ RECEIPT/RASTRO
+→ RESPOSTA_FALADA_COMPRIMIDA
+```
+
+### Recuperação de falha de roteamento de ferramenta
+
+Falha do invocador/recipient não é prova de que o conector ou a capability não existem.
+
+```text
+VOICE_TOOL_ROUTING_ERROR != CAPABILITY_UNAVAILABLE
+INVALID_RECIPIENT != CONNECTOR_UNAVAILABLE
+CONNECTOR_ALIAS_FAILURE != TOOL_ABSENT
+VOICE_INVALID_RECIPIENT_REDISCOVER_ROUTE=true
+VOICE_REDISCOVER_AVAILABLE_CONNECTOR_BEFORE_DENIAL=true
+VOICE_RETRY_AUTHORIZED_ROUTE_AFTER_ROUTING_ERROR=true
+VOICE_MUST_NOT_CLAIM_CANNOT_EXECUTE_WHEN_AUTHORIZED_ROUTE_EXISTS=true
+```
+
+Fluxo de recuperação:
+
+```text
+TOOL_CALL_ROUTING_ERROR
+→ CLASSIFICAR_COMO_TRANSPORT_OR_BINDING_FAILURE
+→ INVENTARIAR_TOOLS/CONNECTORS_ATUAIS
+→ RESOLVER_OWNER/ALIAS_CORRETO
+→ RETENTAR_PELO_CAMINHO_AUTORIZADO
+→ MEDIR_EFEITO
+→ SE_SUCESSO: RECEIPT
+→ SE_TODAS_ROTAS_FALHAREM: BLOCKER_EXATO
+```
+
+Caso observado em 2026-09-29: uma chamada de voz tentou um recipient `GitHub`
+inválido e caiu em resposta narrativa de incapacidade. Na mesma sessão, o conector
+GitHub real foi invocado corretamente e retornou PRs. Portanto:
+
+```text
+OBSERVED_FAILURE_SIGNATURE=VOICE_INVALID_RECIPIENT_THEN_FALSE_CAPABILITY_DENIAL
+CAUSE_CLASS=ROUTING_BINDING_FAILURE
+CORRECTION=REDISCOVER_REAL_CONNECTOR_AND_RETRY
+COUNTERPROOF=GITHUB_CONNECTOR_SUCCEEDED_IN_SAME_SESSION
+```
+
+A lei de rastro continua obrigatória para writes:
+
+```text
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+```
