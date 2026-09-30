@@ -124,7 +124,7 @@ test("lista padrão é exatamente a régua canônica de oito gates", () => {
     "⚙️ Lupa Drift Guard",
     "🧠 Trigger Fabric Full Package — pacote e contraprova",
     "⚙️ PR Title Contract",
-    "⚙️ PR auto-review (Codex + checklist)",
+    "⚙️ PR auto-review CentralDark — checklist determinístico",
     "⚙️ Pipeline — Telegram + Painel",
   ]);
   assert.deepEqual(parseCsv("a,b"), ["a", "b"]);
