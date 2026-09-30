@@ -734,3 +734,16 @@ updated: 2026-08-27
 - **Contraprova executada:** quatro owners divergentes na main medida; âncora revisada do filho passa; alteração deliberada em um owner reprova; âncora ausente reprova. O resultado retornado é o mesmo objeto registrado em `checks`. Prova limitada ao sync, não ao gate global nem ao runtime.
 - **Aprendizado adicional:** `decoded` de um conector pode ser projeção sanitizada. Hash de blob e escrita integral exigem os bytes originais (`content` base64), com conferência contra o SHA fornecido. `DECODED_VIEW != ORIGINAL_GIT_BYTES`; nunca regravar owner canônico a partir de projeção sanitizada.
 - **Cristal:** `FISCAL_RESULT_REQUIRED`; `NONE != PASS`; `TRUNCATED_LOG != FULL_VERDICT`; `BRANCH != MAIN`; `REUSE_EXISTING_CHILD`; `ORIGINAL_BYTES_BEFORE_HASH_OR_FULL_WRITE`.
+
+
+## 101. Verde da interface exige prova do mesmo PR/HEAD; o ciclo pertence à CentralDark
+
+**Owner:** `scripts/dependabot/reconcile-open-prs.mjs` + `.github/workflows/dependabot-auto-merge.yml`; promoção humana permanece em `autonomia-promocao.yml`.
+
+Um único Supabase Preview SKIPPED não prova os oito gates obrigatórios. O reconciliador reutiliza o denominador do green guard e publica `centraldark/required-proof`: somente todos PASS no mesmo PR/HEAD produzem success; MISSING/SKIPPED/FAIL exigem failure; fila ou leitura incompleta permanece pending/UNKNOWN. Conclusão da interface, base antiga e sucesso do Selo não substituem observação causal nem receipt publicado.
+
+O owner reentra após os oito workflows obrigatórios, encaminha explicitamente após update-branch e usa o PROMOTION_TOKEN já existente para sincronizações, com fallback ao GITHUB_TOKEN. Rerun considera somente o run mais recente de cada workflow: falha histórica com sucessor verde não gera nova execução. PR-mãe #1562 permanece protegido; forks e bases diferentes de main não recebem mutação desta varredura; nenhum merge direto é introduzido.
+
+**Contraprova funcional:** seis cenários executam o reconciliador completo com API simulada: ausência/skip, PASS/pending, falha histórica superada, reentrada após 202, mãe/fork/outra base e prova de outro HEAD/evento/PR. Isso prova o comportamento local; publicação real de status, CI e squash ainda exigem readback.
+
+O estado, memória e receitas persistem nos owners canônicos da CentralDark-OS. O modelo é motor substituível; troca de executor não declara continuidade instalada, Vault sincronizado ou loop perpétuo sem medir os respectivos efeitos.

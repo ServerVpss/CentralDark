@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
+import { DEFAULT_REQUIRED_WORKFLOWS, greenDecision, runBelongsToPullHead, selectLatestRun } from '../github-autonomia-green-guard.mjs';
 
 const token = process.env.GITHUB_TOKEN || '';
 const repository = process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark';
@@ -54,9 +55,11 @@ async function getPr(number) {
 async function rerunFailedOnce(headSha) {
   const runsResp = await api(`/actions/runs?head_sha=${encodeURIComponent(headSha)}&per_page=100`);
   if (!runsResp.ok) return { requested: 0, reason: `RUNS_HTTP_${runsResp.status}` };
+  const latest = [...new Set((runsResp.data?.workflow_runs || []).map(run => run.name))]
+    .map(name => selectLatestRun(runsResp.data?.workflow_runs || [], name));
   const failure = new Set(['failure', 'cancelled', 'timed_out', 'action_required', 'startup_failure']);
   let requested = 0;
-  for (const run of runsResp.data?.workflow_runs || []) {
+  for (const run of latest) {
     if (run.status !== 'completed') continue;
     if (!failure.has(String(run.conclusion || '').toLowerCase())) continue;
     if (Number(run.run_attempt || 1) >= 2) continue;
@@ -121,14 +124,23 @@ async function dispatchCanonicalOwner(pr) {
     dependabot,
   };
 }
-const list = await api('/pulls?state=open&per_page=100');
+async function measureProof(pr) {
+  const response = await listAll('/actions/runs?head_sha=' + encodeURIComponent(pr.head.sha) + '&event=pull_request', 'workflow_runs');
+  if (!response.ok) return { green: false, state: 'UNKNOWN', http_status: response.status };
+  const runs = response.items.filter(run => runBelongsToPullHead(run, pr.number, pr.head.sha));
+  const proof = greenDecision(runs, DEFAULT_REQUIRED_WORKFLOWS);
+  return { ...proof, state: proof.green ? 'PASS' : 'DEFERRED', head: pr.head.sha };
+}
+
+const list = await listAll('/pulls?state=open');
 if (!list.ok) {
   console.error(`BLOCKED_LIST_PRS status=${list.status}`);
   process.exit(2);
 }
 
-const prs = (list.data || []).filter(pr =>
+const prs = (list.items || []).filter(pr =>
   pr.head?.repo?.full_name === repository &&
+  pr.base?.ref === 'main' &&
   (!targetPr || Number(pr.number) === targetPr)
 );
 const summary = [];
@@ -173,8 +185,13 @@ for (const item of prs) {
     receipt.action = 'UPDATE_BRANCH_REQUESTED';
     receipt.state = 'SYNCHRONIZING';
     acted += 1;
+    // A atualização pode suprimir synchronize com GITHUB_TOKEN; reentrar no owner explicitamente.
+    const routed = await dispatchCanonicalOwner(await getPr(number));
+    receipt.canonical_event = routed.event_type;
+    receipt.route_status = routed.status;
+    if (!routed.ok) blocked += 1;
     summary.push(receipt);
-    console.log(`PR #${number} UPDATE_BRANCH_REQUESTED head=${expectedHead}`);
+    console.log(`PR #${number} UPDATE_BRANCH_REQUESTED head=${expectedHead} route=${routed.event_type} status=${routed.status}`);
     continue;
   }
 
@@ -227,6 +244,21 @@ for (const item of prs) {
     continue;
   }
 
+  receipt.proof = await measureProof(pr);
+  console.log(`PR #${number} REQUIRED_PROOF=${receipt.proof.state} head=${pr.head.sha} verdicts=${JSON.stringify(receipt.proof.verdicts || [])}`);
+  const proofState = receipt.proof.green ? 'success'
+    : receipt.proof.verdicts?.some(v => ['MISSING', 'SKIPPED', 'FAIL', 'ACTION_REQUIRED'].includes(v.state)) ? 'failure' : 'pending';
+  const advertised = await api('/statuses/' + pr.head.sha, {
+    method: 'POST',
+    body: {
+      state: proofState, context: 'centraldark/required-proof',
+      description: receipt.proof.green ? '8 gates obrigatórios PASS no mesmo PR/HEAD'
+        : (receipt.proof.verdicts || []).filter(v => v.state !== 'PASS').map(v => v.state).join('|').slice(0, 140) || 'UNKNOWN: prova não recuperada',
+      target_url: pr.html_url || 'https://github.com/' + repository + '/pull/' + number,
+    },
+  });
+  receipt.proof_status = advertised.status;
+  if (!advertised.ok) { blocked += 1; console.error('REQUIRED_PROOF_STATUS_FAILED pr=' + number + ' status=' + advertised.status); }
   const rerun = await rerunFailedOnce(pr.head.sha);
   receipt.reruns = rerun.requested;
   if (rerun.requested > 0) {

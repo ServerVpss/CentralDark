@@ -15,7 +15,7 @@ name: 🤖 Dependabot — radar, compatibilidade e squash seguro
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize, ready_for_review]
+    types: [opened, reopened, synchronize, ready_for_review, labeled, edited]
   workflow_dispatch:
     inputs:
       target_pr:
@@ -30,6 +30,9 @@ on:
       - ⚙️ CentralDark Valida — determinístico
       - ⚙️ lupa-conformance
       - ⚙️ Lupa Drift Guard
+      - 🧠 Trigger Fabric Full Package — pacote e contraprova
+      - ⚙️ PR Title Contract
+      - ⚙️ Pipeline — Telegram + Painel
     types: [completed]
   repository_dispatch:
     types: [centraldark_dependabot_reconcile]
@@ -41,7 +44,7 @@ permissions:
   actions: write
   pull-requests: write
   checks: read
-  statuses: read
+  statuses: write
 
 concurrency:
   group: dependabot-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.workflow_run.head_sha || github.event.client_payload.pr_number || 'radar' }}
@@ -770,7 +773,7 @@ jobs:
       - name: 🧠 Update branch → auto-review → commit → rerun
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           TARGET_PR: ${{ github.event.pull_request.number }}
           PROTECTED_PRS: '1562'
@@ -800,7 +803,8 @@ jobs:
       (
         github.event_name == 'schedule' ||
         (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null)) ||
-        github.event_name == 'repository_dispatch'
+        github.event_name == 'repository_dispatch' ||
+        (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request')
       )
     runs-on: [self-hosted, Linux]
     timeout-minutes: 60
@@ -818,8 +822,9 @@ jobs:
       - name: 🔄 Todos PRs → update → auto-review → commit → rerun
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ github.event.workflow_run.pull_requests[0].number || github.event.client_payload.pr_number || '' }}
           PROTECTED_PRS: '1562'
           REPO_DIR: /root/CentralDark
           RESOLVER: .ci-house/scripts/dependabot/resolve-conflicts.sh
@@ -1111,7 +1116,7 @@ jobs:
       - name: 🪡 Executar owner único somente no PR alvo
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PROMOTION_TOKEN || secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           TARGET_PR: ${{ inputs.target_pr }}
           PROTECTED_PRS: '1562'
