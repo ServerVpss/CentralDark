@@ -342,3 +342,263 @@ SUBSTRATE_PRESERVED_WHILE_USEFUL
 PRODUCT_IDENTITY=CENTRALDARK
 DOCUMENTED_REBRAND != RUNTIME_REBRAND
 ```
+
+
+## 12. Plano completo de execução — FASE 2 CentralDark-OS
+
+**Estado de entrada medido em 2026-09-30:** PR #1713 aberto/draft, HEAD `275695d83d14abce9fa2a77354f69bfb8a953388`, base `main@90e2849ec3b84c9f4f7154e0043fc0ce9425c4a7`, mergeable=true. Falhas CI conhecidas/reproduzidas na base não devem ser confundidas com regressão deste escopo.
+
+### 12.1 Objetivo
+
+Transformar a VPS atual em **CentralDark-OS / Instinto Superior**, reaproveitando openKylin apenas como substrato técnico inicial, preservando o cérebro canônico no GitHub, restaurando somente o ouro operacional necessário e eliminando dependência de lixo/backups/caches antigos.
+
+```text
+CURRENT_VPS
+→ VAULT_PROVADO
+→ PROVIDERS_PROVADOS
+→ SNAPSHOT_ROLLBACK_GATE
+→ CENTRALDARK_OS_IMAGE_OR_INSTALL_PATH
+→ REBRAND_USER_VISIBLE
+→ CLEAN_INSTALL
+→ RESTORE_GOLD_ONLY
+→ HYDRATE_PROVIDERS
+→ START_RUNTIME
+→ PING_PONG
+→ INSTINTO_SUPERIOR
+→ COUNTERPROOF
+→ RECEIPTS
+→ FIXED_POINT
+```
+
+### 12.2 Fase A — Vault atual
+
+1. Executar `scripts/vps/centraldark-vault-bootstrap-inventory.sh` na VPS.
+2. Gerar `Vault-Cofre-CentralDark-<UTC>.tar.gz` + SHA256 + MANIFEST.
+3. Confirmar dedupe por SHA256.
+4. Confirmar que caches, backups repetidos, node_modules, logs e artefatos históricos não entram como ouro.
+5. Fazer readback de contagem, tamanho, hash e caminhos; não imprimir valores.
+6. Copiar o pacote para uma segunda superfície autorizada quando disponível (PC/Drive), sem transformar espelho em source of truth.
+
+**Gate A:** `VAULT_READY=1 + SHA256_MATCH + MANIFEST_READBACK`.
+
+### 12.3 Fase B — Providers e controle externo
+
+Medir pelos owners existentes, sem criar cliente paralelo:
+
+- CentralDark Admin API / MCP Admin;
+- Contabo: autenticação, instance identity, snapshots, reinstall/custom image, VNC, rescue, rollback;
+- Cloudflare: token válido, zone/account atual, DNS/tunnel necessários;
+- GitHub: repo/main/current child;
+- Tailscale/SSH como rota adicional quando existir.
+
+Reusar:
+- `apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js`
+- `apps/modulos/oauth-broker/server.mjs`
+- `scripts/vps/hydrate-provider-secrets.sh`
+- `scripts/cloudflare/cf-sync.sh`
+- `install.sh`
+
+**Gate B:** acesso ao provider provado + VPS/instance exata provada + Cloudflare readback provado.
+
+### 12.4 Fase C — Snapshot / rollback antes da mutação destrutiva
+
+Antes de reinstalar:
+
+1. listar snapshot/backup CURRENT;
+2. criar snapshot novo se a rota permitir;
+3. reler snapshot por ID/status;
+4. provar rota de recuperação: snapshot restore/rollback disponível e VNC/rescue acessíveis;
+5. registrar LAST_GOOD_STATE e receipt.
+
+```text
+NO_PROVEN_RECOVERY → NO_REINSTALL
+WRONG_INSTANCE_UNKNOWN → NO_REINSTALL
+VAULT_HASH_FAIL → NO_REINSTALL
+```
+
+**Gate C:** snapshot recuperável + rota VNC/rescue + instance exact match + Vault Gate A.
+
+### 12.5 Fase D — Completar bootstrap/restore antes da instalação
+
+Evoluir `scripts/vps/centraldark-os-bootstrap-restore.sh` no mesmo owner:
+
+- manter READONLY como default;
+- implementar restauração real somente com `CENTRALDARK_RESTORE_APPLY=1`;
+- restaurar por inventário/allowlist, nunca copiar vault bruto inteiro para o sistema;
+- reaproveitar `hydrate-provider-secrets.sh` para hidratação de providers;
+- reaproveitar `install.sh` como instalador central;
+- adicionar receipts por etapa;
+- rollback local para cada etapa reversível.
+
+**Gate D:** dry-run/readonly PASS + restore logic testada em ambiente não destrutivo.
+
+### 12.6 Fase E — Preparar identidade CentralDark-OS
+
+Base técnica inicial: openKylin.
+
+Antes do rollout final, substituir superfície visível:
+- nome do SO;
+- logos;
+- splash/boot visual;
+- wallpapers;
+- tema;
+- launcher/menu;
+- textos de produto;
+- identidade do painel.
+
+```text
+USER_VISIBLE_OS_NAME=CentralDark-OS
+PRIMARY_PRODUCT_SURFACE=Instinto Superior
+OPENKYLIN_USER_VISIBLE_BRANDING=REMOVE
+UPSTREAM_PROVENANCE_INTERNAL=KEEP_WHILE_TRUE
+```
+
+Nunca falsificar a base técnica: enquanto kernel/substrato ainda derivar de openKylin, isso permanece como provenance interna.
+
+### 12.7 Fase F — Prova em ambiente não destrutivo
+
+Usar CENTRALDARK-OS convidado/lab ou outra superfície isolada quando disponível:
+
+1. instalar/bootstrap;
+2. reboot;
+3. login/controle remoto;
+4. MCP health;
+5. Hermes health;
+6. Instinto Superior acessível;
+7. providers read-only;
+8. restore de amostra/estrutura;
+9. rebrand visível;
+10. reboot novamente.
+
+**Gate F:** boot + runtime + providers + UI + second reboot PASS.
+
+### 12.8 Fase G — Reinstalação limpa da VPS
+
+Somente após Gates A–F aplicáveis verdes:
+
+1. congelar receipt do estado anterior;
+2. confirmar novamente instance exata;
+3. iniciar reinstalação pelo provider/Contabo;
+4. usar imagem/rota CentralDark-OS preparada;
+5. acompanhar por provider/VNC;
+6. confirmar boot novo;
+7. não copiar árvore antiga inteira.
+
+O CHEFE já autorizou a transformação/reinstalação deste alvo; não re-perguntar por micro-etapas quando os gates acima estiverem provados. Se algum gate divergir, parar apenas no ponto causal e manter o resto preparado.
+
+### 12.9 Fase H — Restaurar somente o ouro
+
+Depois do boot novo:
+
+- clonar/sincronizar `ServerVpss/CentralDark@main`;
+- carregar owners canônicos;
+- instalar via `install.sh`;
+- restaurar Vault por allowlist;
+- hidratar providers por owner existente;
+- restaurar apenas configurações/runtime realmente usados;
+- não restaurar caches, backups antigos, worktrees velhas, logs históricos, `node_modules`, builds e lixo de diagnóstico.
+
+### 12.10 Fase I — Subir runtime
+
+Subir e medir:
+
+- CentralDark MCP/Admin;
+- OAuth broker;
+- Hermes;
+- PM2/systemd owners;
+- bots necessários;
+- memória/knowledge services;
+- Cloudflare;
+- Tailscale/SSH quando aplicável;
+- Instinto Superior.
+
+```text
+EXISTS != RUNNING
+RUNNING != HEALTHY
+HTTP_200 != WHOLE_SYSTEM_PASS
+```
+
+### 12.11 Fase J — Ping-pong e contraprova
+
+Provar ida e volta:
+
+- GitHub → VPS;
+- VPS → GitHub receipt;
+- Casa → VPS quando Casa estiver disponível;
+- CentralDark API → provider;
+- provider → readback;
+- Cloudflare DNS/tunnel → endpoint;
+- Instinto Superior → owner → runtime → receipt.
+
+Contraprovas mínimas:
+- reiniciar serviço crítico e conferir recovery;
+- reboot da VPS e conferir autostart;
+- confirmar que openKylin não aparece como identidade visível;
+- confirmar que secrets não foram parar em GitHub/logs;
+- confirmar que Vault não virou segundo source of truth.
+
+### 12.12 Fase K — Instinto Superior como painel-mãe
+
+Evoluir owner existente do painel/admin para expor, inicialmente read-only:
+
+- Inventário;
+- Vault;
+- Bootstrap;
+- Providers;
+- Contabo;
+- Cloudflare;
+- GitHub;
+- Runtime/PM2;
+- Rotação de credenciais;
+- Backup/snapshot;
+- Receipts.
+
+Não criar painel paralelo. Reusar a superfície Instinto Superior existente.
+
+### 12.13 Fase L — Rotação pós-online
+
+Depois de CentralDark-OS ONLINE e painel funcional:
+
+- inventariar credenciais ativas;
+- identificar duplicatas/obsoletas;
+- rotacionar provider por provider;
+- atualizar o Vault canônico;
+- invalidar credenciais antigas;
+- receipt sem valor de segredo.
+
+### 12.14 Fixed Point
+
+```text
+VAULT_PROVEN
++ RECOVERY_PROVEN
++ CLEAN_INSTALL_PROVEN
++ CENTRALDARK_OS_BOOT_PROVEN
++ USER_VISIBLE_REBRAND_PROVEN
++ CORE_RUNTIME_PROVEN
++ PROVIDERS_PROVEN
++ INSTINTO_SUPERIOR_PROVEN
++ REBOOT_RECOVERY_PROVEN
++ NO_SECRET_IN_GIT_PROVEN
++ RECEIPT_1713
++ RECEIPT_1562
+=> CENTRALDARK_OS_MVP_FIXED_POINT
+```
+
+### 12.15 Execução contínua do agente cloud
+
+O agente que acompanha PR #1713 deve tratar novos commits/receipts compatíveis como continuação deste mesmo fio.
+
+```text
+MONITOR_1713
+→ READ_CURRENT_HEAD
+→ READ_THIS_PLAN
+→ EXECUTE_NEXT_UNPROVEN_PHASE
+→ TEST
+→ COUNTERPROVE
+→ COMMIT_MINIMUM_DELTA
+→ RECEIPT_1713
+→ ANCHOR_1562
+→ CONTINUE
+```
+
+Não repetir trabalho já provado. Não transformar CI base preexistente em blocker deste escopo sem nexo causal. Não declarar formato/reinstalação concluídos antes da prova material do provider/runtime.
