@@ -23,7 +23,7 @@ on:
   workflow_run:
     workflows:
       - ⚙️ porta-de-entrada
-      - ⚙️ codex-validate
+      - ⚙️ CentralDark Valida — determinístico
       - ⚙️ lupa-conformance
       - ⚙️ Lupa Drift Guard
       - 🧠 Trigger Fabric Full Package — pacote e contraprova
