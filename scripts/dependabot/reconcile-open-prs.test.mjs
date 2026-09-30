@@ -61,3 +61,17 @@ test('other HEAD and other event do not prove current PR', async () => {
     assert.equal(calls.find(c => c.path.startsWith('/statuses/')).body.state, 'failure');
   }
 });
+
+test('existing approval owner requires authorized human, same repo, current scope; protects mother', async () => {
+  const workflow = await readFile(new URL('../../.github/workflows/dependabot-auto-merge.yml', import.meta.url), 'utf8');
+  const block = workflow.slice(workflow.indexOf('            function authorizedCandidate(pr) {'));
+  const body = block.slice(0, block.indexOf('            const marker ='));
+  const candidate = new Function('repository', 'authorizationFor', body + '; return authorizedCandidate;')('ServerVpss/CentralDark', p => ({authorized: p.authorized === true}));
+  assert.equal(candidate({...pr, authorized: true}), true);
+  assert.equal(candidate({...pr, authorized: false}), false);
+  assert.equal(candidate({...pr, authorized: true, number: 1562}), false);
+  assert.equal(candidate({...pr, authorized: true, draft: true}), false);
+  assert.equal(candidate({...pr, authorized: true, user: {login: 'external'}}), false);
+  assert.equal(candidate({...pr, authorized: true, head: {...pr.head, repo: {full_name: 'other/fork'}}}), false);
+  assert.equal(candidate({...pr, user: {login: 'dependabot[bot]'}}), true);
+});

@@ -744,6 +744,8 @@ Um único Supabase Preview SKIPPED não prova os oito gates obrigatórios. O rec
 
 O owner reentra após os oito workflows obrigatórios, encaminha explicitamente após update-branch e usa o PROMOTION_TOKEN já existente para sincronizações, com fallback ao GITHUB_TOKEN. Rerun considera somente o run mais recente de cada workflow: falha histórica com sucessor verde não gera nova execução. PR-mãe #1562 permanece protegido; forks e bases diferentes de main não recebem mutação desta varredura; nenhum merge direto é introduzido.
 
-**Contraprova funcional:** seis cenários executam o reconciliador completo com API simulada: ausência/skip, PASS/pending, falha histórica superada, reentrada após 202, mãe/fork/outra base e prova de outro HEAD/evento/PR. Isso prova o comportamento local; publicação real de status, CI e squash ainda exigem readback.
+O mesmo job de aprovação foi estendido a PR humano autorizado pela autorização canônica, autor confiável, base main e mesmo repo; mãe/draft/fork não entram. O HEAD e a autorização são remedidos antes de cada aprovação de execução. Aprovar execução não aprova revisão nem merge.
+
+**Contraprova funcional:** sete cenários executam o reconciliador completo com API simulada: ausência/skip, PASS/pending, falha histórica superada, reentrada após 202, mãe/fork/outra base e prova de outro HEAD/evento/PR. Isso prova o comportamento local; publicação real de status, CI e squash ainda exigem readback.
 
 O estado, memória e receitas persistem nos owners canônicos da CentralDark-OS. O modelo é motor substituível; troca de executor não declara continuidade instalada, Vault sincronizado ou loop perpétuo sem medir os respectivos efeitos.
