@@ -296,8 +296,8 @@
         "emit_canonical_display": true
       },
       "activation": {
-        "intent": "marcar que todos os gatilhos, camadas, fontes, receipts e cursores pertencem a um único ciclo conectado, sem criar trilho paralelo",
-        "default_scope": "gatilhos+auréola+resposta+contexto",
+        "intent": "interligar o ciclo operacional real da CentralDark sob o mesmo owner: fonte canônica, ferramentas, Casa/Windows, CENTRALDARK-OS, VPS, Tailscale/SSH, receipts e cursores, sem criar trilho ou gatilho paralelo",
+        "default_scope": "gatilhos+fonte-canônica+tools+Casa/Windows+CENTRALDARK-OS+VPS+Tailscale/SSH+runtime+receipts+contexto",
         "autonomous_within_scope": true,
         "requires_runtime_measurement": false,
         "unknown_is_not_pass": true
@@ -310,12 +310,15 @@
         "chain_template": [
           "👑🪬 !CENTRALDARK",
           "🔗 !># INTERLIGADOS",
-          "⭕ !AURÉOLA CANÔNICA",
           "🏛️ GITHUB MAIN VIVA",
           "🫀 SOUL ATUAL",
           "🔌 MCP / HUB / CONNECTORS",
-          "🏠 RUNTIME / CASA / VPS / WEB",
-          "⚖️ REALIDADE"
+          "🪟 CASA / WINDOWS CONTROLE",
+          "🧪 CENTRALDARK-OS LOCAL",
+          "🕸️ TAILSCALE / SSH",
+          "🌐 VPS LINUX",
+          "⚖️ REALIDADE",
+          "🧾 RECEIPT / NEXT_CURSOR"
         ]
       },
       "enabled_response_shape": {
@@ -327,6 +330,98 @@
           "💬 RESPOSTA",
           "🧭 PROXIMO_CURSOR"
         ]
+      },
+      "semantic_route": {
+        "id": "CENTRALDARK_HYBRID_WORK_ROUTE",
+        "invoked_by": [
+          "👑🪬 !CENTRALDARK",
+          "🔗 !># INTERLIGADOS"
+        ],
+        "create_new_trigger": false,
+        "current_state": {
+          "human_control_surface": "CASA_WINDOWS",
+          "local_operational_os": "CENTRALDARK-OS",
+          "remote_operational_os": "VPS_LINUX",
+          "network_fabric": "TAILSCALE",
+          "remote_shell": "TAILSCALE_SSH",
+          "shared_ingest_surface": "VMWARE_SHARED_WHEN_MOUNTED_AND_MEASURED"
+        },
+        "route": [
+          "SEGREDO/CHEFE_VOICE_OR_CHAT",
+          "👑🪬 !CENTRALDARK",
+          "🔗 !># INTERLIGADOS",
+          "GITHUB_MAIN_CANONICAL_CONSUMPTION",
+          "AVAILABLE_TOOLS_AND_CONNECTORS",
+          "CASA_WINDOWS_CONTROL_SURFACE",
+          "CENTRALDARK-OS_LOCAL_RUNTIME_AND_EDIT",
+          "LOCAL_TEST_AND_HUMAN_ACCEPTANCE_WHEN_APPLICABLE",
+          "VPS_SYNC_WHEN_INTENT_REQUIRES",
+          "REBUILD_OR_MICRODEPLOY_AS_CAUSALLY_APPLICABLE",
+          "LIVE_READBACK",
+          "RECEIPT_AND_NEXT_CURSOR"
+        ],
+        "invariants": [
+          "ONE_SYSTEM_ONLY=true",
+          "REUSE_BEFORE_CREATE=true",
+          "NO_V1_V2_V3=true",
+          "SHARED_IS_INGEST_NOT_SECOND_OWNER=true",
+          "LOCAL_TEST_PRECEDES_REMOTE_PROMOTION_WHEN_APPLICABLE=true",
+          "REBUILD_CAN_REPLACE_DEPLOY_WHEN_REBUILD_IS_THE_CAUSAL_ACTION=true",
+          "CI_CD_IS_NOT_REQUIRED_FOR_EVERY_MVP_EDIT=true",
+          "PUBLIC_RELEASE_REQUIRES_STRONGER_VALIDATION=true",
+          "UNKNOWN_IS_NOT_PASS=true",
+          "REALITY_IS_JUDGE=true"
+        ],
+        "future_host_intent": {
+          "status": "CHEFE_INTENT_NOT_CURRENT_RUNTIME",
+          "target": "CENTRALDARK-OS_AS_PRIMARY_HOST_OS",
+          "rule": "when the CHEFE explicitly promotes CENTRALDARK-OS from VM/capsule to primary host OS, preserve this same semantic route and replace only the hosting/control layer that materially changed",
+          "no_parallel_architecture": true
+        },
+        "route_priority": [
+          {
+            "priority": 1,
+            "route": "LOCAL_DIRECT_CENTRALDARK_OS",
+            "when": "TARGET_IS_CENTRALDARK_OS_AND_LOCAL_EXECUTOR_IS_EXPOSED_AND_MEASURED",
+            "fallback_on": [
+              "PLATFORM_UNAVAILABLE",
+              "ROUTE_UNAVAILABLE",
+              "AUTH_NOT_BOUND",
+              "EXECUTION_FAILURE"
+            ]
+          },
+          {
+            "priority": 2,
+            "route": "VPS_TAILSCALE_SSH_TO_CENTRALDARK_OS",
+            "state": "PROVEN_FALLBACK_PRESERVE",
+            "rule": "DO_NOT_REMOVE_WHEN_PRIMARY_BECOMES_AVAILABLE"
+          }
+        ],
+        "multi_account_binding": {
+          "model": "MULTI_ACCOUNT_ISOLATED_HOME",
+          "source_owner": "scripts/vps/deploy-desktop-commander-multi-account.sh",
+          "local_adaptation_policy": "REUSE_MODEL_DO_NOT_COPY_VPS_PATHS_BLINDLY",
+          "two_authenticated_local_profiles": "UNKNOWN_UNTIL_MEASURED"
+        },
+        "promotion_trace": {
+          "route": [
+            "MATERIAL_FINDING",
+            "EXISTING_OWNER",
+            "CHILD_PR_COMMIT",
+            "CHILD_PR_READBACK",
+            "CHILD_PR_RECEIPT",
+            "MOTHER_1562_RECEIPT",
+            "MAIN_PROMOTION_WHEN_APPLICABLE_GATES_PASS",
+            "MAIN_READBACK"
+          ],
+          "child_first": true,
+          "mother_ledger_same_cycle": true,
+          "main_is_canonical_destination": true,
+          "pr_mother_merge_forbidden": true,
+          "pending_or_queued_is_pass": false,
+          "unresolved_review_is_pass": false,
+          "blocked_main_state": "PENDING_PROMOTION_WITH_EXACT_BLOCKER"
+        }
       }
     },
     {
