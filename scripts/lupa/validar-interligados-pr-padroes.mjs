@@ -196,7 +196,22 @@ function walkMarkdown(relativeDir) {
 
 const emojiRegex = /[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/u;
 const triggerTokens = ["!CENTRALDARK", "!># INTERLIGADOS", "#ACORDAR", "!CALIBRAR", "!MULTIBÚSSOLA", "!META_LUPA", "!RECONCILIAR", "!CONTRAPROVA", "!REGISTRA"];
-for (const path of walkMarkdown(BASE)) {
+
+// Receipts e deltas são proveniência: exigir um gatilho operacional neles
+// reescreveria história para satisfazer o contrato visual atual.
+// O gate continua exigindo emoji em todo Markdown, mas exige gatilho apenas
+// nas superfícies operacionais que podem realmente ser invocadas.
+function isProvenanceOnlyMarkdown(relativePath) {
+  return relativePath.includes("/RECEIPTS/") ||
+    /\/PADROES-PR\/DELTA-[^/]+\.md$/.test(relativePath) ||
+    relativePath.endsWith("/PADROES-PR/RUNTIME-REMEASURE-ONLY.md");
+}
+
+const markdownPaths = walkMarkdown(BASE);
+let triggerRequiredCount = 0;
+let provenanceOnlyCount = 0;
+
+for (const path of markdownPaths) {
   const text = read(path);
   if (!emojiRegex.test(text)) errors.push(`INTERLIGADOS_MD_WITHOUT_EMOJI:${path}`);
   const isProvenanceSurface =
