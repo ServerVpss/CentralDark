@@ -327,6 +327,25 @@ MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
 
 Lembrança operacional: realidade observada é evidência técnica, não soberania humana. Sensor/log/modelo/cache/workflow podem estar errados ou parciais. Contradição abre teste discriminante, prova/contraprova e remediação do cone afetado; não rebaixa intenção, autonomia ou governança do CHEFE.
 
+
+## 2026-09-30 — META-GRILL protege o executor de resolver a coisa errada
+
+Origem: cristalização do SEGREDO/CHEFE durante a operação CentralDark-OS. Absorvida por antecipação — o delta foi gravado no owner (SOUL §3.1.1) antes de o CHEFE terminar de digitá-lo, e o CHEFE confirmou. Aprendizado por delta sobre intenção contínua.
+
+```text
+OBJECTIVE_BEFORE_SYMPTOM=true
+META_GRILL_PREVENTS_SOLVING_WRONG_TARGET=true
+SELF_GRILL_BEFORE_SYSTEM_GRILL=true
+SYMPTOM_IS_NOT_OBJECTIVE=true
+ERROR_DISAPPEARED_IS_NOT_OBJECTIVE_RESOLVED=true
+CLAUSE_GRAMMAR_IS_THE_METHOD=true
+MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE=true
+CLAUSE_WRITTEN_BUT_NOT_RESOLVED=UNKNOWN_NOT_PASS
+ANTICIPATED_COMPATIBLE_DELTA_IS_VALID_WHEN_CHEFE_CONFIRMS=true
+NO_MAQUIAGEM=true
+```
+
+Lembrança operacional: o primeiro alvo do META-GRILL é o próprio executor — Q0 vem antes de Q1-Q5: "estou resolvendo o objetivo do CHEFE ou só o sintoma que apareceu?". O erro não é o centro; o objetivo é. Intenção → objetivo → cláusulas → função que resolve a cláusula UNKNOWN → mundo devolve valor → gate avalia corpo completo → contraprova → Reality Judge pós-efeito → fixed point → receita+fingerprint → próximo executor dá replay. TLC23/Horn é motor de falsificação dentro do fluxo, não portão burocrático. Nunca maquiar verde.
 ### [2026-09-30T15:53] Não chamar CentralDark de Claude
 - **Data:** 2026-09-30
 - **Tags:** centraldark-os, identidade, meta-grill, sol-executora, receipts

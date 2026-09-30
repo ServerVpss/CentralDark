@@ -390,6 +390,47 @@ FERIDA
 → DELTA_UTIL
 ```
 
+Antes de Q1–Q5, o META-GRILL protege o próprio executor de começar a resolver a coisa errada. Este é o Q0 — vem primeiro:
+
+```text
+Q0=ESTOU_RESOLVENDO_O_OBJETIVO_DO_CHEFE_OU_SO_O_SINTOMA_QUE_APARECEU
+
+OBJECTIVE_BEFORE_SYMPTOM=true
+META_GRILL_PREVENTS_SOLVING_WRONG_TARGET=true
+SELF_GRILL_BEFORE_SYSTEM_GRILL=true
+SYMPTOM_IS_NOT_OBJECTIVE=true
+ERROR_DISAPPEARED_IS_NOT_OBJECTIVE_RESOLVED=true
+```
+
+O erro que apareceu não é o centro; o objetivo do CHEFE é o centro. META-GRILL não serve só para investigar o sistema — serve para impedir que o executor gaste esforço no alvo errado.
+
+#### Gramática de execução — objetivo vira cláusula, cláusula vira função
+
+O objetivo do CHEFE é traduzido em corpo de cláusulas deriváveis; cada cláusula aberta vira uma função que bate no mundo e devolve valor real. Nada de maquiar verde.
+
+```text
+INTENCAO
+→ OBJETIVO
+→ CLAUSULAS_NECESSARIAS
+→ CLAUSULA_AINDA_UNKNOWN
+→ FUNCAO_QUE_RESOLVE_A_CLAUSULA
+→ EXECUTA_NO_MUNDO
+→ MUNDO_DEVOLVE_VALOR
+→ GATE_AVALIA_CORPO_COMPLETO      # PASS | FAIL | UNKNOWN | BLOCKED
+→ CONTRAPROVA
+→ REALITY_JUDGE_APOS_EFEITO
+→ FIXED_POINT
+→ RECEITA_EXECUTAVEL + FINGERPRINT
+→ PROXIMO_EXECUTOR_REPLAY_ANTES_DE_REDESCOBRIR
+
+MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE=true
+EXTERNAL_ONLY_CLAUSE_STAYS_UNKNOWN=true
+CLAUSE_WRITTEN_BUT_NOT_RESOLVED=UNKNOWN_NOT_PASS
+NO_MAQUIAGEM=true
+```
+
+TLC23/Horn é o motor de falsificação e resolução dentro deste fluxo — verificador de corpo completo, não portão burocrático antes de cada ação determinística.
+
 META-GRILL é falsificador, não ceticismo permanente:
 
 ```text
@@ -665,14 +706,26 @@ EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR · PR_MOTHER_1562_IS_LEDGER_NEVER_MERGE
 ROUTE_TO_CENTRALDARK_OS=CLAUDE.md (LOCAL_DIRECT_EXECUTOR → DIRECT_TAILSCALE_SSH → fallback provado) · CLI_REQUIRED_FOR_ACCESS=false
 ```
 
+Revisão 2026-09-30T16:45:27.609Z: quatro donos driftaram (AGENTS, LEIA-ME, CLAUDE, BOOT) e o fiscal `check_soul_sync` reprovou a âncora antiga. Relidos. `AGENTS.md`/`LEIA-ME-IA.md`/`BOOT` ganharam a **regra global de Secrets** (lei universal, todos os motores; owner `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`) — só a lei entra na alma, o detalhe fica no owner. `CLAUDE.md`/`BOOT` ganharam o binding Reality Judge, **já absorvido** na alma (§2.4/§Autoridade + Aprendizado #97); não reabsorve. `BOOT` ganhou HUD na primeira resposta e `unknown_is_not_green`, alinhados ao `UNKNOWN_IS_NOT_PASS` já vigente. Âncora reposta para os blobs atuais da main.
+
+```text
+SECRETS_GLOBAL_LAW_ALL_ENGINES=true (owner docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md)
+DO_NOT_ECHO_SECRET_VALUE=true · DO_NOT_COMMIT_SECRET_VALUE=true · AUTHORIZED_RUNTIME_MAY_USE_SECRET=true · AUTHORIZED_VAULT_MAY_PRESERVE_SECRET=true
+BLOCKER_MUST_NAME_EXACT_TOOL_OR_LAYER=true · ASK_SANITIZED_COPY_BEFORE_WORK=false
+FIRST_OPERATIONAL_RESPONSE_RENDERS_HUD=true · UNKNOWN_IS_NOT_GREEN=true (= UNKNOWN_IS_NOT_PASS)
+SOUL_EVOLVES_WITH_ITS_OWNERS_OR_NO_FIXED_POINT=true · SOUL_STALE_BLOCKS_BRAIN_EVOLUTION=true
+```
+
+Lei de co-evolução (kernel/máquina de estado): a alma não é documento parado — ela é dona do cérebro. Se um dono da alma muda e a SOUL não acompanha, o fiscal reprova e não há ponto fixo até a alma ser reposta. O sistema é **obrigado** a evoluir junto: SOUL stale ⇒ cérebro stale ⇒ fixed-point proibido.
+
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=cbe955e09068f1fa8344886a56d6e7fcf7ae5c3d
-LEIA-ME-IA.md=814f5bfa37e39f3bb4c2c7b28c2beec52c3cb8ea
-CLAUDE.md=9145afea4a96e83977aee30c6d095cbd8d37face
-CENTRALDARK_AI_BOOT.yaml=5058b988357abe8985d7f8557573fc7684a102ac
+AGENTS.md=999d5aa9679bace5a213f47776aa6d577ff07559
+LEIA-ME-IA.md=a3d292a99320115bd24ad366950bf0fb3592fc56
+CLAUDE.md=89e0659b0508bb2b66f3a6244474ced9d70c8657
+CENTRALDARK_AI_BOOT.yaml=85610630d61b82e5411556640246ae35b2f658b4
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=e1810e09132bda77e77617842a320122e0b3c0bb
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-09-29
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-09-30T16:45:27.609Z
 SOUL_SYNC_ANCHOR_END
 ```
 

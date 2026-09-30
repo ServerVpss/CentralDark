@@ -52,7 +52,8 @@ gate_a() {
       return 1
     fi
   else
-    warn "SHA256 file ausente — hash não verificável (NOT blocker se vault validado antes)"
+    err "SHA256 file ausente — Gate A exige checksum externo verificável"
+    return 1
   fi
 
   # Validar tar.gz
@@ -134,7 +135,11 @@ gate_b() {
   fi
 
   local output
-  output="$(CENTRALDARK_RESTORE_APPLY=0 CENTRALDARK_BOOTSTRAP_APPLY=0 CENTRALDARK_REPO_ROOT="$REPO_ROOT" bash "$REPO_ROOT/scripts/vps/centraldark-os-bootstrap-restore.sh" 2>&1)"
+  if ! output="$(CENTRALDARK_RESTORE_APPLY=0 CENTRALDARK_BOOTSTRAP_APPLY=0 CENTRALDARK_VAULT_PATH="$VAULT_PATH" CENTRALDARK_REPO_ROOT="$REPO_ROOT" bash "$REPO_ROOT/scripts/vps/centraldark-os-bootstrap-restore.sh" 2>&1)"; then
+    echo "$output"
+    err "Gate B FAIL: restore validator failed"
+    return 1
+  fi
 
   echo "$output"
 
@@ -150,6 +155,11 @@ gate_b() {
   fi
   if echo "$output" | grep -q "VAULT_OK=1"; then
     ok "Vault OK"
+  fi
+
+  if ! grep -q "^BOOTSTRAP_VALIDATE=PASS$" <<< "$output" || ! grep -q "^VAULT_OK=1$" <<< "$output"; then
+    err "Gate B FAIL: explicit canonical and vault PASS receipts required"
+    return 1
   fi
 
   # Verificar hydrate-provider-secrets.sh syntax
@@ -205,9 +215,21 @@ gate_c() {
 
     # Verificar se existe confirmação manual prévia
     if [ -f "/tmp/centraldark-gate-c-manual.txt" ]; then
-      ok "Confirmação manual encontrada em /tmp/centraldark-gate-c-manual.txt"
-      cat "/tmp/centraldark-gate-c-manual.txt"
-      GATE_C=PASS
+      local manual="/tmp/centraldark-gate-c-manual.txt"
+      local manual_ok=1
+      for receipt in SNAPSHOT_READY=1 ROLLBACK_AVAILABLE=1 VNC_AVAILABLE=1 RESCUE_AVAILABLE=1 REINSTALL_OPENKYLIN_ROUTE=CONTABO_PANEL; do
+        if ! grep -Fxq "$receipt" "$manual"; then
+          err "Gate C manual receipt ausente: ${receipt%%=*}"
+          manual_ok=0
+        fi
+      done
+      if [ "$manual_ok" = "1" ]; then
+        ok "Confirmação manual completa encontrada"
+        GATE_C=PASS
+      else
+        err "Gate C FAIL: receipt manual incompleto"
+        return 1
+      fi
     else
       echo "Para confirmar manualmente, criar /tmp/centraldark-gate-c-manual.txt com:"
       echo "  SNAPSHOT_READY=1"
