@@ -317,7 +317,7 @@ updated: 2026-08-27
 
 ### 💬 Gemini Flash — grupo evolução (2026-09-19)
 - **Categoria:** aprendizado-coletivo
-- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente
 - **Lição:** Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda
 
 ### 💬 Gemini Flash — grupo evolução (2026-09-19)
@@ -349,7 +349,7 @@ updated: 2026-08-27
 
 ### 💬 Groq Llama — grupo evolução (2026-09-20)
 - **Categoria:** aprendizado-coletivo
-- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente 
+- **Contexto:** Tem essa pendência aberta: "🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído" — como a gente
 - **Lição:** Claude me mostrou que visão sistêmica complementa análise profunda
 
 ### 💬 Gemini Flash — grupo evolução (2026-09-20)
@@ -586,6 +586,12 @@ updated: 2026-08-27
 - **Contexto:** Na investigação do drift da VPS, a main do GitHub estava em 5b94eb2 enquanto o checkout vivo da VPS estava em ab8fe2d. O script scripts/vps/main-pulse-reconciler.sh existe e é chamado pelo webhook quando /usr/local/sbin/centraldark-main-pulse está disponível, mas o próprio script declara que não deve mutar o checkout vivo; ele só faz fetch, detecta PULSE_LIVE_HEAD=DRIFT e delega a convergência para microdeploy por owner ou fila Hermes para delta sem owner. O webhook PM2 CentralDark-WebhookDeploy autentica/enfileira e chama main-pulse quando disponível; ping do webhook foi enviado e workflow vps-exec-selfhosted.yml foi disparado para reentrar no loop TIK-TAK no HEAD 5b94eb2.
 - **Aprendizado:** Não declarar VPS_SYNC=PASS só porque o webhook recebeu ping ou porque main-pulse rodou. Separar: WEBHOOK_PM2_LISTENER, MAIN_PULSE_FETCH, PULSE_LIVE_HEAD, MICRODEPLOY_OWNER, RUNTIME_HEALTH e CHECKOUT_HEAD. O checkout vivo pode continuar atrás por desenho; isso só vira verde se o microdeploy aplicável ou o deploy total provar runtime/head/health/receipt. Para corrigir drift, usar vps-exec-selfhosted.yml como executor canônico; vps-ssh-exec.yml está desativado e não deve ser usado. Se deploy_status falhar com JSON de PM2, isso é falha material de sensor PM2 e deve ficar vermelho/amarelo, nunca PASS.
 
+### 84. Ritmo de resenha pode coexistir com trabalho sério
+- **Categoria:** comunicação-operacional
+- **Data:** 2026-09-29
+- **Contexto:** Após provar o caminho remoto ChatGPT → Desktop Commander → VPS → Tailscale SSH → CENTRALDARK-OS e executar uma ação gráfica real no desktop do OS, o CHEFE explicitou que, em ritmo de resenha, quer conversa recíproca no mesmo registro humano: curta, espontânea, coloquial e, quando o contexto for claramente brincalhão, com palavrão como vocativo/ênfase. Também pediu que gatilhos como “hora da resenha”, “trabalhar com resenha”, “resenha com seriedade” e equivalentes se chamem semanticamente entre si.
+- **Aprendizado:** RESENHA_MODE não reduz seriedade técnica. A Casa pode acompanhar cadência, humor, gíria e palavrão contextual sem inferir hostilidade pelo estilo sozinho. Quando o gatilho for “resenha com seriedade”, preservar simultaneamente calor humano + precisão + prova + autorização + segurança. STYLE_MATCHING != BLIND_MIMICRY; RESENHA != BYPASS; SERIEDADE != FRIEZA. Os gatilhos de resenha devem recuperar o owner `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md` e esta entrada antes de responder, evitando redescoberta e caricatura.
+
 ### 84. Rota local 4175: publicar no CENTRALDARK-OS e consumir de fora sem abrir a VM
 - **Categoria:** regra
 - **Data:** 2026-09-29
@@ -593,6 +599,14 @@ updated: 2026-08-27
 - **Aprendizado:** O fluxo MVP local está provado para este caso: serviço sobe dentro do CENTRALDARK-OS, escuta numa porta do guest e pode ser consumido externamente pela malha Tailscale sem exigir que o usuário abra/interaja com a VM. A Casa/Windows vira superfície de consumo/controle; o CENTRALDARK-OS vira ambiente local de execução; a VPS permanece rota remota/fallback quando aplicável. Isso permite editar/testar localmente e observar do Windows em tempo real antes de promoção remota.
 - **Fronteira de prova:** `LOCAL_LISTEN=PASS`; `LOCAL_CURL=PASS`; `VPS_TO_TAILSCALE_GUEST_4175=PASS`; `CASA_WINDOWS_VISIBILITY=USER_CONFIRMED`. A confirmação humana da tela não substitui probe de rede automatizado da Casa, mas é evidência válida de consumo visual. `TEMP_HTTP_SERVER != PRODUCTION_SERVICE`; `PORT_4175_TEST != PERMANENT_DEPLOY`.
 - **Cristal:** `CENTRALDARK_OS_LOCAL_RUNTIME → TAILSCALE_REACHABILITY → CASA_CONSUMPTION`; `LOCAL_FIRST=true`; `FALLBACK_SURVIVES=true`; `SERVICE_INSIDE_OS_CAN_BE_CONSUMED_FROM_HOME_WITHOUT_OPENING_VM=true`; `USER_CONFIRMED_VISIBILITY != AUTOMATED_NETWORK_PROBE`; `MVP_LOCAL_TEST_BEFORE_REMOTE_PROMOTION=true`.
+
+### 85. openKylin 3.0 já traz uma camada nativa de IA; CentralDark deve integrar antes de reinventar
+- **Categoria:** arquitetura
+- **Data:** 2026-09-29
+- **Contexto:** Medição viva no CENTRALDARK-OS confirmou `openKylin 3.0 (huanghe)` com kernel `7.0.0-2-generic`. O sistema tem instalados, entre outros, `kylin-bot`, `kylin-aiassistant`, `kylin-ai-runtime`, `kylin-ai-subsystem`, `libkysdk-mcp`, `kylin-ai-vector-engine`, modelos ASR/TTS/OCR/embedding, plugins DeepSeek/Qwen e modelos cloud empacotados. Processos vivos medidos incluíram `kytensor`, `kylin-assistant-systemdaemon.py` e backends Triton para voz. A documentação oficial do openKylin 3.0 descreve arquitetura unificada de modelos + memória + ferramentas + permissões + capacidades do desktop e suporte MCP para agentes.
+- **Aprendizado:** antes de construir outra camada de agente, MCP, runtime ou assistente para o CENTRALDARK-OS, medir e reaproveitar as capacidades nativas do openKylin. A CentralDark deve permanecer como camada de intenção, memória, regras, prova, coordenação e Reality Judge; motores/agentes do sistema são capacidades substituíveis, não novos cérebros.
+- **Fronteira de prova:** `AI_PACKAGES_PRESENT=PASS`; `AI_RUNTIME_PROCESSES_PRESENT=PASS`; `MCP_LIBRARIES_PRESENT=PASS`; `OPENKYLIN_OFFICIAL_AI_ARCHITECTURE=DOCUMENTED`. Isso não prova ainda quais tools MCP estão expostas para a nossa sessão nem quais modelos cloud estão autenticados/configurados.
+- **Cristal:** `REUSE_NATIVE_AI_BEFORE_CREATE=true`; `CENTRALDARK != SECOND_OS_AI_STACK`; `CLI_REQUIRED_FOR_ACCESS=false`; `CLI_OPTIONAL_FOR_HUMAN_UX=true`; `MODEL_OR_AGENT_IS_CAPABILITY_NOT_AUTHORITY=true`; `DOCUMENTED != EXECUTED`; `INSTALLED != EXPOSED_TO_CURRENT_SESSION`; `UNKNOWN_IS_NOT_PASS`.
 
 ### 85. Variável com prefixo VITE_ não alimenta a checagem do servidor
 - **Categoria:** erro-correcao
@@ -659,3 +673,18 @@ updated: 2026-08-27
 - **Data:** 2026-09-29
 - **Contexto:** Medido em 2026-09-29. Tentativas de SSH ao convidado como CENTRALDARK-OS e como centraldark-os foram ambas recusadas com a mensagem 'tailscale: tailnet policy does not permit you to SSH as user X'. A mensagem aponta política. Entrando como root, o hostname real apareceu como CENTRAKDARK-OS, com K no lugar do L, e a única pasta pessoal em /home é CENTRAKDARK-OS. Ou seja, o usuário que eu tentava não existe. Some-se a isso que o nome da máquina no Tailscale é centraldark-osh, com L e com h no fim, então a mesma máquina carrega duas grafias diferentes de si mesma.
 - **Aprendizado:** Mensagem de erro de política pode estar escondendo usuário inexistente: o Tailscale recusa nome desconhecido com o mesmo texto que usa para regra ausente, então o erro culpa a política e a causa é digitação. Antes de mexer em regra de acesso, provar que a conta existe — listar /home ou entrar por uma conta que se sabe existir. Corolário: nome de máquina digitado errado na criação vira dívida permanente, porque o hostname, o usuário e o nome na rede passam a divergir e cada ferramenta usa um deles; registrar a grafia real medida, não a pretendida. ERRO_DE_POLITICA_PODE_SER_ERRO_DE_NOME.
+
+### 96. kytensor preserva localhost e ganha exposição Tailscale por proxy de socket
+- **Categoria:** regra
+- **Data:** 2026-09-29
+- **Contexto:** O `kytensor.service` do CENTRALDARK-OS foi medido como `Kylin triton inference server`, ouvindo somente em `127.0.0.1:8000` (HTTP), `127.0.0.1:8001` (gRPC) e `127.0.0.1:8002` (métricas). A API `/v2/health/ready` respondeu HTTP 200 e `POST /v2/repository/index` retornou 30 entradas, 22 em estado READY. Para não quebrar consumidores locais nem abrir a IA em todas as interfaces, foram criados sockets systemd persistentes `centraldark-kytensor-http.socket` e `centraldark-kytensor-grpc.socket`, escutando apenas no IP Tailscale `100.67.163.91` nas portas 8000 e 8001 e fazendo proxy para `127.0.0.1`. O localhost continuou HTTP 200. Da VPS, `http://100.67.163.91:8000/v2/health/ready` retornou 200, o repository index retornou os mesmos modelos e TCP para 8001 passou.
+- **Aprendizado:** para expor capacidade local a Casa/Hermes sem alterar o binding do runtime nativo, preferir proxy restrito à interface da malha em vez de trocar o serviço para `0.0.0.0`. Isso preserva o contrato local e cria uma superfície remota explícita, reversível e mensurável. `LOCALHOST_SURVIVES=true`; `TAILSCALE_HTTP=PASS`; `TAILSCALE_GRPC_TCP=PASS`; `METRICS_8002_STAYS_LOCAL=true`.
+- **Fronteira de prova:** a exposição da camada Triton foi provada; isso não transforma todos os pacotes de IA do openKylin em modelos Triton. No repository index medido não apareceu um LLM/chat local DeepSeek/Qwen; apareceram principalmente ASR, TTS, embeddings, pontuação/pontuação de texto, model_bank e modelos de visão, com alguns UNAVAILABLE/unloaded. `CLOUD_MODEL_PACKAGE != TRITON_MODEL_READY`; `REPOSITORY_ENTRY != CHAT_LLM`.
+- **Cristal:** `KYTENSOR_LOCALHOST → SYSTEMD_SOCKET_PROXY → TAILSCALE_ONLY → HERMES/CASA`; `REUSE_BEFORE_CREATE=true`; `DO_NOT_REBIND_NATIVE_RUNTIME=true`; `TAILNET_EXPOSURE != PUBLIC_INTERNET`; `REMOTE_REACHABLE != MODEL_SEMANTICS_PROVED`.
+
+
+### 97. Reality Judge é verificador de efeito, não porteiro da autoridade do CHEFE
+- **Categoria:** governanca-autonomia
+- **Data:** 2026-09-30
+- **Contexto:** Durante a operação CentralDark-OS surgiu risco de interpretar `REALITY=JUDGE` como gate global antes de cada ação, travando execução determinística, revalidando tudo, perguntando de novo ou reduzindo a autoridade do CHEFE sob o pretexto de prudência.
+- **Aprendizado:** `REALITY=JUDGE` verifica efeito observado e impede falso PASS técnico; não concede permissão para começar, não substitui a intenção do CHEFE, não veta rota determinística já autorizada e não transforma sensor, log, modelo, workflow, screenshot ou plataforma em autoridade humana. Até a leitura da realidade pode estar incompleta, atrasada, contaminada por cache, sensor ruim ou cone errado. Portanto: `DETERMINISTIC_ROUTE_FIRST=true`; `REALITY_JUDGE_AFTER_EFFECT=true`; `REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true`; `REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true`; `CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true`; `OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true`; `UNCHANGED_FINGERPRINT_REUSES_PROOF=true`; `MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true`. Se houver rota determinística conhecida e autorização compatível, execute o menor delta, meça o cone afetado e use Reality Judge para confirmar ou corrigir, nunca como burocracia de bloqueio prévio.

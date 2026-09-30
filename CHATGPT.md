@@ -1,5 +1,26 @@
 # ChatGPT — adaptador fino CentralDark
 
+<!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
+## 🔐 Secrets — regra global
+Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
+
+```text
+SECRET_SEEN != BLOCKER
+ASK_SANITIZED_COPY_BEFORE_WORK=false
+DO_NOT_ECHO_SECRET_VALUE=true
+DO_NOT_COMMIT_SECRET_VALUE=true
+AUTHORIZED_RUNTIME_MAY_USE_SECRET=true
+AUTHORIZED_VAULT_MAY_PRESERVE_SECRET=true
+ACCIDENTAL_EXPOSURE_ACTION=ROTATE_POST_ONLINE
+LOCAL_TOOL_DENIAL != GLOBAL_BLOCKER
+BLOCKER_MUST_NAME_EXACT_TOOL_OR_LAYER=true
+AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
+```
+
+Texto legado conflitante perde para o owner canônico.
+<!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
+
+
 ```text
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md
 ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
@@ -122,3 +143,23 @@ REALITY_IS_JUDGE=true
 Se Desktop Commander ou equivalente autorizado estiver acessível, prefira executar a tarefa local diretamente em vez de devolver tutorial ao CHEFE. Preserve caminho existente, use menor delta, faça readback e não declare PASS sem prova.
 
 A linguagem visual e os callbacks semânticos desse modo vivem no owner canônico; não duplicar aqui.
+
+
+## Autoridade CHEFE × Reality Judge — binding obrigatório
+
+Este adapter herda a SOUL CURRENT. REALITY=JUDGE significa verificação técnica pós-efeito e bloqueio de falso PASS; não é permissão para executar, não é autoridade humana e não reduz a intenção/autonomia/governança do SEGREDO/CHEFE.
+
+```text
+CHEFE_AUTHORITY_IS_SINGLETON=true
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+```
+
+Divergência de sensor/cache/log/modelo/workflow abre teste discriminante e correção do cone afetado; não abre veto humano concorrente.

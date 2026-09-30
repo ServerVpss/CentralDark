@@ -109,6 +109,7 @@ if (registry) {
   if (registry.owner !== OWNER) errors.push(`INTERLIGADOS_OWNER_INVALID:${registry.owner ?? "missing"}`);
   if (registry.refresh?.promotion_rule !== "PROMOTE_STABLE_NON_TEMPORAL_PATTERN_ONLY; DEDUPE_SYNONYMS; KEEP_RUNTIME_SEPARATE") {
     errors.push("INTERLIGADOS_REFRESH_RULE_INVALID");
+    errors.push("INTERLIGADOS_REFRESH_PROMOTION_RULE_INVALID");
   }
   if (registry.refresh?.history_rule !== "CURRENT > HISTORY") errors.push("INTERLIGADOS_CURRENT_OVER_HISTORY_MISSING");
   if (registry.proof_boundary !== "SOURCE_PATTERN_CRYSTALLIZED != IMPLEMENTATION_PROMOTED != CI_GREEN != RUNTIME_PROVEN != GLOBAL_FIXED_POINT") {

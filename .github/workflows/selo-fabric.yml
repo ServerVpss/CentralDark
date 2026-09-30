@@ -1,0 +1,328 @@
+name: 🏅 Selo Fabric — selo universal de eventos
+
+on:
+  push:
+    branches: [main]
+  check_suite:
+    types: [completed]
+  workflow_run:
+    types: [completed]
+  issues:
+    types: [opened, closed, reopened, labeled, unlabeled]
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review, closed]
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created]
+  release:
+    types: [published]
+  create:
+  delete:
+  deployment_status:
+  status:
+  schedule:
+    - cron: '47 */12 * * *'
+  workflow_dispatch:
+    inputs:
+      pr_mae:
+        description: 'PR-mãe para selar (default: 1562)'
+        required: false
+        type: string
+      test_event_name:
+        description: 'Opcional: simular classificação sem fingir evento real'
+        required: false
+        type: choice
+        default: auto
+        options:
+          - auto
+          - push
+          - check_suite
+          - workflow_run
+          - issues
+          - issue_comment
+          - pull_request
+          - pull_request_review
+          - pull_request_review_comment
+          - release
+          - create
+          - delete
+          - deployment_status
+          - status
+          - schedule
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+  checks: read
+  actions: read
+  statuses: read
+
+concurrency:
+  group: selo-fabric-${{ github.event_name }}-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  selar:
+    name: 🏅 Selar evento no PR-mãe
+    runs-on: ubuntu-latest
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      !(
+        github.event_name == 'issue_comment' &&
+        github.actor == 'github-actions[bot]' &&
+        github.event.issue.number == 1562
+      ) &&
+      !(
+        github.event_name == 'workflow_run' &&
+        github.event.workflow_run.name == '🏅 Selo Fabric — selo universal de eventos'
+      )
+    timeout-minutes: 3
+
+    steps:
+      - name: 🏅 Classificar, deduplicar e postar selo
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          PR_MAE_INPUT: ${{ inputs.pr_mae }}
+          TEST_EVENT_NAME: ${{ inputs.test_event_name }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const PR_MAE = Number(process.env.PR_MAE_INPUT || '') || 1562;
+            const sourceEvent = context.eventName;
+            const requested = (process.env.TEST_EVENT_NAME || 'auto').trim();
+            const simulated = sourceEvent === 'workflow_dispatch' && requested && requested !== 'auto';
+            const event = simulated ? requested : sourceEvent;
+            const action = context.payload.action || '';
+            const runId = context.runId;
+            const runAttempt = process.env.GITHUB_RUN_ATTEMPT || '1';
+            const actor = context.actor || 'UNKNOWN';
+            const ts = new Date().toISOString();
+
+            // Derive SHA from the event's actual subject, not context.sha
+            // (context.sha is the default branch HEAD for workflow_run/check_suite)
+            const eventSha = (() => {
+              const p = context.payload;
+              if (p.check_suite?.head_sha) return p.check_suite.head_sha;
+              if (p.workflow_run?.head_sha) return p.workflow_run.head_sha;
+              if (p.pull_request?.head?.sha) return p.pull_request.head.sha;
+              if (p.deployment?.sha) return p.deployment.sha;
+              if (p.head_commit?.id) return p.head_commit.id;
+              if (context.payload.sha) return context.payload.sha;
+              return context.sha || '';
+            })();
+
+            let emoji = '🏅';
+            let tipo = event;
+            let detalhe = '';
+            let classe = 'EVENT_ONLY';
+            let evidence = 'EVENT_ONLY';
+            let skip = false;
+
+            const short = (value, n = 80) => String(value || '').replace(/\s+/g, ' ').trim().slice(0, n);
+            const sha10 = value => String(value || '').slice(0, 10);
+
+            if (simulated) {
+              emoji = '🧪';
+              tipo = `simulação/${event}`;
+              detalhe = 'workflow_dispatch manual — classificação apenas; não prova que o evento real ocorreu';
+              classe = 'SIMULATION_ONLY';
+              evidence = 'NOT_RUNTIME_PROOF';
+            } else {
+              switch (event) {
+                case 'push': {
+                  const msg = short(context.payload.head_commit?.message);
+                  const branch = String(context.payload.ref || '').replace('refs/heads/', '');
+                  emoji = '📦';
+                  tipo = `push → ${branch || '?'}`;
+                  detalhe = `head=\`${sha10(eventSha)}\` — ${msg || 'sem mensagem'}`;
+                  classe = 'CANONICAL_RECORD_ONLY';
+                  evidence = 'COMMIT_EVENT';
+                  break;
+                }
+                case 'check_suite': {
+                  const cs = context.payload.check_suite || {};
+                  const conclusion = cs.conclusion || 'UNKNOWN';
+                  const app = cs.app?.name || 'UNKNOWN';
+                  emoji = conclusion === 'success' ? '🟢' : conclusion === 'failure' ? '🔴' : '🟡';
+                  tipo = `check_suite/${conclusion}`;
+                  detalhe = `app=\`${short(app, 50)}\` head=\`${sha10(cs.head_sha)}\``;
+                  classe = conclusion === 'success' ? 'CI_PASS_ONLY' : 'FAIL_OR_UNKNOWN';
+                  evidence = 'CHECK_SUITE';
+                  if (['neutral', 'skipped'].includes(conclusion)) skip = true;
+                  break;
+                }
+                case 'workflow_run': {
+                  const wr = context.payload.workflow_run || {};
+                  const conclusion = wr.conclusion || 'UNKNOWN';
+                  const name = wr.name || 'UNKNOWN';
+                  emoji = conclusion === 'success' ? '🟢' : conclusion === 'failure' ? '🔴' : '🟡';
+                  tipo = `workflow_run/${conclusion}`;
+                  detalhe = `\`${short(name, 60)}\` branch=\`${wr.head_branch || '?'}\` head=\`${sha10(wr.head_sha)}\``;
+                  classe = conclusion === 'success' ? 'CI_PASS_ONLY' : 'FAIL_OR_UNKNOWN';
+                  evidence = 'WORKFLOW_RUN';
+                  if (['skipped', 'cancelled'].includes(conclusion)) skip = true;
+                  break;
+                }
+                case 'issues': {
+                  const issue = context.payload.issue || {};
+                  emoji = action === 'opened' ? '📋' : action === 'closed' ? '✅' : '🔄';
+                  tipo = `issue/${action || 'changed'}`;
+                  detalhe = `#${issue.number || '?'} — ${short(issue.title)}`;
+                  classe = 'ISSUE_STATE_SENSOR';
+                  evidence = 'ISSUE_EVENT';
+                  break;
+                }
+                case 'issue_comment': {
+                  const issue = context.payload.issue || {};
+                  const comment = context.payload.comment || {};
+                  emoji = '💬';
+                  tipo = `issue_comment/${issue.pull_request ? 'pr' : 'issue'}`;
+                  detalhe = `#${issue.number || '?'} by @${comment.user?.login || actor}: ${short(comment.body, 90)}`;
+                  classe = 'COMMENT_SENSOR';
+                  evidence = 'COMMENT_EVENT';
+                  break;
+                }
+                case 'pull_request': {
+                  const pr = context.payload.pull_request || {};
+                  emoji = action === 'closed' && pr.merged ? '🟣' : action === 'closed' ? '⚫' : '🔀';
+                  tipo = `pull_request/${action || 'changed'}`;
+                  detalhe = `#${pr.number || context.payload.number || '?'} ${short(pr.title)} head=\`${sha10(pr.head?.sha)}\``;
+                  classe = 'PR_STATE_SENSOR';
+                  evidence = 'PR_EVENT';
+                  break;
+                }
+                case 'pull_request_review': {
+                  const review = context.payload.review || {};
+                  const pr = context.payload.pull_request || {};
+                  emoji = review.state === 'approved' ? '✅' : review.state === 'changes_requested' ? '🛑' : '👀';
+                  tipo = `pull_request_review/${review.state || action || 'submitted'}`;
+                  detalhe = `PR #${pr.number || '?'} by @${review.user?.login || actor}`;
+                  classe = 'PR_REVIEW_SENSOR';
+                  evidence = 'PR_REVIEW_EVENT';
+                  break;
+                }
+                case 'pull_request_review_comment': {
+                  const pr = context.payload.pull_request || {};
+                  const comment = context.payload.comment || {};
+                  emoji = '🧵';
+                  tipo = 'pull_request_review_comment/created';
+                  detalhe = `PR #${pr.number || '?'} by @${comment.user?.login || actor}: ${short(comment.body, 90)}`;
+                  classe = 'PR_REVIEW_SENSOR';
+                  evidence = 'PR_REVIEW_COMMENT_EVENT';
+                  break;
+                }
+                case 'release': {
+                  const rel = context.payload.release || {};
+                  emoji = '🚀';
+                  tipo = `release/${action || 'published'}`;
+                  detalhe = `${rel.tag_name || rel.name || 'sem tag'}`;
+                  classe = 'RELEASE_SENSOR';
+                  evidence = 'RELEASE_EVENT';
+                  break;
+                }
+                case 'create':
+                case 'delete': {
+                  emoji = event === 'create' ? '🌱' : '🧹';
+                  tipo = `${event}/${context.payload.ref_type || 'ref'}`;
+                  detalhe = `${context.payload.ref || '?'}`;
+                  classe = 'REPOSITORY_EVENT_ONLY';
+                  evidence = 'REF_EVENT';
+                  break;
+                }
+                case 'deployment_status': {
+                  const ds = context.payload.deployment_status || {};
+                  const dep = context.payload.deployment || {};
+                  emoji = ds.state === 'success' ? '🟢' : ds.state === 'failure' ? '🔴' : '🟡';
+                  tipo = `deployment_status/${ds.state || 'UNKNOWN'}`;
+                  detalhe = `env=\`${dep.environment || '?'}\` sha=\`${sha10(dep.sha)}\``;
+                  classe = ds.state === 'success' ? 'DEPLOY_SIGNAL_ONLY' : 'FAIL_OR_UNKNOWN';
+                  evidence = 'DEPLOYMENT_EVENT';
+                  break;
+                }
+                case 'status': {
+                  const state = context.payload.state || 'UNKNOWN';
+                  emoji = state === 'success' ? '🟢' : state === 'failure' || state === 'error' ? '🔴' : '🟡';
+                  tipo = `status/${state}`;
+                  detalhe = `context=\`${short(context.payload.context, 60) || '?'}\` sha=\`${sha10(context.payload.sha)}\``;
+                  classe = state === 'success' ? 'CI_PASS_ONLY' : 'FAIL_OR_UNKNOWN';
+                  evidence = 'STATUS_EVENT';
+                  break;
+                }
+                case 'schedule': {
+                  emoji = '⏰';
+                  tipo = 'schedule';
+                  detalhe = 'tick periódico do Selo Fabric';
+                  classe = 'DETERMINISTIC_TRIGGER';
+                  evidence = 'SCHEDULE_EVENT';
+                  break;
+                }
+                case 'workflow_dispatch': {
+                  emoji = '🎛️';
+                  tipo = 'workflow_dispatch';
+                  detalhe = 'disparo manual sem simulação de outro evento';
+                  classe = 'DETERMINISTIC_TRIGGER';
+                  evidence = 'MANUAL_TRIGGER';
+                  break;
+                }
+                default: {
+                  emoji = '📡';
+                  tipo = event || 'unknown';
+                  detalhe = `action=${action || 'none'}`;
+                  classe = 'EVENT_ONLY';
+                  evidence = 'UNCLASSIFIED_EVENT';
+                }
+              }
+            }
+
+            if (skip) {
+              core.notice(`SELO_SKIP event=${event} action=${action} reason=LOW_SIGNAL`);
+              return;
+            }
+
+            const fingerprint = [sourceEvent, event, action || '-', runId, simulated ? requested : sha10(eventSha)].join(':');
+            const marker = `<!-- CENTRALDARK_SELO_FABRIC:${fingerprint} -->`;
+
+            const existing = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number: PR_MAE,
+              per_page: 100,
+            });
+
+            if (existing.some(c => String(c.body || '').includes(marker))) {
+              core.notice(`SELO_DEDUP=PASS fingerprint=${fingerprint}`);
+              return;
+            }
+
+            const body = [
+              marker,
+              `### ${emoji} Selo Fabric · ${tipo}`,
+              '',
+              `- **Classe:** \`${classe}\``,
+              `- **Evidência:** \`${evidence}\``,
+              `- **Origem:** \`${sourceEvent}\`${simulated ? ' → simulação explícita' : ''}`,
+              `- **Ação:** \`${action || '-'}\``,
+              `- **Detalhe:** ${detalhe || '-'}`,
+              `- **Actor:** \`@${actor}\``,
+              `- **Run:** \`${runId}\` attempt=\`${runAttempt}\``,
+              `- **UTC:** \`${ts}\``,
+              '',
+              '> EVENTO != PASS · COMMIT != DEPLOY · CI_PASS_ONLY != RUNTIME_PASS · REALIDADE JULGA',
+            ].join('\n');
+
+            try {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: PR_MAE,
+                body,
+              });
+              core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
+            } catch (e) {
+              core.setFailed(`SELO_POST_FAILED event=${event} error=${e.message}`);
+            }

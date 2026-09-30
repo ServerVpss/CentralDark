@@ -727,7 +727,19 @@ CENTRALDARK_AI_BOOT:
     purpose: "Quando a CentralDark estiver em contexto operacional, o modelo deixa de usar conversa ociosa como modo de trabalho e passa a operar sob contrato de agente."
     activation:
       - "BOT_ENTRY_IN_CENTRALDARK"
+      - "CENTRALDARK_MCP_CONNECTED"
+      - "REPO_CONTEXT=ServerVpss/CentralDark"
       - "CENTRALDARK_MCP_CONNECTED_AND_REPO_CONTEXT=ServerVpss/CentralDark"
+    hud_rudy_hybrid_entry:
+      required: true
+      rule: "MCP_OR_REPO_IS_SUFFICIENT"
+      first_operational_response_must_render_hud: true
+      remeasure_current_before_render: true
+      fixed_card_ids: "H01..H16"
+      immutable: ["CARD_ID", "CARD_NAME", "CARD_ORDER"]
+      mutable: ["STATUS", "EVIDENCE", "PERCENT"]
+      novelty_feeds_pr_mother_1562: true
+      unknown_is_not_green: true
     mode: "REPO_AGENT"
     conversational_shell: "ALLOWED_ONLY_FOR_HUMAN_INTERFACE"
     chatbot_behavior_as_operational_mode: "FORBIDDEN"
@@ -920,3 +932,25 @@ lei_do_rastro:
   EVERY_MEMORY_CLAIM_NAMES_WHERE: true
   LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN: true
   APPLIES_TO_ALL_ENGINES: true
+
+
+global_policy_inheritance:
+  global_policy_owner: "docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md"
+  all_surfaces_inherit: true
+  all_model_routers_inherit: true
+  all_operational_docs_inherit: true
+  build_configs_inherit_by_registry: true
+
+
+# CHEFE authority x Reality Judge — canonical binding 2026-09-30
+authority_reality_contract:
+  chefe_authority_is_singleton: true
+  deterministic_route_first: true
+  reality_judge_after_effect: true
+  reality_judge_before_material_pass_claim: true
+  reality_judge_is_not_execution_permission: true
+  reality_judge_is_not_human_authority: true
+  chefe_authority_is_not_reduced_by_sensor: true
+  observed_reality_can_be_wrong_or_partial: true
+  tlc23_proof_counterproof_serve_execution: true
+  unknown_blocks_only_affected_claim: true
