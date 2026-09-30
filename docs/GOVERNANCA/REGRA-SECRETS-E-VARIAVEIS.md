@@ -1,66 +1,36 @@
-# REGRA DE SECRETS E VARIAVEIS
+# 097 — MVP secrets sem falso bloqueio
 
-Este documento fixa a regra segura para qualquer IA, agente, conector ou automacao que participe do CentralDark.
+Data: 2026-09-30
+Status: cristalizado
+Owner: docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md
 
-## Regra principal
+## Aprendizado
 
-Segredo real nao entra no chat, nao entra em documento e nao entra em commit.
+O agente nao deve transformar a presenca de senha/token em print, chat, terminal ou dump bruto autorizado em bloqueio automatico da missao.
 
-## Definicoes
+A regra correta e objetiva:
 
-- secret = chave, token, senha, cookie, API key, service role, chave SSH, connection string ou credencial sensivel.
-- variavel sensivel = nome de configuracao que aponta para segredo ou acesso privilegiado.
-- placeholder = texto falso usado no lugar do segredo real.
-- sanitizar = remover ou mascarar conteudo sensivel antes de compartilhar.
+- nao repetir valor;
+- nao levar valor para GitHub;
+- nao persistir valor em issue/PR/docs/logs;
+- usar valor somente no runtime autorizado quando necessario;
+- continuar o MVP;
+- registrar rotacao posterior quando o sistema estiver online.
 
-## Forma correta de compartilhar contexto
+## Formula
 
-Usar placeholders:
-
-```txt
-SUPABASE_URL=<SUPABASE_URL>
-SUPABASE_SERVICE_ROLE=<SUPABASE_SERVICE_ROLE_REDACTED>
-GITHUB_TOKEN=<GITHUB_TOKEN_REDACTED>
-DATABASE_URL=<DATABASE_URL_REDACTED>
-CENTRALDARK_GATEWAY_KEY=<CENTRALDARK_GATEWAY_KEY_REDACTED>
+```text
+CHEFE_ENVIA_MATERIAL_SENSIVEL
+→ NAO_REPETIR_VALOR
+→ NAO_PERSISTIR_VALOR
+→ USAR_RUNTIME_AUTORIZADO_SE_PRECISO
+→ CONTINUAR_MVP
+→ MARCAR_ROTACAO_POS_ONLINE
+→ RECEIPT_SEM_VALOR
 ```
 
-## O que pode ser salvo
+## Contraprova
 
-Pode salvar:
+Se um agente disser que nao pode continuar apenas porque viu um segredo, sem risco de commit/log/persistencia publica, isso e falso bloqueio.
 
-- nome da variavel;
-- finalidade;
-- modulo que usa;
-- onde deve existir;
-- risco se faltar;
-- exemplo falso;
-- regra de validacao.
-
-Nao pode salvar:
-
-- valor real;
-- token completo;
-- senha;
-- cookie;
-- chave privada;
-- service_role real;
-- Authorization header;
-- connection string real.
-
-## Regra de operacao
-
-Quando o Pivete trouxer texto com variaveis:
-
-1. A IA deve pedir versao sanitizada.
-2. A IA deve trocar valores por placeholders.
-3. A IA deve registrar apenas estrutura e contexto.
-4. A IA deve avisar se detectar segredo real.
-5. A IA nao deve repetir segredo na resposta.
-
-## Regra curta
-
-Contexto sim.
-Segredo nao.
-Placeholder sempre.
-GitHub registra a estrutura, nunca a chave real.
+Se um agente copiar o valor para resposta, GitHub, PR, issue ou log, isso e erro real.
