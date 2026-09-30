@@ -767,3 +767,112 @@ EXECUTION_SURFACE=VPS shell (requer CHEFE executar ou sync de branch)
 GATE_A=NOT_STARTED (script não disponível no VPS)
 NEXT_ACTION=CHEFE sync branch na VPS ou executar vault manualmente
 ```
+
+
+## 14. Plano único — Instinto Superior como painel-mãe operacional AGORA
+
+**Decisão do CHEFE:** retirar "futuro" deste escopo. O painel Instinto Superior entra no mesmo ciclo do Vault + Bootstrap + CentralDark-OS e deve ser construído como superfície administrativa mãe, reutilizando owners já existentes.
+
+```text
+INSTINTO_SUPERIOR_SCOPE=NOW
+INSTINTO_SUPERIOR_ROLE=ADMIN_MOTHER_PANEL
+NO_PROVIDER_PANEL_REQUIRED_FOR_DAILY_OPERATION=true
+CONTABO_UI_DIRECT_USE=OPTIONAL_FALLBACK
+CLOUDFLARE_UI_DIRECT_USE=OPTIONAL_FALLBACK
+ONE_SYSTEM_ONLY=true
+REUSE_EXISTING_OWNERS=true
+```
+
+### 14.1 Capacidades obrigatórias no mesmo plano
+
+O painel deve inventariar, exibir e operar, via owners/API existentes:
+
+- **Sistema/VPS:** CPU, RAM, disco, load, uptime, portas, serviços, systemd, PM2, health e restart controlado.
+- **Agentes:** lista de agentes/processos, estado, owner, modelo/provider quando conhecido, última ação, erro, health, fila e receipt.
+- **CentralDark runtime:** MCP/Admin, OAuth broker, Hermes, bots necessários, memória/knowledge services, deploy e status de endpoints.
+- **Vault/Cofre:** inventário, hashes, duplicatas, origem, consumer, estado ativo/obsoleto, restore e rotação.
+- **Bootstrap/Restore:** geração do pacote, validação, dry-run, aplicação autorizada, receipt e rollback.
+- **Contabo:** instance, status, CPU/RAM/disk contratados, snapshots, criar snapshot, rollback, reinstall/custom image quando suportado, VNC/rescue status e ações permitidas.
+- **Cloudflare:** zone/account, DNS records, tunnels/endpoints, proxied state, criação/edição/remoção quando autorizada.
+- **GitHub:** main/HEAD, PR filho, PR-mãe #1562, checks, deploy receipts e drift.
+- **Tailscale/SSH:** peers, online/offline, rota VPS/Casa/CentralDark-OS.
+- **Backups:** snapshots, vault archives, hashes, data de criação, validade e restore status.
+- **Receipts/Auditoria:** PASS/FAIL/UNKNOWN/BLOCKED por ação, sem valor de segredo.
+
+### 14.2 Owners a reutilizar
+
+Não criar cliente/provider paralelo. Consumir owners existentes antes de adicionar rota nova:
+
+- `apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js`
+- `apps/modulos/mcp/src/tools/core/mcp-admin.js`
+- `apps/modulos/oauth-broker/server.mjs`
+- `scripts/vps/hydrate-provider-secrets.sh`
+- `scripts/cloudflare/cf-sync.sh`
+- `install.sh`
+- `scripts/vps/centraldark-vault-bootstrap-inventory.sh`
+- `scripts/vps/centraldark-os-bootstrap-restore.sh`
+
+Se a UI atual estiver em outro owner já existente, costurar nele; não abrir segundo painel.
+
+### 14.3 Sequência única de execução
+
+```text
+CURRENT_HEAD
+→ GATE_A_VAULT
+→ GATE_B_PROVIDERS
+→ GATE_C_RECOVERY
+→ COMPLETE_RESTORE_LOGIC
+→ IMPLEMENT_INSTINTO_SUPERIOR_ADMIN_SURFACE
+→ PROVIDER_READBACK_IN_PANEL
+→ PROVIDER_MUTATION_GATES
+→ CENTRALDARK_OS_IMAGE/INSTALL_ROUTE
+→ CLEAN_REINSTALL
+→ RESTORE_ONLY_GOLD
+→ START_RUNTIME
+→ PANEL_HEALTH
+→ REBOOT
+→ PANEL_HEALTH_AGAIN
+→ ROTATE_CREDENTIALS_POST_ONLINE
+→ RECEIPT_1713
+→ ANCHOR_1562
+→ FIXED_POINT
+```
+
+O monitor do PR #1713 deve continuar para a próxima etapa comprovável automaticamente; não deixar item deste plano marcado como "futuro" apenas por pertencer à UI.
+
+### 14.4 Gate do painel
+
+```text
+INSTINTO_PANEL_PASS =
+SYSTEM_METRICS_READ
++ AGENT_STATE_READ
++ MCP_RUNTIME_READ
++ CONTABO_READ
++ CLOUDFLARE_READ
++ GITHUB_READ
++ VAULT_READ
++ SNAPSHOT_READ
++ RECEIPT_READ
++ AT_LEAST_ONE_SAFE_PROVIDER_ACTION_WITH_READBACK
++ REBOOT_SURVIVAL
+```
+
+Mutação de provider só pode aparecer verde depois do readback correspondente. Acesso direto aos painéis Contabo/Cloudflare fica como fallback; operação cotidiana deve passar pelo Instinto Superior quando a capability estiver implementada.
+
+### 14.5 Estado atual conhecido
+
+```text
+GATE_B=PASS
+CONTABO_READ=PASS
+CLOUDFLARE_READ=PASS
+TAILSCALE_READ=PASS
+BUILDKITE_READ=PASS
+SNAPSHOT_EXISTS=PASS
+ROLLBACK_PATH_IDENTIFIED=PASS
+GATE_A=NOT_STARTED
+INSTINTO_SUPERIOR_FULL_ADMIN=NOT_IMPLEMENTED
+CLEAN_REINSTALL=NOT_STARTED
+```
+
+Próximo delta do agente cloud: executar Gate A, completar restore real testável e começar a costura da superfície administrativa Instinto Superior no owner existente, sem esperar outro ciclo.
+
