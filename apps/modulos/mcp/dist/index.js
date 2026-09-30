@@ -15,6 +15,9 @@ import { healthDeep } from "./health-deep.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
+import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
+import { handleBuildkiteWebhook } from "./buildkite-integration.js";
+import { adminGet, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
@@ -77,10 +80,30 @@ app.use((_req, res, next) => {
 app.options(/.*/, (_req, res) => {
     res.sendStatus(204);
 });
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({
+    limit: "2mb",
+    verify: (req, _res, buf) => {
+        const url = String(req.originalUrl || req.url || "");
+        if (url.startsWith("/integrations/buildkite/webhook")) {
+            req.rawBody = Buffer.from(buf);
+        }
+    },
+}));
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 // V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
+app.post("/integrations/buildkite/webhook", (req, res) => {
+    const result = handleBuildkiteWebhook(req, res);
+    if (result?.ok) {
+        pushAdminLog("info", "buildkite_webhook_event", {
+            cid: req.cid,
+            path: req.path,
+            event: result.event,
+            event_id: result.receipt?.event_id || null,
+            action_executed: false,
+        });
+    }
+});
 // ─────────────────────────────── Health ──────────────────────────────────
 app.get("/health", (_req, res) => {
     res.json({
@@ -117,6 +140,8 @@ app.get("/heartbeat", (_req, res) => {
     const lagMs = prev?.t ? nowMs - Date.parse(prev.t) : null;
     const hub = getHubMissionConsumerStatus();
     const sse = getSseDiagnostics();
+    const ingestScheduled = scheduleAgentLogIngest();
+    const observability = getAgentObservabilityStatus();
     const self = lagMs == null ? "first_beat" : (lagMs < 120000 ? "alive" : "stale");
     const body = {
         ok: true,
@@ -138,6 +163,13 @@ app.get("/heartbeat", (_req, res) => {
             conexoesAtivas: sse.conexoesAtivas,
             eventosPorMinuto: sse.eventosPorMinuto,
             ultimoEventoHaMs: sse.ultimoEventoHaMs,
+        },
+        observability: {
+            log_root: observability.layout.root,
+            tracked_sources: observability.tracked_sources,
+            last_ingest_status: observability.last_ingest.status,
+            last_ingest_at: observability.last_ingest.at,
+            ingest_scheduled: ingestScheduled,
         },
         operational,
         status_key: {
@@ -210,6 +242,9 @@ app.get("/admin/api/rotas", adminRotas);
 app.get("/admin/api/tools", adminTools);
 app.get("/admin/api/logs", adminBuscarLogs);
 app.get("/admin/api/metricas", adminMetricas);
+app.get("/admin/api/grok/control", adminGrokControlGet);
+app.post("/admin/api/grok/control", adminGrokControlPost);
+app.get("/admin/api/buildkite/status", adminBuildkiteStatus);
 app.get("/admin/api/operational-snapshot", adminOperationalSnapshot);
 app.get("/admin/api/linear", adminLinear);
 app.get("/admin/api/tailscale", adminTailscale);
@@ -558,6 +593,7 @@ app.post("/mcp", (req, res) => {
         cid: req.cid,
         admin: false,
         callerUser: r.callerUser,
+        clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-public").slice(0, 160),
         oauthScope: r.oauthScope,
     }).catch((err) => {
         l.error("mcp_handler_unhandled", { error: String(err) });
@@ -608,6 +644,7 @@ app.post("/admin/mcp", (req, res) => {
         cid: req.cid,
         admin: true,
         callerUser: auth.callerUser,
+        clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-admin").slice(0, 160),
         oauthScope: auth.oauthScope,
     }).catch((err) => {
         l.error("mcp_admin_handler_unhandled", { error: String(err) });

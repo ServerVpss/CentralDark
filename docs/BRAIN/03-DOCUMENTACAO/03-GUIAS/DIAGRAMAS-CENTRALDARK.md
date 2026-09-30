@@ -1,10 +1,15 @@
 ---
 title: "Diagramas do Sistema CentralDark"
 date: 2026-06-29
-updated: 2026-08-22
+updated: 2026-09-19T23:50:19-03:00
 status: "DERIVED_VIEW"
 tags: ["diagrama", "arquitetura", "fluxo", "mermaid", "sistema"]
+category: M-Mapa-Sistema
+sensitivity: INTERNAL
+source: LEIA-ME-IA.md + owners canônicos listados neste documento
+source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+owner: docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/
 ---
 
 # Diagramas CentralDark — visão derivada do canônico
@@ -330,6 +335,54 @@ stateDiagram-v2
     HEALTHY --> [*]
 ```
 
+### 8.1 Vigilância econômica — coração global + probes subordinados
+
+A regra “um coração” é de **autoridade e convergência**, não obrigação de existir literalmente um único processo de SO. Serviços podem manter probes/watchdogs locais quando necessários para autostart ou isolamento, mas todos convergem para o mesmo estado global e não competem por decisão.
+
+```mermaid
+flowchart LR
+    P1["PROBE local<br/>serviço A"]
+    P2["PROBE local<br/>serviço B"]
+    WF["WATCHER focado<br/>run + SHA + deadline"]
+    H["CORAÇÃO GLOBAL<br/>GET /heartbeat<br/>heart=one"]
+    W["WATCHDOG GLOBAL<br/>detecta/classifica"]
+    O["ORCHESTRATOR<br/>executa owner autorizado"]
+    L["LOG/RECEIPT OWNER<br/>Actions · audit · crash"]
+    R["REALITY JUDGE<br/>contraprova"]
+
+    P1 --> H
+    P2 --> H
+    WF --> H
+    H --> W
+    W --> O
+    O --> L
+    L --> R
+    R --> H
+    R -->|"terminal"| WF
+```
+
+Invariantes:
+
+```text
+ONE_GLOBAL_HEART=true
+ONE_GLOBAL_WATCHDOG_AUTHORITY=true
+LOCAL_PROBE != SECOND_HEART
+LOCAL_WATCHER != GLOBAL_AUTHORITY
+WATCHER_KEY=scope|target|sha|run_id
+ONE_ACTIVE_WATCHER_PER_KEY=true
+WATCHER_BOUNDED_LIFETIME=true
+WATCHER_FOLLOWS_EXACT_TARGET=true
+NO_NEW_INFORMATION => SLEEP
+HEARTBEAT_SUMMARY != FULL_LOG
+WATCHDOG_DETECTA != ORCHESTRATOR_EXECUTA
+```
+
+O padrão observado no Grok CLI confirma o ganho operacional de combinar:
+1. watcher focado para o deploy corrente;
+2. loop de baixa frequência para autonomia longa;
+3. receipt curto apenas quando há delta.
+
+A melhoria determinística é impedir o watcher focado de migrar para “qualquer run ativo”: ele deve encerrar no alvo exato e deixar o coração global escolher conscientemente o próximo alvo.
 Allowlist pública: `centralldark.com` · `admin.centralldark.com` · `api.centralldark.com` · `mcp.centralldark.com/mcp`.
 `mcp.centralldark.com/admin` = aba MCP na mesma Casa, **não** HUB.
 `hub.centralldark.com` = LEGADO (403). Não recriar subdomínio HUB.

@@ -30,6 +30,20 @@ def write_secret_file(filename: str, canonical_key: str, *alts: str) -> None:
     print(f"{canonical_key}_WRITE=OK")
 
 
+def upsert_secret_file(filename: str, canonical_key: str, *alts: str) -> None:
+    key, val = first(canonical_key, *alts)
+    if not val:
+        print(f"{canonical_key}_SKIP=MISSING")
+        return
+    path = root / filename
+    lines = path.read_text().splitlines() if path.exists() else []
+    lines = [ln for ln in lines if not ln.startswith(canonical_key + "=") and not any(ln.startswith(a + "=") for a in alts)]
+    lines.append(f"{canonical_key}={val}")
+    path.write_text("\n".join(lines) + "\n")
+    path.chmod(0o600)
+    print(f"{canonical_key}_WRITE=OK")
+
+
 def upsert_mcp_env(canonical_key: str, *alts: str) -> None:
     key, val = first(canonical_key, *alts)
     if not val or not mcp_env.exists():
@@ -43,7 +57,9 @@ def upsert_mcp_env(canonical_key: str, *alts: str) -> None:
 
 write_secret_file("cloudflare.env", "CLOUDFLARE_API_TOKEN", "CF_API_TOKEN")
 write_secret_file("buildkite.env", "BUILDKITE_API_TOKEN")
+upsert_secret_file("buildkite.env", "BUILDKITE_WEBHOOK_SECRET")
 upsert_mcp_env("CLOUDFLARE_API_TOKEN", "CF_API_TOKEN")
 upsert_mcp_env("BUILDKITE_API_TOKEN")
+upsert_mcp_env("BUILDKITE_WEBHOOK_SECRET")
 print("HYDRATE_DONE")
 PY
