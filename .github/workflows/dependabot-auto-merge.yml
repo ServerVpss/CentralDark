@@ -26,7 +26,7 @@ on:
   workflow_run:
     workflows:
       - ⚙️ porta-de-entrada
-      - ⚙️ PR auto-review (Codex + checklist)
+      - ⚙️ PR auto-review CentralDark — checklist determinístico
       - ⚙️ CentralDark Valida — determinístico
       - ⚙️ lupa-conformance
       - ⚙️ Lupa Drift Guard
