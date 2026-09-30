@@ -230,18 +230,84 @@ UNKNOWN != PASS
 
 Sistema agêntico de presença dupla: aplicativo quando convém, ambiente bootável quando precisa dominar a máquina inteira, sempre com um único core e Reality Judge.
 
-## 9. Próximo cursor
+## 9. Vault Cofre e Bootstrap — Capacidade Operacional
+
+**Adicionado:** 2026-09-30 | **Owner:** `scripts/vps/` | **PR-mãe:** #1562
+
+### 9.1 Conceito
+
+```text
+GitHub = cérebro canônico (código, contratos, skills, receipts)
+VPS    = corpo vivo (runtime, PM2, secrets espalhados, MCP, processos)
+Vault  = pacote separado (snapshot de estado VPS, dedupado, sem lixo)
+Bootstrap = instalador/restaurador (usa install.sh + vault para reerguer)
+Instinto Superior = painel-mãe futuro (inventário, rotação, restore, provedores)
+```
+
+### 9.2 Scripts criados
+
+| Script | Função | Modo |
+|---|---|---|
+| `scripts/vps/centraldark-vault-bootstrap-inventory.sh` | Varredura VPS → vault empacotado `.tar.gz` | Executável, nunca apaga origem, nunca imprime segredo |
+| `scripts/vps/centraldark-os-bootstrap-restore.sh` | Valida vault + canonical files, restaura se autorizado | READONLY por padrão, APPLY via env var |
+
+### 9.3 Vault gera
+
+```text
+/root/Vault-Cofre-CentralDark-<UTC>/
+├── raw/                    (arquivos com secret pattern, dedupados por SHA256)
+├── process-env/            (env vars de processos relevantes filtrados)
+├── inventory/              (secret-map sources se existentes)
+├── MANIFEST.tsv            (idx, sha256, kind, source, dest, bytes)
+├── SHA256SUMS.txt          (checksum de todos os arquivos do vault)
+├── DEDUP_SHA_COUNTS.txt    (contagem de duplicatas por SHA)
+├── BOOTSTRAP-NEXT.env      (config para restauração)
+└── README.txt              (metadados da geração)
+→ empacota em .tar.gz + .tar.gz.sha256
+```
+
+### 9.4 Restore valida
+
+```text
+1. Localiza vault (path explícito ou BOOTSTRAP-NEXT.env ou mais recente)
+2. Valida SHA256 do archive
+3. Valida presença de canonical files (install.sh, CENTRALDARK_AI_BOOT.yaml, LEIA-ME-IA.md, AGENTS.md)
+4. BOOTSTRAP_APPLY=1 → roda install.sh --check
+5. RESTORE_APPLY=1 → restauração futura (não implementada, requer validação manual)
+6. Emite receipt sem segredo
+```
+
+### 9.5 Painel Instinto Superior — stub
+
+O painel Instinto Superior ainda não tem UI implementada. Capacidade registrada como pendência futura:
+- Inventário visual de vault/secrets (read-only)
+- Rotação de credenciais via HUB Credential Control Plane
+- Bootstrap/restore assistido
+- Owner existente candidato: `apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js`
+
+```text
+PAINEL_INSTINTO_SUPERIOR_UI=PENDENCIA_FUTURA
+CAPABILITY_REGISTERED=VAULT_INVENTORY+BOOTSTRAP_RESTORE
+OWNER_CANDIDATO=admin-provider-control.js
+IMPLEMENTAR_UI_QUANDO=CHEFE_AUTORIZAR
+```
+
+## 10. Próximo cursor
 
 1. Medir `main` atual e owners existentes.
 2. Transformar este inventário em matriz viva JSON.
-3. Criar launcher de preview Desktop sem declarar OS.
-4. Criar plano OS Edition bootável em QEMU.
-5. Só abrir trilha Native Kernel após PASS da OS Edition mínima.
+3. Executar vault inventory na VPS (`sudo bash scripts/vps/centraldark-vault-bootstrap-inventory.sh`).
+4. Validar vault com restore readonly.
+5. Criar launcher de preview Desktop sem declarar OS.
+6. Criar plano OS Edition bootável em QEMU.
+7. Só abrir trilha Native Kernel após PASS da OS Edition mínima.
 
 ```text
 KERNEL_PROPRIO=TRILHA_FUTURA
 OS_BOOTABLE_MVP=PROXIMO_ALVO_REALISTA
 DESKTOP_PACKAGING=ALVO_IMEDIATO
+VAULT_COFRE=SCRIPTS_CRIADOS_EXECUCAO_PENDENTE
+BOOTSTRAP_RESTORE=READONLY_VALIDADOR_PRONTO
 ONE_SYSTEM_ONLY=true
 REALIDADE=JUIZ
 ```
