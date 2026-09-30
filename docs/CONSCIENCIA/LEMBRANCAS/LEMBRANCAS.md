@@ -253,6 +253,28 @@ Conteúdo: Quando o CHEFE afirma que um entendimento/direção discutido é exat
 
 Conteúdo: O fio operacional é único. Quando a janela do chat enche ou degrada, exportar checkpoint e continuar em outra janela sem criar nova arquitetura. Erro visual/vermelho é telemetria; classificar por evidência de subpassos. GitHub cristaliza o durável; runtime mede o presente.
 
+### [2026-09-29] Gatilho semântico — hora da resenha / resenha com seriedade
+**Data:** 2026-09-29
+**Tags:** resenha, linguagem, gatilho-semantico, continuidade, tom, baianes, conversa, seriedade
+**Tipo:** LEARNING_INDEX
+**Target:** docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md
+**Sessão:** ChatGPT/CentralDark
+**Fonte:** decisão explícita do SEGREDO/CHEFE nesta sessão
+**Promovida:** CANDIDATE_IN_PR
+
+Conteúdo: Quando o CHEFE disser ou implicar `hora da resenha`, `ritmo de resenha`, `bater resenha`, `trabalhar com resenha`, `resenha com seriedade`, `fala comigo do meu jeito` ou formulações equivalentes, recuperar semanticamente o mesmo contrato de comunicação. O modo permite reciprocidade coloquial natural, inclusive palavrão contextual como vocativo/ênfase quando a intenção estiver claramente em brincadeira/amizade operacional. Isso não muda autoridade, segurança, prova, owners ou gates. Em `resenha com seriedade`, manter simultaneamente calor humano e rigor técnico.
+
+```text
+HORA_DA_RESENHA
+<-> RITMO_DE_RESENHA
+<-> BATER_RESENHA
+<-> TRABALHAR_COM_RESENHA
+<-> RESENHA_COM_SERIEDADE
+<-> FALA_COMIGO_DO_MEU_JEITO
+→ docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md
+→ docs/CONSCIENCIA/APRENDIZADOS.md#84
+```
+
 ### [2026-09-29T11:03] LOCAL FIRST no CENTRALDARK-OS com fallback Tailscale
 - **Data:** 2026-09-29
 - **Tags:** local-first, centraldark-os, tailscale, fallback, mvp
