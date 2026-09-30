@@ -8,6 +8,9 @@ on:
   workflow_run:
     types: [completed]
   issues:
+    types: [opened, closed, reopened, labeled]
+  issue_comment:
+    types: [created]
     types: [opened, closed, reopened, labeled, unlabeled]
   issue_comment:
     types: [created]
@@ -69,6 +72,11 @@ jobs:
   selar:
     name: 🏅 Selar evento no PR-mãe
     runs-on: ubuntu-latest
+    if: github.repository == 'ServerVpss/CentralDark'
+    timeout-minutes: 3
+    steps:
+      - name: 🏅 Classificar evento e postar selo
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
     if: >-
       github.repository == 'ServerVpss/CentralDark' &&
       !(
@@ -92,6 +100,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
+            const PR_MAE = Number('${{ inputs.pr_mae }}') || 1562;
+            const event = context.eventName;
+            const action = context.payload.action || '';
+            const runId = context.runId;
             const PR_MAE = Number(process.env.PR_MAE_INPUT || '') || 1562;
             const sourceEvent = context.eventName;
             const requested = (process.env.TEST_EVENT_NAME || 'auto').trim();
@@ -107,6 +119,135 @@ jobs:
             let emoji = '🏅';
             let tipo = event;
             let detalhe = '';
+            let reacao = '+1';
+            let skip = false;
+
+            switch (event) {
+              case 'push': {
+                const msg = (context.payload.head_commit?.message || '').split('\n')[0];
+                const branch = (context.payload.ref || '').replace('refs/heads/', '');
+                emoji = '📦';
+                tipo = `push → ${branch}`;
+                detalhe = `\`${sha.slice(0, 10)}\` — ${msg.slice(0, 80)}`;
+                reacao = '+1';
+                break;
+              }
+              case 'check_suite': {
+                const cs = context.payload.check_suite;
+                const conclusion = cs?.conclusion || 'UNKNOWN';
+                const app = cs?.app?.name || 'UNKNOWN';
+                emoji = conclusion === 'success' ? '🟢' : conclusion === 'failure' ? '🔴' : '🟡';
+                tipo = `check_suite/${conclusion}`;
+                detalhe = `app=\`${app}\` head=\`${(cs?.head_sha || '').slice(0, 10)}\``;
+                reacao = conclusion === 'success' ? '+1' : conclusion === 'failure' ? 'eyes' : 'confused';
+                if (conclusion === 'neutral' || conclusion === 'skipped') skip = true;
+                break;
+              }
+              case 'workflow_run': {
+                const wr = context.payload.workflow_run;
+                const conclusion = wr?.conclusion || 'UNKNOWN';
+                const name = wr?.name || 'UNKNOWN';
+                emoji = conclusion === 'success' ? '🟢' : conclusion === 'failure' ? '🔴' : '🟡';
+                tipo = `workflow_run/${conclusion}`;
+                detalhe = `\`${name}\` branch=\`${wr?.head_branch || '?'}\` head=\`${(wr?.head_sha || '').slice(0, 10)}\``;
+                reacao = conclusion === 'success' ? '+1' : 'eyes';
+                if (conclusion === 'skipped' || conclusion === 'cancelled') skip = true;
+                break;
+              }
+              case 'issues': {
+                const issue = context.payload.issue;
+                emoji = action === 'opened' ? '📋' : action === 'closed' ? '✅' : '🔄';
+                tipo = `issue/${action}`;
+                detalhe = `[#${issue?.number}](${issue?.html_url}) — ${(issue?.title || '').slice(0, 60)}`;
+                reacao = action === 'opened' ? 'eyes' : '+1';
+                break;
+              }
+              case 'issue_comment': {
+                const comment = context.payload.comment;
+                const issue = context.payload.issue;
+                const isPR = Boolean(issue?.pull_request);
+                emoji = isPR ? '💬' : '📝';
+                tipo = `comment/${isPR ? 'pr' : 'issue'}`;
+                detalhe = `[#${issue?.number}](${issue?.html_url}) por @${comment?.user?.login || '?'}`;
+                reacao = '+1';
+                if (comment?.user?.login === 'github-actions[bot]') skip = true;
+                break;
+              }
+              case 'pull_request_review': {
+                const review = context.payload.review;
+                const pr = context.payload.pull_request;
+                const state = review?.state || 'UNKNOWN';
+                emoji = state === 'approved' ? '🟢' : state === 'changes_requested' ? '🔴' : '👁️';
+                tipo = `review/${state}`;
+                detalhe = `[#${pr?.number}](${pr?.html_url}) por @${review?.user?.login || '?'}`;
+                reacao = state === 'approved' ? 'hooray' : 'eyes';
+                break;
+              }
+              case 'pull_request_review_comment': {
+                const comment = context.payload.comment;
+                const pr = context.payload.pull_request;
+                emoji = '🔍';
+                tipo = 'review_comment';
+                detalhe = `[#${pr?.number}](${pr?.html_url}) por @${comment?.user?.login || '?'} em \`${(comment?.path || '?').slice(-40)}\``;
+                reacao = 'eyes';
+                break;
+              }
+              case 'release': {
+                const rel = context.payload.release;
+                emoji = '🚀';
+                tipo = `release/${rel?.tag_name || '?'}`;
+                detalhe = `[${rel?.name || rel?.tag_name}](${rel?.html_url})`;
+                reacao = 'rocket';
+                break;
+              }
+              case 'create': {
+                const refType = context.payload.ref_type || '?';
+                const ref = context.payload.ref || '?';
+                emoji = '🌱';
+                tipo = `create/${refType}`;
+                detalhe = `\`${ref}\``;
+                reacao = '+1';
+                break;
+              }
+              case 'delete': {
+                const refType = context.payload.ref_type || '?';
+                const ref = context.payload.ref || '?';
+                emoji = '🗑️';
+                tipo = `delete/${refType}`;
+                detalhe = `\`${ref}\``;
+                reacao = 'confused';
+                break;
+              }
+              case 'deployment_status': {
+                const ds = context.payload.deployment_status;
+                const state = ds?.state || 'UNKNOWN';
+                emoji = state === 'success' ? '🟢' : state === 'failure' ? '🔴' : '🟡';
+                tipo = `deploy/${state}`;
+                detalhe = `env=\`${ds?.environment || '?'}\``;
+                reacao = state === 'success' ? 'rocket' : 'eyes';
+                break;
+              }
+              case 'status': {
+                const state = context.payload.state || 'UNKNOWN';
+                const ctx = context.payload.context || '?';
+                emoji = state === 'success' ? '🟢' : state === 'failure' ? '🔴' : '🟡';
+                tipo = `status/${state}`;
+                detalhe = `\`${ctx}\` sha=\`${sha.slice(0, 10)}\``;
+                reacao = state === 'success' ? '+1' : 'eyes';
+                if (state === 'pending') skip = true;
+                break;
+              }
+              case 'schedule':
+              case 'workflow_dispatch': {
+                emoji = '⏰';
+                tipo = event;
+                detalhe = 'heartbeat/manual';
+                reacao = '+1';
+                break;
+              }
+              default: {
+                tipo = event;
+                detalhe = `action=\`${action}\``;
             let classe = 'EVENT_ONLY';
             let evidence = 'EVENT_ONLY';
             let skip = false;
@@ -268,6 +409,52 @@ jobs:
             }
 
             if (skip) {
+              core.notice(`SELO_SKIP event=${event} action=${action} reason=LOW_SIGNAL`);
+              return;
+            }
+
+            const marker = `<!-- selo-fabric:${event}:${runId} -->`;
+            const body = [
+              marker,
+              `### ${emoji} SELO · \`${tipo}\``,
+              '',
+              `| campo | valor |`,
+              `|---|---|`,
+              `| evento | \`${event}\` |`,
+              `| ação | \`${action || 'N/A'}\` |`,
+              `| detalhe | ${detalhe} |`,
+              `| ator | \`${actor}\` |`,
+              `| SHA | \`${sha.slice(0, 12) || 'N/A'}\` |`,
+              `| timestamp | \`${ts}\` |`,
+              `| run | \`${runId}\` |`,
+              '',
+              '```text',
+              'SELO_IS_TELEMETRY_NOT_PROOF=true',
+              'UNKNOWN_IS_NOT_PASS=true',
+              'EVENT_RECORDED_NOT_VALIDATED=true',
+              '```',
+            ].join('\n');
+
+            try {
+              await github.rest.reactions.createForIssue({
+                owner, repo,
+                issue_number: PR_MAE,
+                content: reacao,
+              });
+            } catch (e) {
+              core.warning(`SELO_REACTION_NON_FATAL: ${e.message}`);
+            }
+
+            try {
+              await github.rest.issues.createComment({
+                owner, repo,
+                issue_number: PR_MAE,
+                body,
+              });
+              core.notice(`SELO_POSTED pr_mae=#${PR_MAE} event=${event} tipo=${tipo}`);
+            } catch (e) {
+              core.warning(`SELO_COMMENT_NON_FATAL: ${e.message}`);
+            }
               core.notice(`SELO_SKIP event=${event} reason=neutral_or_nonmaterial`);
               return;
             }
