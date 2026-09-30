@@ -19,10 +19,10 @@
 #    2. rsync do código pras duas pastas
 #    3. npm ci + npm run build em cada uma (com VITE_APP_MODE diferente)
 #
-#  O Caddy já serve direto de:
-#    /root/CentralDark/apps/web/dist
-#    /root/CentralDark/apps/portal/dist
-#  Não criamos symlink em /var/www nem mexemos em nginx.
+#  O build web é publicado em /var/www/centralldark porque o serviço Caddy
+#  não deve depender de atravessar /root (0700). O source/build permanece
+#  em /root/CentralDark/apps/web; /var/www é somente artefato de deploy.
+#  Portal permanece no owner atual até medição específica.
 #
 #  Uso:
 #    bash scripts/sync-para-centraldark-monorepo.sh
@@ -34,6 +34,7 @@ set -euo pipefail
 LOVABLE_REPO_DIR="${LOVABLE_REPO_DIR:-/root/Multizap/apps/clone-deck}"
 WEB_TARGET="${WEB_TARGET:-/root/CentralDark/apps/web}"
 PORTAL_TARGET="${PORTAL_TARGET:-/root/CentralDark/apps/portal}"
+PUBLIC_WEB_ROOT="${PUBLIC_WEB_ROOT:-/var/www/centralldark}"
 LOG_PREFIX="[sync-centraldark]"
 
 log() { echo "$LOG_PREFIX $*"; }
@@ -55,11 +56,16 @@ fi
 [ -d "$LOVABLE_REPO_DIR/.git" ] || die "Repo Lovable não encontrado. Defina LOVABLE_REPO_DIR=..."
 log "Repo Lovable: $LOVABLE_REPO_DIR"
 
-log "Atualizando repo Lovable (git pull)…"
-(cd "$LOVABLE_REPO_DIR" \
-  && git fetch origin main \
-  && git reset --hard origin/main) \
-  || log "AVISO: git pull/reset falhou — seguindo com o que tem em disco"
+log "Atualizando referência do repo Lovable sem destruir estado local…"
+(
+  cd "$LOVABLE_REPO_DIR"
+  git fetch origin main
+  if git diff --quiet && git diff --cached --quiet; then
+    git merge --ff-only origin/main
+  else
+    log "AVISO: repo Lovable está dirty; preservando estado local e usando o conteúdo atual"
+  fi
+) || log "AVISO: atualização fast-forward falhou — preservando o que já existe em disco"
 
 LOVABLE_HASH="$(cd "$LOVABLE_REPO_DIR" && git rev-parse --short HEAD)"
 log "Commit atual do Lovable: $LOVABLE_HASH"
@@ -112,8 +118,15 @@ sync_and_build() {
 sync_and_build "$WEB_TARGET"    "web"
 sync_and_build "$PORTAL_TARGET" "portal"
 
+# ---------- 4. Publica somente o build web no root legível pelo Caddy -------
+[ -f "$WEB_TARGET/dist/index.html" ] || die "Build web ausente: $WEB_TARGET/dist/index.html"
+install -d -m 0755 "$PUBLIC_WEB_ROOT"
+rsync -a --delete "$WEB_TARGET/dist/" "$PUBLIC_WEB_ROOT/"
+find "$PUBLIC_WEB_ROOT" -type d -exec chmod 0755 {} +
+find "$PUBLIC_WEB_ROOT" -type f -exec chmod 0644 {} +
+log "[web] Publicado em $PUBLIC_WEB_ROOT (artefato; source continua em $WEB_TARGET)"
+
 log "OK — sync completo (commit $LOVABLE_HASH)"
-log "    web    → $WEB_TARGET/dist     (servido pelo Caddy)"
-log "    portal → $PORTAL_TARGET/dist  (servido pelo Caddy)"
-log ""
-log "Caddy já cuida do resto. Nada de nginx, nada de symlink em /var/www."
+log "    web source/build → $WEB_TARGET/dist"
+log "    web publicado    → $PUBLIC_WEB_ROOT"
+log "    portal           → $PORTAL_TARGET/dist"
