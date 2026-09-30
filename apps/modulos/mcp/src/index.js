@@ -17,6 +17,7 @@ import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-miss
 import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
+import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
 process.on("uncaughtException", (err) => {
