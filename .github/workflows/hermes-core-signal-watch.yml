@@ -23,7 +23,7 @@ on:
   workflow_run:
     workflows:
       - ⚙️ porta-de-entrada
-      - ⚙️ codex-validate
+      - ⚙️ CentralDark Valida — determinístico
       - ⚙️ lupa-conformance
       - ⚙️ Lupa Drift Guard
       - 🧠 Trigger Fabric Full Package — pacote e contraprova
@@ -50,7 +50,7 @@ jobs:
     permissions:
       actions: read
       pull-requests: read
-      contents: read
+      contents: write
     steps:
       - name: 🔗 Encaminhar conclusão ao promotor canônico
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0

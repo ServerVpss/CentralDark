@@ -74,10 +74,10 @@ Conjunto de workflows que validam que a **branch de trabalho** e **main** têm a
 Workflows típicos:
 - `PR — artefato de aprendizado automático` (registry de conhecimento)
 - `PR Title Contract` (validação de semântica)
-- `PR auto-review (Codex + checklist)` (revisão automática)
+- `PR auto-review (CentralDark + checklist)` (revisão automática)
 - `Pipeline — Telegram + Painel` (notificação)
 - `lupa-conformance` (aprovação Bayesiana)
-- `codex-validate` (análise estática)
+- `CentralDark Valida — determinístico` (análise estática)
 - `porta-de-entrada` (security gate)
 - `🔐 CodeQL — análise semântica` (vulnerabilities)
 - `Lupa Drift Guard` (drift detection)

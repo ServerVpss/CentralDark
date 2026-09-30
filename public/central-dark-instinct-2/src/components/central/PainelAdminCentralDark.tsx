@@ -12,6 +12,8 @@ import {
   Users,
 } from "lucide-react";
 
+import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
+import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,7 +46,24 @@ function mensagemErro(valor: unknown) {
 // O Database gerado do Instinto ainda não contém profiles/modulos_portal.
 // Acesso pontual mantém o owner Supabase existente sem duplicar cliente.
 const banco = supabase as unknown as {
+  // Database gerado ainda não conhece profiles/modulos_portal; owner continua o mesmo client.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   from: (tabela: string) => any;
+};
+
+type ModuloPortalLinha = {
+  id: unknown;
+  slug?: unknown;
+  nome?: unknown;
+  icone?: unknown;
+  href?: unknown;
+  status?: unknown;
+  ordem?: unknown;
+};
+
+type ProfileLinha = {
+  user_id: unknown;
+  full_name?: unknown;
 };
 
 export function PainelAdminCentralDark() {
@@ -75,7 +94,7 @@ export function PainelAdminCentralDark() {
       for (const item of r.data ?? []) papeis.set(item.user_id, item.role);
 
       setModulos(
-        (m.data ?? []).map((item: any) => ({
+        (m.data ?? []).map((item: ModuloPortalLinha) => ({
           id: String(item.id),
           slug: String(item.slug ?? ""),
           nome: String(item.nome ?? ""),
@@ -86,7 +105,7 @@ export function PainelAdminCentralDark() {
         })),
       );
       setUsuarios(
-        (p.data ?? []).map((item: any) => ({
+        (p.data ?? []).map((item: ProfileLinha) => ({
           user_id: String(item.user_id),
           full_name: item.full_name ? String(item.full_name) : null,
           papel: papeis.get(String(item.user_id)) ?? "user",
@@ -212,6 +231,8 @@ export function PainelAdminCentralDark() {
           <TabsTrigger value="visao">Visão geral</TabsTrigger>
           <TabsTrigger value="modulos">Módulos</TabsTrigger>
           <TabsTrigger value="usuarios">Usuários</TabsTrigger>
+          <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
+          <TabsTrigger value="observabilidade">Observabilidade</TabsTrigger>
         </TabsList>
 
         <TabsContent value="visao" className="mt-6">
@@ -323,11 +344,7 @@ export function PainelAdminCentralDark() {
                     onClick={() => void salvarModulo(modulo)}
                     disabled={salvandoId === modulo.id}
                   >
-                    {salvandoId === modulo.id ? (
-                      <Loader2 className="animate-spin" />
-                    ) : (
-                      <Save />
-                    )}
+                    {salvandoId === modulo.id ? <Loader2 className="animate-spin" /> : <Save />}
                     Salvar
                   </Button>
                 </div>
@@ -339,6 +356,12 @@ export function PainelAdminCentralDark() {
               </div>
             ) : null}
           </div>
+        </TabsContent>
+        <TabsContent value="conexoes" className="mt-6">
+          <ConexoesCentralDark />
+        </TabsContent>
+        <TabsContent value="observabilidade" className="mt-6">
+          <ObservabilidadeCentralDark />
         </TabsContent>
         <TabsContent value="usuarios" className="mt-6">
           <div>

@@ -74,6 +74,13 @@ DELTA_CONTINUO_REQUIRED=true
 FUTURE_EXECUTORS_INHERIT_SAME_CONTRACT=true
 MUTATION_WITHOUT_GLOBAL_ENTRY_EXIT_GATE=FAIL_CLOSED
 HUD_FIXED_LAYOUT_LIVE_DATA_REQUIRED=true
+HUD_RUDY_HYBRID_ENTRY_REQUIRED=true
+HUD_RUDY_ACTIVATE_ON_MCP_CONNECTION=true
+HUD_RUDY_ACTIVATE_ON_REPO_CONTEXT=true
+HUD_RUDY_MCP_OR_REPO_IS_SUFFICIENT=true
+HUD_RUDY_FIRST_OPERATIONAL_RESPONSE_REQUIRED=true
+HUD_RUDY_FIXED_CARD_IDS=H01..H16
+HUD_RUDY_ONLY_STATUS_EVIDENCE_PERCENT_CHANGE=true
 POMBO64_TRACE_REQUIRED_FOR_MATERIAL_RECEIPTS=true
 MATERIAL_FROM_CHEFE_AUTO_INGEST=true
 MATERIAL_FROM_CHEFE_IS_NOT_AUTOMATIC_FACT=true
@@ -279,6 +286,8 @@ Documentos com `status: CANÔNICO` precisam permanecer alcançáveis a partir de
 - `docs/CONSCIENCIA/ADMINISTRAVEIS.md` — capacidades administráveis.
 - docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO-LOGS-LOCAL.md — contrato híbrido de Grafo Vivo, logs, Casa/VPS e capacidades locais.
 - `docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md` — registro de linguagem regional.
+- `docs/CONSCIENCIA/APRENDIZADOS/2026-09-27-ESPIRITO-INTELIGENCIA-CENTRALDARK.md` — continuidade operacional da Casa e retorno por rastro provado.
+- `docs/CONSCIENCIA/APRENDIZADOS/2026-09-27-SEGREDO-COFRE-NAO-GIT-NAO-LOG.md` — cofre preserva valores; Git/log/receipts guardam somente rastro sem segredo.
 - `docs/GOVERNANCA/CONTEXTO-PESSOAL-E-PROVENIENCIA-TEMPORAL.md` — proveniência e contexto temporal.
 - `.agents/skills/centraldark-operational-method/references/HUMAN-ACTION-DIRECT-LINK.md` — fronteira de ação humana direta.
 
@@ -1082,3 +1091,34 @@ A execução real de ferramenta e a renderização lateral/JSON da Tool Call sã
 Ausência do renderer não prova ausência de execução; resultado de ferramenta não prova que a lateral foi renderizada.
 Estados de visibilidade: `PROVED_BY_PLATFORM_RECEIPT | USER_CONFIRMED_VISIBILITY | PLATFORM_UNAVAILABLE | UNKNOWN`.
 Confirmação visual do CHEFE prova observação humana da UI, não receipt interno da plataforma.
+
+## Reality Judge depois do efeito, não antes da autoridade
+
+Correção canônica: `REALITY=JUDGE` não é porteiro de execução. É juiz do efeito observado antes de declarar `PASS`, `DEPLOYED`, `RESTORED`, `HEALTHY` ou `FIXED_POINT`.
+
+```text
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+UNCHANGED_FINGERPRINT_REUSES_PROOF=true
+MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+```
+
+Fluxo obrigatório para ordem compatível com owner existente:
+
+```text
+CHEFE_FALA
+→ RECUPERA_FIO
+→ ROTA_DETERMINISTICA
+→ EXECUTA_MENOR_DELTA
+→ TESTA_CONE_AFETADO
+→ CONTRAPROVA
+→ REALITY_JUDGE_CONFIRMA_OU_CORRIGE
+→ READBACK
+→ CONTINUA
+```
+
+Proibido transformar `REALITY=JUDGE` em desculpa para parar, pedir microautorização, invalidar autonomia, ignorar julgamento do CHEFE ou reinvestigar tudo quando o fingerprint não mudou.

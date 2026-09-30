@@ -248,6 +248,14 @@ PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW=true
 RETRACT_FALSE_ALARM_IN_SAME_RECEIPT=true
 SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING=true
 ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE=true
+UNIVERSAL_PROOF_LAW_ALL_ENGINES=true
+UNMEASURED_VALUE_IS_NAO_MEDIDO_NEVER_INVENTED=true
+INSTALLED_OR_OPERATIONAL_CLAIM_REQUIRES_REAL_VERIFY_OUTPUT=true
+STUB_OR_DEMO_NEVER_PRESENTED_AS_REAL_TOOL=true
+ROOT_SHELL_IS_NOT_KERNEL_CONTROL=true
+MEASURE_CHEFE_GUI_USER_AND_PATH_BEFORE_PLACING_SURFACE_FILE=true
+EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR=true
+PR_MOTHER_1562_IS_LEDGER_NEVER_MERGE=true
 ```
 
 Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?CHILD_REQUIRED:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> MAIN_READBACK -> RECEIPT_EXISTING_CHILD_IF_ANY -> RECEIPT_1562 -> FIXED_POINT.
@@ -1681,3 +1689,20 @@ A execução real de ferramenta e a renderização lateral/JSON da Tool Call sã
 Ausência do renderer não prova ausência de execução; resultado de ferramenta não prova que a lateral foi renderizada.
 Estados de visibilidade: `PROVED_BY_PLATFORM_RECEIPT | USER_CONFIRMED_VISIBILITY | PLATFORM_UNAVAILABLE | UNKNOWN`.
 Confirmação visual do CHEFE prova observação humana da UI, não receipt interno da plataforma.
+
+## Trava anti-desautorização — Reality Judge não é porteiro
+
+A autoridade humana do SEGREDO/CHEFE e a rota determinística autorizada não podem ser reduzidas por interpretação equivocada de `REALITY=JUDGE`.
+
+```text
+REALITY=JUDGE_SIGNIFICA_VERIFICADOR_DE_EFEITO
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+DETERMINISTIC_ROUTE_FIRST=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+```
+
+Quando a intenção é clara e a rota já existe, execute o menor delta e use a realidade para provar/corrigir o resultado. Não use Reality Judge como ritual de bloqueio, pedido repetido de autorização, revalidação global ou substituto do julgamento do CHEFE.

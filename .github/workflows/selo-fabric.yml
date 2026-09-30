@@ -100,9 +100,21 @@ jobs:
             const action = context.payload.action || '';
             const runId = context.runId;
             const runAttempt = process.env.GITHUB_RUN_ATTEMPT || '1';
-            const sha = context.sha || '';
             const actor = context.actor || 'UNKNOWN';
             const ts = new Date().toISOString();
+
+            // Derive SHA from the event's actual subject, not context.sha
+            // (context.sha is the default branch HEAD for workflow_run/check_suite)
+            const eventSha = (() => {
+              const p = context.payload;
+              if (p.check_suite?.head_sha) return p.check_suite.head_sha;
+              if (p.workflow_run?.head_sha) return p.workflow_run.head_sha;
+              if (p.pull_request?.head?.sha) return p.pull_request.head.sha;
+              if (p.deployment?.sha) return p.deployment.sha;
+              if (p.head_commit?.id) return p.head_commit.id;
+              if (context.payload.sha) return context.payload.sha;
+              return context.sha || '';
+            })();
 
             let emoji = '🏅';
             let tipo = event;
@@ -127,7 +139,7 @@ jobs:
                   const branch = String(context.payload.ref || '').replace('refs/heads/', '');
                   emoji = '📦';
                   tipo = `push → ${branch || '?'}`;
-                  detalhe = `head=\`${sha10(sha)}\` — ${msg || 'sem mensagem'}`;
+                  detalhe = `head=\`${sha10(eventSha)}\` — ${msg || 'sem mensagem'}`;
                   classe = 'CANONICAL_RECORD_ONLY';
                   evidence = 'COMMIT_EVENT';
                   break;
@@ -268,11 +280,11 @@ jobs:
             }
 
             if (skip) {
-              core.notice(`SELO_SKIP event=${event} reason=neutral_or_nonmaterial`);
+              core.notice(`SELO_SKIP event=${event} action=${action} reason=LOW_SIGNAL`);
               return;
             }
 
-            const fingerprint = [sourceEvent, event, action || '-', runId, simulated ? requested : sha10(sha)].join(':');
+            const fingerprint = [sourceEvent, event, action || '-', runId, simulated ? requested : sha10(eventSha)].join(':');
             const marker = `<!-- CENTRALDARK_SELO_FABRIC:${fingerprint} -->`;
 
             const existing = await github.paginate(github.rest.issues.listComments, {
@@ -303,11 +315,14 @@ jobs:
               '> EVENTO != PASS · COMMIT != DEPLOY · CI_PASS_ONLY != RUNTIME_PASS · REALIDADE JULGA',
             ].join('\n');
 
-            await github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number: PR_MAE,
-              body,
-            });
-
-            core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
+            try {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: PR_MAE,
+                body,
+              });
+              core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
+            } catch (e) {
+              core.setFailed(`SELO_POST_FAILED event=${event} error=${e.message}`);
+            }

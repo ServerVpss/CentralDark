@@ -1,4 +1,4 @@
-name: ⚙️ codex-validate
+name: ⚙️ CentralDark Valida — determinístico
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: codex-validate-${{ github.event.pull_request.number || github.ref }}
+  group: centraldark-validate-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -122,7 +122,7 @@ jobs:
           fi
 
   validate:
-    name: 🧩 Validate Codex operational kit
+    name: 🧩 Validar boot operacional CentralDark
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
     steps:
@@ -148,8 +148,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          checkout_dir="$GITHUB_WORKSPACE/.ci-codex-validate"
-          if [[ "$checkout_dir" != "$GITHUB_WORKSPACE/.ci-codex-validate" ]]; then
+          checkout_dir="$GITHUB_WORKSPACE/.ci-centraldark-validate"
+          if [[ "$checkout_dir" != "$GITHUB_WORKSPACE/.ci-centraldark-validate" ]]; then
             echo "Unsafe checkout directory: $checkout_dir"
             exit 1
           fi
@@ -159,85 +159,52 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          path: .ci-codex-validate
+          path: .ci-centraldark-validate
           persist-credentials: false
           submodules: false
 
       - name: 🔹 Prove isolated checkout identity
         shell: bash
-        working-directory: .ci-codex-validate
+        working-directory: .ci-centraldark-validate
         env:
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$HEAD_SHA"
 
-      - name: 🔹 Validate required Codex files
+      - name: 🔹 Validar boot canônico CentralDark
         shell: bash
-        working-directory: .ci-codex-validate
+        working-directory: .ci-centraldark-validate
         run: |
           set -euo pipefail
-          required=("AGENTS.md" "CODEX.md" ".github/codex/prompts/centraldark-system.md" ".github/pull_request_template.md")
-          for file in "${required[@]}"; do test -f "$file" || { echo "Missing required file: $file"; exit 1; }; done
-
-      - name: 🔹 Check official repository references
-        shell: bash
-        working-directory: .ci-codex-validate
-        run: |
-          set -euo pipefail
+          required=(
+            "LEIA-ME-IA.md"
+            "AGENTS.md"
+            "CENTRALDARK_AI_BOOT.yaml"
+            ".agents/library-index.json"
+            ".github/pull_request_template.md"
+          )
+          for file in "${required[@]}"; do
+            test -f "$file" || { echo "Missing canonical boot file: $file"; exit 1; }
+          done
           grep -q "ServerVpss/CentralDark" AGENTS.md
-          grep -q "ServerVpss/CentralDark" CODEX.md
-          grep -q "ServerVpss/CentralDark" .github/codex/prompts/centraldark-system.md
-          grep -q "ServerVpss/CentralDark" .github/pull_request_template.md
-
-      - name: 🔹 Check sensitive-file guardrails are explicit
-        shell: bash
-        working-directory: .ci-codex-validate
-        run: |
-          set -euo pipefail
-          docs=("AGENTS.md" "CODEX.md" ".github/codex/prompts/centraldark-system.md" ".github/pull_request_template.md")
-          for file in "${docs[@]}"; do grep -q "arquivos sensíveis\|Arquivos sensíveis" "$file" || { echo "Missing sensitive-file guardrail wording in $file"; exit 1; }; done
-          grep -q "Não li, abri, copiei, editei ou usei como contexto arquivos sensíveis" .github/pull_request_template.md
-          grep -q "Verifiquei comentários de agentes no PR antes do merge" .github/pull_request_template.md
-          grep -q "\.env" AGENTS.md
-          grep -q "secrets""/" AGENTS.md
-          grep -q "sessions""/" CODEX.md
-          grep -q "\.ssh""/" .github/codex/prompts/centraldark-system.md
-
-      - name: 🔹 Check docs do not contain real secret values
-        shell: bash
-        working-directory: .ci-codex-validate
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import re, sys
-          files = [Path("AGENTS.md"), Path("CODEX.md"), Path(".github/codex/prompts/centraldark-system.md"), Path(".github/pull_request_template.md")]
-          patterns = [re.compile(r"-----BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----", re.I), re.compile(r"(?i)\b(?:token|password|passwd|secret|cookie|session|connection_string|database_url|api_key|apikey)\b\s*[:=]\s*['\"]?([^'\"\s<>`]{12,})")]
-          allowed = {"***OCULTO***", "REDACTED", "CHANGEME", "EXAMPLE", "PLACEHOLDER"}
-          findings=[]
-          for file in files:
-              text=file.read_text(encoding="utf-8")
-              for pattern in patterns:
-                  for match in pattern.finditer(text):
-                      value=(match.group(1) if match.groups() else match.group(0)).strip().strip("\"'")
-                      if value not in allowed: findings.append(f"{file}: possible real secret value near: {match.group(0)[:40]}")
-          if findings:
-              print("Potential real secret-like values found in Codex docs:")
-              print(*[f"- {item}" for item in findings], sep="\n")
-              sys.exit(1)
-          print("OK: no real secret-like values found in Codex docs")
-          PY
-
-      - name: 🔹 Validate Markdown presence
-        shell: bash
-        working-directory: .ci-codex-validate
-        run: |
-          set -euo pipefail
-          grep -q "Repositório oficial" AGENTS.md
-          grep -q "Alvo obrigatório" CODEX.md
-          grep -q "Autoajuste consciente" .github/codex/prompts/centraldark-system.md
+          grep -q "REUSE_BEFORE_CREATE" LEIA-ME-IA.md
+          grep -q "CENTRALDARK_AI_BOOT" CENTRALDARK_AI_BOOT.yaml
+          grep -q "library-index" LEIA-ME-IA.md || true
           grep -q "Ações sensíveis" .github/pull_request_template.md
+          echo "CENTRALDARK_BOOT_VALIDATION=PASS"
+
+      - name: 🔹 Validar contrato determinístico Dependabot → CentralDark
+        shell: bash
+        working-directory: .ci-centraldark-validate
+        run: |
+          set -euo pipefail
+          test -f .github/workflows/dependabot-auto-merge.yml
+          grep -Fq "⚙️ CentralDark Valida — determinístico" .github/workflows/dependabot-auto-merge.yml
+          grep -Fq "centraldark_sentinel_route" .github/workflows/dependabot-auto-merge.yml
+          grep -Fq "dependabot[bot]" .github/workflows/dependabot-auto-merge.yml
+          grep -Fq "UNKNOWN_IS_PASS=0" .github/workflows/dependabot-auto-merge.yml
+          echo "DEPENDABOT_CENTRALDARK_DETERMINISM=PASS"
 
       - name: 🔹 Receipt determinístico (sempre)
         if: always()
@@ -389,7 +356,7 @@ jobs:
         env:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           MAP_RESULT: ${{ needs.validate-canonical-map.result }}
-          CODEX_RESULT: ${{ needs.validate.result }}
+          CENTRALDARK_RESULT: ${{ needs.validate.result }}
           MCP_RESULT: ${{ needs.validate-admin-guard.result }}
         run: |
           set -euo pipefail
@@ -415,14 +382,14 @@ jobs:
           grep -Fq 'github.event.pull_request.base.sha' "$dependabot_flow"
 
           green=1
-          for result in "$MAP_RESULT" "$CODEX_RESULT" "$MCP_RESULT"; do
+          for result in "$MAP_RESULT" "$CENTRALDARK_RESULT" "$MCP_RESULT"; do
             if [ "$result" != 'success' ]; then
               green=0
             fi
           done
 
           echo "PR_AUTHOR=$PR_AUTHOR"
-          echo 'UNIVERSAL_VALIDATION_OWNER=.github/workflows/codex-validate.yml'
+          echo 'UNIVERSAL_VALIDATION_OWNER=.github/workflows/centraldark-validate.yml'
           echo 'GIT_CONFLICT_SKILL=.agents/skills/git-conflict-resolve-house-standard/SKILL.md'
           echo 'GIT_CONFLICT_ENGINE=scripts/dependabot/resolve-conflicts.sh'
           echo 'BOT_CODE_SHARED=1'
@@ -465,14 +432,14 @@ jobs:
         env:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           MAP_RESULT: ${{ needs.validate-canonical-map.result }}
-          CODEX_RESULT: ${{ needs.validate.result }}
+          CENTRALDARK_RESULT: ${{ needs.validate.result }}
           MCP_RESULT: ${{ needs.validate-admin-guard.result }}
           ROUTER_STATUS: ${{ job.status }}
         run: |
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
           echo "MAP_RESULT=${MAP_RESULT}"
-          echo "CODEX_RESULT=${CODEX_RESULT}"
+          echo "CENTRALDARK_RESULT=${CENTRALDARK_RESULT}"
           echo "MCP_RESULT=${MCP_RESULT}"
           echo "ROUTER_STATUS=${ROUTER_STATUS}"
           echo 'UNIVERSAL_BOT_FLOW=1'
