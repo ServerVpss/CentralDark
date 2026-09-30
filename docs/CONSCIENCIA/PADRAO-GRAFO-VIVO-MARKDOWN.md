@@ -2,7 +2,7 @@
 title: "🫀 Padrão do Grafo Vivo Markdown — CentralDark"
 status: "ATIVO_RECONCILIADO"
 date: 2026-09-10
-updated: 2026-09-12
+updated: 2026-09-17
 owner: "docs/CONSCIENCIA/PADRAO-GRAFO-VIVO-MARKDOWN.md"
 truth_scope: "DOCS_MARKDOWN_STRUCTURE_GRAPH_AND_VISUAL_CONTRACT"
 canonical: true
@@ -243,6 +243,68 @@ ROUND_TRIP_EDIT_TELEMETRY_FIXED_POINT=UNKNOWN
 ```
 
 Portanto, implementar essa capacidade futura deve começar em `REUSE_BEFORE_CREATE`: medir painel/plugin/gerador atuais, escolher owner e estender o mínimo necessário.
+
+
+## 💎 Cristais e linhagem no mesmo Grafo Vivo
+
+O Grafo Vivo não representa apenas o estado atual. Ele também precisa manter
+pontes para os cristais materiais que produziram esse estado, sem transformar
+histórico em segunda autoridade.
+
+```text
+CURRENT_NODE
+← lineage ← PREVIOUS_PROVEN_CRYSTAL
+← lineage ← RECEIPT
+← lineage ← HANDOFF
+← lineage ← PR/COMMIT
+```
+
+Cada peça comprovada que entrar, sair, mudar de posição ou trocar relação deve
+atualizar o mesmo grafo e o handoff correspondente na mesma evolução lógica.
+
+```text
+PIECE_CREATED_OR_MOVED
+→ RESOLVE_EXISTING_OWNER
+→ UPDATE_RELATIONS
+→ UPDATE_HANDOFF
+→ UPDATE_CANONICAL_GRAPH
+→ PRESERVE_PROVENANCE
+→ NEXT_CURSOR
+```
+
+Cadeados:
+
+```text
+PAST_PROVEN_CRYSTAL_MUST_REMAIN_DISCOVERABLE=true
+PROVEN_COMPONENT_WITHOUT_OWNER = ORPHAN
+PROVEN_COMPONENT_WITHOUT_HANDOFF = ORPHAN
+PROVEN_COMPONENT_WITHOUT_LINEAGE = COGNITIVE_DEBT
+CURRENT_MAP_MUST_NOT_DROP_USEFUL_HISTORY=true
+MAP_EXTENDS_NEVER_RESTARTS=true
+FIXED_POINT_LOCKS_PROVEN_STRUCTURE_UNTIL_MATERIAL_DELTA=true
+NO_MATERIAL_DELTA → NO_REDESIGN
+```
+
+O Fixed Point não congela o sistema inteiro para sempre. Ele trava a parte
+provada contra reinvenção gratuita. Nova necessidade pode estender o mesmo
+owner, mas deve carregar a linhagem anterior e provar o delta.
+
+### Projeções visuais
+
+Figma/FigJam, Mermaid, Obsidian e HUD são projeções do mesmo grafo.
+
+```text
+CANONICAL_GRAPH
+├─ FIGMA / FIGJAM
+├─ MERMAID
+├─ OBSIDIAN
+└─ HUD
+```
+
+Nenhuma dessas superfícies vira fonte de verdade isolada. Se uma projeção não
+estiver disponível, a linhagem continua preservada no owner canônico e a
+superfície fica `UNKNOWN|UNAVAILABLE`.
+
 
 ## ⚖️ Leis
 
