@@ -287,6 +287,11 @@ const PROVIDER_TEST = {
     const j = await r.json().catch(()=>({}));
     return { ok:r.ok, http:r.status, detail: r.ok ? (j.name||j.bot?.workspace_name||"ok") : (j.message||"erro") };
   },
+  figma: async (t) => {
+    const r = await fetch("https://api.figma.com/v1/me", { headers:{ "X-Figma-Token":t, Accept:"application/json" }});
+    const j = await r.json().catch(()=>({}));
+    return { ok:r.ok, http:r.status, detail: r.ok ? (j.handle||j.email||"figma-ok") : (j.err||j.message||"erro") };
+  },
   github: async (t) => {
     const r = await fetch("https://api.github.com/user", { headers:{ Authorization:`Bearer ${t}`, "User-Agent":"CentralDark-HUB" }});
     const j = await r.json().catch(()=>({}));

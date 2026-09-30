@@ -129,6 +129,13 @@ export const hubCapabilities: HubCapability[] = [
     owner: 'Electron + renderer',
     detail: 'Superfície web existe; painel único de permissões/sessões/cookies ainda não foi consolidado no CentralDark.exe.',
   },
+  {
+    id: 'FIGMA',
+    label: 'Figma / FigJam',
+    state: 'SOURCE_PROVED',
+    owner: 'apps/modulos/mcp/src/tools/integrations.js + apps/modulos/oauth-broker',
+    detail: 'Conector read-only registrado no HUB; credencial fica no cofre canônico. Runtime só vira PASS quando /figma/status autenticar e um arquivo/node real for lido.',
+  },
 ];
 
 export const accountSurfaces: AccountSurface[] = [

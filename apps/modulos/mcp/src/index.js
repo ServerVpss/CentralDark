@@ -124,6 +124,11 @@ app.get("/linear/status", async (_req, res) => {
     const status = await getLinearPublicStatus();
     res.status(status.ok ? 200 : 503).json(status);
 });
+app.get("/figma/status", async (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    const status = await getFigmaPublicStatus();
+    res.status(status.ok ? 200 : 503).json(status);
+});
 // Um coração: heartbeat que monitora o próprio monitor. Público via api.centralldark.com.
 const HEART_FILE = "/root/CentralDark/logs/heartbeat-api.json";
 app.get("/heartbeat", (_req, res) => {
@@ -325,6 +330,7 @@ app.get("/openapi.json", (_req, res) => {
         "/health": { get: { summary: "Healthcheck", operationId: "health", responses: respostaJson } },
         "/health/deep": { get: { summary: "Healthcheck profundo", operationId: "healthDeep", responses: respostaJson } },
         "/linear/status": { get: { summary: "Status seguro da integração Linear", operationId: "linearStatus", responses: respostaJson } },
+        "/figma/status": { get: { summary: "Status seguro da integração Figma/FigJam", operationId: "figmaStatus", responses: respostaJson } },
         "/heartbeat": { get: { summary: "Heartbeat + snapshot operacional determinístico", operationId: "heartbeat", responses: respostaJson } },
         "/status.json": { get: { summary: "Status dos conectores", operationId: "statusJson", responses: respostaJson } },
         "/register": { post: { summary: "OAuth 2.1 Dynamic Client Registration", operationId: "oauthRegister", responses: respostaJson } },
