@@ -311,3 +311,34 @@ BOOTSTRAP_RESTORE=READONLY_VALIDADOR_PRONTO
 ONE_SYSTEM_ONLY=true
 REALIDADE=JUIZ
 ```
+
+
+## 11. Identidade de produto — base openKylin sem vínculo visual
+
+**Decisão do CHEFE:** openKylin pode permanecer como substrato/base técnica durante a transformação, mas não é a identidade exibida do produto final.
+
+```text
+BASE_TECHNICAL_SUBSTRATE=openKylin
+USER_VISIBLE_OS_NAME=CentralDark-OS
+PRIMARY_PRODUCT_SURFACE=Instinto Superior
+OPENKYLIN_USER_VISIBLE_BRANDING=REMOVE
+OPENKYLIN_USER_VISIBLE_NAME=REMOVE
+OPENKYLIN_LOGOS_THEMES_WALLPAPERS_SPLASH=REPLACE
+UPSTREAM_PROVENANCE_MAY_REMAIN_IN_INTERNAL_TECHNICAL_METADATA=true
+ONE_SYSTEM_ONLY=true
+```
+
+Na fase de instalação/empacotamento:
+
+- substituir nome, logo, splash, wallpaper, tema, launcher, metadados visuais e textos apresentados ao usuário por identidade CentralDark;
+- não declarar que o kernel/base técnica deixou de ser openKylin enquanto isso não tiver sido materialmente substituído;
+- preservar apenas a proveniência técnica necessária internamente;
+- o usuário final deve ver **CentralDark-OS / Instinto Superior**, não openKylin;
+- qualquer renomeação deve ser seguida por boot/readback para garantir que serviços e dependências não quebrem.
+
+```text
+OPENKYLIN_BASE != OPENKYLIN_PRODUCT_IDENTITY
+SUBSTRATE_PRESERVED_WHILE_USEFUL
+PRODUCT_IDENTITY=CENTRALDARK
+DOCUMENTED_REBRAND != RUNTIME_REBRAND
+```
