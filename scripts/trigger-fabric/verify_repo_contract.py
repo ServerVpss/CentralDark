@@ -47,9 +47,19 @@ def check_values(path, expected, classification='PROVEN_VALUE_IN_REPO'):
 SOUL_AFFECTING_OWNERS=('AGENTS.md','LEIA-ME-IA.md','CLAUDE.md','CENTRALDARK_AI_BOOT.yaml','docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml')
 
 def _git_blob_sha1(path):
-    import hashlib
-    data=(ROOT/path).read_bytes()
-    return hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+    """Hash the working-tree owner with Git's configured clean filters.
+
+    This avoids checkout-only CRLF false positives without collapsing two
+    genuinely distinct committed blobs into the same synthetic hash.
+    """
+    proc=subprocess.run(
+        ['git','hash-object','--path',path,path],
+        cwd=ROOT,text=True,capture_output=True,check=False,
+    )
+    value=(proc.stdout or '').strip()
+    if proc.returncode != 0 or not re.fullmatch(r'[0-9a-f]{40}', value):
+        raise RuntimeError(f'GIT_HASH_OBJECT_FAILED:{path}:{(proc.stderr or "").strip()}')
+    return value
 
 def check_soul_sync(classification='SOUL_SYNC_CURRENT_FOR_FIXED_POINT'):
     """SOUL guarda a impressão dos donos que afetam a alma; divergência = SOUL atrasada = sem ponto fixo."""
