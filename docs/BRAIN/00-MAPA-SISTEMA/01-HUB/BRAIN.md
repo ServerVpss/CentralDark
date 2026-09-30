@@ -137,5 +137,6 @@ SEM_PROPRIEDADES_OBRIGATORIAS
 - [[2026-09-03-numeracao-01-10-vault]]
 - [[2026-09-03-mandato-preservar-ouro-chefe]]
 - [[ARVORE-SEMANTICA-DA-CASA]]
+- [[2026-09-29-CRISTAL-SESSAO-HIBRIDA-CENTRALDARK]] — ponte para o cristal recente de rota híbrida, GUI remota, Tool Calls móveis e resenha com rigor
 
 O histórico Git preserva versões antigas desta superfície sem permitir que elas governem o presente.
