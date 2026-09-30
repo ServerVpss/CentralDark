@@ -1110,6 +1110,7 @@
     "ACTION_IS_PROOF": false,
     "AUTHORIZED_IS_VALIDATED": false,
     "MERGED_IS_DEPLOYED": false
+  },
   "universal_operational_contract": {
     "marker": "CENTRALDARK_UNIVERSAL_OPERATIONAL_CONTRACT_REQUIRED",
     "status": "MANDATORY",
