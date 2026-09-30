@@ -290,7 +290,7 @@
       "SAFE_RESOLUTION": "USE_MAIN_SIDE",
       "PRESERVE_RULE": "Workflow security and single-engine routing follow current main.",
       "EXPECTED_RESULT": "Workflow continues to call the single resolver and avoids untrusted HEAD execution.",
-      "COUNTERPROOF": "codex-validate grep + integration tests.",
+      "COUNTERPROOF": "CentralDark Valida determinístico grep + integration tests.",
       "RUNTIME_APPLICABLE": "SOURCE_ONLY",
       "LAST_PROVED_SHA": "365c95696d53abb206ce04347b197fea962ac67d",
       "LAST_PROVED_AT": "2026-09-16"

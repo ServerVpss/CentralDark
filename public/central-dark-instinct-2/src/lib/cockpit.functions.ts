@@ -37,6 +37,20 @@ export type EstadoCentralDark = {
   liveFabric: Estado;
   grafoVivo: Estado;
   omniRouter: Estado;
+  apiHealth: Estado;
+  heartbeat: Estado;
+  omniModels: Estado;
+  receipts: Estado;
+  casaSite: Estado;
+  screenpipe: Estado;
+  actions: Estado;
+  actionsLinuxMinutes: number | null;
+  actionsWindowsMinutes: number | null;
+  actionsStorageGbHours: number | null;
+  actionsGrossAmountUsd: number | null;
+  actionsNetAmountUsd: number | null;
+  actionsPeriod: string | null;
+  executionPolicy: "CASA_HEAVY_GITHUB_ACTIONS_ON_DEMAND";
   mainSha: string | null;
   sha: string | null;
   mensagem: string | null;
@@ -49,6 +63,18 @@ export type EstadoCentralDark = {
   omniHttp: number | null;
   nextCursor: string | null;
   erroLiveFabric: string | null;
+  apiHealthHttp: number | null;
+  heartbeatHttp: number | null;
+  heartbeatSelf: string | null;
+  omniModelsHttp: number | null;
+  receiptsHttp: number | null;
+  casaSiteHttp: number | null;
+  screenpipeHttp: number | null;
+  screenpipeDetail: string | null;
+  actionsFonte: string;
+  actionsErro: string | null;
+  gmailFonte: string;
+  desktopFonte: string;
 };
 
 function acessoGitHub() {
@@ -122,9 +148,9 @@ async function medirApi(path: string): Promise<Probe> {
     }
 
     return {
-      estado: candidato["ok"] === true ? "PASS" : candidato["ok"] === false ? "FAIL" : "UNKNOWN",
+      estado: candidato["ok"] === true ? "PASS" : candidato["ok"] === false ? "FAIL" : "RUNNING",
       httpStatus: resposta.status,
-      erro: candidato["ok"] === undefined ? "Campo ok ausente" : null,
+      erro: candidato["ok"] === undefined ? "Rota respondeu JSON sem campo ok" : null,
       dados: candidato,
     };
   } catch (erro) {
@@ -136,6 +162,148 @@ async function medirApi(path: string): Promise<Probe> {
     };
   } finally {
     clearTimeout(timeout);
+  }
+}
+
+async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
+  if (casaOnly && process.platform !== "win32") {
+    return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_ONLY_WINDOWS", dados: null };
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    const resposta = await fetch(url, {
+      headers: { accept: "application/json,text/html;q=0.9,*/*;q=0.8" },
+      cache: "no-store",
+      signal: controller.signal,
+    });
+    if (!resposta.ok) {
+      return {
+        estado: "FAIL",
+        httpStatus: resposta.status,
+        erro: `HTTP ${resposta.status}`,
+        dados: null,
+      };
+    }
+    let dados: JsonObject | null = null;
+    try {
+      const candidato = (await resposta.json()) as unknown;
+      if (objetoJson(candidato)) dados = candidato;
+    } catch {
+      dados = null;
+    }
+    const status = texto(dados?.["status"])?.toLowerCase() ?? null;
+    const estado: Estado =
+      dados?.["ok"] === false
+        ? "FAIL"
+        : dados?.["ok"] === true || status === "healthy"
+          ? "PASS"
+          : "RUNNING";
+    return { estado, httpStatus: resposta.status, erro: null, dados };
+  } catch (erro) {
+    return {
+      estado: "UNKNOWN",
+      httpStatus: null,
+      erro: erro instanceof Error ? erro.message : String(erro),
+      dados: null,
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+type ActionsUsageItem = {
+  product?: string;
+  sku?: string;
+  grossQuantity?: number;
+  netQuantity?: number;
+  grossAmount?: number;
+  netAmount?: number;
+  unitType?: string;
+};
+
+async function medirActions() {
+  const token = process.env["GITHUB_TOKEN"];
+  if (!token) {
+    return {
+      estado: "AUTH_REQUIRED" as Estado,
+      linux: null,
+      windows: null,
+      storage: null,
+      grossUsd: null,
+      netUsd: null,
+      period: null,
+      fonte: "GitHub Billing API · GITHUB_TOKEN ausente",
+      erro: null,
+    };
+  }
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = now.getUTCMonth() + 1;
+  const url = `${GITHUB_API}/organizations/ServerVpss/settings/billing/usage/summary?year=${year}&month=${month}`;
+  try {
+    const resposta = await fetch(url, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${token}`,
+        "X-GitHub-Api-Version": "2026-03-10",
+      },
+      cache: "no-store",
+    });
+    if (resposta.status === 401 || resposta.status === 403) {
+      return {
+        estado: "AUTH_REQUIRED" as Estado,
+        linux: null,
+        windows: null,
+        storage: null,
+        grossUsd: null,
+        netUsd: null,
+        period: `${year}-${String(month).padStart(2, "0")}`,
+        fonte: "GitHub Billing API",
+        erro: `HTTP ${resposta.status}`,
+      };
+    }
+    if (!resposta.ok) {
+      return {
+        estado: "FAIL" as Estado,
+        linux: null,
+        windows: null,
+        storage: null,
+        grossUsd: null,
+        netUsd: null,
+        period: `${year}-${String(month).padStart(2, "0")}`,
+        fonte: "GitHub Billing API",
+        erro: `HTTP ${resposta.status}`,
+      };
+    }
+    const payload = (await resposta.json()) as { usageItems?: ActionsUsageItem[] };
+    const items = (payload.usageItems ?? []).filter((item) => item.product === "Actions");
+    const bySku = (sku: string) => items.find((item) => item.sku === sku);
+    const grossUsd = items.reduce((sum, item) => sum + (item.grossAmount ?? 0), 0);
+    const netUsd = items.reduce((sum, item) => sum + (item.netAmount ?? 0), 0);
+    return {
+      estado: "PASS" as Estado,
+      linux: bySku("actions_linux")?.grossQuantity ?? null,
+      windows: bySku("actions_windows")?.grossQuantity ?? null,
+      storage: bySku("actions_storage")?.grossQuantity ?? null,
+      grossUsd,
+      netUsd,
+      period: `${year}-${String(month).padStart(2, "0")}`,
+      fonte: "GitHub Billing API",
+      erro: null,
+    };
+  } catch (erro) {
+    return {
+      estado: "UNKNOWN" as Estado,
+      linux: null,
+      windows: null,
+      storage: null,
+      grossUsd: null,
+      netUsd: null,
+      period: null,
+      fonte: "GitHub Billing API",
+      erro: erro instanceof Error ? erro.message : String(erro),
+    };
   }
 }
 
@@ -213,12 +381,36 @@ async function medirDelta(vpsSha: string | null, mainSha: string | null) {
 // Único owner do HUD vivo: agrega GitHub + API CentralDark e nunca promove ausência de prova.
 export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
-    const [github, liveFabric, grafoVivo, omniRouter] = await Promise.all([
+    const [
+      github,
+      liveFabric,
+      grafoVivo,
+      omniRouter,
+      apiHealth,
+      heartbeatRaw,
+      omniModels,
+      receipts,
+      casaSite,
+      screenpipe,
+      actions,
+    ] = await Promise.all([
       medirGithub(),
       medirApi("/api/live-fabric/status"),
       medirApi("/api/live-fabric/graph"),
       medirApi("/api/omni/status"),
+      medirApi("/health"),
+      medirApi("/heartbeat"),
+      medirApi("/api/omni/models"),
+      medirApi("/api/microdeploy/receipts/index.json"),
+      medirReachable("http://127.0.0.1:4175/", true),
+      medirReachable("http://127.0.0.1:3030/health", true),
+      medirActions(),
     ]);
+    const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
+    const heartbeat: Probe =
+      heartbeatSelf === "stale"
+        ? { ...heartbeatRaw, estado: "FAIL", erro: "self=stale" }
+        : heartbeatRaw;
 
     const atual = github.commits[0] ?? null;
     const gitLive = objetoJson(liveFabric.dados?.["git"]) ? liveFabric.dados["git"] : null;
@@ -243,6 +435,20 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       liveFabric: liveFabric.estado,
       grafoVivo: grafoVivo.estado,
       omniRouter: omniRouter.estado,
+      apiHealth: apiHealth.estado,
+      heartbeat: heartbeat.estado,
+      omniModels: omniModels.estado,
+      receipts: receipts.estado,
+      casaSite: casaSite.estado,
+      screenpipe: screenpipe.estado,
+      actions: actions.estado,
+      actionsLinuxMinutes: actions.linux,
+      actionsWindowsMinutes: actions.windows,
+      actionsStorageGbHours: actions.storage,
+      actionsGrossAmountUsd: actions.grossUsd,
+      actionsNetAmountUsd: actions.netUsd,
+      actionsPeriod: actions.period,
+      executionPolicy: "CASA_HEAVY_GITHUB_ACTIONS_ON_DEMAND",
       mainSha,
       sha: mainSha,
       mensagem: atual?.mensagem ?? null,
@@ -255,6 +461,18 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniHttp: omniRouter.httpStatus,
       nextCursor: texto(liveFabric.dados?.["next_cursor"]),
       erroLiveFabric: liveFabric.erro,
+      apiHealthHttp: apiHealth.httpStatus,
+      heartbeatHttp: heartbeat.httpStatus,
+      heartbeatSelf,
+      omniModelsHttp: omniModels.httpStatus,
+      receiptsHttp: receipts.httpStatus,
+      casaSiteHttp: casaSite.httpStatus,
+      screenpipeHttp: screenpipe.httpStatus,
+      screenpipeDetail: texto(screenpipe.dados?.["status"]),
+      actionsFonte: actions.fonte,
+      actionsErro: actions.erro,
+      gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
+      desktopFonte: "Remote Desktop Commander externo · status não inferido pelo app",
     };
   },
 );
