@@ -190,6 +190,10 @@ test("tools dedicadas Tailscale reutilizam owners existentes e ficam read-only",
   assert.deepEqual(
     tailscaleTools.map((tool) => tool.name),
     ["tailscale_status", "tailscale_bridge_status", "tailscale_devices_list", "tailscale_dns_nameservers", "tailscale_network_logs"],
+test("tools dedicadas Tailscale reutilizam provider-control e ficam read-only", () => {
+  assert.deepEqual(
+    tailscaleTools.map((tool) => tool.name),
+    ["tailscale_status", "tailscale_devices_list", "tailscale_dns_nameservers", "tailscale_network_logs"],
   );
   assert.ok(tailscaleTools.every((tool) => tool.annotations.readOnlyHint === true));
   assert.ok(tailscaleTools.every((tool) => tool.annotations.destructiveHint === false));

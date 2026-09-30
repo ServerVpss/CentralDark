@@ -785,6 +785,7 @@ export const tailscaleTools = [
   {
     name: "tailscale_status",
     description: "Prova conectividade read-only com a API Tailscale pelo cofre existente e resume devices/capacidades sem expor credencial.",
+    description: "Prova conectividade read-only com a API Tailscale pelo cofre existente e resume quantidade de devices e capacidades permitidas, sem expor credencial.",
     annotations: { ...READ, title: "Tailscale — status vivo" },
     inputSchema: z.object({
       tailnet: z.string().max(160).optional().default("-"),
