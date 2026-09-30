@@ -122,5 +122,93 @@
     "chefe_feedback_negative": "HUMAN_FEEDBACK_ONLY",
     "domain_expansion_phrase": "DETERMINISTIC_TRIGGER",
     "receipt_with_head_pid_payload": "PROMOTABLE_EVIDENCE"
+  },
+  "github_event_router": {
+    "purpose": "Classificacao de github.event_name como sensor/roteador. Evento NAO vira PASS sozinho. Resolve owner antes da acao. Falha de sensor/rota NAO vira falha do mundo.",
+    "rules": {
+      "event_is_not_pass": true,
+      "resolve_owner_before_action": true,
+      "sensor_failure_is_not_world_failure": true,
+      "unknown_is_not_pass": true,
+      "no_parallel_architecture": true
+    },
+    "selo_workflow": ".github/workflows/selo-fabric.yml",
+    "groups": {
+      "pr": {
+        "events": ["pull_request", "pull_request_target", "pull_request_review", "pull_request_review_comment"],
+        "class": "PR_LIFECYCLE",
+        "selo": true,
+        "pulse_pr_mae": true,
+        "existing_workflow": ".github/workflows/pr-mother-pulse.yml"
+      },
+      "ci": {
+        "events": ["check_run", "check_suite", "workflow_run", "status"],
+        "class": "CI_EVIDENCE",
+        "selo": true,
+        "pulse_pr_mae": true,
+        "pass_requires_receipt": true
+      },
+      "code": {
+        "events": ["push", "create", "delete"],
+        "class": "CODE_MUTATION",
+        "selo": true,
+        "pulse_pr_mae": true
+      },
+      "issue": {
+        "events": ["issues", "issue_comment"],
+        "class": "ISSUE_TRACKER",
+        "selo": true,
+        "pulse_pr_mae": true
+      },
+      "deploy": {
+        "events": ["deployment", "deployment_status"],
+        "class": "DEPLOY_EVIDENCE",
+        "selo": true,
+        "pulse_pr_mae": true,
+        "pass_requires_runtime_proof": true
+      },
+      "release": {
+        "events": ["release"],
+        "class": "RELEASE_LIFECYCLE",
+        "selo": true,
+        "pulse_pr_mae": true
+      },
+      "trigger": {
+        "events": ["workflow_dispatch", "repository_dispatch", "schedule"],
+        "class": "DETERMINISTIC_TRIGGER",
+        "selo": true,
+        "pulse_pr_mae": false
+      },
+      "repo_admin": {
+        "events": ["branch_protection_rule", "member", "public", "fork"],
+        "class": "REPO_ADMIN_EVENT",
+        "selo": false,
+        "pulse_pr_mae": false
+      },
+      "project": {
+        "events": ["project", "project_card", "project_column", "milestone", "label"],
+        "class": "PROJECT_MANAGEMENT",
+        "selo": false,
+        "pulse_pr_mae": false
+      },
+      "content": {
+        "events": ["discussion", "discussion_comment", "wiki", "page_build"],
+        "class": "CONTENT_EVENT",
+        "selo": false,
+        "pulse_pr_mae": false
+      },
+      "registry": {
+        "events": ["registry_package"],
+        "class": "PACKAGE_EVENT",
+        "selo": true,
+        "pulse_pr_mae": false
+      },
+      "watch": {
+        "events": ["watch", "star"],
+        "class": "VANITY_METRIC",
+        "selo": false,
+        "pulse_pr_mae": false
+      }
+    }
   }
 }
