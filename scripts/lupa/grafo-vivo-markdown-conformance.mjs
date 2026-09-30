@@ -174,8 +174,10 @@ function markdownHygieneErrors(file, text) {
     if (line === '' && lines[index + 1] === '' && lines[index + 2] === '') findings.push(`MD012:multiple-blank-lines:${lineNo}`);
     const insideFence = fences.length > 0;
 
+
     if (!insideFence) {
       if (/^\s*(?:[-+*](?![-+*])|\d+[.)])\S/.test(line)) findings.push(`MD030:marker-space:${lineNo}`);
+
 
       const heading = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
       if (heading) {
@@ -217,13 +219,19 @@ function markdownHygieneErrors(file, text) {
 function runSelfTest() {
   const good = '# Título\n\n1. Um\n2. Dois\n\n```text\nok\n```\n';
   const bad = '# Título\n1. Um\n15. Dois\n15. Três\n\n```\nsem linguagem\n```';
+  const fencedHeading = '```text\n# CODE_COMMENT\nvalue=true\n```\n';
+
   const fenced = '# Título\n\n```bash\n# shell comment\n# shell comment\n-item\n1.bad\n15. bad\n```\n';
+
   const goodPasses = markdownHygieneErrors('good.md', good).length === 0;
   const badFindings = markdownHygieneErrors('bad.md', bad);
   const fencedFindings = markdownHygieneErrors('fenced.md', fenced);
   const badCovers = ['MD022', 'MD029', 'MD040', 'MD047'].every((code) => badFindings.some((item) => item.startsWith(code)));
+  const fencedHeadingPasses = !markdownHygieneErrors('fenced-heading.md', fencedHeading).some((item) => item.startsWith('MD022'));
+
   const fencedSemanticsIgnored = !fencedFindings.some((item) => ['MD022', 'MD024', 'MD029', 'MD030'].some((code) => item.startsWith(code)));
-  const ok = goodPasses && badCovers && fencedSemanticsIgnored;
+  const ok = goodPasses && badCovers && fencedHeadingPasses && fencedSemanticsIgnored;
+
   console.log(`GLOBAL_MARKDOWN_CONFORMANCE_SELF_TEST=${ok ? 'PASS' : 'FAIL'}`);
   if (!ok) process.exit(1);
 }
