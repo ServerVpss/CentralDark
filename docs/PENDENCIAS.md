@@ -831,3 +831,23 @@ REALITY = JUDGE
 6. SEGREDO/CHEFE reabre explicitamente o passo 2.
 
 **NEXT_CURSOR futuro:** `STEP1_DUPLICATE_CLEANUP_FIXED_POINT → REMEASURE_STORAGE → BENCHMARK → PATH_CONSUMERS → MIGRATION_PLAN → DOCKER_BOUNDARY_PLAN`.
+
+
+---
+
+### 🟢 PENDÊNCIA FUTURA — KASTRA EDGE · EXPLORAÇÃO POSTERIOR
+
+**Status:** 🟢 **FUTURO / SOMENTE LEMBRANÇA / NÃO EXECUTAR AGORA**  
+**Data:** 30/09/2026
+
+**Intenção preservada:** futuramente explorar o **Kastra Edge** como possível camada local de política/auditoria para agentes de IA no Windows/Casa, especialmente para controlar e registrar ações de executores como Hermes, Claude Code, Codex, Cursor e afins.
+
+```text
+DO_NOT_EXECUTE_NOW=true
+FUTURE_EXPLORATION=true
+REUSE_BEFORE_CREATE=true
+CURRENT > HISTORY
+UNKNOWN != PASS
+```
+
+**Quando reabrir:** medir o produto ao vivo, integrações suportadas, modelo de políticas ALLOW/DENY/APPROVAL, auditoria local/offline e encaixe com a arquitetura CentralDark antes de qualquer adoção.
