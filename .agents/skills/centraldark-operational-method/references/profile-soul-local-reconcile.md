@@ -41,3 +41,51 @@ ONE_WRITER_PER_SCOPE=true
 ```
 
 O cache pode ser resetado para `origin/main` porque não recebe trabalho humano nem estado vivo. O checkout operacional nunca é limpo/resetado por esse mecanismo. Cristal útil no sentido reverso usa o writer canônico e, depois da promoção, a volta `main → cache → runtime` fecha o ciclo.
+
+
+## Molde mínimo do SOUL local / VPS
+
+O arquivo local não é uma segunda SOUL. Ele é somente ponte de executor e pode permanecer pequeno:
+
+```text
+# HERMES / VPS — THIN EXECUTOR BRIDGE
+
+EXECUTOR_ROLE=PIVETE/HERMES
+PROFILE_CLASS=THIN_EXECUTOR_BRIDGE
+NO_SECOND_SOUL=true
+LOCAL_RULES_ONLY=true
+
+CANONICAL_REPO=ServerVpss/CentralDark
+CANONICAL_REF=origin/main
+CANONICAL_SOUL_PATH=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+CANONICAL_CACHE_DIR=/var/lib/centraldark/canonical-main
+CANONICAL_CACHE_OWNER=scripts/vps/centraldark-deploy.sh --apply --canonical-cache
+
+BOOT:
+  refresh origin/main
+  → bind MAIN_SHA
+  → read SOUL-SOL.md from clean canonical cache
+  → load canonical gates/contracts
+  → apply only local runtime bindings
+  → measure VPS
+  → execute
+
+LOCAL_MAY_DEFINE:
+  paths
+  tools
+  runtime bindings
+  device facts
+  env/secret references
+  service endpoints
+
+LOCAL_MUST_NOT_COPY:
+  identity
+  canonical memory
+  governance
+  Meta Lupa
+  Writer law
+  Fixed Point
+  learned rules
+```
+
+Se `origin/main` não puder ser atualizado, o último cache pode servir apenas como baseline de continuidade; não pode ser chamado de estado canônico atual. `CURRENT_CANONICAL_CLAIM=UNKNOWN` até nova medição.
