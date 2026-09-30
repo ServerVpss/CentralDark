@@ -87,7 +87,7 @@
       "classification": "REUSE_CANDIDATE",
       "observed_in": [
         ".github/workflows/porta-de-entrada.yml",
-        ".github/workflows/codex-validate.yml",
+        ".github/workflows/centraldark-validate.yml",
         ".github/workflows/pr-auto-review.yml",
         ".github/workflows/lupa-conformance.yml",
         ".github/workflows/lupa-drift-guard.yml"
