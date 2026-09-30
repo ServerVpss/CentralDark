@@ -2,13 +2,16 @@
 title: "🧾 CHECK-LIST DIARIO"
 obsidian: "obsidian://open?vault=CASA-VAULT&file=%F0%9F%A7%BECHECK-LIST%20DIARIO%F0%9F%A4%96"
 vault_windows: "E:\\CentralDark\\Pivete\\CASA-VAULT\\🧾CHECK-LIST DIARIO🤖.md"
-owner: docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md
+owner: docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md
+mirror_path: docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md
 sync: CASA-VAULT/00-CANONICO via scripts/casa/sync-hermes-obsidian.ps1
-status: OPERATIONAL
+status: LEGACY_COMPATIBILITY_MIRROR
 updated: 2026-09-24T00:56:31-03:00
 ---
 
 # 🧾 CHECK-LIST DIARIO 🤖
+
+> ⚠️ **Compatibilidade histórica, não owner.** O owner canônico atual é `docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md`. Este arquivo preserva histórico/integração antiga do Obsidian e não pode disputar CURRENT.
 
 Espelho Git do note do Obsidian. A Casa (Windows) abre pelo URI. A VPS atualiza este arquivo no **fechamento do dia** (Hermes `ec512c0295e2` 23:00) e notifica o CHEFE.
 
