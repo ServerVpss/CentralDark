@@ -1,0 +1,225 @@
+{
+  "schema": "centraldark.grok-runtime-pattern.v1",
+  "captured_at": "2026-09-19T14:36:43.680247Z",
+  "authority": "EVIDENCE_SNAPSHOT_NOT_AUTHORITY",
+  "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GROK-BUILD-ADAPTER.yml",
+  "sources": [
+    "/proc/<grok-pid>",
+    "/root/.grok/config.toml",
+    "/root/.grok/version.json",
+    "events.jsonl",
+    "/root/.grok/logs/unified.jsonl",
+    "grok --help",
+    "grok agent --help",
+    "/root/.grok/bundled/agents",
+    "/root/.grok/bundled/personas",
+    "/root/.grok/bundled/roles"
+  ],
+  "runtime": {
+    "process_running": true,
+    "pid": 884140,
+    "exe": "/root/.grok/downloads/grok-1.0.30-linux-x86_64",
+    "cwd": "/root/CentralDark",
+    "tty": "pts/0",
+    "active_binary_version_from_path": "1.0.30",
+    "installed_version": "1.0.34",
+    "stable_version": "1.0.34"
+  },
+  "config_safe": {},
+  "observed": {
+    "event_lines": 45072,
+    "event_types": {
+      "phase_changed": 41168,
+      "tool_started": 663,
+      "permission_requested": 663,
+      "permission_resolved": 663,
+      "tool_completed": 662,
+      "loop_started": 488,
+      "first_token": 473,
+      "turn_started": 103,
+      "turn_ended": 103,
+      "mcp_health_check": 55,
+      "mcp_server_starting": 10,
+      "mcp_server_failed": 9,
+      "mcp_config_resolved": 4,
+      "mcp_init_completed": 4,
+      "yolo_toggled": 3,
+      "mcp_server_connected": 1
+    },
+    "phases": {
+      "streaming_text": 25477,
+      "streaming_reasoning": 13489,
+      "tool_execution": 1051,
+      "permission_prompt": 663,
+      "waiting_for_model": 488
+    },
+    "tools": {
+      "run_terminal_command": 1067,
+      "read_file": 580,
+      "grep": 400,
+      "search_replace": 384,
+      "get_command_or_subagent_output": 108,
+      "use_tool": 28,
+      "list_dir": 16,
+      "search_tool": 16,
+      "monitor": 12,
+      "scheduler_create": 12,
+      "write": 12,
+      "scheduler_list": 8,
+      "web_fetch": 4,
+      "kill_command_or_subagent": 4
+    },
+    "turn_models": {
+      "grok-4.6": 103
+    },
+    "outcomes": {
+      "success": 644,
+      "completed": 73,
+      "cancelled": 27,
+      "error": 21
+    },
+    "permission_decisions": {
+      "allow": 663
+    },
+    "session_yolo_mode": {
+      "True": 102,
+      "False": 1
+    },
+    "mcp_servers": {
+      "CentralDark": 12,
+      "centraldark": 12,
+      "cloudflare-observability": 9,
+      "cloudflare-builds": 9,
+      "cloudflare-api": 9,
+      "cloudflare-docs": 9,
+      "cloudflare-bindings": 9,
+      "supabase": 6
+    },
+    "subagents": {
+      "spawned": 34,
+      "completed": 32,
+      "failed": 2,
+      "types": {
+        "general-purpose": 34
+      },
+      "models": {
+        "grok-4.6": 29,
+        "grok-4.5": 5
+      },
+      "config_reads": 31,
+      "model_resolutions": 31
+    },
+    "runtime_modes": {
+      "headless": 20
+    },
+    "scheduler_create_calls": 12,
+    "scheduler_list_calls": 8,
+    "monitor_calls": 12,
+    "background_output_calls": 108,
+    "background_kill_calls": 4,
+    "inference_retries": 10,
+    "inference_failures": 15,
+    "wake_gate_cleared": 364,
+    "prompt_queued": 226
+  },
+  "capabilities": {
+    "invocation_modes": [
+      {
+        "id": "HEADLESS",
+        "evidence": "PROVEN_RUNTIME",
+        "selectable": true
+      },
+      {
+        "id": "INTERACTIVE_PTY",
+        "evidence": "PROVEN_RUNTIME",
+        "selectable": true
+      },
+      {
+        "id": "READ_ONLY_AUDIT",
+        "evidence": "TESTED_ADAPTER_NOT_RUNTIME_PROVEN",
+        "selectable": true
+      },
+      {
+        "id": "ACP_STDIO",
+        "evidence": "TESTED_ADAPTER_NOT_RUNTIME_PROVEN",
+        "selectable": true
+      },
+      {
+        "id": "INSPECT",
+        "evidence": "TESTED_ADAPTER_NOT_RUNTIME_PROVEN",
+        "selectable": true
+      }
+    ],
+    "agents": [
+      {
+        "id": "general-purpose",
+        "evidence": "PROVEN_RUNTIME",
+        "selectable": true
+      },
+      {
+        "id": "plan",
+        "evidence": "DOCUMENTED_BUILTIN_NOT_RUNTIME_OBSERVED",
+        "selectable": true
+      },
+      {
+        "id": "explore",
+        "evidence": "DOCUMENTED_BUILTIN_NOT_RUNTIME_OBSERVED",
+        "selectable": true
+      }
+    ],
+    "capability_modes": [
+      "read-only",
+      "read-write",
+      "execute",
+      "all"
+    ],
+    "permission_modes": [
+      "default",
+      "acceptEdits",
+      "auto",
+      "dontAsk",
+      "bypassPermissions",
+      "plan"
+    ],
+    "personas": [
+      "design-doc-reviewer",
+      "design-doc-writer",
+      "implementer",
+      "researcher",
+      "reviewer",
+      "security-auditor",
+      "test-writer"
+    ],
+    "roles": [
+      "design-doc-reviewer",
+      "design-doc-writer",
+      "explore",
+      "implementer",
+      "plan",
+      "quick-search",
+      "reviewer",
+      "security-auditor",
+      "test-writer"
+    ],
+    "workflows": [
+      "deep-research",
+      "learn-traces"
+    ]
+  },
+  "watcher_pattern": {
+    "proven": true,
+    "poll_seconds": 90,
+    "bounded_to_exact_run": false,
+    "risk": "observed watcher selects first active run and may migrate after target completion",
+    "centraldark_rule": "WATCHER_FOLLOWS_EXACT_TARGET_REQUIRED"
+  },
+  "proof_rules": {
+    "UNKNOWN_IS_NOT_PASS": true,
+    "DOCUMENTED_IS_NOT_EXECUTED": true,
+    "ACTION_IS_NOT_PROOF": true,
+    "SELECTED_IS_NOT_ACTIVE": true,
+    "AVAILABLE_IS_NOT_OBSERVED": true,
+    "RAW_PROMPTS_INCLUDED": false,
+    "SECRETS_INCLUDED": false
+  }
+}
