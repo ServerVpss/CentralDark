@@ -4,9 +4,9 @@ Corpo visual final da CentralDark. Este repositório reúne a landing trilíngue
 
 ## Autoridade e publicação
 
-- Código material: `ServerVpss/centraldark-instinto-superior@main`.
-- Contratos, runtime e governança: `ServerVpss/CentralDark`.
-- Lovable: editor/espelho opcional; crédito não é dependência do build nem da reconciliação.
+- Código visual canônico: `ServerVpss/CentralDark/public/central-dark-instinct-2`.
+- Contratos, runtime, governança e código visual convergem no mesmo repositório: `ServerVpss/CentralDark`.
+- `ServerVpss/centraldark-instinto-superior` + Lovable: projeção/editor compatível; não são segunda autoridade nem owner paralelo.
 - URL conhecida: <https://centraldark-instinto-superior.lovable.app>.
 
 Uma URL conhecida ou uma sincronização declarada não prova que o HEAD está publicado. O cockpit só promove deploy quando consegue medir e comparar os SHAs; ausência de fonte aparece como `UNKNOWN`.
