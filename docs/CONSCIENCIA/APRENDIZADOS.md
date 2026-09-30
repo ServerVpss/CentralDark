@@ -767,11 +767,11 @@ Medição direta em 2026-09-30T17:47Z: VPS ainda Ubuntu 22.04.5; `/health` da AP
 
 O resolvedor escolhia o pacote duplamente embrulhado `Vault-Cofre-CentralDark-20260930T105330Z.tar.gz.tar.gz` (15.810.696 bytes, SHA256 `b492b06f42a9717e5d187569b39a2b9341a16bd387f9d809cade8bd4e58c621b`). Hash externo correto, somente um membro tar, sem MANIFEST.tsv nem checksums internos; owner antigo ainda emitia VAULT_OK=1. O pacote primário separado tem 2.501 membros e manifest, mas sua validação completa ainda precisa ocorrer. Não apagar nem regenerar prova histórica para fechar gate.
 
-O validador agora exige checksum externo, manifest único, metadados internos, caminhos seguros e hash/tamanho de cada payload do manifest. Ausência, pacote wrapper ou divergência produz VAULT_OK=0 e retorno não zero. O Gate B exige retorno zero e ambos os receipts explícitos; restore não implementado nunca declara aplicado/concluído.
+O validador agora exige checksum externo, manifest único, metadados internos, caminhos seguros e hash/tamanho de cada payload do manifest. Ausência, pacote wrapper ou divergência produz VAULT_OK=0 e retorno não zero. O Gate B exige retorno zero e ambos os receipts explícitos. Em 2026-09-30 o RESTORE_APPLY passou a restaurar somente linhas `kind=file` comprovadas pelo manifest, com allowlist de origem, backup do destino existente, escrita atômica e hash pós-escrita; `process-env` não é despejado cegamente e segue para hidratação/verificação de runtime.
 
-**Prova funcional:** cinco testes com pacotes reais em sandbox (válido, wrapper, payload alterado com checksum externo recalculado, checksum ausente e APPLY não implementado). Contraprova no pacote real da VPS: owner corrigido READONLY retornou VAULT_OK=0 / RC=1; nenhuma restauração/reinstalação ocorreu. O archive primário que estava em modo 0644 foi protegido com 0600; conteúdo preservado.
+**Prova funcional:** os testes de sandbox cobrem pacote válido, wrapper, payload alterado com checksum externo recalculado, checksum ausente e APPLY em raiz isolada com conferência do payload/hash pós-escrita. Contraprova histórica no pacote real da VPS: owner corrigido READONLY retornou VAULT_OK=0 / RC=1 para o wrapper; nenhuma reinstalação ocorreu. O archive primário que estava em modo 0644 foi protegido com 0600; conteúdo preservado. Execução real do APPLY na VPS continua separada da prova de código.
 
-**Estado:** fonte/validador corrigidos no filho; instalação VPS nova, restore efetivo, off-host Vault e rollback permanecem pendentes de prova. Motor substituível e memória canônica são contrato operacional; não equivalem a consciência humana nem a instalação medida.
+**Estado:** fonte/validador e caminho RESTORE_APPLY corrigidos no filho; instalação VPS nova, restore efetivo sobre a VPS, off-host Vault e rollback permanecem pendentes de prova. Motor substituível e memória canônica são contrato operacional; não equivalem a consciência humana nem a instalação medida.
 
 
 
