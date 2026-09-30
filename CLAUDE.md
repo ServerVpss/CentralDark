@@ -640,3 +640,65 @@ Fórmula herdada:
 
 `CHEFE FALA → intenção → ferramenta autorizada → ação → readback → main avança → COSTURA → HEAD CURRENT → prova same-head → evento novo reentra no TIK-TAK`.
 
+## 🔗 Claude · acesso operacional ao CENTRALDARK-OS sem arquitetura paralela
+
+Claude deve reutilizar o owner `🔗 !># INTERLIGADOS` e a rota viva já cristalizada. **CLI não é requisito para acesso**; CLI é somente uma interface humana opcional.
+
+```text
+CLI_REQUIRED_FOR_ACCESS=false
+CLI_OPTIONAL_FOR_HUMAN_UX=true
+NO_NEW_TRIGGER_FOR_THIS_ROUTE=true
+NO_NEW_PR_IF_EQUIVALENT_CHILD_ALREADY_EXISTS=true
+NO_DESKTOP_SHORTCUT_UNLESS_CHEFE_EXPLICITLY_REQUESTS=true
+ROOT_DESKTOP_IS_NOT_THE_CHEFE_DESKTOP=true
+KERNEL_ACCESS_CLAIM_REQUIRES_KERNEL_SPECIFIC_EVIDENCE=true
+ROOT_SHELL_ACCESS != KERNEL_CONTROL
+```
+
+Ordem de seleção da rota:
+
+```text
+TARGET=CENTRALDARK-OS
+1. LOCAL_DIRECT_EXECUTOR, se a superfície atual realmente o expõe e o readback prova efeito
+2. DIRECT_TAILSCALE_SSH, se a shell atual alcança o peer e a autenticação foi medida
+3. VPS_DESKTOP_COMMANDER → TAILSCALE_SSH → CENTRALDARK-OS, fallback provado
+```
+
+A rota mais curta vence **sem matar a rota anterior**:
+
+```text
+PRIMARY_FAILS != SYSTEM_FAILS
+FALLBACK_SURVIVES=true
+DO_NOT_KILL_PROVEN_FALLBACK=true
+ROUTE_UNAVAILABLE → TRY_NEXT_AUTHORIZED_ROUTE
+UNKNOWN_ONLY_AFTER_AUTHORIZED_ROUTES_ARE_EXHAUSTED=true
+```
+
+Acesso shell suficiente para operar arquivos/processos não exige inventar uma "AI CLI Runtime". Se o CHEFE pedir uma CLI, ela deve ser tratada como UX sobre a mesma rota, não como novo transporte, owner, daemon ou cérebro.
+
+Para desenvolvimento local:
+
+```text
+EDIT/RUN_IN_CENTRALDARK_OS
+→ BIND_SERVICE_TO_APPROPRIATE_INTERFACE
+→ LOCAL_READBACK
+→ TAILSCALE_READBACK_WHEN_REMOTE_CONSUMPTION_IS_INTENDED
+→ CASA_VISUAL_CONFIRMATION_IS_USER_EVIDENCE
+→ PROMOTE_ONLY_THE_PROVEN_DELTA
+```
+
+Prova cristalizada de referência: a porta 4175 foi servida no CENTRALDARK-OS, respondeu localmente e via Tailscale; a Casa confirmou visualmente o consumo. Isso prova a topologia daquele teste, não transforma servidor HTTP temporário em serviço de produção.
+
+Rastro GitHub:
+
+```text
+MATERIAL_DELTA
+→ EXISTING_EQUIVALENT_CHILD_PR
+→ CHILD_COMMIT + READBACK
+→ CHILD_RECEIPT
+→ PR_MOTHER_1562_RECEIPT
+→ MAIN_PROMOTION_WHEN_APPLICABLE_GATES_PASS
+```
+
+`PR_MOTHER_1562_MERGE_FORBIDDEN=true`: #1562 é ledger/rendezvous, não PR para merge.
+
