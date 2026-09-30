@@ -909,4 +909,7 @@ CHEFE
 **Critério de exploração futura:** provar pelo menos um handoff completo em que um agente grava delta no owner, outro agente cloud recebe automaticamente, executa a continuação correta e registra receipt do mesmo estado, sem intervenção manual para transportar contexto.
 
 **Kastra Edge especificamente:** medir produto ao vivo, integrações suportadas, política ALLOW/DENY/APPROVAL, auditoria local/offline e encaixe com CentralDark antes de adoção.
-
+### 57. Vault canônico de segredos CentralDark pós-rebuild — 🟡 ABERTO (30/09/2026, 05:20 BRT)
+- **Sintoma:** Segredos e tokens estão espalhados em arquivos, pastas e ambientes diferentes, dificultando auditoria, rotação, revogação e acesso controlado por agentes.
+- **Onde mexer:** CentralDark/VPS, MCP Admin, API CentralDark, documentação de segurança e rotina de rebuild/formatação.
+- **Critério pra fechar:** Criar um cofre canônico com nomes padronizados por provider/runtime/bot/domínio, registrar dono/finalidade/status/rotação/último teste, remover duplicatas antigas, impedir segredo em desktop/repo/log e fazer agentes acessarem segredos somente pela API/MCP CentralDark com auditoria.
