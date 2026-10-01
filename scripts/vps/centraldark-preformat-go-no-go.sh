@@ -253,23 +253,23 @@ gate_c() {
     # Snapshot check
     local snap_response
     snap_response="$(curl -s -H "Authorization: Bearer $token" \
-      -H "x-request-id: preflight-$(date +%s)" \
+      -H "x-request-id: $(python3 -c 'import uuid;print(uuid.uuid4())')" \
       "https://api.contabo.com/v1/compute/instances/${INSTANCE_ID}/snapshots/${SNAPSHOT_ID}" 2>/dev/null)"
 
-    if echo "$snap_response" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['data'][0]['status'])" 2>/dev/null | grep -qi "ready\|active"; then
+    if echo "$snap_response" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['data'][0].get('status') or 'UNKNOWN')" 2>/dev/null | grep -qi "ready\|active"; then
       ok "Snapshot $SNAPSHOT_ID: READY"
     else
-      err "Snapshot $SNAPSHOT_ID: NOT READY ou não encontrado"
+      err "Snapshot $SNAPSHOT_ID: readiness UNKNOWN ou não comprovado pelo provider"
       return 1
     fi
 
     # Instance check
     local inst_response
     inst_response="$(curl -s -H "Authorization: Bearer $token" \
-      -H "x-request-id: preflight-inst-$(date +%s)" \
+      -H "x-request-id: $(python3 -c 'import uuid;print(uuid.uuid4())')" \
       "https://api.contabo.com/v1/compute/instances/${INSTANCE_ID}" 2>/dev/null)"
 
-    if echo "$inst_response" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['data'][0]['status'])" 2>/dev/null | grep -qi "running\|active"; then
+    if echo "$inst_response" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['data'][0].get('status') or 'UNKNOWN')" 2>/dev/null | grep -qi "running\|active"; then
       ok "Instance $INSTANCE_ID: RUNNING"
     else
       warn "Instance status não confirmado via API"

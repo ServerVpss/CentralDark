@@ -125,8 +125,26 @@ def cmd_auth(_args):
     print("CONTABO_MUTATION=" + env("CONTABO_MUTATION", "0"))
 
 
+def resolve_instance_id(identifier):
+    """Resolve the existing provider name without guessing its numeric ID."""
+    if str(identifier).isdecimal():
+        return str(identifier)
+    matches = []
+    page = 1
+    while True:
+        _, listing = api_get(f"/compute/instances?size=100&page={page}")
+        matches.extend(i for i in listing.get("data", []) if i.get("name") == identifier)
+        if page >= listing.get("_pagination", {}).get("totalPages", 1):
+            break
+        page += 1
+    if len(matches) != 1 or not str(matches[0].get("instanceId", "")).isdecimal():
+        die("INSTANCE_ALIAS_UNRESOLVED_OR_AMBIGUOUS")
+    print("INSTANCE_ALIAS=" + identifier)
+    return str(matches[0]["instanceId"])
+
+
 def cmd_instance(args):
-    iid = args.id or env("CONTABO_INSTANCE_ID", "vmi3256920")
+    iid = resolve_instance_id(args.id or env("CONTABO_INSTANCE_ID", "vmi3256920"))
     status, data = api_get(f"/compute/instances/{iid}")
     inst = (data.get("data") or [{}])[0]
     print(f"HTTP={status}")
@@ -146,28 +164,33 @@ def cmd_instance(args):
 
 
 def cmd_snapshot(args):
-    iid = args.id or env("CONTABO_INSTANCE_ID", "vmi3256920")
+    iid = resolve_instance_id(args.id or env("CONTABO_INSTANCE_ID", "vmi3256920"))
     snap = args.snap or env("CONTABO_SNAPSHOT_ID", "snap1790430960")
     status, data = api_get(f"/compute/instances/{iid}/snapshots/{snap}")
     s = (data.get("data") or [{}])[0]
     print(f"HTTP={status}")
     print("SNAPSHOT_ID=" + str(snap))
     print("SNAP_NAME=" + str(s.get("name", "")))
-    print("SNAP_STATUS=" + str(s.get("status", "")))
+    print("SNAP_STATUS=" + str(s.get("status") or "UNKNOWN"))
     print("SNAP_CREATED=" + str(s.get("createdDate", "")))
     print("SNAP_IMAGE=" + str(s.get("imageId", "")))
 
 
 def cmd_images(_args):
-    status, data = api_get(
-        "/compute/images?size=50&page=1&orderBy=name&orderByDirection=asc"
-    )
+    page, imgs = 1, []
+    while True:
+        status, data = api_get(
+            f"/compute/images?size=100&page={page}&orderBy=name:asc"
+        )
+        imgs.extend(data.get("data", []))
+        if page >= data.get("_pagination", {}).get("totalPages", 1):
+            break
+        page += 1
     print(f"HTTP={status}")
-    imgs = data.get("data", [])
     print("IMAGE_COUNT=" + str(len(imgs)))
     for img in imgs:
         name = str(img.get("name", ""))
-        st = str(img.get("status", ""))
+        st = str(img.get("status") or "UNKNOWN")
         std = "STANDARD" if img.get("standardImage") else "CUSTOM"
         print(f"IMAGE: id={img.get('imageId','')} name={name} status={st} kind={std}")
 
@@ -180,7 +203,7 @@ def cmd_reinstall(args):
         die("MUTATION_BLOCKED missing --confirm")
     if not args.image_id:
         die("MISSING_ARG=--image-id")
-    iid = args.id or env("CONTABO_INSTANCE_ID", "vmi3256920")
+    iid = resolve_instance_id(args.id or env("CONTABO_INSTANCE_ID", "vmi3256920"))
     body = {"imageId": args.image_id}
     if args.ssh_keys:
         body["sshKeys"] = [int(k) for k in args.ssh_keys.split(",") if k.strip()]
