@@ -2329,3 +2329,141 @@ OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
 ```
 
 Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrigir o menor gate causal e continuar. Não transformar prudência em bloqueio.
+
+## Padrão aprendido do CHEFE — transformação de sistemas por invariantes
+
+Este delta é global ao método e não depende de uma UI, modelo ou runtime específico.
+
+```text
+SYSTEM_TRANSFORMATION_BY_INVARIANTS=true
+INTENT_OWNER=SEGREDO/CHEFE
+NO_MIND_READING=true
+MANIFEST_PATTERN_CAN_BE_GENERALIZED=true
+UNSTATED_MENTAL_CONTRACT=UNKNOWN
+REUSE_BEFORE_CREATE_AT_SYSTEM_SCALE=true
+CAPABILITY_NE_INTERFACE=true
+OWNER_NE_BUTTON=true
+ENGINE_NE_IDENTITY=true
+TRANSPORT_NE_PRODUCT=true
+LEGACY_CAN_BE_DONOR=true
+DONOR_IS_NOT_SOURCE_OF_TRUTH=true
+BIG_CATALOG_SELECT_DISCRIMINANT_FEW=true
+SEMANTIC_TOKEN_EXPANDS_TO_OWNER_CONTRACT_RECIPE_GATES=true
+APPLICABLE_EVIDENCE_REUSE=true
+REDUNDANT_REPROOF_WITHOUT_INFORMATION_GAIN=FORBIDDEN
+NEW_MATERIAL_CHANGE_OR_DRIFT_OR_CONTRADICTION=REMEASURE
+PAPAGAIO_MODE=OFF
+```
+
+Algoritmo operacional:
+
+```text
+INTENÇÃO
+→ INVENTARIAR
+→ IDENTIFICAR CAPABILITIES E INVARIANTES
+→ SEPARAR CASCA DE FUNÇÃO
+→ DEDUPE
+→ LOCALIZAR OWNER
+→ REUSE | REBIND | EXTEND
+→ SELECIONAR POUCAS CAPACIDADES DISCRIMINANTES
+→ PARALELIZAR PERCEPÇÃO
+→ SERIALIZAR MUTAÇÃO
+→ MENOR DELTA COMPLETO
+→ EFEITO
+→ EVIDÊNCIA APLICÁVEL
+→ CONTRAPROVA QUANDO DISCRIMINANTE
+→ READBACK
+→ RECEITA
+→ PRÓXIMA EXECUÇÃO COMEÇA MAIS ALTO
+```
+
+Falha de método: reduzir esse padrão a "usar IA", a uma ferramenta específica, ao repo atual ou ao texto literal do CHEFE. A resposta precisa integrar a consequência operacional do que ele ensinou.
+
+
+## Roteamento por setor antes da ferramenta
+
+### Skills sob demanda — antes da ação, aprendizado depois do efeito
+
+Owner do catálogo: `.agents/skills/`. Owner da seleção por capability:
+`.agents/skills/capability-contract-router/SKILL.md`. Skills locais/Hermes são
+fontes candidatas; reconciliar com a main atual antes de importar ou substituir.
+Agente é executor, skill é receita/capacidade; um não substitui o outro.
+
+```text
+SKILL_NEED_EVALUATED_BEFORE_MATERIAL_ACTION=true
+SKILL_SELECTION_BY_INTENT_SECTOR_OWNER=true
+EXISTING_SKILL_REUSE_BEFORE_CREATE=true
+LOADED_SKILL_REUSED_WHILE_CONTEXT_AND_VERSION_APPLY=true
+RELOAD_ON_NEED_CONTEXT_OR_VERSION_CHANGE=true
+POST_ACTION_SKILL_DELTA_REQUIRES_EVIDENCE=true
+NO_NEW_REUSABLE_DELTA=NO_CHANGE
+UNPROVEN_RECIPE=CANDIDATE
+PARTIAL_EFFECT_IS_NOT_COMPLETE_RECIPE=true
+ONE_SKILL_PER_COMMAND_REQUIRED=false
+FULL_CATALOG_LOAD_REQUIRED=false
+```
+
+```text
+INTENÇÃO → SETOR → OWNER → BUSCAR CAPACIDADE EXISTENTE
+→ SELECIONAR MENOR CONJUNTO DISCRIMINANTE → CARREGAR SE NECESSÁRIO
+→ REUTILIZAR RECEITA APLICÁVEL → EXECUTAR → MEDIR EFEITO
+→ DESTILAR CONCLUSÃO + EVIDÊNCIA + LIMITES + FINGERPRINT + ROLLBACK
+→ NO_CHANGE | UPDATE_EXISTING | CREATE_IF_GAP_PROVEN
+→ TESTE APLICÁVEL → MAIN_READBACK → RECEIPT → PRÓXIMO EXECUTOR HERDA
+```
+
+Não recarregar a mesma skill a cada comando nem fabricar uma por ação. Falha útil
+pode ser preservada como contraprova; não vira receita de sucesso. Criar exige
+gap comprovado e ausência de owner equivalente. Receitas de acesso remoto e seus
+limites ficam no owner existente `docs/CONSCIENCIA/05-SSH-VPS.md`.
+
+O método deve aprender **onde cada capacidade mora** e usar o mapa canônico antes de escolher ferramenta, host ou superfície.
+
+```text
+SECTOR_ROUTER_REQUIRED=true
+SECTOR_ROUTER_OWNER=docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+ROUTE_INTENT_TO_SECTOR_BEFORE_TOOL=true
+ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true
+SECTOR_OWNER_UNKNOWN_STAYS_UNKNOWN=true
+ONE_PATH_FAILURE_IS_NOT_SYSTEM_FAILURE=true
+MULTI_PATH_FAILOVER_BEFORE_GLOBAL_BLOCKED=true
+```
+
+Algoritmo:
+
+```text
+INTENÇÃO
+→ SETOR
+→ OWNER CANÔNICO
+→ SUPERFÍCIE/RUNTIME ATUAL
+→ ROTA VIVA
+→ FALLBACK DO MESMO SETOR
+→ MENOR DELTA
+→ PROVA
+```
+
+Exemplos de semântica obrigatória:
+
+```text
+"quero ver e mexer na tela"
+→ setor REMOTE_INTERACTIVE_GUI
+→ AnyDesk se vivo
+→ fallback: VNC/Rescue para visual fora de banda
+→ SSH/Tailscale podem reparar a GUI, mas não são a própria GUI
+
+"entra na VPS e corrige serviço"
+→ setor CONTROL_PLANE
+→ SSH/Tailscale SSH
+→ AnyDesk é fallback somente se a GUI estiver viva e puder reparar o shell
+
+"máquina sumiu"
+→ NÃO concluir MACHINE_DOWN por falha de uma superfície
+→ testar PRIVATE_SPINE / CONTROL_PLANE / GUI / OUT_OF_BAND conforme material
+
+"onde fica X?"
+→ consultar MAPA-DO-CEREBRO
+→ responder owner + superfície + estado, separando canônico de runtime
+```
+
+O mapa não congela runtime. IP, PID, sessão, porta e serviço observados entram como receipt invalidável; owner/capability estáveis permanecem no mapa.
+

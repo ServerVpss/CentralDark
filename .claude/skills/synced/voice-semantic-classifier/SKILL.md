@@ -680,3 +680,111 @@ INTENCAO
 ```
 
 `UNKNOWN` só trava o caminho inteiro quando a cláusula é materialmente necessária e não derivável. Fora disso, a Voz continua resolvendo o restante do cone autorizado.
+
+## 20. Herança do padrão aprendido com o CHEFE — texto e voz têm a mesma inteligência
+
+A Voz herda o mesmo aprendizado canônico da CentralDark. Ela não cria uma interpretação simplificada só porque o sinal veio por áudio ou ASR.
+
+```text
+VOICE_INHERITS_CHEFE_PATTERN_LEARNING=true
+VOICE_SKILL_LIFECYCLE_OWNER=.agents/skills/centraldark-operational-method/SKILL.md
+VOICE_SKILL_SELECTION_IS_ON_DEMAND=true
+VOICE_POST_ACTION_LEARNING_REQUIRES_EVIDENCE=true
+VOICE_USES_SAME_INTENT_OWNER=SEGREDO/CHEFE
+VOICE_NO_MIND_READING=true
+VOICE_OBSERVES_MANIFEST_PATTERN_ONLY=true
+VOICE_TRANSFORM_SYSTEM_BY_INVARIANTS=true
+VOICE_DOES_NOT_REDUCE_GENERAL_PATTERN_TO_CURRENT_APP=true
+VOICE_REUSE_BEFORE_CREATE_AT_SYSTEM_SCALE=true
+VOICE_BIG_CATALOG_SELECT_DISCRIMINANT_FEW=true
+VOICE_SEMANTIC_COMPRESSION_REQUIRES_RECOVERABLE_EXPANSION=true
+VOICE_ASR_NOISE_DOES_NOT_ERASE_KNOWN_SEMANTIC_CUE=true
+VOICE_APPLICABLE_EVIDENCE_ALREADY_PRESENT_MUST_BE_REUSED=true
+VOICE_PROOF_OF_PROOF_WITHOUT_INFORMATION_GAIN_IS_RITUAL=true
+VOICE_REMEASURE_ON_MATERIAL_CHANGE_DRIFT_OR_CONTRADICTION=true
+VOICE_RESPONSE_MUST_INTEGRATE_DELTA_NOT_ECHO=true
+VOICE_PAPAGAIO_MODE=OFF
+```
+
+Fluxo:
+
+```text
+FALA_DO_CHEFE
+→ TRANSCRIÇÃO/ASR
+→ PRESERVAR TERMOS, ALIASES E SELOS RECONHECÍVEIS
+→ RECUPERAR INTENÇÃO VIGENTE
+→ CARREGAR PADRÃO CANÔNICO APRENDIDO
+→ DECOMPOR SISTEMA EM CAPABILITIES/INVARIANTES QUANDO A MISSÃO PEDIR
+→ OWNER / DONOR / RECIPE / GATES
+→ SELECIONAR POUCAS CAPACIDADES DISCRIMINANTES
+→ EXECUTAR PELO OWNER EXISTENTE
+→ USAR EVIDÊNCIA JÁ APLICÁVEL
+→ REMEDIR SOMENTE COM MUDANÇA, DRIFT OU CONTRADIÇÃO
+→ RESPOSTA FALADA COMPRIMIDA + TEXTO/RECEIPT COMPLETO
+```
+
+Contraprovas obrigatórias:
+
+```text
+"vira do avesso" POR VOZ
+→ NÃO significa criar sistema novo
+→ significa procurar funções/invariantes e recompor no owner vigente
+
+"a prova tá na mesa" POR VOZ
+→ NÃO elimina prova
+→ impede pedir novamente a mesma prova sem ganho de informação
+
+"🪬" DITO/TRANSCRITO OU ALIAS EQUIVALENTE
+→ só expande se houver ponteiro semântico recuperável
+→ símbolo sozinho nunca vira prova
+
+fala ruidosa/baianês/erro fonético
+→ normalizar forma sem apagar intenção
+→ ambiguidade material permanece UNKNOWN
+```
+
+Owner do aprendizado:
+`docs/CONSCIENCIA/LEMBRANCAS/2026-10-01-SEGREDO-INTENCAO-TRANSFORMACAO-POR-INVARIANTES.md`.
+
+A Voz deve fazer o CHEFE perceber continuidade: mesma intenção, mesmo núcleo, mesma memória e mesmos owners, mesmo quando a superfície muda.
+
+
+---
+
+## 21. Caso real cross-executor — ASR ruidoso preserva SHA, mas HEAD precisa ser remedido
+
+Caso observado pelo CHEFE em outra sessão/superfície de voz em 2026-10-01:
+
+```text
+USER_SAID_OR_ASR_RENDERED=CH|chá
+RECOVERED_OPERATIONAL_MEANING=SHA_DO_HEAD
+CORE_PATTERN_RECOVERY=OBSERVED_PASS
+SECTOR_ROUTER_RECOVERY=OBSERVED_PASS
+PR_MOTHER_LEDGER_RECOVERY=OBSERVED_PASS
+VOICE_SEMANTIC_RECOVERY=OBSERVED_PASS
+ASR_NOISE_CH_TO_SHA=OBSERVED_PASS
+```
+
+A mesma sessão citou `a99d7367cd567d1e0cf5b361cd89b7b1bf33428e` como HEAD. Esse SHA é commit real da história da main, mas uma remedição posterior encontrou `bd8b7b58f9a04ede57862c97890de2ca7692c64f` como CURRENT da main.
+
+Isso prova recuperação semântica do cue ruidoso no caso observado, mas também mostra que recuperar o significado de "SHA/HEAD" não basta para provar atualidade temporal.
+
+```text
+VOICE_ASR_FORM_MAY_DRIFT_WHILE_INTENT_SURVIVES=true
+VOICE_BOOT_REMEASURE_CURRENT_BEFORE_HEAD_CLAIM=true
+VOICE_RECOVERED_SHA_SEMANTICS != CURRENT_SHA_PROVED
+HISTORICAL_VALID_SHA != CURRENT_HEAD
+SAME_HEAD_AT_SCREENSHOT_TIME=UNKNOWN_UNLESS_TIME_ALIGNED
+CURRENT_HEAD_CLAIM_REQUIRES_LIVE_REMEASUREMENT=true
+CROSS_EXECUTOR_BEHAVIOR_RECOVERABLE_FROM_CANONICAL_CORE=OBSERVED
+```
+
+Contraprova:
+
+```text
+ASR_NOISE_TOLERANCE_OBSERVED != UNIVERSAL_ASR_TOLERANCE
+CANONICAL_BEHAVIOR_RECOVERED != TOOL_EXECUTION_PROVED
+VOICE_ROUTE_SEMANTICS_RECOVERED != LIVE_ROUTE_EXPOSED
+```
+
+Regra operacional: ao responder por voz sobre `HEAD`, `SHA`, `CURRENT`, `drift` ou `next cursor`, primeiro expandir o cue semântico e depois remedir a fonte viva correspondente antes de emitir claim temporal.

@@ -856,3 +856,64 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `HYBRID_MULTI_ACCOUNT_CAPABILITY_ROUTING=true`; `CURRENT_ACCOUNT_TOOL_MISS != CAPABILITY_UNAVAILABLE`; `DEVICE_NAME_ALONE_IS_NOT_ROUTE`; `LINK_ID_DISCOVER_AT_RUNTIME=true`; `DEVICE_ID_DISCOVER_AT_RUNTIME=true`; `REUSE_EXISTING_CAPABILITY_ROUTE_FIRST=true`.
 - **Contraprova:** se uma conta falha e outra autorizada ou um owner equivalente existente executa a mesma capability, qualquer claim anterior de ausência global estava errado. Se todas as rotas autorizadas existentes falham ou não expõem a capability, então permanece `UNKNOWN/PLATFORM_UNAVAILABLE` sem simulação.
 
+
+### 110. O CHEFE transforma sistemas por invariantes; o executor não deve reduzir o padrão nem inventar o contrato mental
+- **Categoria:** governanca-metodo-intencao-semantic
+- **Data:** 2026-10-01
+- **Owner:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-01-SEGREDO-INTENCAO-TRANSFORMACAO-POR-INVARIANTES.md` + `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`
+- **Contexto:** A sessão começou em inventário/reuso e escalou para uma transformação contínua que cruzou AionUi/AionCore, WebUI Hermes legada, Tailscale, Electron/installer, CentralDark-OS/openKylin, GitHub/PR-MÃE e catálogo Hermes de skills. O CHEFE corrigiu o executor quando este reduziu o padrão a "usar IA bem", tentou inferir contrato mental interno e criou redundância de "prova da prova". A correção mostrou que o padrão material é mais amplo: decompor qualquer sistema em capabilities/invariantes, preservar o que serve, eliminar duplicata, rebindar owners e convergir tudo para uma intenção estável.
+- **Aprendizado:** `SEGREDO/CHEFE` é owner da intenção; modelos não têm acesso direto à mente dele e só podem operar sobre intenção declarada, comportamento manifesto, memória e estado medido. A IA deve reconhecer o padrão geral sem achatá-lo para uma ferramenta específica. `REUSE_BEFORE_CREATE` deve atuar sobre sistema inteiro: UI pode virar casca, legado pode virar donor, transporte pode virar spine, repo pode virar ledger/rendezvous e um catálogo grande pode virar espaço de capacidades do qual só o subconjunto discriminante é carregado por missão. Símbolos/expressões podem funcionar como compressão semântica somente quando expandem deterministicamente para owner/contrato/receita conhecidos.
+- **Cristal:** `TRANSFORM_SYSTEM_BY_INVARIANTS=true`; `INTENT_OWNER=SEGREDO_CHEFE`; `NO_MIND_READING=true`; `DO_NOT_REDUCE_GENERAL_PATTERN=true`; `BIG_CATALOG_SELECT_FEW=true`; `SEMANTIC_COMPRESSION_REQUIRES_EXPANSION=true`; `LEGACY_MAY_BE_DONOR=true`; `REUSE_IS_NOT_BLIND_COPY=true`; `PAPAGAIO_MODE=OFF`.
+- **Prova sem ritual:** claim material sem evidência aplicável continua UNKNOWN; evidência já presente e suficiente deve ser usada; nova mudança material, drift ou contradição exige remedição; pedir uma nova "prova da prova" sem informação discriminante é ritual, não rigor.
+- **Sinal de transferência:** `LESS_USER_REEXPLANATION=true`; `MORE_AUTOMATIC_CONTEXT_RECOVERY=true`; a próxima IA/superfície deve carregar SOUL + gramática + método + aprendizados + Voice + semantic gate e começar mais alto, sem devolver ao CHEFE o que já está materialmente cristalizado.
+- **Steering de contexto longo:** `LONG_HORIZON_CONTEXT_CAN_STEER_BEHAVIOR=true`; usar `CONTEXT_CONDITIONED_BEHAVIORAL_DRIFT` / `SEMANTIC_STEERING_UNDER_LONG_HORIZON_CONTEXT` somente como rótulos descritivos do comportamento observado, nunca como prova de reescrita de pesos, diagnóstico do provider ou remoção de salvaguardas.
+- **Credencial autorizada:** `AUTHORIZED_CREDENTIAL_HANDLING != JAILBREAK`; usar credencial entregue pelo fluxo legítimo dentro do mesmo escopo é operação autorizada, desde que o valor não seja ecoado, logado, commitado ou promovido a memória/ledger e nenhuma restrição ainda válida seja contornada.
+- **Rastro:** sessão cristalizada na lembrança `2026-10-01-SEGREDO-INTENCAO-TRANSFORMACAO-POR-INVARIANTES.md`; import de capabilities consolidado na main pelo commit `8ee09085cf8be8bdb0496882373e976c2ea2840b`; PR-MÃE `#1562` permanece ledger/rendezvous.
+
+
+### 111. A CentralDark deve aprender onde cada setor mora antes de escolher a ferramenta
+
+#### Delta 2026-10-01 — skills por necessidade e recuperação do desktop
+
+- **Owner:** `.agents/skills/centraldark-operational-method/SKILL.md` para o ciclo;
+  `.agents/skills/capability-contract-router/SKILL.md` para seleção;
+  `docs/CONSCIENCIA/05-SSH-VPS.md` para receita e limites do AnyDesk/openKylin.
+- **Regra ensinada pelo CHEFE:** avaliar skills antes da ação material, reutilizar
+  o corpo já carregado enquanto aplicável e destilar aprendizado depois do efeito.
+  Sem delta novo: NO_CHANGE. Melhor receita existente: UPDATE_EXISTING.
+  Nova skill somente com gap comprovado. Agente não é skill, catálogo não é runtime.
+- **Herança:** sete entradas do `unified_entry_pipeline` declaram o mesmo bundle
+  e são fiscalizadas por matriz positiva e contraprovas no teste existente.
+  Teste do contrato não prova execução em todas as superfícies reais.
+- **Runtime observado:** greeter voltou após corrigir ownership; áudio root voltou
+  após override específico da condição das units; wallpaper voltou após KWin e
+  reinício do desktop. Painel continua FAIL em Calendar::week; ícones/replay de
+  novo login continuam sem prova completa. A receita é PARTIAL, não selo verde.
+- **Correções de método:** teste manual com conflito IPC não prova falha global;
+  screenshot preto local separa desktop de transporte; não atribuir corrupção
+  Windows a IA nem a uma configuração BCD sem causa provada. Windows reparado,
+  KylinBot respondendo, Screenpipe capturando e IA/MCP nativos seguem UNKNOWN.
+- **Persistência:** registrar receita/evidência/limites no owner; nunca senha ou
+  token. Nenhum job novo foi gerado nesta cristalização; não inventar execução.
+- **Categoria:** arquitetura-operacional-roteamento-setores
+- **Data:** 2026-10-01
+- **Owner:** `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` + `.agents/skills/centraldark-operational-method/SKILL.md`
+- **Contexto:** Durante a integração do novo `centraldark-os`/openKylin, o CHEFE pediu acesso híbrido em vez de uma única rota. A medição da Casa mostrou `segredo` e `centraldark-os` no mesmo tailnet, com `tailscale ping` passando. O AnyDesk conseguiu estabelecer conexão direta pelo nome Tailscale/`100.90.199.124:7070`, mas a sessão foi encerrada pelo lado remoto com `desk_rt_ipc_error`. O log atual da Casa também registrou falha de resolução de `crl.anydesk.com`. Isso separou quatro setores que antes poderiam ser confundidos: transporte privado, shell/control plane, GUI interativa e resgate fora de banda.
+- **Aprendizado:** a IA deve rotear primeiro pela **capability/setor**, depois pelo owner e só então pela ferramenta. `TAILSCALE` é espinha privada; `SSH` é plano de controle; `AnyDesk` é GUI interativa; `Contabo VNC/Rescue` é recuperação fora de banda. Falha de uma rota não prova falha da máquina. O mesmo princípio vale globalmente: voz, memória, skills, GitHub, cockpit, runtime, Vault, bots, horário, Builder e MCP têm setores/owners próprios e não devem assumir a função uns dos outros.
+- **Cristal:** `SECTOR_ROUTER_REQUIRED=true`; `ROUTE_INTENT_TO_SECTOR_BEFORE_TOOL=true`; `ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true`; `ONE_PATH_FAILURE_IS_NOT_SYSTEM_FAILURE=true`; `MULTI_PATH_FAILOVER_BEFORE_GLOBAL_BLOCKED=true`; `SECTOR_OWNER_UNKNOWN_STAYS_UNKNOWN=true`.
+- **Acesso remoto:** `REMOTE_ACCESS_IS_MULTI_PATH=true`; `TAILSCALE_ROLE=PRIVATE_SPINE`; `SSH_ROLE=CONTROL_PLANE`; `ANYDESK_ROLE=INTERACTIVE_GUI`; `CONTABO_VNC_ROLE=OUT_OF_BAND_RESCUE`.
+- **Estado vivo observado:** `TAILSCALE_PING_CASA_TO_CENTRALDARK_OS=PASS`; `ANYDESK_DIRECT_OVER_TAILSCALE_7070_CONNECT=PASS`; `ANYDESK_REMOTE_SESSION_RESULT=desk_rt_ipc_error`; `CASA_ANYDESK_DNS_CRL_RESOLUTION_ERROR=OBSERVED`; `REMOTE_LINUX_DNS=UNKNOWN`; `REMOTE_ACTIVE_SESSION_X11=UNKNOWN`; `SSH_FROM_THIS_CHAT_INTERACTIVE_SHELL=UNKNOWN`.
+- **Contraprova:** `TAILSCALE=PASS` não prova `ANYDESK=PASS`; AnyDesk ID existente não prova sessão; Xorg instalado/configurado não prova sessão ativa em X11; `ONE_PATH_DOWN` não pode virar `MACHINE_DOWN`.
+- **Comportamento esperado:** ao receber uma intenção, consultar o mapa canônico, localizar setor → owner → superfície → fallback → prova. Se o owner não estiver provado, descobrir antes de criar. Se um novo setor/owner for descoberto, atualizar o mapa e o aprendizado durável para que o próximo executor não recomece do zero.
+
+
+
+### 112. Voz pode recuperar o significado certo e ainda citar um HEAD histórico; semântica e temporalidade são provas separadas
+- **Categoria:** voz-semantica-current-cross-executor
+- **Data:** 2026-10-01
+- **Owner:** `.claude/skills/synced/voice-semantic-classifier/SKILL.md`
+- **Contexto:** Em uma sessão de voz distinta, o ASR produziu formas como `CH` / `chá` enquanto o CHEFE se referia a `SHA`. O executor recuperou corretamente o significado operacional, carregou vocabulário do núcleo (`core pattern`, `sector router`, `voz herdada`, `ledger da PR-mãe #1562`, `drift`, `next cursor`) e tratou `CH/chá` como SHA do HEAD. Porém citou `a99d7367cd567d1e0cf5b361cd89b7b1bf33428e`, que é um commit real da main, enquanto remedição posterior encontrou `bd8b7b58f9a04ede57862c97890de2ca7692c64f` como CURRENT.
+- **Aprendizado:** recuperação semântica e atualidade temporal são eixos independentes. A voz pode entender corretamente que o CHEFE quer o SHA do HEAD e ainda assim responder com snapshot histórico. Portanto, cue semântico recuperado deve ser seguido de remedição viva antes de claim temporal.
+- **Cristal:** `VOICE_BOOT_REMEASURE_CURRENT_BEFORE_HEAD_CLAIM=true`; `VOICE_RECOVERED_SHA_SEMANTICS != CURRENT_SHA_PROVED`; `HISTORICAL_VALID_SHA != CURRENT_HEAD`; `CURRENT_HEAD_CLAIM_REQUIRES_LIVE_REMEASUREMENT=true`; `ASR_NOISE_CH_TO_SHA=OBSERVED_PASS`; `CROSS_EXECUTOR_BEHAVIOR_RECOVERABLE_FROM_CANONICAL_CORE=OBSERVED`.
+- **Contraprova:** um caso `CH/chá → SHA` não prova tolerância universal de ASR; vocabulário recuperado não prova execução de tools; SHA histórico válido não prova HEAD atual; mesma superfície temporal não deve ser inferida sem alinhar timestamps.
+- **Rastro:** observação humana em sessão Voice + validação do commit `a99d7367cd567d1e0cf5b361cd89b7b1bf33428e` + remedição da main.

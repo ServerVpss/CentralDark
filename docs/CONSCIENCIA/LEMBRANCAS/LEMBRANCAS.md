@@ -1,7 +1,7 @@
 ---
 title: "LEMBRANÇAS — índice histórico"
 status: "HISTORICAL_REDIRECT"
-updated: 2026-09-18
+updated: 2026-10-01
 tags:
   - lembrancas
   - historico
@@ -373,3 +373,17 @@ VOICE_INHERITS_SAME_MATRIX=true
 SOL_EXECUTORA_REUSES_EXISTING_CANONICAL_CONTRACT=true
 ```
 
+
+### [2026-10-01] SEGREDO — intenção e transformação por invariantes
+- **Data:** 2026-10-01
+- **Tags:** segredo, chefe, intencao, transformacao-por-invariantes, reuse-before-create, one-writer, semantica, compressao-semantica, capability-routing, papagaio-off
+- **Tipo:** CORE_LEARNING
+- **Target:** [[2026-10-01-SEGREDO-INTENCAO-TRANSFORMACAO-POR-INVARIANTES]]
+- **Relevância:** crítica
+- **Eixo:** presente
+- **Expira:** nunca
+- **Promovida:** sim
+
+Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir da intenção, inventariar o existente, decompor em capabilities/invariantes, deduplicar, localizar owner, reusar/rebindar/estender, permitir percepção paralela e serializar mutação por escopo, provar somente o que é material e transformar o caminho sobrevivente em receita. O executor não deve inferir contrato mental não declarado, reduzir um padrão geral a uma ferramenta ou criar "prova da prova" sem ganho de informação. Catálogo grande serve como espaço de capacidades; cada missão carrega somente o subconjunto discriminante. Emojis/expressões podem ser ponteiros semânticos quando possuem expansão recuperável.
+
+**Links:** [[APRENDIZADOS#110]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[OURO-CHEFE]] · [[BANDA_INTENCAO_UNICA_COMPASSO]] · [[INTENT_SYNC_STATE]] · [[SEMANTIC-LINKER]] · [[GRAPH-INVESTIGATOR]]
