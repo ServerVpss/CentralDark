@@ -224,7 +224,6 @@ export const githubWriteTools = [
             try {
                 const body = [
                     String(input.prBody || "").trim(),
-                    "Intent-Authorized: SEGREDO/CHEFE",
                     `Intent-Scope: ${policy.intent}`,
                     `Writer-Scope: ${policy.scope}`,
                     "Branch-Lifecycle: EPHEMERAL_READY_PR_SAME_TURN",
