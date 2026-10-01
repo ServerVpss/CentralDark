@@ -328,6 +328,85 @@ jobs:
                   body,
                 });
                 core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
+
+                // Reconcile only the live HUD projection. The append-only ledger/history
+                // below the first separator remains untouched and is never treated as authority.
+                const [mainRef, mother, openPulls] = await Promise.all([
+                  github.rest.repos.getBranch({ owner, repo, branch: 'main' }),
+                  github.rest.pulls.get({ owner, repo, pull_number: PR_MAE }),
+                  github.paginate(github.rest.pulls.list, {
+                    owner,
+                    repo,
+                    state: 'open',
+                    sort: 'updated',
+                    direction: 'desc',
+                    per_page: 100,
+                  }),
+                ]);
+
+                const mainSha = mainRef.data.commit.sha;
+                const children = openPulls
+                  .filter(pr => pr.number !== PR_MAE)
+                  .sort((a, b) => String(b.updated_at || '').localeCompare(String(a.updated_at || '')));
+                const recentChildren = children.slice(0, 12);
+                const childLines = recentChildren.length
+                  ? recentChildren.map(pr =>
+                      `#${pr.number}@${sha10(pr.head?.sha)} · ${pr.draft ? 'DRAFT' : 'OPEN'} · ${short(pr.title, 72)}`
+                    )
+                  : ['NONE'];
+                const sourceFingerprint = `main@${mainSha}:open=${children.length}:run=${runId}`;
+                const liveMarker = '<!-- CENTRALDARK_PR_MOTHER_LIVE_CARD_V3 -->';
+                const liveCard = [
+                  liveMarker,
+                  '# 🔒🪬 CENTRALDARK / PR-MÃE #1562',
+                  '## 🎮 HUD · FUNIL / HANDOFF VIVO · CURRENT',
+                  '',
+                  '~~~text',
+                  'HUD_ROLE=DERIVED_CURRENT_PROJECTION_NOT_AUTHORITY',
+                  `HUD_MEASURED_AT=${ts}`,
+                  'HUD_SENSOR=GITHUB_API_VIA_SELO_FABRIC',
+                  `HUD_SOURCE_FINGERPRINT=${sourceFingerprint}`,
+                  `MAIN=${mainSha}`,
+                  `PR_MOTHER=#${PR_MAE} · ${String(mother.data.state || '').toUpperCase()} · DO_NOT_MERGE`,
+                  `OPEN_CHILDREN=${children.length}`,
+                  'ACTIVE_LANES_RECENT=',
+                  ...childLines.map(line => `  ${line}`),
+                  'VPS_RUNTIME=UNKNOWN_FROM_GITHUB_SENSOR',
+                  'CASA_RUNTIME=UNKNOWN_FROM_GITHUB_SENSOR',
+                  'RUNTIME_UNKNOWN_IS_NOT_PASS=true',
+                  'HUD_STALE_IF_MAIN_MOVED=true',
+                  'HUD_STALE_IF_OPEN_CHILD_SET_CHANGED=true',
+                  'CURRENT_OVER_HISTORY=true',
+                  'ACTION_IS_PROOF=false',
+                  'MERGED_IS_DEPLOYED=false',
+                  'REALITY=JUDGE',
+                  `LAST_LEDGER_EVENT=${event}/${action || '-'} · run=${runId} · subject=${sha10(eventSha)}`,
+                  'NEXT_CURSOR=RECONCILE_OPEN_CHILDREN_THEN_MEASURE_RUNTIME_IN_ITS_OWNER',
+                  '~~~',
+                  '',
+                  '> **HUD vivo = projeção derivada do CURRENT medido pelo sensor declarado.** GitHub não inventa estado de VPS/Casa; ausência de medição runtime permanece UNKNOWN. Histórico abaixo é provenance, não CURRENT.',
+                  '',
+                ].join('\n');
+
+                const currentBody = String(mother.data.body || '');
+                const start = currentBody.indexOf(liveMarker);
+                const separator = start >= 0 ? currentBody.indexOf('\n---', start) : -1;
+                const historical = separator >= 0
+                  ? currentBody.slice(separator)
+                  : '\n---\n\n# 🔒 PR-MÃE / FUNIL PERMANENTE DA CENTRALDARK\n';
+                const nextBody = `${liveCard}${historical}`;
+
+                if (nextBody !== currentBody) {
+                  await github.rest.pulls.update({
+                    owner,
+                    repo,
+                    pull_number: PR_MAE,
+                    body: nextBody,
+                  });
+                  core.notice(`PR_MOTHER_HUD_RECONCILED=PASS main=${sha10(mainSha)} open_children=${children.length}`);
+                } else {
+                  core.notice(`PR_MOTHER_HUD_RECONCILED=NO_CHANGE main=${sha10(mainSha)} open_children=${children.length}`);
+                }
             } catch (e) {
               const status = e.status || e.response?.status;
               const message = String(e.message || '');
