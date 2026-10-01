@@ -32,6 +32,8 @@ class BadgeCoverageTests(unittest.TestCase):
             'UNKNOWN_IS_NOT_PASS=true\n'
             'SAME_HEAD_PROOF_REQUIRED_FOR_CI_CLAIM=true\n'
             'WORKFLOW_BADGE_COVERAGE=ALL_WORKFLOW_FILES\n'
+            'FUTURE_WORKFLOW_WITHOUT_BADGE=FAIL\n'
+            'CENTRALDARK_VALIDATE_ENFORCES_BADGE_COVERAGE=true\n'
         )
 
     def test_missing_workflow_entry_fails(self):
