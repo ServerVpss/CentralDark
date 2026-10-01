@@ -969,7 +969,10 @@ if (!contract) {
         !/\.(?:test|spec)\.[^.]+$/i.test(file)
       );
       if (materialCodeDelta) {
-        const headDay = git(["show", "-s", "--format=%cI", HEAD_SHA]).trim().slice(0, 10);
+        const headEpoch = Number(git(["show", "-s", "--format=%ct", HEAD_SHA]).trim());
+        const headDay = Number.isFinite(headEpoch)
+          ? new Date(headEpoch * 1000).toISOString().slice(0, 10)
+          : "";
         const dayMatch = checklistText.match(/^checked_day_utc:\s*"?([0-9]{4}-[0-9]{2}-[0-9]{2})"?\s*$/m);
         const checklistDay = dayMatch?.[1] || "";
         if (!checklistDay) errors.push("DAILY_CHECKLIST_DAY_MISSING");
