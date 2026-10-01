@@ -7,6 +7,13 @@ ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 
 # CentralDark — TelePanel
 
+[![⚙️ CentralDark Valida — determinístico](https://github.com/ServerVpss/CentralDark/actions/workflows/centraldark-validate.yml/badge.svg)](https://github.com/ServerVpss/CentralDark/actions/workflows/centraldark-validate.yml)
+[![🤖 Dependabot — radar, compatibilidade e squash seguro](https://github.com/ServerVpss/CentralDark/actions/workflows/dependabot-auto-merge.yml/badge.svg?branch=main)](https://github.com/ServerVpss/CentralDark/actions/workflows/dependabot-auto-merge.yml)
+[![🏷️ Status Badge Fabric](https://github.com/ServerVpss/CentralDark/actions/workflows/status-badge-fabric.yml/badge.svg?branch=main)](https://github.com/ServerVpss/CentralDark/actions/workflows/status-badge-fabric.yml)
+
+➡️ [Matriz completa de badges de todos os workflows atuais e futuros](docs/STATUS-BADGES.md)
+
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 
