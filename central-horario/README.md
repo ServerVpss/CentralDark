@@ -55,3 +55,25 @@ NEW_TIME_DRIFT_IS_BLOCKING=true
 ```
 
 O gate varre o repositório inteiro. Dívida histórica permanece explícita e não vira falso-verde; qualquer novo delta que introduza hora fora deste owner é bloqueado. Corrigir legado significa migrá-lo para este mesmo owner, nunca criar outro sistema de horário.
+
+## Contrato de apresentação humana — cristal global
+
+A intenção do CHEFE é aplicada por **semântica de destino**, não pelo relógio local do executor:
+
+```text
+HUMAN_TIME_PRIMARY_DISPLAY=DD/MM/AAAA HH:mm:ss BRT
+HUMAN_TIME_PRIMARY_TIMEZONE=America/Sao_Paulo
+HUMAN_TIME_PRIMARY_LOCALE=pt-BR
+HUMAN_TIME_FORMATTER_OUTSIDE_CANONICAL_OWNER=CONTRACT_VIOLATION
+ISO_UTC_AS_PRIMARY_HUMAN_DISPLAY=FORBIDDEN
+TECHNICAL_UTC_MAY_EXIST_AS_SECONDARY_MACHINE_FIELD=true
+SELO_HUD_RECEIPT_ALERT_TELEGRAM_REPORT_USE_CANONICAL_HUMAN_TIME=true
+GLOBAL_TIME_SCAN_DELTA_RATCHET_REQUIRED=true
+DOCUMENTED_TIME_RULE_WITH_BROKEN_GATE=FAIL
+```
+
+Aplicação:
+- **Selo Fabric, HUD, receipts, alertas, Telegram, painéis e relatórios para o CHEFE** mostram Brasília no formato brasileiro.
+- **Banco, API, ordenação, assinatura, TTL, auditoria e correlação de máquina** podem e devem manter UTC/RFC3339 quando isso for o contrato técnico.
+- Se uma superfície humana também precisar do instante técnico, UTC entra como campo secundário explicitamente rotulado; nunca substitui a hora humana.
+- O fiscal `scripts/lupa/validar-horario-centraldark.mjs` faz varredura global e usa **delta ratchet**: dívida histórica fica visível, mas novo desvio fora do owner bloqueia o HEAD que o introduziu.
