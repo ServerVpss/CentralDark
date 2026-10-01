@@ -82,6 +82,10 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
             "BIG_CATALOG_SELECT_DISCRIMINANT_FEW=true",
             "PROOF_OF_PROOF_WITHOUT_INFORMATION_GAIN_IS_RITUAL=true",
             "VOICE_INHERITS_SAME_PATTERN=true",
+            "VOICE_BOOT_REMEASURE_CURRENT_BEFORE_HEAD_CLAIM=true",
+            "SEMANTIC_RECOVERY_IS_NOT_STATE_FRESHNESS=true",
+            "RECOVERED_SHA_IS_NOT_CURRENT_MAIN_SHA=true",
+            "CURRENT_HEAD_CLAIM_REQUIRES_LIVE_REMEASUREMENT=true",
         ]
         for item in required:
             with self.subTest(owner="soul", item=item):
