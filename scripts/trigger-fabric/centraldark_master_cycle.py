@@ -51,6 +51,7 @@ EXPANDED_CHAIN = [
     "META_LUPA",
     "RENDEZVOUS",
     "RECONCILE",
+    "DELTA_UTIL",
     "OWNER",
     "ONE_WRITER",
     "PATCH",
