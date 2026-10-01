@@ -137,3 +137,37 @@ CHEFE_INTENT
 ```
 
 Próximo discriminante permanece material: descobrir no CENTRALDARK-OS o catálogo MCP realmente exposto e provar `initialize → tools/list → uma tool de leitura`. Documentação oficial de MCP não transforma essa execução em PASS.
+
+
+## Direção CURRENT — IA nativa primeiro
+
+Intenção confirmada pelo CHEFE em 2026-10-01: a rota principal deve consumir a IA/capabilities nativas do próprio openKylin/CENTRALDARK-OS. A rota cloud `openai-codex/gpt-6.1-sol` permanece como evidência histórica de que o KylinBot consegue conversar por provider remoto, mas não é o alvo desta integração.
+
+```text
+NATIVE_AI_FIRST=true
+PRIMARY_TARGET=OPENKYLIN_SHARED_AI_SUBSYSTEM
+PRIMARY_CAPABILITY_SURFACES=KYTENSOR_TRITON_V2|KYLIN_AI_RUNTIME|NATIVE_MCP|EMBEDDING|VECTOR|SPEECH|VISION|DOCUMENT_SERVICES
+REMOTE_LLM_ROUTE=FALLBACK_OR_SEPARATE_CAPABILITY
+OPENROUTER_MISSING_KEY=NOT_NATIVE_AI_BLOCKER
+OPENAI_COMPATIBLE_UI_FIELD != NATIVE_OPENKYLIN_ROUTE
+REUSE_EXISTING_NATIVE_OWNER_BEFORE_ADAPTER=true
+```
+
+Rota nativa já provada neste owner na VPS:
+
+```text
+VPS_LOCAL_KYTENSOR_HTTP=127.0.0.1:8000
+TRITON_V2_READY=PASS
+NATIVE_EMBEDDING_INFERENCE=PASS
+NATIVE_TTS_INFERENCE=PASS
+```
+
+Ainda não provado como equivalente a chat local completo:
+
+```text
+NATIVE_LOCAL_LLM_CHAT=UNKNOWN
+NATIVE_MCP_INITIALIZE_TOOLS_CALL=UNKNOWN
+AIONUI_NATIVE_BINDING=UNKNOWN
+```
+
+Próxima prova: medir no twin local/VPS a capability nativa pelo protocolo real, executar uma chamada material e somente depois bindar Hermes/AionUi. Não pedir chave de provider externo para fechar um claim nativo.
