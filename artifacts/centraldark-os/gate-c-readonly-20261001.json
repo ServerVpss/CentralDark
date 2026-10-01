@@ -1,0 +1,62 @@
+{
+  "observed_at": "2026-10-01T06:46:01.247663+00:00",
+  "CURRENT_MAIN_SHA": "a8b008f889fa3e0cba253123adc24a29b837e92b",
+  "VPS_SHA": "aeab0853fa5fe4b926460098bd895f2d3c818ebd",
+  "TESTED_OWNER_SHA": "7ca07ca0bb164c2379ea306c1672f94d083aba93",
+  "owner_patch_promoted_to_main": false,
+  "CONTABO_MUTATION": 0,
+  "GATE_A": "PASS",
+  "GATE_B": "PASS",
+  "GATE_C": "FAIL",
+  "GO_REINSTALL": "NO",
+  "ARMED_FOR_REINSTALL": "NO",
+  "Vault_SHA": "383eb16f6ccd8b61585d7589aa88d0c21b10ad09a44cfc34b70bfed60946e8e4",
+  "offhost_remote": "gdrive:CentralDark/Vault/Vault-Cofre-CentralDark-20260930T105330Z.tar.gz",
+  "offhost_receipt": "/root/CentralDark/artifacts/centraldark-os/vault-offhost-20260930T105330Z.receipt",
+  "CONTABO_AUTH": "PASS",
+  "instance": {
+    "provider_id": 203256920,
+    "name": "vmi3256920",
+    "status": "running",
+    "http": 200
+  },
+  "snapshot": {
+    "id": "snap1790430960",
+    "http": 200,
+    "created_audit": "2026-09-26T13:56:02.860Z",
+    "auto_delete_date": "2026-10-26T13:56:00.009Z",
+    "status": "UNKNOWN",
+    "readiness_proven": false
+  },
+  "rollback": {
+    "documented_route": "POST /v1/compute/instances/203256920/snapshots/snap1790430960/rollback",
+    "executed": false,
+    "recovery_proven": false,
+    "proof": "DOCUMENTATION_ONLY"
+  },
+  "images": {
+    "catalog_http": 200,
+    "total": 51,
+    "custom_image_query_http": 200,
+    "custom_total": 0,
+    "CENTRALDARK_TARGET_IMAGE_ID": "UNKNOWN"
+  },
+  "candidate": {
+    "name": "openKylin-Desktop-V3.0-20260905-x86_64.iso",
+    "url": "https://releases.openkylin.top/3.0/openKylin-Desktop-V3.0-20260905-x86_64.iso",
+    "head_http": 200,
+    "bytes": 8089612288,
+    "source_checksum": "UNKNOWN",
+    "provider_imported": false,
+    "boot_restore_proven": false
+  },
+  "contraproof": {
+    "A_B_preformat_runs": "PASS in two read-only runs, same Vault SHA",
+    "instance_alias_resolution": "PASS with provider ID",
+    "custom_image_absence": "confirmed by full catalog and standardImage=false query",
+    "owner_ambiguous_alias_test": "PASS",
+    "owner_pagination_test": "PASS",
+    "all_gate_fixed_point": "NOT_REACHED"
+  },
+  "NEXT_CURSOR": "Verify candidate checksum and unattended firstboot; provision/reuse custom image only when provider mutation is authorized; prove snapshot readiness and recovery/out-of-band; pin provider imageId only after image identity proof; rerun full gates twice."
+}
