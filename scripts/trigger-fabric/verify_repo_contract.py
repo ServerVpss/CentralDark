@@ -755,6 +755,10 @@ runner_policy_exempt=frozenset({
     # Fluxo de COSTURA provado: precisa GitHub-hosted enquanto self-hosted/VPS estiver offline.
     # Cadeado formal: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml
     '.github/workflows/pr-update-branch-deterministic.yml',
+    # HUD/ledger GitHub-API-only: intentionally hosted so PR-mother freshness
+    # does not depend on the self-hosted VPS queue. It does not execute repo
+    # code or deploy runtime.
+    '.github/workflows/selo-fabric.yml',
     '.github/workflows/vps-reboot-forensic.yml',
     '.github/workflows/vps-wake-hosted-ssh.yml',
 })
