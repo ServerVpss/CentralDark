@@ -87,3 +87,53 @@ Pesquisa complementar: [configuração upstream](https://github.com/zeroclaw-lab
 ## Ponte da main para o runtime nativo
 
 Owner: `scripts/vps/kylin-native-bind.py`. Aplica referências via symlinks no workspace existente, preserva arquivos anteriores, valida o SHA e grava receipt local. Não duplica SOUL nem instala outro agente. Reaplica idempotentemente a mesma fonte; testar o agente lendo as regras é obrigatório. Microdeploy existente: `scripts/vps/main-pinned-microdeploy.sh`; exige checkout Git e processos PM2 já provisionados. Não declarar microdeploy PASS se esses consumers estiverem ausentes.
+
+
+## Verificação upstream oficial — openKylin 3.0 como substrate compartilhado de IA/MCP
+
+Data da verificação: 2026-10-01. Fonte externa oficial; não substitui a medição do runtime desta VPS.
+
+Fontes:
+- https://www.openkylin.top/news/4098-cn.html
+- https://www.openkylin.top/news/4083-cn.html
+- https://www.openkylin.top/news/4122-cn.html
+- https://gitee.com/openkylin/kylin-ai-subsystem-plugin/blob/upstream/subsystempackagemanager.h
+- https://gitee.com/openkylin/kylin-ai-runtime/pulls/31
+- https://gitee.com/openkylin/kylin-aiassistant/pulls/456
+
+O openKylin 3.0 documenta uma arquitetura unificada que inclui modelos, memória, ferramentas, permissões do sistema e capacidades do desktop. A publicação oficial afirma que KylinBot e outros agentes podem chamar capacidades do desktop diretamente por MCP, sem depender de simulação de clique. O pacote do subsistema lista runtime, document-QA, document service, vector engine, embedding, speech, vision e GenAI/NLP; o runtime possui suporte upstream a múltiplas conexões NLP distinguíveis por sessionId. O AI Assistant atual também verifica a disponibilidade do AI subsystem/runtime antes de criar a janela principal.
+
+O AgentOS oficial amplia a mesma direção com system agent, desktop-operation agent/CUA, unified model inference service, agent runtime, task management, voz e suporte explícito a modelos de Embedding. Isso reforça a leitura de substrate compartilhado; não cria prova de que cada janela, aba, pasta ou lixeira instancia um LLM próprio.
+
+```text
+OPENKYLIN_SHARED_AI_SUBSTRATE=OFFICIAL_DOCUMENTED
+DESKTOP_CAPABILITY_MCP=OFFICIAL_DOCUMENTED
+AGENT_DIRECT_DESKTOP_CAPABILITY_CALL=OFFICIAL_DOCUMENTED
+AI_RUNTIME_MULTI_SESSION=UPSTREAM_DOCUMENTED
+SUBSYSTEM_EMBEDDING_VECTOR_SPEECH_VISION_NLP=UPSTREAM_SOURCE_PROVED
+AGENTOS_SYSTEM_AGENT_CUA_RUNTIME_INFERENCE_VOICE_EMBEDDING=OFFICIAL_DOCUMENTED
+
+WINDOW_OR_TAB_CAN_BE_AI_CAPABILITY_CLIENT=SUPPORTED_INTERPRETATION
+EACH_WINDOW_OR_TAB_SPAWNS_DISTINCT_LLM=NOT_PROVEN
+PACKAGE_OR_DOC_PRESENT != LOCAL_RUNTIME_EFFECT
+OFFICIAL_ARCHITECTURE != CURRENT_VPS_TOOL_LIST
+```
+
+### Consequência canônica para a CentralDark
+
+Não instalar uma IA por aplicativo. Tratar KylinBot, AI Assistant, UKUI, File Manager, busca, voz, clipboard e demais componentes como consumidores/provedores de capabilities do mesmo corpo openKylin quando a capability for medida.
+
+```text
+CHEFE_INTENT
+→ CENTRALDARK_CORE
+→ CAPABILITY/SECTOR_ROUTER
+→ REUSE_NATIVE_OPENKYLIN_CAPABILITY
+→ SHARED_AI_SUBSYSTEM/RUNTIME
+→ MODEL | EMBEDDING | VECTOR | SPEECH | VISION | MCP_DESKTOP
+→ EFFECT
+→ READBACK
+→ REALITY_JUDGE
+→ LEARNING_DELTA
+```
+
+Próximo discriminante permanece material: descobrir no CENTRALDARK-OS o catálogo MCP realmente exposto e provar `initialize → tools/list → uma tool de leitura`. Documentação oficial de MCP não transforma essa execução em PASS.
