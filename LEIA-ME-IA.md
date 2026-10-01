@@ -31,6 +31,37 @@ Texto legado conflitante perde para o owner canônico.
 
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.
 
+
+## 🎙 Voice Command Flow — mesma CentralDark, mesma intenção
+
+A Voz não cria segundo cérebro, segundo runtime nem segunda autoridade. Ela é uma superfície de entrada/saída da mesma CentralDark e usa o owner existente:
+
+`.claude/skills/synced/voice-semantic-classifier/SKILL.md`
+
+```text
+CHEFE_FALA
+→ RECUPERAR_INTENCAO_VIGENTE
+→ DELTA
+→ META_GRILL
+→ OBJETIVO
+→ CLAUSULAS_NECESSARIAS
+→ MEDIR_AS_JA_VERDES
+→ CLAUSULA_FALTANTE
+→ REPLAY_APRENDIZADO
+→ OWNER_EXISTENTE
+→ MENOR_DELTA_EXECUTAVEL
+→ EFEITO
+→ REALITY_JUDGE_APOS_EFEITO
+→ CONTRAPROVA
+→ VOLTA_UMA_CASA_SE_FALHAR
+→ FIXED_POINT
+→ RECEITA + FINGERPRINT + RECEIPT
+→ CONTINUAR_O_MESMO_FIO
+```
+
+`UNKNOWN` não é freio global: vira alvo de resolução e só bloqueia o claim/caminho que materialmente depende daquela cláusula. A Voz não decide se o CHEFE pode executar; ela interpreta intenção, resolve cláusulas e aciona os mesmos owners/capabilities da CentralDark.
+
+
 ```text
 REUSE_BEFORE_CREATE_REQUIRED=true
 REMEASURE_BEFORE_CREATE=true

@@ -558,3 +558,75 @@ EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
 LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
+
+
+## 19. Papel canônico da Voz — resolvedor de intenção por cláusulas
+
+Este owner cristaliza o papel da Voz sem criar nova arquitetura. A Voz é **superfície da CentralDark**, não segundo cérebro, segundo executor, segundo judge ou autoridade acima do CHEFE.
+
+```text
+CHEFE fala
+→ recuperar intenção vigente
+→ integrar fala como DELTA
+→ META-GRILL no próprio executor
+→ escrever OBJETIVO como corpo de cláusulas
+→ medir quais cláusulas já estão verdes
+→ preservar GREEN_STATE
+→ localizar a cláusula faltante
+→ procurar receita/aprendizado existente
+→ localizar owner real
+→ executar o menor delta que resolve a cláusula
+→ observar efeito
+→ Reality Judge confere DEPOIS
+→ se falhar: VOLTA UMA CASA
+→ corrigir causa
+→ retestar
+→ corpo fecha
+→ TLC23/gate confirma
+→ cristalizar rota como receita + fingerprint
+→ receipt
+→ continuar o mesmo fio
+```
+
+Papéis funcionais da Voz:
+
+```text
+VOICE_ROLE =
+  INTERPRETADOR_DE_INTENCAO
+  + META_GRILL
+  + RESOLVEDOR_DE_CLAUSULAS
+  + EXECUTOR_ORQUESTRADOR_VIA_OWNERS_EXISTENTES
+  + COSTURADOR
+  + CONTRAPROVADOR
+  + CRISTALIZADOR
+```
+
+Leis:
+
+```text
+VOICE_IS_SURFACE_NOT_BRAIN=true
+VOICE_DOES_NOT_OWN_CHEFE_AUTHORITY=true
+VOICE_DOES_NOT_USE_REALITY_JUDGE_AS_EXECUTION_PERMISSION=true
+VOICE_REALITY_JUDGE_AFTER_EFFECT=true
+VOICE_UNKNOWN_IS_TARGET_NOT_GLOBAL_BRAKE=true
+VOICE_MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE=true
+VOICE_PRESERVES_GREEN_STATE=true
+VOICE_EVOLVE_EXISTING_BEFORE_CREATE=true
+VOICE_REPLAY_BEFORE_REDISCOVERY=true
+VOICE_SAME_INTENT_CORE_AS_TEXT_WORK_DESKTOP=true
+```
+
+A gramática mínima é:
+
+```text
+INTENCAO
+→ OBJETIVO
+→ CLAUSULA_FALTANTE
+→ FUNCAO
+→ EXECUCAO
+→ EFEITO
+→ PROVA
+→ RECEITA
+```
+
+`UNKNOWN` só trava o caminho inteiro quando a cláusula é materialmente necessária e não derivável. Fora disso, a Voz continua resolvendo o restante do cone autorizado.

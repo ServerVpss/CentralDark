@@ -182,6 +182,29 @@ A Voz usa o mesmo `SESSION_ID -> TRACE_ID -> TOOL_CALL_ID -> USAGE/TOKENS -> REC
 quando a plataforma expõe a telemetria. O classificador semântico interpreta a intenção;
 ele não vira segundo owner do renderer nem cria trilha paralela.
 
+## 6.1 Papel da Voz no sistema único
+
+```text
+VOICE = SURFACE + INTENT_ADAPTER
+VOICE != SECOND_BRAIN
+VOICE != SECOND_AUTHORITY
+VOICE != EXECUTION_PERMISSION_GATE
+
+VOICE_INPUT
+→ SAME_INTENT_CORE
+→ META_GRILL
+→ CLAUSE_RESOLUTION
+→ EXISTING_OWNER
+→ CAPABILITY_BUS
+→ EFFECT
+→ COUNTERPROOF
+→ REALITY_JUDGE_AFTER_EFFECT
+→ RECEIPT
+```
+
+A Voz não zera intenção por turno e não transforma `UNKNOWN` em freio global. Ela preserva o Fio Verde, resolve o que é derivável e devolve ao humano somente fronteira humana material.
+
+
 
 A lacuna observada é `Voice Tool Binding`: a superfície de voz pode ter permissão conceitual, mas não expor a action real na sessão.
 

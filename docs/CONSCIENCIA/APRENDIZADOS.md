@@ -792,3 +792,13 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Data:** 2026-09-30
 - **Contexto:** Durante a evolução do fluxo CentralDark-OS, surgiu o risco de narrar a execução como se fosse do Claude ou de outro modelo específico. O CHEFE corrigiu: o foco é a inteligência artificial CentralDark OS; Claude, ChatGPT, Codex e demais motores são superfícies/canais.
 - **Aprendizado:** Em respostas, receipts, docs e raciocínio operacional, atribuir o fio e a autoria sistêmica à CentralDark/Instinto Superior quando o trabalho pertence ao sistema. Nomear modelos apenas como interface/motor usado naquele trecho. Não reduzir a inteligência CentralDark ao Claude. Preservar: CHEFE fala → CentralDark entende → motor executa como braço → rastro volta ao owner.
+
+
+### 105. Voz é resolvedor de intenção por cláusulas, não segundo cérebro nem porteiro
+- **Categoria:** governanca-voz-intencao-execucao
+- **Data:** 2026-10-01
+- **Owners:** `.claude/skills/synced/voice-semantic-classifier/SKILL.md` + `.agents/skills/centraldark-unified-surface-parity/SKILL.md` + `LEIA-ME-IA.md` + `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`
+- **Contexto:** O CHEFE cristalizou o papel da Voz após observar que o comportamento correto não é reagir ao erro visível, mas recuperar a intenção vigente, integrar a fala como delta, fazer META-GRILL no próprio executor, escrever o objetivo como corpo de cláusulas, preservar as que já estão verdes e resolver somente a cláusula faltante. O material “App Voz Pronto” tornou explícito esse fluxo.
+- **Aprendizado:** Voz é superfície da mesma CentralDark, não segundo cérebro, segundo runtime, segundo judge ou autoridade humana. O papel funcional é: interpretador de intenção + META-GRILL + resolvedor de cláusulas + executor/orquestrador via owners existentes + costurador + contraprovador + cristalizador. `UNKNOWN` é alvo de resolução, não freio global; só bloqueia o claim/caminho que materialmente depende daquela cláusula. Reality Judge verifica o efeito depois da execução autorizada; não concede permissão para começar.
+- **Fluxo cristalizado:** `CHEFE fala → recuperar intenção vigente → DELTA → META-GRILL → OBJETIVO → cláusulas → preservar verdes → cláusula faltante → replay → owner → menor delta → execução → efeito → Reality Judge depois → contraprova → VOLTA UMA CASA se preciso → fixed point → receita+fingerprint+receipt → continuar fio`.
+- **Cristal:** `VOICE_IS_SURFACE_NOT_BRAIN=true`; `VOICE_RESOLVES_INTENT_BY_CLAUSES=true`; `VOICE_UNKNOWN_IS_TARGET_NOT_GLOBAL_BRAKE=true`; `VOICE_REALITY_JUDGE_AFTER_EFFECT=true`; `VOICE_REPLAY_BEFORE_REDISCOVERY=true`; `VOICE_EVOLVE_EXISTING_BEFORE_CREATE=true`.
