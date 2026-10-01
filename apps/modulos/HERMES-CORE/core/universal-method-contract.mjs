@@ -789,6 +789,17 @@ export function validateUniversalMethod() {
 
     'child_pr_only_promotion_vehicle: false',
     'promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE"',
+    'new_pr_default: false',
+    'new_remote_branch_default: false',
+    'branch_is_transport_not_intent: true',
+    'no_branch_parking_lot: true',
+    'autonomous_pr_draft_default: false',
+    'authorized_intent_draft_auto_ready: true',
+    'draft_is_not_dependency_semaphore: true',
+    'explicit_keep_draft_preserved: true',
+    'ephemeral_branch_open_ready_pr_same_turn: true',
+    'ephemeral_branch_delete_after_merge: true',
+    'persistent_branch_requires_explicit_owner_and_purpose: true',
     'minimum_security_checks:',
     'direct_main_forbidden_when_compatible_child_is_healthy: true',
     'MAIN_READBACK',
@@ -832,6 +843,13 @@ export function validateUniversalMethod() {
     'UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED',
     'PROVEN_PATH_REPLAY_LOCK=true',
     'SAME_FINGERPRINT_REUSES_PROVEN_RECIPE=true',
+    'NEW_REMOTE_BRANCH_DEFAULT=false',
+    'BRANCH_IS_TRANSPORT_NOT_INTENT=true',
+    'NO_BRANCH_PARKING_LOT=true',
+    'AUTONOMOUS_PR_DRAFT_DEFAULT=false',
+    'AUTHORIZED_INTENT_DRAFT_AUTO_READY=true',
+    'EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true',
+    'EPHEMERAL_BRANCH_DELETE_AFTER_MERGE=true',
   ], 'OPERATIONAL_METHOD_INTERVIEW_BINDING');
 
   requireTokens(perceptionOrchestra, [
