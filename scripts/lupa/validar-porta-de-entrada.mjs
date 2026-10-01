@@ -1061,6 +1061,34 @@ if (!contract) {
   const historicalBranchOwner = String(branchPolicy.historical_reconciliation_owner || "");
   if (!historicalBranchOwner || !existe(historicalBranchOwner)) errors.push("BRANCH_RECONCILIATION_OWNER_AUSENTE");
 
+  const mcpToolOwner = String(branchPolicy.mcp_tool_owner || "");
+  const mcpClientOwner = String(branchPolicy.mcp_client_owner || "");
+  const toolLevel = branchPolicy.tool_level_enforcement ?? {};
+  if (!mcpToolOwner || !existe(mcpToolOwner)) errors.push("BRANCH_MCP_TOOL_OWNER_AUSENTE");
+  else {
+    const mcpTool = ler(mcpToolOwner);
+    for (const token of [
+      "centralDarkPrCreationPolicy",
+      "centralDarkBranchCreationPolicy",
+      "NEW_REMOTE_BRANCH_DEFAULT=false",
+      "EPHEMERAL_READY_PR_SAME_TURN",
+      "keepDraftReason",
+      "draft: false",
+    ]) {
+      if (!mcpTool.includes(token)) errors.push(`BRANCH_MCP_TOOL_BINDING_AUSENTE:${token}`);
+    }
+  }
+  if (!mcpClientOwner || !existe(mcpClientOwner)) errors.push("BRANCH_MCP_CLIENT_OWNER_AUSENTE");
+  else if (!ler(mcpClientOwner).includes("export async function deleteBranch")) {
+    errors.push("BRANCH_MCP_ROLLBACK_CLIENT_AUSENTE");
+  }
+  if (toolLevel.create_pr_ready_by_default !== true) errors.push("MCP_PR_READY_DEFAULT_AUSENTE");
+  if (toolLevel.explicit_keep_draft_reason_required !== true) errors.push("MCP_KEEP_DRAFT_REASON_AUSENTE");
+  if (toolLevel.create_branch_requires_material_purpose !== true) errors.push("MCP_BRANCH_PURPOSE_GATE_AUSENTE");
+  if (toolLevel.ephemeral_branch_auto_opens_ready_pr !== true) errors.push("MCP_EPHEMERAL_READY_PR_ATOMIC_AUSENTE");
+  if (toolLevel.ephemeral_branch_rolls_back_if_pr_creation_fails !== true) errors.push("MCP_EPHEMERAL_ROLLBACK_AUSENTE");
+  if (toolLevel.capability_does_not_infer_human_authority !== true) errors.push("MCP_CAPABILITY_INFERIU_AUTHORITY");
+
   const goals = contract.goal_derivation_policy ?? {};
   if (goals.marker !== "STABLE_PARENT_GOAL_DERIVED_MICRO_GOALS") errors.push("GOAL_DERIVATION_POLICY_AUSENTE");
   if (goals.goal_pai_id !== "STABLE") errors.push("GOAL_PAI_NAO_ESTAVEL");
