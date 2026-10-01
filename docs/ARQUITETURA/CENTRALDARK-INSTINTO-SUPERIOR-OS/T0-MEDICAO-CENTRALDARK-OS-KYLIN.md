@@ -466,3 +466,67 @@ ONE_SYSTEM_ONLY=true
 CASA_TWIN_IS_NOT_SECOND_BRAIN=true
 VPS_AND_CASA_CAN_SHARE_CAPABILITIES=true
 ```
+
+
+---
+
+## 15. PENDÊNCIA FUTURA — DUPLICAÇÃO DE FORÇA CASA + VPS (NÃO EXECUTAR AGORA)
+
+**Status:** BACKLOG / passos largos depois.  
+**Data:** 2026-10-01.  
+**Regra:** registrar agora; não transformar em missão ativa até novo comando do CHEFE.
+
+### Intenção
+
+Dobrar capacidade prática por cooperação entre dois corpos do mesmo sistema, sem criar identidade paralela:
+
+```text
+CASA_LOCAL_TWIN
++ GPU_LOCAL
++ HERMES_LOCAL_ISOLATED
++ VPS_CENTRALDARK_OS
++ NATIVE_OPENKYLIN_AI_CAPABILITIES
++ TAILSCALE_PRIVATE_SPINE
+→ ONE_CENTRALDARK / MULTI_BODY_CAPABILITY_COMPOSITION
+```
+
+### Direção futura
+
+1. Casa mantém o twin local openKylin/VMware já medido.
+2. Hermes roda localmente na Casa como coordenador/executor.
+3. Preferência futura de isolamento do Hermes local: container/runtime isolado quando aplicável, para evitar espalhar dependências e manter rollback limpo.
+4. VPS fornece IA pesada, KylinBot, inference, MCP, embeddings, TTS e demais capabilities nativas já existentes.
+5. Casa e VPS compartilham trabalho por capability, não por identidade duplicada.
+6. Omni Router permanece capability/fallback de compatibilidade; não é cérebro obrigatório.
+7. Recursos podem ser ampliados depois (RAM/CPU da VPS, GPU/compute local) somente após prova de uso real justificar aumento.
+
+### Padrão operacional observado nesta sessão
+
+O CHEFE demonstrou antecipação de cadeia e composição por invariantes: ao iniciar um passo, abre múltiplas rotas possíveis, reaproveita capacidades existentes e combina corpos/runtimes diferentes. Isso deve ser tratado como **mecanismo de geração de hipóteses e arquitetura**, não como garantia automática de correção.
+
+```text
+CHAIN_ANTICIPATION=OBSERVED
+REUSE_BEFORE_CREATE=OBSERVED
+CAPABILITY_COMPOSITION=OBSERVED
+REDUNDANCY_WITHOUT_IDENTITY_DUPLICATION=OBSERVED
+EARLY_NEXT_FIT_DISCOVERY=OBSERVED
+HYPOTHESIS_BREADTH_CAN_BE_LARGE=true
+
+ANTICIPATION != PROOF
+POSSIBILITY_COUNT != CORRECTNESS
+ASI_CLAIM=NO
+AGI_HUMAN_LABEL=RESENHA_ONLY
+REALITY_JUDGE_REQUIRED=true
+```
+
+### Aceite futuro
+
+Só promover esta pendência a missão quando houver comando explícito do CHEFE. Quando ativada, começar por inventário e benchmark dos dois corpos e medir ganho real antes de compra/upgrade.
+
+```text
+PENDING_ONLY=true
+DO_NOT_EXECUTE_NOW=true
+NO_NEW_ARCHITECTURE_NOW=true
+CURRENT_GREEN_STATE_MUST_BE_PRESERVED=true
+NEXT_CURSOR=CHEFE_EXPLICITLY_ACTIVATES_TWIN_FORCE_MULTIPLIER
+```
