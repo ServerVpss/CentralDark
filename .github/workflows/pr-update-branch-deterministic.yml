@@ -57,14 +57,57 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'push' }}
 
 jobs:
-  update-branch:
-    name: 🔄🪡 PUT /pulls/{PR}/update-branch + estabilização
+  preflight:
+    name: 🧭 Preflight — alvo + fonte confiável
     if: github.repository == 'ServerVpss/CentralDark'
-    # 🛡️ Runner lock: GitHub-hosted mantém a onda viva sem depender da VPS offline.
-    # Futuro híbrido só com runner self-hosted online provado + autorização explícita do CHEFE.
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      target_pr: ${{ steps.plan.outputs.target_pr }}
+    steps:
+      - name: 🧭 Resolver alvo determinístico
+        id: plan
+        shell: bash
+        env:
+          TARGET_PR_RAW: ${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || '' }}
+        run: |
+          set -euo pipefail
+          TARGET_PR="${TARGET_PR_RAW:-}"
+          echo "target_pr=${TARGET_PR}" >> "$GITHUB_OUTPUT"
+          echo "EVENT_NAME=${GITHUB_EVENT_NAME}"
+          echo "TRUSTED_REF=main"
+          echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
+          echo "NEXT=UPDATE_AND_STITCH"
+
+      - name: 🪵 Debug seguro do contexto
+        if: runner.debug == '1'
+        shell: bash
+        env:
+          TARGET_PR: ${{ steps.plan.outputs.target_pr }}
+        run: |
+          set -euo pipefail
+          echo "DEBUG_ENABLED=1"
+          echo "RUN_ID=${GITHUB_RUN_ID}"
+          echo "RUN_ATTEMPT=${GITHUB_RUN_ATTEMPT}"
+          echo "EVENT_NAME=${GITHUB_EVENT_NAME}"
+          echo "ACTOR=${GITHUB_ACTOR}"
+          echo "SHA=${GITHUB_SHA}"
+          echo "REF=${GITHUB_REF}"
+          echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
+
+  update-and-stitch:
+    name: 🔄🪡 Update branch + estabilização
+    needs: preflight
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
+    outputs:
+      verdict: ${{ steps.update.outputs.verdict }}
+      total: ${{ steps.update.outputs.total }}
+      requested: ${{ steps.update.outputs.requested }}
+      confirmed: ${{ steps.update.outputs.confirmed }}
+      blocked: ${{ steps.update.outputs.blocked }}
+      unknown_or_pending: ${{ steps.update.outputs.unknown_or_pending }}
+      step_outcome: ${{ steps.classify.outputs.step_outcome }}
     steps:
       - name: 📥 Checkout somente do código confiável da main
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -76,11 +119,13 @@ jobs:
           submodules: false
 
       - name: 🔄🪡 Aplicar update-branch determinístico com costura estabilizada
+        id: update
+        continue-on-error: true
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          TARGET_PR: ${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || '' }}
+          TARGET_PR: ${{ needs.preflight.outputs.target_pr }}
           BASE_BRANCH: main
           UPDATE_BRANCH_INCLUDE_PROTECTED: 'true'
           UPDATE_BRANCH_FAIL_ON_BLOCKED: 'true'
@@ -97,24 +142,104 @@ jobs:
           echo 'TARGET_PR='"${TARGET_PR:-ALL_OPEN}"''
           node .ci-house/scripts/github/update-branch-deterministic.mjs
 
-      - name: 🧾 Receipt
+      - name: 🧭 Classificar resultado da execução
+        id: classify
         if: always()
         shell: bash
         env:
-          JOB_STATUS: ${{ job.status }}
-          TARGET_PR: ${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || '' }}
+          STEP_OUTCOME: ${{ steps.update.outcome }}
+          OWNER_VERDICT: ${{ steps.update.outputs.verdict }}
         run: |
-          echo "JOB_STATUS=$JOB_STATUS"
+          set -euo pipefail
+          echo "step_outcome=${STEP_OUTCOME:-UNKNOWN}" >> "$GITHUB_OUTPUT"
+          echo "STEP_OUTCOME=${STEP_OUTCOME:-UNKNOWN}"
+          echo "OWNER_VERDICT=${OWNER_VERDICT:-UNKNOWN}"
+
+  reality-judge:
+    name: ⚖️ Reality Judge — costura material
+    needs: [preflight, update-and-stitch]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      verdict: ${{ steps.judge.outputs.verdict }}
+    steps:
+      - name: ⚖️ Julgar efeito material
+        id: judge
+        shell: bash
+        env:
+          OWNER_VERDICT: ${{ needs.update-and-stitch.outputs.verdict }}
+          STEP_OUTCOME: ${{ needs.update-and-stitch.outputs.step_outcome }}
+          TOTAL: ${{ needs.update-and-stitch.outputs.total }}
+          CONFIRMED: ${{ needs.update-and-stitch.outputs.confirmed }}
+          BLOCKED: ${{ needs.update-and-stitch.outputs.blocked }}
+          UNKNOWN_OR_PENDING: ${{ needs.update-and-stitch.outputs.unknown_or_pending }}
+        run: |
+          set -euo pipefail
+          VERDICT="${OWNER_VERDICT:-UNKNOWN}"
+
+          echo "OWNER_VERDICT=$VERDICT"
+          echo "STEP_OUTCOME=${STEP_OUTCOME:-UNKNOWN}"
+          echo "TOTAL=${TOTAL:-UNKNOWN}"
+          echo "CONFIRMED=${CONFIRMED:-UNKNOWN}"
+          echo "BLOCKED=${BLOCKED:-UNKNOWN}"
+          echo "UNKNOWN_OR_PENDING=${UNKNOWN_OR_PENDING:-UNKNOWN}"
+
+          case "$VERDICT" in
+            PASS)
+              if [ "${STEP_OUTCOME:-}" != "success" ]; then
+                echo "REALITY_JUDGE=FAIL_STEP_OUTCOME"
+                echo "verdict=FAIL" >> "$GITHUB_OUTPUT"
+                exit 1
+              fi
+              echo "REALITY_JUDGE=PASS"
+              echo "verdict=PASS" >> "$GITHUB_OUTPUT"
+              ;;
+            FAIL)
+              echo "REALITY_JUDGE=FAIL"
+              echo "verdict=FAIL" >> "$GITHUB_OUTPUT"
+              exit 1
+              ;;
+            *)
+              echo "REALITY_JUDGE=UNKNOWN_NOT_PASS"
+              echo "verdict=UNKNOWN" >> "$GITHUB_OUTPUT"
+              exit 1
+              ;;
+          esac
+
+  receipt:
+    name: 🧾 Receipt — fluxo completo
+    needs: [preflight, update-and-stitch, reality-judge]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 🧾 Receipt
+        shell: bash
+        env:
+          TARGET_PR: ${{ needs.preflight.outputs.target_pr }}
+          UPDATE_VERDICT: ${{ needs.update-and-stitch.outputs.verdict }}
+          REALITY_VERDICT: ${{ needs.reality-judge.outputs.verdict }}
+          TOTAL: ${{ needs.update-and-stitch.outputs.total }}
+          REQUESTED: ${{ needs.update-and-stitch.outputs.requested }}
+          CONFIRMED: ${{ needs.update-and-stitch.outputs.confirmed }}
+          BLOCKED: ${{ needs.update-and-stitch.outputs.blocked }}
+          UNKNOWN_OR_PENDING: ${{ needs.update-and-stitch.outputs.unknown_or_pending }}
+        run: |
+          set -euo pipefail
           echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
-          echo 'ACTION=PUT_UPDATE_BRANCH_WHEN_BEHIND_MAIN'
-          echo 'STITCH_STABILIZATION=ENABLED'
-          echo 'STITCH_GREEN_REQUIRES=COMPARE_AFTER_BEHIND_BY_0'
-          echo 'CHECKS_PENDING_OR_SKIPPED=NOT_PASS'
-          echo 'MERGE=NOT_DONE'
-          echo 'APPROVAL=NOT_DONE'
-          echo 'DEPLOY=NOT_DONE'
-          echo 'UNKNOWN_IS_PASS=0'
-          echo 'UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN'
-          echo 'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true'
-          echo 'HYBRID_MODE_PENDING_VPS_PROOF=true'
-          echo 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true'
+          echo "FLOW=PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT"
+          echo "ACTION=PUT_UPDATE_BRANCH_WHEN_BEHIND_MAIN"
+          echo "STITCH_STABILIZATION=ENABLED"
+          echo "UPDATE_VERDICT=${UPDATE_VERDICT:-UNKNOWN}"
+          echo "REALITY_VERDICT=${REALITY_VERDICT:-UNKNOWN}"
+          echo "TOTAL=${TOTAL:-UNKNOWN}"
+          echo "REQUESTED=${REQUESTED:-UNKNOWN}"
+          echo "CONFIRMED=${CONFIRMED:-UNKNOWN}"
+          echo "BLOCKED=${BLOCKED:-UNKNOWN}"
+          echo "UNKNOWN_OR_PENDING=${UNKNOWN_OR_PENDING:-UNKNOWN}"
+          echo "MERGE=NOT_DONE"
+          echo "APPROVAL=NOT_DONE"
+          echo "DEPLOY=NOT_DONE"
+          echo "UNKNOWN_IS_PASS=0"
+          echo "UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN"
