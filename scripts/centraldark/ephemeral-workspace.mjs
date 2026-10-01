@@ -372,6 +372,7 @@ function selfTest() {
     writeFileSync(join(target, "probe.txt"), "delete-after-use\n", "utf8");
     const marker = readMarker(target);
     safeIdentity(marker, target);
+    inventoryRoot(root, ["workspace"]);
     cleanupWorkspace(target);
     if (!existsSync(target) && !existsSync(root)) result = "PASS";
   } finally {
