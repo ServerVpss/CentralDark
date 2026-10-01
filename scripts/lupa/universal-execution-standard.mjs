@@ -37,6 +37,9 @@ export const UNIVERSAL_EXECUTION_STANDARD = Object.freeze({
     "RECEIPT_REQUIRED_BEFORE_GREEN",
     "MODEL_VOTE_IS_NOT_TRUTH",
     "DETERMINISTIC_FALLBACK_BEFORE_PROVIDER_DEPENDENCE",
+    "EXIT_CODE_IS_SIGNAL_NOT_ROOT_CAUSE",
+    "EXIT_CODE_ZERO_ALONE_IS_NOT_PASS",
+    "ANY_NONZERO_EXIT_REQUIRES_CAUSAL_DIAGNOSIS",
   ],
   model_policy: {
     n_models_supported: true,
@@ -73,6 +76,73 @@ function state(value) {
   if (value === false || value === "false" || value === "FALSE" || value === 0 || value === "0") return "GAP";
   if (value === "PRESENT" || value === "GAP") return value;
   return "UNKNOWN";
+}
+
+export function classifyProcessExit(input = {}) {
+  const rawCode = input.exit_code ?? input.code ?? null;
+  const parsedCode = rawCode === null || rawCode === undefined || rawCode === ""
+    ? null
+    : Number(rawCode);
+  const exitCode = Number.isInteger(parsedCode) ? parsedCode : null;
+  const signal = input.signal ? String(input.signal) : null;
+  const shellSemantics = bool(input.shell_semantics);
+  const stdout = String(input.stdout ?? "");
+  const stderr = String(input.stderr ?? "");
+  const combined = `${stdout}\n${stderr}`;
+  const explicitCause = String(input.classified_failure ?? input.cause ?? "").trim();
+  const causalEvidence = String(input.causal_evidence ?? "").trim();
+
+  let shellHint = "NO_UNIVERSAL_NUMERIC_MEANING";
+  if (shellSemantics && exitCode !== null) {
+    if (exitCode === 0) shellHint = "SUCCESS_CANDIDATE";
+    else if (exitCode === 1) shellHint = "GENERIC_FAILURE";
+    else if (exitCode === 2) shellHint = "USAGE_OR_POLICY_CANDIDATE";
+    else if (exitCode === 126) shellHint = "NOT_EXECUTABLE_CANDIDATE";
+    else if (exitCode === 127) shellHint = "COMMAND_NOT_FOUND_CANDIDATE";
+    else if (exitCode >= 129 && exitCode <= 255) shellHint = "SIGNAL_TERMINATION_CANDIDATE";
+    else shellHint = "NONZERO_UNCLASSIFIED";
+  }
+
+  const deterministicPatterns = [
+    [/refusing to merge unrelated histories/i, "UNRELATED_HISTORIES"],
+    [/(?:command not found|not recognized as an internal or external command)/i, "COMMAND_NOT_FOUND"],
+    [/(?:permission denied|operation not permitted)/i, "PERMISSION_DENIED"],
+    [/(?:no such file or directory|cannot find the (?:file|path))/i, "PATH_OR_FILE_MISSING"],
+    [/(?:timed? out|timeout)/i, "TIMEOUT"],
+    [/(?:address already in use|EADDRINUSE)/i, "PORT_ALREADY_IN_USE"],
+    [/(?:syntax error|SyntaxError)/i, "SYNTAX_ERROR"],
+    [/(?:authentication failed|unauthorized|401 Unauthorized)/i, "AUTHENTICATION_FAILED"],
+  ];
+
+  let classifiedFailure = explicitCause || null;
+  if (!classifiedFailure && exitCode !== 0) {
+    classifiedFailure = deterministicPatterns.find(([pattern]) => pattern.test(combined))?.[1] ?? null;
+  }
+
+  const rootCauseProven = exitCode === 0
+    ? false
+    : Boolean(classifiedFailure && (causalEvidence || deterministicPatterns.some(([pattern, name]) => name === classifiedFailure && pattern.test(combined))));
+
+  return {
+    marker: "CENTRALDARK_EXIT_CODE_DIAGNOSIS_REQUIRED",
+    exit_code: exitCode,
+    signal,
+    shell_semantics: shellSemantics,
+    shell_hint: shellHint,
+    status: exitCode === 0 ? "SUCCESS_CANDIDATE" : "BLOCKED_REQUIRES_CAUSAL_DIAGNOSIS",
+    pass: false,
+    effect_proof_required: exitCode === 0,
+    causal_diagnosis_required: exitCode !== 0,
+    classified_failure: classifiedFailure ?? "UNKNOWN",
+    root_cause_proven: rootCauseProven,
+    numeric_code_is_root_cause: false,
+    unknown_is_pass: false,
+    next_cursor: exitCode === 0
+      ? "MEASURE_EFFECT_AND_RECEIPT_BEFORE_GREEN"
+      : rootCauseProven
+        ? "REUSE_EXISTING_OWNER_APPLY_MINIMUM_CAUSAL_DELTA_RETEST"
+        : "INSPECT_STDOUT_STDERR_RUNTIME_SOURCE_AND_DISCRIMINATE_CAUSE",
+  };
 }
 
 export function normalizeModelSet(models = []) {
@@ -221,14 +291,37 @@ function selfTest() {
     same_head: true,
   });
 
+  const exit0 = classifyProcessExit({ exit_code: 0, shell_semantics: true });
+  const exit1 = classifyProcessExit({ exit_code: 1, shell_semantics: true, stderr: "generic failure" });
+  const exit2 = classifyProcessExit({ exit_code: 2, shell_semantics: true, stderr: "policy blocked" });
+  const exit127 = classifyProcessExit({ exit_code: 127, shell_semantics: true, stderr: "command not found" });
+  const exit128Unrelated = classifyProcessExit({
+    exit_code: 128,
+    shell_semantics: true,
+    stderr: "fatal: refusing to merge unrelated histories",
+  });
+  const exit42 = classifyProcessExit({ exit_code: 42, shell_semantics: true, stderr: "tool specific failure" });
+
   const samples = [reusableCi, reusableExecutable];
   const receiptGatePass = blockedWithoutReceipt.pass === false &&
     blockedWithoutReceipt.errors.includes("RECEIPT_REQUIRED_BEFORE_GREEN");
+  const exitGatePass =
+    exit0.pass === false &&
+    exit0.effect_proof_required === true &&
+    exit1.causal_diagnosis_required === true &&
+    exit2.shell_hint === "USAGE_OR_POLICY_CANDIDATE" &&
+    exit127.classified_failure === "COMMAND_NOT_FOUND" &&
+    exit128Unrelated.classified_failure === "UNRELATED_HISTORIES" &&
+    exit128Unrelated.root_cause_proven === true &&
+    exit42.shell_hint === "NONZERO_UNCLASSIFIED" &&
+    exit42.classified_failure === "UNKNOWN";
+
   return {
-    status: samples.every((sample) => sample.pass) && receiptGatePass ? "PASS" : "FAIL",
+    status: samples.every((sample) => sample.pass) && receiptGatePass && exitGatePass ? "PASS" : "FAIL",
     marker: UNIVERSAL_EXECUTION_STANDARD.marker,
     samples,
     blocked_without_receipt: blockedWithoutReceipt,
+    exit_code_diagnosis: { exit0, exit1, exit2, exit127, exit128Unrelated, exit42 },
   };
 }
 
