@@ -5,6 +5,8 @@
 
 UPDATE_BRANCH_RUNNER_LOCK: GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN
 workflow: .github/workflows/pr-update-branch-deterministic.yml
+required_jobs: [preflight, update-and-stitch, reality-judge, receipt]
+visual_flow: PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT
 required_runner: ubuntu-latest
 forbidden_without_explicit_chefe_authorization:
   - "runs-on: [self-hosted, Linux]"

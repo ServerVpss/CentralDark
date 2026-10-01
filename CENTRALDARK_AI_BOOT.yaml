@@ -468,6 +468,16 @@ CENTRALDARK_AI_BOOT:
       child_pr_only_promotion_vehicle: false
       promotion_mode: "DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE"
       new_pr_default: false
+      new_remote_branch_default: false
+      branch_is_transport_not_intent: true
+      no_branch_parking_lot: true
+      autonomous_pr_draft_default: false
+      authorized_intent_draft_auto_ready: true
+      draft_is_not_dependency_semaphore: true
+      explicit_keep_draft_preserved: true
+      ephemeral_branch_open_ready_pr_same_turn: true
+      ephemeral_branch_delete_after_merge: true
+      persistent_branch_requires_explicit_owner_and_purpose: true
       existing_open_prs_remain_valid: true
       existing_compatible_child_pr_is_mandatory_lane: true
       child_match_key: "OWNER+SCOPE+CAPABILITY"
@@ -484,7 +494,7 @@ CENTRALDARK_AI_BOOT:
       open_delta_policy: "RECONCILE_ONLY_OPEN_OR_REOPENED_MATERIAL_DELTA"
       fixed_point_semantics: "CLOSES_CURRENT_DELTA_NOT_CENTRALDARK"
       after_fixed_point: "RETURN_TO_PR_MOTHER_1562_AND_CONTINUE_OPEN_DELTA_SCAN"
-    canonical_arrow_command: "CENTRALDARK -> #1562 -> CURRENT_MAIN -> REUSE_PROVEN -> FIND_MATCHING_CHILD_OWNER_SCOPE_CAPABILITY -> CHILD_REQUIRED_OR_STALE_TRACE_OR_NO_CHILD -> PROVA -> CONTRAPROVA -> CHILD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> MAIN_READBACK -> RECEIPT_CHILD_IF_EXISTED -> RECEIPT_PR_MOTHER -> FIXED_POINT -> #1562"
+    canonical_arrow_command: "CENTRALDARK -> #1562 -> CURRENT_MAIN -> REUSE_PROVEN -> FIND_MATCHING_CHILD_OWNER_SCOPE_CAPABILITY -> REUSE_HEALTHY_CHILD_OR_DIRECT_MAIN_IF_ALLOWED_OR_EPHEMERAL_READY_PR_IF_REQUIRED -> PROVA -> CONTRAPROVA -> CHILD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> DELETE_EPHEMERAL_BRANCH_AFTER_MERGE -> MAIN_READBACK -> RECEIPT_CHILD_IF_EXISTED -> RECEIPT_PR_MOTHER -> FIXED_POINT -> #1562"
     hardened_pr_arrow_when_reenabled: "OPEN_DELTA → CHILD_PR → SAME_HEAD → SQUASH_CHILD_ONLY → MAIN_READBACK"
     on_activation:
       - "MEASURE_AND_BIND_CURRENT_MAIN_SHA"
@@ -710,6 +720,14 @@ CENTRALDARK_AI_BOOT:
     one_hub_only: true
     memory_api: "apps/modulos/memoria-api/"
     graph_projection: "apps/modulos/graph-panel/"
+    graph_runtime_source: "apps/modulos/status/graph-data.json"
+    graph_projection_writer: "scripts/grafo-vivo/obsidian-nota.mjs"
+    brain_graph_primary: "docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md"
+    brain_graph_legacy_compat: "docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md"
+    brain_graph_freshness_key: "GRAPH_FINGERPRINT"
+    brain_graph_stale_policy: "REGENERATE_FROM_LIVE_GRAPH_SOURCE"
+    brain_graph_is_authority: false
+    stale_brain_graph_is_current: false
     obsidian_plugin: "apps/modulos/obsidian-plugin-grafo-vivo/"
     obsidian_and_runtime_webhook_ingest: "POST https://api.centralldark.com/memoria/ingest"
     graph_read: "https://grafo.centralldark.com/api/graph?mode=vivo"

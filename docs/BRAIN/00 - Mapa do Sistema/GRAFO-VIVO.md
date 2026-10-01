@@ -1,8 +1,17 @@
 ---
 title: "Grafo Vivo — Visão em Tempo Real"
+status: "DERIVED_CURRENT_PROJECTION"
 date: 2026-07-03
 tags: ["grafo", "arquitetura", "saude", "tempo-real", "mermaid", "sistema"]
-updated: 2026-09-12
+updated: 2026-10-01
+source: "apps/modulos/status/graph-data.json"
+source_class: "RUNTIME_DERIVED"
+source_rule: "LIVE_GRAPH_DATA -> BRAIN_PROJECTION; GRAPH != AUTHORITY"
+owner: "scripts/grafo-vivo/obsidian-nota.mjs"
+writer: "CentralDark-GrafoVivo/cron-grafo-unificado"
+authority: false
+primary_projection: "docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md"
+legacy_compat_mirror: "docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md"
 ---
 
 # 🕸️ Grafo Vivo — Visão em Tempo Real
@@ -12,9 +21,9 @@ updated: 2026-09-12
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│  🕸️ GRAFO VIVO · atualizado 11/09/2026, 23:37:53    │
-│   77 nós · 102 arestas ·  8 🟢 online ·  1 🔴 off       │
-│  23 processos PM2 ·   0 req ChatGPT/15min                │
+│  🕸️ GRAFO VIVO · atualizado 30/09/2026, 23:53:50    │
+│   77 nós · 102 arestas · 12 🟢 online ·  0 🔴 off       │
+│  24 processos PM2 ·   0 req ChatGPT/15min                │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -23,16 +32,15 @@ updated: 2026-09-12
 ```mermaid
 flowchart LR
     arsenaladapter["🟢 Arsenal Adapter"]
-    bot_telegram["🟢 @srver1bot"]
-    elite_http_gateway["🟢 Elite HTTP Gateway"]
-    eliteanthropic["Elite Anthropic"]
-    elitews["Elite WS"]
-    evolucaoias["Evolução IAs"]
+    elite_http_gateway["Elite HTTP Gateway"]
+    eliteanthropic["🟢 Elite Anthropic"]
+    elitews["🟢 Elite WS"]
+    evolucaoias["🟢 Evolução IAs"]
     fn_ai_proxy["EF: ai-proxy"]
     fn_webapp_format["EF: webapp-format-ai"]
     github_api["GitHub API"]
     graph_panel["🟢 Graph Panel"]
-    guardiaoanalista["Guardião Analista"]
+    guardiaoanalista["🟢 Guardião Analista"]
     guardiaoconsciencia["🟢 Guardião Consciência"]
     hermes["🟢 Hermes (executor)"]
     linear_api["Linear API"]
@@ -52,9 +60,8 @@ flowchart LR
     tool_supabase["MCP: supabase"]
     tool_vps["MCP: vps_*"]
     veiculosapi["VeiculosAPI"]
-    webhook_deploy["🔴 Webhook Deploy"]
-    zentinel["Zentinel (latência)"]
-    bot_telegram -->|webhook updates| supabase
+    webhook_deploy["🟢 Webhook Deploy"]
+    zentinel["🟢 Zentinel (latência)"]
     elite_http_gateway -->|roteia AI models| lovable_gateway
     fn_ai_proxy -->|chat/completions| lovable_gateway
     fn_webapp_format -->|format AI| lovable_gateway
@@ -75,8 +82,6 @@ flowchart LR
     tool_painel -->|edita painel-data| painel_status
     tool_supabase -->|REST admin| supabase
     webhook_deploy -->|recebe push → git pull| github_api
-    classDef caido stroke:#ef4444,stroke-width:3px,color:#ef4444;
-    class webhook_deploy caido;
 ```
 
 > Vermelho = processo caído. O diagrama é derivado; divergência visual vira achado para investigação, não autoridade.
@@ -89,19 +94,22 @@ flowchart LR
 
 | | Nó | Processo PM2 | Status |
 |--|----|----|----|
-| 🟢 | @srver1bot | `CentralDark-HubBot` | online |
 | 🟢 | Arsenal Adapter | `CentralDark-ArsenalAdapter` | online |
-| 🟢 | Elite HTTP Gateway | `CentralDark-EliteHTTP` | online |
+| 🟢 | Elite Anthropic | `CentralDark-EliteAnthropic` | online |
+| 🟢 | Elite WS | `CentralDark-EliteWS` | online |
+| 🟢 | Evolução IAs | `CentralDark-EvolucaoIAs` | online |
 | 🟢 | Graph Panel | `CentralDark-GraphPanel` | online |
+| 🟢 | Guardião Analista | `CentralDark-GuardiaoAnalista` | online |
 | 🟢 | Guardião Consciência | `CentralDark-GuardiaoConsciencia` | online |
 | 🟢 | Hermes (executor) | `CentralDark-Hermes` | online |
 | 🟢 | MCP CentralDark | `CentralDark-MCP` | online |
 | 🟢 | Memória API | `CentralDark-Memoria` | online |
-| 🔴 | Webhook Deploy | `CentralDark-WebhookDeploy` | stopped |
+| 🟢 | Webhook Deploy | `CentralDark-WebhookDeploy` | online |
+| 🟢 | Zentinel (latência) | `CentralDark-Zentinel` | online |
 
 ## 🚨 Anomalias
 
-- 🔴 **Webhook Deploy** (`CentralDark-WebhookDeploy`) — status `stopped`.
+✅ Nenhuma anomalia de processo — todos os processos monitorados estão online.
 
 ## 🔀 Fluxos críticos
 
@@ -114,13 +122,16 @@ flowchart LR
 ## 🧾 Receipt da projeção
 
 ```text
-PROJECTION_SOURCE=/root/CentralDark/apps/modulos/status/graph-data.json
-GRAPH_FINGERPRINT=b8fa63825de5bad551e303c1431b2a3271b55e2f433f11bc08ba0cddd8d909fa
+PROJECTION_SOURCE=apps/modulos/status/graph-data.json
+PRIMARY_PROJECTION=docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
+LEGACY_COMPAT_MIRROR=docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md
+FRESHNESS_KEY=GRAPH_FINGERPRINT
+GRAPH_FINGERPRINT=14890c4cd8a6a95a61acc4eee96e1df5c4099e2ba7e744c9d7e89e1211de6727
 MERMAID_KIND=flowchart
 MERMAID_STRUCTURAL_VALIDATION=PASS
 VISUAL_IS_TRUTH=false
-FOCUS_NODES=32
-FOCUS_EDGES=21
+FOCUS_NODES=31
+FOCUS_EDGES=20
 DANGLING_EDGES=0
 DUPLICATE_EDGES=0
 SELF_LOOPS=0
@@ -131,3 +142,5 @@ WRITE=UPDATED
 
 ---
 🔗 [[00-MAPA]] · [[02-ARQUITETURA]] · [[MAPA-DOS-BOTS]] · painel: status.centralldark.com
+
+[executed on device: vmi3256920 (049f49fb-7b7f-4acb-953c-e68f6dbc4339)]

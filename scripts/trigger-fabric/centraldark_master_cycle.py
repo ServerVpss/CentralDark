@@ -488,13 +488,22 @@ def evaluate_multibussola_state(state):
     unknown = int(state.get("unknown_material", 0))
     counterproof = bool(state.get("counterproof_survives"))
     t1 = bool(state.get("t1_stable"))
+
+    ephemeral_workspace_used = bool(state.get("ephemeral_workspace_used"))
+    ephemeral_cleanup_readback_pass = bool(state.get("ephemeral_cleanup_readback_pass"))
+    ephemeral_unclassified_residue = int(state.get("ephemeral_unclassified_residue", 0))
+    ephemeral_cleanup_ok = (
+        not ephemeral_workspace_used
+        or (ephemeral_cleanup_readback_pass and ephemeral_unclassified_residue == 0)
+    )
+
     if not local:
         verdict = "RESIDUAL_MAP_NEXT_CURSOR"
     elif state.get("failure_stable"):
         verdict = "FIXED_POINT_FAIL"
     elif state.get("frontier_stable"):
         verdict = "FIXED_POINT_BLOCKED"
-    elif unknown == 0 and counterproof and t1:
+    elif unknown == 0 and counterproof and t1 and ephemeral_cleanup_ok:
         verdict = "FIXED_POINT_PASS"
     else:
         verdict = "LOCAL_FIXED_POINT_NOT_YET"
@@ -507,6 +516,11 @@ def evaluate_multibussola_state(state):
         "material_contradiction": contradiction,
         "counterproof_survives": counterproof,
         "t1_stable": t1,
+        "ephemeral_workspace_used": ephemeral_workspace_used,
+        "ephemeral_cleanup_required": ephemeral_workspace_used,
+        "ephemeral_cleanup_readback_pass": ephemeral_cleanup_readback_pass,
+        "ephemeral_unclassified_residue": ephemeral_unclassified_residue,
+        "ephemeral_cleanup_ok": ephemeral_cleanup_ok,
         "verdict": verdict,
         "mission_state": "CLOSED" if verdict == "FIXED_POINT_PASS" and state.get("global_objective_closed") else "NOT_YET",
     }

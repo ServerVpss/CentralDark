@@ -285,6 +285,75 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertEqual(["REGISTRA", "RASTRO", "HANDOFF", "BOOT"], chain[-4:])
 
 
+    def test_fixed_point_allows_no_ephemeral_workspace(self):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            "ephemeral_workspace_used": False,
+        }
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("FIXED_POINT_PASS", result["verdict"])
+        self.assertEqual("CLOSED", result["mission_state"])
+        self.assertTrue(result["ephemeral_cleanup_ok"])
+
+    def test_fixed_point_blocks_used_workspace_without_cleanup_readback(self):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            "ephemeral_workspace_used": True,
+            "ephemeral_cleanup_readback_pass": False,
+            "ephemeral_unclassified_residue": 0,
+        }
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("LOCAL_FIXED_POINT_NOT_YET", result["verdict"])
+        self.assertEqual("NOT_YET", result["mission_state"])
+        self.assertFalse(result["ephemeral_cleanup_ok"])
+
+    def test_fixed_point_blocks_unclassified_temp_residue(self):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            "ephemeral_workspace_used": True,
+            "ephemeral_cleanup_readback_pass": True,
+            "ephemeral_unclassified_residue": 1,
+        }
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("LOCAL_FIXED_POINT_NOT_YET", result["verdict"])
+        self.assertFalse(result["ephemeral_cleanup_ok"])
+
+    def test_fixed_point_passes_after_ephemeral_cleanup_readback(self):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            "ephemeral_workspace_used": True,
+            "ephemeral_cleanup_readback_pass": True,
+            "ephemeral_unclassified_residue": 0,
+        }
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("FIXED_POINT_PASS", result["verdict"])
+        self.assertEqual("CLOSED", result["mission_state"])
+        self.assertTrue(result["ephemeral_cleanup_ok"])
+
     def test_embedded_self_test_passes(self):
         result = MODULE.self_test()
         failed = [c for c in result["cases"] if not c["ok"]]

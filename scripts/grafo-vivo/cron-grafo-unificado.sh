@@ -30,4 +30,9 @@ echo "GRAPH_IMPORT=PASS"
 echo "[3] overlay PM2 (grafo vivo)..."
 node "$REPO/scripts/grafo-vivo/gerar-grafo-vivo.mjs"
 echo "GRAPH_OVERLAY=PASS"
-echo "[4] GRAPH_CONTEXT_MAP=UPDATED $(date -Is)"
+
+echo "[4] sync projeção derivada no BRAIN..."
+node "$REPO/scripts/grafo-vivo/obsidian-nota.mjs"
+echo "BRAIN_GRAPH_PROJECTION=PASS"
+
+echo "[5] GRAPH_CONTEXT_MAP=UPDATED $(date -Is)"

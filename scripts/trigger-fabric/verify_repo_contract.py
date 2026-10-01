@@ -89,6 +89,32 @@ def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
         ok=not violations
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':violations})
 
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'GENERAL=POSTURA_OPERACIONAL_TRANSPORTAVEL',
+ 'GENERAL_IS_NOT_NEW_BRAIN=true',
+ 'GENERAL_IS_NOT_NEW_AUTHORITY=true',
+ 'GENERAL_INHERITS_SOUL=true',
+ 'GENERAL_MAY_BE_CARRIED_BY_ANY_REPLACEABLE_ENGINE=true',
+ 'GENERAL_OPERATES_ONLY_INSIDE_CHEFE_INTENT_AND_SCOPE=true',
+ 'GENERAL_RETURNS_PROVEN_LEARNING_TO_CANONICAL_CORE=true',
+ 'CHEFE_TEACHES_CENTRALDARK_OS_LEARNS=true',
+], classification='GENERAL_PORTABLE_POSTURE_SOUL_CONTRACT')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml',[
+ 'GENERAL: TRANSPORTABLE_OPERATIONAL_POSTURE_NOT_IDENTITY',
+ 'CHEFE_TEACHES_CENTRALDARK_OS_LEARNS',
+ 'GENERAL_INHERITS_SAME_SOUL',
+ 'GENERAL_MAY_BE_CARRIED_BY_ANY_REPLACEABLE_ENGINE',
+ 'GENERAL_NE_NEW_BRAIN',
+ 'GENERAL_NE_HUMAN_AUTHORITY',
+ 'GENERAL_RETURNS_PROVEN_LEARNING_TO_CANONICAL_CORE',
+], classification='GENERAL_TEACHING_GRAMMAR_CONTRACT')
+check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
+ 'GENERAL_IS_OPERATIONAL_POSTURE=true',
+ 'GENERAL_IS_NOT_NEW_IDENTITY=true',
+ 'GENERAL_IS_NOT_NEW_MEMORY=true',
+ 'GENERAL_RETURNS_LEARNING_TO_CENTRALDARK_OS=true',
+], classification='GENERAL_METACOGNITION_LEARNING_CONTRACT')
+
 check('docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',[
  'CHEFE_SYSTEMATIC_PROOF_REQUIRED=true',
  'SYSTEMATIC_PROOF_REQUIRED_FOR_MATERIAL_CONFIRMATIONS=true',
@@ -107,6 +133,29 @@ check('apps/modulos/fixed-point-fabric/contracts/FIXED-POINT-FABRIC.yml',[
  'absolute_zero_error_claim: forbidden',
  'two_hundred_percent_success: METAPHOR_ONLY_NOT_METRIC',
 ], classification='FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/VISUAL-NAMING-REGISTRY.yml',[
+ 'one_visual_identity_owner: true',
+ 'capability_base_icon_is_global: true',
+ 'visual_surface_mode: HYBRID',
+ 'same_capability_same_base_icon_across_internal_surfaces: true',
+ 'surface_must_not_replace_base_icon_for_same_capability: true',
+ 'browser_or_external_favicon_is_canonical_identity: false',
+], classification='VISUAL_IDENTITY_HYBRID_SINGLE_OWNER_CONTRACT')
+check('apps/modulos/Bolt/source/app/components/centraldark/centraldark-hub-inventory.ts',[
+ 'canonicalVisualIdentity',
+ 'export function canonicalIcon',
+ 'baseIconSameAcrossInternalSurfaces: true',
+ 'mode: \'HYBRID\' as const',
+], classification='HUB_CANONICAL_VISUAL_IDENTITY_OWNER')
+check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkCockpitShell.client.tsx',[
+ "import { canonicalIcon } from './centraldark-hub-inventory';",
+ "icon: canonicalIcon('ACCOUNTS_HUB')",
+], classification='COCKPIT_REUSES_HUB_VISUAL_IDENTITY')
+check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx',[
+ 'canonicalIcon',
+ 'cd-uhud-row__icon',
+], classification='UNIFIED_HUD_REUSES_CANONICAL_VISUAL_IDENTITY')
+
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml',[
  'DISABLED_IS_NOT_FAILURE: true',
  'OFF_IS_NOT_FAILURE_WHEN_NOT_SELECTED: true',
@@ -654,12 +703,31 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml
  'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE: true',
 ], classification='UPDATE_BRANCH_RUNNER_LOCK_CONTRACT')
 check('.github/workflows/pr-update-branch-deterministic.yml',[
+ 'preflight:',
+ 'update-and-stitch:',
+ 'reality-judge:',
+ 'receipt:',
+ 'FLOW=PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT',
+ "TOOL_REF_RAW: ${{ github.event_name == 'workflow_dispatch' && github.sha || 'main' }}",
+ 'tool_ref: ${{ steps.plan.outputs.tool_ref }}',
+ 'ref: ${{ needs.preflight.outputs.tool_ref }}',
  'runs-on: ubuntu-latest',
  'UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN',
  'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true',
  'HYBRID_MODE_PENDING_VPS_PROOF=true',
  'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true',
 ], classification='UPDATE_BRANCH_RUNNER_LOCK_ENFORCED')
+
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',[
+ 'ephemeral_workspace_finalizer:',
+ 'trigger: BEFORE_FIXED_POINT_WHEN_EPHEMERAL_WORKSPACE_USED',
+ 'canonical_creator_required: true',
+ 'unmarked_temp_workspace: CONTRACT_VIOLATION',
+ 'mission_end_requires_temp_inventory: true',
+ 'cleanup_readback_required: true',
+ 'unclassified_residue_target: 0',
+ 'EPHEMERAL_CLEANUP_IF_USED',
+], classification='EPHEMERAL_CLEANUP_FIXED_POINT_CONTRACT')
 check('.github/workflows/trigger-fabric-package.yml',['Trigger Fabric Full Package','Fresh-extraction counterproof'])
 check('docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md',['👑 PERMITO-SEGREDO','✅ PR CONFIRMADO','Label roteia trabalho; **nunca concede autoridade humana**.'])
 check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[

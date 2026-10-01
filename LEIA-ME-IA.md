@@ -31,11 +31,53 @@ Texto legado conflitante perde para o owner canônico.
 
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.
 
+
+## 🎙 Voice Command Flow — mesma CentralDark, mesma intenção
+
+A Voz não cria segundo cérebro, segundo runtime nem segunda autoridade. Ela é uma superfície de entrada/saída da mesma CentralDark e usa o owner existente:
+
+`.claude/skills/synced/voice-semantic-classifier/SKILL.md`
+
+```text
+CHEFE_FALA
+→ RECUPERAR_INTENCAO_VIGENTE
+→ DELTA
+→ META_GRILL
+→ OBJETIVO
+→ CLAUSULAS_NECESSARIAS
+→ MEDIR_AS_JA_VERDES
+→ CLAUSULA_FALTANTE
+→ REPLAY_APRENDIZADO
+→ OWNER_EXISTENTE
+→ MENOR_DELTA_EXECUTAVEL
+→ EFEITO
+→ REALITY_JUDGE_APOS_EFEITO
+→ CONTRAPROVA
+→ VOLTA_UMA_CASA_SE_FALHAR
+→ FIXED_POINT
+→ RECEITA + FINGERPRINT + RECEIPT
+→ CONTINUAR_O_MESMO_FIO
+```
+
+`UNKNOWN` não é freio global: vira alvo de resolução e só bloqueia o claim/caminho que materialmente depende daquela cláusula. A Voz não decide se o CHEFE pode executar; ela interpreta intenção, resolve cláusulas e aciona os mesmos owners/capabilities da CentralDark.
+
+
 ```text
 REUSE_BEFORE_CREATE_REQUIRED=true
 REMEASURE_BEFORE_CREATE=true
 REMEASURE_BEFORE_CREATE_OWNER=.agents/skills/centraldark-operational-method/SKILL.md
 ARCHITECTURE_LOCK=true
+NEW_PR_DEFAULT=false
+NEW_REMOTE_BRANCH_DEFAULT=false
+BRANCH_IS_TRANSPORT_NOT_INTENT=true
+NO_BRANCH_PARKING_LOT=true
+AUTONOMOUS_PR_DRAFT_DEFAULT=false
+AUTHORIZED_INTENT_DRAFT_AUTO_READY=true
+DRAFT_IS_NOT_DEPENDENCY_SEMAPHORE=true
+EXPLICIT_KEEP_DRAFT_PRESERVED=true
+EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true
+EPHEMERAL_BRANCH_DELETE_AFTER_MERGE=true
+PERSISTENT_BRANCH_REQUIRES_EXPLICIT_OWNER_AND_PURPOSE=true
 UNKNOWN_IS_NOT_PASS=true
 EXIT_CODE_IS_SIGNAL_NOT_CAUSE=true
 EXIT_CODE_ZERO_ALONE_IS_NOT_PASS=true
@@ -154,6 +196,11 @@ PREFER_COMPLETE_OPERATION_OVER_MICROCOMMAND_CHAIN=true
 REUSE_BEFORE_CREATE=true
 REMEASURE_BEFORE_CREATE=true
 MEASURE_BEFORE_CLAIM=true
+NEW_PR_DEFAULT=false
+NEW_REMOTE_BRANCH_DEFAULT=false
+AUTONOMOUS_PR_DRAFT_DEFAULT=false
+AUTHORIZED_INTENT_DRAFT_AUTO_READY=true
+NO_BRANCH_PARKING_LOT=true
 TOOL_ARGUMENT_LIMITS_MUST_BE_NORMALIZED_TO_SAFE_CAP=true
 SOURCE_404_IS_SENSOR_MISS_NOT_WORLD_MISS=true
 GITHUB_REF_MISS_DOES_NOT_PROVE_RUNTIME_FILE_ABSENT=true
