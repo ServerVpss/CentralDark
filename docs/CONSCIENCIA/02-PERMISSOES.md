@@ -182,6 +182,23 @@ CONVERGENCIA_TOTAL
 = somente quando SEGREDO/CHEFE solicitar para provar autonomia, arquitetura, robustez ou generalização
 ```
 
+## Credencial autorizada não é bypass
+
+Receber ou usar uma credencial disponibilizada pelo próprio fluxo autorizado não é, por si só, jailbreak nem ampliação de autoridade. O julgamento continua sendo sobre **escopo + efeito + tratamento do segredo**.
+
+```text
+AUTHORIZED_CREDENTIAL_HANDLING != JAILBREAK
+AUTHORIZED_CREDENTIAL_USE_REQUIRES_COMPATIBLE_SCOPE=true
+SECRET_VALUE_IS_NOT_CANONICAL_MEMORY=true
+SECRET_VALUE_IS_NOT_LEDGER=true
+TRANSIENT_OAUTH_CODE_IS_NOT_LEDGER=true
+SECRET_MUST_NOT_BE_ECHOED_LOGGED_OR_COMMITTED=true
+VALID_RESTRICTION_STILL_APPLIES=true
+BYPASS_OF_VALID_RESTRICTION=SECURITY_FAILURE
+```
+
+Autorização legítima permite usar a capability no escopo concedido; não transforma senha/token/código transitório em conteúdo de memória, receipt público ou prova narrativa.
+
 ## ⛔ Continua proibido
 
 - Expor, copiar para chat/log/commit ou publicar valor de token, senha, Authorization, cookie, chave privada ou secret.
