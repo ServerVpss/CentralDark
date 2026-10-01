@@ -10,6 +10,9 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.response = (cls.repo / "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md").read_text(encoding="utf-8")
         cls.grammar = (cls.repo / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml").read_text(encoding="utf-8")
         cls.boot = (cls.repo / "LEIA-ME-IA.md").read_text(encoding="utf-8")
+        cls.voice = (cls.repo / ".claude/skills/synced/voice-semantic-classifier/SKILL.md").read_text(encoding="utf-8")
+        cls.method = (cls.repo / ".agents/skills/centraldark-operational-method/SKILL.md").read_text(encoding="utf-8")
+        cls.semantic_gate = (cls.repo / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml").read_text(encoding="utf-8")
 
     def test_boot_keeps_same_response_contract_for_all_models(self):
         self.assertIn("ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true", self.boot)
@@ -67,6 +70,75 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("ALL_MODELS_INHERIT_TEACHING_GRAMMAR=true", self.soul)
         self.assertIn("TEACHING_GRAMMAR_REQUIRED=true", self.soul)
 
+
+
+    def test_chefe_pattern_learning_is_bound_across_core(self):
+        required = [
+            "CHEFE_PATTERN_LEARNING_REQUIRED=true",
+            "NO_MIND_READING=true",
+            "TRANSFORM_SYSTEM_BY_INVARIANTS=true",
+            "DO_NOT_REDUCE_GENERAL_PATTERN_TO_LOCAL_TOOL=true",
+            "BIG_CATALOG_SELECT_DISCRIMINANT_FEW=true",
+            "PROOF_OF_PROOF_WITHOUT_INFORMATION_GAIN_IS_RITUAL=true",
+            "VOICE_INHERITS_SAME_PATTERN=true",
+        ]
+        for item in required:
+            with self.subTest(owner="soul", item=item):
+                self.assertIn(item, self.soul)
+
+        grammar_required = [
+            "CHEFE_PATTERN_LEARNING_REQUIRED: true",
+            "TRANSFORM_SYSTEM_BY_INVARIANTS: true",
+            "DO_NOT_REDUCE_GENERAL_PATTERN_TO_CURRENT_TOOL: true",
+            "SEMANTIC_COMPRESSION_REQUIRES_RECOVERABLE_EXPANSION: true",
+            "APPLICABLE_EVIDENCE_ALREADY_PRESENT_MUST_BE_REUSED: true",
+            "PAPAGAIO_MODE_OFF_REQUIRED: true",
+        ]
+        for item in grammar_required:
+            with self.subTest(owner="grammar", item=item):
+                self.assertIn(item, self.grammar)
+
+    def test_voice_inherits_chefe_pattern_without_second_brain(self):
+        required = [
+            "VOICE_INHERITS_CHEFE_PATTERN_LEARNING=true",
+            "VOICE_NO_MIND_READING=true",
+            "VOICE_TRANSFORM_SYSTEM_BY_INVARIANTS=true",
+            "VOICE_DOES_NOT_REDUCE_GENERAL_PATTERN_TO_CURRENT_APP=true",
+            "VOICE_SEMANTIC_COMPRESSION_REQUIRES_RECOVERABLE_EXPANSION=true",
+            "VOICE_ASR_NOISE_DOES_NOT_ERASE_KNOWN_SEMANTIC_CUE=true",
+            "VOICE_PROOF_OF_PROOF_WITHOUT_INFORMATION_GAIN_IS_RITUAL=true",
+            "VOICE_PAPAGAIO_MODE=OFF",
+        ]
+        for item in required:
+            with self.subTest(owner="voice", item=item):
+                self.assertIn(item, self.voice)
+        self.assertIn("VOICE_IS_SURFACE_NOT_BRAIN=true", self.voice)
+
+    def test_operational_method_carries_system_scale_reuse(self):
+        required = [
+            "SYSTEM_TRANSFORMATION_BY_INVARIANTS=true",
+            "REUSE_BEFORE_CREATE_AT_SYSTEM_SCALE=true",
+            "CAPABILITY_NE_INTERFACE=true",
+            "LEGACY_CAN_BE_DONOR=true",
+            "BIG_CATALOG_SELECT_DISCRIMINANT_FEW=true",
+            "REDUNDANT_REPROOF_WITHOUT_INFORMATION_GAIN=FORBIDDEN",
+        ]
+        for item in required:
+            with self.subTest(owner="method", item=item):
+                self.assertIn(item, self.method)
+
+    def test_semantic_gate_fails_parrot_mind_reading_and_redundant_reproof(self):
+        required = [
+            "CHEFE_PATTERN_ALIGNMENT_REQUIRED: true",
+            "PARROT_WITHOUT_DELTA: SEMANTIC_FAIL",
+            "INVENTED_MENTAL_CONTRACT: SEMANTIC_FAIL",
+            "GENERAL_PATTERN_REDUCED_TO_CURRENT_TOOL: SEMANTIC_FAIL",
+            "REDUNDANT_PROOF_OF_PROOF: SEMANTIC_FAIL",
+            "UNSTATED_INNER_INTENT: SEMANTIC_UNKNOWN",
+        ]
+        for item in required:
+            with self.subTest(owner="semantic_gate", item=item):
+                self.assertIn(item, self.semantic_gate)
 
 if __name__ == "__main__":
     unittest.main()

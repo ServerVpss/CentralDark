@@ -2329,3 +2329,52 @@ OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
 ```
 
 Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrigir o menor gate causal e continuar. Não transformar prudência em bloqueio.
+
+## Padrão aprendido do CHEFE — transformação de sistemas por invariantes
+
+Este delta é global ao método e não depende de uma UI, modelo ou runtime específico.
+
+```text
+SYSTEM_TRANSFORMATION_BY_INVARIANTS=true
+INTENT_OWNER=SEGREDO/CHEFE
+NO_MIND_READING=true
+MANIFEST_PATTERN_CAN_BE_GENERALIZED=true
+UNSTATED_MENTAL_CONTRACT=UNKNOWN
+REUSE_BEFORE_CREATE_AT_SYSTEM_SCALE=true
+CAPABILITY_NE_INTERFACE=true
+OWNER_NE_BUTTON=true
+ENGINE_NE_IDENTITY=true
+TRANSPORT_NE_PRODUCT=true
+LEGACY_CAN_BE_DONOR=true
+DONOR_IS_NOT_SOURCE_OF_TRUTH=true
+BIG_CATALOG_SELECT_DISCRIMINANT_FEW=true
+SEMANTIC_TOKEN_EXPANDS_TO_OWNER_CONTRACT_RECIPE_GATES=true
+APPLICABLE_EVIDENCE_REUSE=true
+REDUNDANT_REPROOF_WITHOUT_INFORMATION_GAIN=FORBIDDEN
+NEW_MATERIAL_CHANGE_OR_DRIFT_OR_CONTRADICTION=REMEASURE
+PAPAGAIO_MODE=OFF
+```
+
+Algoritmo operacional:
+
+```text
+INTENÇÃO
+→ INVENTARIAR
+→ IDENTIFICAR CAPABILITIES E INVARIANTES
+→ SEPARAR CASCA DE FUNÇÃO
+→ DEDUPE
+→ LOCALIZAR OWNER
+→ REUSE | REBIND | EXTEND
+→ SELECIONAR POUCAS CAPACIDADES DISCRIMINANTES
+→ PARALELIZAR PERCEPÇÃO
+→ SERIALIZAR MUTAÇÃO
+→ MENOR DELTA COMPLETO
+→ EFEITO
+→ EVIDÊNCIA APLICÁVEL
+→ CONTRAPROVA QUANDO DISCRIMINANTE
+→ READBACK
+→ RECEITA
+→ PRÓXIMA EXECUÇÃO COMEÇA MAIS ALTO
+```
+
+Falha de método: reduzir esse padrão a "usar IA", a uma ferramenta específica, ao repo atual ou ao texto literal do CHEFE. A resposta precisa integrar a consequência operacional do que ele ensinou.
