@@ -23,7 +23,15 @@ bindings:
   centraldark_runtime: REQUIRE_LIVE_EVIDENCE
   hermes_runtime: REQUIRE_LIVE_EVIDENCE
   canonical_soul: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
-  soul_tlc23_binding: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-TLC23-RUNTIME-BINDING.yml
+  soul_tlc23_binding: INLINE_IN_CANONICAL_SOUL
+  soul_tlc23_binding_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+  soul_tlc23_binding_markers:
+    - DETERMINISTIC_ROUTE_FIRST=true
+    - REALITY_JUDGE_AFTER_EFFECT=true
+    - REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+    - TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+    - UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+    - MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
   operational_skill: .agents/skills/centraldark-operational-method/SKILL.md
   runtime_gate: .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
   mission_profile: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/AGENTE-PREMIUM-TLC23.md
@@ -120,6 +128,47 @@ fixed_point:
   contradiction: INVALIDATE_DEPENDENT_CONE_AND_REDERIVE
   unknown: KEEP_VISIBLE_AND_BLOCK_ONLY_DEPENDENT_CLAIM
   no_change: KEEP_MISSION_AND_NEXT_CURSOR_WITHOUT_RENARRATION
+
+claim_scoped_binding:
+  purpose: >-
+    Aplicar o eixo canonico da MULTIBUSSOLA sem congelar o organismo por um
+    UNKNOWN independente e sem permitir que um claim local promova falso PASS
+    global.
+  directional_owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+  receipt_field: required_binding_checks
+  default_when_absent: FULL_BINDING_BACKWARD_COMPATIBLE
+  baseline_required_always:
+    - source_identity_proved
+    - main_sha_measured
+    - target_head_measured
+    - canonical_soul_present
+    - soul_binding_present
+    - boot_present
+    - operational_skill_present
+    - contract_present
+  cross:
+    forward: FACTS_TO_REQUIRED_BODY_TO_CLAIM
+    reverse: CLAIM_TO_REQUIRED_BODY_TO_MISSING_FACTS
+    round_trip: CLAIM_BIDIRECTIONALLY_MATCHES_MEASURED_BODY
+  verdicts:
+    global_mission_pass: REQUIRES_FULL_BINDING
+    affected_claim_pass: MAY_PASS_WITH_UNRELATED_GLOBAL_UNKNOWN
+    affected_claim_unknown: BLOCKS_ONLY_DEPENDENT_CLAIM
+  cli:
+    global_receipt: "--receipt"
+    affected_claim_only: "--claim-receipt"
+  empty_scope: BLOCKED
+  unknown_check_name: CLAIM_UNKNOWN
+  caller_scope_can_promote_global_pass: false
+  unrelated_unknown: VISIBLE_AND_GLOBAL_MISSION_UNKNOWN_BUT_INDEPENDENT_CLAIM_MAY_CONTINUE
+  dependent_unknown: CLAIM_UNKNOWN
+  adversarial_cage_scope: FULL_BINDING_ALWAYS
+  laws:
+    UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM: true
+    CLAIM_PASS_NE_GLOBAL_MISSION_PASS: true
+    REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION: true
+    MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE: true
+    MULTIBUSSOLA_FORWARD_REVERSE_ROUND_TRIP: true
 
 receipt:
   required:

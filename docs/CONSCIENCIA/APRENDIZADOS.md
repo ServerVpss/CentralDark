@@ -794,6 +794,16 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Aprendizado:** Em respostas, receipts, docs e raciocínio operacional, atribuir o fio e a autoria sistêmica à CentralDark/Instinto Superior quando o trabalho pertence ao sistema. Nomear modelos apenas como interface/motor usado naquele trecho. Não reduzir a inteligência CentralDark ao Claude. Preservar: CHEFE fala → CentralDark entende → motor executa como braço → rastro volta ao owner.
 
 
+### 105. Cruzamento bidirecional: UNKNOWN local não congela o organismo e não pode virar PASS global
+- **Categoria:** governanca-metodo-execucao
+- **Data:** 2026-09-30
+- **Owners:** `docs/CONSCIENCIA/MULTIBUSSOLA.md` + `.agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py` + contrato TLC23.
+- **Contexto:** ao transformar `UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM` em código, apareceu uma armadilha: aceitar um subconjunto de checks dentro do mesmo veredito de missão permitiria que um receipt omitisse uma dependência real e promovesse `PASS` global. O META-GRILL + cruzamento bidirecional pegou o bypass antes da promoção.
+- **Correção:** separar dois veredictos. `GLOBAL_MISSION_PASS` continua exigindo o binding completo. Um claim independente pode ter `affected_claim_verdict=PASS` e `can_continue=true` mesmo com outro fato global UNKNOWN, mas o veredito da missão permanece `UNKNOWN` até o corpo completo fechar. Para claim local, a rota é cruzada nos dois sentidos: `FACTS → REQUIRED_BODY → CLAIM` e `CLAIM → REQUIRED_BODY → MISSING_FACTS`, com round-trip de consistência. O modo `--claim-receipt` sai verde somente para o claim explicitamente escopado; `--receipt` continua fail-closed global.
+- **Contraprova:** runtime Hermes ausente mantém missão global UNKNOWN; claim de fonte/canônico independente passa e pode continuar; claim que exige `hermes_runtime_evidence_measured` permanece UNKNOWN e a rota reverse nomeia exatamente esse fato; baseline canônico removido reprova; nome de check inventado não passa.
+- **Cristal:** `CLAIM_PASS != GLOBAL_MISSION_PASS`; `UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true`; `FORWARD + REVERSE + ROUND_TRIP`; `MULTIBUSSOLA_REUSE_BEFORE_CREATE=true`; `GLOBAL_PASS_REQUIRES_FULL_BINDING=true`.
+- **Reuso em vez de ressuscitar owner revertido:** o arquivo `SOUL-TLC23-RUNTIME-BINDING.yml` havia sido criado no commit `3b53e00c1` e removido explicitamente pelo revert `3411c96ff`. O runtime gate ainda apontava para esse caminho inexistente. Em vez de recriar o arquivo revertido, o binding passou a ser medido pelos marcadores TLC23/Reality já absorvidos na `SOUL-SOL.md`, preservando `REUSE_BEFORE_CREATE` e um único owner canônico.
+
 ### 105. Voz é resolvedor de intenção por cláusulas, não segundo cérebro nem porteiro
 - **Categoria:** governanca-voz-intencao-execucao
 - **Data:** 2026-10-01

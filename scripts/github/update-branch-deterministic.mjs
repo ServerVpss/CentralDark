@@ -347,14 +347,29 @@ async function processPr(pr) {
 }
 
 function isConfirmed(receipt) {
-  return String(receipt.state || '').startsWith('SYNC_CONFIRMED')
-    || String(receipt.state || '').startsWith('UP_TO_DATE_WITH_MAIN');
+  if (['BLOCKED', 'SKIP'].includes(String(receipt.action || ''))) return false;
+  return receipt.compare_after?.ok === true
+    && Number(receipt.compare_after?.behind_by) === 0;
 }
 
-function isUnknown(receipt) {
-  return String(receipt.state || '').includes('UNKNOWN')
-    || String(receipt.state || '').includes('PENDING')
-    || String(receipt.state || '').includes('SKIPPED_NOT_PASS');
+function isSyncUnknown(receipt) {
+  if (['BLOCKED', 'SKIP'].includes(String(receipt.action || ''))) return false;
+  return !isConfirmed(receipt);
+}
+
+function checksObservation(receipt) {
+  const state = String(receipt.checks_after?.state || 'CHECKS_UNKNOWN');
+  if (state === 'CHECKS_FAILED') return 'FAIL';
+  if ([
+    'CHECKS_PENDING',
+    'CHECKS_UNKNOWN_EMPTY',
+    'CHECKS_API_UNKNOWN',
+    'CHECKS_UNKNOWN_NO_SHA',
+    'CHECKS_ONLY_SKIPPED_NOT_PASS',
+    'CHECKS_COMPLETE_WITH_SKIPPED_NOT_FULL_PASS',
+  ].includes(state)) return 'UNKNOWN';
+  if (state === 'CHECKS_COMPLETE_NO_FAILURE_DETECTED') return 'PASS';
+  return 'UNKNOWN';
 }
 
 function writeStepSummary(summary) {
@@ -372,7 +387,9 @@ function writeStepSummary(summary) {
     `- requested: \`${summary.requested}\``,
     `- confirmed_or_up_to_date: \`${summary.confirmed_or_up_to_date}\``,
     `- blocked: \`${summary.blocked}\``,
-    `- unknown_or_pending: \`${summary.unknown_or_pending}\``,
+    `- sync_unknown: \`${summary.sync_unknown}\``,
+    `- checks_failed: \`${summary.checks_failed}\``,
+    `- checks_unknown_or_pending: \`${summary.checks_unknown_or_pending}\``,
     '',
     '| PR | Ação | Estado | Antes | Depois | Behind depois | Checks |',
     '|---:|---|---|---|---|---:|---|',
@@ -404,7 +421,7 @@ function writeStepOutputs(summary) {
 
   const verdict = summary.blocked > 0
     ? 'FAIL'
-    : summary.unknown_or_pending > 0
+    : summary.sync_unknown > 0
       ? 'UNKNOWN'
       : 'PASS';
 
@@ -414,7 +431,10 @@ function writeStepOutputs(summary) {
     `requested=${summary.requested}`,
     `confirmed=${summary.confirmed_or_up_to_date}`,
     `blocked=${summary.blocked}`,
-    `unknown_or_pending=${summary.unknown_or_pending}`,
+    `unknown_or_pending=${summary.sync_unknown}`,
+    `sync_unknown=${summary.sync_unknown}`,
+    `checks_failed=${summary.checks_failed}`,
+    `checks_unknown_or_pending=${summary.checks_unknown_or_pending}`,
   ];
 
   appendFileSync(path, `${outputs.join('\n')}\n`);
@@ -444,7 +464,9 @@ const requested = receipts.filter(r => r.action === 'PUT_UPDATE_BRANCH').length;
 const noop = receipts.filter(r => String(r.state || '').includes('UP_TO_DATE')).length;
 const skipped = receipts.filter(r => r.action === 'SKIP').length;
 const confirmed = receipts.filter(isConfirmed).length;
-const unknownOrPending = receipts.filter(isUnknown).length;
+const syncUnknown = receipts.filter(isSyncUnknown).length;
+const checksFailed = receipts.filter(r => checksObservation(r) === 'FAIL').length;
+const checksUnknownOrPending = receipts.filter(r => checksObservation(r) === 'UNKNOWN').length;
 
 const summary = {
   marker,
@@ -463,7 +485,9 @@ const summary = {
   noop,
   skipped,
   blocked,
-  unknown_or_pending: unknownOrPending,
+  sync_unknown: syncUnknown,
+  checks_failed: checksFailed,
+  checks_unknown_or_pending: checksUnknownOrPending,
   stabilization: {
     settle_ms: settleMs,
     poll_attempts: pollAttempts,
@@ -471,7 +495,7 @@ const summary = {
     checks_poll_attempts: checksPollAttempts,
     checks_poll_interval_ms: checksPollIntervalMs,
   },
-  rule: 'PUT /pulls/{PR}/update-branch only when PR is behind main; PR-MOTHER #1562 is syncable but never mergeable by this flow; after 202, poll PR head/compare/checks before claiming stitch; update is sync, not approval; conflict/unknown/pending/skipped does not become PASS.',
+  rule: 'PUT /pulls/{PR}/update-branch only when PR is behind main; PR-MOTHER #1562 is syncable but never mergeable by this flow; sync verdict is scoped to head/compare and requires behind_by_after == 0; checks remain an independent observation and never become promotion/deploy proof; conflict or sync-unknown does not become PASS.',
   receipts,
 };
 
@@ -484,8 +508,14 @@ if (blocked > 0 && failOnBlocked) {
   process.exit(2);
 }
 
-if (unknownOrPending > 0) {
-  console.error(`${stitchMarker}=YELLOW unknown_or_pending=${unknownOrPending}`);
+if (syncUnknown > 0) {
+  console.error(`${stitchMarker}=YELLOW sync_unknown=${syncUnknown}`);
 }
 
-console.log(`${marker}=PASS requested=${requested} confirmed_or_up_to_date=${confirmed} noop=${noop} skipped=${skipped} blocked=${blocked} unknown_or_pending=${unknownOrPending}`);
+if (checksFailed > 0) {
+  console.error(`CHECKS_OBSERVATION=FAIL count=${checksFailed} (does not rewrite SYNC_VERDICT)`);
+} else if (checksUnknownOrPending > 0) {
+  console.error(`CHECKS_OBSERVATION=YELLOW unknown_or_pending=${checksUnknownOrPending} (does not rewrite SYNC_VERDICT)`);
+}
+
+console.log(`${marker}=PASS requested=${requested} confirmed_or_up_to_date=${confirmed} noop=${noop} skipped=${skipped} blocked=${blocked} sync_unknown=${syncUnknown} checks_failed=${checksFailed} checks_unknown_or_pending=${checksUnknownOrPending}`);
