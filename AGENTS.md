@@ -200,6 +200,19 @@ Não criar agente só para preencher número. As seis lentes funcionais já mape
 ```text
 PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE
 NEW_PR_DEFAULT=false
+NEW_REMOTE_BRANCH_DEFAULT=false
+BRANCH_IS_TRANSPORT_NOT_INTENT=true
+NO_BRANCH_PARKING_LOT=true
+AUTONOMOUS_PR_DRAFT_DEFAULT=false
+AUTHORIZED_INTENT_DRAFT_AUTO_READY=true
+DRAFT_IS_NOT_DEPENDENCY_SEMAPHORE=true
+DRAFT_KEEP_REQUIRES_EXPLICIT_STATE_CAUSE=true
+EXPLICIT_KEEP_DRAFT_PRESERVED=true
+NEW_REMOTE_BRANCH_REQUIRES=OWNER+SCOPE+INTENT+LIFECYCLE
+REMOTE_BRANCH_ONLY_WHEN=DIRECT_MAIN_NOT_APPLICABLE|PR_REQUIRED|REMOTE_CI_REQUIRED|CROSS_AGENT_HANDOFF_REQUIRED|ISOLATION_REQUIRED
+EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true
+EPHEMERAL_BRANCH_DELETE_AFTER_MERGE=true
+PERSISTENT_BRANCH_REQUIRES_EXPLICIT_OWNER_AND_PURPOSE=true
 EXISTING_OPEN_PRS_REMAIN_VALID=true
 EXISTING_COMPATIBLE_CHILD_PR_IS_MANDATORY_LANE=true
 CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
@@ -258,7 +271,9 @@ EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR=true
 PR_MOTHER_1562_IS_LEDGER_NEVER_MERGE=true
 ```
 
-Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?CHILD_REQUIRED:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> MAIN_READBACK -> RECEIPT_EXISTING_CHILD_IF_ANY -> RECEIPT_1562 -> FIXED_POINT.
+Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?REUSE_CHILD:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DIRECT_MAIN_IF_ALLOWED_ELSE_CREATE_EPHEMERAL_BRANCH_WITH_READY_PR -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> DELETE_EPHEMERAL_BRANCH_AFTER_MERGE -> MAIN_READBACK -> RECEIPT_EXISTING_CHILD_IF_ANY -> RECEIPT_1562 -> FIXED_POINT.
+
+Branch remota não é estacionamento de intenção. Trabalho ainda não pronto permanece em worktree/local isolado quando isso for suficiente; branch remota nova só existe quando uma necessidade material exige transporte/CI/handoff/isolamento e já nasce com owner, escopo e destino de fechamento. PR autônomo com intenção já autorizada nasce `draft=false`; se uma superfície o criar como Draft sem causa explícita, o normalizador canônico o promove a Ready. `KEEP_DRAFT` explícito continua soberano para rascunho humano/material real.
 
 Toda novidade real do sistema alimenta o PR-mãe #1562 no mesmo ciclo em que for observada. Isso inclui PASS, FAIL, UNKNOWN, BLOCKED, STALE, nova integração, novo acesso, nova rota, commit/PR/merge/deploy, mudança de runtime, contraprova, correção de diagnóstico, descoberta de owner, ferramenta/conector e decisão canônica. Repetição exata pode ser deduplicada; novidade não pode esperar PASS para ser registrada. Segredos nunca entram no ledger.
 
