@@ -1,0 +1,13 @@
+{
+  "prepared_only": true,
+  "mutation_executed": false,
+  "endpoint": "POST https://api.contabo.com/v1/compute/images",
+  "body": {
+    "name": "CentralDark-OS openKylin 3.0 20260905 x86_64",
+    "description": "Candidate only; requires checksum, firstboot and recovery validation before arming.",
+    "url": "https://releases.openkylin.top/3.0/openKylin-Desktop-V3.0-20260905-x86_64.iso",
+    "osType": "Linux",
+    "version": "3.0-20260905"
+  },
+  "CENTRALDARK_TARGET_IMAGE_ID": "UNKNOWN"
+}
