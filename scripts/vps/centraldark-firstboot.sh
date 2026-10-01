@@ -7,6 +7,7 @@ set -euo pipefail
 umask 077
 
 PINNED_SHA="${CENTRALDARK_PINNED_SHA:-}"
+GH_BOOT_TOKEN="${CENTRALDARK_GH_TOKEN:-${GH_TOKEN:-}}"
 VAULT_PATH="${CENTRALDARK_VAULT_PATH:-}"
 REPO_URL="https://github.com/ServerVpss/CentralDark.git"
 REPO_ROOT="/root/CentralDark"
@@ -35,6 +36,30 @@ write_receipt() {
 }
 
 declare -A RESULTS
+
+prepare_git_auth() {
+  export GIT_TERMINAL_PROMPT=0
+  if [ -n "$GH_BOOT_TOKEN" ]; then
+    local askpass="/run/centraldark-git-askpass"
+    cat > "$askpass" <<'ASKPASS'
+#!/usr/bin/env bash
+case "$1" in
+  *Username*) printf '%s\n' "x-access-token" ;;
+  *Password*) printf '%s\n' "$CENTRALDARK_GH_TOKEN" ;;
+  *) exit 1 ;;
+esac
+ASKPASS
+    chmod 700 "$askpass"
+    export CENTRALDARK_GH_TOKEN="$GH_BOOT_TOKEN"
+    export GIT_ASKPASS="$askpass"
+  fi
+}
+
+cleanup_git_auth() {
+  rm -f /run/centraldark-git-askpass 2>/dev/null || true
+  unset GIT_ASKPASS CENTRALDARK_GH_TOKEN GH_BOOT_TOKEN
+}
+trap cleanup_git_auth EXIT
 
 # ── Fase 1: Sistema base ──
 phase_system() {
@@ -87,27 +112,24 @@ phase_system() {
 # ── Fase 2: Clone + checkout SHA pinado ──
 phase_repo() {
   step "FASE 2: REPOSITÓRIO"
+  [ -n "$PINNED_SHA" ] || { err "CENTRALDARK_PINNED_SHA obrigatório; firstboot não aceita SHA flutuante"; RESULTS[REPO]=FAIL; return 1; }
+  [[ "$PINNED_SHA" =~ ^[0-9a-f]{40}$ ]] || { err "CENTRALDARK_PINNED_SHA inválido"; RESULTS[REPO]=FAIL; return 1; }
+  prepare_git_auth
 
   if [ -d "$REPO_ROOT/.git" ]; then
     ok "Repo já existe em $REPO_ROOT"
     cd "$REPO_ROOT"
-    git fetch origin main 2>/dev/null || warn "fetch falhou"
+    git fetch origin main 2>/dev/null || { err "fetch falhou"; RESULTS[REPO]=FAIL; return 1; }
   else
-    git clone "$REPO_URL" "$REPO_ROOT" 2>/dev/null
+    git clone --no-checkout "$REPO_URL" "$REPO_ROOT" 2>/dev/null || { err "clone falhou"; RESULTS[REPO]=FAIL; return 1; }
     cd "$REPO_ROOT"
     ok "Clone completo"
   fi
 
-  if [ -n "$PINNED_SHA" ]; then
-    git checkout "$PINNED_SHA" 2>/dev/null && ok "Checkout SHA: ${PINNED_SHA:0:10}" || {
-      warn "SHA não encontrado, usando main"
-      git checkout main 2>/dev/null
-    }
-  else
-    git checkout main 2>/dev/null
-    PINNED_SHA="$(git rev-parse HEAD)"
-    ok "Checkout main: ${PINNED_SHA:0:10}"
-  fi
+  git cat-file -e "$PINNED_SHA^{commit}" 2>/dev/null || { err "SHA pinado não existe no clone"; RESULTS[REPO]=FAIL; return 1; }
+  git checkout --detach "$PINNED_SHA" 2>/dev/null || { err "checkout do SHA pinado falhou"; RESULTS[REPO]=FAIL; return 1; }
+  [ "$(git rev-parse HEAD)" = "$PINNED_SHA" ] || { err "HEAD divergiu do SHA pinado"; RESULTS[REPO]=FAIL; return 1; }
+  ok "Checkout SHA exato: ${PINNED_SHA:0:10}"
   RESULTS[REPO]=PASS
   RESULTS[HEAD]="${PINNED_SHA:0:10}"
 }
@@ -129,7 +151,7 @@ phase_install() {
   ok "install.sh --check executado"
 
   # Install completo
-  bash "$REPO_ROOT/install.sh" --install 2>&1 || warn "install.sh --install parcial"
+  bash "$REPO_ROOT/install.sh" --install 2>&1 || { err "install.sh --install falhou"; RESULTS[INSTALL]=FAIL; return 1; }
 
   RESULTS[INSTALL]=PASS
 }
@@ -192,7 +214,7 @@ phase_hydrate() {
     return 0
   fi
 
-  bash "$script" 2>&1 || warn "hydrate parcial"
+  bash "$script" 2>&1 || { err "hydrate-provider-secrets falhou"; RESULTS[HYDRATE]=FAIL; return 1; }
   RESULTS[HYDRATE]=PASS
 }
 

@@ -11,6 +11,8 @@ VAULT_PATH="${CENTRALDARK_VAULT_PATH:-}"
 INSTANCE_ID="${CENTRALDARK_INSTANCE_ID:-vmi3256920}"
 SNAPSHOT_ID="${CENTRALDARK_SNAPSHOT_ID:-snap1790430960}"
 CONTABO_CREDS_OK=0
+OFFHOST_RECEIPT="${CENTRALDARK_VAULT_OFFHOST_RECEIPT:-}"
+TARGET_IMAGE_ID="${CENTRALDARK_TARGET_IMAGE_ID:-}"
 GATE_A=FAIL
 GATE_B=FAIL
 GATE_C=FAIL
@@ -110,15 +112,20 @@ gate_a() {
     return 1
   fi
 
-  # Cópia off-host: GitHub main = source of truth
-  local remote_sha
+  # Código canônico off-host + Vault off-host são provas diferentes.
+  local remote_sha vault_sha
   remote_sha="$(git -C "$REPO_ROOT" ls-remote origin refs/heads/main 2>/dev/null | awk '{print $1}')"
-  if [ -n "$remote_sha" ]; then
-    ok "GitHub main reachable: ${remote_sha:0:10}"
-    ok "Off-host copy: GitHub é cópia canônica (install.sh, vault scripts, canonical files)"
-  else
-    warn "GitHub main unreachable — off-host copy não verificável agora"
+  [ -n "$remote_sha" ] || { err "GitHub main unreachable — código canônico off-host não provado"; return 1; }
+  ok "GitHub main reachable: ${remote_sha:0:10}"
+
+  vault_sha="$(sha256sum "$VAULT_PATH" | awk '{print $1}')"
+  if [ -z "$OFFHOST_RECEIPT" ] || [ ! -f "$OFFHOST_RECEIPT" ]; then
+    err "Vault off-host readback receipt ausente"
+    return 1
   fi
+  grep -Fxq "VAULT_SHA256=$vault_sha" "$OFFHOST_RECEIPT" || { err "Vault off-host receipt não corresponde ao archive atual"; return 1; }
+  grep -Fxq "OFFHOST_READBACK=PASS" "$OFFHOST_RECEIPT" || { err "Vault off-host readback não provado"; return 1; }
+  ok "Vault off-host readback receipt: PASS"
 
   GATE_A=PASS
   ok "GATE_A=PASS"
@@ -203,44 +210,9 @@ gate_c() {
   done
 
   if [ "$CONTABO_CREDS_OK" -lt 4 ]; then
-    warn "Contabo API creds incompletas ($CONTABO_CREDS_OK/4) — usando medição manual"
-    echo ""
-    echo "Gate C requer verificação via painel my.contabo.com:"
-    echo "  1. Snapshot $SNAPSHOT_ID existe e status=READY"
-    echo "  2. Instance $INSTANCE_ID aceita rollback"
-    echo "  3. VNC/Console acessível"
-    echo "  4. Rescue mode disponível"
-    echo "  5. Reinstall com Custom ISO (openKylin x86_64) disponível"
-    echo ""
-
-    # Verificar se existe confirmação manual prévia
-    if [ -f "/tmp/centraldark-gate-c-manual.txt" ]; then
-      local manual="/tmp/centraldark-gate-c-manual.txt"
-      local manual_ok=1
-      for receipt in SNAPSHOT_READY=1 ROLLBACK_AVAILABLE=1 VNC_AVAILABLE=1 RESCUE_AVAILABLE=1 REINSTALL_OPENKYLIN_ROUTE=CONTABO_PANEL; do
-        if ! grep -Fxq "$receipt" "$manual"; then
-          err "Gate C manual receipt ausente: ${receipt%%=*}"
-          manual_ok=0
-        fi
-      done
-      if [ "$manual_ok" = "1" ]; then
-        ok "Confirmação manual completa encontrada"
-        GATE_C=PASS
-      else
-        err "Gate C FAIL: receipt manual incompleto"
-        return 1
-      fi
-    else
-      echo "Para confirmar manualmente, criar /tmp/centraldark-gate-c-manual.txt com:"
-      echo "  SNAPSHOT_READY=1"
-      echo "  ROLLBACK_AVAILABLE=1"
-      echo "  VNC_AVAILABLE=1"
-      echo "  RESCUE_AVAILABLE=1"
-      echo "  REINSTALL_OPENKYLIN_ROUTE=CONTABO_PANEL"
-      echo ""
-      err "Gate C FAIL: aguardando confirmação de control plane"
-      return 1
-    fi
+    err "Gate C FAIL: control plane não pode ser provado por receipt manual dentro do guest"
+    err "Exigir API/MCP do provider: snapshot READY + rollback route + acesso out-of-band + imagem alvo"
+    return 1
   else
     # Com credenciais, verificar via API
     echo "Verificando via API Contabo..."
@@ -284,6 +256,8 @@ gate_c() {
       warn "Instance status não confirmado via API"
     fi
 
+    [ -n "$TARGET_IMAGE_ID" ] || { err "TARGET_IMAGE_ID ausente — imagem de reinstalação não está pinada"; return 1; }
+    ok "TARGET_IMAGE_ID=CONFIGURED"
     GATE_C=PASS
   fi
 
@@ -294,7 +268,7 @@ gate_c() {
   ok "Arquitetura VPS: AMD EPYC x86_64 — compatível"
   ok "RAM: 25.2 GB — acima do mínimo"
   ok "Disco: ~200 GB — suficiente"
-  ok "Rota: Custom ISO upload via my.contabo.com → reinstall"
+  ok "Rota de instalação somente é válida com TARGET_IMAGE_ID pinado e control plane PASS"
 
   ok "GATE_C=$GATE_C"
 }

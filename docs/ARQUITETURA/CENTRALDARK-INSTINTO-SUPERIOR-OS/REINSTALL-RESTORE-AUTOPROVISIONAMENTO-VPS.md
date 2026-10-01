@@ -1387,3 +1387,38 @@ GO_REINSTALL=YES
 ```
 
 A limitação principal desta pesquisa é que **nomes/IDs atuais da imagem openKylin, instance ID, snapshot ID e endpoint/provider wrapper exatos não foram fornecidos e não devem ser inventados**. Esses valores são deliberadamente tratados como `UNKNOWN`, e no desenho acima `UNKNOWN != PASS`.
+
+## Cristalização operacional — MICRODEPLOY_DIRECT_VPS_PROVED (2026-10-01)
+
+**Prova material:** `MICRODEPLOY_DIRECT_VPS_PROVED=PASS` no SHA `aeab0853fa5fe4b926460098bd895f2d3c818ebd`.
+
+A rota comprovada deve ser **reutilizada**, não recriada:
+
+1. medir `origin/main` e o HEAD da VPS;
+2. se o shell Git da VPS não tiver autenticação, reutilizar a credencial GitHub já pertencente ao runtime Hermes **sem imprimir o valor** e preparar o Git;
+3. executar `scripts/vps/main-pinned-microdeploy.sh` por owner, sempre com `--source <SHA exato>`;
+4. preservar o worktree vivo; o fast-path usa scratch worktree + backup por owner + rollback;
+5. exigir receipt com `source_sha == main_sha`, `action_proved=true`, `receipt_persisted=true`, `result=PASS` e `secrets_exposed=false`;
+6. contraprovar PM2 + health. Estado `online` isolado não basta; para suspeita de restart-loop medir PID/restart counter em duas amostras;
+7. só depois declarar `MERGED_IS_DEPLOYED=PROVED_FOR_SCOPED_OWNERS_AT_CURRENT_SHA`.
+
+### Binding com CentralDark-OS / pre-format
+
+O microdeploy provado **não autoriza formatação**. Ele passa a ser uma receita de recuperação e promoção dentro da máquina de estados já existente.
+
+`main/SHA imutável → Gate A Vault off-host → Gate B restore READONLY → Gate C provider/rollback/imagem → ARMED → reinstall → centraldark-firstboot → restore/hydrate → PM2/MCP → health → receipt final`.
+
+Travas cristalizadas:
+
+- Gate A não aceita “GitHub contém o código” como prova de que o **Vault** está off-host. O hash do archive atual precisa casar com um receipt de readback off-host.
+- Gate C não aceita mais receipt manual criado dentro do guest como prova do control plane. Snapshot/rollback/out-of-band/image precisam vir da API/MCP do provider.
+- `TARGET_IMAGE_ID` precisa estar pinado antes de `GO_REINSTALL=YES`.
+- `centraldark-firstboot.sh` exige `CENTRALDARK_PINNED_SHA` de 40 hex e falha fechado se clone/fetch/checkout divergirem.
+- A autenticação de bootstrap do Git pode ser injetada por `CENTRALDARK_GH_TOKEN`/`GH_TOKEN`; o valor nunca é impresso e o askpass temporário é removido ao sair.
+- Falha de `install.sh --install` ou de hidratação de providers é **FAIL**, nunca PASS parcial.
+
+### Recovery da prova de 2026-10-01
+
+Antes do alinhamento da referência Git da VPS foi criada a âncora local `recovery/pre-main-sync-20261001T053630Z`. O alinhamento terminou com `VPS_HEAD == origin/main == aeab0853...` e `AHEAD_BEHIND=0 0`. Os owners `hermes`, `mcp`, `hub_bot` e `oauth_broker` produziram receipts PASS no mesmo SHA.
+
+Essa prova é histórica e reaproveitável como **receita**; em qualquer execução futura, o SHA, receipts e health devem ser medidos novamente. `HISTORY != CURRENT`.
