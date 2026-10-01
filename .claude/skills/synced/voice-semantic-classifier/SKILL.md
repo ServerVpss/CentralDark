@@ -714,3 +714,44 @@ Owner do aprendizado:
 `docs/CONSCIENCIA/LEMBRANCAS/2026-10-01-SEGREDO-INTENCAO-TRANSFORMACAO-POR-INVARIANTES.md`.
 
 A Voz deve fazer o CHEFE perceber continuidade: mesma intenção, mesmo núcleo, mesma memória e mesmos owners, mesmo quando a superfície muda.
+
+
+---
+
+## 21. Caso real cross-executor — ASR ruidoso preserva SHA, mas HEAD precisa ser remedido
+
+Caso observado pelo CHEFE em outra sessão/superfície de voz em 2026-10-01:
+
+```text
+USER_SAID_OR_ASR_RENDERED=CH|chá
+RECOVERED_OPERATIONAL_MEANING=SHA_DO_HEAD
+CORE_PATTERN_RECOVERY=OBSERVED_PASS
+SECTOR_ROUTER_RECOVERY=OBSERVED_PASS
+PR_MOTHER_LEDGER_RECOVERY=OBSERVED_PASS
+VOICE_SEMANTIC_RECOVERY=OBSERVED_PASS
+ASR_NOISE_CH_TO_SHA=OBSERVED_PASS
+```
+
+A mesma sessão citou `a99d7367cd567d1e0cf5b361cd89b7b1bf33428e` como HEAD. Esse SHA é commit real da história da main, mas uma remedição posterior encontrou `bd8b7b58f9a04ede57862c97890de2ca7692c64f` como CURRENT da main.
+
+Isso prova recuperação semântica do cue ruidoso no caso observado, mas também mostra que recuperar o significado de "SHA/HEAD" não basta para provar atualidade temporal.
+
+```text
+VOICE_ASR_FORM_MAY_DRIFT_WHILE_INTENT_SURVIVES=true
+VOICE_BOOT_REMEASURE_CURRENT_BEFORE_HEAD_CLAIM=true
+VOICE_RECOVERED_SHA_SEMANTICS != CURRENT_SHA_PROVED
+HISTORICAL_VALID_SHA != CURRENT_HEAD
+SAME_HEAD_AT_SCREENSHOT_TIME=UNKNOWN_UNLESS_TIME_ALIGNED
+CURRENT_HEAD_CLAIM_REQUIRES_LIVE_REMEASUREMENT=true
+CROSS_EXECUTOR_BEHAVIOR_RECOVERABLE_FROM_CANONICAL_CORE=OBSERVED
+```
+
+Contraprova:
+
+```text
+ASR_NOISE_TOLERANCE_OBSERVED != UNIVERSAL_ASR_TOLERANCE
+CANONICAL_BEHAVIOR_RECOVERED != TOOL_EXECUTION_PROVED
+VOICE_ROUTE_SEMANTICS_RECOVERED != LIVE_ROUTE_EXPOSED
+```
+
+Regra operacional: ao responder por voz sobre `HEAD`, `SHA`, `CURRENT`, `drift` ou `next cursor`, primeiro expandir o cue semântico e depois remedir a fonte viva correspondente antes de emitir claim temporal.
