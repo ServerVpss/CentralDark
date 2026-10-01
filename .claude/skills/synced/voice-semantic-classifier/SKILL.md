@@ -475,6 +475,26 @@ o renderer, a execução da ferramenta continua sendo julgada pelo receipt real,
 
 ---
 
+### Caso observado 2026-10-01 — ferramentas passaram a ficar visíveis após reconciliação do território
+
+O CHEFE confirmou na própria interface que, após o inventário/reconciliação de Voz + GitHub + Casa + VPS + Tailscale/RDC, as ferramentas começaram a aparecer na superfície Voice.
+
+Isso promove somente a visibilidade observada; não fabrica causalidade técnica sem trace da plataforma:
+
+```text
+VOICE_TOOL_VISIBILITY_CURRENT=USER_CONFIRMED_VISIBILITY
+VOICE_TOOLS_BECAME_VISIBLE_AFTER_RECONCILIATION=OBSERVED_TEMPORAL_SEQUENCE
+RECONCILIATION_CAUSED_TOOL_EXPOSURE=UNKNOWN
+DO_NOT_UPGRADE_CORRELATION_TO_CAUSATION=true
+PERMISSION_EXISTS != TOOL_EXPOSED
+TOOL_EXPOSED != TOOL_EXECUTED
+USER_CONFIRMED_VISIBILITY != BACKEND_CAUSAL_PROOF
+```
+
+Leitura operacional: quando a ferramenta reaparece depois de rediscovery/reconciliação, registrar o estado vivo como visível e tentar a rota autorizada real; não manter falso `CAPABILITY_UNAVAILABLE` herdado da sessão anterior.
+
+---
+
 ## 18. Preflight canônico da Voz — fonte, ferramentas e recuperação de rota
 
 A superfície Voice herda o mesmo gate de consumo da CentralDark. Texto falado ou
