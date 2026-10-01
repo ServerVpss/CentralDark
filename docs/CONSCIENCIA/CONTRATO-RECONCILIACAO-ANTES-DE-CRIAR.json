@@ -2666,6 +2666,52 @@
       }
     }
   },
+  "git_branch_lifecycle_policy": {
+    "marker": "CENTRALDARK_GIT_BRANCH_LIFECYCLE_REQUIRED",
+    "status": "CANONICAL",
+    "authority": "SEGREDO/CHEFE",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "new_pr_default": false,
+    "new_remote_branch_default": false,
+    "branch_is_transport_not_intent": true,
+    "no_branch_parking_lot": true,
+    "find_matching_child_before_new_branch": true,
+    "direct_main_when_authorized_and_applicable": true,
+    "remote_branch_only_when": [
+      "DIRECT_MAIN_NOT_APPLICABLE",
+      "PR_REQUIRED",
+      "REMOTE_CI_REQUIRED",
+      "CROSS_AGENT_HANDOFF_REQUIRED",
+      "ISOLATION_REQUIRED"
+    ],
+    "new_remote_branch_requires": [
+      "OWNER",
+      "SCOPE",
+      "INTENT",
+      "LIFECYCLE"
+    ],
+    "ephemeral_branch_open_ready_pr_same_turn": true,
+    "ephemeral_branch_delete_after_merge": true,
+    "persistent_branch_requires_explicit_owner_and_purpose": true,
+    "branch_without_active_purpose": "RECONCILE_BEFORE_CREATING_ANOTHER",
+    "historical_branch_delete_without_delta_proof": "FORBIDDEN",
+    "draft_policy": {
+      "autonomous_pr_draft_default": false,
+      "authorized_intent_draft_auto_ready": true,
+      "draft_is_not_dependency_semaphore": true,
+      "explicit_keep_draft_preserved": true,
+      "protected_exceptions": [
+        "PR_MOTHER",
+        "KEEP_DRAFT",
+        "DO_NOT_MERGE",
+        "UNTRUSTED_OR_OUT_OF_SCOPE",
+        "AUTHORIZATION_MISSING"
+      ],
+      "runtime_owner": "scripts/github-autonomia-varredura.mjs",
+      "workflow_owner": ".github/workflows/autonomia-promocao.yml"
+    },
+    "historical_reconciliation_owner": ".github/workflows/varredura-branches-orfas.yml"
+  },
   "explicit_intent_override_policy": {
     "marker": "CENTRALDARK_EXPLICIT_INTENT_TEMPORARY_OVERRIDE",
     "status": "CANONICAL",
