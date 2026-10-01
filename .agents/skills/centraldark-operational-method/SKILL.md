@@ -2467,3 +2467,10 @@ Exemplos de semântica obrigatória:
 
 O mapa não congela runtime. IP, PID, sessão, porta e serviço observados entram como receipt invalidável; owner/capability estáveis permanecem no mapa.
 
+
+## Missão, plano e ramo operacional
+
+MISSION_NE_OPERATIONAL_SYMPTOM=true
+RECOVER_CANONICAL_PLAN_BEFORE_IMPLEMENTATION=true
+
+Recuperar o rumo humano vigente, o owner do plano e o próximo cursor antes de escolher ferramentas. Reparos de desktop/rede são ramos; não substituir a construção de inteligência persistente pelo último sintoma. Plano do cockpit: `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`, seção Plano vigente recuperável — 2026-10-01. Comparar cada etapa com prova atual; plano registrado, fonte existente e conta autenticada não significam integração executada. Selecionar skills sob demanda pelo setor e reutilizar o owner antes de criar.

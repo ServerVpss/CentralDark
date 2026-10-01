@@ -826,7 +826,7 @@ SOUL_SYNC_ANCHOR_BEGIN
 AGENTS.md=b67e3be5a43a494a3000834d8c04bc7356c76e7f
 LEIA-ME-IA.md=585f3e345952c6eb35ddca8f57ec61fa67bd4953
 CLAUDE.md=89e0659b0508bb2b66f3a6244474ced9d70c8657
-CENTRALDARK_AI_BOOT.yaml=dd3f27f0cc16dd2401dd49ac813a8896087fe97f
+CENTRALDARK_AI_BOOT.yaml=b7c832713d2d1d03f5a5b2bd88a12ccb0e757c1e
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=5b8d29656eaea2d5d3581860021fd1216c02dd64
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-01
 SOUL_SYNC_ANCHOR_END
@@ -1735,3 +1735,5 @@ O mesmo princípio vale para todos os setores do mapa: GitHub não vira runtime;
 
 Owner: `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md#-roteador-comportamental-de-setores--onde-cada-capacidade-mora`.
 
+
+Revisão 2026-10-01: relido o delta BOOT da #1740. Roteamento por capability, fallback em conta autorizada e descoberta atual de link/device preservam um cérebro e os owners existentes. Ausência de tool numa conta não é ausência global; alias de conta não é segredo e nome de device não comprova rota. Âncora atualizada após revisão, corrigindo o drift introduzido na promoção. O plano do cockpit permanece design com bindings pendentes, recuperável pelo mapa e pelo método.
