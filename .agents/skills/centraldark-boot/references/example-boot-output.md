@@ -1,0 +1,37 @@
+{
+  "schema": "centraldark.full-trigger-boot.v1",
+  "active": false,
+  "input_normalized": "{}",
+  "load_full_registry": true,
+  "execute_all_phases_blindly": false,
+  "canonical_chain": [
+    "DESTINATION_LOCK",
+    "ACORDAR",
+    "CALIBRAR",
+    "MULTIBUSSOLA",
+    "META_LUPA",
+    "RECONCILIAR",
+    "DELTA_UTIL",
+    "CONTRAPROVA",
+    "REMEDICAO",
+    "SEMANTIC_GREEN",
+    "FIXED_POINT",
+    "POST_GREEN_LOCK",
+    "REGISTRA",
+    "RASTRO",
+    "BOOT"
+  ],
+  "hud": {
+    "COGNITIVE_BIOS_STATUS": "LOADED",
+    "COGNITIVE_MODE": "ADAPTIVE",
+    "ACTIVE_FRONTS": "UNKNOWN_UNTIL_RUNTIME_CONTEXT",
+    "REFLEX_STATE": "READY_IF_EQUIVALENT_CONTEXT_ELSE_STOP_REFLEX",
+    "CURRENT_OWNER": "UNKNOWN_UNTIL_RECONCILIATION",
+    "WRITER": "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED",
+    "EVIDENCE_STATE": "CONTRACT_LOADED_NOT_RUNTIME_PROOF",
+    "COGNITIVE_DEBT": "UNKNOWN",
+    "RUNTIME_TARGET": "UNKNOWN_UNTIL_RUNTIME_CONTEXT",
+    "NEXT_CURSOR": "REMEASURE_CURRENT_REALITY",
+    "FIXED_POINT_STATE": "NOT_PROVEN"
+  }
+}
