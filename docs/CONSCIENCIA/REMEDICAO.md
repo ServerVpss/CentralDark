@@ -123,6 +123,16 @@ COMMIT_PER_MESSAGE=false
 
 PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE
 NEW_PR_DEFAULT=false
+NEW_REMOTE_BRANCH_DEFAULT=false
+BRANCH_IS_TRANSPORT_NOT_INTENT=true
+NO_BRANCH_PARKING_LOT=true
+AUTONOMOUS_PR_DRAFT_DEFAULT=false
+AUTHORIZED_INTENT_DRAFT_AUTO_READY=true
+DRAFT_IS_NOT_DEPENDENCY_SEMAPHORE=true
+EXPLICIT_KEEP_DRAFT_PRESERVED=true
+EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true
+EPHEMERAL_BRANCH_DELETE_AFTER_MERGE=true
+PERSISTENT_BRANCH_REQUIRES_EXPLICIT_OWNER_AND_PURPOSE=true
 EXISTING_OPEN_PRS_REMAIN_VALID=true
 EXISTING_COMPATIBLE_CHILD_PR_IS_MANDATORY_LANE=true
 CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
@@ -160,6 +170,8 @@ NEXT_CURSOR_REQUIRED=true
 ### 5.1. Exceção operacional atual — main direta suave
 
 A política CURRENT da Casa é DIRECT_MAIN_SOFT_EVOLUTION_WITH_EXISTING_CHILD_TRACE. Antes de qualquer escrita material, procurar PR-filho compatível por OWNER+SCOPE+CAPABILITY. Filho saudável é lane obrigatória. Filho stale/conflicting recebe receipt antes de bypass permitido. Sem filho compatível, direct-main segue disponível conforme autoridade e risco.
+
+Branch remota nova não é default e não serve de estacionamento. Se não existe filho compatível e `direct-main` é permitido, não criar branch só para representar a intenção. Quando PR/CI remoto/handoff/isolamento exigir branch, ela nasce efêmera com owner+scope+intent+lifecycle e PR Ready no mesmo ciclo; após merge, deve ser removida. Draft autônomo autorizado é normalizado para Ready, salvo causa explícita `KEEP_DRAFT`/`do-not-merge` ou rascunho humano/material real.
 
 Para delta MCP simples e de baixo risco, CI pesado não é pré-condição. A exigência é menor e causal: remedir a `main`, reutilizar owner existente, aplicar delta mínimo, executar segurança mínima aplicável, ler de volta a `main`, fazer deploy causal quando houver runtime afetado, remedir T1 e registrar receipt no #1562.
 
