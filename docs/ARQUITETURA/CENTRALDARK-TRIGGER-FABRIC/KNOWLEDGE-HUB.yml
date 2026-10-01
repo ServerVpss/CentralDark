@@ -406,6 +406,15 @@ material_first_cognitive_route:
     REPRODUCTION_MUST_NOT_REQUIRE_AI: true
     UNCHANGED_FINGERPRINT_REUSES_PROOF: true
     MATERIAL_DRIFT_REOPENS_AFFECTED_CONE: true
+    GLOBAL_LEARNING_LINEAGE_REQUIRED: true
+    GLOBAL_LINEAGE_BIDIRECTIONAL_REQUIRED: true
+    GLOBAL_LINEAGE_GENESIS_UID: L000
+    GLOBAL_LINEAGE_UID_INDEPENDENT_OF_LEGACY_NUMBER: true
+    LEGACY_DUPLICATE_NUMBERS_PRESERVED: true
+    LEGACY_NUMERIC_GAPS_NOT_FILLED_WITH_INVENTED_LEARNINGS: true
+    GLOBAL_LINEAGE_MANIFEST_REQUIRED: true
+    GLOBAL_LINEAGE_EXECUTABLE_GATE_REQUIRED: true
+    GLOBAL_LINEAGE_COMPILER: scripts/trigger-fabric/rebuild_learning_lineage.py
   cognitive_neurolink_contract:
     status: REQUIRED
     alias: NEUROLINK
@@ -425,5 +434,30 @@ material_first_cognitive_route:
       deterministic_replay_preferred_over_rediscovery: true
     promotion_gate: "NO_ORPHAN_COGNITIVE_CRYSTAL"
     graph_projection_only: true
+    graph_edge_does_not_prove_causality: true
+
+  global_learning_lineage_contract:
+    status: REQUIRED
+    front_a: GLOBAL_HISTORICAL_LINEAGE
+    front_b: STRICT_COGNITIVE_NUMERIC_CHAIN
+    manifest: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json
+    compiler: scripts/trigger-fabric/rebuild_learning_lineage.py
+    genesis:
+      uid: L000
+      legacy_number: 0
+      source: docs/RELATORIOS/notion-sync/2026-07-03T17-29-45.md
+    required_global_properties:
+      - GLOBAL_LINEAGE_UID
+      - PREV_GLOBAL_UID
+      - NEXT_GLOBAL_UID
+      - LEGACY_LEARNING_NUMBER
+      - RELATION_TYPE
+      - LINEAGE_MANIFEST
+    historical_rule:
+      ordering: CANONICAL_DOCUMENT_ORDER
+      duplicate_legacy_numbers: PRESERVE_WITH_UID_SUFFIX
+      missing_legacy_numbers: RECORD_GAP_DO_NOT_INVENT
+      renumber_history: FORBIDDEN
+    promotion_gate: GLOBAL_LINEAGE_COMPILER_CHECK
     graph_edge_does_not_prove_causality: true
 
