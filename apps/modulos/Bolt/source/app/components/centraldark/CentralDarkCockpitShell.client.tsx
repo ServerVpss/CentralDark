@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { canonicalIcon } from './centraldark-hub-inventory';
 import './centraldark-cockpit.scss';
 
 type HouseMode = 'OPERAR' | 'PLANEJAR' | 'TAREFA' | 'DELEGAR';
@@ -93,35 +94,35 @@ const integratedCapabilitySurfaces = [
   {
     key: 'ACCOUNTS_HUB',
     label: 'Contas / Hub',
-    icon: 'i-ph:key',
+    icon: canonicalIcon('ACCOUNTS_HUB'),
     owner: 'apps/modulos/oauth-broker/server.mjs',
     detail: 'providers + connections + OAuth/API-key; Gmail e sua capacidade de leitura/envio/notificação ficam neste owner existente; saúde viva ainda precisa de probe do Cockpit',
   },
   {
     key: 'TELEGRAM',
     label: 'Bot Telegram',
-    icon: 'i-ph:paper-plane-tilt',
+    icon: canonicalIcon('TELEGRAM'),
     owner: 'apps/bot-telegram/ + checker existente',
     detail: 'runtime deve ser provado pelo checker/PM2 no alvo; presença de source não significa ONLINE',
   },
   {
     key: 'CLOUDFLARE',
     label: 'Cloudflare / DNS',
-    icon: 'i-ph:cloud',
+    icon: canonicalIcon('CLOUDFLARE'),
     owner: 'scripts/cloudflare/cf-sync.sh',
     detail: 'sync idempotente existente; token/DNS continuam UNKNOWN até --check/T1 no território correto',
   },
   {
     key: 'CONTABO_VPS',
     label: 'Contabo / VPS',
-    icon: 'i-ph:server',
+    icon: canonicalIcon('CONTABO_VPS'),
     owner: 'apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js + apps/modulos/oauth-broker/server.mjs',
     detail: 'Hub/Broker/MCP Admin já existem para instâncias, snapshots e audits; ações destrutivas exigem gate + receipt; painel externo não vira capability API por inferência',
   },
   {
     key: 'LINEAR',
     label: 'Linear / Coding',
-    icon: 'i-ph:kanban',
+    icon: canonicalIcon('LINEAR'),
     owner: 'apps/modulos/mcp/src/tools/integrations.js',
     detail: 'GraphQL server-side via cofre; Cockpit lê somente /linear/status e o Admin mostra o snapshot vivo sem expor credencial',
   },

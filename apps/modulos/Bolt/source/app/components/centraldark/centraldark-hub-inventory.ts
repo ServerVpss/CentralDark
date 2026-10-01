@@ -16,6 +16,52 @@ export type AccountSurface = {
   detail: string;
 };
 
+export type CanonicalVisualIdentity = {
+  icon: string;
+};
+
+export const canonicalVisualIdentity: Record<string, CanonicalVisualIdentity> = {
+  CENTRALDARK_DESKTOP: { icon: 'i-ph:desktop' },
+  CENTRALDARK_COCKPIT: { icon: 'i-ph:gauge' },
+  SOL_WIDGET: { icon: 'i-ph:waveform' },
+  OMNI_ROUTER: { icon: 'i-ph:arrows-left-right' },
+  SCREENPIPE: { icon: 'i-ph:eye' },
+  HERMES: { icon: 'i-ph:lightning' },
+  DESKTOP_COMMANDER: { icon: 'i-ph:desktop-tower' },
+  MCP: { icon: 'i-ph:plugs-connected' },
+  GITHUB: { icon: 'i-ph:github-logo' },
+  DEPENDABOT: { icon: 'i-ph:robot' },
+  CODERABBIT: { icon: 'i-ph:rabbit' },
+  OPENAI: { icon: 'i-ph:chat-circle-dots' },
+  ANTHROPIC: { icon: 'i-ph:brain' },
+  GEMINI: { icon: 'i-ph:sparkle' },
+  CODEX_VSCODE: { icon: 'i-ph:code' },
+  BROWSER: { icon: 'i-ph:browser' },
+  FIGMA: { icon: 'i-ph:figma-logo' },
+  ACCOUNTS_HUB: { icon: 'i-ph:key' },
+  TELEGRAM: { icon: 'i-ph:paper-plane-tilt' },
+  CLOUDFLARE: { icon: 'i-ph:cloud' },
+  CONTABO_VPS: { icon: 'i-ph:server' },
+  LINEAR: { icon: 'i-ph:kanban' },
+  GMAIL: { icon: 'i-ph:envelope-simple' },
+  GDRIVE: { icon: 'i-ph:hard-drives' },
+  CHATGPT: { icon: 'i-ph:chat-circle-dots' },
+  CLAUDE_CODE: { icon: 'i-ph:brain' },
+  DESKTOP_COMMANDER_1: { icon: 'i-ph:desktop-tower' },
+  DESKTOP_COMMANDER_2: { icon: 'i-ph:desktop-tower' },
+};
+
+export function canonicalIcon(id: string): string {
+  return canonicalVisualIdentity[id]?.icon ?? 'i-ph:squares-four';
+}
+
+export const visualIdentityContract = {
+  mode: 'HYBRID' as const,
+  baseIconSameAcrossInternalSurfaces: true,
+  surfaceMayDecorateWith: ['badge', 'status', 'accent', 'action'] as const,
+  externalThirdPartyFaviconIsCanonicalIdentity: false,
+};
+
 export const hubCapabilities: HubCapability[] = [
   {
     id: 'CENTRALDARK_DESKTOP',

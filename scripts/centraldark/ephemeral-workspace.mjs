@@ -266,6 +266,96 @@ function cleanupWorkspace(targetInput) {
   });
 }
 
+function inventoryRoot(rootInput, prefixes = []) {
+  if (!rootInput) fail("ROOT_REQUIRED");
+  const root = resolve(rootInput);
+  if (!existsSync(root)) {
+    emit({
+      ok: true,
+      action: "inventory",
+      state: "ROOT_ABSENT",
+      root,
+      marked: [],
+      unmarked: [],
+      unclassifiedResidue: 0,
+    });
+    return;
+  }
+
+  const stat = lstatSync(root);
+  if (!stat.isDirectory() || stat.isSymbolicLink()) {
+    fail("ROOT_NOT_PLAIN_DIRECTORY", 3, { root });
+  }
+
+  const normalizedPrefixes = [...new Set(prefixes.filter(Boolean))];
+  const marked = [];
+  const unmarked = [];
+
+  for (const entry of readdirSync(root, { withFileTypes: true })) {
+    if (!entry.isDirectory() || entry.isSymbolicLink()) continue;
+    const target = join(root, entry.name);
+    const file = markerPath(target);
+
+    if (existsSync(file)) {
+      try {
+        const marker = JSON.parse(readFileSync(file, "utf8"));
+        const valid = marker?.schemaVersion === SCHEMA_VERSION
+          && marker?.marker === MARKER
+          && marker?.cleanupRequired === true;
+        marked.push({
+          name: entry.name,
+          target,
+          markerValid: valid,
+          cleanupRequired: marker?.cleanupRequired === true,
+          keep: Boolean(marker?.keep === true || marker?.keepReason || existsSync(join(target, ".centraldark-keep"))),
+          activePids: (marker?.activePids || []).map(Number).filter(pidAlive),
+        });
+      } catch {
+        marked.push({
+          name: entry.name,
+          target,
+          markerValid: false,
+          cleanupRequired: true,
+          keep: false,
+          activePids: [],
+        });
+      }
+      continue;
+    }
+
+    if (normalizedPrefixes.length && normalizedPrefixes.some((prefix) => entry.name.startsWith(prefix))) {
+      unmarked.push({ name: entry.name, target, classification: "UNMARKED_TEMP_WORKSPACE" });
+    }
+  }
+
+  const invalidMarkers = marked.filter((item) => !item.markerValid).length;
+  const activeMarked = marked.filter((item) => item.activePids.length > 0).length;
+  const keptMarked = marked.filter((item) => item.keep).length;
+  const cleanupCandidates = marked.filter((item) => item.markerValid && !item.keep && item.activePids.length === 0).length;
+  const unclassifiedResidue = unmarked.length + invalidMarkers;
+
+  emit({
+    ok: unclassifiedResidue === 0,
+    action: "inventory",
+    state: unclassifiedResidue === 0 ? "CLASSIFIED" : "UNCLASSIFIED_RESIDUE",
+    root,
+    prefixes: normalizedPrefixes,
+    marked,
+    unmarked,
+    counts: {
+      marked: marked.length,
+      invalidMarkers,
+      activeMarked,
+      keptMarked,
+      cleanupCandidates,
+      unmarked: unmarked.length,
+    },
+    unclassifiedResidue,
+  });
+
+  if (unclassifiedResidue > 0) process.exitCode = 8;
+}
+
 function selfTest() {
   const root = join(tmpdir(), `centraldark-ephemeral-selftest-${process.pid}-${Date.now()}`);
   const name = "workspace";
@@ -282,6 +372,7 @@ function selfTest() {
     writeFileSync(join(target, "probe.txt"), "delete-after-use\n", "utf8");
     const marker = readMarker(target);
     safeIdentity(marker, target);
+    inventoryRoot(root, ["workspace"]);
     cleanupWorkspace(target);
     if (!existsSync(target) && !existsSync(root)) result = "PASS";
   } finally {
@@ -314,6 +405,9 @@ switch (command) {
       pids: valuesAfter("--pid"),
     });
     break;
+  case "inventory":
+    inventoryRoot(valueAfter("--root"), valuesAfter("--prefix"));
+    break;
   case "status":
     statusWorkspace(valueAfter("--path"));
     break;
@@ -325,7 +419,7 @@ switch (command) {
     break;
   default:
     fail(
-      "USAGE: ephemeral-workspace.mjs create --root <dir> --name <safe-name> [--owner <owner>] [--purpose <text>] [--remove-empty-root] [--pid <pid>] | status --path <dir> | register-pid --path <dir> --pid <pid> | cleanup --path <dir> | --self-test",
+      "USAGE: ephemeral-workspace.mjs create --root <dir> --name <safe-name> [--owner <owner>] [--purpose <text>] [--remove-empty-root] [--pid <pid>] | inventory --root <dir> [--prefix <prefix> ...] | status --path <dir> | register-pid --path <dir> --pid <pid> | cleanup --path <dir> | --self-test",
       1,
     );
 }

@@ -104,6 +104,22 @@ PERMISSAO_HISTORICA != PERMISSAO_ATUAL
 | `07-APRENDIZADOS-MEMORIAS` | derivados de aprendizado/memória |
 | `08-ARTEFATOS-VISUAIS` | cartazes/grafo visual |
 
+## Grafo Vivo dentro do BRAIN
+
+O Grafo Vivo do BRAIN é **projeção derivada** do source vivo, nunca um segundo owner:
+
+```text
+SOURCE=apps/modulos/status/graph-data.json
+WRITER=scripts/grafo-vivo/obsidian-nota.mjs
+PRIMARY=docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
+LEGACY_COMPAT=docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md
+FRESHNESS_KEY=GRAPH_FINGERPRINT
+STALE_BRAIN_GRAPH != CURRENT
+GRAPH != AUTHORITY
+```
+
+O caminho com espaços é mantido somente como espelho de compatibilidade. Os dois arquivos devem carregar o mesmo `GRAPH_FINGERPRINT`; divergência manda regenerar pelo writer existente, não inventar outro grafo.
+
 ## Propriedades
 
 Nota derivada consumível deve seguir:
@@ -131,6 +147,7 @@ SEM_PROPRIEDADES_OBRIGATORIAS
 - `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml`
+- `docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md` — projeção BRAIN primária, fresca somente quando o fingerprint casa com o source vivo
 - `docs/CONSCIENCIA/APRENDIZADOS/`
 - [[MAPA-OBSIDIAN-BRAIN]]
 - [[BIBLIOTECA]]
