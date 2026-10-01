@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
+import { classifyProcessExit } from "./universal-execution-standard.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const CORE = "LEIA-ME-IA.md";
@@ -84,6 +85,9 @@ const CORE_REQUIRED_MARKERS = Object.freeze([
   "OLD_COPY_IS_CURRENT_REALITY=false",
   "NO_BLIND_OVERWRITE=true",
   "DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true",
+  "EXIT_CODE_IS_SIGNAL_NOT_CAUSE=true",
+  "EXIT_CODE_ZERO_ALONE_IS_NOT_PASS=true",
+  "ANY_NONZERO_EXIT_REQUIRES_CAUSAL_DIAGNOSIS=true",
 ]);
 
 const FORBIDDEN_CLAUDE_SUBAGENT_AUTHORITY = Object.freeze([
@@ -320,4 +324,38 @@ test("check-list diário obrigatório é herdado pelo core sem virar segunda aut
   assert.ok(rem.includes("DAILY_CHECKLIST_UPDATE_REQUIRED_FOR_MATERIAL_DELTA=true"));
   assert.ok(rem.includes("DAILY_CHECKLIST_OWNER=docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"));
   assert.ok(rem.includes("T1 → !REGISTRA → RECEIPT/COMMIT/LEDGER → 🪡 CHECK-LIST DIARIO → READBACK → RELATO AO CHEFE"));
+});
+
+
+test("exit code é sinal universal; causa precisa de diagnóstico", () => {
+  const zero = classifyProcessExit({ exit_code: 0, shell_semantics: true });
+  assert.equal(zero.pass, false);
+  assert.equal(zero.effect_proof_required, true);
+  assert.equal(zero.numeric_code_is_root_cause, false);
+
+  const one = classifyProcessExit({ exit_code: 1, shell_semantics: true, stderr: "generic failure" });
+  assert.equal(one.shell_hint, "GENERIC_FAILURE");
+  assert.equal(one.causal_diagnosis_required, true);
+  assert.equal(one.classified_failure, "UNKNOWN");
+
+  const two = classifyProcessExit({ exit_code: 2, shell_semantics: true, stderr: "policy blocked" });
+  assert.equal(two.shell_hint, "USAGE_OR_POLICY_CANDIDATE");
+  assert.equal(two.numeric_code_is_root_cause, false);
+
+  const missing = classifyProcessExit({ exit_code: 127, shell_semantics: true, stderr: "bash: foo: command not found" });
+  assert.equal(missing.classified_failure, "COMMAND_NOT_FOUND");
+  assert.equal(missing.root_cause_proven, true);
+
+  const unrelated = classifyProcessExit({
+    exit_code: 128,
+    shell_semantics: true,
+    stderr: "fatal: refusing to merge unrelated histories",
+  });
+  assert.equal(unrelated.classified_failure, "UNRELATED_HISTORIES");
+  assert.equal(unrelated.root_cause_proven, true);
+
+  const arbitrary = classifyProcessExit({ exit_code: 42, shell_semantics: true, stderr: "tool-specific failure" });
+  assert.equal(arbitrary.shell_hint, "NONZERO_UNCLASSIFIED");
+  assert.equal(arbitrary.classified_failure, "UNKNOWN");
+  assert.equal(arbitrary.next_cursor, "INSPECT_STDOUT_STDERR_RUNTIME_SOURCE_AND_DISCRIMINATE_CAUSE");
 });
