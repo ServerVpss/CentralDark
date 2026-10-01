@@ -841,9 +841,35 @@ REPRODUCTION_MUST_NOT_REQUIRE_SAME_MODEL=true
 REPRODUCTION_MUST_NOT_REQUIRE_AI=true
 UNCHANGED_FINGERPRINT_REUSES_PROOF=true
 MATERIAL_DRIFT_REOPENS_AFFECTED_CONE=true
+GLOBAL_LEARNING_LINEAGE_REQUIRED=true
+GLOBAL_LINEAGE_BIDIRECTIONAL_REQUIRED=true
+GLOBAL_LINEAGE_GENESIS_UID=L000
+GLOBAL_LINEAGE_UID_INDEPENDENT_OF_LEGACY_NUMBER=true
+LEGACY_DUPLICATE_NUMBERS_PRESERVED=true
+LEGACY_NUMERIC_GAPS_NOT_FILLED_WITH_INVENTED_LEARNINGS=true
+GLOBAL_LINEAGE_MANIFEST_REQUIRED=true
+GLOBAL_LINEAGE_EXECUTABLE_GATE_REQUIRED=true
+GLOBAL_LINEAGE_COMPILER=scripts/trigger-fabric/rebuild_learning_lineage.py
 ```
 
 Ao nascer um sucessor, ele aponta para o predecessor e fecha o backlink do predecessor. O último cristal pode manter `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR` até a próxima expansão.
+
+#### Duas frentes da linhagem
+
+A história anterior ao NeuroLink estrito não é renumerada para parecer limpa. Ela é preservada e interligada por uma projeção global determinística:
+
+- **Frente A — global/histórica:** todo heading real de `docs/CONSCIENCIA/APRENDIZADOS.md` recebe UID estável + predecessor + sucessor no manifesto `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Frente B — cognitiva estrita:** desde `#115`, continua obrigatório `N-1 ← N → N+1`.
+- números legados duplicados recebem sufixo de UID; não são renumerados;
+- lacunas antigas são registradas como lacunas; não se inventa aprendizado;
+- `scripts/trigger-fabric/rebuild_learning_lineage.py --check` precisa passar sem IA.
+
+```text
+GLOBAL_EDGE_IS_CONTINUITY_NOT_CAUSAL_PROOF=true
+GLOBAL_HISTORY_RENUMBER=FORBIDDEN
+GLOBAL_HISTORY_GAP_FILL_WITH_INVENTED_LEARNING=FORBIDDEN
+DETERMINISTIC_LINEAGE_REPLAY_WITHOUT_AI=true
+```
 
 A partir do NeuroLink #115, a numeração também é parte do contrato: `N` só pode cristalizar quando `N-1` existe e está ligado, e o predecessor deve apontar para `N`. Pular um número cria ruptura de continuidade e reprova a promoção. Quando um caminho já foi provado e compilado em artefato determinístico, o próximo executor faz replay antes de redescobrir; drift material reabre apenas o cone afetado.
 
