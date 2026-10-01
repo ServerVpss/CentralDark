@@ -614,3 +614,33 @@ Medir, a partir do Hermes Casa, as capabilities realmente vivas e privadas da VP
 ```text
 NEXT_CURSOR=HERMES_CASA_DISCOVER_AND_BIND_REAL_VPS_CAPABILITIES
 ```
+
+
+### CURRENT route recovery — Casa → twin local (2026-10-01)
+
+A rota não foi redescoberta do zero. Foi reconciliada entre memória de sessões, owner canônico e remedição viva da Casa.
+
+```text
+TWIN_LOCAL_HOST_BINDING=192.168.35.128
+TWIN_LOCAL_SSH_USER=CENTRALDARK-OS
+CASA_TO_TWIN_TCP22=PASS
+CASA_TO_TWIN_SSH_AUTH=UNKNOWN_UNTIL_LOGIN_RETURNS
+HISTORICAL_TWIN_TAILSCALE=100.67.163.91
+HISTORICAL_TAILSCALE_IS_NOT_CURRENT_WITHOUT_REMEASUREMENT=true
+SHARED_HOST_PATH=E:\VMs\CENTRALDARK-OS\SHARED
+BOOTSTRAP=E:\VMs\CENTRALDARK-OS\SHARED\centraldark-3em1.sh
+```
+
+Readback vivo na Casa confirmou novamente a porta 22 em `192.168.35.128` e a árvore compartilhada com `CentralDark`, `ssh`, `centraldark-3em1.sh` e `PRIMEIRA-MUTACAO.txt`. A rota histórica recuperada é `ssh CENTRALDARK-OS@192.168.35.128`.
+
+A tela atual do próprio guest confirma `CENTRALDARK-OS@CENTRALDARK-OS` e o KylinBot usando `/home/CENTRALDARK-OS/.kylinbot/config.toml`. O agente local falha no provider default `openrouter` / `anthropic/claude-sonnet-4` por ausência de `OPENROUTER_API_KEY`.
+
+```text
+KYLINBOT_LOCAL_DEFAULT_PROVIDER=openrouter
+KYLINBOT_LOCAL_DEFAULT_MODEL=anthropic/claude-sonnet-4
+KYLINBOT_LOCAL_AGENT_RESULT=FAIL_MISSING_OPENROUTER_API_KEY
+PROVIDER_FAILURE != NATIVE_AI_ABSENT
+SSH_PORT_PASS != SSH_AUTH_PASS
+```
+
+**NEXT_CURSOR:** fechar autenticação do shell local ou usar a console já aberta; então inventariar capabilities nativas e provar chamada real antes de qualquer bind de provider.
