@@ -22,6 +22,72 @@ const DESTRUCTIVE_ANNOT = {
     idempotentHint: false,
     openWorldHint: true,
 };
+const CENTRALDARK_REPO = "ServerVpss/CentralDark";
+export const CENTRALDARK_BRANCH_PURPOSES = Object.freeze([
+    "PR_REQUIRED",
+    "REMOTE_CI_REQUIRED",
+    "CROSS_AGENT_HANDOFF_REQUIRED",
+    "ISOLATION_REQUIRED",
+    "PERSISTENT_EXPLICIT",
+]);
+export const CENTRALDARK_BRANCH_LIFECYCLES = Object.freeze([
+    "EPHEMERAL_READY_PR_SAME_TURN",
+    "PERSISTENT_EXPLICIT",
+]);
+function targetRepo(owner, repo) {
+    return gh.normalizeRepoRef(owner, repo).fullName;
+}
+export function centralDarkPrCreationPolicy(input, owner, repo) {
+    const fullName = targetRepo(owner, repo);
+    if (fullName !== CENTRALDARK_REPO) {
+        return { draft: input.draft ?? false, body: input.body };
+    }
+    const keepReason = String(input.keepDraftReason || "").trim();
+    if (input.draft === true && keepReason) {
+        const body = [
+            String(input.body || "").trim(),
+            "KEEP_DRAFT=true",
+            `KEEP_DRAFT_REASON=${keepReason}`,
+        ].filter(Boolean).join("\n");
+        return { draft: true, body };
+    }
+    return { draft: false, body: input.body };
+}
+export function centralDarkBranchCreationPolicy(input, owner, repo) {
+    const fullName = targetRepo(owner, repo);
+    if (fullName !== CENTRALDARK_REPO) {
+        return { mode: "LEGACY_COMPAT", autoOpenReadyPr: false };
+    }
+    const purpose = String(input.branchPurpose || "").trim();
+    const lifecycle = String(input.lifecycle || "").trim();
+    const intent = String(input.intent || "").trim();
+    const scope = String(input.scope || "").trim();
+    if (!CENTRALDARK_BRANCH_PURPOSES.includes(purpose)) {
+        throw new Error("NEW_REMOTE_BRANCH_DEFAULT=false: branchPurpose material obrigatório.");
+    }
+    if (!CENTRALDARK_BRANCH_LIFECYCLES.includes(lifecycle)) {
+        throw new Error("NEW_REMOTE_BRANCH_REQUIRES=OWNER+SCOPE+INTENT+LIFECYCLE: lifecycle inválido.");
+    }
+    if (!intent || !scope) {
+        throw new Error("NEW_REMOTE_BRANCH_REQUIRES=OWNER+SCOPE+INTENT+LIFECYCLE: intent e scope obrigatórios.");
+    }
+    if (purpose === "PERSISTENT_EXPLICIT" && lifecycle !== "PERSISTENT_EXPLICIT") {
+        throw new Error("PERSISTENT_BRANCH_REQUIRES_EXPLICIT_OWNER_AND_PURPOSE: lifecycle deve ser PERSISTENT_EXPLICIT.");
+    }
+    if (purpose !== "PERSISTENT_EXPLICIT" && lifecycle !== "EPHEMERAL_READY_PR_SAME_TURN") {
+        throw new Error("EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true: lifecycle efêmero obrigatório.");
+    }
+    if (lifecycle === "EPHEMERAL_READY_PR_SAME_TURN" && !String(input.prTitle || "").trim()) {
+        throw new Error("EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true: prTitle obrigatório.");
+    }
+    return {
+        mode: lifecycle,
+        autoOpenReadyPr: lifecycle === "EPHEMERAL_READY_PR_SAME_TURN",
+        purpose,
+        intent,
+        scope,
+    };
+}
 export const githubWriteTools = [
     {
         name: "github_create_issue",
@@ -112,10 +178,22 @@ export const githubWriteTools = [
             base: z.string().describe("Branch de destino (ex: main)"),
             body: z.string().optional(),
             draft: z.boolean().optional(),
+            keepDraftReason: z.string().min(1).optional().describe("Somente para Draft humano/material real. Sem motivo explícito, CentralDark força Ready."),
             owner: z.string().optional(),
             repo: z.string().optional(),
         }),
-        handler: async (input, ctx) => ok(await gh.createPullRequest(ctx.token, input.owner ?? config.github.owner, input.repo ?? config.github.repo, { title: input.title, head: input.head, base: input.base, body: input.body, draft: input.draft })),
+        handler: async (input, ctx) => {
+            const owner = input.owner ?? config.github.owner;
+            const repo = input.repo ?? config.github.repo;
+            const policy = centralDarkPrCreationPolicy(input, owner, repo);
+            return ok(await gh.createPullRequest(ctx.token, owner, repo, {
+                title: input.title,
+                head: input.head,
+                base: input.base,
+                body: policy.body,
+                draft: policy.draft,
+            }));
+        },
     },
     {
         name: "github_create_branch",
@@ -124,10 +202,47 @@ export const githubWriteTools = [
         inputSchema: z.object({
             newBranch: z.string().min(1).describe("Nome da branch nova"),
             fromBranch: z.string().optional().describe("Branch de origem (padrão: main)"),
+            branchPurpose: z.enum(CENTRALDARK_BRANCH_PURPOSES).optional().describe("CentralDark: causa material para existir remotamente."),
+            intent: z.string().min(1).optional().describe("CentralDark: intenção humana/operacional que a branch transporta."),
+            scope: z.string().min(1).optional().describe("CentralDark: escopo/owner material da branch."),
+            lifecycle: z.enum(CENTRALDARK_BRANCH_LIFECYCLES).optional().describe("CentralDark: efêmera com PR Ready no mesmo turno ou persistente explícita."),
+            prTitle: z.string().min(1).optional().describe("Obrigatório para lifecycle efêmero; o PR Ready é aberto atomicamente no mesmo fluxo."),
+            prBody: z.string().optional(),
+            base: z.string().optional().describe("Base do PR automático (padrão: main)."),
             owner: z.string().optional(),
             repo: z.string().optional(),
         }),
-        handler: async (input, ctx) => ok(await gh.createBranch(ctx.token, input.owner ?? config.github.owner, input.repo ?? config.github.repo, { newBranch: input.newBranch, fromBranch: input.fromBranch })),
+        handler: async (input, ctx) => {
+            const owner = input.owner ?? config.github.owner;
+            const repo = input.repo ?? config.github.repo;
+            const policy = centralDarkBranchCreationPolicy(input, owner, repo);
+            const branch = await gh.createBranch(ctx.token, owner, repo, {
+                newBranch: input.newBranch,
+                fromBranch: input.fromBranch,
+            });
+            if (!policy.autoOpenReadyPr) return ok(branch);
+            try {
+                const body = [
+                    String(input.prBody || "").trim(),
+                    "Intent-Authorized: SEGREDO/CHEFE",
+                    `Intent-Scope: ${policy.intent}`,
+                    `Writer-Scope: ${policy.scope}`,
+                    "Branch-Lifecycle: EPHEMERAL_READY_PR_SAME_TURN",
+                ].filter(Boolean).join("\n");
+                const pr = await gh.createPullRequest(ctx.token, owner, repo, {
+                    title: input.prTitle,
+                    head: input.newBranch,
+                    base: input.base ?? "main",
+                    body,
+                    draft: false,
+                });
+                return ok({ branch, pull_request: pr, lifecycle: policy.mode });
+            }
+            catch (error) {
+                await gh.deleteBranch(ctx.token, owner, repo, input.newBranch).catch(() => null);
+                throw error;
+            }
+        },
     },
     {
         name: "github_merge_pull_request",
