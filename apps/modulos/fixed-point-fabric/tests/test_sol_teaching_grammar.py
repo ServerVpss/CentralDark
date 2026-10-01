@@ -13,6 +13,7 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.voice = (cls.repo / ".claude/skills/synced/voice-semantic-classifier/SKILL.md").read_text(encoding="utf-8")
         cls.method = (cls.repo / ".agents/skills/centraldark-operational-method/SKILL.md").read_text(encoding="utf-8")
         cls.semantic_gate = (cls.repo / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml").read_text(encoding="utf-8")
+        cls.map = (cls.repo / "docs/CONSCIENCIA/MAPA-DO-CEREBRO.md").read_text(encoding="utf-8")
 
     def test_boot_keeps_same_response_contract_for_all_models(self):
         self.assertIn("ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true", self.boot)
@@ -139,6 +140,37 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         for item in required:
             with self.subTest(owner="semantic_gate", item=item):
                 self.assertIn(item, self.semantic_gate)
+
+
+    def test_sector_router_is_bound_to_soul_method_and_map(self):
+        core_required = [
+            "SECTOR_ROUTER_REQUIRED=true",
+            "ROUTE_INTENT_TO_SECTOR_BEFORE_TOOL=true",
+            "ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true",
+            "SECTOR_OWNER_UNKNOWN_STAYS_UNKNOWN=true",
+            "ONE_PATH_FAILURE_IS_NOT_SYSTEM_FAILURE=true",
+            "MULTI_PATH_FAILOVER_BEFORE_GLOBAL_BLOCKED=true",
+        ]
+        for item in core_required:
+            with self.subTest(owner="soul", item=item):
+                self.assertIn(item, self.soul)
+            with self.subTest(owner="method", item=item):
+                self.assertIn(item, self.method)
+
+        map_required = [
+            "SECTOR_ROUTER_REQUIRED=true",
+            "REMOTE_ACCESS_IS_MULTI_PATH=true",
+            "TAILSCALE_ROLE=PRIVATE_SPINE",
+            "ANYDESK_ROLE=INTERACTIVE_GUI",
+            "SSH_ROLE=CONTROL_PLANE",
+            "CONTABO_VNC_ROLE=OUT_OF_BAND_RESCUE",
+            "ANYDESK_DIRECT_OVER_TAILSCALE_7070_CONNECT=PASS",
+            "ANYDESK_REMOTE_SESSION_RESULT=desk_rt_ipc_error",
+            "REMOTE_ACTIVE_SESSION_X11=UNKNOWN",
+        ]
+        for item in map_required:
+            with self.subTest(owner="map", item=item):
+                self.assertIn(item, self.map)
 
 if __name__ == "__main__":
     unittest.main()
