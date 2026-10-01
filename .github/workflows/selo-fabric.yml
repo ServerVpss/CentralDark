@@ -89,6 +89,13 @@ jobs:
     timeout-minutes: 3
 
     steps:
+      - name: ⏰ Carregar owner canônico de horário
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: false
+
       - name: 🏅 Classificar, deduplicar e postar selo
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
@@ -107,18 +114,11 @@ jobs:
             const runId = context.runId;
             const runAttempt = process.env.GITHUB_RUN_ATTEMPT || '1';
             const actor = context.actor || 'UNKNOWN';
+            const path = require('node:path');
+            const canonicalTime = require(path.join(process.env.GITHUB_WORKSPACE, 'central-horario/node.cjs'));
             const now = new Date();
-            const ts = new Intl.DateTimeFormat('pt-BR', {
-              timeZone: 'America/Sao_Paulo',
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false,
-            }).format(now).replace(',', '');
-            const tsIso = now.toISOString();
+            const ts = canonicalTime.formatBrasilia(now);
+            const tsIso = canonicalTime.utcIso(now);
 
             // Derive SHA from the event's actual subject, not context.sha
             // (context.sha is the default branch HEAD for workflow_run/check_suite)
