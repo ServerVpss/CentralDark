@@ -107,6 +107,29 @@ check('apps/modulos/fixed-point-fabric/contracts/FIXED-POINT-FABRIC.yml',[
  'absolute_zero_error_claim: forbidden',
  'two_hundred_percent_success: METAPHOR_ONLY_NOT_METRIC',
 ], classification='FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/VISUAL-NAMING-REGISTRY.yml',[
+ 'one_visual_identity_owner: true',
+ 'capability_base_icon_is_global: true',
+ 'visual_surface_mode: HYBRID',
+ 'same_capability_same_base_icon_across_internal_surfaces: true',
+ 'surface_must_not_replace_base_icon_for_same_capability: true',
+ 'browser_or_external_favicon_is_canonical_identity: false',
+], classification='VISUAL_IDENTITY_HYBRID_SINGLE_OWNER_CONTRACT')
+check('apps/modulos/Bolt/source/app/components/centraldark/centraldark-hub-inventory.ts',[
+ 'canonicalVisualIdentity',
+ 'export function canonicalIcon',
+ 'baseIconSameAcrossInternalSurfaces: true',
+ 'mode: \'HYBRID\' as const',
+], classification='HUB_CANONICAL_VISUAL_IDENTITY_OWNER')
+check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkCockpitShell.client.tsx',[
+ "import { canonicalIcon } from './centraldark-hub-inventory';",
+ "icon: canonicalIcon('ACCOUNTS_HUB')",
+], classification='COCKPIT_REUSES_HUB_VISUAL_IDENTITY')
+check('apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx',[
+ 'canonicalIcon',
+ 'cd-uhud-row__icon',
+], classification='UNIFIED_HUD_REUSES_CANONICAL_VISUAL_IDENTITY')
+
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CAPABILITY-READINESS-POLICY.yml',[
  'DISABLED_IS_NOT_FAILURE: true',
  'OFF_IS_NOT_FAILURE_WHEN_NOT_SELECTED: true',
