@@ -9,6 +9,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 
 import { atomicWriteUtf8Sync } from '../memory-linker/fs-safe.mjs';
+import { formatBrasilia } from '../../central-horario/node.mjs';
 import {
   buildGraphProjection,
   cleanGraphLabel,
@@ -72,7 +73,7 @@ function main() {
   const s = projection.stats;
   const monitorados = projection.monitored;
   const caidos = projection.down;
-  const agoraBR = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const agoraBR = formatBrasilia();
 
   const tabela = monitorados.map((node) =>
     `| ${statusDot(node.status)} | ${cleanGraphLabel(node.label)} | \`${node.pm2 || '—'}\` | ${node.status} |`
