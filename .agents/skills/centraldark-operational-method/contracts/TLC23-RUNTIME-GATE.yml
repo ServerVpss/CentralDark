@@ -23,7 +23,15 @@ bindings:
   centraldark_runtime: REQUIRE_LIVE_EVIDENCE
   hermes_runtime: REQUIRE_LIVE_EVIDENCE
   canonical_soul: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
-  soul_tlc23_binding: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-TLC23-RUNTIME-BINDING.yml
+  soul_tlc23_binding: INLINE_IN_CANONICAL_SOUL
+  soul_tlc23_binding_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+  soul_tlc23_binding_markers:
+    - DETERMINISTIC_ROUTE_FIRST=true
+    - REALITY_JUDGE_AFTER_EFFECT=true
+    - REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+    - TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+    - UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+    - MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
   operational_skill: .agents/skills/centraldark-operational-method/SKILL.md
   runtime_gate: .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
   mission_profile: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/AGENTE-PREMIUM-TLC23.md
