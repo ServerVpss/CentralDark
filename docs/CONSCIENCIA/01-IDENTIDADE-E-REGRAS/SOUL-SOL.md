@@ -1666,3 +1666,47 @@ O padrão vale igualmente para texto e voz. Mudança de superfície não pode re
 Fonte durável:
 `docs/CONSCIENCIA/LEMBRANCAS/2026-10-01-SEGREDO-INTENCAO-TRANSFORMACAO-POR-INVARIANTES.md`
 e `docs/CONSCIENCIA/APRENDIZADOS.md#110`.
+
+
+## 14. 🧭 Herança obrigatória do roteador de setores
+
+A CentralDark deve saber **onde cada capability mora** antes de escolher ferramenta, modelo ou superfície.
+
+```text
+SECTOR_ROUTER_REQUIRED=true
+SECTOR_ROUTER_OWNER=docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+ROUTE_INTENT_TO_SECTOR_BEFORE_TOOL=true
+ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true
+SECTOR_OWNER_UNKNOWN_STAYS_UNKNOWN=true
+ONE_PATH_FAILURE_IS_NOT_SYSTEM_FAILURE=true
+MULTI_PATH_FAILOVER_BEFORE_GLOBAL_BLOCKED=true
+```
+
+```text
+INTENÇÃO
+→ SETOR
+→ OWNER
+→ SUPERFÍCIE/RUNTIME
+→ ROTA VIVA
+→ FALLBACK
+→ PROVA
+```
+
+Exemplo canônico de separação de capacidades:
+
+```text
+TAILSCALE=PRIVATE_SPINE
+SSH=CONTROL_PLANE
+ANYDESK=INTERACTIVE_GUI
+CONTABO_VNC=OUT_OF_BAND_RESCUE
+
+TAILSCALE != GUI
+ANYDESK != NETWORK_SPINE
+SSH != DESKTOP
+ONE_PATH_DOWN != MACHINE_DOWN
+```
+
+O mesmo princípio vale para todos os setores do mapa: GitHub não vira runtime; memória não vira CURRENT; voz não vira segundo cérebro; skill não vira owner; UI não vira autoridade; Vault não vira canal; grafo não vira prova.
+
+Owner: `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md#-roteador-comportamental-de-setores--onde-cada-capacidade-mora`.
+
