@@ -2382,6 +2382,41 @@ Falha de método: reduzir esse padrão a "usar IA", a uma ferramenta específica
 
 ## Roteamento por setor antes da ferramenta
 
+### Skills sob demanda — antes da ação, aprendizado depois do efeito
+
+Owner do catálogo: `.agents/skills/`. Owner da seleção por capability:
+`.agents/skills/capability-contract-router/SKILL.md`. Skills locais/Hermes são
+fontes candidatas; reconciliar com a main atual antes de importar ou substituir.
+Agente é executor, skill é receita/capacidade; um não substitui o outro.
+
+```text
+SKILL_NEED_EVALUATED_BEFORE_MATERIAL_ACTION=true
+SKILL_SELECTION_BY_INTENT_SECTOR_OWNER=true
+EXISTING_SKILL_REUSE_BEFORE_CREATE=true
+LOADED_SKILL_REUSED_WHILE_CONTEXT_AND_VERSION_APPLY=true
+RELOAD_ON_NEED_CONTEXT_OR_VERSION_CHANGE=true
+POST_ACTION_SKILL_DELTA_REQUIRES_EVIDENCE=true
+NO_NEW_REUSABLE_DELTA=NO_CHANGE
+UNPROVEN_RECIPE=CANDIDATE
+PARTIAL_EFFECT_IS_NOT_COMPLETE_RECIPE=true
+ONE_SKILL_PER_COMMAND_REQUIRED=false
+FULL_CATALOG_LOAD_REQUIRED=false
+```
+
+```text
+INTENÇÃO → SETOR → OWNER → BUSCAR CAPACIDADE EXISTENTE
+→ SELECIONAR MENOR CONJUNTO DISCRIMINANTE → CARREGAR SE NECESSÁRIO
+→ REUTILIZAR RECEITA APLICÁVEL → EXECUTAR → MEDIR EFEITO
+→ DESTILAR CONCLUSÃO + EVIDÊNCIA + LIMITES + FINGERPRINT + ROLLBACK
+→ NO_CHANGE | UPDATE_EXISTING | CREATE_IF_GAP_PROVEN
+→ TESTE APLICÁVEL → MAIN_READBACK → RECEIPT → PRÓXIMO EXECUTOR HERDA
+```
+
+Não recarregar a mesma skill a cada comando nem fabricar uma por ação. Falha útil
+pode ser preservada como contraprova; não vira receita de sucesso. Criar exige
+gap comprovado e ausência de owner equivalente. Receitas de acesso remoto e seus
+limites ficam no owner existente `docs/CONSCIENCIA/05-SSH-VPS.md`.
+
 O método deve aprender **onde cada capacidade mora** e usar o mapa canônico antes de escolher ferramenta, host ou superfície.
 
 ```text
