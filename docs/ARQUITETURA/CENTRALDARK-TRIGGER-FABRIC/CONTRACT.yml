@@ -328,6 +328,18 @@ artifact_properties:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARTIFACT-PROPERTIES.yml
   hermes_requires_properties: true
   missing_required: NOT_FLASH_READY
+event_driven_discovery:
+  mode: EVENT_DRIVEN
+  discover_existing_channels_before_blocked: true
+  ephemeral_helper_is_not_canonical_asset: true
+  user_report_is_signal_not_proof: true
+  meaningful_discovery_must_compare_canonical_owner: true
+  events: [USER_REPORTED_ERROR, NEW_DISCOVERY]
+  after_proof: CLEAN_EPHEMERAL_HELPERS_AFTER_PROOF
+  no_post_task_value: SAFE_DELETE
+  authority: false
+  no_parallel_owner: true
+
 operational_rule_learning:
   mandatory: true
   applies_to: [HUMAN_CORRECTION, TOOL_ERROR, TEST_FAILURE, CI_FAILURE, RUNTIME_DRIFT, REPEATED_MANUAL_FIX, NEW_INVARIANT, AUREOLA_MATERIAL_DISCOVERY]
