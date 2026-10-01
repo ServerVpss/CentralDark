@@ -2,7 +2,6 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync } from 'node:child_process';
 
 const ROOT = process.cwd();
 const OWNER_DIR = path.join(ROOT, 'central-horario');
@@ -31,6 +30,10 @@ const SKIP_DIRS = new Set([
   'backups', '_LEGADO_ROOT_DOCS_CONFLITOS',
 ]);
 
+function relative(file) {
+  return path.relative(ROOT, file).replaceAll('\\', '/');
+}
+
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name.startsWith('.') && entry.name !== '.agents' && entry.isDirectory()) continue;
@@ -42,8 +45,12 @@ function walk(dir, out = []) {
   return out;
 }
 
-function relative(file) {
-  return path.relative(ROOT, file).replaceAll('\\', '/');
+function git(args) {
+  return execFileSync('git', args, {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  }).trim();
 }
 
 function argValue(name) {
@@ -51,36 +58,25 @@ function argValue(name) {
   return index >= 0 ? process.argv[index + 1] : null;
 }
 
-function changedPaths(baseRef) {
-  const ref = String(baseRef || '').trim();
-  if (!ref) return new Set();
-  try {
-    execFileSync('git', ['rev-parse', '--verify', `${ref}^{commit}`], { cwd: ROOT, stdio: 'ignore' });
-    const text = execFileSync('git', ['diff', '--name-only', `${ref}...HEAD`, '--'], { cwd: ROOT, encoding: 'utf8' });
-    return new Set(text.split(/\r?\n/).filter(Boolean).map((x) => x.replaceAll('\\', '/')));
-  } catch {
-    return null;
-  }
-}
-
 function bootstrapOk(surface) {
   const full = path.join(ROOT, surface.bootstrap);
   if (!fs.existsSync(full)) return false;
   const text = fs.readFileSync(full, 'utf8');
-  return text.includes('installCentralDarkDateFormatting') && text.includes('installCentralDarkDateFormatting();');
+  return text.includes('installCentralDarkDateFormatting') &&
+    text.includes('installCentralDarkDateFormatting();');
 }
 
-function git(args) {
-  return execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-}
-
-function resolveCiBase() {
-  if (process.env.GITHUB_ACTIONS !== 'true') return null;
+function resolveBaseRef() {
+  const explicit = String(argValue('--base-ref') || process.env.BASE_SHA || '').trim();
   const event = String(process.env.GITHUB_EVENT_NAME || '');
-  const baseRef = String(process.env.GITHUB_BASE_REF || '').trim();
-  const candidate = event === 'pull_request' && baseRef ? `origin/${baseRef}` : 'HEAD^';
+  const baseBranch = String(process.env.GITHUB_BASE_REF || '').trim();
+  const candidate = explicit || (process.env.GITHUB_ACTIONS === 'true' && event === 'pull_request' && baseBranch
+    ? `origin/${baseBranch}`
+    : 'HEAD^');
+
   try {
-    return { ref: candidate, sha: git(['rev-parse', candidate]) };
+    const sha = git(['rev-parse', '--verify', `${candidate}^{commit}`]);
+    return { ref: candidate, sha };
   } catch {
     return { ref: candidate, sha: null };
   }
@@ -90,6 +86,7 @@ function addedLinesSince(baseSha) {
   const byFile = new Map();
   const diff = git(['diff', '--unified=0', '--no-ext-diff', baseSha, 'HEAD', '--']);
   let current = null;
+
   for (const line of diff.split('\n')) {
     if (line.startsWith('+++ b/')) {
       current = line.slice(6);
@@ -101,18 +98,53 @@ function addedLinesSince(baseSha) {
     if (!match) continue;
     const start = Number(match[1]);
     const count = match[2] === undefined ? 1 : Number(match[2]);
-    for (let offset = 0; offset < count; offset += 1) byFile.get(current).add(start + offset);
+    for (let offset = 0; offset < count; offset += 1) {
+      byFile.get(current).add(start + offset);
+    }
   }
   return byFile;
 }
 
 const findings = [];
+
 for (const ownerFile of REQUIRED_OWNER_FILES) {
   const full = path.join(OWNER_DIR, ownerFile);
-  if (!fs.existsSync(full)) findings.push({ file: `central-horario/${ownerFile}`, rule: 'CANONICAL_TIME_OWNER_MISSING', structural: true });
+  if (!fs.existsSync(full)) {
+    findings.push({
+      file: `central-horario/${ownerFile}`,
+      rule: 'CANONICAL_TIME_OWNER_MISSING',
+      structural: true,
+    });
+  }
 }
+
 for (const surface of WEB_SURFACES) {
-  if (!bootstrapOk(surface)) findings.push({ file: surface.bootstrap, rule: 'WEB_TIME_BOOTSTRAP_MISSING', structural: true });
+  if (!bootstrapOk(surface)) {
+    findings.push({
+      file: surface.bootstrap,
+      rule: 'WEB_TIME_BOOTSTRAP_MISSING',
+      structural: true,
+    });
+  }
+}
+
+const seloPath = '.github/workflows/selo-fabric.yml';
+const seloFull = path.join(ROOT, seloPath);
+if (!fs.existsSync(seloFull)) {
+  findings.push({ file: seloPath, rule: 'SELO_FABRIC_MISSING', structural: true });
+} else {
+  const selo = fs.readFileSync(seloFull, 'utf8');
+  const required = [
+    ['pt-BR', 'SELO_PTBR_LOCALE_MISSING'],
+    ['America/Sao_Paulo', 'SELO_BRASILIA_TZ_MISSING'],
+    [' BRT', 'SELO_BRT_LABEL_MISSING'],
+    ['Horário de Brasília', 'SELO_HUMAN_TIME_LABEL_MISSING'],
+    ['HUD_MEASURED_AT_BRASILIA', 'SELO_HUD_BRASILIA_FIELD_MISSING'],
+    ['HUD_TIMESTAMP_ISO_UTC', 'SELO_MACHINE_UTC_FIELD_MISSING'],
+  ];
+  for (const [token, rule] of required) {
+    if (!selo.includes(token)) findings.push({ file: seloPath, rule, structural: true });
+  }
 }
 
 const jsDatePtBrNoZone = /new\s+Date\s*\([^\n;]*?\)\.toLocale(?:String|DateString|TimeString)\(\s*(['"])pt-BR\1\s*\)/g;
@@ -125,7 +157,8 @@ const files = walk(ROOT);
 for (const file of files) {
   const rel = relative(file);
   if (rel.startsWith('central-horario/')) continue;
-  const content = fs.readFileSync(file, 'utf8');
+
+  const contentText = fs.readFileSync(file, 'utf8');
   const ext = path.extname(file);
   const webSurface = WEB_SURFACES.find((surface) => rel.startsWith(surface.root));
   const webCovered = Boolean(webSurface && bootstrapOk(webSurface));
@@ -136,8 +169,8 @@ for (const file of files) {
       [jsDateLocaleNoArgs, 'HUMAN_DATE_BROWSER_OR_SERVER_LOCAL_TZ'],
     ]) {
       regex.lastIndex = 0;
-      for (const match of content.matchAll(regex)) {
-        const line = content.slice(0, match.index).split('\n').length;
+      for (const match of contentText.matchAll(regex)) {
+        const line = contentText.slice(0, match.index).split('\n').length;
         findings.push({ file: rel, line, rule, sample: match[0].slice(0, 180) });
       }
     }
@@ -145,112 +178,76 @@ for (const file of files) {
 
   if (ext === '.py') {
     pyNaiveNow.lastIndex = 0;
-    for (const match of content.matchAll(pyNaiveNow)) {
-      const line = content.slice(0, match.index).split('\n').length;
+    for (const match of contentText.matchAll(pyNaiveNow)) {
+      const line = contentText.slice(0, match.index).split('\n').length;
       findings.push({ file: rel, line, rule: 'PYTHON_NAIVE_NOW_FOR_FORMATTING', sample: match[0] });
     }
   }
 
   if (ext === '.ps1') {
     psNaiveFormattedNow.lastIndex = 0;
-    for (const match of content.matchAll(psNaiveFormattedNow)) {
-      const line = content.slice(0, match.index).split('\n').length;
+    for (const match of contentText.matchAll(psNaiveFormattedNow)) {
+      const line = contentText.slice(0, match.index).split('\n').length;
       findings.push({ file: rel, line, rule: 'POWERSHELL_LOCAL_TZ_FORMATTING', sample: match[0] });
     }
   }
 
   if (ext === '.sh') {
     shHumanDateWithoutTz.lastIndex = 0;
-    for (const match of content.matchAll(shHumanDateWithoutTz)) {
-      const lineStart = content.lastIndexOf('\n', match.index) + 1;
-      const lineEnd = content.indexOf('\n', match.index);
-      const sourceLine = content.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
+    for (const match of contentText.matchAll(shHumanDateWithoutTz)) {
+      const lineStart = contentText.lastIndexOf('\n', match.index) + 1;
+      const lineEnd = contentText.indexOf('\n', match.index);
+      const sourceLine = contentText.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
       if (/TZ\s*=\s*['"]?America\/Sao_Paulo/.test(sourceLine) || /\bdate\s+-u\b/.test(sourceLine)) continue;
-      const line = content.slice(0, match.index).split('\n').length;
-      findings.push({ file: rel, line, rule: 'SHELL_HUMAN_DATE_WITHOUT_EXPLICIT_TZ', sample: sourceLine.trim().slice(0, 180) });
+      const line = contentText.slice(0, match.index).split('\n').length;
+      findings.push({
+        file: rel,
+        line,
+        rule: 'SHELL_HUMAN_DATE_WITHOUT_EXPLICIT_TZ',
+        sample: sourceLine.trim().slice(0, 180),
+      });
     }
   }
 }
 
-const files = walk(ROOT);
-const baseRef = argValue('--base-ref') || process.env.BASE_SHA || process.env.GITHUB_EVENT_BEFORE || 'HEAD^';
-const changed = changedPaths(baseRef);
-if (changed === null) {
-  console.error(`CENTRALDARK_TIME_GATE=BLOCKED base_ref_unavailable=${baseRef}`);
+const base = resolveBaseRef();
+if (!base.sha) {
+  console.error(`CENTRALDARK_TIME_GATE=BLOCKED base_ref_unavailable=${base.ref}`);
   process.exit(2);
 }
-const newFindings = findings.filter((finding) => changed.has(finding.file));
-const legacyFindings = findings.filter((finding) => !changed.has(finding.file));
+
+const changedLines = addedLinesSince(base.sha);
+const deltaFindings = findings.filter((finding) => {
+  if (finding.structural) return true;
+  const lines = changedLines.get(finding.file);
+  return Boolean(lines && finding.line && lines.has(finding.line));
+});
+
 const output = {
-  ok: newFindings.length === 0,
+  ok: deltaFindings.length === 0,
+  mode: 'DELTA_RATCHET',
+  canonical_owner: 'central-horario',
   canonical_timezone: 'America/Sao_Paulo',
-  human_display: 'BRT',
+  human_format: 'DD/MM/AAAA HH:mm:ss BRT',
   machine_storage: 'UTC_RFC3339',
-  scope_policy: 'SCAN_ALL_RATCHET_NEW_DELTA',
-  base_ref: baseRef,
-  bootstrapped_web_surfaces: WEB_SURFACES.filter(bootstrapOk).map((surface) => surface.root),
+  base_ref: base.ref,
+  base_sha: base.sha,
+  head_sha: git(['rev-parse', 'HEAD']),
   scanned_files: files.length,
-  changed_files: changed.size,
-  new_findings: newFindings,
-  legacy_debt: legacyFindings,
+  global_findings_count: findings.length,
+  delta_findings_count: deltaFindings.length,
+  findings,
+  delta_findings: deltaFindings,
 };
 
 console.log(JSON.stringify(output, null, 2));
-if (legacyFindings.length) console.warn(`CENTRALDARK_TIME_LEGACY_DEBT=${legacyFindings.length}`);
-if (newFindings.length) {
-  console.error(`CENTRALDARK_TIME_GATE=FAIL new_findings=${newFindings.length}`);
+console.error(`CENTRALDARK_TIME_GLOBAL_AUDIT=${findings.length === 0 ? 'PASS' : 'DEBT'} findings=${findings.length}`);
+
+if (deltaFindings.length) {
+  console.error(`CENTRALDARK_TIME_DELTA_GATE=FAIL new_findings=${deltaFindings.length} global_debt=${findings.length}`);
+  console.error('CENTRALDARK_TIME_GATE=FAIL scope=DELTA_RATCHET');
   process.exit(1);
 }
-console.log('CENTRALDARK_TIME_GATE=PASS new_findings=0');
-const ciBase = resolveCiBase();
-let mode = 'FULL_AUDIT';
-let deltaFindings = findings;
-let deltaBinding = null;
-if (ciBase) {
-  if (!ciBase.sha) {
-    mode = 'DELTA_RATCHET_UNBOUND';
-  } else {
-    mode = 'DELTA_RATCHET';
-    const changedLines = addedLinesSince(ciBase.sha);
-    deltaFindings = findings.filter((finding) => {
-      if (finding.structural) return true;
-      const lines = changedLines.get(finding.file);
-      return Boolean(lines && lines.has(finding.line));
-    });
-    deltaBinding = { base_ref: ciBase.ref, base_sha: ciBase.sha, head_sha: git(['rev-parse', 'HEAD']) };
-  }
-}
 
-const globalAuditStatus = findings.length === 0 ? 'PASS' : 'DEBT';
-const ok = mode === 'DELTA_RATCHET' ? deltaFindings.length === 0 : findings.length === 0;
-const output = {
-  ok,
-  mode,
-  canonical_timezone: 'America/Sao_Paulo',
-  human_display: 'BRT',
-  machine_storage: 'UTC_RFC3339',
-  global_audit_status: globalAuditStatus,
-  global_findings_count: findings.length,
-  delta_findings_count: mode === 'DELTA_RATCHET' ? deltaFindings.length : null,
-  delta_binding: deltaBinding,
-  bootstrapped_web_surfaces: WEB_SURFACES.filter(bootstrapOk).map((surface) => surface.root),
-  scanned_files: files.length,
-  findings,
-  delta_findings: mode === 'DELTA_RATCHET' ? deltaFindings : undefined,
-};
-
-console.log(JSON.stringify(output, null, 2));
-console.error(`CENTRALDARK_TIME_GLOBAL_AUDIT=${globalAuditStatus} findings=${findings.length}`);
-if (mode === 'DELTA_RATCHET' && ok) {
-  console.log(`CENTRALDARK_TIME_DELTA_GATE=PASS new_findings=0 global_debt=${findings.length}`);
-  console.log('CENTRALDARK_TIME_GATE=PASS scope=DELTA_RATCHET');
-  process.exit(0);
-}
-if (mode === 'DELTA_RATCHET' && !ok) {
-  console.error(`CENTRALDARK_TIME_DELTA_GATE=FAIL new_findings=${deltaFindings.length} global_debt=${findings.length}`);
-} else if (mode === 'DELTA_RATCHET_UNBOUND') {
-  console.error(`CENTRALDARK_TIME_GATE=FAIL reason=CI_BASE_UNBOUND findings=${findings.length}`);
-} else {
-  console.error(`CENTRALDARK_TIME_GATE=${ok ? 'PASS' : 'FAIL'} scope=FULL_AUDIT findings=${findings.length}`);
-}
-process.exit(ok ? 0 : 1);
+console.log(`CENTRALDARK_TIME_DELTA_GATE=PASS new_findings=0 global_debt=${findings.length}`);
+console.log('CENTRALDARK_TIME_GATE=PASS scope=DELTA_RATCHET');
