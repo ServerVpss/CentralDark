@@ -73,11 +73,6 @@ validate_archive() {
     return 1
   fi
 
-  if ! tar -tzf "$archive" >/dev/null 2>&1; then
-    err "Archive corrupt or not a valid tar.gz"
-    return 1
-  fi
-
   if ! python3 - "$archive" <<'PY'
 import csv, hashlib, io, pathlib, re, sys, tarfile
 
