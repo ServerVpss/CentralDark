@@ -2710,7 +2710,17 @@
       "runtime_owner": "scripts/github-autonomia-varredura.mjs",
       "workflow_owner": ".github/workflows/autonomia-promocao.yml"
     },
-    "historical_reconciliation_owner": ".github/workflows/varredura-branches-orfas.yml"
+    "historical_reconciliation_owner": ".github/workflows/varredura-branches-orfas.yml",
+    "mcp_tool_owner": "apps/modulos/mcp/src/tools/github/github-write.js",
+    "mcp_client_owner": "apps/modulos/mcp/src/tools/github/github.js",
+    "tool_level_enforcement": {
+      "create_pr_ready_by_default": true,
+      "explicit_keep_draft_reason_required": true,
+      "create_branch_requires_material_purpose": true,
+      "ephemeral_branch_auto_opens_ready_pr": true,
+      "ephemeral_branch_rolls_back_if_pr_creation_fails": true,
+      "capability_does_not_infer_human_authority": true
+    }
   },
   "explicit_intent_override_policy": {
     "marker": "CENTRALDARK_EXPLICIT_INTENT_TEMPORARY_OVERRIDE",
