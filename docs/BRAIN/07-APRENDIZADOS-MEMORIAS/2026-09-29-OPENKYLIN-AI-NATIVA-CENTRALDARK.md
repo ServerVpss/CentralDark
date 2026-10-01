@@ -99,11 +99,12 @@ A documentação oficial do openKylin 3.0 foi cruzada com o runtime já medido d
 
 O código upstream do instalador do AI subsystem confirma que o conjunto é composto por peças compartilhadas — `kylin-ai-runtime`, document-QA/service, vector engine, `libkylin-coreai-embedding`, speech, vision e GenAI/NLP. O runtime também possui suporte a múltiplas conexões NLP separadas por `sessionId`.
 
-A observação humana de que “até abas/janelas/pastas parecem ter IA por dentro” é compatível com um desktop em que muitos componentes consomem o mesmo substrate inteligente. Não há suporte para promover a interpretação literal “cada aba/pasta/lixeira sobe um LLM próprio”.
+Declaração do CHEFE: abas, janelas, pastas e outras superfícies parecem acionar inteligência integrada do sistema, e ele percebe atividade da GPU ao interagir com essas superfícies. A sessão não deve converter essa fala em “cada aba/pasta/lixeira sobe um LLM próprio”; essa formulação foi uma extrapolação do executor. O que o upstream sustenta é um substrate inteligente compartilhado e profundamente integrado. O vínculo causal exato de cada evento de UI com processos/modelos/GPU permanece UNKNOWN até instrumentação local.
 
 ```text
 DESKTOP_AI_EVERYWHERE_AS_SHARED_CAPABILITY_FABRIC=SUPPORTED
-PER_WINDOW_DISTINCT_MODEL_PROCESS=UNKNOWN_NOT_PROVEN
+ASSISTANT_REFRAME_PER_WINDOW_MODEL=RETRACTED
+UI_EVENT_TO_AI_PROCESS_CAUSAL_MAPPING=UNKNOWN
 SHARED_RUNTIME_CAN_SERVE_MULTIPLE_SESSIONS=true
 MCP_DESKTOP_IS_SYSTEM_CAPABILITY_SURFACE=true
 CENTRALDARK_SHOULD_BIND_NOT_REIMPLEMENT=true
