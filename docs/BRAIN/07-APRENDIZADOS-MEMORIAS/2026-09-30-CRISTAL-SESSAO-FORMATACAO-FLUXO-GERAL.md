@@ -61,3 +61,56 @@ CURRENT > HISTORY
 ## NEXT_CURSOR
 
 Ler o cristal completo e continuar do bloco `NEXT_CURSOR`. O primeiro delta aberto é corrigir o transporte dos outputs no grafo Update Branch sem transformar `unknown_or_pending` em PASS.
+
+
+## Grafo Vivo no BRAIN — anti-stale por fingerprint
+
+Reconciliação de 2026-10-01, no mesmo sistema e no mesmo child PR #1723.
+
+```text
+FERIDA=
+  apps/modulos/status/graph-data.json estava CURRENT
+  + dois GRAFO-VIVO.md do BRAIN estavam STALE
+CAUSA=
+  cron-grafo-unificado.sh atualizava graph-data.json
+  mas não chamava obsidian-nota.mjs
+  + obsidian-nota.mjs escrevia só o caminho legado com espaços
+OWNER_REUSED=scripts/grafo-vivo/obsidian-nota.mjs
+ONE_SYSTEM_ONLY=true
+ONE_WRITER_PER_SCOPE=true
+GRAPH_IS_DERIVED_NOT_AUTHORITY=true
+STALE_BRAIN_GRAPH_IS_NOT_CURRENT=true
+FRESHNESS_KEY=GRAPH_FINGERPRINT
+```
+
+Costura executada:
+
+```text
+graph-data.json
+→ gerar-grafo-vivo.mjs
+→ obsidian-nota.mjs
+→ docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
+→ docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md (compatibilidade)
+```
+
+O scheduler existente passa a chamar o mesmo writer depois do overlay. BOOT, Knowledge Hub, BRAIN e Portable Kernel herdam a mesma fronteira anti-stale; a SOUL foi revista no mesmo ciclo conforme o próprio contrato de sincronia.
+
+Prova isolada sobre o source vivo observado:
+
+```text
+GRAPH_FINGERPRINT=14890c4cd8a6a95a61acc4eee96e1df5c4099e2ba7e744c9d7e89e1211de6727
+PRIMARY_BLOB_SHA=97d283d85b0d625256729d1be41643c2978314c8
+LEGACY_COMPAT_BLOB_SHA=97d283d85b0d625256729d1be41643c2978314c8
+BRAIN_MIRRORS_BYTE_EQUAL=PASS
+FIRST_RUN=SYNCED
+SECOND_RUN=NO_CHANGE
+JS_SYNTAX=PASS
+SHELL_SYNTAX=PASS
+BOOT_YAML_PARSE=PASS
+KNOWLEDGE_HUB_YAML_PARSE=PASS
+SOUL_SYNC_ANCHOR_MATCH=PASS
+```
+
+Cross-chat e múltiplas superfícies continuam matéria/proveniência read-only para reconciliação: somente delta provado chega ao owner canônico e depois à projeção do grafo.
+
+`CURRENT > HISTORY` · `UNKNOWN != PASS` · `ACTION != PROOF` · `REALIDADE = JUDGE`.
