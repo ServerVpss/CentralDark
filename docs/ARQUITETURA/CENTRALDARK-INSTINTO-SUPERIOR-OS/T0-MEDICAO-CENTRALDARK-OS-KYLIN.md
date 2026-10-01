@@ -441,10 +441,12 @@ GUEST_SVGA3D=PASS
 HOST_GPU_RX580=PASS
 DX11_RENDER_BACKEND=PASS
 GPU_SHARED_WITH_VM=SUPPORTED_BY_VMWARE_RENDER_PATH
-PER_TAB_DISTINCT_GPU_AI_PROCESS=NOT_PROVEN
+USER_STATED_GPU_REACTS_ON_TAB_WINDOW_ACTIVITY=true
+ASSISTANT_REFRAME_EACH_TAB_HAS_OWN_AI=RETRACTED
+TAB_WINDOW_TO_AI_GPU_CAUSAL_MAPPING=UNKNOWN
 ```
 
-A observação do CHEFE de que a GPU reage ao abrir abas é compatível com um desktop acelerado e um substrate de IA/GUI compartilhado, mas esta medição não prova que cada aba instancia uma IA ou processo GPU próprio.
+Declaração do CHEFE: ao abrir abas/janelas, ele percebe atividade da GPU e associa isso ao caráter profundamente integrado de IA do sistema. Esta sessão não mediu ainda a causalidade por evento. Portanto, não converter essa fala em “cada aba instancia uma IA própria” nem em negação disso. O claim técnico correto permanece: GPU/3D está provada; o vínculo exato ABA/JANELA → PROCESSO/IA/GPU permanece UNKNOWN até instrumentação por evento.
 
 ### Consequência arquitetural
 
