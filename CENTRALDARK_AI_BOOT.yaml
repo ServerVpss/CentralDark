@@ -980,3 +980,25 @@ authority_reality_contract:
   observed_reality_can_be_wrong_or_partial: true
   tlc23_proof_counterproof_serve_execution: true
   unknown_blocks_only_affected_claim: true
+
+hybrid_multi_account_capability_routing:
+  owner: ".agents/skills/centraldark-unified-surface-parity/SKILL.md#62-roteamento-hibrido-multi-conta-por-capability"
+  status: "REQUIRED_CURRENT_INHERITANCE"
+  applies_to: [CHATGPT_TEXT, CHATGPT_VOICE, WORK, DESKTOP, CLAUDE, HERMES, FUTURE_SURFACES]
+  capability_first_tool_second: true
+  current_account_tool_miss_is_not_global_capability_absence: true
+  alternate_authorized_account_failover: true
+  discover_link_id_at_runtime: true
+  discover_device_id_at_runtime: true
+  device_name_alone_is_not_route: true
+  no_parallel_adapter_for_missing_tool: true
+  reuse_best_existing_equivalent_route: true
+  fallback_order:
+    - CURRENT_ACCOUNT_NATIVE_TOOL
+    - ALTERNATE_AUTHORIZED_ACCOUNT_SAME_CAPABILITY
+    - CENTRALDARK_RDC_ONLINE_DEVICE
+    - EXISTING_CASA_OR_VPS_OWNER
+    - EXISTING_API_OR_MCP_OWNER
+    - PLATFORM_UNAVAILABLE_OR_UNKNOWN
+  receipt_fields: [ACCOUNT_ALIAS, CAPABILITY, ROUTE_CLASS, EFFECT, PROOF, NEXT_CURSOR]
+
