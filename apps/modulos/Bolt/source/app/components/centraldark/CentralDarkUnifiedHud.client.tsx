@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { accountSurfaces, hubCapabilities, hubGaps, optionalAnalyticsPlugins, type HubCapability, type InventoryState } from './centraldark-hub-inventory';
+import { accountSurfaces, canonicalIcon, hubCapabilities, hubGaps, optionalAnalyticsPlugins, type HubCapability, type InventoryState } from './centraldark-hub-inventory';
 import './centraldark-unified-hud.scss';
 
 type LiveState = 'ONLINE' | 'OFFLINE' | 'UNKNOWN';
@@ -78,6 +78,7 @@ function liveClass(state: LiveState | undefined) {
 function CapabilityRow({ item }: { item: HubCapability }) {
   return (
     <div className="cd-uhud-row">
+      <span className={canonicalIcon(item.id)} aria-hidden />
       <div className="cd-uhud-row__main">
         <strong>{item.label}</strong>
         <small>{item.detail}</small>
@@ -277,6 +278,7 @@ export function CentralDarkUnifiedHud() {
               <div className="cd-uhud-list">
                 {accountSurfaces.map((account) => (
                   <div key={account.id} className="cd-uhud-row">
+                    <span className={canonicalIcon(account.id)} aria-hidden />
                     <div className="cd-uhud-row__main"><strong>{account.label}</strong><small>{account.detail}</small><code>{account.accountModel}</code></div>
                     <span className={`cd-uhud-tag ${account.quota === 'ADAPTER_REQUIRED' ? 'cd-uhud-tag--gap' : 'cd-uhud-tag--source_proved'}`}>{account.quota}</span>
                   </div>
