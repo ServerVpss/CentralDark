@@ -580,6 +580,36 @@ LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
 
 
+## 18.1 Multi-conta híbrido — Voz não se perde quando a sessão muda de identidade
+
+A Voz herda o roteamento híbrido do owner `centraldark-unified-surface-parity`. Não cria ferramenta exclusiva por conta ou por superfície.
+
+```text
+VOICE_MULTI_ACCOUNT_HYBRID_ROUTING=true
+VOICE_CAPABILITY_FIRST_TOOL_SECOND=true
+VOICE_CURRENT_ACCOUNT_MISS_REDISCOVERS_AUTHORIZED_ACCOUNTS=true
+VOICE_LINK_AND_DEVICE_BINDINGS_ARE_RUNTIME_DISCOVERED=true
+VOICE_DEVICE_NAME_ALONE_IS_NOT_ROUTE=true
+VOICE_TOOL_MISSING_ON_ONE_ACCOUNT != GLOBAL_TOOL_ABSENT
+VOICE_REUSE_BEST_EXISTING_EQUIVALENT_ROUTE=true
+VOICE_NO_PARALLEL_CONNECTOR_FOR_MISSING_TOOL=true
+```
+
+Fluxo:
+
+```text
+VOICE_INTENT
+→ NORMALIZED_CAPABILITY
+→ INVENTORY_CURRENT_ACCOUNT
+→ IF_MISS: INVENTORY_OTHER_AUTHORIZED_ACCOUNT_LINKS
+→ RESOLVE_ACCOUNT_ALIAS + LIVE_LINK + LIVE_DEVICE + EXISTING_TOOL/OWNER
+→ EXECUTE
+→ READBACK
+→ RECEIPT(account_alias, capability, route_class, effect)
+```
+
+Aliases lógicos preservam continuidade sem gravar e-mail como identidade canônica. IDs de link/device são bindings temporais e devem ser redescobertos; snapshots de disponibilidade vão para receipt/aprendizado.
+
 ## 19. Papel canônico da Voz — resolvedor de intenção por cláusulas
 
 Este owner cristaliza o papel da Voz sem criar nova arquitetura. A Voz é **superfície da CentralDark**, não segundo cérebro, segundo executor, segundo judge ou autoridade acima do CHEFE.
