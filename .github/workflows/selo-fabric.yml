@@ -108,16 +108,22 @@ jobs:
             const runAttempt = process.env.GITHUB_RUN_ATTEMPT || '1';
             const actor = context.actor || 'UNKNOWN';
             const now = new Date();
-            const ts = new Intl.DateTimeFormat('pt-BR', {
-              timeZone: 'America/Sao_Paulo',
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false,
-            }).format(now).replace(',', '');
+            // Projeção humana segue o owner canônico central-horario:
+            // DD/MM/AAAA HH:mm:ss BRT em America/Sao_Paulo.
+            // UTC/RFC3339 continua separado para auditoria técnica.
+            const humanParts = Object.fromEntries(
+              new Intl.DateTimeFormat('pt-BR', {
+                timeZone: 'America/Sao_Paulo',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+              }).formatToParts(now).map(({ type, value }) => [type, value]),
+            );
+            const ts = `${humanParts.day}/${humanParts.month}/${humanParts.year} ${humanParts.hour}:${humanParts.minute}:${humanParts.second} BRT`;
             const tsIso = now.toISOString();
 
             // Derive SHA from the event's actual subject, not context.sha
