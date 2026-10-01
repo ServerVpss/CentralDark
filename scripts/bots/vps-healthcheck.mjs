@@ -6,6 +6,7 @@
 import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { findBotIssue, createIssue, updateIssue, repo } from "./lib/gh.mjs";
+import { formatBrasilia } from "../../central-horario/node.mjs";
 
 const MARKER = "<!-- bot:vps-healthcheck -->";
 const LABELS = ["auto", "revisao-humana", "assign:grok", "p2"];
@@ -90,7 +91,7 @@ function classify(results) {
 }
 
 function renderBody(results, severity, findings) {
-  const ts = new Date().toISOString();
+  const ts = formatBrasilia();
   const blocks = results.map(r => {
     const tag = r.ok ? "✅" : "❌";
     const out = (r.out || "(vazio)").slice(0, 2000);
@@ -126,7 +127,7 @@ async function notifyTelegram(severity, findings, issueUrl) {
   }
   const icons = { p0: "🔴", p1: "🟠", p2: "🟡", p3: "✅" };
   const icon = icons[severity] || "❓";
-  const ts = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+  const ts = formatBrasilia();
   const text = severity === "p3"
     ? `⭕ <b>!AURÉOLA CANÔNICA</b>\n🟢 <b>CHEFE, a VPS voltou ao estado esperado nos checks medidos.</b>\n👉 O que aconteceu: os checks read-only desta rodada não encontraram sinal vermelho.\n🔎 <b>!CONTRAPROVA</b>: verde vale só para estes checks; não prova o sistema inteiro.\n🕐 ${ts}\n⚖️ <i>REALIDADE É O JUIZ.</i>`
     : `⭕ <b>!AURÉOLA CANÔNICA</b>\n${icon} <b>CHEFE, apareceu uma bronca na VPS.</b>\n👉 O que aconteceu:\n${findings.slice(0, 3).map(f => `• ${f}`).join("\n")}\n⚖️ Estado técnico: <b>${severity.toUpperCase()}</b>\n🔎 <b>!CONTRAPROVA</b>: o alerta fica localizado no que foi medido; UNKNOWN != PASS.\n🕐 ${ts}\n<a href="${issueUrl}">Ver a prova completa</a>\n⚖️ <i>REALIDADE É O JUIZ.</i>`;
