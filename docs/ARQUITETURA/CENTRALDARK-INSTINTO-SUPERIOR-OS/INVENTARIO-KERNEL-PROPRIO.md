@@ -1031,3 +1031,62 @@ Para o Gate A atual:
 9. continuar para a costura do Instinto Superior no mesmo ciclo.
 
 Se uma rota falhar, usar a próxima rota autorizada existente. Só retornar ao CHEFE quando houver uma fronteira humana real, não por conveniência do agente.
+
+
+## 15. Núcleo lógico CentralDark-OS — cruzamento bidirecional
+
+**Intenção vigente:** a inteligência persistente da CentralDark-OS deve resolver objetivos sem virar caçadora de sintomas e sem congelar o organismo inteiro por um UNKNOWN que não pertence ao claim atual.
+
+Este binding **reutiliza** a Multibússola e o TLC23; não cria outro kernel, cérebro, gate ou owner.
+
+```text
+OWNER_DIRECIONAL=docs/CONSCIENCIA/MULTIBUSSOLA.md
+OWNER_LOGICO=.agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
+NATIVE_KERNEL_STATUS=TRILHA_FUTURA
+CENTRALDARK_LOGICAL_CORE=ACTIVE_CONTRACT
+ONE_SYSTEM_ONLY=true
+REUSE_BEFORE_CREATE=true
+```
+
+Cruzamento canônico do núcleo lógico:
+
+```text
+INTENÇÃO
+→ OBJETIVO
+→ CORPO_DE_CLÁUSULAS
+→ FATOS MEDIDOS
+→ CLAIM
+→ AÇÃO
+→ EFEITO
+→ RECEIPT
+        ↕
+REVERSE:
+RECEIPT
+← EFEITO
+← AÇÃO
+← CLAIM
+← PRÉ-REQUISITOS
+← FATOS/OWNERS
+← INTENÇÃO
+```
+
+Regra de ida e volta:
+
+```text
+FORWARD  = FACTS → REQUIRED_BODY → CLAIM
+REVERSE  = CLAIM → REQUIRED_BODY → MISSING_FACTS
+ROUND_TRIP = CLAIM ↔ REQUIRED_BODY ↔ MEASURED_FACTS
+```
+
+Um fato UNKNOWN fora do corpo do claim atual permanece visível, mas não impede a próxima cláusula independente resolvível pela máquina. Ao mesmo tempo, **nenhum PASS local promove PASS global**:
+
+```text
+UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+AFFECTED_CLAIM_PASS_MAY_CONTINUE=true
+CLAIM_PASS != GLOBAL_MISSION_PASS
+GLOBAL_MISSION_PASS_REQUIRES_FULL_BINDING=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+```
+
+Isso é o comportamento do **núcleo lógico/operacional da CentralDark-OS** hoje. O kernel nativo de baixo nível (bootloader, scheduler, drivers etc.) continua sendo outra camada, ainda futura, conforme o inventário deste mesmo owner.
