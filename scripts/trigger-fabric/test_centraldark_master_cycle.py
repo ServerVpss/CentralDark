@@ -282,7 +282,7 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         self.assertLess(chain.index("REMEDICAO"), chain.index("REALITY_JUDGE"))
         self.assertLess(chain.index("REALITY_JUDGE"), chain.index("FIXED_POINT"))
         self.assertLess(chain.index("FIXED_POINT"), chain.index("TLC23_CLOSE"))
-        self.assertEqual(["REGISTRA", "HANDOFF", "BOOT"], chain[-3:])
+        self.assertEqual(["REGISTRA", "RASTRO", "HANDOFF", "BOOT"], chain[-4:])
 
 
     def test_embedded_self_test_passes(self):
