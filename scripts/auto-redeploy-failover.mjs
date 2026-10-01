@@ -21,6 +21,7 @@ import { execSync, spawn } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { formatBrasilia } from '../central-horario/node.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const RAIZ = resolve(__dirname, '..', '..');
@@ -278,7 +279,7 @@ async function fireAlarms(trigger, reason, details = {}) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            title: `[auto-failover] ${trigger} falhou — ${new Date().toLocaleString('pt-BR')}`,
+            title: `[auto-failover] ${trigger} falhou — ${formatBrasilia()}`,
             body: msg,
             labels: CONFIG.alarms.githubIssue.labels,
           }),
