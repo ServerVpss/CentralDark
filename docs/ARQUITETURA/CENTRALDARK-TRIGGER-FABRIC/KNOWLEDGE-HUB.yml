@@ -386,4 +386,31 @@ material_first_cognitive_route:
     SAME_FINDING_WITHOUT_NEW_EVIDENCE: DROP_DUPLICATE
     REPEATED_CHEFE_RETEACH_AFTER_PROMOTION: LEARNING_TRANSFER_FAIL
     CURRENT_EQUIVALENCE_OR_REMEASURE_REQUIRED: true
+    COGNITIVE_CRYSTAL_LINK_REQUIRED: true
+    COGNITIVE_CRYSTAL_REQUIRES_INTENT_REF: true
+    COGNITIVE_CRYSTAL_REQUIRES_PREV_LEARNING_REF: true
+    COGNITIVE_CRYSTAL_REQUIRES_RELATION_TYPE: true
+    COGNITIVE_CRYSTAL_REQUIRES_OWNER_REF: true
+    COGNITIVE_CRYSTAL_REQUIRES_NEXT_CURSOR: true
+    COGNITIVE_SUCCESSOR_BACKLINK_REQUIRED: true
+    ORPHAN_COGNITIVE_CRYSTAL: REJECT
+    GENESIS_COGNITIVE_CRYSTAL_MAY_HAVE_NO_PREDECESSOR: true
+    GRAPH_EDGE_IS_CONTINUITY_LINK_NOT_CAUSAL_PROOF: true
+  cognitive_neurolink_contract:
+    status: REQUIRED
+    alias: NEUROLINK
+    semantics: "Every cognitive crystal must remain connected to human intent and at least one prior proven learning; a successor backfills the predecessor link."
+    required_properties:
+      - LEARNING_ID
+      - INTENT_REF
+      - PREV_LEARNING_REF
+      - RELATION_TYPE
+      - OWNER_REF
+      - NEXT_CURSOR
+    successor_rule:
+      on_new_cognitive_crystal: BACKFILL_PREDECESSOR_NEXT_LEARNING_REF
+      unresolved_successor: NEXT_LEARNING_REF_PENDING
+    promotion_gate: "NO_ORPHAN_COGNITIVE_CRYSTAL"
+    graph_projection_only: true
+    graph_edge_does_not_prove_causality: true
 
