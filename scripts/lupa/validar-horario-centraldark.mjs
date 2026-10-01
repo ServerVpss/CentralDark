@@ -30,8 +30,8 @@ const SKIP_DIRS = new Set([
   'backups', '_LEGADO_ROOT_DOCS_CONFLITOS',
 ]);
 
-function git(args) {
-  return execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+function relative(file) {
+  return path.relative(ROOT, file).replaceAll('\\', '/');
 }
 
 function walk(dir, out = []) {
@@ -45,8 +45,12 @@ function walk(dir, out = []) {
   return out;
 }
 
-function relative(file) {
-  return path.relative(ROOT, file).replaceAll('\\', '/');
+function git(args) {
+  return execFileSync('git', args, {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  }).trim();
 }
 
 function argValue(name) {
@@ -58,13 +62,21 @@ function bootstrapOk(surface) {
   const full = path.join(ROOT, surface.bootstrap);
   if (!fs.existsSync(full)) return false;
   const text = fs.readFileSync(full, 'utf8');
-  return text.includes('installCentralDarkDateFormatting') && text.includes('installCentralDarkDateFormatting();');
+  return text.includes('installCentralDarkDateFormatting') &&
+    text.includes('installCentralDarkDateFormatting();');
 }
 
-function resolveBase(ref) {
-  const candidate = String(ref || '').trim() || 'HEAD^';
+function resolveBaseRef() {
+  const explicit = String(argValue('--base-ref') || process.env.BASE_SHA || '').trim();
+  const event = String(process.env.GITHUB_EVENT_NAME || '');
+  const baseBranch = String(process.env.GITHUB_BASE_REF || '').trim();
+  const candidate = explicit || (process.env.GITHUB_ACTIONS === 'true' && event === 'pull_request' && baseBranch
+    ? `origin/${baseBranch}`
+    : 'HEAD^');
+
   try {
-    return { ref: candidate, sha: git(['rev-parse', '--verify', `${candidate}^{commit}`]) };
+    const sha = git(['rev-parse', '--verify', `${candidate}^{commit}`]);
+    return { ref: candidate, sha };
   } catch {
     return { ref: candidate, sha: null };
   }
@@ -74,6 +86,7 @@ function addedLinesSince(baseSha) {
   const byFile = new Map();
   const diff = git(['diff', '--unified=0', '--no-ext-diff', baseSha, 'HEAD', '--']);
   let current = null;
+
   for (const line of diff.split('\n')) {
     if (line.startsWith('+++ b/')) {
       current = line.slice(6);
@@ -85,72 +98,122 @@ function addedLinesSince(baseSha) {
     if (!match) continue;
     const start = Number(match[1]);
     const count = match[2] === undefined ? 1 : Number(match[2]);
-    for (let offset = 0; offset < count; offset += 1) byFile.get(current).add(start + offset);
+    for (let offset = 0; offset < count; offset += 1) {
+      byFile.get(current).add(start + offset);
+    }
   }
   return byFile;
 }
 
-function pushMatches(findings, rel, content, regex, rule) {
-  regex.lastIndex = 0;
-  for (const match of content.matchAll(regex)) {
-    const line = content.slice(0, match.index).split('\n').length;
-    findings.push({ file: rel, line, rule, sample: match[0].replace(/\s+/g, ' ').slice(0, 180) });
-  }
-}
-
 const findings = [];
+
 for (const ownerFile of REQUIRED_OWNER_FILES) {
   const full = path.join(OWNER_DIR, ownerFile);
   if (!fs.existsSync(full)) {
-    findings.push({ file: `central-horario/${ownerFile}`, line: 1, rule: 'CANONICAL_TIME_OWNER_MISSING', structural: true });
-  }
-}
-for (const surface of WEB_SURFACES) {
-  if (!bootstrapOk(surface)) {
-    findings.push({ file: surface.bootstrap, line: 1, rule: 'WEB_TIME_BOOTSTRAP_MISSING', structural: true });
+    findings.push({
+      file: `central-horario/${ownerFile}`,
+      rule: 'CANONICAL_TIME_OWNER_MISSING',
+      structural: true,
+    });
   }
 }
 
-const patterns = {
-  jsLocaleDirect: /new\s+Date\s*\([^\n;]*?\)\.toLocale(?:String|DateString|TimeString)\s*\(/g,
-  jsIntlDirect: /new\s+Intl\.DateTimeFormat\s*\(/g,
-  pyNaiveNow: /\b(?:datetime|dt\.datetime)\.now\(\)\.(?:strftime|isoformat)\s*\(/g,
-  psNaiveFormattedNow: /\(Get-Date\)\.ToString\s*\(/g,
-  shHumanDateWithoutTz: /(^|[^A-Za-z0-9_])date\s+['"]\+%(?:d|Y|H|I|M)/gm,
-};
+for (const surface of WEB_SURFACES) {
+  if (!bootstrapOk(surface)) {
+    findings.push({
+      file: surface.bootstrap,
+      rule: 'WEB_TIME_BOOTSTRAP_MISSING',
+      structural: true,
+    });
+  }
+}
+
+const seloPath = '.github/workflows/selo-fabric.yml';
+const seloFull = path.join(ROOT, seloPath);
+if (!fs.existsSync(seloFull)) {
+  findings.push({ file: seloPath, rule: 'SELO_FABRIC_MISSING', structural: true });
+} else {
+  const selo = fs.readFileSync(seloFull, 'utf8');
+  const required = [
+    ['pt-BR', 'SELO_PTBR_LOCALE_MISSING'],
+    ['America/Sao_Paulo', 'SELO_BRASILIA_TZ_MISSING'],
+    [' BRT', 'SELO_BRT_LABEL_MISSING'],
+    ['Horário de Brasília', 'SELO_HUMAN_TIME_LABEL_MISSING'],
+    ['HUD_MEASURED_AT_BRASILIA', 'SELO_HUD_BRASILIA_FIELD_MISSING'],
+    ['HUD_TIMESTAMP_ISO_UTC', 'SELO_MACHINE_UTC_FIELD_MISSING'],
+    ['central-horario/node.cjs', 'SELO_CANONICAL_TIME_OWNER_MISSING'],
+    ['formatBrasilia', 'SELO_CANONICAL_HUMAN_FORMATTER_MISSING'],
+    ['utcIso', 'SELO_CANONICAL_MACHINE_FORMATTER_MISSING'],
+  ];
+  for (const [token, rule] of required) {
+    if (!selo.includes(token)) findings.push({ file: seloPath, rule, structural: true });
+  }
+}
+
+const jsDatePtBrNoZone = /new\s+Date\s*\([^\n;]*?\)\.toLocale(?:String|DateString|TimeString)\(\s*(['"])pt-BR\1\s*\)/g;
+const jsDateLocaleNoArgs = /new\s+Date\s*\([^\n;]*?\)\.toLocale(?:String|DateString|TimeString)\(\s*\)/g;
+const pyNaiveNow = /\b(?:datetime|dt\.datetime)\.now\(\)\.(?:strftime|isoformat)\s*\(/g;
+const psNaiveFormattedNow = /\(Get-Date\)\.ToString\s*\(/g;
+const shHumanDateWithoutTz = /(^|[^A-Za-z0-9_])date\s+['"]\+%(?:d|Y|H|I|M)/g;
 
 const files = walk(ROOT);
 for (const file of files) {
   const rel = relative(file);
   if (rel.startsWith('central-horario/')) continue;
-  const content = fs.readFileSync(file, 'utf8');
+
+  const contentText = fs.readFileSync(file, 'utf8');
   const ext = path.extname(file);
   const webSurface = WEB_SURFACES.find((surface) => rel.startsWith(surface.root));
   const webCovered = Boolean(webSurface && bootstrapOk(webSurface));
 
   if (['.js', '.mjs', '.cjs', '.ts', '.tsx', '.html', '.yml', '.yaml'].includes(ext) && !webCovered) {
-    pushMatches(findings, rel, content, patterns.jsLocaleDirect, 'HUMAN_DATE_FORMATTER_OUTSIDE_CANONICAL_OWNER');
-    pushMatches(findings, rel, content, patterns.jsIntlDirect, 'INTL_DATE_FORMATTER_OUTSIDE_CANONICAL_OWNER');
+    for (const [regex, rule] of [
+      [jsDateDirectLocale, 'HUMAN_DATE_FORMATTER_OUTSIDE_CANONICAL_OWNER'],
+      [jsIntlDirect, 'INTL_DATE_FORMATTER_OUTSIDE_CANONICAL_OWNER'],
+    ]) {
+      regex.lastIndex = 0;
+      for (const match of contentText.matchAll(regex)) {
+        const line = contentText.slice(0, match.index).split('\n').length;
+        findings.push({ file: rel, line, rule, sample: match[0].slice(0, 180) });
+      }
+    }
   }
 
-  if (ext === '.py') pushMatches(findings, rel, content, patterns.pyNaiveNow, 'PYTHON_NAIVE_NOW_FOR_FORMATTING');
-  if (ext === '.ps1') pushMatches(findings, rel, content, patterns.psNaiveFormattedNow, 'POWERSHELL_LOCAL_TZ_FORMATTING');
+  if (ext === '.py') {
+    pyNaiveNow.lastIndex = 0;
+    for (const match of contentText.matchAll(pyNaiveNow)) {
+      const line = contentText.slice(0, match.index).split('\n').length;
+      findings.push({ file: rel, line, rule: 'PYTHON_NAIVE_NOW_FOR_FORMATTING', sample: match[0] });
+    }
+  }
+
+  if (ext === '.ps1') {
+    psNaiveFormattedNow.lastIndex = 0;
+    for (const match of contentText.matchAll(psNaiveFormattedNow)) {
+      const line = contentText.slice(0, match.index).split('\n').length;
+      findings.push({ file: rel, line, rule: 'POWERSHELL_LOCAL_TZ_FORMATTING', sample: match[0] });
+    }
+  }
 
   if (ext === '.sh') {
-    patterns.shHumanDateWithoutTz.lastIndex = 0;
-    for (const match of content.matchAll(patterns.shHumanDateWithoutTz)) {
-      const lineStart = content.lastIndexOf('\n', match.index) + 1;
-      const lineEnd = content.indexOf('\n', match.index);
-      const sourceLine = content.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
+    shHumanDateWithoutTz.lastIndex = 0;
+    for (const match of contentText.matchAll(shHumanDateWithoutTz)) {
+      const lineStart = contentText.lastIndexOf('\n', match.index) + 1;
+      const lineEnd = contentText.indexOf('\n', match.index);
+      const sourceLine = contentText.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
       if (/TZ\s*=\s*['"]?America\/Sao_Paulo/.test(sourceLine) || /\bdate\s+-u\b/.test(sourceLine)) continue;
-      const line = content.slice(0, match.index).split('\n').length;
-      findings.push({ file: rel, line, rule: 'SHELL_HUMAN_DATE_WITHOUT_EXPLICIT_TZ', sample: sourceLine.trim().slice(0, 180) });
+      const line = contentText.slice(0, match.index).split('\n').length;
+      findings.push({
+        file: rel,
+        line,
+        rule: 'SHELL_HUMAN_DATE_WITHOUT_EXPLICIT_TZ',
+        sample: sourceLine.trim().slice(0, 180),
+      });
     }
   }
 }
 
-const requestedBase = argValue('--base-ref') || process.env.BASE_SHA || process.env.GITHUB_EVENT_BEFORE || 'HEAD^';
-const base = resolveBase(requestedBase);
+const base = resolveBaseRef();
 if (!base.sha) {
   console.error(`CENTRALDARK_TIME_GATE=BLOCKED base_ref_unavailable=${base.ref}`);
   process.exit(2);
@@ -160,7 +223,7 @@ const changedLines = addedLinesSince(base.sha);
 const deltaFindings = findings.filter((finding) => {
   if (finding.structural) return true;
   const lines = changedLines.get(finding.file);
-  return Boolean(lines && lines.has(finding.line));
+  return Boolean(lines && finding.line && lines.has(finding.line));
 });
 
 const output = {
@@ -168,7 +231,6 @@ const output = {
   mode: 'GLOBAL_SCAN_DELTA_RATCHET',
   canonical_owner: 'central-horario',
   canonical_timezone: 'America/Sao_Paulo',
-  locale: 'pt-BR',
   human_display_format: 'DD/MM/AAAA HH:mm:ss BRT',
   machine_storage: 'UTC_RFC3339',
   base_ref: base.ref,
@@ -176,17 +238,17 @@ const output = {
   head_sha: git(['rev-parse', 'HEAD']),
   scanned_files: files.length,
   global_findings_count: findings.length,
-  new_findings_count: deltaFindings.length,
-  legacy_debt: findings.filter((finding) => !deltaFindings.includes(finding)),
-  new_findings: deltaFindings,
+  delta_findings_count: deltaFindings.length,
+  findings,
+  delta_findings: deltaFindings,
 };
 
 console.log(JSON.stringify(output, null, 2));
-console.error(`CENTRALDARK_TIME_GLOBAL_AUDIT=${findings.length ? 'DEBT' : 'PASS'} findings=${findings.length}`);
-if (findings.length) console.warn(`CENTRALDARK_TIME_LEGACY_DEBT=${findings.length - deltaFindings.length}`);
+console.error(`CENTRALDARK_TIME_GLOBAL_AUDIT=${findings.length === 0 ? 'PASS' : 'DEBT'} findings=${findings.length}`);
 
 if (deltaFindings.length) {
-  console.error(`CENTRALDARK_TIME_GATE=FAIL new_findings=${deltaFindings.length}`);
+  console.error(`CENTRALDARK_TIME_DELTA_GATE=FAIL new_findings=${deltaFindings.length} global_debt=${findings.length}`);
+  console.error('CENTRALDARK_TIME_GATE=FAIL scope=GLOBAL_SCAN_DELTA_RATCHET');
   process.exit(1);
 }
 
