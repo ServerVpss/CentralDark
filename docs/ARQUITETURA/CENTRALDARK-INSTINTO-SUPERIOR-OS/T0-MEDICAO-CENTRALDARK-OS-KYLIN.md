@@ -644,3 +644,50 @@ SSH_PORT_PASS != SSH_AUTH_PASS
 ```
 
 **NEXT_CURSOR:** fechar autenticação do shell local ou usar a console já aberta; então inventariar capabilities nativas e provar chamada real antes de qualquer bind de provider.
+
+
+### CURRENT native-AI-first route — Casa/twin/openKylin (2026-10-01)
+
+Revalidação viva feita na Casa antes deste registro:
+
+```text
+VMWARE_VMX_PID=29768
+TWIN_NAT_IPV4=192.168.35.128
+CASA_TO_TWIN_TCP22=PASS
+CASA_TO_TWIN_TCP8000=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_TCP8001=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_TCP8002=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_TCP42617=NOT_EXPOSED_AT_MEASUREMENT
+SSH_BATCHMODE_AUTH=FAIL
+SSH_AUTH=UNKNOWN
+```
+
+A intenção vigente do CHEFE é consumir primeiro a IA nativa do próprio corpo openKylin/CENTRALDARK-OS, não substituir esse objetivo por um modelo cloud externo só porque uma superfície aceita provider OpenAI-compatible.
+
+```text
+NATIVE_AI_FIRST=true
+TARGET_AI_BODY=OPENKYLIN_SHARED_AI_SUBSYSTEM
+TARGET_ROUTE=CASA/HERMES -> TWIN_LOCAL_OR_VPS_CENTRALDARK_OS -> NATIVE_OPENKYLIN_CAPABILITY
+EXTERNAL_LLM_IS_PRIMARY_TARGET=false
+EXTERNAL_PROVIDER_ROLE=FALLBACK_ONLY_WHEN_EXPLICITLY_REQUIRED
+OPENROUTER_DEFAULT_IS_NOT_TARGET=true
+OPENAI_CODEX_REMOTE_ROUTE_IS_NOT_NATIVE_AI=true
+TRITON_V2_IS_NATIVE_CAPABILITY_SURFACE=true
+MCP_DESKTOP_IS_NATIVE_CAPABILITY_SURFACE_WHEN_RUNTIME_PROVED=true
+KYLIN_AI_RUNTIME_IS_NATIVE_CAPABILITY_OWNER_CANDIDATE=true
+AIONUI_CUSTOM_OPENAI_SCREEN_IS_NOT_CANONICAL_ROUTE_BY_ITSELF=true
+```
+
+A rota já comprovada na VPS para inferência nativa continua sendo o kytensor/Triton em loopback `127.0.0.1:8000` (HTTP), com embedding e TTS previamente provados no owner `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md`. Isso não vira automaticamente um endpoint OpenAI chat.
+
+Para o twin local, o transporte atual comprovado é `Casa -> 192.168.35.128:22`. As portas de capability não estavam expostas ao host nesta medição e a autenticação SSH BatchMode ainda não fechou; portanto a autópsia nativa deve continuar pela console autenticada do guest ou por uma credencial existente, sem pedir/chutar chave de provider externo.
+
+```text
+ROUTE_PROOF != CAPABILITY_PROOF
+NATIVE_PACKAGE_PRESENT != NATIVE_CHAT_PASS
+PORT_NOT_EXPOSED != CAPABILITY_ABSENT
+EXTERNAL_CREDENTIAL_MISSING != NATIVE_AI_MISSING
+USER_CONFIRMED_NATIVE_FIRST_INTENT=true
+```
+
+**NEXT_CURSOR:** entrar no guest por rota autenticada já existente/console; medir `processos -> sockets -> kylin-ai-runtime/kytensor -> repository/models -> SDK/MCP -> uma chamada nativa real`; depois ligar o AionUi/Hermes à capability provada usando o protocolo real dela, reutilizando owner/adapter existente antes de criar qualquer compatibilidade nova.
