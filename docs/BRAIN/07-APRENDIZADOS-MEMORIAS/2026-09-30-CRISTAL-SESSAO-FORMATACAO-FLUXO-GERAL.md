@@ -1,0 +1,63 @@
+---
+title: "Núcleo — cristal da sessão 2026-09-30 → 2026-10-01"
+date: 2026-09-30
+status: DERIVED_CORE_POINTER
+category: "07-APRENDIZADOS-MEMORIAS"
+source: ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/SESSOES/2026-09-30-SESSAO-COMPLETA-CENTRALDARK-FORMATACAO-FLUXO-GERAL.md"
+source_class: SESSION_CRYSTAL
+pr_mother: 1562
+child_pr: 1723
+tags: [centraldark-os, dependabot, update-branch, cleanup, ephemeral-workspace, preformat, general, visual-identity, session-crystal]
+---
+
+# Núcleo — cristal da sessão 2026-09-30 → 2026-10-01
+
+Esta nota é ponte de recuperação. Não duplica a sessão inteira.
+
+## Caminho de recuperação
+
+```text
+CENTRALDARK
+→ SESSION_CRYSTAL_2026_09_30
+→ DEPENDABOT_RECONCILIATION
+→ REAL_DEPENDABOT_REPLAY
+→ EPHEMERAL_WORKSPACE_CLEANUP
+→ UPDATE_BRANCH_VISUAL_GRAPH
+→ HYBRID_VISUAL_IDENTITY
+→ GENERAL_PORTABLE_POSTURE
+→ PREFORMAT_VS_FINAL_RECEIPT
+→ CENTRALDARK_OS_REINSTALL_NEXT_CURSOR
+```
+
+Cristal completo:
+
+`.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/SESSOES/2026-09-30-SESSAO-COMPLETA-CENTRALDARK-FORMATACAO-FLUXO-GERAL.md`
+
+## Chaves semânticas
+
+```text
+FIXED_POINT_REQUIRES_EPHEMERAL_CLEANUP
+UNMARKED_TEMP_WORKSPACE=CONTRACT_VIOLATION
+UPDATE_BRANCH=MAIN_INTO_PR_NOT_PR_INTO_MAIN
+UPDATE_BRANCH_GRAPH=PRECHECK→UPDATE_AND_STITCH→REALITY_JUDGE→RECEIPT
+GENERAL=TRANSPORTABLE_OPERATIONAL_POSTURE
+CHEFE_TEACHES_CENTRALDARK_OS_LEARNS
+PRE_FORMAT_RECEIPT!=FINAL_RECEIPT
+GO_REINSTALL_REQUIRES_SAME_SHA_SAME_VPS_SAME_VAULT
+VPS_DIRTY_MUST_BE_RECONCILED_BEFORE_DISCARD
+```
+
+## Fronteiras
+
+```text
+SESSION_CRYSTAL != RUNTIME
+DOCUMENTED != EXECUTED
+MERGEABLE != MERGED
+MERGED != DEPLOYED
+UNKNOWN != PASS
+CURRENT > HISTORY
+```
+
+## NEXT_CURSOR
+
+Ler o cristal completo e continuar do bloco `NEXT_CURSOR`. O primeiro delta aberto é corrigir o transporte dos outputs no grafo Update Branch sem transformar `unknown_or_pending` em PASS.
