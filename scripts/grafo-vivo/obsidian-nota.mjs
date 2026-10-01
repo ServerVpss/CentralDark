@@ -9,8 +9,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 
 import { atomicWriteUtf8Sync } from '../memory-linker/fs-safe.mjs';
-import {
 import { formatBrasilia } from '../../central-horario/node.mjs';
+import {
   buildGraphProjection,
   cleanGraphLabel,
   extractGraphFingerprint,
