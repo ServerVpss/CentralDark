@@ -913,3 +913,40 @@ CHEFE
 - **Sintoma:** Segredos e tokens estão espalhados em arquivos, pastas e ambientes diferentes, dificultando auditoria, rotação, revogação e acesso controlado por agentes.
 - **Onde mexer:** CentralDark/VPS, MCP Admin, API CentralDark, documentação de segurança e rotina de rebuild/formatação.
 - **Critério pra fechar:** Criar um cofre canônico com nomes padronizados por provider/runtime/bot/domínio, registrar dono/finalidade/status/rotação/último teste, remover duplicatas antigas, impedir segredo em desktop/repo/log e fazer agentes acessarem segredos somente pela API/MCP CentralDark com auditoria.
+
+---
+
+### 🟢 PENDÊNCIA FUTURA — BRAIN/OBSIDIAN · ESPINHA DORSAL ANATÔMICA DA CENTRALDARK
+
+**Status:** 🟢 **FUTURO / LEMBRANÇA / NÃO EXECUTAR AGORA**  
+**Data:** 01/10/2026  
+**Classe:** mesma fila de exploração futura; não vira missão ativa enquanto o foco atual for Hermes Casa → VPS.
+
+**Intenção do CHEFE:** futuramente organizar o Obsidian/BRAIN como representação anatômica navegável da CentralDark, com uma **espinha dorsal canônica** e regiões especializadas ligadas por relações explícitas, sem criar segunda memória ou segunda fonte de verdade.
+
+```text
+DO_NOT_EXECUTE_NOW=true
+FUTURE_EXPLORATION=true
+REUSE_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+OBSIDIAN_IS_VISUAL_KNOWLEDGE_SURFACE_NOT_AUTHORITY=true
+GITHUB_MAIN_REMAINS_CANONICAL_VERSIONED_SOURCE=true
+BRAIN_GRAPH_IS_DERIVED_NAVIGATION=true
+```
+
+**Imagem mental preservada:**
+- **Espinha dorsal:** boot, SOUL, regras, owners, CURRENT, provas, handoff e memória canônica.
+- **Regiões/lobos:** VPS, Casa, Hermes, segurança, bots, modelos, projetos, runtime e pesquisa.
+- **Sinapses:** links, backlinks, GraphRAG e relações semânticas.
+- **Memória recente:** sessões, receipts, NEXT_CURSOR e deltas ainda quentes.
+- **Memória consolidada:** somente pepitas que passaram pela peneira/prova.
+- **Nervos:** MCP, Tailscale, SSH, APIs, ferramentas e conectores.
+- **Corpos:** Casa, VPS, CENTRALDARK-OS e modelos substituíveis.
+
+**Regra de desenho:** a espinha não precisa conter todo o conhecimento; ela precisa apontar deterministicamente **onde cada conhecimento mora, quem é o owner e como alcançá-lo**.
+
+**Reuso obrigatório antes de implementar:** reconciliar com `docs/BRAIN/`, `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`, GraphRAG/Semantic Linker e o writer existente `scripts/grafo-vivo/obsidian-nota.mjs`. Não criar watcher, vault, memória ou grafo paralelo sem gap material provado.
+
+**Quando reabrir:** somente por comando explícito do CHEFE depois do foco atual. Primeiro inventariar o BRAIN/Obsidian existente, medir o que já é gerado automaticamente e implementar somente o delta visual/navegacional faltante.
+
+**NEXT_CURSOR futuro:** `INVENTARIO_BRAIN_OBSIDIAN → SPINE_OWNER_MAP → REGIONS_AND_EDGES → VISUAL_NAVIGATION → READBACK`.
