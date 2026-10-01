@@ -1,6 +1,7 @@
 // Serviço de alertas Telegram (fire-and-forget com throttle)
 const config = require('../config');
 const messages = require('./messages');
+const { formatBrasilia } = require('../../../central-horario/node.cjs');
 
 const THROTTLE_MS = 10 * 60 * 1000;
 const lastSent = new Map();
@@ -39,7 +40,7 @@ module.exports = {
     for (const [k, v] of Object.entries(fields)) {
       if (v) parts.push(`<b>${esc(k)}:</b> <code>${esc(v)}</code>`);
     }
-    parts.push('', `🧾 <i>${new Date().toISOString()}</i>`);
+    parts.push('', `🧾 <i>${formatBrasilia()}</i>`);
 
     try {
       await messages.sendMessage(config.ALERTS_CHAT_ID, parts.join('\n'));
