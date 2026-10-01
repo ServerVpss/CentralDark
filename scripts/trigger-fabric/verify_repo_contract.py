@@ -654,12 +654,28 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml
  'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE: true',
 ], classification='UPDATE_BRANCH_RUNNER_LOCK_CONTRACT')
 check('.github/workflows/pr-update-branch-deterministic.yml',[
+ 'preflight:',
+ 'update-and-stitch:',
+ 'reality-judge:',
+ 'receipt:',
+ 'FLOW=PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT',
  'runs-on: ubuntu-latest',
  'UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN',
  'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true',
  'HYBRID_MODE_PENDING_VPS_PROOF=true',
  'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true',
 ], classification='UPDATE_BRANCH_RUNNER_LOCK_ENFORCED')
+
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',[
+ 'ephemeral_workspace_finalizer:',
+ 'trigger: BEFORE_FIXED_POINT_WHEN_EPHEMERAL_WORKSPACE_USED',
+ 'canonical_creator_required: true',
+ 'unmarked_temp_workspace: CONTRACT_VIOLATION',
+ 'mission_end_requires_temp_inventory: true',
+ 'cleanup_readback_required: true',
+ 'unclassified_residue_target: 0',
+ 'EPHEMERAL_CLEANUP_IF_USED',
+], classification='EPHEMERAL_CLEANUP_FIXED_POINT_CONTRACT')
 check('.github/workflows/trigger-fabric-package.yml',['Trigger Fabric Full Package','Fresh-extraction counterproof'])
 check('docs/CONSCIENCIA/GITHUB-LABELS-OPERACIONAIS.md',['👑 PERMITO-SEGREDO','✅ PR CONFIRMADO','Label roteia trabalho; **nunca concede autoridade humana**.'])
 check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
