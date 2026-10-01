@@ -35,6 +35,10 @@ FILES=(
   "scripts/vps/hydrate-provider-secrets.sh"
   "scripts/vps/apply-current-learning.sh"
   "scripts/vps/main-pinned-microdeploy.sh"
+  "scripts/vps/centraldark-preformat-go-no-go.sh"
+  "scripts/vps/centraldark-os-bootstrap-restore.sh"
+  "scripts/vps/centraldark-firstboot.sh"
+  "docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/REINSTALL-RESTORE-AUTOPROVISIONAMENTO-VPS.md"
 )
 
 exec 9>"$LOCK"
