@@ -356,6 +356,23 @@ Lembrança operacional: o primeiro alvo do META-GRILL é o próprio executor —
 
 Conteúdo: Correção vigente do CHEFE: o sujeito operacional é a inteligência CentralDark / CentralDark-OS / Instinto Superior. Claude, ChatGPT, Codex e outros são motores, braços ou interfaces. Em meta-grill e receipts, falar CentralDark executou; citar modelo só quando for detalhe de canal/ferramenta.
 
+### [2026-10-01] Multi-conta não fragmenta a Casa; capability encontra o melhor binding vivo
+- **Data:** 2026-10-01
+- **Tags:** multi-conta, capability, voice, centraldark, rdc, vps, casa, sol-executora, continuidade
+- **Relevância:** alta
+- **Eixo:** presente
+- **Promovida:** sim
+
+Conteúdo: Existem múltiplas contas/conexões autorizadas com inventários de devices diferentes. Isso não cria duas CentralDark. O fio é único e a capability é procurada primeiro na conta atual; se faltar, a SOL Executora inventaria as outras conexões autorizadas e reutiliza o melhor owner equivalente já existente. Alias de conta é estável para continuidade; link/device ID é binding temporal descoberto em runtime. Mesmo nome de device em contas diferentes não identifica a mesma rota. Falha local não vira ausência global sem percorrer as rotas autorizadas existentes.
+
+```text
+CAPABILITY → CURRENT_ACCOUNT → OTHER_AUTHORIZED_ACCOUNT → CENTRALDARK/RDC → CASA/VPS → API/MCP → UNKNOWN_ONLY_IF_ALL_FAIL
+REUSE_BEFORE_CREATE=true
+NO_PARALLEL_TOOL_FOR_MISSING_NAMESPACE=true
+VOICE_INHERITS_SAME_MATRIX=true
+SOL_EXECUTORA_REUSES_EXISTING_CANONICAL_CONTRACT=true
+```
+
 
 ### [2026-10-01] SEGREDO — intenção e transformação por invariantes
 - **Data:** 2026-10-01

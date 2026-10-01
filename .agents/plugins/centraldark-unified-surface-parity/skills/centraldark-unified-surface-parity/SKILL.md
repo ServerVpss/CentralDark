@@ -83,3 +83,30 @@ GEV/JEV or another typed decision engine may be used only as an optional decisio
 ## Runtime truth
 
 This package bundles the canonical public CentralDark MCP endpoint. Successful plugin publication does not itself prove Voice runtime exposure. Live Voice binding remains a separate measurement.
+
+## Roteamento híbrido multi-conta por capability
+
+```text
+HYBRID_MULTI_ACCOUNT_CAPABILITY_ROUTING=true
+CAPABILITY_FIRST_TOOL_SECOND=true
+CURRENT_ACCOUNT_TOOL_MISS != CAPABILITY_UNAVAILABLE
+DEVICE_NAME_ALONE_IS_NOT_ROUTE
+LINK_ID_DISCOVER_AT_RUNTIME=true
+DEVICE_ID_DISCOVER_AT_RUNTIME=true
+REUSE_EXISTING_CAPABILITY_ROUTE_FIRST=true
+NO_PARALLEL_ADAPTER_FOR_MISSING_TOOL=true
+```
+
+```text
+INTENT
+→ CAPABILITY_NEEDED
+→ CURRENT_ACCOUNT_NATIVE_TOOL_IF_EXPOSED
+→ ALTERNATE_AUTHORIZED_ACCOUNT_SAME_CAPABILITY
+→ CENTRALDARK/RDC_ONLINE_DEVICE_WITH_CAPABILITY
+→ EXISTING_CASA_OR_VPS_OWNER
+→ EXISTING_API_OR_MCP_OWNER
+→ PLATFORM_UNAVAILABLE_OR_UNKNOWN_ONLY_AFTER_ALL_AUTHORIZED_EXISTING_ROUTES_FAIL
+```
+
+Alias de conta preserva continuidade; link/device são bindings temporais descobertos em runtime. Mesmo nome de device em contas diferentes não identifica a mesma rota. Ferramenta ausente em uma superfície não autoriza criar wrapper paralelo; reutilizar a melhor capability equivalente já existente.
+
