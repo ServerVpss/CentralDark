@@ -6,7 +6,7 @@
 # Costura evoluída no mesmo objeto:
 # - depois do 202 Accepted, remede a PR até confirmar head/compare/checks.
 # - STITCH_CONFIRMED exige behind_by_after == 0.
-# - pending/skipped/unknown continuam amarelo; não viram PASS.
+# - pending/skipped/unknown de checks continuam amarelo como observação de CI; não reescrevem o claim independente de sincronização.
 #
 # Cadeados:
 # - update-branch é sincronização, não aprovação.
@@ -115,6 +115,9 @@ jobs:
       confirmed: ${{ steps.update.outputs.confirmed }}
       blocked: ${{ steps.update.outputs.blocked }}
       unknown_or_pending: ${{ steps.update.outputs.unknown_or_pending }}
+      sync_unknown: ${{ steps.update.outputs.sync_unknown }}
+      checks_failed: ${{ steps.update.outputs.checks_failed }}
+      checks_unknown_or_pending: ${{ steps.update.outputs.checks_unknown_or_pending }}
       step_outcome: ${{ steps.classify.outputs.step_outcome }}
     steps:
       - name: 📥 Checkout do código confiável do ref autorizado
@@ -186,6 +189,9 @@ jobs:
           CONFIRMED: ${{ needs.update-and-stitch.outputs.confirmed }}
           BLOCKED: ${{ needs.update-and-stitch.outputs.blocked }}
           UNKNOWN_OR_PENDING: ${{ needs.update-and-stitch.outputs.unknown_or_pending }}
+          SYNC_UNKNOWN: ${{ needs.update-and-stitch.outputs.sync_unknown }}
+          CHECKS_FAILED: ${{ needs.update-and-stitch.outputs.checks_failed }}
+          CHECKS_UNKNOWN_OR_PENDING: ${{ needs.update-and-stitch.outputs.checks_unknown_or_pending }}
         run: |
           set -euo pipefail
           VERDICT="${OWNER_VERDICT:-UNKNOWN}"
@@ -196,6 +202,11 @@ jobs:
           echo "CONFIRMED=${CONFIRMED:-UNKNOWN}"
           echo "BLOCKED=${BLOCKED:-UNKNOWN}"
           echo "UNKNOWN_OR_PENDING=${UNKNOWN_OR_PENDING:-UNKNOWN}"
+          echo "SYNC_UNKNOWN=${SYNC_UNKNOWN:-UNKNOWN}"
+          echo "CHECKS_FAILED=${CHECKS_FAILED:-UNKNOWN}"
+          echo "CHECKS_UNKNOWN_OR_PENDING=${CHECKS_UNKNOWN_OR_PENDING:-UNKNOWN}"
+          echo "CLAIM_SCOPE=PR_SYNC_TO_MAIN"
+          echo "CHECKS_SCOPE=OBSERVATION_ONLY_NOT_PROMOTION_PROOF"
 
           case "$VERDICT" in
             PASS)
@@ -237,6 +248,9 @@ jobs:
           CONFIRMED: ${{ needs.update-and-stitch.outputs.confirmed }}
           BLOCKED: ${{ needs.update-and-stitch.outputs.blocked }}
           UNKNOWN_OR_PENDING: ${{ needs.update-and-stitch.outputs.unknown_or_pending }}
+          SYNC_UNKNOWN: ${{ needs.update-and-stitch.outputs.sync_unknown }}
+          CHECKS_FAILED: ${{ needs.update-and-stitch.outputs.checks_failed }}
+          CHECKS_UNKNOWN_OR_PENDING: ${{ needs.update-and-stitch.outputs.checks_unknown_or_pending }}
         run: |
           set -euo pipefail
           echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
@@ -252,6 +266,10 @@ jobs:
           echo "CONFIRMED=${CONFIRMED:-UNKNOWN}"
           echo "BLOCKED=${BLOCKED:-UNKNOWN}"
           echo "UNKNOWN_OR_PENDING=${UNKNOWN_OR_PENDING:-UNKNOWN}"
+          echo "SYNC_UNKNOWN=${SYNC_UNKNOWN:-UNKNOWN}"
+          echo "CHECKS_FAILED=${CHECKS_FAILED:-UNKNOWN}"
+          echo "CHECKS_UNKNOWN_OR_PENDING=${CHECKS_UNKNOWN_OR_PENDING:-UNKNOWN}"
+          echo "SYNC_CLAIM_AND_CI_OBSERVATION_ARE_SEPARATE=true"
           echo "MERGE=NOT_DONE"
           echo "APPROVAL=NOT_DONE"
           echo "DEPLOY=NOT_DONE"
