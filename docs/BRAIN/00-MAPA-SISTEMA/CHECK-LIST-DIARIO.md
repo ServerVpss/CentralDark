@@ -6,8 +6,8 @@ owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
 pr_mother: 1562
 semantic_role: "session_crystal_continuity_learning_map"
 priority: "OBRIGATORIO"
-checked_day_utc: "2026-09-30"
-updated: "2026-09-30T20:17:00-03:00"
+checked_day_utc: "2026-10-01"
+updated: "2026-09-30T21:21:00-03:00"
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 mirror_role: "CASA-VAULT = memoria operacional/espelho; Git+owners continuam autoridade tecnica"
 aliases:
@@ -18,6 +18,16 @@ aliases:
 ---
 
 # 📋 CHECK-LIST DIARIO — controle operacional do CHEFE
+
+## 🧪 Diagnóstico universal de EXIT CODE
+
+- [x] `exit code 0` = candidato a sucesso; efeito/receipt ainda obrigatórios.
+- [x] `exit code 1` = falha genérica; causa NÃO pode ser inferida só pelo número.
+- [x] `exit code 2` = hint de uso/política somente quando o contexto da ferramenta sustenta; causa real continua medida.
+- [x] `126/127/128+signal` = convenções de shell tratadas como hints, nunca autoridade universal.
+- [x] Qualquer outro não-zero entra em diagnóstico causal por stdout/stderr/runtime/source.
+- [x] Causa conhecida reutiliza owner/resolvedor existente; causa desconhecida permanece UNKNOWN.
+- [x] Depois do reparo, repetir a mesma probe discriminante antes de verde.
 
 ## 🫀 CURRENT VIVO — 2026-09-30
 
