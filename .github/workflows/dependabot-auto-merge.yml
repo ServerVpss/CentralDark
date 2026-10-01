@@ -540,7 +540,7 @@ jobs:
         github.event_name == 'repository_dispatch'
       )
     # API-only: não precisa consumir runner da VPS.
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 12
 
     steps:
@@ -874,7 +874,7 @@ jobs:
         (github.event_name == 'workflow_dispatch' && (inputs.target_pr == '' || inputs.target_pr == null))
       )
     # API-only: libera capacidade da VPS para os jobs que realmente precisam dela.
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 12
     outputs:
       rerun_count: ${{ steps.rerun.outputs.rerun_count }}
@@ -1062,7 +1062,7 @@ jobs:
     if: >-
       needs.watchdog-rerun-all-jobs.result == 'success' &&
       needs.watchdog-rerun-all-jobs.outputs.rerun_count != '0'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 5
 
     steps:
