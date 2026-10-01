@@ -28,7 +28,7 @@ gate_a() {
 
   # Localizar vault archive
   if [ -z "$VAULT_PATH" ]; then
-    VAULT_PATH="$(find /root/ -maxdepth 1 -name 'Vault-Cofre-CentralDark-*.tar.gz' -type f 2>/dev/null | sort -r | head -1)"
+    VAULT_PATH="$(find /root/ -maxdepth 1 -type f -name 'Vault-Cofre-CentralDark-*.tar.gz' ! -name '*.tar.gz.tar.gz' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1{sub(/^[^ ]+ /,"");print;exit}')"
   fi
 
   if [ -z "$VAULT_PATH" ] || [ ! -f "$VAULT_PATH" ]; then
@@ -113,8 +113,27 @@ gate_a() {
   fi
 
   # Código canônico off-host + Vault off-host são provas diferentes.
-  local remote_sha vault_sha
+  local remote_sha vault_sha askpass=""
+  # Reuse the already-owned runtime Git identity when the preformat shell itself has no GH token.
+  if [ -z "${GH_TOKEN:-}" ] && command -v pm2 >/dev/null && command -v jq >/dev/null; then
+    export GH_TOKEN="$(PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | jq -r '.[]|select(.name=="CentralDark-Hermes")|.pm2_env.env.GH_TOKEN // .pm2_env.env.CENTRALDARK_GITHUB_TOKEN // empty' | head -n1)"
+  fi
+  if [ -n "${GH_TOKEN:-}" ]; then
+    askpass="$(mktemp)"
+    cat > "$askpass" <<'ASKPASS'
+#!/usr/bin/env bash
+case "$1" in
+  *Username*) printf '%s\n' "x-access-token" ;;
+  *Password*) printf '%s\n' "$GH_TOKEN" ;;
+  *) exit 1 ;;
+esac
+ASKPASS
+    chmod 700 "$askpass"
+    export GIT_ASKPASS="$askpass" GIT_TERMINAL_PROMPT=0
+  fi
   remote_sha="$(git -C "$REPO_ROOT" ls-remote origin refs/heads/main 2>/dev/null | awk '{print $1}')"
+  [ -n "$askpass" ] && rm -f "$askpass"
+  unset GIT_ASKPASS
   [ -n "$remote_sha" ] || { err "GitHub main unreachable — código canônico off-host não provado"; return 1; }
   ok "GitHub main reachable: ${remote_sha:0:10}"
 
