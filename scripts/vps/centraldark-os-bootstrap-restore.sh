@@ -40,7 +40,7 @@ resolve_vault() {
   fi
 
   local latest
-  latest="$(find /root/ -maxdepth 1 -name 'Vault-Cofre-CentralDark-*.tar.gz' -type f 2>/dev/null | sort -r | head -1)"
+  latest="$(find /root/ -maxdepth 1 -type f -name 'Vault-Cofre-CentralDark-*.tar.gz' ! -name '*.tar.gz.tar.gz' -printf '%T@ %p\n' 2>/dev/null | sort -nr | awk 'NR==1{sub(/^[^ ]+ /,"");print;exit}')"
   if [ -n "$latest" ]; then
     VAULT_PATH="$latest"
     return 0
