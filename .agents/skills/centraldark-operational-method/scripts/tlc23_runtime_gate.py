@@ -141,6 +141,44 @@ def binding_check(source: dict | None = None, runtime: dict | None = None) -> di
     }
 
 
+def bidirectional_binding_cross(binding: dict, required: list[str]) -> dict:
+    checks = binding["checks"]
+    unknown_names = [name for name in required if name not in checks]
+    unresolved = [
+        name
+        for name in required
+        if name in checks and checks[name] is not True
+    ]
+    resolved = [
+        name
+        for name in required
+        if name in checks and checks[name] is True
+    ]
+    global_unresolved = [name for name, ok in checks.items() if ok is not True]
+    claim_derivable = not unknown_names and not unresolved
+
+    return {
+        "forward": {
+            "route": "FACTS -> REQUIRED_BODY -> CLAIM",
+            "resolved_required_checks": resolved,
+            "unresolved_required_checks": unresolved,
+            "unknown_check_names": unknown_names,
+            "claim_derivable": claim_derivable,
+        },
+        "reverse": {
+            "route": "CLAIM -> REQUIRED_BODY -> MISSING_FACTS",
+            "claim_requires": required,
+            "missing_to_derive_claim": [*unresolved, *unknown_names],
+        },
+        "round_trip": {
+            "route": "CLAIM <-> REQUIRED_BODY <-> MEASURED_FACTS",
+            "consistent": claim_derivable,
+        },
+        "global_unresolved_checks": global_unresolved,
+        "law": "MULTIBUSSOLA_FORWARD_REVERSE_ROUND_TRIP",
+    }
+
+
 def resolve_binding_scope(receipt: dict, binding: dict) -> dict:
     requested = receipt.get("required_binding_checks")
 
@@ -161,24 +199,24 @@ def resolve_binding_scope(receipt: dict, binding: dict) -> dict:
                 "required_checks": requested,
                 "unresolved_required_checks": [],
                 "unknown_check_names": [],
+                "can_continue": False,
                 "law": "SCOPE_MUST_BE_EXPLICIT_AND_NONEMPTY",
             }
         required = list(dict.fromkeys([*BASE_REQUIRED_BINDING_CHECKS, *requested]))
         mode = "AFFECTED_CLAIM"
 
-    unknown_names = [name for name in required if name not in binding["checks"]]
-    unresolved = [
-        name
-        for name in required
-        if name in binding["checks"] and binding["checks"][name] is not True
-    ]
+    cross = bidirectional_binding_cross(binding, required)
+    missing = cross["reverse"]["missing_to_derive_claim"]
+    verdict = "PASS" if not missing else "UNKNOWN"
 
     return {
-        "verdict": "PASS" if not unknown_names and not unresolved else "UNKNOWN",
+        "verdict": verdict,
         "mode": mode,
         "required_checks": required,
-        "unresolved_required_checks": unresolved,
-        "unknown_check_names": unknown_names,
+        "unresolved_required_checks": cross["forward"]["unresolved_required_checks"],
+        "unknown_check_names": cross["forward"]["unknown_check_names"],
+        "bidirectional_cross": cross,
+        "can_continue": mode == "AFFECTED_CLAIM" and verdict == "PASS",
         "law": "UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM",
     }
 
@@ -202,6 +240,7 @@ def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = N
         return {
             "mode": "MISSION_GATE",
             "verdict": "NO_CHANGE",
+            "can_continue": True,
             "reason": (
                 "NO_NEW_MATERIAL_INFORMATION"
                 if no_new_information
@@ -215,6 +254,7 @@ def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = N
         return {
             "mode": "MISSION_GATE",
             "verdict": "BLOCKED",
+            "can_continue": False,
             "reason": "REPEATED_PLAN_WITHOUT_EXECUTION_EVIDENCE",
             "binding": binding,
             "law": "PLAN != EXECUTION",
@@ -225,14 +265,15 @@ def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = N
         return {
             "mode": "MISSION_GATE",
             "verdict": "BLOCKED",
+            "affected_claim_verdict": "BLOCKED",
+            "can_continue": False,
             "reason": binding_scope["reason"],
             "binding": binding,
             "binding_scope": binding_scope,
             "law": "INVALID_SCOPE != PASS",
         }
 
-    checks = {
-        "binding_passed": binding_scope["verdict"] == "PASS",
+    execution_checks = {
         "owner_measured": bool(receipt.get("owner")),
         "same_target": receipt.get("same_target") is True,
         "same_head_or_runtime_fingerprint": receipt.get("same_head_or_runtime_fingerprint") is True,
@@ -242,14 +283,69 @@ def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = N
         "counterproof_regression_found_false": receipt.get("counterproof_regression_found") is False,
         "fixed_point_reached": receipt.get("fixed_point_reached") is True,
     }
-    passed = all(checks.values())
+
+    mission_checks = {
+        "full_binding_passed": binding["verdict"] == "PASS",
+        **execution_checks,
+    }
+    affected_claim_checks = {
+        "scoped_binding_passed": binding_scope["verdict"] == "PASS",
+        **execution_checks,
+    }
+
+    mission_passed = all(mission_checks.values())
+    affected_claim_passed = all(affected_claim_checks.values())
+    affected_claim_verdict = "PASS" if affected_claim_passed else "UNKNOWN"
+    can_continue = (
+        binding_scope["mode"] == "AFFECTED_CLAIM"
+        and affected_claim_passed
+    )
+
     return {
         "mode": "MISSION_GATE",
-        "verdict": "PASS" if passed else "UNKNOWN",
-        "checks": checks,
+        "verdict": "PASS" if mission_passed else "UNKNOWN",
+        "affected_claim_verdict": affected_claim_verdict,
+        "can_continue": can_continue or mission_passed,
+        "mission_checks": mission_checks,
+        "affected_claim_checks": affected_claim_checks,
         "binding": binding,
         "binding_scope": binding_scope,
-        "law": "UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM; ACTION != PROOF; REALITY_JUDGE_AFTER_EFFECT",
+        "law": (
+            "GLOBAL_PASS_REQUIRES_FULL_BINDING; "
+            "UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM; "
+            "ACTION != PROOF; REALITY_JUDGE_AFTER_EFFECT"
+        ),
+    }
+
+
+def evaluate_claim(receipt: dict, source: dict | None = None, runtime: dict | None = None) -> dict:
+    if receipt.get("required_binding_checks") is None:
+        return {
+            "mode": "CLAIM_GATE",
+            "verdict": "BLOCKED",
+            "can_continue": False,
+            "reason": "CLAIM_SCOPE_REQUIRED",
+            "law": "CLAIM_PASS_MUST_NAME_AFFECTED_BODY",
+        }
+
+    result = evaluate(receipt, source, runtime)
+    if result["verdict"] in {"BLOCKED", "NO_CHANGE"}:
+        return {
+            "mode": "CLAIM_GATE",
+            "verdict": result["verdict"],
+            "can_continue": result.get("can_continue", False),
+            "mission_verdict": result["verdict"],
+            "result": result,
+        }
+
+    return {
+        "mode": "CLAIM_GATE",
+        "verdict": result["affected_claim_verdict"],
+        "can_continue": result["can_continue"],
+        "mission_verdict": result["verdict"],
+        "binding_scope": result["binding_scope"],
+        "checks": result["affected_claim_checks"],
+        "law": "CLAIM_PASS != GLOBAL_MISSION_PASS",
     }
 
 
@@ -382,8 +478,10 @@ def self_test() -> dict:
         "counterproof_regression_found": False,
         "fixed_point_reached": True,
     }
+
     assert binding_check(source, runtime)["verdict"] == "PASS"
     assert evaluate(good, source, runtime)["verdict"] == "PASS"
+
     bad = dict(good, action_executed=False)
     assert evaluate(bad, source, runtime)["verdict"] == "UNKNOWN"
     loop = dict(bad, narrative="Vou executar comandos para verificar depois")
@@ -392,13 +490,14 @@ def self_test() -> dict:
     missing_runtime = dict(runtime, hermes_runtime_fingerprint=None)
     assert binding_check(source, missing_runtime)["verdict"] == "UNKNOWN"
 
-    # Full receipts preserve the legacy/full-body rule: runtime UNKNOWN blocks
-    # a full PASS.
-    assert evaluate(good, source, missing_runtime)["verdict"] == "UNKNOWN"
+    # Global mission PASS remains fail-closed while any full-body binding fact
+    # is UNKNOWN.
+    full_unknown = evaluate(good, source, missing_runtime)
+    assert full_unknown["verdict"] == "UNKNOWN"
+    assert full_unknown["can_continue"] is False
 
-    # A claim that does not depend on the missing runtime fingerprint may
-    # explicitly scope the binding. Baseline source/canonical checks remain
-    # mandatory and cannot be removed by the caller.
+    # An independent affected claim may continue, but it cannot promote the
+    # global mission to PASS.
     source_only = dict(
         good,
         required_binding_checks=[
@@ -408,33 +507,43 @@ def self_test() -> dict:
         ],
     )
     scoped = evaluate(source_only, source, missing_runtime)
-    assert scoped["verdict"] == "PASS"
+    assert scoped["verdict"] == "UNKNOWN"
+    assert scoped["affected_claim_verdict"] == "PASS"
+    assert scoped["can_continue"] is True
     assert scoped["binding"]["verdict"] == "UNKNOWN"
     assert scoped["binding_scope"]["mode"] == "AFFECTED_CLAIM"
+    assert scoped["binding_scope"]["bidirectional_cross"]["round_trip"]["consistent"] is True
+    assert evaluate_claim(source_only, source, missing_runtime)["verdict"] == "PASS"
 
-    # If the affected claim really depends on the missing runtime fact, it
-    # remains UNKNOWN.
+    # Reverse route names the exact missing fact when the claim actually
+    # depends on runtime.
     runtime_claim = dict(
         good,
         required_binding_checks=["hermes_runtime_evidence_measured"],
     )
     runtime_scoped = evaluate(runtime_claim, source, missing_runtime)
     assert runtime_scoped["verdict"] == "UNKNOWN"
-    assert "hermes_runtime_evidence_measured" in runtime_scoped["binding_scope"]["unresolved_required_checks"]
+    assert runtime_scoped["affected_claim_verdict"] == "UNKNOWN"
+    assert runtime_scoped["can_continue"] is False
+    assert "hermes_runtime_evidence_measured" in runtime_scoped["binding_scope"]["bidirectional_cross"]["reverse"]["missing_to_derive_claim"]
+    assert evaluate_claim(runtime_claim, source, missing_runtime)["verdict"] == "UNKNOWN"
 
-    # A caller cannot bypass the baseline with an empty or invented scope.
+    # Scope cannot bypass the canonical baseline or invent check names.
     assert evaluate(dict(good, required_binding_checks=[]), source, runtime)["verdict"] == "BLOCKED"
-    assert evaluate(dict(good, required_binding_checks=["not_a_real_check"]), source, runtime)["verdict"] == "UNKNOWN"
-
+    invented = evaluate(dict(good, required_binding_checks=["not_a_real_check"]), source, runtime)
+    assert invented["affected_claim_verdict"] == "UNKNOWN"
     missing_cognitive_bios = dict(source, cognitive_bios_contract_present=False)
-    assert binding_check(missing_cognitive_bios, runtime)["verdict"] == "UNKNOWN"
+    baseline_fail = evaluate(source_only, missing_cognitive_bios, runtime)
+    assert baseline_fail["affected_claim_verdict"] == "UNKNOWN"
+
     no_delta = dict(good, new_material_information=False)
     assert evaluate(no_delta, source, runtime)["verdict"] == "NO_CHANGE"
     same_state = dict(good, previous_state_hash="state-1", current_state_hash="state-1")
     assert evaluate(same_state, source, runtime)["verdict"] == "NO_CHANGE"
     changed_state = dict(good, previous_state_hash="state-1", current_state_hash="state-2")
     assert evaluate(changed_state, source, runtime)["verdict"] == "PASS"
-    return {"status": "PASS", "tests": 13}
+
+    return {"status": "PASS", "tests": 18}
 
 
 def load_receipt(path: str) -> dict:
@@ -451,6 +560,7 @@ def main() -> int:
     mode.add_argument("--binding-check", action="store_true")
     mode.add_argument("--cage-test", action="store_true")
     mode.add_argument("--receipt", metavar="PATH")
+    mode.add_argument("--claim-receipt", metavar="PATH")
     parser.add_argument("--iterations", type=int, default=64)
     args = parser.parse_args()
 
@@ -463,6 +573,9 @@ def main() -> int:
     elif args.cage_test:
         out = cage_test(args.iterations)
         code = 0 if out["verdict"] == "PASS" else 3
+    elif args.claim_receipt:
+        out = evaluate_claim(load_receipt(args.claim_receipt))
+        code = 0 if out["verdict"] in {"PASS", "NO_CHANGE"} else 2
     else:
         out = evaluate(load_receipt(args.receipt))
         code = 0 if out["verdict"] in {"PASS", "NO_CHANGE"} else 2
