@@ -743,14 +743,28 @@ EXIT_CODE_CAUSE_REQUIRES_STDOUT_STDERR_RUNTIME_SOURCE_OR_DISCRIMINANT=true
 
 Revisão 2026-10-01: `CENTRALDARK_AI_BOOT.yaml` e `CONTRACT.yml` mudaram e foram relidos antes da nova âncora. O BOOT repôs payload vivo (`LIVING_CANON`, runtime medido, Reality Judge e owner temporal) já coerente com as leis existentes desta SOUL. O CONTRACT repôs descoberta orientada a evento, prova antes de claim, limpeza de helper efêmero e reutilização de owner — também já cobertos por `MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE`, `REUSE_BEFORE_CREATE`, `ACTION_IS_NOT_PROOF` e `ONE_SYSTEM_ONLY`. Portanto não nasce lei paralela; só a impressão dos owners é atualizada.
 
+Revisão 2026-10-01T03:35Z: `AGENTS.md`, `LEIA-ME-IA.md` e `CENTRALDARK_AI_BOOT.yaml` evoluíram o mesmo contrato de lifecycle operacional de branch/PR. A mudança universal é absorvida sem criar owner novo: branch remota é transporte, não intenção; branch não vira estacionamento; PR autônomo de intenção já autorizada nasce Ready salvo causa explícita para Draft; branch efêmera fecha no mesmo ciclo de promoção e é removida após merge.
+
+```text
+BRANCH_IS_TRANSPORT_NOT_INTENT=true
+NO_BRANCH_PARKING_LOT=true
+AUTONOMOUS_PR_DRAFT_DEFAULT=false
+AUTHORIZED_INTENT_DRAFT_AUTO_READY=true
+DRAFT_IS_NOT_DEPENDENCY_SEMAPHORE=true
+EXPLICIT_KEEP_DRAFT_PRESERVED=true
+EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true
+EPHEMERAL_BRANCH_DELETE_AFTER_MERGE=true
+PERSISTENT_BRANCH_REQUIRES_EXPLICIT_OWNER_AND_PURPOSE=true
+```
+
 Lei de co-evolução (kernel/máquina de estado): a alma não é documento parado — ela é dona do cérebro. Se um dono da alma muda e a SOUL não acompanha, o fiscal reprova e não há ponto fixo até a alma ser reposta. O sistema é **obrigado** a evoluir junto: SOUL stale ⇒ cérebro stale ⇒ fixed-point proibido.
 
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=17cce57d5017f93a3a1929537e2c9889906a23ab
-LEIA-ME-IA.md=695ffd40097a6e9e337dfc6cf01869710db5fb8f
+AGENTS.md=b67e3be5a43a494a3000834d8c04bc7356c76e7f
+LEIA-ME-IA.md=585f3e345952c6eb35ddca8f57ec61fa67bd4953
 CLAUDE.md=89e0659b0508bb2b66f3a6244474ced9d70c8657
-CENTRALDARK_AI_BOOT.yaml=884665473e500b33fc826c33dc25f4de3fda00b2
+CENTRALDARK_AI_BOOT.yaml=2fa7a108ea11c6cc3c16958d09f900f62bf107e4
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=5b8d29656eaea2d5d3581860021fd1216c02dd64
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-01
 SOUL_SYNC_ANCHOR_END
