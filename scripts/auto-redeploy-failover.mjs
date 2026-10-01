@@ -73,7 +73,6 @@ const CONFIG = {
 
   // Fallback chain do Omni Router (ordem de preferência)
   fallbackChain: [
-    'hermes',
     'nous',
     'google',
     'claude-code',

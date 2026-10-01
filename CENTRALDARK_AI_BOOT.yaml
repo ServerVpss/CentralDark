@@ -12,6 +12,14 @@ CENTRALDARK_AI_BOOT:
   unified_surface_parity_contract: LOADED
   unified_surface_parity_skill: LOADED
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
+  model: LIVING_CANON
+  persistent_canon: ServerVpss/CentralDark
+  live_state: MEASURED_RUNTIME
+  final_judge: REALITY
+  owner: central-horario
+  timezone: America/Sao_Paulo
+  human_display_label: BRT
+  machine_storage: UTC_RFC3339
   observed_evidence: "MEASURE_AT_RUNTIME: branch, HEAD, PR, runtime, tools, owner, writer_scope"
   alignment: "SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS"
   role: "DISCOVER_FROM_PRESENT_GAP_AND_CAPABILITY"

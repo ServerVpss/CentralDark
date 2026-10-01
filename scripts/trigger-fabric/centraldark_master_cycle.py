@@ -39,6 +39,34 @@ CHAIN = [
     "BOOT",
 ]
 
+EXPANDED_CHAIN = [
+    "TLC23_OPEN",
+    "DESTINATION_LOCK",
+    "ACORDAR",
+    "CALIBRAR",
+    "MULTIBUSSOLA",
+    "PEGATUDO",
+    "DEBITO_COGNITIVO",
+    "READERS_MEASURE",
+    "META_LUPA",
+    "RENDEZVOUS",
+    "RECONCILE",
+    "DELTA_UTIL",
+    "OWNER",
+    "ONE_WRITER",
+    "PATCH",
+    "TESTE",
+    "CONTRAPROVA",
+    "REMEDICAO",
+    "REALITY_JUDGE",
+    "FIXED_POINT",
+    "TLC23_CLOSE",
+    "REGISTRA",
+    "RASTRO",
+    "HANDOFF",
+    "BOOT",
+]
+
 GUIDED_TELEMETRY_PHASES = [
     ("ACORDAR", "#ACORDAR"),
     ("CENTRALDARK", "!CENTRALDARK"),
@@ -579,7 +607,7 @@ def resolve(
         "master_cycle_active": master_cycle_active,
         "activation_source": activation_source,
         "next_master_active": master_cycle_active,
-        "expanded_chain": CHAIN if master_cycle_active else [],
+        "expanded_chain": EXPANDED_CHAIN if master_cycle_active else [],
         "visual_trigger_chain": (
             " → ".join([
                 "⭕ !AURÉOLA CANÔNICA",
@@ -901,7 +929,7 @@ def self_test():
     )
 
     r = resolve("!CENTRALDARK", chefe_source=True)
-    add("master", r["explicit_match"] and r["expanded_chain"] == CHAIN)
+    add("master", r["explicit_match"] and r["expanded_chain"] == EXPANDED_CHAIN)
     add(
         "tool_discovery_gate_present",
         any(step["phase"] == "TOOL_DISCOVERY" for step in r["guided_telemetry"]["steps"])
