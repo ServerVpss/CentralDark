@@ -30,13 +30,16 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-APP_VERSION = "0.3.0"
-DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "hermes").strip().lower()
 APP_VERSION = "0.3.1"
+ENGINE_PROVIDERS = frozenset({"antigravity", "openai", "claude-code", "nous", "google", "xai", "abacus", "zendrive-chatgpt-local"})
+hermes_is_agent_runtime_not_engine = True
 DEFAULT_ENGINE = os.getenv("CENTRALDARK_DEFAULT_ENGINE", "nous").strip().lower()
+default_engine_config_valid = DEFAULT_ENGINE in ENGINE_PROVIDERS
+if not default_engine_config_valid:
+    DEFAULT_ENGINE = "nous"
 ROUTER_TOKEN = os.getenv("CENTRALDARK_ROUTER_TOKEN", "").strip()
 REQUEST_TIMEOUT = float(os.getenv("CENTRALDARK_ROUTER_TIMEOUT", "180"))
-DEFAULT_FALLBACK_CHAIN = "hermes,nous,google,claude-code,xai,abacus,openai"
+DEFAULT_FALLBACK_CHAIN = "nous,google,claude-code,xai,abacus,openai"
 CENTRAL_LOG_ROOT = Path(os.getenv("CENTRALDARK_LOG_ROOT", "/root/CentralDark/logs"))
 HERMES_HEALTH_WINDOW_MINUTES = int(os.getenv("CENTRALDARK_HERMES_HEALTH_WINDOW_MINUTES", "30"))
 HERMES_HEALTH_MIN_SAMPLE = int(os.getenv("CENTRALDARK_HERMES_HEALTH_MIN_SAMPLE", "5"))
@@ -615,13 +618,13 @@ def route_model(model: str) -> Tuple[str, str]:
     for sep in ("/", ":"):
         if sep in raw:
             prefix, target = raw.split(sep, 1)
-            provider = prefix.strip().lower()
-            if provider == "claude":
-                provider = "claude-code"
-            if provider in {
-                "antigravity", "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus", "zendrive-chatgpt-local"
-            }:
-                return provider, target.strip()
+            normalized = prefix.strip().lower()
+            if normalized == "claude":
+                normalized = "claude-code"
+            if normalized == "hermes":
+                return DEFAULT_ENGINE, target.strip()
+            if normalized in ENGINE_PROVIDERS:
+                return normalized, target.strip()
     return DEFAULT_ENGINE, raw
 
 
@@ -723,8 +726,6 @@ def provider_default_model(provider: str) -> str:
         return os.getenv("ANTIGRAVITY_MODEL", "flash_lite").strip()
     if provider == "openai":
         return os.getenv("OPENAI_MODEL", "gpt-5.6").strip()
-    if provider == "hermes":
-        return os.getenv("HERMES_MODEL", "hermes").strip()
     if provider == "nous":
         return discover_nous_free_model()
     if provider == "google":
@@ -746,8 +747,6 @@ def provider_configured(provider: str) -> bool:
     if provider == "claude-code":
         binary = os.getenv("CLAUDE_BIN", "claude").strip()
         return bool(shutil.which(binary) or (binary and os.path.exists(binary)))
-    if provider == "hermes":
-        return bool(os.getenv("HERMES_BASE_URL", "").strip())
     if provider == "nous":
         return bool(get_nous_token())
     if provider == "google":
@@ -898,14 +897,12 @@ def candidate_routes(model: str) -> List[Tuple[str, str]]:
     chain = split_csv(os.getenv("CENTRALDARK_FALLBACK_CHAIN", DEFAULT_FALLBACK_CHAIN))
     for provider in chain:
         normalized = "claude-code" if provider == "claude" else provider
-        if normalized not in {"antigravity", "openai", "claude-code", "hermes", "nous", "google", "xai", "abacus", "zendrive-chatgpt-local"}:
+        if normalized == "hermes":
+            continue
+        if normalized not in ENGINE_PROVIDERS:
             continue
         if normalized != primary_provider:
             candidates.append((normalized, ""))
-    is_auto = (model or "auto").strip().lower() == "auto"
-    if is_auto and env_bool("CENTRALDARK_ADAPTIVE_HERMES_HEALTH", True):
-        health = observed_hermes_health()
-        return _reorder_hermes_by_health(candidates, str(health.get("state") or "UNKNOWN"))
     return candidates
 
 
@@ -1214,14 +1211,6 @@ def run_provider(provider: str, messages: List[ChatMessage], target_model: str) 
             "openai",
             os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
             os.getenv("OPENAI_API_KEY", "").strip(),
-            messages,
-            model,
-        )
-    if provider == "hermes":
-        return run_compatible(
-            "hermes",
-            os.getenv("HERMES_BASE_URL", "").rstrip("/"),
-            os.getenv("HERMES_AUTH_TOKEN", "").strip(),
             messages,
             model,
         )
@@ -1540,7 +1529,7 @@ def vps_delta_stream(authorization: str = Header(default=None)) -> StreamingResp
 
 @app.get("/health")
 def health() -> Dict[str, Any]:
-    providers = ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai", ZENDRIVE_MODEL_ALIAS]
+    providers = sorted(ENGINE_PROVIDERS)
     return {
         "ok": True,
         "service": "centraldark-omni-router",
@@ -1569,7 +1558,7 @@ def health() -> Dict[str, Any]:
 def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
     require_router_auth(authorization)
     rows = [{"id": "auto", "object": "model", "owned_by": "centraldark"}]
-    for provider in ["antigravity", "nous", "hermes", "google", "claude-code", "xai", "abacus", "openai", ZENDRIVE_MODEL_ALIAS]:
+    for provider in sorted(ENGINE_PROVIDERS):
         if not provider_configured(provider):
             continue
         model = provider_default_model(provider)
@@ -1638,9 +1627,9 @@ def self_test() -> int:
         "redaction": "sekret" not in sanitize("Authorization: ***"),
         "email_redaction": "user@example.com" not in sanitize("user@example.com") and "[EMAIL_REDACTED]" in sanitize("user@example.com"),
         "chain_dedup": len(candidate_routes("auto")) == len(set(candidate_routes("auto"))),
-        "hermes_first_default_chain": split_csv(DEFAULT_FALLBACK_CHAIN)[0] == "hermes",
-        "hermes_degraded_returns_frontier": _reorder_hermes_by_health([("hermes", ""), ("nous", "")], "DEGRADED")[0][0] == "nous",
-        "hermes_unknown_keeps_first": _reorder_hermes_by_health([("hermes", ""), ("nous", "")], "UNKNOWN_INSUFFICIENT_SAMPLE")[0][0] == "hermes",
+        "default_engine_config_valid": default_engine_config_valid,
+        "hermes_is_agent_runtime_not_engine": hermes_is_agent_runtime_not_engine,
+        "default_chain_excludes_hermes": "hermes" not in split_csv(DEFAULT_FALLBACK_CHAIN),
         "zendrive_health_safe": zendrive_provider_health_payload().get("proof") is False,
         "zendrive_simulation_oi": _zendrive_simulation_payload([ChatMessage(role="user", content="oi")]).get("response_text") == "oi",
         "vps_delta_error_class": parse_vps_delta_line(
