@@ -742,6 +742,9 @@ check('.github/workflows/pr-update-branch-deterministic.yml',[
  'CLAIM_SCOPE=PR_SYNC_TO_MAIN',
  'CHECKS_SCOPE=OBSERVATION_ONLY_NOT_PROMOTION_PROOF',
  'SYNC_CLAIM_AND_CI_OBSERVATION_ARE_SEPARATE=true',
+ 'Encaminhar conflito ao resolvedor canônico existente',
+ "event_type: 'centraldark_dependabot_reconcile'",
+ 'owner=scripts/dependabot/resolve-conflicts.sh',
 ], classification='UPDATE_BRANCH_RUNNER_LOCK_ENFORCED')
 check('scripts/github/update-branch-deterministic.mjs',[
  'function isSyncUnknown(receipt)',

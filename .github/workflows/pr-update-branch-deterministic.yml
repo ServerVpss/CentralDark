@@ -157,6 +157,45 @@ jobs:
           echo 'TARGET_PR='"${TARGET_PR:-ALL_OPEN}"''
           node .ci-house/scripts/github/update-branch-deterministic.mjs
 
+      - name: 🪡 Encaminhar conflito ao resolvedor canônico existente
+        if: >-
+          always() &&
+          steps.update.outputs.blocked != '0' &&
+          needs.preflight.outputs.target_pr != '' &&
+          needs.preflight.outputs.target_pr != '1562'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          TARGET_PR: ${{ needs.preflight.outputs.target_pr }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pull_number = Number(process.env.TARGET_PR || 0);
+            const pr = (await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number,
+            })).data;
+            const mergeState = String(pr.mergeable_state || 'unknown').toLowerCase();
+            const conflict = pr.mergeable === false || mergeState === 'dirty';
+            if (!conflict || pr.state !== 'open' || pr.base?.ref !== 'main' ||
+                pr.head?.repo?.full_name !== context.payload.repository?.full_name) {
+              core.notice(`CONFLICT_RESOLVER_ROUTE=NOOP pr=${pull_number} conflict=${conflict}`);
+              return;
+            }
+            await github.request('POST /repos/{owner}/{repo}/dispatches', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'centraldark_dependabot_reconcile',
+              client_payload: {
+                pr_number: pull_number,
+                head_sha: pr.head.sha,
+                source: 'pr-update-branch-deterministic',
+                reason: 'conflict_requires_existing_resolver',
+                reconciliation_only: true,
+              },
+            });
+            core.notice(`CONFLICT_RESOLVER_ROUTE=DISPATCHED pr=${pull_number} owner=scripts/dependabot/resolve-conflicts.sh`);
+
       - name: 🧭 Classificar resultado da execução
         id: classify
         if: always()
