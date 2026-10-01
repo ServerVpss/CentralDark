@@ -470,6 +470,63 @@ VPS_AND_CASA_CAN_SHARE_CAPABILITIES=true
 ```
 
 
+
+### CURRENT remeasurement — twin local ligado / ponte host→guest (2026-10-01)
+
+O estado histórico `poweredOff` de 2026-09-30 permanece como histórico. A remedição da Casa nesta sessão substitui esse estado como CURRENT do twin:
+
+```text
+VMWARE_VMX_PROCESS=PASS
+VMWARE_VMX_PID_AT_MEASUREMENT=29768
+VMX=E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx
+DISPLAY_NAME=CENTRALDARK-OSh
+OPENKYLIN=3.0
+KERNEL=7.0.0-2-generic
+VCPU=4
+RAM_MB=8192
+NETWORK=VMNET8_NAT
+MAC=00:0c:29:94:7b:51
+DHCP_IPV4=192.168.35.128
+DHCP_HOSTNAME=CENTRALDARK-OS
+CASA_TO_TWIN_PORT_22=PASS
+CASA_TO_TWIN_PORT_8000=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_PORT_8001=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_PORT_8002=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_PORT_42617=NOT_EXPOSED_AT_MEASUREMENT
+```
+
+O VMX readback preserva `mks.enable3d=TRUE`, disco raw `E:\VMs\CENTRALDARK-OSh\CENTRALDARK-OSh.vmdk`, NAT e share RW `E:\VMs\CENTRALDARK-OS\SHARED → CENTRALDARK-SHARED`. O descriptor VMDK preserva `createType="fullDevice"` e `\\.\PhysicalDrive1`.
+
+A ponte existente também foi relida:
+
+```text
+BOOTSTRAP=E:\VMs\CENTRALDARK-OS\SHARED\centraldark-3em1.sh
+BOOTSTRAP_CAPABILITIES=HGFS+TAILSCALE+DESKTOP_COMMANDER+SCREENPIPE
+PRIMEIRA_MUTACAO=PROVA_DE_PONTE_HOST_GUEST
+```
+
+O repo compartilhado não é usado como CURRENT porque foi medido em:
+
+```text
+BRANCH=feature/ai-cli-runtime-kernel
+HEAD=892454b98d941c3fada35d3df826f9962257f80f
+UNTRACKED_FILES_PRESENT=true
+WORKING_TREE_IS_LAB=true
+```
+
+Regra operacional resultante:
+
+```text
+LOCAL_TWIN_FIRST_PROVING_GROUND=true
+PROCESSOS→SOCKETS→RUNTIME→MODELS→SDK→CAPABILITIES→REAL_CALL
+PROVE_LOCALLY_THEN_REPLAY_REMOTELY=true
+PORT_CLOSED != CAPABILITY_ABSENT
+WORKING_TREE != CANONICAL_CURRENT
+REUSE_EXISTING_3EM1_BRIDGE=true
+```
+
+**NEXT_CURSOR:** autenticar shell no twin, executar a autópsia nativa e provar pelo menos uma capability com chamada read-only + readback antes de repetir a receita na VPS.
+
 ---
 
 ## 15. CASA + VPS — FORÇA MULTICORPO ATIVADA PELO CHEFE (2026-10-01)

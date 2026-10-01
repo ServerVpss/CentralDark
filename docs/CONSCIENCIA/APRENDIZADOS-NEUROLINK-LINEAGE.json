@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "442a6d3286b7d59c7e883a792f21d566a5dd11cb",
+  "source_blob_sha": "9274feb7915a8823e1d8abde15677ba0b9f1b0fb",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 120,
-    "highest_legacy_learning_number": 121,
+    "learning_sections": 121,
+    "highest_legacy_learning_number": 122,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 121
+      "end": 122
     }
   },
   "nodes": [
@@ -1405,6 +1405,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L120",
+      "next_uid": "L122"
+    },
+    {
+      "uid": "L122",
+      "legacy_learning_number": 122,
+      "legacy_occurrence": 1,
+      "title": "O twin local ligado vira bancada de prova antes da VPS: capability só sobe depois de chamada real",
+      "document_order": 121,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L121",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
