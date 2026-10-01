@@ -64,19 +64,24 @@ jobs:
     timeout-minutes: 5
     outputs:
       target_pr: ${{ steps.plan.outputs.target_pr }}
+      tool_ref: ${{ steps.plan.outputs.tool_ref }}
     steps:
       - name: 🧭 Resolver alvo determinístico
         id: plan
         shell: bash
         env:
           TARGET_PR_RAW: ${{ github.event.pull_request.number || inputs.pr_number || github.event.client_payload.pr_number || '' }}
+          TOOL_REF_RAW: ${{ github.event_name == 'workflow_dispatch' && github.sha || 'main' }}
         run: |
           set -euo pipefail
           TARGET_PR="${TARGET_PR_RAW:-}"
+          TOOL_REF="${TOOL_REF_RAW:-main}"
           echo "target_pr=${TARGET_PR}" >> "$GITHUB_OUTPUT"
+          echo "tool_ref=${TOOL_REF}" >> "$GITHUB_OUTPUT"
           echo "EVENT_NAME=${GITHUB_EVENT_NAME}"
-          echo "TRUSTED_REF=main"
+          echo "TRUSTED_TOOL_REF=${TOOL_REF}"
           echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
+          echo "TRUSTED_TOOL_REF=${TOOL_REF:-UNKNOWN}"
           echo "NEXT=UPDATE_AND_STITCH"
 
       - name: 🪵 Debug seguro do contexto
@@ -84,6 +89,7 @@ jobs:
         shell: bash
         env:
           TARGET_PR: ${{ steps.plan.outputs.target_pr }}
+          TOOL_REF: ${{ steps.plan.outputs.tool_ref }}
         run: |
           set -euo pipefail
           echo "DEBUG_ENABLED=1"
@@ -109,10 +115,10 @@ jobs:
       unknown_or_pending: ${{ steps.update.outputs.unknown_or_pending }}
       step_outcome: ${{ steps.classify.outputs.step_outcome }}
     steps:
-      - name: 📥 Checkout somente do código confiável da main
+      - name: 📥 Checkout do código confiável do ref autorizado
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: main
+          ref: ${{ needs.preflight.outputs.tool_ref }}
           path: .ci-house
           persist-credentials: false
           fetch-depth: 1
