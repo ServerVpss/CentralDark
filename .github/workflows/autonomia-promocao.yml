@@ -28,8 +28,54 @@ env:
   BOT_WAIT_TIMEOUT_MINUTES: "45"
 
 jobs:
+  normalize:
+    name: 🧩 Normalizador — intenção autorizada não estaciona em Draft
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+
+    steps:
+      - name: 🔹 Checkout exclusivo da main confiável
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: 🔹 Setup Node 24 (fast path self-hosted)
+        uses: ./.github/actions/setup-node24-selfhosted
+
+      - name: 🔹 Provar política Draft → Ready antes da mutação
+        run: node --test scripts/github-autonomia-varredura.test.mjs
+
+      - name: 🔹 Tirar de Draft somente intenção já autorizada
+        env:
+          BOT_TRUSTED_AUTHORS: segredounlock
+          NORMALIZER_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/github-autonomia-varredura.mjs normalize
+
+      - name: 🔹 Receipt determinístico
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          echo "HEAD_SHA=${HEAD_SHA}"
+          echo "DRAFT_IS_NOT_DEPENDENCY_SEMAPHORE=1"
+          echo "AUTHORIZED_INTENT_DRAFT_AUTO_READY=1"
+          echo "EXPLICIT_KEEP_DRAFT_IS_PRESERVED=1"
+          echo "JOB_STATUS=${JOB_STATUS}"
+          test "${JOB_STATUS}" = "success" && echo "RESULTADO=PASS" || echo "RESULTADO=BLOCKED"
+
   judge:
     name: 🧩 Juiz determinístico — intenção + estado + segurança
+    needs: normalize
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     permissions:

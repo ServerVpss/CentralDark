@@ -13,6 +13,7 @@ import {
   REQUIRED_PROMOTION_SEAL_LABELS,
   agentLabelsFromWriter,
   classifyFailure,
+  draftReadyDecision,
   eligibleSummary,
   guardSweep,
   noticeTargets,
@@ -51,6 +52,66 @@ test("recibo de intenção torna PR confiável elegível sem reask", () => {
   assert.equal(eligibleSummary(pr({ draft: true }), "ServerVpss/CentralDark"), false);
   assert.equal(eligibleSummary(pr({ body: "sem autorização" }), "ServerVpss/CentralDark"), false);
   assert.equal(eligibleSummary(pr({ user: { login: "intruso" } }), "ServerVpss/CentralDark"), false);
+});
+
+test("draft autorizado vira ready; draft humano explícito continua draft", () => {
+  const authorizedDraft = draftReadyDecision(
+    pr({ number: 1726, draft: true }),
+    "ServerVpss/CentralDark",
+  );
+  assert.deepEqual(authorizedDraft, {
+    action: "MARK_READY",
+    reason: "AUTHORIZED_INTENT_DRAFT_IS_NOT_SEMAPHORE",
+  });
+
+  assert.deepEqual(
+    draftReadyDecision(
+      pr({ number: 1727, draft: true, body: `${INTENT_BODY}\nKEEP_DRAFT=true` }),
+      "ServerVpss/CentralDark",
+    ),
+    { action: "KEEP_DRAFT", reason: "EXPLICIT_KEEP_DRAFT" },
+  );
+
+  assert.deepEqual(
+    draftReadyDecision(
+      pr({ number: 1728, draft: true, labels: [{ name: "do-not-merge" }] }),
+      "ServerVpss/CentralDark",
+    ),
+    { action: "KEEP_DRAFT", reason: "EXPLICIT_KEEP_DRAFT" },
+  );
+});
+
+test("normalizador de draft não amplia autoridade nem toca PR-mãe", () => {
+  assert.deepEqual(
+    draftReadyDecision(pr({ number: 1562, draft: true }), "ServerVpss/CentralDark"),
+    { action: "KEEP_DRAFT", reason: "PR_MOTHER_PROTECTED" },
+  );
+
+  assert.deepEqual(
+    draftReadyDecision(
+      pr({ number: 1729, draft: true, user: { login: "intruso" } }),
+      "ServerVpss/CentralDark",
+    ),
+    { action: "KEEP_DRAFT", reason: "UNTRUSTED_OR_OUT_OF_SCOPE" },
+  );
+
+  assert.deepEqual(
+    draftReadyDecision(
+      pr({ number: 1730, draft: true, head: { repo: { full_name: "outro/fork" } } }),
+      "ServerVpss/CentralDark",
+    ),
+    { action: "KEEP_DRAFT", reason: "UNTRUSTED_OR_OUT_OF_SCOPE" },
+  );
+
+  assert.deepEqual(
+    draftReadyDecision(pr({ number: 1731, draft: true, body: "sem autorização" }), "ServerVpss/CentralDark"),
+    { action: "KEEP_DRAFT", reason: "AUTHORIZATION_MISSING" },
+  );
+
+  assert.deepEqual(
+    draftReadyDecision(pr({ number: 1732, draft: false }), "ServerVpss/CentralDark"),
+    { action: "NONE", reason: "NOT_OPEN_DRAFT" },
+  );
 });
 
 test("selo canônico sintetiza autoridade + canal Git + automação", () => {
