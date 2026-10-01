@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "9274feb7915a8823e1d8abde15677ba0b9f1b0fb",
+  "source_blob_sha": "3a4fe1a733caedd2266f94282119916f292d9217",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 121,
-    "highest_legacy_learning_number": 122,
+    "learning_sections": 122,
+    "highest_legacy_learning_number": 123,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 122
+      "end": 123
     }
   },
   "nodes": [
@@ -1416,6 +1416,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L121",
+      "next_uid": "L123"
+    },
+    {
+      "uid": "L123",
+      "legacy_learning_number": 123,
+      "legacy_occurrence": 1,
+      "title": "Recuperar rota por memória cruzada + repo evita redescoberta e separa acesso do provider quebrado",
+      "document_order": 122,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L122",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
