@@ -16,8 +16,11 @@ import {
   statusDot,
 } from './mermaid-core.mjs';
 
-const GRAPH = '/root/CentralDark/apps/modulos/status/graph-data.json';
-const NOTA  = '/root/CentralDark/docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md';
+const ROOT = process.env.CENTRALDARK_ROOT || '/root/CentralDark';
+const GRAPH = `${ROOT}/apps/modulos/status/graph-data.json`;
+const PRIMARY_NOTE = `${ROOT}/docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md`;
+const LEGACY_NOTE = `${ROOT}/docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md`;
+const NOTE_TARGETS = [PRIMARY_NOTE, LEGACY_NOTE];
 
 function edgeText(edge) {
   const label = edge.label ? ` (${edge.label})` : '';
@@ -56,10 +59,12 @@ function main() {
     throw new Error(`MERMAID_STRUCTURAL_VALIDATION_FAILED:${projection.validation.errors.join(',')}`);
   }
 
-  const previous = existsSync(NOTA) ? readFileSync(NOTA, 'utf8') : '';
-  const previousFingerprint = extractGraphFingerprint(previous);
-  if (previousFingerprint === projection.fingerprint) {
-    console.log(`[obsidian-nota] NO_CHANGE · fingerprint=${projection.fingerprint.slice(0, 12)} · WRITE=UNCHANGED`);
+  const previousFingerprints = NOTE_TARGETS.map((path) => {
+    const previous = existsSync(path) ? readFileSync(path, 'utf8') : '';
+    return extractGraphFingerprint(previous);
+  });
+  if (previousFingerprints.every((fingerprint) => fingerprint === projection.fingerprint)) {
+    console.log(`[obsidian-nota] NO_CHANGE · targets=${NOTE_TARGETS.length} · fingerprint=${projection.fingerprint.slice(0, 12)} · WRITE=UNCHANGED`);
     return;
   }
 
@@ -81,9 +86,18 @@ function main() {
 
   const md = `---
 title: "Grafo Vivo — Visão em Tempo Real"
+status: "DERIVED_CURRENT_PROJECTION"
 date: 2026-07-03
 tags: ["grafo", "arquitetura", "saude", "tempo-real", "mermaid", "sistema"]
 updated: ${new Date().toISOString().slice(0, 10)}
+source: "apps/modulos/status/graph-data.json"
+source_class: "RUNTIME_DERIVED"
+source_rule: "LIVE_GRAPH_DATA -> BRAIN_PROJECTION; GRAPH != AUTHORITY"
+owner: "scripts/grafo-vivo/obsidian-nota.mjs"
+writer: "CentralDark-GrafoVivo/cron-grafo-unificado"
+authority: false
+primary_projection: "docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md"
+legacy_compat_mirror: "docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md"
 ---
 
 # 🕸️ Grafo Vivo — Visão em Tempo Real
@@ -129,6 +143,9 @@ ${fluxos}
 
 \`\`\`text
 PROJECTION_SOURCE=${GRAPH}
+PRIMARY_PROJECTION=docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
+LEGACY_COMPAT_MIRROR=docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md
+FRESHNESS_KEY=GRAPH_FINGERPRINT
 GRAPH_FINGERPRINT=${projection.fingerprint}
 MERMAID_KIND=flowchart
 MERMAID_STRUCTURAL_VALIDATION=PASS
@@ -147,8 +164,11 @@ WRITE=UPDATED
 🔗 [[00-MAPA]] · [[02-ARQUITETURA]] · [[MAPA-DOS-BOTS]] · painel: status.centralldark.com
 `;
 
-  const writeState = atomicWriteUtf8Sync(NOTA, md);
-  console.log(`[obsidian-nota] ${writeState} · ${monitorados.length} monitorados · ${caidos.length} caído(s) · fingerprint=${projection.fingerprint.slice(0, 12)}`);
+  const writeStates = NOTE_TARGETS.map((path) => ({
+    path,
+    state: atomicWriteUtf8Sync(path, md),
+  }));
+  console.log(`[obsidian-nota] SYNCED · ${monitorados.length} monitorados · ${caidos.length} caído(s) · fingerprint=${projection.fingerprint.slice(0, 12)} · ${writeStates.map((item) => `${item.path}:${item.state}`).join(' · ')}`);
 }
 
 main();
