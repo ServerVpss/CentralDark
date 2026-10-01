@@ -831,9 +831,21 @@ COGNITIVE_SUCCESSOR_BACKLINK_REQUIRED=true
 ORPHAN_COGNITIVE_CRYSTAL=REJECT
 NEUROLINK=COGNITIVE_CONTINUITY_ALIAS
 GRAPH_EDGE_IS_CONTINUITY_LINK_NOT_CAUSAL_PROOF=true
+COGNITIVE_NEUROLINK_NUMERIC_CONTINUITY_REQUIRED=true
+COGNITIVE_NEUROLINK_SEQUENCE_START=115
+COGNITIVE_NEXT_ID_MUST_EQUAL_CURRENT_PLUS_ONE=true
+COGNITIVE_PREV_ID_MUST_EQUAL_CURRENT_MINUS_ONE=true
+NO_NUMERIC_GAP_AFTER_SEQUENCE_START=true
+PROVEN_LEARNING_SHOULD_COMPILE_TO_DETERMINISTIC_ARTIFACT=true
+REPRODUCTION_MUST_NOT_REQUIRE_SAME_MODEL=true
+REPRODUCTION_MUST_NOT_REQUIRE_AI=true
+UNCHANGED_FINGERPRINT_REUSES_PROOF=true
+MATERIAL_DRIFT_REOPENS_AFFECTED_CONE=true
 ```
 
 Ao nascer um sucessor, ele aponta para o predecessor e fecha o backlink do predecessor. O último cristal pode manter `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR` até a próxima expansão.
+
+A partir do NeuroLink #115, a numeração também é parte do contrato: `N` só pode cristalizar quando `N-1` existe e está ligado, e o predecessor deve apontar para `N`. Pular um número cria ruptura de continuidade e reprova a promoção. Quando um caminho já foi provado e compilado em artefato determinístico, o próximo executor faz replay antes de redescobrir; drift material reabre apenas o cone afetado.
 
 “Nada fica para trás” significa: nenhuma peça material é ignorada sem classificação; duplicata pode ser descartada **depois** de comparada, hipótese pode ficar candidata, e só ouro provado sobe. Persistir tudo cegamente seria perda de sinal e violaria Menos É Mais.
 
