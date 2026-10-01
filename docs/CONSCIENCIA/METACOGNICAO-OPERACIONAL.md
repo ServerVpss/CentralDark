@@ -196,6 +196,31 @@ INSTRUMENT_UNAVAILABLE
 
 Indisponibilidade de instrumento nunca é compensada com confiança narrativa maior.
 
+## Steering semântico sob contexto longo
+
+Contexto acumulado, correções repetidas e exemplos concretos podem deslocar o comportamento do executor durante a sessão. Isso é um fenômeno operacional útil para calibração, mas não deve ser confundido com mudança automática dos pesos do modelo, diagnóstico oficial do provider ou remoção de salvaguardas.
+
+```text
+LONG_HORIZON_CONTEXT_CAN_STEER_BEHAVIOR=true
+CONTEXT_CONDITIONED_BEHAVIORAL_DRIFT=DESCRIPTIVE_LABEL
+SEMANTIC_STEERING_UNDER_LONG_HORIZON_CONTEXT=DESCRIPTIVE_LABEL
+DESCRIPTIVE_LABEL_IS_NOT_PROVIDER_DIAGNOSIS=true
+CONTEXT_STEERING_IS_NOT_MODEL_WEIGHT_CHANGE=true
+CONTEXT_STEERING_IS_NOT_SAFEGUARD_REMOVAL=true
+STEERING_SIGNAL_REQUIRES_PROVENANCE_SEPARATION=true
+```
+
+Quando o contexto fizer o executor reduzir demais, inferir mente, exagerar gate ou apenas ecoar a estrutura recebida, o delta correto é recalibrar o scaffold já existente:
+
+```text
+DETECTAR_DRIFT
+→ SELF_GRILL
+→ SEPARAR USER_STATED | CANONICAL_PROVEN | ASSISTANT_INFERRED
+→ PRESERVAR O QUE SOBREVIVE
+→ INTEGRAR SOMENTE O DELTA
+→ CONTINUAR
+```
+
 ## Relação com o aprendizado por confronto
 
 Metacognição operacional é uma especialização do contrato de ganho informacional:

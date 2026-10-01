@@ -108,6 +108,91 @@ tail -n 80 /var/log/clone-deck-cleanup.log
 
 ## Conexões Rápidas
 
+## Receita observada — AnyDesk/openKylin 3.0 em 2026-10-01
+
+Setor: `REMOTE_INTERACTIVE_GUI`; controle de reparo: SSH; transporte privado:
+Tailscale; fallback de resgate: Contabo VNC. Reutiliza os owners existentes.
+Este é um receipt datado, não uma promessa de compatibilidade geral ou estado
+atual. AnyDesk 8.1.0, UKUI 4.24, Xorg :0, sessão gráfica root explicitamente
+solicitada pelo CHEFE. Não recomendar root como desktop padrão para outros alvos.
+Senhas, tokens, cookies e conteúdo do Vault não pertencem a esta receita.
+
+### Sequência causal e contraprovas
+
+1. Rede/ID alcançáveis não provaram desktop: `desk_rt_ipc_error` ocorreu depois
+   da conexão. `7070/TCP` era AnyDesk direto; `41641/UDP` era Tailscale. Não usar
+   a porta do transporte privado como endereço AnyDesk.
+2. No greeter, `/var/lib/lightdm/.anydesk` estava root:root, modo 700. Após backup
+   privado, restaurar ownership para lightdm fez o tray persistir e permitiu ver
+   a tela de login. Aplicar somente se HOME/UID/permissões medidos confirmarem
+   esse mesmo erro; não executar chown global.
+3. A senha do acesso AnyDesk e a senha de login Linux são autenticações distintas.
+   Login root foi confirmado pelo LightDM; nenhum usuário novo foi criado.
+4. Depois do login, o backend abortava em `pa_context_send_simple_command`, com
+   `Connection refused`. `pactl info` falhava; pipewire e pipewire-pulse não
+   iniciavam porque suas units continham `ConditionUser=!root`. Isso localizou
+   a falha de áudio; trocar Xorg ou abrir portas não corrigia essa condição.
+5. Para a sessão root autorizada, drop-ins somente em
+   `/root/.config/systemd/user/{pipewire.service,pipewire.socket,pipewire-pulse.service,pipewire-pulse.socket}.d/90-centraldark-root-session.conf`
+   com `[Unit]` e `ConditionUser=` limparam a condição herdada. Após daemon-reload
+   e start das sockets/wireplumber, `pactl info` respondeu
+   `PulseAudio (on PipeWire 1.6.2)`; trace AnyDesk confirmou conexão ao áudio.
+   Não modificar units do fornecedor nem aplicar esse override a todos os usuários.
+6. Teste manual `anydesk --backend` passou pelo áudio mas encontrou conflito de
+   slot IPC com backend existente. Esse teste não é prova de sessão completa;
+   medir a conexão real. Na conexão real posterior o backend permaneceu vivo,
+   registrou `Starting capture` e monitor 1280×800.
+7. Captura direta do X11 também estava preta: falha do desktop remoto, não
+   somente do transporte AnyDesk. KWin não estava ativo para root. Iniciar o
+   `kwin_x11 --replace` existente com DISPLAY/XAUTHORITY/DBus/runtime da sessão
+   correta criou `_NET_SUPPORTING_WM_CHECK`. Reiniciar somente ukui-panel e
+   peony-qt-desktop nessa mesma sessão trouxe o papel de parede; a captura local
+   e screenshot do CHEFE confirmaram imagem no AnyDesk.
+8. Resultado parcial: ícones ausentes e painel caiu com SIGSEGV;
+   backtrace em `Calendar::week` / `libukui-panel-calendar.so`.
+   `QT_QPA_PLATFORM=xcb` em `.xsessionrc` não eliminou todos os erros Wayland de
+   componentes UKUI. Não declarar desktop 100%, boot persistente ou root suportado.
+
+### Operação reutilizável — medir antes de aplicar
+
+```bash
+loginctl list-sessions
+loginctl show-session <sessao-medida> -p Type -p Active -p Name -p Desktop
+systemctl is-active lightdm anydesk
+journalctl -u anydesk -u lightdm --since '10 minutes ago' --no-pager
+# Dentro do contexto correto do usuário da sessão, sem imprimir seu ambiente inteiro:
+pactl info
+systemctl --user status pipewire.socket pipewire-pulse.socket --no-pager
+xprop -root _NET_SUPPORTING_WM_CHECK
+```
+
+Bindings DISPLAY, XAUTHORITY, XDG_RUNTIME_DIR e DBUS_SESSION_BUS_ADDRESS devem
+vir da sessão medida, nunca do exemplo de outra máquina. Só reiniciar processos
+que pertencem ao usuário/display comprovados e ao escopo autorizado.
+
+Para reverter os overrides de áudio, remover somente os quatro drop-ins criados,
+recarregar o user manager e reiniciar os serviços afetados. Restaurar ownership
+do greeter pelo backup privado se necessário. A inicialização manual do KWin e
+do desktop ainda não foi convertida em correção persistente: novo login/reboot
+exige remedição. `.xsessionrc` tinha checkpoint privado anterior quando aplicável.
+
+```text
+SSH_COMMAND_EXECUTION=OBSERVED_PASS
+ROOT_X11_LOGIN=OBSERVED_PASS
+ROOT_PULSE_CONNECTION=OBSERVED_PASS
+ANYDESK_CAPTURE_STARTED=OBSERVED_PASS
+REMOTE_WALLPAPER_VISIBLE=USER_SCREENSHOT_PASS
+PANEL_COMPLETE=FAIL_CALENDAR_SEGFAULT
+ICONS_COMPLETE=UNKNOWN
+NEXT_LOGIN_OR_REBOOT_REPLAY=UNKNOWN
+COMPLETE_DESKTOP_RECIPE=PARTIAL
+NEXT_CURSOR=REPAIR_PANEL_CALENDAR_AND_ICON_LOADING_THEN_VERIFY_NEW_LOGIN
+```
+
+Não mascarar essa incompletude com instalação de outro desktop. A marca
+`This is a non-commercial session` é overlay AnyDesk, distinto da falha UKUI.
+
+
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre

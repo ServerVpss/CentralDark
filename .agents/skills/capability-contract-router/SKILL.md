@@ -348,6 +348,15 @@ O roteador não escolhe intenção humana, não altera autorização e não subs
 
 ## Runtime executável
 
+### Seleção de skills no mesmo roteamento
+
+O catálogo canônico é `.agents/skills/`; a presença de um agente não implica que
+uma skill foi carregada. Resolver necessidade por intenção → setor → owner e
+selecionar somente receitas relevantes. Reutilizar o corpo já lido enquanto
+contexto e versão continuarem aplicáveis. Mudança de necessidade/contexto/versão
+reabre a seleção. O ciclo pós-ação e a promoção do delta pertencem a
+`.agents/skills/centraldark-operational-method/SKILL.md`, não a um novo router.
+
 ```text
 python .agents/skills/capability-contract-router/scripts/route_capabilities.py --self-test
 python .agents/skills/capability-contract-router/scripts/route_capabilities.py --input <payload.json>

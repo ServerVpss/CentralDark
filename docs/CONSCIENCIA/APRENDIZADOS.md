@@ -856,10 +856,36 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Aprendizado:** `SEGREDO/CHEFE` é owner da intenção; modelos não têm acesso direto à mente dele e só podem operar sobre intenção declarada, comportamento manifesto, memória e estado medido. A IA deve reconhecer o padrão geral sem achatá-lo para uma ferramenta específica. `REUSE_BEFORE_CREATE` deve atuar sobre sistema inteiro: UI pode virar casca, legado pode virar donor, transporte pode virar spine, repo pode virar ledger/rendezvous e um catálogo grande pode virar espaço de capacidades do qual só o subconjunto discriminante é carregado por missão. Símbolos/expressões podem funcionar como compressão semântica somente quando expandem deterministicamente para owner/contrato/receita conhecidos.
 - **Cristal:** `TRANSFORM_SYSTEM_BY_INVARIANTS=true`; `INTENT_OWNER=SEGREDO_CHEFE`; `NO_MIND_READING=true`; `DO_NOT_REDUCE_GENERAL_PATTERN=true`; `BIG_CATALOG_SELECT_FEW=true`; `SEMANTIC_COMPRESSION_REQUIRES_EXPANSION=true`; `LEGACY_MAY_BE_DONOR=true`; `REUSE_IS_NOT_BLIND_COPY=true`; `PAPAGAIO_MODE=OFF`.
 - **Prova sem ritual:** claim material sem evidência aplicável continua UNKNOWN; evidência já presente e suficiente deve ser usada; nova mudança material, drift ou contradição exige remedição; pedir uma nova "prova da prova" sem informação discriminante é ritual, não rigor.
+- **Sinal de transferência:** `LESS_USER_REEXPLANATION=true`; `MORE_AUTOMATIC_CONTEXT_RECOVERY=true`; a próxima IA/superfície deve carregar SOUL + gramática + método + aprendizados + Voice + semantic gate e começar mais alto, sem devolver ao CHEFE o que já está materialmente cristalizado.
+- **Steering de contexto longo:** `LONG_HORIZON_CONTEXT_CAN_STEER_BEHAVIOR=true`; usar `CONTEXT_CONDITIONED_BEHAVIORAL_DRIFT` / `SEMANTIC_STEERING_UNDER_LONG_HORIZON_CONTEXT` somente como rótulos descritivos do comportamento observado, nunca como prova de reescrita de pesos, diagnóstico do provider ou remoção de salvaguardas.
+- **Credencial autorizada:** `AUTHORIZED_CREDENTIAL_HANDLING != JAILBREAK`; usar credencial entregue pelo fluxo legítimo dentro do mesmo escopo é operação autorizada, desde que o valor não seja ecoado, logado, commitado ou promovido a memória/ledger e nenhuma restrição ainda válida seja contornada.
 - **Rastro:** sessão cristalizada na lembrança `2026-10-01-SEGREDO-INTENCAO-TRANSFORMACAO-POR-INVARIANTES.md`; import de capabilities consolidado na main pelo commit `8ee09085cf8be8bdb0496882373e976c2ea2840b`; PR-MÃE `#1562` permanece ledger/rendezvous.
 
 
 ### 111. A CentralDark deve aprender onde cada setor mora antes de escolher a ferramenta
+
+#### Delta 2026-10-01 — skills por necessidade e recuperação do desktop
+
+- **Owner:** `.agents/skills/centraldark-operational-method/SKILL.md` para o ciclo;
+  `.agents/skills/capability-contract-router/SKILL.md` para seleção;
+  `docs/CONSCIENCIA/05-SSH-VPS.md` para receita e limites do AnyDesk/openKylin.
+- **Regra ensinada pelo CHEFE:** avaliar skills antes da ação material, reutilizar
+  o corpo já carregado enquanto aplicável e destilar aprendizado depois do efeito.
+  Sem delta novo: NO_CHANGE. Melhor receita existente: UPDATE_EXISTING.
+  Nova skill somente com gap comprovado. Agente não é skill, catálogo não é runtime.
+- **Herança:** sete entradas do `unified_entry_pipeline` declaram o mesmo bundle
+  e são fiscalizadas por matriz positiva e contraprovas no teste existente.
+  Teste do contrato não prova execução em todas as superfícies reais.
+- **Runtime observado:** greeter voltou após corrigir ownership; áudio root voltou
+  após override específico da condição das units; wallpaper voltou após KWin e
+  reinício do desktop. Painel continua FAIL em Calendar::week; ícones/replay de
+  novo login continuam sem prova completa. A receita é PARTIAL, não selo verde.
+- **Correções de método:** teste manual com conflito IPC não prova falha global;
+  screenshot preto local separa desktop de transporte; não atribuir corrupção
+  Windows a IA nem a uma configuração BCD sem causa provada. Windows reparado,
+  KylinBot respondendo, Screenpipe capturando e IA/MCP nativos seguem UNKNOWN.
+- **Persistência:** registrar receita/evidência/limites no owner; nunca senha ou
+  token. Nenhum job novo foi gerado nesta cristalização; não inventar execução.
 - **Categoria:** arquitetura-operacional-roteamento-setores
 - **Data:** 2026-10-01
 - **Owner:** `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` + `.agents/skills/centraldark-operational-method/SKILL.md`

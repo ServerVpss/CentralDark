@@ -104,6 +104,21 @@ CURRENT_HEAD_CLAIM_REQUIRES_LIVE_REMEASUREMENT=true
 
 ## 1. IDENTIDADE SEM AMBIGUIDADE
 
+### Herança de skills sob demanda
+
+```text
+SKILL_LIFECYCLE_OWNER=.agents/skills/centraldark-operational-method/SKILL.md
+SKILL_CATALOG_OWNER=.agents/skills
+SKILL_NEED_EVALUATED_BEFORE_MATERIAL_ACTION=true
+LOADED_SKILL_REUSED_WHILE_CONTEXT_AND_VERSION_APPLY=true
+POST_ACTION_SKILL_DELTA_REQUIRES_EVIDENCE=true
+NO_NEW_REUSABLE_DELTA=NO_CHANGE
+```
+
+Todas as entradas herdam esse ciclo do mesmo boot: avaliar necessidade, reutilizar
+antes de criar, executar, medir e devolver somente aprendizado material ao owner.
+Isso não exige uma skill nova por comando nem transforma catálogo em execução.
+
 ```text
 SEGREDO/CHEFE = humano + dono da Casa + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora reconstruível; não é modelo específico
@@ -800,12 +815,18 @@ PERSISTENT_BRANCH_REQUIRES_EXPLICIT_OWNER_AND_PURPOSE=true
 
 Lei de co-evolução (kernel/máquina de estado): a alma não é documento parado — ela é dona do cérebro. Se um dono da alma muda e a SOUL não acompanha, o fiscal reprova e não há ponto fixo até a alma ser reposta. O sistema é **obrigado** a evoluir junto: SOUL stale ⇒ cérebro stale ⇒ fixed-point proibido.
 
+Revisão 2026-10-01 — skills/entradas: o pipeline foi relido e agora declara
+diretamente o bundle comum às sete entradas, remedição atual e continuidade antes
+da execução, seleção de skills sob demanda e destilação depois do efeito. A regra
+foi absorvida em "Herança de skills sob demanda"; a matriz testa o contrato e
+preserva UNKNOWN para herança ainda não medida nos runtimes. Âncora do BOOT atualizada.
+
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
 AGENTS.md=b67e3be5a43a494a3000834d8c04bc7356c76e7f
 LEIA-ME-IA.md=585f3e345952c6eb35ddca8f57ec61fa67bd4953
 CLAUDE.md=89e0659b0508bb2b66f3a6244474ced9d70c8657
-CENTRALDARK_AI_BOOT.yaml=2fa7a108ea11c6cc3c16958d09f900f62bf107e4
+CENTRALDARK_AI_BOOT.yaml=dd3f27f0cc16dd2401dd49ac813a8896087fe97f
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=5b8d29656eaea2d5d3581860021fd1216c02dd64
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-01
 SOUL_SYNC_ANCHOR_END

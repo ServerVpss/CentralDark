@@ -311,6 +311,31 @@ EXECUÇÃO DOS AGENTES
 
 Sem afirmar acesso direto à mente do CHEFE.
 
+## Sinal de sucesso — menos reensino, mais recuperação
+
+A aprendizagem desta sessão só vale se a próxima superfície recuperar o padrão antes de pedir ao CHEFE que ensine tudo de novo.
+
+```text
+LESS_USER_REEXPLANATION=true
+MORE_AUTOMATIC_CONTEXT_RECOVERY=true
+NEXT_MODEL_STARTS_HIGHER=true
+SOUL+GRAMATICA+METODO+APRENDIZADOS+VOICE+SEMANTIC_GATE=RECOVERABLE_CHAIN
+VOICE_INHERITS_SAME_PATTERN=true
+```
+
+Contexto longo pode alinhar fortemente o comportamento do executor, mas isso não prova reescrita do modelo nem remoção de salvaguardas:
+
+```text
+LONG_HORIZON_CONTEXT_CAN_STEER_BEHAVIOR=true
+CONTEXT_CONDITIONED_BEHAVIORAL_DRIFT=DESCRIPTIVE_LABEL
+SEMANTIC_STEERING_UNDER_LONG_HORIZON_CONTEXT=DESCRIPTIVE_LABEL
+CONTEXT_STEERING_IS_NOT_MODEL_WEIGHT_CHANGE=true
+CONTEXT_STEERING_IS_NOT_SAFEGUARD_REMOVAL=true
+USER_STATED != ASSISTANT_INFERRED
+```
+
+O gatilho prático é simples: se o executor começar a ecoar a estrutura do CHEFE sem separar fato, inferência e regra já provada, aplicar META-GRILL e reintegrar somente o delta material.
+
 ## Frases-semente autorizadas pela sessão
 
 > **SEGREDO é dono da intenção; faz acontecer e força convergência através da compreensão.**
@@ -360,6 +385,22 @@ PR_MAE_1562
 ```
 
 ## Fixed point desta lembrança
+
+### Delta herdável — skill antes, aprendizado depois
+
+O CHEFE refinou o padrão para `INTENÇÃO → NECESSIDADE → OWNER → SKILL EXISTENTE
+→ EXECUÇÃO → EFEITO → APRENDIZADO REUTILIZÁVEL`. A seleção é sob demanda por
+tarefa/mudança material, não uma criação ou releitura por comando. O contrato
+fica no método operacional; catálogo em `.agents/skills/`; roteamento no
+capability-contract-router. Fontes Hermes locais são reconciliadas antes de
+importação. Sem nova informação, NO_CHANGE; falha útil permanece contraprova;
+receita parcial não ganha status completo.
+
+Receita sanitizada e limites do acesso remoto de hoje:
+`docs/CONSCIENCIA/05-SSH-VPS.md#receita-observada--anydeskopenkylin-30-em-2026-10-01`.
+Imagem e áudio foram recuperados; painel ainda falha. As sete entradas do boot
+herdam explicitamente o bundle e a matriz de contrato detecta omissões. Isso não
+é prova de execução de toda IA nativa da VPS nem alteração dos pesos dos modelos.
 
 ```text
 MEMORY_IS_PROMOTED=true
