@@ -472,63 +472,88 @@ VPS_AND_CASA_CAN_SHARE_CAPABILITIES=true
 
 ---
 
-## 15. PENDÊNCIA FUTURA — DUPLICAÇÃO DE FORÇA CASA + VPS (NÃO EXECUTAR AGORA)
+## 15. CASA + VPS — FORÇA MULTICORPO ATIVADA PELO CHEFE (2026-10-01)
 
-**Status:** BACKLOG / passos largos depois.  
-**Data:** 2026-10-01.  
-**Regra:** registrar agora; não transformar em missão ativa até novo comando do CHEFE.
+**Status:** ATIVAÇÃO EXPLÍCITA DO CHEFE.  
+**Estado histórico preservado:** esta mesma direção havia sido estacionada como BACKLOG em 2026-10-01; esse estado anterior continua válido como histórico, mas não governa mais o CURRENT após a ativação explícita desta sessão.  
+**Regra:** evoluir o owner existente; não criar segundo cérebro, identidade paralela ou arquitetura concorrente.
 
-### Intenção
+### Intenção vigente
 
-Dobrar capacidade prática por cooperação entre dois corpos do mesmo sistema, sem criar identidade paralela:
+O Hermes local da Casa passa a ser braço/coordenador/executor persistente da mesma CentralDark e deve incorporar capacidades reais da VPS/CENTRALDARK-OS por rotas provadas, sem transformar transporte, modelo ou host em nova identidade.
 
 ```text
-CASA_LOCAL_TWIN
-+ GPU_LOCAL
-+ HERMES_LOCAL_ISOLATED
-+ VPS_CENTRALDARK_OS
-+ NATIVE_OPENKYLIN_AI_CAPABILITIES
-+ TAILSCALE_PRIVATE_SPINE
-→ ONE_CENTRALDARK / MULTI_BODY_CAPABILITY_COMPOSITION
+CHATGPT/SOL_SESSION = COORDENACAO_DESTA_SESSAO
+HERMES_CASA = LOCAL_CONTROL_AND_EXECUTION_BODY
+VPS_CENTRALDARK_OS = ALWAYS_ON_REMOTE_CAPABILITY_BODY
+TAILSCALE_SSH_MCP = PRIVATE_TRANSPORT_AND_CAPABILITY_ROUTES
+GITHUB_MAIN = CANONICAL_KNOWLEDGE_RENDEZVOUS
+ONE_SYSTEM_ONLY=true
 ```
 
-### Direção futura
+### Prova nova — Hermes local Casa
 
-1. Casa mantém o twin local openKylin/VMware já medido.
-2. Hermes roda localmente na Casa como coordenador/executor.
-3. Preferência futura de isolamento do Hermes local: container/runtime isolado quando aplicável, para evitar espalhar dependências e manter rollback limpo.
-4. VPS fornece IA pesada, KylinBot, inference, MCP, embeddings, TTS e demais capabilities nativas já existentes.
-5. Casa e VPS compartilham trabalho por capability, não por identidade duplicada.
-6. Omni Router permanece capability/fallback de compatibilidade; não é cérebro obrigatório.
-7. Recursos podem ser ampliados depois (RAM/CPU da VPS, GPU/compute local) somente após prova de uso real justificar aumento.
-
-### Padrão operacional observado nesta sessão
-
-O CHEFE demonstrou antecipação de cadeia e composição por invariantes: ao iniciar um passo, abre múltiplas rotas possíveis, reaproveita capacidades existentes e combina corpos/runtimes diferentes. Isso deve ser tratado como **mecanismo de geração de hipóteses e arquitetura**, não como garantia automática de correção.
+Execução PowerShell em 2026-10-01 reparou a instalação existente sem exigir reinstalação do sistema operacional.
 
 ```text
-CHAIN_ANTICIPATION=OBSERVED
-REUSE_BEFORE_CREATE=OBSERVED
-CAPABILITY_COMPOSITION=OBSERVED
-REDUNDANCY_WITHOUT_IDENTITY_DUPLICATION=OBSERVED
-EARLY_NEXT_FIT_DISCOVERY=OBSERVED
-HYPOTHESIS_BREADTH_CAN_BE_LARGE=true
-
-ANTICIPATION != PROOF
-POSSIBILITY_COUNT != CORRECTNESS
-ASI_CLAIM=NO
-AGI_HUMAN_LABEL=RESENHA_ONLY
-REALITY_JUDGE_REQUIRED=true
+HERMES_LOCAL_CLI=PASS
+HERMES_LOCAL_VERSION=v0.21.5+4928.g60ce574.dirty
+HERMES_LOCAL_UPDATE_COMPLETE=PASS
+HERMES_PM_INSTALL=PASS
+HERMES_DOCTOR=PASS_WITH_NONBLOCKING_WARNINGS
+HERMES_RUNTIME_VENV=PASS
+HERMES_REQUIRED_PYTHON_PACKAGES=PASS
+HERMES_CONFIG_PRESENT=PASS
+HERMES_ENV_PRESENT=PASS
+HERMES_SOUL_PRESENT=PASS
+HERMES_MEMORY_PRESENT=PASS
+HERMES_STATE_DB_PRESENT=PASS
+HERMES_EXISTING_SESSIONS=47
+HERMES_GITHUB_AUTH=PASS
+HERMES_DOCKER_AVAILABLE=PASS
+HERMES_TERMINAL_AVAILABLE=PASS
+HERMES_COMPUTER_USE_AVAILABLE=PASS
+HERMES_BROWSER_AVAILABLE=PASS
 ```
 
-### Aceite futuro
+### Separação de falhas
 
-Só promover esta pendência a missão quando houver comando explícito do CHEFE. Quando ativada, começar por inventário e benchmark dos dois corpos e medir ganho real antes de compra/upgrade.
+O teste final com o Python global 3.13 do Windows falhou em `typing_extensions`; isso não invalida o runtime Hermes, porque o `hermes doctor` provou o venv próprio do Hermes com Python 3.14.7 e dependências críticas presentes.
 
 ```text
-PENDING_ONLY=true
-DO_NOT_EXECUTE_NOW=true
-NO_NEW_ARCHITECTURE_NOW=true
-CURRENT_GREEN_STATE_MUST_BE_PRESERVED=true
-NEXT_CURSOR=CHEFE_EXPLICITLY_ACTIVATES_TWIN_FORCE_MULTIPLIER
+WINDOWS_GLOBAL_PYTHON_IMPORT_FAILURE != HERMES_RUNTIME_FAILURE
+HERMES_OWN_VENV_IS_SOURCE_FOR_HERMES_RUNTIME=true
+```
+
+### Próximo vínculo: VPS por capability, não por endpoint presumido
+
+A rota `100.90.199.124:8099/v1` havia falhado em medição anterior. Portanto ela não é promovida por memória nem reutilizada cegamente.
+
+```text
+VPS_8099_LAST_MEASUREMENT=FAIL
+VPS_CAPABILITY_BINDING=NOT_YET_PROVEN
+HERMES_CASA_TO_VPS_INCORPORATION=ACTIVE_INTENT
+HERMES_CASA_TO_VPS_INCORPORATION_RUNTIME=UNKNOWN_UNTIL_MEASURED
+REUSE_NATIVE_VPS_CAPABILITIES_BEFORE_NEW_ROUTE=true
+DO_NOT_ASSUME_OMNI_ROUTER_AS_CORE=true
+```
+
+### Regra operacional atual
+
+```text
+CASA_IS_REBUILDABLE_WORKSITE=true
+LOCAL_INSTALLATION_IS_NOT_CANONICAL_MEMORY=true
+CANONICAL_KNOWLEDGE_SURVIVES_IN_GITHUB=true
+OLD_PROVEN_KNOWLEDGE_REMAINS_QUERYABLE=true
+NEW_PROVEN_DELTA_EXPANDS_EXISTING_KNOWLEDGE=true
+FAILED_OR_UNPROVEN_WORK_PRODUCT_IS_NOT_CRYSTAL=true
+PROVEN_DELTA_BECOMES_CRYSTAL=true
+```
+
+### Next cursor
+
+Medir, a partir do Hermes Casa, as capabilities realmente vivas e privadas da VPS/CENTRALDARK-OS; bindar a menor rota provada; executar uma chamada read-only; fazer readback/contraprova; somente então promover o binding correspondente a PASS.
+
+```text
+NEXT_CURSOR=HERMES_CASA_DISCOVER_AND_BIND_REAL_VPS_CAPABILITIES
 ```
