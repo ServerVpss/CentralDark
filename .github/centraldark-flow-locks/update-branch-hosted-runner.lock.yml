@@ -10,8 +10,9 @@ source_receipt_pr_mother: 1562
 
 protected_workflow:
   path: .github/workflows/pr-update-branch-deterministic.yml
-  job: update-branch
-  must_remain:
+  jobs: [preflight, update-and-stitch, reality-judge, receipt]
+  visual_flow: PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT
+  all_jobs_must_remain:
     runs_on: ubuntu-latest
   forbidden_without_chefe_explicit_approval:
     - "runs-on: [self-hosted, Linux]"
