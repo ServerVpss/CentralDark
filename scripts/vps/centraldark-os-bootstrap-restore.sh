@@ -80,47 +80,108 @@ validate_archive() {
 
   if ! python3 - "$archive" <<'PY'
 import csv, hashlib, io, pathlib, re, sys, tarfile
+
+archive_path = sys.argv[1]
+allowed = {
+    "DUPLICATE_MEMBERS", "UNSAFE_MEMBERS", "MANIFEST_REQUIRED",
+    "INTERNAL_METADATA_REQUIRED", "EMPTY_MANIFEST", "DEST_OUTSIDE_VAULT",
+    "UNSAFE_DEST", "MANIFEST_BINDING_MISSING", "MANIFEST_PAYLOAD_MISMATCH",
+}
+
+def fail(reason):
+    raise ValueError(reason)
+
+def safe_member(member):
+    p = pathlib.PurePosixPath(member.name)
+    if p.is_absolute() or ".." in p.parts or not (member.isfile() or member.isdir()):
+        fail("UNSAFE_MEMBERS")
+
 try:
-    with tarfile.open(sys.argv[1]) as archive:
-        members = archive.getmembers()
-        names = [m.name for m in members]
-        if len(names) != len(set(names)):
-            raise ValueError("DUPLICATE_MEMBERS")
-        if any(pathlib.PurePosixPath(m.name).is_absolute() or ".." in pathlib.PurePosixPath(m.name).parts
-               or not (m.isfile() or m.isdir()) for m in members):
-            raise ValueError("UNSAFE_MEMBERS")
-        manifests = [m for m in members if pathlib.PurePosixPath(m.name).name == "MANIFEST.tsv"]
-        if len(manifests) != 1:
-            raise ValueError("MANIFEST_REQUIRED")
-        root = pathlib.PurePosixPath(manifests[0].name).parent
-        files = {m.name: m for m in members if m.isfile()}
-        for required in ("SHA256SUMS.txt", "BOOTSTRAP-NEXT.env"):
-            if str(root / required) not in files:
-                raise ValueError("INTERNAL_METADATA_REQUIRED")
-        rows = list(csv.DictReader(io.StringIO(archive.extractfile(manifests[0]).read().decode()), delimiter="\t"))
-        if not rows:
-            raise ValueError("EMPTY_MANIFEST")
-        checked = 0
-        for row in rows:
-            destination = pathlib.PurePosixPath(row["dest"])
-            # Destinations from the canonical inventory are absolute paths inside the vault root.
-            parts = destination.parts
-            if root.name not in parts:
-                raise ValueError("DEST_OUTSIDE_VAULT")
-            relative = pathlib.PurePosixPath(*parts[parts.index(root.name) + 1:])
-            if ".." in relative.parts or relative.is_absolute():
-                raise ValueError("UNSAFE_DEST")
-            member = files.get(str(root / relative))
-            if not member or not re.fullmatch(r"[a-f0-9]{64}", row["sha256"]):
-                raise ValueError("MANIFEST_BINDING_MISSING")
-            content = archive.extractfile(member).read()
-            if len(content) != int(row["bytes"]) or hashlib.sha256(content).hexdigest() != row["sha256"]:
-                raise ValueError("MANIFEST_PAYLOAD_MISMATCH")
+    # Pass 1: find/read MANIFEST sequentially. No random seeks over gzip.
+    manifest_bytes = None
+    manifest_name = None
+    with tarfile.open(archive_path, mode="r|gz") as archive:
+        for member in archive:
+            safe_member(member)
+            if pathlib.PurePosixPath(member.name).name == "MANIFEST.tsv":
+                if manifest_bytes is not None or not member.isfile():
+                    fail("MANIFEST_REQUIRED")
+                fh = archive.extractfile(member)
+                if fh is None:
+                    fail("MANIFEST_REQUIRED")
+                manifest_bytes = fh.read()
+                manifest_name = member.name
+                break
+    if manifest_bytes is None or manifest_name is None:
+        fail("MANIFEST_REQUIRED")
+
+    root = pathlib.PurePosixPath(manifest_name).parent
+    rows = list(csv.DictReader(io.StringIO(manifest_bytes.decode()), delimiter="\t"))
+    if not rows:
+        fail("EMPTY_MANIFEST")
+
+    expected = {}
+    for row in rows:
+        destination = pathlib.PurePosixPath(row["dest"])
+        parts = destination.parts
+        if root.name not in parts:
+            fail("DEST_OUTSIDE_VAULT")
+        relative = pathlib.PurePosixPath(*parts[parts.index(root.name) + 1:])
+        if ".." in relative.parts or relative.is_absolute():
+            fail("UNSAFE_DEST")
+        sha = row.get("sha256", "")
+        if not re.fullmatch(r"[a-f0-9]{64}", sha):
+            fail("MANIFEST_BINDING_MISSING")
+        member_name = str(root / relative)
+        if member_name in expected:
+            fail("DUPLICATE_MEMBERS")
+        expected[member_name] = (sha, int(row["bytes"]))
+
+    # Pass 2: one sequential scan validates every payload exactly once.
+    seen = set()
+    metadata = {
+        str(root / "MANIFEST.tsv"): False,
+        str(root / "SHA256SUMS.txt"): False,
+        str(root / "BOOTSTRAP-NEXT.env"): False,
+    }
+    checked = 0
+    with tarfile.open(archive_path, mode="r|gz") as archive:
+        for member in archive:
+            safe_member(member)
+            if member.name in seen:
+                fail("DUPLICATE_MEMBERS")
+            seen.add(member.name)
+            if member.name in metadata:
+                metadata[member.name] = True
+            spec = expected.get(member.name)
+            if spec is None:
+                continue
+            if not member.isfile():
+                fail("MANIFEST_BINDING_MISSING")
+            fh = archive.extractfile(member)
+            if fh is None:
+                fail("MANIFEST_BINDING_MISSING")
+            h = hashlib.sha256()
+            size = 0
+            while True:
+                chunk = fh.read(1024 * 1024)
+                if not chunk:
+                    break
+                size += len(chunk)
+                h.update(chunk)
+            sha, expected_size = spec
+            if size != expected_size or h.hexdigest() != sha:
+                fail("MANIFEST_PAYLOAD_MISMATCH")
             checked += 1
-        print("VAULT_MANIFEST_ENTRIES=" + str(checked))
-        print("VAULT_PAYLOAD_HASHES=PASS")
+
+    if not all(metadata.values()):
+        fail("INTERNAL_METADATA_REQUIRED")
+    if checked != len(expected):
+        fail("MANIFEST_BINDING_MISSING")
+
+    print("VAULT_MANIFEST_ENTRIES=" + str(checked))
+    print("VAULT_PAYLOAD_HASHES=PASS")
 except Exception as error:
-    allowed = {"DUPLICATE_MEMBERS", "UNSAFE_MEMBERS", "MANIFEST_REQUIRED", "INTERNAL_METADATA_REQUIRED", "EMPTY_MANIFEST", "DEST_OUTSIDE_VAULT", "UNSAFE_DEST", "MANIFEST_BINDING_MISSING", "MANIFEST_PAYLOAD_MISMATCH"}
     reason = str(error) if str(error) in allowed else type(error).__name__
     print("ERROR: VAULT_PAYLOAD_INVALID=" + reason, file=sys.stderr)
     sys.exit(1)
