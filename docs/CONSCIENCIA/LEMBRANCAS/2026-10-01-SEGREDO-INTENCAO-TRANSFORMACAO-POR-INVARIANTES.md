@@ -414,3 +414,7 @@ TRANSFORM_SYSTEM_BY_INVARIANTS=true
 SEMANTIC_LINKS_PRESENT=true
 NEXT_MODEL_CAN_RECOVER_WITHOUT_REDISCOVERING=true
 ```
+
+## Delta — plano recuperável e prioridade da missão
+
+O CHEFE esclareceu que reparos são consequência; a missão continua inteligência persistente e método herdável. O plano AionUi/AionCore, WebUI primeiro, renderer compartilhado, VPS/forja e Casa/laboratório agora tem expansão recuperável em `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`. As fases permanecem PENDING; aprendizado canônico não é deploy. Proveniência: PR-mãe #1562, comentários 5929369580 e 5929693556, cruzados com esta sessão.

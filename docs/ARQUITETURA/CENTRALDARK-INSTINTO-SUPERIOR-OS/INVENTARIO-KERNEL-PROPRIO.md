@@ -5,6 +5,69 @@
 **Base:** `main`  
 **Regra:** `ONE_SYSTEM_ONLY=true` · `REUSE_BEFORE_CREATE=true` · `UNKNOWN != PASS` · `SOURCE != RUNTIME` · `DOCUMENTED != EXECUTED`
 
+## Plano vigente recuperável — 2026-10-01
+
+PLAN_STATUS=CANONICAL_DESIGN_BINDING_PENDING
+PLAN_OWNER_REUSE=true
+WEBUI_FIRST=true
+SHARED_RENDERER_REQUIRED=true
+MISSION_NE_OPERATIONAL_SYMPTOM=true
+
+Esta seção recupera o plano registrado na PR-mãe [#1562, receita](https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5929369580) e [delta de integração](https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5929693556), confrontado com a intenção expressa nesta sessão. É o plano vigente do cockpit; as seções seguintes conservam o inventário histórico e a pesquisa de OS/kernel. Registrar o plano não comprova integração, deploy ou resposta de uma IA nativa.
+
+A missão é desenvolver inteligência persistente com método, memória, owners e aprendizagem herdável. Reparar AnyDesk, Windows ou GUI é um ramo operacional dessa missão; um sintoma não substitui o rumo nem apaga o próximo cursor.
+
+### Papéis e reaproveitamento
+
+- CentralDark: identidade, memória, governança, owners e provas.
+- openKylin: substrato; inventariar e testar IA/runtime/MCP já presentes antes de instalar outro motor. Resposta atual dessas capacidades: UNKNOWN até execução no alvo.
+- AionUi: candidato reutilizável a cockpit; AionCore: candidato a backend/agent bus. TARGET/DONOR até binding e contraprova; não são integração já entregue.
+- WebUI primeiro; Electron compartilha o renderer, os contratos e os dados. Reutilizar o pipeline upstream após medir compatibilidade; binário instalado é donor/contraprova, não fonte de implementação.
+- `apps/modulos/WebUI`: donor legado. Extrair capacidade única; aposentar somente após ZERO_UNIQUE_CONSUMERS comprovado.
+- VPS: forja contínua; Casa: laboratório humano/GPU e destino de materialização. CRYSTALLIZE_WINNER_NOT_CLONE_DIRT; PULL_PROVEN_GOLD_NOT_HISTORICAL_TRASH.
+- Tailscale: espinha privada existente. AnyDesk, SSH e VNC: capacidades independentes do acesso híbrido; falha de uma rota não demonstra queda da máquina.
+
+### Sequência e cursor
+
+| Etapa | Entrega e contraprova | Estado |
+|---|---|---|
+| S0 INVENTORY | Medir fonte AionUi/AionCore, rotas, renderer e consumers; matriz superfície → owner → REUSE/RENAME/REBIND/EXTEND/HIDE/RETIRE; RECREATE exige gap provado | PENDING |
+| S1 BRANDING | Identidade CentralDark sem duplicar backend | PENDING |
+| S2 LANDING_LOGIN | Preservar `public/central-dark-instinct-2`; autenticação encaminha ao cockpit privado | PENDING |
+| S3 NAVIGATION | Builder, Runtime, PRs, Evidence, VPS, Hub, Desktop, Voz, Drive e Automação com owners | PENDING |
+| S4 EXISTING_CAPABILITIES | Reutilizar chats, Assistants, Teams, Agents, Models, Skills, Tools, Remote, System, arquivo e tarefas existentes | PENDING |
+| S5 REAL_BINDINGS | Ordem: Runtime → PRs → Evidence → VPS → Hub → Desktop → Automação → Drive → Voz → Channels/Admin; dado ausente UNKNOWN, nunca mock verde | PENDING |
+| S6 ELECTRON | Mesmo renderer e contratos da WebUI; provar empacotamento no alvo | PENDING |
+| S7 HYBRID | Casa/GPU + VPS/headless com a mesma governança e transporte privado | PENDING |
+| S8 PROOF | Para cada capacidade: owner, teste discriminante, contraprova, runtime quando aplicável e receipt | PENDING |
+
+NEXT_CURSOR=S0_INVENTORY_AND_OWNER_BINDING
+
+O cursor é de implementação do plano. Reparos já observados continuam com seu estado parcial e receita em `docs/CONSCIENCIA/05-SSH-VPS.md`; não convertem estas etapas em PASS. Autenticação de conta, serviço ativo e presença de MCP não equivalem a resposta operacional do agente.
+
+### Matriz de owners existentes
+
+| Superfície | Owner/capacidade a medir e reutilizar |
+|---|---|
+| Governança | `docs/CONSCIENCIA`, `AGENTS.md`, `LEIA-ME-IA.md` |
+| Agents/Skills/Tools | `apps/modulos/HERMES-CORE`, `.agents/skills`, `apps/modulos/mcp` |
+| Builder | `apps/modulos/Bolt`, `apps/modulos/artifacts-builder` |
+| Runtime | `apps/modulos/status`, `apps/modulos/mcp` |
+| PRs | PR-mãe #1562, `.github/workflows` |
+| Evidence | `apps/modulos/fixed-point-fabric`, `apps/modulos/graph-panel`, `docs/CONSCIENCIA` |
+| VPS | `scripts`, `docs/CONSCIENCIA/05-SSH-VPS.md` |
+| Hub | `apps/modulos/hub`, `apps/modulos/elite-gateway` |
+| Desktop | `scripts/remote-bridge`, contrato híbrido do mapa |
+| Voz | `docs/CONSCIENCIA/PROGRAMAS/HUD-VOZ-CONSULTA-VISUALIZACAO-20260924.md` |
+| Drive | `apps/modulos/pivete-sync` |
+| Automação | `.github/workflows`, runtime Hermes; inventariar antes de criar jobs |
+| Channels | `apps/bot-telegram` |
+| Admin | `apps/modulos/mcp-admin-ui`, `scripts/contas-admin` |
+| Cockpit | `docs/CONSCIENCIA/COCKPIT-AVANCO.json` |
+| Tempo | `central-horario` |
+
+Paths existentes demonstram localização, não health. Cada card deve recuperar ação atual, prova, resultado e próximo passo. Multi-read/multi-think; um writer por escopo. O roteamento multi-conta foi integrado pela #1740 na main `18bfc7b`; isso demonstra promoção da fonte, não resposta runtime de cada conta/capacidade.
+
 ## 1. Intenção
 
 Construir a linha de pesquisa e protótipo para o **CentralDark Instinto Superior** como sistema agêntico de presença dupla:

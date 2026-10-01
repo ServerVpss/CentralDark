@@ -260,5 +260,26 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
             with self.subTest(owner="map", item=item):
                 self.assertIn(item, self.map)
 
+    def test_cockpit_plan_is_recoverable_and_not_runtime_proof(self):
+        owner = "docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md"
+        plan = (self.repo / owner).read_text(encoding="utf-8")
+        self.assertIn(owner, self.map)
+        self.assertIn(owner, self.method)
+        self.assertIn("MISSION_NE_OPERATIONAL_SYMPTOM=true", self.method)
+        self.assertIn("PLAN_STATUS=CANONICAL_DESIGN_BINDING_PENDING", plan)
+        self.assertIn("WEBUI_FIRST=true", plan)
+        self.assertIn("SHARED_RENDERER_REQUIRED=true", plan)
+        self.assertIn("NEXT_CURSOR=S0_INVENTORY_AND_OWNER_BINDING", plan)
+        rows = re.findall(r"(?m)^\| S([0-8]) [^|]+\| [^|]+\| PENDING \|$", plan)
+        self.assertEqual(rows, list("012345678"))
+        # Binding candidates must point to actual repository owners. Existence
+        # is intentionally weaker than application health or successful deploy.
+        table = plan.split("### Matriz de owners existentes", 1)[1].split("Paths existentes", 1)[0]
+        paths = re.findall(r"`([^`]+)`", table)
+        self.assertGreaterEqual(len(paths), 20)
+        for path in paths:
+            with self.subTest(path=path):
+                self.assertTrue((self.repo / path).exists(), f"missing owner: {path}")
+
 if __name__ == "__main__":
     unittest.main()

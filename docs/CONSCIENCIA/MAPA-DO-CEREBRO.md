@@ -715,3 +715,7 @@ SECTOR_OWNER_UNKNOWN
 → CRIAR SOMENTE SE GAP MATERIAL CONTINUAR
 ```
 
+
+### Plano do cockpit recuperável
+
+Owner vigente: [docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md](../ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md). Recuperar a seção **Plano vigente recuperável — 2026-10-01** antes de integrar AionUi/AionCore. PLAN_STATUS=CANONICAL_DESIGN_BINDING_PENDING; NEXT_CURSOR=S0_INVENTORY_AND_OWNER_BINDING. A tabela de setores localiza capacidades; não comprova bindings em runtime.
