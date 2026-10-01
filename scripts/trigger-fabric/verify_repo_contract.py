@@ -739,7 +739,18 @@ check('.github/workflows/pr-update-branch-deterministic.yml',[
  'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true',
  'HYBRID_MODE_PENDING_VPS_PROOF=true',
  'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true',
+ 'CLAIM_SCOPE=PR_SYNC_TO_MAIN',
+ 'CHECKS_SCOPE=OBSERVATION_ONLY_NOT_PROMOTION_PROOF',
+ 'SYNC_CLAIM_AND_CI_OBSERVATION_ARE_SEPARATE=true',
 ], classification='UPDATE_BRANCH_RUNNER_LOCK_ENFORCED')
+check('scripts/github/update-branch-deterministic.mjs',[
+ 'function isSyncUnknown(receipt)',
+ 'function checksObservation(receipt)',
+ 'sync_unknown',
+ 'checks_failed',
+ 'checks_unknown_or_pending',
+ 'does not rewrite SYNC_VERDICT',
+], classification='UPDATE_BRANCH_CLAIM_SCOPE_ENFORCED')
 
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',[
  'ephemeral_workspace_finalizer:',
