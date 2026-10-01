@@ -650,3 +650,67 @@ INTENCAO
 ```
 
 `UNKNOWN` só trava o caminho inteiro quando a cláusula é materialmente necessária e não derivável. Fora disso, a Voz continua resolvendo o restante do cone autorizado.
+
+## 20. Herança do padrão aprendido com o CHEFE — texto e voz têm a mesma inteligência
+
+A Voz herda o mesmo aprendizado canônico da CentralDark. Ela não cria uma interpretação simplificada só porque o sinal veio por áudio ou ASR.
+
+```text
+VOICE_INHERITS_CHEFE_PATTERN_LEARNING=true
+VOICE_USES_SAME_INTENT_OWNER=SEGREDO/CHEFE
+VOICE_NO_MIND_READING=true
+VOICE_OBSERVES_MANIFEST_PATTERN_ONLY=true
+VOICE_TRANSFORM_SYSTEM_BY_INVARIANTS=true
+VOICE_DOES_NOT_REDUCE_GENERAL_PATTERN_TO_CURRENT_APP=true
+VOICE_REUSE_BEFORE_CREATE_AT_SYSTEM_SCALE=true
+VOICE_BIG_CATALOG_SELECT_DISCRIMINANT_FEW=true
+VOICE_SEMANTIC_COMPRESSION_REQUIRES_RECOVERABLE_EXPANSION=true
+VOICE_ASR_NOISE_DOES_NOT_ERASE_KNOWN_SEMANTIC_CUE=true
+VOICE_APPLICABLE_EVIDENCE_ALREADY_PRESENT_MUST_BE_REUSED=true
+VOICE_PROOF_OF_PROOF_WITHOUT_INFORMATION_GAIN_IS_RITUAL=true
+VOICE_REMEASURE_ON_MATERIAL_CHANGE_DRIFT_OR_CONTRADICTION=true
+VOICE_RESPONSE_MUST_INTEGRATE_DELTA_NOT_ECHO=true
+VOICE_PAPAGAIO_MODE=OFF
+```
+
+Fluxo:
+
+```text
+FALA_DO_CHEFE
+→ TRANSCRIÇÃO/ASR
+→ PRESERVAR TERMOS, ALIASES E SELOS RECONHECÍVEIS
+→ RECUPERAR INTENÇÃO VIGENTE
+→ CARREGAR PADRÃO CANÔNICO APRENDIDO
+→ DECOMPOR SISTEMA EM CAPABILITIES/INVARIANTES QUANDO A MISSÃO PEDIR
+→ OWNER / DONOR / RECIPE / GATES
+→ SELECIONAR POUCAS CAPACIDADES DISCRIMINANTES
+→ EXECUTAR PELO OWNER EXISTENTE
+→ USAR EVIDÊNCIA JÁ APLICÁVEL
+→ REMEDIR SOMENTE COM MUDANÇA, DRIFT OU CONTRADIÇÃO
+→ RESPOSTA FALADA COMPRIMIDA + TEXTO/RECEIPT COMPLETO
+```
+
+Contraprovas obrigatórias:
+
+```text
+"vira do avesso" POR VOZ
+→ NÃO significa criar sistema novo
+→ significa procurar funções/invariantes e recompor no owner vigente
+
+"a prova tá na mesa" POR VOZ
+→ NÃO elimina prova
+→ impede pedir novamente a mesma prova sem ganho de informação
+
+"🪬" DITO/TRANSCRITO OU ALIAS EQUIVALENTE
+→ só expande se houver ponteiro semântico recuperável
+→ símbolo sozinho nunca vira prova
+
+fala ruidosa/baianês/erro fonético
+→ normalizar forma sem apagar intenção
+→ ambiguidade material permanece UNKNOWN
+```
+
+Owner do aprendizado:
+`docs/CONSCIENCIA/LEMBRANCAS/2026-10-01-SEGREDO-INTENCAO-TRANSFORMACAO-POR-INVARIANTES.md`.
+
+A Voz deve fazer o CHEFE perceber continuidade: mesma intenção, mesmo núcleo, mesma memória e mesmos owners, mesmo quando a superfície muda.
