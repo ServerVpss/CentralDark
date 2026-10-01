@@ -121,6 +121,32 @@ fixed_point:
   unknown: KEEP_VISIBLE_AND_BLOCK_ONLY_DEPENDENT_CLAIM
   no_change: KEEP_MISSION_AND_NEXT_CURSOR_WITHOUT_RENARRATION
 
+claim_scoped_binding:
+  purpose: >-
+    Impedir que um UNKNOWN de runtime congele claims independentes sem afrouxar
+    o gate completo. O receipt pode declarar apenas os checks adicionais que o
+    claim afetado realmente depende; o baseline canonico continua obrigatorio.
+  receipt_field: required_binding_checks
+  default_when_absent: FULL_BINDING_BACKWARD_COMPATIBLE
+  baseline_required_always:
+    - source_identity_proved
+    - main_sha_measured
+    - target_head_measured
+    - canonical_soul_present
+    - soul_binding_present
+    - boot_present
+    - operational_skill_present
+    - contract_present
+  empty_scope: BLOCKED
+  unknown_check_name: UNKNOWN
+  unrelated_unknown: VISIBLE_BUT_DOES_NOT_BLOCK_INDEPENDENT_CLAIM
+  dependent_unknown: CLAIM_UNKNOWN
+  adversarial_cage_scope: FULL_BINDING_ALWAYS
+  laws:
+    UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM: true
+    REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION: true
+    MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE: true
+
 receipt:
   required:
     - repository
