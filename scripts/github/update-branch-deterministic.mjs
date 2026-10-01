@@ -394,6 +394,28 @@ function writeStepSummary(summary) {
   }
 }
 
+function writeStepOutputs(summary) {
+  const path = process.env.GITHUB_OUTPUT;
+  if (!path) return;
+
+  const verdict = summary.blocked > 0
+    ? 'FAIL'
+    : summary.unknown_or_pending > 0
+      ? 'UNKNOWN'
+      : 'PASS';
+
+  const outputs = [
+    `verdict=${verdict}`,
+    `total=${summary.total}`,
+    `requested=${summary.requested}`,
+    `confirmed=${summary.confirmed_or_up_to_date}`,
+    `blocked=${summary.blocked}`,
+    `unknown_or_pending=${summary.unknown_or_pending}`,
+  ];
+
+  appendFileSync(path, `${outputs.join('\n')}\n`);
+}
+
 const prs = targetPr ? [await getPr(targetPr)] : await listOpenPrs();
 const receipts = [];
 for (const pr of prs) {
@@ -449,6 +471,7 @@ const summary = {
 
 console.log(JSON.stringify(summary, null, 2));
 writeStepSummary(summary);
+writeStepOutputs(summary);
 
 if (blocked > 0 && failOnBlocked) {
   console.error(`${marker}=BLOCKED count=${blocked}`);

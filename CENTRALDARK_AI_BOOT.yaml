@@ -710,6 +710,14 @@ CENTRALDARK_AI_BOOT:
     one_hub_only: true
     memory_api: "apps/modulos/memoria-api/"
     graph_projection: "apps/modulos/graph-panel/"
+    graph_runtime_source: "apps/modulos/status/graph-data.json"
+    graph_projection_writer: "scripts/grafo-vivo/obsidian-nota.mjs"
+    brain_graph_primary: "docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md"
+    brain_graph_legacy_compat: "docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md"
+    brain_graph_freshness_key: "GRAPH_FINGERPRINT"
+    brain_graph_stale_policy: "REGENERATE_FROM_LIVE_GRAPH_SOURCE"
+    brain_graph_is_authority: false
+    stale_brain_graph_is_current: false
     obsidian_plugin: "apps/modulos/obsidian-plugin-grafo-vivo/"
     obsidian_and_runtime_webhook_ingest: "POST https://api.centralldark.com/memoria/ingest"
     graph_read: "https://grafo.centralldark.com/api/graph?mode=vivo"
