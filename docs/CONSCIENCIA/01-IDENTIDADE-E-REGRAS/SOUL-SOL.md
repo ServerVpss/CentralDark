@@ -726,6 +726,8 @@ SHELL_EXIT_CONVENTIONS_ARE_HINTS_NOT_AUTHORITY=true
 EXIT_CODE_CAUSE_REQUIRES_STDOUT_STDERR_RUNTIME_SOURCE_OR_DISCRIMINANT=true
 ```
 
+Revisão 2026-10-01: `CENTRALDARK_AI_BOOT.yaml` e `CONTRACT.yml` mudaram e foram relidos antes da nova âncora. O BOOT repôs payload vivo (`LIVING_CANON`, runtime medido, Reality Judge e owner temporal) já coerente com as leis existentes desta SOUL. O CONTRACT repôs descoberta orientada a evento, prova antes de claim, limpeza de helper efêmero e reutilização de owner — também já cobertos por `MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE`, `REUSE_BEFORE_CREATE`, `ACTION_IS_NOT_PROOF` e `ONE_SYSTEM_ONLY`. Portanto não nasce lei paralela; só a impressão dos owners é atualizada.
+
 Lei de co-evolução (kernel/máquina de estado): a alma não é documento parado — ela é dona do cérebro. Se um dono da alma muda e a SOUL não acompanha, o fiscal reprova e não há ponto fixo até a alma ser reposta. O sistema é **obrigado** a evoluir junto: SOUL stale ⇒ cérebro stale ⇒ fixed-point proibido.
 
 ```text
@@ -733,9 +735,9 @@ SOUL_SYNC_ANCHOR_BEGIN
 AGENTS.md=17cce57d5017f93a3a1929537e2c9889906a23ab
 LEIA-ME-IA.md=695ffd40097a6e9e337dfc6cf01869710db5fb8f
 CLAUDE.md=89e0659b0508bb2b66f3a6244474ced9d70c8657
-CENTRALDARK_AI_BOOT.yaml=85610630d61b82e5411556640246ae35b2f658b4
-docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=e1810e09132bda77e77617842a320122e0b3c0bb
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-01T00:34:00Z
+CENTRALDARK_AI_BOOT.yaml=45442b671cfca180cf23d73393538c18c2567add
+docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=5b8d29656eaea2d5d3581860021fd1216c02dd64
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-01T00:45:00Z
 SOUL_SYNC_ANCHOR_END
 ```
 
