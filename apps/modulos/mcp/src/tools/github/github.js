@@ -272,6 +272,9 @@ export async function createBranch(token, owner, repo, input) {
         sha: fromSha,
     });
 }
+export async function deleteBranch(token, owner, repo, branch) {
+    return ghJson(token, "DELETE", `${repoBase(owner, repo)}/git/refs/heads/${encodeURIComponent(branch)}`);
+}
 // Últimos N commits de uma branch.
 export async function listCommits(token, owner, repo, opts = {}) {
     const sha = opts.branch ?? "main";
