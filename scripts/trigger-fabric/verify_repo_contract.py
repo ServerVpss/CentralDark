@@ -1034,6 +1034,11 @@ check('docs/CONSCIENCIA/APRENDIZADOS.md',[
  'CONTABO_VNC_ROLE=OUT_OF_BAND_RESCUE',
 ], classification='CENTRALDARK_SECTOR_ROUTER_LEARNING')
 
+check_command(
+ 'apps/modulos/fixed-point-fabric/tests/test_sol_teaching_grammar.py',
+ [sys.executable, str(ROOT/'apps/modulos/fixed-point-fabric/tests/test_sol_teaching_grammar.py')],
+ classification='ENTRY_BEHAVIORAL_BUNDLE_MATRIX_COUNTERPROOF',
+)
 failed=[c for c in checks if not c['ok'] and not c.get('exempted', False)]
 print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))
 if failed:

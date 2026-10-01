@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import unittest
 
 
@@ -14,6 +15,89 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.method = (cls.repo / ".agents/skills/centraldark-operational-method/SKILL.md").read_text(encoding="utf-8")
         cls.semantic_gate = (cls.repo / "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml").read_text(encoding="utf-8")
         cls.map = (cls.repo / "docs/CONSCIENCIA/MAPA-DO-CEREBRO.md").read_text(encoding="utf-8")
+        cls.entry_boot = (cls.repo / "CENTRALDARK_AI_BOOT.yaml").read_text(encoding="utf-8")
+        cls.metacognition = (cls.repo / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md").read_text(encoding="utf-8")
+
+    # Parse only this owner block with exact indentation, without adding a YAML
+    # dependency to the existing stdlib test runner. Full YAML parse is separate.
+    def entry_section(self, text, name, indent):
+        match = re.search(
+            rf"(?m)^{' ' * indent}{name}:\s*\n(.*?)(?=^\S|^ {{1,{indent}}}\S|\Z)",
+            text, re.S,
+        )
+        self.assertIsNotNone(match, f"missing entry contract section: {name}")
+        return match.group(1)
+
+    def assert_entry_matrix(self, text):
+        pipeline = self.entry_section(text, "unified_entry_pipeline", 2)
+        entries = re.findall(r"(?m)^      - ([A-Z_]+)$", self.entry_section(pipeline, "applies_to", 4))
+        expected = {"BOT_ENTRY", "SESSION_RESUME", "NEW_TAB", "MODEL_CHANGE",
+                    "AGENT_HANDOFF", "VOICE_COMMAND", "CENTRALDARK_MCP_CONTEXT"}
+        self.assertEqual(set(entries), expected)
+        self.assertEqual(len(entries), len(expected), "duplicate entry surface")
+        inheritance = self.entry_section(pipeline, "behavioral_inheritance", 4)
+        self.assertIn("scope: EVERY_APPLIES_TO_ENTRY", inheritance)
+        self.assertIn("runtime_proof: UNKNOWN_UNTIL_TARGET_EXECUTION", inheritance)
+        bindings = dict(re.findall(r"(?m)^        ([A-Z_]+): (\S+)$", inheritance))
+        bundle = {
+            "CHEFE_PATTERN": ("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md", "CHEFE_PATTERN_LEARNING_REQUIRED=true"),
+            "TEACHING_GRAMMAR": ("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml", "TEACHING_GRAMMAR_REQUIRED: true"),
+            "SECTOR_ROUTER": ("docs/CONSCIENCIA/MAPA-DO-CEREBRO.md", "SECTOR_ROUTER_REQUIRED=true"),
+            "METACOGNITION": ("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md", "ZERO_SILENT_LEARNING=true"),
+            "SKILL_LIFECYCLE": (".agents/skills/centraldark-operational-method/SKILL.md", "SKILL_NEED_EVALUATED_BEFORE_MATERIAL_ACTION=true"),
+        }
+        flow = re.findall(r'(?m)^      - "([^"]+)"$', self.entry_section(pipeline, "flow", 4))
+        for step in ("HERMES_EXECUTION", "REMEASURE_CURRENT_REALITY",
+                     "RANDOLF_CONTINUITY_LAST_GOOD_STATE_NEXT_CURSOR",
+                     "SELECT_DISCRIMINANT_SKILLS_ON_DEMAND", "REALITY_JUDGE",
+                     "DISTILL_VERIFIED_REUSABLE_SKILL_DELTA_OR_NO_CHANGE"):
+            self.assertIn(step, flow)
+        for entry in entries:
+            for prop, (owner, marker) in bundle.items():
+                self.assertEqual(bindings.get(prop), owner, f"{entry}/{prop}")
+                self.assertIn(marker, (self.repo / owner).read_text(encoding="utf-8"), f"{entry}/{prop}")
+                self.assertIn(f"LOAD_{prop}", flow, f"{entry}/{prop}")
+                self.assertLess(flow.index(f"LOAD_{prop}"), flow.index("HERMES_EXECUTION"))
+            self.assertIn("current_recovery: REMEASURE_CURRENT_REALITY", inheritance)
+            self.assertIn("continuity: RANDOLF_CONTINUITY_LAST_GOOD_STATE_NEXT_CURSOR", inheritance)
+            self.assertLess(flow.index("REMEASURE_CURRENT_REALITY"), flow.index("HERMES_EXECUTION"))
+            self.assertLess(flow.index("RANDOLF_CONTINUITY_LAST_GOOD_STATE_NEXT_CURSOR"), flow.index("HERMES_EXECUTION"))
+            self.assertLess(flow.index("SELECT_DISCRIMINANT_SKILLS_ON_DEMAND"), flow.index("HERMES_EXECUTION"))
+            self.assertLess(flow.index("REALITY_JUDGE"), flow.index("DISTILL_VERIFIED_REUSABLE_SKILL_DELTA_OR_NO_CHANGE"))
+
+    def test_each_entry_inherits_complete_behavioral_bundle(self):
+        self.assert_entry_matrix(self.entry_boot)
+
+    def test_entry_matrix_rejects_missing_property_wrong_owner_or_surface(self):
+        # A fresh surface cannot silently bypass the shared bundle. Mutation
+        # tests exercise the same checker, rather than merely searching markers.
+        for prop in ("CHEFE_PATTERN", "TEACHING_GRAMMAR", "SECTOR_ROUTER", "METACOGNITION", "SKILL_LIFECYCLE"):
+            for mutation in ("remove", "wrong_owner"):
+                altered = re.sub(
+                    rf"(?m)^        {prop}: [^\n]+\n",
+                    "" if mutation == "remove" else f"        {prop}: docs/README.md\n",
+                    self.entry_boot,
+                )
+                with self.subTest(property=prop, mutation=mutation):
+                    with self.assertRaises(AssertionError):
+                        self.assert_entry_matrix(altered)
+        for entry in ("BOT_ENTRY", "SESSION_RESUME", "NEW_TAB", "MODEL_CHANGE", "AGENT_HANDOFF", "VOICE_COMMAND", "CENTRALDARK_MCP_CONTEXT"):
+            with self.subTest(missing_entry=entry), self.assertRaises(AssertionError):
+                self.assert_entry_matrix(self.entry_boot.replace(f"      - {entry}\n", "", 1))
+        for step in ("LOAD_TEACHING_GRAMMAR", "LOAD_SECTOR_ROUTER", "LOAD_METACOGNITION",
+                     "REMEASURE_CURRENT_REALITY", "RANDOLF_CONTINUITY_LAST_GOOD_STATE_NEXT_CURSOR"):
+            with self.subTest(missing_step=step), self.assertRaises(AssertionError):
+                self.assert_entry_matrix(self.entry_boot.replace(f'      - "{step}"\n', ""))
+
+    def test_skill_lifecycle_reuses_loaded_recipe_and_preserves_unknown(self):
+        for marker in ("LOADED_SKILL_REUSED_WHILE_CONTEXT_AND_VERSION_APPLY=true",
+                       "RELOAD_ON_NEED_CONTEXT_OR_VERSION_CHANGE=true",
+                       "POST_ACTION_SKILL_DELTA_REQUIRES_EVIDENCE=true",
+                       "NO_NEW_REUSABLE_DELTA=NO_CHANGE", "UNPROVEN_RECIPE=CANDIDATE",
+                       "PARTIAL_EFFECT_IS_NOT_COMPLETE_RECIPE=true"):
+            self.assertIn(marker, self.method)
+        self.assertIn("VOICE_SKILL_LIFECYCLE_OWNER=.agents/skills/centraldark-operational-method/SKILL.md", self.voice)
+        self.assertIn("UNPROVEN_REPAIR_PROMOTED_AS_COMPLETE_RECIPE: SEMANTIC_FAIL", self.semantic_gate)
 
     def test_boot_keeps_same_response_contract_for_all_models(self):
         self.assertIn("ALL_MODEL_ADAPTERS_INHERIT_RESPONSE_STYLE=true", self.boot)

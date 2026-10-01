@@ -386,6 +386,22 @@ PR_MAE_1562
 
 ## Fixed point desta lembrança
 
+### Delta herdável — skill antes, aprendizado depois
+
+O CHEFE refinou o padrão para `INTENÇÃO → NECESSIDADE → OWNER → SKILL EXISTENTE
+→ EXECUÇÃO → EFEITO → APRENDIZADO REUTILIZÁVEL`. A seleção é sob demanda por
+tarefa/mudança material, não uma criação ou releitura por comando. O contrato
+fica no método operacional; catálogo em `.agents/skills/`; roteamento no
+capability-contract-router. Fontes Hermes locais são reconciliadas antes de
+importação. Sem nova informação, NO_CHANGE; falha útil permanece contraprova;
+receita parcial não ganha status completo.
+
+Receita sanitizada e limites do acesso remoto de hoje:
+`docs/CONSCIENCIA/05-SSH-VPS.md#receita-observada--anydeskopenkylin-30-em-2026-10-01`.
+Imagem e áudio foram recuperados; painel ainda falha. As sete entradas do boot
+herdam explicitamente o bundle e a matriz de contrato detecta omissões. Isso não
+é prova de execução de toda IA nativa da VPS nem alteração dos pesos dos modelos.
+
 ```text
 MEMORY_IS_PROMOTED=true
 EXPIRES=false
