@@ -108,6 +108,37 @@ DRAFT_COMO_TRAVA_TEMPORARIA → anti-padrão
 
 Draft não deve ser usado para obrigar o humano a apertar `Ready for review` quando a máquina já possui autorização e estado suficiente para continuar.
 
+## Extensão provada — branch não é estacionamento de intenção (2026-10-01)
+
+Uma remedição viva encontrou 723 branches remotas no repositório e apenas 4 PRs abertos naquele instante. O inventário histórico já registrava várias branches `SEM PR CONHECIDO`, inclusive nomes de teste/placeholder como `stop-accidental-branches`, `tmp-noop*` e `tmp-placeholder-*`. O número é snapshot temporal, não denominador eterno; o padrão causal é o que fica.
+
+Esse estado confirma a mesma classe de latência já observada com Draft: criar um contêiner Git sem um caminho de fechamento pode retirar o delta do funil ativo sem retirar a intenção humana.
+
+```text
+INTENCAO_AUTORIZADA
++ NEW_BRANCH_COMO_REFLEXO
++ SEM_PR_ATIVO_OU_LIFECYCLE_EXPLICITO
+= RISCO_DE_DELTA_ESTACIONADO
+```
+
+Regra absorvida no owner operacional existente:
+
+```text
+NEW_PR_DEFAULT=false
+NEW_REMOTE_BRANCH_DEFAULT=false
+BRANCH_IS_TRANSPORT_NOT_INTENT=true
+NO_BRANCH_PARKING_LOT=true
+FIND_MATCHING_CHILD_BEFORE_NEW_BRANCH=true
+DIRECT_MAIN_WHEN_ALREADY_AUTHORIZED_AND_APPLICABLE=true
+REMOTE_BRANCH_ONLY_WHEN=DIRECT_MAIN_NOT_APPLICABLE|PR_REQUIRED|REMOTE_CI_REQUIRED|CROSS_AGENT_HANDOFF_REQUIRED|ISOLATION_REQUIRED
+EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true
+EPHEMERAL_BRANCH_DELETE_AFTER_MERGE=true
+PERSISTENT_BRANCH_REQUIRES_EXPLICIT_OWNER_AND_PURPOSE=true
+```
+
+Isso não autoriza apagar branches históricas em massa. Branch antiga pode conter delta único; antes de excluir, o owner `.github/workflows/varredura-branches-orfas.yml` deve comparar conteúdo contra `main` e a branch só pode virar `SAFE_TO_REMOVE` quando a contraprova demonstrar ausência de ouro não convergido.
+
+Draft e branch seguem a mesma disciplina: **estado intermediário só existe quando carrega causa material e próximo estado determinístico**. Caso contrário, a máquina continua a intenção pelo caminho já autorizado em vez de estacioná-la.
 ## Receipt / fila
 
 Receipt continua preso a integridade, repositório e estado validado. A janela temporal deve ser coerente com a latência operacional normal:
