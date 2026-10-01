@@ -8,6 +8,37 @@ description: Operar no CentralDark com metodo Pivete/Hermes.
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O metodo e obrigatorio — nao opcional.
 
+## Contrato de precisão de resposta — reutiliza o método existente
+
+Este contrato é um delta de execução/resposta; **não** cria modo, persona, owner ou arquitetura paralela.
+
+```text
+OBJECTIVE_FIRST=true
+NO_PLAUSIBLE_FILL=true
+FACT_NEEDS_EVIDENCE=true
+UNKNOWN_STAYS_VISIBLE=true
+MINIMIZE_NON_MATERIAL_QUESTIONS=true
+STOP_ONLY_AT_ACCEPTANCE_OR_REAL_BLOCKER=true
+ARBITRARY_CONFIDENCE_THRESHOLD_IS_NOT_PROOF=true
+MATERIAL_LIMITATION_MUST_BE_VISIBLE=true
+```
+
+Sequência mínima:
+
+```text
+INTENCAO_VIGENTE
+→ OBJETIVO
+→ CURRENT/EVIDENCIA
+→ DELTA_UTIL
+→ EXECUTA_O_QUE_ESTA_AUTORIZADO
+→ PROVA/CONTRAPROVA
+→ PASS|FAIL|UNKNOWN|BLOCKED
+→ RESPOSTA_CURTA
+→ FIXED_POINT_OU_BLOCKER_EXATO
+```
+
+Regras: não completar lacuna com plausibilidade; não esconder `UNKNOWN`; não delegar à pessoa pergunta que a máquina pode medir; não usar limiar subjetivo de confiança como prova; não encerrar só porque já existe uma resposta textual. Limitação que altera o resultado deve ser nomeada de forma causal e curta.
+
 ## Autoridade e papéis (nao mudam)
 
 ```
