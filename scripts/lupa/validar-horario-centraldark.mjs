@@ -137,13 +137,20 @@ if (!fs.existsSync(seloFull)) {
   const required = [
     ['pt-BR', 'SELO_PTBR_LOCALE_MISSING'],
     ['America/Sao_Paulo', 'SELO_BRASILIA_TZ_MISSING'],
-    [' BRT', 'SELO_BRT_LABEL_MISSING'],
     ['Horário de Brasília', 'SELO_HUMAN_TIME_LABEL_MISSING'],
     ['HUD_MEASURED_AT_BRASILIA', 'SELO_HUD_BRASILIA_FIELD_MISSING'],
     ['HUD_TIMESTAMP_ISO_UTC', 'SELO_MACHINE_UTC_FIELD_MISSING'],
   ];
   for (const [token, rule] of required) {
     if (!selo.includes(token)) findings.push({ file: seloPath, rule, structural: true });
+  }
+  const requiredPatterns = [
+    [/const\s+ts\s*=\s*[^\n]*BRT[^\n]*;/, 'SELO_BRT_LABEL_MISSING'],
+    [/const\s+tsIso\s*=\s*now\.toISOString\(\)\s*;/, 'SELO_MACHINE_UTC_FORMATTER_MISSING'],
+    [/formatToParts\(now\)/, 'SELO_EXPLICIT_BRASILIA_PARTS_FORMAT_MISSING'],
+  ];
+  for (const [pattern, rule] of requiredPatterns) {
+    if (!pattern.test(selo)) findings.push({ file: seloPath, rule, structural: true });
   }
 }
 
