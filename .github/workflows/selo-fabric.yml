@@ -1,4 +1,5 @@
 name: 🏅 Selo Fabric — selo universal de eventos
+# Contrato de tempo humano: pt-BR / America/Sao_Paulo; ISO UTC fica apenas para auditoria de máquina.
 
 on:
   push:
@@ -106,7 +107,18 @@ jobs:
             const runId = context.runId;
             const runAttempt = process.env.GITHUB_RUN_ATTEMPT || '1';
             const actor = context.actor || 'UNKNOWN';
-            const ts = new Date().toISOString();
+            const now = new Date();
+            const ts = new Intl.DateTimeFormat('pt-BR', {
+              timeZone: 'America/Sao_Paulo',
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(now).replace(',', '');
+            const tsIso = now.toISOString();
 
             // Derive SHA from the event's actual subject, not context.sha
             // (context.sha is the default branch HEAD for workflow_run/check_suite)
@@ -316,7 +328,7 @@ jobs:
                 `- **Detalhe:** ${detalhe || '-'}`,
                 `- **Actor:** \`@${actor}\``,
                 `- **Run:** \`${runId}\` attempt=\`${runAttempt}\``,
-                `- **UTC:** \`${ts}\``,
+                `- **Horário de Brasília:** \`${ts}\``,
                 '',
                 '> EVENTO != PASS · COMMIT != DEPLOY · CI_PASS_ONLY != RUNTIME_PASS · REALIDADE JULGA',
               ].join('\n');
@@ -363,7 +375,9 @@ jobs:
                   '',
                   '~~~text',
                   'HUD_ROLE=DERIVED_CURRENT_PROJECTION_NOT_AUTHORITY',
-                  `HUD_MEASURED_AT=${ts}`,
+                  `HUD_MEASURED_AT_BRASILIA=${ts}`,
+                  'HUD_TIMEZONE=America/Sao_Paulo',
+                  `HUD_TIMESTAMP_ISO_UTC=${tsIso}`,
                   'HUD_SENSOR=GITHUB_API_VIA_SELO_FABRIC',
                   `HUD_SOURCE_FINGERPRINT=${sourceFingerprint}`,
                   `MAIN=${mainSha}`,
