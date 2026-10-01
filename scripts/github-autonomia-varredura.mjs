@@ -3,6 +3,7 @@
  * Varredura eventual da promoção autônoma.
  *
  * Um único motor canônico:
+ * - normalize: tira de Draft PR confiável com intenção já autorizada, salvo KEEP_DRAFT explícito;
  * - judge: read-only, produz recibo SHA-256;
  * - promote: materializa/verifica o selo canônico, revalida HEAD/base/intenção e promove.
  *
@@ -23,9 +24,10 @@ import { spawnSync } from "node:child_process";
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { DEFAULT_REQUIRED_WORKFLOWS, authorizationFor, verifySealedReceipt } from "./github-autonomia-promocao.mjs";
+import { DEFAULT_REQUIRED_WORKFLOWS, PR_MOTHER_NUMBER, authorizationFor, verifySealedReceipt } from "./github-autonomia-promocao.mjs";
 
 const API = "https://api.github.com";
+const GRAPHQL_API = "https://api.github.com/graphql";
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const ENGINE = join(ROOT, "scripts", "github-autonomia-promocao.mjs");
 export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
@@ -159,6 +161,40 @@ export function eligibleSummary(pr, repository, trustedAuthors = ["segredounlock
   );
 }
 
+export function draftReadyDecision(pr, repository, trustedAuthors = ["segredounlock"]) {
+  const trusted = trustedAuthors.map((item) => item.toLowerCase());
+  if (pr?.state !== "open" || pr?.draft !== true) {
+    return { action: "NONE", reason: "NOT_OPEN_DRAFT" };
+  }
+  if (Number(pr?.number) === PR_MOTHER_NUMBER) {
+    return { action: "KEEP_DRAFT", reason: "PR_MOTHER_PROTECTED" };
+  }
+
+  const sameRepository = pr?.head?.repo?.full_name === repository;
+  const trustedAuthor = trusted.includes(String(pr?.user?.login || "").toLowerCase());
+  if (pr?.base?.ref !== "main" || !sameRepository || !trustedAuthor) {
+    return { action: "KEEP_DRAFT", reason: "UNTRUSTED_OR_OUT_OF_SCOPE" };
+  }
+
+  const labels = labelNames(pr);
+  const explicitKeepDraft = labels.has("keep-draft")
+    || labels.has("do-not-merge")
+    || /(?:^|\n)\s*KEEP_DRAFT\s*[:=]\s*(?:true|1|yes)\s*$/im.test(String(pr?.body || ""));
+  if (explicitKeepDraft) {
+    return { action: "KEEP_DRAFT", reason: "EXPLICIT_KEEP_DRAFT" };
+  }
+
+  const authorized = markerAuthorized(pr) || promotionSealReceipt(pr).valid;
+  if (!authorized) {
+    return { action: "KEEP_DRAFT", reason: "AUTHORIZATION_MISSING" };
+  }
+
+  return {
+    action: "MARK_READY",
+    reason: "AUTHORIZED_INTENT_DRAFT_IS_NOT_SEMAPHORE",
+  };
+}
+
 export function shouldMaterializeAuthority(pr, repository, trustedAuthors = ["segredounlock"]) {
   const seal = promotionSealState(pr, repository, trustedAuthors);
   return Boolean(seal.eligible && seal.missingLabels.includes(CANONICAL_AUTHORITY_LABEL));
@@ -184,6 +220,28 @@ async function api(token, method, path, body) {
   }
   if (!response.ok) throw new Error(`GITHUB_${method}_${path}_${response.status}:${String(data.message || "request failed").slice(0, 500)}`);
   return data;
+}
+
+async function graphql(token, query, variables = {}) {
+  const response = await fetch(GRAPHQL_API, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "User-Agent": "centraldark-autonomia-varredura/3.3",
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+  const data = await response.json().catch(() => ({}));
+  const errors = Array.isArray(data?.errors) ? data.errors : [];
+  if (!response.ok || errors.length) {
+    const detail = errors.map((error) => error?.message).filter(Boolean).join(" | ")
+      || data?.message
+      || "request failed";
+    throw new Error(`GITHUB_GRAPHQL_${response.status}:${String(detail).slice(0, 500)}`);
+  }
+  return data?.data || {};
 }
 
 async function upsertDiagnostic(token, repository, number, code, detail) {
@@ -301,6 +359,58 @@ function config() {
   const sweepDir = process.env.BOT_SWEEP_DIR || join(process.env.RUNNER_TEMP || "/tmp", "centraldark-autonomia");
   if (!repository.includes("/")) throw new Error("GITHUB_REPOSITORY_INVALID");
   return { repository, trustedAuthors, sweepDir };
+}
+
+async function normalizeDraftSweep() {
+  const { repository, trustedAuthors } = config();
+  const token = process.env.NORMALIZER_TOKEN || process.env.GITHUB_TOKEN || "";
+  if (!token) throw new Error("NORMALIZER_TOKEN_MISSING");
+
+  const pulls = await api(token, "GET", `/repos/${repository}/pulls?state=open&per_page=100`);
+  const decisions = pulls
+    .map((pr) => ({ pr, decision: draftReadyDecision(pr, repository, trustedAuthors) }))
+    .filter(({ decision }) => decision.action !== "NONE");
+
+  const failures = [];
+  const normalized = [];
+  const kept = [];
+
+  for (const { pr, decision } of decisions) {
+    if (decision.action !== "MARK_READY") {
+      kept.push(`${pr.number}:${decision.reason}`);
+      continue;
+    }
+    if (!pr?.node_id) {
+      failures.push(`${pr.number}:NODE_ID_MISSING`);
+      continue;
+    }
+
+    try {
+      await graphql(
+        token,
+        `mutation MarkReady($id: ID!) {
+          markPullRequestReadyForReview(input: { pullRequestId: $id }) {
+            pullRequest { number isDraft }
+          }
+        }`,
+        { id: pr.node_id },
+      );
+      const readback = await api(token, "GET", `/repos/${repository}/pulls/${pr.number}`);
+      if (readback?.draft === true) {
+        failures.push(`${pr.number}:READY_READBACK_STILL_DRAFT`);
+        continue;
+      }
+      normalized.push(pr.number);
+      console.log(`PR=${pr.number} DRAFT_NORMALIZATION=MARK_READY REASON=${decision.reason}`);
+    } catch (error) {
+      failures.push(`${pr.number}:${classifyFailure(error?.message)}`);
+    }
+  }
+
+  console.log(`AUTONOMIA_DRAFT_NORMALIZED=${normalized.join(",") || "none"}`);
+  console.log(`AUTONOMIA_DRAFT_KEPT=${kept.join(",") || "none"}`);
+  console.log(`AUTONOMIA_DRAFT_NORMALIZE_FAILURES=${failures.join(",") || "none"}`);
+  if (failures.length) throw new Error(`DRAFT_NORMALIZE_FAILED:${failures.join(",")}`);
 }
 
 async function judgeSweep() {
@@ -470,6 +580,7 @@ export async function guardSweep(sweepDir) {
 
 export async function main(argv = process.argv.slice(2)) {
   const mode = argv[0] || "";
+  if (mode === "normalize") return normalizeDraftSweep();
   if (mode === "judge") return judgeSweep();
   if (mode === "guard") return guardSweep(config().sweepDir);
   if (mode === "promote") return promoteSweep();
