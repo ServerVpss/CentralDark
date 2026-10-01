@@ -681,6 +681,10 @@ if (!contract) {
   if (tempCleanupTool !== "scripts/centraldark/ephemeral-workspace.mjs") errors.push("CONTRATO_TEMP_POLICY_SEM_FERRAMENTA_EXECUTAVEL");
   if (tempPolicy.cleanup?.marker_file !== ".centraldark-ephemeral.json") errors.push("CONTRATO_TEMP_POLICY_MARKER_FILE_AUSENTE");
   if (tempPolicy.cleanup?.cleanup_readback_required !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_READBACK_FINAL");
+  if (tempPolicy.cleanup?.fixed_point_requires_ephemeral_cleanup !== true) errors.push("CONTRATO_FIXED_POINT_NAO_EXIGE_LIMPEZA_EFEMERA");
+  if (tempPolicy.cleanup?.temporary_workspace_must_use_canonical_creator !== true) errors.push("CONTRATO_TEMP_NAO_EXIGE_CRIADOR_CANONICO");
+  if (tempPolicy.cleanup?.unmarked_temp_workspace !== "CONTRACT_VIOLATION") errors.push("CONTRATO_TEMP_SEM_PUNICAO_PARA_NAO_MARCADO");
+  if (tempPolicy.cleanup?.mission_end_requires_temp_inventory !== true) errors.push("CONTRATO_FIM_MISSAO_SEM_INVENTARIO_TEMP");
   if (tempPolicy.cleanup?.blind_delete_without_marker !== "FORBIDDEN") errors.push("CONTRATO_TEMP_POLICY_PERMITE_DELETE_CEGO");
   if (tempPolicy.cleanup?.self_test_required_by_gate !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_SELF_TEST_GATE");
   const tempCleanupToolPath = typeof tempCleanupTool === "string" ? join(ROOT, tempCleanupTool) : "";
