@@ -1,4 +1,5 @@
 import process from 'node:process';
+import { formatBrasilia } from '../central-horario/node.mjs';
 
 async function sendTelegramMessage(chatId, text) {
   const url = 'https://connector-gateway.lovable.dev/telegram/sendMessage';
@@ -33,7 +34,7 @@ async function main() {
   const adminChatId = process.env.TELEGRAM_ADMIN_CHAT_ID || '1901426549';
   const statusChannelId = process.env.TELEGRAM_STATUS_CHANNEL_ID || '-1003669176367';
 
-  const now = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+  const now = formatBrasilia();
 
   const adminMsg = `
 <b>🚀 Arsenal Council — Rollout Fase 2+3</b>
@@ -44,7 +45,7 @@ async function main() {
 • tema Esmeralda pronto (esperando docker restart)
 • aprendizados 266/267/268 gravados
 
-<i>Gerado em: ${now} (BRT)</i>
+<i>Gerado em: ${now}</i>
 `.trim();
 
   const channelMsg = `✅ Arsenal Council fase 2+3 fechada — verbos OK, tools OK, Esmeralda pronto (falta reload WebUI)`;

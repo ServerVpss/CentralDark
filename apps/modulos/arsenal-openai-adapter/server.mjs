@@ -7,6 +7,7 @@ import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { postarComoBot, postarPergunta } from './telegram-grupo.mjs';
 import { authenticate, shouldBlock, audit, newRequestId, enforceMode } from './auth-audit.mjs';
+import { formatBrasilia } from '../../../central-horario/node.mjs';
 
 const PORT = process.env.PORT || 8090;
 const AUTH_KEY = process.env.ARSENAL_ADAPTER_KEY || 'arsenal-key-local';
@@ -187,7 +188,7 @@ ${pendencias}`;
   ]);
   postarComoBot('hermes', veredito, { nome: `🤖 HERMES · veredito` });
 
-  return `🤖 **HERMES · proposta autônoma**\n\n**Quando:** ${new Date().toLocaleString('pt-BR')}\n**Pergunta:** ${pergunta}\n\n---\n\n### 🅰️ ${regras.modelos.voz1_pro}\n${propostaA}\n\n### 🅱️ ${regras.modelos.voz2_gpt}\n${propostaB}\n\n---\n\n## ⚖️ Veredito Hermes (${regras.modelos.juiz})\n\n${veredito}`;
+  return `🤖 **HERMES · proposta autônoma**\n\n**Quando:** ${formatBrasilia()}\n**Pergunta:** ${pergunta}\n\n---\n\n### 🅰️ ${regras.modelos.voz1_pro}\n${propostaA}\n\n### 🅱️ ${regras.modelos.voz2_gpt}\n${propostaB}\n\n---\n\n## ⚖️ Veredito Hermes (${regras.modelos.juiz})\n\n${veredito}`;
 }
 
 async function salvarSaida(modo, messages, resposta) {
@@ -202,7 +203,7 @@ async function salvarSaida(modo, messages, resposta) {
     const slug = pergunta.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
     const prefix = isHermes ? 'hermes-webui' : `${modo}-webui`;
     await writeFile(join(baseDir, `${ts}-${prefix}-${slug}.md`),
-      `# ${modo} · WebUI\n\n**Quando:** ${new Date().toLocaleString('pt-BR')}\n**Origem:** ui.centralldark.com\n\n## Pergunta\n${pergunta}\n\n## Resposta\n\n${resposta}\n`);
+      `# ${modo} · WebUI\n\n**Quando:** ${formatBrasilia()}\n**Origem:** ui.centralldark.com\n\n## Pergunta\n${pergunta}\n\n## Resposta\n\n${resposta}\n`);
   } catch (e) { console.error('salvar:', e.message); }
 }
 
