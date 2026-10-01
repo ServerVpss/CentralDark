@@ -203,7 +203,7 @@ async function salvarSaida(modo, messages, resposta) {
     const slug = pergunta.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
     const prefix = isHermes ? 'hermes-webui' : `${modo}-webui`;
     await writeFile(join(baseDir, `${ts}-${prefix}-${slug}.md`),
-      `# ${modo} · WebUI\n\n**Quando:** ${new Date().toLocaleString('pt-BR')}\n**Origem:** ui.centralldark.com\n\n## Pergunta\n${pergunta}\n\n## Resposta\n\n${resposta}\n`);
+      `# ${modo} · WebUI\n\n**Quando:** ${formatBrasilia()}\n**Origem:** ui.centralldark.com\n\n## Pergunta\n${pergunta}\n\n## Resposta\n\n${resposta}\n`);
   } catch (e) { console.error('salvar:', e.message); }
 }
 

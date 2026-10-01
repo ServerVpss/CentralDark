@@ -45,7 +45,7 @@ async function main() {
 • tema Esmeralda pronto (esperando docker restart)
 • aprendizados 266/267/268 gravados
 
-<i>Gerado em: ${now} (BRT)</i>
+<i>Gerado em: ${now}</i>
 `.trim();
 
   const channelMsg = `✅ Arsenal Council fase 2+3 fechada — verbos OK, tools OK, Esmeralda pronto (falta reload WebUI)`;

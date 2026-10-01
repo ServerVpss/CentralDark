@@ -233,7 +233,7 @@ function shouldFailover(results) {
 
 // ============ ALARMES ============
 async function fireAlarms(trigger, reason, details = {}) {
-  const msg = `🚨 CENTRALDARK FAILOVER\nTrigger: ${trigger}\nReason: ${reason}\nTime: ${new Date().toISOString()}\nDetails: ${JSON.stringify(details, null, 2)}`;
+  const msg = `🚨 CENTRALDARK FAILOVER\nTrigger: ${trigger}\nReason: ${reason}\nTime: ${formatBrasilia()}\nDetails: ${JSON.stringify(details, null, 2)}`;
 
   // Telegram
   if (CONFIG.alarms.telegram.enabled) {
