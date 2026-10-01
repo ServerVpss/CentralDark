@@ -2378,3 +2378,57 @@ INTENÇÃO
 ```
 
 Falha de método: reduzir esse padrão a "usar IA", a uma ferramenta específica, ao repo atual ou ao texto literal do CHEFE. A resposta precisa integrar a consequência operacional do que ele ensinou.
+
+
+## Roteamento por setor antes da ferramenta
+
+O método deve aprender **onde cada capacidade mora** e usar o mapa canônico antes de escolher ferramenta, host ou superfície.
+
+```text
+SECTOR_ROUTER_REQUIRED=true
+SECTOR_ROUTER_OWNER=docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+ROUTE_INTENT_TO_SECTOR_BEFORE_TOOL=true
+ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true
+SECTOR_OWNER_UNKNOWN_STAYS_UNKNOWN=true
+ONE_PATH_FAILURE_IS_NOT_SYSTEM_FAILURE=true
+MULTI_PATH_FAILOVER_BEFORE_GLOBAL_BLOCKED=true
+```
+
+Algoritmo:
+
+```text
+INTENÇÃO
+→ SETOR
+→ OWNER CANÔNICO
+→ SUPERFÍCIE/RUNTIME ATUAL
+→ ROTA VIVA
+→ FALLBACK DO MESMO SETOR
+→ MENOR DELTA
+→ PROVA
+```
+
+Exemplos de semântica obrigatória:
+
+```text
+"quero ver e mexer na tela"
+→ setor REMOTE_INTERACTIVE_GUI
+→ AnyDesk se vivo
+→ fallback: VNC/Rescue para visual fora de banda
+→ SSH/Tailscale podem reparar a GUI, mas não são a própria GUI
+
+"entra na VPS e corrige serviço"
+→ setor CONTROL_PLANE
+→ SSH/Tailscale SSH
+→ AnyDesk é fallback somente se a GUI estiver viva e puder reparar o shell
+
+"máquina sumiu"
+→ NÃO concluir MACHINE_DOWN por falha de uma superfície
+→ testar PRIVATE_SPINE / CONTROL_PLANE / GUI / OUT_OF_BAND conforme material
+
+"onde fica X?"
+→ consultar MAPA-DO-CEREBRO
+→ responder owner + superfície + estado, separando canônico de runtime
+```
+
+O mapa não congela runtime. IP, PID, sessão, porta e serviço observados entram como receipt invalidável; owner/capability estáveis permanecem no mapa.
+
