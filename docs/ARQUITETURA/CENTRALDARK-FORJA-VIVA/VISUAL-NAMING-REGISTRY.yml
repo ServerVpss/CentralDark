@@ -10,6 +10,13 @@ rules:
   visual_name_is_proof: false
   human_facing_version_suffix_forbidden: true
   one_visual_identity_owner: true
+  capability_base_icon_is_global: true
+  visual_surface_mode: HYBRID
+  same_capability_same_base_icon_across_internal_surfaces: true
+  surface_may_change: [badge, status, accent, action]
+  surface_must_not_replace_base_icon_for_same_capability: true
+  browser_or_external_favicon_is_canonical_identity: false
+  browser_or_external_favicon_semantics: THIRD_PARTY_PROJECTION_ONLY
 
 entries:
   - id: FORJA_VIVA_ICON
