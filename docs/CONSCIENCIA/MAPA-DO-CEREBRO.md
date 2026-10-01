@@ -719,3 +719,7 @@ SECTOR_OWNER_UNKNOWN
 ### Plano do cockpit recuperável
 
 Owner vigente: [docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md](../ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md). Recuperar a seção **Plano vigente recuperável — 2026-10-01** antes de integrar AionUi/AionCore. PLAN_STATUS=CANONICAL_DESIGN_BINDING_PENDING; NEXT_CURSOR=S0_INVENTORY_AND_OWNER_BINDING. A tabela de setores localiza capacidades; não comprova bindings em runtime.
+
+### Casa como cliente da IA na VPS — CURRENT 2026-10-01
+
+No momento a Casa consome a API; a IA nativa executa na VPS. Rotas, imagem, diagrama e teste discriminante: [VPS-IA-NATIVA-ROTAS.md](VPS-IA-NATIVA-ROTAS.md). Pontuação, embedding e TTS com inferência PASS; conversa KylinBot PASS após reutilização de OAuth Codex da Casa; MCP instalado ainda não é sessão provada. Papel futuro Casa/GPU permanece plano, não obrigação atual.
