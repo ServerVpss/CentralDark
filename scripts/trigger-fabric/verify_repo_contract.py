@@ -281,6 +281,25 @@ check('CENTRALDARK_AI_BOOT.yaml',[
  'writer: "UNKNOWN_UNTIL_WRITER_SCOPE_MEASURED"',
  'frequency: "ADAPTIVE"',
 ], classification='LIVE_BOOT_PAYLOAD_CONTRACT')
+check('central-horario/README.md',[
+ 'ONE_TIME_SYSTEM_ONLY=true',
+ 'CANONICAL_TIME_OWNER=central-horario',
+ 'HUMAN_TIME_PRIMARY_DISPLAY=DD/MM/AAAA HH:mm:ss BRT',
+ 'HUMAN_TIME_PRIMARY_TIMEZONE=America/Sao_Paulo',
+ 'HUMAN_TIME_FORMATTER_OUTSIDE_CANONICAL_OWNER=CONTRACT_VIOLATION',
+ 'ISO_UTC_AS_PRIMARY_HUMAN_DISPLAY=FORBIDDEN',
+ 'TECHNICAL_UTC_MAY_EXIST_AS_SECONDARY_MACHINE_FIELD=true',
+ 'GLOBAL_TIME_SCAN_DELTA_RATCHET_REQUIRED=true',
+ 'DOCUMENTED_TIME_RULE_WITH_BROKEN_GATE=FAIL',
+], classification='CANONICAL_HUMAN_TIME_GLOBAL_CONTRACT')
+check('scripts/lupa/validar-horario-centraldark.mjs',[
+ "mode: 'GLOBAL_SCAN_DELTA_RATCHET'",
+ "canonical_owner: 'central-horario'",
+ "human_display_format: 'DD/MM/AAAA HH:mm:ss BRT'",
+ 'HUMAN_DATE_FORMATTER_OUTSIDE_CANONICAL_OWNER',
+ 'INTL_DATE_FORMATTER_OUTSIDE_CANONICAL_OWNER',
+ 'CENTRALDARK_TIME_GATE=FAIL',
+], classification='CANONICAL_HUMAN_TIME_EXECUTABLE_RATCHET')
 check_absent('CENTRALDARK_AI_BOOT.yaml',[
  r'(?mi)^\s*observed_evidence:\s*".*\bbranch=',
  r'(?mi)^\s*observed_evidence:\s*".*\bHEAD=[0-9a-f]{7,40}\b',
