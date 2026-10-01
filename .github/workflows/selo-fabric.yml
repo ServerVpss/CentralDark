@@ -375,6 +375,8 @@ jobs:
                   '~~~text',
                   'HUD_ROLE=DERIVED_CURRENT_PROJECTION_NOT_AUTHORITY',
                   `HUD_MEASURED_AT_BRASILIA=${ts}`,
+                  'HUD_TIMEZONE=America/Sao_Paulo',
+                  `HUD_TIMESTAMP_ISO_UTC=${tsIso}`,
                   'HUD_SENSOR=GITHUB_API_VIA_SELO_FABRIC',
                   `HUD_SOURCE_FINGERPRINT=${sourceFingerprint}`,
                   `MAIN=${mainSha}`,
