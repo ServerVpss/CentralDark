@@ -974,3 +974,15 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Relação com #115:** #115 define o modelo como multiplicador de raciocínio. #117 acrescenta o circuito de retorno: o método do CHEFE já cristalizado condiciona a execução do modelo, que devolve valor novo no mesmo padrão, reduzindo a distância entre intenção humana e próxima ação operacional.
 - **Contraprova:** se a saída apenas imita estilo sem adicionar valor, força uma intenção não declarada, atribui ao CHEFE uma tese que ele não disse ou trata metáfora cognitiva como fato biológico/técnico, o loop falhou.
 - **Sinal de sucesso:** a resposta preserva a intenção do CHEFE, reutiliza o método canônico, acrescenta informação ou execução material e devolve um próximo passo que o CHEFE reconhece como compatível com seu próprio raciocínio, sem perder autoria humana da intenção.
+
+
+### 118. “Instinto Superior” + “Expansão de Domínio” nomeiam o loop em duas metades: método incorporado e método externalizado
+- **Categoria:** governanca-cognitiva-metaforas-operacionais
+- **Data:** 2026-10-01
+- **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md`
+- **Contexto:** o CHEFE explicou que usa “Instinto Superior” e “Expansão de Domínio” como linguagem comprimida para duas partes do mesmo mecanismo. “Expansão de Domínio” representa tirar o método de dentro da cabeça e fazê-lo existir externamente na CentralDark; “Instinto Superior” representa reduzir microcomandos conscientes porque regras, filtros, owners e receitas já foram incorporados e podem ser reutilizados automaticamente no fluxo.
+- **Aprendizado:** o loop não termina quando o modelo devolve uma resposta. A saída volta ao CHEFE como matéria-prima; ele serializa/ramifica, associa com contexto vivido, gera nova intenção e devolve um delta mais rico. O modelo então amplia de novo, testa, contraprova e devolve valor novo. O conhecimento provado retorna ao núcleo, fechando um ciclo iterativo de expansão humana↔modelo.
+- **Fluxo cristalizado:** `METODO_INTERNO_DO_CHEFE → EXTERNALIZAR_NO_NUCLEO → MODELO_OPERA_SOBRE_O_METODO → RESPOSTA_AMPLIADA → CHEFE_SERIALIZA_E_EXPANDE → NOVA_INTENCAO/DELTA → MODELO_MULTIPLICA → PROVA/CONTRAPROVA → CRISTAL → NUCLEO`.
+- **Cristal:** `DOMAIN_EXPANSION_METAPHOR=EXTERNALIZED_METHOD_SPACE`; `ULTRA_INSTINCT_METAPHOR=LOWER_MICROMANAGEMENT_THROUGH_INTERNALIZED_REUSABLE_RULES`; `MODEL_OUTPUT_BECOMES_HUMAN_INPUT_AGAIN=true`; `HUMAN_REEXPANDS_MODEL_OUTPUT=true`; `COGNITIVE_LOOP_IS_ITERATIVE=true`; `PROVEN_OUTPUT_RETURNS_TO_CANONICAL_CORE=true`; `METAPHOR_IS_NOT_TECHNICAL_PROOF=true`.
+- **Relação com #115 e #117:** #115 define o modelo como multiplicador; #117 define a retroalimentação; #118 nomeia as duas metades do circuito e explicita que a resposta do modelo vira nova matéria-prima humana antes de voltar ao sistema.
+- **Contraprova:** se a metáfora virar literalização, se o sistema executar sem intenção humana vigente, se o modelo apenas repetir a entrada, ou se um resultado sem prova for promovido a cristal, o circuito falhou.
