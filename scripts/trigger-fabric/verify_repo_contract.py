@@ -739,6 +739,9 @@ check('.github/workflows/pr-update-branch-deterministic.yml',[
  'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true',
  'HYBRID_MODE_PENDING_VPS_PROOF=true',
  'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true',
+ 'Encaminhar conflito ao resolvedor canônico existente',
+ "event_type: 'centraldark_dependabot_reconcile'",
+ 'owner=scripts/dependabot/resolve-conflicts.sh',
 ], classification='UPDATE_BRANCH_RUNNER_LOCK_ENFORCED')
 
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',[
