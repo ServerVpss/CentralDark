@@ -1,0 +1,1412 @@
+{
+  "schema": "centraldark.learning-neurolink-lineage.v1",
+  "status": "CANONICAL_DERIVED_INDEX",
+  "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+  "source_blob_sha": "442a6d3286b7d59c7e883a792f21d566a5dd11cb",
+  "generated_from_main": "12f155abce9a9635d401908d384cb443c78b0a04",
+  "semantics": {
+    "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
+    "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
+    "graph_edge": "CONTINUITY_NOT_CAUSAL_PROOF",
+    "legacy_numbers": "PRESERVED_NOT_RENUMBERED",
+    "missing_legacy_numbers": "RECORDED_NOT_INVENTED"
+  },
+  "genesis": {
+    "uid": "L000",
+    "legacy_learning_number": 0,
+    "title": "Conhecimento só existe se está no repo ou no Mega Painel",
+    "source_path": "docs/RELATORIOS/notion-sync/2026-07-03T17-29-45.md",
+    "prev_uid": null,
+    "next_uid": "L001",
+    "relation_type": "HISTORICAL_GENESIS"
+  },
+  "audit": {
+    "learning_sections": 120,
+    "highest_legacy_learning_number": 121,
+    "duplicate_legacy_numbers": [
+      {
+        "legacy_learning_number": 16,
+        "count": 2,
+        "uids": [
+          "L016A",
+          "L016B"
+        ]
+      },
+      {
+        "legacy_learning_number": 50,
+        "count": 2,
+        "uids": [
+          "L050A",
+          "L050B"
+        ]
+      },
+      {
+        "legacy_learning_number": 84,
+        "count": 2,
+        "uids": [
+          "L084A",
+          "L084B"
+        ]
+      },
+      {
+        "legacy_learning_number": 85,
+        "count": 2,
+        "uids": [
+          "L085A",
+          "L085B"
+        ]
+      },
+      {
+        "legacy_learning_number": 105,
+        "count": 2,
+        "uids": [
+          "L105A",
+          "L105B"
+        ]
+      },
+      {
+        "legacy_learning_number": 110,
+        "count": 2,
+        "uids": [
+          "L110A",
+          "L110B"
+        ]
+      }
+    ],
+    "missing_legacy_numbers": [
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+    ],
+    "strict_cognitive_sequence": {
+      "start": 115,
+      "end": 121
+    }
+  },
+  "nodes": [
+    {
+      "uid": "L001",
+      "legacy_learning_number": 1,
+      "legacy_occurrence": 1,
+      "title": "Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo",
+      "document_order": 1,
+      "prev_uid": "L000",
+      "next_uid": "L002",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L002",
+      "legacy_learning_number": 2,
+      "legacy_occurrence": 1,
+      "title": "git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone",
+      "document_order": 2,
+      "prev_uid": "L001",
+      "next_uid": "L003",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L003",
+      "legacy_learning_number": 3,
+      "legacy_occurrence": 1,
+      "title": "Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída",
+      "document_order": 3,
+      "prev_uid": "L002",
+      "next_uid": "L004",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L004",
+      "legacy_learning_number": 4,
+      "legacy_occurrence": 1,
+      "title": "Auditoria não vale sem HEAD_SHA declarado: 4 escopos, 3 lacunas falsas no PR #410",
+      "document_order": 4,
+      "prev_uid": "L003",
+      "next_uid": "L005",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L005",
+      "legacy_learning_number": 5,
+      "legacy_occurrence": 1,
+      "title": "Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou",
+      "document_order": 5,
+      "prev_uid": "L004",
+      "next_uid": "L006",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L006",
+      "legacy_learning_number": 6,
+      "legacy_occurrence": 1,
+      "title": "A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa",
+      "document_order": 6,
+      "prev_uid": "L005",
+      "next_uid": "L007",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L007",
+      "legacy_learning_number": 7,
+      "legacy_occurrence": 1,
+      "title": "github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot",
+      "document_order": 7,
+      "prev_uid": "L006",
+      "next_uid": "L008",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L008",
+      "legacy_learning_number": 8,
+      "legacy_occurrence": 1,
+      "title": "Nunca gerar -v2/-v3: refinar o arquivo que já existe",
+      "document_order": 8,
+      "prev_uid": "L007",
+      "next_uid": "L009",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L009",
+      "legacy_learning_number": 9,
+      "legacy_occurrence": 1,
+      "title": "Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente",
+      "document_order": 9,
+      "prev_uid": "L008",
+      "next_uid": "L010",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L010",
+      "legacy_learning_number": 10,
+      "legacy_occurrence": 1,
+      "title": "Reconferir o blob na hora de publicar, não só na hora de auditar",
+      "document_order": 10,
+      "prev_uid": "L009",
+      "next_uid": "L011",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L011",
+      "legacy_learning_number": 11,
+      "legacy_occurrence": 1,
+      "title": "Hash validado por regex não prova que o artefato existe",
+      "document_order": 11,
+      "prev_uid": "L010",
+      "next_uid": "L012",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L012",
+      "legacy_learning_number": 12,
+      "legacy_occurrence": 1,
+      "title": "Modo novo não alcança problema empilhado antes da ramificação de modo",
+      "document_order": 12,
+      "prev_uid": "L011",
+      "next_uid": "L013",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L013",
+      "legacy_learning_number": 13,
+      "legacy_occurrence": 1,
+      "title": "Recuo preventivo não é obediência",
+      "document_order": 13,
+      "prev_uid": "L012",
+      "next_uid": "L014",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L014",
+      "legacy_learning_number": 14,
+      "legacy_occurrence": 1,
+      "title": "Mutante equivalente sai do denominador mas aponta a invariante sem teste",
+      "document_order": 14,
+      "prev_uid": "L013",
+      "next_uid": "L015",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L015",
+      "legacy_learning_number": 15,
+      "legacy_occurrence": 1,
+      "title": "Achado repetido é ruído, não reforço",
+      "document_order": 15,
+      "prev_uid": "L014",
+      "next_uid": "L016A",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L016A",
+      "legacy_learning_number": 16,
+      "legacy_occurrence": 1,
+      "title": "Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso",
+      "document_order": 16,
+      "prev_uid": "L015",
+      "next_uid": "L016B",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L016B",
+      "legacy_learning_number": 16,
+      "legacy_occurrence": 2,
+      "title": "#ACORDAR é recuperação de estado real, não apenas comando de GitHub",
+      "document_order": 17,
+      "prev_uid": "L016A",
+      "next_uid": "L017",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L017",
+      "legacy_learning_number": 17,
+      "legacy_occurrence": 1,
+      "title": "Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis",
+      "document_order": 18,
+      "prev_uid": "L016B",
+      "next_uid": "L018",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L018",
+      "legacy_learning_number": 18,
+      "legacy_occurrence": 1,
+      "title": "O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano",
+      "document_order": 19,
+      "prev_uid": "L017",
+      "next_uid": "L019",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L019",
+      "legacy_learning_number": 19,
+      "legacy_occurrence": 1,
+      "title": "Em desenvolvimento autorizado, produção observável vem antes de perfeição global",
+      "document_order": 20,
+      "prev_uid": "L018",
+      "next_uid": "L020",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L020",
+      "legacy_learning_number": 20,
+      "legacy_occurrence": 1,
+      "title": "Convergência, Judge e Meta Lupa servem para tentar quebrar; não para decidir a intenção do CHEFE",
+      "document_order": 21,
+      "prev_uid": "L019",
+      "next_uid": "L021",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L021",
+      "legacy_learning_number": 21,
+      "legacy_occurrence": 1,
+      "title": "Falha local pede correção local e deploy no menor blast radius possível",
+      "document_order": 22,
+      "prev_uid": "L020",
+      "next_uid": "L022",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L022",
+      "legacy_learning_number": 22,
+      "legacy_occurrence": 1,
+      "title": "Painel Admin precisa ser observabilidade operacional, não só configuração",
+      "document_order": 23,
+      "prev_uid": "L021",
+      "next_uid": "L023",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L023",
+      "legacy_learning_number": 23,
+      "legacy_occurrence": 1,
+      "title": "HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE",
+      "document_order": 24,
+      "prev_uid": "L022",
+      "next_uid": "L024",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L024",
+      "legacy_learning_number": 24,
+      "legacy_occurrence": 1,
+      "title": "API paga é capacidade, não identidade nem caminho obrigatório",
+      "document_order": 25,
+      "prev_uid": "L023",
+      "next_uid": "L025",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L025",
+      "legacy_learning_number": 25,
+      "legacy_occurrence": 1,
+      "title": "\"Menos é mais\" significa menor movimento compatível com efeito, observabilidade e segurança",
+      "document_order": 26,
+      "prev_uid": "L024",
+      "next_uid": "L026",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L026",
+      "legacy_learning_number": 26,
+      "legacy_occurrence": 1,
+      "title": "Batch .bat: 4 armadilhas que passam em revisão superficial",
+      "document_order": 27,
+      "prev_uid": "L025",
+      "next_uid": "L027",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L027",
+      "legacy_learning_number": 27,
+      "legacy_occurrence": 1,
+      "title": "Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo",
+      "document_order": 28,
+      "prev_uid": "L026",
+      "next_uid": "L028",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L028",
+      "legacy_learning_number": 28,
+      "legacy_occurrence": 1,
+      "title": "Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido",
+      "document_order": 29,
+      "prev_uid": "L027",
+      "next_uid": "L029",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L029",
+      "legacy_learning_number": 29,
+      "legacy_occurrence": 1,
+      "title": "Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)",
+      "document_order": 30,
+      "prev_uid": "L028",
+      "next_uid": "L030",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L030",
+      "legacy_learning_number": 30,
+      "legacy_occurrence": 1,
+      "title": "Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes",
+      "document_order": 31,
+      "prev_uid": "L029",
+      "next_uid": "L031",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L031",
+      "legacy_learning_number": 31,
+      "legacy_occurrence": 1,
+      "title": "Provider sem crédito NÃO é router quebrado",
+      "document_order": 32,
+      "prev_uid": "L030",
+      "next_uid": "L032",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L032",
+      "legacy_learning_number": 32,
+      "legacy_occurrence": 1,
+      "title": "Uma capacidade = uma linhagem = um PR de promoção por escopo",
+      "document_order": 33,
+      "prev_uid": "L031",
+      "next_uid": "L033",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L033",
+      "legacy_learning_number": 33,
+      "legacy_occurrence": 1,
+      "title": "Opinião usada como medição gera falso verde e ação destrutiva",
+      "document_order": 34,
+      "prev_uid": "L032",
+      "next_uid": "L034",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L034",
+      "legacy_learning_number": 34,
+      "legacy_occurrence": 1,
+      "title": "Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição",
+      "document_order": 35,
+      "prev_uid": "L033",
+      "next_uid": "L035",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L035",
+      "legacy_learning_number": 35,
+      "legacy_occurrence": 1,
+      "title": "T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás",
+      "document_order": 36,
+      "prev_uid": "L034",
+      "next_uid": "L043",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L043",
+      "legacy_learning_number": 43,
+      "legacy_occurrence": 1,
+      "title": "EXECUTION_OVER_EXPLANATION — User Values Doing over Talking",
+      "document_order": 37,
+      "prev_uid": "L035",
+      "next_uid": "L044",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L044",
+      "legacy_learning_number": 44,
+      "legacy_occurrence": 1,
+      "title": "LINGUISTIC_CALIBRATION — Bahia Expression Accuracy",
+      "document_order": 38,
+      "prev_uid": "L043",
+      "next_uid": "L045",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L045",
+      "legacy_learning_number": 45,
+      "legacy_occurrence": 1,
+      "title": "WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface",
+      "document_order": 39,
+      "prev_uid": "L044",
+      "next_uid": "L046",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L046",
+      "legacy_learning_number": 46,
+      "legacy_occurrence": 1,
+      "title": "ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim",
+      "document_order": 40,
+      "prev_uid": "L045",
+      "next_uid": "L047",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L047",
+      "legacy_learning_number": 47,
+      "legacy_occurrence": 1,
+      "title": "LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge",
+      "document_order": 41,
+      "prev_uid": "L046",
+      "next_uid": "L048",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L048",
+      "legacy_learning_number": 48,
+      "legacy_occurrence": 1,
+      "title": "COMMIT_LIMPO — Commit não é vassoura de git status",
+      "document_order": 42,
+      "prev_uid": "L047",
+      "next_uid": "L056",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L056",
+      "legacy_learning_number": 56,
+      "legacy_occurrence": 1,
+      "title": "COMPLEXIDADE ABSORVIDA — simples na superfície, rigor na fundação; simples ≠ burro",
+      "document_order": 43,
+      "prev_uid": "L048",
+      "next_uid": "L055",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L055",
+      "legacy_learning_number": 55,
+      "legacy_occurrence": 1,
+      "title": "SESSÃO NÃO MORRE SUJA — commit+push main; checklist diário; dia fecha sozinho",
+      "document_order": 44,
+      "prev_uid": "L056",
+      "next_uid": "L054",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L054",
+      "legacy_learning_number": 54,
+      "legacy_occurrence": 1,
+      "title": "COMPRESSÃO ARQUITETURAL — crescer por dentro; DROP/EXTEND; sem contrato paralelo",
+      "document_order": 45,
+      "prev_uid": "L055",
+      "next_uid": "L053",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L053",
+      "legacy_learning_number": 53,
+      "legacy_occurrence": 1,
+      "title": "CONTINUIDADE OPERACIONAL — GOAL PAI vive; conversa muda; a Casa lembra pelo motor",
+      "document_order": 46,
+      "prev_uid": "L054",
+      "next_uid": "L052",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L052",
+      "legacy_learning_number": 52,
+      "legacy_occurrence": 1,
+      "title": "ORGANISMO ≠ FERRAMENTAS NA MESA — motor substituível; captura ≠ fixed point",
+      "document_order": 47,
+      "prev_uid": "L053",
+      "next_uid": "L051",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L051",
+      "legacy_learning_number": 51,
+      "legacy_occurrence": 1,
+      "title": "DELTA ÚTIL DA RESENHA — locução 2 min + base dos cavaleiros; não construir o que ainda é ⚫",
+      "document_order": 48,
+      "prev_uid": "L052",
+      "next_uid": "L050A",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L050A",
+      "legacy_learning_number": 50,
+      "legacy_occurrence": 1,
+      "title": "CRISTALIZAÇÃO_OPERACIONAL — medir, reconciliar, só então alterar; delegar ao Hermes existente",
+      "document_order": 49,
+      "prev_uid": "L051",
+      "next_uid": "L049",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L049",
+      "legacy_learning_number": 49,
+      "legacy_occurrence": 1,
+      "title": "AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado",
+      "document_order": 50,
+      "prev_uid": "L050A",
+      "next_uid": "L050B",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L050B",
+      "legacy_learning_number": 50,
+      "legacy_occurrence": 2,
+      "title": "DOCKER_BUILD_CONTEXT — erro visual antigo não é estado atual",
+      "document_order": 51,
+      "prev_uid": "L049",
+      "next_uid": "L057",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L057",
+      "legacy_learning_number": 57,
+      "legacy_occurrence": 1,
+      "title": "Substring e regex enganam: provar import/ausência lendo a fonte e todas as refs",
+      "document_order": 52,
+      "prev_uid": "L050B",
+      "next_uid": "L058",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L058",
+      "legacy_learning_number": 58,
+      "legacy_occurrence": 1,
+      "title": "Não esperar o CHEFE tropeçar no ouro: medir antes de criar e melhorar o owner existente",
+      "document_order": 53,
+      "prev_uid": "L057",
+      "next_uid": "L059",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L059",
+      "legacy_learning_number": 59,
+      "legacy_occurrence": 1,
+      "title": "Screenpipe: migração de storage travada trava o backend e o MCP",
+      "document_order": 54,
+      "prev_uid": "L058",
+      "next_uid": "L060",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L060",
+      "legacy_learning_number": 60,
+      "legacy_occurrence": 1,
+      "title": "Observação não é execução; ordem explícita executa; rastro precisa ser verificável pela máquina",
+      "document_order": 55,
+      "prev_uid": "L059",
+      "next_uid": "L061",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L061",
+      "legacy_learning_number": 61,
+      "legacy_occurrence": 1,
+      "title": "Dobradinha sem atrito: múltiplos modelos, um cristal, realidade única",
+      "document_order": 56,
+      "prev_uid": "L060",
+      "next_uid": "L062",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L062",
+      "legacy_learning_number": 62,
+      "legacy_occurrence": 1,
+      "title": "Chat → Casa → Costura viva: execução conversacional, sensor de evento e identidade por evidência",
+      "document_order": 57,
+      "prev_uid": "L061",
+      "next_uid": "L063",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L063",
+      "legacy_learning_number": 63,
+      "legacy_occurrence": 1,
+      "title": "Dependabot: aprovação autônoma de workflow run é diferente de aprovação de PR",
+      "document_order": 58,
+      "prev_uid": "L062",
+      "next_uid": "L064",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L064",
+      "legacy_learning_number": 64,
+      "legacy_occurrence": 1,
+      "title": "COSTURA autônoma: resolver conhecido, amarelar desconhecido, aprender por replay",
+      "document_order": 59,
+      "prev_uid": "L063",
+      "next_uid": "L065",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L065",
+      "legacy_learning_number": 65,
+      "legacy_occurrence": 1,
+      "title": "Lei do Papagaio Curioso: curiosidade + método + prova = detetive funcional",
+      "document_order": 60,
+      "prev_uid": "L064",
+      "next_uid": "L066",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L066",
+      "legacy_learning_number": 66,
+      "legacy_occurrence": 1,
+      "title": "Um fio operacional; HTML é checkpoint entre janelas",
+      "document_order": 61,
+      "prev_uid": "L065",
+      "next_uid": "L067",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L067",
+      "legacy_learning_number": 67,
+      "legacy_occurrence": 1,
+      "title": "Workflow vermelho pode ter executado delta útil e falhado fechado",
+      "document_order": 62,
+      "prev_uid": "L066",
+      "next_uid": "L068",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L068",
+      "legacy_learning_number": 68,
+      "legacy_occurrence": 1,
+      "title": "Híbrido é por trilhos, não trocando o runner da COSTURA",
+      "document_order": 63,
+      "prev_uid": "L067",
+      "next_uid": "L069",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L069",
+      "legacy_learning_number": 69,
+      "legacy_occurrence": 1,
+      "title": "Objeção hipotética repetida vira disputa de autoridade e queima a sessão",
+      "document_order": 64,
+      "prev_uid": "L068",
+      "next_uid": "L070",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L070",
+      "legacy_learning_number": 70,
+      "legacy_occurrence": 1,
+      "title": "Painel não é estado: deploy_status dá falso VERMELHO com pm2 100% online",
+      "document_order": 65,
+      "prev_uid": "L069",
+      "next_uid": "L071",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L071",
+      "legacy_learning_number": 71,
+      "legacy_occurrence": 1,
+      "title": "Mesmo nome, duas peças: receptor systemd ativo escondendo executor PM2 parado",
+      "document_order": 66,
+      "prev_uid": "L070",
+      "next_uid": "L072",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L072",
+      "legacy_learning_number": 72,
+      "legacy_occurrence": 1,
+      "title": "Receptor religado não reprocessa histórico; e detecção provada não é cura provada",
+      "document_order": 67,
+      "prev_uid": "L071",
+      "next_uid": "L073",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L073",
+      "legacy_learning_number": 73,
+      "legacy_occurrence": 1,
+      "title": "Percepção distribuída: ângulo × acesso × método, e o custo do barramento humano",
+      "document_order": 68,
+      "prev_uid": "L072",
+      "next_uid": "L074",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L074",
+      "legacy_learning_number": 74,
+      "legacy_occurrence": 1,
+      "title": "Executor real fora do repositório: corrigir o ramo morto de um fallback e achar que consertou",
+      "document_order": 69,
+      "prev_uid": "L073",
+      "next_uid": "L075",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L075",
+      "legacy_learning_number": 75,
+      "legacy_occurrence": 1,
+      "title": "Correção do #74: enfileirar não é deployar, e eu violei meu próprio #70 no mesmo dia",
+      "document_order": 70,
+      "prev_uid": "L074",
+      "next_uid": "L076",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L076",
+      "legacy_learning_number": 76,
+      "legacy_occurrence": 1,
+      "title": "SKIP não é PASS: pulo por lock devolve zero e mente mais sob carga",
+      "document_order": 71,
+      "prev_uid": "L075",
+      "next_uid": "L077",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L077",
+      "legacy_learning_number": 77,
+      "legacy_occurrence": 1,
+      "title": "A esteira não conserta a si mesma: correção do executor cai na fila órfã do próprio executor",
+      "document_order": 72,
+      "prev_uid": "L076",
+      "next_uid": "L078",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L078",
+      "legacy_learning_number": 78,
+      "legacy_occurrence": 1,
+      "title": "Achado-mãe: três filas com entrada e sem saída, e o UNKNOWN que virou desculpa",
+      "document_order": 73,
+      "prev_uid": "L077",
+      "next_uid": "L079",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L079",
+      "legacy_learning_number": 79,
+      "legacy_occurrence": 1,
+      "title": "Dupla caneta só converge depois da contraprova",
+      "document_order": 74,
+      "prev_uid": "L078",
+      "next_uid": "L080",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L080",
+      "legacy_learning_number": 80,
+      "legacy_occurrence": 1,
+      "title": "Gatilhos de consumo: ferramenta, ponteiro e UNKNOWN medível",
+      "document_order": 75,
+      "prev_uid": "L079",
+      "next_uid": "L081",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L081",
+      "legacy_learning_number": 81,
+      "legacy_occurrence": 1,
+      "title": "Contraprova humana reentra o loop enquanto houver delta material",
+      "document_order": 76,
+      "prev_uid": "L080",
+      "next_uid": "L082",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L082",
+      "legacy_learning_number": 82,
+      "legacy_occurrence": 1,
+      "title": "Tool Call executada não é Tool Call visível na lateral",
+      "document_order": 77,
+      "prev_uid": "L081",
+      "next_uid": "L083",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L083",
+      "legacy_learning_number": 83,
+      "legacy_occurrence": 1,
+      "title": "Webhook PM2 e main-pulse não são checkout verde automático",
+      "document_order": 78,
+      "prev_uid": "L082",
+      "next_uid": "L084A",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L084A",
+      "legacy_learning_number": 84,
+      "legacy_occurrence": 1,
+      "title": "Ritmo de resenha pode coexistir com trabalho sério",
+      "document_order": 79,
+      "prev_uid": "L083",
+      "next_uid": "L084B",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L084B",
+      "legacy_learning_number": 84,
+      "legacy_occurrence": 2,
+      "title": "Rota local 4175: publicar no CENTRALDARK-OS e consumir de fora sem abrir a VM",
+      "document_order": 80,
+      "prev_uid": "L084A",
+      "next_uid": "L085A",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L085A",
+      "legacy_learning_number": 85,
+      "legacy_occurrence": 1,
+      "title": "openKylin 3.0 já traz uma camada nativa de IA; CentralDark deve integrar antes de reinventar",
+      "document_order": 81,
+      "prev_uid": "L084B",
+      "next_uid": "L085B",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L085B",
+      "legacy_learning_number": 85,
+      "legacy_occurrence": 2,
+      "title": "Variável com prefixo VITE_ não alimenta a checagem do servidor",
+      "document_order": 82,
+      "prev_uid": "L085A",
+      "next_uid": "L086",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L086",
+      "legacy_learning_number": 86,
+      "legacy_occurrence": 1,
+      "title": "Sonda que mede o próprio localhost nunca enxerga a Casa",
+      "document_order": 83,
+      "prev_uid": "L085B",
+      "next_uid": "L087",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L087",
+      "legacy_learning_number": 87,
+      "legacy_occurrence": 1,
+      "title": "UNKNOWN cravado no código não é medição pendente",
+      "document_order": 84,
+      "prev_uid": "L086",
+      "next_uid": "L088",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L088",
+      "legacy_learning_number": 88,
+      "legacy_occurrence": 1,
+      "title": "Pacote de asset mudou de grade e o contrato do app não foi remedido",
+      "document_order": 85,
+      "prev_uid": "L087",
+      "next_uid": "L089",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L089",
+      "legacy_learning_number": 89,
+      "legacy_occurrence": 1,
+      "title": "Entrar como root não é controlar o kernel, e número sem medição é invenção",
+      "document_order": 86,
+      "prev_uid": "L088",
+      "next_uid": "L090",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L090",
+      "legacy_learning_number": 90,
+      "legacy_occurrence": 1,
+      "title": "Rota, gatilho e PR novos quando já existe filho é arquitetura paralela",
+      "document_order": 87,
+      "prev_uid": "L089",
+      "next_uid": "L091",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L091",
+      "legacy_learning_number": 91,
+      "legacy_occurrence": 1,
+      "title": "Entrega no desktop do root não chega ao CHEFE",
+      "document_order": 88,
+      "prev_uid": "L090",
+      "next_uid": "L092",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L092",
+      "legacy_learning_number": 92,
+      "legacy_occurrence": 1,
+      "title": "As três rotas para o CENTRALDARK-OS dependem todas do mesmo shell",
+      "document_order": 89,
+      "prev_uid": "L091",
+      "next_uid": "L093",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L093",
+      "legacy_learning_number": 93,
+      "legacy_occurrence": 1,
+      "title": "Ligar o SSH do Tailscale não autoriza o SSH do Tailscale",
+      "document_order": 90,
+      "prev_uid": "L092",
+      "next_uid": "L094",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L094",
+      "legacy_learning_number": 94,
+      "legacy_occurrence": 1,
+      "title": "A camada de IA do openKylin está viva e presa ao laço local",
+      "document_order": 91,
+      "prev_uid": "L093",
+      "next_uid": "L095",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L095",
+      "legacy_learning_number": 95,
+      "legacy_occurrence": 1,
+      "title": "Letra trocada no nome da máquina derruba SSH com erro que culpa a política",
+      "document_order": 92,
+      "prev_uid": "L094",
+      "next_uid": "L096",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L096",
+      "legacy_learning_number": 96,
+      "legacy_occurrence": 1,
+      "title": "kytensor preserva localhost e ganha exposição Tailscale por proxy de socket",
+      "document_order": 93,
+      "prev_uid": "L095",
+      "next_uid": "L097",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L097",
+      "legacy_learning_number": 97,
+      "legacy_occurrence": 1,
+      "title": "Reality Judge é verificador de efeito, não porteiro da autoridade do CHEFE",
+      "document_order": 94,
+      "prev_uid": "L096",
+      "next_uid": "L098",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L098",
+      "legacy_learning_number": 98,
+      "legacy_occurrence": 1,
+      "title": "O aprendizado pertence à CentralDark; o executor atual é só o portador da rodada",
+      "document_order": 95,
+      "prev_uid": "L097",
+      "next_uid": "L104",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L104",
+      "legacy_learning_number": 104,
+      "legacy_occurrence": 1,
+      "title": "Receita replay-able — diagnóstico e fix determinístico de falha de workflow GitHub",
+      "document_order": 96,
+      "prev_uid": "L098",
+      "next_uid": "L100",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L100",
+      "legacy_learning_number": 100,
+      "legacy_occurrence": 1,
+      "title": "META-GRILL protege o executor de resolver a coisa errada (objetivo antes de sintoma)",
+      "document_order": 97,
+      "prev_uid": "L104",
+      "next_uid": "L101",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L101",
+      "legacy_learning_number": 101,
+      "legacy_occurrence": 1,
+      "title": "Fiscal da SOUL: retorno estruturado e contraprova completa",
+      "document_order": 98,
+      "prev_uid": "L100",
+      "next_uid": "L102",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L102",
+      "legacy_learning_number": 102,
+      "legacy_occurrence": 1,
+      "title": "Verde da interface exige prova do mesmo PR/HEAD; o ciclo pertence à CentralDark",
+      "document_order": 99,
+      "prev_uid": "L101",
+      "next_uid": "L103",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L103",
+      "legacy_learning_number": 103,
+      "legacy_occurrence": 1,
+      "title": "Vault existe não significa restore provado; checksum do contêiner não prova o conteúdo esperado",
+      "document_order": 100,
+      "prev_uid": "L102",
+      "next_uid": "L099",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L099",
+      "legacy_learning_number": 99,
+      "legacy_occurrence": 1,
+      "title": "CentralDark é o sujeito operacional; modelos são interfaces",
+      "document_order": 101,
+      "prev_uid": "L103",
+      "next_uid": "L105A",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L105A",
+      "legacy_learning_number": 105,
+      "legacy_occurrence": 1,
+      "title": "Cruzamento bidirecional: UNKNOWN local não congela o organismo e não pode virar PASS global",
+      "document_order": 102,
+      "prev_uid": "L099",
+      "next_uid": "L105B",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L105B",
+      "legacy_learning_number": 105,
+      "legacy_occurrence": 2,
+      "title": "Voz é resolvedor de intenção por cláusulas, não segundo cérebro nem porteiro",
+      "document_order": 103,
+      "prev_uid": "L105A",
+      "next_uid": "L106",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L106",
+      "legacy_learning_number": 106,
+      "legacy_occurrence": 1,
+      "title": "Regra global de horário sem fiscal executável volta a vazar UTC para o CHEFE",
+      "document_order": 104,
+      "prev_uid": "L105B",
+      "next_uid": "L107",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L107",
+      "legacy_learning_number": 107,
+      "legacy_occurrence": 1,
+      "title": "META-GRILL também grelha o próprio executor antes da resposta",
+      "document_order": 105,
+      "prev_uid": "L106",
+      "next_uid": "L108",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L108",
+      "legacy_learning_number": 108,
+      "legacy_occurrence": 1,
+      "title": "Aprovação de Actions não é execução: action_required, fila e falha são estados distintos",
+      "document_order": 106,
+      "prev_uid": "L107",
+      "next_uid": "L109",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L109",
+      "legacy_learning_number": 109,
+      "legacy_occurrence": 1,
+      "title": "Precisão objetiva é delta do método; não é um modo novo nem substituto da prova",
+      "document_order": 107,
+      "prev_uid": "L108",
+      "next_uid": "L110A",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L110A",
+      "legacy_learning_number": 110,
+      "legacy_occurrence": 1,
+      "title": "Multi-conta exige binding por capability; ausência local não é ausência global",
+      "document_order": 108,
+      "prev_uid": "L109",
+      "next_uid": "L110B",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L110B",
+      "legacy_learning_number": 110,
+      "legacy_occurrence": 2,
+      "title": "O CHEFE transforma sistemas por invariantes; o executor não deve reduzir o padrão nem inventar o contrato mental",
+      "document_order": 109,
+      "prev_uid": "L110A",
+      "next_uid": "L111",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L111",
+      "legacy_learning_number": 111,
+      "legacy_occurrence": 1,
+      "title": "A CentralDark deve aprender onde cada setor mora antes de escolher a ferramenta",
+      "document_order": 110,
+      "prev_uid": "L110B",
+      "next_uid": "L112",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L112",
+      "legacy_learning_number": 112,
+      "legacy_occurrence": 1,
+      "title": "Voz pode recuperar o significado certo e ainda citar um HEAD histórico; semântica e temporalidade são provas separadas",
+      "document_order": 111,
+      "prev_uid": "L111",
+      "next_uid": "L113",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L113",
+      "legacy_learning_number": 113,
+      "legacy_occurrence": 1,
+      "title": "openKylin 3.0 usa um substrate compartilhado de IA; presença de IA no desktop não implica um modelo por janela",
+      "document_order": 112,
+      "prev_uid": "L112",
+      "next_uid": "L114",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L114",
+      "legacy_learning_number": 114,
+      "legacy_occurrence": 1,
+      "title": "O twin local VMware é um corpo real da CentralDark: disco físico + shared tree + GPU 3D, não uma imagem isolada",
+      "document_order": 113,
+      "prev_uid": "L113",
+      "next_uid": "L115",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L115",
+      "legacy_learning_number": 115,
+      "legacy_occurrence": 1,
+      "title": "GPT/modelo serve para multiplicar o raciocínio do CHEFE e devolver conhecimento útil à CentralDark, não para repetir a conversa",
+      "document_order": 114,
+      "prev_uid": "L114",
+      "next_uid": "L116",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L116",
+      "legacy_learning_number": 116,
+      "legacy_occurrence": 1,
+      "title": "Hermes local Casa vira corpo de controle da mesma CentralDark; VPS entra por capability provada, não por endpoint presumido",
+      "document_order": 115,
+      "prev_uid": "L115",
+      "next_uid": "L117",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L117",
+      "legacy_learning_number": 117,
+      "legacy_occurrence": 1,
+      "title": "O método do CHEFE pode ser externalizado no núcleo e devolvido como loop cognitivo ampliado",
+      "document_order": 116,
+      "prev_uid": "L116",
+      "next_uid": "L118",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L118",
+      "legacy_learning_number": 118,
+      "legacy_occurrence": 1,
+      "title": "“Instinto Superior” + “Expansão de Domínio” nomeiam o loop em duas metades: método incorporado e método externalizado",
+      "document_order": 117,
+      "prev_uid": "L117",
+      "next_uid": "L119",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L119",
+      "legacy_learning_number": 119,
+      "legacy_occurrence": 1,
+      "title": "NeuroLink cognitivo: nenhum cristal novo fica órfão; continuidade semântica é gate de cristalização",
+      "document_order": 118,
+      "prev_uid": "L118",
+      "next_uid": "L120",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L120",
+      "legacy_learning_number": 120,
+      "legacy_occurrence": 1,
+      "title": "Determinismo herdável: o que já foi provado vira contrato/código reexecutável e não depende de outra IA para existir",
+      "document_order": 119,
+      "prev_uid": "L119",
+      "next_uid": "L121",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    },
+    {
+      "uid": "L121",
+      "legacy_learning_number": 121,
+      "legacy_occurrence": 1,
+      "title": "NeuroLink global em duas frentes: legado inteiro preservado por UID + cadeia cognitiva estrita continua determinística",
+      "document_order": 120,
+      "prev_uid": "L120",
+      "next_uid": "PENDING_NEXT_CURSOR",
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY"
+    }
+  ]
+}
