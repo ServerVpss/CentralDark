@@ -24,12 +24,20 @@ EXPECTED_PDF_SHA256 = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3
 EXPECTED_PDF_SIZE = 206674
 PDF = ROOT / "docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf"
 SOUL = ROOT / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
-SOUL_BINDING = ROOT / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-TLC23-RUNTIME-BINDING.yml"
 BOOT = ROOT / "CENTRALDARK_AI_BOOT.yaml"
 COGNITIVE_CAPABILITIES = ROOT / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
 METACOGNITION = ROOT / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
 SKILL = ROOT / ".agents/skills/centraldark-operational-method/SKILL.md"
 CONTRACT = ROOT / ".agents/skills/centraldark-operational-method/contracts/TLC23-RUNTIME-GATE.yml"
+
+SOUL_TLC23_MARKERS = (
+    "DETERMINISTIC_ROUTE_FIRST=true",
+    "REALITY_JUDGE_AFTER_EFFECT=true",
+    "REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true",
+    "TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true",
+    "UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true",
+    "MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true",
+)
 
 PLAN_PHRASES = (
     "vou verificar",
@@ -95,7 +103,7 @@ def measure_source() -> dict:
             pdf_sha == EXPECTED_PDF_SHA256 and pdf_size == EXPECTED_PDF_SIZE
         ),
         "canonical_soul_present": SOUL.is_file(),
-        "soul_binding_present": SOUL_BINDING.is_file(),
+        "soul_binding_present": file_contains_all(SOUL, SOUL_TLC23_MARKERS),
         "boot_present": BOOT.is_file(),
         "cognitive_bios_contract_present": file_contains_all(BOOT, ("cognitive_bios:", 'role: "ADAPTIVE_BOOT_POLICY_LAYER"', "firmware_mutation: false", "native_os_kernel_mutation: false", "COGNITIVE_BIOS_STATUS")),
         "cognitive_capabilities_present": file_contains_all(COGNITIVE_CAPABILITIES, ("INSTINTO_SUPERIOR=OPERATIONAL_REFLEX", "REALITY_REMAINS_JUDGE=true")),
