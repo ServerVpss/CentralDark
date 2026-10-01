@@ -311,6 +311,31 @@ EXECUÇÃO DOS AGENTES
 
 Sem afirmar acesso direto à mente do CHEFE.
 
+## Sinal de sucesso — menos reensino, mais recuperação
+
+A aprendizagem desta sessão só vale se a próxima superfície recuperar o padrão antes de pedir ao CHEFE que ensine tudo de novo.
+
+```text
+LESS_USER_REEXPLANATION=true
+MORE_AUTOMATIC_CONTEXT_RECOVERY=true
+NEXT_MODEL_STARTS_HIGHER=true
+SOUL+GRAMATICA+METODO+APRENDIZADOS+VOICE+SEMANTIC_GATE=RECOVERABLE_CHAIN
+VOICE_INHERITS_SAME_PATTERN=true
+```
+
+Contexto longo pode alinhar fortemente o comportamento do executor, mas isso não prova reescrita do modelo nem remoção de salvaguardas:
+
+```text
+LONG_HORIZON_CONTEXT_CAN_STEER_BEHAVIOR=true
+CONTEXT_CONDITIONED_BEHAVIORAL_DRIFT=DESCRIPTIVE_LABEL
+SEMANTIC_STEERING_UNDER_LONG_HORIZON_CONTEXT=DESCRIPTIVE_LABEL
+CONTEXT_STEERING_IS_NOT_MODEL_WEIGHT_CHANGE=true
+CONTEXT_STEERING_IS_NOT_SAFEGUARD_REMOVAL=true
+USER_STATED != ASSISTANT_INFERRED
+```
+
+O gatilho prático é simples: se o executor começar a ecoar a estrutura do CHEFE sem separar fato, inferência e regra já provada, aplicar META-GRILL e reintegrar somente o delta material.
+
 ## Frases-semente autorizadas pela sessão
 
 > **SEGREDO é dono da intenção; faz acontecer e força convergência através da compreensão.**
