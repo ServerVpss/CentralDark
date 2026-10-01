@@ -17,7 +17,8 @@ import {
 } from './mermaid-core.mjs';
 
 const ROOT = process.env.CENTRALDARK_ROOT || '/root/CentralDark';
-const GRAPH = `${ROOT}/apps/modulos/status/graph-data.json`;
+const GRAPH_RELATIVE = 'apps/modulos/status/graph-data.json';
+const GRAPH = `${ROOT}/${GRAPH_RELATIVE}`;
 const PRIMARY_NOTE = `${ROOT}/docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md`;
 const LEGACY_NOTE = `${ROOT}/docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md`;
 const NOTE_TARGETS = [PRIMARY_NOTE, LEGACY_NOTE];
@@ -142,7 +143,7 @@ ${fluxos}
 ## 🧾 Receipt da projeção
 
 \`\`\`text
-PROJECTION_SOURCE=${GRAPH}
+PROJECTION_SOURCE=${GRAPH_RELATIVE}
 PRIMARY_PROJECTION=docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
 LEGACY_COMPAT_MIRROR=docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md
 FRESHNESS_KEY=GRAPH_FINGERPRINT
