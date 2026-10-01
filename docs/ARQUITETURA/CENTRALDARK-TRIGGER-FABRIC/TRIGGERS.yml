@@ -299,6 +299,18 @@ automatic_triggers:
     owner: "porta-de-entrada + autonomia-promocao + Trigger Fabric"
     behavior: [REMEASURE_HEAD, ENFORCE_CANONICAL_RUNNER_POLICY, ENFORCE_WORKFLOW_REUSE, RUN_GATES, COLLECT_FAILURE_SIGNATURE, SELF_HEAL_IF_SAFE, COUNTERPROOF, RECEIPT, CONTINUE_TO_FIXED_POINT]
     status: CONTRACT_AND_CI_GATE
+  - event: USER_REPORTED_ERROR
+    owner: "Trigger Fabric + existing affected owner"
+    report_is_proof: false
+    behavior: [CAPTURE_SIGNAL, MEASURE_CURRENT, COMPARE_CANONICAL_OWNER, FIND_EXISTING_CHANNEL, PRESERVE_UNKNOWN, NO_PARALLEL_OWNER]
+    no_material_delta: NO_CHANGE
+    status: CONTRACT_DECLARED
+  - event: NEW_DISCOVERY
+    owner: "Trigger Fabric + existing capability owner"
+    report_is_proof: false
+    behavior: [MEASURE_DISCOVERY, COMPARE_CANONICAL_OWNER, REUSE_OR_EXTEND_EXISTING, CLEAN_EPHEMERAL_HELPERS_AFTER_PROOF]
+    no_material_delta: NO_CHANGE
+    status: CONTRACT_DECLARED
   - event: STATE_CHANGED
     owner: "#ACORDAR + continuity"
     behavior: [INVALIDATE_STALE_ASSUMPTIONS, REMEASURE_LIVE_STATE, RECONCILE]
