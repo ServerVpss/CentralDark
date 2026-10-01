@@ -91,8 +91,6 @@ jobs:
           set -euo pipefail
           node scripts/lupa/diagram-route-gate.mjs --base-ref "$BASE_SHA" --head-ref "$HEAD_SHA"
 
-      - name: Gate INTERLIGADOS — padrões de PR e dívida runtime explícita
-
       - name: 🔹 Gate INTERLIGADOS — padrões de PR e dívida runtime explícita
         run: node scripts/lupa/validar-interligados-pr-padroes.mjs
 
