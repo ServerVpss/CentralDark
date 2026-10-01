@@ -130,6 +130,47 @@ Regras:
 - Handoff obrigatório antes de outro Writer atuar no mesmo escopo
 - Worktrees: git worktree list --porcelain → reutilizar worktree valido da mesma missao → nunca escrever direto na main do clone canonico
 
+## Lifecycle canônico de branch e PR
+
+Branch remota é mecanismo de transporte/isolamento, não memória, owner, intenção nem estacionamento. A intenção do CHEFE deve convergir até `main` ou terminar em blocker explícito; não deve ficar esquecida porque um executor criou uma branch nova.
+
+```text
+NEW_PR_DEFAULT=false
+NEW_REMOTE_BRANCH_DEFAULT=false
+BRANCH_IS_TRANSPORT_NOT_INTENT=true
+NO_BRANCH_PARKING_LOT=true
+AUTONOMOUS_PR_DRAFT_DEFAULT=false
+AUTHORIZED_INTENT_DRAFT_AUTO_READY=true
+DRAFT_IS_NOT_DEPENDENCY_SEMAPHORE=true
+EXPLICIT_KEEP_DRAFT_PRESERVED=true
+
+CURRENT_MAIN
+→ FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY)
+→ IF HEALTHY_CHILD: REUSE_EXISTING_BRANCH
+→ ELSE IF DIRECT_MAIN_ALLOWED_BY_AUTHORITY_AND_RISK: DIRECT_MAIN
+→ ELSE IF REMOTE_BRANCH_IS_MATERIALLY_REQUIRED:
+     CREATE_EPHEMERAL_BRANCH_WITH_OWNER+SCOPE+INTENT+LIFECYCLE
+     OPEN_READY_PR_SAME_TURN
+     PROVE_SAME_HEAD
+     PROMOTE
+     DELETE_EPHEMERAL_BRANCH_AFTER_MERGE
+→ ELSE: KEEP_WORK_LOCAL/WORKTREE_AND_CONTINUE
+```
+
+Uma branch remota nova só se justifica quando `main` direta não é aplicável e há necessidade material de PR, CI remoto, handoff entre executores ou isolamento. Se o trabalho ainda não está pronto para entrar no funil e não precisa existir remotamente, permanece em worktree/local isolado. Branch persistente de máquina precisa de owner e finalidade explícitos; não nasce como efeito colateral.
+
+PR autônomo de intenção já autorizada deve nascer `draft=false`. Se uma superfície o criar como Draft por default, o normalizador canônico pode marcar `Ready for review` após provar mesma conta/repo/base/autorização. `KEEP_DRAFT` explícito, `do-not-merge`, PR-mãe e rascunho humano/material real são preservados.
+
+```text
+NEW_REMOTE_BRANCH_REQUIRES=OWNER+SCOPE+INTENT+LIFECYCLE
+REMOTE_BRANCH_ONLY_WHEN=DIRECT_MAIN_NOT_APPLICABLE|PR_REQUIRED|REMOTE_CI_REQUIRED|CROSS_AGENT_HANDOFF_REQUIRED|ISOLATION_REQUIRED
+EPHEMERAL_BRANCH_OPEN_READY_PR_SAME_TURN=true
+EPHEMERAL_BRANCH_DELETE_AFTER_MERGE=true
+PERSISTENT_BRANCH_REQUIRES_EXPLICIT_OWNER_AND_PURPOSE=true
+BRANCH_WITHOUT_ACTIVE_PURPOSE=RECONCILE_BEFORE_CREATING_ANOTHER
+```
+
+Branches antigas não são apagadas cegamente: medir conteúdo contra `main`, preservar delta útil ainda não convergido e só classificar `SAFE_TO_REMOVE` quando a contraprova demonstrar que nada material seria perdido.
 ## Reconciliação antes de criar (REUSE_BEFORE_CREATE_REQUIRED)
 
 Antes de criar código, skill, servico, workflow, plugin, rota, pasta, memória, documento, processo, arquitetura:
