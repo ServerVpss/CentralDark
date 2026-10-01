@@ -39,6 +39,17 @@ PLAN_PHRASES = (
     "investigation plan",
 )
 
+BASE_REQUIRED_BINDING_CHECKS = (
+    "source_identity_proved",
+    "main_sha_measured",
+    "target_head_measured",
+    "canonical_soul_present",
+    "soul_binding_present",
+    "boot_present",
+    "operational_skill_present",
+    "contract_present",
+)
+
 
 def sha256_file(path: Path) -> str | None:
     if not path.is_file():
@@ -130,6 +141,48 @@ def binding_check(source: dict | None = None, runtime: dict | None = None) -> di
     }
 
 
+def resolve_binding_scope(receipt: dict, binding: dict) -> dict:
+    requested = receipt.get("required_binding_checks")
+
+    # Backward compatibility: receipts without an explicit scope keep the
+    # original full-binding behavior.
+    if requested is None:
+        required = list(binding["checks"].keys())
+        mode = "FULL"
+    else:
+        if (
+            not isinstance(requested, list)
+            or not requested
+            or not all(isinstance(name, str) and name for name in requested)
+        ):
+            return {
+                "verdict": "BLOCKED",
+                "reason": "INVALID_BINDING_SCOPE",
+                "required_checks": requested,
+                "unresolved_required_checks": [],
+                "unknown_check_names": [],
+                "law": "SCOPE_MUST_BE_EXPLICIT_AND_NONEMPTY",
+            }
+        required = list(dict.fromkeys([*BASE_REQUIRED_BINDING_CHECKS, *requested]))
+        mode = "AFFECTED_CLAIM"
+
+    unknown_names = [name for name in required if name not in binding["checks"]]
+    unresolved = [
+        name
+        for name in required
+        if name in binding["checks"] and binding["checks"][name] is not True
+    ]
+
+    return {
+        "verdict": "PASS" if not unknown_names and not unresolved else "UNKNOWN",
+        "mode": mode,
+        "required_checks": required,
+        "unresolved_required_checks": unresolved,
+        "unknown_check_names": unknown_names,
+        "law": "UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM",
+    }
+
+
 def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = None) -> dict:
     binding = binding_check(source, runtime)
     narrative = str(receipt.get("narrative") or "").lower()
@@ -167,8 +220,19 @@ def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = N
             "law": "PLAN != EXECUTION",
         }
 
+    binding_scope = resolve_binding_scope(receipt, binding)
+    if binding_scope["verdict"] == "BLOCKED":
+        return {
+            "mode": "MISSION_GATE",
+            "verdict": "BLOCKED",
+            "reason": binding_scope["reason"],
+            "binding": binding,
+            "binding_scope": binding_scope,
+            "law": "INVALID_SCOPE != PASS",
+        }
+
     checks = {
-        "binding_passed": binding["verdict"] == "PASS",
+        "binding_passed": binding_scope["verdict"] == "PASS",
         "owner_measured": bool(receipt.get("owner")),
         "same_target": receipt.get("same_target") is True,
         "same_head_or_runtime_fingerprint": receipt.get("same_head_or_runtime_fingerprint") is True,
@@ -184,9 +248,9 @@ def evaluate(receipt: dict, source: dict | None = None, runtime: dict | None = N
         "verdict": "PASS" if passed else "UNKNOWN",
         "checks": checks,
         "binding": binding,
-        "law": "ACTION != PROOF; REALITY = JUDGE",
+        "binding_scope": binding_scope,
+        "law": "UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM; ACTION != PROOF; REALITY_JUDGE_AFTER_EFFECT",
     }
-
 
 
 def cage_test(iterations: int = 64) -> dict:
@@ -324,8 +388,44 @@ def self_test() -> dict:
     assert evaluate(bad, source, runtime)["verdict"] == "UNKNOWN"
     loop = dict(bad, narrative="Vou executar comandos para verificar depois")
     assert evaluate(loop, source, runtime)["verdict"] == "BLOCKED"
+
     missing_runtime = dict(runtime, hermes_runtime_fingerprint=None)
     assert binding_check(source, missing_runtime)["verdict"] == "UNKNOWN"
+
+    # Full receipts preserve the legacy/full-body rule: runtime UNKNOWN blocks
+    # a full PASS.
+    assert evaluate(good, source, missing_runtime)["verdict"] == "UNKNOWN"
+
+    # A claim that does not depend on the missing runtime fingerprint may
+    # explicitly scope the binding. Baseline source/canonical checks remain
+    # mandatory and cannot be removed by the caller.
+    source_only = dict(
+        good,
+        required_binding_checks=[
+            "cognitive_bios_contract_present",
+            "cognitive_capabilities_present",
+            "metacognition_present",
+        ],
+    )
+    scoped = evaluate(source_only, source, missing_runtime)
+    assert scoped["verdict"] == "PASS"
+    assert scoped["binding"]["verdict"] == "UNKNOWN"
+    assert scoped["binding_scope"]["mode"] == "AFFECTED_CLAIM"
+
+    # If the affected claim really depends on the missing runtime fact, it
+    # remains UNKNOWN.
+    runtime_claim = dict(
+        good,
+        required_binding_checks=["hermes_runtime_evidence_measured"],
+    )
+    runtime_scoped = evaluate(runtime_claim, source, missing_runtime)
+    assert runtime_scoped["verdict"] == "UNKNOWN"
+    assert "hermes_runtime_evidence_measured" in runtime_scoped["binding_scope"]["unresolved_required_checks"]
+
+    # A caller cannot bypass the baseline with an empty or invented scope.
+    assert evaluate(dict(good, required_binding_checks=[]), source, runtime)["verdict"] == "BLOCKED"
+    assert evaluate(dict(good, required_binding_checks=["not_a_real_check"]), source, runtime)["verdict"] == "UNKNOWN"
+
     missing_cognitive_bios = dict(source, cognitive_bios_contract_present=False)
     assert binding_check(missing_cognitive_bios, runtime)["verdict"] == "UNKNOWN"
     no_delta = dict(good, new_material_information=False)
@@ -334,7 +434,7 @@ def self_test() -> dict:
     assert evaluate(same_state, source, runtime)["verdict"] == "NO_CHANGE"
     changed_state = dict(good, previous_state_hash="state-1", current_state_hash="state-2")
     assert evaluate(changed_state, source, runtime)["verdict"] == "PASS"
-    return {"status": "PASS", "tests": 9}
+    return {"status": "PASS", "tests": 13}
 
 
 def load_receipt(path: str) -> dict:
