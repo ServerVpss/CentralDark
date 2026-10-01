@@ -816,6 +816,25 @@ HISTORICAL_SUCCESS_IS_NOT_CURRENT_PASS=true
 CURRENT_EQUIVALENCE_OR_REMEASURE_REQUIRED=true
 ```
 
+### NeuroLink cognitivo — continuidade obrigatória entre cristais
+
+Todo aprendizado da classe cognitiva/governança-cognitiva só pode ser promovido como cristal quando permanecer ligado à intenção e à linhagem que o gerou. Nota órfã pode existir como material, mas não como cristal canônico.
+
+```text
+COGNITIVE_CRYSTAL_LINK_REQUIRED=true
+COGNITIVE_CRYSTAL_REQUIRES_INTENT_REF=true
+COGNITIVE_CRYSTAL_REQUIRES_PREV_LEARNING_REF=true
+COGNITIVE_CRYSTAL_REQUIRES_RELATION_TYPE=true
+COGNITIVE_CRYSTAL_REQUIRES_OWNER_REF=true
+COGNITIVE_CRYSTAL_REQUIRES_NEXT_CURSOR=true
+COGNITIVE_SUCCESSOR_BACKLINK_REQUIRED=true
+ORPHAN_COGNITIVE_CRYSTAL=REJECT
+NEUROLINK=COGNITIVE_CONTINUITY_ALIAS
+GRAPH_EDGE_IS_CONTINUITY_LINK_NOT_CAUSAL_PROOF=true
+```
+
+Ao nascer um sucessor, ele aponta para o predecessor e fecha o backlink do predecessor. O último cristal pode manter `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR` até a próxima expansão.
+
 “Nada fica para trás” significa: nenhuma peça material é ignorada sem classificação; duplicata pode ser descartada **depois** de comparada, hipótese pode ficar candidata, e só ouro provado sobe. Persistir tudo cegamente seria perda de sinal e violaria Menos É Mais.
 
 ### Correção do CHEFE baseada em evidência observada — sem disputa ornamental
