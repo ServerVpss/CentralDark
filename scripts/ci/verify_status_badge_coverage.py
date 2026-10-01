@@ -40,6 +40,8 @@ def main():
         'UNKNOWN_IS_NOT_PASS=true',
         'SAME_HEAD_PROOF_REQUIRED_FOR_CI_CLAIM=true',
         'WORKFLOW_BADGE_COVERAGE=ALL_WORKFLOW_FILES',
+        'FUTURE_WORKFLOW_WITHOUT_BADGE=FAIL',
+        'CENTRALDARK_VALIDATE_ENFORCES_BADGE_COVERAGE=true',
     ]
     absent = [token for token in required if token not in text]
     if absent:
