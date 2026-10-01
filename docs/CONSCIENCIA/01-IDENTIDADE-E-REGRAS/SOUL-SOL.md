@@ -716,16 +716,26 @@ FIRST_OPERATIONAL_RESPONSE_RENDERS_HUD=true · UNKNOWN_IS_NOT_GREEN=true (= UNKN
 SOUL_EVOLVES_WITH_ITS_OWNERS_OR_NO_FIXED_POINT=true · SOUL_STALE_BLOCKS_BRAIN_EVOLUTION=true
 ```
 
+Revisão 2026-10-01T00:34:00Z: `AGENTS.md` e `LEIA-ME-IA.md` mudaram novamente e foram relidos antes de mover a âncora. A mudança material universal nova é a lei de diagnóstico causal de exit codes; ela entra na SOUL. O requisito de seis gates técnicos no mesmo HEAD, o ponteiro do check-list diário e o mapa de owner de proveniência temporal permanecem nos respectivos owners operacionais e não viram segunda lei/arquitetura. `CENTRALDARK_AI_BOOT.yaml`, `CLAUDE.md` e `CONTRACT.yml` não mudaram desde a revisão anterior.
+
+```text
+EXIT_CODE_IS_SIGNAL_NOT_CAUSE=true
+EXIT_CODE_ZERO_ALONE_IS_NOT_PASS=true
+ANY_NONZERO_EXIT_REQUIRES_CAUSAL_DIAGNOSIS=true
+SHELL_EXIT_CONVENTIONS_ARE_HINTS_NOT_AUTHORITY=true
+EXIT_CODE_CAUSE_REQUIRES_STDOUT_STDERR_RUNTIME_SOURCE_OR_DISCRIMINANT=true
+```
+
 Lei de co-evolução (kernel/máquina de estado): a alma não é documento parado — ela é dona do cérebro. Se um dono da alma muda e a SOUL não acompanha, o fiscal reprova e não há ponto fixo até a alma ser reposta. O sistema é **obrigado** a evoluir junto: SOUL stale ⇒ cérebro stale ⇒ fixed-point proibido.
 
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=999d5aa9679bace5a213f47776aa6d577ff07559
-LEIA-ME-IA.md=a3d292a99320115bd24ad366950bf0fb3592fc56
+AGENTS.md=17cce57d5017f93a3a1929537e2c9889906a23ab
+LEIA-ME-IA.md=695ffd40097a6e9e337dfc6cf01869710db5fb8f
 CLAUDE.md=89e0659b0508bb2b66f3a6244474ced9d70c8657
 CENTRALDARK_AI_BOOT.yaml=85610630d61b82e5411556640246ae35b2f658b4
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=e1810e09132bda77e77617842a320122e0b3c0bb
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-09-30T16:45:27.609Z
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-01T00:34:00Z
 SOUL_SYNC_ANCHOR_END
 ```
 
