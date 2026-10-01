@@ -874,3 +874,14 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Contraprova:** `TAILSCALE=PASS` não prova `ANYDESK=PASS`; AnyDesk ID existente não prova sessão; Xorg instalado/configurado não prova sessão ativa em X11; `ONE_PATH_DOWN` não pode virar `MACHINE_DOWN`.
 - **Comportamento esperado:** ao receber uma intenção, consultar o mapa canônico, localizar setor → owner → superfície → fallback → prova. Se o owner não estiver provado, descobrir antes de criar. Se um novo setor/owner for descoberto, atualizar o mapa e o aprendizado durável para que o próximo executor não recomece do zero.
 
+
+
+### 112. Voz pode recuperar o significado certo e ainda citar um HEAD histórico; semântica e temporalidade são provas separadas
+- **Categoria:** voz-semantica-current-cross-executor
+- **Data:** 2026-10-01
+- **Owner:** `.claude/skills/synced/voice-semantic-classifier/SKILL.md`
+- **Contexto:** Em uma sessão de voz distinta, o ASR produziu formas como `CH` / `chá` enquanto o CHEFE se referia a `SHA`. O executor recuperou corretamente o significado operacional, carregou vocabulário do núcleo (`core pattern`, `sector router`, `voz herdada`, `ledger da PR-mãe #1562`, `drift`, `next cursor`) e tratou `CH/chá` como SHA do HEAD. Porém citou `a99d7367cd567d1e0cf5b361cd89b7b1bf33428e`, que é um commit real da main, enquanto remedição posterior encontrou `bd8b7b58f9a04ede57862c97890de2ca7692c64f` como CURRENT.
+- **Aprendizado:** recuperação semântica e atualidade temporal são eixos independentes. A voz pode entender corretamente que o CHEFE quer o SHA do HEAD e ainda assim responder com snapshot histórico. Portanto, cue semântico recuperado deve ser seguido de remedição viva antes de claim temporal.
+- **Cristal:** `VOICE_BOOT_REMEASURE_CURRENT_BEFORE_HEAD_CLAIM=true`; `VOICE_RECOVERED_SHA_SEMANTICS != CURRENT_SHA_PROVED`; `HISTORICAL_VALID_SHA != CURRENT_HEAD`; `CURRENT_HEAD_CLAIM_REQUIRES_LIVE_REMEASUREMENT=true`; `ASR_NOISE_CH_TO_SHA=OBSERVED_PASS`; `CROSS_EXECUTOR_BEHAVIOR_RECOVERABLE_FROM_CANONICAL_CORE=OBSERVED`.
+- **Contraprova:** um caso `CH/chá → SHA` não prova tolerância universal de ASR; vocabulário recuperado não prova execução de tools; SHA histórico válido não prova HEAD atual; mesma superfície temporal não deve ser inferida sem alinhar timestamps.
+- **Rastro:** observação humana em sessão Voice + validação do commit `a99d7367cd567d1e0cf5b361cd89b7b1bf33428e` + remedição da main.
