@@ -231,6 +231,57 @@ O contrato de saída estruturada é igual nas superfícies: `INTENT_ID`, `DECISI
 
 Se a plataforma não expuser sessão, tracing, tool calls ou usage, marcar aquela capacidade como `PLATFORM_UNAVAILABLE`. Não abrir caixa-preta/trilha separada para Voz e não afirmar paridade sem prova.
 
+## 6.2 Roteamento híbrido multi-conta por capability
+
+Este é o mesmo capability bus; não nasce bridge, router, owner ou plugin paralelo. Conta, link e device são bindings de transporte descobertos em runtime.
+
+```text
+HYBRID_MULTI_ACCOUNT_CAPABILITY_ROUTING=true
+CAPABILITY_FIRST_TOOL_SECOND=true
+ACCOUNT_ALIAS_IS_LOGICAL_BINDING=true
+RAW_ACCOUNT_EMAIL_IS_NOT_CANONICAL_ID=true
+LINK_ID_DISCOVER_AT_RUNTIME=true
+DEVICE_ID_DISCOVER_AT_RUNTIME=true
+DEVICE_NAME_ALONE_IS_NOT_ROUTE=true
+CURRENT_ACCOUNT_TOOL_MISS != CAPABILITY_UNAVAILABLE
+CURRENT_LINK_DEVICE_OFFLINE != ORGANISM_CAPABILITY_UNAVAILABLE
+PERMISSION_EXISTS != TOOL_EXPOSED
+TOOL_EXPOSED != TOOL_EXECUTED
+NO_PARALLEL_ADAPTER_FOR_MISSING_TOOL=true
+REUSE_EXISTING_CAPABILITY_ROUTE_FIRST=true
+```
+
+Rota mínima para qualquer superfície, inclusive Voz:
+
+```text
+INTENT
+→ CAPABILITY_NEEDED
+→ CURRENT_ACCOUNT_NATIVE_TOOL_IF_EXPOSED
+→ ALTERNATE_AUTHORIZED_ACCOUNT_SAME_CAPABILITY
+→ CENTRALDARK/RDC_ONLINE_DEVICE_WITH_CAPABILITY
+→ EXISTING_CASA_OR_VPS_OWNER
+→ EXISTING_API_OR_MCP_OWNER
+→ PLATFORM_UNAVAILABLE_OR_UNKNOWN_ONLY_AFTER_ALL_AUTHORIZED_EXISTING_ROUTES_FAIL
+```
+
+Regras de binding:
+
+- persistir alias lógico da conta e capability; redescobrir `link_id` e `device_id` vivos por sessão;
+- dois devices com o mesmo nome em contas diferentes não são a mesma rota;
+- ferramenta sem namespace dedicado pode ser atendida por capability equivalente já existente, sem criar wrapper novo;
+- Voz, Texto, Work, Desktop, Hermes e futuras superfícies usam a mesma matriz híbrida;
+- falha em uma conta abre failover autorizado para a outra conta antes de declarar ausência global;
+- estado temporal de device pertence ao receipt, não ao contrato eterno.
+
+Exemplos de equivalência sem arquitetura nova:
+
+```text
+VOICE_GITHUB_MISSING_ON_SURFACE → GitHub connector existente; se não exposto, procurar rota autorizada equivalente; nunca criar Voice-GitHub
+NO_DEDICATED_TAILSCALE_NAMESPACE → CENTRALDARK/RDC + owner/runtime Tailscale existente
+NO_DEDICATED_PM2_SSH_DOCKER_NAMESPACE → CENTRALDARK/RDC no corpo autorizado + owner existente
+PROVIDER_NAMESPACE_ABSENT → API/MCP/provider adapter existente; depois RDC/VPS se aplicável; senão UNKNOWN
+```
+
 ## 7. Estratégia de execução
 
 ```text
