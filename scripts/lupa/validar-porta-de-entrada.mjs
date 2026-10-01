@@ -1016,6 +1016,51 @@ if (!contract) {
   if (finalization.merge_is_not_deploy !== true) errors.push("MERGE_CONFUNDIDO_COM_DEPLOY");
   if (finalization.deploy_is_not_runtime_proof !== true) errors.push("DEPLOY_CONFUNDIDO_COM_RUNTIME_PROOF");
 
+  const branchPolicy = contract.git_branch_lifecycle_policy ?? {};
+  if (branchPolicy.marker !== "CENTRALDARK_GIT_BRANCH_LIFECYCLE_REQUIRED") errors.push("GIT_BRANCH_LIFECYCLE_POLICY_AUSENTE");
+  if (branchPolicy.new_pr_default !== false) errors.push("NEW_PR_DEFAULT_VIROU_TRUE");
+  if (branchPolicy.new_remote_branch_default !== false) errors.push("NEW_REMOTE_BRANCH_DEFAULT_VIROU_TRUE");
+  if (branchPolicy.branch_is_transport_not_intent !== true) errors.push("BRANCH_VIROU_INTENT_OWNER");
+  if (branchPolicy.no_branch_parking_lot !== true) errors.push("BRANCH_PARKING_LOT_PERMITIDO");
+  if (branchPolicy.find_matching_child_before_new_branch !== true) errors.push("NEW_BRANCH_SEM_REUSE_CHILD");
+  if (branchPolicy.direct_main_when_authorized_and_applicable !== true) errors.push("DIRECT_MAIN_APLICAVEL_NAO_PRIORIZADO");
+  const expectedRemoteBranchCauses = ["DIRECT_MAIN_NOT_APPLICABLE","PR_REQUIRED","REMOTE_CI_REQUIRED","CROSS_AGENT_HANDOFF_REQUIRED","ISOLATION_REQUIRED"];
+  if (!Array.isArray(branchPolicy.remote_branch_only_when) || expectedRemoteBranchCauses.some((item) => !branchPolicy.remote_branch_only_when.includes(item))) {
+    errors.push("REMOTE_BRANCH_CAUSES_INVALIDAS");
+  }
+  const expectedBranchBindings = ["OWNER","SCOPE","INTENT","LIFECYCLE"];
+  if (!Array.isArray(branchPolicy.new_remote_branch_requires) || expectedBranchBindings.some((item) => !branchPolicy.new_remote_branch_requires.includes(item))) {
+    errors.push("NEW_REMOTE_BRANCH_SEM_BINDINGS");
+  }
+  if (branchPolicy.ephemeral_branch_open_ready_pr_same_turn !== true) errors.push("EPHEMERAL_BRANCH_SEM_READY_PR_SAME_TURN");
+  if (branchPolicy.ephemeral_branch_delete_after_merge !== true) errors.push("EPHEMERAL_BRANCH_SEM_CLEANUP_POS_MERGE");
+  if (branchPolicy.persistent_branch_requires_explicit_owner_and_purpose !== true) errors.push("PERSISTENT_BRANCH_SEM_OWNER");
+  if (branchPolicy.historical_branch_delete_without_delta_proof !== "FORBIDDEN") errors.push("HISTORICAL_BRANCH_BLIND_DELETE_PERMITIDO");
+
+  const draftPolicy = branchPolicy.draft_policy ?? {};
+  if (draftPolicy.autonomous_pr_draft_default !== false) errors.push("AUTONOMOUS_PR_DRAFT_DEFAULT_VIROU_TRUE");
+  if (draftPolicy.authorized_intent_draft_auto_ready !== true) errors.push("AUTHORIZED_DRAFT_AUTO_READY_AUSENTE");
+  if (draftPolicy.draft_is_not_dependency_semaphore !== true) errors.push("DRAFT_VIROU_DEPENDENCY_SEMAPHORE");
+  if (draftPolicy.explicit_keep_draft_preserved !== true) errors.push("EXPLICIT_KEEP_DRAFT_NAO_PRESERVADO");
+  const draftRuntimeOwner = String(draftPolicy.runtime_owner || "");
+  const draftWorkflowOwner = String(draftPolicy.workflow_owner || "");
+  if (!draftRuntimeOwner || !existe(draftRuntimeOwner)) errors.push("DRAFT_NORMALIZER_RUNTIME_OWNER_AUSENTE");
+  else {
+    const draftRuntime = ler(draftRuntimeOwner);
+    if (!draftRuntime.includes("draftReadyDecision") || !draftRuntime.includes("normalizeDraftSweep") || !draftRuntime.includes('mode === "normalize"')) {
+      errors.push("DRAFT_NORMALIZER_RUNTIME_BINDING_AUSENTE");
+    }
+  }
+  if (!draftWorkflowOwner || !existe(draftWorkflowOwner)) errors.push("DRAFT_NORMALIZER_WORKFLOW_OWNER_AUSENTE");
+  else {
+    const draftWorkflow = ler(draftWorkflowOwner);
+    if (!draftWorkflow.includes("normalize:") || !draftWorkflow.includes("github-autonomia-varredura.mjs normalize")) {
+      errors.push("DRAFT_NORMALIZER_WORKFLOW_BINDING_AUSENTE");
+    }
+  }
+  const historicalBranchOwner = String(branchPolicy.historical_reconciliation_owner || "");
+  if (!historicalBranchOwner || !existe(historicalBranchOwner)) errors.push("BRANCH_RECONCILIATION_OWNER_AUSENTE");
+
   const goals = contract.goal_derivation_policy ?? {};
   if (goals.marker !== "STABLE_PARENT_GOAL_DERIVED_MICRO_GOALS") errors.push("GOAL_DERIVATION_POLICY_AUSENTE");
   if (goals.goal_pai_id !== "STABLE") errors.push("GOAL_PAI_NAO_ESTAVEL");
