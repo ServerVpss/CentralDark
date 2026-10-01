@@ -373,3 +373,96 @@ FRONTEIRA HUMANA GENUÍNA: Custom Images, VNC, Rescue, Reinstall (sem API públi
 ---
 
 **NEXT_CURSOR:** CHEFE configura 4 credenciais Contabo no VPS/HUB → medição completa via `provider_read` → gate FASE 2 reavaliado. Itens painel-only (Custom Image, VNC, rescue, reinstall) são fronteira humana genuína se necessários.
+
+
+---
+
+## 14. CASA — TWIN LOCAL VMWARE / PHYSICAL DISK / GPU SHARED (2026-10-01)
+
+Medição read-only na Casa `SEGREDO`.
+
+### VM
+
+| Métrica | Valor | Estado |
+|---|---|---|
+| VMX | `E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx` | MEDIDO |
+| displayName | `CENTRALDARK-OSh` | MEDIDO |
+| vCPU | 4 | MEDIDO |
+| RAM | 8192 MB | MEDIDO |
+| guestOS | `other6xlinux-64` | MEDIDO |
+| rede | NAT | MEDIDO |
+| estado final observado | poweredOff em 2026-09-30T07:35:29Z | MEDIDO |
+
+### Disco
+
+O VMDK é descriptor `fullDevice`, não disco virtual tradicional. Ele aponta diretamente para `\\.\\PhysicalDrive1`, identificado no descriptor como dispositivo Kingston.
+
+```text
+CENTRALDARK_OSH_DISK_MODE=PHYSICAL_DEVICE_PASSTHROUGH
+VMDK_DESCRIPTOR_ONLY=true
+PHYSICALDRIVE1_BACKING=PROVED
+KINGSTON_DEVICE_REFERENCE=PROVED
+```
+
+Isso significa que a VM foi usada como casca de virtualização sobre um disco físico real. Não promover como snapshot/clone automático: `PHYSICAL_DISK != PORTABLE_VMDK_IMAGE`.
+
+### Shared CentralDark
+
+`sharedFolder0` está habilitado em leitura e escrita:
+
+```text
+HOST_PATH=E:\VMs\CENTRALDARK-OS\SHARED
+GUEST_NAME=CENTRALDARK-SHARED
+READ=true
+WRITE=true
+EXPIRATION=never
+```
+
+A árvore compartilhada contém o corpo CentralDark (`.agents`, `.claude`, `.codex`, `.hermes`, `apps`, `docs`, `infra`, `NUCLEO`, `scripts`, `skills`, `AGENTS.md`, `LEIA-ME-IA.md`, `CENTRALDARK_AI_BOOT.yaml`, `SECOND-BRAIN.yml` e outros owners).
+
+Também existem shares read-only de `E:\` e `F:\`.
+
+### GPU / aceleração 3D
+
+A configuração da VM contém:
+
+```text
+mks.enable3d=TRUE
+svga.vramSize=134217728
+svga.graphicsMemoryKB=8388608
+svga.guestBackedPrimaryAware=TRUE
+```
+
+O log prova uso de `Mesa: SVGA3D`, threads `SVGA/MKS`, backend `DX11` e ciclo DXGI/D3D durante execução. A GPU física medida no host é `Radeon RX 580 Series`.
+
+```text
+VMWARE_3D_ACCELERATION=PASS
+GUEST_SVGA3D=PASS
+HOST_GPU_RX580=PASS
+DX11_RENDER_BACKEND=PASS
+GPU_SHARED_WITH_VM=SUPPORTED_BY_VMWARE_RENDER_PATH
+PER_TAB_DISTINCT_GPU_AI_PROCESS=NOT_PROVEN
+```
+
+A observação do CHEFE de que a GPU reage ao abrir abas é compatível com um desktop acelerado e um substrate de IA/GUI compartilhado, mas esta medição não prova que cada aba instancia uma IA ou processo GPU próprio.
+
+### Consequência arquitetural
+
+```text
+CASA_WINDOWS
+→ VMWARE_SHELL
+→ PHYSICAL_DISK_OPENKYLIN
+→ SHARED_CENTRALDARK_TREE
+→ GPU_ACCELERATED_DESKTOP
+→ TAILSCALE
+→ VPS_CENTRALDARK_OS
+```
+
+Leitura: a Casa já possui um twin local material do CENTRALDARK-OS com disco físico, árvore CentralDark compartilhada e aceleração gráfica. A VPS permanece outro corpo/runtime. Isso é composição de capacidades, não duplicação de identidade.
+
+```text
+MEGAZORD_LOCAL_REMOTE_CAPABILITY_COMPOSITION=SUPPORTED
+ONE_SYSTEM_ONLY=true
+CASA_TWIN_IS_NOT_SECOND_BRAIN=true
+VPS_AND_CASA_CAN_SHARE_CAPABILITIES=true
+```
