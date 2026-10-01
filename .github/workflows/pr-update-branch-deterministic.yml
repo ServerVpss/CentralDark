@@ -10,6 +10,7 @@
 #
 # Cadeados:
 # - update-branch é sincronização, não aprovação.
+# - PR-MÃE #1562 também é sincronizada quando ficar atrás da main; isso NÃO autoriza merge.
 # - não faz merge, squash, deploy nem ignora checks.
 # - conflito/UNKNOWN não vira PASS.
 # - pull_request_target executa somente código confiável da base/main.
@@ -40,6 +41,7 @@ on:
     types:
       - centraldark_update_branch_reconcile
       - centraldark_pr_update_branch
+      - centraldark_pr_mother_update_branch
   schedule:
     - cron: '11,41 * * * *'
 
@@ -132,6 +134,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           TARGET_PR: ${{ needs.preflight.outputs.target_pr }}
+          PR_MOTHER_NUMBER: '1562'
           BASE_BRANCH: main
           UPDATE_BRANCH_INCLUDE_PROTECTED: 'true'
           UPDATE_BRANCH_FAIL_ON_BLOCKED: 'true'
@@ -143,6 +146,9 @@ jobs:
         run: |
           set -euo pipefail
           echo 'CENTRALDARK_ANY_PR_UPDATE_BRANCH_DETERMINISTIC=true'
+          echo 'CENTRALDARK_PR_MOTHER_UPDATE_BRANCH_DETERMINISTIC=true'
+          echo 'PR_MOTHER_NUMBER=1562'
+          echo 'PR_MOTHER_MERGE_FORBIDDEN_SYNC_ALLOWED=true'
           echo 'CENTRALDARK_STITCH_STABILIZATION=true'
           echo 'ENDPOINT=PUT /pulls/{PR}/update-branch'
           echo 'TARGET_PR='"${TARGET_PR:-ALL_OPEN}"''
@@ -236,6 +242,8 @@ jobs:
           echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
           echo "FLOW=PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT"
           echo "ACTION=PUT_UPDATE_BRANCH_WHEN_BEHIND_MAIN"
+          echo "PR_MOTHER_1562_UPDATE_BRANCH=DETERMINISTIC_SYNC_ALLOWED"
+          echo "PR_MOTHER_1562_MERGE=FORBIDDEN"
           echo "STITCH_STABILIZATION=ENABLED"
           echo "UPDATE_VERDICT=${UPDATE_VERDICT:-UNKNOWN}"
           echo "REALITY_VERDICT=${REALITY_VERDICT:-UNKNOWN}"
