@@ -114,6 +114,26 @@ consolidated_lock:
 
 failure_diagnosis:
   bypass_on_block: FORBIDDEN
+  exit_code_diagnosis:
+    marker: CENTRALDARK_EXIT_CODE_DIAGNOSIS_REQUIRED
+    applies_to: ALL_PROCESS_AND_TOOL_EXECUTIONS
+    exit_code_is_signal_not_root_cause: true
+    exit_code_zero_alone_is_not_pass: true
+    any_nonzero_requires_causal_diagnosis: true
+    same_numeric_code_may_mean_different_causes_across_tools: true
+    shell_conventions_are_hints_not_authority: true
+    signal_convention_requires_shell_context: true
+    stdout_stderr_runtime_and_source_are_evidence: true
+    unknown_exit_cause: UNKNOWN
+    reuse_existing_owner_or_resolver_first: true
+    after_fix_repeat_same_discriminating_probe: true
+    generic_hints:
+      0: SUCCESS_CANDIDATE
+      1: GENERIC_FAILURE
+      2: USAGE_OR_POLICY_CANDIDATE
+      126: NOT_EXECUTABLE_CANDIDATE
+      127: COMMAND_NOT_FOUND_CANDIDATE
+      128_plus_signal: SIGNAL_TERMINATION_CANDIDATE
   canonical_route:
     - CENTRALDARK
     - ACORDAR

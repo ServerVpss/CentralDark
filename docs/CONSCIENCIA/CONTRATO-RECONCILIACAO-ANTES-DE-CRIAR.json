@@ -607,6 +607,13 @@
       "RUNTIME_PROOF_GATE": {
         "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#universal_operational_contract.counterproof",
         "stage": "RUNTIME"
+      },
+      "EXIT_CODE_DIAGNOSIS_GATE": {
+        "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json#exit_code_diagnosis_contract",
+        "stage": "ALL_PROCESS_RESULTS",
+        "role": "DIAGNOSE_NUMERIC_EXIT_BEFORE_CAUSAL_CLAIM",
+        "exit_code_alone_is_not_root_cause": true,
+        "unknown_is_not_pass": true
       }
     }
   },
@@ -2762,5 +2769,53 @@
     "preserve_one_writer_per_mutable_scope": true,
     "sol_self_approval": false,
     "reality_is_judge": true
+  },
+  "exit_code_diagnosis_contract": {
+    "marker": "CENTRALDARK_EXIT_CODE_DIAGNOSIS_REQUIRED",
+    "status": "MANDATORY_GLOBAL",
+    "applies_to": "ALL_PROCESS_AND_TOOL_EXECUTIONS",
+    "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UNIVERSAL-ENGINE-METHOD.yml#exit_code_diagnosis",
+    "rules": {
+      "exit_code_is_signal_not_root_cause": true,
+      "exit_code_zero_alone_is_not_pass": true,
+      "any_nonzero_requires_causal_diagnosis": true,
+      "stderr_stdout_and_runtime_state_are_evidence": true,
+      "same_numeric_code_may_mean_different_causes_across_tools": true,
+      "numeric_code_must_not_be_globally_redefined_by_tool_specific_meaning": true,
+      "signal_convention_requires_shell_context": true,
+      "unknown_exit_cause_remains_unknown": true,
+      "diagnosis_must_name_failed_premise_or_exact_hard_blocker": true,
+      "existing_owner_or_resolver_must_be_reused_before_new_mechanism": true,
+      "after_fix_reexecute_same_discriminating_probe": true,
+      "action_without_effect_is_not_proof": true
+    },
+    "generic_classes": [
+      "SUCCESS_CANDIDATE",
+      "GENERIC_FAILURE",
+      "USAGE_OR_POLICY_CANDIDATE",
+      "NOT_EXECUTABLE_CANDIDATE",
+      "COMMAND_NOT_FOUND_CANDIDATE",
+      "SIGNAL_TERMINATION_CANDIDATE",
+      "NONZERO_UNCLASSIFIED"
+    ],
+    "known_shell_conventions_are_hints_not_authority": {
+      "0": "SUCCESS_CANDIDATE",
+      "1": "GENERIC_FAILURE",
+      "2": "USAGE_OR_POLICY_CANDIDATE",
+      "126": "NOT_EXECUTABLE_CANDIDATE",
+      "127": "COMMAND_NOT_FOUND_CANDIDATE",
+      "128_plus_signal": "SIGNAL_TERMINATION_CANDIDATE"
+    },
+    "required_receipt_fields": [
+      "exit_code",
+      "signal",
+      "command_or_tool",
+      "observed_stdout_excerpt",
+      "observed_stderr_excerpt",
+      "classified_failure",
+      "causal_evidence",
+      "owner_or_resolver",
+      "next_cursor"
+    ]
   }
 }
