@@ -2,7 +2,7 @@
 title: "Mapa Central do Cérebro Vivo — CentralDark"
 status: CANONICO
 date: 2026-06-29
-updated: 2026-09-11T15:03:45-03:00
+updated: 2026-10-01
 tags: [navegacao, moc, mapa, consciencia, intencao, continuidade, cross-chat, delta-util, semantica, proof-reuse]
 category: "M-Mapa-Sistema"
 sensitivity: INTERNAL
@@ -573,3 +573,145 @@ NO_NEW_GATE_FOR_ALREADY_PROVEN_FACT=true
 - Quando `!CENTRALDARK` já for o gatilho composto declarado pelo Trigger Fabric vigente, não duplicar manualmente subgatilhos na entrada; primeiro consumir o grafo canônico do próprio trigger.
 - `api.github.com/meta` é sensor de infraestrutura GitHub; não substitui checks/statuses/mergeability de PR.
 - OAuth/MCP autenticado, tool list e processo Remote/Tray são provas distintas; bridge fim-a-fim só é PASS quando uma tool call atravessa o bridge e retorna resposta válida.
+
+
+## 🧭 Roteador comportamental de setores — onde cada capacidade mora
+
+Este mapa também governa **roteamento de comportamento**. A IA não deve escolher uma ferramenta primeiro e tentar encaixar a missão depois. Deve classificar a intenção pelo setor, localizar o owner canônico, escolher a superfície disponível e só então executar/provar.
+
+```text
+SECTOR_ROUTER_REQUIRED=true
+ROUTE_INTENT_TO_SECTOR_BEFORE_TOOL=true
+ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true
+SECTOR_OWNER_UNKNOWN_STAYS_UNKNOWN=true
+ONE_PATH_FAILURE_IS_NOT_SYSTEM_FAILURE=true
+MULTI_PATH_FAILOVER_BEFORE_GLOBAL_BLOCKED=true
+CURRENT_RUNTIME_STATE_IS_NOT_CANONICAL_OWNER=true
+MAP_IS_ROUTER_NOT_SECOND_BRAIN=true
+```
+
+Fluxo:
+
+```text
+INTENÇÃO DO CHEFE
+→ CLASSIFICAR SETOR
+→ LOCALIZAR OWNER
+→ IDENTIFICAR SUPERFÍCIE/RUNTIME
+→ REUSE_BEFORE_CREATE
+→ ESCOLHER MENOR ROTA VIVA
+→ FALLBACK DO MESMO SETOR QUANDO EXISTIR
+→ PROVA APLICÁVEL
+→ REGISTRAR DELTA
+```
+
+### Matriz de setores da CentralDark
+
+| Setor/capability | Owner canônico / endereço | Papel | Regra de roteamento |
+|---|---|---|---|
+| 👑 Intenção e autoridade humana | SEGREDO/CHEFE + `SOUL-SOL.md` | define objetivo, prioridade e autorização | modelo não inventa contrato mental |
+| 🧬 Identidade e lei da Casa | `LEIA-ME-IA.md` + `AGENTS.md` + `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` | invariantes e precedência | carregar antes de alterar significado |
+| 🧭 Navegação/onde fica cada coisa | `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` | roteador de setores/owners | consultar antes de procurar ferramenta |
+| 🧠 Gramática e aprendizado comportamental | `SOL-GRAMATICA-DE-ENSINO.yml` + `.agents/skills/centraldark-operational-method/SKILL.md` | transformar correções do CHEFE em comportamento reutilizável | próximo executor herda sem reensino |
+| 🔄 Orquestração/ciclo | `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml` + `TRIGGERS.yml` | ciclo ponta a ponta | não criar segundo orquestrador |
+| ☿ Execução agêntica | `apps/modulos/HERMES-CORE/` | execução/coordenadores/especialistas | executor não vira autoridade |
+| 🧰 Skills/capabilities | `.agents/skills/` | catálogo de capacidades | catálogo grande → selecionar poucas discriminantes |
+| 🎙️ Voz | `.claude/skills/synced/voice-semantic-classifier/SKILL.md` | superfície de voz/ASR | VOICE_IS_SURFACE_NOT_BRAIN |
+| ⚖ Evidência/gates | `SEMANTIC-GREEN-GATE.yml` + Fixed Point Fabric + Reality Judge | filtrar claim/falso-verde | ACTION != PROOF; UNKNOWN != PASS |
+| 🐙 GitHub/canon versionado | `ServerVpss/CentralDark@main` | rendezvous canônico de código/docs | main atual > histórico |
+| ⚓ PR-MÃE | PR `#1562` | ledger/rendezvous permanente | receipt/handoff; não é segundo writer |
+| 🖥️ Cockpit/UI atual | `apps/modulos/Bolt/source/` + Hub inventory | superfície visual atual | visual != autoridade |
+| 🧩 AionUi/AionCore | integração alvo/donor medida em 2026-10-01 | shell/cockpit + agent bus reutilizáveis | TARGET/DONOR; não promover a owner atual sem integração provada |
+| 🧪 Hermes WebUI antiga | `apps/modulos/WebUI/` | DONOR de capacidades/UX | DONOR_IS_NOT_SOURCE_OF_TRUTH |
+| 🌐 Rede privada | Tailscale + `scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md` | PRIVATE_SPINE | transporte != GUI |
+| ⌨️ Controle remoto textual | SSH + `docs/CONSCIENCIA/05-SSH-VPS.md` | CONTROL_PLANE | usar para reparar serviços/GUI quando shell estiver vivo |
+| 🖱️ Desktop remoto interativo | AnyDesk no runtime alvo | INTERACTIVE_GUI | GUI != network spine |
+| 🆘 Resgate fora de banda | Contabo VNC/Rescue | OUT_OF_BAND_RESCUE | usar quando SO/rede interna não sustentarem as rotas normais |
+| 🐧 Corpo/SO | `centraldark-os` / openKylin runtime | substrate operacional | OS != identidade CentralDark |
+| 🏠 Casa | Windows SEGREDO + Remote Desktop Commander | edge/local executor + percepção | CASA_OFFLINE não invalida VPS |
+| 🖥️ VPS/runtime | runtime medido no host atual | corpo always-on / efeito real | DOCUMENTED != DEPLOYED |
+| 🔐 Vault/secrets | `/root/CentralDark/secrets` + `docs/CONSCIENCIA/13-COFRE-SECRETS-CENTRALIZADO.md` | owner de segredo/credencial | valor não vai para Git/log/receipt |
+| ☁️ Drive/transferência | Google Drive/rclone + rotas OAuth autorizadas | storage/transfer externo | auth é binding; Drive não vira fonte de verdade de runtime |
+| 🤖 Bots/Telegram | `apps/bot-telegram/` + `unified-bot.cjs` | canais | perfil/boot/menu diferenciam; token não mistura |
+| 🛡️ Guardião/segurança | `docs/CONSCIENCIA/DARKAI/GUARDIAO-CONFIG.md` + perfil Guardião no bot unificado | segurança/notificação | setor de segurança não vira segundo cérebro |
+| 🕒 Horário | `central-horario/` | owner global de tempo humano/máquina | um sistema de horário |
+| 🏗️ Builder | `apps/modulos/Bolt/` | construtor/aplicações | evoluir owner atual antes de criar paralelo |
+| 🔌 MCP/conectores | `apps/modulos/mcp/` + contratos MCP | ferramentas externas/capabilities | conexão != autoridade |
+| 📚 Memória/aprendizado | `docs/CONSCIENCIA/APRENDIZADOS.md` + `docs/CONSCIENCIA/LEMBRANCAS/` + memory-linker | cristal durável | sessão isolada != aprendizado permanente |
+| 🔎 Grafo/BRAIN | `docs/BRAIN/` + GraphRAG/Semantic Linker | navegação/relações | GRAPH_EDGE != CAUSALITY; grafo != autoridade |
+| 🚦 CI/PR/review | `.github/workflows/` + guards existentes | gates de integração | SAME_HEAD; pending/skipped != pass |
+
+### Contrato de acesso remoto híbrido
+
+O setor de acesso remoto é **multi-path**; nenhuma ferramenta sozinha representa a disponibilidade da máquina.
+
+```text
+REMOTE_ACCESS_IS_MULTI_PATH=true
+TAILSCALE_ROLE=PRIVATE_SPINE
+ANYDESK_ROLE=INTERACTIVE_GUI
+SSH_ROLE=CONTROL_PLANE
+CONTABO_VNC_ROLE=OUT_OF_BAND_RESCUE
+ONE_PATH_FAILURE_IS_NOT_MACHINE_FAILURE=true
+FAILOVER_BEFORE_BLOCKED=true
+GUI_FAILURE_CAN_BE_REPAIRED_OVER_SSH=true
+SSH_FAILURE_CAN_BE_REPAIRED_OVER_GUI_WHEN_GUI_IS_LIVE=true
+OS_OR_NETWORK_FAILURE_CAN_ESCALATE_TO_VNC_RESCUE=true
+```
+
+### Receipt vivo — acesso remoto observado em 2026-10-01
+
+Este bloco é **snapshot de runtime**, não lei eterna. Invalidar ao mudar tailnet, IP, serviço, sessão gráfica, firewall, DNS ou reboot relevante.
+
+```text
+OBSERVED_AT=2026-10-01
+CASA_TAILSCALE_NODE=segredo
+CASA_TAILSCALE_IPV4=100.123.93.25
+CENTRALDARK_OS_NODE=centraldark-os
+CENTRALDARK_OS_TAILSCALE_IPV4=100.90.199.124
+TAILSCALE_PING_CASA_TO_CENTRALDARK_OS=PASS
+ANYDESK_ID_PRESENT=1910522390
+ANYDESK_DIRECT_OVER_TAILSCALE_7070_CONNECT=PASS
+ANYDESK_REMOTE_SESSION_RESULT=desk_rt_ipc_error
+ANYDESK_SOCKET_REACHED_REMOTE_BEFORE_CLOSE=true
+CASA_ANYDESK_DNS_CRL_RESOLUTION_ERROR=OBSERVED
+REMOTE_LINUX_DNS=UNKNOWN
+REMOTE_ACTIVE_SESSION_X11=UNKNOWN
+SSH_FROM_THIS_CHAT_INTERACTIVE_SHELL=UNKNOWN
+CONTABO_VNC_PRESERVED=USER_AND_PARALLEL_EXECUTOR_REPORTED
+```
+
+Leitura causal desta sessão:
+
+```text
+TAILSCALE_NETWORK_REACHABILITY=PROVED
+ANYDESK_7070_ROUTE_OVER_TAILSCALE=PROVED
+ANYDESK_SESSION_CLOSE_IS_POST_NETWORK_CONNECTION=true
+GENERIC_OPEN_PORT_FIX_IS_NOT_FIRST_DISCRIMINANT=true
+NEXT_DISCRIMINANTS=[REMOTE_ACTIVE_DISPLAY_TYPE, REMOTE_ANYDESK_TRACE, REMOTE_DNS, REMOTE_FIREWALL]
+```
+
+Não promover o estado acima a PASS global. Exemplo: `TAILSCALE=PASS` não prova `ANYDESK=PASS`; `ANYDESK_ID_PRESENT` não prova sessão gráfica; Xorg instalado/configurado não prova que a sessão ativa é `Type=x11`.
+
+### Regra de aprendizagem por setor
+
+Quando uma missão encontra um novo owner ou corrige um endereço existente:
+
+```text
+ACHADO_DE_SETOR
+→ VALIDAR OWNER/CAPABILITY
+→ ATUALIZAR ESTE MAPA
+→ ATUALIZAR APRENDIZADO DURÁVEL SE O DELTA FOR REUTILIZÁVEL
+→ LIGAR RELAÇÃO SEMÂNTICA
+→ TESTAR ROTEAMENTO
+→ PRÓXIMO EXECUTOR NÃO RECOMEÇA DO ZERO
+```
+
+Se um setor novo não tiver owner provado:
+
+```text
+SECTOR_OWNER_UNKNOWN
+→ NÃO INVENTAR OWNER
+→ DISCOVER_EXISTING_OWNER
+→ REUSE_BEFORE_CREATE
+→ CRIAR SOMENTE SE GAP MATERIAL CONTINUAR
+```
+
