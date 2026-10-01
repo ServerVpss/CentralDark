@@ -79,6 +79,45 @@ def check_soul_sync(classification='SOUL_SYNC_CURRENT_FOR_FIXED_POINT'):
     checks.append(result)
     return result
 
+def check_neurolink_numeric_chain(path='docs/CONSCIENCIA/APRENDIZADOS.md', start=115, classification='NEUROLINK_NUMERIC_CONTINUITY_EXECUTABLE_GATE'):
+    """From the declared NeuroLink start, every numbered learning must be contiguous and bidirectionally linked.
+
+    The latest learning may leave NEXT_LEARNING_REF=PENDING_NEXT_CURSOR until its successor exists.
+    """
+    p=ROOT/path
+    problems=[]
+    if not p.exists():
+        checks.append({'path':path,'classification':classification,'ok':False,'missing':['FILE_MISSING']}); return
+    text=p.read_text(encoding='utf-8',errors='replace')
+    matches=list(re.finditer(r'(?m)^###\s+(\d+)\.', text))
+    sections={}
+    for i,m in enumerate(matches):
+        n=int(m.group(1)); end=matches[i+1].start() if i+1 < len(matches) else len(text)
+        if n >= start: sections[n]=text[m.start():end]
+    if not sections:
+        problems.append(f'NO_LEARNINGS_FROM_{start}')
+    else:
+        highest=max(sections)
+        expected=list(range(start, highest+1))
+        missing_ids=[n for n in expected if n not in sections]
+        if missing_ids: problems.append('NUMERIC_GAP:'+','.join(map(str,missing_ids)))
+        for n in expected:
+            body=sections.get(n,'')
+            if not body: continue
+            if f'LEARNING_ID={n}' not in body:
+                problems.append(f'{n}:LEARNING_ID_MISSING_OR_WRONG')
+            if n == start:
+                if 'PREV_LEARNING_REF=GENESIS_COGNITIVE_CHAIN' not in body:
+                    problems.append(f'{n}:GENESIS_PREV_MISSING')
+            elif f'PREV_LEARNING_REF={n-1}' not in body:
+                problems.append(f'{n}:PREV_EXPECTED_{n-1}')
+            if n < highest:
+                if f'NEXT_LEARNING_REF={n+1}' not in body:
+                    problems.append(f'{n}:NEXT_EXPECTED_{n+1}')
+            elif 'NEXT_LEARNING_REF=PENDING_NEXT_CURSOR' not in body:
+                problems.append(f'{n}:LATEST_NEXT_MUST_BE_PENDING')
+    checks.append({'path':path,'classification':classification,'ok':not problems,'missing':problems})
+
 def check_absent(path, forbidden=(), classification='PROVEN_ABSENT_IN_REPO'):
     p=ROOT/path
     ok=p.exists(); violations=[]; text=''
@@ -242,7 +281,14 @@ check('AGENTS.md',[
  'COGNITIVE_SUCCESSOR_BACKLINK_REQUIRED=true',
  'ORPHAN_COGNITIVE_CRYSTAL=REJECT',
  'NEUROLINK=COGNITIVE_CONTINUITY_ALIAS',
+ 'COGNITIVE_NEUROLINK_NUMERIC_CONTINUITY_REQUIRED=true',
+ 'COGNITIVE_NEUROLINK_SEQUENCE_START=115',
+ 'COGNITIVE_NEXT_ID_MUST_EQUAL_CURRENT_PLUS_ONE=true',
+ 'NO_NUMERIC_GAP_AFTER_SEQUENCE_START=true',
+ 'PROVEN_LEARNING_SHOULD_COMPILE_TO_DETERMINISTIC_ARTIFACT=true',
+ 'REPRODUCTION_MUST_NOT_REQUIRE_AI=true',
 ], classification='MATERIAL_FIRST_AGENT_SEMANTICS')
+check_neurolink_numeric_chain()
 check('AGENTS.md',[
  'CREATE_PR_MERGEABLE_SNAPSHOT_IS_NOT_FINAL=true',
  'REMEASURE_PR_LIVE_BEFORE_HUMAN_RETURN=true',
@@ -271,6 +317,12 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml',[
  'COGNITIVE_SUCCESSOR_BACKLINK_REQUIRED: true',
  'ORPHAN_COGNITIVE_CRYSTAL: REJECT',
  'NO_ORPHAN_COGNITIVE_CRYSTAL',
+ 'COGNITIVE_NEUROLINK_NUMERIC_CONTINUITY_REQUIRED: true',
+ 'COGNITIVE_NEUROLINK_SEQUENCE_START: 115',
+ 'COGNITIVE_NEXT_ID_MUST_EQUAL_CURRENT_PLUS_ONE: true',
+ 'NO_NUMERIC_GAP_AFTER_SEQUENCE_START: true',
+ 'PROVEN_LEARNING_SHOULD_COMPILE_TO_DETERMINISTIC_ARTIFACT: true',
+ 'REPRODUCTION_MUST_NOT_REQUIRE_AI: true',
 ], classification='MATERIAL_FIRST_GRAPH_BINDING')
 check('scripts/lupa/portable-kernel.mjs',[
  "id: 'MATERIAL_FIRST_COGNITIVE_CRYSTALLIZATION'",
