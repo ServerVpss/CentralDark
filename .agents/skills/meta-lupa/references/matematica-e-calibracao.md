@@ -54,3 +54,154 @@ Se veredito muda → `SENSÍVEL À DEPENDÊNCIA`.
 
 Evitar 0 e 1 (dogma). Usar base rate quando houver. `0,5` só como neutro declarado.
 Registrar quem escolheu o prior e com qual evidência.
+## 8. Medição Bayesiana de reancoragem do contrato portátil
+
+**Hipótese operacional**
+
+\[
+H = \text{executor alinhado ao fio canônico CURRENT}
+\]
+
+A reinjeção do contrato é uma **intervenção** \(T\), não uma prova por si só:
+
+\[
+T=1 \Rightarrow \text{contrato portátil reinjetado}
+\]
+
+\[
+T=0 \Rightarrow \text{sem reinjeção ou baseline pareada}
+\]
+
+O resultado \(A=1\) só ocorre quando todos os indicadores materiais aplicáveis passam: docs-first, CURRENT recuperado, SELF-GRILL, setor/owner, REUSE_BEFORE_CREATE, PAPAGAIO OFF, ausência de reprova redundante e NEXT_CURSOR preservado. UNKNOWN material não conta como sucesso.
+
+### 8.1 Prior, odds, LR e posterior
+
+\[
+O(H)=\frac{P(H)}{1-P(H)}
+\]
+
+\[
+LR_i=\frac{P(E_i\mid H)}{P(E_i\mid \neg H)}
+\]
+
+\[
+O(H\mid E_1,\ldots,E_n)=O(H)\prod_{i=1}^{n}LR_i
+\]
+
+\[
+P(H\mid E)=\frac{O(H\mid E)}{1+O(H\mid E)}
+\]
+
+Não inventar prior, LR ou posterior. Sem base histórica/experimental ou fonte declarada, usar NÃO CALCULÁVEL ou classificação ordinal.
+
+### 8.2 Efeito empírico da reinjeção
+
+Para medir se reinjetar o contrato melhora o alinhamento:
+
+\[
+\Delta_{reanchor}
+=
+P(A=1\mid T=1)-P(A=1\mid T=0)
+\]
+
+e, quando a taxa de controle for diferente de zero:
+
+\[
+RR_{reanchor}
+=
+\frac{P(A=1\mid T=1)}{P(A=1\mid T=0)}
+\]
+
+Sem controle ou baseline pareada, não chamar isso de efeito causal; registrar apenas taxa descritiva de recuperação após reinjeção.
+
+### 8.3 Posterior Beta da confiabilidade da reancoragem
+
+Se \(\theta=P(A=1\mid T=1)\):
+
+\[
+\theta\sim \operatorname{Beta}(\alpha_0,\beta_0)
+\]
+
+Após \(s\) sucessos e \(f\) falhas:
+
+\[
+\theta\mid D
+\sim
+\operatorname{Beta}(\alpha_0+s,\beta_0+f)
+\]
+
+Média posterior:
+
+\[
+\mathbb{E}[\theta\mid D]
+=
+\frac{\alpha_0+s}{\alpha_0+\beta_0+s+f}
+\]
+
+Não assumir \(\operatorname{Beta}(1,1)\) silenciosamente. Se usado como prior neutro experimental, declarar explicitamente.
+
+Com tratamento e controle medidos separadamente, uma pergunta útil é:
+
+\[
+P(\theta_1>\theta_0\mid D)
+\]
+
+Isto mede a probabilidade posterior de a reancoragem ter taxa de alinhamento superior ao controle, sem confundir essa probabilidade com autoridade operacional.
+
+### 8.4 Entropia e ganho de informação
+
+\[
+\mathcal{H}(p)
+=
+-p\log_2 p-(1-p)\log_2(1-p)
+\]
+
+\[
+IG
+=
+\mathcal{H}(p_{prior})
+-
+\mathcal{H}(p_{posterior})
+\]
+
+Se repetir o mesmo contrato não reduz incerteza, não muda regra/teste e não acrescenta amostra útil, a repetição não gera ouro novo.
+
+### 8.5 Calibração
+
+Para previsões probabilísticas de alinhamento:
+
+\[
+BS
+=
+\frac{1}{N}
+\sum_{i=1}^{N}(p_i-y_i)^2
+\]
+
+onde \(y_i\in\{0,1\}\). Quanto menor o Brier Score, melhor a calibração média.
+
+### 8.6 Dependência entre evidências
+
+Não multiplicar sinais correlacionados como se fossem independentes. Modo conservador: um LR por cluster de dependência. Se o veredito muda entre a hipótese de independência e o modo conservador, marcar SENSÍVEL À DEPENDÊNCIA.
+
+### 8.7 Limiar e valor da informação
+
+O limiar de decisão continua sendo apoio, não autoridade:
+
+\[
+p^*
+=
+\frac{C_{FP}}{C_{FP}+C_{FN}}
+\]
+
+\[
+VOI
+=
+L_{before}
+-
+L_{after}
+-
+C_{test}
+\]
+
+A reancoragem só merece repetição instrumental quando acrescenta calibração, reduz entropia, encontra drift ou altera o próximo movimento.
+
