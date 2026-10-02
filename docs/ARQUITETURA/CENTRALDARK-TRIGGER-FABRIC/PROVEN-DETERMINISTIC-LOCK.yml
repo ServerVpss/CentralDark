@@ -669,4 +669,22 @@ hybrid_multiroute_capability_replay_2026_10_02:
     ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER: true
     ROUTE_HEALTH_MUST_BE_REMEASURED_PER_BINDING: true
     TRANSVERSAL_ROUTE_REUSES_SAME_OWNER_AND_PROOF_LAW: true
+  hook_bindings:
+    triggers: [CAPABILITY_GAP, TERRITORY_ROUTE_CHANGE]
+    sentinel_signature: ROUTE_FAILURE
+    sentinel_owner: scripts/trigger-fabric/system_sentinel.py
+    trigger_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+    runtime_consumer: CENTRALDARK-OS/root:/root/CentralDark
+    git_hook_is_runtime_route_owner: false
+    hermes_failure_callback_claimed: false
+  runtime_proof:
+    main_sha: dcce1fbd25af0534925d69c01f3d07be86d2638b
+    yaml_parse: PASS
+    pycompile: PASS
+    sentinel_self_test: PASS
+    route_failure_classifier: true
+    multiroute_recipe_hook: true
+    recipe_binding: PASS
+    cleanup: PASS
+  checklist_ref: docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md
   next_cursor: REPLAY_MULTIROUTE_BEFORE_HUMAN_BLOCKER
