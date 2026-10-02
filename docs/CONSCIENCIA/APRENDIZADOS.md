@@ -1061,7 +1061,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Categoria:** arquitetura-casa-openkylin-vmware-gpu
 - **Data:** 2026-10-01
 - **Owner:** `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/T0-MEDICAO-CENTRALDARK-OS-KYLIN.md`
-- **NeuroLink:** `LEARNING_ID=116`; `INTENT_REF=COGNITIVE_EXPANSION_2026_10_01`; `PREV_LEARNING_REF=115`; `RELATION_TYPE=OPERATIONAL_EMBODIMENT_OF_REASONING_LOOP`; `NEXT_LEARNING_REF=117`; `OWNER_REF=docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/T0-MEDICAO-CENTRALDARK-OS-KYLIN.md`; `NEXT_CURSOR=EXTERNALIZE_METHOD_AND_RETURN_LOOP`.
+- **NeuroLink:** `LEARNING_ID=114`; `INTENT_REF=COGNITIVE_EXPANSION_2026_10_01`; `PREV_LEARNING_REF=113`; `RELATION_TYPE=OPERATIONAL_EMBODIMENT_OF_REASONING_LOOP`; `NEXT_LEARNING_REF=115`; `OWNER_REF=docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/T0-MEDICAO-CENTRALDARK-OS-KYLIN.md`; `NEXT_CURSOR=EXTERNALIZE_METHOD_AND_RETURN_LOOP`.
 - **Contexto:** Leitura read-only de `E:\VMs\CENTRALDARK-OS` mostrou que `CENTRALDARK-OSh` usa 4 vCPU, 8 GB RAM, rede NAT e VMware hardware v22. O arquivo VMDK é somente um descriptor `fullDevice` que aponta para `\\.\\PhysicalDrive1` (referência Kingston), portanto o guest trabalha sobre disco físico real. O share `CENTRALDARK-SHARED` monta `E:\VMs\CENTRALDARK-OS\SHARED` com leitura/escrita e contém a árvore CentralDark. A VM tem `mks.enable3d=TRUE`; logs registram `Mesa: SVGA3D`, MKS/SVGA, DXGI/D3D e backend DX11; a GPU física do host é Radeon RX 580.
 - **Aprendizado:** a Casa já possui um corpo local material do CENTRALDARK-OS, não só backup ou mock. O desenho correto é composição: Windows/VMware fornece casca e GPU; o disco físico fornece o guest; shared folders fornecem o núcleo; Tailscale conecta com a VPS. Isso permite `CASA_TWIN + VPS_RUNTIME` como Megazord de capacidades sem criar segundo cérebro.
 - **Cristal:** `PHYSICAL_DISK_VM=PASS`; `CENTRALDARK_SHARED_TREE=PASS`; `VMWARE_3D_ACCELERATION=PASS`; `HOST_GPU_RX580=PASS`; `CASA_TWIN_IS_NOT_SECOND_BRAIN=true`; `VPS_AND_CASA_CAN_SHARE_CAPABILITIES=true`; `ONE_SYSTEM_ONLY=true`.
@@ -1255,6 +1255,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 128. Casa hospedeira e twin local formam um único laboratório de prova, mas host e guest continuam referências distintas
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L128`; `PREV_GLOBAL_UID=L127`; `NEXT_GLOBAL_UID=L129`; `LEGACY_LEARNING_NUMBER=128`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=128`; `PREV_LEARNING_REF=127`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=129`.
 - **Categoria:** local-first-host-guest-runtime-lab
 - **Data:** 2026-10-02
 - **Owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-OPENKYLIN-AI-NATIVA-CENTRALDARK.md`
@@ -1266,6 +1267,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 129. Runtime sieve: corrigir premissa sem jogar fora capability boa; caminho de usuário deve seguir `$HOME`, não hardcode
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L129`; `PREV_GLOBAL_UID=L128`; `NEXT_GLOBAL_UID=L130`; `LEGACY_LEARNING_NUMBER=129`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=129`; `PREV_LEARNING_REF=128`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=130`.
 - **Categoria:** runtime-sieve-path-identity-and-probe-correction
 - **Data:** 2026-10-02
 - **Owner:** `tools/local/centraldark-ai-runtime-panel.sh` no PR filho #1742 enquanto não promovido.
@@ -1278,6 +1280,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 130. O painel CENTRALDARK AI CLI Runtime é uma superfície CLI read-only; acesso visual e dashboard web são capabilities distintas
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L130`; `PREV_GLOBAL_UID=L129`; `NEXT_GLOBAL_UID=L131`; `LEGACY_LEARNING_NUMBER=130`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=130`; `PREV_LEARNING_REF=129`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=131`.
 - **Categoria:** runtime-panel-access-surface-separation
 - **Data:** 2026-10-02
 - **Contexto:** o CHEFE pediu o acesso ao dashboard. A medição encontrou `$HOME/Área de Trabalho/AI-CLI-Runtime.desktop` apontando para `$HOME/centraldark-ai-runtime-panel.sh`. O painel foi aberto na sessão gráfica do guest via `mate-terminal` e o processo `bash $HOME/centraldark-ai-runtime-panel.sh` ficou observável.
@@ -1288,6 +1291,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 131. Token Center, pairing do KylinBot e inferência Triton local são três camadas de acesso que não podem ser misturadas
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L131`; `PREV_GLOBAL_UID=L130`; `NEXT_GLOBAL_UID=L132`; `LEGACY_LEARNING_NUMBER=131`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=131`; `PREV_LEARNING_REF=130`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=132`.
 - **Categoria:** auth-layer-separation-windows-clients
 - **Data:** 2026-10-02
 - **Owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-OPENKYLIN-AI-NATIVA-CENTRALDARK.md`
@@ -1299,6 +1303,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 132. Convergir toda inteligência significa bindar capabilities ao mesmo core; PR-mãe é ledger e donor não vira cérebro por merge cego
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L132`; `PREV_GLOBAL_UID=L131`; `NEXT_GLOBAL_UID=L133`; `LEGACY_LEARNING_NUMBER=132`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=132`; `PREV_LEARNING_REF=131`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=133`.
 - **Categoria:** one-system-canonical-convergence
 - **Data:** 2026-10-02
 - **Owner:** `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`
@@ -1310,6 +1315,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 133. Aprendizado durável exige sincronização viva entre Aprendizados, Lembranças, NeuroLink, catálogo semântico e SOUL quando a regra tocar identidade
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L133`; `PREV_GLOBAL_UID=L132`; `NEXT_GLOBAL_UID=L134`; `LEGACY_LEARNING_NUMBER=133`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=133`; `PREV_LEARNING_REF=132`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=134`.
 - **Categoria:** canonical-memory-semantic-index-soul-sync
 - **Data:** 2026-10-02
 - **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md` + `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` + Semantic Linker, sem criar memória paralela.
@@ -1320,6 +1326,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 134. A constelação META é uma rede de capacidades herdadas; META-START-LINK preserva direção e conecta META-GRILL, MetaLupa, Metacognição e MetaMultibússola sem novo cérebro
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L134`; `PREV_GLOBAL_UID=L133`; `NEXT_GLOBAL_UID=L135`; `LEGACY_LEARNING_NUMBER=134`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=134`; `PREV_LEARNING_REF=133`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=135`.
 - **Categoria:** meta-constellation-start-link-semantic-stitch
 - **Data:** 2026-10-02
 - **Owners:** `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`, `docs/CONSCIENCIA/MULTIBUSSOLA.md`, `.agents/skills/meta-lupa/SKILL.md` e kit `METAGRILL-METALUPA`.
@@ -1330,6 +1337,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 135. Examinar criticamente e conservar o que sobrevive à prova é a forma curta do META-GRILL: falsificar sem destruir o ouro provado
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L135`; `PREV_GLOBAL_UID=L134`; `NEXT_GLOBAL_UID=L136`; `LEGACY_LEARNING_NUMBER=135`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=135`; `PREV_LEARNING_REF=134`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=136`.
 - **Categoria:** meta-grill-retain-proven-good
 - **Data:** 2026-10-02
 - **Proveniência humana:** referência fornecida pelo CHEFE a 1 Tessalonicenses 5:21, em `https://www.bible.com/pt/bible/212/1TH.5.21`. A CentralDark absorve a estrutura operacional, não usa a referência religiosa como prova técnica.
@@ -1340,6 +1348,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 136. O sync cognitivo precisa se aplicar ao próprio delta material: S0 owner-binding entra na cadeia antes de continuar a missão
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L136`; `PREV_GLOBAL_UID=L135`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=136`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=136`; `PREV_LEARNING_REF=135`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
 - **Categoria:** meta-self-application-s0-owner-binding
 - **Data:** 2026-10-02
 - **Owner:** `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`
