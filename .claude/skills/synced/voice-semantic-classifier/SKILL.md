@@ -440,7 +440,14 @@ VOZ SE PEDIR \"LEIA O ID\":
 → ler apenas o ID solicitado, sem transformar o restante da resposta em soletração técnica.
 ```
 
-Esta política vale para Claude, ChatGPT/SOL, Hermes, Grok, Gemini, Codex, modelos locais e superfícies futuras que consumam este owner.
+Esta política vale para CHAT_GLOBAL (ChatGPT, Claude Chat, Gemini Chat, Grok Chat e futuras superfícies conversacionais), Hermes, Codex, modelos locais e qualquer superfície futura que consuma este owner.
+
+```text
+VOICE_CHAT_BRAND_IS_PROVENANCE_NOT_CAPABILITY=true
+VOICE_SURFACE_TOOLSET_MUST_BE_MEASURED=true
+VOICE_GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true
+VOICE_CHAT_GLOBAL_WITH_AUTHORIZED_TOOL_CAN_EXECUTE_IN_SCOPE=true
+```
 
 ## 17. Tool Call visibility no modo Voice
 
