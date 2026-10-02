@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "109d9fe8c4f330ac81a9bbc66b45c518b43a201e",
+  "source_blob_sha": "b699e4a65d64b7c2c04911e7a536f5b22570df79",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 136,
-    "highest_legacy_learning_number": 137,
+    "learning_sections": 137,
+    "highest_legacy_learning_number": 138,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 137
+      "end": 138
     }
   },
   "nodes": [
@@ -1581,6 +1581,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L136",
+      "next_uid": "L138"
+    },
+    {
+      "uid": "L138",
+      "legacy_learning_number": 138,
+      "legacy_occurrence": 1,
+      "title": "Autoconsulta canônica é o modo operacional padrão: antes de perguntar ou contradizer, a CentralDark consulta o método externalizado e tenta falsificar a intuição do CHEFE",
+      "document_order": 137,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L137",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
