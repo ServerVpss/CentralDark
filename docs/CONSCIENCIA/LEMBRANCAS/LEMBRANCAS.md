@@ -498,3 +498,9 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 
 **Links:** [[APRENDIZADOS#140]] · [[APRENDIZADOS#139]] · [[CONTRATO-LUPA-BAYESIANA]] · [[CENTRALDARK_AI_BOOT]]
 
+### [2026-10-02] Sessão inteira — síntese canônica
+- **Tipo:** SESSION_MEMORY_INDEX
+- **Learning:** #142
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SESSAO-CORPO-FORJA-CONTRATO-BAYES-FUNIL.md`
+- **Conteúdo:** corpo único CentralDark-OS; Casa/VMware como forja; VPS como twin headless; SELF-GRILL docs-first; contrato portátil; Bayes da reancoragem; funil de dedupe/absorção; Meta-Lupa/Meta-Multibússola; matriz causal de vermelhos.
+
