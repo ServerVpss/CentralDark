@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "076d817e3a0b6b02024521c0c83cf6a07e7d39cb",
+  "source_blob_sha": "6ad2ad6443ad63c90aab1edf9dfb72a59af136a7",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 144,
-    "highest_legacy_learning_number": 145,
+    "learning_sections": 146,
+    "highest_legacy_learning_number": 147,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 145
+      "end": 147
     }
   },
   "nodes": [
@@ -1669,6 +1669,28 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L144",
+      "next_uid": "L146"
+    },
+    {
+      "uid": "L146",
+      "legacy_learning_number": 146,
+      "legacy_occurrence": 1,
+      "title": "Sistema híbrido multirota: uma rota falhar não reduz a capability global do organismo",
+      "document_order": 145,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L145",
+      "next_uid": "L147"
+    },
+    {
+      "uid": "L147",
+      "legacy_learning_number": 147,
+      "legacy_occurrence": 1,
+      "title": "Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis",
+      "document_order": 146,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L146",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

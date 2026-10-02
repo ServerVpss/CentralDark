@@ -385,11 +385,26 @@ def on_session_end(*_args: Any, **_kwargs: Any) -> None:
     })
 
 
+COMPLETE_SIEVE_REQUIRED_PATHS = (
+    "CENTRALDARK_AI_BOOT.yaml",
+    "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+    "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md",
+    "docs/receipts/2026-10-02-complete-sieve-law.md",
+)
+
+
+def complete_sieve_materialization(root: Path) -> list[str]:
+    """Return required complete-sieve sources absent from this runtime checkout."""
+    return [rel for rel in COMPLETE_SIEVE_REQUIRED_PATHS if not (root / rel).exists()]
+
 def pre_verify(*_args: Any, **_kwargs: Any) -> dict[str, str] | None:
     """Do not let a changed repository close while Git detects malformed whitespace."""
     root = repo_root()
     if not (root / ".git").exists():
         return None
+    missing = complete_sieve_materialization(root)
+    if missing:
+        return {"action": "continue", "message": "CENTRALDARK_COMPLETE_SIEVE_MATERIALIZATION=FAIL missing=" + ",".join(missing)}
     rc, output = run_text(["git", "diff", "--check"], root)
     if rc == 0:
         return None
@@ -410,6 +425,8 @@ def self_test() -> dict[str, Any]:
     assert is_logical_path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md")
     assert is_logical_path("CENTRALDARK_AI_BOOT.yaml")
     assert not is_logical_path("apps/modulos/mcp/src/index.js")
+    assert "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md" in COMPLETE_SIEVE_REQUIRED_PATHS
+    assert "docs/receipts/2026-10-02-complete-sieve-law.md" in COMPLETE_SIEVE_REQUIRED_PATHS
     assert is_mutating("terminal", {"command": "git commit -m x"})
     assert not is_mutating("terminal", {"command": "git status --short"})
     assert logical_mutation("write_file", {"path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/X.md"})

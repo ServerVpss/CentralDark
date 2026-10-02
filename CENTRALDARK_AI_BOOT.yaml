@@ -859,6 +859,63 @@ CENTRALDARK_AI_BOOT:
         - HANDOFF_EXHAUSTED
         - EXACT_BLOCKER_PROVED
       local_shell_absent_does_not_end_system_loop: true
+      one_route_failed_is_not_system_failed: true
+      local_route_offline_is_not_global_capability_offline: true
+      alternate_authorized_route_before_human_blocker: true
+      route_health_must_be_remeasured_per_binding: true
+      same_logical_system_may_be_reached_outside_in_and_inside_out: true
+      bidirectional_route_does_not_create_second_system: true
+      transversal_route_reuses_same_owner_and_proof_law: true
+      capability_system_model: "UNION_OF_MEASURED_AUTHORIZED_ROUTE_CAPABILITIES"
+      route_fail_sequence:
+        - CLASSIFY_EXACT_ROUTE
+        - KEEP_SYSTEM_STATE_UNDECIDED
+        - INVENTORY_AUTHORIZED_ALTERNATE_ROUTES
+        - MEASURE_ALTERNATES
+        - REUSE_LIVE_CAPABILITY
+        - COMPARE_SAME_CLAIM_SCOPE_TIME
+        - DECIDE_PASS_UNKNOWN_OR_BLOCKED
+    complete_sieve_registration:
+      enabled: true
+      learning_ref: 147
+      fixed_point_requires_all_applicable_layers: true
+      non_applicable_layer_must_be_explicit: true
+      ordered_layers:
+        - APRENDIZADO
+        - LEMBRANCA
+        - RECEITA_EXECUTAVEL
+        - HOOK_REAL_WHEN_APPLICABLE
+        - TRIGGER
+        - BOOT
+        - VERIFIER
+        - CONSUMER_REAL
+        - CHECKLIST_DIARIO
+        - RECEIPT
+        - PR_MOTHER_1562
+        - RELATED_LIVE_PR_WHEN_SCOPE_INTERSECTS
+        - PHYSICAL_BINDING_WHEN_CLAIM_DEPENDS_ON_IT
+        - READBACK
+      laws:
+        learning_registered_is_not_recipe_registered: true
+        recipe_registered_is_not_hook_bound: true
+        hook_bound_is_not_trigger_bound: true
+        trigger_bound_is_not_boot_loaded: true
+        boot_loaded_is_not_verifier_enforced: true
+        verifier_enforced_is_not_consumer_proven: true
+        consumer_proven_is_not_checklist_registered: true
+        checklist_registered_is_not_receipt_materialized: true
+        receipt_materialized_is_not_pr_mother_receipt: true
+        check_present_in_git_is_not_check_present_in_runtime: true
+        sparse_checkout_is_binding_not_source_of_truth: true
+        sparse_path_enabled_is_not_file_present_at_current_head: true
+        physical_binding_required_when_claim_depends_on_host_vm_share: true
+        unrelated_global_red_does_not_invalidate_proven_cone: true
+        cone_pass_does_not_imply_global_pass: true
+      pre_fixed_point:
+        - CALCULATE_APPLICABLE_LAYERS
+        - MATERIALIZE_REQUIRED_CONSUMER_PATHS
+        - PROVE_OR_CLASSIFY_EACH_LAYER_PASS_UNKNOWN_BLOCKED_NA
+        - READBACK
     human_counterproof_reentry:
       enabled: true
       trigger: "MATERIAL_HUMAN_COUNTERPROOF_INVALIDATES_CURRENT_EXIT"

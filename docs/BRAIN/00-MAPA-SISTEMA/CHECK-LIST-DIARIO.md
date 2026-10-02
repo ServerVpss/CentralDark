@@ -208,6 +208,65 @@ TOOLSET -> CAPABILITY
 SAME_CLAIM+SCOPE+TIME: MEASURED_EVIDENCE > UNMEASURED_INFERENCE
 ```
 
+### 📓 Caderneta — sistema híbrido multirota #146
+
+- [x] Aprendizado #146 registrado e encadeado em `L145→L146`.
+- [x] Lembrança expandida registrada.
+- [x] Receita executável registrada em `PROVEN-CLAIMS.lock.json`.
+- [x] Lock determinístico registrado em `PROVEN-DETERMINISTIC-LOCK.yml`.
+- [x] Trigger `CAPABILITY_GAP` ligado à receita `HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`.
+- [x] Trigger `TERRITORY_ROUTE_CHANGE` ligado à mesma receita.
+- [x] Sentinel classifica `ROUTE_FAILURE` e roteia para `CAPABILITY_GAP → HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`.
+- [x] Verifier fiscaliza trigger + sentinel + machine recipe.
+- [x] Consumer real provado no `CENTRALDARK-OS/root:/root/CentralDark`.
+- [x] Ferida discriminante: `origin/main` tinha o checklist, mas o sparse-checkout do consumer não materializava `docs/BRAIN/00-MAPA-SISTEMA`; `CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME`.
+- [x] Delta mínimo aplicado: `docs/BRAIN/00-MAPA-SISTEMA` adicionado ao sparse-checkout existente.
+- [x] Pós-remediação: `HYBRID_MULTIROUTE_HOOK_CONTRACT=PASS`, `SENTINEL_HOOK=PASS`, `MACHINE_RECIPE=PASS`, `CHECKLIST_CONTRACT=PASS`, `RECIPE_COMPLETENESS=PASS`.
+- [x] Consumer self-test preserva marcador factual: `multiroute_recipe_hook=true`.
+- [x] Verifier global permanece vermelho fora do cone (`GLOBAL_FAILED=30` na medição); `CONE_PASS != GLOBAL_PASS`.
+- [ ] Binding físico `E:\VMs\CENTRALDARK-OS\SHARED ↔ guest HGFS`: NOT_PROVEN nesta medição; Windows `SEGREDO` offline e HGFS não visível/montado no guest.
+- [x] PR-MÃE #1562 continua ledger/rendezvous; não é writer.
+- [ ] PR #1743 está aberta e não-mergeável; tratar como projeção/checklist histórica até reconciliação.
+- [ ] PR #1742 está aberta e não-mergeável; runtime panel continua separado desta prova de hook e deve remedir seu próprio cone.
+
+```text
+LEARNING_REGISTERED != RECIPE_REGISTERED
+RECIPE_REGISTERED != HOOK_BOUND
+HOOK_BOUND != CONSUMER_PROVEN
+CONSUMER_PROVEN != CHECKLIST_REGISTERED
+CHECKLIST_REGISTERED != PR_MOTHER_RECEIPT
+
+FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS
+```
+
+### 📓 Caderneta — Lei da Peneira Completa #147
+
+- [x] Aprendizado #147 registrado.
+- [x] Lembrança expandida registrada.
+- [x] NeuroLink `L146→L147` registrado.
+- [x] Receita #146 evoluída com materialização, hook real, binding físico condicional e novo fingerprint.
+- [x] Hook real Hermes `pre_verify` fiscaliza fontes mínimas da peneira materializadas no consumer.
+- [x] `docs/receipts` entrou no sparse-checkout do consumer; o receipt é camada aplicável da peneira.
+- [x] Lei discriminante: `SPARSE_PATH_ENABLED != FILE_PRESENT_AT_CURRENT_HEAD`; prova usa o mesmo HEAD do claim.
+- [x] Trigger `PRE_HUMAN_RETURN` recebeu `COMPLETE_SIEVE_APPLICABILITY_CHECK` + `COMPLETE_SIEVE_READBACK`.
+- [x] BOOT carrega `complete_sieve_registration`.
+- [x] Consumer `CENTRALDARK-OS/root` materializa `docs/BRAIN/00-MAPA-SISTEMA` no sparse-checkout.
+- [x] Cone multirota #146 passou os cinco checks aplicáveis após a correção do sparse.
+- [ ] Verifier global completo ainda tem vermelhos fora do cone; não chamar repo globalmente verde.
+- [ ] `E:\VMs\CENTRALDARK-OS\SHARED ↔ HGFS` permanece NOT_PROVEN; remedir quando a rota Windows/host estiver viva.
+- [ ] PR #1742 continua aberta/não-mergeável na última medição; cone runtime-panel próprio.
+- [ ] PR #1743 continua aberta/não-mergeável na última medição; projeção checklist própria.
+- [x] PR-MÃE #1562 continua somente ledger/rendezvous.
+
+```text
+APRENDIZADO -> LEMBRANCA -> RECEITA -> HOOK -> TRIGGER -> BOOT -> VERIFIER
+-> CONSUMER_REAL -> CHECKLIST_DIARIO -> PR_MAE_1562
+-> RELATED_PR_IF_SCOPE_INTERSECTS -> PHYSICAL_BINDING_IF_MATERIAL -> READBACK
+
+FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true
+CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME
+CONE_PASS != GLOBAL_PASS
+```
 ## 🫀 CURRENT VIVO — 2026-09-30
 
 ```text
