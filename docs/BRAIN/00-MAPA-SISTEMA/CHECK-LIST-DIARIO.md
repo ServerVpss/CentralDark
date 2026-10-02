@@ -208,6 +208,32 @@ TOOLSET -> CAPABILITY
 SAME_CLAIM+SCOPE+TIME: MEASURED_EVIDENCE > UNMEASURED_INFERENCE
 ```
 
+### 📓 Caderneta — sistema híbrido multirota #146
+
+- [x] Aprendizado #146 registrado e encadeado em `L145→L146`.
+- [x] Lembrança expandida registrada.
+- [x] Receita executável registrada em `PROVEN-CLAIMS.lock.json`.
+- [x] Lock determinístico registrado em `PROVEN-DETERMINISTIC-LOCK.yml`.
+- [x] Trigger `CAPABILITY_GAP` ligado à receita `HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`.
+- [x] Trigger `TERRITORY_ROUTE_CHANGE` ligado à mesma receita.
+- [x] Sentinel classifica `ROUTE_FAILURE` e roteia para `CAPABILITY_GAP → HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`.
+- [x] Verifier fiscaliza trigger + sentinel + machine recipe.
+- [x] Consumer real provado no `CENTRALDARK-OS/root` em `dcce1fbd25af0534925d69c01f3d07be86d2638b`.
+- [x] Consumer proof: `YAML_PARSE=PASS`, `PYCOMPILE=PASS`, `route_failure=true`, `multiroute_recipe_hook=true`, `RECIPE_BINDING=PASS`, `CLEANUP=PASS`.
+- [x] PR-MÃE #1562 continua ledger/rendezvous; não é writer.
+- [ ] PR #1743 está aberta e não-mergeável; tratar como projeção/checklist histórica até reconciliação.
+- [ ] PR #1742 está aberta e não-mergeável; runtime panel continua separado desta prova de hook e deve remedir seu próprio cone.
+
+```text
+LEARNING_REGISTERED != RECIPE_REGISTERED
+RECIPE_REGISTERED != HOOK_BOUND
+HOOK_BOUND != CONSUMER_PROVEN
+CONSUMER_PROVEN != CHECKLIST_REGISTERED
+CHECKLIST_REGISTERED != PR_MOTHER_RECEIPT
+
+FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS
+```
+
 ## 🫀 CURRENT VIVO — 2026-09-30
 
 ```text
