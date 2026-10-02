@@ -485,3 +485,23 @@ WINDOWS_COMPANION_BINARY_AVAILABILITY=NOT_YET_PROVEN_BY_DOWNLOAD_READBACK
 
 NEXT_CURSOR: provar uma rota privada alcançável a partir dos dois Windows; depois parear cada cliente KylinBot sem transportar credencial por GitHub/log e, separadamente, decidir se o chat usará Token Center/cloud provider ou capability local já provada.
 
+### Delta adicional — provider custom OpenAI-compatible
+
+Probe read-only do CLI instalado mostrou que KylinBot oferece provider dinâmico:
+
+```text
+custom:<URL> = Any OpenAI-compatible endpoint
+anthropic-custom:<URL> = Any Anthropic-compatible endpoint
+```
+
+Isso cria uma rota material de compatibilidade com o openKylin Token Center, cuja API oficial é OpenAI-compatible. O endpoint publicado pelo upstream é `https://llm-gateway.openkylin.top/v1/chat/completions`.
+
+```text
+KYLINBOT_CUSTOM_OPENAI_COMPATIBLE_PROVIDER=PROVED_BY_LOCAL_CLI
+OPENKYLIN_TOKEN_CENTER_OPENAI_COMPATIBLE=DOCUMENTED_UPSTREAM
+EXACT_CUSTOM_BASE_URL_STRING_FOR_KYLINBOT=NOT_YET_PROVEN
+DO_NOT_MUTATE_PROVIDER_UNTIL_BASE_URL_AND_MODEL_ARE_PROBED=true
+```
+
+Isso preserva a separação: a API Key do Token Center serve o modelo cloud/OpenAI-compatible; o paircode/Bearer autentica cliente no gateway KylinBot; o Triton local continua outra superfície.
+
