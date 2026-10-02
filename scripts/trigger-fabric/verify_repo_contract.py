@@ -291,6 +291,73 @@ check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
  'MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true',
  'LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true',
 ], classification='CHAT_GLOBAL_SOUL_INHERITANCE')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'event: CAPABILITY_GAP',
+ 'event: TERRITORY_ROUTE_CHANGE',
+ 'proven_recipe_claim: HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH',
+ 'LOAD_PROVEN_MULTIROUTE_RECIPE',
+], classification='HYBRID_MULTIROUTE_HOOK_CONTRACT')
+check('scripts/trigger-fabric/system_sentinel.py',[
+ '"ROUTE_FAILURE"',
+ '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
+ '"CAPABILITY_GAP"',
+ '"INVENTORY_AUTHORIZED_ALTERNATE_ROUTES"',
+], classification='HYBRID_MULTIROUTE_SENTINEL_HOOK')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
+ '"dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069"',
+], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
+
+check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
+ '### 📓 Caderneta — sistema híbrido multirota #146',
+ 'HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH',
+ 'multiroute_recipe_hook=true',
+ 'FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS',
+], classification='HYBRID_MULTIROUTE_CHECKLIST_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"hook_bindings"',
+ '"runtime_consumer"',
+ '"runtime_proof"',
+ '"checklist_ref"',
+], classification='HYBRID_MULTIROUTE_RECIPE_COMPLETENESS')
+
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 147. Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis',
+ 'FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true',
+ 'CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME=true',
+], classification='COMPLETE_SIEVE_LEARNING_147')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-LEI-DA-PENEIRA-COMPLETA.md',[
+ '# 2026-10-02 — Lei da Peneira Completa',
+ 'CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME',
+], classification='COMPLETE_SIEVE_REMEMBRANCE_147')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'complete_sieve_registration:',
+ 'fixed_point_requires_all_applicable_layers: true',
+ 'physical_binding_required_when_claim_depends_on_host_vm_share: true',
+], classification='COMPLETE_SIEVE_BOOT_147')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'COMPLETE_SIEVE_APPLICABILITY_CHECK',
+ 'COMPLETE_SIEVE_READBACK',
+], classification='COMPLETE_SIEVE_TRIGGER_147')
+check('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ 'COMPLETE_SIEVE_REQUIRED_PATHS = (',
+ 'CENTRALDARK_COMPLETE_SIEVE_MATERIALIZATION=FAIL',
+ 'complete_sieve_materialization(root)',
+], classification='COMPLETE_SIEVE_HERMES_HOOK_147')
+check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
+ '### 📓 Caderneta — Lei da Peneira Completa #147',
+ 'CONE_PASS != GLOBAL_PASS',
+], classification='COMPLETE_SIEVE_CHECKLIST_147')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"dependency_fingerprint": "82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09"',
+ '"materialization_requirements"',
+ '"physical_binding"',
+ '"complete_sieve"',
+], classification='COMPLETE_SIEVE_MACHINE_RECIPE_147')
+check('docs/receipts/2026-10-02-complete-sieve-law.md',[
+ '# Receipt — Lei da Peneira Completa #147',
+ 'CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME',
+], classification='COMPLETE_SIEVE_RECEIPT_147')
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'CAPABILITY_PRIOR_FROM_BRAND=FORBIDDEN',
  'TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true',

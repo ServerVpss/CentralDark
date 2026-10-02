@@ -93,6 +93,7 @@ ERROR_SIGNATURES = [
     ("PROVIDER_5XX", re.compile(r"\b5\d\d\b|temporarily unavailable", re.I)),
     ("MODEL_UNAVAILABLE", re.compile(r"model unavailable|model.*not found|unsupported model", re.I)),
     ("AUTH_CONFIG_ERROR", re.compile(r"\b401\b|auth error|token not configured|api key.*not configured|config error", re.I)),
+    ("ROUTE_FAILURE", re.compile(r"route (?:failed|failure|offline|unavailable)|connector (?:offline|unavailable)|device (?:offline|unreachable)|capability gap", re.I)),
 ]
 
 TRIGGER_ROUTE = {
@@ -109,6 +110,7 @@ TRIGGER_ROUTE = {
     "PROVIDER_5XX": ["MODEL_UNAVAILABLE", "MEASURE_ALTERNATIVE_ENGINE_CAPABILITY", "FAILOVER_ALLOWED_ROUTE", "RETEST"],
     "MODEL_UNAVAILABLE": ["MODEL_UNAVAILABLE", "MEASURE_ALTERNATIVE_ENGINE_CAPABILITY", "FAILOVER_ALLOWED_ROUTE", "RETEST"],
     "AUTH_CONFIG_ERROR": ["DEPENDENCY_FAILURE", "MARK_ROUTE_BROKEN", "TRY_NEXT_PROVEN_ALLOWED_ROUTE"],
+    "ROUTE_FAILURE": ["CAPABILITY_GAP", "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH", "CLASSIFY_EXACT_ROUTE", "INVENTORY_AUTHORIZED_ALTERNATE_ROUTES", "MEASURE_ALTERNATES", "REUSE_LIVE_CAPABILITY", "RETEST"],
     "UNKNOWN_ERROR": ["TOOL_ERROR", "META_LUPA", "RECONCILIAR"],
     "NOTE_OUT_OF_LINE": ["STATE_CHANGED", "META_LUPA", "CARACOL_REVERSO", "RECONCILIAR"],
 }
@@ -400,11 +402,14 @@ def self_test() -> int:
         "rate_limit": classify_signature("429 rate limit") == "PROVIDER_RATE_LIMIT",
         "timeout": classify_signature("request timeout") == "PROVIDER_TIMEOUT",
         "unknown": classify_signature("weird local failure") == "UNKNOWN_ERROR",
+        "route_failure": classify_signature("connector offline on current route") == "ROUTE_FAILURE",
     }
     sample = normalize_event({"source_surface": "SOL_APP", "message": "HTTP 403: Your request was blocked"})
     expired = normalize_event({"source_surface": "SOL_APP", "message": "This model free period has ended"})
     cases["caracol"] = sample["caracol_reverse"] is True and sample["route"][0] == "META_LUPA"
     cases["sealed_route"] = bool(expired["route_seals"]) and expired["route_seals"][0]["seal"] == "🧠"
+    route_failure = normalize_event({"source_surface": "SELF_TEST", "message": "connector offline on current route"})
+    cases["multiroute_recipe_hook"] = "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH" in route_failure["route"]
     cases["no_auto_authority"] = sample["auto_mutation_authority"] is False
     cases["contract_exists"] = CONTRACT.exists()
     cases["stitcher_exists"] = STITCHER.exists()

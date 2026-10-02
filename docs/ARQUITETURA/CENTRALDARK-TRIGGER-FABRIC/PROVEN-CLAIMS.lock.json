@@ -881,6 +881,149 @@
         "revalidate_is_not_green": true,
         "chefe_authorization": "CHEFE 2026-09-27 23:47 BRT: cadeados postos pelo Claude abertos e atribuídos ao Claude; registrar na main validado e provado"
       }
+    },
+    "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH": {
+      "claim_key": "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH",
+      "owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+      "lock_key": "f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b",
+      "state": "SEALED_PROVEN",
+      "proof_target": "AUTHORIZED_MULTIROUTE_FAILOVER_WITH_BINDING_SCOPED_HEALTH",
+      "evidence_ref": "LEARNING_146 + LEARNING_147 + CURRENT_ROUTE_REMEASURE_2026-10-02",
+      "observed_at": "2026-10-02T19:33:00Z",
+      "counterproof": "PASS",
+      "receipt_ref": "docs/receipts/2026-10-02-complete-sieve-law.md",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069",
+        "execution_commands": [
+          "classify the exact failed route and binding",
+          "keep global system state undecided",
+          "inventory existing authorized alternate routes",
+          "measure alternate routes independently",
+          "reuse the first live capability that satisfies the claim without changing owner",
+          "compare evidence on the same claim scope and time",
+          "decide PASS UNKNOWN or BLOCKED only after applicable route exhaustion"
+        ],
+        "proof_commands": [
+          "record route name account/device binding and timestamp",
+          "prove alternate route with an actual tool call or runtime probe",
+          "separate route health from system capability",
+          "verify one failed route is not promoted to global blocker",
+          "verify each conflicting route state remains attached to its own binding"
+        ],
+        "expected_results": [
+          "ONE_ROUTE_FAILED_IS_NOT_SYSTEM_FAILED=true",
+          "LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE=true",
+          "ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER=true",
+          "ROUTE_HEALTH_SCOPED_TO_BINDING=true",
+          "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME=true",
+          "FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true",
+          "NO_PARALLEL_OWNER_CREATED=true"
+        ],
+        "expected_effect": "SAME_LOGICAL_SYSTEM_REUSES_EXISTING_CAPABILITY_BUS_ACROSS_AUTHORIZED_ROUTES",
+        "result_schema": "centraldark.hybrid-multiroute-replay.result.v1",
+        "environment_bindings": [
+          "ROUTE_NAME",
+          "ACCOUNT_OR_LINK_ID",
+          "DEVICE_OR_RUNTIME_BINDING",
+          "HOST",
+          "TRANSPORT",
+          "OBSERVED_AT",
+          "SPARSE_CHECKOUT_REQUIRED_PATHS",
+          "HOST_VM_SHARED_ROOT_IF_APPLICABLE"
+        ],
+        "commands_executable": true,
+        "execution_policy": "READ_ONLY_UNTIL_MUTATION_OWNER_REQUIRED",
+        "proof_commands_read_only": true,
+        "self_test_command": "remeasure one failed route plus at least one authorized alternate route",
+        "self_test_result": "PASS_SESSION_2026_10_02_RDC_SEGREDO_OFFLINE_CENTRALDARK_OS_ALTERNATE_ONLINE",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false
+      },
+      "hook_bindings": {
+        "triggers_owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+        "events": [
+          "CAPABILITY_GAP",
+          "TERRITORY_ROUTE_CHANGE",
+          "PRE_HUMAN_RETURN"
+        ],
+        "sentinel_owner": "scripts/trigger-fabric/system_sentinel.py",
+        "sentinel_signature": "ROUTE_FAILURE",
+        "hermes_runtime_hook": "apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py#pre_verify",
+        "hermes_hook_marker": "CENTRALDARK_COMPLETE_SIEVE_MATERIALIZATION=FAIL",
+        "git_hooks_are_not_runtime_route_owner": true
+      },
+      "runtime_consumer": {
+        "device_class": "CENTRALDARK-OS",
+        "binding_user": "root",
+        "repo_root": "/root/CentralDark",
+        "sparse_checkout": true,
+        "test_mode": "DETACHED_ORIGIN_MAIN_WORKTREE",
+        "last_proven_source_main": "595df0ea496e5982b59c04b1ad0575ca878e900c",
+        "materialized_paths_added": [
+          "docs/BRAIN/00-MAPA-SISTEMA",
+          "docs/receipts"
+        ]
+      },
+      "runtime_proof": {
+        "yaml_parse": "PASS",
+        "pycompile": "PASS",
+        "sentinel_self_test": "PASS",
+        "route_failure_classifier": true,
+        "multiroute_recipe_hook": true,
+        "recipe_binding": "PASS",
+        "checklist_contract_after_sparse_fix": "PASS",
+        "all_hybrid_multiroute_checks_pass": true,
+        "unrelated_global_failed_checks": 30,
+        "cleanup": "PASS",
+        "observed_at": "2026-10-02"
+      },
+      "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#caderneta--sistema-hibrido-multirota-146",
+      "materialization_requirements": {
+        "consumer_repo": "/root/CentralDark",
+        "sparse_checkout_required_paths": [
+          "docs/BRAIN/00-MAPA-SISTEMA",
+          "docs/receipts"
+        ],
+        "checklist_path": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md",
+        "law": "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME",
+        "receipt_path": "docs/receipts/2026-10-02-complete-sieve-law.md",
+        "laws": [
+          "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME",
+          "SPARSE_PATH_ENABLED_IS_NOT_FILE_PRESENT_AT_CURRENT_HEAD"
+        ]
+      },
+      "physical_binding": {
+        "host_path": "E:\\VMs\\CENTRALDARK-OS\\SHARED",
+        "guest_expected_share": "/mnt/hgfs/CENTRALDARK-SHARED",
+        "windows_segredo_route": "OFFLINE_AT_MEASUREMENT",
+        "guest_hgfs_share_visible": false,
+        "guest_mount_proven": false,
+        "state": "NOT_PROVEN",
+        "does_not_invalidate_repo_consumer": true,
+        "remeasure_when_windows_route_returns": true
+      },
+      "complete_sieve": {
+        "learning_ref": 147,
+        "ordered_layers": [
+          "APRENDIZADO",
+          "LEMBRANCA",
+          "RECEITA_EXECUTAVEL",
+          "HOOK_REAL_WHEN_APPLICABLE",
+          "TRIGGER",
+          "BOOT",
+          "VERIFIER",
+          "CONSUMER_REAL",
+          "CHECKLIST_DIARIO",
+          "RECEIPT",
+          "PR_MOTHER_1562",
+          "RELATED_LIVE_PR_WHEN_SCOPE_INTERSECTS",
+          "PHYSICAL_BINDING_WHEN_CLAIM_DEPENDS_ON_IT",
+          "READBACK"
+        ],
+        "fixed_point_requires_all_applicable_layers": true,
+        "non_applicable_layer_must_be_explicit": true
+      }
     }
   }
 }
