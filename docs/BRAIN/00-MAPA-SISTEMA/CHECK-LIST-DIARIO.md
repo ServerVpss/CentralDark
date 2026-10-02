@@ -32,7 +32,7 @@ aliases:
 ## 🫀 CURRENT VIVO — 2026-10-02 — FUNIL BAYESIANO
 
 ```text
-MAIN_CURRENT=b5a50c084e389f4c0d1ff26541af8bb7023473f5
+MAIN_BASE_MEASURED_FOR_FUNNEL=b5a50c084e389f4c0d1ff26541af8bb7023473f5
 PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED
 BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED
 PR_MOTHER=#1562
@@ -44,27 +44,27 @@ CHECKLIST_ROLE=OPERATIONAL_HUD_NOT_SOURCE_OF_TRUTH
 
 Definições:
 
-\\[
-M = \\text{mini contrato/candidato}
-\\]
+\[
+M = \text{mini contrato/candidato}
+\]
 
-\\[
-O = \\text{contrato oficial canônico}
-\\]
+\[
+O = \text{contrato oficial canônico}
+\]
 
 Caso o candidato já esteja semanticamente contido no oficial:
 
-\\[
-M \\subseteq O
-\\]
+\[
+M \subseteq O
+\]
 
-\\[
-\\Delta = M \\setminus O = \\varnothing
-\\]
+\[
+\Delta = M \setminus O = \varnothing
+\]
 
-\\[
+\[
 IG_{create}=0
-\\]
+\]
 
 Resultado operacional:
 
@@ -78,9 +78,9 @@ DROP_DUPLICATE
 
 Se houver delta compatível real:
 
-\\[
-\\Delta = M \\setminus O \\neq \\varnothing
-\\]
+\[
+\Delta = M \setminus O \neq \varnothing
+\]
 
 ```text
 ABSORB_ONLY_DELTA
@@ -91,9 +91,9 @@ ABSORB_ONLY_DELTA
 
 Se houver cláusula contraditória:
 
-\\[
-C = \\{x \\in M : x \\text{ contradiz } O\\},\\qquad C \\neq \\varnothing
-\\]
+\[
+C = \{x \in M : x \text{ contradiz } O\},\qquad C \neq \varnothing
+\]
 
 ```text
 META_LUPA
