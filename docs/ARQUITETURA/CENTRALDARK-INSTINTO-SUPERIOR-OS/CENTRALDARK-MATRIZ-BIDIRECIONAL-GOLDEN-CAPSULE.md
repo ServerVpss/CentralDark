@@ -15,7 +15,7 @@ Ela deve:
 - trabalhar localmente;
 - administrar e observar a própria oficina;
 - acumular conhecimento;
-- usar ChatGPT/SOL como oráculo quando necessário;
+- usar CHAT_GLOBAL/SOL como oráculo quando necessário;
 - usar Hermes como executor;
 - usar MCP como barramento;
 - usar Obsidian como memória viva;
@@ -27,7 +27,7 @@ Ela deve:
 A regra central é:
 
 ```text
-CHATGPT PENSA
+CHAT_GLOBAL RACIOCINA/COORDENA
 → HERMES EXECUTA
 → VMWARE CONTÉM
 → DOCKER COMPARTIMENTA
@@ -39,6 +39,20 @@ CHATGPT PENSA
 ```
 
 ---
+
+## 1.1 Chat global e capability
+
+```text
+CHAT_GLOBAL_IS_CLASS_NOT_PRODUCT=true
+CHATGPT|CLAUDE_CHAT|GEMINI_CHAT|FUTURE_CHAT = superfícies possíveis
+SURFACE != CAPABILITY
+GITHUB_ACCESS != SHELL_ACCESS
+CHAT_GLOBAL + TOOL_AUTORIZADA_MEDIDA = CAPABILITY_EXECUTORA_NO_ESCOPO
+HERMES = EXECUTOR_LOCAL_VIVO
+REALIDADE = JUIZ
+```
+
+A Golden Capsule não depende de uma marca de chat. SOL é papel de coordenação; qualquer superfície CHAT_GLOBAL que carregue o contrato pode raciocinar/reconciliar, e só executa onde houver capability autorizada realmente medida.
 
 ## 2. PAPÉIS
 
@@ -52,7 +66,7 @@ Responsável por:
 - decisão final;
 - direção da evolução da CentralDark.
 
-### CHATGPT / SOL
+### CHAT_GLOBAL / SOL
 
 Responsável por:
 
@@ -171,7 +185,7 @@ HERMES + MCP + BROWSER + MEMÓRIA + IA LOCAL
 A CentralDark possui duas rotas dentro do mesmo sistema.
 
 ```text
-                    CHATGPT / SOL
+                    CHAT_GLOBAL / SOL
                          ⇅
                    CENTRALDARK MCP
                          ⇅
@@ -508,7 +522,7 @@ Pode cuidar de:
 - tarefas mecânicas;
 - monitoramento.
 
-ChatGPT/SOL fica responsável pelo raciocínio forte e decisões arquiteturais quando necessário.
+CHAT_GLOBAL/SOL fica responsável pelo raciocínio forte e decisões arquiteturais quando necessário.
 
 Regra:
 
@@ -820,7 +834,7 @@ E USA A REALIDADE COMO JUIZ.
 
 ```mermaid
 flowchart TD
-    SOL[CHATGPT / SOL]
+    SOL[CHAT_GLOBAL / SOL]
     MCP[CENTRALDARK MCP]
     MATRIX[ROUTE MATRIX / FABRIC]
 
