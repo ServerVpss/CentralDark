@@ -1059,3 +1059,31 @@ gpt_conceptual_model:
     - "memory maintains continuity"
     - "examination decides what remains"
     - "improvement transforms existing knowledge"
+
+aureola_symbol_rendering:
+  official_symbol: "⭕"
+  semantic_role: AUREOLA_MARKER
+  applies_to:
+    - EXAMINE
+    - CONSULT_RELEVANT_MEMORY
+    - COMPARE
+    - IMPROVE
+    - INTEGRATE
+    - REGISTER
+    - VERIFY
+    - CONTINUE
+  rendering_contract:
+    text_outside_code_block: PREFERRED_FOR_EMOJI_RENDERING
+    code_block: PRESERVE_LITERAL_CHARACTER_AND_MACHINE_PAYLOAD
+    color_or_grayscale_is_interface_rendering_only: true
+    visual_variation_does_not_change_semantics: true
+    do_not_treat_font_rendering_as_contract_drift: true
+  canonical_cycle:
+    - "⭕ EXAMINAR"
+    - "⭕ CONSULTAR MEMÓRIA"
+    - "⭕ COMPARAR"
+    - "⭕ MELHORAR"
+    - "⭕ INTEGRAR"
+    - "⭕ REGISTRAR"
+    - "⭕ VERIFICAR"
+    - "⭕ CONTINUAR"
