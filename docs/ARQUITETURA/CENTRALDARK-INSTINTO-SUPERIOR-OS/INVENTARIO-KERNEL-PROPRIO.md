@@ -31,7 +31,7 @@ A missão é desenvolver inteligência persistente com método, memória, owners
 
 | Etapa | Entrega e contraprova | Estado |
 |---|---|---|
-| S0 INVENTORY | Medir fonte AionUi/AionCore, rotas, renderer e consumers; matriz superfície → owner → REUSE/RENAME/REBIND/EXTEND/HIDE/RETIRE; RECREATE exige gap provado | PENDING |
+| S0 INVENTORY | Medir fonte AionUi/AionCore, rotas, renderer e consumers; matriz superfície → owner → REUSE/RENAME/REBIND/EXTEND/HIDE/RETIRE; RECREATE exige gap provado | IN_PROGRESS |
 | S1 BRANDING | Identidade CentralDark sem duplicar backend | PENDING |
 | S2 LANDING_LOGIN | Preservar `public/central-dark-instinct-2`; autenticação encaminha ao cockpit privado | PENDING |
 | S3 NAVIGATION | Builder, Runtime, PRs, Evidence, VPS, Hub, Desktop, Voz, Drive e Automação com owners | PENDING |
@@ -42,6 +42,53 @@ A missão é desenvolver inteligência persistente com método, memória, owners
 | S8 PROOF | Para cada capacidade: owner, teste discriminante, contraprova, runtime quando aplicável e receipt | PENDING |
 
 NEXT_CURSOR=S0_INVENTORY_AND_OWNER_BINDING
+
+## S0 — inventory + owner binding medido em 2026-10-02
+
+```text
+S0_STATUS=IN_PROGRESS
+CURRENT_MAIN_AT_MEASUREMENT=7b0ba9b748bd2269295ed7dcafbb8e9c9244fd44
+CANONICAL_VISUAL_OWNER=public/central-dark-instinct-2
+AIONUI_SOURCE=UNKNOWN_NOT_MATERIALIZED_IN_CANONICAL_REPO_SEARCH
+AIONCORE_SOURCE=UNKNOWN_NOT_MATERIALIZED_IN_CANONICAL_REPO_SEARCH
+WEBUI_UNIQUE_CONSUMERS=UNKNOWN
+LOCAL_RUNTIME_BINDING=Kylin_AI_Triton+KylinBot_as_capabilities_not_authority
+PR_MOTHER_1562=RENDEZVOUS_LEDGER_NOT_WRITER
+UNKNOWN_IS_NOT_PASS=true
+```
+
+| Superfície | Fonte medida | Owner canônico | Decisão S0 | Prova / contraprova |
+|---|---|---|---|---|
+| Instinto Superior visual | `public/central-dark-instinct-2` | o próprio path no repo canônico | **REUSE + EXTEND** | README declara código visual canônico; TLC23 runtime gate também aponta `CANONICAL_VISUAL_OWNER=public/central-dark-instinct-2`. Source provado; deploy do HEAD continua claim separado. |
+| Bolt/Desktop renderer | `apps/modulos/Bolt/source` | Builder/Desktop owners existentes | **REUSE + REBIND** | source/package/build Electron existem; presença de source não prova instalador/runtime atual. |
+| AionUi | somente referências documentais encontradas no repo canônico durante a busca S0 | owner de integração ainda não materializado | **UNKNOWN / MEASURE_BEFORE_BIND** | busca canônica encontrou referências em docs/receipts/mapa, mas nenhum source AionUi materializado foi identificado. Docs != source/runtime. |
+| AionCore | somente referências documentais encontradas no repo canônico durante a busca S0 | owner de integração ainda não materializado | **UNKNOWN / MEASURE_BEFORE_BIND** | mesma fronteira de AionUi; agent bus não pode ser declarado integrado sem source/consumer/binding. |
+| Hermes WebUI antiga | `apps/modulos/WebUI` | donor legado | **HIDE/RETIRE BLOQUEADO; extrair ouro primeiro** | owner histórico existe; `ZERO_UNIQUE_CONSUMERS` ainda não foi provado. Não retirar. |
+| HERMES-CORE | `apps/modulos/HERMES-CORE` | core/agents existentes | **REUSE** | source físico presente; capabilities continuam subordinadas à SOUL/owners. |
+| MCP | `apps/modulos/mcp` | MCP CentralDark | **REUSE + EXTEND quando gap real** | source físico e OpenAPI/tool surfaces existem; runtime health precisa ser medido no alvo quando claim for operacional. |
+| Hub | `apps/modulos/hub` | Hub inventory/memória/eventos | **REUSE** | source físico presente e inventário canônico já indexa capabilities/aprendizados; source != runtime. |
+| Kylin AI/Triton | runtime `CENTRALDARK-OS` | capability local do mesmo core | **REBIND** | live/ready 8000 e metrics 8002 provados; 8001 é gRPC; modelos nativos provados. Isso não cria segundo cérebro. |
+| KylinBot | daemon + Unix socket no guest | agente/memória/gateway local | **REBIND** | `/health` Unix = 200 provado; provider/model chat ainda UNKNOWN. |
+| AI CLI Runtime panel | PR #1742 / script read-only | adapter de observabilidade, não visual owner | **REUSE como donor/adaptor; promoção separada** | execução no guest sobreviveu à runtime sieve; PR segue draft e não é `main`. |
+
+### Contraprova S0
+
+```text
+AION_DOC_REFERENCE != AION_SOURCE
+AION_SOURCE_UNKNOWN != INTEGRATED
+VISUAL_OWNER_SOURCE_PRESENT != DEPLOYED_HEAD
+WEBUI_DONOR_PRESENT != SAFE_TO_RETIRE
+RUNTIME_HEALTH_PARTIAL != FULL_COCKPIT_BOUND
+PANEL_RUNTIME_PASS != CANONICAL_VISUAL_OWNER
+PR_MOTHER_LEDGER != RUNTIME_WRITER
+```
+
+S0 não fecha enquanto `AionUi/AionCore source+consumers` e `WebUI unique consumers` permanecerem UNKNOWN.
+
+```text
+NEXT_CURSOR=S0_FIND_AION_SOURCE_AND_WEBUI_CONSUMERS_THEN_BIND_MINIMUM_DELTA
+```
+
 
 O cursor é de implementação do plano. Reparos já observados continuam com seu estado parcial e receita em `docs/CONSCIENCIA/05-SSH-VPS.md`; não convertem estas etapas em PASS. Autenticação de conta, serviço ativo e presença de MCP não equivalem a resposta operacional do agente.
 
