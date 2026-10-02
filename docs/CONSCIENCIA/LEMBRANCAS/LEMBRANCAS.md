@@ -509,3 +509,9 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Tipo:** LEARNING_INDEX
 - **Learning:** #143
 - **Conteúdo:** `RED -> EXACT_DIVERGENCE -> OWNER -> MINIMUM_DELTA -> TARGETED_RETEST`. O vermelho já traz a diferença; o owner resolve autoridade. Investigação ampla só se restar ambiguidade ou o delta mínimo falhar.
+
+### [2026-10-02] Limite de canal → compactar e expandir
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #144
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHANNEL-LIMIT-COMPACT-RECORD-EXPANDED-REMEMBRANCE.md`
+- **Conteúdo:** quando o canal barra registro grande, compactar no canônico, guardar expansão recuperável em Lembranças, backlinkar e continuar no mesmo owner; sem v1/v2/v3.
