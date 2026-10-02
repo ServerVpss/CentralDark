@@ -308,6 +308,19 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"dependency_fingerprint": "e41349163bae0fb768c1120237b61fad0746ec1af29c92c09a5b75beb0f4fd2b"',
 ], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
 
+check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
+ '### 📓 Caderneta — sistema híbrido multirota #146',
+ 'HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH',
+ 'multiroute_recipe_hook=true',
+ 'FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS',
+], classification='HYBRID_MULTIROUTE_CHECKLIST_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"hook_bindings"',
+ '"runtime_consumer"',
+ '"runtime_proof"',
+ '"checklist_ref"',
+], classification='HYBRID_MULTIROUTE_RECIPE_COMPLETENESS')
+
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'CAPABILITY_PRIOR_FROM_BRAND=FORBIDDEN',
  'TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true',
