@@ -6,8 +6,8 @@ owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
 pr_mother: 1562
 semantic_role: "session_crystal_continuity_learning_map"
 priority: "OBRIGATORIO"
-checked_day_utc: "2026-10-01"
-updated: "2026-09-30T21:21:00-03:00"
+checked_day_utc: "2026-10-02"
+updated: "2026-10-02T07:03:33-03:00"
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 mirror_role: "CASA-VAULT = memoria operacional/espelho; Git+owners continuam autoridade tecnica"
 aliases:
@@ -75,6 +75,27 @@ MERGED_IS_NOT_DEPLOYED=true
 ### ➡️ NEXT_CURSOR
 Remedir fiscal global + run de deploy + runtime; corrigir somente o próximo blocker material no owner existente e voltar ao #1562.
 
+
+## 2026-10-02 — RECONCILIAÇÃO DIÁRIA (medição real)
+
+**Escopo:** GitHub/main, PRs abertos, VPS via SSH, runtime/health, Hermes cron e pendências/mirrors. .
+
+### ✅ Medido / provado
+- [x] GitHub  medido em  ().
+- [x] SSH  respondeu; VPS identificada como ; runtime  está em , HEAD , working tree .
+- [x] Hermes CLI ; gateway ativo (PID , heartbeat há , 5 jobs ativos). Job  existe e foi despachado no horário; execução atual  está .
+- [x] PRs abertos medidos: #1742 (draft, HEAD , novo delta acima do último registro) e PR-mãe #1562 (open, HEAD ).
+
+### 🔴 Bloqueado / ⚪ UNKNOWN
+- [ ] **VPS canonical-main = UNKNOWN:**  não existe/ não respondeu ; não afirmar sincronização de deploy.
+- [ ] **PM2/runtime = UNKNOWN:**  não está disponível no PATH remoto; não foi possível provar processos.
+- [ ] **Health local = UNKNOWN:**  recusou conexão (HTTP 000).
+- [ ] **Health público = UNKNOWN:** DNS de  resolveu para Cloudflare, mas o curl público terminou sem resposta HTTP; não converter em PASS/FAIL causal sem probe discriminante.
+- [ ] **Pendências Git () = UNKNOWN:** workspace local configurado em  não é um worktree Git acessível neste corpo e o conector MCP específico () não está disponível; não inferir ausência de itens.
+- [ ] **Execução concluída do cron = UNKNOWN:** o job está ; a última tentativa terminou em erro  (9 falhas consecutivas).  não prova resultado.
+
+### ➡️ Próximo cursor
+Remedir VPS com o owner correto de /PM2 e repetir probes local+público; reabrir o receipt do job  somente após estado terminal e resultado legível.
 
 Este arquivo define o **painel diário obrigatório** da CentralDark. Ele não cria novo cérebro, ledger, promotor, workflow ou autoridade. Ele projeta o estado já registrado pelos owners, receipts, PRs, runtime e Segundo Cérebro para o CHEFE enxergar, em uma tela, o que aconteceu hoje e o que ainda falta.
 
