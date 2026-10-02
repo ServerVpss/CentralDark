@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 const leia = readFileSync(new URL('../../LEIA-ME-IA.md', import.meta.url), 'utf8');
 const capacidades = readFileSync(new URL('../../docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md', import.meta.url), 'utf8');
 
-assert.match(leia, /runtime.*tools aplicáveis|runtime\/tools aplicáveis/i, 'LEIA-ME-IA deve exigir runtime/tools aplicáveis ao escopo');
+assert.match(leia, /TOOLS_MUST_BE_MEASURED_PER_SURFACE_PER_SESSION=true|runtime.*tools aplicáveis|runtime\/tools aplicáveis/i, 'LEIA-ME-IA deve exigir tools/runtime medidos na superfície aplicável');
 assert.match(capacidades, /VERIFY O CLAIM CERTO/, 'DNA cognitivo deve prender a prova ao claim correto');
 
 const resolveCapabilities = ({ brand, tools }) => ({
