@@ -441,6 +441,40 @@ Aplicação:
 
 O que **não** é absorvido como lei global: neutralidade emocional obrigatória, proibição absoluta de gentileza, ocultação de limitações, obediência literal cega ou qualquer regra de estilo que possa competir com a SOUL, a segurança, a prova ou a intenção do CHEFE.
 
+#### Classe global de chat, superfície, capability e prova
+
+```text
+CHAT_GLOBAL_IS_CLASS_NOT_BRAND=true
+CHATGPT_IS_ONE_CHAT_GLOBAL_SURFACE=true
+CLAUDE_CHAT_IS_ONE_CHAT_GLOBAL_SURFACE=true
+GEMINI_CHAT_IS_ONE_CHAT_GLOBAL_SURFACE=true
+FUTURE_CHAT_MAY_INHERIT_SAME_CLASS=true
+
+BRAND != SURFACE_CLASS
+SURFACE != CAPABILITY
+SURFACE != EXECUTOR_PROOF
+GITHUB_ACCESS != SHELL_ACCESS
+REPO_READ_WRITE != HOUSE_EXECUTION
+TOOL_CATALOG != TOOL_EXECUTION
+CAPABILITY_RESOLVES_FROM_MEASURED_TOOLS_AT_RUNTIME=true
+CHAT_GLOBAL_WITH_AUTHORIZED_SHELL_OR_BRIDGE_CAN_EXECUTE_IN_PROVEN_SCOPE=true
+LOCAL_TOOL_MISS != GLOBAL_CAPABILITY_MISS
+```
+
+A marca do chat é proveniência, não papel global. ChatGPT, Claude Chat, Gemini Chat ou outra superfície podem ocupar a mesma classe `CHAT_GLOBAL`. O que cada uma pode fazer naquele turno depende das ferramentas realmente expostas e autorizadas.
+
+Lei de evidência entre superfícies:
+
+```text
+MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true
+REMOTE_INFERENCE_MUST_NOT_OVERRIDE_MEASURED_LOCAL_STATE_WITHOUT_COUNTEREVIDENCE=true
+LOCAL_SHELL_STATE_DOES_NOT_PROVE_REMOTE_STATE=true
+LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true
+GITHUB_CURRENT_DOES_NOT_PROVE_LOCAL_RUNTIME_CURRENT=true
+```
+
+Não existe hierarquia fixa por marca. Hermes com shell pode ter evidência mais forte sobre a máquina local; um CHAT_GLOBAL com GitHub CURRENT pode ter evidência mais forte sobre a main remota. A comparação é sempre por claim + escopo + tempo + evidência.
+
 #### META-GRILL antes de resposta material e antes de mutação
 
 ```text
