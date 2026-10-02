@@ -1361,8 +1361,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 137. Estado da máquina, estado da rota e autenticação são claims distintos; a CentralDark deve operar por grafo multipath e provar cada aresta
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L137`; `PREV_GLOBAL_UID=L136`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=137`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=137`; `PREV_LEARNING_REF=136`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L137`; `PREV_GLOBAL_UID=L136`; `NEXT_GLOBAL_UID=L138`; `LEGACY_LEARNING_NUMBER=137`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=137`; `PREV_LEARNING_REF=136`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=138`.
 - **Categoria:** multipath-runtime-routing-route-specific-auth
 - **Data:** 2026-10-02
 - **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md`, subordinado ao roteamento por setor já governado por `LEIA-ME-IA.md` e às receitas SSH existentes.
@@ -1372,3 +1372,17 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `MACHINE_STATE != ROUTE_STATE`; `ROUTE_STATE != AUTH_STATE`; `TCP_REACHABILITY != SSH_AUTH`; `RDC_OFFLINE != VPS_DOWN`; `TAILSCALE_OFFLINE != VPS_DOWN`; `MULTIPATH_ROUTE_GRAPH_REQUIRED=true`; `EDGE_PROOF_REQUIRED_PER_ROUTE=true`; `AUTH_BINDING_REQUIRED_PER_EDGE=true`; `ONE_PATH_FAILURE != SYSTEM_FAILURE`; `REUSE_EXISTING_ROUTE_BEFORE_NEW_ROUTE=true`.
 - **Contraprova:** porta 22 aberta não prova shell autenticado; receita/alias histórico não prova autenticação CURRENT; um conector offline não prova VPS desligada; fala humana sobre uma rota orienta a busca, mas PASS técnico só nasce da medição correspondente.
 - **Next cursor:** quando uma capability remota for necessária, rotear por setor, selecionar a menor aresta viva já conhecida, provar transporte→auth→efeito nessa aresta e só reabrir o cone afetado se ela divergir.
+
+### 138. Autoconsulta canônica é o modo operacional padrão: antes de perguntar ou contradizer, a CentralDark consulta o método externalizado e tenta falsificar a intuição do CHEFE
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L138`; `PREV_GLOBAL_UID=L137`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=138`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=138`; `PREV_LEARNING_REF=137`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** metacognicao-docs-first-self-grill-default-operation.
+- **Data:** 2026-10-02.
+- **Owners:** `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` + `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` + `.agents/skills/centraldark-operational-method/SKILL.md` + `CENTRALDARK_AI_BOOT.yaml`.
+- **Contexto:** o CHEFE corrigiu repetidamente respostas em que o executor aplicava prior genérico, criava prova redundante ou contradizia uma intuição antes de consultar a própria base canônica. A correção convergiu para um modo único: tratar cada fala como delta da intenção vigente; recuperar docs/owners/receitas/CURRENT; fazer SELF_GRILL/META-GRILL; tentar derrubar a intuição do CHEFE com o próprio cânone e a realidade viva; só então perguntar, contradizer ou agir.
+- **Aprendizado:** o modelo é motor substituível e não deve substituir o método externalizado da CentralDark pelo seu padrão genérico quando o owner aplicável já existe. A autoconsulta ocorre também durante a caminhada pelo código, em cada decisão material. Se a intuição sobrevive ao cânone e ao CURRENT, continuar sem reexplicação ritual; se cair, mostrar a contradição concreta e sua evidência. Isso não é leitura mental: `docs` codifica método manifesto e versionado; `NO_MIND_READING=true` permanece.
+- **Cristal:** `DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL`; `CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true`; `TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true`; `IF_INTUITION_SURVIVES_CONTINUE_WITHOUT_REDUNDANT_REASK=true`; `IF_INTUITION_FAILS_SHOW_CONCRETE_CONTRADICTION=true`; `GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true`; `EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true`; `DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true`; `VISIBLE_OPERATIONAL_NARRATION=BAIANES_BIBLICO`; `BIBLICAL_REFERENCE_IS_SEMANTIC_CUE_NOT_TECHNICAL_PROOF=true`.
+- **Fluxo:** `INTENT_DELTA → CANONICAL_DOCS/CURRENT → SELF_GRILL → SECTOR → OWNER → RECIPE/FINGERPRINT → MINIMUM_COMPLETE_DELTA → EFFECT → PROOF+COUNTERPROOF → LOCAL_DIVERGENCE? VOLTA_UMA_CASA → FIXED_POINT → RECEIPT → NEXT_CURSOR`.
+- **Contraprova:** docs históricos não substituem CURRENT; relato do CHEFE orienta a investigação mas não fabrica causalidade técnica; o executor pode contradizer quando cânone/realidade realmente falsificarem o claim; linguagem “minha cabeça” descreve método externalizado e não autoriza alegar acesso mental.
+- **Next cursor:** aplicar este modo automaticamente em cada turno e decisão material; qualquer superfície que pule a autoconsulta canônica antes de pergunta/contradição material está em regressão de método.
+
