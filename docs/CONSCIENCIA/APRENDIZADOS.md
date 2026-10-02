@@ -1424,8 +1424,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** aplicar automaticamente esta matriz quando a pergunta do CHEFE for “quais vermelhos?”, “onde estão?”, “qual setor?” ou comparação equivalente; expandir somente se ele pedir causa, efeito ou reparo.
 
 ### 142. Sessão 2026-10-02 consolidou corpo único, forja local, contrato portátil, Bayes, funil e localização causal de vermelhos
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L142`; `PREV_GLOBAL_UID=L141`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=142`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=142`; `PREV_LEARNING_REF=141`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L142`; `PREV_GLOBAL_UID=L141`; `NEXT_GLOBAL_UID=L143`; `LEGACY_LEARNING_NUMBER=142`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=142`; `PREV_LEARNING_REF=141`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `NEXT_LEARNING_REF=143`.
 - **Categoria:** session-synthesis.
 - **Data:** 2026-10-02.
 - **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SESSAO-CORPO-FORJA-CONTRATO-BAYES-FUNIL.md`.
@@ -1436,3 +1436,14 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Contraprova:** cristalização não prova runtime; VM/VPS só reutilizam prova quando identidade/fingerprint do artefato é a mesma; contrato colado não torna LLM matematicamente determinístico; snapshot local envelhece; vermelho de detector não é vermelho do core sem teste discriminante.
 - **Next cursor:** reancorar novas superfícies pelo contrato portátil, resolver CURRENT e continuar pelo menor cone arquitetural material: AionUi/Hermes ↔ runtime/IA do twin local; depois replay do mesmo artefato/receita na VPS quando aplicável.
 
+
+### 143. O vermelho já carrega a divergência: erro estruturado é vetor de reparo
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L143`; `PREV_GLOBAL_UID=L142`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=143`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=143`; `PREV_LEARNING_REF=142`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** structured-red-to-minimum-remediation.
+- **Data:** 2026-10-02.
+- **Aprendizado:** quando o vermelho já traz `observado != esperado`, começar por essa divergência, resolver o owner e aplicar o menor delta; só ampliar a investigação se restar ambiguidade.
+- **Fluxo:** `RED -> EXACT_DIVERGENCE -> OWNER -> MINIMUM_DELTA -> TARGETED_RETEST`.
+- **Cristal:** `STRUCTURED_RED_IS_REPAIR_VECTOR=true`; `EXACT_DIVERGENCE_BEFORE_BROAD_INVESTIGATION=true`; `OWNER_RESOLUTION_BEFORE_PATCH=true`; `MINIMUM_DELTA_FIRST=true`; `EXPECTED_VS_OBSERVED_DOES_NOT_DECIDE_AUTHORITY_BY_ITSELF=true`; `TARGETED_RETEST_AFTER_MINIMUM_DELTA=true`.
+- **Contraprova:** teste e CURRENT podem discordar; o erro mostra a diferença, mas o owner decide qual lado é autoridade. Se o reparo mínimo falhar, `VOLTA_UMA_CASA` no cone afetado.
+- **Next cursor:** combinar a matriz #141 com este método para transformar vermelho em reparo mínimo.

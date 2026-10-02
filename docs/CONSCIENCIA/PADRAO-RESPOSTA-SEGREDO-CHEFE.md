@@ -161,6 +161,29 @@ RED_IS_PINNED_TO_SMALLEST_PROVEN_SCOPE=true
 ADJACENT_FAILURE_CANNOT_CONTAMINATE_PROVEN_CORE=true
 ```
 
+## 🔧 Vermelho como vetor de reparo
+
+Depois de localizar o vermelho pela matriz comparativa, usar a própria divergência como primeira rota de remediação:
+
+```text
+RED
+→ EXACT_DIVERGENCE
+→ OWNER
+→ MINIMUM_DELTA
+→ TARGETED_RETEST
+```
+
+```text
+STRUCTURED_RED_IS_REPAIR_VECTOR=true
+EXACT_DIVERGENCE_BEFORE_BROAD_INVESTIGATION=true
+OWNER_RESOLUTION_BEFORE_PATCH=true
+MINIMUM_DELTA_FIRST=true
+EXPECTED_VS_OBSERVED_DOES_NOT_DECIDE_AUTHORITY_BY_ITSELF=true
+TARGETED_RETEST_AFTER_MINIMUM_DELTA=true
+```
+
+O erro aponta a diferença; o owner decide qual lado deve mudar. Investigação ampla só começa se a diferença continuar ambígua ou o menor delta não sobreviver ao reteste.
+
 ## 🧠 Começar pelo plano do Chefe
 
 Quando a pergunta for sobre arquitetura, direção, padrão, escolha ou estado da Casa, responder primeiro o plano humano, depois a máquina.
