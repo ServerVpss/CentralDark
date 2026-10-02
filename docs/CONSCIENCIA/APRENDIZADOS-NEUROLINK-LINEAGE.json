@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "ca0b166f0e7b0d0eda0e5e3c66ddb7b718c39265",
+  "source_blob_sha": "6ad2ad6443ad63c90aab1edf9dfb72a59af136a7",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 139,
-    "highest_legacy_learning_number": 140,
+    "learning_sections": 146,
+    "highest_legacy_learning_number": 147,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 140
+      "end": 147
     }
   },
   "nodes": [
@@ -1614,6 +1614,83 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L139",
+      "next_uid": "L141"
+    },
+    {
+      "uid": "L141",
+      "legacy_learning_number": 141,
+      "legacy_occurrence": 1,
+      "title": "Vermelho precisa apontar setor, detector e owner sem contaminar o core provado",
+      "document_order": 140,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L140",
+      "next_uid": "L142"
+    },
+    {
+      "uid": "L142",
+      "legacy_learning_number": 142,
+      "legacy_occurrence": 1,
+      "title": "Sessão 2026-10-02 consolidou corpo único, forja local, contrato portátil, Bayes, funil e localização causal de vermelhos",
+      "document_order": 141,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "SESSION_SYNTHESIS_CONTINUITY",
+      "prev_uid": "L141",
+      "next_uid": "L143"
+    },
+    {
+      "uid": "L143",
+      "legacy_learning_number": 143,
+      "legacy_occurrence": 1,
+      "title": "O vermelho já carrega a divergência: erro estruturado é vetor de reparo",
+      "document_order": 142,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L142",
+      "next_uid": "L144"
+    },
+    {
+      "uid": "L144",
+      "legacy_learning_number": 144,
+      "legacy_occurrence": 1,
+      "title": "Limite de canal não bloqueia cristalização: compactar no canônico e expandir em Lembranças",
+      "document_order": 143,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L143",
+      "next_uid": "L145"
+    },
+    {
+      "uid": "L145",
+      "legacy_learning_number": 145,
+      "legacy_occurrence": 1,
+      "title": "Marca, superfície, capability, estado e prova são eixos separados",
+      "document_order": 144,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L144",
+      "next_uid": "L146"
+    },
+    {
+      "uid": "L146",
+      "legacy_learning_number": 146,
+      "legacy_occurrence": 1,
+      "title": "Sistema híbrido multirota: uma rota falhar não reduz a capability global do organismo",
+      "document_order": 145,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L145",
+      "next_uid": "L147"
+    },
+    {
+      "uid": "L147",
+      "legacy_learning_number": 147,
+      "legacy_occurrence": 1,
+      "title": "Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis",
+      "document_order": 146,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L146",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

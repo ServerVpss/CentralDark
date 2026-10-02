@@ -12,6 +12,7 @@ mandatory_rules:
     trigger_registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
     mode: HOUSE_EXECUTOR_CONVERSATIONAL_MODE
     recognize_on:
+    - CHAT_GLOBAL
     - CHATGPT
     - TELEGRAM_BOT
     - AI_CHATS
@@ -43,6 +44,12 @@ mandatory_rules:
       NO_SECRET_ECHO: true
       NO_BLIND_OVERWRITE: true
       NO_SILENT_REROUTE: true
+      CHATGPT_IS_SURFACE_EXAMPLE_NOT_GLOBAL_CLASS: true
+      SURFACE_NAME_IS_NOT_CAPABILITY: true
+      GITHUB_ACCESS_IS_NOT_SHELL_ACCESS: true
+      TOOLSET_DEFINES_EXECUTOR_CAPABILITY_AT_RUNTIME: true
+      LOCAL_TOOL_MISS_IS_NOT_GLOBAL_CAPABILITY_MISS: true
+      MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME: true
     visual_contract:
       semantic_titles: true
       callback_backcheck: "🔙"

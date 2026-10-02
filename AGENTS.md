@@ -526,9 +526,23 @@ Quando o escopo já possui `review_forward_ref`, `review_backward_ref`, `checkpo
 
 ## Conformidade entre superfícies — mesmo CORE, corpos substituíveis
 
-Jan, Hermes, ChatGPT, Claude, Gemini, Grok, Codex, Copilot, CLI, worker ou
+```text
+CHAT_GLOBAL_CLASS=CONVERSATIONAL_SURFACE
+CHAT_GLOBAL_EXAMPLES=CHATGPT|CLAUDE_CHAT|GEMINI_CHAT|GROK_CHAT|FUTURE_CHAT
+CHATGPT_IS_SURFACE_EXAMPLE_NOT_GLOBAL_CLASS=true
+SURFACE_NAME_IS_NOT_CAPABILITY=true
+GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true
+REPO_ACCESS_IS_NOT_HOUSE_EXECUTION=true
+CAPABILITY_RESOLVES_FROM_CURRENT_TOOLSET=true
+CHAT_GLOBAL_WITH_AUTHORIZED_SHELL_OR_BRIDGE_CAN_EXECUTE=true
+MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true
+LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true
+```
+
+
+Jan, Hermes, CHAT_GLOBAL (ChatGPT, Claude Chat, Gemini Chat, Grok Chat e futuros chats), Codex, Copilot, CLI, worker ou
 qualquer interface conectada são **superfícies/instrumentos**, não novas
-identidades canônicas. O sucesso esperado é a mesma gramática operacional
+identidades canônicas. A marca identifica proveniência; a capability é medida na sessão. O sucesso esperado é a mesma gramática operacional
 em corpos diferentes, desde que o contrato canônico tenha sido carregado.
 
 ```text

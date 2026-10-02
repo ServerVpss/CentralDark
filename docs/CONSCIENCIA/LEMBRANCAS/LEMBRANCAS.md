@@ -498,3 +498,40 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 
 **Links:** [[APRENDIZADOS#140]] · [[APRENDIZADOS#139]] · [[CONTRATO-LUPA-BAYESIANA]] · [[CENTRALDARK_AI_BOOT]]
 
+### [2026-10-02] Sessão inteira — síntese canônica
+- **Tipo:** SESSION_MEMORY_INDEX
+- **Learning:** #142
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SESSAO-CORPO-FORJA-CONTRATO-BAYES-FUNIL.md`
+- **Conteúdo:** corpo único CentralDark-OS; Casa/VMware como forja; VPS como twin headless; SELF-GRILL docs-first; contrato portátil; Bayes da reancoragem; funil de dedupe/absorção; Meta-Lupa/Meta-Multibússola; matriz causal de vermelhos.
+
+
+### [2026-10-02] Erro estruturado é vetor de reparo
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #143
+- **Conteúdo:** `RED -> EXACT_DIVERGENCE -> OWNER -> MINIMUM_DELTA -> TARGETED_RETEST`. O vermelho já traz a diferença; o owner resolve autoridade. Investigação ampla só se restar ambiguidade ou o delta mínimo falhar.
+
+### [2026-10-02] Limite de canal → compactar e expandir
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #144
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHANNEL-LIMIT-COMPACT-RECORD-EXPANDED-REMEMBRANCE.md`
+- **Conteúdo:** quando o canal barra registro grande, compactar no canônico, guardar expansão recuperável em Lembranças, backlinkar e continuar no mesmo owner; sem v1/v2/v3.
+
+
+### [2026-10-02] CHAT_GLOBAL — superfície, capability e evidência
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #145
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md`
+- **Conteúdo:** ChatGPT/Claude/Gemini/Grok são superfícies da classe `CHAT_GLOBAL`; capability deriva do toolset medido. `GITHUB_ACCESS != SHELL_ACCESS`; evidência medida vence inferência não medida no mesmo claim/escopo/tempo; provenance histórica de marca é preservada.
+
+
+### [2026-10-02] Sistema híbrido multirota, bidirecional e transversal
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #146
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md`
+- **Conteúdo:** falha de uma rota não define falha do sistema; capability sistêmica é modelada como união das capabilities realmente medidas nas rotas autorizadas vivas aplicáveis ao claim. A prova temporal da sessão mostrou `SEGREDO/RDC=OFFLINE` enquanto outro conector `CENTRALDARK` alcançou `CENTRALDARK-OS`; estados de Tailscale divergiram por binding, confirmando `ROUTE_STATE != SYSTEM_STATE`.
+
+### [2026-10-02] Lei da Peneira Completa
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #147
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-LEI-DA-PENEIRA-COMPLETA.md`
+- **Conteúdo:** novidade material só fecha após atravessar todas as camadas aplicáveis; `CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME`; binding físico entra quando o claim depende dele.

@@ -1,5 +1,5 @@
 ---
-title: "👑🪬 Executor CentralDark — ChatGPT ↔ Casa"
+title: "👑🪬 Executor CentralDark — CHAT_GLOBAL ↔ Casa"
 status: "CANONICAL"
 date: 2026-09-27
 authority: "SEGREDO/CHEFE"
@@ -9,8 +9,13 @@ aliases:
   - "!EXECUTOR CENTRALDARK"
   - "#EXECUTOR_CENTRALDARK"
   - "EXECUTOR_CENTRALDARK"
+surface_class: "CHAT_GLOBAL"
+legacy_owner_filename: true
 surface:
+  - CHAT_GLOBAL
   - CHATGPT
+  - CLAUDE_CHAT
+  - GEMINI_CHAT
   - TELEGRAM_BOT
   - AI_CHATS
 capability_gate: "HOUSE_ACCESS_REQUIRED"
@@ -158,6 +163,24 @@ Não destruir contexto bom por um erro localizado.
 - se um caminho existir e não corresponder ao owner esperado, preservar e escolher rota segura;
 - mutação irreversível exige autorização material e recovery path;
 - ferramenta disponível não expande a intenção do CHEFE.
+
+## 🌐 Escopo global do owner legado
+
+O filename preserva `CHATGPT` por compatibilidade histórica e por proveniência da sessão que originou este cristal. Ele **não** limita o contrato ao produto ChatGPT.
+
+```text
+CHAT_GLOBAL_IS_PORTABLE_CLASS=true
+CHATGPT_IS_ONE_ADAPTER_OF_CHAT_GLOBAL=true
+CLAUDE_CHAT_IS_ONE_ADAPTER_OF_CHAT_GLOBAL=true
+GEMINI_CHAT_IS_ONE_ADAPTER_OF_CHAT_GLOBAL=true
+BRAND_IS_NOT_CAPABILITY=true
+GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true
+HOUSE_EXECUTION_REQUIRES_MEASURED_AUTHORIZED_HOUSE_TOOL=true
+CHAT_GLOBAL_WITH_AUTHORIZED_HOUSE_TOOL_CAN_EXECUTE=true
+LOCAL_TOOL_MISS_IS_NOT_GLOBAL_CAPABILITY_MISS=true
+```
+
+A mesma regra vale para qualquer chat conectado à CentralDark: reconhecer intenção não concede tool; possuir GitHub não concede shell; possuir shell/bridge autorizado concede capability executora apenas no escopo medido.
 
 ## 🤖 Binding de IA
 

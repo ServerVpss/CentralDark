@@ -187,6 +187,225 @@ check('docs/CONSCIENCIA/APRENDIZADOS.md',[
  'LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true',
 ], classification='BAYESIAN_REANCHOR_LEARNING_140')
 
+check('docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',[
+ 'FAILURE_COMPARATIVE_MATRIX_REQUIRED_WHEN_USER_ASKS_WHERE_REDS_ARE=true',
+ 'FAILURE_MATRIX_COLUMNS=RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER',
+ 'ONE_INDEPENDENT_RED_PER_ROW=true',
+ 'DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true',
+ 'LOCAL_RED_DOES_NOT_IMPLY_SECTOR_RED=true',
+ 'ONE_TEST_FAIL_DOES_NOT_IMPLY_CORE_BROKEN=true',
+ 'CORE_PASS_AND_ADJACENT_RED_MUST_BE_SHOWN_SEPARATELY=true',
+ 'COMPARISON_FIRST_EXPLANATION_SECOND=true',
+ 'NO_TEXT_WALL_WHEN_MATRIX_CLOSES_THE_QUESTION=true',
+], classification='CHEFE_FAILURE_COMPARATIVE_MATRIX_CONTRACT')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'failure_explanation_mode: "RED_SECTOR_DETECTOR_OWNER_MATRIX"',
+ 'failure_matrix_columns: "RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER"',
+ 'detector_fail_does_not_imply_target_fail: true',
+ 'one_test_fail_does_not_imply_core_broken: true',
+ 'comparison_first_explanation_second: true',
+], classification='CHEFE_FAILURE_COMPARATIVE_MATRIX_BOOT_BINDING')
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 141. Vermelho precisa apontar setor, detector e owner',
+ 'DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true',
+ 'NO_TEXT_WALL_WHEN_MATRIX_CLOSES_THE_QUESTION=true',
+], classification='CHEFE_FAILURE_COMPARATIVE_MATRIX_LEARNING_141')
+
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 142. Sessão 2026-10-02 consolidou corpo único',
+ 'ONE_SYSTEM_ONLY=true',
+ 'PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED',
+ 'BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED',
+ 'DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true',
+], classification='SESSION_2026_10_02_SYNTHESIS_CONTRACT')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SESSAO-CORPO-FORJA-CONTRATO-BAYES-FUNIL.md',[
+ '# 2026-10-02 — Sessão: corpo único, forja local, contrato portátil, Bayes, funil e explicação causal',
+ 'DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL',
+ 'MINI_CONTRACT_SUBSET_OFFICIAL=DROP_DUPLICATE_REUSE',
+ 'FAILURE_MATRIX_COLUMNS=RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER',
+], classification='SESSION_2026_10_02_REMEMBRANCE_EXPANSION')
+check('docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md',[
+ '2026-10-02-SESSAO-CORPO-FORJA-CONTRATO-BAYES-FUNIL',
+ 'Learning:** #142',
+], classification='SESSION_2026_10_02_REMEMBRANCE_INDEX')
+
+check('docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md',[
+ 'STRUCTURED_RED_IS_REPAIR_VECTOR=true',
+ 'EXACT_DIVERGENCE_BEFORE_BROAD_INVESTIGATION=true',
+ 'OWNER_RESOLUTION_BEFORE_PATCH=true',
+ 'MINIMUM_DELTA_FIRST=true',
+ 'EXPECTED_VS_OBSERVED_DOES_NOT_DECIDE_AUTHORITY_BY_ITSELF=true',
+ 'TARGETED_RETEST_AFTER_MINIMUM_DELTA=true',
+], classification='STRUCTURED_RED_REPAIR_VECTOR_CONTRACT')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'red_remediation_flow: "RED->EXACT_DIVERGENCE->OWNER->MINIMUM_DELTA->TARGETED_RETEST"',
+ 'structured_red_is_repair_vector: true',
+ 'minimum_delta_first: true',
+], classification='STRUCTURED_RED_REPAIR_VECTOR_BOOT_BINDING')
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 143. O vermelho já carrega a divergência',
+ 'STRUCTURED_RED_IS_REPAIR_VECTOR=true',
+ 'TARGETED_RETEST_AFTER_MINIMUM_DELTA=true',
+], classification='STRUCTURED_RED_REPAIR_VECTOR_LEARNING_143')
+
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'CHANNEL_LIMIT_COMPACT_RECORD_EXPANDED_REMEMBRANCE=true',
+ 'CHANNEL_LIMIT_IS_NOT_MISSION_BLOCKED=true',
+ 'COMPACT_CANONICAL_RECORD_REQUIRED_ON_CHANNEL_LIMIT=true',
+ 'EXPANDED_REMEMBRANCE_REQUIRED_WHEN_COMPRESSION_WOULD_DROP_MATERIAL_CONTEXT=true',
+ 'EXPANSION_MUST_BACKLINK_CANONICAL_RECORD=true',
+ 'SAME_OWNER_MUST_BE_EVOLVED=true',
+ 'NO_V1_V2_V3_CHANNEL_FALLBACK=true',
+], classification='CHANNEL_LIMIT_RECOVERABLE_COMPRESSION_CONTRACT')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'channel_limit_fallback_flow: "CHANNEL_LIMIT->COMPACT_CANONICAL_RECORD->EXPANDED_REMEMBRANCE->BACKLINK->SAME_OWNER->CONTINUE"',
+ 'channel_limit_is_not_mission_blocked: true',
+ 'same_owner_must_be_evolved: true',
+ 'no_v1_v2_v3_channel_fallback: true',
+], classification='CHANNEL_LIMIT_RECOVERABLE_COMPRESSION_BOOT_BINDING')
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 144. Limite de canal não bloqueia cristalização',
+ 'CHANNEL_LIMIT_IS_NOT_MISSION_BLOCKED=true',
+ 'NO_V1_V2_V3_CHANNEL_FALLBACK=true',
+], classification='CHANNEL_LIMIT_RECOVERABLE_COMPRESSION_LEARNING_144')
+
+check('.agents/skills/centraldark-unified-surface-parity/SKILL.md',[
+ 'CHAT_GLOBAL = classe de qualquer superfície conversacional conectada à CentralDark',
+ 'BRAND != SURFACE_CLASS',
+ 'SURFACE != CAPABILITY',
+ 'GITHUB_ACCESS != SHELL_ACCESS',
+ 'CHAT_GLOBAL/Texto = oráculo + executor conforme tools autorizadas medidas',
+ 'MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true',
+], classification='CHAT_GLOBAL_SURFACE_CAPABILITY_EVIDENCE_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml',[
+ 'global_chat_class: CHAT_GLOBAL',
+ 'BRAND_NE_SURFACE_CLASS: true',
+ 'GITHUB_ACCESS_NE_SHELL_ACCESS: true',
+ 'TOOLSET_RESOLVED_AT_RUNTIME: true',
+ 'CHAT_GLOBAL_WITH_AUTHORIZED_SHELL_GAINS_EXECUTOR_CAPABILITY_IN_SCOPE: true',
+], classification='CHAT_GLOBAL_SURFACE_CAPABILITY_MACHINE_CONTRACT')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'CHAT_GLOBAL_IS_CLASS_NOT_BRAND=true',
+ 'CHATGPT_IS_ONE_CHAT_GLOBAL_SURFACE=true',
+ 'GITHUB_ACCESS != SHELL_ACCESS',
+ 'MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true',
+ 'LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true',
+], classification='CHAT_GLOBAL_SOUL_INHERITANCE')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'event: CAPABILITY_GAP',
+ 'event: TERRITORY_ROUTE_CHANGE',
+ 'proven_recipe_claim: HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH',
+ 'LOAD_PROVEN_MULTIROUTE_RECIPE',
+], classification='HYBRID_MULTIROUTE_HOOK_CONTRACT')
+check('scripts/trigger-fabric/system_sentinel.py',[
+ '"ROUTE_FAILURE"',
+ '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
+ '"CAPABILITY_GAP"',
+ '"INVENTORY_AUTHORIZED_ALTERNATE_ROUTES"',
+], classification='HYBRID_MULTIROUTE_SENTINEL_HOOK')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
+ '"dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069"',
+], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
+
+check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
+ '### 📓 Caderneta — sistema híbrido multirota #146',
+ 'HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH',
+ 'multiroute_recipe_hook=true',
+ 'FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS',
+], classification='HYBRID_MULTIROUTE_CHECKLIST_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"hook_bindings"',
+ '"runtime_consumer"',
+ '"runtime_proof"',
+ '"checklist_ref"',
+], classification='HYBRID_MULTIROUTE_RECIPE_COMPLETENESS')
+
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 147. Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis',
+ 'FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true',
+ 'CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME=true',
+], classification='COMPLETE_SIEVE_LEARNING_147')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-LEI-DA-PENEIRA-COMPLETA.md',[
+ '# 2026-10-02 — Lei da Peneira Completa',
+ 'CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME',
+], classification='COMPLETE_SIEVE_REMEMBRANCE_147')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'complete_sieve_registration:',
+ 'fixed_point_requires_all_applicable_layers: true',
+ 'physical_binding_required_when_claim_depends_on_host_vm_share: true',
+], classification='COMPLETE_SIEVE_BOOT_147')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'COMPLETE_SIEVE_APPLICABILITY_CHECK',
+ 'COMPLETE_SIEVE_READBACK',
+], classification='COMPLETE_SIEVE_TRIGGER_147')
+check('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ 'COMPLETE_SIEVE_REQUIRED_PATHS = (',
+ 'CENTRALDARK_COMPLETE_SIEVE_MATERIALIZATION=FAIL',
+ 'complete_sieve_materialization(root)',
+], classification='COMPLETE_SIEVE_HERMES_HOOK_147')
+check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
+ '### 📓 Caderneta — Lei da Peneira Completa #147',
+ 'CONE_PASS != GLOBAL_PASS',
+], classification='COMPLETE_SIEVE_CHECKLIST_147')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"dependency_fingerprint": "82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09"',
+ '"materialization_requirements"',
+ '"physical_binding"',
+ '"complete_sieve"',
+], classification='COMPLETE_SIEVE_MACHINE_RECIPE_147')
+check('docs/receipts/2026-10-02-complete-sieve-law.md',[
+ '# Receipt — Lei da Peneira Completa #147',
+ 'CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME',
+], classification='COMPLETE_SIEVE_RECEIPT_147')
+check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
+ 'CAPABILITY_PRIOR_FROM_BRAND=FORBIDDEN',
+ 'TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true',
+ 'USER_STATED_SURFACE_FACT_OUTRANKS_ASSISTANT_GENERIC_PRIOR=true',
+], classification='CHAT_GLOBAL_METAGRILL_INFERENCE_GUARD')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'global_chat_class: "CHAT_GLOBAL"',
+ 'brand_is_provenance_not_capability: true',
+ 'github_access_is_not_shell_access: true',
+ 'chat_global_with_authorized_shell_or_bridge_can_execute_in_scope: true',
+], classification='CHAT_GLOBAL_PORTABLE_BOOT_BINDING')
+check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
+ 'CHAT_GLOBAL_IS_EXTERNAL_SURFACE_CLASS=true',
+ 'REMOTE_CHAT_INFERENCE_MUST_NOT_OVERRIDE_MEASURED_LOCAL_STATE_WITHOUT_COUNTEREVIDENCE=true',
+ 'LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true',
+], classification='CHAT_GLOBAL_HERMES_EVIDENCE_BINDING')
+check('apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml',[
+ '- CHAT_GLOBAL',
+ 'CHATGPT_IS_SURFACE_EXAMPLE_NOT_GLOBAL_CLASS: true',
+ 'TOOLSET_DEFINES_EXECUTOR_CAPABILITY_AT_RUNTIME: true',
+], classification='CHAT_GLOBAL_TELEGRAM_BINDING')
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 145. Marca, superfície, capability, estado e prova são eixos separados',
+ 'CHAT_GLOBAL_IS_CLASS_NOT_PRODUCT=true',
+ 'GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true',
+], classification='CHAT_GLOBAL_LEARNING_145')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md',[
+ '# 2026-10-02 — CHAT_GLOBAL, superfície, capability, estado e prova',
+ 'PROVENANCE_SPECIFIC_BRAND_MUST_BE_PRESERVED=true',
+], classification='CHAT_GLOBAL_REMEMBRANCE_EXPANSION')
+check_absent('.agents/skills/centraldark-unified-surface-parity/SKILL.md',[
+ r'ChatGPT Texto = oráculo \+ executor quando tool aparece',
+], classification='CHAT_GLOBAL_NO_BRAND_AS_GLOBAL_ROLE_SKILL')
+check_absent('docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/CENTRALDARK-MATRIZ-BIDIRECIONAL-GOLDEN-CAPSULE.md',[
+ r'usar ChatGPT/SOL como oráculo',
+ r'CHATGPT PENSA',
+ r'### CHATGPT / SOL',
+], classification='CHAT_GLOBAL_NO_BRAND_AS_GLOBAL_ROLE_CAPSULE')
+check_absent('LEIA-ME-IA.md',[
+ r'\+ CHATGPT/SOL \+ GITHUB = EFEITO OBSERVADO',
+], classification='CHAT_GLOBAL_NO_BRAND_AS_PROOF_TARGET')
+check_absent('CENTRALDARK_AI_BOOT.yaml',[
+ r'applies_to: \[CHATGPT_TEXT, CHATGPT_VOICE, WORK, DESKTOP, CLAUDE, HERMES, FUTURE_SURFACES\]',
+], classification='CHAT_GLOBAL_NO_BRAND_ONLY_SURFACE_ROUTING')
+check_command('runtime-proof-same-target-chat-global',[
+ 'node','scripts/lupa/runtime-proof-same-target.test.mjs'
+], classification='CHAT_GLOBAL_RUNTIME_PROOF_TEST')
+
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'GENERAL_IS_OPERATIONAL_POSTURE=true',
  'GENERAL_IS_NOT_NEW_IDENTITY=true',

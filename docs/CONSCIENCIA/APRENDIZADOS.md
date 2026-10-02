@@ -1399,8 +1399,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** qualquer nova superfície começa pelo contrato portátil, resolve bindings vivos e continua do último NEXT_CURSOR recuperável sem exigir que o CHEFE reensine o método.
 
 ### 140. Reancoragem portátil deixa de ser promessa: medir alinhamento com Bayes, calibração e efeito empírico
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L140`; `PREV_GLOBAL_UID=L139`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=140`; `PREV_LEARNING_REF=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L140`; `PREV_GLOBAL_UID=L139`; `NEXT_GLOBAL_UID=L141`; `LEGACY_LEARNING_NUMBER=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=140`; `PREV_LEARNING_REF=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=141`.
 - **Categoria:** bayesian-reanchor-measurement-calibration.
 - **Data:** 2026-10-02.
 - **Owners:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract.bayesian_reanchor_measurement` + `.agents/skills/meta-lupa/references/matematica-e-calibracao.md#8-medição-bayesiana-de-reancoragem-do-contrato-portátil`.
@@ -1411,3 +1411,93 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Contraprova:** reinjeção que “parece funcionar” não basta; sem outcome medido não há amostra. Taxa pós-reinjeção sem controle não prova causalidade. Evidências correlacionadas não podem ser multiplicadas como independentes. Um posterior alto não concede autoridade operacional.
 - **Next cursor:** cada evento de reancoragem registra treatment, fingerprint, indicadores, outcome, provenance do prior/LR, posterior/calibração quando calculáveis e NEXT_CURSOR; comparar coortes apenas por fingerprints compatíveis.
 
+### 141. Vermelho precisa apontar setor, detector e owner sem contaminar o core provado
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L141`; `PREV_GLOBAL_UID=L140`; `NEXT_GLOBAL_UID=L142`; `LEGACY_LEARNING_NUMBER=141`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=141`; `PREV_LEARNING_REF=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=142`.
+- **Categoria:** comparative-failure-localization-response.
+- **Data:** 2026-10-02.
+- **Owner:** `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md#-matriz-comparativa-operacional--vermelho-por-setor`.
+- **Contexto:** ao listar os vermelhos atuais, a resposta curta em tabela — vermelho, setor, detector e diretório/owner — permitiu ao CHEFE localizar imediatamente cada ferida. A contraprova mostrou por que a separação é essencial: o `pytest` da Casa estava quebrado por Pygments, mas a Meta-Lupa passou 53/53 por rota direta; logo `DETECTOR_FAIL != CORE_BROKEN`.
+- **Aprendizado:** perguntas de localização/comparação de falhas devem usar a menor matriz causal suficiente. Cada vermelho independente ocupa uma linha e é preso ao menor escopo provado. Nome real, setor, detector e owner/path ficam lado a lado. Falha do instrumento não contamina o alvo; vermelho local não vira vermelho global; core provado e ferida adjacente aparecem separados.
+- **Cristal:** `FAILURE_COMPARATIVE_MATRIX_REQUIRED_WHEN_USER_ASKS_WHERE_REDS_ARE=true`; `FAILURE_MATRIX_COLUMNS=RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER`; `ONE_INDEPENDENT_RED_PER_ROW=true`; `DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true`; `LOCAL_RED_DOES_NOT_IMPLY_SECTOR_RED=true`; `ONE_TEST_FAIL_DOES_NOT_IMPLY_CORE_BROKEN=true`; `CORE_PASS_AND_ADJACENT_RED_MUST_BE_SHOWN_SEPARATELY=true`; `COMPARISON_FIRST_EXPLANATION_SECOND=true`; `NO_TEXT_WALL_WHEN_MATRIX_CLOSES_THE_QUESTION=true`.
+- **Contraprova:** tabela não substitui causalidade. Se setor, detector ou owner não estiver medido, usar `UNKNOWN`; não inventar diretório. Uma matriz bonita com escopo errado continua falso-verde/falso-vermelho.
+- **Next cursor:** aplicar automaticamente esta matriz quando a pergunta do CHEFE for “quais vermelhos?”, “onde estão?”, “qual setor?” ou comparação equivalente; expandir somente se ele pedir causa, efeito ou reparo.
+
+### 142. Sessão 2026-10-02 consolidou corpo único, forja local, contrato portátil, Bayes, funil e localização causal de vermelhos
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L142`; `PREV_GLOBAL_UID=L141`; `NEXT_GLOBAL_UID=L143`; `LEGACY_LEARNING_NUMBER=142`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=142`; `PREV_LEARNING_REF=141`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `NEXT_LEARNING_REF=143`.
+- **Categoria:** session-synthesis.
+- **Data:** 2026-10-02.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SESSAO-CORPO-FORJA-CONTRATO-BAYES-FUNIL.md`.
+- **Aprendizado:** a sessão convergiu cinco eixos que antes apareciam separados: (1) CentralDark-OS como corpo canônico único; Casa/VMware como forja e bancada de prova local; VPS como twin headless 24/7 da mesma linhagem; (2) SELF-GRILL docs-first como modo operacional padrão; (3) contrato portátil que reancora qualquer chat no método e resolve CURRENT/HEAD/writer em tempo de boot; (4) medição Bayesiana real da reancoragem, proibindo probabilidade/LR inventados; (5) funil que deduplica mini-contrato já contido, absorve só delta útil e usa Meta-Lupa + Meta-Multibússola para conflitos. A saída humana também foi cristalizada como `RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER`, impedindo que detector quebrado contamine core provado.
+- **Snapshot local preservado:** nesta sessão, `E:\CentralDark\w-skills` foi observado como worktree real de `ServerVpss/CentralDark`; `E:\CentralDark` funcionava como raiz organizacional, `_IMPORTS` segregava donors e `_MAPA_CASA` receipts. Esses paths são evidência temporal e exigem revalidação antes de claim CURRENT.
+- **Provas relevantes da sessão:** Meta-Lupa core passou por rota direta (`53/53`, 3 temperaturas, CLI Bayes); falha do pytest foi isolada em Pygments; Meta-Multibússola core passou no teste isolado/evaluator/registry; vermelhos adjacentes permaneceram separados.
+- **Cristal:** `ONE_SYSTEM_ONLY=true`; `CASA_VMWARE_ROLE=FORGE_AND_LOCAL_PROOF_LAB`; `VPS_ROLE=HEADLESS_24X7_TWIN_EXECUTION_BODY`; `SAME_FINGERPRINT_SAME_PROOF=REUSE_CRYSTAL`; `DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL`; `PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED`; `BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED`; `MINI_CONTRACT_SUBSET_OFFICIAL=DROP_DUPLICATE_REUSE`; `DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true`.
+- **Contraprova:** cristalização não prova runtime; VM/VPS só reutilizam prova quando identidade/fingerprint do artefato é a mesma; contrato colado não torna LLM matematicamente determinístico; snapshot local envelhece; vermelho de detector não é vermelho do core sem teste discriminante.
+- **Next cursor:** reancorar novas superfícies pelo contrato portátil, resolver CURRENT e continuar pelo menor cone arquitetural material: AionUi/Hermes ↔ runtime/IA do twin local; depois replay do mesmo artefato/receita na VPS quando aplicável.
+
+
+### 143. O vermelho já carrega a divergência: erro estruturado é vetor de reparo
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L143`; `PREV_GLOBAL_UID=L142`; `NEXT_GLOBAL_UID=L144`; `LEGACY_LEARNING_NUMBER=143`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=143`; `PREV_LEARNING_REF=142`; `NEXT_LEARNING_REF=144`.
+- **Categoria:** structured-red-to-minimum-remediation.
+- **Data:** 2026-10-02.
+- **Aprendizado:** quando o vermelho já traz `observado != esperado`, começar por essa divergência, resolver o owner e aplicar o menor delta; só ampliar a investigação se restar ambiguidade.
+- **Fluxo:** `RED -> EXACT_DIVERGENCE -> OWNER -> MINIMUM_DELTA -> TARGETED_RETEST`.
+- **Cristal:** `STRUCTURED_RED_IS_REPAIR_VECTOR=true`; `EXACT_DIVERGENCE_BEFORE_BROAD_INVESTIGATION=true`; `OWNER_RESOLUTION_BEFORE_PATCH=true`; `MINIMUM_DELTA_FIRST=true`; `EXPECTED_VS_OBSERVED_DOES_NOT_DECIDE_AUTHORITY_BY_ITSELF=true`; `TARGETED_RETEST_AFTER_MINIMUM_DELTA=true`.
+- **Contraprova:** teste e CURRENT podem discordar; o erro mostra a diferença, mas o owner decide qual lado é autoridade. Se o reparo mínimo falhar, `VOLTA_UMA_CASA` no cone afetado.
+- **Next cursor:** combinar a matriz #141 com este método para transformar vermelho em reparo mínimo.
+
+### 144. Limite de canal não bloqueia cristalização: compactar no canônico e expandir em Lembranças
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L144`; `PREV_GLOBAL_UID=L143`; `NEXT_GLOBAL_UID=L145`; `LEGACY_LEARNING_NUMBER=144`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=144`; `PREV_LEARNING_REF=143`; `NEXT_LEARNING_REF=145`.
+- **Categoria:** channel-limit-recoverable-compression.
+- **Owner:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#15`.
+- **Aprendizado:** se o canal rejeita registro grande, escrever a forma compacta no owner canônico e preservar a expansão em Lembranças com backlink; continuar a missão sem criar v1/v2/v3.
+- **Fluxo:** `CHANNEL_LIMIT -> COMPACT_CANONICAL_RECORD -> EXPANDED_REMEMBRANCE -> BACKLINK -> SAME_OWNER -> CONTINUE`.
+- **Cristal:** `CHANNEL_LIMIT_IS_NOT_MISSION_BLOCKED=true`; `COMPRESSION_IS_NOT_INFORMATION_LOSS=true`; `SAME_OWNER_MUST_BE_EVOLVED=true`; `NO_V1_V2_V3_CHANNEL_FALLBACK=true`.
+- **Contraprova:** compactação que perde owner, provenance, contraprova ou NEXT_CURSOR é regressão; Lembrança não vira segundo owner.
+- **Next cursor:** aplicar automaticamente em qualquer escrita futura barrada por limite de canal/formato.
+
+### 145. Marca, superfície, capability, estado e prova são eixos separados
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L145`; `PREV_GLOBAL_UID=L144`; `NEXT_GLOBAL_UID=L146`; `LEGACY_LEARNING_NUMBER=145`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=145`; `PREV_LEARNING_REF=144`; `NEXT_LEARNING_REF=146`.
+- **Categoria:** surface-capability-evidence-inference-control.
+- **Owner:** `.agents/skills/centraldark-unified-surface-parity/SKILL.md` + `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md`.
+- **Aprendizado:** `CHAT_GLOBAL` é a classe portátil de qualquer chat conectado à CentralDark; ChatGPT, Claude Chat, Gemini Chat, Grok Chat e futuros chats são superfícies/proveniência. Capability é derivada das tools realmente medidas na sessão, nunca da marca. GitHub não implica shell; shell/bridge autorizado pode dar capability executora ao próprio chat naquele escopo.
+- **Lei de evidência:** `MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true`. Hermes com shell pode ser mais forte para estado local; CHAT_GLOBAL com GitHub CURRENT pode ser mais forte para main remota. Não existe hierarquia fixa por marca.
+- **Cristal:** `CHAT_GLOBAL_IS_CLASS_NOT_PRODUCT=true`; `SURFACE_NAME_IS_NOT_CAPABILITY=true`; `GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true`; `TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true`; `CHAT_GLOBAL_WITH_AUTHORIZED_SHELL_OR_BRIDGE_CAN_EXECUTE_IN_SCOPE=true`; `LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true`; `CURRENT_MAIN_IS_NOT_LOCAL_RUNTIME_STATE_WITHOUT_LOCAL_MEASUREMENT=true`; `USER_STATED_SURFACE_FACT_OUTRANKS_ASSISTANT_GENERIC_PRIOR=true`.
+- **Contraprova:** provenance específica continua específica: registro histórico de uma sessão ChatGPT não deve ser reescrito para CHAT_GLOBAL. Medição local não prova main remota; main remota não prova runtime local.
+- **Next cursor:** antes de qualquer claim/correção sobre capacidade de agente/chat, classificar superfície, medir toolset, fixar claim+scope+tempo e só então concluir.
+
+
+### 146. Sistema híbrido multirota: uma rota falhar não reduz a capability global do organismo
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L146`; `PREV_GLOBAL_UID=L145`; `NEXT_GLOBAL_UID=L147`; `LEGACY_LEARNING_NUMBER=146`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=146`; `PREV_LEARNING_REF=145`; `NEXT_LEARNING_REF=147`.
+- **Categoria:** hybrid-multiroute-bidirectional-transversal-capability.
+- **Data:** 2026-10-02.
+- **Owner:** `.agents/skills/centraldark-unified-surface-parity/SKILL.md#02-sistema-híbrido-multirota-bidirecional-e-transversal` + `CENTRALDARK_AI_BOOT.yaml#cross_surface_capability_handoff`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md`.
+- **Contexto:** durante uma leitura da Casa, a rota antiga `Remote Desktop Commander -> SEGREDO Windows` ficou offline. Em vez de classificar o sistema como inacessível, o executor aplicou o owner e procurou rota alternativa. O conector `CENTRALDARK` expôs três dispositivos `CENTRALDARK-OS` online. Um respondeu como `root` e mostrou Tailscale `Running` com IP tailnet; dois outros responderam pelo mesmo corpo lógico com Tailscale `NeedsLogin`. Isso provou que `ROUTE_STATE != SYSTEM_STATE` e que health/capability precisam ser presos ao binding medido.
+- **Aprendizado:** CentralDark é um único sistema lógico com múltiplas rotas autorizadas de entrada/saída: Casa, CENTRALDARK-OS, VPS, Tailscale, RDC/Desktop Commander, SSH, MCP, Telegram, Gateway, GitHub e superfícies futuras podem fornecer capabilities diferentes no mesmo instante. A capability global não é igual à capability da rota atual; operacionalmente ela é a união das capabilities efetivamente medidas nas rotas autorizadas vivas aplicáveis ao claim.
+- **Modelo:** `CAPABILITY_SYSTEM(t)=UNION(CAPABILITY(route,t) for route in AUTHORIZED_ROUTES measured alive)`.
+- **Fluxo:** `ROUTE_FAIL -> CLASSIFY_EXACT_ROUTE -> KEEP_SYSTEM_STATE_UNDECIDED -> INVENTORY_AUTHORIZED_ALTERNATE_ROUTES -> MEASURE_ALTERNATES -> REUSE_LIVE_CAPABILITY -> COMPARE_SAME_CLAIM_SCOPE_TIME -> PASS|UNKNOWN|BLOCKED`.
+- **Cristal:** `ONE_ROUTE_FAILED_IS_NOT_SYSTEM_FAILED=true`; `LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE=true`; `LOCAL_BLOCKED_IS_NOT_GLOBAL_BLOCKER=true`; `ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER=true`; `HUMAN_FRONTIER_REQUIRES_EXHAUSTED_AUTHORIZED_BODIES=true`; `ROUTE_HEALTH_MUST_BE_REMEASURED_PER_BINDING=true`; `SAME_LOGICAL_SYSTEM_MAY_BE_REACHED_FROM_OUTSIDE_IN_AND_INSIDE_OUT=true`; `BIDIRECTIONAL_ROUTE_DOES_NOT_CREATE_SECOND_SYSTEM=true`; `TRANSVERSAL_ROUTE_REUSES_SAME_OWNER_AND_PROOF_LAW=true`.
+- **Contraprova:** uma rota online não prova que todas as outras estão saudáveis; Tailscale `Running` em um binding não torna `NeedsLogin` de outro binding falso. Multiplicidade de bindings também não prova duplicação arquitetural: primeiro classificar processo, conta, identidade, transporte e capability. Rota conhecida/documentada não é prova viva; deve ser remedida antes do uso.
+- **Next cursor:** diante de qualquer falha de acesso, nunca elevar `rota falhou` para `sistema falhou` antes de esgotar e medir as rotas autorizadas aplicáveis; registrar qual binding provou cada claim.
+
+### 147. Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L147`; `PREV_GLOBAL_UID=L146`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=147`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=147`; `PREV_LEARNING_REF=146`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** complete-sieve-registration-runtime-materialization.
+- **Data:** 2026-10-02.
+- **Owner:** `CENTRALDARK_AI_BOOT.yaml#complete_sieve_registration` + Trigger Fabric + owners existentes de cada camada.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-LEI-DA-PENEIRA-COMPLETA.md`.
+- **Aprendizado:** registrar aprendizado/lembrança não fecha a técnica. Toda novidade material deve atravessar todas as camadas aplicáveis: `APRENDIZADO -> LEMBRANÇA -> RECEITA -> HOOK -> TRIGGER -> BOOT -> VERIFIER -> CONSUMER_REAL -> CHECKLIST_DIARIO -> RECEIPT -> PR_MAE_1562 -> PR_RELACIONADA_QUANDO_ESCOPO_INTERSECTA -> BINDING_FISICO_QUANDO_O_CLAIM_DEPENDE_DELE -> READBACK`.
+- **Lei:** `LEARNING_REGISTERED != RECIPE_REGISTERED`; `RECIPE_REGISTERED != HOOK_BOUND`; `HOOK_BOUND != TRIGGER_BOUND`; `TRIGGER_BOUND != BOOT_LOADED`; `BOOT_LOADED != VERIFIER_ENFORCED`; `VERIFIER_ENFORCED != CONSUMER_PROVEN`; `CONSUMER_PROVEN != CHECKLIST_REGISTERED`; `CHECKLIST_REGISTERED != RECEIPT_MATERIALIZED`; `RECEIPT_MATERIALIZED != PR_MOTHER_RECEIPT`; `REPO_PROOF != PHYSICAL_BINDING_PROOF_WHEN_PHYSICAL_BINDING_IS_MATERIAL`.
+- **Descoberta discriminante:** o `CHECK-LIST-DIARIO.md` existia em `origin/main`, mas o consumer `CENTRALDARK-OS/root:/root/CentralDark` usava sparse-checkout sem `docs/BRAIN/00-MAPA-SISTEMA`. O verifier mostrou `HYBRID_MULTIROUTE_CHECKLIST_CONTRACT=false` com `missing=[]`. Após materializar `docs/BRAIN/00-MAPA-SISTEMA`, o mesmo check virou PASS. Portanto `CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME`.
+- **Binding físico:** quando o claim depende de Casa/VM/share, `E:\\VMs\\CENTRALDARK-OS\\SHARED` também entra na peneira. Nesta sessão, Windows `SEGREDO` estava offline e o guest não apresentava HGFS/share montado; então `HOST_VM_SHARED_BINDING=NOT_PROVEN`, sem contaminar o PASS separado do repo `/root/CentralDark`.
+- **Cristal:** `FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true`; `NON_APPLICABLE_LAYER_MUST_BE_EXPLICIT=true`; `CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME=true`; `SPARSE_CHECKOUT_IS_BINDING_NOT_SOURCE_OF_TRUTH=true`; `SPARSE_PATH_ENABLED_IS_NOT_FILE_PRESENT_AT_CURRENT_HEAD=true`; `PHYSICAL_BINDING_REQUIRED_WHEN_CLAIM_DEPENDS_ON_HOST_VM_SHARE=true`; `UNRELATED_GLOBAL_RED_DOES_NOT_INVALIDATE_PROVEN_CONE=true`; `CONE_PASS_DOES_NOT_IMPLY_GLOBAL_PASS=true`.
+- **Contraprova:** camadas não aplicáveis não devem ser fabricadas; hook real e trigger são categorias distintas; PR relacionada só entra quando o escopo intersecta; binding físico só é obrigatório quando participa do claim. Verifier global vermelho não invalida cone local provado, e cone local verde não torna o repo globalmente verde.
+- **Next cursor:** antes de declarar FIXED_POINT, calcular as camadas aplicáveis, provar cada uma ou marcar `N/A|UNKNOWN|BLOCKED`, materializar os arquivos requeridos no consumer e executar readback final.

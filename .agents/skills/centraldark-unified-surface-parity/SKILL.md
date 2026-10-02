@@ -24,6 +24,97 @@ CONTRATO = como qualquer motor usa a mão
 REALIDADE = juiz
 ```
 
+## 0.1 Classe global de chat, superfície e capability
+
+```text
+CHAT_GLOBAL = classe de qualquer superfície conversacional conectada à CentralDark
+CHATGPT = uma implementação/superfície possível de CHAT_GLOBAL
+CLAUDE_CHAT = uma implementação/superfície possível de CHAT_GLOBAL
+GEMINI_CHAT = uma implementação/superfície possível de CHAT_GLOBAL
+FUTURE_CHAT = implementação futura da mesma classe
+
+BRAND != SURFACE_CLASS
+SURFACE != CAPABILITY
+SURFACE != EXECUTOR_PROOF
+GITHUB_ACCESS != SHELL_ACCESS
+REPO_READ_WRITE != HOUSE_EXECUTION
+TOOL_CATALOG != TOOL_EXECUTION
+```
+
+A marca não define o papel global. A capability disponível é resolvida no runtime da superfície atual.
+
+```text
+CHAT_GLOBAL
++ CONTEXT/DOCS
+= REASONING/RECONCILIATION_CAPABILITY
+
+CHAT_GLOBAL
++ GITHUB_TOOL
+= REPO_CAPABILITY
+
+CHAT_GLOBAL
++ AUTHORIZED_SHELL_OR_DESKTOP_BRIDGE
+= EXECUTOR_CAPABILITY_IN_THAT_SCOPE
+```
+
+Logo, uma superfície de chat sem shell não é “menos CentralDark”; ela só não possui aquela capability naquele momento. E uma superfície de chat com shell autorizado pode executar no escopo provado sem deixar de ser CHAT_GLOBAL.
+
+Lei de evidência:
+
+```text
+MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true
+LOCAL_SHELL_STATE_DOES_NOT_PROVE_REMOTE_OR_MAIN_STATE=true
+LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true
+REMOTE_CHAT_INFERENCE_MUST_NOT_OVERRIDE_LOCAL_MEASUREMENT_WITHOUT_COUNTEREVIDENCE=true
+LOCAL_TOOL_MISS_IS_NOT_GLOBAL_CAPABILITY_MISS=true
+```
+
+Isto não cria hierarquia fixa “Hermes > chat” ou “chat > Hermes”. A força vem da evidência aplicável ao claim, não do nome do agente.
+
+## 0.2 Sistema híbrido multirota, bidirecional e transversal
+
+A CentralDark não reduz o organismo à rota atualmente usada. Transporte, superfície e capability são eixos separados.
+
+```text
+ROUTE = binding/transporte observado
+CAPABILITY(route,t) = capabilities realmente medidas naquela rota no instante t
+AUTHORIZED_ROUTES = conjunto de rotas autorizadas aplicáveis ao claim
+
+CAPABILITY_SYSTEM(t)
+= UNION(CAPABILITY(route,t) for route in AUTHORIZED_ROUTES measured alive)
+```
+
+Leis:
+
+```text
+ONE_ROUTE_FAILED_IS_NOT_SYSTEM_FAILED=true
+LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE=true
+LOCAL_BLOCKED_IS_NOT_GLOBAL_BLOCKER=true
+ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER=true
+HUMAN_FRONTIER_REQUIRES_EXHAUSTED_AUTHORIZED_BODIES=true
+ROUTE_PRESENCE_IS_NOT_ROUTE_HEALTH=true
+ROUTE_HEALTH_MUST_BE_REMEASURED_PER_BINDING=true
+SAME_LOGICAL_SYSTEM_MAY_BE_REACHED_FROM_OUTSIDE_IN_AND_INSIDE_OUT=true
+BIDIRECTIONAL_ROUTE_DOES_NOT_CREATE_SECOND_SYSTEM=true
+TRANSVERSAL_ROUTE_REUSES_SAME_OWNER_AND_PROOF_LAW=true
+ROUTE_FAIL_REQUIRES_CLAIM_SCOPE_TIME_BINDING=true
+```
+
+Fluxo de falha:
+
+```text
+ROUTE_FAIL
+→ CLASSIFY_EXACT_ROUTE
+→ KEEP_SYSTEM_STATE_UNDECIDED
+→ INVENTORY_AUTHORIZED_ALTERNATE_ROUTES
+→ MEASURE_ALTERNATES
+→ REUSE_LIVE_CAPABILITY
+→ COMPARE_SAME_CLAIM_SCOPE_TIME
+→ ONLY_THEN: PASS | UNKNOWN | BLOCKED
+```
+
+Não há hierarquia fixa Tailscale > RDC > SSH > MCP. A melhor rota é a que estiver autorizada, viva e adequada ao claim naquele momento. Uma rota local pode falhar enquanto outra superfície do mesmo organismo continua capaz.
+
 ## 1. Gatilho mestre
 
 Quando a entrada iniciar ou implicar `!CENTRALDARK`, `CentralDark`, `#ACORDAR`, `!CALIBRAR`, `!AUTO_GRILL`, `!GRILL_ME` ou comando operacional equivalente, carregue o funil:
@@ -286,7 +377,7 @@ PROVIDER_NAMESPACE_ABSENT → API/MCP/provider adapter existente; depois RDC/VPS
 
 ```text
 Worker/Cloud Code = implementação pesada
-ChatGPT Texto = oráculo + executor quando tool aparece
+CHAT_GLOBAL/Texto = oráculo + executor conforme tools autorizadas medidas (ChatGPT, Claude Chat, Gemini Chat e futuras superfícies são exemplos)
 Voice = superfície humana rápida com binding explícito
 Hermes/Casa = executor local vivo
 GitHub = cristal verificável

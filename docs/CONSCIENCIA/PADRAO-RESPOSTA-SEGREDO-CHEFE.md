@@ -2,7 +2,7 @@
 title: "💬 Padrão de resposta — SEGREDO/CHEFE"
 status: "ATIVO_RECONCILIADO"
 date: 2026-06-20
-updated: 2026-09-27
+updated: 2026-10-02
 owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
 truth_scope: "CHEFE_RESPONSE_STYLE_AND_DELIVERY_CONTRACT"
 canonical: true
@@ -105,6 +105,84 @@ GENERIC_LABEL != CANONICAL_COMPONENT_NAME
 ```
 
 Em UI com pouco espaço, rótulo curto é permitido, mas a identidade canônica deve continuar disponível no detalhe, tooltip, painel expandido ou resposta técnica.
+
+## 🔴 Matriz comparativa operacional — vermelho por setor
+
+Quando o SEGREDO/CHEFE perguntar quais vermelhos existem, onde estão, qual setor falhou ou pedir comparação de diretórios, responder primeiro com uma matriz curta que preserve a separação entre **alvo**, **detector** e **owner real**.
+
+Formato canônico:
+
+| 🔴 Vermelho | Setor | Detector / teste | Diretório / owner afetado |
+|---|---|---|---|
+
+Cada linha representa **um vermelho independente**. Não duplicar a mesma falha por aliases, sintomas ou superfícies derivadas.
+
+```text
+FAILURE_COMPARATIVE_MATRIX_REQUIRED_WHEN_USER_ASKS_WHERE_REDS_ARE=true
+FAILURE_MATRIX_COLUMNS=RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER
+ONE_INDEPENDENT_RED_PER_ROW=true
+REAL_COMPONENT_NAME_REQUIRED=true
+SECTOR_MUST_BE_CAUSALLY_RELEVANT=true
+DETECTOR_MUST_BE_NAMED_WHEN_KNOWN=true
+OWNER_OR_DIRECTORY_MUST_BE_NAMED_WHEN_KNOWN=true
+UNKNOWN_LOCATION_STAYS_UNKNOWN=true
+DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true
+LOCAL_RED_DOES_NOT_IMPLY_SECTOR_RED=true
+ONE_TEST_FAIL_DOES_NOT_IMPLY_CORE_BROKEN=true
+CORE_PASS_AND_ADJACENT_RED_MUST_BE_SHOWN_SEPARATELY=true
+COMPARISON_FIRST_EXPLANATION_SECOND=true
+NO_TEXT_WALL_WHEN_MATRIX_CLOSES_THE_QUESTION=true
+```
+
+Regra de comparação:
+
+```text
+ALVO/CORE
+↔ DETECTOR/TESTE
+↔ SETOR
+↔ OWNER/PATH
+```
+
+Exemplo sem congelar estado real:
+
+| 🔴 Vermelho | Setor | Detector / teste | Diretório / owner afetado |
+|---|---|---|---|
+| `PYTEST_ENVIRONMENT_BROKEN` | Casa / Python | `pytest` | ambiente `site-packages` |
+| `ADMIN_REGISTRY_DRIFT` | MCP/Admin | guard administrativo | `docs/CONSCIENCIA/ADMINISTRAVEIS.json` |
+
+Se o detector falhar antes de tocar o alvo, dizer explicitamente que o alvo continua `UNKNOWN` ou usar outra prova discriminante. Se outra rota prova o core, registrar `CORE=PASS` e manter o vermelho adjacente separado.
+
+O objetivo desta matriz é reduzir tempo de leitura sem reduzir precisão causal:
+
+```text
+FAST_VISUAL_LOCALIZATION=true
+CAUSE_AND_LOCATION_NOT_MIXED=true
+RED_IS_PINNED_TO_SMALLEST_PROVEN_SCOPE=true
+ADJACENT_FAILURE_CANNOT_CONTAMINATE_PROVEN_CORE=true
+```
+
+## 🔧 Vermelho como vetor de reparo
+
+Depois de localizar o vermelho pela matriz comparativa, usar a própria divergência como primeira rota de remediação:
+
+```text
+RED
+→ EXACT_DIVERGENCE
+→ OWNER
+→ MINIMUM_DELTA
+→ TARGETED_RETEST
+```
+
+```text
+STRUCTURED_RED_IS_REPAIR_VECTOR=true
+EXACT_DIVERGENCE_BEFORE_BROAD_INVESTIGATION=true
+OWNER_RESOLUTION_BEFORE_PATCH=true
+MINIMUM_DELTA_FIRST=true
+EXPECTED_VS_OBSERVED_DOES_NOT_DECIDE_AUTHORITY_BY_ITSELF=true
+TARGETED_RETEST_AFTER_MINIMUM_DELTA=true
+```
+
+O erro aponta a diferença; o owner decide qual lado deve mudar. Investigação ampla só começa se a diferença continuar ambígua ou o menor delta não sobreviver ao reteste.
 
 ## 🧠 Começar pelo plano do Chefe
 

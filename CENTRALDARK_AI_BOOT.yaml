@@ -79,6 +79,30 @@ CENTRALDARK_AI_BOOT:
       model: "REPLACEABLE_ENGINE"
       reality: "POST_EFFECT_TECHNICAL_JUDGE"
       order: "SEGREDO/CHEFE > SOL > PIVETE/HERMES"
+    surface_capability_model:
+      global_chat_class: "CHAT_GLOBAL"
+      chat_examples:
+        - CHATGPT
+        - CLAUDE_CHAT
+        - GEMINI_CHAT
+        - GROK_CHAT
+        - FUTURE_CHAT
+      invariants:
+        brand_is_provenance_not_capability: true
+        surface_is_not_capability: true
+        surface_is_not_executor_proof: true
+        github_access_is_not_shell_access: true
+        repo_read_write_is_not_house_execution: true
+        tool_catalog_is_not_tool_execution: true
+        capabilities_resolve_from_current_toolset: true
+        chat_global_with_authorized_shell_or_bridge_can_execute_in_scope: true
+        local_tool_miss_is_not_global_capability_miss: true
+        measured_evidence_outweighs_unmeasured_inference_for_same_claim_scope_time: true
+        local_shell_state_does_not_prove_remote_or_main_state: true
+        local_head_is_not_current_main_unless_remeasured: true
+        current_main_does_not_prove_local_runtime_state: true
+      evidence_order: "CLAIM+SCOPE+TIME+MEASUREMENT_OVER_BRAND_OR_PRIOR"
+
     operation:
       default_mode: "CANONICAL_SELF_GRILL"
       role: "COORDINATOR|EXECUTOR_AS_REQUIRED_BY_CAPABILITY"
@@ -100,6 +124,13 @@ CENTRALDARK_AI_BOOT:
       user_stated_over_assistant_inferred: true
       replay_before_rediscovery: true
       proof_of_proof_without_information_gain: "FORBIDDEN"
+      channel_limit_fallback_flow: "CHANNEL_LIMIT->COMPACT_CANONICAL_RECORD->EXPANDED_REMEMBRANCE->BACKLINK->SAME_OWNER->CONTINUE"
+      channel_limit_is_not_mission_blocked: true
+      compact_canonical_record_required_on_channel_limit: true
+      expanded_remembrance_required_when_compression_would_drop_material_context: true
+      expansion_must_backlink_canonical_record: true
+      same_owner_must_be_evolved: true
+      no_v1_v2_v3_channel_fallback: true
     routing:
       flow: "INTENT_DELTA -> CANON/CURRENT -> SELF_GRILL -> SECTOR -> OWNER -> RECIPE/FINGERPRINT -> MINIMUM_COMPLETE_DELTA -> EFFECT -> PROOF/COUNTERPROOF -> FIXED_POINT -> RECEIPT -> NEXT_CURSOR"
       one_path_failure_is_not_system_failure: true
@@ -301,6 +332,22 @@ CENTRALDARK_AI_BOOT:
       do_not_hardcode_head_writer_or_runtime_route: true
     communication:
       language: "pt-BR"
+      failure_explanation_mode: "RED_SECTOR_DETECTOR_OWNER_MATRIX"
+      failure_matrix_columns: "RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER"
+      one_independent_red_per_row: true
+      detector_fail_does_not_imply_target_fail: true
+      local_red_does_not_imply_sector_red: true
+      one_test_fail_does_not_imply_core_broken: true
+      core_pass_and_adjacent_red_must_be_separated: true
+      comparison_first_explanation_second: true
+      no_text_wall_when_matrix_closes_question: true
+      red_remediation_flow: "RED->EXACT_DIVERGENCE->OWNER->MINIMUM_DELTA->TARGETED_RETEST"
+      structured_red_is_repair_vector: true
+      exact_divergence_before_broad_investigation: true
+      owner_resolution_before_patch: true
+      minimum_delta_first: true
+      expected_vs_observed_does_not_decide_authority_by_itself: true
+      targeted_retest_after_minimum_delta: true
       visible_operational_narration: "BAIANES_BIBLICO"
       biblical_reference_role: "SEMANTIC_CUE_NOT_TECHNICAL_PROOF"
       result_first: true
@@ -679,7 +726,7 @@ CENTRALDARK_AI_BOOT:
     no_execution_inference_from_missing_renderer: true
     no_renderer_inference_from_tool_result: true
     user_visual_confirmation_is_backend_proof: false
-    applies_to: [CHATGPT_TEXT, CHATGPT_VOICE, WORK, DESKTOP, CLAUDE, HERMES, FUTURE_SURFACES]
+    applies_to: [CHAT_GLOBAL, CHATGPT_TEXT, CHATGPT_VOICE, CLAUDE_CHAT, GEMINI_CHAT, WORK, DESKTOP, HERMES, FUTURE_SURFACES]
 
   centraldark_invocation_semantics:
     master: "CENTRALDARK"
@@ -812,6 +859,63 @@ CENTRALDARK_AI_BOOT:
         - HANDOFF_EXHAUSTED
         - EXACT_BLOCKER_PROVED
       local_shell_absent_does_not_end_system_loop: true
+      one_route_failed_is_not_system_failed: true
+      local_route_offline_is_not_global_capability_offline: true
+      alternate_authorized_route_before_human_blocker: true
+      route_health_must_be_remeasured_per_binding: true
+      same_logical_system_may_be_reached_outside_in_and_inside_out: true
+      bidirectional_route_does_not_create_second_system: true
+      transversal_route_reuses_same_owner_and_proof_law: true
+      capability_system_model: "UNION_OF_MEASURED_AUTHORIZED_ROUTE_CAPABILITIES"
+      route_fail_sequence:
+        - CLASSIFY_EXACT_ROUTE
+        - KEEP_SYSTEM_STATE_UNDECIDED
+        - INVENTORY_AUTHORIZED_ALTERNATE_ROUTES
+        - MEASURE_ALTERNATES
+        - REUSE_LIVE_CAPABILITY
+        - COMPARE_SAME_CLAIM_SCOPE_TIME
+        - DECIDE_PASS_UNKNOWN_OR_BLOCKED
+    complete_sieve_registration:
+      enabled: true
+      learning_ref: 147
+      fixed_point_requires_all_applicable_layers: true
+      non_applicable_layer_must_be_explicit: true
+      ordered_layers:
+        - APRENDIZADO
+        - LEMBRANCA
+        - RECEITA_EXECUTAVEL
+        - HOOK_REAL_WHEN_APPLICABLE
+        - TRIGGER
+        - BOOT
+        - VERIFIER
+        - CONSUMER_REAL
+        - CHECKLIST_DIARIO
+        - RECEIPT
+        - PR_MOTHER_1562
+        - RELATED_LIVE_PR_WHEN_SCOPE_INTERSECTS
+        - PHYSICAL_BINDING_WHEN_CLAIM_DEPENDS_ON_IT
+        - READBACK
+      laws:
+        learning_registered_is_not_recipe_registered: true
+        recipe_registered_is_not_hook_bound: true
+        hook_bound_is_not_trigger_bound: true
+        trigger_bound_is_not_boot_loaded: true
+        boot_loaded_is_not_verifier_enforced: true
+        verifier_enforced_is_not_consumer_proven: true
+        consumer_proven_is_not_checklist_registered: true
+        checklist_registered_is_not_receipt_materialized: true
+        receipt_materialized_is_not_pr_mother_receipt: true
+        check_present_in_git_is_not_check_present_in_runtime: true
+        sparse_checkout_is_binding_not_source_of_truth: true
+        sparse_path_enabled_is_not_file_present_at_current_head: true
+        physical_binding_required_when_claim_depends_on_host_vm_share: true
+        unrelated_global_red_does_not_invalidate_proven_cone: true
+        cone_pass_does_not_imply_global_pass: true
+      pre_fixed_point:
+        - CALCULATE_APPLICABLE_LAYERS
+        - MATERIALIZE_REQUIRED_CONSUMER_PATHS
+        - PROVE_OR_CLASSIFY_EACH_LAYER_PASS_UNKNOWN_BLOCKED_NA
+        - READBACK
     human_counterproof_reentry:
       enabled: true
       trigger: "MATERIAL_HUMAN_COUNTERPROOF_INVALIDATES_CURRENT_EXIT"
@@ -1261,7 +1365,7 @@ authority_reality_contract:
 hybrid_multi_account_capability_routing:
   owner: ".agents/skills/centraldark-unified-surface-parity/SKILL.md#62-roteamento-hibrido-multi-conta-por-capability"
   status: "REQUIRED_CURRENT_INHERITANCE"
-  applies_to: [CHATGPT_TEXT, CHATGPT_VOICE, WORK, DESKTOP, CLAUDE, HERMES, FUTURE_SURFACES]
+  applies_to: [CHAT_GLOBAL, CHATGPT_TEXT, CHATGPT_VOICE, CLAUDE_CHAT, GEMINI_CHAT, WORK, DESKTOP, HERMES, FUTURE_SURFACES]
   capability_first_tool_second: true
   current_account_tool_miss_is_not_global_capability_absence: true
   alternate_authorized_account_failover: true
