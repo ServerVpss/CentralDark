@@ -147,6 +147,18 @@ check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml',[
  'GENERAL_NE_HUMAN_AUTHORITY',
  'GENERAL_RETURNS_PROVEN_LEARNING_TO_CANONICAL_CORE',
 ], classification='GENERAL_TEACHING_GRAMMAR_CONTRACT')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'portable_operation_contract:',
+ 'status: "CANONICAL_REQUIRED"',
+ 'purpose: "BOOTSTRAP_ANY_CHAT_OR_SURFACE_WITHOUT_RETEACHING_CENTRALDARK"',
+ 'current_head: "RESOLVE_AT_BOOT"',
+ 'writer: "RESOLVE_AND_LOCK_PER_SCOPE"',
+ 'observed_evidence: "RESOLVE_AT_BOOT: repo/ref/HEAD/PR/runtime/routes/tools/owner/writer_scope"',
+ 'default_mode: "CANONICAL_SELF_GRILL"',
+ 'new_chat_is_new_surface_not_new_brain: true',
+ 'do_not_hardcode_head_writer_or_runtime_route: true',
+], classification='PORTABLE_OPERATION_CONTRACT_ANY_CHAT')
+
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'GENERAL_IS_OPERATIONAL_POSTURE=true',
  'GENERAL_IS_NOT_NEW_IDENTITY=true',
@@ -1123,6 +1135,32 @@ check('docs/CONSCIENCIA/APRENDIZADOS.md',[
  'SSH_ROLE=CONTROL_PLANE',
  'CONTABO_VNC_ROLE=OUT_OF_BAND_RESCUE',
 ], classification='CENTRALDARK_SECTOR_ROUTER_LEARNING')
+
+check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
+ 'DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL',
+ 'CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true',
+ 'TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true',
+ 'GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true',
+ 'EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true',
+ 'DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true',
+ 'VISIBLE_OPERATIONAL_NARRATION=BAIANES_BIBLICO',
+ 'BIBLICAL_REFERENCE_IS_SEMANTIC_CUE_NOT_TECHNICAL_PROOF=true',
+], classification='CANONICAL_DOCS_FIRST_SELF_GRILL_DEFAULT_MODE')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL',
+ 'CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true',
+ 'TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true',
+], classification='CANONICAL_DOCS_FIRST_SELF_GRILL_SOUL_INHERITANCE')
+check('.agents/skills/centraldark-operational-method/SKILL.md',[
+ 'DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL',
+ 'EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true',
+], classification='CANONICAL_DOCS_FIRST_SELF_GRILL_METHOD_BINDING')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'canonical_docs_before_question_or_contradiction: true',
+ 'falsify_chefe_intuition_against_canon_and_current_before_countering: true',
+ 'generic_model_prior_must_not_override_canonical_method: true',
+ 'every_material_decision_reenters_same_loop: true',
+], classification='CANONICAL_DOCS_FIRST_SELF_GRILL_BOOT_BINDING')
 
 check_command(
  'apps/modulos/fixed-point-fabric/tests/test_sol_teaching_grammar.py',

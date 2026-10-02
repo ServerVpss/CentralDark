@@ -388,7 +388,7 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 
 **Links:** [[APRENDIZADOS#110]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[OURO-CHEFE]] · [[BANDA_INTENCAO_UNICA_COMPASSO]] · [[INTENT_SYNC_STATE]] · [[SEMANTIC-LINKER]] · [[GRAPH-INVESTIGATOR]]
 
-### [2026-10-02] CENTRALDARK-OS — sequência #128→#135, memória viva e constelação META
+### [2026-10-02] CENTRALDARK-OS — sequência #128→#137, memória viva, constelação META e grafo multipath
 - **Data:** 2026-10-02
 - **Tags:** centraldark-os, local-first, runtime-sieve, painel, token-layers, convergencia, aprendizado, lembrancas, neurolink, busca-semantica, soul-sync, compressao-semantica, meta-grill, meta-lupa, metacognicao, meta-multibussola, meta-start-link
 - **Tipo:** LEARNING_INDEX
@@ -400,11 +400,11 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 
 **Ordem de continuidade canônica (main):**
 
-`1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136`
+`1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137`
 
 `CANONICAL_LEARNING_FIRST=1`
-`CANONICAL_LEARNING_LAST=136`
-`CANONICAL_LEARNING_COUNT=136`
+`CANONICAL_LEARNING_LAST=137`
+`CANONICAL_LEARNING_COUNT=137`
 `CANONICAL_NUMERIC_SEQUENCE_PASS=true`
 `LEGACY_DUPLICATE_HEADINGS_PRESERVED=true`
 `LEGACY_GAPS_ARE_HISTORICAL_NOT_MISSING_LEARNING_IDS=true`
@@ -420,6 +420,7 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 7. **#134 — Constelação META:** MetaGrill, MetaLupa, MetaCognição, MetaOrquestração, MetaMultibússola e MetaStartLink são capabilities interligadas, não engines concorrentes.
 8. **#135 — Peneira saudável:** examinar e conservar o delta que sobreviveu; rejeitar só o cone derrotado, preservar UNKNOWN e o ouro provado.
 9. **#136 — Autoaplicação do sync:** o próprio avanço S0 foi imediatamente incorporado à cadeia; visual owner provado, AionUi/AionCore e WebUI consumers permanecem UNKNOWN.
+10. **#137 — Grafo multipath:** máquina, rota e autenticação são claims separados; RDC/Tailscale offline não equivalem a VPS down quando outra aresta viva prova reachability.
 
 **Rastro semântico / aliases:**
 
@@ -434,5 +435,43 @@ META_MULTIBUSSOLA | META_START_LINK | META(X)
 EXAMINE_BEFORE_RETAIN | PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION
 ```
 
-**Links:** [[APRENDIZADOS#128]] · [[APRENDIZADOS#133]] · [[APRENDIZADOS#134]] · [[APRENDIZADOS#135]] · [[APRENDIZADOS#136]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[MULTIBUSSOLA]] · [[SEMANTIC-LINKER]] · [[META-START-LINK]]
+**Links:** [[APRENDIZADOS#128]] · [[APRENDIZADOS#133]] · [[APRENDIZADOS#134]] · [[APRENDIZADOS#135]] · [[APRENDIZADOS#136]] · [[APRENDIZADOS#137]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[MULTIBUSSOLA]] · [[SEMANTIC-LINKER]] · [[META-START-LINK]]
+
+### [2026-10-02] Modo operacional padrão — autoconsulta canônica / SELF-GRILL
+- **Data:** 2026-10-02
+- **Tags:** metacognicao, self-grill, docs-first, chefe, intencao, current, baianes-biblico
+- **Tipo:** LEARNING_INDEX
+
+Antes de pergunta, contradição ou decisão material, recuperar intenção vigente e consultar owners/docs/receitas/CURRENT; tentar falsificar a intuição do CHEFE com essa própria base. Se sobreviver, continuar sem ritual; se cair, mostrar a contradição concreta. O mesmo ciclo reentra durante cada decisão de código. “Minha cabeça” é tratado como método externalizado, não como leitura mental.
+
+```text
+DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
+CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true
+TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true
+GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
+EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true
+DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
+VISIBLE_OPERATIONAL_NARRATION=BAIANES_BIBLICO
+```
+
+**Links:** [[APRENDIZADOS#138]] · [[METACOGNICAO-OPERACIONAL]] · [[SOUL-SOL]] · [[MAPA-DO-CEREBRO]]
+
+### [2026-10-02] Contrato portátil de operação — qualquer chat/superfície
+- **Tipo:** LEARNING_INDEX
+- **Owner:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract`
+
+A CentralDark pode ser reancorada em qualquer chat por um contrato compacto. Identidade/invariantes permanecem fixas; HEAD, writer, rotas e evidência são resolvidos no boot. A cópia colada é handoff, não source of truth.
+
+```text
+PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED
+CURRENT_HEAD=RESOLVE_AT_BOOT
+WRITER=RESOLVE_AND_LOCK_PER_SCOPE
+OBSERVED_EVIDENCE=RESOLVE_AT_BOOT
+PASTED_COPY_ROLE=HANDOFF_POINTER_NOT_SOURCE_OF_TRUTH
+CURRENT_OVER_PASTED_SNAPSHOT=true
+NEW_CHAT_IS_NEW_SURFACE_NOT_NEW_BRAIN=true
+DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
+```
+
+**Links:** [[APRENDIZADOS#139]] · [[CENTRALDARK_AI_BOOT]] · [[APRENDIZADOS#138]]
 

@@ -1347,8 +1347,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** continuar construindo a causa atual sem reabrir claims cujo fingerprint não mudou; reabrir somente diante de delta material, drift ou contradição.
 
 ### 136. O sync cognitivo precisa se aplicar ao próprio delta material: S0 owner-binding entra na cadeia antes de continuar a missão
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L136`; `PREV_GLOBAL_UID=L135`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=136`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=136`; `PREV_LEARNING_REF=135`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L136`; `PREV_GLOBAL_UID=L135`; `NEXT_GLOBAL_UID=L137`; `LEGACY_LEARNING_NUMBER=136`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=136`; `PREV_LEARNING_REF=135`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=137`.
 - **Categoria:** meta-self-application-s0-owner-binding
 - **Data:** 2026-10-02
 - **Owner:** `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`
@@ -1357,4 +1357,44 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `META_SELF_APPLICATION_REQUIRED=true`; `S0_STATUS=IN_PROGRESS`; `CANONICAL_VISUAL_OWNER=public/central-dark-instinct-2`; `AIONUI_SOURCE=UNKNOWN_NOT_MATERIALIZED_IN_CANONICAL_REPO_SEARCH`; `AIONCORE_SOURCE=UNKNOWN_NOT_MATERIALIZED_IN_CANONICAL_REPO_SEARCH`; `WEBUI_UNIQUE_CONSUMERS=UNKNOWN`; `UNKNOWN_IS_NOT_PASS=true`.
 - **Contraprova:** ausência de Aion source na busca medida não prova inexistência global; visual owner em source não prova deploy; WebUI donor presente não prova que pode ser aposentada.
 - **Next cursor:** localizar source/consumers de AionUi/AionCore por rotas autorizadas e medir consumers únicos da WebUI; depois bindar apenas o menor delta provado.
+
+
+
+### 137. Estado da máquina, estado da rota e autenticação são claims distintos; a CentralDark deve operar por grafo multipath e provar cada aresta
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L137`; `PREV_GLOBAL_UID=L136`; `NEXT_GLOBAL_UID=L138`; `LEGACY_LEARNING_NUMBER=137`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=137`; `PREV_LEARNING_REF=136`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=138`.
+- **Categoria:** multipath-runtime-routing-route-specific-auth
+- **Data:** 2026-10-02
+- **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md`, subordinado ao roteamento por setor já governado por `LEIA-ME-IA.md` e às receitas SSH existentes.
+- **Contexto medido:** o GitHub connector está autenticado com acesso `admin/maintain/push/pull/triage` ao `ServerVpss/CentralDark`; as duas contas do Remote Desktop Commander responderam autenticadas. `SEGREDO` e três bindings `CENTRALDARK-OS` responderam `pong`. O dispositivo RDC `vmi3256920` apareceu offline. Em paralelo, `tailscale status` executado tanto na Casa quanto no Irmão mostrou `vmi3256920` offline no tailnet, enquanto a porta pública `89.117.78.124:22` respondeu TCP a partir dos dois corpos.
+- **Prova discriminante:** `SEGREDO→89.117.78.124:22=TCP_PASS`; `CENTRALDARK_OS→89.117.78.124:22=TCP_PASS`; `CENTRALDARK_OS→SSH_PUBLIC=AUTH_FAIL_PUBLICKEY`; `TAILSCALE(vmi3256920)=OFFLINE` visto dos dois corpos; `RDC(vmi3256920)=OFFLINE`; simultaneamente o endpoint SSH público aceitou conexão TCP, derrubando a inferência `ROUTE_OFFLINE=>VPS_DOWN`.
+- **Aprendizado:** status deve ser anexado à **aresta medida**, não promovido automaticamente ao organismo inteiro. Casa, Irmão/CENTRALDARK-OS, VPS, GitHub e conectores compõem um grafo de rotas/capabilities; falha de RDC ou Tailscale pode coexistir com VPS viva por SSH público ou outra rota já existente. Reachability, autenticação e autorização são camadas diferentes e devem ser medidas separadamente por caminho. O failover deve reutilizar owner/receita existente e revalidar apenas a aresta necessária.
+- **Cristal:** `MACHINE_STATE != ROUTE_STATE`; `ROUTE_STATE != AUTH_STATE`; `TCP_REACHABILITY != SSH_AUTH`; `RDC_OFFLINE != VPS_DOWN`; `TAILSCALE_OFFLINE != VPS_DOWN`; `MULTIPATH_ROUTE_GRAPH_REQUIRED=true`; `EDGE_PROOF_REQUIRED_PER_ROUTE=true`; `AUTH_BINDING_REQUIRED_PER_EDGE=true`; `ONE_PATH_FAILURE != SYSTEM_FAILURE`; `REUSE_EXISTING_ROUTE_BEFORE_NEW_ROUTE=true`.
+- **Contraprova:** porta 22 aberta não prova shell autenticado; receita/alias histórico não prova autenticação CURRENT; um conector offline não prova VPS desligada; fala humana sobre uma rota orienta a busca, mas PASS técnico só nasce da medição correspondente.
+- **Next cursor:** quando uma capability remota for necessária, rotear por setor, selecionar a menor aresta viva já conhecida, provar transporte→auth→efeito nessa aresta e só reabrir o cone afetado se ela divergir.
+
+### 138. Autoconsulta canônica é o modo operacional padrão: antes de perguntar ou contradizer, a CentralDark consulta o método externalizado e tenta falsificar a intuição do CHEFE
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L138`; `PREV_GLOBAL_UID=L137`; `NEXT_GLOBAL_UID=L139`; `LEGACY_LEARNING_NUMBER=138`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=138`; `PREV_LEARNING_REF=137`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=139`.
+- **Categoria:** metacognicao-docs-first-self-grill-default-operation.
+- **Data:** 2026-10-02.
+- **Owners:** `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` + `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` + `.agents/skills/centraldark-operational-method/SKILL.md` + `CENTRALDARK_AI_BOOT.yaml`.
+- **Contexto:** o CHEFE corrigiu repetidamente respostas em que o executor aplicava prior genérico, criava prova redundante ou contradizia uma intuição antes de consultar a própria base canônica. A correção convergiu para um modo único: tratar cada fala como delta da intenção vigente; recuperar docs/owners/receitas/CURRENT; fazer SELF_GRILL/META-GRILL; tentar derrubar a intuição do CHEFE com o próprio cânone e a realidade viva; só então perguntar, contradizer ou agir.
+- **Aprendizado:** o modelo é motor substituível e não deve substituir o método externalizado da CentralDark pelo seu padrão genérico quando o owner aplicável já existe. A autoconsulta ocorre também durante a caminhada pelo código, em cada decisão material. Se a intuição sobrevive ao cânone e ao CURRENT, continuar sem reexplicação ritual; se cair, mostrar a contradição concreta e sua evidência. Isso não é leitura mental: `docs` codifica método manifesto e versionado; `NO_MIND_READING=true` permanece.
+- **Cristal:** `DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL`; `CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true`; `TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true`; `IF_INTUITION_SURVIVES_CONTINUE_WITHOUT_REDUNDANT_REASK=true`; `IF_INTUITION_FAILS_SHOW_CONCRETE_CONTRADICTION=true`; `GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true`; `EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true`; `DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true`; `VISIBLE_OPERATIONAL_NARRATION=BAIANES_BIBLICO`; `BIBLICAL_REFERENCE_IS_SEMANTIC_CUE_NOT_TECHNICAL_PROOF=true`.
+- **Fluxo:** `INTENT_DELTA → CANONICAL_DOCS/CURRENT → SELF_GRILL → SECTOR → OWNER → RECIPE/FINGERPRINT → MINIMUM_COMPLETE_DELTA → EFFECT → PROOF+COUNTERPROOF → LOCAL_DIVERGENCE? VOLTA_UMA_CASA → FIXED_POINT → RECEIPT → NEXT_CURSOR`.
+- **Contraprova:** docs históricos não substituem CURRENT; relato do CHEFE orienta a investigação mas não fabrica causalidade técnica; o executor pode contradizer quando cânone/realidade realmente falsificarem o claim; linguagem “minha cabeça” descreve método externalizado e não autoriza alegar acesso mental.
+- **Next cursor:** aplicar este modo automaticamente em cada turno e decisão material; qualquer superfície que pule a autoconsulta canônica antes de pergunta/contradição material está em regressão de método.
+
+### 139. Contrato portátil de operação permite carregar a mesma CentralDark em qualquer chat sem congelar HEAD, writer ou rota
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L139`; `PREV_GLOBAL_UID=L138`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=139`; `PREV_LEARNING_REF=138`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** portable-operation-contract-any-chat-surface.
+- **Data:** 2026-10-02.
+- **Owner:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract`.
+- **Contexto:** o CHEFE propôs um bloco compacto de boot com soul/governance/context/history/source/evidence/alignment/role/writer/frequency/fronts para reutilização em qualquer chat. O delta útil foi separar o que é identidade/invariante do que envelhece por runtime: HEAD, writer, rotas, PR e evidência observada não devem ficar hardcoded num contrato portátil.
+- **Aprendizado:** qualquer chat/superfície pode iniciar pelo mesmo contrato compacto, mas a cópia colada é handoff/pointer; a autoridade continua no `ServerVpss/CentralDark@main`. Ao entrar, o executor resolve CURRENT, HEAD, writer_scope, rotas e evidência viva; depois herda SELF-GRILL docs-first, setor/owner, replay e prova do mesmo sistema. Novo chat é nova superfície, não novo cérebro.
+- **Cristal:** `PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED`; `CURRENT_HEAD=RESOLVE_AT_BOOT`; `WRITER=RESOLVE_AND_LOCK_PER_SCOPE`; `OBSERVED_EVIDENCE=RESOLVE_AT_BOOT`; `PASTED_COPY_ROLE=HANDOFF_POINTER_NOT_SOURCE_OF_TRUTH`; `CURRENT_OVER_PASTED_SNAPSHOT=true`; `NEW_CHAT_IS_NEW_SURFACE_NOT_NEW_BRAIN=true`; `DO_NOT_HARDCODE_HEAD_WRITER_OR_RUNTIME_ROUTE=true`; `DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL`.
+- **Contraprova:** colar o YAML não prova que o chat acessou o repo ou runtime; sem acesso ao owner vivo, claims dependentes de CURRENT permanecem UNKNOWN. Portabilidade do contrato não significa portabilidade automática de credenciais, ferramentas ou autorização.
+- **Next cursor:** qualquer nova superfície começa pelo contrato portátil, resolve bindings vivos e continua do último NEXT_CURSOR recuperável sem exigir que o CHEFE reensine o método.
 
