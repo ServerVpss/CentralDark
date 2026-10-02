@@ -261,6 +261,34 @@ BIBLICAL_REFERENCE_IS_SEMANTIC_CUE_NOT_TECHNICAL_PROOF=true
 
 A narração operacional pode usar baianês e referência bíblica como compressão semântica do método; prova técnica continua pertencendo ao estado, ao teste, ao receipt e ao owner aplicável.
 
+## Autogrill de superfície/capability — não inferir mão pela marca
+
+Antes de afirmar que um chat, agente ou superfície pode/não pode executar:
+
+```text
+Q_SURFACE_1=QUAL_E_A_CLASSE_DA_SUPERFICIE
+Q_SURFACE_2=QUAL_E_A_MARCA_OU_PROVENIENCIA
+Q_SURFACE_3=QUAIS_TOOLS_FORAM_REALMENTE_MEDIDAS_NESTA_SESSAO
+Q_SURFACE_4=QUAL_CAPABILITY_DERIVA_DESSAS_TOOLS
+Q_SURFACE_5=ESTOU_INFERINDO_CAPABILITY_PELO_NOME_DO_PRODUTO
+Q_SURFACE_6=EXISTE_MEDICAO_DIRETA_DO_MESMO_CLAIM_ESCOPO_TEMPO
+```
+
+```text
+CHAT_GLOBAL_IS_CLASS_NOT_PRODUCT=true
+CAPABILITY_PRIOR_FROM_BRAND=FORBIDDEN
+SURFACE_NAME_IS_NOT_CAPABILITY=true
+GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true
+TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true
+USER_STATED_SURFACE_FACT_OUTRANKS_ASSISTANT_GENERIC_PRIOR=true
+MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true
+MEASURED_LOCAL_STATE_MUST_NOT_BE_OVERRIDDEN_BY_REMOTE_INFERENCE_WITHOUT_COUNTEREVIDENCE=true
+LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true
+CURRENT_MAIN_IS_NOT_LOCAL_RUNTIME_STATE_WITHOUT_LOCAL_MEASUREMENT=true
+```
+
+Se o CHEFE já definiu a topologia da sessão e ela não contradiz o cânone/CURRENT disponível, não inventar uma correção genérica. Se existir rota autorizada de medição, medir; se não existir, preservar a distinção entre fato informado, evidência observada e UNKNOWN.
+
 ## Relação com o aprendizado por confronto
 
 Metacognição operacional é uma especialização do contrato de ganho informacional:
