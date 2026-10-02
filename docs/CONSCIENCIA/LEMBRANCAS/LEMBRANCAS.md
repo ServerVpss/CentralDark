@@ -475,3 +475,26 @@ DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
 
 **Links:** [[APRENDIZADOS#139]] · [[CENTRALDARK_AI_BOOT]] · [[APRENDIZADOS#138]]
 
+### [2026-10-02] Reancoragem portátil — medição Bayesiana real
+- **Tipo:** LEARNING_INDEX
+- **Owner:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract.bayesian_reanchor_measurement`
+- **Math owner:** `.agents/skills/meta-lupa/references/matematica-e-calibracao.md#8-medição-bayesiana-de-reancoragem-do-contrato-portátil`
+
+O contrato portátil deixa de depender de “parece que reancorou”. Reinjeção é intervenção `T=1`, não prova. O outcome `A=1` exige todos os indicadores materiais aplicáveis em PASS; UNKNOWN material não entra como sucesso. Bayes mede atualização de crença, Beta acumula confiabilidade da reancoragem, uplift compara reinjeção contra controle/baseline, entropia/IG medem redução de incerteza e Brier mede calibração.
+
+```text
+BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED
+REANCHOR_REINJECTION_IS_INTERVENTION_NOT_PROOF=true
+NUMERIC_POSTERIOR_REQUIRES_DECLARED_BASIS=true
+INVENTED_LR=FORBIDDEN
+UNKNOWN_IS_SUCCESS=false
+CAUSAL_UPLIFT_REQUIRES_CONTROL_OR_MATCHED_BASELINE=true
+NO_CONTROL=DESCRIPTIVE_RECOVERY_RATE_ONLY
+BETA_POSTERIOR_ACCUMULATES_REANCHOR_RELIABILITY=true
+BRIER_SCORE_CALIBRATES_ALIGNMENT_PREDICTIONS=true
+ONE_LR_PER_DEPENDENCE_CLUSTER_CONSERVATIVE=true
+LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
+```
+
+**Links:** [[APRENDIZADOS#140]] · [[APRENDIZADOS#139]] · [[CONTRATO-LUPA-BAYESIANA]] · [[CENTRALDARK_AI_BOOT]]
+
