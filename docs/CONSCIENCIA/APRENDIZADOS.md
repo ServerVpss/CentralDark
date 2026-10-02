@@ -1329,7 +1329,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** recuperar a constelação por aliases semânticos e carregar apenas lentes materiais para a causa.
 
 ### 135. Examinar criticamente e conservar o que sobrevive à prova é a forma curta do META-GRILL: falsificar sem destruir o ouro provado
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L135`; `PREV_GLOBAL_UID=L134`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=135`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L135`; `PREV_GLOBAL_UID=L134`; `NEXT_GLOBAL_UID=L136`; `LEGACY_LEARNING_NUMBER=135`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** meta-grill-retain-proven-good
 - **Data:** 2026-10-02
 - **Proveniência humana:** referência fornecida pelo CHEFE a 1 Tessalonicenses 5:21, em `https://www.bible.com/pt/bible/212/1TH.5.21`. A CentralDark absorve a estrutura operacional, não usa a referência religiosa como prova técnica.
@@ -1337,4 +1337,15 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `EXAMINE_BEFORE_RETAIN=true`; `PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true`; `PARTIAL_FAILURE_DISCARDS_ONLY_DISPROVEN_DELTA=true`; `BLIND_ACCEPTANCE=FORBIDDEN`; `BLIND_REJECTION=FORBIDDEN`; `UNKNOWN_STAYS_UNKNOWN=true`.
 - **Contraprova:** metáfora ou referência humana não substitui evidência técnica; “bom” operacionalmente significa delta que sobreviveu aos testes aplicáveis no mesmo escopo.
 - **Next cursor:** continuar construindo a causa atual sem reabrir claims cujo fingerprint não mudou; reabrir somente diante de delta material, drift ou contradição.
+
+### 136. O sync cognitivo precisa se aplicar ao próprio delta material: S0 owner-binding entra na cadeia antes de continuar a missão
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L136`; `PREV_GLOBAL_UID=L135`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=136`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** meta-self-application-s0-owner-binding
+- **Data:** 2026-10-02
+- **Owner:** `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`
+- **Contexto:** imediatamente após cristalizar a regra #133 de memória viva, o S0 material foi executado e medido. O owner do Instinto Superior avançou em `main` no commit `2b29d504353472d036b61c62b5d356467410538e`. O source visual canônico `public/central-dark-instinct-2` foi provado no repo e também aparece no TLC23 runtime gate. `apps/modulos/Bolt/source`, HERMES-CORE, MCP e Hub estão materializados. A busca canônica encontrou apenas referências documentais para AionUi/AionCore, sem source materializado identificado; `ZERO_UNIQUE_CONSUMERS` da WebUI antiga continua não provado.
+- **Aprendizado:** se a Casa acabou de declarar que todo delta material deve virar aprendizado recuperável, o próximo delta material precisa obedecer isso imediatamente. META(X) vale sobre o próprio pipeline de memória. S0 não pode ser marcado PASS enquanto source/consumers críticos estiverem UNKNOWN.
+- **Cristal:** `META_SELF_APPLICATION_REQUIRED=true`; `S0_STATUS=IN_PROGRESS`; `CANONICAL_VISUAL_OWNER=public/central-dark-instinct-2`; `AIONUI_SOURCE=UNKNOWN_NOT_MATERIALIZED_IN_CANONICAL_REPO_SEARCH`; `AIONCORE_SOURCE=UNKNOWN_NOT_MATERIALIZED_IN_CANONICAL_REPO_SEARCH`; `WEBUI_UNIQUE_CONSUMERS=UNKNOWN`; `UNKNOWN_IS_NOT_PASS=true`.
+- **Contraprova:** ausência de Aion source na busca medida não prova inexistência global; visual owner em source não prova deploy; WebUI donor presente não prova que pode ser aposentada.
+- **Next cursor:** localizar source/consumers de AionUi/AionCore por rotas autorizadas e medir consumers únicos da WebUI; depois bindar apenas o menor delta provado.
 

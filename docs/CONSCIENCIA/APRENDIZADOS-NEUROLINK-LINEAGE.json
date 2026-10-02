@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "fda23f52206631835fbae62ca35e29e1a4e044f0",
+  "source_blob_sha": "013dcb2f97a6150c87b549e21590d8b03577c7d5",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 134,
-    "highest_legacy_learning_number": 135,
+    "learning_sections": 135,
+    "highest_legacy_learning_number": 136,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 135
+      "end": 136
     }
   },
   "nodes": [
@@ -1559,6 +1559,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L134",
+      "next_uid": "L136"
+    },
+    {
+      "uid": "L136",
+      "legacy_learning_number": 136,
+      "legacy_occurrence": 1,
+      "title": "O sync cognitivo precisa se aplicar ao próprio delta material: S0 owner-binding entra na cadeia antes de continuar a missão",
+      "document_order": 135,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L135",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
