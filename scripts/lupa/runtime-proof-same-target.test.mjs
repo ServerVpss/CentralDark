@@ -7,14 +7,21 @@ const capacidades = readFileSync(new URL('../../docs/CONSCIENCIA/01-IDENTIDADE-E
 assert.match(leia, /runtime.*tools aplicáveis|runtime\/tools aplicáveis/i, 'LEIA-ME-IA deve exigir runtime/tools aplicáveis ao escopo');
 assert.match(capacidades, /VERIFY O CLAIM CERTO/, 'DNA cognitivo deve prender a prova ao claim correto');
 
-const brandIsCapability = ({ brand, tools }) =>
-  tools.includes('shell') || tools.includes('github') ? false : false;
+const resolveCapabilities = ({ brand, tools }) => ({
+  brand,
+  github: tools.includes('github'),
+  shell: tools.includes('shell'),
+  localExecutor: tools.includes('shell') || tools.includes('desktop_commander'),
+});
 
-assert.equal(
-  brandIsCapability({ brand: 'ChatGPT', tools: [] }),
-  false,
-  'marca da superfície não prova capability',
-);
+const chatgptNoTools = resolveCapabilities({ brand: 'ChatGPT', tools: [] });
+const chatgptWithShell = resolveCapabilities({ brand: 'ChatGPT', tools: ['shell'] });
+const claudeWithShell = resolveCapabilities({ brand: 'Claude Chat', tools: ['shell'] });
+
+assert.equal(chatgptNoTools.localExecutor, false, 'ChatGPT sem tool não ganha execução por marca');
+assert.equal(chatgptWithShell.localExecutor, true, 'CHAT_GLOBAL com shell autorizado ganha capability executora');
+assert.equal(claudeWithShell.localExecutor, true, 'capability equivalente independe da marca do chat');
+assert.notEqual(chatgptNoTools.localExecutor, chatgptWithShell.localExecutor, 'mesma marca pode ter capabilities diferentes por sessão');
 
 const classify = ({ claimTarget, observedTarget, effectObserved }) => {
   if (claimTarget !== observedTarget) return 'PROOF_TARGET_MISMATCH';
