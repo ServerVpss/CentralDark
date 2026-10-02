@@ -624,8 +624,8 @@ hybrid_multiroute_capability_replay_2026_10_02:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
   state: SEALED_PROVEN
   learning_ref: 146
-  dependency_fingerprint: 82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09
-  lock_key: d1444ef3efcfb766ee2d121c1703d23bfc7e576f83d770a2d186ba491c9fe68a
+  dependency_fingerprint: a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069
+  lock_key: f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b
   objective: >-
     Reusar o mesmo capability bus por rotas autorizadas alternativas sem
     promover falha local de transporte para falha global do organismo.
@@ -692,8 +692,10 @@ hybrid_multiroute_capability_replay_2026_10_02:
   complete_sieve_learning_ref: 147
   consumer_materialization:
     sparse_checkout: true
-    required_paths: [docs/BRAIN/00-MAPA-SISTEMA]
+    required_paths: [docs/BRAIN/00-MAPA-SISTEMA, docs/receipts]
     law: CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME
+    receipt_path: docs/receipts/2026-10-02-complete-sieve-law.md
+    sparse_path_enabled_is_not_file_present_at_current_head: true
   physical_binding_when_applicable:
     host_path: "E:\\VMs\\CENTRALDARK-OS\\SHARED"
     guest_expected_share: /mnt/hgfs/CENTRALDARK-SHARED
