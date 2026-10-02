@@ -188,6 +188,26 @@ COMPRESSION != INFORMATION_LOSS
 NO_V1_V2_V3
 ```
 
+### 📓 Caderneta — CHAT_GLOBAL / capability / inferência #145
+
+- [x] `CHAT_GLOBAL` virou classe portátil; ChatGPT/Claude/Gemini/Grok ficam como superfícies/proveniência.
+- [x] Capability agora deriva do toolset medido, não da marca.
+- [x] `GITHUB_ACCESS != SHELL_ACCESS`.
+- [x] CHAT_GLOBAL com shell/bridge autorizado pode executar no escopo provado.
+- [x] Evidência medida vence inferência não medida somente no mesmo claim + escopo + tempo.
+- [x] Proveniência histórica por marca foi preservada; owners normativos foram evoluídos.
+- [x] SOUL/MetaCog/BOOT/Hermes/Telegram/Voice/Golden Capsule/surface parity reconciliados.
+- [x] Teste executável `runtime-proof-same-target.test.mjs`: PASS em `4354dd7adba43f3455f72302ac23c42d8af7351f`.
+- [x] Receipt: `docs/receipts/2026-10-02-chat-global-surface-capability-evidence.md`.
+
+```text
+BRAND != SURFACE_CLASS
+SURFACE != CAPABILITY
+GITHUB_ACCESS != SHELL_ACCESS
+TOOLSET -> CAPABILITY
+SAME_CLAIM+SCOPE+TIME: MEASURED_EVIDENCE > UNMEASURED_INFERENCE
+```
+
 ## 🫀 CURRENT VIVO — 2026-09-30
 
 ```text
