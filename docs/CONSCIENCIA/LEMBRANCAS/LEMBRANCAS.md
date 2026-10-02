@@ -522,3 +522,10 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Learning:** #145
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md`
 - **Conteúdo:** ChatGPT/Claude/Gemini/Grok são superfícies da classe `CHAT_GLOBAL`; capability deriva do toolset medido. `GITHUB_ACCESS != SHELL_ACCESS`; evidência medida vence inferência não medida no mesmo claim/escopo/tempo; provenance histórica de marca é preservada.
+
+
+### [2026-10-02] Sistema híbrido multirota, bidirecional e transversal
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #146
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md`
+- **Conteúdo:** falha de uma rota não define falha do sistema; capability sistêmica é modelada como união das capabilities realmente medidas nas rotas autorizadas vivas aplicáveis ao claim. A prova temporal da sessão mostrou `SEGREDO/RDC=OFFLINE` enquanto outro conector `CENTRALDARK` alcançou `CENTRALDARK-OS`; estados de Tailscale divergiram por binding, confirmando `ROUTE_STATE != SYSTEM_STATE`.
