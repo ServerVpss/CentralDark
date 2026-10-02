@@ -935,7 +935,40 @@
         "self_test_result": "PASS_SESSION_2026_10_02_RDC_SEGREDO_OFFLINE_CENTRALDARK_OS_ALTERNATE_ONLINE",
         "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
         "raw_output_byte_equality_required": false
-      }
+      },
+      "hook_bindings": {
+        "triggers_owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+        "events": [
+          "CAPABILITY_GAP",
+          "TERRITORY_ROUTE_CHANGE"
+        ],
+        "sentinel_owner": "scripts/trigger-fabric/system_sentinel.py",
+        "sentinel_signature": "ROUTE_FAILURE",
+        "sentinel_route": [
+          "CAPABILITY_GAP",
+          "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"
+        ],
+        "git_hooks_are_not_runtime_route_owner": true,
+        "hermes_lifecycle_hook_extension_not_claimed_without_documented_failure_callback": true
+      },
+      "runtime_consumer": {
+        "device_class": "CENTRALDARK-OS",
+        "binding_user": "root",
+        "repo_root": "/root/CentralDark",
+        "test_mode": "DETACHED_ORIGIN_MAIN_WORKTREE",
+        "main_sha": "dcce1fbd25af0534925d69c01f3d07be86d2638b"
+      },
+      "runtime_proof": {
+        "yaml_parse": "PASS",
+        "pycompile": "PASS",
+        "sentinel_self_test": "PASS",
+        "route_failure_classifier": true,
+        "multiroute_recipe_hook": true,
+        "recipe_binding": "PASS",
+        "cleanup": "PASS",
+        "observed_at": "2026-10-02"
+      },
+      "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#caderneta--sistema-hibrido-multirota-146"
     }
   }
 }
