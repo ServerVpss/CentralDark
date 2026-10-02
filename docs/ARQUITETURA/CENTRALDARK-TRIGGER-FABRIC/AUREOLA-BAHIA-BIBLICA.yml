@@ -745,3 +745,57 @@ canonical_examination_command:
     ⭕ AURÉOLA = DISCERNIMENTO + INTEGRIDADE + MEMÓRIA + APERFEIÇOAMENTO CONTÍNUO.
   preservation_rule: EXACT_TEXT_IS_PRESERVED; OPERATIONAL_CONTRACT_REMAINS_EXECUTABLE
   technical_boundary: MORAL_OR_SEMANTIC_TEXT_GUIDES_DIRECTION; LIVE_STATE_AND_TECHNICAL_PROOF_REMAIN_REQUIRED
+
+session_error_correction_receipt:
+  session_date: 2026-10-02
+  scope: "AURÉOLA / exame, retenção, aperfeiçoamento e comportamento de resposta"
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
+  pr: 1744
+  pr_mother: 1562
+  status: RECORDED_WITH_READBACK
+  errors:
+    - id: ERR-01
+      claim: "O mandamento completo foi reduzido a um delta operacional."
+      cause: "Tratamento de texto fornecido pelo CHEFE como material resumível, quando a ordem era preservar a forma e a semântica."
+      impact: "Os princípios 8-11 e 20 não estavam representados literalmente no owner."
+      correction: "Preservado o texto completo em canonical_examination_command.exact_text no mesmo owner."
+      proof: "Readback confirmou título, princípios 1 e 21, axioma final e conteúdo completo."
+    - id: ERR-02
+      claim: "Foi sugerido cumprimento integral antes da prova comparativa."
+      cause: "Confusão entre cobertura do núcleo operacional e preservação integral do mandamento."
+      impact: "Risco de falso PASS."
+      correction: "Classificação corrigida para PARTIAL; depois da inclusão literal, a afirmação foi limitada ao conteúdo efetivamente lido."
+      proof: "Readback do owner e probes de conteúdo."
+    - id: ERR-03
+      claim: "A conversa ainda não estava seguindo explicitamente o modelo cabeça-do-CHEFE."
+      cause: "Resposta descritiva sem aplicar META-GRILL → GOAL/cláusulas → CURRENT → efeito → prova."
+      impact: "Perda de continuidade operacional."
+      correction: "Fluxo de resposta alinhado ao contrato: intenção, cláusulas, estado atual, owner, menor delta, efeito, prova, receita e NEXT_CURSOR."
+      proof: "Regra comportamental declarada e ligada ao owner; sem atribuir prova de runtime não medida."
+  retained_valid:
+    - "68142 permanece comando completo do PR #1741."
+    - "72916 permanece execução condensada e não substitui 68142."
+    - "REUSE_BEFORE_CREATE=true."
+    - "ONE_WRITER_PER_SCOPE=true."
+    - "UNKNOWN != PASS."
+    - "REALITY_JUDGE verifica o efeito depois da execução; não autoriza o CHEFE."
+    - "Erro local exige VOLTA_UMA_CASA, preservação do GREEN_STATE e correção no mesmo owner."
+  learned_rules:
+    - "Texto explicitamente fornecido pelo CHEFE deve ser preservado antes de qualquer compressão."
+    - "Cobertura operacional não equivale a preservação textual integral."
+    - "Ação, receipt e readback não devem ser confundidos com prova de runtime."
+    - "Toda nova resposta deve recuperar o fio e tratar a fala como delta da intenção vigente."
+    - "Caminho provado deve virar receita; novo HEAD ou mudança material revalida somente o cone afetado."
+  evidence:
+    branch: agent/aureola-exame-retencao-20261002
+    head_after_correction: 7a0f35ba68903ce4c454109547a270c7a5d39d61
+    owner_readback_sha: 08a0310b5e4753cc3fd9fb62aba210dac090a5d2
+    pr_url: https://github.com/ServerVpss/CentralDark/pull/1744
+  next_cursor:
+    - "Executar validação YAML/CI do mesmo HEAD."
+    - "Aguardar revisão do PR; não fazer merge automaticamente."
+    - "Levar o receipt à PR-mãe #1562 após a promoção autorizada."
+  boundary:
+    runtime_effect: NOT_MEASURED
+    main_promotion: NOT_EXECUTED
+    merge: NOT_EXECUTED
