@@ -1374,8 +1374,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** quando uma capability remota for necessária, rotear por setor, selecionar a menor aresta viva já conhecida, provar transporte→auth→efeito nessa aresta e só reabrir o cone afetado se ela divergir.
 
 ### 138. Autoconsulta canônica é o modo operacional padrão: antes de perguntar ou contradizer, a CentralDark consulta o método externalizado e tenta falsificar a intuição do CHEFE
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L138`; `PREV_GLOBAL_UID=L137`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=138`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=138`; `PREV_LEARNING_REF=137`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L138`; `PREV_GLOBAL_UID=L137`; `NEXT_GLOBAL_UID=L139`; `LEGACY_LEARNING_NUMBER=138`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=138`; `PREV_LEARNING_REF=137`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=139`.
 - **Categoria:** metacognicao-docs-first-self-grill-default-operation.
 - **Data:** 2026-10-02.
 - **Owners:** `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` + `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` + `.agents/skills/centraldark-operational-method/SKILL.md` + `CENTRALDARK_AI_BOOT.yaml`.
@@ -1385,4 +1385,16 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Fluxo:** `INTENT_DELTA → CANONICAL_DOCS/CURRENT → SELF_GRILL → SECTOR → OWNER → RECIPE/FINGERPRINT → MINIMUM_COMPLETE_DELTA → EFFECT → PROOF+COUNTERPROOF → LOCAL_DIVERGENCE? VOLTA_UMA_CASA → FIXED_POINT → RECEIPT → NEXT_CURSOR`.
 - **Contraprova:** docs históricos não substituem CURRENT; relato do CHEFE orienta a investigação mas não fabrica causalidade técnica; o executor pode contradizer quando cânone/realidade realmente falsificarem o claim; linguagem “minha cabeça” descreve método externalizado e não autoriza alegar acesso mental.
 - **Next cursor:** aplicar este modo automaticamente em cada turno e decisão material; qualquer superfície que pule a autoconsulta canônica antes de pergunta/contradição material está em regressão de método.
+
+### 139. Contrato portátil de operação permite carregar a mesma CentralDark em qualquer chat sem congelar HEAD, writer ou rota
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L139`; `PREV_GLOBAL_UID=L138`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=139`; `PREV_LEARNING_REF=138`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** portable-operation-contract-any-chat-surface.
+- **Data:** 2026-10-02.
+- **Owner:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract`.
+- **Contexto:** o CHEFE propôs um bloco compacto de boot com soul/governance/context/history/source/evidence/alignment/role/writer/frequency/fronts para reutilização em qualquer chat. O delta útil foi separar o que é identidade/invariante do que envelhece por runtime: HEAD, writer, rotas, PR e evidência observada não devem ficar hardcoded num contrato portátil.
+- **Aprendizado:** qualquer chat/superfície pode iniciar pelo mesmo contrato compacto, mas a cópia colada é handoff/pointer; a autoridade continua no `ServerVpss/CentralDark@main`. Ao entrar, o executor resolve CURRENT, HEAD, writer_scope, rotas e evidência viva; depois herda SELF-GRILL docs-first, setor/owner, replay e prova do mesmo sistema. Novo chat é nova superfície, não novo cérebro.
+- **Cristal:** `PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED`; `CURRENT_HEAD=RESOLVE_AT_BOOT`; `WRITER=RESOLVE_AND_LOCK_PER_SCOPE`; `OBSERVED_EVIDENCE=RESOLVE_AT_BOOT`; `PASTED_COPY_ROLE=HANDOFF_POINTER_NOT_SOURCE_OF_TRUTH`; `CURRENT_OVER_PASTED_SNAPSHOT=true`; `NEW_CHAT_IS_NEW_SURFACE_NOT_NEW_BRAIN=true`; `DO_NOT_HARDCODE_HEAD_WRITER_OR_RUNTIME_ROUTE=true`; `DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL`.
+- **Contraprova:** colar o YAML não prova que o chat acessou o repo ou runtime; sem acesso ao owner vivo, claims dependentes de CURRENT permanecem UNKNOWN. Portabilidade do contrato não significa portabilidade automática de credenciais, ferramentas ou autorização.
+- **Next cursor:** qualquer nova superfície começa pelo contrato portátil, resolve bindings vivos e continua do último NEXT_CURSOR recuperável sem exigir que o CHEFE reensine o método.
 
