@@ -505,3 +505,37 @@ DO_NOT_MUTATE_PROVIDER_UNTIL_BASE_URL_AND_MODEL_ARE_PROBED=true
 
 Isso preserva a separação: a API Key do Token Center serve o modelo cloud/OpenAI-compatible; o paircode/Bearer autentica cliente no gateway KylinBot; o Triton local continua outra superfície.
 
+### Delta adicional — base URL Token Center provada pelo KylinBot
+
+Contraprova sem credencial confirmou o formato exato do provider custom do KylinBot:
+
+```text
+PROVIDER=custom:https://llm-gateway.openkylin.top/v1
+OBSERVED_REQUEST=https://llm-gateway.openkylin.top/v1/chat/completions
+OBSERVED_RESPONSE=401 Unauthorized / API Key authentication required
+BASE_URL_FORMAT=PROVED
+CREDENTIAL_VALUE_NOT_READ=true
+```
+
+Isso prova que, para KylinBot, o base URL correto é `https://llm-gateway.openkylin.top/v1`; o cliente acrescenta `/chat/completions`.
+
+O upstream oficial openKylin publicado em 2026-09-09 documenta os modelos atuais:
+
+```text
+qwen3.8-max
+qwen3.7-max
+qwen3.7-plus
+deepseek-v4-pro
+deepseek-v4-flash
+```
+
+E confirma que a Token Center API é OpenAI-compatible no endpoint `https://llm-gateway.openkylin.top/v1/chat/completions`.
+
+```text
+TOKEN_CENTER_KEY_CAN_BE_USED_FROM_WINDOWS_WITH_OPENAI_COMPATIBLE_CLIENT=true
+TOKEN_CENTER_KEY_DOES_NOT_EXPOSE_LOCAL_TRITON=true
+LOCAL_TRITON_REQUIRES_NETWORK_ROUTE_NOT_PROVIDER_TOKEN=true
+```
+
+Fonte oficial: https://www.openkylin.top/news/4131-cn.html
+
