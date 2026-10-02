@@ -165,6 +165,29 @@ EXPLANATION_SECOND
 
 **Regra de uso:** quando o CHEFE perguntar quais vermelhos existem, onde estão ou qual setor está afetado, responder primeiro com a matriz curta. Expandir causa/efeito/reparo apenas se material ou solicitado.
 
+### 📓 Caderneta — fallback de canal #144
+
+- [x] Mesmo owner evoluído: `SOUL-SOL.md#15`.
+- [x] Aprendizado compacto: `#144`.
+- [x] Expansão recuperável: `LEMBRANCAS/2026-10-02-CHANNEL-LIMIT-COMPACT-RECORD-EXPANDED-REMEMBRANCE.md`.
+- [x] NeuroLink: `L143→L144`.
+- [x] BOOT portátil herdou o fallback.
+- [x] Fiscal: `CHANNEL_LIMIT_RECOVERABLE_COMPRESSION_*`.
+- [x] Contraprova: `CHANNEL_144_ASSERTS=PASS`; `PYCOMPILE=PASS`; cleanup=PASS.
+
+```text
+CHANNEL_LIMIT
+→ COMPACT_CANONICAL_RECORD
+→ EXPANDED_REMEMBRANCE
+→ BACKLINK
+→ SAME_OWNER
+→ CONTINUE
+
+CHANNEL_LIMIT != MISSION_BLOCKED
+COMPRESSION != INFORMATION_LOSS
+NO_V1_V2_V3
+```
+
 ## 🫀 CURRENT VIVO — 2026-09-30
 
 ```text
