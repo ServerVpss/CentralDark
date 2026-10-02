@@ -535,3 +535,13 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Learning:** #147
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-LEI-DA-PENEIRA-COMPLETA.md`
 - **Conteúdo:** novidade material só fecha após atravessar todas as camadas aplicáveis; `CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME`; binding físico entra quando o claim depende dele.
+
+### [2026-10-02] TextChat/Qwen nativo — catálogo, SDK 1.1 e fronteira de prova
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #148
+- **Owner:** `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md` + `scripts/vps/kylin-native-bind.py`
+- **Conteúdo:** o `CENTRALDARK-OS` expõe a SDK nativa `libkysdk-genai-nlp.so.1` compatível com `libkysdk-genai-nlp-dev 1.1.0.1-ok1.6`; os IDs `llm_Qwen-2.5-3b_1.0`, `llm_Qwen-3-8b-0_1.0`, `llm_Qwen-3-8b-1_1.0` estão configurados no engine on-device. A UI `Kylin AI System -> OpenKylin AI Subsystem -> AI models` mostra `Qwen3-8B` e `Qwen2.5-3B` como modelos disponíveis para `Download`, com tamanhos aproximados de 9.32 GB e 3.62 GB. A mesma UI separa explicitamente `On-device model` de `Cloud model`, reforçando que são rotas distintas.
+- **Cristal:** `MODEL_CATALOG_VISIBLE=PASS`; `ONDEVICE_ROUTE_EXISTS=PASS`; `CLOUD_ROUTE_EXISTS=PASS`; `ONDEVICE_ROUTE != CLOUD_ROUTE`; `CATALOG_ENTRY != MODEL_WEIGHTS_INSTALLED`; `MODEL_ID_CONFIG != MODEL_READY`; `PROBE_CREATED != INFERENCE_PROVEN`.
+- **Fronteira atual:** `WEIGHTS_MATERIALIZED_LOCAL=UNKNOWN`; `QWEN_CHAT_EXECUTED=UNKNOWN`; `PR_AGENT_REPLACED=NO`.
+- **Next cursor:** provar materialização dos pesos e inferência local real via `genai_text_*` antes de substituir os reviewers externos no `.github/workflows/pr-agent.yml`.
+
