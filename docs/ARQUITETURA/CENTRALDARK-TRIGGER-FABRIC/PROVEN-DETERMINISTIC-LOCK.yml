@@ -616,3 +616,57 @@ rastro_lock:
   write_claim_fields: [COMMIT_SHA, PATH, LINK, READBACK]
   memory_claim_requires_location: true
   ledger_1562_same_turn_for_direct_main: true
+
+
+hybrid_multiroute_capability_replay_2026_10_02:
+  claim_key: HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH
+  owner: .agents/skills/centraldark-unified-surface-parity/SKILL.md
+  registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
+  state: SEALED_PROVEN
+  learning_ref: 146
+  dependency_fingerprint: e41349163bae0fb768c1120237b61fad0746ec1af29c92c09a5b75beb0f4fd2b
+  lock_key: ce986c21499b00a0823e9b46d0227e17b6ab6f4233a536294acb55173b2b966a
+  objective: >-
+    Reusar o mesmo capability bus por rotas autorizadas alternativas sem
+    promover falha local de transporte para falha global do organismo.
+  preconditions:
+    - EXACT_FAILED_ROUTE_IDENTIFIED
+    - CLAIM_SCOPE_TIME_BOUND
+    - AUTHORIZED_ROUTE_INVENTORY_AVAILABLE_OR_DISCOVERABLE
+    - OWNER_UNCHANGED
+  execution_sequence:
+    - CLASSIFY_EXACT_ROUTE
+    - KEEP_SYSTEM_STATE_UNDECIDED
+    - INVENTORY_AUTHORIZED_ALTERNATE_ROUTES
+    - MEASURE_ALTERNATES
+    - REUSE_LIVE_CAPABILITY
+    - COMPARE_SAME_CLAIM_SCOPE_TIME
+    - DECIDE_PASS_UNKNOWN_OR_BLOCKED
+  environment_bindings:
+    - ROUTE_NAME
+    - ACCOUNT_OR_LINK_ID
+    - DEVICE_OR_RUNTIME_BINDING
+    - HOST
+    - TRANSPORT
+    - OBSERVED_AT
+  proof:
+    - ACTUAL_TOOLCALL_OR_RUNTIME_PROBE_REQUIRED
+    - EACH_ROUTE_STATE_BOUND_TO_ITS_OWN_BINDING
+    - ONE_ROUTE_FAILURE_MUST_NOT_BECOME_GLOBAL_BLOCKER
+  counterproof:
+    - ONLINE_ROUTE_DOES_NOT_PROVE_ALL_ROUTES_HEALTHY
+    - DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF
+    - MULTIPLE_BINDINGS_DO_NOT_IMPLY_PARALLEL_ARCHITECTURE
+  expected_result_format_effect:
+    schema: centraldark.hybrid-multiroute-replay.result.v1
+    effect: SAME_LOGICAL_SYSTEM_REUSES_EXISTING_CAPABILITY_BUS_ACROSS_AUTHORIZED_ROUTES
+  evidence:
+    - docs/CONSCIENCIA/APRENDIZADOS.md#146
+    - docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md
+  replay_laws:
+    ONE_ROUTE_FAILED_IS_NOT_SYSTEM_FAILED: true
+    LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE: true
+    ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER: true
+    ROUTE_HEALTH_MUST_BE_REMEASURED_PER_BINDING: true
+    TRANSVERSAL_ROUTE_REUSES_SAME_OWNER_AND_PROOF_LAW: true
+  next_cursor: REPLAY_MULTIROUTE_BEFORE_HUMAN_BLOCKER
