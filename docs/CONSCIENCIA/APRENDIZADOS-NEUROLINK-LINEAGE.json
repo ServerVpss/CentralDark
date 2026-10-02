@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "17a27da373ae0fe88475909cb9197e8fa5b6b390",
+  "source_blob_sha": "9899a6335182c6e5b3455fe2e7d984cb3082fcfc",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 124,
-    "highest_legacy_learning_number": 125,
+    "learning_sections": 125,
+    "highest_legacy_learning_number": 126,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 125
+      "end": 126
     }
   },
   "nodes": [
@@ -1449,6 +1449,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L124",
+      "next_uid": "L126"
+    },
+    {
+      "uid": "L126",
+      "legacy_learning_number": 126,
+      "legacy_occurrence": 1,
+      "title": "Acesso direto ao twin elimina dependência de SSH para prova; gateway, provider e runtime nativo são três credenciais/cones distintos",
+      "document_order": 125,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L125",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
