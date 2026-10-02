@@ -515,3 +515,10 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Learning:** #144
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHANNEL-LIMIT-COMPACT-RECORD-EXPANDED-REMEMBRANCE.md`
 - **Conteúdo:** quando o canal barra registro grande, compactar no canônico, guardar expansão recuperável em Lembranças, backlinkar e continuar no mesmo owner; sem v1/v2/v3.
+
+
+### [2026-10-02] CHAT_GLOBAL — superfície, capability e evidência
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #145
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md`
+- **Conteúdo:** ChatGPT/Claude/Gemini/Grok são superfícies da classe `CHAT_GLOBAL`; capability deriva do toolset medido. `GITHUB_ACCESS != SHELL_ACCESS`; evidência medida vence inferência não medida no mesmo claim/escopo/tempo; provenance histórica de marca é preservada.
