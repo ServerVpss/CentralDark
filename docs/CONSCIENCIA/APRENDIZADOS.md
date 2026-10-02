@@ -19,6 +19,8 @@ updated: 2026-08-27
 <!-- NEUROLINK_GLOBAL_END -->
 
 
+
+
 ### 1. Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L001`; `PREV_GLOBAL_UID=L000`; `NEXT_GLOBAL_UID=L002`; `LEGACY_LEARNING_NUMBER=1`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** armadilha
@@ -1209,7 +1211,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 125. A autópsia do twin separa agente/provider do corpo nativo: KylinBot pode falhar enquanto Kylin AI continua vivo
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L125`; `PREV_GLOBAL_UID=L124`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=125`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L125`; `PREV_GLOBAL_UID=L124`; `NEXT_GLOBAL_UID=L126`; `LEGACY_LEARNING_NUMBER=125`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** local-native-ai-runtime-forensics-and-capability-separation
 - **Data:** 2026-10-01
 - **Owner:** `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/T0-MEDICAO-CENTRALDARK-OS-KYLIN.md`
@@ -1224,6 +1226,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 126. Acesso direto ao twin elimina dependência de SSH para prova; gateway, provider e runtime nativo são três credenciais/cones distintos
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L126`; `PREV_GLOBAL_UID=L125`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=126`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** direct-guest-access-gateway-pairing-native-inference
 - **Data:** 2026-10-01
 - **Owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-OPENKYLIN-AI-NATIVA-CENTRALDARK.md`
