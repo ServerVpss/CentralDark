@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "f0ae9c635e3673651071dcd084a5cb75c265715d",
+  "source_blob_sha": "ca0b166f0e7b0d0eda0e5e3c66ddb7b718c39265",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 138,
-    "highest_legacy_learning_number": 139,
+    "learning_sections": 139,
+    "highest_legacy_learning_number": 140,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 139
+      "end": 140
     }
   },
   "nodes": [
@@ -1603,6 +1603,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L138",
+      "next_uid": "L140"
+    },
+    {
+      "uid": "L140",
+      "legacy_learning_number": 140,
+      "legacy_occurrence": 1,
+      "title": "Reancoragem portátil deixa de ser promessa: medir alinhamento com Bayes, calibração e efeito empírico",
+      "document_order": 139,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L139",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
