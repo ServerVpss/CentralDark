@@ -77,26 +77,27 @@ Remedir fiscal global + run de deploy + runtime; corrigir somente o próximo blo
 
 
 
+
 ## 2026-10-02 — RECONCILIAÇÃO DIÁRIA (medição real)
 
-**Escopo:** GitHub/main, PRs abertos, VPS via SSH, runtime/health, Hermes cron e pendências/mirrors. .
+**Escopo:** GitHub/main, PRs abertos, VPS via SSH, runtime/health, Hermes cron e pendências/mirrors. `UNKNOWN != PASS`.
 
 ### ✅ Medido / provado
-- [x] GitHub  medido em  ().
-- [x] SSH  respondeu; VPS identificada como ; runtime  está em , HEAD , working tree .
-- [x] Hermes CLI ; gateway ativo (PID , heartbeat há , 5 jobs ativos). Job  existe e foi despachado no horário; execução atual  está .
-- [x] PRs abertos medidos: #1742 (draft, HEAD , novo delta acima do último registro) e PR-mãe #1562 (open, HEAD ).
+- [x] GitHub `main` medido em `63d25cb1ee5d956c26a184be6afab7e43e6a7787` (`docs(runtime): bind CentralDark OS runtime inventory`).
+- [x] SSH `segredo-vpss` respondeu; VPS identificada como `CENTRALDARK-OS`; runtime `/root/CentralDark` está em `main`, HEAD `3c47d79179697d09cfad03648550a0ec392b4651`, working tree `DIRTY_COUNT=0`.
+- [x] Hermes CLI `v0.21.5+5564.g6c51075`; gateway ativo (PID `17048`, heartbeat há `17s`, 5 jobs ativos). Job `f052f0dc37ed` existe e foi despachado no horário; execução atual `57b6b57e81584f039b41860c9bd65b22` está `running`.
+- [x] PRs abertos medidos: #1742 (draft, HEAD `d2243a0ada5635c55cb949b7eaa420c491860cf2`, novo delta acima do último registro) e PR-mãe #1562 (open, HEAD `0e5ca854b64ee149d7fab144ab421fb005371566`).
 
 ### 🔴 Bloqueado / ⚪ UNKNOWN
-- [ ] **VPS canonical-main = UNKNOWN:**  não existe/ não respondeu ; não afirmar sincronização de deploy.
-- [ ] **PM2/runtime = UNKNOWN:**  não está disponível no PATH remoto; não foi possível provar processos.
-- [ ] **Health local = UNKNOWN:**  recusou conexão (HTTP 000).
-- [ ] **Health público = UNKNOWN:** DNS de  resolveu para Cloudflare, mas o curl público terminou sem resposta HTTP; não converter em PASS/FAIL causal sem probe discriminante.
-- [ ] **Pendências Git () = UNKNOWN:** workspace local configurado em  não é um worktree Git acessível neste corpo e o conector MCP específico () não está disponível; não inferir ausência de itens.
-- [ ] **Execução concluída do cron = UNKNOWN:** o job está ; a última tentativa terminou em erro  (9 falhas consecutivas).  não prova resultado.
+- [ ] **VPS canonical-main = UNKNOWN:** `/var/lib/centraldark/canonical-main` não existe/ não respondeu `rev-parse`; não afirmar sincronização de deploy.
+- [ ] **PM2/runtime = UNKNOWN:** `pm2` não está disponível no PATH remoto; não foi possível provar processos.
+- [ ] **Health local = UNKNOWN:** `127.0.0.1:9400/health` recusou conexão (HTTP 000).
+- [ ] **Health público = UNKNOWN:** DNS de `admin.centralldark.com` resolveu para Cloudflare, mas o curl público terminou sem resposta HTTP; não converter em PASS/FAIL causal sem probe discriminante.
+- [ ] **Pendências Git (`docs/PENDENCIAS.md`) = UNKNOWN:** workspace local configurado em `E:\CentralDark\CentralDark` não é um worktree Git acessível neste corpo e o conector MCP específico (`pendencias_list`) não está disponível; não inferir ausência de itens.
+- [ ] **Execução concluída do cron = UNKNOWN:** o job está `running`; a última tentativa terminou em erro `HTTP 429: The usage limit has been reached` (9 falhas consecutivas). `Dispatch on time` não prova resultado.
 
 ### ➡️ Próximo cursor
-Remedir VPS com o owner correto de /PM2 e repetir probes local+público; reabrir o receipt do job  somente após estado terminal e resultado legível.
+Remedir VPS com o owner correto de `canonical-main`/PM2 e repetir probes local+público; reabrir o receipt do job `57b6b57e81584f039b41860c9bd65b22` somente após estado terminal e resultado legível.
 
 Este arquivo define o **painel diário obrigatório** da CentralDark. Ele não cria novo cérebro, ledger, promotor, workflow ou autoridade. Ele projeta o estado já registrado pelos owners, receipts, PRs, runtime e Segundo Cérebro para o CHEFE enxergar, em uma tela, o que aconteceu hoje e o que ainda falta.
 
