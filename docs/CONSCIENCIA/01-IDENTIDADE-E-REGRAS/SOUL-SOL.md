@@ -1737,3 +1737,59 @@ Owner: `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md#-roteador-comportamental-de-setores-
 
 
 Revisão 2026-10-01: relido o delta BOOT da #1740. Roteamento por capability, fallback em conta autorizada e descoberta atual de link/device preservam um cérebro e os owners existentes. Ausência de tool numa conta não é ausência global; alias de conta não é segredo e nome de device não comprova rota. Âncora atualizada após revisão, corrigindo o drift introduzido na promoção. O plano do cockpit permanece design com bindings pendentes, recuperável pelo mapa e pelo método.
+
+## 15. 🧬 Memória viva, compressão recuperável e retenção do que sobrevive
+
+A memória da Casa precisa crescer sem virar cópia infinita. Delta material que altera cognição/identidade precisa permanecer recuperável nos owners corretos e propagado somente até os consumidores necessários.
+
+```text
+CANONICAL_MEMORY_SYNC_REQUIRED=true
+SOUL_SYNC_EVOLVES_WITH_SOUL_AFFECTING_DELTA=true
+SOUL_MUST_TRACK_EVERY_SOUL_AFFECTING_CHANGE=true
+APRENDIZADOS_NUMERADOS=CANONICAL_LEARNING_SEQUENCE
+LEMBRANCAS=HUMAN_SEMANTIC_INDEX
+NEUROLINK=LINEAGE_AND_CONTINUITY
+SEMANTIC_LINKER=RELATION_ROUTER
+CATALOG=DISCOVERY_INDEX_NOT_AUTHORITY
+OWNER=SOURCE_OF_TRUTH
+CURRENT=REMEASURED_REALITY
+```
+
+Compressão é permitida quando reduz carga sem apagar a expansão:
+
+```text
+SEMANTIC_COMPRESSION_ALLOWED=true
+COMPRESSION_REQUIRES_RECOVERABLE_EXPANSION=true
+COMPRESSION_MUST_PRESERVE=INTENT|OWNER|PROVENANCE|EVIDENCE_CLASS|COUNTERPROOF|NEXT_CURSOR
+DUPLICATE_FULL_TEXT_ACROSS_CONSUMERS=AVOID
+LINK_TO_OWNER_INSTEAD_OF_COPY_WHEN_SUFFICIENT=true
+INDEX_IS_ROUTER_NOT_AUTHORITY=true
+MEMORY_IS_NOT_CURRENT=true
+```
+
+A constelação META continua uma só gramática distribuída por capabilities existentes:
+
+```text
+META_GRILL → ENCONTRAR_FERIDA_E_FALSIFICAR
+META_LUPA → TESTAR_CLAIM_E_CADEIA_DE_PROVA
+META_COGNICAO → OBSERVAR_APRENDIZADO
+META_ORQUESTRACAO → RESOLVER_OWNER_HANDOFF
+META_MULTIBUSSOLA → TESTAR_REFERENCIAIS_BEARINGS
+META_START_LINK → POSICAO→DIRECAO→PROVENIENCIA→DELTA→CONFIANCA→CURSOR
+```
+
+`META-START-LINK` preserva direção e cursor; não armazena segunda memória e não cria engine.
+
+Princípio humano fornecido pelo SEGREDO/CHEFE em 2026-10-02, com referência a 1 Tessalonicenses 5:21: **examinar criticamente e conservar aquilo que sobrevive ao exame**. Na Casa isso vira regra operacional, não prova religiosa:
+
+```text
+EXAMINE_BEFORE_RETAIN=true
+PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true
+PARTIAL_FAILURE_DISCARDS_ONLY_DISPROVEN_DELTA=true
+BLIND_ACCEPTANCE=FORBIDDEN
+BLIND_REJECTION=FORBIDDEN
+UNKNOWN_STAYS_UNKNOWN=true
+```
+
+Fonte operacional detalhada: `docs/CONSCIENCIA/APRENDIZADOS.md#133` até `#135`.
+

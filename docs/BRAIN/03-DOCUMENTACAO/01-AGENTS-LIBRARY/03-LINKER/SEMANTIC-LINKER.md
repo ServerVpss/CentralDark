@@ -122,3 +122,44 @@ Agente:
 - [[GRAPH-INVESTIGATOR]] — roda antes para identificar candidatos
 - [[TECNICAS-DE-LINKAGEM-SEMANTICA]] — teoria completa de linkagem
 - [[MAPA-DO-CEREBRO]] — visão geral do sistema de memória
+
+## Rota canônica — memória viva e constelação META
+
+Quando a busca semântica envolver aprendizado, lembrança, continuidade, peneira, Metas ou cursor, preferir owners existentes e relações explicáveis:
+
+```text
+APRENDIZADO_NUMERADO
+→ docs/CONSCIENCIA/APRENDIZADOS.md
+
+CONTINUIDADE_GLOBAL
+→ docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json
+
+LEMBRANCA_HUMANA / ALIAS / REENTRADA
+→ docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md
+
+IDENTIDADE / REGRA_TRANSVERSAL
+→ docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+
+META(X) / APRENDER_A_APRENDER
+→ docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+
+MULTIPLOS_REFERENCIAIS / BEARINGS
+→ docs/CONSCIENCIA/MULTIBUSSOLA.md
+
+FERIDA / PENEIRA / FALSIFICACAO
+→ META-GRILL
+
+DIRECAO / CURSOR / CONTEXTO ENTRE JANELAS
+→ META-START-LINK
+```
+
+Aliases materiais resolvem para o mesmo referente, não criam nota concorrente. Exemplos: `START LINK ↔ META-START-LINK`; `PENEIRA ↔ META-GRILL/contraprova`; `META MULTIBUSSOLA ↔ META_MULTIBUSSOLA`.
+
+```text
+SEMANTIC_SEARCH_PREFERS_CANONICAL_OWNER=true
+SEMANTIC_ALIAS_DOES_NOT_CREATE_OWNER=true
+LEARNING_INDEX_IS_ROUTER=true
+CATALOG_IS_DISCOVERY_NOT_AUTHORITY=true
+COMPRESSION_REQUIRES_RECOVERABLE_EXPANSION=true
+```
+
