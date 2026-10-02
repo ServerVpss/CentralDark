@@ -349,7 +349,7 @@ check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
  'CONE_PASS != GLOBAL_PASS',
 ], classification='COMPLETE_SIEVE_CHECKLIST_147')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
- '"dependency_fingerprint": "82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09"',
+ '"dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069"',
  '"materialization_requirements"',
  '"physical_binding"',
  '"complete_sieve"',

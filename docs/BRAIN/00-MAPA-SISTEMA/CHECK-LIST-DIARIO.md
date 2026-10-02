@@ -224,7 +224,7 @@ SAME_CLAIM+SCOPE+TIME: MEASURED_EVIDENCE > UNMEASURED_INFERENCE
 - [x] Pós-remediação: `HYBRID_MULTIROUTE_HOOK_CONTRACT=PASS`, `SENTINEL_HOOK=PASS`, `MACHINE_RECIPE=PASS`, `CHECKLIST_CONTRACT=PASS`, `RECIPE_COMPLETENESS=PASS`.
 - [x] Consumer self-test preserva marcador factual: `multiroute_recipe_hook=true`.
 - [x] Verifier global permanece vermelho fora do cone (`GLOBAL_FAILED=30` na medição); `CONE_PASS != GLOBAL_PASS`.
-- [ ] Binding físico `E:\VMs\CENTRALDARK-OS\SHARED ↔ guest HGFS`: NOT_PROVEN nesta medição; Windows `SEGREDO` offline e HGFS não visível/montado no guest.
+- [x] Binding físico `E:\VMs\CENTRALDARK-OS\SHARED ↔ guest HGFS`: PASS_CURRENT_MEASUREMENT; host path + VMX RW + mount `vmhgfs-fuse` + SHA cruzado de `!CENTRALDARK.txt` fecharam (`d4e99f0fef87b499a97f567b767fe7b71dc5dce8f1303a6779135b35571fa130`). Persistência pós-reboot continua UNKNOWN.
 - [x] PR-MÃE #1562 continua ledger/rendezvous; não é writer.
 - [ ] PR #1743 está aberta e não-mergeável; tratar como projeção/checklist histórica até reconciliação.
 - [ ] PR #1742 está aberta e não-mergeável; runtime panel continua separado desta prova de hook e deve remedir seu próprio cone.
@@ -253,7 +253,7 @@ FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS
 - [x] Consumer `CENTRALDARK-OS/root` materializa `docs/BRAIN/00-MAPA-SISTEMA` no sparse-checkout.
 - [x] Cone multirota #146 passou os cinco checks aplicáveis após a correção do sparse.
 - [ ] Verifier global completo ainda tem vermelhos fora do cone; não chamar repo globalmente verde.
-- [ ] `E:\VMs\CENTRALDARK-OS\SHARED ↔ HGFS` permanece NOT_PROVEN; remedir quando a rota Windows/host estiver viva.
+- [x] `E:\VMs\CENTRALDARK-OS\SHARED ↔ HGFS` = PASS_CURRENT_MEASUREMENT; `SEGREDO` host path + VMX + guest `/home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED` + SHA host↔guest idêntico. Boot persistence continua UNKNOWN e é claim separado.
 - [ ] PR #1742 continua aberta/não-mergeável na última medição; cone runtime-panel próprio.
 - [ ] PR #1743 continua aberta/não-mergeável na última medição; projeção checklist própria.
 - [x] PR-MÃE #1562 continua somente ledger/rendezvous.
