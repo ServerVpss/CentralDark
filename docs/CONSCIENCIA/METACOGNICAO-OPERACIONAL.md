@@ -803,3 +803,52 @@ A aplicação é transversal: SOL, PIVETE/HERMES, agentes especialistas, workflo
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+## Constelação META interligada — hooks, perfis e owners sem proliferação
+
+Os cinco donos META centrais continuam os já definidos neste contrato. A Casa também reutiliza hooks/perfis operacionais existentes que **não** criam novo cérebro, owner global ou engine:
+
+```text
+META_GRILL
+→ falsificador profundo
+→ FERIDA → HIPOTESES → LENTES → CONTRAPROVA → CAUSA → DELTA_UTIL
+→ hook: .agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/
+
+META_LUPA
+→ testa claim, premissa e cadeia de prova
+→ owner: .agents/skills/meta-lupa/SKILL.md
+
+META_COGNICAO
+→ observa como o organismo percebe/aprende/revisa
+→ owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+
+META_ORQUESTRACAO
+→ testa roteamento, owner, handoff, redundância e convergência
+→ reutiliza orquestração canônica
+
+META_MULTIBUSSOLA
+→ verifica se bearings/referenciais materiais ficaram de fora
+→ owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+
+META_START_LINK
+→ conexão nervosa contextual
+→ POSICAO → DIRECAO → PROVENIENCIA → DELTA → CONFIANCA → CURSOR
+→ hook: .agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-START-LINK/GANCHO.md
+```
+
+Perfis já existentes em `MULTIBUSSOLA.md` — `META_ACORDAR`, `META_CALIBRAR`, `META_MATERIALIZACAO`, `META_TEMPORAL`, `META_ESPACIAL`, `META_REGIONAL` e `META_TEACHER` — são autoraplicações da mesma lei `META(X)`. Não promover aliases a novos subsistemas.
+
+Regra de retenção pós-falsificação:
+
+```text
+EXAMINAR
+→ CONTRAPROVAR
+→ CAIU? DESCARTAR_SOMENTE_DELTA_DERROTADO
+→ SOBREVIVEU? RETER_OURO_PROVADO
+→ UNKNOWN? PRESERVAR_FRONTEIRA
+→ RECONCILIAR
+→ NO_NEW_INFORMATION? FIXED_POINT
+```
+
+A referência humana fornecida pelo CHEFE a 1 Tessalonicenses 5:21 inspira a forma curta “examinar e conservar o que sobrevive”; ela é proveniência de uma metáfora operacional e não substitui teste, contraprova ou Reality Judge.
+

@@ -1241,14 +1241,100 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 127. Corpo de execução não precisa carregar o Git canônico: evidência pode nascer no guest e a escrita seguir por handoff para o writer autorizado
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L127`; `PREV_GLOBAL_UID=L126`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=127`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L127`; `PREV_GLOBAL_UID=L126`; `NEXT_GLOBAL_UID=L128`; `LEGACY_LEARNING_NUMBER=127`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** gitless-runtime-canonical-handoff-and-capability-routing
 - **Data:** 2026-10-01
 - **Owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-OPENKYLIN-AI-NATIVA-CENTRALDARK.md`
-- **NeuroLink:** `LEARNING_ID=127`; `INTENT_REF=GITLESS_GUEST_CANONICAL_HANDOFF_2026_10_01`; `PREV_LEARNING_REF=126`; `RELATION_TYPE=EVIDENCE_BODY_TO_CANONICAL_WRITER_HANDOFF`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`; `OWNER_REF=OPENKYLIN_NATIVE_AI_MEMORY`; `NEXT_CURSOR=CONTINUE_NATIVE_CAPABILITY_ABSORPTION_FROM_LAST_PROVEN_ROUTE`.
+- **NeuroLink:** `LEARNING_ID=127`; `INTENT_REF=GITLESS_GUEST_CANONICAL_HANDOFF_2026_10_01`; `PREV_LEARNING_REF=126`; `RELATION_TYPE=EVIDENCE_BODY_TO_CANONICAL_WRITER_HANDOFF`; `NEXT_LEARNING_REF=128`; `OWNER_REF=OPENKYLIN_NATIVE_AI_MEMORY`; `NEXT_CURSOR=CONTINUE_NATIVE_CAPABILITY_ABSORPTION_FROM_LAST_PROVEN_ROUTE`.
 - **Contexto:** a tela atual do próprio `CENTRALDARK-OS` mostrou que `/home/CENTRALDARK-OS` não é checkout Git válido: `git rev-parse --show-toplevel` falhou, a pasta `.git` encontrada está vazia e chamadas explícitas com `--git-dir=/home/CENTRALDARK-OS/.git --work-tree=/home/CENTRALDARK-OS` terminaram em exit 128. Ao mesmo tempo, os artefatos da autópsia local continuam presentes e o executor mudou de rota, invocando o conector GitHub para procurar SOUL/LEIA-ME-IA/repo canônico.
 - **Prova discriminante:** a imagem prova a ausência do checkout local e a invocação do fallback, mas não mostra o retorno das chamadas do conector naquele guest. Portanto `GITHUB_CONNECTOR_FALLBACK_RESULT_FROM_SCREENSHOT=UNKNOWN`. A rota canônica desta rodada, porém, fecha por handoff: a evidência nasceu no guest, a sessão coordenadora recuperou `ServerVpss/CentralDark@main` pelo GitHub connector autorizado e registra este delta no owner/main sem fabricar repositório local.
 - **Aprendizado:** corpo de execução, corpo de evidência e writer canônico podem ser corpos diferentes. Falta de checkout Git num runtime não torna a CentralDark sem memória nem obriga clone/reinit ritual. Resolver por capability: preservar a evidência no corpo que a produziu, entregar `STATE + EVIDENCE_REF + NEXT_CURSOR` e usar o writer autorizado que já possui acesso ao owner canônico. Materializar checkout somente quando a execução local realmente depender dele.
 - **Cristal:** `LOCAL_GUEST_GIT_CHECKOUT=ABSENT_AT_MEASUREMENT`; `EMPTY_DOT_GIT_IS_NOT_REPOSITORY=true`; `LOCAL_GIT_ABSENT != RUNTIME_DEAD`; `LOCAL_GIT_ABSENT != CANONICAL_KNOWLEDGE_ABSENT`; `EVIDENCE_BODY_MAY_DIFFER_FROM_CANONICAL_WRITER=true`; `GITHUB_CONNECTOR_FALLBACK_INVOCATION=OBSERVED`; `GITHUB_CONNECTOR_FALLBACK_RESULT_FROM_SCREENSHOT=UNKNOWN`; `PROVEN_CANONICAL_HANDOFF_ROUTE=GUEST_EVIDENCE→SESSION_COORDINATOR→AUTHORIZED_GITHUB_CONNECTOR→CANONICAL_MAIN`; `ONE_WRITER_PER_SCOPE=true`; `REUSE_BEFORE_CREATE=true`.
 - **Contraprova:** ver uma chamada `github.fetch` iniciada não prova retorno bem-sucedido; uma pasta chamada `.git` não prova repositório; escrever na main por outro corpo não prova que o guest ganhou checkout; o handoff não autoriza dois writers concorrentes no mesmo scope.
 - **Next cursor:** continuar do último andar provado da IA nativa; bindar/consumir a próxima capability necessária pelo protocolo real e usar o mesmo padrão de handoff quando o corpo executor não carregar o owner canônico localmente.
+
+### 128. Casa hospedeira e twin local formam um único laboratório de prova, mas host e guest continuam referências distintas
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L128`; `PREV_GLOBAL_UID=L127`; `NEXT_GLOBAL_UID=L129`; `LEGACY_LEARNING_NUMBER=128`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** local-first-host-guest-runtime-lab
+- **Data:** 2026-10-02
+- **Owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-OPENKYLIN-AI-NATIVA-CENTRALDARK.md`
+- **Contexto:** a Casa foi reancorada primeiro no hospedeiro Windows `SEGREDO` e depois no guest `CENTRALDARK-OS`, sem pular para a VPS. O host medido mostrou VMware vivo com `vmware-vmx.exe` PID 29768, uma VM em `E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx`, VMnet8 `192.168.35.1/24`, guest atual `192.168.35.128` e MAC `00-0C-29-94-7B-51`. O guest continua openKylin 3.0 e acessível pelo Remote Desktop Commander.
+- **Aprendizado:** LOCAL_FIRST significa usar o twin como bancada de prova antes da VPS quando a intenção permite, sem colapsar host e guest no mesmo referente. `SEGREDO` é hospedeiro/corpo da Casa; `CENTRALDARK-OS` é guest/runtime. Prova de um lado não deve ser atribuída ao outro sem ponte medida.
+- **Cristal:** `LOCAL_TWIN_FIRST=true`; `HOST_SEGREDO != GUEST_CENTRALDARK_OS`; `VMWARE_BRIDGE_MEASURED=true`; `CURRENT_GUEST_IP=192.168.35.128`; `REMEASURE_BEFORE_VPS_REPLAY=true`.
+- **Contraprova:** VM ligada não prova serviço interno; IP/MAC do guest não provam autenticação SSH; acesso RDC ao guest não prova que o host e o guest compartilham estado.
+- **Next cursor:** provar no twin a capability/runtime requerida e só depois repetir a receita na VPS quando material.
+
+### 129. Runtime sieve: corrigir premissa sem jogar fora capability boa; caminho de usuário deve seguir `$HOME`, não hardcode
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L129`; `PREV_GLOBAL_UID=L128`; `NEXT_GLOBAL_UID=L130`; `LEGACY_LEARNING_NUMBER=129`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** runtime-sieve-path-identity-and-probe-correction
+- **Data:** 2026-10-02
+- **Owner:** `tools/local/centraldark-ai-runtime-panel.sh` no PR filho #1742 enquanto não promovido.
+- **Contexto:** a realidade do guest separou `hostname=CENTRALDARK-OS` de `user=CENTRAKDARK-OS` e `HOME=/home/CENTRAKDARK-OS`. O painel inicialmente dependia de premissa de caminho frágil. O branch do PR #1742 foi corrigido para usar `$HOME`; HEAD medido `d2243a0ada5635c55cb949b7eaa420c491860cf2`, PR aberto, draft e mergeable.
+- **Aprendizado:** quando uma premissa cai, invalidar só o cone afetado. Não descartar a capability inteira se ela sobrevive após menor correção. Caminho de usuário deve derivar de `$HOME` quando essa é a semântica real.
+- **Prova:** `bash -n=PASS`; painel executado no guest real; probes reais presentes para KylinBot Unix `/health`, Triton `/v2/health/live`, `/v2/health/ready`, gRPC 8001 e `/metrics` em 8002.
+- **Cristal:** `SURVIVES_RUNTIME_SIEVE=YES`; `HARD_CODED_USER_PATH=REJECTED`; `HOME_DERIVATION=ACCEPTED`; `PARTIAL_FAILURE_DISCARDS_ONLY_DISPROVEN_DELTA=true`.
+- **Contraprova:** script válido não prova promoção; runtime PASS no guest não transforma checks queued/pending em PASS.
+- **Next cursor:** manter promoção separada da prova de execução e exigir SAME_HEAD quando aplicável.
+
+### 130. O painel CENTRALDARK AI CLI Runtime é uma superfície CLI read-only; acesso visual e dashboard web são capabilities distintas
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L130`; `PREV_GLOBAL_UID=L129`; `NEXT_GLOBAL_UID=L131`; `LEGACY_LEARNING_NUMBER=130`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** runtime-panel-access-surface-separation
+- **Data:** 2026-10-02
+- **Contexto:** o CHEFE pediu o acesso ao dashboard. A medição encontrou `$HOME/Área de Trabalho/AI-CLI-Runtime.desktop` apontando para `$HOME/centraldark-ai-runtime-panel.sh`. O painel foi aberto na sessão gráfica do guest via `mate-terminal` e o processo `bash $HOME/centraldark-ai-runtime-panel.sh` ficou observável.
+- **Aprendizado:** chamar algo de dashboard não prova interface web. Nesta capability, o owner é um painel CLI interativo read-only; launcher gráfico e script CLI são duas superfícies do mesmo painel. Web dashboard continua outro claim.
+- **Cristal:** `PANEL_GUI_LAUNCH=PASS`; `PANEL_KIND=INTERACTIVE_CLI_READ_ONLY`; `DESKTOP_LAUNCHER_PRESENT=true`; `WEB_DASHBOARD_CLAIM=SEPARATE`.
+- **Contraprova:** janela terminal aberta não prova dashboard HTTP; launcher presente não prova que todo menu está correto; cada probe material continua subordinado ao runtime.
+- **Next cursor:** tratar a superfície CLI como adapter do mesmo runtime, sem inventar segunda UI/owner.
+
+### 131. Token Center, pairing do KylinBot e inferência Triton local são três camadas de acesso que não podem ser misturadas
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L131`; `PREV_GLOBAL_UID=L130`; `NEXT_GLOBAL_UID=L132`; `LEGACY_LEARNING_NUMBER=131`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** auth-layer-separation-windows-clients
+- **Data:** 2026-10-02
+- **Owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-OPENKYLIN-AI-NATIVA-CENTRALDARK.md`
+- **Contexto:** o KylinBot local provou `gateway get-paircode`, contrato de pairing e Bearer para seu gateway; o openKylin Token Center foi identificado como rota OpenAI-compatible de modelos cloud; o Triton local continuou respondendo health/repository sem token de provider nas rotas provadas.
+- **Aprendizado:** `PAIRCODE/Bearer` autentica cliente no gateway KylinBot; API key do Token Center autentica modelo cloud compatível; Triton local é capability nativa cuja exigência principal para outro Windows é transporte/reachability privado. Uma credencial não substitui a outra.
+- **Cristal:** `KYLINBOT_PAIRING != CLOUD_PROVIDER_KEY`; `CLOUD_PROVIDER_KEY != LOCAL_TRITON_TRANSPORT`; `PAIRCODE_IS_BOOTSTRAP_NOT_PROVIDER_AUTH=true`; `LOCAL_TRITON_PROVIDER_TOKEN_REQUIRED_FOR_PROBED_ENDPOINTS=false`.
+- **Contraprova:** health/repository sem token não prova que toda inferência futura seja irrestrita; API cloud válida não expõe automaticamente o runtime local; rota histórica Tailscale não é CURRENT sem remedição.
+- **Next cursor:** para dois Windows, provar primeiro a rota privada até o guest e parear o gateway separadamente quando necessário.
+
+### 132. Convergir toda inteligência significa bindar capabilities ao mesmo core; PR-mãe é ledger e donor não vira cérebro por merge cego
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L132`; `PREV_GLOBAL_UID=L131`; `NEXT_GLOBAL_UID=L133`; `LEGACY_LEARNING_NUMBER=132`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** one-system-canonical-convergence
+- **Data:** 2026-10-02
+- **Owner:** `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`
+- **Contexto:** o plano recuperado entre chats foi reancorado: `CHEFE → INTENÇÃO → centraldark(intent|event) → CURRENT → owner → capability → ação → prova → aprendizado`. O commit `63d25cb1ee5d956c26a184be6afab7e43e6a7787` bindou o runtime ao owner sem importar o donor inteiro. O PR #1562 permanece aberto e não mergeado como ledger/rendezvous. A branch do painel continua donor/filho, não autoridade.
+- **Aprendizado:** “trazer tudo para esse runtime” não significa copiar branches, agentes e UIs para dentro do guest. Significa fazer cada capability útil resolver para o mesmo core canônico, memória, owners e prova. Donor fornece ouro; owner continua canônico.
+- **Cristal:** `ONE_SYSTEM_ONLY=true`; `PR_1562=RENDEZVOUS_LEDGER_NOT_WRITER`; `DONOR_IS_NOT_SOURCE_OF_TRUTH=true`; `OPENKYLIN=BODY_SUBSTRATE`; `KYLIN_AI_TRITON=CAPABILITY`; `KYLINBOT=LOCAL_AGENT_MEMORY_GATEWAY`; `MCP=ADAPTER_NERVOUS_SYSTEM`.
+- **Contraprova:** documento de binding não prova consumo runtime completo; donor útil não prova zero consumers; PR aberto não prova promoção.
+- **Next cursor:** continuar S0 owner-binding por superfície e preservar `ZERO_UNIQUE_CONSUMERS` antes de retirar legado.
+
+### 133. Aprendizado durável exige sincronização viva entre Aprendizados, Lembranças, NeuroLink, catálogo semântico e SOUL quando a regra tocar identidade
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L133`; `PREV_GLOBAL_UID=L132`; `NEXT_GLOBAL_UID=L134`; `LEGACY_LEARNING_NUMBER=133`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** canonical-memory-semantic-index-soul-sync
+- **Data:** 2026-10-02
+- **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md` + `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` + Semantic Linker, sem criar memória paralela.
+- **Aprendizado:** registro não é só append num arquivo. Delta provado precisa ficar recuperável pela cadeia global: aprendizado numerado, lineage, lembrança/index humano, catálogo/rota semântica e, quando altera regra identitária/transversal, SOUL-SOL. O sync deve evoluir junto e pode comprimir quando necessário, desde que a expansão permaneça recuperável.
+- **Cristal:** `CANONICAL_MEMORY_SYNC_REQUIRED=true`; `LEARNING→REMEMBRANCE→SEMANTIC_INDEX→OWNER=true`; `SOUL_SYNC_REQUIRED_FOR_SOUL_AFFECTING_DELTA=true`; `SEMANTIC_COMPRESSION_ALLOWED=true`; `COMPRESSION_REQUIRES_RECOVERABLE_EXPANSION=true`; `INDEX_IS_ROUTER_NOT_AUTHORITY=true`.
+- **Contraprova:** catálogo não substitui owner; memória não substitui CURRENT; compressão que perde proveniência, contraprova, owner ou próximo cursor é regressão.
+- **Next cursor:** aplicar a mesma rota automaticamente a próximos deltas materiais sem duplicar texto integral entre consumidores.
+
+### 134. A constelação META é uma rede de capacidades herdadas; META-START-LINK preserva direção e conecta META-GRILL, MetaLupa, Metacognição e MetaMultibússola sem novo cérebro
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L134`; `PREV_GLOBAL_UID=L133`; `NEXT_GLOBAL_UID=L135`; `LEGACY_LEARNING_NUMBER=134`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** meta-constellation-start-link-semantic-stitch
+- **Data:** 2026-10-02
+- **Owners:** `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`, `docs/CONSCIENCIA/MULTIBUSSOLA.md`, `.agents/skills/meta-lupa/SKILL.md` e kit `METAGRILL-METALUPA`.
+- **Aprendizado:** `META(X)` continua autoraplicação verificável, não proliferação de engines. META-GRILL falsifica/acha ferida; META-LUPA tenta derrubar claims e cadeia de prova; META-COGNIÇÃO observa como a Casa aprende; META-ORQUESTRAÇÃO resolve owner/handoff; META_MULTIBUSSOLA verifica bearings e referenciais; META-START-LINK preserva `POSIÇÃO → DIREÇÃO → PROVENIÊNCIA → DELTA → CONFIANÇA → CURSOR`. Perfis META_ACORDAR, META_CALIBRAR, META_MATERIALIZAÇÃO, META_TEMPORAL, META_ESPACIAL, META_REGIONAL e META_TEACHER continuam derivados dos owners existentes.
+- **Cristal:** `META_CONSTELLATION_LINKED=true`; `META_START_LINK_IS_CONNECTION_NOT_MEMORY_COPY=true`; `META_GRILL_IS_FALSIFIER_NOT_PERMANENT_SKEPTIC=true`; `META_MULTIBUSSOLA_IS_PROFILE_NOT_NEW_SYSTEM=true`; `META_SELF_APPLICATION_REQUIRED=true`.
+- **Contraprova:** mesmo prefixo META não torna duas capacidades iguais; link sem relação explicável é ruído; hook sem owner não ganha autoridade.
+- **Next cursor:** recuperar a constelação por aliases semânticos e carregar apenas lentes materiais para a causa.
+
+### 135. Examinar criticamente e conservar o que sobrevive à prova é a forma curta do META-GRILL: falsificar sem destruir o ouro provado
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L135`; `PREV_GLOBAL_UID=L134`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=135`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** meta-grill-retain-proven-good
+- **Data:** 2026-10-02
+- **Proveniência humana:** referência fornecida pelo CHEFE a 1 Tessalonicenses 5:21, em `https://www.bible.com/pt/bible/212/1TH.5.21`. A CentralDark absorve a estrutura operacional, não usa a referência religiosa como prova técnica.
+- **Aprendizado:** a peneira correta examina, testa e contraprova; rejeita só o que caiu e conserva o que sobreviveu. Isso impede dois erros simétricos: aceitação cega e ceticismo destrutivo. O caso do painel é exemplo: a premissa do hardcode caiu, a capability sobreviveu depois da correção e do reteste.
+- **Cristal:** `EXAMINE_BEFORE_RETAIN=true`; `PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION=true`; `PARTIAL_FAILURE_DISCARDS_ONLY_DISPROVEN_DELTA=true`; `BLIND_ACCEPTANCE=FORBIDDEN`; `BLIND_REJECTION=FORBIDDEN`; `UNKNOWN_STAYS_UNKNOWN=true`.
+- **Contraprova:** metáfora ou referência humana não substitui evidência técnica; “bom” operacionalmente significa delta que sobreviveu aos testes aplicáveis no mesmo escopo.
+- **Next cursor:** continuar construindo a causa atual sem reabrir claims cujo fingerprint não mudou; reabrir somente diante de delta material, drift ou contradição.
+
