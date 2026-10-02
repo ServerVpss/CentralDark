@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "944dcb7e53d5a01e0a6adaac007ecb30cc192b87",
+  "source_blob_sha": "a815089b359b06e2d2b27c0e6fa9c1a5c47f4dba",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 145,
-    "highest_legacy_learning_number": 146,
+    "learning_sections": 146,
+    "highest_legacy_learning_number": 147,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 146
+      "end": 147
     }
   },
   "nodes": [
@@ -1680,6 +1680,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L145",
+      "next_uid": "L147"
+    },
+    {
+      "uid": "L147",
+      "legacy_learning_number": 147,
+      "legacy_occurrence": 1,
+      "title": "Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis",
+      "document_order": 146,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L146",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
