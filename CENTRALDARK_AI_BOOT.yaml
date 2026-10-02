@@ -100,6 +100,13 @@ CENTRALDARK_AI_BOOT:
       user_stated_over_assistant_inferred: true
       replay_before_rediscovery: true
       proof_of_proof_without_information_gain: "FORBIDDEN"
+      channel_limit_fallback_flow: "CHANNEL_LIMIT->COMPACT_CANONICAL_RECORD->EXPANDED_REMEMBRANCE->BACKLINK->SAME_OWNER->CONTINUE"
+      channel_limit_is_not_mission_blocked: true
+      compact_canonical_record_required_on_channel_limit: true
+      expanded_remembrance_required_when_compression_would_drop_material_context: true
+      expansion_must_backlink_canonical_record: true
+      same_owner_must_be_evolved: true
+      no_v1_v2_v3_channel_fallback: true
     routing:
       flow: "INTENT_DELTA -> CANON/CURRENT -> SELF_GRILL -> SECTOR -> OWNER -> RECIPE/FINGERPRINT -> MINIMUM_COMPLETE_DELTA -> EFFECT -> PROOF/COUNTERPROOF -> FIXED_POINT -> RECEIPT -> NEXT_CURSOR"
       one_path_failure_is_not_system_failure: true
