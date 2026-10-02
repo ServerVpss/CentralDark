@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "f19a82cdf6cd95c69dd3726738e95d9587e01181",
+  "source_blob_sha": "17a27da373ae0fe88475909cb9197e8fa5b6b390",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 123,
-    "highest_legacy_learning_number": 124,
+    "learning_sections": 124,
+    "highest_legacy_learning_number": 125,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 124
+      "end": 125
     }
   },
   "nodes": [
@@ -1438,6 +1438,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L123",
+      "next_uid": "L125"
+    },
+    {
+      "uid": "L125",
+      "legacy_learning_number": 125,
+      "legacy_occurrence": 1,
+      "title": "A autópsia do twin separa agente/provider do corpo nativo: KylinBot pode falhar enquanto Kylin AI continua vivo",
+      "document_order": 124,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L124",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
