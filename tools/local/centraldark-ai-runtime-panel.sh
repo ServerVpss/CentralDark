@@ -7,12 +7,12 @@
 set -u
 
 RUNTIME_DIR="/opt/centraldark"
-REPORT_FILE="/home/CENTRAKDARK-OS/Área de Trabalho/inventario-ia-local-centraldark-os.txt"
-KYLINBOT_CONFIG="/home/CENTRAKDARK-OS/.kylinbot/config.toml"
-KYLINBOT_SOCKET="/home/CENTRAKDARK-OS/.kylinbot/gateway.sock"
+REPORT_FILE="$HOME/Área de Trabalho/inventario-ia-local-centraldark-os.txt"
+KYLINBOT_CONFIG="$HOME/.kylinbot/config.toml"
+KYLINBOT_SOCKET="$HOME/.kylinbot/gateway.sock"
 MODEL_REPO="/usr/share/kylin-ai/model-repository"
-CODEX_CONFIG="/home/CENTRAKDARK-OS/.codex/config.toml"
-CLAUDE_MCP_LOGS="/home/CENTRAKDARK-OS/.cache/claude-cli-nodejs/-home-CENTRAKDARK-OS"
+CODEX_CONFIG="$HOME/.codex/config.toml"
+CLAUDE_MCP_LOGS="$HOME/.cache/claude-cli-nodejs/-home-$(basename "$HOME")"
 KYLINBOT_HEALTH_BODY="/tmp/centraldark_kylinbot_health"
 TRITON_HEALTH_BODY="/tmp/centraldark_triton_health"
 
@@ -200,7 +200,7 @@ kylinbot_panel() {
     echo -e "${BOLD}KYLINBOT${NC}"
     line
     echo "Config:    $KYLINBOT_CONFIG"
-    echo "Workspace: /home/CENTRAKDARK-OS/.kylinbot/workspace"
+    echo "Workspace: $HOME/.kylinbot/workspace"
     echo "Socket:    $KYLINBOT_SOCKET"
     echo
     echo -e "${BOLD}Status${NC}"
@@ -262,7 +262,7 @@ mcp_integrations() {
     echo -e "${BOLD}MCP, CONECTORES E INTEGRACOES${NC}"
     line
     echo -e "${BOLD}Codex plugins/cache${NC}"
-    find /home/CENTRAKDARK-OS/.codex/plugins/cache/openai-curated-remote -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort
+    find $HOME/.codex/plugins/cache/openai-curated-remote -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort
     echo
     echo -e "${BOLD}Claude MCP logs${NC}"
     find "$CLAUDE_MCP_LOGS" -maxdepth 1 -type d -name 'mcp-logs-*' -printf '%f\n' 2>/dev/null | sort
@@ -330,10 +330,10 @@ skills_memory() {
     echo
     echo -e "${BOLD}SQLite tables${NC}"
     for db in \
-        /home/CENTRAKDARK-OS/.kylinbot/workspace/memory/brain.db \
-        /home/CENTRAKDARK-OS/.kylinbot/workspace/cron/jobs.db \
-        /home/CENTRAKDARK-OS/.kylinbot/workspace/sessions/sessions.db \
-        /home/CENTRAKDARK-OS/.config/kylin-aiassistant/knowledgeBase/knowledge_base.db; do
+        $HOME/.kylinbot/workspace/memory/brain.db \
+        $HOME/.kylinbot/workspace/cron/jobs.db \
+        $HOME/.kylinbot/workspace/sessions/sessions.db \
+        $HOME/.config/kylin-aiassistant/knowledgeBase/knowledge_base.db; do
         echo "### $db"
         sqlite3 "$db" '.tables' 2>/dev/null || echo "sqlite read failed"
     done
