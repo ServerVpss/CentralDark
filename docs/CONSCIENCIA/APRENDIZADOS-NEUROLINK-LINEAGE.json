@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "9899a6335182c6e5b3455fe2e7d984cb3082fcfc",
+  "source_blob_sha": "30cc5f6c7f05b8f9bebc1e53a28947a706154bdb",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 125,
-    "highest_legacy_learning_number": 126,
+    "learning_sections": 126,
+    "highest_legacy_learning_number": 127,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 126
+      "end": 127
     }
   },
   "nodes": [
@@ -1460,6 +1460,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L125",
+      "next_uid": "L127"
+    },
+    {
+      "uid": "L127",
+      "legacy_learning_number": 127,
+      "legacy_occurrence": 1,
+      "title": "Corpo de execução não precisa carregar o Git canônico: evidência pode nascer no guest e a escrita seguir por handoff para o writer autorizado",
+      "document_order": 126,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L126",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
