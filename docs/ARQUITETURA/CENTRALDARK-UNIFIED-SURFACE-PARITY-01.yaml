@@ -24,6 +24,33 @@ core_law:
   EXISTS_NEQ_RUNNING: true
   REALITY_IS_JUDGE: true
 
+surface_identity_model:
+  global_chat_class: CHAT_GLOBAL
+  examples:
+    - CHATGPT
+    - CLAUDE_CHAT
+    - GEMINI_CHAT
+    - GROK_CHAT
+    - FUTURE_CHAT
+  invariants:
+    BRAND_NE_SURFACE_CLASS: true
+    SURFACE_NE_CAPABILITY: true
+    SURFACE_NE_EXECUTOR_PROOF: true
+    GITHUB_ACCESS_NE_SHELL_ACCESS: true
+    REPO_READ_WRITE_NE_HOUSE_EXECUTION: true
+    TOOL_CATALOG_NE_TOOL_EXECUTION: true
+    TOOLSET_RESOLVED_AT_RUNTIME: true
+    CHAT_GLOBAL_WITH_AUTHORIZED_SHELL_GAINS_EXECUTOR_CAPABILITY_IN_SCOPE: true
+    LOCAL_TOOL_MISS_NE_GLOBAL_CAPABILITY_MISS: true
+    MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME: true
+    LOCAL_SHELL_STATE_DOES_NOT_PROVE_REMOTE_OR_MAIN_STATE: true
+    LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED: true
+  rule: >
+    Marca e superfície são proveniência; capability é medida no runtime. Uma
+    superfície CHAT_GLOBAL pode ser somente consultiva, ter GitHub read/write,
+    ou também executar por shell/bridge autorizado. Nenhum desses estados é
+    inferido apenas pelo nome da plataforma.
+
 authority_boundary:
   CHEFE_INTENT_IS_AUTHORITY: true
   CHEFE_COMMAND_IS_NOT_MODEL_CLAIM: true
@@ -280,8 +307,12 @@ execution_strategy:
       - publish_capability
       - generate_surface_matrix
       - commit_or_pr_if_authorized
+  chat_global:
+    role: oracle_and_executor_according_to_measured_authorized_tools
+    examples: [chatgpt_text, claude_chat, gemini_chat, grok_chat, future_chat]
   chatgpt_text:
-    role: oracle_and_light_executor_when_tools_exposed
+    role: compatibility_surface_example
+    class: CHAT_GLOBAL
   voice:
     role: fast_human_surface_requiring_tool_binding
   hermes_casa:
