@@ -6,8 +6,8 @@ owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
 pr_mother: 1562
 semantic_role: "session_crystal_continuity_learning_map"
 priority: "OBRIGATORIO"
-checked_day_utc: "2026-10-01"
-updated: "2026-09-30T21:21:00-03:00"
+checked_day_utc: "2026-10-02"
+updated: "2026-10-02"
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 mirror_role: "CASA-VAULT = memoria operacional/espelho; Git+owners continuam autoridade tecnica"
 aliases:
@@ -28,6 +28,121 @@ aliases:
 - [x] Qualquer outro não-zero entra em diagnóstico causal por stdout/stderr/runtime/source.
 - [x] Causa conhecida reutiliza owner/resolvedor existente; causa desconhecida permanece UNKNOWN.
 - [x] Depois do reparo, repetir a mesma probe discriminante antes de verde.
+
+## 🫀 CURRENT VIVO — 2026-10-02 — FUNIL BAYESIANO
+
+```text
+MAIN_CURRENT=b5a50c084e389f4c0d1ff26541af8bb7023473f5
+PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED
+BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED
+PR_MOTHER=#1562
+PR_MOTHER_ROLE=GLOBAL_RENDEZVOUS_LEDGER
+CHECKLIST_ROLE=OPERATIONAL_HUD_NOT_SOURCE_OF_TRUTH
+```
+
+### ✅ Passagem do mini contrato pelo funil oficial
+
+Definições:
+
+[
+M = \text{mini contrato/candidato}
+]
+
+[
+O = \text{contrato oficial canônico}
+]
+
+Caso o candidato já esteja semanticamente contido no oficial:
+
+[
+M \subseteq O
+]
+
+[
+\Delta = M \setminus O = \varnothing
+]
+
+[
+IG_{create}=0
+]
+
+Resultado operacional:
+
+```text
+DROP_DUPLICATE
+→ REUSE_OFFICIAL_OWNER
+→ NO_SECOND_CONTRACT
+→ NO_SECOND_OWNER
+→ SAME_FINGERPRINT? REUSE_CRYSTAL
+```
+
+Se houver delta compatível real:
+
+[
+\Delta = M \setminus O \neq \varnothing
+]
+
+```text
+ABSORB_ONLY_DELTA
+→ EVOLVE_SAME_OFFICIAL_OWNER
+→ UPDATE_FINGERPRINT
+→ REVALIDATE_AFFECTED_CONE_ONLY
+```
+
+Se houver cláusula contraditória:
+
+[
+C = \{x \in M : x \text{ contradiz } O\},\qquad C \neq \varnothing
+]
+
+```text
+META_LUPA
+→ META_MULTIBUSSOLA
+→ TESTE_DISCRIMINANTE
+→ CONTRAPROVA
+→ CANDIDATO_SOBREVIVE? EVOLVE_O : REJECT_CONFLICTING_CONE
+```
+
+Isto reutiliza regras já canônicas do funil: `ABSORB_BEFORE_DUPLICATE`, `NO_NEW_INFORMATION_NO_CHANGE`, `EVOLVE_SAME_OBJECT`, `same_finding_without_new_evidence=DROP_DUPLICATE` e `REUSE_OR_EXTEND_EXISTING`.
+
+### ✅ Meta-Lupa — CURRENT
+
+- [x] Identity/hash guard: PASS.
+- [x] `SKILL.md` blob esperado = observado: `05b8664f6753fd4117e6cfc34e81edb1e7f5367b`.
+- [x] Formato canônico lock: PASS.
+- [x] Teste direto sem pytest: `53/53 PASS`.
+- [x] Meta-Lupa 3 temperaturas: PASS.
+- [x] CLI Bayes: prior=0.3, LR=[5,2] → posterior=0.8108; entropia 0.8813→0.6998.
+- [ ] `pytest` global da Casa: BLOQUEADO NO INSTRUMENTO por `ModuleNotFoundError: pygments.lexers._mapping`; não classificar como falha da Meta-Lupa.
+
+### ✅ Meta-Multibússola — CURRENT
+
+- [x] Owner: `docs/CONSCIENCIA/MULTIBUSSOLA.md`.
+- [x] Perfil `META_MULTIBUSSOLA` existe sem segundo comando/motor.
+- [x] Master cycle: 4 aliases, 4 routes, 6 proof gates.
+- [x] Evaluator: estado completo → `FIXED_POINT_PASS`.
+- [x] Evaluator com `unknown_material=1` → `LOCAL_FIXED_POINT_NOT_YET`.
+- [x] Teste isolado `test_meta_bussola_is_existing_meta_multibussola_not_new_command`: PASS.
+- [x] Registry item de `!MULTIBUSSOLA`: PASS.
+- [ ] Suite ampla de convergência contém 2 falhas fora do cone da Meta-Multibússola: webhook esperado retired mas CURRENT está active; `normative_hierarchy:` esperado pelo teste mas ausente no CONTRACT.
+- [ ] Registry administrativo global tem drift independente: marcador `!EXECUTOR_CENTRALDARK` sem item correspondente em `ADMINISTRAVEIS.json`.
+
+### 🔒 Selado nesta passagem
+
+```text
+MINI_CONTRACT_IS_NOT_SECOND_OWNER=true
+SUBSET_OF_OFFICIAL_CONTRACT=DROP_DUPLICATE_REUSE
+COMPATIBLE_NEW_DELTA=ABSORB_INTO_OFFICIAL_OWNER
+CONFLICT=DISCRIMINATE_BEFORE_EVOLVE
+META_LUPA_CORE_BROKEN=false
+PYTEST_ENVIRONMENT_BROKEN_ON_CASA=true
+META_MULTIBUSSOLA_CORE_BROKEN=false
+BROADER_UNRELATED_DRIFT_PRESERVED=true
+```
+
+### ➡️ NEXT_CURSOR
+
+O contrato portátil Bayesiano já está absorvido no owner oficial; não criar segundo contrato. Próximo cone material separado: reconciliar somente os drifts globais de teste/registry se eles entrarem na missão vigente.
 
 ## 🫀 CURRENT VIVO — 2026-09-30
 
