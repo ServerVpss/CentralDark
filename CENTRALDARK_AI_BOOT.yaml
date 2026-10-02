@@ -890,6 +890,7 @@ CENTRALDARK_AI_BOOT:
         - VERIFIER
         - CONSUMER_REAL
         - CHECKLIST_DIARIO
+        - RECEIPT
         - PR_MOTHER_1562
         - RELATED_LIVE_PR_WHEN_SCOPE_INTERSECTS
         - PHYSICAL_BINDING_WHEN_CLAIM_DEPENDS_ON_IT
@@ -902,9 +903,11 @@ CENTRALDARK_AI_BOOT:
         boot_loaded_is_not_verifier_enforced: true
         verifier_enforced_is_not_consumer_proven: true
         consumer_proven_is_not_checklist_registered: true
-        checklist_registered_is_not_pr_mother_receipt: true
+        checklist_registered_is_not_receipt_materialized: true
+        receipt_materialized_is_not_pr_mother_receipt: true
         check_present_in_git_is_not_check_present_in_runtime: true
         sparse_checkout_is_binding_not_source_of_truth: true
+        sparse_path_enabled_is_not_file_present_at_current_head: true
         physical_binding_required_when_claim_depends_on_host_vm_share: true
         unrelated_global_red_does_not_invalidate_proven_cone: true
         cone_pass_does_not_imply_global_pass: true
