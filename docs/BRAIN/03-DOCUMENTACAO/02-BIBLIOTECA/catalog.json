@@ -1348,11 +1348,11 @@
     {
       "id": "d01-memoria-viva-centraldark",
       "source_id": "canonical-aprendizados",
-      "reference": "Aprendizados #128-#135 — memória viva CENTRALDARK-OS",
+      "reference": "Aprendizados #128-#136 — memória viva CENTRALDARK-OS",
       "kind": "canonical-learning-route",
       "category": "D",
       "state": "CANONICAL",
-      "summary": "Sequência local-first → runtime sieve → painel → auth layers → convergência → memória viva → constelação META → retenção do ouro provado.",
+      "summary": "Sequência local-first → runtime sieve → painel → auth layers → convergência → memória viva → constelação META → retenção do ouro provado → autoaplicação S0.",
       "tags": [
         "tema/aprendizado",
         "funcao/continuidade",
@@ -1364,7 +1364,8 @@
         "[[LEMBRANCAS]]",
         "[[SOUL-SOL]]",
         "[[METACOGNICAO-OPERACIONAL]]",
-        "[[SEMANTIC-LINKER]]"
+        "[[SEMANTIC-LINKER]]",
+        "[[APRENDIZADOS#136]]"
       ],
       "emojis": [
         "🧬",
