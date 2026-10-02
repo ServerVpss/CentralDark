@@ -885,7 +885,7 @@
     "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH": {
       "claim_key": "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH",
       "owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
-      "lock_key": "d1444ef3efcfb766ee2d121c1703d23bfc7e576f83d770a2d186ba491c9fe68a",
+      "lock_key": "f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b",
       "state": "SEALED_PROVEN",
       "proof_target": "AUTHORIZED_MULTIROUTE_FAILOVER_WITH_BINDING_SCOPED_HEALTH",
       "evidence_ref": "LEARNING_146 + LEARNING_147 + CURRENT_ROUTE_REMEASURE_2026-10-02",
@@ -894,7 +894,7 @@
       "receipt_ref": "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
-        "dependency_fingerprint": "82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09",
+        "dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069",
         "execution_commands": [
           "classify the exact failed route and binding",
           "keep global system state undecided",
@@ -958,9 +958,12 @@
         "binding_user": "root",
         "repo_root": "/root/CentralDark",
         "sparse_checkout": true,
-        "materialized_path_added": "docs/BRAIN/00-MAPA-SISTEMA",
         "test_mode": "DETACHED_ORIGIN_MAIN_WORKTREE",
-        "last_proven_source_main": "595df0ea496e5982b59c04b1ad0575ca878e900c"
+        "last_proven_source_main": "595df0ea496e5982b59c04b1ad0575ca878e900c",
+        "materialized_paths_added": [
+          "docs/BRAIN/00-MAPA-SISTEMA",
+          "docs/receipts"
+        ]
       },
       "runtime_proof": {
         "yaml_parse": "PASS",
@@ -979,10 +982,16 @@
       "materialization_requirements": {
         "consumer_repo": "/root/CentralDark",
         "sparse_checkout_required_paths": [
-          "docs/BRAIN/00-MAPA-SISTEMA"
+          "docs/BRAIN/00-MAPA-SISTEMA",
+          "docs/receipts"
         ],
         "checklist_path": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md",
-        "law": "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME"
+        "law": "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME",
+        "receipt_path": "docs/receipts/2026-10-02-complete-sieve-law.md",
+        "laws": [
+          "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME",
+          "SPARSE_PATH_ENABLED_IS_NOT_FILE_PRESENT_AT_CURRENT_HEAD"
+        ]
       },
       "physical_binding": {
         "host_path": "E:\\VMs\\CENTRALDARK-OS\\SHARED",
@@ -1006,6 +1015,7 @@
           "VERIFIER",
           "CONSUMER_REAL",
           "CHECKLIST_DIARIO",
+          "RECEIPT",
           "PR_MOTHER_1562",
           "RELATED_LIVE_PR_WHEN_SCOPE_INTERSECTS",
           "PHYSICAL_BINDING_WHEN_CLAIM_DEPENDS_ON_IT",
