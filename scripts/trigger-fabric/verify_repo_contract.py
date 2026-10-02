@@ -147,6 +147,18 @@ check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml',[
  'GENERAL_NE_HUMAN_AUTHORITY',
  'GENERAL_RETURNS_PROVEN_LEARNING_TO_CANONICAL_CORE',
 ], classification='GENERAL_TEACHING_GRAMMAR_CONTRACT')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'portable_operation_contract:',
+ 'status: "CANONICAL_REQUIRED"',
+ 'purpose: "BOOTSTRAP_ANY_CHAT_OR_SURFACE_WITHOUT_RETEACHING_CENTRALDARK"',
+ 'current_head: "RESOLVE_AT_BOOT"',
+ 'writer: "RESOLVE_AND_LOCK_PER_SCOPE"',
+ 'observed_evidence: "RESOLVE_AT_BOOT: repo/ref/HEAD/PR/runtime/routes/tools/owner/writer_scope"',
+ 'default_mode: "CANONICAL_SELF_GRILL"',
+ 'new_chat_is_new_surface_not_new_brain: true',
+ 'do_not_hardcode_head_writer_or_runtime_route: true',
+], classification='PORTABLE_OPERATION_CONTRACT_ANY_CHAT')
+
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'GENERAL_IS_OPERATIONAL_POSTURE=true',
  'GENERAL_IS_NOT_NEW_IDENTITY=true',
