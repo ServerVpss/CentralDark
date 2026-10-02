@@ -238,3 +238,130 @@ NEXT_CURSOR:
 - consultar repository index Triton por método correto e registrar lista READY + versões; depois mapear somente capabilities úteis ao owner INTERLIGADOS, sem criar stack paralela.
 ```
 
+
+
+## Delta 2026-10-01 — acesso direto RDC + gateway real + inferência Triton real
+
+Medição feita diretamente no guest `CENTRALDARK-OS` via Remote Desktop Commander, sem depender de SSH da Casa.
+
+```text
+REMOTE_DESKTOP_COMMANDER_DIRECT_GUEST_ACCESS=PASS
+HOST=CENTRALDARK-OS
+USER=CENTRAKDARK-OS
+OS=openKylin 3.0 (huanghe)
+KERNEL=7.0.0-2-generic
+VMWARE_GUEST=true
+KYLINBOT_VERSION=0.7.5
+```
+
+### KylinBot gateway — transporte e pairing CURRENT
+
+O schema/CLI instalado provou:
+
+```text
+gateway.host=127.0.0.1
+gateway.port=42617
+gateway.listen-tcp=false
+gateway.unix-socket=/home/CENTRAKDARK-OS/.kylinbot/gateway.sock
+gateway.require-pairing=true
+gateway.paired-tokens=<unset>
+```
+
+O socket Unix existe e `GET /health` respondeu HTTP 200 com `paired=false`, `require_pairing=true` e componente `gateway.status=ok`.
+
+O CLI expõe `gateway start`, `gateway restart` e `gateway get-paircode`. Portanto:
+
+```text
+TCP_42617_NOT_LISTENING=EXPECTED_WITH_LISTEN_TCP_FALSE
+UNIX_GATEWAY_HEALTH=PASS
+PAIRING_REQUIRED=true
+PAIRED_CLIENT_TOKEN_PRESENT=false
+GATEWAY_PAIRCODE_CAPABILITY=PROVED_BY_CLI
+```
+
+Autenticação de provider é outro cone: `auth` suporta OAuth para OpenAI Codex/Gemini e token de assinatura Anthropic, mas nesta medição `providers.fallback`, `providers.model-routes` e `providers.embedding-routes` estão unset; `models status` retorna `No configured providers to probe`.
+
+```text
+GATEWAY_PAIRING_CREDENTIAL != MODEL_PROVIDER_CREDENTIAL
+KYLINBOT_CONFIGURED_PROVIDER=NONE_AT_MEASUREMENT
+KYLINBOT_CHAT_MODEL=UNKNOWN
+```
+
+### Kylin AI/Triton — repository CURRENT e chamada real
+
+Health local permaneceu verde:
+
+```text
+127.0.0.1:8000/v2/health/live=HTTP_200
+127.0.0.1:8000/v2/health/ready=HTTP_200
+127.0.0.1:8002/metrics=HTTP_200
+```
+
+O repository index CURRENT retornou:
+
+```text
+REPOSITORY_ENTRIES=30
+REPOSITORY_READY=17
+```
+
+READY observados:
+
+```text
+asr_cif-search_streaming
+asr_decoder_streaming
+asr_encoder_nonstreaming
+asr_encoder_streaming
+asr_feature-extractor_nonstreaming
+asr_feature-extractor_streaming
+asr_fsmn-vad_streaming
+asr_lfr-cmvn-pe_streaming
+asr_scoring_nonstreaming
+ensemble-asr_fsmn-vad_streaming
+ensemble-asr_paraformer_nonstreaming
+ensemble-asr_paraformer_streaming
+ensemble-punc_ct-transformer_nonstreaming
+ensemble-tts_melo
+model_bank
+punc_ct-transformer_nonstreaming
+tts_melo
+```
+
+A contagem histórica de 22 READY fica como história; o CURRENT medido nesta rodada é 17.
+
+Foi executada inferência real no próprio guest usando `ensemble-punc_ct-transformer_nonstreaming`:
+
+```text
+MODEL_METADATA_HTTP=200
+INFER_HTTP=200
+MODEL_VERSION=1
+INPUT="你好今天系统运行正常吗"
+OUTPUT="你好，今天系统运行正常吗？"
+LOCAL_TWIN_NATIVE_CAPABILITY_CALL=PASS
+```
+
+Isso fecha a primeira chamada nativa real do twin pelo protocolo Triton. Não prova LLM/chat local.
+
+### Tailscale CURRENT do guest
+
+`tailscale status` retornou `Logged out` nesta medição. Logo o endereço histórico `100.67.163.91` e os listeners/proxies associados não podem ser usados como prova de transporte CURRENT até novo login/readback.
+
+```text
+GUEST_TAILSCALE_CURRENT=LOGGED_OUT
+HISTORICAL_TAILSCALE_IP_IS_NOT_CURRENT_ROUTE=true
+LOCALHOST_NATIVE_RUNTIME_SURVIVES=true
+```
+
+### Fixed point
+
+```text
+REMOTE_DESKTOP_COMMANDER_DIRECT_GUEST_ACCESS=PASS
+UNIX_GATEWAY_HEALTH=PASS
+TRITON_LIVE_READY=PASS
+TRITON_REPOSITORY_CURRENT=30_TOTAL_17_READY
+NATIVE_PUNCTUATION_INFERENCE=PASS
+KYLINBOT_CHAT_PROVIDER=UNKNOWN
+LOCAL_CHAT_LLM=NOT_PROVEN
+GUEST_TAILSCALE_ROUTE=CURRENTLY_UNAVAILABLE_LOGGED_OUT
+```
+
+NEXT_CURSOR: bindar Hermes/AionUi somente a capability já provada ou provar a próxima capability nativa necessária; para KylinBot REST, gerar pairing pelo fluxo do próprio gateway e manter credencial de gateway separada de credencial de provider.
