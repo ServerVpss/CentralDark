@@ -144,6 +144,27 @@ BROADER_UNRELATED_DRIFT_PRESERVED=true
 
 O contrato portátil Bayesiano já está absorvido no owner oficial; não criar segundo contrato. Próximo cone material separado: reconciliar somente os drifts globais de teste/registry se eles entrarem na missão vigente.
 
+### 📓 Caderneta — método comparativo de vermelhos #141
+
+- [x] Owner de resposta evoluído: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`.
+- [x] BOOT portátil herdou `RED_SECTOR_DETECTOR_OWNER_MATRIX`.
+- [x] Aprendizado `#141` + NeuroLink `L140→L141`.
+- [x] Fiscal ganhou checks `CHEFE_FAILURE_COMPARATIVE_MATRIX_*`.
+- [x] Receipt: `docs/receipts/2026-10-02-failure-comparative-matrix-response.md`.
+- [x] Contraprova do cone: `PYCOMPILE=PASS`; `TARGET_ASSERTS=PASS`; cleanup do worktree = PASS.
+
+```text
+RED_NAME | SECTOR | DETECTOR | DIRECTORY_OR_OWNER
+DETECTOR_FAIL != TARGET_FAIL
+LOCAL_RED != GLOBAL_RED
+ONE_TEST_FAIL != CORE_BROKEN
+CORE_PASS + ADJACENT_RED = SHOW_SEPARATELY
+COMPARISON_FIRST
+EXPLANATION_SECOND
+```
+
+**Regra de uso:** quando o CHEFE perguntar quais vermelhos existem, onde estão ou qual setor está afetado, responder primeiro com a matriz curta. Expandir causa/efeito/reparo apenas se material ou solicitado.
+
 ## 🫀 CURRENT VIVO — 2026-09-30
 
 ```text
