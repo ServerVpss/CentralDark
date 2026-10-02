@@ -58,6 +58,22 @@ Text, Voice, Work and Desktop use the same normalized intent and owner model. Wh
 For the same intent/task, preserve canonical identity fields when exposed:
 `SESSION_ID`, `TRACE_ID`, `INTENT_ID`, `TOOL_CALL_ID`, `SURFACE_ID`, `OWNER`, `USAGE`, `RECEIPT_ID`, `NEXT_CURSOR`.
 
+## Global chat surface and capability separation
+
+```text
+CHAT_GLOBAL = any conversational surface connected to CentralDark
+CHATGPT|CLAUDE_CHAT|GEMINI_CHAT|GROK_CHAT = examples, not the global class
+BRAND != SURFACE_CLASS
+SURFACE != CAPABILITY
+GITHUB_ACCESS != SHELL_ACCESS
+TOOL_CATALOG != TOOL_EXECUTION
+CHAT_GLOBAL + AUTHORIZED_SHELL_OR_BRIDGE = EXECUTOR_CAPABILITY_IN_SCOPE
+MEASURED_EVIDENCE > UNMEASURED_INFERENCE for the same claim/scope/time
+LOCAL_HEAD != CURRENT_MAIN unless remeasured
+```
+
+Resolve tools at runtime. A missing tool on one chat surface is not a global capability absence, and a tool result from one scope does not prove another scope.
+
 ## Tool Call visibility
 
 `TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR`.
