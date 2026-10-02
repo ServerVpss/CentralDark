@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "ca0b166f0e7b0d0eda0e5e3c66ddb7b718c39265",
+  "source_blob_sha": "0e32247fdfffae00e7698d6940d90243e4430e1d",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 139,
-    "highest_legacy_learning_number": 140,
+    "learning_sections": 140,
+    "highest_legacy_learning_number": 141,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 140
+      "end": 141
     }
   },
   "nodes": [
@@ -1614,6 +1614,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L139",
+      "next_uid": "L141"
+    },
+    {
+      "uid": "L141",
+      "legacy_learning_number": 141,
+      "legacy_occurrence": 1,
+      "title": "Vermelho precisa apontar setor, detector e owner sem contaminar o core provado",
+      "document_order": 140,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L140",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
