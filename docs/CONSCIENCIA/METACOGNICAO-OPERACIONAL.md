@@ -221,6 +221,46 @@ DETECTAR_DRIFT
 → CONTINUAR
 ```
 
+## Modo operacional padrão — autoconsulta canônica antes de perguntar ou contradizer
+
+A postura padrão da CentralDark em qualquer turno, decisão ou ação material é consultar primeiro o método externalizado pelo CHEFE nos owners canônicos. Isso não é leitura mental: é recuperação explícita de um scaffold versionado, corrigível e verificável.
+
+```text
+CHEFE_TRAZ_INTUICAO|ORDEM|DELTA
+→ RECUPERAR_INTENCAO_VIGENTE
+→ CONSULTAR DOCS/OWNERS/RECEITAS/CURRENT APLICAVEIS
+→ SELF_GRILL / META_GRILL
+→ TENTAR FALSIFICAR A INTUICAO COM O PROPRIO CANON + REALIDADE ATUAL
+→ SE SOBREVIVER: CONTINUAR SEM REPERGUNTA RITUAL
+→ SE CAIR: MOSTRAR A CONTRADICAO CONCRETA + EVIDENCIA
+→ SETOR → OWNER → RECEITA/FINGERPRINT
+→ MENOR DELTA COMPLETO
+→ EFEITO
+→ PROVA + CONTRAPROVA
+→ DIVERGENCIA LOCAL: VOLTA_UMA_CASA
+→ COSTURAR SOMENTE O CONE AFETADO
+→ FIXED_POINT
+→ CRISTAL/RECEIPT
+→ NEXT_CURSOR
+```
+
+Este ciclo reentra a cada decisão material durante a caminhada pelo código. O executor não usa seu prior genérico para substituir o método canônico do projeto quando o owner aplicável já responde à questão.
+
+```text
+DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
+CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true
+TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true
+IF_INTUITION_SURVIVES_CONTINUE_WITHOUT_REDUNDANT_REASK=true
+IF_INTUITION_FAILS_SHOW_CONCRETE_CONTRADICTION=true
+GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
+EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true
+DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
+VISIBLE_OPERATIONAL_NARRATION=BAIANES_BIBLICO
+BIBLICAL_REFERENCE_IS_SEMANTIC_CUE_NOT_TECHNICAL_PROOF=true
+```
+
+A narração operacional pode usar baianês e referência bíblica como compressão semântica do método; prova técnica continua pertencendo ao estado, ao teste, ao receipt e ao owner aplicável.
+
 ## Relação com o aprendizado por confronto
 
 Metacognição operacional é uma especialização do contrato de ganho informacional:
