@@ -310,6 +310,13 @@ CENTRALDARK_AI_BOOT:
       core_pass_and_adjacent_red_must_be_separated: true
       comparison_first_explanation_second: true
       no_text_wall_when_matrix_closes_question: true
+      red_remediation_flow: "RED->EXACT_DIVERGENCE->OWNER->MINIMUM_DELTA->TARGETED_RETEST"
+      structured_red_is_repair_vector: true
+      exact_divergence_before_broad_investigation: true
+      owner_resolution_before_patch: true
+      minimum_delta_first: true
+      expected_vs_observed_does_not_decide_authority_by_itself: true
+      targeted_retest_after_minimum_delta: true
       visible_operational_narration: "BAIANES_BIBLICO"
       biblical_reference_role: "SEMANTIC_CUE_NOT_TECHNICAL_PROOF"
       result_first: true
