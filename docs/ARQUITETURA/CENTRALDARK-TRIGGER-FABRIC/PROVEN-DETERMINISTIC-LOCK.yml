@@ -624,8 +624,8 @@ hybrid_multiroute_capability_replay_2026_10_02:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
   state: SEALED_PROVEN
   learning_ref: 146
-  dependency_fingerprint: e41349163bae0fb768c1120237b61fad0746ec1af29c92c09a5b75beb0f4fd2b
-  lock_key: ce986c21499b00a0823e9b46d0227e17b6ab6f4233a536294acb55173b2b966a
+  dependency_fingerprint: 82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09
+  lock_key: d1444ef3efcfb766ee2d121c1703d23bfc7e576f83d770a2d186ba491c9fe68a
   objective: >-
     Reusar o mesmo capability bus por rotas autorizadas alternativas sem
     promover falha local de transporte para falha global do organismo.
@@ -687,4 +687,19 @@ hybrid_multiroute_capability_replay_2026_10_02:
     recipe_binding: PASS
     cleanup: PASS
   checklist_ref: docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md
+  complete_sieve_learning_ref: 147
+  consumer_materialization:
+    sparse_checkout: true
+    required_paths: [docs/BRAIN/00-MAPA-SISTEMA]
+    law: CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME
+  physical_binding_when_applicable:
+    host_path: "E:\\VMs\\CENTRALDARK-OS\\SHARED"
+    guest_expected_share: /mnt/hgfs/CENTRALDARK-SHARED
+    current_state: NOT_PROVEN
+    repo_consumer_pass_is_independent: true
+  complete_sieve:
+    fixed_point_requires_all_applicable_layers: true
+    non_applicable_layer_must_be_explicit: true
+    unrelated_global_red_does_not_invalidate_proven_cone: true
+    cone_pass_does_not_imply_global_pass: true
   next_cursor: REPLAY_MULTIROUTE_BEFORE_HUMAN_BLOCKER
