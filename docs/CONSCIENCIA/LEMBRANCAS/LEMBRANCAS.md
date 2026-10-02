@@ -408,6 +408,7 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 6. **#133 — Memória viva:** aprendizado durável sincroniza sequência numérica, Lembranças, NeuroLink, catálogo/rota semântica e SOUL quando material; compressão só se expansível.
 7. **#134 — Constelação META:** MetaGrill, MetaLupa, MetaCognição, MetaOrquestração, MetaMultibússola e MetaStartLink são capabilities interligadas, não engines concorrentes.
 8. **#135 — Peneira saudável:** examinar e conservar o delta que sobreviveu; rejeitar só o cone derrotado, preservar UNKNOWN e o ouro provado.
+9. **#136 — Autoaplicação do sync:** o próprio avanço S0 foi imediatamente incorporado à cadeia; visual owner provado, AionUi/AionCore e WebUI consumers permanecem UNKNOWN.
 
 **Rastro semântico / aliases:**
 
@@ -422,5 +423,5 @@ META_MULTIBUSSOLA | META_START_LINK | META(X)
 EXAMINE_BEFORE_RETAIN | PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION
 ```
 
-**Links:** [[APRENDIZADOS#128]] · [[APRENDIZADOS#133]] · [[APRENDIZADOS#134]] · [[APRENDIZADOS#135]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[MULTIBUSSOLA]] · [[SEMANTIC-LINKER]] · [[META-START-LINK]]
+**Links:** [[APRENDIZADOS#128]] · [[APRENDIZADOS#133]] · [[APRENDIZADOS#134]] · [[APRENDIZADOS#135]] · [[APRENDIZADOS#136]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[MULTIBUSSOLA]] · [[SEMANTIC-LINKER]] · [[META-START-LINK]]
 
