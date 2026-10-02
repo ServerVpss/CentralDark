@@ -13,6 +13,8 @@ KYLINBOT_SOCKET="/home/CENTRAKDARK-OS/.kylinbot/gateway.sock"
 MODEL_REPO="/usr/share/kylin-ai/model-repository"
 CODEX_CONFIG="/home/CENTRAKDARK-OS/.codex/config.toml"
 CLAUDE_MCP_LOGS="/home/CENTRAKDARK-OS/.cache/claude-cli-nodejs/-home-CENTRAKDARK-OS"
+KYLINBOT_HEALTH_BODY="/tmp/centraldark_kylinbot_health"
+TRITON_HEALTH_BODY="/tmp/centraldark_triton_health"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -56,14 +58,29 @@ cmd_version() {
     fi
 }
 
+http_probe() {
+    local url="$1"
+    local body="${2:-$TRITON_HEALTH_BODY}"
+    printf '%-45s ' "$url"
+    timeout 5s curl -sS -o "$body" -w 'HTTP %{http_code} ERR %{errormsg}\n' "$url" 2>&1 | mask
+}
+
+kylinbot_unix_health() {
+    if [ ! -S "$KYLINBOT_SOCKET" ]; then
+        echo "SOCKET_MISSING"
+        return
+    fi
+    timeout 5s curl --unix-socket "$KYLINBOT_SOCKET" -sS -o "$KYLINBOT_HEALTH_BODY" -w 'HTTP %{http_code} ERR %{errormsg}\n' http://localhost/health 2>&1 | mask
+}
+
 banner() {
     clear
     echo -e "${CYAN}"
-    echo "========================================================================"
-    echo "                     CENTRALDARK AI CLI RUNTIME"
-    echo "              openKylin 3.0 + Kylin AI + KylinBot + MCP"
-    echo "                     $(date '+%Y-%m-%d %H:%M:%S')"
-    echo "========================================================================"
+    echo "╔════════════════════════════════════════════════════════════════════════════╗"
+    echo "║                     CENTRALDARK AI CLI RUNTIME                            ║"
+    echo "║              openKylin 3.0 + Kylin AI + KylinBot + MCP                    ║"
+    echo "║                     $(date '+%Y-%m-%d %H:%M:%S')                          ║"
+    echo "╚════════════════════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
     echo -e "${DIM}Modo: inventario e controle local somente-leitura. Tokens nunca sao exibidos.${NC}"
 }
@@ -110,12 +127,17 @@ dashboard() {
     echo "kytensor/Triton:       $(pgrep -af 'kytensor' >/dev/null && echo OK || echo MISSING)"
     echo "Codex app-server:      $(pgrep -af 'codex app-server' >/dev/null && echo OK || echo MISSING)"
     echo "Remote Commander:      $(pgrep -af 'desktop-commander' >/dev/null && echo OK || echo MISSING)"
-    echo "KylinBot Unix socket:  $([ -S "$KYLINBOT_SOCKET" ] && echo OK || echo MISSING)"
-    echo "KylinBot TCP 42617:    $(timeout 2s bash -c '</dev/tcp/127.0.0.1/42617' >/dev/null 2>&1 && echo OPEN || echo CLOSED)"
+    printf "KylinBot Unix /health: "
+    kylinbot_unix_health
+    echo "KylinBot TCP 42617:    $(timeout 2s bash -c '</dev/tcp/127.0.0.1/42617' >/dev/null 2>&1 && echo OPEN_CONFIGURED_TCP || echo CLOSED_CONFIGURED_TCP)"
+    echo "Triton live:           $(timeout 5s curl -sS -o /dev/null -w 'HTTP %{http_code}' http://127.0.0.1:8000/v2/health/live 2>/dev/null || echo FAIL)"
+    echo "Triton ready:          $(timeout 5s curl -sS -o /dev/null -w 'HTTP %{http_code}' http://127.0.0.1:8000/v2/health/ready 2>/dev/null || echo FAIL)"
+    echo "Triton metrics:        $(timeout 5s curl -sS -o /dev/null -w 'HTTP %{http_code}' http://127.0.0.1:8002/metrics 2>/dev/null || echo FAIL)"
     echo
     echo -e "${BOLD}Resumo${NC}"
     echo "- IA local real: Kylin AI ONNX/Triton para ASR, TTS, OCR, embeddings, segmentacao."
-    echo "- Agente local: KylinBot 0.7.5 rodando via daemon/socket Unix."
+    echo "- Agente local: KylinBot 0.7.5 rodando via daemon/socket Unix; TCP 42617 e apenas endpoint configurado se fechado."
+    echo "- Provider externo: KylinBot reporta OpenRouter, mas isso nao prova LLM local."
     echo "- Coding/agent remoto: Codex, Claude e Gemini instalados."
     echo "- LLM local tipo Ollama/llama.cpp/vLLM/LocalAI/LM Studio: nao provado."
     pause
@@ -189,8 +211,13 @@ kylinbot_panel() {
     echo
     echo -e "${BOLD}Gateway Unix socket${NC}"
     ls -l "$KYLINBOT_SOCKET" 2>/dev/null || true
-    timeout 5s curl --unix-socket "$KYLINBOT_SOCKET" -sS -o /tmp/kylinbot_panel_sock -w 'HTTP %{http_code} ERR %{errormsg}\n' http://localhost/ 2>&1 | mask
-    head -c 500 /tmp/kylinbot_panel_sock 2>/dev/null | mask
+    echo "### /health"
+    kylinbot_unix_health
+    head -c 500 "$KYLINBOT_HEALTH_BODY" 2>/dev/null | mask
+    echo
+    echo "### / dashboard/root, se existir"
+    timeout 5s curl --unix-socket "$KYLINBOT_SOCKET" -sS -o /tmp/kylinbot_panel_sock_root -w 'HTTP %{http_code} ERR %{errormsg}\n' http://localhost/ 2>&1 | mask
+    head -c 500 /tmp/kylinbot_panel_sock_root 2>/dev/null | mask
     echo
     pause
 }
@@ -257,24 +284,30 @@ routes_health() {
     echo -e "${BOLD}Portas provadas${NC}"
     ss -ltnup 2>/dev/null | grep -E '(:8000|:8001|:8002|:42617|:9515|:8787)\b|Netid' | mask || true
     echo
-    echo -e "${BOLD}Health probes conhecidos${NC}"
+    echo -e "${BOLD}Health probes canônicos${NC}"
+    echo "### KylinBot gateway: transporte corrente = Unix socket"
+    printf '%-45s ' "unix://$KYLINBOT_SOCKET /health"
+    kylinbot_unix_health
+    head -c 500 "$KYLINBOT_HEALTH_BODY" 2>/dev/null | mask
+    echo
+    echo
+    echo "### KylinBot TCP/browser/computer-use configurados, nao equivalem ao gateway vivo"
     for u in \
-        http://127.0.0.1:42617/ \
         http://127.0.0.1:42617/health \
-        http://127.0.0.1:42617/api/health \
         http://127.0.0.1:9515/status \
-        http://127.0.0.1:8787/v1/actions \
-        http://127.0.0.1:8000/ \
-        http://127.0.0.1:8001/ \
-        http://127.0.0.1:8002/; do
-        echo "### $u"
-        timeout 5s curl -sS -o /tmp/centraldark_ai_probe -w 'HTTP %{http_code} ERR %{errormsg}\n' "$u" 2>&1 | mask
-        head -c 300 /tmp/centraldark_ai_probe 2>/dev/null | mask
-        echo
+        http://127.0.0.1:8787/v1/actions; do
+        http_probe "$u" /tmp/centraldark_ai_probe
     done
-    echo "### unix://$KYLINBOT_SOCKET"
-    timeout 5s curl --unix-socket "$KYLINBOT_SOCKET" -sS -o /tmp/centraldark_ai_sock -w 'HTTP %{http_code} ERR %{errormsg}\n' http://localhost/ 2>&1 | mask
-    head -c 500 /tmp/centraldark_ai_sock 2>/dev/null | mask
+    echo
+    echo "### Kylin AI / Triton"
+    http_probe http://127.0.0.1:8000/v2 /tmp/centraldark_ai_probe
+    http_probe http://127.0.0.1:8000/v2/health/live /tmp/centraldark_ai_probe
+    http_probe http://127.0.0.1:8000/v2/health/ready /tmp/centraldark_ai_probe
+    http_probe http://127.0.0.1:8002/metrics /tmp/centraldark_ai_probe
+    echo
+    echo "### 8001"
+    echo "127.0.0.1:8001 = Triton gRPC listener. Nao testar como HTTP; erro HTTP aqui e protocolo errado, nao prova falha."
+    timeout 2s bash -c '</dev/tcp/127.0.0.1/8001' >/dev/null 2>&1 && echo "TCP 8001 OPEN" || echo "TCP 8001 CLOSED"
     echo
     pause
 }
@@ -385,6 +418,8 @@ openkylin_notes() {
     echo "- A release openKylin 3.0 e divulgada como 'AI native' / AI+OS, com KylinBot nativo."
     echo "- Fontes publicas citam UKUI 4.24, suporte a agentes de IA e integracao mais profunda entre desktop e IA."
     echo "- Nesta maquina isso aparece como KylinBot, Kylin AI runtime, kytensor/Triton e servicos Kylin AI."
+    echo "- CURRENT: IA nativa primeiro. OpenRouter/Codex/Claude/Gemini sao rota remota ou separada, nao substituem a camada Kylin AI local."
+    echo "- UNKNOWN != PASS: LLM local nativo ainda nao foi provado; modelos ONNX/Triton locais foram provados."
     echo
     echo "Fontes pesquisadas:"
     echo "- openKylin oficial: https://www.openkylin.top/news/4099-en.html"
