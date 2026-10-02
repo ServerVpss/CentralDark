@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "30cc5f6c7f05b8f9bebc1e53a28947a706154bdb",
+  "source_blob_sha": "fda23f52206631835fbae62ca35e29e1a4e044f0",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 126,
-    "highest_legacy_learning_number": 127,
+    "learning_sections": 134,
+    "highest_legacy_learning_number": 135,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 127
+      "end": 135
     }
   },
   "nodes": [
@@ -1471,6 +1471,94 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L126",
+      "next_uid": "L128"
+    },
+    {
+      "uid": "L128",
+      "legacy_learning_number": 128,
+      "legacy_occurrence": 1,
+      "title": "Casa hospedeira e twin local formam um único laboratório de prova, mas host e guest continuam referências distintas",
+      "document_order": 127,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L127",
+      "next_uid": "L129"
+    },
+    {
+      "uid": "L129",
+      "legacy_learning_number": 129,
+      "legacy_occurrence": 1,
+      "title": "Runtime sieve: corrigir premissa sem jogar fora capability boa; caminho de usuário deve seguir $HOME, não hardcode",
+      "document_order": 128,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L128",
+      "next_uid": "L130"
+    },
+    {
+      "uid": "L130",
+      "legacy_learning_number": 130,
+      "legacy_occurrence": 1,
+      "title": "O painel CENTRALDARK AI CLI Runtime é uma superfície CLI read-only; acesso visual e dashboard web são capabilities distintas",
+      "document_order": 129,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L129",
+      "next_uid": "L131"
+    },
+    {
+      "uid": "L131",
+      "legacy_learning_number": 131,
+      "legacy_occurrence": 1,
+      "title": "Token Center, pairing do KylinBot e inferência Triton local são três camadas de acesso que não podem ser misturadas",
+      "document_order": 130,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L130",
+      "next_uid": "L132"
+    },
+    {
+      "uid": "L132",
+      "legacy_learning_number": 132,
+      "legacy_occurrence": 1,
+      "title": "Convergir toda inteligência significa bindar capabilities ao mesmo core; PR-mãe é ledger e donor não vira cérebro por merge cego",
+      "document_order": 131,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L131",
+      "next_uid": "L133"
+    },
+    {
+      "uid": "L133",
+      "legacy_learning_number": 133,
+      "legacy_occurrence": 1,
+      "title": "Aprendizado durável exige sincronização viva entre Aprendizados, Lembranças, NeuroLink, catálogo semântico e SOUL quando a regra tocar identidade",
+      "document_order": 132,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L132",
+      "next_uid": "L134"
+    },
+    {
+      "uid": "L134",
+      "legacy_learning_number": 134,
+      "legacy_occurrence": 1,
+      "title": "A constelação META é uma rede de capacidades herdadas; META-START-LINK preserva direção e conecta META-GRILL, MetaLupa, Metacognição e MetaMultibússola sem novo cérebro",
+      "document_order": 133,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L133",
+      "next_uid": "L135"
+    },
+    {
+      "uid": "L135",
+      "legacy_learning_number": 135,
+      "legacy_occurrence": 1,
+      "title": "Examinar criticamente e conservar o que sobrevive à prova é a forma curta do META-GRILL: falsificar sem destruir o ouro provado",
+      "document_order": 134,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L134",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

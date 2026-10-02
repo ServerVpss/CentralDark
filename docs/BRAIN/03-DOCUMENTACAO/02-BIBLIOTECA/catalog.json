@@ -296,6 +296,90 @@
         "observed_at": "2026-08-22T10:54:00-03:00"
       },
       "content_ingested": false
+    },
+    {
+      "source_id": "canonical-aprendizados",
+      "title": "APRENDIZADOS.md",
+      "formats": [
+        "txt"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "CANONICAL_LEARNING_MEMORY",
+      "provenance": {
+        "provider": "repository",
+        "canonical_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+        "observed_at": "2026-10-02"
+      }
+    },
+    {
+      "source_id": "canonical-lembrancas",
+      "title": "LEMBRANCAS.md",
+      "formats": [
+        "txt"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "CANONICAL_HUMAN_MEMORY_INDEX",
+      "provenance": {
+        "provider": "repository",
+        "canonical_path": "docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md",
+        "observed_at": "2026-10-02"
+      }
+    },
+    {
+      "source_id": "canonical-soul-sol",
+      "title": "SOUL-SOL.md",
+      "formats": [
+        "txt"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "CANONICAL_IDENTITY_CONTRACT",
+      "provenance": {
+        "provider": "repository",
+        "canonical_path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+        "observed_at": "2026-10-02"
+      }
+    },
+    {
+      "source_id": "canonical-metacognicao",
+      "title": "METACOGNICAO-OPERACIONAL.md",
+      "formats": [
+        "txt"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "CANONICAL_COGNITIVE_OWNER",
+      "provenance": {
+        "provider": "repository",
+        "canonical_path": "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md",
+        "observed_at": "2026-10-02"
+      }
+    },
+    {
+      "source_id": "canonical-multibussola",
+      "title": "MULTIBUSSOLA.md",
+      "formats": [
+        "txt"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "CANONICAL_COGNITIVE_OWNER",
+      "provenance": {
+        "provider": "repository",
+        "canonical_path": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+        "observed_at": "2026-10-02"
+      }
+    },
+    {
+      "source_id": "canonical-meta-start-link",
+      "title": "GANCHO.md",
+      "formats": [
+        "txt"
+      ],
+      "status": "INDEXED_REFERENCE",
+      "classification": "CANONICAL_SEMANTIC_HOOK",
+      "provenance": {
+        "provider": "repository",
+        "canonical_path": ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-START-LINK/GANCHO.md",
+        "observed_at": "2026-10-02"
+      }
     }
   ],
   "entries": [
@@ -1260,6 +1344,189 @@
         ]
       },
       "limits": "Conhecer vetor ofensivo não concede autorização operacional para atacar terceiros."
+    },
+    {
+      "id": "d01-memoria-viva-centraldark",
+      "source_id": "canonical-aprendizados",
+      "reference": "Aprendizados #128-#135 — memória viva CENTRALDARK-OS",
+      "kind": "canonical-learning-route",
+      "category": "D",
+      "state": "CANONICAL",
+      "summary": "Sequência local-first → runtime sieve → painel → auth layers → convergência → memória viva → constelação META → retenção do ouro provado.",
+      "tags": [
+        "tema/aprendizado",
+        "funcao/continuidade",
+        "capacidade/semantic-retrieval",
+        "capacidade/neurolink",
+        "uso/cognicao"
+      ],
+      "links": [
+        "[[LEMBRANCAS]]",
+        "[[SOUL-SOL]]",
+        "[[METACOGNICAO-OPERACIONAL]]",
+        "[[SEMANTIC-LINKER]]"
+      ],
+      "emojis": [
+        "🧬",
+        "🪬"
+      ],
+      "use": [
+        "cognition",
+        "memory",
+        "semantic-search",
+        "continuity"
+      ]
+    },
+    {
+      "id": "d02-lembrancas-learning-index",
+      "source_id": "canonical-lembrancas",
+      "reference": "LEARNING_INDEX — CENTRALDARK-OS #128→#135",
+      "kind": "semantic-memory-index",
+      "category": "D",
+      "state": "CANONICAL",
+      "summary": "Índice humano e aliases para recuperar aprendizados sem depender de texto duplicado.",
+      "tags": [
+        "tema/memoria",
+        "funcao/indexacao",
+        "capacidade/aliases-semanticos",
+        "capacidade/recuperacao"
+      ],
+      "links": [
+        "[[APRENDIZADOS]]",
+        "[[SEMANTIC-LINKER]]",
+        "[[META-START-LINK]]"
+      ],
+      "emojis": [
+        "🧠",
+        "🔗"
+      ],
+      "use": [
+        "memory",
+        "semantic-search",
+        "conversation"
+      ]
+    },
+    {
+      "id": "d03-soul-sync-compressao",
+      "source_id": "canonical-soul-sol",
+      "reference": "SOUL-SOL §15 — memória viva e compressão recuperável",
+      "kind": "canonical-contract",
+      "category": "D",
+      "state": "CANONICAL",
+      "summary": "SOUL sync acompanha delta identitário; compressão é permitida somente com expansão recuperável e owner preservado.",
+      "tags": [
+        "tema/identidade",
+        "funcao/sync",
+        "capacidade/compressao-semantica",
+        "capacidade/owner-routing"
+      ],
+      "links": [
+        "[[APRENDIZADOS#133]]",
+        "[[LEMBRANCAS]]",
+        "[[SEMANTIC-LINKER]]"
+      ],
+      "emojis": [
+        "🪬",
+        "🧬"
+      ],
+      "use": [
+        "boot",
+        "cognition",
+        "memory",
+        "semantic-search"
+      ]
+    },
+    {
+      "id": "d04-meta-constelacao",
+      "source_id": "canonical-metacognicao",
+      "reference": "Constelação META interligada",
+      "kind": "canonical-cognitive-route",
+      "category": "D",
+      "state": "CANONICAL",
+      "summary": "MetaGrill, MetaLupa, MetaCognição, MetaOrquestração, MetaMultibússola e MetaStartLink convergem sem criar engines paralelas.",
+      "tags": [
+        "tema/metacognicao",
+        "funcao/meta-x",
+        "capacidade/meta-grill",
+        "capacidade/meta-lupa",
+        "capacidade/meta-orquestracao"
+      ],
+      "links": [
+        "[[MULTIBUSSOLA]]",
+        "[[META-START-LINK]]",
+        "[[APRENDIZADOS#134]]"
+      ],
+      "emojis": [
+        "🔥",
+        "🧿",
+        "💭",
+        "🎼",
+        "🧭",
+        "🔗"
+      ],
+      "use": [
+        "cognition",
+        "counterproof",
+        "orchestration",
+        "semantic-search"
+      ]
+    },
+    {
+      "id": "d05-meta-multibussola",
+      "source_id": "canonical-multibussola",
+      "reference": "META_MULTIBUSSOLA — bearings e fixed point",
+      "kind": "canonical-cognitive-profile",
+      "category": "D",
+      "state": "CANONICAL",
+      "summary": "Autoraplicação da Multibússola para detectar referencial material omitido e convergir bearings sem criar sistema novo.",
+      "tags": [
+        "tema/metacognicao",
+        "funcao/bearings",
+        "capacidade/meta-multibussola",
+        "capacidade/fixed-point"
+      ],
+      "links": [
+        "[[METACOGNICAO-OPERACIONAL]]",
+        "[[META-LUPA]]",
+        "[[META-START-LINK]]"
+      ],
+      "emojis": [
+        "🧭"
+      ],
+      "use": [
+        "cognition",
+        "counterproof",
+        "semantic-search"
+      ]
+    },
+    {
+      "id": "d06-meta-start-link",
+      "source_id": "canonical-meta-start-link",
+      "reference": "META-START-LINK — conexão nervosa contextual",
+      "kind": "semantic-continuity-hook",
+      "category": "D",
+      "state": "CANONICAL",
+      "summary": "Preserva posição, direção, proveniência, delta, confiança e próximo cursor; conecta owners sem copiar memória.",
+      "tags": [
+        "tema/continuidade",
+        "funcao/cursor",
+        "capacidade/start-link",
+        "capacidade/proveniencia"
+      ],
+      "links": [
+        "[[APRENDIZADOS]]",
+        "[[LEMBRANCAS]]",
+        "[[METACOGNICAO-OPERACIONAL]]",
+        "[[SEMANTIC-LINKER]]"
+      ],
+      "emojis": [
+        "🔗"
+      ],
+      "use": [
+        "continuity",
+        "semantic-search",
+        "memory"
+      ]
     }
   ]
 }
