@@ -305,7 +305,7 @@ check('scripts/trigger-fabric/system_sentinel.py',[
 ], classification='HYBRID_MULTIROUTE_SENTINEL_HOOK')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
- '"dependency_fingerprint": "82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09"',
+ '"dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069"',
 ], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
 
 check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
@@ -354,6 +354,10 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"physical_binding"',
  '"complete_sieve"',
 ], classification='COMPLETE_SIEVE_MACHINE_RECIPE_147')
+check('docs/receipts/2026-10-02-complete-sieve-law.md',[
+ '# Receipt — Lei da Peneira Completa #147',
+ 'CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME',
+], classification='COMPLETE_SIEVE_RECEIPT_147')
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'CAPABILITY_PRIOR_FROM_BRAND=FORBIDDEN',
  'TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true',
