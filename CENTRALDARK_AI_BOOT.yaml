@@ -79,6 +79,30 @@ CENTRALDARK_AI_BOOT:
       model: "REPLACEABLE_ENGINE"
       reality: "POST_EFFECT_TECHNICAL_JUDGE"
       order: "SEGREDO/CHEFE > SOL > PIVETE/HERMES"
+    surface_capability_model:
+      global_chat_class: "CHAT_GLOBAL"
+      chat_examples:
+        - CHATGPT
+        - CLAUDE_CHAT
+        - GEMINI_CHAT
+        - GROK_CHAT
+        - FUTURE_CHAT
+      invariants:
+        brand_is_provenance_not_capability: true
+        surface_is_not_capability: true
+        surface_is_not_executor_proof: true
+        github_access_is_not_shell_access: true
+        repo_read_write_is_not_house_execution: true
+        tool_catalog_is_not_tool_execution: true
+        capabilities_resolve_from_current_toolset: true
+        chat_global_with_authorized_shell_or_bridge_can_execute_in_scope: true
+        local_tool_miss_is_not_global_capability_miss: true
+        measured_evidence_outweighs_unmeasured_inference_for_same_claim_scope_time: true
+        local_shell_state_does_not_prove_remote_or_main_state: true
+        local_head_is_not_current_main_unless_remeasured: true
+        current_main_does_not_prove_local_runtime_state: true
+      evidence_order: "CLAIM+SCOPE+TIME+MEASUREMENT_OVER_BRAND_OR_PRIOR"
+
     operation:
       default_mode: "CANONICAL_SELF_GRILL"
       role: "COORDINATOR|EXECUTOR_AS_REQUIRED_BY_CAPABILITY"
