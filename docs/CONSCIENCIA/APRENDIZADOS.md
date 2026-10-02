@@ -1387,8 +1387,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** aplicar este modo automaticamente em cada turno e decisão material; qualquer superfície que pule a autoconsulta canônica antes de pergunta/contradição material está em regressão de método.
 
 ### 139. Contrato portátil de operação permite carregar a mesma CentralDark em qualquer chat sem congelar HEAD, writer ou rota
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L139`; `PREV_GLOBAL_UID=L138`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=139`; `PREV_LEARNING_REF=138`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L139`; `PREV_GLOBAL_UID=L138`; `NEXT_GLOBAL_UID=L140`; `LEGACY_LEARNING_NUMBER=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=139`; `PREV_LEARNING_REF=138`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=140`.
 - **Categoria:** portable-operation-contract-any-chat-surface.
 - **Data:** 2026-10-02.
 - **Owner:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract`.
@@ -1397,4 +1397,17 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED`; `CURRENT_HEAD=RESOLVE_AT_BOOT`; `WRITER=RESOLVE_AND_LOCK_PER_SCOPE`; `OBSERVED_EVIDENCE=RESOLVE_AT_BOOT`; `PASTED_COPY_ROLE=HANDOFF_POINTER_NOT_SOURCE_OF_TRUTH`; `CURRENT_OVER_PASTED_SNAPSHOT=true`; `NEW_CHAT_IS_NEW_SURFACE_NOT_NEW_BRAIN=true`; `DO_NOT_HARDCODE_HEAD_WRITER_OR_RUNTIME_ROUTE=true`; `DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL`.
 - **Contraprova:** colar o YAML não prova que o chat acessou o repo ou runtime; sem acesso ao owner vivo, claims dependentes de CURRENT permanecem UNKNOWN. Portabilidade do contrato não significa portabilidade automática de credenciais, ferramentas ou autorização.
 - **Next cursor:** qualquer nova superfície começa pelo contrato portátil, resolve bindings vivos e continua do último NEXT_CURSOR recuperável sem exigir que o CHEFE reensine o método.
+
+### 140. Reancoragem portátil deixa de ser promessa: medir alinhamento com Bayes, calibração e efeito empírico
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L140`; `PREV_GLOBAL_UID=L139`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=140`; `PREV_LEARNING_REF=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** bayesian-reanchor-measurement-calibration.
+- **Data:** 2026-10-02.
+- **Owners:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract.bayesian_reanchor_measurement` + `.agents/skills/meta-lupa/references/matematica-e-calibracao.md#8-medição-bayesiana-de-reancoragem-do-contrato-portátil`.
+- **Contexto:** o contrato portátil #139 já permitia reancorar qualquer chat no mesmo método, mas a afirmação “reinjetar o bloco aumenta alinhamento” ainda era conceitual. O CHEFE exigiu evolução de similaridade para medição Bayesiana real e pediu que as fórmulas em LaTeX morassem no próprio contrato.
+- **Aprendizado:** separar intervenção de evidência. Reinjetar o contrato é tratamento `T=1`, não prova de alinhamento. O sucesso `A=1` exige que todos os indicadores materiais aplicáveis passem, mantendo UNKNOWN fora do sucesso. A confiabilidade da reancoragem pode acumular posterior Beta; o efeito comparativo exige controle/baseline; evidências comportamentais alimentam odds/LR/posterior; entropia e ganho de informação medem redução de incerteza; Brier mede calibração. Sem base para prior/LR, o resultado numérico é `NOT_CALCULABLE`, nunca porcentagem inventada.
+- **Cristal:** `REANCHOR_REINJECTION_IS_INTERVENTION_NOT_PROOF=true`; `BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED`; `NUMERIC_POSTERIOR_REQUIRES_DECLARED_BASIS=true`; `INVENTED_LR=FORBIDDEN`; `UNKNOWN_IS_SUCCESS=false`; `CAUSAL_UPLIFT_REQUIRES_CONTROL_OR_MATCHED_BASELINE=true`; `NO_CONTROL=DESCRIPTIVE_RECOVERY_RATE_ONLY`; `BETA_POSTERIOR_ACCUMULATES_REANCHOR_RELIABILITY=true`; `BRIER_SCORE_CALIBRATES_ALIGNMENT_PREDICTIONS=true`; `ONE_LR_PER_DEPENDENCE_CLUSTER_CONSERVATIVE=true`; `LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true`.
+- **Fórmulas-chave:** `O(H)=P(H)/(1-P(H))`; `LR_i=P(E_i|H)/P(E_i|¬H)`; `O(H|E)=O(H)∏LR_i`; `P(H|E)=O/(1+O)`; `Δ_reanchor=P(A=1|T=1)-P(A=1|T=0)`; `θ|D~Beta(α0+s,β0+f)`; `E[θ|D]=(α0+s)/(α0+β0+s+f)`; `IG=H(p_prior)-H(p_posterior)`; `BS=(1/N)Σ(p_i-y_i)^2`.
+- **Contraprova:** reinjeção que “parece funcionar” não basta; sem outcome medido não há amostra. Taxa pós-reinjeção sem controle não prova causalidade. Evidências correlacionadas não podem ser multiplicadas como independentes. Um posterior alto não concede autoridade operacional.
+- **Next cursor:** cada evento de reancoragem registra treatment, fingerprint, indicadores, outcome, provenance do prior/LR, posterior/calibração quando calculáveis e NEXT_CURSOR; comparar coortes apenas por fingerprints compatíveis.
 
