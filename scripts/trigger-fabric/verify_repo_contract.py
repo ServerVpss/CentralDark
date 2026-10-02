@@ -305,7 +305,7 @@ check('scripts/trigger-fabric/system_sentinel.py',[
 ], classification='HYBRID_MULTIROUTE_SENTINEL_HOOK')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
- '"dependency_fingerprint": "e41349163bae0fb768c1120237b61fad0746ec1af29c92c09a5b75beb0f4fd2b"',
+ '"dependency_fingerprint": "82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09"',
 ], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
 
 check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
@@ -321,6 +321,39 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"checklist_ref"',
 ], classification='HYBRID_MULTIROUTE_RECIPE_COMPLETENESS')
 
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 147. Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis',
+ 'FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true',
+ 'CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME=true',
+], classification='COMPLETE_SIEVE_LEARNING_147')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-LEI-DA-PENEIRA-COMPLETA.md',[
+ '# 2026-10-02 — Lei da Peneira Completa',
+ 'CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME',
+], classification='COMPLETE_SIEVE_REMEMBRANCE_147')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'complete_sieve_registration:',
+ 'fixed_point_requires_all_applicable_layers: true',
+ 'physical_binding_required_when_claim_depends_on_host_vm_share: true',
+], classification='COMPLETE_SIEVE_BOOT_147')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'COMPLETE_SIEVE_APPLICABILITY_CHECK',
+ 'COMPLETE_SIEVE_READBACK',
+], classification='COMPLETE_SIEVE_TRIGGER_147')
+check('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ 'COMPLETE_SIEVE_REQUIRED_PATHS = (',
+ 'CENTRALDARK_COMPLETE_SIEVE_MATERIALIZATION=FAIL',
+ 'complete_sieve_materialization(root)',
+], classification='COMPLETE_SIEVE_HERMES_HOOK_147')
+check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
+ '### 📓 Caderneta — Lei da Peneira Completa #147',
+ 'CONE_PASS != GLOBAL_PASS',
+], classification='COMPLETE_SIEVE_CHECKLIST_147')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"dependency_fingerprint": "82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09"',
+ '"materialization_requirements"',
+ '"physical_binding"',
+ '"complete_sieve"',
+], classification='COMPLETE_SIEVE_MACHINE_RECIPE_147')
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'CAPABILITY_PRIOR_FROM_BRAND=FORBIDDEN',
  'TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true',
