@@ -246,6 +246,8 @@ FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS
 - [x] NeuroLink `L146→L147` registrado.
 - [x] Receita #146 evoluída com materialização, hook real, binding físico condicional e novo fingerprint.
 - [x] Hook real Hermes `pre_verify` fiscaliza fontes mínimas da peneira materializadas no consumer.
+- [x] `docs/receipts` entrou no sparse-checkout do consumer; o receipt é camada aplicável da peneira.
+- [x] Lei discriminante: `SPARSE_PATH_ENABLED != FILE_PRESENT_AT_CURRENT_HEAD`; prova usa o mesmo HEAD do claim.
 - [x] Trigger `PRE_HUMAN_RETURN` recebeu `COMPLETE_SIEVE_APPLICABILITY_CHECK` + `COMPLETE_SIEVE_READBACK`.
 - [x] BOOT carrega `complete_sieve_registration`.
 - [x] Consumer `CENTRALDARK-OS/root` materializa `docs/BRAIN/00-MAPA-SISTEMA` no sparse-checkout.
