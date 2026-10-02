@@ -691,3 +691,116 @@ USER_CONFIRMED_NATIVE_FIRST_INTENT=true
 ```
 
 **NEXT_CURSOR:** entrar no guest por rota autenticada já existente/console; medir `processos -> sockets -> kylin-ai-runtime/kytensor -> repository/models -> SDK/MCP -> uma chamada nativa real`; depois ligar o AionUi/Hermes à capability provada usando o protocolo real dela, reutilizando owner/adapter existente antes de criar qualquer compatibilidade nova.
+
+
+### CURRENT forensic autopsy — twin local native-AI body (2026-10-01)
+
+#ACORDAR executado antes do registro. A Casa e o guest foram tratados como sensores separados.
+
+#### Readback vivo da Casa
+
+```text
+VMWARE_VMX_PROCESS=PASS
+VMWARE_VMX_PID=29768
+VMX=E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx
+DISPLAY_NAME=CENTRALDARK-OSh
+VCPU=4
+RAM_MB=8192
+MKS_ENABLE3D=true
+NETWORK=VMNET8_NAT
+MAC=00:0c:29:94:7b:51
+DHCP_IPV4=192.168.35.128
+DHCP_HOSTNAME=CENTRALDARK-OS
+CASA_TO_TWIN_TCP22=PASS
+CASA_TO_TWIN_TCP8000=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_TCP8001=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_TCP8002=NOT_EXPOSED_AT_MEASUREMENT
+CASA_TO_TWIN_TCP42617=NOT_EXPOSED_AT_MEASUREMENT
+HOST_TO_HISTORICAL_TWIN_TAILSCALE_100_67_163_91=NOT_REACHABLE_AT_MEASUREMENT
+```
+
+A cópia compartilhada continua laboratório, não CURRENT canônico:
+
+```text
+SHARED_REPO_BRANCH=feature/ai-cli-runtime-kernel
+SHARED_REPO_HEAD=892454b98d941c3fada35d3df826f9962257f80f
+SHARED_REPO_UNTRACKED_PRESENT=true
+WORKING_TREE_IS_LAB=true
+```
+
+#### Autópsia interna do guest
+
+O transcript forense executado dentro do próprio `CENTRALDARK-OS` fechou um nível novo de prova: o corpo nativo de IA existe independentemente do provider quebrado do KylinBot.
+
+```text
+OS=openKylin_3.0_huanghe
+KERNEL=7.0.0-2-generic
+DESKTOP=UKUI_WAYLAND
+KYLINBOT_VERSION=0.7.5
+KYLINBOT_DAEMON_PROCESS=PASS
+KYLIN_AI_RUNTIME_PROCESS=PASS
+KYTENSOR_TRITON_PROCESS=PASS
+KYLIN_AI_DOCUMENT_QA_PROCESS=PASS
+KYLIN_AI_KNOWLEDGE_BASE_PROCESS=PASS
+KYLIN_AI_VECTOR_ENGINE_PROCESS=PASS
+CODEX_APP_SERVER_PROCESS=PASS
+REMOTE_DESKTOP_COMMANDER_PROCESS=PASS
+```
+
+Model repository real observado em `/usr/share/kylin-ai/model-repository`:
+
+```text
+LOCAL_MODEL_FORMAT=ONNX_TRITON
+EMBEDDING_TEXT_MODEL_PRESENT=PASS
+EMBEDDING_IMAGE_MODEL_PRESENT=PASS
+ASR_STREAMING_MODEL_PRESENT=PASS
+ASR_NONSTREAMING_MODEL_PRESENT=PASS
+TTS_MODEL_PRESENT=PASS
+OCR_MODEL_PRESENT=PASS
+SEGMENTATION_MODELS_PRESENT=PASS
+CLASSIC_LOCAL_LLM_GGUF_SAFETENSORS=NOT_FOUND
+LOCAL_LLM_CHAT_INFERENCE=NOT_PROVEN
+```
+
+Listeners observados **dentro do guest**:
+
+```text
+GUEST_127_0_0_1_8000=LISTEN
+GUEST_127_0_0_1_8002=LISTEN
+GUEST_100_67_163_91_8000=LISTEN
+GUEST_100_67_163_91_8001=LISTEN
+GUEST_SSH_22=LISTEN
+KYLINBOT_GATEWAY_42617_CONFIGURED_BUT_TCP_NOT_LISTENING=true
+WEBDRIVER_9515_CONFIGURED_BUT_NOT_LISTENING=true
+COMPUTER_USE_8787_CONFIGURED_BUT_NOT_LISTENING=true
+```
+
+KylinBot continua sendo superfície/agente separada do runtime nativo:
+
+```text
+KYLINBOT_PROVIDER_STATUS=openrouter
+KYLINBOT_PROVIDER_PROBE=FAIL_NO_CONFIGURED_PROVIDER
+KYLINBOT_DEFAULT_PROVIDER_EXPLICIT=ABSENT
+KYLINBOT_MCP_ENABLED=false
+KYLINBOT_MEMORY_BACKEND=sqlite
+KYLINBOT_MEMORY_HEALTH=healthy
+KYLINBOT_DESKTOP_SKILLS_COUNT=12
+KYLINBOT_GATEWAY_DOWN != KYLIN_AI_RUNTIME_DOWN
+PROVIDER_FAILURE != NATIVE_AI_ABSENT
+```
+
+#### Veredito
+
+A autópsia fecha `LOCAL_TWIN_NATIVE_AI_BODY=PROVED` no nível de processos + serviços + modelos + listeners. Ela **não** fecha ainda uma inferência nativa ponta a ponta nesta rodada.
+
+```text
+LOCAL_TWIN_NATIVE_AI_BODY=PROVED
+LOCAL_TWIN_NATIVE_MODEL_REPOSITORY=PROVED
+LOCAL_TWIN_NATIVE_RUNTIME_LISTENERS=PROVED_INSIDE_GUEST
+LOCAL_TWIN_NATIVE_CAPABILITY_CALL=UNKNOWN_UNTIL_REAL_INFERENCE
+CASA_HOST_DIRECT_CAPABILITY_BIND=NOT_PROVEN
+ROUTE_PROOF != CAPABILITY_PROOF
+PACKAGE_PRESENT != REAL_CALL_PASS
+```
+
+**NEXT_CURSOR:** executar dentro do guest uma chamada read-only ao protocolo real do kytensor/Triton (preferir `/v2`/health/repository index e uma inferência de capability já carregada), guardar resposta/readback e somente então promover a capability específica para PASS e bindar Hermes/AionUi.
