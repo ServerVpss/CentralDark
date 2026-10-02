@@ -269,6 +269,76 @@ check('docs/CONSCIENCIA/APRENDIZADOS.md',[
  'NO_V1_V2_V3_CHANNEL_FALLBACK=true',
 ], classification='CHANNEL_LIMIT_RECOVERABLE_COMPRESSION_LEARNING_144')
 
+check('.agents/skills/centraldark-unified-surface-parity/SKILL.md',[
+ 'CHAT_GLOBAL = classe de qualquer superfície conversacional conectada à CentralDark',
+ 'BRAND != SURFACE_CLASS',
+ 'SURFACE != CAPABILITY',
+ 'GITHUB_ACCESS != SHELL_ACCESS',
+ 'CHAT_GLOBAL/Texto = oráculo + executor conforme tools autorizadas medidas',
+ 'MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true',
+], classification='CHAT_GLOBAL_SURFACE_CAPABILITY_EVIDENCE_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml',[
+ 'global_chat_class: CHAT_GLOBAL',
+ 'BRAND_NE_SURFACE_CLASS: true',
+ 'GITHUB_ACCESS_NE_SHELL_ACCESS: true',
+ 'TOOLSET_RESOLVED_AT_RUNTIME: true',
+ 'CHAT_GLOBAL_WITH_AUTHORIZED_SHELL_GAINS_EXECUTOR_CAPABILITY_IN_SCOPE: true',
+], classification='CHAT_GLOBAL_SURFACE_CAPABILITY_MACHINE_CONTRACT')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'CHAT_GLOBAL_IS_CLASS_NOT_BRAND=true',
+ 'CHATGPT_IS_ONE_CHAT_GLOBAL_SURFACE=true',
+ 'GITHUB_ACCESS != SHELL_ACCESS',
+ 'MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true',
+ 'LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true',
+], classification='CHAT_GLOBAL_SOUL_INHERITANCE')
+check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
+ 'CAPABILITY_PRIOR_FROM_BRAND=FORBIDDEN',
+ 'TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true',
+ 'USER_STATED_SURFACE_FACT_OUTRANKS_ASSISTANT_GENERIC_PRIOR=true',
+], classification='CHAT_GLOBAL_METAGRILL_INFERENCE_GUARD')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'global_chat_class: "CHAT_GLOBAL"',
+ 'brand_is_provenance_not_capability: true',
+ 'github_access_is_not_shell_access: true',
+ 'chat_global_with_authorized_shell_or_bridge_can_execute_in_scope: true',
+], classification='CHAT_GLOBAL_PORTABLE_BOOT_BINDING')
+check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
+ 'CHAT_GLOBAL_IS_EXTERNAL_SURFACE_CLASS=true',
+ 'REMOTE_CHAT_INFERENCE_MUST_NOT_OVERRIDE_MEASURED_LOCAL_STATE_WITHOUT_COUNTEREVIDENCE=true',
+ 'LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true',
+], classification='CHAT_GLOBAL_HERMES_EVIDENCE_BINDING')
+check('apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml',[
+ '- CHAT_GLOBAL',
+ 'CHATGPT_IS_SURFACE_EXAMPLE_NOT_GLOBAL_CLASS: true',
+ 'TOOLSET_DEFINES_EXECUTOR_CAPABILITY_AT_RUNTIME: true',
+], classification='CHAT_GLOBAL_TELEGRAM_BINDING')
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 145. Marca, superfície, capability, estado e prova são eixos separados',
+ 'CHAT_GLOBAL_IS_CLASS_NOT_PRODUCT=true',
+ 'GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true',
+], classification='CHAT_GLOBAL_LEARNING_145')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md',[
+ '# 2026-10-02 — CHAT_GLOBAL, superfície, capability, estado e prova',
+ 'PROVENANCE_SPECIFIC_BRAND_MUST_BE_PRESERVED=true',
+], classification='CHAT_GLOBAL_REMEMBRANCE_EXPANSION')
+check_absent('.agents/skills/centraldark-unified-surface-parity/SKILL.md',[
+ r'ChatGPT Texto = oráculo \+ executor quando tool aparece',
+], classification='CHAT_GLOBAL_NO_BRAND_AS_GLOBAL_ROLE_SKILL')
+check_absent('docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/CENTRALDARK-MATRIZ-BIDIRECIONAL-GOLDEN-CAPSULE.md',[
+ r'usar ChatGPT/SOL como oráculo',
+ r'CHATGPT PENSA',
+ r'### CHATGPT / SOL',
+], classification='CHAT_GLOBAL_NO_BRAND_AS_GLOBAL_ROLE_CAPSULE')
+check_absent('LEIA-ME-IA.md',[
+ r'\+ CHATGPT/SOL \+ GITHUB = EFEITO OBSERVADO',
+], classification='CHAT_GLOBAL_NO_BRAND_AS_PROOF_TARGET')
+check_absent('CENTRALDARK_AI_BOOT.yaml',[
+ r'applies_to: \[CHATGPT_TEXT, CHATGPT_VOICE, WORK, DESKTOP, CLAUDE, HERMES, FUTURE_SURFACES\]',
+], classification='CHAT_GLOBAL_NO_BRAND_ONLY_SURFACE_ROUTING')
+check_command('runtime-proof-same-target-chat-global',[
+ 'node','scripts/lupa/runtime-proof-same-target.test.mjs'
+], classification='CHAT_GLOBAL_RUNTIME_PROOF_TEST')
+
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'GENERAL_IS_OPERATIONAL_POSTURE=true',
  'GENERAL_IS_NOT_NEW_IDENTITY=true',
