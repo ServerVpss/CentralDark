@@ -36,8 +36,15 @@ Lock key: `f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b`.
 
 ## Binding físico
 
-`E:\VMs\CENTRALDARK-OS\SHARED ↔ /mnt/hgfs/CENTRALDARK-SHARED = NOT_PROVEN` nesta medição.
-Windows SEGREDO estava offline e o guest não apresentou share/mount HGFS. Isso não invalida o consumer `/root/CentralDark`, pois são claims diferentes.
+T0: `E:\VMs\CENTRALDARK-OS\SHARED ↔ guest HGFS = NOT_PROVEN` porque Windows SEGREDO estava offline e o guest não apresentava share/mount HGFS.
+
+T1 CURRENT:
+- host `E:\VMs\CENTRALDARK-OS\SHARED` = PASS;
+- VMX = PASS para `hostPath=E:\VMs\CENTRALDARK-OS\SHARED`, `guestName=CENTRALDARK-SHARED`, read/write;
+- guest `CENTRAKDARK-OS` = PASS em `/home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED` via `fuse.vmhgfs-fuse`;
+- arquivo discriminante `!CENTRALDARK.txt` = mesmo SHA-256 host↔guest: `d4e99f0fef87b499a97f567b767fe7b71dc5dce8f1303a6779135b35571fa130`.
+
+Classificação: `HOST_VM_SHARED_BINDING=PASS_CURRENT_MEASUREMENT`. O caminho `/mnt/hgfs/CENTRALDARK-SHARED` permanece expectativa do bootstrap legado; o mount CURRENT provado está no diretório `$HOME/vmware-shares/CENTRALDARK-SHARED`. Persistência pós-reboot = `UNKNOWN` até prova própria.
 
 ## Estado global
 
@@ -53,4 +60,4 @@ O cone #146/#147 pode ser PASS enquanto o verifier global permanece vermelho por
 - `UNRELATED_GLOBAL_RED_DOES_NOT_INVALIDATE_PROVEN_CONE=true`
 - `CONE_PASS_DOES_NOT_IMPLY_GLOBAL_PASS=true`
 
-NEXT_CURSOR: executar prova same-head no consumer real, registrar resultado na PR-MÃE #1562 e nas PRs #1742/#1743 sem merge.
+NEXT_CURSOR: registrar este T1 na PR-MÃE #1562 e nas PRs #1742/#1743 quando o escopo intersectar; manter verifier global separado e provar persistência pós-reboot apenas se esse claim entrar no escopo.
