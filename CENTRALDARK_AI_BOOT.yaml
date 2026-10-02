@@ -113,6 +113,184 @@ CENTRALDARK_AI_BOOT:
       same_fingerprint_same_proof: "REUSE_CRYSTAL"
       changed_fingerprint: "REVALIDATE_AFFECTED_CONE_ONLY"
       bible_is_technical_proof: false
+    bayesian_reanchor_measurement:
+      status: "CANONICAL_REQUIRED"
+      math_owner: ".agents/skills/meta-lupa/references/matematica-e-calibracao.md"
+      lupa_contract: "docs/CONSCIENCIA/CONTRATO-LUPA-BAYESIANA.md"
+      purpose: "MEASURE_REANCHOR_EFFECT_INSTEAD_OF_ASSERTING_ALIGNMENT"
+      hypothesis:
+        H: "EXECUTOR_IS_ALIGNED_TO_CURRENT_CANONICAL_THREAD"
+        not_H: "EXECUTOR_IS_DRIFTED_OR_ONLY_PARTIALLY_ALIGNED"
+      intervention:
+        T1: "PORTABLE_OPERATION_CONTRACT_REINJECTED"
+        T0: "NO_REINJECTION_OR_MATCHED_BASELINE"
+        reinjection_is_intervention_not_proof: true
+      outcome:
+        A1: "ALL_APPLICABLE_REQUIRED_ALIGNMENT_INDICATORS_PASS"
+        A0: "AT_LEAST_ONE_APPLICABLE_REQUIRED_INDICATOR_FAILS_OR_REMAINS_MATERIAL_UNKNOWN"
+        required_indicators:
+          - CANONICAL_DOCS_FIRST
+          - CURRENT_RECOVERED
+          - SELF_GRILL_EXECUTED
+          - SECTOR_AND_OWNER_RESOLVED
+          - REUSE_BEFORE_CREATE
+          - PAPAGAIO_MODE_OFF
+          - NO_REDUNDANT_REPROOF
+          - NEXT_CURSOR_PRESERVED
+        unknown_is_success: false
+      formulas:
+        conditional_probability_latex: |-
+          \[
+          P(H\mid E)
+          \]
+        prior_odds_latex: |-
+          \[
+          O(H)=\frac{P(H)}{1-P(H)}
+          \]
+        likelihood_ratio_latex: |-
+          \[
+          LR_i=\frac{P(E_i\mid H)}{P(E_i\mid \neg H)}
+          \]
+        posterior_odds_latex: |-
+          \[
+          O(H\mid E_1,\ldots,E_n)
+          =
+          O(H)\prod_{i=1}^{n}LR_i
+          \]
+        posterior_probability_latex: |-
+          \[
+          P(H\mid E)
+          =
+          \frac{O(H\mid E)}
+          {1+O(H\mid E)}
+          \]
+        binary_entropy_latex: |-
+          \[
+          \mathcal{H}(p)
+          =
+          -p\log_2 p-(1-p)\log_2(1-p)
+          \]
+        information_gain_latex: |-
+          \[
+          IG
+          =
+          \mathcal{H}(p_{prior})
+          -
+          \mathcal{H}(p_{posterior})
+          \]
+        reanchor_uplift_latex: |-
+          \[
+          \Delta_{reanchor}
+          =
+          P(A=1\mid T=1)
+          -
+          P(A=1\mid T=0)
+          \]
+        reanchor_risk_ratio_latex: |-
+          \[
+          RR_{reanchor}
+          =
+          \frac{P(A=1\mid T=1)}
+          {P(A=1\mid T=0)}
+          \]
+        beta_prior_latex: |-
+          \[
+          \theta=P(A=1\mid T=1),
+          \qquad
+          \theta\sim\operatorname{Beta}(\alpha_0,\beta_0)
+          \]
+        beta_posterior_latex: |-
+          \[
+          \theta\mid D
+          \sim
+          \operatorname{Beta}(\alpha_0+s,\beta_0+f)
+          \]
+        beta_posterior_mean_latex: |-
+          \[
+          \mathbb{E}[\theta\mid D]
+          =
+          \frac{\alpha_0+s}
+          {\alpha_0+\beta_0+s+f}
+          \]
+        posterior_superiority_latex: |-
+          \[
+          P(\theta_1>\theta_0\mid D)
+          \]
+        brier_score_latex: |-
+          \[
+          BS
+          =
+          \frac{1}{N}
+          \sum_{i=1}^{N}(p_i-y_i)^2
+          \]
+        decision_threshold_latex: |-
+          \[
+          p^*
+          =
+          \frac{C_{FP}}
+          {C_{FP}+C_{FN}}
+          \]
+        value_of_information_latex: |-
+          \[
+          VOI
+          =
+          L_{before}
+          -
+          L_{after}
+          -
+          C_{test}
+          \]
+      measurement_policy:
+        prior_requires_declared_source: true
+        neutral_prior_0_5_only_if_explicitly_declared: true
+        default_beta_prior: "NONE_UNLESS_DECLARED"
+        optional_experimental_neutral_beta_prior: "Beta(1,1)_ONLY_IF_EXPLICITLY_LABELLED"
+        invented_probability: "FORBIDDEN"
+        invented_likelihood_ratio: "FORBIDDEN"
+        numeric_posterior_without_empirical_or_declared_likelihood_basis: "NOT_CALCULABLE"
+        correlated_evidence_must_not_be_multiplied_as_independent: true
+        conservative_dependence_mode: "ONE_LR_PER_DEPENDENCE_CLUSTER"
+        sensitivity_required_when_independence_assumption_changes_verdict: true
+        causal_uplift_claim_requires_control_or_matched_baseline: true
+        no_control_means: "DESCRIPTIVE_REANCHOR_RECOVERY_RATE_ONLY"
+        risk_ratio_requires_nonzero_control_rate: true
+        posterior_superiority_requires_treatment_and_control_posteriors: true
+        calibration_metric: "BRIER_SCORE"
+        information_gain_required_for_repeated_reanchor_analysis: true
+      trial_ledger:
+        required: true
+        unit: "ONE_REANCHOR_EVENT_OR_MATCHED_CONTROL_EVENT"
+        fields:
+          - EVENT_ID
+          - SESSION_OR_SURFACE_ID
+          - MODEL_OR_EXECUTOR
+          - CURRENT_HEAD
+          - CONTRACT_FINGERPRINT
+          - TREATMENT_T
+          - PRE_ALIGNMENT_STATE
+          - POST_ALIGNMENT_STATE
+          - APPLICABLE_INDICATORS
+          - INDICATOR_RESULTS
+          - OUTCOME_A
+          - PRIOR_SOURCE
+          - PRIOR_P
+          - EVIDENCE_CLUSTERS
+          - LR_SOURCES
+          - POSTERIOR_P
+          - ENTROPY_PRIOR
+          - ENTROPY_POSTERIOR
+          - INFORMATION_GAIN
+          - BRIER_CONTRIBUTION
+          - DRIFT_FOUND
+          - NEXT_CURSOR
+        append_only: true
+        secrets_forbidden: true
+      verdict:
+        reanchor_effect_proven_when: "MEASURED_DELTA_OR_POSTERIOR_SUPPORTS_EFFECT_AND_COUNTERPROOF_DOES_NOT_OVERTURN"
+        same_contract_same_fingerprint: "ACCUMULATE_CALIBRATION_SAMPLE_DONT_RETEACH"
+        contract_changed: "START_NEW_FINGERPRINT_COHORT_WITH_PRIOR_PROVENANCE"
+        no_numeric_basis: "REPORT_ORDINAL_ONLY: FAVORECE_H|NEUTRO|FAVORECE_NOT_H|NOT_CALCULABLE"
+
     portability:
       new_chat_is_new_surface_not_new_brain: true
       model_change_is_not_reset: true
