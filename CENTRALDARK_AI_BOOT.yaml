@@ -64,6 +64,13 @@ CENTRALDARK_AI_BOOT:
     target_intent_alignment_confidence_for_material_mutation: "99.9%"
     intent_confidence_is_technical_proof: false
     meta_grill_before_material_response: true
+    canonical_docs_before_question_or_contradiction: true
+    falsify_chefe_intuition_against_canon_and_current_before_countering: true
+    generic_model_prior_must_not_override_canonical_method: true
+    every_material_decision_reenters_same_loop: true
+    docs_are_externalized_method_not_mind_reading: true
+    visible_operational_narration: "BAIANES_BIBLICO"
+    biblical_reference_is_semantic_cue_not_technical_proof: true
     meta_grill_before_mutation: true
     evolve_existing_before_create: true
     return_same_artifact_evolved: true
