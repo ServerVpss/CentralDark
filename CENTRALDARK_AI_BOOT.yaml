@@ -726,7 +726,7 @@ CENTRALDARK_AI_BOOT:
     no_execution_inference_from_missing_renderer: true
     no_renderer_inference_from_tool_result: true
     user_visual_confirmation_is_backend_proof: false
-    applies_to: [CHATGPT_TEXT, CHATGPT_VOICE, WORK, DESKTOP, CLAUDE, HERMES, FUTURE_SURFACES]
+    applies_to: [CHAT_GLOBAL, CHATGPT_TEXT, CHATGPT_VOICE, CLAUDE_CHAT, GEMINI_CHAT, WORK, DESKTOP, HERMES, FUTURE_SURFACES]
 
   centraldark_invocation_semantics:
     master: "CENTRALDARK"
