@@ -24,6 +24,53 @@ CONTRATO = como qualquer motor usa a mão
 REALIDADE = juiz
 ```
 
+## 0.1 Classe global de chat, superfície e capability
+
+```text
+CHAT_GLOBAL = classe de qualquer superfície conversacional conectada à CentralDark
+CHATGPT = uma implementação/superfície possível de CHAT_GLOBAL
+CLAUDE_CHAT = uma implementação/superfície possível de CHAT_GLOBAL
+GEMINI_CHAT = uma implementação/superfície possível de CHAT_GLOBAL
+FUTURE_CHAT = implementação futura da mesma classe
+
+BRAND != SURFACE_CLASS
+SURFACE != CAPABILITY
+SURFACE != EXECUTOR_PROOF
+GITHUB_ACCESS != SHELL_ACCESS
+REPO_READ_WRITE != HOUSE_EXECUTION
+TOOL_CATALOG != TOOL_EXECUTION
+```
+
+A marca não define o papel global. A capability disponível é resolvida no runtime da superfície atual.
+
+```text
+CHAT_GLOBAL
++ CONTEXT/DOCS
+= REASONING/RECONCILIATION_CAPABILITY
+
+CHAT_GLOBAL
++ GITHUB_TOOL
+= REPO_CAPABILITY
+
+CHAT_GLOBAL
++ AUTHORIZED_SHELL_OR_DESKTOP_BRIDGE
+= EXECUTOR_CAPABILITY_IN_THAT_SCOPE
+```
+
+Logo, uma superfície de chat sem shell não é “menos CentralDark”; ela só não possui aquela capability naquele momento. E uma superfície de chat com shell autorizado pode executar no escopo provado sem deixar de ser CHAT_GLOBAL.
+
+Lei de evidência:
+
+```text
+MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true
+LOCAL_SHELL_STATE_DOES_NOT_PROVE_REMOTE_OR_MAIN_STATE=true
+LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true
+REMOTE_CHAT_INFERENCE_MUST_NOT_OVERRIDE_LOCAL_MEASUREMENT_WITHOUT_COUNTEREVIDENCE=true
+LOCAL_TOOL_MISS_IS_NOT_GLOBAL_CAPABILITY_MISS=true
+```
+
+Isto não cria hierarquia fixa “Hermes > chat” ou “chat > Hermes”. A força vem da evidência aplicável ao claim, não do nome do agente.
+
 ## 1. Gatilho mestre
 
 Quando a entrada iniciar ou implicar `!CENTRALDARK`, `CentralDark`, `#ACORDAR`, `!CALIBRAR`, `!AUTO_GRILL`, `!GRILL_ME` ou comando operacional equivalente, carregue o funil:
@@ -286,7 +333,7 @@ PROVIDER_NAMESPACE_ABSENT → API/MCP/provider adapter existente; depois RDC/VPS
 
 ```text
 Worker/Cloud Code = implementação pesada
-ChatGPT Texto = oráculo + executor quando tool aparece
+CHAT_GLOBAL/Texto = oráculo + executor conforme tools autorizadas medidas (ChatGPT, Claude Chat, Gemini Chat e futuras superfícies são exemplos)
 Voice = superfície humana rápida com binding explícito
 Hermes/Casa = executor local vivo
 GitHub = cristal verificável
