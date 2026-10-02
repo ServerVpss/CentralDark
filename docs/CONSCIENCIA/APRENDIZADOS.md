@@ -1412,8 +1412,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** cada evento de reancoragem registra treatment, fingerprint, indicadores, outcome, provenance do prior/LR, posterior/calibração quando calculáveis e NEXT_CURSOR; comparar coortes apenas por fingerprints compatíveis.
 
 ### 141. Vermelho precisa apontar setor, detector e owner sem contaminar o core provado
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L141`; `PREV_GLOBAL_UID=L140`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=141`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=141`; `PREV_LEARNING_REF=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L141`; `PREV_GLOBAL_UID=L140`; `NEXT_GLOBAL_UID=L142`; `LEGACY_LEARNING_NUMBER=141`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=141`; `PREV_LEARNING_REF=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=142`.
 - **Categoria:** comparative-failure-localization-response.
 - **Data:** 2026-10-02.
 - **Owner:** `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md#-matriz-comparativa-operacional--vermelho-por-setor`.
@@ -1422,4 +1422,17 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `FAILURE_COMPARATIVE_MATRIX_REQUIRED_WHEN_USER_ASKS_WHERE_REDS_ARE=true`; `FAILURE_MATRIX_COLUMNS=RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER`; `ONE_INDEPENDENT_RED_PER_ROW=true`; `DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true`; `LOCAL_RED_DOES_NOT_IMPLY_SECTOR_RED=true`; `ONE_TEST_FAIL_DOES_NOT_IMPLY_CORE_BROKEN=true`; `CORE_PASS_AND_ADJACENT_RED_MUST_BE_SHOWN_SEPARATELY=true`; `COMPARISON_FIRST_EXPLANATION_SECOND=true`; `NO_TEXT_WALL_WHEN_MATRIX_CLOSES_THE_QUESTION=true`.
 - **Contraprova:** tabela não substitui causalidade. Se setor, detector ou owner não estiver medido, usar `UNKNOWN`; não inventar diretório. Uma matriz bonita com escopo errado continua falso-verde/falso-vermelho.
 - **Next cursor:** aplicar automaticamente esta matriz quando a pergunta do CHEFE for “quais vermelhos?”, “onde estão?”, “qual setor?” ou comparação equivalente; expandir somente se ele pedir causa, efeito ou reparo.
+
+### 142. Sessão 2026-10-02 consolidou corpo único, forja local, contrato portátil, Bayes, funil e localização causal de vermelhos
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L142`; `PREV_GLOBAL_UID=L141`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=142`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=142`; `PREV_LEARNING_REF=141`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** session-synthesis.
+- **Data:** 2026-10-02.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SESSAO-CORPO-FORJA-CONTRATO-BAYES-FUNIL.md`.
+- **Aprendizado:** a sessão convergiu cinco eixos que antes apareciam separados: (1) CentralDark-OS como corpo canônico único; Casa/VMware como forja e bancada de prova local; VPS como twin headless 24/7 da mesma linhagem; (2) SELF-GRILL docs-first como modo operacional padrão; (3) contrato portátil que reancora qualquer chat no método e resolve CURRENT/HEAD/writer em tempo de boot; (4) medição Bayesiana real da reancoragem, proibindo probabilidade/LR inventados; (5) funil que deduplica mini-contrato já contido, absorve só delta útil e usa Meta-Lupa + Meta-Multibússola para conflitos. A saída humana também foi cristalizada como `RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER`, impedindo que detector quebrado contamine core provado.
+- **Snapshot local preservado:** nesta sessão, `E:\CentralDark\w-skills` foi observado como worktree real de `ServerVpss/CentralDark`; `E:\CentralDark` funcionava como raiz organizacional, `_IMPORTS` segregava donors e `_MAPA_CASA` receipts. Esses paths são evidência temporal e exigem revalidação antes de claim CURRENT.
+- **Provas relevantes da sessão:** Meta-Lupa core passou por rota direta (`53/53`, 3 temperaturas, CLI Bayes); falha do pytest foi isolada em Pygments; Meta-Multibússola core passou no teste isolado/evaluator/registry; vermelhos adjacentes permaneceram separados.
+- **Cristal:** `ONE_SYSTEM_ONLY=true`; `CASA_VMWARE_ROLE=FORGE_AND_LOCAL_PROOF_LAB`; `VPS_ROLE=HEADLESS_24X7_TWIN_EXECUTION_BODY`; `SAME_FINGERPRINT_SAME_PROOF=REUSE_CRYSTAL`; `DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL`; `PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED`; `BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED`; `MINI_CONTRACT_SUBSET_OFFICIAL=DROP_DUPLICATE_REUSE`; `DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true`.
+- **Contraprova:** cristalização não prova runtime; VM/VPS só reutilizam prova quando identidade/fingerprint do artefato é a mesma; contrato colado não torna LLM matematicamente determinístico; snapshot local envelhece; vermelho de detector não é vermelho do core sem teste discriminante.
+- **Next cursor:** reancorar novas superfícies pelo contrato portátil, resolver CURRENT e continuar pelo menor cone arquitetural material: AionUi/Hermes ↔ runtime/IA do twin local; depois replay do mesmo artefato/receita na VPS quando aplicável.
 
