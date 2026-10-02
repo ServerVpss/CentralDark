@@ -42,6 +42,15 @@ invariants:
   MATERIAL_DISCOVERY_REQUIRES_LEARNING_REF: true
   SAME_FINDING_WITHOUT_NEW_EVIDENCE_IS_DEDUPED: true
 
+  EXAMINE_BEFORE_ACCEPT_OR_RECORD: true
+  RETAIN_CONFIRMED_VALUE: true
+  COMPARE_BEFORE_REPLACE: true
+  CORRECT_WITHOUT_ERASING_VALID_STATE: true
+  DUPLICATE_WITHOUT_NEW_VALUE_IS_DEDUPED: true
+  NEW_EVIDENCE_UPDATES_EXISTING_OWNER: true
+  UNCERTAINTY_REMAINS_EXPLICIT: true
+  CONTINUOUS_VIGILANCE_IS_AUTHORIZED_SCOPE_BOUND: true
+
 render_contract:
   on_explicit_centraldark:
     header_first: true
@@ -335,3 +344,43 @@ learning_binding:
     discovery_is_learning_candidate: true
     candidate_is_not_crystal: true
     proof_then_crystallize: true
+
+examination_retention_contract:
+  purpose: >-
+    Examinar toda entrada material antes de aceitar, registrar, modificar ou executar;
+    reter o que for confirmado e útil; corrigir o erro sem apagar o estado válido;
+    integrar somente o delta que aumentar a capacidade do owner.
+  sequence:
+    - DETECT
+    - EXAMINE_VALIDITY_COHERENCE_UTILITY_COMPATIBILITY
+    - COMPARE_WITH_EXISTING_OWNER_AND_CRYSTAL
+    - CLASSIFY_FACT_INFERENCE_HYPOTHESIS_OR_UNKNOWN
+    - RETAIN_CONFIRMED_VALUE
+    - CORRECT_CONTRADICTION_OR_STALE_RECORD
+    - DEDUPE_WHEN_NO_NEW_VALUE
+    - INTEGRATE_MINIMUM_SUFFICIENT_DELTA
+    - REGISTER_PROVENANCE_AND_EVIDENCE
+    - VERIFY_NO_REGRESSION
+  disposition:
+    CONFIRMED_USEFUL: RETAIN_AND_INTEGRATE
+    PARTIAL_OR_IMPROVABLE: CORRECT_THEN_INTEGRATE
+    REDUNDANT: DEDUPE_INTO_EXISTING_OWNER
+    CONTRADICTORY_OR_UNSAFE: REJECT_AND_RECORD_REASON
+    UNVERIFIED: PRESERVE_AS_UNKNOWN_NOT_AS_FACT
+  correction_rules:
+    - PRESERVE_LAST_GOOD_STATE
+    - DO_NOT_REPLACE_VALID_OWNER_WITH_NEW_COPY
+    - DO_NOT_PROMOTE_MEMORY_OR_HISTORY_TO_CURRENT
+    - DO_NOT_USE_MORAL_OR_SEMANTIC_CUE_AS_TECHNICAL_PROOF
+  registration:
+    required_fields:
+      - CLAIM
+      - CLASSIFICATION
+      - OWNER
+      - DELTA
+      - EVIDENCE_REFS
+      - COUNTERPROOF_WHEN_MATERIAL
+      - CURRENT_HEAD_WHEN_STATE_MUTABLE
+      - NEXT_CURSOR
+    write_scope: ONE_WRITER_PER_SCOPE
+    promotion_gate: PROOF_THEN_CRYSTALLIZE
