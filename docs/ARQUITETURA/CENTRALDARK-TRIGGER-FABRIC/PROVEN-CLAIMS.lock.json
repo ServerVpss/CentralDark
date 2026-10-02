@@ -885,16 +885,16 @@
     "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH": {
       "claim_key": "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH",
       "owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
-      "lock_key": "ce986c21499b00a0823e9b46d0227e17b6ab6f4233a536294acb55173b2b966a",
+      "lock_key": "d1444ef3efcfb766ee2d121c1703d23bfc7e576f83d770a2d186ba491c9fe68a",
       "state": "SEALED_PROVEN",
       "proof_target": "AUTHORIZED_MULTIROUTE_FAILOVER_WITH_BINDING_SCOPED_HEALTH",
-      "evidence_ref": "LEARNING_146 + CURRENT_ROUTE_REMEASURE_2026-10-02",
+      "evidence_ref": "LEARNING_146 + LEARNING_147 + CURRENT_ROUTE_REMEASURE_2026-10-02",
       "observed_at": "2026-10-02T19:33:00Z",
       "counterproof": "PASS",
       "receipt_ref": "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
-        "dependency_fingerprint": "e41349163bae0fb768c1120237b61fad0746ec1af29c92c09a5b75beb0f4fd2b",
+        "dependency_fingerprint": "82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09",
         "execution_commands": [
           "classify the exact failed route and binding",
           "keep global system state undecided",
@@ -916,6 +916,8 @@
           "LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE=true",
           "ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER=true",
           "ROUTE_HEALTH_SCOPED_TO_BINDING=true",
+          "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME=true",
+          "FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true",
           "NO_PARALLEL_OWNER_CREATED=true"
         ],
         "expected_effect": "SAME_LOGICAL_SYSTEM_REUSES_EXISTING_CAPABILITY_BUS_ACROSS_AUTHORIZED_ROUTES",
@@ -926,7 +928,9 @@
           "DEVICE_OR_RUNTIME_BINDING",
           "HOST",
           "TRANSPORT",
-          "OBSERVED_AT"
+          "OBSERVED_AT",
+          "SPARSE_CHECKOUT_REQUIRED_PATHS",
+          "HOST_VM_SHARED_ROOT_IF_APPLICABLE"
         ],
         "commands_executable": true,
         "execution_policy": "READ_ONLY_UNTIL_MUTATION_OWNER_REQUIRED",
@@ -940,23 +944,23 @@
         "triggers_owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
         "events": [
           "CAPABILITY_GAP",
-          "TERRITORY_ROUTE_CHANGE"
+          "TERRITORY_ROUTE_CHANGE",
+          "PRE_HUMAN_RETURN"
         ],
         "sentinel_owner": "scripts/trigger-fabric/system_sentinel.py",
         "sentinel_signature": "ROUTE_FAILURE",
-        "sentinel_route": [
-          "CAPABILITY_GAP",
-          "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"
-        ],
-        "git_hooks_are_not_runtime_route_owner": true,
-        "hermes_lifecycle_hook_extension_not_claimed_without_documented_failure_callback": true
+        "hermes_runtime_hook": "apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py#pre_verify",
+        "hermes_hook_marker": "CENTRALDARK_COMPLETE_SIEVE_MATERIALIZATION=FAIL",
+        "git_hooks_are_not_runtime_route_owner": true
       },
       "runtime_consumer": {
         "device_class": "CENTRALDARK-OS",
         "binding_user": "root",
         "repo_root": "/root/CentralDark",
+        "sparse_checkout": true,
+        "materialized_path_added": "docs/BRAIN/00-MAPA-SISTEMA",
         "test_mode": "DETACHED_ORIGIN_MAIN_WORKTREE",
-        "main_sha": "dcce1fbd25af0534925d69c01f3d07be86d2638b"
+        "last_proven_source_main": "595df0ea496e5982b59c04b1ad0575ca878e900c"
       },
       "runtime_proof": {
         "yaml_parse": "PASS",
@@ -965,10 +969,51 @@
         "route_failure_classifier": true,
         "multiroute_recipe_hook": true,
         "recipe_binding": "PASS",
+        "checklist_contract_after_sparse_fix": "PASS",
+        "all_hybrid_multiroute_checks_pass": true,
+        "unrelated_global_failed_checks": 30,
         "cleanup": "PASS",
         "observed_at": "2026-10-02"
       },
-      "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#caderneta--sistema-hibrido-multirota-146"
+      "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#caderneta--sistema-hibrido-multirota-146",
+      "materialization_requirements": {
+        "consumer_repo": "/root/CentralDark",
+        "sparse_checkout_required_paths": [
+          "docs/BRAIN/00-MAPA-SISTEMA"
+        ],
+        "checklist_path": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md",
+        "law": "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME"
+      },
+      "physical_binding": {
+        "host_path": "E:\\VMs\\CENTRALDARK-OS\\SHARED",
+        "guest_expected_share": "/mnt/hgfs/CENTRALDARK-SHARED",
+        "windows_segredo_route": "OFFLINE_AT_MEASUREMENT",
+        "guest_hgfs_share_visible": false,
+        "guest_mount_proven": false,
+        "state": "NOT_PROVEN",
+        "does_not_invalidate_repo_consumer": true,
+        "remeasure_when_windows_route_returns": true
+      },
+      "complete_sieve": {
+        "learning_ref": 147,
+        "ordered_layers": [
+          "APRENDIZADO",
+          "LEMBRANCA",
+          "RECEITA_EXECUTAVEL",
+          "HOOK_REAL_WHEN_APPLICABLE",
+          "TRIGGER",
+          "BOOT",
+          "VERIFIER",
+          "CONSUMER_REAL",
+          "CHECKLIST_DIARIO",
+          "PR_MOTHER_1562",
+          "RELATED_LIVE_PR_WHEN_SCOPE_INTERSECTS",
+          "PHYSICAL_BINDING_WHEN_CLAIM_DEPENDS_ON_IT",
+          "READBACK"
+        ],
+        "fixed_point_requires_all_applicable_layers": true,
+        "non_applicable_layer_must_be_explicit": true
+      }
     }
   }
 }
