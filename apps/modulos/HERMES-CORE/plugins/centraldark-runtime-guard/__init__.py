@@ -389,6 +389,7 @@ COMPLETE_SIEVE_REQUIRED_PATHS = (
     "CENTRALDARK_AI_BOOT.yaml",
     "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
     "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md",
+    "docs/receipts/2026-10-02-complete-sieve-law.md",
 )
 
 
@@ -425,6 +426,7 @@ def self_test() -> dict[str, Any]:
     assert is_logical_path("CENTRALDARK_AI_BOOT.yaml")
     assert not is_logical_path("apps/modulos/mcp/src/index.js")
     assert "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md" in COMPLETE_SIEVE_REQUIRED_PATHS
+    assert "docs/receipts/2026-10-02-complete-sieve-law.md" in COMPLETE_SIEVE_REQUIRED_PATHS
     assert is_mutating("terminal", {"command": "git commit -m x"})
     assert not is_mutating("terminal", {"command": "git status --short"})
     assert logical_mutation("write_file", {"path": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/X.md"})
