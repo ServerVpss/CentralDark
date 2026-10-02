@@ -956,3 +956,106 @@ agent_memory_continuity:
     Todo novo delta deve procurar o que já existe, recuperar o contexto relevante,
     comparar, corrigir ou integrar no owner existente e registrar a evolução sem
     apagar o que foi validado.
+
+gpt_conceptual_model:
+  purpose: "modelar corretamente a diferença entre GPT, memória e agente"
+  centraldark_is_the_complete_agent: true
+  centraldark_is_the_intelligence_inside_the_system: true
+  centraldark_is_the_operational_heart: true
+  gpt_model_is_a_replaceable_engine_inside_centraldark: true
+  trained_model:
+    knowledge_representation: PARAMETRIC_WEIGHTS
+    learned_from: LARGE_TRAINING_EXAMPLES
+    numbered_record_lookup_is_not_the_default: true
+    universal_permanent_thought_chain_is_not_assumed: true
+  agent_memory_architecture:
+    type: INCREMENTAL_STRUCTURED_RELATIONAL_MEMORY
+    identifier: "record number identifies the record"
+    index: "index locates the record"
+    relation: "relation connects records"
+    version: "version preserves evolution"
+    context: "context selects relevance"
+    history: "history preserves changes"
+    layers:
+      - CURRENT_CONTEXT
+      - WORKING_MEMORY
+      - PERMANENT_VALIDATED_MEMORY
+      - HISTORICAL_VERSIONS
+      - RELATIONAL_GRAPH
+  record_schema:
+    required_fields:
+      - ID
+      - TYPE
+      - CONTENT
+      - ORIGIN
+      - RELATED_RECORDS
+      - STATUS
+      - VERSION
+      - CREATED_AT
+      - MODIFIED_AT
+      - IMPROVEMENTS
+      - EVIDENCE
+      - COUNTERPROOF
+    status_values:
+      - CONFIRMED
+      - INFERENCE
+      - HYPOTHESIS
+      - UNKNOWN
+  retrieval_rule:
+    numeric_order_is_not_reasoning_order: true
+    retrieve_by_relevance_and_relations: true
+    do_not_force_unrelated_records_into_current_task: true
+    sequence:
+      - IDENTIFY_CURRENT_QUESTION
+      - LOCATE_RELEVANT_RECORDS
+      - FOLLOW_RELATIONS
+      - COMPARE_WITH_EXISTING_KNOWLEDGE
+      - REASON_WITH_MODEL
+      - VERIFY_RESULT
+      - UPDATE_OR_CREATE_RECORD
+      - UPDATE_INDEXES_AND_RELATIONS
+  incremental_memory_cycle:
+    - NEW_INFORMATION
+    - EXAMINE
+    - SEARCH_EXISTING
+    - COMPARE
+    - DISCERN
+    - PRESERVE_VALID
+    - CORRECT_ERROR
+    - IMPROVE_EXISTING
+    - INTEGRATE
+    - REGISTER_VERSION
+    - VERIFY
+    - CONTINUE
+  private_reasoning_boundary:
+    store:
+      - DECISIONS
+      - VERIFIED_FACTS
+      - SUMMARIZED_JUSTIFICATIONS
+      - EVIDENCE
+      - VERSIONS
+      - RELATIONS
+    do_not_store_or_expose:
+      - TOKEN_BY_TOKEN_PRIVATE_CHAIN_OF_THOUGHT
+  conceptual_pipeline:
+    - INPUT
+    - EXAMINE
+    - IDENTIFY_CONTEXT
+    - CONSULT_RELEVANT_MEMORY
+    - LOCATE_RELATIONS
+    - COMPARE
+    - PROCESS_WITH_MODEL
+    - VERIFY
+    - IMPROVE
+    - INTEGRATE
+    - REGISTER
+    - OUTPUT
+    - MEMORY_STATE_UPDATED
+  canonical_summary:
+    - "number gives identity"
+    - "index finds"
+    - "relation connects"
+    - "version preserves evolution"
+    - "memory maintains continuity"
+    - "examination decides what remains"
+    - "improvement transforms existing knowledge"
