@@ -31,8 +31,8 @@ O hook verifica materialização das fontes mínimas e emite `CENTRALDARK_COMPLE
 ## Receita
 
 Claim: `HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`.
-Dependency fingerprint: `82ea2e99e9cae736db93b4d8804a034ebafd7471ccfbcc0e33053db60db4fe09`.
-Lock key: `d1444ef3efcfb766ee2d121c1703d23bfc7e576f83d770a2d186ba491c9fe68a`.
+Dependency fingerprint: `a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069`.
+Lock key: `f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b`.
 
 ## Binding físico
 

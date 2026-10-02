@@ -891,7 +891,7 @@
       "evidence_ref": "LEARNING_146 + LEARNING_147 + CURRENT_ROUTE_REMEASURE_2026-10-02",
       "observed_at": "2026-10-02T19:33:00Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md",
+      "receipt_ref": "docs/receipts/2026-10-02-complete-sieve-law.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069",
