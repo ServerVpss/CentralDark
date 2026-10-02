@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "6ad2ad6443ad63c90aab1edf9dfb72a59af136a7",
+  "source_blob_sha": "cf851a1e7891a3c414f23007898f917ad3d1a6f3",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 146,
-    "highest_legacy_learning_number": 147,
+    "learning_sections": 147,
+    "highest_legacy_learning_number": 148,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 147
+      "end": 148
     }
   },
   "nodes": [
@@ -1691,6 +1691,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L146",
+      "next_uid": "L148"
+    },
+    {
+      "uid": "L148",
+      "legacy_learning_number": 148,
+      "legacy_occurrence": 1,
+      "title": "TextChat/Qwen nativo está configurado e a SDK correta foi identificada; catálogo visível não é peso materializado nem inferência provada",
+      "document_order": 147,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L147",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
