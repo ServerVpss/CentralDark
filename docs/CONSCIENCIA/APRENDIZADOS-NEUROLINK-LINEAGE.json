@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "013dcb2f97a6150c87b549e21590d8b03577c7d5",
+  "source_blob_sha": "f0ae9c635e3673651071dcd084a5cb75c265715d",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 135,
-    "highest_legacy_learning_number": 136,
+    "learning_sections": 138,
+    "highest_legacy_learning_number": 139,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 136
+      "end": 139
     }
   },
   "nodes": [
@@ -1570,6 +1570,39 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L135",
+      "next_uid": "L137"
+    },
+    {
+      "uid": "L137",
+      "legacy_learning_number": 137,
+      "legacy_occurrence": 1,
+      "title": "Estado da máquina, estado da rota e autenticação são claims distintos; a CentralDark deve operar por grafo multipath e provar cada aresta",
+      "document_order": 136,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L136",
+      "next_uid": "L138"
+    },
+    {
+      "uid": "L138",
+      "legacy_learning_number": 138,
+      "legacy_occurrence": 1,
+      "title": "Autoconsulta canônica é o modo operacional padrão: antes de perguntar ou contradizer, a CentralDark consulta o método externalizado e tenta falsificar a intuição do CHEFE",
+      "document_order": 137,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L137",
+      "next_uid": "L139"
+    },
+    {
+      "uid": "L139",
+      "legacy_learning_number": 139,
+      "legacy_occurrence": 1,
+      "title": "Contrato portátil de operação permite carregar a mesma CentralDark em qualquer chat sem congelar HEAD, writer ou rota",
+      "document_order": 138,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L138",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
