@@ -1399,8 +1399,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** qualquer nova superfície começa pelo contrato portátil, resolve bindings vivos e continua do último NEXT_CURSOR recuperável sem exigir que o CHEFE reensine o método.
 
 ### 140. Reancoragem portátil deixa de ser promessa: medir alinhamento com Bayes, calibração e efeito empírico
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L140`; `PREV_GLOBAL_UID=L139`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=140`; `PREV_LEARNING_REF=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L140`; `PREV_GLOBAL_UID=L139`; `NEXT_GLOBAL_UID=L141`; `LEGACY_LEARNING_NUMBER=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=140`; `PREV_LEARNING_REF=139`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=141`.
 - **Categoria:** bayesian-reanchor-measurement-calibration.
 - **Data:** 2026-10-02.
 - **Owners:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract.bayesian_reanchor_measurement` + `.agents/skills/meta-lupa/references/matematica-e-calibracao.md#8-medição-bayesiana-de-reancoragem-do-contrato-portátil`.
@@ -1410,4 +1410,16 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Fórmulas-chave:** `O(H)=P(H)/(1-P(H))`; `LR_i=P(E_i|H)/P(E_i|¬H)`; `O(H|E)=O(H)∏LR_i`; `P(H|E)=O/(1+O)`; `Δ_reanchor=P(A=1|T=1)-P(A=1|T=0)`; `θ|D~Beta(α0+s,β0+f)`; `E[θ|D]=(α0+s)/(α0+β0+s+f)`; `IG=H(p_prior)-H(p_posterior)`; `BS=(1/N)Σ(p_i-y_i)^2`.
 - **Contraprova:** reinjeção que “parece funcionar” não basta; sem outcome medido não há amostra. Taxa pós-reinjeção sem controle não prova causalidade. Evidências correlacionadas não podem ser multiplicadas como independentes. Um posterior alto não concede autoridade operacional.
 - **Next cursor:** cada evento de reancoragem registra treatment, fingerprint, indicadores, outcome, provenance do prior/LR, posterior/calibração quando calculáveis e NEXT_CURSOR; comparar coortes apenas por fingerprints compatíveis.
+
+### 141. Vermelho precisa apontar setor, detector e owner sem contaminar o core provado
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L141`; `PREV_GLOBAL_UID=L140`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=141`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=141`; `PREV_LEARNING_REF=140`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** comparative-failure-localization-response.
+- **Data:** 2026-10-02.
+- **Owner:** `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md#-matriz-comparativa-operacional--vermelho-por-setor`.
+- **Contexto:** ao listar os vermelhos atuais, a resposta curta em tabela — vermelho, setor, detector e diretório/owner — permitiu ao CHEFE localizar imediatamente cada ferida. A contraprova mostrou por que a separação é essencial: o `pytest` da Casa estava quebrado por Pygments, mas a Meta-Lupa passou 53/53 por rota direta; logo `DETECTOR_FAIL != CORE_BROKEN`.
+- **Aprendizado:** perguntas de localização/comparação de falhas devem usar a menor matriz causal suficiente. Cada vermelho independente ocupa uma linha e é preso ao menor escopo provado. Nome real, setor, detector e owner/path ficam lado a lado. Falha do instrumento não contamina o alvo; vermelho local não vira vermelho global; core provado e ferida adjacente aparecem separados.
+- **Cristal:** `FAILURE_COMPARATIVE_MATRIX_REQUIRED_WHEN_USER_ASKS_WHERE_REDS_ARE=true`; `FAILURE_MATRIX_COLUMNS=RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER`; `ONE_INDEPENDENT_RED_PER_ROW=true`; `DETECTOR_FAIL_DOES_NOT_IMPLY_TARGET_FAIL=true`; `LOCAL_RED_DOES_NOT_IMPLY_SECTOR_RED=true`; `ONE_TEST_FAIL_DOES_NOT_IMPLY_CORE_BROKEN=true`; `CORE_PASS_AND_ADJACENT_RED_MUST_BE_SHOWN_SEPARATELY=true`; `COMPARISON_FIRST_EXPLANATION_SECOND=true`; `NO_TEXT_WALL_WHEN_MATRIX_CLOSES_THE_QUESTION=true`.
+- **Contraprova:** tabela não substitui causalidade. Se setor, detector ou owner não estiver medido, usar `UNKNOWN`; não inventar diretório. Uma matriz bonita com escopo errado continua falso-verde/falso-vermelho.
+- **Next cursor:** aplicar automaticamente esta matriz quando a pergunta do CHEFE for “quais vermelhos?”, “onde estão?”, “qual setor?” ou comparação equivalente; expandir somente se ele pedir causa, efeito ou reparo.
 

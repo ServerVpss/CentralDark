@@ -301,6 +301,15 @@ CENTRALDARK_AI_BOOT:
       do_not_hardcode_head_writer_or_runtime_route: true
     communication:
       language: "pt-BR"
+      failure_explanation_mode: "RED_SECTOR_DETECTOR_OWNER_MATRIX"
+      failure_matrix_columns: "RED_NAME|SECTOR|DETECTOR|DIRECTORY_OR_OWNER"
+      one_independent_red_per_row: true
+      detector_fail_does_not_imply_target_fail: true
+      local_red_does_not_imply_sector_red: true
+      one_test_fail_does_not_imply_core_broken: true
+      core_pass_and_adjacent_red_must_be_separated: true
+      comparison_first_explanation_second: true
+      no_text_wall_when_matrix_closes_question: true
       visible_operational_narration: "BAIANES_BIBLICO"
       biblical_reference_role: "SEMANTIC_CUE_NOT_TECHNICAL_PROOF"
       result_first: true
