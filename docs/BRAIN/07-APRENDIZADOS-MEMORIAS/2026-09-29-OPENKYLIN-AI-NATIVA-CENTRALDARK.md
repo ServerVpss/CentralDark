@@ -539,3 +539,44 @@ LOCAL_TRITON_REQUIRES_NETWORK_ROUTE_NOT_PROVIDER_TOKEN=true
 
 Fonte oficial: https://www.openkylin.top/news/4131-cn.html
 
+
+
+### Delta adicional — runtime guest sem checkout Git + handoff canônico por capability
+
+Evidência visual atual do próprio `CENTRALDARK-OS` mostrou o executor trabalhando em `/home/CENTRALDARK-OS` e falhando corretamente ao tratar esse diretório como repositório:
+
+```text
+git rev-parse --show-toplevel -> fatal: not a git repository
+GIT_DISCOVERY_ACROSS_FILESYSTEM=stopped_at_mount_boundary
+/home/CENTRALDARK-OS/.git=directory_present_but_empty
+git --git-dir=/home/CENTRALDARK-OS/.git --work-tree=/home/CENTRALDARK-OS status --short -> exit 128
+git --git-dir=/home/CENTRALDARK-OS/.git --work-tree=/home/CENTRALDARK-OS remote -v -> exit 128
+LOCAL_GUEST_GIT_CHECKOUT=ABSENT_AT_MEASUREMENT
+```
+
+No mesmo corpo, os artefatos de investigação continuam presentes:
+
+```text
+/home/CENTRALDARK-OS/centraldark-ai-runtime-panel.sh
+/home/CENTRALDARK-OS/Área de Trabalho/inventario-ia-local-centraldark-os.txt
+```
+
+O executor então mudou de rota e invocou o conector GitHub para localizar SOUL/LEIA-ME-IA/repo canônico. A imagem prova a **invocação do fallback**, não o retorno daquelas chamadas; portanto:
+
+```text
+GITHUB_CONNECTOR_FALLBACK_INVOCATION=OBSERVED
+GITHUB_CONNECTOR_FALLBACK_RESULT_FROM_SCREENSHOT=UNKNOWN
+```
+
+A continuidade canônica desta rodada fecha por um caminho separado e provado: a evidência nasceu no guest, chegou à sessão coordenadora e o GitHub connector autorizado desta sessão leu o `ServerVpss/CentralDark@main` e escreve o registro no owner existente.
+
+```text
+GUEST_RUNTIME_CAN_PRODUCE_EVIDENCE_WITHOUT_LOCAL_GIT=true
+LOCAL_GIT_ABSENT != RUNTIME_DEAD
+LOCAL_GIT_ABSENT != CANONICAL_KNOWLEDGE_ABSENT
+EVIDENCE_BODY_MAY_DIFFER_FROM_CANONICAL_WRITER=true
+ONE_WRITER_PER_SCOPE=true
+PROVEN_HANDOFF_ROUTE=GUEST_EVIDENCE -> SESSION_COORDINATOR -> AUTHORIZED_GITHUB_CONNECTOR -> CANONICAL_MAIN
+```
+
+Regra: não criar `.git` fake, não transformar pasta vazia em checkout e não clonar só para satisfazer ritual. Se a missão exige escrita canônica e existe writer autorizado com acesso à main, usar o handoff com evidência; materializar checkout somente quando a execução local realmente precisar dele.
