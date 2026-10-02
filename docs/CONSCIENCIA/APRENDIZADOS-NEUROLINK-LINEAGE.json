@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "b699e4a65d64b7c2c04911e7a536f5b22570df79",
+  "source_blob_sha": "f0ae9c635e3673651071dcd084a5cb75c265715d",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 137,
-    "highest_legacy_learning_number": 138,
+    "learning_sections": 138,
+    "highest_legacy_learning_number": 139,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 138
+      "end": 139
     }
   },
   "nodes": [
@@ -1592,6 +1592,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L137",
+      "next_uid": "L139"
+    },
+    {
+      "uid": "L139",
+      "legacy_learning_number": 139,
+      "legacy_occurrence": 1,
+      "title": "Contrato portátil de operação permite carregar a mesma CentralDark em qualquer chat sem congelar HEAD, writer ou rota",
+      "document_order": 138,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L138",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
