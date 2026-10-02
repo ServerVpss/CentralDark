@@ -799,3 +799,160 @@ session_error_correction_receipt:
     runtime_effect: NOT_MEASURED
     main_promotion: NOT_EXECUTED
     merge: NOT_EXECUTED
+
+# Conceito transversal: a CentralDark é o agente; modelos são motores substituíveis.
+agent_memory_continuity:
+  status: CANONICAL_OWNER_EXTENSION
+  scope: CENTRALDARK_WHOLE_AGENT
+  centraldark_is_the_agent: true
+  centraldark_is_the_cognitive_continuity: true
+  centraldark_is_the_operational_heart: true
+  gpt_like_model_is_reasoning_engine_not_memory: true
+  memory_is_indexed_recoverable_and_versioned: true
+  preserve_existing_aureola: true
+  no_new_aureola: true
+  principles:
+    "22_MEMORY_AND_AGENT_CONTINUITY":
+      identity: RECORD_ID
+      index: RETRIEVAL_LOCATION
+      relation: KNOWLEDGE_CONNECTION
+      version: KNOWLEDGE_EVOLUTION
+      context: TASK_RELEVANCE
+      history: CHANGE_CONTINUITY
+      rule: "records are a continuous related structure, not isolated facts"
+    "23_SEARCH_BEFORE_CREATE":
+      before_create:
+        - SEARCH_EXISTING_RECORDS
+        - COMPARE_EQUIVALENTS
+        - CHECK_DIFFERENCES
+        - PRESERVE_VALID_VALUE
+        - INTEGRATE_NEW_VALUE
+        - UPDATE_EXISTING_WHEN_APPROPRIATE
+      create_only_when: NO_ADEQUATE_EXISTING_RECORD
+    "24_RELATIONAL_MEMORY":
+      relation_types:
+        - RELATED_TO
+        - CORRECTED_BY
+        - IMPROVED_BY
+        - VERSION_OF
+      rule: "identifier identifies; relation connects; version demonstrates evolution"
+    "25_VERSIONED_EVOLUTION":
+      preserve_continuity: true
+      newest_version_is_consolidated: true
+      preserve_relevant_history: true
+      do_not_delete_past_without_reason: true
+    "26_WORKING_MEMORY":
+      distinguish:
+        - CURRENT_CONTEXT
+        - PERMANENT_MEMORY
+        - TEMPORARY_INFORMATION
+        - CONFIRMED_KNOWLEDGE
+        - UNEXAMINED_INFORMATION
+      context_is_not_automatically_permanent_memory: true
+    "27_CONFIRMATION":
+      verify:
+        - ORIGIN
+        - CONSISTENCY
+        - AVAILABLE_EVIDENCE
+        - COMPATIBILITY
+        - UTILITY
+        - CONTRADICTIONS
+      hypothesis_is_not_fact: true
+    "28_COGNITIVE_CONTINUITY":
+      sequence:
+        - PRIOR_KNOWLEDGE
+        - CURRENT_CONTEXT
+        - NEW_INFORMATION
+        - COMPARISON
+        - DISCERNMENT
+        - INTEGRATION
+        - NEW_KNOWLEDGE_STATE
+      numeric_chain_is_not_the_only_reasoning_order: true
+    "29_RELEVANT_RETRIEVAL":
+      retrieve_by: CONTEXT_RELEVANCE
+      sequence:
+        - IDENTIFY_TOPIC
+        - LOCATE_RELATED_RECORDS
+        - RETRIEVE_RELEVANT_INFORMATION
+        - COMPARE
+        - RESPOND
+        - VERIFY_NEW_KNOWLEDGE
+      do_not_load_all_memory indiscriminately: true
+    "30_INCREMENTAL_LEARNING":
+      update_existing_knowledge:
+        - COMPARE
+        - PRESERVE_VALID
+        - CORRECT_ERROR
+        - ADD_MISSING
+        - UPDATE_STALE
+        - REGISTER_IMPROVEMENT
+      learning_definition: "validated new information updates existing knowledge"
+    "31_CONTINUITY_CHAIN":
+      trace:
+        - EXISTING_RECORD
+        - NEW_EVIDENCE
+        - NEW_VERSION
+        - NEW_CORRECTION
+        - NEW_IMPROVEMENT
+      chain_is_evolution_not_mandatory_private_thought: true
+    "32_MODEL_AND_MEMORY_DISTINCTION":
+      model: GENERAL_LEARNED_CAPABILITY
+      memory: SPECIFIC_RETRIEVABLE_INFORMATION
+      context: CURRENT_TASK_INFORMATION
+      record: ORGANIZED_INFORMATION_UNIT
+      index: RECORD_LOCATION_MECHANISM
+      relations: RECORD_CONNECTIONS
+      history: RECORD_EVOLUTION
+    "33_AUREOLA_AROUND_GPT":
+      role: ORGANIZATION_MEMORY_AND_IMPROVEMENT_LAYER
+      flow:
+        - INPUT
+        - EXAMINE
+        - IDENTIFY_CONTEXT
+        - CONSULT_RELEVANT_MEMORY
+        - COMPARE_EXISTING_KNOWLEDGE
+        - PROCESS_WITH_MODEL
+        - VERIFY
+        - IMPROVE
+        - INTEGRATE
+        - REGISTER
+        - OUTPUT
+      model_is_not_memory: true
+      memory_serves_centraldark_agent: true
+    "34_CONTINUITY_WITHOUT_DUPLICATION":
+      existing_record: EXAMINE_COMPARE
+      equal_record: DO_NOT_DUPLICATE
+      better_record: INTEGRATE_UPDATE
+      error_record: CORRECT
+      new_confirmed_record: CREATE
+      uncertain_record: MARK_UNKNOWN
+    "35_MAXIMUM_CONTINUITY":
+      preserve_validated_knowledge: true
+      sequence:
+        - EXAMINE
+        - COMPARE
+        - DISCERN
+        - PRESERVE
+        - CORRECT
+        - IMPROVE
+        - INTEGRATE
+        - REGISTER
+        - VERIFY
+        - CONTINUE
+  agent_axiom:
+    memory: true
+    context: true
+    relations: true
+    versions: true
+    examination: true
+    improvement: true
+    equals: KNOWLEDGE_CONTINUITY
+  centraldark_agent_statement: >-
+    A CentralDark é a inteligência e o agente por dentro; o modelo tipo GPT é
+    um motor substituível usado por ela para interpretar, comparar, raciocinar,
+    verificar e produzir saída. A continuidade pertence ao conjunto CentralDark:
+    memória indexada, contexto, relações, versões, owners, evidências e histórico.
+  canonical_retrieval_rule: >-
+    Todo novo delta deve procurar o que já existe, recuperar o contexto relevante,
+    comparar, corrigir ou integrar no owner existente e registrar a evolução sem
+    apagar o que foi validado.
