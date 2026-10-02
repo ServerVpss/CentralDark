@@ -1449,8 +1449,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** combinar a matriz #141 com este método para transformar vermelho em reparo mínimo.
 
 ### 144. Limite de canal não bloqueia cristalização: compactar no canônico e expandir em Lembranças
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L144`; `PREV_GLOBAL_UID=L143`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=144`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
-- **NeuroLink:** `LEARNING_ID=144`; `PREV_LEARNING_REF=143`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L144`; `PREV_GLOBAL_UID=L143`; `NEXT_GLOBAL_UID=L145`; `LEGACY_LEARNING_NUMBER=144`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=144`; `PREV_LEARNING_REF=143`; `NEXT_LEARNING_REF=145`.
 - **Categoria:** channel-limit-recoverable-compression.
 - **Owner:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#15`.
 - **Aprendizado:** se o canal rejeita registro grande, escrever a forma compacta no owner canônico e preservar a expansão em Lembranças com backlink; continuar a missão sem criar v1/v2/v3.
@@ -1458,3 +1458,15 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `CHANNEL_LIMIT_IS_NOT_MISSION_BLOCKED=true`; `COMPRESSION_IS_NOT_INFORMATION_LOSS=true`; `SAME_OWNER_MUST_BE_EVOLVED=true`; `NO_V1_V2_V3_CHANNEL_FALLBACK=true`.
 - **Contraprova:** compactação que perde owner, provenance, contraprova ou NEXT_CURSOR é regressão; Lembrança não vira segundo owner.
 - **Next cursor:** aplicar automaticamente em qualquer escrita futura barrada por limite de canal/formato.
+
+### 145. Marca, superfície, capability, estado e prova são eixos separados
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L145`; `PREV_GLOBAL_UID=L144`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=145`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=145`; `PREV_LEARNING_REF=144`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** surface-capability-evidence-inference-control.
+- **Owner:** `.agents/skills/centraldark-unified-surface-parity/SKILL.md` + `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md`.
+- **Aprendizado:** `CHAT_GLOBAL` é a classe portátil de qualquer chat conectado à CentralDark; ChatGPT, Claude Chat, Gemini Chat, Grok Chat e futuros chats são superfícies/proveniência. Capability é derivada das tools realmente medidas na sessão, nunca da marca. GitHub não implica shell; shell/bridge autorizado pode dar capability executora ao próprio chat naquele escopo.
+- **Lei de evidência:** `MEASURED_EVIDENCE_OUTRANKS_UNMEASURED_INFERENCE_FOR_SAME_CLAIM_SCOPE_TIME=true`. Hermes com shell pode ser mais forte para estado local; CHAT_GLOBAL com GitHub CURRENT pode ser mais forte para main remota. Não existe hierarquia fixa por marca.
+- **Cristal:** `CHAT_GLOBAL_IS_CLASS_NOT_PRODUCT=true`; `SURFACE_NAME_IS_NOT_CAPABILITY=true`; `GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true`; `TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true`; `CHAT_GLOBAL_WITH_AUTHORIZED_SHELL_OR_BRIDGE_CAN_EXECUTE_IN_SCOPE=true`; `LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true`; `CURRENT_MAIN_IS_NOT_LOCAL_RUNTIME_STATE_WITHOUT_LOCAL_MEASUREMENT=true`; `USER_STATED_SURFACE_FACT_OUTRANKS_ASSISTANT_GENERIC_PRIOR=true`.
+- **Contraprova:** provenance específica continua específica: registro histórico de uma sessão ChatGPT não deve ser reescrito para CHAT_GLOBAL. Medição local não prova main remota; main remota não prova runtime local.
+- **Next cursor:** antes de qualquer claim/correção sobre capacidade de agente/chat, classificar superfície, medir toolset, fixar claim+scope+tempo e só então concluir.
