@@ -2,7 +2,7 @@
 
 ## Sequência canônica
 
-APRENDIZADO → LEMBRANÇA → RECEITA EXECUTÁVEL → HOOK REAL quando aplicável → TRIGGER → BOOT → VERIFIER → CONSUMER REAL → CHECK-LIST DIÁRIO → PR-MÃE #1562 → PR RELACIONADA quando o escopo intersecta → BINDING FÍSICO quando o claim depende dele → READBACK.
+APRENDIZADO → LEMBRANÇA → RECEITA EXECUTÁVEL → HOOK REAL quando aplicável → TRIGGER → BOOT → VERIFIER → CONSUMER REAL → CHECK-LIST DIÁRIO → RECEIPT → PR-MÃE #1562 → PR RELACIONADA quando o escopo intersecta → BINDING FÍSICO quando o claim depende dele → READBACK.
 
 Cada camada deve terminar como PASS, UNKNOWN, BLOCKED ou N/A. N/A precisa de justificativa; UNKNOWN nunca vira PASS.
 
@@ -59,3 +59,7 @@ Hermes runtime guard já possui hooks reais: on_session_start, pre_llm_call, pre
 ## NEXT_CURSOR
 
 Antes de FIXED_POINT, enumerar camadas aplicáveis, provar/materializar cada uma, preservar UNKNOWN/N/A honestos e fazer readback final.
+
+## Delta descoberto pela própria peneira
+
+`docs/receipts` foi adicionado ao sparse-checkout do consumer porque o receipt participa do fechamento verificável. A primeira probe mostrou o path habilitado, mas o arquivo ainda ausente no checkout root antigo, provando `SPARSE_PATH_ENABLED != FILE_PRESENT_AT_CURRENT_HEAD`. A prova válida deve usar o mesmo HEAD do claim, por worktree detachado de `origin/main`.
