@@ -159,6 +159,34 @@ check('CENTRALDARK_AI_BOOT.yaml',[
  'do_not_hardcode_head_writer_or_runtime_route: true',
 ], classification='PORTABLE_OPERATION_CONTRACT_ANY_CHAT')
 
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'portable_operation_contract:',
+ 'bayesian_reanchor_measurement:',
+ 'purpose: "MEASURE_REANCHOR_EFFECT_INSTEAD_OF_ASSERTING_ALIGNMENT"',
+ 'reinjection_is_intervention_not_proof: true',
+ 'likelihood_ratio_latex: |-',
+ 'posterior_probability_latex: |-',
+ 'reanchor_uplift_latex: |-',
+ 'beta_posterior_latex: |-',
+ 'brier_score_latex: |-',
+ 'invented_likelihood_ratio: "FORBIDDEN"',
+ 'causal_uplift_claim_requires_control_or_matched_baseline: true',
+ 'no_control_means: "DESCRIPTIVE_REANCHOR_RECOVERY_RATE_ONLY"',
+ 'no_numeric_basis: "REPORT_ORDINAL_ONLY: FAVORECE_H|NEUTRO|FAVORECE_NOT_H|NOT_CALCULABLE"',
+], classification='BAYESIAN_REANCHOR_MEASUREMENT_CONTRACT')
+check('.agents/skills/meta-lupa/references/matematica-e-calibracao.md',[
+ '## 8. Medição Bayesiana de reancoragem do contrato portátil',
+ 'LR_i=\\frac{P(E_i\\mid H)}{P(E_i\\mid \\neg H)}',
+ '\\Delta_{reanchor}',
+ '\\operatorname{Beta}(\\alpha_0+s,\\beta_0+f)',
+ 'Brier Score',
+], classification='BAYESIAN_REANCHOR_MATH_OWNER')
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 140. Reancoragem portátil deixa de ser promessa',
+ 'BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED',
+ 'LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true',
+], classification='BAYESIAN_REANCHOR_LEARNING_140')
+
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
  'GENERAL_IS_OPERATIONAL_POSTURE=true',
  'GENERAL_IS_NOT_NEW_IDENTITY=true',
