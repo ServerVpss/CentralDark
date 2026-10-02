@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "0e32247fdfffae00e7698d6940d90243e4430e1d",
+  "source_blob_sha": "12416233cb6d0fee50f7af436c485f90c88245eb",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 140,
-    "highest_legacy_learning_number": 141,
+    "learning_sections": 141,
+    "highest_legacy_learning_number": 142,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 141
+      "end": 142
     }
   },
   "nodes": [
@@ -1625,6 +1625,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L140",
+      "next_uid": "L142"
+    },
+    {
+      "uid": "L142",
+      "legacy_learning_number": 142,
+      "legacy_occurrence": 1,
+      "title": "Sessão 2026-10-02 consolidou corpo único, forja local, contrato portátil, Bayes, funil e localização causal de vermelhos",
+      "document_order": 141,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "SESSION_SYNTHESIS_CONTINUITY",
+      "prev_uid": "L141",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
