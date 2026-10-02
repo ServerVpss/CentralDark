@@ -859,6 +859,22 @@ CENTRALDARK_AI_BOOT:
         - HANDOFF_EXHAUSTED
         - EXACT_BLOCKER_PROVED
       local_shell_absent_does_not_end_system_loop: true
+      one_route_failed_is_not_system_failed: true
+      local_route_offline_is_not_global_capability_offline: true
+      alternate_authorized_route_before_human_blocker: true
+      route_health_must_be_remeasured_per_binding: true
+      same_logical_system_may_be_reached_outside_in_and_inside_out: true
+      bidirectional_route_does_not_create_second_system: true
+      transversal_route_reuses_same_owner_and_proof_law: true
+      capability_system_model: "UNION_OF_MEASURED_AUTHORIZED_ROUTE_CAPABILITIES"
+      route_fail_sequence:
+        - CLASSIFY_EXACT_ROUTE
+        - KEEP_SYSTEM_STATE_UNDECIDED
+        - INVENTORY_AUTHORIZED_ALTERNATE_ROUTES
+        - MEASURE_ALTERNATES
+        - REUSE_LIVE_CAPABILITY
+        - COMPARE_SAME_CLAIM_SCOPE_TIME
+        - DECIDE_PASS_UNKNOWN_OR_BLOCKED
     human_counterproof_reentry:
       enabled: true
       trigger: "MATERIAL_HUMAN_COUNTERPROOF_INVALIDATES_CURRENT_EXIT"
