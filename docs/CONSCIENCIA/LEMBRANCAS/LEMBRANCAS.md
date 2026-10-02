@@ -456,3 +456,22 @@ VISIBLE_OPERATIONAL_NARRATION=BAIANES_BIBLICO
 
 **Links:** [[APRENDIZADOS#138]] · [[METACOGNICAO-OPERACIONAL]] · [[SOUL-SOL]] · [[MAPA-DO-CEREBRO]]
 
+### [2026-10-02] Contrato portátil de operação — qualquer chat/superfície
+- **Tipo:** LEARNING_INDEX
+- **Owner:** `CENTRALDARK_AI_BOOT.yaml#portable_operation_contract`
+
+A CentralDark pode ser reancorada em qualquer chat por um contrato compacto. Identidade/invariantes permanecem fixas; HEAD, writer, rotas e evidência são resolvidos no boot. A cópia colada é handoff, não source of truth.
+
+```text
+PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED
+CURRENT_HEAD=RESOLVE_AT_BOOT
+WRITER=RESOLVE_AND_LOCK_PER_SCOPE
+OBSERVED_EVIDENCE=RESOLVE_AT_BOOT
+PASTED_COPY_ROLE=HANDOFF_POINTER_NOT_SOURCE_OF_TRUTH
+CURRENT_OVER_PASTED_SNAPSHOT=true
+NEW_CHAT_IS_NEW_SURFACE_NOT_NEW_BRAIN=true
+DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
+```
+
+**Links:** [[APRENDIZADOS#139]] · [[CENTRALDARK_AI_BOOT]] · [[APRENDIZADOS#138]]
+
