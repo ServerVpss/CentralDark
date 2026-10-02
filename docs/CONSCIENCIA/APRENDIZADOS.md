@@ -1438,8 +1438,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 143. O vermelho já carrega a divergência: erro estruturado é vetor de reparo
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L143`; `PREV_GLOBAL_UID=L142`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=143`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
-- **NeuroLink:** `LEARNING_ID=143`; `PREV_LEARNING_REF=142`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L143`; `PREV_GLOBAL_UID=L142`; `NEXT_GLOBAL_UID=L144`; `LEGACY_LEARNING_NUMBER=143`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=143`; `PREV_LEARNING_REF=142`; `NEXT_LEARNING_REF=144`.
 - **Categoria:** structured-red-to-minimum-remediation.
 - **Data:** 2026-10-02.
 - **Aprendizado:** quando o vermelho já traz `observado != esperado`, começar por essa divergência, resolver o owner e aplicar o menor delta; só ampliar a investigação se restar ambiguidade.
@@ -1447,3 +1447,14 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `STRUCTURED_RED_IS_REPAIR_VECTOR=true`; `EXACT_DIVERGENCE_BEFORE_BROAD_INVESTIGATION=true`; `OWNER_RESOLUTION_BEFORE_PATCH=true`; `MINIMUM_DELTA_FIRST=true`; `EXPECTED_VS_OBSERVED_DOES_NOT_DECIDE_AUTHORITY_BY_ITSELF=true`; `TARGETED_RETEST_AFTER_MINIMUM_DELTA=true`.
 - **Contraprova:** teste e CURRENT podem discordar; o erro mostra a diferença, mas o owner decide qual lado é autoridade. Se o reparo mínimo falhar, `VOLTA_UMA_CASA` no cone afetado.
 - **Next cursor:** combinar a matriz #141 com este método para transformar vermelho em reparo mínimo.
+
+### 144. Limite de canal não bloqueia cristalização: compactar no canônico e expandir em Lembranças
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L144`; `PREV_GLOBAL_UID=L143`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=144`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=144`; `PREV_LEARNING_REF=143`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** channel-limit-recoverable-compression.
+- **Owner:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#15`.
+- **Aprendizado:** se o canal rejeita registro grande, escrever a forma compacta no owner canônico e preservar a expansão em Lembranças com backlink; continuar a missão sem criar v1/v2/v3.
+- **Fluxo:** `CHANNEL_LIMIT -> COMPACT_CANONICAL_RECORD -> EXPANDED_REMEMBRANCE -> BACKLINK -> SAME_OWNER -> CONTINUE`.
+- **Cristal:** `CHANNEL_LIMIT_IS_NOT_MISSION_BLOCKED=true`; `COMPRESSION_IS_NOT_INFORMATION_LOSS=true`; `SAME_OWNER_MUST_BE_EVOLVED=true`; `NO_V1_V2_V3_CHANNEL_FALLBACK=true`.
+- **Contraprova:** compactação que perde owner, provenance, contraprova ou NEXT_CURSOR é regressão; Lembrança não vira segundo owner.
+- **Next cursor:** aplicar automaticamente em qualquer escrita futura barrada por limite de canal/formato.
