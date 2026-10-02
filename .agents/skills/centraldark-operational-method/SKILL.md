@@ -2474,3 +2474,29 @@ MISSION_NE_OPERATIONAL_SYMPTOM=true
 RECOVER_CANONICAL_PLAN_BEFORE_IMPLEMENTATION=true
 
 Recuperar o rumo humano vigente, o owner do plano e o próximo cursor antes de escolher ferramentas. Reparos de desktop/rede são ramos; não substituir a construção de inteligência persistente pelo último sintoma. Plano do cockpit: `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`, seção Plano vigente recuperável — 2026-10-01. Comparar cada etapa com prova atual; plano registrado, fonte existente e conta autenticada não significam integração executada. Selecionar skills sob demanda pelo setor e reutilizar o owner antes de criar.
+
+## Modo padrão — autoconsulta canônica em cada decisão material
+
+Antes de perguntar ao CHEFE, contradizer sua intuição ou substituir sua leitura por uma inferência do executor:
+
+```text
+RECUPERAR_INTENCAO_VIGENTE
+→ CONSULTAR_CANONICO
+→ CURRENT/RECEIPTS APLICAVEIS
+→ SELF_GRILL
+→ TENTAR_DERRUBAR_A_INTUICAO_COM_EVIDENCIA_INTERNA_E_VIVA
+→ SOBREVIVEU: CONTINUAR
+→ CAIU: MOSTRAR CONTRADICAO CONCRETA
+```
+
+Durante código, repetir o mesmo ciclo por decisão: setor → owner → receita/fingerprint → menor delta → efeito → prova/contraprova → VOLTA_UMA_CASA se divergir → costura do cone afetado → fixed point → receipt → next cursor.
+
+```text
+DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
+CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true
+TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true
+GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
+EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true
+DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
+```
+
