@@ -1460,8 +1460,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** aplicar automaticamente em qualquer escrita futura barrada por limite de canal/formato.
 
 ### 145. Marca, superfície, capability, estado e prova são eixos separados
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L145`; `PREV_GLOBAL_UID=L144`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=145`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
-- **NeuroLink:** `LEARNING_ID=145`; `PREV_LEARNING_REF=144`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L145`; `PREV_GLOBAL_UID=L144`; `NEXT_GLOBAL_UID=L146`; `LEGACY_LEARNING_NUMBER=145`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=145`; `PREV_LEARNING_REF=144`; `NEXT_LEARNING_REF=146`.
 - **Categoria:** surface-capability-evidence-inference-control.
 - **Owner:** `.agents/skills/centraldark-unified-surface-parity/SKILL.md` + `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
 - **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md`.
@@ -1470,3 +1470,19 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `CHAT_GLOBAL_IS_CLASS_NOT_PRODUCT=true`; `SURFACE_NAME_IS_NOT_CAPABILITY=true`; `GITHUB_ACCESS_IS_NOT_SHELL_ACCESS=true`; `TOOLSET_MUST_BE_MEASURED_BEFORE_CAPABILITY_CLAIM=true`; `CHAT_GLOBAL_WITH_AUTHORIZED_SHELL_OR_BRIDGE_CAN_EXECUTE_IN_SCOPE=true`; `LOCAL_HEAD_IS_NOT_CURRENT_MAIN_UNLESS_REMEASURED=true`; `CURRENT_MAIN_IS_NOT_LOCAL_RUNTIME_STATE_WITHOUT_LOCAL_MEASUREMENT=true`; `USER_STATED_SURFACE_FACT_OUTRANKS_ASSISTANT_GENERIC_PRIOR=true`.
 - **Contraprova:** provenance específica continua específica: registro histórico de uma sessão ChatGPT não deve ser reescrito para CHAT_GLOBAL. Medição local não prova main remota; main remota não prova runtime local.
 - **Next cursor:** antes de qualquer claim/correção sobre capacidade de agente/chat, classificar superfície, medir toolset, fixar claim+scope+tempo e só então concluir.
+
+
+### 146. Sistema híbrido multirota: uma rota falhar não reduz a capability global do organismo
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L146`; `PREV_GLOBAL_UID=L145`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=146`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink:** `LEARNING_ID=146`; `PREV_LEARNING_REF=145`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** hybrid-multiroute-bidirectional-transversal-capability.
+- **Data:** 2026-10-02.
+- **Owner:** `.agents/skills/centraldark-unified-surface-parity/SKILL.md#02-sistema-híbrido-multirota-bidirecional-e-transversal` + `CENTRALDARK_AI_BOOT.yaml#cross_surface_capability_handoff`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md`.
+- **Contexto:** durante uma leitura da Casa, a rota antiga `Remote Desktop Commander -> SEGREDO Windows` ficou offline. Em vez de classificar o sistema como inacessível, o executor aplicou o owner e procurou rota alternativa. O conector `CENTRALDARK` expôs três dispositivos `CENTRALDARK-OS` online. Um respondeu como `root` e mostrou Tailscale `Running` com IP tailnet; dois outros responderam pelo mesmo corpo lógico com Tailscale `NeedsLogin`. Isso provou que `ROUTE_STATE != SYSTEM_STATE` e que health/capability precisam ser presos ao binding medido.
+- **Aprendizado:** CentralDark é um único sistema lógico com múltiplas rotas autorizadas de entrada/saída: Casa, CENTRALDARK-OS, VPS, Tailscale, RDC/Desktop Commander, SSH, MCP, Telegram, Gateway, GitHub e superfícies futuras podem fornecer capabilities diferentes no mesmo instante. A capability global não é igual à capability da rota atual; operacionalmente ela é a união das capabilities efetivamente medidas nas rotas autorizadas vivas aplicáveis ao claim.
+- **Modelo:** `CAPABILITY_SYSTEM(t)=UNION(CAPABILITY(route,t) for route in AUTHORIZED_ROUTES measured alive)`.
+- **Fluxo:** `ROUTE_FAIL -> CLASSIFY_EXACT_ROUTE -> KEEP_SYSTEM_STATE_UNDECIDED -> INVENTORY_AUTHORIZED_ALTERNATE_ROUTES -> MEASURE_ALTERNATES -> REUSE_LIVE_CAPABILITY -> COMPARE_SAME_CLAIM_SCOPE_TIME -> PASS|UNKNOWN|BLOCKED`.
+- **Cristal:** `ONE_ROUTE_FAILED_IS_NOT_SYSTEM_FAILED=true`; `LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE=true`; `LOCAL_BLOCKED_IS_NOT_GLOBAL_BLOCKER=true`; `ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER=true`; `HUMAN_FRONTIER_REQUIRES_EXHAUSTED_AUTHORIZED_BODIES=true`; `ROUTE_HEALTH_MUST_BE_REMEASURED_PER_BINDING=true`; `SAME_LOGICAL_SYSTEM_MAY_BE_REACHED_FROM_OUTSIDE_IN_AND_INSIDE_OUT=true`; `BIDIRECTIONAL_ROUTE_DOES_NOT_CREATE_SECOND_SYSTEM=true`; `TRANSVERSAL_ROUTE_REUSES_SAME_OWNER_AND_PROOF_LAW=true`.
+- **Contraprova:** uma rota online não prova que todas as outras estão saudáveis; Tailscale `Running` em um binding não torna `NeedsLogin` de outro binding falso. Multiplicidade de bindings também não prova duplicação arquitetural: primeiro classificar processo, conta, identidade, transporte e capability. Rota conhecida/documentada não é prova viva; deve ser remedida antes do uso.
+- **Next cursor:** diante de qualquer falha de acesso, nunca elevar `rota falhou` para `sistema falhou` antes de esgotar e medir as rotas autorizadas aplicáveis; registrar qual binding provou cada claim.
