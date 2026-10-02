@@ -2,4 +2,37 @@
 
 `POSIÇÃO → DIREÇÃO → PROVENIÊNCIA → DELTA → CONFIANÇA → CURSOR`
 
-Herda a META-LUPA. Não cria owner nem engine paralela.
+Herda a META-LUPA. Não cria owner, memória, router ou engine paralela.
+
+## Função
+
+```text
+META_START_LINK=CONNECTION_NOT_STORAGE
+CURRENT_POSITION → CANONICAL_DIRECTION
+PROVENANCE → DELTA
+CONFIDENCE → NEXT_CURSOR
+NEXT_WINDOW_OR_ENGINE → RECOVER_FROM_OWNER
+```
+
+Ele liga, sem copiar integralmente:
+
+- `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade/invariantes;
+- `docs/CONSCIENCIA/APRENDIZADOS.md` — sequência numérica de aprendizados;
+- `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` — índice humano/semântico;
+- `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md` — lei META;
+- `docs/CONSCIENCIA/MULTIBUSSOLA.md` — `META_MULTIBUSSOLA`;
+- `.agents/skills/meta-lupa/SKILL.md` — MetaLupa;
+- `../META-GRILL/GANCHO.md` — MetaGrill;
+- Semantic Linker — relações explicáveis e busca/reentrada.
+
+## Invariantes
+
+```text
+START_LINK_IS_META_START_LINK=true
+START_LINK_PRESERVES_CURSOR=true
+START_LINK_MUST_PRESERVE_PROVENANCE=true
+START_LINK_MUST_NOT_DUPLICATE_CANONICAL_MEMORY=true
+START_LINK_MUST_NOT_CREATE_SECOND_BRAIN=true
+START_LINK_RECOVERY_PREFERS_OWNER=true
+UNKNOWN_IS_NOT_PASS=true
+```

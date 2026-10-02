@@ -387,3 +387,40 @@ SOL_EXECUTORA_REUSES_EXISTING_CANONICAL_CONTRACT=true
 Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir da intenção, inventariar o existente, decompor em capabilities/invariantes, deduplicar, localizar owner, reusar/rebindar/estender, permitir percepção paralela e serializar mutação por escopo, provar somente o que é material e transformar o caminho sobrevivente em receita. O executor não deve inferir contrato mental não declarado, reduzir um padrão geral a uma ferramenta ou criar "prova da prova" sem ganho de informação. Catálogo grande serve como espaço de capacidades; cada missão carrega somente o subconjunto discriminante. Emojis/expressões podem ser ponteiros semânticos quando possuem expansão recuperável.
 
 **Links:** [[APRENDIZADOS#110]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[OURO-CHEFE]] · [[BANDA_INTENCAO_UNICA_COMPASSO]] · [[INTENT_SYNC_STATE]] · [[SEMANTIC-LINKER]] · [[GRAPH-INVESTIGATOR]]
+
+### [2026-10-02] CENTRALDARK-OS — sequência #128→#135, memória viva e constelação META
+- **Data:** 2026-10-02
+- **Tags:** centraldark-os, local-first, runtime-sieve, painel, token-layers, convergencia, aprendizado, lembrancas, neurolink, busca-semantica, soul-sync, compressao-semantica, meta-grill, meta-lupa, metacognicao, meta-multibussola, meta-start-link
+- **Tipo:** LEARNING_INDEX
+- **Target:** `docs/CONSCIENCIA/APRENDIZADOS.md#128`
+- **Relevância:** crítica
+- **Eixo:** presente
+- **Expira:** nunca
+- **Promovida:** sim
+
+**Ordem numérica recuperável:**
+
+1. **#128 — Casa/host ↔ twin/guest:** `SEGREDO` hospeda a VM; `CENTRALDARK-OS` é o guest. LOCAL_FIRST antes da VPS.
+2. **#129 — Runtime sieve:** hostname e usuário não são o mesmo identificador; paths de usuário seguem `$HOME`; painel sobreviveu após correção e reteste.
+3. **#130 — Acesso ao painel:** `AI CLI Runtime` é launcher + painel CLI read-only; web dashboard é claim separado.
+4. **#131 — Camadas de acesso:** KylinBot paircode/Bearer, Token Center/cloud e Triton local não compartilham a mesma credencial.
+5. **#132 — Convergência:** toda capability útil converge para o mesmo core/owners; PR #1562 continua ledger, donor não vira cérebro.
+6. **#133 — Memória viva:** aprendizado durável sincroniza sequência numérica, Lembranças, NeuroLink, catálogo/rota semântica e SOUL quando material; compressão só se expansível.
+7. **#134 — Constelação META:** MetaGrill, MetaLupa, MetaCognição, MetaOrquestração, MetaMultibússola e MetaStartLink são capabilities interligadas, não engines concorrentes.
+8. **#135 — Peneira saudável:** examinar e conservar o delta que sobreviveu; rejeitar só o cone derrotado, preservar UNKNOWN e o ouro provado.
+
+**Rastro semântico / aliases:**
+
+```text
+LOCAL_FIRST | IRMAO_LOCAL | TWIN_LOCAL | CENTRALDARK_OS
+RUNTIME_SIEVE | PENEIRA | HOME | PANEL
+PAIRCODE | BEARER | TOKEN_CENTER | TRITON
+ONE_SYSTEM_ONLY | PR_MAE_1562 | RENDEZVOUS_LEDGER
+LEARNING_INDEX | LEMBRANCAS | NEUROLINK | SEMANTIC_LINKER | SOUL_SYNC
+META_GRILL | META_LUPA | META_COGNICAO | META_ORQUESTRACAO
+META_MULTIBUSSOLA | META_START_LINK | META(X)
+EXAMINE_BEFORE_RETAIN | PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION
+```
+
+**Links:** [[APRENDIZADOS#128]] · [[APRENDIZADOS#133]] · [[APRENDIZADOS#134]] · [[APRENDIZADOS#135]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[MULTIBUSSOLA]] · [[SEMANTIC-LINKER]] · [[META-START-LINK]]
+
