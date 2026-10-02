@@ -222,6 +222,7 @@ SAME_CLAIM+SCOPE+TIME: MEASURED_EVIDENCE > UNMEASURED_INFERENCE
 - [x] Ferida discriminante: `origin/main` tinha o checklist, mas o sparse-checkout do consumer não materializava `docs/BRAIN/00-MAPA-SISTEMA`; `CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME`.
 - [x] Delta mínimo aplicado: `docs/BRAIN/00-MAPA-SISTEMA` adicionado ao sparse-checkout existente.
 - [x] Pós-remediação: `HYBRID_MULTIROUTE_HOOK_CONTRACT=PASS`, `SENTINEL_HOOK=PASS`, `MACHINE_RECIPE=PASS`, `CHECKLIST_CONTRACT=PASS`, `RECIPE_COMPLETENESS=PASS`.
+- [x] Consumer self-test preserva marcador factual: `multiroute_recipe_hook=true`.
 - [x] Verifier global permanece vermelho fora do cone (`GLOBAL_FAILED=30` na medição); `CONE_PASS != GLOBAL_PASS`.
 - [ ] Binding físico `E:\VMs\CENTRALDARK-OS\SHARED ↔ guest HGFS`: NOT_PROVEN nesta medição; Windows `SEGREDO` offline e HGFS não visível/montado no guest.
 - [x] PR-MÃE #1562 continua ledger/rendezvous; não é writer.
