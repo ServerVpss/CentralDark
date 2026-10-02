@@ -529,3 +529,9 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Learning:** #146
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md`
 - **Conteúdo:** falha de uma rota não define falha do sistema; capability sistêmica é modelada como união das capabilities realmente medidas nas rotas autorizadas vivas aplicáveis ao claim. A prova temporal da sessão mostrou `SEGREDO/RDC=OFFLINE` enquanto outro conector `CENTRALDARK` alcançou `CENTRALDARK-OS`; estados de Tailscale divergiram por binding, confirmando `ROUTE_STATE != SYSTEM_STATE`.
+
+### [2026-10-02] Lei da Peneira Completa
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #147
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-LEI-DA-PENEIRA-COMPLETA.md`
+- **Conteúdo:** novidade material só fecha após atravessar todas as camadas aplicáveis; `CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME`; binding físico entra quando o claim depende dele.
