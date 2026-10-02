@@ -437,3 +437,22 @@ EXAMINE_BEFORE_RETAIN | PROVEN_GOOD_MUST_SURVIVE_RECONCILIATION
 
 **Links:** [[APRENDIZADOS#128]] · [[APRENDIZADOS#133]] · [[APRENDIZADOS#134]] · [[APRENDIZADOS#135]] · [[APRENDIZADOS#136]] · [[APRENDIZADOS#137]] · [[SOUL-SOL]] · [[METACOGNICAO-OPERACIONAL]] · [[MULTIBUSSOLA]] · [[SEMANTIC-LINKER]] · [[META-START-LINK]]
 
+### [2026-10-02] Modo operacional padrão — autoconsulta canônica / SELF-GRILL
+- **Data:** 2026-10-02
+- **Tags:** metacognicao, self-grill, docs-first, chefe, intencao, current, baianes-biblico
+- **Tipo:** LEARNING_INDEX
+
+Antes de pergunta, contradição ou decisão material, recuperar intenção vigente e consultar owners/docs/receitas/CURRENT; tentar falsificar a intuição do CHEFE com essa própria base. Se sobreviver, continuar sem ritual; se cair, mostrar a contradição concreta. O mesmo ciclo reentra durante cada decisão de código. “Minha cabeça” é tratado como método externalizado, não como leitura mental.
+
+```text
+DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
+CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true
+TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true
+GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
+EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true
+DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
+VISIBLE_OPERATIONAL_NARRATION=BAIANES_BIBLICO
+```
+
+**Links:** [[APRENDIZADOS#138]] · [[METACOGNICAO-OPERACIONAL]] · [[SOUL-SOL]] · [[MAPA-DO-CEREBRO]]
+
