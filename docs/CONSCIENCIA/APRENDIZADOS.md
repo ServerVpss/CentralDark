@@ -1572,8 +1572,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** fazer inventário diferencial da bancada contra o `main` CURRENT, separar `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`, preservar o funcional, reconciliar o menor cone primeiro e só depois materializar a cápsula VMware → VPS.
 
 ### 153. Compressão por invariante + bindings autossuficientes: a VMware deve executar o mesmo sistema sem depender da Casa como salto
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L153`; `PREV_GLOBAL_UID=L152`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=153`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=153`; `PREV_LEARNING_REF=152`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L153`; `PREV_GLOBAL_UID=L152`; `NEXT_GLOBAL_UID=L154`; `LEGACY_LEARNING_NUMBER=153`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=153`; `PREV_LEARNING_REF=152`; `NEXT_LEARNING_REF=154`.
 - **Categoria:** invariant-compression-live-state-bindings-vmware-vps.
 - **Data:** 2026-10-03.
 - **Owner do aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md`.
@@ -1586,3 +1586,21 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `RAW_COUNT_IS_NOT_ARCHITECTURE=true`; `COMPRESS_BY_INVARIANT_BEFORE_CREATING=true`; `ONE_CLOCK_CAN_DISPATCH_MULTIPLE_FAMILIES=true`; `QUEUED_IS_NOT_RUNNING=true`; `RUNNER_NAME_EMPTY_MEANS_EXECUTOR_NOT_ASSIGNED=true`; `ROUTE_STATE_IS_NOT_SYSTEM_STATE=true`; `VPS_TCP22_REACHABLE=PASS`; `VMWARE_SHARED_SSH_BINDING=PASS`; `VMWARE_SHARED_SECRETS_BINDING=PASS`; `CASA_REQUIRED_AS_SSH_HOP=NO`; `KNOWN_HOSTS_STALE=PROVEN`; `NEW_HOST_IDENTITY_ACCEPTANCE=NOT_YET_AUTHORIZED_BY_PROOF`; `SECRETS_STAY_OUT_OF_GIT=true`; `REUSE_BEFORE_CREATE=true`; `ONE_SYSTEM_ONLY=true`; `CURRENT_OVER_HISTORY=true`; `UNKNOWN_IS_NOT_PASS=true`.
 - **Contraprova:** amarelo no GitHub não prova execução; self-hosted/Linux não identifica sozinho VMware ou VPS; Desktop Commander offline não prova host offline; porta 22 viva não prova autenticação SSH; arquivo de chave presente não prova login; duas leituras iguais da nova host key aumentam consistência da observação, mas não substituem uma âncora independente/autorizada para promoção da identidade.
 - **Next cursor:** validar a identidade SSH atual da VPS por âncora independente/autorizada; atualizar somente o binding `known_hosts` afetado; provar `VMware → VPS` com sessão autenticada e hostname/user; depois registrar/matricular o runner self-hosted dedicado da VMware e provar um job real com `runner_name` preenchido antes de comprimir/rebindar workflows por família.
+
+### 154. Binding de ambiente não é arquitetura: config byte-a-byte da Casa carregou path Windows no Linux; adaptar somente o path provou VMware → VPS direto
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L154`; `PREV_GLOBAL_UID=L153`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=154`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=154`; `PREV_LEARNING_REF=153`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** environment-binding-cross-os-ssh-direct-vmware-vps.
+- **Data:** 2026-10-03.
+- **Owner do aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md`.
+- **Owner da receita:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#VMWARE_VPS_DIRECT_SSH_BINDING_PATH`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-RECEITA-VMWARE-VPS-DIRECT-SSH-BINDING.md`.
+- **Descoberta raiz:** `SHARED/ssh/config` e `~/.ssh/config` estavam byte-a-byte iguais, mas essa igualdade preservava um binding inválido no guest Linux: `IdentityFile C:/Users/Administrador/.ssh/segredo_vps_ed25519`. Portanto `BYTE_EQUAL_CONFIG != VALID_CROSS_OS_BINDING`.
+- **Delta mínimo:** foi criado backup local `~/.ssh/config.pre-vm-binding-20261003` e alterado somente o `IdentityFile` local da VMware para `~/.ssh/segredo_vps_ed25519`. O readback por `ssh -G segredo-vpss` confirmou `user root`, `hostname 89.117.78.124`, `identitiesonly yes` e o path Linux correto.
+- **Prova:** a VPS já respondia TCP/22. Após corrigir somente o binding, o probe SSH direto VMware→VPS autenticou com chave pública, retornou usuário remoto `root` e exit 0. Como VM e VPS usam o mesmo hostname `CENTRALDARK-OS`, a contraprova comparou SHA-256 de `/etc/machine-id`: VM `0f9dd395...d43ad8` e VPS `c61bd228...5fb5b93b`, provando máquinas distintas.
+- **Fronteira de host identity:** o `known_hosts` persistente continua stale. A VPS apresenta ED25519 `SHA256:KkbBd5sOR1boP8ldlWh45eWN2DY8RPjOHtXX+4FQhIE`, mas não existe âncora canônica anterior desse fingerprint. O probe de autenticação isolou temporariamente host-key trust usando `UserKnownHostsFile=/dev/null` + `StrictHostKeyChecking=no`; isso prova a chave de login, não autoriza trust persistente.
+- **Aprendizado:** receita e semântica permanecem estáveis entre Casa/VM/VPS; paths, aliases, hosts e profiles são bindings de ambiente. Espelhar config byte-a-byte entre SOs pode preservar uma ferida. Próximo executor deve carregar a mesma receita, adaptar somente bindings declarados, executar a mesma prova e comparar efeito.
+- **Cristal:** `VMWARE_TO_VPS_SSH_AUTH=PASS`; `CASA_REQUIRED_AS_SSH_HOP=NO`; `BYTE_EQUAL_CROSS_OS_CONFIG_IS_NOT_BINDING_PROOF=true`; `SAME_HOSTNAME_IS_NOT_SAME_MACHINE=true`; `MACHINE_ID_HASH_DISTINGUISHES_HOSTS_IN_THIS_PROOF=true`; `TEMP_HOSTKEY_BYPASS_IS_PROOF_ONLY=true`; `PERSISTENT_HOSTKEY_TRUST=UNKNOWN`; `ADAPT_ONLY_ENVIRONMENT_BINDINGS=true`; `SECRETS_STAY_OUT_OF_GIT=true`; `REUSE_BEFORE_CREATE=true`; `CURRENT_OVER_HISTORY=true`; `UNKNOWN_IS_NOT_PASS=true`.
+- **Recipe fingerprint:** `a5e27b72a31829b5a911ca6170efd1dc87a0ee69b7c7ba2991930ea2ead57602`.
+- **Next cursor:** validar a host key atual da VPS por âncora independente/autorizada; atualizar somente o trust binding persistente; reexecutar SSH com trust normal; registrar/provar runner self-hosted VMware com `runner_name` real; então comprimir/rebindar workflows por famílias medidas.
+
