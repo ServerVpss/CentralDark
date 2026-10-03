@@ -21,7 +21,7 @@
   },
   "audit": {
     "learning_sections": 151,
-    "highest_legacy_learning_number": 153,
+    "highest_legacy_learning_number": 154,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 153
+      "end": 154
     }
   },
   "nodes": [
@@ -1757,6 +1757,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L152",
+      "next_uid": "L154"
+    },
+    {
+      "uid": "L154",
+      "legacy_learning_number": 154,
+      "legacy_occurrence": 1,
+      "title": "Binding de ambiente não é arquitetura: config byte-a-byte da Casa carregou path Windows no Linux; adaptar somente o path provou VMware → VPS direto",
+      "document_order": 153,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L153",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
