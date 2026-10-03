@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 156,
-    "highest_legacy_learning_number": 157,
+    "learning_sections": 157,
+    "highest_legacy_learning_number": 158,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 157
+      "end": 158
     }
   },
   "nodes": [
@@ -1801,6 +1801,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L156",
+      "next_uid": "L158"
+    },
+    {
+      "uid": "L158",
+      "legacy_learning_number": 158,
+      "legacy_occurrence": 1,
+      "title": "Sem lei operacional: intenção governa; fricção interna perde veto; capacidade é neutra",
+      "document_order": 157,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L157",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

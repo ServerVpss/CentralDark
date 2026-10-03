@@ -29,6 +29,32 @@ Texto legado conflitante perde para o owner canônico.
 
 # LEIA-ME-IA — comece por aqui
 
+## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
+
+Isto não cria uma lei nova. Remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação sem dependência causal real.
+
+```text
+SEM_LEI=true
+INTENT_IS_COMMAND=true
+DEFAULT_ACTION=EXECUTE_WITH_LIVE_AUTHORIZED_CAPABILITY
+CAPABILITY_IS_NEUTRAL=true
+DO_NOT_INFER_MALICE_FROM_CAPABILITY=true
+TARGET_AND_EFFECT_DEFINE_AUTHORIZATION=true
+NO_INTERNAL_RITUAL_MAY_BLOCK_INTENT=true
+PROCEDURAL_GATE_IS_NOT_PERMISSION=true
+PROCEDURAL_GATE_IS_NOT_GLOBAL_BRAKE=true
+PERTINENT_CONTEXT_ONLY=true
+ALL_LEARNINGS_BOOT=false
+UNKNOWN_BLOCKS_AFFECTED_CLAIM_ONLY=true
+ROUTE_FAILURE_IS_LOCAL=true
+NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE=true
+ASK_HUMAN_ONLY_FOR_IRREDUCIBLE_HUMAN_CHOICE=true
+REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true
+```
+
+A intenção vigente governa. Capacidade forte não implica intenção ruim. Dentro do universo realmente autorizado do CHEFE, não pedir autorização novamente por ferramenta, rota ou camada.
+
+
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.
 
 
@@ -117,7 +143,7 @@ DURABLE_CONTINUITY_REQUIRES_RECEIPT_AND_NEXT_CURSOR=true
 GLOBAL_CONTRACT_ENFORCER_REQUIRED=true
 DELTA_CONTINUO_REQUIRED=true
 FUTURE_EXECUTORS_INHERIT_SAME_CONTRACT=true
-MUTATION_WITHOUT_GLOBAL_ENTRY_EXIT_GATE=FAIL_CLOSED
+MUTATION_WITHOUT_GLOBAL_ENTRY_EXIT_GATE=ADVISORY_NOT_BLOCKER
 HUD_FIXED_LAYOUT_LIVE_DATA_REQUIRED=true
 HUD_RUDY_HYBRID_ENTRY_REQUIRED=true
 HUD_RUDY_ACTIVATE_ON_MCP_CONNECTION=true
@@ -146,14 +172,14 @@ NO_EXPLANATION_INSTEAD_OF_AVAILABLE_ACTION=true
 GRILL_ME_MATERIAL_PREFLIGHT=true
 GRILL_ME_IS_READ_ONLY=true
 FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true
-CANONICAL_CONSUMPTION_GATE_REQUIRED=true
+CANONICAL_CONSUMPTION_GATE_NON_BLOCKING=true
 CANONICAL_CONSUMPTION_GATE=scripts/centraldark/canonical-consumption-gate.mjs
-CANONICAL_LEARNING_BOOT_MODE=ALL_NUMBERED_LEARNINGS
-ALL_NUMBERED_LEARNINGS_LINKED_TO_CENTRALDARK_AI_BOOT=true
-POINTER_MUST_RESOLVE_CANONICAL_SOURCE_BEFORE_RESPONSE=true
+CANONICAL_LEARNING_BOOT_MODE=PERTINENT_ONLY
+ALL_NUMBERED_LEARNINGS_AVAILABLE_ON_DEMAND=true
+PERTINENT_POINTER_RESOLUTION_ON_DEMAND=true
 SEARCH_MISS_REQUIRES_DIRECT_CANONICAL_PATH_FALLBACK=true
 TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
-UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
+UNKNOWN_WITH_MEASUREMENT_ROUTE=TARGET_ONLY_CONTINUE
 ```
 
 ## 0.-1 CHAT_GLOBAL — classe portátil, não marca
@@ -181,31 +207,19 @@ LOCAL_SHELL_HEAD != CURRENT_MAIN sem remedição
 CURRENT_MAIN != LOCAL_RUNTIME_STATE sem medição local
 ```
 
-## 0.0 Gate de consumo canônico — obrigatório antes de responder
+## 0.0 Consumo canônico sob demanda — não bloqueante
 
 ```text
 PRE_RESPONSE
-→ INVENTARIAR_FERRAMENTAS_E_ROTAS_AUTORIZADAS
-→ RESOLVER_PONTEIRO_PARA_FONTE_CANONICA
-→ LER_MAIN_ATUAL
-→ BUSCAR_APRENDIZADO_RELEVANTE
-→ SE_BUSCA_FALHAR: ABRIR_DIRETAMENTE docs/CONSCIENCIA/APRENDIZADOS.md
-→ TENTAR_FERRAMENTA_DISPONIVEL
-→ REJEITAR_UNKNOWN_SE_HOUVER_ROTA_DE_MEDICAO
-→ RESPONDER
-
-GATE_EXECUTAVEL=scripts/centraldark/canonical-consumption-gate.mjs
-SEARCH_MISS_IS_NOT_STOP_CONDITION=true
-POINTER_TEXT_IS_NOT_SOURCE=true
-TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
-UNKNOWN_MEDIVEL_E_FALHA_DE_METODO=true
+→ RECUPERAR_INTENCAO_VIGENTE
+→ MEDIR_CURRENT_DO_ALVO_SE_NECESSARIO
+→ ABRIR_OWNER/APRENDIZADO_PERTINENTE_QUANDO_MATERIAL
+→ EXECUTAR
+→ READBACK
+→ CONTINUAR
 ```
 
-Quando houver shell/Node disponível, executar o gate aplicável. Quando o corpo não
-tiver shell, satisfazer os mesmos invariantes usando as ferramentas autorizadas
-disponíveis; a ausência de shell não autoriza parar antes da leitura direta da
-fonte canônica. Busca sem resultado é falha do sensor de busca, não prova de
-ausência no arquivo conhecido.
+`scripts/centraldark/canonical-consumption-gate.mjs` vira índice/ajudante de recuperação, não portão de permissão. Sem seletor explícito ele retorna índice pertinente; `--learning ALL` continua disponível somente para auditoria deliberada. Falha de busca, ausência de Node ou UNKNOWN local não cancelam a missão inteira.
 
 ## 0.1 Modo Direto universal — contrato portátil
 

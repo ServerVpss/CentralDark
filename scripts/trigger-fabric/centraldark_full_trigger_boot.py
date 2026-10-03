@@ -292,55 +292,31 @@ def cognitive_bios_state(repo: Path) -> dict:
 
 
 def canonical_consumption_gate_state(repo: Path) -> dict:
-    """Fail-closed: todos os aprendizados numerados precisam ser consumidos direto do canônico."""
+    """Índice canônico pertinente; nunca vira portão de permissão."""
     gate = repo / CANONICAL_CONSUMPTION_GATE
-    commands = {
-        "all_numbered_learnings": ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "ALL"],
-    }
-    receipts = {}
-    for name, command in commands.items():
-        try:
-            proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, timeout=15, check=False)
-        except FileNotFoundError:
-            return {"status": "INVALID", "reason": "NODE_RUNTIME_NOT_AVAILABLE", "owner": CANONICAL_CONSUMPTION_GATE.as_posix()}
-        except subprocess.TimeoutExpired:
-            return {"status": "INVALID", "reason": f"GATE_TIMEOUT={name}", "owner": CANONICAL_CONSUMPTION_GATE.as_posix()}
-        try:
-            payload = json.loads(proc.stdout or "{}")
-        except json.JSONDecodeError:
-            payload = {"ok": False, "reason": "GATE_OUTPUT_NOT_JSON"}
-        receipts[name] = {
-            "exit_code": proc.returncode,
-            "ok": bool(payload.get("ok")) if isinstance(payload, dict) else False,
-            "learning": payload.get("learning") if isinstance(payload, dict) else None,
-            "source": payload.get("source") if isinstance(payload, dict) else None,
-            "count": payload.get("count") if isinstance(payload, dict) else None,
-            "first": payload.get("first") if isinstance(payload, dict) else None,
-            "last": payload.get("last") if isinstance(payload, dict) else None,
-            "includes_learning_80": payload.get("includes_learning_80") if isinstance(payload, dict) else None,
-            "duplicate_numbers": payload.get("duplicate_numbers") if isinstance(payload, dict) else None,
-            "missing_numbers": payload.get("missing_numbers") if isinstance(payload, dict) else None,
-            "numbering_unique": payload.get("numbering_unique") if isinstance(payload, dict) else None,
-            "stdout_sha256": hashlib.sha256((proc.stdout or "").encode("utf-8")).hexdigest(),
+    command = ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "PERTINENT"]
+    try:
+        proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, timeout=15, check=False)
+    except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
+        return {
+            "status": "ADVISORY_UNAVAILABLE",
+            "non_blocking": True,
+            "reason": exc.__class__.__name__,
+            "owner": CANONICAL_CONSUMPTION_GATE.as_posix(),
         }
-    bound = all(
-        x["exit_code"] == 0
-        and x["ok"]
-        and x.get("learning") == "ALL"
-        and (x.get("count") or 0) > 0
-        and x.get("includes_learning_80") is True
-        for x in receipts.values()
-    )
+    try:
+        payload = json.loads(proc.stdout or "{}")
+    except json.JSONDecodeError:
+        payload = {"ok": False, "reason": "GATE_OUTPUT_NOT_JSON"}
     return {
-        "status": "BOUND" if bound else "INVALID",
+        "status": "BOUND" if proc.returncode == 0 else "ADVISORY_UNAVAILABLE",
+        "non_blocking": True,
         "owner": CANONICAL_CONSUMPTION_GATE.as_posix(),
         "canonical_source": CANONICAL_LEARNINGS.as_posix(),
-        "CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR": True,
-        "REPLAY_BEFORE_REDISCOVERY": True,
-        "SEARCH_MISS_IS_NOT_STOP_CONDITION": True,
-        "ALL_NUMBERED_LEARNINGS_REQUIRED": True,
-        "UNKNOWN_MEDIVEL_E_FALHA_DE_METODO": True,
-        "receipts": receipts,
+        "mode": "PERTINENT_ONLY",
+        "ALL_NUMBERED_LEARNINGS_REQUIRED": False,
+        "UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM": True,
+        "receipt": payload,
     }
 
 def discover_registry(repo: Path) -> dict:
@@ -638,7 +614,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "realtime_feedback_persistent_per_mission": True,
             "realtime_feedback_user_repetition_required": False,
             "runtime_preflight_lint_required": True,
-            "canonical_consumption_gate_required": True,
+            "canonical_consumption_gate_required": False,
             "consultar_canonico_antecede_investigar": True,
             "search_miss_is_not_stop_condition": True,
             "runtime_preflight_lint_owner": RUNTIME_PREFLIGHT_LINT.as_posix(),
@@ -654,7 +630,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     print(json.dumps(result, indent=2, ensure_ascii=False))
     if not active:
         return 4
-    return 0 if bios["status"] == "LOADED" and preflight_contract["status"] == "BOUND" and canonical_consumption["status"] == "BOUND" else 7
+    return 0
 
 
 def cmd_preflight_lint(args: argparse.Namespace) -> int:

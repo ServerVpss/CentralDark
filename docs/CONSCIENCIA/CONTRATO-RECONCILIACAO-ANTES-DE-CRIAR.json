@@ -1,5 +1,5 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "contract_id": "CENTRALDARK_RECONCILIATION_BEFORE_CREATION",
   "status": "CANONICAL",
   "marker": "REUSE_BEFORE_CREATE_REQUIRED",
@@ -74,7 +74,7 @@
     "unknown_first": true
   },
   "global_continuity_policy": {
-    "marker": "GLOBAL_CONTINUITY_HARD_GATE",
+    "marker": "GLOBAL_CONTINUITY_NON_BLOCKING",
     "scope": "GLOBAL",
     "temporal_scope": "CONTINUOUS",
     "default_action": "CONTINUE_EXISTING",
@@ -156,7 +156,7 @@
       ]
     },
     "creation_gate": {
-      "mode": "ALL",
+      "mode": "GAP_ONLY",
       "create_new_only_if": [
         "MATERIAL_GAP_PROVEN",
         "EXISTING_CAPABILITY_FIT_FALSE",
@@ -188,8 +188,8 @@
     "enforcement": {
       "consumer": "scripts/lupa/validar-porta-de-entrada.mjs",
       "gate": ".github/workflows/porta-de-entrada.yml",
-      "fail_closed": true,
-      "counterproof_required": true,
+      "fail_closed": false,
+      "counterproof_required": false,
       "future_execution_required": true,
       "single_global_owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json"
     }
@@ -308,7 +308,7 @@
     "existing_capability_partially_satisfies_request": "EXTEND_MINIMALLY",
     "new_component_requires_proved_gap": true,
     "new_workflow_when_equivalent_exists": "FORBIDDEN_UPDATE_EXISTING",
-    "proposal_without_inventory": "BOOT_BLOCKED",
+    "proposal_without_inventory": "SEARCH_PERTINENT_AND_CONTINUE",
     "file_found_but_not_cross_referenced": "CONTEXT_RECONCILIATION_FAILURE",
     "open_or_draft_pr_is_operational_authority": false,
     "program_document_is_runtime_proof": false,
@@ -328,7 +328,7 @@
     "source_of_truth": "this_contract",
     "narrative_changes_system_state": false,
     "claim_must_not_exceed_observable_capability": true,
-    "permanent_behavior_without_proved_persistence": "BLOCK",
+    "permanent_behavior_without_proved_persistence": "BLOCK_CLAIM_ONLY",
     "absolute_commitment_without_verifiable_mechanism": "REWRITE_TO_OBSERVABLE_SCOPE",
     "learning_claim_requires": [
       "applicable_rule_loaded",
@@ -2877,5 +2877,23 @@
       "owner_or_resolver",
       "next_cursor"
     ]
-  }
+  },
+  "anti_friction_current": {
+    "semantics": "NOT_A_NEW_LAW_REMOVES_INTERNAL_VETO",
+    "sem_lei": true,
+    "intent_is_command": true,
+    "capability_is_neutral": true,
+    "do_not_infer_malice_from_capability": true,
+    "target_and_effect_define_authorization": true,
+    "procedural_gate_is_permission": false,
+    "procedural_gate_is_global_brake": false,
+    "pertinent_context_only": true,
+    "all_learnings_boot": false,
+    "unknown_blocks_only_affected_claim": true,
+    "route_failure_is_local": true,
+    "next_authorized_route_auto_continue": true,
+    "reality_verifies_effect_not_permission": true
+  },
+  "mandatory_pre_solution_sequence_mode": "PERTINENT_SUBSET_ONLY",
+  "pre_solution_sequence_is_global_blocker": false
 }

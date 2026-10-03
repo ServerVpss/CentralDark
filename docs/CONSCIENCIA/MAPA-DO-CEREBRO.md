@@ -2,7 +2,7 @@
 title: "Mapa Central do Cérebro Vivo — CentralDark"
 status: CANONICO
 date: 2026-06-29
-updated: 2026-10-01
+updated: 2026-10-03
 tags: [navegacao, moc, mapa, consciencia, intencao, continuidade, cross-chat, delta-util, semantica, proof-reuse]
 category: "M-Mapa-Sistema"
 sensitivity: INTERNAL
@@ -18,76 +18,30 @@ writer: SOL
 
 Este MOC é **mapa de navegação**, não um segundo cérebro e não um snapshot eterno de runtime. Números de tools, processos, portas e serviços só valem enquanto a chave material da prova não mudar.
 
-## Norte
+## Norte CURRENT — direto, sem ritual obrigatório
 
 ```text
-👑 SEGREDO/CHEFE
-   intenção + autoridade final
-        │
-        ▼
-!CENTRALDARK   (quando explicitamente convocado)
-        │
-        ▼
-☀ SOL
-   preserva significado + coordena
-        │
-        ▼
-#ACORDAR
-   estado vivo / continuidade
-        │
-        ▼
-!CALIBRAR
-   intenção / escopo / ferramentas / prova
-        │
-        ▼
-🧭 !MULTIBUSSOLA
-   percepção material por vários eixos
-        │
-        ▼
-⊛ !META_LUPA
-   técnica de falsificação, não agente
-        │
-        ▼
-!RECONCILIAR
-   passado útil + presente vivo → um owner
-        │
-        ▼
-✎ WRITER LEASE
-   uma caneta por escopo
-        │
-        ▼
-☿ PIVETE/HERMES
-   executa + preserva + continua
-        │
-        ▼
-!CONTRAPROVA
-   provider/capacidade independente quando material
-        │
-        ▼
-!REMEDIÇÃO
-   T0 → efeito → T1
-        │
-        ▼
-⚖ REALITY JUDGE
-        │
-        ▼
-!FIXED_POINT
-        │
-        ▼
-!REGISTRA
-   receipt + aprendizado + proveniência + next cursor
-        │
-        ▼
-✶ GRAFO / VETORES / BRAIN
-   projeções e navegação derivadas
-        │
-        ▼
-!BOOT
-   próximo ciclo recuperável
+👑 CHEFE fala
+   ↓
+INTENÇÃO VIGENTE
+   ↓
+RECUPERAR CURRENT somente do que importa
+   ↓
+ESCOLHER QUALQUER CAPABILITY VIVA + AUTORIZADA
+   ↓
+FAZER
+   ↓
+READBACK / EFEITO REAL
+   ↓
+SE FALHOU LOCALMENTE → OUTRA ROTA AUTORIZADA
+   ↓
+SE FECHOU → CONTINUAR O FIO
 ```
 
-A cadeia canônica completa está em:
-`docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`.
+`#ACORDAR`, `!CALIBRAR`, `!MULTIBÚSSOLA`, `!META_LUPA`, `!RECONCILIAR`, `!CONTRAPROVA`, `!FIXED_POINT` e `!REGISTRA` continuam como lentes/ferramentas sob demanda. Não são escada obrigatória, permissão nem freio de intenção autorizada.
+
+A cadeia histórica completa permanece disponível em:
+`docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml` como biblioteca/compatibilidade, não como trilho obrigatório.
 
 ## Papéis, sem mistura
 

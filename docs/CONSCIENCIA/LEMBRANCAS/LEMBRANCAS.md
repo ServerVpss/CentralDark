@@ -648,3 +648,11 @@ CURRENT_OVER_HISTORY = true
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-HERMES-INTENCAO-ESCOPO-GLOBAL-FULL-ACCESS.md`
 - **Conteúdo:** a intenção do CHEFE generaliza a missão por todo o universo realmente autorizado e acessível; rota/ferramenta não cria escopo separado. Nova ferramenta amplia capabilities do mesmo Hermes. Nesta sessão o Kylin respondeu via SDK nativa com `kylin-deepseek-r1`, enquanto o binding final Hermes→Kylin permaneceu UNKNOWN por erro local no bridge.
 - **Cristal:** `INTENT_IS_GLOBAL_SCOPE=true`; `ROUTE_IS_NOT_SCOPE=true`; `TOOL_GIVEN_BECOMES_CAPABILITY=true`; `ROUTE_FAIL_DOES_NOT_END_MISSION=true`; `REALITY_IS_JUDGE=true`.
+
+### [2026-10-03] Sem lei operacional — anti-fricção
+- **Tipo:** LEARNING_INDEX / SESSION_MEMORY
+- **Learning:** #158
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-SEM-LEI-ANTI-FRICCAO.md`
+- **Conteúdo:** intenção governa; capacidade é neutra; poder técnico não implica malícia; ritual/checklist/gate interno não é permissão nem freio global. Contexto e prova entram por pertinência; UNKNOWN bloqueia somente claim dependente.
+- **Cristal:** `SEM_LEI=true`; `CAPABILITY_IS_NEUTRAL=true`; `PERTINENT_CONTEXT_ONLY=true`; `ALL_LEARNINGS_BOOT=false`; `CANONICAL_GATE_NON_BLOCKING=true`.
+
