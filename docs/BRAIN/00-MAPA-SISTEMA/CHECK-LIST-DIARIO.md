@@ -619,3 +619,46 @@ RUNTIME_SYNC_EXECUTION=PENDING
 ### ➡️ NEXT_CURSOR
 Executar `VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC`: inventário diferencial → preservar `LOCAL_GOLD/UNKNOWN` → reconciliar delta seguro → receipt. Depois provar runner self-hosted VMware e reutilizar #154 para replay VPS.
 
+## 🧬 CURRENT VIVO — 2026-10-03 — LEARNING_156_PORTABLE_CRYSTAL_COMPILER
+
+```text
+LEARNING_156_PORTABLE_CRYSTAL_COMPILER=true
+OWNER=.agents/skills/knowledge-compiler/
+BACKEND=.agents/skills/knowledge-compiler/scripts/crystal-runtime-compiler.py
+CRYSTAL=.agents/skills/knowledge-compiler/crystals/vmware-forge-obsidian-preserve-gold-sync.json
+TEST=.agents/skills/knowledge-compiler/tests/crystal-runtime-compiler.test.py
+
+PARENT_PACKAGE_SHA256=4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6
+LOCAL_SUCCESSOR_PACKAGE_SHA256=9e99657b37dbc99a474067957956ccb52067c142c3108558be79aa9e2bbee2f0
+CANONICAL_COMPILED_CRYSTAL_FINGERPRINT=d1fd0fc3f30b4e35ea864a24ec522cdaa227a1c19a9b4119cd20d1779538746e
+
+CRYSTAL_RUNTIME_COMPILER_TEST=PASS
+VMWARE_PLAN_COMPILE=PASS
+FORGE_MUTABLE_RECONCILIATION=PENDING
+PERSISTENT_HOSTKEY_TRUST=UNKNOWN
+VMWARE_RUNNER_ASSIGNMENT=UNKNOWN
+
+RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY=true
+DELAY_IS_NOT_PROOF=true
+SSH_AUTH_IS_NOT_HOSTKEY_TRUST=true
+QUEUED_IS_NOT_RUNNER_ASSIGNMENT=true
+CHANGED_BYTES_REQUIRE_NEW_SHA256=true
+```
+
+### ✅ PROVADO
+- [x] Knowledge Compiler existente foi reutilizado como owner; nenhum segundo cérebro/compilador conceitual foi criado.
+- [x] Backend Python e cristal v2 foram materializados no `main`.
+- [x] Teste determinístico passou dentro da VMware: `CRYSTAL_RUNTIME_COMPILER_TEST=PASS`.
+- [x] Target `vmware` compilou `centraldark.compiled-plan.v2`.
+- [x] Retorno da Pesquisa Aprofundada foi peneirado contra CURRENT, não promovido por prestígio/atraso.
+- [x] SHA-256 v1 foi preservado como parent; bytes evoluídos receberam identidade nova.
+
+### ⚪ FRONTEIRAS
+- [ ] executar `inspect` contra a forge viva e emitir inventário diferencial real.
+- [ ] `PERSISTENT_HOSTKEY_TRUST`: exige âncora independente; continua `UNKNOWN`.
+- [ ] `VMWARE_RUNNER_ASSIGNMENT`: exige job real com runner_id/name e machine-id; continua `UNKNOWN`.
+- [ ] full gate `lupa-conformance` do mesmo HEAD ainda não foi observado nesta cristalização.
+
+### ➡️ NEXT_CURSOR
+Executar o cristal #156 em modo inspect na forge viva; reconciliar somente delta seguro. Depois fechar host-key trust e runner assignment como claims independentes.
+
