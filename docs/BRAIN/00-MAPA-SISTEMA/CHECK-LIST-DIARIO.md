@@ -584,3 +584,38 @@ SECRETS_STAY_OUT_OF_GIT=true
 
 ### ➡️ NEXT_CURSOR
 Validar host key VPS por âncora independente/autorizada → atualizar somente `known_hosts` → replay SSH com trust normal → matricular/provar runner VMware → comprimir/rebindar workflows por famílias medidas.
+
+## 🫀 CURRENT VIVO — 2026-10-03 — LEARNING_155_VMWARE_FORGE_OBSIDIAN_SYNC
+
+```text
+LEARNING_155_VMWARE_FORGE_OBSIDIAN_SYNC=true
+RECIPE=VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC
+DEPENDENCY_FINGERPRINT=557819f7b6230625330f8870cd41d69c1a16f21e3e40d644f00cd7aea4b9ff24
+OBSIDIAN_VAULT_ROOT=SHARED/CentralDark
+SYNC_MEANS_RECONCILE_NOT_OVERWRITE=true
+LOCAL_GOLD_PRESERVED=true
+UNKNOWN_NOT_OVERWRITTEN=true
+DOT_OBSIDIAN_LOCAL_STATE_NOT_COMMITTED=true
+CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE=true
+HUD_HTML_RUNTIME_BUILD_REQUIRED=false
+PLUGIN_BUILD_REQUIRED_ONLY_ON_SOURCE_CHANGE=true
+RUNTIME_SYNC_EXECUTION=PENDING
+```
+
+### ✅ PROVADO / MATERIALIZADO
+- [x] share dedicado `CENTRALDARK-SHARED` passou write/readback no backing da bancada.
+- [x] `Home.md`, `HUD.html`, `Pendências.md` foram materializados na forja.
+- [x] `.obsidian/` foi criada localmente e permanece ignorada pelo Git.
+- [x] build existente de `centraldark-grafo-vivo` foi reaproveitado; nenhum plugin paralelo foi criado.
+- [x] HUD/Home/Pendências ligam a Lembrança #152 e o BRAIN.
+- [x] recipe/claim #155 foi selada nos owners existentes.
+
+### ⚪ FRONTEIRAS
+- [ ] sync preservativo contra a `main` CURRENT ainda não foi executado: `PENDING`.
+- [ ] bytes/configs da antiga `.obsidian` do vault Windows separado: `UNKNOWN`.
+- [ ] plugin presente/buildado não prova plugin carregado no runtime Obsidian.
+- [ ] runner self-hosted VMware ainda exige prova com `runner_name` real.
+
+### ➡️ NEXT_CURSOR
+Executar `VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC`: inventário diferencial → preservar `LOCAL_GOLD/UNKNOWN` → reconciliar delta seguro → receipt. Depois provar runner self-hosted VMware e reutilizar #154 para replay VPS.
+
