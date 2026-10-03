@@ -486,3 +486,33 @@ CURRENT_OVER_HISTORY=true
 ### ➡️ NEXT_CURSOR
 Executar `python3 scripts/trigger-fabric/verify_repo_contract.py` em checkout limpo do CURRENT quando a rota de checkout estiver viva; depois continuar o cone VMware → Hermes original → Qwen/Kylin → runner self-hosted → cápsula/replay VPS.
 
+## 🫀 CURRENT VIVO — 2026-10-03 — LEARNING_152_SHARED_FORGE
+
+```text
+LEARNING_152_SHARED_FORGE=true
+SHARED_CENTRALDARK=LIVE_FORGE
+SYNC_MEANS_RECONCILE_NOT_OVERWRITE
+FUNCTIONAL_GOLD_SURVIVES_PENEIRA=true
+NO_DESTRUCTIVE_PULL_RESET_ON_FORGE=true
+CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE=true
+CRYSTALLIZE_IN_VMWARE_THEN_REPLAY_VPS=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+### ✅ PROVADO
+- [x] `/home/CENTRAKDARK-OS/SHARED/CentralDark` existe como Git válido ligado a `ServerVpss/CentralDark`.
+- [x] branch medida: `feature/ai-cli-runtime-kernel`.
+- [x] HEAD medido: `892454b98d941c3fada35d3df826f9962257f80f`.
+- [x] snapshot da bancada: `TRACKED_FILES=6020`, `DIRTY_COUNT=5535`, `UNTRACKED_COUNT=13`.
+- [x] a branch existe no GitHub; o HEAD existe no remoto.
+- [x] a árvore local e o GitHub CURRENT divergem; há história do main não absorvida e trabalho próprio da bancada.
+- [x] Aprendizado #152 + Lembrança + NeuroLink + índice materializados.
+
+### ⚠️ NÃO FAZER
+- [ ] não executar `git reset --hard`, pull cego ou checkout destrutivo enquanto o delta local não estiver classificado;
+- [ ] não usar `SHARED/CentralDark` como workspace de CI;
+- [ ] não criar segunda árvore CentralDark para resolver o sync.
+
+### ➡️ NEXT_CURSOR
+Inventariar diferencialmente a bancada contra o `main` CURRENT e classificar cada delta em `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`; reconciliar primeiro o menor cone material e retestar.
+
