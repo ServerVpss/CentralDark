@@ -622,3 +622,12 @@ CURRENT_OVER_HISTORY = true
 - **Conteúdo:** a própria raiz `SHARED/CentralDark` é o vault/cockpit da CentralDark. HUD/Home/Pendências/BRAIN/Obsidian/plugin existente convergem na mesma forja. A `main` entra por reconciliação preservativa: classificar `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`, preservar ouro e UNKNOWN, aplicar somente delta seguro por owner, manter CI em `_work`, gerar fingerprint/receipt e preparar replay VPS.
 - **Cristal:** `OBSIDIAN_VAULT_ROOT=SHARED/CentralDark`; `SYNC_MEANS_RECONCILE_NOT_OVERWRITE=true`; `DOT_OBSIDIAN_LOCAL_STATE_NOT_COMMITTED=true`; `HUD_HTML_RUNTIME_BUILD_REQUIRED=false`; `PLUGIN_BUILD_REQUIRED_ONLY_ON_SOURCE_CHANGE=true`.
 
+### [2026-10-03] Fragmentos da “cabeça” externalizada — método do CHEFE + seleção temporal
+- **Tipo:** CHEFE_STATED_METHOD / SESSION_MEMORY
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FRAGMENTOS-DA-CABECA-EXTERNALIZADA-SELECAO-TEMPORAL.md`
+- **Proveniência:** explicação direta do CHEFE nesta sessão.
+- **Conteúdo:** no contexto CentralDark, “leia minha cabeça” significa consultar os fragmentos externalizados em `docs/BRAIN`, `docs/CONSCIENCIA` e owners relacionados antes de inferir genericamente. O CHEFE usa esses documentos para cristalizar seletivamente o essencial do próprio método/visão: fragmentos preservam proveniência e tempo; Lembranças guardam o caminho; Aprendizados destilam o que sobrevive a confronto; CURRENT continua governando o presente.
+- **Seleção temporal:** material produzido sobre um snapshot antigo — inclusive Pesquisa Aprofundada deixada rodando enquanto o organismo evolui — retorna como CANDIDATE e deve ser peneirado contra o CURRENT de chegada. Duplicado→reuse; superado→history/stale; contradito→não promove; sem prova→UNKNOWN; sobrevivente→candidato a invariante/delta útil.
+- **Preservação:** não apagar o que era verdadeiro/dito no tempo; adicionar camada, proveniência, correção e motivo. `DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true`; `RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY=true`; `DELAY_IS_NOT_PROOF=true`; `CURRENT_OVER_HISTORY=true`; `RAW_PRIVATE_REASONING_NOT_STORED=true`.
+- **Promoção:** nenhuma. Este registro não cria #156 nem altera a sequência de Aprendizados; reutiliza a arquitetura de memória existente.
+
