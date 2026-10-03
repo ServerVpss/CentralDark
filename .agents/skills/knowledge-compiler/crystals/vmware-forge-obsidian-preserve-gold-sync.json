@@ -1,0 +1,123 @@
+{
+  "schema": "centraldark.crystal.v2",
+  "name": "VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC",
+  "learning_ref": 156,
+  "source_claim_state": "SEALED_RECIPE_RUNTIME_EXECUTION_PENDING",
+  "source_claim_fingerprint": "557819f7b6230625330f8870cd41d69c1a16f21e3e40d644f00cd7aea4b9ff24",
+  "canonical_repo": "https://github.com/ServerVpss/CentralDark.git",
+  "canonical_branch": "main",
+  "pr_mother": 1562,
+  "related_vmware_pr": 1742,
+  "invariants": {
+    "ONE_SYSTEM_ONLY": true,
+    "REUSE_BEFORE_CREATE": true,
+    "CURRENT_OVER_HISTORY": true,
+    "UNKNOWN_IS_NOT_PASS": true,
+    "SYNC_MEANS_RECONCILE_NOT_OVERWRITE": true,
+    "LOCAL_GOLD_PRESERVED": true,
+    "UNKNOWN_NOT_OVERWRITTEN": true,
+    "CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE": true,
+    "DOT_OBSIDIAN_LOCAL_STATE_NOT_COMMITTED": true,
+    "HUD_IS_PROJECTION_NOT_AUTHORITY": true,
+    "NO_SECRET_VALUES_IN_GIT": true,
+    "RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY": true,
+    "DELAY_IS_NOT_PROOF": true,
+    "SURVIVAL_ACROSS_TIME_IS_SIGNAL_NOT_AUTOMATIC_CANON": true,
+    "SSH_AUTH_IS_NOT_HOSTKEY_TRUST": true,
+    "QUEUED_IS_NOT_RUNNER_ASSIGNMENT": true,
+    "SAME_CRYSTAL_DIFFERENT_BINDING_SAME_SEMANTICS": true
+  },
+  "sequence": [
+    "RUN_GLOBAL_CROSS_CONTEXT_PREFLIGHT",
+    "INGEST_RETURNING_RESEARCH_AS_CANDIDATE",
+    "TEMPORAL_DEDUPE_AGAINST_CURRENT",
+    "RESOLVE_MAIN_CURRENT_AND_PR_FUNNEL",
+    "MEASURE_FORGE_IDENTITY_BRANCH_HEAD_DIRTY_STATE",
+    "FETCH_MAIN_WITHOUT_MUTATING_WORKTREE",
+    "CLASSIFY_DELTA_LOCAL_GOLD_ALREADY_IN_MAIN_STALE_CONFLICT_UNKNOWN",
+    "PRESERVE_LOCAL_GOLD_AND_UNKNOWN",
+    "RECONCILE_ONLY_PROVEN_SAFE_DELTA_BY_OWNER",
+    "VERIFY_SSH_AUTH_SEPARATE_FROM_HOSTKEY_TRUST",
+    "REQUIRE_INDEPENDENT_HOSTKEY_ANCHOR_BEFORE_PERSISTENT_PROMOTION",
+    "VERIFY_RUNNER_ASSIGNMENT_SEPARATE_FROM_QUEUED",
+    "KEEP_CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE",
+    "GENERATE_HASHES_FINGERPRINT_AND_RECEIPT",
+    "STOP_ON_CONFLICT_OR_UNKNOWN_BEFORE_DESTRUCTIVE_WRITE"
+  ],
+  "proof_plan": [
+    "forge identity remote branch HEAD captured before mutation",
+    "main fetched without worktree overwrite",
+    "LOCAL_GOLD and UNKNOWN are not overwritten",
+    "returning research classified against CURRENT",
+    "SSH auth PASS does not promote persistent host-key trust",
+    "persistent trust requires independent anchor equality",
+    "runner assignment requires runner_id > 0 and runner_name nonempty",
+    "runner machine-id hash matches VMware body",
+    "receipt records PASS CONFLICT UNKNOWN NEXT_CURSOR"
+  ],
+  "security_boundary": [
+    "NO_SECRET_VALUES_IN_GIT",
+    "NO_PRIVATE_KEY_CONTENT_IN_RECEIPTS",
+    "NO_TOKEN_OR_PASSWORD_IN_MARKDOWN",
+    "NO_DESTRUCTIVE_RESET_PULL_CHECKOUT_ON_UNCLASSIFIED_FORGE",
+    "UNKNOWN_NOT_OVERWRITTEN"
+  ],
+  "effect_schema": "MAIN_CURRENT_RECONCILED_INTO_VMWARE_FORGE_WITH_LOCAL_GOLD_PRESERVED_AND_OBSIDIAN_HUD_INTEGRATED",
+  "result_schema": "centraldark.vmware-forge-preserve-gold-sync.result.v2",
+  "bindings": {
+    "windows": {
+      "forge_root": "E:\\VMs\\CENTRALDARK-OS\\SHARED\\CentralDark",
+      "ci_workspace": "%USERPROFILE%\\actions-runner-vmware\\_work",
+      "shell": "powershell"
+    },
+    "vmware": {
+      "forge_root": "/home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED/CentralDark",
+      "ci_workspace": "/home/CENTRAKDARK-OS/actions-runner-vmware/_work",
+      "shell": "bash"
+    },
+    "vps": {
+      "forge_root": "/opt/centraldark/CentralDark",
+      "ci_workspace": "/opt/actions-runner/_work",
+      "shell": "bash"
+    }
+  },
+  "lineage": {
+    "parent_package_sha256": "4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6",
+    "parent_claim_fingerprint": "557819f7b6230625330f8870cd41d69c1a16f21e3e40d644f00cd7aea4b9ff24",
+    "successor_package_sha256": "9e99657b37dbc99a474067957956ccb52067c142c3108558be79aa9e2bbee2f0",
+    "compiled_crystal_fingerprint": "3aca3433931505f6d0c4f32e9045704f7454c3fc6f0d070e9b2df4f7907cb5d8"
+  },
+  "temporal_research": {
+    "policy": "RETURNING_RESEARCH_IS_CANDIDATE_NOT_AUTHORITY",
+    "pipeline": [
+      "CAPTURE_T0_SNAPSHOT",
+      "ALLOW_SYSTEM_TO_EVOLVE",
+      "RESEARCH_RETURNS_AT_TN",
+      "REENTER_CURRENT_PREFLIGHT",
+      "DEDUPE_ALREADY_CANONICAL",
+      "DROP_SUPERSEDED",
+      "UNKNOWN_STAYS_UNKNOWN",
+      "PROMOTE_ONLY_SURVIVING_DELTA"
+    ]
+  },
+  "ssh_promotion_gates": {
+    "SSH_AUTH": "PASS_FROM_LEARNING_154",
+    "PERSISTENT_HOSTKEY_TRUST": "UNKNOWN_UNTIL_INDEPENDENT_ANCHOR",
+    "independent_anchor_required": true,
+    "network_candidate_is_trust": false,
+    "strict_host_key_checking_after_anchor": "yes",
+    "reuse_same_verified_candidate_blob": true
+  },
+  "runner_promotion_gates": {
+    "queued_is_assignment": false,
+    "dedicated_label": "centraldark-vmware",
+    "required_proof": [
+      "runner_id > 0",
+      "runner_name != empty",
+      "VMware-specific label",
+      "job machine_id_sha256 equals VMware",
+      "run_id/job_id/head_sha correlated"
+    ],
+    "state": "UNKNOWN_UNTIL_REAL_ASSIGNMENT"
+  }
+}
