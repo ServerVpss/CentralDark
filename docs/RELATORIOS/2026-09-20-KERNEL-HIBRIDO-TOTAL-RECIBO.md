@@ -2,7 +2,7 @@
 title: "🧬 Kernel Híbrido Total — recibo de englobamento (Claude/claude.ai)"
 status: ENGLOBADO_COM_LIMITE_DE_PROVA
 mission_id: KERNEL_HIBRIDO_TOTAL_20260920
-authority: SEGREDO/CHEFE (ordem direta: commit no PR-MÃE + trajetória + aprendizados pela mesma rota)
+authority: "SEGREDO/CHEFE (ordem direta: commit no PR-MÃE + trajetória + aprendizados pela mesma rota)"
 writer: Claude (claude.ai) — Writer só deste arquivo; NÃO é Writer do #1597, da main nem da VPS
 pr_mother: "#1562 (RENDEZVOUS_LEDGER_NOT_WRITER)"
 t0_observed_at: "2026-09-20T06:10Z"
