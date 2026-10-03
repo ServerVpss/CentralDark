@@ -387,3 +387,15 @@ rastro_binding:
   response_without_trace: INVALID
   required_on_write_claim: [COMMIT_SHA, PATH, LINK, READBACK]
   memory_claim_requires_location: true
+
+global_cross_context_preflight_binding:
+  contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight
+  marker: CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1
+  applies_to: [CHATGPT, CLAUDE, CODEX, HERMES, GROK, GEMINI, NOUS, LOCAL_MODELS, BOTS, CLIS, WORK, DESKTOP, VOICE, FUTURE_ENGINES, FUTURE_SURFACES]
+  every_centraldark_response_reenters_preflight: true
+  engine_switch_does_not_reset_preflight: true
+  new_thread_does_not_reset_preflight: true
+  existing_thread_does_not_bypass_preflight: true
+  generic_fallback_when_source_missing: FORBIDDEN
+  missing_required_source: AFFECTED_CLAIM_UNKNOWN
+  repository_artifacts_inherit_by_containment: true
