@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 155,
-    "highest_legacy_learning_number": 155,
+    "learning_sections": 156,
+    "highest_legacy_learning_number": 156,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 155
+      "end": 156
     }
   },
   "nodes": [
@@ -1779,6 +1779,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L154",
+      "next_uid": "L156"
+    },
+    {
+      "uid": "L156",
+      "legacy_learning_number": 156,
+      "legacy_occurrence": 1,
+      "title": "Cristal vira programa portátil: Knowledge Compiler compila invariantes em bindings Windows/VMware/VPS e pesquisa atrasada retorna como candidato temporal",
+      "document_order": 155,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L155",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
