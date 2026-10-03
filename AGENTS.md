@@ -1793,3 +1793,22 @@ MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
 ```
 
 Quando a intenção é clara e a rota já existe, execute o menor delta e use a realidade para provar/corrigir o resultado. Não use Reality Judge como ritual de bloqueio, pedido repetido de autorização, revalidação global ou substituto do julgamento do CHEFE.
+
+## Global cross-context preflight inheritance
+
+```text
+CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
+ALL_CURRENT_AND_FUTURE_AGENTS_INHERIT=true
+ALL_DOT_AGENTS_ARTIFACTS_INHERIT_BY_CONTAINMENT=true
+EVERY_CENTRALDARK_RESPONSE_REENTERS_PREFLIGHT=true
+PR_MOTHER_1562_CURRENT_REQUIRED=true
+OPEN_PRS_CURRENT_REQUIRED=true
+CHECK_LIST_DIARIO_CURRENT_REQUIRED=true
+ALL_NUMBERED_LEARNINGS_INDEX_REQUIRED=true
+CAUSAL_HISTORY_CLOSURE_REQUIRED=true
+MUTABLE_CLAIM_REQUIRES_RUNTIME_REMEASUREMENT=true
+GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN
+MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
+```
+
+Canonical owner: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`.
