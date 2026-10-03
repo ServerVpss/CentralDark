@@ -1383,3 +1383,30 @@ hybrid_multi_account_capability_routing:
     - PLATFORM_UNAVAILABLE_OR_UNKNOWN
   receipt_fields: [ACCOUNT_ALIAS, CAPABILITY, ROUTE_CLASS, EFFECT, PROOF, NEXT_CURSOR]
 
+global_cross_context_response_preflight:
+    marker: "CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1"
+    owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight"
+    trigger: "ANY_RESPONSE_OR_ACTION_RELATED_TO_CENTRALDARK"
+    applies_to_any_current_or_future_thread: true
+    applies_to_any_current_or_future_surface: true
+    all_repository_artifacts_inherit_by_containment: true
+    every_response_reenters_preflight: true
+    required_current_sources:
+      - "SEGREDO_CHEFE_INTENT"
+      - "GITHUB_MAIN_CURRENT"
+      - "PR_MOTHER_1562_CURRENT"
+      - "ALL_OPEN_PRS_CURRENT"
+      - "CHECK_LIST_DIARIO_CURRENT"
+      - "SOUL_SOL"
+      - "LEIA_ME_IA"
+      - "AGENTS"
+      - "MAPA_DO_CEREBRO"
+      - "APRENDIZADOS_ALL_NUMBERED_INDEX"
+      - "LEMBRANCAS_INDEX_AND_CAUSAL_TARGETS"
+      - "OWNER_AND_RUNTIME_WHEN_MUTABLE"
+    generic_answer_without_preflight: "FORBIDDEN"
+    missing_required_source: "AFFECTED_CLAIM_UNKNOWN"
+    current_over_history: true
+    unknown_is_not_pass: true
+    causal_history_closure_required: true
+    sieve_before_human_return: true

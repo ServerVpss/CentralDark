@@ -805,3 +805,20 @@ UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
 ```
 
 Divergência de sensor/cache/log/modelo/workflow abre teste discriminante e correção do cone afetado; não abre veto humano concorrente.
+
+## Global cross-context preflight — obrigatório antes de qualquer resposta CentralDark
+
+```text
+CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
+HERMES_REENTERS_PREFLIGHT_BEFORE_EVERY_CENTRALDARK_RESPONSE=true
+HERMES_RECOVERS_CURRENT_CHEFE_INTENT=true
+HERMES_REMEASURES_MAIN_PR_MOTHER_OPEN_PRS_CHECKLIST=true
+HERMES_CONSUMES_CANONICAL_CORE_AND_ALL_NUMBERED_LEARNING_INDEX=true
+HERMES_EXPANDS_CAUSAL_LEMBRANCAS_OWNERS_RECEIPTS=true
+HERMES_REMEASURES_MUTABLE_RUNTIME_CLAIMS=true
+GENERIC_RESPONSE_WITHOUT_PREFLIGHT=FORBIDDEN
+MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
+PENEIRA_BEFORE_HUMAN_RETURN=true
+```
+
+O contrato é herdado; Hermes não cria segundo owner nem copia o cérebro em cada skill. O owner continua `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`.

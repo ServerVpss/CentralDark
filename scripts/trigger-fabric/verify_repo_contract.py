@@ -1414,6 +1414,100 @@ check_command(
  [sys.executable, str(ROOT/'apps/modulos/fixed-point-fabric/tests/test_sol_teaching_grammar.py')],
  classification='ENTRY_BEHAVIORAL_BUNDLE_MATRIX_COUNTERPROOF',
 )
+
+# GLOBAL_CROSS_CONTEXT_PREFLIGHT_REPO_WIDE
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1',
+ 'preflight_reenters_on_every_centraldark_response: true',
+ 'repository_artifact_inheritance: ALL_TRACKED_AND_FUTURE_ARTIFACTS',
+ 'generic_answer_without_preflight: FORBIDDEN',
+ 'missing_required_source: AFFECTED_CLAIM_UNKNOWN',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_CANONICAL_OWNER')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1',
+ 'every_centraldark_response_reenters_preflight: true',
+ 'new_thread_does_not_reset_preflight: true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_ENGINE_BINDING')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1',
+ 'every_response_reenters_preflight: true',
+ 'all_repository_artifacts_inherit_by_containment: true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_BOOT')
+check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
+ 'ANY_CURRENT_OR_FUTURE_THREAD_INHERITS=true',
+ 'GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_SOUL')
+check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1',
+ 'ALL_REPOSITORY_ARTIFACTS_INHERIT_BY_CONTAINMENT=true',
+ 'GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_METACOGNITION')
+check('LEIA-ME-IA.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
+ 'REPOSITORY_WIDE_INHERITANCE=true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_MODEL_ENTRY')
+check('AGENTS.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
+ 'ALL_CURRENT_AND_FUTURE_AGENTS_INHERIT=true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_AGENT_ENTRY')
+check('CLAUDE.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
+ 'CLAUDE_INHERITS_GLOBAL_PREFLIGHT=true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_CLAUDE')
+check('CODEX.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
+ 'CODEX_INHERITS_GLOBAL_PREFLIGHT=true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_CODEX')
+check('.claude/rules/00-centraldark-boot-universal.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
+ 'ALL_DOT_CLAUDE_FILES_INHERIT_BY_CONTAINMENT=true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_DOT_CLAUDE')
+check('.claude/BOOT-PIVETE.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
+ 'BOOT_MUST_REMEASURE_MAIN_PR_MOTHER_OPEN_PRS_CHECKLIST=true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_CLAUDE_BOOT')
+check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
+ 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
+ 'HERMES_REENTERS_PREFLIGHT_BEFORE_EVERY_CENTRALDARK_RESPONSE=true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_HERMES')
+check('apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml',[
+ 'marker: CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1',
+ 'applies_to_bot_free_text_and_agent_modes: true',
+ 'BOT_IS_SURFACE_NOT_BRAIN: true',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_BOT')
+check('package.json',[
+ '"verify:centraldark-contract": "python3 scripts/trigger-fabric/verify_repo_contract.py"',
+], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_PACKAGE_ENTRY')
+
+try:
+    tracked=subprocess.check_output(['git','ls-files'],cwd=ROOT,text=True).splitlines()
+except Exception as exc:
+    tracked=[]
+    checks.append({'path':'git ls-files','classification':'GLOBAL_CROSS_CONTEXT_PREFLIGHT_REPO_INVENTORY','ok':False,'missing':[str(exc)]})
+if tracked:
+    package_names={'package.json','pyproject.toml','Cargo.toml','go.mod','pom.xml','composer.json'}
+    markdown=[p for p in tracked if p.lower().endswith('.md')]
+    packages=[p for p in tracked if Path(p).name in package_names or re.match(r'requirements[^/]*\.txt$', Path(p).name, re.I)]
+    claude_files=[p for p in tracked if p=='CLAUDE.md' or p.startswith('.claude/')]
+    agents_files=[p for p in tracked if p=='AGENTS.md' or p.startswith('.agents/')]
+    architecture_files=[p for p in tracked if p.startswith('docs/ARQUITETURA/')]
+    hermes_files=[p for p in tracked if re.search(r'HERMES-CORE|hermes-core|/hermes/',p,re.I)]
+    bot_files=[p for p in tracked if re.search(r'bot|telegram|guardiao',p,re.I)]
+    inventory={
+      'tracked':len(tracked),'markdown':len(markdown),'packages':len(packages),
+      'claude':len(claude_files),'agents':len(agents_files),'architecture':len(architecture_files),
+      'hermes':len(hermes_files),'bots':len(bot_files),
+    }
+    checks.append({
+      'path':'REPOSITORY_WIDE_INHERITANCE',
+      'classification':'GLOBAL_CROSS_CONTEXT_PREFLIGHT_REPO_INVENTORY',
+      'ok':all(inventory[k] > 0 for k in ('tracked','markdown','packages','claude','agents','architecture','hermes','bots')),
+      'missing':[] if all(inventory[k] > 0 for k in inventory) else [inventory],
+      'inventory':inventory,
+      'inheritance':'BY_CONTAINMENT_FROM_CANONICAL_OWNER',
+    })
+
 failed=[c for c in checks if not c['ok'] and not c.get('exempted', False)]
 print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))
 if failed:

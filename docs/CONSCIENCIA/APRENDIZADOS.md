@@ -19,8 +19,6 @@ updated: 2026-08-27
 <!-- NEUROLINK_GLOBAL_END -->
 
 
-
-
 ### 1. Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L001`; `PREV_GLOBAL_UID=L000`; `NEXT_GLOBAL_UID=L002`; `LEGACY_LEARNING_NUMBER=1`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** armadilha
@@ -1424,7 +1422,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** aplicar automaticamente esta matriz quando a pergunta do CHEFE for “quais vermelhos?”, “onde estão?”, “qual setor?” ou comparação equivalente; expandir somente se ele pedir causa, efeito ou reparo.
 
 ### 142. Sessão 2026-10-02 consolidou corpo único, forja local, contrato portátil, Bayes, funil e localização causal de vermelhos
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L142`; `PREV_GLOBAL_UID=L141`; `NEXT_GLOBAL_UID=L143`; `LEGACY_LEARNING_NUMBER=142`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L142`; `PREV_GLOBAL_UID=L141`; `NEXT_GLOBAL_UID=L143`; `LEGACY_LEARNING_NUMBER=142`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=142`; `PREV_LEARNING_REF=141`; `RELATION_TYPE=SESSION_SYNTHESIS_CONTINUITY`; `NEXT_LEARNING_REF=143`.
 - **Categoria:** session-synthesis.
 - **Data:** 2026-10-02.
@@ -1438,7 +1436,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 143. O vermelho já carrega a divergência: erro estruturado é vetor de reparo
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L143`; `PREV_GLOBAL_UID=L142`; `NEXT_GLOBAL_UID=L144`; `LEGACY_LEARNING_NUMBER=143`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L143`; `PREV_GLOBAL_UID=L142`; `NEXT_GLOBAL_UID=L144`; `LEGACY_LEARNING_NUMBER=143`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=143`; `PREV_LEARNING_REF=142`; `NEXT_LEARNING_REF=144`.
 - **Categoria:** structured-red-to-minimum-remediation.
 - **Data:** 2026-10-02.
@@ -1449,7 +1447,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** combinar a matriz #141 com este método para transformar vermelho em reparo mínimo.
 
 ### 144. Limite de canal não bloqueia cristalização: compactar no canônico e expandir em Lembranças
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L144`; `PREV_GLOBAL_UID=L143`; `NEXT_GLOBAL_UID=L145`; `LEGACY_LEARNING_NUMBER=144`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L144`; `PREV_GLOBAL_UID=L143`; `NEXT_GLOBAL_UID=L145`; `LEGACY_LEARNING_NUMBER=144`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=144`; `PREV_LEARNING_REF=143`; `NEXT_LEARNING_REF=145`.
 - **Categoria:** channel-limit-recoverable-compression.
 - **Owner:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#15`.
@@ -1460,7 +1458,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** aplicar automaticamente em qualquer escrita futura barrada por limite de canal/formato.
 
 ### 145. Marca, superfície, capability, estado e prova são eixos separados
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L145`; `PREV_GLOBAL_UID=L144`; `NEXT_GLOBAL_UID=L146`; `LEGACY_LEARNING_NUMBER=145`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L145`; `PREV_GLOBAL_UID=L144`; `NEXT_GLOBAL_UID=L146`; `LEGACY_LEARNING_NUMBER=145`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=145`; `PREV_LEARNING_REF=144`; `NEXT_LEARNING_REF=146`.
 - **Categoria:** surface-capability-evidence-inference-control.
 - **Owner:** `.agents/skills/centraldark-unified-surface-parity/SKILL.md` + `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
@@ -1473,7 +1471,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 146. Sistema híbrido multirota: uma rota falhar não reduz a capability global do organismo
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L146`; `PREV_GLOBAL_UID=L145`; `NEXT_GLOBAL_UID=L147`; `LEGACY_LEARNING_NUMBER=146`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L146`; `PREV_GLOBAL_UID=L145`; `NEXT_GLOBAL_UID=L147`; `LEGACY_LEARNING_NUMBER=146`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=146`; `PREV_LEARNING_REF=145`; `NEXT_LEARNING_REF=147`.
 - **Categoria:** hybrid-multiroute-bidirectional-transversal-capability.
 - **Data:** 2026-10-02.
@@ -1488,7 +1486,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** diante de qualquer falha de acesso, nunca elevar `rota falhou` para `sistema falhou` antes de esgotar e medir as rotas autorizadas aplicáveis; registrar qual binding provou cada claim.
 
 ### 147. Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L147`; `PREV_GLOBAL_UID=L146`; `NEXT_GLOBAL_UID=L148`; `LEGACY_LEARNING_NUMBER=147`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L147`; `PREV_GLOBAL_UID=L146`; `NEXT_GLOBAL_UID=L148`; `LEGACY_LEARNING_NUMBER=147`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=147`; `PREV_LEARNING_REF=146`; `NEXT_LEARNING_REF=148`.
 - **Categoria:** complete-sieve-registration-runtime-materialization.
 - **Data:** 2026-10-02.
@@ -1503,8 +1501,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** antes de declarar FIXED_POINT, calcular as camadas aplicáveis, provar cada uma ou marcar `N/A|UNKNOWN|BLOCKED`, materializar os arquivos requeridos no consumer e executar readback final.
 
 ### 148. TextChat/Qwen nativo está configurado e a SDK correta foi identificada; catálogo visível não é peso materializado nem inferência provada
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L148`; `PREV_GLOBAL_UID=L147`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=148`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`.
-- **NeuroLink:** `LEARNING_ID=148`; `PREV_LEARNING_REF=147`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L148`; `PREV_GLOBAL_UID=L147`; `NEXT_GLOBAL_UID=L149`; `LEGACY_LEARNING_NUMBER=148`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=148`; `PREV_LEARNING_REF=147`; `NEXT_LEARNING_REF=149`.
 - **Categoria:** openkylin-native-textchat-qwen-runtime-proof-boundary.
 - **Data:** 2026-10-02.
 - **Owner:** `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md` + `scripts/vps/kylin-native-bind.py`; `.github/workflows/pr-agent.yml` só entra depois de inferência local real.
@@ -1516,4 +1514,60 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `CATALOG_ENTRY != MODEL_WEIGHTS_INSTALLED`; `MODEL_ID_CONFIG != MODEL_READY`; `PROBE_CREATED != INFERENCE_PROVEN`; `TOOL_SECURITY_BLOCK != RUNTIME_FAIL`; `SDK_VERSION_MUST_MATCH_RUNTIME=true`; `REVIEWER_REPLACEMENT_REQUIRES_REAL_LOCAL_INFERENCE_PASS=true`; `UNKNOWN_IS_NOT_PASS=true`.
 - **Contraprova:** encontrar nomes Qwen em configuração não prova que os pesos estão presentes; botão `Download` não prova ausência absoluta fora desse gerenciador, por isso o claim correto é `WEIGHTS_MATERIALIZED_LOCAL=UNKNOWN`; criar probe não prova que o TextChat respondeu; UI/catalog metadata não autoriza trocar Groq/Gemini/Claude por nomes locais sem execução real.
 - **Next cursor:** materializar/provar os pesos do Qwen escolhido pelo owner existente, executar `genai_text_*` até resposta local real, então substituir os reviewers externos pelo trio local no mesmo owner `.github/workflows/pr-agent.yml` e provar os três jobs.
+
+### 149. VMware assume o funil self-hosted com Hermes local; a forja compartilhada não vira workspace de CI
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L149`; `PREV_GLOBAL_UID=L148`; `NEXT_GLOBAL_UID=L150`; `LEGACY_LEARNING_NUMBER=149`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Data:** 2026-10-03
+- **Categoria:** arquitetura-operacional-vmware-hermes-runner-github-funil
+- **Owner:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FUNIL-VMWARE-HERMES-CLASSIFICACAO-APRENDIZADOS-1-149.md`
+- **NeuroLink:** `LEARNING_ID=149`; `PREV_LEARNING_REF=148`; `NEXT_LEARNING_REF=150`; `RELATION_TYPE=LOCAL_FORGE_TO_SELF_HOSTED_FUNNEL_EXECUTION`; `OWNER_REF=docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FUNIL-VMWARE-HERMES-CLASSIFICACAO-APRENDIZADOS-1-149.md`; `NEXT_CURSOR=REGISTER_VMWARE_RUNNER_THEN_PROVE_SELO_FABRIC`.
+- **Contexto:** após reler a cadeia canônica e medir o `CENTRALDARK-OS` vivo, ficou comprovado que o plano já existente é Casa/VMware como forja/corpo local de execução, VPS como twin headless 24/7, GitHub como memória/funil e Hermes como executor dentro do corpo. A VM possui Hermes `vgit.ca952a5` com Python 3.14.7, `kylin-ai-runtime` e `kytensor` vivos; o GitHub Actions runner 2.337.0 foi materializado com `config.sh`, mas ainda não está matriculado/ativo. O binding Tailscale medido está `Logged out`. A árvore `/home/CENTRAKDARK-OS/SHARED/CentralDark` está em `feature/ai-cli-runtime-kernel@892454b98d941c3fada35d3df826f9962257f80f` com muitas modificações e não pode ser usada como checkout autoritativo de CI. O CURRENT remoto medido permanece `main@1995939b2b8679c822e245c4e841207cf22c85dc`. O Selo Fabric usa `ubuntu-latest`; falha de billing ocorreu antes do job iniciar.
+- **Aprendizado:** o funil aplicável deve rodar em runner self-hosted dedicado do `CENTRALDARK-OS/VMware`, com identidade/label exclusivos e workspace próprio `_work` fazendo checkout do SHA do evento. A árvore compartilhada continua forja/laboratório e não deve ser limpa nem sequestrada pelo CI. Hermes dentro da VM executa/coordena as capabilities locais; depois artefato/receita/fingerprint provados são reexecutados na VPS twin. `JOB_NOT_STARTED_BY_BILLING != CODE_FAILURE`; `TAILSCALE_LOGGED_OUT != MACHINE_DOWN`; `SHARED_WORKTREE != CI_WORKSPACE`; `RUNNER_BINARY_PRESENT != RUNNER_REGISTERED`.
+- **Cristal:** `VMWARE_ROLE=FORGE_PLUS_LOCAL_FUNNEL_EXECUTOR`; `VPS_ROLE=HEADLESS_24X7_TWIN`; `GITHUB_ROLE=CANONICAL_MEMORY_AND_FUNNEL`; `HERMES_IN_VM=LOCAL_EXECUTION_ARM`; `CI_CHECKOUT_ISOLATED_FROM_SHARED_FORGE=true`; `PROVE_LOCALLY_THEN_REPLAY_REMOTELY=true`; `REUSE_BEFORE_CREATE=true`; `ONE_SYSTEM_ONLY=true`; `CURRENT_OVER_HISTORY=true`; `UNKNOWN_IS_NOT_PASS=true`.
+- **Next cursor:** registrar o runner dedicado da VM, provar `Runner.Listener` online + label exclusivo, executar primeiro o Selo Fabric no mesmo runner e verificar hostname/runner/SHA; só então ampliar o binding do restante do funil por cone/owner.
+
+### 150. Toda resposta CentralDark reentra no preflight global; qualquer artefato do repo herda o mesmo método por pertencimento
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L150`; `PREV_GLOBAL_UID=L149`; `NEXT_GLOBAL_UID=L151`; `LEGACY_LEARNING_NUMBER=150`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=150`; `PREV_LEARNING_REF=149`; `NEXT_LEARNING_REF=151`.
+- **Categoria:** global-cross-context-preflight-repository-wide-inheritance.
+- **Data:** 2026-10-03.
+- **Owner:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-PREFLIGHT-GLOBAL-CROSS-CONTEXT-CENTRALDARK.md`.
+- **Contexto:** o CHEFE corrigiu explicitamente o escopo: o preflight não vale apenas para esta conversa. Qualquer resposta ou ação relacionada à CentralDark, em qualquer fio existente ou futuro e em qualquer superfície/modelo/agente, deve recuperar a intenção vigente e cruzá-la com CURRENT, PR-mãe #1562, todos os PRs abertos, checklist diário, núcleo canônico, cadeia de Aprendizados, índice de Lembranças, owners/receipts causais e runtime mutável quando o claim depender dele. Se fonte necessária não puder ser medida, somente o claim afetado permanece `UNKNOWN`; conhecimento genérico não substitui a fonte.
+- **Aprendizado:** "usar a cabeça do CHEFE" é consumir o método externalizado da CentralDark — intenção declarada + SOUL + owners + Aprendizados + Lembranças + receipts + PRs + checklist + estado vivo — e não inferir mente privada. A herança deve ser global por pertencimento ao repositório, não por copiar o mesmo parágrafo em milhares de arquivos. Markdown, packages, arquiteturas, `.agents`, `.claude`, bots, HERMES-CORE, CLIs, engines e superfícies futuras permanecem donos de seus escopos, mas todos são interpretados sob o mesmo preflight.
+- **Materialização:** o contrato foi vinculado em `CONTRACT.yml`, `ENGINE_BINDING.yml`, `CENTRALDARK_AI_BOOT.yaml`, `SOUL-SOL.md`, `METACOGNICAO-OPERACIONAL.md`, `LEIA-ME-IA.md`, `AGENTS.md`, `CLAUDE.md`, `CODEX.md`, `.claude/rules/00-centraldark-boot-universal.md`, `.claude/BOOT-PIVETE.md`, `HERMES-CORE/prompts/hermes-core.md`, `apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml`, `package.json` e `scripts/trigger-fabric/verify_repo_contract.py`.
+- **Inventário no momento da cristalização:** `TRACKED_FILES=11354`; `MARKDOWN=5529`; `PACKAGE_MANIFESTS=25`; `DOT_CLAUDE=18`; `DOT_AGENTS=5527`; `HERMES_RELATED=133`; `BOT_RELATED=312`; `ARCHITECTURE_FILES=116`. Esses números são snapshot/proveniência e devem ser remedidos; a regra vale também para artefatos futuros.
+- **Cristal:** `CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true`; `ANY_CENTRALDARK_RESPONSE_REQUIRES_PREFLIGHT=true`; `ANY_CURRENT_OR_FUTURE_THREAD_INHERITS=true`; `ALL_REPOSITORY_ARTIFACTS_INHERIT_BY_CONTAINMENT=true`; `GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN`; `MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN`; `CURRENT_OVER_HISTORY=true`; `UNKNOWN_IS_NOT_PASS=true`; `PENEIRA_BEFORE_HUMAN_RETURN=true`; `NO_PARALLEL_ARCHITECTURE=true`.
+- **Contraprova:** repetir o contrato em todos os 11 mil arquivos criaria drift e múltiplas cópias sem aumentar autoridade. Por isso a prova de cobertura é: owner único + bindings nos consumidores reais + inventário dinâmico no verifier. O readback GitHub confirmou os marcadores nos 15 bindings escritos; a execução integral do `verify_repo_contract.py` ainda não fechou porque a tentativa de clone limpo no guest VMware ficou bloqueada pela rota de rede e foi terminada. Portanto `CONTRACT_MATERIALIZED=PASS` e `FULL_VERIFIER_EXECUTION=UNKNOWN`, não falso verde.
+- **Next cursor:** executar `python3 scripts/trigger-fabric/verify_repo_contract.py` em checkout limpo do CURRENT quando a rota de checkout estiver disponível; depois continuar o cone VMware/Hermes/Qwen/runner sem reexplicar o contrato.
+
+
+### 151. Conhecimento legado do CHEFE vira hipótese operacional reutilizável: experiência MU/XPZone/Windows/DB antecipou o padrão relógio → dispatcher → integração, mas CURRENT continua juiz
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L151`; `PREV_GLOBAL_UID=L150`; `NEXT_GLOBAL_UID=L152`; `LEGACY_LEARNING_NUMBER=151`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=151`; `PREV_LEARNING_REF=150`; `NEXT_LEARNING_REF=152`.
+- **Categoria:** human-knowledge-provenance-reuse-before-create.
+- **Data:** 2026-10-03.
+- **Owner do aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md`.
+- **Owner operacional afetado:** Trigger Fabric + binding local já existente do Windows Task Scheduler; não criar scheduler paralelo.
+- **Contexto:** o CHEFE relatou experiência pré-IA criando e mantendo servidores de MU, programas e sites PHP, usando Windows Server, SQL/ODBC e tarefas agendadas. Esta parte é `CHEFE_STATED_HISTORY`: proveniência humana autorizada, não prova externa automática. A busca nas contas Gmail conectadas confirmou no alias `SONASMARCAS` rastros históricos de XPZONE/MU entre 2017 e 2023, incluindo resumos com `MuServer + SRC`, `Connect server Windows server 2012` e `Web Cabal Machine ... + DB`; isso sustenta a ligação com esse ecossistema, mas não prova por si só cada detalhe temporal do período 2000–2005 relatado pelo CHEFE.
+- **Prova CURRENT da Casa:** o Windows Task Scheduler possui tarefas CentralDark que chamam um dispatcher setorial no formato `run-scheduled-sector.ps1 -Sector <CAPABILITY>`. Receipt canônico anterior prova `PDF_GATE` executado com sucesso por esse mesmo padrão em 2026-09-18. Na medição atual, porém, `E:\CentralDark\runtime\scheduled-jobs\run-scheduled-sector.ps1` não existe mais e as tasks registradas retornam `LastTaskResult=0xfffd0000`; portanto a ferida atual é `BINDING_DRIFT`, não ausência de scheduler.
+- **Aprendizado:** conhecimento técnico antigo do CHEFE deve entrar como prior operacional/hypothesis seed e ser cruzado com owners e runtime vivo antes de virar regra. O padrão mental `RELÓGIO → DISPATCHER → CAPABILITY → BANCO/API/SYNC` sobreviveu à contraprova e coincide com a arquitetura local já existente. Logo, diante de problema equivalente, procurar primeiro o mecanismo já conhecido pelo CHEFE e o owner já existente; medir o binding atual; reparar o elo quebrado; só criar novo componente se a peneira provar GAP real.
+- **Cristal:** `CHEFE_STATED_HISTORY=PROVENANCE_NOT_AUTOMATIC_FACT`; `USER_DOMAIN_EXPERTISE_CAN_SEED_HYPOTHESIS=true`; `OLD_PATTERN_MUST_BE_REMEASURED_IN_CURRENT=true`; `WINDOWS_TASK_SCHEDULER=REUSE_EXISTING`; `CURRENT_FAILURE=BINDING_DRIFT_NOT_SCHEDULER_ABSENCE`; `ONE_CLOCK_CAN_DISPATCH_MULTIPLE_SECTORS=true`; `REUSE_BEFORE_CREATE=true`; `CURRENT_OVER_HISTORY=true`; `UNKNOWN_IS_NOT_PASS=true`.
+- **Contraprova:** a memória do CHEFE sozinha não prova que um path, serviço, ODBC, SQL Agent ou scheduler específico ainda esteja vivo hoje. O caso só virou aprendizado reutilizável porque a medição atual encontrou o Task Scheduler real, o receipt histórico encontrou o dispatcher setorial provado e a medição atual localizou exatamente o binding desaparecido.
+- **Next cursor:** reparar/evoluir o dispatcher local já existente, provar uma execução setorial na Casa com receipt novo e depois usar a mesma invariante para comprimir/rebindar os workflows por família sem transformar 70 YAMLs em 70 schedulers Windows.
+
+### 152. A bancada `SHARED/CentralDark` é a forja viva: sincronizar o CURRENT nela preservando o ouro local; cristalizar no mesmo VMware antes do espelho VPS
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L152`; `PREV_GLOBAL_UID=L151`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=152`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=152`; `PREV_LEARNING_REF=151`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** forge-live-worktree-current-sync-preserve-gold.
+- **Data:** 2026-10-03.
+- **Owner do aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md`.
+- **Owner operacional afetado:** `/home/CENTRAKDARK-OS/SHARED/CentralDark` como forja viva do mesmo sistema; GitHub `main` continua fonte canônica; VPS continua twin headless 24/7.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-BANCADA-SHARED-CENTRALDARK-SYNC-PRESERVA-OURO.md`.
+- **Intenção do CHEFE:** trabalhar dentro da bancada que já existe no `CENTRALDARK-OS`; manter o funcional e o ouro local; trazer/sincronizar o repositório CURRENT para dentro dessa mesma bancada; cristalizar ali o corpo completo; somente depois espelhar a mesma materialização para a VPS. Não criar segunda CentralDark, segundo Hermes, segundo scheduler ou árvore paralela.
+- **Medição da bancada:** `/home/CENTRAKDARK-OS/SHARED/CentralDark` existe como Git válido com remote `ServerVpss/CentralDark`, branch `feature/ai-cli-runtime-kernel`, HEAD `892454b98d941c3fada35d3df826f9962257f80f`; contém `6020` arquivos rastreados, `5535` entradas dirty e `13` untracked na medição. O `origin/main` local estava stale e a branch divergiu do GitHub CURRENT: ela possui trabalho próprio e não pode receber `pull/reset/checkout` destrutivo. Worktrees legados apontando para caminhos `E:` aparecem como prunable dentro do guest Linux e devem ser classificados como resíduos de bindings anteriores, não apagados por reflexo.
+- **Aprendizado:** sincronizar a bancada não significa substituir a árvore local por `main`. Significa inventariar/deduplicar o delta local, preservar artefatos/capabilities funcionais, atualizar a referência do CURRENT, reconciliar por owner/escopo e somente então promover o que sobrevive. A árvore `SHARED/CentralDark` continua forja/working tree; o runner CI continua usando `_work` isolado. O pacote/cristal de arquitetura deve entrar na mesma CentralDark como artefato/owner existente, não como novo sistema.
+- **Cristal:** `SHARED_CENTRALDARK=LIVE_FORGE`; `GITHUB_MAIN=CANONICAL_SOURCE`; `SYNC_MEANS_RECONCILE_NOT_OVERWRITE`; `DIRTY_WORKTREE_MUST_BE_PRESERVED_UNTIL_CLASSIFIED=true`; `FUNCTIONAL_GOLD_SURVIVES_PENEIRA=true`; `NO_DESTRUCTIVE_PULL_RESET_ON_FORGE=true`; `CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE=true`; `CRYSTALLIZE_IN_VMWARE_THEN_REPLAY_VPS=true`; `ONE_SYSTEM_ONLY=true`; `REUSE_BEFORE_CREATE=true`; `CURRENT_OVER_HISTORY=true`; `UNKNOWN_IS_NOT_PASS=true`.
+- **Contraprova:** repo local stale não autoriza dizer que seu conteúdo é inútil; dirty count alto não prova erro; branch remota existente não prova que cada alteração local esteja no GitHub. Da mesma forma, GitHub CURRENT não autoriza sobrescrever material local ainda não classificado. Cada cone deve ser reconciliado por identidade, owner e efeito antes de qualquer descarte.
+- **Next cursor:** fazer inventário diferencial da bancada contra o `main` CURRENT, separar `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`, preservar o funcional, reconciliar o menor cone primeiro e só depois materializar a cápsula VMware → VPS.
 

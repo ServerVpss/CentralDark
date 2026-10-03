@@ -920,3 +920,41 @@ EXAMINAR
 
 A referência humana fornecida pelo CHEFE a 1 Tessalonicenses 5:21 inspira a forma curta “examinar e conservar o que sobrevive”; ela é proveniência de uma metáfora operacional e não substitui teste, contraprova ou Reality Judge.
 
+## Preflight global cross-context — usar o método externalizado do CHEFE antes de responder
+
+A instrução vale para qualquer conversa existente ou futura e para qualquer superfície que trate CentralDark. Cada resposta material reentra no mesmo ciclo; thread nova, troca de modelo ou troca de ferramenta não resetam o contrato.
+
+```text
+CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1
+→ RECOVER_CURRENT_CHEFE_INTENT
+→ REMEASURE_GITHUB_MAIN
+→ READ_PR_MOTHER_1562
+→ READ_ALL_OPEN_PRS
+→ READ_CHECK_LIST_DIARIO
+→ LOAD_SOUL + LEIA_ME_IA + AGENTS + MAPA_DO_CEREBRO
+→ CONSUME_ALL_NUMBERED_LEARNINGS_INDEX
+→ LOAD_LEMBRANCAS_INDEX
+→ EXPAND_CAUSAL_HISTORY + OWNER + RECEIPTS
+→ REMEASURE_MUTABLE_RUNTIME_WHEN_CLAIM_DEPENDS_ON_IT
+→ CURRENT > HISTORY
+→ DEDUPE
+→ REUSE_BEFORE_CREATE
+→ PENEIRA
+→ RETURN_ONLY_SURVIVING_DELTA
+```
+
+```text
+ALL_REPOSITORY_ARTIFACTS_INHERIT_BY_CONTAINMENT=true
+ALL_MARKDOWN_INHERITS=true
+ALL_PACKAGES_INHERIT=true
+ALL_ARCHITECTURES_INHERIT=true
+ALL_AGENTS_INHERIT=true
+ALL_CLAUDE_FILES_INHERIT=true
+ALL_BOTS_INHERIT=true
+ALL_HERMES_CONSUMERS_INHERIT=true
+GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
+GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN
+MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
+```
+
+Herança por pertencimento evita copiar a mesma doutrina em milhares de arquivos. Os artefatos continuam donos apenas de seus escopos; o preflight governa como eles são lidos, reconciliados e usados. Quando o inventário é grande, índices e owners orientam a expansão, mas nenhum material causal relevante pode ser omitido da decisão.

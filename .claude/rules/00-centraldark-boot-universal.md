@@ -110,3 +110,17 @@ A execução real de ferramenta e a renderização lateral/JSON da Tool Call sã
 Ausência do renderer não prova ausência de execução; resultado de ferramenta não prova que a lateral foi renderizada.
 Estados de visibilidade: `PROVED_BY_PLATFORM_RECEIPT | USER_CONFIRMED_VISIBILITY | PLATFORM_UNAVAILABLE | UNKNOWN`.
 Confirmação visual do CHEFE prova observação humana da UI, não receipt interno da plataforma.
+
+## Herança global cross-context
+
+```text
+CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
+ALL_DOT_CLAUDE_FILES_INHERIT_BY_CONTAINMENT=true
+ALL_CLAUDE_SUBAGENTS_INHERIT_GLOBAL_PREFLIGHT=true
+EVERY_CENTRALDARK_RESPONSE_REENTERS_PREFLIGHT=true
+NEW_THREAD_DOES_NOT_RESET_PREFLIGHT=true
+GENERIC_RESPONSE_WITHOUT_PREFLIGHT=FORBIDDEN
+MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
+```
+
+Owner: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`.
