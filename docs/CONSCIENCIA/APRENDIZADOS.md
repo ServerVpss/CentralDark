@@ -1543,8 +1543,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 151. Conhecimento legado do CHEFE vira hipótese operacional reutilizável: experiência MU/XPZone/Windows/DB antecipou o padrão relógio → dispatcher → integração, mas CURRENT continua juiz
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L151`; `PREV_GLOBAL_UID=L150`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=151`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=151`; `PREV_LEARNING_REF=150`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L151`; `PREV_GLOBAL_UID=L150`; `NEXT_GLOBAL_UID=L152`; `LEGACY_LEARNING_NUMBER=151`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=151`; `PREV_LEARNING_REF=150`; `NEXT_LEARNING_REF=152`.
 - **Categoria:** human-knowledge-provenance-reuse-before-create.
 - **Data:** 2026-10-03.
 - **Owner do aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md`.
@@ -1555,3 +1555,19 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `CHEFE_STATED_HISTORY=PROVENANCE_NOT_AUTOMATIC_FACT`; `USER_DOMAIN_EXPERTISE_CAN_SEED_HYPOTHESIS=true`; `OLD_PATTERN_MUST_BE_REMEASURED_IN_CURRENT=true`; `WINDOWS_TASK_SCHEDULER=REUSE_EXISTING`; `CURRENT_FAILURE=BINDING_DRIFT_NOT_SCHEDULER_ABSENCE`; `ONE_CLOCK_CAN_DISPATCH_MULTIPLE_SECTORS=true`; `REUSE_BEFORE_CREATE=true`; `CURRENT_OVER_HISTORY=true`; `UNKNOWN_IS_NOT_PASS=true`.
 - **Contraprova:** a memória do CHEFE sozinha não prova que um path, serviço, ODBC, SQL Agent ou scheduler específico ainda esteja vivo hoje. O caso só virou aprendizado reutilizável porque a medição atual encontrou o Task Scheduler real, o receipt histórico encontrou o dispatcher setorial provado e a medição atual localizou exatamente o binding desaparecido.
 - **Next cursor:** reparar/evoluir o dispatcher local já existente, provar uma execução setorial na Casa com receipt novo e depois usar a mesma invariante para comprimir/rebindar os workflows por família sem transformar 70 YAMLs em 70 schedulers Windows.
+
+### 152. A bancada `SHARED/CentralDark` é a forja viva: sincronizar o CURRENT nela preservando o ouro local; cristalizar no mesmo VMware antes do espelho VPS
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L152`; `PREV_GLOBAL_UID=L151`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=152`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=152`; `PREV_LEARNING_REF=151`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** forge-live-worktree-current-sync-preserve-gold.
+- **Data:** 2026-10-03.
+- **Owner do aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md`.
+- **Owner operacional afetado:** `/home/CENTRAKDARK-OS/SHARED/CentralDark` como forja viva do mesmo sistema; GitHub `main` continua fonte canônica; VPS continua twin headless 24/7.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-BANCADA-SHARED-CENTRALDARK-SYNC-PRESERVA-OURO.md`.
+- **Intenção do CHEFE:** trabalhar dentro da bancada que já existe no `CENTRALDARK-OS`; manter o funcional e o ouro local; trazer/sincronizar o repositório CURRENT para dentro dessa mesma bancada; cristalizar ali o corpo completo; somente depois espelhar a mesma materialização para a VPS. Não criar segunda CentralDark, segundo Hermes, segundo scheduler ou árvore paralela.
+- **Medição da bancada:** `/home/CENTRAKDARK-OS/SHARED/CentralDark` existe como Git válido com remote `ServerVpss/CentralDark`, branch `feature/ai-cli-runtime-kernel`, HEAD `892454b98d941c3fada35d3df826f9962257f80f`; contém `6020` arquivos rastreados, `5535` entradas dirty e `13` untracked na medição. O `origin/main` local estava stale e a branch divergiu do GitHub CURRENT: ela possui trabalho próprio e não pode receber `pull/reset/checkout` destrutivo. Worktrees legados apontando para caminhos `E:` aparecem como prunable dentro do guest Linux e devem ser classificados como resíduos de bindings anteriores, não apagados por reflexo.
+- **Aprendizado:** sincronizar a bancada não significa substituir a árvore local por `main`. Significa inventariar/deduplicar o delta local, preservar artefatos/capabilities funcionais, atualizar a referência do CURRENT, reconciliar por owner/escopo e somente então promover o que sobrevive. A árvore `SHARED/CentralDark` continua forja/working tree; o runner CI continua usando `_work` isolado. O pacote/cristal de arquitetura deve entrar na mesma CentralDark como artefato/owner existente, não como novo sistema.
+- **Cristal:** `SHARED_CENTRALDARK=LIVE_FORGE`; `GITHUB_MAIN=CANONICAL_SOURCE`; `SYNC_MEANS_RECONCILE_NOT_OVERWRITE`; `DIRTY_WORKTREE_MUST_BE_PRESERVED_UNTIL_CLASSIFIED=true`; `FUNCTIONAL_GOLD_SURVIVES_PENEIRA=true`; `NO_DESTRUCTIVE_PULL_RESET_ON_FORGE=true`; `CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE=true`; `CRYSTALLIZE_IN_VMWARE_THEN_REPLAY_VPS=true`; `ONE_SYSTEM_ONLY=true`; `REUSE_BEFORE_CREATE=true`; `CURRENT_OVER_HISTORY=true`; `UNKNOWN_IS_NOT_PASS=true`.
+- **Contraprova:** repo local stale não autoriza dizer que seu conteúdo é inútil; dirty count alto não prova erro; branch remota existente não prova que cada alteração local esteja no GitHub. Da mesma forma, GitHub CURRENT não autoriza sobrescrever material local ainda não classificado. Cada cone deve ser reconciliado por identidade, owner e efeito antes de qualquer descarte.
+- **Next cursor:** fazer inventário diferencial da bancada contra o `main` CURRENT, separar `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`, preservar o funcional, reconciliar o menor cone primeiro e só depois materializar a cápsula VMware → VPS.
+
