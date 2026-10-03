@@ -1488,34 +1488,7 @@ except Exception as exc:
 if tracked:
     package_names={'package.json','pyproject.toml','Cargo.toml','go.mod','pom.xml','composer.json'}
     markdown=[p for p in tracked if p.lower().endswith('.md')]
-    packages=[p for p in tracked if Path(p).name in package_names or re.match(r'requirements[^/]*\.txt
-print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))
-if failed:
-    print('REPO_CONTRACT_VERIFY=FAIL')
-    if runner_violations:
-        print('CANONICAL_RUNNER_POLICY=FAIL')
-    sys.exit(1)
-print('REPO_CONTRACT_VERIFY=PASS')
-print('BOT_ENTRY_CONTRACT=PASS')
-print('OUTPUT_GUARD_CONTRACT=PASS')
-print('WORKFLOW_REUSE_CONTRACT=PASS')
-print('CANONICAL_RUNNER_POLICY=PASS')
-print('SELF_HEALING_CONTRACT=PASS')
-print('UNIVERSAL_EVOLUTION_CARACOL_CONTRACT=PASS')
-print('OPERATIONAL_RULE_LEARNING_CONTRACT=PASS')
-print('CANONICAL_HANDOFF_POMBO_CHECKSUM=PASS')
-print('POMBO_CHECKSUM_HANDOFF_CONTRACT=PASS')
-print('PROOF_CARRYING_CLOSED_LOOP_CONTROL=PASS')
-print('ALCHEMICAL_OPERATIONAL_LEARNING_CRYSTAL=PASS')
-print('RESILIENT_AUTONOMY_BOUNDARY_CRYSTAL=PASS')
-print('MATERIAL_STATE_MACHINE_AND_LEARNING_BINDING=PASS')
-print('DETERMINISTIC_SCAFFOLD_CONTRACT=PASS')
-print('CHEFE_SYSTEMATIC_PROOF_CONTRACT=PASS')
-print('FIXED_POINT_SCOPE_HISTORY_LOGIC_CONTRACT=PASS')
-print('CAPABILITY_OFF_NEUTRALITY_CONTRACT=PASS')
-print('COCKPIT_OFF_NEUTRALITY_HUD=PASS')
-print('NOTE=PASS proves repository contract/path/runner-policy facts only; it does not prove live Windows/VPS/runtime inheritance.')
-,Path(p).name,re.I)]
+    packages=[p for p in tracked if Path(p).name in package_names or re.match(r'requirements[^/]*\.txt$', Path(p).name, re.I)]
     claude_files=[p for p in tracked if p=='CLAUDE.md' or p.startswith('.claude/')]
     agents_files=[p for p in tracked if p=='AGENTS.md' or p.startswith('.agents/')]
     architecture_files=[p for p in tracked if p.startswith('docs/ARQUITETURA/')]

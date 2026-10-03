@@ -400,11 +400,11 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 
 **Ordem de continuidade canônica (main):**
 
-`1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 141 → 142 → 143 → 144 → 145 → 146 → 147 → 148 → 149 → 150`
+`1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 141 → 142 → 143 → 144 → 145 → 146 → 147 → 148 → 149 → 150 → 151`
 
 `CANONICAL_LEARNING_FIRST=1`
-`CANONICAL_LEARNING_LAST=150`
-`CANONICAL_LEARNING_COUNT=150`
+`CANONICAL_LEARNING_LAST=151`
+`CANONICAL_LEARNING_COUNT=151`
 `CANONICAL_NUMERIC_SEQUENCE_PASS=true`
 `LEGACY_DUPLICATE_HEADINGS_PRESERVED=true`
 `LEGACY_GAPS_ARE_HISTORICAL_NOT_MISSING_LEARNING_IDS=true`
@@ -558,3 +558,33 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Owner:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`
 - **Conteúdo:** qualquer resposta/ação CentralDark em fio atual ou futuro reentra no preflight; intenção do CHEFE + main CURRENT + PR-mãe #1562 + PRs abertos + checklist + núcleo + Aprendizados + Lembranças + owner/runtime aplicável são cruzados antes do retorno. Todo artefato do repositório herda o contrato por pertencimento; fonte necessária indisponível mantém apenas o claim afetado UNKNOWN; resposta genérica substitutiva é proibida.
 
+
+### [2026-10-03] Conhecimento legado do CHEFE — MU/XPZone/Windows/DB → invariante local reutilizável
+- **Data:** 2026-10-03
+- **Tags:** chefe, historico-tecnico, mu, xpzone, windows-server, sql, odbc, scheduler, task-scheduler, dispatcher, reuse-before-create, casa, trigger-fabric
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #151
+- **Target:** `docs/CONSCIENCIA/APRENDIZADOS.md#151`
+- **Relevância:** alta
+- **Eixo:** histórico humano → método operacional atual
+- **Promovida:** sim
+
+**Proveniência humana preservada:** o CHEFE relatou experiência pré-IA criando servidores de MU, programas e sites PHP e trabalhando com Windows Server, SQL/ODBC e agendamento. Isto é `CHEFE_STATED_HISTORY`: memória autorizada do humano, não evidência externa automática.
+
+**Corroboração disponível sem guardar credenciais pessoais:** no Gmail conectado pelo alias `SONASMARCAS`, foram encontrados rastros XPZONE/MU entre 2017 e 2023, incluindo `MuServer + SRC`, `Connect server Windows server 2012` e `Web Cabal Machine ... + DB`. Esses rastros confirmam vínculo com o ecossistema, mas não são usados para inventar datas ou detalhes que a evidência não mostra.
+
+**Costura com a Casa atual:** o padrão antigo lembrado pelo CHEFE — `RELÓGIO → DISPATCHER → AÇÃO/DB/API → SINCRONIZAÇÃO` — coincide com o binding já existente da CentralDark no Windows Task Scheduler. O mesmo dispatcher setorial foi historicamente provado em `PDF_GATE`; na medição atual as tasks continuam registradas, porém o path do dispatcher desapareceu. Assim, a falha é de binding/continuidade e deve ser reparada no owner existente, não respondida com um scheduler paralelo.
+
+```text
+CHEFE_STATED_HISTORY = PROVENIENCIA_HUMANA
+GMAIL_ALIAS_EVIDENCE = CORROBORACAO_PARCIAL
+USER_DOMAIN_EXPERTISE → HYPOTHESIS_SEED
+HYPOTHESIS_SEED → CURRENT_OWNER_SEARCH → MEASURE → REUSE_OR_REFUTE
+CURRENT_FAILURE = BINDING_DRIFT_NOT_SCHEDULER_ABSENCE
+REUSE_BEFORE_CREATE = true
+CURRENT_OVER_HISTORY = true
+```
+
+**Regra de continuidade:** quando uma intuição técnica do CHEFE vier de experiência anterior, tratá-la como hipótese forte a ser tentada/falsificada contra o CURRENT e os owners existentes. Se sobreviver, absorver somente o delta e preservar o mecanismo já provado.
+
+**Links:** [[APRENDIZADOS#151]] · [[LEMBRANCAS]] · [[CHECK-LIST-DIARIO]] · [[CENTRALDARK-TRIGGER-FABRIC]]
