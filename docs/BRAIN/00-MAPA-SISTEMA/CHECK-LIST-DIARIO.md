@@ -549,3 +549,38 @@ UNKNOWN_IS_NOT_PASS=true
 
 ### ➡️ NEXT_CURSOR
 Validar identidade SSH atual da VPS por âncora independente/autorizada; atualizar somente known_hosts afetado; provar VMware→VPS autenticado; então matricular/provar runner VMware e só depois comprimir/rebindar workflows por família.
+
+## 🫀 CURRENT VIVO — 2026-10-03 — LEARNING_154_VMWARE_VPS_DIRECT_SSH
+
+```text
+LEARNING_154_VMWARE_VPS_DIRECT_SSH=true
+VMWARE_TO_VPS_TCP=PASS
+VMWARE_TO_VPS_SSH_AUTH=PASS
+REMOTE_USER=root
+CASA_REQUIRED_AS_SSH_HOP=NO
+BINDING_ROOT_CAUSE=WINDOWS_IDENTITYFILE_PATH_INSIDE_LINUX
+BINDING_FIX=LOCAL_VM_IDENTITYFILE_PATH_ONLY
+CONFIG_BACKUP=PASS
+LOCAL_REMOTE_MACHINE_ID_DIFFER=PASS
+PERSISTENT_HOSTKEY_TRUST=UNKNOWN
+TEMP_HOSTKEY_BYPASS=PROOF_ONLY
+SECRETS_STAY_OUT_OF_GIT=true
+```
+
+### ✅ PROVADO
+- [x] `ssh -G segredo-vpss` revelou path Windows dentro do guest Linux antes do delta.
+- [x] backup local do config criado antes da mutação.
+- [x] somente `IdentityFile` foi adaptado para `~/.ssh/segredo_vps_ed25519`.
+- [x] readback `ssh -G` confirma binding Linux correto.
+- [x] SSH VMware→VPS autenticou sem Casa; usuário remoto `root`.
+- [x] VM e VPS têm hashes de `/etc/machine-id` distintos, evitando falso-verde apesar do mesmo hostname.
+- [x] receita executável registrada em `PROVEN-CLAIMS.lock.json#VMWARE_VPS_DIRECT_SSH_BINDING_PATH`.
+- [x] Aprendizado #154 + Lembrança expandida com Mermaid + parâmetros + fingerprint materializados.
+
+### ⚪ FRONTEIRA
+- [ ] trust persistente da host key atual da VPS continua UNKNOWN até âncora independente/autorizada.
+- [ ] probe temporário de bypass de host-key foi usado só para isolar autenticação; não vira política padrão.
+- [ ] runner GitHub self-hosted VMware ainda precisa matrícula + `runner_name` real em job.
+
+### ➡️ NEXT_CURSOR
+Validar host key VPS por âncora independente/autorizada → atualizar somente `known_hosts` → replay SSH com trust normal → matricular/provar runner VMware → comprimir/rebindar workflows por famílias medidas.
