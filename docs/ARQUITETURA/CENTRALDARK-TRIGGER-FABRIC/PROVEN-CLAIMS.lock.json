@@ -1122,6 +1122,89 @@
           "SECRET_VALUES_STORED": false
         }
       }
+    },
+    "VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC": {
+      "claim_key": "VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+      "lock_key": "90b98d0a64eca63a1da217b7c9de5072bcf107e3f2800768d10e78b26545c45b",
+      "state": "SEALED_RECIPE_RUNTIME_EXECUTION_PENDING",
+      "proof_target": "MAIN_CURRENT_RECONCILED_INTO_VMWARE_FORGE_WITH_LOCAL_GOLD_PRESERVED_AND_OBSIDIAN_HUD_INTEGRATED",
+      "evidence_ref": "LEARNING_155 + expanded remembrance + runtime materialization 2026-10-03",
+      "observed_at": "2026-10-03",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "557819f7b6230625330f8870cd41d69c1a16f21e3e40d644f00cd7aea4b9ff24",
+        "proof_plan_hash": "885608acd3366d0972a0207e316f445f36ca8eccaa024365e0da2fa442afad9a",
+        "result_schema_hash": "8cd2c4e36f31316c6f65af6922e78c97a17a6cf6e2a0e6b88b60325cbfc3ca37",
+        "effect_schema_hash": "1e1f8d17d66cc3374fcffaa481e0fe0fa218c06aee2566d6a8bdc303c7ec2c2e",
+        "execution_commands": [
+          "run CentralDark global cross-context preflight",
+          "measure forge remote/branch/HEAD/dirty state before mutation",
+          "fetch main CURRENT without reset or checkout overwrite",
+          "classify delta as LOCAL_GOLD/ALREADY_IN_MAIN/STALE/CONFLICT/UNKNOWN",
+          "preserve LOCAL_GOLD and UNKNOWN",
+          "reconcile only proven-safe delta by existing owner",
+          "keep CI _work isolated from SHARED/CentralDark",
+          "keep Obsidian rooted in same forge with .obsidian local-only",
+          "verify HUD/Home/Pendencias canonical links",
+          "verify existing obsidian-plugin-grafo-vivo build and Knowledge Hub binding",
+          "generate hashes/fingerprint/receipt",
+          "stop destructive write on CONFLICT or UNKNOWN",
+          "prepare VMware crystal for VPS replay"
+        ],
+        "proof_commands": [
+          "git remote -v + git branch --show-current + git rev-parse HEAD",
+          "git status --porcelain before mutation",
+          "git fetch origin main without merge/reset",
+          "git merge-base HEAD origin/main",
+          "differential inventory with LOCAL_GOLD/ALREADY_IN_MAIN/STALE/CONFLICT/UNKNOWN",
+          "git check-ignore .obsidian/**",
+          "hash Home.md HUD.html Pendencias.md and obsidian plugin build",
+          "verify CI workspace path is outside SHARED/CentralDark",
+          "emit result receipt with PASS/CONFLICT/UNKNOWN/NEXT_CURSOR"
+        ],
+        "expected_results": [
+          "FORGE_IDENTITY=PASS",
+          "FETCH_MAIN_NO_WORKTREE_OVERWRITE=PASS",
+          "LOCAL_GOLD_PRESERVED=PASS",
+          "UNKNOWN_OVERWRITTEN=NO",
+          "DOT_OBSIDIAN_GIT_IGNORED=PASS",
+          "OBSIDIAN_HUD_LINKAGE=PASS",
+          "CI_WORKSPACE_ISOLATED=PASS",
+          "CONFLICT_OR_UNKNOWN_STOPS_DESTRUCTIVE_WRITE=true",
+          "RESULT_RECEIPT_EMITTED=true"
+        ],
+        "expected_effect": "MAIN_CURRENT_RECONCILED_INTO_VMWARE_FORGE_WITH_LOCAL_GOLD_PRESERVED_AND_OBSIDIAN_HUD_INTEGRATED",
+        "result_schema": "centraldark.vmware-forge-preserve-gold-sync.result.v1",
+        "environment_bindings": {
+          "FORGE_WINDOWS_PATH": "E:\\VMs\\CENTRALDARK-OS\\SHARED\\CentralDark",
+          "FORGE_GUEST_WRITE_PATH": "/home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED/CentralDark",
+          "CASA_E_WIDE_ROUTE_WRITE": "EIO_OBSERVED",
+          "DEDICATED_SHARE_WRITE": "PASS_OBSERVED",
+          "CANONICAL_REMOTE": "https://github.com/ServerVpss/CentralDark.git",
+          "CANONICAL_BRANCH": "main",
+          "CI_WORKSPACE": "~/actions-runner-vmware/_work",
+          "OBSIDIAN_PLUGIN_OWNER": "apps/modulos/obsidian-plugin-grafo-vivo",
+          "OLD_WINDOWS_DOT_OBSIDIAN_BYTES": "UNKNOWN",
+          "SECRET_VALUES_STORED": false
+        },
+        "security_boundary": {
+          "secret_values_in_git": false,
+          "private_key_content_in_receipts": false,
+          "token_or_password_in_markdown": false,
+          "dot_obsidian_local_state_not_committed": true,
+          "unknown_not_overwritten": true
+        },
+        "commands_executable": true,
+        "runtime_sync_execution": "PENDING",
+        "current_materialization": {
+          "home_hud_pendencias_in_forge": "PASS",
+          "dot_obsidian_created": "PASS",
+          "canonical_plugin_build_copied": "PASS",
+          "learning_152_and_brain_links": "PASS",
+          "old_windows_dot_obsidian_reconciled": "UNKNOWN"
+        }
+      }
     }
   }
 }
