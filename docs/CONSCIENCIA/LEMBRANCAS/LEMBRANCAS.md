@@ -403,8 +403,8 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 `1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 141 → 142 → 143 → 144 → 145 → 146 → 147 → 148 → 149 → 150 → 151 → 152`
 
 `CANONICAL_LEARNING_FIRST=1`
-`CANONICAL_LEARNING_LAST=155`
-`CANONICAL_LEARNING_COUNT=155`
+`CANONICAL_LEARNING_LAST=156`
+`CANONICAL_LEARNING_COUNT=156`
 `CANONICAL_NUMERIC_SEQUENCE_PASS=true`
 `LEGACY_DUPLICATE_HEADINGS_PRESERVED=true`
 `LEGACY_GAPS_ARE_HISTORICAL_NOT_MISSING_LEARNING_IDS=true`
@@ -630,4 +630,13 @@ CURRENT_OVER_HISTORY = true
 - **Seleção temporal:** material produzido sobre um snapshot antigo — inclusive Pesquisa Aprofundada deixada rodando enquanto o organismo evolui — retorna como CANDIDATE e deve ser peneirado contra o CURRENT de chegada. Duplicado→reuse; superado→history/stale; contradito→não promove; sem prova→UNKNOWN; sobrevivente→candidato a invariante/delta útil.
 - **Preservação:** não apagar o que era verdadeiro/dito no tempo; adicionar camada, proveniência, correção e motivo. `DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true`; `RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY=true`; `DELAY_IS_NOT_PROOF=true`; `CURRENT_OVER_HISTORY=true`; `RAW_PRIVATE_REASONING_NOT_STORED=true`.
 - **Promoção:** nenhuma. Este registro não cria #156 nem altera a sequência de Aprendizados; reutiliza a arquitetura de memória existente.
+
+### [2026-10-03] Compilador de cristal portátil + seleção temporal
+- **Tipo:** LEARNING_INDEX / EXECUTABLE_CRYSTAL
+- **Learning:** #156
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-COMPILADOR-CRISTAL-PORTATIL-SELECAO-TEMPORAL.md`
+- **Owner:** `.agents/skills/knowledge-compiler/`
+- **Conteúdo:** o cristal passa a ser programa portátil: o Knowledge Compiler existente recebe backend Python que preserva semântica e adapta somente bindings Windows/VMware/VPS. Pesquisa atrasada volta como CANDIDATE e reentra no CURRENT; `SSH_AUTH != HOSTKEY_TRUST`; `QUEUED != RUNNER_ASSIGNMENT`; bytes alterados exigem novo SHA-256 e preservam o hash anterior por lineage.
+- **Prova:** `CRYSTAL_RUNTIME_COMPILER_TEST=PASS` executado na VMware com plano `centraldark.compiled-plan.v2`.
+- **Cristal:** `PYTHON=KNOWLEDGE_EXECUTABLE_BACKEND`; `JSON=MATERIALIZED_CRYSTAL`; `HASH=IDENTITY`; `RECEIPT=RUNTIME_EFFECT_PROOF`.
 
