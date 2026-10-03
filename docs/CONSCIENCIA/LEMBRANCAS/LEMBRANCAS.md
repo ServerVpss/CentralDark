@@ -400,11 +400,11 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 
 **Ordem de continuidade canônica (main):**
 
-`1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137`
+`1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 141 → 142 → 143 → 144 → 145 → 146 → 147 → 148 → 149`
 
 `CANONICAL_LEARNING_FIRST=1`
-`CANONICAL_LEARNING_LAST=137`
-`CANONICAL_LEARNING_COUNT=137`
+`CANONICAL_LEARNING_LAST=149`
+`CANONICAL_LEARNING_COUNT=149`
 `CANONICAL_NUMERIC_SEQUENCE_PASS=true`
 `LEGACY_DUPLICATE_HEADINGS_PRESERVED=true`
 `LEGACY_GAPS_ARE_HISTORICAL_NOT_MISSING_LEARNING_IDS=true`
@@ -544,4 +544,10 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Cristal:** `MODEL_CATALOG_VISIBLE=PASS`; `ONDEVICE_ROUTE_EXISTS=PASS`; `CLOUD_ROUTE_EXISTS=PASS`; `ONDEVICE_ROUTE != CLOUD_ROUTE`; `CATALOG_ENTRY != MODEL_WEIGHTS_INSTALLED`; `MODEL_ID_CONFIG != MODEL_READY`; `PROBE_CREATED != INFERENCE_PROVEN`.
 - **Fronteira atual:** `WEIGHTS_MATERIALIZED_LOCAL=UNKNOWN`; `QWEN_CHAT_EXECUTED=UNKNOWN`; `PR_AGENT_REPLACED=NO`.
 - **Next cursor:** provar materialização dos pesos e inferência local real via `genai_text_*` antes de substituir os reviewers externos no `.github/workflows/pr-agent.yml`.
+
+### [2026-10-03] VMware executa o funil self-hosted com Hermes local
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #149
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FUNIL-VMWARE-HERMES-CLASSIFICACAO-APRENDIZADOS-1-149.md`
+- **Conteúdo:** o plano existente foi fechado no nível de execução: Casa/VMware continua forja, mas também recebe o runner self-hosted dedicado do funil; Hermes executa dentro do mesmo `CENTRALDARK-OS`; `runner/_work` é isolado da árvore `SHARED` suja; o artefato/receipt provado é reexecutado na VPS twin. Binário de runner presente não equivale a matrícula; billing hosted antes do start não equivale a falha de código; Tailscale logged out não equivale a máquina down.
 
