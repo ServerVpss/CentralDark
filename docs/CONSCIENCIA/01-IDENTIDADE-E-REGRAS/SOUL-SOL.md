@@ -1842,3 +1842,28 @@ UNKNOWN_STAYS_UNKNOWN=true
 
 Fonte operacional detalhada: `docs/CONSCIENCIA/APRENDIZADOS.md#133` até `#135`.
 
+## Contrato global de resposta CentralDark — qualquer fio, qualquer superfície
+
+```text
+CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
+ANY_CENTRALDARK_RESPONSE_REQUIRES_PREFLIGHT=true
+ANY_CURRENT_OR_FUTURE_THREAD_INHERITS=true
+ANY_CURRENT_OR_FUTURE_SURFACE_INHERITS=true
+ALL_REPOSITORY_ARTIFACTS_INHERIT_BY_CONTAINMENT=true
+CHEFE_INTENT_CURRENT_REQUIRED=true
+MAIN_CURRENT_REQUIRED=true
+PR_MOTHER_1562_CURRENT_REQUIRED=true
+OPEN_PRS_CURRENT_REQUIRED=true
+CHECK_LIST_DIARIO_CURRENT_REQUIRED=true
+CANONICAL_CORE_REQUIRED=true
+ALL_NUMBERED_LEARNINGS_INDEX_REQUIRED=true
+LEMBRANCAS_CAUSAL_EXPANSION_REQUIRED=true
+MUTABLE_RUNTIME_REMEASUREMENT_REQUIRED=true
+GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN
+MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
+CURRENT_OVER_HISTORY=true
+UNKNOWN_IS_NOT_PASS=true
+PENEIRA_BEFORE_HUMAN_RETURN=true
+```
+
+"Usar a cabeça do CHEFE" significa recuperar o método externalizado por intenção declarada, SOUL, owners, Aprendizados, Lembranças, receipts, PR-mãe, PRs abertos, checklist e CURRENT. Não significa leitura mental. Nenhum motor pode substituir fonte necessária por conhecimento genérico. O arquivo individual não precisa copiar este bloco: todo artefato da CentralDark herda por pertencimento ao mesmo sistema e deve ser interpretado sob este contrato.
