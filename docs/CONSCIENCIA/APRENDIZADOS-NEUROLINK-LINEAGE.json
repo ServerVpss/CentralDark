@@ -21,7 +21,7 @@
   },
   "audit": {
     "learning_sections": 151,
-    "highest_legacy_learning_number": 152,
+    "highest_legacy_learning_number": 153,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 152
+      "end": 153
     }
   },
   "nodes": [
@@ -1746,6 +1746,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L151",
+      "next_uid": "L153"
+    },
+    {
+      "uid": "L153",
+      "legacy_learning_number": 153,
+      "legacy_occurrence": 1,
+      "title": "Compressão por invariante + bindings autossuficientes: a VMware deve executar o mesmo sistema sem depender da Casa como salto",
+      "document_order": 152,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L152",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
