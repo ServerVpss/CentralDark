@@ -516,3 +516,36 @@ UNKNOWN_IS_NOT_PASS=true
 ### ➡️ NEXT_CURSOR
 Inventariar diferencialmente a bancada contra o `main` CURRENT e classificar cada delta em `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`; reconciliar primeiro o menor cone material e retestar.
 
+## 🫀 CURRENT VIVO — 2026-10-03 — LEARNING_153_INVARIANT_BINDINGS
+
+```text
+LEARNING_153_INVARIANT_BINDINGS=true
+RAW_COUNT_IS_NOT_ARCHITECTURE=true
+COMPRESS_BY_INVARIANT_BEFORE_CREATING=true
+QUEUED_IS_NOT_RUNNING=true
+VMWARE_SHARED_SSH_BINDING=PASS
+VMWARE_SHARED_SECRETS_BINDING=PASS
+VPS_TCP22_REACHABLE=PASS
+CASA_REQUIRED_AS_SSH_HOP=NO
+KNOWN_HOSTS_STALE=PROVEN
+SSH_AUTH_VMWARE_TO_VPS=NOT_PROVEN
+SECRETS_STAY_OUT_OF_GIT=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+### ✅ PROVADO
+- [x] VMware enxerga `SHARED/ssh` e `SHARED/secrets`.
+- [x] bindings SSH materiais comparados entre SHARED e ~/.ssh são equivalentes por SHA-256.
+- [x] alias VPS existe dentro da VMware e TCP/22 VM→VPS passa.
+- [x] jobs self-hosted/Linux amarelos medidos permanecem queued sem runner_name; não chamar de execução.
+- [x] Desktop Commander da VPS offline não significou VPS down; TCP/22 foi alcançado por outra rota.
+- [x] Aprendizado #153 + Lembrança + NeuroLink + índice materializados.
+
+### 🔴 / ⚪ FRONTEIRA
+- [ ] known_hosts da VM está stale frente à identidade atual observada da VPS.
+- [ ] não aceitar/promover host key nova sem âncora independente/autorizada.
+- [ ] SSH autenticado VMware→VPS ainda não está provado.
+- [ ] runner self-hosted físico que executará os jobs atuais ainda não está provado por runner_name.
+
+### ➡️ NEXT_CURSOR
+Validar identidade SSH atual da VPS por âncora independente/autorizada; atualizar somente known_hosts afetado; provar VMware→VPS autenticado; então matricular/provar runner VMware e só depois comprimir/rebindar workflows por família.
