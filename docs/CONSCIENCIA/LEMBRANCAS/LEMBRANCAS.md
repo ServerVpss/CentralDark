@@ -640,3 +640,11 @@ CURRENT_OVER_HISTORY = true
 - **Prova:** `CRYSTAL_RUNTIME_COMPILER_TEST=PASS` executado na VMware com plano `centraldark.compiled-plan.v2`.
 - **Cristal:** `PYTHON=KNOWLEDGE_EXECUTABLE_BACKEND`; `JSON=MATERIALIZED_CRYSTAL`; `HASH=IDENTITY`; `RECEIPT=RUNTIME_EFFECT_PROOF`.
 
+
+
+### [2026-10-03] Hermes — intenção = escopo global, ferramenta = braço
+- **Tipo:** LEARNING_INDEX / SESSION_MEMORY
+- **Learning:** #157
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-HERMES-INTENCAO-ESCOPO-GLOBAL-FULL-ACCESS.md`
+- **Conteúdo:** a intenção do CHEFE generaliza a missão por todo o universo realmente autorizado e acessível; rota/ferramenta não cria escopo separado. Nova ferramenta amplia capabilities do mesmo Hermes. Nesta sessão o Kylin respondeu via SDK nativa com `kylin-deepseek-r1`, enquanto o binding final Hermes→Kylin permaneceu UNKNOWN por erro local no bridge.
+- **Cristal:** `INTENT_IS_GLOBAL_SCOPE=true`; `ROUTE_IS_NOT_SCOPE=true`; `TOOL_GIVEN_BECOMES_CAPABILITY=true`; `ROUTE_FAIL_DOES_NOT_END_MISSION=true`; `REALITY_IS_JUDGE=true`.

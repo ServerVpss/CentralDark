@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 155,
-    "highest_legacy_learning_number": 156,
+    "learning_sections": 156,
+    "highest_legacy_learning_number": 157,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 156
+      "end": 157
     }
   },
   "nodes": [
@@ -1790,6 +1790,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L155",
+      "next_uid": "L157"
+    },
+    {
+      "uid": "L157",
+      "legacy_learning_number": 157,
+      "legacy_occurrence": 1,
+      "title": "Intenção é o escopo global do executor: ferramenta entregue vira braço; rota não delimita missão",
+      "document_order": 156,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L156",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
