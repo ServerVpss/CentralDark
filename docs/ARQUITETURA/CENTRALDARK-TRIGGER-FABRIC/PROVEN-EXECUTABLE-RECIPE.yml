@@ -342,3 +342,47 @@ recipe_instances:
       - LEARNING_153_INVARIANT_COMPRESSION
       - LEARNING_154_VMWARE_VPS_DIRECT_SSH
     next_cursor: EXECUTE_DIFFERENTIAL_INVENTORY_THEN_PROVE_VMWARE_SELF_HOSTED_RUNNER
+
+  KNOWLEDGE_COMPILER_PORTABLE_CRYSTAL_RUNTIME:
+    claim_key: KNOWLEDGE_COMPILER_PORTABLE_CRYSTAL_RUNTIME
+    learning_ref: 156
+    version: 1
+    owner: .agents/skills/knowledge-compiler/
+    backend: .agents/skills/knowledge-compiler/scripts/crystal-runtime-compiler.py
+    crystal: .agents/skills/knowledge-compiler/crystals/vmware-forge-obsidian-preserve-gold-sync.json
+    regression: .agents/skills/knowledge-compiler/tests/crystal-runtime-compiler.test.py
+    purpose: >-
+      Reproduzir o mesmo cristal semântico em bindings Windows/VMware/VPS,
+      mantendo hash/lock/plano determinísticos e separando compilação de
+      efeito runtime.
+    parent_package_sha256: 4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6
+    successor_package_sha256: 9e99657b37dbc99a474067957956ccb52067c142c3108558be79aa9e2bbee2f0
+    compiled_crystal_fingerprint: d1fd0fc3f30b4e35ea864a24ec522cdaa227a1c19a9b4119cd20d1779538746e
+    lock_key: dfc11b978498393ef13c42f2c583ef0ac0109c3d45585ff561ad2abcaa746d1f
+    proof_plan_hash: 85857899510cae71c0cc8cdb2973c232f291f9ac0e09bf7283c30ce50ec5c534
+    result_schema_hash: 75d56a005d5d50ad8bb3460fc0c77289827364807a22ce80ce475b6e854de9a3
+    effect_schema_hash: 1e1f8d17d66cc3374fcffaa481e0fe0fa218c06aee2566d6a8bdc303c7ec2c2e
+    sequence:
+      - CURRENT_PREFLIGHT
+      - INGEST_RETURNING_RESEARCH_AS_CANDIDATE
+      - DEDUPE_AND_TEMPORAL_SELECTION
+      - VALIDATE_CRYSTAL_INVARIANTS
+      - ADAPT_ONLY_ENVIRONMENT_BINDINGS
+      - COMPILE_PLAN
+      - CALCULATE_HASH_AND_LOCK
+      - INSPECT_RUNTIME
+      - PROVE_AND_COUNTERPROVE
+      - EMIT_RECEIPT
+    proof:
+      - CRYSTAL_RUNTIME_COMPILER_TEST=PASS
+      - VMWARE_COMPILED_PLAN_SCHEMA=centraldark.compiled-plan.v2
+      - TEMPORAL_POLICY=RETURNING_RESEARCH_IS_CANDIDATE_NOT_AUTHORITY
+      - PERSISTENT_HOSTKEY_TRUST=UNKNOWN_UNTIL_INDEPENDENT_ANCHOR
+      - RUNNER_STATE=UNKNOWN_UNTIL_REAL_ASSIGNMENT
+    counterproof:
+      - COMPILED_PLAN_IS_NOT_RUNTIME_EFFECT
+      - SSH_AUTH_IS_NOT_HOSTKEY_TRUST
+      - QUEUED_IS_NOT_RUNNER_ASSIGNMENT
+      - CHANGED_BYTES_REQUIRE_NEW_SHA256
+      - RESEARCH_SURVIVAL_IS_NOT_AUTOMATIC_CANON
+    next_cursor: INSPECT_LIVE_FORGE_THEN_CLOSE_HOSTKEY_AND_RUNNER_CLAIMS_SEPARATELY
