@@ -26,7 +26,8 @@ if pkg.get('license') != 'Apache-2.0':
 pkg['name'] = 'centraldark-instinto-superior'
 pkg['description'] = 'CentralDark — Instinto Superior · AionUi shell + CentralDark persistent runtime'
 pkg['productName'] = 'CentralDark — Instinto Superior'
-PACKAGE.write_text(json.dumps(pkg, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+PACKAGE.write_text(json.dumps(pkg, ensure_ascii=False, indent=2) + '
+', encoding='utf-8')
 
 builder = BUILDER.read_text(encoding='utf-8')
 replacements = {
@@ -49,12 +50,17 @@ for old, new in replacements.items():
         raise SystemExit(f'overlay guard missing in electron-builder.yml: {old!r}')
     builder = builder.replace(old, new, 1)
 
-seed_binding = "  - from: resources/hub\n    to: hub\n"
+seed_binding = "  - from: resources/hub
+    to: hub
+"
 if seed_binding not in builder:
     raise SystemExit('cannot locate extraResources hub anchor')
 builder = builder.replace(
     seed_binding,
-    seed_binding + "  # CentralDark CURRENT seed — optional in thin dev; populated by build-prototype.sh\n  - from: resources/centraldark-seed\n    to: centraldark-seed\n",
+    seed_binding + "  # CentralDark CURRENT seed — optional in thin dev; populated by build-prototype.sh
+  - from: resources/centraldark-seed
+    to: centraldark-seed
+",
     1,
 )
 BUILDER.write_text(builder, encoding='utf-8')
@@ -70,28 +76,44 @@ if import_anchor not in index:
 if 'initializeCentralDark' not in index:
     index = index.replace(
         import_anchor,
-        import_anchor + "\nimport { initializeCentralDark } from './centraldark/bootstrap';",
+        import_anchor + "
+import { initializeCentralDark } from './centraldark/bootstrap';",
         1,
     )
 
-call_anchor = "  await initStorage();\n  mark('initStorage');"
+call_anchor = "  await initStorage();
+  mark('initStorage');"
 if call_anchor not in index:
     raise SystemExit('index call anchor missing')
 if "mark('centralDark')" not in index:
     index = index.replace(
         call_anchor,
-        call_anchor + "\n\n  await initializeCentralDark();\n  mark('centralDark');",
+        call_anchor + "
+
+  await initializeCentralDark();
+  mark('centralDark');",
         1,
     )
 INDEX.write_text(index, encoding='utf-8')
 
+# AionUi 2.2.2 assumes a separate bunx binary. Current Bun exposes the same
+# package runner as "bun x"; patch only the build-critical calls.
+for rel in ('scripts/build-with-builder.js', 'scripts/postinstall.js'):
+    p = ROOT / rel
+    text = p.read_text(encoding='utf-8')
+    text = text.replace('bunx electron-vite', 'bun x electron-vite')
+    text = text.replace('bunx electron-builder', 'bun x electron-builder')
+    p.write_text(text, encoding='utf-8')
+
 seed = ROOT / 'resources/centraldark-seed'
 seed.mkdir(parents=True, exist_ok=True)
 (seed / 'README.txt').write_text(
-    'Thin prototype placeholder. Full build copies SOURCE_SNAPSHOT/CentralDark here.\n',
+    'Thin prototype placeholder. Full build copies SOURCE_SNAPSHOT/CentralDark here.
+',
     encoding='utf-8',
 )
 
 print('AIONUI_UPSTREAM_VERSION=2.2.2')
 print('CENTRALDARK_OVERLAY=APPLIED')
+print('BUNX_BUILD_COMPAT=PATCHED')
 print('PRODUCT=CentralDark — Instinto Superior')
