@@ -1210,7 +1210,7 @@
       "claim_key": "KNOWLEDGE_COMPILER_PORTABLE_CRYSTAL_RUNTIME",
       "owner": ".agents/skills/knowledge-compiler/",
       "learning_ref": 156,
-      "state": "BACKEND_COMPILE_PROVEN_RUNTIME_EFFECT_PENDING",
+      "state": "BACKEND_COMPILE_AND_CANONICAL_REGISTRATION_PROVEN_RUNTIME_EFFECT_PENDING",
       "observed_at": "2026-10-03",
       "source_artifact_lineage": {
         "parent_package_sha256": "4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6",
@@ -1234,7 +1234,13 @@
         "temporal_policy": "RETURNING_RESEARCH_IS_CANDIDATE_NOT_AUTHORITY",
         "persistent_hostkey_trust": "UNKNOWN_UNTIL_INDEPENDENT_ANCHOR",
         "runner_assignment": "UNKNOWN_UNTIL_REAL_ASSIGNMENT",
-        "forge_mutable_reconciliation": "PENDING"
+        "forge_mutable_reconciliation": "PENDING",
+        "global_learning_lineage": "PASS",
+        "recipe_yaml_parse": "PASS",
+        "recipe_instance_present": true,
+        "semantic_index_to_learning_156": "PASS",
+        "secret_pattern_scan_touched_files": "PASS_NO_MATCH",
+        "repo_source_crystal_json_parse": "PASS"
       },
       "counterproof": [
         "COMPILED_PLAN_IS_NOT_RUNTIME_EFFECT",
