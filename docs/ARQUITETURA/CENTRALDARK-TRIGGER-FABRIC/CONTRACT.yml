@@ -611,3 +611,59 @@ rastro_lock:
   direct_main_requires_ledger_1562_same_turn: true
   applies_to_all_engines: true
   authority_expansion: false
+
+global_cross_context_response_preflight:
+  marker: CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1
+  authority: SEGREDO/CHEFE
+  purpose: USE_EXTERNALIZED_CHEFE_METHOD_BEFORE_EVERY_CENTRALDARK_RESPONSE_OR_ACTION
+  trigger: ANY_RESPONSE_OR_ACTION_RELATED_TO_CENTRALDARK
+  preflight_reenters_on_every_centraldark_response: true
+  scope:
+    applies_to_any_current_or_future_thread: true
+    applies_to_any_current_or_future_surface: true
+    repository_artifact_inheritance: ALL_TRACKED_AND_FUTURE_ARTIFACTS
+    markdown_inheritance: ALL
+    package_inheritance: ALL
+    architecture_inheritance: ALL
+    agents_inheritance: ALL
+    claude_inheritance: ALL
+    bot_inheritance: ALL
+    hermes_inheritance: ALL
+    model_adapter_inheritance: ALL
+  preflight_order:
+    - RECOVER_CURRENT_CHEFE_INTENT
+    - REMEASURE_MAIN_CURRENT_SHA
+    - READ_PR_MOTHER_1562_CURRENT
+    - READ_ALL_OPEN_PRS_CURRENT
+    - READ_DAILY_CHECKLIST_CURRENT
+    - LOAD_SOUL_SOL
+    - LOAD_LEIA_ME_IA
+    - LOAD_AGENTS
+    - LOAD_MAPA_DO_CEREBRO
+    - CONSUME_ALL_NUMBERED_LEARNINGS_INDEX
+    - LOAD_LEMBRANCAS_INDEX
+    - EXPAND_RELEVANT_CAUSAL_REMEMBRANCES_AND_OWNERS
+    - MEASURE_MUTABLE_RUNTIME_CLAIMS_IN_REAL_OWNER
+    - RECONCILE_HISTORY_WITH_CURRENT
+    - DEDUPE_REUSE_BEFORE_CREATE
+    - PENEIRA_KEEP_ONLY_SURVIVING_DELTA
+    - RESPOND_OR_ACT
+  laws:
+    all_repository_artifacts_in_scope_by_inheritance: true
+    artifact_does_not_need_duplicate_contract_text: true
+    contract_reference_beats_copy_paste: true
+    full_repo_inventory_required_before_scope_claim: true
+    all_numbered_learnings_consumed_before_first_route: true
+    causal_history_closure_required_before_answer: true
+    current_over_history: true
+    unknown_is_not_pass: true
+    missing_required_source: AFFECTED_CLAIM_UNKNOWN
+    missing_source_does_not_authorize_generic_answer: true
+    generic_answer_without_preflight: FORBIDDEN
+    generic_model_prior_must_not_override_chefe_method: true
+    response_must_integrate_delta_not_echo_input: true
+    peneira_before_human_return: true
+    no_parallel_architecture: true
+    no_second_owner: true
+  response_failure_signature: CENTRALDARK_RESPONSE_WITHOUT_GLOBAL_PREFLIGHT
+  remediation: REENTER_PREFLIGHT_REMEASURE_RECONCILE_THEN_RETURN_ONLY_SURVIVING_DELTA
