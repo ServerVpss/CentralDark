@@ -22,15 +22,25 @@ O verifier global permaneceu com 30 falhas fora do cone. Portanto `UNRELATED_GLO
 
 Quando o claim depende de Casa/VM/shared storage, o binding físico também deve cair na peneira.
 
-Snapshot desta sessão:
+Snapshot T0 desta sessão:
 - Windows SEGREDO route: OFFLINE.
 - CENTRALDARK-OS/root: ONLINE.
-- vmware-hgfsclient: sem share listado.
-- /etc/fstab: sem HGFS/SHARED observado.
+- vmware-hgfsclient: sem share listado naquele binding.
+- /etc/fstab: sem HGFS/SHARED observado naquele binding.
 - /proc/mounts: sem HGFS observado.
 - /mnt/hgfs/CENTRALDARK-SHARED: ausente.
 
-Classificação: `E:\VMs\CENTRALDARK-OS\SHARED <-> guest HGFS = NOT_PROVEN`; `/root/CentralDark consumer = PROVEN_FOR_#146_CONE`. São claims diferentes.
+T0 classificou corretamente `E:\VMs\CENTRALDARK-OS\SHARED <-> guest HGFS = NOT_PROVEN`; `/root/CentralDark consumer = PROVEN_FOR_#146_CONE`. São claims diferentes.
+
+Snapshot T1 após failover multirota:
+- Windows `SEGREDO`: ONLINE novamente pela rota Primary.
+- Host path `E:\VMs\CENTRALDARK-OS\SHARED`: PASS e conteúdo visível.
+- VMX `E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx`: `sharedFolder0.present=TRUE`, `enabled=TRUE`, read/write TRUE, `hostPath=E:\VMs\CENTRALDARK-OS\SHARED`, `guestName=CENTRALDARK-SHARED`.
+- `vmware-hgfsclient` no guest usuário: anuncia `CENTRALDARK-SHARED`.
+- Mount atual: `/home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED` via `fuse.vmhgfs-fuse`.
+- O mesmo arquivo `!CENTRALDARK.txt` foi lido dos dois lados com SHA-256 `d4e99f0fef87b499a97f567b767fe7b71dc5dce8f1303a6779135b35571fa130`.
+
+Classificação T1: `HOST_VM_SHARED_BINDING=PASS_CURRENT_MEASUREMENT`. O caminho `/mnt/hgfs/CENTRALDARK-SHARED` permanece apenas expectativa histórica do bootstrap `centraldark-3em1.sh`; o mount efetivamente provado neste runtime está em `$HOME/vmware-shares/CENTRALDARK-SHARED`. Persistência pós-reboot = `UNKNOWN` até probe dedicado; `CURRENT_BINDING_PASS != BOOT_PERSISTENCE_PASS`.
 
 ## Hook != Trigger
 

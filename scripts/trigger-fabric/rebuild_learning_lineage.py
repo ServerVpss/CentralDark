@@ -33,7 +33,7 @@ END = "<!-- NEUROLINK_GLOBAL_END -->"
 HEADING_RE = re.compile(r"(?m)^###\s+(\d+)\.\s+(.+)$")
 GLOBAL_LINE_RE = re.compile(r"(?m)^- \*\*NeuroLink Global:\*\* .*\n?")
 BLOCK_RE = re.compile(
-    r"\n?" + re.escape(BEGIN) + r"[\s\S]*?" + re.escape(END) + r"\n?"
+    r"\n*" + re.escape(BEGIN) + r"[\s\S]*?" + re.escape(END) + r"\n*"
 )
 
 def git_blob_sha(text: str) -> str:
@@ -108,7 +108,11 @@ def render_projection(raw_text: str):
         rendered = rendered[:pos] + line + rendered[pos:]
     if ANCHOR not in rendered:
         raise RuntimeError("APRENDIZADOS_ANCHOR_MISSING")
-    rendered = rendered.replace(ANCHOR, ANCHOR + "\n" + projection_block(), 1)
+    rendered = rendered.replace(
+        ANCHOR,
+        ANCHOR + "\n\n" + projection_block().strip("\n") + "\n\n",
+        1,
+    )
     return rendered, nodes
 
 def build_manifest(rendered: str, nodes):
