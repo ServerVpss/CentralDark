@@ -260,3 +260,14 @@ LOCK_OWNER=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK
 ```
 
 Este fluxo só vira híbrido depois de prova atual do runner self-hosted online e autorização explícita do CHEFE. Enquanto isso, trocar para `[self-hosted, Linux]` é regressão.
+
+## Cross-context preflight obrigatório
+
+```text
+CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
+BOOT_MUST_RELOAD_CURRENT_INTENT=true
+BOOT_MUST_REMEASURE_MAIN_PR_MOTHER_OPEN_PRS_CHECKLIST=true
+BOOT_MUST_CONSUME_CANONICAL_CORE_AND_LEARNING_INDEX=true
+GENERIC_RESPONSE_WITHOUT_PREFLIGHT=FORBIDDEN
+MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
+```

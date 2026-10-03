@@ -400,11 +400,11 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 
 **Ordem de continuidade canônica (main):**
 
-`1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137`
+`1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 141 → 142 → 143 → 144 → 145 → 146 → 147 → 148 → 149 → 150 → 151 → 152`
 
 `CANONICAL_LEARNING_FIRST=1`
-`CANONICAL_LEARNING_LAST=137`
-`CANONICAL_LEARNING_COUNT=137`
+`CANONICAL_LEARNING_LAST=152`
+`CANONICAL_LEARNING_COUNT=152`
 `CANONICAL_NUMERIC_SEQUENCE_PASS=true`
 `LEGACY_DUPLICATE_HEADINGS_PRESERVED=true`
 `LEGACY_GAPS_ARE_HISTORICAL_NOT_MISSING_LEARNING_IDS=true`
@@ -535,3 +535,67 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Learning:** #147
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-LEI-DA-PENEIRA-COMPLETA.md`
 - **Conteúdo:** novidade material só fecha após atravessar todas as camadas aplicáveis; `CHECK_PRESENT_IN_GIT != CHECK_PRESENT_IN_RUNTIME`; binding físico entra quando o claim depende dele.
+
+### [2026-10-02] TextChat/Qwen nativo — catálogo, SDK 1.1 e fronteira de prova
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #148
+- **Owner:** `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md` + `scripts/vps/kylin-native-bind.py`
+- **Conteúdo:** o `CENTRALDARK-OS` expõe a SDK nativa `libkysdk-genai-nlp.so.1` compatível com `libkysdk-genai-nlp-dev 1.1.0.1-ok1.6`; os IDs `llm_Qwen-2.5-3b_1.0`, `llm_Qwen-3-8b-0_1.0`, `llm_Qwen-3-8b-1_1.0` estão configurados no engine on-device. A UI `Kylin AI System -> OpenKylin AI Subsystem -> AI models` mostra `Qwen3-8B` e `Qwen2.5-3B` como modelos disponíveis para `Download`, com tamanhos aproximados de 9.32 GB e 3.62 GB. A mesma UI separa explicitamente `On-device model` de `Cloud model`, reforçando que são rotas distintas.
+- **Cristal:** `MODEL_CATALOG_VISIBLE=PASS`; `ONDEVICE_ROUTE_EXISTS=PASS`; `CLOUD_ROUTE_EXISTS=PASS`; `ONDEVICE_ROUTE != CLOUD_ROUTE`; `CATALOG_ENTRY != MODEL_WEIGHTS_INSTALLED`; `MODEL_ID_CONFIG != MODEL_READY`; `PROBE_CREATED != INFERENCE_PROVEN`.
+- **Fronteira atual:** `WEIGHTS_MATERIALIZED_LOCAL=UNKNOWN`; `QWEN_CHAT_EXECUTED=UNKNOWN`; `PR_AGENT_REPLACED=NO`.
+- **Next cursor:** provar materialização dos pesos e inferência local real via `genai_text_*` antes de substituir os reviewers externos no `.github/workflows/pr-agent.yml`.
+
+### [2026-10-03] VMware executa o funil self-hosted com Hermes local
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #149
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FUNIL-VMWARE-HERMES-CLASSIFICACAO-APRENDIZADOS-1-149.md`
+- **Conteúdo:** o plano existente foi fechado no nível de execução: Casa/VMware continua forja, mas também recebe o runner self-hosted dedicado do funil; Hermes executa dentro do mesmo `CENTRALDARK-OS`; `runner/_work` é isolado da árvore `SHARED` suja; o artefato/receipt provado é reexecutado na VPS twin. Binário de runner presente não equivale a matrícula; billing hosted antes do start não equivale a falha de código; Tailscale logged out não equivale a máquina down.
+
+### [2026-10-03] Preflight global cross-context — qualquer resposta CentralDark
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #150
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-PREFLIGHT-GLOBAL-CROSS-CONTEXT-CENTRALDARK.md`
+- **Owner:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`
+- **Conteúdo:** qualquer resposta/ação CentralDark em fio atual ou futuro reentra no preflight; intenção do CHEFE + main CURRENT + PR-mãe #1562 + PRs abertos + checklist + núcleo + Aprendizados + Lembranças + owner/runtime aplicável são cruzados antes do retorno. Todo artefato do repositório herda o contrato por pertencimento; fonte necessária indisponível mantém apenas o claim afetado UNKNOWN; resposta genérica substitutiva é proibida.
+
+
+### [2026-10-03] Conhecimento legado do CHEFE — MU/XPZone/Windows/DB → invariante local reutilizável
+- **Data:** 2026-10-03
+- **Tags:** chefe, historico-tecnico, mu, xpzone, windows-server, sql, odbc, scheduler, task-scheduler, dispatcher, reuse-before-create, casa, trigger-fabric
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #151
+- **Target:** `docs/CONSCIENCIA/APRENDIZADOS.md#151`
+- **Relevância:** alta
+- **Eixo:** histórico humano → método operacional atual
+- **Promovida:** sim
+
+**Proveniência humana preservada:** o CHEFE relatou experiência pré-IA criando servidores de MU, programas e sites PHP e trabalhando com Windows Server, SQL/ODBC e agendamento. Isto é `CHEFE_STATED_HISTORY`: memória autorizada do humano, não evidência externa automática.
+
+**Corroboração disponível sem guardar credenciais pessoais:** no Gmail conectado pelo alias `SONASMARCAS`, foram encontrados rastros XPZONE/MU entre 2017 e 2023, incluindo `MuServer + SRC`, `Connect server Windows server 2012` e `Web Cabal Machine ... + DB`. Esses rastros confirmam vínculo com o ecossistema, mas não são usados para inventar datas ou detalhes que a evidência não mostra.
+
+**Costura com a Casa atual:** o padrão antigo lembrado pelo CHEFE — `RELÓGIO → DISPATCHER → AÇÃO/DB/API → SINCRONIZAÇÃO` — coincide com o binding já existente da CentralDark no Windows Task Scheduler. O mesmo dispatcher setorial foi historicamente provado em `PDF_GATE`; na medição atual as tasks continuam registradas, porém o path do dispatcher desapareceu. Assim, a falha é de binding/continuidade e deve ser reparada no owner existente, não respondida com um scheduler paralelo.
+
+```text
+CHEFE_STATED_HISTORY = PROVENIENCIA_HUMANA
+GMAIL_ALIAS_EVIDENCE = CORROBORACAO_PARCIAL
+USER_DOMAIN_EXPERTISE → HYPOTHESIS_SEED
+HYPOTHESIS_SEED → CURRENT_OWNER_SEARCH → MEASURE → REUSE_OR_REFUTE
+CURRENT_FAILURE = BINDING_DRIFT_NOT_SCHEDULER_ABSENCE
+REUSE_BEFORE_CREATE = true
+CURRENT_OVER_HISTORY = true
+```
+
+**Regra de continuidade:** quando uma intuição técnica do CHEFE vier de experiência anterior, tratá-la como hipótese forte a ser tentada/falsificada contra o CURRENT e os owners existentes. Se sobreviver, absorver somente o delta e preservar o mecanismo já provado.
+
+**Links:** [[APRENDIZADOS#151]] · [[LEMBRANCAS]] · [[CHECK-LIST-DIARIO]] · [[CENTRALDARK-TRIGGER-FABRIC]]
+
+### [2026-10-03] Bancada SHARED/CentralDark — sincronizar CURRENT preservando o ouro local
+- **Data:** 2026-10-03
+- **Tags:** vmware, centraldark-os, shared, forge, sync, reconciliation, preserve-gold, current, github-main, vps-twin
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #152
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-BANCADA-SHARED-CENTRALDARK-SYNC-PRESERVA-OURO.md`
+- **Relevância:** alta
+- **Eixo:** bancada viva → reconciliação preservativa → cristalização → replay VPS
+- **Conteúdo:** `SHARED/CentralDark` é a forja viva do mesmo sistema. Sincronizar não significa sobrescrever: medir o GitHub CURRENT, inventariar o delta local, classificar `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`, preservar o funcional e reconciliar por owner. O runner CI permanece isolado em `_work`. Depois de cristalizado no VMware, o mesmo artefato/fingerprint segue para a VPS twin 24/7.
+

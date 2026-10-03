@@ -195,6 +195,34 @@ mandatory_rules:
       reset_after_use: true
       dirty_handoff_forbidden: true
       runtime_is_not_scratch: true
+  global_cross_context_response_preflight:
+    required: true
+    marker: CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1
+    owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight
+    trigger: ANY_RESPONSE_OR_ACTION_RELATED_TO_CENTRALDARK
+    applies_to_any_current_or_future_thread: true
+    applies_to_bot_free_text_and_agent_modes: true
+    formula:
+    - RECOVER_CURRENT_CHEFE_INTENT
+    - REMEASURE_MAIN_CURRENT_SHA
+    - READ_PR_MOTHER_1562_CURRENT
+    - READ_ALL_OPEN_PRS_CURRENT
+    - READ_CHECK_LIST_DIARIO_CURRENT
+    - LOAD_CANONICAL_CORE
+    - CONSUME_ALL_NUMBERED_LEARNINGS_INDEX
+    - LOAD_LEMBRANCAS_AND_CAUSAL_OWNERS
+    - REMEASURE_MUTABLE_RUNTIME_WHEN_REQUIRED
+    - DEDUPE_REUSE_BEFORE_CREATE
+    - PENEIRA_KEEP_SURVIVING_DELTA
+    - RESPOND
+    locks:
+      GENERIC_RESPONSE_WITHOUT_PREFLIGHT: FORBIDDEN
+      MISSING_REQUIRED_SOURCE: AFFECTED_CLAIM_UNKNOWN
+      UNKNOWN_IS_NOT_PASS: true
+      CURRENT_OVER_HISTORY: true
+      NO_PARALLEL_ARCHITECTURE: true
+      BOT_IS_SURFACE_NOT_BRAIN: true
+      HERMES_IS_EXECUTOR_CONTINUITY: true
 runtime_note: Este arquivo amarra a regra no escopo do bot CentralDark sem criar arquitetura
   paralela. O bot continua consumidor do contrato canônico; ele não vira autoridade,
   juiz ou owner novo.

@@ -698,8 +698,16 @@ hybrid_multiroute_capability_replay_2026_10_02:
     sparse_path_enabled_is_not_file_present_at_current_head: true
   physical_binding_when_applicable:
     host_path: "E:\\VMs\\CENTRALDARK-OS\\SHARED"
-    guest_expected_share: /mnt/hgfs/CENTRALDARK-SHARED
-    current_state: NOT_PROVEN
+    vmx_path: "E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx"
+    vmx_guest_name: CENTRALDARK-SHARED
+    guest_expected_share_legacy: /mnt/hgfs/CENTRALDARK-SHARED
+    guest_observed_mount_path: /home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED
+    guest_mount_fstype: fuse.vmhgfs-fuse
+    probe_file: "!CENTRALDARK.txt"
+    host_guest_sha256: d4e99f0fef87b499a97f567b767fe7b71dc5dce8f1303a6779135b35571fa130
+    current_state: PASS_CURRENT_MEASUREMENT
+    boot_persistence: UNKNOWN
+    current_binding_pass_does_not_prove_boot_persistence: true
     repo_consumer_pass_is_independent: true
   complete_sieve:
     fixed_point_requires_all_applicable_layers: true

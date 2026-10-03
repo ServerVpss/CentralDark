@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "6ad2ad6443ad63c90aab1edf9dfb72a59af136a7",
+  "source_blob_sha": "6f33fc4bd61864db63680d11457fce97f52df986",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 146,
-    "highest_legacy_learning_number": 147,
+    "learning_sections": 151,
+    "highest_legacy_learning_number": 152,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 147
+      "end": 152
     }
   },
   "nodes": [
@@ -1488,7 +1488,7 @@
       "uid": "L129",
       "legacy_learning_number": 129,
       "legacy_occurrence": 1,
-      "title": "Runtime sieve: corrigir premissa sem jogar fora capability boa; caminho de usuário deve seguir $HOME, não hardcode",
+      "title": "Runtime sieve: corrigir premissa sem jogar fora capability boa; caminho de usuário deve seguir `$HOME`, não hardcode",
       "document_order": 128,
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
@@ -1634,7 +1634,7 @@
       "title": "Sessão 2026-10-02 consolidou corpo único, forja local, contrato portátil, Bayes, funil e localização causal de vermelhos",
       "document_order": 141,
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-      "relation_type": "SESSION_SYNTHESIS_CONTINUITY",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L141",
       "next_uid": "L143"
     },
@@ -1691,6 +1691,61 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L146",
+      "next_uid": "L148"
+    },
+    {
+      "uid": "L148",
+      "legacy_learning_number": 148,
+      "legacy_occurrence": 1,
+      "title": "TextChat/Qwen nativo está configurado e a SDK correta foi identificada; catálogo visível não é peso materializado nem inferência provada",
+      "document_order": 147,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L147",
+      "next_uid": "L149"
+    },
+    {
+      "uid": "L149",
+      "legacy_learning_number": 149,
+      "legacy_occurrence": 1,
+      "title": "VMware assume o funil self-hosted com Hermes local; a forja compartilhada não vira workspace de CI",
+      "document_order": 148,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L148",
+      "next_uid": "L150"
+    },
+    {
+      "uid": "L150",
+      "legacy_learning_number": 150,
+      "legacy_occurrence": 1,
+      "title": "Toda resposta CentralDark reentra no preflight global; qualquer artefato do repo herda o mesmo método por pertencimento",
+      "document_order": 149,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L149",
+      "next_uid": "L151"
+    },
+    {
+      "uid": "L151",
+      "legacy_learning_number": 151,
+      "legacy_occurrence": 1,
+      "title": "Conhecimento legado do CHEFE vira hipótese operacional reutilizável: experiência MU/XPZone/Windows/DB antecipou o padrão relógio → dispatcher → integração, mas CURRENT continua juiz",
+      "document_order": 150,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L150",
+      "next_uid": "L152"
+    },
+    {
+      "uid": "L152",
+      "legacy_learning_number": 152,
+      "legacy_occurrence": 1,
+      "title": "A bancada `SHARED/CentralDark` é a forja viva: sincronizar o CURRENT nela preservando o ouro local; cristalizar no mesmo VMware antes do espelho VPS",
+      "document_order": 151,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L151",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

@@ -224,7 +224,7 @@ SAME_CLAIM+SCOPE+TIME: MEASURED_EVIDENCE > UNMEASURED_INFERENCE
 - [x] Pós-remediação: `HYBRID_MULTIROUTE_HOOK_CONTRACT=PASS`, `SENTINEL_HOOK=PASS`, `MACHINE_RECIPE=PASS`, `CHECKLIST_CONTRACT=PASS`, `RECIPE_COMPLETENESS=PASS`.
 - [x] Consumer self-test preserva marcador factual: `multiroute_recipe_hook=true`.
 - [x] Verifier global permanece vermelho fora do cone (`GLOBAL_FAILED=30` na medição); `CONE_PASS != GLOBAL_PASS`.
-- [ ] Binding físico `E:\VMs\CENTRALDARK-OS\SHARED ↔ guest HGFS`: NOT_PROVEN nesta medição; Windows `SEGREDO` offline e HGFS não visível/montado no guest.
+- [x] Binding físico `E:\VMs\CENTRALDARK-OS\SHARED ↔ guest HGFS`: PASS_CURRENT_MEASUREMENT; host path + VMX RW + mount `vmhgfs-fuse` + SHA cruzado de `!CENTRALDARK.txt` fecharam (`d4e99f0fef87b499a97f567b767fe7b71dc5dce8f1303a6779135b35571fa130`). Persistência pós-reboot continua UNKNOWN.
 - [x] PR-MÃE #1562 continua ledger/rendezvous; não é writer.
 - [ ] PR #1743 está aberta e não-mergeável; tratar como projeção/checklist histórica até reconciliação.
 - [ ] PR #1742 está aberta e não-mergeável; runtime panel continua separado desta prova de hook e deve remedir seu próprio cone.
@@ -253,7 +253,7 @@ FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS
 - [x] Consumer `CENTRALDARK-OS/root` materializa `docs/BRAIN/00-MAPA-SISTEMA` no sparse-checkout.
 - [x] Cone multirota #146 passou os cinco checks aplicáveis após a correção do sparse.
 - [ ] Verifier global completo ainda tem vermelhos fora do cone; não chamar repo globalmente verde.
-- [ ] `E:\VMs\CENTRALDARK-OS\SHARED ↔ HGFS` permanece NOT_PROVEN; remedir quando a rota Windows/host estiver viva.
+- [x] `E:\VMs\CENTRALDARK-OS\SHARED ↔ HGFS` = PASS_CURRENT_MEASUREMENT; `SEGREDO` host path + VMX + guest `/home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED` + SHA host↔guest idêntico. Boot persistence continua UNKNOWN e é claim separado.
 - [ ] PR #1742 continua aberta/não-mergeável na última medição; cone runtime-panel próprio.
 - [ ] PR #1743 continua aberta/não-mergeável na última medição; projeção checklist própria.
 - [x] PR-MÃE #1562 continua somente ledger/rendezvous.
@@ -453,3 +453,66 @@ O CHEFE deve conseguir responder olhando só este painel:
 5. O que está UNKNOWN?
 6. O que foi selado e não deve ser refeito?
 7. Qual é a próxima ação única?
+
+## 🫀 CURRENT VIVO — 2026-10-03 — PREFLIGHT GLOBAL CROSS-CONTEXT
+
+```text
+MAIN_CURRENT=RESOLVE_AT_READ\nMAIN_PREWRITE_MEASUREMENT=3deb814ebb4feddb9d57fac3a762b56b08fd05b4
+PR_MOTHER=#1562 · OPEN · DO_NOT_MERGE
+OPEN_PRS=#1562 🔒 🪬 PR-MÃE #1562 · HUD/FUNIL PERMANENTE CENTRALDARK · NÃO MERGEAR | #1742 local-ai: reconcile CENTRALDARK-OS runtime panel with CURRENT probes | #1743 🧾 CHECK-LIST DIARIO · PR-MÃE #1562
+CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
+CONTRACT_MATERIALIZED=PASS
+GITHUB_READBACK_15_BINDINGS=PASS
+SOUL_SYNC_REANCHORED=PASS
+FULL_VERIFIER_EXECUTION=UNKNOWN
+UNKNOWN_IS_NOT_PASS=true
+CURRENT_OVER_HISTORY=true
+```
+
+### ✅ Contrato materializado
+- [x] Trigger Fabric `CONTRACT.yml` ganhou owner único do preflight global.
+- [x] `ENGINE_BINDING.yml` aplica o preflight a motores/superfícies atuais e futuros.
+- [x] `CENTRALDARK_AI_BOOT.yaml`, SOUL, MetaCog, `LEIA-ME-IA.md` e `AGENTS.md` herdaram a regra.
+- [x] `CLAUDE.md`, `CODEX.md`, `.claude/rules`, `.claude/BOOT-PIVETE.md`, HERMES-CORE e bot obrigatório estão vinculados.
+- [x] Todo artefato/pacote/Markdown/arquitetura herda por pertencimento ao repositório, sem copiar a doutrina em milhares de arquivos.
+- [x] `scripts/trigger-fabric/verify_repo_contract.py` inventaria dinamicamente tracked/Markdown/packages/.claude/.agents/arquiteturas/Hermes/bots e verifica os bindings.
+- [x] `package.json` expõe `verify:centraldark-contract`.
+- [x] Aprendizado #150 + Lembrança + índice materializados.
+
+### ⚪ Fronteira
+- [ ] `FULL_VERIFIER_EXECUTION`: UNKNOWN. A tentativa de clone limpo no guest VMware ficou presa na rota de rede e foi terminada; não promover para PASS sem execução real.
+- [ ] PRs #1742 e #1743 precisam ser reconciliados contra o novo `main` antes de qualquer claim SAME_HEAD.
+
+### ➡️ NEXT_CURSOR
+Executar `python3 scripts/trigger-fabric/verify_repo_contract.py` em checkout limpo do CURRENT quando a rota de checkout estiver viva; depois continuar o cone VMware → Hermes original → Qwen/Kylin → runner self-hosted → cápsula/replay VPS.
+
+## 🫀 CURRENT VIVO — 2026-10-03 — LEARNING_152_SHARED_FORGE
+
+```text
+LEARNING_152_SHARED_FORGE=true
+SHARED_CENTRALDARK=LIVE_FORGE
+SYNC_MEANS_RECONCILE_NOT_OVERWRITE
+FUNCTIONAL_GOLD_SURVIVES_PENEIRA=true
+NO_DESTRUCTIVE_PULL_RESET_ON_FORGE=true
+CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE=true
+CRYSTALLIZE_IN_VMWARE_THEN_REPLAY_VPS=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+### ✅ PROVADO
+- [x] `/home/CENTRAKDARK-OS/SHARED/CentralDark` existe como Git válido ligado a `ServerVpss/CentralDark`.
+- [x] branch medida: `feature/ai-cli-runtime-kernel`.
+- [x] HEAD medido: `892454b98d941c3fada35d3df826f9962257f80f`.
+- [x] snapshot da bancada: `TRACKED_FILES=6020`, `DIRTY_COUNT=5535`, `UNTRACKED_COUNT=13`.
+- [x] a branch existe no GitHub; o HEAD existe no remoto.
+- [x] a árvore local e o GitHub CURRENT divergem; há história do main não absorvida e trabalho próprio da bancada.
+- [x] Aprendizado #152 + Lembrança + NeuroLink + índice materializados.
+
+### ⚠️ NÃO FAZER
+- [ ] não executar `git reset --hard`, pull cego ou checkout destrutivo enquanto o delta local não estiver classificado;
+- [ ] não usar `SHARED/CentralDark` como workspace de CI;
+- [ ] não criar segunda árvore CentralDark para resolver o sync.
+
+### ➡️ NEXT_CURSOR
+Inventariar diferencialmente a bancada contra o `main` CURRENT e classificar cada delta em `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`; reconciliar primeiro o menor cone material e retestar.
+
