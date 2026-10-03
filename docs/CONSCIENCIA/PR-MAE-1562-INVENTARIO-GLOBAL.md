@@ -25,13 +25,13 @@ O contrato canônico existente foi estendido; nenhum contrato paralelo foi criad
 
 | classe | quantidade | arquivo |
 |---|---:|---|
-| branches do repositório | **613** | `docs/CONSCIENCIA/PR-MAE-1562-BRANCHES-GLOBAL.md` |
+| branches do repositório | **616** | `docs/CONSCIENCIA/PR-MAE-1562-BRANCHES-GLOBAL.md` |
 | PRs abertos | **27** | `docs/CONSCIENCIA/PR-MAE-1562-PRS-ABERTOS-GLOBAL.md` |
 | issues abertas | **109** | `docs/CONSCIENCIA/PR-MAE-1562-ISSUES-ABERTAS-GLOBAL.md` |
 
 ## Sem perda silenciosa
 
-Inventário não significa que código de 613 branches foi mergeado cegamente. Cada branch está registrada com HEAD e vínculo de PR aberto quando existe. O delta útil deve convergir para a CentralDark antes de branch/PR/issue ser encerrado ou removido.
+Inventário não significa que código de 616 branches foi mergeado cegamente. Cada branch está registrada com HEAD e vínculo de PR aberto quando existe. O delta útil deve convergir para a CentralDark antes de branch/PR/issue ser encerrado ou removido.
 
 ## Commits do ledger no PR-mãe
 
