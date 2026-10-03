@@ -25,3 +25,20 @@ Código de produto/runtime não foi reescrito cegamente. Segurança material, se
 - full-trigger não usa consumo ALL como condição de saída;
 - Learning #158 / L158 presente;
 - PR-mãe #1562 recebe receipt.
+
+## Passo 2 — consumidores vivos restantes
+
+Refatorados no mesmo fio:
+- adaptadores CHATGPT/CODEX/CLAUDE/GEMINI/GROK;
+- porta legada `00-COMECE-AQUI-IA.md` (remove dependência `pivete/dev`);
+- HERMES-CORE agents;
+- Trigger Fabric CONTRACT;
+- Metacognição Operacional;
+- Claude flow locks;
+- regras do bot Telegram;
+- registry ADM de gatilhos.
+
+Mudança semântica: preflight global, MetaGrill, MetaLupa, consumo ALL e locks deixam de ser permissão/global brake. Permanecem disponíveis quando o alvo realmente depende deles.
+
+Não foi feita remoção cega de `FAIL_CLOSED` em verificadores técnicos de segredo, wrapper, CI, produção ou integridade: esses só serão alterados se a trava for ceremonial e não causal.
+
