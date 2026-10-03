@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 151,
-    "highest_legacy_learning_number": 154,
+    "learning_sections": 155,
+    "highest_legacy_learning_number": 155,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 154
+      "end": 155
     }
   },
   "nodes": [
@@ -1768,6 +1768,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L153",
+      "next_uid": "L155"
+    },
+    {
+      "uid": "L155",
+      "legacy_learning_number": 155,
+      "legacy_occurrence": 1,
+      "title": "A própria bancada vira cofre/cockpit: Obsidian, HUD, BRAIN e sync preservativo da main convergem no mesmo `SHARED/CentralDark`",
+      "document_order": 154,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L154",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
