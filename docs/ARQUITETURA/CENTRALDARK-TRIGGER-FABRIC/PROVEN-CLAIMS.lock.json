@@ -1034,6 +1034,94 @@
         "fixed_point_requires_all_applicable_layers": true,
         "non_applicable_layer_must_be_explicit": true
       }
+    },
+    "VMWARE_VPS_DIRECT_SSH_BINDING_PATH": {
+      "claim_key": "VMWARE_VPS_DIRECT_SSH_BINDING_PATH",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+      "lock_key": "564e2fa6a5b061bf316ff8d3074aeeb479399d0eabbb6ee327bb05149d85b541",
+      "state": "SEALED_PROVEN",
+      "proof_target": "VMWARE_CAN_AUTHENTICATE_TO_VPS_WITHOUT_CASA_HOP_USING_EXISTING_KEY_AND_ENVIRONMENT_ADAPTED_IDENTITYFILE",
+      "evidence_ref": "LEARNING_154 + runtime probe 2026-10-03 + expanded remembrance",
+      "observed_at": "2026-10-03",
+      "counterproof": "PASS_AUTH_PATH",
+      "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562",
+      "security_frontier": {
+        "persistent_hostkey_trust": "UNKNOWN_UNTIL_INDEPENDENT_AUTHORIZED_ANCHOR",
+        "current_observed_ed25519_fingerprint": "SHA256:KkbBd5sOR1boP8ldlWh45eWN2DY8RPjOHtXX+4FQhIE",
+        "temp_hostkey_bypass": "PROOF_ONLY_NON_PERSISTENT",
+        "secrets_committed": false
+      },
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "a5e27b72a31829b5a911ca6170efd1dc87a0ee69b7c7ba2991930ea2ead57602",
+        "proof_plan_hash": "851031cc65df288faba6e049c6a9eeba2a30e9f271dc369f6640aaad22db861c",
+        "result_schema_hash": "2f6812101c896e69dad7806aa9b81c1d559519a79b3ea6cf68ad050b46f4e6e6",
+        "effect_schema_hash": "8cb67c6207c2539b9e5d222db227c00a3367e3335f2bb8695d57cae0d11749b4",
+        "execution_commands": [
+          "measure existing alias/config/TCP before mutation",
+          "classify network vs auth vs host-key vs path binding",
+          "backup local SSH config before binding mutation",
+          "adapt only IdentityFile path to guest OS when readback proves mismatch",
+          "read back effective config with ssh -G",
+          "prove TCP/22",
+          "prove publickey authentication while isolating persistent host-key trust",
+          "distinguish local and remote machines with machine-id SHA256",
+          "keep persistent host-key promotion as a separate security claim"
+        ],
+        "proof_commands": [
+          "ssh -G segredo-vpss",
+          "ssh-keygen -F <VPS_HOST> -f ~/.ssh/known_hosts",
+          "ssh-keyscan -T 5 -t ed25519 <VPS_HOST>",
+          "sha256sum /etc/machine-id",
+          "remote whoami + remote machine-id SHA256 after auth"
+        ],
+        "expected_results": [
+          "effective IdentityFile is a Linux guest path",
+          "TCP22=PASS",
+          "SSH_AUTH_VMWARE_TO_VPS=PASS",
+          "REMOTE_USER=root",
+          "LOCAL_MACHINE_ID_SHA256 != REMOTE_MACHINE_ID_SHA256",
+          "CASA_REQUIRED_AS_SSH_HOP=NO",
+          "PERSISTENT_HOSTKEY_TRUST remains UNKNOWN until independently anchored"
+        ],
+        "expected_effect": "VMWARE_CAN_REACH_AND_AUTH_TO_VPS_WITHOUT_CASA_HOP",
+        "result_schema": "centraldark.vmware-vps-direct-ssh.result.v1",
+        "environment_bindings": [
+          "SSH_ALIAS",
+          "VPS_HOST",
+          "SSH_USER",
+          "SSH_CONFIG_PATH",
+          "SSH_IDENTITYFILE_PATH",
+          "KNOWN_HOSTS_PATH",
+          "SHARED_SSH_ROOT",
+          "SHARED_SECRETS_ROOT",
+          "HOSTKEY_FINGERPRINT",
+          "LOCAL_MACHINE_ID_HASH",
+          "REMOTE_MACHINE_ID_HASH"
+        ],
+        "commands_executable": true,
+        "execution_policy": "MUTATE_LOCAL_BINDING_ONLY_WITH_BACKUP__HOSTKEY_BYPASS_PROOF_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "ssh -G alias + TCP22 + authenticated remote identity proof",
+        "self_test_result": "PASS_AUTH_PATH__PERSISTENT_HOSTKEY_TRUST_UNKNOWN",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "environment_binding_report": {
+          "SSH_ALIAS": "segredo-vpss",
+          "VPS_HOST": "89.117.78.124",
+          "SSH_USER": "root",
+          "SSH_CONFIG_PATH": "~/.ssh/config",
+          "SSH_IDENTITYFILE_PATH": "~/.ssh/segredo_vps_ed25519",
+          "CONFIG_BACKUP": "~/.ssh/config.pre-vm-binding-20261003",
+          "KNOWN_HOSTS_PATH": "~/.ssh/known_hosts",
+          "SHARED_SSH_ROOT": "/home/CENTRAKDARK-OS/SHARED/ssh",
+          "SHARED_SECRETS_ROOT": "/home/CENTRAKDARK-OS/SHARED/secrets",
+          "HOSTKEY_FINGERPRINT": "SHA256:KkbBd5sOR1boP8ldlWh45eWN2DY8RPjOHtXX+4FQhIE",
+          "LOCAL_MACHINE_ID_SHA256": "0f9dd395682f32a0ca8ada9fe8ef5300e77bcdfd35764be90c38a1f004d43ad8",
+          "REMOTE_MACHINE_ID_SHA256": "c61bd228339394e6631c851e234260a0c5b66359c2b9ed417a5895875fb5b93b",
+          "SECRET_VALUES_STORED": false
+        }
+      }
     }
   }
 }
