@@ -144,6 +144,7 @@ app.get("/heartbeat", (_req, res) => {
     const ingestScheduled = scheduleAgentLogIngest();
     const observability = getAgentObservabilityStatus();
     const self = lagMs == null ? "first_beat" : (lagMs < 120000 ? "alive" : "stale");
+    const operational = getOperationalSnapshot({ heartbeat: { self } });
     const body = {
         ok: true,
         heart: "one",

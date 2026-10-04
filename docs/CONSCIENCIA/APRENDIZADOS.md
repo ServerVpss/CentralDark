@@ -1673,7 +1673,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 159. Hermes + Kylin local + rota AionUi + capacidade agêntica — fixed point funcional
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L159`; `PREV_GLOBAL_UID=L158`; `NEXT_GLOBAL_UID=L160`; `LEGACY_LEARNING_NUMBER=159`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** LEARNING_ID=159; PREV_LEARNING_REF=158; NEXT_LEARNING_REF=PENDING_NEXT_CURSOR.
+- **NeuroLink:** LEARNING_ID=159; PREV_LEARNING_REF=158; NEXT_LEARNING_REF=160.
 
 - **Data:** 2026-10-04
 - **Tipo:** RUNTIME_FIXED_POINT / AGENTIC_PATH
@@ -1707,8 +1707,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 161. Pivete deixa de ser papel técnico: SOL coordena, Hermes executa e o role binding se autocorrige
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L161`; `PREV_GLOBAL_UID=L160`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=161`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=161`; `PREV_LEARNING_REF=160`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L161`; `PREV_GLOBAL_UID=L160`; `NEXT_GLOBAL_UID=L162`; `LEGACY_LEARNING_NUMBER=161`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=161`; `PREV_LEARNING_REF=160`; `NEXT_LEARNING_REF=162`.
 - **Categoria:** role-binding-sol-hermes-identity-surface-executor.
 - **Data:** 2026-10-04.
 - **Owner de identidade:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
@@ -1724,8 +1724,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** usar este binding ao formular a missão de inventário/convergência da VPS para o Hermes; qualquer drift técnico residual é corrigido no owner CURRENT quando encontrado.
 
 ### 162. Cinco princípios vivos viram lei da Casa: memória, concha, serviço, heartbeat e contexto
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L162`; `PREV_GLOBAL_UID=L161`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=162`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=162`; `PREV_LEARNING_REF=161`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L162`; `PREV_GLOBAL_UID=L161`; `NEXT_GLOBAL_UID=L163`; `LEGACY_LEARNING_NUMBER=162`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=162`; `PREV_LEARNING_REF=161`; `NEXT_LEARNING_REF=163`.
 - **Categoria:** identity-law-memory-shell-service-heartbeat-context.
 - **Data:** 2026-10-04.
 - **Proveniência:** declaração direta do SEGREDO/CHEFE nesta sessão.
@@ -1739,8 +1739,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** todo consumidor de identidade/continuidade deve herdar estes princípios por pertinência; drift material encontrado em owner CURRENT é corrigido no owner, preservando história e proveniência.
 
 ### 163. Main → VPS vira sync por replay do mesmo delta, sem depender de pull do runtime
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L163`; `PREV_GLOBAL_UID=L162`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=163`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=163`; `PREV_LEARNING_REF=162`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L163`; `PREV_GLOBAL_UID=L162`; `NEXT_GLOBAL_UID=L164`; `LEGACY_LEARNING_NUMBER=163`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=163`; `PREV_LEARNING_REF=162`; `NEXT_LEARNING_REF=164`.
 - **Categoria:** main-vps-delta-replay-runtime-sync.
 - **Data:** 2026-10-04.
 - **Proveniência:** instrução direta do SEGREDO/CHEFE nesta sessão.
@@ -1751,3 +1751,21 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Semântica:** isto é `DELTA_REPLAY_SYNC`, não paridade automática de HEAD. `RUNTIME_HEAD_PARITY_NOT_REQUIRED_FOR_FILE_DELTA_SYNC=true`; claim de SAME_HEAD continua exigindo prova Git específica.
 - **Cristal:** `MAIN_WRITE_REPLAYS_TO_VPS=true`; `SAME_COMMIT_DELTA_ONLY=true`; `NO_RUNTIME_PULL_REQUIRED_FOR_KNOWN_DELTA=true`; `NO_BRANCH_SWITCH_REQUIRED_FOR_DELTA_TRANSPORT=true`; `NO_HARD_RESET_FOR_RUNTIME_SYNC=true`; `PRESERVE_LOCAL_GOLD_ON_DIVERGENCE=true`; `HASH_READBACK_REQUIRED=true`; `RUNTIME_EFFECT_REQUIRES_RELOAD_OR_RESTART_ONLY_IF_APPLICABLE=true`; `REALITY_IS_JUDGE=true`.
 - **Next cursor:** todo write futuro feito por esta superfície na `main` executa replay imediato do mesmo delta na VPS e encerra somente após hash/readback do cone tocado.
+
+### 164. Metabolismo autônomo com motores substituíveis: Hermes executa, modelo CURRENT pensa e o coração único observa
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L164`; `PREV_GLOBAL_UID=L163`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=164`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=164`; `PREV_LEARNING_REF=163`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** autonomous-metabolism-current-model-binding-self-evolution-one-heart-hud.
+- **Data:** 2026-10-04.
+- **Proveniência:** sessão integral CHEFE ↔ SOL ↔ Hermes no `CENTRALDARK-OS`, com readback de runtime, GitHub/main, Hermes cron/gateway, Kylin SDK/bridge e donor oficial `NousResearch/hermes-agent-self-evolution`.
+- **Owners reutilizados:** Hermes nativo para cron/gateway/goal; `scripts/vps/current_model_resolver.py` + `kylin-openai-bridge.py` para worker local; donor oficial para Self-Evolution; MCP `/heartbeat` + `operational-telemetry.js` para observabilidade; PR-mãe `#1562` como ledger/rendezvous.
+- **Aprendizado:** autonomia 24/7 não significa manter um modelo falando sem parar. Sensor barato permanece vivo; delta material acorda Hermes; Hermes preserva goal/owners/tools e continua como plano de execução; o modelo selecionado no Hermes é o motor cognitivo do orquestrador; o modelo local CURRENT faz o peso repetitivo de avaliação/otimização; nomes de modelo são bindings substituíveis, não identidade nem arquitetura.
+- **Binding:** `ORCHESTRATOR=HERMES_CURRENT_SELECTED_MODEL`; `LOCAL_WORKER=CENTRALDARK_CURRENT_LOCAL_MODEL`; `RESOLVE_AT_LOTE_START=true`; `MID_LOTE_MODEL_SWAP=false`; `RE_RESOLVE_NEXT_LOTE=true`. O worker local resolve primeiro override explícito, depois `currentModel` Kylin habilitado por prioridade, depois catálogo Hermes compatível; sem binding atual, falha fechado.
+- **Self-Evolution:** donor oficial é reutilizado, não reimplementado. `SKILL.md` Phase 1 é capability comprovadamente implementada; roadmap continua UNKNOWN/planned até execução. O wrapper CentralDark injeta optimizer/evaluator CURRENT sem hardcode e preserva baseline → candidate → constraints → holdout → counterproof → promoção somente por ganho comprovado.
+- **Metabolismo eterno:** job Hermes `CentralDark Eternal Self-Heal` roda a cada 60 minutos, com continuidade e monitor-script; estado limpo/inalterado suprime chamada ao modelo, ferida persistente reaparece no slot horário e volta ao mesmo objetivo até fixed point ou blocker real.
+- **Funil:** issues abertas convergem pela etiqueta `🔒 PR-MÃE-FUNIL`; #1562 permanece ledger `DO_NOT_MERGE`, não writer.
+- **Coração/HUD:** existe um único coração, `/heartbeat`. Sensores, bindings de modelos, Self-Evolution, execução e runtime alimentam o snapshot operacional; `HUD.html` do Obsidian é projeção viva desse coração e nunca autoridade. Falha de fetch vira UNKNOWN.
+- **Provas materiais desta sessão:** resolver CURRENT retornou `kylin-qwen-plus`; 4 testes do resolver PASS; bridge systemd ativo; `/health` e `/v1/models` reportaram `kylin-qwen-plus`; completion real respondeu pelo mesmo binding; troca temporária para `kylin-deepseek-r1` sem alteração do consumer/restart fez `/health` e completion mudarem para DeepSeek, depois o binding foi restaurado para Qwen; Self-Evolution wrapper resolveu `openai/kylin-qwen-plus` no lote.
+- **Cristal:** `MODEL_IS_ENGINE=true`; `MODEL_NAME_IS_BINDING=true`; `HERMES_IS_EXECUTION_PLANE=true`; `LOCAL_AI_IS_COGNITIVE_WORKER=true`; `REUSE_NATIVE_SELF_EVOLUTION=true`; `NO_SECOND_ROUTER=true`; `NO_SECOND_SCHEDULER=true`; `NO_SECOND_EVOLUTION_ENGINE=true`; `ONE_HEART=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `UNKNOWN_IS_NOT_PASS=true`; `REALITY_IS_JUDGE=true`.
+- **Contraprova:** process alive não prova missão avançando; housekeeping não é code motion; donor lido não é evolução concluída; source commit não é deploy; modelo listado não é inferência; labels não resolvem issues; HUD offline da Casa não pode ser declarado atualizado fisicamente enquanto o device `SEGREDO` estiver offline.
+- **Next cursor:** fechar telemetry/heartbeat do binding no runtime MCP, publicar receipt/readback, instalar o bloco live no `HUD.html` físico quando a Casa voltar online e manter o loop horário consumindo o mesmo coração sem novos owners.

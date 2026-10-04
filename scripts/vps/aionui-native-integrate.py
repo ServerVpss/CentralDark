@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Replay the AionUi/Hermes binding using the existing CentralDark owners."""
-import argparse,json,shutil,subprocess,urllib.request,urllib.parse
+import argparse,json,shutil,subprocess,urllib.request,urllib.parse,sys
 from pathlib import Path
 import yaml
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from current_model_resolver import resolve_current_model
 parser=argparse.ArgumentParser()
 parser.add_argument("--repo",type=Path,default=Path(__file__).resolve().parents[2])
 parser.add_argument("--web-url",default="http://127.0.0.1:25808")
 parser.add_argument("--apply",action="store_true")
 args=parser.parse_args()
 repo=args.repo.resolve()
+current_model=resolve_current_model()
 if urllib.parse.urlparse(args.web_url).hostname not in {"127.0.0.1","localhost"}:raise SystemExit("LOCAL_WEBUI_REQUIRED")
 def api(path,data=None,method=None):
     req=urllib.request.Request(args.web_url+path,data=None if data is None else json.dumps(data).encode(),headers={"Content-Type":"application/json"},method=method)
@@ -36,11 +39,11 @@ test=api("/api/mcp/test-connection",server)
 if not test.get("success"):raise SystemExit("MCP_TEST_FAILED:"+str(test.get("error")))
 if not server.get("enabled"):server=api("/api/mcp/servers/"+server["id"]+"/toggle",{})
 providers=api("/api/providers");provider=next((p for p in providers if p.get("base_url")=="http://127.0.0.1:18435/v1"),None)
-payload={"model_protocols":{"kylin-deepseek-r1":"openai"},"model_settings":{"kylin-deepseek-r1":{"image_input":"unsupported","openai_api_mode":"chat_completions"}}}
+payload={"model_protocols":{current_model:"openai"},"model_settings":{current_model:{"image_input":"unsupported","openai_api_mode":"chat_completions"}}}
 if provider:
-    payload["models"]=list(dict.fromkeys(provider.get("models",[])+["kylin-deepseek-r1"]))
+    payload["models"]=list(dict.fromkeys(provider.get("models",[])+[current_model]))
     provider=api("/api/providers/"+provider["id"],payload,"PUT")
-else:provider=api("/api/providers",{**payload,"platform":"custom","name":"Kylin Native — existing bridge","base_url":"http://127.0.0.1:18435/v1","api_key":"local","models":["kylin-deepseek-r1"],"enabled":True})
+else:provider=api("/api/providers",{**payload,"platform":"custom","name":"Kylin Native — existing bridge","base_url":"http://127.0.0.1:18435/v1","api_key":"local","models":[current_model],"enabled":True})
 stt=api("/api/settings/client?keys=tools.speechToText").get("tools.speechToText") or {}
 if not stt.get("enabled") or stt.get("openai",{}).get("base_url")=="http://127.0.0.1:18435/v1":
     api("/api/settings/client",{"tools.speechToText":{"enabled":True,"autoSend":False,"provider":"openai","openai":{"api_key":"local","base_url":"http://127.0.0.1:18435/v1","model":"ensemble-asr_paraformer_nonstreaming"}}},"PUT")
