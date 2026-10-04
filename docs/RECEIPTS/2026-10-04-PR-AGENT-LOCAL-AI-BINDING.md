@@ -119,6 +119,74 @@ conclusion: UNKNOWN
 
 O run está aguardando runner; não foi promovido a PASS.
 
+## Lote executado — falha seguinte do consumidor
+
+A execução local fora do Actions reproduziu o próximo erro depois de remover o bloqueio do Python:
+
+```text
+Model openai/kylin-qwen-plus is not defined in MAX_TOKENS
+and no custom_model_max_tokens is set
+```
+
+O bridge respondeu diretamente `HTTP 200` para a mesma rota e modelo, então o problema estava no orçamento/configuração do PR-Agent, não no endpoint local.
+
+Correção publicada:
+
+```text
+CONFIG__CUSTOM_MODEL_MAX_TOKENS=8192
+```
+
+O PR-Agent ainda retornou `Failed to generate prediction` depois desse ajuste; portanto o parsing/compatibilidade da resposta cognitiva continua `UNKNOWN`, sem review promovido.
+
+## Lote executado — isolamento do runtime Python/LiteLLM
+
+A exceção interna foi capturada em execução controlada:
+
+```text
+ValueError: The required prompt leaves no input capacity for openai/kylin-qwen-plus
+OpenAIException: 'AsyncOpenAI' object has no attribute '_auth_headers'
+```
+
+Causas separadas:
+
+```text
+budget local insuficiente para o diff completo
+PYTHONPATH do Hermes contaminava o venv e carregava openai 2.24.0 externo
+```
+
+Correção publicada no workflow:
+
+```text
+CONFIG__CUSTOM_MODEL_MAX_TOKENS=32000
+CONFIG__MAX_MODEL_TOKENS=32000
+env -u PYTHONPATH -u PYTHONHOME para pip e PR-Agent
+impressão de OPENAI_VERSION/OPENAI_PATH no runner
+```
+
+Contraprova local no mesmo bridge e PR:
+
+```text
+openai isolado: 2.54.0 no venv do PR-Agent
+PR diff: 12799 tokens sob limite 32000
+review gerado: PASS
+comentário publicado: issue comment 5983717282
+marker: <!-- pr-agent:review:full -->
+```
+
+A prova foi feita fora do Actions enquanto o runner permanecia ocupado; o workflow ainda precisa reproduzir a mesma prova no self-hosted job.
+
+Novo dispatch no HEAD atualizado:
+
+```text
+run=37229557379
+head=142772a7f6
+status=queued
+conclusion=UNKNOWN
+runner=UNKNOWN
+```
+
+Os runners self-hosted continuam ocupados; `queued` não é `PASS` nem `FAIL`.
+
 ## Next cursor
 
 `publicar workflow → disparar/medir um run de PR → provar health/model binding → provar PR-Agent usando 127.0.0.1:18435 → confirmar review publicado → receipt → retomar Self-Evolution com o mesmo resolver`
