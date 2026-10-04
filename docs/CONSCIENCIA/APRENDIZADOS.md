@@ -1670,3 +1670,18 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Fronteira técnica preservada:** `UNKNOWN != PASS` continua sendo verdade sobre claims; colisão real de Writer, impossibilidade física, permissão externa, alvo não autorizado, gasto/consentimento humano e irreversibilidade realmente não coberta continuam sendo dependências materiais, não “leis” inventadas.
 - **Next cursor:** varrer consumidores restantes do CURRENT e reduzir qualquer `FAIL_CLOSED`/“obrigatório antes de responder” que ainda seja apenas cerimônia, preservando somente blockers causalmente reais.
 
+
+### 159. Hermes + Kylin local + rota AionUi + capacidade agêntica — fixed point funcional
+
+- **Data:** 2026-10-04
+- **Tipo:** RUNTIME_FIXED_POINT / AGENTIC_PATH
+- **Owner de evidência:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-kylin-native-hermes-routes-session.md`
+- **Owner de rotas:** `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md`
+- **Receipt ledger:** PR-mãe `#1562`, comentário `5975848027`.
+- **Delta sobre #157:** o que em #157 ainda era `Hermes→Kylin=UNKNOWN` foi fechado depois no runtime sem apagar o estado histórico anterior. Hermes Agent real foi identificado e configurado para `kylin-deepseek-r1` via provider custom/bridge loopback; o bridge respondeu health/models/chat sobre a SDK nativa Kylin; AionUi conversou pela rota; e Hermes emitiu tool call estruturada `read_file` para o `AGENTS.md` do projeto.
+- **Rota provada:** `AionUi → Hermes Agent → provider custom → bridge local → Kylin native GenAI SDK → kylin-deepseek-r1`.
+- **Saúde associada:** Triton `live/ready=200`; HERMES-CORE `health=200`, versão `5.0`.
+- **Cristal:** `HERMES_KYLIN_BINDING_PASS=PASS`; `AIONUI_HERMES_KYLIN_ROUTE=PASS`; `HERMES_AGENT_TOOL_CALL_READ_FILE_EMITTED=PASS`; `HERMES_PLUS_LOCAL_KYLIN_PLUS_AGENTIC_CAPABILITY=PROVEN_FUNCTIONAL`.
+- **Contraprova:** tool call de leitura provada não promove todas as tools; rota AionUi funcional não reescreve a tentativa CLI anterior; resposta de modelo não equivale por si só a efeito de ferramenta. `ONE_AGENTIC_TOOL_PATH_PASS != EVERY_AGENTIC_CAPABILITY_PASS`.
+- **Fixed point:** dentro deste cone, não inventar teste adicional sem novo claim. Novo teste só é exigido quando mudar binding/fingerprint, capability ou efeito alegado.
+
