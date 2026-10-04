@@ -299,7 +299,7 @@ export function buildCognitiveCouncilPlan({
     authority_plane: Object.freeze({
       final_authority: 'SEGREDO/CHEFE',
       coordinator: 'SOL',
-      executor_continuity: 'PIVETE/HERMES',
+      executor_continuity: 'HERMES',
       writer_rule: 'ONE_WRITER_PER_SCOPE',
       reality_is_judge: true,
     }),

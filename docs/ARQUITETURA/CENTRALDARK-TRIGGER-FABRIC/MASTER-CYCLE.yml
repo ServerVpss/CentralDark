@@ -216,7 +216,7 @@ measure_before_creation_semantic_binding:
 execution_model:
   human_intent_owner: SEGREDO/CHEFE
   coordinator: SOL
-  executor: PIVETE/HERMES_OR_CAPABLE_PROVIDER
+  executor: HERMES_OR_CAPABLE_PROVIDER
   model_is_replaceable: true
   intention_must_be_preserved: true
   perception_material_is_separate_capability: true
