@@ -8,7 +8,7 @@
 export const AUTHORITY_LAW = Object.freeze({
   final_human: 'SEGREDO/CHEFE',
   coordinator: 'SOL',
-  executor: 'PIVETE/HERMES',
+  executor: 'HERMES',
   writer: 'MUTA_SOMENTE_ESCOPO_AUTORIZADO',
   judge: 'VALIDA_CONTRAPROVA',
   model_is_authority: false,
