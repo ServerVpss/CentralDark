@@ -1068,11 +1068,13 @@ check('.github/workflows/porta-de-entrada.yml',[
 ])
 check('.github/workflows/autonomia-promocao.yml',['Juiz determinístico','github-pr-confirmado-label.mjs'])
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml',[
- 'UPDATE_BRANCH_RUNNER_LOCK: GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN',
- 'required_runner: ubuntu-latest',
+ 'UPDATE_BRANCH_RUNNER_LOCK: SELF_HOSTED_VPS_PROVEN',
+ 'required_runner: [self-hosted, Linux]',
  'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE: true',
- 'HYBRID_MODE_PENDING_VPS_PROOF: true',
- 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE: true',
+ 'SELF_HOSTED_VPS_PROVEN: true',
+ 'SELF_HOSTED_REQUIRED_FOR_24_7: true',
+ 'HYBRID_MODE_PENDING_VPS_PROOF: false',
+ 'CHEFE_EXPLICIT_AUTHORIZATION_FOR_VPS_SELF_HOSTED: true',
 ], classification='UPDATE_BRANCH_RUNNER_LOCK_CONTRACT')
 check('.github/workflows/pr-update-branch-deterministic.yml',[
  'preflight:',
@@ -1083,11 +1085,9 @@ check('.github/workflows/pr-update-branch-deterministic.yml',[
  "TOOL_REF_RAW: ${{ github.event_name == 'workflow_dispatch' && github.sha || 'main' }}",
  'tool_ref: ${{ steps.plan.outputs.tool_ref }}',
  'ref: ${{ needs.preflight.outputs.tool_ref }}',
- 'runs-on: ubuntu-latest',
- 'UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN',
- 'SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true',
- 'HYBRID_MODE_PENDING_VPS_PROOF=true',
- 'CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true',
+ 'runs-on: [self-hosted, Linux]',
+ 'UPDATE_BRANCH_RUNNER_LOCK=SELF_HOSTED_VPS_BECAUSE_HOSTED_BILLING_BLOCKED',
+ 'SELF_HOSTED_REQUIRED_FOR_24_7=true',
  'CLAIM_SCOPE=PR_SYNC_TO_MAIN',
  'CHECKS_SCOPE=OBSERVATION_ONLY_NOT_PROMOTION_PROOF',
  'SYNC_CLAIM_AND_CI_OBSERVATION_ARE_SEPARATE=true',
@@ -1138,9 +1138,7 @@ forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
 # vps-reboot-forensic precisa de saída pra API Contabo/Cloudflare. Autorizado
 # por PERMITO-SEGREDO no cabeçalho de cada arquivo. Isentar, não remover.
 runner_policy_exempt=frozenset({
-    # Fluxo de COSTURA provado: precisa GitHub-hosted enquanto self-hosted/VPS estiver offline.
-    # Cadeado formal: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/UPDATE-BRANCH-RUNNER-LOCK.yml
-    '.github/workflows/pr-update-branch-deterministic.yml',
+    # PR Update Branch deixou de ser excecao: VPS self-hosted foi provado em 2026-10-04.
     # HUD/ledger GitHub-API-only: intentionally hosted so PR-mother freshness
     # does not depend on the self-hosted VPS queue. It does not execute repo
     # code or deploy runtime.
@@ -1417,11 +1415,15 @@ check_command(
 
 # GLOBAL_CROSS_CONTEXT_PREFLIGHT_REPO_WIDE
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
- 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1',
- 'preflight_reenters_on_every_centraldark_response: true',
- 'repository_artifact_inheritance: ALL_TRACKED_AND_FUTURE_ARTIFACTS',
- 'generic_answer_without_preflight: FORBIDDEN',
+ 'marker: CENTRALDARK_PERTINENT_CONTEXT_RECOVERY',
+ 'preflight_reenters_on_every_centraldark_response: false',
+ 'non_blocking: true',
+ 'sem_lei: true',
+ 'full_repo_inventory_required_before_scope_claim: false',
  'missing_required_source: AFFECTED_CLAIM_UNKNOWN',
+ 'generic_answer_without_preflight: ALLOWED_WITH_PERTINENT_CONTEXT',
+ 'procedural_gate_is_global_brake: false',
+ 'no_parallel_architecture: true',
 ], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_CANONICAL_OWNER')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1',
@@ -1439,9 +1441,12 @@ check('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',[
  'GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN',
 ], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_SOUL')
 check('docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md',[
- 'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1',
- 'ALL_REPOSITORY_ARTIFACTS_INHERIT_BY_CONTAINMENT=true',
- 'GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN',
+ 'METACOGNITION_IS_TOOL_NOT_GATE=true',
+ 'META_GRILL=ON_DEMAND',
+ 'META_LUPA=ON_DEMAND',
+ 'PERTINENT_CONTEXT_ONLY=true',
+ 'NO_ALL_LEARNINGS_BOOT=true',
+ 'UNKNOWN_BLOCKS_AFFECTED_CLAIM_ONLY=true',
 ], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_METACOGNITION')
 check('LEIA-ME-IA.md',[
  'CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true',
