@@ -25,7 +25,7 @@ Leia nesta ordem mínima:
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" regional = vocativo informal; não cria identidade técnica
 ```
 
@@ -41,3 +41,6 @@ NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
 ```
 
 Não carregar listas antigas de PM2, paths, personas ou permissões como verdade viva sem medir o runtime correspondente.
+
+
+> **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação cognitiva oficial`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.
