@@ -756,7 +756,7 @@ export function validateUniversalMethod() {
     '"user_transport": "TELEGRAM_MTPROTO_DIRECT"',
     '"telegram_orchestrator_contract":',
     '"coordinator": "SOL"',
-    '"executor": "PIVETE/HERMES"',
+    '"executor": "HERMES"',
     '"marker": "CENTRALDARK_GLOBAL_SECRET_REUSE"',
     '"canonical_vault": "/root/CentralDark/secrets"',
     '"repository_secrets": "REUSE_ALL_EXISTING_AND_FUTURE"',
@@ -784,7 +784,7 @@ export function validateUniversalMethod() {
     'user_transport: "TELEGRAM_MTPROTO_DIRECT"',
     'telegram_orchestrator_contract:',
     'coordinator: "SOL"',
-    'executor: "PIVETE/HERMES"',
+    'executor: "HERMES"',
     'SQUASH_CHILD_ONLY',
 
     'child_pr_only_promotion_vehicle: false',
