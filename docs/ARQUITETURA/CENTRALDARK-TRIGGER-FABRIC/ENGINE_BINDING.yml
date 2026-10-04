@@ -45,7 +45,7 @@ engines:
 agent_runtimes:
   hermes:
     role: EXECUTION_CONTINUITY_RUNTIME
-    owner: PIVETE/HERMES
+    owner: HERMES
     prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md
     transport_owner: apps/modulos/HERMES-CORE
     required_for: [hermes_mission_routing, hermes_session_continuity, hermes_runtime_memory, hermes_hooks, hermes_scheduler, hermes_learning_transfer_test]

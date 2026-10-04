@@ -4,7 +4,7 @@
   "authority": {
     "human_intent": "SEGREDO/CHEFE",
     "coordination": "SOL",
-    "execution": "PIVETE/HERMES",
+    "execution": "HERMES",
     "judge": "REALIDADE",
     "writer_policy": "ONE_WRITER_PER_SCOPE"
   },
