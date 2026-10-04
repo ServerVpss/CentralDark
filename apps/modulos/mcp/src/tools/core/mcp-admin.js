@@ -1,3 +1,4 @@
+import { localHybridTools } from "../local/local-compute.js";
 import { adminVaultTools } from "../../modes/admin/tools/admin-vault.js";
 import { adminFileTools } from "../../modes/admin/tools/admin-files.js";
 import { adminPm2Tools } from "../../modes/admin/tools/admin-pm2.js";
@@ -58,6 +59,7 @@ function invalidInputResponse(input, parsed, destructive) {
     });
 }
 const runtimeTools = [
+    ...localHybridTools,
     codeReviewerToolDefinition,
     ...aprendizadoTools,
     ...conscienciaTools,

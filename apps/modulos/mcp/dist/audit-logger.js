@@ -34,17 +34,10 @@ const auditSubscribers = new Set();
 const auditContext = new AsyncLocalStorage();
 function ensureLogDir() {
     fs.mkdirSync(LOG_DIR, { recursive: true, mode: 0o700 });
-    try {
-        fs.chmodSync(LOG_DIR, 0o700);
-    }
-    catch { /* best effort */ }
+    try { fs.chmodSync(LOG_DIR, 0o700); } catch { /* best effort */ }
 }
 function secureFile(file) {
-    try {
-        if (fs.existsSync(file))
-            fs.chmodSync(file, 0o600);
-    }
-    catch { /* best effort */ }
+    try { if (fs.existsSync(file)) fs.chmodSync(file, 0o600); } catch { /* best effort */ }
 }
 function secureExistingLogs() {
     try {
@@ -53,8 +46,7 @@ function secureExistingLogs() {
                 secureFile(path.join(LOG_DIR, name));
             }
         }
-    }
-    catch { /* best effort */ }
+    } catch { /* best effort */ }
 }
 function redactString(value) {
     const redacted = value
@@ -64,34 +56,28 @@ function redactString(value) {
         .replace(JWT_RE, "[REDACTED_JWT]")
         .replace(OPENAI_KEY_RE, "[REDACTED_API_KEY]")
         .replace(EMAIL_RE, "[REDACTED_EMAIL]");
-    if (redacted.length <= MAX_STRING_LENGTH)
-        return redacted;
+    if (redacted.length <= MAX_STRING_LENGTH) return redacted;
     return `${redacted.slice(0, MAX_STRING_LENGTH)}...[TRUNCATED:${redacted.length}]`;
 }
 function sanitizeValue(value, depth = 0, seen = new WeakSet()) {
-    if (value === null || value === undefined)
-        return null;
-    if (typeof value === "string")
-        return redactString(value);
-    if (typeof value === "number" || typeof value === "boolean")
-        return value;
-    if (typeof value === "bigint")
-        return value.toString();
-    if (typeof value === "function" || typeof value === "symbol")
-        return `[${typeof value}]`;
+    if (value === null || value === undefined) return null;
+    if (typeof value === "string") return redactString(value);
+    if (typeof value === "number" || typeof value === "boolean") return value;
+    if (typeof value === "bigint") return value.toString();
+    if (typeof value === "function" || typeof value === "symbol") return `[${typeof value}]`;
     if (value instanceof Error) {
         return { name: redactString(value.name), message: redactString(value.message), stack: value.stack ? redactString(value.stack) : null };
     }
-    if (depth >= MAX_DEPTH)
-        return "[MAX_DEPTH]";
+    if (depth >= MAX_DEPTH) return "[MAX_DEPTH]";
     if (typeof value === "object") {
-        if (seen.has(value))
-            return "[CIRCULAR]";
+        if ((value.type === "audio" || value.type === "image") && typeof value.data === "string") {
+            return { type: value.type, mimeType: value.mimeType, data: "[MEDIA_OMITTED]", encoded_length: value.data.length };
+        }
+        if (seen.has(value)) return "[CIRCULAR]";
         seen.add(value);
         if (Array.isArray(value)) {
             const items = value.slice(0, MAX_ARRAY_ITEMS).map((item) => sanitizeValue(item, depth + 1, seen));
-            if (value.length > MAX_ARRAY_ITEMS)
-                items.push(`[TRUNCATED:${value.length - MAX_ARRAY_ITEMS}]`);
+            if (value.length > MAX_ARRAY_ITEMS) items.push(`[TRUNCATED:${value.length - MAX_ARRAY_ITEMS}]`);
             return items;
         }
         const out = {};
@@ -100,8 +86,7 @@ function sanitizeValue(value, depth = 0, seen = new WeakSet()) {
             out[key] = SENSITIVE_KEY_RE.test(key) ? "[REDACTED]" : sanitizeValue(item, depth + 1, seen);
         }
         const totalKeys = Object.keys(value).length;
-        if (totalKeys > MAX_OBJECT_KEYS)
-            out.__truncatedKeys = totalKeys - MAX_OBJECT_KEYS;
+        if (totalKeys > MAX_OBJECT_KEYS) out.__truncatedKeys = totalKeys - MAX_OBJECT_KEYS;
         return out;
     }
     return String(value);
@@ -121,7 +106,7 @@ function makeTransport(prefix) {
     });
     transport.on("new", secureFile);
     transport.on("rotate", (_oldFile, newFile) => { secureFile(newFile); secureFile(auditFile); });
-    transport.on("error", () => { });
+    transport.on("error", () => { /* fail closed: never throw into MCP request flow */ });
     secureFile(auditFile);
     return transport;
 }
@@ -132,9 +117,11 @@ const appLogger = winston.createLogger({ level: process.env.LOG_LEVEL || "info",
 const auditLogger = winston.createLogger({ level: "info", format: jsonlFormat, transports: [makeTransport("audit")], exitOnError: false });
 appLogger.on("error", () => { });
 auditLogger.on("error", () => { });
+
 export function runWithAuditContext(context, fn) {
     return auditContext.run(context && typeof context === "object" ? context : {}, fn);
 }
+
 export function buildAuditEnvelope(entry = {}) {
     const endedAtMs = Date.now();
     const durationMs = Number.isFinite(Number(entry.durationMs)) ? Math.max(0, Number(entry.durationMs)) : null;
@@ -173,12 +160,13 @@ export function buildAuditEnvelope(entry = {}) {
         error: source.error ?? null,
     };
 }
+
 export function subscribeAuditEvents(listener) {
-    if (typeof listener !== "function")
-        throw new TypeError("audit subscriber must be a function");
+    if (typeof listener !== "function") throw new TypeError("audit subscriber must be a function");
     auditSubscribers.add(listener);
     return () => auditSubscribers.delete(listener);
 }
+
 export function logApp(level, event, meta) {
     try {
         const safeMeta = sanitizeValue(meta ?? {});
@@ -197,45 +185,28 @@ export function logApp(level, event, meta) {
         });
         secureExistingLogs();
     }
-    catch { /* logging must never break MCP protocol */ }
+    catch {
+        /* logging must never break MCP protocol */
+    }
 }
 export function auditToolExecution(entry) {
     const envelope = buildAuditEnvelope(entry);
     try {
-        const safeEntry = sanitizeValue(entry ?? {});
-        auditLogger.info("mcp_tool_execution", entry);
-        appendCentralEvent({
-            sector: "mcp",
-            source: "CentralDark-MCP",
-            actor: safeEntry?.clientLabel || safeEntry?.callerUser || "mcp-client",
-            kind: "mcp_tool_call",
-            level: safeEntry?.ok === false ? "error" : "info",
-            key: `tool:${safeEntry?.toolName || "unknown"}`,
-            tags: [
-                "mcp",
-                "tool-call",
-                safeEntry?.endpointRole || "public",
-                safeEntry?.toolName || "unknown",
-                safeEntry?.ok === false ? "error" : "ok",
-            ],
-            correlation_id: safeEntry?.correlationId || null,
-            message: safeEntry?.toolName || "unknown",
-            data: safeEntry,
-        });
         auditLogger.info("mcp_tool_execution", envelope);
+        appendCentralEvent({
+            sector: "mcp", source: "CentralDark-MCP", actor: envelope.actor || "mcp-client",
+            kind: "mcp_tool_call", level: envelope.ok ? "info" : "error",
+            key: `tool:${envelope.toolName}`, tags: ["mcp", "tool-call", envelope.toolName],
+            correlation_id: envelope.correlation_id, message: envelope.toolName, data: envelope,
+        });
         secureExistingLogs();
-    }
-    catch { /* logging must never break MCP protocol */ }
+    } catch { /* logging must never break MCP protocol */ }
     for (const listener of auditSubscribers) {
-        try {
-            listener(envelope);
-        }
-        catch { /* observer failure must not break MCP request flow */ }
+        try { listener(envelope); } catch { /* observer failure must not break MCP request flow */ }
     }
     return envelope;
 }
 export function sanitizeForLog(value) {
     return sanitizeValue(value);
 }
-//# sourceMappingURL=audit-logger.js.map
 //# sourceMappingURL=audit-logger.js.map
