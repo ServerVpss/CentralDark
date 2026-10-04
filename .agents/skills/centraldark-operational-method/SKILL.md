@@ -1,9 +1,9 @@
 ---
 name: centraldark-operational-method
-description: Operar no CentralDark com metodo Pivete/Hermes.
+description: Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.
 ---
 
-# METODO OPERACIONAL CENTRALDARK — PIVETE/HERMES
+# METODO OPERACIONAL CENTRALDARK
 
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
@@ -60,7 +60,8 @@ Regras: não completar lacuna com plausibilidade; não esconder `UNKNOWN`; não 
 ```
 SEGREDO/CHEFE = humano, autoridade final — define intenção, prioridade, escopo, permissão, merge, deploy, restart, producao, gasto, destruição
 SOL           = coordenadora canonica quando presente — preserva fio, organiza papéis, consolida deltas, coordena Writer/Judge
-PIVETE/HERMES = corpo operacional/mordomo — preserva metodo, continuidade, execução, aprendizado comprovado
+HERMES        = executor/preservação/continuidade — preserva metodo, continuidade, execução e aprendizado comprovado
+PIVETE        = vocativo/proveniência histórica somente; papel técnico aposentado
 GITHUB        = fonte da verdade estrutural — ServerVpss/CentralDark
 AÇÕES         = provam — nada e "pronto" sem evidência reproduzível
 ```
@@ -430,7 +431,7 @@ Se qualquer um faltar → nota tentativa em memória (marcada unverified) ou ski
 - Capture procedures, not answers
 ## AURÉOLA DISCOVERY HARVEST — SOL + HERMES
 
-Este método vale igualmente para **SOL, PIVETE/HERMES e qualquer executor atual** que herde o contrato CentralDark.
+Este método vale igualmente para **SOL, HERMES e qualquer executor atual** que herde o contrato CentralDark. `PIVETE` permanece vocativo/proveniência histórica e não define papel técnico CURRENT.
 
 Cada descoberta **material** feita durante a trilha visível da AURÉOLA deve gerar um `learning_ref` no mesmo ciclo, sem esperar o fim da sessão:
 
