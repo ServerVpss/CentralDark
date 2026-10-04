@@ -1834,6 +1834,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L159",
+      "next_uid": "L161"
+    },
+    {
+      "uid": "L161",
+      "legacy_learning_number": 161,
+      "legacy_occurrence": 1,
+      "title": "Pivete deixa de ser papel técnico: SOL coordena, Hermes executa e o role binding se autocorrige",
+      "document_order": 160,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L160",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

@@ -442,7 +442,8 @@ const condensedDna = {
   authority: 'SEGREDO/CHEFE',
   identity: {
     coordinator: 'SOL',
-    executor: 'PIVETE/HERMES',
+    executor: 'HERMES',
+    piveteRole: 'RETIRED',
     model: 'REPLACEABLE_ENGINE',
   },
   load_strategy: 'DNA_FIRST_SOURCE_ON_DEMAND',
