@@ -1845,6 +1845,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L160",
+      "next_uid": "L162"
+    },
+    {
+      "uid": "L162",
+      "legacy_learning_number": 162,
+      "legacy_occurrence": 1,
+      "title": "Cinco princípios vivos viram lei da Casa: memória, concha, serviço, heartbeat e contexto",
+      "document_order": 161,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L161",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
