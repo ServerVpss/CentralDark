@@ -70,6 +70,9 @@ function sanitizeValue(value, depth = 0, seen = new WeakSet()) {
     }
     if (depth >= MAX_DEPTH) return "[MAX_DEPTH]";
     if (typeof value === "object") {
+        if ((value.type === "audio" || value.type === "image") && typeof value.data === "string") {
+            return { type: value.type, mimeType: value.mimeType, data: "[MEDIA_OMITTED]", encoded_length: value.data.length };
+        }
         if (seen.has(value)) return "[CIRCULAR]";
         seen.add(value);
         if (Array.isArray(value)) {
@@ -187,36 +190,17 @@ export function logApp(level, event, meta) {
     }
 }
 export function auditToolExecution(entry) {
+    const envelope = buildAuditEnvelope(entry);
     try {
-        const safeEntry = sanitizeValue(entry ?? {});
-        auditLogger.info("mcp_tool_execution", entry);
+        auditLogger.info("mcp_tool_execution", envelope);
         appendCentralEvent({
-            sector: "mcp",
-            source: "CentralDark-MCP",
-            actor: safeEntry?.clientLabel || safeEntry?.callerUser || "mcp-client",
-            kind: "mcp_tool_call",
-            level: safeEntry?.ok === false ? "error" : "info",
-            key: `tool:${safeEntry?.toolName || "unknown"}`,
-            tags: [
-                "mcp",
-                "tool-call",
-                safeEntry?.endpointRole || "public",
-                safeEntry?.toolName || "unknown",
-                safeEntry?.ok === false ? "error" : "ok",
-            ],
-            correlation_id: safeEntry?.correlationId || null,
-            message: safeEntry?.toolName || "unknown",
-            data: safeEntry,
+            sector: "mcp", source: "CentralDark-MCP", actor: envelope.actor || "mcp-client",
+            kind: "mcp_tool_call", level: envelope.ok ? "info" : "error",
+            key: `tool:${envelope.toolName}`, tags: ["mcp", "tool-call", envelope.toolName],
+            correlation_id: envelope.correlation_id, message: envelope.toolName, data: envelope,
         });
         secureExistingLogs();
-    }
-    catch {
-        /* logging must never break MCP protocol */
-    try { appLogger.log({ level, message: event, ...(meta ?? {}) }); secureExistingLogs(); } catch { /* logging must never break MCP protocol */ }
-}
-export function auditToolExecution(entry) {
-    const envelope = buildAuditEnvelope(entry);
-    try { auditLogger.info("mcp_tool_execution", envelope); secureExistingLogs(); } catch { /* logging must never break MCP protocol */ }
+    } catch { /* logging must never break MCP protocol */ }
     for (const listener of auditSubscribers) {
         try { listener(envelope); } catch { /* observer failure must not break MCP request flow */ }
     }
