@@ -461,3 +461,41 @@ Não inventar probabilidade/confiança numérica. Use classe epistemológica + e
 - Batch process historical exports.
 - Incremental: only new sessions since last harvest.
 - On resume, invalidate only claims whose truth depends on live state; preserve historical learning as provenance.
+
+## Receita executável — multimodal completo antes da ação (CHEFE, 2026-10-04)
+
+Quando a entrada combinar vídeo/imagem/áudio/texto/sinal simbólico, o harvester não pode preencher a modalidade ausente com contexto anterior.
+
+```text
+MULTIMODAL_INPUT
+→ MEASURE_BYTES_AND_METADATA
+→ VISUAL_TIMELINE_COVERAGE
+→ AUDIO_STREAM_CHECK
+→ ASR_TRANSCRIPT
+→ CROSS_MODAL_SEMANTIC_COMPARE
+→ FACT|INFERENCE|HYPOTHESIS|UNKNOWN
+→ DEDUPE
+→ EXISTING_OWNER
+→ AUTHORITY_CHECK
+→ MINIMAL_ACTION
+→ READBACK
+→ RECEIPT
+```
+
+```text
+MULTIMODAL_COMPLETE_BEFORE_ACTION=true
+VISIBLE_FACT != CONTEXTUAL_INFERENCE
+AUDIO_PRESENT != AUDIO_UNDERSTOOD
+SAMPLED_VISUAL_COVERAGE != EVERY_FRAME_READ
+CUE_IS_POINTER_NOT_AUTHORITY=true
+SYMBOLIC_CUE_DOES_NOT_GRANT_WRITE=true
+EXPLICIT_CURRENT_INTENT_OR_CANONICAL_MAPPING_REQUIRED_FOR_WRITE=true
+CONNECTED_PROVIDER_CAN_CLOSE_CAPABILITY_GAP_WITHOUT_BECOMING_OWNER=true
+ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true
+USER_STATED > ASSISTANT_INFERRED
+```
+
+Capacidade externa conectada é braço temporário do mesmo sistema, não novo owner. Exemplo provado: arquivo de vídeo → medição local → cobertura visual densa → provider ASR conectado → transcript com timecodes → reconciliação semântica. Isso prova a rota orquestrada, não um ASR local/nativo.
+
+A sequência `🪛🪄🪬🔩⛏️🏺✍🏼🪚🌞⏰👩🏻‍🍳𓇼𓏲*ੈ✩‧₊˚🥣🫵🏽🧏🏻‍♂️👨🏻‍💻🦾🦿🧿` pode recuperar esta receita quando o CHEFE a usar como ponteiro composto. O sistema não inventa significado atômico para cada glifo e não converte o ponteiro em autoridade de write sem intenção explícita ou mapping canônico.
+

@@ -171,3 +171,15 @@ Contagem: `{"EXISTING": 43, "PARTIAL": 50, "NEW_DELTA": 60, "GAP": 10, "VERIFY_L
 | Autonomy | Human Frontier With Resume Condition | **EXISTING** | P0 | operational method | human-only blocker must include exact resume condition |
 | Evaluation | Architecture-vs-Runtime Dual Score | **NEW_DELTA** | P0 | evaluation harness | design maturity cannot substitute runtime proof |
 | Evaluation | 50-Gate Adversarial Package Assault | **NEW_DELTA** | P0 | MetaLupa/Forja harness | repeatable critical suite against capability crystal |
+
+## Delta provado — 2026-10-04 · multimodal completo antes da ação
+
+| Domínio | Capability | Estado | Prioridade | Owner | Efeito provado |
+|---|---|---:|---:|---|---|
+| Media | Connected-provider ASR transcription | **EXISTING** | P0 | session-intelligence-harvester + media router | attachment→provider import→job→timecoded transcript→provenance |
+| Media | Multimodal session evidence completion | **EXISTING** | P0 | session-intelligence-harvester | hash/metadata→dense visual coverage→audio→ASR→cross-modal compare→epistemic classification |
+| Semantic | Symbolic cue routing without implicit authority | **EXISTING** | P0 | AUREOLA + session-intelligence-harvester | cue→recover recipe/context; write requires explicit current intent or canonical mapping |
+| Memory | Minimum-sufficient cross-surface continuation | **EXISTING** | P0 | session-intelligence-harvester + canonical memory | session/chat/model may change while owner/recipe/fingerprint/next cursor preserve continuity |
+
+> Distinção obrigatória: o row histórico `ASR transcription pipeline = NEW_DELTA` continua representando ASR local/nativo ainda não provado. O PASS desta sessão é uma rota de capability por provider conectado, sem criar segundo owner.
+
