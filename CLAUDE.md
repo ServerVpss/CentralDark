@@ -9,6 +9,9 @@ sensitivity: INTERNAL
 source: AGENTS.md + LEIA-ME-IA.md + docs/CONSCIENCIA/MICRO-DEPLOY/* + MODULES/HUB/*
 source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+AI_UNIVERSAL_ENTRYPOINT=LEIA-ME-IA.md
+AI_UNIVERSAL_ENTRYPOINT_CONTRACT=docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+CENTRALDARK_AI_BOOT=CENTRALDARK_AI_BOOT.yaml
 owner: AGENTS.md
 consumer: Claude Code / engines Claude
 session_crystal: "CHAT_HOUSE_COSTURA"

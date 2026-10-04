@@ -24,6 +24,17 @@ _KYLIN_SCHEMAS = (
     "com.kylin.aisdk.model.shared",
 )
 
+def _execution_class(source: str) -> str:
+    if source.startswith("gsettings:"):
+        for kind in ("cloud", "ondevice", "custom", "shared"):
+            if f".model.{kind}." in source:
+                return kind
+    if source.startswith("env:"):
+        return "override"
+    if source.startswith("hermes-config:"):
+        return "catalog"
+    return "unknown"
+
 def _env_model() -> str | None:
     value = os.environ.get("CENTRALDARK_LOCAL_MODEL", "").strip()
     return value or None
@@ -123,17 +134,20 @@ def _persist(details: dict) -> None:
 def resolve_current_model_details() -> dict:
     model = _env_model()
     if model:
-        details = {"model": model, "source": "env:CENTRALDARK_LOCAL_MODEL", "priority": -1}
+        source = "env:CENTRALDARK_LOCAL_MODEL"
+        details = {"model": model, "source": source, "execution_class": _execution_class(source), "priority": -1}
         _persist(details)
         return details
     current = _kylin_current()
     if current:
+        current["execution_class"] = _execution_class(current["source"])
         _persist(current)
         return current
     config_path = Path(os.environ.get("HERMES_CONFIG", DEFAULT_HERMES_CONFIG))
     model = _config_model(config_path)
     if model:
-        details = {"model": model, "source": f"hermes-config:{_PROVIDER_NAME}.models", "priority": 999}
+        source = f"hermes-config:{_PROVIDER_NAME}.models"
+        details = {"model": model, "source": source, "execution_class": _execution_class(source), "priority": 999}
         _persist(details)
         return details
     raise RuntimeError(
