@@ -175,6 +175,18 @@ marker: <!-- pr-agent:review:full -->
 
 A prova foi feita fora do Actions enquanto o runner permanecia ocupado; o workflow ainda precisa reproduzir a mesma prova no self-hosted job.
 
+Novo dispatch no HEAD atualizado:
+
+```text
+run=37229557379
+head=142772a7f6
+status=queued
+conclusion=UNKNOWN
+runner=UNKNOWN
+```
+
+Os runners self-hosted continuam ocupados; `queued` não é `PASS` nem `FAIL`.
+
 ## Next cursor
 
 `publicar workflow → disparar/medir um run de PR → provar health/model binding → provar PR-Agent usando 127.0.0.1:18435 → confirmar review publicado → receipt → retomar Self-Evolution com o mesmo resolver`
