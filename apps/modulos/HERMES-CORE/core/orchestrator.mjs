@@ -678,10 +678,61 @@ function registrarConclusao() { metricas.missoesConcluidas++; }
 function registrarFalha() { metricas.missoesFalhas++; }
 function registrarEtapa(ok) { metricas.totalEtapas++; if (!ok) metricas.totalFalhasEtapa++; }
 
+const RECONCILIATION_RECEIPT = '/root/CentralDark/.artifacts/system-sentinel/reconciliation.json';
+let ultimaReconciliacao = null;
+
+async function reconciliarEstadoCanonico() {
+  const observadoEm = new Date().toISOString();
+  const resultado = {
+    schema: 'centraldark.reconciliation.v1',
+    observado_em: observadoEm,
+    fonte: 'HERMES_CORE_HEARTBEAT',
+    status: 'UNKNOWN',
+    current: {},
+    checklist_diario: {},
+    pr_mother_1562: { status: 'UNKNOWN', motivo: 'NAO_MEDIDO' },
+    prs_abertos: { status: 'UNKNOWN', motivo: 'NAO_MEDIDO' },
+    regra: 'UNKNOWN_NAO_VIRA_PASS',
+  };
+  try {
+    const git = (comando) => new Promise((resolve, reject) => exec(comando, { timeout: 30_000 }, (err, stdout, stderr) => err ? reject(new Error(stderr.trim() || err.message)) : resolve(stdout.trim())));
+    const head = await git("git -C /root/CentralDark rev-parse HEAD");
+    const main = await git("git -C /root/CentralDark rev-parse origin/main");
+    resultado.current = { head, origin_main: main, alinhado: head === main };
+    const checklist = '/root/CentralDark/docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md';
+    resultado.checklist_diario = { path: checklist, presente: existsSync(checklist) };
+    try {
+      const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'CentralDark-Hermes-Core' };
+      if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+      const response = await fetch('https://api.github.com/repos/ServerVpss/CentralDark/pulls?state=open&per_page=100', { headers });
+      if (!response.ok) throw new Error(`HTTP_${response.status}`);
+      const prs = await response.json();
+      resultado.prs_abertos = { status: 'PASS', total: Array.isArray(prs) ? prs.length : 0, numeros: Array.isArray(prs) ? prs.map(pr => pr.number) : [] };
+      const mother = Array.isArray(prs) ? prs.find(pr => pr.number === 1562) : null;
+      resultado.pr_mother_1562 = mother ? { status: 'OPEN', title: mother.title, head_sha: mother.head?.sha || null, base: mother.base?.ref || null } : { status: 'NOT_OPEN', motivo: 'NAO_LISTADO_ABERTO' };
+    } catch (error) {
+      resultado.prs_abertos = { status: 'UNKNOWN', motivo: String(error.message || error) };
+      resultado.pr_mother_1562 = { status: 'UNKNOWN', motivo: String(error.message || error) };
+    }
+    resultado.status = resultado.current.alinhado && resultado.checklist_diario.presente && resultado.prs_abertos.status === 'PASS' ? 'PASS' : 'UNKNOWN';
+  } catch (error) {
+    resultado.motivo = String(error.message || error);
+  }
+  await mkdir(dirname(RECONCILIATION_RECEIPT), { recursive: true });
+  await writeFile(RECONCILIATION_RECEIPT, JSON.stringify(resultado, null, 2) + '\n', { encoding: 'utf8', mode: 0o600 });
+  const assinatura = JSON.stringify({ status: resultado.status, current: resultado.current, prs: resultado.prs_abertos, mother: resultado.pr_mother_1562 });
+  if (assinatura !== ultimaReconciliacao) {
+    ultimaReconciliacao = assinatura;
+    log('[reconciliacao] ' + resultado.status + ' current=' + (resultado.current.alinhado ? 'ALINHADO' : 'DIVERGENTE/UNKNOWN') + ' prs=' + resultado.prs_abertos.status);
+  }
+  return resultado;
+}
+
 async function enviarHeartbeat() {
   const uptime = Math.round((Date.now() - metricas.inicio) / 1000);
   const h = uptime / 3600;
-  const msg = `🟢 <b>Hermes Core</b>\nUptime: ${h.toFixed(1)}h\nMissões: ✅ ${metricas.missoesConcluidas} | ❌ ${metricas.missoesFalhas}\nEtapas: ${metricas.totalEtapas} (${metricas.totalFalhasEtapa} falhas)\nOcupado: ${ocupado ? 'sim' : 'não'}`;
+  const reconciliacao = await reconciliarEstadoCanonico();
+  const msg = `🟢 <b>Hermes Core</b>\\nUptime: ${h.toFixed(1)}h\\nMissões: ✅ ${metricas.missoesConcluidas} | ❌ ${metricas.missoesFalhas}\\nEtapas: ${metricas.totalEtapas} (${metricas.totalFalhasEtapa} falhas)\\nReconciliação: ${reconciliacao.status}\\nOcupado: ${ocupado ? 'sim' : 'não'}`;
   await notificar('Hermes: heartbeat', msg, 'admin');
   metricas.ultimoHeartbeatEnviado = Date.now();
 }
