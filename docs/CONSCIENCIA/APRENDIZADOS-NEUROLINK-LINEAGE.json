@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 157,
-    "highest_legacy_learning_number": 158,
+    "learning_sections": 158,
+    "highest_legacy_learning_number": 159,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 158
+      "end": 159
     }
   },
   "nodes": [
@@ -1812,6 +1812,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L157",
+      "next_uid": "L159"
+    },
+    {
+      "uid": "L159",
+      "legacy_learning_number": 159,
+      "legacy_occurrence": 1,
+      "title": "Hermes + Kylin local + rota AionUi + capacidade agêntica — fixed point funcional",
+      "document_order": 158,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L158",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

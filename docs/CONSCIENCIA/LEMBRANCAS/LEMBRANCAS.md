@@ -403,8 +403,8 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 `1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 141 → 142 → 143 → 144 → 145 → 146 → 147 → 148 → 149 → 150 → 151 → 152`
 
 `CANONICAL_LEARNING_FIRST=1`
-`CANONICAL_LEARNING_LAST=156`
-`CANONICAL_LEARNING_COUNT=156`
+`CANONICAL_LEARNING_LAST=159`
+`CANONICAL_LEARNING_COUNT=159`
 `CANONICAL_NUMERIC_SEQUENCE_PASS=true`
 `LEGACY_DUPLICATE_HEADINGS_PRESERVED=true`
 `LEGACY_GAPS_ARE_HISTORICAL_NOT_MISSING_LEARNING_IDS=true`
@@ -655,4 +655,14 @@ CURRENT_OVER_HISTORY = true
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-SEM-LEI-ANTI-FRICCAO.md`
 - **Conteúdo:** intenção governa; capacidade é neutra; poder técnico não implica malícia; ritual/checklist/gate interno não é permissão nem freio global. Contexto e prova entram por pertinência; UNKNOWN bloqueia somente claim dependente.
 - **Cristal:** `SEM_LEI=true`; `CAPABILITY_IS_NEUTRAL=true`; `PERTINENT_CONTEXT_ONLY=true`; `ALL_LEARNINGS_BOOT=false`; `CANONICAL_GATE_NON_BLOCKING=true`.
+
+
+### [2026-10-04] Hermes + Kylin local + AionUi + capacidade agêntica — fixed point
+- **Tipo:** LEARNING_INDEX / RUNTIME_FIXED_POINT
+- **Learning:** #159
+- **Target:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-kylin-native-hermes-routes-session.md`
+- **Owner de rotas:** `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md`
+- **Conteúdo:** a sessão fechou a rota `AionUi → Hermes Agent real → provider custom → bridge local → Kylin native GenAI SDK → kylin-deepseek-r1` com conversa funcional e emissão de tool call estruturada `read_file` para o `AGENTS.md`. Triton permaneceu live/ready e HERMES-CORE saudável. O UNKNOWN histórico do binding em #157 é preservado como estado daquele instante; o fechamento posterior adiciona camada, não reescreve história.
+- **Cristal:** `HERMES_KYLIN_BINDING_PASS=PASS`; `AIONUI_HERMES_KYLIN_ROUTE=PASS`; `HERMES_AGENT_TOOL_CALL_READ_FILE_EMITTED=PASS`; `HERMES_PLUS_LOCAL_KYLIN_PLUS_AGENTIC_CAPABILITY=PROVEN_FUNCTIONAL`; `ONE_AGENTIC_TOOL_PATH_PASS != EVERY_AGENTIC_CAPABILITY_PASS`.
+- **Receipt:** PR-mãe #1562 comentário `5975848027`.
 
