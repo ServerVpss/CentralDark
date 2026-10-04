@@ -44,9 +44,33 @@ working resolver output at measurement time: kylin-qwen-plus
 
 The current binding was observed from the live local Kylin selection path; it is not crystallized as a permanent model identity.
 
-## Runtime boundary
+## Runtime proof
 
-Source-level binding is proven. The live bridge service has not yet been restarted from this new source in this lot; deployment/readback remains a separate runtime proof and must not be inferred from the commit.
+The existing bridge owner was updated reversibly on `CENTRALDARK-OS`:
+
+```text
+backup=/root/.hermes/backups/current-model-binding-20261004T185707Z
+services restarted:
+  centraldark-kylin-native-bridge.service = active
+  centraldark-kylin-public-bridge.service = active
+
+/health = 200, model=kylin-qwen-plus
+/v1/models = 200, id=kylin-qwen-plus
+live bridge SHA = 16861b888655bf72fb40a41e8266b8c73ae0ddf396ccd78e95ae02c91a8a27eb
+```
+
+The live bridge now follows the current Kylin binding. A completion call and a controlled model-swap readback remain separate proof items; no static model identity is claimed.
+
+Completion readback:
+
+```text
+request model: ignored-by-binding-test
+response model: kylin-qwen-plus
+finish_reason: stop
+content: CURRENT_MODEL_BINDING_PROOF
+```
+
+The consumer ignored the caller's static model label and returned the resolved current binding. Model-swap isolation is still not promoted to PASS; the resolver's environment/config swap tests are proven, but the live service was not switched to a fake model.
 
 ## Next cursor
 
