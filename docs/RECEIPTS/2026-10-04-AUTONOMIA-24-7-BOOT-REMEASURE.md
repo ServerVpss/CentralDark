@@ -67,6 +67,16 @@ Não foram instalados novos motores.
 - Hook GitHub `647381247` para `https://deploy.centralldark.com/webhook` foi desativado (`active=false`) após confirmar que o owner no repositório está aposentado e o deploy canônico é GitHub Actions self-hosted.
 - Readback do hook: HTTP 200, `active=false`; o hook não foi apagado, preservando reversibilidade.
 
+## Owner CURRENT reconciliado
+
+- `ACTIVE_OWNER`: `.github/workflows/vps-exec-selfhosted.yml` para deploy canônico self-hosted.
+- `ACTIVE_OWNER`: `apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/github_state.py` + `webhook.py` para ingestão/auditoria de estado GitHub.
+- `RETIRED`: `scripts/webhook/github-webhook-deploy.mjs`.
+- `LEGACY`: `scripts/run-once/instalar-webhook-deploy-seguro.sh`, `scripts/run-once/testar-webhook-deploy-local.sh` e referências ao Caddyfile ausente.
+- `DONOR`: `docs/INSTALADOR/08-webhooks-e-deploy.md`, usado apenas como proveniência histórica; não governa o CURRENT.
+- `infra/caddy/deploy-centraldark.Caddyfile`: ausente e classificado como legado faltante, não como gap CURRENT.
+- O workflow tinha uma contradição: parava o legado, mas depois exigia que `CentralDark-WebhookDeploy` permanecesse online. O menor delta removeu essa exigência e mantém somente a parada segura do owner exato + prova de `PORT_9300_CLOSED=1`.
+
 ## Estado
 
 `PARTIAL`
