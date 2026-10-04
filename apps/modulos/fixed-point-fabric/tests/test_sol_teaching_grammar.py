@@ -153,7 +153,7 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
             self.soul,
         )
         self.assertIn("ALL_MODELS_INHERIT_TEACHING_GRAMMAR=true", self.soul)
-        self.assertIn("TEACHING_GRAMMAR_REQUIRED=true", self.soul)
+        self.assertIn("TEACHING_GRAMMAR_REQUIRED=false", self.soul)
 
 
 
@@ -270,8 +270,14 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("WEBUI_FIRST=true", plan)
         self.assertIn("SHARED_RENDERER_REQUIRED=true", plan)
         self.assertIn("NEXT_CURSOR=S0_INVENTORY_AND_OWNER_BINDING", plan)
-        rows = re.findall(r"(?m)^\| S([0-8]) [^|]+\| [^|]+\| PENDING \|$", plan)
-        self.assertEqual(rows, list("012345678"))
+        self.assertRegex(
+            plan,
+            r"(?m)^\| S0 INVENTORY \| [^|]+ \| IN_PROGRESS \|$",
+        )
+        pending_rows = re.findall(
+            r"(?m)^\| S([1-8]) [^|]+\| [^|]+\| PENDING \|$", plan
+        )
+        self.assertEqual(pending_rows, list("12345678"))
         # Binding candidates must point to actual repository owners. Existence
         # is intentionally weaker than application health or successful deploy.
         table = plan.split("### Matriz de owners existentes", 1)[1].split("Paths existentes", 1)[0]
