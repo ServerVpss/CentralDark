@@ -674,3 +674,12 @@ CURRENT_OVER_HISTORY = true
 - **Conteúdo:** fechar bytes/metadados, cobertura visual, áudio e transcrição antes de promover interpretação; cue simbólico recupera receita/contexto, mas não concede write sozinho; provider conectado pode fechar gap sem virar owner; claim local/nativo permanece separado.
 - **Cristal:** `MULTIMODAL_COMPLETE_BEFORE_ACTION=true`; `CUE_IS_POINTER_NOT_AUTHORITY=true`; `CONNECTED_PROVIDER_CAN_CLOSE_CAPABILITY_GAP_WITHOUT_BECOMING_OWNER=true`; `ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true`.
 
+
+
+### [2026-10-04] SOL ↔ HERMES — Pivete aposentado como papel técnico
+- **Tipo:** LEARNING_INDEX / ROLE_BINDING
+- **Learning:** #161
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-SOL-HERMES-ROLE-BINDING-PIVETE-RETIRED.md`
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-sol-hermes-role-binding.md`
+- **Conteúdo:** CHEFE=intenção/autoridade; SOL=coordenação cognitiva oficial em voz/texto/superfícies; HERMES=executor/preservação/continuidade; PIVETE=vocativo/histórico somente. Drift técnico residual corrige automaticamente para HERMES sem re-perguntar.
+- **Cristal:** `SOL_COORDINATES_HERMES_EXECUTES=true`; `PIVETE_ROLE=RETIRED`; `ROLE_DRIFT_AUTO_REPAIR=true`; `NO_NEW_AGENT_REQUIRED=true`.
