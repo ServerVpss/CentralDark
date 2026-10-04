@@ -69,16 +69,16 @@ def _entries_for_paths(root: Path, paths: list[str]) -> list[dict[str, Any]]:
     resolved_root = root.resolve()
     entries: dict[str, dict[str, Any]] = {}
     for relative in sorted(set(paths)):
-        target = (root / relative).resolve()
+        target = (resolved_root / relative).resolve()
         if not target.is_relative_to(resolved_root):
             raise ValueError(f"path escapes root: {relative}")
         if target.is_file():
-            entry = _entry(root, target)
+            entry = _entry(resolved_root, target)
             entries[entry["path"]] = entry
         elif target.is_dir():
             for item in sorted(target.rglob("*")):
                 if item.is_file():
-                    entry = _entry(root, item)
+                    entry = _entry(resolved_root, item)
                     entries[entry["path"]] = entry
         else:
             raise FileNotFoundError(relative)
