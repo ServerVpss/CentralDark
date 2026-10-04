@@ -68,14 +68,16 @@ jobs:
         run: |
           set -Eeuo pipefail
           python -m venv .venv-pr-agent
-          .venv-pr-agent/bin/python -m pip install --upgrade pip --quiet
-          .venv-pr-agent/bin/pip install 'pr-agent==0.46.0' --quiet
+          env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/python -m pip install --upgrade pip --quiet
+          env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/pip install 'pr-agent==0.46.0' --quiet
+          env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/python -c 'import openai,sys; print("OPENAI_VERSION="+openai.__version__); print("OPENAI_PATH="+openai.__file__)'
 
       - name: 🤖 Review pelo modelo local CURRENT
         env:
           CONFIG__AI_PROVIDER: openai
           CONFIG__FALLBACK_MODELS: '[]'
-          CONFIG__CUSTOM_MODEL_MAX_TOKENS: '8192'
+          CONFIG__CUSTOM_MODEL_MAX_TOKENS: '32000'
+          CONFIG__MAX_MODEL_TOKENS: '32000'
           OPENAI__API_BASE: ${{ env.LOCAL_BRIDGE_BASE }}
           OPENAI__KEY: local-kylin
         run: |
@@ -89,5 +91,5 @@ jobs:
           echo "LOCAL_EXECUTION_CLASS=$LOCAL_EXECUTION_CLASS"
           echo "PR_URL=$PR_URL"
           echo "🤖 CentralDark Local AI — $LOCAL_MODEL iniciando review..."
-          .venv-pr-agent/bin/python -m pr_agent.cli \
+          env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/python -m pr_agent.cli \
             --pr_url="$PR_URL" review
