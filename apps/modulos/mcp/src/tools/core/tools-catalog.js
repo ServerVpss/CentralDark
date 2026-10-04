@@ -39,38 +39,71 @@ import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { observabilityTools } from "../observability/agent-patterns.js";
 import { buildkiteTools } from "../buildkite/buildkite.js";
 const TOOL_NAME_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
-const RAW_TOOLS = [
-    ...aprendizadoTools,
-    ...reuseHornTools,
-    ...conscienciaTools,
-    ...skillTools,
-    ...githubReadTools,
-    ...githubWriteTools,
-    ...githubAdminTools,
-    ...githubTools,
-    ...vpsRunOnceTools,
-    ...vpsFileTools,
-    ...vpsLazyTools,
-    ...pendenciasTools,
-    ...deployTools,
-    ...supabaseTools,
-    ...mcpAdminTools,
-    ...mcpDiagnosticsTools,
-    ...mcpPolicyTools,
-    ...integrationsTools,
-    ...painelTools,
-    ...eliteGatewayTools,
-    ...hybridObservabilityTools,
-    ...operationalTelemetryTools,
-    ...localHybridTools,
-    ...piveteTools,
-    ...cognitivoTools,
-    ...semanticTools,
-    ...geminiTools,
-    ...youtubeMediaTools,
-    ...observabilityTools,
-    ...buildkiteTools,
+const CATALOG_OWNER = "centraldark-mcp";
+const SOURCE_CATALOG = "apps/modulos/mcp/src/tools/core/tools-catalog.js";
+const PROOF_BOUNDARY = "DECLARED_CAPABILITY != RUNTIME_PROVEN";
+
+// A declaração é deliberadamente separada de prova: este catálogo descreve
+// o que o owner registra; não transforma a existência do handler em prova viva.
+const TOOL_GROUPS = [
+    ["aprendizado", aprendizadoTools, "hermes", "deterministic"],
+    ["reuse-horn", reuseHornTools, "hermes", "deterministic"],
+    ["consciencia", conscienciaTools, "hermes", "deterministic"],
+    ["skills", skillTools, "hermes", "deterministic"],
+    ["github", [...githubReadTools, ...githubWriteTools, ...githubAdminTools, ...githubTools], "github", "hybrid"],
+    ["vps", [...vpsRunOnceTools, ...vpsFileTools, ...vpsLazyTools], "vps", "hybrid"],
+    ["pendencias", pendenciasTools, "hermes", "deterministic"],
+    ["deploy", deployTools, "hermes", "hybrid"],
+    ["supabase", supabaseTools, "supabase", "hybrid"],
+    ["admin-providers", mcpAdminTools, "cloudflare|contabo|tailscale|hermes", "hybrid"],
+    ["mcp-diagnostics", mcpDiagnosticsTools, "hermes", "deterministic"],
+    ["mcp-policy", mcpPolicyTools, "hermes", "deterministic"],
+    ["integrations", integrationsTools, "multi-provider", "hybrid"],
+    ["painel", painelTools, "hermes", "deterministic"],
+    ["elite", eliteGatewayTools, "hermes", "hybrid"],
+    ["hybrid-observability", hybridObservabilityTools, "hermes", "hybrid"],
+    ["operational-telemetry", operationalTelemetryTools, "hermes", "deterministic"],
+    ["local-ai", localHybridTools, "kylin|local-ai", "local-ai"],
+    ["pivete", piveteTools, "hermes", "deterministic"],
+    ["cognitivo", cognitivoTools, "hermes|local-ai", "local-ai"],
+    ["semantic", semanticTools, "hermes|local-ai", "local-ai"],
+    ["gemini", geminiTools, "gemini", "hybrid"],
+    ["youtube", youtubeMediaTools, "youtube", "hybrid"],
+    ["observability", observabilityTools, "hermes", "deterministic"],
+    ["buildkite", buildkiteTools, "buildkite", "hybrid"],
 ];
+const RAW_TOOLS = TOOL_GROUPS.flatMap(([, tools]) => tools);
+const TOOL_DECLARATIONS = new Map();
+for (const [group, tools, provider, execution_class] of TOOL_GROUPS) {
+    for (const tool of tools) {
+        if (!TOOL_DECLARATIONS.has(tool.name)) {
+            TOOL_DECLARATIONS.set(tool.name, { group, provider, execution_class });
+        }
+    }
+}
+
+function toolMetadata(tool) {
+    const declaration = TOOL_DECLARATIONS.get(tool.name) ?? {
+        group: "unclassified",
+        provider: "unknown",
+        execution_class: "deterministic",
+    };
+    const destructive = tool.annotations?.destructiveHint === true;
+    const readOnly = tool.annotations?.readOnlyHint === true;
+    const mutation_class = readOnly ? "read-only" : destructive ? "destructive" : "write";
+    return {
+        provider: declaration.provider,
+        owner: CATALOG_OWNER,
+        execution_class: declaration.execution_class,
+        declaration_status: "declared",
+        runtime_status: "unproven",
+        proof_boundary: PROOF_BOUNDARY,
+        readback_required: mutation_class !== "read-only",
+        mutation_class,
+        source_catalog: SOURCE_CATALOG,
+        evidence_ref: `declaration:${declaration.group}`,
+    };
+}
 function isToolDefinition(tool) {
     return (typeof tool === "object" &&
         tool !== null &&
@@ -117,6 +150,7 @@ export function getCatalogSummary() {
             title: tool.annotations?.title ?? null,
             readOnly: tool.annotations?.readOnlyHint === true,
             destructive: tool.annotations?.destructiveHint === true,
+            ...toolMetadata(tool),
         })).sort((a, b) => a.name.localeCompare(b.name)),
     };
 }
