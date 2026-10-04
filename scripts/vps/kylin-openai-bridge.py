@@ -155,9 +155,10 @@ class IntegratedHandler(H):
         calls=decode_tool_calls(text,tools) if tools and data.get("tool_choice")!="none" else []
         message={"role":"assistant","content":None if calls else text}
         if calls:message["tool_calls"]=calls
-        result={"id":"kylin-native-"+uuid.uuid4().hex,"object":"chat.completion","created":int(time.time()),"model":resolve_current_model(),
+        binding=resolve_current_model_details()
+        result={"id":"kylin-native-"+uuid.uuid4().hex,"object":"chat.completion","created":int(time.time()),"model":binding["model"],
             "choices":[{"index":0,"message":message,"finish_reason":"tool_calls" if calls else "stop"}],
-            "_meta":{"usage_status":"UNAVAILABLE_BY_NATIVE_SDK","tool_binding":"model_generated_json_adapter" if tools else "native_text"}}
+            "_meta":{"usage_status":"UNAVAILABLE_BY_NATIVE_SDK","binding_source":binding.get("source"),"execution_class":binding.get("execution_class"),"tool_binding":"model_generated_json_adapter" if tools else "native_text"}}
         if data.get("stream"):
             self.send_response(200);self.send_header("Content-Type","text/event-stream");self.send_header("Cache-Control","no-cache");self.end_headers()
             delta={"role":"assistant"}

@@ -41,20 +41,27 @@ py_compile: PASS
 git diff --check: PASS
 ```
 
-## Runtime
+## Runtime proof
 
-O bridge deve ser redeployado pelo owner existente e o readback deve distinguir:
+Microdeploy reversível no owner existente:
 
 ```text
-LOCAL_ENDPOINT=PASS
-BRIDGE=PASS
-MODEL_NAME=PASS
-MODEL_SOURCE=PASS
-EXECUTION_CLASS=PASS
-ON_DEVICE_INFERENCE=UNKNOWN até prova específica
+backup=/root/.hermes/backups/model-source-hardening-20261004T192509Z
+centraldark-kylin-native-bridge.service=active
+centraldark-kylin-public-bridge.service=active
+
+/health=200
+model=kylin-qwen-plus
+source=gsettings:com.kylin.aisdk.model.cloud.nlp
+execution_class=cloud
+
+completion response model=kylin-qwen-plus
+completion content=BINDING_METADATA_PROOF
+completion _meta.binding_source=gsettings:com.kylin.aisdk.model.cloud.nlp
+completion _meta.execution_class=cloud
 ```
 
-`kylin-qwen-plus` continua sendo apenas o binding observado no momento; não é identidade arquitetural.
+O caminho local e o SDK nativo estão provados. `ON_DEVICE_INFERENCE` permanece `UNKNOWN`; a classe `cloud` anunciada pelo resolver não deve ser rebaixada nem reinterpretada.
 
 ## Invariantes
 

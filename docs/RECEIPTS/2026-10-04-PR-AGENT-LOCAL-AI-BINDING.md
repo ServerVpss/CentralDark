@@ -90,6 +90,35 @@ runner=UNKNOWN
 
 No momento da medição, os quatro runners Linux self-hosted estavam `online=true` e `busy=true`. Portanto o review local ainda não executou; não é `PASS` nem `FAIL`.
 
+## Lote executado — falha real e correção
+
+O run `37227037321` chegou ao runner `centraldark-vps-2`, mas falhou antes do PR-Agent porque `actions/setup-python@v6` tentou instalar Python 3.12, inexistente no openKylin 3.0:
+
+```text
+The version '3.12' with architecture 'x64' was not found for openKylin 3.0.
+```
+
+Correção mínima publicada no workflow:
+
+```text
+removido actions/setup-python@v6
+usar python3 já existente no runner
+python3 --version medido no job
+continue-on-error=false
+runner/model/source/execution_class registrados
+```
+
+Novo dispatch:
+
+```text
+run: 37228462840
+head: b0f9e61df6
+status: queued
+conclusion: UNKNOWN
+```
+
+O run está aguardando runner; não foi promovido a PASS.
+
 ## Next cursor
 
 `publicar workflow → disparar/medir um run de PR → provar health/model binding → provar PR-Agent usando 127.0.0.1:18435 → confirmar review publicado → receipt → retomar Self-Evolution com o mesmo resolver`

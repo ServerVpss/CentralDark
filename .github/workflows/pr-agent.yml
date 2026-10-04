@@ -34,7 +34,7 @@ jobs:
         github.event_name == 'workflow_dispatch' ||
         !github.event.pull_request.draft
       )
-    continue-on-error: true
+    continue-on-error: false
     env:
       LOCAL_BRIDGE_BASE: http://127.0.0.1:18435/v1
       LOCAL_BRIDGE_HEALTH: http://127.0.0.1:18435/health
@@ -44,22 +44,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🐍 Preparar Python 3.12
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
       - name: 🧿 Resolver e provar IA local CURRENT
         shell: bash
         run: |
           set -Eeuo pipefail
+          python3 --version
           health="$(curl -fsS --max-time 10 "$LOCAL_BRIDGE_HEALTH")"
           LOCAL_MODEL="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["model"])' <<<"$health")"
+          LOCAL_MODEL_SOURCE="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("source", "UNKNOWN"))' <<<"$health")"
+          LOCAL_EXECUTION_CLASS="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("execution_class", "UNKNOWN"))' <<<"$health")"
           test -n "$LOCAL_MODEL"
           printf 'LOCAL_MODEL=%s\n' "$LOCAL_MODEL" >> "$GITHUB_ENV"
-          printf 'LOCAL_MODEL_SOURCE=%s\n' "$LOCAL_BRIDGE_HEALTH" >> "$GITHUB_ENV"
+          printf 'LOCAL_MODEL_SOURCE=%s\n' "$LOCAL_MODEL_SOURCE" >> "$GITHUB_ENV"
+          printf 'LOCAL_EXECUTION_CLASS=%s\n' "$LOCAL_EXECUTION_CLASS" >> "$GITHUB_ENV"
+          printf 'LOCAL_BRIDGE_HEALTH=%s\n' "$LOCAL_BRIDGE_HEALTH" >> "$GITHUB_ENV"
           printf 'LOCAL_BRIDGE_HEALTH=PASS\n'
+          printf 'RUNNER_NAME=%s\n' "$RUNNER_NAME"
           printf 'LOCAL_MODEL=%s\n' "$LOCAL_MODEL"
+          printf 'LOCAL_MODEL_SOURCE=%s\n' "$LOCAL_MODEL_SOURCE"
+          printf 'LOCAL_EXECUTION_CLASS=%s\n' "$LOCAL_EXECUTION_CLASS"
 
       - name: 🐍 Preparar PR-Agent isolado
         run: |
@@ -79,6 +82,11 @@ jobs:
           export CONFIG__MODEL="openai/$LOCAL_MODEL"
           PR_NUMBER='${{ inputs.pr_number || github.event.pull_request.number }}'
           PR_URL="https://github.com/${{ github.repository }}/pull/${PR_NUMBER}"
+          echo "RUNNER_NAME=$RUNNER_NAME"
+          echo "LOCAL_MODEL=$LOCAL_MODEL"
+          echo "LOCAL_MODEL_SOURCE=$LOCAL_MODEL_SOURCE"
+          echo "LOCAL_EXECUTION_CLASS=$LOCAL_EXECUTION_CLASS"
+          echo "PR_URL=$PR_URL"
           echo "🤖 CentralDark Local AI — $LOCAL_MODEL iniciando review..."
           .venv-pr-agent/bin/python -m pr_agent.cli \
             --pr_url="$PR_URL" review
