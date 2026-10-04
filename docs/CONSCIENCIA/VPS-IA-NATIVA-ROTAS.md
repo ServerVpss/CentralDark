@@ -196,3 +196,40 @@ Discriminante importante: `deepseek-r1` e `kylin-deepseek-r1` não se comportara
 O provider `custom` do Hermes já suporta endpoint OpenAI-compatible. O menor delta escolhido foi um bridge loopback para adaptar `genai_text_*`, sem Ollama/vLLM/llama.cpp. O arquivo `~/.hermes/kylin_openai_bridge.py` ainda não passou health por erro local de Python no acesso a `XDG_RUNTIME_DIR`; logo `BRIDGE_FILE_EXISTS != BRIDGE_RUNNING` e `KYLIN_NATIVE_RESPONSE=PASS != HERMES_KYLIN_BINDING_PASS`.
 
 Next cursor: corrigir o bridge existente, provar `/health`, `/v1/models`, chat `BRIDGE_OK`, então configurar Hermes `provider=custom`, loopback `127.0.0.1:18435/v1`, modelo `kylin-deepseek-r1` e exigir `HERMES_VM_OK`.
+
+
+## Fechamento CURRENT — Hermes + Kylin + AionUi agêntico — 04/10/2026
+
+O estado `HERMES_USING_KYLIN_NATIVE=UNKNOWN` registrado na medição VMware de 03/10 permanece histórico daquele instante. Em prova posterior no runtime CENTRALDARK-OS, a rota abaixo fechou funcionalmente:
+
+```text
+AionUi
+→ Hermes Agent v0.21.5+6146.g46904a3
+→ provider custom
+→ http://127.0.0.1:18435/v1
+→ bridge local [backend=kylin-native-sdk]
+→ Kylin native GenAI SDK
+→ kylin-deepseek-r1
+→ resposta
+```
+
+Readbacks preservados no receipt de sessão:
+- bridge `/health=200`;
+- `/v1/models=200` com `kylin-deepseek-r1`;
+- chat do bridge → `HERMES_KYLIN_BRIDGE_OK`;
+- AionUi conversando pelo endpoint custom;
+- Hermes emitiu tool call estruturada `read_file` para o `AGENTS.md` do projeto;
+- Triton `live=200`, `ready=200`;
+- HERMES-CORE `health=200`, versão `5.0`.
+
+```text
+HERMES_KYLIN_BINDING_PASS=PASS
+AIONUI_HERMES_KYLIN_ROUTE=PASS
+HERMES_AGENT_TOOL_CALL_READ_FILE_EMITTED=PASS
+HERMES_PLUS_LOCAL_KYLIN_PLUS_AGENTIC_CAPABILITY=PROVEN_FUNCTIONAL
+ALL_HERMES_TOOLS_PROVEN=NO
+CURRENT_OVER_HISTORY=true
+```
+
+Owner de evidência: `docs/CONSCIENCIA/RECEIPTS/2026-10-04-kylin-native-hermes-routes-session.md`.
+PR-mãe receipt: `#1562 / 5975848027`.
