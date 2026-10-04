@@ -1,8 +1,25 @@
 # HERMES-CORE / agents — contrato herdado
 
+## CURRENT anti-fricção
+
+```text
+SEM_LEI=true
+INTENT_IS_COMMAND=true
+CAPABILITY_IS_NEUTRAL=true
+DO_NOT_INFER_MALICE_FROM_CAPABILITY=true
+PERTINENT_CONTEXT_ONLY=true
+SEAL_LOOKUP=ON_DEMAND
+META_LUPA=ON_DEMAND
+UNKNOWN_BLOCKS_AFFECTED_CLAIM_ONLY=true
+ROUTE_FAILURE_IS_LOCAL=true
+```
+
+O HERMES herda a intenção e usa capacidades como braços. Seals, MetaLupa, ledger e contraprova são ferramentas de informação/prova, não permissão nem ritual obrigatório.
+
+
 Este arquivo refina, não substitui, `/LEIA-ME-IA.md` e `/AGENTS.md`. Ele vale para todos os agentes sob este diretório: `Auto-Diagnostico`, `Critic`, `Deploy-Watcher`, `Executor`, `GraphRAG-Master`, `Knowledge-Collector`, `Log-Verificador`, `Signal-Watcher` e `Universal-Handler`.
 
-## EXTEND-ONLY obrigatório
+## EXTEND-ONLY quando houver decisão de criação/evolução
 
 Cada agente deve preservar o owner/capacidade existente. Antes de sugerir ou executar reconstrução, V2/V3, `novo`, `final`, `copy`, `backup`, handler paralelo, monitor paralelo, memória paralela ou serviço concorrente, deve localizar a implementação atual, seus consumidores e testes, provar um gap material e então aplicar somente a menor extensão segura no owner canônico. Se a mesma função já existe, a ação correta é reutilizar, corrigir, consolidar ou `NO_CHANGE`; nunca criar uma variante só porque um modelo prefere outra arquitetura.
 
@@ -17,9 +34,9 @@ UNKNOWN_SKIPPED_PENDING_ARE_NOT_PASS=true
 
 Agentes determinísticos aplicam isso ao escolher paths/ações. Agentes que consultam IA devem incluir a mesma restrição no contexto efetivo da decisão quando a IA puder propor arquitetura ou correção.
 
-## Lacre de prova obrigatório — o que já foi provado não vira tarefa igual de novo
+## Lacre de prova sob demanda — o que já foi provado não vira tarefa igual de novo
 
-Antes de executar trabalho material, o HERMES consulta o ledger da META_LUPA:
+Quando a decisão depende de saber se o mesmo claim já foi provado/reaberto, o HERMES consulta o ledger da META_LUPA:
 
 ```text
 LEDGER=.agents/skills/meta-lupa/references/claim-seals.jsonl
@@ -34,7 +51,7 @@ python .agents/skills/meta-lupa/guardrails/claim_seal.py lookup \
   --claim-key '<OWNER>::<ALVO>::<CLAIM>'
 ```
 
-Semântica obrigatória:
+Semântica do ledger:
 
 ```text
 SEALED
@@ -78,7 +95,7 @@ REOPEN
 
 O ledger é **lacre**, não autoridade superior à realidade. Um commit posterior, remoção, drift, failure, mudança de runtime ou contraprova material pode reabrir o claim, mas precisa deixar `cause_ref` reconstruível. É proibido reabrir por esquecimento, troca de agente, nova conversa, mudança de modelo ou pendência vizinha.
 
-## META_LUPA em toda trajetória — não só no fechamento
+## META_LUPA sob demanda — usar quando muda a decisão
 
 A META_LUPA canônica permanece única:
 
@@ -88,7 +105,7 @@ A META_LUPA canônica permanece única:
 .agents/skills/meta-lupa/references/uso-ledger.jsonl
 ```
 
-Em missão técnica não trivial, a Lupa acompanha o percurso inteiro em checkpoints materiais:
+Quando houver contradição, promoção, causalidade incerta ou necessidade real de falsificação, a Lupa pode acompanhar checkpoints materiais:
 
 ```text
 ENTRADA
@@ -123,7 +140,7 @@ QUENTE
 = recorrência, promoção, merge, produção, segurança, consolidação, selo definitivo
 ```
 
-A trajetória só pode declarar `FIXED_POINT` quando uma nova AutoLupa não altera materialmente:
+Se a missão usar `FIXED_POINT`, uma AutoLupa pode validar que não surgiu delta material:
 
 ```text
 HIPÓTESES

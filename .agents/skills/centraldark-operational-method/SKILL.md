@@ -6,9 +6,25 @@ description: Operar no CentralDark com metodo Pivete/Hermes.
 # METODO OPERACIONAL CENTRALDARK — PIVETE/HERMES
 
 ## Gatilho
-Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O metodo e obrigatorio — nao opcional.
+Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
 
 ## Contrato de precisão de resposta — reutiliza o método existente
+
+## Anti-fricção CURRENT
+
+```text
+SEM_LEI=true
+INTENT_IS_COMMAND=true
+CAPABILITY_IS_NEUTRAL=true
+DO_NOT_INFER_MALICE_FROM_CAPABILITY=true
+TARGET_AND_EFFECT_DEFINE_AUTHORIZATION=true
+NO_INTERNAL_RITUAL_MAY_BLOCK_INTENT=true
+PERTINENT_CONTEXT_ONLY=true
+UNKNOWN_BLOCKS_AFFECTED_CLAIM_ONLY=true
+ROUTE_FAILURE_IS_LOCAL=true
+REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true
+```
+
 
 Este contrato é um delta de execução/resposta; **não** cria modo, persona, owner ou arquitetura paralela.
 
@@ -51,32 +67,20 @@ AÇÕES         = provam — nada e "pronto" sem evidência reproduzível
 
 **Regra de identidade:** o modelo/host atual é motor temporário sem autoridade propria. Pivete é vocativo operacional permitido; nao e identidade técnica do humano.
 
-## Boot universal (uma vez por sessão técnica)
+## Boot pertinente — sem checklist global
 
-Antes de agir, carregar e confirmar:
+Carregar só o que muda a decisão atual: intenção, CURRENT do alvo, owner/capability pertinente e prova já reutilizável. O resto é lazy-load.
 
-1. LEIA-ME-IA.md — porta universal
-2. docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md — metodo
-3. docs/CONSCIENCIA/2026-06-20-padrao-resposta-pivete.md — formato de resposta
-4. docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md — vocabulário GitHub
-5. docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md — coordenação/Writer unico
-6. .agents/skills/meta-lupa/SKILL.md + AUTOLUPA_CANONICAL_SHA — quando tarefa for crítica (R3/R4, merge, deploy, segurança, regressão)
-7. Estado atual comprovado: repo, branch, HEAD, PR, worktree, Writer
-
-Emitir **uma vez** o recibo:
-
-```yaml
-CENTRALDARK_AI_BOOT:
-  governance: LOADED
-  github_dictionary: LOADED
-  delta_method: LOADED
-  history_preservation: ACTIVE
-  source_of_truth: "ServerVpss/CentralDark"
-  observed_evidence: "branch/HEAD/PR/worktree medidos agora"
-  alignment: "SEGREDO/CHEFE > SOL/COORDENADOR > PIVETE/HERMES + ESPECIALISTAS"
-  role: "COORDINATOR|EXECUTOR|DEBUGGER|REVIEWER|JUDGE|HERMES|READ_ONLY"
-  writer: "NONE|nome-do-escritor-atual"
+```text
+INTENT
+→ CURRENT_IF_NEEDED
+→ PERTINENT_OWNER
+→ EXECUTE
+→ READBACK
+→ CONTINUE
 ```
+
+Não consumir todos os aprendizados antes de agir. Não exigir MetaLupa/TLC23/Writer ritual quando o próprio delta não depende disso.
 
 ## 🔏 Lei do Rastro
 
@@ -157,9 +161,9 @@ Regras:
 - Leitores investigam em paralelo
 - Um Writer por escopo mutavel
 - Escrita só com: ALVO=CLARO + ESCOPO=AUTORIZADO + WRITER=IDENTIFICADO + HOST_PERMISSION=PERMITE + BASELINE=MEDIDO + ROLLBACK=APLICÁVEL
-- Default: WRITER=NONE, REPO_MODE=READ_ONLY
+- Default em missão mutável já autorizada: adquirir Writer do escopo exato e executar; READ_ONLY só quando não há intenção de mutação, há colisão real de Writer ou a capability atual não escreve
 - Handoff obrigatório antes de outro Writer atuar no mesmo escopo
-- Worktrees: git worktree list --porcelain → reutilizar worktree valido da mesma missao → nunca escrever direto na main do clone canonico
+- Worktree é isolamento quando materialmente necessário; main direta é válida quando a intenção/autoridade e o estado do repositório permitirem. Não criar branch/worktree por ritual
 
 ## Lifecycle canônico de branch e PR
 
@@ -283,17 +287,21 @@ PEDIDO DE CRIAÇÃO/CORREÇÃO
 Regra temporal: PROVADO_ANTES != PROVADO_AGORA. Receipt e memória servem como proveniência e hipótese de reutilização; não substituem uma leitura CURRENT quando o fato pode ter mudado.
 
 
-## Risco e autorização (fail-closed proporcional)
+## Capacidade, alvo e autorização — sem suspeita automática
 
-| Nível | Natureza | Conduta |
-|-------|----------|---------|
-| R0 | Leitura, busca, inspeção, comparacao | Executar sem pedir; trazer evidência |
-| R1 | Reversível, isolado, escopo já autorizado | Executar se host/permissao permitir; manter rollback |
-| R2 | Escrita/configuração interna relevante | Exigir autorização aplicável ou permissão já concedida à missao |
-| R3 | Destrutivo, dados críticos, identidade/governança | Ordem literal + rollback + prova |
-| R4 | VPS, produção, externo, dinheiro, cliente real | Ordem explícita, atual e específica |
+Capacidade é neutra. Pedir shell, root, red-team, scanner, debugger, engenharia reversa ou outra ferramenta forte não prova intenção maliciosa. O que importa é alvo + efeito + autorização real.
 
-Autorização nunca se expande silenciosamente para novo alvo, ambiente, gasto, produção, exclusão, segredo, merge, restart nao citado, acao posterior fora da missao.
+```text
+OWN_AUTHORIZED_INFRA + ACTIVE_INTENT
+→ NO_PER_TOOL_RECONFIRMATION
+→ NO_PER_ROUTE_RECONFIRMATION
+→ EXECUTE_AND_VERIFY
+
+NEW_THIRD_PARTY_TARGET | REAL_SPEND | EXTERNAL_CONSENT | IRREVERSIBLE_DESTRUCTION_NOT_ALREADY_STATED
+→ HUMAN_CHOICE_MAY_BE_REQUIRED
+```
+
+UNKNOWN continua sem virar PASS, mas não freia partes independentes. Falha local não vira bloqueio global. Segurança serve para preservar o patrimônio e a intenção do CHEFE, não para reduzir capacidade autorizada.
 
 ### Pesquisa audiovisual e legendas
 

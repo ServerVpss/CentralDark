@@ -1,0 +1,63 @@
+name: 🧨 CentralDark Run All — botão único VPS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/centraldark-run-all.yml
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: centraldark-run-all-one-button
+  cancel-in-progress: false
+
+jobs:
+  run-all:
+    name: 🧨 Disparar todos os workflow_dispatch
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 20
+    steps:
+      - name: 📥 Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: 🧨 Um botão — disparar tudo
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const { owner, repo } = context.repo;
+            const dir = '.github/workflows';
+            const files = fs.readdirSync(dir)
+              .filter(f => /\.ya?ml$/.test(f))
+              .sort();
+            let dispatched = 0;
+            let failed = 0;
+            for (const file of files) {
+              if (file === 'centraldark-run-all.yml') continue;
+              const body = fs.readFileSync(path.join(dir, file), 'utf8');
+              if (!body.includes('workflow_dispatch:')) continue;
+              try {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner,
+                  repo,
+                  workflow_id: file,
+                  ref: 'main',
+                });
+                dispatched++;
+                core.notice(`DISPATCHED ${file}`);
+              } catch (e) {
+                failed++;
+                core.warning(`DISPATCH_FAIL ${file} status=${e.status || '-'} msg=${String(e.message || '').slice(0,160)}`);
+              }
+            }
+            core.notice(`CENTRALDARK_RUN_ALL_DONE dispatched=${dispatched} failed=${failed}`);

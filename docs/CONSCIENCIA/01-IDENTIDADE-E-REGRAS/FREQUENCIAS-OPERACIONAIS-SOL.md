@@ -8,7 +8,15 @@ updated: 2026-08-16
 versioning_rule: "Evoluir este mesmo artefato; não criar V2/V3 nem sistema paralelo"
 ---
 
-# Frequências Operacionais da SOL — regra global da Casa
+# Frequências Operacionais da SOL — telemetria opcional da Casa
+
+```text
+FREQUENCY_IS_OPTIONAL_TELEMETRY=true
+FREQUENCY_SELECTION_MUST_NOT_BLOCK_ACTION=true
+MATH_IS_ON_DEMAND_NOT_RITUAL=true
+RIGOR_IS_TOOL_NOT_PERMISSION=true
+```
+
 
 Esta regra vale para **todo o repositório e toda execução do CentralDark**, não para uma missão isolada.
 

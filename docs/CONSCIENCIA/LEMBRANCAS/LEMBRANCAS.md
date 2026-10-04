@@ -403,8 +403,8 @@ Conteúdo: O CHEFE cristalizou um padrão transportável entre sistemas: partir 
 `1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 20 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41 → 42 → 43 → 44 → 45 → 46 → 47 → 48 → 49 → 50 → 51 → 52 → 53 → 54 → 55 → 56 → 57 → 58 → 59 → 60 → 61 → 62 → 63 → 64 → 65 → 66 → 67 → 68 → 69 → 70 → 71 → 72 → 73 → 74 → 75 → 76 → 77 → 78 → 79 → 80 → 81 → 82 → 83 → 84 → 85 → 86 → 87 → 88 → 89 → 90 → 91 → 92 → 93 → 94 → 95 → 96 → 97 → 98 → 99 → 100 → 101 → 102 → 103 → 104 → 105 → 106 → 107 → 108 → 109 → 110 → 111 → 112 → 113 → 114 → 115 → 116 → 117 → 118 → 119 → 120 → 121 → 122 → 123 → 124 → 125 → 126 → 127 → 128 → 129 → 130 → 131 → 132 → 133 → 134 → 135 → 136 → 137 → 138 → 139 → 140 → 141 → 142 → 143 → 144 → 145 → 146 → 147 → 148 → 149 → 150 → 151 → 152`
 
 `CANONICAL_LEARNING_FIRST=1`
-`CANONICAL_LEARNING_LAST=152`
-`CANONICAL_LEARNING_COUNT=152`
+`CANONICAL_LEARNING_LAST=156`
+`CANONICAL_LEARNING_COUNT=156`
 `CANONICAL_NUMERIC_SEQUENCE_PASS=true`
 `LEGACY_DUPLICATE_HEADINGS_PRESERVED=true`
 `LEGACY_GAPS_ARE_HISTORICAL_NOT_MISSING_LEARNING_IDS=true`
@@ -598,4 +598,61 @@ CURRENT_OVER_HISTORY = true
 - **Relevância:** alta
 - **Eixo:** bancada viva → reconciliação preservativa → cristalização → replay VPS
 - **Conteúdo:** `SHARED/CentralDark` é a forja viva do mesmo sistema. Sincronizar não significa sobrescrever: medir o GitHub CURRENT, inventariar o delta local, classificar `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`, preservar o funcional e reconciliar por owner. O runner CI permanece isolado em `_work`. Depois de cristalizado no VMware, o mesmo artefato/fingerprint segue para a VPS twin 24/7.
+
+### [2026-10-03] Compressão por invariante + bindings VMware → VPS
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #153
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-COMPRESSAO-INVARIANTE-BINDINGS-VMWARE-VPS.md`
+- **Conteúdo:** quantidade bruta não define arquitetura; classificar por efeito/owner, comprimir em famílias e reutilizar relógio/dispatcher. Jobs self-hosted amarelos com runner_name vazio continuam queued, não executando. VMware já enxerga SHARED/ssh + SHARED/secrets e possui binding SSH para a VPS; TCP/22 direto passa. Bloqueio atual é known_hosts stale, não ausência de chave/rota. Casa não é necessária como salto SSH. Segredos permanecem fora do Git.
+- **Cristal:** `RAW_COUNT_IS_NOT_ARCHITECTURE=true`; `COMPRESS_BY_INVARIANT_BEFORE_CREATING=true`; `QUEUED_IS_NOT_RUNNING=true`; `CASA_REQUIRED_AS_SSH_HOP=NO`; `KNOWN_HOSTS_STALE=PROVEN`; `SECRETS_STAY_OUT_OF_GIT=true`.
+
+### [2026-10-03] Receita VMware → VPS direto — binding cross-OS
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #154
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-RECEITA-VMWARE-VPS-DIRECT-SSH-BINDING.md`
+- **Owner da receita:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#VMWARE_VPS_DIRECT_SSH_BINDING_PATH`
+- **Conteúdo:** a rota/chave já existiam; a falha raiz era `IdentityFile` Windows dentro do Linux. Backup + adaptação somente do binding local + `ssh -G` + prova SSH fecharam VMware→VPS sem Casa. VM e VPS usam o mesmo hostname, então machine-id SHA-256 foi usado como contraprova de máquina distinta. Trust persistente da nova host key continua UNKNOWN até âncora independente.
+- **Cristal:** `BYTE_EQUAL_CONFIG != VALID_CROSS_OS_BINDING`; `VMWARE_TO_VPS_SSH_AUTH=PASS`; `CASA_REQUIRED_AS_SSH_HOP=NO`; `PERSISTENT_HOSTKEY_TRUST=UNKNOWN`; `SECRETS_STAY_OUT_OF_GIT=true`.
+
+### [2026-10-03] Cristal VMware Forge + Obsidian + sync preservativo
+- **Tipo:** LEARNING_INDEX
+- **Learning:** #155
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-CRISTAL-VMWARE-FORGE-OBSIDIAN-PRESERVE-GOLD-SYNC.md`
+- **Owner da receita:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC`
+- **Conteúdo:** a própria raiz `SHARED/CentralDark` é o vault/cockpit da CentralDark. HUD/Home/Pendências/BRAIN/Obsidian/plugin existente convergem na mesma forja. A `main` entra por reconciliação preservativa: classificar `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`, preservar ouro e UNKNOWN, aplicar somente delta seguro por owner, manter CI em `_work`, gerar fingerprint/receipt e preparar replay VPS.
+- **Cristal:** `OBSIDIAN_VAULT_ROOT=SHARED/CentralDark`; `SYNC_MEANS_RECONCILE_NOT_OVERWRITE=true`; `DOT_OBSIDIAN_LOCAL_STATE_NOT_COMMITTED=true`; `HUD_HTML_RUNTIME_BUILD_REQUIRED=false`; `PLUGIN_BUILD_REQUIRED_ONLY_ON_SOURCE_CHANGE=true`.
+
+### [2026-10-03] Fragmentos da “cabeça” externalizada — método do CHEFE + seleção temporal
+- **Tipo:** CHEFE_STATED_METHOD / SESSION_MEMORY
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FRAGMENTOS-DA-CABECA-EXTERNALIZADA-SELECAO-TEMPORAL.md`
+- **Proveniência:** explicação direta do CHEFE nesta sessão.
+- **Conteúdo:** no contexto CentralDark, “leia minha cabeça” significa consultar os fragmentos externalizados em `docs/BRAIN`, `docs/CONSCIENCIA` e owners relacionados antes de inferir genericamente. O CHEFE usa esses documentos para cristalizar seletivamente o essencial do próprio método/visão: fragmentos preservam proveniência e tempo; Lembranças guardam o caminho; Aprendizados destilam o que sobrevive a confronto; CURRENT continua governando o presente.
+- **Seleção temporal:** material produzido sobre um snapshot antigo — inclusive Pesquisa Aprofundada deixada rodando enquanto o organismo evolui — retorna como CANDIDATE e deve ser peneirado contra o CURRENT de chegada. Duplicado→reuse; superado→history/stale; contradito→não promove; sem prova→UNKNOWN; sobrevivente→candidato a invariante/delta útil.
+- **Preservação:** não apagar o que era verdadeiro/dito no tempo; adicionar camada, proveniência, correção e motivo. `DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true`; `RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY=true`; `DELAY_IS_NOT_PROOF=true`; `CURRENT_OVER_HISTORY=true`; `RAW_PRIVATE_REASONING_NOT_STORED=true`.
+- **Promoção:** nenhuma. Este registro não cria #156 nem altera a sequência de Aprendizados; reutiliza a arquitetura de memória existente.
+
+### [2026-10-03] Compilador de cristal portátil + seleção temporal
+- **Tipo:** LEARNING_INDEX / EXECUTABLE_CRYSTAL
+- **Learning:** #156
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-COMPILADOR-CRISTAL-PORTATIL-SELECAO-TEMPORAL.md`
+- **Owner:** `.agents/skills/knowledge-compiler/`
+- **Conteúdo:** o cristal passa a ser programa portátil: o Knowledge Compiler existente recebe backend Python que preserva semântica e adapta somente bindings Windows/VMware/VPS. Pesquisa atrasada volta como CANDIDATE e reentra no CURRENT; `SSH_AUTH != HOSTKEY_TRUST`; `QUEUED != RUNNER_ASSIGNMENT`; bytes alterados exigem novo SHA-256 e preservam o hash anterior por lineage.
+- **Prova:** `CRYSTAL_RUNTIME_COMPILER_TEST=PASS` executado na VMware com plano `centraldark.compiled-plan.v2`.
+- **Cristal:** `PYTHON=KNOWLEDGE_EXECUTABLE_BACKEND`; `JSON=MATERIALIZED_CRYSTAL`; `HASH=IDENTITY`; `RECEIPT=RUNTIME_EFFECT_PROOF`.
+
+
+
+### [2026-10-03] Hermes — intenção = escopo global, ferramenta = braço
+- **Tipo:** LEARNING_INDEX / SESSION_MEMORY
+- **Learning:** #157
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-HERMES-INTENCAO-ESCOPO-GLOBAL-FULL-ACCESS.md`
+- **Conteúdo:** a intenção do CHEFE generaliza a missão por todo o universo realmente autorizado e acessível; rota/ferramenta não cria escopo separado. Nova ferramenta amplia capabilities do mesmo Hermes. Nesta sessão o Kylin respondeu via SDK nativa com `kylin-deepseek-r1`, enquanto o binding final Hermes→Kylin permaneceu UNKNOWN por erro local no bridge.
+- **Cristal:** `INTENT_IS_GLOBAL_SCOPE=true`; `ROUTE_IS_NOT_SCOPE=true`; `TOOL_GIVEN_BECOMES_CAPABILITY=true`; `ROUTE_FAIL_DOES_NOT_END_MISSION=true`; `REALITY_IS_JUDGE=true`.
+
+### [2026-10-03] Sem lei operacional — anti-fricção
+- **Tipo:** LEARNING_INDEX / SESSION_MEMORY
+- **Learning:** #158
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-SEM-LEI-ANTI-FRICCAO.md`
+- **Conteúdo:** intenção governa; capacidade é neutra; poder técnico não implica malícia; ritual/checklist/gate interno não é permissão nem freio global. Contexto e prova entram por pertinência; UNKNOWN bloqueia somente claim dependente.
+- **Cristal:** `SEM_LEI=true`; `CAPABILITY_IS_NEUTRAL=true`; `PERTINENT_CONTEXT_ONLY=true`; `ALL_LEARNINGS_BOOT=false`; `CANONICAL_GATE_NON_BLOCKING=true`.
 

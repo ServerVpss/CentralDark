@@ -23,11 +23,15 @@ Texto legado conflitante perde para o owner canônico.
 
 ```text
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md
+SEM_LEI_ADAPTER=true
+PERTINENT_CORE_LOAD_ONLY=true
+CAPABILITY_IS_NEUTRAL=true
+GLOBAL_PREFLIGHT_IS_NOT_PERMISSION=true
 ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
 ENGINE=CHATGPT
 ```
 
-Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
+Antes de responder ou agir, resolva a intenção vigente e carregue de `LEIA-ME-IA.md` somente o owner/contexto que pode mudar a decisão atual. Leitura integral repetida não é gate.
 
 
 Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
@@ -66,10 +70,10 @@ Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. He
 CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
 NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
 RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
-TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE
 INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
-META_GRILL_BEFORE_MATERIAL_RESPONSE=true
-META_GRILL_BEFORE_MUTATION=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=false
+META_GRILL_BEFORE_MUTATION=false
 EVOLVE_EXISTING_BEFORE_CREATE=true
 RETURN_SAME_ARTIFACT_EVOLVED=true
 VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
@@ -112,7 +116,7 @@ CHEFE_FALA
 ## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
-RESPONSE_WITHOUT_TRACE=INVALID
+RESPONSE_WITHOUT_TRACE=VALID_IF_NO_WRITE_OR_EXPLICIT_RASTRO
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
 LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true

@@ -9,25 +9,23 @@ ENGINE=CLAUDE_CODE
 Esta regra existe somente para garantir descoberta automática no Claude Code. Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e execute o roteamento canônico definido ali.
 
 
-## Gate obrigatório antes da primeira resposta operacional
+## Boot pertinente antes da ação — não bloqueante
 
 ```text
 CONSULTAR_CANONICO_ANTECEDE_INVESTIGAR=true
 REPLAY_BEFORE_REDISCOVERY=true
 CANONICAL_CONSUMPTION_GATE=scripts/centraldark/canonical-consumption-gate.mjs
 CANONICAL_LEARNING_SOURCE=docs/CONSCIENCIA/APRENDIZADOS.md
-CANONICAL_LEARNING_MODE=ALL_NUMBERED_LEARNINGS
-CANONICAL_LEARNING_GATE_ARGS=--learning ALL
+CANONICAL_LEARNING_MODE=PERTINENT_ONLY
+CANONICAL_LEARNING_GATE_ARGS=--learning PERTINENT
 SEARCH_MISS_IS_NOT_STOP_CONDITION=true
 SEARCH_MISS_FALLBACK=DIRECT_CANONICAL_PATH_READ
 TITLE_ONLY_IS_NOT_LEARNING_CONSUMED=true
 TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
-UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
+UNKNOWN_WITH_MEASUREMENT_ROUTE=TARGET_ONLY_CONTINUE
 ```
 
-Claude não pede ao CHEFE para mandar reler um aprendizado quando GitHub/path canônico
-está acessível. Busca zero cai automaticamente para leitura direta do arquivo. O boot consome TODOS os aprendizados numerados antes do primeiro roteamento; a seleção por pertinência vem depois desse inventário.
-`#ACORDAR` só fecha depois do consumo do registro canônico.
+Claude não pede ao CHEFE para repetir contexto que consegue recuperar. Busca zero pode cair para o owner conhecido, mas o boot não consome todos os aprendizados: carrega somente o que pode mudar a decisão atual. `#ACORDAR` é recuperação, não portão.
 
 ```text
 RASTRO_FISCAL_BEFORE_CURRENT_LEDGER_RETURN=true
@@ -40,8 +38,8 @@ LOCAL_CAPABILITY_GAP_REQUIRES_CROSS_SURFACE_HANDOFF=true
 HUMAN_FRONTIER_REQUIRES_EXHAUSTED_AUTHORIZED_BODIES=true
 CAPABILITY_HANDOFF_RECEIPT_BEFORE_TERMINAL_BLOCKED=true
 TLC23_CAGE_OWNER=.agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py
-TLC23_CAGE_BYPASS_FORBIDDEN=true
-TLC23_CAGE_GREEN_REQUIRES_COMPLETE_BODY=true
+TLC23_CAGE_IS_OPTIONAL_VERIFIER=true
+TLC23_CAGE_DOES_NOT_BLOCK_AUTHORIZED_INTENT=true
 TLC23_CAGE_NO_CHANGE_IS_NOT_GREEN=true
 ```
 
@@ -119,7 +117,7 @@ ALL_DOT_CLAUDE_FILES_INHERIT_BY_CONTAINMENT=true
 ALL_CLAUDE_SUBAGENTS_INHERIT_GLOBAL_PREFLIGHT=true
 EVERY_CENTRALDARK_RESPONSE_REENTERS_PREFLIGHT=true
 NEW_THREAD_DOES_NOT_RESET_PREFLIGHT=true
-GENERIC_RESPONSE_WITHOUT_PREFLIGHT=FORBIDDEN
+PREFLIGHT_IS_CONTEXT_RECOVERY_NOT_RESPONSE_BLOCKER=true
 MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
 ```
 

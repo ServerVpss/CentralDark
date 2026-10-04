@@ -1034,6 +1034,228 @@
         "fixed_point_requires_all_applicable_layers": true,
         "non_applicable_layer_must_be_explicit": true
       }
+    },
+    "VMWARE_VPS_DIRECT_SSH_BINDING_PATH": {
+      "claim_key": "VMWARE_VPS_DIRECT_SSH_BINDING_PATH",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+      "lock_key": "564e2fa6a5b061bf316ff8d3074aeeb479399d0eabbb6ee327bb05149d85b541",
+      "state": "SEALED_PROVEN",
+      "proof_target": "VMWARE_CAN_AUTHENTICATE_TO_VPS_WITHOUT_CASA_HOP_USING_EXISTING_KEY_AND_ENVIRONMENT_ADAPTED_IDENTITYFILE",
+      "evidence_ref": "LEARNING_154 + runtime probe 2026-10-03 + expanded remembrance",
+      "observed_at": "2026-10-03",
+      "counterproof": "PASS_AUTH_PATH",
+      "receipt_ref": "https://github.com/ServerVpss/CentralDark/pull/1562",
+      "security_frontier": {
+        "persistent_hostkey_trust": "UNKNOWN_UNTIL_INDEPENDENT_AUTHORIZED_ANCHOR",
+        "current_observed_ed25519_fingerprint": "SHA256:KkbBd5sOR1boP8ldlWh45eWN2DY8RPjOHtXX+4FQhIE",
+        "temp_hostkey_bypass": "PROOF_ONLY_NON_PERSISTENT",
+        "secrets_committed": false
+      },
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "a5e27b72a31829b5a911ca6170efd1dc87a0ee69b7c7ba2991930ea2ead57602",
+        "proof_plan_hash": "851031cc65df288faba6e049c6a9eeba2a30e9f271dc369f6640aaad22db861c",
+        "result_schema_hash": "2f6812101c896e69dad7806aa9b81c1d559519a79b3ea6cf68ad050b46f4e6e6",
+        "effect_schema_hash": "8cb67c6207c2539b9e5d222db227c00a3367e3335f2bb8695d57cae0d11749b4",
+        "execution_commands": [
+          "measure existing alias/config/TCP before mutation",
+          "classify network vs auth vs host-key vs path binding",
+          "backup local SSH config before binding mutation",
+          "adapt only IdentityFile path to guest OS when readback proves mismatch",
+          "read back effective config with ssh -G",
+          "prove TCP/22",
+          "prove publickey authentication while isolating persistent host-key trust",
+          "distinguish local and remote machines with machine-id SHA256",
+          "keep persistent host-key promotion as a separate security claim"
+        ],
+        "proof_commands": [
+          "ssh -G segredo-vpss",
+          "ssh-keygen -F <VPS_HOST> -f ~/.ssh/known_hosts",
+          "ssh-keyscan -T 5 -t ed25519 <VPS_HOST>",
+          "sha256sum /etc/machine-id",
+          "remote whoami + remote machine-id SHA256 after auth"
+        ],
+        "expected_results": [
+          "effective IdentityFile is a Linux guest path",
+          "TCP22=PASS",
+          "SSH_AUTH_VMWARE_TO_VPS=PASS",
+          "REMOTE_USER=root",
+          "LOCAL_MACHINE_ID_SHA256 != REMOTE_MACHINE_ID_SHA256",
+          "CASA_REQUIRED_AS_SSH_HOP=NO",
+          "PERSISTENT_HOSTKEY_TRUST remains UNKNOWN until independently anchored"
+        ],
+        "expected_effect": "VMWARE_CAN_REACH_AND_AUTH_TO_VPS_WITHOUT_CASA_HOP",
+        "result_schema": "centraldark.vmware-vps-direct-ssh.result.v1",
+        "environment_bindings": [
+          "SSH_ALIAS",
+          "VPS_HOST",
+          "SSH_USER",
+          "SSH_CONFIG_PATH",
+          "SSH_IDENTITYFILE_PATH",
+          "KNOWN_HOSTS_PATH",
+          "SHARED_SSH_ROOT",
+          "SHARED_SECRETS_ROOT",
+          "HOSTKEY_FINGERPRINT",
+          "LOCAL_MACHINE_ID_HASH",
+          "REMOTE_MACHINE_ID_HASH"
+        ],
+        "commands_executable": true,
+        "execution_policy": "MUTATE_LOCAL_BINDING_ONLY_WITH_BACKUP__HOSTKEY_BYPASS_PROOF_ONLY",
+        "proof_commands_read_only": true,
+        "self_test_command": "ssh -G alias + TCP22 + authenticated remote identity proof",
+        "self_test_result": "PASS_AUTH_PATH__PERSISTENT_HOSTKEY_TRUST_UNKNOWN",
+        "result_match_policy": "RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH",
+        "raw_output_byte_equality_required": false,
+        "environment_binding_report": {
+          "SSH_ALIAS": "segredo-vpss",
+          "VPS_HOST": "89.117.78.124",
+          "SSH_USER": "root",
+          "SSH_CONFIG_PATH": "~/.ssh/config",
+          "SSH_IDENTITYFILE_PATH": "~/.ssh/segredo_vps_ed25519",
+          "CONFIG_BACKUP": "~/.ssh/config.pre-vm-binding-20261003",
+          "KNOWN_HOSTS_PATH": "~/.ssh/known_hosts",
+          "SHARED_SSH_ROOT": "/home/CENTRAKDARK-OS/SHARED/ssh",
+          "SHARED_SECRETS_ROOT": "/home/CENTRAKDARK-OS/SHARED/secrets",
+          "HOSTKEY_FINGERPRINT": "SHA256:KkbBd5sOR1boP8ldlWh45eWN2DY8RPjOHtXX+4FQhIE",
+          "LOCAL_MACHINE_ID_SHA256": "0f9dd395682f32a0ca8ada9fe8ef5300e77bcdfd35764be90c38a1f004d43ad8",
+          "REMOTE_MACHINE_ID_SHA256": "c61bd228339394e6631c851e234260a0c5b66359c2b9ed417a5895875fb5b93b",
+          "SECRET_VALUES_STORED": false
+        }
+      }
+    },
+    "VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC": {
+      "claim_key": "VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+      "lock_key": "90b98d0a64eca63a1da217b7c9de5072bcf107e3f2800768d10e78b26545c45b",
+      "state": "SEALED_RECIPE_RUNTIME_EXECUTION_PENDING",
+      "proof_target": "MAIN_CURRENT_RECONCILED_INTO_VMWARE_FORGE_WITH_LOCAL_GOLD_PRESERVED_AND_OBSIDIAN_HUD_INTEGRATED",
+      "evidence_ref": "LEARNING_155 + expanded remembrance + runtime materialization 2026-10-03",
+      "observed_at": "2026-10-03",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "557819f7b6230625330f8870cd41d69c1a16f21e3e40d644f00cd7aea4b9ff24",
+        "proof_plan_hash": "885608acd3366d0972a0207e316f445f36ca8eccaa024365e0da2fa442afad9a",
+        "result_schema_hash": "8cd2c4e36f31316c6f65af6922e78c97a17a6cf6e2a0e6b88b60325cbfc3ca37",
+        "effect_schema_hash": "1e1f8d17d66cc3374fcffaa481e0fe0fa218c06aee2566d6a8bdc303c7ec2c2e",
+        "execution_commands": [
+          "run CentralDark global cross-context preflight",
+          "measure forge remote/branch/HEAD/dirty state before mutation",
+          "fetch main CURRENT without reset or checkout overwrite",
+          "classify delta as LOCAL_GOLD/ALREADY_IN_MAIN/STALE/CONFLICT/UNKNOWN",
+          "preserve LOCAL_GOLD and UNKNOWN",
+          "reconcile only proven-safe delta by existing owner",
+          "keep CI _work isolated from SHARED/CentralDark",
+          "keep Obsidian rooted in same forge with .obsidian local-only",
+          "verify HUD/Home/Pendencias canonical links",
+          "verify existing obsidian-plugin-grafo-vivo build and Knowledge Hub binding",
+          "generate hashes/fingerprint/receipt",
+          "stop destructive write on CONFLICT or UNKNOWN",
+          "prepare VMware crystal for VPS replay"
+        ],
+        "proof_commands": [
+          "git remote -v + git branch --show-current + git rev-parse HEAD",
+          "git status --porcelain before mutation",
+          "git fetch origin main without merge/reset",
+          "git merge-base HEAD origin/main",
+          "differential inventory with LOCAL_GOLD/ALREADY_IN_MAIN/STALE/CONFLICT/UNKNOWN",
+          "git check-ignore .obsidian/**",
+          "hash Home.md HUD.html Pendencias.md and obsidian plugin build",
+          "verify CI workspace path is outside SHARED/CentralDark",
+          "emit result receipt with PASS/CONFLICT/UNKNOWN/NEXT_CURSOR"
+        ],
+        "expected_results": [
+          "FORGE_IDENTITY=PASS",
+          "FETCH_MAIN_NO_WORKTREE_OVERWRITE=PASS",
+          "LOCAL_GOLD_PRESERVED=PASS",
+          "UNKNOWN_OVERWRITTEN=NO",
+          "DOT_OBSIDIAN_GIT_IGNORED=PASS",
+          "OBSIDIAN_HUD_LINKAGE=PASS",
+          "CI_WORKSPACE_ISOLATED=PASS",
+          "CONFLICT_OR_UNKNOWN_STOPS_DESTRUCTIVE_WRITE=true",
+          "RESULT_RECEIPT_EMITTED=true"
+        ],
+        "expected_effect": "MAIN_CURRENT_RECONCILED_INTO_VMWARE_FORGE_WITH_LOCAL_GOLD_PRESERVED_AND_OBSIDIAN_HUD_INTEGRATED",
+        "result_schema": "centraldark.vmware-forge-preserve-gold-sync.result.v1",
+        "environment_bindings": {
+          "FORGE_WINDOWS_PATH": "E:\\VMs\\CENTRALDARK-OS\\SHARED\\CentralDark",
+          "FORGE_GUEST_WRITE_PATH": "/home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED/CentralDark",
+          "CASA_E_WIDE_ROUTE_WRITE": "EIO_OBSERVED",
+          "DEDICATED_SHARE_WRITE": "PASS_OBSERVED",
+          "CANONICAL_REMOTE": "https://github.com/ServerVpss/CentralDark.git",
+          "CANONICAL_BRANCH": "main",
+          "CI_WORKSPACE": "~/actions-runner-vmware/_work",
+          "OBSIDIAN_PLUGIN_OWNER": "apps/modulos/obsidian-plugin-grafo-vivo",
+          "OLD_WINDOWS_DOT_OBSIDIAN_BYTES": "UNKNOWN",
+          "SECRET_VALUES_STORED": false
+        },
+        "security_boundary": {
+          "secret_values_in_git": false,
+          "private_key_content_in_receipts": false,
+          "token_or_password_in_markdown": false,
+          "dot_obsidian_local_state_not_committed": true,
+          "unknown_not_overwritten": true
+        },
+        "commands_executable": true,
+        "runtime_sync_execution": "PENDING",
+        "current_materialization": {
+          "home_hud_pendencias_in_forge": "PASS",
+          "dot_obsidian_created": "PASS",
+          "canonical_plugin_build_copied": "PASS",
+          "learning_152_and_brain_links": "PASS",
+          "old_windows_dot_obsidian_reconciled": "UNKNOWN"
+        }
+      }
+    },
+    "KNOWLEDGE_COMPILER_PORTABLE_CRYSTAL_RUNTIME": {
+      "claim_key": "KNOWLEDGE_COMPILER_PORTABLE_CRYSTAL_RUNTIME",
+      "owner": ".agents/skills/knowledge-compiler/",
+      "learning_ref": 156,
+      "state": "BACKEND_COMPILE_AND_CANONICAL_REGISTRATION_PROVEN_RUNTIME_EFFECT_PENDING",
+      "observed_at": "2026-10-03",
+      "source_artifact_lineage": {
+        "parent_package_sha256": "4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6",
+        "successor_package_sha256": "9e99657b37dbc99a474067957956ccb52067c142c3108558be79aa9e2bbee2f0",
+        "rule": "CHANGED_BYTES_REQUIRE_NEW_SHA256"
+      },
+      "compiler": {
+        "backend": ".agents/skills/knowledge-compiler/scripts/crystal-runtime-compiler.py",
+        "crystal": ".agents/skills/knowledge-compiler/crystals/vmware-forge-obsidian-preserve-gold-sync.json",
+        "regression": ".agents/skills/knowledge-compiler/tests/crystal-runtime-compiler.test.py",
+        "compiled_crystal_fingerprint": "d1fd0fc3f30b4e35ea864a24ec522cdaa227a1c19a9b4119cd20d1779538746e",
+        "lock_key": "dfc11b978498393ef13c42f2c583ef0ac0109c3d45585ff561ad2abcaa746d1f",
+        "proof_plan_hash": "85857899510cae71c0cc8cdb2973c232f291f9ac0e09bf7283c30ce50ec5c534",
+        "result_schema_hash": "75d56a005d5d50ad8bb3460fc0c77289827364807a22ce80ce475b6e854de9a3",
+        "effect_schema_hash": "1e1f8d17d66cc3374fcffaa481e0fe0fa218c06aee2566d6a8bdc303c7ec2c2e"
+      },
+      "proof": {
+        "vmware_backend_test": "PASS",
+        "compiled_plan_schema": "centraldark.compiled-plan.v2",
+        "target": "vmware",
+        "temporal_policy": "RETURNING_RESEARCH_IS_CANDIDATE_NOT_AUTHORITY",
+        "persistent_hostkey_trust": "UNKNOWN_UNTIL_INDEPENDENT_ANCHOR",
+        "runner_assignment": "UNKNOWN_UNTIL_REAL_ASSIGNMENT",
+        "forge_mutable_reconciliation": "PENDING",
+        "global_learning_lineage": "PASS",
+        "recipe_yaml_parse": "PASS",
+        "recipe_instance_present": true,
+        "semantic_index_to_learning_156": "PASS",
+        "secret_pattern_scan_touched_files": "PASS_NO_MATCH",
+        "repo_source_crystal_json_parse": "PASS"
+      },
+      "counterproof": [
+        "COMPILED_PLAN_IS_NOT_RUNTIME_EFFECT",
+        "SSH_AUTH_IS_NOT_HOSTKEY_TRUST",
+        "QUEUED_IS_NOT_RUNNER_ASSIGNMENT",
+        "RESEARCH_SURVIVAL_IS_NOT_AUTOMATIC_CANON",
+        "CHANGED_BYTES_REQUIRE_NEW_SHA256"
+      ],
+      "security_boundary": {
+        "secret_values_in_git": false,
+        "private_key_content_in_receipts": false,
+        "tokens_in_git": false,
+        "unknown_is_pass": false
+      },
+      "next_cursor": "INSPECT_LIVE_FORGE_THEN_CLOSE_HOSTKEY_AND_RUNNER_CLAIMS_SEPARATELY"
     }
   }
 }

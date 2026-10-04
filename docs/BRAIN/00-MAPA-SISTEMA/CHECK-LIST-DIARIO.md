@@ -516,3 +516,149 @@ UNKNOWN_IS_NOT_PASS=true
 ### ➡️ NEXT_CURSOR
 Inventariar diferencialmente a bancada contra o `main` CURRENT e classificar cada delta em `LOCAL_GOLD / ALREADY_IN_MAIN / STALE / CONFLICT / UNKNOWN`; reconciliar primeiro o menor cone material e retestar.
 
+## 🫀 CURRENT VIVO — 2026-10-03 — LEARNING_153_INVARIANT_BINDINGS
+
+```text
+LEARNING_153_INVARIANT_BINDINGS=true
+RAW_COUNT_IS_NOT_ARCHITECTURE=true
+COMPRESS_BY_INVARIANT_BEFORE_CREATING=true
+QUEUED_IS_NOT_RUNNING=true
+VMWARE_SHARED_SSH_BINDING=PASS
+VMWARE_SHARED_SECRETS_BINDING=PASS
+VPS_TCP22_REACHABLE=PASS
+CASA_REQUIRED_AS_SSH_HOP=NO
+KNOWN_HOSTS_STALE=PROVEN
+SSH_AUTH_VMWARE_TO_VPS=NOT_PROVEN
+SECRETS_STAY_OUT_OF_GIT=true
+UNKNOWN_IS_NOT_PASS=true
+```
+
+### ✅ PROVADO
+- [x] VMware enxerga `SHARED/ssh` e `SHARED/secrets`.
+- [x] bindings SSH materiais comparados entre SHARED e ~/.ssh são equivalentes por SHA-256.
+- [x] alias VPS existe dentro da VMware e TCP/22 VM→VPS passa.
+- [x] jobs self-hosted/Linux amarelos medidos permanecem queued sem runner_name; não chamar de execução.
+- [x] Desktop Commander da VPS offline não significou VPS down; TCP/22 foi alcançado por outra rota.
+- [x] Aprendizado #153 + Lembrança + NeuroLink + índice materializados.
+
+### 🔴 / ⚪ FRONTEIRA
+- [ ] known_hosts da VM está stale frente à identidade atual observada da VPS.
+- [ ] não aceitar/promover host key nova sem âncora independente/autorizada.
+- [ ] SSH autenticado VMware→VPS ainda não está provado.
+- [ ] runner self-hosted físico que executará os jobs atuais ainda não está provado por runner_name.
+
+### ➡️ NEXT_CURSOR
+Validar identidade SSH atual da VPS por âncora independente/autorizada; atualizar somente known_hosts afetado; provar VMware→VPS autenticado; então matricular/provar runner VMware e só depois comprimir/rebindar workflows por família.
+
+## 🫀 CURRENT VIVO — 2026-10-03 — LEARNING_154_VMWARE_VPS_DIRECT_SSH
+
+```text
+LEARNING_154_VMWARE_VPS_DIRECT_SSH=true
+VMWARE_TO_VPS_TCP=PASS
+VMWARE_TO_VPS_SSH_AUTH=PASS
+REMOTE_USER=root
+CASA_REQUIRED_AS_SSH_HOP=NO
+BINDING_ROOT_CAUSE=WINDOWS_IDENTITYFILE_PATH_INSIDE_LINUX
+BINDING_FIX=LOCAL_VM_IDENTITYFILE_PATH_ONLY
+CONFIG_BACKUP=PASS
+LOCAL_REMOTE_MACHINE_ID_DIFFER=PASS
+PERSISTENT_HOSTKEY_TRUST=UNKNOWN
+TEMP_HOSTKEY_BYPASS=PROOF_ONLY
+SECRETS_STAY_OUT_OF_GIT=true
+```
+
+### ✅ PROVADO
+- [x] `ssh -G segredo-vpss` revelou path Windows dentro do guest Linux antes do delta.
+- [x] backup local do config criado antes da mutação.
+- [x] somente `IdentityFile` foi adaptado para `~/.ssh/segredo_vps_ed25519`.
+- [x] readback `ssh -G` confirma binding Linux correto.
+- [x] SSH VMware→VPS autenticou sem Casa; usuário remoto `root`.
+- [x] VM e VPS têm hashes de `/etc/machine-id` distintos, evitando falso-verde apesar do mesmo hostname.
+- [x] receita executável registrada em `PROVEN-CLAIMS.lock.json#VMWARE_VPS_DIRECT_SSH_BINDING_PATH`.
+- [x] Aprendizado #154 + Lembrança expandida com Mermaid + parâmetros + fingerprint materializados.
+
+### ⚪ FRONTEIRA
+- [ ] trust persistente da host key atual da VPS continua UNKNOWN até âncora independente/autorizada.
+- [ ] probe temporário de bypass de host-key foi usado só para isolar autenticação; não vira política padrão.
+- [ ] runner GitHub self-hosted VMware ainda precisa matrícula + `runner_name` real em job.
+
+### ➡️ NEXT_CURSOR
+Validar host key VPS por âncora independente/autorizada → atualizar somente `known_hosts` → replay SSH com trust normal → matricular/provar runner VMware → comprimir/rebindar workflows por famílias medidas.
+
+## 🫀 CURRENT VIVO — 2026-10-03 — LEARNING_155_VMWARE_FORGE_OBSIDIAN_SYNC
+
+```text
+LEARNING_155_VMWARE_FORGE_OBSIDIAN_SYNC=true
+RECIPE=VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC
+DEPENDENCY_FINGERPRINT=557819f7b6230625330f8870cd41d69c1a16f21e3e40d644f00cd7aea4b9ff24
+OBSIDIAN_VAULT_ROOT=SHARED/CentralDark
+SYNC_MEANS_RECONCILE_NOT_OVERWRITE=true
+LOCAL_GOLD_PRESERVED=true
+UNKNOWN_NOT_OVERWRITTEN=true
+DOT_OBSIDIAN_LOCAL_STATE_NOT_COMMITTED=true
+CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE=true
+HUD_HTML_RUNTIME_BUILD_REQUIRED=false
+PLUGIN_BUILD_REQUIRED_ONLY_ON_SOURCE_CHANGE=true
+RUNTIME_SYNC_EXECUTION=PENDING
+```
+
+### ✅ PROVADO / MATERIALIZADO
+- [x] share dedicado `CENTRALDARK-SHARED` passou write/readback no backing da bancada.
+- [x] `Home.md`, `HUD.html`, `Pendências.md` foram materializados na forja.
+- [x] `.obsidian/` foi criada localmente e permanece ignorada pelo Git.
+- [x] build existente de `centraldark-grafo-vivo` foi reaproveitado; nenhum plugin paralelo foi criado.
+- [x] HUD/Home/Pendências ligam a Lembrança #152 e o BRAIN.
+- [x] recipe/claim #155 foi selada nos owners existentes.
+
+### ⚪ FRONTEIRAS
+- [ ] sync preservativo contra a `main` CURRENT ainda não foi executado: `PENDING`.
+- [ ] bytes/configs da antiga `.obsidian` do vault Windows separado: `UNKNOWN`.
+- [ ] plugin presente/buildado não prova plugin carregado no runtime Obsidian.
+- [ ] runner self-hosted VMware ainda exige prova com `runner_name` real.
+
+### ➡️ NEXT_CURSOR
+Executar `VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC`: inventário diferencial → preservar `LOCAL_GOLD/UNKNOWN` → reconciliar delta seguro → receipt. Depois provar runner self-hosted VMware e reutilizar #154 para replay VPS.
+
+## 🧬 CURRENT VIVO — 2026-10-03 — LEARNING_156_PORTABLE_CRYSTAL_COMPILER
+
+```text
+LEARNING_156_PORTABLE_CRYSTAL_COMPILER=true
+OWNER=.agents/skills/knowledge-compiler/
+BACKEND=.agents/skills/knowledge-compiler/scripts/crystal-runtime-compiler.py
+CRYSTAL=.agents/skills/knowledge-compiler/crystals/vmware-forge-obsidian-preserve-gold-sync.json
+TEST=.agents/skills/knowledge-compiler/tests/crystal-runtime-compiler.test.py
+
+PARENT_PACKAGE_SHA256=4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6
+LOCAL_SUCCESSOR_PACKAGE_SHA256=9e99657b37dbc99a474067957956ccb52067c142c3108558be79aa9e2bbee2f0
+CANONICAL_COMPILED_CRYSTAL_FINGERPRINT=d1fd0fc3f30b4e35ea864a24ec522cdaa227a1c19a9b4119cd20d1779538746e
+
+CRYSTAL_RUNTIME_COMPILER_TEST=PASS
+VMWARE_PLAN_COMPILE=PASS
+FORGE_MUTABLE_RECONCILIATION=PENDING
+PERSISTENT_HOSTKEY_TRUST=UNKNOWN
+VMWARE_RUNNER_ASSIGNMENT=UNKNOWN
+
+RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY=true
+DELAY_IS_NOT_PROOF=true
+SSH_AUTH_IS_NOT_HOSTKEY_TRUST=true
+QUEUED_IS_NOT_RUNNER_ASSIGNMENT=true
+CHANGED_BYTES_REQUIRE_NEW_SHA256=true
+```
+
+### ✅ PROVADO
+- [x] Knowledge Compiler existente foi reutilizado como owner; nenhum segundo cérebro/compilador conceitual foi criado.
+- [x] Backend Python e cristal v2 foram materializados no `main`.
+- [x] Teste determinístico passou dentro da VMware: `CRYSTAL_RUNTIME_COMPILER_TEST=PASS`.
+- [x] Target `vmware` compilou `centraldark.compiled-plan.v2`.
+- [x] Retorno da Pesquisa Aprofundada foi peneirado contra CURRENT, não promovido por prestígio/atraso.
+- [x] SHA-256 v1 foi preservado como parent; bytes evoluídos receberam identidade nova.
+
+### ⚪ FRONTEIRAS
+- [ ] executar `inspect` contra a forge viva e emitir inventário diferencial real.
+- [ ] `PERSISTENT_HOSTKEY_TRUST`: exige âncora independente; continua `UNKNOWN`.
+- [ ] `VMWARE_RUNNER_ASSIGNMENT`: exige job real com runner_id/name e machine-id; continua `UNKNOWN`.
+- [ ] full gate `lupa-conformance` do mesmo HEAD ainda não foi observado nesta cristalização.
+
+### ➡️ NEXT_CURSOR
+Executar o cristal #156 em modo inspect na forge viva; reconciliar somente delta seguro. Depois fechar host-key trust e runner assignment como claims independentes.
+

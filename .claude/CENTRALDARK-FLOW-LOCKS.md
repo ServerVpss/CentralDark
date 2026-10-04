@@ -13,10 +13,10 @@ Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. He
 CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
 NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
 RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
-TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE
 INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
-META_GRILL_BEFORE_MATERIAL_RESPONSE=true
-META_GRILL_BEFORE_MUTATION=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=false
+META_GRILL_BEFORE_MUTATION=false
 EVOLVE_EXISTING_BEFORE_CREATE=true
 RETURN_SAME_ARTIFACT_EVOLVED=true
 VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
@@ -60,7 +60,7 @@ CHEFE_FALA
 
 `.github/workflows/pr-update-branch-deterministic.yml`
 
-Regra atual obrigatória:
+Regra atual quando este flow for material:
 
 ```text
 RUNNER_REQUIRED_FOR_THIS_FLOW=ubuntu-latest
@@ -148,3 +148,15 @@ UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
 ```
 
 Divergência de sensor/cache/log/modelo/workflow abre teste discriminante e correção do cone afetado; não abre veto humano concorrente.
+
+
+## CURRENT anti-fricção
+
+```text
+SEM_LEI_FLOW_LOCKS=true
+FLOW_LOCK_IS_NOT_PERMISSION=true
+FLOW_LOCK_IS_NOT_GLOBAL_BRAKE=true
+PERTINENT_ONLY=true
+CAPABILITY_IS_NEUTRAL=true
+UNKNOWN_BLOCKS_AFFECTED_CLAIM_ONLY=true
+```

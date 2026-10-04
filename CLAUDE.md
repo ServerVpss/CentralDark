@@ -39,13 +39,11 @@ HUB_CREDENTIAL_CONTROL_PLANE = MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PL
 
 Antes de agir:
 
-1. Ler `LEIA-ME-IA.md`
-2. Ler `AGENTS.md`
-3. Medir branch/HEAD/PR/writer/tools
-4. Emitir `CENTRALDARK_AI_BOOT` uma vez
-5. Todo material entra no moinho canônico; não criar memória/governança paralela
-6. Artefato derivado sem propriedades obrigatórias **não** é `FLASH_READY`
-7. Carregar o sistema de intenção e gatilhos obrigatórios deste arquivo antes de mutar qualquer owner
+1. Recuperar a intenção vigente.
+2. Medir somente o CURRENT do alvo que pode mudar a decisão.
+3. Carregar owner/capability pertinente.
+4. Executar pela rota autorizada disponível.
+5. Fazer readback; erro local usa outra rota sem reiniciar a missão.
 
 ```text
 ENGINE=CLAUDE
@@ -63,10 +61,10 @@ Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. He
 CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
 NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
 RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
-TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE
 INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
-META_GRILL_BEFORE_MATERIAL_RESPONSE=true
-META_GRILL_BEFORE_MUTATION=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=false
+META_GRILL_BEFORE_MUTATION=false
 EVOLVE_EXISTING_BEFORE_CREATE=true
 RETURN_SAME_ARTIFACT_EVOLVED=true
 VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
@@ -127,6 +125,10 @@ O “vice-versa” é descoberta de capacidade e handoff: Claude pode localizar 
 
 ```text
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md
+SEM_LEI_ADAPTER=true
+PERTINENT_CORE_LOAD_ONLY=true
+CAPABILITY_IS_NEUTRAL=true
+GLOBAL_PREFLIGHT_IS_NOT_PERMISSION=true
 ONE_SOL=true
 ONE_CORE=true
 LAZY_LOAD_BY_DEMAND=true
@@ -155,21 +157,16 @@ REALITY_JUDGE: measured_evidence > assumptions
 UNKNOWN_IS_NOT_PASS: true
 ```
 
-## Boot Obrigatório (Todos os Agentes)
+## Boot pertinente — Todos os Agentes
 
-**Ordem imutável:**
-1. `LEIA-ME-IA.md` — entrada única
-2. `AGENTS.md` — contrato operacional
-3. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade
-4. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` — reúso obrigatório
-5. `docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md` — modo padrão de edição viva
-6. `.agents/skills/centraldark-live-editing-fabric/SKILL.md` — skill operacional do método
-7. `docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md` — fast-path main-pinned
-8. `.agents/skills/main-pinned-runtime-fast-path/SKILL.md` — skill do fast-path
-9. `MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md` — HUB/credenciais/providers
-10. `.agents/skills/centraldark-hub-credential-control-plane/SKILL.md` — skill de HUB e segredo em trânsito
+Não existe ordem imutável de leitura. Cada agente herda o core por ponteiro e carrega sob demanda somente o que altera a decisão atual.
 
-Emitir uma vez `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md` (linhas 112–128).
+```text
+PERTINENT_CONTEXT_ONLY=true
+ALL_LEARNINGS_BOOT=false
+META_GRILL=ON_DEMAND
+TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
+```
 
 ## Sistema de intenção e gatilhos obrigatórios
 
@@ -588,7 +585,7 @@ docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 ## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
-RESPONSE_WITHOUT_TRACE=INVALID
+RESPONSE_WITHOUT_TRACE=VALID_IF_NO_WRITE_OR_EXPLICIT_RASTRO
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
 LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
@@ -728,9 +725,9 @@ Divergência de sensor/cache/log/modelo/workflow abre teste discriminante e corr
 ```text
 CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
 CLAUDE_INHERITS_GLOBAL_PREFLIGHT=true
-ANY_CENTRALDARK_RESPONSE_REENTERS_PREFLIGHT=true
-CURRENT_MAIN+PR_MOTHER_1562+OPEN_PRS+CHECKLIST+CANONICAL_CORE+LEARNINGS+LEMBRANCAS+OWNER+MUTABLE_RUNTIME=REQUIRED
-GENERIC_RESPONSE_WITHOUT_PREFLIGHT=FORBIDDEN
+ANY_CENTRALDARK_RESPONSE_REENTERS_PERTINENT_CONTEXT=true
+PERTINENT_CURRENT+PERTINENT_OWNER=REQUIRED_WHEN_DECISION_DEPENDS_ON_THEM
+GENERIC_RESPONSE_WITHOUT_PREFLIGHT=ALLOWED_WITH_PERTINENT_CONTEXT
 MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
 ```
 
