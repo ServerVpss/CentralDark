@@ -51,8 +51,9 @@ Observed donor issues:
 1. donor calls `dspy.GEPA(..., max_steps=...)`, but the installed DSPy version rejects that argument;
 2. donor falls back to MIPROv2;
 3. MIPROv2 required optional `optuna`, which was installed only inside the isolated donor `.venv`;
-4. the second synthetic attempt exceeded the execution timeout and produced no evolved output directory;
-5. no variant, promotion, commit, PR or runtime mutation occurred.
+4. after a compatibility patch in scratch (`GEPA(auto="light")`), GEPA rejected the donor metric signature and fell back to MIPROv2;
+5. the bounded synthetic run reached dataset generation, bootstrapping and instruction proposal, then hit the 360-second timeout; no evolved output directory was produced;
+6. no variant, promotion, commit, PR or runtime mutation occurred.
 
 ## Verdict
 
@@ -70,6 +71,24 @@ RUNTIME_MUTATION=false
 ```
 
 This is an honest `BLOCKED` for the actual evolution run, not a false green. The donor repository tests remain the proof floor: `145 passed` in its isolated environment before the run.
+
+## Lote seguinte executado — adapter GEPA
+
+Applied only in donor scratch, never in CentralDark or the Hermes runtime:
+
+```text
+evolution/core/fitness.py
+skill_fitness_metric(example, prediction, trace, pred_name, pred_trace)
+```
+
+Verification:
+
+```text
+145 passed in 1.30s
+five-argument metric call = 1.0
+```
+
+The bounded rerun then reached dataset generation, bootstrapping and instruction proposal, but exceeded the tool timeout before producing a variant. No output directory was created. The adapter removed the metric-signature blocker; the remaining blocker is runtime cost/optimizer fallback, not an unverified success.
 
 ## Next cursor
 
