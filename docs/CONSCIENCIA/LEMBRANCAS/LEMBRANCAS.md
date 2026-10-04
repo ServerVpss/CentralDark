@@ -666,3 +666,11 @@ CURRENT_OVER_HISTORY = true
 - **Cristal:** `HERMES_KYLIN_BINDING_PASS=PASS`; `AIONUI_HERMES_KYLIN_ROUTE=PASS`; `HERMES_AGENT_TOOL_CALL_READ_FILE_EMITTED=PASS`; `HERMES_PLUS_LOCAL_KYLIN_PLUS_AGENTIC_CAPABILITY=PROVEN_FUNCTIONAL`; `ONE_AGENTIC_TOOL_PATH_PASS != EVERY_AGENTIC_CAPABILITY_PASS`.
 - **Receipt:** PR-mãe #1562 comentário `5975848027`.
 
+### [2026-10-04] Multimodal completo antes da ação — vídeo+áudio+contexto
+- **Tipo:** LEARNING_INDEX / MULTIMODAL_OPERATIONAL_RECIPE
+- **Learning:** #160
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-MULTIMODAL-COMPLETE-BEFORE-ACTION.md`
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-multimodal-context-symbolic-execution.md`
+- **Conteúdo:** fechar bytes/metadados, cobertura visual, áudio e transcrição antes de promover interpretação; cue simbólico recupera receita/contexto, mas não concede write sozinho; provider conectado pode fechar gap sem virar owner; claim local/nativo permanece separado.
+- **Cristal:** `MULTIMODAL_COMPLETE_BEFORE_ACTION=true`; `CUE_IS_POINTER_NOT_AUTHORITY=true`; `CONNECTED_PROVIDER_CAN_CLOSE_CAPABILITY_GAP_WITHOUT_BECOMING_OWNER=true`; `ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true`.
+
