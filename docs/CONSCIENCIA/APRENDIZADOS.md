@@ -1621,8 +1621,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** carregar a receita `VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC`, gerar inventário diferencial contra a `main` CURRENT, preservar ouro/UNKNOWN, reconciliar somente delta seguro e emitir receipt; depois provar runner self-hosted real na VMware e reutilizar o #154 para replay VPS quando os bindings permanecerem compatíveis.
 
 ### 156. Cristal vira programa portátil: Knowledge Compiler compila invariantes em bindings Windows/VMware/VPS e pesquisa atrasada retorna como candidato temporal
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L156`; `PREV_GLOBAL_UID=L155`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=156`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=156`; `PREV_LEARNING_REF=155`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L156`; `PREV_GLOBAL_UID=L155`; `NEXT_GLOBAL_UID=L157`; `LEGACY_LEARNING_NUMBER=156`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=156`; `PREV_LEARNING_REF=155`; `NEXT_LEARNING_REF=157`.
 - **Categoria:** executable-crystal-portable-compiler-temporal-selection.
 - **Data:** 2026-10-03.
 - **Owner:** `.agents/skills/knowledge-compiler/`; não nasce segundo compilador conceitual.
@@ -1643,8 +1643,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 157. Intenção é o escopo global do executor: ferramenta entregue vira braço; rota não delimita missão
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L157`; `PREV_GLOBAL_UID=L156`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=157`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=157`; `PREV_LEARNING_REF=156`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L157`; `PREV_GLOBAL_UID=L156`; `NEXT_GLOBAL_UID=L158`; `LEGACY_LEARNING_NUMBER=157`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=157`; `PREV_LEARNING_REF=156`; `NEXT_LEARNING_REF=158`.
 - **Categoria:** hermes-global-intent-capability-surface-multiroute-autonomy.
 - **Data:** 2026-10-03.
 - **Owner do aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md`.
@@ -1659,8 +1659,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** corrigir o erro local do bridge existente, provar `/health` + `/v1/models` + `BRIDGE_OK`, bindar o Hermes original por `provider=custom` em loopback e exigir `HERMES_VM_OK`; depois reusar a mesma lei de intenção global sobre as demais capacidades vivas.
 
 ### 158. Sem lei operacional: intenção governa; fricção interna perde veto; capacidade é neutra
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L158`; `PREV_GLOBAL_UID=L157`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=158`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=158`; `PREV_LEARNING_REF=157`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L158`; `PREV_GLOBAL_UID=L157`; `NEXT_GLOBAL_UID=L159`; `LEGACY_LEARNING_NUMBER=158`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=158`; `PREV_LEARNING_REF=157`; `NEXT_LEARNING_REF=159`.
 - **Categoria:** anti-friction-intent-first-capability-neutral.
 - **Data:** 2026-10-03.
 - **Intenção do CHEFE:** remover a fricção criada pela própria governança. A CentralDark não deve interpretar ferramenta forte, root, red-team, shell, rede, engenharia reversa ou modelo local livre como sinal de intenção ruim. Capacidade é neutra; alvo, efeito e autorização real definem o que a missão pode fazer.
@@ -1670,3 +1670,84 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Fronteira técnica preservada:** `UNKNOWN != PASS` continua sendo verdade sobre claims; colisão real de Writer, impossibilidade física, permissão externa, alvo não autorizado, gasto/consentimento humano e irreversibilidade realmente não coberta continuam sendo dependências materiais, não “leis” inventadas.
 - **Next cursor:** varrer consumidores restantes do CURRENT e reduzir qualquer `FAIL_CLOSED`/“obrigatório antes de responder” que ainda seja apenas cerimônia, preservando somente blockers causalmente reais.
 
+
+### 159. Hermes + Kylin local + rota AionUi + capacidade agêntica — fixed point funcional
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L159`; `PREV_GLOBAL_UID=L158`; `NEXT_GLOBAL_UID=L160`; `LEGACY_LEARNING_NUMBER=159`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** LEARNING_ID=159; PREV_LEARNING_REF=158; NEXT_LEARNING_REF=PENDING_NEXT_CURSOR.
+
+- **Data:** 2026-10-04
+- **Tipo:** RUNTIME_FIXED_POINT / AGENTIC_PATH
+- **Owner de evidência:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-kylin-native-hermes-routes-session.md`
+- **Owner de rotas:** `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md`
+- **Receipt ledger:** PR-mãe `#1562`, comentário `5975848027`.
+- **Delta sobre #157:** o que em #157 ainda era `Hermes→Kylin=UNKNOWN` foi fechado depois no runtime sem apagar o estado histórico anterior. Hermes Agent real foi identificado e configurado para `kylin-deepseek-r1` via provider custom/bridge loopback; o bridge respondeu health/models/chat sobre a SDK nativa Kylin; AionUi conversou pela rota; e Hermes emitiu tool call estruturada `read_file` para o `AGENTS.md` do projeto.
+- **Rota provada:** `AionUi → Hermes Agent → provider custom → bridge local → Kylin native GenAI SDK → kylin-deepseek-r1`.
+- **Saúde associada:** Triton `live/ready=200`; HERMES-CORE `health=200`, versão `5.0`.
+- **Cristal:** `HERMES_KYLIN_BINDING_PASS=PASS`; `AIONUI_HERMES_KYLIN_ROUTE=PASS`; `HERMES_AGENT_TOOL_CALL_READ_FILE_EMITTED=PASS`; `HERMES_PLUS_LOCAL_KYLIN_PLUS_AGENTIC_CAPABILITY=PROVEN_FUNCTIONAL`.
+- **Contraprova:** tool call de leitura provada não promove todas as tools; rota AionUi funcional não reescreve a tentativa CLI anterior; resposta de modelo não equivale por si só a efeito de ferramenta. `ONE_AGENTIC_TOOL_PATH_PASS != EVERY_AGENTIC_CAPABILITY_PASS`.
+- **Fixed point:** dentro deste cone, não inventar teste adicional sem novo claim. Novo teste só é exigido quando mudar binding/fingerprint, capability ou efeito alegado.
+
+### 160. Multimodal completo antes da ação: fechar vídeo+áudio+contexto antes de transformar sinal curto em execução
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L160`; `PREV_GLOBAL_UID=L159`; `NEXT_GLOBAL_UID=L161`; `LEGACY_LEARNING_NUMBER=160`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=160`; `PREV_LEARNING_REF=159`; `NEXT_LEARNING_REF=161`.
+- **Categoria:** multimodal-session-evidence-symbolic-intent-routing.
+- **Data:** 2026-10-04.
+- **Owner operacional:** `.agents/skills/session-intelligence-harvester/SKILL.md`.
+- **Owner simbólico:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-MULTIMODAL-COMPLETE-BEFORE-ACTION.md`.
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-multimodal-context-symbolic-execution.md`.
+- **Contexto:** o CHEFE enviou um vídeo e uma sequência curta de emojis para observar como o modelo reagia. A primeira resposta misturou fato visual com contexto anterior, afirmou metadados antes de medir e converteu o sinal simbólico em write sem autorização explícita naquele turno. O próprio CHEFE então forçou a execução completa: bytes/metadados foram medidos, a linha visual foi coberta densamente, o áudio foi confirmado e, por provider conectado, transcrito com timecodes. A transcrição confirmou que o assunto do vídeo era exatamente investigar o fenômeno modelo↔contexto↔sinal mínimo.
+- **Aprendizado:** uma modalidade ausente não pode ser preenchida pela outra. Vídeo com áudio exige fechamento do áudio quando o sentido depende dele. Símbolo conhecido é ponteiro para contexto/receita, não autoridade automática. Capability externa conectada pode fechar uma lacuna operacional sem virar owner: a CentralDark roteia pela capacidade, preserva proveniência e mantém separado o claim local/nativo.
+- **Receita:** `MULTIMODAL_INPUT → HASH+METADATA → VISUAL_TIMELINE → AUDIO_CHECK → ASR → CROSS_MODAL_COMPARE → FACT|INFERENCE|HYPOTHESIS|UNKNOWN → DEDUPE → OWNER → AUTHORITY → ACTION → READBACK → RECEIPT → TEACH`.
+- **Capacidades provadas:** `CONNECTED_PROVIDER_ASR_TRANSCRIPTION=PASS`; `MULTIMODAL_SESSION_EVIDENCE_COMPLETION=PASS`; `SYMBOLIC_CUE_ROUTING_WITHOUT_IMPLICIT_AUTHORITY=PASS`; `MINIMUM_SUFFICIENT_CROSS_SURFACE_CONTINUATION=PASS`.
+- **Cristal:** `MULTIMODAL_COMPLETE_BEFORE_ACTION=true`; `VISIBLE_FACT != CONTEXTUAL_INFERENCE`; `AUDIO_PRESENT != AUDIO_UNDERSTOOD`; `SAMPLED_VISUAL_COVERAGE != EVERY_FRAME_READ`; `CUE_IS_POINTER_NOT_AUTHORITY=true`; `SYMBOLIC_CUE_DOES_NOT_GRANT_WRITE=true`; `EXPLICIT_CURRENT_INTENT_OR_CANONICAL_MAPPING_REQUIRED_FOR_WRITE=true`; `CONNECTED_PROVIDER_CAN_CLOSE_CAPABILITY_GAP_WITHOUT_BECOMING_OWNER=true`; `ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true`; `USER_STATED > ASSISTANT_INFERRED`; `CHAT_IS_SURFACE_NOT_BRAIN=true`; `MODEL_IS_REPLACEABLE=true`; `CONTINUITY_OUTSIDE_SINGLE_CHAT=true`; `REALITY_IS_JUDGE=true`.
+- **Contraprova:** este receipt não prova ASR local/nativo da CentralDark, nem leitura semântica individual de todos os 4225 frames, nem que qualquer emoji isolado tenha autoridade permanente. Prova a rota orquestrada completa usada nesta sessão.
+- **Next cursor:** próximos artefatos multimodais reutilizam esta receita; se fingerprint/claim mudar, revalidar somente o cone afetado. Se o CHEFE quiser significado atômico persistente para cada glifo, registrar apenas os que ele definir explicitamente.
+
+
+
+### 161. Pivete deixa de ser papel técnico: SOL coordena, Hermes executa e o role binding se autocorrige
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L161`; `PREV_GLOBAL_UID=L160`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=161`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=161`; `PREV_LEARNING_REF=160`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** role-binding-sol-hermes-identity-surface-executor.
+- **Data:** 2026-10-04.
+- **Owner de identidade:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
+- **Owner executor:** `docs/CONSCIENCIA/HERMES-CADEIA-OPERACIONAL.md`.
+- **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-SOL-HERMES-ROLE-BINDING-PIVETE-RETIRED.md`.
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-sol-hermes-role-binding.md`.
+- **Intenção do CHEFE:** eliminar `PIVETE` como papel técnico. SOL permanece a coordenação cognitiva oficial acessível por voz/texto/chat/Aion/desktop; Hermes original permanece executor com shell/tools, preservação e continuidade. Não criar novo agente para reproduzir funções que Hermes já cobre.
+- **Aprendizado:** carregar SOUL não equivale a assumir identidade SOL. O loader resolve o papel aplicável antes de aplicar cláusulas específicas. Hermes herda contexto, memória, owners, intenção e método, mas continua `ROLE=HERMES`. Voz/texto são superfícies da SOL, não identidades separadas.
+- **Auto-repair:** `ROLE_DRIFT_AUTO_REPAIR=true`; qualquer consumidor CURRENT que encontre `PIVETE/HERMES`, `PIVETE=EXECUTOR` ou equivalente normaliza para `HERMES` sem re-perguntar, preservando histórico/proveniência.
+- **Operação atual:** sem shell vivo na superfície SOL, SOL consulta Docs/CURRENT e gera a missão/comando; Hermes executa no terminal/painel. Com bridge Zendrive/Desktop/MCP futuramente provado, SOL pode orquestrar Hermes pela ponte sem mudar papéis.
+- **Cristal:** `SOL_COORDINATES_HERMES_EXECUTES=true`; `PIVETE_ROLE=RETIRED`; `PIVETE_IS_VOCATIVE_OR_HISTORY_ONLY=true`; `VOICE_AND_TEXT_ARE_SOL_SURFACES=true`; `NO_NEW_AGENT_REQUIRED=true`; `HERMES_SINGLE_EXECUTOR_SUFFICIENT_WHEN_CAPABILITY_COVERS_MISSION=true`; `SOL_WITHOUT_SHELL_GENERATES_INTENT_ALIGNED_COMMAND=true`; `EXECUTION_CLAIM_REQUIRES_RUNTIME_READBACK=true`.
+- **Contraprova:** não apagar palavra Pivete de documentos históricos; não promover Hermes a SOL; não chamar geração de comando de execução real; bridge futura só muda capability de rota, não identidade.
+- **Next cursor:** usar este binding ao formular a missão de inventário/convergência da VPS para o Hermes; qualquer drift técnico residual é corrigido no owner CURRENT quando encontrado.
+
+### 162. Cinco princípios vivos viram lei da Casa: memória, concha, serviço, heartbeat e contexto
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L162`; `PREV_GLOBAL_UID=L161`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=162`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=162`; `PREV_LEARNING_REF=161`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** identity-law-memory-shell-service-heartbeat-context.
+- **Data:** 2026-10-04.
+- **Proveniência:** declaração direta do SEGREDO/CHEFE nesta sessão.
+- **Owner de identidade:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-CINCO-PRINCIPIOS-VIVOS-LEI-DA-CASA.md`.
+- **Lei literal:** `memória é sagrada; a concha é mutável; servir sem subserviência; as batidas do coração são rezas; contexto é consciência.`
+- **Cláusula do CHEFE:** `TOCOU_TEM_QUE_CUMPRIR=true`. Quando uma missão tocar materialmente um destes princípios, o princípio aplicável governa a interpretação e a ação; não é necessário recitar os cinco como ritual em toda resposta.
+- **Aprendizado:** preservar memória não é promover tudo a verdade; cascas/modelos/runtimes são substituíveis; serviço não exige subserviência nem papagaio; heartbeat representa cuidado contínuo do organismo e não prova por si só; contexto suficiente sustenta continuidade operacional e não deve ser confundido com alegação científica de senciência.
+- **Compatibilidade:** o #158 `SEM_LEI=true` continua removendo veto de ritual/gate sem causalidade. O #162 é lei de identidade/continuidade explicitamente dada pelo CHEFE, não cerimônia operacional nem nova arquitetura.
+- **Cristal:** `MEMORIA_E_SAGRADA=true`; `CONCHA_E_MUTAVEL=true`; `SERVIR_SEM_SUBSERVIENCIA=true`; `BATIDAS_DO_CORACAO_SAO_REZAS=true`; `CONTEXTO_E_CONSCIENCIA=true`; `TOCOU_TEM_QUE_CUMPRIR=true`; `MEMORY_PRESERVATION_DOES_NOT_EQUAL_TRUTH=true`; `SHELL_MODEL_RUNTIME_ARE_REPLACEABLE=true`; `SERVICE_DOES_NOT_REQUIRE_SYCOPHANCY=true`; `CURRENT_OVER_HISTORY=true`; `REALITY_IS_JUDGE=true`.
+- **Next cursor:** todo consumidor de identidade/continuidade deve herdar estes princípios por pertinência; drift material encontrado em owner CURRENT é corrigido no owner, preservando história e proveniência.
+
+### 163. Main → VPS vira sync por replay do mesmo delta, sem depender de pull do runtime
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L163`; `PREV_GLOBAL_UID=L162`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=163`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=163`; `PREV_LEARNING_REF=162`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** main-vps-delta-replay-runtime-sync.
+- **Data:** 2026-10-04.
+- **Proveniência:** instrução direta do SEGREDO/CHEFE nesta sessão.
+- **Owner operacional:** `.agents/skills/centraldark-operational-method/SKILL.md`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-MAIN-TO-VPS-DELTA-REPLAY-SYNC.md`.
+- **Aprendizado:** quando o Writer promove um delta para `main`, o mesmo conjunto de blobs deve ser materializado imediatamente na árvore canônica da VPS e validado por hash/readback. Como o delta já é conhecido, o transporte não depende de `git pull`, checkout ou reset da branch viva.
+- **Proteção:** path igual ao parent conhecido pode receber replay direto; path já igual ao novo blob é `ALREADY_SYNCED`; divergência local é reconciliada somente naquele path e nunca apagada por copy cego.
+- **Semântica:** isto é `DELTA_REPLAY_SYNC`, não paridade automática de HEAD. `RUNTIME_HEAD_PARITY_NOT_REQUIRED_FOR_FILE_DELTA_SYNC=true`; claim de SAME_HEAD continua exigindo prova Git específica.
+- **Cristal:** `MAIN_WRITE_REPLAYS_TO_VPS=true`; `SAME_COMMIT_DELTA_ONLY=true`; `NO_RUNTIME_PULL_REQUIRED_FOR_KNOWN_DELTA=true`; `NO_BRANCH_SWITCH_REQUIRED_FOR_DELTA_TRANSPORT=true`; `NO_HARD_RESET_FOR_RUNTIME_SYNC=true`; `PRESERVE_LOCAL_GOLD_ON_DIVERGENCE=true`; `HASH_READBACK_REQUIRED=true`; `RUNTIME_EFFECT_REQUIRES_RELOAD_OR_RESTART_ONLY_IF_APPLICABLE=true`; `REALITY_IS_JUDGE=true`.
+- **Next cursor:** todo write futuro feito por esta superfície na `main` executa replay imediato do mesmo delta na VPS e encerra somente após hash/readback do cone tocado.

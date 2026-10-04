@@ -28,7 +28,7 @@ def resolve_forja_total() -> dict:
     ok = bool(
         receipt.get("master_cycle_active")
         and "FIXED_POINT" in chain
-        and chain[-3:] == ["REGISTRA", "HANDOFF", "BOOT"]
+        and chain[-4:] == ["REGISTRA", "RASTRO", "HANDOFF", "BOOT"]
     )
     return {
         "schema": "centraldark.boot-forja-total.v1",

@@ -1,0 +1,52 @@
+{
+  "schema": "centraldark.system-sentinel-state.v1",
+  "notes": {},
+  "last_cursor": null,
+  "updated_at": "2026-10-04T11:57:45.262883+00:00",
+  "last_route_receipt": {
+    "schema": "centraldark.sentinel-fixed-route.v1",
+    "seal": "🧿",
+    "api_transport": "GITHUB_REPOSITORY_DISPATCH",
+    "api_event": "centraldark_sentinel_route",
+    "route": [
+      "INTENT",
+      "CONTRACT_CURRENT",
+      "SENSOR",
+      "T0",
+      "CURRENT_STATE",
+      "EXISTING_OWNER",
+      "COUNTERPROOF",
+      "PROBES",
+      "RECONCILIATION",
+      "T1",
+      "REALITY_JUDGE",
+      "HUD",
+      "NEXT_CURSOR"
+    ],
+    "route_is_deterministic": true,
+    "route_is_authority": false,
+    "same_fingerprint_no_full_replay": true,
+    "minimal_liveness_remeasure_still_required": true,
+    "route_scope_key": "c19b4e7dc4e3cad1ccdcaefe",
+    "dependency_fingerprint": "36213f0b65f1342d103f4ffc3a1603082ebee94e9ace112f1cbb2b1f6caacecf",
+    "fingerprint_identity": {
+      "target": "CENTRALDARK_SENTINELA",
+      "owner": "scripts/sentinela/run.mjs",
+      "inputs_hash": "28e24085e891f1b48e0789ee90f37c00db199ff61c6ededfeee0a003eb1878c8",
+      "config_hash": "b9989dba1c4b013cee869ab23245a5d5ec8d7d96d69f2fac68a12b6b6908469e",
+      "head_or_artifact_hash": "1dd41222cbf65a884b19d0eab3e15da3419e5cf0",
+      "security_boundary": "SELF_HOSTED_SENTINEL_READ_ONLY_GITHUB_API"
+    },
+    "fingerprint_missing": [],
+    "proof_state": "NOT_PROVEN",
+    "decision": "RUN_DETERMINISTIC_ROUTE",
+    "reason": "NO_REUSABLE_FIXED_POINT",
+    "source_surface": "SYSTEM_SENTINEL_RUNNER",
+    "event_class": "STATE_CHANGED",
+    "evidence_ref": "sha256:28e24085e891f1b48e0789ee90f37c00db199ff61c6ededfeee0a003eb1878c8",
+    "next_cursor": "REMEASURE_AFFECTED_CHAIN_ONLY",
+    "fixed_point_scope": "SENTINEL_ROUTE_LOCAL",
+    "auto_mutation_authority": false,
+    "unknown_is_pass": false
+  }
+}

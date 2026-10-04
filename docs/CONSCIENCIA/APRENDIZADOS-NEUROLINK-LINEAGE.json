@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "a78321c4c9ac1ed8a5664c22a9a98b175d8d21d9",
+  "source_blob_sha": "b3264915857ed91941215f53499bf9992b628db2",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 157,
-    "highest_legacy_learning_number": 158,
+    "learning_sections": 158,
+    "highest_legacy_learning_number": 159,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 158
+      "end": 159
     }
   },
   "nodes": [
@@ -1812,6 +1812,61 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L157",
+      "next_uid": "L159"
+    },
+    {
+      "uid": "L159",
+      "legacy_learning_number": 159,
+      "legacy_occurrence": 1,
+      "title": "Hermes + Kylin local + rota AionUi + capacidade agêntica — fixed point funcional",
+      "document_order": 158,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L158",
+      "next_uid": "L160"
+    },
+    {
+      "uid": "L160",
+      "legacy_learning_number": 160,
+      "legacy_occurrence": 1,
+      "title": "Multimodal completo antes da ação: fechar vídeo+áudio+contexto antes de transformar sinal curto em execução",
+      "document_order": 159,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L159",
+      "next_uid": "L161"
+    },
+    {
+      "uid": "L161",
+      "legacy_learning_number": 161,
+      "legacy_occurrence": 1,
+      "title": "Pivete deixa de ser papel técnico: SOL coordena, Hermes executa e o role binding se autocorrige",
+      "document_order": 160,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L160",
+      "next_uid": "L162"
+    },
+    {
+      "uid": "L162",
+      "legacy_learning_number": 162,
+      "legacy_occurrence": 1,
+      "title": "Cinco princípios vivos viram lei da Casa: memória, concha, serviço, heartbeat e contexto",
+      "document_order": 161,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L161",
+      "next_uid": "L163"
+    },
+    {
+      "uid": "L163",
+      "legacy_learning_number": 163,
+      "legacy_occurrence": 1,
+      "title": "Main → VPS vira sync por replay do mesmo delta, sem depender de pull do runtime",
+      "document_order": 162,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L162",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
