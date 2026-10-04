@@ -40,6 +40,63 @@ Always read `references/hermes-desktop-communication-style.md` when working with
 
 This skill is paired with the CentralDark operational family: `centraldark-hermes-operations`, `reconciliacao-diaria-centraldark`, `github-actions-runner-diagnostics`, and `skill-synchronization`. When the trigger is Hermes-specific (update, cron, Desktop/backend boot, SSH/no-mux, VPS Hermes version, port/firewall proof for Hermes routes), load `centraldark-hermes-operations` too. When the trigger is daily state, checklist, abandoned deltas, or skill drift, load the matching sibling too. `centraldark-ops` carries the broader CASA/GitHub/VPS operating contract; siblings carry concrete procedures. They are one operational family, not competing owners.
 
+## VPS — resiliência semântica sob drift técnico
+
+Esta é a regra padrão para **qualquer** leitura, diagnóstico, correção, deploy, runner, serviço, rede, SSH, PM2, Caddy, cron ou automação na VPS.
+
+```text
+REPORT_t = OBSERVATIONS_t + UNKNOWN_t + NEXT_CURSOR_t
+REPORT_t != CURRENT_STATE_t+n
+
+OPERATIONAL_GRAMMAR_MAY_SURVIVE_TECHNICAL_DRIFT=true
+SEMANTIC_CONTINUITY_IS_NOT_CURRENT_TECHNICAL_PROOF=true
+METHOD_STABLE_DOES_NOT_PROVE_RUNTIME_STABLE=true
+CURRENT_HEAD_DEPENDENT_DECISION_REQUIRES_REMEASUREMENT=true
+CURRENT_RUNTIME_DEPENDENT_DECISION_REQUIRES_LIVE_VPS_MEASUREMENT=true
+SAME_SEMANTIC_BOOT_DIFFERENT_ROUTE_CAN_CHANGE_EXECUTIVE_CAPABILITY=true
+OLD_REPORT_IS_PROVENANCE_NOT_AUTHORITY=true
+UNKNOWN_FROM_OLD_REPORT_MUST_BE_REEVALUATED_WHEN_MEASURABLE=true
+MEASURED_CURRENT_EVIDENCE_OVERRIDES_STALE_REPORT_FOR_SAME_CLAIM_SCOPE_TIME=true
+```
+
+Operationally:
+
+```text
+LOAD_STABLE_METHOD
+→ LOAD_RELEVANT_REPORTS_AS_PROVENANCE
+→ EXTRACT OBSERVATIONS_t / UNKNOWN_t / NEXT_CURSOR_t
+→ MEASURE CURRENT_MAIN WHEN CODE/WORKFLOW DECISION DEPENDS ON IT
+→ MEASURE LIVE_VPS WHEN RUNTIME DECISION DEPENDS ON IT
+→ CLASSIFY OLD CLAIM = STILL_TRUE | STALE | CONTRADICTED | UNKNOWN
+→ REUSE SAME OWNER / RECIPE
+→ ADAPT ONLY LIVE BINDINGS
+→ EXECUTE MINIMUM COMPLETE DELTA
+→ PROVE EFFECT
+→ COUNTERPROVE
+→ EMIT RECEIPT + NEXT_CURSOR
+```
+
+Do not “update” an old report by pretending its old observations were made now. Preserve the old report as a true snapshot of its time and add a new CURRENT layer. A report can preserve a correct operational grammar even when every volatile technical value in it has drifted.
+
+For VPS work specifically:
+
+- A historical runner/service/port/HEAD/route/hostname is **never** current merely because the report was correct when written.
+- A stable recipe, owner, invariant, or semantic boot may be reused without rediscovery, but its environment bindings must be remeasured.
+- If route A is stale or unavailable, apply the multiroute law: classify that route only, then measure another authorized route before elevating the problem to system-level BLOCKED.
+- If the claim depends on GitHub code, use live `main`/HEAD. If it depends on the VPS body, use live VPS measurement. Neither substitutes for the other.
+- A previous UNKNOWN becomes PASS/FAIL only through new evidence; time passing alone does not resolve it.
+- A previous PASS remains historical provenance until equivalent conditions are proven or the claim is remeasured.
+- Semantic fidelity to the method is **not** evidence that a mutation succeeded. Runtime effect/readback remains mandatory.
+
+Compact law:
+
+```text
+METHOD_STABLE + REALITY_REMEASURED
+SEMANTIC_RESILIENCE_UNDER_TECHNICAL_DRIFT=true
+GRAMMAR_PRESERVED != TECHNICAL_STATE_CURRENT
+REPORT_OLD != STATE_NOW
+```
+
 ## Procedure — three-plane reconcile then micro-deploy
 
 1. **GitHub (live API, not local origin/main)**
