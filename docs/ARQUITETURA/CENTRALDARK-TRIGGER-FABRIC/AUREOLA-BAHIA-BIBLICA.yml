@@ -1087,3 +1087,36 @@ aureola_symbol_rendering:
     - "⭕ REGISTRAR"
     - "⭕ VERIFICAR"
     - "⭕ CONTINUAR"
+
+multimodal_completion_symbolic_cue:
+  id: MULTIMODAL_COMPLETE_BEFORE_ACTION
+  learned_at: "2026-10-04"
+  owner_skill: ".agents/skills/session-intelligence-harvester/SKILL.md"
+  remembrance: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-MULTIMODAL-COMPLETE-BEFORE-ACTION.md"
+  receipt: "docs/CONSCIENCIA/RECEIPTS/2026-10-04-multimodal-context-symbolic-execution.md"
+  composite_cue: "🪛🪄🪬🔩⛏️🏺✍🏼🪚🌞⏰👩🏻‍🍳𓇼𓏲*ੈ✩‧₊˚🥣🫵🏽🧏🏻‍♂️👨🏻‍💻🦾🦿🧿"
+  cue_meaning: COMPLETE_EVIDENCE_THEN_TRANSFORM_CRYSTALLIZE_AND_TEACH
+  atomic_glyph_meanings_are_not_invented: true
+  recipe:
+    - MEASURE_BYTES_AND_METADATA
+    - COVER_VISUAL_TIMELINE
+    - CHECK_AUDIO_STREAM
+    - TRANSCRIBE_AUDIO
+    - COMPARE_MODALITIES
+    - CLASSIFY_FACT_INFERENCE_HYPOTHESIS_UNKNOWN
+    - DEDUPE_AGAINST_CURRENT
+    - RESOLVE_EXISTING_OWNER
+    - CHECK_CURRENT_AUTHORITY
+    - EXECUTE_MINIMAL_DELTA
+    - READBACK
+    - REGISTER_RECEIPT
+    - TEACH_NEXT_EXECUTOR
+  invariants:
+    MULTIMODAL_COMPLETE_BEFORE_ACTION: true
+    CUE_IS_POINTER_NOT_AUTHORITY: true
+    SYMBOLIC_CUE_DOES_NOT_GRANT_WRITE: true
+    EXPLICIT_CURRENT_INTENT_OR_CANONICAL_MAPPING_REQUIRED_FOR_WRITE: true
+    USER_STATED_GT_ASSISTANT_INFERRED: true
+    CONNECTED_PROVIDER_CAN_CLOSE_GAP_WITHOUT_BECOMING_OWNER: true
+    ROUTE_BY_CAPABILITY_NOT_TOOL_NAME: true
+
