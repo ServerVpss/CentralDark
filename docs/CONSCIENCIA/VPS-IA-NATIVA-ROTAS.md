@@ -171,3 +171,28 @@ AIONUI_NATIVE_BINDING=UNKNOWN
 ```
 
 Próxima prova: medir no twin local/VPS a capability nativa pelo protocolo real, executar uma chamada material e somente depois bindar Hermes/AionUi. Não pedir chave de provider externo para fechar um claim nativo.
+
+
+## VMware CURRENT — Hermes + Kylin native/cloud route — 03/10/2026
+
+Medição feita no twin local `CENTRALDARK-OS`, não na VPS. O objetivo foi provar um modelo Kylin já disponível e preparar o binding do Hermes original sem instalar runtime paralelo.
+
+```text
+HERMES_VERSION=vgit.ca952a5
+HERMES_PROVIDER_CURRENT=nous
+NOUS_PAID_ROUTE=CREDITS_EXHAUSTED
+KYLIN_DEEPSEEK_R1_PACKAGE=INSTALLED
+KYLIN_DEEPSEEK_V3_PACKAGE=INSTALLED
+KYLIN_CLOUD_ENABLED=PASS
+KYLIN_CLOUD_CURRENT_MODEL=kylin-deepseek-r1
+KYLIN_NATIVE_SDK=/usr/lib/x86_64-linux-gnu/libkysdk-genai-nlp.so.1
+KYLIN_NATIVE_RESPONSE=PASS
+KYLIN_NATIVE_RESPONSE_TEXT=LOCAL_QWEN_OK
+HERMES_USING_KYLIN_NATIVE=UNKNOWN
+```
+
+Discriminante importante: `deepseek-r1` e `kylin-deepseek-r1` não se comportaram igual. O primeiro inicializou a sessão mas retornou erro 10 sem texto; o segundo fechou `INIT=0 → DONE=True → TEXT=LOCAL_QWEN_OK`. Portanto o binding nominal do Kylin faz parte da prova.
+
+O provider `custom` do Hermes já suporta endpoint OpenAI-compatible. O menor delta escolhido foi um bridge loopback para adaptar `genai_text_*`, sem Ollama/vLLM/llama.cpp. O arquivo `~/.hermes/kylin_openai_bridge.py` ainda não passou health por erro local de Python no acesso a `XDG_RUNTIME_DIR`; logo `BRIDGE_FILE_EXISTS != BRIDGE_RUNNING` e `KYLIN_NATIVE_RESPONSE=PASS != HERMES_KYLIN_BINDING_PASS`.
+
+Next cursor: corrigir o bridge existente, provar `/health`, `/v1/models`, chat `BRIDGE_OK`, então configurar Hermes `provider=custom`, loopback `127.0.0.1:18435/v1`, modelo `kylin-deepseek-r1` e exigir `HERMES_VM_OK`.

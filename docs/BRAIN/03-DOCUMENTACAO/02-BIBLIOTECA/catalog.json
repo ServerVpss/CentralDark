@@ -1348,11 +1348,11 @@
     {
       "id": "d01-memoria-viva-centraldark",
       "source_id": "canonical-aprendizados",
-      "reference": "Aprendizados #128-#136 — memória viva CENTRALDARK-OS",
+      "reference": "Aprendizados #128-#156 — memória viva CENTRALDARK-OS",
       "kind": "canonical-learning-route",
       "category": "D",
       "state": "CANONICAL",
-      "summary": "Sequência local-first → runtime sieve → painel → auth layers → convergência → memória viva → constelação META → retenção do ouro provado → autoaplicação S0.",
+      "summary": "Sequência local-first → runtime sieve → convergência → memória viva → constelação META → forja VMware → binding SSH → preserve-gold → compilador de cristal portátil e seleção temporal.",
       "tags": [
         "tema/aprendizado",
         "funcao/continuidade",
@@ -1365,7 +1365,8 @@
         "[[SOUL-SOL]]",
         "[[METACOGNICAO-OPERACIONAL]]",
         "[[SEMANTIC-LINKER]]",
-        "[[APRENDIZADOS#136]]"
+        "[[APRENDIZADOS#136]]",
+        "[[APRENDIZADOS#156]]"
       ],
       "emojis": [
         "🧬",
@@ -1381,11 +1382,11 @@
     {
       "id": "d02-lembrancas-learning-index",
       "source_id": "canonical-lembrancas",
-      "reference": "LEARNING_INDEX — CENTRALDARK-OS #128→#135",
+      "reference": "LEARNING_INDEX — CENTRALDARK-OS #128→#156",
       "kind": "semantic-memory-index",
       "category": "D",
       "state": "CANONICAL",
-      "summary": "Índice humano e aliases para recuperar aprendizados sem depender de texto duplicado.",
+      "summary": "Índice humano e aliases para recuperar aprendizados até #156 sem duplicar o corpus; CURRENT e owners permanecem autoridade.",
       "tags": [
         "tema/memoria",
         "funcao/indexacao",
@@ -1395,7 +1396,8 @@
       "links": [
         "[[APRENDIZADOS]]",
         "[[SEMANTIC-LINKER]]",
-        "[[META-START-LINK]]"
+        "[[META-START-LINK]]",
+        "[[APRENDIZADOS#156]]"
       ],
       "emojis": [
         "🧠",

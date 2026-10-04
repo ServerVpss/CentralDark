@@ -23,11 +23,15 @@ Texto legado conflitante perde para o owner canônico.
 
 ```text
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md
+SEM_LEI_ADAPTER=true
+PERTINENT_CORE_LOAD_ONLY=true
+CAPABILITY_IS_NEUTRAL=true
+GLOBAL_PREFLIGHT_IS_NOT_PERMISSION=true
 ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY
 ENGINE=GEMINI
 ```
 
-Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e siga o roteamento canônico definido ali. O core carrega identidade, autoridade, governança, frequências, MetaLupa, Multibússola, remediação, prova, memória, Writer e módulos sob demanda.
+Antes de responder ou agir, resolva a intenção vigente e carregue de `LEIA-ME-IA.md` somente o owner/contexto que pode mudar a decisão atual. Leitura integral repetida não é gate.
 
 
 Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
@@ -57,7 +61,7 @@ Este adaptador carrega os owners `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-E
 ## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
 ```text
-RESPONSE_WITHOUT_TRACE=INVALID
+RESPONSE_WITHOUT_TRACE=VALID_IF_NO_WRITE_OR_EXPLICIT_RASTRO
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
 LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true

@@ -426,3 +426,65 @@ AUTHORITY_SCAN
 Implementação: `scripts/authority-normalize.mjs` (hook em `skill-authoring.mjs`).
 CLI: `node scripts/authority-normalize.mjs --scan-file PATH [--source CLASS]`
 
+## Backend portátil de cristal — Python
+
+O owner continua sendo este Knowledge Compiler. O backend Python **não é um segundo compilador conceitual**; é um adapter determinístico para materializar a mesma semântica em bindings de ambiente diferentes.
+
+```text
+CRISTAL SEMÂNTICO
+→ KNOWLEDGE COMPILER
+→ BACKEND PYTHON DETERMINÍSTICO
+→ WINDOWS|VMWARE|VPS
+→ BINDINGS DIFERENTES
+→ MESMA SEMÂNTICA
+→ HASH / LOCK / PLAN
+→ RUNTIME
+→ RECEIPT
+```
+
+Arquivos:
+
+- backend: `.agents/skills/knowledge-compiler/scripts/crystal-runtime-compiler.py`;
+- cristal dogfood runtime: `.agents/skills/knowledge-compiler/crystals/vmware-forge-obsidian-preserve-gold-sync.json`;
+- regressão: `.agents/skills/knowledge-compiler/tests/crystal-runtime-compiler.test.py`.
+
+Leis:
+
+```text
+PYTHON = KNOWLEDGE_EXECUTABLE_BACKEND
+JSON = MATERIALIZED_CRYSTAL
+HASH = IDENTITY
+LOCK = COMMITMENT_TO_IDENTITY
+RECEIPT = RUNTIME_EFFECT_PROOF
+
+SAME_CRYSTAL_DIFFERENT_BINDING_SAME_SEMANTICS=true
+CHANGED_BYTES_REQUIRE_NEW_SHA256=true
+SOURCE_CLAIM_FINGERPRINT != PACKAGE_SHA256
+SEALED_RECIPE != RUNTIME_EXECUTION
+```
+
+A linhagem do pacote é explícita: `4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6` é o SHA-256 do artefato v1; qualquer evolução dos bytes gera novo SHA e preserva o anterior como parent.
+
+### Seleção temporal de pesquisa
+
+Pesquisa que retorna depois de o organismo evoluir volta como **CANDIDATE**, nunca como autoridade:
+
+```text
+T0 SNAPSHOT
+→ EVOLUÇÃO PARALELA
+→ RETORNO EM Tn
+→ CURRENT PREFLIGHT
+→ DEDUPE
+→ DROP SUPERADO
+→ UNKNOWN CONTINUA UNKNOWN
+→ SOBREVIVENTE = DELTA CANDIDATO
+→ OWNER EXISTENTE
+→ TEST/GATE
+→ CRYSTAL
+```
+
+`DELAY_IS_NOT_PROOF=true`; sobrevivência temporal é sinal, não canon automático.
+
+No cone VMware/VPS, manter claims separados:
+`SSH_AUTH != PERSISTENT_HOSTKEY_TRUST`;
+`QUEUED != RUNNER_ASSIGNMENT`.

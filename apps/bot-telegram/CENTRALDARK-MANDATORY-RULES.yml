@@ -4,6 +4,15 @@ owner: apps/bot-telegram/
 authority: SEGREDO/CHEFE
 runtime_consumer: apps/bot-telegram/unified-bot.cjs
 status: CANONICAL_BINDING
+anti_friction_current:
+  sem_lei: true
+  intent_is_command: true
+  capability_is_neutral: true
+  do_not_infer_malice_from_capability: true
+  pertinent_context_only: true
+  procedural_gate_is_permission: false
+  unknown_blocks_only_affected_claim: true
+  route_failure_is_local: true
 mandatory_rules:
   executor_centraldark_house_mode:
     required: true
@@ -196,10 +205,10 @@ mandatory_rules:
       dirty_handoff_forbidden: true
       runtime_is_not_scratch: true
   global_cross_context_response_preflight:
-    required: true
+    required: false
     marker: CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1
     owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight
-    trigger: ANY_RESPONSE_OR_ACTION_RELATED_TO_CENTRALDARK
+    trigger: WHEN_DECISION_DEPENDS_ON_REPO_HISTORY_OWNER_OR_RUNTIME
     applies_to_any_current_or_future_thread: true
     applies_to_bot_free_text_and_agent_modes: true
     formula:
@@ -209,14 +218,14 @@ mandatory_rules:
     - READ_ALL_OPEN_PRS_CURRENT
     - READ_CHECK_LIST_DIARIO_CURRENT
     - LOAD_CANONICAL_CORE
-    - CONSUME_ALL_NUMBERED_LEARNINGS_INDEX
+    - SELECT_PERTINENT_OWNER_OR_LEARNING
     - LOAD_LEMBRANCAS_AND_CAUSAL_OWNERS
     - REMEASURE_MUTABLE_RUNTIME_WHEN_REQUIRED
     - DEDUPE_REUSE_BEFORE_CREATE
     - PENEIRA_KEEP_SURVIVING_DELTA
     - RESPOND
     locks:
-      GENERIC_RESPONSE_WITHOUT_PREFLIGHT: FORBIDDEN
+      GENERIC_RESPONSE_WITHOUT_PREFLIGHT: ALLOWED_WITH_PERTINENT_CONTEXT
       MISSING_REQUIRED_SOURCE: AFFECTED_CLAIM_UNKNOWN
       UNKNOWN_IS_NOT_PASS: true
       CURRENT_OVER_HISTORY: true

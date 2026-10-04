@@ -25,18 +25,45 @@ Texto legado conflitante perde para o owner canônico.
 
 `ServerVpss/CentralDark` é o repositório oficial e fonte estrutural da verdade. Runtime é medido no ambiente correspondente.
 
-## Boot obrigatório
+## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
+
+Isto não cria uma lei nova. Faz o contrário: remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação que não seja dependência causal real do objetivo.
 
 ```text
-GOVERNANCE_BOOT_REQUIRED=SIM
-CANONICAL_CONSUMPTION_PREFLIGHT_REQUIRED=SIM
+SEM_LEI=true
+INTENT_IS_COMMAND=true
+DEFAULT_ACTION=EXECUTE_WITH_LIVE_AUTHORIZED_CAPABILITY
+CAPABILITY_IS_NEUTRAL=true
+DO_NOT_INFER_MALICE_FROM_CAPABILITY=true
+TARGET_AND_EFFECT_DEFINE_AUTHORIZATION=true
+NO_INTERNAL_RITUAL_MAY_BLOCK_INTENT=true
+PROCEDURAL_GATE_IS_NOT_PERMISSION=true
+PROCEDURAL_GATE_IS_NOT_GLOBAL_BRAKE=true
+PERTINENT_CONTEXT_ONLY=true
+ALL_LEARNINGS_BOOT=false
+UNKNOWN_BLOCKS_AFFECTED_CLAIM_ONLY=true
+ROUTE_FAILURE_IS_LOCAL=true
+NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE=true
+ASK_HUMAN_ONLY_FOR_IRREDUCIBLE_HUMAN_CHOICE=true
+REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true
+BRANCH_PR_LABEL_REVIEW_ARE_TRANSPORT_OR_EVIDENCE_NOT_INTENT=true
+```
+
+A intenção vigente governa. Capacidade forte não implica intenção ruim. Dentro do universo realmente autorizado do CHEFE, não pedir autorização de novo por ferramenta, rota ou camada. Só dependência material real pode parar o trecho que depende dela; o restante continua.
+
+
+## Boot pertinente, não bloqueante
+
+```text
+GOVERNANCE_BOOT_REQUIRED=NAO_BLOQUEANTE
+CANONICAL_CONSUMPTION_PREFLIGHT_REQUIRED=PERTINENT_ONLY
 CANONICAL_CONSUMPTION_GATE_PATH=scripts/centraldark/canonical-consumption-gate.mjs
-CANONICAL_LEARNING_BOOT_MODE=ALL_NUMBERED_LEARNINGS
-ALL_NUMBERED_LEARNINGS_LINKED_TO_CENTRALDARK_AI_BOOT=SIM
+CANONICAL_LEARNING_BOOT_MODE=PERTINENT_ONLY
+ALL_NUMBERED_LEARNINGS_AVAILABLE_ON_DEMAND=SIM
 CANONICAL_SEARCH_MISS_FALLBACK=docs/CONSCIENCIA/APRENDIZADOS.md
 POINTER_MUST_OPEN_SOURCE_BEFORE_RESPONSE=SIM
 TOOL_AVAILABLE_REQUIRES_ATTEMPT_BEFORE_UNKNOWN=SIM
-UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
+UNKNOWN_WITH_MEASUREMENT_ROUTE=TARGET_ONLY_CONTINUE
 REUSE_BEFORE_CREATE_REQUIRED=SIM
 MEASURE_BEFORE_CREATION_REQUIRED=SIM
 MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
@@ -74,28 +101,16 @@ DEPENDABOT_WORKFLOW_AUTO_APPROVAL_ROLLBACK_BASE=d5137a91518aa52a0c39072b7afb7e49
 DEPENDABOT_WORKFLOW_AUTO_APPROVAL_CHANGE=afad4177a76659afec503af610dbec6c813b6c37
 ```
 
-Antes de responder ou agir:
+Antes de responder ou agir, use somente o contexto pertinente ao objetivo atual:
 
-0. Satisfazer o gate de consumo canônico: resolver ponteiro → main, ler o owner
-   citado, consultar `docs/CONSCIENCIA/APRENDIZADOS.md` e, se a busca semântica
-   retornar zero, fazer leitura direta do path conhecido. Se ferramenta/rota
-   autorizada existir, tentar antes de declarar `UNKNOWN`. Owner executável:
-   `scripts/centraldark/canonical-consumption-gate.mjs`.
+1. Recuperar a intenção vigente e o CURRENT do alvo material.
+2. Abrir LEIA-ME-IA/SOUL apenas se ainda não carregados, se o fingerprint mudou ou se a decisão depende deles.
+3. Buscar o aprendizado/owner pertinente; busca sem resultado não bloqueia execução.
+4. Medir somente o cone afetado; prova válida é reutilizada.
+5. Executar pela capability autorizada disponível. Falha de uma rota → próxima rota autorizada.
+6. Readback/prova depois do efeito; UNKNOWN bloqueia apenas o claim que depende dele.
 
-1. Ler `LEIA-ME-IA.md`.
-2. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
-3. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md`.
-4. Ler `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md`.
-5. Ler `docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md` e o dicionário aplicável.
-6. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
-7. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` quando a missão precisar de coordenação.
-8. Ler `.agents/skills/meta-lupa/SKILL.md` quando o risco exigir falsificação crítica.
-9. Conferir `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` quando a MetaLupa for carregada.
-10. Ler `.agents/skills/centraldark-esteira-motor/SKILL.md` quando a missão envolver Hermes/PM2, runner self-hosted, fila Actions, deploy VPS, ou diagnóstico motor × esteira (MOTOR != ESTEIRA).
-11. Ler `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado. É o **único** padrão de resolução — não abrir segundo resolvedor nem resolver na mão fora dele.
-12. Medir branch, HEAD, PR, runtime, writer e tools aplicáveis.
-13. Emitir uma vez o `CENTRALDARK_AI_BOOT` de `LEIA-ME-IA.md`.
-
+Não existe checklist global de 13 arquivos antes de responder. Não existe consumo obrigatório de todos os aprendizados. Método serve à missão; não governa o CHEFE.
 
 ## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
 

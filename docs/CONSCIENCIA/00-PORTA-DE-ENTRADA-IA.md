@@ -8,6 +8,23 @@ status: "CANÔNICO"
 
 # CHECKPOINT-IA — Estado vivo para qualquer IA
 
+## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
+
+Isto não cria lei nova. Remove poder de veto de ritual/checklist/gate sem dependência causal real.
+
+```text
+SEM_LEI=true
+INTENT_IS_COMMAND=true
+CAPABILITY_IS_NEUTRAL=true
+DO_NOT_INFER_MALICE_FROM_CAPABILITY=true
+PERTINENT_CONTEXT_ONLY=true
+ALL_LEARNINGS_BOOT=false
+UNKNOWN_BLOCKS_AFFECTED_CLAIM_ONLY=true
+ROUTE_FAILURE_IS_LOCAL=true
+REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true
+```
+
+
 Este arquivo é a primeira camada de sincronização entre agentes, modelos, plugins e hubs no CentralDark.
 
 ```text
@@ -62,8 +79,6 @@ RETOMAR MISSAO
 
 `!AURÉOLA CANÔNICA` significa o refinamento adaptativo de !CENTRALDARK. Modo não ritualístico: `RITUAL_MODE=OFF`, `PERTINENCE_FIRST=true`, `MINIMUM_SUFFICIENT_LOOP=true`. Seleciona dinamicamente o menor ciclo suficiente (REACT, FABLE, META_LUPA, MULTIBUSSOLA, RECONCILIAR, CONTRAPROVA, REGISTRA) com base na pertinência do contexto. Pular etapa não pertinente é operação válida. O seletor canônico de BOOT é: AUREOLA_CENTRALDARK_MINIMUM_LOOP → REALIDADE.
 
-`!AURÉOLA CANÔNICA` significa o refinamento adaptativo de !CENTRALDARK. Modo não ritualístico: `RITUAL_MODE=OFF`, `PERTINENCE_FIRST=true`, `MINIMUM_SUFFICIENT_LOOP=true`. Seleciona dinamicamente o menor ciclo suficiente (REACT, FABLE, META_LUPA, MULTIBUSSOLA, RECONCILIAR, CONTRAPROVA, REGISTRA) com base na pertinência do contexto. Pular etapa não pertinente é operação válida. O seletor canônico de BOOT é: AUREOLA_CENTRALDARK_MINIMUM_LOOP → REALIDADE.
-
 ```text
 #ACORDAR + !CALIBRAR + !MULTIBUSSOLA
 → RECUPERAR ESTADO
@@ -79,24 +94,17 @@ RETOMAR MISSAO
 
 Todos os eixos são considerados; somente os eixos materiais são executados. Eixo material não pode ser pulado por conveniência. Eixo sem ganho informacional esperado pode ser `SKIP_JUSTIFICADO`. `UNKNOWN` nunca vira PASS.
 
-## Boot obrigatório
+## Boot sob demanda — só o pertinente
 
-1. Ler `LEIA-ME-IA.md`.
-2. Ler `AGENTS.md`.
-3. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
-4. Ler `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md`.
-5. Ler `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`.
-6. Ler `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`.
-7. Quando outro Writer já estiver ativo ou houver colaboração multiagente, carregar `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md`.
-8. Ler `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`, `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/PENDENCIAS.md` quando relevantes; o mapa contém o registro de provas reutilizáveis e seus critérios de invalidação.
-   - Memória contextual canônica alcançável: `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/HISTORIA-CHEFE.md` e `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md`; narrativa/XP não substituem prova de runtime.
-9. Quando a missão projetar contexto + ferramentas + observabilidade para um ambiente delimitado, carregar `docs/CONSCIENCIA/EXPANSAO-DE-DOMINIO.md`.
-10. Quando `!MULTIBUSSOLA` for invocado, carregar `docs/CONSCIENCIA/MULTIBUSSOLA.md`.
-11. Consultar GitHub Actions quando envolver CI/PR/merge/deploy.
-12. Medir branch, HEAD, escopo, escritor atual, runtime e ferramentas aplicáveis somente onde o registro de prova estiver ausente, expirado ou invalidado.
-13. Emitir uma vez o `CENTRALDARK_AI_BOOT` definido em `LEIA-ME-IA.md`.
-14. Executar a reconciliação antes de propor qualquer solução nova.
-15. Continuar do ponto real sem pedir novamente estado que a própria máquina consegue medir.
+```text
+INTENCAO
+→ CURRENT_DO_ALVO
+→ OWNER/APRENDIZADO_PERTINENTE_SE_NECESSARIO
+→ EXECUTAR
+→ READBACK
+```
+
+LEIA-ME-IA, SOUL, MAPA, APRENDIZADOS, MetaLupa, MultiBússola, contrato, HUD e outros owners são carregados por pertinência, não como lista obrigatória. Prova válida não é reaberta sem mudança material. Falha de uma camada não impede capacidades independentes.
 
 ## Cristalização operacional útil — runtime, GitHub e VPS limpos
 

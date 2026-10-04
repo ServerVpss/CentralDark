@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "6f33fc4bd61864db63680d11457fce97f52df986",
+  "source_blob_sha": "a78321c4c9ac1ed8a5664c22a9a98b175d8d21d9",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 151,
-    "highest_legacy_learning_number": 152,
+    "learning_sections": 157,
+    "highest_legacy_learning_number": 158,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 152
+      "end": 158
     }
   },
   "nodes": [
@@ -1746,6 +1746,72 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L151",
+      "next_uid": "L153"
+    },
+    {
+      "uid": "L153",
+      "legacy_learning_number": 153,
+      "legacy_occurrence": 1,
+      "title": "Compressão por invariante + bindings autossuficientes: a VMware deve executar o mesmo sistema sem depender da Casa como salto",
+      "document_order": 152,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L152",
+      "next_uid": "L154"
+    },
+    {
+      "uid": "L154",
+      "legacy_learning_number": 154,
+      "legacy_occurrence": 1,
+      "title": "Binding de ambiente não é arquitetura: config byte-a-byte da Casa carregou path Windows no Linux; adaptar somente o path provou VMware → VPS direto",
+      "document_order": 153,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L153",
+      "next_uid": "L155"
+    },
+    {
+      "uid": "L155",
+      "legacy_learning_number": 155,
+      "legacy_occurrence": 1,
+      "title": "A própria bancada vira cofre/cockpit: Obsidian, HUD, BRAIN e sync preservativo da main convergem no mesmo `SHARED/CentralDark`",
+      "document_order": 154,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L154",
+      "next_uid": "L156"
+    },
+    {
+      "uid": "L156",
+      "legacy_learning_number": 156,
+      "legacy_occurrence": 1,
+      "title": "Cristal vira programa portátil: Knowledge Compiler compila invariantes em bindings Windows/VMware/VPS e pesquisa atrasada retorna como candidato temporal",
+      "document_order": 155,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L155",
+      "next_uid": "L157"
+    },
+    {
+      "uid": "L157",
+      "legacy_learning_number": 157,
+      "legacy_occurrence": 1,
+      "title": "Intenção é o escopo global do executor: ferramenta entregue vira braço; rota não delimita missão",
+      "document_order": 156,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L156",
+      "next_uid": "L158"
+    },
+    {
+      "uid": "L158",
+      "legacy_learning_number": 158,
+      "legacy_occurrence": 1,
+      "title": "Sem lei operacional: intenção governa; fricção interna perde veto; capacidade é neutra",
+      "document_order": 157,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L157",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
