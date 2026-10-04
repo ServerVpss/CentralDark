@@ -107,12 +107,11 @@ tem que refletir nos DOIS lugares abaixo, sem esperar o Chefe pedir:
    — mesma pendência, mesma frase, na seção certa (`🧍 Do Chefe` = decisão
    humana; `🤖 Do agente` = o próprio agente resolve sozinho).
 
-Importante: isso é edição manual de arquivo (`file://`, sem servidor), não
-sincronização automática de verdade — o "autônomo" aqui é o AGENTE fazer isso
-sempre, sem precisar ser lembrado, não o arquivo se atualizar sozinho. Se
-algum dia quiser automação real (HUD lendo Pendências.md ao vivo via
-servidor local), isso é mudança de arquitetura nova — avisar o Chefe antes,
-não assumir.
+Importante: desde 2026-10-04 o CHEFE autorizou a evolução deste owner para monitoramento vivo sem criar segundo coração. O `HUD.html` continua arquivo local/Obsidian, mas dados mutáveis devem vir do owner existente `https://api.centralldark.com/heartbeat`, com refresh periódico e fail-closed: fetch falhou = `UNKNOWN`, nunca PASS.
+
+O HUD deve renderizar, quando presentes, `operational.modelBinding.orchestrator`, `operational.modelBinding.localWorker`, `operational.modelBinding.selfEvolution`, `operational.executionTopology` e o timestamp da medição. O arquivo é projeção; `/heartbeat` é o agregador vivo; nenhum dos dois vira autoridade.
+
+Contrato: `ONE_HEART=true`; `HUD_LIVE_SOURCE=/heartbeat`; `MODEL_BINDING_VISIBLE=true`; `ORCHESTRATOR_CURRENT_VISIBLE=true`; `LOCAL_WORKER_CURRENT_VISIBLE=true`; `SELF_EVOLUTION_VISIBLE=true`; `UNKNOWN_ON_FETCH_FAILURE=true`; `NO_SECOND_HEALTH_AGGREGATOR=true`.
 
 ## Regras que não podem ser violadas
 

@@ -7,6 +7,12 @@ on:
   pull_request:
     types: [opened, reopened, ready_for_review, synchronize]
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to review with the local CURRENT model"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -14,7 +20,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: pr-agent-local-${{ github.event.pull_request.number }}
+  group: pr-agent-local-${{ inputs.pr_number || github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -22,7 +28,12 @@ jobs:
     name: "🪬 CentralDark Local AI — current model"
     runs-on: [self-hosted, Linux]
     timeout-minutes: 20
-    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        !github.event.pull_request.draft
+      )
     continue-on-error: true
     env:
       LOCAL_BRIDGE_BASE: http://127.0.0.1:18435/v1
@@ -66,6 +77,8 @@ jobs:
         run: |
           set -Eeuo pipefail
           export CONFIG__MODEL="openai/$LOCAL_MODEL"
+          PR_NUMBER='${{ inputs.pr_number || github.event.pull_request.number }}'
+          PR_URL="https://github.com/${{ github.repository }}/pull/${PR_NUMBER}"
           echo "🤖 CentralDark Local AI — $LOCAL_MODEL iniciando review..."
           .venv-pr-agent/bin/python -m pr_agent.cli \
-            --pr_url="${{ github.event.pull_request.html_url }}" review
+            --pr_url="$PR_URL" review

@@ -700,3 +700,10 @@ CURRENT_OVER_HISTORY = true
 - **Owner:** `.agents/skills/centraldark-operational-method/SKILL.md`
 - **Conteúdo:** write promovido para `main` é imediatamente replayado na árvore canônica da VPS pelos mesmos paths/blobs, com hash/readback, sem depender de pull, checkout ou reset do runtime. Divergência local preserva ouro e reconcilia somente o path afetado.
 - **Cristal:** `MAIN_WRITE_REPLAYS_TO_VPS=true`; `NO_RUNTIME_PULL_REQUIRED_FOR_KNOWN_DELTA=true`; `PRESERVE_LOCAL_GOLD_ON_DIVERGENCE=true`; `HASH_READBACK_REQUIRED=true`; `RUNTIME_HEAD_PARITY_NOT_REQUIRED_FOR_FILE_DELTA_SYNC=true`.
+
+### [2026-10-04] Metabolismo autônomo + CURRENT model binding + One Heart
+- **Tipo:** LEARNING_INDEX / AUTONOMOUS_METABOLISM / MODEL_BINDING / SELF_EVOLUTION / OBSERVABILITY
+- **Learning:** #164
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-METABOLISMO-AUTONOMO-CURRENT-MODEL-ONE-HEART.md`
+- **Conteúdo:** Hermes permanece corpo executor e continuidade; o modelo selecionado no Hermes é motor do orquestrador; o modelo local CURRENT é worker cognitivo pesado; Self-Evolution reutiliza donor oficial e resolve optimizer/evaluator no início de cada lote; cron horário mantém metabolismo sem chamar modelo quando nada mudou; `/heartbeat` é o coração único e o HUD é projeção.
+- **Cristal:** `MODEL_NAME_IS_BINDING=true`; `ORCHESTRATOR=HERMES_CURRENT_SELECTED_MODEL`; `LOCAL_WORKER=CENTRALDARK_CURRENT_LOCAL_MODEL`; `MID_LOTE_MODEL_SWAP=false`; `ONE_HEART=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `NO_SECOND_EVOLUTION_ENGINE=true`.
