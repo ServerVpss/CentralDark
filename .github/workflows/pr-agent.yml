@@ -1,8 +1,7 @@
-name: ⚙️ PR Review — Multi-IA (paralelo)
+name: ⚙️ PR Review — IA local CentralDark
 
-# 3 IAs revisam o mesmo PR em paralelo — cada uma posta seu review independente.
-# Secrets necessários: GROQ_API_KEY · GEMINI_API_KEY · ANTHROPIC_API_KEY
-# Se um secret não estiver configurado, aquele job pula sem falhar.
+# O review usa o bridge OpenAI-compatible local da VPS.
+# O modelo é resolvido no início do job pelo /health; nenhum modelo cloud é fixado.
 
 on:
   pull_request:
@@ -15,100 +14,58 @@ permissions:
   issues: write
 
 concurrency:
-  group: pr-agent-${{ github.event.pull_request.number }}
+  group: pr-agent-local-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-
-  review-groq:
-    name: "⚡ Groq — Llama3-70B"
+  review-local:
+    name: "🪬 CentralDark Local AI — current model"
     runs-on: [self-hosted, Linux]
-    timeout-minutes: 15
+    timeout-minutes: 20
     if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
     continue-on-error: true
+    env:
+      LOCAL_BRIDGE_BASE: http://127.0.0.1:18435/v1
+      LOCAL_BRIDGE_HEALTH: http://127.0.0.1:18435/health
+      GITHUB__USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: 🐍 Preparar Python 3.12
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-      - name: 🐍 Preparar PR-Agent isolado
-        run: |
-          python -m venv .venv-pr-agent
-          .venv-pr-agent/bin/python -m pip install --upgrade pip --quiet
-          .venv-pr-agent/bin/pip install 'pr-agent==0.46.0' --quiet
-      - name: 🤖 Review
-        continue-on-error: true
-        env:
-          GROQ_API_KEY:         ${{ secrets.GROQ_API_KEY }}
-          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -z "$GROQ_API_KEY" ]; then echo "⚠️ GROQ_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=groq
-          export CONFIG__MODEL=llama3-70b-8192
-          echo "🤖 Groq Llama3-70B iniciando review..."
-          .venv-pr-agent/bin/python -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
 
-  review-gemini:
-    name: "✨ Gemini — Flash 1.5"
-    runs-on: [self-hosted, Linux]
-    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
       - name: 🐍 Preparar Python 3.12
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: 🐍 Preparar PR-Agent isolado
-        run: |
-          python -m venv .venv-pr-agent
-          .venv-pr-agent/bin/python -m pip install --upgrade pip --quiet
-          .venv-pr-agent/bin/pip install 'pr-agent==0.46.0' --quiet
-      - name: 🤖 Review
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
-          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -z "$GEMINI_API_KEY" ]; then echo "⚠️ GEMINI_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=google
-          export CONFIG__MODEL=gemini/gemini-1.5-flash
-          export GOOGLE_AI_STUDIO_KEY=$GEMINI_API_KEY
-          echo "🤖 Gemini Flash 1.5 iniciando review..."
-          .venv-pr-agent/bin/python -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
 
-  review-claude:
-    name: "🧠 Claude — Sonnet 4.6"
-    runs-on: [self-hosted, Linux]
-    if: github.repository == 'ServerVpss/CentralDark' && !github.event.pull_request.draft
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - name: 🐍 Preparar Python 3.12
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
+      - name: 🧿 Resolver e provar IA local CURRENT
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          health="$(curl -fsS --max-time 10 "$LOCAL_BRIDGE_HEALTH")"
+          LOCAL_MODEL="$(python3 -c 'import json,sys; print(json.load(sys.stdin)["model"])' <<<"$health")"
+          test -n "$LOCAL_MODEL"
+          printf 'LOCAL_MODEL=%s\n' "$LOCAL_MODEL" >> "$GITHUB_ENV"
+          printf 'LOCAL_MODEL_SOURCE=%s\n' "$LOCAL_BRIDGE_HEALTH" >> "$GITHUB_ENV"
+          printf 'LOCAL_BRIDGE_HEALTH=PASS\n'
+          printf 'LOCAL_MODEL=%s\n' "$LOCAL_MODEL"
+
       - name: 🐍 Preparar PR-Agent isolado
         run: |
+          set -Eeuo pipefail
           python -m venv .venv-pr-agent
           .venv-pr-agent/bin/python -m pip install --upgrade pip --quiet
           .venv-pr-agent/bin/pip install 'pr-agent==0.46.0' --quiet
-      - name: 🤖 Review
-        continue-on-error: true
+
+      - name: 🤖 Review pelo modelo local CURRENT
         env:
-          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_BASE_URL:   https://claude.ap7.site
-          GITHUB__USER_TOKEN:   ${{ secrets.GITHUB_TOKEN }}
+          CONFIG__AI_PROVIDER: openai
+          CONFIG__FALLBACK_MODELS: '[]'
+          OPENAI__API_BASE: ${{ env.LOCAL_BRIDGE_BASE }}
+          OPENAI__KEY: local-kylin
         run: |
-          if [ -z "$ANTHROPIC_API_KEY" ]; then echo "⚠️ ANTHROPIC_API_KEY não configurado — pulando"; exit 0; fi
-          export CONFIG__AI_PROVIDER=anthropic
-          export CONFIG__MODEL=claude-sonnet-4-6
-          echo "🤖 Claude Sonnet 4.6 iniciando review (via proxy ap7)..."
-          .venv-pr-agent/bin/python -m pr_agent.cli --pr_url="${{ github.event.pull_request.html_url }}" review
+          set -Eeuo pipefail
+          export CONFIG__MODEL="openai/$LOCAL_MODEL"
+          echo "🤖 CentralDark Local AI — $LOCAL_MODEL iniciando review..."
+          .venv-pr-agent/bin/python -m pr_agent.cli \
+            --pr_url="${{ github.event.pull_request.html_url }}" review
