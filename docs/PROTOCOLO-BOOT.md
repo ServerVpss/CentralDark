@@ -13,10 +13,10 @@ Este caminho continua existindo para compatibilidade, mas **não é fonte única
 ```text
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 ```
 
-O metadado histórico `Dono: Pivete` significava o humano hoje canonicamente identificado como `SEGREDO/CHEFE`; não redefine PIVETE/HERMES.
+O metadado histórico `Dono: Pivete` significava o humano hoje canonicamente identificado como `SEGREDO/CHEFE`; não redefine HERMES.
 
 ## Boot atual
 
@@ -52,3 +52,6 @@ UNKNOWN != PASS
 ```
 
 `docs/CONSCIENCIA/CONSCIENCIA.md` e lembranças antigas não são mais mestre de identidade/permissão. Consulte SOUL/AGENTS/porta de entrada atuais.
+
+
+> **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.
