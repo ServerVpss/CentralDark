@@ -3,7 +3,7 @@ base_head: LIVE_REMEASURE_REQUIRED
 authority:
   human_intent_owner: SEGREDO/CHEFE
   coordinator: SOL
-  executor_continuity: HERMES/PIVETE
+  executor_continuity: HERMES
   judge: REALITY
 principles:
   response_without_trace_invalid: true
@@ -57,7 +57,6 @@ global_contract_entry_policy:
     - ALL_CURRENT_AND_FUTURE_AGENTS
     - ALL_CURRENT_AND_FUTURE_CLIS
     - HERMES
-    - PIVETE
     - MCP_WORKERS
     - NEW_TAB
     - MODEL_CHANGE
