@@ -117,3 +117,64 @@ Fechar somente o claim ainda aberto:
 `Hermes CLI -> provider custom -> 127.0.0.1:18435/v1 -> Kylin native SDK -> resposta textual`.
 
 Depois, se aplicável, tornar o bridge persistente por arquivo unit em `/etc/systemd/system` e provar reboot/restart, sem criar segundo runtime.
+
+
+## Fechamento posterior da mesma sessão — Hermes + Kylin + AionUi + tool call
+
+Este bloco preserva o snapshot anterior acima e registra o delta medido depois. A fronteira histórica `HERMES_CLI_END_TO_END_RESPONSE=NOT_PROVEN_IN_THIS_RECEIPT` continua verdadeira **para a tentativa CLI daquele instante**; ela não é apagada nem retroativamente convertida em PASS.
+
+Evidência posterior consolidada no PR-mãe #1562, receipt `5975848027`:
+
+- Hermes Agent real identificado: `v0.21.5+6146.g46904a3`, instalação `/root/.hermes/hermes-agent`.
+- Hermes efetivamente configurado com `default=kylin-deepseek-r1`, `provider=custom`, `base_url=http://127.0.0.1:18435/v1`, `streaming=false`.
+- Bridge loopback saudável: `/health=200`, backend `kylin-native-sdk`; `/v1/models` expôs `kylin-deepseek-r1`; chat respondeu `HERMES_KYLIN_BRIDGE_OK`.
+- Kylin native GenAI SDK já havia fechado `SESSION=TRUE → INIT=0 → CENTRALDARK_LOCAL_OK → END=1 → DONE=TRUE → ERROR=FALSE`.
+- AionUi mostrou o endpoint personalizado `kylin-deepseek-r1` e conversação funcional.
+- Prova agêntica observada: Hermes emitiu chamada estruturada `read_file` para `/root/CentralDark_FULL_20261004003605/AGENTS.md`.
+- Triton/Kylin permaneceu `live=200` e `ready=200`.
+- HERMES-CORE permaneceu `health=200`, versão `5.0`.
+
+Rota funcional consolidada:
+
+```text
+AionUi
+→ Hermes Agent real
+→ provider custom
+→ 127.0.0.1:18435/v1
+→ centraldark-kylin-native-bridge
+→ Kylin native GenAI SDK
+→ kylin-deepseek-r1
+→ resposta
+
+Hermes Agent
+→ decisão de ferramenta
+→ tool call estruturada read_file
+→ AGENTS.md do projeto
+```
+
+Cristal deste fechamento:
+
+```text
+KYLIN_NATIVE_LOCAL_GENERATION=PASS
+KYLIN_OPENAI_BRIDGE=PASS
+HERMES_CONFIG_POINTS_TO_KYLIN_NATIVE=PASS
+AIONUI_CUSTOM_KYLIN_CONVERSATION=PASS
+HERMES_AGENT_TOOL_CALL_READ_FILE_EMITTED=PASS
+TRITON_LIVE_READY=PASS
+HERMES_CORE_HEALTH=PASS
+HERMES_KYLIN_AGENTIC_PATH_FUNCTIONAL=PASS
+FIXED_POINT=HERMES_PLUS_LOCAL_KYLIN_PLUS_AGENTIC_CAPABILITY_PROVEN_FUNCTIONAL
+```
+
+Fronteira de prova preservada:
+
+```text
+TOOL_CALL_EMITTED != ALL_TOOLS_PROVEN
+ONE_AGENTIC_TOOL_PATH_PASS != EVERY_AGENTIC_CAPABILITY_PASS
+AIONUI_PATH_PASS != HISTORICAL_CLI_ATTEMPT_RETROACTIVELY_PASS
+MODEL_RESPONSE != TOOL_EFFECT
+UNKNOWN_IS_NOT_PASS
+ACTION_IS_NOT_PROOF
+```
+
+O fixed point vale para o escopo material provado nesta sessão: **Hermes real + rota local Kylin funcional + emissão de tool call real pelo agente**. Capabilities não exercitadas permanecem fora do claim.
