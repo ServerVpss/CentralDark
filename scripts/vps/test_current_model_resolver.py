@@ -23,6 +23,7 @@ def test_current_kylin_selection_beats_stale_hermes_catalog(monkeypatch, tmp_pat
     details = r.resolve_current_model_details()
     assert details["model"] == "kylin-qwen-plus"
     assert details["source"] == "gsettings:com.kylin.aisdk.model.cloud.nlp"
+    assert details["execution_class"] == "cloud"
 
 def test_hermes_catalog_is_fallback(monkeypatch, tmp_path):
     config = tmp_path / "config.yaml"

@@ -279,6 +279,20 @@ local_llm_policy:
   house_weight_is_selection_factor: true
   model_is_replaceable_engine: true
   model_is_not_identity: true
+  current_model_binding:
+    orchestrator: HERMES_CURRENT_SELECTED_MODEL
+    local_worker: CENTRALDARK_CURRENT_LOCAL_MODEL
+    local_worker_owner: scripts/vps/current_model_resolver.py
+    bridge_consumer: scripts/vps/kylin-openai-bridge.py
+    self_evolution_consumer: scripts/vps/hermes-self-evolution-current-model.sh
+    resolve_at_lote_start: true
+    freeze_binding_within_lote: true
+    resolve_again_next_lote: true
+    model_name_is_binding_not_architecture: true
+    consumer_hardcode_model_name: false
+    silent_cloud_fallback_on_local_route_failure: false
+    no_second_router: true
+    monitoring_owner: https://api.centralldark.com/heartbeat
 
 resource_budget:
   dimensions:

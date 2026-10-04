@@ -14,6 +14,7 @@ import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/s
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
 import { decorateToolResult } from "./tool-result-envelope.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
 function zodTypeToJsonSchema(schema) {
     if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
         return zodTypeToJsonSchema(schema._def.innerType);
@@ -394,6 +395,19 @@ export async function serveHttp(options = {}) {
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
       res.end(JSON.stringify({ ok: true, service: "centraldark-native-mcp-http", mode: admin ? "admin" : "mcp", compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length, catalogVersion: CATALOG_VERSION }));
+      return;
+    }
+    if (requestUrl.pathname === "/heartbeat" && req.method === "GET") {
+      const operational = getOperationalSnapshot({ heartbeat: { self: "alive" } });
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({
+        ok: true,
+        service: "centraldark-native-mcp-http",
+        schema: "centraldark.heartbeat.v1",
+        measuredAt: new Date().toISOString(),
+        operational,
+      }));
       return;
     }
     if (requestUrl.pathname !== "/mcp") {
