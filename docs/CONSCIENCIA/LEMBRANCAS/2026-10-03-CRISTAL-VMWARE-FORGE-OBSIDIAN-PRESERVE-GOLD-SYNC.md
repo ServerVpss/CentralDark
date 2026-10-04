@@ -150,6 +150,62 @@ UNKNOWN != SAFE_TO_OVERWRITE
 
 Nenhuma senha, token, PAT, Bearer, chave privada ou valor secreto entra neste cristal. Apenas nomes de bindings, caminhos, fingerprints públicos de receita e estados de presença/prova.
 
+## 2026-10-04 — Reset da forja: migração preservativa CASA → shared → VPS
+
+Delta de intenção CURRENT do CHEFE, medido antes do wipe:
+
+```text
+NORMAL_DIRECTION=CASA_VMWARE_FORGE -> PROVA/GARIMPO -> MAIN -> REPLAY_VPS
+TEMPORARY_RESET_WINDOW=VPS_MAY_BE_MORE_ADVANCED_THAN_VMWARE
+TEMPORARY_VPS_LEAD_DOES_NOT_REVERSE_CANONICAL_DIRECTION=true
+
+MIGRATION_SOURCE_WINDOWS=E:\CentralDark
+MIGRATION_TARGET_SHARED=E:\VMs\CENTRALDARK-OS\SHARED\CentralDark
+POST_RESET_CASA_FORGE=MIGRATION_TARGET_SHARED
+
+PROMOTE_ONLY_PROVEN_USEFUL_DELTA=true
+DELETE_OLD_SHARED_ONLY_AFTER_GARIMPO=true
+COPY_SOURCE_INTO_SHARED_AFTER_OLD_SHARED_CLEARED=true
+WIPE_COPY_EXECUTED=false
+DOCUMENTED != EXECUTED
+```
+
+### Medição pré-wipe
+
+```text
+SHARED_GIT_ROOT=E:/VMs/CENTRALDARK-OS/SHARED/CentralDark
+SHARED_BRANCH=feature/ai-cli-runtime-kernel
+SHARED_HEAD=892454b98d941c3fada35d3df826f9962257f80f
+MAIN_MEASURED_DURING_GARIMPO=5070d8e1b53b002e716701f7e41c6ae42847c7c4
+SHARED_AHEAD_OF_MAIN=1
+SHARED_BEHIND_MAIN=507
+
+E_CENTRALDARK_IS_GIT_ROOT=false
+E_CENTRALDARK_FILES_MEASURED=56018
+E_CENTRALDARK_BYTES_MEASURED=1419550423
+
+VMWARE_GUEST_RUNNING_AT_MEASUREMENT=false
+```
+
+### Peneira do conteúdo antigo da shared
+
+- o commit local `892454b98...` adiciona `2026-09-29-AI-CLI-RUNTIME-KERNEL.md`, mas a `main` já possui o mesmo owner evoluído e deliberadamente mais conservador; a versão local antiga promove claims de seis CLIs como operacionais que o CURRENT não aceita sem prova;
+- `package.json` / `package-lock.json` locais não são promoção segura: incluem versões mais antigas e removem o verificador CURRENT; o Desktop Commander já possui owner/rota canônica no remote bridge;
+- skills locais de merge/voz já possuem owners canônicos equivalentes na `main`; não criar segunda cópia;
+- arquivos idênticos à `main` são dedupe, não novo delta;
+- auth/DPAPI/session, logs brutos, estados de runtime e artefatos temporários ficam fora do Git;
+- Remote Tray/bridge já possui owner canônico em `scripts/remote-bridge/canonical/`; scripts soltos históricos não viram owner novo;
+- reparos locais de Windows e exports/HUD históricos não sobem sem prova discriminante de utilidade CURRENT.
+
+```text
+GARIMPO_RESULT=NO_NEW_CANONICAL_DELTA_IDENTIFIED
+LOCAL_HISTORY_ALREADY_ABSORBED_OR_STALE=true
+SECRETS_RUNTIME_STATE_EXCLUDED=true
+NEW_OWNER_CREATED=false
+```
+
+A limpeza física e a cópia permanecem pendentes até a rota Windows estar viva novamente e o readback pós-cópia provar o efeito. Não transformar esta seção em afirmação de wipe concluído.
+
 ## NEXT_CURSOR
 
-Executar a receita de inventário/reconciliação preservativa contra a `main` CURRENT; depois provar `runner_name` real do self-hosted VMware e usar o cristal #154 para o replay VPS sem Casa como salto.
+Reabrir a rota Windows; confirmar Desktop Commander fora da shared; executar limpeza do conteúdo antigo de `E:\VMs\CENTRALDARK-OS\SHARED\CentralDark`; copiar o conteúdo de `E:\CentralDark` para a shared; comparar contagem/hash/amostragem; então subir a VM e provar a nova CASA/forja antes de retomar `CASA/VMware -> main -> VPS`.
