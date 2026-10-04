@@ -153,8 +153,8 @@ jobs:
             echo "TRACKED_DIRTY_TREE_PRESERVED_ATOMIC_DIST_ONLY"
           fi
 
-          # WebhookDeploy permanece como receptor persistente. A concorrência
-          # de mutação é contida pelo lock compartilhado centraldark-repo-deploy.
+          # Legacy deploy webhook is retired. Reuse the existing PM2 owner only
+          # to stop an exact legacy target; never require or recreate it.
           WEBHOOK_JSON="$(pm2 jlist | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
           if [[ -n "$WEBHOOK_JSON" ]]; then
             WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
@@ -170,15 +170,9 @@ jobs:
             sleep 1
           done
           ! ss -ltn 'sport = :9300' | grep -q LISTEN || { echo "PORT_9300_STILL_LISTENING"; exit 29; }
-          [[ -n "$WEBHOOK_JSON" ]] || { echo "WEBHOOK_PM2_APP_MISSING"; exit 27; }
-          WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
-          WEBHOOK_EXEC="$(jq -r '.pm2_env.pm_exec_path // ""' <<<"$WEBHOOK_JSON")"
-          WEBHOOK_STATUS="$(jq -r '.pm2_env.status // ""' <<<"$WEBHOOK_JSON")"
-          [[ "$WEBHOOK_EXEC" == "$REPO_DIR/scripts/webhook/github-webhook-deploy.mjs" ]] || { echo "WEBHOOK_PM2_TARGET_MISMATCH"; exit 27; }
-          [[ "$WEBHOOK_PID" =~ ^[0-9]+$ && "$WEBHOOK_PID" -gt 0 && "$WEBHOOK_STATUS" == "online" ]] || { echo "WEBHOOK_PM2_NOT_ONLINE"; exit 28; }
-          PORT_PID="$(ss -ltnp 'sport = :9300' 2>/dev/null | sed -n 's/.*pid=\([0-9][0-9]*\).*/\1/p' | head -n1)"
-          [[ "$PORT_PID" == "$WEBHOOK_PID" ]] || { echo "PORT_9300_OWNERSHIP_MISMATCH"; exit 29; }
-          echo "WEBHOOK_LISTENER_PRESERVED=1"
+          echo "LEGACY_WEBHOOK_DEPLOY=RETIRED"
+          echo "CANONICAL_DEPLOY=GITHUB_ACTIONS_SELF_HOSTED"
+          echo "PORT_9300_CLOSED=1"
 
           git fetch --prune origin main
           ORIGIN_SHA="$(git rev-parse origin/main)"
