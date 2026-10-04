@@ -1,0 +1,104 @@
+{
+  "schema": "centraldark.executable-recipe.v1",
+  "owner": "apps/modulos/mcp/src/tools/local/local-compute.js",
+  "objective": "Reuse canonical MCP catalog and native Kylin/Triton in AionUi and Hermes; preserve legacy chat and profile",
+  "pr_mother": 1562,
+  "equivalent_child": 1748,
+  "fingerprint": {
+    "algorithm": "sha256",
+    "aggregate": "863dc16ed1e736a67c943a481f6e3b65f51ec34c6fa16f3257cc61873de744b1",
+    "files": {
+      "scripts/vps/kylin-native-media.py": "af5086d033cdbe632867c53e68ad0115b68eee74b91a50050e7e5b79179f0798",
+      "scripts/vps/kylin-openai-bridge.py": "021abd38e91a7c940bfc4c87b9b0a391f5a8e862b0c967766b654de8b9b48f78",
+      "scripts/vps/aionui-native-integrate.py": "62841117f8b953eef422e01cd0f4c3247a6bfbacf7e5ccbc30606aab405c1385",
+      "apps/modulos/mcp/native-proof.mjs": "32f0189d7c3cd575d08be76bf591e05fc4dc6ac8435505646eac6befa4429abc",
+      "apps/modulos/mcp/src/mcp-server.js": "f6d16c090009ce7b27fb3b3231a5b8ada812fa78447c03544551a6e0b15a4f46",
+      "apps/modulos/mcp/src/audit-logger.js": "97a3b4dcc1bdfad1463a9769bad263e36a5cea655c9b6d654da3ee657d3b20dd",
+      "apps/modulos/mcp/src/tools/core/mcp-admin.js": "75e4fa90b86c7bcca6b6fb06796326bf4a387eba86705c8988a542fb72d25a06",
+      "apps/modulos/mcp/src/tools/local/local-compute.js": "359b41331f83427a2716db420f4d0a3b2ea7938c633b24929770d241712d260c",
+      "apps/modulos/mcp/dist/mcp-server.js": "0505e966a96670caceb82049dc8ec8ac1967bd360d8b015f60dba4c6d68d45cb",
+      "apps/modulos/mcp/dist/audit-logger.js": "97a3b4dcc1bdfad1463a9769bad263e36a5cea655c9b6d654da3ee657d3b20dd",
+      "apps/modulos/mcp/dist/tools/core/mcp-admin.js": "6b358ad51f169f06cc3797afbabd4e689cfbaa6ee67b86d621a9a0a282f5a142",
+      "apps/modulos/mcp/dist/tools/local/local-compute.js": "c4e05f225fcdc688e348cc153fc7ab5697ff77c8c66c7fc0c085ea252b87444e",
+      "apps/modulos/mcp/package-lock.json": "0773aed3e707847218c5e29458b78033d0c3c6881d9084d23dc83b12640f89f1"
+    }
+  },
+  "preconditions": [
+    "Existing AionUi WebUI and profile",
+    "Existing Kylin SDK and Triton 2.49 runtime/models",
+    "Node >=20, Python3 with Pillow/PyYAML, ffmpeg, tesseract eng+chi_sim",
+    "Local owner authorizes binding and scoped existing bridge service restart; destructive MCP actions retain admin guard"
+  ],
+  "bindings": {
+    "repo": "/root/CentralDark_MCP_RUNTIME",
+    "web_url": "http://127.0.0.1:25808",
+    "native_api": "http://127.0.0.1:8000",
+    "native_bridge": "http://127.0.0.1:18435/v1",
+    "media_root": "/root/.hermes/audio_cache/centraldark"
+  },
+  "sequence": [
+    {
+      "cwd": "apps/modulos/mcp",
+      "argv": [
+        "npm",
+        "ci",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund"
+      ]
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "python3",
+        "scripts/vps/aionui-native-integrate.py",
+        "--apply",
+        "--repo",
+        "{repo}",
+        "--web-url",
+        "{web_url}"
+      ]
+    },
+    {
+      "cwd": "apps/modulos/mcp",
+      "env": {
+        "CENTRALDARK_NATIVE_WEB_URL": "{web_url}"
+      },
+      "argv": [
+        "node",
+        "native-proof.mjs"
+      ]
+    },
+    {
+      "argv": [
+        "hermes",
+        "mcp",
+        "test",
+        "centraldark"
+      ]
+    }
+  ],
+  "proof": {
+    "expected_assertions": 10,
+    "embedding_dimensions": 768,
+    "image_embedding_dimensions": 1024,
+    "ocr": "CENTRALDARK PROOF",
+    "asr": "你好",
+    "tts": "RIFF/WAV 44100 Hz nonempty; stochastic waveform, no bit-identical guarantee",
+    "video": "one frame OCR plus native audio ASR",
+    "legacy_chat": "HERMES_KYLIN_BRIDGE_OK"
+  },
+  "counterproof": [
+    "outside-root media rejected",
+    "frames >6 rejected",
+    "empty synthesis text rejected",
+    "unknown model-generated tool name rejected",
+    "raw audio redacted from audit"
+  ],
+  "evidence": [
+    "NATIVE-PROOF-2026-10-04.json",
+    "RUNTIME-2026-10-04.json"
+  ],
+  "result": "BINDINGS_AND_NATIVE_EFFECTS_PASS; AION_AGENT_E2E_UNKNOWN",
+  "next_cursor": "Resolve Aion CLI context/confirmation boundary without changing legacy AGENTS; finish one real tool result and compare UI call_id to canonical MCP trace. PT-BR and full voice/session/token parity remain unproved."
+}

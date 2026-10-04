@@ -1,0 +1,3574 @@
+{
+  "schema": "centraldark.aionui.native-runtime-inventory.v1",
+  "measured_at": "2026-10-04T03:06:15.065606+00:00",
+  "hostname": "CENTRALDARK-OS",
+  "platform": "Linux-7.0.0-2-generic-x86_64-with-glibc2.43",
+  "services": [
+    {
+      "unit": "accounts-daemon.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Accounts Service"
+    },
+    {
+      "unit": "actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "GitHub Actions Runner centraldark-vps-1"
+    },
+    {
+      "unit": "actions.runner.ServerVpss-CentralDark.centraldark-vps-2.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "GitHub Actions Runner centraldark-vps-2"
+    },
+    {
+      "unit": "actions.runner.ServerVpss-CentralDark.centraldark-vps-3.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "GitHub Actions Runner centraldark-vps-3"
+    },
+    {
+      "unit": "actions.runner.ServerVpss-CentralDark.centraldark-vps-4.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "GitHub Actions Runner centraldark-vps-4"
+    },
+    {
+      "unit": "anydesk.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "AnyDesk"
+    },
+    {
+      "unit": "apparmor.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "apparmor.service"
+    },
+    {
+      "unit": "apt-daily-upgrade.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Daily apt upgrade and clean activities"
+    },
+    {
+      "unit": "apt-daily.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Daily apt download activities"
+    },
+    {
+      "unit": "auditd.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "auditd.service"
+    },
+    {
+      "unit": "avahi-daemon.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Avahi mDNS/DNS-SD Stack"
+    },
+    {
+      "unit": "biometric-authentication.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Authenticate by human biometric"
+    },
+    {
+      "unit": "blk-availability.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Availability of block devices"
+    },
+    {
+      "unit": "bluetooth.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Bluetooth service"
+    },
+    {
+      "unit": "casper.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Shuts down the \"live\" preinstalled system cleanly"
+    },
+    {
+      "unit": "centraldark-aionui-webui.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "CentralDark Instinto Superior public WebUI"
+    },
+    {
+      "unit": "centraldark-kylin-native-bridge.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "CentralDark Kylin native SDK bridge (existing owner)"
+    },
+    {
+      "unit": "cloud-init-local.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "cloud-init-local.service"
+    },
+    {
+      "unit": "com.kylin-os-manager-driver-acquirer.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "kylin os manager driver acquirer"
+    },
+    {
+      "unit": "com.kylin-os-manager.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "kylin os manager daemon"
+    },
+    {
+      "unit": "com.kylin.kysdk.SyncConfig.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "KYLIN CONF2 SYNC DBUS"
+    },
+    {
+      "unit": "conf2-compile.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "KYSDK CONF2 COMPILE CONFIG FILE"
+    },
+    {
+      "unit": "connman.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "connman.service"
+    },
+    {
+      "unit": "cpufrequtils.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "LSB: set CPUFreq kernel parameters"
+    },
+    {
+      "unit": "cron.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Regular background program processing daemon"
+    },
+    {
+      "unit": "cups.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "CUPS Scheduler"
+    },
+    {
+      "unit": "dbus.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "D-Bus System Message Bus"
+    },
+    {
+      "unit": "desktop-commander-remote.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Desktop Commander Remote MCP agent"
+    },
+    {
+      "unit": "dm-event.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Device-mapper event daemon"
+    },
+    {
+      "unit": "dmesg.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Save initial kernel messages after boot"
+    },
+    {
+      "unit": "dns-clean.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Clean up any mess left by 0dns-up"
+    },
+    {
+      "unit": "dpkg-db-backup.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Daily dpkg database backup service"
+    },
+    {
+      "unit": "dracut-shutdown.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "dracut-shutdown.service"
+    },
+    {
+      "unit": "e2scrub_all.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Online ext4 Metadata Check for All Filesystems"
+    },
+    {
+      "unit": "e2scrub_reap.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Remove Stale Online ext4 Metadata Check Snapshots"
+    },
+    {
+      "unit": "emergency.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Emergency Shell"
+    },
+    {
+      "unit": "fcoe.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "fcoe.service"
+    },
+    {
+      "unit": "finalrd.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Create final runtime dir for shutdown pivot root"
+    },
+    {
+      "unit": "fstrim.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Discard unused blocks on filesystems from /etc/fstab"
+    },
+    {
+      "unit": "getty-static.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "getty on tty2-tty6 if dbus and logind are not available"
+    },
+    {
+      "unit": "getty@tty1.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Getty on tty1"
+    },
+    {
+      "unit": "grub-common.service",
+      "load": "loaded",
+      "active": "failed",
+      "sub": "failed",
+      "description": "Record successful boot for GRUB"
+    },
+    {
+      "unit": "grub-initrd-fallback.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "GRUB failed boot detection"
+    },
+    {
+      "unit": "hwfp_init.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "hwfp_init.service"
+    },
+    {
+      "unit": "ifupdown-pre.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Helper to synchronize boot up for ifupdown"
+    },
+    {
+      "unit": "initrd-cleanup.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Cleaning Up and Shutting Down Daemons"
+    },
+    {
+      "unit": "initrd-parse-etc.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Mountpoints Configured in the Real Root"
+    },
+    {
+      "unit": "initrd-switch-root.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Switch Root"
+    },
+    {
+      "unit": "initrd-udevadm-cleanup-db.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Cleanup udev Database"
+    },
+    {
+      "unit": "iscsi-shutdown.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "iscsi-shutdown.service"
+    },
+    {
+      "unit": "iscsi.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "iscsi.service"
+    },
+    {
+      "unit": "iscsid.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "iscsid.service"
+    },
+    {
+      "unit": "kare-base-config-copy.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "copy user congiguration files to bash environment"
+    },
+    {
+      "unit": "keyboard-setup.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "keyboard-setup.service"
+    },
+    {
+      "unit": "kmod-static-nodes.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Create List of Static Device Nodes"
+    },
+    {
+      "unit": "kylin-core-dump-monitor.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "kylin-core-dump-monitor"
+    },
+    {
+      "unit": "kylin-daq.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "kylin-daq config"
+    },
+    {
+      "unit": "kylin-fix-boot-grub.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Kylin fix boot grub"
+    },
+    {
+      "unit": "kylin-nm-sysdbus.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Kylin Network Manager System D-Bus Service"
+    },
+    {
+      "unit": "kylin-os-installer.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Kylin live CD installer"
+    },
+    {
+      "unit": "kylin-printer-applet-dbus.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "kylin-printer-applet Dbus Application"
+    },
+    {
+      "unit": "kylin-process-manager-daemon.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "kylin process manager daemon"
+    },
+    {
+      "unit": "kylin-process-manager-thawer.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Thaw forzen processes before shutdown"
+    },
+    {
+      "unit": "kylin-source-update-timer.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "更新源管理器启动时间的定时器生成工具"
+    },
+    {
+      "unit": "kylin-source-update.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "后台自动更新软件源"
+    },
+    {
+      "unit": "kylin-system-updater.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "kylin-system-updater dbus daemon"
+    },
+    {
+      "unit": "kylin-unattended-upgrades.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Unattended Upgrades Shutdown"
+    },
+    {
+      "unit": "kylinID.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "The kylinID system bus."
+    },
+    {
+      "unit": "kysdk-conf2.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "KYLIN CONF2 DBUS"
+    },
+    {
+      "unit": "kysdk-dbus.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "KYLIN SDK SYSTIME DBUS"
+    },
+    {
+      "unit": "kysdk-systime.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "KYLIN SDK SYSTIME DBUS"
+    },
+    {
+      "unit": "kytensor.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Kylin triton inference server"
+    },
+    {
+      "unit": "ldconfig.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Rebuild Dynamic Linker Cache"
+    },
+    {
+      "unit": "lightdm.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Light Display Manager"
+    },
+    {
+      "unit": "lm-sensors.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Initialize hardware monitoring sensors"
+    },
+    {
+      "unit": "loadcpufreq.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "LSB: Load kernel modules needed to enable cpufreq scaling"
+    },
+    {
+      "unit": "logrotate.service",
+      "load": "loaded",
+      "active": "failed",
+      "sub": "failed",
+      "description": "Rotate log files"
+    },
+    {
+      "unit": "lvm2-lvmpolld.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "LVM2 poll daemon"
+    },
+    {
+      "unit": "lvm2-monitor.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling"
+    },
+    {
+      "unit": "mkinitcpio-generate-shutdown-ramfs.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "mkinitcpio-generate-shutdown-ramfs.service"
+    },
+    {
+      "unit": "modprobe@configfs.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Load Kernel Module configfs"
+    },
+    {
+      "unit": "modprobe@dm_mod.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Load Kernel Module dm_mod"
+    },
+    {
+      "unit": "modprobe@drm.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Load Kernel Module drm"
+    },
+    {
+      "unit": "modprobe@efi_pstore.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Load Kernel Module efi_pstore"
+    },
+    {
+      "unit": "modprobe@fuse.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Load Kernel Module fuse"
+    },
+    {
+      "unit": "modprobe@loop.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Load Kernel Module loop"
+    },
+    {
+      "unit": "motd-news.service",
+      "load": "loaded",
+      "active": "failed",
+      "sub": "failed",
+      "description": "Message of the Day"
+    },
+    {
+      "unit": "netplan-configure.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Netplan Backend Configuration"
+    },
+    {
+      "unit": "netplan-ovs-cleanup.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "OpenVSwitch configuration for cleanup"
+    },
+    {
+      "unit": "network-manager.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "network-manager.service"
+    },
+    {
+      "unit": "networkd-dispatcher.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Dispatcher daemon for systemd-networkd"
+    },
+    {
+      "unit": "networking.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Raise network interfaces"
+    },
+    {
+      "unit": "NetworkManager-wait-online.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Network Manager Wait Online"
+    },
+    {
+      "unit": "NetworkManager.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Network Manager"
+    },
+    {
+      "unit": "nm-enhance-optimization.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "kylin network enhancement optimization"
+    },
+    {
+      "unit": "nslcd.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "nslcd.service"
+    },
+    {
+      "unit": "open-vm-tools.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Service for virtual machines hosted on VMware"
+    },
+    {
+      "unit": "openvpn.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "OpenVPN service"
+    },
+    {
+      "unit": "org.kylin.kaiming.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "org-kylin-kaiming dbus daemon"
+    },
+    {
+      "unit": "ostree-boot-bind.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "sysroot boot bind boot for ostree"
+    },
+    {
+      "unit": "ostree-coredata-boot.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "ostree boot handle"
+    },
+    {
+      "unit": "ostree-coredata-copy.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "ostree copy"
+    },
+    {
+      "unit": "ostree-coredata-restore.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "ostree restore"
+    },
+    {
+      "unit": "ostree-extra-restore.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "ostree restore factory"
+    },
+    {
+      "unit": "ostree-finalize-staged-hold.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Hold /boot Open for OSTree Finalize Staged Deployment"
+    },
+    {
+      "unit": "ostree-finalize-staged.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "OSTree Finalize Staged Deployment"
+    },
+    {
+      "unit": "ostree-logfile-prepare.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Prepare ostree log file"
+    },
+    {
+      "unit": "ostree-maintain-daemon.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "ostree maintain mode daemon"
+    },
+    {
+      "unit": "ostree-remount.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "OSTree Remount OS/ Bind Mounts"
+    },
+    {
+      "unit": "ovsdb-server.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "ovsdb-server.service"
+    },
+    {
+      "unit": "plymouth-halt.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Show Plymouth Halt Screen"
+    },
+    {
+      "unit": "plymouth-kexec.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Show Plymouth Reboot with kexec Screen"
+    },
+    {
+      "unit": "plymouth-poweroff.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Show Plymouth Power Off Screen"
+    },
+    {
+      "unit": "plymouth-quit-wait.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Hold until boot process finishes up"
+    },
+    {
+      "unit": "plymouth-quit.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Terminate Plymouth Boot Screen"
+    },
+    {
+      "unit": "plymouth-read-write.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Tell Plymouth To Write Out Runtime Data"
+    },
+    {
+      "unit": "plymouth-reboot.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Show Plymouth Reboot Screen"
+    },
+    {
+      "unit": "plymouth-start.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Show Plymouth Boot Screen"
+    },
+    {
+      "unit": "plymouth-switch-root-initramfs.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Tell Plymouth To Jump To initramfs"
+    },
+    {
+      "unit": "plymouth-switch-root.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Plymouth switch root service"
+    },
+    {
+      "unit": "polkit.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Authorization Manager"
+    },
+    {
+      "unit": "prefinalrd.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Pre create final runtime dir for shutdown pivot root"
+    },
+    {
+      "unit": "rbdmap.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "rbdmap.service"
+    },
+    {
+      "unit": "rc-local.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "/etc/rc.local Compatibility"
+    },
+    {
+      "unit": "rescue.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Rescue Shell"
+    },
+    {
+      "unit": "resolvconf.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "resolvconf.service"
+    },
+    {
+      "unit": "rsyslog.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "System Logging Service"
+    },
+    {
+      "unit": "samba-ad-dc.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Samba AD Daemon"
+    },
+    {
+      "unit": "smartmontools.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Self Monitoring and Reporting Technology (SMART) Daemon"
+    },
+    {
+      "unit": "ssh.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "OpenBSD Secure Shell server"
+    },
+    {
+      "unit": "sshd-keygen.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Generate sshd host keys on first boot"
+    },
+    {
+      "unit": "sshd@sshd-keygen.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "OpenBSD Secure Shell server per-connection daemon"
+    },
+    {
+      "unit": "ssl-cert.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Generate snakeoil SSL keypair"
+    },
+    {
+      "unit": "systemd-ask-password-console.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Dispatch Password Requests to Console"
+    },
+    {
+      "unit": "systemd-ask-password-plymouth.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Forward Password Requests to Plymouth"
+    },
+    {
+      "unit": "systemd-ask-password-wall.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Forward Password Requests to Wall"
+    },
+    {
+      "unit": "systemd-battery-check.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Early Battery Level Check"
+    },
+    {
+      "unit": "systemd-binfmt.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Set Up Additional Binary Formats"
+    },
+    {
+      "unit": "systemd-bsod.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Display Boot-Time Emergency Messages In Full Screen"
+    },
+    {
+      "unit": "systemd-confext-initrd.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Merge System Configuration Images into /etc/"
+    },
+    {
+      "unit": "systemd-confext.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Merge System Configuration Images into /etc/"
+    },
+    {
+      "unit": "systemd-firstboot.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Initial Setup"
+    },
+    {
+      "unit": "systemd-fsck-root.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "File System Check on Root Device"
+    },
+    {
+      "unit": "systemd-fsck@dev-disk-by\\x2duuid-1D66\\x2d34B0.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "File System Check on /dev/disk/by-uuid/1D66-34B0"
+    },
+    {
+      "unit": "systemd-halt.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "System Halt"
+    },
+    {
+      "unit": "systemd-hibernate-clear.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Clear Stale Hibernate Storage Info"
+    },
+    {
+      "unit": "systemd-hibernate-resume.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Resume from hibernation"
+    },
+    {
+      "unit": "systemd-hibernate.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "System Hibernate"
+    },
+    {
+      "unit": "systemd-hostnamed.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Hostname Service"
+    },
+    {
+      "unit": "systemd-hwdb-update.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Rebuild Hardware Database"
+    },
+    {
+      "unit": "systemd-hybrid-sleep.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "System Hybrid Suspend+Hibernate"
+    },
+    {
+      "unit": "systemd-journal-catalog-update.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Rebuild Journal Catalog"
+    },
+    {
+      "unit": "systemd-journal-flush.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Flush Journal to Persistent Storage"
+    },
+    {
+      "unit": "systemd-journald.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Journal Service"
+    },
+    {
+      "unit": "systemd-kexec.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Reboot via kexec"
+    },
+    {
+      "unit": "systemd-logind.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "User Login Management"
+    },
+    {
+      "unit": "systemd-machine-id-commit.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Save Transient machine-id to Disk"
+    },
+    {
+      "unit": "systemd-modules-load.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Load Kernel Modules"
+    },
+    {
+      "unit": "systemd-networkd-persistent-storage.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Enable Persistent Storage in systemd-networkd"
+    },
+    {
+      "unit": "systemd-networkd.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Network Management"
+    },
+    {
+      "unit": "systemd-oomd.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "systemd-oomd.service"
+    },
+    {
+      "unit": "systemd-pcrmachine.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "TPM PCR Machine ID Measurement"
+    },
+    {
+      "unit": "systemd-pcrnvdone.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "TPM PCR NvPCR Initialization Separator"
+    },
+    {
+      "unit": "systemd-pcrphase-initrd.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "TPM PCR Barrier (initrd)"
+    },
+    {
+      "unit": "systemd-pcrphase-sysinit.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "TPM PCR Barrier (Initialization)"
+    },
+    {
+      "unit": "systemd-pcrphase.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "TPM PCR Barrier (User)"
+    },
+    {
+      "unit": "systemd-pcrproduct.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "TPM NvPCR Product ID Measurement"
+    },
+    {
+      "unit": "systemd-poweroff.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "System Power Off"
+    },
+    {
+      "unit": "systemd-pstore.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Platform Persistent Storage Archival"
+    },
+    {
+      "unit": "systemd-quotacheck-root.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Root File System Quota Check"
+    },
+    {
+      "unit": "systemd-quotacheck.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "systemd-quotacheck.service"
+    },
+    {
+      "unit": "systemd-random-seed.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Load/Save OS Random Seed"
+    },
+    {
+      "unit": "systemd-reboot.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "System Reboot"
+    },
+    {
+      "unit": "systemd-remount-fs.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Remount Root and Kernel File Systems"
+    },
+    {
+      "unit": "systemd-resolved.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Network Name Resolution"
+    },
+    {
+      "unit": "systemd-rfkill.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Load/Save RF Kill Switch Status"
+    },
+    {
+      "unit": "systemd-soft-reboot.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Reboot System Userspace"
+    },
+    {
+      "unit": "systemd-suspend-then-hibernate.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "System Suspend then Hibernate"
+    },
+    {
+      "unit": "systemd-suspend.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "System Suspend"
+    },
+    {
+      "unit": "systemd-sysctl.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Apply Kernel Variables"
+    },
+    {
+      "unit": "systemd-sysext-initrd.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Merge System Extension Images into /usr/ and /opt/"
+    },
+    {
+      "unit": "systemd-sysext.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Merge System Extension Images into /usr/ and /opt/"
+    },
+    {
+      "unit": "systemd-sysusers.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Create System Users"
+    },
+    {
+      "unit": "systemd-timesyncd.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Network Time Synchronization"
+    },
+    {
+      "unit": "systemd-tmpfiles-clean.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Cleanup of Temporary Directories"
+    },
+    {
+      "unit": "systemd-tmpfiles-setup-dev-early.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Create Static Device Nodes in /dev gracefully"
+    },
+    {
+      "unit": "systemd-tmpfiles-setup-dev.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Create Static Device Nodes in /dev"
+    },
+    {
+      "unit": "systemd-tmpfiles-setup.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Create System Files and Directories"
+    },
+    {
+      "unit": "systemd-tpm2-setup-early.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Early TPM SRK Setup"
+    },
+    {
+      "unit": "systemd-tpm2-setup.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "TPM SRK Setup"
+    },
+    {
+      "unit": "systemd-udev-load-credentials.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Load udev Rules from Credentials"
+    },
+    {
+      "unit": "systemd-udev-settle.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Wait for udev To Complete Device Initialization"
+    },
+    {
+      "unit": "systemd-udev-trigger.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Coldplug All udev Devices"
+    },
+    {
+      "unit": "systemd-udevd.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Rule-based Manager for Device Events and Files"
+    },
+    {
+      "unit": "systemd-update-done.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Update is Completed"
+    },
+    {
+      "unit": "systemd-user-sessions.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Permit User Sessions"
+    },
+    {
+      "unit": "systemd-vconsole-setup.service",
+      "load": "not-found",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "systemd-vconsole-setup.service"
+    },
+    {
+      "unit": "tailscaled.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Tailscale node agent"
+    },
+    {
+      "unit": "udisks2.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Disk Manager"
+    },
+    {
+      "unit": "ukui-bluetooth.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "UKUI Bluetooth service"
+    },
+    {
+      "unit": "ukui-i18n-management.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "Language package status check and notification"
+    },
+    {
+      "unit": "ukui-input-gather.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "UKUI-Input-Event-Gather"
+    },
+    {
+      "unit": "ukui-media-control-mute-led.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Mate media control leds daemon"
+    },
+    {
+      "unit": "ukui-system-service-manager.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "UKUI System Service Manager"
+    },
+    {
+      "unit": "upower.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "Daemon for power management"
+    },
+    {
+      "unit": "user-runtime-dir@0.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "exited",
+      "description": "User Runtime Directory /run/user/0"
+    },
+    {
+      "unit": "user-runtime-dir@107.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "User Runtime Directory /run/user/107"
+    },
+    {
+      "unit": "user@0.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "User Manager for UID 0"
+    },
+    {
+      "unit": "user@107.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "User Manager for UID 107"
+    },
+    {
+      "unit": "uuidd.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Daemon for generating UUIDs"
+    },
+    {
+      "unit": "vgauth.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Authentication service for virtual machines hosted on VMware"
+    },
+    {
+      "unit": "wpa_supplicant.service",
+      "load": "loaded",
+      "active": "active",
+      "sub": "running",
+      "description": "WPA supplicant"
+    },
+    {
+      "unit": "xfs_scrub_all.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Online XFS Metadata Check for All Filesystems"
+    },
+    {
+      "unit": "xfs_scrub_all_fail.service",
+      "load": "loaded",
+      "active": "inactive",
+      "sub": "dead",
+      "description": "Online XFS Metadata Check for All Filesystems Failure Reporting"
+    }
+  ],
+  "native_packages": [
+    [
+      "ai-kylin-deepseek-r1-cloud-model:amd64",
+      "1.0.0.0-ok0.1"
+    ],
+    [
+      "ai-kylin-deepseek-v3-cloud-model:amd64",
+      "1.0.0.0-ok0.1"
+    ],
+    [
+      "ai-kylin-qwen-plus-cloud-model:amd64",
+      "1.0.0.0-ok0.1"
+    ],
+    [
+      "app.web.openkylincommunity",
+      "1.0.0"
+    ],
+    [
+      "archdetect-deb",
+      "1.117kylin7-ok2k0.1"
+    ],
+    [
+      "ffmpeg",
+      "7:8.0.1-ok4.1"
+    ],
+    [
+      "ffmpegthumbnailer",
+      "2.3.0-ok1"
+    ],
+    [
+      "gstreamer1.0-pulseaudio:amd64",
+      "1.28.2-ok2"
+    ],
+    [
+      "intel-microcode",
+      "3.20240910.0kylin0.20.04.1-ok1"
+    ],
+    [
+      "kylin-ai-abstract-models",
+      "1.2.0.0-0k0.21"
+    ],
+    [
+      "kylin-ai-document-qa-service",
+      "1.2.0.0-ok0.7"
+    ],
+    [
+      "kylin-ai-document-service:amd64",
+      "1.2.0.0-ok0.6"
+    ],
+    [
+      "kylin-ai-engine-plugins:amd64",
+      "1.1.0.1-ok1.5"
+    ],
+    [
+      "kylin-ai-knowledge-base-service",
+      "1.2.0.0-ok0.7"
+    ],
+    [
+      "kylin-ai-parser-extension:amd64",
+      "1.2.0.0-ok0.4"
+    ],
+    [
+      "kylin-ai-python-env",
+      "1.2.0.0-ok0.6"
+    ],
+    [
+      "kylin-ai-runtime",
+      "1.1.0.1-ok0.21"
+    ],
+    [
+      "kylin-ai-subsystem:amd64",
+      "1.3.0.0-ok0.4"
+    ],
+    [
+      "kylin-ai-subsystem-modelconfig",
+      "1.0.0.1-ok1.11"
+    ],
+    [
+      "kylin-ai-subsystem-plugin",
+      "1.0.0.2-ok1.13"
+    ],
+    [
+      "kylin-ai-vector-engine",
+      "1.2.0.1-ok0.11"
+    ],
+    [
+      "kylin-aiassistant",
+      "5.0.0.0-0k1.32"
+    ],
+    [
+      "kylin-bot",
+      "0.7.5-ok1.8"
+    ],
+    [
+      "kylin-burner",
+      "3.2.0.1kylin1k32.01-ok45"
+    ],
+    [
+      "kylin-calculator",
+      "1.2.0.0-ok8"
+    ],
+    [
+      "kylin-calendar",
+      "5.0.0.0-ok0.10"
+    ],
+    [
+      "kylin-camera",
+      "1.3.0.16-ok1.80"
+    ],
+    [
+      "kylin-cn-clip-model",
+      "1.0.0.1-ok1.3"
+    ],
+    [
+      "kylin-code",
+      "0.4.0"
+    ],
+    [
+      "kylin-cua",
+      "1.0.0"
+    ],
+    [
+      "kylin-daq",
+      "1.2.9.2-ok2.2"
+    ],
+    [
+      "kylin-device-daemon",
+      "3.20.0.5-ok26"
+    ],
+    [
+      "kylin-fix-boot-grub",
+      "3.0.1.1-0k0.21"
+    ],
+    [
+      "kylin-fonts-gb",
+      "1.2.7.1-0k1.4"
+    ],
+    [
+      "kylin-gte-base-model",
+      "1.0.0.1-ok1.3"
+    ],
+    [
+      "kylin-gtk-theme",
+      "3.22.0.1-ok1.3"
+    ],
+    [
+      "kylin-id",
+      "2.2.11.2-0k1.18"
+    ],
+    [
+      "kylin-initiate-theme",
+      "3.22.0.1-ok1.3"
+    ],
+    [
+      "kylin-installer",
+      "2.0.2.1-ok4.16"
+    ],
+    [
+      "kylin-ipmsg",
+      "1.3.1.2-ok16.22"
+    ],
+    [
+      "kylin-music",
+      "1.1.0.47-ok9.42"
+    ],
+    [
+      "kylin-nm",
+      "4.24.0.0-ok0.7"
+    ],
+    [
+      "kylin-nm-plugin",
+      "4.24.0.0-ok0.2"
+    ],
+    [
+      "kylin-os-installer",
+      "0.2.2-0k1.12"
+    ],
+    [
+      "kylin-os-manager",
+      "2.0.0-76update8"
+    ],
+    [
+      "kylin-os-manager-data",
+      "2.0.0-76update8"
+    ],
+    [
+      "kylin-paddle-ocr-model",
+      "1.0.0.1-ok1.1"
+    ],
+    [
+      "kylin-photo-viewer",
+      "1.3.0.3-ok22.56"
+    ],
+    [
+      "kylin-portrait-matting-model",
+      "1.0.0.0-ok0.9"
+    ],
+    [
+      "kylin-printer",
+      "1.3.1.0-ok27"
+    ],
+    [
+      "kylin-process-manager",
+      "4.10.0.0-ok1.44update1"
+    ],
+    [
+      "kylin-process-manager-daemon",
+      "4.10.0.0-ok1.44update1"
+    ],
+    [
+      "kylin-recorder",
+      "1.3.0.2.0k3.3-ok5.22"
+    ],
+    [
+      "kylin-sam-model",
+      "1.2.0.0-0k1.0"
+    ],
+    [
+      "kylin-sam-model-onnx",
+      "1.0.0.0-ok0.2"
+    ],
+    [
+      "kylin-sane-virtual-backend",
+      "1.0.0.1-0k0.2ok0.2"
+    ],
+    [
+      "kylin-sane-virtual-backend-app",
+      "1.0.0.1-0k0.2ok0.2"
+    ],
+    [
+      "kylin-scanner",
+      "3.2.1-ok2.46"
+    ],
+    [
+      "kylin-screencap",
+      "1.0.0.1-ok0.21"
+    ],
+    [
+      "kylin-screenshot",
+      "1.0.0.1kylin1k81-ok8.45"
+    ],
+    [
+      "kylin-software-center",
+      "5.0.9.1-ok4.76"
+    ],
+    [
+      "kylin-software-center-plugin-expand",
+      "5.0.9.1-ok4.76"
+    ],
+    [
+      "kylin-software-center-plugin-preprocessing",
+      "5.0.9.1-ok4.76"
+    ],
+    [
+      "kylin-software-center-plugin-synchrodata",
+      "5.0.9.1-ok4.76"
+    ],
+    [
+      "kylin-software-properties",
+      "1.0.1.1-ok1.24"
+    ],
+    [
+      "kylin-sounds-theme",
+      "3.22.0.1-ok1.3"
+    ],
+    [
+      "kylin-speech-asr-model",
+      "1.0.0.0-ok0.3update1"
+    ],
+    [
+      "kylin-speech-asr-model-onnx",
+      "1.0.0.0-ok0.3"
+    ],
+    [
+      "kylin-speech-tts-model",
+      "1.0.0.0-ok0.3"
+    ],
+    [
+      "kylin-speech-tts-model-onnx",
+      "1.0.0.0-ok0.1"
+    ],
+    [
+      "kylin-status-manager",
+      "4.20.0.0-ok0.2"
+    ],
+    [
+      "kylin-system-updater",
+      "3.0.0.0-ok56"
+    ],
+    [
+      "kylin-theme",
+      "3.22.0.1-ok1.3"
+    ],
+    [
+      "kylin-theme-configure",
+      "3.22.0.1-ok1.3"
+    ],
+    [
+      "kylin-time",
+      "1.9.0-ok1"
+    ],
+    [
+      "kylin-universal-matting-model",
+      "1.0.0.0-ok0.2"
+    ],
+    [
+      "kylin-update-frontend",
+      "2.0.0.0-ok36.7"
+    ],
+    [
+      "kylin-update-notify",
+      "1.3.2.1-ok17"
+    ],
+    [
+      "kylin-usb-creator",
+      "1.2.0.3kylin-ok6.13k0.21update2"
+    ],
+    [
+      "kylin-user-guide",
+      "4.10.0.0-ok2.27"
+    ],
+    [
+      "kylin-user-guide-common",
+      "4.10.0.0-ok2.27"
+    ],
+    [
+      "kylin-video",
+      "3.1.4.2k1-ok26.38"
+    ],
+    [
+      "kylin-virtual-keyboard",
+      "4.24.0.0-ok0.3"
+    ],
+    [
+      "kylin-wallpapers",
+      "3.22.0.1-ok0.11"
+    ],
+    [
+      "kylin-wallpapers-yangtze",
+      "3.22.0.1-ok0.11"
+    ],
+    [
+      "kylin-wayland-compositor",
+      "1.3.1-ok36"
+    ],
+    [
+      "kylin-wayland-compositor-client",
+      "1.3.1-ok36"
+    ],
+    [
+      "kylin-wayland-compositor-tools",
+      "1.3.1-ok36"
+    ],
+    [
+      "kylin-weather",
+      "3.2.0.3-ok16.17~2update3"
+    ],
+    [
+      "kylin-wget",
+      "1.21.4-ok4"
+    ],
+    [
+      "kylincameralibs",
+      "1.0.0.1-1ok10"
+    ],
+    [
+      "kytensor-client:amd64",
+      "2.49.0.6-0ok11"
+    ],
+    [
+      "kytensor-llm",
+      "1.0.0-ok0.7~1"
+    ],
+    [
+      "kytensor-python:amd64",
+      "2.49.0.6-0ok11"
+    ],
+    [
+      "kytensor-server:amd64",
+      "2.49.0.6-0ok11"
+    ],
+    [
+      "libaudio2:amd64",
+      "1.9.4-ok1"
+    ],
+    [
+      "libffmpegthumbnailer4v5:amd64",
+      "2.3.0-ok1"
+    ],
+    [
+      "libkylin-ai-document-qa-service",
+      "1.2.0.0-ok0.7"
+    ],
+    [
+      "libkylin-ai-document-service:amd64",
+      "1.2.0.0-ok0.6"
+    ],
+    [
+      "libkylin-baidu-ai-engine-plugin:amd64",
+      "1.0.0.2-ok0.6"
+    ],
+    [
+      "libkylin-baidu-nlp-engine:amd64",
+      "1.1.0.0-ok0.10"
+    ],
+    [
+      "libkylin-baidu-speech-engine:amd64",
+      "1.0.0.2-ok0.10"
+    ],
+    [
+      "libkylin-baidu-vision-engine:amd64",
+      "1.0.0.2-ok0.10"
+    ],
+    [
+      "libkylin-chkname1:amd64",
+      "1.0.10kylin3uk1-0k3"
+    ],
+    [
+      "libkylin-coreai-embedding:amd64",
+      "1.2.0.0-ok0.5"
+    ],
+    [
+      "libkylin-custom-ai-engine-plugin:amd64",
+      "1.1.0.1-ok0.3update1"
+    ],
+    [
+      "libkylin-custom-nlp-engine:amd64",
+      "1.1.0.1-ok0.9"
+    ],
+    [
+      "libkylin-deepseek-ai-engine-plugin:amd64",
+      "1.1.0.1-ok0.4"
+    ],
+    [
+      "libkylin-deepseek-nlp-engine:amd64",
+      "1.1.0.1-ok0.12"
+    ],
+    [
+      "libkylin-freetrial-ai-engine-plugin:amd64",
+      "1.2.0.0-ok0.1"
+    ],
+    [
+      "libkylin-freetrial-nlp-engine:amd64",
+      "1.1.0.0-ok0.5"
+    ],
+    [
+      "libkylin-nm-base",
+      "4.20.0.0-ok1.8"
+    ],
+    [
+      "libkylin-ondevice-ai-engine-plugin",
+      "1.2.0.0-ok0.8"
+    ],
+    [
+      "libkylin-ondevice-embedding-engine:amd64",
+      "1.2.0.0-ok0.7"
+    ],
+    [
+      "libkylin-ondevice-nlp-engine",
+      "1.2.0.0-ok0.13"
+    ],
+    [
+      "libkylin-ondevice-speech-engine:amd64",
+      "1.2.0.0-ok0.3"
+    ],
+    [
+      "libkylin-ondevice-traditional-ai-engine-plugin:amd64",
+      "1.2.0.0-ok0.4"
+    ],
+    [
+      "libkylin-ondevice-vision-engine",
+      "1.2.0.0-ok0.9"
+    ],
+    [
+      "libkylin-qwen-ai-engine-plugin:amd64",
+      "1.1.0.2-ok0.5"
+    ],
+    [
+      "libkylin-qwen-nlp-engine:amd64",
+      "1.1.0.1-ok0.12"
+    ],
+    [
+      "libkylin-xunfei-ai-engine-plugin:amd64",
+      "1.1.0.1-ok0.6"
+    ],
+    [
+      "libkylin-xunfei-nlp-engine:amd64",
+      "1.1.0.1-ok0.9"
+    ],
+    [
+      "libkylin-xunfei-speech-engine:amd64",
+      "1.1.0.1-ok0.8"
+    ],
+    [
+      "libkylin-xunfei-vision-engine:amd64",
+      "1.1.0.1-ok0.10"
+    ],
+    [
+      "libkysdk-advanced-ai0:amd64",
+      "1.0.0.1-ok0.10"
+    ],
+    [
+      "libkysdk-ai-common:amd64",
+      "1.1.0.1-ok0.5"
+    ],
+    [
+      "libkysdk-alm",
+      "3.0.1.0-ok0.29"
+    ],
+    [
+      "libkysdk-appconf2",
+      "3.0.1.0-ok0.29"
+    ],
+    [
+      "libkysdk-basecommon",
+      "3.0.1.0-ok0.1"
+    ],
+    [
+      "libkysdk-conf2",
+      "3.0.1.0-ok0.1"
+    ],
+    [
+      "libkysdk-config",
+      "3.0.1.0-ok0.1"
+    ],
+    [
+      "libkysdk-coreai-speech0:amd64",
+      "1.1.0.1-ok1.5"
+    ],
+    [
+      "libkysdk-coreai-vision0:amd64",
+      "1.1.0.1-ok1.3"
+    ],
+    [
+      "libkysdk-datacollect",
+      "3.0.1.0-0k0.1update1"
+    ],
+    [
+      "libkysdk-diagnostics",
+      "3.0.1.0-ok0.1"
+    ],
+    [
+      "libkysdk-disk",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-filesystem",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-genai-nlp0:amd64",
+      "1.1.0.1-ok1.6"
+    ],
+    [
+      "libkysdk-genai-vision0:amd64",
+      "1.1.0.1-ok1.5"
+    ],
+    [
+      "libkysdk-gsetting",
+      "3.0.1.0-ok0.1"
+    ],
+    [
+      "libkysdk-hardware",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-kabase",
+      "3.0.1.0-ok0.29"
+    ],
+    [
+      "libkysdk-location",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-log",
+      "3.0.1.0-ok0.1"
+    ],
+    [
+      "libkysdk-mcp:amd64",
+      "1.0.0.0-ok0.1"
+    ],
+    [
+      "libkysdk-net",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-ocr",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-package",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-powermanagement",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-proc",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-qtwidgets",
+      "3.0.1.0-ok0.29"
+    ],
+    [
+      "libkysdk-realtime",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-soundeffects",
+      "3.0.1.0-ok0.3update1"
+    ],
+    [
+      "libkysdk-sysinfo",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-sysinfo-data",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-system-dbus",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-systime",
+      "3.0.1.0-ok0.21"
+    ],
+    [
+      "libkysdk-timer",
+      "3.0.1.0-ok0.1"
+    ],
+    [
+      "libkysdk-ukenv",
+      "3.0.1.0-ok0.29"
+    ],
+    [
+      "libkysdk-utils",
+      "3.0.1.0-ok0.1"
+    ],
+    [
+      "libkysdk-vector-engine-client:amd64",
+      "1.2.0.0-ok0.7"
+    ],
+    [
+      "libkysdk-waylandhelper",
+      "3.0.1.0-ok0.29"
+    ],
+    [
+      "libkysdk-widgetutils",
+      "3.0.1.0-ok0.29"
+    ],
+    [
+      "libmpv1:amd64",
+      "0.32.0.4kylin6k12-ok4"
+    ],
+    [
+      "libonnx1t64:amd64",
+      "1.16.2-ok1"
+    ],
+    [
+      "libonnxruntime:amd64",
+      "1.20.1+dfsg-ok2"
+    ],
+    [
+      "libpipewire-0.3-0t64:amd64",
+      "1.6.2-ok5"
+    ],
+    [
+      "libpipewire-0.3-modules:amd64",
+      "1.6.2-ok5"
+    ],
+    [
+      "libqt5texttospeech5:amd64",
+      "5.15.10-2ok1"
+    ],
+    [
+      "libspeechd-module0:amd64",
+      "0.12.1-ok1"
+    ],
+    [
+      "libspeechd2:amd64",
+      "0.12.1-ok1"
+    ],
+    [
+      "libtesseract5:amd64",
+      "5.3.4-ok4"
+    ],
+    [
+      "libwebrtc-audio-processing-1-3:amd64",
+      "1.3-ok1"
+    ],
+    [
+      "onnxruntime-backend:amd64",
+      "1.0.0-0ok3"
+    ],
+    [
+      "openkylin-archive-anything",
+      "2023.02.06-ok4"
+    ],
+    [
+      "openkylin-default-settings",
+      "1:3.0.2"
+    ],
+    [
+      "openkylin-fonts",
+      "1.0.1-ok0.1"
+    ],
+    [
+      "openkylin-keyring",
+      "2022.05.12-ok3"
+    ],
+    [
+      "openkylin-language-pack-ar",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-language-pack-bo-cn",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-language-pack-de",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-language-pack-es",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-language-pack-fr",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-language-pack-kk-kz",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-language-pack-ky-kg",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-language-pack-mn",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-language-pack-ug-cn",
+      "1.0.0.0-ok1.1"
+    ],
+    [
+      "openkylin-language-pack-zh-hk",
+      "1.0.0.0-ok1.2"
+    ],
+    [
+      "openkylin-theme",
+      "3.22.0.1-ok1.3"
+    ],
+    [
+      "openkylin-token-center",
+      "1.0.0-ok1.7"
+    ],
+    [
+      "pipewire:amd64",
+      "1.6.2-ok5"
+    ],
+    [
+      "pipewire-alsa:amd64",
+      "1.6.2-ok5"
+    ],
+    [
+      "pipewire-audio-client-libraries",
+      "1.6.2-ok5"
+    ],
+    [
+      "pipewire-bin",
+      "1.6.2-ok5"
+    ],
+    [
+      "pipewire-jack:amd64",
+      "1.6.2-ok5"
+    ],
+    [
+      "pipewire-pulse",
+      "1.6.2-ok5"
+    ],
+    [
+      "pulseaudio",
+      "1:17.0+dfsg1-ok1"
+    ],
+    [
+      "pulseaudio-module-bluetooth",
+      "1:17.0+dfsg1-ok1"
+    ],
+    [
+      "pulseaudio-utils",
+      "1:17.0+dfsg1-ok1"
+    ],
+    [
+      "python3-speechd",
+      "0.12.1-ok1"
+    ],
+    [
+      "speech-dispatcher",
+      "0.12.1-ok1"
+    ],
+    [
+      "speech-dispatcher-audio-plugins:amd64",
+      "0.12.1-ok1"
+    ],
+    [
+      "tesseract-ocr",
+      "5.3.4-ok4"
+    ],
+    [
+      "tesseract-ocr-chi-sim",
+      "1:4.1.0-ok2"
+    ],
+    [
+      "tesseract-ocr-eng",
+      "1:4.1.0-ok2"
+    ],
+    [
+      "tesseract-ocr-osd",
+      "1:4.1.0-ok2"
+    ],
+    [
+      "yhkylin-backup-tools",
+      "4.2.0.1-ok1"
+    ],
+    [
+      "yhkylin-systembackup-tools",
+      "1.0.0.0-ok10"
+    ]
+  ],
+  "processes": [
+    "    PID COMMAND",
+    "      1 systemd",
+    "      2 kthreadd",
+    "      3 pool_workqueue_release",
+    "      4 kworker/R-rcu_gp",
+    "      5 kworker/R-sync_wq",
+    "      6 kworker/R-kvfree_rcu_reclaim",
+    "      7 kworker/R-slub_flushwq",
+    "      8 kworker/R-netns",
+    "     10 kworker/0:0H-kblockd",
+    "     13 kworker/R-mm_percpu_wq",
+    "     14 ksoftirqd/0",
+    "     15 rcu_preempt",
+    "     16 rcu_exp_par_gp_kthread_worker/0",
+    "     17 rcu_exp_gp_kthread_worker",
+    "     18 migration/0",
+    "     19 kprobe-optimizer",
+    "     20 idle_inject/0",
+    "     21 cpuhp/0",
+    "     22 cpuhp/1",
+    "     23 idle_inject/1",
+    "     24 migration/1",
+    "     25 ksoftirqd/1",
+    "     27 kworker/1:0H-kblockd",
+    "     28 cpuhp/2",
+    "     29 idle_inject/2",
+    "     30 migration/2",
+    "     31 ksoftirqd/2",
+    "     34 cpuhp/3",
+    "     35 idle_inject/3",
+    "     36 migration/3",
+    "     37 ksoftirqd/3",
+    "     40 cpuhp/4",
+    "     41 idle_inject/4",
+    "     42 migration/4",
+    "     43 ksoftirqd/4",
+    "     46 cpuhp/5",
+    "     47 idle_inject/5",
+    "     48 migration/5",
+    "     49 ksoftirqd/5",
+    "     51 kworker/5:0H-kblockd",
+    "     52 cpuhp/6",
+    "     53 idle_inject/6",
+    "     54 migration/6",
+    "     55 ksoftirqd/6",
+    "     57 kworker/6:0H-kblockd",
+    "     58 cpuhp/7",
+    "     59 idle_inject/7",
+    "     60 migration/7",
+    "     61 ksoftirqd/7",
+    "     63 kworker/7:0H-kblockd",
+    "     64 kdevtmpfs",
+    "     65 kworker/R-inet_frag_wq",
+    "     66 rcu_tasks_kthread",
+    "     67 rcu_tasks_rude_kthread",
+    "     68 kauditd",
+    "     69 khungtaskd",
+    "     70 oom_reaper",
+    "     73 kworker/R-writeback",
+    "     74 kcompactd0",
+    "     75 ksmd",
+    "     76 khugepaged",
+    "     77 kworker/R-kblockd",
+    "     78 kworker/R-blkcg_punt_bio",
+    "     79 kworker/R-kintegrityd",
+    "     80 irq/9-acpi",
+    "     84 kworker/R-tpm_dev_wq",
+    "     85 kworker/R-ata_sff",
+    "     86 kworker/R-md_bitmap",
+    "     87 kworker/R-md_llbitmap_io",
+    "     88 kworker/R-md_llbitmap_unplug",
+    "     89 kworker/R-md",
+    "     90 kworker/R-edac-poller",
+    "     91 kworker/R-devfreq_wq",
+    "     92 watchdogd",
+    "     93 kworker/R-quota_events_unbound",
+    "     94 kswapd0",
+    "     95 ecryptfs-kthread",
+    "     96 kworker/R-kthrotld",
+    "     97 kworker/R-acpi_thermal_pm",
+    "     98 scsi_eh_0",
+    "     99 kworker/R-scsi_tmf_0",
+    "    100 scsi_eh_1",
+    "    101 kworker/R-scsi_tmf_1",
+    "    102 scsi_eh_2",
+    "    103 kworker/R-scsi_tmf_2",
+    "    108 kworker/R-mld",
+    "    109 kworker/R-ipv6_addrconf",
+    "    110 kworker/R-kstrp",
+    "    114 kworker/u33:0",
+    "    127 kworker/R-charger_manager",
+    "    192 card0-crtc0",
+    "    235 kworker/7:1H-kblockd",
+    "    237 jbd2/sda3-8",
+    "    238 kworker/R-ext4-rsv-conversion",
+    "    497 systemd-journal",
+    "    515 kworker/3:1H-kblockd",
+    "    535 systemd-timesyn",
+    "    540 systemd-udevd",
+    "    545 kworker/1:1H-kblockd",
+    "    552 psimon",
+    "    687 accounts-daemon",
+    "    688 avahi-daemon",
+    "    690 biometric-authe",
+    "    691 cron",
+    "    692 dbus-daemon",
+    "    698 avahi-daemon",
+    "    707 kylin-system-up",
+    "    711 conf2-system.py",
+    "    712 kySdkDbus",
+    "    716 kytensor",
+    "    747 udisksd",
+    "    748 ukui-input-gath",
+    "    823 rsyslogd",
+    "    852 kylin-software-",
+    "    858 NetworkManager",
+    "    859 kylin-os-manage",
+    "    864 wpa_supplicant",
+    "    893 polkitd",
+    "    906 ostree-maintain",
+    "   1092 systemd-logind",
+    "   1110 kylin-nm-sysdbu",
+    "   1162 sshd",
+    "   1267 agetty",
+    "   1286 kylin-daq-daemo",
+    "   1288 kylin-process-m",
+    "   1293 systime",
+    "   1295 nm-enhance-opti",
+    "   1297 ostree-coredata",
+    "   1303 bluetoothServic",
+    "   1305 ukui-media-cont",
+    "   1315 psimon",
+    "   1438 kylin-assistant",
+    "   1519 kylin-unattende",
+    "   1522 kaiming-system-",
+    "   1524 ukui-system-ser",
+    "   1551 authoritydbus",
+    "   1641 upowerd",
+    "   1820 obexd",
+    "   2018 uniauth-backend",
+    "   2088 backup-daemon",
+    "   2105 ukui-powermanag",
+    "  12205 ukui-system-ser",
+    "  13650 tailscaled",
+    "  15967 kylin-update-ti",
+    "  17384 npm exec @wonde",
+    "  17399 sh",
+    "  17400 node",
+    "  17431 node",
+    "  18555 kworker/0:2H-kblockd",
+    "  43148 systemd",
+    "  43151 (sd-pam)",
+    "  43173 dbus-daemon",
+    "  43174 kyai-data-manag",
+    "  43177 kylin-ai-docume",
+    "  43179 kylin-ai-knowle",
+    "  43181 kylin-ai-vector",
+    "  43182 ukui-audio-serv",
+    "  43187 mpris-proxy",
+    "  44776 kylin-software-",
+    "  44788 python3",
+    "  44994 systemd-resolve",
+    "  47502 kpr-backend",
+    "  47504 kylinid-dbus",
+    "  47685 ukui-notificati",
+    "  47688 ukui-search-ser",
+    "  47693 gvfsd",
+    "  47699 gvfsd-fuse",
+    "  47705 gvfs-udisks2-vo",
+    "  47714 gvfs-mtp-volume",
+    "  47719 gvfs-afc-volume",
+    "  47725 gvfs-gphoto2-vo",
+    "  47730 gvfs-goa-volume",
+    "  47737 ukui-search-app",
+    "  47742 kylin-process-m",
+    "  47755 kylin-status-ma",
+    "  47818 dconf-service",
+    "  48107 gvfsd-metadata",
+    "  48171 at-spi-bus-laun",
+    "  48189 dbus-daemon",
+    "  48289 ukui-session-se",
+    "  48303 xdg-desktop-por",
+    "  48309 xdg-permission-",
+    "  48316 xdg-document-po",
+    "  48339 fusermount3",
+    "  48445 gvfsd-trash",
+    "  48459 gvfsd-computer",
+    "  48902 ukui-system-ser",
+    "  49122 gvfsd-recent",
+    "  49280 ukui-notebook-s",
+    "  49967 triton_python_b",
+    "  49969 triton_python_b",
+    "  50345 kylin-nm-netctr",
+    "  50477 kworker/R-xfsalloc",
+    "  50478 kworker/R-xfs_mru_cache",
+    "  50482 jfsIO",
+    "  50483 jfsCommit",
+    "  50484 jfsCommit",
+    "  50485 jfsCommit",
+    "  50486 jfsCommit",
+    "  50487 jfsCommit",
+    "  50488 jfsCommit",
+    "  50489 jfsCommit",
+    "  50490 jfsCommit",
+    "  50491 jfsSync",
+    "  50755 speech-dispatch",
+    "  50760 sd_kylin_speech",
+    "  50763 speech-dispatch",
+    "  50764 speech-dispatch",
+    "  50765 sd_dummy",
+    "  50947 triton_python_b",
+    "  50983 triton_python_b",
+    "  51091 triton_python_b",
+    "  51111 triton_python_b",
+    "  51502 triton_python_b",
+    "  51560 triton_python_b",
+    "  51561 triton_python_b",
+    "  51768 lightdm",
+    "  51780 Xorg",
+    "  51784 kylin-os-manage",
+    "  53540 psimon",
+    "  53542 pipewire",
+    "  53543 wireplumber",
+    "  53545 pipewire-pulse",
+    "  53768 anydesk",
+    "  54328 lightdm",
+    "  54365 ukui-session",
+    "  54403 kscreen_backend",
+    "  54444 anydesk",
+    "  54532 bwrap",
+    "  54537 bwrap",
+    "  54540 glycin-image-rs",
+    "  54615 at-spi2-registr",
+    "  54777 ukuismserver",
+    "  54787 dbus-daemon-pro",
+    "  54788 conf2-session.p",
+    "  54792 ukui-screensave",
+    "  54793 ukui-settings-d",
+    "  54794 ukui-sni-watche",
+    "  54802 xembed-sni-prox",
+    "  54841 kglobalaccel5",
+    "  55172 anydesk",
+    "  55178 kylin-calendar",
+    "  55190 fcitx5",
+    "  55196 kylin-ai-runtim",
+    "  55204 kylin-bot",
+    "  55205 kylin-device-da",
+    "  55206 kylin-nm",
+    "  55236 kylin-updatefin",
+    "  55238 user-guide-daem",
+    "  55243 kylin-virtual-k",
+    "  55282 kySdkDbus-sessi",
+    "  55283 sdk-date",
+    "  55285 mm-watermark",
+    "  55296 ukui-voice-wing",
+    "  55298 polkit-kare-aut",
+    "  55299 polkit-ukui-aut",
+    "  55318 kylin-os-manage",
+    "  55324 ukui-session-se",
+    "  55325 sound-theme-pla",
+    "  55340 ukui-bluetooth",
+    "  55359 ukui-clipboard",
+    "  55379 ukui-framework-",
+    "  55390 ukui-menu",
+    "  55448 bwrap",
+    "  55455 bwrap",
+    "  55466 ukui-powermanag",
+    "  55467 glycin-image-rs",
+    "  55527 ukui-search-ser",
+    "  55537 ukui-search",
+    "  55560 ukui-sidebar",
+    "  55577 ukui-upower",
+    "  55597 ukui-volume-con",
+    "  55620 user_cmd",
+    "  55625 process_trace",
+    "  56941 kwin_x11",
+    "  57101 peony-qt-deskto",
+    "  57788 peony",
+    "  57807 peony-intellige",
+    "  58488 ukui-screensave",
+    "  58988 triton_python_b",
+    "  59890 kworker/2:2H-kblockd",
+    "  68190 kworker/6:2H-kblockd",
+    "  86146 kworker/4:1H-kblockd",
+    "  86427 kworker/3:0H-kblockd",
+    "  87943 cupsd",
+    "  87944 kylin-printer-a",
+    "  90388 mate-terminal",
+    "  90439 hermes",
+    "  90601 kworker/5:1H-kblockd",
+    " 106726 chpasswd",
+    " 107881 hermes",
+    " 108052 sshd-session",
+    " 108062 sshd-session",
+    " 112341 xmessage",
+    " 113323 CentralDark-Ins",
+    " 113326 CentralDark-Ins",
+    " 113327 CentralDark-Ins",
+    " 113376 bluetoothd",
+    " 113377 CentralDark-Ins",
+    " 113384 CentralDark-Ins",
+    " 113391 aioncore",
+    " 113485 CentralDark-Ins",
+    " 113545 CentralDark-Ins",
+    " 114807 kworker/2:1H-kblockd",
+    " 115491 hermes",
+    " 115648 sshd-session",
+    " 115659 sshd-session",
+    " 118214 run.sh",
+    " 118222 run-helper.sh",
+    " 118227 Runner.Listener",
+    " 118785 run.sh",
+    " 118794 run-helper.sh",
+    " 118798 Runner.Listener",
+    " 119488 run.sh",
+    " 119495 run-helper.sh",
+    " 119499 Runner.Listener",
+    " 120452 run.sh",
+    " 120457 run-helper.sh",
+    " 120461 Runner.Listener",
+    " 131544 kworker/4:2H-kblockd",
+    " 182878 kworker/u32:5-events_power_efficient",
+    " 305634 kworker/7:1-events",
+    " 322608 kworker/6:2-mm_percpu_wq",
+    " 323425 kworker/u32:1-writeback",
+    " 330755 kworker/7:0-mm_percpu_wq",
+    " 336088 kworker/5:1-events",
+    " 358105 bun",
+    " 358107 node",
+    " 358117 node",
+    " 358133 node",
+    " 358153 aioncore",
+    " 368605 kworker/2:2-mm_percpu_wq",
+    " 373294 kworker/1:1-events",
+    " 380442 kworker/3:2-mm_percpu_wq",
+    " 380443 kworker/4:3-events",
+    " 380444 kworker/6:0-events",
+    " 414894 kworker/u32:0-events_power_efficient",
+    " 423033 kworker/0:3-mm_percpu_wq",
+    " 433337 kworker/3:0-cgroup_release",
+    " 437665 kworker/5:2-mm_percpu_wq",
+    " 446954 kworker/2:0-mm_percpu_wq",
+    " 456657 kworker/u32:6-events_power_efficient",
+    " 458285 kworker/1:2-mm_percpu_wq",
+    " 458446 kworker/4:1-mm_percpu_wq",
+    " 458699 systemd-inhibit",
+    " 458700 sleep",
+    " 458902 kworker/0:1-mm_percpu_wq",
+    " 458946 kworker/u32:2-writeback",
+    " 459863 psimon",
+    " 459864 python3",
+    " 459912 node",
+    " 459943 kworker/6:1",
+    " 460054 bash",
+    " 460059 python3",
+    " 460063 ps"
+  ],
+  "native_models": [
+    {
+      "name": "asr_cif-search_streaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "asr_decoder_streaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "asr_encoder_nonstreaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "asr_encoder_streaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "asr_feature-extractor_nonstreaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "asr_feature-extractor_streaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "asr_fsmn-vad_streaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "asr_lfr-cmvn-pe_streaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "asr_scoring_nonstreaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "embd_cn-clip_512-uint8-image",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "embd_cn-clip_512-uint8-text"
+    },
+    {
+      "name": "embd_gte-base_uint8-text",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "ensemble-asr_fsmn-vad_streaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "ensemble-asr_paraformer_nonstreaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "ensemble-asr_paraformer_streaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "ensemble-embd_cn-clip_512-uint8-text"
+    },
+    {
+      "name": "ensemble-embd_gte-base_uint8-text",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "ensemble-punc_ct-transformer_nonstreaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "ensemble-tts_melo",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "matting_portrait"
+    },
+    {
+      "name": "matting_universal"
+    },
+    {
+      "name": "model_bank",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "ocr_ppocr",
+      "version": "1",
+      "state": "UNAVAILABLE",
+      "reason": "unloaded"
+    },
+    {
+      "name": "punc_ct-transformer_nonstreaming",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "seg_sam"
+    },
+    {
+      "name": "seg_sam-decoder"
+    },
+    {
+      "name": "seg_sam-encoder"
+    },
+    {
+      "name": "tokenizer_cn-clip_512-uint8-text"
+    },
+    {
+      "name": "tokenizer_gte-base_uint8-text",
+      "version": "1",
+      "state": "READY"
+    },
+    {
+      "name": "tts_melo",
+      "version": "1",
+      "state": "READY"
+    }
+  ],
+  "weights": [
+    {
+      "path": "/usr/share/kylin-ai/model-repository/punc_ct-transformer_nonstreaming/1/model.onnx",
+      "bytes": 73167767
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/asr_fsmn-vad_streaming/1/model.onnx",
+      "bytes": 1730426
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/asr_encoder_streaming/1/model.onnx",
+      "bytes": 52761954
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/matting_universal/1/model.onnx",
+      "bytes": 395316574
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/seg_sam-encoder/1/encoder.onnx",
+      "bytes": 359048256
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/asr_decoder_streaming/1/decoder.onnx",
+      "bytes": 27218929
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/embd_gte-base_uint8-text/1/gte-base-multilingual-model_QUInt8.onnx",
+      "bytes": 339629744
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/asr_lfr-cmvn-pe_streaming/1/lfr_cmvn_pe.onnx",
+      "bytes": 11253923
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/asr_encoder_nonstreaming/1/model.onnx",
+      "bytes": 222509002
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/ocr_ppocr/1/model_det.onnx",
+      "bytes": 4819576
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/ocr_ppocr/1/model_rec.onnx",
+      "bytes": 16557276
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/embd_cn-clip_512-uint8-image/1/vit-b-16.img.QUInt8.onnx",
+      "bytes": 109546758
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/seg_sam-decoder/1/decoder.onnx",
+      "bytes": 16499555
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/matting_portrait/1/model.onnx",
+      "bytes": 35953948
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/embd_cn-clip_512-uint8-text/1/vit-b-16.txt.QUInt8.onnx",
+      "bytes": 41996220
+    },
+    {
+      "path": "/usr/share/kylin-ai/model-repository/tts_melo/1/model.onnx",
+      "bytes": 90421298
+    }
+  ],
+  "agents": [
+    {
+      "id": "632f31d2",
+      "name": "Aion CLI",
+      "agent_type": "aionrs",
+      "agent_source": "internal",
+      "installed": true,
+      "status": "online",
+      "native_skills_dirs": [
+        ".aionrs/skills"
+      ]
+    },
+    {
+      "id": "2d23ff1c",
+      "name": "Claude Code",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".claude/skills"
+      ]
+    },
+    {
+      "id": "8e1acf31",
+      "name": "Codex CLI",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".codex/skills"
+      ]
+    },
+    {
+      "id": "cc126dd5",
+      "name": "Gemini CLI",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".gemini/skills"
+      ]
+    },
+    {
+      "id": "eb895030",
+      "name": "Auggie",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "8b20fd41",
+      "name": "CodeBuddy",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".codebuddy/skills"
+      ]
+    },
+    {
+      "id": "3cd9d436",
+      "name": "Copilot",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "a0dfb1ec",
+      "name": "Cursor",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".cursor/skills"
+      ]
+    },
+    {
+      "id": "da386544",
+      "name": "Droid",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".factory/skills"
+      ]
+    },
+    {
+      "id": "600c6601",
+      "name": "Goose",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".goose/skills"
+      ]
+    },
+    {
+      "id": "55f3ed1c",
+      "name": "Hermes",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": true,
+      "status": "online",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "e241c49c",
+      "name": "Kimi",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".kimi/skills"
+      ]
+    },
+    {
+      "id": "e044000d",
+      "name": "Kiro",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "53861a53",
+      "name": "OpenCode",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".opencode/skills"
+      ]
+    },
+    {
+      "id": "484e4bf2",
+      "name": "Pi",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".pi/skills"
+      ]
+    },
+    {
+      "id": "1e4afc51",
+      "name": "Qoder",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "26a946ed",
+      "name": "Qwen",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".qwen/skills"
+      ]
+    },
+    {
+      "id": "346b0041",
+      "name": "Snow",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "65d0f5b2",
+      "name": "Vibe",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".vibe/skills"
+      ]
+    },
+    {
+      "id": "a9f3c21e",
+      "name": "Antigravity",
+      "agent_type": "antigravity",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".agents/skills"
+      ]
+    },
+    {
+      "id": "b3252207",
+      "name": "Autohand Code",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "b7e8a9c4",
+      "name": "OpenClaw",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "a11632d4",
+      "name": "DeepAgents",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".deepagents/skills",
+        "skills"
+      ]
+    },
+    {
+      "id": "d14634b4",
+      "name": "DimCode",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "6a95eb4f",
+      "name": "Dirac",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".dirac/skills"
+      ]
+    },
+    {
+      "id": "5431c523",
+      "name": "GLM Agent",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "145a4e5c",
+      "name": "Grok Build",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "54c5ccf0",
+      "name": "Kilo",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "19e05df6",
+      "name": "Nova",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".compass/skills"
+      ]
+    },
+    {
+      "id": "79767ac2",
+      "name": "siGit Code",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "ca45e378",
+      "name": "Amp",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "d5fd9849",
+      "name": "Cortex Code",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".cortex/skills",
+        ".claude/skills"
+      ]
+    },
+    {
+      "id": "e9bf0ab3",
+      "name": "Corust Agent",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".corust-agent/skills",
+        ".agents/skills"
+      ]
+    },
+    {
+      "id": "5792d298",
+      "name": "Devin",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".devin/skills",
+        ".agents/skills",
+        ".windsurf/skills"
+      ]
+    },
+    {
+      "id": "ca2e896a",
+      "name": "Harn",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".harn/skills"
+      ]
+    },
+    {
+      "id": "edd2858a",
+      "name": "Junie",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "0d1e478d",
+      "name": "Poolside",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".poolside/skills",
+        ".agents/skills"
+      ]
+    },
+    {
+      "id": "b6ba32f7",
+      "name": "Stakpak",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".stakpak/skills"
+      ]
+    },
+    {
+      "id": "2ab86949",
+      "name": "VT Code",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".vtcode/skills",
+        ".agents/skills"
+      ]
+    },
+    {
+      "id": "8f21c6d3",
+      "name": "MiMo Code",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".mimocode/skills",
+        ".opencode/skills"
+      ]
+    },
+    {
+      "id": "c9e8a2f4",
+      "name": "omp",
+      "agent_type": "acp",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": [
+        ".omp/skills",
+        ".claude/skills"
+      ]
+    },
+    {
+      "id": "f9f61666",
+      "name": "OpenClaw",
+      "agent_type": "openclaw-gateway",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    },
+    {
+      "id": "fb1083a5",
+      "name": "Nanobot",
+      "agent_type": "nanobot",
+      "agent_source": "builtin",
+      "installed": false,
+      "status": "missing",
+      "native_skills_dirs": null
+    }
+  ],
+  "assistants": [
+    {
+      "id": "bare:632f31d2",
+      "name": "Aion CLI",
+      "enabled": true,
+      "agent_id": "632f31d2",
+      "enabled_skills": null
+    },
+    {
+      "id": "bare:55f3ed1c",
+      "name": "Hermes",
+      "enabled": true,
+      "agent_id": "55f3ed1c",
+      "enabled_skills": null
+    },
+    {
+      "id": "aionui-assistant",
+      "name": "AionUi Butler",
+      "enabled": true,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "aionui-config",
+        "aionui-troubleshooting",
+        "aionui-webui-public"
+      ]
+    },
+    {
+      "id": "word-creator",
+      "name": "Word Creator",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "officecli-docx"
+      ]
+    },
+    {
+      "id": "ppt-creator",
+      "name": "PPT Creator",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "officecli-pptx"
+      ]
+    },
+    {
+      "id": "excel-creator",
+      "name": "Excel Creator",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "officecli-xlsx"
+      ]
+    },
+    {
+      "id": "word-form-creator",
+      "name": "Word Form Creator",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "officecli-word-form"
+      ]
+    },
+    {
+      "id": "dashboard-creator",
+      "name": "Dashboard Creator",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "officecli-data-dashboard"
+      ]
+    },
+    {
+      "id": "financial-model-creator",
+      "name": "Financial Model Creator",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "officecli-financial-model"
+      ]
+    },
+    {
+      "id": "academic-paper",
+      "name": "Academic Paper",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "officecli-academic-paper"
+      ]
+    },
+    {
+      "id": "pitch-deck-creator",
+      "name": "Pitch Deck Creator",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "officecli-pitch-deck"
+      ]
+    },
+    {
+      "id": "morph-ppt",
+      "name": "Morph PPT",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "morph-ppt"
+      ]
+    },
+    {
+      "id": "morph-ppt-3d",
+      "name": "3D Morph PPT",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "morph-ppt-3d",
+        "morph-ppt"
+      ]
+    },
+    {
+      "id": "beautiful-mermaid",
+      "name": "Beautiful Mermaid",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "mermaid"
+      ]
+    },
+    {
+      "id": "ui-ux-pro-max",
+      "name": "UI/UX Pro Max",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": null
+    },
+    {
+      "id": "game-3d",
+      "name": "3D Game",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": null
+    },
+    {
+      "id": "story-roleplay",
+      "name": "Story Roleplay",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "story-roleplay"
+      ]
+    },
+    {
+      "id": "planning-with-files",
+      "name": "Planning with Files",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": null
+    },
+    {
+      "id": "cowork",
+      "name": "Cowork",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "skill-creator",
+        "officecli-pptx",
+        "officecli-docx",
+        "pdf",
+        "officecli-xlsx"
+      ]
+    },
+    {
+      "id": "openclaw-setup",
+      "name": "OpenClaw Setup Expert",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "openclaw-setup",
+        "aionui-webui-setup"
+      ]
+    },
+    {
+      "id": "social-job-publisher",
+      "name": "Social Job Publisher",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "xiaohongshu-recruiter",
+        "x-recruiter"
+      ]
+    },
+    {
+      "id": "human-3-coach",
+      "name": "HUMAN 3.0 Coach",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": null
+    },
+    {
+      "id": "moltbook",
+      "name": "moltbook",
+      "enabled": false,
+      "agent_id": "632f31d2",
+      "enabled_skills": [
+        "moltbook"
+      ]
+    }
+  ],
+  "tools": {
+    "hermes": true,
+    "node": true,
+    "python3": true,
+    "ffmpeg": true,
+    "ffprobe": true,
+    "tesseract": true,
+    "officecli": false,
+    "whisper": false,
+    "ollama": false,
+    "codex": false,
+    "claude": false,
+    "gemini": false,
+    "yt-dlp": false
+  },
+  "provenance_caveat": "SDK local comprovada. Pacote R1 contém cloud-model; inferência R1 totalmente offline não inferida.",
+  "reference_attachments": "Screenshots de AionUi são desta rota; vídeo VMware é referência externa, não runtime desta VPS."
+}
