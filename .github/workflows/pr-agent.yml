@@ -75,6 +75,7 @@ jobs:
         env:
           CONFIG__AI_PROVIDER: openai
           CONFIG__FALLBACK_MODELS: '[]'
+          CONFIG__CUSTOM_MODEL_MAX_TOKENS: '8192'
           OPENAI__API_BASE: ${{ env.LOCAL_BRIDGE_BASE }}
           OPENAI__KEY: local-kylin
         run: |
