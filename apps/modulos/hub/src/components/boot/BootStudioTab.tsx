@@ -10,7 +10,7 @@ context_reconciliation: LOADED 🧩
 history_preservation: ACTIVE 📚
 source_of_truth: ServerVpss/CentralDark + runtime medido 🎯
 observed_evidence: branch/HEAD/PR/runtime/tools medidos agora 🔎
-alignment: SEGREDO/CHEFE > SOL > PIVETE/HERMES + ESPECIALISTAS 👑
+alignment: SEGREDO/CHEFE > SOL > HERMES + ESPECIALISTAS 👑
 role: COORDINATOR 🎛️
 writer: NONE ✍️
 frequency: ADAPTIVE ⚡`;

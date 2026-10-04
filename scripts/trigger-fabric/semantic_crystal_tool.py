@@ -255,7 +255,7 @@ def self_test() -> int:
         "providers": [
             {
                 "name": "hermes",
-                "owner": "PIVETE/HERMES",
+                "owner": "HERMES",
                 "capabilities": ["RUN_TEST"],
                 "territories": ["CI_PIPELINE"],
                 "available": True,
