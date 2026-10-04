@@ -1823,6 +1823,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L158",
+      "next_uid": "L160"
+    },
+    {
+      "uid": "L160",
+      "legacy_learning_number": 160,
+      "legacy_occurrence": 1,
+      "title": "Multimodal completo antes da ação: fechar vídeo+áudio+contexto antes de transformar sinal curto em execução",
+      "document_order": 159,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L159",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
