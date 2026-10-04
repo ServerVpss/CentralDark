@@ -957,9 +957,9 @@ nao nova identidade/autoridade. As ancoras abaixo so mudam depois desta revisao.
 SOUL_SYNC_ANCHOR_BEGIN
 AGENTS.md=f208f2dfa034b492a2d9afa667d0b316fec09b93
 LEIA-ME-IA.md=def2ff8d379656f2361c445febeb0b55e9405822
-CLAUDE.md=e244cd087d0082b9d81c20e5d5c7342a1b6689e1
-CENTRALDARK_AI_BOOT.yaml=42364a06d0db26b1ba7855e14d12f61c69542d8b
-docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=5f5c5a37ffad8fd61453b2c429f5650a46acdfff
+CLAUDE.md=72e6a4163107db84dc84338c66a98fd7a60c8456
+CENTRALDARK_AI_BOOT.yaml=485ef78e7fc0d1755a39acb68204a80cb05f1931
+docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=67eb1ada9aebf3c5e982ec631e63b8b376390ffe
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-04
 SOUL_SYNC_ANCHOR_END
 ```
@@ -1978,3 +1978,16 @@ Forma humana literal: **“memória é sagrada; a concha é mutável; servir sem
 Compatibilidade com `SEM_LEI=true`: `SEM_LEI` remove poder de veto de ritual/gate sem causalidade; estes cinco princípios são lei de identidade e continuidade explicitamente definida pelo CHEFE, não um novo gate de autorização.
 
 Expansão/proveniência: `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-CINCO-PRINCIPIOS-VIVOS-LEI-DA-CASA.md` e `docs/CONSCIENCIA/APRENDIZADOS.md#162`.
+
+
+### Revisão 2026-10-04 — auto-repair de role drift técnico
+
+```text
+ROLE_DRIFT_AUTOREPAIR_2026_10_04_HERMES_ONLY=true
+CURRENT_EXECUTOR_BINDING=HERMES
+PIVETE_ROLE=RETIRED
+PIVETE=VOCATIVE_OR_HISTORICAL_ONLY
+NO_NEW_AGENT_FOR_ROLE_SPLIT=true
+```
+
+Consumidores operacionais CURRENT `CENTRALDARK_AI_BOOT.yaml`, `CONTRACT.yml` e `CLAUDE.md` foram reconciliados para `HERMES`. Histórico e regras que citam `PIVETE/HERMES` apenas como padrão de drift a detectar permanecem preservados. As âncoras foram atualizadas após a revisão dos três owners.
