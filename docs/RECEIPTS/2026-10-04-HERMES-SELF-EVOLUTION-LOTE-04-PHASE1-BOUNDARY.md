@@ -51,8 +51,9 @@ Observed donor issues:
 1. donor calls `dspy.GEPA(..., max_steps=...)`, but the installed DSPy version rejects that argument;
 2. donor falls back to MIPROv2;
 3. MIPROv2 required optional `optuna`, which was installed only inside the isolated donor `.venv`;
-4. the second synthetic attempt exceeded the execution timeout and produced no evolved output directory;
-5. no variant, promotion, commit, PR or runtime mutation occurred.
+4. after a compatibility patch in scratch (`GEPA(auto="light")`), GEPA rejected the donor metric signature and fell back to MIPROv2;
+5. the bounded synthetic run reached dataset generation, bootstrapping and instruction proposal, then hit the 360-second timeout; no evolved output directory was produced;
+6. no variant, promotion, commit, PR or runtime mutation occurred.
 
 ## Verdict
 
