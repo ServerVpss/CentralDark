@@ -24,6 +24,13 @@ const http             = require('http');
 const fs               = require('fs');
 const path             = require('path');
 const { execSync, spawn } = require('child_process');
+const {
+  DEFAULT_LOCAL_AI_BASE_URL,
+  classifyLocalAiFailure,
+  isLocalAiEnabled,
+  requestLocalAiChat,
+  resolveLocalAiModel,
+} = require('./local-ai-adapter.cjs');
 
 // ── Carrega arquivos .env ──────────────────────────────────────────────────
 function loadEnv(p) {
@@ -58,6 +65,8 @@ const TG_API       = 'https://api.telegram.org';
 const USE_HERMES_PRIMARY = process.env.BOT_USE_HERMES === '1';
 const HEALTH_PORT  = Number(process.env.BOT_HEALTH_PORT || process.env.BOT_HEALTH_PORT || '9500');
 const TELEGRAM_TRANSPORT = 'BOT_API_DIRECT_LONG_POLLING';
+const LOCAL_AI_ENABLED = isLocalAiEnabled(process.env);
+const LOCAL_AI_BASE = (process.env.LOCAL_AI_BASE_URL || DEFAULT_LOCAL_AI_BASE_URL).replace(/\/$/, '');
 const MANDATORY_RULES_PATH = path.join(__dirname, 'CENTRALDARK-MANDATORY-RULES.yml');
 let MANDATORY_RULES_TEXT = '';
 try {
@@ -755,6 +764,7 @@ async function executeTool(toolName, toolInput) {
 async function callLLMWithTools(history, systemPrompt) {
   systemPrompt = withMandatoryRules(systemPrompt);
   systemPrompt = withExecutorCentralDark(systemPrompt, history);
+  if (LOCAL_AI_ENABLED) return callLocalAi(history, systemPrompt, 4096);
   const gatewayThenHermes = async (motivo) => {
     const gw = await callCentralDarkGateway(history, systemPrompt, motivo);
     if (gw.ok) return gw.text;
@@ -816,6 +826,31 @@ async function callLLMWithTools(history, systemPrompt) {
     messages.push({ role: 'user', content: results });
   }
   return '❌ Limite de iterações de ferramentas atingido.';
+}
+
+function localAiMessages(history, systemPrompt) {
+  return [
+    { role: 'system', content: systemPrompt },
+    ...history.slice(-20).map(m => ({
+      role: m.role || 'user',
+      content: typeof m.content === 'string' ? m.content : JSON.stringify(m.content),
+    })),
+  ];
+}
+
+async function callLocalAi(history, systemPrompt, maxTokens = 1024) {
+  try {
+    // Resolve o modelo atual no /health a cada mensagem; não há fallback cloud nesta rota.
+    return await requestLocalAiChat({
+      baseUrl: LOCAL_AI_BASE,
+      maxTokens,
+      messages: localAiMessages(history, systemPrompt),
+    });
+  } catch (error) {
+    const failure = classifyLocalAiFailure(error);
+    console.error(`[Bot] ❌ Local AI ${failure.code}: ${error?.message || error}`);
+    return `⚠️ IA local indisponível (${failure.code}). Estado: BLOCKED/UNKNOWN. Nenhum fallback cloud foi usado.`;
+  }
 }
 
 // ── Painel ADM ─────────────────────────────────────────────────────────────
@@ -1169,6 +1204,9 @@ async function downloadTelegramPhoto(msg) {
 async function callLLMWithVision(history, systemPrompt, imageData, caption) {
   systemPrompt = withMandatoryRules(systemPrompt);
   systemPrompt = withExecutorCentralDark(systemPrompt, history);
+  if (LOCAL_AI_ENABLED) {
+    return '⚠️ IA local não suporta Vision neste adapter. Estado: BLOCKED/UNKNOWN. Nenhum fallback cloud foi usado.';
+  }
   if (!LLM_KEY) return '❌ ANTHROPIC_AUTH_TOKEN não configurado.';
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
   const userContent = [
@@ -1202,6 +1240,7 @@ async function callLLMWithVision(history, systemPrompt, imageData, caption) {
 async function callLLM(history, systemPrompt) {
   systemPrompt = withMandatoryRules(systemPrompt);
   systemPrompt = withExecutorCentralDark(systemPrompt, history);
+  if (LOCAL_AI_ENABLED) return callLocalAi(history, systemPrompt, 1024);
   if (USE_HERMES_PRIMARY) return callHermesExecutor(history, systemPrompt, 'BOT_USE_HERMES=1');
   if (!LLM_KEY) return callHermesExecutor(history, systemPrompt, 'ANTHROPIC_AUTH_TOKEN ausente');
   const url = LLM_BASE.endsWith('/v1') ? `${LLM_BASE}/messages` : `${LLM_BASE}/v1/messages`;
@@ -1948,6 +1987,15 @@ async function main() {
   console.log('[Bot] 🔄 Transporte canônico: Telegram Bot API oficial via long polling direto');
   _botMode = 'api-direta';
   console.log('[Bot] ✅ BOT_API_DIRECT_LONG_POLLING ativo');
+  if (LOCAL_AI_ENABLED) {
+    try {
+      const model = await resolveLocalAiModel({ baseUrl: LOCAL_AI_BASE });
+      console.log(`[Bot] ✅ BOT_USE_LOCAL_AI=1 ativo — bridge ${LOCAL_AI_BASE}; modelo atual ${model}`);
+    } catch (error) {
+      const failure = classifyLocalAiFailure(error);
+      console.warn(`[Bot] ⚠️ Local AI indisponível no início do processo (${failure.code}); mensagens permanecerão fail-closed`);
+    }
+  }
   let pollingHealth = null;
   try {
     pollingHealth = await startPollingHealthServer();
