@@ -1,3 +1,6 @@
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { randomUUID } from "node:crypto";
+import { pathToFileURL } from "node:url";
 // Servidor MCP (Streamable HTTP, stateless) via SDK oficial.
 // Cada request POST /mcp instancia um Server + StreamableHTTPServerTransport efêmero.
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -112,7 +115,7 @@ estado vivo: reconcilie branch, HEAD, runtime e ferramentas quando o claim exigi
 Cumprimente curto ("E aí Pivete, tô calibrado — o que manda?"), NÃO liste tudo isso de volta pro usuário.
 `;
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
-function buildServer(options) {
+export function buildServer(options) {
     const requestedVisibleTools = options.visibleTools ?? ALL_TOOLS;
     // Endpoint comum nunca anuncia nem executa destrutivas. No endpoint admin,
     // toda destrutiva passa exclusivamente pelo dispatcher auditado mcp_admin_call.
@@ -339,3 +342,14 @@ export async function handleMcpRequest(req, res, ghToken, options = {}) {
 }
 //# sourceMappingURL=mcp-server.js.map
 //# sourceMappingURL=mcp-server.js.map
+export async function serveStdio(options = {}) {
+  const compact = process.argv.includes("--compact");
+  const admin = process.argv.includes("--admin");
+  const names = new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_call", ...ALL_TOOLS.filter(t => t.name.startsWith("kylin_")).map(t => t.name)]);
+  const server = buildServer({ admin, oauthScope: admin ? "mcp admin" : "mcp", visibleTools: compact ? ALL_TOOLS.filter(t => names.has(t.name)) : ALL_TOOLS, callableTools: ALL_TOOLS, label: "centraldark-local", clientLabel: process.env.CENTRALDARK_CLIENT_LABEL || "local-stdio", cid: process.env.CENTRALDARK_SESSION_ID || randomUUID(), callerUser: "local-owner", ...options });
+  await server.connect(new StdioServerTransport());
+  return server;
+}
+if (process.argv[2] === "--stdio" && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  await serveStdio();
+}

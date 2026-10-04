@@ -1,0 +1,112 @@
+{
+  "schema": "centraldark.aionui.native-proof.v1",
+  "native_replay": {
+    "time": "2026-10-04T03:19:05.937Z",
+    "catalog_count": 132,
+    "results": [
+      {
+        "name": "kylin_text_embedding",
+        "pass": true,
+        "isError": false,
+        "dimensions": 768,
+        "vector_finite": true,
+        "vector_hash": "89a1227183a2ea27cef7909895f80b7d4b37d476cda84d11956a22b85e19f7c6"
+      },
+      {
+        "name": "kylin_audio_synthesize",
+        "pass": true,
+        "isError": false,
+        "artifact": "centraldark/d458e5bf-5319-42f4-ada0-dd1439643b8f.wav",
+        "samples": 40994
+      },
+      {
+        "name": "kylin_audio_transcribe",
+        "pass": true,
+        "isError": false,
+        "transcript": [
+          "你好"
+        ]
+      },
+      {
+        "name": "kylin_image_analyze",
+        "pass": true,
+        "isError": false,
+        "ocr": "CENTRALDARK PROOF"
+      },
+      {
+        "name": "kylin_image_embedding",
+        "pass": true,
+        "isError": false,
+        "dimensions": 1024,
+        "vector_finite": true,
+        "vector_hash": "680a88c7292b7b9dd5c442c4efad6eaed2b6a1eabe630627025bed136fcedf34"
+      },
+      {
+        "name": "kylin_video_analyze",
+        "pass": true,
+        "isError": false,
+        "frames": 1,
+        "audio": {
+          "model": "ensemble-asr_paraformer_nonstreaming",
+          "sample_rate": 16000,
+          "duration_seconds": 0.952,
+          "transcript": [
+            "你好"
+          ]
+        }
+      },
+      {
+        "name": "kylin_image_analyze",
+        "pass": true,
+        "isError": true,
+        "error": "{\"ok\": false, \"error\": \"MEDIA_PATH_OUT_OF_SCOPE\"}\n",
+        "counterproof": "{\"ok\": false, \"error\": \"MEDIA_PATH_OUT_OF_SCOPE\"}\n"
+      },
+      {
+        "name": "kylin_video_analyze",
+        "pass": true,
+        "isError": true,
+        "error": "Argumentos inválidos: [\n  {\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be less than or equal to 6\",\n    \"path\": [\n      \"frames\"\n    ]\n  }\n]",
+        "counterproof": "Argumentos inválidos: [\n  {\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"type\": \"number\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"Number must be less than or equal to 6\",\n    \"path\": [\n      \"frames\"\n    ]\n  }\n]"
+      },
+      {
+        "name": "kylin_audio_synthesize",
+        "pass": true,
+        "isError": true,
+        "error": "Argumentos inválidos: [\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"type\": \"string\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"String must contain at least 1 character(s)\",\n    \"path\": [\n      \"text\"\n    ]\n  }\n]",
+        "counterproof": "Argumentos inválidos: [\n  {\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"type\": \"string\",\n    \"inclusive\": true,\n    \"exact\": false,\n    \"message\": \"String must contain at least 1 character(s)\",\n    \"path\": [\n      \"text\"\n    ]\n  }\n]"
+      },
+      {
+        "name": "aionui_stt",
+        "pass": true,
+        "status": 200,
+        "transcript": "你好"
+      }
+    ]
+  },
+  "binding": {
+    "mcp_id": "mcp_01a104db-6033-76f1-af0c-6b0c28b68cef",
+    "enabled": true,
+    "status": "connected",
+    "visible_tools": 10,
+    "provider_id": "prov_01a104db-f3e0-7ba2-ab05-91fa5e2a135f",
+    "model": [
+      "kylin-deepseek-r1"
+    ]
+  },
+  "hermes_mcp_test": {
+    "connected": true,
+    "discovered_tools": 10
+  },
+  "legacy_chat_readback": "HERMES_KYLIN_BRIDGE_OK",
+  "typecheck": "PASS",
+  "audit_media_redaction": "PASS",
+  "aion_agent_effect": "UNKNOWN: generated tool_call and waited for confirmation in one attempt; subsequent context requests timed out; no completed tool result claimed",
+  "usage_status": "UNAVAILABLE_BY_NATIVE_SDK",
+  "health_http": {
+    "http://127.0.0.1:25808": 200,
+    "http://127.0.0.1:18435/health": 200,
+    "http://127.0.0.1:8899/health": 200,
+    "http://127.0.0.1:8000/v2/health/ready": 200
+  }
+}
