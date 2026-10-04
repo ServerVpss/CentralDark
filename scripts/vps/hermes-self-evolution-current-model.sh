@@ -13,8 +13,31 @@ export OPENAI_API_KEY="${OPENAI_API_KEY:-local-kylin}"
 ARGS=("$@")
 has_optimizer=0; has_eval=0
 for ((i=0;i<${#ARGS[@]};i++)); do
-  [ "${ARGS[$i]}" = "--optimizer-model" ] && has_optimizer=1
-  [ "${ARGS[$i]}" = "--eval-model" ] && has_eval=1
+  case "${ARGS[$i]}" in
+    --optimizer-model|--eval-model)
+      flag="${ARGS[$i]}"
+      if (( i + 1 >= ${#ARGS[@]} )); then
+        echo "MODEL_IS_NOT_IDENTITY: $flag requires $MODEL_SPEC" >&2
+        exit 64
+      fi
+      override="${ARGS[$((i + 1))]}"
+      if [ "$override" != "$MODEL_SPEC" ]; then
+        echo "MODEL_IS_NOT_IDENTITY: $flag=$override current=$MODEL_SPEC" >&2
+        exit 64
+      fi
+      [ "$flag" = "--optimizer-model" ] && has_optimizer=1 || has_eval=1
+      i=$((i + 1))
+      ;;
+    --optimizer-model=*|--eval-model=*)
+      flag="${ARGS[$i]%%=*}"
+      override="${ARGS[$i]#*=}"
+      if [ "$override" != "$MODEL_SPEC" ]; then
+        echo "MODEL_IS_NOT_IDENTITY: $flag=$override current=$MODEL_SPEC" >&2
+        exit 64
+      fi
+      [ "$flag" = "--optimizer-model" ] && has_optimizer=1 || has_eval=1
+      ;;
+  esac
 done
 [ "$has_optimizer" -eq 1 ] || ARGS+=(--optimizer-model "$MODEL_SPEC")
 [ "$has_eval" -eq 1 ] || ARGS+=(--eval-model "$MODEL_SPEC")
