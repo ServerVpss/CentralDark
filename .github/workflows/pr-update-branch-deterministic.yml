@@ -15,14 +15,12 @@
 # - conflito/UNKNOWN não vira PASS.
 # - pull_request_target executa somente código confiável da base/main.
 #
-# 🛡️ CADEADO DO GUARDIÃO — NÃO trocar o runner deste fluxo para self-hosted.
-# Regressão provada: self-hosted offline deixou a COSTURA em fila.
-# Este fluxo fica em GitHub-hosted até VPS/self-hosted ficar PROVADO online
-# e o CHEFE autorizar modo híbrido.
-# UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN
-# SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE=true
-# HYBRID_MODE_PENDING_VPS_PROOF=true
-# CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE=true
+# 🛡️ CADEADO ATUALIZADO PELO CHEFE — hosted runner bloqueado por billing/spending-limit.
+# Este fluxo deve rodar no runner Linux self-hosted da VPS/CentralDark.
+# UPDATE_BRANCH_RUNNER_LOCK=SELF_HOSTED_VPS_BECAUSE_HOSTED_BILLING_BLOCKED
+# SELF_HOSTED_REQUIRED_FOR_24_7=true
+# HOSTED_RUNNER_BILLING_BLOCKED=true
+# VPS_RUNNER_IS_CANONICAL_FOR_THIS_FLOW=true
 
 name: 🔄 PR Update Branch — determinístico
 
@@ -62,7 +60,7 @@ jobs:
   preflight:
     name: 🧭 Preflight — alvo + fonte confiável
     if: github.repository == 'ServerVpss/CentralDark'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     outputs:
       target_pr: ${{ steps.plan.outputs.target_pr }}
@@ -106,7 +104,7 @@ jobs:
   update-and-stitch:
     name: 🔄🪡 Update branch + estabilização
     needs: preflight
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 30
     outputs:
       verdict: ${{ steps.update.outputs.verdict }}
@@ -213,7 +211,7 @@ jobs:
     name: ⚖️ Reality Judge — costura material
     needs: [preflight, update-and-stitch]
     if: always()
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     outputs:
       verdict: ${{ steps.judge.outputs.verdict }}
@@ -273,7 +271,7 @@ jobs:
     name: 🧾 Receipt — fluxo completo
     needs: [preflight, update-and-stitch, reality-judge]
     if: always()
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 5
     steps:
       - name: 🧾 Receipt
@@ -313,4 +311,4 @@ jobs:
           echo "APPROVAL=NOT_DONE"
           echo "DEPLOY=NOT_DONE"
           echo "UNKNOWN_IS_PASS=0"
-          echo "UPDATE_BRANCH_RUNNER_LOCK=GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN"
+          echo "UPDATE_BRANCH_RUNNER_LOCK=SELF_HOSTED_VPS_BECAUSE_HOSTED_BILLING_BLOCKED"

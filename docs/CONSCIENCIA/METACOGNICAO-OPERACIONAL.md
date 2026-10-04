@@ -8,6 +8,18 @@ scope: "Aprendizado do scaffold operacional; não altera autoridade humana nem p
 
 # Metacognição operacional
 
+```text
+METACOGNITION_IS_TOOL_NOT_GATE=true
+META_GRILL=ON_DEMAND
+META_LUPA=ON_DEMAND
+PERTINENT_CONTEXT_ONLY=true
+NO_ALL_LEARNINGS_BOOT=true
+UNKNOWN_BLOCKS_AFFECTED_CLAIM_ONLY=true
+```
+
+Metacognição entra quando produz informação ou corrige uma falha real; não é autorização nem ritual antes de agir.
+
+
 A CentralDark trata **metacognição operacional** como a capacidade do organismo de observar e falsificar o próprio processo de trabalho — contexto, hipótese, ferramenta, validação, prova, memória, regra e coordenação — e alterar o scaffold quando a evidência mostrar uma falha reutilizável.
 
 Não significa consciência subjetiva, entidade independente nem mudança automática dos pesos do modelo.
@@ -920,41 +932,26 @@ EXAMINAR
 
 A referência humana fornecida pelo CHEFE a 1 Tessalonicenses 5:21 inspira a forma curta “examinar e conservar o que sobrevive”; ela é proveniência de uma metáfora operacional e não substitui teste, contraprova ou Reality Judge.
 
-## Preflight global cross-context — usar o método externalizado do CHEFE antes de responder
+## Recuperação cross-context sob demanda
 
-A instrução vale para qualquer conversa existente ou futura e para qualquer superfície que trate CentralDark. Cada resposta material reentra no mesmo ciclo; thread nova, troca de modelo ou troca de ferramenta não resetam o contrato.
+Thread, modelo e ferramenta podem mudar sem resetar a intenção. Isso não exige reexecutar um preflight global em toda resposta.
 
 ```text
-CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1
-→ RECOVER_CURRENT_CHEFE_INTENT
-→ REMEASURE_GITHUB_MAIN
-→ READ_PR_MOTHER_1562
-→ READ_ALL_OPEN_PRS
-→ READ_CHECK_LIST_DIARIO
-→ LOAD_SOUL + LEIA_ME_IA + AGENTS + MAPA_DO_CEREBRO
-→ CONSUME_ALL_NUMBERED_LEARNINGS_INDEX
-→ LOAD_LEMBRANCAS_INDEX
-→ EXPAND_CAUSAL_HISTORY + OWNER + RECEIPTS
-→ REMEASURE_MUTABLE_RUNTIME_WHEN_CLAIM_DEPENDS_ON_IT
+CHEFE_INTENT
+→ SELECT_PERTINENT_OWNER_OR_LEARNING
+→ REMEASURE_ONLY_IF_MUTABLE_CLAIM_AFFECTS_DECISION
 → CURRENT > HISTORY
-→ DEDUPE
-→ REUSE_BEFORE_CREATE
-→ PENEIRA
-→ RETURN_ONLY_SURVIVING_DELTA
+→ EXECUTE
+→ READBACK
 ```
 
 ```text
-ALL_REPOSITORY_ARTIFACTS_INHERIT_BY_CONTAINMENT=true
-ALL_MARKDOWN_INHERITS=true
-ALL_PACKAGES_INHERIT=true
-ALL_ARCHITECTURES_INHERIT=true
-ALL_AGENTS_INHERIT=true
-ALL_CLAUDE_FILES_INHERIT=true
-ALL_BOTS_INHERIT=true
-ALL_HERMES_CONSUMERS_INHERIT=true
-GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
-GENERIC_ANSWER_WITHOUT_PREFLIGHT=FORBIDDEN
+GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CURRENT_EVIDENCE=true
+GENERIC_ANSWER_WITHOUT_PREFLIGHT=ALLOWED_WITH_PERTINENT_CONTEXT
 MISSING_REQUIRED_SOURCE=AFFECTED_CLAIM_UNKNOWN
+MISSING_SOURCE_DOES_NOT_BLOCK_INDEPENDENT_ACTION=true
+ALL_NUMBERED_LEARNINGS_BOOT=false
+GLOBAL_PREFLIGHT_IS_NOT_PERMISSION=true
 ```
 
-Herança por pertencimento evita copiar a mesma doutrina em milhares de arquivos. Os artefatos continuam donos apenas de seus escopos; o preflight governa como eles são lidos, reconciliados e usados. Quando o inventário é grande, índices e owners orientam a expansão, mas nenhum material causal relevante pode ser omitido da decisão.
+Artefatos herdam o owner pertinente por referência. Expansão de contexto acontece somente quando pode mudar a decisão; material causal conhecido não é omitido, mas inventário total não é pré-condição.

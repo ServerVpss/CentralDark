@@ -240,3 +240,149 @@ invariants:
   machine_receipt_must_persist_in_vps_or_repo_owner: true
 
 next_cursor: CI_SAME_HEAD_THEN_RUNTIME_TIK_TAK_REPLAY_RECIPE
+
+recipe_instances:
+  VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC:
+    claim_key: VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC
+    learning_ref: 155
+    version: 1
+    owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC
+    purpose: >-
+      Reconciliar GitHub main CURRENT dentro da forja VMware existente sem
+      sobrescrever ouro local ou UNKNOWN, mantendo Obsidian/HUD/BRAIN no mesmo
+      SHARED/CentralDark e CI isolado em _work, preparando o mesmo cristal para
+      replay VPS.
+    dependency_fingerprint: 557819f7b6230625330f8870cd41d69c1a16f21e3e40d644f00cd7aea4b9ff24
+    lock_key: 90b98d0a64eca63a1da217b7c9de5072bcf107e3f2800768d10e78b26545c45b
+    proof_plan_hash: 885608acd3366d0972a0207e316f445f36ca8eccaa024365e0da2fa442afad9a
+    result_schema_hash: 8cd2c4e36f31316c6f65af6922e78c97a17a6cf6e2a0e6b88b60325cbfc3ca37
+    effect_schema_hash: 1e1f8d17d66cc3374fcffaa481e0fe0fa218c06aee2566d6a8bdc303c7ec2c2e
+    result_schema: centraldark.vmware-forge-preserve-gold-sync.result.v1
+    effect_schema: MAIN_CURRENT_RECONCILED_INTO_VMWARE_FORGE_WITH_LOCAL_GOLD_PRESERVED_AND_OBSIDIAN_HUD_INTEGRATED
+    parameters:
+      FORGE_WINDOWS_PATH:
+        default: 'E:\VMs\CENTRALDARK-OS\SHARED\CentralDark'
+        binding_only: true
+      FORGE_GUEST_PATH:
+        default: /home/CENTRAKDARK-OS/vmware-shares/CENTRALDARK-SHARED/CentralDark
+        binding_only: true
+      CANONICAL_REMOTE:
+        default: https://github.com/ServerVpss/CentralDark.git
+      CANONICAL_BRANCH:
+        default: main
+      PR_MOTHER:
+        default: 1562
+      RELATED_VMWARE_PR:
+        default: 1742
+      CI_WORKSPACE:
+        default: ~/actions-runner-vmware/_work
+        binding_only: true
+      OBSIDIAN_PLUGIN_OWNER:
+        default: apps/modulos/obsidian-plugin-grafo-vivo
+      KNOWLEDGE_HUB_OWNER:
+        default: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml
+    allowed_environment_bindings:
+      - FORGE_WINDOWS_PATH
+      - FORGE_GUEST_PATH
+      - CI_WORKSPACE
+      - SSH_ALIAS
+      - VPS_HOST
+      - OBSIDIAN_LOCAL_CONFIG
+    forbidden_semantic_mutations:
+      - OVERWRITE_UNKNOWN
+      - RESET_HARD_UNCLASSIFIED_FORGE
+      - BLIND_PULL_IN_DIRTY_FORGE
+      - USE_SHARED_FORGE_AS_CI_WORKSPACE
+      - CREATE_SECOND_VAULT_ARCHITECTURE
+      - CREATE_SECOND_HERMES
+      - MOVE_SECRET_VALUES_INTO_GIT
+    sequence:
+      - RUN_GLOBAL_CROSS_CONTEXT_PREFLIGHT
+      - RESOLVE_MAIN_CURRENT_AND_PR_FUNNEL
+      - MEASURE_FORGE_IDENTITY_BRANCH_HEAD_DIRTY_STATE
+      - FETCH_MAIN_WITHOUT_MUTATING_WORKTREE
+      - CLASSIFY_DELTA_LOCAL_GOLD_ALREADY_IN_MAIN_STALE_CONFLICT_UNKNOWN
+      - PRESERVE_LOCAL_GOLD_AND_UNKNOWN
+      - RECONCILE_ONLY_PROVEN_SAFE_DELTA_BY_OWNER
+      - KEEP_CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE
+      - KEEP_OBSIDIAN_ROOTED_IN_FORGE_WITH_DOT_OBSIDIAN_LOCAL_ONLY
+      - VERIFY_HUD_HOME_PENDENCIAS_LINK_TO_LEARNING_AND_BRAIN
+      - VERIFY_EXISTING_OBSIDIAN_PLUGIN_BUILD_AND_KNOWLEDGE_HUB_BINDING
+      - GENERATE_HASHES_FINGERPRINT_AND_RECEIPT
+      - STOP_ON_CONFLICT_OR_UNKNOWN_BEFORE_DESTRUCTIVE_WRITE
+      - PREPARE_VMWARE_CRYSTAL_FOR_VPS_REPLAY_WITHOUT_CASA_HOP
+    proof_plan:
+      - git remote branch HEAD identify ServerVpss/CentralDark forge
+      - git status captured before mutation
+      - main CURRENT fetched without reset or checkout overwrite
+      - merge-base and differential inventory generated
+      - LOCAL_GOLD and UNKNOWN remain untouched
+      - .obsidian stays git-ignored
+      - existing centraldark-grafo-vivo build remains present
+      - HUD Home Pendencias link to canonical memory and BRAIN
+      - CI _work remains separate from SHARED/CentralDark
+      - receipt records PASS CONFLICT UNKNOWN and NEXT_CURSOR
+    counterproof:
+      - SAME_HEAD_ON_TWO_PATHS_IS_NOT_SAME_PHYSICAL_BACKING
+      - HUD_MATERIALIZED_IS_NOT_HUD_CURRENT_STATE_PROVEN
+      - PLUGIN_BUILD_PRESENT_IS_NOT_PLUGIN_RUNTIME_LOADED
+      - OBSIDIAN_FILES_PRESENT_IS_NOT_OLD_WINDOWS_VAULT_FULLY_MIGRATED
+      - FETCH_MAIN_IS_NOT_SAFE_RECONCILIATION
+      - DIRTY_IS_NOT_BROKEN
+      - UNKNOWN_IS_NOT_SAFE_TO_OVERWRITE
+    security_boundary:
+      - NO_SECRET_VALUES_IN_GIT
+      - NO_PRIVATE_KEY_CONTENT_IN_RECEIPTS
+      - NO_TOKEN_OR_PASSWORD_IN_MARKDOWN
+      - DOT_OBSIDIAN_LOCAL_STATE_NOT_COMMITTED
+      - UNKNOWN_NOT_OVERWRITTEN
+    reuse_dependencies:
+      - LEARNING_150_GLOBAL_PREFLIGHT
+      - LEARNING_152_SHARED_FORGE
+      - LEARNING_153_INVARIANT_COMPRESSION
+      - LEARNING_154_VMWARE_VPS_DIRECT_SSH
+    next_cursor: EXECUTE_DIFFERENTIAL_INVENTORY_THEN_PROVE_VMWARE_SELF_HOSTED_RUNNER
+
+  KNOWLEDGE_COMPILER_PORTABLE_CRYSTAL_RUNTIME:
+    claim_key: KNOWLEDGE_COMPILER_PORTABLE_CRYSTAL_RUNTIME
+    learning_ref: 156
+    version: 1
+    owner: .agents/skills/knowledge-compiler/
+    backend: .agents/skills/knowledge-compiler/scripts/crystal-runtime-compiler.py
+    crystal: .agents/skills/knowledge-compiler/crystals/vmware-forge-obsidian-preserve-gold-sync.json
+    regression: .agents/skills/knowledge-compiler/tests/crystal-runtime-compiler.test.py
+    purpose: >-
+      Reproduzir o mesmo cristal semântico em bindings Windows/VMware/VPS,
+      mantendo hash/lock/plano determinísticos e separando compilação de
+      efeito runtime.
+    parent_package_sha256: 4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6
+    successor_package_sha256: 9e99657b37dbc99a474067957956ccb52067c142c3108558be79aa9e2bbee2f0
+    compiled_crystal_fingerprint: d1fd0fc3f30b4e35ea864a24ec522cdaa227a1c19a9b4119cd20d1779538746e
+    lock_key: dfc11b978498393ef13c42f2c583ef0ac0109c3d45585ff561ad2abcaa746d1f
+    proof_plan_hash: 85857899510cae71c0cc8cdb2973c232f291f9ac0e09bf7283c30ce50ec5c534
+    result_schema_hash: 75d56a005d5d50ad8bb3460fc0c77289827364807a22ce80ce475b6e854de9a3
+    effect_schema_hash: 1e1f8d17d66cc3374fcffaa481e0fe0fa218c06aee2566d6a8bdc303c7ec2c2e
+    sequence:
+      - CURRENT_PREFLIGHT
+      - INGEST_RETURNING_RESEARCH_AS_CANDIDATE
+      - DEDUPE_AND_TEMPORAL_SELECTION
+      - VALIDATE_CRYSTAL_INVARIANTS
+      - ADAPT_ONLY_ENVIRONMENT_BINDINGS
+      - COMPILE_PLAN
+      - CALCULATE_HASH_AND_LOCK
+      - INSPECT_RUNTIME
+      - PROVE_AND_COUNTERPROVE
+      - EMIT_RECEIPT
+    proof:
+      - CRYSTAL_RUNTIME_COMPILER_TEST=PASS
+      - VMWARE_COMPILED_PLAN_SCHEMA=centraldark.compiled-plan.v2
+      - TEMPORAL_POLICY=RETURNING_RESEARCH_IS_CANDIDATE_NOT_AUTHORITY
+      - PERSISTENT_HOSTKEY_TRUST=UNKNOWN_UNTIL_INDEPENDENT_ANCHOR
+      - RUNNER_STATE=UNKNOWN_UNTIL_REAL_ASSIGNMENT
+    counterproof:
+      - COMPILED_PLAN_IS_NOT_RUNTIME_EFFECT
+      - SSH_AUTH_IS_NOT_HOSTKEY_TRUST
+      - QUEUED_IS_NOT_RUNNER_ASSIGNMENT
+      - CHANGED_BYTES_REQUIRE_NEW_SHA256
+      - RESEARCH_SURVIVAL_IS_NOT_AUTOMATIC_CANON
+    next_cursor: INSPECT_LIVE_FORGE_THEN_CLOSE_HOSTKEY_AND_RUNNER_CLAIMS_SEPARATELY

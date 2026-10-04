@@ -210,7 +210,12 @@
     "EXTERNAL_GUIDELINE_IS_NOT_HOUSE_POLICY",
     "DETERMINISTIC_ROUTINE_BEFORE_AGENT",
     "REUSE_EXISTING_SKILL_OWNER_BEFORE_CREATING_NEW_SKILL",
-    "ENGINE_BY_OBSERVED_FITNESS_NOT_NAME"
+    "ENGINE_BY_OBSERVED_FITNESS_NOT_NAME",
+    "SAME_CRYSTAL_DIFFERENT_BINDING_SAME_SEMANTICS",
+    "RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY",
+    "SSH_AUTH_IS_NOT_HOSTKEY_TRUST",
+    "QUEUED_IS_NOT_RUNNER_ASSIGNMENT",
+    "CHANGED_BYTES_REQUIRE_NEW_SHA256"
   ],
   "authority_normalize": {
     "enabled": true,
@@ -229,5 +234,28 @@
       "EXTERNAL_ADAPTED",
       "NO_ISSUE"
     ]
+  },
+  "portable_runtime_backend": {
+    "status": "IMPLEMENTED",
+    "role": "ENVIRONMENT_BINDING_ADAPTER_NOT_SECOND_COMPILER_AUTHORITY",
+    "backend": ".agents/skills/knowledge-compiler/scripts/crystal-runtime-compiler.py",
+    "crystal": ".agents/skills/knowledge-compiler/crystals/vmware-forge-obsidian-preserve-gold-sync.json",
+    "regression": ".agents/skills/knowledge-compiler/tests/crystal-runtime-compiler.test.py",
+    "targets": [
+      "windows",
+      "vmware",
+      "vps"
+    ],
+    "invariant": "SAME_CRYSTAL_DIFFERENT_BINDING_SAME_SEMANTICS",
+    "parent_package_sha256": "4da29cd8345591f25695909c2159dc54de393120c6f78673e2b0cd98689efde6",
+    "successor_package_sha256": "9e99657b37dbc99a474067957956ccb52067c142c3108558be79aa9e2bbee2f0",
+    "compiled_crystal_fingerprint": "3aca3433931505f6d0c4f32e9045704f7454c3fc6f0d070e9b2df4f7907cb5d8"
+  },
+  "temporal_research_policy": {
+    "returning_research_is_candidate_not_authority": true,
+    "delay_is_proof": false,
+    "must_reenter_current_preflight": true,
+    "survival_across_time_is_signal_not_automatic_canon": true,
+    "promote_only_surviving_delta": true
   }
 }
