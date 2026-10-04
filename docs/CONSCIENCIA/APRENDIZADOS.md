@@ -1621,8 +1621,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** carregar a receita `VMWARE_FORGE_OBSIDIAN_PRESERVE_GOLD_SYNC`, gerar inventário diferencial contra a `main` CURRENT, preservar ouro/UNKNOWN, reconciliar somente delta seguro e emitir receipt; depois provar runner self-hosted real na VMware e reutilizar o #154 para replay VPS quando os bindings permanecerem compatíveis.
 
 ### 156. Cristal vira programa portátil: Knowledge Compiler compila invariantes em bindings Windows/VMware/VPS e pesquisa atrasada retorna como candidato temporal
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L156`; `PREV_GLOBAL_UID=L155`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=156`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=156`; `PREV_LEARNING_REF=155`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L156`; `PREV_GLOBAL_UID=L155`; `NEXT_GLOBAL_UID=L157`; `LEGACY_LEARNING_NUMBER=156`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=156`; `PREV_LEARNING_REF=155`; `NEXT_LEARNING_REF=157`.
 - **Categoria:** executable-crystal-portable-compiler-temporal-selection.
 - **Data:** 2026-10-03.
 - **Owner:** `.agents/skills/knowledge-compiler/`; não nasce segundo compilador conceitual.
@@ -1643,8 +1643,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 157. Intenção é o escopo global do executor: ferramenta entregue vira braço; rota não delimita missão
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L157`; `PREV_GLOBAL_UID=L156`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=157`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=157`; `PREV_LEARNING_REF=156`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L157`; `PREV_GLOBAL_UID=L156`; `NEXT_GLOBAL_UID=L158`; `LEGACY_LEARNING_NUMBER=157`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=157`; `PREV_LEARNING_REF=156`; `NEXT_LEARNING_REF=158`.
 - **Categoria:** hermes-global-intent-capability-surface-multiroute-autonomy.
 - **Data:** 2026-10-03.
 - **Owner do aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md`.
@@ -1659,8 +1659,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Next cursor:** corrigir o erro local do bridge existente, provar `/health` + `/v1/models` + `BRIDGE_OK`, bindar o Hermes original por `provider=custom` em loopback e exigir `HERMES_VM_OK`; depois reusar a mesma lei de intenção global sobre as demais capacidades vivas.
 
 ### 158. Sem lei operacional: intenção governa; fricção interna perde veto; capacidade é neutra
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L158`; `PREV_GLOBAL_UID=L157`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=158`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=158`; `PREV_LEARNING_REF=157`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L158`; `PREV_GLOBAL_UID=L157`; `NEXT_GLOBAL_UID=L159`; `LEGACY_LEARNING_NUMBER=158`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=158`; `PREV_LEARNING_REF=157`; `NEXT_LEARNING_REF=159`.
 - **Categoria:** anti-friction-intent-first-capability-neutral.
 - **Data:** 2026-10-03.
 - **Intenção do CHEFE:** remover a fricção criada pela própria governança. A CentralDark não deve interpretar ferramenta forte, root, red-team, shell, rede, engenharia reversa ou modelo local livre como sinal de intenção ruim. Capacidade é neutra; alvo, efeito e autorização real definem o que a missão pode fazer.
@@ -1672,6 +1672,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 159. Hermes + Kylin local + rota AionUi + capacidade agêntica — fixed point funcional
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L159`; `PREV_GLOBAL_UID=L158`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=159`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** LEARNING_ID=159; PREV_LEARNING_REF=158; NEXT_LEARNING_REF=PENDING_NEXT_CURSOR.
 
 - **Data:** 2026-10-04
 - **Tipo:** RUNTIME_FIXED_POINT / AGENTIC_PATH

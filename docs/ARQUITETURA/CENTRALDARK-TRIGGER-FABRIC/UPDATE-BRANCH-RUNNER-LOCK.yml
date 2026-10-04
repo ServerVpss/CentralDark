@@ -1,38 +1,40 @@
-# 🛡️ Runner lock — PR Update Branch / COSTURA
+# Runner lock — PR Update Branch / COSTURA
 # Owner: SEGREDO/CHEFE
-# Motivo: regressão provada em 2026-09-27 quando o fluxo foi trocado de
-# ubuntu-latest para [self-hosted, Linux] enquanto os runners estavam offline.
+# Evolucao 2026-10-04: self-hosted/VPS foi provado no corpo real.
 
-UPDATE_BRANCH_RUNNER_LOCK: GITHUB_HOSTED_UNTIL_SELF_HOSTED_PROVEN
+UPDATE_BRANCH_RUNNER_LOCK: SELF_HOSTED_VPS_PROVEN
 workflow: .github/workflows/pr-update-branch-deterministic.yml
 required_jobs: [preflight, update-and-stitch, reality-judge, receipt]
 visual_flow: PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT
-required_runner: ubuntu-latest
-forbidden_without_explicit_chefe_authorization:
-  - "runs-on: [self-hosted, Linux]"
-  - "runs-on: self-hosted"
-regression_commit: ab33962d76e7d6b7a714b32051ca71d575d2fbeb
-restoration_commit: 38615b10cc94d2810cb741cea337027ade1ee3ad
+required_runner: [self-hosted, Linux]
+historical_regression_commit: ab33962d76e7d6b7a714b32051ca71d575d2fbeb
+historical_restoration_commit: 38615b10cc94d2810cb741cea337027ade1ee3ad
 receipt_pr_mother: 1562
-receipt_comment: 5855489772
+
+proof:
+  VPS_RUNNER_BODY_IDENTITY: PASS
+  SELF_HOSTED_VPS_PROVEN: true
+  labels: [self-hosted, Linux]
+  package_run_with_real_assignment: 37176820799
+  runner_id_gt_zero: true
+  runner_name_nonempty: true
+  body_receipt: docs/CONSCIENCIA/RECEIPTS/2026-10-03-vps-runner-body-identity-pass.md
+  hosted_billing_block_observed: true
 
 rules:
   UPDATE_BRANCH_WRITES_MAIN: false
   UPDATE_BRANCH_IS_SYNC_NOT_PROMOTION: true
   COSTURA_REQUIRES_LIVE_RUNNER: true
-  GITHUB_HOSTED_IS_REQUIRED_WHILE_SELF_HOSTED_OFFLINE: true
+  GITHUB_HOSTED_IS_REQUIRED_WHILE_SELF_HOSTED_OFFLINE: false
   SELF_HOSTED_ALLOWED_ONLY_WHEN_PROVEN_ONLINE: true
-  HYBRID_MODE_PENDING_VPS_PROOF: true
-  CLAUDE_OR_ANY_AGENT_MUST_NOT_CHANGE_RUNNER_WITHOUT_CHEFE: true
+  SELF_HOSTED_VPS_PROVEN: true
+  SELF_HOSTED_REQUIRED_FOR_24_7: true
+  HYBRID_MODE_PENDING_VPS_PROOF: false
+  CHEFE_EXPLICIT_AUTHORIZATION_FOR_VPS_SELF_HOSTED: true
   UNKNOWN_IS_PASS: false
 
-hybrid_future_gate:
-  required_evidence:
-    - github_actions_runner_status_online
-    - matching_labels_self_hosted_linux
-    - queued_count_materially_reduced_or_zero
-    - chefe_explicit_authorization
-    - rollback_path_documented
-  then_allowed:
-    mode: HYBRID_HOSTED_PLUS_SELF_HOSTED
-    status: CANDIDATE_ONLY_UNTIL_PROVEN
+fallback:
+  runner_unavailable: QUEUED_OR_BLOCKED_BY_EXACT_ROUTE
+  one_runner_failure_is_not_system_failure: true
+  alternate_proven_vps_runner_before_global_blocked: true
+  create_parallel_workflow: false
