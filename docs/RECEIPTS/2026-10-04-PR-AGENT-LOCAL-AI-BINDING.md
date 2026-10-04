@@ -69,6 +69,27 @@ FALLBACK_CLOUD=false
 
 A quantidade anterior de três jobs não representava três inteligências locais; eram três provedores cloud. O workflow agora não finge diversidade: usa o executor local CURRENT real.
 
+## Disparo de prova
+
+Foi adicionado `workflow_dispatch` para testar um PR existente sem fabricar um evento de pull request:
+
+```text
+workflow: pr-agent.yml
+pr_number: 1748
+run: 37227037321
+head_sha: 2e3743a5817db1fd7d68acb4b3449b5907460039
+```
+
+Readback GitHub:
+
+```text
+status=queued
+conclusion=UNKNOWN
+runner=UNKNOWN
+```
+
+No momento da medição, os quatro runners Linux self-hosted estavam `online=true` e `busy=true`. Portanto o review local ainda não executou; não é `PASS` nem `FAIL`.
+
 ## Next cursor
 
 `publicar workflow → disparar/medir um run de PR → provar health/model binding → provar PR-Agent usando 127.0.0.1:18435 → confirmar review publicado → receipt → retomar Self-Evolution com o mesmo resolver`

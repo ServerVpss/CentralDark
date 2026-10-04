@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "b3264915857ed91941215f53499bf9992b628db2",
+  "source_blob_sha": "e11a4ea0b26fabad015d65f2fb1ad32651e25ed5",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 158,
-    "highest_legacy_learning_number": 159,
+    "learning_sections": 163,
+    "highest_legacy_learning_number": 164,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 159
+      "end": 164
     }
   },
   "nodes": [
@@ -1867,6 +1867,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L162",
+      "next_uid": "L164"
+    },
+    {
+      "uid": "L164",
+      "legacy_learning_number": 164,
+      "legacy_occurrence": 1,
+      "title": "Metabolismo autônomo com motores substituíveis: Hermes executa, modelo CURRENT pensa e o coração único observa",
+      "document_order": 163,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L163",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
