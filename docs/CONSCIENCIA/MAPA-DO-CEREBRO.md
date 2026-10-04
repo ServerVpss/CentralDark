@@ -2,7 +2,7 @@
 title: "Mapa Central do Cérebro Vivo — CentralDark"
 status: CANONICO
 date: 2026-06-29
-updated: 2026-10-03
+updated: 2026-10-03T16:39:16-03:00
 tags: [navegacao, moc, mapa, consciencia, intencao, continuidade, cross-chat, delta-util, semantica, proof-reuse]
 category: "M-Mapa-Sistema"
 sensitivity: INTERNAL

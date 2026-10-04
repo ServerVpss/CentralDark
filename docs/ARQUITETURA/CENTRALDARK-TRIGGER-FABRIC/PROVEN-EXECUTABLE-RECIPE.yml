@@ -462,6 +462,26 @@ recipe_instances:
       - LEARNING_159_HERMES_KYLIN_AIONUI_FIXED_POINT
       - TRIGGER_FABRIC_PACKAGE_WORKFLOW
       - BUILD_PACKAGE_EXISTING_OWNER
+    self_hosted_openkylin_runtime:
+      body: VPS_REAL
+      os: openKylin_3.0
+      runner_labels: [self-hosted, Linux]
+      runner_assignment_proven: true
+      python_executable: /usr/bin/python3
+      python_version_observed: 3.12.2
+      actions_setup_python_3_11_supported_on_openkylin: false
+      reuse_native_python_when_version_gte_3_11: true
+      native_python_gate_observed: PASS
+      artifact_updated_property_requires_iso_datetime: true
+      mapa_updated_provenance_commit: 697578c5593eb66cc5acaa04ab3f08a54c81f69c
+      mapa_updated_provenance_datetime: 2026-10-03T16:39:16-03:00
+      map_artifact_property_gate_candidate: PASS
+      prepackage_gates_8_to_14_candidate: PASS
+      package_gates_15_to_18_candidate: PASS
+      candidate_zip_bytes: 406243131
+      candidate_zip_sha256: 0fec794f14393b8f409eb00ea50e8c4897a1d8eb77e1f881028cc610a7a94132
+      candidate_is_same_head_artifact_proof: false
+      reason: candidate contained the uncommitted MAPA datetime repair; final proof must come from the next exact CURRENT HEAD workflow
     security_boundary:
       - NO_SECRET_VALUES_IN_GIT
       - SENSITIVE_PATHS_EXCLUDED_FROM_PACKAGE
