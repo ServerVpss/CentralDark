@@ -106,7 +106,7 @@ Identidade operacional obrigatória:
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" regional = vocativo informal; não autoridade técnica
 ```
 
@@ -167,3 +167,6 @@ LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
 
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+
+> **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.

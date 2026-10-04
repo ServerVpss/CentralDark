@@ -1,7 +1,37 @@
 // Ferramentas read-only para capacidade local híbrida da Casa.
 // A Casa/GPU/áudio/vídeo entram como sensor/capacidade autorizada, não como juiz.
 import { z } from "zod";
-import { execFileSync } from "node:child_process";
+import { execFile, execFileSync } from "node:child_process";
+import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
+import { readFile } from "node:fs/promises";
+const execAsync = promisify(execFile);
+const nativeAdapter = fileURLToPath(new URL("../../../../../../scripts/vps/kylin-native-media.py", import.meta.url));
+async function nativeCall(action, input) {
+  try {
+    const { stdout } = await execAsync("python3", [nativeAdapter, JSON.stringify({ ...input, action })], { timeout: 180000, maxBuffer: 8 * 1024 * 1024 });
+    const data = JSON.parse(stdout);
+    const content = [{ type: "text", text: JSON.stringify(data) }];
+    if (action === "tts" && data.ok && data.result?.artifact) {
+      const artifact = data.result.artifact;
+      if (!/^centraldark\/[a-f0-9-]+\.wav$/.test(artifact)) throw new Error("ARTIFACT_ID_INVALID");
+      const bytes = await readFile(new URL(artifact, `file://${process.env.HOME || "/root"}/.hermes/audio_cache/`));
+      content.push({ type: "audio", mimeType: "audio/wav", data: bytes.toString("base64") });
+    }
+    return { isError: !data.ok, content };
+  } catch (error) {
+    return { isError: true, content: [{ type: "text", text: String(error.stdout || error.message).slice(0, 2000) }] };
+  }
+}
+const nativeSpecs = [
+ ["kylin_native_status", "status", "Estado vivo do runtime Kylin/Triton existente.", z.object({})],
+ ["kylin_text_embedding", "embedding", "Embedding nativo GTE de texto, mean pooling normalizado.", z.object({text:z.string().min(1).max(4000)})],
+ ["kylin_audio_synthesize", "tts", "Sintetiza WAV no TTS nativo instalado (ZH/EN; PT-BR não comprovado).", z.object({text:z.string().min(1).max(4000)})],
+ ["kylin_audio_transcribe", "asr", "Transcreve mídia autorizada com ASR nativo; até 120 segundos.", z.object({path:z.string().min(1)})],
+ ["kylin_image_analyze", "image", "Metadados e OCR real com Tesseract instalado; não promete descrição visual generativa.", z.object({path:z.string().min(1)})],
+ ["kylin_image_embedding", "image_embedding", "Embedding CLIP nativo da imagem; carrega somente o modelo instalado allowlisted.", z.object({path:z.string().min(1)})],
+ ["kylin_video_analyze", "video", "Analisa vídeo por amostragem OCR e ASR; até 120 segundos, 1 a 6 frames. Não gera vídeo.", z.object({path:z.string().min(1),frames:z.number().int().min(1).max(6).default(3)})]
+];
 
 function ok(data) {
   return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
@@ -20,6 +50,7 @@ function maybeJson(text) {
 }
 
 export const localHybridTools = [
+  ...nativeSpecs.map(([name, action, description, inputSchema]) => ({ name, description, inputSchema, annotations: { readOnlyHint: action !== "tts", destructiveHint: false, openWorldHint: false }, handler: input => nativeCall(action, input) })),
   {
     name: "local_compute_status",
     description: "Inventaria, de forma read-only, CPU/GPU/RAM local disponível para ponte Casa↔VPS. Não agenda job, não executa GPU e não declara prova global.",

@@ -386,3 +386,107 @@ recipe_instances:
       - CHANGED_BYTES_REQUIRE_NEW_SHA256
       - RESEARCH_SURVIVAL_IS_NOT_AUTOMATIC_CANON
     next_cursor: INSPECT_LIVE_FORGE_THEN_CLOSE_HOSTKEY_AND_RUNNER_CLAIMS_SEPARATELY
+
+  CURRENT_REPO_FULL_SWEEP_AND_PACKAGE_PROOF:
+    claim_key: CURRENT_REPO_FULL_SWEEP_AND_PACKAGE_PROOF
+    version: 1
+    owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml
+    purpose: >-
+      Consumir integralmente o CURRENT rastreado sem depender de amostra:
+      ler todos os bytes rastreados, identificar todo delta desde o cursor anterior,
+      ler integralmente cada arquivo alterado, validar formatos/codigo, preservar
+      Aprendizados/Lembrancas/receitas existentes e fechar pacote canonico com
+      build, SHA-256, fresh extraction e artifact GitHub no mesmo HEAD.
+    provenance_before_recipe_update:
+      head_sha: aebca08129d6cf4cc328086ef262f89fd34b3ad8
+      tracked_files: 11378
+      regular_files_read: 11372
+      tracked_bytes: 435642547
+      repo_content_fingerprint: 73ff4801694c54f078f8434d1193691a60a3079d699987e87ac9c86eeea59853
+      binary_files: 307
+      delta_from_sha: 77894dfac70a7f9b21eee4b6e86d6ed3c51ed19d
+      delta_commits: 7
+      delta_files_read_integrally: 20
+      new_workflows_in_delta: 0
+      new_skills_in_delta: 0
+    sequence:
+      - RESOLVE_CURRENT_MAIN
+      - MATERIALIZE_DETACHED_WORKTREE_OF_EXACT_HEAD
+      - READ_EVERY_TRACKED_REGULAR_FILE_BYTE_FOR_BYTE
+      - HASH_EVERY_TRACKED_FILE_AND_BUILD_REPO_CONTENT_FINGERPRINT
+      - INVENTORY_WORKFLOWS_SKILLS_RECIPES_RECEIPTS_BRAIN_LEMBRANCAS_APRENDIZADOS_VPS_SCRIPTS
+      - DIFF_FROM_PREVIOUS_CURSOR
+      - READ_EVERY_CHANGED_FILE_INTEGRALLY
+      - VALIDATE_JSON_PARSE_PY_COMPILE_NODE_CHECK_WHEN_APPLICABLE
+      - DEDUPE_NEW_KNOWLEDGE_AGAINST_APRENDIZADOS_LEMBRANCAS_AND_RECIPE_OWNERS
+      - PROMOTE_ONLY_SURVIVING_DELTA_TO_EXISTING_OWNER
+      - RENDER_CANONICAL_ARCHITECTURE_IF_PACKAGE_REQUIRES_IT
+      - BUILD_CANONICAL_FULL_PACKAGE_ON_EXACT_CURRENT_HEAD
+      - VERIFY_ZIP_SIZE_SHA256_AND_NO_SYNTHETIC_PADDING
+      - FRESH_EXTRACT_AND_RUN_PACKAGE_VERIFIER
+      - REQUIRE_GITHUB_JOB_REAL_ASSIGNMENT_ON_SAME_HEAD
+      - REQUIRE_GITHUB_ARTIFACT_PUBLISHED_ON_SAME_HEAD
+      - DOWNLOAD_ARTIFACT_AND_COMPARE_SHA256_OR_CONTENT_PROOF
+      - EMIT_PR_MOTHER_RECEIPT_WITH_NEXT_CURSOR
+    proof_plan:
+      - TRACKED_FILES_COUNT_RECORDED
+      - TRACKED_BYTES_RECORDED
+      - REPO_CONTENT_FINGERPRINT_RECORDED
+      - DELTA_FILE_LIST_COMPLETE
+      - DELTA_FILES_READ_INTEGRALLY
+      - CODE_AND_JSON_VALIDATION_PASS
+      - LEARNING_MEMORY_RECIPE_DEDUPE_DONE
+      - PACKAGE_BUILD_HEAD_EQUALS_WORKFLOW_HEAD
+      - ZIP_BYTES_WITHIN_400000000_TO_430000000
+      - SYNTHETIC_PADDING_FALSE
+      - ZIP_TEST_PASS
+      - FRESH_EXTRACTION_VERIFY_PASS
+      - RUNNER_ID_GT_ZERO
+      - RUNNER_NAME_NONEMPTY
+      - ARTIFACT_COUNT_GT_ZERO
+      - ARTIFACT_DOWNLOAD_PROVEN
+    counterproof:
+      - OLD_REPORT_IS_NOT_CURRENT
+      - OLD_PACKAGE_SHA_IS_NOT_CURRENT_PACKAGE_SHA
+      - QUEUED_IS_NOT_RUNNER_ASSIGNMENT
+      - RUNNER_SERVICE_ONLINE_IS_NOT_JOB_ASSIGNMENT
+      - LOCAL_PACKAGE_PASS_IS_NOT_GITHUB_ARTIFACT_PASS
+      - ARTIFACT_METADATA_IS_NOT_FRESH_EXTRACTION
+      - RECIPE_PRESENT_IS_NOT_RUNTIME_EFFECT
+      - CURRENT_MAIN_MOVED_INVALIDATES_ONLY_HEAD_DEPENDENT_PROOF
+    reuse_dependencies:
+      - LEARNING_145_MEASURED_EVIDENCE
+      - LEARNING_146_HYBRID_MULTI_ROUTE
+      - LEARNING_150_GLOBAL_PREFLIGHT
+      - LEARNING_156_PORTABLE_CRYSTAL_TEMPORAL_SELECTION
+      - LEARNING_159_HERMES_KYLIN_AIONUI_FIXED_POINT
+      - TRIGGER_FABRIC_PACKAGE_WORKFLOW
+      - BUILD_PACKAGE_EXISTING_OWNER
+    self_hosted_openkylin_runtime:
+      body: VPS_REAL
+      os: openKylin_3.0
+      runner_labels: [self-hosted, Linux]
+      runner_assignment_proven: true
+      python_executable: /usr/bin/python3
+      python_version_observed: 3.12.2
+      actions_setup_python_3_11_supported_on_openkylin: false
+      reuse_native_python_when_version_gte_3_11: true
+      native_python_gate_observed: PASS
+      artifact_updated_property_requires_iso_datetime: true
+      mapa_updated_provenance_commit: 697578c5593eb66cc5acaa04ab3f08a54c81f69c
+      mapa_updated_provenance_datetime: 2026-10-03T16:39:16-03:00
+      map_artifact_property_gate_candidate: PASS
+      prepackage_gates_8_to_14_candidate: PASS
+      package_gates_15_to_18_candidate: PASS
+      candidate_zip_bytes: 406243131
+      candidate_zip_sha256: 0fec794f14393b8f409eb00ea50e8c4897a1d8eb77e1f881028cc610a7a94132
+      candidate_is_same_head_artifact_proof: false
+      reason: candidate contained the uncommitted MAPA datetime repair; final proof must come from the next exact CURRENT HEAD workflow
+    security_boundary:
+      - NO_SECRET_VALUES_IN_GIT
+      - SENSITIVE_PATHS_EXCLUDED_FROM_PACKAGE
+      - NO_PRIVATE_KEYS_IN_PACKAGE
+      - NO_SYNTHETIC_PADDING
+      - ONE_SYSTEM_ONLY
+      - REUSE_BEFORE_CREATE
+    next_cursor: SAME_HEAD_GITHUB_ARTIFACT_THEN_DOWNLOAD_AND_FRESH_COUNTERPROOF

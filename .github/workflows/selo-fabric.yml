@@ -72,9 +72,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Hosted runner bloqueado por billing/spending-limit; executar no runner Linux da VPS.
+  # SELO_FABRIC_RUNNER=SELF_HOSTED_VPS
   selar:
     name: 🏅 Selar evento no PR-mãe
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
     if: >-
       github.repository == 'ServerVpss/CentralDark' &&
       !(

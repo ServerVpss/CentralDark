@@ -27,7 +27,7 @@ Entrada humana do vault/Obsidian. **BRAIN é navegação derivada**, não runtim
 → SOL coordena/preserva significado
 → percepção + MetaLupa + reconciliação
 → Writer único
-→ PIVETE/HERMES executa
+→ HERMES executa
 → contraprova + remedição
 → REALITY JUDGE
 → registro/aprendizado
@@ -43,7 +43,7 @@ Ciclo mestre: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`.
 ```text
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 MODELO = motor substituível
 REALITY = JUDGE
 ```
@@ -157,3 +157,6 @@ SEM_PROPRIEDADES_OBRIGATORIAS
 - [[2026-09-29-CRISTAL-SESSAO-HIBRIDA-CENTRALDARK]] — ponte para o cristal recente de rota híbrida, GUI remota, Tool Calls móveis e resenha com rigor
 
 O histórico Git preserva versões antigas desta superfície sem permitir que elas governem o presente.
+
+
+> **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação cognitiva oficial`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.

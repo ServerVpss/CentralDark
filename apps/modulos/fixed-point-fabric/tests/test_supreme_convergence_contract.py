@@ -72,17 +72,20 @@ class SupremeConvergenceContractTest(unittest.TestCase):
         self.assertIn("counterproof_pass", fixed)
         self.assertIn("one_writer_per_scope: true", fixed)
 
-    def test_pr1490_owner_hierarchy_is_not_circular(self):
+    def test_master_cycle_routes_without_becoming_parallel_authority(self):
         contract = read("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml")
         master = read("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml")
         triggers = read("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml")
         engine = read("docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml")
-        self.assertIn("normative_hierarchy:", contract)
-        self.assertIn("master_cycle_is_authority_for_master_trigger: true", contract)
-        self.assertIn("owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml", master)
-        self.assertIn("registry_role: DISCOVERY_AND_ROUTING_REGISTRY", triggers)
-        self.assertIn("registry_is_normative_owner: false", triggers)
-        self.assertIn("binding_is_normative_owner: false", engine)
+        self.assertIn("global_cross_context_response_preflight:", contract)
+        self.assertIn("sem_lei: true", contract)
+        self.assertIn("procedural_gate_is_permission: false", contract)
+        self.assertIn('master_trigger: "!CENTRALDARK"', master)
+        self.assertIn("owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml", master)
+        self.assertIn("NO_AUTHORITY_EXPANSION", triggers)
+        self.assertIn("SEMANTIC_TRIGGER_MATCH != AUTHORITY_EXPANSION", triggers)
+        self.assertIn("master_trigger_is_authority: false", engine)
+        self.assertIn("second_semantic_owner: FORBIDDEN", engine)
 
     def test_interface_evolves_underneath_without_parallel_identity(self):
         boot = read("CENTRALDARK_AI_BOOT.yaml")
