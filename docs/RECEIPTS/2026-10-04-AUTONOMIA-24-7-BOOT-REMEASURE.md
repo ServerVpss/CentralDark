@@ -63,7 +63,9 @@ Não foram instalados novos motores.
 - `deploy.centralldark.com/health`: HTTP 521.
 - Buildkite hook: último retorno HTTP 429.
 - Não foi localizado serviço local de webhook/Caddy/Nginx correspondente na VPS.
-- Runners estão saudáveis; a falha está na borda/owner do webhook.
+- Runners estão saudáveis; a falha estava na borda/owner do webhook.
+- Hook GitHub `647381247` para `https://deploy.centralldark.com/webhook` foi desativado (`active=false`) após confirmar que o owner no repositório está aposentado e o deploy canônico é GitHub Actions self-hosted.
+- Readback do hook: HTTP 200, `active=false`; o hook não foi apagado, preservando reversibilidade.
 
 ## Estado
 
