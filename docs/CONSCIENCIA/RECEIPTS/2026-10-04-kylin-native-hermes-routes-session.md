@@ -207,3 +207,33 @@ Fronteiras: Aion CLI gerou chamada real de embedding, porém houve confirmação
 Receita executável e fingerprint: [NATIVE-RECIPE-2026-10-04.json](../../../experiments/aionui-centraldark-instinto-superior/NATIVE-RECIPE-2026-10-04.json). Evidência: [NATIVE-PROOF-2026-10-04.json](../../../experiments/aionui-centraldark-instinto-superior/NATIVE-PROOF-2026-10-04.json). Inventário: [RUNTIME-2026-10-04.json](../../../experiments/aionui-centraldark-instinto-superior/RUNTIME-2026-10-04.json).
 
 NEXT_CURSOR: resolver o limite de contexto/confirmacão do Aion CLI usando o mesmo owner; terminar uma chamada e seu resultado real. Depois correlacionar SESSION_ID/TOOL_CALL_ID/receipt entre UI e funil. O PASS anterior do Hermes não é rebaixado por esse novo binding incompleto.
+
+
+## Reconciliação de sensores — runtime owner vs GitHub HUD — 04/10/2026
+
+Medição direta posterior feita no owner/runtime `CENTRALDARK-OS`, preservando a semântica do HUD GitHub: `VPS_RUNTIME=UNKNOWN_FROM_GITHUB_SENSOR` continua correto **para o sensor GitHub** e não é reescrito como se GitHub tivesse observado a VPS.
+
+Readback do sensor runtime:
+- `/root/CentralDark` = `5070d8e1b53b002e716701f7e41c6ae42847c7c4` no instante da medição;
+- Hermes Agent = `v0.21.5+6778.g81e1ce7`;
+- bridge `127.0.0.1:18435` = `status=ok`, backend `kylin-native-sdk`, modelo `kylin-deepseek-r1`;
+- Triton `/v2/health/live=200` e `/v2/health/ready=200`;
+- HERMES-CORE `/health` = `status=ok`, versão `5.0`, watchdog ativo/saudável;
+- AionUi WebUI `127.0.0.1:25808/api/settings/client=200`;
+- bridge = `active + enabled`.
+
+Contraprova preservada: o payload do HERMES-CORE reportou `grafo.ok=false` por `ENOENT` no gerador de grafo; portanto `HERMES_CORE_HEALTH=PASS` não promove o grafo a PASS.
+
+```text
+GITHUB_SENSOR_RUNTIME_STATE=UNKNOWN_FROM_GITHUB_SENSOR
+RUNTIME_OWNER_DIRECT_MEASUREMENT=PASS
+SENSOR_FAILURE_IS_WORLD_FAILURE=false
+GITHUB_AND_VPS_ARE_INDEPENDENT_SENSORS=true
+GITHUB_UNKNOWN != VPS_DOWN
+RUNTIME_PASS != GITHUB_SENSOR_PASS
+HERMES_CORE_HEALTH_PASS != HERMES_GRAPH_PASS
+CURRENT_OVER_HISTORY=true
+REALITY=JUDGE
+```
+
+Fixed point reconciliado: a fotografia histórica `runtime UNKNOWN` não governa o estado do mundo quando o owner/runtime foi medido diretamente; ela permanece apenas como resultado correto do sensor GitHub que não observa runtime.
