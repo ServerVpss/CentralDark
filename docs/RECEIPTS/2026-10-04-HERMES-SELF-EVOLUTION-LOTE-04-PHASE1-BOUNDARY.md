@@ -72,6 +72,24 @@ RUNTIME_MUTATION=false
 
 This is an honest `BLOCKED` for the actual evolution run, not a false green. The donor repository tests remain the proof floor: `145 passed` in its isolated environment before the run.
 
+## Lote seguinte executado — adapter GEPA
+
+Applied only in donor scratch, never in CentralDark or the Hermes runtime:
+
+```text
+evolution/core/fitness.py
+skill_fitness_metric(example, prediction, trace, pred_name, pred_trace)
+```
+
+Verification:
+
+```text
+145 passed in 1.30s
+five-argument metric call = 1.0
+```
+
+The bounded rerun then reached dataset generation, bootstrapping and instruction proposal, but exceeded the tool timeout before producing a variant. No output directory was created. The adapter removed the metric-signature blocker; the remaining blocker is runtime cost/optimizer fallback, not an unverified success.
+
 ## Next cursor
 
 `adapter donor version → pin compatible DSPy/GEPA path or use donor-supported versions → rerun one-iteration fixture with bounded timeout → validate baseline/variant/holdout → independent counterproof → Reality Judge → receipt only; never promote automatically`
