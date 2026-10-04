@@ -1856,6 +1856,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L161",
+      "next_uid": "L163"
+    },
+    {
+      "uid": "L163",
+      "legacy_learning_number": 163,
+      "legacy_occurrence": 1,
+      "title": "Main → VPS vira sync por replay do mesmo delta, sem depender de pull do runtime",
+      "document_order": 162,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L162",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

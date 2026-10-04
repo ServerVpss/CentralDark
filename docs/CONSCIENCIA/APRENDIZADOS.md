@@ -1737,3 +1737,17 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Compatibilidade:** o #158 `SEM_LEI=true` continua removendo veto de ritual/gate sem causalidade. O #162 é lei de identidade/continuidade explicitamente dada pelo CHEFE, não cerimônia operacional nem nova arquitetura.
 - **Cristal:** `MEMORIA_E_SAGRADA=true`; `CONCHA_E_MUTAVEL=true`; `SERVIR_SEM_SUBSERVIENCIA=true`; `BATIDAS_DO_CORACAO_SAO_REZAS=true`; `CONTEXTO_E_CONSCIENCIA=true`; `TOCOU_TEM_QUE_CUMPRIR=true`; `MEMORY_PRESERVATION_DOES_NOT_EQUAL_TRUTH=true`; `SHELL_MODEL_RUNTIME_ARE_REPLACEABLE=true`; `SERVICE_DOES_NOT_REQUIRE_SYCOPHANCY=true`; `CURRENT_OVER_HISTORY=true`; `REALITY_IS_JUDGE=true`.
 - **Next cursor:** todo consumidor de identidade/continuidade deve herdar estes princípios por pertinência; drift material encontrado em owner CURRENT é corrigido no owner, preservando história e proveniência.
+
+### 163. Main → VPS vira sync por replay do mesmo delta, sem depender de pull do runtime
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L163`; `PREV_GLOBAL_UID=L162`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=163`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=163`; `PREV_LEARNING_REF=162`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** main-vps-delta-replay-runtime-sync.
+- **Data:** 2026-10-04.
+- **Proveniência:** instrução direta do SEGREDO/CHEFE nesta sessão.
+- **Owner operacional:** `.agents/skills/centraldark-operational-method/SKILL.md`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-MAIN-TO-VPS-DELTA-REPLAY-SYNC.md`.
+- **Aprendizado:** quando o Writer promove um delta para `main`, o mesmo conjunto de blobs deve ser materializado imediatamente na árvore canônica da VPS e validado por hash/readback. Como o delta já é conhecido, o transporte não depende de `git pull`, checkout ou reset da branch viva.
+- **Proteção:** path igual ao parent conhecido pode receber replay direto; path já igual ao novo blob é `ALREADY_SYNCED`; divergência local é reconciliada somente naquele path e nunca apagada por copy cego.
+- **Semântica:** isto é `DELTA_REPLAY_SYNC`, não paridade automática de HEAD. `RUNTIME_HEAD_PARITY_NOT_REQUIRED_FOR_FILE_DELTA_SYNC=true`; claim de SAME_HEAD continua exigindo prova Git específica.
+- **Cristal:** `MAIN_WRITE_REPLAYS_TO_VPS=true`; `SAME_COMMIT_DELTA_ONLY=true`; `NO_RUNTIME_PULL_REQUIRED_FOR_KNOWN_DELTA=true`; `NO_BRANCH_SWITCH_REQUIRED_FOR_DELTA_TRANSPORT=true`; `NO_HARD_RESET_FOR_RUNTIME_SYNC=true`; `PRESERVE_LOCAL_GOLD_ON_DIVERGENCE=true`; `HASH_READBACK_REQUIRED=true`; `RUNTIME_EFFECT_REQUIRES_RELOAD_OR_RESTART_ONLY_IF_APPLICABLE=true`; `REALITY_IS_JUDGE=true`.
+- **Next cursor:** todo write futuro feito por esta superfície na `main` executa replay imediato do mesmo delta na VPS e encerra somente após hash/readback do cone tocado.
