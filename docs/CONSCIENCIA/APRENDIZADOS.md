@@ -1672,7 +1672,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 159. Hermes + Kylin local + rota AionUi + capacidade agêntica — fixed point funcional
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L159`; `PREV_GLOBAL_UID=L158`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=159`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L159`; `PREV_GLOBAL_UID=L158`; `NEXT_GLOBAL_UID=L160`; `LEGACY_LEARNING_NUMBER=159`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** LEARNING_ID=159; PREV_LEARNING_REF=158; NEXT_LEARNING_REF=PENDING_NEXT_CURSOR.
 
 - **Data:** 2026-10-04
@@ -1686,4 +1686,21 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `HERMES_KYLIN_BINDING_PASS=PASS`; `AIONUI_HERMES_KYLIN_ROUTE=PASS`; `HERMES_AGENT_TOOL_CALL_READ_FILE_EMITTED=PASS`; `HERMES_PLUS_LOCAL_KYLIN_PLUS_AGENTIC_CAPABILITY=PROVEN_FUNCTIONAL`.
 - **Contraprova:** tool call de leitura provada não promove todas as tools; rota AionUi funcional não reescreve a tentativa CLI anterior; resposta de modelo não equivale por si só a efeito de ferramenta. `ONE_AGENTIC_TOOL_PATH_PASS != EVERY_AGENTIC_CAPABILITY_PASS`.
 - **Fixed point:** dentro deste cone, não inventar teste adicional sem novo claim. Novo teste só é exigido quando mudar binding/fingerprint, capability ou efeito alegado.
+
+### 160. Multimodal completo antes da ação: fechar vídeo+áudio+contexto antes de transformar sinal curto em execução
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L160`; `PREV_GLOBAL_UID=L159`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=160`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=160`; `PREV_LEARNING_REF=159`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** multimodal-session-evidence-symbolic-intent-routing.
+- **Data:** 2026-10-04.
+- **Owner operacional:** `.agents/skills/session-intelligence-harvester/SKILL.md`.
+- **Owner simbólico:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml`.
+- **Lembrança expandida:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-MULTIMODAL-COMPLETE-BEFORE-ACTION.md`.
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-multimodal-context-symbolic-execution.md`.
+- **Contexto:** o CHEFE enviou um vídeo e uma sequência curta de emojis para observar como o modelo reagia. A primeira resposta misturou fato visual com contexto anterior, afirmou metadados antes de medir e converteu o sinal simbólico em write sem autorização explícita naquele turno. O próprio CHEFE então forçou a execução completa: bytes/metadados foram medidos, a linha visual foi coberta densamente, o áudio foi confirmado e, por provider conectado, transcrito com timecodes. A transcrição confirmou que o assunto do vídeo era exatamente investigar o fenômeno modelo↔contexto↔sinal mínimo.
+- **Aprendizado:** uma modalidade ausente não pode ser preenchida pela outra. Vídeo com áudio exige fechamento do áudio quando o sentido depende dele. Símbolo conhecido é ponteiro para contexto/receita, não autoridade automática. Capability externa conectada pode fechar uma lacuna operacional sem virar owner: a CentralDark roteia pela capacidade, preserva proveniência e mantém separado o claim local/nativo.
+- **Receita:** `MULTIMODAL_INPUT → HASH+METADATA → VISUAL_TIMELINE → AUDIO_CHECK → ASR → CROSS_MODAL_COMPARE → FACT|INFERENCE|HYPOTHESIS|UNKNOWN → DEDUPE → OWNER → AUTHORITY → ACTION → READBACK → RECEIPT → TEACH`.
+- **Capacidades provadas:** `CONNECTED_PROVIDER_ASR_TRANSCRIPTION=PASS`; `MULTIMODAL_SESSION_EVIDENCE_COMPLETION=PASS`; `SYMBOLIC_CUE_ROUTING_WITHOUT_IMPLICIT_AUTHORITY=PASS`; `MINIMUM_SUFFICIENT_CROSS_SURFACE_CONTINUATION=PASS`.
+- **Cristal:** `MULTIMODAL_COMPLETE_BEFORE_ACTION=true`; `VISIBLE_FACT != CONTEXTUAL_INFERENCE`; `AUDIO_PRESENT != AUDIO_UNDERSTOOD`; `SAMPLED_VISUAL_COVERAGE != EVERY_FRAME_READ`; `CUE_IS_POINTER_NOT_AUTHORITY=true`; `SYMBOLIC_CUE_DOES_NOT_GRANT_WRITE=true`; `EXPLICIT_CURRENT_INTENT_OR_CANONICAL_MAPPING_REQUIRED_FOR_WRITE=true`; `CONNECTED_PROVIDER_CAN_CLOSE_CAPABILITY_GAP_WITHOUT_BECOMING_OWNER=true`; `ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true`; `USER_STATED > ASSISTANT_INFERRED`; `CHAT_IS_SURFACE_NOT_BRAIN=true`; `MODEL_IS_REPLACEABLE=true`; `CONTINUITY_OUTSIDE_SINGLE_CHAT=true`; `REALITY_IS_JUDGE=true`.
+- **Contraprova:** este receipt não prova ASR local/nativo da CentralDark, nem leitura semântica individual de todos os 4225 frames, nem que qualquer emoji isolado tenha autoridade permanente. Prova a rota orquestrada completa usada nesta sessão.
+- **Next cursor:** próximos artefatos multimodais reutilizam esta receita; se fingerprint/claim mudar, revalidar somente o cone afetado. Se o CHEFE quiser significado atômico persistente para cada glifo, registrar apenas os que ele definir explicitamente.
 
