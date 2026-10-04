@@ -1,5 +1,6 @@
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { randomUUID } from "node:crypto";
+import { randomUUID, timingSafeEqual } from "node:crypto";
+import { createServer } from "node:http";
 import { pathToFileURL } from "node:url";
 // Servidor MCP (Streamable HTTP, stateless) via SDK oficial.
 // Cada request POST /mcp instancia um Server + StreamableHTTPServerTransport efêmero.
@@ -350,6 +351,100 @@ export async function serveStdio(options = {}) {
   await server.connect(new StdioServerTransport());
   return server;
 }
-if (process.argv[2] === "--stdio" && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await serveStdio();
+function secureTokenEqual(a, b) {
+  const aa = Buffer.from(String(a || ""));
+  const bb = Buffer.from(String(b || ""));
+  return aa.length > 0 && aa.length === bb.length && timingSafeEqual(aa, bb);
+}
+
+export async function serveHttp(options = {}) {
+  const compact = process.argv.includes("--compact");
+  const admin = process.argv.includes("--admin");
+  const names = new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_call", ...ALL_TOOLS.filter(t => t.name.startsWith("kylin_")).map(t => t.name)]);
+  const visibleTools = compact ? ALL_TOOLS.filter(t => names.has(t.name)) : ALL_TOOLS;
+  const expectedToken = String(process.env.CENTRALDARK_MCP_REMOTE_TOKEN || "").trim();
+  if (!expectedToken) throw new Error("CENTRALDARK_MCP_REMOTE_TOKEN is required for --http");
+  const host = String(process.env.CENTRALDARK_MCP_HTTP_HOST || "127.0.0.1");
+  const port = Number(process.env.CENTRALDARK_MCP_HTTP_PORT || "9100");
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error("invalid CENTRALDARK_MCP_HTTP_PORT");
+
+  const httpServer = createServer(async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,MCP-Protocol-Version,Mcp-Session-Id");
+    res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
+    if (req.method === "OPTIONS") { res.statusCode = 204; res.end(); return; }
+
+    const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+    if (requestUrl.pathname === "/health" && req.method === "GET") {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ ok: true, service: "centraldark-native-mcp-http", mode: admin ? "admin" : "mcp", compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length, catalogVersion: CATALOG_VERSION }));
+      return;
+    }
+    if (requestUrl.pathname !== "/mcp") {
+      res.statusCode = 404;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ error: "not_found" }));
+      return;
+    }
+
+    const auth = String(req.headers.authorization || "");
+    const match = /^Bearer\s+(.+)$/i.exec(auth.trim());
+    if (!match || !secureTokenEqual(match[1], expectedToken)) {
+      res.statusCode = 401;
+      res.setHeader("WWW-Authenticate", 'Bearer realm="centraldark-native-mcp"');
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32000, message: "unauthorized" }, id: null }));
+      return;
+    }
+    if (req.method !== "POST") {
+      res.statusCode = 405;
+      res.setHeader("Allow", "POST, OPTIONS");
+      res.end();
+      return;
+    }
+
+    try {
+      const chunks = [];
+      let size = 0;
+      for await (const chunk of req) {
+        size += chunk.length;
+        if (size > 2 * 1024 * 1024) throw new Error("request_too_large");
+        chunks.push(chunk);
+      }
+      req.body = JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
+      const cid = randomUUID();
+      await handleMcpRequest(req, res, "", {
+        admin,
+        oauthScope: admin ? "mcp admin" : "mcp",
+        visibleTools,
+        callableTools: ALL_TOOLS,
+        label: "centraldark-remote",
+        clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "remote-http").slice(0, 160),
+        cid,
+        callerUser: "remote-owner",
+        ...options,
+      });
+    } catch (err) {
+      log.error("mcp_remote_http_error", { error: String(err) });
+      if (!res.headersSent) {
+        res.statusCode = String(err).includes("request_too_large") ? 413 : 400;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32600, message: "invalid request" }, id: null }));
+      }
+    }
+  });
+
+  await new Promise((resolve, reject) => {
+    httpServer.once("error", reject);
+    httpServer.listen(port, host, () => resolve());
+  });
+  log.info("mcp_remote_http_ready", { host, port, admin, compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length });
+  return httpServer;
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  if (process.argv[2] === "--stdio") await serveStdio();
+  else if (process.argv[2] === "--http") await serveHttp();
 }
