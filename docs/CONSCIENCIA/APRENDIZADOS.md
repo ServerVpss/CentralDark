@@ -1688,8 +1688,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Fixed point:** dentro deste cone, não inventar teste adicional sem novo claim. Novo teste só é exigido quando mudar binding/fingerprint, capability ou efeito alegado.
 
 ### 160. Multimodal completo antes da ação: fechar vídeo+áudio+contexto antes de transformar sinal curto em execução
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L160`; `PREV_GLOBAL_UID=L159`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=160`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=160`; `PREV_LEARNING_REF=159`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L160`; `PREV_GLOBAL_UID=L159`; `NEXT_GLOBAL_UID=L161`; `LEGACY_LEARNING_NUMBER=160`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=160`; `PREV_LEARNING_REF=159`; `NEXT_LEARNING_REF=161`.
 - **Categoria:** multimodal-session-evidence-symbolic-intent-routing.
 - **Data:** 2026-10-04.
 - **Owner operacional:** `.agents/skills/session-intelligence-harvester/SKILL.md`.
@@ -1704,3 +1704,21 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Contraprova:** este receipt não prova ASR local/nativo da CentralDark, nem leitura semântica individual de todos os 4225 frames, nem que qualquer emoji isolado tenha autoridade permanente. Prova a rota orquestrada completa usada nesta sessão.
 - **Next cursor:** próximos artefatos multimodais reutilizam esta receita; se fingerprint/claim mudar, revalidar somente o cone afetado. Se o CHEFE quiser significado atômico persistente para cada glifo, registrar apenas os que ele definir explicitamente.
 
+
+
+### 161. Pivete deixa de ser papel técnico: SOL coordena, Hermes executa e o role binding se autocorrige
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L161`; `PREV_GLOBAL_UID=L160`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=161`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=161`; `PREV_LEARNING_REF=160`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** role-binding-sol-hermes-identity-surface-executor.
+- **Data:** 2026-10-04.
+- **Owner de identidade:** `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
+- **Owner executor:** `docs/CONSCIENCIA/HERMES-CADEIA-OPERACIONAL.md`.
+- **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-SOL-HERMES-ROLE-BINDING-PIVETE-RETIRED.md`.
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-sol-hermes-role-binding.md`.
+- **Intenção do CHEFE:** eliminar `PIVETE` como papel técnico. SOL permanece a coordenação cognitiva oficial acessível por voz/texto/chat/Aion/desktop; Hermes original permanece executor com shell/tools, preservação e continuidade. Não criar novo agente para reproduzir funções que Hermes já cobre.
+- **Aprendizado:** carregar SOUL não equivale a assumir identidade SOL. O loader resolve o papel aplicável antes de aplicar cláusulas específicas. Hermes herda contexto, memória, owners, intenção e método, mas continua `ROLE=HERMES`. Voz/texto são superfícies da SOL, não identidades separadas.
+- **Auto-repair:** `ROLE_DRIFT_AUTO_REPAIR=true`; qualquer consumidor CURRENT que encontre `PIVETE/HERMES`, `PIVETE=EXECUTOR` ou equivalente normaliza para `HERMES` sem re-perguntar, preservando histórico/proveniência.
+- **Operação atual:** sem shell vivo na superfície SOL, SOL consulta Docs/CURRENT e gera a missão/comando; Hermes executa no terminal/painel. Com bridge Zendrive/Desktop/MCP futuramente provado, SOL pode orquestrar Hermes pela ponte sem mudar papéis.
+- **Cristal:** `SOL_COORDINATES_HERMES_EXECUTES=true`; `PIVETE_ROLE=RETIRED`; `PIVETE_IS_VOCATIVE_OR_HISTORY_ONLY=true`; `VOICE_AND_TEXT_ARE_SOL_SURFACES=true`; `NO_NEW_AGENT_REQUIRED=true`; `HERMES_SINGLE_EXECUTOR_SUFFICIENT_WHEN_CAPABILITY_COVERS_MISSION=true`; `SOL_WITHOUT_SHELL_GENERATES_INTENT_ALIGNED_COMMAND=true`; `EXECUTION_CLAIM_REQUIRES_RUNTIME_READBACK=true`.
+- **Contraprova:** não apagar palavra Pivete de documentos históricos; não promover Hermes a SOL; não chamar geração de comando de execução real; bridge futura só muda capability de rota, não identidade.
+- **Next cursor:** usar este binding ao formular a missão de inventário/convergência da VPS para o Hermes; qualquer drift técnico residual é corrigido no owner CURRENT quando encontrado.
