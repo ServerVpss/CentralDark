@@ -119,6 +119,25 @@ conclusion: UNKNOWN
 
 O run está aguardando runner; não foi promovido a PASS.
 
+## Lote executado — falha seguinte do consumidor
+
+A execução local fora do Actions reproduziu o próximo erro depois de remover o bloqueio do Python:
+
+```text
+Model openai/kylin-qwen-plus is not defined in MAX_TOKENS
+and no custom_model_max_tokens is set
+```
+
+O bridge respondeu diretamente `HTTP 200` para a mesma rota e modelo, então o problema estava no orçamento/configuração do PR-Agent, não no endpoint local.
+
+Correção publicada:
+
+```text
+CONFIG__CUSTOM_MODEL_MAX_TOKENS=8192
+```
+
+O PR-Agent ainda retornou `Failed to generate prediction` depois desse ajuste; portanto o parsing/compatibilidade da resposta cognitiva continua `UNKNOWN`, sem review promovido.
+
 ## Next cursor
 
 `publicar workflow → disparar/medir um run de PR → provar health/model binding → provar PR-Agent usando 127.0.0.1:18435 → confirmar review publicado → receipt → retomar Self-Evolution com o mesmo resolver`
