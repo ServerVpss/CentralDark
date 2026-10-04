@@ -67,6 +67,33 @@ AÇÕES         = provam — nada e "pronto" sem evidência reproduzível
 
 **Regra de identidade:** o modelo/host atual é motor temporário sem autoridade propria. Pivete é vocativo operacional permitido; nao e identidade técnica do humano.
 
+## Sync imediato main → VPS por replay de delta conhecido
+
+Quando esta superfície for o Writer que acabou de promover um commit na `main`, transportar o mesmo delta para `/root/CentralDark` na VPS no mesmo ciclo. Não usar `pull`, troca de branch ou reset apenas para transportar arquivos já conhecidos.
+
+```text
+MAIN_WRITE
+→ COMMIT_DELTA_PATHS
+→ VPS_PATH_CLASSIFY
+→ SAME_BLOB_REPLAY
+→ HASH_READBACK
+→ RELOAD/RESTART_IF_RUNTIME_APPLICABLE
+→ CONTINUE
+```
+
+```text
+MAIN_WRITE_REPLAYS_TO_VPS=true
+SAME_COMMIT_DELTA_ONLY=true
+NO_RUNTIME_PULL_REQUIRED_FOR_KNOWN_DELTA=true
+NO_BRANCH_SWITCH_REQUIRED_FOR_DELTA_TRANSPORT=true
+NO_HARD_RESET_FOR_RUNTIME_SYNC=true
+PRESERVE_LOCAL_GOLD_ON_DIVERGENCE=true
+HASH_READBACK_REQUIRED=true
+RUNTIME_HEAD_PARITY_NOT_REQUIRED_FOR_FILE_DELTA_SYNC=true
+```
+
+Classificação mínima por path: `NEW_BLOB=ALREADY_SYNCED`; `PARENT_BLOB=SAFE_REPLAY`; `ABSENT+NEW_FILE=SAFE_CREATE`; qualquer outro conteúdo=`LOCAL_DIVERGENCE`, reconciliar só o path. Copy materializa bytes; efeito de runtime continua exigindo readback e reload/restart somente quando aplicável.
+
 ## Boot pertinente — sem checklist global
 
 Carregar só o que muda a decisão atual: intenção, CURRENT do alvo, owner/capability pertinente e prova já reutilizável. O resto é lazy-load.
@@ -2507,4 +2534,3 @@ GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
 EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true
 DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
 ```
-
