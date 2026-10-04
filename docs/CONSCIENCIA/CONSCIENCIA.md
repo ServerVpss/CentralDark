@@ -24,7 +24,7 @@ DEPLOY=docs/CONSCIENCIA/03-FLUXO-DEPLOY.md
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" regional = vocativo informal
 ```
 
@@ -50,3 +50,6 @@ Nenhuma contagem antiga de PM2, path de VPS, regra de deploy, permissão ou inte
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+
+> **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação cognitiva oficial`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.
