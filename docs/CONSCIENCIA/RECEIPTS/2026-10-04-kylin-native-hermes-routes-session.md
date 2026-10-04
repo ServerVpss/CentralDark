@@ -178,3 +178,32 @@ ACTION_IS_NOT_PROOF
 ```
 
 O fixed point vale para o escopo material provado nesta sessão: **Hermes real + rota local Kylin funcional + emissão de tool call real pelo agente**. Capabilities não exercitadas permanecem fora do claim.
+
+
+## Delta: AionUi MCP e mídia nativa — 2026-10-04
+
+Owner preservado: catálogo MCP existente + local-compute; mesmo bridge Kylin/Hermes. PR equivalente #1748, rastro #1562. Escrita em main conforme autorização explícita do CHEFE; nenhum merge do protótipo/PR-mãe implicado.
+
+- WebUI 25808: MCP CentralDark cadastrado/connected e modelo Kylin no Aion CLI. Perfil e histórico preservados.
+- Transporte local stdio reutiliza catálogo, dispatcher, guarda admin, envelope e funil; modo compacto anuncia 10 ferramentas e descobre o catálogo inteiro sob demanda. O catálogo público normal segue com 132 ferramentas.
+- Hermes CLI: conexão MCP real e 10 ferramentas descobertas. Sua configuração anterior de modelo/SOUL permanece.
+- Replay real: **10/10** com efeitos de embeddings 768/1024d, WAV, ASR, OCR, vídeo por frames+áudio, contraprovas e POST /api/stt do WebUI. Typecheck PASS.
+- Chat legado remedido: resposta exata **HERMES_KYLIN_BRIDGE_OK** após evolução. Health WebUI, bridge, HERMES-CORE e Triton: HTTP 200. Isto preserva o escopo do PASS funcional anterior, não prova toda regressão possível.
+- Persistência: mesma árvore AionUi movida de /tmp para /opt/centraldark/aionui, mantendo symlink compatível e mesmo perfil; mesmo serviço. Bridge antes transient agora unit permanente enabled.
+- Auditoria: corrigido erro de sintaxe preexistente no src e duplicação de registros no dist; mantidos subscribers e funil. Áudio bruto omitido dos logs.
+- Bridge evoluído: schemas de tools/model-generated JSON, serialização de resultados, SSE buffered compatível, embeddings e APIs de áudio; subprocesso limita timeout do SDK. Usage fictício zero removido: SDK sem medição retorna indisponibilidade explícita. SDK headers de distribuição conferidos para setters.
+
+| Capacidade/superfície | Texto/MCP local | Voz WebUI | Work/VPS | Desktop/Hermes |
+|---|---|---|---|---|
+| Catálogo comum | PASS tools/list | Mesmo cadastro; chamadas completas ainda não comprovadas | PASS execução | Hermes MCP conectado; GUI Desktop não reconfigurada |
+| Embeddings texto/imagem | PASS 768/1024d | Consumível pelo MCP; E2E conversacional UNKNOWN | PASS | Binding compartilhado; inferência via agente não remediada |
+| ASR/TTS | PASS fixture ZH e WAV | POST /api/stt PASS; microfone em HTTP público: PLATFORM_UNAVAILABLE por contexto inseguro | PASS | Mesmo adapter disponível pelo MCP |
+| Imagem | OCR e CLIP PASS | Attachments/MCP disponíveis; diálogo visual generativo UNKNOWN | PASS no escopo medido | Não presume instalação de plugin de geração |
+| Vídeo | Frames OCR + áudio ASR PASS | Upload/MCP; não geração de vídeo | PASS no escopo medido | Mesmo adapter |
+| Sessão/trace/tool calls/tokens | Envelope e logs preservados | Sessões e tool_call do Aion vistos; vínculo global/usage UNKNOWN | Audit com call_id/correlation_id | Paridade total ainda não provada |
+
+Fronteiras: Aion CLI gerou chamada real de embedding, porém houve confirmação pendente e timeouts nas tentativas subsequentes; não há receipt de resultado final de ferramenta pelo Aion. AGENTS legado de 75 KB foi preservado integralmente. Não há prova de ASR/TTS PT-BR, geração de imagem/vídeo, ou R1 totalmente offline (pacote inclui cloud-model). HERMES-CORE health não prova grafo: gerador do grafo ausente na medição. Agentes cadastrados/offline e modelos unloaded estão discriminados no inventário. Ferramenta anunciada não prova credencial nem sucesso de todos os conectores.
+
+Receita executável e fingerprint: [NATIVE-RECIPE-2026-10-04.json](../../../experiments/aionui-centraldark-instinto-superior/NATIVE-RECIPE-2026-10-04.json). Evidência: [NATIVE-PROOF-2026-10-04.json](../../../experiments/aionui-centraldark-instinto-superior/NATIVE-PROOF-2026-10-04.json). Inventário: [RUNTIME-2026-10-04.json](../../../experiments/aionui-centraldark-instinto-superior/RUNTIME-2026-10-04.json).
+
+NEXT_CURSOR: resolver o limite de contexto/confirmacão do Aion CLI usando o mesmo owner; terminar uma chamada e seu resultado real. Depois correlacionar SESSION_ID/TOOL_CALL_ID/receipt entre UI e funil. O PASS anterior do Hermes não é rebaixado por esse novo binding incompleto.
