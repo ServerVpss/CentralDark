@@ -187,6 +187,39 @@ runner=UNKNOWN
 
 Os runners self-hosted continuam ocupados; `queued` não é `PASS` nem `FAIL`.
 
+## Delta posterior — run cancelado e separação das provas
+
+O run `37229557379` foi cancelado. O cancelamento não prova execução do job nem review pelo Actions:
+
+```text
+run=37229557379
+status=cancelled
+conclusion=cancelled
+runner=UNKNOWN
+steps=UNKNOWN
+logs=UNKNOWN
+ACTIONS_END_TO_END=UNKNOWN
+```
+
+As evidências permanecem separadas:
+
+```text
+Selo/Fabric estático ≠ execução live do PR-Agent
+PR-Agent live local: comentário de issue 5983717282
+marker: <!-- pr-agent:review:full -->
+```
+
+A prova live do bridge registrou:
+
+```text
+model=kylin-qwen-plus
+source=gsettings:com.kylin.aisdk.model.cloud.nlp
+execution_class=cloud
+endpoint=http://127.0.0.1:18435
+```
+
+O comentário `5983717282` prova a execução local controlada do PR-Agent, mas não converte o run cancelado do Actions em `PASS`. `ACTIONS_END_TO_END` permanece `UNKNOWN`.
+
 ## Next cursor
 
 `publicar workflow → disparar/medir um run de PR → provar health/model binding → provar PR-Agent usando 127.0.0.1:18435 → confirmar review publicado → receipt → retomar Self-Evolution com o mesmo resolver`
