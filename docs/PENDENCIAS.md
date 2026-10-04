@@ -950,3 +950,30 @@ BRAIN_GRAPH_IS_DERIVED_NAVIGATION=true
 **Quando reabrir:** somente por comando explícito do CHEFE depois do foco atual. Primeiro inventariar o BRAIN/Obsidian existente, medir o que já é gerado automaticamente e implementar somente o delta visual/navegacional faltante.
 
 **NEXT_CURSOR futuro:** `INVENTARIO_BRAIN_OBSIDIAN → SPINE_OWNER_MAP → REGIONS_AND_EDGES → VISUAL_NAVIGATION → READBACK`.
+
+---
+
+### 58. Extensão de domínio da mente do CHEFE — memória persistente viva + Hermes melhorando o acervo — 🟡 ABERTO (04/10/2026, 07:39 BRT)
+- **Intenção:** cristalizar dentro da CentralDark o conhecimento do CHEFE como extensão operacional da própria mente, preservando conhecimento bom, ruim, péssimo, melhor, pior, antigo, corrigido e contraditório sem achatar tudo em “verdade”.
+- **Núcleo da ideia:** a inteligência local permanece como corpo durável; modelos externos como ChatGPT/Claude/Grok entram apenas como motores/percepções substituíveis quando úteis. Hermes mantém, reorganiza, compara, melhora e evolui o acervo ao longo do tempo.
+- **Onde encaixa:** memória persistente/BRAIN/Obsidian, Hermes, modelo local, owners de conhecimento e proveniência temporal.
+- **Critério pra fechar:** provar um ciclo em que uma experiência/decisão do CHEFE é cristalizada com contexto e classificação, recuperada depois pelo sistema no momento certo, reconciliada com realidade nova e melhorada pelo Hermes sem apagar a história nem criar segunda memória.
+- **Guardrail:** não reduzir a “chatbot personalizado” nem exigir que o modelo local carregue tudo no prompt; recuperar somente o contexto necessário em tempo real.
+
+### 59. Hermes como extensão operacional do CHEFE para atendimento técnico paralelo — 🟡 ABERTO (04/10/2026, 07:39 BRT)
+- **Intenção:** permitir que o CHEFE continue trabalhando enquanto Hermes atende clientes em paralelo por canais e máquinas autorizadas, executando suporte técnico real e escalando somente decisões/material que precisem do CHEFE.
+- **Exemplos levantados:** Telegram, WhatsApp, múltiplos atendimentos simultâneos, acesso autorizado a máquinas/dispositivos conectados, suporte de telefonia, manutenção, ferramentas de reparo, diagnóstico e orientação técnica.
+- **Fluxo desejado:** cliente entra → Hermes entende o caso → usa conhecimento/memória/tools autorizadas → executa ou orienta → mantém o CHEFE informado → escala exceção/decisão → registra resultado → conhecimento volta para a base.
+- **Onde encaixa:** Hermes execution plane, channels, MCP/tools, device/desktop control autorizado, memória, receipts e escalonamento humano.
+- **Critério pra fechar:** provar atendimento paralelo de ponta a ponta em um caso autorizado, com ação real, handoff ao CHEFE quando necessário, receipt e reaproveitamento do aprendizado depois.
+- **Guardrail:** nenhuma ação em dispositivo/conta de cliente sem autorização aplicável; separar claramente execução permitida, recomendação e decisão humana.
+
+### 60. Flywheel de conhecimento → suporte → cursos/produtos → melhoria consentida da base — 🟡 ABERTO (04/10/2026, 07:39 BRT)
+- **Intenção:** transformar o conhecimento operacional que surge no suporte e no trabalho do CHEFE em base reutilizável, materiais, cursos, produtos e novas capacidades, sem criar sistemas separados para cada domínio.
+- **Exemplos levantados:** telefonia/desbloqueio, suporte técnico, reparo, atendimento, design, criação de sites e outros domínios que surgirem a partir do conhecimento real já dominado.
+- **Ciclo desejado:** caso real → solução comprovada → padrão/procedimento → conteúdo ensinável → curso/produto/suporte → uso real → feedback → melhoria da base.
+- **Contribuição de usuários/clientes:** quando houver permissão explícita, experiências e dados úteis podem alimentar a base para melhorar o próprio serviço/modelo, sempre com origem, consentimento, finalidade e separação de informação privada.
+- **Onde encaixa:** memória/conhecimento, Hermes, canais, learning pipeline, cursos/produtos e governança de consentimento/proveniência.
+- **Critério pra fechar:** provar um ciclo completo em que um caso real autorizado gera conhecimento reutilizável, vira material/procedimento consumível e retorna como melhoria mensurável no atendimento seguinte.
+- **Guardrail:** conhecimento contribuído por terceiros só entra no acervo reutilizável quando a permissão e a finalidade forem claras; privado não vira corpus compartilhado por padrão.
+
