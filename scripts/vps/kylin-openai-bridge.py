@@ -4,7 +4,7 @@ from pathlib import Path
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from current_model_resolver import resolve_current_model
+from current_model_resolver import resolve_current_model, resolve_current_model_details
 
 LIB="/usr/lib/x86_64-linux-gnu/libkysdk-genai-nlp.so.1"
 lib=ctypes.CDLL(LIB)
@@ -88,9 +88,9 @@ class H(BaseHTTPRequestHandler):
     def log_message(self,*a): pass
     def do_GET(self):
         if self.path=="/health":
-            try: model=resolve_current_model()
+            try: details=resolve_current_model_details()
             except RuntimeError as e: return self.sendj(503,{"status":"degraded","backend":"kylin-native-sdk","error":str(e)})
-            return self.sendj(200,{"status":"ok","backend":"kylin-native-sdk","model":model})
+            return self.sendj(200,{"status":"ok","backend":"kylin-native-sdk",**details})
         if self.path=="/v1/models":
             model=resolve_current_model()
             return self.sendj(200,{"object":"list","data":[{"id":model,"object":"model","owned_by":"openkylin"}]})
