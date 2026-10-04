@@ -889,14 +889,23 @@ da execução, seleção de skills sob demanda e destilação depois do efeito. 
 foi absorvida em "Herança de skills sob demanda"; a matriz testa o contrato e
 preserva UNKNOWN para herança ainda não medida nos runtimes. Âncora do BOOT atualizada.
 
+Revisao 2026-10-04 — full CURRENT sweep / anti-friccao / runtime local: os cinco donos
+que afetam a alma foram relidos apos o avanco #158→#159. A semantica ja esta
+absorvida na propria SOUL: SEM_LEI=true, PERTINENCE_FIRST=true,
+TEACHING_GRAMMAR_REQUIRED=false, capability neutra e UNKNOWN bloqueando somente
+o claim dependente. CONTRACT.yml confirma preflight pertinente e nao bloqueante,
+CURRENT>history e nenhuma arquitetura paralela. #159 prova capability/runtime e
+nao altera autoridade humana. A migracao dos runners para VPS e binding operacional,
+nao nova identidade/autoridade. As ancoras abaixo so mudam depois desta revisao.
+
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=5db548fdf597bff57ffe635011521ad0844701fd
-LEIA-ME-IA.md=2077648a5418085b046979817d927ea3b2313259
-CLAUDE.md=0910491623c6c8a423efa6e833a00f143d5343fc
-CENTRALDARK_AI_BOOT.yaml=de84a0d1cedb9d60bff7f05623991f522eaba524
-docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=209c8d915911d9f476ad771785cc241b6070d7e6
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-03
+AGENTS.md=a814bb76832adb66ad5d3c0e71b344132d3481fe
+LEIA-ME-IA.md=91f9dbabb9b6814633a5f933d8b69a4f4d3f0f7c
+CLAUDE.md=8f2bf1d62998b6bdf774924922edb2aba77cc934
+CENTRALDARK_AI_BOOT.yaml=42364a06d0db26b1ba7855e14d12f61c69542d8b
+docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=5f5c5a37ffad8fd61453b2c429f5650a46acdfff
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-04
 SOUL_SYNC_ANCHOR_END
 ```
 
