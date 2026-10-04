@@ -57,10 +57,19 @@ jobs:
           }
           echo "HEAD_SHA=$actual"
 
-      - name: 🐍 Preparar Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v6
-        with:
-          python-version: '3.11'
+      - name: 🐍 Provar Python nativo do self-hosted
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v python3
+          python3 --version
+          python3 - <<'PY'
+          import sys
+          assert sys.version_info >= (3, 11), sys.version
+          print("PYTHON_NATIVE_SELF_HOSTED=PASS")
+          print("PYTHON_EXECUTABLE=" + sys.executable)
+          print("PYTHON_VERSION=" + ".".join(map(str, sys.version_info[:3])))
+          PY
 
       - name: ⚖️ Provar Fixed Point Fabric no workflow existente
         shell: bash
