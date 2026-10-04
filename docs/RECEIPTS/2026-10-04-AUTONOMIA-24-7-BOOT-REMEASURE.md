@@ -77,6 +77,9 @@ Não foram instalados novos motores.
 - `infra/caddy/deploy-centraldark.Caddyfile`: ausente e classificado como legado faltante, não como gap CURRENT.
 - O workflow tinha uma contradição: parava o legado, mas depois exigia que `CentralDark-WebhookDeploy` permanecesse online. O menor delta removeu essa exigência e mantém somente a parada segura do owner exato + prova de `PORT_9300_CLOSED=1`.
 
+- O workflow `vps-exec-selfhosted.yml` também tinha falha de robustez no gate de autenticação: dependia exclusivamente do `extraheader` persistido pelo checkout. O menor delta agora usa `GITHUB_TOKEN`/`github.token` como fallback efêmero, sem imprimir segredo, em todos os jobs que carregam o dispatcher.
+- Validação local após o patch: `bash -n scripts/vps/deploy-guards-dispatcher.sh` e `71/71` testes Trigger Fabric passaram.
+
 ## Estado
 
 `PARTIAL`
