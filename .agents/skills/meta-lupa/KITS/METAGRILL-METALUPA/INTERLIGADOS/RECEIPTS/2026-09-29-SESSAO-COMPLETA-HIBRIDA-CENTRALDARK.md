@@ -1,4 +1,4 @@
-# Receipt — sessão completa híbrida 2026-09-29
+# 🧾 Receipt — sessão completa híbrida 2026-09-29
 
 ```text
 PR_MOTHER=#1562
