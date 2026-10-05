@@ -169,6 +169,12 @@ jobs:
           node --test \
             .agents/skills/knowledge-compiler/tests/compiler.test.mjs \
             .agents/skills/knowledge-compiler/tests/contract.test.mjs
+      - name: 🔹 Knowledge Compiler — cristal portátil + contraprova #167
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 .agents/skills/knowledge-compiler/tests/crystal-runtime-compiler.test.py
+          python3 .agents/skills/knowledge-compiler/tests/anaximander-core-shell-formalism.test.py
       - name: 🔹 Percentual evidencial — denominador fechado + dogfood
         working-directory: .agents/skills/meta-lupa
         run: python3 scripts/percentual_evidencial.py self-test
