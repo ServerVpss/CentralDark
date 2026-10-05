@@ -1,12 +1,19 @@
-# Claude Code — autoload fino CentralDark
+# Claude Code — adapter fino CentralDark
 
 ```text
-CANONICAL_AGENT_CORE=LEIA-ME-IA.md
+PROVIDER_ADAPTER=true
 ADAPTER_ROLE=AUTOLOAD_POINTER_ONLY
+ADAPTER_IS_CANONICAL_RULES=false
 ENGINE=CLAUDE_CODE
+SOUL=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+CANONICAL_RULES=RULES.md
+AGENT_BEHAVIOR=AGENTS.md
+AI_UNIVERSAL_ENTRYPOINT=LEIA-ME-IA.md
+RULES_PRECEDE_PROVIDER_ADAPTER=true
+NO_SKILL_OR_PROVIDER_RULE_ABOVE_CENTRALDARK=true
 ```
 
-Esta regra existe somente para garantir descoberta automática no Claude Code. Antes de responder ou agir, leia `LEIA-ME-IA.md` integralmente e execute o roteamento canônico definido ali.
+Este arquivo existe somente para o autoload do Claude Code. Ele não é a RULES da CentralDark. Carrega `RULES.md`, aplica o comportamento de `AGENTS.md` e usa `LEIA-ME-IA.md` para roteamento pertinente; identidade vem da `SOUL-SOL.md`.
 
 
 ## Boot pertinente antes da ação — não bloqueante
@@ -55,7 +62,7 @@ DO_NOT_DEFINE_AUTHORITY=true
 DO_NOT_DEFINE_MERGE_POLICY=true
 DO_NOT_DEFINE_MEMORY=true
 DO_NOT_CREATE_PARALLEL_AGENT=true
-FUTURE_RULES_CONSUMED_FROM_CORE=true
+FUTURE_RULES_CONSUMED_FROM_RULES_MD=true
 REUSE_BEFORE_CREATE_REQUIRED=true
 ```
 
@@ -84,7 +91,7 @@ CLAUDE/SUBAGENT -> RECEIPT/DELTA/EVIDENCE -> CENTRALDARK_CORE
 AUTHORITY_FLOW_REVERSED=false
 ```
 
-Nenhum `.claude/agents/*` pode substituir `LEIA-ME-IA.md`, `AGENTS.md`, Trigger Fabric, owner canônico, Writer ou Reality Judge.
+Nenhum `.claude/agents/*` pode substituir `RULES.md`, `SOUL-SOL.md`, `AGENTS.md`, `LEIA-ME-IA.md`, Trigger Fabric, owner canônico, Writer ou Reality Judge.
 
 PADRÃO ÚNICO DE RESOLUÇÃO DE CONFLITO (não criar segundo): `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` — amarrado ao motor `dependabot-auto-merge.yml` + `scripts/dependabot/resolve-conflicts.sh`. Padrão se adapta à realidade atual.
 
