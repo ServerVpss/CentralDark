@@ -115,6 +115,36 @@ MAP_IS_OPERATIONAL_GRAPH=true
 
 O mapa seleciona a próxima aresta candidata; a medição decide o estado.
 
+## 4.1 Memória temporal acumulada — CURRENT sem amputar HISTORY
+
+O estado cognitivo não usa apenas memória do instante. A forma correta é:
+
+```text
+K_{≤t} = memória/proveniência acumulada e reconciliada até t
+```
+
+Então:
+
+```text
+CD_t = (I, G_t, B_t, K_{≤t}, C_t, E_t)
+```
+
+`CURRENT_OVER_HISTORY` é abreviação de **precedência para o claim do presente**, não apagamento temporal.
+
+```text
+CURRENT_DEFINES_PRESENT_STATE=true
+HISTORY_IS_EVIDENCE=true
+HISTORY_MUST_NOT_BE_ERASED=true
+LIVE_CURRENT_CANNOT_ERASE_RELEVANT_HISTORY=true
+STALE_HISTORY_CANNOT_OVERRIDE_LIVE_CURRENT_STATE=true
+HISTORY_INFORMS_CAUSALITY=true
+HISTORY_INFORMS_RECURRENCE=true
+HISTORY_INFORMS_FUTURE_RISK=true
+PROVEN_HISTORICAL_LOCKS_INHERIT_INTO_CURRENT=true
+PAST_GOLD_IS_PRESERVED=true
+EXTEND_EXISTING_NOT_REPLACE=true
+```
+
 ## 5. Tempo e gnomon operacional
 
 Para ticks `t_k = t_0 + kΔt`:
@@ -124,7 +154,16 @@ STATE(t_k) = MEASURE(WORLD, t_k)
 STATE(t_k) != ASSUME(STATE(t_(k-1)))
 ```
 
-Toda evidência mutável carrega tempo, source/fingerprint e, quando aplicável, TTL.
+Toda evidência mutável carrega tempo, source/fingerprint e, quando aplicável, TTL. Para evitar falso CURRENT, distingue-se:
+
+```text
+OBSERVED_AT       = quando o observador recebeu/mediu a informação
+SOURCE_STATE_AT   = instante ao qual o estado reportado se refere
+TRANSPORT_LATENCY = diferença/atraso quando conhecida
+```
+
+`MEASURED_NOW` não implica automaticamente `STATE_IS_FROM_NOW`.
+
 
 ```text
 CLOCK_TRIGGERS_MEASUREMENT_NOT_TRUTH=true
@@ -227,6 +266,18 @@ PROJECT_I(
 ```
 
 `PROJECT_I` significa: conservar invariantes e autoridade enquanto bindings/capabilities podem mudar.
+
+## 10.1 Evento encerrado não encerra evidência
+
+```text
+EVENT_ENDED != EVIDENCE_ENDED
+DIRECT_EVIDENCE_UNAVAILABLE
+→ LOOK_FOR_CAUSAL_RESIDUE
+→ CROSS_CHECK_INDEPENDENT_EFFECTS
+→ INFER_WITH_CONFIDENCE_BOUND
+```
+
+Logs, hashes, efeitos posteriores, dependências e receipts podem preservar informação causal depois do evento. Resíduo causal permite reconstrução limitada; nunca autoriza inventar o evento.
 
 ## 11. Contraprovas que devem quebrar o claim
 
