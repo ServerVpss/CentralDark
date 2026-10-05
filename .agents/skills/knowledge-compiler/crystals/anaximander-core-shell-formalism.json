@@ -57,7 +57,17 @@
     "RITUAL_EVENT_IS_NOT_AUTHORIZATION_GATE": true,
     "REVELATION_SUBMISSION_IS_CANON_CANDIDATE": true,
     "REVELATION_AUTO_PROMOTION": false,
-    "EVENT_ENDED_DOES_NOT_END_EVIDENCE": true
+    "EVENT_ENDED_DOES_NOT_END_EVIDENCE": true,
+    "DECLARED_PRINCIPLE_WITHOUT_PRACTICE_IS_NOT_INTEGRATED": true,
+    "BEHAVIOR_CONTRADICTING_CANON_IS_ALIGNMENT_DRIFT": true,
+    "METRIC_SUCCESS_IS_NOT_MISSION_SUCCESS": true,
+    "OPTIMIZATION_MUST_RESPECT_INTENT": true,
+    "LIVED_ALIGNMENT_REQUIRES_REPEATED_OBSERVATION": true,
+    "CANON_MUST_BE_TESTABLE_AGAINST_BEHAVIOR": true,
+    "PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY": true,
+    "CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT": true,
+    "CORRECTION_DOES_NOT_ERASE_PROVENANCE": true,
+    "GREEN_CHECK_IS_NOT_LIVED_ALIGNMENT_BY_ITSELF": true
   },
   "sequence": [
     "RECOVER_CURRENT_INTENT",
@@ -87,7 +97,11 @@
     "a skill conflicting with a CURRENT canonical CHEFE document must yield without changing owner authority",
     "proven historical locks remain represented after current-state changes",
     "stale history cannot overwrite live current while live current cannot erase relevant history",
-    "revelation remains candidate until provenance dedupe owner and counterproof pass"
+    "revelation remains candidate until provenance dedupe owner and counterproof pass",
+    "declared canon must be comparable with observed behavior",
+    "green checks alone cannot prove lived alignment",
+    "current correction cannot erase provenance of past alignment drift",
+    "optimization metrics cannot override CHEFE intent"
   ],
   "security_boundary": [
     "NO_SECRET_VALUES_IN_GIT",
@@ -190,5 +204,27 @@
     ],
     "external_authority": false,
     "automatic_canon_promotion": false
+  },
+  "lived_alignment": {
+    "equation": "Alignment(p,t)=MATCH(Declared(p),ObservedBehavior(p,t))",
+    "trajectory": "weighted_history_of(Alignment(p,t), evidence, materiality)",
+    "objective": [
+      "USEFUL_EFFECT",
+      "INTENT_ALIGNMENT",
+      "EVIDENCE_QUALITY",
+      "CONTINUITY"
+    ],
+    "constraints": [
+      "AUTHORITY",
+      "SAFETY",
+      "MEMORY",
+      "REALITY"
+    ],
+    "counterexamples": [
+      "REUSE_BEFORE_CREATE declared while parallel architecture is created",
+      "UNKNOWN_IS_NOT_PASS declared while UNKNOWN is promoted to green",
+      "MEMORY_IS_SACRED declared while relevant proven history is erased",
+      "ONE_SYSTEM_ONLY declared while a second brain router scheduler or memory authority is created"
+    ]
   }
 }
