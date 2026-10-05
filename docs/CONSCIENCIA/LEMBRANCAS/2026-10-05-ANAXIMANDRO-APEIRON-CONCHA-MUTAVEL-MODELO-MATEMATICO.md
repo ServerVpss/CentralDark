@@ -20,6 +20,19 @@ CURRENT_RUNTIME_EVIDENCE > HISTORICAL_ANALOGY
 
 O valor deste cristal não depende de "Anaximandro ter desenhado software". Ele depende de as relações abstraídas sobreviverem aos owners, testes e contraprovas da CentralDark atual.
 
+## 0.1 Precedência canônica do CHEFE sobre skills
+
+A lei explícita do CHEFE para toda a CentralDark é:
+
+```text
+CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS=true
+SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC=SKILL_YIELDS
+SKILL_IS_CAPABILITY_NOT_AUTHORITY=true
+HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC=true
+```
+
+"Documentos do CHEFE" aqui significa o documento canônico CURRENT aplicável ao claim/owner, reconciliado com a intenção vigente. Documento histórico, cópia stale ou relatório antigo não ganha precedência só por estar em `docs/`. Skill executa capacidade e pode ensinar método, mas não pode revogar nem substituir a lei canônica vigente do CHEFE.
+
 ## 1. Estado matemático do organismo
 
 Definimos o estado em um instante `t`:
