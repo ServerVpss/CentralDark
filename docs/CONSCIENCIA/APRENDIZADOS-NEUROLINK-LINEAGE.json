@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "35dbfd77e56e8cdf68431998710bb577843ca3a4",
+  "source_blob_sha": "4aa3e7bfa46d1c57c2e7763240c2b5ddd91c54bc",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 165,
-    "highest_legacy_learning_number": 166,
+    "learning_sections": 166,
+    "highest_legacy_learning_number": 167,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 166
+      "end": 167
     }
   },
   "nodes": [
@@ -1900,6 +1900,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L165",
+      "next_uid": "L167"
+    },
+    {
+      "uid": "L167",
+      "legacy_learning_number": 167,
+      "legacy_occurrence": 1,
+      "title": "Ápeiron operacional: identidade invariável, concha mutável, capacidades abertas e prova temporal sem arquitetura paralela",
+      "document_order": 166,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L166",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
