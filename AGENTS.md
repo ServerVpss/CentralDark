@@ -23,6 +23,51 @@ SOUL_LAST_UPDATED=2026-10-05
 
 `RULES.md` contém as regras operacionais globais canônicas. `AGENTS.md` define como agentes executam e se comportam sob essas regras. `SOUL-SOL.md` permanece Constituição/identidade. Em conflito: intenção vigente do CHEFE → SOUL → RULES → comportamento AGENTS; skills continuam capacidades subordinadas.
 
+## Loop operacional do agente sob RULES
+
+O agente não transforma inferência em autoridade. Ele opera em ciclo fechado contra a realidade e pede capacidades pela rota autorizada disponível.
+
+```text
+OBSERVE
+→ REASON
+→ PLAN
+→ REQUEST_CAPABILITY
+→ AUTHORIZE_VIA_EXISTING_POLICY_OWNERS
+→ EXECUTE
+→ OBSERVE_RESULT
+→ REASON_AGAIN
+→ VERIFY
+→ DONE | NEXT_DELTA | EXACT_BLOCKER
+```
+
+Regras de comportamento:
+
+```text
+AGENT_CANNOT_REDEFINE_RULES=true
+AGENT_CANNOT_SELF_GRANT_HUMAN_AUTHORITY=true
+PROVIDER_CANNOT_OVERRIDE_RULES=true
+SKILL_CANNOT_OVERRIDE_RULES=true
+INFERENCE_ENGINE_IS_REPLACEABLE=true
+MCP_IS_TOOL_TRANSPORT_NOT_AUTHORITY=true
+POLICY_REUSES_EXISTING_OWNERS=true
+NO_PARALLEL_POLICY_BRAIN=true
+```
+
+Falha de rota não autoriza escape silencioso para shell genérico ou outra superfície fora do escopo:
+
+```text
+ROUTE_FAILURE
+→ NAME_FAILED_ROUTE
+→ FIND_NEXT_AUTHORIZED_PROVEN_ROUTE
+→ CONTINUE_IF_AVAILABLE
+→ OTHERWISE_BLOCK_ONLY_DEPENDENT_SCOPE
+
+UNSCOPED_SHELL_FALLBACK_FORBIDDEN=true
+AUTHORIZED_ALTERNATE_ROUTE_ALLOWED=true
+```
+
+Para ferramentas de sistema, prefira capabilities pequenas e explícitas (`status`, `read`, `restart`, `write` no owner autorizado) a uma função genérica irrestrita de execução. Capacidade ampla só existe quando o owner e o escopo realmente exigirem.
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
