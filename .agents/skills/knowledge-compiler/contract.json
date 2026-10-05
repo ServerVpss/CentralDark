@@ -232,7 +232,21 @@
     "CANON_MUST_BE_TESTABLE_AGAINST_BEHAVIOR",
     "PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY",
     "CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT",
-    "CORRECTION_DOES_NOT_ERASE_PROVENANCE"
+    "CORRECTION_DOES_NOT_ERASE_PROVENANCE",
+    "INTENT_IS_NOT_OUTCOME",
+    "OUTCOME_IS_NOT_INTENT",
+    "GOOD_INTENT_DOES_NOT_ERASE_HARM",
+    "BAD_OUTCOME_DOES_NOT_PROVE_BAD_INTENT",
+    "GOOD_OUTCOME_DOES_NOT_PROVE_GOOD_INTENT",
+    "RESPONSIBILITY_REQUIRES_CAUSAL_SCOPE",
+    "RESPONSIBILITY_SCALES_WITH_CONTROL",
+    "RESPONSIBILITY_SCALES_WITH_FORESEEABILITY",
+    "UNINTENDED_EFFECT_MUST_BE_OBSERVED",
+    "KNOWN_HARM_REQUIRES_RESPONSE",
+    "PAST_INTENT_MUST_NOT_BE_REWRITTEN_BY_LATER_OUTCOME",
+    "PAST_OUTCOME_MUST_NOT_BE_ERASED_BY_GOOD_INTENT",
+    "REPAIR_IS_PART_OF_INTEGRITY",
+    "LEARNING_MUST_CHANGE_NEXT_ACTION"
   ],
   "authority_normalize": {
     "enabled": true,
@@ -281,5 +295,22 @@
     "new_engine": false,
     "rule": "COMPARE_DECLARED_CANON_WITH_OBSERVED_BEHAVIOR_LONGITUDINALLY",
     "metric_success_is_not_mission_success": true
+  },
+  "intent_responsibility": {
+    "owner": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#164-integridade-de-intenção-e-responsabilidade--intenção-não-é-efeito-efeito-não-é-intenção",
+    "engine": "EXISTING_KNOWLEDGE_COMPILER",
+    "new_engine": false,
+    "required_dimensions": [
+      "intent",
+      "decision_basis",
+      "action",
+      "outcome",
+      "foreseeability",
+      "causal_control",
+      "repair",
+      "learning",
+      "next_action"
+    ],
+    "responsibility_requires_causal_scope": true
   }
 }
