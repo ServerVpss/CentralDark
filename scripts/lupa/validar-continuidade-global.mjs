@@ -418,7 +418,7 @@ function validate(contract, extension, contractText, portaText, gateText, writer
   const errors = [];
   const expect = (condition, code) => { if (!condition) errors.push(code); };
 
-  expect(policy?.marker === "GLOBAL_CONTINUITY_HARD_GATE", "CONTINUIDADE_GLOBAL_MARKER");
+  expect(policy?.marker === "GLOBAL_CONTINUITY_NON_BLOCKING", "CONTINUIDADE_GLOBAL_MARKER");
   expect(policy?.scope === "GLOBAL", "CONTINUIDADE_GLOBAL_SCOPE");
   expect(policy?.temporal_scope === "CONTINUOUS", "CONTINUIDADE_GLOBAL_TEMPORAL");
   expect(policy?.default_action === "CONTINUE_EXISTING", "CONTINUIDADE_GLOBAL_DEFAULT");
@@ -449,7 +449,7 @@ function validate(contract, extension, contractText, portaText, gateText, writer
   expect(contract?.decision_rules?.unknown_is_pass === false, "CONTINUIDADE_GLOBAL_UNKNOWN_NOT_PASS");
   for (const token of REQUIRED.input_tokens) expect(portaText.includes(token), `CONTINUIDADE_GLOBAL_INPUT_BOUNDARY:${token}`);
 
-  expect(policy?.creation_gate?.mode === "ALL", "CONTINUIDADE_GLOBAL_CREATION_MODE");
+  expect(policy?.creation_gate?.mode === "GAP_ONLY", "CONTINUIDADE_GLOBAL_CREATION_MODE");
   expect(hasAll(policy?.creation_gate?.create_new_only_if, REQUIRED.create_new_only_if), "CONTINUIDADE_GLOBAL_CREATION_CONDITIONS");
   expect(policy?.creation_gate?.otherwise === "REUSE_OR_EXTEND_EXISTING", "CONTINUIDADE_GLOBAL_CREATION_FALLBACK");
   expect(policy?.creation_gate?.parallel_owner === "FORBIDDEN", "CONTINUIDADE_GLOBAL_PARALLEL_OWNER");
@@ -466,8 +466,8 @@ function validate(contract, extension, contractText, portaText, gateText, writer
 
   expect(policy?.enforcement?.consumer === "scripts/lupa/validar-porta-de-entrada.mjs", "CONTINUIDADE_GLOBAL_CONSUMER");
   expect(policy?.enforcement?.gate === GATE, "CONTINUIDADE_GLOBAL_GATE");
-  expect(policy?.enforcement?.fail_closed === true, "CONTINUIDADE_GLOBAL_FAIL_CLOSED");
-  expect(policy?.enforcement?.counterproof_required === true, "CONTINUIDADE_GLOBAL_COUNTERPROOF_REQUIRED");
+  expect(policy?.enforcement?.fail_closed === false, "CONTINUIDADE_GLOBAL_FAIL_CLOSED");
+  expect(policy?.enforcement?.counterproof_required === false, "CONTINUIDADE_GLOBAL_COUNTERPROOF_REQUIRED");
   expect(policy?.enforcement?.future_execution_required === true, "CONTINUIDADE_GLOBAL_FUTURE_REQUIRED");
   expect(policy?.enforcement?.single_global_owner === CONTRACT, "CONTINUIDADE_GLOBAL_OWNER");
   const globalEverything = contract?.global_absorption_and_cockpit_policy;
@@ -504,7 +504,7 @@ function validate(contract, extension, contractText, portaText, gateText, writer
 
 
 
-  const markerCount = (contractText.match(/"marker"\s*:\s*"GLOBAL_CONTINUITY_HARD_GATE"/g) || []).length;
+  const markerCount = (contractText.match(/"marker"\\s*:\\s*"GLOBAL_CONTINUITY_NON_BLOCKING"/g) || []).length;
   expect(markerCount === 1, `CONTINUIDADE_GLOBAL_OWNER_COUNT:${markerCount}`);
   expect(gateText.includes("node scripts/lupa/validar-continuidade-global.mjs"), "CONTINUIDADE_GLOBAL_GATE_NOT_REACHABLE");
   expect(gateText.includes("node scripts/lupa/validar-porta-de-entrada.mjs"), "CONTINUIDADE_GLOBAL_CANONICAL_CONSUMER_NOT_REACHABLE");
