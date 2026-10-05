@@ -535,16 +535,20 @@ jobs:
           # Private spine: reuse persisted node state. No auth key is printed or recreated.
           if systemctl list-unit-files tailscaled.service >/dev/null 2>&1; then
             systemctl enable --now tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
-            systemctl restart tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
+            ts_json="$(tailscale status --json 2>/dev/null || true)"
+            ts_online="$(printf '%s' "$ts_json" | jq -r '.Self.Online // false' 2>/dev/null)"
+            if [[ "$ts_online" != "true" ]]; then
+              systemctl restart tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
+            fi
             tailscale set --ssh >/dev/null 2>&1 || true
             ts_online=false
             ts_ips=""
-            for _ in $(seq 1 15); do
-              sleep 2
+            for _ in $(seq 1 30); do
               ts_json="$(tailscale status --json 2>/dev/null || true)"
               ts_online="$(printf '%s' "$ts_json" | jq -r '.Self.Online // false' 2>/dev/null)"
               ts_ips="$(printf '%s' "$ts_json" | jq -r '(.Self.TailscaleIPs // []) | join(",")' 2>/dev/null)"
               [[ "$ts_online" == "true" ]] && break
+              sleep 2
             done
             echo "TAILSCALE_SELF_ONLINE=${ts_online:-false}"
             echo "TAILSCALE_IPS=${ts_ips:-}"
