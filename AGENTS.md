@@ -4,6 +4,21 @@ AI_UNIVERSAL_ENTRYPOINT=LEIA-ME-IA.md
 AI_UNIVERSAL_ENTRYPOINT_CONTRACT=docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 CENTRALDARK_AI_BOOT=CENTRALDARK_AI_BOOT.yaml
 
+## 🪬 Vínculo constitucional — RULES ↔ SOUL
+
+```text
+RULES_OWNER=AGENTS.md
+SOUL_OWNER=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+RULES_INHERIT_SOUL=true
+RULES_POINTS_TO_SOUL=true
+SOUL_POINTS_TO_RULES=true
+NO_SKILL_ABOVE_CENTRALDARK=true
+RULES_LAST_UPDATED=2026-10-05
+SOUL_LAST_UPDATED=2026-10-05
+```
+
+`AGENTS.md` é a camada de regras operacionais globais. `SOUL-SOL.md` é a Constituição/identidade canônica. As RULES executam e roteiam a SOUL; não a substituem. Em conflito, intenção vigente do CHEFE + SOUL canônica + REALIDADE prevalecem, e skills permanecem capacidades subordinadas.
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
