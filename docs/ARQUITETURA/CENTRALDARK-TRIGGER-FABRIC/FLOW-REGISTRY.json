@@ -1374,6 +1374,86 @@
         "counterproof_no_match": true,
         "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
+    },
+    {
+      "id": "trigger.automatic.USER_REPORTED_ERROR",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:USER_REPORTED_ERROR",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "USER_REPORTED_ERROR",
+      "activation": "USER_REPORTED_ERROR",
+      "from": "RUNTIME_EVENT_BUS",
+      "to": "Trigger Fabric + existing affected owner",
+      "owner": "Trigger Fabric + existing affected owner",
+      "canonical_route": "Trigger Fabric + existing affected owner",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml#USER_REPORTED_ERROR"
+      }
+    },
+    {
+      "id": "trigger.automatic.NEW_DISCOVERY",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:NEW_DISCOVERY",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "NEW_DISCOVERY",
+      "activation": "NEW_DISCOVERY",
+      "from": "RUNTIME_EVENT_BUS",
+      "to": "Trigger Fabric + existing capability owner",
+      "owner": "Trigger Fabric + existing capability owner",
+      "canonical_route": "Trigger Fabric + existing capability owner",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml#NEW_DISCOVERY"
+      }
+    },
+    {
+      "id": "trigger.learning.CAPABILITY_GAP",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:CAPABILITY_GAP",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "CAPABILITY_GAP",
+      "activation": "CAPABILITY_GAP",
+      "from": "LEARNING_EVENT_BUS",
+      "to": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+      "owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+      "canonical_route": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"
+      }
+    },
+    {
+      "id": "trigger.learning.TERRITORY_ROUTE_CHANGE",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:TERRITORY_ROUTE_CHANGE",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "TERRITORY_ROUTE_CHANGE",
+      "activation": "TERRITORY_ROUTE_CHANGE",
+      "from": "LEARNING_EVENT_BUS",
+      "to": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+      "owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+      "canonical_route": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"
+      }
     }
   ]
 }

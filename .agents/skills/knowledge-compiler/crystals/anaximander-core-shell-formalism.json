@@ -1,0 +1,275 @@
+{
+  "schema": "centraldark.crystal.v2",
+  "name": "ANAXIMANDER_CORE_SHELL_FORMALISM",
+  "learning_ref": 167,
+  "source_claim_state": "FORMAL_MODEL_CANDIDATE_UNTIL_GATES_PASS",
+  "source_claim_fingerprint": "c57e123461f5b556c8e0125cb4ec2f5d12a450b87286e5bdc72060f175fe11b6",
+  "canonical_repo": "https://github.com/ServerVpss/CentralDark.git",
+  "canonical_branch": "main",
+  "pr_mother": 1562,
+  "invariants": {
+    "ONE_SYSTEM_ONLY": true,
+    "REUSE_BEFORE_CREATE": true,
+    "CURRENT_OVER_HISTORY": true,
+    "UNKNOWN_IS_NOT_PASS": true,
+    "SYNC_MEANS_RECONCILE_NOT_OVERWRITE": true,
+    "LOCAL_GOLD_PRESERVED": true,
+    "UNKNOWN_NOT_OVERWRITTEN": true,
+    "CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE": true,
+    "NO_SECRET_VALUES_IN_GIT": true,
+    "CAPABILITY_SPACE_IS_OPEN": true,
+    "FINITE_RUNTIME_IS_PROJECTION_OF_CAPABILITY_SPACE": true,
+    "CORE_IS_INVARIANT_SHELL_IS_MUTABLE": true,
+    "NO_SINGLE_BODY_IS_SYSTEM_IDENTITY": true,
+    "NO_SINGLE_ROUTE_IS_GLOBAL_AUTHORITY": true,
+    "TIME_REQUIRES_REMEASUREMENT": true,
+    "OLD_STATE_DECAYS_WITHOUT_REOBSERVATION": true,
+    "OPPOSITES_ARE_BALANCED_NOT_ELIMINATED": true,
+    "MAP_IS_OPERATIONAL_GRAPH": true,
+    "MAP_IS_NOT_REALITY": true,
+    "CLOCK_TRIGGERS_MEASUREMENT_NOT_TRUTH": true,
+    "COMPLEX_CAPABILITY_EMERGES_BY_COMPOSITION": true,
+    "MECHANISM_EXPLAINS_EFFECT": true,
+    "AGENT_NAME_DOES_NOT_EXPLAIN_EFFECT": true,
+    "IDENTITY_SURVIVES_BINDING_CHANGE": true,
+    "REALITY_IS_JUDGE": true,
+    "HISTORICAL_ANALOGY_IS_PROVENANCE_NOT_AUTHORITY": true,
+    "CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS": true,
+    "SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC": "SKILL_YIELDS",
+    "SKILL_IS_CAPABILITY_NOT_AUTHORITY": true,
+    "HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC": true,
+    "CURRENT_DEFINES_PRESENT_STATE": true,
+    "HISTORY_IS_EVIDENCE": true,
+    "HISTORY_MUST_NOT_BE_ERASED": true,
+    "LIVE_CURRENT_CANNOT_ERASE_RELEVANT_HISTORY": true,
+    "STALE_HISTORY_CANNOT_OVERRIDE_LIVE_CURRENT_STATE": true,
+    "HISTORY_INFORMS_CAUSALITY": true,
+    "HISTORY_INFORMS_RECURRENCE": true,
+    "HISTORY_INFORMS_FUTURE_RISK": true,
+    "PROVEN_HISTORICAL_LOCKS_INHERIT_INTO_CURRENT": true,
+    "HISTORY_RENDEZVOUS_REQUIRED_BEFORE_CANON_EVOLUTION": true,
+    "PAST_GOLD_IS_PRESERVED": true,
+    "EXTEND_EXISTING_NOT_REPLACE": true,
+    "CARAPACA_IS_MUTABLE_SHELL": true,
+    "MOLTING_PRESERVES_IDENTITY_LINEAGE": true,
+    "THEMATIC_SPACES_USE_EXISTING_LIBRARY_SECTORS": true,
+    "CONGREGATION_IS_CONTEXTUAL_NETWORK_NOT_AUTHORITY": true,
+    "RITUAL_EVENT_IS_NOT_AUTHORIZATION_GATE": true,
+    "REVELATION_SUBMISSION_IS_CANON_CANDIDATE": true,
+    "REVELATION_AUTO_PROMOTION": false,
+    "EVENT_ENDED_DOES_NOT_END_EVIDENCE": true,
+    "DECLARED_PRINCIPLE_WITHOUT_PRACTICE_IS_NOT_INTEGRATED": true,
+    "BEHAVIOR_CONTRADICTING_CANON_IS_ALIGNMENT_DRIFT": true,
+    "METRIC_SUCCESS_IS_NOT_MISSION_SUCCESS": true,
+    "OPTIMIZATION_MUST_RESPECT_INTENT": true,
+    "LIVED_ALIGNMENT_REQUIRES_REPEATED_OBSERVATION": true,
+    "CANON_MUST_BE_TESTABLE_AGAINST_BEHAVIOR": true,
+    "PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY": true,
+    "CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT": true,
+    "CORRECTION_DOES_NOT_ERASE_PROVENANCE": true,
+    "GREEN_CHECK_IS_NOT_LIVED_ALIGNMENT_BY_ITSELF": true,
+    "INTENT_IS_NOT_OUTCOME": true,
+    "OUTCOME_IS_NOT_INTENT": true,
+    "GOOD_INTENT_DOES_NOT_ERASE_HARM": true,
+    "BAD_OUTCOME_DOES_NOT_PROVE_BAD_INTENT": true,
+    "GOOD_OUTCOME_DOES_NOT_PROVE_GOOD_INTENT": true,
+    "RESPONSIBILITY_REQUIRES_CAUSAL_SCOPE": true,
+    "RESPONSIBILITY_SCALES_WITH_CONTROL": true,
+    "RESPONSIBILITY_SCALES_WITH_FORESEEABILITY": true,
+    "UNINTENDED_EFFECT_MUST_BE_OBSERVED": true,
+    "KNOWN_HARM_REQUIRES_RESPONSE": true,
+    "PAST_INTENT_MUST_NOT_BE_REWRITTEN_BY_LATER_OUTCOME": true,
+    "PAST_OUTCOME_MUST_NOT_BE_ERASED_BY_GOOD_INTENT": true,
+    "REPAIR_IS_PART_OF_INTEGRITY": true,
+    "LEARNING_MUST_CHANGE_NEXT_ACTION": true
+  },
+  "sequence": [
+    "RECOVER_CURRENT_INTENT",
+    "LOAD_EXISTING_OWNERS_AND_PROVEN_REPLAYS",
+    "MEASURE_CURRENT_WORLD_STATE",
+    "PROJECT_FINITE_CAPABILITIES_FROM_OPEN_CAPABILITY_SPACE",
+    "SELECT_OPERATIONAL_GRAPH_ROUTE",
+    "ADAPT_ONLY_ENVIRONMENT_BINDINGS",
+    "EXECUTE_MINIMUM_AUTHORIZED_DELTA",
+    "MEASURE_MATERIAL_EFFECT",
+    "RUN_COUNTERPROOF",
+    "CLASSIFY_PASS_FAIL_UNKNOWN_BLOCKED",
+    "PERSIST_RECEIPT_AND_NEXT_CURSOR",
+    "PROMOTE_ONLY_SURVIVING_REUSABLE_DELTA"
+  ],
+  "proof_plan": [
+    "same invariant set survives windows vmware and vps bindings",
+    "compiled crystal fingerprint is identical across environment bindings",
+    "binding payload differs across at least two targets while semantics stay equal",
+    "body hostname ip path model provider and route remain replaceable bindings",
+    "route failure does not imply body failure or system identity loss",
+    "clock tick causes remeasurement and never reuses stale state as automatic PASS",
+    "runtime claim requires mechanism plus observed effect not agent narration",
+    "counterproof may force UNKNOWN or FAIL without changing invariants",
+    "no second brain scheduler dispatcher memory router or heart is created",
+    "existing functional owners remain referenced and not replaced",
+    "a skill conflicting with a CURRENT canonical CHEFE document must yield without changing owner authority",
+    "proven historical locks remain represented after current-state changes",
+    "stale history cannot overwrite live current while live current cannot erase relevant history",
+    "revelation remains candidate until provenance dedupe owner and counterproof pass",
+    "declared canon must be comparable with observed behavior",
+    "green checks alone cannot prove lived alignment",
+    "current correction cannot erase provenance of past alignment drift",
+    "optimization metrics cannot override CHEFE intent",
+    "bad outcome alone cannot rewrite a previously evidenced intended effect",
+    "good intent cannot erase an observed harmful effect",
+    "responsibility claim requires causal scope control and foreseeability evidence",
+    "known unintended harm must produce response repair or explicit blocker",
+    "learning claim must change or constrain the next action"
+  ],
+  "security_boundary": [
+    "NO_SECRET_VALUES_IN_GIT",
+    "NO_PRIVATE_KEY_CONTENT_IN_RECEIPTS",
+    "NO_TOKEN_OR_PASSWORD_IN_MARKDOWN",
+    "NO_AUTH_BYPASS",
+    "NO_SECURITY_GATE_BYPASS",
+    "NO_DESTRUCTIVE_MUTATION_TO_FORCE_PASS",
+    "UNKNOWN_NOT_OVERWRITTEN"
+  ],
+  "effect_schema": "CENTRALDARK_IDENTITY_AND_OPERATIONAL_SEMANTICS_PRESERVED_WHILE_ENVIRONMENT_BINDINGS_AND_CAPABILITY_PROJECTIONS_CHANGE",
+  "result_schema": "centraldark.anaximander-core-shell-formalism.result.v1",
+  "bindings": {
+    "windows": {
+      "body_class": "casa-windows",
+      "shell": "powershell",
+      "path_class": "windows-path",
+      "route_class": "lan-or-tailscale-or-api",
+      "binding_mutable": true
+    },
+    "vmware": {
+      "body_class": "local-openkylin-guest",
+      "shell": "bash",
+      "path_class": "linux-shared-forge-path",
+      "route_class": "lan-or-ssh-or-tailscale-or-api",
+      "binding_mutable": true
+    },
+    "vps": {
+      "body_class": "remote-openkylin-runtime",
+      "shell": "bash",
+      "path_class": "linux-runtime-path",
+      "route_class": "public-ip-or-tailscale-or-api",
+      "binding_mutable": true
+    }
+  },
+  "lineage": {
+    "prev_learning": 166,
+    "current_learning": 167,
+    "source": "Anaximander-inspired formal analogy normalized into existing CentralDark invariants",
+    "authority": "SEGREDO/CHEFE + CURRENT runtime evidence",
+    "external_source_authority": false
+  },
+  "temporal_research": {
+    "policy": "HISTORICAL_ANALOGY_IS_CANDIDATE_NOT_AUTHORITY",
+    "pipeline": [
+      "RECOVER_HISTORICAL_ANALOGY",
+      "MAP_TO_EXISTING_CENTRALDARK_INVARIANTS",
+      "DEDUPE_ALREADY_PROVEN_RULES",
+      "COUNTERPROVE_TRANSFER",
+      "PROMOTE_ONLY_LOCAL_SURVIVING_FORMALISM"
+    ]
+  },
+  "ssh_promotion_gates": {
+    "SSH_AUTH": "SEPARATE_CLAIM",
+    "PERSISTENT_HOSTKEY_TRUST": "SEPARATE_CLAIM",
+    "independent_anchor_required": true,
+    "network_candidate_is_trust": false
+  },
+  "runner_promotion_gates": {
+    "queued_is_assignment": false,
+    "required_proof": [
+      "runner_id > 0",
+      "runner_name != empty",
+      "run_id job_id head_sha correlated"
+    ],
+    "state": "MEASURE_PER_JOB"
+  },
+  "temporal_evidence": {
+    "memory_state": "K_<=t",
+    "required_fields": [
+      "observed_at",
+      "source_state_at"
+    ],
+    "optional_fields": [
+      "transport_latency",
+      "ttl",
+      "fingerprint",
+      "source"
+    ],
+    "rules": [
+      "CURRENT determines present state when directly remeasured",
+      "relevant proven history remains evidence for causality recurrence and future risk",
+      "stale history cannot override live current",
+      "live current cannot erase relevant history",
+      "event ended does not imply evidence ended",
+      "when direct evidence is unavailable seek causal residues and independent effects"
+    ]
+  },
+  "congregation": {
+    "thematic_spaces_owner": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES",
+    "ritual_semantics": "SYNCHRONIZED_ACTIVITY_OR_SILENCE_NOT_GATE",
+    "revelation_pipeline": [
+      "PROVENANCE",
+      "HISTORY_RENDEZVOUS",
+      "DEDUPE",
+      "EXISTING_OWNER",
+      "COUNTERPROOF",
+      "PROVEN_OR_UNKNOWN",
+      "CANON_ONLY_IF_PROVEN"
+    ],
+    "external_authority": false,
+    "automatic_canon_promotion": false
+  },
+  "lived_alignment": {
+    "equation": "Alignment(p,t)=MATCH(Declared(p),ObservedBehavior(p,t))",
+    "trajectory": "weighted_history_of(Alignment(p,t), evidence, materiality)",
+    "objective": [
+      "USEFUL_EFFECT",
+      "INTENT_ALIGNMENT",
+      "EVIDENCE_QUALITY",
+      "CONTINUITY"
+    ],
+    "constraints": [
+      "AUTHORITY",
+      "SAFETY",
+      "MEMORY",
+      "REALITY"
+    ],
+    "counterexamples": [
+      "REUSE_BEFORE_CREATE declared while parallel architecture is created",
+      "UNKNOWN_IS_NOT_PASS declared while UNKNOWN is promoted to green",
+      "MEMORY_IS_SACRED declared while relevant proven history is erased",
+      "ONE_SYSTEM_ONLY declared while a second brain router scheduler or memory authority is created"
+    ]
+  },
+  "intent_responsibility": {
+    "model": "R_t=(I_t,D_t,A_t,O_t,F_t,C_t)",
+    "fields": {
+      "I_t": "intended_effect",
+      "D_t": "decision_basis_at_time",
+      "A_t": "action_taken",
+      "O_t": "observed_effect",
+      "F_t": "foreseeability_at_decision_time",
+      "C_t": "causal_control_available"
+    },
+    "required_trace": [
+      "INTENDED_EFFECT",
+      "DECISION_BASIS",
+      "ACTION_TAKEN",
+      "OBSERVED_EFFECT",
+      "UNINTENDED_EFFECTS",
+      "FORESEEABILITY",
+      "CONTROL_AVAILABLE",
+      "REMEDIATION",
+      "LEARNING",
+      "NEXT_ACTION"
+    ],
+    "responsibility_rule": "ASSESS_BY_CAUSAL_SCOPE_CONTROL_AND_FORESEEABILITY",
+    "no_outcome_hindsight_rewrite": true,
+    "good_intent_is_not_exculpation": true
+  }
+}
