@@ -20,14 +20,14 @@ jobs:
 
       - name: 📋 Generate deterministic inventory
         run: |
-          python scripts/generate_centraldark_inventory.py \
+          python3 scripts/generate_centraldark_inventory.py \
             --write \
             --deterministic-baseline \
             --output docs/CONSCIENCIA/INVENTARIO-CASA.json
 
       - name: 📊 Show inventory summary
         run: |
-          python - <<'PY'
+          python3 - <<'PY'
           import json
           from pathlib import Path
           data = json.loads(Path('docs/CONSCIENCIA/INVENTARIO-CASA.json').read_text())
