@@ -18,7 +18,7 @@ const BOOT = "CENTRALDARK_AI_BOOT.yaml";
 const CONTRATO_DELTA = "docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md";
 const CONTRATO_RECONCILIACAO = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const ESTRUTURA_VPS = "docs/CONSCIENCIA/04-ESTRUTURA-VPS.md";
-const RECONCILIATION_SCHEMA_VERSION = 6;
+const RECONCILIATION_SCHEMA_VERSION = 7;
 const IDENTIDADE_LUPA = ".agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA";
 const GRILL_ME = ".agents/skills/grill-me/SKILL.md";
 const META_GRILL = ".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/KIT.md";
@@ -695,7 +695,7 @@ if (!contract) {
       const cleanupProof = execFileSync(process.execPath, [tempCleanupToolPath, "--self-test"], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
       if (!cleanupProof.includes('"selfTest":"PASS"')) errors.push("CONTRATO_TEMP_TOOL_SELF_TEST_SEM_PASS");
     } catch (error) {
-      errors.push(`CONTRATO_TEMP_TOOL_SELF_TEST_FAIL:${error?.status ?? "UNKNOWN"}`);
+      errors.push(`CONTRATO_TEMP_TOOL_SELF_TEST_FAIL:${error?.status ?? "UNKNOWN"}:${String(error?.stderr || error?.message || "").trim().slice(0, 500)}`);
     }
   }
   if (tempPolicy.cleanup?.delete_after_use !== true) errors.push("CONTRATO_TEMP_POLICY_SEM_LIMPEZA_FINAL");
@@ -777,7 +777,7 @@ if (!contract) {
   const rules = contract.decision_rules ?? {};
   if (rules.new_component_requires_proved_gap !== true) errors.push("CONTRATO_RECONCILIACAO_GAP_NAO_OBRIGATORIO");
   if (rules.new_workflow_when_equivalent_exists !== "FORBIDDEN_UPDATE_EXISTING") errors.push("WORKFLOW_REUSE_NAO_OBRIGATORIO");
-  if (rules.proposal_without_inventory !== "BOOT_BLOCKED") errors.push("CONTRATO_RECONCILIACAO_SEM_FAIL_CLOSED");
+  if (rules.proposal_without_inventory !== "SEARCH_PERTINENT_AND_CONTINUE") errors.push("CONTRATO_RECONCILIACAO_POLICY_DRIFT");
   if (rules.file_found_but_not_cross_referenced !== "CONTEXT_RECONCILIATION_FAILURE") errors.push("CONTRATO_RECONCILIACAO_SEM_CROSS_REFERENCE");
   if (rules.open_or_draft_pr_is_operational_authority !== false) errors.push("CONTRATO_RECONCILIACAO_PR_DRAFT_COM_AUTORIDADE");
   if (rules.program_document_is_runtime_proof !== false) errors.push("CONTRATO_RECONCILIACAO_PROGRAMA_COMO_RUNTIME");
