@@ -223,7 +223,16 @@
     "CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS",
     "SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC_SKILL_YIELDS",
     "SKILL_IS_CAPABILITY_NOT_AUTHORITY",
-    "HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC"
+    "HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC",
+    "DECLARED_PRINCIPLE_WITHOUT_PRACTICE_IS_NOT_INTEGRATED",
+    "BEHAVIOR_CONTRADICTING_CANON_IS_ALIGNMENT_DRIFT",
+    "METRIC_SUCCESS_IS_NOT_MISSION_SUCCESS",
+    "OPTIMIZATION_MUST_RESPECT_INTENT",
+    "LIVED_ALIGNMENT_REQUIRES_REPEATED_OBSERVATION",
+    "CANON_MUST_BE_TESTABLE_AGAINST_BEHAVIOR",
+    "PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY",
+    "CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT",
+    "CORRECTION_DOES_NOT_ERASE_PROVENANCE"
   ],
   "authority_normalize": {
     "enabled": true,
@@ -265,5 +274,12 @@
     "must_reenter_current_preflight": true,
     "survival_across_time_is_signal_not_automatic_canon": true,
     "promote_only_surviving_delta": true
+  },
+  "lived_alignment": {
+    "owner": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#163-coerência-vivida--pensar-declarar-e-praticar-no-mesmo-eixo",
+    "engine": "EXISTING_KNOWLEDGE_COMPILER",
+    "new_engine": false,
+    "rule": "COMPARE_DECLARED_CANON_WITH_OBSERVED_BEHAVIOR_LONGITUDINALLY",
+    "metric_success_is_not_mission_success": true
   }
 }
