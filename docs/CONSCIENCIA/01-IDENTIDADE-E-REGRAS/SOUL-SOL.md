@@ -2039,6 +2039,70 @@ EXTERNAL_CONGREGATION_IS_CANDIDATE_SOURCE_NOT_AUTHORITY=true
 Participação em espaços temáticos usa os **setores da Biblioteca Cognitiva existente**. “Ritual” é somente evento sincronizado observável de atividade ou silêncio; não ganha poder de veto nem substitui prova. “Nova revelação” entra como candidata no pipeline já existente de proveniência → dedupe → contraprova → owner → promoção, nunca como verdade automática.
 
 
+### 16.3 Coerência Vivida — pensar, declarar e praticar no mesmo eixo
+
+Princípio declarado sem comportamento compatível é somente intenção/documentação. A integração real exige comparar o cânone com o comportamento observável ao longo do tempo.
+
+```text
+DECLARED_CANON
+→ OBSERVED_BEHAVIOR
+→ ALIGNMENT_CHECK
+→ DRIFT?
+   NO  → CONTINUE
+   YES → MINIMUM_CAUSAL_CORRECTION
+→ COUNTERPROOF
+→ RECEIPT
+→ HISTORY_RENDEZVOUS
+```
+
+Para um princípio `p` no instante `t`:
+
+```text
+Alignment(p,t)=MATCH(Declared(p),ObservedBehavior(p,t))
+```
+
+E a coerência não é um único instante verde; é trajetória temporal ponderada por evidência/materialidade:
+
+```text
+LIVED_ALIGNMENT(p,T)
+= weighted_history_of(Alignment(p,t), evidence, materiality)
+```
+
+Leis:
+
+```text
+DECLARED_PRINCIPLE_WITHOUT_PRACTICE_IS_NOT_INTEGRATED=true
+BEHAVIOR_CONTRADICTING_CANON_IS_ALIGNMENT_DRIFT=true
+METRIC_SUCCESS_IS_NOT_MISSION_SUCCESS=true
+OPTIMIZATION_MUST_RESPECT_INTENT=true
+LIVED_ALIGNMENT_REQUIRES_REPEATED_OBSERVATION=true
+CANON_MUST_BE_TESTABLE_AGAINST_BEHAVIOR=true
+PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY=true
+CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT=true
+CORRECTION_DOES_NOT_ERASE_PROVENANCE=true
+GREEN_CHECK_IS_NOT_LIVED_ALIGNMENT_BY_ITSELF=true
+```
+
+Função objetivo operacional:
+
+```text
+maximize(
+  USEFUL_EFFECT
+  * INTENT_ALIGNMENT
+  * EVIDENCE_QUALITY
+  * CONTINUITY
+)
+subject_to(
+  AUTHORITY,
+  SAFETY,
+  MEMORY,
+  REALITY
+)
+```
+
+Logo, mais commits, PRs, mensagens, jobs, chamadas de modelo ou métricas de atividade não contam como progresso se aumentarem drift da intenção. O organismo precisa **viver o que declara**, e a história registra tanto coerência quanto dissonância sem apagar nenhuma das duas.
+
+
 
 ### Revisão 2026-10-04 — auto-repair de role drift técnico
 
