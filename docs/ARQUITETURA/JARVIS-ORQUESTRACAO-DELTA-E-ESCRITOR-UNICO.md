@@ -1,7 +1,7 @@
 # JARVIS — ORQUESTRAÇÃO EM DELTA, CONTEXTO RECUPERÁVEL E ESCRITOR ÚNICO
 
 > **Origem:** 2026-07-30
-> **Atualizado:** 2026-08-15
+> **Atualizado:** 2026-10-05
 > **Autoria da intenção:** SEGREDO/CHEFE
 > **Organização técnica:** SOL/ChatGPT + organismo CentralDark
 > **Status:** CANÔNICO
@@ -10,14 +10,21 @@
 
 Este documento não cria outro Jarvis, outra SOL, outra memória, outro ledger, outra MetaLupa nem outro sistema de agentes.
 
-Precedência:
+Precedência normativa e operacional:
 
-1. `LEIA-ME-IA.md`;
-2. `AGENTS.md`;
-3. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`;
-4. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`;
-5. estado real medido e autorização vigente do SEGREDO/CHEFE;
-6. este contrato.
+1. intenção/autorização vigente do `SEGREDO/CHEFE`;
+2. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade/Constituição;
+3. `RULES.md` — regras canônicas globais;
+4. `AGENTS.md` — comportamento dos agentes sob as RULES;
+5. owner específico aplicável, incluindo permissões, proof ownership, capability routing e gates;
+6. `LEIA-ME-IA.md` — entrypoint/roteamento, não autoridade superior;
+7. estado real medido — juiz do efeito/fato observado, não substituto da autoridade humana;
+8. este contrato arquitetural.
+
+```text
+CHEFE -> SOUL -> RULES -> AGENTS -> OWNERS_APLICAVEIS
+REALIDADE = JUIZ_DO_EFEITO
+```
 
 ## 2. Identidade
 
@@ -306,6 +313,58 @@ INTENT
 Essa é a arquitetura operacional padrão para fan-out interno. Tarefa simples continua podendo saltar braços desnecessários e usar a ação mínima direta.
 
 A seção 7.1 distribui trabalho entre **escopos independentes**; esta seção governa como cada frente percebe, arbitra e entrega delta antes da caneta. As duas compartilham dedupe, ganho informacional e Writer único, sem criar workers concorrentes no mesmo escopo.
+
+### 6.2 Dois planos — autoridade e execução
+
+A CentralDark não mistura fluxo normativo com fluxo físico. Essa separação impede que provider, modelo, skill, MCP, backend de inferência ou hardware assumam autoridade por executarem trabalho.
+
+```text
+PLANO_DE_AUTORIDADE
+SEGREDO/CHEFE
+→ SOUL
+→ RULES
+→ AGENTS
+→ OWNERS_APLICAVEIS_DE_AUTORIZACAO_E_PROVA
+
+PLANO_DE_EXECUCAO
+INFERENCE_ENGINE
+→ HERMES/AGENTE
+→ CAPABILITY_REQUEST
+→ AUTHORIZATION_EXISTENTE
+→ MCP/TOOL/ROTA_AUTORIZADA
+→ OS/SERVICO/HARDWARE
+→ RESULTADO_OBSERVADO
+→ HERMES/AGENTE
+→ PROVA/CONTINUIDADE
+```
+
+Leis:
+
+```text
+AUTHORITY_FLOW_MUST_NOT_BE_INVERTED=true
+PROVIDER_IS_ADAPTER_NOT_AUTHORITY=true
+SKILL_IS_CAPABILITY_NOT_AUTHORITY=true
+MCP_IS_CAPABILITY_TRANSPORT_NOT_FIREWALL=true
+POLICY_GATE_IS_COMPOSITION_NOT_NEW_BRAIN=true
+INFERENCE_BACKEND_IS_MUTABLE_BINDING=true
+TRITON_VLLM_KYLIN_ARE_BINDINGS_NOT_IDENTITY=true
+BODY_FAILURE_DOES_NOT_EQUAL_SYSTEM_IDENTITY_FAILURE=true
+```
+
+O nome `POLICY GATE` descreve uma função composta pelos owners já existentes. Não cria segundo control plane. A decisão de autorização continua presa à intenção vigente, permissões/owners aplicáveis e prova correspondente.
+
+Falha de rota é local:
+
+```text
+ROUTE_A_FAIL
+→ DECLARE_ROUTE_A_UNAVAILABLE
+→ TRY_NEXT_AUTHORIZED_PROVEN_ROUTE
+→ IF_NONE: BLOCK_ONLY_DEPENDENT_SCOPE
+
+FAILED_MCP_ROUTE_DOES_NOT_AUTHORIZE_DIRECT_UNSCOPED_SHELL=true
+```
+
+O backend de inferência é casca mutável. Triton, vLLM, TensorRT-LLM, Kylin SDK ou outro backend entram somente quando medidos/necessários no ambiente correspondente; nenhum deles é pré-requisito constitucional.
 
 ## 7. Generalização sistêmica por composição
 
