@@ -454,6 +454,142 @@ jobs:
                 : 'promoção bloqueada em fail-closed; consultar job sanitizado',
             });
 
+  reconcile-control-routes:
+    name: 🧩 Reconciliar rotas de controle da VPS
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    env:
+      HOME: /root
+    steps:
+      - name: 🔹 Checkout exato para receita de rota
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-route-reconcile
+          fetch-depth: 1
+          submodules: false
+          persist-credentials: false
+
+      - name: 🔹 Curar SSH, Tailscale, Remote Desktop e MCP direto
+        id: routes
+        shell: bash
+        env:
+          VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+        run: |
+          set +e
+          failures=0
+          echo "RUNNER_NAME=$RUNNER_NAME"
+          echo "MACHINE_NAME=$(hostname)"
+          case "$RUNNER_NAME" in
+            centraldark-vps-[1-4]|vmi3256920|vmi3256920-centraldark) ;;
+            *) echo "VPS_RUNNER_IDENTITY=BLOCK runner=$RUNNER_NAME"; exit 81 ;;
+          esac
+
+          # Public SSH control plane: preserve current policy and repair only the intended existing key binding.
+          ssh_unit=""
+          systemctl list-unit-files ssh.service >/dev/null 2>&1 && ssh_unit="ssh.service"
+          [[ -n "$ssh_unit" ]] || { systemctl list-unit-files sshd.service >/dev/null 2>&1 && ssh_unit="sshd.service"; }
+          if [[ -n "$ssh_unit" ]]; then
+            install -d -m 700 /root/.ssh
+            touch /root/.ssh/authorized_keys
+            chmod 600 /root/.ssh/authorized_keys
+            if [[ -n "${VPS_SSH_KEY_LOVABLE:-}" ]]; then
+              keyfile="$(mktemp /tmp/centraldark-vps-key.XXXXXX)"
+              pubfile="$(mktemp /tmp/centraldark-vps-pub.XXXXXX)"
+              printf '%s\n' "$VPS_SSH_KEY_LOVABLE" > "$keyfile"
+              chmod 600 "$keyfile"
+              if ssh-keygen -y -f "$keyfile" > "$pubfile" 2>/dev/null; then
+                pub="$(cat "$pubfile")"
+                if ! grep -Fqx "$pub" /root/.ssh/authorized_keys; then
+                  printf '%s centraldark-github-vps\n' "$pub" >> /root/.ssh/authorized_keys
+                  echo "SSH_AUTHORIZED_KEY=ADDED"
+                else
+                  echo "SSH_AUTHORIZED_KEY=ALREADY_PRESENT"
+                fi
+                chmod 600 /root/.ssh/authorized_keys
+                systemctl enable --now "$ssh_unit" >/dev/null 2>&1 || failures=$((failures+1))
+                systemctl restart "$ssh_unit" >/dev/null 2>&1 || failures=$((failures+1))
+                if ssh -i "$keyfile" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=5 root@127.0.0.1 'printf SSH_KEY_AUTH=PASS' 2>/dev/null | grep -q 'SSH_KEY_AUTH=PASS'; then
+                  echo "SSH_KEY_AUTH=PASS"
+                else
+                  echo "SSH_KEY_AUTH=FAIL"
+                  failures=$((failures+1))
+                fi
+              else
+                echo "SSH_SECRET_KEY_FORMAT=FAIL"
+                failures=$((failures+1))
+              fi
+              rm -f "$keyfile" "$pubfile"
+              unset pub
+            else
+              echo "SSH_SECRET_KEY=ABSENT"
+              failures=$((failures+1))
+            fi
+            systemctl is-active --quiet "$ssh_unit" && echo "SSH_DAEMON=PASS" || { echo "SSH_DAEMON=FAIL"; failures=$((failures+1)); }
+          else
+            echo "SSH_DAEMON=UNIT_MISSING"
+            failures=$((failures+1))
+          fi
+
+          # Private spine: reuse persisted node state. No auth key is printed or recreated.
+          if systemctl list-unit-files tailscaled.service >/dev/null 2>&1; then
+            systemctl enable --now tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
+            systemctl restart tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
+            sleep 4
+            tailscale set --ssh >/dev/null 2>&1 || true
+            ts_online="$(tailscale status --json 2>/dev/null | jq -r '.Self.Online // false' 2>/dev/null)"
+            ts_ips="$(tailscale status --json 2>/dev/null | jq -r '(.Self.TailscaleIPs // []) | join(",")' 2>/dev/null)"
+            echo "TAILSCALE_SELF_ONLINE=${ts_online:-false}"
+            echo "TAILSCALE_IPS=${ts_ips:-}"
+            [[ "$ts_online" == "true" ]] || failures=$((failures+1))
+          else
+            echo "TAILSCALE_DAEMON=UNIT_MISSING"
+            failures=$((failures+1))
+          fi
+
+          # Interactive fallback: restart the already-installed canonical Remote Desktop services.
+          rdc_ok=0
+          for unit in centraldark-desktop-commander.service centraldark-desktop-commander-conta2.service; do
+            if systemctl list-unit-files "$unit" >/dev/null 2>&1; then
+              systemctl enable --now "$unit" >/dev/null 2>&1 || true
+              systemctl restart "$unit" >/dev/null 2>&1 || true
+              sleep 2
+              if systemctl is-active --quiet "$unit"; then
+                echo "RDC_SERVICE_PASS=$unit"
+                rdc_ok=$((rdc_ok+1))
+              else
+                echo "RDC_SERVICE_FAIL=$unit"
+              fi
+            else
+              echo "RDC_SERVICE_MISSING=$unit"
+            fi
+          done
+          [[ "$rdc_ok" -ge 1 ]] || failures=$((failures+1))
+
+          ss -ltn 'sport = :22' | grep -q LISTEN && echo "PORT_22=PASS" || { echo "PORT_22=FAIL"; failures=$((failures+1)); }
+          curl -fsS --max-time 3 http://127.0.0.1:9100/health | grep -q '"ok":true'             && echo "MCP_9100=PASS" || { echo "MCP_9100=FAIL"; failures=$((failures+1)); }
+
+          echo "ROUTE_RECONCILE_FAILURES=$failures"
+          [[ $failures -eq 0 ]]
+
+      - name: 🔹 Publicar estado sanitizado das rotas
+        if: always()
+        uses: actions/github-script@v9
+        env:
+          ROUTE_OUTCOME: ${{ steps.routes.outcome }}
+        with:
+          script: |
+            const ok = process.env.ROUTE_OUTCOME === 'success';
+            await github.rest.repos.createCommitStatus({
+              ...context.repo,
+              sha: context.sha,
+              state: ok ? 'success' : 'failure',
+              context: 'centraldark/vps-control-routes',
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+              description: ok ? 'SSH + Tailscale + RDC + MCP reconciliados' : 'uma ou mais rotas seguem degradadas',
+            });
+
   vps-housekeeping:
     name: 🧩 VPS Housekeeping (varredura lixo/ouro, report-only)
     if: github.repository == 'ServerVpss/CentralDark'
