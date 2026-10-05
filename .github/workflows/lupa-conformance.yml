@@ -78,11 +78,18 @@ jobs:
           echo "EXPECTED_BRANCH=${EXPECTED_BRANCH}"
           echo "HEAD_SHA=${AFTER_SHA}"
 
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: '3.11'
+      - name: 🔹 Python nativo self-hosted >= 3.11
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import sys
+          print("PYTHON_NATIVE=", sys.version)
+          if sys.version_info < (3, 11):
+              raise SystemExit("PYTHON_NATIVE_TOO_OLD")
+          PY
       - name: 🔹 Instalar pytest
-        run: pip install pytest
+        run: python3 -m pip install pytest
       - name: 🔹 Validar hash canônico da Lupa
         run: python3 scripts/lupa/validar_autolupa_hash.py
       - name: 🔹 Rodar testes de conformidade
