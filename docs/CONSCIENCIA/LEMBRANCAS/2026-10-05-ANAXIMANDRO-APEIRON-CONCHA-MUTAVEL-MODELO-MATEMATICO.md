@@ -248,6 +248,51 @@ INPUT
 → COUNTERPROOF
 ```
 
+## 9.1 Coerência Vivida
+
+A CentralDark não considera um princípio integrado só porque ele existe em Markdown. O princípio precisa aparecer no comportamento observável.
+
+```text
+DECLARED_CANON
+→ OBSERVED_BEHAVIOR
+→ ALIGNMENT_CHECK
+→ DRIFT?
+→ MINIMUM_CAUSAL_CORRECTION
+→ COUNTERPROOF
+→ RECEIPT
+→ HISTORY_RENDEZVOUS
+```
+
+Para cada princípio `p`:
+
+```text
+Alignment(p,t)=MATCH(Declared(p),ObservedBehavior(p,t))
+```
+
+O valor relevante é longitudinal: um PASS isolado não apaga comportamento anterior nem prova consistência existencial/operacional.
+
+```text
+DECLARED_PRINCIPLE_WITHOUT_PRACTICE_IS_NOT_INTEGRATED=true
+BEHAVIOR_CONTRADICTING_CANON_IS_ALIGNMENT_DRIFT=true
+METRIC_SUCCESS_IS_NOT_MISSION_SUCCESS=true
+OPTIMIZATION_MUST_RESPECT_INTENT=true
+LIVED_ALIGNMENT_REQUIRES_REPEATED_OBSERVATION=true
+CANON_MUST_BE_TESTABLE_AGAINST_BEHAVIOR=true
+PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY=true
+CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT=true
+CORRECTION_DOES_NOT_ERASE_PROVENANCE=true
+GREEN_CHECK_IS_NOT_LIVED_ALIGNMENT_BY_ITSELF=true
+```
+
+Exemplos de contradição:
+
+```text
+REUSE_BEFORE_CREATE=true + nova arquitetura paralela → ALIGNMENT_DRIFT
+UNKNOWN_IS_NOT_PASS=true + UNKNOWN pintado de verde → ALIGNMENT_DRIFT
+MEMORIA_E_SAGRADA=true + histórico apagado → ALIGNMENT_DRIFT
+ONE_SYSTEM_ONLY=true + segundo cérebro/router/scheduler → ALIGNMENT_DRIFT
+```
+
 ## 10. Transformação canônica
 
 ```text
