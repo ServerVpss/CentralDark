@@ -414,6 +414,60 @@ MIRROR_IS_SECOND_OWNER=false
 
 ---
 
+## Separação canônica de planos — autoridade ≠ execução
+
+A CentralDark separa o que **governa** do que **executa**. Modelo, provider, skill, MCP, backend de inferência e hardware nunca sobem a cadeia normativa só porque executam trabalho.
+
+```text
+AUTHORITY_PLANE:
+CHEFE_INTENT
+→ SOUL
+→ RULES
+→ AGENTS
+→ AUTHORIZATION_POLICY_EXISTING_OWNERS
+
+EXECUTION_PLANE:
+INFERENCE_ENGINE
+→ HERMES_OR_AGENT
+→ CAPABILITY_REQUEST
+→ AUTHORIZED_ROUTE
+→ MCP_OR_TOOL
+→ OS_SERVICE_OR_HARDWARE
+→ OBSERVED_RESULT
+→ HERMES_OR_AGENT
+```
+
+```text
+AUTHORITY_FLOW_MUST_NOT_BE_INVERTED=true
+EXECUTION_RESULT_FEEDS_REALITY_BUT_DOES_NOT_REWRITE_RULES=true
+PROVIDER_ADAPTER_IS_NOT_AUTHORITY=true
+SKILL_IS_CAPABILITY_NOT_AUTHORITY=true
+INFERENCE_IS_CAPABILITY_NOT_AUTHORITY=true
+MCP_IS_CAPABILITY_TRANSPORT_NOT_POLICY_AUTHORITY=true
+POLICY_GATE_IS_COMPOSITION_OF_EXISTING_AUTHORITY_OWNERS=true
+NO_NEW_POLICY_BRAIN=true
+BODY_FAILURE_DOES_NOT_EQUAL_IDENTITY_FAILURE=true
+INFERENCE_BINDING_IS_MUTABLE=true
+TRITON_VLLM_KYLIN_ARE_BINDINGS_NOT_CONSTITUTION=true
+```
+
+Autorização e confirmação reutilizam os owners já existentes de permissões, proof ownership, capability routing e gates aplicáveis. `POLICY GATE` é uma visão funcional dessa composição; não é novo cérebro, nova autoridade nem owner paralelo.
+
+Falha de uma rota continua local:
+
+```text
+MCP_ROUTE_DOWN
+→ ROUTE_UNAVAILABLE
+→ TRY_NEXT_AUTHORIZED_PROVEN_ROUTE
+→ IF_NONE: BLOCK_AFFECTED_SCOPE_ONLY
+
+MCP_ROUTE_FAILURE_DOES_NOT_AUTHORIZE_UNSCOPED_SHELL=true
+NO_AUTHORIZED_ROUTE=BLOCKED_AFFECTED_SCOPE
+```
+
+Uma capacidade pode desaparecer sem apagar identidade, regras ou memória. A CentralDark degrada capacidade; não inventa autoridade alternativa.
+
+---
 ## Rotas nativas e exemplo provado
 
 O caso Hermes + Kylin local é exemplo de evolução correta:
