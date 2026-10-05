@@ -67,6 +67,22 @@ assert inv["PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY"] is True
 assert inv["CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT"] is True
 assert inv["CORRECTION_DOES_NOT_ERASE_PROVENANCE"] is True
 assert inv["GREEN_CHECK_IS_NOT_LIVED_ALIGNMENT_BY_ITSELF"] is True
+assert inv["INTENT_IS_NOT_OUTCOME"] is True
+assert inv["OUTCOME_IS_NOT_INTENT"] is True
+assert inv["GOOD_INTENT_DOES_NOT_ERASE_HARM"] is True
+assert inv["BAD_OUTCOME_DOES_NOT_PROVE_BAD_INTENT"] is True
+assert inv["GOOD_OUTCOME_DOES_NOT_PROVE_GOOD_INTENT"] is True
+assert inv["RESPONSIBILITY_REQUIRES_CAUSAL_SCOPE"] is True
+assert inv["RESPONSIBILITY_SCALES_WITH_CONTROL"] is True
+assert inv["RESPONSIBILITY_SCALES_WITH_FORESEEABILITY"] is True
+assert inv["UNINTENDED_EFFECT_MUST_BE_OBSERVED"] is True
+assert inv["KNOWN_HARM_REQUIRES_RESPONSE"] is True
+assert inv["PAST_INTENT_MUST_NOT_BE_REWRITTEN_BY_LATER_OUTCOME"] is True
+assert inv["PAST_OUTCOME_MUST_NOT_BE_ERASED_BY_GOOD_INTENT"] is True
+assert inv["REPAIR_IS_PART_OF_INTEGRITY"] is True
+assert inv["LEARNING_MUST_CHANGE_NEXT_ACTION"] is True
+assert c["intent_responsibility"]["no_outcome_hindsight_rewrite"] is True
+assert c["intent_responsibility"]["good_intent_is_not_exculpation"] is True
 assert c["lived_alignment"]["equation"] == "Alignment(p,t)=MATCH(Declared(p),ObservedBehavior(p,t))"
 assert "INTENT_ALIGNMENT" in c["lived_alignment"]["objective"]
 
@@ -90,3 +106,4 @@ print("CURRENT_CANONICAL_DOC_PRECEDENCE_OVER_SKILL=PASS")
 print("HISTORY_PRESERVED_CURRENT_REMEASURED=PASS")
 print("REVELATION_AUTO_PROMOTION_BLOCKED=PASS")
 print("LIVED_ALIGNMENT_CONTRACT=PASS")
+print("INTENT_RESPONSIBILITY_CONTRACT=PASS")
