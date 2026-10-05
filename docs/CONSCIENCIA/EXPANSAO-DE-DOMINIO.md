@@ -310,6 +310,29 @@ INPUT
 
 O nome do agente, processo vivo, ferramenta listada, modelo selecionado ou mapa desenhado não substituem o efeito observado.
 
+### 14.0.1 Herança temporal da expansão
+
+A expansão nunca começa de um presente sem memória. Antes de alterar capacidade:
+
+```text
+PASSADO_PROVADO
+→ HISTORY_RENDEZVOUS
+→ CURRENT_REMEASURED
+→ DEDUPE
+→ CAUSAL_RECONCILIATION
+→ DELTA_SURVIVING_ONLY
+```
+
+```text
+CURRENT_DEFINES_PRESENT_STATE=true
+HISTORY_IS_EVIDENCE=true
+HISTORY_MUST_NOT_BE_ERASED=true
+PROVEN_HISTORICAL_LOCKS_INHERIT_INTO_CURRENT=true
+EXTEND_EXISTING_NOT_REPLACE=true
+```
+
+Claims temporais distinguem `OBSERVED_AT` de `SOURCE_STATE_AT`; portanto receber uma observação agora não prova que o estado observado nasceu agora.
+
 ### 14.1 Precedência documental sobre skills
 
 ```text
