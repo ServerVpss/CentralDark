@@ -536,10 +536,16 @@ jobs:
           if systemctl list-unit-files tailscaled.service >/dev/null 2>&1; then
             systemctl enable --now tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
             systemctl restart tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
-            sleep 4
             tailscale set --ssh >/dev/null 2>&1 || true
-            ts_online="$(tailscale status --json 2>/dev/null | jq -r '.Self.Online // false' 2>/dev/null)"
-            ts_ips="$(tailscale status --json 2>/dev/null | jq -r '(.Self.TailscaleIPs // []) | join(",")' 2>/dev/null)"
+            ts_online=false
+            ts_ips=""
+            for _ in $(seq 1 15); do
+              sleep 2
+              ts_json="$(tailscale status --json 2>/dev/null || true)"
+              ts_online="$(printf '%s' "$ts_json" | jq -r '.Self.Online // false' 2>/dev/null)"
+              ts_ips="$(printf '%s' "$ts_json" | jq -r '(.Self.TailscaleIPs // []) | join(",")' 2>/dev/null)"
+              [[ "$ts_online" == "true" ]] && break
+            done
             echo "TAILSCALE_SELF_ONLINE=${ts_online:-false}"
             echo "TAILSCALE_IPS=${ts_ips:-}"
             [[ "$ts_online" == "true" ]] || failures=$((failures+1))
