@@ -67,7 +67,21 @@
     "PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY": true,
     "CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT": true,
     "CORRECTION_DOES_NOT_ERASE_PROVENANCE": true,
-    "GREEN_CHECK_IS_NOT_LIVED_ALIGNMENT_BY_ITSELF": true
+    "GREEN_CHECK_IS_NOT_LIVED_ALIGNMENT_BY_ITSELF": true,
+    "INTENT_IS_NOT_OUTCOME": true,
+    "OUTCOME_IS_NOT_INTENT": true,
+    "GOOD_INTENT_DOES_NOT_ERASE_HARM": true,
+    "BAD_OUTCOME_DOES_NOT_PROVE_BAD_INTENT": true,
+    "GOOD_OUTCOME_DOES_NOT_PROVE_GOOD_INTENT": true,
+    "RESPONSIBILITY_REQUIRES_CAUSAL_SCOPE": true,
+    "RESPONSIBILITY_SCALES_WITH_CONTROL": true,
+    "RESPONSIBILITY_SCALES_WITH_FORESEEABILITY": true,
+    "UNINTENDED_EFFECT_MUST_BE_OBSERVED": true,
+    "KNOWN_HARM_REQUIRES_RESPONSE": true,
+    "PAST_INTENT_MUST_NOT_BE_REWRITTEN_BY_LATER_OUTCOME": true,
+    "PAST_OUTCOME_MUST_NOT_BE_ERASED_BY_GOOD_INTENT": true,
+    "REPAIR_IS_PART_OF_INTEGRITY": true,
+    "LEARNING_MUST_CHANGE_NEXT_ACTION": true
   },
   "sequence": [
     "RECOVER_CURRENT_INTENT",
@@ -101,7 +115,12 @@
     "declared canon must be comparable with observed behavior",
     "green checks alone cannot prove lived alignment",
     "current correction cannot erase provenance of past alignment drift",
-    "optimization metrics cannot override CHEFE intent"
+    "optimization metrics cannot override CHEFE intent",
+    "bad outcome alone cannot rewrite a previously evidenced intended effect",
+    "good intent cannot erase an observed harmful effect",
+    "responsibility claim requires causal scope control and foreseeability evidence",
+    "known unintended harm must produce response repair or explicit blocker",
+    "learning claim must change or constrain the next action"
   ],
   "security_boundary": [
     "NO_SECRET_VALUES_IN_GIT",
@@ -226,5 +245,31 @@
       "MEMORY_IS_SACRED declared while relevant proven history is erased",
       "ONE_SYSTEM_ONLY declared while a second brain router scheduler or memory authority is created"
     ]
+  },
+  "intent_responsibility": {
+    "model": "R_t=(I_t,D_t,A_t,O_t,F_t,C_t)",
+    "fields": {
+      "I_t": "intended_effect",
+      "D_t": "decision_basis_at_time",
+      "A_t": "action_taken",
+      "O_t": "observed_effect",
+      "F_t": "foreseeability_at_decision_time",
+      "C_t": "causal_control_available"
+    },
+    "required_trace": [
+      "INTENDED_EFFECT",
+      "DECISION_BASIS",
+      "ACTION_TAKEN",
+      "OBSERVED_EFFECT",
+      "UNINTENDED_EFFECTS",
+      "FORESEEABILITY",
+      "CONTROL_AVAILABLE",
+      "REMEDIATION",
+      "LEARNING",
+      "NEXT_ACTION"
+    ],
+    "responsibility_rule": "ASSESS_BY_CAUSAL_SCOPE_CONTROL_AND_FORESEEABILITY",
+    "no_outcome_hindsight_rewrite": true,
+    "good_intent_is_not_exculpation": true
   }
 }
