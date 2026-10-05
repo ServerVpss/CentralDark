@@ -4,20 +4,24 @@ AI_UNIVERSAL_ENTRYPOINT=LEIA-ME-IA.md
 AI_UNIVERSAL_ENTRYPOINT_CONTRACT=docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 CENTRALDARK_AI_BOOT=CENTRALDARK_AI_BOOT.yaml
 
-## 🪬 Vínculo constitucional — RULES ↔ SOUL
+## 🪬 Contrato de comportamento — AGENTS sob RULES
 
 ```text
-RULES_OWNER=AGENTS.md
 SOUL_OWNER=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+RULES_OWNER=RULES.md
+AGENTS_OWNER=AGENTS.md
+AGENTS_ROLE=AGENT_BEHAVIOR_AND_EXECUTION_CONTRACT
+AGENTS_INHERIT_RULES=true
+AGENTS_POINTS_TO_RULES=true
+RULES_POINTS_TO_AGENTS=true
 RULES_INHERIT_SOUL=true
-RULES_POINTS_TO_SOUL=true
-SOUL_POINTS_TO_RULES=true
 NO_SKILL_ABOVE_CENTRALDARK=true
+AGENTS_LAST_UPDATED=2026-10-05
 RULES_LAST_UPDATED=2026-10-05
 SOUL_LAST_UPDATED=2026-10-05
 ```
 
-`AGENTS.md` é a camada de regras operacionais globais. `SOUL-SOL.md` é a Constituição/identidade canônica. As RULES executam e roteiam a SOUL; não a substituem. Em conflito, intenção vigente do CHEFE + SOUL canônica + REALIDADE prevalecem, e skills permanecem capacidades subordinadas.
+`RULES.md` contém as regras operacionais globais canônicas. `AGENTS.md` define como agentes executam e se comportam sob essas regras. `SOUL-SOL.md` permanece Constituição/identidade. Em conflito: intenção vigente do CHEFE → SOUL → RULES → comportamento AGENTS; skills continuam capacidades subordinadas.
 
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
@@ -87,6 +91,8 @@ REUSE_BEFORE_CREATE_REQUIRED=SIM
 MEASURE_BEFORE_CREATION_REQUIRED=SIM
 MEASURE_BEFORE_CREATION_FORMULA="REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE"
 REALITY_IS_JUDGE=true
+RULES_REQUIRED=SIM
+RULES_PATH=RULES.md
 SOUL_REQUIRED=SIM
 SOUL_PATH=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 SOL_FREQUENCY_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/FREQUENCIAS-OPERACIONAIS-SOL.md
