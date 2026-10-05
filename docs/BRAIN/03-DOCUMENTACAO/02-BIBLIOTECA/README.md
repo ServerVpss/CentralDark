@@ -1,8 +1,15 @@
 ---
 title: "Biblioteca Cognitiva — CentralDark"
-status: "OPERATIONAL_IN_PR"
-owner: "docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md"
+status: CANONICO
+date: 2026-10-05
+updated: 2026-10-05T02:31:00-03:00
 tags: ["brain", "biblioteca", "fontes", "cognicao", "skills", "grafo"]
+category: BRAIN_LIBRARY
+sensitivity: INTERNAL
+source: "ServerVpss/CentralDark + canon autorizado pelo SEGREDO/CHEFE"
+source_class: INTERNAL
+source_rule: "EXTERNAL_SOURCE_IS_CANDIDATE_NOT_AUTHORITY; HISTORY_PRESERVED; CURRENT_REMEASURED"
+owner: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md"
 ---
 
 # 📚 Biblioteca Cognitiva — CentralDark
