@@ -185,7 +185,11 @@
     "plan_is_execution": false,
     "compiled_route_is_authorization": false,
     "apply_requires_existing_authority": true,
-    "human_authority": "SEGREDO/CHEFE"
+    "human_authority": "SEGREDO/CHEFE",
+    "current_chefe_canonical_docs_precede_skills": true,
+    "skill_conflict_with_current_canonical_doc": "SKILL_YIELDS",
+    "skill_is_capability_not_authority": true,
+    "historical_doc_is_not_current_canonical_doc": true
   },
   "tick": {
     "private_chain_of_thought_required": false,
@@ -215,7 +219,11 @@
     "RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY",
     "SSH_AUTH_IS_NOT_HOSTKEY_TRUST",
     "QUEUED_IS_NOT_RUNNER_ASSIGNMENT",
-    "CHANGED_BYTES_REQUIRE_NEW_SHA256"
+    "CHANGED_BYTES_REQUIRE_NEW_SHA256",
+    "CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS",
+    "SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC_SKILL_YIELDS",
+    "SKILL_IS_CAPABILITY_NOT_AUTHORITY",
+    "HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC"
   ],
   "authority_normalize": {
     "enabled": true,
