@@ -441,48 +441,31 @@ jobs:
           set +e
           failures=0
           echo "ROUTE_RECONCILE_HOST=$(hostname)"
-          if [[ "$(hostname)" != "vmi3256920" ]]; then
-            echo "ROUTE_RECONCILE_WRONG_HOST"
-            exit 81
-          fi
+          [[ "$(hostname)" == "vmi3256920" ]] || { echo "ROUTE_RECONCILE_WRONG_HOST"; exit 81; }
 
-          # SSH control plane: preserve config; only ensure the existing daemon is alive.
           ssh_unit=""
-          if systemctl list-unit-files ssh.service >/dev/null 2>&1; then ssh_unit="ssh.service"; fi
-          if [[ -z "$ssh_unit" ]] && systemctl list-unit-files sshd.service >/dev/null 2>&1; then ssh_unit="sshd.service"; fi
+          systemctl list-unit-files ssh.service >/dev/null 2>&1 && ssh_unit="ssh.service"
+          [[ -n "$ssh_unit" ]] || { systemctl list-unit-files sshd.service >/dev/null 2>&1 && ssh_unit="sshd.service"; }
           if [[ -n "$ssh_unit" ]]; then
             systemctl enable --now "$ssh_unit" >/dev/null 2>&1 || failures=$((failures+1))
             systemctl restart "$ssh_unit" >/dev/null 2>&1 || failures=$((failures+1))
-            systemctl is-active --quiet "$ssh_unit" || { echo "SSH_DAEMON=FAIL"; failures=$((failures+1)); }
+            systemctl is-active --quiet "$ssh_unit" && echo "SSH_DAEMON=PASS" || { echo "SSH_DAEMON=FAIL"; failures=$((failures+1)); }
           else
             echo "SSH_DAEMON=UNIT_MISSING"
             failures=$((failures+1))
           fi
 
-          # Private spine: reuse the persisted Tailscale node identity, never print credentials.
           if systemctl list-unit-files tailscaled.service >/dev/null 2>&1; then
             systemctl enable --now tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
             systemctl restart tailscaled.service >/dev/null 2>&1 || failures=$((failures+1))
             sleep 3
             tailscale set --ssh >/dev/null 2>&1 || true
             if tailscale status --json >/tmp/centraldark-tailscale-route.json 2>/dev/null; then
-              python3 - <<'PY'
-import json
-p="/tmp/centraldark-tailscale-route.json"
-try:
-    d=json.load(open(p))
-    self=d.get("Self") or {}
-    online=self.get("Online")
-    ips=self.get("TailscaleIPs") or []
-    print("TAILSCALE_SELF_ONLINE="+("true" if online else "false"))
-    print("TAILSCALE_IPS="+",".join(ips))
-    if not online:
-        raise SystemExit(2)
-except Exception:
-    raise SystemExit(2)
-PY
-              rc=$?
-              [[ $rc -eq 0 ]] || failures=$((failures+1))
+              online="$(jq -r '.Self.Online // false' /tmp/centraldark-tailscale-route.json 2>/dev/null)"
+              ips="$(jq -r '(.Self.TailscaleIPs // []) | join(",")' /tmp/centraldark-tailscale-route.json 2>/dev/null)"
+              echo "TAILSCALE_SELF_ONLINE=$online"
+              echo "TAILSCALE_IPS=$ips"
+              [[ "$online" == "true" ]] || failures=$((failures+1))
             else
               echo "TAILSCALE_STATUS=FAIL"
               failures=$((failures+1))
@@ -493,17 +476,16 @@ PY
             failures=$((failures+1))
           fi
 
-          # Interactive/control fallback: reuse the existing canonical multi-account owner.
           ROUTE_SRC="$GITHUB_WORKSPACE/.ci-operational-guards"
           if [[ -x "$ROUTE_SRC/scripts/vps/deploy-desktop-commander-multi-account.sh" ]]; then
-            CENTRALDARK_ROOT=/root/CentralDark SOURCE_HEAD="$TARGET_SHA"               bash "$ROUTE_SRC/scripts/vps/deploy-desktop-commander-multi-account.sh" "$ROUTE_SRC"               >/tmp/centraldark-rdc-reconcile.log 2>&1
+            CENTRALDARK_ROOT=/root/CentralDark SOURCE_HEAD="$TARGET_SHA" bash "$ROUTE_SRC/scripts/vps/deploy-desktop-commander-multi-account.sh" "$ROUTE_SRC" >/tmp/centraldark-rdc-reconcile.log 2>&1
             rc=$?
-            if [[ $rc -ne 0 ]]; then
+            if [[ $rc -eq 0 ]]; then
+              echo "REMOTE_DESKTOP_COMMANDER=PASS"
+            else
               echo "REMOTE_DESKTOP_COMMANDER=FAIL rc=$rc"
               tail -n 30 /tmp/centraldark-rdc-reconcile.log | sed -E 's/(token|secret|password|key)=[^[:space:]]+/\1=[REDACTED]/Ig'
               failures=$((failures+1))
-            else
-              echo "REMOTE_DESKTOP_COMMANDER=PASS"
             fi
             rm -f /tmp/centraldark-rdc-reconcile.log
           else
@@ -512,7 +494,7 @@ PY
           fi
 
           ss -ltn 'sport = :22' | grep -q LISTEN && echo "PORT_22=PASS" || { echo "PORT_22=FAIL"; failures=$((failures+1)); }
-          curl -fsS --max-time 3 http://127.0.0.1:9100/health             | jq -e '.ok == true and .service == "centraldark-native-mcp-http"' >/dev/null             && echo "MCP_9100=PASS" || { echo "MCP_9100=FAIL"; failures=$((failures+1)); }
+          curl -fsS --max-time 3 http://127.0.0.1:9100/health | jq -e '.ok == true and .service == "centraldark-native-mcp-http"' >/dev/null             && echo "MCP_9100=PASS" || { echo "MCP_9100=FAIL"; failures=$((failures+1)); }
 
           echo "ROUTE_RECONCILE_FAILURES=$failures"
           [[ $failures -eq 0 ]]
