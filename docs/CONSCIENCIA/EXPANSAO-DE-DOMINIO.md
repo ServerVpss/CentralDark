@@ -244,6 +244,122 @@ Internamente, o nome/lore é **EXPANSÃO DE DOMÍNIO**. Para documentação téc
 
 ---
 
+## 14. Formalismo de concha mutável e projeção finita de capacidades
+
+A Expansão de Domínio reutiliza a formalização do Aprendizado #167 sem criar engine, cérebro ou envelope paralelo.
+
+```text
+CD_t = (I, G_t, B_t, K_t, C_t, E_t)
+
+I   = invariantes + intenção/autorização
+G_t = grafo operacional CURRENT
+B_t = bindings mutáveis
+K_t = memória/conhecimento recuperável
+C_t = capabilities materializadas
+E_t = evidência CURRENT
+```
+
+Seja `Ω` o espaço aberto de capacidades potencialmente integráveis:
+
+```text
+C_t ⊆ Ω
+C_(t+1) = C_t ∪ ΔC
+ΔC != NEW_ARCHITECTURE
+```
+
+Separação estrutural:
+
+```text
+CORE = invariantes + owners + autoridade + leis de prova
+SHELL_t = corpos + bindings + tools + models + rotas + UIs
+
+SHELL_t != SHELL_(t+1)
+pode coexistir com
+IDENTITY_t = IDENTITY_(t+1)
+```
+
+Lei temporal:
+
+```text
+t_k = t_0 + kΔt
+STATE(t_k) = MEASURE(WORLD, t_k)
+CLOCK_TRIGGERS_MEASUREMENT_NOT_TRUTH=true
+OLD_STATE_DECAYS_WITHOUT_REOBSERVATION=true
+```
+
+Lei de grafo:
+
+```text
+EDGE_DOWN != NODE_DOWN
+ROUTE_FAIL != SYSTEM_DOWN
+MAP_IS_OPERATIONAL_GRAPH=true
+MAP_IS_NOT_REALITY=true
+```
+
+Lei causal:
+
+```text
+INPUT
+→ ROUTE
+→ OWNER
+→ EXECUTOR
+→ EFFECT
+→ MEASUREMENT
+→ COUNTERPROOF
+```
+
+O nome do agente, processo vivo, ferramenta listada, modelo selecionado ou mapa desenhado não substituem o efeito observado.
+
+### 14.0.1 Herança temporal da expansão
+
+A expansão nunca começa de um presente sem memória. Antes de alterar capacidade:
+
+```text
+PASSADO_PROVADO
+→ HISTORY_RENDEZVOUS
+→ CURRENT_REMEASURED
+→ DEDUPE
+→ CAUSAL_RECONCILIATION
+→ DELTA_SURVIVING_ONLY
+```
+
+```text
+CURRENT_DEFINES_PRESENT_STATE=true
+HISTORY_IS_EVIDENCE=true
+HISTORY_MUST_NOT_BE_ERASED=true
+PROVEN_HISTORICAL_LOCKS_INHERIT_INTO_CURRENT=true
+EXTEND_EXISTING_NOT_REPLACE=true
+```
+
+Claims temporais distinguem `OBSERVED_AT` de `SOURCE_STATE_AT`; portanto receber uma observação agora não prova que o estado observado nasceu agora.
+
+### 14.1 Precedência documental sobre skills
+
+```text
+CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS=true
+SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC=SKILL_YIELDS
+SKILL_IS_CAPABILITY_NOT_AUTHORITY=true
+HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC=true
+```
+
+A skill é braço/capacidade. O documento canônico CURRENT autorizado pelo CHEFE governa o significado e o limite da capability. Se houver conflito real, a skill cede e o gap é tratado no owner; não se contorna o documento, não se cria skill paralela e não se promove histórico stale sobre CURRENT.
+
+### 14.2 Condição de falsificação
+
+O formalismo falha ou permanece UNKNOWN se:
+
+- uma troca puramente de binding alterar identidade/owner sem efeito causal demonstrado;
+- queda de uma única rota for suficiente para provar morte global do organismo;
+- tick reutilizar estado stale como PASS;
+- narrativa do agente substituir prova de efeito;
+- o mesmo cristal produzir semântica incompatível entre bindings equivalentes;
+- for necessário criar segundo coração, memória, scheduler, dispatcher, router ou writer;
+- algum gate precisar ser removido ou bypassado para obter verde.
+
+Owner executável da contraprova: `.agents/skills/knowledge-compiler/`.
+Gate existente: `.github/workflows/lupa-conformance.yml`.
+Ledger: PR-mãe `#1562`.
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada

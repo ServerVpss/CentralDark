@@ -1,4 +1,4 @@
-# Receipt — sessão completa CentralDark 2026-09-30 → 2026-10-01
+# 🧾 Receipt — sessão completa CentralDark 2026-09-30 → 2026-10-01
 
 ```text
 PR_MOTHER=#1562
