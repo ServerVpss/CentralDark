@@ -88,14 +88,24 @@ jobs:
           if sys.version_info < (3, 11):
               raise SystemExit("PYTHON_NATIVE_TOO_OLD")
           PY
-      - name: 🔹 Instalar pytest
-        run: python3 -m pip install pytest
+      - name: 🔹 Venv efêmero do gate + pytest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv .venv-ci
+          .venv-ci/bin/python -m pip install --disable-pip-version-check pytest
+          echo "$PWD/.venv-ci/bin" >> "$GITHUB_PATH"
+          .venv-ci/bin/python - <<'PY'
+          import sys, pytest
+          print("VENV_PYTHON=", sys.version)
+          print("PYTEST_VERSION=", pytest.__version__)
+          PY
       - name: 🔹 Validar hash canônico da Lupa
         run: python3 scripts/lupa/validar_autolupa_hash.py
       - name: 🔹 Rodar testes de conformidade
         env:
           AUTOLUPA_REPORT: .agents/skills/meta-lupa/testes/fixtures/exemplo_ok.md
-        run: pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
+        run: python3 -m pytest .agents/skills/meta-lupa/testes/test_autolupa_conformance.py -v
       - name: 🔹 Motor determinístico
         working-directory: .agents/skills/meta-lupa
         run: python3 testes/test_lupa.py
@@ -166,7 +176,7 @@ jobs:
           python3 scripts/evolution_series_gate.py --self-test
           python3 scripts/agi_claim_gate.py --self-test
           python3 scripts/evolution_series_gate.py --scan references --repo-root ../../..
-          pytest testes/test_evolution_gate.py -v
+          python3 -m pytest testes/test_evolution_gate.py -v
       - name: 🔹 Knowledge Compiler — FORJA rigorosa, runtime FLASH
         shell: bash
         run: |
@@ -186,7 +196,7 @@ jobs:
         working-directory: .agents/skills/meta-lupa
         run: python3 scripts/percentual_evidencial.py self-test
       - name: 🔹 Validador e promotor do OPERATION_RECEIPT
-        run: pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
+        run: python3 -m pytest .agents/skills/meta-lupa/testes/test_operation_receipt_validator.py -v
       - name: 🔹 Guardrail do selo de ponto fixo
         working-directory: .agents/skills/meta-lupa
         run: python3 guardrails/validar_selo_ponto_fixo.py
