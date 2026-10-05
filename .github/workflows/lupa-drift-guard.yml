@@ -101,7 +101,13 @@ jobs:
         run: |
           python3 scripts/lupa/inventario_skills.py > /tmp/inv.json
           echo "---"
-          jq '.total, [.skills[].nome]' /tmp/inv.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('/tmp/inv.json').read_text(encoding='utf-8'))
+          print(data.get('total'))
+          print([item.get('nome') for item in data.get('skills', [])])
+          PY
 
       - name: 🔹 Detectar drift (skills duplicadas + menções ativas em doc)
         run: python3 scripts/lupa/detectar_drift.py
