@@ -504,7 +504,7 @@ function validate(contract, extension, contractText, portaText, gateText, writer
 
 
 
-  const markerCount = (contractText.match(/"marker"\\s*:\\s*"GLOBAL_CONTINUITY_NON_BLOCKING"/g) || []).length;
+  const markerCount = (contractText.match(/"marker"\s*:\s*"GLOBAL_CONTINUITY_NON_BLOCKING"/g) || []).length;
   expect(markerCount === 1, `CONTINUIDADE_GLOBAL_OWNER_COUNT:${markerCount}`);
   expect(gateText.includes("node scripts/lupa/validar-continuidade-global.mjs"), "CONTINUIDADE_GLOBAL_GATE_NOT_REACHABLE");
   expect(gateText.includes("node scripts/lupa/validar-porta-de-entrada.mjs"), "CONTINUIDADE_GLOBAL_CANONICAL_CONSUMER_NOT_REACHABLE");
