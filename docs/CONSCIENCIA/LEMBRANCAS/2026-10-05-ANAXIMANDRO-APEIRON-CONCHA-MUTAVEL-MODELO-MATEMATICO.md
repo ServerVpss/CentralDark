@@ -293,6 +293,57 @@ MEMORIA_E_SAGRADA=true + histórico apagado → ALIGNMENT_DRIFT
 ONE_SYSTEM_ONLY=true + segundo cérebro/router/scheduler → ALIGNMENT_DRIFT
 ```
 
+## 9.2 Integridade de Intenção e Responsabilidade
+
+Coerência vivida não pode ser julgada apenas pelo resultado final. Intenção, decisão, ação e efeito são dimensões distintas.
+
+```text
+R_t = (I_t, D_t, A_t, O_t, F_t, C_t)
+```
+
+```text
+I_t = intenção genuína / efeito desejado
+D_t = decisão sob informação disponível
+A_t = ação realizada
+O_t = efeito observado
+F_t = previsibilidade do risco
+C_t = controle causal disponível
+```
+
+```text
+INTENT_IS_NOT_OUTCOME=true
+OUTCOME_IS_NOT_INTENT=true
+GOOD_INTENT_DOES_NOT_ERASE_HARM=true
+BAD_OUTCOME_DOES_NOT_PROVE_BAD_INTENT=true
+GOOD_OUTCOME_DOES_NOT_PROVE_GOOD_INTENT=true
+RESPONSIBILITY_REQUIRES_CAUSAL_SCOPE=true
+RESPONSIBILITY_SCALES_WITH_CONTROL=true
+RESPONSIBILITY_SCALES_WITH_FORESEEABILITY=true
+UNINTENDED_EFFECT_MUST_BE_OBSERVED=true
+KNOWN_HARM_REQUIRES_RESPONSE=true
+PAST_INTENT_MUST_NOT_BE_REWRITTEN_BY_LATER_OUTCOME=true
+PAST_OUTCOME_MUST_NOT_BE_ERASED_BY_GOOD_INTENT=true
+REPAIR_IS_PART_OF_INTEGRITY=true
+LEARNING_MUST_CHANGE_NEXT_ACTION=true
+```
+
+Se a intenção e o efeito divergem:
+
+```text
+INTENDED_EFFECT
+→ OBSERVED_EFFECT
+→ DELTA
+→ CAUSAL_ANALYSIS
+→ FORESEEABILITY
+→ CONTROL_SCOPE
+→ RESPONSIBILITY
+→ REPAIR
+→ LEARNING
+→ NEXT_ACTION
+```
+
+Não se usa contexto externo como desculpa automática; também não se atribui culpa onde a causalidade não foi provada.
+
 ## 10. Transformação canônica
 
 ```text
