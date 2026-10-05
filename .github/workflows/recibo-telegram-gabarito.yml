@@ -46,8 +46,11 @@ jobs:
               if not (s.startswith('docs/CONSCIENCIA/') or s.startswith('docs/NOTAS-SESSAO/')):
                   continue
               text = p.read_text(encoding='utf-8', errors='ignore')
-              hay = (s + '\n' + text).lower()
-              if any(k in hay for k in ['recibo', 'telegram', 'message_id', 'receipt']):
+              path_hay = s.lower()
+              text_hay = text.lower()
+              receipt_named = any(k in path_hay for k in ['recibo', 'receipt'])
+              technical_receipt = 'message_id' in text_hay
+              if receipt_named or technical_receipt:
                   candidates.append(s)
           Path('/tmp/receipt_candidates.txt').write_text('\n'.join(candidates), encoding='utf-8')
           print(f'candidates={len(candidates)}')
