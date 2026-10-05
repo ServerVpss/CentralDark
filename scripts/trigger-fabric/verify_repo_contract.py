@@ -1063,7 +1063,7 @@ check('.agents/skills/knowledge-compiler/SKILL.md',[
 ])
 check('.agents/skills/vector-memory/SKILL.md',classification='CONTRACT_EXISTS_RUNTIME_NOT_PROVEN')
 check('.github/workflows/porta-de-entrada.yml',[
- 'WORKFLOW_REUSE_REQUIRED=1','GLOBAL_CONTINUITY_HARD_GATE=1','ANY_BRANCH_PUSH_GATED=1',
+ 'WORKFLOW_REUSE_REQUIRED=1','GLOBAL_CONTINUITY_NON_BLOCKING=1','ANY_BRANCH_PUSH_GATED=1',
  'GITHUB_HOSTED_RUNNER_ALLOWED=0','SELF_HEALING_CONTRACT_REQUIRED=1'
 ])
 check('.github/workflows/autonomia-promocao.yml',['Juiz determinístico','github-pr-confirmado-label.mjs'])

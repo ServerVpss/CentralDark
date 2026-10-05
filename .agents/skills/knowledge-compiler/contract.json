@@ -185,7 +185,11 @@
     "plan_is_execution": false,
     "compiled_route_is_authorization": false,
     "apply_requires_existing_authority": true,
-    "human_authority": "SEGREDO/CHEFE"
+    "human_authority": "SEGREDO/CHEFE",
+    "current_chefe_canonical_docs_precede_skills": true,
+    "skill_conflict_with_current_canonical_doc": "SKILL_YIELDS",
+    "skill_is_capability_not_authority": true,
+    "historical_doc_is_not_current_canonical_doc": true
   },
   "tick": {
     "private_chain_of_thought_required": false,
@@ -215,7 +219,34 @@
     "RESEARCH_OUTPUT_IS_CANDIDATE_NOT_AUTHORITY",
     "SSH_AUTH_IS_NOT_HOSTKEY_TRUST",
     "QUEUED_IS_NOT_RUNNER_ASSIGNMENT",
-    "CHANGED_BYTES_REQUIRE_NEW_SHA256"
+    "CHANGED_BYTES_REQUIRE_NEW_SHA256",
+    "CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS",
+    "SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC_SKILL_YIELDS",
+    "SKILL_IS_CAPABILITY_NOT_AUTHORITY",
+    "HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC",
+    "DECLARED_PRINCIPLE_WITHOUT_PRACTICE_IS_NOT_INTEGRATED",
+    "BEHAVIOR_CONTRADICTING_CANON_IS_ALIGNMENT_DRIFT",
+    "METRIC_SUCCESS_IS_NOT_MISSION_SUCCESS",
+    "OPTIMIZATION_MUST_RESPECT_INTENT",
+    "LIVED_ALIGNMENT_REQUIRES_REPEATED_OBSERVATION",
+    "CANON_MUST_BE_TESTABLE_AGAINST_BEHAVIOR",
+    "PAST_BEHAVIOR_INFORMS_ALIGNMENT_TRAJECTORY",
+    "CURRENT_BEHAVIOR_DOES_NOT_ERASE_PAST_DRIFT",
+    "CORRECTION_DOES_NOT_ERASE_PROVENANCE",
+    "INTENT_IS_NOT_OUTCOME",
+    "OUTCOME_IS_NOT_INTENT",
+    "GOOD_INTENT_DOES_NOT_ERASE_HARM",
+    "BAD_OUTCOME_DOES_NOT_PROVE_BAD_INTENT",
+    "GOOD_OUTCOME_DOES_NOT_PROVE_GOOD_INTENT",
+    "RESPONSIBILITY_REQUIRES_CAUSAL_SCOPE",
+    "RESPONSIBILITY_SCALES_WITH_CONTROL",
+    "RESPONSIBILITY_SCALES_WITH_FORESEEABILITY",
+    "UNINTENDED_EFFECT_MUST_BE_OBSERVED",
+    "KNOWN_HARM_REQUIRES_RESPONSE",
+    "PAST_INTENT_MUST_NOT_BE_REWRITTEN_BY_LATER_OUTCOME",
+    "PAST_OUTCOME_MUST_NOT_BE_ERASED_BY_GOOD_INTENT",
+    "REPAIR_IS_PART_OF_INTEGRITY",
+    "LEARNING_MUST_CHANGE_NEXT_ACTION"
   ],
   "authority_normalize": {
     "enabled": true,
@@ -257,5 +288,29 @@
     "must_reenter_current_preflight": true,
     "survival_across_time_is_signal_not_automatic_canon": true,
     "promote_only_surviving_delta": true
+  },
+  "lived_alignment": {
+    "owner": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#163-coerência-vivida--pensar-declarar-e-praticar-no-mesmo-eixo",
+    "engine": "EXISTING_KNOWLEDGE_COMPILER",
+    "new_engine": false,
+    "rule": "COMPARE_DECLARED_CANON_WITH_OBSERVED_BEHAVIOR_LONGITUDINALLY",
+    "metric_success_is_not_mission_success": true
+  },
+  "intent_responsibility": {
+    "owner": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#164-integridade-de-intenção-e-responsabilidade--intenção-não-é-efeito-efeito-não-é-intenção",
+    "engine": "EXISTING_KNOWLEDGE_COMPILER",
+    "new_engine": false,
+    "required_dimensions": [
+      "intent",
+      "decision_basis",
+      "action",
+      "outcome",
+      "foreseeability",
+      "causal_control",
+      "repair",
+      "learning",
+      "next_action"
+    ],
+    "responsibility_requires_causal_scope": true
   }
 }
