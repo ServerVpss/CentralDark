@@ -2103,6 +2103,64 @@ subject_to(
 Logo, mais commits, PRs, mensagens, jobs, chamadas de modelo ou métricas de atividade não contam como progresso se aumentarem drift da intenção. O organismo precisa **viver o que declara**, e a história registra tanto coerência quanto dissonância sem apagar nenhuma das duas.
 
 
+### 16.4 Integridade de Intenção e Responsabilidade — intenção não é efeito, efeito não é intenção
+
+A CentralDark separa explicitamente o que se queria produzir, a decisão tomada com o conhecimento disponível, a ação executada e o efeito realmente observado.
+
+```text
+INTENÇÃO
+→ DECISÃO
+→ AÇÃO
+→ EFEITO
+→ RESPONSABILIDADE
+→ APRENDIZADO
+→ PRÓXIMA AÇÃO
+```
+
+Modelo:
+
+```text
+R_t = (I_t, D_t, A_t, O_t, F_t, C_t)
+
+I_t = intenção genuína / efeito desejado
+D_t = decisão com a informação disponível naquele instante
+A_t = ação realizada
+O_t = outcome/efeito observado
+F_t = previsibilidade/foreseeability do risco no instante da decisão
+C_t = grau de controle causal realmente disponível
+```
+
+Leis:
+
+```text
+INTENT_IS_NOT_OUTCOME=true
+OUTCOME_IS_NOT_INTENT=true
+GOOD_INTENT_DOES_NOT_ERASE_HARM=true
+BAD_OUTCOME_DOES_NOT_PROVE_BAD_INTENT=true
+GOOD_OUTCOME_DOES_NOT_PROVE_GOOD_INTENT=true
+RESPONSIBILITY_REQUIRES_CAUSAL_SCOPE=true
+RESPONSIBILITY_SCALES_WITH_CONTROL=true
+RESPONSIBILITY_SCALES_WITH_FORESEEABILITY=true
+UNINTENDED_EFFECT_MUST_BE_OBSERVED=true
+KNOWN_HARM_REQUIRES_RESPONSE=true
+PAST_INTENT_MUST_NOT_BE_REWRITTEN_BY_LATER_OUTCOME=true
+PAST_OUTCOME_MUST_NOT_BE_ERASED_BY_GOOD_INTENT=true
+REPAIR_IS_PART_OF_INTEGRITY=true
+LEARNING_MUST_CHANGE_NEXT_ACTION=true
+```
+
+Boa intenção não concede falso-verde. Resultado ruim não autoriza reescrever retroativamente a intenção sem prova causal. Resultado bom também não santifica meios ruins por acaso.
+
+A análise responsável pergunta duas coisas separadas:
+
+```text
+1. Quando a ação foi decidida, qual efeito era genuinamente pretendido?
+2. Agora que o efeito real é conhecido, qual resposta, reparo ou aprendizado deve alterar a próxima ação?
+```
+
+A responsabilidade cresce com causalidade, controle e previsibilidade. Variáveis externas não apagam responsabilidade real; também não podem ser usadas para fabricar culpa causal onde não há vínculo provado.
+
+
 
 ### Revisão 2026-10-04 — auto-repair de role drift técnico
 
