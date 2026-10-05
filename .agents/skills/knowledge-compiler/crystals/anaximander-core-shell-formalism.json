@@ -17,7 +17,6 @@
     "UNKNOWN_NOT_OVERWRITTEN": true,
     "CI_WORKSPACE_ISOLATED_FROM_SHARED_FORGE": true,
     "NO_SECRET_VALUES_IN_GIT": true,
-
     "CAPABILITY_SPACE_IS_OPEN": true,
     "FINITE_RUNTIME_IS_PROJECTION_OF_CAPABILITY_SPACE": true,
     "CORE_IS_INVARIANT_SHELL_IS_MUTABLE": true,
@@ -34,7 +33,11 @@
     "AGENT_NAME_DOES_NOT_EXPLAIN_EFFECT": true,
     "IDENTITY_SURVIVES_BINDING_CHANGE": true,
     "REALITY_IS_JUDGE": true,
-    "HISTORICAL_ANALOGY_IS_PROVENANCE_NOT_AUTHORITY": true
+    "HISTORICAL_ANALOGY_IS_PROVENANCE_NOT_AUTHORITY": true,
+    "CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS": true,
+    "SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC": "SKILL_YIELDS",
+    "SKILL_IS_CAPABILITY_NOT_AUTHORITY": true,
+    "HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC": true
   },
   "sequence": [
     "RECOVER_CURRENT_INTENT",
@@ -60,7 +63,8 @@
     "runtime claim requires mechanism plus observed effect not agent narration",
     "counterproof may force UNKNOWN or FAIL without changing invariants",
     "no second brain scheduler dispatcher memory router or heart is created",
-    "existing functional owners remain referenced and not replaced"
+    "existing functional owners remain referenced and not replaced",
+    "a skill conflicting with a CURRENT canonical CHEFE document must yield without changing owner authority"
   ],
   "security_boundary": [
     "NO_SECRET_VALUES_IN_GIT",
