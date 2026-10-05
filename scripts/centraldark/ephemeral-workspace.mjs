@@ -357,26 +357,31 @@ function inventoryRoot(rootInput, prefixes = []) {
 }
 
 function selfTest() {
-  const root = join(tmpdir(), `centraldark-ephemeral-selftest-${process.pid}-${Date.now()}`);
+  const requestedRoot = join(tmpdir(), `centraldark-ephemeral-selftest-${process.pid}-${Date.now()}`);
   const name = "workspace";
-  const target = join(root, name);
+  let target = null;
+  let canonicalRoot = requestedRoot;
   let result = "FAIL";
   try {
-    createWorkspace({
-      rootInput: root,
+    const created = createWorkspace({
+      rootInput: requestedRoot,
       name,
       purpose: "self-test",
       owner: "porta-de-entrada",
       removeEmptyRoot: true,
     });
+    target = created.target;
+    canonicalRoot = created.root;
     writeFileSync(join(target, "probe.txt"), "delete-after-use\n", "utf8");
     const marker = readMarker(target);
     safeIdentity(marker, target);
-    inventoryRoot(root, ["workspace"]);
+    inventoryRoot(canonicalRoot, ["workspace"]);
     cleanupWorkspace(target);
-    if (!existsSync(target) && !existsSync(root)) result = "PASS";
+    if (!existsSync(target) && !existsSync(canonicalRoot)) result = "PASS";
   } finally {
-    if (existsSync(root)) rmSync(root, { recursive: true, force: true });
+    if (target && existsSync(target)) rmSync(target, { recursive: true, force: true });
+    if (existsSync(canonicalRoot)) rmSync(canonicalRoot, { recursive: true, force: true });
+    if (requestedRoot !== canonicalRoot && existsSync(requestedRoot)) rmSync(requestedRoot, { recursive: true, force: true });
   }
   emit({
     ok: result === "PASS",
