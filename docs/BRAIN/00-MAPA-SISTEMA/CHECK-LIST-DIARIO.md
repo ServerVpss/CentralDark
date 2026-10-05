@@ -6,8 +6,8 @@ owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
 pr_mother: 1562
 semantic_role: "session_crystal_continuity_learning_map"
 priority: "OBRIGATORIO"
-checked_day_utc: "2026-10-02"
-updated: "2026-10-02"
+checked_day_utc: "2026-10-05"
+updated: "2026-10-05T20:05:13Z"
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 mirror_role: "CASA-VAULT = memoria operacional/espelho; Git+owners continuam autoridade tecnica"
 aliases:
@@ -662,3 +662,67 @@ CHANGED_BYTES_REQUIRE_NEW_SHA256=true
 ### ➡️ NEXT_CURSOR
 Executar o cristal #156 em modo inspect na forge viva; reconciliar somente delta seguro. Depois fechar host-key trust e runner assignment como claims independentes.
 
+
+
+## 🔄 RECONCILIAÇÃO DIÁRIA — 2026-10-05 — MEDIÇÃO REAL
+
+**Medição:** 2026-10-05T20:05:13Z. **ΔU:** material onde indicado; `UNKNOWN` permanece UNKNOWN e não é PASS.
+
+### Estado medido
+
+- **MAIN/GitHub — MATERIAL:** `main` medido em `9ee09563a4b17c906605d03c4860bb6ea4c200ac` (`🧿 #167 · FORMALISMO CORE/CONCHA + CAPACIDADE ABERTA + CONTRAPROVA (#1750)`).
+- **PRs abertas — MATERIAL:** #1562, #1742, #1743, #1748 e #1749; todas retornadas pelo GitHub como `MERGEABLE`. A #1562 permanece PR-mãe e `NÃO MERGEAR`.
+- **Hermes cron — MATERIAL:** gateway ativo, PID `19096`, heartbeat medido, 5 jobs ativos e próxima execução `2026-10-05T21:30:00-02:00`. Quatro jobs tiveram catch-up atrasado; isso é delta operacional, não PASS.
+- **VPS Git — MATERIAL/UNKNOWN:** SSH medido em `CENTRALDARK-OS`; `/root/CentralDark` está em `47d0722121ee48d4c2ffc63a8158b7ad6e002562`, divergente de `main`, e a working tree reportou 6 linhas de alteração.
+- **PM2 na VPS — UNKNOWN:** a probe encontrou 12 processos `node/pm2`, mas o binário `pm2` não foi localizado/executável na rota medida; estado dos serviços PM2 não foi provado.
+- **Deploy/status consolidado — UNKNOWN:** não há prova suficiente de convergência GitHub HEAD ↔ VPS HEAD ↔ PM2; não marcar como PASS.
+- **Pendências — MATERIAL:** `docs/PENDENCIAS.md` medido com 979 linhas e itens abertos, incluindo #57 (vault canônico de segredos, 30/09), #58–#60 (04/10). Não foi possível obter `pendencias_list` MCP; a leitura Git é a evidência disponível, não substitui a probe MCP.
+- **Skills — UNKNOWN/MATERIAL:** `docs/CONSCIENCIA/HERMES-SKILLS/` retornou HTTP 404 em `main`; existem 851 diretórios locais de skills. O script canônico `scripts/skill-sync-check.sh` foi executado e terminou com erro de sintaxe/unbound variable na linha 99 depois de reportar diferenças; sincronização não provada.
+- **Vault mirror — UNKNOWN:** o espelho esperado `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md` não foi localizado nesta execução; divergência Git↔vault não pode ser descartada.
+
+### Próximo cursor
+
+```text
+CURRENT_MAIN=9ee09563a4b17c906605d03c4860bb6ea4c200ac
+VPS_HEAD=47d0722121ee48d4c2ffc63a8158b7ad6e002562
+VPS_DIRTY_LINES=6
+PM2_STATE=UNKNOWN
+DEPLOY_CONVERGENCE=UNKNOWN
+SKILL_CANONICAL_PATH=UNKNOWN_404
+SKILL_SYNC=UNKNOWN_SCRIPT_FAILURE
+VAULT_MIRROR=UNKNOWN_NOT_FOUND
+PR_MOTHER=#1562
+NEXT=REMEDIR_VPS_PM2_SKILLS_CANONICAL_E_VAULT_MIRROR
+```
+
+
+## 🔄 RECONCILIAÇÃO DIÁRIA — 2026-10-05 — MEDIÇÃO REAL
+
+**Medição:** 2026-10-05T20:05:13Z. **ΔU:** material onde indicado; `UNKNOWN` permanece UNKNOWN e não é PASS.
+
+### Estado medido
+
+- **MAIN/GitHub — MATERIAL:** `main` medido em `9ee09563a4b17c906605d03c4860bb6ea4c200ac` (`🧿 #167 · FORMALISMO CORE/CONCHA + CAPACIDADE ABERTA + CONTRAPROVA (#1750)`).
+- **PRs abertas — MATERIAL:** #1562, #1742, #1743, #1748 e #1749; todas retornadas pelo GitHub como `MERGEABLE`. A #1562 permanece PR-mãe e `NÃO MERGEAR`.
+- **Hermes cron — MATERIAL:** gateway ativo, PID `19096`, heartbeat medido, 5 jobs ativos e próxima execução `2026-10-05T21:30:00-02:00`. Quatro jobs tiveram catch-up atrasado; isso é delta operacional, não PASS.
+- **VPS Git — MATERIAL/UNKNOWN:** SSH medido em `CENTRALDARK-OS`; `/root/CentralDark` está em `47d0722121ee48d4c2ffc63a8158b7ad6e002562`, divergente de `main`, e a working tree reportou 6 linhas de alteração.
+- **PM2 na VPS — UNKNOWN:** a probe encontrou 12 processos `node/pm2`, mas o binário `pm2` não foi localizado/executável na rota medida; estado dos serviços PM2 não foi provado.
+- **Deploy/status consolidado — UNKNOWN:** não há prova suficiente de convergência GitHub HEAD ↔ VPS HEAD ↔ PM2; não marcar como PASS.
+- **Pendências — MATERIAL:** `docs/PENDENCIAS.md` medido com 979 linhas e itens abertos, incluindo #57 (vault canônico de segredos, 30/09), #58–#60 (04/10). Não foi possível obter `pendencias_list` MCP; a leitura Git é a evidência disponível, não substitui a probe MCP.
+- **Skills — UNKNOWN/MATERIAL:** `docs/CONSCIENCIA/HERMES-SKILLS/` retornou HTTP 404 em `main`; existem 851 diretórios locais de skills. O script canônico `scripts/skill-sync-check.sh` foi executado e terminou com erro de sintaxe/unbound variable na linha 99 depois de reportar diferenças; sincronização não provada.
+- **Vault mirror — UNKNOWN:** o espelho esperado `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md` não foi localizado nesta execução; divergência Git↔vault não pode ser descartada.
+
+### Próximo cursor
+
+```text
+CURRENT_MAIN=9ee09563a4b17c906605d03c4860bb6ea4c200ac
+VPS_HEAD=47d0722121ee48d4c2ffc63a8158b7ad6e002562
+VPS_DIRTY_LINES=6
+PM2_STATE=UNKNOWN
+DEPLOY_CONVERGENCE=UNKNOWN
+SKILL_CANONICAL_PATH=UNKNOWN_404
+SKILL_SYNC=UNKNOWN_SCRIPT_FAILURE
+VAULT_MIRROR=UNKNOWN_NOT_FOUND
+PR_MOTHER=#1562
+NEXT=REMEDIR_VPS_PM2_SKILLS_CANONICAL_E_VAULT_MIRROR
+```
