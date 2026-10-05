@@ -38,6 +38,10 @@ assert inv["MECHANISM_EXPLAINS_EFFECT"] is True
 assert inv["IDENTITY_SURVIVES_BINDING_CHANGE"] is True
 assert inv["UNKNOWN_IS_NOT_PASS"] is True
 assert inv["REALITY_IS_JUDGE"] is True
+assert inv["CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS"] is True
+assert inv["SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC"] == "SKILL_YIELDS"
+assert inv["SKILL_IS_CAPABILITY_NOT_AUTHORITY"] is True
+assert inv["HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC"] is True
 
 # Contraprova estrutural: tentar remover uma invariante herdada deve falhar fechado.
 broken = json.loads(json.dumps(c))
@@ -54,4 +58,4 @@ print("TARGETS=windows,vmware,vps")
 print("SEMANTICS_EQUAL=PASS")
 print("BINDINGS_DIFFER=PASS")
 print("FINGERPRINT_STABLE_ACROSS_BINDINGS=PASS")
-print("BROKEN_INVARIANT_REJECTED=PASS")
+print("BROKEN_INVARIANT_REJECTED=PASS")\nprint("CURRENT_CANONICAL_DOC_PRECEDENCE_OVER_SKILL=PASS")
