@@ -550,25 +550,29 @@ jobs:
 
           # Interactive fallback: restart the already-installed canonical Remote Desktop services.
           rdc_ok=0
-          for unit in centraldark-desktop-commander.service centraldark-desktop-commander-conta2.service; do
+          for unit in desktop-commander-remote.service centraldark-desktop-commander.service centraldark-desktop-commander-conta2.service; do
             if systemctl list-unit-files "$unit" >/dev/null 2>&1; then
               systemctl enable --now "$unit" >/dev/null 2>&1 || true
-              systemctl restart "$unit" >/dev/null 2>&1 || true
-              sleep 2
               if systemctl is-active --quiet "$unit"; then
                 echo "RDC_SERVICE_PASS=$unit"
                 rdc_ok=$((rdc_ok+1))
+                [[ "$unit" == "desktop-commander-remote.service" ]] && break
               else
                 echo "RDC_SERVICE_FAIL=$unit"
               fi
-            else
-              echo "RDC_SERVICE_MISSING=$unit"
             fi
           done
-          [[ "$rdc_ok" -ge 1 ]] || failures=$((failures+1))
+          [[ "$rdc_ok" -ge 1 ]] || { echo "RDC_ROUTE=FAIL"; failures=$((failures+1)); }
 
           ss -ltn 'sport = :22' | grep -q LISTEN && echo "PORT_22=PASS" || { echo "PORT_22=FAIL"; failures=$((failures+1)); }
-          curl -fsS --max-time 3 http://127.0.0.1:9100/health | grep -q '"ok":true'             && echo "MCP_9100=PASS" || { echo "MCP_9100=FAIL"; failures=$((failures+1)); }
+
+          public_ip="$(ip -4 -o addr show scope global 2>/dev/null | awk '{split($4,a,"/"); if (a[1] !~ /^100\./ && a[1] !~ /^10\./ && a[1] !~ /^172\.(1[6-9]|2[0-9]|3[01])\./ && a[1] !~ /^192\.168\./) {print a[1]; exit}}')"
+          if [[ -n "$public_ip" ]] && curl -fsS --max-time 3 "http://$public_ip:9100/health" | grep -q '"ok":true'; then
+            echo "MCP_9100=PASS ip=$public_ip"
+          else
+            echo "MCP_9100=FAIL"
+            failures=$((failures+1))
+          fi
 
           echo "ROUTE_RECONCILE_FAILURES=$failures"
           [[ $failures -eq 0 ]]
