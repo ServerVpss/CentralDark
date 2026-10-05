@@ -35,7 +35,7 @@ jobs:
           else
             git diff --name-only HEAD~1 HEAD > /tmp/changed.txt
           fi
-          python - <<'PY'
+          python3 - <<'PY'
           from pathlib import Path
           candidates = []
           for line in Path('/tmp/changed.txt').read_text().splitlines():
@@ -65,5 +65,5 @@ jobs:
           fi
           while IFS= read -r file; do
             echo "Verifying $file"
-            python scripts/verify_recibo_telegram_gabarito.py "$file"
+            python3 scripts/verify_recibo_telegram_gabarito.py "$file"
           done < /tmp/receipt_candidates.txt
