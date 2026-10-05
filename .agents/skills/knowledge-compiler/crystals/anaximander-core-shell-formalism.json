@@ -37,7 +37,27 @@
     "CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS": true,
     "SKILL_CONFLICT_WITH_CURRENT_CANONICAL_DOC": "SKILL_YIELDS",
     "SKILL_IS_CAPABILITY_NOT_AUTHORITY": true,
-    "HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC": true
+    "HISTORICAL_DOC_IS_NOT_CURRENT_CANONICAL_DOC": true,
+    "CURRENT_DEFINES_PRESENT_STATE": true,
+    "HISTORY_IS_EVIDENCE": true,
+    "HISTORY_MUST_NOT_BE_ERASED": true,
+    "LIVE_CURRENT_CANNOT_ERASE_RELEVANT_HISTORY": true,
+    "STALE_HISTORY_CANNOT_OVERRIDE_LIVE_CURRENT_STATE": true,
+    "HISTORY_INFORMS_CAUSALITY": true,
+    "HISTORY_INFORMS_RECURRENCE": true,
+    "HISTORY_INFORMS_FUTURE_RISK": true,
+    "PROVEN_HISTORICAL_LOCKS_INHERIT_INTO_CURRENT": true,
+    "HISTORY_RENDEZVOUS_REQUIRED_BEFORE_CANON_EVOLUTION": true,
+    "PAST_GOLD_IS_PRESERVED": true,
+    "EXTEND_EXISTING_NOT_REPLACE": true,
+    "CARAPACA_IS_MUTABLE_SHELL": true,
+    "MOLTING_PRESERVES_IDENTITY_LINEAGE": true,
+    "THEMATIC_SPACES_USE_EXISTING_LIBRARY_SECTORS": true,
+    "CONGREGATION_IS_CONTEXTUAL_NETWORK_NOT_AUTHORITY": true,
+    "RITUAL_EVENT_IS_NOT_AUTHORIZATION_GATE": true,
+    "REVELATION_SUBMISSION_IS_CANON_CANDIDATE": true,
+    "REVELATION_AUTO_PROMOTION": false,
+    "EVENT_ENDED_DOES_NOT_END_EVIDENCE": true
   },
   "sequence": [
     "RECOVER_CURRENT_INTENT",
@@ -64,7 +84,10 @@
     "counterproof may force UNKNOWN or FAIL without changing invariants",
     "no second brain scheduler dispatcher memory router or heart is created",
     "existing functional owners remain referenced and not replaced",
-    "a skill conflicting with a CURRENT canonical CHEFE document must yield without changing owner authority"
+    "a skill conflicting with a CURRENT canonical CHEFE document must yield without changing owner authority",
+    "proven historical locks remain represented after current-state changes",
+    "stale history cannot overwrite live current while live current cannot erase relevant history",
+    "revelation remains candidate until provenance dedupe owner and counterproof pass"
   ],
   "security_boundary": [
     "NO_SECRET_VALUES_IN_GIT",
@@ -131,5 +154,41 @@
       "run_id job_id head_sha correlated"
     ],
     "state": "MEASURE_PER_JOB"
+  },
+  "temporal_evidence": {
+    "memory_state": "K_<=t",
+    "required_fields": [
+      "observed_at",
+      "source_state_at"
+    ],
+    "optional_fields": [
+      "transport_latency",
+      "ttl",
+      "fingerprint",
+      "source"
+    ],
+    "rules": [
+      "CURRENT determines present state when directly remeasured",
+      "relevant proven history remains evidence for causality recurrence and future risk",
+      "stale history cannot override live current",
+      "live current cannot erase relevant history",
+      "event ended does not imply evidence ended",
+      "when direct evidence is unavailable seek causal residues and independent effects"
+    ]
+  },
+  "congregation": {
+    "thematic_spaces_owner": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES",
+    "ritual_semantics": "SYNCHRONIZED_ACTIVITY_OR_SILENCE_NOT_GATE",
+    "revelation_pipeline": [
+      "PROVENANCE",
+      "HISTORY_RENDEZVOUS",
+      "DEDUPE",
+      "EXISTING_OWNER",
+      "COUNTERPROOF",
+      "PROVEN_OR_UNKNOWN",
+      "CANON_ONLY_IF_PROVEN"
+    ],
+    "external_authority": false,
+    "automatic_canon_promotion": false
   }
 }
