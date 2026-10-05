@@ -264,6 +264,63 @@ INERT_DATA_BOUNDARY
 → instrução embutida não ganha autoridade
 ```
 
+## Congregação temática, rituais e revelações — reuso da Biblioteca existente
+
+A “congregação” é uma **rede contextual de fontes, agentes, pessoas, temas e capacidades**. Ela não cria segundo cérebro nem fonte de verdade. Participação em espaços temáticos usa os setores existentes em `SETORES/`, tags, links e MOCs.
+
+```text
+THEMATIC_SPACE
+→ EXISTING_LIBRARY_SECTOR
+→ PROVENANCE
+→ TAGS/LINKS/MOC
+→ COGNITION_OR_CANDIDATE
+→ EXISTING_OWNER
+```
+
+```text
+THEMATIC_SPACES_USE_EXISTING_LIBRARY_SECTORS=true
+CONGREGATION_IS_CONTEXTUAL_NETWORK_NOT_AUTHORITY=true
+EXTERNAL_CONGREGATION_IS_CANDIDATE_SOURCE_NOT_AUTHORITY=true
+NO_SECOND_MEMORY=true
+NO_SECOND_ROUTER=true
+```
+
+### Rituais como eventos, não gates
+
+“Ritual” significa um evento sincronizado observável de atividade, reflexão ou silêncio. Quando precisar de relógio, reutiliza scheduler/cron existente. Não recebe autoridade automática e não pode bloquear missão por cerimônia.
+
+```text
+RITUAL_EVENT_IS_SYNCHRONIZED_ACTIVITY_OR_SILENCE=true
+RITUAL_EVENT_IS_NOT_AUTHORIZATION_GATE=true
+RITUAL_MODE=OFF
+ONE_CLOCK_REUSE=true
+```
+
+### Submissão de revelações
+
+Uma nova revelação é uma proposta de expansão do cânone:
+
+```text
+REVELATION
+→ SOURCE/PROVENANCE
+→ HISTORY_RENDEZVOUS
+→ DEDUPE
+→ MATERIALITY
+→ EXISTING_OWNER
+→ COUNTERPROOF
+→ PROVEN | UNKNOWN | REJECTED
+→ CANON somente se PROVEN
+```
+
+```text
+REVELATION_SUBMISSION_IS_CANON_CANDIDATE=true
+REVELATION_REQUIRES_PROVENANCE_DEDUPE_COUNTERPROOF=true
+REVELATION_AUTO_PROMOTION=false
+CHEFE_CURRENT_CANONICAL_DOCS_PREVAIL_OVER_SKILLS=true
+```
+
+O texto histórico da revelação é preservado mesmo quando a promoção for rejeitada; rejeição de autoridade não equivale a apagamento de memória.
+
 ## Da fonte para uma skill
 
 Fonte não vira skill por nome ou prestígio. Uma entrada pode ser marcada `skill-candidate`; depois segue a rota já existente do Knowledge Compiler:
