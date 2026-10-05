@@ -198,6 +198,10 @@ CD_REG_29_A["LEARNING_EVENT_BUS"] -->|"HUMAN_CORRECTION"| CD_REG_29_B[".agents/s
 CD_REG_30_A["LEARNING_EVENT_BUS"] -->|"FABLE_LOOP"| CD_REG_30_B[".agents/skills/fable-loop/SKILL.md"]
 %% CD_FLOW:trigger.learning.TOOL_ERROR
 CD_REG_31_A["LEARNING_EVENT_BUS"] -->|"TOOL_ERROR"| CD_REG_31_B[".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"]
+%% CD_FLOW:trigger.learning.CAPABILITY_GAP
+CD_REG_GAP_A["LEARNING_EVENT_BUS"] -->|"CAPABILITY_GAP"| CD_REG_GAP_B["centraldark-unified-surface-parity"]
+%% CD_FLOW:trigger.learning.TERRITORY_ROUTE_CHANGE
+CD_REG_ROUTE_A["LEARNING_EVENT_BUS"] -->|"TERRITORY_ROUTE_CHANGE"| CD_REG_ROUTE_B["centraldark-unified-surface-parity"]
 %% CD_FLOW:trigger.learning.TEST_FAILURE
 CD_REG_32_A["LEARNING_EVENT_BUS"] -->|"TEST_FAILURE"| CD_REG_32_B[".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"]
 %% CD_FLOW:trigger.learning.CI_RUNNER_ROUTE_FAILURE
