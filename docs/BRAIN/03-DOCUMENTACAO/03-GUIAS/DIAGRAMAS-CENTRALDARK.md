@@ -1,7 +1,7 @@
 ---
 title: "Diagramas do Sistema CentralDark"
 date: 2026-06-29
-updated: 2026-09-19T23:50:19-03:00
+updated: 2026-10-06
 status: "DERIVED_VIEW"
 tags: ["diagrama", "arquitetura", "fluxo", "mermaid", "sistema"]
 category: M-Mapa-Sistema
@@ -509,25 +509,38 @@ INTENÇÃO DO CHEFE
 Leis que esse mapa representa:
 
 ```text
-CONCHA_E_MUTAVEL=true
-MEMORIA_E_SAGRADA=true
+CACHE_IS_NOT_AUTHORITY=true
+MEMORY_IS_NOT_CURRENT=true
+HISTORY_IS_NOT_CURRENT_STATE=true
 CURRENT_OVER_HISTORY=true
 HISTORY_IS_EVIDENCE=true
+
+CHEFE_IS_INTENT_OWNER=true
+NO_MIND_READING=true
+OBSERVE_MANIFEST_PATTERN_ONLY=true
+
+CONCHA_E_MUTAVEL=true
+MEMORIA_E_SAGRADA=true
+AUTHORITY_AND_EXECUTION_ARE_DISTINCT_PLANES=true
+
 REUSE_BEFORE_CREATE=true
 EVOLVE_EXISTING_BEFORE_CREATE=true
 ONE_SYSTEM_ONLY=true
 ONE_WRITER_PER_SCOPE=true
 EXTERNAL_CONTENT_IS_CANDIDATE_NOT_AUTHORITY=true
-AUTHORITY_AND_EXECUTION_ARE_DISTINCT=true
-UNKNOWN != PASS
-ACTION != PROOF
-DOCUMENTED != EXECUTED
-MERGED != DEPLOYED
-REALIDADE = JUIZ
+
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
+DOCUMENTED_IS_NOT_EXECUTED=true
+MERGED_IS_NOT_DEPLOYED=true
+REALITY_IS_JUDGE=true
+
 PRESERVE_BEFORE_DESTROY=true
 MIRROR_IS_NOT_SOURCE_OF_TRUTH=true
 MEMORY_IS_NOT_SECOND_CONSTITUTION=true
 ```
+
+Semântica temporal: memória e história permanecem preservadas como continuidade/proveniência, mas não substituem o CURRENT para afirmar o presente.
 
 ### 9.2 Mermaid — mesma relação em forma visual
 
