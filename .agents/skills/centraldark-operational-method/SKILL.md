@@ -2366,6 +2366,50 @@ OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
 
 Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrigir o menor gate causal e continuar. Não transformar prudência em bloqueio.
 
+## HEREDITARY_CRITERION_DNA — Goal/intent fractal no owner existente
+
+O mesmo Criterion/intent nasce no `GOAL` e é herdado, sem virar lista rígida de passos,
+por toda a árvore `GOAL → SUBGOAL → LOTE/BATCH → SUBAGENT/SUBSUBGOAL`. Este é o
+contrato aditivo do owner operacional/TLC23 existente; não cria segundo criterion
+engine, scheduler, goal system, memory engine ou arquitetura.
+
+```text
+HEREDITARY_CRITERION_DNA=true
+CRITERION_ENGINE_OWNER=.agents/skills/centraldark-operational-method
+GOAL → SUBGOAL → LOTE/BATCH → SUBAGENT/SUBSUBGOAL
+
+INHERIT:
+  INTENTION/OBJECTIVE + SUCCESS_PREDICATE_TERMINAL_INDIVISIBLE
+  CURRENT/BASELINE + OWNER/SCOPE
+  REUSE_BEFORE_CREATE
+  PARALLEL_PERCEPTION_AS_LENSES_OR_CAPABILITIES
+  ONE_WRITER_PER_SCOPE
+  COUNTERPROOF + REALITY_JUDGE
+  REMEDIATION_AFTER_STATE_CHANGE
+  RECEIPT + NEXT_CURSOR
+
+DO_NOT_INHERIT_AS_RIGID_SCRIPT:
+  STEPS
+  COMMIT/PUSH/PR/MERGE/QUEUED/GREEN/DEPLOY_TRIGGERED
+
+DONE_ONLY:
+  FIXED_POINT | HUMAN_ONLY_BLOCKER
+```
+
+Regras de composição: o descendente preserva intenção e predicate terminal, pode
+estreitar o escopo, mas mede novamente `CURRENT/BASELINE` e reatacha `OWNER/SCOPE`.
+Lentes só observam; toda mutação é serializada no escopo. Mudança de estado expira
+a prova dependente e exige remediação, nova contraprova, readback e receipt próprio.
+Cada nó continua até `FIXED_POINT` ou até um `HUMAN_ONLY_BLOCKER` exato; etapas de
+entrega e deploy são intermediários, nunca `DONE`.
+
+### Teste e proveniência
+
+A formulação executável vive em `contracts/TLC23-RUNTIME-GATE.yml` sob
+`hereditary_criterion_dna`, ligada à PR-mãe `#1562` pelo contrato TLC23 existente.
+O teste `scripts/test_goal_criterion_inheritance.py` verifica as quatro escalas,
+o DNA herdado, a ausência de lista de passos herdada e a fronteira terminal.
+
 ## Padrão aprendido do CHEFE — transformação de sistemas por invariantes
 
 Este delta é global ao método e não depende de uma UI, modelo ou runtime específico.
