@@ -118,7 +118,7 @@ OWNER=AGENTS.md
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 APPLIES_TO_ALL_ENGINES=true
 ```
 
@@ -2237,7 +2237,7 @@ REGISTRA
 → teste aplicável + contraprova
 → commit
 → push em branch filha
-→ abrir PR filha vinculada à #1562
+→ abrir PR filha vinculada à #1757
 → remeasure live
 → blocker técnico recuperável: continuar até HUMAN_FRONTIER real
 → conflito: usar git-conflict-resolve-house-standard
@@ -2248,10 +2248,10 @@ REGISTRA
 → T1 quando houver deploy causal
 → receipt no PR filho e na PR-mãe
 → fixed point do delta
-→ voltar ao #1562
+→ voltar ao #1757
 ```
 
-A `#1562` permanece aberta como PR-MÃE permanente, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
+A `#1757` permanece aberta como PR-MÃE ativa, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
 
 ### Lapidação progressiva
 
@@ -2586,3 +2586,7 @@ GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
 EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true
 DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
 ```
+
+LEGACY_PR_MOTHER_1562_PROTECTED=true
+SHELL_IS_MUTABLE=true
+LEGACY_IS_PRESERVED=true
