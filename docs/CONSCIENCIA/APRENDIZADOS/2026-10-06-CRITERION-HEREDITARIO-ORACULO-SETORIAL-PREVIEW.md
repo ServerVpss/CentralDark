@@ -131,29 +131,59 @@ RUNTIME_EFFECT = NOT_APPLICABLE_TO_THIS_PILOT
 
 A primeira camada física está provada; a integração cognitiva completa ainda precisa passar pelo owner existente `perception-orchestra.mjs`.
 
-## 5. Semântica de abas do Preview
+## 5. Semântica de abas do Preview — contraprova e correção
+
+A primeira formulação desta sessão dizia que `desktop_preview action=open` com `label` distinta criaria outra Browser tab. O teste real falsificou isso.
+
+A leitura do Hermes Desktop CURRENT confirmou a causa:
+
+```text
+desktop_preview action=open
+→ preview.open {url,label}
+→ para target.kind=url, openPreview usa browserTabFor(visible)
+→ reutiliza o Browser ativo ou o último Browser visível
+
+Preview strip "+"
+→ newBrowserTab()
+→ cria outro id url:browser-...
+→ preserva o Browser anterior
+```
+
+O schema atual de `desktop_preview` expõe apenas:
+
+```text
+open
+close
+read
+```
+
+Não há `new_tab` exposto ao agente.
+
+Logo, a regra corrigida é:
 
 ```text
 "abra/navegue/vá para"
-→ reutiliza a aba Preview focada
+→ navegar/reutilizar Browser atual
 
 "abra NOVA ABA/novo tab/outra aba"
-→ preserva abas existentes
-→ desktop_preview action=open
-→ label exclusiva
-→ readback da aba criada
+→ intenção = preservar Browser atual e criar outro
+→ desktop_preview open + label NÃO basta
+→ usar a capability real de criação de tab quando estiver exposta
+→ provar por readback/lista que existem pelo menos duas Browser tabs
 ```
 
-Cristais:
+Cristais corrigidos:
 
 ```text
 NAVIGATE_CURRENT_TAB != OPEN_NEW_PREVIEW_TAB
-NEW_TAB_PRESERVE_CURRENT=true
-DISTINCT_LABEL_REQUIRED=true
-NEW_TAB_REQUIRES_READBACK=true
+LABEL_IS_NOT_NEW_TAB_SIGNAL=true
+DESKTOP_PREVIEW_OPEN_DOES_NOT_PROVE_NEW_BROWSER_TAB=true
+NEW_TAB_REQUEST_PRESERVES_CURRENT=INTENT
+AGENT_NEW_BROWSER_TAB_TOOL_ACTION=UNEXPOSED
+NEW_BROWSER_TAB_E2E=UNKNOWN
 ```
 
-Não depender de `target="_blank"` ou `window.open()` como prova de nova aba; a criação confiável usa o Preview diretamente e confirma por readback.
+Isto preserva a intenção do CHEFE sem transformar desejo em falso PASS.
 
 ## 6. Superfícies externas
 
