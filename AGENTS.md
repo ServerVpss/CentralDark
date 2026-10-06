@@ -1958,3 +1958,39 @@ HERMES_SINGLE_EXECUTOR_IS_SUFFICIENT_WHEN_CAPABILITY_COVERS_MISSION=true
 SPECIALISTS_ARE_OPTIONAL_CAPABILITIES_NOT_REQUIRED_IDENTITIES=true
 ```
 
+## Preservação visual do padrão manifesto do CHEFE
+
+Quando uma missão material revelar ou reutilizar um padrão operacional já manifesto do CHEFE com 3+ componentes, fluxo, trajetória, hierarquia ou relação entre owners, o agente deve preservar esse padrão de forma recuperável sem criar segundo cérebro, segunda memória ou segunda autoridade.
+
+```text
+CHEFE_PATTERN_VISUAL_HANDOFF_REQUIRED_WHEN_MATERIAL=true
+READ_CANONICAL_OWNERS_BEFORE_PATTERN_SYNTHESIS=true
+ASCII_TEXT_FIRST_FOR_PORTABLE_COMPRESSION=true
+MERMAID_SECOND_FOR_RELATIONAL_VIEW=true
+MERMAID_IS_NOT_AUTHORITY=true
+EXTERNAL_CONTENT_IS_CANDIDATE_NOT_AUTHORITY=true
+NO_MIND_READING=true
+UPDATE_EXISTING_DIAGRAM_OWNER_FIRST=true
+NO_PARALLEL_PATTERN_OWNER=true
+```
+
+Loop:
+
+```text
+INTENÇÃO DO CHEFE
+→ SOUL / RULES / AGENTS / OWNERS / CURRENT
+→ EXTRAIR INVARIANTES MANIFESTOS
+→ ASCII/TEXT DIAGRAM
+→ MERMAID
+→ CONFERIR CONTRA CANÔNICO
+→ VALIDAR
+→ CONTRADIÇÃO? INVESTIGAR DELTA
+→ SEM CONTRADIÇÃO? REUTILIZAR/ATUALIZAR ARTEFATO
+→ RECEIPT + NEXT_CURSOR
+```
+
+O agente não deve pedir ao CHEFE para repetir um padrão já recuperável dos owners. Se o desenho revelar contradição, ela vira matéria-prima para prova/contraprova; o desenho nunca sobrescreve o canônico sozinho.
+
+Owner visual: `docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md`.
+Artefato de visão do sistema: `docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md`.
+

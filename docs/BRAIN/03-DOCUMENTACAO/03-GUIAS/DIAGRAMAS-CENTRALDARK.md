@@ -430,3 +430,143 @@ CANONICO_MUDOU_ESTRUTURALMENTE
 SEM_DELTA_ESTRUTURAL
 → NO_ARTIFACT_CHANGE
 ```
+
+## 9. Trajetória + síntese do padrão manifesto do CHEFE
+
+Esta seção preserva **o padrão operacional observado e já cristalizado**, não uma leitura mental do CHEFE. Ela existe para que IAs, agentes, terminais, PRs e handoffs recuperem rapidamente a mesma lógica sem recomeçar do zero.
+
+### 9.1 ASCII/Text Diagram — compressão portátil
+
+```text
+[HD / WINDOWS / VM / CASA]
+        |
+        v
+[SEPARAR CASCA DE ESSÊNCIA]
+        |
+        v
+[INTENÇÃO + MEMÓRIA + REGRAS + OWNERS]
+        |
+        v
+[GITHUB MAIN = FONTE CANÔNICA RECONSTRUÍVEL]
+        |
+        v
+[/root/CentralDark NA VPS = ESPELHO OPERACIONAL DO CURRENT]
+        |
+        v
+[HERMES = CONSULTA OWNERS + EXECUTA]
+        |
+        v
+[RUNTIME / REALIDADE = PROVA DO EFEITO]
+        |
+        v
+[RECEIPT + HISTÓRICO + NEXT_CURSOR]
+        |
+        +--------------------------+
+                                   |
+                                   v
+                             [CONTINUIDADE]
+
+[NOVA IDEIA / CHATGPT / FONTE EXTERNA]
+        |
+        v
+[COMPARAR COM CURRENT]
+        |
+        +--> já contido ------> DROP_DUPLICATE
+        |                       REUSE_OFFICIAL_OWNER
+        |
+        +--> delta real ------> ABSORB_ONLY_DELTA
+        |                       EVOLVE_SAME_OWNER
+        |
+        +--> contradição -----> META-LUPA
+                                TESTE_DISCRIMINANTE
+                                CONTRAPROVA
+                                |
+                                v
+                         [ONE WRITER / MENOR DELTA]
+                                |
+                                v
+                         [PROVA NO RUNTIME]
+```
+
+Compressão do padrão:
+
+```text
+INTENÇÃO DO CHEFE
+→ MEDIR CURRENT
+→ ACHAR OWNER
+→ COMPARAR
+→ REUTILIZAR OU EXTRAIR SÓ O DELTA
+→ CORRIGIR O OWNER MÍNIMO
+→ PROVAR
+→ CONTRAPROVAR
+→ PROMOVER
+→ REMEDIR NO RUNTIME
+→ PRESERVAR HISTÓRICO/RECEIPT
+→ DEIXAR NEXT_CURSOR
+→ CONTINUAR SEM RECOMEÇAR
+```
+
+Leis que esse mapa representa:
+
+```text
+CONCHA_E_MUTAVEL=true
+MEMORIA_E_SAGRADA=true
+CURRENT_OVER_HISTORY=true
+HISTORY_IS_EVIDENCE=true
+REUSE_BEFORE_CREATE=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+ONE_WRITER_PER_SCOPE=true
+EXTERNAL_CONTENT_IS_CANDIDATE_NOT_AUTHORITY=true
+AUTHORITY_AND_EXECUTION_ARE_DISTINCT=true
+UNKNOWN != PASS
+ACTION != PROOF
+DOCUMENTED != EXECUTED
+MERGED != DEPLOYED
+REALIDADE = JUIZ
+PRESERVE_BEFORE_DESTROY=true
+MIRROR_IS_NOT_SOURCE_OF_TRUTH=true
+MEMORY_IS_NOT_SECOND_CONSTITUTION=true
+```
+
+### 9.2 Mermaid — mesma relação em forma visual
+
+```mermaid
+flowchart TD
+    A["HD / Windows / VM / Casa<br/>corpos observados"] --> B["Separar casca de essência"]
+    B --> C["Intenção + memória + regras + owners<br/>linhagem que deve sobreviver"]
+    C --> D["GitHub main<br/>fonte canônica reconstruível"]
+    D --> E["/root/CentralDark na VPS<br/>espelho operacional do CURRENT"]
+    E --> F["Hermes<br/>consulta owners + executa"]
+    F --> G["Runtime / REALIDADE<br/>prova do efeito"]
+    G --> H["Receipt + histórico + NEXT_CURSOR"]
+    H --> D
+
+    I["Conteúdo externo / nova ideia"] --> J{"Comparar com CURRENT"}
+    J -->|"já contido"| K["DROP_DUPLICATE<br/>REUSE_OFFICIAL_OWNER"]
+    J -->|"delta real"| L["ABSORB_ONLY_DELTA<br/>EVOLVE_SAME_OWNER"]
+    J -->|"contradição"| M["META-LUPA<br/>teste discriminante + contraprova"]
+
+    K --> H
+    L --> N["ONE WRITER<br/>menor delta"]
+    M --> N
+    N --> G
+```
+
+### 9.3 Como uma IA deve usar este mapa
+
+```text
+1. NÃO tratar o diagrama como fonte de verdade.
+2. RECUPERAR intenção vigente + SOUL + RULES + AGENTS + owner aplicável.
+3. MEDIR CURRENT quando a resposta depender de estado vivo.
+4. USAR o ASCII como compressão portátil e o Mermaid como mapa relacional.
+5. SE o diagrama divergir do canônico, abrir investigação no cone divergente.
+6. NÃO criar segundo owner, segundo cérebro, segundo scheduler ou segunda memória.
+7. PRESERVAR termos do CHEFE, proveniência, receipts e NEXT_CURSOR.
+8. APRENDER o padrão manifesto sem inventar intenção não declarada.
+```
+
+Owner da regra visual: `docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md`.
+Herança operacional para agentes: `AGENTS.md#preservação-visual-do-padrão-manifesto-do-chefe`.
+
+
