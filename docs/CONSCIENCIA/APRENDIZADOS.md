@@ -1814,7 +1814,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 167. Ápeiron operacional: identidade invariável, concha mutável, capacidades abertas e prova temporal sem arquitetura paralela
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L167`; `PREV_GLOBAL_UID=L166`; `NEXT_GLOBAL_UID=L168`; `LEGACY_LEARNING_NUMBER=167`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=167`; `PREV_LEARNING_REF=166`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink:** `LEARNING_ID=167`; `PREV_LEARNING_REF=166`; `NEXT_LEARNING_REF=168`.
 - **Categoria:** anaximander-inspired-core-shell-open-capability-space-temporal-proof-operational-graph.
 - **Data:** 2026-10-05.
 - **Proveniência:** analogia filosófico-matemática inspirada em Anaximandro, normalizada pela CentralDark. A fonte histórica é proveniência/candidato, nunca autoridade da Casa; a validade operacional vem somente de owners CURRENT, testes, gates e efeito observado.
@@ -1863,6 +1863,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 168. Catálogo MCP unificado de capabilities e rotas (2026-10-06)
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L168`; `PREV_GLOBAL_UID=L167`; `NEXT_GLOBAL_UID=L169`; `LEGACY_LEARNING_NUMBER=168`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=168`; `PREV_LEARNING_REF=167`; `NEXT_LEARNING_REF=169`.
 - **Owner detalhado:** `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
 - **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md`
@@ -1874,6 +1875,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 169. Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L169`; `PREV_GLOBAL_UID=L168`; `NEXT_GLOBAL_UID=L170`; `LEGACY_LEARNING_NUMBER=169`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=169`; `PREV_LEARNING_REF=168`; `NEXT_LEARNING_REF=170`.
 - **Owner detalhado:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
 - **Commit Hermes:** `c893a949b3051ae8a96cc4bc8b910857534c55e7`.
 - **Arquivo de prova:** `experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md`.
