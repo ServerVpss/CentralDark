@@ -113,7 +113,7 @@ export const CATALOG_VERSION = `v1-${MANIFEST_HASH}`;
 /** Ficha completa de cada destrutiva aprovada (origem, arquivo, se e publica). */
 export const MANIFESTO_DESTRUTIVAS = Object.freeze(MANIFESTO.entradas);
 // Confirmação administrativa é mecanismo técnico do endpoint admin. Ela não
-// reatribui autoridade humana: PIVETE/HERMES é executor, não aprovador.
+// reatribui autoridade humana: HERMES é executor, não aprovador.
 export const ADMIN_CONFIRMATIONS = Object.freeze({
     "CONFIRMO ADMIN": "confirmo_admin",
     "PERMITO SEGREDO": "permito_segredo",

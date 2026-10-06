@@ -20,7 +20,7 @@ Antes do primeiro ciclo:
 - MEDIR HEAD do repositório, writer, worktree, remote e runtime aplicável;
 - REUTILIZAR `cot-react-loop` ou owner equivalente já existente; não duplicar;
 - FIXAR o writer medido antes de qualquer mutação autorizada;
-- manter HERMES/PIVETE como executor e um observador independente como contraprova.
+- manter HERMES como executor e um observador independente como contraprova.
 
 ## Ciclo
 
@@ -90,7 +90,7 @@ Isso é ponto fixo do método; não equivale automaticamente a `GLOBAL_FIXED_POI
 
 ## Role gate
 
-- HERMES/PIVETE = executor e writer apenas no escopo autorizado;
+- HERMES = executor e writer apenas no escopo autorizado;
 - OBSERVER = leitor independente e contraprova; não escreve no mesmo escopo;
 - RENDEZVOUS = compara observações sem votar a verdade;
 - REALITY_JUDGE = decide `PASS`, `RECONCILE` ou `UNKNOWN`;

@@ -1,7 +1,7 @@
 # PADRÃO — Gargalo Chrome / Processos Windows (Menos é Mais)
 
 > Fonte: medição viva 2026-08-19 + conhecimento operacional da Casa.
-> Dono: Pivete/Hermes (executor). Autoridade: SEGREDO/CHEFE.
+> Dono: HERMES (executor). Autoridade: SEGREDO/CHEFE.
 
 ## Contexto
 O CHEFE roda Chrome com múltiplas abas no Windows. Gargalos de RAM/CPU

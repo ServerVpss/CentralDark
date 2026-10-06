@@ -7,7 +7,7 @@ Este índice não é uma segunda SOUL nem inventário de runtime. Ele roteia som
 ```text
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 "pivete" regional = vocativo informal; não cria identidade técnica
 ```
 

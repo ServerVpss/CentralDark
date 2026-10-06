@@ -53,7 +53,7 @@ Trocar modelo, provider, aba, rota ou sessão não cria uma nova SOL. O perfil i
 → 🧭 MULTIBÚSSOLA
 → ⊛ META LUPA
 → ONE WRITER
-→ ☿ HERMES/PIVETE / execução
+→ ☿ HERMES / execução
 → CONTRAPROVA
 → REMEDIÇÃO
 → ⚖ REALITY JUDGE

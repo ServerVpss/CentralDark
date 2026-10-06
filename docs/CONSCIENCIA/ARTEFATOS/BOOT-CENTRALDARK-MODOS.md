@@ -7,7 +7,7 @@ Este arquivo guarda os modos de boot sem confundir o humano com o executor.
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" regional = vocativo informal, não identidade técnica
 ```
 
@@ -16,7 +16,7 @@ Regra central:
 ```text
 SEGREDO/CHEFE COMANDA.
 SOL ORGANIZA.
-PIVETE/HERMES PRESERVA E EXECUTA.
+HERMES PRESERVA E EXECUTA.
 ACTIONS/RUNTIME PROVAM.
 IAS VARIAM.
 O MÉTODO PERMANECE.
