@@ -63,7 +63,7 @@ MEASURABLE_CURRENT_UNKNOWN_RE = re.compile(
     re.I | re.S,
 )
 LEDGER_CURRENT_CONTEXT_RE = re.compile(
-    r"(?:#1562|PR[- _]?M[ÃA]E).{0,500}"
+    r"(?:#1757|#1562|PR[- _]?M[ÃA]E).{0,500}"
     r"(?:CURRENT_MAIN(?:_SHA)?|HEAD\s+ATUAL|MAIN\s+(?:AGORA|ATUAL|CORRENTE)|CORRENTE)",
     re.I | re.S,
 )
@@ -181,13 +181,29 @@ class GitHubBackend:
     def ledger_has_sha(
         self,
         sha: str,
-        issue: int = 1562,
+        issue: int = 1757,
         ledger_ref: Optional[str] = None,
     ) -> Optional[bool]:
         needle = sha.lower()
 
-        # Preferred route: if the response cites an exact ledger comment,
-        # verify that comment directly instead of searching the thread.
+        # Preferred CURRENT route: receipts live in the repository.
+        # LEDGER_REF may name an exact repository receipt path; verify it at live main.
+        if ledger_ref and _ledger_comment_id(ledger_ref) is None:
+            raw_ref = ledger_ref.strip().strip("`'\"")
+            if raw_ref.startswith("https://github.com/"):
+                blob = BLOB_URL_RE.search(raw_ref)
+                if blob and f"{blob.group('owner')}/{blob.group('repo')}".lower() == self.repo.lower():
+                    raw_ref = urllib.parse.unquote(blob.group("path"))
+            if "/" in raw_ref and not raw_ref.startswith("#"):
+                live_main = self.current_main()
+                if not live_main:
+                    return None
+                content = self.file_at(raw_ref, live_main)
+                if content is None:
+                    return False
+                return needle in content.lower()
+
+        # Historical compatibility: exact legacy ledger comments remain valid provenance.
         comment_id = _ledger_comment_id(ledger_ref)
         if comment_id is not None:
             obj = self._gh(f"repos/{self.repo}/issues/comments/{comment_id}")
@@ -195,7 +211,8 @@ class GitHubBackend:
                 return False
             return needle in str(obj.get("body") or "").lower()
 
-        # Fallback route: GitHub issue comments are oldest-first by default.
+        # Legacy fallback only: scan the historical issue thread when no exact
+        # repository receipt was supplied.
         # Read the issue comment count, start at the newest page, then walk
         # backwards until the cited SHA is found. This prevents false FAILs
         # once #1562 grows beyond 100 comments.
@@ -271,7 +288,7 @@ class FakeBackend:
     def ledger_has_sha(
         self,
         sha: str,
-        issue: int = 1562,
+        issue: int = 1757,
         ledger_ref: Optional[str] = None,
     ) -> Optional[bool]:
         self._guard()
@@ -527,19 +544,19 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
 
     if data["direct_main_claim"]:
         if not sha:
-            checks.append(Check("ledger_1562", "FAIL", "direct-main write claim without COMMIT_SHA"))
+            checks.append(Check("ledger_active", "FAIL", "direct-main write claim without COMMIT_SHA"))
         else:
             try:
-                found = backend.ledger_has_sha(sha, 1562, data.get("ledger_ref"))
+                found = backend.ledger_has_sha(sha, 1757, data.get("ledger_ref"))
             except BackendUnavailable as exc:
-                checks.append(Check("ledger_1562", "UNKNOWN", str(exc)))
+                checks.append(Check("ledger_active", "UNKNOWN", str(exc)))
             else:
                 if found is True:
-                    checks.append(Check("ledger_1562", "PASS", "commit cited in #1562"))
+                    checks.append(Check("ledger_active", "PASS", "commit cited in active ledger/receipt"))
                 elif found is False:
-                    checks.append(Check("ledger_1562", "FAIL", "direct-main commit absent from #1562"))
+                    checks.append(Check("ledger_active", "FAIL", "direct-main commit absent from active ledger/receipt"))
                 else:
-                    checks.append(Check("ledger_1562", "UNKNOWN", "ledger could not be verified"))
+                    checks.append(Check("ledger_active", "UNKNOWN", "ledger could not be verified"))
 
     # A material trace with no checkable claim is not green.
     if not checks:

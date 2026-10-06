@@ -788,7 +788,8 @@ workflow_reconciliation_binding:
   authorization_owner: scripts/github-autonomia-promocao.mjs#authorizationFor
   no_model_required_for_transition: true
   no_parallel_promoter: true
-  protected_ledger_pr: 1562
+  protected_ledger_pr: 1757
+  legacy_protected_ledger_prs: [1562]
   observation_identity: [repository, pr_number, current_head, current_base, workflow_id, run_attempt]
   positive_horn_rules:
     - "APPROVE_EXECUTION <- AUTHORIZED, SAME_REPO, BASE_MAIN, CURRENT_HEAD_MATCH, ACTION_REQUIRED"
