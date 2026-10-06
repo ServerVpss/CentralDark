@@ -10,7 +10,7 @@
 #
 # Cadeados:
 # - update-branch é sincronização, não aprovação.
-# - PR-MÃE #1562 também é sincronizada quando ficar atrás da main; isso NÃO autoriza merge.
+# - PR-MÃE ativa #1757 é HUD/rendezvous e NÃO recebe update-branch; o body é atualizado no lugar.
 # - não faz merge, squash, deploy nem ignora checks.
 # - conflito/UNKNOWN não vira PASS.
 # - pull_request_target executa somente código confiável da base/main.
@@ -135,7 +135,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           TARGET_PR: ${{ needs.preflight.outputs.target_pr }}
-          PR_MOTHER_NUMBER: '1562'
+          PR_MOTHER_NUMBER: '1757'
+          UPDATE_BRANCH_PROTECTED_PRS: '1562,1757'
+          UPDATE_BRANCH_INCLUDE_PROTECTED: 'false'
           BASE_BRANCH: main
           UPDATE_BRANCH_INCLUDE_PROTECTED: 'true'
           UPDATE_BRANCH_FAIL_ON_BLOCKED: 'true'
@@ -148,7 +150,7 @@ jobs:
           set -euo pipefail
           echo 'CENTRALDARK_ANY_PR_UPDATE_BRANCH_DETERMINISTIC=true'
           echo 'CENTRALDARK_PR_MOTHER_UPDATE_BRANCH_DETERMINISTIC=true'
-          echo 'PR_MOTHER_NUMBER=1562'
+          echo 'PR_MOTHER_NUMBER=1757'
           echo 'PR_MOTHER_MERGE_FORBIDDEN_SYNC_ALLOWED=true'
           echo 'CENTRALDARK_STITCH_STABILIZATION=true'
           echo 'ENDPOINT=PUT /pulls/{PR}/update-branch'
@@ -160,7 +162,7 @@ jobs:
           always() &&
           steps.update.outputs.blocked != '0' &&
           needs.preflight.outputs.target_pr != '' &&
-          needs.preflight.outputs.target_pr != '1562'
+          needs.preflight.outputs.target_pr != '1757'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           TARGET_PR: ${{ needs.preflight.outputs.target_pr }}
@@ -293,8 +295,8 @@ jobs:
           echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
           echo "FLOW=PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT"
           echo "ACTION=PUT_UPDATE_BRANCH_WHEN_BEHIND_MAIN"
-          echo "PR_MOTHER_1562_UPDATE_BRANCH=DETERMINISTIC_SYNC_ALLOWED"
-          echo "PR_MOTHER_1562_MERGE=FORBIDDEN"
+          echo "PR_MOTHER_1757_UPDATE_BRANCH=SKIPPED_UI_SHELL"
+          echo "PR_MOTHER_1757_MERGE=FORBIDDEN"
           echo "STITCH_STABILIZATION=ENABLED"
           echo "UPDATE_VERDICT=${UPDATE_VERDICT:-UNKNOWN}"
           echo "REALITY_VERDICT=${REALITY_VERDICT:-UNKNOWN}"

@@ -20,7 +20,12 @@ import {
 
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
 export const CANONICAL_MAP_PATH = "apps/modulos/mapeamento/config/mapa-canonico.json";
-export const PR_MOTHER_NUMBER = 1562;
+export const PR_MOTHER_NUMBER = 1757;
+export const LEGACY_PR_MOTHER_NUMBERS = Object.freeze([1562]);
+export function isProtectedLedgerPr(number) {
+  const n = Number(number);
+  return n === PR_MOTHER_NUMBER || LEGACY_PR_MOTHER_NUMBERS.includes(n);
+}
 
 export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "⚙️ porta-de-entrada",
@@ -547,7 +552,7 @@ export function evaluateCandidate({
 
   if (pr.state !== "open") reasons.push("PR_NOT_OPEN");
   if (pr.base?.ref !== "main") reasons.push("BASE_NOT_MAIN");
-  if (Number(pr.number) === PR_MOTHER_NUMBER) reasons.push("PR_MOTHER_MERGE_FORBIDDEN");
+  if (isProtectedLedgerPr(pr.number)) reasons.push("PR_MOTHER_MERGE_FORBIDDEN");
   if (pr.draft) reasons.push("PR_IS_DRAFT");
   if (!sameRepository) reasons.push("HEAD_EXTERNAL_REPOSITORY");
   if (!trusted) reasons.push("AUTHOR_NOT_TRUSTED");
