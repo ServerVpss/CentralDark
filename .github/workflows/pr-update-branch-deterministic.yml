@@ -10,7 +10,7 @@
 #
 # Cadeados:
 # - update-branch é sincronização, não aprovação.
-# - PR-MÃE ativa #1757 também é sincronizada quando ficar atrás da main; isso NÃO autoriza merge.
+# - PR-MÃE ativa #1757 é HUD/rendezvous e NÃO recebe update-branch; o body é atualizado no lugar.
 # - não faz merge, squash, deploy nem ignora checks.
 # - conflito/UNKNOWN não vira PASS.
 # - pull_request_target executa somente código confiável da base/main.
@@ -137,6 +137,7 @@ jobs:
           TARGET_PR: ${{ needs.preflight.outputs.target_pr }}
           PR_MOTHER_NUMBER: '1757'
           UPDATE_BRANCH_PROTECTED_PRS: '1562,1757'
+          UPDATE_BRANCH_INCLUDE_PROTECTED: 'false'
           BASE_BRANCH: main
           UPDATE_BRANCH_INCLUDE_PROTECTED: 'true'
           UPDATE_BRANCH_FAIL_ON_BLOCKED: 'true'
@@ -294,7 +295,7 @@ jobs:
           echo "TARGET_PR=${TARGET_PR:-ALL_OPEN}"
           echo "FLOW=PRECHECK -> UPDATE_AND_STITCH -> REALITY_JUDGE -> RECEIPT"
           echo "ACTION=PUT_UPDATE_BRANCH_WHEN_BEHIND_MAIN"
-          echo "PR_MOTHER_1757_UPDATE_BRANCH=DETERMINISTIC_SYNC_ALLOWED"
+          echo "PR_MOTHER_1757_UPDATE_BRANCH=SKIPPED_UI_SHELL"
           echo "PR_MOTHER_1757_MERGE=FORBIDDEN"
           echo "STITCH_STABILIZATION=ENABLED"
           echo "UPDATE_VERDICT=${UPDATE_VERDICT:-UNKNOWN}"
