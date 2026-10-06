@@ -258,6 +258,54 @@ ONE_SUCCESS != REPLAYABLE_RECIPE
 PROOF_WITHOUT_LEARNING_CAN_BE_FORGOTTEN=true
 LEARNING_WITHOUT_REPLAY_IS_NOT_REUSABLE_RECIPE=true
 ```
+## Memory Pending Confirmation Gate
+
+A pending memory candidate is not an operational message to the CHEFE and is never promoted merely because Hermes, ChatGPT, or any Oracle surface said it.
+
+```text
+MEMORY_PENDING
+→ ORACLE_QUERY_READONLY
+→ WAIT_FOR_RESPONSE
+→ RECONCILE_WITH_PARENT_INTENT
+→ RECONCILE_WITH_CURRENT_DOCS_AND_OWNER
+→ REQUIRE_PROVENANCE
+→ REQUIRE_COUNTERPROOF
+→ REQUIRE_REALITY_EVIDENCE_WHEN_EFFECT_IS_EXTERNAL
+→ REQUIRE_EXISTING_WRITER
+→ IF_ALL_APPLICABLE_GATES_PASS: PROMOTE_MINIMUM_DELTA
+→ ELSE: KEEP_PENDING_OR_UNKNOWN
+```
+
+Confirmation is mandatory before promotion:
+
+```text
+CHATGPT_SAID != CONFIRMED
+ORACLE_SAID != CONFIRMED
+HERMES_SAID != CONFIRMED
+DOCUMENTED != EXECUTED
+CANDIDATE != CANONICAL
+UNKNOWN != PASS
+```
+
+The minimum confirmation envelope is:
+
+```yaml
+candidate_text:
+source:
+provenance:
+intent_match:
+current_match:
+owner_match:
+dedupe:
+counterproof:
+reality_evidence:
+writer:
+readback:
+next_cursor:
+```
+
+Only applicable fields must be proven. A field that cannot be measured remains `UNKNOWN`; it must not be silently inferred. The existing writer performs any authorized mutation only after reconciliation. The Oracle remains consultative and read-only.
+
 ## Proven Pilot
 
 The proven pilot opened `https://chatgpt.com/` in the internal Preview, created an isolated chat, sent a sanitized oracle query with all four IDs, and captured a structured response containing `CANDIDATE_CLAIM`, `EVIDENCE_LIMIT`, `COUNTERPROOF` and `NEXT_READONLY_PROBE`. This proves surface transport and response capture only; it does not prove canonical-envelope integration, writer mutation, deployment or runtime effect.
