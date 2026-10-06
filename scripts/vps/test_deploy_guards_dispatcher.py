@@ -31,7 +31,7 @@ class DeployDispatcherGateTests(unittest.TestCase):
         output = proc.stdout + proc.stderr
         self.assertEqual(proc.returncode, 0, output)
         self.assertIn("REPO_CONTRACT_VERIFY=PASS", output)
-        self.assertIn("HORN_CARACOL_GATE_ONLY=PASS", output)
+        self.assertIn("TLC23_DEPLOY_GATE_ONLY=PASS", output)
         self.assertNotIn("HORN_CARACOL_GATE_ONLY=BLOCK", output)
 
 
