@@ -146,3 +146,20 @@ test("executionTopology não confunde processo vivo com execução provada", () 
   assert.equal(snap.executionTopology.rules.processPresentIsNotExecutionProof, true);
   assert.equal(snap.executionTopology.rules.uiLoopPausedIsNotGlobalExecutionPaused, true);
 });
+
+test("hudInventory projeta inventário derivado no ONE_HEART sem promover LIVE", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-hud-inventory-"));
+  const hudDir = path.join(root, "docs/HUD");
+  fs.mkdirSync(hudDir, { recursive: true });
+  fs.writeFileSync(path.join(hudDir, "CENTRALDARK-HUD-INVENTORY.json"), JSON.stringify({
+    inventory_fingerprint: "abc123",
+    summary: { skills: 992, workflows: 71, sealed_baselines: 8 },
+  }));
+  const snap = getOperationalSnapshot({ root });
+  assert.equal(snap.hudInventory.schema, "centraldark.hud.inventory.runtime.v1");
+  assert.equal(snap.hudInventory.status, "OBSERVED");
+  assert.equal(snap.hudInventory.inventoryFingerprint, "abc123");
+  assert.equal(snap.hudInventory.summary.skills, 992);
+  assert.equal(snap.hudInventory.rules.inventoryIsDerivedNotAuthority, true);
+  assert.equal(snap.hudInventory.rules.sealIsNotLive, true);
+});
