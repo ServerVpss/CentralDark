@@ -223,7 +223,7 @@ CHEFE_OBSERVATION → RESPONDER_SO_O_PERTINENTE (sem conselho, sem risco não pe
 → só declarar ponto fixo quando não houver erro material novo no escopo medido.
 
 🧾 !REGISTRA
-→ receipt no #1562 ou PR-filho equivalente, sem segredo, com NEXT_CURSOR.
+→ receipt no #1757 ou PR-filho equivalente, sem segredo, com NEXT_CURSOR.
 
 🔏 !RASTRO
 → toda escrita/memória declarada ao CHEFE traz SHA + caminho + link + readback; sem isso, não aconteceu.
@@ -591,7 +591,7 @@ docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 RESPONSE_WITHOUT_TRACE=VALID_IF_NO_WRITE_OR_EXPLICIT_RASTRO
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
 
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
@@ -607,7 +607,7 @@ PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW=true
 RETRACT_FALSE_ALARM_IN_SAME_RECEIPT=true
 SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING=true
 ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE=true
-CLAUDE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_1562
+CLAUDE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_ACTIVE_PR_MOTHER
 ```
 
 
@@ -696,11 +696,11 @@ MATERIAL_DELTA
 → EXISTING_EQUIVALENT_CHILD_PR
 → CHILD_COMMIT + READBACK
 → CHILD_RECEIPT
-→ PR_MOTHER_1562_RECEIPT
+→ PR_MOTHER_ACTIVE_RECEIPT
 → MAIN_PROMOTION_WHEN_APPLICABLE_GATES_PASS
 ```
 
-`PR_MOTHER_1562_MERGE_FORBIDDEN=true`: #1562 é ledger/rendezvous, não PR para merge.
+`PR_MOTHER_ACTIVE_MERGE_FORBIDDEN=true`: #1757 é ledger/rendezvous, não PR para merge.
 
 
 

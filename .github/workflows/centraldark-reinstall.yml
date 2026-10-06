@@ -42,7 +42,7 @@ concurrency:
 
 env:
   REPO_ROOT: /root/CentralDark
-  PR_MAE: 1562
+  PR_MAE: 1757
 
 jobs:
   preflight:
