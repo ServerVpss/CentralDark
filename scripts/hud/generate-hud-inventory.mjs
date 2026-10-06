@@ -84,6 +84,17 @@ function sectorOf(relativePath) {
   return parts[0]?.toUpperCase() || 'REPO';
 }
 
+function surfaceOf(relativePath) {
+  if (relativePath === 'docs/HUD/HUD.html') return 'STATIC_HUD';
+  if (relativePath.startsWith('apps/modulos/hub/')) return 'HUB';
+  if (relativePath.startsWith('apps/modulos/WebUI/')) return 'WEBUI';
+  if (relativePath.startsWith('apps/modulos/aion') || relativePath.includes('AionUi')) return 'AIONUI';
+  if (relativePath.startsWith('experiments/aionui-centraldark-instinto-superior/')) return 'AIONUI_EXPERIMENT';
+  if (relativePath.startsWith('MODULES/HUB/')) return 'HUB_LEGACY_SURFACE';
+  if (relativePath.startsWith('src/')) return 'ROOT_UI';
+  return sectorOf(relativePath);
+}
+
 function sortByOwnerLine(items) {
   return items.sort((a, b) =>
     String(a.owner || '').localeCompare(String(b.owner || ''), 'pt-BR') ||
@@ -175,20 +186,37 @@ function collectUiSignals(files) {
   const roots = /^(apps\/|src\/|docs\/HUD\/|experiments\/aionui-centraldark-instinto-superior\/|MODULES\/HUB\/)/;
   const sourceFiles = files.filter((file) => roots.test(file) && /\.(tsx|jsx|html)$/.test(file));
   const records = [];
-  const seen = new Set();
-  const push = (owner, text, index, kind, label) => {
+
+  const attribute = (attrs, name) => {
+    const match = String(attrs || '').match(new RegExp('(?:^|\\\\s)' + name + '=["\\\\\\']([^"\\\\\\']+)["\\\\\\']', 'i'));
+    return match?.[1]?.trim() || null;
+  };
+  const nearbyLabel = (text, afterOpen, tagName) => {
+    const close = new RegExp('</' + tagName + '\\\\s*>', 'i');
+    const sample = text.slice(afterOpen, afterOpen + 700);
+    const found = sample.match(close);
+    const body = found ? sample.slice(0, found.index) : sample.slice(0, 240);
+    return stripMarkup(body);
+  };
+  const push = (owner, text, index, kind, attrs, fallbackLabel, element) => {
     const line = lineNumber(text, index);
-    const normalized = stripMarkup(label) || kind;
-    const key = [owner, line, kind, normalized].join('|');
-    if (seen.has(key)) return;
-    seen.add(key);
+    const label =
+      attribute(attrs, 'aria-label') ||
+      attribute(attrs, 'title') ||
+      attribute(attrs, 'data-testid') ||
+      attribute(attrs, 'name') ||
+      attribute(attrs, 'id') ||
+      stripMarkup(fallbackLabel) ||
+      kind;
     records.push({
-      id: 'ui:' + safeId([key]),
+      id: 'ui:' + safeId([owner, String(index), kind, label]),
       kind,
-      label: normalized,
+      element,
+      label,
       owner,
       line,
       sector: sectorOf(owner),
+      surface: surfaceOf(owner),
       proof_source: owner + ':' + line,
       seal_state: 'DISCOVERED_FROM_OWNER',
       live_state: 'UNKNOWN_UNTIL_SURFACE_READBACK',
@@ -198,20 +226,21 @@ function collectUiSignals(files) {
 
   for (const owner of sourceFiles) {
     const text = read(owner);
-    for (const match of text.matchAll(/<(?:button|Button)\b[^>]*>([\s\S]{0,360}?)<\/(?:button|Button)>/g)) {
-      push(owner, text, match.index, 'button', match[1]);
+
+    for (const match of text.matchAll(/<(button|Button)\b([^>]*)>/g)) {
+      push(owner, text, match.index, 'button', match[2], nearbyLabel(text, match.index + match[0].length, match[1]), match[1]);
     }
-    for (const match of text.matchAll(/<TabsTrigger\b[^>]*\bvalue=["']([^"']+)["'][^>]*>([\s\S]{0,240}?)<\/TabsTrigger>/g)) {
-      push(owner, text, match.index, 'tab', match[2] || match[1]);
+    for (const match of text.matchAll(/<TabsTrigger\b([^>]*)>/g)) {
+      push(owner, text, match.index, 'tab', match[1], nearbyLabel(text, match.index + match[0].length, 'TabsTrigger') || attribute(match[1], 'value'), 'TabsTrigger');
     }
     for (const match of text.matchAll(/\bdata-tab=["']([^"']+)["']/g)) {
-      push(owner, text, match.index, 'tab', match[1]);
+      push(owner, text, match.index, 'tab', match[0], match[1], 'data-tab');
     }
-    for (const match of text.matchAll(/<(SidebarMenuButton|DropdownMenuItem|CommandItem|NavigationMenuLink)\b[^>]*>([\s\S]{0,280}?)<\/\1>/g)) {
-      push(owner, text, match.index, 'navigation', match[2] || match[1]);
+    for (const match of text.matchAll(/<(SidebarMenuButton|DropdownMenuItem|CommandItem|NavigationMenuLink)\b([^>]*)>/g)) {
+      push(owner, text, match.index, 'navigation', match[2], nearbyLabel(text, match.index + match[0].length, match[1]), match[1]);
     }
-    for (const match of text.matchAll(/<h[1-3]\b[^>]*>([\s\S]{0,220}?)<\/h[1-3]>/g)) {
-      push(owner, text, match.index, 'section', match[1]);
+    for (const match of text.matchAll(/<(h[1-3])\b([^>]*)>/g)) {
+      push(owner, text, match.index, 'section', match[2], nearbyLabel(text, match.index + match[0].length, match[1]), match[1]);
     }
   }
   return sortByOwnerLine(records);
@@ -378,6 +407,8 @@ function buildInventory() {
     ui_tabs: uiSignals.filter((item) => item.kind === 'tab').length,
     ui_navigation: uiSignals.filter((item) => item.kind === 'navigation').length,
     ui_sections: uiSignals.filter((item) => item.kind === 'section').length,
+    ui_surfaces: new Set(uiSignals.map((item) => item.surface)).size,
+    ui_source_files: new Set(uiSignals.map((item) => item.owner)).size,
     genealogy_nodes: genealogy.node_count,
     lineage_files: genealogy.lineage_files.length,
     proven_claims: metabolism.proven_claims.length,
@@ -423,6 +454,7 @@ function buildInventory() {
     seals,
     ui: {
       signal_schema: 'button|tab|navigation|section',
+      map_contract: 'OWNER+LINE+SECTOR+SURFACE+KIND+LABEL+PROOF_SOURCE+SEAL_STATE+LIVE_STATE',
       signals: uiSignals,
     },
   };
@@ -434,6 +466,8 @@ function validate(inventory) {
   require(inventory.summary.skills > 0, 'skills_empty');
   require(inventory.summary.workflows > 0, 'workflows_empty');
   require(inventory.summary.ui_signals > 0, 'ui_signals_empty');
+  require(inventory.summary.ui_buttons > 0 && inventory.summary.ui_tabs > 0, 'button_tab_map_empty');
+  require(inventory.summary.ui_surfaces > 0, 'ui_surface_map_empty');
   require(inventory.summary.genealogy_nodes > 0, 'genealogy_empty');
   require(inventory.summary.proven_claims > 0, 'proven_claims_empty');
   require(inventory.summary.deterministic_owners > 0, 'deterministic_owners_empty');
@@ -441,7 +475,7 @@ function validate(inventory) {
   require(inventory.routes.some((route) => route.id === 'RDC_DESKTOP_COMMANDER'), 'rdc_route_missing');
   require(inventory.routes.some((route) => route.id === 'SCREENPIPE_LOCAL_SENSOR'), 'screenpipe_route_missing');
   require(inventory.routes.some((route) => route.id === 'HERMES_DELEGATED_COMMIT_PATH'), 'hermes_delegate_route_missing');
-  require(inventory.ui.signals.every((item) => item.owner && item.proof_source && item.seal_state && item.live_state), 'ui_signal_contract_incomplete');
+  require(inventory.ui.signals.every((item) => item.owner && item.proof_source && item.seal_state && item.live_state && item.sector && item.surface), 'ui_signal_contract_incomplete');
   require(inventory.policy.seal_live_separation === true, 'seal_live_policy_missing');
   return failures;
 }
