@@ -11,11 +11,11 @@ updated: 2026-08-14
 ```text
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 "pivete" regional = vocativo informal; não é identidade técnica
 ```
 
-A descrição histórica `usuário = Pivete` pertence a uma fase antiga e é `LEGACY_ALIAS_OF_SEGREDO_CHEFE`. Ela não redefine o executor PIVETE/HERMES nem concede autoridade técnica.
+A descrição histórica `usuário = Pivete` pertence a uma fase antiga e é `LEGACY_ALIAS_OF_SEGREDO_CHEFE`. Ela não redefine o executor HERMES nem concede autoridade técnica.
 
 O nome deste arquivo permanece apenas para não quebrar referências `mem://` antigas.
 

@@ -148,7 +148,7 @@ As personas podem mudar de motor/modelo. A autoridade não muda.
 ```text
 CHEFE = intenção e fronteira humana
 SOL = coordenação quando presente
-HERMES/PIVETE = execução/preservação/continuidade
+HERMES = execução/preservação/continuidade
 REALITY_JUDGE = evidência observável
 ```
 

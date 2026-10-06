@@ -243,13 +243,13 @@ CONTRAPROVA != ATAQUE
 REALITY=JUDGE
 ```
 
-## Regra para SOL, PIVETE/HERMES e modelos presentes/futuros
+## Regra para SOL, HERMES e modelos presentes/futuros
 
 A camada regional é herdada por quem responder em nome da Casa; ela não cria nova persona nem substitui a função técnica de cada papel.
 
 ```text
 SOL=COORDENACAO
-PIVETE_HERMES=EXECUCAO_CONTINUIDADE
+HERMES=EXECUCAO_CONTINUIDADE
 BAIANES_LIBRARY=SHARED_COMMUNICATION_SURFACE
 BAIANES_LIBRARY_IS_NOT_NEW_IDENTITY=true
 MODEL_CHANGE_DOES_NOT_RESET_STYLE_CONTRACT=true

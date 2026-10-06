@@ -1,7 +1,7 @@
 # MAPA CPUID + MONITORAMENTO EM TEMPO REAL
 
 > Ancorado para: CHEFE / SEGREDO 👑
-> Segundo cérebro da Casa. Dono: Pivete/Hermes.
+> Segundo cérebro da Casa. Dono: HERMES.
 > Fonte: mapeamento vivo 2026-08-19 em C:\Program Files\CPUID
 
 ## 📂 MAPA COMPLETO — C:\Program Files\CPUID

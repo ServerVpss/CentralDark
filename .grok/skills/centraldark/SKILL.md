@@ -30,7 +30,7 @@ Antes de agir:
 
 `SOL` = coordenação/reconciliação operacional.
 
-`PIVETE/HERMES` = execução, continuidade e preservação.
+`HERMES` = execução, continuidade e preservação.
 
 Modelo/provider = motor substituível.
 

@@ -100,7 +100,7 @@ SCREENPIPE != NEW_HANDOFF_PROTOCOL
 REALITY = JUDGE
 ```
 
-Qualquer agente, modelo, skill, worker, runtime, superfície ou processo CentralDark **autorizado no host** pode requisitar esta capacidade pelo `MEGAZORD-CENTRALDARK` / `Capability Contract Router` quando tela, histórico, input, áudio, accessibility ou contexto temporal discriminarem um fato material. SOL/Codex e PIVETE/HERMES são apenas exemplos de consumidores, nunca limite do contrato.
+Qualquer agente, modelo, skill, worker, runtime, superfície ou processo CentralDark **autorizado no host** pode requisitar esta capacidade pelo `MEGAZORD-CENTRALDARK` / `Capability Contract Router` quando tela, histórico, input, áudio, accessibility ou contexto temporal discriminarem um fato material. SOL/Codex e HERMES são apenas exemplos de consumidores, nunca limite do contrato.
 
 ```text
 ANY_AUTHORIZED_CENTRALDARK_ACTOR

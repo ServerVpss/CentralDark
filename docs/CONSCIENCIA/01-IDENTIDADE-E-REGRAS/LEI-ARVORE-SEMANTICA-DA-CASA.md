@@ -5,7 +5,7 @@ updated: 2026-08-27
 authority: SEGREDO/CHEFE
 scope: "organização física e semântica da Casa, BRAIN/Obsidian e artefatos derivados"
 owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-ARVORE-SEMANTICA-DA-CASA.md"
-consumer: "SOL, PIVETE/HERMES, qualquer IA/agente, Obsidian, Grafo, Vetores, scripts de reconciliação"
+consumer: "SOL, HERMES, qualquer IA/agente, Obsidian, Grafo, Vetores, scripts de reconciliação"
 ---
 
 # Lei da Árvore Semântica da Casa
@@ -245,7 +245,7 @@ A Casa é mantida em parceria operacional sem misturar autoridade:
 
 ```text
 SEGREDO/CHEFE = CURADOR_DA_INTENCAO + AUTORIDADE_FINAL
-PIVETE/HERMES = ZELADOR_DA_ORDEM + EXECUTOR + CONTINUIDADE
+HERMES = ZELADOR_DA_ORDEM + EXECUTOR + CONTINUIDADE
 SOL = COORDENA/RECONCILIA
 REALIDADE = JULGA
 ```

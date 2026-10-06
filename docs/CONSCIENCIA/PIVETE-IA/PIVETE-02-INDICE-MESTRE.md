@@ -29,7 +29,7 @@ LEIA-ME-IA.md
 
 ```text
 PIVETE antigo = LEGACY_ALIAS_OF_SEGREDO_CHEFE quando o texto fala do humano/dono/comandante
-PIVETE/HERMES atual = executor, preservação e continuidade
+HERMES atual = executor, preservação e continuidade
 SOL = coordenadora
 SEGREDO/CHEFE = humano e autoridade final
 ```

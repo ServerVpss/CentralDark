@@ -117,7 +117,7 @@ Papéis:
 🧿 SENTINELA = alinhamento/drift
 🧭 MULTIBÚSSOLA = direções e cruzamentos
 ⊛ META LUPA = causalidade e discriminação
-☿ HERMES/PIVETE = execução
+☿ HERMES = execução
 ⚖ REALITY JUDGE = veredito por evidência
 🐚 CARACOL REVERSO = retorno ao último cursor provado
 ```
