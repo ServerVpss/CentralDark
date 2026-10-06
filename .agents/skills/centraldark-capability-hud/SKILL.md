@@ -107,6 +107,41 @@ Fluxo:
 → RECEIPT/NEXT_CURSOR
 ```
 
+## Promoção viva — prova → runtime → HUD
+
+Tudo que fecha prova deve voltar ao sistema vivo sem transformar HUD em autoridade:
+
+```text
+PROVEN_RUNTIME_AFFECTING_DELTA
+→ OWNER
+→ MAIN
+→ DEPLOY_CAUSAL
+→ RUNTIME_READBACK
+→ /heartbeat ONE_HEART
+→ HUD OFFICIAL
+→ RECEIPT/NEXT_CURSOR
+
+PROVEN_CANONICAL_KNOWLEDGE
+→ OWNER/RECIPE/FINGERPRINT
+→ MACHINE_INVENTORY
+→ /heartbeat PROJECTION
+→ HUD OFFICIAL
+```
+
+Não reiniciar serviço sem dependência causal. `MERGED != DEPLOYED`; `HUD_UPDATED != RUNTIME_PASS`.
+
+```text
+SEALED_BASELINE_PRESERVED=true
+SEAL_IS_NOT_LIVE=true
+LIVE_REMEASURE_REQUIRED_FOR_MUTABLE_STATE=true
+HUD_REALTIME_REFRESH_MS=5000
+LOCAL_OBSIDIAN_HUD_IS_PROJECTION_NOT_AUTHORITY=true
+OBSIDIAN_PLUGIN_OWNER=apps/modulos/obsidian-plugin-grafo-vivo
+OBSIDIAN_PLUGIN_RUNTIME_LOAD_REQUIRES_APP_READBACK=true
+ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT
+```
+
+O vault local pode receber o plugin/binding existente, mas não vira segundo Git, segundo ledger ou segunda verdade.
 ## HUD minimo
 
 ```text
