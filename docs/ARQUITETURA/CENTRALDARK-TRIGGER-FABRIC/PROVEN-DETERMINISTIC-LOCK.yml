@@ -624,8 +624,8 @@ hybrid_multiroute_capability_replay_2026_10_02:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
   state: SEALED_PROVEN
   learning_ref: 146
-  dependency_fingerprint: a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069
-  lock_key: f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b
+  dependency_fingerprint: 42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5
+  lock_key: 3318ec585173c84b5ad374b80bfade8180f1e9b11b013120baec55f46f5ab781
   objective: >-
     Reusar o mesmo capability bus por rotas autorizadas alternativas sem
     promover falha local de transporte para falha global do organismo.
