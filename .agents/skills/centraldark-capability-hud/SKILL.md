@@ -3,7 +3,7 @@ name: centraldark-capability-hud
 description: Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.
 metadata:
   type: diagnostic
-  version: "1.1"
+  version: "2.0"
   owner: SEGREDO/CHEFE
 ---
 
@@ -49,6 +49,62 @@ INTENCAO >= 95%
 → PROBE SEGURO
 → EXECUTAR ATE PASS | CAUSA_RAIZ | BLOQUEIO_REAL
 → SO ENTAO RESPONDER
+```
+
+## Agente cartógrafo do HUD
+
+Esta skill também é a superfície canônica do agente que inventaria a Casa sem criar um segundo cérebro.
+
+```text
+HUD_CARTOGRAPHER_AGENT=true
+OWNER=.agents/skills/centraldark-capability-hud/SKILL.md
+MACHINE_GENERATOR=scripts/hud/generate-hud-inventory.mjs
+MACHINE_INVENTORY=docs/HUD/CENTRALDARK-HUD-INVENTORY.json
+HUD_CONSUMER=docs/HUD/HUD.html
+PR_MOTHER_CONSUMER=.github/workflows/selo-fabric.yml
+```
+
+O agente coleta e cruza, sempre do CURRENT:
+
+```text
+GENEALOGIA
+→ APRENDIZADOS-NEUROLINK-LINEAGE + demais lineage owners
+
+METABOLISMO
+→ PROVEN-CLAIMS + receipts + receitas + Trigger Fabric
+
+DETERMINISMO
+→ deterministic locks + executable recipe + verifier + owners determinísticos
+
+SUPERFÍCIES
+→ botões + abas + navegação + seções + agentes + skills + workflows + rotas MCP
+
+CADEADOS
+→ SELO = última prova válida/fingerprint/rollback
+→ LIVE = medição atual/timestamp/fonte
+```
+
+Nunca promover `SELO` para `LIVE` sem probe do runtime aplicável. O inventário é projeção derivada e machine-consumable; owners continuam sendo a fonte canônica.
+
+Comandos:
+
+```bash
+node scripts/hud/generate-hud-inventory.mjs --write
+node scripts/hud/generate-hud-inventory.mjs --check
+```
+
+Fluxo:
+
+```text
+#ACORDAR
+→ GITHUB_ENTRY_HUD
+→ GENERATE/CHECK_MACHINE_INVENTORY
+→ DIFF_FINGERPRINT
+→ MAP_GENEALOGY_METABOLISM_DETERMINISM_SURFACES
+→ MEASURE_ONLY_RELEVANT_LIVE_BINDINGS
+→ SEAL/LIVE SPLIT
+→ UPDATE HUD
+→ RECEIPT/NEXT_CURSOR
 ```
 
 ## HUD minimo
