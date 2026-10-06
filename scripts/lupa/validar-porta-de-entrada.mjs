@@ -1095,6 +1095,33 @@ if (!contract) {
   if (goals.micro_goal !== "DERIVED_FROM_CURRENT_WOUND") errors.push("MICRO_GOAL_NAO_DERIVADO_DA_FERIDA");
   if (goals.child_failure_does_not_replace_parent_goal !== true) errors.push("FALHA_FILHA_SUBSTITUI_GOAL_PAI");
   if (goals.current_wound_drives_next_micro_goal !== true) errors.push("FERIDA_ATUAL_NAO_DIRIGE_MICRO_GOAL");
+  if (goals.criterion_inheritance_marker !== "HEREDITARY_ADAPTIVE_CRITERION") errors.push("CRITERION_HEREDITARIO_AUSENTE");
+  for (const child of ["GOAL","SUBGOAL","BATCH","SUBAGENT","SUBSUBGOAL"]) {
+    if (!Array.isArray(goals.applies_to) || !goals.applies_to.includes(child)) errors.push(`CRITERION_HERANCA_AUSENTE_${child}`);
+  }
+  if (goals.child_can_refine_criterion !== true) errors.push("CHILD_NAO_PODE_REFINAR_CRITERION");
+  if (goals.child_cannot_weaken_parent_criterion !== true) errors.push("CHILD_PODE_ENFRAQUECER_PARENT_CRITERION");
+  if (goals.local_done_does_not_equal_parent_done !== true) errors.push("LOCAL_DONE_CONFUNDIDO_COM_PARENT_DONE");
+  for (const terminal of ["FIXED_POINT","HUMAN_ONLY_BLOCKER"]) {
+    if (!Array.isArray(goals.parent_terminal_state) || !goals.parent_terminal_state.includes(terminal)) errors.push(`PARENT_TERMINAL_STATE_AUSENTE_${terminal}`);
+  }
+
+  const ladder = contract.capability_proof_ladder ?? {};
+  if (ladder.marker !== "CENTRALDARK_CAPABILITY_PROOF_LADDER") errors.push("CAPABILITY_PROOF_LADDER_AUSENTE");
+  const expectedStages = ["DECLARED","DISCOVERED","CONFIGURED","HEALTHY","EXECUTED","RECEIPT"];
+  if (JSON.stringify(ladder.stages ?? []) !== JSON.stringify(expectedStages)) errors.push("CAPABILITY_PROOF_LADDER_ORDEM_INVALIDA");
+  if (ladder.no_stage_implies_next !== true) errors.push("CAPABILITY_STAGE_IMPLICOU_PROXIMO");
+  if (ladder.strongest_claim_is_highest_measured_stage !== true) errors.push("CAPABILITY_CLAIM_ACIMA_DA_PROVA");
+
+  const sectors = contract.sectoral_parallel_perception_contract ?? {};
+  if (sectors.marker !== "CENTRALDARK_SECTORAL_PARALLEL_PERCEPTION") errors.push("SECTORAL_PARALLEL_PERCEPTION_AUSENTE");
+  if (sectors.selection_rule !== "PARALLEL_PERCEPTION_ALLOWED_WHEN_INFORMATION_GAIN") errors.push("SECTOR_FANOUT_SEM_INFORMATION_GAIN");
+  if (sectors.sector_count_is_fixed !== false) errors.push("SECTOR_COUNT_FIXADO");
+  if (sectors.read_only_fanout_before_mutation !== true) errors.push("SECTOR_FANOUT_NAO_READONLY");
+  if (sectors.rendezvous_before_mutation !== true) errors.push("SECTOR_RENDEZVOUS_AUSENTE");
+  if (sectors.dedupe_before_mutation !== true) errors.push("SECTOR_DEDUPE_AUSENTE");
+  if (sectors.same_scope_parallel_mutation !== false) errors.push("SECTOR_PARALLEL_MUTATION_SAME_SCOPE");
+  if (sectors.reality_is_judge !== true) errors.push("SECTOR_REALITY_JUDGE_AUSENTE");
 
   const roleMap = contract.authority_role_map ?? {};
   const expectedRoleMap = {
