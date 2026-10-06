@@ -1010,7 +1010,20 @@
           "SOUL_SYNC_CURRENT_FOR_FIXED_POINT"
         ],
         "runtime_http_health": "PASS_EXISTING_PROCESS",
-        "live_catalog_new_payload": "UNKNOWN_UNTIL_PROCESS_RELOAD_AND_TOOL_READBACK"
+        "live_catalog_new_payload": "UNKNOWN_UNTIL_SERVICE_RELOAD_AND_TOOL_READBACK",
+        "vps_runtime_tree": "/root/CentralDark_MCP_RUNTIME",
+        "vps_runtime_unit": "centraldark-native-mcp-http.service",
+        "runtime_files_promoted": "PASS",
+        "runtime_src_sha256": "3f3d059ae00469728d535ae34121322d335e9365555494bd89a9132d1ae64ca4",
+        "runtime_dist_sha256": "d63020ec58b940d636b57a091608faf63b62c607a489fada64c2bd9339e0c1b0",
+        "runtime_backup": "/root/CentralDark-Recovery/mcp-catalog-20261006",
+        "runtime_process_before_reload": {
+          "pid": 2446659,
+          "unit": "centraldark-native-mcp-http.service",
+          "state": "active",
+          "port": 9100
+        },
+        "runtime_restart_attempt": "BLOCKED_BY_EXECUTION_TOOL_SECURITY"
       },
       "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#current-vivo--2026-10-06--learning_168_mcp_unified_capability_catalog",
       "materialization_requirements": {
