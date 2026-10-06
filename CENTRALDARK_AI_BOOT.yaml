@@ -167,6 +167,13 @@ CENTRALDARK_AI_BOOT:
       hud_seal_live_split_required: true
       hud_full_surface_map_machine_enumerated: true
       hud_inventory_load_policy: "INDEX_FIRST_THEN_LOAD_ONLY_PERTINENT_OWNER_CONE"
+      hud_live_source: "/heartbeat"
+      hud_realtime_refresh_ms: 5000
+      hud_proven_runtime_path: "MAIN->DEPLOY_CAUSAL->RUNTIME_READBACK->HEARTBEAT->HUD"
+      hud_proven_knowledge_path: "MACHINE_INVENTORY->HEARTBEAT_PROJECTION->HUD"
+      local_obsidian_hud_is_projection_not_authority: true
+      active_rendezvous: "RESOLVE_FROM_CURRENT"
+      pr_number_is_runtime_binding_not_identity: true
     proof:
       unknown_is_pass: false
       action_is_proof: false
