@@ -745,3 +745,13 @@ CURRENT_OVER_HISTORY = true
 - **Target:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
 - **Conteúdo:** Hermes executor provado em PR #1748 por commit/push/readback externo entra no catálogo metabólico. Screenpipe CLI entra como rota de recorder/search/pipes com regra de status/freshness antes de PASS.
 - **Cristal:** `HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748`; `SCREENPIPE_CLI_RECORDER=CATALOGED_RECIPE`; `SCREENPIPE_RUNTIME_ON_VPS=UNKNOWN_UNTIL_STATUS_JSON`.
+
+
+### [2026-10-06] HUD Cartographer — genealogia + metabolismo + determinismo + superfícies
+- **Tipo:** LEARNING_INDEX / HUD_MACHINE_INVENTORY / GENEALOGY / METABOLISM / DETERMINISM
+- **Learning:** #170
+- **Target:** docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-HUD-CARTOGRAPHER-GENEALOGIA-METABOLISMO-DETERMINISMO.md
+- **Owner:** .agents/skills/centraldark-capability-hud/SKILL.md
+- **Gerador:** scripts/hud/generate-hud-inventory.mjs
+- **Conteúdo:** o Capability HUD evolui no mesmo owner para cartografar genealogia, claims/receipts/receitas, determinismo, agentes, skills, workflows, rotas e elementos UI; o JSON é índice derivado e cada cadeado preserva SELO separado de LIVE.
+- **Cristal:** HUD_CARTOGRAPHER_AGENT=true; MACHINE_INVENTORY_IS_DERIVED_NOT_AUTHORITY=true; SEAL_LIVE_SPLIT_REQUIRED=true; FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED; REPLAY_BEFORE_REDISCOVERY=true.
