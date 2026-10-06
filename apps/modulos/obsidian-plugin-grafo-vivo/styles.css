@@ -76,3 +76,124 @@
 }
 .cd-grafo-changelog-bloco ul { margin: 0; padding-left: 20px; }
 .cd-grafo-changelog-bloco li { margin: 3px 0; font-size: 13px; }
+
+
+/* Hermes original live rail — HUD fixo + stream móvel */
+.cd-hud-live-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 8px;
+  gap: 8px;
+  background: var(--background-primary);
+}
+.cd-hud-toolbar { flex: 0 0 auto; }
+.cd-hud-frame {
+  flex: 1 1 auto;
+  min-height: 180px;
+  overflow: hidden;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  background: var(--background-secondary);
+}
+.cd-hud-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+}
+.cd-hermes-status-grid {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(110px, 1fr));
+  gap: 6px;
+}
+.cd-hermes-status-card {
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 9px;
+  background: var(--background-secondary);
+}
+.cd-hermes-status-head {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.cd-hermes-status-detail {
+  margin-top: 3px;
+  font-family: var(--font-monospace);
+  font-size: 10px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cd-hermes-pass { border-color: rgba(34, 197, 94, .45); }
+.cd-hermes-warn { border-color: rgba(234, 179, 8, .5); }
+.cd-hermes-fail { border-color: rgba(239, 68, 68, .55); }
+.cd-hermes-unknown { border-color: var(--background-modifier-border); }
+
+.cd-hermes-log-panel {
+  flex: 0 0 220px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  background: #080c10;
+}
+.cd-hermes-log-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  color: #dbeafe;
+  font-size: 11px;
+}
+.cd-hermes-log-header span {
+  color: #94a3b8;
+  font-family: var(--font-monospace);
+  font-size: 10px;
+}
+.cd-hermes-log-stream {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px 10px 10px;
+  scroll-behavior: smooth;
+  font-family: var(--font-monospace);
+  font-size: 10px;
+  line-height: 1.45;
+}
+.cd-hermes-log-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  animation: cdHermesLogIn 160ms ease-out;
+  color: #94a3b8;
+}
+.cd-hermes-log-pass { color: #86efac; }
+.cd-hermes-log-warn { color: #fde047; }
+.cd-hermes-log-error { color: #fca5a5; }
+.cd-hermes-log-info { color: #bfdbfe; }
+
+@keyframes cdHermesLogIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1100px) {
+  .cd-hermes-status-grid { grid-template-columns: repeat(4, minmax(100px, 1fr)); }
+}
+@media (max-width: 720px) {
+  .cd-hermes-status-grid { grid-template-columns: repeat(2, minmax(100px, 1fr)); }
+  .cd-hermes-log-panel { flex-basis: 180px; }
+}

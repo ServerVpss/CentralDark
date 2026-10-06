@@ -18,6 +18,8 @@ export interface GrafoVivoSettings {
   autoUpdateIntervaloMinutos: number;
   semanticRepoRoot: string;
   semanticPython: string;
+  hermesSshHost: string;
+  hermesLiveRefreshMs: number;
 }
 
 export const DEFAULT_SETTINGS: GrafoVivoSettings = {
@@ -37,6 +39,8 @@ export const DEFAULT_SETTINGS: GrafoVivoSettings = {
   autoUpdateIntervaloMinutos: 10,
   semanticRepoRoot: "",
   semanticPython: "",
+  hermesSshHost: "Segredo-VPS",
+  hermesLiveRefreshMs: 1500,
 };
 
 export class GrafoVivoSettingTab extends PluginSettingTab {
@@ -156,6 +160,31 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
       });
 
     if (Platform.isDesktopApp) {
+      containerEl.createEl("h3", { text: "Hermes LIVE no HUD" });
+
+      new Setting(containerEl)
+        .setName("Host SSH do Hermes")
+        .setDesc("Binding variável usado só para ler o runtime Hermes remoto. Ex.: alias da VPS em ~/.ssh/config.")
+        .addText((txt) =>
+          txt
+            .setPlaceholder("Segredo-VPS")
+            .setValue(this.plugin.settings.hermesSshHost)
+            .onChange(async (v) => {
+              this.plugin.settings.hermesSshHost = v.trim() || "Segredo-VPS";
+              await this.plugin.saveSettings();
+            }),
+        );
+
+      new Setting(containerEl)
+        .setName("Atualização Hermes LIVE (ms)")
+        .setDesc("Frequência da projeção do gateway/logs no HUD. Mínimo: 1000 ms.")
+        .addText((txt) =>
+          txt.setValue(String(this.plugin.settings.hermesLiveRefreshMs)).onChange(async (v) => {
+            this.plugin.settings.hermesLiveRefreshMs = Math.max(1000, parseInt(v, 10) || 1500);
+            await this.plugin.saveSettings();
+          }),
+        );
+
       containerEl.createEl("h3", { text: "Semântica local" });
 
       new Setting(containerEl)
