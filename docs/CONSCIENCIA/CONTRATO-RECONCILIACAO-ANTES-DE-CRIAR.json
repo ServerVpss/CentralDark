@@ -2921,6 +2921,43 @@
   },
   "mandatory_pre_solution_sequence_mode": "PERTINENT_SUBSET_ONLY",
   "pre_solution_sequence_is_global_blocker": false,
+  "oracle_learning_replay_policy": {
+    "marker": "CENTRALDARK_ORACLE_LEARNING_REPLAY",
+    "status": "CANONICAL",
+    "owner": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md",
+    "one_success_is_replayable_recipe": false,
+    "new_proven_path_flow": [
+      "CRYSTALLIZE_MINIMUM_LEARNING",
+      "STORE_PROVENANCE",
+      "EMIT_EVIDENCE_ENVELOPE",
+      "REPLAY_ONCE",
+      "COMPARE_RESULT_SCHEMA_AND_EXPECTED_EFFECT",
+      "PROMOTE_TO_REUSABLE_RECIPE_IF_EQUIVALENT",
+      "KEEP_AS_SINGLE_RUN_PROOF_IF_DIVERGENT"
+    ],
+    "same_conversation_retry_once_when_surface_survives": true,
+    "new_chat_same_tab_only_after_same_conversation_failure": true,
+    "new_browser_tab_only_after_same_tab_route_proven_unusable": true,
+    "blind_identical_retry_without_new_information": false,
+    "canonical_first_prefix": [
+      "!CENTRALDARK",
+      "#ACORDAR",
+      "!CALIBRAR",
+      "!MULTIBUSSOLA"
+    ],
+    "external_surface_must_consult_applicable_current_canon_when_accessible": true,
+    "no_canon_access_requires_evidence_limit": true,
+    "external_output_remains_candidate": true,
+    "persist_whole_private_conversation_by_default": false,
+    "required_causal_fields": [
+      "INTENT_ID",
+      "EVENT_ID",
+      "CAUSATION_ID",
+      "SURFACE_ID",
+      "ATTEMPT_ID"
+    ],
+    "replayability_requires_equivalent_result_schema_and_expected_effect": true
+  },
   "capability_proof_ladder": {
     "marker": "CENTRALDARK_CAPABILITY_PROOF_LADDER",
     "status": "CANONICAL",
