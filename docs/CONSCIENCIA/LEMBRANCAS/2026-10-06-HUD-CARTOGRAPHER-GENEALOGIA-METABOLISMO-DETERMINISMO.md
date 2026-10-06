@@ -84,6 +84,11 @@ Medição Casa/Windows desta rodada:
 - o mesmo plugin existente foi copiado do CURRENT e habilitado no `community-plugins.json`;
 - hashes locais após readback: `main.js=a8f6f00f8a86fd7213f1216f29a034b8b7ff57f680d88d7be37741564b0edf29`, `manifest.json=0db30d1fcbe6bc931106c2187a36e7f415befa785ce68df28fcf915f057734bb`, `styles.css=d797d77552f5788846bbb3228b0b9145b21bb6d4a6832f1592b32f93aaa5f043`;
 - `OBSIDIAN_PLUGIN_FILES_AND_ENABLE_CONFIG=PASS`;
-- `OBSIDIAN_PLUGIN_RUNTIME_LOADED=UNKNOWN_UNTIL_OBSIDIAN_APP_READBACK`.
+- `OBSIDIAN_PLUGIN_RUNTIME_LOADED=PASS`.
 
 O vault continua projeção local; não criar `.git` paralelo nele.
+
+Readback após abrir o Obsidian:
+- `obsidian.json` marcou o vault `🪬Centraldark -HUD🪬` como `open=true`;
+- `.obsidian/workspace.json` registrou `centraldark-grafo-vivo:Abrir Grafo Vivo CentralDark` e `centraldark-grafo-vivo:Abrir Grafo 3D · Jarvis` no ribbon;
+- portanto `WORKSPACE_COMMAND_REGISTRATION=PASS` e `OBSIDIAN_PLUGIN_RUNTIME_LOADED=PASS` no cone medido.
