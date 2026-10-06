@@ -20,7 +20,7 @@
     "one_writer_per_scope": true,
     "reality_is_judge": true
   },
-  "inventory_fingerprint": "9f0c5aff4dae9226aadc2fabba5cea03eee1e58637ea3e637021dac41c36a638",
+  "inventory_fingerprint": "84cfdea16385be9b6b117e65664f9140041e664e3cb0203421b32ac6ccea2d9f",
   "summary": {
     "tracked_files": 11439,
     "skills": 992,
@@ -46,7 +46,7 @@
     "lineage_files": [
       {
         "owner": "docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json",
-        "fingerprint": "0f0df456459f2572b406cff4fdfdcf851c82ddbc7945de0d9f8b35c047c8fda6",
+        "fingerprint": "9c55f36fbc9543a7a7f648febc1f50117a6bb1c808ef0bdb4de9e77ded817719",
         "sector": "CONSCIENCIA"
       },
       {
@@ -2266,7 +2266,7 @@
       }
     ],
     "node_count": 170,
-    "fingerprint": "e598cbd7dce6954226a3f65e839ee2039de54898b57c5c8a411d47370be82fe6"
+    "fingerprint": "79d5bb8c05435a57f61621bdefcb71bb161a5623a72e491e9abf09d6980c4dbb"
   },
   "metabolism": {
     "proven_claims_owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
@@ -2584,7 +2584,7 @@
       },
       {
         "owner": "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hud-cartographer-complete-inventory.md",
-        "fingerprint": "3554255847fdda4b008a3415d4caf6a752e0222067847eb070fb03cc393e56aa",
+        "fingerprint": "12ae637d7b5a02a7ac87b7e9fd709c8a575e3107c7917fec983242bf25f8cf43",
         "proof_source": "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hud-cartographer-complete-inventory.md"
       },
       {
@@ -2645,7 +2645,7 @@
         "proof_source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     ],
-    "fingerprint": "f11c845abb843dd1923a9845fa3249d7acc63f1dfd49c30ca890946cc57ad411"
+    "fingerprint": "1a04495aa54c631f7f61c42aa5be6a22a23894c4aac62ede9271b448f7fd84e9"
   },
   "determinism": {
     "lock_owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml",
@@ -3049,7 +3049,7 @@
       {
         "owner": "docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-HUD-CARTOGRAPHER-GENEALOGIA-METABOLISMO-DETERMINISMO.md",
         "sector": "CONSCIENCIA",
-        "fingerprint": "20cd3ba41e7dcd5796c83cdb4c7bdbaffe55f3b7235dbd7bc3bd74e3bad8aff5"
+        "fingerprint": "da85bd9e68ff4ae838f47e21dd894bb7d1a88de05947103f880709970d514795"
       },
       {
         "owner": "docs/INSTALADOR/24-rebuild-deterministico.md",
@@ -3087,7 +3087,7 @@
         "fingerprint": "85acb4ef3cb1853bf071c68a62df7bc08bfdf9a1ed3059324ae48d67d8fad456"
       }
     ],
-    "fingerprint": "1d3bf0672a00296035c2b98d9aec8376036d06122116a3e65c6b721877e16fb4"
+    "fingerprint": "297fa7d8adf120b3dbbc42d7d39f70e44c0fda697c2514b80c150c1224b976c3"
   },
   "agents": [
     {

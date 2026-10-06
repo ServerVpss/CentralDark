@@ -5,7 +5,7 @@ export const HOUSE_INVENTORY = {
   "source_of_truth": "REPOSITORY_OWNERS",
   "source_is_authority": false,
   "second_truth": false,
-  "generated_from": "ae84ff007f104c6e3234e55bb8a5abd480f55880",
+  "generated_from": "7ab8c441d08e2016ad04e8a411f4cbc90d5309bf",
   "groups": [
     "CAPACIDADES",
     "SKILLS",
