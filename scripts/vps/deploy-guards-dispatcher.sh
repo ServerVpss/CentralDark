@@ -49,6 +49,7 @@ GATE_ONLY=0
 SOURCE_ONLY=0
 TOTAL=0
 ACEITAR_DIVERGENCIA=0
+RUNTIME_FINGERPRINT_ONLY=0
 for arg in "$@"; do
   case "$arg" in
     --apply)                APPLY=1 ;;
@@ -56,6 +57,7 @@ for arg in "$@"; do
     --source-only)          SOURCE_ONLY=1 ;;
     --total)                TOTAL=1 ;;
     --aceitar-divergencia)  ACEITAR_DIVERGENCIA=1 ;;
+    --runtime-fingerprint-self-test) RUNTIME_FINGERPRINT_ONLY=1 ;;
     *) echo "argumento desconhecido: $arg"; exit 2 ;;
   esac
 done
@@ -66,6 +68,68 @@ done
 log() { printf '%s %s\n' "$(date -u '+%H:%M:%SZ')" "$*"; }
 die() { log "FALHA: $*"; exit "${2:-1}"; }
 info() { log "INFO: $*"; }
+
+# Produce a runtime fingerprint without exposing PM2 environment secrets. PM2
+# remains canonical when present; the systemd lane is the real Hermes owner on
+# hosts where PM2 is not installed. No source means BLOCK, never PASS.
+hermes_runtime_fingerprint() {
+  local pm2_json systemd_show main_pid cmdline exe material sha
+  if command -v pm2 >/dev/null 2>&1; then
+    pm2_json="$(pm2 jlist 2>/dev/null || true)"
+    if [[ -n "$pm2_json" ]]; then
+      material="$(printf '%s' "$pm2_json" | python3 -c '
+import json, sys
+try:
+    data = json.load(sys.stdin)
+    rows = []
+    for proc in data:
+        env = proc.get("pm2_env") or {}
+        rows.append({k: env.get(k, proc.get(k, "")) for k in (
+            "name", "status", "pid", "pm_exec_path", "pm_cwd", "pm_uptime"
+        )})
+    if rows:
+        print(json.dumps(sorted(rows, key=lambda row: (row["name"], str(row["pid"]))),
+                         sort_keys=True, separators=(",", ":")))
+except (ValueError, TypeError, AttributeError):
+    pass
+' 2>/dev/null || true)"
+      if [[ -n "$material" ]]; then
+        sha="$(printf 'pm2|%s' "$material" | sha256sum | awk '{print $1}')"
+        printf 'HERMES_RUNTIME_FINGERPRINT_SOURCE=pm2\nHERMES_RUNTIME_FINGERPRINT_SHA=%s\n' "$sha"
+        return 0
+      fi
+    fi
+  fi
+
+  if ! command -v systemctl >/dev/null 2>&1; then
+    echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE" >&2
+    return 16
+  fi
+  systemd_show="$(systemctl show hermes-gateway.service --no-pager \
+    -p Id -p LoadState -p ActiveState -p SubState -p MainPID \
+    -p ExecMainStartTimestamp -p FragmentPath -p WorkingDirectory 2>/dev/null || true)"
+  grep -q '^LoadState=loaded$' <<<"$systemd_show" || { echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE" >&2; return 16; }
+  grep -q '^ActiveState=active$' <<<"$systemd_show" || { echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE" >&2; return 16; }
+  grep -q '^SubState=running$' <<<"$systemd_show" || { echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE" >&2; return 16; }
+  main_pid="$(awk -F= '$1 == "MainPID" {print $2}' <<<"$systemd_show")"
+  [[ "$main_pid" =~ ^[1-9][0-9]*$ && -r "/proc/$main_pid/cmdline" ]] || {
+    echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE" >&2
+    return 16
+  }
+  cmdline="$(tr '\0' ' ' < "/proc/$main_pid/cmdline" | sed -E 's/[[:space:]]+/ /g; s/(token|secret|password|authorization|api[_-]?key)([=[:space:]]+)[^[:space:]]+/\1\2REDACTED/Ig')"
+  exe="$(readlink "/proc/$main_pid/exe" 2>/dev/null || true)"
+  [[ -n "$cmdline" && -n "$exe" ]] \
+    && grep -Eiq 'hermes|gateway[[:space:]]+run' <<<"$cmdline" \
+    || { echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE" >&2; return 16; }
+  material="$(printf 'systemd|%s|PID=%s|EXE=%s|CMD=%s\n' "$systemd_show" "$main_pid" "$exe" "$cmdline")"
+  sha="$(printf '%s' "$material" | sha256sum | awk '{print $1}')"
+  printf 'HERMES_RUNTIME_FINGERPRINT_SOURCE=systemd:hermes-gateway.service\nHERMES_RUNTIME_FINGERPRINT_SHA=%s\n' "$sha"
+}
+
+if [[ "$RUNTIME_FINGERPRINT_ONLY" -eq 1 ]]; then
+  hermes_runtime_fingerprint
+  exit $?
+fi
 
 contar_sujos() {
   git status --porcelain | grep -cE '^([MARCD ][MARCD]|[MARCD] )' || true
@@ -161,10 +225,12 @@ git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
   python3 scripts/lupa/validar_autolupa_hash.py
   python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --self-test
   python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --self-test
-  HERMES_RUNTIME_JSON="$(pm2 jlist 2>/dev/null)" || { echo "HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE"; exit 16; }
-  [[ -n "$HERMES_RUNTIME_JSON" ]] || { echo "HERMES_RUNTIME_FINGERPRINT_EMPTY"; exit 16; }
+  RUNTIME_FINGERPRINT_OUTPUT="$(hermes_runtime_fingerprint)" || exit 16
+  HERMES_RUNTIME_FINGERPRINT="$(awk -F= '$1 == "HERMES_RUNTIME_FINGERPRINT_SHA" {print $2}' <<<"$RUNTIME_FINGERPRINT_OUTPUT")"
+  [[ "$HERMES_RUNTIME_FINGERPRINT" =~ ^[0-9a-f]{64}$ ]] || { echo "HERMES_RUNTIME_FINGERPRINT_EMPTY"; exit 16; }
+  printf '%s\n' "$RUNTIME_FINGERPRINT_OUTPUT"
   CENTRALDARK_RUNTIME_FINGERPRINT="$(printf '%s|%s' "$(hostname)" "$ALVO" | sha256sum | awk '{print $1}')" \
-  HERMES_RUNTIME_FINGERPRINT="$(printf '%s' "$HERMES_RUNTIME_JSON" | sha256sum | awk '{print $1}')" \
+  HERMES_RUNTIME_FINGERPRINT="$HERMES_RUNTIME_FINGERPRINT" \
     python3 .agents/skills/centraldark-operational-method/scripts/tlc23_runtime_gate.py --cage-test --iterations 64
   echo "TLC23_ADVERSARIAL_CAGE=PASS"
 ) || die "SHA alvo falhou Master/Universal/Meta-Lupa/Horn" 16

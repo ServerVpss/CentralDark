@@ -107,6 +107,30 @@ else
   fail "workflow possui rota lateral ao gate canônico"
 fi
 
+# ─── 7. Fingerprint real do Hermes, com fallback fail-closed ───────────
+log "=== 7. Fingerprint Hermes sem PM2 ==="
+RUNTIME_OUTPUT="$(bash "$DISPATCHER" --runtime-fingerprint-self-test 2>&1)" || true
+if grep -q 'HERMES_RUNTIME_FINGERPRINT_SOURCE=systemd:hermes-gateway.service' <<<"$RUNTIME_OUTPUT" \
+  && grep -Eq 'HERMES_RUNTIME_FINGERPRINT_SHA=[0-9a-f]{64}' <<<"$RUNTIME_OUTPUT"; then
+  pass "fingerprint systemd do hermes-gateway.service comprovado"
+else
+  fail "fingerprint systemd do Hermes indisponível ou inválido"
+fi
+
+STUB_DIR="$(mktemp -d)"
+trap 'rm -rf "$STUB_DIR"' EXIT
+cat >"$STUB_DIR/systemctl" <<'EOF'
+#!/usr/bin/env bash
+exit 1
+EOF
+chmod +x "$STUB_DIR/systemctl"
+BLOCK_OUTPUT="$(PATH="$STUB_DIR:/usr/bin:/bin" bash "$DISPATCHER" --runtime-fingerprint-self-test 2>&1)" && BLOCK_EXIT=0 || BLOCK_EXIT=$?
+if [[ "$BLOCK_EXIT" -eq 16 ]] && grep -q 'HERMES_RUNTIME_FINGERPRINT_UNAVAILABLE' <<<"$BLOCK_OUTPUT"; then
+  pass "fallback permanece fail-closed sem fonte real"
+else
+  fail "fallback não bloqueou sem fonte real (exit=$BLOCK_EXIT)"
+fi
+
 # ─── Resumo ──────────────────────────────────────────────────────────
 TOTAL=$((PASS + FAIL))
 log "=== RESUMO ==="
