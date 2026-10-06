@@ -1851,3 +1851,11 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Aprendizado:** script auto-sync com flock/stash/ff-only/rebase + cron a cada 5 min resolve o drift autônomo. Método inteiro documentado pra qualquer agente reproduzir.
 - **Commit de prova:** 6ae79a9ec
 - **Regra:** STASH_BEFORE_PULL=true; FF_ONLY_FIRST=true; FLOCK_REQUIRED=true; NO_FORCE_PUSH=true; NO_BLIND_RESET=true.
+
+### Lei Transversal de Preenchimento de Lacunas — Metabolismo do Instinto Superior (2026-10-06)
+- **Owner detalhado:** docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-LEI-PREENCHIMENTO-LACUNAS-METABOLISMO-INSTINTO-SUPERIOR.md
+- **Herança:** docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-CINCO-PRINCIPIOS-VIVOS-LEI-DA-CASA.md
+- **Princípio:** toda brecha encontrada deve primeiro tentar ser preenchida por capacidade existente; caminho repetível vira determinístico; conhecimento novo vira memória; capacidade nova entra como braço do mesmo corpo; sem prova fica UNKNOWN.
+- **Metabolismo:** PERCEBER → COMPARAR → ENCONTRAR GAP → REUTILIZAR → COMPOR → AGIR → PROVAR → APRENDER → GENERALIZAR → AUTOMATIZAR → OBSERVAR → REPETIR.
+- **Propriedade:** quanto mais trabalha, menos redescobre; quanto mais erra, mais cresce a capacidade de não repetir; quanto mais ferramentas recebe, mais amplo sem mudar quem é.
+- **Cristal:** EVERY_GAP_IS_A_CAPABILITY_OPPORTUNITY; EVERY_PROVEN_PATH_CAN_BECOME_REPLAY; ONE_HEART; REALITY_IS_JUDGE.
