@@ -4,6 +4,7 @@
 import { Notice, Platform, Plugin, TFile, WorkspaceLeaf } from "obsidian";
 import { GrafoVivoView, VIEW_TYPE_GRAFO_VIVO } from "./view";
 import { Grafo3DView, VIEW_TYPE_GRAFO_3D } from "./view3d";
+import { HudCentralDarkView, VIEW_TYPE_HUD_CENTRALDARK } from "./hud";
 import { DEFAULT_SETTINGS, GrafoVivoSettings, GrafoVivoSettingTab } from "./settings";
 import { AutoAtualizador } from "./autoUpdater";
 import { SemanticClient } from "./semantic";
@@ -33,6 +34,11 @@ export default class GrafoVivoPlugin extends Plugin {
       (leaf) => new Grafo3DView(leaf, this),
     );
 
+    this.registerView(
+      VIEW_TYPE_HUD_CENTRALDARK,
+      (leaf) => new HudCentralDarkView(leaf, this),
+    );
+
     this.registerEvent(this.app.vault.on("create", (file) => this.agendarKnowledgeAutoSync(file)));
     this.registerEvent(this.app.vault.on("modify", (file) => this.agendarKnowledgeAutoSync(file)));
 
@@ -42,6 +48,10 @@ export default class GrafoVivoPlugin extends Plugin {
 
     this.addRibbonIcon("orbit", "Abrir Grafo 3D · Jarvis", () => {
       this.ativarView3D();
+    });
+
+    this.addRibbonIcon("layout-dashboard", "Abrir HUD CentralDark", () => {
+      this.ativarHud();
     });
 
     this.addCommand({
@@ -54,6 +64,12 @@ export default class GrafoVivoPlugin extends Plugin {
       id: "abrir-grafo-vivo",
       name: "Abrir Grafo Vivo CentralDark",
       callback: () => this.ativarView(),
+    });
+
+    this.addCommand({
+      id: "abrir-hud-centraldark",
+      name: "Abrir HUD CentralDark",
+      callback: () => this.ativarHud(),
     });
 
     this.addCommand({
@@ -190,6 +206,16 @@ export default class GrafoVivoPlugin extends Plugin {
     if (!leaf) {
       leaf = workspace.getRightLeaf(false);
       if (leaf) await leaf.setViewState({ type: VIEW_TYPE_GRAFO_3D, active: true });
+    }
+    if (leaf) workspace.revealLeaf(leaf);
+  }
+
+  async ativarHud() {
+    const { workspace } = this.app;
+    let leaf: WorkspaceLeaf | null = workspace.getLeavesOfType(VIEW_TYPE_HUD_CENTRALDARK)[0] ?? null;
+    if (!leaf) {
+      leaf = workspace.getRightLeaf(false);
+      if (leaf) await leaf.setViewState({ type: VIEW_TYPE_HUD_CENTRALDARK, active: true });
     }
     if (leaf) workspace.revealLeaf(leaf);
   }
