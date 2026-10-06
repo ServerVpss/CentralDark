@@ -57,9 +57,11 @@ hereditary_criterion_dna:
     - SUBAGENT/SUBSUBGOAL
   inherited_fields:
     - intention_objective
+    - inherited_why_intent
     - success_predicate_terminal_indivisible
     - current_baseline
     - owner_scope
+    - proof_destination
     - reuse_before_create
     - parallel_perception_lenses
     - ONE_WRITER_PER_SCOPE
@@ -70,9 +72,15 @@ hereditary_criterion_dna:
     - NEXT_CURSOR
     - continuation_until_FIXED_POINT_or_HUMAN_ONLY_BLOCKER
   inheritance_rules:
+    CHILD_CAN_REFINE_CRITERION: true
+    CHILD_CANNOT_WEAKEN_PARENT_CRITERION: true
+    LOCAL_DONE != PARENT_DONE: true
     parent_intent_and_predicate_are_immutable_bindings: true
+    child_inherits_why_intent_and_proof_destination: true
     child_may_narrow_scope_without_changing_intent: true
     child_must_rebind_current_baseline_and_owner_scope: true
+    evidence_returns_to_parent: true
+    intelligence_lives_in_process_and_inheritance: true
     parallel_perception_is_observation_only: true
     mutation_is_serialized_per_scope: true
     steps_are_not_inherited: true

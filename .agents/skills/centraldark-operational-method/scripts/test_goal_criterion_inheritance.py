@@ -34,6 +34,12 @@ class GoalCriterionInheritanceTest(unittest.TestCase):
             "NEXT_CURSOR",
             "FIXED_POINT",
             "HUMAN_ONLY_BLOCKER",
+            "CHILD_CAN_REFINE_CRITERION",
+            "CHILD_CANNOT_WEAKEN_PARENT_CRITERION",
+            "LOCAL_DONE != PARENT_DONE",
+            "inherited_why_intent",
+            "evidence_returns_to_parent",
+            "intelligence_lives_in_process_and_inheritance",
         )
         for marker in required:
             with self.subTest(marker=marker):
