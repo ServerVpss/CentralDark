@@ -383,6 +383,75 @@ worker_deliverables:
   - PASS_UNKNOWN_BLOCKED
   - NEXT_CURSOR
 
+oracle_surface_contract:
+  class: CHAT_GLOBAL
+  mode: ADVISORY_READ_ONLY_BY_DEFAULT
+  authority: NONE
+  current_proven_binding:
+    surface: chatgpt_text
+    transport: HERMES_DESKTOP_PREVIEW
+    preview_open: PASS
+    isolated_chat: PASS
+    query_submit: PASS
+    response_capture: PASS
+    provenance_ids: PASS
+  required_query_ids:
+    - INTENT_ID
+    - EVENT_ID
+    - CAUSATION_ID
+    - SURFACE_ID
+  expected_response_fields:
+    - CANDIDATE_CLAIM
+    - EVIDENCE_LIMIT
+    - COUNTERPROOF
+    - NEXT_READONLY_PROBE
+  boundaries:
+    ORACLE_OUTPUT_IS_CANDIDATE: true
+    ORACLE_CANNOT_WRITE_CANONICAL_STATE_DIRECTLY: true
+    ORACLE_CANNOT_CHOOSE_WRITER: true
+    ORACLE_CANNOT_DECLARE_PASS_WITHOUT_REALITY_JUDGE: true
+    SOURCE_IS_PROVENANCE_NOT_AUTHORITY: true
+    SECRETS_AND_UNNECESSARY_PRIVATE_HISTORY_MUST_NOT_BE_SENT: true
+  integration_state:
+    ORACLE_QUERY_TRANSPORT: PASS
+    ORACLE_RESPONSE_CAPTURE: PASS
+    ORACLE_TO_CANONICAL_ENVELOPE: UNKNOWN
+    ENVELOPE_TO_RECONCILIATION: UNKNOWN
+    RECONCILIATION_TO_WRITER: UNKNOWN
+  next_existing_owner: apps/modulos/HERMES-CORE/core/perception-orchestra.mjs
+  forbid_new_oracle_engine_without_proven_gap: true
+
+preview_navigation_contract:
+  owner: centraldark-oracle-surface
+  focused_tab_navigation_phrases: ["abra", "navegue", "vá para"]
+  new_tab_phrases: ["abra NOVA ABA", "novo tab", "outra aba"]
+  rules:
+    NAVIGATE_CURRENT_TAB_NE_OPEN_NEW_PREVIEW_TAB: true
+    NEW_TAB_PRESERVE_CURRENT: true
+    DISTINCT_LABEL_REQUIRED: true
+    NEW_TAB_REQUIRES_READBACK: true
+    SITE_TARGET_BLANK_IS_NOT_RELIABLE_TAB_CREATION_PROOF: true
+  proven_transport:
+    open: desktop_preview
+    interact: drive_preview
+    readback: desktop_preview
+
+external_surface_candidate_policy:
+  surfaces:
+    - CHAT_GLOBAL
+    - WEB_SEARCH
+    - LIBRARY
+    - CONNECTORS
+    - SITES
+    - EXTERNAL_SKILLS
+    - AUTHORIZED_BROWSER_SESSION
+  rule: EXTERNAL_SURFACE_ENTERS_AS_CANDIDATE
+  whole_private_history_auto_ingest: false
+  whole_memory_auto_ingest: false
+  unknown_connector_auto_access: false
+  authenticated_profile_is_binding_not_authority: true
+  alternate_browser_surface_requires_own_e2e_proof: true
+
 final_sentence: >
   Nao e dar poder ao modelo. E expor a mesma capability real para qualquer
   modelo autorizado.
