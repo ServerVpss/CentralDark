@@ -103,3 +103,17 @@ Bindings do protótipo:
 A página AionUi incorpora a superfície Rakazo por `iframe` e também oferece abertura direta. Em WebUI remota o host é herdado de `window.location.hostname`; no Electron/local cai para `127.0.0.1`.
 
 `REUSE_BEFORE_CREATE=true` · `ONE_SYSTEM_ONLY=true` · `RAKAZO=CAPABILITY_NOT_SECOND_BRAIN`.
+
+
+## Celestial / Mapas — uma casca, um store, cinco vistas
+
+O AionUi expõe a rota nativa `/settings/maps` e incorpora o GraphPanel existente. O GraphPanel continua owner de renderização; AionUi é somente a casca/menu.
+
+- vistas: `Galáxia`, `2D`, `3D/Celestial`, `Módulos`, `Vault`;
+- peles: `emerald`, `operational`, `forge`;
+- store cliente único: `gd`;
+- API única: `/api/graph?mode=...`;
+- preferências: `centraldark.graph.view` e `centraldark.graph.theme`;
+- binding: `centraldark.graph.url`.
+
+`GRAPH_IS_PROJECTION_NOT_AUTHORITY=true` · `ONE_SYSTEM_ONLY=true`.

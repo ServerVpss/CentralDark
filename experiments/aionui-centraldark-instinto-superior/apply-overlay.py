@@ -16,6 +16,7 @@ SIDER = ROOT / "packages/desktop/src/renderer/pages/settings/components/Settings
 WRAPPER = ROOT / "packages/desktop/src/renderer/pages/settings/components/SettingsPageWrapper.tsx"
 ROUTER = ROOT / "packages/desktop/src/renderer/components/layout/Router.tsx"
 BOTS_PAGE = ROOT / "packages/desktop/src/renderer/pages/settings/CentralDarkBotsSettings/index.tsx"
+MAPS_PAGE = ROOT / "packages/desktop/src/renderer/pages/settings/CentralDarkMapsSettings/index.tsx"
 
 for required in (PACKAGE, BUILDER, INDEX, SIDER, WRAPPER, ROUTER):
     if not required.exists():
@@ -95,6 +96,8 @@ INDEX.write_text(index, encoding="utf-8")
 # CentralDark Bots / Agentes surface: Rakazo remains a capability, never a second brain.
 BOTS_PAGE.parent.mkdir(parents=True, exist_ok=True)
 shutil.copy2(HERE / "centraldark-bots-page.tsx", BOTS_PAGE)
+MAPS_PAGE.parent.mkdir(parents=True, exist_ok=True)
+shutil.copy2(HERE / "centraldark-maps-page.tsx", MAPS_PAGE)
 
 sider = SIDER.read_text(encoding="utf-8")
 if "  'bots',\n" not in sider:
@@ -102,6 +105,8 @@ if "  'bots',\n" not in sider:
     if anchor not in sider:
         raise SystemExit("settings sider builtin id anchor missing")
     sider = sider.replace(anchor, anchor + "  'bots',\n", 1)
+if "  'maps',\n" not in sider:
+    sider = sider.replace("  'bots',\n", "  'bots',\n  'maps',\n", 1)
 if "id: 'bots'" not in sider:
     anchor = """      agent: {
         id: 'agent',
@@ -119,6 +124,24 @@ if "id: 'bots'" not in sider:
 """
     if anchor not in sider:
         raise SystemExit("settings sider agent map anchor missing")
+    sider = sider.replace(anchor, anchor + addition, 1)
+if "id: 'maps'" not in sider:
+    anchor = """      bots: {
+        id: 'bots',
+        label: 'Bots / Agentes',
+        icon: <Puzzle />,
+        path: 'bots',
+      },
+"""
+    addition = """      maps: {
+        id: 'maps',
+        label: 'Celestial / Mapas',
+        icon: <Puzzle />,
+        path: 'maps',
+      },
+"""
+    if anchor not in sider:
+        raise SystemExit("settings sider bots map anchor missing")
     sider = sider.replace(anchor, anchor + addition, 1)
 SIDER.write_text(sider, encoding="utf-8")
 
@@ -141,6 +164,24 @@ if "id: 'bots'" not in wrapper:
     if anchor not in wrapper:
         raise SystemExit("settings wrapper agent map anchor missing")
     wrapper = wrapper.replace(anchor, anchor + addition, 1)
+if "id: 'maps'" not in wrapper:
+    anchor = """    bots: {
+      id: 'bots',
+      label: 'Bots / Agentes',
+      icon: <Robot theme='outline' size='16' />,
+      path: 'bots',
+    },
+"""
+    addition = """    maps: {
+      id: 'maps',
+      label: 'Celestial / Mapas',
+      icon: <Robot theme='outline' size='16' />,
+      path: 'maps',
+    },
+"""
+    if anchor not in wrapper:
+        raise SystemExit("settings wrapper bots map anchor missing")
+    wrapper = wrapper.replace(anchor, anchor + addition, 1)
 WRAPPER.write_text(wrapper, encoding="utf-8")
 
 router = ROUTER.read_text(encoding="utf-8")
@@ -150,7 +191,7 @@ if "CentralDarkBotsSettings" not in router:
         raise SystemExit("router lazy import anchor missing")
     router = router.replace(
         anchor,
-        anchor + "\nconst CentralDarkBotsSettings = React.lazy(() => import('@renderer/pages/settings/CentralDarkBotsSettings'));",
+        anchor + "\nconst CentralDarkBotsSettings = React.lazy(() => import('@renderer/pages/settings/CentralDarkBotsSettings'));\nconst CentralDarkMapsSettings = React.lazy(() => import('@renderer/pages/settings/CentralDarkMapsSettings'));",
         1,
     )
 
@@ -160,6 +201,11 @@ if bots_route not in router:
     if route_anchor not in router:
         raise SystemExit("router agent route anchor missing")
     router = router.replace(route_anchor, route_anchor + "\n" + bots_route, 1)
+maps_route = "          <Route path='/settings/maps' element={withRouteFallback(CentralDarkMapsSettings)} />"
+if maps_route not in router:
+    if bots_route not in router:
+        raise SystemExit("router bots route anchor missing")
+    router = router.replace(bots_route, bots_route + "\n" + maps_route, 1)
 ROUTER.write_text(router, encoding="utf-8")
 
 # AionUi 2.2.2 assumes a separate bunx binary. Current Bun exposes the same
@@ -181,5 +227,6 @@ seed.mkdir(parents=True, exist_ok=True)
 print("AIONUI_UPSTREAM_VERSION=2.2.2")
 print("CENTRALDARK_OVERLAY=APPLIED")
 print("CENTRALDARK_BOTS_RAKAZO=WIRED")
+print("CENTRALDARK_CELESTIAL_MAPS=WIRED")
 print("BUNX_BUILD_COMPAT=PATCHED")
 print("PRODUCT=CentralDark — Instinto Superior")

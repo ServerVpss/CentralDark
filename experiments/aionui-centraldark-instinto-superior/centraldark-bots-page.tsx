@@ -9,7 +9,12 @@ import SettingsPageWrapper from '../components/SettingsPageWrapper';
 import SettingsPageHeader from '../components/SettingsPageHeader';
 
 function resolveRakazoUrl(): string {
+  const configured = window.localStorage.getItem('centraldark.rakazo.url')?.trim();
+  if (configured) return configured;
   const host = window.location.hostname || '127.0.0.1';
+  if (window.location.protocol === 'https:') {
+    return new URL('/capabilities/rakazo/', window.location.origin).toString();
+  }
   return `http://${host}:25810`;
 }
 
