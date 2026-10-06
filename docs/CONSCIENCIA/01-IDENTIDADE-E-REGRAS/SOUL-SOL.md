@@ -988,11 +988,23 @@ nao altera autoridade humana. A migracao dos runners para VPS e binding operacio
 nao nova identidade/autoridade. As ancoras abaixo so mudam depois desta revisao.
 
 ```text
+Revisão 2026-10-06 — HUD Cartographer / ONE HEART / casca dinâmica: `CENTRALDARK_AI_BOOT.yaml` foi relido após ganhar somente bindings do owner HUD existente. O inventário machine-consumable continua projeção derivada, SELO histórico permanece separado de LIVE, conhecimento provado alimenta o inventário e delta runtime só vira LIVE após deploy causal + readback no `/heartbeat`. O número da PR-mãe não é identidade: o rendezvous ativo é resolvido do CURRENT. O vault Obsidian local continua projeção, nunca segunda fonte de verdade.
+
+```text
+HUD_MACHINE_INVENTORY_IS_DERIVED_NOT_AUTHORITY=true
+SEAL_IS_NOT_LIVE=true
+HUD_LIVE_SOURCE=/heartbeat
+PROVEN_RUNTIME_AFFECTING_DELTA_REQUIRES_DEPLOY_AND_READBACK=true
+PROVEN_CANONICAL_KNOWLEDGE_FEEDS_MACHINE_INVENTORY=true
+ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT
+PR_NUMBER_IS_RUNTIME_BINDING_NOT_IDENTITY=true
+LOCAL_OBSIDIAN_HUD_IS_PROJECTION_NOT_AUTHORITY=true
+```
 SOUL_SYNC_ANCHOR_BEGIN
 AGENTS.md=7e888a631c194950a3cd727ff82b32709570f5e0
 LEIA-ME-IA.md=beadaa161086d1b617193c93b4be37d1ebd9d1df
 CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
-CENTRALDARK_AI_BOOT.yaml=7fd58aa9d8d1c491c1e3ec8e2d9408d07512a921
+CENTRALDARK_AI_BOOT.yaml=ba6d51c0de69ba38cc71c942ca43772d912e3514
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=e93f7b87fa6926eea6c110ace0b7f981cf8cb071
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-04
 SOUL_SYNC_ANCHOR_END
@@ -2322,6 +2334,6 @@ NO_NEW_AGENT_FOR_ROLE_SPLIT=true
 Consumidores operacionais CURRENT `CENTRALDARK_AI_BOOT.yaml`, `CONTRACT.yml` e `CLAUDE.md` foram reconciliados para `HERMES`. Histórico e regras que citam `PIVETE/HERMES` apenas como padrão de drift a detectar permanecem preservados. As âncoras foram atualizadas após a revisão dos três owners.
 
 LEGACY_PR_MOTHER_1562_PROTECTED=true
-ACTIVE_PR_MOTHER=1757
+ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT
 SHELL_IS_MUTABLE=true
 LEGACY_IS_PRESERVED=true
