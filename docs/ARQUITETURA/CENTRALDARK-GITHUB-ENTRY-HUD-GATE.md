@@ -4,13 +4,15 @@ Data: 2026-10-06
 Status: CANONICAL_REQUIRED
 Owner: docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md
 Runtime consumer: .github/workflows/selo-fabric.yml
-PR-mae viva: #1757
+Active rendezvous: `RESOLVE_FROM_CURRENT` (snapshot medido nesta rodada: #1757)
 
 ## Lei do CHEFE
 
 ```text
 GITHUB_ENTRY_HUD_FIRST=true
 FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true
+ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT
+PR_NUMBER_IS_RUNTIME_BINDING_NOT_IDENTITY=true
 AGENT_DEPENDENCY_MAP_REQUIRED=true
 GITHUB_REALITY_CROSSCHECK_REQUIRED=true
 UI_SURFACE_INVENTORY_REQUIRED=true
@@ -27,7 +29,8 @@ Quem entra pelo GitHub primeiro mede o GitHub real e atualiza o HUD vivo antes d
 ```text
 GITHUB_ENTRY
 -> GET repo/main/current
--> GET PR-mae #1757
+-> RESOLVE active rendezvous from CURRENT
+-> GET active rendezvous
 -> listar PRs filhos abertos
 -> atualizar HUD vivo se mudou main/open-child-set/evento
 -> inventariar dependencias de agente
@@ -70,7 +73,7 @@ APPS_SECTORS_COUNT=47
 MCP_SRC_TOOL_FILES_COUNT=40
 UI_SIGNAL_MATCHES=7717
 HUD_RELATED_FILES=535
-PR_MOTHER=1757
+PR_MOTHER_AT_CREATION_SNAPSHOT=1757
 ```
 
 ## Done condition
@@ -116,3 +119,26 @@ node scripts/hud/generate-hud-inventory.mjs --check
 ```
 
 A PR-mãe consome apenas o resumo/fingerprint do JSON; o JSON completo fica no repo para consulta seletiva por agente, HUD e verifier.
+
+## Promoção viva e Obsidian — delta 2026-10-06
+
+```text
+PROVEN_RUNTIME_AFFECTING_DELTA
+→ MAIN
+→ DEPLOY_CAUSAL
+→ RUNTIME_READBACK
+→ ONE_HEART /heartbeat
+→ HUD_OFFICIAL_REALTIME
+
+PROVEN_CANONICAL_KNOWLEDGE
+→ MACHINE_INVENTORY
+→ ONE_HEART_PROJECTION
+→ HUD_OFFICIAL_REALTIME
+
+HUD_REALTIME_REFRESH_MS=5000
+SEAL_IS_NOT_LIVE=true
+LOCAL_OBSIDIAN_HUD_IS_PROJECTION_NOT_AUTHORITY=true
+ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT
+```
+
+A casca de rendezvous pode mudar; o workflow deve descobrir a casca ativa pelo marcador canônico, nunca por número fixo.
