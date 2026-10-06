@@ -318,6 +318,53 @@ LIVE_AGENT_LOG_DELIVERY_FROM_PREVIEW = UNKNOWN até observação runtime
 REPLAY_CAPTURE_BY_HERMES = UNKNOWN até readback do executor
 ```
 
+### 6.2 MEMORY_PENDING exige confirmação antes de promoção
+
+Delta confirmado nesta sessão: a regra geral `ORACLE_OUTPUT_IS_CANDIDATE` já existia, mas a rota específica para memória pendente não estava materializada no owner do Oráculo.
+
+Owner evoluído:
+
+```text
+.agents/skills/software-development/centraldark-oracle-surface/SKILL.md
+```
+
+Commit:
+
+```text
+a4b89c335001d73314087f180bed7c48d689df79
+```
+
+Receita confirmada:
+
+```text
+MEMORY_PENDING
+→ ORACLE_QUERY_READONLY
+→ WAIT_FOR_RESPONSE
+→ RECONCILE_WITH_PARENT_INTENT
+→ RECONCILE_WITH_CURRENT_DOCS_AND_OWNER
+→ REQUIRE_PROVENANCE
+→ REQUIRE_COUNTERPROOF
+→ REQUIRE_REALITY_EVIDENCE_WHEN_EFFECT_IS_EXTERNAL
+→ REQUIRE_EXISTING_WRITER
+→ IF_ALL_APPLICABLE_GATES_PASS: PROMOTE_MINIMUM_DELTA
+→ ELSE: KEEP_PENDING_OR_UNKNOWN
+```
+
+Invariantes:
+
+```text
+CHATGPT_SAID != CONFIRMED
+ORACLE_SAID != CONFIRMED
+HERMES_SAID != CONFIRMED
+DOCUMENTED != EXECUTED
+CANDIDATE != CANONICAL
+UNKNOWN != PASS
+```
+
+A confirmação mínima preserva, quando aplicável: texto candidato, fonte/proveniência, alinhamento com intenção, CURRENT, owner, dedupe, contraprova, realidade, writer, readback e NEXT_CURSOR. Campo não medido permanece `UNKNOWN`.
+
+Readback do mesmo commit confirmou que a seção `Memory Pending Confirmation Gate` foi persistida no owner canônico. A tentativa de registrar receipt como comentário no PR-mãe #1562 falhou por limite do próprio GitHub (`commenting is disabled on issues with more than 2500 comments`), portanto este aprendizado preserva o receipt no repositório sem criar writer, scheduler, memory engine ou arquitetura paralela.
+
 ## 7. Superfícies externas
 
 Superfícies vistas/consideradas nesta sessão:
