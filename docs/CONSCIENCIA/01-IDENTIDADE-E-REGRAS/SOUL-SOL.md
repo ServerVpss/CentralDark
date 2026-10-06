@@ -989,7 +989,7 @@ nao nova identidade/autoridade. As ancoras abaixo so mudam depois desta revisao.
 
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=ac823c78ac168990d280cbbdb0e0970179b377de
+AGENTS.md=fa11480d42457f169ce16f2f031f33385830e958
 LEIA-ME-IA.md=def2ff8d379656f2361c445febeb0b55e9405822
 CLAUDE.md=72e6a4163107db84dc84338c66a98fd7a60c8456
 CENTRALDARK_AI_BOOT.yaml=485ef78e7fc0d1755a39acb68204a80cb05f1931
