@@ -1108,7 +1108,32 @@
     "goal_pai_id": "STABLE",
     "micro_goal": "DERIVED_FROM_CURRENT_WOUND",
     "child_failure_does_not_replace_parent_goal": true,
-    "current_wound_drives_next_micro_goal": true
+    "current_wound_drives_next_micro_goal": true,
+    "criterion_inheritance_marker": "HEREDITARY_ADAPTIVE_CRITERION",
+    "applies_to": [
+      "GOAL",
+      "SUBGOAL",
+      "BATCH",
+      "SUBAGENT",
+      "SUBSUBGOAL"
+    ],
+    "child_inherits": [
+      "PARENT_INTENT",
+      "SUCCESS_PREDICATE",
+      "OWNER_SCOPE",
+      "CURRENT_BASELINE",
+      "REUSE_BEFORE_CREATE",
+      "COUNTERPROOF",
+      "EVIDENCE_DESTINATION",
+      "RECEIPT_NEXT_CURSOR"
+    ],
+    "child_can_refine_criterion": true,
+    "child_cannot_weaken_parent_criterion": true,
+    "local_done_does_not_equal_parent_done": true,
+    "parent_terminal_state": [
+      "FIXED_POINT",
+      "HUMAN_ONLY_BLOCKER"
+    ]
   },
   "authority_role_map": {
     "CHEFE": "INTENT_AUTHORITY",
@@ -2895,5 +2920,47 @@
     "reality_verifies_effect_not_permission": true
   },
   "mandatory_pre_solution_sequence_mode": "PERTINENT_SUBSET_ONLY",
-  "pre_solution_sequence_is_global_blocker": false
+  "pre_solution_sequence_is_global_blocker": false,
+  "capability_proof_ladder": {
+    "marker": "CENTRALDARK_CAPABILITY_PROOF_LADDER",
+    "status": "CANONICAL",
+    "owner": "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json",
+    "stages": [
+      "DECLARED",
+      "DISCOVERED",
+      "CONFIGURED",
+      "HEALTHY",
+      "EXECUTED",
+      "RECEIPT"
+    ],
+    "no_stage_implies_next": true,
+    "strongest_claim_is_highest_measured_stage": true,
+    "documented_or_catalogued_does_not_prove_execution": true,
+    "runtime_claim_requires_runtime_measurement": true,
+    "receipt_requires_effect_provenance": true
+  },
+  "sectoral_parallel_perception_contract": {
+    "marker": "CENTRALDARK_SECTORAL_PARALLEL_PERCEPTION",
+    "status": "CANONICAL",
+    "owner": "apps/modulos/HERMES-CORE/core/perception-orchestra.mjs",
+    "selection_rule": "PARALLEL_PERCEPTION_ALLOWED_WHEN_INFORMATION_GAIN",
+    "sector_count_is_fixed": false,
+    "read_only_fanout_before_mutation": true,
+    "sector_result_fields": [
+      "OWNER",
+      "CAPABILITY",
+      "PROOF_STAGE",
+      "GAP",
+      "SAFE_READONLY_PROBE",
+      "REUSE_CANDIDATE",
+      "PROVENANCE"
+    ],
+    "rendezvous_before_mutation": true,
+    "dedupe_before_mutation": true,
+    "contradiction_detection_required": true,
+    "counterproof_required_for_material_delta": true,
+    "same_scope_parallel_mutation": false,
+    "disjoint_scope_writers_require_independent_scope_lease": true,
+    "reality_is_judge": true
+  }
 }
