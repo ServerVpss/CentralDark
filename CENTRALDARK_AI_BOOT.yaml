@@ -157,7 +157,7 @@ CENTRALDARK_AI_BOOT:
       capability_catalog_owner: "apps/modulos/mcp/src/tools/core/mcp-admin.js"
       capability_catalog_consumer: "mcp_admin_catalog"
       capability_catalog_scope: "centraldark_unified_capability_catalog"
-      capability_catalog_fingerprint: "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"
+      capability_catalog_fingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"
       screenpipe_and_rdc_share_one_mcp_catalog: true
       catalog_entry_is_not_runtime_health: true
     proof:

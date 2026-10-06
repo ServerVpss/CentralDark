@@ -711,3 +711,25 @@ LIVE_MCP_CATALOG_RELOAD=UNKNOWN_UNTIL_READBACK
 - [x] Node syntax check do dist: PASS.
 - [ ] restart da unit: não executado; camada de execução bloqueou a chamada.
 - [ ] `mcp_admin_catalog` vivo com fingerprint/11 rotas: UNKNOWN até reload + readback.
+
+
+## 🫀 CURRENT VIVO — 2026-10-06 — LEARNING_169_HERMES_SCREENPIPE_CATALOG
+
+```text
+HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748
+HERMES_COMMIT=c893a949b3051ae8a96cc4bc8b910857534c55e7
+SCREENPIPE_CLI_RECORDER=CATALOGED_RECIPE
+SCREENPIPE_RUNTIME_ON_VPS=UNKNOWN_UNTIL_STATUS_JSON
+CATALOG_EXPECTED_ROUTES=13
+CATALOG_FINGERPRINT=80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
+```
+
+### ✅ MATERIALIZADO
+- [x] Hermes delegated commit path entrou no catálogo metabólico.
+- [x] Screenpipe CLI recorder/search/pipes entrou como rota operacional catalogada.
+- [x] Receita/receipt existente preserva que Desktop Commander está PASS vivo e Screenpipe runtime ainda exige `status --json`.
+- [x] Source e dist do MCP foram regenerados no mesmo cone.
+
+### ⚪ FRONTEIRA
+- [ ] Screenpipe runtime na VPS continua UNKNOWN até `screenpipe status --json` provar captura/freshness.
+- [ ] Repetir receita `c893a949` com Kylin CURRENT depois de corrigir binding local.

@@ -1869,3 +1869,12 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Aprendizado:** tools internas, Remote Desktop Commander, Screenpipe e demais rotas autorizadas devem ser descobertas no mesmo `mcp_admin_catalog`; catálogo não prova execução e estado continua por binding.
 - **Cristal:** `ONE_MCP_CATALOG=true`; `SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true`; `DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF=true`; `NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE=true`.
 - **Fingerprint:** `42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5`.
+
+
+### #169 — Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
+- **Owner detalhado:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
+- **Commit Hermes:** `c893a949b3051ae8a96cc4bc8b910857534c55e7`.
+- **Arquivo de prova:** `experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md`.
+- **Aprendizado:** Hermes executor provado por delegação real entra como capability catalogada; Screenpipe CLI entra como rota operacional recorder-first, mas runtime só vira PASS por `status --json`/freshness.
+- **Cristal:** `HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748`; `MODEL_IS_ENGINE_NOT_OWNER=true`; `SCREENPIPE_RUNTIME_PASS_REQUIRES_FRESHNESS=true`; `CATALOG_ENTRY != RUNTIME_HEALTH`.
+- **Fingerprint catálogo:** `80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7`.

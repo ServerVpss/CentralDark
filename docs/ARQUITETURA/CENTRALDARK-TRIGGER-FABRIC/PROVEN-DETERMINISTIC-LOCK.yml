@@ -624,14 +624,14 @@ hybrid_multiroute_capability_replay_2026_10_02:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
   state: SEALED_PROVEN
   learning_ref: 146
-  dependency_fingerprint: 42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5
+  dependency_fingerprint: 80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
   lock_key: 3318ec585173c84b5ad374b80bfade8180f1e9b11b013120baec55f46f5ab781
   evolved_learning_ref: 168
   catalog_owner: apps/modulos/mcp/src/tools/core/mcp-admin.js
   catalog_consumer: mcp_admin_catalog
   catalog_scope: centraldark_unified_capability_catalog
   catalog_expected_routes: 11
-  catalog_fingerprint: 42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5
+  catalog_fingerprint: 80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
   external_capabilities: [RDC_DESKTOP_COMMANDER, SCREENPIPE_LOCAL_SENSOR]
   objective: >-
     Reusar o mesmo capability bus por rotas autorizadas alternativas sem
@@ -733,3 +733,20 @@ hybrid_multiroute_capability_replay_2026_10_02:
   legacy_pr_mother: 1562
   runtime_catalog_reload: UNKNOWN_UNTIL_LIVE_READBACK
   next_cursor: LIVE_MCP_CATALOG_READBACK_THEN_REPLAY_MULTIROUTE_BEFORE_HUMAN_BLOCKER
+
+
+hermes_delegated_commit_path_2026_10_06:
+  claim_key: HERMES_DELEGATED_COMMIT_PATH
+  state: SEALED_PROVEN_ON_PR1748
+  commit: c893a949b3051ae8a96cc4bc8b910857534c55e7
+  recipe_file: experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md
+  engine_used: copilot/gpt-4.1
+  model_is_engine_not_owner: true
+  kylin_current_pass_claimed: false
+
+screenpipe_cli_recorder_path_2026_10_06:
+  claim_key: SCREENPIPE_CLI_RECORDER_PATH
+  state: CATALOGED_RECIPE_RUNTIME_UNKNOWN
+  command_form: 'cd "$(mktemp -d)" && ${SCREENPIPE_CLI:-bun x screenpipe@latest} <command>'
+  recorder_default: service_install
+  runtime_pass_requires_status_json: true

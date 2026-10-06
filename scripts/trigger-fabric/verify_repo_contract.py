@@ -305,20 +305,20 @@ check('scripts/trigger-fabric/system_sentinel.py',[
 ], classification='HYBRID_MULTIROUTE_SENTINEL_HOOK')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
- '"dependency_fingerprint": "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
+ '"dependency_fingerprint": "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
 ], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
 check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  '"centraldark_unified_capability_catalog"',
  '"SCREENPIPE_LOCAL_SENSOR"',
  '"RDC_DESKTOP_COMMANDER"',
- 'catalogFingerprint: "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
+ 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
  'routeReturned: routes.length',
 ], classification='MCP_UNIFIED_CAPABILITY_CATALOG')
 check('apps/modulos/mcp/dist/tools/core/mcp-admin.js',[
  '"centraldark_unified_capability_catalog"',
  '"SCREENPIPE_LOCAL_SENSOR"',
  '"RDC_DESKTOP_COMMANDER"',
- 'catalogFingerprint: "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
+ 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
 ], classification='MCP_UNIFIED_CAPABILITY_CATALOG_DIST_PARITY')
 check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md',[
  'LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG=true',
@@ -371,7 +371,7 @@ check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
  'CONE_PASS != GLOBAL_PASS',
 ], classification='COMPLETE_SIEVE_CHECKLIST_147')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
- '"dependency_fingerprint": "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
+ '"dependency_fingerprint": "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
  '"materialization_requirements"',
  '"physical_binding"',
  '"complete_sieve"',
@@ -1506,6 +1506,22 @@ check('apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml',[
 check('package.json',[
  '"verify:centraldark-contract": "python3 scripts/trigger-fabric/verify_repo_contract.py"',
 ], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_PACKAGE_ENTRY')
+
+check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
+ '"HERMES_DELEGATED_COMMIT_PATH"',
+ '"SCREENPIPE_CLI_RECORDER"',
+ 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+], classification='HERMES_SCREENPIPE_METABOLISM_CATALOG_SRC')
+check('apps/modulos/mcp/dist/tools/core/mcp-admin.js',[
+ '"HERMES_DELEGATED_COMMIT_PATH"',
+ '"SCREENPIPE_CLI_RECORDER"',
+ 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+], classification='HERMES_SCREENPIPE_METABOLISM_CATALOG_DIST')
+check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md',[
+ 'HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748',
+ 'SCREENPIPE_RUNTIME_ON_VPS=UNKNOWN_UNTIL_STATUS_JSON',
+ 'CATALOG_EXPECTED_ROUTES=13',
+], classification='HERMES_SCREENPIPE_METABOLISM_RECEIPT')
 
 try:
     tracked=subprocess.check_output(['git','ls-files'],cwd=ROOT,text=True).splitlines()

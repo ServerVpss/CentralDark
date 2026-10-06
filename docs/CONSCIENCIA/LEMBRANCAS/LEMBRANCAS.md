@@ -737,3 +737,11 @@ CURRENT_OVER_HISTORY = true
 - **Receita:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`
 - **Conteúdo:** o mesmo catálogo MCP descreve tools internas e rotas/capabilities externas. Remote Desktop Commander e Screenpipe compartilham o catálogo, mas preservam estados independentes e exigem remedição no binding.
 - **Cristal:** `ONE_MCP_CATALOG=true`; `RDC_STATE != SCREENPIPE_STATE`; `CATALOG_ENTRY != RUNTIME_HEALTH`; `ONE_ROUTE_FAILED != SYSTEM_FAILED`.
+
+
+### [2026-10-06] Hermes delegado + Screenpipe CLI no metabolismo
+- **Tipo:** LEARNING_INDEX / EXECUTOR_PROOF / SCREENPIPE_CLI / MCP_CATALOG
+- **Learning:** #169
+- **Target:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
+- **Conteúdo:** Hermes executor provado em PR #1748 por commit/push/readback externo entra no catálogo metabólico. Screenpipe CLI entra como rota de recorder/search/pipes com regra de status/freshness antes de PASS.
+- **Cristal:** `HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748`; `SCREENPIPE_CLI_RECORDER=CATALOGED_RECIPE`; `SCREENPIPE_RUNTIME_ON_VPS=UNKNOWN_UNTIL_STATUS_JSON`.
