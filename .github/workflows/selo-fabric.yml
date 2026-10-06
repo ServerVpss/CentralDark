@@ -34,7 +34,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_mae:
-        description: 'PR-mãe para selar (default: 1562)'
+        description: 'PR-mãe para selar (default: 1757)'
         required: false
         type: string
       test_event_name:
@@ -82,7 +82,7 @@ jobs:
       !(
         github.event_name == 'issue_comment' &&
         github.actor == 'github-actions[bot]' &&
-        github.event.issue.number == 1562
+        github.event.issue.number == 1757
       ) &&
       !(
         github.event_name == 'workflow_run' &&
@@ -100,7 +100,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
-            const PR_MAE = Number(process.env.PR_MAE_INPUT || '') || 1562;
+            const PR_MAE = Number(process.env.PR_MAE_INPUT || '') || 1757;
             const sourceEvent = context.eventName;
             const requested = (process.env.TEST_EVENT_NAME || 'auto').trim();
             const simulated = sourceEvent === 'workflow_dispatch' && requested && requested !== 'auto';
@@ -310,47 +310,13 @@ jobs:
             }
 
             const fingerprint = [sourceEvent, event, action || '-', runId, simulated ? requested : sha10(eventSha)].join(':');
-            const marker = `<!-- CENTRALDARK_SELO_FABRIC:${fingerprint} -->`;
 
             try {
-              const existing = await github.paginate(github.rest.issues.listComments, {
-                owner,
-                repo,
-                issue_number: PR_MAE,
-                per_page: 100,
-              });
+                core.notice(`SELO_HUD_ONLY=PASS fingerprint=${fingerprint} event=${event} class=${classe} pr_mae=${PR_MAE}`);
 
-              if (existing.some(c => String(c.body || '').includes(marker))) {
-                core.notice(`SELO_DEDUP=PASS fingerprint=${fingerprint}`);
-                return;
-              }
-
-              const body = [
-                marker,
-                `### ${emoji} Selo Fabric · ${tipo}`,
-                '',
-                `- **Classe:** \`${classe}\``,
-                `- **Evidência:** \`${evidence}\``,
-                `- **Origem:** \`${sourceEvent}\`${simulated ? ' → simulação explícita' : ''}`,
-                `- **Ação:** \`${action || '-'}\``,
-                `- **Detalhe:** ${detalhe || '-'}`,
-                `- **Actor:** \`@${actor}\``,
-                `- **Run:** \`${runId}\` attempt=\`${runAttempt}\``,
-                `- **Horário de Brasília:** \`${ts}\``,
-                '',
-                '> EVENTO != PASS · COMMIT != DEPLOY · CI_PASS_ONLY != RUNTIME_PASS · REALIDADE JULGA',
-              ].join('\n');
-
-              await github.rest.issues.createComment({
-                  owner,
-                  repo,
-                  issue_number: PR_MAE,
-                  body,
-                });
-                core.notice(`SELO_POSTED=PASS event=${event} class=${classe} pr_mae=${PR_MAE}`);
-
-                // Reconcile only the live HUD projection. The append-only ledger/history
-                // below the first separator remains untouched and is never treated as authority.
+                // Reconcile only the live HUD projection.
+                // Receipts are durable repository artifacts; PR comments are not the ledger.
+                // The compact core below the first separator is preserved in place.
                 const [mainRef, mother, openPulls] = await Promise.all([
                   github.rest.repos.getBranch({ owner, repo, branch: 'main' }),
                   github.rest.pulls.get({ owner, repo, pull_number: PR_MAE }),
@@ -378,7 +344,7 @@ jobs:
                 const liveMarker = '<!-- CENTRALDARK_PR_MOTHER_LIVE_CARD_V3 -->';
                 const liveCard = [
                   liveMarker,
-                  '# 🔒🪬 CENTRALDARK / PR-MÃE #1562',
+                  `# 🔒🪬 CENTRALDARK / PR-MÃE #${PR_MAE}`,
                   '## 🎮 HUD · FUNIL / HANDOFF VIVO · CURRENT',
                   '',
                   '~~~text',
@@ -402,11 +368,16 @@ jobs:
                   'ACTION_IS_PROOF=false',
                   'MERGED_IS_DEPLOYED=false',
                   'REALITY=JUDGE',
+                  'COMMENTS_ARE_NOT_PRIMARY_LEDGER=true',
+                  'RECEIPTS_OWNER=repository',
+                  'HUD_BODY_UPDATED_IN_PLACE=true',
+                  'SHELL_IS_MUTABLE=true',
+                  'LEGACY_IS_PRESERVED=true',
                   `LAST_LEDGER_EVENT=${event}/${action || '-'} · run=${runId} · subject=${sha10(eventSha)}`,
                   'NEXT_CURSOR=RECONCILE_OPEN_CHILDREN_THEN_MEASURE_RUNTIME_IN_ITS_OWNER',
                   '~~~',
                   '',
-                  '> **HUD vivo = projeção derivada do CURRENT medido pelo sensor declarado.** GitHub não inventa estado de VPS/Casa; ausência de medição runtime permanece UNKNOWN. Histórico abaixo é provenance, não CURRENT.',
+                  '> **HUD vivo = projeção derivada do CURRENT medido pelo sensor declarado.** Receipts duráveis ficam no repositório; comentários não são ledger.',
                   '',
                 ].join('\n');
 
