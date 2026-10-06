@@ -106,6 +106,29 @@ NEW_BROWSER_TAB_E2E=UNKNOWN_UNTIL_AGENT_CAN_TRIGGER_TAB_CREATION_AND_READBACK_TW
 
 The `desktop_preview` schema currently exposes only `open|close|read`; it has no `new_tab` action. Do not claim that a distinct label creates a second Browser tab. A real PASS requires the agent to trigger the same tab-creation path as the Preview strip `+` (or an equivalent authorized binding) and then prove that both Browser tabs remain present.
 
+## Visual Readback / Scroll
+
+Visual truncation is not automatically a data failure. If the response was already captured completely by the reader, scrolling is presentation/readback hygiene, not a new proof gate.
+
+```text
+UI_TRUNCATED != RESPONSE_TRUNCATED
+FULL_CAPTURE_PROVEN → SCROLL_OPTIONAL_FOR_VISUAL_READBACK
+FULL_CAPTURE_UNKNOWN → SCROLL_OR_BOTTOM_CONTROL → RE_READ → CONFIRM_COMPLETE
+```
+
+When the chat exposes a bottom/down control, prefer the smallest visible action:
+
+```text
+RESPONSE_APPEARS_CUT
+→ READ_CURRENT_SURFACE
+→ IF_FULL_CAPTURE_ALREADY_PROVEN: optionally scroll to bottom for clean visual readback
+→ ELSE: use dynamic elements/ref to scroll or activate the bottom/down control
+→ RE_READ
+→ confirm the final response boundary
+```
+
+Do not hard-code coordinates. The down-arrow/scroll affordance is a runtime UI binding and may change. Its use improves visual continuity; it only becomes mandatory when the unread portion is needed to prove response completeness.
+
 ## Oracle Response Telemetry and Adaptive Surface Loop
 
 The oracle flow does not stop at collecting text. Measure the surface, the attempt, and the response before reconciliation.
