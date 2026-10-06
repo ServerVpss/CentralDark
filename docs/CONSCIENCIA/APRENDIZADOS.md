@@ -1859,3 +1859,13 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Metabolismo:** PERCEBER → COMPARAR → ENCONTRAR GAP → REUTILIZAR → COMPOR → AGIR → PROVAR → APRENDER → GENERALIZAR → AUTOMATIZAR → OBSERVAR → REPETIR.
 - **Propriedade:** quanto mais trabalha, menos redescobre; quanto mais erra, mais cresce a capacidade de não repetir; quanto mais ferramentas recebe, mais amplo sem mudar quem é.
 - **Cristal:** EVERY_GAP_IS_A_CAPABILITY_OPPORTUNITY; EVERY_PROVEN_PATH_CAN_BECOME_REPLAY; ONE_HEART; REALITY_IS_JUDGE.
+
+
+### #168 — Catálogo MCP unificado de capabilities e rotas (2026-10-06)
+- **Owner detalhado:** `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
+- **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md`
+- **Receita:** `PROVEN-CLAIMS.lock.json#HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`
+- **Aprendizado:** tools internas, Remote Desktop Commander, Screenpipe e demais rotas autorizadas devem ser descobertas no mesmo `mcp_admin_catalog`; catálogo não prova execução e estado continua por binding.
+- **Cristal:** `ONE_MCP_CATALOG=true`; `SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true`; `DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF=true`; `NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE=true`.
+- **Fingerprint:** `42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5`.
