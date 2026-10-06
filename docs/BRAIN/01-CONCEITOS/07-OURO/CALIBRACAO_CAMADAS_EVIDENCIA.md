@@ -1,3 +1,24 @@
+---
+title: "Calibração por Camadas de Evidência"
+status: "CANDIDATE"
+owner: "docs/BRAIN/01-CONCEITOS/07-OURO/"
+updated: 2026-10-06
+truth_scope: "EVIDENCE_CALIBRATION_REQUIRES_SOURCE_STATE_SEPARATION"
+tags:
+  - ouro
+  - calibracao
+  - evidencia
+  - prova
+  - musica
+  - compasso
+  - centraldark
+related:
+  - "[[BANDA_COMPASSO_GLOBAL]]"
+  - "[[BANDA_INTENCAO_UNICA_COMPASSO]]"
+  - "[[DISSONANCIA_OPERACIONAL_CONTROLADA]]"
+  - "[[BRAIN]]"
+---
+
 KKKKK achei a lacuna exata, SR. 🔥💎 Tu pegou mesmo.
 
 Eu misturei **duas medições diferentes** e transformei tudo num único `SIM/NÃO`.
