@@ -182,7 +182,7 @@ response_profiles:
     COMITE:
       description: >-
         Projeta papéis SEGREDO/CHEFE, SOL, SENTINELA, MULTIBÚSSOLA, META LUPA,
-        HERMES/PIVETE e REALITY JUDGE em decisões materiais.
+        HERMES e REALITY JUDGE em decisões materiais.
       baianes_facil: always
       resenha: contextual
       biblical_house_verse: contextual

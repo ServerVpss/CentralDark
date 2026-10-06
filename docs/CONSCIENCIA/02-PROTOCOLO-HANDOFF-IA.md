@@ -408,7 +408,7 @@ MUTATION_PLANE
   → SERIALIZE_MUTATION
 
 EXECUTION_PLANE
-  HERMES/PIVETE
+  HERMES
   → executa e preserva continuidade quando aplicável
 
 STABILIZATION_LOOP

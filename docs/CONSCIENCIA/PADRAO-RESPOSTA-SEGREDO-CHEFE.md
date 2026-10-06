@@ -41,7 +41,7 @@ O caminho antigo `2026-06-20-padrao-resposta-pivete.md` fica somente como alias/
 ```text
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 "pivete" regional = vocativo informal; não é identidade técnica
 ```
 

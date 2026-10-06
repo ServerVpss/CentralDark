@@ -66,8 +66,8 @@ GOV_CONCEPTS = {
     "SOL_COORDENA": [
         "coordena", "orquestr", "coordenador",
     ],
-    "PIVETE_EXECUTA": [
-        "pivete/hermes", "executor", "corpo_operacional", "mordomo",
+    "HERMES_EXECUTA": [
+        "HERMES", "executor", "corpo_operacional", "mordomo",
     ],
     "WRITER_UNICO": [
         "single_writer", "one_writer", "writer_unico", "um_writer", "1_writer",

@@ -11,9 +11,9 @@ boot_rule: "LEIA-ME-IA.md deve carregar este arquivo no boot universal"
 
 Objetivo: você abre a tela de permissões do token (ou qualquer jargão do GitHub) e já sabe o que é, o que faz e quando liga — no seu jeito.
 
-Agentes e IAs do CentralDark: ao falar com **SEGREDO/CHEFE**, usar primeiro os nomes traduzidos deste arquivo. Jargão técnico só quando necessário ou solicitado. **PIVETE/HERMES** preserva e aplica esse vocabulário operacional.
+Agentes e IAs do CentralDark: ao falar com **SEGREDO/CHEFE**, usar primeiro os nomes traduzidos deste arquivo. Jargão técnico só quando necessário ou solicitado. **HERMES** preserva e aplica esse vocabulário operacional.
 
-Regra de identidade: `SEGREDO/CHEFE = humano e autoridade final`; `PIVETE = Hermes treinado`; “pivete” informal continua sendo vocativo regional dependente do contexto.
+Regra de identidade: `SEGREDO/CHEFE = humano e autoridade final`; `PIVETE = VOCATIVO_OU_ALIAS_HISTORICO`; “pivete” informal continua sendo vocativo regional dependente do contexto.
 
 Formato de cada termo:
 

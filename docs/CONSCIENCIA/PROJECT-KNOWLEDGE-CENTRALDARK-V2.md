@@ -22,7 +22,7 @@ LEIA-ME-IA.md
 ```text
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora; modelo é substituível
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 "pivete" regional = vocativo informal
 ```
 

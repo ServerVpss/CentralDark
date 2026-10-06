@@ -1,6 +1,6 @@
 ---
 name: Estrutura local Windows — snapshot histórico + fronteira C/E a provar
-description: Preserva a topologia observada em 02/07/2026 sem confundir SEGREDO/CHEFE com PIVETE/HERMES nem promover caminho antigo como runtime atual
+description: Preserva a topologia observada em 02/07/2026 sem confundir SEGREDO/CHEFE com HERMES nem promover caminho antigo como runtime atual
 type: preference
 status: HISTORICO_COM_CONTRATO_ATUAL
 updated_at: 2026-08-14
@@ -13,7 +13,7 @@ updated_at: 2026-08-14
 ```text
 SEGREDO/CHEFE = humano, dono da intenção e autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" regional = vocativo informal; não identifica o humano tecnicamente
 ```
 
@@ -99,7 +99,7 @@ O caminho físico do vault atual permanece `UNKNOWN` até C:/E: serem medidos.
 ```text
 HISTORICO_02_07_PRESERVADO=true
 HISTORICO_NAO_REDEFINE_PRESENTE=true
-SEGREDO_CHEFE_EQ_PIVETE_HERMES=false
+SEGREDO_CHEFE_EQ_HERMES=false
 C_E_AINDA_EXIGEM_PROVA_LOCAL=true
 NO_DATA_MOVE_WITHOUT_MAPPING=true
 NO_JUNCTION_BLIND=true

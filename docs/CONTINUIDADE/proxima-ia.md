@@ -35,7 +35,7 @@ Este é o owner vivo do handoff entre janelas, modelos, agentes e superfícies.
 ```text
 SEGREDO/CHEFE = autoridade e intenção
 SOL = coordenação operacional
-PIVETE/HERMES = executor/preservação/continuidade
+HERMES = executor/preservação/continuidade
 REALIDADE = juiz
 ```
 

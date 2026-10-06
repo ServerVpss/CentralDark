@@ -8,7 +8,7 @@ sensitivity: INTERNAL
 source: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-ARVORE-SEMANTICA-DA-CASA.md"
 source_class: INTERNAL
 owner: "docs/BRAIN/00-MAPA-SISTEMA/"
-consumer: "SEGREDO/CHEFE + PIVETE/HERMES + Obsidian"
+consumer: "SEGREDO/CHEFE + HERMES + Obsidian"
 ---
 
 # Árvore Semântica da Casa

@@ -38,7 +38,7 @@ jobs:
               ['🧠 AGENTE-CLAUDE','B088FF','Claude como capacidade, nunca autoridade'],
               ['🧠 AGENTE-CODEX','5319E7','Codex como capacidade, nunca autoridade'],
               ['🧠 AGENTE-GROK','1F6FEB','Grok como capacidade, nunca autoridade'],
-              ['🧠 AGENTE-HERMES','7057FF','PIVETE/Hermes executor'],
+              ['🧠 AGENTE-HERMES','7057FF','HERMES executor'],
               ['🧠 AGENTE-JARVIS','0052CC','Jarvis/orquestração'],
               ['🧠 AGENTE-SENTINELA','B60205','Sentinela detector'],
               ['🧠 AGENTE-SUPABASE','3ECF8E','Supabase/banco'],

@@ -50,7 +50,7 @@ O arquivo local não é uma segunda SOUL. Ele é somente ponte de executor e pod
 ```text
 # HERMES / VPS — THIN EXECUTOR BRIDGE
 
-EXECUTOR_ROLE=PIVETE/HERMES
+EXECUTOR_ROLE=HERMES
 PROFILE_CLASS=THIN_EXECUTOR_BRIDGE
 NO_SECOND_SOUL=true
 LOCAL_RULES_ONLY=true

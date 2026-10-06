@@ -102,7 +102,7 @@ flowchart TB
 
     subgraph T4["⚙️ Núcleo runtime — verdade operacional medida"]
       MASTER["🎼 MASTER-CYCLE / Trigger Fabric"]
-      HERMES["🪬 HERMES/PIVETE"]
+      HERMES["🪬 HERMES"]
       MCP["🔌 MCP CentralDark"]
       SENSORS["👁️ Screenpipe / Desktop / Remote / Tray"]
       RUNTIME(("⚙️ NÚCLEO RUNTIME"))

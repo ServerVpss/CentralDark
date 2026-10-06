@@ -20,7 +20,7 @@ ESTADO_ATUAL = MEDIR_AGORA
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 ## Não usar como presente

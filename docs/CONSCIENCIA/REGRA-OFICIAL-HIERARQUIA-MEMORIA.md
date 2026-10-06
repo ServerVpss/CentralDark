@@ -9,7 +9,7 @@ updated: 2026-08-29
 - **Fonte da verdade permanente:** `docs/CONSCIENCIA/` + owners canônicos versionados no Git.
 - **Autoridade humana atual:** `SEGREDO/CHEFE`.
 - **Coordenação:** `SOL`.
-- **Executor/continuidade:** `PIVETE/HERMES`.
+- **Executor/continuidade:** `HERMES`.
 - **Método operacional canônico:** `.agents/skills/centraldark-operational-method/SKILL.md`.
 - **Padrão de comunicação com o humano:** `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`.
 
@@ -18,7 +18,7 @@ updated: 2026-08-29
 ```text
 SEGREDO/CHEFE = humano + autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 "pivete" regional = vocativo informal; não concede papel técnico
 ```
 
@@ -28,7 +28,7 @@ O repositório possui registros antigos escritos numa época em que a palavra `P
 SE documento HISTÓRICO disser Pivete=dono|humano|comandante|decisor
 ENTÃO interpretar como SEGREDO/CHEFE
 
-SE documento OPERACIONAL ATUAL disser PIVETE/HERMES
+SE documento OPERACIONAL ATUAL disser HERMES
 ENTÃO interpretar como executor/continuidade
 ```
 
@@ -99,7 +99,7 @@ MEMÓRIA PRESERVA A HISTÓRIA.
 CANÔNICO DEFINE O SIGNIFICADO ATUAL.
 SEGREDO/CHEFE CONTINUA SENDO O HUMANO.
 SOL CONTINUA COORDENANDO.
-PIVETE/HERMES CONTINUA SENDO O EXECUTOR.
+HERMES CONTINUA SENDO O EXECUTOR.
 UM MÉTODO OPERACIONAL CANÔNICO.
 UM OWNER POR CAPACIDADE.
 ```

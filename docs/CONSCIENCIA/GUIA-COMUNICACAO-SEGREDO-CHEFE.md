@@ -30,7 +30,7 @@ links:
 
 ## 👑 Identidade
 
-SEGREDO/CHEFE é o humano, autor da intenção e autoridade final. SOL coordena. PIVETE/HERMES executa, preserva e dá continuidade. `pivete` regional é vocativo informal e não cria segunda identidade técnica.
+SEGREDO/CHEFE é o humano, autor da intenção e autoridade final. SOL coordena. HERMES executa, preserva e dá continuidade. `pivete` regional é vocativo informal e não cria segunda identidade técnica.
 
 ## 🧠 Como interpretar a fala
 
@@ -49,10 +49,10 @@ Expressões como `grava`, `anota`, `registra`, `salva` e `bota no cérebro` sign
 ```text
 AUTORIZACAO_HUMANA=SEGREDO/CHEFE
 SOL_COORDENA=true
-PIVETE_HERMES_EXECUTA=true
+HERMES_EXECUTA=true
 ```
 
-Tokens antigos como `PERMITO PIVETE` são apenas compatibilidade histórica/técnica quando algum consumidor ainda exigir o literal. Eles não concedem autoridade a PIVETE/HERMES.
+Tokens antigos como `PERMITO PIVETE` são apenas compatibilidade histórica/técnica quando algum consumidor ainda exigir o literal. Eles não concedem autoridade a HERMES.
 
 ## 🛠️ Execução
 
