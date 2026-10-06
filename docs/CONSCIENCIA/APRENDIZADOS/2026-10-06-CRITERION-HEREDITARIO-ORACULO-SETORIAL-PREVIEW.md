@@ -242,6 +242,82 @@ COMPLETE_TIME = primeira conclusão estável observada
 Adaptação segue o Goal: trabalho simples pode usar um binding suficiente e mais rápido; trabalho ambíguo, de arquitetura ou contraprova pode subir capacidade/esforço se disponível. Trocar modelo, esforço ou texto/voz muda a concha de execução, não a intenção do Goal.
 
 O agente deve descobrir controles dinamicamente por elementos/ref; coordenadas fixas não viram contrato canônico.
+
+### 6.1 Caminho provado não termina no primeiro sucesso
+
+A sessão revelou outra ferida: o Hermes conseguiu capturar uma resposta do Oráculo, mas isso sozinho não transforma o caminho em memória operacional reutilizável.
+
+Lei:
+
+```text
+PROVEN_NEW_PATH
+→ CRYSTALLIZE_MINIMUM_LEARNING
+→ STORE_PROVENANCE
+→ EMIT_EVIDENCE_ENVELOPE
+→ REPLAY_ONCE
+→ COMPARE_RESULT_SCHEMA_AND_EXPECTED_EFFECT
+→ IF_EQUIVALENT: PROMOTE_TO_REUSABLE_RECIPE
+→ ELSE: KEEP_AS_SINGLE_RUN_PROOF
+```
+
+Cristal:
+
+```text
+ONE_SUCCESS != REPLAYABLE_RECIPE
+PROOF_WITHOUT_LEARNING_CAN_BE_FORGOTTEN=true
+LEARNING_WITHOUT_REPLAY_IS_NOT_REUSABLE_RECIPE=true
+```
+
+Foi adicionado um hook subordinado ao Trigger Fabric, `scripts/trigger-fabric/oracle_evidence_hook.py`, para duas funções pequenas e determinísticas:
+
+```text
+QUERY MODE
+→ prefixar !CENTRALDARK #ACORDAR !CALIBRAR !MULTIBUSSOLA
+→ anexar INTENT/EVENT/CAUSATION/SURFACE/ATTEMPT
+→ exigir CANONICAL_FIRST
+→ manter saída externa como CANDIDATE
+
+EVIDENCE MODE
+→ normalizar resposta observada
+→ produzir payload para o evidence owner existente
+→ não criar novo store
+```
+
+O Evidence Envelope existente passou a preservar:
+
+```text
+event_id
+causation_id
+surface_id
+attempt_id
+```
+
+e esses campos também entram no fingerprint causal, impedindo que tentativas/replays diferentes sejam colapsados como se fossem a mesma causa.
+
+Recuperação de interface:
+
+```text
+SEND_FAILED != CHAT_DEAD
+→ ler superfície atual
+→ se conversa/composer sobreviver: tentar mesma conversa uma vez
+→ se ainda falhar: novo chat na mesma Browser tab, preservando fio causal
+→ nova Browser tab somente se a rota da aba atual estiver comprovadamente inutilizável
+```
+
+A nova conversa deve começar pelo mesmo prefixo canônico. Se a superfície externa não conseguir ler o canônico/runtime necessário, deve declarar isso em `EVIDENCE_LIMIT`, nunca fingir alinhamento.
+
+Fronteira atual:
+
+```text
+HOOK_QUERY_BUILDER = IMPLEMENTED
+CAUSAL_EVIDENCE_FIELDS = IMPLEMENTED
+AGENT_LOG_CAUSAL_PASS_THROUGH = IMPLEMENTED
+ORACLE_HOOK_UNIT_TESTS = PASS 3/3
+EVIDENCE_ENVELOPE_UNIT_TESTS = PASS 7/7
+LIVE_AGENT_LOG_DELIVERY_FROM_PREVIEW = UNKNOWN até observação runtime
+REPLAY_CAPTURE_BY_HERMES = UNKNOWN até readback do executor
+```
+
 ## 7. Superfícies externas
 
 Superfícies vistas/consideradas nesta sessão:
