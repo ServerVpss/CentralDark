@@ -76,7 +76,14 @@
     "RESULT",
     "BLOCKER_IF_ANY",
     "NEXT_REQUIRED_IDENTIFIER",
-    "CONFIDENCE_ACTING_PERCENT"
+    "CONFIDENCE_ACTING_PERCENT",
+    "SEAL_STATE",
+    "LIVE_STATE",
+    "FINGERPRINT",
+    "ROLLBACK",
+    "OWNER",
+    "PROOF_SOURCE",
+    "NEXT_CURSOR"
   ],
   "execution_contract": {
     "intent_confidence_gte_95_and_scope_clear": "execute first, explain after",
@@ -120,5 +127,27 @@
     "canonical_owner_unchanged": true,
     "no_v1_v2_v3_parallel_owner": true
   },
-  "canonical_continuous_contract": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28"
+  "canonical_continuous_contract": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28",
+  "hud_cartographer": {
+    "enabled": true,
+    "canonical_agent": ".agents/skills/centraldark-capability-hud/SKILL.md",
+    "machine_generator": "scripts/hud/generate-hud-inventory.mjs",
+    "machine_inventory": "docs/HUD/CENTRALDARK-HUD-INVENTORY.json",
+    "collects": [
+      "GENEALOGIA",
+      "METABOLISMO",
+      "DETERMINISMO",
+      "AGENTES",
+      "SKILLS",
+      "WORKFLOWS",
+      "ROTAS",
+      "UI_SURFACES",
+      "CADEADOS"
+    ],
+    "seal_live_split": true,
+    "seal_semantics": "LAST_VALID_PROOF_FINGERPRINT_ROLLBACK",
+    "live_semantics": "CURRENT_MEASUREMENT_TIMESTAMP_SOURCE",
+    "machine_inventory_is_authority": false,
+    "owners_remain_authority": true
+  }
 }
