@@ -73,6 +73,32 @@ function statusFileSnapshot(root) {
     }
     return found;
 }
+function hudInventorySnapshot(root) {
+    const relativeOwner = "docs/HUD/CENTRALDARK-HUD-INVENTORY.json";
+    const file = path.join(root, relativeOwner);
+    const payload = readJsonSafe(file);
+    if (!payload) {
+        return {
+            schema: "centraldark.hud.inventory.runtime.v1",
+            status: exists(file) ? "INVALID_JSON" : "UNKNOWN",
+            source: relativeOwner,
+            inventoryFingerprint: null,
+            summary: null,
+            measuredAt: new Date().toISOString(),
+            rules: { inventoryIsDerivedNotAuthority: true, sealIsNotLive: true, unknownIsNotPass: true },
+        };
+    }
+    const summary = payload?.summary && typeof payload.summary === "object" ? payload.summary : {};
+    return {
+        schema: "centraldark.hud.inventory.runtime.v1",
+        status: "OBSERVED",
+        source: relativeOwner,
+        inventoryFingerprint: payload.inventory_fingerprint || null,
+        summary,
+        measuredAt: new Date().toISOString(),
+        rules: { inventoryIsDerivedNotAuthority: true, sealIsNotLive: true, unknownIsNotPass: true },
+    };
+}
 function secretBoundary(root) {
     const dir = path.join(root, "secrets");
     return {
@@ -211,6 +237,44 @@ function latestMcpToolActivity(root, nowMs = Date.now()) {
         source: "logs/mcp-audit-*.jsonl*",
     };
 }
+function modelBindingSnapshot({ root, procRoot = "/proc", nowMs = Date.now() }) {
+    const hermesConfig = readTextSafe("/root/.hermes/config.yaml");
+    const modelMatch = hermesConfig.match(/\bdefault:\s*[\'"]?([^\'"\n]+)[\'"]?/);
+    const providerMatch = hermesConfig.match(/\bprovider:\s*[\'"]?([^\'"\n]+)[\'"]?/);
+    const baseMatch = hermesConfig.match(/\bbase_url:\s*[\'"]?([^\'"\n]+)[\'"]?/);
+    const local = readJsonSafe(path.join(root, "logs/model-binding-current.json"));
+    const evolution = readJsonSafe(path.join(root, "logs/self-evolution-binding.json"));
+    const processes = processCmdlines(procRoot);
+    const activeEvolution = processes.find((row) => /evolution\.skills\.evolve_skill/.test(row.command));
+    const optimizer = activeEvolution?.command.match(/--optimizer-model\s+([^\s]+)/)?.[1] || null;
+    const evaluator = activeEvolution?.command.match(/--eval-model\s+([^\s]+)/)?.[1] || null;
+    return {
+        schema: "centraldark.model-routing.v1",
+        observedAt: new Date(nowMs).toISOString(),
+        rules: { modelIsEngine: true, modelNameIsBinding: true, orchestratorUsesCurrentHermesSelection: true, localWorkerUsesCurrentLocalSelection: true, resolveAtLoteStart: true, midLoteSwap: false, noSecondRouter: true },
+        orchestrator: {
+            model: modelMatch?.[1]?.trim() || null,
+            provider: providerMatch?.[1]?.trim() || null,
+            baseUrl: baseMatch?.[1]?.trim() || null,
+            source: "/root/.hermes/config.yaml",
+            state: modelMatch ? "SELECTED" : "UNKNOWN",
+        },
+        localWorker: {
+            model: local?.local_worker?.model || null,
+            source: local?.local_worker?.source || "logs/model-binding-current.json",
+            observedAt: local?.observed_at || null,
+            state: local?.local_worker?.model ? "SELECTED" : "UNKNOWN",
+        },
+        selfEvolution: {
+            active: Boolean(activeEvolution),
+            pid: activeEvolution?.pid || null,
+            optimizerModel: optimizer || evolution?.model_spec || null,
+            evalModel: evaluator || evolution?.model_spec || null,
+            frozenPerLote: true,
+            state: activeEvolution ? "RUNNING" : (evolution?.model ? "LAST_BINDING_OBSERVED" : "UNKNOWN"),
+        },
+    };
+}
 function executionTopologySnapshot({ root, procRoot = "/proc", nowMs = Date.now() }) {
     const processes = processCmdlines(procRoot);
     const lanes = [
@@ -226,6 +290,9 @@ function executionTopologySnapshot({ root, procRoot = "/proc", nowMs = Date.now(
         ]),
         laneFromProcesses(processes, "HERMES_CRON", "Hermes cron/external worker", [
             /-m\s+cron\.scheduler\b/i,
+        ]),
+        laneFromProcesses(processes, "SELF_EVOLUTION", "Hermes Self-Evolution", [
+            /evolution\.skills\.evolve_skill/i,
         ]),
         laneFromProcesses(processes, "GITHUB_RUNNER", "GitHub Actions runner", [
             /actions-runner\/.*Runner\.(?:Listener|Worker)/i,
@@ -450,6 +517,8 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, 
     const boundary = secretBoundary(root);
     const patternAlignment = patternAlignmentSnapshot({ root, diagnostics, boundary, rules });
     const executionTopology = executionTopologySnapshot({ root, procRoot, nowMs });
+    const modelBinding = modelBindingSnapshot({ root, procRoot, nowMs });
+    const hudInventory = hudInventorySnapshot(root);
     return {
         schema: "centraldark.operational.snapshot.v1",
         observedAt: new Date().toISOString(),
@@ -480,6 +549,8 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, 
         secretBoundary: boundary,
         patternAlignment,
         executionTopology,
+        modelBinding,
+        hudInventory,
         statusFiles: statusFileSnapshot(root),
         fronts,
         verdict: diagnostics.status === "OBSERVED" ? "OBSERVED_NOT_FIXED_POINT" : "UNKNOWN_NOT_PASS",
