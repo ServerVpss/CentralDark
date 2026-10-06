@@ -953,14 +953,15 @@
         "events": [
           "CAPABILITY_GAP",
           "TERRITORY_ROUTE_CHANGE",
-          "PRE_HUMAN_RETURN",
-          "MCP_CATALOG_ROUTE_GAP"
+          "PRE_HUMAN_RETURN"
         ],
         "sentinel_owner": "scripts/trigger-fabric/system_sentinel.py",
         "sentinel_signature": "ROUTE_FAILURE",
         "hermes_runtime_hook": "apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py#pre_verify",
         "hermes_hook_marker": "CENTRALDARK_COMPLETE_SIEVE_MATERIALIZATION=FAIL",
-        "git_hooks_are_not_runtime_route_owner": true
+        "git_hooks_are_not_runtime_route_owner": true,
+        "catalog_gap_reuses_existing_trigger": "CAPABILITY_GAP",
+        "new_hook_required": false
       },
       "runtime_consumer": {
         "device_class": "CENTRALDARK-OS",
