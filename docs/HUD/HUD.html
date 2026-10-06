@@ -900,6 +900,11 @@ body {
         <div class="val warn" id="live-heart-tools">UNKNOWN</div>
         <div class="meta">catalogo vivo em /health</div>
       </div>
+      <div class="hud-card">
+        <h3>Chat nativo</h3>
+        <div class="val warn" id="live-heart-chat">UNKNOWN</div>
+        <div class="meta">heartbeat não executa inferência; prova separada</div>
+      </div>
     </div>
   </div>
 
@@ -1309,14 +1314,18 @@ function refreshCentralDarkLive() {
         var remoteLane = Array.isArray(topology.lanes) ? topology.lanes.find(function(x) { return x && x.id === 'REMOTE_DESKTOP'; }) : null;
         var alive = heartbeat.ok === true && String((op.heartbeat || {}).self || '').toLowerCase() === 'alive';
         var measuredRaw = heartbeat.measuredAt || op.observedAt || null;
-        var measured = measuredRaw ? new Date(measuredRaw).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) + ' BRT' : 'UNKNOWN';
+        var measuredDate = measuredRaw ? new Date(measuredRaw) : null;
+        var measuredAgeMs = measuredDate && !isNaN(measuredDate.getTime()) ? Date.now() - measuredDate.getTime() : null;
+        var fresh = measuredAgeMs !== null && measuredAgeMs >= 0 && measuredAgeMs <= 15000;
+        var measured = measuredDate && !isNaN(measuredDate.getTime()) ? measuredDate.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) + ' BRT · ' + (fresh ? 'FRESH' : 'STALE') : 'UNKNOWN';
 
-        liveSet('live-heart-state', alive ? 'ALIVE' : 'UNKNOWN', alive);
+        liveSet('live-heart-state', alive ? 'ALIVE' : 'UNKNOWN', alive && fresh);
         liveSet('live-heart-measured', measured, Boolean(measuredRaw));
         liveSet('live-heart-orchestrator', orchestrator.model || 'UNKNOWN', orchestrator.state === 'SELECTED');
         liveSet('live-heart-worker', worker.model || 'UNKNOWN', worker.state === 'SELECTED');
         liveSet('live-heart-execution', topology.verdict || 'UNKNOWN', /^RUNNING|EXECUTION/i.test(String(topology.verdict || '')));
         liveSet('live-heart-tools', health && Number.isFinite(Number(health.totalTools)) ? String(health.totalTools) + ' tools' : 'UNKNOWN', Boolean(health && Number.isFinite(Number(health.totalTools))));
+        liveSet('live-heart-chat', 'UNKNOWN', false);
         liveSet('live-heart-provider', 'provider: ' + (orchestrator.provider || 'UNKNOWN'));
         liveSet('live-heart-remote', 'Remote Desktop: ' + ((remoteLane || {}).state || 'UNKNOWN'));
 
