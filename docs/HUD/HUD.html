@@ -451,6 +451,45 @@ body {
   width: 4px; height: 100%;
 }
 .cadeado-card.selado::before { background: var(--green); }
+.cadeado-live {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--amber);
+  background: rgba(233,180,76,0.08);
+}
+.cadeado-live.pass {
+  color: var(--green);
+  background: rgba(123,201,111,0.08);
+}
+.metabolism-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 12px;
+}
+.metabolism-card {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--ground);
+}
+.metabolism-card .n {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--titulo-cor);
+}
+.metabolism-card .k {
+  margin-top: 3px;
+  color: var(--text-dim);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+@media (max-width: 700px) { .metabolism-grid { grid-template-columns: 1fr 1fr; } }
 .cadeado-card.aberto::before { background: var(--amber); }
 .cadeado-card.falha::before { background: var(--red); }
 
@@ -862,6 +901,28 @@ body {
     </div>
   </div>
 
+  <!-- INVENTARIO METABOLICO MACHINE-CONSUMABLE -->
+  <div class="section" style="margin-top:16px;" id="hud-machine-inventory">
+    <div class="section-header">
+      <div class="section-icon">&#129504;</div>
+      <h2 class="section-title">Inventário Metabólico &mdash; Genealogia / Determinismo / Superfícies</h2>
+      <span class="section-count" id="hud-machine-state">carregando...</span>
+    </div>
+    <div class="metabolism-grid">
+      <div class="metabolism-card"><div class="n" id="hud-count-genealogy">?</div><div class="k">Genealogia</div></div>
+      <div class="metabolism-card"><div class="n" id="hud-count-claims">?</div><div class="k">Claims provados</div></div>
+      <div class="metabolism-card"><div class="n" id="hud-count-determinism">?</div><div class="k">Owners determinísticos</div></div>
+      <div class="metabolism-card"><div class="n" id="hud-count-skills">?</div><div class="k">Skills</div></div>
+      <div class="metabolism-card"><div class="n" id="hud-count-workflows">?</div><div class="k">Workflows</div></div>
+      <div class="metabolism-card"><div class="n" id="hud-count-ui">?</div><div class="k">Sinais UI</div></div>
+      <div class="metabolism-card"><div class="n" id="hud-count-routes">?</div><div class="k">Rotas</div></div>
+      <div class="metabolism-card"><div class="n" id="hud-count-seals">?</div><div class="k">Baselines seladas</div></div>
+      <div class="metabolism-card"><div class="n" id="hud-count-agents">?</div><div class="k">Agentes expostos</div></div>
+    </div>
+    <div class="cadeado-prova" style="margin-top:10px;" id="hud-machine-fingerprint">fingerprint: UNKNOWN</div>
+    <div class="cadeado-meta" style="margin-top:4px;">SELO = última prova válida / fingerprint / rollback &middot; LIVE = medição atual / timestamp / fonte</div>
+  </div>
+
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
@@ -1119,7 +1180,7 @@ body {
 <!-- Footer -->
 <div class="page">
   <div class="footer">
-    <span>READ_ONLY &middot; 1 PAGINA &middot; 3 PELES &middot; 8 CADEADOS SELADOS &middot; mega update 2026-10-06</span>
+    <span>READ_ONLY &middot; 1 PAGINA &middot; 3 PELES &middot; SELO/LIVE SEPARADOS &middot; inventário machine-consumable</span>
     <span>CentralDark &middot; ServerVpss/CentralDark &middot; HEAD main</span>
   </div>
 </div>
@@ -1227,6 +1288,55 @@ cartas.forEach(function(c) {
     '<div class="carta-path">' + c.path + '</div>';
   deckEl.appendChild(div);
 });
+
+/* ============================================================
+   INVENTARIO METABOLICO MACHINE-CONSUMABLE
+   ============================================================ */
+(function loadHudMachineInventory() {
+  var url = './CENTRALDARK-HUD-INVENTORY.json';
+  fetch(url, { cache: 'no-store' })
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function(inv) {
+      var s = inv.summary || {};
+      var pairs = [
+        ['hud-count-genealogy', s.genealogy_nodes],
+        ['hud-count-claims', s.proven_claims],
+        ['hud-count-determinism', s.deterministic_owners],
+        ['hud-count-skills', s.skills],
+        ['hud-count-workflows', s.workflows],
+        ['hud-count-ui', s.ui_signals],
+        ['hud-count-routes', s.routes],
+        ['hud-count-seals', s.sealed_baselines],
+        ['hud-count-agents', s.agents]
+      ];
+      pairs.forEach(function(pair) {
+        var el = document.getElementById(pair[0]);
+        if (el) el.textContent = pair[1] == null ? '?' : String(pair[1]);
+      });
+      var state = document.getElementById('hud-machine-state');
+      if (state) state.textContent = 'machine PASS';
+      var fp = document.getElementById('hud-machine-fingerprint');
+      if (fp) fp.textContent = 'fingerprint: ' + (inv.inventory_fingerprint || 'UNKNOWN');
+
+      document.querySelectorAll('.cadeado-card.selado .cadeado-header').forEach(function(header) {
+        if (header.querySelector('.cadeado-live')) return;
+        var live = document.createElement('span');
+        live.className = 'cadeado-live';
+        live.textContent = 'LIVE: UNKNOWN';
+        live.title = 'SELO histórico preservado; LIVE exige medição atual da rota.';
+        header.appendChild(live);
+      });
+    })
+    .catch(function(err) {
+      var state = document.getElementById('hud-machine-state');
+      if (state) state.textContent = 'UNKNOWN';
+      var fp = document.getElementById('hud-machine-fingerprint');
+      if (fp) fp.textContent = 'inventário indisponível: ' + String(err.message || err);
+    });
+})();
 
 /* ============================================================
    HUD LIVE - ONE HEART
