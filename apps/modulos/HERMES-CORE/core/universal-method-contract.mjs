@@ -529,8 +529,8 @@ export function validateUniversalMethod() {
   ], 'FABLE_DETERMINISTIC_CLOSURE');
   let previous = -1;
   for (const token of REQUIRED_CHAIN) {
-    const needle = `  - ${token}`;
-    const pos = universal.indexOf(needle);
+    const needle = new RegExp(`^  - ${token}$`, 'm');
+    const pos = universal.search(needle);
     if (pos < 0) throw new Error(`CHAIN_TOKEN_MISSING:${token}`);
     if (pos <= previous) throw new Error(`CHAIN_ORDER_INVALID:${token}`);
     previous = pos;

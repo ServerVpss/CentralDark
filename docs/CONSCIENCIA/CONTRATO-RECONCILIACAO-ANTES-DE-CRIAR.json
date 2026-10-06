@@ -2818,7 +2818,7 @@
     "marker": "CENTRALDARK_TELEGRAM_ORCHESTRATOR",
     "authority": "SEGREDO/CHEFE",
     "coordinator": "SOL",
-    "executor": "PIVETE/HERMES",
+    "executor": "HERMES",
     "control_plane": "CENTRALDARK",
     "bot_identities_are_interfaces_not_authority": true,
     "user_mtproto_identity_is_interface_not_second_brain": true,
