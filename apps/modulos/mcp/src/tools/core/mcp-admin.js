@@ -101,6 +101,27 @@ const runtimeTools = [
     ...piveteTools,
     ...youtubeMediaTools,
 ];
+const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
+    { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO", capability: "CASA_DESKTOP_SHELL_FILES", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "segredo-vpss|VPS_HOST", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "MCP_CASA_TO_VPS", transport: "MCP", binding: "MCP_CASA", capability: "execute_command|vps_run_once_script", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "HERMES_SHELL", transport: "HERMES", binding: "SHELL", capability: "EXECUTION_BODY", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "GITHUB_RUNTIME", transport: "GITHUB", binding: "ServerVpss/CentralDark", capability: "CANONICAL_RECORD_AND_MICRODEPLOY_ROUTE", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "AIONUI_MCP_STDIO", transport: "MCP_STDIO", binding: "AionUi->CentralDark", capability: "MCP_CATALOG_AND_NATIVE_BINDINGS", source: "scripts/vps/aionui-native-integrate.py", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "CAS_CLOUD_RELAY", transport: "WEBSOCKET_RELAY", binding: "Casa<->CAS Cloud VPS", capability: "REMOTE_AGENT_ORCHESTRATION", source: "docs/ARQUITETURA/CENTRALDARK-CAS-CLOUD-VPS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+]);
+const ROUTE_LAWS = Object.freeze({
+    oneRouteFailedIsNotSystemFailed: true,
+    alternateAuthorizedRouteBeforeHumanBlocker: true,
+    nextAuthorizedRouteAutoContinue: true,
+    routeDocumentedIsNotRuntimeProof: true,
+    capabilitySystem: "UNION_OF_MEASURED_AUTHORIZED_ROUTE_CAPABILITIES",
+    realityIsJudge: true,
+});
+
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
 function safeToolInfo(tool) {
     return {
@@ -167,6 +188,10 @@ export const mcpAdminTools = [
                 catalogVersion: CATALOG_VERSION,
                 confirmForDestructive: ADMIN_CONFIRM,
                 acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
+                routeCatalogScope: "centraldark_authorized_routes",
+                routeCount: AUTHORIZED_ROUTE_CATALOG.length,
+                routeLaws: ROUTE_LAWS,
+                routes: AUTHORIZED_ROUTE_CATALOG,
                 tools,
             });
         },
