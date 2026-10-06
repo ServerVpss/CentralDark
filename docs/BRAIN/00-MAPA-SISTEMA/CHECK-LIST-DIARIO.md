@@ -752,3 +752,37 @@ HUD_RELATED_FILES=535
 FULL_UI_BUTTON_TAB_MAP=PARTIAL_COUNTED_NOT_FULLY_ENUMERATED
 NEXT_CURSOR=GENERATE_MACHINE_INVENTORY_JSON_FOR_UI_SKILLS_WORKFLOWS
 ```
+
+
+## 🧭 CURRENT VIVO — 2026-10-06 — LEARNING_170_HUD_CARTOGRAPHER_COMPLETE_INVENTORY
+
+```text
+HUD_CARTOGRAPHER_AGENT=true
+AGENT_OWNER=.agents/skills/centraldark-capability-hud/SKILL.md
+MACHINE_GENERATOR=scripts/hud/generate-hud-inventory.mjs
+MACHINE_INVENTORY=docs/HUD/CENTRALDARK-HUD-INVENTORY.json
+HUD_CONSUMER=docs/HUD/HUD.html
+PR_MOTHER_CONSUMER=.github/workflows/selo-fabric.yml
+HOUSE_INVENTORY_CONSUMER=apps/modulos/hub/scripts/house-inventory-core.mjs
+SEAL_LIVE_SPLIT_REQUIRED=true
+FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED
+DEPENDENCY_FINGERPRINT=d4d3ceda8e7c842e067af04cb8aeb52b88b787a47078257a24f6055903c7736c
+```
+
+### ✅ MATERIALIZADO
+- [x] agente cartógrafo exposto na skill canônica;
+- [x] genealogia/lineage indexados;
+- [x] metabolismo provado indexado por claims/receipts/recipes;
+- [x] determinismo indexado por locks/verifiers/owners;
+- [x] skills/workflows/agentes/rotas indexados;
+- [x] botões/abas/navegação/seções mapeados por owner+linha+setor+superfície;
+- [x] SELO e LIVE separados no HUD;
+- [x] PR-mãe preparado para consumir resumo/fingerprint;
+- [x] Inventário da Casa usa scan recursivo de SKILL.md.
+
+### ⚪ FRONTEIRA
+- [ ] LIVE de serviço/rota mutável exige probe próprio; JSON não promove runtime.
+- [ ] promover somente após verifier + lineage + inventory check no mesmo HEAD.
+
+### ➡️ NEXT_CURSOR
+`FINAL_REGENERATE → SAME_HEAD_VERIFY → PROMOTE_MAIN → PR1757_HUD_READBACK`
