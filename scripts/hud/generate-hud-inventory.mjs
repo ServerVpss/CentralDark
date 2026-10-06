@@ -188,7 +188,7 @@ function collectUiSignals(files) {
   const records = [];
 
   const attribute = (attrs, name) => {
-    const match = String(attrs || '').match(new RegExp('(?:^|\\\\s)' + name + '=["\\\\\\']([^"\\\\\\']+)["\\\\\\']', 'i'));
+    const match = String(attrs || '').match(new RegExp("(?:^|\\\\s)" + name + "=[\\\"']([^\\\"']+)[\\\"']", "i"));
     return match?.[1]?.trim() || null;
   };
   const nearbyLabel = (text, afterOpen, tagName) => {
