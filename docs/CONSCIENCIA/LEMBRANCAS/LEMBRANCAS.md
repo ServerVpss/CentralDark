@@ -727,3 +727,13 @@ CURRENT_OVER_HISTORY = true
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-pr-mae-ledger-rollover.md`
 - **Conteúdo:** #1562 é predecessor histórico preservado e não mergeado; #1757 é a casca/rendezvous ativa. Comentários deixam de ser armazenamento primário de receipt; Git versionado guarda a memória durável e o body da PR ativa fica como HUD compacto atualizado no lugar.
 - **Cristal:** `LEGACY_IS_PRESERVED=true`; `SHELL_IS_MUTABLE=true`; `COMMENTS_ARE_NOT_PRIMARY_LEDGER=true`; `RECEIPTS_LIVE_IN_REPOSITORY=true`; `ONE_ACTIVE_RENDEZVOUS=true`.
+
+
+### [2026-10-06] Catálogo MCP unificado — tools + rotas + Screenpipe + Desktop Commander
+- **Tipo:** LEARNING_INDEX / MCP_CAPABILITY_CATALOG / MULTIROUTE_METABOLISM
+- **Learning:** #168
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
+- **Owner executável:** `apps/modulos/mcp/src/tools/core/mcp-admin.js#mcp_admin_catalog`
+- **Receita:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`
+- **Conteúdo:** o mesmo catálogo MCP descreve tools internas e rotas/capabilities externas. Remote Desktop Commander e Screenpipe compartilham o catálogo, mas preservam estados independentes e exigem remedição no binding.
+- **Cristal:** `ONE_MCP_CATALOG=true`; `RDC_STATE != SCREENPIPE_STATE`; `CATALOG_ENTRY != RUNTIME_HEALTH`; `ONE_ROUTE_FAILED != SYSTEM_FAILED`.
