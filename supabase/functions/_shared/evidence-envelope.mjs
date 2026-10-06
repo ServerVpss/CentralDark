@@ -45,6 +45,12 @@ function firstDefined(event, keys, fallback = null) {
   return fallback;
 }
 
+function numericMetric(value) {
+  if (value == null || value === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+}
+
 export async function normalizeTelemetryBatch(input) {
   const source = Array.isArray(input) ? input : Array.isArray(input?.events) ? input.events : [input];
   const now = Date.now();
@@ -63,6 +69,10 @@ export async function normalizeTelemetryBatch(input) {
       writer_scope: firstDefined(event, ['writer_scope', 'writerScope'], 'unknown'),
       sha: firstDefined(event, ['sha', 'head_sha', 'headSha'], 'unknown'),
       cause: firstDefined(event, ['causal_key', 'cause_key', 'failure_fingerprint'], ''),
+      event_id: firstDefined(event, ['event_id', 'eventId'], ''),
+      causation_id: firstDefined(event, ['causation_id', 'causationId'], ''),
+      surface_id: firstDefined(event, ['surface_id', 'surfaceId'], ''),
+      attempt_id: firstDefined(event, ['attempt_id', 'attemptId'], ''),
     };
     const key = JSON.stringify(stable(identity));
     const current = groups.get(key) ?? {
@@ -87,12 +97,12 @@ export async function normalizeTelemetryBatch(input) {
     if (trace) current.trace_ids.add(text(trace, 160));
     const session = firstDefined(event, ['session', 'session_id', 'context']);
     if (session) current.sessions.add(text(session, 160));
-    const latency = Number(firstDefined(event, ['latency_ms', 'latencyMs']));
-    if (Number.isFinite(latency) && latency >= 0) current.latency_ms.push(latency);
-    const tokens = Number(firstDefined(event, ['tokens', 'token_count']));
-    if (Number.isFinite(tokens) && tokens >= 0) current.tokens.push(tokens);
-    const cost = Number(firstDefined(event, ['cost', 'cost_usd']));
-    if (Number.isFinite(cost) && cost >= 0) current.costs.push(cost);
+    const latency = numericMetric(firstDefined(raw, ['latency_ms', 'latencyMs']));
+    if (latency !== null) current.latency_ms.push(latency);
+    const tokens = numericMetric(firstDefined(raw, ['tokens', 'token_count']));
+    if (tokens !== null) current.tokens.push(tokens);
+    const cost = numericMetric(firstDefined(raw, ['cost', 'cost_usd']));
+    if (cost !== null) current.costs.push(cost);
     const result = firstDefined(event, ['result', 'status'], 'UNKNOWN');
     current.results.add(text(result, 80).toUpperCase());
     const context = firstDefined(event, ['context', 'metadata'], null);
@@ -118,6 +128,10 @@ export async function normalizeTelemetryBatch(input) {
       mission_id: text(group.mission_id, 160),
       writer_scope: text(group.writer_scope, 160),
       sha: text(group.sha, 80),
+      event_id: text(group.event_id, 160) || null,
+      causation_id: text(group.causation_id, 160) || null,
+      surface_id: text(group.surface_id, 160) || null,
+      attempt_id: text(group.attempt_id, 160) || null,
       trace_id: group.trace_ids.size === 1 ? [...group.trace_ids][0] : null,
       latency_ms: group.latency_ms.length ? Number((group.latency_ms.reduce((a, b) => a + b, 0) / group.latency_ms.length).toFixed(2)) : null,
       tokens: group.tokens.length ? group.tokens.reduce((a, b) => a + b, 0) : null,
@@ -131,6 +145,10 @@ export async function normalizeTelemetryBatch(input) {
         writer_scope: group.writer_scope,
         sha: group.sha,
         cause: group.cause,
+        event_id: group.event_id,
+        causation_id: group.causation_id,
+        surface_id: group.surface_id,
+        attempt_id: group.attempt_id,
       }),
       source_count: group.source_count,
       duplicates_collapsed: Math.max(0, group.source_count - 1),
