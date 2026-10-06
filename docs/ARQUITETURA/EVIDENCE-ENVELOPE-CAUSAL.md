@@ -97,7 +97,7 @@ Isso impede que 1.000 warnings ou 1.000 receipts equivalentes virem 1.000
 ```text
 event, producer, target, operational_scope,
 first_seen, last_seen, count, rate,
-context, session, mission_id, writer_scope, sha, trace_id,
+context, session, mission_id, writer_scope, sha, event_id, causation_id, surface_id, attempt_id, trace_id,
 latency_ms, tokens, cost, result, causal_fingerprint
 ```
 

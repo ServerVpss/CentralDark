@@ -75,3 +75,43 @@ test('zero medido não é convertido em NULL', async () => {
   assert.equal(event.tokens, 0);
   assert.equal(event.cost, 0);
 });
+
+test('preserva causalidade de tentativa Oracle no envelope', async () => {
+  const snapshot = await normalizeTelemetryBatch({
+    event: 'oracle_response_captured',
+    producer: 'hermes',
+    target: 'CHAT_GLOBAL',
+    mission_id: 'oracle-runtime-002',
+    writer_scope: 'read-only-oracle',
+    sha: 'current',
+    event_id: 'preview-current-tab-replay-003',
+    causation_id: 'hermes-replay-003',
+    surface_id: 'CHATGPT-ORACLE-CURRENT-TAB',
+    attempt_id: 'attempt-2',
+    trace_id: 'trace-oracle-2',
+    result: 'PASS',
+    context: {
+      capability: 'CHATGPT_PREVIEW_CURRENT_TAB_RESPONSE_CAPTURE',
+      replay_marker: 'oracle-runtime-002',
+      evidence_limit: 'interface_response_only',
+    },
+  });
+
+  const event = snapshot.events[0];
+  assert.equal(event.event_id, 'preview-current-tab-replay-003');
+  assert.equal(event.causation_id, 'hermes-replay-003');
+  assert.equal(event.surface_id, 'CHATGPT-ORACLE-CURRENT-TAB');
+  assert.equal(event.attempt_id, 'attempt-2');
+  assert.equal(event.context[0].replay_marker, 'oracle-runtime-002');
+});
+
+test('replays com EVENT_ID diferente não colapsam numa única causa', async () => {
+  const snapshot = await normalizeTelemetryBatch([
+    { event: 'oracle_response_captured', producer: 'hermes', target: 'CHAT_GLOBAL', mission_id: 'oracle-runtime-002', writer_scope: 'read-only-oracle', sha: 'current', event_id: 'preview-current-tab-002', causation_id: 'hermes-test-002', surface_id: 'CHATGPT-ORACLE-CURRENT-TAB', attempt_id: 'attempt-1', result: 'PASS' },
+    { event: 'oracle_response_captured', producer: 'hermes', target: 'CHAT_GLOBAL', mission_id: 'oracle-runtime-002', writer_scope: 'read-only-oracle', sha: 'current', event_id: 'preview-current-tab-replay-003', causation_id: 'hermes-replay-003', surface_id: 'CHATGPT-ORACLE-CURRENT-TAB', attempt_id: 'attempt-2', result: 'PASS' },
+  ]);
+
+  assert.equal(snapshot.normalized_count, 2);
+  assert.equal(snapshot.duplicates_collapsed, 0);
+  assert.notEqual(snapshot.events[0].causal_fingerprint, snapshot.events[1].causal_fingerprint);
+});
