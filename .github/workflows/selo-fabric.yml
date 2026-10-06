@@ -34,7 +34,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_mae:
-        description: 'PR-mãe para selar (default: 1562)'
+        description: 'PR-mãe para selar (default: 1757)'
         required: false
         type: string
       test_event_name:
@@ -82,7 +82,7 @@ jobs:
       !(
         github.event_name == 'issue_comment' &&
         github.actor == 'github-actions[bot]' &&
-        github.event.issue.number == 1562
+        github.event.issue.number == 1757
       ) &&
       !(
         github.event_name == 'workflow_run' &&
@@ -100,7 +100,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
-            const PR_MAE = Number(process.env.PR_MAE_INPUT || '') || 1562;
+            const PR_MAE = Number(process.env.PR_MAE_INPUT || '') || 1757;
             const sourceEvent = context.eventName;
             const requested = (process.env.TEST_EVENT_NAME || 'auto').trim();
             const simulated = sourceEvent === 'workflow_dispatch' && requested && requested !== 'auto';
@@ -378,7 +378,7 @@ jobs:
                 const liveMarker = '<!-- CENTRALDARK_PR_MOTHER_LIVE_CARD_V3 -->';
                 const liveCard = [
                   liveMarker,
-                  '# 🔒🪬 CENTRALDARK / PR-MÃE #1562',
+                  `# 🔒🪬 CENTRALDARK / PR-MÃE #${PR_MAE}`,
                   '## 🎮 HUD · FUNIL / HANDOFF VIVO · CURRENT',
                   '',
                   '~~~text',
