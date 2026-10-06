@@ -106,6 +106,82 @@ NEW_BROWSER_TAB_E2E=UNKNOWN_UNTIL_AGENT_CAN_TRIGGER_TAB_CREATION_AND_READBACK_TW
 
 The `desktop_preview` schema currently exposes only `open|close|read`; it has no `new_tab` action. Do not claim that a distinct label creates a second Browser tab. A real PASS requires the agent to trigger the same tab-creation path as the Preview strip `+` (or an equivalent authorized binding) and then prove that both Browser tabs remain present.
 
+## Oracle Response Telemetry and Adaptive Surface Loop
+
+The oracle flow does not stop at collecting text. Measure the surface, the attempt, and the response before reconciliation.
+
+```text
+SNAPSHOT_SURFACE
+→ SELECT_CURRENT_BINDINGS
+→ SUBMIT_QUERY
+→ MEASURE_RESPONSE
+→ CAPTURE_RESULT
+→ SNAPSHOT_POST_STATE
+→ CLASSIFY
+→ ADAPT_ONLY_IF_NEEDED
+→ RECONCILE
+```
+
+For each oracle attempt preserve:
+
+```yaml
+attempt_id:
+intent_id:
+event_id:
+causation_id:
+surface_id:
+surface:
+model_binding:
+effort_binding:
+input_mode:
+available_controls:
+missing_controls:
+submit_observed_at:
+first_visible_response_observed_at:
+response_complete_observed_at:
+elapsed_to_first_visible_ms:
+elapsed_to_complete_ms:
+response_state:
+error_state:
+error_text:
+candidate_claim:
+evidence_limit:
+counterproof:
+next_readonly_probe:
+```
+
+Timing is observational unless the provider exposes an authoritative trace:
+
+```text
+PREVIEW_POLL_TIME != PROVIDER_BACKEND_LATENCY
+FIRST_VISIBLE_RESPONSE = first response content observed by the Preview reader
+COMPLETE_TIME = first observed stable/completed response state
+```
+
+Surface controls are runtime bindings, not architecture:
+
+```text
+MODEL_NAME_IS_BINDING=true
+EFFORT_LEVEL_IS_BINDING=true
+INPUT_MODE_IS_BINDING=true
+VISIBLE_CONTROL != INVOKABLE_CAPABILITY
+CONTROL_PRESENT != ACTION_EXECUTED
+VOICE_BUTTON_VISIBLE != VOICE_SESSION_ACTIVE
+MIC_BUTTON_VISIBLE != MICROPHONE_CAPTURE_ACTIVE
+```
+
+Map controls dynamically with `drive_preview action=elements`; do not hard-code screen coordinates or assume a model/effort list remains stable. Preserve labels/options observed at that attempt.
+
+Adaptation is goal-driven:
+
+```text
+simple/mechanical goal → prefer sufficient lower-cost/faster binding when available
+complex/ambiguous/counterproof-heavy goal → prefer stronger reasoning binding when available
+surface/error/capability mismatch → change only the failed binding or route
+same failure + same inputs + no new information → do not blind-retry
+```
+
+Model, effort, and text/voice mode may change between attempts without changing the parent Goal. The child may refine its execution binding but may not weaken the parent's success criterion.
 ## Proven Pilot
 
 The proven pilot opened `https://chatgpt.com/` in the internal Preview, created an isolated chat, sent a sanitized oracle query with all four IDs, and captured a structured response containing `CANDIDATE_CLAIM`, `EVIDENCE_LIMIT`, `COUNTERPROOF` and `NEXT_READONLY_PROBE`. This proves surface transport and response capture only; it does not prove canonical-envelope integration, writer mutation, deployment or runtime effect.
