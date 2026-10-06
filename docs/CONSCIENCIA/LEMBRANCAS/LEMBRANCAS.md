@@ -753,5 +753,5 @@ CURRENT_OVER_HISTORY = true
 - **Target:** docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-HUD-CARTOGRAPHER-GENEALOGIA-METABOLISMO-DETERMINISMO.md
 - **Owner:** .agents/skills/centraldark-capability-hud/SKILL.md
 - **Gerador:** scripts/hud/generate-hud-inventory.mjs
-- **Conteúdo:** o Capability HUD evolui no mesmo owner para cartografar genealogia, claims/receipts/receitas, determinismo, agentes, skills, workflows, rotas e elementos UI; o JSON é índice derivado e cada cadeado preserva SELO separado de LIVE.
-- **Cristal:** HUD_CARTOGRAPHER_AGENT=true; MACHINE_INVENTORY_IS_DERIVED_NOT_AUTHORITY=true; SEAL_LIVE_SPLIT_REQUIRED=true; FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED; REPLAY_BEFORE_REDISCOVERY=true.
+- **Conteúdo:** o Capability HUD evolui no mesmo owner para cartografar genealogia, claims/receipts/receitas, determinismo, agentes, skills, workflows, rotas e elementos UI; o JSON é índice derivado, cada cadeado preserva SELO separado de LIVE e o ONE_HEART `/heartbeat` projeta o inventário CURRENT para o HUD oficial/local em tempo real.
+- **Cristal:** HUD_CARTOGRAPHER_AGENT=true; MACHINE_INVENTORY_IS_DERIVED_NOT_AUTHORITY=true; SEAL_LIVE_SPLIT_REQUIRED=true; FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED; PROVEN_RUNTIME_AFFECTING_DELTA_TO_HEARTBEAT_HUD=true; LOCAL_OBSIDIAN_HUD_IS_PROJECTION_NOT_AUTHORITY=true; ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT; REPLAY_BEFORE_REDISCOVERY=true.
