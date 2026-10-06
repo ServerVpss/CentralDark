@@ -24,7 +24,7 @@ import { spawnSync } from "node:child_process";
 import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { DEFAULT_REQUIRED_WORKFLOWS, PR_MOTHER_NUMBER, authorizationFor, verifySealedReceipt } from "./github-autonomia-promocao.mjs";
+import { DEFAULT_REQUIRED_WORKFLOWS, isProtectedLedgerPr, authorizationFor, verifySealedReceipt } from "./github-autonomia-promocao.mjs";
 
 const API = "https://api.github.com";
 const GRAPHQL_API = "https://api.github.com/graphql";
@@ -166,7 +166,7 @@ export function draftReadyDecision(pr, repository, trustedAuthors = ["segredounl
   if (pr?.state !== "open" || pr?.draft !== true) {
     return { action: "NONE", reason: "NOT_OPEN_DRAFT" };
   }
-  if (Number(pr?.number) === PR_MOTHER_NUMBER) {
+  if (isProtectedLedgerPr(pr?.number)) {
     return { action: "KEEP_DRAFT", reason: "PR_MOTHER_PROTECTED" };
   }
 

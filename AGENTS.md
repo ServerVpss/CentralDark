@@ -304,9 +304,11 @@ CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
 DIRECT_MAIN_FORBIDDEN_WHEN_COMPATIBLE_CHILD_IS_HEALTHY=true
 STALE_OR_CONFLICTING_CHILD_REQUIRES_RECEIPT_BEFORE_BYPASS=true
 MAIN_READBACK_MUST_RETURN_TO_CHILD_AND_PR_MOTHER=true
-PR_MOTHER=#1562
+PR_MOTHER=#1757
 PR_MOTHER_ROLE=HISTORY_HANDOFF_LEDGER
 PR_MOTHER_MERGE_FORBIDDEN=true
+SHELL_IS_MUTABLE=true
+LEGACY_IS_PRESERVED=true
 PR_GATE_HARDENING=DEFERRED_UNTIL_CHEFE_REENABLES
 MIN_SECURITY_ONLY=true
 MIN_SECURITY_CHECKS=SECRET_SCAN|SYNTAX_OR_PARSE_WHEN_APPLICABLE|TARGETED_TEST_WHEN_AVAILABLE|MAIN_READBACK
@@ -326,7 +328,11 @@ PROVEN_CRYSTAL_DIVERGENCE=REOPEN_AFFECTED_CONE_ONLY
 UNPROVEN_OR_DIVERGENT_DELTA_USES_NORMAL_GATE=true
 CENTRALDARK_UNIFIED_SURFACE_PARITY_OWNER=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
 EVERY_NOVELTY_FEEDS_PR_MOTHER=true
-PR_MOTHER_APPEND_ONLY=true
+PR_MOTHER_BODY_MUTABLE_HUD=true
+PR_MOTHER_COMMENTS_ARE_NOT_LEDGER=true
+PR_MOTHER_RECEIPTS_LIVE_IN_REPOSITORY=true
+PR_MOTHER_LEGACY_PREDECESSOR=#1562
+PR_MOTHER_LEGACY_PROTECTED=true
 PR_MOTHER_RECORDS_PASS_FAIL_UNKNOWN_BLOCKED_STALE=true
 EXACT_REPEAT_MAY_DEDUPE=true
 NO_SECRET_IN_PR_MOTHER_LEDGER=true
@@ -337,7 +343,7 @@ TRIGGER=🔏 !RASTRO
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-LEDGER_1562_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+LEDGER_1757_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD=true
 TEST_HARNESS_DERIVES_FILES_FROM_OWNER=true
 TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE=true
@@ -353,16 +359,16 @@ STUB_OR_DEMO_NEVER_PRESENTED_AS_REAL_TOOL=true
 ROOT_SHELL_IS_NOT_KERNEL_CONTROL=true
 MEASURE_CHEFE_GUI_USER_AND_PATH_BEFORE_PLACING_SURFACE_FILE=true
 EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR=true
-PR_MOTHER_1562_IS_LEDGER_NEVER_MERGE=true
+PR_MOTHER_1757_IS_LEDGER_NEVER_MERGE=true
 ```
 
-Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?REUSE_CHILD:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DIRECT_MAIN_IF_ALLOWED_ELSE_CREATE_EPHEMERAL_BRANCH_WITH_READY_PR -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> DELETE_EPHEMERAL_BRANCH_AFTER_MERGE -> MAIN_READBACK -> RECEIPT_EXISTING_CHILD_IF_ANY -> RECEIPT_1562 -> FIXED_POINT.
+Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?REUSE_CHILD:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DIRECT_MAIN_IF_ALLOWED_ELSE_CREATE_EPHEMERAL_BRANCH_WITH_READY_PR -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> DELETE_EPHEMERAL_BRANCH_AFTER_MERGE -> MAIN_READBACK -> RECEIPT_EXISTING_CHILD_IF_ANY -> RECEIPT_1757 -> FIXED_POINT.
 
 Branch remota não é estacionamento de intenção. Trabalho ainda não pronto permanece em worktree/local isolado quando isso for suficiente; branch remota nova só existe quando uma necessidade material exige transporte/CI/handoff/isolamento e já nasce com owner, escopo e destino de fechamento. PR autônomo com intenção já autorizada nasce `draft=false`; se uma superfície o criar como Draft sem causa explícita, o normalizador canônico o promove a Ready. `KEEP_DRAFT` explícito continua soberano para rascunho humano/material real.
 
-Toda novidade real do sistema alimenta o PR-mãe #1562 no mesmo ciclo em que for observada. Isso inclui PASS, FAIL, UNKNOWN, BLOCKED, STALE, nova integração, novo acesso, nova rota, commit/PR/merge/deploy, mudança de runtime, contraprova, correção de diagnóstico, descoberta de owner, ferramenta/conector e decisão canônica. Repetição exata pode ser deduplicada; novidade não pode esperar PASS para ser registrada. Segredos nunca entram no ledger.
+Toda novidade real do sistema alimenta o PR-mãe #1757 no mesmo ciclo em que for observada. Isso inclui PASS, FAIL, UNKNOWN, BLOCKED, STALE, nova integração, novo acesso, nova rota, commit/PR/merge/deploy, mudança de runtime, contraprova, correção de diagnóstico, descoberta de owner, ferramenta/conector e decisão canônica. Repetição exata pode ser deduplicada; novidade não pode esperar PASS para ser registrada. Segredos nunca entram no ledger.
 
-PR existente compatível por OWNER+SCOPE+CAPABILITY não é opcional: é a promotion lane obrigatória enquanto saudável/reconciliável. Se estiver STALE ou CONFLICTING, registrar receipt no próprio filho antes de qualquer bypass; direct-main só ocorre por autorização aplicável ou regra global, e MAIN_READBACK volta ao filho e ao #1562. PR_STALE != IGNORAR_PR.
+PR existente compatível por OWNER+SCOPE+CAPABILITY não é opcional: é a promotion lane obrigatória enquanto saudável/reconciliável. Se estiver STALE ou CONFLICTING, registrar receipt no próprio filho antes de qualquer bypass; direct-main só ocorre por autorização aplicável ou regra global, e MAIN_READBACK volta ao filho e ao #1757. PR_STALE != IGNORAR_PR.
 
 ## Identidade
 
@@ -1680,7 +1686,7 @@ REGISTRA
 → TESTAR_GATES_APLICAVEIS
 → COMMIT
 → PUSH_BRANCH_FILHA
-→ PR_FILHA_LINKADA_A_PR_MAE_1562
+→ PR_FILHA_LINKADA_A_PR_MAE_1757
 → REMEDIR_PR_LIVE
 → SE_ELEGIVEL: SQUASH_MAIN
 → READBACK_MAIN
@@ -1688,20 +1694,20 @@ REGISTRA
 → FIXED_POINT_OU_BLOCKER_MATERIAL
 ```
 
-A PR-MÃE `#1562` é o rendezvous permanente/ledger (“ponto turístico”) e permanece `DO_NOT_MERGE`. PRs filhas passam por ela como veículos de promoção; peças sobreviventes seguem para `main`, e o receipt volta para a mãe.
+A PR-MÃE `#1757` é o rendezvous permanente/ledger (“ponto turístico”) e permanece `DO_NOT_MERGE`. PRs filhas passam por ela como veículos de promoção; peças sobreviventes seguem para `main`, e o receipt volta para a mãe.
 
-A missão da CentralDark é contínua. `FIXED_POINT` fecha o delta corrente; não encerra a CentralDark. Estado consolidado é reutilizado enquanto suas premissas materiais não mudarem. O boot não congela PR-filho: descobre no `#1562` quais deltas continuam abertos. O SHA é medido a cada ativação, porque hash histórico é proveniência, não CURRENT.
+A missão da CentralDark é contínua. `FIXED_POINT` fecha o delta corrente; não encerra a CentralDark. Estado consolidado é reutilizado enquanto suas premissas materiais não mudarem. O boot não congela PR-filho: descobre no `#1757` quais deltas continuam abertos. O SHA é medido a cada ativação, porque hash histórico é proveniência, não CURRENT.
 
 ```text
-⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1562 → SHA:<CURRENT_MAIN_SHA>
+⭕ !AURÉOLA → 👑🪬 !CENTRALDARK → #1757 → SHA:<CURRENT_MAIN_SHA>
 → CURRENT>HISTORY → REUSE_PROVEN → OPEN_DELTA_ONLY
 → TLC23 → META_LUPA → FABLE → META_GRILL → HERMES
 → PROVA → CONTRAPROVA → ACEITE → RECONCILIAR
 → SEMANTIC_ALL → SAME_HEAD → SQUASH_CHILD_ONLY → MAIN
-→ DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1562 → LOOP
+→ DEPLOY_CAUSAL → T1 → RECEIPT → FIXED_POINT → #1757 → LOOP
 
 MISSION=CENTRALDARK_CONTINUA
-RENDEZVOUS=#1562
+RENDEZVOUS=#1757
 PR_MOTHER_MERGE_FORBIDDEN=true
 CHILD_PR_ONLY_PROMOTION_VEHICLE=true
 PROVEN=REUSE
@@ -1724,7 +1730,7 @@ FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true
 
 
 MISSION=CENTRALDARK_CONTINUA
-RENDEZVOUS=#1562
+RENDEZVOUS=#1757
 PR_MOTHER_MERGE_FORBIDDEN=true
 CHILD_PR_ONLY_PROMOTION_VEHICLE=false
 PROVEN=REUSE
@@ -1737,7 +1743,7 @@ MATERIAL_DELTA_MUST_NOT_DIE_IN_CHAT=true
 PERSIST_BEFORE_FINAL_REPORT=true
 PERSIST_TO_EXISTING_CANONICAL_OWNER=true
 PERSISTENCE_OWNER=.agents/skills/centraldark-esteira-motor/SKILL.md
-RECEIPT_RETURNS_TO_1562=true
+RECEIPT_RETURNS_TO_1757=true
 OPERATIONAL_STATUS_USER_TOUR_FIRST=true
 USER_MEANING_BEFORE_RAW_TELEMETRY=true
 TECHNICAL_DETAILS_REMAIN_AVAILABLE=true
@@ -1761,8 +1767,8 @@ FAILING_OR_UNPROVEN_DELTA_MUST_NOT_BE_PROMOTED_TO_MAIN=true
 MVP_OPEN_TEST_MEASURE_LEARN=true
 ERROR_WITH_RECEIPT_CAN_BECOME_LEARNING=true
 MAIN_RECEIVES_ONLY_SURVIVING_DELTA=true
-PR_MOTHER_1562_PERMANENT_RENDEZVOUS=true
-PR_MOTHER_1562_DO_NOT_MERGE=true
+PR_MOTHER_1757_PERMANENT_RENDEZVOUS=true
+PR_MOTHER_1757_DO_NOT_MERGE=true
 ```
 
 Fluxo humano preferido: `MVP → abre → testa → mostra ao CHEFE quando houver decisão/materialidade`. Erro reversível e observado é dado de aprendizado; medo de errar não pode virar paralisia, mas UNKNOWN/falha material continuam impedindo falso-verde.
@@ -1799,7 +1805,7 @@ mesmo artefato consolidado; não cuspir fragmentos ou alternativas paralelas se 
 intenção estiver suficientemente alinhada. Caminho comprovado deve deixar no
 repositório receita executável/machine-consumable + fingerprint + prova +
 contraprova + resultado/efeito esperado + bindings + NEXT_CURSOR, com receipt no
-PR-mãe #1562 ou PR-filho equivalente por OWNER+SCOPE+CAPABILITY.
+PR-mãe #1757 ou PR-filho equivalente por OWNER+SCOPE+CAPABILITY.
 
 
 
@@ -1829,7 +1835,7 @@ MEDIR ESTADO
 → CONTRAPROVAR
 → COMMIT
 → PUSH
-→ RECEIPT NO PR-MÃE #1562 OU PR FILHO EQUIVALENTE
+→ RECEIPT NO PR-MÃE #1757 OU PR FILHO EQUIVALENTE
 → SÓ ENTÃO DECLARAR CONCLUÍDO
 ```
 
@@ -1888,7 +1894,7 @@ CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
 ALL_CURRENT_AND_FUTURE_AGENTS_INHERIT=true
 ALL_DOT_AGENTS_ARTIFACTS_INHERIT_BY_CONTAINMENT=true
 EVERY_CENTRALDARK_RESPONSE_REENTERS_PREFLIGHT=true
-PR_MOTHER_1562_CURRENT_REQUIRED=true
+PR_MOTHER_1757_CURRENT_REQUIRED=true
 OPEN_PRS_CURRENT_REQUIRED=true
 CHECK_LIST_DIARIO_CURRENT_REQUIRED=true
 ALL_NUMBERED_LEARNINGS_INDEX_REQUIRED=true
