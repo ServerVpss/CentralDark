@@ -106,6 +106,29 @@ NEW_BROWSER_TAB_E2E=UNKNOWN_UNTIL_AGENT_CAN_TRIGGER_TAB_CREATION_AND_READBACK_TW
 
 The `desktop_preview` schema currently exposes only `open|close|read`; it has no `new_tab` action. Do not claim that a distinct label creates a second Browser tab. A real PASS requires the agent to trigger the same tab-creation path as the Preview strip `+` (or an equivalent authorized binding) and then prove that both Browser tabs remain present.
 
+## Visual Readback / Scroll
+
+Visual truncation is not automatically a data failure. If the response was already captured completely by the reader, scrolling is presentation/readback hygiene, not a new proof gate.
+
+```text
+UI_TRUNCATED != RESPONSE_TRUNCATED
+FULL_CAPTURE_PROVEN → SCROLL_OPTIONAL_FOR_VISUAL_READBACK
+FULL_CAPTURE_UNKNOWN → SCROLL_OR_BOTTOM_CONTROL → RE_READ → CONFIRM_COMPLETE
+```
+
+When the chat exposes a bottom/down control, prefer the smallest visible action:
+
+```text
+RESPONSE_APPEARS_CUT
+→ READ_CURRENT_SURFACE
+→ IF_FULL_CAPTURE_ALREADY_PROVEN: optionally scroll to bottom for clean visual readback
+→ ELSE: use dynamic elements/ref to scroll or activate the bottom/down control
+→ RE_READ
+→ confirm the final response boundary
+```
+
+Do not hard-code coordinates. The down-arrow/scroll affordance is a runtime UI binding and may change. Its use improves visual continuity; it only becomes mandatory when the unread portion is needed to prove response completeness.
+
 ## Oracle Response Telemetry and Adaptive Surface Loop
 
 The oracle flow does not stop at collecting text. Measure the surface, the attempt, and the response before reconciliation.
@@ -258,6 +281,54 @@ ONE_SUCCESS != REPLAYABLE_RECIPE
 PROOF_WITHOUT_LEARNING_CAN_BE_FORGOTTEN=true
 LEARNING_WITHOUT_REPLAY_IS_NOT_REUSABLE_RECIPE=true
 ```
+## Memory Pending Confirmation Gate
+
+A pending memory candidate is not an operational message to the CHEFE and is never promoted merely because Hermes, ChatGPT, or any Oracle surface said it.
+
+```text
+MEMORY_PENDING
+→ ORACLE_QUERY_READONLY
+→ WAIT_FOR_RESPONSE
+→ RECONCILE_WITH_PARENT_INTENT
+→ RECONCILE_WITH_CURRENT_DOCS_AND_OWNER
+→ REQUIRE_PROVENANCE
+→ REQUIRE_COUNTERPROOF
+→ REQUIRE_REALITY_EVIDENCE_WHEN_EFFECT_IS_EXTERNAL
+→ REQUIRE_EXISTING_WRITER
+→ IF_ALL_APPLICABLE_GATES_PASS: PROMOTE_MINIMUM_DELTA
+→ ELSE: KEEP_PENDING_OR_UNKNOWN
+```
+
+Confirmation is mandatory before promotion:
+
+```text
+CHATGPT_SAID != CONFIRMED
+ORACLE_SAID != CONFIRMED
+HERMES_SAID != CONFIRMED
+DOCUMENTED != EXECUTED
+CANDIDATE != CANONICAL
+UNKNOWN != PASS
+```
+
+The minimum confirmation envelope is:
+
+```yaml
+candidate_text:
+source:
+provenance:
+intent_match:
+current_match:
+owner_match:
+dedupe:
+counterproof:
+reality_evidence:
+writer:
+readback:
+next_cursor:
+```
+
+Only applicable fields must be proven. A field that cannot be measured remains `UNKNOWN`; it must not be silently inferred. The existing writer performs any authorized mutation only after reconciliation. The Oracle remains consultative and read-only.
+
 ## Proven Pilot
 
 The proven pilot opened `https://chatgpt.com/` in the internal Preview, created an isolated chat, sent a sanitized oracle query with all four IDs, and captured a structured response containing `CANDIDATE_CLAIM`, `EVIDENCE_LIMIT`, `COUNTERPROOF` and `NEXT_READONLY_PROBE`. This proves surface transport and response capture only; it does not prove canonical-envelope integration, writer mutation, deployment or runtime effect.
