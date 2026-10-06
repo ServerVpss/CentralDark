@@ -67,7 +67,7 @@ jobs:
       - name: 🐍 Preparar PR-Agent isolado
         run: |
           set -Eeuo pipefail
-          python -m venv .venv-pr-agent
+          python3 -m venv .venv-pr-agent
           env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/python -m pip install --upgrade pip --quiet
           env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/pip install 'pr-agent==0.46.0' --quiet
           env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/python -c 'import openai,sys; print("OPENAI_VERSION="+openai.__version__); print("OPENAI_PATH="+openai.__file__)'
