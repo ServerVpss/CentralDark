@@ -17,7 +17,7 @@ import {
   promotionLaneDecision,
   scanPullFiles,
   sealReceipt,
-  selectLatestNonSkipped,
+  selectLatestWorkflowRun,
   squashFixedPointProof,
   verifySealedReceipt,
   waitAgeMs,

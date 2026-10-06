@@ -537,6 +537,7 @@ export function evaluateCandidate({
 }) {
   const reasons = [];
   const waits = [];
+  let technicalGateNotGreen = false;
   const labels = normalizedLabels(pr);
   const auth = authorizationFor(pr);
   const fastPath = auth.merge_policy === FAST_MERGE_POLICY && auth.viaBody;
@@ -576,16 +577,15 @@ export function evaluateCandidate({
   const applicableWorkflows = requiredWorkflows;
   const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
   for (const workflow of workflows) {
-    if (workflow.state !== "PASS") technicalGateNotGreen = true;
+    if (!fastPath && workflow.state !== "PASS") technicalGateNotGreen = true;
     if (workflow.state === "FAIL") waits.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
     if (workflow.state === "ACTION_REQUIRED") waits.push(`WORKFLOW_ACTION_REQUIRED:${workflow.name}:${workflow.run_id}`);
   }
 
   const stalledFor = waitAgeMs(pr, now);
-  const operationalWaits = waits.filter((wait) => !wait.startsWith("WORKFLOW_"));
-  const waitExpired = operationalWaits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
-  if (waitExpired) reasons.push(`WAIT_TIMEOUT:${Math.round(stalledFor / 60000)}min:${waits.join("|")}`);
+  const waitExpired = waits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
+  if (waitExpired) technicalGateNotGreen = true;
 
   let decision = "READY";
   if (reasons.length) decision = "BLOCKED";
