@@ -823,7 +823,7 @@ body {
     <div class="section-header">
       <div class="section-icon">&#128274;</div>
       <h2 class="section-title">Cadeados &mdash; Lugares Provados e Selados</h2>
-      <span class="section-count">8 selados</span>
+      <span class="section-count" id="hud-sealed-count">carregando...</span>
     </div>
     <div class="cadeado-grid">
       <div class="cadeado-card selado">
@@ -1146,7 +1146,7 @@ body {
       <div class="section-header">
         <div class="section-icon">&#10209;</div>
         <h2 class="section-title">Skills</h2>
-        <span class="section-count">47 skills</span>
+        <span class="section-count" id="hud-skills-count">carregando...</span>
       </div>
       <div class="link-list">
         <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">meta-lupa</div><div class="link-desc">Auditoria cognitiva &mdash; analise profunda de estado</div><div class="link-path">.agents/skills/meta-lupa/SKILL.md</div></div></div>
@@ -1320,6 +1320,10 @@ cartas.forEach(function(c) {
       if (state) state.textContent = 'machine PASS';
       var fp = document.getElementById('hud-machine-fingerprint');
       if (fp) fp.textContent = 'fingerprint: ' + (inv.inventory_fingerprint || 'UNKNOWN');
+      var sealedCount = document.getElementById('hud-sealed-count');
+      if (sealedCount) sealedCount.textContent = String(s.sealed_baselines == null ? '?' : s.sealed_baselines) + ' selados';
+      var skillsCount = document.getElementById('hud-skills-count');
+      if (skillsCount) skillsCount.textContent = String(s.skills == null ? '?' : s.skills) + ' skills';
 
       document.querySelectorAll('.cadeado-card.selado .cadeado-header').forEach(function(header) {
         if (header.querySelector('.cadeado-live')) return;
