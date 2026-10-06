@@ -66,3 +66,40 @@ CENTRALDARK_SEED_DIR=/caminho/SOURCE_SNAPSHOT/CentralDark \
 ```
 
 O branch é de laboratório. Não altera o owner visual/main até o protótipo fechar build + boot + Hermes + readback.
+
+
+## Bots / Agentes — Rakazo como capability
+
+O cockpit agora reserva uma superfície nativa **Bots / Agentes**. Rakazo é executado como módulo subordinado da CentralDark; não vira cérebro, owner ou orquestrador paralelo.
+
+```text
+CentralDark
+  ↓
+Instinto Superior / AionUi
+  ↓
+Bots / Agentes
+  ↓
+Rakazo
+  ├─ bots persistentes
+  ├─ browser
+  ├─ desktop
+  ├─ terminal
+  ├─ workers
+  ├─ sandbox
+  ├─ MCP
+  ├─ memória
+  └─ delegação
+```
+
+Bindings do protótipo:
+
+- rota AionUi: `/settings/bots`
+- Rakazo web: `25810`
+- Rakazo API: `127.0.0.1:3100`
+- root de runtime: `/opt/centraldark/rakazo`
+- sandbox padrão: Docker
+- receita de deploy: `install-rakazo.sh`
+
+A página AionUi incorpora a superfície Rakazo por `iframe` e também oferece abertura direta. Em WebUI remota o host é herdado de `window.location.hostname`; no Electron/local cai para `127.0.0.1`.
+
+`REUSE_BEFORE_CREATE=true` · `ONE_SYSTEM_ONLY=true` · `RAKAZO=CAPABILITY_NOT_SECOND_BRAIN`.
