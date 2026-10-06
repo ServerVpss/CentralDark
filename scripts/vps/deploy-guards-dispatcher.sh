@@ -237,22 +237,53 @@ git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
 
 # Gate-only prova o SHA e sai sem tocar checkout/runtime.
 if [[ "$GATE_ONLY" -eq 1 ]]; then
-  cat >"$GATE_ROOT/tlc23-deploy-facts.json" <<'JSON'
-{
-  "centraldark_gate": {
-    "acordar_done": true,
-    "calibrar_done": true,
-    "multibussola_done": true,
-    "meta_lupa_done": true,
-    "menos_e_mais_done": true,
-    "owner_resolved": true,
-    "writer_scope_valid": true,
-    "evidence_bound": true,
-    "no_destructive_bypass": true
-  }
+  HORN_REPO_CHECK="$GATE_ROOT/horn-repo-check.json"
+  # Repo-check is the source of truth for musical facts.  Keep its output
+  # machine-readable and fail closed before materializing the facts envelope.
+  (cd "$GATE_TMP" && python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py \
+    --repo-check "$GATE_TMP") >"$HORN_REPO_CHECK" \
+    || die "HORN_CARACOL_REPO_CHECK=BLOCK" 16
+  python3 - "$HORN_REPO_CHECK" "$GATE_ROOT/tlc23-deploy-facts.json" <<'PY' \
+    || die "HORN_CARACOL_REPO_CHECK=INVALID" 16
+import json
+import sys
+
+repo_check_path, facts_path = sys.argv[1:]
+with open(repo_check_path, encoding="utf-8") as handle:
+    result = json.load(handle)
+if result.get("accepted") is not True or result.get("verdict") != "PASS":
+    raise SystemExit("repo-check did not prove accepted/PASS")
+repo_facts = result.get("facts")
+required_musical = (
+    "band_compasso_bound",
+    "musical_semantics_bound",
+    "maestro_owner_resolved",
+    "caracol_reaches_nucleus",
+    "musical_notes_cataloged",
+    "musical_notes_linked",
+)
+if not isinstance(repo_facts, dict) or any(repo_facts.get(key) is not True for key in required_musical):
+    raise SystemExit("repo-check omitted proven musical facts")
+
+facts = {
+    "acordar_done": True,
+    "calibrar_done": True,
+    "multibussola_done": True,
+    "meta_lupa_done": True,
+    "menos_e_mais_done": True,
+    "owner_resolved": True,
+    "writer_scope_valid": True,
+    "evidence_bound": True,
+    "no_destructive_bypass": True,
 }
-JSON
-  (cd "$GATE_TMP" && python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_ROOT/tlc23-deploy-facts.json") || die "HORN_CARACOL_GATE_ONLY=BLOCK" 16
+facts.update({key: True for key in required_musical})
+with open(facts_path, "w", encoding="utf-8") as handle:
+    json.dump({"centraldark_gate": facts}, handle, indent=2)
+    handle.write("\n")
+PY
+  (cd "$GATE_TMP" && python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py \
+    --facts-file "$GATE_ROOT/tlc23-deploy-facts.json") \
+    || die "HORN_CARACOL_GATE_ONLY=BLOCK" 16
   log "TLC23_DEPLOY_GATE_ONLY=PASS TARGET_SHA=$ALVO"
   exit 0
 fi

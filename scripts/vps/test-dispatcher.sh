@@ -131,6 +131,18 @@ else
   fail "fallback não bloqueou sem fonte real (exit=$BLOCK_EXIT)"
 fi
 
+# ─── 8. Gate-only reutiliza repo-check musical real ───────────────────
+log "=== 8. Gate-only com facts musicais provados ==="
+if grep -q -- '--repo-check "\$GATE_TMP"' "$DISPATCHER" \
+  && grep -q 'HORN_CARACOL_REPO_CHECK=BLOCK' "$DISPATCHER" \
+  && grep -q 'accepted.*True' "$DISPATCHER" \
+  && grep -q 'verdict.*PASS' "$DISPATCHER" \
+  && grep -q 'musical_notes_linked' "$DISPATCHER"; then
+  pass "gate-only exige repo-check PASS e inclui facts musicais"
+else
+  fail "gate-only não prova facts musicais via repo-check"
+fi
+
 # ─── Resumo ──────────────────────────────────────────────────────────
 TOTAL=$((PASS + FAIL))
 log "=== RESUMO ==="
