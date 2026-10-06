@@ -182,6 +182,82 @@ same failure + same inputs + no new information → do not blind-retry
 ```
 
 Model, effort, and text/voice mode may change between attempts without changing the parent Goal. The child may refine its execution binding but may not weaken the parent's success criterion.
+## Canonical-First Query, Recovery, Learning and Replay
+
+Every material Oracle query must carry the CentralDark boot semantics before the actual question:
+
+```text
+!CENTRALDARK #ACORDAR !CALIBRAR !MULTIBUSSOLA
+CANONICAL_FIRST=true
+CONSULT_RELEVANT_CURRENT_OWNERS_BEFORE_ANSWER=true
+```
+
+This prefix is a semantic contract, not proof that the external surface has repository/runtime access. If the surface cannot read the applicable canon/CURRENT/runtime, it must keep that boundary explicit in `EVIDENCE_LIMIT` and remain `CANDIDATE`.
+
+Do not open a new conversation or Browser tab merely because one send failed. Recover in the smallest surviving scope:
+
+```text
+SEND_FAILED
+→ READ_CURRENT_SURFACE
+→ IS_CONVERSATION_STILL_READABLE?
+→ IS_COMPOSER_OR_RETRY_CONTROL_AVAILABLE?
+→ YES: RETRY_SAME_CONVERSATION_ONCE_WITH_NEW_ATTEMPT_ID
+→ RE-READ RESULT
+
+IF SAME_CONVERSATION_STILL_BROKEN:
+→ NEW_CHAT_SAME_BROWSER_TAB
+→ PRESERVE_PARENT_INTENT_AND_CAUSAL_THREAD
+→ SEND_CANONICAL_BOOT_PREFIX_FIRST
+→ SEND_MINIMUM_CONTEXT + CURRENT QUESTION
+→ READBACK
+
+ONLY IF SAME_TAB/NEW_CHAT ROUTE IS PROVEN UNUSABLE:
+→ NEW_BROWSER_TAB_CANDIDATE
+→ current agent tool capability may still be UNKNOWN
+→ never destroy the previous proven context before replacement is proven
+```
+
+Required continuity fields when a new conversation is needed:
+
+```yaml
+parent_intent_id:
+parent_event_id:
+parent_causation_id:
+previous_surface_id:
+previous_conversation_ref:
+last_proven_context_fingerprint:
+reason_for_new_conversation:
+```
+
+Failure classification:
+
+```text
+SEND_FAILED != CHAT_DEAD
+CHAT_DEGRADED != NEW_TAB_REQUIRED
+NEW_CHAT_SAME_TAB != NEW_BROWSER_TAB
+UI_CONTROL_MISSING != CAPABILITY_ABSENT_GLOBALLY
+```
+
+After a genuinely new path is proven, do not stop at PASS. Close the learning loop through existing learning/receipt owners:
+
+```text
+PROVEN_NEW_PATH
+→ CRYSTALLIZE_MINIMUM_LEARNING
+→ STORE_PROVENANCE
+→ EMIT_EVIDENCE_ENVELOPE
+→ REPLAY_ONCE
+→ COMPARE
+→ IF_EQUIVALENT: PROMOTE_TO_REUSABLE_RECIPE
+→ ELSE: KEEP_AS_SINGLE_RUN_PROOF
+```
+
+Only the minimum surviving lesson is persisted; never persist the whole private conversation by default.
+
+```text
+ONE_SUCCESS != REPLAYABLE_RECIPE
+PROOF_WITHOUT_LEARNING_CAN_BE_FORGOTTEN=true
+LEARNING_WITHOUT_REPLAY_IS_NOT_REUSABLE_RECIPE=true
+```
 ## Proven Pilot
 
 The proven pilot opened `https://chatgpt.com/` in the internal Preview, created an isolated chat, sent a sanitized oracle query with all four IDs, and captured a structured response containing `CANDIDATE_CLAIM`, `EVIDENCE_LIMIT`, `COUNTERPROOF` and `NEXT_READONLY_PROBE`. This proves surface transport and response capture only; it does not prove canonical-envelope integration, writer mutation, deployment or runtime effect.
