@@ -328,6 +328,44 @@ check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-github-entry-hud-agent-dependency-ga
  'MAIN_AT_INVENTORY=d600f0efb1ed386779f519404ca0c802a82d8302',
  'FULL_UI_BUTTON_TAB_MAP=PARTIAL_COUNTED_NOT_FULLY_ENUMERATED',
 ], classification='GITHUB_ENTRY_HUD_AGENT_DEPENDENCY_RECEIPT')
+check('scripts/hud/generate-hud-inventory.mjs',[
+ "centraldark.hud-machine-inventory.v1",
+ "seal_live_separation: true",
+ "HERMES_DELEGATED_COMMIT_PATH",
+ "SCREENPIPE_LOCAL_SENSOR",
+ "RDC_DESKTOP_COMMANDER",
+ "HUD_INVENTORY_CHECK=PASS",
+], classification='HUD_MACHINE_INVENTORY_GENERATOR')
+check('docs/HUD/CENTRALDARK-HUD-INVENTORY.json',[
+ '"schema": "centraldark.hud-machine-inventory.v1"',
+ '"seal_live_separation": true',
+ '"skills": 992',
+ '"workflows": 71',
+ '"routes": 13',
+], classification='HUD_MACHINE_INVENTORY_BASELINE')
+check('.agents/skills/centraldark-capability-hud/SKILL.md',[
+ 'HUD_CARTOGRAPHER_AGENT=true',
+ 'MACHINE_GENERATOR=scripts/hud/generate-hud-inventory.mjs',
+ 'SELO = última prova válida/fingerprint/rollback',
+], classification='HUD_CARTOGRAPHER_AGENT_BINDING')
+check('.agents/skills/centraldark-capability-hud/agents/openai.yaml',[
+ 'display_name: CentralDark HUD Cartographer',
+ 'allow_implicit_invocation: true',
+], classification='HUD_CARTOGRAPHER_AGENT_SURFACE')
+check('docs/HUD/HUD.html',[
+ 'Inventário Metabólico',
+ 'CENTRALDARK-HUD-INVENTORY.json',
+ 'LIVE: UNKNOWN',
+], classification='HUD_MACHINE_INVENTORY_VISUAL_CONSUMER')
+check('.github/workflows/selo-fabric.yml',[
+ 'Verificar inventário machine-consumable do HUD',
+ 'HUD_INVENTORY_FINGERPRINT',
+ 'HUD_SEAL_LIVE_SPLIT=true',
+], classification='HUD_MACHINE_INVENTORY_PR_MOTHER_CONSUMER')
+check('package.json',[
+ '"hud:inventory": "node scripts/hud/generate-hud-inventory.mjs --write"',
+ '"hud:inventory:check": "node scripts/hud/generate-hud-inventory.mjs --check"',
+], classification='HUD_MACHINE_INVENTORY_PACKAGE_ENTRY')
 
 check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  '"centraldark_unified_capability_catalog"',
