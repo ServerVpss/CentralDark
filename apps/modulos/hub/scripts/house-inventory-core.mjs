@@ -418,6 +418,16 @@ function fixedOwners(repoRoot) {
       limit: 'Cadastro não é prova automática de disponibilidade no runtime atual.',
       summary: 'Inventário de ferramentas continua no Catálogo; a aba Inventário apenas aponta para esse owner.',
     },
+    {
+      id: 'tools:hud-machine-inventory', name: 'HUD Machine Inventory', group: 'FERRAMENTAS', type: 'HUD_MACHINE_INDEX',
+      owner: 'docs/HUD/CENTRALDARK-HUD-INVENTORY.json', proof: 'scripts/hud/generate-hud-inventory.mjs',
+      consumers: ['CAPABILITY_HUD', 'HUD_STATIC', 'PR_MOTHER', 'AGENTES'], sector: 'HUD_E_GENEALOGIA',
+      used_when: 'Na entrada GitHub/#ACORDAR e quando o sistema precisa mapear genealogia, metabolismo, determinismo, workflows, rotas ou superfícies sem carregar todos os owners no prompt.',
+      metrics: ['inventory_fingerprint', 'skills', 'agents', 'workflows', 'ui_signals', 'genealogy_nodes', 'proven_claims', 'deterministic_owners', 'routes', 'sealed_baselines'],
+      effect: 'Projeta o mapa machine-consumable completo e mantém SELO separado de LIVE; consumers selecionam apenas o cone pertinente.',
+      limit: 'É índice derivado. Não substitui owner, runtime probe, GitHub readback nem prova atual de serviço.',
+      summary: 'Índice completo do HUD gerado dos owners reais; evita redescoberta e preserva carga seletiva do catálogo.',
+    },
   ];
   return definitions
     .filter((definition) => exists(repoRoot, definition.owner))
