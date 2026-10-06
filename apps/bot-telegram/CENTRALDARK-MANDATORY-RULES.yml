@@ -66,10 +66,10 @@ mandatory_rules:
       house: "🏠"
       execution: "⚙️"
       receipt: "🧾"
-  pr_mae_1562_toda_novidade:
+  pr_mae_active_toda_novidade:
     required: true
     canonical_rule: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
-    target: PR_MAE_1562
+    target: PR_MAE_1757
     mode: APPEND_ONLY
     register_on:
     - PASS
@@ -187,7 +187,7 @@ mandatory_rules:
     - COPIA_FILESET_CAUSAL
     - RESTART_ISOLADO
     - HEALTH_OU_PROVA_RUNTIME
-    - RECEIPT_PR_MAE_1562
+    - RECEIPT_PR_MAE_1757
     locks:
       UNKNOWN_IS_NOT_PASS: true
       NO_FORCE_PUSH: true
@@ -214,7 +214,7 @@ mandatory_rules:
     formula:
     - RECOVER_CURRENT_CHEFE_INTENT
     - REMEASURE_MAIN_CURRENT_SHA
-    - READ_PR_MOTHER_1562_CURRENT
+    - READ_PR_MOTHER_1757_CURRENT
     - READ_ALL_OPEN_PRS_CURRENT
     - READ_CHECK_LIST_DIARIO_CURRENT
     - LOAD_CANONICAL_CORE
