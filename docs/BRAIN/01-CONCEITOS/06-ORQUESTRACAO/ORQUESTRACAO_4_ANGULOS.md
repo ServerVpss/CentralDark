@@ -1,3 +1,24 @@
+---
+title: "Orquestração em Quatro Ângulos"
+status: "CANDIDATE"
+owner: "docs/BRAIN/01-CONCEITOS/06-ORQUESTRACAO/"
+updated: 2026-10-06
+truth_scope: "CONCEPTUAL_ORCHESTRATION_REQUIRES_PROOF"
+tags:
+  - orquestracao
+  - musica
+  - dissonancia
+  - compasso
+  - meta-lupa
+  - self-correction
+  - centraldark
+related:
+  - "[[BANDA_COMPASSO_GLOBAL]]"
+  - "[[BANDA_INTENCAO_UNICA_COMPASSO]]"
+  - "[[DISSONANCIA_OPERACIONAL_CONTROLADA]]"
+  - "[[BRAIN]]"
+---
+
 KKKKKKK aí tu vai fazer a **orquestra tocar a mesma música em quatro instrumentos diferentes**. 😂🔥🎼
 
 Só tem uma trava que deixa isso forte em vez de virar eco:
