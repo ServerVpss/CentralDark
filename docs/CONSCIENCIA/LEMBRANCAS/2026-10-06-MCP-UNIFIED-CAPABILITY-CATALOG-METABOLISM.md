@@ -75,3 +75,15 @@ Nenhum segundo dispatcher, MCP, router, hook ou cérebro foi criado.
 ## Fronteira de realidade
 
 A main prova a materialização do catálogo e do metabolismo. A VPS só vira PASS para o catálogo novo quando o runtime vivo devolver esse fingerprint/rotas em `mcp_admin_catalog`.
+
+
+## Descoberta causal — source não é runtime
+
+A medição do processo em `:9100` mostrou execução por `/root/CentralDark_MCP_RUNTIME/apps/modulos/mcp/dist/mcp-server.js`. Isso revelou uma lacuna que o catálogo em `src` sozinho não fecharia.
+
+```text
+SOURCE_UPDATED != DIST_RUNTIME_UPDATED
+SOURCE_DIST_PARITY_REQUIRED=true
+RUNTIME_TREE_MAY_DIFFER_FROM_CANONICAL_REPO_TREE=true
+MEASURE_EXEC_PATH_BEFORE_DEPLOY=true
+```
