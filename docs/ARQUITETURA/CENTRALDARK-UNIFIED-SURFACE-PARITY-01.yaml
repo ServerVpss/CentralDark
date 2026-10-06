@@ -446,6 +446,67 @@ preview_navigation_contract:
     DESKTOP_PREVIEW_OPEN_DOES_NOT_PROVE_NEW_BROWSER_TAB: true
     SITE_TARGET_BLANK_IS_NOT_RELIABLE_TAB_CREATION_PROOF: true
 
+oracle_response_telemetry_contract:
+  owner: centraldark-oracle-surface
+  purpose: MEASURE_AND_ADAPT_THE_EXISTING_CHAT_GLOBAL_SURFACE_WITHOUT_CREATING_A_SECOND_BRAIN
+  loop:
+    - SNAPSHOT_SURFACE
+    - SELECT_CURRENT_BINDINGS
+    - SUBMIT_QUERY
+    - MEASURE_RESPONSE
+    - CAPTURE_RESULT
+    - SNAPSHOT_POST_STATE
+    - CLASSIFY
+    - ADAPT_ONLY_IF_NEEDED
+    - RECONCILE
+  attempt_fields:
+    - ATTEMPT_ID
+    - INTENT_ID
+    - EVENT_ID
+    - CAUSATION_ID
+    - SURFACE_ID
+    - MODEL_BINDING
+    - EFFORT_BINDING
+    - INPUT_MODE
+    - AVAILABLE_CONTROLS
+    - MISSING_CONTROLS
+    - SUBMIT_OBSERVED_AT
+    - FIRST_VISIBLE_RESPONSE_OBSERVED_AT
+    - RESPONSE_COMPLETE_OBSERVED_AT
+    - ELAPSED_TO_FIRST_VISIBLE_MS
+    - ELAPSED_TO_COMPLETE_MS
+    - RESPONSE_STATE
+    - ERROR_STATE
+    - ERROR_TEXT
+    - CANDIDATE_CLAIM
+    - EVIDENCE_LIMIT
+    - COUNTERPROOF
+    - NEXT_READONLY_PROBE
+  timing_semantics:
+    PREVIEW_POLL_TIME_NE_PROVIDER_BACKEND_LATENCY: true
+    FIRST_VISIBLE_RESPONSE_IS_OBSERVED_UI_EVENT: true
+    COMPLETE_TIME_IS_FIRST_OBSERVED_STABLE_COMPLETION: true
+  runtime_binding_rules:
+    MODEL_NAME_IS_BINDING: true
+    EFFORT_LEVEL_IS_BINDING: true
+    INPUT_MODE_IS_BINDING: true
+    VISIBLE_CONTROL_NE_INVOKABLE_CAPABILITY: true
+    CONTROL_PRESENT_NE_ACTION_EXECUTED: true
+    VOICE_BUTTON_VISIBLE_NE_VOICE_SESSION_ACTIVE: true
+    MIC_BUTTON_VISIBLE_NE_MICROPHONE_CAPTURE_ACTIVE: true
+    DYNAMIC_ELEMENT_DISCOVERY_REQUIRED: true
+    FIXED_SCREEN_COORDINATES_AS_PRIMARY_CONTROL: false
+  adaptation:
+    parent_goal_is_stable: true
+    child_may_refine_execution_binding: true
+    child_may_weaken_parent_success_criterion: false
+    simple_mechanical_goal: PREFER_SUFFICIENT_FAST_BINDING_WHEN_AVAILABLE
+    complex_ambiguous_counterproof_goal: PREFER_STRONGER_REASONING_BINDING_WHEN_AVAILABLE
+    capability_or_error_mismatch: CHANGE_ONLY_FAILED_BINDING_OR_ROUTE
+    blind_identical_retry_without_new_information: false
+    model_switch_may_preserve_same_goal: true
+    effort_switch_may_preserve_same_goal: true
+    text_voice_switch_may_preserve_same_goal: true
 external_surface_candidate_policy:
   surfaces:
     - CHAT_GLOBAL

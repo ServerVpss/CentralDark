@@ -185,7 +185,64 @@ NEW_BROWSER_TAB_E2E=UNKNOWN
 
 Isto preserva a intenção do CHEFE sem transformar desejo em falso PASS.
 
-## 6. Superfícies externas
+## 6. Resposta do Oráculo vira sinal operacional, não apenas texto
+
+A expansão fecha o ciclo da mesma superfície `CHAT_GLOBAL`; não cria novo owner.
+
+```text
+mapear controles atuais
+→ escolher binding suficiente
+→ enviar query
+→ marcar tempo de envio
+→ observar primeiro conteúdo visível
+→ observar conclusão/erro
+→ capturar resposta
+→ registrar modelo/esforço/modo usados
+→ detectar controle/capability ausente
+→ adaptar somente o binding necessário
+→ reconciliar com CURRENT
+```
+
+O envelope de tentativa passa a carregar, quando observável:
+
+```text
+ATTEMPT_ID
+MODEL_BINDING
+EFFORT_BINDING
+INPUT_MODE
+AVAILABLE_CONTROLS / MISSING_CONTROLS
+SUBMIT_OBSERVED_AT
+FIRST_VISIBLE_RESPONSE_OBSERVED_AT
+RESPONSE_COMPLETE_OBSERVED_AT
+ELAPSED_TO_FIRST_VISIBLE_MS
+ELAPSED_TO_COMPLETE_MS
+RESPONSE_STATE
+ERROR_STATE / ERROR_TEXT
+```
+
+A interface mostrada nesta sessão expôs visualmente seletor de modelo, seletor de esforço e controles de microfone/voz. Isso prova presença visual naquele instante; não prova automaticamente que cada controle foi acionado com sucesso.
+
+```text
+VISIBLE_CONTROL != INVOKABLE_CAPABILITY
+VOICE_BUTTON_VISIBLE != VOICE_SESSION_ACTIVE
+MIC_BUTTON_VISIBLE != MICROPHONE_CAPTURE_ACTIVE
+MODEL_NAME_IS_BINDING=true
+EFFORT_LEVEL_IS_BINDING=true
+INPUT_MODE_IS_BINDING=true
+```
+
+Velocidade é medida como observação da superfície, não confundida com latência interna do provedor:
+
+```text
+PREVIEW_POLL_TIME != PROVIDER_BACKEND_LATENCY
+FIRST_VISIBLE_RESPONSE = primeiro conteúdo de resposta observado
+COMPLETE_TIME = primeira conclusão estável observada
+```
+
+Adaptação segue o Goal: trabalho simples pode usar um binding suficiente e mais rápido; trabalho ambíguo, de arquitetura ou contraprova pode subir capacidade/esforço se disponível. Trocar modelo, esforço ou texto/voz muda a concha de execução, não a intenção do Goal.
+
+O agente deve descobrir controles dinamicamente por elementos/ref; coordenadas fixas não viram contrato canônico.
+## 7. Superfícies externas
 
 Superfícies vistas/consideradas nesta sessão:
 
@@ -217,7 +274,7 @@ Não importar automaticamente memória inteira, histórico inteiro, arquivos pri
 
 Uma sessão/perfil autenticado é binding temporal, não autoridade. O Preview do Hermes está provado para o piloto. Outras superfícies de navegador exigem E2E próprio antes de receber PASS.
 
-## 7. Percepção setorial por ganho de informação
+## 8. Percepção setorial por ganho de informação
 
 A exploração da sessão usou seis setores, sem transformá-los em número fixo:
 
@@ -254,7 +311,7 @@ DEDUPE_BEFORE_MUTATION=true
 
 Muitos olhos não significam muitos cérebros. Vários resultados são candidatos; a mutação continua serializada por escopo.
 
-## 8. Escada universal de prova de capability
+## 9. Escada universal de prova de capability
 
 A sessão convergiu a distinção:
 
@@ -279,7 +336,7 @@ EXECUTED != RECEIPT
 
 O claim mais forte permitido é o maior estágio realmente medido.
 
-## 9. Matriz setorial consolidada da sessão
+## 10. Matriz setorial consolidada da sessão
 
 | Setor | Owner/âncora principal | Estado mais forte observado nesta exploração | Gap principal |
 |---|---|---|---|
@@ -292,7 +349,7 @@ O claim mais forte permitido é o maior estágio realmente medido.
 
 A matriz é um mapa de exploração, não congelamento temporal. Estados vivos devem ser re-medidos quando a missão depender deles.
 
-## 10. Não criado
+## 11. Não criado
 
 ```text
 NO_NEW_ORACLE_ENGINE=true
@@ -306,7 +363,7 @@ NO_NEW_PERCEPTION_ENGINE=true
 
 A skill é capability subordinada e o owner de percepção continua sendo o existente.
 
-## 11. Skill preservada
+## 12. Skill preservada
 
 A skill criada durante a sessão foi promovida para:
 
@@ -316,7 +373,7 @@ A skill criada durante a sessão foi promovida para:
 
 Ela preserva procedimento de Preview, IDs de causalidade, provenance envelope, anti-loop, read-only boundary, semântica de nova aba e fronteiras de prova.
 
-## 12. NEXT_CURSOR
+## 13. NEXT_CURSOR
 
 ```text
 NEXT_CURSOR=
