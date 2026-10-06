@@ -241,6 +241,30 @@ learning_triggers:
     may_write_canonical: false
     status: CONTRACT_AND_MACHINE_RECIPE_BOUND
 
+  - event: ORACLE_QUERY_SUBMITTED
+    owner: ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + supabase/functions/_shared/evidence-envelope.mjs"
+    behavior: [CANONICAL_FIRST_PREFIX, SANITIZE_CONTEXT, REQUIRE_CAUSAL_IDS, SNAPSHOT_SURFACE_BINDINGS, EMIT_READONLY_EVIDENCE]
+    may_write_canonical: false
+    status: HOOK_IMPLEMENTED_PERSISTENCE_OWNER_EXISTING
+
+  - event: ORACLE_RESPONSE_CAPTURED
+    owner: ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + apps/modulos/HERMES-CORE/core/perception-orchestra.mjs + supabase/functions/_shared/evidence-envelope.mjs"
+    behavior: [CAPTURE_CANDIDATE, STORE_PROVENANCE, EMIT_EVIDENCE_ENVELOPE, RENDEZVOUS, DEDUPE, COUNTERPROOF]
+    may_write_canonical: false
+    status: HOOK_IMPLEMENTED_PERSISTENCE_OWNER_EXISTING
+
+  - event: ORACLE_SEND_FAILED
+    owner: ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md"
+    behavior: [READ_CURRENT_SURFACE, CLASSIFY_FAILURE, RETRY_SAME_CONVERSATION_ONCE, NEW_CHAT_SAME_TAB_IF_NEEDED, NEW_BROWSER_TAB_ONLY_AFTER_SAME_TAB_ROUTE_FAILS, NO_BLIND_IDENTICAL_RETRY]
+    may_write_canonical: false
+    status: CONTRACT_DECLARED_RUNTIME_UI_PROOF_REQUIRED
+
+  - event: ORACLE_PROVEN_NEW_PATH
+    owner: ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/memory-linker/"
+    behavior: [CRYSTALLIZE_MINIMUM_LEARNING, STORE_PROVENANCE, EMIT_EVIDENCE_ENVELOPE, REPLAY_ONCE, COMPARE_RESULT_SCHEMA_AND_EXPECTED_EFFECT, PROMOTE_RECIPE_ONLY_IF_EQUIVALENT]
+    may_write_canonical: false
+    status: CONTRACT_DECLARED_REPLAY_REQUIRED
+
   - event: TEST_FAILURE
     owner: ".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"
     behavior: [REGISTER_CAUSE_EVIDENCE, PROPOSE_DISCRIMINATING_TEST, SEARCH_EXISTING_CRYSTAL, ROUTE_MINIMAL_REMEDIATION]
