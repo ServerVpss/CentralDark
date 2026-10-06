@@ -79,7 +79,7 @@ class RastroFiscalTests(unittest.TestCase):
     def test_direct_main_without_ledger_fails(self):
         r = M.verify_text(traced_text(), REPO, backend(ledger=False))
         self.assertEqual("FAIL", r.verdict)
-        self.assertTrue(any(c.name == "ledger_1562" and c.verdict == "FAIL" for c in r.checks))
+        self.assertTrue(any(c.name == "ledger_active" and c.verdict == "FAIL" for c in r.checks))
 
     def test_link_repo_mismatch_fails(self):
         text = traced_text().replace(

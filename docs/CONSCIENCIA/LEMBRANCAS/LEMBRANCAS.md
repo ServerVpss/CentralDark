@@ -719,3 +719,11 @@ CURRENT_OVER_HISTORY = true
 - **Fronteira de prova:** Preview/query/captura/IDs = PASS nesta sessão; `ORACLE→ENVELOPE→RECONCILIATION→WRITER` continua UNKNOWN até E2E próprio.
 - **Next cursor:** integrar a resposta do Oráculo ao `perception-orchestra.mjs` existente e provar rendezvous/counterproof sem criar engine paralelo.
 - **Correção por contraprova (2026-10-06):** `desktop_preview open + label` navega/reutiliza o Browser visível; não prova nova Browser tab. O CURRENT do Hermes Desktop mostra `browserTabFor(visible)` no caminho de URL e `newBrowserTab()` separado no botão `+`. O schema do agente ainda não expõe `new_tab`; portanto múltiplas Browser tabs por comando permanecem UNKNOWN até binding + readback E2E.
+
+### [2026-10-06] PR-MÃE — legado preservado, casca mutável
+- **Tipo:** LEDGER_ROLLOVER / CONTINUIDADE / ANTI-ACUMULO
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-PR-MAE-LEDGER-ROLLOVER.md`
+- **Learning:** `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-PR-MAE-LEDGER-ROLLOVER.md`
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-pr-mae-ledger-rollover.md`
+- **Conteúdo:** #1562 é predecessor histórico preservado e não mergeado; #1757 é a casca/rendezvous ativa. Comentários deixam de ser armazenamento primário de receipt; Git versionado guarda a memória durável e o body da PR ativa fica como HUD compacto atualizado no lugar.
+- **Cristal:** `LEGACY_IS_PRESERVED=true`; `SHELL_IS_MUTABLE=true`; `COMMENTS_ARE_NOT_PRIMARY_LEDGER=true`; `RECEIPTS_LIVE_IN_REPOSITORY=true`; `ONE_ACTIVE_RENDEZVOUS=true`.
