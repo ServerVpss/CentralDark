@@ -1292,48 +1292,50 @@ cartas.forEach(function(c) {
 /* ============================================================
    INVENTARIO METABOLICO MACHINE-CONSUMABLE
    ============================================================ */
-(function loadHudMachineInventory() {
-  var url = './CENTRALDARK-HUD-INVENTORY.json';
-  fetch(url, { cache: 'no-store' })
+function applyHudMachineInventory(inv, sourceLabel) {
+  inv = inv || {};
+  var summary = inv.summary || {};
+  var pairs = [
+    ['hud-count-genealogy', summary.genealogy_nodes],
+    ['hud-count-claims', summary.proven_claims],
+    ['hud-count-determinism', summary.deterministic_owners],
+    ['hud-count-skills', summary.skills],
+    ['hud-count-workflows', summary.workflows],
+    ['hud-count-ui', summary.ui_signals],
+    ['hud-count-routes', summary.routes],
+    ['hud-count-seals', summary.sealed_baselines],
+    ['hud-count-agents', summary.agents]
+  ];
+  pairs.forEach(function(pair) {
+    var el = document.getElementById(pair[0]);
+    if (el) el.textContent = pair[1] == null ? '?' : String(pair[1]);
+  });
+  var state = document.getElementById('hud-machine-state');
+  if (state) state.textContent = sourceLabel === 'LIVE_HEARTBEAT' ? 'LIVE · heartbeat' : 'STATIC · repo';
+  var fp = document.getElementById('hud-machine-fingerprint');
+  var fingerprint = inv.inventoryFingerprint || inv.inventory_fingerprint || 'UNKNOWN';
+  if (fp) fp.textContent = 'fingerprint: ' + fingerprint + ' · source=' + (sourceLabel || 'UNKNOWN');
+  var sealedCount = document.getElementById('hud-sealed-count');
+  if (sealedCount) sealedCount.textContent = String(summary.sealed_baselines == null ? '?' : summary.sealed_baselines) + ' selados';
+  var skillsCount = document.getElementById('hud-skills-count');
+  if (skillsCount) skillsCount.textContent = String(summary.skills == null ? '?' : summary.skills) + ' skills';
+  document.querySelectorAll('.cadeado-card.selado .cadeado-header').forEach(function(header) {
+    if (header.querySelector('.cadeado-live')) return;
+    var live = document.createElement('span');
+    live.className = 'cadeado-live';
+    live.textContent = 'LIVE: UNKNOWN';
+    live.title = 'SELO histórico preservado; LIVE exige medição atual da rota.';
+    header.appendChild(live);
+  });
+}
+
+(function loadHudMachineInventoryFallback() {
+  fetch('./CENTRALDARK-HUD-INVENTORY.json', { cache: 'no-store' })
     .then(function(res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
     })
-    .then(function(inv) {
-      var s = inv.summary || {};
-      var pairs = [
-        ['hud-count-genealogy', s.genealogy_nodes],
-        ['hud-count-claims', s.proven_claims],
-        ['hud-count-determinism', s.deterministic_owners],
-        ['hud-count-skills', s.skills],
-        ['hud-count-workflows', s.workflows],
-        ['hud-count-ui', s.ui_signals],
-        ['hud-count-routes', s.routes],
-        ['hud-count-seals', s.sealed_baselines],
-        ['hud-count-agents', s.agents]
-      ];
-      pairs.forEach(function(pair) {
-        var el = document.getElementById(pair[0]);
-        if (el) el.textContent = pair[1] == null ? '?' : String(pair[1]);
-      });
-      var state = document.getElementById('hud-machine-state');
-      if (state) state.textContent = 'machine PASS';
-      var fp = document.getElementById('hud-machine-fingerprint');
-      if (fp) fp.textContent = 'fingerprint: ' + (inv.inventory_fingerprint || 'UNKNOWN');
-      var sealedCount = document.getElementById('hud-sealed-count');
-      if (sealedCount) sealedCount.textContent = String(s.sealed_baselines == null ? '?' : s.sealed_baselines) + ' selados';
-      var skillsCount = document.getElementById('hud-skills-count');
-      if (skillsCount) skillsCount.textContent = String(s.skills == null ? '?' : s.skills) + ' skills';
-
-      document.querySelectorAll('.cadeado-card.selado .cadeado-header').forEach(function(header) {
-        if (header.querySelector('.cadeado-live')) return;
-        var live = document.createElement('span');
-        live.className = 'cadeado-live';
-        live.textContent = 'LIVE: UNKNOWN';
-        live.title = 'SELO histórico preservado; LIVE exige medição atual da rota.';
-        header.appendChild(live);
-      });
-    })
+    .then(function(inv) { applyHudMachineInventory(inv, 'STATIC_REPO'); })
     .catch(function(err) {
       var state = document.getElementById('hud-machine-state');
       if (state) state.textContent = 'UNKNOWN';
@@ -1341,7 +1343,6 @@ cartas.forEach(function(c) {
       if (fp) fp.textContent = 'inventário indisponível: ' + String(err.message || err);
     });
 })();
-
 /* ============================================================
    HUD LIVE - ONE HEART
    ============================================================ */
@@ -1421,6 +1422,9 @@ function refreshCentralDarkLive() {
       var healthP = liveFetchJson(ep.health).catch(function() { return null; });
       healthP.then(function(health) {
         var op = heartbeat.operational || {};
+        if (op.hudInventory && op.hudInventory.status === 'OBSERVED') {
+          applyHudMachineInventory(op.hudInventory, 'LIVE_HEARTBEAT');
+        }
         var binding = op.modelBinding || {};
         var topology = op.executionTopology || {};
         var orchestrator = binding.orchestrator || {};
@@ -1462,7 +1466,7 @@ setInterval(refreshCentralDarkLive, CENTRALDARK_LIVE.refreshMs);
 /* ============================================================
    MISSOES
    ============================================================ */
-var VAULT = '\uD83E\uDEAC Centraldark -HUD\uD83E\uDEAC';
+var VAULT = '\uD83E\uDEACCentraldark -HUD\uD83E\uDEAC';
 
 var missions = [
   {tag:'chefe', label:'Confirmar cockpit pro Lovable', text:'Liberar pro Lovable os enderecos (publico + logado) do cockpit real da CentralDark, pra Hermes poder andar nos 3 lugares.'},
