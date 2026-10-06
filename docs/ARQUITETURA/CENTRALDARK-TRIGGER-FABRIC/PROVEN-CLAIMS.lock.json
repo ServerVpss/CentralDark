@@ -885,26 +885,30 @@
     "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH": {
       "claim_key": "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH",
       "owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
-      "lock_key": "f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b",
+      "lock_key": "3318ec585173c84b5ad374b80bfade8180f1e9b11b013120baec55f46f5ab781",
       "state": "SEALED_PROVEN",
       "proof_target": "AUTHORIZED_MULTIROUTE_FAILOVER_WITH_BINDING_SCOPED_HEALTH",
-      "evidence_ref": "LEARNING_146 + LEARNING_147 + CURRENT_ROUTE_REMEASURE_2026-10-02 + HOST_VM_SHARED_T1",
-      "observed_at": "2026-10-02T20:52:00Z",
+      "evidence_ref": "LEARNING_146 + LEARNING_147 + LEARNING_168 + CURRENT_MCP_UNIFIED_CATALOG_2026-10-06",
+      "observed_at": "2026-10-06T17:28:57Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/receipts/2026-10-02-complete-sieve-law.md",
+      "receipt_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
-        "dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069",
+        "dependency_fingerprint": "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5",
         "execution_commands": [
+          "query mcp_admin_catalog for the requested capability or route",
           "classify the exact failed route and binding",
           "keep global system state undecided",
-          "inventory existing authorized alternate routes",
+          "inventory existing authorized alternate routes from the same unified catalog",
           "measure alternate routes independently",
           "reuse the first live capability that satisfies the claim without changing owner",
           "compare evidence on the same claim scope and time",
           "decide PASS UNKNOWN or BLOCKED only after applicable route exhaustion"
         ],
         "proof_commands": [
+          "mcp_admin_catalog must return tools and routes from centraldark_unified_capability_catalog",
+          "filter screenpipe must select SCREENPIPE_LOCAL_SENSOR without requiring a second MCP",
+          "filter desktop must select RDC_DESKTOP_COMMANDER without requiring a second catalog",
           "record route name account/device binding and timestamp",
           "prove alternate route with an actual tool call or runtime probe",
           "separate route health from system capability",
@@ -915,8 +919,10 @@
           "ONE_ROUTE_FAILED_IS_NOT_SYSTEM_FAILED=true",
           "LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE=true",
           "ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER=true",
+          "NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE=true",
           "ROUTE_HEALTH_SCOPED_TO_BINDING=true",
-          "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME=true",
+          "SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true",
+          "DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF=true",
           "FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true",
           "NO_PARALLEL_OWNER_CREATED=true"
         ],
@@ -929,6 +935,8 @@
           "HOST",
           "TRANSPORT",
           "OBSERVED_AT",
+          "MCP_CATALOG_VERSION",
+          "MCP_CATALOG_FINGERPRINT",
           "SPARSE_CHECKOUT_REQUIRED_PATHS",
           "HOST_VM_SHARED_ROOT_IF_APPLICABLE"
         ],
@@ -945,7 +953,8 @@
         "events": [
           "CAPABILITY_GAP",
           "TERRITORY_ROUTE_CHANGE",
-          "PRE_HUMAN_RETURN"
+          "PRE_HUMAN_RETURN",
+          "MCP_CATALOG_ROUTE_GAP"
         ],
         "sentinel_owner": "scripts/trigger-fabric/system_sentinel.py",
         "sentinel_signature": "ROUTE_FAILURE",
@@ -963,6 +972,15 @@
         "materialized_paths_added": [
           "docs/BRAIN/00-MAPA-SISTEMA",
           "docs/receipts"
+        ],
+        "catalog_owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+        "catalog_consumer": "mcp_admin_catalog",
+        "catalog_scope": "centraldark_unified_capability_catalog",
+        "catalog_expected_routes": 11,
+        "catalog_fingerprint": "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5",
+        "external_capabilities": [
+          "RDC_DESKTOP_COMMANDER",
+          "SCREENPIPE_LOCAL_SENSOR"
         ]
       },
       "runtime_proof": {
@@ -976,9 +994,13 @@
         "all_hybrid_multiroute_checks_pass": true,
         "unrelated_global_failed_checks": 30,
         "cleanup": "PASS",
-        "observed_at": "2026-10-02"
+        "observed_at": "2026-10-02",
+        "catalog_source_readback": "PASS_MAIN",
+        "catalog_runtime_reload": "UNKNOWN_UNTIL_LIVE_READBACK",
+        "screenpipe_catalog_binding": true,
+        "rdc_catalog_binding": true
       },
-      "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#caderneta--sistema-hibrido-multirota-146",
+      "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#current-vivo--2026-10-06--learning_168_mcp_unified_capability_catalog",
       "materialization_requirements": {
         "consumer_repo": "/root/CentralDark",
         "sparse_checkout_required_paths": [
@@ -1026,13 +1048,17 @@
           "CONSUMER_REAL",
           "CHECKLIST_DIARIO",
           "RECEIPT",
-          "PR_MOTHER_1562",
+          "PR_MOTHER_1757",
+          "LEGACY_PR_MOTHER_1562",
           "RELATED_LIVE_PR_WHEN_SCOPE_INTERSECTS",
           "PHYSICAL_BINDING_WHEN_CLAIM_DEPENDS_ON_IT",
           "READBACK"
         ],
         "fixed_point_requires_all_applicable_layers": true,
-        "non_applicable_layer_must_be_explicit": true
+        "non_applicable_layer_must_be_explicit": true,
+        "evolved_learning_ref": 168,
+        "pr_mother_current": 1757,
+        "pr_mother_legacy": 1562
       }
     },
     "VMWARE_VPS_DIRECT_SSH_BINDING_PATH": {
