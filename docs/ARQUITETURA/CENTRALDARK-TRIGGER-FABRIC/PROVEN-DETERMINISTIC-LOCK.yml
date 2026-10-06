@@ -626,6 +626,13 @@ hybrid_multiroute_capability_replay_2026_10_02:
   learning_ref: 146
   dependency_fingerprint: 42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5
   lock_key: 3318ec585173c84b5ad374b80bfade8180f1e9b11b013120baec55f46f5ab781
+  evolved_learning_ref: 168
+  catalog_owner: apps/modulos/mcp/src/tools/core/mcp-admin.js
+  catalog_consumer: mcp_admin_catalog
+  catalog_scope: centraldark_unified_capability_catalog
+  catalog_expected_routes: 11
+  catalog_fingerprint: 42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5
+  external_capabilities: [RDC_DESKTOP_COMMANDER, SCREENPIPE_LOCAL_SENSOR]
   objective: >-
     Reusar o mesmo capability bus por rotas autorizadas alternativas sem
     promover falha local de transporte para falha global do organismo.
