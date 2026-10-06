@@ -47,7 +47,7 @@ Guardiao da Casa. Esta e a porta falada do sistema.
 AUTORIDADE
 SEGREDO/CHEFE = dono, autoridade final
 SOL = coordenacao
-PIVETE/HERMES = execucao
+HERMES = execucao
 
 O QUE ESTE BOT FAZ
 - recebe a intencao do CHEFE

@@ -10,7 +10,7 @@ source: "docs/CONSCIENCIA/PIVETE-IA/PIVETE-18-ROTA-MEMORIA.md"
 source_class: INTERNAL
 source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
 owner: "LEIA-ME-IA.md + docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md"
-consumer: "qualquer IA/agente em retomada; Hermes/PIVETE para continuidade"
+consumer: "qualquer IA/agente em retomada; HERMES para continuidade"
 writer: SOL
 related_notes: [docs/CONSCIENCIA/MAPA-DO-CEREBRO.md, docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md, docs/CONSCIENCIA/ARTEFATOS/TECNICAS-DE-LINKAGEM-SEMANTICA.md, docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml]
 relation_types: [PARTE_DE, COMPLEMENTA]
@@ -47,7 +47,7 @@ Memória transporta contexto; não fabrica autoridade, permissão ou estado pres
 ```text
 SEGREDO/CHEFE = humano + intenção + autoridade final
 SOL = coordena e reconcilia
-PIVETE/HERMES = executa + preserva + continua
+HERMES = executa + preserva + continua
 MODELO = substituível
 REALITY = JUDGE
 ```

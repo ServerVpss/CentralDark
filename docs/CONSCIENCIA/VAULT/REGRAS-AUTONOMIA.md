@@ -13,7 +13,7 @@ Este arquivo não define mais permissões por conta própria.
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 ## Fonte atual de permissão

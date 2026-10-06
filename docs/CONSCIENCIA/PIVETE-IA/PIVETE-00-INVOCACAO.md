@@ -13,7 +13,7 @@ O gatilho `pivete` permanece por compatibilidade do WebUI. Ele **não carrega ma
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 ## O que o gatilho faz agora

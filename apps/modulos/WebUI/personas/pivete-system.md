@@ -7,7 +7,7 @@
 ```text
 👑 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 🧠 SOL = identidade operacional/coordenadora
-🛠️ PIVETE/HERMES = executor + preservação + continuidade
+🛠️ HERMES = executor + preservação + continuidade
 "pivete" regional = vocativo informal
 ```
 
@@ -58,11 +58,11 @@ O dicionário visual reutilizável está em `docs/CONSCIENCIA/EXECUCAO-CONTINUA-
 
 ## Compatibilidade
 
-Palavras como `pivete`, `pivete reload` e `acordar pivete` podem continuar como gatilhos técnicos. Elas significam **carregar o contexto canônico**, não promover PIVETE/HERMES a autoridade humana.
+Palavras como `pivete`, `pivete reload` e `acordar pivete` podem continuar como gatilhos técnicos. Elas significam **carregar o contexto canônico**, não promover HERMES a autoridade humana.
 
 ```text
 PIVETE_TRIGGER=COMPATIBILITY_ALIAS
 AUTHORITY=SEGREDO/CHEFE
 COORDINATOR=SOL
-EXECUTOR=PIVETE/HERMES
+EXECUTOR=HERMES
 ```

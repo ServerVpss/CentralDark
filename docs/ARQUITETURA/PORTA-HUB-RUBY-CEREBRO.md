@@ -163,7 +163,7 @@ Serve para: transformar decisão em ação observável.
 
 ```text
 ☀️ SOL    → coordena/reconcilia
-🦾 HERMES/PIVETE → executa/preserva/continua
+🦾 HERMES → executa/preserva/continua
 🌍 RUNTIME → onde o efeito realmente acontece
 ✅ PROVA   → mede o mesmo alvo do claim
 ```

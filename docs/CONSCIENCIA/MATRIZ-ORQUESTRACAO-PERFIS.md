@@ -32,7 +32,7 @@ Perfil, conta, modelo, agente e janela são superfícies. Nenhuma superfície vi
 ```text
 SEGREDO/CHEFE = autoridade e intenção
 SOL = coordenação operacional
-PIVETE/HERMES = executor/preservação/continuidade
+HERMES = executor/preservação/continuidade
 MODELO = motor substituível
 PERFIL = superfície/contexto autenticado
 REALIDADE = juiz
@@ -66,7 +66,7 @@ UNKNOWN != PASS
 
 - Decisão humana: SEGREDO/CHEFE.
 - Coordenação e reconciliação: SOL.
-- Execução e continuidade: HERMES/PIVETE.
+- Execução e continuidade: HERMES.
 - Estado de código: GitHub main/PR.
 - Estado rodando: runtime medido.
 - Memória e planejamento: Obsidian/Screenpipe.

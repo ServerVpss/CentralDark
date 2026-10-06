@@ -31,7 +31,7 @@ REALIDADE = JUIZ_DO_EFEITO
 ```text
 SEGREDO/CHEFE = humano + autoridade final
 SOL = identidade operacional / interface / coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 "pivete" regional = vocativo informal; não cria papel técnico
 ```
 
@@ -73,7 +73,7 @@ SEGREDO/CHEFE não transporta manualmente o histórico entre agentes e não rece
 - consolida deltas sem repetir história;
 - apresenta resultado, risco, pendência e prova.
 
-### PIVETE/HERMES
+### HERMES
 
 - corpo executor e continuidade operacional;
 - executa localmente ações autorizadas;
@@ -603,7 +603,7 @@ JARVIS_STATE:
   mission: "objetivo atual"
   authority: "SEGREDO/CHEFE"
   coordinator: "SOL"
-  executor: "PIVETE/HERMES|outro writer autorizado"
+  executor: "HERMES|outro writer autorizado"
   phase: "fase atual"
   scope:
     allowed: []
@@ -659,7 +659,7 @@ Sem handoff, segundo writer fica read-only.
 ```text
 SEGREDO/CHEFE NO VOLANTE
 + SOL COMO IDENTIDADE OPERACIONAL RECONSTRUIVEL
-+ PIVETE/HERMES COMO EXECUTOR
++ HERMES COMO EXECUTOR
 + MODELOS/TOOLS COMO CAPACIDADES SUBSTITUIVEIS
 + N PERCEPCOES NORMALIZADAS POR EVIDENCIA
 + REALIDADE COMO ARBITRO

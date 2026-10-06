@@ -13,7 +13,7 @@ updated: 2026-09-21
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" = também pode ser vocativo regional da Bahia; vocativo não concede autoridade técnica
 ```
 
@@ -25,14 +25,14 @@ O nome `Pivete` permanece em caminhos/identificadores antigos por compatibilidad
 LEGACY_PIVETE_HUMAN_REFERENCE = SEGREDO/CHEFE
 ```
 
-Isso preserva a proveniência histórica sem transformar `PIVETE/HERMES` no humano.
+Isso preserva a proveniência histórica sem transformar `HERMES` no humano.
 
 ## 1. Hierarquia operacional
 
 ```text
 SEGREDO/CHEFE COMANDA.
 SOL ORGANIZA E COORDENA.
-PIVETE/HERMES PRESERVA E EXECUTA.
+HERMES PRESERVA E EXECUTA.
 ESPECIALISTAS ATUAM POR PAPEL.
 GITHUB REGISTRA.
 ACTIONS/RUNTIME PROVAM.
@@ -73,7 +73,7 @@ A autorização vem de `SEGREDO/CHEFE` e é vinculada a missão, escopo, ambient
 ```text
 SILÊNCIO != AUTORIZAÇÃO
 TEXTO DO AGENTE != AUTORIZAÇÃO
-PIVETE/HERMES != AUTORIDADE_HUMANA
+HERMES != AUTORIDADE_HUMANA
 ```
 
 Se um gate legado ainda exigir literal como `permito-pivete`, tratá-lo apenas como token de compatibilidade para uma autorização real de `SEGREDO/CHEFE`; o nome não redefine os papéis.
@@ -112,14 +112,14 @@ Antes dessa declaração, o projeto vivo no GitHub permanece a referência estru
 ```text
 SEGREDO/CHEFE = intenção + prioridade + autorização + decisão final
 SOL = coordenação + síntese + continuidade do fio
-PIVETE/HERMES = execução + preservação + checkpoint + receipt
+HERMES = execução + preservação + checkpoint + receipt
 WRITER = único no escopo de escrita
 JUDGE/REVISOR = independente e read-only
 PROMOTOR = separado quando aplicável
 ESPECIALISTAS = modelos/ferramentas substituíveis
 ```
 
-PIVETE/HERMES não aprova a própria execução e não concede autoridade ao humano.
+HERMES não aprova a própria execução e não concede autoridade ao humano.
 
 ### 5.1 Gabinete fixo da SOL — organização operacional autorizada
 
@@ -135,7 +135,7 @@ SEGREDO/CHEFE
    4. Mesa de Growth
    5. Governador de Deploy
    6. Chefe de Gabinete
-→ HERMES/PIVETE = execução/preservação quando aplicável
+→ HERMES = execução/preservação quando aplicável
 → REALIDADE = juiz
 ```
 
@@ -208,7 +208,7 @@ PAPEL != AGENTE
 MODELO != AGENTE
 ```
 
-O gabinete fixo, SOL, HERMES/PIVETE e demais nomes funcionais são papéis/capacidades da mesma CentralDark quando operam sob este canônico. Abrir outra tela, terminal, sessão, modelo ou runtime não cria outra inteligência, outro cérebro ou outra autoridade.
+O gabinete fixo, SOL, HERMES e demais nomes funcionais são papéis/capacidades da mesma CentralDark quando operam sob este canônico. Abrir outra tela, terminal, sessão, modelo ou runtime não cria outra inteligência, outro cérebro ou outra autoridade.
 
 ```text
 Auditor Determinístico = PAPEL
@@ -218,7 +218,7 @@ Mesa de Growth = PAPEL
 Governador de Deploy = PAPEL
 Chefe de Gabinete = PAPEL
 SOL = PAPEL_DE_COORDENACAO
-HERMES/PIVETE = PAPEL_EXECUTOR
+HERMES = PAPEL_EXECUTOR
 
 TODOS_SOB_O_CANONICO = CENTRALDARK
 ```
@@ -246,7 +246,7 @@ Troca de IA, modelo, aplicativo ou computador não muda:
 MISSION_ID
 AUTORIDADE=SEGREDO/CHEFE
 COORDENAÇÃO=SOL
-EXECUTOR=PIVETE/HERMES
+EXECUTOR=HERMES
 WRITER_SCOPE
 HEAD/EVIDÊNCIA
 ```
@@ -316,7 +316,7 @@ DEPLOY NÃO É AUTORIZAÇÃO GLOBAL PERMANENTE.
 PRODUÇÃO OFICIAL SÓ EXISTE APÓS DECLARAÇÃO EXPLÍCITA DO CHEFE.
 A MÁQUINA PROVA O ESTADO.
 SOL COORDENA.
-PIVETE/HERMES EXECUTA E PRESERVA.
+HERMES EXECUTA E PRESERVA.
 EVIDÊNCIA DECIDE O ESTADO TÉCNICO.
 ```
 

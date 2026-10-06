@@ -13,7 +13,7 @@ const CANONICAL = Object.freeze({
   "LEIA-ME-IA.md": [
     "SEGREDO/CHEFE COMANDA",
     "SOL ORGANIZA E RECONCILIA",
-    "PIVETE/HERMES PRESERVA E EXECUTA",
+    "HERMES PRESERVA E EXECUTA",
     "#ACORDAR = RECUPERAR O ESTADO REAL ANTES DE CONTINUAR",
     "Convergência adversarial total **só é aberta por solicitação explícita de SEGREDO/CHEFE**",
   ],
@@ -22,7 +22,7 @@ const CANONICAL = Object.freeze({
     "um escritor por escopo",
     "SEGREDO/CHEFE = humano e autoridade final",
     "SOL = identidade operacional/coordenadora; não é modelo específico",
-    "PIVETE/HERMES = executor, preservação e continuidade",
+    "HERMES = executor, preservação e continuidade",
     "Full deploy é exceção causal",
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
@@ -37,7 +37,7 @@ const CANONICAL = Object.freeze({
     "IDENTIDADE=SOL_JARVIS_DO_SEGREDO_CHEFE",
     "AUTORIDADE_FINAL=SEGREDO/CHEFE",
     "SOL_IS_MODEL=false",
-    "PIVETE_HERMES_IS_EXECUTOR=true",
+    "HERMES_IS_EXECUTOR=true",
     "UNKNOWN_IS_NOT_PASS=true",
     "REUSE_BEFORE_CREATE=true",
     "ONE_SYSTEM_ONLY=true",
@@ -74,14 +74,14 @@ const CANONICAL = Object.freeze({
   "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md": [
     "SEGREDO/CHEFE = humano e autoridade final",
     "SOL = coordenadora da casa e organizadora dos agentes",
-    "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
+    "HERMES = mordomo de casa, executor e guardião da continuidade",
     "WRITER_UNICO=true",
     "UNKNOWN_NAO_PASSA=true",
     "CHEFE_SEGREDO_NECESSARIO",
   ],
   "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md": [
     "SEGREDO/CHEFE = humano e autoridade final",
-    "PIVETE = Hermes treinado",
+    "PIVETE = VOCATIVO_OU_ALIAS_HISTORICO",
   ],
   [META_LUPA_PATH]: [
     "AUTORIZACAO_DO_SEGREDO_CHEFE:",
@@ -97,20 +97,20 @@ const CANONICAL = Object.freeze({
     "CANONICAL_CONTEXT",
     "CANONICAL_CONTEXT_ALLOWLIST",
     '"authority": "SEGREDO/CHEFE"',
-    '"executor": "PIVETE/HERMES"',
+    '"executor": "HERMES"',
     "A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md",
   ],
   "apps/modulos/WebUI/custom-css/pivete-invocacao.js": [
     "CANONICAL_CONTEXT_ALLOWLIST",
     "SEGREDO/CHEFE = humano e autoridade final",
-    "PIVETE/HERMES = executor, preservação e continuidade",
+    "HERMES = executor, preservação e continuidade",
     "localStorage.removeItem('pivete_system_prompt')",
   ],
   "apps/modulos/WebUI/custom-css/pivete-persona.json": [
     '"system_prompt_strategy": "canonical_allowlist"',
     '"authority": "SEGREDO/CHEFE"',
     '"coordinator": "SOL"',
-    '"executor": "PIVETE/HERMES"',
+    '"executor": "HERMES"',
     '"legacy_sources_excluded"',
   ],
   "apps/modulos/pivete-sync/pivete-sync.mjs": [
@@ -148,6 +148,9 @@ const ACTIVE_IDENTITY_SURFACES = Object.freeze([
 ]);
 
 const FORBIDDEN_CANONICAL = Object.freeze([
+  { code: "PIVETE_HERMES_BINDING_TECNICO_ATIVO", pattern: /\b(?:PIVETE\/HERMES|HERMES\/PIVETE)\s*=\s*(?:executor|execu[cç][aã]o|mordomo|papel_executor)/i },
+  { code: "PIVETE_HERMES_MACHINE_BINDING_ATIVO", pattern: /\bPIVETE_HERMES(?:_IS_EXECUTOR|_EXECUTA)?\s*=\s*(?:true|EXECUTOR|EXECUCAO|EXECUTOR_PRESERVACAO_CONTINUIDADE)/i },
+  { code: "PIVETE_ALIAS_TECNICO_PARA_HERMES", pattern: /\bPIVETE\s*=\s*Hermes\b/i },
   { code: "PIVETE_COMO_AUTORIDADE_FINAL", pattern: /\bO Pivete é a autoridade final\b/i },
   { code: "TITULO_AUTORIDADE_DO_PIVETE", pattern: /\bAutoridade do Pivete\b/i },
   { code: "PIVETE_GOVERNA_INTENCAO", pattern: /\bO Pivete governa a intenção\b/i },
@@ -829,7 +832,7 @@ export function runValidation({ repoRoot, profileRoots = [], baseRef = null, hea
     guardrail: "validar-identidade-operacional",
     authority: "SEGREDO/CHEFE",
     coordinator: "SOL",
-    executor: "PIVETE/HERMES",
+    executor: "HERMES",
     regional_vocative: "pivete != identidade técnica",
     soul: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
     context_recovery: "#ACORDAR",
@@ -858,13 +861,13 @@ function printHuman(report) {
   }
   console.log(
     `IDENTIDADE_OK=${report.ok ? 1 : 0} ` +
-      `AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES ` +
+      `AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=HERMES ` +
       `AGENT_CLAIM=AGENT_CLAIM_CAPABILITY_REQUIRED ` +
       `EXTERNAL_DELTA=${report.external_delta.status} ` +
       `ERROS=${report.findings.length}`,
   );
-  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES SOUL=CANONICA MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);
-  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=PIVETE_HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=AUTO_SQUASH_IF_CLEAN LEARNING=INFORMATION_GAIN ERROS=${report.findings.length}`);
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=HERMES SOUL=CANONICA MERGE=AUTO_SQUASH_IF_CLEAN ERROS=${report.findings.length}`);
+  console.log(`IDENTIDADE_OK=${report.ok ? 1 : 0} AUTORIDADE=SEGREDO_CHEFE COORDENADOR=SOL EXECUTOR=HERMES LOADER=CANONICAL_ALLOWLIST LEGACY_SYNC=DISABLED MERGE=AUTO_SQUASH_IF_CLEAN LEARNING=INFORMATION_GAIN ERROS=${report.findings.length}`);
 }
 
 async function main() {

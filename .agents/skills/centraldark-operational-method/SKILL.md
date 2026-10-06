@@ -713,7 +713,7 @@ PARE SOMENTE SE (bloqueios materiais):
 3. LER ADAPTADORES LOCAIS: profiles/sol/SOUL.md + profiles/pivete/SOUL.md
 4. COMPARAR SEMANTICAMENTE: autoridade, identidade, papel, contratos
 5. PRESERVAR CONFIG LOCAL: paths Casa/VPS, tools, memoria 3 temps, modos, Builder, painel
-6. CORRIGIR SOMENTE DIVERGÊNCIA MATERIAL: autoridade final, papel PIVETE/HERMES, vocativo, legacy alias
+6. CORRIGIR SOMENTE DIVERGÊNCIA MATERIAL: autoridade final, papel HERMES, vocativo, legacy alias
 7. REABRIR ARQUIVOS para provar alinhamento
 8. CONTRAProvar: SEGREDO/CHEFE=autoridade, SOL≠modelo, HERMES≠autoridade, profile≠SOUL, snapshot≠authority, ONE_SYSTEM_ONLY=true
 9. REGISTRAR SHA medido como LAST_OBSERVED_SHA no BOOT RECEIPT, NÃO na SOUL
@@ -735,7 +735,7 @@ runtime-state / receipt / boot-state
 | Divergência | Canônico Correto |
 |-------------|------------------|
 | `DONO_DA_CASA=SEGREDO/CHEFE/PIVETE` | `DONO_DA_CASA=SEGREDO/CHEFE` |
-| `PIVETE = dono/autor/autoridade` | `PIVETE/HERMES = executor + preservação + continuidade` |
+| `PIVETE = dono/autor/autoridade` | `HERMES = executor + preservação + continuidade` |
 | `"pivete" = identidade técnica` | `"pivete" = vocativo; LEGACY_ALIAS_OF_SEGREDO_CHEFE` |
 | `SOUL_STATUS=RASCUNHO` | `SOUL_STATUS=ALINHADO_CANONICO_SOUL-SOL.md` |
 
@@ -745,7 +745,7 @@ SEGREDO/CHEFE
     ↓ intenção + autoridade final
 profile SOL (coordena / reconcilia / distribui)
     ↓
-profile PIVETE/HERMES (executa / preserva / continua)
+profile HERMES (executa / preserva / continua)
     ↓
 tools / runtime / Git / PC
     ↑ ambos carregam ↑
