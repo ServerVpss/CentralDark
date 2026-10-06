@@ -665,3 +665,38 @@ CHANGED_BYTES_REQUIRE_NEW_SHA256=true
 ### ➡️ NEXT_CURSOR
 Executar o cristal #156 em modo inspect na forge viva; reconciliar somente delta seguro. Depois fechar host-key trust e runner assignment como claims independentes.
 
+
+
+## 🫀 CURRENT VIVO — 2026-10-06 — LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG
+
+```text
+LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG=true
+CATALOG_OWNER=apps/modulos/mcp/src/tools/core/mcp-admin.js
+CATALOG_CONSUMER=mcp_admin_catalog
+CATALOG_SCOPE=centraldark_unified_capability_catalog
+CATALOG_EXPECTED_ROUTES=11
+CATALOG_FINGERPRINT=42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5
+SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true
+HOOK=REUSE_CAPABILITY_GAP_AND_TERRITORY_ROUTE_CHANGE
+RECIPE=HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH
+PR_MOTHER_CURRENT=#1757
+PR_MOTHER_LEGACY=#1562
+LIVE_MCP_CATALOG_RELOAD=UNKNOWN_UNTIL_READBACK
+```
+
+### ✅ MATERIALIZADO
+- [x] `RDC_DESKTOP_COMMANDER` no catálogo unificado.
+- [x] `SCREENPIPE_LOCAL_SENSOR` no mesmo catálogo.
+- [x] filtro de `mcp_admin_catalog` cobre tools e routes.
+- [x] fingerprint explícito e routeCount/routeReturned no payload.
+- [x] receita multirota existente evoluída; nenhum segundo owner/router/MCP.
+- [x] aprendizado + lembrança + receipt materializados.
+- [x] verifier amarrado aos marcadores do catálogo.
+- [x] hook/trigger reais existentes reutilizados.
+
+### ⚪ FRONTEIRA
+- [ ] runtime MCP vivo precisa devolver fingerprint + 11 rotas antes de `LIVE_MCP_CATALOG_RELOAD=PASS`.
+- [ ] status atual de Screenpipe e RDC continua por binding; entrada no catálogo não os torna online.
+
+### ➡️ NEXT_CURSOR
+`LIVE_MCP_CATALOG_READBACK → VERIFY_FINGERPRINT_AND_11_ROUTES → FILTER_SCREENPIPE → FILTER_DESKTOP → ROUTE_FAILOVER_REPLAY → FIXED_POINT`
