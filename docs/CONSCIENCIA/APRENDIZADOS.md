@@ -1843,3 +1843,11 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Ferida:** #1562 excedeu a capacidade de comentários do GitHub e deixou de aceitar novos receipts.
 - **Aprendizado:** memória/receita durável fica no repositório; PR-mãe é HUD/rendezvous mutável. #1562 permanece legado não mergeado; #1757 assume o rendezvous ativo.
 - **Regra:** `LEGACY_IS_PRESERVED=true`; `SHELL_IS_MUTABLE=true`; `COMMENTS_ARE_NOT_PRIMARY_LEDGER=true`.
+
+### Sync Autônomo Git VPS — método completo provado (2026-10-06)
+- **Owner detalhado:** docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-VPS-AUTONOMOUS-GIT-SYNC-METHOD.md
+- **Receipt:** docs/CONSCIENCIA/RECEIPTS/2026-10-06-vps-autonomous-git-sync.md
+- **Ferida:** VPS CENTRALDARK-OS ficava dessincronizada com origin/main (drift de 177 arquivos).
+- **Aprendizado:** script auto-sync com flock/stash/ff-only/rebase + cron a cada 5 min resolve o drift autônomo. Método inteiro documentado pra qualquer agente reproduzir.
+- **Commit de prova:** 6ae79a9ec
+- **Regra:** STASH_BEFORE_PULL=true; FF_ONLY_FIRST=true; FLOCK_REQUIRED=true; NO_FORCE_PUSH=true; NO_BLIND_RESET=true.
