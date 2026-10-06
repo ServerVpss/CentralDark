@@ -8,6 +8,10 @@ Receita: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#HY
 
 ## O que ficou aprendido
 
+```text
+LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG=true
+```
+
 A CentralDark não precisa de um MCP para tools, outro para Desktop Commander e outro para Screenpipe. O mesmo catálogo pode descrever capacidades internas e rotas externas sem confundir catálogo com execução.
 
 ```text
