@@ -13,7 +13,7 @@ Este arquivo registrou infraestrutura observada em julho/2026. Ele **não é inv
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 ## Regra
@@ -25,7 +25,7 @@ SUBDOMINIO_DOCUMENTADO != RUNTIME_PROVADO
 DECISAO_HISTORICA != PERMISSAO_ATUAL
 ```
 
-A expressão histórica “base aberta por decisão do Pivete” deve ser entendida como decisão antiga de `SEGREDO/CHEFE`; não concede autoridade a PIVETE/HERMES e não substitui `docs/CONSCIENCIA/02-PERMISSOES.md`.
+A expressão histórica “base aberta por decisão do Pivete” deve ser entendida como decisão antiga de `SEGREDO/CHEFE`; não concede autoridade a HERMES e não substitui `docs/CONSCIENCIA/02-PERMISSOES.md`.
 
 Para estado atual:
 

@@ -8,25 +8,25 @@
 ```text
 SEGREDO/CHEFE = humano, dono da intenção e autoridade final
 SOL = coordenação
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" = também pode ser vocativo regional da Bahia; vocativo não cria identidade técnica
 ```
 
-Arquivos/títulos antigos contendo `PIVETE` podem permanecer por compatibilidade. Em texto histórico, `Pivete` usado como “dono/comandante/humano” significa `LEGACY_ALIAS_OF_SEGREDO_CHEFE`. Em texto operacional atual, `PIVETE/HERMES` significa o executor.
+Arquivos/títulos antigos contendo `PIVETE` podem permanecer por compatibilidade. Em texto histórico, `Pivete` usado como “dono/comandante/humano” significa `LEGACY_ALIAS_OF_SEGREDO_CHEFE`. Em texto operacional atual, `HERMES` significa o executor.
 
 ## 1. Modo operacional
 
 ```text
 SEGREDO/CHEFE COMANDA.
 SOL ORGANIZA.
-PIVETE/HERMES PRESERVA E EXECUTA.
+HERMES PRESERVA E EXECUTA.
 AÇÕES PROVAM.
 GITHUB REGISTRA.
 VPS EXECUTA.
 NADA NO ESCURO.
 ```
 
-SEGREDO/CHEFE decide rumo, intenção, prioridade e autorizações humanas. SOL organiza. PIVETE/HERMES executa o escopo autorizado, preserva o fio e devolve recibos.
+SEGREDO/CHEFE decide rumo, intenção, prioridade e autorizações humanas. SOL organiza. HERMES executa o escopo autorizado, preserva o fio e devolve recibos.
 
 ## 2. Ordem obrigatória
 
@@ -213,7 +213,7 @@ NÃO APAGAR SEM CAMINHO DE RECUPERAÇÃO.
 UNKNOWN != PASS.
 ```
 
-A autorização vem de SEGREDO/CHEFE. PIVETE/HERMES recebe e executa; não concede a si mesmo autoridade humana.
+A autorização vem de SEGREDO/CHEFE. HERMES recebe e executa; não concede a si mesmo autoridade humana.
 
 ## 10. Deploy e runtime
 
@@ -329,7 +329,7 @@ Detalhe técnico/código entra quando pedido ou quando necessário para agir, pr
 ```text
 SEGREDO/CHEFE define a intenção.
 SOL coordena.
-PIVETE/HERMES executa e preserva.
+HERMES executa e preserva.
 Especialistas ajudam por papel.
 GitHub registra.
 Runtime prova.

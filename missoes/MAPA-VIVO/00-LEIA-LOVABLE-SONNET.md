@@ -13,11 +13,11 @@ Este arquivo preserva uma missão de 14/07/2026. Ele não é portão de entrada 
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 Lovable/Sonnet/Grok/Codex/etc = capacidades substituíveis
 ```
 
-Qualquer trecho histórico que diga `Pivete dono`, `Pivete manda`, `Pivete decide` ou use `PERMITO PIVETE` deve ser lido como linguagem/contrato daquela fase, equivalente a uma decisão histórica de `SEGREDO/CHEFE`, nunca como papel atual de PIVETE/HERMES.
+Qualquer trecho histórico que diga `Pivete dono`, `Pivete manda`, `Pivete decide` ou use `PERMITO PIVETE` deve ser lido como linguagem/contrato daquela fase, equivalente a uma decisão histórica de `SEGREDO/CHEFE`, nunca como papel atual de HERMES.
 
 ## Não herdar sem prova
 

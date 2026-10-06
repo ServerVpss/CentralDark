@@ -23,7 +23,7 @@ CHECKPOINT_ANTIGO
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 Qualquer uso antigo de `Pivete` para representar o humano deve ser lido como `LEGACY_ALIAS_OF_SEGREDO_CHEFE`.

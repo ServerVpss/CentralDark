@@ -2,7 +2,7 @@
 pivete_routes.py — rota legada de compatibilidade para carregar contexto canônico CentralDark.
 
 O nome /pivete é preservado para não quebrar consumidores antigos. A semântica atual é:
-SEGREDO/CHEFE = humano e autoridade final; SOL = coordenadora; PIVETE/HERMES = executor.
+SEGREDO/CHEFE = humano e autoridade final; SOL = coordenadora; HERMES = executor.
 
 A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md. Esses arquivos são histórico.
 """
@@ -78,7 +78,7 @@ async def pivete_status(request: Request) -> dict[str, Any]:
         "mode": "CANONICAL_CONTEXT_ALLOWLIST",
         "authority": "SEGREDO/CHEFE",
         "coordinator": "SOL",
-        "executor": "PIVETE/HERMES",
+        "executor": "HERMES",
         "arquivos_count": len(dados),
         "expected_count": len(CANONICAL_CONTEXT),
         "missing": ausentes,
@@ -111,7 +111,7 @@ async def pivete_consciencia(request: Request) -> dict[str, Any]:
         "mode": "CANONICAL_CONTEXT_ALLOWLIST",
         "authority": "SEGREDO/CHEFE",
         "coordinator": "SOL",
-        "executor": "PIVETE/HERMES",
+        "executor": "HERMES",
         "ultimaSync": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ultima)),
         "ultimaSyncTs": ultima,
         "mcp_catalog_url": "/pivete/mcp-catalog",

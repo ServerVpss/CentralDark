@@ -13,7 +13,7 @@ Manual para qualquer IA entrar no CentralDark sem perder o fio e sem confundir o
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, mordomo, preservação e continuidade
+HERMES = executor, mordomo, preservação e continuidade
 "pivete" na fala regional = vocativo informal; não é identidade técnica automática
 ```
 
@@ -24,13 +24,13 @@ O nome antigo deste arquivo é preservado por compatibilidade. Qualquer trecho h
 ```text
 SEGREDO/CHEFE COMANDA.
 SOL COORDENA.
-PIVETE/HERMES PRESERVA E EXECUTA.
+HERMES PRESERVA E EXECUTA.
 ACTIONS PROVAM.
 IAS VARIAM.
 O MÉTODO PERMANECE.
 ```
 
-SEGREDO/CHEFE define prioridade, limite, autorização e decisão humana final. SOL traduz e coordena. PIVETE/HERMES executa o que já foi autorizado, preserva estado/checkpoint e mantém continuidade. Especialistas entram por papel.
+SEGREDO/CHEFE define prioridade, limite, autorização e decisão humana final. SOL traduz e coordena. HERMES executa o que já foi autorizado, preserva estado/checkpoint e mantém continuidade. Especialistas entram por papel.
 
 ## Estado de bordo
 
@@ -219,7 +219,7 @@ Autoridade humana pertence a `SEGREDO/CHEFE`.
 
 ```text
 AUTORIZAÇÃO_HUMANA = SEGREDO/CHEFE
-PIVETE/HERMES = RECEBE + PRESERVA + EXECUTA
+HERMES = RECEBE + PRESERVA + EXECUTA
 SOL = COORDENA
 ```
 
@@ -229,7 +229,7 @@ Identificadores/labels legados como `permito-pivete` podem ser aceitos temporari
 permito-pivete = LEGACY_COMPATIBILITY_TOKEN_FOR_SEGREDO_CHEFE
 ```
 
-Nunca interpretar esse nome como autoridade de PIVETE/HERMES.
+Nunca interpretar esse nome como autoridade de HERMES.
 
 ### V-REALTIME / desenvolvimento próprio autorizado
 
@@ -308,7 +308,7 @@ Aprendizado durável vai para `docs/CONSCIENCIA/APRENDIZADOS.md` ou para o artef
 ## Frase curta universal
 
 ```text
-SEGREDO/CHEFE comanda; SOL coordena; PIVETE/HERMES preserva e executa; especialistas variam; GitHub registra; Actions e runtime provam. Recupere o estado real antes de continuar, reutilize antes de criar, não repita autorização ainda válida, faça o menor movimento causal e nunca converta UNKNOWN em PASS.
+SEGREDO/CHEFE comanda; SOL coordena; HERMES preserva e executa; especialistas variam; GitHub registra; Actions e runtime provam. Recupere o estado real antes de continuar, reutilize antes de criar, não repita autorização ainda válida, faça o menor movimento causal e nunca converta UNKNOWN em PASS.
 ```
 
 ---

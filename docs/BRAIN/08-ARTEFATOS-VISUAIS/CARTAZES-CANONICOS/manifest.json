@@ -8,7 +8,7 @@
     "human_intent": "SEGREDO/CHEFE",
     "canonical_brain": "Git/GitHub: docs/BRAIN + owners de governança",
     "second_brain": "CASA-VAULT/00-CANONICO como espelho; nunca autoridade paralela",
-    "executor": "HERMES/PIVETE",
+    "executor": "HERMES",
     "coordinator": "SOL",
     "rule": "ONE_SYSTEM_ONLY"
   },

@@ -13,7 +13,7 @@ Este arquivo registra uma decisão antiga de abertura operacional do MCP. Ele **
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 Toda citação antiga atribuída ao `Pivete` humano deve ser lida como decisão histórica de `SEGREDO/CHEFE`.

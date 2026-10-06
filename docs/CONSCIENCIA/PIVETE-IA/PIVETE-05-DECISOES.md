@@ -23,7 +23,7 @@ DECISAO_ANTIGA
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 Frases antigas atribuídas ao `Pivete` humano devem ser lidas como decisões históricas de `SEGREDO/CHEFE` naquela época.
