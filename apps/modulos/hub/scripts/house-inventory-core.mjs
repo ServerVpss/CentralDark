@@ -127,7 +127,7 @@ function scanSkills(repoRoot) {
         continue;
       }
       if (entry.isFile() && entry.name === 'SKILL.md') {
-        owners.push(relative(repoRoot, absolute));
+        owners.push(path.relative(repoRoot, absolute).split(path.sep).join('/'));
       }
     }
   };
