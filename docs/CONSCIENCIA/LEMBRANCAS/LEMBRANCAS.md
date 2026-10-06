@@ -707,3 +707,14 @@ CURRENT_OVER_HISTORY = true
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-METABOLISMO-AUTONOMO-CURRENT-MODEL-ONE-HEART.md`
 - **Conteúdo:** Hermes permanece corpo executor e continuidade; o modelo selecionado no Hermes é motor do orquestrador; o modelo local CURRENT é worker cognitivo pesado; Self-Evolution reutiliza donor oficial e resolve optimizer/evaluator no início de cada lote; cron horário mantém metabolismo sem chamar modelo quando nada mudou; `/heartbeat` é o coração único e o HUD é projeção.
 - **Cristal:** `MODEL_NAME_IS_BINDING=true`; `ORCHESTRATOR=HERMES_CURRENT_SELECTED_MODEL`; `LOCAL_WORKER=CENTRALDARK_CURRENT_LOCAL_MODEL`; `MID_LOTE_MODEL_SWAP=false`; `ONE_HEART=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `NO_SECOND_EVOLUTION_ENGINE=true`.
+
+
+### [2026-10-06] Criterion hereditário + Oráculo setorial + Preview
+- **Tipo:** LEARNING_INDEX / SESSION_CRYSTAL / ORACLE_SURFACE
+- **Learning:** #165
+- **Target:** `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-CRITERION-HEREDITARIO-ORACULO-SETORIAL-PREVIEW.md`
+- **Owners:** `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` + `docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml` + `apps/modulos/HERMES-CORE/core/perception-orchestra.mjs`
+- **Conteúdo:** o padrão do CHEFE passa a explicitar herança adaptativa de Criterion em `GOAL→SUBGOAL→BATCH/LOTE→SUBAGENT→SUBSUBGOAL`; o filho pode refinar, nunca enfraquecer o pai, e `LOCAL_DONE != PARENT_DONE`. O Preview interno provou transporte consultivo `Hermes→CHAT_GLOBAL/ChatGPT→resposta capturada` com `INTENT_ID/EVENT_ID/CAUSATION_ID/SURFACE_ID`, mantendo o Oráculo read-only e sem autoridade. A exploração setorial usa fan-out read-only por ganho de informação, rendezvous/dedupe/contraprova e writer por escopo. A maturidade de capability passa a ser lida como `DECLARED→DISCOVERED→CONFIGURED→HEALTHY→EXECUTED→RECEIPT`, sem implicação automática entre estágios.
+- **Cristal:** `CHILD_CAN_REFINE_CRITERION=true`; `CHILD_CANNOT_WEAKEN_PARENT_CRITERION=true`; `LOCAL_DONE != PARENT_DONE`; `ORACLE_OUTPUT_IS_CANDIDATE=true`; `NEW_TAB_PRESERVE_CURRENT=true`; `DISTINCT_LABEL_REQUIRED=true`; `PARALLEL_PERCEPTION_ALLOWED_WHEN_INFORMATION_GAIN=true`; `SECTOR_COUNT_IS_FIXED=false`; `ONE_SYSTEM_ONLY=true`; `REALITY_IS_JUDGE=true`.
+- **Fronteira de prova:** Preview/query/captura/IDs = PASS nesta sessão; `ORACLE→ENVELOPE→RECONCILIATION→WRITER` continua UNKNOWN até E2E próprio.
+- **Next cursor:** integrar a resposta do Oráculo ao `perception-orchestra.mjs` existente e provar rendezvous/counterproof sem criar engine paralelo.
