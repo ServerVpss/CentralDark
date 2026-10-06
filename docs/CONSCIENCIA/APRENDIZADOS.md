@@ -1813,7 +1813,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 167. Ápeiron operacional: identidade invariável, concha mutável, capacidades abertas e prova temporal sem arquitetura paralela
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L167`; `PREV_GLOBAL_UID=L166`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=167`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L167`; `PREV_GLOBAL_UID=L166`; `NEXT_GLOBAL_UID=L168`; `LEGACY_LEARNING_NUMBER=167`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=167`; `PREV_LEARNING_REF=166`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
 - **Categoria:** anaximander-inspired-core-shell-open-capability-space-temporal-proof-operational-graph.
 - **Data:** 2026-10-05.
@@ -1861,7 +1861,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** EVERY_GAP_IS_A_CAPABILITY_OPPORTUNITY; EVERY_PROVEN_PATH_CAN_BECOME_REPLAY; ONE_HEART; REALITY_IS_JUDGE.
 
 
-### #168 — Catálogo MCP unificado de capabilities e rotas (2026-10-06)
+### 168. Catálogo MCP unificado de capabilities e rotas (2026-10-06)
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L168`; `PREV_GLOBAL_UID=L167`; `NEXT_GLOBAL_UID=L169`; `LEGACY_LEARNING_NUMBER=168`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Owner detalhado:** `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
 - **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md`
@@ -1871,10 +1872,34 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Fingerprint:** `42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5`.
 
 
-### #169 — Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
+### 169. Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L169`; `PREV_GLOBAL_UID=L168`; `NEXT_GLOBAL_UID=L170`; `LEGACY_LEARNING_NUMBER=169`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Owner detalhado:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
 - **Commit Hermes:** `c893a949b3051ae8a96cc4bc8b910857534c55e7`.
 - **Arquivo de prova:** `experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md`.
 - **Aprendizado:** Hermes executor provado por delegação real entra como capability catalogada; Screenpipe CLI entra como rota operacional recorder-first, mas runtime só vira PASS por `status --json`/freshness.
 - **Cristal:** `HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748`; `MODEL_IS_ENGINE_NOT_OWNER=true`; `SCREENPIPE_RUNTIME_PASS_REQUIRES_FRESHNESS=true`; `CATALOG_ENTRY != RUNTIME_HEALTH`.
 - **Fingerprint catálogo:** `80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7`.
+
+
+### 170. HUD Cartographer fecha genealogia, metabolismo, determinismo e superfícies em inventário machine-consumable
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L170`; `PREV_GLOBAL_UID=L169`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=170`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** LEARNING_ID=170; PREV_LEARNING_REF=169; NEXT_LEARNING_REF=PENDING_NEXT_CURSOR.
+- **Categoria:** hud-cartographer-genealogy-metabolism-determinism-surface-inventory.
+- **Data:** 2026-10-06.
+- **Owner executável:** .agents/skills/centraldark-capability-hud/SKILL.md.
+- **Gerador:** scripts/hud/generate-hud-inventory.mjs.
+- **Inventário derivado:** docs/HUD/CENTRALDARK-HUD-INVENTORY.json.
+- **Lembrança expandida:** docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-HUD-CARTOGRAPHER-GENEALOGIA-METABOLISMO-DETERMINISMO.md.
+- **Receipt:** docs/CONSCIENCIA/RECEIPTS/2026-10-06-hud-cartographer-complete-inventory.md.
+- **Ferida:** o HUD tinha cadeados e contagens, mas ainda não possuía mapa machine-consumable completo de genealogia + metabolismo provado + determinismo + agentes + skills + workflows + rotas + botões/abas/superfícies; além disso, SELO histórico ainda podia ser confundido visualmente com LIVE.
+- **Aprendizado:** o mesmo Capability HUD pode operar como cartógrafo sem virar segundo cérebro: ele gera um índice derivado dos owners, carrega só o cone pertinente, e mede runtime apenas quando o claim pede estado vivo.
+- **UI:** cada sinal suportado recebe OWNER + LINE + SECTOR + SURFACE + KIND + LABEL + PROOF_SOURCE + SEAL_STATE + LIVE_STATE; a contagem antiga de 7717 sinais era busca ampla e não é denominador equivalente ao novo mapa enumerado.
+- **Genealogia:** #168 e #169 foram reconciliados ao formato numérico já exigido pelo compilador NeuroLink; #170 entra na mesma linhagem sem criar índice paralelo.
+- **Metabolismo:** claims, receipts, receitas, locks, verifiers, rotas MCP e cadeados passam a ser indexados no mesmo JSON derivado.
+- **Determinismo:** gerador tem --write, --check, self-test, fingerprint e verifier; mesma entrada deve reproduzir o mesmo inventário.
+- **Consumers:** docs/HUD/HUD.html, .github/workflows/selo-fabric.yml, apps/modulos/hub/scripts/house-inventory-core.mjs, .agents/CAPABILITY-HUD-BOOT.json e CENTRALDARK_AI_BOOT.yaml.
+- **Cristal:** HUD_CARTOGRAPHER_AGENT=true; MACHINE_INVENTORY_IS_DERIVED_NOT_AUTHORITY=true; SEAL_LIVE_SPLIT_REQUIRED=true; SEAL_IS_LAST_VALID_PROOF_FINGERPRINT_ROLLBACK=true; LIVE_IS_CURRENT_MEASUREMENT_TIMESTAMP_SOURCE=true; FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED; CATALOG_BIG_LOAD_ALL=false; REPLAY_BEFORE_REDISCOVERY=true; UNKNOWN_IS_NOT_PASS=true; REALITY_IS_JUDGE=true.
+- **Dependency fingerprint:** d4d3ceda8e7c842e067af04cb8aeb52b88b787a47078257a24f6055903c7736c.
+- **Contraprova:** OWNER_PRESENT != RUNTIME_PASS; INVENTORY_ENTRY != CAPABILITY_HEALTH; SEALED_BASELINE != LIVE_PASS; HUD_UPDATED != VPS_RUNTIME; elemento UI enumerado não prova clique funcional.
+- **Next cursor:** reconstruir lineage, regenerar inventários, rodar verifier/contraprova no mesmo HEAD, promover e conferir PR-mãe #1757 consumindo o fingerprint novo.
