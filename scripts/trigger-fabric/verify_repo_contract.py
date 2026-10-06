@@ -314,6 +314,12 @@ check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  'catalogFingerprint: "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
  'routeReturned: routes.length',
 ], classification='MCP_UNIFIED_CAPABILITY_CATALOG')
+check('apps/modulos/mcp/dist/tools/core/mcp-admin.js',[
+ '"centraldark_unified_capability_catalog"',
+ '"SCREENPIPE_LOCAL_SENSOR"',
+ '"RDC_DESKTOP_COMMANDER"',
+ 'catalogFingerprint: "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
+], classification='MCP_UNIFIED_CAPABILITY_CATALOG_DIST_PARITY')
 check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md',[
  'LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG=true',
  'SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true',
