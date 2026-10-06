@@ -750,3 +750,33 @@ screenpipe_cli_recorder_path_2026_10_06:
   command_form: 'cd "$(mktemp -d)" && ${SCREENPIPE_CLI:-bun x screenpipe@latest} <command>'
   recorder_default: service_install
   runtime_pass_requires_status_json: true
+
+
+hud_cartographer_machine_inventory_2026_10_06:
+  learning_ref: 170
+  owner: .agents/skills/centraldark-capability-hud/SKILL.md
+  dependency_fingerprint: d4d3ceda8e7c842e067af04cb8aeb52b88b787a47078257a24f6055903c7736c
+  generator: scripts/hud/generate-hud-inventory.mjs
+  machine_inventory: docs/HUD/CENTRALDARK-HUD-INVENTORY.json
+  consumers:
+    - docs/HUD/HUD.html
+    - .github/workflows/selo-fabric.yml
+    - apps/modulos/hub/scripts/house-inventory-core.mjs
+  laws:
+    MACHINE_INVENTORY_IS_DERIVED_NOT_AUTHORITY: true
+    SEAL_LIVE_SPLIT_REQUIRED: true
+    FULL_UI_BUTTON_TAB_MAP: MACHINE_ENUMERATED
+    REPLAY_BEFORE_REDISCOVERY: true
+    LIVE_REQUIRES_RUNTIME_PROBE: true
+    CATALOG_BIG_LOAD_ALL: false
+    ONE_SYSTEM_ONLY: true
+    REALITY_IS_JUDGE: true
+  replay:
+    - GENERATE_MACHINE_INVENTORY
+    - REBUILD_LINEAGE_WHEN_CHANGED
+    - REGENERATE_HOUSE_INVENTORY
+    - CHECK_MACHINE_INVENTORY
+    - VERIFY_REPO_CONTRACT
+    - DIFF_CHECK
+    - PROMOTE_ONLY_AFTER_SAME_HEAD_PASS
+  next_cursor: FINAL_REGENERATE_SAME_HEAD_VERIFY_PROMOTE_PR1757_READBACK
