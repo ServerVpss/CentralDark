@@ -13,11 +13,11 @@ updated: 2026-08-14
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" na fala regional = vocativo informal, sem autoridade técnica automática
 ```
 
-Qualquer memória antiga que trate `Pivete` como dono/comandante deve ser lida como alias histórico de `SEGREDO/CHEFE`, nunca como redefinição de `PIVETE/HERMES`.
+Qualquer memória antiga que trate `Pivete` como dono/comandante deve ser lida como alias histórico de `SEGREDO/CHEFE`, nunca como redefinição de `HERMES`.
 
 ## Comunicação
 
@@ -33,7 +33,7 @@ Qualquer memória antiga que trate `Pivete` como dono/comandante deve ser lida c
 CHEFE_DECIDE_INTENCAO=true
 MAQUINA_PROVA_ESTADO=true
 SOL_COORDENA=true
-PIVETE_HERMES_EXECUTA=true
+HERMES_EXECUTA=true
 REUSE_BEFORE_CREATE=true
 ONE_SCOPE_ONE_WRITER=true
 UNKNOWN_FIRST=true
@@ -48,7 +48,7 @@ Tarefa simples usa ação mínima. Paralelismo só quando reduz tempo/risco de v
 
 Autorização humana pertence a `SEGREDO/CHEFE` e é vinculada à missão/escopo/ambiente/classe de ação.
 
-Identificadores antigos como `PERMITO PIVETE` ou `permito-pivete` podem existir em gates legados. Quando um gate vigente ainda exigir o literal, ele é apenas compatibilidade técnica para uma autorização real de SEGREDO/CHEFE; não significa que PIVETE/HERMES virou autoridade.
+Identificadores antigos como `PERMITO PIVETE` ou `permito-pivete` podem existir em gates legados. Quando um gate vigente ainda exigir o literal, ele é apenas compatibilidade técnica para uma autorização real de SEGREDO/CHEFE; não significa que HERMES virou autoridade.
 
 Não pedir novamente autorização ainda válida para o mesmo contrato. Mudança material de risco/escopo/ambiente pode exigir nova decisão humana.
 
@@ -94,7 +94,7 @@ Antes de decisão complexa, recuperar somente o contexto necessário. Não carre
 ```text
 SEGREDO/CHEFE COMANDA.
 SOL ORGANIZA.
-PIVETE/HERMES PRESERVA E EXECUTA.
+HERMES PRESERVA E EXECUTA.
 EVIDÊNCIA DECIDE O ESTADO TÉCNICO.
 ```
 

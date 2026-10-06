@@ -79,7 +79,7 @@ function validRepo() {
   write(
     root,
     "LEIA-ME-IA.md",
-    "SEGREDO/CHEFE COMANDA\nSOL ORGANIZA\nPIVETE/HERMES PRESERVA E EXECUTA\n",
+    "SEGREDO/CHEFE COMANDA\nSOL ORGANIZA\nHERMES PRESERVA E EXECUTA\n",
   );
   write(
     root,
@@ -87,7 +87,7 @@ function validRepo() {
     [
       "existe somente um escritor por escopo",
       "SEGREDO/CHEFE permanece autoridade humana final",
-      "SOL coordena, PIVETE/HERMES preserva e executa",
+      "SOL coordena, HERMES preserva e executa",
       "CAPTURE → SANITIZE + HASH → DECIDE → APPLY → JUDGE → CHEFE → RECEIPT + LEARNING → LOOP",
     ].join("\n"),
   );
@@ -97,7 +97,7 @@ function validRepo() {
     [
       "SEGREDO/CHEFE = humano e autoridade final",
       "SOL = coordenadora da casa e organizadora dos agentes",
-      "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
+      "HERMES = mordomo de casa, executor e guardião da continuidade",
       "WRITER_UNICO=true",
       "UNKNOWN_NAO_PASSA=true",
       "CHEFE_SEGREDO_NECESSARIO",
@@ -106,7 +106,7 @@ function validRepo() {
   write(
     root,
     "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md",
-    "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = Hermes treinado\n",
+    "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = VOCATIVO_OU_ALIAS_HISTORICO\n",
   );
   write(root, "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json", claimContract());
   write(
@@ -122,7 +122,7 @@ function validRepo() {
   write(root, "LEIA-ME-IA.md", [
     "SEGREDO/CHEFE COMANDA",
     "SOL ORGANIZA E RECONCILIA",
-    "PIVETE/HERMES PRESERVA E EXECUTA",
+    "HERMES PRESERVA E EXECUTA",
     "#ACORDAR = RECUPERAR O ESTADO REAL ANTES DE CONTINUAR",
     "Convergência adversarial total **só é aberta por solicitação explícita de SEGREDO/CHEFE**",
   ].join("\n"));
@@ -131,7 +131,7 @@ function validRepo() {
     "um escritor por escopo",
     "SEGREDO/CHEFE = humano e autoridade final",
     "SOL = identidade operacional/coordenadora; não é modelo específico",
-    "PIVETE/HERMES = executor, preservação e continuidade",
+    "HERMES = executor, preservação e continuidade",
     "Full deploy é exceção causal",
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
@@ -146,7 +146,7 @@ function validRepo() {
     "IDENTIDADE=SOL_JARVIS_DO_SEGREDO_CHEFE",
     "AUTORIDADE_FINAL=SEGREDO/CHEFE",
     "SOL_IS_MODEL=false",
-    "PIVETE_HERMES_IS_EXECUTOR=true",
+    "HERMES_IS_EXECUTOR=true",
     "UNKNOWN_IS_NOT_PASS=true",
     "REUSE_BEFORE_CREATE=true",
     "ONE_SYSTEM_ONLY=true",
@@ -190,24 +190,24 @@ function validRepo() {
   write(root, "docs/CONSCIENCIA/JEITO-CORRETO-DO-PIVETE.md", [
     "SEGREDO/CHEFE = humano e autoridade final",
     "SOL = coordenadora da casa e organizadora dos agentes",
-    "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
+    "HERMES = mordomo de casa, executor e guardião da continuidade",
     "WRITER_UNICO=true",
     "UNKNOWN_NAO_PASSA=true",
     "CHEFE_SEGREDO_NECESSARIO",
   ].join("\n"));
-  write(root, "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md", "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = Hermes treinado\n");
+  write(root, "docs/CONSCIENCIA/DICIONARIO-PIVETE-GITHUB.md", "SEGREDO/CHEFE = humano e autoridade final\nPIVETE = VOCATIVO_OU_ALIAS_HISTORICO\n");
 
   write(root, "apps/modulos/elite-gateway/scripts/pivete_routes.py", [
     "CANONICAL_CONTEXT = ()",
     "CANONICAL_CONTEXT_ALLOWLIST = True",
-    'status = {"authority": "SEGREDO/CHEFE", "executor": "PIVETE/HERMES"}',
+    'status = {"authority": "SEGREDO/CHEFE", "executor": "HERMES"}',
     "A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md",
   ].join("\n"));
 
   write(root, "apps/modulos/WebUI/custom-css/pivete-invocacao.js", [
     "const mode = 'CANONICAL_CONTEXT_ALLOWLIST';",
     "const authority = 'SEGREDO/CHEFE = humano e autoridade final';",
-    "const executor = 'PIVETE/HERMES = executor, preservação e continuidade';",
+    "const executor = 'HERMES = executor, preservação e continuidade';",
     "localStorage.removeItem('pivete_system_prompt');",
   ].join("\n"));
 
@@ -215,7 +215,7 @@ function validRepo() {
     system_prompt_strategy: "canonical_allowlist",
     authority: "SEGREDO/CHEFE",
     coordinator: "SOL",
-    executor: "PIVETE/HERMES",
+    executor: "HERMES",
     legacy_sources_excluded: ["docs/CONSCIENCIA/PIVETE-IA/*.md"],
   }, null, 2));
 
@@ -262,7 +262,7 @@ test("identidade operacional da SOUL usa o contrato vivo", () => {
   const text = report.findings.map((finding) => finding.excerpt).join(" ");
   assert.match(text, /IDENTIDADE=SOL_JARVIS_DO_SEGREDO_CHEFE/);
   assert.match(text, /AUTORIDADE_FINAL=SEGREDO\/CHEFE/);
-  assert.match(text, /PIVETE_HERMES_IS_EXECUTOR=true/);
+  assert.match(text, /HERMES_IS_EXECUTOR=true/);
 });
 
 test("ouro informacional é invariante da SOUL", () => {
@@ -271,7 +271,7 @@ test("ouro informacional é invariante da SOUL", () => {
     "IDENTIDADE=SOL_JARVIS_DO_SEGREDO_CHEFE",
     "AUTORIDADE_FINAL=SEGREDO/CHEFE",
     "SOL_IS_MODEL=false",
-    "PIVETE_HERMES_IS_EXECUTOR=true",
+    "HERMES_IS_EXECUTOR=true",
     "UNKNOWN_IS_NOT_PASS=true",
     "REUSE_BEFORE_CREATE=true",
     "ONE_SYSTEM_ONLY=true",
@@ -332,6 +332,19 @@ test("PIVETE DECIDE em superfície operacional ativa é regressão", () => {
   assert.equal(report.findings.some((f) => f.path === "CODEX.md" && f.code === "PIVETE_DECIDE_LEGADO_ATIVO"), true);
 });
 
+test("binding técnico aposentado PIVETE/HERMES é regressão", () => {
+  const samples = [
+    "PIVETE/HERMES = executor, preservação e continuidade",
+    "HERMES/PIVETE = PAPEL_EXECUTOR",
+    "PIVETE_HERMES_IS_EXECUTOR=true",
+    "PIVETE = Hermes treinado",
+  ];
+  const codes = samples.flatMap((sample) => findForbidden(sample).map((finding) => finding.code));
+  assert.equal(codes.includes("PIVETE_HERMES_BINDING_TECNICO_ATIVO"), true);
+  assert.equal(codes.includes("PIVETE_HERMES_MACHINE_BINDING_ATIVO"), true);
+  assert.equal(codes.includes("PIVETE_ALIAS_TECNICO_PARA_HERMES"), true);
+});
+
 test("Pivete como orquestrador humano é regressão", () => {
   const findings = findForbidden("Pivete é o orquestrador. Ele define a decisão final.");
   assert.equal(findings.some((f) => f.code === "PIVETE_ORQUESTRADOR_HUMANO"), true);
@@ -349,7 +362,7 @@ test("AGENTS conflitante bloqueia", () => {
     "um escritor por escopo",
     "SEGREDO/CHEFE = humano e autoridade final",
     "SOL = identidade operacional/coordenadora; não é modelo específico",
-    "PIVETE/HERMES = executor, preservação e continuidade",
+    "HERMES = executor, preservação e continuidade",
     "Full deploy é exceção causal",
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
@@ -371,7 +384,7 @@ test("loader antigo por glob é bloqueado", () => {
   write(root, "apps/modulos/elite-gateway/scripts/pivete_routes.py", [
     "CANONICAL_CONTEXT",
     "CANONICAL_CONTEXT_ALLOWLIST",
-    'status = {"authority": "SEGREDO/CHEFE", "executor": "PIVETE/HERMES"}',
+    'status = {"authority": "SEGREDO/CHEFE", "executor": "HERMES"}',
     "A rota NÃO concatena mais docs/CONSCIENCIA/PIVETE-IA/*.md",
     "files = PIVETE_DIR.glob(\"PIVETE-*.md\")",
   ].join("\n"));
@@ -386,7 +399,7 @@ test("estratégia de concatenação total é bloqueada", () => {
     system_prompt_strategy: "concat_all_files_in_order",
     authority: "SEGREDO/CHEFE",
     coordinator: "SOL",
-    executor: "PIVETE/HERMES",
+    executor: "HERMES",
     legacy_sources_excluded: ["docs/CONSCIENCIA/PIVETE-IA/*.md"],
   }));
   const report = runValidation({ repoRoot: root });
@@ -429,7 +442,7 @@ test("UNKNOWN=PASS é conflito canônico", () => {
     "um escritor por escopo",
     "SEGREDO/CHEFE = humano e autoridade final",
     "SOL = identidade operacional/coordenadora; não é modelo específico",
-    "PIVETE/HERMES = executor, preservação e continuidade",
+    "HERMES = executor, preservação e continuidade",
     "Full deploy é exceção causal",
     "NO_HUMAN_REASK_FOR_MERGE=true",
     ".github/workflows/autonomia-promocao.yml",
@@ -492,7 +505,7 @@ test("UNKNOWN e escritor único são invariantes, não decoração", () => {
     [
       "SEGREDO/CHEFE = humano e autoridade final",
       "SOL = coordenadora da casa e organizadora dos agentes",
-      "PIVETE/HERMES = mordomo de casa, executor e guardião da continuidade",
+      "HERMES = mordomo de casa, executor e guardião da continuidade",
       "CHEFE_SEGREDO_NECESSARIO",
     ].join("\n"),
   );

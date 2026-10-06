@@ -2,7 +2,7 @@
 
 Status: `REFERENCE_PATTERN`
 Owner: `session-intelligence-harvester`
-Consumers: `SOL` + `PIVETE/HERMES` por meio da mesma skill
+Consumers: `SOL` + `HERMES` por meio da mesma skill
 Authority: `SEGREDO/CHEFE`
 
 ```text

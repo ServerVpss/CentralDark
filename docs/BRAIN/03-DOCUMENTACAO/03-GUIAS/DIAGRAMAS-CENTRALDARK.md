@@ -41,7 +41,7 @@ flowchart TD
     CHEFE["SEGREDO/CHEFE<br/>intencao + limites + autoridade humana"]
     SOL["SOL<br/>coordena + reconcilia + protege o fio"]
     MOTORS["Modelos / ferramentas<br/>motores substituiveis"]
-    HERMES["PIVETE/HERMES<br/>executor + continuidade"]
+    HERMES["HERMES<br/>executor + continuidade"]
     WRITER["Writer unico por escopo<br/>muta somente o alvo autorizado"]
     VERIFY["Teste + MetaLupa + receipts<br/>prova aplicavel"]
     GIT["GitHub / canonico<br/>historia + prova"]
@@ -193,7 +193,7 @@ O organograma não transforma especialidade em autoridade. A linha vertical most
 ```mermaid
 flowchart TD
     CHEFE2["SEGREDO/CHEFE<br/>AUTORIDADE FINAL"] --> SOL2["SOL<br/>coordenação + reconciliação"]
-    SOL2 --> HERMES2["PIVETE/HERMES<br/>execução + continuidade"]
+    SOL2 --> HERMES2["HERMES<br/>execução + continuidade"]
     SOL2 --> WRITER2["1 Writer por escopo"]
     WRITER2 --> PROVA2["teste + receipt + estado real"]
     PROVA2 --> SOL2

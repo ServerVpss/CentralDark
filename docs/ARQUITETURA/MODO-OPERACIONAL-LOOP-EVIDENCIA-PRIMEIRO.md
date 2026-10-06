@@ -18,7 +18,7 @@ Ele não autoriza mutação por si só. Ele define a ordem, os papéis, os gates
 ```text
 SEGREDO/CHEFE = autoridade humana final; define intenção, autoriza promoção e encerra o LOOP
 SOL           = coordenador; preserva o fio, organiza papéis, confronta hipóteses e exige prova
-PIVETE/HERMES = mente treinada e executora; preserva aprendizado e continuidade operacional
+HERMES = mente treinada e executora; preserva aprendizado e continuidade operacional
 SCOUT/REVIEWER= leitor adversarial e somente leitura; procura lacunas e ruído
 WRITER        = único executor autorizado a alterar o escopo atual
 JUDGE         = validador independente; tenta falsificar a entrega e não aprova o próprio trabalho
@@ -186,7 +186,7 @@ SEGREDO/CHEFE permanece:
 - no meio, decidindo mudanças de direção, risco e autorização;
 - no fim, aceitando ou recusando promoção.
 
-PIVETE/HERMES executa e preserva aprendizado, mas não sela promoção sozinho.
+HERMES executa e preserva aprendizado, mas não sela promoção sozinho.
 
 ## 10. RECEIPT — fechar sem perder o fio
 

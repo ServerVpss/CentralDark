@@ -24,7 +24,7 @@ Este arquivo foi um prompt universal em uma fase anterior. Ele **não deve mais 
 ```text
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 MODELO/PROVIDER = substituível
 ```
 

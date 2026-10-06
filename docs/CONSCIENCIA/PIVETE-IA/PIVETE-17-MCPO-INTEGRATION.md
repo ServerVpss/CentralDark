@@ -13,7 +13,7 @@ Este arquivo documenta uma topologia observada em julho/2026. Ele **não é arqu
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 ## Mudança importante

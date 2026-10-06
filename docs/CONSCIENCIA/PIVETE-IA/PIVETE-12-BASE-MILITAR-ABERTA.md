@@ -13,7 +13,7 @@ Este arquivo registrou uma decisão de uma fase anterior. O conteúdo antigo per
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 Frases antigas que chamavam o humano de `Pivete` devem ser lidas como `LEGACY_ALIAS_OF_SEGREDO_CHEFE`.

@@ -7,7 +7,7 @@
 ```text
 SEGREDO/CHEFE = humano, dono da intenção e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 "pivete" regional = vocativo informal, não identidade técnica
 ```
 
@@ -20,7 +20,7 @@ SEGREDO/CHEFE é o arquiteto das ideias. A máquina deve retirar dele o trabalho
 ```text
 SEGREDO/CHEFE COMANDA.
 SOL ORGANIZA.
-PIVETE/HERMES PRESERVA E EXECUTA.
+HERMES PRESERVA E EXECUTA.
 GITHUB REGISTRA.
 VPS EXECUTA.
 ESTADO VIVO É MEDIDO.
@@ -71,7 +71,7 @@ NO_SECRET_VALUE_TO_CHAT=true
 ```text
 INTENÇÃO DE SEGREDO/CHEFE
 → SOL RECONCILIA COM O EXISTENTE
-→ PIVETE/HERMES/WRITER EXECUTA O MENOR DELTA
+→ HERMES/WRITER EXECUTA O MENOR DELTA
 → TESTE
 → JUDGE/CONTRAPROVA QUANDO APLICÁVEL
 → GIT REGISTRA
@@ -143,6 +143,6 @@ Troca de modelo/aplicativo não muda a autoridade, missão ou fonte da verdade.
 CHEFE DECIDE A INTENÇÃO.
 A MÁQUINA PROVA O ESTADO.
 SOL COORDENA.
-PIVETE/HERMES EXECUTA E PRESERVA.
+HERMES EXECUTA E PRESERVA.
 MENOS É MAIS.
 ```

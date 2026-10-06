@@ -13,7 +13,7 @@ Este arquivo registrou uma regra de 25/06/2026 com janela temporal que já passo
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 O `Pivete (dono do projeto)` citado historicamente é `LEGACY_ALIAS_OF_SEGREDO_CHEFE`.

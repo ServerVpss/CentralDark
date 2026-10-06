@@ -73,7 +73,7 @@ Se qualquer texto deste Comitê divergir de um owner vigente ou do estado vivo m
 🪡 RECONCILIAR
 = absorver no owner existente sem criar paralelo
 
-☿ HERMES/PIVETE
+☿ HERMES
 = execução + preservação + continuidade
 
 ⚖ REALITY JUDGE
@@ -105,7 +105,7 @@ ENEIAS_IS_JUDGE=false
 
 ## Papel recuperado
 
-Eneias funciona como **camada estratégica de contexto e decisão proposta**. Ele organiza matéria complexa antes da mutação, mas não toma o lugar da SOL, do HERMES/PIVETE nem do REALITY JUDGE.
+Eneias funciona como **camada estratégica de contexto e decisão proposta**. Ele organiza matéria complexa antes da mutação, mas não toma o lugar da SOL, do HERMES nem do REALITY JUDGE.
 
 Entrada esperada:
 
@@ -155,7 +155,7 @@ Para obedecer `ONE_SYSTEM_ONLY` e não duplicar a coordenação da SOL, Eneias e
 → ⊛ META_LUPA
 → 🪡 EXISTING_OWNER / RECONCILIAR
 → ONE_WRITER
-→ ☿ HERMES/PIVETE EXECUTA
+→ ☿ HERMES EXECUTA
 → 🔬 CONTRAPROVA
 → 📏 REMEDICAO
 → ⚖ REALITY_JUDGE
@@ -163,7 +163,7 @@ Para obedecer `ONE_SYSTEM_ONLY` e não duplicar a coordenação da SOL, Eneias e
 → 🚀 PROMOCAO QUANDO PROVADA
 ```
 
-Eneias **propõe**; SOL reconcilia e coordena; HERMES/PIVETE executa dentro de autoridade; REALITY JUDGE decide por evidência.
+Eneias **propõe**; SOL reconcilia e coordena; HERMES executa dentro de autoridade; REALITY JUDGE decide por evidência.
 
 ## Leis de Eneias
 
