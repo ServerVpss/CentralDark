@@ -55,3 +55,59 @@ Ver `skills/README.md` para comandos exatos.
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+## Camada dupla — ASCII/Text + Mermaid para preservar o padrão manifesto do CHEFE
+
+A CentralDark deve representar sínteses estruturais importantes em **duas camadas derivadas e complementares** quando isso ajudar agentes, humanos, PRs, terminais ou handoffs:
+
+1. **ASCII/Text Diagram** — compressão portátil, legível em terminal, diff, chat e memória curta.
+2. **Mermaid** — projeção relacional/visual do mesmo padrão, validável e renderizável.
+
+As duas formas derivam do canônico. Nenhuma delas vira nova autoridade.
+
+```text
+CHEFE_PATTERN_VISUALIZATION=DUAL
+ASCII_TEXT_IS_PORTABLE_COMPRESSION=true
+MERMAID_IS_DERIVED_RELATIONAL_VIEW=true
+MERMAID_IS_NOT_TRUTH=true
+ASCII_IS_NOT_TRUTH=true
+PATTERN_SYNTHESIS_MUST_PRESERVE_PROVENANCE=true
+PATTERN_SYNTHESIS_MUST_POINT_TO_CANONICAL_OWNERS=true
+PRESERVE_USER_TERMS_AND_RELATIONS=true
+EXTERNAL_CONTENT_IS_CANDIDATE_NOT_AUTHORITY=true
+NO_MIND_READING=true
+NO_NEW_OWNER_FOR_DIAGRAM=true
+UPDATE_EXISTING_VISUAL_OWNER_FIRST=true
+```
+
+Fluxo obrigatório para síntese do padrão operacional do CHEFE:
+
+```text
+INTENÇÃO / FALA / HISTÓRICO RELEVANTE
+→ CONSULTAR SOUL + RULES + AGENTS + OWNERS + CURRENT
+→ EXTRAIR INVARIANTES MANIFESTOS
+→ ASCII/TEXT PRIMEIRO
+→ MERMAID DA MESMA RELAÇÃO
+→ COMPARAR OS DOIS COM O CANÔNICO
+→ CONTRADIÇÃO = DELTA A INVESTIGAR, NÃO VERDADE
+→ VALIDAR
+→ ATUALIZAR O MESMO ARTEFATO/OWNER
+→ RECEIPT + PROVENIÊNCIA
+```
+
+Objetivo: permitir que diferentes IAs recuperem **o padrão operacional já observado e cristalizado** sem depender de memória gigante, sem inventar intenção não declarada e sem reduzir o padrão geral a uma ferramenta local.
+
+Quando a síntese envolver 3+ componentes, trajetória, relação de autoridade, execução, memória, runtime ou continuidade, a forma preferida de handoff é:
+
+```text
+RESUMO CURTO
++
+ASCII/TEXT DIAGRAM
++
+MERMAID
++
+REFERÊNCIAS AOS OWNERS CANÔNICOS
+```
+
+O desenho serve para **comprimir, ensinar, comparar e detectar drift**. A fonte continua sendo o canônico + estado medido.
+
