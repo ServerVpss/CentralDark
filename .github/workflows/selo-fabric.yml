@@ -34,7 +34,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_mae:
-        description: 'PR-mãe para selar (default: 1757)'
+        description: 'Override opcional; vazio resolve ACTIVE_RENDEZVOUS do CURRENT'
         required: false
         type: string
       test_event_name:
@@ -80,11 +80,6 @@ jobs:
     if: >-
       github.repository == 'ServerVpss/CentralDark' &&
       !(
-        github.event_name == 'issue_comment' &&
-        github.actor == 'github-actions[bot]' &&
-        github.event.issue.number == 1757
-      ) &&
-      !(
         github.event_name == 'workflow_run' &&
         github.event.workflow_run.name == '🏅 Selo Fabric — selo universal de eventos'
       )
@@ -109,7 +104,19 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
-            const PR_MAE = Number(process.env.PR_MAE_INPUT || '') || 1757;
+            const explicitPrMae = Number(process.env.PR_MAE_INPUT || '');
+            let PR_MAE = Number.isInteger(explicitPrMae) && explicitPrMae > 0 ? explicitPrMae : null;
+            if (!PR_MAE) {
+              const openPrs = await github.paginate(github.rest.pulls.list, { owner, repo, state: 'open', per_page: 100 });
+              const candidates = openPrs.filter(pr =>
+                String(pr.body || '').includes('CENTRALDARK_PR_MOTHER_LIVE_CARD_V3') ||
+                /PR-MÃE.*HUD\/RENDEZVOUS VIVO/i.test(String(pr.title || ''))
+              );
+              if (candidates.length !== 1) {
+                throw new Error(`ACTIVE_RENDEZVOUS_RESOLUTION_FAILED candidates=${candidates.map(pr => pr.number).join(',') || 'NONE'}`);
+              }
+              PR_MAE = candidates[0].number;
+            }
             const sourceEvent = context.eventName;
             const requested = (process.env.TEST_EVENT_NAME || 'auto').trim();
             const simulated = sourceEvent === 'workflow_dispatch' && requested && requested !== 'auto';
@@ -118,6 +125,10 @@ jobs:
             const runId = context.runId;
             const runAttempt = process.env.GITHUB_RUN_ATTEMPT || '1';
             const actor = context.actor || 'UNKNOWN';
+            if (sourceEvent === 'issue_comment' && actor === 'github-actions[bot]' && Number(context.payload.issue?.number) === PR_MAE) {
+              core.info(`skip self-loop on ACTIVE_RENDEZVOUS #${PR_MAE}`);
+              return;
+            }
             const now = new Date();
             // Projeção humana segue o owner canônico central-horario:
             // DD/MM/AAAA HH:mm:ss BRT em America/Sao_Paulo.
