@@ -180,6 +180,10 @@ export const mcpAdminTools = [
                     String(tool.name || "").toLowerCase().includes(filter) ||
                     String(tool.description || "").toLowerCase().includes(filter))
                 .sort((a, b) => a.name.localeCompare(b.name));
+            const routes = AUTHORIZED_ROUTE_CATALOG
+                .filter((route) => !filter ||
+                    Object.values(route).some((value) => String(value || "").toLowerCase().includes(filter)))
+                .sort((a, b) => a.id.localeCompare(b.id));
             return ok({
                 ok: true, dispatcher: "mcp_admin_call",
                 totalRuntimeTools: runtimeTools.length,
@@ -187,12 +191,14 @@ export const mcpAdminTools = [
                 returned: tools.length,
                 catalogScope: "centraldark_unified_capability_catalog",
                 catalogVersion: CATALOG_VERSION,
+                catalogFingerprint: "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5",
                 confirmForDestructive: ADMIN_CONFIRM,
                 acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
                 routeCatalogScope: "centraldark_unified_capability_catalog",
                 routeCount: AUTHORIZED_ROUTE_CATALOG.length,
+                routeReturned: routes.length,
                 routeLaws: ROUTE_LAWS,
-                routes: AUTHORIZED_ROUTE_CATALOG,
+                routes,
                 tools,
             });
         },
