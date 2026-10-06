@@ -999,7 +999,18 @@
         "catalog_source_readback": "PASS_MAIN",
         "catalog_runtime_reload": "UNKNOWN_UNTIL_LIVE_READBACK",
         "screenpipe_catalog_binding": true,
-        "rdc_catalog_binding": true
+        "rdc_catalog_binding": true,
+        "source_main_current": "93cc39bbf578668143b8f8b596320d07a7d6b754",
+        "node_check": "PASS",
+        "mcp_unified_capability_catalog_checks": "PASS",
+        "introduced_scope_failures": 0,
+        "global_unrelated_failures": 2,
+        "global_unrelated_failure_classes": [
+          "GLOBAL_LEARNING_LINEAGE_EXECUTABLE_GATE",
+          "SOUL_SYNC_CURRENT_FOR_FIXED_POINT"
+        ],
+        "runtime_http_health": "PASS_EXISTING_PROCESS",
+        "live_catalog_new_payload": "UNKNOWN_UNTIL_PROCESS_RELOAD_AND_TOOL_READBACK"
       },
       "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#current-vivo--2026-10-06--learning_168_mcp_unified_capability_catalog",
       "materialization_requirements": {
