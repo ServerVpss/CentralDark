@@ -311,7 +311,7 @@ check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  '"centraldark_unified_capability_catalog"',
  '"SCREENPIPE_LOCAL_SENSOR"',
  '"RDC_DESKTOP_COMMANDER"',
- '"catalogFingerprint: \"42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5\""',
+ 'catalogFingerprint: "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
  'routeReturned: routes.length',
 ], classification='MCP_UNIFIED_CAPABILITY_CATALOG')
 check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md',[
@@ -365,7 +365,7 @@ check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
  'CONE_PASS != GLOBAL_PASS',
 ], classification='COMPLETE_SIEVE_CHECKLIST_147')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
- '"dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069"',
+ '"dependency_fingerprint": "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
  '"materialization_requirements"',
  '"physical_binding"',
  '"complete_sieve"',
