@@ -53,6 +53,11 @@ Dispatcher que decide se (e qual) script de deploy deve ser acionado, validando 
 - **Saída:** código de saída informando a decisão (0 nada | 10..15 guard failed | 21..22 deploy executado)
 - **Leis:** REUSE_BEFORE_CREATE, ONE_WRITER_PER_SCOPE, FAIL_HIGH
 
+Antes do cage TLC23, o dispatcher calcula o fingerprint do runtime Hermes sem
+expor variáveis de ambiente: usa `pm2 jlist` quando PM2 existe; sem PM2, usa o
+estado real de `hermes-gateway.service` (`systemctl show` + `/proc/$MainPID`).
+Se nenhuma fonte real estiver disponível, o gate permanece bloqueado.
+
 ### Fluxo:
 1. T0: mede estado do repo, origem, diferença, arquivos sujos
 2. Guardas: SSH key, scripts existentes, chattr +i, histórico divergente
