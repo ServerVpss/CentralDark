@@ -7,7 +7,7 @@ const repository = process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark';
 const baseBranch = process.env.BASE_BRANCH || 'main';
 const targetPr = Number(process.env.TARGET_PR || process.env.PR_NUMBER || 0) || null;
 const prMotherNumber = Number(process.env.PR_MOTHER_NUMBER || 1757);
-const includeProtected = String(process.env.UPDATE_BRANCH_INCLUDE_PROTECTED || 'true').toLowerCase() === 'true';
+const includeProtected = String(process.env.UPDATE_BRANCH_INCLUDE_PROTECTED || 'false').toLowerCase() === 'true';
 const failOnBlocked = String(process.env.UPDATE_BRANCH_FAIL_ON_BLOCKED || 'true').toLowerCase() === 'true';
 const settleMs = Number(process.env.UPDATE_BRANCH_STITCH_SETTLE_MS || 3000);
 const pollAttempts = Number(process.env.UPDATE_BRANCH_STITCH_POLL_ATTEMPTS || 12);
@@ -233,7 +233,7 @@ function skipReason(pr) {
   if (pr.base?.ref !== baseBranch) return `BASE_NOT_${baseBranch}`;
   if (!pr.head?.sha) return 'HEAD_SHA_UNKNOWN';
   if (pr.head?.ref === pr.base?.ref) return 'HEAD_IS_BASE';
-  if (Number(pr.number) !== prMotherNumber && !includeProtected && protectedPrs.has(Number(pr.number))) return 'PROTECTED_PR';
+  if (!includeProtected && protectedPrs.has(Number(pr.number))) return 'PROTECTED_LEDGER_PR';
   if (pr.head?.repo?.full_name !== repository) return 'HEAD_REPO_NOT_SAME_REPO';
   return null;
 }
@@ -495,7 +495,7 @@ const summary = {
     checks_poll_attempts: checksPollAttempts,
     checks_poll_interval_ms: checksPollIntervalMs,
   },
-  rule: 'PUT /pulls/{PR}/update-branch only when PR is behind main; active PR-MOTHER is syncable but never mergeable; legacy #1562 remains protected by this flow; sync verdict is scoped to head/compare and requires behind_by_after == 0; checks remain an independent observation and never become promotion/deploy proof; conflict or sync-unknown does not become PASS.',
+  rule: 'PUT /pulls/{PR}/update-branch only when PR is behind main; active PR-MOTHER and legacy #1562 are protected UI/ledger shells and are not update-branch targets; sync verdict is scoped to head/compare and requires behind_by_after == 0; checks remain an independent observation and never become promotion/deploy proof; conflict or sync-unknown does not become PASS.',
   receipts,
 };
 
