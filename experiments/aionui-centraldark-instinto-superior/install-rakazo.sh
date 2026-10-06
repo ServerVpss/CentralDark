@@ -4,12 +4,36 @@ set -euo pipefail
 ROOT="${CENTRALDARK_RAKAZO_ROOT:-/opt/centraldark/rakazo}"
 HOST="${CENTRALDARK_RAKAZO_HOST:-127.0.0.1}"
 WEB_PORT="${CENTRALDARK_RAKAZO_PORT:-25810}"
+LOCAL_MODEL_ID="${CENTRALDARK_RAKAZO_LOCAL_MODEL_ID:-}"
+LOCAL_MODEL_URL="${CENTRALDARK_RAKAZO_LOCAL_MODEL_URL:-}"
 DOWNLOAD_BASE="https://raw.githubusercontent.com/elie222/rakazo/main/infra/compose"
 
 command -v docker >/dev/null 2>&1 || { echo "BLOCKED docker_missing"; exit 41; }
 docker compose version >/dev/null 2>&1 || { echo "BLOCKED docker_compose_missing"; exit 42; }
 command -v curl >/dev/null 2>&1 || { echo "BLOCKED curl_missing"; exit 43; }
 command -v openssl >/dev/null 2>&1 || { echo "BLOCKED openssl_missing"; exit 44; }
+command -v python3 >/dev/null 2>&1 || { echo "BLOCKED python3_missing"; exit 45; }
+
+# Reuse the existing CentralDark OpenAI-compatible local bridge when it is
+# reachable over the host's Tailscale address. Explicit bindings always win.
+if [[ -z "$LOCAL_MODEL_URL" ]] && command -v tailscale >/dev/null 2>&1; then
+  TS_IP="$(tailscale ip -4 2>/dev/null | head -1 || true)"
+  if [[ -n "$TS_IP" ]] && curl -fsS --max-time 3 "http://$TS_IP:18435/v1/models" >/tmp/centraldark-rakazo-models.json 2>/dev/null; then
+    LOCAL_MODEL_URL="http://$TS_IP:18435/v1"
+    if [[ -z "$LOCAL_MODEL_ID" ]]; then
+      LOCAL_MODEL_ID="$(python3 - <<'PY'
+import json
+from pathlib import Path
+try:
+    data=json.loads(Path("/tmp/centraldark-rakazo-models.json").read_text())
+    print((data.get("data") or [{}])[0].get("id",""))
+except Exception:
+    print("")
+PY
+)"
+    fi
+  fi
+fi
 
 mkdir -p "$ROOT"
 cd "$ROOT"
@@ -22,12 +46,12 @@ if [[ ! -f .env ]]; then
   chmod 600 .env
 fi
 
-python3 - "$HOST" "$WEB_PORT" <<'PY'
+python3 - "$HOST" "$WEB_PORT" "$LOCAL_MODEL_ID" "$LOCAL_MODEL_URL" <<'PY'
 from pathlib import Path
 import secrets
 import sys
 
-host, web_port = sys.argv[1], sys.argv[2]
+host, web_port, local_model_id, local_model_url = sys.argv[1:5]
 compose = Path("docker-compose.images.yml")
 env = Path(".env")
 
@@ -55,6 +79,13 @@ public = {
     "RAKAZO_WEB_PORT": web_port,
     "SANDBOX_PROVIDER": "docker",
 }
+if local_model_id and local_model_url:
+    public.update({
+        "RAKAZO_LOCAL_MODELS": local_model_id,
+        "RAKAZO_LOCAL_MODELS_URL": local_model_url,
+        "RAKAZO_LOCAL_CONTEXT_WINDOW": "32768",
+        "RAKAZO_LOCAL_MAX_TOKENS": "4096",
+    })
 
 lines = env.read_text().splitlines()
 values = {}
@@ -89,7 +120,7 @@ docker compose --env-file .env -f docker-compose.images.yml config >/dev/null
 docker compose --env-file .env -f docker-compose.images.yml pull
 docker compose --env-file .env -f docker-compose.images.yml up -d
 
-for _ in $(seq 1 60); do
+for _ in $(seq 1 90); do
   if curl -fsS "http://127.0.0.1:3100/internal/health" >/tmp/centraldark-rakazo-health.json 2>/dev/null; then
     break
   fi
@@ -99,3 +130,9 @@ done
 echo "RAKAZO_ROOT=$ROOT"
 echo "RAKAZO_URL=http://$HOST:$WEB_PORT"
 echo "RAKAZO_HEALTH=$(cat /tmp/centraldark-rakazo-health.json 2>/dev/null || echo UNKNOWN)"
+if [[ -n "$LOCAL_MODEL_ID" && -n "$LOCAL_MODEL_URL" ]]; then
+  echo "RAKAZO_LOCAL_MODEL=$LOCAL_MODEL_ID"
+  echo "RAKAZO_LOCAL_MODEL_URL=$LOCAL_MODEL_URL"
+else
+  echo "RAKAZO_LOCAL_MODEL=UNBOUND"
+fi
