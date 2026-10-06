@@ -366,6 +366,36 @@ check('package.json',[
  '"hud:inventory": "node scripts/hud/generate-hud-inventory.mjs --write"',
  '"hud:inventory:check": "node scripts/hud/generate-hud-inventory.mjs --check"',
 ], classification='HUD_MACHINE_INVENTORY_PACKAGE_ENTRY')
+check('docs/CONSCIENCIA/APRENDIZADOS.md',[
+ '### 170. HUD Cartographer fecha genealogia, metabolismo, determinismo e superfícies em inventário machine-consumable',
+ 'HUD_CARTOGRAPHER_AGENT=true',
+ 'FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED',
+], classification='HUD_CARTOGRAPHER_LEARNING_170')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-HUD-CARTOGRAPHER-GENEALOGIA-METABOLISMO-DETERMINISMO.md',[
+ 'SELO = última prova válida + fingerprint + rollback',
+ 'LIVE = medição atual + timestamp + fonte',
+ 'CATALOG_BIG != LOAD_ALL',
+], classification='HUD_CARTOGRAPHER_REMEMBRANCE_170')
+check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-hud-cartographer-complete-inventory.md',[
+ 'HUD_CARTOGRAPHER_AGENT=true',
+ 'FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED',
+ 'Dependency fingerprint:',
+], classification='HUD_CARTOGRAPHER_RECEIPT_170')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
+ '"HUD_CARTOGRAPHER_COMPLETE_MACHINE_INVENTORY"',
+ '"dependency_fingerprint": "d4d3ceda8e7c842e067af04cb8aeb52b88b787a47078257a24f6055903c7736c"',
+ '"runtime_live_claims_inferred_from_inventory": false',
+], classification='HUD_CARTOGRAPHER_PROVEN_RECIPE_170')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml',[
+ 'hud_cartographer_machine_inventory_2026_10_06:',
+ 'SEAL_LIVE_SPLIT_REQUIRED: true',
+ 'LIVE_REQUIRES_RUNTIME_PROBE: true',
+], classification='HUD_CARTOGRAPHER_DETERMINISTIC_LOCK_170')
+check('CENTRALDARK_AI_BOOT.yaml',[
+ 'hud_cartographer_agent: ".agents/skills/centraldark-capability-hud/SKILL.md"',
+ 'hud_machine_inventory_is_authority: false',
+ 'hud_seal_live_split_required: true',
+], classification='HUD_CARTOGRAPHER_GLOBAL_BOOT_170')
 
 check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  '"centraldark_unified_capability_catalog"',
