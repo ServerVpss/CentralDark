@@ -2,7 +2,7 @@
 title: "VISUALIZACAO MERMAID PADRAO"
 date: 2026-08-28
 tags: ["consciencia"]
-updated: 2026-08-28
+updated: 2026-10-06
 ---
 
 # Visualização Mermaid — Padrão Obrigatório da Casa
@@ -110,4 +110,37 @@ REFERÊNCIAS AOS OWNERS CANÔNICOS
 ```
 
 O desenho serve para **comprimir, ensinar, comparar e detectar drift**. A fonte continua sendo o canônico + estado medido.
+
+### Invariantes canônicos que a síntese visual deve carregar
+
+Estes nomes são herdados dos owners existentes; não são aliases novos nem nova autoridade:
+
+```text
+CACHE_IS_NOT_AUTHORITY=true
+MEMORY_IS_NOT_CURRENT=true
+HISTORY_IS_NOT_CURRENT_STATE=true
+CURRENT_OVER_HISTORY=true
+HISTORY_IS_EVIDENCE=true
+
+CHEFE_IS_INTENT_OWNER=true
+NO_MIND_READING=true
+OBSERVE_MANIFEST_PATTERN_ONLY=true
+
+ONE_SYSTEM_ONLY=true
+ONE_WRITER_PER_SCOPE=true
+REUSE_BEFORE_CREATE=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+
+AUTHORITY_AND_EXECUTION_ARE_DISTINCT_PLANES=true
+MEMORIA_E_SAGRADA=true
+CONCHA_E_MUTAVEL=true
+
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
+DOCUMENTED_IS_NOT_EXECUTED=true
+MERGED_IS_NOT_DEPLOYED=true
+REALITY_IS_JUDGE=true
+```
+
+Leitura operacional: cache, memória e história preservam continuidade/proveniência, mas **não governam o claim do presente**. O CURRENT medido prevalece para o estado atual; a história continua evidência. O CHEFE continua dono da intenção; a realidade julga o efeito.
 
