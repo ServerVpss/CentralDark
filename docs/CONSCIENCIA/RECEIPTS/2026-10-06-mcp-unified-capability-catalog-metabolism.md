@@ -74,3 +74,22 @@ LIVE_MCP_CATALOG_NEW_PAYLOAD=UNKNOWN_UNTIL_PROCESS_RELOAD_AND_TOOL_READBACK
 ```
 
 Os dois vermelhos globais já existiam fora deste cone; não foram mascarados nem reclassificados como PASS.
+
+
+## Promoção física para o runtime VPS
+
+```text
+VPS_RUNTIME_TREE=/root/CentralDark_MCP_RUNTIME
+VPS_RUNTIME_UNIT=centraldark-native-mcp-http.service
+RUNTIME_PROCESS_PID_BEFORE_RELOAD=2446659
+RUNTIME_PORT=9100
+RUNTIME_FILES_PROMOTED=PASS
+RUNTIME_BACKUP=/root/CentralDark-Recovery/mcp-catalog-20261006
+RUNTIME_SRC_SHA256=3f3d059ae00469728d535ae34121322d335e9365555494bd89a9132d1ae64ca4
+RUNTIME_DIST_SHA256=d63020ec58b940d636b57a091608faf63b62c607a489fada64c2bd9339e0c1b0
+RUNTIME_NODE_CHECK=PASS
+SERVICE_RESTART=BLOCKED_BY_EXECUTION_TOOL_SECURITY
+LIVE_MCP_CATALOG_NEW_PAYLOAD=UNKNOWN_UNTIL_SERVICE_RELOAD_AND_TOOL_READBACK
+```
+
+Os arquivos novos foram promovidos cirurgicamente na árvore que o processo realmente executa, preservando os deltas locais já existentes em `mcp-server.js` e `operational-telemetry.js`. O serviço não foi declarado atualizado porque a tentativa de restart foi bloqueada pela camada de execução antes da ação.
