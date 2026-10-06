@@ -504,6 +504,26 @@ test("action_required não é FAIL: WAIT + run_id para approve", () => {
   assert.deepEqual(actionRequiredRunIds(result.workflows), [35589535285]);
 });
 
+test("action_required permanece WAIT no caminho adversarial", () => {
+  const result = evaluate(prFixture({
+    body: "sem recibo de fast-path",
+    labels: [{ name: "👑 PERMITO-SEGREDO" }],
+  }), {
+    requiredWorkflows: ["porta-de-entrada"],
+    workflowRuns: [{
+      id: 35589535286,
+      name: "porta-de-entrada",
+      run_number: 91,
+      status: "completed",
+      conclusion: "action_required",
+    }],
+  });
+  assert.equal(result.mode, "ADVERSARIAL");
+  assert.equal(result.decision, "WAIT");
+  assert.equal(result.reasons.includes("WORKFLOW_FAILED:porta-de-entrada:action_required"), false);
+  assert.deepEqual(actionRequiredRunIds(result.workflows), [35589535286]);
+});
+
 test("recibo selado é preso ao hash e expira", () => {
   const generated = new Date("2026-08-14T03:00:00.000Z");
   const sealed = sealReceipt({
