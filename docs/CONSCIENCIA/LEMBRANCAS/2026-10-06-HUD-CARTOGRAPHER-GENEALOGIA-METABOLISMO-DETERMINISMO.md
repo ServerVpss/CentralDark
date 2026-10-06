@@ -63,3 +63,27 @@ A contagem antiga de sinais amplos continua história. A nova contagem é outro 
 ## NEXT_CURSOR
 
 `FINAL_REGENERATE → LINEAGE_REBUILD → VERIFY_FIXED_POINT → PROMOTE → PR_MOTHER_READBACK → RUNTIME_LIVE_PROBES_ON_DEMAND`
+
+## Delta integrado — runtime oficial + HUD local Obsidian
+
+```text
+PROVEN_RUNTIME_AFFECTING_DELTA → MAIN → DEPLOY_CAUSAL → RUNTIME_READBACK → /heartbeat → HUD
+PROVEN_CANONICAL_KNOWLEDGE → MACHINE_INVENTORY → /heartbeat PROJECTION → HUD
+SEALED_BASELINE_PRESERVED=true
+SEAL_IS_NOT_LIVE=true
+HUD_REALTIME_REFRESH_MS=5000
+LOCAL_OBSIDIAN_HUD_IS_PROJECTION_NOT_AUTHORITY=true
+ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT
+```
+
+Medição Casa/Windows desta rodada:
+- vault alvo: `C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬`;
+- `obsidian-git`, `dataview` e `obsidian-excalidraw-plugin` estavam presentes;
+- o vault não era repositório Git e o `obsidian-git` tinha intervalos automáticos zerados, portanto `PLUGIN_PRESENT != LIVE_GIT_TRANSPORT`;
+- o plugin canônico `centraldark-grafo-vivo` não estava materializado nesse vault;
+- o mesmo plugin existente foi copiado do CURRENT e habilitado no `community-plugins.json`;
+- hashes locais após readback: `main.js=a8f6f00f8a86fd7213f1216f29a034b8b7ff57f680d88d7be37741564b0edf29`, `manifest.json=0db30d1fcbe6bc931106c2187a36e7f415befa785ce68df28fcf915f057734bb`, `styles.css=d797d77552f5788846bbb3228b0b9145b21bb6d4a6832f1592b32f93aaa5f043`;
+- `OBSIDIAN_PLUGIN_FILES_AND_ENABLE_CONFIG=PASS`;
+- `OBSIDIAN_PLUGIN_RUNTIME_LOADED=UNKNOWN_UNTIL_OBSIDIAN_APP_READBACK`.
+
+O vault continua projeção local; não criar `.git` paralelo nele.
