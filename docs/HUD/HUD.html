@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CentralDark Index + HUD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS - 3 PELES
+   ============================================================ */
+:root {
+  --ground: #0A0906;
+  --surface: #15120C;
+  --surface-hover: #1E1A11;
+  --accent: #C0902B;
+  --accent-dim: rgba(192,144,43,0.12);
+  --accent-glow: rgba(192,144,43,0.25);
+  --green: #7BC96F;
+  --red: #7C1F12;
+  --amber: #E9B44C;
+  --text: #DCC9A2;
+  --text-dim: #5B4A32;
+  --border: rgba(192,144,43,0.18);
+  --disp: 'Cinzel','Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
+  --corpo: 'EB Garamond',Georgia,'Times New Roman',serif;
+  --mono: 'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --badge-bg: rgba(192,144,43,0.08);
+  --selo-bg: linear-gradient(150deg,#F6E1A4 0%,#B7862A 16%,#6A4B12 34%,#E4C874 52%,#8A6519 70%,#F2DB98 86%,#8B6620 100%);
+  --titulo-cor: #F4DA95;
+  --link-nome: #EFE2C6;
+}
+
+[data-pele="ops"] {
+  --ground: #060d14;
+  --surface: #0c1a28;
+  --surface-hover: #11243a;
+  --accent: #00eaff;
+  --accent-dim: rgba(0,234,255,0.12);
+  --accent-glow: rgba(0,234,255,0.25);
+  --green: #00ffa3;
+  --red: #ff2244;
+  --amber: #ffaa00;
+  --text: #d0e8f5;
+  --text-dim: #5a7a8f;
+  --border: rgba(0,234,255,0.15);
+  --badge-bg: rgba(0,234,255,0.06);
+  --selo-bg: linear-gradient(150deg,#9FD8E6 0%,#4E93A6 18%,#1E4550 36%,#9FD8E6 54%,#2C6272 72%,#BFE6F2 88%,#2E5F6E 100%);
+  --titulo-cor: #fff;
+  --link-nome: #e0f0ff;
+}
+
+[data-pele="esmeralda"] {
+  --ground: #040d08;
+  --surface: #0a1a10;
+  --surface-hover: #112a18;
+  --accent: #00ff88;
+  --accent-dim: rgba(0,255,136,0.10);
+  --accent-glow: rgba(0,255,136,0.22);
+  --green: #00ff88;
+  --red: #ff4455;
+  --amber: #e0c030;
+  --text: #b8e8cc;
+  --text-dim: #4a7a5a;
+  --border: rgba(0,255,136,0.15);
+  --badge-bg: rgba(0,255,136,0.06);
+  --selo-bg: linear-gradient(150deg,#80FFB8 0%,#20A050 18%,#0A4020 36%,#60E090 54%,#187040 72%,#90FFCC 88%,#106030 100%);
+  --titulo-cor: #d0ffe8;
+  --link-nome: #e0fff0;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*{box-sizing:border-box;}
+body {
+  background: var(--ground);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+::selection { background: var(--accent); color: var(--ground); }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) {
+  .grid { grid-template-columns: 1fr; }
+  .barra { flex-direction: column; align-items: stretch; }
+  .pele-grupo { margin-left: 0; justify-content: center; }
+  .barra-meta { text-align: center; }
+  .aion-banner { flex-direction: column; }
+  .aion-banner-info { text-align: center; }
+}
+
+/* ============================================================
+   BARRA TOPO
+   ============================================================ */
+.barra {
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--surface), var(--ground));
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.barra-titulo {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--titulo-cor);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  padding: 6px 12px;
+  background: var(--ground);
+  white-space: nowrap;
+}
+
+.barra-busca {
+  flex: 1;
+  min-width: 140px;
+  max-width: 320px;
+  position: relative;
+}
+
+.barra-busca input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 6px 10px 6px 28px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.barra-busca input:focus { border-color: var(--accent); }
+.barra-busca input::placeholder { color: var(--text-dim); }
+.barra-busca::before {
+  content: '\2315';
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+.pele-grupo {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.pele-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.pele-btn:hover { border-color: var(--text); }
+.pele-btn.ativa {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+.pele-btn[data-pele-alvo="ouro"] { background: linear-gradient(135deg, #C0902B, #6A4B12); }
+.pele-btn[data-pele-alvo="ops"]  { background: linear-gradient(135deg, #00eaff, #0a3a50); }
+.pele-btn[data-pele-alvo="esmeralda"] { background: linear-gradient(135deg, #00ff88, #0a4020); }
+
+.barra-meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.barra-meta .live {
+  color: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 12px 20px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tab-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tab-btn:hover { color: var(--text); background: var(--surface); }
+.tab-btn.ativa {
+  color: var(--accent);
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.tab-painel { display: none; }
+.tab-painel.visivel { display: block; }
+
+/* ============================================================
+   GRID
+   ============================================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.section {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 20px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.section:hover {
+  box-shadow: 0 0 24px var(--accent-dim);
+}
+.section[hidden] { display: none !important; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.section-icon {
+  font-size: 16px;
+  width: 32px; height: 32px;
+  border-radius: 7px;
+  background: var(--accent-dim);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0;
+}
+.section-count {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text-dim);
+  background: var(--badge-bg);
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+}
+
+.link-list { display: flex; flex-direction: column; gap: 4px; }
+.link-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: baseline;
+  padding: 7px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.15s;
+  cursor: default;
+}
+.link-item:hover { background: var(--surface-hover); }
+.link-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); margin-top: 6px; flex-shrink: 0; opacity: 0.6;
+}
+.link-dot.green { background: var(--green); opacity: 0.8; }
+.link-dot.amber { background: var(--amber); opacity: 0.8; }
+.link-dot.red   { background: var(--red); opacity: 0.8; }
+.link-nome { font-size: 12.5px; font-weight: 700; color: var(--link-nome); }
+.link-desc { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+.link-path {
+  font-size: 10px; color: var(--text-dim); opacity: 0.6;
+  margin-top: 2px; font-variant-numeric: tabular-nums;
+}
+
+.section.wide { grid-column: span 2; }
+@media (max-width: 560px) { .section.wide { grid-column: span 1; } }
+
+.link-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 20px;
+}
+@media (max-width: 560px) { .link-columns { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   AION BANNER
+   ============================================================ */
+.aion-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  margin-top: 16px;
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(192,144,43,0.06) 100%);
+  box-shadow: 0 0 30px var(--accent-dim), inset 0 1px 0 rgba(255,255,255,0.03);
+  transition: box-shadow 0.3s, transform 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+}
+.aion-banner:hover {
+  box-shadow: 0 0 50px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+}
+
+.aion-logo {
+  width: 56px; height: 56px;
+  border-radius: 12px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+.aion-logo svg {
+  width: 36px;
+  height: 36px;
+}
+
+.aion-banner-info {
+  flex: 1;
+  min-width: 0;
+}
+.aion-banner-title {
+  font-family: var(--disp);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--titulo-cor);
+  margin: 0 0 4px;
+}
+.aion-banner-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.aion-banner-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-top: 6px;
+}
+.aion-banner-status::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.aion-open-btn {
+  background: var(--accent);
+  color: var(--ground);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.1s;
+  flex-shrink: 0;
+}
+.aion-open-btn:hover {
+  background: var(--titulo-cor);
+  transform: scale(1.03);
+}
+
+/* ============================================================
+   CADEADOS
+   ============================================================ */
+.cadeado-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  padding-top: 4px;
+}
+.cadeado-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+}
+.cadeado-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+}
+.cadeado-card.selado::before { background: var(--green); }
+.cadeado-card.aberto::before { background: var(--amber); }
+.cadeado-card.falha::before { background: var(--red); }
+
+.cadeado-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.cadeado-icon { font-size: 16px; }
+.cadeado-nome {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--link-nome);
+  letter-spacing: 0.04em;
+}
+.cadeado-status {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.cadeado-status.pass {
+  background: rgba(123,201,111,0.15);
+  color: var(--green);
+  border: 1px solid rgba(123,201,111,0.4);
+}
+.cadeado-status.warn {
+  background: rgba(233,180,76,0.15);
+  color: var(--amber);
+  border: 1px solid rgba(233,180,76,0.4);
+}
+.cadeado-meta {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.cadeado-prova {
+  font-size: 10px;
+  color: var(--text-dim);
+  opacity: 0.7;
+  margin-top: 6px;
+  font-family: var(--mono);
+}
+
+/* ============================================================
+   HUD CARDS
+   ============================================================ */
+.hud-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  padding-top: 4px;
+}
+.hud-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 16px 18px;
+}
+.hud-card h3 {
+  margin: 0 0 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+.hud-card .val { font-size: 13.5px; font-weight: 700; margin-bottom: 6px; font-family: var(--disp); letter-spacing: .02em; }
+.hud-card .val.ok { color: var(--green); }
+.hud-card .val.warn { color: var(--amber); }
+.hud-card .meta { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+/* ============================================================
+   MISSOES
+   ============================================================ */
+.hud-missions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  padding-top: 4px;
+}
+.hud-mission {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hud-tag {
+  font-size: 10px; text-transform: uppercase; letter-spacing: .08em;
+  padding: 2px 8px; border-radius: 6px; width: fit-content; font-weight: 700;
+}
+.hud-tag.chefe { background: rgba(233,180,76,.15); color: var(--amber); border: 1px solid rgba(233,180,76,.4); }
+.hud-tag.agente { background: rgba(123,201,111,.15); color: var(--green); border: 1px solid rgba(123,201,111,.4); }
+.hud-mission p { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--text); }
+.hud-mission button {
+  background: var(--accent); color: var(--ground); border: none; border-radius: 7px;
+  padding: 8px 12px; font-weight: 700; font-size: 11.5px; cursor: pointer; letter-spacing: .03em;
+  font-family: var(--mono);
+}
+.hud-mission button.done { background: var(--border); color: var(--text-dim); }
+
+.hud-links { display: flex; gap: 10px; flex-wrap: wrap; padding-top: 4px; }
+.hud-linkbtn {
+  background: var(--surface); border: 1px solid var(--border); color: var(--text); text-decoration: none;
+  padding: 10px 16px; border-radius: 8px; font-size: 12px; display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); transition: border-color 0.2s, color 0.2s;
+}
+.hud-linkbtn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ============================================================
+   FORJA
+   ============================================================ */
+.forja-intro {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-dim);
+  font-family: var(--corpo);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.forja-intro strong {
+  color: var(--accent);
+  font-family: var(--disp);
+  font-weight: 600;
+}
+.forja-deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 16px 0;
+}
+.carta-mini {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 18px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.carta-mini:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-dim);
+  transform: translateY(-2px);
+}
+.carta-mini-topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.carta-selo {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--selo-bg);
+  font-family: var(--disp);
+  font-size: 16px;
+  color: var(--ground);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+.carta-nome {
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--titulo-cor);
+  text-transform: uppercase;
+}
+.carta-raridade {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+.carta-corpo {
+  font-family: var(--corpo);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.carta-corpo .stat {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  margin: 2px 2px 2px 0;
+}
+.carta-path {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+/* ============================================================
+   FOOTER & TOAST
+   ============================================================ */
+.footer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.match-info {
+  font-size: 10px;
+  color: var(--text-dim);
+  padding: 2px 0;
+  min-height: 16px;
+}
+
+.hud-toast {
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(16px); opacity: 0;
+  background: var(--surface); border: 1px solid var(--accent); color: var(--text); padding: 10px 18px;
+  border-radius: 8px; font-size: 12px; transition: .25s; pointer-events: none; z-index: 999;
+  font-family: var(--mono);
+}
+.hud-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- BARRA TOPO -->
+<div class="barra">
+  <div class="barra-titulo">&#9672; CENTRALDARK &middot; INDEX + HUD</div>
+  <div class="barra-busca">
+    <input type="text" id="busca" placeholder="Buscar no sistema..." autocomplete="off">
+  </div>
+  <div class="pele-grupo">
+    <button class="pele-btn ativa" data-pele-alvo="ouro" title="Breu &amp; Ouro"></button>
+    <button class="pele-btn" data-pele-alvo="ops" title="Ops &middot; Ciano"></button>
+    <button class="pele-btn" data-pele-alvo="esmeralda" title="Esmeralda"></button>
+  </div>
+  <div class="barra-meta">
+    <span class="live">&#9679; SISTEMA</span> &middot; ServerVpss/CentralDark &middot; mega update 2026-10-06
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn ativa" data-tab="hud">HUD</button>
+  <button class="tab-btn" data-tab="mapa">MAPA</button>
+  <button class="tab-btn" data-tab="forja">FORJA</button>
+</div>
+
+<!-- ================================================================
+     TAB: HUD
+     ================================================================ -->
+<div class="tab-painel visivel" id="tab-hud">
+<div class="page">
+
+  <!-- AION UI BANNER -->
+  <a class="aion-banner" href="http://89.117.78.124:25808/" target="_blank" rel="noopener" id="aion-link">
+    <div class="aion-logo">
+      <svg viewBox="0 0 80 80" fill="none">
+        <path d="M40 20 Q38 22 25 40 Q23 42 26 42 L30 42 Q32 40 40 30 Q48 40 50 42 L54 42 Q57 42 55 40 Q42 22 40 20" fill="white"/>
+        <circle cx="40" cy="46" r="3" fill="white"/>
+        <path d="M18 50 Q40 70 62 50" stroke="white" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="aion-banner-info">
+      <div class="aion-banner-title">AionUi &middot; Painel de Controle</div>
+      <div class="aion-banner-desc">Central de agentes, tarefas agendadas, projetos e assistentes. Acesso direto ao orquestrador da VPS.</div>
+      <div class="aion-banner-status">VPS ONLINE &middot; :25808</div>
+    </div>
+    <button class="aion-open-btn" onclick="event.preventDefault(); window.open(document.getElementById('aion-link').href, '_blank')">ABRIR AIONUI</button>
+  </a>
+
+  <!-- AMBIENTES -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-icon">&#9673;</div>
+      <h2 class="section-title">Ambientes &mdash; realidade medida agora</h2>
+      <span class="section-count">6 nos</span>
+    </div>
+    <div class="hud-grid">
+      <div class="hud-card">
+        <h3>Casa (PC segredo)</h3>
+        <div class="val ok">Online</div>
+        <div class="meta">i5-10400F &middot; 12 threads &middot; 24GB RAM &middot; Radeon RX 580<br>C:22GB &middot; D:419GB &middot; E:198GB &middot; F:222GB livres</div>
+      </div>
+      <div class="hud-card">
+        <h3>GitHub</h3>
+        <div class="val ok">Fonte canonica</div>
+        <div class="meta">ServerVpss/CentralDark &middot; docs/BRAIN + docs/CONSCIENCIA versionados</div>
+      </div>
+      <div class="hud-card">
+        <h3>VPS CENTRALDARK-OS</h3>
+        <div class="val ok">Sync autonomo</div>
+        <div class="meta">openKylin 3.0 &middot; kernel 7.0 &middot; git pull auto cada 5min via cron</div>
+      </div>
+      <div class="hud-card">
+        <h3>AionUi &middot; VPS</h3>
+        <div class="val ok">Ativo :25808</div>
+        <div class="meta">Painel de agentes, tarefas e projetos &middot; sempre online</div>
+      </div>
+      <div class="hud-card">
+        <h3>gh CLI &middot; VPS</h3>
+        <div class="val ok">Autenticado</div>
+        <div class="meta">segredounlock &middot; scopes: gist, read:org, repo, workflow</div>
+      </div>
+      <div class="hud-card">
+        <h3>SSH Casa &rarr; VPS</h3>
+        <div class="val ok">Provado</div>
+        <div class="meta">Segredo-VPS &middot; 89.117.78.124 &middot; key ed25519</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CADEADOS - LUGARES PROVADOS -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-icon">&#128274;</div>
+      <h2 class="section-title">Cadeados &mdash; Lugares Provados e Selados</h2>
+      <span class="section-count">7 selados</span>
+    </div>
+    <div class="cadeado-grid">
+      <div class="cadeado-card selado">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128994;</span>
+          <span class="cadeado-nome">VPS Auto-Sync</span>
+          <span class="cadeado-status pass">SELADO</span>
+        </div>
+        <div class="cadeado-meta">Cron */5 * * * * puxa origin/main automaticamente. Script com flock, stash, ff-only/rebase, log rotation.</div>
+        <div class="cadeado-prova">commit: 6ae79a9ec &middot; script: scripts/vps/auto-sync-main.sh</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128994;</span>
+          <span class="cadeado-nome">gh CLI VPS</span>
+          <span class="cadeado-status pass">SELADO</span>
+        </div>
+        <div class="cadeado-meta">gh v2.102.0 autenticado como segredounlock. Token do SHARED.zip com scopes completos.</div>
+        <div class="cadeado-prova">commit: dd8df7fc9 &middot; receipt: docs/CONSCIENCIA/RECEIPTS/</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128994;</span>
+          <span class="cadeado-nome">SSH Casa &rarr; VPS</span>
+          <span class="cadeado-status pass">SELADO</span>
+        </div>
+        <div class="cadeado-meta">Alias Segredo-VPS em ~/.ssh/config. Key segredo_vps_ed25519. Acesso root direto.</div>
+        <div class="cadeado-prova">IP: 89.117.78.124 &middot; provado em multiplas sessoes</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128994;</span>
+          <span class="cadeado-nome">GitHub Fonte Canonica</span>
+          <span class="cadeado-status pass">SELADO</span>
+        </div>
+        <div class="cadeado-meta">ServerVpss/CentralDark e a fonte da verdade. VPS e Casa puxam de la. Nunca o contrario sem PR.</div>
+        <div class="cadeado-prova">topologia: GitHub &harr; VPS (cron) &harr; Casa (manual)</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128994;</span>
+          <span class="cadeado-nome">Tailscale Mesh</span>
+          <span class="cadeado-status pass">SELADO</span>
+        </div>
+        <div class="cadeado-meta">Casa: 100.118.223.100. VPS acessivel via Tailscale como fallback ao IP direto.</div>
+        <div class="cadeado-prova">provado: porta 4175 servida e consumida via Tailscale</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128994;</span>
+          <span class="cadeado-nome">SHARED.zip Vault</span>
+          <span class="cadeado-status pass">SELADO</span>
+        </div>
+        <div class="cadeado-meta">18MB em /root/SHARED.zip. Contem GITHUB_TOKEN e chaves operacionais. Cofre do valor.</div>
+        <div class="cadeado-prova">COFRE_E_DONO_DO_VALOR=true &middot; NO_SECRET_COMMIT=true</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128994;</span>
+          <span class="cadeado-nome">AionUi VPS :25808</span>
+          <span class="cadeado-status pass">SELADO</span>
+        </div>
+        <div class="cadeado-meta">Painel de controle de agentes rodando na VPS. Sempre online, sincronizado com projetos.</div>
+        <div class="cadeado-prova">url: http://89.117.78.124:25808/ &middot; verificado 2026-10-06</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ONE HEART - LIVE -->
+  <div class="section" style="margin-top:16px;" id="live-heart-section">
+    <div class="section-header">
+      <div class="section-icon">&#129528;</div>
+      <h2 class="section-title">One Heart &mdash; CURRENT ao vivo</h2>
+      <span class="section-count" id="live-heart-badge">conectando...</span>
+    </div>
+    <div class="hud-grid">
+      <div class="hud-card">
+        <h3>Heartbeat</h3>
+        <div class="val warn" id="live-heart-state">UNKNOWN</div>
+        <div class="meta" id="live-heart-source">fonte: IP direto CURRENT</div>
+      </div>
+      <div class="hud-card">
+        <h3>Medido em</h3>
+        <div class="val warn" id="live-heart-measured">aguardando...</div>
+        <div class="meta">refresh 5s &middot; falha = UNKNOWN</div>
+      </div>
+      <div class="hud-card">
+        <h3>Orquestrador</h3>
+        <div class="val warn" id="live-heart-orchestrator">UNKNOWN</div>
+        <div class="meta" id="live-heart-provider">provider: UNKNOWN</div>
+      </div>
+      <div class="hud-card">
+        <h3>Worker local</h3>
+        <div class="val warn" id="live-heart-worker">UNKNOWN</div>
+        <div class="meta">binding CURRENT do runtime</div>
+      </div>
+      <div class="hud-card">
+        <h3>Execucao</h3>
+        <div class="val warn" id="live-heart-execution">UNKNOWN</div>
+        <div class="meta" id="live-heart-remote">Remote Desktop: UNKNOWN</div>
+      </div>
+      <div class="hud-card">
+        <h3>MCP tools</h3>
+        <div class="val warn" id="live-heart-tools">UNKNOWN</div>
+        <div class="meta">catalogo vivo em /health</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MISSOES -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-icon">&#9873;</div>
+      <h2 class="section-title">Missoes &mdash; clica, copia, cola onde for resolver</h2>
+      <span class="section-count" id="missions-count">7 abertas</span>
+    </div>
+    <div class="hud-missions" id="hud-missions"></div>
+  </div>
+
+  <!-- COFRE OBSIDIAN -->
+  <div class="section" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-icon">&#128300;</div>
+      <h2 class="section-title">Cofre Obsidian</h2>
+      <span class="section-count">bidirecional</span>
+    </div>
+    <div class="hud-links">
+      <a class="hud-linkbtn" id="open-pendencias" href="#">&#128203; Abrir Pendencias</a>
+      <a class="hud-linkbtn" id="open-home" href="#">&#127968; Abrir Home</a>
+      <a class="hud-linkbtn" href="https://github.com/ServerVpss/CentralDark" target="_blank" rel="noopener">&#128025; GitHub Repo</a>
+      <a class="hud-linkbtn" href="http://89.117.78.124:25808/" target="_blank" rel="noopener">&#9881; AionUi VPS</a>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ================================================================
+     TAB: MAPA (Index completo)
+     ================================================================ -->
+<div class="tab-painel" id="tab-mapa">
+<div class="page">
+  <div class="match-info" id="matchInfo"></div>
+  <div class="grid" id="gridMapa">
+
+    <div class="section" data-busca="jarvis 3d grafo live graph three.js hud setores busca 2d force celestial universo estrelas vault esmeralda">
+      <div class="section-header">
+        <div class="section-icon">&#9678;</div>
+        <h2 class="section-title">Grafos</h2>
+        <span class="section-count">4 views</span>
+      </div>
+      <div class="link-list">
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">JARVIS 3D &middot; Live Graph</div><div class="link-desc">Grafo principal &mdash; Three.js, HUD com setores, busca, detalhes</div><div class="link-path">apps/modulos/graph-panel/public/index.html</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">Grafo 2D</div><div class="link-desc">Force-graph 2D &mdash; modulos, relatorio, auditoria, historico</div><div class="link-path">apps/modulos/graph-panel/public/2d.html</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">Celestial</div><div class="link-desc">Modo universo &mdash; estrelas com glow, paleta por tipo de arquivo</div><div class="link-path">apps/modulos/graph-panel/public/celestial.html</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">V.A.U.L.T.</div><div class="link-desc">Tema esmeralda &mdash; grafo 3D com vinheta radial verde neon</div><div class="link-path">apps/modulos/graph-panel/public/vault.html</div></div></div>
+      </div>
+    </div>
+
+    <div class="section" data-busca="mega painel capsula conselho vivo infra protocolos ai review mcp admin tools health auditoria status">
+      <div class="section-header">
+        <div class="section-icon">&#9635;</div>
+        <h2 class="section-title">Paineis</h2>
+        <span class="section-count">7 pages</span>
+      </div>
+      <div class="link-list">
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">Mega Painel</div><div class="link-desc">Visao geral &mdash; progresso, MCP score, modulos</div><div class="link-path">apps/modulos/status/index.html</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Capsula</div><div class="link-desc">Eventos observaveis &mdash; schema + data</div><div class="link-path">apps/modulos/status/capsula.html</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Conselho Vivo</div><div class="link-desc">Conselho cognitivo &mdash; decisoes do motor</div><div class="link-path">apps/modulos/status/conselho.html</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Infra</div><div class="link-desc">Status de infraestrutura VPS</div><div class="link-path">apps/modulos/status/infra.html</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Protocolos</div><div class="link-desc">Protocolos operacionais ativos</div><div class="link-path">apps/modulos/status/protocolos.html</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">AI Review</div><div class="link-desc">Diagnostico e review por IA</div><div class="link-path">apps/modulos/status/ai-review.html</div></div></div>
+        <div class="link-item"><span class="link-dot amber"></span><div><div class="link-nome">MCP Admin</div><div class="link-desc">Painel admin do MCP &mdash; tools, health, auditoria</div><div class="link-path">mcp.centralldark.com/admin</div></div></div>
+      </div>
+    </div>
+
+    <div class="section" data-busca="instalacao instalar guia build dependencias portas rede pastas deploy gold master script backup">
+      <div class="section-header">
+        <div class="section-icon">&#9881;</div>
+        <h2 class="section-title">Instalacao</h2>
+        <span class="section-count">30 docs</span>
+      </div>
+      <div class="link-list">
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">INSTALACAO.md</div><div class="link-desc">Guia rapido &mdash; arvore, build, migracao VPS</div><div class="link-path">/ (raiz do repo)</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">00 &middot; Como Comecar</div><div class="link-desc">Ponto de partida do instalador completo</div><div class="link-path">docs/INSTALADOR/00-COMO-COMECAR.md</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">01 &middot; Arquitetura</div><div class="link-path">docs/INSTALADOR/01-arquitetura.md</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">02 &middot; Dependencias</div><div class="link-path">docs/INSTALADOR/02-dependencias.md</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">03-30 &middot; Portas, Skills</div><div class="link-desc">+27 docs: rede, pastas, webhooks, deploy, MCP, DNS, celular...</div><div class="link-path">docs/INSTALADOR/</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">install.sh GOLD-MASTER</div><div class="link-desc">Script de instalacao backup canonico</div><div class="link-path">docs/INSTALADOR/backup/install.sh.GOLD-MASTER</div></div></div>
+      </div>
+    </div>
+
+    <div class="section wide" data-busca="brain mapa sistema index grafo vivo arvore semantica moc mcp github pm2 skills protocolo inicializacao obsidian wikilinks">
+      <div class="section-header">
+        <div class="section-icon">&#9670;</div>
+        <h2 class="section-title">BRAIN &middot; Mapa do Sistema</h2>
+        <span class="section-count">19 notas</span>
+      </div>
+      <div class="link-columns">
+        <div class="link-list">
+          <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">INDEX.md</div><div class="link-desc">Indice master do BRAIN &mdash; todas as secoes</div><div class="link-path">docs/BRAIN/00-MAPA-SISTEMA/INDEX.md</div></div></div>
+          <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">GRAFO-VIVO.md</div><div class="link-desc">Mermaid &mdash; 68 nos, 88 arestas, topologia</div><div class="link-path">docs/BRAIN/00-MAPA-SISTEMA/GRAFO-VIVO.md</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Arvore Semantica</div><div class="link-desc">Estrutura das 10 pastas + gramatica visual</div><div class="link-path">docs/BRAIN/00-MAPA-SISTEMA/ARVORE-SEMANTICA-DA-CASA.md</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">02-ARQUITETURA.md</div><div class="link-desc">Visao arquitetural do sistema</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">MAPA-DOS-BOTS.md</div><div class="link-desc">Bot team &mdash; Telegram, WhatsApp, fiscal</div></div></div>
+        </div>
+        <div class="link-list">
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">MOC-MCP</div><div class="link-desc">Map of Content &mdash; MCP server</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">MOC-GitHub</div><div class="link-desc">Map of Content &mdash; GitHub flows</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">MOC-PM2</div><div class="link-desc">Map of Content &mdash; processos PM2</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">MOC-Skills</div><div class="link-desc">Map of Content &mdash; 47 skills</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">PROTOCOLO-INICIALIZACAO</div><div class="link-desc">Boot sequence do sistema</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" data-busca="leia-me-ia consciencia identidade regras permissoes deploy metodo arquitetura trigger fabric aprendizados bots cofre codex governanca">
+      <div class="section-header">
+        <div class="section-icon">&#9776;</div>
+        <h2 class="section-title">Docs Canonicos</h2>
+        <span class="section-count">200+ files</span>
+      </div>
+      <div class="link-list">
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">LEIA-ME-IA.md</div><div class="link-desc">Boot canonico &mdash; 20KB, ordem de leitura, regras</div><div class="link-path">/ (raiz)</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">CONSCIENCIA/</div><div class="link-desc">Identidade, regras, permissoes, deploy, metodo</div><div class="link-path">docs/CONSCIENCIA/</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">ARQUITETURA/</div><div class="link-desc">Routers, Trigger Fabric (17 files), proofs (9 YMLs)</div><div class="link-path">docs/ARQUITETURA/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">APRENDIZADOS/</div><div class="link-desc">Incidentes, MCP playbooks, sessoes completas</div><div class="link-path">docs/APRENDIZADOS/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">BOTS/</div><div class="link-desc">Bot team docs &mdash; @srver1bot, fiscal</div><div class="link-path">docs/BOTS/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">COFRE/ &middot; CODEX/ &middot; GOVERNANCA/</div><div class="link-desc">Prompts rapidos, auditoria, governanca</div></div></div>
+      </div>
+    </div>
+
+    <div class="section" data-busca="diagramas mermaid architecture mmd trigger fabric custodia anti falso verde fronteiras cartazes canvas obsidian">
+      <div class="section-header">
+        <div class="section-icon">&#9651;</div>
+        <h2 class="section-title">Diagramas</h2>
+        <span class="section-count">15+ charts</span>
+      </div>
+      <div class="link-list">
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">DIAGRAMAS-CENTRALDARK.md</div><div class="link-desc">7 Mermaid canonicos &mdash; autoridade, refinaria, memory linker, evolucao</div><div class="link-path">docs/BRAIN/03-DOCUMENTACAO/</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">ARCHITECTURE.mmd</div><div class="link-desc">Flowchart completo da Trigger Fabric</div><div class="link-path">docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">MERMAID-COMPLETO.md</div><div class="link-desc">4 diagramas &mdash; custodia, anti-falso-verde, fronteiras</div><div class="link-path">docs/APRENDIZADOS/SESSAO-COMPLETA-2026-08-06/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Cartazes Canonicos</div><div class="link-desc">4 posters .webp + semantic-graph.png</div><div class="link-path">docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Canvas Obsidian</div><div class="link-desc">2 canvas files (.canvas) &mdash; visualizacao de relacoes</div><div class="link-path">docs/BRAIN/03-DOCUMENTACAO/</div></div></div>
+      </div>
+    </div>
+
+    <div class="section" data-busca="runtime graph panel pm2 status grafo vivo scripts graphrag master memory linker pipeline">
+      <div class="section-header">
+        <div class="section-icon">&#10064;</div>
+        <h2 class="section-title">Runtime</h2>
+        <span class="section-count">core</span>
+      </div>
+      <div class="link-list">
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">Graph Panel</div><div class="link-desc">PM2 id CentralDark-GraphPanel &mdash; serve /api/graph + views</div><div class="link-path">apps/modulos/graph-panel/</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">Status Panel</div><div class="link-desc">PM2 &mdash; painel-data.json, graph-data.json, capsula</div><div class="link-path">apps/modulos/status/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">grafo-vivo scripts</div><div class="link-desc">gerar-grafo-vivo.mjs, mermaid-core.mjs, cron, loop</div><div class="link-path">scripts/grafo-vivo/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">GraphRAG Master</div><div class="link-desc">Agent de grafos &mdash; refresh 30min</div><div class="link-path">apps/modulos/HERMES-CORE/agents/GraphRAG-Master/</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Memory Linker</div><div class="link-desc">Pipeline: scout, delta, analyst, executor, receipt</div><div class="link-path">scripts/memory-linker/</div></div></div>
+      </div>
+    </div>
+
+    <div class="section wide" data-busca="issues github sentinela auto dedupe hash severity labels capability routing pull requests pendencias mcp hermes skills">
+      <div class="section-header">
+        <div class="section-icon">&#9873;</div>
+        <h2 class="section-title">Issues &amp; Rastreamento</h2>
+        <span class="section-count">1360+ issues</span>
+      </div>
+      <div class="link-columns">
+        <div class="link-list">
+          <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">GitHub Issues</div><div class="link-desc">Rastreamento central &mdash; bugs, features, drift, CI breaks</div><div class="link-path">github.com/ServerVpss/CentralDark/issues</div></div></div>
+          <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">Sentinela (Bot AUTO)</div><div class="link-desc">GitHub Actions auto-cria issues &mdash; dedupe hash, severity, capability routing</div><div class="link-path">.github/workflows/sentinela-*.yml</div></div></div>
+          <div class="link-item"><span class="link-dot amber"></span><div><div class="link-nome">Labels de Roteamento</div><div class="link-desc">SENTINELA &middot; AGENTE-CODEX &middot; AUTO &middot; severity:critical/warn</div></div></div>
+        </div>
+        <div class="link-list">
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Pull Requests</div><div class="link-desc">PRs para contribuicoes &mdash; sync Lovable, GitHub, VPS</div><div class="link-path">github.com/ServerVpss/CentralDark/pulls</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Pendencias MCP</div><div class="link-desc">Lista de pendencias via pendencias_list &mdash; abrir/fechar pelo Pivete</div><div class="link-path">MCP: pendencias_list / pendencias_add</div></div></div>
+          <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">Modelo hermes-skills</div><div class="link-desc">Referencia: itgoyo/hermes-skills &mdash; 310+ skills, SKILL.md</div><div class="link-path">github.com/itgoyo/hermes-skills</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" data-busca="skills meta lupa capability contract router knowledge compiler reconciliar divergencia gatilhos biblicos skill.md trigger steps pitfalls verification">
+      <div class="section-header">
+        <div class="section-icon">&#10209;</div>
+        <h2 class="section-title">Skills</h2>
+        <span class="section-count">47 skills</span>
+      </div>
+      <div class="link-list">
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">meta-lupa</div><div class="link-desc">Auditoria cognitiva &mdash; analise profunda de estado</div><div class="link-path">.agents/skills/meta-lupa/SKILL.md</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">capability-contract-router</div><div class="link-desc">Roteamento de capabilidades por contrato</div><div class="link-path">.agents/skills/capability-contract-router/SKILL.md</div></div></div>
+        <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">knowledge-compiler</div><div class="link-desc">Compilacao de conhecimento para BRAIN</div><div class="link-path">.agents/skills/knowledge-compiler/SKILL.md</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">reconciliar-divergencia</div><div class="link-desc">Reconcilia estado entre Lovable/GitHub/VPS</div><div class="link-path">.agents/skills/reconciliar-divergencia/SKILL.md</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">gatilhos-biblicos</div><div class="link-desc">Padronizacao de gatilhos !CENTRALDARK</div><div class="link-path">.agents/skills/gatilhos-biblicos/SKILL.md</div></div></div>
+        <div class="link-item"><span class="link-dot"></span><div><div class="link-nome">+42 skills</div><div class="link-desc">Catalogo completo &mdash; SKILL.md pattern (trigger, steps, pitfalls, verification)</div><div class="link-path">.agents/skills/</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ================================================================
+     TAB: FORJA
+     ================================================================ -->
+<div class="tab-painel" id="tab-forja">
+<div class="page">
+  <div class="forja-intro">
+    <strong>Forja de Cartas</strong> &mdash; Cada componente do CentralDark e uma carta
+    com nome, nivel, procedencia e habilidades. A forja completa (206KB, editor + export)
+    vive em <code>.agents/skills/visual-design-method/assets/forja-de-cartas.html</code>.
+    Abaixo, o deck resumido dos componentes-chave.
+  </div>
+  <div class="forja-deck" id="forjaDeck"></div>
+</div>
+</div>
+
+<!-- Footer -->
+<div class="page">
+  <div class="footer">
+    <span>READ_ONLY &middot; 1 PAGINA &middot; 3 PELES &middot; 7 CADEADOS SELADOS &middot; mega update 2026-10-06</span>
+    <span>CentralDark &middot; ServerVpss/CentralDark &middot; HEAD main</span>
+  </div>
+</div>
+
+<div class="hud-toast" id="hud-toast"></div>
+
+<script>
+/* ============================================================
+   3 PELES
+   ============================================================ */
+var peleMap = { ouro: null, ops: 'ops', esmeralda: 'esmeralda' };
+document.querySelectorAll('.pele-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var alvo = btn.dataset.peleAlvo;
+    var val = peleMap[alvo];
+    if (val) document.documentElement.setAttribute('data-pele', val);
+    else document.documentElement.removeAttribute('data-pele');
+    document.querySelectorAll('.pele-btn').forEach(function(b) { b.classList.remove('ativa'); });
+    btn.classList.add('ativa');
+    try { localStorage.setItem('cd-pele', alvo); } catch(e) {}
+  });
+});
+try {
+  var saved = localStorage.getItem('cd-pele');
+  if (saved && peleMap.hasOwnProperty(saved)) {
+    var val = peleMap[saved];
+    if (val) document.documentElement.setAttribute('data-pele', val);
+    document.querySelectorAll('.pele-btn').forEach(function(b) {
+      b.classList.toggle('ativa', b.dataset.peleAlvo === saved);
+    });
+  }
+} catch(e) {}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('ativa'); });
+    document.querySelectorAll('.tab-painel').forEach(function(p) { p.classList.remove('visivel'); });
+    btn.classList.add('ativa');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('visivel');
+  });
+});
+
+/* ============================================================
+   BUSCA
+   ============================================================ */
+var buscaInput = document.getElementById('busca');
+var sections = document.querySelectorAll('#gridMapa .section');
+var matchInfo = document.getElementById('matchInfo');
+
+buscaInput.addEventListener('input', function() {
+  var q = buscaInput.value.trim().toLowerCase();
+  if (!q) {
+    sections.forEach(function(s) { s.hidden = false; });
+    matchInfo.textContent = '';
+    return;
+  }
+  var count = 0;
+  sections.forEach(function(s) {
+    var haystack = (s.textContent + ' ' + (s.dataset.busca || '')).toLowerCase();
+    var match = q.split(/\s+/).every(function(w) { return haystack.includes(w); });
+    s.hidden = !match;
+    if (match) count++;
+  });
+  matchInfo.textContent = count + ' secao(oes) encontrada(s)';
+  if (!document.getElementById('tab-mapa').classList.contains('visivel')) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.toggle('ativa', b.dataset.tab === 'mapa'); });
+    document.querySelectorAll('.tab-painel').forEach(function(p) { p.classList.remove('visivel'); });
+    document.getElementById('tab-mapa').classList.add('visivel');
+  }
+});
+
+/* ============================================================
+   FORJA
+   ============================================================ */
+var cartas = [
+  { glifo:'\u25C8', nome:'PIVETE', cadeia:'Motor de Execucao', raridade:'LENDA', nivel:'LV 99', stats:['FORCA 95','RESIST 88','ENERGIA \u221E'], passiva:'Continuidade', efeito:'Preserva contexto entre sessoes. Nunca perde fio da missao.', path:'.agents/skills/' },
+  { glifo:'\u25CE', nome:'JARVIS GRAPH', cadeia:'Visualizacao', raridade:'RARA', nivel:'LV 72', stats:['FORCA 80','RESIST 70','ENERGIA 60'], passiva:'Visao 3D', efeito:'Renderiza topologia viva do sistema em Three.js com HUD interativo.', path:'apps/modulos/graph-panel/' },
+  { glifo:'\u2691', nome:'SENTINELA', cadeia:'Rastreamento', raridade:'RARA', nivel:'LV 65', stats:['FORCA 70','RESIST 90','ENERGIA 50'], passiva:'Dedupe Hash', efeito:'Auto-cria issues no GitHub com severity labels e capability routing.', path:'.github/workflows/sentinela-*.yml' },
+  { glifo:'\u25C6', nome:'BRAIN', cadeia:'Memoria', raridade:'LENDA', nivel:'LV 88', stats:['FORCA 75','RESIST 95','ENERGIA 80'], passiva:'Obsidian Vault', efeito:'10 pastas canonicas. Wikilinks semanticos. Arvore viva da casa.', path:'docs/BRAIN/' },
+  { glifo:'\u25B3', nome:'TRIGGER FABRIC', cadeia:'Orquestracao', raridade:'LENDA', nivel:'LV 90', stats:['FORCA 85','RESIST 92','ENERGIA 70'], passiva:'Cadeia de Autoridade', efeito:'CHEFE > LOCK > BOOT > CALIBRAR > MULTIBUSSOLA > ROUTE > JUDGE > CRYSTAL.', path:'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/' },
+  { glifo:'\u25A3', nome:'MEGA PAINEL', cadeia:'Status', raridade:'RARA', nivel:'LV 60', stats:['FORCA 55','RESIST 80','ENERGIA 45'], passiva:'Score MCP', efeito:'Mostra progresso geral, health dos modulos e score de integridade.', path:'apps/modulos/status/index.html' },
+  { glifo:'\u27E1', nome:'META-LUPA', cadeia:'Auditoria', raridade:'RARA', nivel:'LV 70', stats:['FORCA 65','RESIST 85','ENERGIA 55'], passiva:'Analise Profunda', efeito:'Auditoria cognitiva de estado. Mede antes de agir. PAPAGAIO_MODE=OFF.', path:'.agents/skills/meta-lupa/SKILL.md' },
+  { glifo:'\u27D0', nome:'MEMORY LINKER', cadeia:'Pipeline', raridade:'RARA', nivel:'LV 68', stats:['FORCA 60','RESIST 78','ENERGIA 65'], passiva:'Scout > Receipt', efeito:'Pipeline completo: scout, delta, analyst, executor, receipt.', path:'scripts/memory-linker/' },
+];
+
+var deckEl = document.getElementById('forjaDeck');
+cartas.forEach(function(c) {
+  var div = document.createElement('div');
+  div.className = 'carta-mini';
+  div.innerHTML =
+    '<div class="carta-mini-topo">' +
+      '<div class="carta-selo">' + c.glifo + '</div>' +
+      '<div class="carta-nome">' + c.nome + '</div>' +
+      '<div class="carta-raridade">' + c.raridade + '</div>' +
+    '</div>' +
+    '<div class="carta-corpo">' +
+      '<div style="font-size:11px;color:var(--text-dim);margin-bottom:4px;">' + c.cadeia + ' \u00B7 ' + c.nivel + '</div>' +
+      '<div style="margin-bottom:6px;">' + c.stats.map(function(s){ return '<span class="stat">'+s+'</span>'; }).join('') + '</div>' +
+      '<div style="font-family:var(--disp);font-size:12px;color:var(--accent);margin-bottom:2px;">' + c.passiva + '</div>' +
+      '<div>' + c.efeito + '</div>' +
+    '</div>' +
+    '<div class="carta-path">' + c.path + '</div>';
+  deckEl.appendChild(div);
+});
+
+/* ============================================================
+   HUD LIVE - ONE HEART
+   ============================================================ */
+function resolveCentralDarkApiBase() {
+  var fallback = 'http://89.117.78.124:9100';
+  try {
+    var params = new URLSearchParams(location.search);
+    var fromQuery = (params.get('api') || '').replace(/\/$/, '');
+    if (fromQuery) {
+      localStorage.setItem('centraldark-hud-api-base', fromQuery);
+      return fromQuery;
+    }
+    return (localStorage.getItem('centraldark-hud-api-base') || fallback).replace(/\/$/, '');
+  } catch (_) {
+    return fallback;
+  }
+}
+
+var CENTRALDARK_DIRECT_BASE = resolveCentralDarkApiBase();
+var CENTRALDARK_LIVE = {
+  refreshMs: 5000,
+  endpoints: [
+    { name: 'IP/binding CURRENT', heartbeat: CENTRALDARK_DIRECT_BASE + '/heartbeat', health: CENTRALDARK_DIRECT_BASE + '/health' },
+    { name: 'dominio canonico', heartbeat: 'https://api.centralldark.com/heartbeat', health: 'https://api.centralldark.com/health' }
+  ]
+};
+
+function liveSet(id, text, ok) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  if (el.classList.contains('val')) {
+    el.classList.toggle('ok', Boolean(ok));
+    el.classList.toggle('warn', !ok);
+  }
+}
+
+function liveFetchJson(url, timeoutMs) {
+  timeoutMs = timeoutMs || 3500;
+  var controller = new AbortController();
+  var timer = setTimeout(function() { controller.abort(); }, timeoutMs);
+  return fetch(url, { cache: 'no-store', signal: controller.signal })
+    .then(function(res) {
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var type = (res.headers.get('content-type') || '').toLowerCase();
+      if (!type.includes('json')) throw new Error('NON_JSON');
+      return res.json();
+    })
+    .catch(function(err) {
+      clearTimeout(timer);
+      throw err;
+    });
+}
+
+function refreshCentralDarkLive() {
+  var endpoints = CENTRALDARK_LIVE.endpoints;
+  var idx = 0;
+  function tryNext() {
+    if (idx >= endpoints.length) {
+      liveSet('live-heart-state', 'UNKNOWN', false);
+      liveSet('live-heart-measured', 'sem prova CURRENT', false);
+      liveSet('live-heart-orchestrator', 'UNKNOWN', false);
+      liveSet('live-heart-worker', 'UNKNOWN', false);
+      liveSet('live-heart-execution', 'UNKNOWN', false);
+      liveSet('live-heart-tools', 'UNKNOWN', false);
+      liveSet('live-heart-provider', 'provider: UNKNOWN');
+      liveSet('live-heart-remote', 'Remote Desktop: UNKNOWN');
+      var badge = document.getElementById('live-heart-badge');
+      if (badge) badge.textContent = 'UNKNOWN';
+      var source = document.getElementById('live-heart-source');
+      if (source) source.textContent = 'fonte: nenhuma rota provada';
+      return;
+    }
+    var ep = endpoints[idx];
+    liveFetchJson(ep.heartbeat).then(function(heartbeat) {
+      var healthP = liveFetchJson(ep.health).catch(function() { return null; });
+      healthP.then(function(health) {
+        var op = heartbeat.operational || {};
+        var binding = op.modelBinding || {};
+        var topology = op.executionTopology || {};
+        var orchestrator = binding.orchestrator || {};
+        var worker = binding.localWorker || {};
+        var remoteLane = Array.isArray(topology.lanes) ? topology.lanes.find(function(x) { return x && x.id === 'REMOTE_DESKTOP'; }) : null;
+        var alive = heartbeat.ok === true && String((op.heartbeat || {}).self || '').toLowerCase() === 'alive';
+        var measuredRaw = heartbeat.measuredAt || op.observedAt || null;
+        var measured = measuredRaw ? new Date(measuredRaw).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) + ' BRT' : 'UNKNOWN';
+
+        liveSet('live-heart-state', alive ? 'ALIVE' : 'UNKNOWN', alive);
+        liveSet('live-heart-measured', measured, Boolean(measuredRaw));
+        liveSet('live-heart-orchestrator', orchestrator.model || 'UNKNOWN', orchestrator.state === 'SELECTED');
+        liveSet('live-heart-worker', worker.model || 'UNKNOWN', worker.state === 'SELECTED');
+        liveSet('live-heart-execution', topology.verdict || 'UNKNOWN', /^RUNNING|EXECUTION/i.test(String(topology.verdict || '')));
+        liveSet('live-heart-tools', health && Number.isFinite(Number(health.totalTools)) ? String(health.totalTools) + ' tools' : 'UNKNOWN', Boolean(health && Number.isFinite(Number(health.totalTools))));
+        liveSet('live-heart-provider', 'provider: ' + (orchestrator.provider || 'UNKNOWN'));
+        liveSet('live-heart-remote', 'Remote Desktop: ' + ((remoteLane || {}).state || 'UNKNOWN'));
+
+        var source = document.getElementById('live-heart-source');
+        if (source) source.textContent = 'fonte: ' + ep.name + ' \u00B7 ' + ep.heartbeat;
+        var badge = document.getElementById('live-heart-badge');
+        if (badge) badge.textContent = alive ? 'LIVE \u00B7 5s' : 'UNKNOWN \u00B7 5s';
+      });
+    }).catch(function() {
+      idx++;
+      tryNext();
+    });
+  }
+  tryNext();
+}
+
+refreshCentralDarkLive();
+setInterval(refreshCentralDarkLive, CENTRALDARK_LIVE.refreshMs);
+
+/* ============================================================
+   MISSOES
+   ============================================================ */
+var VAULT = '\uD83E\uDEAC Centraldark -HUD\uD83E\uDEAC';
+
+var missions = [
+  {tag:'chefe', label:'Confirmar cockpit pro Lovable', text:'Liberar pro Lovable os enderecos (publico + logado) do cockpit real da CentralDark, pra Hermes poder andar nos 3 lugares.'},
+  {tag:'chefe', label:'Motor do app: Tauri ou Electron', text:'Decisao: motor do centraldark.exe - Tauri (leve, Rust) ou Electron (mais pronto, mais pesado). Bater o martelo.'},
+  {tag:'chefe', label:'Memoria dentro do Obsidian?', text:'Decidir se a memoria da Casa/VPS fica embutida dentro do vault Obsidian da CentralDark (bidirecional) ou separada.'},
+  {tag:'agente', label:'Filtrar Garimpo-Chefe', text:'#acordar - Na pasta E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE, separar as imagens reais (Screenshots, PASTA CHEFE, raiz - ~800) do ruido (.gradle, .codex, pastas _files) e trazer o resultado organizado.'},
+  {tag:'agente', label:'Confirmar equipe do Grok', text:'#acordar - Confirmar por captura de tela a equipe de agentes nomeados na conta Grok do Chefe antes de tratar como fato.'},
+  {tag:'agente', label:'Separar telepainel/CRM/Multizap/bot', text:'#acordar - Assim que o Chefe mostrar o codigo, separar e documentar a distincao entre telepainel, CRM, Multizap e o robo do WhatsApp.'},
+  {tag:'chefe', label:'Hermes: consolidar perfil', text:'Hermes roda em 2 perfis Windows. Decidir: traz o danda pro Administrador ou leva o Administrador pro danda (herda 849 skills). Pendente confirmar acesso ao E:\\CentralDark.'},
+];
+
+var missionsEl = document.getElementById('hud-missions');
+missions.forEach(function(m, i) {
+  var div = document.createElement('div');
+  div.className = 'hud-mission';
+  div.innerHTML =
+    '<span class="hud-tag ' + m.tag + '">' + (m.tag === 'chefe' ? '\uD83E\uDDCD Chefe decide' : '\uD83E\uDD16 Agente resolve') + '</span>' +
+    '<p><strong>' + m.label + '</strong><br>' + m.text + '</p>' +
+    '<button data-i="' + i + '">Aceitar missao (copiar)</button>';
+  missionsEl.appendChild(div);
+});
+
+missionsEl.addEventListener('click', function(e) {
+  if (e.target.tagName !== 'BUTTON') return;
+  var i = e.target.getAttribute('data-i');
+  var m = missions[i];
+  navigator.clipboard.writeText(m.text).then(function() {
+    e.target.textContent = 'Copiado \u2713 - cola no Hermes/Claude';
+    e.target.classList.add('done');
+    hudToast('Missao copiada. Cola no chat do agente que vai executar.');
+  }).catch(function() {
+    hudToast('Nao deu pra copiar sozinho - seleciona o texto manualmente.');
+  });
+});
+
+function hudToast(msg) {
+  var t = document.getElementById('hud-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2600);
+}
+
+document.getElementById('open-pendencias').href =
+  'obsidian://open?vault=' + encodeURIComponent(VAULT) + '&file=' + encodeURIComponent('Pend\u00EAncias');
+document.getElementById('open-home').href =
+  'obsidian://open?vault=' + encodeURIComponent(VAULT) + '&file=' + encodeURIComponent('Home');
+</script>
+
+</body>
+</html>
