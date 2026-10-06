@@ -91,6 +91,15 @@ jobs:
     timeout-minutes: 3
 
     steps:
+      - name: 🔹 Checkout main para inventário HUD
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: 🔹 Verificar inventário machine-consumable do HUD
+        run: node scripts/hud/generate-hud-inventory.mjs --check
+
       - name: 🏅 Classificar, deduplicar e postar selo
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
@@ -331,6 +340,21 @@ jobs:
                 ]);
 
                 const mainSha = mainRef.data.commit.sha;
+                let hudInventory = null;
+                try {
+                  const inventoryFile = await github.rest.repos.getContent({
+                    owner,
+                    repo,
+                    path: 'docs/HUD/CENTRALDARK-HUD-INVENTORY.json',
+                    ref: mainSha,
+                  });
+                  if (!Array.isArray(inventoryFile.data) && inventoryFile.data.content) {
+                    hudInventory = JSON.parse(Buffer.from(inventoryFile.data.content, 'base64').toString('utf8'));
+                  }
+                } catch (inventoryError) {
+                  core.warning(`HUD_MACHINE_INVENTORY_READ=UNKNOWN error=${String(inventoryError.message || inventoryError)}`);
+                }
+                const hudSummary = hudInventory?.summary || {};
                 const children = openPulls
                   .filter(pr => pr.number !== PR_MAE)
                   .sort((a, b) => String(b.updated_at || '').localeCompare(String(a.updated_at || '')));
@@ -357,6 +381,18 @@ jobs:
                   `MAIN=${mainSha}`,
                   `PR_MOTHER=#${PR_MAE} · ${String(mother.data.state || '').toUpperCase()} · DO_NOT_MERGE`,
                   `OPEN_CHILDREN=${children.length}`,
+                  `HUD_MACHINE_INVENTORY=${hudInventory ? 'PASS' : 'UNKNOWN'}`,
+                  `HUD_INVENTORY_FINGERPRINT=${hudInventory?.inventory_fingerprint || 'UNKNOWN'}`,
+                  `HUD_GENEALOGY_NODES=${hudSummary.genealogy_nodes ?? 'UNKNOWN'}`,
+                  `HUD_PROVEN_CLAIMS=${hudSummary.proven_claims ?? 'UNKNOWN'}`,
+                  `HUD_DETERMINISTIC_OWNERS=${hudSummary.deterministic_owners ?? 'UNKNOWN'}`,
+                  `HUD_SKILLS=${hudSummary.skills ?? 'UNKNOWN'}`,
+                  `HUD_AGENTS=${hudSummary.agents ?? 'UNKNOWN'}`,
+                  `HUD_WORKFLOWS=${hudSummary.workflows ?? 'UNKNOWN'}`,
+                  `HUD_UI_SIGNALS=${hudSummary.ui_signals ?? 'UNKNOWN'}`,
+                  `HUD_ROUTES=${hudSummary.routes ?? 'UNKNOWN'}`,
+                  `HUD_SEALED_BASELINES=${hudSummary.sealed_baselines ?? 'UNKNOWN'}`,
+                  'HUD_SEAL_LIVE_SPLIT=true',
                   'ACTIVE_LANES_RECENT=',
                   ...childLines.map(line => `  ${line}`),
                   'VPS_RUNTIME=UNKNOWN_FROM_GITHUB_SENSOR',
