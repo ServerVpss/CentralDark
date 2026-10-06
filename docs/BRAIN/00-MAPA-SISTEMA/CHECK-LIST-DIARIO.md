@@ -700,3 +700,14 @@ LIVE_MCP_CATALOG_RELOAD=UNKNOWN_UNTIL_READBACK
 
 ### ➡️ NEXT_CURSOR
 `LIVE_MCP_CATALOG_READBACK → VERIFY_FINGERPRINT_AND_11_ROUTES → FILTER_SCREENPIPE → FILTER_DESKTOP → ROUTE_FAILOVER_REPLAY → FIXED_POINT`
+
+
+### 🧾 T1 físico — catálogo MCP #168
+- [x] runtime real identificado: `/root/CentralDark_MCP_RUNTIME`.
+- [x] unit real identificada: `centraldark-native-mcp-http.service`.
+- [x] processo pré-reload: PID 2446659, porta 9100, active.
+- [x] backup antes da promoção: `/root/CentralDark-Recovery/mcp-catalog-20261006`.
+- [x] src/dist `mcp-admin.js` promovidos sem tocar nos deltas locais de `mcp-server.js`/telemetria.
+- [x] Node syntax check do dist: PASS.
+- [ ] restart da unit: não executado; camada de execução bloqueou a chamada.
+- [ ] `mcp_admin_catalog` vivo com fingerprint/11 rotas: UNKNOWN até reload + readback.
