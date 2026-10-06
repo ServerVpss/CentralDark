@@ -73,6 +73,33 @@ function statusFileSnapshot(root) {
   return found;
 }
 
+function hudInventorySnapshot(root) {
+  const relativeOwner = "docs/HUD/CENTRALDARK-HUD-INVENTORY.json";
+  const file = path.join(root, relativeOwner);
+  const payload = readJsonSafe(file);
+  if (!payload) {
+    return {
+      schema: "centraldark.hud.inventory.runtime.v1",
+      status: exists(file) ? "INVALID_JSON" : "UNKNOWN",
+      source: relativeOwner,
+      inventoryFingerprint: null,
+      summary: null,
+      measuredAt: new Date().toISOString(),
+      rules: { inventoryIsDerivedNotAuthority: true, sealIsNotLive: true, unknownIsNotPass: true },
+    };
+  }
+  const summary = payload?.summary && typeof payload.summary === "object" ? payload.summary : {};
+  return {
+    schema: "centraldark.hud.inventory.runtime.v1",
+    status: "OBSERVED",
+    source: relativeOwner,
+    inventoryFingerprint: payload.inventory_fingerprint || null,
+    summary,
+    measuredAt: new Date().toISOString(),
+    rules: { inventoryIsDerivedNotAuthority: true, sealIsNotLive: true, unknownIsNotPass: true },
+  };
+}
+
 function secretBoundary(root) {
   const dir = path.join(root, "secrets");
   return {
@@ -478,6 +505,7 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, 
   const patternAlignment = patternAlignmentSnapshot({ root, diagnostics, boundary, rules });
   const executionTopology = executionTopologySnapshot({ root, procRoot, nowMs });
   const modelBinding = modelBindingSnapshot({ root, procRoot, nowMs });
+  const hudInventory = hudInventorySnapshot(root);
 
   return {
     schema: "centraldark.operational.snapshot.v1",
@@ -510,6 +538,7 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, 
     patternAlignment,
     executionTopology,
     modelBinding,
+    hudInventory,
     statusFiles: statusFileSnapshot(root),
     fronts,
     verdict: diagnostics.status === "OBSERVED" ? "OBSERVED_NOT_FIXED_POINT" : "UNKNOWN_NOT_PASS",
