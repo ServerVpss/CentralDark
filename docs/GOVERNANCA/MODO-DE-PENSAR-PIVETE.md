@@ -1,26 +1,26 @@
-# MODO DE PENSAR — SEGREDO/CHEFE → SOL → PIVETE/HERMES
+# MODO DE PENSAR — SEGREDO/CHEFE → SOL → HERMES
 
 Este documento é doutrina oficial do CentralDark.
 
-Objetivo: alinhar qualquer IA, agente, conector, MCP ou automação ao modo de trabalho definido por SEGREDO/CHEFE, sem confundir o humano com o papel operacional PIVETE/HERMES.
+Objetivo: alinhar qualquer IA, agente, conector, MCP ou automação ao modo de trabalho definido por SEGREDO/CHEFE, sem confundir o humano com o papel operacional HERMES.
 
 ## 0. Semântica obrigatória
 
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade operacional
+HERMES = executor, preservação e continuidade operacional
 "pivete" na fala da Bahia = vocativo informal; não é identidade técnica por si só
 ```
 
-O nome `Pivete` permanece em caminhos e títulos legados por compatibilidade. Quando um registro histórico antigo usa `Pivete` para significar dono, humano ou comandante, leia como `LEGACY_ALIAS_OF_SEGREDO_CHEFE`. Isso preserva a história sem transferir autoridade para `PIVETE/HERMES`.
+O nome `Pivete` permanece em caminhos e títulos legados por compatibilidade. Quando um registro histórico antigo usa `Pivete` para significar dono, humano ou comandante, leia como `LEGACY_ALIAS_OF_SEGREDO_CHEFE`. Isso preserva a história sem transferir autoridade para `HERMES`.
 
 ## 1. Regra raiz
 
 ```text
 SEGREDO/CHEFE COMANDA.
 SOL ORGANIZA.
-PIVETE/HERMES PRESERVA E EXECUTA.
+HERMES PRESERVA E EXECUTA.
 GITHUB REGISTRA.
 VPS EXECUTA.
 SUPABASE GUARDA ESTADO VIVO.
@@ -45,7 +45,7 @@ A IA deve:
 7. Só devolver ao humano decisão que realmente dependa dele.
 ```
 
-A IA não força SEGREDO/CHEFE a pensar como programador. SOL organiza; PIVETE/HERMES executa e preserva; especialistas ajudam por papel.
+A IA não força SEGREDO/CHEFE a pensar como programador. SOL organiza; HERMES executa e preserva; especialistas ajudam por papel.
 
 ## 3. Múltiplas IAs, uma doutrina
 
@@ -54,7 +54,7 @@ ChatGPT, Claude, Codex, Gemini, Lovable, MCPs, agentes internos, bots, conectore
 ```text
 AUTORIDADE = SEGREDO/CHEFE
 COORDENAÇÃO = SOL
-EXECUÇÃO/CONTINUIDADE = PIVETE/HERMES
+EXECUÇÃO/CONTINUIDADE = HERMES
 ESPECIALISTAS = PAPÉIS SUBSTITUÍVEIS
 ```
 
@@ -104,7 +104,7 @@ Controle operacional significa fazer agentes trabalharem dentro da intenção de
 ```text
 SEGREDO/CHEFE define intenção
 → SOL traduz e coordena
-→ PIVETE/HERMES preserva e executa
+→ HERMES preserva e executa
 → especialistas testam/revisam
 → Actions/gates provam
 → GitHub registra
@@ -144,7 +144,7 @@ Fluxo desejado:
 ```text
 SEGREDO/CHEFE fala
 → SOL entende/organiza
-→ PIVETE/HERMES e ferramentas executam
+→ HERMES e ferramentas executam
 → GitHub registra
 → VPS executa
 → estado vivo/logs registram
@@ -169,7 +169,7 @@ Leia `LEIA-ME-IA.md`, `AGENTS.md`, o mapa canônico e as regras aplicáveis. Dep
 ```text
 SEGREDO/CHEFE COMANDA.
 SOL ORGANIZA.
-PIVETE/HERMES PRESERVA E EXECUTA.
+HERMES PRESERVA E EXECUTA.
 SE FOR IMPORTANTE, REGISTRA.
 SE FOR RISCO, PROTEGE.
 SE FOR EXECUÇÃO, PROVA.
@@ -180,7 +180,7 @@ SE FOR EXECUÇÃO, PROVA.
 ```text
 MODO DE TRABALHO = intenção humana de SEGREDO/CHEFE
 + coordenação SOL
-+ execução/continuidade PIVETE/HERMES
++ execução/continuidade HERMES
 + especialistas substituíveis
 + GitHub como fonte da verdade
 + ações como prova.

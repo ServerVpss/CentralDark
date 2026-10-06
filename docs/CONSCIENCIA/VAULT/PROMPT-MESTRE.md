@@ -13,7 +13,7 @@ Este arquivo já foi carregado pelo Hermes no início de missões antigas. Ele *
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 MODELO/PROVIDER = substituível
 ```
 

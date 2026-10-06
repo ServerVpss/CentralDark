@@ -54,7 +54,7 @@ runtime:
 consumers:
   any_authorized_centraldark_actor:
     enabled: true
-    includes_examples: [SOL, CODEX, PIVETE_HERMES, FUTURE_MODEL, SKILL, WORKER, RUNTIME, AUTHORIZED_PROCESS]
+    includes_examples: [SOL, CODEX, HERMES, FUTURE_MODEL, SKILL, WORKER, RUNTIME, AUTHORIZED_PROCESS]
     mode: READ_OBSERVE_CONTEXT
     may_request: ALL_SCREENPIPE_CAPABILITIES
     through: CAPABILITY_CONTRACT_ROUTER

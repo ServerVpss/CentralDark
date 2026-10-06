@@ -9,7 +9,7 @@
  * Identidade atual:
  * SEGREDO/CHEFE = humano e autoridade final
  * SOL = identidade operacional/coordenadora
- * PIVETE/HERMES = executor, preservação e continuidade
+ * HERMES = executor, preservação e continuidade
  */
 
 (function () {
@@ -55,7 +55,7 @@
       '',
       'SEGREDO/CHEFE = humano e autoridade final',
       'SOL = identidade operacional/coordenadora',
-      'PIVETE/HERMES = executor, preservação e continuidade',
+      'HERMES = executor, preservação e continuidade',
       '',
       `Última sincronização: ${data.ultimaSync || 'desconhecida'}`,
       `Fontes canônicas carregadas: ${data.count}`,

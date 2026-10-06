@@ -13,7 +13,7 @@ Este arquivo já inventariou nomes, IDs, contagens e conectores de uma fase ante
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = executor, preservação e continuidade
+HERMES = executor, preservação e continuidade
 ```
 
 ## Regras atuais

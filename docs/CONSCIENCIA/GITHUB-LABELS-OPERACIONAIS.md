@@ -12,7 +12,7 @@ updated: 2026-09-09
 ```text
 SEGREDO/CHEFE = humano e autoridade final
 SOL = coordenadora
-PIVETE/HERMES = papel histórico/operacional quando aplicável
+HERMES = papel histórico/operacional quando aplicável
 MODELO = capacidade substituível
 REALIDADE = juiz
 ```
@@ -25,7 +25,7 @@ A autorização humana canônica é:
 👑 PERMITO-SEGREDO
 ```
 
-`permito-pivete`, `PERMITO-PIVETE` e outros aliases históricos não pertencem à taxonomia operacional ativa. O histórico permanece nos registros antigos, sem promover PIVETE/HERMES/modelo/bot a autoridade.
+`permito-pivete`, `PERMITO-PIVETE` e outros aliases históricos não pertencem à taxonomia operacional ativa. O histórico permanece nos registros antigos, sem promover HERMES/modelo/bot a autoridade.
 
 ## Regra model-neutral
 
@@ -233,7 +233,7 @@ LABEL_RECEBIDA
 → comparação case-insensitive para aliases conhecidos
 → alias conhecido: converter para destino canônico
 → alias de autoridade SEGREDO: 👑 PERMITO-SEGREDO
-→ alias de autoridade PIVETE/HERMES: descartar
+→ alias de autoridade HERMES: descartar
 → assign:* conhecido: preservar somente como proveniência, nunca roteamento/gate
 → assign:* desconhecido: descartar, não inventar agente
 → dedupe

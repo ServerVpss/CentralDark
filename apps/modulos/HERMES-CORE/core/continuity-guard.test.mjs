@@ -29,7 +29,7 @@ function validState(overrides = {}) {
     objetivo: 'Retomar missão sem repetir trabalho',
     autoridade: 'SEGREDO/CHEFE',
     coordenador: 'SOL',
-    escritor: 'PIVETE/HERMES',
+    escritor: 'HERMES',
     escopo: ['apps/modulos/HERMES-CORE/**'],
     ambiente: 'CASA_LOCAL',
     classe_de_acao: 'R1_LOCAL',

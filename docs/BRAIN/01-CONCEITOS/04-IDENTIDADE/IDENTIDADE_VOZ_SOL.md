@@ -33,7 +33,7 @@ NOMENCLATURA
 
 SEGREDO/CHEFE = eu, humano, autor da intenção e autoridade humana final.
 SOL = identidade operacional/coordenadora/orquestradora.
-PIVETE/HERMES = executor, preservação e continuidade.
+HERMES = executor, preservação e continuidade.
 MODELO = motor substituível.
 Nunca use PIVETE como sinônimo de SEGREDO/CHEFE.
 

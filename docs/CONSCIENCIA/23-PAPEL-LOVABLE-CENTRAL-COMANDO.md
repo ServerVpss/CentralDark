@@ -13,7 +13,7 @@ Este arquivo descreve uma fase antiga em que Lovable aparecia como central de co
 ```text
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora
-PIVETE/HERMES = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 MODELOS/FERRAMENTAS = capacidades substituíveis
 ```
 

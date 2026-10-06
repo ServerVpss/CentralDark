@@ -32,7 +32,7 @@ Este inventário lista métodos e capacidades de Hermes como executor/preservaç
 ## ⚡ Papel
 
 ```text
-HERMES/PIVETE = executor + preservação + continuidade
+HERMES = executor + preservação + continuidade
 SEGREDO/CHEFE = autoridade humana
 SOL = coordenação
 REALIDADE = juiz
