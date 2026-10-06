@@ -305,8 +305,24 @@ check('scripts/trigger-fabric/system_sentinel.py',[
 ], classification='HYBRID_MULTIROUTE_SENTINEL_HOOK')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
- '"dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069"',
+ '"dependency_fingerprint": "42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5"',
 ], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
+check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
+ '"centraldark_unified_capability_catalog"',
+ '"SCREENPIPE_LOCAL_SENSOR"',
+ '"RDC_DESKTOP_COMMANDER"',
+ '"catalogFingerprint: \"42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5\""',
+ 'routeReturned: routes.length',
+], classification='MCP_UNIFIED_CAPABILITY_CATALOG')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md',[
+ 'LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG=true',
+ 'SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true',
+ 'DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF=true',
+], classification='MCP_UNIFIED_CAPABILITY_CATALOG_MEMORY')
+check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md',[
+ 'CATALOG_SOURCE_READBACK=PASS',
+ 'LIVE_MCP_CATALOG_RELOAD=UNKNOWN_UNTIL_READBACK',
+], classification='MCP_UNIFIED_CAPABILITY_CATALOG_RECEIPT')
 
 check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
  '### 📓 Caderneta — sistema híbrido multirota #146',
