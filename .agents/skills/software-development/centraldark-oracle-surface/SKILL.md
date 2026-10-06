@@ -72,15 +72,39 @@ next_readonly_probe:
 
 ## Preview Tab Semantics
 
+Runtime counterproof corrected a false assumption from the first session draft.
+
 ```text
-"abra/navegue/vá para" = reuse the currently focused Preview tab
-"abra NOVA ABA/novo tab" = preserve current tabs and call desktop_preview open with a distinct descriptive label
+"abra/navegue/vá para" = reuse/navigate the current Browser tab
+"abra NOVA ABA/novo tab" = preserve the current Browser tab and create another Browser tab
 NAVIGATE_CURRENT_TAB != OPEN_NEW_PREVIEW_TAB
-NEW_TAB_PRESERVE_CURRENT=true
-DISTINCT_LABEL_REQUIRED=true
 ```
 
-Do not depend on a site's `target="_blank"` or `window.open()` for reliable tab creation; open the destination directly with `desktop_preview` and a unique label, then read back the active tab.
+Current Hermes Desktop source proves a split between **navigation** and **tab creation**:
+
+```text
+desktop_preview action=open + URL
+→ emits preview.open {url,label}
+→ URL targets call browserTabFor(visible)
+→ active/last Browser tab is reused by design
+
+Preview strip "+"
+→ newBrowserTab()
+→ mints a new Browser tab id
+→ preserves the previous Browser tab
+```
+
+Therefore:
+
+```text
+LABEL_IS_NOT_NEW_TAB_SIGNAL=true
+DESKTOP_PREVIEW_OPEN_DOES_NOT_PROVE_NEW_BROWSER_TAB=true
+NEW_TAB_REQUEST_PRESERVES_CURRENT=INTENT
+AGENT_NEW_BROWSER_TAB_TOOL_ACTION=UNEXPOSED_IN_CURRENT_DESKTOP_PREVIEW_SCHEMA
+NEW_BROWSER_TAB_E2E=UNKNOWN_UNTIL_AGENT_CAN_TRIGGER_TAB_CREATION_AND_READBACK_TWO_TABS
+```
+
+The `desktop_preview` schema currently exposes only `open|close|read`; it has no `new_tab` action. Do not claim that a distinct label creates a second Browser tab. A real PASS requires the agent to trigger the same tab-creation path as the Preview strip `+` (or an equivalent authorized binding) and then prove that both Browser tabs remain present.
 
 ## Proven Pilot
 

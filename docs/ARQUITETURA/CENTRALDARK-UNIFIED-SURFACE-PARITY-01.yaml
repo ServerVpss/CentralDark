@@ -425,16 +425,26 @@ preview_navigation_contract:
   owner: centraldark-oracle-surface
   focused_tab_navigation_phrases: ["abra", "navegue", "vá para"]
   new_tab_phrases: ["abra NOVA ABA", "novo tab", "outra aba"]
-  rules:
+  desired_semantics:
     NAVIGATE_CURRENT_TAB_NE_OPEN_NEW_PREVIEW_TAB: true
-    NEW_TAB_PRESERVE_CURRENT: true
-    DISTINCT_LABEL_REQUIRED: true
-    NEW_TAB_REQUIRES_READBACK: true
+    NEW_TAB_REQUEST_PRESERVES_CURRENT: true
+    NEW_TAB_REQUIRES_READBACK_OF_AT_LEAST_TWO_BROWSER_TABS: true
+  current_measured_binding:
+    desktop_preview_schema_actions: [open, close, read]
+    desktop_preview_open_url_behavior: REUSE_ACTIVE_OR_LAST_VISIBLE_BROWSER_TAB
+    label_role: DISPLAY_LABEL_NOT_TAB_CREATION_SIGNAL
+    ui_new_tab_function: newBrowserTab
+    ui_new_tab_trigger: PREVIEW_STRIP_PLUS
+    agent_new_tab_action_exposed: false
+  proof_state:
+    OPEN_PAGE: PASS
+    READ_PAGE: PASS
+    NEW_BROWSER_TAB_FROM_AGENT_TOOL: UNKNOWN
+    PRESERVE_PREVIOUS_BROWSER_TAB_WHILE_OPENING_SECOND: UNKNOWN
+  rules:
+    LABEL_IS_NOT_NEW_TAB_SIGNAL: true
+    DESKTOP_PREVIEW_OPEN_DOES_NOT_PROVE_NEW_BROWSER_TAB: true
     SITE_TARGET_BLANK_IS_NOT_RELIABLE_TAB_CREATION_PROOF: true
-  proven_transport:
-    open: desktop_preview
-    interact: drive_preview
-    readback: desktop_preview
 
 external_surface_candidate_policy:
   surfaces:
