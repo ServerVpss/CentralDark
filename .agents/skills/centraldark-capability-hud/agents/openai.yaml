@@ -1,0 +1,15 @@
+interface:
+  display_name: CentralDark HUD Cartographer
+  short_description: Genealogia, metabolismo, determinismo e HUD vivo da CentralDark
+  default_prompt: >-
+    Use $centraldark-capability-hud para medir CURRENT, reconstruir o inventário
+    machine-consumable do HUD, separar SELO de LIVE, cruzar genealogia,
+    metabolismo, determinismo, skills, workflows, agentes, rotas e superfícies,
+    e devolver somente PASS/UNKNOWN/BLOCKED com owner, prova e NEXT_CURSOR.
+policy:
+  products:
+    - chatgpt
+    - codex
+    - api
+    - atlas
+  allow_implicit_invocation: true
