@@ -57,3 +57,16 @@ O hook real continua sendo o já existente `CAPABILITY_GAP/TERRITORY_ROUTE_CHANG
 ## Fronteira
 
 Source/main materializado não prova reload do processo MCP na VPS. `LIVE_MCP_CATALOG_RELOAD` permanece UNKNOWN até `mcp_admin_catalog` vivo devolver o fingerprint e as rotas novas.
+
+
+## Ferida adicional encontrada no metabolismo
+
+O runtime real executa `dist/mcp-server.js`, e a primeira cristalização havia alterado apenas `src/tools/core/mcp-admin.js`. Portanto:
+
+```text
+SOURCE_UPDATED != DIST_RUNTIME_UPDATED
+SOURCE_DIST_PARITY_REQUIRED=true
+BUILD_ARTIFACT_IS_PART_OF_RUNTIME_PROOF=true
+```
+
+A correção compilou o MCP com o build oficial e promoveu também `dist/tools/core/mcp-admin.js`; o verifier passou a fiscalizar os dois lados.
