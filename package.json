@@ -17,7 +17,9 @@
     "screenpipe:mcp": "screenpipe-mcp",
     "screenpipe:mcp:http": "screenpipe-mcp --http --port 3031",
     "screenpipe:supervisor": "node apps/modulos/screenpipe-launcher.mjs",
-    "verify:centraldark-contract": "python3 scripts/trigger-fabric/verify_repo_contract.py"
+    "verify:centraldark-contract": "python3 scripts/trigger-fabric/verify_repo_contract.py",
+    "hud:inventory": "node scripts/hud/generate-hud-inventory.mjs --write",
+    "hud:inventory:check": "node scripts/hud/generate-hud-inventory.mjs --check"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
