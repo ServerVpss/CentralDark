@@ -1339,6 +1339,56 @@
         "screen/audio status"
       ],
       "runtime_pass_claimed": false
+    },
+    "HUD_CARTOGRAPHER_COMPLETE_MACHINE_INVENTORY": {
+      "claim_key": "HUD_CARTOGRAPHER_COMPLETE_MACHINE_INVENTORY",
+      "owner": ".agents/skills/centraldark-capability-hud/SKILL.md",
+      "state": "SEALED_PROVEN_SOURCE_GENERATOR_AND_CONSUMERS",
+      "proof_target": "GENEALOGY_METABOLISM_DETERMINISM_AGENT_SKILL_WORKFLOW_ROUTE_UI_MACHINE_INVENTORY_WITH_SEAL_LIVE_SPLIT",
+      "evidence_ref": "LEARNING_170 + docs/CONSCIENCIA/RECEIPTS/2026-10-06-hud-cartographer-complete-inventory.md",
+      "observed_at": "2026-10-06",
+      "counterproof": "PASS_SOURCE_CONSUMER_VERIFIER__RUNTIME_STATES_REMAIN_SCOPED",
+      "receipt_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hud-cartographer-complete-inventory.md",
+      "dependency_fingerprint": "d4d3ceda8e7c842e067af04cb8aeb52b88b787a47078257a24f6055903c7736c",
+      "proven_path_replay": {
+        "marker": "PROVEN_PATH_REPLAY_LOCK",
+        "dependency_fingerprint": "d4d3ceda8e7c842e067af04cb8aeb52b88b787a47078257a24f6055903c7736c",
+        "execution_commands": [
+          "node scripts/hud/generate-hud-inventory.mjs --write",
+          "python3 scripts/trigger-fabric/rebuild_learning_lineage.py --write when learning headings changed",
+          "node apps/modulos/hub/scripts/generate-house-inventory.mjs",
+          "node scripts/hud/generate-hud-inventory.mjs --check",
+          "python3 scripts/trigger-fabric/verify_repo_contract.py",
+          "git diff --check"
+        ],
+        "proof_commands": [
+          "verify machine JSON schema and inventory_fingerprint",
+          "verify skills/workflows/routes/genealogy/proven_claims/deterministic owners are non-empty",
+          "verify each supported UI signal has owner+line+sector+surface+proof+seal/live states",
+          "verify PR mother consumer reads machine JSON from main",
+          "verify sealed cards do not imply LIVE PASS"
+        ],
+        "expected_results": [
+          "HUD_INVENTORY_SELF_TEST=PASS",
+          "HUD_INVENTORY_CHECK=PASS",
+          "HOUSE_INVENTORY_SKILLS=992",
+          "FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED",
+          "SEAL_LIVE_SPLIT_REQUIRED=true",
+          "MACHINE_INVENTORY_IS_DERIVED_NOT_AUTHORITY=true",
+          "NO_PARALLEL_OWNER_CREATED=true"
+        ],
+        "environment_bindings": [
+          "REPO_ROOT",
+          "CURRENT_MAIN_SHA",
+          "PR_MOTHER_NUMBER",
+          "RUNTIME_PROBE_SOURCE_WHEN_LIVE_IS_REQUIRED"
+        ],
+        "result_schema": "centraldark.hud-machine-inventory.v1",
+        "expected_effect": "NEXT_EXECUTOR_LOADS_INDEX_THEN_ONLY_PERTINENT_OWNER_CONE",
+        "raw_output_byte_equality_required": false,
+        "runtime_live_claims_inferred_from_inventory": false
+      },
+      "next_cursor": "FINAL_REGENERATE_SAME_HEAD_VERIFY_PROMOTE_PR1757_READBACK"
     }
   }
 }
