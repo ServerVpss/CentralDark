@@ -153,7 +153,7 @@ jobs:
       - name: 🔹 Testar core único e adapters finos
         run: node --test scripts/lupa/agent-core-adapters.test.mjs
 
-      - name: 🔹 Validar identidade SEGREDO → SOL → PIVETE/HERMES
+      - name: 🔹 Validar identidade SEGREDO → SOL → HERMES
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}

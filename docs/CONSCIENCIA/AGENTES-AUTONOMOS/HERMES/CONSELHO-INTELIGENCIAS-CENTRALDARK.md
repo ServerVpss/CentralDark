@@ -44,7 +44,7 @@ flowchart TB
     BOTS["🤖 Bot API<br/>bots existentes"]
   end
   MCP["🔌 MCP CentralDark<br/>control plane único"]
-  HERMES["☿ HERMES/PIVETE<br/>executor"]
+  HERMES["☿ HERMES<br/>executor"]
   RUNTIME(("⚙️ RUNTIME MEDIDO"))
   REALITY["⚖️ REALIDADE"]
 
@@ -71,7 +71,7 @@ flowchart TB
 | MCP oficial | `apps/modulos/mcp/` |
 | Biblioteca Cognitiva | `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/` |
 | Navegação BRAIN | `docs/BRAIN/` |
-| Executor | HERMES/PIVETE |
+| Executor | HERMES |
 | Estado operacional | runtime/log/efeito medidos |
 
 ## Significados

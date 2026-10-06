@@ -31,7 +31,7 @@ links:
 ```text
 SEGREDO/CHEFE = decisão final e intenção humana
 SOL = coordenação operacional
-PIVETE/HERMES = execução, preservação e continuidade
+HERMES = execução, preservação e continuidade
 MODELO = motor substituível
 REALIDADE = juiz
 ```

@@ -2,7 +2,7 @@
 
 > Atualização do PADRAO-GARGALO-CHROME-WINDOWS.md (que focava em Chrome/PID
 > e ESTAVA INVERTIDO na árvore de parentesco).
-> Medido vivo 2026-08-19. Dono: Pivete/Hermes. Autoridade: SEGREDO/CHEFE.
+> Medido vivo 2026-08-19. Dono: HERMES. Autoridade: SEGREDO/CHEFE.
 
 ## Correção de erro anterior
 - A árvore anotou `21516 → 23980` (21516 pai de 23980) — ESTAVA ERRADA.
