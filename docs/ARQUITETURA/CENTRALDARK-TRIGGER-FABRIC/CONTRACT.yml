@@ -47,7 +47,7 @@ principles:
   chief_receives_decision_not_internal_topology: true
 
 global_contract_entry_policy:
-  marker: CENTRALDARK_GLOBAL_CONTRACT_ENTRY_ON_DEMAND
+  marker: CENTRALDARK_GLOBAL_CONTRACT_ENTRY_REQUIRED
   applies_to:
     - CHATGPT
     - GEMINI
@@ -61,9 +61,9 @@ global_contract_entry_policy:
     - NEW_TAB
     - MODEL_CHANGE
     - AGENT_HANDOFF
-  contract_required_before_operational_mutation: false
+  contract_required_before_operational_mutation: true
   model_or_tool_may_bypass_contract: false
-  outside_contract_mutation: CONTINUE_IF_INTENT_TARGET_AND_CAPABILITY_ARE_AUTHORIZED
+  outside_contract_mutation: FAIL_CLOSED
   parallel_workaround_for_uncovered_case: FORBIDDEN
   uncovered_case_flow:
     - FIND_EXISTING_OWNER
@@ -74,7 +74,7 @@ global_contract_entry_policy:
   uncovered_case_may_create_parallel_architecture: false
   uncovered_case_may_restart_mission: false
   delta_must_preserve_human_intent: true
-  revalidation_required_before_continue: false
+  revalidation_required_before_continue: true
 
 standard_flow:
   canonical_entry: CENTRALDARK
