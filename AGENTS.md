@@ -93,6 +93,26 @@ Texto legado conflitante perde para o owner canônico.
 
 `ServerVpss/CentralDark` é o repositório oficial e fonte estrutural da verdade. Runtime é medido no ambiente correspondente.
 
+## 🟢 GitHub Entry HUD Gate — obrigação antes de responder
+
+Owner: `docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md`
+
+```text
+GITHUB_ENTRY_HUD_FIRST=true
+FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true
+AGENT_DEPENDENCY_MAP_REQUIRED=true
+GITHUB_REALITY_CROSSCHECK_REQUIRED=true
+UI_SURFACE_INVENTORY_REQUIRED=true
+SKILL_INVENTORY_REQUIRED=true
+WORKFLOW_INVENTORY_REQUIRED=true
+BUTTON_TAB_SECTOR_SURFACE_MAP_REQUIRED=true
+HUD_UPDATE_IS_ENTRY_GATE_NOT_OPTIONAL=true
+```
+
+Qualquer agente/superfície que entra pelo GitHub deve primeiro medir `main`, PR-mãe `#1757`, filhos abertos e dependências de agente; se o HUD vivo estiver stale, deve atualizá-lo ou marcar `HUD_STALE_BLOCKS_HUMAN_RETURN=true` para o escopo dependente.
+
+Regra de prova: GitHub real medido ganha de print, memória de chat, texto colado ou UI truncada. Skill, botão, aba, workflow ou serviço listado não é PASS até haver owner + consumer + readback aplicável.
+
 ## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
 
 Isto não cria uma lei nova. Faz o contrário: remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação que não seja dependência causal real do objetivo.

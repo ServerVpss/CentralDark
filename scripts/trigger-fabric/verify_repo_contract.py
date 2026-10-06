@@ -307,6 +307,28 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
  '"dependency_fingerprint": "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
 ], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
+
+check('docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md',[
+ 'GITHUB_ENTRY_HUD_FIRST=true',
+ 'FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true',
+ 'AGENT_DEPENDENCY_MAP_REQUIRED=true',
+ 'BUTTON_TAB_SECTOR_SURFACE_MAP_REQUIRED=true',
+ 'GITHUB_REALITY_CROSSCHECK_REQUIRED=true',
+ 'SKILLS_COUNT=992',
+ 'WORKFLOWS_COUNT=71',
+], classification='GITHUB_ENTRY_HUD_AGENT_DEPENDENCY_GATE')
+check('AGENTS.md',[
+ 'GITHUB_ENTRY_HUD_FIRST=true',
+ 'FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true',
+ 'AGENT_DEPENDENCY_MAP_REQUIRED=true',
+ 'HUD_UPDATE_IS_ENTRY_GATE_NOT_OPTIONAL=true',
+], classification='GITHUB_ENTRY_HUD_AGENT_POLICY_BINDING')
+check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-github-entry-hud-agent-dependency-gate.md',[
+ 'GITHUB_ENTRY_HUD_FIRST=true',
+ 'MAIN_AT_INVENTORY=d600f0efb1ed386779f519404ca0c802a82d8302',
+ 'FULL_UI_BUTTON_TAB_MAP=PARTIAL_COUNTED_NOT_FULLY_ENUMERATED',
+], classification='GITHUB_ENTRY_HUD_AGENT_DEPENDENCY_RECEIPT')
+
 check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  '"centraldark_unified_capability_catalog"',
  '"SCREENPIPE_LOCAL_SENSOR"',
@@ -1506,6 +1528,7 @@ check('apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml',[
 check('package.json',[
  '"verify:centraldark-contract": "python3 scripts/trigger-fabric/verify_repo_contract.py"',
 ], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_PACKAGE_ENTRY')
+
 
 check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  '"HERMES_DELEGATED_COMMIT_PATH"',
