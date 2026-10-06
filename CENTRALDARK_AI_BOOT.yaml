@@ -1342,6 +1342,38 @@ proven_path_replay_lock:
     RESULT_SCHEMA_AND_EXPECTED_EFFECT_MUST_MATCH: true
     NO_NEW_SYSTEM_FOR_PROVEN_PATH_REUSE: true
 
+oracle_surface_boot:
+  marker: CENTRALDARK_ORACLE_CANONICAL_FIRST
+  owner: ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md"
+  query_builder: scripts/trigger-fabric/oracle_evidence_hook.py
+  evidence_owner: supabase/functions/_shared/evidence-envelope.mjs
+  persistence_entry: supabase/functions/agent-log/index.ts
+  canonical_prefix: ["!CENTRALDARK", "#ACORDAR", "!CALIBRAR", "!MULTIBUSSOLA"]
+  before_material_oracle_query:
+    - LOAD_APPLICABLE_CURRENT_CANON
+    - PRESERVE_PARENT_INTENT
+    - SANITIZE_MINIMUM_CONTEXT
+    - ATTACH_INTENT_EVENT_CAUSATION_SURFACE_ATTEMPT_IDS
+    - SEND_QUERY_AS_CANDIDATE_ONLY
+  if_surface_cannot_read_required_canon: DECLARE_EVIDENCE_LIMIT_AND_KEEP_CANDIDATE
+  recovery:
+    send_failed_is_not_chat_dead: true
+    retry_same_conversation_once_when_surface_survives: true
+    new_chat_same_tab_after_same_conversation_failure: true
+    new_browser_tab_only_after_same_tab_route_proven_unusable: true
+    preserve_previous_proven_context_until_replacement_proven: true
+  learning:
+    one_success_is_replayable_recipe: false
+    after_proven_new_path: [CRYSTALLIZE_MINIMUM_LEARNING, STORE_PROVENANCE, EMIT_EVIDENCE_ENVELOPE, REPLAY_ONCE, COMPARE_RESULT_SCHEMA_AND_EXPECTED_EFFECT]
+    promote_recipe_only_if_equivalent: true
+    divergent_replay_remains_single_run_proof: true
+  invariants:
+    ORACLE_OUTPUT_IS_CANDIDATE: true
+    SOURCE_IS_PROVENANCE_NOT_AUTHORITY: true
+    ONE_SYSTEM_ONLY: true
+    ONE_WRITER_PER_SCOPE: true
+    REALITY_IS_JUDGE: true
+
 
 lei_do_rastro:
   current_claim_live_measurement_required: true
