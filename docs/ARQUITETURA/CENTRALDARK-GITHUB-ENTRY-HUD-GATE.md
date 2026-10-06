@@ -82,3 +82,37 @@ AGENT_DEPENDENCY_MAP_UPDATED=PASS
 UNMAPPED_AGENT_DEPENDENCY=0_OR_EXPLICIT_UNKNOWN
 NEXT_CURSOR_REGISTERED=PASS
 ```
+
+
+## Agent cartographer binding — 2026-10-06
+
+```text
+HUD_CARTOGRAPHER_AGENT=true
+AGENT_OWNER=.agents/skills/centraldark-capability-hud/SKILL.md
+AGENT_SURFACE=.agents/skills/centraldark-capability-hud/agents/openai.yaml
+MACHINE_GENERATOR=scripts/hud/generate-hud-inventory.mjs
+MACHINE_INVENTORY=docs/HUD/CENTRALDARK-HUD-INVENTORY.json
+HUD_CONSUMER=docs/HUD/HUD.html
+PR_MOTHER_CONSUMER=.github/workflows/selo-fabric.yml
+SEAL_LIVE_SPLIT_REQUIRED=true
+FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED
+```
+
+O inventário não cria segunda verdade. Ele projeta owners existentes e carrega somente o cone pertinente.
+
+```text
+SELO = última prova válida + fingerprint + rollback
+LIVE = medição atual + timestamp + fonte
+SELO != LIVE
+OWNER_PRESENT != RUNTIME_PASS
+INVENTORY_ENTRY != CAPABILITY_HEALTH
+```
+
+A geração é determinística e deve permanecer em fixed point:
+
+```bash
+node scripts/hud/generate-hud-inventory.mjs --write
+node scripts/hud/generate-hud-inventory.mjs --check
+```
+
+A PR-mãe consome apenas o resumo/fingerprint do JSON; o JSON completo fica no repo para consulta seletiva por agente, HUD e verifier.
