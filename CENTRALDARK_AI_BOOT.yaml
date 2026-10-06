@@ -160,6 +160,13 @@ CENTRALDARK_AI_BOOT:
       capability_catalog_fingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"
       screenpipe_and_rdc_share_one_mcp_catalog: true
       catalog_entry_is_not_runtime_health: true
+      hud_cartographer_agent: ".agents/skills/centraldark-capability-hud/SKILL.md"
+      hud_machine_generator: "scripts/hud/generate-hud-inventory.mjs"
+      hud_machine_inventory: "docs/HUD/CENTRALDARK-HUD-INVENTORY.json"
+      hud_machine_inventory_is_authority: false
+      hud_seal_live_split_required: true
+      hud_full_surface_map_machine_enumerated: true
+      hud_inventory_load_policy: "INDEX_FIRST_THEN_LOAD_ONLY_PERTINENT_OWNER_CONE"
     proof:
       unknown_is_pass: false
       action_is_proof: false
