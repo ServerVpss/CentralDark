@@ -93,17 +93,20 @@ function sortByOwnerLine(items) {
 
 function collectSkills(files) {
   return files
-    .filter((file) => /^\.agents\/skills\/[^/]+\/SKILL\.md$/.test(file))
-    .map((owner) => ({
-      id: 'skill:' + owner.split('/')[2],
-      name: owner.split('/')[2],
+    .filter((file) => file.startsWith('.agents/skills/') && file.endsWith('/SKILL.md'))
+    .map((owner) => {
+      const relative = owner.slice('.agents/skills/'.length, -'/SKILL.md'.length);
+      return {
+      id: 'skill:' + relative,
+      name: relative,
       owner,
       sector: 'SKILLS',
       proof_source: owner,
       seal_state: 'OWNER_PRESENT',
       live_state: 'UNKNOWN_UNTIL_AGENT_LOAD_READBACK',
       fingerprint: sha256File(owner),
-    }));
+    };
+    });
 }
 
 function collectAgents(files) {
@@ -309,10 +312,10 @@ function collectRoutes() {
   const end = start >= 0 ? text.indexOf(']);', start) : -1;
   const block = start >= 0 && end > start ? text.slice(start, end + 3) : text;
   const routes = [];
-  for (const match of block.matchAll(/\{[^{}]*\bid:\s*"([^"]+)"[^{}]*\}/g)) {
-    const raw = match[0];
-    const field = (name) => raw.match(new RegExp(name + ':\\\\s*"([^"]+)"'))?.[1] || null;
-    const id = match[1];
+  for (const raw of block.split(/\r?\n/).filter((line) => /\{\s*id:\s*"/.test(line))) {
+    const field = (name) => raw.match(new RegExp(name + ':\\s*"([^"]+)"'))?.[1] || null;
+    const id = field('id');
+    if (!id) continue;
     routes.push({
       id,
       transport: field('transport'),
