@@ -118,13 +118,24 @@ function parseJsonl(repoRoot, relativePath) {
 function scanSkills(repoRoot) {
   const root = path.resolve(repoRoot, '.agents/skills');
   if (!fs.existsSync(root)) return [];
-  return fs.readdirSync(root, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .filter((name) => fs.existsSync(path.join(root, name, 'SKILL.md')))
-    .sort()
-    .map((name) => {
-      const owner = `.agents/skills/${name}/SKILL.md`;
+  const owners = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const absolute = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(absolute);
+        continue;
+      }
+      if (entry.isFile() && entry.name === 'SKILL.md') {
+        owners.push(relative(repoRoot, absolute));
+      }
+    }
+  };
+  walk(root);
+  return owners
+    .sort((a, b) => a.localeCompare(b, 'pt-BR'))
+    .map((owner) => {
+      const name = owner.slice('.agents/skills/'.length, -'/SKILL.md'.length);
       const text = read(repoRoot, owner);
       return makeItem({
         id: `skill:${name}`,
