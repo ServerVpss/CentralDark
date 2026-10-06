@@ -104,7 +104,8 @@ const runtimeTools = [
 const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
-    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO", capability: "CASA_DESKTOP_SHELL_FILES", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "SCREENPIPE_LOCAL_SENSOR", transport: "SCREENPIPE_HTTP", binding: "SEGREDO:127.0.0.1:3030", capability: "CASA_VISUAL_AUDIO_DESKTOP_SENSOR", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "segredo-vpss|VPS_HOST", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_CASA_TO_VPS", transport: "MCP", binding: "MCP_CASA", capability: "execute_command|vps_run_once_script", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
@@ -163,7 +164,7 @@ export const mcpAdminTools = [
     },
     {
         name: "mcp_admin_catalog",
-        description: "Lista o catálogo interno do MCP usado pelo dispatcher fixo mcp_admin_call. Use para descobrir ações disponíveis sem reconectar.",
+        description: "Catálogo unificado da CentralDark: tools internas, rotas autorizadas e capacidades externas (incluindo Remote Desktop Commander e Screenpipe) no mesmo mcp_admin_catalog, sem criar MCP paralelo.",
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Catálogo admin MCP" },
         inputSchema: z.object({
             filter: z.string().optional(),
@@ -184,11 +185,11 @@ export const mcpAdminTools = [
                 totalRuntimeTools: runtimeTools.length,
                 totalDispatchableTools: runtimeTools.length,
                 returned: tools.length,
-                catalogScope: "mcp_admin_dispatcher",
+                catalogScope: "centraldark_unified_capability_catalog",
                 catalogVersion: CATALOG_VERSION,
                 confirmForDestructive: ADMIN_CONFIRM,
                 acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
-                routeCatalogScope: "centraldark_authorized_routes",
+                routeCatalogScope: "centraldark_unified_capability_catalog",
                 routeCount: AUTHORIZED_ROUTE_CATALOG.length,
                 routeLaws: ROUTE_LAWS,
                 routes: AUTHORIZED_ROUTE_CATALOG,
