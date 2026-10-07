@@ -4,6 +4,11 @@ name: ⚙️ VPS HealthCheck
 
 on:
   workflow_dispatch:
+    inputs:
+      diagnostico:
+        description: 'Rodar diagnóstico extra somente leitura (Hermes/API 503/portas 9900-8644-9119-3030); default não roda'
+        type: boolean
+        default: false
   schedule:
     - cron: '0 */6 * * *'
 
@@ -15,6 +20,55 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  diagnostico-leitura:
+    if: github.event_name == 'workflow_dispatch' && inputs.diagnostico == true
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: 🔹 Medir Hermes/API/portas — somente leitura, nenhuma mutação
+        shell: bash
+        run: |
+          set +e
+          cap() { local n="$1"; shift; echo "## $n"; "$@" 2>&1 | head -c 2000; echo; echo; }
+
+          cap "git /root/CentralDark" bash -c '
+            git -C /root/CentralDark symbolic-ref -q HEAD || echo DETACHED
+            echo "HEAD=$(git -C /root/CentralDark rev-parse HEAD 2>/dev/null)"
+            echo "origin/main=$(git -C /root/CentralDark rev-parse origin/main 2>/dev/null)"
+            echo "dirty_files=$(git -C /root/CentralDark status --porcelain 2>/dev/null | wc -l)"
+          '
+
+          cap "portas 9900/8644/9119/3030" ss -ltnp "sport = :9900 or sport = :8644 or sport = :9119 or sport = :3030"
+
+          cap "pm2 (Hermes/graph/ScreenPipe)" bash -c '
+            pm2 jlist 2>/dev/null | jq -r ".[]|select(.name|test(\"Hermes|graph|ScreenPipe\";\"i\"))|[.name,.pm2_env.status,.pm2_env.restart_time,.pm2_env.autorestart]|@tsv"
+          '
+
+          cap "hermes-gateway.service" systemctl show hermes-gateway.service -p FragmentPath,DropInPaths,Restart,ActiveState,SubState,MainPID,NRestarts 2>&1
+
+          cap "heartbeat.service enabled?" systemctl is-enabled hermes-gateway.service centraldark-vps-heartbeat.service 2>&1
+
+          cap "health 9900/8644 (código HTTP)" bash -c '
+            echo -n "9900: "; curl -s -o /dev/null -w "%{http_code}\n" --max-time 4 127.0.0.1:9900/health
+            echo -n "8644: "; curl -s -o /dev/null -w "%{http_code}\n" --max-time 4 127.0.0.1:8644/health
+          '
+
+          cap "api.centralldark.com/health (público)" curl -sS -i --max-time 8 https://api.centralldark.com/health
+
+          cap "MCP /health/deep (local, falhas)" bash -c '
+            curl -s --max-time 6 127.0.0.1:9100/health/deep | jq "{status,score,falhas:[.checks[]|select(.ok==false)|.key]}" 2>&1
+          '
+
+          cap "Caddy vhost api.centralldark.com (config computada)" bash -c '
+            caddy adapt --config /etc/caddy/Caddyfile --pretty 2>&1 | grep -n -A20 "api.centralldark.com"
+          '
+
+          cap "upstream legado 3100/8099" ss -ltnp "sport = :3100 or sport = :8099"
+
+          echo "DIAGNOSTICO_SOMENTE_LEITURA=DONE"
+        env:
+          CI: "false"
+
   healthcheck:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 8
