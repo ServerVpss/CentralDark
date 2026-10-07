@@ -16,6 +16,7 @@ import urllib.request
 from pathlib import Path
 
 STATE_FILE = Path("/root/.hermes/runtimes/llamacpp/server.json")
+CALIBRATION_FILE = Path("/root/.hermes/centraldark-runtime-calibration.json")
 
 
 def service_state(name: str) -> str:
@@ -62,6 +63,21 @@ def parse_json_text(raw: object) -> dict:
 
 
 def runtime_snapshot() -> dict:
+    calibration = {}
+    try:
+        raw = json.loads(CALIBRATION_FILE.read_text(encoding="utf-8"))
+        calibration = {
+            "verdict": raw.get("verdict"),
+            "observed_at": raw.get("observed_at"),
+            "wound_count": raw.get("wound_count"),
+            "streak": raw.get("streak"),
+            "reward": raw.get("reward"),
+            "trend": raw.get("trend"),
+            "fingerprint": raw.get("fingerprint"),
+        }
+    except Exception:
+        calibration = {"verdict": "UNKNOWN"}
+
     return {
         "host": socket.gethostname(),
         "hermes_gateway_service": service_state("hermes-gateway.service"),
@@ -72,9 +88,9 @@ def runtime_snapshot() -> dict:
         "triton_live": http_code("http://127.0.0.1:8000/v2/health/live"),
         "triton_ready": http_code("http://127.0.0.1:8000/v2/health/ready"),
         "local_model": "UNKNOWN",
-        "advisory_route": "vps-local-runtime",
+        "calibration_state": calibration,
+        "advisory_route": "vps-state-machine-local",
     }
-
 
 def local_runtime_binding(snapshot: dict) -> tuple[str, str, str]:
     state = json.loads(STATE_FILE.read_text(encoding="utf-8"))
@@ -178,7 +194,7 @@ def main() -> int:
 
         safe = {
             "status": "ADVISORY",
-            "source": "vps-local-runtime",
+            "source": "vps-state-machine-local",
             "model": model,
             "summary": safe_text(data["summary"], 1200),
             "findings": [
@@ -192,7 +208,7 @@ def main() -> int:
         }
         review_path.write_text(json.dumps(safe, ensure_ascii=False) + "\n", encoding="utf-8")
         print(
-            "LOCAL_RUNTIME_ADVISORY=PASS "
+            "STATE_MACHINE_ADVISORY=PASS "
             f"model={model} host={snapshot['host']} "
             f"mcp={snapshot['mcp_http']} triton={snapshot['triton_live']}/{snapshot['triton_ready']}"
         )
