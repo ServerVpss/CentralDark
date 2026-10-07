@@ -155,6 +155,65 @@ EVIDÊNCIA
   → PRÓXIMO PASSO (um só, claro)
 ```
 
+## Pairwise Reality Selection — comparar rotas e cristalizar o vencedor
+
+Comparação pareada é uma especialização condicional da MULTIBÚSSOLA + CONTRAPROVA + REALITY JUDGE. Não cria agente, juiz, workflow ou arquitetura nova.
+
+A inspiração pode vir de uma superfície externa que apresenta duas opções ao humano, mas a CentralDark não promove hipótese sobre o mecanismo interno dessa superfície. O que se retém é o padrão observável: candidatos comparáveis + critério de escolha + registro do vencedor.
+
+```text
+PAIRWISE_REALITY_SELECTION=true
+PAIRWISE_IS_CONDITIONAL_NOT_RITUAL=true
+PAIRWISE_ONLY_WHEN=MATERIAL_ROUTE_AMBIGUITY_SURVIVES_REUSE_AND_DETERMINISTIC_FAST_PATH
+SAME_INTENT_REQUIRED=true
+SAME_TARGET_REQUIRED=true
+SAME_BASELINE_OR_EQUIVALENT_BINDINGS_REQUIRED=true
+SAME_EVIDENCE_SCHEMA_REQUIRED=true
+REALITY_JUDGE_SELECTS_TECHNICAL_EFFECT_WINNER=true
+ELOQUENCE_OR_MODEL_CONFIDENCE_IS_NOT_WINNER_PROOF=true
+HUMAN_PREFERENCE_SELECTS_SUBJECTIVE_GOALS=true
+NO_DISCRIMINATING_EVIDENCE=NO_WINNER
+TIE_OR_INCOMPARABLE=UNKNOWN
+LOSER_IS_NOT_DELETED_BLINDLY=true
+WINNER_REQUIRES=PROOF+COUNTERPROOF+EFFECT_READBACK
+WINNER_CRYSTAL_REQUIRES=OWNER+SEQUENCE+BINDINGS+FINGERPRINT+PROOF+COUNTERPROOF+EXPECTED_EFFECT+EVIDENCE+NEXT_CURSOR
+REPLAY_WINNER_BEFORE_REDISCOVERY=true
+CHANGED_FINGERPRINT=REVALIDATE_AFFECTED_CONE_ONLY
+```
+
+Fluxo mínimo:
+
+```text
+INTENÇÃO
+→ REUSE/DETERMINISTIC_FAST_PATH
+→ SE AINDA HOUVER ≥2 ROTAS MATERIALMENTE VIÁVEIS:
+     CANDIDATO_A + CANDIDATO_B
+     → NORMALIZAR MESMO ALVO/BASELINE/EVIDÊNCIA
+     → EXECUTAR/PROVAR CADA ROTA SEM DUPLICAR WRITER
+     → CONTRAPROVAR
+     → REALITY_JUDGE_COMPARA_EFEITO
+     → WINNER | TIE | UNKNOWN
+     → WINNER: CRISTAL + FINGERPRINT + REPLAY
+→ SENÃO:
+     USAR ROTA DETERMINÍSTICA EXISTENTE
+```
+
+Critério técnico compara resultado observável: correção, completude, regressão, custo/latência quando material, estabilidade, reversibilidade e aderência ao owner/escopo. "Resposta mais bonita" não vence teste técnico.
+
+Quando a intenção for subjetiva (estilo, preferência visual, escolha humana genuína), o humano é o juiz de preferência. Reality Judge continua verificando apenas claims técnicos e efeitos observáveis.
+
+A comparação não autoriza executar duas mutações concorrentes no mesmo escopo. Leitura/probe pode ser paralelo; mutação respeita Writer único, isolamento e rollback. Se uma rota já está provada com fingerprint compatível, `REPLAY_BEFORE_REDISCOVERY` vence a experimentação redundante.
+
+### Origem observada e limite de evidência
+
+```text
+OBSERVED_EXTERNAL_PATTERN=PAIRWISE_OPTION_PREFERENCE_SURFACE
+OBSERVED_FACT=TWO_CANDIDATE_OPTIONS_PRESENTED_FOR_HUMAN_PREFERENCE
+UNKNOWN=INTERNAL_MODEL_IDENTITIES|EXPERIMENT_SELECTION_REASON|HIDDEN_ROUTING
+EXTERNAL_UI_IS_SEMANTIC_INPUT_NOT_INTERNAL_PROOF=true
+CENTRALDARK_ADAPTATION_IS_OWN_METHOD_DELTA=true
+```
+
 ## Contrato humano de execução integral
 
 Este método é universal: não é preferência de um usuário específico. O sistema deve absorver complexidade operacional sempre que isso puder ser feito com segurança.
