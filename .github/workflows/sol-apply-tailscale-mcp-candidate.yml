@@ -26,7 +26,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 1
 
-      - name: Contraprova do runner antes de mutar
+      - name: 🧪 Contraprova do runner antes de mutar
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -39,19 +39,19 @@ jobs:
           curl -fsS --max-time 4 http://127.0.0.1:9100/health | grep -q 'mcp-centraldark' || { echo 'MCP_LOCAL_HEALTH_FAIL'; exit 25; }
           echo 'PRECHECK=PASS'
 
-      - name: Aplicar rota privada Tailscale do MCP
+      - name: 🔐 Aplicar rota privada Tailscale do MCP
         shell: bash
         run: |
           set -Eeuo pipefail
           bash scripts/vps/configure-tailscale-private-mcp.sh
 
-      - name: Ligar skill-workshop ao Hermes por referência
+      - name: 🔗 Ligar skill-workshop ao Hermes por referência
         shell: bash
         run: |
           set -Eeuo pipefail
           REPO_ROOT=/root/CentralDark HERMES_HOME=/root/.hermes bash scripts/hermes/bind-skill-workshop.sh
 
-      - name: Receipt e contraprova final
+      - name: 🧾 Receipt e contraprova final
         shell: bash
         run: |
           set -Eeuo pipefail
