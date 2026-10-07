@@ -43,7 +43,24 @@ function extractAllLearnings(text) {
   });
 }
 
+// Autonomia: todo aviso/razão vira próxima ação legível por máquina — o gate orienta, nunca trava.
+const NEXT_ACTION = Object.freeze({
+  TOOL_AVAILABLE_NOT_ATTEMPTED_YET: 'ATTEMPT_AVAILABLE_TOOL_THEN_REPORT_MEASURED_RESULT',
+  UNKNOWN_HAS_MEASUREMENT_ROUTE_CONTINUE_TARGETED: 'RUN_MEASUREMENT_ROUTE_FOR_AFFECTED_CLAIM_ONLY',
+  CANONICAL_FILE_NOT_FOUND: 'READ_CANONICAL_PATH_DIRECT_FROM_MAIN_OR_DECLARE_SOUL_STATUS_UNKNOWN',
+  NO_NUMBERED_LEARNING_IN_CANONICAL_FILE: 'READ_CANONICAL_FILE_DIRECT_AND_FIX_HEADINGS',
+  LEARNING_NOT_FOUND: 'LIST_PERTINENT_INDEX_AND_PICK_EXISTING_NUMBER',
+  LEARNING_NUMBER_AMBIGUOUS: 'DEDUPLICATE_LEARNING_NUMBER_IN_OWNER_FILE',
+});
+
+function nextActionsFor(payload) {
+  const keys = [...(payload.warnings || []), payload.reason].filter(Boolean);
+  return [...new Set(keys.map((key) => NEXT_ACTION[key]).filter(Boolean))];
+}
+
 function emit(payload, code = 0) {
+  const next_actions = nextActionsFor(payload);
+  if (next_actions.length) payload.next_actions = next_actions;
   console.log(JSON.stringify(payload, null, 2));
   process.exit(code);
 }

@@ -24,7 +24,7 @@ REPO_SRC="/root/Multizap/apps/clone-deck/apps/bot"
 
 mkdir -p "$REV_DIR" "$BACKUP_DIR"
 
-log() { echo "[$(date '+%H:%M:%S')] $*" | tee -a "$RESUMO"; }
+log() { echo "[$(TZ=America/Sao_Paulo date '+%H:%M:%S')] $*" | tee -a "$RESUMO"; }
 sanitize() { sed -E 's/(token|password|authorization|apikey|api_key|secret|bot_token)[=: ]+[^ ,"]+/\1=***OCULTO***/Ig'; }
 
 echo "# Resync apps/bot — $TS" > "$RESUMO"

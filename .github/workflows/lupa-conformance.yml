@@ -315,8 +315,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m pip install --disable-pip-version-check "numpy>=1.26" "safetensors>=0.4.5"
-          python3 -m unittest discover -s infra/mcp/tests -v
+          # venv isolado: runner com Python gerenciado (PEP 668) recusa pip no sistema.
+          python3 -m venv "$RUNNER_TEMP/semantic-core-venv"
+          "$RUNNER_TEMP/semantic-core-venv/bin/python" -m pip install --disable-pip-version-check "numpy>=1.26" "safetensors>=0.4.5"
+          "$RUNNER_TEMP/semantic-core-venv/bin/python" -m unittest discover -s infra/mcp/tests -v
 
       - name: 🔹 Receipt determinístico (sempre)
         if: always()

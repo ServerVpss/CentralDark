@@ -111,7 +111,7 @@ jobs:
             const actor = context.actor || 'UNKNOWN';
             const now = new Date();
             // Projeção humana segue o owner canônico central-horario:
-            // DD/MM/AAAA HH:mm:ss BRT em America/Sao_Paulo.
+            // Horário de Brasília: DD/MM/AAAA HH:mm:ss BRT em America/Sao_Paulo.
             // UTC/RFC3339 continua separado para auditoria técnica.
             const humanParts = Object.fromEntries(
               new Intl.DateTimeFormat('pt-BR', {

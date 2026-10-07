@@ -19,7 +19,7 @@ CLONE_DECK="/root/Multizap/apps/clone-deck"
 BOT_DIR="$CLONE_DECK/apps/bot"
 PUBLIC_BOT="/var/www/multizap/bot"
 REV="/root/Multizap/revisoes/$(date +%Y%m%d-%H%M%S)/bot-build-npm-fallback"
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+TIMESTAMP=$(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')
 
 mkdir -p "$REV"/{logs,backup}
 exec > >(tee -a "$REV/logs/execucao.log") 2>&1
