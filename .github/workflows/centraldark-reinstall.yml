@@ -165,7 +165,7 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: Health check
+      - name: 🏥 Health check
         run: |
           echo "=== POST-REBOOT HEALTH ==="
           echo "HOSTNAME=$(hostname)"
