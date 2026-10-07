@@ -95,7 +95,6 @@ jobs:
             BASE_SHA="$(git rev-parse origin/main)"
             echo "GATE_BASE_FALLBACK=origin/main:${BASE_SHA}"
           fi
-          test "$BASE_SHA" != "" && test "$BASE_SHA" != "0000000000000000000000000000000000000000"
           node scripts/lupa/diagram-route-gate.mjs --base-ref "$BASE_SHA" --head-ref "$HEAD_SHA"
 
       - name: 🔹 Gate INTERLIGADOS — padrões de PR e dívida runtime explícita
