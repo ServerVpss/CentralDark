@@ -315,10 +315,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # venv isolado: runner com Python gerenciado (PEP 668) recusa pip no sistema.
-          python3 -m venv "$RUNNER_TEMP/semantic-core-venv"
-          "$RUNNER_TEMP/semantic-core-venv/bin/python" -m pip install --disable-pip-version-check "numpy>=1.26" "safetensors>=0.4.5"
-          "$RUNNER_TEMP/semantic-core-venv/bin/python" -m unittest discover -s infra/mcp/tests -v
+          # Python gerenciado (PEP 668) recusa pip no sistema e o runner não tem python3-venv:
+          # instala as dependências em diretório isolado (--target) e expõe por PYTHONPATH.
+          DEPS_DIR="$RUNNER_TEMP/semantic-core-deps"
+          python3 -m pip install --disable-pip-version-check --upgrade --target "$DEPS_DIR" "numpy>=1.26" "safetensors>=0.4.5"
+          PYTHONPATH="$DEPS_DIR${PYTHONPATH:+:$PYTHONPATH}" python3 -m unittest discover -s infra/mcp/tests -v
 
       - name: 🔹 Receipt determinístico (sempre)
         if: always()
