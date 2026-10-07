@@ -2590,3 +2590,31 @@ DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
 LEGACY_PR_MOTHER_1562_PROTECTED=true
 SHELL_IS_MUTABLE=true
 LEGACY_IS_PRESERVED=true
+
+
+### 26. WORKTREE TEARDOWN — bancada temporária, rastro permanente
+
+Regra operacional para agentes/subagentes que usam worktree isolado:
+
+```text
+MISSION_DONE
+→ CLASSIFY_WORKTREE
+→ UNIQUE_DELTA? PRESERVE/PROMOTE_FIRST
+→ RECEIPT
+→ REMOVE_WORKTREE
+→ PRUNE_IF_APPLICABLE
+```
+
+Invariantes:
+
+`WORKTREE_IS_DISPOSABLE=true`
+`UNIQUE_DELTA_MUST_SURVIVE_BEFORE_TEARDOWN=true`
+`CLEAN_OR_PROMOTED_BEFORE_REMOVE=true`
+`TEARDOWN_REQUIRES_RECEIPT=true`
+`GIT_WORKTREE_PRUNE_AFTER_SAFE_REMOVE=true`
+`TEMPORARY_BENCH_IS_NOT_MEMORY=true`
+`GIT_RECEIPT_CRYSTAL_IS_MEMORY=true`
+
+Não remover worktree quando existir commit apenas local, arquivo modificado/untracked com delta único, receipt pendente, prova ainda não promovida ou classificação UNKNOWN. Worktree pode ser deletado após o delta útil estar promovido/preservado e a trilha de proveniência estar registrada. A limpeza deve deixar rastro suficiente para responder: qual missão criou a bancada, qual HEAD/base usou, qual delta sobreviveu, onde foi promovido e quando a bancada foi removida.
+
+Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode compartilhar leitura; mutação paralela usa isolamento quando necessário; cada escopo mantém um único writer.
