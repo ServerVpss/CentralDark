@@ -7,7 +7,7 @@ OWNER=AGENTS.md
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+REPOSITORY_RECEIPT_AND_HUD_CURRENT_READBACK_SAME_TURN_AS_DIRECT_MAIN=true
 APPLIES_TO_ALL_ENGINES=true
 ```
 
@@ -73,22 +73,25 @@ TRACE_PRESENT != TRACE_VALID
 NETWORK_OR_PROVIDER_UNAVAILABLE=UNKNOWN
 WRITE_WITHOUT_TRACE=FAIL
 MEMORY_WITHOUT_LOCATION=FAIL
-DIRECT_MAIN_WITHOUT_ACTIVE_LEDGER_RECEIPT=FAIL
+DIRECT_MAIN_WITHOUT_REPOSITORY_RECEIPT_OR_HUD_CURRENT_READBACK=FAIL
 STALE_CURRENT_MAIN=FAIL
 ```
 
 O fiscal não cria segundo judge, segundo owner ou segunda verdade. Ele reconstrói a prova citada e devolve evidência para o Reality Judge.
 
 
-### Ledger ativo #1757 — ordem de verificação
+### Ledgers legados #1562/#1757 — lookup de provenance
 
 ```text
-LEDGER_REF_EXACT_COMMENT_FIRST=true
-LEDGER_FALLBACK_STARTS_FROM_NEWEST_PAGE=true
-LEDGER_FALLBACK_WALKS_BACKWARD_UNTIL_FOUND=true
+PR_MOTHER_ROLE=RETIRED
+NO_NEW_PR_MOTHER=true
+LEGACY_LEDGER_REF_EXACT_COMMENT_FIRST=true
+LEGACY_LEDGER_FALLBACK_STARTS_FROM_NEWEST_PAGE=true
+LEGACY_LEDGER_FALLBACK_WALKS_BACKWARD_UNTIL_FOUND=true
 GITHUB_ISSUE_COMMENTS_DEFAULT_ORDER=OLDEST_FIRST
-LEDGER_OVER_100_COMMENTS_MUST_NOT_FALSE_FAIL=true
+LEGACY_LEDGER_OVER_100_COMMENTS_MUST_NOT_FALSE_FAIL=true
 ```
 
-Se a resposta fornecer link/ID de comentário do livro-razão, o fiscal consulta esse comentário diretamente.
-Receipts CURRENT devem citar um caminho exato no repositório. Comentários da #1562 são somente compatibilidade histórica/proveniência; não são mais o store primário.
+Se uma prova histórica fornecer link/ID de comentário, o fiscal pode consultá-lo diretamente como provenance.
+Receipts CURRENT citam caminho exato no repositório e o fechamento exige HUD CURRENT readback.
+Comentários de #1562/#1757 não são superfície operacional nem store primário.

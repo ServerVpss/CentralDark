@@ -885,26 +885,30 @@
     "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH": {
       "claim_key": "HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH",
       "owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
-      "lock_key": "f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b",
+      "lock_key": "3318ec585173c84b5ad374b80bfade8180f1e9b11b013120baec55f46f5ab781",
       "state": "SEALED_PROVEN",
       "proof_target": "AUTHORIZED_MULTIROUTE_FAILOVER_WITH_BINDING_SCOPED_HEALTH",
-      "evidence_ref": "LEARNING_146 + LEARNING_147 + CURRENT_ROUTE_REMEASURE_2026-10-02 + HOST_VM_SHARED_T1",
-      "observed_at": "2026-10-02T20:52:00Z",
+      "evidence_ref": "LEARNING_146 + LEARNING_147 + LEARNING_168 + CURRENT_MCP_UNIFIED_CATALOG_2026-10-06",
+      "observed_at": "2026-10-06T17:28:57Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/receipts/2026-10-02-complete-sieve-law.md",
+      "receipt_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
-        "dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069",
+        "dependency_fingerprint": "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
         "execution_commands": [
+          "query mcp_admin_catalog for the requested capability or route",
           "classify the exact failed route and binding",
           "keep global system state undecided",
-          "inventory existing authorized alternate routes",
+          "inventory existing authorized alternate routes from the same unified catalog",
           "measure alternate routes independently",
           "reuse the first live capability that satisfies the claim without changing owner",
           "compare evidence on the same claim scope and time",
           "decide PASS UNKNOWN or BLOCKED only after applicable route exhaustion"
         ],
         "proof_commands": [
+          "mcp_admin_catalog must return tools and routes from centraldark_unified_capability_catalog",
+          "filter screenpipe must select SCREENPIPE_LOCAL_SENSOR without requiring a second MCP",
+          "filter desktop must select RDC_DESKTOP_COMMANDER without requiring a second catalog",
           "record route name account/device binding and timestamp",
           "prove alternate route with an actual tool call or runtime probe",
           "separate route health from system capability",
@@ -915,10 +919,13 @@
           "ONE_ROUTE_FAILED_IS_NOT_SYSTEM_FAILED=true",
           "LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE=true",
           "ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER=true",
+          "NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE=true",
           "ROUTE_HEALTH_SCOPED_TO_BINDING=true",
-          "CHECK_PRESENT_IN_GIT_IS_NOT_CHECK_PRESENT_IN_RUNTIME=true",
+          "SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true",
+          "DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF=true",
           "FIXED_POINT_REQUIRES_ALL_APPLICABLE_LAYERS=true",
-          "NO_PARALLEL_OWNER_CREATED=true"
+          "NO_PARALLEL_OWNER_CREATED=true",
+          "SOURCE_DIST_PARITY_REQUIRED=true"
         ],
         "expected_effect": "SAME_LOGICAL_SYSTEM_REUSES_EXISTING_CAPABILITY_BUS_ACROSS_AUTHORIZED_ROUTES",
         "result_schema": "centraldark.hybrid-multiroute-replay.result.v1",
@@ -929,6 +936,8 @@
           "HOST",
           "TRANSPORT",
           "OBSERVED_AT",
+          "MCP_CATALOG_VERSION",
+          "MCP_CATALOG_FINGERPRINT",
           "SPARSE_CHECKOUT_REQUIRED_PATHS",
           "HOST_VM_SHARED_ROOT_IF_APPLICABLE"
         ],
@@ -951,7 +960,9 @@
         "sentinel_signature": "ROUTE_FAILURE",
         "hermes_runtime_hook": "apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py#pre_verify",
         "hermes_hook_marker": "CENTRALDARK_COMPLETE_SIEVE_MATERIALIZATION=FAIL",
-        "git_hooks_are_not_runtime_route_owner": true
+        "git_hooks_are_not_runtime_route_owner": true,
+        "catalog_gap_reuses_existing_trigger": "CAPABILITY_GAP",
+        "new_hook_required": false
       },
       "runtime_consumer": {
         "device_class": "CENTRALDARK-OS",
@@ -963,7 +974,21 @@
         "materialized_paths_added": [
           "docs/BRAIN/00-MAPA-SISTEMA",
           "docs/receipts"
-        ]
+        ],
+        "catalog_owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+        "catalog_consumer": "mcp_admin_catalog",
+        "catalog_scope": "centraldark_unified_capability_catalog",
+        "catalog_expected_routes": 13,
+        "catalog_fingerprint": "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
+        "external_capabilities": [
+          "HERMES_DELEGATED_COMMIT_PATH",
+          "RDC_DESKTOP_COMMANDER",
+          "SCREENPIPE_CLI_RECORDER",
+          "SCREENPIPE_LOCAL_SENSOR"
+        ],
+        "runtime_exec_tree": "/root/CentralDark_MCP_RUNTIME",
+        "runtime_exec_artifact": "apps/modulos/mcp/dist/mcp-server.js",
+        "source_dist_parity_required": true
       },
       "runtime_proof": {
         "yaml_parse": "PASS",
@@ -976,9 +1001,39 @@
         "all_hybrid_multiroute_checks_pass": true,
         "unrelated_global_failed_checks": 30,
         "cleanup": "PASS",
-        "observed_at": "2026-10-02"
+        "observed_at": "2026-10-02",
+        "catalog_source_readback": "PASS_MAIN",
+        "catalog_runtime_reload": "UNKNOWN_UNTIL_LIVE_READBACK",
+        "screenpipe_catalog_binding": true,
+        "rdc_catalog_binding": true,
+        "source_main_current": "93cc39bbf578668143b8f8b596320d07a7d6b754",
+        "node_check": "PASS",
+        "mcp_unified_capability_catalog_checks": "PASS",
+        "introduced_scope_failures": 0,
+        "global_unrelated_failures": 2,
+        "global_unrelated_failure_classes": [
+          "GLOBAL_LEARNING_LINEAGE_EXECUTABLE_GATE",
+          "SOUL_SYNC_CURRENT_FOR_FIXED_POINT"
+        ],
+        "runtime_http_health": "PASS_EXISTING_PROCESS",
+        "live_catalog_new_payload": "UNKNOWN_UNTIL_SERVICE_RELOAD_AND_TOOL_READBACK",
+        "vps_runtime_tree": "/root/CentralDark_MCP_RUNTIME",
+        "vps_runtime_unit": "centraldark-native-mcp-http.service",
+        "runtime_files_promoted": "PASS",
+        "runtime_src_sha256": "3f3d059ae00469728d535ae34121322d335e9365555494bd89a9132d1ae64ca4",
+        "runtime_dist_sha256": "d63020ec58b940d636b57a091608faf63b62c607a489fada64c2bd9339e0c1b0",
+        "runtime_backup": "/root/CentralDark-Recovery/mcp-catalog-20261006",
+        "runtime_process_before_reload": {
+          "pid": 2446659,
+          "unit": "centraldark-native-mcp-http.service",
+          "state": "active",
+          "port": 9100
+        },
+        "runtime_restart_attempt": "BLOCKED_BY_EXECUTION_TOOL_SECURITY",
+        "hermes_delegated_commit_path": "PASS_ON_PR1748_C893A949",
+        "screenpipe_cli_recorder": "CATALOGED_RUNTIME_UNKNOWN_UNTIL_STATUS_JSON"
       },
-      "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#caderneta--sistema-hibrido-multirota-146",
+      "checklist_ref": "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md#current-vivo--2026-10-06--learning_168_mcp_unified_capability_catalog",
       "materialization_requirements": {
         "consumer_repo": "/root/CentralDark",
         "sparse_checkout_required_paths": [
@@ -1026,13 +1081,17 @@
           "CONSUMER_REAL",
           "CHECKLIST_DIARIO",
           "RECEIPT",
-          "PR_MOTHER_1562",
+          "PR_MOTHER_1757",
+          "LEGACY_PR_MOTHER_1562",
           "RELATED_LIVE_PR_WHEN_SCOPE_INTERSECTS",
           "PHYSICAL_BINDING_WHEN_CLAIM_DEPENDS_ON_IT",
           "READBACK"
         ],
         "fixed_point_requires_all_applicable_layers": true,
-        "non_applicable_layer_must_be_explicit": true
+        "non_applicable_layer_must_be_explicit": true,
+        "evolved_learning_ref": 168,
+        "pr_mother_current": 1757,
+        "pr_mother_legacy": 1562
       }
     },
     "VMWARE_VPS_DIRECT_SSH_BINDING_PATH": {
@@ -1256,6 +1315,30 @@
         "unknown_is_pass": false
       },
       "next_cursor": "INSPECT_LIVE_FORGE_THEN_CLOSE_HOSTKEY_AND_RUNNER_CLAIMS_SEPARATELY"
+    },
+    "HERMES_DELEGATED_COMMIT_PATH": {
+      "claim_key": "HERMES_DELEGATED_COMMIT_PATH",
+      "owner": "experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md",
+      "state": "SEALED_PROVEN_ON_PR1748",
+      "proof_target": "HERMES_TOOL_WRITE_COMMIT_PUSH_READBACK",
+      "observed_at": "2026-10-06T07:59:48Z",
+      "commit": "c893a949b3051ae8a96cc4bc8b910857534c55e7",
+      "counterproof": "PASS_GITHUB_EXTERNAL_READBACK",
+      "engine_used": "copilot/gpt-4.1",
+      "kylin_current_pass_claimed": false
+    },
+    "SCREENPIPE_CLI_RECORDER_PATH": {
+      "claim_key": "SCREENPIPE_CLI_RECORDER_PATH",
+      "owner": "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md",
+      "state": "CATALOGED_RECIPE_RUNTIME_UNKNOWN",
+      "proof_target": "SCREENPIPE_RECORDER_FIRST_CLI_OPERATION",
+      "runtime_pass_requires": [
+        "status --json",
+        "capture freshness",
+        "storage path",
+        "screen/audio status"
+      ],
+      "runtime_pass_claimed": false
     }
   }
 }

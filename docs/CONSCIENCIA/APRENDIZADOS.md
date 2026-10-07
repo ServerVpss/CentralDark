@@ -1843,3 +1843,38 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Ferida:** #1562 excedeu a capacidade de comentários do GitHub e deixou de aceitar novos receipts.
 - **Aprendizado:** memória/receita durável fica no repositório; PR-mãe é HUD/rendezvous mutável. #1562 permanece legado não mergeado; #1757 assume o rendezvous ativo.
 - **Regra:** `LEGACY_IS_PRESERVED=true`; `SHELL_IS_MUTABLE=true`; `COMMENTS_ARE_NOT_PRIMARY_LEDGER=true`.
+
+### Sync Autônomo Git VPS — método completo provado (2026-10-06)
+- **Owner detalhado:** docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-VPS-AUTONOMOUS-GIT-SYNC-METHOD.md
+- **Receipt:** docs/CONSCIENCIA/RECEIPTS/2026-10-06-vps-autonomous-git-sync.md
+- **Ferida:** VPS CENTRALDARK-OS ficava dessincronizada com origin/main (drift de 177 arquivos).
+- **Aprendizado:** script auto-sync com flock/stash/ff-only/rebase + cron a cada 5 min resolve o drift autônomo. Método inteiro documentado pra qualquer agente reproduzir.
+- **Commit de prova:** 6ae79a9ec
+- **Regra:** STASH_BEFORE_PULL=true; FF_ONLY_FIRST=true; FLOCK_REQUIRED=true; NO_FORCE_PUSH=true; NO_BLIND_RESET=true.
+
+### Lei Transversal de Preenchimento de Lacunas — Metabolismo do Instinto Superior (2026-10-06)
+- **Owner detalhado:** docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-LEI-PREENCHIMENTO-LACUNAS-METABOLISMO-INSTINTO-SUPERIOR.md
+- **Herança:** docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-CINCO-PRINCIPIOS-VIVOS-LEI-DA-CASA.md
+- **Princípio:** toda brecha encontrada deve primeiro tentar ser preenchida por capacidade existente; caminho repetível vira determinístico; conhecimento novo vira memória; capacidade nova entra como braço do mesmo corpo; sem prova fica UNKNOWN.
+- **Metabolismo:** PERCEBER → COMPARAR → ENCONTRAR GAP → REUTILIZAR → COMPOR → AGIR → PROVAR → APRENDER → GENERALIZAR → AUTOMATIZAR → OBSERVAR → REPETIR.
+- **Propriedade:** quanto mais trabalha, menos redescobre; quanto mais erra, mais cresce a capacidade de não repetir; quanto mais ferramentas recebe, mais amplo sem mudar quem é.
+- **Cristal:** EVERY_GAP_IS_A_CAPABILITY_OPPORTUNITY; EVERY_PROVEN_PATH_CAN_BECOME_REPLAY; ONE_HEART; REALITY_IS_JUDGE.
+
+
+### #168 — Catálogo MCP unificado de capabilities e rotas (2026-10-06)
+- **Owner detalhado:** `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
+- **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md`
+- **Receita:** `PROVEN-CLAIMS.lock.json#HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`
+- **Aprendizado:** tools internas, Remote Desktop Commander, Screenpipe e demais rotas autorizadas devem ser descobertas no mesmo `mcp_admin_catalog`; catálogo não prova execução e estado continua por binding.
+- **Cristal:** `ONE_MCP_CATALOG=true`; `SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true`; `DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF=true`; `NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE=true`.
+- **Fingerprint:** `42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5`.
+
+
+### #169 — Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
+- **Owner detalhado:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
+- **Commit Hermes:** `c893a949b3051ae8a96cc4bc8b910857534c55e7`.
+- **Arquivo de prova:** `experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md`.
+- **Aprendizado:** Hermes executor provado por delegação real entra como capability catalogada; Screenpipe CLI entra como rota operacional recorder-first, mas runtime só vira PASS por `status --json`/freshness.
+- **Cristal:** `HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748`; `MODEL_IS_ENGINE_NOT_OWNER=true`; `SCREENPIPE_RUNTIME_PASS_REQUIRES_FRESHNESS=true`; `CATALOG_ENTRY != RUNTIME_HEALTH`.
+- **Fingerprint catálogo:** `80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7`.
