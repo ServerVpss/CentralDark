@@ -51,6 +51,42 @@ async function serviceState(name) {
   }
 }
 
+async function bridgeChatProbe() {
+  const url = "http://127.0.0.1:18435/v1/chat/completions";
+  const started = Date.now();
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      signal: AbortSignal.timeout(15_000),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "kylin-qwen-plus",
+        messages: [{ role: "user", content: "Responda somente OK" }],
+        max_tokens: 8,
+        temperature: 0,
+      }),
+    });
+    const text = await response.text();
+    return {
+      name: "kylin_bridge_chat",
+      url,
+      code: response.status,
+      ok: response.status === 200,
+      latency_ms: Date.now() - started,
+      body_preview: text.slice(0, 300),
+    };
+  } catch (error) {
+    return {
+      name: "kylin_bridge_chat",
+      url,
+      code: 0,
+      ok: false,
+      latency_ms: Date.now() - started,
+      error: compact(error && (error.message || error), 200),
+    };
+  }
+}
+
 async function httpProbe(name, url) {
   try {
     const response = await fetch(url, {
@@ -123,6 +159,9 @@ export function classifySnapshot(snapshot) {
     if (!probe.ok) wounds.push("HTTP_UNHEALTHY:" + probe.name + ":" + probe.code);
     if (probe.name === "kylin_bridge" && bridgeDegraded(probe)) {
       wounds.push("KYLIN_BRIDGE_DEGRADED");
+    }
+    if (probe.name === "kylin_bridge_chat" && !probe.ok) {
+      wounds.push("KYLIN_BRIDGE_CHAT_FAILED:" + probe.code);
     }
   }
 
@@ -243,6 +282,7 @@ export async function calibrateRuntime(options = {}) {
 
   const http = [];
   for (const pair of HTTP_TARGETS) http.push(await httpProbe(pair[0], pair[1]));
+  http.push(await bridgeChatProbe());
 
   const localModel = await resolveLocalModel();
   const snapshot = {
