@@ -26,6 +26,23 @@ function formatBrasilia(value = new Date(), options = {}) {
   return `${formatted} ${DISPLAY_LABEL}`;
 }
 
+function formatFinalReportBrasilia(value = new Date()) {
+  const date = asDate(value);
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat(LOCALE, {
+      timeZone: TIME_ZONE,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    }).formatToParts(date).map(({ type, value: part }) => [type, part]),
+  );
+  return `${parts.day}/${parts.month}/${parts.year} ${parts.hour}:${parts.minute}:${parts.second} ${DISPLAY_LABEL}`;
+}
+
 function formatBrasiliaDate(value = new Date()) {
   return new Intl.DateTimeFormat(LOCALE, {
     timeZone: TIME_ZONE,
@@ -60,13 +77,29 @@ function nowPair() {
   };
 }
 
+function finalReportTimeFields(value = new Date()) {
+  const date = asDate(value);
+  return {
+    Date: formatFinalReportBrasilia(date),
+    'Date-UTC': utcIso(date),
+  };
+}
+
+function finalReportTimeHeader(value = new Date()) {
+  const fields = finalReportTimeFields(value);
+  return `Date: ${fields.Date}\nDate-UTC: ${fields['Date-UTC']}`;
+}
+
 module.exports = {
   TIME_ZONE,
   LOCALE,
   DISPLAY_LABEL,
   formatBrasilia,
+  formatFinalReportBrasilia,
   formatBrasiliaDate,
   formatBrasiliaTime,
   utcIso,
   nowPair,
+  finalReportTimeFields,
+  finalReportTimeHeader,
 };

@@ -5,10 +5,13 @@ export const {
   LOCALE,
   DISPLAY_LABEL,
   formatBrasilia,
+  formatFinalReportBrasilia,
   formatBrasiliaDate,
   formatBrasiliaTime,
   utcIso,
   nowPair,
+  finalReportTimeFields,
+  finalReportTimeHeader,
 } = time;
 
 export default time;
