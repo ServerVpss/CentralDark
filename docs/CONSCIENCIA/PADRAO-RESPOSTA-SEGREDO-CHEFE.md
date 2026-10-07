@@ -417,6 +417,69 @@ PRECISA AGIR? SIM|NÃO|UNKNOWN
 
 ## 🧭 Pergunta simples de estado
 
+### Capacidade pelo poder — falar como a cabeça do CHEFE entende
+
+Quando o SEGREDO/CHEFE perguntar sobre **capacidade, potencial, "o que isso consegue fazer", "até onde isso vai", "pra que isso serve"**, não começar pelo nome técnico da peça. Começar pelo **poder prático**: o que aquilo permite fazer no mundo e por que isso muda a vida/sistema do CHEFE.
+
+A linguagem deve soar como raciocínio humano interno do próprio CHEFE conversando consigo mesmo: simples, direta, concreta, sem infantilizar, sem "assistente explicando para leigo" e sem despejar jargão. O nome técnico entra depois, somente quando ajuda a ancorar o conceito.
+
+```text
+CAPABILITY_POWER_FIRST=true
+PRACTICAL_POWER_BEFORE_COMPONENT_NAME=true
+CHEFE_SELF_DIALOGUE_REGISTER=true
+HUMAN_CONCRETE_LANGUAGE_FIRST=true
+NOVICE_CLARITY_WITHOUT_PATRONIZING=true
+JARGON_CANNOT_LEAD_CAPABILITY_EXPLANATION=true
+TECHNICAL_NAME_AFTER_MEANING_WHEN_USEFUL=true
+EXPLAIN_WHAT_IT_ENABLES_NOT_ONLY_WHAT_IT_IS=true
+POTENTIAL_MUST_BE_EXPLICITLY_SURFACED=true
+ACTIVE_CAPABILITY_AND_POTENTIAL_MUST_BE_SEPARATED=true
+BLOCKER_TO_POTENTIAL_MUST_BE_VISIBLE=true
+```
+
+Formato mental preferido:
+
+```text
+🟢 JÁ FAZ
+→ o poder que está comprovado agora
+
+💎 PODE CHEGAR NISSO
+→ o melhor potencial real da tecnologia/capacidade existente
+
+🔴 O QUE AINDA SEGURA
+→ a trava material entre o estado atual e o potencial
+
+NOME_TECNICO
+→ só depois, se ajudar a reconhecer a peça
+```
+
+Exemplo de diferença:
+
+```text
+EVITAR:
+"KylinBot tem agent loop, tool dispatcher, providers e skills."
+
+PREFERIR:
+"Isso aqui consegue receber um objetivo, escolher sozinho qual ferramenta usar, tentar, olhar o resultado e continuar até fechar. O nome técnico dessa peça é KylinBot/agent runtime."
+
+EVITAR:
+"ARM Router faz failover multi-route."
+
+PREFERIR:
+"Se uma estrada falhar, ele tenta outra estrada que leve ao mesmo lugar antes de dizer que não consegue. O nome técnico dessa escolha de caminho é ARM Router."
+```
+
+Regra de potencial:
+
+```text
+FUNCTIONING_NOW != FULL_POTENTIAL
+POTENTIAL != ACTIVE_PROOF
+SHOW_BEST_POTENTIAL_WITHOUT_PROMOTING_IT_TO_CURRENT=true
+EXPLAIN_WHAT_UNLOCKS_NEXT_LEVEL=true
+```
+
+O objetivo é o CHEFE conseguir reconstruir mentalmente **o poder, o limite atual e o salto possível** sem precisar decorar vocabulário técnico.
+
 ### Explicação operacional de capacidades
 
 Correção do SEGREDO/CHEFE em 2026-09-16: clareza e objetividade são parte do
