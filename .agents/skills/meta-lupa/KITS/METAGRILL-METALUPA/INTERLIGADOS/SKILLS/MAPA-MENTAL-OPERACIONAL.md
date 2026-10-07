@@ -178,3 +178,33 @@ Antes de abrir owner, skill, router, workflow, painel, serviço ou superfície n
 | action_required | ⏳ **WAIT, NÃO FAIL/PASS** | aprovar quando autorizado e remedir |
 
 > 📖 1Ts 5:21 funciona aqui como **gancho humano de memória**: examinar/por à prova e reter o bom. Não é gate nem prova técnica.
+
+
+## 🧬 REFRESH PR 1709–1782 · GATILHOS ABSORVIDOS
+
+```text
+⚖️ GATE DETERMINÍSTICO > IA CONSULTIVA
+📸 SNAPSHOT DO PR = HEAD LOCAL, NÃO ESTADO ETERNO
+🪞 ARTIFACT MIRROR DEGRADADO != CORE QUEBRADO
+🧠 CORE CANÔNICO ÚNICO → ADAPTERS HERDAM
+🎯 CONFIANÇA DE INTENÇÃO ORIENTA; NÃO É GATE TÉCNICO
+🌐 COORDENAÇÃO EXTERNA != SOURCE OF TRUTH DO CÓDIGO
+♻️ DEDUPE CONFIG ANTES DE CRIAR OUTRA
+🪦 SUPERSEDED = HISTÓRICO, NÃO OWNER ATIVO
+🧬 CRITÉRIO HERDA PELOS DESCENDENTES
+🧪 NÃO ENFRAQUECER TESTE PARA PROMOVER
+🚀 DEPLOY GATE CONSOME FATOS REAIS
+📚 LINHAGEM DE APRENDIZADO MONOTÔNICA E RECONSTRUÍVEL
+🔀 MULTI-CONTA = ROTA DE CAPACIDADE, NÃO NOVA AUTORIDADE
+🎙️ CLÁUSULAS DE INTENÇÃO → SÓ DEPOIS TOOL
+↔️ CRUZAMENTO BIDIRECIONAL != PASS GLOBAL
+🫀 CENTRALDARK PERSISTE ALÉM DO EXECUTOR
+📜 RECEITA REPLAYABLE != RUNTIME ATUAL
+🧯 REINSTALL DESTRUTIVO EXIGE PREFLIGHT + VOLTA
+🔐 SEGREDO VISTO != BLOQUEIO AUTOMÁTICO
+🫀 PROJEÇÃO DE RUNTIME = ADVISORY ATÉ REMEDIÇÃO
+```
+
+🪝 **Fórmula escondida continua a mesma:** `SINAL → OWNER → MENOR CAPACIDADE → AÇÃO/PROVA → CONTRAPROVA → RECEIPT → PRÓXIMO_CURSOR`.
+
+🏠 Tudo que depende de estado vivo da Casa/VPS/áudio/processo/deploy permanece fora do verde documental e dentro de `current_runtime_remeasurement_required`.
