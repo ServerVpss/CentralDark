@@ -119,7 +119,9 @@ ps -eo pid=,comm=,args= \
   fi
 done
 
-find "$OUT" -type f -print0 | xargs -0 sha256sum | sort > "$OUT/SHA256SUMS.txt"
+sha256_tmp="$(mktemp --suffix=.txt)"
+(cd "$OUT" && find . -type f -print0 | xargs -0 sha256sum | sort) > "$sha256_tmp"
+mv "$sha256_tmp" "$OUT/SHA256SUMS.txt"
 
 awk -F"\t" 'NR>1{print $2}' "$MAN" | sort | uniq -c | sort -nr > "$OUT/DEDUP_SHA_COUNTS.txt"
 

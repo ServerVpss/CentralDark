@@ -453,6 +453,48 @@ async function chamarEliteAnthropic(prompt, system) {
   }
 }
 
+async function chamarRuntimeLocal(system, prompt) {
+  const statePath = process.env.HERMES_LOCAL_RUNTIME_STATE || '/root/.hermes/runtimes/llamacpp/server.json';
+  const state = JSON.parse(readFileSync(statePath, 'utf8'));
+  const baseUrl = String(state?.base_url || '').replace(/\/$/, '');
+  const apiKey = String(state?.api_key || '');
+  if (!baseUrl || !apiKey) throw new Error('LOCAL_RUNTIME_BINDING_INCOMPLETE');
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${apiKey}`,
+  };
+  const modelsRes = await fetch(baseUrl + '/models', {
+    headers,
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!modelsRes.ok) throw new Error(`LOCAL_MODELS_HTTP_${modelsRes.status}`);
+  const models = await modelsRes.json();
+  const model = String(models?.data?.[0]?.id || '').trim();
+  if (!model) throw new Error('LOCAL_MODEL_UNRESOLVED');
+
+  const res = await fetch(baseUrl + '/chat/completions', {
+    method: 'POST',
+    headers,
+    signal: AbortSignal.timeout(Number(process.env.HERMES_LOCAL_DECISOR_TIMEOUT_MS || 120000)),
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: prompt },
+      ],
+      temperature: 0,
+      max_tokens: 900,
+      stream: false,
+    }),
+  });
+  if (!res.ok) throw new Error(`LOCAL_CHAT_HTTP_${res.status}`);
+  const data = await res.json();
+  const texto = data?.choices?.[0]?.message?.content;
+  if (!texto) throw new Error('LOCAL_CHAT_EMPTY');
+  return { texto, model };
+}
+
 async function chamarDarkaiComResiliencia(modelo, system, prompt, timeout_ms, tentativas = 2) {
   for (let t = 1; t <= tentativas; t++) {
     try {
@@ -489,6 +531,25 @@ export async function decidir(missao, historico) {
   }
 
   const historico_erros = [];
+
+  // Corpo primário: modelo local já residente na VPS. Provedores remotos são fallback.
+  try {
+    const t0 = Date.now();
+    const memoriaLocal = '';
+    const prompt = montarPrompt(missao, historico, historico_erros, memoriaLocal);
+    const local = await chamarRuntimeLocal(system, prompt);
+    const bruta = validarDecisao(extrairJSON(local.texto));
+    const decisao = validarDecisao(aplicarGatePercepcao(bruta, historico, { emLoop: false }));
+    decisao._modelo_usado = `local:${local.model}`;
+    decisao._provider = 'llamacpp-local';
+    console.log(`[decisor] ✅ local ${local.model} respondeu em ${Date.now()-t0}ms gate=${decisao._perception_gate_status || 'UNKNOWN'}`);
+    salvarCache(k, decisao);
+    return decisao;
+  } catch (e) {
+    const erro = String(e?.message || e).replace(/\s+/g, ' ').slice(0, 300);
+    console.error(`[decisor] ⚠️ local runtime falhou: ${erro}; escalando para cadeia remota`);
+    historico_erros.push({ modelo: 'LOCAL_RUNTIME', erro });
+  }
 
   let memoria = '';
   const n = historico?.length ?? 0;
