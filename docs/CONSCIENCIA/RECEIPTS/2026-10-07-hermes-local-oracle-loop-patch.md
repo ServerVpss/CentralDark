@@ -85,7 +85,33 @@ M hermes_cli/local_runtime/context_policy.py
 ?? hermes_cli/local_runtime/context_policy.py.backup.20261007073449
 ```
 
-## Deployment boundary
+## Durable runtime binding
+
+The existing `apps/modulos/HERMES-CORE/core/orchestrator.mjs` was moved from the Desktop Commander child process into the existing CentralDark operational path as a dedicated systemd owner for the same component. No second Hermes or alternate orchestrator was created.
+
+```text
+UNIT=centraldark-hermes-core.service
+PID=2109054
+CGROUP=/system.slice/centraldark-hermes-core.service
+PORT=8899
+RESTART_POLICY=always
+ENABLED=true
+```
+
+Fresh readback after the transition:
+
+```text
+http://127.0.0.1:8899/health=200
+https://api.centralldark.com/health=200
+servico=hermes-core
+versao=5.0
+watchdog.ativo=true
+watchdog.saudavel=true
+restarts_forcados=0
+```
+
+The same orchestrator source is now owned by a durable systemd unit. This proves service ownership and health after the transition; it does not by itself prove the full Hermes↔CHAT_GLOBAL oracle loop.
+
 
 ```text
 LOCAL_PATCH=PROVEN
