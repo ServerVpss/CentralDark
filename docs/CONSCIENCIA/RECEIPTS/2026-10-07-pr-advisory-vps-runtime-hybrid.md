@@ -1,9 +1,9 @@
 # Receipt — IA consultiva híbrida ancorada no runtime VPS
 
-Data: 2026-10-07  
-Status: CANDIDATE_UNTIL_CI  
-Authority: SEGREDO/CHEFE  
-Owner: `.github/workflows/pr-auto-review.yml`  
+Data: 2026-10-07
+Status: CANDIDATE_UNTIL_CI
+Authority: SEGREDO/CHEFE
+Owner: `.github/workflows/pr-auto-review.yml`
 Base medida: `9bdf7d0abab7ca2acbce9c476a4bfb171228860c`
 
 ## Intenção
@@ -145,4 +145,3 @@ KYLİN_CHAT_CURRENT=FAIL_502
 LOCAL_DECISOR_E2E=UNKNOWN
 FULL_SELF_HEALING=NOT_YET_PASS
 ```
-
