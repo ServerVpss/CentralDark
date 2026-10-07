@@ -1,6 +1,6 @@
 ---
 title: "👑🪬 Executor CentralDark — CHAT_GLOBAL ↔ Casa"
-status: "CANONICAL"
+status: "CANÔNICO"
 date: 2026-09-27
 authority: "SEGREDO/CHEFE"
 owner: "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md"
