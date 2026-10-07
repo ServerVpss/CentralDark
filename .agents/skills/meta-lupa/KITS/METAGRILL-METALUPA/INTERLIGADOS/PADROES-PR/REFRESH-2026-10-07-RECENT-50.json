@@ -1,0 +1,458 @@
+{
+  "schema": "centraldark.meta-lupa.interligados.pr-pattern-refresh.v1",
+  "status": "CRYSTALLIZED_PATTERN_SWEEP",
+  "owner": ".agents/skills/meta-lupa/SKILL.md",
+  "base_main": "ff336e2bf86194602993060e5b58ad46d293f0b5",
+  "scope": "latest 50 user PRs visible to GitHub connector",
+  "prs": [
+    {
+      "number": 1782,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧿 FEAT(HUD): CARTAO HERMES JUIZ AO VIVO (POWERSHELL 7) NO HUD.HTML",
+      "head_sha": "215fe4ce02cbe3a37d3490418201c1cd5e8b8f18"
+    },
+    {
+      "number": 1778,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "title": "🧠 DOCS(RECEIPT): CRYSTALLIZE LOCAL HERMES ORACLE LOOP PATCH",
+      "head_sha": "989038e8b4efe576fde2495e20e5ba927c90bc90"
+    },
+    {
+      "number": 1777,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "title": "🧪 DOCS(HUD): ADD ORACLE SURFACE PROOF SECTORS",
+      "head_sha": "ff2eab15dd350727e41a1525f1e51ca9f64cff5c"
+    },
+    {
+      "number": 1776,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧠 RUNTIME: MÁQUINA DE ESTADO VPS CALIBRA HERMES E PROJETA NO GITHUB",
+      "head_sha": "783cae0a8a34a7ecbc5709939fb55275814eeb0f"
+    },
+    {
+      "number": 1775,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "title": "🧠 DOCS: ABSORVE PADRÃO MULTIAGENTE OPENAI NO ENXAME OMEGA",
+      "head_sha": "368d9983a2fdc36e80cdc4758817a9b660ea98b0"
+    },
+    {
+      "number": 1774,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "title": "🧠 DOCS(SOUL): RECONCILIA BLOCO CURRENT HERDADO (AGENTS/LEIA/BOOT) E RE-ANCORA A SOUL",
+      "head_sha": "f2e83b312018825ce285d9088447e5ed1f9eb306"
+    },
+    {
+      "number": 1773,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧪 CLICKUP ↔ GITHUB ROUND-TRIP CU-86E3M6J7G",
+      "head_sha": "5f433598df7294182b2c7ac2a559dfbe7f537efc"
+    },
+    {
+      "number": 1772,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧪 FIX(SUPABASE): DEDUPLICA CONFIGURAÇÃO DE PLUGIN-RELEASE",
+      "head_sha": "bcdfd573e5c46b230451373b5c1149f53e758144"
+    },
+    {
+      "number": 1771,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "title": "🧿 AUTO PR: FEAT/TRIGGER-FABRIC-7-FAMILIAS-CLOCK-DISPATCHER-20261007",
+      "head_sha": "9a08e04b8b42a87b4fd7d386dfd3e85910921c22"
+    },
+    {
+      "number": 1770,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🔐 FIX(VAULT-BOOTSTRAP): CLOSE 3 CODEX-IDENTIFIED SECURITY GATES",
+      "head_sha": "d311781611aa6b7c75523523d1a43bb874e79be9"
+    },
+    {
+      "number": 1768,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "title": "🧿 FIX: MEDE CAPABILITY ANTES DE NEGAR FERRAMENTA NA VOZ",
+      "head_sha": "e0411ab26cfbd9c48a67ea999e649d9fc76238a4"
+    },
+    {
+      "number": 1767,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "title": "🧬 HUD CARTOGRAPHER: GENEALOGIA + METABOLISMO + ONE_HEART + OBSIDIAN",
+      "head_sha": "0d6a4b68dd518902d91eaf0cc27d0891169ed802"
+    },
+    {
+      "number": 1758,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧠 KYLIN CURRENT: CRISTALIZA BINDING, TRITON E REPLAY HERMES",
+      "head_sha": "6768d5836c0b450f97a0826001ba672bb18fc3ee"
+    },
+    {
+      "number": 1757,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "title": "🪬 RETIRED · PR-MÃE #1757 · SUPERSEDED_BY_HUD",
+      "head_sha": "3c1e17e433f7ecc751e34604fd974f182131621b"
+    },
+    {
+      "number": 1756,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧪 TEST(TELEGRAM): PROVE MOCKED MESSAGE ID CONTINUITY",
+      "head_sha": "fcfcd8c64aef6f02f476510fb593c5b71f2777fb"
+    },
+    {
+      "number": 1755,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧿 FIX(GRAFO): BOOTSTRAP LIVE GRAPH FROM CLEAN WORKTREES",
+      "head_sha": "e2a1b72816178a24349f513df56cd64862b36477"
+    },
+    {
+      "number": 1754,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧿 FEAT: INHERIT CRITERION DNA ACROSS GOAL DESCENDANTS",
+      "head_sha": "1a181bf9a98afbc67e502fbdbc65e5b194d6d91d"
+    },
+    {
+      "number": 1753,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧪 FIX(AUTONOMIA): RESTORE PROMOTION GATE TEST CONTRACT",
+      "head_sha": "4c78e82a9a0b6cc479410ca8bc988e18af3fff05"
+    },
+    {
+      "number": 1752,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🚀 FIX(DEPLOY-GATE): CONSUME REAL HORN REPO FACTS",
+      "head_sha": "6c48ae28b0a04da28a749828695336c9d6d8cb4c"
+    },
+    {
+      "number": 1751,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "title": "🧾 LEGACY CHECKLIST #1751 · SUPERSEDED_BY_HUD",
+      "head_sha": "533bb8e21487cc365dfa9d8928a954a5623ac498"
+    },
+    {
+      "number": 1750,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧿 #167 · FORMALISMO CORE/CONCHA + CAPACIDADE ABERTA + CONTRAPROVA",
+      "head_sha": "8e5bd38d975b17a052480b37ff9e0abe69069feb"
+    },
+    {
+      "number": 1749,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "title": "🧠 DOCS: REGISTRAR PAUSA TEMPORARIA DA CASA",
+      "head_sha": "97ed68186b79ec197911bb2d874df7a2b33fb212"
+    },
+    {
+      "number": 1748,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧪 AIONUI V2.2.2 → CENTRALDARK — INSTINTO SUPERIOR · PROTÓTIPO INSTALÁVEL",
+      "head_sha": "851331e98d3a6166b19f818d0d3e9dd393d4d87d"
+    },
+    {
+      "number": 1747,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "docs: registra aprendizado 148 sobre TextChat/Qwen nativo",
+      "head_sha": "0b05c7fdadb6a0579f9b394fdf5a887411a1a326"
+    },
+    {
+      "number": 1746,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "docs: fixa aprendizados 137-139 e contrato portátil de operação",
+      "head_sha": "7fd5d8ab5fda0a6c07849490debc8df4883e8635"
+    },
+    {
+      "number": 1745,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "fix(memory): restore numeric learning continuity and remembrance index",
+      "head_sha": "3f88107dca2d1d3c3b54f7d6bb340fdfadc2357b"
+    },
+    {
+      "number": 1744,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "docs(aureola): integrar exame, retenção e aperfeiçoamento no owner canônico",
+      "head_sha": "06bb39202ce12bc226d1815112f1ddfcf0db213e"
+    },
+    {
+      "number": 1743,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "title": "🧾 LEGACY CHECKLIST #1743 · SUPERSEDED_BY_HUD",
+      "head_sha": "8d6a2f71730a8586d61393e67068c07a8133c063"
+    },
+    {
+      "number": 1742,
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "title": "🚀 LOCAL-AI: RECONCILE CENTRALDARK-OS RUNTIME PANEL WITH CURRENT PROBES",
+      "head_sha": "d403d37e0440aa4182b5b6515587705c671aeb1f"
+    },
+    {
+      "number": 1741,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "feat(core): skills sob demanda e herança verificável das sete entradas",
+      "head_sha": "1d2fe659852426144d9452c125f842c9930203b9"
+    },
+    {
+      "number": 1740,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧿 FEAT: ROTEAMENTO HÍBRIDO MULTI-CONTA POR CAPABILITY",
+      "head_sha": "3e9e4941ffa7f7a845bafe60d6b462320f913b14"
+    },
+    {
+      "number": 1735,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "title": "🧿 FIX(TIME): CRISTALIZA HORÁRIO HUMANO DE BRASÍLIA GLOBALMENTE",
+      "head_sha": "c52b4c92e6fed09a992acf616e84f483cee0bd74"
+    },
+    {
+      "number": 1734,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🕒 SELO FABRIC · HORÁRIO DE BRASÍLIA NO HUD/RECEIPTS",
+      "head_sha": "42fd8224859e47cf2d73ca3fc7fe7dbc4a7e7cf8"
+    },
+    {
+      "number": 1733,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🪬 HUD PR-MÃE: SELO FABRIC FORA DA FILA SELF-HOSTED",
+      "head_sha": "ea34ad3565cd0f32f250cd6fb1443574f74e6d69"
+    },
+    {
+      "number": 1725,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🎙 VOZ: RESOLVEDOR DE INTENÇÃO POR CLÁUSULAS",
+      "head_sha": "e121e092e24d735c9b1da500e4304e7d9ff16985"
+    },
+    {
+      "number": 1724,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧠 TLC23: CRUZAMENTO BIDIRECIONAL SEM FALSO PASS GLOBAL",
+      "head_sha": "ae7675a6dedbd080eb524ced43cc83b667f5f853"
+    },
+    {
+      "number": 1723,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧹 🔀 FECHAR CICLO EFÊMERO + GRAFO VISUAL UPDATE BRANCH + IDENTIDADE VISUAL HÍBRIDA",
+      "head_sha": "9c6dba8695d8b221578de80316d788625d236711"
+    },
+    {
+      "number": 1722,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧠 CRISTAL: CentralDark persiste além do executor",
+      "head_sha": "87b1ada6843a026ba0a139aaede85663eed32dee"
+    },
+    {
+      "number": 1721,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "💎 META-GRILL + RECEITA REPLAY-ABLE + SELO FABRIC BEST-EFFORT",
+      "head_sha": "d7158b2803f5b8391dec89f91d5a2024fdef4c34"
+    },
+    {
+      "number": 1720,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "feat(ccr+vps): setup-env resiliente + Contabo control plane",
+      "head_sha": "edaf27b0716ffcef3cab29e66c1112aa8b6b2cb4"
+    },
+    {
+      "number": 1719,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "feat(os): CentralDark Valida determinístico + REINSTALL_ARMED=1",
+      "head_sha": "6a05ac6159c0a3be72a30944e306bd05b5637689"
+    },
+    {
+      "number": 1718,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧿 FEAT(VPS): PREFLIGHT GO/NO-GO + FIRSTBOOT + REINSTALL ORCHESTRATOR",
+      "head_sha": "9be8f110dddaea0a2374e80da3604ad75fcce17d"
+    },
+    {
+      "number": 1716,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🏅 CENTRALDARK VALIDA + SELO FABRIC DETERMINÍSTICO",
+      "head_sha": "8d8cf34f2a707e33bd901e94c499a5b0cff74a5d"
+    },
+    {
+      "number": 1715,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧿 FEAT/GITHUB EVENT ROUTER SENSORS 20260930",
+      "head_sha": "389e229c571a1d99667f27492aa1b87d43d4334d"
+    },
+    {
+      "number": 1714,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🔐 DOCS(GOVERNANCA): REGRA MVP PARA SECRETS SEM FALSO BLOQUEIO",
+      "head_sha": "302a267a712584dc4a65dae7c67a710f70a47583"
+    },
+    {
+      "number": 1713,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🧿 MEDIÇÃO(CENTRALDARK-OS): T0 FASE 1 — ESTADO COMPLETO ANTES DE OPENKYLIN",
+      "head_sha": "bbe41324d64d2a4eb6faa79c42e257f00d2ebc11"
+    },
+    {
+      "number": 1712,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "title": "🚀 FEAT(AI-CLI): SISTEMA OPERACIONAL NO KERNEL RUNTIME",
+      "head_sha": "b3faacdc3320c47210992597819045884056f15f"
+    },
+    {
+      "number": 1711,
+      "state": "closed",
+      "merged": false,
+      "draft": false,
+      "title": "feat(gateway): !ROTA VIVA ao owner canônico",
+      "head_sha": "3b1dcf087bd0e5538aae0c4b1c53abfc85c72553"
+    },
+    {
+      "number": 1710,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🪬 RESTAURAR AUTONOMIA: BOOT CASA + DISPATCH HERMES + PORTA VERDE",
+      "head_sha": "a367e643ddb2976acc6b843ac5e895a60bad3a3d"
+    },
+    {
+      "number": 1709,
+      "state": "closed",
+      "merged": true,
+      "draft": false,
+      "title": "🔗 INSTINTO SUPERIOR: CONVERGIR OWNER ÚNICO + HERMES LOCAL",
+      "head_sha": "63479444d4d3edba27710add6ff17f88e12c68fa"
+    }
+  ],
+  "promoted_pattern_ids": [
+    "DETERMINISTIC_GATES_OUTRANK_ADVISORY_AI",
+    "PR_SNAPSHOT_IS_HEAD_SCOPED_NOT_ETERNAL_CURRENT",
+    "ARTIFACT_MIRROR_DEGRADED_IS_NOT_CORE_FAILURE",
+    "CANONICAL_AGENT_CORE_SINGLE_OWNER",
+    "INTENT_CONFIDENCE_IS_ADAPTIVE_NOT_TECHNICAL_GATE",
+    "EXTERNAL_COORDINATION_IS_NOT_CODE_SOURCE_OF_TRUTH",
+    "DEDUPE_EXISTING_CONFIG_BEFORE_ADDING_CONFIG",
+    "SUPERSEDED_LEGACY_ARTIFACT_IS_NOT_ACTIVE_CANON",
+    "CRITERION_DNA_INHERITS_ACROSS_GOAL_DESCENDANTS",
+    "PROMOTION_GATE_TEST_CONTRACT_MUST_STAY_STRONG",
+    "DEPLOY_GATE_CONSUMES_REAL_REPO_FACTS",
+    "LEARNING_LINEAGE_MUST_BE_MONOTONIC_AND_RECONSTRUCTIBLE",
+    "MULTI_ACCOUNT_ROUTE_IS_CAPABILITY_ROUTING_NOT_NEW_AUTHORITY",
+    "INTENT_RESOLUTION_BY_CLAUSES_PRECEDES_TOOL_SELECTION",
+    "BIDIRECTIONAL_CROSSCHECK_DOES_NOT_CREATE_GLOBAL_PASS",
+    "CENTRALDARK_PERSISTS_BEYOND_EXECUTOR",
+    "REPLAYABLE_RECIPE_IS_PROOF_PATH_NOT_RUNTIME_BY_ITSELF",
+    "CONTROL_PLANE_PREFLIGHT_BEFORE_DESTRUCTIVE_REINSTALL",
+    "SECRET_SEEN_IS_NOT_AUTOMATIC_BLOCKER",
+    "RUNTIME_PROJECTION_IS_ADVISORY_UNTIL_REMEASURED"
+  ],
+  "runtime_only": [
+    "REMOTE_DEVICE_ONLINE_NOW",
+    "SCREENPIPE_3030_LISTENING_NOW",
+    "SCREENPIPE_AUDIO_INPUT_BOUND_NOW",
+    "PHONE_TO_WO_MIC_MEDIA_FLOW_NOW",
+    "VOICE_TO_INTENT_TO_ROUTER_TO_RECEIPT_NOW",
+    "CENTRALDARK_EXE_RUNNING_NOW",
+    "VPS_DEPLOYED_SHA_NOW",
+    "APP_READY_END_TO_END",
+    "VOICE_FOLLOWS_INTENT_END_TO_END",
+    "PHONE_AUDIO_CONTENT_MATCHES_TRANSCRIPT_END_TO_END",
+    "GLOBAL_FIXED_POINT",
+    "PR1778_LOCAL_HERMES_ORACLE_LOOP_RUNTIME",
+    "PR1777_ORACLE_SURFACE_LIVE_SECTORS",
+    "PR1776_VPS_STATE_MACHINE_CURRENT",
+    "PR1749_CASA_PAUSE_CURRENT",
+    "PR1742_CENTRALDARK_OS_PANEL_CURRENT",
+    "PR1713_CENTRALDARK_OS_T0_CURRENT"
+  ],
+  "law": [
+    "PATTERN_IN_PR != IMPLEMENTATION_PROMOTED",
+    "DOCUMENTED != EXECUTED",
+    "MERGED != DEPLOYED",
+    "CURRENT > HISTORY",
+    "UNKNOWN != PASS",
+    "RUNTIME_CURRENT_REQUIRES_RUNTIME_REMEASUREMENT"
+  ]
+}
