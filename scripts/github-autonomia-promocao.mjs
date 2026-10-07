@@ -582,6 +582,7 @@ export function evaluateCandidate({
   const applicableWorkflows = requiredWorkflows;
   const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
   for (const workflow of workflows) {
+    if (!fastPath && workflow.state !== "PASS" && workflow.state !== "ACTION_REQUIRED") technicalGateNotGreen = true;
     if (!fastPath && workflow.state !== "PASS") technicalGateNotGreen = true;
     if (workflow.state === "FAIL") waits.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
