@@ -927,6 +927,20 @@ body {
     </div>
   </div>
 
+  <!-- HERMES JUIZ AO VIVO (PowerShell 7) -->
+  <div class="section" style="margin-top:16px;" id="hermes-judge-section">
+    <div class="section-header">
+      <div class="section-icon">&#9889;</div>
+      <h2 class="section-title">Hermes &mdash; juiz ao vivo (PowerShell 7)</h2>
+      <span class="section-count">terminal da VPS</span>
+    </div>
+    <p style="font-size:12px;color:var(--text-dim,#9aa);margin:0 0 10px;">Mesma vista do Hermes, no terminal: PowerShell 7 entra na VPS (Segredo-VPS) e roda <code>/root/hermes-hud.sh</code>. Uma pagina HTML nao abre terminal sozinha: copie o comando e cole no PowerShell 7. O estado verde so vale o que o script medir na hora.</p>
+    <div class="hud-missions">
+      <pre id="hermes-judge-cmd" style="margin:0 0 10px;padding:10px;border:1px solid var(--border,#333);border-radius:8px;overflow:auto;white-space:pre-wrap;">ssh -t Segredo-VPS 'bash /root/hermes-hud.sh'</pre>
+      <a class="hud-linkbtn" id="hermes-judge-copy" href="#">&#128203; Copiar comando</a>
+    </div>
+  </div>
+
   <!-- MISSOES -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
@@ -1444,6 +1458,16 @@ document.getElementById('open-pendencias').href =
   'obsidian://open?vault=' + encodeURIComponent(VAULT) + '&file=' + encodeURIComponent('Pend\u00EAncias');
 document.getElementById('open-home').href =
   'obsidian://open?vault=' + encodeURIComponent(VAULT) + '&file=' + encodeURIComponent('Home');
+
+document.getElementById('hermes-judge-copy').addEventListener('click', function(e) {
+  e.preventDefault();
+  var cmd = document.getElementById('hermes-judge-cmd').textContent;
+  navigator.clipboard.writeText(cmd).then(function() {
+    hudToast('Comando copiado - cola no PowerShell 7.');
+  }, function() {
+    hudToast('Nao deu pra copiar sozinho - seleciona o texto manualmente.');
+  });
+});
 </script>
 
 </body>
