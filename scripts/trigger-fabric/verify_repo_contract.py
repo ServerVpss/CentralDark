@@ -684,7 +684,21 @@ check('central-horario/README.md',[
  'TECHNICAL_UTC_MAY_EXIST_AS_SECONDARY_MACHINE_FIELD=true',
  'GLOBAL_TIME_SCAN_DELTA_RATCHET_REQUIRED=true',
  'DOCUMENTED_TIME_RULE_WITH_BROKEN_GATE=FAIL',
+ 'FINAL_REPORT_TIME_FIELDS_REQUIRED=true',
+ 'FINAL_REPORT_DATE_FIELD=DD/MM/AAAA HH:mm:ss BRT',
+ 'FINAL_REPORT_DATE_UTC_FIELD=UTC_RFC3339',
+ 'FINAL_REPORT_TIME_RECIPE=central-horario.finalReportTimeHeader',
 ], classification='CANONICAL_HUMAN_TIME_GLOBAL_CONTRACT')
+check('central-horario/node.cjs',[
+ 'function finalReportTimeFields(value = new Date())',
+ 'function finalReportTimeHeader(value = new Date())',
+ "'Date-UTC': utcIso(date)",
+], classification='FINAL_REPORT_TIME_EXECUTABLE_RECIPE')
+check('central-horario/self-test.mjs',[
+ 'FINAL_REPORT_TIME_RECIPE=PASS',
+ 'finalReportTimeFields(instant)',
+ 'finalReportTimeHeader(instant)',
+], classification='FINAL_REPORT_TIME_RECIPE_SELF_TEST')
 check('scripts/lupa/validar-horario-centraldark.mjs',[
  "canonical_owner: 'central-horario'",
  "human_format: 'DD/MM/AAAA HH:mm:ss BRT'",

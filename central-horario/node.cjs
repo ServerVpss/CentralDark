@@ -60,6 +60,19 @@ function nowPair() {
   };
 }
 
+function finalReportTimeFields(value = new Date()) {
+  const date = asDate(value);
+  return {
+    Date: formatBrasilia(date),
+    'Date-UTC': utcIso(date),
+  };
+}
+
+function finalReportTimeHeader(value = new Date()) {
+  const fields = finalReportTimeFields(value);
+  return `Date: ${fields.Date}\nDate-UTC: ${fields['Date-UTC']}`;
+}
+
 module.exports = {
   TIME_ZONE,
   LOCALE,
@@ -69,4 +82,6 @@ module.exports = {
   formatBrasiliaTime,
   utcIso,
   nowPair,
+  finalReportTimeFields,
+  finalReportTimeHeader,
 };
