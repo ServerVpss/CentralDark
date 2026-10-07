@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { decideReuse, deriveFixedPoint } from "./horn-reuse-fixed-point.mjs";
 
 const CONTRACT_PATH = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
+const CONTINUITY_OWNER_PATH = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json";
 const LOGIC_REFERENCE_PATH = "docs/CONSCIENCIA/REFERENCIA-LOGICA-HORN-REUSE-FIXED-POINT.md";
 const SOURCE_NAME = "tlc23(2).pdf";
 const SOURCE_SHA256 = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
@@ -18,7 +19,9 @@ test("base lógica do PDF fica ligada ao owner canônico sem criar segunda autor
   assert.ok(reference.includes(CONTRACT_PATH));
   assert.equal(contract.marker, "REUSE_BEFORE_CREATE_REQUIRED");
   assert.equal(contract.global_continuity_policy?.principles?.REUSE_BEFORE_CREATE, true);
-  assert.equal(contract.global_continuity_policy?.principles?.GLOBAL_LEARNING_PROMOTES_TO_CANONICAL_OWNER, true);
+  // O princípio de promoção de aprendizado global mora no owner de continuidade, não é duplicado no contrato de reconciliação.
+  const continuityOwner = JSON.parse(readFileSync(CONTINUITY_OWNER_PATH, "utf8"));
+  assert.equal(JSON.stringify(continuityOwner).includes('"GLOBAL_LEARNING_PROMOTES_TO_CANONICAL_OWNER":true'), true);
 });
 
 test("reusa owner existente quando intenção e fit completo coincidem", () => {
