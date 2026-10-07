@@ -519,8 +519,9 @@ if (!contract) {
   if (convergence.marker !== "GLOBAL_CONVERGENCE_COORDINATION_REQUIRED") errors.push("CONTRATO_GLOBAL_CONVERGENCIA_MARKER_AUSENTE");
   if (convergence.coordinate_convergence !== true) errors.push("CONTRATO_GLOBAL_CONVERGENCIA_DESATIVADA");
   if (convergence.analyze_active_prs !== true || convergence.compare_active_branches !== true) errors.push("CONTRATO_GLOBAL_PRS_BRANCHES_AUSENTE");
-  if (convergence.register_convergence_in_principal_pr !== true) errors.push("CONTRATO_GLOBAL_PRINCIPAL_SEM_RECEIPT");
-  if (convergence.principal_pr_is_authority !== false || convergence.principal_pr_is_runtime_proof !== false) errors.push("CONTRATO_GLOBAL_PRINCIPAL_COM_FALSA_AUTORIDADE");
+  // PR-mãe aposentada (84ccccf8fd): convergência é registrada na projeção HUD CURRENT; PRs-mãe #1562/#1757 são legado/ledger, nunca autoridade.
+  if (convergence.register_convergence_in_hud !== true || convergence.principal_projection_resolution !== "HUD_CURRENT_PROJECTION") errors.push("CONTRATO_GLOBAL_PRINCIPAL_SEM_RECEIPT");
+  if (convergence.hud_is_authority !== false || convergence.hud_is_runtime_proof !== false || convergence.no_new_pr_mother !== true) errors.push("CONTRATO_GLOBAL_PRINCIPAL_COM_FALSA_AUTORIDADE");
   if (convergence.global_dna_validation?.required !== true) errors.push("CONTRATO_GLOBAL_DNA_NAO_OBRIGATORIO");
   if (convergence.buildkite_funnel?.validate_end_to_end_when_material !== true) errors.push("CONTRATO_GLOBAL_BUILDKITE_FUNIL_AUSENTE");
   if (convergence.buildkite_funnel?.green_requires_end_to_end_evidence !== true) errors.push("CONTRATO_GLOBAL_BUILDKITE_FALSO_VERDE");

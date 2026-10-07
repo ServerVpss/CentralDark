@@ -202,6 +202,14 @@ CD_REG_31_A["LEARNING_EVENT_BUS"] -->|"TOOL_ERROR"| CD_REG_31_B[".agents/skills/
 CD_REG_GAP_A["LEARNING_EVENT_BUS"] -->|"CAPABILITY_GAP"| CD_REG_GAP_B["centraldark-unified-surface-parity"]
 %% CD_FLOW:trigger.learning.TERRITORY_ROUTE_CHANGE
 CD_REG_ROUTE_A["LEARNING_EVENT_BUS"] -->|"TERRITORY_ROUTE_CHANGE"| CD_REG_ROUTE_B["centraldark-unified-surface-parity"]
+%% CD_FLOW:trigger.learning.ORACLE_QUERY_SUBMITTED
+CD_REG_ORQ_A["LEARNING_EVENT_BUS"] -->|"ORACLE_QUERY_SUBMITTED"| CD_REG_ORQ_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + supabase/functions/_shared/evidence-envelope.mjs"]
+%% CD_FLOW:trigger.learning.ORACLE_RESPONSE_CAPTURED
+CD_REG_ORR_A["LEARNING_EVENT_BUS"] -->|"ORACLE_RESPONSE_CAPTURED"| CD_REG_ORR_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + apps/modulos/HERMES-CORE/core/perception-orchestra.mjs + supabase/functions/_shared/evidence-envelope.mjs"]
+%% CD_FLOW:trigger.learning.ORACLE_SEND_FAILED
+CD_REG_ORF_A["LEARNING_EVENT_BUS"] -->|"ORACLE_SEND_FAILED"| CD_REG_ORF_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md"]
+%% CD_FLOW:trigger.learning.ORACLE_PROVEN_NEW_PATH
+CD_REG_ORP_A["LEARNING_EVENT_BUS"] -->|"ORACLE_PROVEN_NEW_PATH"| CD_REG_ORP_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/memory-linker/"]
 %% CD_FLOW:trigger.learning.TEST_FAILURE
 CD_REG_32_A["LEARNING_EVENT_BUS"] -->|"TEST_FAILURE"| CD_REG_32_B[".agents/skills/session-intelligence-harvester/ + scripts/memory-linker/"]
 %% CD_FLOW:trigger.learning.CI_RUNNER_ROUTE_FAILURE
@@ -304,5 +312,7 @@ CD_REG_78_A["CHEFE"] -->|"!RASTRO"| CD_REG_78_B["AGENTS.md + docs/ARQUITETURA/CE
 CD_REG_79_A["RUNTIME_EVENT_BUS"] -->|"VPS_KERNEL_DELTA_MATERIAL"| CD_REG_79_B["apps/modulos/elite-gateway/scripts/centraldark_omni_router.py + Trigger Fabric"]
 %% CD_FLOW:trigger.automatic.LOG_INCIDENT_MATERIAL
 CD_REG_80_A["RUNTIME_EVENT_BUS"] -->|"LOG_INCIDENT_MATERIAL"| CD_REG_80_B["apps/modulos/mcp/src/admin.js + Trigger Fabric"]
+%% CD_FLOW:gate.canonical-consumption.nextActionsFor
+CD_REG_CCG_A["CANONICAL_CONSUMPTION_GATE"] -->|"CALL"| CD_REG_CCG_B["NEXT_ACTIONS_MACHINE_READABLE"]
 end
 %% CD_REGISTRY_PROJECTION_END
