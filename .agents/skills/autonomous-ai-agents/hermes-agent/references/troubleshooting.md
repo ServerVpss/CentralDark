@@ -16,6 +16,19 @@
 3. Check `.env` has the right API key
 4. **Copilot 403**: `gh auth login` tokens do NOT work for Copilot API. You must use the Copilot-specific OAuth device code flow via `hermes model` → GitHub Copilot.
 
+### execute_code / session kernel: SyntaxError followed by NameError
+Hermes' Python execution kernel is session-persistent: successful state survives across cells, and a normal runtime error does not automatically reset the kernel. A syntax error is different in one important way: that cell never starts executing, so imports, assignments, or helper definitions introduced only in that failed cell do not exist.
+
+Operational recovery:
+1. Treat the first traceback as the dependency boundary. Do not continue a patch that depends on names introduced by the failed cell.
+2. Repair and rerun the smallest failed cell before dependent mutations.
+3. Make patch cells self-sufficient for critical dependencies: import modules used by that patch in the same cell (for example, `import subprocess`) instead of assuming a previous preparation cell succeeded.
+4. Avoid building multiline shell/code by concatenating nested triple-quoted strings when a direct argv/list call, `pathlib`, or a short literal can express the same operation.
+5. For generated Python text, preflight with `compile(generated, "<preflight>", "exec")` before executing or sending the next dependent step.
+6. Use `reset=true` only when a fresh interpreter is actually required. Normal errors preserve prior good state by design; resetting blindly throws useful state away.
+
+Diagnostic rule: `SyntaxError -> dependent NameError` usually means the second cell ran after preparation in the first cell never executed. Fix the earliest failed cell, then replay forward from that boundary.
+
 ### Changes not taking effect
 - **Tools/skills:** `/reset` starts a new session with updated toolset
 - **Config changes:** In gateway: `/restart`. In CLI: exit and relaunch.
