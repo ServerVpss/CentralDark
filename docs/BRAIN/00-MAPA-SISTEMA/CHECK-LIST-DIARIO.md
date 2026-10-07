@@ -696,4 +696,88 @@ SKILL_SYNC=UNKNOWN_SCRIPT_FAILURE
 VAULT_MIRROR=UNKNOWN_NOT_FOUND
 PR_MOTHER=#1562
 NEXT=REMEDIR_VPS_PM2_SKILLS_CANONICAL_E_VAULT_MIRROR
+## 🫀 CURRENT VIVO — 2026-10-06 — LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG
+
+```text
+LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG=true
+CATALOG_OWNER=apps/modulos/mcp/src/tools/core/mcp-admin.js
+CATALOG_CONSUMER=mcp_admin_catalog
+CATALOG_SCOPE=centraldark_unified_capability_catalog
+CATALOG_EXPECTED_ROUTES=11
+CATALOG_FINGERPRINT=42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5
+SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true
+HOOK=REUSE_CAPABILITY_GAP_AND_TERRITORY_ROUTE_CHANGE
+RECIPE=HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH
+PR_MOTHER_CURRENT=#1757
+PR_MOTHER_LEGACY=#1562
+LIVE_MCP_CATALOG_RELOAD=UNKNOWN_UNTIL_READBACK
+```
+
+### ✅ MATERIALIZADO
+- [x] `RDC_DESKTOP_COMMANDER` no catálogo unificado.
+- [x] `SCREENPIPE_LOCAL_SENSOR` no mesmo catálogo.
+- [x] filtro de `mcp_admin_catalog` cobre tools e routes.
+- [x] fingerprint explícito e routeCount/routeReturned no payload.
+- [x] receita multirota existente evoluída; nenhum segundo owner/router/MCP.
+- [x] aprendizado + lembrança + receipt materializados.
+- [x] verifier amarrado aos marcadores do catálogo.
+- [x] hook/trigger reais existentes reutilizados.
+
+### ⚪ FRONTEIRA
+- [ ] runtime MCP vivo precisa devolver fingerprint + 11 rotas antes de `LIVE_MCP_CATALOG_RELOAD=PASS`.
+- [ ] status atual de Screenpipe e RDC continua por binding; entrada no catálogo não os torna online.
+
+### ➡️ NEXT_CURSOR
+`LIVE_MCP_CATALOG_READBACK → VERIFY_FINGERPRINT_AND_11_ROUTES → FILTER_SCREENPIPE → FILTER_DESKTOP → ROUTE_FAILOVER_REPLAY → FIXED_POINT`
+
+
+### 🧾 T1 físico — catálogo MCP #168
+- [x] runtime real identificado: `/root/CentralDark_MCP_RUNTIME`.
+- [x] unit real identificada: `centraldark-native-mcp-http.service`.
+- [x] processo pré-reload: PID 2446659, porta 9100, active.
+- [x] backup antes da promoção: `/root/CentralDark-Recovery/mcp-catalog-20261006`.
+- [x] src/dist `mcp-admin.js` promovidos sem tocar nos deltas locais de `mcp-server.js`/telemetria.
+- [x] Node syntax check do dist: PASS.
+- [ ] restart da unit: não executado; camada de execução bloqueou a chamada.
+- [ ] `mcp_admin_catalog` vivo com fingerprint/11 rotas: UNKNOWN até reload + readback.
+
+
+## 🫀 CURRENT VIVO — 2026-10-06 — LEARNING_169_HERMES_SCREENPIPE_CATALOG
+
+```text
+HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748
+HERMES_COMMIT=c893a949b3051ae8a96cc4bc8b910857534c55e7
+SCREENPIPE_CLI_RECORDER=CATALOGED_RECIPE
+SCREENPIPE_RUNTIME_ON_VPS=UNKNOWN_UNTIL_STATUS_JSON
+CATALOG_EXPECTED_ROUTES=13
+CATALOG_FINGERPRINT=80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
+```
+
+### ✅ MATERIALIZADO
+- [x] Hermes delegated commit path entrou no catálogo metabólico.
+- [x] Screenpipe CLI recorder/search/pipes entrou como rota operacional catalogada.
+- [x] Receita/receipt existente preserva que Desktop Commander está PASS vivo e Screenpipe runtime ainda exige `status --json`.
+- [x] Source e dist do MCP foram regenerados no mesmo cone.
+
+### ⚪ FRONTEIRA
+- [ ] Screenpipe runtime na VPS continua UNKNOWN até `screenpipe status --json` provar captura/freshness.
+- [ ] Repetir receita `c893a949` com Kylin CURRENT depois de corrigir binding local.
+
+## 🟢 CURRENT VIVO — 2026-10-06 — GITHUB_ENTRY_HUD_AGENT_DEPENDENCY_GATE
+
+```text
+GITHUB_ENTRY_HUD_FIRST=true
+FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true
+AGENT_DEPENDENCY_MAP_REQUIRED=true
+BUTTON_TAB_SECTOR_SURFACE_MAP_REQUIRED=true
+GITHUB_REALITY_CROSSCHECK_REQUIRED=true
+OWNER=docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md
+RECEIPT=docs/CONSCIENCIA/RECEIPTS/2026-10-06-github-entry-hud-agent-dependency-gate.md
+MAIN_AT_INVENTORY=d600f0efb1ed386779f519404ca0c802a82d8302
+SKILLS_COUNT=992
+WORKFLOWS_COUNT=71
+UI_SIGNAL_MATCHES=7717
+HUD_RELATED_FILES=535
+FULL_UI_BUTTON_TAB_MAP=PARTIAL_COUNTED_NOT_FULLY_ENUMERATED
+NEXT_CURSOR=GENERATE_MACHINE_INVENTORY_JSON_FOR_UI_SKILLS_WORKFLOWS
 ```

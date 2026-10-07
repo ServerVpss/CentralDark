@@ -305,8 +305,52 @@ check('scripts/trigger-fabric/system_sentinel.py',[
 ], classification='HYBRID_MULTIROUTE_SENTINEL_HOOK')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
  '"HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH"',
- '"dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069"',
+ '"dependency_fingerprint": "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
 ], classification='HYBRID_MULTIROUTE_MACHINE_RECIPE')
+
+check('docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md',[
+ 'GITHUB_ENTRY_HUD_FIRST=true',
+ 'FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true',
+ 'AGENT_DEPENDENCY_MAP_REQUIRED=true',
+ 'BUTTON_TAB_SECTOR_SURFACE_MAP_REQUIRED=true',
+ 'GITHUB_REALITY_CROSSCHECK_REQUIRED=true',
+ 'SKILLS_COUNT=992',
+ 'WORKFLOWS_COUNT=71',
+], classification='GITHUB_ENTRY_HUD_AGENT_DEPENDENCY_GATE')
+check('AGENTS.md',[
+ 'GITHUB_ENTRY_HUD_FIRST=true',
+ 'FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true',
+ 'AGENT_DEPENDENCY_MAP_REQUIRED=true',
+ 'HUD_UPDATE_IS_ENTRY_GATE_NOT_OPTIONAL=true',
+], classification='GITHUB_ENTRY_HUD_AGENT_POLICY_BINDING')
+check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-github-entry-hud-agent-dependency-gate.md',[
+ 'GITHUB_ENTRY_HUD_FIRST=true',
+ 'MAIN_AT_INVENTORY=d600f0efb1ed386779f519404ca0c802a82d8302',
+ 'FULL_UI_BUTTON_TAB_MAP=PARTIAL_COUNTED_NOT_FULLY_ENUMERATED',
+], classification='GITHUB_ENTRY_HUD_AGENT_DEPENDENCY_RECEIPT')
+
+check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
+ '"centraldark_unified_capability_catalog"',
+ '"SCREENPIPE_LOCAL_SENSOR"',
+ '"RDC_DESKTOP_COMMANDER"',
+ 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+ 'routeReturned: routes.length',
+], classification='MCP_UNIFIED_CAPABILITY_CATALOG')
+check('apps/modulos/mcp/dist/tools/core/mcp-admin.js',[
+ '"centraldark_unified_capability_catalog"',
+ '"SCREENPIPE_LOCAL_SENSOR"',
+ '"RDC_DESKTOP_COMMANDER"',
+ 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+], classification='MCP_UNIFIED_CAPABILITY_CATALOG_DIST_PARITY')
+check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md',[
+ 'LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG=true',
+ 'SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true',
+ 'DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF=true',
+], classification='MCP_UNIFIED_CAPABILITY_CATALOG_MEMORY')
+check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md',[
+ 'CATALOG_SOURCE_READBACK=PASS',
+ 'LIVE_MCP_CATALOG_RELOAD=UNKNOWN_UNTIL_READBACK',
+], classification='MCP_UNIFIED_CAPABILITY_CATALOG_RECEIPT')
 
 check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
  '### 📓 Caderneta — sistema híbrido multirota #146',
@@ -349,7 +393,7 @@ check('docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',[
  'CONE_PASS != GLOBAL_PASS',
 ], classification='COMPLETE_SIEVE_CHECKLIST_147')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json',[
- '"dependency_fingerprint": "a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069"',
+ '"dependency_fingerprint": "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
  '"materialization_requirements"',
  '"physical_binding"',
  '"complete_sieve"',
@@ -1484,6 +1528,23 @@ check('apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml',[
 check('package.json',[
  '"verify:centraldark-contract": "python3 scripts/trigger-fabric/verify_repo_contract.py"',
 ], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_PACKAGE_ENTRY')
+
+
+check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
+ '"HERMES_DELEGATED_COMMIT_PATH"',
+ '"SCREENPIPE_CLI_RECORDER"',
+ 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+], classification='HERMES_SCREENPIPE_METABOLISM_CATALOG_SRC')
+check('apps/modulos/mcp/dist/tools/core/mcp-admin.js',[
+ '"HERMES_DELEGATED_COMMIT_PATH"',
+ '"SCREENPIPE_CLI_RECORDER"',
+ 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+], classification='HERMES_SCREENPIPE_METABOLISM_CATALOG_DIST')
+check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md',[
+ 'HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748',
+ 'SCREENPIPE_RUNTIME_ON_VPS=UNKNOWN_UNTIL_STATUS_JSON',
+ 'CATALOG_EXPECTED_ROUTES=13',
+], classification='HERMES_SCREENPIPE_METABOLISM_RECEIPT')
 
 try:
     tracked=subprocess.check_output(['git','ls-files'],cwd=ROOT,text=True).splitlines()

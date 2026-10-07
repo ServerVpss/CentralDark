@@ -154,6 +154,12 @@ CENTRALDARK_AI_BOOT:
       one_path_failure_is_not_system_failure: true
       multipath_failover_before_global_blocked: true
       local_divergence: "VOLTA_UMA_CASA_AND_REVALIDATE_AFFECTED_CONE_ONLY"
+      capability_catalog_owner: "apps/modulos/mcp/src/tools/core/mcp-admin.js"
+      capability_catalog_consumer: "mcp_admin_catalog"
+      capability_catalog_scope: "centraldark_unified_capability_catalog"
+      capability_catalog_fingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"
+      screenpipe_and_rdc_share_one_mcp_catalog: true
+      catalog_entry_is_not_runtime_health: true
     proof:
       unknown_is_pass: false
       action_is_proof: false
