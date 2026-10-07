@@ -1554,6 +1554,206 @@
         "counterproof_no_match": true,
         "evidence_ref": "scripts/centraldark/canonical-consumption-gate.test.mjs"
       }
+    },
+    {
+      "id": "bot.evolucao-ias.formatarMensagem",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_CANDIDATE_RENDER",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "formatarMensagem",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "GROUP_MESSAGE_HYPOTHESIS_LABEL",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.rotuloEstadoAprendizado",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_STATE_LABEL",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "rotuloEstadoAprendizado",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "STATE_LABEL_TEXT",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.escaparHtml",
+      "kind": "FUNCTION",
+      "capability": "TELEGRAM_HTML_ESCAPE",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "escaparHtml",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "SAFE_HTML_TEXT",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.gerarCandidatoAprendizado",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_CANDIDATE_EXTRACT",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "gerarCandidatoAprendizado",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "CANDIDATE_HYPOTHESIS",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.avancarEstadoAprendizado",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_STATE_ADVANCE",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "avancarEstadoAprendizado",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "CANDIDATE_REPLAY_PROVED_STATE",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.headAtual",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_CURRENT_HEAD",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "headAtual",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "GIT_HEAD_CURRENT",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.processarCandidato",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_CANDIDATE_PROCESS",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "processarCandidato",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "PROVED_ADOPTED_OR_HELD",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.registrarCandidato",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_CANDIDATE_REGISTER",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "registrarCandidato",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "CANDIDATE_STATE_PERSISTED",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.selfTestAprendizado",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_SELF_TEST_OFFLINE",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "selfTestAprendizado",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "SELF_TEST_RESULT",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
+    },
+    {
+      "id": "bot.evolucao-ias.passo",
+      "kind": "FUNCTION",
+      "capability": "LEARNING_SELF_TEST_STEP",
+      "boundary": "evolucao-ias",
+      "source": "apps/bot-telegram/evolucao-ias.cjs",
+      "symbol": "passo",
+      "activation": "CALL",
+      "from": "EVOLUCAO_IAS_LEARNING_CYCLE",
+      "to": "SELF_TEST_STEP_RESULT",
+      "owner": "apps/bot-telegram/evolucao-ias.cjs",
+      "canonical_route": "evolucao-ias",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
+      }
     }
   ]
 }

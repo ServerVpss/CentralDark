@@ -589,7 +589,9 @@ function specialAddedLineFindings({ path, line, text }) {
 
   if (DOC_LIKE_EXTENSIONS.has(extension)) {
     const remoteEmbed = /<(?:script|iframe|object|embed|img|link)\b[^>]*(?:src|href|data)\s*=\s*["']?https?:\/\//i.test(text);
-    const remoteImage = /!\[[^\]]*\]\(\s*https?:\/\//i.test(text);
+    // Badge de workflow do próprio repositório é cobertura obrigatória (Status Badge Fabric), não referência externa nova.
+    const ownRepoBadge = /!\[[^\]]*\]\(\s*https:\/\/github\.com\/ServerVpss\/CentralDark\/actions\/workflows\/[A-Za-z0-9._-]+\/badge\.svg\s*\)/g;
+    const remoteImage = /!\[[^\]]*\]\(\s*https?:\/\//i.test(text.replace(ownRepoBadge, ""));
     if (remoteEmbed || remoteImage) {
       findings.push(redactedDeltaFinding("EXTERNAL_DELTA_REMOTE_EMBED", path, line));
     }

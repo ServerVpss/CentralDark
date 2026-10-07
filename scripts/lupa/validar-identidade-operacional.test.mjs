@@ -756,6 +756,17 @@ test("segunda camada exige Action e container imutáveis", () => {
   );
 });
 
+test("badge de workflow do próprio repositório não é embed externo novo; imagem de outro host continua bloqueada", () => {
+  const own = "| `x.yml` | [![x.yml](https://github.com/ServerVpss/CentralDark/actions/workflows/x.yml/badge.svg)](https://github.com/ServerVpss/CentralDark/actions/workflows/x.yml) |";
+  const foreign = "![x](https://example.invalid/badge.svg)";
+  const otherRepo = "![x](https://github.com/Outro/Repo/actions/workflows/x.yml/badge.svg)";
+  const embed = (text) => validateGenericAddedText(text, "docs/STATUS-BADGES.md", 22)
+    .some((finding) => finding.code === "EXTERNAL_DELTA_REMOTE_EMBED");
+  assert.equal(embed(own), false);
+  assert.equal(embed(foreign), true);
+  assert.equal(embed(otherRepo), true);
+});
+
 test("segunda camada bloqueia dependência, embed e busca Git externos", () => {
   const remoteEmbed = ["<scr", "ipt src=\"https://example.invalid/x.js\"></script>"].join("");
   const remoteGit = ["git cl", "one https://example.invalid/outside.git"].join("");
