@@ -80,6 +80,7 @@ jobs:
             env -u PYTHONPATH -u PYTHONHOME PYTHONPATH="$PWD/.pr-agent-site" python3 -c 'import openai,sys; print("OPENAI_VERSION="+openai.__version__); print("OPENAI_PATH="+openai.__file__)'
           fi
 
+
       - name: 🤖 Review pelo modelo local CURRENT
         env:
           CONFIG__AI_PROVIDER: openai
@@ -105,4 +106,5 @@ jobs:
           else
             env -u PYTHONPATH -u PYTHONHOME PYTHONPATH="$PWD/.pr-agent-site" python3 -m pr_agent.cli \
               --pr_url="$PR_URL" review
+          fi
           fi
