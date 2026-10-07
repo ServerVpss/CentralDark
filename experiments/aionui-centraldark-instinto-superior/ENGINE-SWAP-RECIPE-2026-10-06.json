@@ -1,0 +1,139 @@
+{
+  "schema": "centraldark.executable-recipe.v1",
+  "name": "hermes-same-mission-same-method-engine-swap-kylin",
+  "date": "2026-10-06",
+  "authority": "SEGREDO/CHEFE",
+  "owner": "scripts/vps/current_model_resolver.py",
+  "supporting_owners": [
+    "scripts/vps/kylin-openai-bridge.py",
+    "scripts/vps/aionui-native-integrate.py",
+    ".agents/skills/autonomous-ai-agents/hermes-agent/references/background-systems.md"
+  ],
+  "pr_mother_current": 1757,
+  "pr_mother_legacy": 1562,
+  "baseline_main_sha": "070671b19ba7011a882a32ef5fbbd5836a032316",
+  "objective": "Replay the same Hermes mission/method/proof with only the cognitive engine changed to Kylin, preserving one system and one writer.",
+  "candidate_recipe_fingerprint": {
+    "value": "c893a949",
+    "provenance": "UNKNOWN",
+    "replay_allowed": false,
+    "rule": "Do not invent the recipe. Locate exact provenance and proof key before replay."
+  },
+  "current_green_state": {
+    "triton_live": true,
+    "triton_ready": true,
+    "repository_entries": 30,
+    "repository_ready": 21,
+    "embedding_model": "ensemble-embd_gte-base_uint8-text",
+    "embedding_dimensions": 768,
+    "canonical_bridge_service_owner": true,
+    "new_chat_kylin_tool_call": true
+  },
+  "current_blockers": [
+    "Kylin GenAI genai_text_init_session returns INIT_FAILED:10 for explicit kylin-qwen-plus and kylin-deepseek-r1 probes.",
+    "Kylin NLP currentModel is empty after runtime rejection.",
+    "c893a949 exact recipe provenance is not found.",
+    "Hermes openai-codex fallback is rate-limited (HTTP 429) at this measurement."
+  ],
+  "bindings": {
+    "main": "?",
+    "active_mother_pr": "?",
+    "hermes_body": "Hermes current runtime",
+    "engine": "?",
+    "model_binding": "?",
+    "runtime": "?",
+    "recipe_fingerprint": "c893a949",
+    "proof_key": "?"
+  },
+  "hooks": {
+    "resolve_current_model": [
+      "python3",
+      "scripts/vps/current_model_resolver.py"
+    ],
+    "bridge_health": [
+      "curl",
+      "-fsS",
+      "http://127.0.0.1:18435/health"
+    ],
+    "triton_live": [
+      "curl",
+      "-fsS",
+      "http://127.0.0.1:8000/v2/health/live"
+    ],
+    "triton_ready": [
+      "curl",
+      "-fsS",
+      "http://127.0.0.1:8000/v2/health/ready"
+    ],
+    "repository_index": [
+      "curl",
+      "-fsS",
+      "-X",
+      "POST",
+      "-H",
+      "Content-Type: application/json",
+      "-d",
+      "{}",
+      "http://127.0.0.1:8000/v2/repository/index"
+    ],
+    "native_once_owner": "/root/.hermes/kylin_openai_bridge.py --native-once",
+    "hermes_tool_ping": "new clean Hermes session; require observable tool invocation",
+    "hook_decision": "REUSE_EXISTING_OWNERS_NO_NEW_HOOK"
+  },
+  "delegation": {
+    "max_concurrent_children": 10,
+    "parent_writer_only": true,
+    "children_read_only": true,
+    "sectors": [
+      "CANON_INTENT",
+      "KYLIN_BINDING",
+      "TRITON_EMBEDDING",
+      "OPENKYLIN_SDK",
+      "HERMES_AGENTIC",
+      "GITHUB_GRAPH",
+      "MEMORY_DOCS",
+      "RECIPE_C893A949",
+      "HOOKS_TRIGGER",
+      "COUNTERPROOF_TESTS"
+    ]
+  },
+  "sequence": [
+    "Resolve MAIN=?, ACTIVE_MOTHER=?, runtime and current model binding.",
+    "Verify canonical bridge service owns 127.0.0.1:18435; no orphan duplicate owner.",
+    "Verify Triton live/ready and embedding metadata.",
+    "Run direct native-once with the candidate Kylin engine; stop on init error.",
+    "Run Hermes clean-session TOOL_PING; TEXT_ONLY is not PASS.",
+    "Locate exact c893a949 provenance and original proof key.",
+    "Replay the exact c893a949 sequence with same Hermes/body/mission/method and only engine changed.",
+    "Run the same proof and counterproof.",
+    "Compare result schema, format, effect and proof key.",
+    "Equivalent => reusable crystal; divergence => new delta; write receipt + NEXT_CURSOR."
+  ],
+  "stop_conditions": {
+    "pass": [
+      "recipe provenance located",
+      "current Kylin binding non-empty and read back",
+      "native-once PASS",
+      "Hermes tool ping PASS",
+      "same recipe/proof executed under Kylin",
+      "result/schema/effect comparison complete"
+    ],
+    "blocked": [
+      "INIT_FAILED or provider unavailable",
+      "recipe/proof provenance UNKNOWN",
+      "tool ping missing",
+      "current binding reverts/clears",
+      "reality readback diverges"
+    ]
+  },
+  "proof_rules": [
+    "UNKNOWN != PASS",
+    "HISTORY != CURRENT",
+    "TRITON_READY != CHAT_LLM_READY",
+    "TOOL_CALL_EMITTED != TOOL_EFFECT",
+    "TEN_SUBAGENT_PLAN != TEN_SUBAGENTS_EXECUTED",
+    "MODEL_NAME_IS_BINDING"
+  ],
+  "result": "PRECONDITIONS_BLOCKED_CURRENTLY",
+  "next_cursor": "Root-cause INIT_FAILED:10 -> recover stable CURRENT Kylin NLP binding -> native-once PASS -> 10-subagent rendezvous -> locate c893a949 -> exact replay -> compare -> crystal or new delta"
+}
