@@ -745,3 +745,10 @@ CURRENT_OVER_HISTORY = true
 - **Target:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
 - **Conteúdo:** Hermes executor provado em PR #1748 por commit/push/readback externo entra no catálogo metabólico. Screenpipe CLI entra como rota de recorder/search/pipes com regra de status/freshness antes de PASS.
 - **Cristal:** `HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748`; `SCREENPIPE_CLI_RECORDER=CATALOGED_RECIPE`; `SCREENPIPE_RUNTIME_ON_VPS=UNKNOWN_UNTIL_STATUS_JSON`.
+
+
+### [2026-10-06] Hermes Desktop nativo como projeção do One Heart
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-METABOLISMO-AUTONOMO-CURRENT-MODEL-ONE-HEART.md`
+- **Conteúdo:** o cockpit CentralDark passa a ser extensão nativa do próprio Hermes Desktop, reutilizando gateway/model/profile/subagents/tool calls/jobs/logs já existentes. Obsidian e Hermes Desktop são duas projeções da mesma telemetria e não criam segundo organismo, daemon, porta, scheduler, banco ou HUD owner.
+- **Cristal:** `HERMES_DESKTOP_NATIVE_EXTENSION=true`; `CENTRALDARK_COCKPIT_IS_PLUGIN_NOT_SECOND_APP=true`; `OBSIDIAN_AND_HERMES_DESKTOP_SHARE_TELEMETRY=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `NO_SECOND_HUD_OWNER=true`; `REUSE_EXISTING_HERMES_STATE_AND_LOGS=true`.
+- **Next cursor:** materializar o menor plugin nativo no Hermes Desktop e provar hot-load/readback visual sem criar runtime paralelo.
