@@ -4,6 +4,7 @@ import { dirname } from "node:path";
 import express from "express";
 const DEFAULT_TTL_MS = 2 * 60_000;
 const DEFAULT_STALE_MS = 45_000;
+const DEFAULT_DEVICE_TOKEN_TTL_MS = Number(process.env.CENTRALDARK_DEVICE_TOKEN_TTL_MS || 30 * 24 * 60 * 60_000);
 const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || "/root/CentralDark/data/mcp-device-registry.json";
 const sha256 = (value) => createHash("sha256").update(String(value)).digest("hex");
 const safeEqual = (a, b) => {
@@ -17,6 +18,7 @@ export function createDevicePairingStore(options = {}) {
     const registryPath = options.registryPath || DEFAULT_REGISTRY_PATH;
     const ttlMs = Number(options.ttlMs || DEFAULT_TTL_MS);
     const staleMs = Number(options.staleMs || DEFAULT_STALE_MS);
+    const deviceTokenTtlMs = Number(options.deviceTokenTtlMs || DEFAULT_DEVICE_TOKEN_TTL_MS);
     const now = options.now || (() => Date.now());
     const pending = new Map();
     function readRegistry() {
@@ -58,6 +60,7 @@ export function createDevicePairingStore(options = {}) {
             approvedAt: 0,
             tokenDelivered: false,
             token: "",
+            refreshToken: "",
             meta: {
                 deviceName: cleanText(meta.deviceName, "unknown-device"),
                 executor: cleanText(meta.executor, "unknown"),
@@ -75,6 +78,7 @@ export function createDevicePairingStore(options = {}) {
         if (!safeEqual(item.code, String(code || "").toUpperCase()))
             return { ok: false, error: "pair_code_mismatch" };
         const token = randomBytes(32).toString("base64url");
+        const refreshToken = randomBytes(40).toString("base64url");
         const deviceId = randomUUID();
         const registry = readRegistry();
         registry.devices.push({
@@ -83,6 +87,8 @@ export function createDevicePairingStore(options = {}) {
             executor: cleanText(executor, item.meta.executor),
             surface: cleanText(surface, item.meta.surface),
             token_hash: sha256(token),
+            refresh_token_hash: sha256(refreshToken),
+            token_expires_at: new Date(now() + deviceTokenTtlMs).toISOString(),
             paired_at: new Date(now()).toISOString(),
             last_heartbeat: null,
             capabilities: {},
@@ -90,6 +96,8 @@ export function createDevicePairingStore(options = {}) {
         writeRegistry(registry);
         item.deviceId = deviceId;
         item.token = token;
+        item.refreshToken = refreshToken;
+        item.tokenExpiresAt = now() + deviceTokenTtlMs;
         item.approvedAt = now();
         return { ok: true, deviceId };
     }
@@ -106,8 +114,10 @@ export function createDevicePairingStore(options = {}) {
             return { status: "approved", device_id: item.deviceId };
         item.tokenDelivered = true;
         const token = item.token;
+        const refreshToken = item.refreshToken;
         item.token = "";
-        return { status: "approved", device_id: item.deviceId, token };
+        item.refreshToken = "";
+        return { status: "approved", device_id: item.deviceId, token, refresh_token: refreshToken, token_expires_at: new Date(item.tokenExpiresAt).toISOString() };
     }
     function heartbeat({ token, capabilities = {} }) {
         const tokenHash = sha256(token || "");
@@ -115,20 +125,34 @@ export function createDevicePairingStore(options = {}) {
         const device = registry.devices.find((entry) => safeEqual(entry.token_hash || "", tokenHash));
         if (!device)
             return { ok: false, error: "invalid_device_token" };
+        if (device.token_expires_at && Date.parse(device.token_expires_at) <= now())
+            return { ok: false, error: "device_token_expired" };
         device.last_heartbeat = new Date(now()).toISOString();
         device.capabilities = capabilities && typeof capabilities === "object" ? capabilities : {};
         writeRegistry(registry);
         return { ok: true, device_id: device.device_id, pong: new Date(now()).toISOString() };
     }
+    function refresh({ refreshToken }) {
+        const refreshHash = sha256(refreshToken || "");
+        const registry = readRegistry();
+        const device = registry.devices.find((entry) => safeEqual(entry.refresh_token_hash || "", refreshHash));
+        if (!device)
+            return { ok: false, error: "invalid_refresh_token" };
+        const token = randomBytes(32).toString("base64url");
+        device.token_hash = sha256(token);
+        device.token_expires_at = new Date(now() + deviceTokenTtlMs).toISOString();
+        writeRegistry(registry);
+        return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };
+    }
     function listDevices() {
         const registry = readRegistry();
         const t = now();
-        return registry.devices.map(({ token_hash: _secret, ...device }) => ({
+        return registry.devices.map(({ token_hash: _secret, refresh_token_hash: _refreshSecret, ...device }) => ({
             ...device,
             status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
         }));
     }
-    return { start, approve, status, heartbeat, listDevices, registryPath };
+    return { start, approve, status, heartbeat, refresh, listDevices, registryPath };
 }
 export function createDevicePairingRouter(options = {}) {
     const router = express.Router();
@@ -147,6 +171,10 @@ export function createDevicePairingRouter(options = {}) {
             return res.status(401).json({ ok: false, error: "admin_auth_required" });
         const result = store.approve({ pairId: req.body?.id, code: req.body?.code, deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
         res.status(result.ok ? 200 : 400).json(result);
+    });
+    router.post("/token/refresh", (req, res) => {
+        const result = store.refresh({ refreshToken: bearerFrom(req) });
+        res.status(result.ok ? 200 : 401).json(result);
     });
     router.post("/heartbeat", (req, res) => {
         const result = store.heartbeat({ token: bearerFrom(req), capabilities: req.body?.capabilities });

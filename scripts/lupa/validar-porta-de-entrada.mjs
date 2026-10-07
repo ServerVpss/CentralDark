@@ -946,46 +946,32 @@ if (!contract) {
   if (daily.checklist_role !== "OPERATIONAL_HUD_NOT_SOURCE_OF_TRUTH") errors.push("DAILY_CHECKLIST_VIROU_FONTE_DA_VERDADE");
 
   const checklistOwner = String(daily.projection_owner || "");
+  const checklistHistoryOwner = String(daily.history_owner || "");
   if (daily.projection_owner_required !== true) errors.push("DAILY_CHECKLIST_PROJECTION_OWNER_NOT_REQUIRED");
-  if (checklistOwner !== "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md") {
+  if (checklistOwner !== "apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx") {
     errors.push("DAILY_CHECKLIST_PROJECTION_OWNER_INVALIDO");
   } else if (!existe(checklistOwner)) {
     errors.push("DAILY_CHECKLIST_PROJECTION_AUSENTE:" + checklistOwner);
   } else {
-    const checklistText = ler(checklistOwner);
-    if (!checklistText.includes('owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"')) {
-      errors.push("DAILY_CHECKLIST_PROJECTION_OWNER_DRIFT");
-    }
-    if (daily.projection_checked_day_field !== "checked_day_utc") {
-      errors.push("DAILY_CHECKLIST_DAY_FIELD_INVALIDO");
-    }
-    if (daily.material_code_delta_requires_projection_day_match !== true) {
-      errors.push("DAILY_CHECKLIST_DAY_MATCH_NOT_REQUIRED");
-    }
-
-    if (shaValido(BASE_SHA) && shaValido(HEAD_SHA) && gitCommitExiste(BASE_SHA) && gitCommitExiste(HEAD_SHA)) {
-      const changed = git(["diff", "--name-only", BASE_SHA, HEAD_SHA, "--"])
-        .split(/\r?\n/)
-        .filter(Boolean);
-      const materialCodeDelta = changed.some((file) =>
-        /^(?:apps|scripts|infra|\.agents\/skills|\.github\/workflows)\//.test(file) &&
-        !/(?:^|\/)(?:test|tests|__tests__)\//i.test(file) &&
-        !/\.(?:test|spec)\.[^.]+$/i.test(file)
-      );
-      if (materialCodeDelta) {
-        const headEpoch = Number(git(["show", "-s", "--format=%ct", HEAD_SHA]).trim());
-        const headDay = Number.isFinite(headEpoch)
-          ? new Date(headEpoch * 1000).toISOString().slice(0, 10)
-          : "";
-        const dayMatch = checklistText.match(/^checked_day_utc:\s*"?([0-9]{4}-[0-9]{2}-[0-9]{2})"?\s*$/m);
-        const checklistDay = dayMatch?.[1] || "";
-        if (!checklistDay) errors.push("DAILY_CHECKLIST_DAY_MISSING");
-        else if (checklistDay !== headDay) {
-          errors.push(`DAILY_CHECKLIST_STALE:checklist=${checklistDay}:head=${headDay}`);
-        }
-      }
+    const hudText = ler(checklistOwner);
+    for (const marker of [
+      "HUD_IS_CURRENT_PROJECTION",
+      "CHECKLIST_DAILY_OWNER",
+      "receiptsFingerprint",
+      "nextCursor",
+      "activeLanes",
+    ]) {
+      if (!hudText.includes(marker)) errors.push("DAILY_CHECKLIST_HUD_MARKER_AUSENTE:" + marker);
     }
   }
+  if (checklistHistoryOwner !== "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md" || !existe(checklistHistoryOwner)) {
+    errors.push("DAILY_CHECKLIST_HISTORY_OWNER_INVALIDO");
+  }
+  if (daily.no_daily_pr !== true) errors.push("DAILY_CHECKLIST_DAILY_PR_AINDA_PERMITIDA");
+  if (daily.no_new_pr_mother !== true) errors.push("DAILY_CHECKLIST_NEW_PR_MOTHER_AINDA_PERMITIDA");
+  if (daily.hud_is_current_projection !== true) errors.push("DAILY_CHECKLIST_HUD_CURRENT_PROJECTION_AUSENTE");
+  if (daily.hud_is_not_authority !== true) errors.push("DAILY_CHECKLIST_HUD_VIROU_AUTORIDADE");
+  if (daily.receipts_owner !== "repository") errors.push("DAILY_CHECKLIST_RECEIPTS_OWNER_INVALIDO");
 
   const executorSelection = contract.executor_selection_policy ?? {};
   if (executorSelection.marker !== "EXECUTOR_SELECTION_BY_CAPABILITY_SCOPE_LEASE_POLICY") errors.push("EXECUTOR_SELECTION_POLICY_AUSENTE");

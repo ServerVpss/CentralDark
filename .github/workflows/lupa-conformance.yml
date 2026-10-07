@@ -88,16 +88,17 @@ jobs:
           if sys.version_info < (3, 11):
               raise SystemExit("PYTHON_NATIVE_TOO_OLD")
           PY
-      - name: 🔹 Venv efêmero do gate + pytest
+      - name: 🔹 Pacotes Python isolados do runner + pytest
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m venv .venv-ci
-          .venv-ci/bin/python -m pip install --disable-pip-version-check pytest
-          echo "$PWD/.venv-ci/bin" >> "$GITHUB_PATH"
-          .venv-ci/bin/python - <<'PY'
+          PYTEST_TARGET="${RUNNER_TEMP}/centraldark-pytest-${GITHUB_RUN_ID}"
+          mkdir -p "${PYTEST_TARGET}"
+          python3 -m pip install --disable-pip-version-check --target "${PYTEST_TARGET}" pytest
+          echo "PYTHONPATH=${PYTEST_TARGET}${PYTHONPATH:+:${PYTHONPATH}}" >> "$GITHUB_ENV"
+          PYTHONPATH="${PYTEST_TARGET}${PYTHONPATH:+:${PYTHONPATH}}" python3 - <<'PY'
           import sys, pytest
-          print("VENV_PYTHON=", sys.version)
+          print("PYTHON_ISOLATED=", sys.version)
           print("PYTEST_VERSION=", pytest.__version__)
           PY
       - name: 🔹 Validar hash canônico da Lupa
