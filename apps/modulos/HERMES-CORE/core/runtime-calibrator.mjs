@@ -340,7 +340,7 @@ export async function calibrateRuntime(options = {}) {
   return state;
 }
 
-export function buildCalibrationMission(state) {
+export function buildCalibrationMission(state, options = {}) {
   if (!state || !state.eligible_for_repair || !state.wounds || !state.wounds.length) {
     return null;
   }
@@ -355,6 +355,46 @@ export function buildCalibrationMission(state) {
   const short = state.fingerprint.slice(0, 12);
   const advisory =
     (state.advisory && state.advisory.summary) || "UNAVAILABLE";
+  const headSha = String(options.headSha || "").trim();
+  const continuityState = headSha
+    ? {
+        objetivo:
+          "Fechar somente a ferida CURRENT do runtime interno preservando owners existentes.",
+        autoridade: "SEGREDO/CHEFE",
+        coordenador: "SOL",
+        escritor: "HERMES",
+        escopo: "VPS_RUNTIME_INTERNAL_ONLY",
+        ambiente: "CENTRALDARK-OS",
+        classe_de_acao: "RUNTIME_REMEDIATION",
+        baseline: {
+          head_sha: headSha,
+          status: "MEASURED",
+          wounds: [...state.wounds],
+        },
+        backup: {
+          head_sha: headSha,
+          status: "REQUIRED_BEFORE_MUTATION",
+          scope: "AFFECTED_RUNTIME_OWNER_ONLY",
+        },
+        rollback: {
+          head_sha: headSha,
+          status: "REQUIRED_BEFORE_MUTATION",
+          scope: "AFFECTED_RUNTIME_OWNER_ONLY",
+        },
+        receipt: {
+          head_sha: headSha,
+          path: CALIBRATION_STATE_PATH,
+          status: "LOCAL_RUNTIME_RECEIPT",
+        },
+        head_sha: headSha,
+        missao:
+          "Calibrar e reparar somente o runtime interno afetado; sem mutação Git/GitHub.",
+        historico: [],
+        retomadas: 0,
+        terminal_state: "RUNNING",
+        terminal_reason: null,
+      }
+    : null;
   const lines = [
     "# CENTRALDARK_RUNTIME_CALIBRATION",
     "",
@@ -392,6 +432,7 @@ export function buildCalibrationMission(state) {
     filename: "runtime-calibration-" + short + ".md",
     content: lines.join("\n"),
     fingerprint: state.fingerprint,
+    continuity_state: continuityState,
   };
 }
 
