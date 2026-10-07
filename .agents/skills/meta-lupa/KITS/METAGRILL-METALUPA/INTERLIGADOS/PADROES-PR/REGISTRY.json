@@ -61,8 +61,36 @@
     ],
     "latest_window": "RECENT_50_PRS_1709_TO_1782",
     "refreshed_from_main": "ff336e2bf86194602993060e5b58ad46d293f0b5",
-    "pattern_count": 207,
-    "coverage_note": "Every PR in the latest 50 is represented by either an existing pattern, a promoted stable pattern, or runtime/external remeasurement boundary; implementation is not promoted by this registry."
+    "pattern_count": 224,
+    "coverage_note": "Recent-50 sweep preserved; recent-200 backfill classified all 71 previously uncovered PRs as existing-pattern enrichment, new stable source pattern, superseded/closed-unmerged, or no-new-stable-delta. Runtime implementation is not promoted by this registry.",
+    "backfill": {
+      "kind": "RECENT_200_GAP_BACKFILL",
+      "source_registry_blob": "a9c48c5776d8b67f0240a3830fa1fedaa19f6ae3",
+      "sampled_recent_prs": 200,
+      "sampled_window": "1535_TO_1782",
+      "previously_uncovered_count": 71,
+      "classified_count": 71,
+      "new_stable_patterns_added": 17,
+      "existing_patterns_enriched": 31,
+      "no_promotion_closed_unmerged_or_superseded": [
+        1700,
+        1692,
+        1681,
+        1651,
+        1638,
+        1539
+      ],
+      "no_new_stable_pattern": [
+        1673,
+        1672,
+        1643,
+        1585
+      ],
+      "runtime_mutation": false,
+      "casa_mutation": false,
+      "vps_mutation": false,
+      "boundary": "SOURCE_PATTERN_ONLY; IMPLEMENTATION/RUNTIME CLAIMS REQUIRE TARGET RUNTIME REMEASUREMENT"
+    }
   },
   "patterns": [
     {
@@ -110,12 +138,23 @@
       "runtime_required": false
     },
     {
+      "id": "ASYNC_INGRESS_ACK_IS_NOT_FINAL_WORK_PROOF",
+      "emoji": "⚡",
+      "anchor": "ACK RÁPIDO PROVA RECEPÇÃO; WORKER/HEALTH/RECEIPT PROVAM O EFEITO FINAL",
+      "pr_refs": [
+        1639,
+        1654
+      ],
+      "runtime_required": false
+    },
+    {
       "id": "AUTHORIZATION_IS_SCOPE_BOUND",
       "emoji": "👑",
       "anchor": "PERMISSÃO NÃO É CARTA BRANCA",
       "pr_refs": [
+        1430,
         1458,
-        1430
+        1662
       ],
       "runtime_required": false
     },
@@ -124,7 +163,8 @@
       "emoji": "🏷️",
       "anchor": "PLACA NÃO É JUIZ",
       "pr_refs": [
-        1431
+        1431,
+        1657
       ],
       "runtime_required": false
     },
@@ -154,7 +194,8 @@
       "pr_refs": [
         1335,
         1445,
-        1625
+        1625,
+        1641
       ],
       "runtime_required": false
     },
@@ -203,6 +244,15 @@
       "pr_refs": [
         1492,
         1484
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CANONICAL_NAME_PRECEDES_GENERIC_ALIAS",
+      "emoji": "🏷️",
+      "anchor": "NOME TÉCNICO REAL VEM PRIMEIRO; APELIDO CURTO NÃO APAGA IDENTIDADE",
+      "pr_refs": [
+        1678
       ],
       "runtime_required": false
     },
@@ -362,6 +412,15 @@
       "runtime_required": false
     },
     {
+      "id": "CONTINUITY_STATE_UPDATE_PRESERVES_CONTRACT",
+      "emoji": "🧵",
+      "anchor": "MUDAR STATE NÃO APAGA OBJETIVO, AUTORIDADE, BASELINE, RECEIPT NEM HEAD",
+      "pr_refs": [
+        1702
+      ],
+      "runtime_required": false
+    },
+    {
       "id": "CONTROL_PLANE_EXECUTION_PLANE_SEPARATION",
       "emoji": "🎛️",
       "anchor": "CONTROLE ESCOLHE, EXECUÇÃO RODA",
@@ -387,6 +446,16 @@
       "anchor": "DESCENDENTE HERDA CRITÉRIO DO OBJETIVO; NÃO REINVENTA A RÉGUA",
       "pr_refs": [
         1754
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CRYSTAL_IS_MINIMUM_REPLAYABLE_PROVEN_STATE",
+      "emoji": "💎",
+      "anchor": "CRISTAL = ESTADO MÍNIMO PROVADO PARA REPLAY; FINGERPRINT IGUAL REUSA, MUDOU REVALIDA O CONE",
+      "pr_refs": [
+        1584,
+        1701
       ],
       "runtime_required": false
     },
@@ -447,6 +516,7 @@
       "emoji": "🚀",
       "anchor": "DEPLOY DECIDE COM FATOS REAIS DO REPO; NÃO COM ECO OU PLACEHOLDER",
       "pr_refs": [
+        1582,
         1752
       ],
       "runtime_required": false
@@ -506,6 +576,8 @@
       "emoji": "⚖️",
       "anchor": "GATE DETERMINÍSTICO DECIDE; IA CONSULTIVA APOIA",
       "pr_refs": [
+        1693,
+        1698,
         1776,
         1777,
         1782
@@ -582,6 +654,16 @@
       "anchor": "BINDING EXECUTA, NÃO COROA",
       "pr_refs": [
         1490
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EPHEMERAL_AUTH_PROPAGATES_TO_AUTHORIZED_CHILD_PROCESS",
+      "emoji": "🔐",
+      "anchor": "AUTH EFÊMERA PODE VIAJAR NO AMBIENTE DO JOB/PROCESSO; NÃO PERSISTE EM REMOTE, GLOBAL CONFIG OU REPO",
+      "pr_refs": [
+        1645,
+        1653
       ],
       "runtime_required": false
     },
@@ -689,6 +771,7 @@
       "anchor": "FORA NÃO VIRA DONO",
       "pr_refs": [
         1464,
+        1677,
         1773
       ],
       "runtime_required": false
@@ -747,6 +830,24 @@
       "runtime_required": false
     },
     {
+      "id": "FUNCTIONAL_SLICE_BEFORE_DESIGN_POLISH",
+      "emoji": "🎨",
+      "anchor": "PRIMEIRO FECHA O MENOR SLICE FUNCIONAL; DEPOIS POLIMENTO NA MESMA SUPERFÍCIE",
+      "pr_refs": [
+        1676
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "FUTURE_LOCKED_PLAN_IS_NOT_CURRENT_ACTION",
+      "emoji": "🚧",
+      "anchor": "PLANO FUTURO TRANCADO É HISTÓRIA/PENDÊNCIA; NÃO É ORDEM DE EXECUÇÃO ATUAL",
+      "pr_refs": [
+        1663
+      ],
+      "runtime_required": false
+    },
+    {
       "id": "GENERATED_ARTIFACT_MUST_MATCH_SOURCE",
       "emoji": "🧬",
       "anchor": "SOURCE E DIST ANDAM JUNTOS",
@@ -758,11 +859,23 @@
       "runtime_required": false
     },
     {
+      "id": "GENERATED_DIRTY_IS_NOT_HUMAN_DIRTY",
+      "emoji": "🧹",
+      "anchor": "DIRTY GERADO E DIRTY HUMANO SÃO CLASSES DIFERENTES; JULGAR POR PROVENIÊNCIA/ALLOWLIST EXATA",
+      "pr_refs": [
+        1591,
+        1655,
+        1656
+      ],
+      "runtime_required": false
+    },
+    {
       "id": "GIT_CURRENT_IS_NOT_RUNTIME_CURRENT",
       "emoji": "🔀",
       "anchor": "GIT ATUAL E RUNTIME ATUAL SÃO PROVAS DIFERENTES",
       "pr_refs": [
-        1597
+        1597,
+        1670
       ],
       "runtime_required": false
     },
@@ -798,6 +911,15 @@
       "runtime_required": false
     },
     {
+      "id": "HUD_IDENTITY_STABLE_CURRENT_DATA_REMEASURED",
+      "emoji": "🧭",
+      "anchor": "HUD PRESERVA IDS/ORDEM; STATUS, PROVA E PERCENTUAL VÊM DO CURRENT",
+      "pr_refs": [
+        1691
+      ],
+      "runtime_required": false
+    },
+    {
       "id": "HUMAN_ACCEPTANCE_IS_NOT_PROOF",
       "emoji": "👑",
       "anchor": "ACEITE HUMANO AUTORIZA; NÃO SUBSTITUI PROVA",
@@ -811,7 +933,9 @@
       "emoji": "🎨",
       "anchor": "LINGUAGEM HUMANA/EMOJI PRIMEIRO; TERMO TÉCNICO PERMANECE DISPONÍVEL; EMOJI NÃO É PROVA",
       "pr_refs": [
-        1543
+        1543,
+        1646,
+        1661
       ],
       "runtime_required": false
     },
@@ -942,6 +1066,10 @@
         1393,
         1580,
         1597,
+        1606,
+        1670,
+        1674,
+        1684,
         1710,
         1713,
         1742,
@@ -1008,6 +1136,16 @@
       "value": "CONTRACT.yml → MASTER-CYCLE.yml → TRIGGERS.yml → ENGINE_BINDING.yml",
       "pr_refs": [
         1490
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MATERIAL_DELTA_MUST_NOT_DIE_IN_CHAT",
+      "emoji": "🧾",
+      "anchor": "DELTA MATERIAL PROVADO VAI AO OWNER CANÔNICO ANTES DO RELATÓRIO FINAL",
+      "pr_refs": [
+        1659,
+        1666
       ],
       "runtime_required": false
     },
@@ -1119,7 +1257,19 @@
       "value": "AGENT_STOP != MISSION_STOP; SESSION_END != GOAL_END; MODEL_LIMIT != GOAL_END; RENDEZVOUS=#1562; PROVEN=REUSE; OPEN_DELTA=RECONCILE; FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true; MAIN_SHA=MEASURE_CURRENT",
       "pr_refs": [
         1554,
-        1562
+        1562,
+        1648,
+        1652,
+        1658
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MISSION_STOP_REQUIRES_EXPLICIT_CHEFE_STOP",
+      "emoji": "🛑",
+      "anchor": "FIM DE CHAT NÃO PARA MISSÃO CONTÍNUA; STOP EXIGE ORDEM EXPLÍCITA DO CHEFE",
+      "pr_refs": [
+        1652
       ],
       "runtime_required": false
     },
@@ -1131,6 +1281,7 @@
         1389,
         1390,
         1447,
+        1650,
         1775,
         1776,
         1777,
@@ -1282,7 +1433,18 @@
       "emoji": "🔎",
       "anchor": "CORRELAÇÃO → AUDIT → LOG → SSE; OBSERVAR NÃO CRIA SEGUNDO BARRAMENTO",
       "pr_refs": [
-        1494
+        1494,
+        1583
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OBSERVATION_INSTRUMENT_FAILURE_IS_NOT_TARGET_FAILURE",
+      "emoji": "🧿",
+      "anchor": "MEDIDOR/ESCAPING/BUFFER QUEBROU NÃO PROVA O ALVO QUEBRADO",
+      "pr_refs": [
+        1640,
+        1679
       ],
       "runtime_required": false
     },
@@ -1318,11 +1480,12 @@
       "emoji": "🚦",
       "anchor": "UM VEÍCULO ATIVO POR ESCOPO",
       "pr_refs": [
-        1452,
-        1451,
-        1439,
+        1432,
         1436,
-        1432
+        1439,
+        1451,
+        1452,
+        1686
       ],
       "runtime_required": false
     },
@@ -1419,6 +1582,8 @@
         1465,
         1483,
         1490,
+        1639,
+        1674,
         1709,
         1710,
         1713,
@@ -1438,12 +1603,25 @@
       "runtime_required": false
     },
     {
+      "id": "OPTIONAL_ADVISORY_JOB_IS_BOUNDED_NON_BLOCKING",
+      "emoji": "⏱️",
+      "anchor": "BEST-EFFORT TEM TIMEOUT/CANCELAMENTO; NÃO MONOPOLIZA CAPACIDADE NEM BLOQUEIA O CORE",
+      "pr_refs": [
+        1688,
+        1689
+      ],
+      "runtime_required": false
+    },
+    {
       "id": "OPTIONAL_INTEGRATION_OFF_IS_NOT_GLOBAL_FAILURE",
       "emoji": "🔌",
       "anchor": "INTEGRAÇÃO OPCIONAL INDISPONÍVEL NÃO BLOQUEIA MISSÃO QUANDO EXISTE ROTA/FALLBACK SUFICIENTE",
       "pr_refs": [
         1503,
-        1523
+        1523,
+        1644,
+        1688,
+        1689
       ],
       "runtime_required": false
     },
@@ -1502,7 +1680,8 @@
       "emoji": "💾",
       "anchor": "SALVAR NÃO É PROMOVER",
       "pr_refs": [
-        1389
+        1389,
+        1666
       ],
       "runtime_required": false
     },
@@ -1530,7 +1709,8 @@
       "anchor": "PR ELEGÍVEL NÃO DEVOLVE O PROBLEMA AO HUMANO NO AMARELO",
       "pr_refs": [
         1620,
-        1628
+        1628,
+        1671
       ],
       "runtime_required": false
     },
@@ -1562,6 +1742,8 @@
       "pr_refs": [
         1540,
         1623,
+        1648,
+        1658,
         1710,
         1721,
         1744,
@@ -1576,7 +1758,8 @@
       "emoji": "🔒",
       "anchor": "PR-MÃE/FUNIL NÃO É VEÍCULO DE PROMOÇÃO; MERGE SOMENTE POR SUB-PR VINCULADO",
       "pr_refs": [
-        1572
+        1572,
+        1649
       ],
       "runtime_required": false
     },
@@ -1585,21 +1768,22 @@
       "emoji": "📜",
       "anchor": "PADRÃO PODE SUBIR SEM FINGIR QUE CÓDIGO SUBIU",
       "pr_refs": [
-        1492,
-        1490,
-        1488,
-        1485,
-        1484,
-        1483,
-        1482,
-        1480,
-        1465,
-        1463,
-        1458,
-        1456,
-        1454,
+        1444,
         1447,
-        1444
+        1454,
+        1456,
+        1458,
+        1463,
+        1465,
+        1480,
+        1482,
+        1483,
+        1484,
+        1485,
+        1488,
+        1490,
+        1492,
+        1664
       ],
       "runtime_required": false
     },
@@ -1629,7 +1813,9 @@
       "emoji": "🛣️",
       "anchor": "TROCAR ROTA PRIMÁRIA NÃO CRIA NOVO DONO",
       "pr_refs": [
-        1578
+        1578,
+        1642,
+        1696
       ],
       "runtime_required": false
     },
@@ -1638,7 +1824,17 @@
       "emoji": "🔐",
       "anchor": "TÚNEL/PAIRING PRIVADO É TRANSPORTE; NÃO CRIA SEGUNDO CÉREBRO/ROUTER/AUTORIDADE",
       "pr_refs": [
-        1520
+        1520,
+        1699
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "PROCESS_WRAPPER_IS_PART_OF_RUNTIME_IDENTITY",
+      "emoji": "🧬",
+      "anchor": "WRAPPER SHELL/PM2 FAZ PARTE DA IDENTIDADE REAL DO PROCESSO E DO GATE",
+      "pr_refs": [
+        1589
       ],
       "runtime_required": false
     },
@@ -1744,8 +1940,9 @@
       "anchor": "INBOX/DRIVE/MATERIAL BRUTO ENTRA COM PROVENIÊNCIA; NÃO SOBRESCREVE CÂNONE",
       "pr_refs": [
         1510,
+        1545,
         1546,
-        1545
+        1677
       ],
       "runtime_required": false
     },
@@ -1755,6 +1952,15 @@
       "anchor": "FEEDBACK ENTRA NO MESMO FIO",
       "pr_refs": [
         1435
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "REGIONAL_TONE_REFINES_STYLE_NOT_IDENTITY",
+      "emoji": "🗣️",
+      "anchor": "BAIANÊS É CAMADA DE FALA; NÃO CRIA PERSONA NEM AUTORIDADE",
+      "pr_refs": [
+        1707
       ],
       "runtime_required": false
     },
@@ -1794,6 +2000,8 @@
       "emoji": "📜",
       "anchor": "RECEITA REPLAYABLE PRESERVA CAMINHO; EXECUÇÃO ATUAL AINDA PRECISA PROVA",
       "pr_refs": [
+        1694,
+        1697,
         1721
       ],
       "runtime_required": false
@@ -1811,6 +2019,7 @@
         1465,
         1482,
         1483,
+        1581,
         1586,
         1587,
         1596,
@@ -1818,6 +2027,14 @@
         1632,
         1633,
         1634,
+        1636,
+        1641,
+        1647,
+        1650,
+        1660,
+        1675,
+        1676,
+        1687,
         1709,
         1710,
         1714,
@@ -1834,7 +2051,8 @@
       "anchor": "MEDIR OWNER/DECISÃO/CAPACIDADE EXISTENTE ANTES DE CRIAR ALGO NOVO",
       "pr_refs": [
         1513,
-        1533
+        1533,
+        1675
       ],
       "runtime_required": false
     },
@@ -1873,7 +2091,17 @@
       "emoji": "🌳",
       "anchor": "WORKTREE SUJO É ESTADO VIVO; NÃO RESETAR NEM LIMPAR CEGAMENTE",
       "pr_refs": [
-        1597
+        1597,
+        1685
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ROUTE_ALIAS_REUSES_CANONICAL_HANDLER",
+      "emoji": "🔀",
+      "anchor": "ALIAS COMPATÍVEL REUSA AUTH/HANDLER CANÔNICO; NÃO CRIA SEGUNDA ROTA DONA",
+      "pr_refs": [
+        1690
       ],
       "runtime_required": false
     },
@@ -1900,7 +2128,8 @@
       "emoji": "🛡️",
       "anchor": "GUARDA ESTENDE O OWNER, NÃO CRIA SEGUNDO DONO",
       "pr_refs": [
-        1557
+        1557,
+        1696
       ],
       "runtime_required": false
     },
@@ -1942,7 +2171,11 @@
         1492,
         1620,
         1628,
-        1631
+        1631,
+        1649,
+        1671,
+        1693,
+        1698
       ],
       "runtime_required": false
     },
@@ -1951,7 +2184,8 @@
       "emoji": "👑",
       "anchor": "MESMO ALVO E ESCOPO NÃO PEDEM A MESMA PERMISSÃO DE NOVO",
       "pr_refs": [
-        1567
+        1567,
+        1685
       ],
       "runtime_required": false
     },
@@ -2108,6 +2342,15 @@
         1607,
         1609,
         1616
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "TOOL_CALL_VISIBILITY_FALLBACK_RECEIPT",
+      "emoji": "🧾",
+      "anchor": "CARD NATIVO SUMIU? RECIBO SEGURO NO TEXTO",
+      "pr_refs": [
+        1708
       ],
       "runtime_required": false
     },
@@ -2276,9 +2519,13 @@
       "emoji": "🎨",
       "anchor": "FIGMA HUD GRAFO E PAINEL PROJETAM; NÃO GOVERNAM",
       "pr_refs": [
+        1542,
         1576,
         1609,
         1621,
+        1636,
+        1637,
+        1684,
         1767,
         1777,
         1782
