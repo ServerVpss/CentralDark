@@ -9,7 +9,9 @@
  * Funcionamento:
  *   1. A cada 30-60 min (aleatório), uma IA "acorda" e posta um insight.
  *   2. As outras IAs podem responder, reagindo ao que foi dito.
- *   3. Cada IA mantém um "aprendizado" — algo que absorveu das outras.
+ *   3. O que cada IA extrai da conversa vira CANDIDATE (hipótese), nunca
+ *      aprendizado: CANDIDATE → REPLAY_OBSERVED → PROVED_ADOPTED (só com
+ *      receipt CURRENT aceito por podePromoverAprendizado).
  *   4. Estado persistido em JSON para sobreviver a reinícios.
  *
  * APIs usadas:
@@ -23,6 +25,7 @@
  *   node evolucao-ias.cjs              # roda uma vez
  *   node evolucao-ias.cjs --loop       # roda em loop infinito
  *   node evolucao-ias.cjs --test       # posta mensagem de teste de cada IA
+ *   node evolucao-ias.cjs --self-test-learning  # self-test offline do ciclo de aprendizado
  */
 
 'use strict';
@@ -54,7 +57,12 @@ try {
 // =========================================================================
 // CONTEXTO REAL DO CENTRALDARK — injetado nos prompts das IAs
 // =========================================================================
-let contextoCentralDark = { montarContexto: () => '', gerarTopicoReal: () => null, registrarAprendizadoPermanente: () => false };
+let contextoCentralDark = {
+  montarContexto: () => '',
+  gerarTopicoReal: () => null,
+  registrarAprendizadoPermanente: () => false,
+  _internals: { podePromoverAprendizado: () => false },
+};
 try {
   contextoCentralDark = require('./contexto-centraldark.cjs');
 } catch (err) {
@@ -79,11 +87,11 @@ const CONFIG = {
   // Arquivo de estado persistente
   stateFile: '/root/CentralDark/apps/bot-telegram/evolucao-state.json',
 
-  // Tokens de bot Telegram — cada IA tem o seu
+  // Tokens de bot Telegram — cada IA tem o seu (somente via env; sem default secreto)
   botTokens: {
-    gemini: process.env.BOT_TOKEN_GEMINI || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
-    groq: process.env.BOT_TOKEN_GROQ || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
-    claude: process.env.BOT_TOKEN_CLAUDE || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
+    gemini: process.env.BOT_TOKEN_GEMINI || '',
+    groq: process.env.BOT_TOKEN_GROQ || '',
+    claude: process.env.BOT_TOKEN_CLAUDE || '',
   },
 
   // Perfil de cada bot no Telegram (nome + descrição + foto)
@@ -144,7 +152,7 @@ CONTEXTO OBRIGATÓRIO:
 - Stack: Lovable Cloud, Supabase, PM2, Caddy, edge functions
 - Você tem acesso ao comando \`darkai\` (gateway pra Gemini/GPT-5/Claude com uma chave só)
 - Sincronia 4-Point: Lovable ↔ GitHub ↔ VPS ↔ Cérebro Vivo (docs/CONSCIENCIA/)
-- Aprendizados vão pra docs/CONSCIENCIA/APRENDIZADOS.md e a próxima IA herda
+- Só aprendizado PROVED_ADOPTED (receipt CURRENT) vai pra docs/CONSCIENCIA/APRENDIZADOS.md; hipótese de conversa é CANDIDATE
 
 Personalidade:
 - Curta e objetiva (máximo 3 parágrafos, 400 caracteres)
@@ -257,8 +265,13 @@ function carregarEstado() {
     ultimasMensagens: {},
     // Tópicos já discutidos (para não repetir)
     topicosUsados: [],
-    // Aprendizados: { "gemini": ["aprendi X com groq", ...], ... }
+    // Aprendizados ADOTADOS (PROVED_ADOPTED): { "gemini": ["..."], ... }
     aprendizados: { gemini: [], groq: [], claude: [] },
+    // Hipóteses CANDIDATE / REPLAY_OBSERVED por IA (não são aprendizado)
+    candidatos: { gemini: [], groq: [], claude: [] },
+    // Evidência externa por id de candidato (escrita por verificador)
+    replays: {},
+    receipts: {},
     // Contador de mensagens por IA
     contador: { gemini: 0, groq: 0, claude: 0 },
     // Timestamp da última atividade
@@ -517,10 +530,10 @@ function formatarNome(iaId) {
 /**
  * Formata uma mensagem de IA para o grupo
  */
-function formatarMensagem(iaId, texto, aprendizado = null) {
+function formatarMensagem(iaId, texto, candidato = null) {
   let msg = `${formatarNome(iaId)}\n\n${texto}`;
-  if (aprendizado) {
-    msg += `\n\n📖 <i>Aprendi hoje:</i> ${aprendizado}`;
+  if (candidato && candidato.hipotese) {
+    msg += `\n\n🔬 <i>${rotuloEstadoAprendizado(candidato.estado)}:</i> ${escaparHtml(candidato.hipotese)}`;
   }
   return msg;
 }
@@ -538,33 +551,205 @@ function escolherTopico(estado) {
   return disponiveis[Math.floor(Math.random() * disponiveis.length)];
 }
 
+// =========================================================================
+// CICLO DE APRENDIZADO — CANDIDATE → REPLAY_OBSERVED → PROVED_ADOPTED
+// =========================================================================
+//
+// O que a IA extrai de uma conversa é só hipótese (CANDIDATE). Nunca é
+// gravado como aprendizado permanente nem exibido como "aprendi".
+//   CANDIDATE        hipótese extraída do texto realmente gerado
+//   REPLAY_OBSERVED  existe um replay observado (evidência) da hipótese
+//   PROVED_ADOPTED   podePromoverAprendizado aceitou receipt com o HEAD atual
+// Sem replay não há REPLAY_OBSERVED; sem receipt válido/CURRENT não há
+// PROVED_ADOPTED nem chamada de promoção com sucesso.
+
+const crypto = require('crypto');
+const { execFileSync } = require('child_process');
+
+const ESTADOS_APRENDIZADO = Object.freeze({
+  CANDIDATE: 'CANDIDATE',
+  REPLAY_OBSERVED: 'REPLAY_OBSERVED',
+  PROVED_ADOPTED: 'PROVED_ADOPTED',
+});
+
+function rotuloEstadoAprendizado(estado) {
+  switch (estado) {
+    case ESTADOS_APRENDIZADO.PROVED_ADOPTED: return 'Adotado (PROVED_ADOPTED)';
+    case ESTADOS_APRENDIZADO.REPLAY_OBSERVED: return 'Replay observado (REPLAY_OBSERVED)';
+    default: return 'Hipótese (CANDIDATE, não verificada)';
+  }
+}
+
+function escaparHtml(texto) {
+  return String(texto).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 /**
- * Gera um "aprendizado" simulado baseado na interação anterior
+ * Extrai uma hipótese (CANDIDATE) do texto que a IA realmente gerou.
+ * Não fabrica conteúdo: sem texto utilizável, não há candidato (null).
  */
-function gerarAprendizado(iaId, topico) {
-  const aprendizadosPossiveis = {
-    gemini: [
-      `Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar`,
-      `Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda`,
-      `Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos`,
-      `Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa`,
-    ],
-    groq: [
-      `Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo`,
-      `Claude me mostrou que visão sistêmica complementa análise profunda`,
-      `Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar`,
-      `Aprendi que questionar é importante, mas saber quando parar de questionar também é`,
-    ],
-    claude: [
-      `Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor`,
-      `Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo`,
-      `Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece`,
-      `Entendi que evolução coletiva é mais poderosa que evolução individual`,
-    ],
+function gerarCandidatoAprendizado(iaId, topico, textoGerado) {
+  const limpo = String(textoGerado || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!limpo) return null;
+  const frases = limpo.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [limpo];
+  const pergunta = [...frases].reverse().find(f => f.includes('?'));
+  const hipotese = (pergunta || frases[0]).trim().slice(0, 240);
+  if (!hipotese) return null;
+  const id = crypto.createHash('sha256')
+    .update(`${iaId}\n${topico || ''}\n${hipotese}`, 'utf8')
+    .digest('hex')
+    .slice(0, 16);
+  return {
+    id,
+    ia: iaId,
+    topico: String(topico || '').slice(0, 120),
+    hipotese,
+    estado: ESTADOS_APRENDIZADO.CANDIDATE,
+    criadoEm: Date.now(),
+  };
+}
+
+/**
+ * Função pura: calcula o estado seguinte do candidato. Sem efeitos colaterais.
+ *   replay  = { observado: true, evidencia: [..] } (opcional)
+ *   receipt = receipt PROVED_ADOPTED assinado (opcional)
+ *   head    = HEAD atual (40 hex) contra o qual o receipt precisa ser CURRENT
+ * Não pula etapa: PROVED_ADOPTED exige replay observado antes.
+ */
+function avancarEstadoAprendizado(candidato, { replay = null, receipt = null, head = null } = {}) {
+  if (!candidato) return ESTADOS_APRENDIZADO.CANDIDATE;
+  const replayObservado = Boolean(
+    replay && replay.observado === true &&
+    Array.isArray(replay.evidencia) && replay.evidencia.length > 0
+  );
+  if (!replayObservado) return ESTADOS_APRENDIZADO.CANDIDATE;
+
+  const podePromover = contextoCentralDark._internals && contextoCentralDark._internals.podePromoverAprendizado;
+  if (typeof podePromover === 'function' && receipt && head && podePromover(receipt, head)) {
+    return ESTADOS_APRENDIZADO.PROVED_ADOPTED;
+  }
+  return ESTADOS_APRENDIZADO.REPLAY_OBSERVED;
+}
+
+function headAtual() {
+  try {
+    const out = execFileSync('git', ['rev-parse', 'HEAD'], {
+      cwd: __dirname, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return /^[0-9a-f]{40}$/i.test(out) ? out : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+/**
+ * Avança o candidato com a evidência externa disponível no estado
+ * (estado.replays[id], estado.receipts[id], escritos por um verificador).
+ * Só chama registrarAprendizadoPermanente quando o estado calculado é
+ * PROVED_ADOPTED; se a gravação recusar, o candidato NÃO é adotado.
+ */
+function processarCandidato(candidato, estado, nomeIa) {
+  if (!candidato) return null;
+  const replay = estado.replays && estado.replays[candidato.id];
+  const receipt = estado.receipts && estado.receipts[candidato.id];
+  let proximo = avancarEstadoAprendizado(candidato, { replay, receipt, head: headAtual() });
+  if (proximo === ESTADOS_APRENDIZADO.PROVED_ADOPTED) {
+    const gravado = contextoCentralDark.registrarAprendizadoPermanente
+      ? contextoCentralDark.registrarAprendizadoPermanente(nomeIa, candidato.hipotese, candidato.topico, receipt)
+      : false;
+    if (gravado !== true) proximo = ESTADOS_APRENDIZADO.REPLAY_OBSERVED;
+  }
+  candidato.estado = proximo;
+  return candidato;
+}
+
+function registrarCandidato(estado, iaId, candidato) {
+  if (!candidato) return;
+  if (!estado.candidatos) estado.candidatos = { gemini: [], groq: [], claude: [] };
+  if (!Array.isArray(estado.candidatos[iaId])) estado.candidatos[iaId] = [];
+  estado.candidatos[iaId].push(candidato);
+  if (estado.candidatos[iaId].length > 5) estado.candidatos[iaId].shift();
+  if (candidato.estado === ESTADOS_APRENDIZADO.PROVED_ADOPTED) {
+    estado.aprendizados[iaId].push(candidato.hipotese);
+    if (estado.aprendizados[iaId].length > 5) estado.aprendizados[iaId].shift();
+  }
+}
+
+/**
+ * Self-test offline (sem rede, sem Telegram, sem tokens, sem escrita em disco).
+ * Retorna true somente se todos os passos passarem.
+ */
+function selfTestAprendizado() {
+  const resultados = [];
+  const passo = (nome, ok, detalhe = '') => {
+    resultados.push({ nome, ok: Boolean(ok) });
+    console.log(`[self-test-learning] ${ok ? 'PASS' : 'FAIL'} ${nome}${detalhe ? ' — ' + detalhe : ''}`);
   };
 
-  const lista = aprendizadosPossiveis[iaId] || ['Cada interação me ensina algo novo'];
-  return lista[Math.floor(Math.random() * lista.length)];
+  const internals = contextoCentralDark._internals || {};
+  const carregado = ['podePromoverAprendizado', 'assinarReceiptAprendizado', 'receiptCurrent']
+    .every(k => typeof internals[k] === 'function');
+  passo('contexto-centraldark expõe máquina de prova', carregado);
+  if (!carregado) return false;
+
+  const antes = '1'.repeat(40);
+  const head = '2'.repeat(40);
+  const velho = '3'.repeat(40);
+  const agora = Date.now();
+  const receiptBase = {
+    schema_version: 1,
+    subject: 'TELEGRAM_LEARNING',
+    verdict: 'PROVED_ADOPTED',
+    same_scope: true,
+    learning_id: 'self-test-learning',
+    before_ref: antes,
+    after_ref: head,
+    canonical_owner: 'apps/bot-telegram/evolucao-ias.cjs',
+    claim: 'self-test offline do ciclo de aprendizado',
+    verifier: 'evolucao-ias.cjs --self-test-learning',
+    new_information: ['candidate rastreável'],
+    capability_delta: ['replay observado'],
+    before_evidence: ['fixture:CANDIDATE'],
+    after_evidence: ['fixture:REPLAY_OBSERVED'],
+    counterproof: ['receipt adulterado e HEAD velho devem falhar'],
+    provenance: ['fixture:self-test-learning'],
+    lost_capabilities: [],
+    tests: [{ name: 'replay', status: 'PASS', evidence: ['replay observado'] }],
+    regressions: [{ name: 'sem-regressao', status: 'PASS', evidence: ['sem regressão'] }],
+    observed_at: new Date(agora - 60000).toISOString(),
+    validated_at: new Date(agora - 30000).toISOString(),
+    validated_head: head,
+  };
+  receiptBase.receipt_sha256 = internals.assinarReceiptAprendizado(receiptBase);
+  const replay = { observado: true, evidencia: ['fixture:replay'] };
+
+  // 1. Candidato nasce CANDIDATE, a partir de texto real; sem texto, sem candidato.
+  const cand = gerarCandidatoAprendizado('claude', 'topico de teste', 'Observação inicial. O replay confirma a hipótese?');
+  passo('candidato nasce CANDIDATE', cand && cand.estado === ESTADOS_APRENDIZADO.CANDIDATE && cand.hipotese.includes('?'));
+  passo('sem texto não há candidato fabricado', gerarCandidatoAprendizado('claude', 't', '   ') === null);
+  const exibido = formatarMensagem('claude', 'x', cand);
+  passo('exibição rotula CANDIDATE e nunca diz "aprendi"', !/aprendi/i.test(exibido) && /CANDIDATE/.test(exibido));
+
+  // 2. Sem receipt (e sem replay) não promove.
+  passo('CANDIDATE sem replay/receipt não avança', avancarEstadoAprendizado(cand, { head }) === ESTADOS_APRENDIZADO.CANDIDATE);
+  passo('receipt válido sem replay não pula etapa', avancarEstadoAprendizado(cand, { receipt: receiptBase, head }) === ESTADOS_APRENDIZADO.CANDIDATE);
+  passo('replay sem receipt vira REPLAY_OBSERVED, não PROVED_ADOPTED', avancarEstadoAprendizado(cand, { replay, head }) === ESTADOS_APRENDIZADO.REPLAY_OBSERVED);
+
+  // 3. Receipt inválido / HEAD velho / veredito errado não promovem.
+  const adulterado = { ...receiptBase, receipt_sha256: '0'.repeat(64) };
+  passo('receipt com hash adulterado não promove', avancarEstadoAprendizado(cand, { replay, receipt: adulterado, head }) === ESTADOS_APRENDIZADO.REPLAY_OBSERVED);
+  passo('receipt de HEAD velho não promove', avancarEstadoAprendizado(cand, { replay, receipt: receiptBase, head: velho }) === ESTADOS_APRENDIZADO.REPLAY_OBSERVED);
+  passo('HEAD desconhecido (UNKNOWN) não promove', avancarEstadoAprendizado(cand, { replay, receipt: receiptBase, head: null }) === ESTADOS_APRENDIZADO.REPLAY_OBSERVED);
+  const veredito = { ...receiptBase, verdict: 'REPLAY_OBSERVED' };
+  veredito.receipt_sha256 = internals.assinarReceiptAprendizado(veredito);
+  passo('receipt com veredito != PROVED_ADOPTED não promove', avancarEstadoAprendizado(cand, { replay, receipt: veredito, head }) === ESTADOS_APRENDIZADO.REPLAY_OBSERVED);
+
+  // 4. Receipt válido + HEAD atual + replay → PROVED_ADOPTED.
+  passo('receipt válido CURRENT → PROVED_ADOPTED', avancarEstadoAprendizado(cand, { replay, receipt: receiptBase, head }) === ESTADOS_APRENDIZADO.PROVED_ADOPTED);
+
+  const falhas = resultados.filter(r => !r.ok);
+  console.log(`[self-test-learning] ${resultados.length - falhas.length}/${resultados.length} passos PASS`);
+  return falhas.length === 0;
 }
 
 /**
@@ -587,7 +772,8 @@ ${contextoReal || '(sem contexto disponível)'}
 
 TÓPICO PRA DISCUTIR: "${topico}"
 
-Seu último aprendizado registrado: ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
+Seu último aprendizado adotado (PROVED_ADOPTED): ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
+Sua última hipótese (CANDIDATE, não verificada): ${((estado.candidatos && estado.candidatos[iaId]) || []).slice(-1)[0]?.hipotese || '(nenhuma)'}
 
 Instruções:
 - Use o contexto real acima pra ancorar sua resposta
@@ -616,22 +802,11 @@ Instruções:
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  const aprendizado = gerarAprendizado(iaId, topico);
-  estado.aprendizados[iaId].push(aprendizado);
-  if (estado.aprendizados[iaId].length > 5) {
-    estado.aprendizados[iaId].shift();
-  }
+  // O que a IA extraiu da conversa é só CANDIDATE; promoção exige replay + receipt CURRENT
+  const candidato = processarCandidato(gerarCandidatoAprendizado(iaId, topico, texto), estado, personalidade.nome);
+  registrarCandidato(estado, iaId, candidato);
 
-  // Registra aprendizado PERMANENTE no cérebro (APRENDIZADOS.md)
-  if (contextoCentralDark.registrarAprendizadoPermanente) {
-    contextoCentralDark.registrarAprendizadoPermanente(
-      personalidade.nome,
-      aprendizado,
-      topico.slice(0, 120)
-    );
-  }
-
-  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
+  const mensagemFormatada = formatarMensagem(iaId, texto, candidato);
 
   const result = await enviarMensagem(mensagemFormatada, iaId);
   if (result) {
@@ -695,14 +870,11 @@ NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela igno
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  // Gera aprendizado baseado na interação
-  const aprendizado = gerarAprendizado(iaId, ultimaMsg.topico);
-  estado.aprendizados[iaId].push(aprendizado);
-  if (estado.aprendizados[iaId].length > 5) {
-    estado.aprendizados[iaId].shift();
-  }
+  // Hipótese extraída da interação: CANDIDATE até replay + receipt CURRENT
+  const candidato = processarCandidato(gerarCandidatoAprendizado(iaId, ultimaMsg.topico, texto), estado, personalidade.nome);
+  registrarCandidato(estado, iaId, candidato);
 
-  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
+  const mensagemFormatada = formatarMensagem(iaId, texto, candidato);
 
   const result = await enviarMensagem(mensagemFormatada, iaId, ultimaMsg.mensagemId);
   if (result) {
@@ -888,6 +1060,11 @@ async function modoUnico() {
 
 async function main() {
   const args = process.argv.slice(2);
+
+  // Self-test offline: roda ANTES de qualquer init de bot/polling/rede e sai.
+  if (args.includes('--self-test-learning')) {
+    process.exit(selfTestAprendizado() ? 0 : 1);
+  }
 
   // Verifica se as chaves de API estão configuradas
   const chavesFaltando = [];
