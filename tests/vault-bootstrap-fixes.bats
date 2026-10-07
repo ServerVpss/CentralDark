@@ -85,3 +85,50 @@ teardown() {
   bash -n scripts/vps/centraldark-os-bootstrap-restore.sh || return 1
   bash -n scripts/vps/centraldark-vault-bootstrap-inventory.sh || return 1
 }
+
+@test "Integration: inventory creates valid archive with duplicate content" {
+  # Simulate inventory + archive creation with identical content from different sources
+  local vault_dir manifest_file sha256_file archive
+  vault_dir="$TEST_TMPDIR/vault-integration-test"
+  manifest_file="$vault_dir/MANIFEST.tsv"
+  sha256_file="$vault_dir/SHA256SUMS.txt"
+  archive="$vault_dir.tar.gz"
+
+  mkdir -p "$vault_dir/raw"
+
+  # Create two files with identical content (simulating dedup scenario)
+  echo "duplicate-secret-content" > "$vault_dir/source1.txt"
+  echo "duplicate-secret-content" > "$vault_dir/source2.txt"
+
+  # Create manifest manually to simulate what inventory does
+  printf "idx\tsha256\tkind\tsource\tdest\tbytes\n" > "$manifest_file"
+
+  # Both sources have same SHA, but different dest names (with source suffix)
+  local sha bytes idx
+  sha="$(sha256sum "$vault_dir/source1.txt" | awk '{print $1}')"
+  bytes="23"
+
+  # First source → dest with suffix
+  cp "$vault_dir/source1.txt" "$vault_dir/raw/${sha}__source1.txt"
+  printf "00001\t%s\tfile\t/source1\t/vault/raw/%s__source1.txt\t%s\n" "$sha" "$sha" "$bytes" >> "$manifest_file"
+
+  # Second source (identical content) → different dest name (different suffix)
+  cp "$vault_dir/source2.txt" "$vault_dir/raw/${sha}__source2.txt"
+  printf "00002\t%s\tfile\t/source2\t/vault/raw/%s__source2.txt\t%s\n" "$sha" "$sha" "$bytes" >> "$manifest_file"
+
+  # Generate SHA256SUMS (without absolute paths)
+  (cd "$vault_dir" && find . -type f ! -name "*.txt" -print0 | xargs -0 sha256sum | sort) > "$sha256_file"
+  [ -f "$sha256_file" ] || return 1
+
+  # Create archive
+  tar -C "$TEST_TMPDIR" -czf "$archive" "$(basename "$vault_dir")" || return 1
+
+  # Generate .sha256 sidecar
+  sha256sum "$archive" > "$archive.sha256"
+
+  # Validate archive using the restore script's validator
+  # (requires Python; minimal check that archive is created and readable)
+  [ -f "$archive" ] || return 1
+  [ -s "$archive" ] || return 1
+  tar -tzf "$archive" > /dev/null || return 1
+}

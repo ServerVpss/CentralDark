@@ -90,7 +90,7 @@ sort -u "$SEED" \
 
   if grep -Iq . "$f" 2>/dev/null && grep -Eiq "$SECRET_PATTERN" "$f" 2>/dev/null; then
     sha="$(sha256sum "$f" | awk '{print $1}')"
-    dest="$RAW/${sha}"
+    dest="$RAW/${sha}__$(echo "$f" | sed 's#^/##; s#[/ ]#_#g')"
     if [ ! -f "$dest" ]; then
       cp -p "$f" "$dest" 2>/dev/null || true
     fi
@@ -119,9 +119,8 @@ ps -eo pid=,comm=,args= \
   fi
 done
 
-local sha256_tmp
 sha256_tmp="$(mktemp --suffix=.txt)"
-find "$OUT" -type f -print0 | xargs -0 sha256sum | sort > "$sha256_tmp"
+(cd "$OUT" && find . -type f -print0 | xargs -0 sha256sum | sort) > "$sha256_tmp"
 mv "$sha256_tmp" "$OUT/SHA256SUMS.txt"
 
 awk -F"\t" 'NR>1{print $2}' "$MAN" | sort | uniq -c | sort -nr > "$OUT/DEDUP_SHA_COUNTS.txt"
