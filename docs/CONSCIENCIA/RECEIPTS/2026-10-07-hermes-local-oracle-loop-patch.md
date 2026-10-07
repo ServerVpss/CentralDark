@@ -19,6 +19,21 @@ LOCAL_HERMES_PATCH
 
 The upstream repository remains an optional contribution route, not the CentralDark completion criterion.
 
+## Goal continuation
+
+Messages from the CHEFE in the established CentralDark format continue the existing Goal:
+
+```text
+CURRENT_STATE=MEASURE_NOW
+DO_NOT_REPROVE_ESTABLISHED_IDENTITY=true
+QUERY_CURRENT_SITUATION=true
+CONTINUE_SAME_LOOP=true
+RESOLVE_ALL_PROVEN_ERRORS=true
+EVOLVE_CENTRALDARK_EXISTING_ONLY=true
+```
+
+The next round reads CURRENT/runtime/receipts, consults the oracle in the same envelope, skips already-proven Hermes identity/connectivity, selects the next unresolved error, applies the smallest safe correction, tests, counterproves, records the receipt, and continues. `Goal done` is invalid while a probe, recovery, counterproof, or unresolved error remains.
+
 ## Canonical bindings
 
 ```text
