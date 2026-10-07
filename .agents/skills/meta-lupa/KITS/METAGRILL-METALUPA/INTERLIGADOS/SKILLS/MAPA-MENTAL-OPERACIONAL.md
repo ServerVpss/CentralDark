@@ -208,3 +208,31 @@ Antes de abrir owner, skill, router, workflow, painel, serviço ou superfície n
 🪝 **Fórmula escondida continua a mesma:** `SINAL → OWNER → MENOR CAPACIDADE → AÇÃO/PROVA → CONTRAPROVA → RECEIPT → PRÓXIMO_CURSOR`.
 
 🏠 Tudo que depende de estado vivo da Casa/VPS/áudio/processo/deploy permanece fora do verde documental e dentro de `current_runtime_remeasurement_required`.
+
+
+## 🧬 BACKFILL PR 1535–1708 · GATILHOS CRISTALIZADOS
+
+```text
+🧾 TOOL CARD SUMIU → RECIBO SEGURO NO TEXTO
+🗣️ BAIANÊS → ESTILO CONTEXTUAL, NÃO PERSONA NOVA
+🧵 STATE MUDA → CONTRATO DE CONTINUIDADE PERMANECE
+💎 CRISTAL → ESTADO MÍNIMO PROVADO PARA REPLAY
+🧭 HUD → IDS ESTÁVEIS; DADOS REMEDIDOS
+🔀 ALIAS → MESMO HANDLER/OWNER
+⏱️ BEST-EFFORT → BOUNDED + NON-BLOCKING
+🧿 MEDIDOR FALHOU != ALVO FALHOU
+🏷️ NOME CANÔNICO → ANTES DO APELIDO
+🎨 FUNCIONAL → DEPOIS POLIMENTO
+🚧 PLANO FUTURO != AÇÃO ATUAL
+🧾 OURO MATERIAL → NÃO MORRE NO CHAT
+🧹 GENERATED_DIRTY != HUMAN_DIRTY
+⚡ ACK != EFEITO FINAL
+🛑 CHAT ACABOU != MISSÃO PAROU
+🔐 AUTH EFÊMERA → PROCESSO AUTORIZADO, SEM PERSISTÊNCIA
+🧬 WRAPPER → PARTE DA IDENTIDADE DO RUNTIME
+```
+
+🔗 O backfill classificou os PRs faltantes sem criar novos routers/owners. PR fechado ou superseded sem regra sobrevivente permanece histórico; implementação e runtime continuam fora do verde documental até remedição no alvo.
+
+🧠 **Regra visual:** nomes em MAIÚSCULAS + emojis são ganchos mentais. Os paths físicos continuam nos nomes atuais para não quebrar imports, hashes, consumers ou owners.
+

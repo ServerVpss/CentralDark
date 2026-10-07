@@ -1,0 +1,75 @@
+# 🧾🔗 RECEIPT · !># INTERLIGADOS · BACKFILL PR 1535–1708
+
+```text
+ID=METAGRILL-METALUPA-INTERLIGADOS-PR-BACKFILL-20261007
+OWNER=.agents/skills/meta-lupa/SKILL.md
+REGISTRY_COMMIT=c536af021c1021800521ddd230074c5720e18114
+REFRESH_COMMIT=7011cabbf729bb49e28f505c3cd44496014f70aa
+MAP_COMMIT=5a893f7279bc580969a3030b783b2a5ffc974157
+PRS_RECENT_SAMPLE=200
+WINDOW=1535..1782
+PREVIOUSLY_UNCOVERED=71
+CLASSIFIED=71
+NEW_STABLE_PATTERNS=17
+PATTERNS_AFTER=224
+SKILL_BRIDGES_OBSERVED=52
+RUNTIME_MUTATION=false
+CASA_MUTATION=false
+VPS_MUTATION=false
+```
+
+## 🧿 O que foi cristalizado
+
+- 71/71 PRs antes fora do registry foram classificados;
+- 23 PRs alimentaram 17 padrões duráveis novos;
+- 38 PRs enriqueceram padrões já canônicos, sem criar sinônimos paralelos;
+- 6 PRs closed/unmerged/superseded ficaram sem promoção de autoridade;
+- 4 PRs não trouxeram regra estável nova além do cânone existente;
+- o mapa mental foi ampliado sem renomear paths físicos;
+- a camada INTERLIGADOS.md continua ponte visual-operacional, não novo cérebro.
+
+## 🔗 Cadeia visual
+
+```text
+👑🪬 !CENTRALDARK
+→ 🔗 !># INTERLIGADOS
+→ ⭕ !AURÉOLA CANÔNICA
+→ 🧿 #ACORDAR
+→ 🎛️ !CALIBRAR
+→ 🧭 !MULTIBÚSSOLA
+→ 🔎 !META_LUPA
+→ 🔄 !RECONCILIAR
+→ 🎼 CAPABILITY-CONTRACT-ROUTER
+→ 🔁 COT-REACT / OWNER PERTINENTE
+→ ⚖️ !CONTRAPROVA
+→ 💠 !FIXED_POINT
+→ 🧾 !REGISTRA
+→ ⚖️ REALIDADE
+```
+
+## 🏠 Fronteira preservada
+
+```text
+SOURCE_PATTERN != RUNTIME_PROOF
+PR_PATTERN != IMPLEMENTATION_PROMOTED
+DOCUMENTED != EXECUTED
+MERGED != DEPLOYED
+CURRENT > HISTORY
+UNKNOWN != PASS
+CASA/VPS/PROCESS/PM2/DEPLOY/E2E/AUDIO
+= REMEASURE_WHEN_THE_CLAIM_DEPENDS_ON_RUNTIME
+```
+
+## 🪝 Fórmula
+
+```text
+SINAL
+→ OWNER
+→ MENOR CAPACIDADE
+→ AÇÃO/PROVA
+→ CONTRAPROVA
+→ RECEIPT
+→ PRÓXIMO_CURSOR
+```
+
+NEXT_CURSOR=VARREDURA_HISTORICA_MAIS_ANTIGA_SOMENTE_SE_TROUXER_DELTA_ESTAVEL_NAO_JA_COBERTO
