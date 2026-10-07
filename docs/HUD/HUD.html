@@ -881,6 +881,65 @@ body {
     </div>
   </div>
 
+  <!-- ORACLE SURFACE - PROVA POR SETOR -->
+  <div class="section" style="margin-top:16px;" id="oracle-surface-section">
+    <div class="section-header">
+      <div class="section-icon">&#128272;</div>
+      <h2 class="section-title">Oracle Surface &mdash; Prova por Setor</h2>
+      <span class="section-count">selado: 2 &middot; aberto: 5 &middot; progresso: 1</span>
+    </div>
+    <div class="hud-grid">
+      <div class="hud-card">
+        <h3>CHAT_GLOBAL &middot; envelope</h3>
+        <div class="val ok">SELADO</div>
+        <div class="meta">correlation: LOOP/TURN/RECEIPT/PARENT</div>
+        <div class="meta">prova: receipt-oracle-e2e-001 &middot; 2026-10-07T10:07:45Z</div>
+        <div class="meta">owner: centraldark-oracle-surface</div>
+      </div>
+      <div class="hud-card">
+        <h3>Oracle evidence hook</h3>
+        <div class="val ok">SELADO</div>
+        <div class="meta">3 testes unitários &middot; canonical prefix &middot; fail-closed IDs</div>
+        <div class="meta">prova: scripts/trigger-fabric/test_oracle_evidence_hook.py</div>
+        <div class="meta">owner: scripts/trigger-fabric/oracle_evidence_hook.py</div>
+      </div>
+      <div class="hud-card">
+        <h3>GlobalPing &middot; reachability</h3>
+        <div class="val warn">ABERTO</div>
+        <div class="meta">measurement: 2RbXj3W1s3wEBbKpA00121GwR</div>
+        <div class="meta">RTT medio: 164.52 ms &middot; perda: 77.78%</div>
+        <div class="meta">next: repetir por alvo/rota &middot; não é backend ChatGPT</div>
+      </div>
+      <div class="hud-card">
+        <h3>Buildkite &middot; pipeline read</h3>
+        <div class="val warn">ABERTO</div>
+        <div class="meta">CentralDark &middot; segredoidev &middot; pipeline descoberto</div>
+        <div class="meta">build/check/log readback: UNKNOWN</div>
+        <div class="meta">next: probe read-only de builds no binding atual</div>
+      </div>
+      <div class="hud-card">
+        <h3>Perception rendezvous</h3>
+        <div class="val warn">ABERTO</div>
+        <div class="meta">owner: apps/modulos/HERMES-CORE/core/perception-orchestra.mjs</div>
+        <div class="meta">hook → percepção → writer → Reality Judge: UNKNOWN</div>
+        <div class="meta">next: prova E2E sem mutação paralela</div>
+      </div>
+      <div class="hud-card">
+        <h3>Recovery / replay</h3>
+        <div class="val warn">EM PROGRESSO</div>
+        <div class="meta">stale binding recuperado no Preview; replay completo: UNKNOWN</div>
+        <div class="meta">next: timeout, refresh, failover e idempotência</div>
+      </div>
+      <div class="hud-card">
+        <h3>HUD mirror &middot; Obsidian</h3>
+        <div class="val warn">ABERTO</div>
+        <div class="meta">owner GitHub: docs/HUD/HUD.html</div>
+        <div class="meta">espelho local Windows: UNKNOWN neste runtime</div>
+        <div class="meta">next: sincronizar somente após readback do owner</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
