@@ -102,9 +102,24 @@ RUNTIME_DIRTY!=WRITER_AUTHORIZED
 ORACLE_OR_USER_DISCOVERY=CANDIDATE_UNTIL_CURRENT_OWNER_READBACK
 CHAT_GLOBAL_SESSION=AUTH_REQUIRED
 ORACLE_RETURN=WAITING_EXTERNAL
+MCP_RUNTIME_PROMOTION_OWNER=PROMOTION_OWNER_NOT_CRYSTALLIZED
+HISTORICAL_INTERVENTION=20261004_125529_d13bf7_DIRECT_UNIT_ENV_AND_RESTART
 ```
 
 Nenhum segredo foi lido ou registrado.
+
+## Proveniência de promoção
+
+A recuperação do transcript `20261004_125529_d13bf7` prova uma intervenção histórica direta: backup do EnvironmentFile, binding de segredos existentes sem imprimi-los, alteração de `ExecStart` para `dist/index.js`, `daemon-reload` e restart da mesma unit. O transcript não contém recipe canônica, workflow, writer de replay ou receipt que autorize promoções recorrentes de `origin/main` para `/root/CentralDark_MCP_RUNTIME`.
+
+```text
+HISTORICAL_INTERVENTION=PROVEN
+RECURRING_PROMOTION_OWNER=UNKNOWN
+RUNTIME_MUTATION_NOW=BLOCKED_BY_OWNER_PROVENANCE
+HUMAN_FRONTIER=PROMOTION_OWNER_NOT_CRYSTALLIZED
+```
+
+A próxima mutação no checkout dirty permanece bloqueada até um owner/replay reversível ser cristalizado e contraprovido. Esta fronteira afeta somente a promoção do runtime MCP; não invalida o catálogo, health básico, Caddy ou a futura convergência visual.
 
 ## Rollback
 
@@ -112,4 +127,4 @@ Nenhuma mutação foi aplicada no MCP runtime, Caddy ou UI nesta rodada. O rollb
 
 ## Next cursor
 
-`RECONCILE_CANONICAL_MCP_SOURCE_WITH_LIVE_RUNTIME_DIRTY_FINGERPRINT_THEN_FIX_HEARTBEAT_OPERATIONAL_REFERENCE_BEFORE_VISUAL_ABSORPTION`
+`CRYSTALLIZE_ONE_REVERSIBLE_MCP_RUNTIME_PROMOTION_OWNER_BEFORE_HEARTBEAT_REPAIR_OR_VISUAL_ABSORPTION`
