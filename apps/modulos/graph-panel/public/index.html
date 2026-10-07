@@ -5,20 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CentralDark · Grafo Celestial</title>
 <style>
-:root{--c:#00eaff;--g:#00ffa3;--r:#ff2244;--bg:#02070c}
-*{box-sizing:border-box}html,body,#graph{margin:0;width:100%;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 45%,#082033 0,#02070c 45%,#000 100%);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#bfefff}
+:root{--c:#10b981;--g:#34d399;--r:#ff2244;--bg:#020b08;--panel:rgba(2,24,18,.76);--text:#d8fff1;--link:#10b981}
+:root[data-theme="operational"]{--c:#22d3ee;--g:#67e8f9;--bg:#02070c;--panel:rgba(2,18,31,.76);--text:#dff9ff;--link:#22d3ee}
+:root[data-theme="forge"]{--c:#f59e0b;--g:#fbbf24;--bg:#120702;--panel:rgba(35,14,3,.80);--text:#fff4cf;--link:#f59e0b}
+*{box-sizing:border-box}html,body,#graph{margin:0;width:100%;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 45%,var(--bg) 0,#02070c 52%,#000 100%);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#bfefff}
 #graph canvas{display:block}.hud{position:fixed;z-index:10;pointer-events:none;text-shadow:0 0 8px var(--c),0 0 18px rgba(0,234,255,.35)}
 #top{left:14px;top:12px;right:14px;display:flex;gap:14px;align-items:center;font-size:13px;letter-spacing:.08em;color:#dff9ff}
 .live{color:var(--g);animation:pulse 1s infinite}.brand{font-weight:800;color:#fff}.dim{opacity:.72}.pill{border:1px solid rgba(0,234,255,.35);background:rgba(0,20,32,.42);padding:5px 9px;border-radius:999px;box-shadow:0 0 22px rgba(0,234,255,.16) inset}
 @keyframes pulse{0%,100%{opacity:.35;filter:drop-shadow(0 0 2px var(--g))}50%{opacity:1;filter:drop-shadow(0 0 10px var(--g))}}
-.panel{position:fixed;z-index:11;pointer-events:auto;border:1px solid rgba(0,234,255,.28);background:linear-gradient(180deg,rgba(2,18,31,.72),rgba(0,5,10,.52));box-shadow:0 0 30px rgba(0,234,255,.12),inset 0 0 22px rgba(0,234,255,.06);backdrop-filter:blur(7px);border-radius:10px;color:#bfefff}
+.panel{position:fixed;z-index:11;pointer-events:auto;border:1px solid rgba(0,234,255,.28);background:linear-gradient(180deg,var(--panel),rgba(0,5,10,.62));box-shadow:0 0 30px rgba(0,234,255,.12),inset 0 0 22px rgba(0,234,255,.06);backdrop-filter:blur(7px);border-radius:10px;color:#bfefff}
 #left{left:14px;top:62px;width:255px;max-height:calc(100vh - 135px);overflow:auto;padding:12px}
 #right{right:14px;top:62px;width:305px;min-height:230px;padding:12px}
 h3{margin:0 0 10px;font-size:12px;letter-spacing:.18em;color:#fff;text-shadow:0 0 10px var(--c)}
 .sector{display:grid;grid-template-columns:1fr auto;gap:4px;padding:8px 6px;margin:4px 0;border-left:2px solid var(--c);border-radius:6px;cursor:pointer;background:rgba(0,234,255,.04)}
 .sector:hover{background:rgba(0,234,255,.13)}.sector b{font-size:12px}.sector small{opacity:.76}.dots{font-size:12px;white-space:nowrap}.ok{color:var(--g)}.bad{color:var(--r)}
 #details .row{display:grid;grid-template-columns:88px 1fr;gap:8px;margin:6px 0;font-size:12px}.k{opacity:.65}.v{color:#fff;word-break:break-word}
-button,a{font-family:inherit;color:#dff9ff;background:rgba(0,234,255,.08);border:1px solid rgba(0,234,255,.32);border-radius:7px;padding:7px 9px;text-decoration:none;cursor:pointer;box-shadow:0 0 12px rgba(0,234,255,.08)}
+button,a,select{font-family:inherit;color:#dff9ff;background:rgba(0,234,255,.08);border:1px solid rgba(0,234,255,.32);border-radius:7px;padding:7px 9px;text-decoration:none;cursor:pointer;box-shadow:0 0 12px rgba(0,234,255,.08)}
 button:hover,a:hover{background:rgba(0,234,255,.18)}#copy{width:100%;margin-top:10px}
 #bottom{position:fixed;z-index:12;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;pointer-events:auto;padding:9px;border:1px solid rgba(0,234,255,.28);background:rgba(0,8,14,.68);border-radius:12px;box-shadow:0 0 28px rgba(0,234,255,.15);backdrop-filter:blur(7px)}
 #search{width:260px;color:#dff9ff;background:rgba(0,0,0,.35);border:1px solid rgba(0,234,255,.4);border-radius:8px;padding:8px 10px;outline:none;font-family:inherit}
@@ -41,6 +43,8 @@ button:hover,a:hover{background:rgba(0,234,255,.18)}#copy{width:100%;margin-top:
 <aside id="right" class="panel"><h3>DETALHES</h3><div id="details" class="dim">Clique em um nó para inspecionar.</div></aside>
 <footer id="bottom">
   <input id="search" placeholder="buscar nó por label/id ↵">
+  <select id="view" aria-label="Vista"><option value="celestial">🌌 Celestial 3D</option><option value="galaxy">✨ Galáxia</option><option value="2d">🕸️ 2D</option><option value="modules">🧩 Módulos</option><option value="vault">🗄️ Vault</option></select>
+  <select id="theme" aria-label="Pele"><option value="emerald">Emerald</option><option value="operational">Operational</option><option value="forge">Forge</option></select>
   <button id="rot">🌀 rotação</button>
   <button id="reset">⛶ reset câmera</button>
 </footer>
@@ -50,8 +54,13 @@ button:hover,a:hover{background:rgba(0,234,255,.18)}#copy{width:100%;margin-top:
 <script>
 (function(){
 'use strict';
-var gd={nodes:[],links:[]}, graph=null, rotating=false, selected=null, lastServed=null, pollTimer=null;
-var groupColors={core:'#00eaff',bots:'#ffb020',edge:'#c084fc',infra:'#00ffa3',web:'#4da6ff',ia:'#ff6ec7',dados:'#facc15',default:'#7f9db9'};
+var gd={nodes:[],links:[]}, graph=null, rotating=false, selected=null, lastServed=null, pollTimer=null, currentView='celestial', currentTheme='emerald';
+var palettes={
+  emerald:{core:'#10b981',bots:'#fbbf24',edge:'#a78bfa',infra:'#34d399',web:'#60a5fa',ia:'#f472b6',dados:'#fde047',default:'#94a3b8'},
+  operational:{core:'#22d3ee',bots:'#38bdf8',edge:'#818cf8',infra:'#2dd4bf',web:'#60a5fa',ia:'#c084fc',dados:'#facc15',default:'#94a3b8'},
+  forge:{core:'#f59e0b',bots:'#fb923c',edge:'#f97316',infra:'#fbbf24',web:'#fcd34d',ia:'#ef4444',dados:'#fde68a',default:'#a8a29e'}
+};
+var groupColors=palettes.emerald;
 var elGraph=document.getElementById('graph'), elErr=document.getElementById('error'), elStats=document.getElementById('stats'), elSectors=document.getElementById('sectors'), elDetails=document.getElementById('details');
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function hash(s){s=String(s||'');for(var h=0,i=0;i<s.length;i++)h=((h<<5)-h+s.charCodeAt(i))|0;return Math.abs(h)}
@@ -156,8 +165,26 @@ async function fetchJson(url){
   var ctrl=new AbortController(), to=setTimeout(function(){ctrl.abort()},4500);
   try{var r=await fetch(url,{cache:'no-store',signal:ctrl.signal});if(!r.ok)throw new Error(url+' '+r.status);return await r.json()}finally{clearTimeout(to)}
 }
+function graphMode(){return currentView==='galaxy'||currentView==='vault'?'full':currentView==='modules'?'ui':'vivo'}
+function projectView(data){
+  if(currentView!=='vault')return data;
+  var keep=(data.nodes||[]).filter(function(n){return /vault|docs|brain|consciencia|memoria|aprendizado|lembranca/i.test(String(n.id)+' '+String(n.label)+' '+String(n.group)+' '+String(n.type))});
+  var ids=new Set(keep.map(function(n){return String(n.id)}));
+  return Object.assign({},data,{nodes:keep,edges:(data.edges||[]).filter(function(e){return ids.has(String(e.from||e.source))&&ids.has(String(e.to||e.target))})})
+}
+function applyTheme(name){
+  currentTheme=palettes[name]?name:'emerald';groupColors=palettes[currentTheme];document.documentElement.dataset.theme=currentTheme;
+  try{localStorage.setItem('centraldark.graph.theme',currentTheme)}catch(e){}
+  gd.nodes.forEach(applyNodeVisual);if(graph){graph.linkColor(function(){return getComputedStyle(document.documentElement).getPropertyValue('--link').trim()||'#10b981'});graph.refresh()}
+}
+function applyView(name){
+  currentView=/^(celestial|galaxy|2d|modules|vault)$/.test(name)?name:'celestial';
+  try{localStorage.setItem('centraldark.graph.view',currentView)}catch(e){}
+  if(graph){try{graph.numDimensions(currentView==='2d'?2:3);graph.controls().autoRotate=currentView==='galaxy'}catch(e){}}
+  poll();resetCamera()
+}
 async function poll(){
-  try{var d=await fetchJson('api/graph?mode=vivo');applyDiff(d);setError(null)}
+  try{var d=await fetchJson('api/graph?mode='+graphMode());applyDiff(projectView(d));setError(null)}
   catch(e){setError(e.message||e)}
 }
 function renderStats(){
@@ -194,13 +221,17 @@ function updateSectorLabels(){
   });
   Object.keys(sectorSprites).forEach(function(g){if(!seen[g]){scene.remove(sectorSprites[g]);try{sectorSprites[g].dispose&&sectorSprites[g].dispose()}catch(e){}delete sectorSprites[g]}});
 }
+document.getElementById('view').onchange=function(){applyView(this.value)};
+document.getElementById('theme').onchange=function(){applyTheme(this.value)};
+try{currentTheme=localStorage.getItem('centraldark.graph.theme')||'emerald';currentView=localStorage.getItem('centraldark.graph.view')||'celestial'}catch(e){}
+document.getElementById('theme').value=currentTheme;document.getElementById('view').value=currentView;applyTheme(currentTheme);
 document.getElementById('rot').onclick=function(){rotating=!rotating;try{graph.controls().autoRotate=rotating}catch(e){}this.textContent='🌀 rotação '+(rotating?'ON':'')};
 document.getElementById('reset').onclick=resetCamera;
 document.getElementById('search').addEventListener('keydown',function(e){if(e.key!=='Enter')return;var q=this.value.trim().toLowerCase();if(!q)return;var n=gd.nodes.find(function(x){return String(x.label||'').toLowerCase().includes(q)||String(x.id||'').toLowerCase().includes(q)});if(n){selected=n;renderDetails(n);focusNode(n,120)}});
 window.addEventListener('resize',function(){try{graph.width(innerWidth).height(innerHeight)}catch(e){}});
 elGraph.addEventListener('dblclick',function(e){if(e.target&&String(e.target.tagName).toLowerCase()==='canvas')resetCamera()});
 setInterval(function(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('pt-BR')},1000);
-try{initGraph();poll();pollTimer=setInterval(poll,3000);setInterval(pulse,60);setInterval(updateSectorLabels,600)}catch(e){setError(e.message||e)}
+try{initGraph();applyView(currentView);pollTimer=setInterval(poll,3000);setInterval(pulse,60);setInterval(updateSectorLabels,600)}catch(e){setError(e.message||e)}
 })();
 </script>
 </body>
