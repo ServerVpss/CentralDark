@@ -1754,6 +1754,146 @@
         "counterproof_no_match": true,
         "evidence_ref": "scripts/lupa/validar-identidade-operacional.test.mjs"
       }
+    },
+    {
+      "id": "ci.vps-healthcheck.diagnostico-leitura",
+      "kind": "JOB",
+      "capability": "VPS_READONLY_DIAGNOSTIC_ON_DEMAND",
+      "boundary": "vps-healthcheck",
+      "source": ".github/workflows/vps-healthcheck.yml",
+      "symbol": "diagnostico-leitura",
+      "activation": "CALL",
+      "from": "WORKFLOW_DISPATCH_INPUT_DIAGNOSTICO",
+      "to": "READONLY_RUNTIME_MEASUREMENT",
+      "owner": ".github/workflows/vps-healthcheck.yml",
+      "canonical_route": "vps-healthcheck",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "scripts/lupa/diagram-route-gate.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "scripts/lupa/diagram-route-gate.test.mjs"
+      }
+    },
+    {
+      "id": "mcp.health-deep.src.hasConfiguredSecretInFile",
+      "kind": "FUNCTION",
+      "capability": "TELEGRAM_OWNER_TOKEN_PRESENCE_CHECK",
+      "boundary": "health-deep",
+      "source": "apps/modulos/mcp/src/health-deep.js",
+      "symbol": "hasConfiguredSecretInFile",
+      "activation": "CALL",
+      "from": "CHECK_TELEGRAM_OWNER",
+      "to": "TOKEN_CONFIGURED_BOOL",
+      "owner": "apps/modulos/mcp/src/health-deep.js",
+      "canonical_route": "health-deep",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs"
+      }
+    },
+    {
+      "id": "mcp.health-deep.src.pm2ProcessAlive",
+      "kind": "FUNCTION",
+      "capability": "TELEGRAM_OWNER_PROCESS_LIVE_CHECK",
+      "boundary": "health-deep",
+      "source": "apps/modulos/mcp/src/health-deep.js",
+      "symbol": "pm2ProcessAlive",
+      "activation": "CALL",
+      "from": "CHECK_TELEGRAM_OWNER",
+      "to": "PROCESS_ALIVE_BOOL",
+      "owner": "apps/modulos/mcp/src/health-deep.js",
+      "canonical_route": "health-deep",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs"
+      }
+    },
+    {
+      "id": "mcp.health-deep.src.checkTelegramOwner",
+      "kind": "FUNCTION",
+      "capability": "TELEGRAM_OWNER_NO_FALSE_GREEN",
+      "boundary": "health-deep",
+      "source": "apps/modulos/mcp/src/health-deep.js",
+      "symbol": "checkTelegramOwner",
+      "activation": "CALL",
+      "from": "HEALTH_DEEP_TELEGRAM_SUBSYSTEM",
+      "to": "OWNER_OK_TOKEN_AND_PROCESS",
+      "owner": "apps/modulos/mcp/src/health-deep.js",
+      "canonical_route": "health-deep",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs"
+      }
+    },
+    {
+      "id": "mcp.health-deep.dist.hasConfiguredSecretInFile",
+      "kind": "FUNCTION",
+      "capability": "TELEGRAM_OWNER_TOKEN_PRESENCE_CHECK",
+      "boundary": "health-deep",
+      "source": "apps/modulos/mcp/dist/health-deep.js",
+      "symbol": "hasConfiguredSecretInFile",
+      "activation": "CALL",
+      "from": "CHECK_TELEGRAM_OWNER",
+      "to": "TOKEN_CONFIGURED_BOOL",
+      "owner": "apps/modulos/mcp/dist/health-deep.js",
+      "canonical_route": "health-deep",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs"
+      }
+    },
+    {
+      "id": "mcp.health-deep.dist.pm2ProcessAlive",
+      "kind": "FUNCTION",
+      "capability": "TELEGRAM_OWNER_PROCESS_LIVE_CHECK",
+      "boundary": "health-deep",
+      "source": "apps/modulos/mcp/dist/health-deep.js",
+      "symbol": "pm2ProcessAlive",
+      "activation": "CALL",
+      "from": "CHECK_TELEGRAM_OWNER",
+      "to": "PROCESS_ALIVE_BOOL",
+      "owner": "apps/modulos/mcp/dist/health-deep.js",
+      "canonical_route": "health-deep",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs"
+      }
+    },
+    {
+      "id": "mcp.health-deep.dist.checkTelegramOwner",
+      "kind": "FUNCTION",
+      "capability": "TELEGRAM_OWNER_NO_FALSE_GREEN",
+      "boundary": "health-deep",
+      "source": "apps/modulos/mcp/dist/health-deep.js",
+      "symbol": "checkTelegramOwner",
+      "activation": "CALL",
+      "from": "HEALTH_DEEP_TELEGRAM_SUBSYSTEM",
+      "to": "OWNER_OK_TOKEN_AND_PROCESS",
+      "owner": "apps/modulos/mcp/dist/health-deep.js",
+      "canonical_route": "health-deep",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs"
+      }
     }
   ]
 }
