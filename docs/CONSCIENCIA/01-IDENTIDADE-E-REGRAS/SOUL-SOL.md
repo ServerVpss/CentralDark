@@ -987,14 +987,30 @@ CURRENT>history e nenhuma arquitetura paralela. #159 prova capability/runtime e
 nao altera autoridade humana. A migracao dos runners para VPS e binding operacional,
 nao nova identidade/autoridade. As ancoras abaixo so mudam depois desta revisao.
 
+Revisão 2026-10-07T06:45:03.463Z — reconciliação de donos (SOUL × RULES × AGENTS × LEIA-ME × BOOT × bridges × regras do bot): a âncora estava CURRENT, mas a revisão achou
+contradição interna no bloco "Contrato CURRENT herdado". SOUL §3.1.1 e CLAUDE.md já estavam na forma vigente desde 2026-10-03 (remoção de fricção ritual:
+`META_GRILL_BEFORE_MATERIAL_RESPONSE=false`, `META_GRILL_BEFORE_MUTATION=false`, `TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE`),
+mas AGENTS.md e LEIA-ME-IA.md carregavam cópia antiga (`=true`, `99.9%`) e o BOOT ainda tinha `meta_grill_before_*: true` ao lado de `ADAPTIVE_NOT_GATE`.
+Medido: nenhum fiscal/teste/workflow exige o valor antigo (o fiscal só exige `META_GRILL=ON_DEMAND`); diff dos blocos CLAUDE×AGENTS e CLAUDE×LEIA = exatamente 3 linhas cada.
+Os três donos foram alinhados ao dono governante (SOUL), sem criar regra nova. As regras do bot (`apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml`) já apontam PR-mãe #1757
+e não carregam META-GRILL; nenhuma mudança. #1562 permanece apenas como legado protegido (`LEGACY_PR_MOTHERS=#1562,#1757`), sem reabrir.
+
+```text
+SOUL_BRIDGE_BLOCKS_MUST_MATCH_GOVERNING_OWNER=true
+INHERITED_CONTRACT_BLOCK_DRIFT_ACROSS_BRIDGES=RECONCILE_TO_SOUL_NOT_TO_MAJORITY
+META_GRILL_BEFORE_MATERIAL_RESPONSE=false (ON_DEMAND) · META_GRILL_BEFORE_MUTATION=false (ON_DEMAND)
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE
+ANCHOR_UPDATE_AFTER_REVIEW_ONLY=true
+```
+
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=2f96157f6945bc98e85bdb5cd510743fd251f8a6
-LEIA-ME-IA.md=a55dc6215c6367c17e8adcb373a7255d0cd5596b
+AGENTS.md=71451ce29c0da11fafed4612ce4ee23f83d75d8f
+LEIA-ME-IA.md=a1fcacd3b41c48a40dcb46d5eaeb8a9b1501f961
 CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
-CENTRALDARK_AI_BOOT.yaml=5cae31ccd662b36fda372186d59c6c32eb993c17
+CENTRALDARK_AI_BOOT.yaml=fb17afb089eeb31682c79baa52d51cdaea4fc827
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=00d02387cde287ac1ee3447337f85bcea0c243cc
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-07
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-07T06:45:03.463Z
 SOUL_SYNC_ANCHOR_END
 ```
 
