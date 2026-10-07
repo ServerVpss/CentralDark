@@ -59,14 +59,28 @@ async function calibrarRuntimeInterno() {
     const estado = await calibrateRuntime();
     log(`[calibracao] verdict=${estado.verdict} wounds=${estado.wound_count} streak=${estado.streak} reward=${estado.reward}`);
 
-    const missao = buildCalibrationMission(estado);
+    const headSha = await new Promise((resolve, reject) => {
+      exec("git -C /root/CentralDark rev-parse HEAD", { timeout: 10_000 }, (error, stdout, stderr) => {
+        if (error) return reject(new Error(String(stderr || error.message).trim()));
+        resolve(String(stdout || "").trim());
+      });
+    });
+    const missao = buildCalibrationMission(estado, { headSha });
     if (!missao) return;
+    if (!missao.continuity_state) throw new Error("CALIBRATION_CONTINUITY_STATE_MISSING");
 
     const destino = join(PENDENTE, missao.filename);
+    const sidecar = destino + '.state.json';
     try {
+      // Sidecar primeiro e .md por último: o dispatcher nunca enxerga missão sem contrato.
+      await writeFile(sidecar, JSON.stringify(missao.continuity_state, null, 2) + '\n', {
+        encoding: 'utf8',
+        mode: 0o600,
+        flag: 'wx',
+      });
       await writeFile(destino, missao.content, { encoding: 'utf8', mode: 0o600, flag: 'wx' });
       await markCalibrationEnqueued(estado, destino);
-      log(`[calibracao] missão interna enfileirada ${destino}`);
+      log(`[calibracao] missão interna enfileirada ${destino} com continuity sidecar`);
     } catch (error) {
       if (error?.code !== 'EEXIST') throw error;
       log(`[calibracao] missão equivalente já pendente ${destino}`);
@@ -163,14 +177,28 @@ async function executarMissao(arquivoPendente) {
   await mkdir(dir, { recursive: true });
 
   const missao = (await readFile(arquivoPendente, 'utf8')).trim();
+  const sidecar = arquivoPendente + '.state.json';
+  let continuityState = {};
+  if (existsSync(sidecar)) {
+    continuityState = JSON.parse(await readFile(sidecar, 'utf8'));
+    const validation = validateContinuityState(continuityState);
+    if (!validation.ok) {
+      throw new Error('continuity sidecar inválido: ' + validation.reasons.join(','));
+    }
+  }
+
   { const rr = await renameComRetry(arquivoPendente, join(dir, 'missao.md'), 'pend->and'); if (!rr.ok) throw new Error('mover pendente falhou: ' + rr.error); }
+  if (existsSync(sidecar)) {
+    const rrState = await renameComRetry(sidecar, join(dir, 'state.json'), 'pend-state->and');
+    if (!rrState.ok) throw new Error('mover continuity sidecar falhou: ' + rrState.error);
+  }
 
   await notificar(
     `Hermes: nova missão`,
     `🚀 <b>${slug}</b>\n\n<i>${missao.slice(0, 400)}</i>\n\nProgresso será postado a cada etapa.`
   );
 
-  await rodarMissao(dir, slug, missao, [], 0);
+  await rodarMissao(dir, slug, missao, [], 0, continuityState);
 }
 
 // 🔄 Missões órfãs: daemon caiu/reiniciou no meio — continua da etapa onde parou usando o state.json
