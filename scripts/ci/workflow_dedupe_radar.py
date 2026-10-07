@@ -40,8 +40,8 @@ NORMALIZE_DROP_PREFIXES = (
 EMOJI_RE = re.compile(
     "["
     "\U0001F300-\U0001FAFF"
-    "\U00002700-\U000027BF"
-    "\U00002600-\U000026FF"
+    "\u2300-\u23FF"
+    "\u2600-\u27BF"
     "]"
 )
 
@@ -315,14 +315,14 @@ def changed_workflow_paths(root: Path) -> set[str]:
 
 
 def self_test() -> int:
-    sample = """name: 🧪 x
+    sample = """name: ⏰ x
 on: push
 jobs:
   a:
-    name: 🧪 validar
+    name: ⏰ validar
     runs-on: [self-hosted, Linux]
     steps:
-      - name: 🔎 Guard
+      - name: ⏰ Guard
         run: |
           echo one
           echo two
