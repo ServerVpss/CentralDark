@@ -9,6 +9,8 @@ export const {
   formatBrasiliaTime,
   utcIso,
   nowPair,
+  finalReportTimeFields,
+  finalReportTimeHeader,
 } = time;
 
 export default time;
