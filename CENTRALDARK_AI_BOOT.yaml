@@ -1455,7 +1455,7 @@ global_cross_context_response_preflight:
     required_current_sources:
       - "SEGREDO_CHEFE_INTENT"
       - "GITHUB_MAIN_CURRENT"
-      - "PR_MOTHER_1757_CURRENT"
+      - "HUD_CURRENT_PROJECTION"
       - "ALL_OPEN_PRS_CURRENT"
       - "CHECK_LIST_DIARIO_CURRENT"
       - "SOUL_SOL"
@@ -1472,11 +1472,16 @@ global_cross_context_response_preflight:
     causal_history_closure_required: true
     sieve_before_human_return: true
 
-ledger_rollover:
-  ACTIVE_PR_MOTHER: 1757
-  LEGACY_PR_MOTHER_1562_PROTECTED: true
-  COMMENTS_ARE_NOT_PRIMARY_LEDGER: true
-  RECEIPTS_LIVE_IN_REPOSITORY: true
-  HUD_BODY_UPDATED_IN_PLACE: true
+hud_current_projection:
+  HUD_CURRENT_OWNER: "apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx"
+  HUD_CURRENT_SOURCE: "apps/modulos/Bolt/source/app/routes/api.github-stats.ts"
+  HUD_IS_CURRENT_PROJECTION: true
+  HUD_IS_NOT_AUTHORITY: true
+  CHECKLIST_DAILY_OWNER: "HUD"
+  RECEIPTS_OWNER: "repository"
+  PR_MOTHER_ROLE: "RETIRED"
+  LEGACY_PR_MOTHERS: [1562, 1757]
+  NO_NEW_PR_MOTHER: true
+  NO_DAILY_PR: true
   SHELL_IS_MUTABLE: true
   LEGACY_IS_PRESERVED: true

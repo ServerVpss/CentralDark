@@ -118,7 +118,7 @@ OWNER=AGENTS.md
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+HUD_CURRENT_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 APPLIES_TO_ALL_ENGINES=true
 ```
 
@@ -2236,8 +2236,8 @@ REGISTRA
 → menor MVP útil
 → teste aplicável + contraprova
 → commit
-→ push em branch filha
-→ abrir PR filha vinculada à #1757
+→ push em branch filha somente quando PR for materialmente necessária
+→ abrir/reusar PR filha por OWNER+SCOPE+CAPABILITY sem vínculo obrigatório com PR-MÃE
 → remeasure live
 → blocker técnico recuperável: continuar até HUMAN_FRONTIER real
 → conflito: usar git-conflict-resolve-house-standard
@@ -2246,12 +2246,13 @@ REGISTRA
 → readback da main + novo CURRENT_MAIN_SHA
 → DEPLOY_CAUSAL somente se o delta exigir runtime
 → T1 quando houver deploy causal
-→ receipt no PR filho e na PR-mãe
+→ receipt no repositório e no PR filho quando aplicável
+→ HUD_CURRENT_READBACK
 → fixed point do delta
-→ voltar ao #1757
 ```
 
-A `#1757` permanece aberta como PR-MÃE ativa, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
+`#1562` e `#1757` são provenance histórica preservada. A superfície operacional
+CURRENT é o HUD existente; nenhuma nova PR-MÃE nasce para rendezvous/checklist.
 
 ### Lapidação progressiva
 

@@ -3,14 +3,15 @@
 Data: 2026-10-06
 Status: CANONICAL_REQUIRED
 Owner: docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md
-Runtime consumer: .github/workflows/selo-fabric.yml
-PR-mae viva: #1757
+Runtime consumer: apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx
+Current source: apps/modulos/Bolt/source/app/routes/api.github-stats.ts
+PR-mae: RETIRED (#1562/#1757 preservadas como provenance)
 
 ## Lei do CHEFE
 
 ```text
 GITHUB_ENTRY_HUD_FIRST=true
-FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true
+FIRST_GITHUB_ACTION_MUST_REFRESH_HUD_CURRENT_PROJECTION=true
 AGENT_DEPENDENCY_MAP_REQUIRED=true
 GITHUB_REALITY_CROSSCHECK_REQUIRED=true
 UI_SURFACE_INVENTORY_REQUIRED=true
@@ -27,9 +28,9 @@ Quem entra pelo GitHub primeiro mede o GitHub real e atualiza o HUD vivo antes d
 ```text
 GITHUB_ENTRY
 -> GET repo/main/current
--> GET PR-mae #1757
--> listar PRs filhos abertos
--> atualizar HUD vivo se mudou main/open-child-set/evento
+-> GET open PR lanes/current checks
+-> GET repository receipts fingerprint
+-> atualizar HUD CURRENT se mudou main/open-lane-set/checks/receipt
 -> inventariar dependencias de agente
 -> cruzar com owners reais no repo
 -> separar PASS/UNKNOWN/BLOCKED
@@ -40,7 +41,7 @@ GITHUB_ENTRY
 
 ```text
 SETORES=docs|apps|.agents|.github|scripts|central-horario|runtime
-SUPERFICIES=GitHub_UI|PR_MOTHER_HUD|Actions|PullRequests|Issues|Workflows|MCP|HermesDesktop|AionUi|Casa|VPS
+SUPERFICIES=GitHub_UI|HUD_CURRENT|Actions|PullRequests|Issues|Workflows|MCP|HermesDesktop|AionUi|Casa|VPS
 AGENT_DEPENDENCIES=workflow_runner|provider_model|Desktop_app|MCP_tool|secret_or_var|runtime_service|local_sensor|VPS_service|browser_surface
 UI_DEPENDENCIES=button|tab|sidebar|command_palette|provider_picker|retry|switch_provider|desktop_logs|diagnostics
 ```
@@ -70,7 +71,9 @@ APPS_SECTORS_COUNT=47
 MCP_SRC_TOOL_FILES_COUNT=40
 UI_SIGNAL_MATCHES=7717
 HUD_RELATED_FILES=535
-PR_MOTHER=1757
+PR_MOTHER_ROLE=RETIRED
+LEGACY_PR_MOTHERS=1562,1757
+HUD_CURRENT_PROJECTION=CentralDarkUnifiedHud/CURRENT
 ```
 
 ## Done condition

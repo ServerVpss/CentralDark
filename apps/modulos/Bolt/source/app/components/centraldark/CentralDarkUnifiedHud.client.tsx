@@ -3,7 +3,32 @@ import { accountSurfaces, canonicalIcon, hubCapabilities, hubGaps, optionalAnaly
 import './centraldark-unified-hud.scss';
 
 type LiveState = 'ONLINE' | 'OFFLINE' | 'UNKNOWN';
-type Tab = 'RESUMO' | 'CONTAS' | 'CAPACIDADES' | 'LACUNAS';
+type CurrentState = 'PASS' | 'FAIL' | 'UNKNOWN' | 'BLOCKED';
+type Tab = 'RESUMO' | 'CURRENT' | 'CONTAS' | 'CAPACIDADES' | 'LACUNAS';
+
+const HUD_IS_CURRENT_PROJECTION = true;
+const CHECKLIST_DAILY_OWNER = 'HUD';
+
+type CurrentLane = {
+  number: number;
+  title: string;
+  headSha: string;
+  state: CurrentState;
+  url: string;
+};
+
+type CurrentProjection = {
+  role: 'HUD_CURRENT_PROJECTION';
+  authority: false;
+  measuredAt: string;
+  mainSha: string;
+  activeLanes: CurrentLane[];
+  checklist: { total: number; pass: number; fail: number; unknown: number; blocked: number };
+  receiptsFingerprint: string;
+  sourceFingerprint: string;
+  nextCursor: string;
+  provenance: { retiredPrMothers: number[]; checklistHistory: string };
+};
 
 type RuntimeSnapshot = {
   app_name?: string;
@@ -27,6 +52,7 @@ type GitHubSnapshot = {
   totalStars?: number;
   totalForks?: number;
   lastUpdated?: string;
+  currentProjection?: CurrentProjection;
   error?: string;
 };
 
@@ -200,6 +226,7 @@ export function CentralDarkUnifiedHud() {
       central: centralNext.status ?? 'UNKNOWN',
       screenpipe: screenpipeNext.status ?? 'UNKNOWN',
       github: githubNext?.error ? 'UNKNOWN' : `${githubNext?.publicRepos ?? 0}:${githubNext?.privateRepos ?? 0}`,
+      current: githubNext?.currentProjection?.sourceFingerprint ?? 'UNKNOWN',
     });
     recordSnapshot('snapshot operacional mudou', signature);
   }, [recordSnapshot]);
@@ -250,7 +277,7 @@ export function CentralDarkUnifiedHud() {
           </div>
 
           <nav className="cd-uhud-tabs">
-            {(['RESUMO', 'CONTAS', 'CAPACIDADES', 'LACUNAS'] as Tab[]).map((item) => (
+            {(['RESUMO', 'CURRENT', 'CONTAS', 'CAPACIDADES', 'LACUNAS'] as Tab[]).map((item) => (
               <button key={item} type="button" className={tab === item ? 'is-active' : ''} onClick={() => setTab(item)}>{item}</button>
             ))}
           </nav>
@@ -272,6 +299,60 @@ export function CentralDarkUnifiedHud() {
                   ))}
                 </div>
               </>
+            )}
+
+            {tab === 'CURRENT' && (
+              <div className="cd-uhud-list">
+                {!github?.currentProjection ? (
+                  <p className="cd-uhud-note">CURRENT = UNKNOWN · projeção GitHub indisponível.</p>
+                ) : (
+                  <>
+                    <div className="cd-uhud-section-title">
+                      <span>Rendezvous / CURRENT</span>
+                      <strong>{github.currentProjection.checklist.total} lanes</strong>
+                    </div>
+                    <div className="cd-uhud-current-grid">
+                      <div><span>PASS</span><strong>{github.currentProjection.checklist.pass}</strong></div>
+                      <div><span>FAIL</span><strong>{github.currentProjection.checklist.fail}</strong></div>
+                      <div><span>UNKNOWN</span><strong>{github.currentProjection.checklist.unknown}</strong></div>
+                      <div><span>BLOCKED</span><strong>{github.currentProjection.checklist.blocked}</strong></div>
+                    </div>
+                    <div className="cd-uhud-rule">
+                      {HUD_IS_CURRENT_PROJECTION ? 'HUD_IS_CURRENT_PROJECTION=true' : 'HUD_IS_CURRENT_PROJECTION=false'} ·
+                      {CHECKLIST_DAILY_OWNER === 'HUD' ? ' CHECKLIST_DAILY_OWNER=HUD' : ' CHECKLIST_DAILY_OWNER=UNKNOWN'} ·
+                      HUD_IS_NOT_AUTHORITY=true
+                    </div>
+                    <div className="cd-uhud-current-meta">
+                      <code>MAIN={github.currentProjection.mainSha}</code>
+                      <code>RECEIPTS={github.currentProjection.receiptsFingerprint}</code>
+                      <code>FINGERPRINT={github.currentProjection.sourceFingerprint}</code>
+                      <code>NEXT_CURSOR={github.currentProjection.nextCursor}</code>
+                      <small>medido {new Date(github.currentProjection.measuredAt).toLocaleString()}</small>
+                    </div>
+                    <div className="cd-uhud-section-title">
+                      <span>Filhos / lanes ativos</span>
+                      <strong>{github.currentProjection.activeLanes.length}</strong>
+                    </div>
+                    {github.currentProjection.activeLanes.map((lane) => (
+                      <a
+                        key={lane.number}
+                        className="cd-uhud-current-lane"
+                        href={lane.url}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <span>#{lane.number}</span>
+                        <strong>{lane.title}</strong>
+                        <code>{lane.headSha.slice(0, 10)}</code>
+                        <em className={`cd-uhud-state cd-uhud-state--${lane.state.toLowerCase()}`}>{lane.state}</em>
+                      </a>
+                    ))}
+                    <p className="cd-uhud-note">
+                      Provenance preservada: PRs #1562 e #1757 aposentadas como superfície; receipts continuam no repositório.
+                    </p>
+                  </>
+                )}
+              </div>
             )}
 
             {tab === 'CONTAS' && (
