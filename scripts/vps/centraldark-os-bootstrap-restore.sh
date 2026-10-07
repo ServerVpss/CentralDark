@@ -58,18 +58,18 @@ validate_archive() {
     return 1
   fi
 
-  if [ -f "$sha_file" ]; then
-    local expected actual
-    expected="$(cut -d' ' -f1 "$sha_file")"
-    actual="$(sha256sum "$archive" | awk '{print $1}')"
-    if [ "$expected" = "$actual" ]; then
-      ok "SHA256 match: $actual"
-    else
-      err "SHA256 mismatch: expected=$expected actual=$actual"
-      return 1
-    fi
+  if [ ! -f "$sha_file" ]; then
+    err "SHA256 file not found: $sha_file (UNKNOWN_IS_NOT_PASS)"
+    return 1
+  fi
+
+  local expected actual
+  expected="$(cut -d' ' -f1 "$sha_file")"
+  actual="$(sha256sum "$archive" | awk '{print $1}')"
+  if [ "$expected" = "$actual" ]; then
+    ok "SHA256 match: $actual"
   else
-    err "SHA256 file not found: $sha_file"
+    err "SHA256 mismatch: expected=$expected actual=$actual"
     return 1
   fi
 
