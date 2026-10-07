@@ -208,12 +208,16 @@ jobs:
             const files = await github.paginate(github.rest.pulls.listFiles, { owner, repo, pull_number, per_page: 100 });
             const denied = /(^|\/)(\.env(?:\.|$)|secrets?(\/|$)|tokens?(\/|$)|sessions?(\/|$)|\.ssh(\/|$)|[^/]+\.(pem|key)$)/i;
             let status = 'READY';
-            if (files.length > 40 || files.some(f => denied.test(f.filename) || typeof f.patch !== 'string')) status = 'NEEDS_HUMAN';
+            let reason = 'OK';
+            if (files.length > 40) { status = 'NEEDS_HUMAN'; reason = 'MAIS_DE_40_ARQUIVOS'; }
+            else if (files.some(f => denied.test(f.filename))) { status = 'NEEDS_HUMAN'; reason = 'CAMINHO_SENSIVEL_NO_DIFF'; }
+            else if (files.some(f => typeof f.patch !== 'string')) { status = 'NEEDS_HUMAN'; reason = 'ARQUIVO_SEM_PATCH_TEXTUAL'; }
             let text = status === 'READY'
               ? files.map(f => `FILE ${f.filename}\n${f.patch}`).join('\n')
               : '';
             if (text.length > 120000 || files.some(f => (f.patch || '').length > 30000)) {
               status = 'NEEDS_HUMAN';
+              reason = 'DIFF_GRANDE_DEMAIS';
               text = '';
             }
             const patterns = [
@@ -233,18 +237,49 @@ jobs:
             ];
             if (valuePatterns.some(pattern => pattern.test(text))) {
               status = 'NEEDS_HUMAN';
+              reason = 'PADRAO_DE_SEGREDO_NO_DIFF';
               text = '';
             }
             for (const [pattern, replacement] of patterns) text = text.replace(pattern, replacement);
             const diffPath = path.join(process.env.RUNNER_TEMP, 'darkai-input.txt');
             fs.writeFileSync(diffPath, text, { encoding: 'utf8', mode: 0o600 });
             core.setOutput('status', status);
+            core.setOutput('reason', reason);
+
+      - name: 🔹 Medir runtime vivo da VPS (somente leitura)
+        id: runtime
+        shell: bash
+        run: |
+          set -uo pipefail
+          OUT="$RUNNER_TEMP/runtime-vivo.txt"
+          : > "$OUT"
+          chmod 600 "$OUT"
+          probe_http() {
+            # imprime só o código HTTP; corpo nunca entra no comentário
+            local code
+            code="$(curl -sS --max-time 4 -o /dev/null -w '%{http_code}' "$1" 2>/dev/null || true)"
+            printf '%s' "${code:-000}"
+          }
+          {
+            echo "HOST=$(hostname 2>/dev/null || echo unknown)"
+            echo "OS=$(. /etc/os-release 2>/dev/null && echo "${PRETTY_NAME:-unknown}" || echo unknown)"
+            echo "KERNEL=$(uname -sr 2>/dev/null || echo unknown)"
+            echo "LOAD=$(cut -d' ' -f1-3 /proc/loadavg 2>/dev/null || echo unknown)"
+            echo "RUNNER=${RUNNER_NAME:-unknown}"
+            echo "TRITON_READY_HTTP=$(probe_http http://127.0.0.1:8000/v2/health/ready)"
+            echo "MCP_HEALTH_HTTP=$(probe_http http://127.0.0.1:9100/health)"
+            for bin in darkai kylinbot; do
+              if bash -lc "command -v $bin" >/dev/null 2>&1; then echo "BIN_$bin=PRESENT"; else echo "BIN_$bin=ABSENT"; fi
+            done
+          } >> "$OUT"
+          cat "$OUT"
 
       - name: 🔹 Consultar IA sem poder de gate
         id: darkai
         shell: bash
         env:
           PREPARE_STATUS: ${{ steps.prepare.outputs.status }}
+          PREPARE_REASON: ${{ steps.prepare.outputs.reason }}
           CENTRALDARK_GATEWAY_KEY: ${{ secrets.CENTRALDARK_GATEWAY_KEY }}
         run: |
           set -Eeuo pipefail
@@ -252,7 +287,16 @@ jobs:
           INPUT_FILE="$RUNNER_TEMP/darkai-input.txt"
           RAW_FILE="$RUNNER_TEMP/darkai-review.raw"
           REQUEST_FILE="$RUNNER_TEMP/centraldark-review-request.json"
-          printf '%s' '{"status":"NEEDS_HUMAN","source":"none","summary":"Revisão de IA indisponível; gates determinísticos permanecem autoridade.","findings":[]}' > "$REVIEW_FILE"
+          if [[ "$PREPARE_STATUS" == "READY" ]]; then
+            DEFAULT_SUMMARY="Nenhuma rota de IA respondeu (API CentralDark e darkai local). Gates determinísticos permanecem autoridade."
+          else
+            DEFAULT_SUMMARY="IA não consultada: ${PREPARE_REASON:-MOTIVO_DESCONHECIDO}. O diff não foi enviado à IA. Gates determinísticos permanecem autoridade."
+          fi
+          python3 - "$REVIEW_FILE" "$DEFAULT_SUMMARY" <<'PY'
+          import json, sys
+          from pathlib import Path
+          Path(sys.argv[1]).write_text(json.dumps({"status": "NEEDS_HUMAN", "source": "none", "summary": sys.argv[2], "findings": []}, ensure_ascii=False), encoding='utf-8')
+          PY
           chmod 600 "$REVIEW_FILE"
 
           sanitize_review() {
@@ -361,6 +405,10 @@ jobs:
             try { review = JSON.parse(fs.readFileSync(reviewPath, 'utf8')); } catch {}
             const lines = [marker, '## IA consultiva — parecer de apoio', '', `Status: \`${review.status}\``, `Fonte: \`${review.source || 'none'}\``, '', review.summary || 'Sem resumo.'];
             for (const finding of (review.findings || [])) lines.push(`- **${finding.severity}**: ${finding.text}`);
+            try {
+              const runtime = fs.readFileSync(path.join(process.env.RUNNER_TEMP, 'runtime-vivo.txt'), 'utf8').trim();
+              if (runtime) lines.push('', '### Runtime vivo da VPS (medido neste run, somente leitura)', '', '```text', runtime.slice(0, 1200), '```');
+            } catch {}
             lines.push('', `HEAD: ${context.payload.pull_request.head.sha}. A IA não aprova, não bloqueia e não executa código.`);
             const body = lines.join('\n').slice(0, 12000);
             const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number, per_page: 100 });
