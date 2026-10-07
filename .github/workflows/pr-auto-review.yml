@@ -146,7 +146,7 @@ jobs:
           echo "EVENT_NAME=${EVENT_NAME}"
           echo "EXECUTOR=self-hosted"
           echo "ROTA_PRIMARIA=self-hosted-linux"
-          echo "ADVISORY_PRIMARY=vps-local-runtime"
+          echo "ADVISORY_PRIMARY=vps-state-machine-local"
           echo "ADVISORY_FALLBACK=centraldark-api-fallback,darkai-provider-fallback"
           echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
           echo "JOB_STATUS=${JOB_STATUS}"
@@ -166,7 +166,7 @@ jobs:
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
   gemini-advisory:
-    name: 🧩 IA consultiva via API CentralDark + darkai
+    name: 🧠 Projeção consultiva da máquina de estado VPS
     if: >-
       github.event_name == 'pull_request_target' &&
       github.repository == 'ServerVpss/CentralDark' &&
@@ -385,10 +385,11 @@ jobs:
               `MCP=${runtime.mcp_http || 'UNKNOWN'}`,
               `Triton=${runtime.triton_live || 'UNKNOWN'}/${runtime.triton_ready || 'UNKNOWN'}`,
               `modelo=${runtime.local_model || review.model || 'UNKNOWN'}`,
+              `calibração=${runtime.calibration_state?.verdict || 'UNKNOWN'}/${runtime.calibration_state?.trend || 'UNKNOWN'}`,
             ].join(' · ');
             const lines = [
               marker,
-              '## IA consultiva híbrida — runtime vivo',
+              '## 🧠 Máquina de estado VPS — parecer consultivo',
               '',
               `Status: \`${review.status}\``,
               `Fonte: \`${review.source || 'none'}\``,
