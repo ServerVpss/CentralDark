@@ -29,6 +29,7 @@ const { decidir, provarContratoRuntime } = await import('./decisor.mjs'); // cé
 const { executar } = await import('../agents/Executor/agent.mjs');     // braço (com travas)
 const { auditar, auditarFinalizacao, resultadoAprovadoPeloCritic, vetar } = await import('../agents/Critic/agent.mjs'); // auditor + gate final
 const { atualizarGrafo } = await import('../agents/GraphRAG-Master/agent.mjs'); // memória viva + auto-update do grafo
+const { calibrateRuntime, buildCalibrationMission, markCalibrationEnqueued, getCalibrationSummary } = await import('./runtime-calibrator.mjs'); // máquina de estado calibra o runtime; Hermes executa
 
 const BASE = dirname(dirname(fileURLToPath(import.meta.url))); // /root/CentralDark/apps/modulos/HERMES-CORE
 const PENDENTE  = `${BASE}/missions/pendente`;
@@ -38,6 +39,7 @@ const CONCLUIDA = `${BASE}/missions/concluidas`;
 const NOTIFY    = `${BASE}/utils/notify.mjs`;
 const INTERVAL  = 5000;
 const MAX_FALHAS = 3;
+const RUNTIME_CALIBRATION_INTERVAL = Number(process.env.CENTRALDARK_RUNTIME_CALIBRATION_INTERVAL_MS || 60_000);
 
 async function garantirRuntimeDirs() {
   await mkdir(PENDENTE, { recursive: true });
@@ -46,8 +48,49 @@ async function garantirRuntimeDirs() {
 }
 
 let ocupado = false; // trava: nunca rodar duas missões ao mesmo tempo
+let calibracaoRuntimeEmCurso = false;
 
 const log = (...a) => console.log(`[${new Date().toISOString()}]`, ...a);
+
+async function calibrarRuntimeInterno() {
+  if (calibracaoRuntimeEmCurso) return;
+  calibracaoRuntimeEmCurso = true;
+  try {
+    const estado = await calibrateRuntime();
+    log(`[calibracao] verdict=${estado.verdict} wounds=${estado.wound_count} streak=${estado.streak} reward=${estado.reward}`);
+
+    const headSha = await new Promise((resolve, reject) => {
+      exec("git -C /root/CentralDark rev-parse HEAD", { timeout: 10_000 }, (error, stdout, stderr) => {
+        if (error) return reject(new Error(String(stderr || error.message).trim()));
+        resolve(String(stdout || "").trim());
+      });
+    });
+    const missao = buildCalibrationMission(estado, { headSha });
+    if (!missao) return;
+    if (!missao.continuity_state) throw new Error("CALIBRATION_CONTINUITY_STATE_MISSING");
+
+    const destino = join(PENDENTE, missao.filename);
+    const sidecar = destino + '.state.json';
+    try {
+      // Sidecar primeiro e .md por último: o dispatcher nunca enxerga missão sem contrato.
+      await writeFile(sidecar, JSON.stringify(missao.continuity_state, null, 2) + '\n', {
+        encoding: 'utf8',
+        mode: 0o600,
+        flag: 'wx',
+      });
+      await writeFile(destino, missao.content, { encoding: 'utf8', mode: 0o600, flag: 'wx' });
+      await markCalibrationEnqueued(estado, destino);
+      log(`[calibracao] missão interna enfileirada ${destino} com continuity sidecar`);
+    } catch (error) {
+      if (error?.code !== 'EEXIST') throw error;
+      log(`[calibracao] missão equivalente já pendente ${destino}`);
+    }
+  } catch (error) {
+    log(`[calibracao] erro sem mascarar loop: ${String(error?.message || error).slice(0, 220)}`);
+  } finally {
+    calibracaoRuntimeEmCurso = false;
+  }
+}
 
 const LEARNING_ALWAYS_TOOLS = new Set(['git', 'escrever_arquivo', 'handler']);
 const LEARNING_SKIP_TOOLS = new Set(['ler_arquivo', 'darkai', 'notificar_progresso', 'aprender']);
@@ -134,14 +177,28 @@ async function executarMissao(arquivoPendente) {
   await mkdir(dir, { recursive: true });
 
   const missao = (await readFile(arquivoPendente, 'utf8')).trim();
+  const sidecar = arquivoPendente + '.state.json';
+  let continuityState = {};
+  if (existsSync(sidecar)) {
+    continuityState = JSON.parse(await readFile(sidecar, 'utf8'));
+    const validation = validateContinuityState(continuityState);
+    if (!validation.ok) {
+      throw new Error('continuity sidecar inválido: ' + validation.reasons.join(','));
+    }
+  }
+
   { const rr = await renameComRetry(arquivoPendente, join(dir, 'missao.md'), 'pend->and'); if (!rr.ok) throw new Error('mover pendente falhou: ' + rr.error); }
+  if (existsSync(sidecar)) {
+    const rrState = await renameComRetry(sidecar, join(dir, 'state.json'), 'pend-state->and');
+    if (!rrState.ok) throw new Error('mover continuity sidecar falhou: ' + rrState.error);
+  }
 
   await notificar(
     `Hermes: nova missão`,
     `🚀 <b>${slug}</b>\n\n<i>${missao.slice(0, 400)}</i>\n\nProgresso será postado a cada etapa.`
   );
 
-  await rodarMissao(dir, slug, missao, [], 0);
+  await rodarMissao(dir, slug, missao, [], 0, continuityState);
 }
 
 // 🔄 Missões órfãs: daemon caiu/reiniciou no meio — continua da etapa onde parou usando o state.json
@@ -791,6 +848,7 @@ async function montarHealth() {
       ok: ultimoGrafoResumo.ok,
       resumo: ultimoGrafoResumo.saida,
     },
+    calibracao_runtime: await getCalibrationSummary(),
   };
 }
 
@@ -827,6 +885,7 @@ let ultimaRetomada = 0;
 let ultimoGC = 0;
 let ultimoHeartbeatEnvio = 0;
 let ultimoGrafo = 0;
+let ultimaCalibracaoRuntime = 0;
 let ultimoGrafoResumo = { ts: 0, ok: null, saida: null };
 
 async function loop() {
@@ -860,6 +919,13 @@ async function loop() {
           ultimaRetomada = Date.now();
           try { await retomarOrfas(); }
           catch (e) { log('erro na retomada periódica:', e.message); }
+        }
+
+        // Calibração interna do runtime: duas leituras iguais fecham falso-verde.
+        // A IA local sugere; Hermes/Executor/Critic executam; Reality Judge fecha.
+        if (Date.now() - ultimaCalibracaoRuntime >= RUNTIME_CALIBRATION_INTERVAL) {
+          ultimaCalibracaoRuntime = Date.now();
+          calibrarRuntimeInterno(); // fire-and-forget; não bloqueia watchdog/loop
         }
 
         // GC periódico
