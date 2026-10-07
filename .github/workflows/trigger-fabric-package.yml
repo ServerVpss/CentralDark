@@ -11,6 +11,9 @@ on:
       - 'central-horario/**'
       - 'scripts/lupa/validar-horario-centraldark.mjs'
       - '.github/workflows/trigger-fabric-package.yml'
+      - 'scripts/trigger-fabric/workflow-family-dispatcher.test.mjs'
+      - 'scripts/trigger-fabric/workflow-family-dispatcher.mjs'
+      - 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/WORKFLOW-FAMILIES.json'
       - 'CENTRALDARK_AI_BOOT.yaml'
       - 'docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md'
       - 'docs/NOTIFY/**'
@@ -22,10 +25,29 @@ on:
       - 'apps/modulos/obsidian-plugin-grafo-vivo/**'
       - 'apps/modulos/HERMES-CORE/**'
       - 'apps/modulos/fixed-point-fabric/**'
+  schedule:
+    - cron: '17 9 * * 1'
+    - cron: '17 6 * * *'
+    - cron: '23 6 * * *'
+    - cron: '0 12 * * *'
+    - cron: '15 8 * * *'
+    - cron: '17 9 * * *'
+    - cron: '23 3 * * *'
+    - cron: '23 */6 * * *'
+    - cron: '0 */6 * * *'
+    - cron: '17 * * * *'
+    - cron: '47 */12 * * *'
+    - cron: '*/30 * * * *'
+    - cron: '0 6 1 * *'
+    - cron: '0 9 * * 1'
+    - cron: '17,47 * * * *'
+    - cron: '17 7 * * *'
+    - cron: '11,41 * * * *'
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: write
 
 concurrency:
   group: trigger-fabric-package-${{ github.event.pull_request.number || github.ref }}
@@ -34,6 +56,7 @@ concurrency:
 jobs:
   build-counterproof-package:
     name: 🧪 Provar pacote, funil e contraprova no HEAD exato
+    if: github.event_name != 'schedule'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     steps:
@@ -291,3 +314,50 @@ jobs:
           path: .artifacts/trigger-fabric/CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE.zip
           if-no-files-found: error
           retention-days: 30
+
+  clock-dispatch:
+    name: ⏰ 1 CLOCK → Trigger Fabric → famílias → capabilities
+    if: github.event_name == 'schedule'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: 📥 Checkout da main canônica
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: 🔹 Setup Node 24 (fast path self-hosted)
+        uses: ./.github/actions/setup-node24-selfhosted
+
+      - name: 🧪 Provar compressão 71 → 7 → 1 CLOCK → 1 DISPATCHER
+        run: |
+          set -euo pipefail
+          node --test scripts/trigger-fabric/workflow-family-dispatcher.test.mjs
+          node scripts/trigger-fabric/workflow-family-dispatcher.mjs --verify
+
+      - name: ⏰ Despachar capabilities vencidas pelo cron atual
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          CENTRALDARK_CLOCK_CRON: ${{ github.event.schedule }}
+        run: |
+          set -euo pipefail
+          node scripts/trigger-fabric/workflow-family-dispatcher.mjs --dispatch --cron "$CENTRALDARK_CLOCK_CRON"
+
+      - name: 🧾 Receipt do clock único
+        if: always()
+        env:
+          CLOCK_CRON: ${{ github.event.schedule }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          echo "ONE_CLOCK=1"
+          echo "ONE_DISPATCHER=scripts/trigger-fabric/workflow-family-dispatcher.mjs"
+          echo "FAMILY_COUNT=7"
+          echo "CLOCK_CRON=${CLOCK_CRON}"
+          echo "JOB_STATUS=${JOB_STATUS}"

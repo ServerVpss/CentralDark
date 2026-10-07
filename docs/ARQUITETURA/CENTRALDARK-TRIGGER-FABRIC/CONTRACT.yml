@@ -475,6 +475,20 @@ ci_binding:
     authority: "👑 PERMITO-SEGREDO"
     confirmed_result: "✅ PR CONFIRMADO"
     label_is_authority: false
+  workflow_family_compression:
+    marker: CENTRALDARK_WORKFLOW_FAMILY_COMPRESSION_V1
+    owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+    inventory: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/WORKFLOW-FAMILIES.json
+    clock_owner: .github/workflows/trigger-fabric-package.yml
+    dispatcher: scripts/trigger-fabric/workflow-family-dispatcher.mjs
+    model: "71_WORKFLOWS -> 7_FAMILIES -> 1_CLOCK -> 1_DISPATCHER -> N_CAPABILITIES"
+    families: [GATE_VALIDACAO, PR_GITHUB, DEPLOY, INFRA_VPS, CASA_DESKTOP, SENTINELA_OBSERVABILIDADE, CONHECIMENTO_MEMORIA]
+    workflow_is_binding_not_owner: true
+    capability_loss_allowed: false
+    schedule_outside_clock: FORBIDDEN
+    unregistered_workflow: FAIL
+    future_workflow_requires_family_binding: true
+    proof_gate: scripts/trigger-fabric/workflow-family-dispatcher.mjs --verify
   runner_policy:
     scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS
     applies_to: [PULL_REQUEST, PUSH_COMMIT, WORKFLOW_DISPATCH, SCHEDULE, WORKFLOW_RUN, REPOSITORY_DISPATCH]

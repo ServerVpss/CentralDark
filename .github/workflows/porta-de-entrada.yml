@@ -68,6 +68,13 @@ jobs:
       - name: 🔹 Setup Node 24 (fast path self-hosted)
         uses: ./.github/actions/setup-node24-selfhosted
 
+      - name: 🔹 Testar fonte autenticada de autorização
+        run: node --test scripts/lupa/authority-approval.test.mjs
+
+      - name: 🔹 Resolver autorização autenticada
+        id: authority
+        run: node scripts/lupa/authority-approval.mjs
+
       - name: 🔹 Gate global — Trigger Fabric + runner policy + self-healing contract
         shell: bash
         run: |
@@ -139,13 +146,6 @@ jobs:
           done < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
           test "$failed" -eq 0
           echo "CENTRALDARK_API_SINGLE_ENTRY=PASS"
-
-      - name: 🔹 Testar fonte autenticada de autorização
-        run: node --test scripts/lupa/authority-approval.test.mjs
-
-      - name: 🔹 Resolver autorização autenticada
-        id: authority
-        run: node scripts/lupa/authority-approval.mjs
 
       - name: 🔹 Testar contrato de identidade operacional
         run: node --test scripts/lupa/validar-identidade-operacional.test.mjs

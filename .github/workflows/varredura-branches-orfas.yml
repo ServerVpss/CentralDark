@@ -19,8 +19,6 @@ name: ⚙️ Varredura — branches órfãs (inventário determinístico)
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 9 * * 1"
 
 permissions:
   contents: read

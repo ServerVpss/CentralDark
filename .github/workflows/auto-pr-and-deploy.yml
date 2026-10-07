@@ -20,7 +20,7 @@ jobs:
       - name: 🔹 Ensure PR exists (create if missing)
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROMOTION_TOKEN }}
           script: |
             const branch = process.env.GITHUB_REF.replace('refs/heads/', '');
             const owner = context.repo.owner;

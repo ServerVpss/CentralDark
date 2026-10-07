@@ -29,8 +29,6 @@ on:
   delete:
   deployment_status:
   status:
-  schedule:
-    - cron: '47 */12 * * *'
   workflow_dispatch:
     inputs:
       pr_mae:

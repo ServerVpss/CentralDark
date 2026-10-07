@@ -5,8 +5,6 @@ name: ⚙️ sentinela-divergencias
 # por hash) pra cada uma. Roda a cada 6h e sob demanda.
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
