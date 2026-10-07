@@ -4,8 +4,6 @@ name: ⚙️ painel-validacao
 # Gera relatório verde/amarelo/vermelho. Roda daily e sob demanda.
 
 on:
-  schedule:
-    - cron: '15 8 * * *'  # 05:15 BRT
   workflow_dispatch:
   push:
     paths:
