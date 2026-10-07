@@ -690,8 +690,10 @@ check('central-horario/README.md',[
  'FINAL_REPORT_TIME_RECIPE=central-horario.finalReportTimeHeader',
 ], classification='CANONICAL_HUMAN_TIME_GLOBAL_CONTRACT')
 check('central-horario/node.cjs',[
+ 'function formatFinalReportBrasilia(value = new Date())',
  'function finalReportTimeFields(value = new Date())',
  'function finalReportTimeHeader(value = new Date())',
+ 'Date: formatFinalReportBrasilia(date)',
  "'Date-UTC': utcIso(date)",
 ], classification='FINAL_REPORT_TIME_EXECUTABLE_RECIPE')
 check('central-horario/self-test.mjs',[
