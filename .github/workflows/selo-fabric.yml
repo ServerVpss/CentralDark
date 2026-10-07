@@ -1,5 +1,5 @@
 name: 🏅 Selo Fabric — selo universal de eventos
-# Contrato de tempo humano: pt-BR / America/Sao_Paulo; ISO UTC fica apenas para auditoria de máquina.
+# Contrato de tempo humano: Horário de Brasília (pt-BR / America/Sao_Paulo); ISO UTC fica apenas para auditoria de máquina.
 
 on:
   push:
