@@ -860,9 +860,11 @@ test("fronteira limpa permanece verde e integra o gate canônico", () => {
 test("bot injeta contrato operacional canonico de merge/deploy/fixed-point", () => {
   const { montarContexto, _internals } = require("../../apps/bot-telegram/contexto-centraldark.cjs");
   const contrato = _internals.contratoOperacionalCanonico();
-  assert.match(contrato, /AUTO_SQUASH_IF_CLEAN=PROVEN/);
-  assert.match(contrato, /NO_HUMAN_REASK_FOR_MERGE=PROVEN/);
+  // Forma vigente na LEIA-ME-IA.md (o bot lê do owner; não existe mais o sufixo "=PROVEN").
+  assert.match(contrato, /Merge-Policy: AUTO_SQUASH_IF_CLEAN/);
+  assert.match(contrato, /NO_HUMAN_REASK_FOR_MERGE=true/);
   assert.match(contrato, /MERGED != DEPLOYED/);
-  assert.match(contrato, /REALITY_JUDGE .* FIXED_POINT/);
-  assert.match(montarContexto(), /CONTRATO OPERACIONAL CANONICO/);
+  assert.match(contrato, /REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true/);
+  assert.match(contrato, /FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true/);
+  assert.match(montarContexto(), /CONTRATO OPERACIONAL CAN[OÔ]NICO/);
 });
