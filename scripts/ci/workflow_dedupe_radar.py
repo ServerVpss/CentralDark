@@ -40,8 +40,8 @@ NORMALIZE_DROP_PREFIXES = (
 EMOJI_RE = re.compile(
     "["
     "\U0001F300-\U0001FAFF"
-    "\\u2300-\\u23FF"
-    "\\u2600-\\u27BF"
+    "\u2300-\u23FF"
+    "\u2600-\u27BF"
     "]"
 )
 
