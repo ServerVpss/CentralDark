@@ -1,3 +1,17 @@
+---
+title: "Aprendizado — padrão multiagente de pesquisa de fronteira aplicado ao OMEGA"
+status: KNOWLEDGE_ONLY
+source_rule: "EXTERNAL_PRIMARY_SOURCE -> PROVENANCE + INDEPENDENT_CONFIRMATION; EXTERNAL_RESULT != CENTRALDARK_RUNTIME_PROOF"
+date: 2026-10-07
+updated: 2026-10-07T15:33:00-03:00
+tags: [aprendizado, omega, openai, multiagente, frontier-math, provenance, contraprova]
+category: "A-Aprendizado-Externo"
+sensitivity: INTERNAL
+source: "OpenAI official pages: Navier-Stokes solution; Advisory Group on Mathematics and AI; Sharing AI progress in mathematics"
+source_class: EXTERNAL_UNTRUSTED
+owner: "docs/CONSCIENCIA/PROGRAMAS/BOOT-ENXAME-OMEGA-20260924.md"
+---
+
 # Aprendizado — padrão multiagente de pesquisa de fronteira aplicado ao OMEGA
 
 Data: 2026-10-07  
