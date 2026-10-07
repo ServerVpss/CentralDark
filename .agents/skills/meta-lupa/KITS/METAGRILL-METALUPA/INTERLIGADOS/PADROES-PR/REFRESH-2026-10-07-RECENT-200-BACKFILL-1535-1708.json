@@ -1,0 +1,188 @@
+{
+  "schema": "centraldark.meta-lupa.interligados.pr-patterns.backfill.v1",
+  "status": "CANONICAL_SOURCE_CLASSIFICATION_ON_MAIN",
+  "owner": ".agents/skills/meta-lupa/SKILL.md",
+  "observed_main": "c536af021c1021800521ddd230074c5720e18114",
+  "sampled_recent_prs": 200,
+  "sampled_window": "1535_TO_1782",
+  "previously_uncovered_count": 71,
+  "disposition": {
+    "new_pattern_prs": [
+      1708,
+      1707,
+      1702,
+      1701,
+      1691,
+      1690,
+      1689,
+      1688,
+      1679,
+      1678,
+      1676,
+      1663,
+      1659,
+      1656,
+      1655,
+      1654,
+      1653,
+      1652,
+      1645,
+      1640,
+      1639,
+      1589,
+      1584
+    ],
+    "mapped_existing_prs": [
+      1699,
+      1698,
+      1697,
+      1696,
+      1694,
+      1693,
+      1687,
+      1686,
+      1685,
+      1684,
+      1677,
+      1675,
+      1674,
+      1671,
+      1670,
+      1666,
+      1664,
+      1662,
+      1661,
+      1660,
+      1658,
+      1657,
+      1650,
+      1649,
+      1648,
+      1647,
+      1646,
+      1644,
+      1642,
+      1641,
+      1637,
+      1636,
+      1606,
+      1591,
+      1583,
+      1582,
+      1581,
+      1542
+    ],
+    "no_promotion_closed_unmerged_or_superseded": [
+      1700,
+      1692,
+      1681,
+      1651,
+      1638,
+      1539
+    ],
+    "no_new_stable_pattern": [
+      1673,
+      1672,
+      1643,
+      1585
+    ]
+  },
+  "counts": {
+    "previously_uncovered": 71,
+    "classified": 71,
+    "new_pattern_prs": 23,
+    "new_patterns": 17,
+    "mapped_existing_prs": 38,
+    "no_promotion": 6,
+    "no_new_stable_delta": 4,
+    "resulting_pattern_count": 224
+  },
+  "runtime_boundaries": [
+    "CASA",
+    "VPS",
+    "PROCESS",
+    "PM2",
+    "DEPLOY",
+    "E2E",
+    "AUDIO",
+    "LOCAL_FILESYSTEM"
+  ],
+  "invariants": [
+    "CURRENT > HISTORY",
+    "PR_PATTERN_IS_NOT_IMPLEMENTATION_PROMOTED",
+    "DOCUMENTED != EXECUTED",
+    "MERGED != DEPLOYED",
+    "UNKNOWN != PASS",
+    "RUNTIME_CURRENT_REQUIRES_RUNTIME_REMEASUREMENT"
+  ],
+  "new_patterns": [
+    {
+      "id": "TOOL_CALL_VISIBILITY_FALLBACK_RECEIPT",
+      "emoji": "🧾"
+    },
+    {
+      "id": "REGIONAL_TONE_REFINES_STYLE_NOT_IDENTITY",
+      "emoji": "🗣️"
+    },
+    {
+      "id": "CONTINUITY_STATE_UPDATE_PRESERVES_CONTRACT",
+      "emoji": "🧵"
+    },
+    {
+      "id": "CRYSTAL_IS_MINIMUM_REPLAYABLE_PROVEN_STATE",
+      "emoji": "💎"
+    },
+    {
+      "id": "HUD_IDENTITY_STABLE_CURRENT_DATA_REMEASURED",
+      "emoji": "🧭"
+    },
+    {
+      "id": "ROUTE_ALIAS_REUSES_CANONICAL_HANDLER",
+      "emoji": "🔀"
+    },
+    {
+      "id": "OPTIONAL_ADVISORY_JOB_IS_BOUNDED_NON_BLOCKING",
+      "emoji": "⏱️"
+    },
+    {
+      "id": "OBSERVATION_INSTRUMENT_FAILURE_IS_NOT_TARGET_FAILURE",
+      "emoji": "🧿"
+    },
+    {
+      "id": "CANONICAL_NAME_PRECEDES_GENERIC_ALIAS",
+      "emoji": "🏷️"
+    },
+    {
+      "id": "FUNCTIONAL_SLICE_BEFORE_DESIGN_POLISH",
+      "emoji": "🎨"
+    },
+    {
+      "id": "FUTURE_LOCKED_PLAN_IS_NOT_CURRENT_ACTION",
+      "emoji": "🚧"
+    },
+    {
+      "id": "MATERIAL_DELTA_MUST_NOT_DIE_IN_CHAT",
+      "emoji": "🧾"
+    },
+    {
+      "id": "GENERATED_DIRTY_IS_NOT_HUMAN_DIRTY",
+      "emoji": "🧹"
+    },
+    {
+      "id": "ASYNC_INGRESS_ACK_IS_NOT_FINAL_WORK_PROOF",
+      "emoji": "⚡"
+    },
+    {
+      "id": "MISSION_STOP_REQUIRES_EXPLICIT_CHEFE_STOP",
+      "emoji": "🛑"
+    },
+    {
+      "id": "EPHEMERAL_AUTH_PROPAGATES_TO_AUTHORIZED_CHILD_PROCESS",
+      "emoji": "🔐"
+    },
+    {
+      "id": "PROCESS_WRAPPER_IS_PART_OF_RUNTIME_IDENTITY",
+      "emoji": "🧬"
+    }
+  ]
+}
