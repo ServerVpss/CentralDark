@@ -52,3 +52,18 @@ RUMOR_IS_NOT_CANONICAL_FACT=true
 ## NEXT_CURSOR
 
 CI/verifier do HEAD exato → reconciliar qualquer gate afetado → merge pelo fluxo normal → somente depois considerar qualquer implementação runtime adicional.
+
+## Prova local do HEAD
+
+Verificação executada na VPS/CENTRALDARK-OS em worktree isolado da branch:
+
+```text
+HEAD_VERIFIED=0946b93c7b0308bcb552666a08a0cc381b1883df
+python3 scripts/trigger-fabric/verify_repo_contract.py → EXIT=0
+git diff --check → PASS
+PR=#1775
+MERGEABLE_AT_MEASUREMENT=true
+```
+
+Isto prova conformidade do repositório para o HEAD medido. Não prova merge, deploy ou ativação runtime.
+
