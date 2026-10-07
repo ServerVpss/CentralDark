@@ -41,6 +41,30 @@ BROWSER_LOCAL_TZ_IS_NOT_AUTHORITY=true
 UNKNOWN_TIME_SOURCE_IS_NOT_PASS=true
 ```
 
+## Receita executável — `final_report` rastreável
+
+Relatório humano/receipt não termina apenas com data civil. O mesmo instante deve carregar a projeção humana e a âncora técnica:
+
+```text
+FINAL_REPORT_TIME_FIELDS_REQUIRED=true
+FINAL_REPORT_DATE_FIELD=DD/MM/AAAA HH:mm:ss BRT
+FINAL_REPORT_DATE_UTC_FIELD=UTC_RFC3339
+FINAL_REPORT_DATE_ONLY_IS_INSUFFICIENT=true
+FINAL_REPORT_TIME_RECIPE=central-horario.finalReportTimeHeader
+```
+
+Em Node/ESM:
+
+```js
+import { finalReportTimeHeader } from './central-horario/node.mjs';
+
+console.log(finalReportTimeHeader());
+// Date: DD/MM/AAAA HH:mm:ss BRT
+// Date-UTC: YYYY-MM-DDTHH:mm:ss.sssZ
+```
+
+Os dois campos representam o **mesmo instante**. `Date` é leitura humana em Brasília; `Date-UTC` é correlação/ordenação/auditoria de máquina. Não derivar um campo em chamada de relógio diferente da usada pelo outro.
+
 ## Escopo global permanente
 
 `central-horario/` é o único owner de tempo para toda a CentralDark: Casa, VPS, HUB, MCP, Hermes, Gateway, automações, agentes, superfícies atuais e arquitetura futura.
