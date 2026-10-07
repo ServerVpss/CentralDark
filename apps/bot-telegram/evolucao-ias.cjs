@@ -52,7 +52,9 @@ try {
       }
     }
   }
-} catch (_) {}
+} catch (erro) {
+  console.warn('[evolucao-ias] carga de agent.env falhou:', erro && erro.message);
+}
 
 // =========================================================================
 // CONTEXTO REAL DO CENTRALDARK — injetado nos prompts das IAs

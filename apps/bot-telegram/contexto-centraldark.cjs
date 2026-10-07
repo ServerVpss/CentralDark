@@ -115,7 +115,9 @@ function statusPM2() {
         const nomes = [...raw.matchAll(/"name"\s*:\s*"([^"]+)"/g)].map(m => m[1]);
         if (nomes.length) return { total: nomes.length, exemplos: nomes.slice(0, 5) };
       }
-    } catch (_) {}
+    } catch (erro) {
+      console.warn('[contexto-centraldark] leitura de config PM2 falhou:', erro && erro.message);
+    }
   }
   return null;
 }
