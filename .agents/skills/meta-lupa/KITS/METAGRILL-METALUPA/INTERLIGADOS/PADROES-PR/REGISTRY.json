@@ -3,208 +3,74 @@
   "status": "CANONICAL_PATTERN_LAYER_ON_MAIN",
   "owner": ".agents/skills/meta-lupa/SKILL.md",
   "refresh": {
-    "kind": "DEEP_RECENT_PR_PATTERN_SWEEP",
+    "kind": "DEEP_RECENT_50_PR_PATTERN_SWEEP",
     "promotion_rule": "PROMOTE_STABLE_NON_TEMPORAL_PATTERN_ONLY; DEDUPE_SYNONYMS; KEEP_RUNTIME_SEPARATE",
     "runtime_mutation": false,
     "history_rule": "CURRENT > HISTORY",
     "latest_prs_reconciled": [
-      1576,
-      1577,
-      1578,
-      1579,
-      1580,
-      1581,
-      1582,
-      1583,
-      1584,
-      1585,
-      1586,
-      1587,
-      1588,
-      1589,
-      1590,
-      1591,
-      1592,
-      1593,
-      1594,
-      1595,
-      1596,
-      1597,
-      1598,
-      1599,
-      1600,
-      1601,
-      1602,
-      1604,
-      1605,
-      1606,
-      1607,
-      1608,
-      1609,
-      1610,
-      1611,
-      1613,
-      1614,
-      1615,
-      1616,
-      1617,
-      1618,
-      1619,
-      1620,
-      1621,
-      1622,
-      1623,
-      1624,
-      1625,
-      1628,
-      1629,
-      1630,
-      1631,
-      1632,
-      1633,
-      1634
+      1782,
+      1778,
+      1777,
+      1776,
+      1775,
+      1774,
+      1773,
+      1772,
+      1771,
+      1770,
+      1768,
+      1767,
+      1758,
+      1757,
+      1756,
+      1755,
+      1754,
+      1753,
+      1752,
+      1751,
+      1750,
+      1749,
+      1748,
+      1747,
+      1746,
+      1745,
+      1744,
+      1743,
+      1742,
+      1741,
+      1740,
+      1735,
+      1734,
+      1733,
+      1725,
+      1724,
+      1723,
+      1722,
+      1721,
+      1720,
+      1719,
+      1718,
+      1716,
+      1715,
+      1714,
+      1713,
+      1712,
+      1711,
+      1710,
+      1709
     ],
-    "latest_window": "PR_1576_TO_1634_EXISTING_PRS",
-    "missing_numbers_not_pull_requests": [
-      1603,
-      1612,
-      1626,
-      1627
-    ],
-    "refreshed_from_main": "325bff5340c22c9eb4768a1c7e016257df350665",
-    "all_stable_pattern_delta_files_absorbed_through": "DELTA-PR-1634.md",
-    "full_registry_reconciled_at_main": "373c0f3f91280f5496a844813f836dc35c1f1a8d",
-    "pattern_count": 187,
-    "latest_pattern_sweep_base_main": "f5160c865e5642bc767ec432e01d608eee2c937c",
-    "full_coverage_file": "REFRESH-2026-09-21-PR-1576-1634.json",
-    "full_coverage_parent_main": "ebf93c80aa1e0779883aa9b88d56cea980dc31e6"
+    "latest_window": "RECENT_50_PRS_1709_TO_1782",
+    "refreshed_from_main": "ff336e2bf86194602993060e5b58ad46d293f0b5",
+    "pattern_count": 207,
+    "coverage_note": "Every PR in the latest 50 is represented by either an existing pattern, a promoted stable pattern, or runtime/external remeasurement boundary; implementation is not promoted by this registry."
   },
   "patterns": [
     {
-      "id": "ONE_SYSTEM_ONLY",
-      "emoji": "🫀",
-      "anchor": "UM CORPO",
+      "id": "ACTION_CLASS_REQUIRES_TARGET_ROLLBACK_AUTHORITY",
+      "emoji": "🧯",
+      "anchor": "DEPLOY TEM ALVO E VOLTA",
       "pr_refs": [
-        1381,
-        1389,
-        1444,
-        1445,
-        1482,
-        1483,
-        1590,
-        1592,
-        1596,
-        1604,
-        1617,
-        1624
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "REUSE_BEFORE_CREATE",
-      "emoji": "♻️",
-      "anchor": "REUSA ANTES DE CRIAR",
-      "pr_refs": [
-        1381,
-        1384,
-        1438,
-        1444,
-        1445,
-        1465,
-        1482,
-        1483,
-        1586,
-        1587,
-        1596,
-        1617,
-        1632,
-        1633,
-        1634
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "EXTEND_EXISTING_NOT_REPLACE",
-      "emoji": "🌱",
-      "anchor": "EVOLUI O MESMO CORPO",
-      "pr_refs": [
-        1483,
-        1482,
-        1465,
-        1445,
-        1444
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "NO_V2_V3_PARALLEL_SYSTEMS",
-      "emoji": "🚫",
-      "anchor": "SEM GÊMEOS",
-      "pr_refs": [
-        1444,
-        1482,
-        1483,
-        1465,
-        1386,
-        1384
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CURRENT_OVER_HISTORY",
-      "emoji": "🕰️",
-      "anchor": "AGORA VENCE HISTÓRIA",
-      "pr_refs": [
-        1381,
-        1389,
-        1414,
-        1444,
-        1465,
-        1479,
-        1488,
-        1577,
-        1580,
-        1600
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "UNKNOWN_IS_NOT_PASS",
-      "emoji": "❓",
-      "anchor": "SEM PROVA NÃO É VERDE",
-      "pr_refs": [
-        1492,
-        1490,
-        1485,
-        1484,
-        1483,
-        1482,
-        1480,
-        1465,
-        1463,
-        1458,
-        1456,
-        1454,
-        1447,
-        1444,
-        1438,
-        1435,
-        1434,
-        1431,
-        1430,
-        1414,
-        1389,
-        1381
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "UNKNOWN_IS_NOT_FALSE",
-      "emoji": "⚪",
-      "anchor": "NÃO MARCADO CONTINUA ABERTO",
-      "pr_refs": [
-        1454,
-        1381
+        1430
       ],
       "runtime_required": false
     },
@@ -226,6 +92,447 @@
       "runtime_required": false
     },
     {
+      "id": "ACTION_REQUIRED_IS_WAIT_NOT_FAIL_NOT_PASS",
+      "emoji": "⏳",
+      "anchor": "ACTION_REQUIRED ESPERA/REMEDIA; NÃO É FAIL NEM PASS",
+      "pr_refs": [
+        1630
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ARTIFACT_MIRROR_DEGRADED_IS_NOT_CORE_FAILURE",
+      "emoji": "🪞",
+      "anchor": "FALHA NO ESPELHO DE ARTIFACT DEGRADA PROJEÇÃO; NÃO FABRICA FALHA DO CORE",
+      "pr_refs": [
+        1778
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "AUTHORIZATION_IS_SCOPE_BOUND",
+      "emoji": "👑",
+      "anchor": "PERMISSÃO NÃO É CARTA BRANCA",
+      "pr_refs": [
+        1458,
+        1430
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "BADGE_IS_TELEMETRY_NOT_PROOF",
+      "emoji": "🏷️",
+      "anchor": "PLACA NÃO É JUIZ",
+      "pr_refs": [
+        1431
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "BEFORE_BLOCKED_MEASURE_AUTHORIZED_CHANNELS",
+      "emoji": "🧭",
+      "anchor": "ANTES DE DECLARAR BLOCKED, MEDIR CANAIS JÁ AUTORIZADOS E APLICÁVEIS",
+      "pr_refs": [
+        1538,
+        1611
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "BIDIRECTIONAL_CROSSCHECK_DOES_NOT_CREATE_GLOBAL_PASS",
+      "emoji": "↔️",
+      "anchor": "CRUZAMENTO ENTRE FONTES AUMENTA EVIDÊNCIA; NÃO FABRICA PASS GLOBAL",
+      "pr_refs": [
+        1724
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "BLIND_CODE_COPY_FALSE",
+      "emoji": "🧬",
+      "anchor": "ABSORVE CAPACIDADE, NÃO COPIA CEGO",
+      "pr_refs": [
+        1335,
+        1445,
+        1625
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "BUDGET_EXHAUSTION_RETURNS_LAST_GOOD_AND_BLOCKED",
+      "emoji": "⏱️",
+      "anchor": "ACABOU ORÇAMENTO, VOLTA AO ÚLTIMO BOM",
+      "pr_refs": [
+        1339
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CALIBRATE_EXECUTE_FALSIFY",
+      "emoji": "🧠",
+      "anchor": "FABLE CALIBRA ANTES; COT-REACT EXECUTA DURANTE; META-LUPA FALSIFICA DEPOIS",
+      "pr_refs": [
+        1512,
+        1614
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CANONICAL_AGENT_CORE_SINGLE_OWNER",
+      "emoji": "🧠",
+      "anchor": "ADAPTERS CARREGAM O CORE; NÃO REDEFINEM A LEI",
+      "pr_refs": [
+        1774
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CANONICAL_ARTIFACT_PROPERTIES_USE_EXISTING_SCHEMA",
+      "emoji": "🧾",
+      "anchor": "ARTEFATO ENTRA NO SCHEMA CANÔNICO; NORMALIZA PROPRIEDADES SEM CRIAR OWNER PARALELO",
+      "pr_refs": [
+        1570,
+        1775
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CANONICAL_IDENTITY_PIN_MUST_MATCH_TARGET_BLOB",
+      "emoji": "🔐",
+      "anchor": "PIN APONTA PARA O CORPO CERTO",
+      "pr_refs": [
+        1492,
+        1484
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CANONICAL_OWNERS_MUST_BE_REACHABLE",
+      "emoji": "🚪",
+      "anchor": "OWNER CANÔNICO PRECISA SER ALCANÇÁVEL PELA PORTA; ÓRFÃO CONHECIDO NÃO VIRA NORMAL",
+      "pr_refs": [
+        1500
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CANONICAL_PROCESS_IDENTITY_REQUIRES_SCOPE_MEMBERSHIP",
+      "emoji": "🧑‍🔧",
+      "anchor": "PID PARECIDO NÃO É PROCESSO CANÔNICO",
+      "pr_refs": [
+        1555
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CAPABILITY_IS_NOT_AUTHORITY",
+      "emoji": "🧩",
+      "anchor": "PODER FAZER NÃO É MANDAR",
+      "pr_refs": [
+        1490,
+        1458,
+        1447,
+        1445,
+        1389
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CAPABILITY_READY_IS_NOT_RESIDENT",
+      "emoji": "🧰",
+      "anchor": "CAPACIDADE PRONTA NÃO PRECISA FICAR CARREGADA",
+      "pr_refs": [
+        1370
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CENTRALDARK_PERSISTS_BEYOND_EXECUTOR",
+      "emoji": "🫀",
+      "anchor": "EXECUTOR TROCA OU CAI; CONTRATO, ESTADO E PROVENIÊNCIA PRESERVAM O CORPO",
+      "pr_refs": [
+        1722
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CHECKBOX_IS_VISUAL_NOT_STATE_AUTHORITY",
+      "emoji": "☑️",
+      "anchor": "CHECKBOX MOSTRA, EVENTO PROVA",
+      "pr_refs": [
+        1554
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CHECKSUM_IS_IDENTITY_NOT_SEMANTIC_OR_RUNTIME_PROOF",
+      "emoji": "🔐",
+      "anchor": "HASH PRENDE BYTE, NÃO VERDADE TOTAL",
+      "pr_refs": [
+        1480,
+        1418,
+        1381
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CLASSIFY_BEFORE_NEW_WORK",
+      "emoji": "🗂️",
+      "anchor": "CLASSIFICA ANTES DE ABRIR OUTRA FERIDA",
+      "value": "OWNER | DUPLICATE | COMPLEMENTARY | SUPERSEDED | ABSORBED | CONFLICTING | UNIQUE | UNKNOWN",
+      "pr_refs": [
+        1444
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "COGNITIVE_DEBT_MUST_BE_RECONSTRUCTIBLE",
+      "emoji": "🧠",
+      "anchor": "PRÓXIMO AGENTE NÃO ADIVINHA",
+      "pr_refs": [
+        1381,
+        1408
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "COMPONENT_PROOF_IS_NOT_INTEGRATION_PROOF",
+      "emoji": "🧩",
+      "anchor": "PEÇA PASSAR NÃO PROVA A MÁQUINA",
+      "pr_refs": [
+        1325,
+        1350,
+        1381,
+        1610
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONNECTED_IS_NOT_SYNCHRONIZED",
+      "emoji": "🔌",
+      "anchor": "CONECTOU NÃO SIGNIFICA SINCRONIZOU",
+      "pr_refs": [
+        1381
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONSOLIDATED_STATE_REOPENS_ONLY_WITH_MATERIAL_CAUSE",
+      "emoji": "🔒",
+      "anchor": "CONSOLIDADO SÓ REABRE COM DELTA MATERIAL",
+      "pr_refs": [
+        1567
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONSUMER_INHERITS_CANONICAL_CONTRACT",
+      "emoji": "🧾",
+      "anchor": "BOT/CONSUMER HERDA CONTRATO EXISTENTE; NÃO COPIA AUTORIDADE EM PARALELO",
+      "pr_refs": [
+        1535
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONTENT_HASH_ANCHORS_IDENTITY_NOT_AUTHORITY",
+      "emoji": "🧬",
+      "anchor": "HASH PRENDE IDENTIDADE/PROVENIÊNCIA; FONTE PRESERVADA NÃO VIRA AUTORIDADE OPERACIONAL",
+      "pr_refs": [
+        1536
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONTEXT_BEFORE_JUDGMENT",
+      "emoji": "🧿",
+      "anchor": "CONTEXTO E FUNÇÃO VÊM ANTES DE CLASSIFICAR FALHA",
+      "pr_refs": [
+        1622
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONTEXT_TRUNCATION_DOES_NOT_END_MISSION",
+      "emoji": "🧠",
+      "anchor": "CONTEXTO GRANDE VIRA LEITURA DIRIGIDA/BOUNDED; UNKNOWN FICA RESTRITO AO CLAIM NÃO LIDO",
+      "pr_refs": [
+        1518
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONTROL_PLANE_EXECUTION_PLANE_SEPARATION",
+      "emoji": "🎛️",
+      "anchor": "CONTROLE ESCOLHE, EXECUÇÃO RODA",
+      "pr_refs": [
+        1370
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CONTROL_PLANE_PREFLIGHT_BEFORE_DESTRUCTIVE_REINSTALL",
+      "emoji": "🧯",
+      "anchor": "ANTES DE REINSTALAR: GO/NO-GO, ROTA DE VOLTA, FIRSTBOOT E RECEIPT",
+      "pr_refs": [
+        1718,
+        1719,
+        1720
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CRITERION_DNA_INHERITS_ACROSS_GOAL_DESCENDANTS",
+      "emoji": "🧬",
+      "anchor": "DESCENDENTE HERDA CRITÉRIO DO OBJETIVO; NÃO REINVENTA A RÉGUA",
+      "pr_refs": [
+        1754
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CURRENT_BINDING_CHAIN",
+      "emoji": "🔗",
+      "anchor": "SINAL ATÉ RECEIPT",
+      "value": "PROCESS → BRIDGE → INPUT_OR_VOICE → INTENT → ROUTER → ACTION → RECEIPT",
+      "pr_refs": [
+        1483,
+        1465,
+        1444
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "CURRENT_OVER_HISTORY",
+      "emoji": "🕰️",
+      "anchor": "AGORA VENCE HISTÓRIA",
+      "pr_refs": [
+        1381,
+        1389,
+        1414,
+        1444,
+        1465,
+        1479,
+        1488,
+        1577,
+        1580,
+        1600,
+        1709,
+        1713,
+        1749,
+        1774
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DAILY_FRESHNESS_USES_COMMIT_DATE_NOT_RUNNER_CLOCK",
+      "emoji": "📅",
+      "anchor": "FRESCOR DIÁRIO USA DATA DO COMMIT; RELÓGIO DO RUNNER NÃO É AUTORIDADE",
+      "pr_refs": [
+        1579
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DEDUPE_EXISTING_CONFIG_BEFORE_ADDING_CONFIG",
+      "emoji": "♻️",
+      "anchor": "CONFIG DUPLICADA SE REMOVE; NÃO SE CRIA TERCEIRA CÓPIA",
+      "pr_refs": [
+        1772
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DEPLOY_GATE_CONSUMES_REAL_REPO_FACTS",
+      "emoji": "🚀",
+      "anchor": "DEPLOY DECIDE COM FATOS REAIS DO REPO; NÃO COM ECO OU PLACEHOLDER",
+      "pr_refs": [
+        1752
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DEPLOY_GATE_PRECEDES_MUTATION",
+      "emoji": "🚪",
+      "anchor": "GATE ANTES DE MEXER",
+      "pr_refs": [
+        1563,
+        1565
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DEPLOY_TRIGGER_MUST_COVER_CAUSAL_PATH",
+      "emoji": "🚀",
+      "anchor": "ARQUIVO QUE EXIGE DEPLOY PRECISA ALCANÇAR O TRIGGER DE DEPLOY",
+      "pr_refs": [
+        1601
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DERIVED_ARTIFACT_IS_NOT_COORDINATION_AUTHORITY",
+      "emoji": "🪞",
+      "anchor": "DERIVADO MOSTRA, NÃO MANDA",
+      "pr_refs": [
+        1339,
+        1773,
+        1777,
+        1782
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DERIVED_GRAPH_IS_NOT_AUTHORITY",
+      "emoji": "🧠",
+      "anchor": "ALINHAMENTO/GRAFO DERIVADOS AJUDAM DECISÃO; CONFLITO EQUIVALENTE PERMANECE CONFLICT/UNKNOWN",
+      "pr_refs": [
+        1544
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DETERMINISTIC_CAPABILITY_ROUTING",
+      "emoji": "🎼",
+      "anchor": "MESMO ESTADO, MESMA ROTA",
+      "pr_refs": [
+        1447,
+        1444
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DETERMINISTIC_GATES_OUTRANK_ADVISORY_AI",
+      "emoji": "⚖️",
+      "anchor": "GATE DETERMINÍSTICO DECIDE; IA CONSULTIVA APOIA",
+      "pr_refs": [
+        1776,
+        1777,
+        1782
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DISPLAY_LIMIT_MUST_NOT_MUTATE_MACHINE_TRUTH",
+      "emoji": "✂️",
+      "anchor": "CORTA A TELA, NÃO A VERDADE",
+      "pr_refs": [
+        1491
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DOCUMENTATION_AND_CATALOG_ARE_SENSORS",
+      "emoji": "📚",
+      "anchor": "DOCS/CATÁLOGOS INFORMAM CAPACIDADE; NÃO VIRAM AUTORIDADE NEM EXECUÇÃO",
+      "pr_refs": [
+        1501,
+        1502,
+        1514
+      ],
+      "runtime_required": false
+    },
+    {
       "id": "DOCUMENTED_IS_NOT_EXECUTED",
       "emoji": "📄",
       "anchor": "TEXTO NÃO RODA",
@@ -237,6 +544,504 @@
         1438,
         1414,
         1381
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DUAL_USE_ANALYZE_BEFORE_BLOCK",
+      "emoji": "🔐",
+      "anchor": "CAPACIDADE POTENTE É INSPECIONADA POR ALVO/AUTORIDADE/RISCO ANTES DE BLOQUEIO GENÉRICO",
+      "pr_refs": [
+        1515
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "DURABLE_FACT_TEMPORAL_EDGE_SPLIT",
+      "emoji": "💎",
+      "anchor": "FATO FICA, ARESTA REMEDE",
+      "pr_refs": [
+        1483,
+        1465,
+        1444
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EMOJI_IS_SEMANTIC_CLUE_NOT_PROOF",
+      "emoji": "🎨",
+      "anchor": "EMOJI LEMBRA, NÃO JULGA",
+      "pr_refs": [
+        1390
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ENGINE_BINDING_IS_EXECUTION_NOT_NORMATIVE_OWNER",
+      "emoji": "⚙️",
+      "anchor": "BINDING EXECUTA, NÃO COROA",
+      "pr_refs": [
+        1490
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ERROR_IS_TELEMETRY_NOT_NEW_ARCHITECTURE",
+      "emoji": "🔴",
+      "anchor": "ERRO MOSTRA O PONTO, NÃO CRIA OUTRO CORPO",
+      "pr_refs": [
+        1437,
+        1381,
+        1379
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EVENT_SIGNAL_IS_NOT_COMMAND",
+      "emoji": "📡",
+      "anchor": "EVENT VIEWER/WMI SÃO SINAIS; NORMALIZA → FINGERPRINT → DEDUPE → REMEDIAÇÃO MÍNIMA",
+      "pr_refs": [
+        1574,
+        1715
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXPERIMENTAL_FUTURE_TRACK_IS_NOT_CURRENT_MAIN",
+      "emoji": "🧪",
+      "anchor": "LABORATÓRIO FUTURO NÃO É ESTADO OPERACIONAL",
+      "pr_refs": [
+        1558,
+        1564
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXPLICIT_DELIVERY_USES_SAME_SHA",
+      "emoji": "🚀",
+      "anchor": "COMMIT → BUILD/TEST NO SHA EXATO → MICRO-DEPLOY DO MESMO SHA → RUNTIME PROOF → RECEIPT",
+      "pr_refs": [
+        1516,
+        1517,
+        1613
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXTEND_EXISTING_NOT_REPLACE",
+      "emoji": "🌱",
+      "anchor": "EVOLUI O MESMO CORPO",
+      "pr_refs": [
+        1483,
+        1482,
+        1465,
+        1445,
+        1444
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXTERNAL_ACTIONS_PINNED_WHEN_MATERIAL",
+      "emoji": "🔐",
+      "anchor": "AÇÃO EXTERNA FLUTUANTE NÃO ENTRA EM GATE CRÍTICO SEM IDENTIDADE IMUTÁVEL",
+      "pr_refs": [
+        1497
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXTERNAL_COORDINATION_IS_NOT_CODE_SOURCE_OF_TRUTH",
+      "emoji": "🌐",
+      "anchor": "CLICKUP E SUPERFÍCIES EXTERNAS COORDENAM; GITHUB/MAIN PRESERVA A VERDADE DO CÓDIGO",
+      "pr_refs": [
+        1773
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXTERNAL_PROJECT_IS_CANDIDATE_DELTA_NOT_TRANSPLANT",
+      "emoji": "🧬",
+      "anchor": "PROJETO EXTERNO ENTRA COMO CANDIDATO; NÃO COMO TRANSPLANTE CEGO",
+      "pr_refs": [
+        1625,
+        1709,
+        1775
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXTERNAL_SOURCE_IS_PROVENANCE_NOT_AUTHORITY",
+      "emoji": "🌐",
+      "anchor": "FONTE DE FORA INFORMA, NÃO MANDA",
+      "pr_refs": [
+        1335,
+        1339,
+        1389,
+        1445,
+        1459,
+        1625
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "EXTERNAL_SYNC_IS_NOT_SOURCE_OF_TRUTH",
+      "emoji": "🌐",
+      "anchor": "FORA NÃO VIRA DONO",
+      "pr_refs": [
+        1464,
+        1773
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "FAIL_CLOSED_PUSH_KILLSWITCH",
+      "emoji": "🛑",
+      "anchor": "SEM PERMISSÃO, NÃO EMPURRA",
+      "pr_refs": [
+        1456,
+        1455
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "FAILURE_ATTRIBUTION_REQUIRES_CAUSAL_EVIDENCE",
+      "emoji": "🧭",
+      "anchor": "NÃO CULPA SEM NEXO",
+      "pr_refs": [
+        1445,
+        1435,
+        1437,
+        1389
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "FAILURE_BECOMES_MINERAL",
+      "emoji": "⛏️",
+      "anchor": "FALHA VIRA MINÉRIO, NÃO LIXO",
+      "pr_refs": [
+        1444,
+        1438,
+        1437,
+        1435,
+        1434
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "FAST_AUTOMERGE_REQUIRES_LIVE_REVALIDATION",
+      "emoji": "⚡",
+      "anchor": "AUTO SQUASH REMEDE HEAD MERGEABILIDADE CHECKS REVIEWS E DELTA",
+      "pr_refs": [
+        1628
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "FIXED_POINT_IS_CHECKPOINT_NOT_END_OF_LEARNING",
+      "emoji": "🔄",
+      "anchor": "FIXED POINT FECHA A RODADA SEM DESLIGAR CAPACIDADE DE APRENDER/RETOMAR PRÓXIMO CURSOR",
+      "pr_refs": [
+        1549
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "GENERATED_ARTIFACT_MUST_MATCH_SOURCE",
+      "emoji": "🧬",
+      "anchor": "SOURCE E DIST ANDAM JUNTOS",
+      "pr_refs": [
+        1455,
+        1490,
+        1588
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "GIT_CURRENT_IS_NOT_RUNTIME_CURRENT",
+      "emoji": "🔀",
+      "anchor": "GIT ATUAL E RUNTIME ATUAL SÃO PROVAS DIFERENTES",
+      "pr_refs": [
+        1597
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HISTORICAL_ERROR_IS_NOT_CURRENT_FAILURE",
+      "emoji": "🕰️",
+      "anchor": "ERRO DE OUTRO CHAT/RECEIPT VIRA CANDIDATO DE REMEDIÇÃO ATÉ REPRODUÇÃO ATUAL",
+      "pr_refs": [
+        1532,
+        1600,
+        1615
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HISTORY_RESILIENCE_REQUIRES_TEMPORAL_BOUNDARY",
+      "emoji": "🕰️",
+      "anchor": "HISTÓRIA PRESERVA CONTEXTO; CURRENT EXIGE FRONTEIRA TEMPORAL",
+      "pr_refs": [
+        1577
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HORN_REUSE_FIXED_POINT_FAILS_CLOSED",
+      "emoji": "🧠",
+      "anchor": "PREMISSAS → CONCLUSÃO; CONTRADIÇÃO/UNKNOWN NÃO PROMOVE PASS",
+      "pr_refs": [
+        1533,
+        1548,
+        1549
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HUMAN_ACCEPTANCE_IS_NOT_PROOF",
+      "emoji": "👑",
+      "anchor": "ACEITE HUMANO AUTORIZA; NÃO SUBSTITUI PROVA",
+      "pr_refs": [
+        1614
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HUMAN_FIRST_HUD_TECHNICAL_PRESERVED",
+      "emoji": "🎨",
+      "anchor": "LINGUAGEM HUMANA/EMOJI PRIMEIRO; TERMO TÉCNICO PERMANECE DISPONÍVEL; EMOJI NÃO É PROVA",
+      "pr_refs": [
+        1543
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "HUMAN_TIME_HAS_ONE_OWNER",
+      "emoji": "⏰",
+      "anchor": "HORA HUMANA USA OWNER/FUSO CANÔNICO; UTC TÉCNICO CONTINUA PROVA DE MÁQUINA",
+      "pr_refs": [
+        1493,
+        1734,
+        1735
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "IMMUTABLE_PROOF_REUSES_FINGERPRINT",
+      "emoji": "💠",
+      "anchor": "PROVA NÃO TEMPORAL PODE SER REUTILIZADA ENQUANTO PREMISSAS/FINGERPRINT NÃO MUDAREM; DEPLOY É TEMPORAL E REMEDE",
+      "pr_refs": [
+        1548,
+        1614
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "INGESTION_DOES_NOT_GRANT_AUTHORITY",
+      "emoji": "🧬",
+      "anchor": "AUTO-INGESTÃO EXIGE PROVENIÊNCIA/DEDUPE/OWNER; ENTRADA NÃO GANHA AUTORIDADE SÓ POR CHEGAR",
+      "pr_refs": [
+        1546
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "INTENT_CONFIDENCE_IS_ADAPTIVE_NOT_TECHNICAL_GATE",
+      "emoji": "🎯",
+      "anchor": "CONFIANÇA DE INTENÇÃO ORIENTA; NÃO SUBSTITUI PROVA NEM VIRA GATE FIXO",
+      "pr_refs": [
+        1774
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "INTENT_IS_NOT_TOOL_IMPLEMENTATION",
+      "emoji": "🎙️",
+      "anchor": "INTENÇÃO HUMANA NÃO É O NOME DA FERRAMENTA",
+      "pr_refs": [
+        1616
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "INTENT_RESOLUTION_BY_CLAUSES_PRECEDES_TOOL_SELECTION",
+      "emoji": "🎙️",
+      "anchor": "PRIMEIRO RESOLVE A INTENÇÃO EM CLÁUSULAS; DEPOIS ESCOLHE A FERRAMENTA",
+      "pr_refs": [
+        1725
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "INTERCEPTED_TOOL_CALL_IS_NOT_AUTHORIZED_ACTION",
+      "emoji": "🔎",
+      "anchor": "OBSERVAR TOOL-CALL NÃO AUTORIZA AÇÃO",
+      "pr_refs": [
+        1552
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "INTERRUPTION_DOES_NOT_RESTART_MISSION",
+      "emoji": "🧵",
+      "anchor": "INTERRUPÇÃO PRESERVA OURO, MISSÃO E NEXT CURSOR; REMEDE SÓ O ESTADO TEMPORAL",
+      "pr_refs": [
+        1573
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LABEL_TRACE_IS_NOT_CANONICAL_PROOF",
+      "emoji": "🏷️",
+      "anchor": "ETIQUETA PRECISA DE ORIGEM E ESCOPO",
+      "pr_refs": [
+        1551
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LAST_GOOD_STATE_IS_NEXT_BASELINE",
+      "emoji": "🏁",
+      "anchor": "ÚLTIMO BOM VIRA PRÓXIMO CHÃO",
+      "pr_refs": [
+        1465,
+        1444,
+        1437,
+        1393,
+        1381
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LEARNING_LINEAGE_MUST_BE_MONOTONIC_AND_RECONSTRUCTIBLE",
+      "emoji": "📚",
+      "anchor": "APRENDIZADO AVANÇA EM LINHAGEM; PRÓXIMO AGENTE RECONSTRÓI SEM ADIVINHAR",
+      "pr_refs": [
+        1745,
+        1746,
+        1747
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LIVE_PR_STATE_BEATS_LIST_SNAPSHOT",
+      "emoji": "🧭",
+      "anchor": "ANTES DE DECIDIR, REMEDIR O PR INDIVIDUAL; LISTA COLETIVA NÃO É AUTORIDADE VIVA",
+      "pr_refs": [
+        1537
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LIVE_STATE_MUST_BE_MEASURED_AT_RUNTIME",
+      "emoji": "🫀",
+      "anchor": "ESTADO VIVO NÃO FICA CONGELADO",
+      "pr_refs": [
+        1367,
+        1381,
+        1393,
+        1580,
+        1597,
+        1710,
+        1713,
+        1742,
+        1749,
+        1758,
+        1776
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LIVE_THREAD_REVALIDATES_TEMPORAL_EDGE",
+      "emoji": "🪢",
+      "anchor": "FIO VIVO REVALIDA SÓ O QUE É TEMPORAL",
+      "pr_refs": [
+        1567
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LOAD_CAPABILITY_ON_DEMAND",
+      "emoji": "🧩",
+      "anchor": "CARREGAR SOMENTE A SKILL NECESSÁRIA AO GAP MATERIAL; CATÁLOGO INTEIRO NÃO AUTOEXECUTA",
+      "pr_refs": [
+        1501,
+        1502,
+        1514,
+        1741
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LOCAL_CAPTURE_REQUIRES_NEW_RESPONSE",
+      "emoji": "📥",
+      "anchor": "PLACEHOLDER NÃO É RESPOSTA",
+      "pr_refs": [
+        1566
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "LOCAL_TEST_READY_IS_NOT_PRODUCTION_READY",
+      "emoji": "🏠",
+      "anchor": "PRONTO PRA CASA NÃO É PRONTO PRA PRODUÇÃO",
+      "pr_refs": [
+        1416
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MACHINE_OUTPUT_IS_DELTA_UTIL",
+      "emoji": "💠",
+      "anchor": "MÁQUINA DEVOLVE SÓ O QUE MUDA O JOGO",
+      "pr_refs": [
+        1445,
+        1444,
+        1438
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MASTER_COMMAND_SINGLE_OWNER",
+      "emoji": "👑🪬",
+      "anchor": "UM COMANDO, UM DONO",
+      "value": "CONTRACT.yml → MASTER-CYCLE.yml → TRIGGERS.yml → ENGINE_BINDING.yml",
+      "pr_refs": [
+        1490
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MEASURE_BEFORE_CREATION",
+      "aliases": [
+        "REMEASURE_BEFORE_CREATE"
+      ],
+      "emoji": "👁️",
+      "anchor": "MEDE E, SE O ALVO PUDER TER MUDADO, REMEDE ANTES DE CRIAR",
+      "pr_refs": [
+        1632,
+        1633,
+        1634
+      ],
+      "value": "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE; LIVE/DRIFTABLE TARGET => FRESH SAME-TARGET REMEASUREMENT",
+      "runtime_required": false
+    },
+    {
+      "id": "MEASUREMENT_FILTER_MUST_BE_CALIBRATED_ON_KNOWN_CASE",
+      "emoji": "📏",
+      "anchor": "MEDE O MEDIDOR ANTES DE CONFIAR",
+      "pr_refs": [
+        1349,
+        1350
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MENTAL_HOOK_IS_NOT_NEW_OWNER",
+      "emoji": "🧠",
+      "anchor": "GANCHO MENTAL LEMBRA, NÃO COROA",
+      "pr_refs": [
+        1562
       ],
       "runtime_required": false
     },
@@ -256,141 +1061,138 @@
       "runtime_required": false
     },
     {
-      "id": "SAME_HEAD_PROOF",
-      "emoji": "🧬",
-      "anchor": "PROVA NO MESMO HEAD",
+      "id": "MICRO_DEPLOY_IS_NOT_DEPLOY",
+      "emoji": "🧪",
+      "anchor": "TESTE PEQUENO NÃO É PRODUÇÃO",
       "pr_refs": [
-        1376,
-        1381,
-        1416,
-        1431,
-        1444,
-        1447,
-        1463,
         1480,
-        1482,
-        1490,
-        1492,
-        1620,
-        1628,
-        1631
+        1430
       ],
       "runtime_required": false
     },
     {
-      "id": "ONE_WRITER_PER_SCOPE",
-      "emoji": "✍️",
-      "anchor": "UMA CANETA POR FERIDA",
+      "id": "MINIMUM_SAFE_ADAPTATION_BEFORE_GLOBAL_DISABLE",
+      "emoji": "🛡️",
+      "anchor": "ANTES DE DESLIGAR PROTEÇÃO GLOBAL, PROVA PROCESSO/PATH/OWNER E APLICA MENOR ADAPTAÇÃO",
       "pr_refs": [
-        1490,
-        1483,
-        1465,
-        1458,
-        1447,
-        1444,
-        1438,
-        1389,
-        1381,
-        1330
+        1574
       ],
       "runtime_required": false
     },
     {
-      "id": "PARALLELIZE_PERCEPTION_SERIALIZE_MUTATION",
-      "emoji": "👁️",
-      "anchor": "MUITOS OLHOS, UMA CANETA",
-      "pr_refs": [
-        1483,
-        1447,
-        1444,
-        1389
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER",
-      "emoji": "🧿",
-      "anchor": "PR-MÃE VÊ, NÃO ESCREVE TUDO",
-      "pr_refs": [
-        1444,
-        1483,
-        1458,
-        1447
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "DURABLE_FACT_TEMPORAL_EDGE_SPLIT",
-      "emoji": "💎",
-      "anchor": "FATO FICA, ARESTA REMEDE",
-      "pr_refs": [
-        1483,
-        1465,
-        1444
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "SENSOR_FAILURE_IS_NOT_WORLD_FAILURE",
-      "emoji": "📡",
-      "anchor": "SENSOR CEGO NÃO APAGA O MUNDO",
-      "pr_refs": [
-        1483,
-        1465,
-        1444,
-        1389
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "REGISTER_BEFORE_REPORT",
-      "emoji": "🧾",
-      "anchor": "REGISTRA ANTES DE CONTAR",
-      "pr_refs": [
-        1452,
-        1451,
-        1439,
-        1436,
-        1433,
-        1432,
-        1429,
-        1425
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PROOF_TARGET_IS_SCOPE_BOUND",
+      "id": "MINIMUM_SCOPE_FIRST",
       "emoji": "🎯",
-      "anchor": "CADA PROVA NO SEU TERRENO",
+      "anchor": "MEXE NO MENOR CONE CAUSAL",
       "pr_refs": [
-        1452,
-        1451,
-        1439,
-        1436,
-        1432,
-        1381
+        1339,
+        1430,
+        1480,
+        1595
       ],
       "runtime_required": false
     },
     {
-      "id": "ONE_TOPIC_ONE_PROOF_ROW",
-      "emoji": "📋",
-      "anchor": "UMA CLAIM, UMA FILEIRA DE PROVA",
+      "id": "MINIMUM_SUFFICIENT_CONTEXT",
+      "emoji": "🧠",
+      "anchor": "CARREGA SÓ O NECESSÁRIO",
       "pr_refs": [
-        1452,
-        1451,
-        1439,
-        1436,
-        1432
+        1370,
+        1384
       ],
       "runtime_required": false
     },
     {
-      "id": "REALTIME_FEEDBACK_IS_SIGNAL",
-      "emoji": "📣",
-      "anchor": "FEEDBACK ENTRA NO MESMO FIO",
+      "id": "MIRROR_IS_NOT_SECOND_OWNER",
+      "emoji": "🪞",
+      "anchor": "ESPELHO NÃO VIRA DONO",
       "pr_refs": [
-        1435
+        1369,
+        1389,
+        1778
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MISSION_CONTINUITY_SURVIVES_SESSION",
+      "emoji": "🧵",
+      "anchor": "CENTRALDARK CONTINUA; FIXED POINT FECHA DELTA, NÃO A MISSÃO",
+      "value": "AGENT_STOP != MISSION_STOP; SESSION_END != GOAL_END; MODEL_LIMIT != GOAL_END; RENDEZVOUS=#1562; PROVEN=REUSE; OPEN_DELTA=RECONCILE; FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true; MAIN_SHA=MEASURE_CURRENT",
+      "pr_refs": [
+        1554,
+        1562
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MODEL_IS_NOT_AUTHORITY",
+      "emoji": "🤖",
+      "anchor": "MODELO É MOTOR",
+      "pr_refs": [
+        1389,
+        1390,
+        1447,
+        1775,
+        1776,
+        1777,
+        1782
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MODEL_IS_REPLACEABLE_ENGINE",
+      "emoji": "🤖",
+      "anchor": "HERMES/CORPO AGENTE CONTINUA OWNER OPERACIONAL; MODELOS SÃO MOTORES PLUGÁVEIS",
+      "pr_refs": [
+        1523,
+        1629
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MULTI_ACCOUNT_ROUTE_IS_CAPABILITY_ROUTING_NOT_NEW_AUTHORITY",
+      "emoji": "🔀",
+      "anchor": "MÚLTIPLAS CONTAS SÃO ROTAS DE CAPACIDADE; OWNER CONTINUA ÚNICO",
+      "pr_refs": [
+        1710,
+        1740
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "MULTIPLE_WRITERS_REQUIRE_DISJOINT_SCOPES",
+      "emoji": "✍️",
+      "anchor": "MÚLTIPLAS CANETAS SÓ EM ESCOPOS DISJUNTOS",
+      "pr_refs": [
+        1579
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NARRATIVE_IS_NOT_PROOF",
+      "emoji": "🔊",
+      "anchor": "NARRAÇÃO CURTA PODE ACOMPANHAR TOOL-CALL REAL; RESULTADO/RECEIPT CONTINUAM SENDO PROVA",
+      "pr_refs": [
+        1550
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NEGATED_OR_QUOTED_TRIGGER_IS_NOT_ACTIVATION",
+      "emoji": "🚫",
+      "anchor": "NEGAR OU CITAR NÃO DISPARA",
+      "pr_refs": [
+        1375,
+        1364
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NO_LATERAL_ROUTE",
+      "emoji": "🚪",
+      "anchor": "BLOQUEOU, DIAGNOSTICA; NÃO CONTORNA",
+      "value": "ENTRY_REQUIRES_GATE ∧ EXIT_REQUIRES_GATE ∧ RETURN_PATH_REQUIRES_GATE",
+      "pr_refs": [
+        1567
       ],
       "runtime_required": false
     },
@@ -417,66 +1219,270 @@
       "runtime_required": false
     },
     {
-      "id": "PROVED_NON_TEMPORAL_REUSES_PROVENANCE",
-      "emoji": "🔒",
-      "anchor": "PROVOU UMA VEZ, NÃO REDESCOBRE SEM CAUSA",
+      "id": "NO_RETRY_WITHOUT_INFORMATION_GAIN",
+      "emoji": "🔁",
+      "anchor": "SEM NOVA INFORMAÇÃO, NÃO REPETE LOOP; AGUARDA EVENTO OU DELTA NOVO",
       "pr_refs": [
+        1574
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NO_V2_V3_PARALLEL_SYSTEMS",
+      "emoji": "🚫",
+      "anchor": "SEM GÊMEOS",
+      "pr_refs": [
+        1444,
+        1482,
+        1483,
         1465,
-        1434,
+        1386,
+        1384
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NULL_OID_IS_SEM_BASE_NOT_FAILURE",
+      "emoji": "0️⃣",
+      "anchor": "OID ZERO É SEM BASE, NÃO FALHA FANTASMA",
+      "pr_refs": [
+        1462
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "NULL_REQUIRED_DECISION_FIELD_STAYS_UNKNOWN",
+      "emoji": "❓",
+      "anchor": "NULL EM CAMPO DECISÓRIO OBRIGATÓRIO FICA UNKNOWN",
+      "pr_refs": [
+        1577
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OAUTH_PUBLIC_DISCOVERY_WITHOUT_STORED_BEARER",
+      "emoji": "🔐",
+      "anchor": "DESCOBERTA PÚBLICA + PKCE/ESCOPO; NÃO CRISTALIZAR BEARER TOKEN EM CONFIG",
+      "pr_refs": [
+        1519
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OBJECTIVE_AUTHORITY_ROUTE_AUTONOMY_SPLIT",
+      "emoji": "👑",
+      "anchor": "CHEFE DEFINE OBJETIVO; HERMES ESCOLHE A MENOR ROTA TÉCNICA SEM REDEFINIR A INTENÇÃO",
+      "pr_refs": [
+        1574
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OBSERVABILITY_REUSES_EXISTING_TRACE",
+      "emoji": "🔎",
+      "anchor": "CORRELAÇÃO → AUDIT → LOG → SSE; OBSERVAR NÃO CRIA SEGUNDO BARRAMENTO",
+      "pr_refs": [
+        1494
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OBSERVER_ENV_IS_NOT_OWNER_HEALTH",
+      "emoji": "🩺",
+      "anchor": "FALTA NO OBSERVADOR NÃO PROVA OWNER DOENTE",
+      "pr_refs": [
+        1598
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OFFICIAL_UPDATER_REUSE_BEFORE_CUSTOM_UPDATE",
+      "emoji": "♻️",
+      "anchor": "ATUALIZADOR OFICIAL EXISTENTE VEM ANTES DE MOTOR NOVO",
+      "pr_refs": [
+        1608
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_ACTIVE_FINALIZER_LEASE",
+      "emoji": "🔐",
+      "anchor": "PROMOÇÃO FINAL TEM UM FINALIZADOR ATIVO",
+      "pr_refs": [
+        1579
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_ACTIVE_PROMOTION_PR_PER_SCOPE",
+      "emoji": "🚦",
+      "anchor": "UM VEÍCULO ATIVO POR ESCOPO",
+      "pr_refs": [
+        1452,
+        1451,
+        1439,
+        1436,
+        1432
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_CONFLICT_RESOLVER_PER_CONTRACT",
+      "emoji": "🪢",
+      "anchor": "UM CONTRATO DE CONFLITO USA UM RESOLVEDOR CANÔNICO",
+      "pr_refs": [
+        1599,
+        1631
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_LOGIN_IS_NOT_ONE_SECRET",
+      "emoji": "🔐",
+      "anchor": "UMA ENTRADA HUMANA PODE GOVERNAR N CAPACIDADES; CREDENCIAIS INTERNAS CONTINUAM POR ESCOPO",
+      "pr_refs": [
+        1547
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_OPERATIONAL_SNAPSHOT_MANY_PROJECTIONS",
+      "emoji": "🫀",
+      "anchor": "UM SNAPSHOT OPERACIONAL ALIMENTA MUITAS PROJEÇÕES",
+      "pr_refs": [
+        1604,
+        1605
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_SYSTEM_ONLY",
+      "emoji": "🫀",
+      "anchor": "UM CORPO",
+      "pr_refs": [
+        1381,
+        1389,
+        1444,
+        1445,
+        1482,
+        1483,
+        1590,
+        1592,
+        1596,
+        1604,
+        1617,
+        1624,
+        1709,
+        1710,
+        1722,
+        1740,
+        1741,
+        1774
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_TOPIC_ONE_PROOF_ROW",
+      "emoji": "📋",
+      "anchor": "UMA CLAIM, UMA FILEIRA DE PROVA",
+      "pr_refs": [
+        1452,
+        1451,
+        1439,
+        1436,
+        1432
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_WORKFLOW_PER_CONTRACT",
+      "emoji": "🧿",
+      "anchor": "REPARAR OWNER EXISTENTE; NÃO CRIAR WORKFLOW PARALELO PARA O MESMO CONTRATO",
+      "pr_refs": [
+        1531,
+        1599
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "ONE_WRITER_PER_SCOPE",
+      "emoji": "✍️",
+      "anchor": "UMA CANETA POR FERIDA",
+      "pr_refs": [
+        1330,
+        1381,
+        1389,
+        1438,
+        1444,
+        1447,
+        1458,
+        1465,
+        1483,
+        1490,
+        1709,
+        1710,
+        1713,
+        1741,
+        1774,
+        1775
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OPEN_ITEM_IS_NOT_MATERIAL_FAILURE",
+      "emoji": "📂",
+      "anchor": "ABERTO NÃO É FERIDA ATIVA",
+      "pr_refs": [
         1444
       ],
       "runtime_required": false
     },
     {
-      "id": "PROVEN_CLAIM_REOPEN_REQUIRES_CAUSE",
-      "emoji": "🔓",
-      "anchor": "CRISTAL SÓ REABRE COM CAUSA",
+      "id": "OPTIONAL_INTEGRATION_OFF_IS_NOT_GLOBAL_FAILURE",
+      "emoji": "🔌",
+      "anchor": "INTEGRAÇÃO OPCIONAL INDISPONÍVEL NÃO BLOQUEIA MISSÃO QUANDO EXISTE ROTA/FALLBACK SUFICIENTE",
       "pr_refs": [
-        1465,
+        1503,
+        1523
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "OPTIONAL_NULL_METADATA_IS_NOT_FAILURE",
+      "emoji": "0️⃣",
+      "anchor": "NULL OPCIONAL EM ENVELOPE DE SUCESSO NÃO FABRICA FALHA",
+      "pr_refs": [
+        1577
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "PARALLELIZE_PERCEPTION_SERIALIZE_MUTATION",
+      "emoji": "👁️",
+      "anchor": "MUITOS OLHOS, UMA CANETA",
+      "pr_refs": [
+        1483,
+        1447,
         1444,
-        1435,
-        1434
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CAPABILITY_IS_NOT_AUTHORITY",
-      "emoji": "🧩",
-      "anchor": "PODER FAZER NÃO É MANDAR",
-      "pr_refs": [
-        1490,
-        1458,
-        1447,
-        1445,
         1389
       ],
       "runtime_required": false
     },
     {
-      "id": "MODEL_IS_NOT_AUTHORITY",
-      "emoji": "🤖",
-      "anchor": "MODELO É MOTOR",
+      "id": "PARSE_FULL_PROTOCOL_BEFORE_DISPLAY_TRUNCATION",
+      "emoji": "📡",
+      "anchor": "PARSEIA INTEIRO, MOSTRA CORTADO",
       "pr_refs": [
-        1447,
-        1390,
-        1389
+        1491
       ],
       "runtime_required": false
     },
     {
-      "id": "SOURCE_FEATURE_IS_NOT_RUNTIME_PROOF",
-      "emoji": "🧱",
-      "anchor": "CÓDIGO NÃO É RUNTIME",
+      "id": "PARTIAL_MISMATCH_ERROR_NOT_PROMOTABLE",
+      "emoji": "🟡",
+      "anchor": "PARCIAL NÃO SOBE COMO VERDE",
       "pr_refs": [
-        1492,
-        1491,
-        1490,
-        1482,
-        1480,
-        1454,
-        1445,
-        1414,
-        1381
+        1339
       ],
       "runtime_required": false
     },
@@ -492,209 +1498,85 @@
       "runtime_required": false
     },
     {
-      "id": "CONNECTED_IS_NOT_SYNCHRONIZED",
-      "emoji": "🔌",
-      "anchor": "CONECTOU NÃO SIGNIFICA SINCRONIZOU",
+      "id": "PERSISTENCE_IS_NOT_PROMOTION",
+      "emoji": "💾",
+      "anchor": "SALVAR NÃO É PROMOVER",
       "pr_refs": [
-        1381
+        1389
       ],
       "runtime_required": false
     },
     {
-      "id": "PROVIDER_OPTIONAL_IS_NOT_GLOBAL_FAILURE",
-      "emoji": "🔌",
-      "anchor": "BRAÇO OPCIONAL NÃO DERRUBA O CORPO",
-      "pr_refs": [
-        1479,
-        1458,
-        1381
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "FAIL_CLOSED_PUSH_KILLSWITCH",
-      "emoji": "🛑",
-      "anchor": "SEM PERMISSÃO, NÃO EMPURRA",
-      "pr_refs": [
-        1456,
-        1455
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "AUTHORIZATION_IS_SCOPE_BOUND",
-      "emoji": "👑",
-      "anchor": "PERMISSÃO NÃO É CARTA BRANCA",
-      "pr_refs": [
-        1458,
-        1430
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ACTION_CLASS_REQUIRES_TARGET_ROLLBACK_AUTHORITY",
-      "emoji": "🧯",
-      "anchor": "DEPLOY TEM ALVO E VOLTA",
-      "pr_refs": [
-        1430
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "BADGE_IS_TELEMETRY_NOT_PROOF",
-      "emoji": "🏷️",
-      "anchor": "PLACA NÃO É JUIZ",
-      "pr_refs": [
-        1431
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "MICRO_DEPLOY_IS_NOT_DEPLOY",
-      "emoji": "🧪",
-      "anchor": "TESTE PEQUENO NÃO É PRODUÇÃO",
-      "pr_refs": [
-        1480,
-        1430
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "LOCAL_TEST_READY_IS_NOT_PRODUCTION_READY",
-      "emoji": "🏠",
-      "anchor": "PRONTO PRA CASA NÃO É PRONTO PRA PRODUÇÃO",
-      "pr_refs": [
-        1416
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CHECKSUM_IS_IDENTITY_NOT_SEMANTIC_OR_RUNTIME_PROOF",
-      "emoji": "🔐",
-      "anchor": "HASH PRENDE BYTE, NÃO VERDADE TOTAL",
-      "pr_refs": [
-        1480,
-        1418,
-        1381
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "BLIND_CODE_COPY_FALSE",
-      "emoji": "🧬",
-      "anchor": "ABSORVE CAPACIDADE, NÃO COPIA CEGO",
-      "pr_refs": [
-        1335,
-        1445,
-        1625
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "EXTERNAL_SOURCE_IS_PROVENANCE_NOT_AUTHORITY",
-      "emoji": "🌐",
-      "anchor": "FONTE DE FORA INFORMA, NÃO MANDA",
-      "pr_refs": [
-        1335,
-        1339,
-        1389,
-        1445,
-        1459,
-        1625
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PUBLIC_SOURCE_IS_NOT_SAFE_TO_COPY",
-      "emoji": "📚",
-      "anchor": "PÚBLICO NÃO SIGNIFICA COPIÁVEL",
-      "pr_refs": [
-        1459,
-        1335
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "UNKNOWN_LICENSE_BLOCKS_RAW_INGEST",
-      "emoji": "⚖️",
-      "anchor": "LICENÇA INCERTA NÃO ENTRA BRUTA",
-      "pr_refs": [
-        1459,
-        1335
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "DETERMINISTIC_CAPABILITY_ROUTING",
-      "emoji": "🎼",
-      "anchor": "MESMO ESTADO, MESMA ROTA",
-      "pr_refs": [
-        1447,
-        1444
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "COGNITIVE_DEBT_MUST_BE_RECONSTRUCTIBLE",
+      "id": "PERSONA_USES_CANONICAL_SOUL_MODEL_REPLACEABLE",
       "emoji": "🧠",
-      "anchor": "PRÓXIMO AGENTE NÃO ADIVINHA",
+      "anchor": "PERSONA REUSA SOUL CANÔNICO; MODELO CONTINUA MOTOR SUBSTITUÍVEL",
       "pr_refs": [
-        1381,
-        1408
+        1629
       ],
       "runtime_required": false
     },
     {
-      "id": "CURRENT_BINDING_CHAIN",
-      "emoji": "🔗",
-      "anchor": "SINAL ATÉ RECEIPT",
-      "value": "PROCESS → BRIDGE → INPUT_OR_VOICE → INTENT → ROUTER → ACTION → RECEIPT",
+      "id": "PLATFORM_CAPABILITY_REQUIRES_PLATFORM_MATCH",
+      "emoji": "🧩",
+      "anchor": "CAPACIDADE DE PLATAFORMA EXIGE ALVO COMPATÍVEL",
       "pr_refs": [
-        1483,
-        1465,
-        1444
+        1576
       ],
       "runtime_required": false
     },
     {
-      "id": "ERROR_IS_TELEMETRY_NOT_NEW_ARCHITECTURE",
-      "emoji": "🔴",
-      "anchor": "ERRO MOSTRA O PONTO, NÃO CRIA OUTRO CORPO",
+      "id": "POST_PR_CONTINUES_UNTIL_MERGED_OR_MATERIAL_BLOCKER",
+      "emoji": "🧭",
+      "anchor": "PR ELEGÍVEL NÃO DEVOLVE O PROBLEMA AO HUMANO NO AMARELO",
       "pr_refs": [
-        1437,
-        1381,
-        1379
+        1620,
+        1628
       ],
       "runtime_required": false
     },
     {
-      "id": "FAILURE_BECOMES_MINERAL",
-      "emoji": "⛏️",
-      "anchor": "FALHA VIRA MINÉRIO, NÃO LIXO",
+      "id": "PR_IS_COMMUNICATION_LEDGER_NOT_AUTHORITY",
+      "emoji": "🧾",
+      "anchor": "PR CARREGA O FIO; NÃO VIRA AUTORIDADE NEM RUNTIME",
+      "pr_refs": [
+        1579
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "PR_MOTHER_IS_RENDEZVOUS_NOT_WRITER",
+      "emoji": "🧿",
+      "anchor": "PR-MÃE VÊ, NÃO ESCREVE TUDO",
       "pr_refs": [
         1444,
-        1438,
-        1437,
-        1435,
-        1434
+        1483,
+        1458,
+        1447
       ],
       "runtime_required": false
     },
     {
-      "id": "EXTERNAL_SYNC_IS_NOT_SOURCE_OF_TRUTH",
-      "emoji": "🌐",
-      "anchor": "FORA NÃO VIRA DONO",
+      "id": "PR_MOTHER_IS_SINGLE_RENDEZVOUS",
+      "emoji": "🧭",
+      "anchor": "ISSUE → DELTA ÚTIL → OWNER → TESTE → CONTRAPROVA → PR-MÃE → MAIN; SEM MÚLTIPLOS WRITERS",
       "pr_refs": [
-        1464
+        1540,
+        1623,
+        1710,
+        1721,
+        1744,
+        1745,
+        1746,
+        1747
       ],
       "runtime_required": false
     },
     {
-      "id": "RAW_EXTERNAL_DUMP_IS_NOT_ACTIVE_CANON",
-      "emoji": "🧹",
-      "anchor": "DUMP BRUTO NÃO MORA NO CÂNONE ATIVO",
+      "id": "PR_MOTHER_MERGE_FORBIDDEN_CHILD_ONLY_PROMOTION",
+      "emoji": "🔒",
+      "anchor": "PR-MÃE/FUNIL NÃO É VEÍCULO DE PROMOÇÃO; MERGE SOMENTE POR SUB-PR VINCULADO",
       "pr_refs": [
-        1485
+        1572
       ],
       "runtime_required": false
     },
@@ -722,426 +1604,41 @@
       "runtime_required": false
     },
     {
-      "id": "ZERO_REGRESSION_REQUIRED",
-      "emoji": "🛡️",
-      "anchor": "OURO NOVO NÃO QUEBRA O ANTIGO",
+      "id": "PR_SNAPSHOT_IS_HEAD_SCOPED_NOT_ETERNAL_CURRENT",
+      "emoji": "📸",
+      "anchor": "COMENTÁRIO É SNAPSHOT DO HEAD; NÃO É ESTADO ETERNO DA MAIN",
       "pr_refs": [
-        1492,
-        1483,
-        1482,
-        1465,
-        1445,
-        1444,
-        1390,
-        1384
+        1776,
+        1777,
+        1782
       ],
       "runtime_required": false
     },
     {
-      "id": "MACHINE_OUTPUT_IS_DELTA_UTIL",
-      "emoji": "💠",
-      "anchor": "MÁQUINA DEVOLVE SÓ O QUE MUDA O JOGO",
-      "pr_refs": [
-        1445,
-        1444,
-        1438
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "LAST_GOOD_STATE_IS_NEXT_BASELINE",
-      "emoji": "🏁",
-      "anchor": "ÚLTIMO BOM VIRA PRÓXIMO CHÃO",
-      "pr_refs": [
-        1465,
-        1444,
-        1437,
-        1393,
-        1381
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "OPEN_ITEM_IS_NOT_MATERIAL_FAILURE",
-      "emoji": "📂",
-      "anchor": "ABERTO NÃO É FERIDA ATIVA",
-      "pr_refs": [
-        1444
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CLASSIFY_BEFORE_NEW_WORK",
-      "emoji": "🗂️",
-      "anchor": "CLASSIFICA ANTES DE ABRIR OUTRA FERIDA",
-      "value": "OWNER | DUPLICATE | COMPLEMENTARY | SUPERSEDED | ABSORBED | CONFLICTING | UNIQUE | UNKNOWN",
-      "pr_refs": [
-        1444
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "EMOJI_IS_SEMANTIC_CLUE_NOT_PROOF",
-      "emoji": "🎨",
-      "anchor": "EMOJI LEMBRA, NÃO JULGA",
-      "pr_refs": [
-        1390
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ONE_ACTIVE_PROMOTION_PR_PER_SCOPE",
-      "emoji": "🚦",
-      "anchor": "UM VEÍCULO ATIVO POR ESCOPO",
-      "pr_refs": [
-        1452,
-        1451,
-        1439,
-        1436,
-        1432
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "MINIMUM_SCOPE_FIRST",
-      "emoji": "🎯",
-      "anchor": "MEXE NO MENOR CONE CAUSAL",
-      "pr_refs": [
-        1339,
-        1430,
-        1480,
-        1595
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "FAILURE_ATTRIBUTION_REQUIRES_CAUSAL_EVIDENCE",
-      "emoji": "🧭",
-      "anchor": "NÃO CULPA SEM NEXO",
-      "pr_refs": [
-        1445,
-        1435,
-        1437,
-        1389
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "MASTER_COMMAND_SINGLE_OWNER",
-      "emoji": "👑🪬",
-      "anchor": "UM COMANDO, UM DONO",
-      "value": "CONTRACT.yml → MASTER-CYCLE.yml → TRIGGERS.yml → ENGINE_BINDING.yml",
-      "pr_refs": [
-        1490
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "TRIGGER_REGISTRY_IS_DISCOVERY_NOT_OWNER",
-      "emoji": "🗺️",
-      "anchor": "MAPA ACHA, NÃO GOVERNA",
-      "pr_refs": [
-        1490
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ENGINE_BINDING_IS_EXECUTION_NOT_NORMATIVE_OWNER",
-      "emoji": "⚙️",
-      "anchor": "BINDING EXECUTA, NÃO COROA",
-      "pr_refs": [
-        1490
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "GENERATED_ARTIFACT_MUST_MATCH_SOURCE",
-      "emoji": "🧬",
-      "anchor": "SOURCE E DIST ANDAM JUNTOS",
-      "pr_refs": [
-        1455,
-        1490,
-        1588
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "STABLE_OWNER_LEGACY_ALIAS",
-      "emoji": "🪢",
-      "anchor": "NOME VIVO, LEGADO APONTA",
-      "pr_refs": [
-        1488,
-        1368,
-        1372
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "LIVE_STATE_MUST_BE_MEASURED_AT_RUNTIME",
-      "emoji": "🫀",
-      "anchor": "ESTADO VIVO NÃO FICA CONGELADO",
-      "pr_refs": [
-        1367,
-        1381,
-        1393,
-        1580,
-        1597
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "NEGATED_OR_QUOTED_TRIGGER_IS_NOT_ACTIVATION",
-      "emoji": "🚫",
-      "anchor": "NEGAR OU CITAR NÃO DISPARA",
-      "pr_refs": [
-        1375,
-        1364
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "TRIGGER_SOURCE_PROVENANCE_REQUIRED",
-      "emoji": "👑",
-      "anchor": "GATILHO PRECISA DE ORIGEM AUTORIZADA",
-      "pr_refs": [
-        1375,
-        1364
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "YAML_PARSE_IS_NOT_SCHEMA_OR_CONSUMER_PASS",
-      "emoji": "🧾",
-      "anchor": "YAML VÁLIDO NÃO PROVA CONSUMIDOR",
-      "value": "YAML_PARSE_PASS != SCHEMA_PASS != CONSUMER_PASS != RUNTIME_PASS",
-      "pr_refs": [
-        1374,
-        1350
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "COMPONENT_PROOF_IS_NOT_INTEGRATION_PROOF",
-      "emoji": "🧩",
-      "anchor": "PEÇA PASSAR NÃO PROVA A MÁQUINA",
-      "pr_refs": [
-        1325,
-        1350,
-        1381,
-        1610
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "MEASUREMENT_FILTER_MUST_BE_CALIBRATED_ON_KNOWN_CASE",
-      "emoji": "📏",
-      "anchor": "MEDE O MEDIDOR ANTES DE CONFIAR",
-      "pr_refs": [
-        1349,
-        1350
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "WRITTEN_RULE_IS_NOT_IMPLEMENTED_RULE",
-      "emoji": "📜",
-      "anchor": "LEI NO CABEÇALHO NÃO PROVA O CORPO",
-      "pr_refs": [
-        1349,
-        1347,
-        1331
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "RISK_NONZERO_GAIN_ZERO_NO_ACTION",
-      "emoji": "🧯",
-      "anchor": "RISCO SEM GANHO, NÃO MEXE",
-      "pr_refs": [
-        1338
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ROUTE_WITHOUT_BACKEND_IS_NOT_AUTOMATICALLY_BROKEN",
-      "emoji": "🛣️",
-      "anchor": "ROTA SEM SERVIÇO PODE SER INTENCIONAL",
-      "pr_refs": [
-        1338
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "DERIVED_ARTIFACT_IS_NOT_COORDINATION_AUTHORITY",
-      "emoji": "🪞",
-      "anchor": "DERIVADO MOSTRA, NÃO MANDA",
-      "pr_refs": [
-        1339
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PARTIAL_MISMATCH_ERROR_NOT_PROMOTABLE",
-      "emoji": "🟡",
-      "anchor": "PARCIAL NÃO SOBE COMO VERDE",
-      "pr_refs": [
-        1339
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "BUDGET_EXHAUSTION_RETURNS_LAST_GOOD_AND_BLOCKED",
-      "emoji": "⏱️",
-      "anchor": "ACABOU ORÇAMENTO, VOLTA AO ÚLTIMO BOM",
-      "pr_refs": [
-        1339
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "MIRROR_IS_NOT_SECOND_OWNER",
-      "emoji": "🪞",
-      "anchor": "ESPELHO NÃO VIRA DONO",
-      "pr_refs": [
-        1389,
-        1369
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PERSISTENCE_IS_NOT_PROMOTION",
-      "emoji": "💾",
-      "anchor": "SALVAR NÃO É PROMOVER",
-      "pr_refs": [
-        1389
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CONTROL_PLANE_EXECUTION_PLANE_SEPARATION",
-      "emoji": "🎛️",
-      "anchor": "CONTROLE ESCOLHE, EXECUÇÃO RODA",
-      "pr_refs": [
-        1370
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CAPABILITY_READY_IS_NOT_RESIDENT",
-      "emoji": "🧰",
-      "anchor": "CAPACIDADE PRONTA NÃO PRECISA FICAR CARREGADA",
-      "pr_refs": [
-        1370
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "MINIMUM_SUFFICIENT_CONTEXT",
-      "emoji": "🧠",
-      "anchor": "CARREGA SÓ O NECESSÁRIO",
-      "pr_refs": [
-        1370,
-        1384
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "WRITER_LEASE_PIN_AND_CAS",
-      "emoji": "🔐",
-      "anchor": "CANETA TEM ESCOPO, REF E REDECISÃO",
-      "pr_refs": [
-        1330
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "NULL_OID_IS_SEM_BASE_NOT_FAILURE",
-      "emoji": "0️⃣",
-      "anchor": "OID ZERO É SEM BASE, NÃO FALHA FANTASMA",
-      "pr_refs": [
-        1462
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PARSE_FULL_PROTOCOL_BEFORE_DISPLAY_TRUNCATION",
+      "id": "PR_SYNC_IS_NOT_APPROVAL",
       "emoji": "📡",
-      "anchor": "PARSEIA INTEIRO, MOSTRA CORTADO",
+      "anchor": "SINCRONIZAR PR NÃO APROVA; PENDING ESPERA; CONFLITO BLOQUEIA; SEM CHURN INÚTIL",
       "pr_refs": [
-        1491
+        1498,
+        1537
       ],
       "runtime_required": false
     },
     {
-      "id": "DISPLAY_LIMIT_MUST_NOT_MUTATE_MACHINE_TRUTH",
-      "emoji": "✂️",
-      "anchor": "CORTA A TELA, NÃO A VERDADE",
+      "id": "PRIMARY_ROUTE_CHANGE_REUSES_EXISTING_OWNER",
+      "emoji": "🛣️",
+      "anchor": "TROCAR ROTA PRIMÁRIA NÃO CRIA NOVO DONO",
       "pr_refs": [
-        1491
+        1578
       ],
       "runtime_required": false
     },
     {
-      "id": "CANONICAL_IDENTITY_PIN_MUST_MATCH_TARGET_BLOB",
+      "id": "PRIVATE_TRANSPORT_DOES_NOT_CHANGE_OWNER",
       "emoji": "🔐",
-      "anchor": "PIN APONTA PARA O CORPO CERTO",
+      "anchor": "TÚNEL/PAIRING PRIVADO É TRANSPORTE; NÃO CRIA SEGUNDO CÉREBRO/ROUTER/AUTORIDADE",
       "pr_refs": [
-        1492,
-        1484
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "SYSTEMATIC_PROOF_FIELDS_BELONG_TO_RESPONSE_CONTRACT",
-      "emoji": "🧾",
-      "anchor": "PROVA OBRIGATÓRIA NÃO SOME",
-      "pr_refs": [
-        1492
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "RUNNER_DECLARATION_MUST_MATCH_CANONICAL_RUNNER_POLICY",
-      "emoji": "🚂",
-      "anchor": "WORKFLOW USA A ESTRADA CANÔNICA",
-      "pr_refs": [
-        1492
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "LABEL_TRACE_IS_NOT_CANONICAL_PROOF",
-      "emoji": "🏷️",
-      "anchor": "ETIQUETA PRECISA DE ORIGEM E ESCOPO",
-      "pr_refs": [
-        1551
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "INTERCEPTED_TOOL_CALL_IS_NOT_AUTHORIZED_ACTION",
-      "emoji": "🔎",
-      "anchor": "OBSERVAR TOOL-CALL NÃO AUTORIZA AÇÃO",
-      "pr_refs": [
-        1552
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "REVIEW_SIGNAL_IS_NOT_PROOF",
-      "emoji": "🐰",
-      "anchor": "REVIEW APONTA, PROVA DECIDE",
-      "pr_refs": [
-        1553
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CHECKBOX_IS_VISUAL_NOT_STATE_AUTHORITY",
-      "emoji": "☑️",
-      "anchor": "CHECKBOX MOSTRA, EVENTO PROVA",
-      "pr_refs": [
-        1554
+        1520
       ],
       "runtime_required": false
     },
@@ -1157,162 +1654,69 @@
       "runtime_required": false
     },
     {
-      "id": "MISSION_CONTINUITY_SURVIVES_SESSION",
-      "emoji": "🧵",
-      "anchor": "CENTRALDARK CONTINUA; FIXED POINT FECHA DELTA, NÃO A MISSÃO",
-      "value": "AGENT_STOP != MISSION_STOP; SESSION_END != GOAL_END; MODEL_LIMIT != GOAL_END; RENDEZVOUS=#1562; PROVEN=REUSE; OPEN_DELTA=RECONCILE; FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true; MAIN_SHA=MEASURE_CURRENT",
-      "pr_refs": [
-        1554,
-        1562
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CANONICAL_PROCESS_IDENTITY_REQUIRES_SCOPE_MEMBERSHIP",
-      "emoji": "🧑‍🔧",
-      "anchor": "PID PARECIDO NÃO É PROCESSO CANÔNICO",
-      "pr_refs": [
-        1555
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "RUNTIME_GUARD_EXTENDS_EXISTING_OWNER",
-      "emoji": "🛡️",
-      "anchor": "GUARDA ESTENDE O OWNER, NÃO CRIA SEGUNDO DONO",
-      "pr_refs": [
-        1557
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "EXPERIMENTAL_FUTURE_TRACK_IS_NOT_CURRENT_MAIN",
+      "id": "PROMOTION_GATE_TEST_CONTRACT_MUST_STAY_STRONG",
       "emoji": "🧪",
-      "anchor": "LABORATÓRIO FUTURO NÃO É ESTADO OPERACIONAL",
+      "anchor": "PROMOÇÃO NÃO ENFRAQUECE O PRÓPRIO TESTE PARA PASSAR",
       "pr_refs": [
-        1558,
-        1564
+        1753
       ],
       "runtime_required": false
     },
     {
-      "id": "UTC_AT_REST_LOCAL_AT_DISPLAY",
-      "emoji": "⏰",
-      "anchor": "UTC NA FONTE, BAHIA NA TELA",
-      "value": "UTC_AT_REST → LOCAL_AT_DISPLAY(America/Bahia) → NEVER_OVERWRITE_SOURCE_TIMESTAMP",
+      "id": "PROOF_TARGET_IS_SCOPE_BOUND",
+      "emoji": "🎯",
+      "anchor": "CADA PROVA NO SEU TERRENO",
       "pr_refs": [
-        1561
+        1452,
+        1451,
+        1439,
+        1436,
+        1432,
+        1381
       ],
       "runtime_required": false
     },
     {
-      "id": "MENTAL_HOOK_IS_NOT_NEW_OWNER",
-      "emoji": "🧠",
-      "anchor": "GANCHO MENTAL LEMBRA, NÃO COROA",
-      "pr_refs": [
-        1562
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "DEPLOY_GATE_PRECEDES_MUTATION",
-      "emoji": "🚪",
-      "anchor": "GATE ANTES DE MEXER",
-      "pr_refs": [
-        1563,
-        1565
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "LOCAL_CAPTURE_REQUIRES_NEW_RESPONSE",
-      "emoji": "📥",
-      "anchor": "PLACEHOLDER NÃO É RESPOSTA",
-      "pr_refs": [
-        1566
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "NO_LATERAL_ROUTE",
-      "emoji": "🚪",
-      "anchor": "BLOQUEOU, DIAGNOSTICA; NÃO CONTORNA",
-      "value": "ENTRY_REQUIRES_GATE ∧ EXIT_REQUIRES_GATE ∧ RETURN_PATH_REQUIRES_GATE",
-      "pr_refs": [
-        1567
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CONSOLIDATED_STATE_REOPENS_ONLY_WITH_MATERIAL_CAUSE",
+      "id": "PROVED_NON_TEMPORAL_REUSES_PROVENANCE",
       "emoji": "🔒",
-      "anchor": "CONSOLIDADO SÓ REABRE COM DELTA MATERIAL",
+      "anchor": "PROVOU UMA VEZ, NÃO REDESCOBRE SEM CAUSA",
       "pr_refs": [
-        1567
+        1465,
+        1434,
+        1444
       ],
       "runtime_required": false
     },
     {
-      "id": "SAME_MISSION_AUTHORITY_REUSES_AUTHORIZATION",
-      "emoji": "👑",
-      "anchor": "MESMO ALVO E ESCOPO NÃO PEDEM A MESMA PERMISSÃO DE NOVO",
+      "id": "PROVEN_CLAIM_REOPEN_REQUIRES_CAUSE",
+      "emoji": "🔓",
+      "anchor": "CRISTAL SÓ REABRE COM CAUSA",
       "pr_refs": [
-        1567
+        1465,
+        1444,
+        1435,
+        1434
       ],
       "runtime_required": false
     },
     {
-      "id": "LIVE_THREAD_REVALIDATES_TEMPORAL_EDGE",
-      "emoji": "🪢",
-      "anchor": "FIO VIVO REVALIDA SÓ O QUE É TEMPORAL",
+      "id": "PROVIDER_OPTIONAL_IS_NOT_GLOBAL_FAILURE",
+      "emoji": "🔌",
+      "anchor": "BRAÇO OPCIONAL NÃO DERRUBA O CORPO",
       "pr_refs": [
-        1567
+        1479,
+        1458,
+        1381
       ],
       "runtime_required": false
     },
     {
-      "id": "HUMAN_TIME_HAS_ONE_OWNER",
-      "emoji": "⏰",
-      "anchor": "HORA HUMANA USA OWNER/FUSO CANÔNICO; UTC TÉCNICO CONTINUA PROVA DE MÁQUINA",
+      "id": "PUBLIC_SOURCE_IS_NOT_SAFE_TO_COPY",
+      "emoji": "📚",
+      "anchor": "PÚBLICO NÃO SIGNIFICA COPIÁVEL",
       "pr_refs": [
-        1493
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "OBSERVABILITY_REUSES_EXISTING_TRACE",
-      "emoji": "🔎",
-      "anchor": "CORRELAÇÃO → AUDIT → LOG → SSE; OBSERVAR NÃO CRIA SEGUNDO BARRAMENTO",
-      "pr_refs": [
-        1494
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "EXTERNAL_ACTIONS_PINNED_WHEN_MATERIAL",
-      "emoji": "🔐",
-      "anchor": "AÇÃO EXTERNA FLUTUANTE NÃO ENTRA EM GATE CRÍTICO SEM IDENTIDADE IMUTÁVEL",
-      "pr_refs": [
-        1497
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PR_SYNC_IS_NOT_APPROVAL",
-      "emoji": "📡",
-      "anchor": "SINCRONIZAR PR NÃO APROVA; PENDING ESPERA; CONFLITO BLOQUEIA; SEM CHURN INÚTIL",
-      "pr_refs": [
-        1498,
-        1537
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "LIVE_PR_STATE_BEATS_LIST_SNAPSHOT",
-      "emoji": "🧭",
-      "anchor": "ANTES DE DECIDIR, REMEDIR O PR INDIVIDUAL; LISTA COLETIVA NÃO É AUTORIDADE VIVA",
-      "pr_refs": [
-        1537
+        1459,
+        1335
       ],
       "runtime_required": false
     },
@@ -1326,52 +1730,11 @@
       "runtime_required": false
     },
     {
-      "id": "CANONICAL_OWNERS_MUST_BE_REACHABLE",
-      "emoji": "🚪",
-      "anchor": "OWNER CANÔNICO PRECISA SER ALCANÇÁVEL PELA PORTA; ÓRFÃO CONHECIDO NÃO VIRA NORMAL",
+      "id": "RAW_EXTERNAL_DUMP_IS_NOT_ACTIVE_CANON",
+      "emoji": "🧹",
+      "anchor": "DUMP BRUTO NÃO MORA NO CÂNONE ATIVO",
       "pr_refs": [
-        1500
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "DOCUMENTATION_AND_CATALOG_ARE_SENSORS",
-      "emoji": "📚",
-      "anchor": "DOCS/CATÁLOGOS INFORMAM CAPACIDADE; NÃO VIRAM AUTORIDADE NEM EXECUÇÃO",
-      "pr_refs": [
-        1501,
-        1502,
-        1514
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "LOAD_CAPABILITY_ON_DEMAND",
-      "emoji": "🧩",
-      "anchor": "CARREGAR SOMENTE A SKILL NECESSÁRIA AO GAP MATERIAL; CATÁLOGO INTEIRO NÃO AUTOEXECUTA",
-      "pr_refs": [
-        1501,
-        1502,
-        1514
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "OPTIONAL_INTEGRATION_OFF_IS_NOT_GLOBAL_FAILURE",
-      "emoji": "🔌",
-      "anchor": "INTEGRAÇÃO OPCIONAL INDISPONÍVEL NÃO BLOQUEIA MISSÃO QUANDO EXISTE ROTA/FALLBACK SUFICIENTE",
-      "pr_refs": [
-        1503,
-        1523
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "SURFACE_BLOCKER_IS_NOT_CORE_SERVER_FAILURE",
-      "emoji": "🌉",
-      "anchor": "CONECTOR/SUPERFÍCIE INDISPONÍVEL NÃO PROVA FALHA DO MCP/CORE",
-      "pr_refs": [
-        1508
+        1485
       ],
       "runtime_required": false
     },
@@ -1387,12 +1750,81 @@
       "runtime_required": false
     },
     {
-      "id": "CALIBRATE_EXECUTE_FALSIFY",
-      "emoji": "🧠",
-      "anchor": "FABLE CALIBRA ANTES; COT-REACT EXECUTA DURANTE; META-LUPA FALSIFICA DEPOIS",
+      "id": "REALTIME_FEEDBACK_IS_SIGNAL",
+      "emoji": "📣",
+      "anchor": "FEEDBACK ENTRA NO MESMO FIO",
       "pr_refs": [
-        1512,
-        1614
+        1435
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "REGISTER_BEFORE_REPORT",
+      "emoji": "🧾",
+      "anchor": "REGISTRA ANTES DE CONTAR",
+      "pr_refs": [
+        1452,
+        1451,
+        1439,
+        1436,
+        1433,
+        1432,
+        1429,
+        1425
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "REGISTRA_PROMOTION_CHAIN",
+      "emoji": "🧾",
+      "anchor": "COMMIT → PUSH → PR FILHA → REMEDE → SQUASH MAIN → READBACK → RECEIPT",
+      "pr_refs": [
+        1623,
+        1710,
+        1721,
+        1744,
+        1745,
+        1746,
+        1747
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "REPLAYABLE_RECIPE_IS_PROOF_PATH_NOT_RUNTIME_BY_ITSELF",
+      "emoji": "📜",
+      "anchor": "RECEITA REPLAYABLE PRESERVA CAMINHO; EXECUÇÃO ATUAL AINDA PRECISA PROVA",
+      "pr_refs": [
+        1721
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "REUSE_BEFORE_CREATE",
+      "emoji": "♻️",
+      "anchor": "REUSA ANTES DE CRIAR",
+      "pr_refs": [
+        1381,
+        1384,
+        1438,
+        1444,
+        1445,
+        1465,
+        1482,
+        1483,
+        1586,
+        1587,
+        1596,
+        1617,
+        1632,
+        1633,
+        1634,
+        1709,
+        1710,
+        1714,
+        1741,
+        1768,
+        1774,
+        1775
       ],
       "runtime_required": false
     },
@@ -1407,256 +1839,79 @@
       "runtime_required": false
     },
     {
-      "id": "DUAL_USE_ANALYZE_BEFORE_BLOCK",
-      "emoji": "🔐",
-      "anchor": "CAPACIDADE POTENTE É INSPECIONADA POR ALVO/AUTORIDADE/RISCO ANTES DE BLOQUEIO GENÉRICO",
-      "pr_refs": [
-        1515
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "EXPLICIT_DELIVERY_USES_SAME_SHA",
-      "emoji": "🚀",
-      "anchor": "COMMIT → BUILD/TEST NO SHA EXATO → MICRO-DEPLOY DO MESMO SHA → RUNTIME PROOF → RECEIPT",
-      "pr_refs": [
-        1516,
-        1517,
-        1613
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CONTEXT_TRUNCATION_DOES_NOT_END_MISSION",
-      "emoji": "🧠",
-      "anchor": "CONTEXTO GRANDE VIRA LEITURA DIRIGIDA/BOUNDED; UNKNOWN FICA RESTRITO AO CLAIM NÃO LIDO",
-      "pr_refs": [
-        1518
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "OAUTH_PUBLIC_DISCOVERY_WITHOUT_STORED_BEARER",
-      "emoji": "🔐",
-      "anchor": "DESCOBERTA PÚBLICA + PKCE/ESCOPO; NÃO CRISTALIZAR BEARER TOKEN EM CONFIG",
-      "pr_refs": [
-        1519
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PRIVATE_TRANSPORT_DOES_NOT_CHANGE_OWNER",
-      "emoji": "🔐",
-      "anchor": "TÚNEL/PAIRING PRIVADO É TRANSPORTE; NÃO CRIA SEGUNDO CÉREBRO/ROUTER/AUTORIDADE",
-      "pr_refs": [
-        1520
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "MODEL_IS_REPLACEABLE_ENGINE",
-      "emoji": "🤖",
-      "anchor": "HERMES/CORPO AGENTE CONTINUA OWNER OPERACIONAL; MODELOS SÃO MOTORES PLUGÁVEIS",
-      "pr_refs": [
-        1523,
-        1629
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "TOOL_CATALOG_IS_NOT_MODEL_CATALOG",
-      "emoji": "🧰",
-      "anchor": "CATÁLOGO DE FERRAMENTAS E CATÁLOGO DE MODELOS PERMANECEM SEPARADOS",
-      "pr_refs": [
-        1523
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "SCORE_AND_BADGE_ARE_TELEMETRY",
-      "emoji": "🏷️",
-      "anchor": "SCORE/BADGE/TENDÊNCIA ORIENTAM; NUNCA SUBSTITUEM CI/PROVA",
-      "pr_refs": [
-        1530
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ONE_WORKFLOW_PER_CONTRACT",
-      "emoji": "🧿",
-      "anchor": "REPARAR OWNER EXISTENTE; NÃO CRIAR WORKFLOW PARALELO PARA O MESMO CONTRATO",
-      "pr_refs": [
-        1531,
-        1599
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "HISTORICAL_ERROR_IS_NOT_CURRENT_FAILURE",
-      "emoji": "🕰️",
-      "anchor": "ERRO DE OUTRO CHAT/RECEIPT VIRA CANDIDATO DE REMEDIÇÃO ATÉ REPRODUÇÃO ATUAL",
-      "pr_refs": [
-        1532,
-        1600,
-        1615
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "HORN_REUSE_FIXED_POINT_FAILS_CLOSED",
-      "emoji": "🧠",
-      "anchor": "PREMISSAS → CONCLUSÃO; CONTRADIÇÃO/UNKNOWN NÃO PROMOVE PASS",
-      "pr_refs": [
-        1533,
-        1548,
-        1549
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CONSUMER_INHERITS_CANONICAL_CONTRACT",
-      "emoji": "🧾",
-      "anchor": "BOT/CONSUMER HERDA CONTRATO EXISTENTE; NÃO COPIA AUTORIDADE EM PARALELO",
-      "pr_refs": [
-        1535
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CONTENT_HASH_ANCHORS_IDENTITY_NOT_AUTHORITY",
-      "emoji": "🧬",
-      "anchor": "HASH PRENDE IDENTIDADE/PROVENIÊNCIA; FONTE PRESERVADA NÃO VIRA AUTORIDADE OPERACIONAL",
-      "pr_refs": [
-        1536
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "USER_REPORTED_ERROR_IS_PRIORITY_SIGNAL_NOT_PROOF",
-      "emoji": "📣",
-      "anchor": "RELATO DO CHEFE PRIORIZA INVESTIGAÇÃO; NÃO VIRA PASS/FAIL SEM MEDIÇÃO",
-      "pr_refs": [
-        1538
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "BEFORE_BLOCKED_MEASURE_AUTHORIZED_CHANNELS",
-      "emoji": "🧭",
-      "anchor": "ANTES DE DECLARAR BLOCKED, MEDIR CANAIS JÁ AUTORIZADOS E APLICÁVEIS",
-      "pr_refs": [
-        1538,
-        1611
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PR_MOTHER_IS_SINGLE_RENDEZVOUS",
-      "emoji": "🧭",
-      "anchor": "ISSUE → DELTA ÚTIL → OWNER → TESTE → CONTRAPROVA → PR-MÃE → MAIN; SEM MÚLTIPLOS WRITERS",
-      "pr_refs": [
-        1540,
-        1623
-      ],
-      "runtime_required": false
-    },
-    {
       "id": "REVIEW_ROLE_IS_CAPABILITY_NOT_AUTHORITY",
       "emoji": "🤖",
       "anchor": "CODEX/REVIEWER É PAPEL SUBSTITUÍVEL; INDISPONIBILIDADE PERMITE FALLBACK SEM CONCEDER AUTORIDADE",
       "pr_refs": [
-        1541
+        1541,
+        1776,
+        1777,
+        1782
       ],
       "runtime_required": false
     },
     {
-      "id": "HUMAN_FIRST_HUD_TECHNICAL_PRESERVED",
-      "emoji": "🎨",
-      "anchor": "LINGUAGEM HUMANA/EMOJI PRIMEIRO; TERMO TÉCNICO PERMANECE DISPONÍVEL; EMOJI NÃO É PROVA",
+      "id": "REVIEW_SIGNAL_IS_NOT_PROOF",
+      "emoji": "🐰",
+      "anchor": "REVIEW APONTA, PROVA DECIDE",
       "pr_refs": [
-        1543
+        1553
       ],
       "runtime_required": false
     },
     {
-      "id": "DERIVED_GRAPH_IS_NOT_AUTHORITY",
-      "emoji": "🧠",
-      "anchor": "ALINHAMENTO/GRAFO DERIVADOS AJUDAM DECISÃO; CONFLITO EQUIVALENTE PERMANECE CONFLICT/UNKNOWN",
+      "id": "RISK_NONZERO_GAIN_ZERO_NO_ACTION",
+      "emoji": "🧯",
+      "anchor": "RISCO SEM GANHO, NÃO MEXE",
       "pr_refs": [
-        1544
+        1338
       ],
       "runtime_required": false
     },
     {
-      "id": "INGESTION_DOES_NOT_GRANT_AUTHORITY",
-      "emoji": "🧬",
-      "anchor": "AUTO-INGESTÃO EXIGE PROVENIÊNCIA/DEDUPE/OWNER; ENTRADA NÃO GANHA AUTORIDADE SÓ POR CHEGAR",
+      "id": "ROOT_DIRTY_MUST_BE_PRESERVED_UNTIL_RECONCILED",
+      "emoji": "🌳",
+      "anchor": "WORKTREE SUJO É ESTADO VIVO; NÃO RESETAR NEM LIMPAR CEGAMENTE",
       "pr_refs": [
-        1546
+        1597
       ],
       "runtime_required": false
     },
     {
-      "id": "ONE_LOGIN_IS_NOT_ONE_SECRET",
-      "emoji": "🔐",
-      "anchor": "UMA ENTRADA HUMANA PODE GOVERNAR N CAPACIDADES; CREDENCIAIS INTERNAS CONTINUAM POR ESCOPO",
+      "id": "ROUTE_WITHOUT_BACKEND_IS_NOT_AUTOMATICALLY_BROKEN",
+      "emoji": "🛣️",
+      "anchor": "ROTA SEM SERVIÇO PODE SER INTENCIONAL",
       "pr_refs": [
-        1547
+        1338
       ],
       "runtime_required": false
     },
     {
-      "id": "IMMUTABLE_PROOF_REUSES_FINGERPRINT",
-      "emoji": "💠",
-      "anchor": "PROVA NÃO TEMPORAL PODE SER REUTILIZADA ENQUANTO PREMISSAS/FINGERPRINT NÃO MUDAREM; DEPLOY É TEMPORAL E REMEDE",
+      "id": "RUNNER_DECLARATION_MUST_MATCH_CANONICAL_RUNNER_POLICY",
+      "emoji": "🚂",
+      "anchor": "WORKFLOW USA A ESTRADA CANÔNICA",
       "pr_refs": [
-        1548,
-        1614
+        1492
       ],
       "runtime_required": false
     },
     {
-      "id": "FIXED_POINT_IS_CHECKPOINT_NOT_END_OF_LEARNING",
-      "emoji": "🔄",
-      "anchor": "FIXED POINT FECHA A RODADA SEM DESLIGAR CAPACIDADE DE APRENDER/RETOMAR PRÓXIMO CURSOR",
+      "id": "RUNTIME_GUARD_EXTENDS_EXISTING_OWNER",
+      "emoji": "🛡️",
+      "anchor": "GUARDA ESTENDE O OWNER, NÃO CRIA SEGUNDO DONO",
       "pr_refs": [
-        1549
+        1557
       ],
       "runtime_required": false
     },
     {
-      "id": "NARRATIVE_IS_NOT_PROOF",
-      "emoji": "🔊",
-      "anchor": "NARRAÇÃO CURTA PODE ACOMPANHAR TOOL-CALL REAL; RESULTADO/RECEIPT CONTINUAM SENDO PROVA",
+      "id": "RUNTIME_PROJECTION_IS_ADVISORY_UNTIL_REMEASURED",
+      "emoji": "🫀",
+      "anchor": "SNAPSHOT DE RUNTIME PROJETA ESTADO; CLAIM AO VIVO EXIGE REMEDIÇÃO",
       "pr_refs": [
-        1550
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "CANONICAL_ARTIFACT_PROPERTIES_USE_EXISTING_SCHEMA",
-      "emoji": "🧾",
-      "anchor": "ARTEFATO ENTRA NO SCHEMA CANÔNICO; NORMALIZA PROPRIEDADES SEM CRIAR OWNER PARALELO",
-      "pr_refs": [
-        1570
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PR_MOTHER_MERGE_FORBIDDEN_CHILD_ONLY_PROMOTION",
-      "emoji": "🔒",
-      "anchor": "PR-MÃE/FUNIL NÃO É VEÍCULO DE PROMOÇÃO; MERGE SOMENTE POR SUB-PR VINCULADO",
-      "pr_refs": [
-        1572
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "INTERRUPTION_DOES_NOT_RESTART_MISSION",
-      "emoji": "🧵",
-      "anchor": "INTERRUPÇÃO PRESERVA OURO, MISSÃO E NEXT CURSOR; REMEDE SÓ O ESTADO TEMPORAL",
-      "pr_refs": [
-        1573
+        1713,
+        1758,
+        1776
       ],
       "runtime_required": false
     },
@@ -1670,62 +1925,86 @@
       "runtime_required": false
     },
     {
-      "id": "EVENT_SIGNAL_IS_NOT_COMMAND",
-      "emoji": "📡",
-      "anchor": "EVENT VIEWER/WMI SÃO SINAIS; NORMALIZA → FINGERPRINT → DEDUPE → REMEDIAÇÃO MÍNIMA",
+      "id": "SAME_HEAD_PROOF",
+      "emoji": "🧬",
+      "anchor": "PROVA NO MESMO HEAD",
       "pr_refs": [
-        1574
+        1376,
+        1381,
+        1416,
+        1431,
+        1444,
+        1447,
+        1463,
+        1480,
+        1482,
+        1490,
+        1492,
+        1620,
+        1628,
+        1631
       ],
       "runtime_required": false
     },
     {
-      "id": "OBJECTIVE_AUTHORITY_ROUTE_AUTONOMY_SPLIT",
+      "id": "SAME_MISSION_AUTHORITY_REUSES_AUTHORIZATION",
       "emoji": "👑",
-      "anchor": "CHEFE DEFINE OBJETIVO; HERMES ESCOLHE A MENOR ROTA TÉCNICA SEM REDEFINIR A INTENÇÃO",
+      "anchor": "MESMO ALVO E ESCOPO NÃO PEDEM A MESMA PERMISSÃO DE NOVO",
       "pr_refs": [
-        1574
+        1567
       ],
       "runtime_required": false
     },
     {
-      "id": "NO_RETRY_WITHOUT_INFORMATION_GAIN",
-      "emoji": "🔁",
-      "anchor": "SEM NOVA INFORMAÇÃO, NÃO REPETE LOOP; AGUARDA EVENTO OU DELTA NOVO",
+      "id": "SCORE_AND_BADGE_ARE_TELEMETRY",
+      "emoji": "🏷️",
+      "anchor": "SCORE/BADGE/TENDÊNCIA ORIENTAM; NUNCA SUBSTITUEM CI/PROVA",
       "pr_refs": [
-        1574
+        1530,
+        1777,
+        1782
       ],
       "runtime_required": false
     },
     {
-      "id": "MINIMUM_SAFE_ADAPTATION_BEFORE_GLOBAL_DISABLE",
-      "emoji": "🛡️",
-      "anchor": "ANTES DE DESLIGAR PROTEÇÃO GLOBAL, PROVA PROCESSO/PATH/OWNER E APLICA MENOR ADAPTAÇÃO",
+      "id": "SECRET_SEEN_IS_NOT_AUTOMATIC_BLOCKER",
+      "emoji": "🔐",
+      "anchor": "VER SEGREDO NÃO PARA A MISSÃO; NÃO ECOAR, NÃO COMMITAR, USAR SÓ ROTA AUTORIZADA",
       "pr_refs": [
-        1574
+        1714,
+        1770
       ],
       "runtime_required": false
     },
     {
-      "id": "MEASURE_BEFORE_CREATION",
-      "aliases": [
-        "REMEASURE_BEFORE_CREATE"
-      ],
-      "emoji": "👁️",
-      "anchor": "MEDE E, SE O ALVO PUDER TER MUDADO, REMEDE ANTES DE CRIAR",
+      "id": "SECRET_VALUE_NEVER_IN_RENDERER",
+      "emoji": "🔐",
+      "anchor": "SEGREDO NÃO ENTRA EM BROWSER RENDERER LOG OU GIT",
       "pr_refs": [
-        1632,
-        1633,
-        1634
+        1593,
+        1594,
+        1619
       ],
-      "value": "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE; LIVE/DRIFTABLE TARGET => FRESH SAME-TARGET REMEASUREMENT",
       "runtime_required": false
     },
     {
-      "id": "TRIGGER_SURFACE_IS_NOT_HISTORY_PROVENANCE",
-      "emoji": "🧾",
-      "anchor": "GATILHO É SUPERFÍCIE OPERACIONAL; RECEIPT É PROVENIÊNCIA",
+      "id": "SEMANTIC_ACCEPT_BOTH_IS_NOT_BLIND_ACCEPT_BOTH",
+      "emoji": "🪢",
+      "anchor": "PRESERVAR AMBOS EXIGE COMPOSIÇÃO RESOLVÍVEL E CONTRAPROVA",
       "pr_refs": [
-        1576
+        1631
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "SENSOR_FAILURE_IS_NOT_WORLD_FAILURE",
+      "emoji": "📡",
+      "anchor": "SENSOR CEGO NÃO APAGA O MUNDO",
+      "pr_refs": [
+        1483,
+        1465,
+        1444,
+        1389
       ],
       "runtime_required": false
     },
@@ -1739,67 +2018,84 @@
       "runtime_required": false
     },
     {
-      "id": "PLATFORM_CAPABILITY_REQUIRES_PLATFORM_MATCH",
-      "emoji": "🧩",
-      "anchor": "CAPACIDADE DE PLATAFORMA EXIGE ALVO COMPATÍVEL",
+      "id": "SINGLE_SURFACE_EMBED_BEFORE_NEW_SURFACE",
+      "emoji": "🌌",
+      "anchor": "EMBUTE NO PAINEL EXISTENTE ANTES DE CRIAR NOVA SUPERFÍCIE",
       "pr_refs": [
-        1576
+        1592,
+        1624
       ],
       "runtime_required": false
     },
     {
-      "id": "VISUAL_PROJECTION_IS_NOT_AUTHORITY",
-      "emoji": "🎨",
-      "anchor": "FIGMA HUD GRAFO E PAINEL PROJETAM; NÃO GOVERNAM",
+      "id": "SOURCE_FEATURE_IS_NOT_RUNTIME_PROOF",
+      "emoji": "🧱",
+      "anchor": "CÓDIGO NÃO É RUNTIME",
       "pr_refs": [
-        1576,
-        1609,
-        1621
+        1381,
+        1414,
+        1445,
+        1454,
+        1480,
+        1482,
+        1490,
+        1491,
+        1492,
+        1712,
+        1742,
+        1758,
+        1776
       ],
       "runtime_required": false
     },
     {
-      "id": "HISTORY_RESILIENCE_REQUIRES_TEMPORAL_BOUNDARY",
-      "emoji": "🕰️",
-      "anchor": "HISTÓRIA PRESERVA CONTEXTO; CURRENT EXIGE FRONTEIRA TEMPORAL",
+      "id": "STABLE_COMPONENT_IDENTITY_MONOTONIC_REVISION",
+      "emoji": "📦",
+      "anchor": "MESMO COMPONENTE EVOLUI POR REVISÃO; HASH NOVO NÃO CRIA PRODUTO NOVO",
       "pr_refs": [
-        1577
+        1618
       ],
       "runtime_required": false
     },
     {
-      "id": "PRIMARY_ROUTE_CHANGE_REUSES_EXISTING_OWNER",
-      "emoji": "🛣️",
-      "anchor": "TROCAR ROTA PRIMÁRIA NÃO CRIA NOVO DONO",
+      "id": "STABLE_OWNER_LEGACY_ALIAS",
+      "emoji": "🪢",
+      "anchor": "NOME VIVO, LEGADO APONTA",
       "pr_refs": [
-        1578
+        1368,
+        1372,
+        1488,
+        1751,
+        1757
       ],
       "runtime_required": false
     },
     {
-      "id": "PR_IS_COMMUNICATION_LEDGER_NOT_AUTHORITY",
+      "id": "SUPERSEDED_LEGACY_ARTIFACT_IS_NOT_ACTIVE_CANON",
+      "emoji": "🪦",
+      "anchor": "ARTEFATO SUPERADO FICA HISTÓRICO; NÃO VOLTA A GOVERNAR",
+      "pr_refs": [
+        1743,
+        1751,
+        1757
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "SURFACE_BLOCKER_IS_NOT_CORE_SERVER_FAILURE",
+      "emoji": "🌉",
+      "anchor": "CONECTOR/SUPERFÍCIE INDISPONÍVEL NÃO PROVA FALHA DO MCP/CORE",
+      "pr_refs": [
+        1508
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "SYSTEMATIC_PROOF_FIELDS_BELONG_TO_RESPONSE_CONTRACT",
       "emoji": "🧾",
-      "anchor": "PR CARREGA O FIO; NÃO VIRA AUTORIDADE NEM RUNTIME",
+      "anchor": "PROVA OBRIGATÓRIA NÃO SOME",
       "pr_refs": [
-        1579
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "MULTIPLE_WRITERS_REQUIRE_DISJOINT_SCOPES",
-      "emoji": "✍️",
-      "anchor": "MÚLTIPLAS CANETAS SÓ EM ESCOPOS DISJUNTOS",
-      "pr_refs": [
-        1579
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ONE_ACTIVE_FINALIZER_LEASE",
-      "emoji": "🔐",
-      "anchor": "PROMOÇÃO FINAL TEM UM FINALIZADOR ATIVO",
-      "pr_refs": [
-        1579
+        1492
       ],
       "runtime_required": false
     },
@@ -1816,69 +2112,11 @@
       "runtime_required": false
     },
     {
-      "id": "OBSERVER_ENV_IS_NOT_OWNER_HEALTH",
-      "emoji": "🩺",
-      "anchor": "FALTA NO OBSERVADOR NÃO PROVA OWNER DOENTE",
+      "id": "TOOL_CATALOG_IS_NOT_MODEL_CATALOG",
+      "emoji": "🧰",
+      "anchor": "CATÁLOGO DE FERRAMENTAS E CATÁLOGO DE MODELOS PERMANECEM SEPARADOS",
       "pr_refs": [
-        1598
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ONE_CONFLICT_RESOLVER_PER_CONTRACT",
-      "emoji": "🪢",
-      "anchor": "UM CONTRATO DE CONFLITO USA UM RESOLVEDOR CANÔNICO",
-      "pr_refs": [
-        1599,
-        1631
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "DEPLOY_TRIGGER_MUST_COVER_CAUSAL_PATH",
-      "emoji": "🚀",
-      "anchor": "ARQUIVO QUE EXIGE DEPLOY PRECISA ALCANÇAR O TRIGGER DE DEPLOY",
-      "pr_refs": [
-        1601
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "WORK_ARTIFACT_IS_NOT_USER_DELIVERY",
-      "emoji": "🐦",
-      "anchor": "ARTEFATO INTERNO NÃO É ENTREGA AO CHEFE",
-      "pr_refs": [
-        1602
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ONE_OPERATIONAL_SNAPSHOT_MANY_PROJECTIONS",
-      "emoji": "🫀",
-      "anchor": "UM SNAPSHOT OPERACIONAL ALIMENTA MUITAS PROJEÇÕES",
-      "pr_refs": [
-        1604,
-        1605
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "SECRET_VALUE_NEVER_IN_RENDERER",
-      "emoji": "🔐",
-      "anchor": "SEGREDO NÃO ENTRA EM BROWSER RENDERER LOG OU GIT",
-      "pr_refs": [
-        1593,
-        1594,
-        1619
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "OFFICIAL_UPDATER_REUSE_BEFORE_CUSTOM_UPDATE",
-      "emoji": "♻️",
-      "anchor": "ATUALIZADOR OFICIAL EXISTENTE VEM ANTES DE MOTOR NOVO",
-      "pr_refs": [
-        1608
+        1523
       ],
       "runtime_required": false
     },
@@ -1887,44 +2125,121 @@
       "emoji": "🔎",
       "anchor": "ANTES DE DIZER SEM ACESSO MEDE AS FERRAMENTAS",
       "pr_refs": [
-        1611
+        1611,
+        1768
       ],
       "runtime_required": false
     },
     {
-      "id": "HUMAN_ACCEPTANCE_IS_NOT_PROOF",
+      "id": "TRIGGER_REGISTRY_IS_DISCOVERY_NOT_OWNER",
+      "emoji": "🗺️",
+      "anchor": "MAPA ACHA, NÃO GOVERNA",
+      "pr_refs": [
+        1490
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "TRIGGER_SOURCE_PROVENANCE_REQUIRED",
       "emoji": "👑",
-      "anchor": "ACEITE HUMANO AUTORIZA; NÃO SUBSTITUI PROVA",
+      "anchor": "GATILHO PRECISA DE ORIGEM AUTORIZADA",
       "pr_refs": [
-        1614
+        1375,
+        1364
       ],
       "runtime_required": false
     },
     {
-      "id": "INTENT_IS_NOT_TOOL_IMPLEMENTATION",
-      "emoji": "🎙️",
-      "anchor": "INTENÇÃO HUMANA NÃO É O NOME DA FERRAMENTA",
+      "id": "TRIGGER_SURFACE_IS_NOT_HISTORY_PROVENANCE",
+      "emoji": "🧾",
+      "anchor": "GATILHO É SUPERFÍCIE OPERACIONAL; RECEIPT É PROVENIÊNCIA",
       "pr_refs": [
-        1616
+        1576
       ],
       "runtime_required": false
     },
     {
-      "id": "STABLE_COMPONENT_IDENTITY_MONOTONIC_REVISION",
-      "emoji": "📦",
-      "anchor": "MESMO COMPONENTE EVOLUI POR REVISÃO; HASH NOVO NÃO CRIA PRODUTO NOVO",
+      "id": "UNKNOWN_IS_NOT_FALSE",
+      "emoji": "⚪",
+      "anchor": "NÃO MARCADO CONTINUA ABERTO",
       "pr_refs": [
-        1618
+        1454,
+        1381
       ],
       "runtime_required": false
     },
     {
-      "id": "POST_PR_CONTINUES_UNTIL_MERGED_OR_MATERIAL_BLOCKER",
-      "emoji": "🧭",
-      "anchor": "PR ELEGÍVEL NÃO DEVOLVE O PROBLEMA AO HUMANO NO AMARELO",
+      "id": "UNKNOWN_IS_NOT_PASS",
+      "emoji": "❓",
+      "anchor": "SEM PROVA NÃO É VERDE",
       "pr_refs": [
-        1620,
-        1628
+        1381,
+        1389,
+        1414,
+        1430,
+        1431,
+        1434,
+        1435,
+        1438,
+        1444,
+        1447,
+        1454,
+        1456,
+        1458,
+        1463,
+        1465,
+        1480,
+        1482,
+        1483,
+        1484,
+        1485,
+        1490,
+        1492,
+        1709,
+        1710,
+        1713,
+        1714,
+        1715,
+        1718,
+        1719,
+        1720,
+        1721,
+        1724,
+        1725,
+        1734,
+        1740,
+        1741,
+        1742,
+        1748,
+        1749,
+        1750,
+        1752,
+        1753,
+        1754,
+        1755,
+        1756,
+        1758,
+        1767,
+        1768,
+        1770,
+        1771,
+        1773,
+        1774,
+        1775,
+        1776,
+        1777,
+        1778,
+        1782
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "UNKNOWN_LICENSE_BLOCKS_RAW_INGEST",
+      "emoji": "⚖️",
+      "anchor": "LICENÇA INCERTA NÃO ENTRA BRUTA",
+      "pr_refs": [
+        1459,
+        1335
       ],
       "runtime_required": false
     },
@@ -1938,120 +2253,91 @@
       "runtime_required": false
     },
     {
-      "id": "CONTEXT_BEFORE_JUDGMENT",
-      "emoji": "🧿",
-      "anchor": "CONTEXTO E FUNÇÃO VÊM ANTES DE CLASSIFICAR FALHA",
+      "id": "USER_REPORTED_ERROR_IS_PRIORITY_SIGNAL_NOT_PROOF",
+      "emoji": "📣",
+      "anchor": "RELATO DO CHEFE PRIORIZA INVESTIGAÇÃO; NÃO VIRA PASS/FAIL SEM MEDIÇÃO",
       "pr_refs": [
-        1622
+        1538
       ],
       "runtime_required": false
     },
     {
-      "id": "REGISTRA_PROMOTION_CHAIN",
+      "id": "UTC_AT_REST_LOCAL_AT_DISPLAY",
+      "emoji": "⏰",
+      "anchor": "UTC NA FONTE, BAHIA NA TELA",
+      "value": "UTC_AT_REST → LOCAL_AT_DISPLAY(America/Bahia) → NEVER_OVERWRITE_SOURCE_TIMESTAMP",
+      "pr_refs": [
+        1561
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "VISUAL_PROJECTION_IS_NOT_AUTHORITY",
+      "emoji": "🎨",
+      "anchor": "FIGMA HUD GRAFO E PAINEL PROJETAM; NÃO GOVERNAM",
+      "pr_refs": [
+        1576,
+        1609,
+        1621,
+        1767,
+        1777,
+        1782
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "WORK_ARTIFACT_IS_NOT_USER_DELIVERY",
+      "emoji": "🐦",
+      "anchor": "ARTEFATO INTERNO NÃO É ENTREGA AO CHEFE",
+      "pr_refs": [
+        1602
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "WRITER_LEASE_PIN_AND_CAS",
+      "emoji": "🔐",
+      "anchor": "CANETA TEM ESCOPO, REF E REDECISÃO",
+      "pr_refs": [
+        1330
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "WRITTEN_RULE_IS_NOT_IMPLEMENTED_RULE",
+      "emoji": "📜",
+      "anchor": "LEI NO CABEÇALHO NÃO PROVA O CORPO",
+      "pr_refs": [
+        1349,
+        1347,
+        1331
+      ],
+      "runtime_required": false
+    },
+    {
+      "id": "YAML_PARSE_IS_NOT_SCHEMA_OR_CONSUMER_PASS",
       "emoji": "🧾",
-      "anchor": "COMMIT → PUSH → PR FILHA → REMEDE → SQUASH MAIN → READBACK → RECEIPT",
+      "anchor": "YAML VÁLIDO NÃO PROVA CONSUMIDOR",
+      "value": "YAML_PARSE_PASS != SCHEMA_PASS != CONSUMER_PASS != RUNTIME_PASS",
       "pr_refs": [
-        1623
+        1374,
+        1350
       ],
       "runtime_required": false
     },
     {
-      "id": "SINGLE_SURFACE_EMBED_BEFORE_NEW_SURFACE",
-      "emoji": "🌌",
-      "anchor": "EMBUTE NO PAINEL EXISTENTE ANTES DE CRIAR NOVA SUPERFÍCIE",
+      "id": "ZERO_REGRESSION_REQUIRED",
+      "emoji": "🛡️",
+      "anchor": "OURO NOVO NÃO QUEBRA O ANTIGO",
       "pr_refs": [
-        1592,
-        1624
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "EXTERNAL_PROJECT_IS_CANDIDATE_DELTA_NOT_TRANSPLANT",
-      "emoji": "🧬",
-      "anchor": "PROJETO EXTERNO ENTRA COMO CANDIDATO; NÃO COMO TRANSPLANTE CEGO",
-      "pr_refs": [
-        1625
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "FAST_AUTOMERGE_REQUIRES_LIVE_REVALIDATION",
-      "emoji": "⚡",
-      "anchor": "AUTO SQUASH REMEDE HEAD MERGEABILIDADE CHECKS REVIEWS E DELTA",
-      "pr_refs": [
-        1628
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "PERSONA_USES_CANONICAL_SOUL_MODEL_REPLACEABLE",
-      "emoji": "🧠",
-      "anchor": "PERSONA REUSA SOUL CANÔNICO; MODELO CONTINUA MOTOR SUBSTITUÍVEL",
-      "pr_refs": [
-        1629
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ACTION_REQUIRED_IS_WAIT_NOT_FAIL_NOT_PASS",
-      "emoji": "⏳",
-      "anchor": "ACTION_REQUIRED ESPERA/REMEDIA; NÃO É FAIL NEM PASS",
-      "pr_refs": [
-        1630
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "SEMANTIC_ACCEPT_BOTH_IS_NOT_BLIND_ACCEPT_BOTH",
-      "emoji": "🪢",
-      "anchor": "PRESERVAR AMBOS EXIGE COMPOSIÇÃO RESOLVÍVEL E CONTRAPROVA",
-      "pr_refs": [
-        1631
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "ROOT_DIRTY_MUST_BE_PRESERVED_UNTIL_RECONCILED",
-      "emoji": "🌳",
-      "anchor": "WORKTREE SUJO É ESTADO VIVO; NÃO RESETAR NEM LIMPAR CEGAMENTE",
-      "pr_refs": [
-        1597
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "GIT_CURRENT_IS_NOT_RUNTIME_CURRENT",
-      "emoji": "🔀",
-      "anchor": "GIT ATUAL E RUNTIME ATUAL SÃO PROVAS DIFERENTES",
-      "pr_refs": [
-        1597
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "DAILY_FRESHNESS_USES_COMMIT_DATE_NOT_RUNNER_CLOCK",
-      "emoji": "📅",
-      "anchor": "FRESCOR DIÁRIO USA DATA DO COMMIT; RELÓGIO DO RUNNER NÃO É AUTORIDADE",
-      "pr_refs": [
-        1579
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "OPTIONAL_NULL_METADATA_IS_NOT_FAILURE",
-      "emoji": "0️⃣",
-      "anchor": "NULL OPCIONAL EM ENVELOPE DE SUCESSO NÃO FABRICA FALHA",
-      "pr_refs": [
-        1577
-      ],
-      "runtime_required": false
-    },
-    {
-      "id": "NULL_REQUIRED_DECISION_FIELD_STAYS_UNKNOWN",
-      "emoji": "❓",
-      "anchor": "NULL EM CAMPO DECISÓRIO OBRIGATÓRIO FICA UNKNOWN",
-      "pr_refs": [
-        1577
+        1492,
+        1483,
+        1482,
+        1465,
+        1445,
+        1444,
+        1390,
+        1384
       ],
       "runtime_required": false
     }
@@ -2132,7 +2418,13 @@
     "APP_READY_END_TO_END",
     "VOICE_FOLLOWS_INTENT_END_TO_END",
     "PHONE_AUDIO_CONTENT_MATCHES_TRANSCRIPT_END_TO_END",
-    "GLOBAL_FIXED_POINT"
+    "GLOBAL_FIXED_POINT",
+    "PR1778_LOCAL_HERMES_ORACLE_LOOP_RUNTIME",
+    "PR1777_ORACLE_SURFACE_LIVE_SECTORS",
+    "PR1776_VPS_STATE_MACHINE_CURRENT",
+    "PR1749_CASA_PAUSE_CURRENT",
+    "PR1742_CENTRALDARK_OS_PANEL_CURRENT",
+    "PR1713_CENTRALDARK_OS_T0_CURRENT"
   ],
   "runtime_remeasurement_semantics": {
     "active_field": "current_runtime_remeasurement_required",
