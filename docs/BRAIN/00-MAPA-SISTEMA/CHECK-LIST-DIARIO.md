@@ -1,14 +1,15 @@
 ---
-title: "CHECK-LIST DIARIO CENTRALDARK — HUD + PENDENCIAS + CRISTAL"
-status: "CANÔNICO"
+title: "CHECK-LIST DIARIO CENTRALDARK — PROVENANCE DO HUD CURRENT"
+status: "HISTORICAL_PROVENANCE"
 authority: "SEGREDO/CHEFE"
-owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
-pr_mother: 1757
-semantic_role: "session_crystal_continuity_learning_map"
-priority: "OBRIGATORIO"
-checked_day_utc: "2026-10-02"
-updated: "2026-10-02"
-source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+owner: "apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx"
+history_owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
+pr_mother: "RETIRED"
+semantic_role: "hud_current_projection_history_and_learning_map"
+priority: "PROVENANCE"
+checked_day_utc: "2026-10-07"
+updated: "2026-10-07"
+source_rule: "HUD CURRENT deriva realidade viva; este arquivo preserva história e aprendizados"
 mirror_role: "CASA-VAULT = memoria operacional/espelho; Git+owners continuam autoridade tecnica"
 aliases:
   - "CHECKLISTDIARIO"
@@ -29,19 +30,27 @@ aliases:
 - [x] Causa conhecida reutiliza owner/resolvedor existente; causa desconhecida permanece UNKNOWN.
 - [x] Depois do reparo, repetir a mesma probe discriminante antes de verde.
 
-## 🫀 CURRENT VIVO — 2026-10-02 — FUNIL BAYESIANO
+## 🫀 CURRENT VIVO — PROJEÇÃO MIGRADA PARA O HUD — 2026-10-07
 
 ```text
-MAIN_BASE_MEASURED_FOR_FUNNEL=b5a50c084e389f4c0d1ff26541af8bb7023473f5
-PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED
-BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED
-PR_MOTHER=#1757
-PR_MOTHER_ROLE=GLOBAL_RENDEZVOUS_LEDGER
-PR_MOTHER_LEGACY=#1562
-PR_MOTHER_COMMENTS_ARE_NOT_LEDGER=true
-PR_MOTHER_RECEIPTS_OWNER=repository
-CHECKLIST_ROLE=OPERATIONAL_HUD_NOT_SOURCE_OF_TRUTH
+HUD_CURRENT_OWNER=apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx
+HUD_CURRENT_SOURCE=apps/modulos/Bolt/source/app/routes/api.github-stats.ts
+HUD_IS_CURRENT_PROJECTION=true
+HUD_IS_NOT_AUTHORITY=true
+CHECKLIST_DAILY_OWNER=HUD
+CHECKLIST_HISTORY_OWNER=docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md
+RECEIPTS_OWNER=repository
+PR_MOTHER_ROLE=RETIRED
+LEGACY_PR_MOTHERS=#1562,#1757
+NO_NEW_PR_MOTHER=true
+NO_DAILY_PR=true
+CURRENT_OVER_HISTORY=true
+UNKNOWN_IS_NOT_PASS=true
 ```
+
+O restante deste arquivo preserva histórico/aprendizados anteriores. Estado operacional
+vivo, filhos/lanes, PASS/FAIL/UNKNOWN/BLOCKED, receipt fingerprint e NEXT_CURSOR
+são medidos e projetados diretamente no HUD; não abrir PR diária para atualizar este arquivo.
 
 ### ✅ Passagem do mini contrato pelo funil oficial
 
@@ -457,7 +466,7 @@ O CHEFE deve conseguir responder olhando só este painel:
 6. O que foi selado e não deve ser refeito?
 7. Qual é a próxima ação única?
 
-## 🫀 CURRENT VIVO — 2026-10-03 — PREFLIGHT GLOBAL CROSS-CONTEXT
+## 🧾 SNAPSHOT HISTÓRICO — 2026-10-03 — PREFLIGHT GLOBAL CROSS-CONTEXT
 
 ```text
 MAIN_CURRENT=RESOLVE_AT_READ\nMAIN_PREWRITE_MEASUREMENT=3deb814ebb4feddb9d57fac3a762b56b08fd05b4

@@ -80,10 +80,10 @@ jobs:
       - name: 🔹 Validar continuidade global e fronteira de autoridade da entrada
         run: node scripts/lupa/validar-continuidade-global.mjs
 
-      - name: Testar obrigação universal de diagrama e rota
+      - name: 🧭 Testar obrigação universal de diagrama e rota
         run: node --test scripts/lupa/diagram-route-gate.test.mjs
 
-      - name: Gate universal — função/app/botão/gatilho/gancho precisa de seta e rota
+      - name: 🚦 Gate universal — função/app/botão/gatilho/gancho precisa de seta e rota
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}

@@ -118,7 +118,7 @@ OWNER=AGENTS.md
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+HUD_CURRENT_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 APPLIES_TO_ALL_ENGINES=true
 ```
 
@@ -153,6 +153,65 @@ EVIDÊNCIA
   → PROVA (SHA, diff, arquivo alterado, teste, log, estado do PR, resultado repetível)
   → REGISTRO DO OURO (só aprendizado útil e comprovado — o que aconteceu, quem decidiu, por que, evidência, o que mudou, resultado, aprendizado, onde reaparecer)
   → PRÓXIMO PASSO (um só, claro)
+```
+
+## Pairwise Reality Selection — comparar rotas e cristalizar o vencedor
+
+Comparação pareada é uma especialização condicional da MULTIBÚSSOLA + CONTRAPROVA + REALITY JUDGE. Não cria agente, juiz, workflow ou arquitetura nova.
+
+A inspiração pode vir de uma superfície externa que apresenta duas opções ao humano, mas a CentralDark não promove hipótese sobre o mecanismo interno dessa superfície. O que se retém é o padrão observável: candidatos comparáveis + critério de escolha + registro do vencedor.
+
+```text
+PAIRWISE_REALITY_SELECTION=true
+PAIRWISE_IS_CONDITIONAL_NOT_RITUAL=true
+PAIRWISE_ONLY_WHEN=MATERIAL_ROUTE_AMBIGUITY_SURVIVES_REUSE_AND_DETERMINISTIC_FAST_PATH
+SAME_INTENT_REQUIRED=true
+SAME_TARGET_REQUIRED=true
+SAME_BASELINE_OR_EQUIVALENT_BINDINGS_REQUIRED=true
+SAME_EVIDENCE_SCHEMA_REQUIRED=true
+REALITY_JUDGE_SELECTS_TECHNICAL_EFFECT_WINNER=true
+ELOQUENCE_OR_MODEL_CONFIDENCE_IS_NOT_WINNER_PROOF=true
+HUMAN_PREFERENCE_SELECTS_SUBJECTIVE_GOALS=true
+NO_DISCRIMINATING_EVIDENCE=NO_WINNER
+TIE_OR_INCOMPARABLE=UNKNOWN
+LOSER_IS_NOT_DELETED_BLINDLY=true
+WINNER_REQUIRES=PROOF+COUNTERPROOF+EFFECT_READBACK
+WINNER_CRYSTAL_REQUIRES=OWNER+SEQUENCE+BINDINGS+FINGERPRINT+PROOF+COUNTERPROOF+EXPECTED_EFFECT+EVIDENCE+NEXT_CURSOR
+REPLAY_WINNER_BEFORE_REDISCOVERY=true
+CHANGED_FINGERPRINT=REVALIDATE_AFFECTED_CONE_ONLY
+```
+
+Fluxo mínimo:
+
+```text
+INTENÇÃO
+→ REUSE/DETERMINISTIC_FAST_PATH
+→ SE AINDA HOUVER ≥2 ROTAS MATERIALMENTE VIÁVEIS:
+     CANDIDATO_A + CANDIDATO_B
+     → NORMALIZAR MESMO ALVO/BASELINE/EVIDÊNCIA
+     → EXECUTAR/PROVAR CADA ROTA SEM DUPLICAR WRITER
+     → CONTRAPROVAR
+     → REALITY_JUDGE_COMPARA_EFEITO
+     → WINNER | TIE | UNKNOWN
+     → WINNER: CRISTAL + FINGERPRINT + REPLAY
+→ SENÃO:
+     USAR ROTA DETERMINÍSTICA EXISTENTE
+```
+
+Critério técnico compara resultado observável: correção, completude, regressão, custo/latência quando material, estabilidade, reversibilidade e aderência ao owner/escopo. "Resposta mais bonita" não vence teste técnico.
+
+Quando a intenção for subjetiva (estilo, preferência visual, escolha humana genuína), o humano é o juiz de preferência. Reality Judge continua verificando apenas claims técnicos e efeitos observáveis.
+
+A comparação não autoriza executar duas mutações concorrentes no mesmo escopo. Leitura/probe pode ser paralelo; mutação respeita Writer único, isolamento e rollback. Se uma rota já está provada com fingerprint compatível, `REPLAY_BEFORE_REDISCOVERY` vence a experimentação redundante.
+
+### Origem observada e limite de evidência
+
+```text
+OBSERVED_EXTERNAL_PATTERN=PAIRWISE_OPTION_PREFERENCE_SURFACE
+OBSERVED_FACT=TWO_CANDIDATE_OPTIONS_PRESENTED_FOR_HUMAN_PREFERENCE
+UNKNOWN=INTERNAL_MODEL_IDENTITIES|EXPERIMENT_SELECTION_REASON|HIDDEN_ROUTING
+EXTERNAL_UI_IS_SEMANTIC_INPUT_NOT_INTERNAL_PROOF=true
+CENTRALDARK_ADAPTATION_IS_OWN_METHOD_DELTA=true
 ```
 
 ## Contrato humano de execução integral
@@ -2236,8 +2295,8 @@ REGISTRA
 → menor MVP útil
 → teste aplicável + contraprova
 → commit
-→ push em branch filha
-→ abrir PR filha vinculada à #1757
+→ push em branch filha somente quando PR for materialmente necessária
+→ abrir/reusar PR filha por OWNER+SCOPE+CAPABILITY sem vínculo obrigatório com PR-MÃE
 → remeasure live
 → blocker técnico recuperável: continuar até HUMAN_FRONTIER real
 → conflito: usar git-conflict-resolve-house-standard
@@ -2246,12 +2305,13 @@ REGISTRA
 → readback da main + novo CURRENT_MAIN_SHA
 → DEPLOY_CAUSAL somente se o delta exigir runtime
 → T1 quando houver deploy causal
-→ receipt no PR filho e na PR-mãe
+→ receipt no repositório e no PR filho quando aplicável
+→ HUD_CURRENT_READBACK
 → fixed point do delta
-→ voltar ao #1757
 ```
 
-A `#1757` permanece aberta como PR-MÃE ativa, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
+`#1562` e `#1757` são provenance histórica preservada. A superfície operacional
+CURRENT é o HUD existente; nenhuma nova PR-MÃE nasce para rendezvous/checklist.
 
 ### Lapidação progressiva
 
