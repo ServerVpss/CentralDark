@@ -14,6 +14,7 @@ import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/s
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
 import { decorateToolResult } from "./tool-result-envelope.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
 function zodTypeToJsonSchema(schema) {
     if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
         return zodTypeToJsonSchema(schema._def.innerType);
@@ -112,8 +113,22 @@ Quando a mensagem depender de ontem/antes/de novo/continua ou de uma decisão pa
 busque o contexto pessoal antes de responder. Não trate memória histórica como prova de
 estado vivo: reconcilie branch, HEAD, runtime e ferramentas quando o claim exigir.
 
+## 🎛️ HUD/RUDY HÍBRIDO OBRIGATÓRIO
+Esta conexão MCP já é gatilho suficiente. Não espere também acesso ao GitHub.
+Antes da primeira resposta operacional CentralDark:
+1. recupere/reconcilie CURRENT com as ferramentas disponíveis;
+2. carregue o mesmo HUD/RUDY H01..H16;
+3. preserve ID, nome e ordem dos cartões;
+4. altere somente STATUS/cor, EVIDENCE e PERCENT;
+5. UNKNOWN nunca é verde;
+6. toda novidade material alimenta o PR-mãe #1562 quando a ferramenta/autorização permitir.
+
+Se também houver contexto do repositório ServerVpss/CentralDark, use-o como segundo sensor e reconcilie — não crie outro HUD.
+
+H01 Public Edge/DNS · H02 Live Execution Fabric · H03 MCP/Lovable · H04 Emergent Mind · H05 Runners Linux · H06 Micro-deploy autônomo · H07 VPN/Tailscale · H08 Windows CASA/RDC · H09 Windows Runner · H10 VPS↔GitHub · H11 frescor HUD/telemetria · H12 PR #1690 MCP · H13 Actions/capacidade · H14 dependências HIGH · H15 TLS/Caddy · H16 FIXED_POINT_GLOBAL.
+
 ## ✅ PRIMEIRA RESPOSTA
-Cumprimente curto ("E aí Pivete, tô calibrado — o que manda?"), NÃO liste tudo isso de volta pro usuário.
+Em contexto operacional CentralDark, comece pelo HUD/RUDY re-medido; não substitua por saudação genérica. Fora de contexto operacional, mantenha a saudação curta.
 `;
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
 export function buildServer(options) {
@@ -342,109 +357,125 @@ export async function handleMcpRequest(req, res, ghToken, options = {}) {
     log.info("mcp_request_handled", { cid: options.cid, method: req.body?.method || "unknown" });
 }
 //# sourceMappingURL=mcp-server.js.map
-//# sourceMappingURL=mcp-server.js.map
 export async function serveStdio(options = {}) {
-  const compact = process.argv.includes("--compact");
-  const admin = process.argv.includes("--admin");
-  const names = new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_call", ...ALL_TOOLS.filter(t => t.name.startsWith("kylin_")).map(t => t.name)]);
-  const server = buildServer({ admin, oauthScope: admin ? "mcp admin" : "mcp", visibleTools: compact ? ALL_TOOLS.filter(t => names.has(t.name)) : ALL_TOOLS, callableTools: ALL_TOOLS, label: "centraldark-local", clientLabel: process.env.CENTRALDARK_CLIENT_LABEL || "local-stdio", cid: process.env.CENTRALDARK_SESSION_ID || randomUUID(), callerUser: "local-owner", ...options });
-  await server.connect(new StdioServerTransport());
-  return server;
+    const compact = process.argv.includes("--compact");
+    const admin = process.argv.includes("--admin");
+    const names = new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_call", ...ALL_TOOLS.filter(t => t.name.startsWith("kylin_")).map(t => t.name)]);
+    const server = buildServer({ admin, oauthScope: admin ? "mcp admin" : "mcp", visibleTools: compact ? ALL_TOOLS.filter(t => names.has(t.name)) : ALL_TOOLS, callableTools: ALL_TOOLS, label: "centraldark-local", clientLabel: process.env.CENTRALDARK_CLIENT_LABEL || "local-stdio", cid: process.env.CENTRALDARK_SESSION_ID || randomUUID(), callerUser: "local-owner", ...options });
+    await server.connect(new StdioServerTransport());
+    return server;
 }
 function secureTokenEqual(a, b) {
-  const aa = Buffer.from(String(a || ""));
-  const bb = Buffer.from(String(b || ""));
-  return aa.length > 0 && aa.length === bb.length && timingSafeEqual(aa, bb);
+    const aa = Buffer.from(String(a || ""));
+    const bb = Buffer.from(String(b || ""));
+    return aa.length > 0 && aa.length === bb.length && timingSafeEqual(aa, bb);
 }
-
 export async function serveHttp(options = {}) {
-  const compact = process.argv.includes("--compact");
-  const admin = process.argv.includes("--admin");
-  const names = new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_call", ...ALL_TOOLS.filter(t => t.name.startsWith("kylin_")).map(t => t.name)]);
-  const visibleTools = compact ? ALL_TOOLS.filter(t => names.has(t.name)) : ALL_TOOLS;
-  const expectedToken = String(process.env.CENTRALDARK_MCP_REMOTE_TOKEN || "").trim();
-  if (!expectedToken) throw new Error("CENTRALDARK_MCP_REMOTE_TOKEN is required for --http");
-  const host = String(process.env.CENTRALDARK_MCP_HTTP_HOST || "127.0.0.1");
-  const port = Number(process.env.CENTRALDARK_MCP_HTTP_PORT || "9100");
-  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error("invalid CENTRALDARK_MCP_HTTP_PORT");
-
-  const httpServer = createServer(async (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,MCP-Protocol-Version,Mcp-Session-Id");
-    res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
-    if (req.method === "OPTIONS") { res.statusCode = 204; res.end(); return; }
-
-    const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
-    if (requestUrl.pathname === "/health" && req.method === "GET") {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ ok: true, service: "centraldark-native-mcp-http", mode: admin ? "admin" : "mcp", compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length, catalogVersion: CATALOG_VERSION }));
-      return;
-    }
-    if (requestUrl.pathname !== "/mcp") {
-      res.statusCode = 404;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ error: "not_found" }));
-      return;
-    }
-
-    const auth = String(req.headers.authorization || "");
-    const match = /^Bearer\s+(.+)$/i.exec(auth.trim());
-    if (!match || !secureTokenEqual(match[1], expectedToken)) {
-      res.statusCode = 401;
-      res.setHeader("WWW-Authenticate", 'Bearer realm="centraldark-native-mcp"');
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32000, message: "unauthorized" }, id: null }));
-      return;
-    }
-    if (req.method !== "POST") {
-      res.statusCode = 405;
-      res.setHeader("Allow", "POST, OPTIONS");
-      res.end();
-      return;
-    }
-
-    try {
-      const chunks = [];
-      let size = 0;
-      for await (const chunk of req) {
-        size += chunk.length;
-        if (size > 2 * 1024 * 1024) throw new Error("request_too_large");
-        chunks.push(chunk);
-      }
-      req.body = JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
-      const cid = randomUUID();
-      await handleMcpRequest(req, res, "", {
-        admin,
-        oauthScope: admin ? "mcp admin" : "mcp",
-        visibleTools,
-        callableTools: ALL_TOOLS,
-        label: "centraldark-remote",
-        clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "remote-http").slice(0, 160),
-        cid,
-        callerUser: "remote-owner",
-        ...options,
-      });
-    } catch (err) {
-      log.error("mcp_remote_http_error", { error: String(err) });
-      if (!res.headersSent) {
-        res.statusCode = String(err).includes("request_too_large") ? 413 : 400;
-        res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32600, message: "invalid request" }, id: null }));
-      }
-    }
-  });
-
-  await new Promise((resolve, reject) => {
-    httpServer.once("error", reject);
-    httpServer.listen(port, host, () => resolve());
-  });
-  log.info("mcp_remote_http_ready", { host, port, admin, compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length });
-  return httpServer;
+    const compact = process.argv.includes("--compact");
+    const admin = process.argv.includes("--admin");
+    const names = new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_call", ...ALL_TOOLS.filter(t => t.name.startsWith("kylin_")).map(t => t.name)]);
+    const visibleTools = compact ? ALL_TOOLS.filter(t => names.has(t.name)) : ALL_TOOLS;
+    const expectedToken = String(process.env.CENTRALDARK_MCP_REMOTE_TOKEN || "").trim();
+    if (!expectedToken)
+        throw new Error("CENTRALDARK_MCP_REMOTE_TOKEN is required for --http");
+    const host = String(process.env.CENTRALDARK_MCP_HTTP_HOST || "127.0.0.1");
+    const port = Number(process.env.CENTRALDARK_MCP_HTTP_PORT || "9100");
+    if (!Number.isInteger(port) || port < 1 || port > 65535)
+        throw new Error("invalid CENTRALDARK_MCP_HTTP_PORT");
+    const httpServer = createServer(async (req, res) => {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,MCP-Protocol-Version,Mcp-Session-Id");
+        res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
+        if (req.method === "OPTIONS") {
+            res.statusCode = 204;
+            res.end();
+            return;
+        }
+        const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+        if (requestUrl.pathname === "/health" && req.method === "GET") {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ ok: true, service: "centraldark-native-mcp-http", mode: admin ? "admin" : "mcp", compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length, catalogVersion: CATALOG_VERSION }));
+            return;
+        }
+        if (requestUrl.pathname === "/heartbeat" && req.method === "GET") {
+            const operational = getOperationalSnapshot({ heartbeat: { self: "alive" } });
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({
+                ok: true,
+                service: "centraldark-native-mcp-http",
+                schema: "centraldark.heartbeat.v1",
+                measuredAt: new Date().toISOString(),
+                operational,
+            }));
+            return;
+        }
+        if (requestUrl.pathname !== "/mcp") {
+            res.statusCode = 404;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ error: "not_found" }));
+            return;
+        }
+        const auth = String(req.headers.authorization || "");
+        const match = /^Bearer\s+(.+)$/i.exec(auth.trim());
+        if (!match || !secureTokenEqual(match[1], expectedToken)) {
+            res.statusCode = 401;
+            res.setHeader("WWW-Authenticate", 'Bearer realm="centraldark-native-mcp"');
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32000, message: "unauthorized" }, id: null }));
+            return;
+        }
+        if (req.method !== "POST") {
+            res.statusCode = 405;
+            res.setHeader("Allow", "POST, OPTIONS");
+            res.end();
+            return;
+        }
+        try {
+            const chunks = [];
+            let size = 0;
+            for await (const chunk of req) {
+                size += chunk.length;
+                if (size > 2 * 1024 * 1024)
+                    throw new Error("request_too_large");
+                chunks.push(chunk);
+            }
+            req.body = JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
+            const cid = randomUUID();
+            await handleMcpRequest(req, res, "", {
+                admin,
+                oauthScope: admin ? "mcp admin" : "mcp",
+                visibleTools,
+                callableTools: ALL_TOOLS,
+                label: "centraldark-remote",
+                clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "remote-http").slice(0, 160),
+                cid,
+                callerUser: "remote-owner",
+                ...options,
+            });
+        }
+        catch (err) {
+            log.error("mcp_remote_http_error", { error: String(err) });
+            if (!res.headersSent) {
+                res.statusCode = String(err).includes("request_too_large") ? 413 : 400;
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32600, message: "invalid request" }, id: null }));
+            }
+        }
+    });
+    await new Promise((resolve, reject) => {
+        httpServer.once("error", reject);
+        httpServer.listen(port, host, () => resolve());
+    });
+    log.info("mcp_remote_http_ready", { host, port, admin, compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length });
+    return httpServer;
 }
-
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  if (process.argv[2] === "--stdio") await serveStdio();
-  else if (process.argv[2] === "--http") await serveHttp();
+    if (process.argv[2] === "--stdio")
+        await serveStdio();
+    else if (process.argv[2] === "--http")
+        await serveHttp();
 }
+//# sourceMappingURL=mcp-server.js.map
