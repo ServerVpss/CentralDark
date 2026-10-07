@@ -49,9 +49,15 @@ test("mission is bounded to internal runtime and forbids repo mutation", () => {
     last_enqueued_fingerprint: null,
     last_enqueued_at: null,
   };
-  const mission = buildCalibrationMission(state);
+  const headSha = "1".repeat(40);
+  const mission = buildCalibrationMission(state, { headSha });
   assert.ok(mission);
   assert.match(mission.content, /SCOPE=VPS_RUNTIME_INTERNAL_ONLY/);
   assert.match(mission.content, /nao editar Git\/GitHub/);
   assert.match(mission.content, /REALITY_JUDGE/);
+  assert.equal(mission.continuity_state.autoridade, "SEGREDO/CHEFE");
+  assert.equal(mission.continuity_state.coordenador, "SOL");
+  assert.equal(mission.continuity_state.escritor, "HERMES");
+  assert.equal(mission.continuity_state.head_sha, headSha);
+  assert.equal(mission.continuity_state.baseline.head_sha, headSha);
 });
