@@ -1021,10 +1021,10 @@ body {
 <div class="section" id="cd-observation-invariant" style="margin-top:16px">
  <div class="section-header"><div class="section-icon">&#128274;</div><h2 class="section-title">Invariante dos nos &middot; selo versus CURRENT</h2><span class="section-count">SEM FALSO REBAIXAMENTO</span></div>
  <p class="cadeado-meta"><strong>SELADO + mesma identidade/fingerprint/escopo = prova reutilizada.</strong> Falha de consulta administrativa Tailscale (`TAILSCALE_CREDENTIALS_MISSING`, OAuth Broker `fetch failed`) significa SENSOR INDISPONIVEL; nao prova falha Casa&#8596;VPS. Novo teste de conectividade e de escrita Windows pertence ao owner/escopo exato; sem criar outra fronteira, sem derrubar cadeado alheio.</p>
- <div class="hud-grid"><div class="hud-card"><h3>Casa &#8596; VPS</h3><div class="val ok">SELO DE CONECTIVIDADE PRESERVADO</div><div class="meta">PONG Tailscale e Taildrop ja observados; ultima medicao datada, nao alegar status CURRENT sem retorno da tailnet.</div></div>
+ <div class="hud-grid"><div class="hud-card"><h3>Casa &#8596; VPS</h3><div class="val ok">SELO DE CONECTIVIDADE PRESERVADO</div><div class="meta">PONG Tailscale medido DIRETAMENTE no CENTRALDARK-OS ate SEGREDO (100.123.93.25): 541 ms e 144 ms via DERP(sao), 08/10/2026. Servicos TCP 445/5985/3030 OPEN; SSH 22 CLOSED. Taildrop e historico separado; escrita Windows requer autenticacao no owner existente.</div></div>
  <div class="hud-card"><h3>Sensor admin Tailscale</h3><div class="val warn">CONSULTA INDISPONIVEL</div><div class="meta">Ausencia de credencial na integracao MCP nao invalida conectividade; corrigir somente o sensor pelo owner atual.</div></div>
  <div class="hud-card"><h3>MCP CentralDark</h3><div class="val ok">CATALOGO MEDIDO</div><div class="meta">141 ferramentas internas e 11 rotas no dispatcher, 08/10/2026 05:08 UTC; escopo diferente do /health publico.</div></div>
- <div class="hud-card"><h3>HUD Casa / writer</h3><div class="val warn">READBACK PENDENTE</div><div class="meta">Nao confundir transporte de arquivo Taildrop com permissao de escrita no Obsidian; manter BAT original intacto.</div></div></div>
+ <div class="hud-card"><h3>HUD Casa / writer</h3><div class="val warn">READBACK PENDENTE</div><div class="meta">WINRM /wsman respondeu HTTP 405 (endpoint alcancado), SMB 445 acessivel; nao equivale a sessao autenticada. Casa HUD.html e BAT - Copia: hash e writer ainda nao medidos. BAT original intocado.</div></div><div class="hud-card"><h3>GitHub main / observador</h3><div class="val warn" id="cd-main-observer-status">CONSULTANDO</div><div class="meta" id="cd-main-observer-meta">Consulta apenas leitura ao HEAD atual, a cada 60 s. Nao declara sincronizacao do arquivo Windows.</div></div></div>
 </div>
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
@@ -2017,6 +2017,33 @@ document.addEventListener('click', function(e) {
   if (e.target.id === 'leitor' || (e.target.closest && e.target.closest('#leitor-fechar'))) { e.preventDefault(); fecharNota(); }
 });
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecharNota(); });
+
+// CURRENT GitHub observer, scoped to the existing HUD. Does not alter files or seals.
+(function(){
+  var status=document.getElementById('cd-main-observer-status');
+  var meta=document.getElementById('cd-main-observer-meta');
+  if(!status||!meta)return;
+  var lastGood=null;
+  function checkHead(){
+    var controller=window.AbortController?new AbortController():null;
+    var timeout=controller?setTimeout(function(){controller.abort();},6000):null;
+    fetch('https://api.github.com/repos/ServerVpss/CentralDark/commits/main',{headers:{'Accept':'application/vnd.github+json'},cache:'no-store',signal:controller?controller.signal:undefined})
+      .then(function(res){if(!res.ok)throw new Error('HTTP '+res.status);return res.json();})
+      .then(function(data){
+        if(!data||!(/^[0-9a-f]{40}$/).test(data.sha||''))throw new Error('SHA_INVALID');
+        lastGood={sha:data.sha,at:new Date().toISOString()};
+        status.textContent='MAIN '+data.sha.slice(0,12)+' / LIDO';
+        status.className='val ok';
+        meta.textContent='GitHub HEAD observado em '+lastGood.at+'. Copia fisica da Casa: ainda sem hash/readback. Consulta nao e sincronizacao.';
+      }).catch(function(){
+        status.textContent=lastGood?'SENSOR SEM LEITURA / ULTIMO '+lastGood.sha.slice(0,12):'SENSOR SEM LEITURA';
+        status.className='val warn';
+        meta.textContent=lastGood?'Ultimo HEAD confirmado '+lastGood.at+'; nao revoga selos anteriores.':'Falha na consulta do GitHub; selos historicos continuam preservados.';
+      }).then(function(){if(timeout)clearTimeout(timeout);});
+  }
+  checkHead();
+  setInterval(checkHead,60000);
+})();
 </script>
 
 </body>
