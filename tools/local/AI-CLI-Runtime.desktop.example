@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=AI CLI Runtime
+Comment=Inventario e controle local de IA, runtimes, MCP e rotas
+Exec=/home/CENTRAKDARK-OS/centraldark-ai-runtime-panel.sh
+Terminal=true
+Icon=utilities-terminal
+Categories=Development;Utility;
