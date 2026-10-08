@@ -464,11 +464,11 @@ test("mergeability pendente espera; conflito nunca vira WAIT verde", () => {
   assert.equal(conflict.decision, "BLOCKED");
 });
 
-test("modo adversarial por label visual preserva workflows e contraprova completos", () => {
+test("label persistente usa fast path sem remover gates técnicos", () => {
   const pr = prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] });
   const missing = evaluate(pr, { workflowRuns: [] });
-  assert.equal(missing.mode, "ADVERSARIAL");
-  assert.equal(missing.decision, "DEFERRED");
+  assert.equal(missing.mode, "FAST");
+  assert.equal(missing.decision, "WAIT");
   assert.match(missing.waits.join(" "), /WORKFLOW_MISSING/);
 
   const ready = evaluate(pr, { workflowRuns: successfulRuns(["gate-a", "gate-b"]) });
@@ -573,7 +573,7 @@ test("Trigger Fabric obrigatório dispara em todo PR para main", async () => {
     new URL("../.github/workflows/trigger-fabric-package.yml", import.meta.url),
     "utf8",
   );
-  const pullBlock = workflow.match(/\n  pull_request:\n([\s\S]*?)\n  push:\n/);
+  const pullBlock = workflow.match(/\r?\n  pull_request:\r?\n([\s\S]*?)\r?\n  push:\r?\n/);
   assert.ok(pullBlock, "pull_request block ausente");
   assert.match(pullBlock[1], /branches:\s*\[main\]/);
   assert.doesNotMatch(pullBlock[1], /\bpaths:/);

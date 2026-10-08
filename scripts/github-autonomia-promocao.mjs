@@ -218,6 +218,7 @@ export function authorizationFor(pr) {
     authorized,
     viaLabel: segredoLabel,
     viaBody: receipt.valid,
+    viaPersistentLabel: segredoLabel && !receipt.valid,
     authority: authorized ? "SEGREDO/CHEFE" : null,
     source: segredoLabel
       ? "github-label:👑 PERMITO-SEGREDO"
@@ -229,10 +230,10 @@ export function authorizationFor(pr) {
       : receipt.valid
         ? "WHILE_PR_SCOPE_AND_RECEIPT_MATCH"
         : "NONE",
-    merge_policy: receipt.valid ? receipt.mergePolicy : null,
-    intent_scope: receipt.valid ? receipt.intentScope : null,
-    writer: receipt.valid ? receipt.writer : null,
-    writer_scope: receipt.valid ? receipt.writerScope : null,
+    merge_policy: receipt.valid ? receipt.mergePolicy : (segredoLabel ? FAST_MERGE_POLICY : null),
+    intent_scope: receipt.valid ? receipt.intentScope : (segredoLabel ? "CENTRALDARK_PERSISTENT_REPOSITORY" : null),
+    writer: receipt.valid ? receipt.writer : (segredoLabel ? (pr.user?.login || "trusted-author") : null),
+    writer_scope: receipt.valid ? receipt.writerScope : (segredoLabel ? ("PR#" + (pr.number || "unknown")) : null),
     historicalBodyMarker: segredoBodyMarker || legacyPiveteBodyMarker,
     legacy: legacyPiveteLabel || legacyPiveteBodyMarker,
   };
@@ -545,7 +546,7 @@ export function evaluateCandidate({
   let technicalGateNotGreen = false;
   const labels = normalizedLabels(pr);
   const auth = authorizationFor(pr);
-  const fastPath = auth.merge_policy === FAST_MERGE_POLICY && auth.viaBody;
+  const fastPath = auth.merge_policy === FAST_MERGE_POLICY && (auth.viaBody || auth.viaLabel);
   const author = String(pr.user?.login || "").toLowerCase();
   const trusted = trustedAuthors.map((value) => value.toLowerCase()).includes(author);
   const sameRepository = pr.head?.repo?.full_name === repository;
