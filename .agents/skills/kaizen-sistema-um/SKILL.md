@@ -57,7 +57,7 @@ O fluxo do CHEFE (conversa → muda → vê → erro aparece → corrige só aqu
 - Captura erro de código, promessa rejeitada, console.error, recurso que não carregou e pedido de rede falho; traduz para português simples; remove parâmetros de endereço para não vazar chave.
 - "Copiar pro Instinto" gera o relato (página, hora, explicação simples, mensagem técnica, onde, pilha). Ao receber esse relato: corrigir o menor ponto no dono existente, preservar o resto, testar de novo.
 - Silêncio do sensor não prova que está tudo certo: é só o que aquela tela enxergou.
-- Atenção: todo push na `main` dispara `vps-exec-selfhosted.yml` (deploy de produção). Mudança de código de site vai por PR filho até o CHEFE mandar promover.
+- Modo vigente: direto na `main`, sem PR novo (`AGENTS.md` → `PROMOTION_MODE=DIRECT_MAIN_SOFT_EVOLUTION`, `NEW_PR_DEFAULT=false`). Erro visto pelo CHEFE chega por foto, seta, log ou relato do 🧿. Todo push na `main` dispara `vps-exec-selfhosted.yml`, então cada push leva recibo no repositório e medição do efeito.
 
 ## Herança de notas (semente + cicatriz)
 - Cada nota nova aponta para a mesma semente (o OWNER) em vez de copiar o texto inteiro.
