@@ -1017,6 +1017,15 @@ body {
  <div class="cadeado-prova">OWNER: scripts/vps/main-pinned-microdeploy.sh + centraldark-oracle-surface/SKILL.md + MCP admin. NEXT_CURSOR=READONLY_CLASSIFY_HUB_MISSION_CONSUMER_THEN_WINDOWS_COPY_HASH_AND_HUD_MAIN_RECONCILE. Estes cards nao iniciam processos nem alteram as rotas existentes.</div>
 </div>
 
+<!-- SENSOR SEPARATION: FAILING OBSERVER NEVER ERASES LAST PROVEN SEAL -->
+<div class="section" id="cd-observation-invariant" style="margin-top:16px">
+ <div class="section-header"><div class="section-icon">&#128274;</div><h2 class="section-title">Invariante dos nos &middot; selo versus CURRENT</h2><span class="section-count">SEM FALSO REBAIXAMENTO</span></div>
+ <p class="cadeado-meta"><strong>SELADO + mesma identidade/fingerprint/escopo = prova reutilizada.</strong> Falha de consulta administrativa Tailscale (`TAILSCALE_CREDENTIALS_MISSING`, OAuth Broker `fetch failed`) significa SENSOR INDISPONIVEL; nao prova falha Casa&#8596;VPS. Novo teste de conectividade e de escrita Windows pertence ao owner/escopo exato; sem criar outra fronteira, sem derrubar cadeado alheio.</p>
+ <div class="hud-grid"><div class="hud-card"><h3>Casa &#8596; VPS</h3><div class="val ok">SELO DE CONECTIVIDADE PRESERVADO</div><div class="meta">PONG Tailscale e Taildrop ja observados; ultima medicao datada, nao alegar status CURRENT sem retorno da tailnet.</div></div>
+ <div class="hud-card"><h3>Sensor admin Tailscale</h3><div class="val warn">CONSULTA INDISPONIVEL</div><div class="meta">Ausencia de credencial na integracao MCP nao invalida conectividade; corrigir somente o sensor pelo owner atual.</div></div>
+ <div class="hud-card"><h3>MCP CentralDark</h3><div class="val ok">CATALOGO MEDIDO</div><div class="meta">141 ferramentas internas e 11 rotas no dispatcher, 08/10/2026 05:08 UTC; escopo diferente do /health publico.</div></div>
+ <div class="hud-card"><h3>HUD Casa / writer</h3><div class="val warn">READBACK PENDENTE</div><div class="meta">Nao confundir transporte de arquivo Taildrop com permissao de escrita no Obsidian; manter BAT original intacto.</div></div></div>
+</div>
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
@@ -1033,7 +1042,7 @@ body {
       <div class="hud-card">
         <h3>Medido em</h3>
         <div class="val warn" id="live-heart-measured">aguardando...</div>
-        <div class="meta">refresh 5s &middot; falha = UNKNOWN</div>
+        <div class="meta">refresh 5s &middot; falha de consulta = CURRENT UNKNOWN, nao invalida recibos/selos historicos</div>
       </div>
       <div class="hud-card">
         <h3>Orquestrador</h3>
@@ -1072,9 +1081,9 @@ body {
     </div>
     <p class="cadeado-meta" style="margin:0 0 12px">Uma superficie e um owner. Estado historico identificado por data; LIVE somente apos leitura real no navegador. Porta aberta nao prova login, controle da tela ou leitura de logs.</p>
     <div class="hud-grid">
-      <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val warn" id="cd-route-casa">ULTIMA PROVA</div><div class="meta">SEGREDO 100.123.93.25 &#8596; VPS 100.90.199.124. PONG por DERP(sao), 727 ms; 08/10/2026.</div></div>
+      <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val ok" id="cd-route-casa">SELADO / PONG HISTORICO</div><div class="meta">SEGREDO 100.123.93.25 &#8596; VPS 100.90.199.124. PONG por DERP(sao), 727 ms; 08/10/2026. API administrativa sem credenciais e uma falha de OBSERVACAO, nao revoga a rota ja provada. CURRENT Casa: medir pelo owner do transporte, sem falsificar online.</div></div>
       <div class="hud-card"><h3>Windows / portas</h3><div class="val warn">PORTAS ABERTAS</div><div class="meta">3389 RDP; 445 arquivos; 5985 comandos. Autenticacao e controle da tela nao comprovados. SSH 22 e 4175 indisponiveis na medicao.</div></div>
-      <div class="hud-card"><h3>Screenpipe / Casa</h3><div class="val warn" id="cd-route-screenpipe">ULTIMA PROVA HTTP 200</div><div class="meta">http://100.123.93.25:3030/health. Prova feita pela VPS em 08/10/2026; navegador mede novamente abaixo.</div></div>
+      <div class="hud-card"><h3>Screenpipe / Casa</h3><div class="val warn" id="cd-route-screenpipe">CURRENT MEDINDO / HISTORICO SELADO</div><div class="meta">SELO: HTTP 200 provado pela VPS em 08/10/2026. CURRENT: navegador tenta medicao independente; falha de CORS/consulta nao remove o selo.</div></div>
       <div class="hud-card"><h3>One Heart / VPS</h3><div class="val warn" id="cd-route-heart">AGUARDANDO</div><div class="meta">Mesmo heartbeat do HUD; medido pela VPS com HTTP 200 em 08/10/2026. Atualizacao ao vivo depende do endpoint e CORS.</div></div>
       <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / HISTORICO</div><div class="meta">VPS 127.0.0.1:9119 respondeu 302; 8788 fechada. UI autenticada nao provada pelo 302.</div></div>
       <div class="hud-card"><h3>Runtime / modelo</h3><div class="val warn">HTTP 200 / HISTORICO</div><div class="meta">VPS 18435/health respondeu 200; portas 8000, 8001, 8002 e 9100 escutando na medicao. Sem inferencia comprovada.</div></div>
