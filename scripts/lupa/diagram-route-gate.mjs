@@ -369,6 +369,206 @@ export function validateDiffCoverage(registry, units) {
   return errors;
 }
 
+// ---------------------------------------------------------------------------
+// 🪬 TRAVA DE PRESERVAÇÃO MERMAID — intenção do CHEFE não pode ser apagada
+// ---------------------------------------------------------------------------
+// Origem: commit bb60b2d (2026-10-08). Um agente reestruturou o Mermaid do
+// MAPA-DO-CEREBRO.md (apagou o nó OS e as setas IS-->OS, OS<-->HUD,
+// OS<-->CASA) quando a ordem era ADAPTAR o mesmo desenho. O gate passava
+// porque só olhava ARCHITECTURE.mmd. Agora:
+//   ADICIONAR nó/seta            → livre (delta aditivo)
+//   APAGAR nó/subgraph/seta      → BLOQUEIA
+//   TROCAR texto de nó existente → BLOQUEIA
+//   APAGAR arquivo com Mermaid   → BLOQUEIA
+// Liberação SOMENTE item a item, nunca curinga:
+//   a) PR com label "👑 PERMITO-SEGREDO" (autoridade humana autenticada), ou
+//   b) linha no commit, copiando EXATAMENTE o código que o gate imprimiu:
+//      Mermaid-Autorizado: MERMAID_NODE_REMOVED:docs/x.md:OS
+// MERMAID_DELETE_REQUIRES_EXPLICIT_ITEM=true · ADDITIVE_DELTA_IS_FREE=true
+export const MERMAID_AUTH_TRAILER = "Mermaid-Autorizado";
+
+const MERMAID_SKIP =
+  /^(?:flowchart|graph|direction|classDef|class|style|linkStyle|click|end|subgraph)\b/;
+const EDGE_OP =
+  /(<?(?:-{2,}|={2,}|-\.+-)(?:>|o|x)?|~~~)/;
+
+function stripQuoted(line) {
+  const quoted = [];
+  const text = line.replace(/"(?:[^"\\]|\\.)*"/g, (m) => {
+    quoted.push(m.slice(1, -1));
+    return "\u0000" + (quoted.length - 1) + "\u0000";
+  });
+  return { text, restore: (v) => v.replace(/\u0000(\d+)\u0000/g, (_, i) => quoted[Number(i)]) };
+}
+
+function normalizeOp(op) {
+  const left = op.startsWith("<") ? "<" : "";
+  const body = op.replace(/^</, "");
+  const head = /[>ox]$/.test(body) ? body.slice(-1) : "";
+  const shaft = body.includes("=") ? "==" : body.includes(".") ? "-.-" : body === "~~~" ? "~~~" : "--";
+  return left + shaft + head;
+}
+
+const NODE_SHAPE =
+  /([A-Za-z0-9_][\w.-]*)\s*(\(\(\(.*?\)\)\)|\(\(.*?\)\)|\(\[.*?\]\)|\[\[.*?\]\]|\[\(.*?\)\]|\[\/.*?[\/\\]\]|\[\\.*?[\/\\]\]|\[.*?\]|\(.*?\)|\{\{.*?\}\}|\{.*?\}|>.*?\])/g;
+
+function labelOf(shape, restore) {
+  return restore(shape.replace(/^[\[\(\{>\/\\]+|[\]\)\}\/\\]+$/g, ""))
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function parseMermaid(source) {
+  const nodes = new Map();
+  const edges = new Set();
+  const subgraphs = new Set();
+  for (const raw of String(source).split(/\r?\n/)) {
+    let line = raw.replace(/%%.*$/, "").trim();
+    if (!line) continue;
+    const { text, restore } = stripQuoted(line);
+    line = text;
+    const sub = line.match(/^subgraph\s+([A-Za-z0-9_][\w.-]*)/);
+    if (sub) {
+      subgraphs.add(sub[1]);
+      continue;
+    }
+    if (MERMAID_SKIP.test(line)) continue;
+    // remove rótulos de seta: -->|txt| e  -- txt -->
+    line = line.replace(/\|[^|]*\|/g, " ");
+    line = line.replace(/(<?)(--|==|-\.)\s+[^\s>=.-][^>]*?\s+(-{2,}>|={2,}>|\.+->|-{3,}|={3,})/g, (_, l, _a, r) => " " + l + r + " ");
+    // registra definições de nó e troca pelo id
+    line = line.replace(NODE_SHAPE, (_, id, shape) => {
+      nodes.set(id, labelOf(shape, restore));
+      return " " + id + " ";
+    });
+    const parts = line.split(EDGE_OP).map((p) => p.trim());
+    if (parts.length < 3) {
+      for (const id of parts[0].split("&").map((v) => v.trim())) {
+        if (/^[A-Za-z0-9_][\w.-]*$/.test(id) && !nodes.has(id)) nodes.set(id, "");
+      }
+      continue;
+    }
+    for (let i = 0; i + 2 < parts.length; i += 2) {
+      const froms = parts[i].split("&").map((v) => v.trim()).filter(Boolean);
+      const tos = parts[i + 2].split("&").map((v) => v.trim()).filter(Boolean);
+      const op = normalizeOp(parts[i + 1]);
+      for (const id of [...froms, ...tos]) {
+        if (/^[A-Za-z0-9_][\w.-]*$/.test(id) && !nodes.has(id)) nodes.set(id, "");
+      }
+      for (const a of froms) for (const b of tos) edges.add(a + op + b);
+    }
+  }
+  return { nodes, edges, subgraphs };
+}
+
+export function extractMermaidSource(file, text) {
+  if (/\.mmd$/i.test(file)) return String(text || "");
+  const blocks = [];
+  const re = /^[ \t]*(```|~~~)[ \t]*mermaid[^\n]*\n([\s\S]*?)^[ \t]*\1[ \t]*$/gim;
+  let m;
+  while ((m = re.exec(String(text || "")))) blocks.push(m[2]);
+  return blocks.join("\n");
+}
+
+export function compareMermaid(file, baseText, headText) {
+  const errors = [];
+  const before = parseMermaid(extractMermaidSource(file, baseText));
+  if (before.nodes.size === 0 && before.edges.size === 0) return errors;
+  if (headText === null) {
+    errors.push("MERMAID_FILE_REMOVED:" + file);
+    return errors;
+  }
+  const after = parseMermaid(extractMermaidSource(file, headText));
+  for (const [id, label] of before.nodes) {
+    if (!after.nodes.has(id)) {
+      errors.push("MERMAID_NODE_REMOVED:" + file + ":" + id);
+    } else if (label && after.nodes.get(id) && after.nodes.get(id) !== label) {
+      errors.push("MERMAID_NODE_LABEL_CHANGED:" + file + ":" + id);
+    }
+  }
+  for (const id of before.subgraphs) {
+    if (!after.subgraphs.has(id)) errors.push("MERMAID_SUBGRAPH_REMOVED:" + file + ":" + id);
+  }
+  for (const edge of before.edges) {
+    if (!after.edges.has(edge)) errors.push("MERMAID_EDGE_REMOVED:" + file + ":" + edge);
+  }
+  return errors;
+}
+
+export function authorizedMermaidItems(commitMessages) {
+  const items = new Set();
+  const re = new RegExp("^" + MERMAID_AUTH_TRAILER + ":\\s*(MERMAID_[A-Z_]+:\\S.*?)\\s*$", "gm");
+  let m;
+  while ((m = re.exec(String(commitMessages || "")))) items.add(m[1]);
+  return items;
+}
+
+export function applyMermaidAuthorization(errors, { authorizedItems = new Set(), humanApproved = false } = {}) {
+  if (humanApproved) return [];
+  return errors.filter((code) => !authorizedItems.has(code));
+}
+
+function readEventApproval() {
+  try {
+    const p = process.env.GITHUB_EVENT_PATH;
+    if (!p) return false;
+    const event = JSON.parse(fs.readFileSync(p, "utf8"));
+    return (event.pull_request?.labels || []).some((label) => {
+      const name = String(label?.name || label || "").trim().toLocaleLowerCase("pt-BR");
+      return name === "👑 permito-segredo" || name === "permito-segredo";
+    });
+  } catch {
+    return false;
+  }
+}
+
+function showAt(ref, file) {
+  try {
+    return execFileSync("git", ["show", ref + ":" + file], {
+      cwd: REPO,
+      encoding: "utf8",
+      maxBuffer: 64 * 1024 * 1024,
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+  } catch {
+    return null;
+  }
+}
+
+export function validateMermaidPreservation(baseRef, headRef, { humanApproved = readEventApproval() } = {}) {
+  let status = "";
+  try {
+    status = git(["diff", "--name-status", "-M", "--no-ext-diff", baseRef, headRef, "--"]);
+  } catch {
+    return ["MERMAID_PRESERVATION_DIFF_UNKNOWN:" + baseRef + ".." + headRef];
+  }
+  const raw = [];
+  for (const line of status.split(/\r?\n/)) {
+    if (!line.trim()) continue;
+    const [code, a, b] = line.split("\t");
+    const oldPath = normalizePath(a);
+    const newPath = normalizePath(b || a);
+    if (!/\.(?:md|mmd)$/i.test(oldPath)) continue;
+    if (code.startsWith("A")) continue;
+    const baseText = showAt(baseRef, oldPath);
+    if (baseText === null) continue;
+    if (!/\.mmd$/i.test(oldPath) && !/mermaid/i.test(baseText)) continue;
+    const headText = code.startsWith("D") ? null : showAt(headRef, newPath);
+    raw.push(...compareMermaid(oldPath, baseText, headText));
+  }
+  if (raw.length === 0) return [];
+  let messages = "";
+  try {
+    messages = git(["log", "--format=%B", baseRef + ".." + headRef]);
+  } catch {
+    messages = "";
+  }
+  return applyMermaidAuthorization(raw, {
+    authorizedItems: authorizedMermaidItems(messages),
+    humanApproved,
+  });
+}
+
 export function runGate({ baseRef, headRef }) {
   const registry = loadRegistry();
   const base = effectiveBase(registry, baseRef, headRef);
@@ -385,6 +585,7 @@ export function runGate({ baseRef, headRef }) {
     ...validateDiagram(registry, diagram),
     ...validateTriggerCoverage(registry, triggerText),
     ...validateDiffCoverage(registry, units),
+    ...validateMermaidPreservation(baseRef, headRef),
   ];
 
   return {
