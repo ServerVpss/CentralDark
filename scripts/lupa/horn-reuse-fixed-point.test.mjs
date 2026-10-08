@@ -172,3 +172,29 @@ test("oracle surface converts no-progress loops into bounded replay recipes", ()
   assert.match(oracle, /scripts\/skill-sync-check\.sh/);
   assert.match(oracle, /does not add a Ralph engine/);
 });
+
+
+test("oracle skill preserves SOL_EXECUTORA direct handoff without granting oracle write authority", () => {
+  const oracle = readFileSync(".agents/skills/software-development/centraldark-oracle-surface/SKILL.md", "utf8");
+  for (const marker of [
+    "SOL_EXECUTORA_CROSS_SURFACE_HANDOFF=true",
+    "HERMES_ORIGINAL_PRIORITY=true",
+    "EXECUTOR_DIRECT_WHEN_AUTHORIZED=true",
+    "PAPAGAIO_MODE=OFF",
+    "RITUAL_MODE=OFF",
+    "MENU_MODE=OFF",
+    "ASK_MODE=OFF_FOR_CLEAR_AUTHORIZED_SCOPE",
+    "ONE_WRITER_PER_SCOPE=true",
+    "UNKNOWN_IS_NOT_PASS=true",
+    "ACTION_IS_NOT_PROOF=true",
+    "ROUTE_FAIL",
+    "VOLTA_UMA_CASA",
+    "COSTURA_SURVIVING_PROOF_AND_NEXT_CURSOR",
+    "STOP_WRITE",
+    "SUFFICIENT_OBJECTIVE_OR_NEXT_CURSOR",
+    "ORACLE_CANNOT_WRITE_CANONICAL_STATE_DIRECTLY=true",
+  ]) assert.ok(oracle.includes(marker), marker);
+  assert.match(oracle, /HERMES_RESULT=UNKNOWN/);
+  assert.match(oracle, /CAPABILITY != AUTHORIZATION/);
+  assert.match(oracle, /not a second proof writer/);
+});

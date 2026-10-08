@@ -1,7 +1,7 @@
 ---
 name: centraldark-oracle-surface
 description: "Use when consulting an external browser oracle."
-version: 0.5.1
+version: 0.5.3
 author: SEGREDO/CHEFE, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -47,6 +47,91 @@ REALITY_IS_JUDGE=true
 ```
 
 Every child inherits the parent Goal's intent, success predicate, owner/scope, CURRENT/baseline, evidence destination, counterproof and NEXT_CURSOR. A child may refine a criterion but may not weaken its parent; `LOCAL_DONE != PARENT_DONE`.
+
+## SOL_EXECUTORA — Direct Authorized Execution and Original Hermes Handoff (CHEFE)
+
+**Boundary:** this skill remains the *read-only Oracle surface*, not an executor, writer, scheduler, permission grant or substitute Hermes. The CHEFE supplies intent/authority; SOL coordinates without unnecessary narration; the authenticated original Hermes executes when Hermes was named; models are replaceable engines; real effect and counterproof judge PASS. Current SOUL/RULES/AGENTS and established administrative/secret boundaries prevail.
+
+~~~text
+SOL_EXECUTORA_CROSS_SURFACE_HANDOFF=true
+CHEFE_INTENT_IS_AUTHORITY=true
+SOL_IS_SILENT_COORDINATOR=true
+HERMES_ORIGINAL_PRIORITY=true
+EXECUTOR_DIRECT_WHEN_AUTHORIZED=true
+PAPAGAIO_MODE=OFF
+RITUAL_MODE=OFF
+PERTINENCE_FIRST=true
+MENU_MODE=OFF
+ASK_MODE=OFF_FOR_CLEAR_AUTHORIZED_SCOPE
+NARRATION_DURING_EXECUTION=OFF
+REUSE_BEFORE_CREATE=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+ONE_WRITER_PER_SCOPE=true
+CURRENT_OVER_HISTORY=true
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
+DOCUMENTED_IS_NOT_EXECUTED=true
+MERGED_IS_NOT_DEPLOYED=true
+~~~
+
+**Fast path:** treat a new CHEFE request as a delta of the active Goal first. When target, authorization class, owner and sufficient acceptance predicate are clear, use the smallest actually available authorized tool/route directly for safe, reversible work. Do not offer menus, demand micro-confirmations, ask the CHEFE to copy commands the session can run, or narrate every step. Triggers are pertinent tools, never mandatory ritual. Do not fabricate tool availability, access, permission, work or success. CAPABILITY != AUTHORIZATION.
+
+**Original Hermes:** if the CHEFE requests HERMES, first discover and measure the original live Hermes route. Forward the task using the existing authorized Hermes capability and preserve the verbatim operational output and provenance, sanitized of secrets. Never impersonate Hermes as SOL/Jarvis. If no authenticated Hermes binding exists, report HERMES_RESULT=UNKNOWN and the exact missing binding; do not invent a result or create another Hermes.
+
+~~~text
+INTENT_DELTA
+→ TARGET + SCOPE + AUTHORIZATION + EXISTING_OWNER
+→ CURRENT_ON_SAME_TARGET + LAST_GOOD_GREEN_STATE
+→ REPLAY_PROVEN_RECIPE_IF_FINGERPRINT_MATCHES
+→ SMALLEST_LIVE_AUTHORIZED_ROUTE
+→ EXISTING_WRITER_EXECUTES_MINIMUM_DELTA
+→ EFFECT_READBACK + BACKCHECK + INDEPENDENT_COUNTERPROOF
+→ COSTURA_SOURCE_RUNTIME_RECEIPT
+→ RETEST_AFFECTED_CONE_ONLY
+→ SUFFICIENT_OBJECTIVE_OR_NEXT_CURSOR
+~~~
+
+**Route-local failover:** one failing SSH, Tailscale, Desktop, GitHub, MCP, HTTP or UI route is not global system failure. Preserve the unaffected good state and compare only evidence from the same target, claim, scope and time.
+
+~~~text
+ROUTE_FAIL
+→ CLASSIFY_EXACT_ROUTE_AND_ERROR
+→ INVENTORY_EXISTING_AUTHORIZED_ALTERNATES
+→ PROBE_NEXT_DISCRIMINATING_ROUTE
+→ REUSE_LIVE_CAPABILITY | UNKNOWN | REAL_BLOCKER
+~~~
+
+When Casa/VMware/VPS is relevant and a live authorized binding exists, inspect the *actual* hostname, whoami, cwd, repository HEAD/dirty state, target files, processes, ports, SSH identity and AI runtimes. Reconfirm target identity after changing transport. A route error does not authorize disabling host key checks, modifying keys, firewall, accounts, administrative policy or secrets; retain their separate explicit authorization requirements. Continue independent authorized readonly sectors rather than waiting idly.
+
+**VOLTA UMA CASA + COSTURA:** local failure must not reset the whole mission. Classify the smallest causal wound, preserve LAST_GOOD_STATE and GREEN_STATE, rewind only the disproven delta where authorized, reconcile surviving evidence, retest only its affected cone, and continue the same Goal/LOOP_ID/NEXT_CURSOR. Never hard-reset, overwrite independent drift, or repeat an identical failure fingerprint indefinitely. Reuse the existing Ralph-style bounded recipe gate on no-progress.
+
+~~~text
+ERROR_LOCAL
+→ VOLTA_UMA_CASA
+→ PRESERVE_GREEN_STATE
+→ REWIND_DISPROVEN_DELTA_ONLY_IF_AUTHORIZED
+→ COSTURA_SURVIVING_PROOF_AND_NEXT_CURSOR
+→ RETEST_AFFECTED_CONE
+→ CONTINUE_SAME_GOAL
+~~~
+
+**GitHub/main:** immediately before writing, measure the current main SHA, existing owner, one writer and dirty state. Keep the delta in existing files, validate applicable syntax/lint/build/tests/diff, commit within authorization, read back the same SHA/files, and separately measure runtime effect. If main advances, STOP_WRITE → REMEASURE → RECALIBRATE → COSTURA → CONTINUE. COMMIT != DEPLOY; MERGED != DEPLOYED; file exists != runtime effect. Never push secrets or erase a dirty runtime to claim parity.
+
+**Sufficient fixed point:** PASS needs the *authorized objective sufficiently satisfied*, effect on the intended target, backcheck, independent counterproof, receipt/readback and no material blocker/false green. This does not require perfection or closing unrelated optional UNKNOWNs. Open material NEXT_READONLY_PROBE, pending work or recoverable failure forbids Goal done; explicit cancellation and genuine HUMAN_FRONTIER remain valid stops.
+
+**Response after work, not instead of work:**
+
+~~~text
+Feito: actual measured result
+Evidência: source, same-target readback and counterproof
+Pendente: real material blocker or UNKNOWN only
+Estado: PASS | UNKNOWN | BLOCKED
+Próximo cursor: next executable action or proven FIXED_POINT
+~~~
+
+Oracle output stays candidate evidence; only the authenticated original executor and Reality Judge produce effects/proof. This projection is not a second proof writer.
 
 ## Continuous Loop and Correlation
 
@@ -915,3 +1000,74 @@ Reuse Hermes' **existing** continuity/memory owner. Before `/compact`, `/compres
 ### Receipt / HUD / PR equality
 
 The canonical architecture and G01..G12 acceptance clauses live in `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md` section 21. The existing HUD (`docs/HUD/HUD.html`) and Obsidian Grafo Vivo plugin may **project** these receipts; they do not write them. Show `UNKNOWN` for unmeasured Windows/Hermes/CHAT_GLOBAL E2E. Clock: UTC ISO provenance and `America/Bahia` presentation via the existing `central-horario` owner. A direct-main architecture commit and a separate E2E-proof PR may coexist; never open a duplicate implementation PR or call a draft receipt `FIXED_POINT`.
+
+
+## Browser Oracle Completeness Gate — Nous Native Tools (2026-10-08)
+
+**Owner:** this existing `centraldark-oracle-surface` skill, using Hermes' own supported tools and GoalManager. No second agent, browser bridge, router, scheduler, memory or writer. **Oracle output remains candidate evidence.** The previous Preview recipes, browser policy, Ralph bounded iteration, capsule and all other contracts above remain valid.
+
+### Native-capability-first selection
+
+For a Hermes session where the official Nous `browser` toolset is actually available, prefer:
+
+```text
+browser_navigate (only if a navigation is required and authorized)
+→ browser_snapshot full=true (structured accessible blocks/controls)
+→ browser_scroll direction=up|down (bounded, only if needed)
+→ browser_snapshot full=true (readback)
+→ browser_vision (when semantics/visible evidence remain ambiguous)
+→ browser_console (diagnostic aid only, not a transcript)
+```
+
+The official `browser_snapshot` may report only the accessible/loaded DOM; **`full=true` does not guarantee every virtualized/historical message is loaded**. Browser tool availability is runtime- and session-specific; do not pretend `desktop_preview` automatically has all `browser_*` actions. If Hermes Desktop Preview exposes only `drive_preview`/`desktop_preview`, keep the previously documented current-tab bounded capture path and record `NATIVE_BROWSER_TOOL=UNAVAILABLE`; do not invent `new_tab` or transcript export methods. Never bypass CSP/CORS or use another account to evade provider controls.
+
+### Read before click: hypotheses are not UI facts
+
+```text
+HYPOTHESIS(control)
+→ FRESH_SNAPSHOT / ELEMENT_ROLE / ACCESSIBLE_NAME / STATE
+→ CHOOSE_SUPPORTED_ACTION
+→ ACTION
+→ FRESH_READBACK
+→ DISCRIMINATING_EVIDENCE
+```
+
+An ellipsis, arrow, pulse or loading icon has no universal semantic meaning. A `...` icon is **not automatically scroll-to-bottom**, and an arrow is **not automatically send/scroll**. If role/ref/state cannot be established, do not click; capture/inspect with the available supported tool or mark `CONTROL_SEMANTICS=UNKNOWN`.
+
+### Response state machine, causal capture and stopping condition
+
+Separate **response streaming** from **message viewport coverage**:
+
+```text
+RESPONSE_STATE = NOT_STARTED | STREAMING | QUIESCENT_UNVERIFIED | COMPLETE | INCOMPLETE | ERROR
+COVERAGE       = UNMEASURED | PARTIAL | COMPLETE
+CAPTURE        = {loop_id,turn_id,surface_id,attempt_id,parent_id,
+                  conversation_ref,first_seen_id,last_seen_id,
+                  bottom_reached,top_reached,gaps,duplicates_dropped,
+                  response_state,coverage,observed_at,evidence_ref}
+```
+
+- `STREAMING`: token/content still changing or an actual generation-in-progress signal exists. Never treat visible text as final.
+- `QUIESCENT_UNVERIFIED`: text paused but no distinct terminal/completed generation signal. **Silence or unchanged screenshots alone are insufficient**.
+- `COMPLETE`: generation terminal state independently observed **and** final assistant response is associated with the requested `TURN_ID`/`SURFACE_ID`; content boundary/readback stable. If terminal state is inaccessible, retain `QUIESCENT_UNVERIFIED`/`UNKNOWN`, not false COMPLETE.
+- `COVERAGE=COMPLETE`: causally relevant message range was visited/read/ordered/deduplicated, both boundaries confirmed and zero unread virtualized gaps. `RESPONSE_STATE=COMPLETE` may coexist with `COVERAGE=PARTIAL`: these are independent dimensions.
+- Capture one or more bounded `scroll → snapshot` iterations; each step records new identifiers/blocks and checks actual information gain, not only a scroll coordinate. If the page virtualizes earlier text or no stable unique IDs exist, preserve `COVERAGE=PARTIAL` and emit missing spans.
+- Console errors help locate resource/CSP failures but are not automatically oracle transport failures; a successful text capture requires causal text and provenance, not merely a console log.
+
+### Bounded loop, errors and evidence
+
+Use `error_fingerprint = class + source + location(if measured) + causal evidence id`. Prefer compiler/test/stack evidence for `file:line`; the browser snapshot alone cannot certify code line numbers. No-progress retries are budgeted and paused/backed off, preserving capsule and `NEXT_CURSOR`; never spin on screenshot/scroll or retry the same click indefinitely.
+
+For each material turn record `BEGIN/FINAL`, full correlation envelope, `RESPONSE_STATE`, `COVERAGE`, `CONTROL_SEMANTICS`, `EVIDENCE_REF`, the source/age and `NEXT_CURSOR`. A `COMPLETE` UI response is **not** proof of the answer's factual correctness: execution effects still go through the existing owner, Reality Judge and independent counterproof. No production PASS from this documentation alone.
+
+### Regression and external success evidence
+
+Required probes before declaring full runtime integration: streaming partial text; delayed chunks; quiescent-not-terminal; terminal-with-viewport-gaps; virtualized top; scroll UP/DOWN; ambiguous ellipsis; wrong send-arrow; multiple concurrent surfaces/turn IDs; duplicate or out-of-order blocks; reconnection; bounded no-progress; provider browser vs Desktop Preview capability difference; and three independently correlated Hermes→Oracle→Hermes cycles.
+
+Official upstream references (source links, not runtime proof):
+- `https://hermes-agent.nousresearch.com/docs/user-stories` — public community stories, qualitative use cases and reported deployments; **not** a verified 99–100% completion-rate benchmark.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/tools-reference.md` — native browser tool contracts.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/desktop.md` — Desktop/CLI/gateway same Hermes core.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/computer-use.md` — supported computer-use and visual limits.
+
+`DOCUMENTED != EXECUTED`; `SOURCE_PROVEN != SESSION_CAPTURE_PROVEN`; `CURRENT > HISTORY`. Report `UNKNOWN` if the session lacks terminal events or full coverage.
