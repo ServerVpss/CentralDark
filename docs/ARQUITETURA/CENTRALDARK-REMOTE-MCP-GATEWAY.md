@@ -154,3 +154,27 @@ Não significa presença física nem funcionamento quando o device estiver offli
 ### Receipt 2026-09-14
 
 `DEVICE_SEGREDO=ONLINE`; `AUTH_TOKEN=VALID`; `REMOTE_PING=PONG`; comando remoto observou `hostname=SEGREDO` e `whoami=segredo\danda`; GitHub respondeu `200`; MCP CentralDark respondeu `200` com catálogo ativo. A operação da Casa por ChatGPT foi, portanto, observada no runtime e não apenas documentada.
+
+## Decisao CURRENT — transporte privado Tailscale como prioridade (08/10/2026)
+
+Intencao explicita do CHEFE: eliminar dependencias redundantes na operacao Casa/VPS, usar **Tailscale como transporte privado principal**, **MCP CentralDark como control plane e catalogo unico**, e **Hermes/executor nativo autorizado como corpo de execucao**. A bridge publica ja existente continua autenticada por OAuth2/PKCE; nao converte acesso a tailnet em acesso administrativo publico.
+
+```text
+CASA_VPS_PRIVATE_TRANSPORT_PRIORITY=TAILSCALE
+CANONICAL_MCP_CONTROL_PLANE=CENTRALDARK_MCP
+ADMIN_EXECUTION=AUTHORIZED_NATIVE_EXECUTOR
+PUBLIC_BRIDGE=EXISTING_MCP_OAUTH2_PKCE
+DESKTOP_COMMANDER_REQUIRED=false
+DESKTOP_COMMANDER_DEFAULT_ROUTE=false
+DESKTOP_COMMANDER_LEGACY_OPTIONAL=true
+REMOVE_WORKING_COMPONENTS_AUTOMATICALLY=false
+TAILSCALE_CONNECTED_IS_NOT_ADMIN_AUTHORIZED=true
+NO_PARALLEL_BRIDGE=true
+ONE_SYSTEM_ONLY=true
+```
+
+A prioridade diz respeito ao **roteamento novo**: nao depender do Desktop Commander para abrir, escrever, sincronizar ou monitorar a Casa. A ferramenta pode permanecer instalada/historica como fallback opcional, mas nao vira condicao de sucesso nem bloqueio do fluxo canônico. Falha na rota privada obriga descobrir outra rota autorizada existente; nao autoriza abertura publica indiscriminada de SSH, SMB, tela, tokens ou portas de administracao.
+
+**Estado de prova:** Tailscale VPS/Casa e transferencia de `HUD.html` ja tiveram provas pontuais; escrita remota autenticada em `C:\Users\Administrador\Documents\Obsidian Vault\...` e sincronizacao bidirecional nao sao inferidas da conectividade da tailnet. Promover o efeito somente apos teste de permissao, readback, hash e criterio de rollback quando necessario.
+
+**Owners reutilizados:** este documento, `scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json`, `apps/modulos/mcp/`, `docs/HUD/HUD.html`. O config ja define `primary_control_plane=centraldark_mcp` e `legacy_remote_enabled_by_default=false`; manter sem editar para evitar delta cosmetico.
