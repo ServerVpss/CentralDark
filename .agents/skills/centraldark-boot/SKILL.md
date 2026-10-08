@@ -1,6 +1,9 @@
 ---
 name: centraldark-boot
 description: Execute CentralDark boot to align and verify HUD.
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 Use when you need to execute the CentralDark boot sequence (#acordar) to align system state, verify HUD, and produce a deterministic boot receipt. Procedure first, pitfalls attached to steps.

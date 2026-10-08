@@ -10,6 +10,9 @@ metadata:
     category: devops
     created_by: agent
 related_skills: [centraldark-ops, reconciliacao-diaria-centraldark, github-actions-runner-diagnostics, skill-synchronization]
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CentralDark Hermes Operations
