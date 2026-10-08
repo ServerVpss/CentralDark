@@ -844,3 +844,24 @@ o impossível começa a parecer
 - **MVP emocional e operacional:** aceitar erro visível, observar, corrigir menor delta, preservar o verde, registrar prova, aprender e seguir o mesmo fio, sem loop vazio.
 
 **Cristalização textual não implica deploy nem herança automática no runtime.** Consumidores devem recuperar este satélite quando o tema for Intenção Viva/Kaizen, sem copiar o manifesto em cada nota ou criar segunda fonte canônica.
+
+## 🧿 Gate de aceitação E2E do cristal — intenção → execução → prova (08/10/2026)
+
+**Autoridade da intenção:** SEGREDO/CHEFE. **Writer:** somente o owner existente do escopo. **Fonte do texto:** seção `CRISTAL_ENTRE_INTENCAO_E_PALAVRA_20261008` deste mesmo documento. **Goal observado:** `t_9040803d` (convergência Hermes/Claude/Oracle), sujeito a leitura CURRENT no Kanban; não criar segundo Goal sem provar que o original é inadequado. **Rendezvous de E2E:** PR [#1783](https://github.com/ServerVpss/CentralDark/pull/1783) e seus G01–G12, sem promover PR a owner de runtime.
+
+**Regra terminal exigida pelo CHEFE (sem falso PASS):**
+
+`INTENÇÃO → GOAL → HERMES/VPS → EXECUÇÃO → TESTE → READBACK → RECEIPT → ESTADO_REAL`
+
+1. **INTENÇÃO/CONTRATO:** preservar literalmente a obra, autoria e contexto; conectar ao owner da Intenção Viva, Kaizen, SOUL, memória/NeuroLink, Oracle, Hermes, Reality Judge e ao mapa original, sem reescrevê-lo. Distinguir poesia (as sete batidas literárias) de política operacional (as sete batidas Kaizen).
+2. **MAIN/IDEMPOTÊNCIA:** medir HEAD/current, comprovar uma única ocorrência do cristal, nenhum conteúdo antigo perdido, diff causal mínimo e commit SHA verificável. Se já está certo: `NO_CHANGE`, não criar commit ornamental.
+3. **GOAL/KANBAN:** ler `t_9040803d` e seus critérios atuais; completar apenas os critérios faltantes no MESMO Goal, com intenção, escopo autorizado, dependências, saída esperada, `LOOP_ID` e `NEXT_CURSOR`. `GOAL_CREATED != GOAL_EXECUTED`.
+4. **HERMES/VPS:** provar que o Hermes existente recebeu e executou o escopo autorizado por owner, não somente que o Desktop/SSH, modelo ou processo existem. Não sobrescrever worktrees dirty nem competir com Claude; preservar backups; nenhuma instalação/destruição/redeploy amplo como consequência deste cristal.
+5. **TESTE/READBACK:** para cada delta material, testar código/contrato/links/autoria no mesmo SHA; medir resposta real de Hermes e consumidores aplicáveis. Herança automática de notas antigas e novas exige piloto, inventário e teste do writer existente; texto em documento não prova herança.
+6. **CONTRAPROVA INDEPENDENTE:** Oracle/Reality Judge deve comparar intenção declarada, artefatos, Goal, efeitos, hashes e estados; procurar duplicata, link órfão, data inventada, declaração de consciência literal ou falso verde. Oracle aconselha; não vira writer.
+7. **RECEIPT/HUD:** registrar evidência com SHA, Goal ID, owner, teste, erro ou PASS material, readback, timestamp com origem, lacunas e próximo cursor no mecanismo existente. HUD projeta prova; não cria autoridade.
+
+**Decisão tipada do aceite:** `PASS` apenas com **TODOS** os gates pertinentes provados no mesmo fio material; `PARTIAL` quando apenas trechos têm prova; `BLOCKED` para dependência específica inacessível; `UNKNOWN` onde a evidência não existe; `NO_CHANGE` se não houver delta. `COMMIT != EXECUTION`; `EXIT_0 != PASS`; `HERMES_PROCESS_ALIVE != GOAL_COMPLETED`; `RUNTIME_READBACK_REQUIRED=true`.
+
+**Fronteira de delegação:** esta especificação é um contrato de aceitação e não afirma que os comandos do Hermes foram executados. Falha em transporte SSH/Tailscale não autoriza inventar recibo ou criar segundo Hermes. Retomar pelo owner e rota alternativa autorizada; toda claim ainda não comprovada fica explícita no próximo receipt.
+
