@@ -130,6 +130,8 @@ NUL
 # Recibo runtime do Hermes Core (orchestrator.mjs:RECONCILIATION_RECEIPT); reescrito a cada ciclo.
 # Versionado ele deixava /root/CentralDark sempre sujo e travava scripts/vps/auto-sync-main.sh.
 .artifacts/system-sentinel/reconciliation.json
+# Mesma classe (3º caso, 08/10): state.json é reescrito pelo Hermes Core a cada ciclo e travava o auto-sync.
+.artifacts/system-sentinel/state.json
 
 # Biblioteca offline local — conteúdo inteiro para estudo/RAG/treino fica só na Casa
 _BIBLIOTECA_OFFLINE/
