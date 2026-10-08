@@ -726,3 +726,35 @@ MAIN_SKILL_SOURCE_HEAD == SEALED_RUNTIME_SOURCE_HEAD
 CANONICAL_SKILL_HASH == RUNTIME_SKILL_HASH
 
 The seal is provenance, not execution proof. SYNCED != EXECUTED.
+
+
+## Goal-Clause META-GRILL / Deep Context Continuity (2026-10-08)
+
+The CHEFE's current intent, not the model, owns the Goal. Before a material answer or action, use the **existing** `meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md` as a criterion self-interview grounded in pertinent CURRENT `docs/CONSCIENCIA`, `docs/BRAIN`, SOUL/RULES/AGENTS and receipts. Do not pretend the model is literally the human or fabricate human instructions. Summarize testable conclusions, not private hidden reasoning.
+
+```text
+CHEFE_INTENT → CURRENT → META_GRILL → GOAL_CLAUSES → GREEN_STATE
+→ REPLAY_PROVEN_RECIPE → OWNER_MAP → HERMES_PERCEPTION
+→ OPTIONAL_ORACLE_DEEP_RESEARCH → EXISTING_WRITER
+→ EFFECT → REALITY_JUDGE + COUNTERPROOF_SENSOR
+→ CLAUSE_EVALUATOR → FIXED_POINT_OR_NEXT_CURSOR
+→ RECEIPT + CONTEXT_CAPSULE + EXISTING_HUD_PROJECTION
+```
+
+`GOAL_CLAUSE_EVALUATOR_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs`. Required clauses are never PASS without valid positive proof, counterproof, owner, measurement time and source provenance. `FIXED_POINT` additionally requires a receipt and terminal cursor. The same `intent_id + goal_fingerprint + clause_ids` must be used by execution, PR acceptance and Obsidian HUD; a PR or green badge does not certify runtime.
+
+### Operational deep context capsule (not model KV cache)
+
+Reuse Hermes' **existing** continuity/memory owner. Before `/compact`, `/compress`, `/clean`, capture a sanitized capsule only if the native hook actually supports it; after recovery rehydrate the minimum context and revalidate CURRENT. Capsule: `schema_version,loop_id,parent_id,intent_id,goal_fingerprint,chefe_intent_summary,current_main_sha,runtime_ref,owner_map,used_skills,used_tools,clause_states,evidence_refs,decision_summary,unknowns,failures,oracle_candidates,counterproof_refs,receipts,next_cursor,observed_at_utc,expires_at_utc,rehydration_summary`. No raw secrets, personal/private notes, browser cookies or hidden chain of thought. `CACHE_HIT != PASS`; provider prompt caching and internal KV tensors are distinct from this evidence capsule. Never claim cache efficiency without measured usage.
+
+### Oracle / deep research selection
+
+`CHAT_GLOBAL`, optional Deep Research, Context7 and Globalping are **capabilities**, not authorities or guaranteed API endpoints. Use Deep Research only for material uncertainty with expected information gain; avoid repeating a cached proven result. `MCP_ON != MCP_USED != EFFECT_PROVEN`. Oracle candidates must be correlated to `LOOP_ID`, `TURN_ID`, `INTENT_ID`, `PARENT_ID` and read back through Hermes. Preserve owner-local mutation, single writer, counterproof and independent runtime verification. ChatGPT subscription quota is not an API budget. The `@` UI is not an automation contract until a supported bridge is proven.
+
+### Domain skill states and sync
+
+`SIX_EYES/INFINITY/BLUE/RED/PURPLE/RCT/DOMAIN` are roles **inside this skill**, not new agents. Every used skill is classified `UNCHANGED_PROVEN|PATCH_CANDIDATE|PATCH_APPLIED|TEST_ADDED|RECEIPT_ADDED|DEGRADED|BLOCKED`. Never rewrite a skill merely because it was loaded. `skill-synchronization` + `scripts/skill-sync-check.sh` remain the sole main→Hermes skill sync owner; independent runtime drift must be preserved for Oracle reconciliation before `--apply`/`--seal`. Sync hash is not proof of execution.
+
+### Receipt / HUD / PR equality
+
+The canonical architecture and G01..G12 acceptance clauses live in `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md` section 21. The existing HUD (`docs/HUD/HUD.html`) and Obsidian Grafo Vivo plugin may **project** these receipts; they do not write them. Show `UNKNOWN` for unmeasured Windows/Hermes/CHAT_GLOBAL E2E. Clock: UTC ISO provenance and `America/Bahia` presentation via the existing `central-horario` owner. A direct-main architecture commit and a separate E2E-proof PR may coexist; never open a duplicate implementation PR or call a draft receipt `FIXED_POINT`.
