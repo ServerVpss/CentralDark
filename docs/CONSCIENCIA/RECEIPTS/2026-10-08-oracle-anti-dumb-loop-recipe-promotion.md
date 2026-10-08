@@ -63,6 +63,30 @@ FIXED_POINT=FALSE
 NEXT_CURSOR=RUN_STATIC_TESTS_THEN_RECONCILE_SKILL_RUNTIME_DRIFT_THEN_REPLAY_RECIPE_ON_SAME_GOAL
 
 
+## CHEFE SOL_EXECUTORA — Direct execution/handoff crystal (08/10/2026)
+
+Owner: .agents/skills/software-development/centraldark-oracle-surface/SKILL.md
+Source: explicit CHEFE SOL_EXECUTORA directive + associated full CentralDark contract.
+Scope: owner-local additive behavior only; original Oracle/Ralph/Goal contracts preserved.
+
+~~~text
+SOL_EXECUTORA_CROSS_SURFACE_HANDOFF=true
+HERMES_ORIGINAL_PRIORITY=true
+EXECUTOR_DIRECT_WHEN_AUTHORIZED=true
+RITUAL_MODE=OFF
+NO_NEW_OWNER=true
+NO_SECOND_EXECUTOR=true
+CHAT_GLOBAL_IS_ORACLE_SURFACE_CAPABILITY=true
+ORACLE_CANNOT_WRITE_CANONICAL_STATE_DIRECTLY=true
+NO_BLIND_RUNTIME_OVERWRITE=true
+SOURCE_VERSION=0.5.3
+~~~
+
+Evidence boundary: static source/contract check proves canonical text only, NOT Hermes original dispatch, Windows/VPS SSH, tool invocation, automatic sync, or E2E runtime outcome. Preserve independent skill drift and use the established skill-synchronization owner; no automatic write to Casa, VPS or secrets follows merely from this commit. Real route-level proof requires an authenticated executor and same-target readback.
+
+NEXT_CURSOR=STATIC_CONTRACT_GATE_THEN_EXISTING_SKILL_SYNC_RECONCILE_THEN_HERMES_ORIGINAL_E2E_READBACK
+FIXED_POINT=FALSE
+
 ## CHEFE sync crystal
 
 ```text
