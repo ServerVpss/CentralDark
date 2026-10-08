@@ -163,3 +163,33 @@ changed owner/behavior
 ## Next cursor
 
 `RELOAD_ACTIVE_HERMES_RUNTIME_AND_PROVE_THREE_ORACLE_CYCLES`
+
+
+## Readback visual 08/10/2026 — envelope e evolução da skill
+
+**Fonte:** duas fotografias da sessão Hermes Desktop e ChatGPT fornecidas pelo CHEFE em 08/10/2026. **Tipo de evidência:** observação visual de logs e relato do agente; não houve neste registro leitura independente do SHA de execução, teste remoto, reinício ou readback do runtime. **Owner:** receipt de continuidade do mesmo loop Hermes/Oracle; Goal original não alterado.
+
+### Comprovado no escopo da captura visual
+
+- A sessão do Hermes mostra uma **tarefa ativa** de diagnóstico do motivo pelo qual ficou esperando em vez de continuar o loop; o painel exibe `Goal active · Turn 0/20` e `1 Queued`. Isso prova a **exibição de atividade naquele instante**, não autonomia recorrente.
+- O retorno textual na tela relaciona correção de transporte/envelope Oracle, cita **dois arquivos alterados**, e exibe os campos `LOOP_ID`, `TURN_ID`, `EVENT_ID`, `RECEIPT_ID`, `PARENT_ID`, `INTENT_ID`, `ATTEMPT_ID`, `NEXT_CURSOR`, `CAUSATION_ID` e `SURFACE_ID` com marcações positivas. Isso **comprova a presença da alegação e dos marcadores no readback visual**, não a auditoria independente do conteúdo desses arquivos.
+- A tela declara `GITHUB_MAIN=PASS`, `ENVELOPE_IMPLEMENTADO=PASS` e `TESTES_74=RELATADOS_PELO_HERMES`. Essas são **classificações informadas pelo executor**; o commit SHA, a lista/resultado independente dos 74 testes e a correspondência código↔runtime não foram obtidos por estas fotografias.
+- A captura mostra expressamente `RUNTIME_CARREGADO=UNKNOWN`, `AUTO_RETURN_TO_ORACLE=UNKNOWN`, `CICLO_CONTINUO_E2E=UNKNOWN`, `FIXED_POINT=FALSE`. Nenhuma dessas categorias deve ser promovida a PASS.
+- O cursor exibido permanece `REMEDIR_HERMES_RUNTIME → PROVAR_3_TURNOS_MESMO_LOOP_ID → VERIFICAR_EVOLUCAO_DAS_SKILLS`. A mensagem visível distingue indisponibilidade do resultado na interface de eventual falha no push; `Result unavailable` **não prova** falha ou êxito no GitHub.
+
+### Matriz de evidências sem promoção indevida
+
+| Afirmação | Estado desta rodada | Limite / prova ainda requerida |
+|---|---|---|
+| Hermes Desktop exibiu Goal ativo e tarefa na fila | **VISUAL_COMPROVADO** | Não prova continuidade após a captura |
+| Envelope e identificadores de correlação aparecem no retorno | **VISUAL_COMPROVADO** | Precisa de payload/receipt verificáveis |
+| Alterações em 2 arquivos e 74 testes | **RELATADO_PELO_HERMES** | SHA, nomes, logs e execução independente ainda não conferidos |
+| `main` recebeu a correção específica | **UNKNOWN_NESTA_RODADA** | Resolver commit exato e comparar arquivos no remoto |
+| Hermes ativo carregou fonte corrigida | **UNKNOWN** | PID, source hash carregado, health e teste de transporte |
+| Três turnos consecutivos, mesmo `LOOP_ID` | **UNKNOWN** | Três receipts correlacionados e sequência sem encerramento prematuro |
+| Autorreparo e evolução de skills E2E | **UNKNOWN** | Testes negativos/replay/readback e Reality Judge |
+| `FIXED_POINT` | **NOT_PROVEN** | Goal/clauses e contraprova independentes |
+
+**Nenhuma mutação de runtime é autorizada por este receipt.** Este adendo não altera G01–G12, não marca checklist como PASS, não modifica a cápsula nem substitui o receipt anterior. Seguir a prova mais próxima sem criar Goal, arquitetura ou sistema paralelo.
+
+**NEXT_CURSOR:** `REMEDIR_HERMES_RUNTIME → PROVAR_3_TURNOS_MESMO_LOOP_ID → VERIFICAR_EVOLUCAO_DAS_SKILLS`.
