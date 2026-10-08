@@ -908,6 +908,15 @@ body {
         <div class="cadeado-meta">VPS &#8594; Tailscale &#8594; SEGREDO 100.123.93.25:3030/health. Respondeu HTTP 200 em 08/10/2026. Nao significa captura de audio ou logs completos disponiveis.</div>
         <div class="cadeado-prova">PROVADO_ESCOPO: HTTP 200 pela VPS, 08/10/2026. Atualizacao live na secao Conexoes.</div>
       </div>
+      <div class="cadeado-card selado" data-proof-scope="CASA_HUD_UNICO_GUI" data-measured-at="2026-10-08">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128274;</span>
+          <span class="cadeado-nome">HUD Corpo Unico / Console interno (Casa)</span>
+          <span class="cadeado-status pass">SELADO: GUI LOCAL</span>
+        </div>
+        <div class="cadeado-meta">SEGREDO: o BAT da Copia executa o HUD WinForms existente com 10 cards e logs no proprio painel. O host PowerShell e iniciado oculto, o lancador encerra e nao chama bridge ou outro HUD. Escopo: apresentacao e processo local; nao comprova captura Screenpipe, sincronizacao Obsidian E2E nem saude da VPS.</div>
+        <div class="cadeado-prova">CONTRAPROVA Desktop Commander, 08/10/2026: GUI_WINDOWS=1; GUI_TITLE=CENTRALDARK | CORPO UNICO | HUD FIXO + LOGS AO VIVO; PARSE_ERRORS=0; HIDDEN_HOST_FLAG=True; EXTERNAL_BRIDGE_LAUNCH=False; SOURCE_UI_10_CARDS=True. BAT SHA-256: A78D468F9B4AF7215AF5F8F1974FDDB8D762402807AE98F31E2F4B46A0BFFF4C.</div>
+      </div>
       <div class="cadeado-card selado">
         <div class="cadeado-header"><span class="cadeado-icon">&#129528;</span><span class="cadeado-nome">One Heart VPS</span><span class="cadeado-status pass">PROVA HTTP</span></div>
         <div class="cadeado-meta">VPS 127.0.0.1:9100/heartbeat e /health responderam HTTP 200 em 08/10/2026. Vida do endpoint nao e prova de todos os workers.</div>

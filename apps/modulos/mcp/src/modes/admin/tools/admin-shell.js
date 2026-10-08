@@ -7,7 +7,7 @@
 // - Log estruturado JSONL em logs/admin-shell.jsonl (quem, o que, quando, saida, duracao, exit)
 
 import { z } from "zod";
-import { execFile } from "node:child_process";
+import { execFile, execFileSync } from "node:child_process";
 import { promisify } from "node:util";
 import { appendFile, mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -68,7 +68,20 @@ function validate(command, args) {
   return { command, argv, runAs: rule.runAs };
 }
 
-// Constroi a chamada final: prlimit ... [-- runuser -u mcp-admin --] cmd argv
+// Mantem comandos de leitura fora do root mesmo quando mcp-admin nao foi criado.
+function readOnlyUser() {
+  for (const candidate of ["mcp-admin", "nobody"]) {
+    try {
+      const entry = execFileSync("/usr/bin/getent", ["passwd", candidate], {
+        encoding: "utf8", timeout: 2000, stdio: ["ignore", "pipe", "ignore"],
+      }).trim().split(":");
+      if (entry.length >= 7 && Number(entry[2]) > 0) return candidate;
+    } catch { /* tenta o proximo usuario nao-root existente */ }
+  }
+  throw new Error("MCP_READONLY_USER_MISSING: mcp-admin/nobody indisponiveis");
+}
+
+// Constroi a chamada final: prlimit ... [-- runuser -u <usuario existente> --] cmd argv
 function buildWrapped(command, argv, runAs) {
   const prlimitArgs = [
     `--as=${LIMITS.AS_BYTES}`,
@@ -78,11 +91,11 @@ function buildWrapped(command, argv, runAs) {
     "--",
   ];
   if (runAs === "mcp-admin" && process.getuid && process.getuid() === 0) {
-    // runuser -u mcp-admin -- <cmd> <argv...>
+    const effectiveUser = readOnlyUser();
     return {
       bin: "/usr/bin/prlimit",
-      args: [...prlimitArgs, "/usr/sbin/runuser", "-u", "mcp-admin", "--", command, ...argv],
-      effectiveUser: "mcp-admin",
+      args: [...prlimitArgs, "/usr/sbin/runuser", "-u", effectiveUser, "--", command, ...argv],
+      effectiveUser,
     };
   }
   return {
