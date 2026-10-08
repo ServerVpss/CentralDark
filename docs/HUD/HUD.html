@@ -962,6 +962,22 @@ body {
     </div>
   </div>
 
+  <!-- GOAL-CLAUSE / META-GRILL PROJECTION -->
+  <div class="section" style="margin-top:16px;" id="goal-clause-section">
+    <div class="section-header">
+      <div class="section-icon">&#129504;</div>
+      <h2 class="section-title">Goal &middot; META-GRILL &middot; Reality</h2>
+      <span class="section-count" id="goal-clause-badge">UNKNOWN &middot; sem receipt</span>
+    </div>
+    <div class="hud-grid" aria-live="polite">
+      <div class="hud-card"><h3>Cláusulas obrigatórias</h3><div class="val warn" id="goal-clause-progress">UNKNOWN</div><div class="meta">PASS só com prova + contraprova</div></div>
+      <div class="hud-card"><h3>FAIL / UNKNOWN / STALE</h3><div class="val warn" id="goal-clause-gaps">UNKNOWN</div><div class="meta">sem dados não significa zero falhas</div></div>
+      <div class="hud-card"><h3>Estado do objetivo</h3><div class="val warn" id="goal-clause-verdict">UNKNOWN</div><div class="meta" id="goal-clause-owner">owner: UNKNOWN</div></div>
+      <div class="hud-card"><h3>Proveniência / medição</h3><div class="val warn" id="goal-clause-measured">UNKNOWN</div><div class="meta" id="goal-clause-source">receipt: UNKNOWN</div></div>
+      <div class="hud-card"><h3>NEXT_CURSOR</h3><div class="val warn" id="goal-clause-cursor">REMEASURE_REQUIRED</div><div class="meta">mesmo loop; sem segundo writer</div></div>
+    </div>
+  </div>
+
   <!-- MISSOES -->
   <div class="section" style="margin-top:16px;">
     <div class="section-header">
@@ -1399,11 +1415,62 @@ function liveFetchJson(url, timeoutMs) {
     });
 }
 
+
+/* Goal clauses são projeção read-only do avaliador Horn canônico.
+ * Sem envelope/receipt medido, mostrar UNKNOWN; não inferir PASS de HTTP 200.
+ */
+function renderGoalClauseProjection(goal) {
+  var verified = goal && goal.evaluator === 'scripts/lupa/horn-reuse-fixed-point.mjs'
+    && goal.contract_version === 1 && typeof goal.intent_id === 'string'
+    && typeof goal.goal_fingerprint === 'string' && typeof goal.main_sha === 'string'
+    && Array.isArray(goal.clauses) && goal.clauses.length > 0;
+  if (!verified) {
+    liveSet('goal-clause-progress', 'UNKNOWN', false);
+    liveSet('goal-clause-gaps', 'UNKNOWN', false);
+    liveSet('goal-clause-verdict', 'UNKNOWN', false);
+    liveSet('goal-clause-measured', 'UNKNOWN', false);
+    liveSet('goal-clause-owner', 'owner: UNKNOWN');
+    liveSet('goal-clause-source', 'receipt: UNKNOWN');
+    liveSet('goal-clause-cursor', 'REMEASURE_REQUIRED', false);
+    var emptyBadge = document.getElementById('goal-clause-badge');
+    if (emptyBadge) emptyBadge.textContent = 'UNKNOWN · sem receipt';
+    return;
+  }
+  var required = goal.clauses.filter(function(c) { return c && c.required !== false; });
+  var pass = required.filter(function(c) {
+    return c.status === 'PASS' && Boolean(c.proof_ref && c.counterproof_ref && c.measured_at);
+  }).length;
+  var fail = required.filter(function(c) { return c.status === 'FAIL'; }).length;
+  var stale = required.filter(function(c) { return c.status === 'STALE'; }).length;
+  var unknown = required.length - pass - fail - stale;
+  var stamp = goal.measured_at ? new Date(goal.measured_at) : null;
+  var validStamp = stamp && !isNaN(stamp.getTime());
+  var maxAge = Number(goal.max_age_ms);
+  var fresh = Boolean(validStamp && Number.isFinite(maxAge) && maxAge > 0 &&
+    Date.now() >= stamp.getTime() && Date.now() - stamp.getTime() <= maxAge);
+  if (!fresh) {
+    stale += pass;
+    pass = 0;
+  }
+  var fixed = fresh && goal.fixedPoint === true && pass === required.length && required.length > 0
+    && Boolean(goal.receipt_ref) && goal.next_cursor === 'FIXED_POINT';
+  liveSet('goal-clause-progress', pass + '/' + required.length + ' PASS', fixed);
+  liveSet('goal-clause-gaps', fail + ' FAIL · ' + unknown + ' UNKNOWN · ' + stale + ' STALE', false);
+  liveSet('goal-clause-verdict', fixed ? 'FIXED_POINT' : 'NEXT_DELTA', fixed);
+  liveSet('goal-clause-owner', 'owner: ' + (goal.owner_scope || 'UNKNOWN'));
+  liveSet('goal-clause-measured', validStamp ? stamp.toLocaleString('pt-BR', { timeZone: 'America/Bahia' }) + ' BRT' : 'UNKNOWN', Boolean(validStamp));
+  liveSet('goal-clause-source', 'main: ' + goal.main_sha.slice(0, 12) + ' · receipt: ' + (goal.receipt_ref || 'UNKNOWN'));
+  liveSet('goal-clause-cursor', goal.next_cursor || 'REMEASURE_REQUIRED', fixed);
+  var badge = document.getElementById('goal-clause-badge');
+  if (badge) badge.textContent = fixed ? 'FIXED_POINT · readback' : 'PARTIAL · readback';
+}
+
 function refreshCentralDarkLive() {
   var endpoints = CENTRALDARK_LIVE.endpoints;
   var idx = 0;
   function tryNext() {
     if (idx >= endpoints.length) {
+      renderGoalClauseProjection(null);
       liveSet('live-heart-state', 'UNKNOWN', false);
       liveSet('live-heart-measured', 'sem prova CURRENT', false);
       liveSet('live-heart-orchestrator', 'UNKNOWN', false);
@@ -1423,6 +1490,7 @@ function refreshCentralDarkLive() {
       var healthP = liveFetchJson(ep.health).catch(function() { return null; });
       healthP.then(function(health) {
         var op = heartbeat.operational || {};
+        renderGoalClauseProjection(op.goalClauseProjection || null);
         var binding = op.modelBinding || {};
         var topology = op.executionTopology || {};
         var orchestrator = binding.orchestrator || {};
