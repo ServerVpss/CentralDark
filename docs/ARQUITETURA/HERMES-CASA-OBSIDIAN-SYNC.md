@@ -111,3 +111,35 @@ Note Casa: `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`
 URI: `obsidian://open?vault=CASA-VAULT&file=%F0%9F%A7%BECHECK-LIST%20DIARIO%F0%9F%A4%96`
 
 Hermes job existente `ec512c0295e2` (Daily Receipt) fecha o dia ~23:00, atualiza o owner Git e notifica o CHEFE. Sessão cristalizada = commit+push main do ouro; não deixar a VPS suja. O vault Windows recebe o delta pelo sync `00-CANONICO` — não criar segundo checklist.
+
+## Regra CURRENT — HUD local e BAT em copia (08/10/2026)
+
+Intencao explicitamente reafirmada pelo CHEFE: **Casa e bancada mutavel**, GitHub `main` e registro canonico. Melhorar o **mesmo** `HUD.html` fisico do vault `C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬\HUD.html`, usando uma rota nativa autenticada pela tailnet quando provada, e promover o delta verificado ao **mesmo** owner `docs/HUD/HUD.html`. Sem criar novo HUD ou novo artefato a cada atualizacao; **nao usar Downloads como destino de entrega** para esse fluxo.
+
+### Dois escritores, alvos distintos
+
+- **HUD.html (Casa e main):** um unico writer por arquivo, reconciliacao por hash/base, menor delta, leitura de volta nos dois lados, preservacao de alteracoes divergentes. A captura de um print nao prova o hash/conteudo local.
+- **`CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` original:** manter aberto, operante e INTACTO enquanto a copia evolui.
+- **`CENTRALDARK-CORPO-UNICO-HUD-LOGS - Copia.bat`:** unica area de edicao do BAT para experimentos. Confirmar nome/extensao e bytes reais na Casa antes de escrever. Testar em escopo isolado; nao executar simultaneamente original e copia sobre o mesmo recurso/porta/log sem prova de isolamento.
+- **Promocao da copia ao nome original:** somente apos validacao aplicavel e troca coordenada pelo CHEFE; na sequencia preservar nova copia de trabalho. Nunca substituir o BAT original automaticamente.
+- **Hermes/Oraculo:** podem ler e testar em paralelo; writes no mesmo caminho requerem ownership unico para evitar conflitos, cherry-picks redundantes e perda de mudancas locais.
+
+### Ciclo pretendido e portabilidade
+
+```text
+CASA_HUD_EXISTENTE → HASH/BASE + DELTA MINIMO → TESTE LOCAL
+→ MAIN_OWNER_EXISTENTE → READBACK GITHUB
+→ READBACK CASA → RECEIPT/FINGERPRINT → FIXED_POINT_POR_ESCOPO
+BAT_ORIGINAL=RUNNING_UNCHANGED
+BAT_COPIA=EDIT_AND_TEST_WITHOUT_SHARED_WRITER_COLLISION
+TAILSCALE=PRIVATE_TRANSPORT_PRIORITY
+MCP=CANONICAL_CONTROL_PLANE
+REMOTE_WINDOWS_WRITE=REQUIRES_PROVEN_AUTHORIZED_EXECUTOR
+DOWNLOADS_STAGING=DISABLED_FOR_THIS_WORKFLOW
+NO_PARALLEL_HUD=true
+NO_BLIND_OVERWRITE=true
+```
+
+O script existente `scripts/casa/sync-hermes-obsidian.ps1` ja protege `docs/BRAIN` com hashes e conflitos; ele **nao deve ser declarado responsavel pelo HUD.html ou BAT** sem medir e ampliar o owner existente conforme necessario. Tailscale conectado nao comprova execucao Windows/SMB/SSH autenticada. Quando a rota autorizada de escrita estiver indisponivel, nao falsificar sincronizacao: anotar o bloqueio especifico e preservar arquivos, incluindo o original ativo.
+
+**Status da decisao:** `INTENT_REGISTERED`. **Status de Casa→main automatico:** `NOT_PROVEN` ate leitura de hash local + escrita + readback; promover selo so apos esses testes. Nenhum arquivo Windows e alterado pela declaracao documental.
