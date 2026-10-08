@@ -1,7 +1,7 @@
 ---
 name: centraldark-oracle-surface
 description: "Use when consulting an external browser oracle."
-version: 0.5.0
+version: 0.5.1
 author: SEGREDO/CHEFE, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -134,6 +134,87 @@ HERMES_ENVELOPE
 → RETURN_TO_CHAT_GLOBAL
 → REPEAT
 ```
+
+## Micro-Step Trigger Gate / Raph Looping
+
+Treat the CHEFE's loop words and the oracle's cursor words as executable continuation, not as a new task or final answer. This is the Raph/Ralf looping posture: keep the same loop alive, return each material micro-step to `CHAT_GLOBAL` when a usable surface exists, and only stop at a proven fixed point, explicit cancellation, or a true human frontier.
+
+```text
+MICROSTEP_ORACLE_GATE=true
+RAPH_LOOPING=true
+SAME_HERMES_ONLY=true
+ASK_CHAT_GLOBAL_EACH_MATERIAL_STEP=true
+THREE_TURNS_IS_MINIMUM_PROOF_NOT_LIMIT=true
+HUMAN_MICRO_CONFIRMATION_REQUIRED=false
+NO_NEW_GOAL_FOR_NEXT_CURSOR=true
+```
+
+Trigger on semantically equivalent phrases, including typos, speech-to-text variants, or mixed Portuguese/English:
+
+```text
+TRIGGERS=
+proximo_cursor|próximo_cursor|proximo curso|próximo curso casual|next cursor|NEXT_CURSOR|
+prove|provar|proof|counterproof|contraprova|
+reconciliar|reconcilie|reconcile|reconciliation|
+restaure|restaurar|restore|replay|retomar|
+readonly|read-only|read only|NEXT_READONLY_PROBE|
+mesmo loop|same loop|continue same loop|
+3 turnos|três turnos|prove tres turno|prove três turno|
+nao retornado pro chat|não retornado pro chat|return to oracle|auto return
+```
+
+Surface discovery is by capability/name first, not by demanding an already-active input box. A candidate `CHAT_GLOBAL` surface can be classified even when the composer is not active. If a usable input is present, send the micro-step there; if not, mark `SURFACE_NOT_ACTIVE`, preserve the cursor, and continue via the next existing authorized route.
+
+```text
+CHAT_GLOBAL_SURFACE_CLASSIFICATION_BY_NAME_AND_CAPABILITY=true
+ACTIVE_INPUT_BOX_REQUIRED_FOR_CLASSIFICATION=false
+ACTIVE_INPUT_BOX_REQUIRED_ONLY_FOR_SEND=true
+SURFACE_NOT_ACTIVE != LOOP_BLOCKED
+PREFER_EXISTING_AUTHORIZED_ROUTE=true
+```
+
+When triggered:
+
+```text
+TRIGGER_MATCH
+→ PRESERVE_LOOP_ID + INTENT_ID + PARENT_ID + RECEIPT_ID + NEXT_CURSOR
+→ MEASURE_ONLY_THE_TARGET_MATERIAL_TO_THE_CLAIM
+→ BUILD_ONE_MATERIAL_MICROSTEP_FOR_CHAT_GLOBAL
+→ IF_CHAT_GLOBAL_INPUT_ACTIVE: SEND_AND_WAIT_COMPLETE_RESPONSE
+→ IF_NOT_ACTIVE: RECORD_SURFACE_NOT_ACTIVE_AND_CONTINUE_EXISTING_ROUTE
+→ EXECUTE_OR_PROVE_ONLY_THE_NEXT_MATERIAL_MICROSTEP
+→ CAPTURE_FILE_LINE_ERROR_TYPE_WHEN_AVAILABLE
+→ COUNTERPROVE_OR_CLASSIFY_UNKNOWN
+→ RETURN_READBACK_TO_CHAT_GLOBAL_WHEN_AVAILABLE_WITH_NEW_TURN_ID
+→ REPEAT_SAME_LOOP
+```
+
+A material micro-step is a causal boundary, not every shell line. Examples: a new measured error, file/line/type classification, proposed minimal patch, test result, counterproof result, recovery/failover event, `NEXT_CURSOR`, or state transition. Do not spam the oracle with duplicate logs, unchanged output, or the same error fingerprint without information gain.
+
+```text
+SAME_ERROR_FINGERPRINT + NO_NEW_EVIDENCE = BACKOFF_OR_PAUSE
+MATERIAL_DELTA_REQUIRED_FOR_NEXT_ORACLE_TURN=true
+ERROR_REPORT_SHAPE=FILE|LINE|FUNCTION|TYPE|CAUSE|TEST|COUNTERPROOF|NEXT_CURSOR
+```
+
+Do not let a stale route-specific transport gap hijack the loop. A disconnected or stale route affects only the claim that depends on that route. It does not block repository work, oracle loop crystallization, local Casa routes, or any other existing authorized capability.
+
+```text
+ROUTE_SPECIFIC_GAP_AFFECTS_ONLY_THAT_ROUTE=true
+STALE_DEVICE_STATUS_IS_NOT_GLOBAL_RUNTIME_STATE=true
+DO_NOT_REPEAT_STALE_TRANSPORT_GAP_TO_HUMAN=true
+```
+
+Minimum proof of this gate is three consecutive correlated Hermes↔CHAT_GLOBAL turns without human intervention. This proves the loop; it does not cap the loop.
+
+```text
+TURN_1: oracle candidate + NEXT_READONLY_PROBE
+TURN_2: Hermes readback + next probe/counterproof
+TURN_3: Hermes readback + next cursor/fixed point decision
+THEN_CONTINUE_BY_NEXT_CURSOR_WHILE_MATERIAL_WORK_EXISTS=true
+```
+
+`Goal done` emitted before the readback returns to the chat, or while a material cursor remains, is `FAIL_PREMATURE_GOAL_DONE`.
 
 ## Oracle-First Human Response Routing
 
