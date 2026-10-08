@@ -4,7 +4,7 @@ Date: 2026-10-08
 Authority: SEGREDO/CHEFE
 Owner: `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`
 Test owner: `scripts/lupa/horn-reuse-fixed-point.test.mjs`
-Status: CANONICAL_DELTA_COMMITTED_PENDING_RUNTIME_SYNC_READBACK
+Status: CANONICAL_MAIN_READY_FOR_RUNTIME_SYNC
 
 ## Intent
 
@@ -61,3 +61,22 @@ FIXED_POINT=FALSE
 ```
 
 NEXT_CURSOR=RUN_STATIC_TESTS_THEN_RECONCILE_SKILL_RUNTIME_DRIFT_THEN_REPLAY_RECIPE_ON_SAME_GOAL
+
+
+## CHEFE sync crystal
+
+```text
+SYNC_REQUESTED_BY_CHEFE=true
+CANONICAL_SKILL=.agents/skills/software-development/centraldark-oracle-surface/SKILL.md
+CANONICAL_SKILL_VERSION=0.5.0
+CENTRALDARK_AUTOSYNC=true
+AUTOSYNC_POLICY=main-runtime-lock
+SYNC_OWNER=.agents/skills/skill-synchronization/SKILL.md + scripts/skill-sync-check.sh
+SYNC_SEQUENCE=--check -> reconcile independent runtime drift if any -> --apply -> --seal -> hash readback
+BLIND_RUNTIME_OVERWRITE=false
+SAME_GOAL_RETURN_REQUIRED=true
+```
+
+The canonical main is now explicitly the source for the next Hermes skill synchronization attempt. If the runtime skill has independent drift, the sync owner must preserve and reconcile that drift before apply/seal; this crystal is not permission to overwrite it blindly.
+
+NEXT_CURSOR=HERMES_SKILL_SYNC_CHECK_RECONCILE_APPLY_SEAL_HASH_READBACK_THEN_RETURN_SAME_GOAL
