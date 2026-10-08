@@ -1894,6 +1894,86 @@
         "counterproof_no_match": true,
         "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs"
       }
+    },
+    {
+      "id": "hermes-core.agents.critic.normalizeContinuation",
+      "kind": "FUNCTION",
+      "capability": "HERMES_FINALIZATION_CONTINUITY_CONTRACT",
+      "boundary": "hermes-core-critic",
+      "source": "apps/modulos/HERMES-CORE/agents/Critic/agent.mjs",
+      "symbol": "normalizeContinuation",
+      "activation": "CALL",
+      "from": "HERMES_FINALIZATION_DECISION",
+      "to": "CONTINUITY_STATE_NORMALIZED",
+      "owner": "apps/modulos/HERMES-CORE/agents/Critic/agent.mjs",
+      "canonical_route": "hermes-core-critic",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs"
+      }
+    },
+    {
+      "id": "hermes-core.agents.critic.continuationRequiredByMission",
+      "kind": "FUNCTION",
+      "capability": "HERMES_FINALIZATION_CONTINUITY_CONTRACT",
+      "boundary": "hermes-core-critic",
+      "source": "apps/modulos/HERMES-CORE/agents/Critic/agent.mjs",
+      "symbol": "continuationRequiredByMission",
+      "activation": "CALL",
+      "from": "HERMES_MISSION_TEXT",
+      "to": "CONTINUITY_CONTRACT_REQUIRED_FLAG",
+      "owner": "apps/modulos/HERMES-CORE/agents/Critic/agent.mjs",
+      "canonical_route": "hermes-core-critic",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs"
+      }
+    },
+    {
+      "id": "hermes-core.agents.critic.continuationProblems",
+      "kind": "FUNCTION",
+      "capability": "HERMES_FINALIZATION_CONTINUITY_CONTRACT",
+      "boundary": "hermes-core-critic",
+      "source": "apps/modulos/HERMES-CORE/agents/Critic/agent.mjs",
+      "symbol": "continuationProblems",
+      "activation": "CALL",
+      "from": "CONTINUITY_STATE_NORMALIZED",
+      "to": "HERMES_FINALIZATION_PROBLEMS_LIST",
+      "owner": "apps/modulos/HERMES-CORE/agents/Critic/agent.mjs",
+      "canonical_route": "hermes-core-critic",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs"
+      }
+    },
+    {
+      "id": "hermes-core.agents.critic.Critic",
+      "kind": "AGENT",
+      "capability": "HERMES_FINALIZATION_CRITIC_AUDITOR",
+      "boundary": "hermes-core-critic",
+      "source": "apps/modulos/HERMES-CORE/agents/Critic/agent.mjs",
+      "symbol": "Critic",
+      "activation": "CALL",
+      "from": "HERMES_ORCHESTRATOR_STEP",
+      "to": "HERMES_FINALIZATION_RECEIPT",
+      "owner": "apps/modulos/HERMES-CORE/agents/Critic/agent.mjs",
+      "canonical_route": "hermes-core-critic",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs"
+      }
     }
   ]
 }
