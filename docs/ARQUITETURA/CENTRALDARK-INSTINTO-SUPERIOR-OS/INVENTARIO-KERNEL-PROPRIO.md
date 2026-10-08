@@ -33,7 +33,7 @@ A missão é desenvolver inteligência persistente com método, memória, owners
 |---|---|---|
 | S0 INVENTORY | Medir fonte AionUi/AionCore, rotas, renderer e consumers; matriz superfície → owner → REUSE/RENAME/REBIND/EXTEND/HIDE/RETIRE; RECREATE exige gap provado | IN_PROGRESS |
 | S1 BRANDING | Identidade CentralDark sem duplicar backend | PENDING |
-| S2 LANDING_LOGIN | Preservar `public/central-dark-instinct-2`; autenticação encaminha ao cockpit privado | PENDING |
+| S2 LANDING_LOGIN | Preservar `apps/instinto-superior`; autenticação encaminha ao cockpit privado | PENDING |
 | S3 NAVIGATION | Builder, Runtime, PRs, Evidence, VPS, Hub, Desktop, Voz, Drive e Automação com owners | PENDING |
 | S4 EXISTING_CAPABILITIES | Reutilizar chats, Assistants, Teams, Agents, Models, Skills, Tools, Remote, System, arquivo e tarefas existentes | PENDING |
 | S5 REAL_BINDINGS | Ordem: Runtime → PRs → Evidence → VPS → Hub → Desktop → Automação → Drive → Voz → Channels/Admin; dado ausente UNKNOWN, nunca mock verde | PENDING |
@@ -48,7 +48,7 @@ NEXT_CURSOR=S0_INVENTORY_AND_OWNER_BINDING
 ```text
 S0_STATUS=IN_PROGRESS
 CURRENT_MAIN_AT_MEASUREMENT=7b0ba9b748bd2269295ed7dcafbb8e9c9244fd44
-CANONICAL_VISUAL_OWNER=public/central-dark-instinct-2
+CANONICAL_VISUAL_OWNER=apps/instinto-superior
 AIONUI_SOURCE=UNKNOWN_NOT_MATERIALIZED_IN_CANONICAL_REPO_SEARCH
 AIONCORE_SOURCE=UNKNOWN_NOT_MATERIALIZED_IN_CANONICAL_REPO_SEARCH
 WEBUI_UNIQUE_CONSUMERS=UNKNOWN
@@ -59,7 +59,7 @@ UNKNOWN_IS_NOT_PASS=true
 
 | Superfície | Fonte medida | Owner canônico | Decisão S0 | Prova / contraprova |
 |---|---|---|---|---|
-| Instinto Superior visual | `public/central-dark-instinct-2` | o próprio path no repo canônico | **REUSE + EXTEND** | README declara código visual canônico; TLC23 runtime gate também aponta `CANONICAL_VISUAL_OWNER=public/central-dark-instinct-2`. Source provado; deploy do HEAD continua claim separado. |
+| Instinto Superior visual | `apps/instinto-superior` | o próprio path no repo canônico | **REUSE + EXTEND** | README declara código visual canônico; TLC23 runtime gate também aponta `CANONICAL_VISUAL_OWNER=apps/instinto-superior`. Source provado; deploy do HEAD continua claim separado. |
 | Bolt/Desktop renderer | `apps/modulos/Bolt/source` | Builder/Desktop owners existentes | **REUSE + REBIND** | source/package/build Electron existem; presença de source não prova instalador/runtime atual. |
 | AionUi | somente referências documentais encontradas no repo canônico durante a busca S0 | owner de integração ainda não materializado | **UNKNOWN / MEASURE_BEFORE_BIND** | busca canônica encontrou referências em docs/receipts/mapa, mas nenhum source AionUi materializado foi identificado. Docs != source/runtime. |
 | AionCore | somente referências documentais encontradas no repo canônico durante a busca S0 | owner de integração ainda não materializado | **UNKNOWN / MEASURE_BEFORE_BIND** | mesma fronteira de AionUi; agent bus não pode ser declarado integrado sem source/consumer/binding. |
