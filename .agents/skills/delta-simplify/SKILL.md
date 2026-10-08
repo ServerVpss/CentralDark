@@ -1,6 +1,9 @@
 ---
 name: delta-simplify
 description: Revisar o delta já produzido para reduzir duplicação, complexidade, desperdício e correção superficial sem mudar a intenção nem substituir auditoria de correctness. Usar quando houver diff/PR/branch pronta para limpeza, quando a pergunta for "dá para fazer menor?", antes de promover mudança relevante, ou quando a mesma intenção está sendo reprocessada sem informação/estado novo. Não usar para caçar bug de correctness; para isso usar auditoria-pr + MetaLupa.
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # DELTA SIMPLIFY — MENOR DELTA QUE PRESERVA A INTENÇÃO

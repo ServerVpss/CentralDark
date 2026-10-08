@@ -1,6 +1,9 @@
 ---
 name: kimetsu-brainstorm
 description: "REMIX: KIMETSU_LEGACY + brainstorming. Classifica complexidade, descobre intenção real, propõe abordagens com trade-offs, gateia aprovação humana antes de implementar. Use antes de qualquer trabalho criativo ou de implementação."
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # 🫁 KIMETSU_BRAINSTORM — Remix Operacional

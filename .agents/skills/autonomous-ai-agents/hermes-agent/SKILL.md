@@ -10,6 +10,9 @@ metadata:
     tags: [hermes, setup, configuration, multi-agent, spawning, cli, gateway, bots, bot-mode, features, themes, skins, desktop-plugins, tui-widgets, petdex, development]
     homepage: https://github.com/NousResearch/hermes-agent
     related_skills: [claude-code, codex, opencode]
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # Hermes Agent

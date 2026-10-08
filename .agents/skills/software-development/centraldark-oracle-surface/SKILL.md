@@ -1,7 +1,7 @@
 ---
 name: centraldark-oracle-surface
 description: "Use when consulting an external browser oracle."
-version: 0.1.0
+version: 0.4.0
 author: SEGREDO/CHEFE, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -9,6 +9,9 @@ metadata:
   hermes:
     tags: [CentralDark, oracle, ChatGPT, desktop-preview, perception, provenance]
     related_skills: [hermes-agent]
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CentralDark Oracle Surface
@@ -45,6 +48,482 @@ REALITY_IS_JUDGE=true
 
 Every child inherits the parent Goal's intent, success predicate, owner/scope, CURRENT/baseline, evidence destination, counterproof and NEXT_CURSOR. A child may refine a criterion but may not weaken its parent; `LOCAL_DONE != PARENT_DONE`.
 
+## Continuous Loop and Correlation
+
+Use the existing HERMES continuity and perception owners; do not create a second loop, scheduler, brain, router, memory store, or writer.
+
+Every Hermes-originated message carries this envelope:
+
+```text
+ACTOR=HERMES
+LOOP_ID=<stable loop id>
+TURN_ID=<unique turn id>
+ATTEMPT_ID=<attempt id>
+RECEIPT_ID=<receipt or pending receipt id>
+PARENT_ID=<parent event/intent id>
+INTENT_ID=<goal intent id>
+EVENT_ID=<event id>
+CAUSATION_ID=<causal predecessor>
+SURFACE_ID=<surface binding id>
+NEXT_CURSOR=<next proven step>
+```
+
+The oracle response must echo or otherwise correlate `LOOP_ID`, `TURN_ID`, `RECEIPT_ID`, and `PARENT_ID`. A message without `ACTOR=HERMES` and the envelope is human input, never a Hermes-generated event. Classify it as `DELTA`, `OVERRIDE`, or `PARALLEL_CONVERSATION`, reconcile it with CURRENT and the active loop, and preserve the loop unless it is an explicit valid override.
+
+```text
+OBSERVE
+→ CONSULT_ORACLE
+→ CORRELATE_RESPONSE
+→ EXECUTE_EXISTING_OWNER
+→ MEASURE
+→ COUNTERPROVE
+→ UPDATE_CURRENT
+→ EMIT_EVIDENCE
+→ REPEAT
+```
+
+Continue until `FIXED_POINT` is proved or a genuine `HUMAN_FRONTIER` is reached. `AUTH != PASS`, `ORACLE_SAID != CONFIRMED`, and `LOCAL_DONE != PARENT_DONE` remain binding.
+
+## Continuous Oracle Loop Gate
+
+```text
+NO_TIME_WINDOW_PAUSE=true
+ACTIVE_LOOP_RUNS_CONTINUOUSLY=true
+TIMEZONE=America/Bahia
+WATCHDOG_INTERVAL != EXECUTION_CADENCE
+NEVER_WAIT_FOR_SCHEDULE_WHILE_ACTIVE=true
+```
+
+The watchdog/heartbeat exists for recovery and liveness only. It must not pause or gate an already-active Hermes↔CHAT_GLOBAL execution round.
+
+On surface failure:
+
+```text
+CHAT_FAILURE
+→ PRESERVE_LAST_GOOD_STATE + NEXT_CURSOR + LOOP_ID + RECEIPT_ID
+→ RECOVER
+→ IF_RECOVERY_FAILS: NEW_CHAT
+→ RESTORE_MINIMUM_HANDOFF
+→ CONTINUE_FROM_NEXT_CURSOR
+```
+
+When a human fixes or clarifies a wound during the active mission:
+
+```text
+HUMAN_FIX_DETECTED
+→ RECONCILE_DELTA
+→ RESUME_IMMEDIATELY
+```
+
+An oracle response containing `NEXT_READONLY_PROBE` is never completion:
+
+```text
+ORACLE_RESPONSE + NEXT_READONLY_PROBE != GOAL_DONE
+ORACLE_RESPONSE + NEXT_READONLY_PROBE = CONTINUE_SAME_LOOP
+```
+
+The active loop must continue without waiting for a new human Goal:
+
+```text
+HERMES_ENVELOPE
+→ WAIT_FOR_COMPLETE_CHAT_GLOBAL_RESPONSE
+→ CAPTURE_RESPONSE_STATE + EVIDENCE + NEXT_READONLY_PROBE
+→ RECONCILE_CURRENT
+→ EXECUTE/PROVE_NEXT_READONLY_PROBE
+→ NEW_TURN_ID + ATTEMPT_ID + RECEIPT_ID
+→ RETURN_TO_CHAT_GLOBAL
+→ REPEAT
+```
+
+## Oracle-First Human Response Routing
+
+Operational responses must be routed through the oracle before reaching the human:
+
+```text
+HERMES_ENVELOPE
+→ CHAT_GLOBAL/ORACLE
+→ ORACLE_RESPONSE
+→ HERMES_CAPTURE
+→ RECONCILE_CURRENT + EVIDENCE
+→ HUMAN_RESPONSE=RECONCILED_ORACLE_RESULT
+```
+
+A local probe result is evidence for the next oracle turn, not the final human response and not `GOAL_DONE`. After recovery or probe execution, the controller must automatically return the correlated readback to `CHAT_GLOBAL` with a new turn/attempt/receipt. Confirm `AUTO_RETURN_TO_ORACLE` and `ORACLE_FIRST_HUMAN_ROUTING` on the same `LOOP_ID`.
+
+`UNKNOWN`, `FAIL`, `COUNTERPROOF_REQUIRED`, `NEXT_READONLY_PROBE`, `NO_PROGRESS_RECOVERABLE`, and `SESSION_RECOVERABLE` keep the loop alive. The 10-minute heartbeat is a watchdog/recovery/resume mechanism, not a substitute for an active round. Do not emit `GOAL_DONE` while a probe, counterproof, recovery, or next cursor remains.
+
+```text
+GOAL_DONE_ALLOWED_ONLY_IF:
+NEXT_CURSOR=FIXED_POINT
+AND all applicable gates are proven
+AND no recoverable state remains
+```
+
+Stop only at a proven `FIXED_POINT`, a genuinely unavoidable `HUMAN_FRONTIER`, or explicit CHEFE cancellation. A minimum loop proof is three consecutive Hermes↔CHAT_GLOBAL turns without human intervention:
+
+```text
+turn-N
+→ oracle response
+→ NEXT_READONLY_PROBE
+→ Hermes execution
+→ turn-N+1
+→ oracle response
+→ next probe
+→ turn-N+2
+```
+
+If the runtime reports `Goal done` before that criterion, classify `FAIL_CONTINUOUS_LOOP` and resume the same loop from the last receipt/cursor.
+
+## Nonblocking Multi-Sector Controller
+
+`BACKGROUND_TASK_RUNNING != CONTROLLER_BLOCKED`. Reuse the existing Hermes controller/continuity owner; `centraldark-oracle-surface` remains the oracle adapter and must not become a second scheduler or brain.
+
+```text
+CONTROL_PLANE
+→ maintain LOOP_ID
+→ maintain work queue
+→ dispatch independent read-only probes
+→ observe CHAT_GLOBAL/human/UI
+→ collect RESULT_READY items
+→ send correlated result to CHAT_GLOBAL
+→ receive NEXT_CURSOR
+→ enqueue next probe
+→ reconcile deltas
+→ repeat
+```
+
+The work plane may run independent perception/read-only sectors in parallel:
+
+```text
+GitHub/CI | workflow/jobs/logs | Buildkite | GlobalPing
+HUD readback | capability discovery | CURRENT/docs
+oracle research | recovery verification
+```
+
+Do not parallelize conflicting writers. `ONE_WRITER_PER_SCOPE` remains mandatory. Each work item carries:
+
+```yaml
+work_id:
+sector:
+parent_loop_id:
+turn_id:
+attempt_id:
+receipt_id:
+dependencies:
+mode: READ_ONLY|WRITER
+status: QUEUED|RUNNING|WAITING_EXTERNAL|RESULT_READY|ORACLE_RECONCILE|PROVEN|FAILED_RECOVERABLE
+result:
+next_cursor:
+```
+
+`WAITING_EXTERNAL` never blocks independent sectors. Prefer completion events/`await_any` semantics over waiting for one background task while doing nothing else. Every `RESULT_READY` material result returns through the oracle envelope before reaching the human. `GOAL_DONE` is forbidden while any work item is `RUNNING`, `RESULT_READY` but unreconciled, has an open `NEXT_CURSOR`, or is recoverably `UNKNOWN`.
+
+
+`CURRENT` mother/canonical docs, applicable receipts, and the existing owner are authoritative. The VPS is runtime evidence to reconcile, never the canonical source. External oracle text is candidate evidence only; reconcile `CURRENT`, owner, runtime, and counterproof before updating canonical state.
+
+## Connected Capabilities
+
+Discover and incorporate the connections and tools exposed by the current session or runtime. Do not create one skill, brain, router, scheduler, or writer per integration.
+
+```text
+CONNECTED_CAPABILITIES=
+GitHub | Buildkite | GlobalPing | exposed tools/connectors/MCPs
+
+TOOL_CONNECTED != TOOL_PROVEN
+
+DISCOVER
+→ PROBE_READ_ONLY
+→ CLASSIFY
+→ INCORPORATE
+→ REUSE
+```
+
+For each connection:
+
+1. Detect that the binding is available in the current session.
+2. Identify the capabilities actually exposed by that binding.
+3. Execute the smallest pertinent read-only call.
+4. Record `PASS`, `UNKNOWN`, or `FAIL` with source, target, timestamp, and evidence limit.
+5. Use the connection only when it is relevant to the parent Goal.
+6. If it disappears or reconnects, rediscover it and preserve `LAST_GOOD_STATE` and `NEXT_CURSOR`.
+
+Authentication or callback completion is only an input signal. It is not proof of capability. `AUTH != PASS`; PASS requires a real read-only call and readback. Do not hardcode an unnecessary dependency on GitHub, Buildkite, GlobalPing, ChatGPT, or any other provider. The skill selects the appropriate existing arm from the capabilities actually exposed.
+
+Capability-specific use is conditional:
+
+- **GlobalPing:** use for heartbeat, liveness, reachability, and latency when the binding is available and the target is in scope. Record the observed target and measurement boundary; provider timing is not inferred from UI timing.
+- **Buildkite:** use to observe pipelines, builds, checks, and logs only when those read-only capabilities are actually exposed and authorized.
+- **GitHub:** use only for the repository, pull request, Actions, checks, and readback capabilities actually proven in the current session.
+- **Other connectors/MCPs:** inventory and probe them by the same contract; never promote a listing or connection badge to execution proof.
+
+A missing, revoked, or unavailable connection is `UNKNOWN`, not a reason to create a parallel integration. Reuse the same `centraldark-oracle-surface` loop and existing writer after the connection returns.
+
+## Inbound Canonical Trigger Gate
+
+The canonical prefix is executable control flow, not decorative text and not only a correlation envelope:
+
+```text
+INBOUND_CANONICAL_TRIGGER_GATE=true
+CANONICAL_PREFIX_IS_NOT_DECORATIVE=true
+CANONICAL_PREFIX_IS_NOT_ONLY_CORRELATION_ENVELOPE=true
+INBOUND_ORACLE_REQUEST_MUST_ENTER_TRIGGER_FABRIC=true
+```
+
+On receiving the canonical trigger plus a Hermes envelope:
+
+```text
+!CENTRALDARK #ACORDAR !CALIBRAR !MULTIBUSSOLA
++ ACTOR=HERMES
+→ ACTIVATE_MASTER_SESSION
+→ MEASURE_MAIN_CURRENT
+→ LOAD_MASTER_CYCLE + CONTRACT + PERTINENT_OWNER
+→ RECONCILE_PARENT_RECEIPT + NEXT_CURSOR
+→ REUSE_UNCHANGED_PROOF
+→ VERIFY_NEW_EVIDENCE
+→ COUNTERPROVE
+→ RETURN_MINIMUM_DELTA + NEXT_READONLY_PROBE/NEXT_CURSOR
+```
+
+`!ACORDAR`, `!CALIBRAR`, and `!MULTIBUSSOLA` are phases of the existing master funnel. Do not answer merely because the prefix was parsed; execute the applicable trigger contract first. `NEW_MATERIAL_RESTARTS_MISSION=false` remains in force.
+
+
+When the CHEFE sends a message in the established CentralDark format, interpret it as continuation of the active Goal, not as a new finite task:
+
+```text
+!CENTRALDARK — CONTINUE_EXISTING_GOAL
+
+CURRENT_STATE=MEASURE_NOW
+DO_NOT_REPROVE_ESTABLISHED_IDENTITY=true
+QUERY_CURRENT_SITUATION=true
+PRESERVE_LAST_GOOD_STATE=true
+CONTINUE_SAME_LOOP=true
+RESOLVE_ALL_PROVEN_ERRORS=true
+EVOLVE_CENTRALDARK_EXISTING_ONLY=true
+COMMIT_CANONICAL_DELTA=true
+```
+
+Continuation behavior:
+
+```text
+read current state
+→ consult CHAT_GLOBAL/oracle in the same format
+→ reconcile CURRENT/runtime/receipts
+→ skip already-proven identity and connectivity checks
+→ select the next unresolved error or capability
+→ execute the smallest safe correction
+→ test and counterprove
+→ commit/push the canonical CentralDark delta when authorized
+→ return the readback to the oracle
+→ continue the same Goal
+```
+
+Do not stop after confirming that Hermes Desktop, Gateway, SSH, or the model exists. Those are established identity facts unless a new contradiction appears. The active objective is persistence, continuous loop, canonical commit/receipt, error resolution, and incremental CentralDark evolution.
+
+A continuation message must inherit `LOOP_ID`, `PARENT_ID`, `LAST_GOOD_STATE`, `NEXT_CURSOR`, and the current unresolved-error set. It must not restart discovery from zero or ask the CHEFE to issue a new Goal for routine next probes.
+
+## Canonical Integration and Loop Health
+
+`perception-orchestra.mjs` is the existing perception owner. This skill is a subordinated surface capability, not a brain or dispatcher. Reuse `scripts/trigger-fabric/oracle_evidence_hook.py` for oracle query construction and evidence envelopes; do not create a second hook. The canonical path is:
+
+```text
+centraldark-oracle-surface
+→ oracle_evidence_hook.py
+→ perception-orchestra.mjs
+→ rendezvous + dedupe + counterproof
+→ existing writer
+→ Reality Judge
+→ receipt
+→ NEXT_CURSOR
+```
+
+Use the capability bus by measured toolset, not by brand. ChatGPT, Gemini, Claude, Grok, and similar products are `CHAT_GLOBAL` implementations when their exposed tools and surface behavior support that class; the brand alone proves nothing.
+
+An oracle must never claim repository, CURRENT, runtime, GitHub, Buildkite, or VPS access merely because Hermes included facts in a prompt. For every claimed external read, require a tool binding, the exact read-only call, target/path, and readback. If the oracle surface cannot invoke the repository/tool binding itself, mark the claim `EVIDENCE_LIMIT=ORACLE_NO_DIRECT_TOOL_ACCESS`; Hermes remains the executor that performs the read and returns sanitized evidence for reconciliation.
+
+```text
+ORACLE_TOOL_ACCESS_DECLARED != ORACLE_TOOL_ACCESS_PROVEN
+REPO_READ_CLAIM
+→ TOOL_BINDING_OBSERVED
+→ READ_ONLY_CALL_EXECUTED
+→ TARGET_READBACK
+→ PROVENANCE_CORRELATED
+```
+
+The oracle may request a tool probe, but only Hermes or the existing authorized tool owner executes it. Never promote an oracle's statement that it "looked at the repo" without a correlated tool receipt.
+
+## Canonical-First Query, Recovery, Learning and Replay
+
+For a material self-improvement or tooling question, consult the same `CHAT_GLOBAL` surface instead of creating a new research path. Start every request with the canonical boot prefix and a complete correlation envelope, then ask for a candidate procedure and, when useful, public web research:
+
+```text
+!CENTRALDARK #ACORDAR !CALIBRAR !MULTIBUSSOLA
+ACTOR=HERMES
+LOOP_ID=<stable loop>
+TURN_ID=<turn>
+ATTEMPT_ID=<attempt>
+RECEIPT_ID=<receipt>
+PARENT_ID=<parent>
+INTENT_ID=<intent>
+EVENT_ID=<event>
+CAUSATION_ID=<cause>
+SURFACE_ID=<surface>
+NEXT_CURSOR=<cursor>
+
+QUESTION=<specific operational question>
+RESEARCH_REQUEST=public_sources_when_available
+RESPONSE_SCHEMA=CANDIDATE_CLAIM,SOURCES,PROCEDURE,EVIDENCE_LIMIT,COUNTERPROOF,NEXT_READONLY_PROBE
+```
+
+When the question concerns Hermes Desktop or surface automation, explicitly request guidance for: scrolling up/down only when needed; detecting new messages; refreshing and re-snapshotting without rereading proven context; stale-element recovery; incomplete/frozen response detection; retry and same-tab new-chat failover; minimal handoff with `LAST_GOOD_STATE`/`NEXT_CURSOR`; connector/tool discovery; and separating connection, research, and execution proof.
+
+Read the entire relevant response cone. If the page indicates research, loading, or an incomplete response, do not capture it as final: reread after the response-complete state is observed. Use `drive_preview action=scroll` upward/downward when context boundaries or new messages require it, and use `desktop_preview action=read` for the actual text. Public URLs are candidate sources; reconcile them with CURRENT/owners and run the smallest counterproof before absorbing a method into this skill.
+
+Normal reading posture is the newest stable boundary at the bottom. Scroll upward only when a causal dependency, human delta, provenance, or missing context is not in the persisted state; return to the last known boundary afterward. Detect new messages with a stable message/fingerprint boundary and consume only the append, not the whole conversation. A response is `IN_PROGRESS` while generation is active, text is still changing, a stop control is present, or the expected terminal boundary is absent. Mark `COMPLETE` only after a terminal state and stable content are observed; temporary silence is not completion.
+
+Only persist the minimum surviving method after:
+
+```text
+CONSULT
+→ CAPTURE COMPLETE RESPONSE
+→ EXTRACT SOURCES + PROCEDURE
+→ RECONCILE CURRENT/OWNER
+→ COUNTERPROVE
+→ REPLAY ONCE
+→ PATCH THIS SAME SKILL
+```
+
+A research answer, an authenticated callback, or a visible browser control is not execution proof. If the oracle cannot complete the research response, preserve the last good cursor and classify the attempt `RESPONSE_INCOMPLETE` rather than inventing the missing method.
+
+Before a material decision, perform canonical-first reconciliation against the live `main`/CURRENT, applicable owners, docs, learnings, and receipts. Compare `CURRENT main` with the VPS runtime whenever the conclusion depends on runtime state. Oracle output remains `CANDIDATE` until local evidence, owner, counterproof, and Reality Judge rendezvous succeed.
+
+Classify failures independently:
+
+```text
+TRANSPORT | UI | SESSION | TOOL | CI | RUNTIME | PRODUCT
+```
+
+One class must not be promoted to another without evidence. Dedupe red checks by causal fingerprint: many checks with one root cause are one wound and one mission, not many repair loops. Perception may run in parallel; mutation is serialized through one writer per scope.
+
+Use the integration stage machine and declare only the measured stage:
+
+```text
+DECLARED → DISCOVERED → CONFIGURED → HEALTHY → EXECUTED → RECEIPT
+```
+
+`CONNECTED != HEALTHY != EXECUTED`. A listing, callback, badge, or successful authentication cannot advance the stage without a real read-only call and readback.
+
+Track loop observability per attempt:
+
+```yaml
+round_number:
+duration_ms:
+retry_count:
+recovery_used:
+selected_tool:
+discarded_cause:
+surviving_cause:
+progress_fingerprint:
+conversation_fingerprint:
+```
+
+Require progress in at least one of evidence, hypothesis, state, or cursor. Otherwise classify `NO_PROGRESS` and stop blind retries. Detect conversation changes by fingerprint and reconstruct continuity from the envelope, not from UI assumptions. Reread only the relevant cone when the fingerprint is unchanged; use `REPLAY_BEFORE_REDISCOVERY=true`.
+
+Apply these invariants:
+
+- **Human-in-the-loop:** an un-enveloped human message is a new delta or override, not an oracle response; refresh/read back before material mutation.
+- **Adaptive binding:** choose a sufficient fast binding for simple work and a stronger reasoning/effort binding for counterproof-heavy work without changing the parent mission.
+- **Hot-plug/hot-unplug:** rediscover capabilities when tools appear or disappear; do not restart the Goal.
+- **Idempotency:** replay after crash must not duplicate comments, commits, deploys, or mutations; persist the last `FIXED_POINT`/`PARTIAL_POINT` and `NEXT_CURSOR`.
+- **Artifact isolation:** artifact, upload, and quota failures remain separate from functional CI failures.
+- **CI feedback:** `commit → checks → first causal failure → owner correction → checks`; do not wait for unrelated red jobs when a safe micro-deploy is permitted.
+- **Runtime proof:** `PATCHED != ROOT_CAUSE_FIXED`; after deployment, read back effect, deployed SHA, runtime SHA, and health from the real owner.
+
+A new path becomes reusable only after:
+
+```text
+PROVEN_NEW_PATH
+→ MINIMUM_LEARNING
+→ REPLAY
+→ COMPARE
+→ REUSABLE_RECIPE or SINGLE_RUN_PROOF
+```
+
+Pending learning never becomes memory or canonical state merely because Hermes or the oracle said it. Require provenance, CURRENT match, owner match, dedupe, counterproof, reality evidence, writer, and readback.
+
+## Surface Mapping and Recovery
+
+```text
+STALE_DOM_REF_REDISCOVERY=true
+FULL_CHAT_TRAVERSAL_BEFORE_REASONING=true
+PROVEN_ORACLE_IMPROVEMENT → EVOLVE_EXISTING_CENTRALDARK_ORACLE_SURFACE
+```
+
+A stale/unknown ref is a recoverable binding failure, never terminal: preserve `LOOP_ID`, `RECEIPT_ID`, `LAST_GOOD_STATE`, and `NEXT_CURSOR`; call `drive_preview action=elements`; remap by semantic label/role; then retry only the interrupted idempotent interaction. Never guess a selector or reuse the stale ref.
+
+For a material decision that depends on conversation history not already preserved as evidence, traverse the current chat before reasoning: acquire elements, capture the current view, scroll to top, read visible blocks, scroll downward in bounded steps, read each new block, dedupe already-read text, and return to the bottom. Record `FIRST_VISIBLE_MESSAGE`, `LAST_VISIBLE_MESSAGE`, `SCROLL_TOP_REACHED`, `SCROLL_BOTTOM_REACHED`, `UNREAD_GAPS`, `DUPLICATES_DROPPED`, and `CONVERSATION_COVERAGE=COMPLETE|PARTIAL`. Virtualized or unavailable content makes coverage `PARTIAL`; never claim full-history reading without both boundaries and zero gaps.
+
+Map the whole relevant page when the answer, conversation boundary, or control state is material. Use `drive_preview action=scroll` in both directions, `desktop_preview action=read`, and a fresh `drive_preview action=elements` after navigation, refresh, or a stale reference. Re-read only the affected cone after a proven snapshot; `REPLAY_BEFORE_REDISCOVERY=true`.
+
+Promote a new Oracle/UI practice into this same skill only after real-use proof, counterproof, a replay, and a generalizability check. Keep a one-off observation in its receipt; do not create a sibling Oracle skill.
+
+Recover these states without restarting the mission:
+
+```text
+CONNECTION_INTERRUPTED | RESPONSE_PENDING | RESPONSE_FROZEN
+STALE_ELEMENT_REMOVED | TIMEOUT | CONVERSATION_LIMIT
+PREVIEW_STUCK
+```
+
+On any such state:
+
+1. Preserve `LAST_GOOD_STATE`, `LOOP_ID`, `RECEIPT_ID`, and `NEXT_CURSOR`.
+2. Read the current surface and inventory elements again.
+3. Retry the same conversation once through the cheapest surviving route.
+4. If still broken, refresh/reopen the same surface and re-submit a minimum handoff, never the full private history.
+5. If the same tab remains unusable, open a new conversation in that tab with `PARENT_ID`, `previous_surface_id`, `last_proven_context_fingerprint`, and the reason for failover.
+6. Reconcile the result with CURRENT before any action; do not silently switch tabs or targets.
+
+`element removed from page since last snapshot` is a recoverable binding error: re-snapshot, find the equivalent ref by label/role, and continue. Do not blind-retry unchanged inputs after the same failure with no new information.
+
+Use this recovery ladder, preserving the same loop:
+
+```text
+REREAD
+→ REACQUIRE_ELEMENTS
+→ ONE_IDEMPOTENT_RETRY
+→ REFRESH
+→ REREAD_CONVERSATION
+→ SAME_CHAT
+→ NEW_CHAT_SAME_TAB_WITH_MINIMAL_HANDOFF
+→ ONLY_THEN_NEW_TAB/SESSION
+```
+
+Before refresh, persist the conversation fingerprint, last message boundary, known receipt, `LAST_GOOD_STATE`, and `NEXT_CURSOR`. After refresh or failover, verify the fingerprint and boundary before sending. If they diverge, classify `CONVERSATION_CHANGED` and reconcile; never silently continue on a new conversation.
+
+Record per round:
+
+```yaml
+attempt_id:
+loop_id:
+turn_id:
+receipt_id:
+parent_id:
+surface_id:
+model_binding:
+input_mode:
+submit_observed_at:
+first_visible_response_observed_at:
+response_complete_observed_at:
+elapsed_to_first_visible_ms:
+elapsed_to_complete_ms:
+response_state:
+error_state:
+last_good_state:
+next_cursor:
+```
+
+Use an existing ping/heartbeat API only when its binding is available. A successful authorization or visible control is not a liveness proof; execute the ping and read back its result. If no ping binding exists, record `HEARTBEAT=UNKNOWN` rather than inventing one.
+
 ## Preview Procedure
 
 1. Open the external surface with `desktop_preview` using `action=open`; do not use `browser_navigate` or an external browser for the Hermes Desktop Preview path.
@@ -72,7 +551,7 @@ next_readonly_probe:
 
 ## Preview Tab Semantics
 
-Runtime counterproof corrected a false assumption from the first session draft.
+Runtime counterproof + Hermes Desktop source establish the real split:
 
 ```text
 "abra/navegue/vá para" = reuse/navigate the current Browser tab
@@ -80,260 +559,68 @@ Runtime counterproof corrected a false assumption from the first session draft.
 NAVIGATE_CURRENT_TAB != OPEN_NEW_PREVIEW_TAB
 ```
 
-Current Hermes Desktop source proves a split between **navigation** and **tab creation**:
+Current implementation:
 
 ```text
 desktop_preview action=open + URL
-→ emits preview.open {url,label}
-→ URL targets call browserTabFor(visible)
-→ active/last Browser tab is reused by design
+→ preview.open {url,label}
+→ openPreview(target.kind=url)
+→ browserTabFor(visible)
+→ reuses active/last Browser tab
 
 Preview strip "+"
 → newBrowserTab()
-→ mints a new Browser tab id
-→ preserves the previous Browser tab
+→ mints another url:browser-* tab id
+→ preserves previous Browser tab
 ```
 
-Therefore:
+Current `desktop_preview` schema exposes only `open|close|read`; there is no `new_tab` action for the agent.
 
 ```text
 LABEL_IS_NOT_NEW_TAB_SIGNAL=true
 DESKTOP_PREVIEW_OPEN_DOES_NOT_PROVE_NEW_BROWSER_TAB=true
 NEW_TAB_REQUEST_PRESERVES_CURRENT=INTENT
-AGENT_NEW_BROWSER_TAB_TOOL_ACTION=UNEXPOSED_IN_CURRENT_DESKTOP_PREVIEW_SCHEMA
-NEW_BROWSER_TAB_E2E=UNKNOWN_UNTIL_AGENT_CAN_TRIGGER_TAB_CREATION_AND_READBACK_TWO_TABS
+AGENT_NEW_BROWSER_TAB_TOOL_ACTION=UNEXPOSED
+NEW_BROWSER_TAB_E2E=UNKNOWN
 ```
 
-The `desktop_preview` schema currently exposes only `open|close|read`; it has no `new_tab` action. Do not claim that a distinct label creates a second Browser tab. A real PASS requires the agent to trigger the same tab-creation path as the Preview strip `+` (or an equivalent authorized binding) and then prove that both Browser tabs remain present.
+Do not claim a second Browser tab from `open + label`. PASS requires triggering the same creation path as the Preview strip `+` (or an equivalent authorized binding) and readback proving at least two Browser tabs remain present. Do not depend on a site's `target="_blank"` or `window.open()`.
 
-## Visual Readback / Scroll
+## Proven Pilot
 
-Visual truncation is not automatically a data failure. If the response was already captured completely by the reader, scrolling is presentation/readback hygiene, not a new proof gate.
+The proven pilot opened `https://chatgpt.com/` in the internal Preview, created an isolated chat, sent a sanitized oracle query with all four IDs, and captured a structured response containing `CANDIDATE_CLAIM`, `EVIDENCE_LIMIT`, `COUNTERPROOF` and `NEXT_READONLY_PROBE`. A second current-tab runtime probe sent `ORACLE_RUNTIME_PROOF` with `INTENT_ID`, `EVENT_ID`, `CAUSATION_ID` and `SURFACE_ID`; the response returned `RESPONSE_STATE=COMPLETE` and the requested candidate/limit/counterproof fields. This proves surface transport and response capture only; it does not prove canonical-envelope integration, writer mutation, deployment or runtime effect.
 
-```text
-UI_TRUNCATED != RESPONSE_TRUNCATED
-FULL_CAPTURE_PROVEN → SCROLL_OPTIONAL_FOR_VISUAL_READBACK
-FULL_CAPTURE_UNKNOWN → SCROLL_OR_BOTTOM_CONTROL → RE_READ → CONFIRM_COMPLETE
-```
-
-When the chat exposes a bottom/down control, prefer the smallest visible action:
-
-```text
-RESPONSE_APPEARS_CUT
-→ READ_CURRENT_SURFACE
-→ IF_FULL_CAPTURE_ALREADY_PROVEN: optionally scroll to bottom for clean visual readback
-→ ELSE: use dynamic elements/ref to scroll or activate the bottom/down control
-→ RE_READ
-→ confirm the final response boundary
-```
-
-Do not hard-code coordinates. The down-arrow/scroll affordance is a runtime UI binding and may change. Its use improves visual continuity; it only becomes mandatory when the unread portion is needed to prove response completeness.
-
-## Oracle Response Telemetry and Adaptive Surface Loop
-
-The oracle flow does not stop at collecting text. Measure the surface, the attempt, and the response before reconciliation.
-
-```text
-SNAPSHOT_SURFACE
-→ SELECT_CURRENT_BINDINGS
-→ SUBMIT_QUERY
-→ MEASURE_RESPONSE
-→ CAPTURE_RESULT
-→ SNAPSHOT_POST_STATE
-→ CLASSIFY
-→ ADAPT_ONLY_IF_NEEDED
-→ RECONCILE
-```
-
-For each oracle attempt preserve:
-
-```yaml
-attempt_id:
-intent_id:
-event_id:
-causation_id:
-surface_id:
-surface:
-model_binding:
-effort_binding:
-input_mode:
-available_controls:
-missing_controls:
-submit_observed_at:
-first_visible_response_observed_at:
-response_complete_observed_at:
-elapsed_to_first_visible_ms:
-elapsed_to_complete_ms:
-response_state:
-error_state:
-error_text:
-candidate_claim:
-evidence_limit:
-counterproof:
-next_readonly_probe:
-```
-
-Timing is observational unless the provider exposes an authoritative trace:
-
-```text
-PREVIEW_POLL_TIME != PROVIDER_BACKEND_LATENCY
-FIRST_VISIBLE_RESPONSE = first response content observed by the Preview reader
-COMPLETE_TIME = first observed stable/completed response state
-```
-
-Surface controls are runtime bindings, not architecture:
-
-```text
-MODEL_NAME_IS_BINDING=true
-EFFORT_LEVEL_IS_BINDING=true
-INPUT_MODE_IS_BINDING=true
-VISIBLE_CONTROL != INVOKABLE_CAPABILITY
-CONTROL_PRESENT != ACTION_EXECUTED
-VOICE_BUTTON_VISIBLE != VOICE_SESSION_ACTIVE
-MIC_BUTTON_VISIBLE != MICROPHONE_CAPTURE_ACTIVE
-```
-
-Map controls dynamically with `drive_preview action=elements`; do not hard-code screen coordinates or assume a model/effort list remains stable. Preserve labels/options observed at that attempt.
-
-Adaptation is goal-driven:
-
-```text
-simple/mechanical goal → prefer sufficient lower-cost/faster binding when available
-complex/ambiguous/counterproof-heavy goal → prefer stronger reasoning binding when available
-surface/error/capability mismatch → change only the failed binding or route
-same failure + same inputs + no new information → do not blind-retry
-```
-
-Model, effort, and text/voice mode may change between attempts without changing the parent Goal. The child may refine its execution binding but may not weaken the parent's success criterion.
-## Canonical-First Query, Recovery, Learning and Replay
-
-Every material Oracle query must carry the CentralDark boot semantics before the actual question:
-
-```text
-!CENTRALDARK #ACORDAR !CALIBRAR !MULTIBUSSOLA
-CANONICAL_FIRST=true
-CONSULT_RELEVANT_CURRENT_OWNERS_BEFORE_ANSWER=true
-```
-
-This prefix is a semantic contract, not proof that the external surface has repository/runtime access. If the surface cannot read the applicable canon/CURRENT/runtime, it must keep that boundary explicit in `EVIDENCE_LIMIT` and remain `CANDIDATE`.
-
-Do not open a new conversation or Browser tab merely because one send failed. Recover in the smallest surviving scope:
-
-```text
-SEND_FAILED
-→ READ_CURRENT_SURFACE
-→ IS_CONVERSATION_STILL_READABLE?
-→ IS_COMPOSER_OR_RETRY_CONTROL_AVAILABLE?
-→ YES: RETRY_SAME_CONVERSATION_ONCE_WITH_NEW_ATTEMPT_ID
-→ RE-READ RESULT
-
-IF SAME_CONVERSATION_STILL_BROKEN:
-→ NEW_CHAT_SAME_BROWSER_TAB
-→ PRESERVE_PARENT_INTENT_AND_CAUSAL_THREAD
-→ SEND_CANONICAL_BOOT_PREFIX_FIRST
-→ SEND_MINIMUM_CONTEXT + CURRENT QUESTION
-→ READBACK
-
-ONLY IF SAME_TAB/NEW_CHAT ROUTE IS PROVEN UNUSABLE:
-→ NEW_BROWSER_TAB_CANDIDATE
-→ current agent tool capability may still be UNKNOWN
-→ never destroy the previous proven context before replacement is proven
-```
-
-Required continuity fields when a new conversation is needed:
-
-```yaml
-parent_intent_id:
-parent_event_id:
-parent_causation_id:
-previous_surface_id:
-previous_conversation_ref:
-last_proven_context_fingerprint:
-reason_for_new_conversation:
-```
-
-Failure classification:
-
-```text
-SEND_FAILED != CHAT_DEAD
-CHAT_DEGRADED != NEW_TAB_REQUIRED
-NEW_CHAT_SAME_TAB != NEW_BROWSER_TAB
-UI_CONTROL_MISSING != CAPABILITY_ABSENT_GLOBALLY
-```
-
-After a genuinely new path is proven, do not stop at PASS. Close the learning loop through existing learning/receipt owners:
+A replay was then executed in the same current ChatGPT Preview tab using the same capability and a new event/causation pair. The replay returned `RESPONSE_STATE=COMPLETE`, the same `CAPABILITY=CHATGPT_PREVIEW_CURRENT_TAB_RESPONSE_CAPTURE`, `REPLAY_MARKER=oracle-runtime-002`, the same interface-only evidence limit and the same counterproof boundary. Therefore the reusable recipe is proven only for current-tab transport and response capture; it is not proof of provider latency, canonical-envelope integration, writer mutation, deployment or runtime effect.
 
 ```text
 PROVEN_NEW_PATH
 → CRYSTALLIZE_MINIMUM_LEARNING
 → STORE_PROVENANCE
-→ EMIT_EVIDENCE_ENVELOPE
 → REPLAY_ONCE
 → COMPARE
 → IF_EQUIVALENT: PROMOTE_TO_REUSABLE_RECIPE
-→ ELSE: KEEP_AS_SINGLE_RUN_PROOF
+ELSE: KEEP_AS_SINGLE_RUN_PROOF
 ```
 
-Only the minimum surviving lesson is persisted; never persist the whole private conversation by default.
+`ONE_SUCCESS != REPLAYABLE_RECIPE`.
 
-```text
-ONE_SUCCESS != REPLAYABLE_RECIPE
-PROOF_WITHOUT_LEARNING_CAN_BE_FORGOTTEN=true
-LEARNING_WITHOUT_REPLAY_IS_NOT_REUSABLE_RECIPE=true
-```
-## Memory Pending Confirmation Gate
+## Memory-Pending Gate
 
-A pending memory candidate is not an operational message to the CHEFE and is never promoted merely because Hermes, ChatGPT, or any Oracle surface said it.
+Never surface a raw `/memory pending` state directly as an operational message to the CHEFE. Route it through the existing oracle/reconciliation path:
 
 ```text
 MEMORY_PENDING
-→ ORACLE_QUERY_READONLY
-→ WAIT_FOR_RESPONSE
-→ RECONCILE_WITH_PARENT_INTENT
-→ RECONCILE_WITH_CURRENT_DOCS_AND_OWNER
-→ REQUIRE_PROVENANCE
-→ REQUIRE_COUNTERPROOF
-→ REQUIRE_REALITY_EVIDENCE_WHEN_EFFECT_IS_EXTERNAL
-→ REQUIRE_EXISTING_WRITER
-→ IF_ALL_APPLICABLE_GATES_PASS: PROMOTE_MINIMUM_DELTA
-→ ELSE: KEEP_PENDING_OR_UNKNOWN
+→ consult current CHAT_GLOBAL oracle
+→ await response
+→ reconcile with live intent + CURRENT/docs + owner + reality
+→ auto-promote only when alignment is proven
+→ otherwise keep PENDING/UNKNOWN and do not mutate
 ```
 
-Confirmation is mandatory before promotion:
+The oracle response remains a candidate. Safe automatic promotion requires matching intent/owner/scope, no contradiction with CURRENT/docs, provenance and evidence fields, a counterproof, and an existing writer. A mismatch, missing proof, stale CURRENT, or unknown owner blocks promotion. Do not create a second memory engine or send raw pending state to the user.
 
-```text
-CHATGPT_SAID != CONFIRMED
-ORACLE_SAID != CONFIRMED
-HERMES_SAID != CONFIRMED
-DOCUMENTED != EXECUTED
-CANDIDATE != CANONICAL
-UNKNOWN != PASS
-```
+Minimum receipt fields: `intent_id`, `event_id`, `causation_id`, `surface_id`, `candidate_hash`, `current_ref`, `owner`, `alignment_verdict`, `counterproof`, `writer`, `promotion_state`, `next_cursor`.
 
-The minimum confirmation envelope is:
-
-```yaml
-candidate_text:
-source:
-provenance:
-intent_match:
-current_match:
-owner_match:
-dedupe:
-counterproof:
-reality_evidence:
-writer:
-readback:
-next_cursor:
-```
-
-Only applicable fields must be proven. A field that cannot be measured remains `UNKNOWN`; it must not be silently inferred. The existing writer performs any authorized mutation only after reconciliation. The Oracle remains consultative and read-only.
-
-## Proven Pilot
-
-The proven pilot opened `https://chatgpt.com/` in the internal Preview, created an isolated chat, sent a sanitized oracle query with all four IDs, and captured a structured response containing `CANDIDATE_CLAIM`, `EVIDENCE_LIMIT`, `COUNTERPROOF` and `NEXT_READONLY_PROBE`. This proves surface transport and response capture only; it does not prove canonical-envelope integration, writer mutation, deployment or runtime effect.
-
-## Anti-Loop and Safety
 
 ```text
 ORACLE_QUERY → RESPONSE → RECONCILE → PROBE/ACTION
@@ -365,3 +652,77 @@ Hermes → Preview/CHAT_GLOBAL → query → response capture
 ```
 
 Do not create a new hook until a missing owner/capability is proven; first evolve `perception-orchestra.mjs` or the applicable existing owner.
+
+## Domain / Turn Skill Evolution
+
+CENTRALDARK_GOJO_DOMAIN_SKILL_EVOLUTION_FABRIC=true
+
+SIX_EYES = inventory USED_SKILLS + USED_TOOLS + OWNERS + evidence + failures + NEXT_CURSOR.
+INFINITY = oracle/runtime output cannot mutate canonical state directly; classify PASS, DEGRADED, UNKNOWN, FAIL or BLOCKED.
+BLUE = pull only evidence with causal gravity to the parent intent: CURRENT docs, owner, PR/commit, receipt, runtime, logs and used skills.
+RED = reject duplicate owners, stale history, false-green, unsupported inference, parallel architecture and irrelevant evidence.
+PURPLE = reconcile surviving evidence into the smallest owner-local candidate delta.
+RCT = convert a proven failure into test + receipt + reusable skill improvement.
+DOMAIN = keep participating skills on the same LOOP_ID, TURN_ID, PARENT_ID, OWNER_SCOPE, EVIDENCE_LIMIT and NEXT_CURSOR until parent FIXED_POINT.
+
+Every materially used skill leaves one state:
+UNCHANGED_PROVEN | PATCH_CANDIDATE | PATCH_APPLIED | TEST_ADDED | RECEIPT_ADDED | DEGRADED | BLOCKED.
+
+A used skill does not need a rewrite merely because it was loaded. Evolve only after measurement, generalizability, Oracle candidate review, owner-local patch, test, counterproof, receipt and replay.
+ONE_TURN_OBSERVATION != REUSABLE_SKILL_DELTA.
+
+## CHEFE Intent Calibration and Autonomous Memory Promotion
+
+CHEFE_INTENT_CALIBRATION_GATE=true
+CHEFE_ALIGNMENT_SCORE_MAX=99.9
+
+Evidence weights:
+CURRENT_EXPLICIT_CHEFE_INTENT=0..30
+CURRENT_DOCS_MATCH=0..30
+REPEATED_INTENT_HISTORY=0..15
+OWNER_SCOPE_MATCH=0..10
+RECEIPT_RUNTIME_EVIDENCE=0..10
+DEDUPE_CANONICALITY=0..5
+
+Decision:
+score >= 99.0 plus CURRENT_MATCH, OWNER_SCOPE_MATCH, DEDUPE=PASS, no contradiction, proven writer, no secret risk and no sensitive-personal-data risk
+→ AUTO_PROMOTE_MINIMUM_MEMORY_DELTA → READBACK → RECEIPT → CLEAR_ONLY_ABSORBED_PENDING_ITEMS.
+
+95.0 <= score < 99.0
+→ CONSULT_ORACLE → REMEASURE MAIN + VPS/RUNTIME when material + CURRENT DOCS → RECALIBRATE.
+
+90.0 <= score < 95.0 → KEEP_PENDING.
+score < 90.0 → HOLD_OR_REJECT.
+
+99.9 is not certainty by assertion. It requires convergent current evidence: explicit recent CHEFE intent + CURRENT docs + repeated compatible behavior + correct owner + no contradiction. Secrets, credentials, sensitive personal data, destructive authority changes or exceptional permissions keep their dedicated gates. Semantic duplicates are clustered before promotion so one canonical memory replaces many paraphrases.
+
+## Main ↔ Runtime Autonomous Skill Auto-Sync Lock
+
+Canonical skill source is ServerVpss/CentralDark@main under .agents/skills/**/SKILL.md.
+Hermes runtime mirrors live under ~/.hermes/skills/<same-relative-path>/SKILL.md.
+
+Opt-in metadata:
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
+
+The existing owner is skill-synchronization + scripts/skill-sync-check.sh. Do not create another scheduler or sync engine.
+
+SKILL_CHANGE
+→ ORACLE_REVIEW_ON_CHANGE
+→ RECONCILE CHEFE INTENT + CURRENT MAIN + DOCS + OWNER + LIVE RUNTIME
+→ TEST + COUNTERPROOF
+→ COMMIT CANONICAL MAIN
+→ AUTO_SYNC MAIN TO HERMES RUNTIME
+→ HASH READBACK
+→ SEAL MAIN_SHA + CANONICAL_HASH + RUNTIME_HASH.
+
+No-op syncs need no new Oracle turn. A material skill mutation does.
+
+If runtime still equals the last sealed canonical hash, main may fast-forward it. Independent runtime drift is never overwritten: emit ORACLE_REQUIRED_RUNTIME_DRIFT, preserve the live file, reconcile it against CURRENT main/docs, promote only the surviving minimum delta canonically, then mirror again.
+
+After successful sync:
+MAIN_SKILL_SOURCE_HEAD == SEALED_RUNTIME_SOURCE_HEAD
+CANONICAL_SKILL_HASH == RUNTIME_SKILL_HASH
+
+The seal is provenance, not execution proof. SYNCED != EXECUTED.
