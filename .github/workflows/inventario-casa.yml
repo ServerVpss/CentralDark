@@ -39,11 +39,28 @@ jobs:
           PY
 
       - name: 📤 Upload inventory artifact
+        id: artifact_mirror_inventario_casa_1
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: centraldark-inventario-casa
           path: docs/CONSCIENCIA/INVENTARIO-CASA.json
 
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_inventario_casa_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi
       - name: 🚀 Promote baseline on main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         shell: bash

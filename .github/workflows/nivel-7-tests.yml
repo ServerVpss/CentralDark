@@ -168,6 +168,8 @@ jobs:
           echo "manifest coerente com ZIP commitado"
 
       - name: 🔹 Publicar artefato CI (build reprodutivel do runner)
+        id: artifact_mirror_nivel_7_tests_1
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: nivel-7-ci-build-${{ github.event.pull_request.head.sha || github.sha }}
@@ -175,11 +177,27 @@ jobs:
           if-no-files-found: error
           retention-days: 2
 
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_nivel_7_tests_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi
       - name: 🔹 Receipt deterministico (sempre)
         if: always()
         env:
           JOB_STATUS: ${{ job.status }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_nivel_7_tests_1.outcome }}
         run: |
           set -euo pipefail
           echo "HEAD_SHA=${HEAD_SHA}"
@@ -187,6 +205,7 @@ jobs:
           echo "ROTA_PRIMARIA=self-hosted-linux"
           echo "ROTA_FALLBACK=BLOCKED_NO_SELF_HOSTED"
           echo "JOB_STATUS=${JOB_STATUS}"
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then echo "ARTIFACT_MIRROR=PASS"; elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then echo "ARTIFACT_MIRROR=DEGRADED"; else echo "ARTIFACT_MIRROR=UNKNOWN"; fi
           case "${JOB_STATUS}" in
             success) echo "RESULTADO=PASS" ;;
             failure) echo "RESULTADO=FAIL" ;;
