@@ -1,7 +1,7 @@
 ---
 name: centraldark-oracle-surface
 description: "Use when consulting an external browser oracle."
-version: 0.5.1
+version: 0.5.2
 author: SEGREDO/CHEFE, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -915,3 +915,74 @@ Reuse Hermes' **existing** continuity/memory owner. Before `/compact`, `/compres
 ### Receipt / HUD / PR equality
 
 The canonical architecture and G01..G12 acceptance clauses live in `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md` section 21. The existing HUD (`docs/HUD/HUD.html`) and Obsidian Grafo Vivo plugin may **project** these receipts; they do not write them. Show `UNKNOWN` for unmeasured Windows/Hermes/CHAT_GLOBAL E2E. Clock: UTC ISO provenance and `America/Bahia` presentation via the existing `central-horario` owner. A direct-main architecture commit and a separate E2E-proof PR may coexist; never open a duplicate implementation PR or call a draft receipt `FIXED_POINT`.
+
+
+## Browser Oracle Completeness Gate — Nous Native Tools (2026-10-08)
+
+**Owner:** this existing `centraldark-oracle-surface` skill, using Hermes' own supported tools and GoalManager. No second agent, browser bridge, router, scheduler, memory or writer. **Oracle output remains candidate evidence.** The previous Preview recipes, browser policy, Ralph bounded iteration, capsule and all other contracts above remain valid.
+
+### Native-capability-first selection
+
+For a Hermes session where the official Nous `browser` toolset is actually available, prefer:
+
+```text
+browser_navigate (only if a navigation is required and authorized)
+→ browser_snapshot full=true (structured accessible blocks/controls)
+→ browser_scroll direction=up|down (bounded, only if needed)
+→ browser_snapshot full=true (readback)
+→ browser_vision (when semantics/visible evidence remain ambiguous)
+→ browser_console (diagnostic aid only, not a transcript)
+```
+
+The official `browser_snapshot` may report only the accessible/loaded DOM; **`full=true` does not guarantee every virtualized/historical message is loaded**. Browser tool availability is runtime- and session-specific; do not pretend `desktop_preview` automatically has all `browser_*` actions. If Hermes Desktop Preview exposes only `drive_preview`/`desktop_preview`, keep the previously documented current-tab bounded capture path and record `NATIVE_BROWSER_TOOL=UNAVAILABLE`; do not invent `new_tab` or transcript export methods. Never bypass CSP/CORS or use another account to evade provider controls.
+
+### Read before click: hypotheses are not UI facts
+
+```text
+HYPOTHESIS(control)
+→ FRESH_SNAPSHOT / ELEMENT_ROLE / ACCESSIBLE_NAME / STATE
+→ CHOOSE_SUPPORTED_ACTION
+→ ACTION
+→ FRESH_READBACK
+→ DISCRIMINATING_EVIDENCE
+```
+
+An ellipsis, arrow, pulse or loading icon has no universal semantic meaning. A `...` icon is **not automatically scroll-to-bottom**, and an arrow is **not automatically send/scroll**. If role/ref/state cannot be established, do not click; capture/inspect with the available supported tool or mark `CONTROL_SEMANTICS=UNKNOWN`.
+
+### Response state machine, causal capture and stopping condition
+
+Separate **response streaming** from **message viewport coverage**:
+
+```text
+RESPONSE_STATE = NOT_STARTED | STREAMING | QUIESCENT_UNVERIFIED | COMPLETE | INCOMPLETE | ERROR
+COVERAGE       = UNMEASURED | PARTIAL | COMPLETE
+CAPTURE        = {loop_id,turn_id,surface_id,attempt_id,parent_id,
+                  conversation_ref,first_seen_id,last_seen_id,
+                  bottom_reached,top_reached,gaps,duplicates_dropped,
+                  response_state,coverage,observed_at,evidence_ref}
+```
+
+- `STREAMING`: token/content still changing or an actual generation-in-progress signal exists. Never treat visible text as final.
+- `QUIESCENT_UNVERIFIED`: text paused but no distinct terminal/completed generation signal. **Silence or unchanged screenshots alone are insufficient**.
+- `COMPLETE`: generation terminal state independently observed **and** final assistant response is associated with the requested `TURN_ID`/`SURFACE_ID`; content boundary/readback stable. If terminal state is inaccessible, retain `QUIESCENT_UNVERIFIED`/`UNKNOWN`, not false COMPLETE.
+- `COVERAGE=COMPLETE`: causally relevant message range was visited/read/ordered/deduplicated, both boundaries confirmed and zero unread virtualized gaps. `RESPONSE_STATE=COMPLETE` may coexist with `COVERAGE=PARTIAL`: these are independent dimensions.
+- Capture one or more bounded `scroll → snapshot` iterations; each step records new identifiers/blocks and checks actual information gain, not only a scroll coordinate. If the page virtualizes earlier text or no stable unique IDs exist, preserve `COVERAGE=PARTIAL` and emit missing spans.
+- Console errors help locate resource/CSP failures but are not automatically oracle transport failures; a successful text capture requires causal text and provenance, not merely a console log.
+
+### Bounded loop, errors and evidence
+
+Use `error_fingerprint = class + source + location(if measured) + causal evidence id`. Prefer compiler/test/stack evidence for `file:line`; the browser snapshot alone cannot certify code line numbers. No-progress retries are budgeted and paused/backed off, preserving capsule and `NEXT_CURSOR`; never spin on screenshot/scroll or retry the same click indefinitely.
+
+For each material turn record `BEGIN/FINAL`, full correlation envelope, `RESPONSE_STATE`, `COVERAGE`, `CONTROL_SEMANTICS`, `EVIDENCE_REF`, the source/age and `NEXT_CURSOR`. A `COMPLETE` UI response is **not** proof of the answer's factual correctness: execution effects still go through the existing owner, Reality Judge and independent counterproof. No production PASS from this documentation alone.
+
+### Regression and external success evidence
+
+Required probes before declaring full runtime integration: streaming partial text; delayed chunks; quiescent-not-terminal; terminal-with-viewport-gaps; virtualized top; scroll UP/DOWN; ambiguous ellipsis; wrong send-arrow; multiple concurrent surfaces/turn IDs; duplicate or out-of-order blocks; reconnection; bounded no-progress; provider browser vs Desktop Preview capability difference; and three independently correlated Hermes→Oracle→Hermes cycles.
+
+Official upstream references (source links, not runtime proof):
+- `https://hermes-agent.nousresearch.com/docs/user-stories` — public community stories, qualitative use cases and reported deployments; **not** a verified 99–100% completion-rate benchmark.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/tools-reference.md` — native browser tool contracts.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/desktop.md` — Desktop/CLI/gateway same Hermes core.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/computer-use.md` — supported computer-use and visual limits.
+
+`DOCUMENTED != EXECUTED`; `SOURCE_PROVEN != SESSION_CAPTURE_PROVEN`; `CURRENT > HISTORY`. Report `UNKNOWN` if the session lacks terminal events or full coverage.
