@@ -42,7 +42,12 @@ case "$OWNER" in
     TOOLS="http://127.0.0.1:9100/tools.json"
     ;;
   hub_bot) PREFIXES=("apps/bot-telegram/"); APPS=("CentralDark-HubBot-Srver1" "CentralDark-HubBot-Guardiao") ;;
-  hermes) PREFIXES=("apps/modulos/HERMES-CORE/" "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/" ".agents/skills/centraldark-operational-method/"); APPS=("CentralDark-Hermes") ;;
+  hermes)
+    PREFIXES=("apps/modulos/HERMES-CORE/" "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/" ".agents/skills/centraldark-operational-method/")
+    SYSTEMD_SERVICE="centraldark-hermes-core.service"
+    EXPECTED_EXEC="$TARGET_ROOT/apps/modulos/HERMES-CORE/core/orchestrator.mjs"
+    HEALTH="http://127.0.0.1:8899/health"
+    ;;
   oauth_broker) PREFIXES=("apps/modulos/oauth-broker/"); APPS=("CentralDark-OAuthBroker"); HEALTH="http://127.0.0.1:8098/health" ;;
   *) echo "OWNER_UNKNOWN"; exit 4 ;;
 esac

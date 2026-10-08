@@ -56,6 +56,9 @@ async function calibrarRuntimeInterno() {
   if (calibracaoRuntimeEmCurso) return;
   calibracaoRuntimeEmCurso = true;
   try {
+    // Mission directories are runtime state and may disappear after boot.
+    // Recreate them before a calibration sidecar is enqueued.
+    await garantirRuntimeDirs();
     const estado = await calibrateRuntime();
     log(`[calibracao] verdict=${estado.verdict} wounds=${estado.wound_count} streak=${estado.streak} reward=${estado.reward}`);
 
