@@ -734,7 +734,7 @@ body {
     <button class="pele-btn" data-pele-alvo="esmeralda" title="Esmeralda"></button>
   </div>
   <div class="barra-meta">
-    <span class="live">&#9679; SISTEMA</span> &middot; ServerVpss/CentralDark &middot; <span class="hud-clock-live" id="hud-clock-top">sincronizando data/hora...</span>
+    <span class="live" id="cd-global-indicator" style="color:var(--amber)">&#9679; SISTEMA / PROVA POR SETOR</span> &middot; ServerVpss/CentralDark &middot; <span class="hud-clock-live" id="hud-clock-top">sincronizando data/hora...</span>
   </div>
 </div>
 
@@ -750,6 +750,9 @@ body {
      ================================================================ -->
 <div class="tab-painel visivel" id="tab-hud">
 <div class="page">
+<!-- Ultimo delta, sem novo owner -->
+<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 01:05:56 BRT</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
+
 
   <!-- AION UI BANNER -->
   <a class="aion-banner" href="http://89.117.78.124:25808/" target="_blank" rel="noopener" id="aion-link">
@@ -763,7 +766,7 @@ body {
     <div class="aion-banner-info">
       <div class="aion-banner-title">AionUi &middot; Painel de Controle</div>
       <div class="aion-banner-desc">Central de agentes, tarefas agendadas, projetos e assistentes. Acesso direto ao orquestrador da VPS.</div>
-      <div class="aion-banner-status">VPS ONLINE &middot; :25808</div>
+      <div class="aion-banner-status" style="color:var(--amber)">AionUi :25808 &middot; ESTADO ATUAL NAO REMEDIDO</div>
     </div>
     <button class="aion-open-btn" onclick="event.preventDefault(); window.open(document.getElementById('aion-link').href, '_blank')">ABRIR AIONUI</button>
   </a>
@@ -778,7 +781,7 @@ body {
     <div class="hud-grid">
       <div class="hud-card">
         <h3>Casa (PC segredo)</h3>
-        <div class="val ok">Online</div>
+        <div class="val ok">Tailscale PASS</div>
         <div class="meta">i5-10400F &middot; 12 threads &middot; 24GB RAM &middot; Radeon RX 580<br>C:22GB &middot; D:419GB &middot; E:198GB &middot; F:222GB livres</div>
       </div>
       <div class="hud-card">
@@ -788,12 +791,12 @@ body {
       </div>
       <div class="hud-card">
         <h3>VPS CENTRALDARK-OS</h3>
-        <div class="val ok">Sync autonomo</div>
+        <div class="val ok">One Heart HTTP 200</div>
         <div class="meta">openKylin 3.0 &middot; kernel 7.0 &middot; git pull auto cada 5min via cron</div>
       </div>
       <div class="hud-card">
         <h3>AionUi &middot; VPS</h3>
-        <div class="val ok">Ativo :25808</div>
+        <div class="val warn">CURRENT UNKNOWN :25808</div>
         <div class="meta">Painel de agentes, tarefas e projetos &middot; sempre online</div>
       </div>
       <div class="hud-card">
@@ -871,20 +874,20 @@ body {
         <div class="cadeado-meta">18MB em /root/SHARED.zip. Contem GITHUB_TOKEN e chaves operacionais. Cofre do valor.</div>
         <div class="cadeado-prova">COFRE_E_DONO_DO_VALOR=true &middot; NO_SECRET_COMMIT=true</div>
       </div>
-      <div class="cadeado-card selado">
+      <div class="cadeado-card aberto">
         <div class="cadeado-header">
           <span class="cadeado-icon">&#128994;</span>
           <span class="cadeado-nome">AionUi VPS :25808</span>
-          <span class="cadeado-status pass">SELADO</span>
+          <span class="cadeado-status warn">PROVA HISTORICA</span>
         </div>
         <div class="cadeado-meta">Painel de controle de agentes rodando na VPS. Sempre online, sincronizado com projetos.</div>
         <div class="cadeado-prova">url: http://89.117.78.124:25808/ &middot; verificado 2026-10-06</div>
       </div>
-      <div class="cadeado-card selado">
+      <div class="cadeado-card aberto">
         <div class="cadeado-header">
           <span class="cadeado-icon">&#128994;</span>
           <span class="cadeado-nome">CAS Cloud VPS</span>
-          <span class="cadeado-status pass">SELADO</span>
+          <span class="cadeado-status warn">PROVA HISTORICA</span>
         </div>
         <div class="cadeado-meta">CodeAgentSwarm Cloud v0.0.21. 6 agentes CLI instalados: Claude 2.1.291, Codex 0.160.1, Antigravity 1.3.0, Opencode 1.18.34, Kimi 2.1.1, Grok 1.0.24.</div>
         <div class="cadeado-prova">cas doctor: PASS &middot; docs/ARQUITETURA/CENTRALDARK-CAS-CLOUD-VPS.md</div>
@@ -1061,6 +1064,19 @@ body {
      ================================================================ -->
 <div class="tab-painel" id="tab-mapa">
 <div class="page">
+<div class="section cd-measured-status" style="margin-top:16px" data-cd-proof="2026-10-08T04:05:56Z">
+ <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">08/10/2026 01:05 BRT</span></div>
+ <p class="cadeado-meta">Provas coletadas na VPS CENTRALDARK-OS em 08/10/2026 04:05:56 UTC. Sinais sao historicos ate nova medicao; portas abertas != sessao autenticada. O One Heart da aba HUD refaz a consulta ao owner a cada 5 s.</p>
+ <div class="hud-grid">
+  <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val ok">PASS / PONG 103 ms</div><div class="meta">SEGREDO 100.123.93.25 alcancado diretamente em 08/10/2026.</div></div>
+  <div class="hud-card"><h3>Screenpipe Casa</h3><div class="val ok">HTTP 200</div><div class="meta">/health pela VPS, via Tailscale. Audio e logs integrais exigem provas separadas.</div></div>
+  <div class="hud-card"><h3>API / One Heart</h3><div class="val ok">HTTP 200 &amp; ALIVE</div><div class="meta">Owner existente mcp.centralldark.com/heartbeat e heart local 9100. Medicao datada, sujeito a staleness.</div></div>
+  <div class="hud-card"><h3>Modelo runtime</h3><div class="val ok">HEALTH 200</div><div class="meta">Modelo 18435/health; nao equivale a inferencia de IA comprovada.</div></div>
+  <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / PARCIAL</div><div class="meta">Servico 9119 responde, mas login e operacao no painel nao foram provados.</div></div>
+  <div class="hud-card"><h3>SSH Windows / portas legadas</h3><div class="val warn">NAO CONECTA</div><div class="meta">Casa 22, VPS 8788 e 4175 nao passaram; rota principal permanece viva.</div></div>
+ </div>
+</div>
+
   <div class="match-info" id="matchInfo"></div>
   <div class="grid" id="gridMapa">
 
@@ -1238,6 +1254,20 @@ body {
      ================================================================ -->
 <div class="tab-painel" id="tab-forja">
 <div class="page">
+<div class="forja-intro"><strong>Forja &middot; Componentes medidos</strong> &mdash; Camada visual da mesma CentralDark; cada carta de evidencia abaixo diferencia efeito comprovado e operacao pendente. Sem segunda arquitetura.</div>
+<div class="section cd-measured-status" style="margin-top:16px" data-cd-proof="2026-10-08T04:05:56Z">
+ <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">08/10/2026 01:05 BRT</span></div>
+ <p class="cadeado-meta">Provas coletadas na VPS CENTRALDARK-OS em 08/10/2026 04:05:56 UTC. Sinais sao historicos ate nova medicao; portas abertas != sessao autenticada. O One Heart da aba HUD refaz a consulta ao owner a cada 5 s.</p>
+ <div class="hud-grid">
+  <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val ok">PASS / PONG 103 ms</div><div class="meta">SEGREDO 100.123.93.25 alcancado diretamente em 08/10/2026.</div></div>
+  <div class="hud-card"><h3>Screenpipe Casa</h3><div class="val ok">HTTP 200</div><div class="meta">/health pela VPS, via Tailscale. Audio e logs integrais exigem provas separadas.</div></div>
+  <div class="hud-card"><h3>API / One Heart</h3><div class="val ok">HTTP 200 &amp; ALIVE</div><div class="meta">Owner existente mcp.centralldark.com/heartbeat e heart local 9100. Medicao datada, sujeito a staleness.</div></div>
+  <div class="hud-card"><h3>Modelo runtime</h3><div class="val ok">HEALTH 200</div><div class="meta">Modelo 18435/health; nao equivale a inferencia de IA comprovada.</div></div>
+  <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / PARCIAL</div><div class="meta">Servico 9119 responde, mas login e operacao no painel nao foram provados.</div></div>
+  <div class="hud-card"><h3>SSH Windows / portas legadas</h3><div class="val warn">NAO CONECTA</div><div class="meta">Casa 22, VPS 8788 e 4175 nao passaram; rota principal permanece viva.</div></div>
+ </div>
+</div>
+
   <div class="forja-intro">
     <strong>Forja de Cartas</strong> &mdash; Cada componente do CentralDark e uma carta
     com nome, nivel, procedencia e habilidades. A forja completa (206KB, editor + export)
