@@ -952,6 +952,25 @@ body {
   <p class="cadeado-meta"><strong>Abas reais do owner:</strong> &#128065; Visao Geral &middot; &#129520; Ferramentas &middot; &#128203; Linear &middot; &#127756; Grafo Celestial &middot; &#129513; Padroes &middot; &#127899; Comandos &middot; Auditoria &middot; Grok &middot; Buildkite &middot; Conector &middot; Diagnostico &middot; Omni &middot; Tailscale. Presenca no codigo nao equivale a sessao operacional provada.</p>
   <p class="cadeado-prova">Owners medidos: apps/modulos/mcp/src/admin.js, MCP /health, catalogo mcp_admin_catalog. Rotas administrativas que requerem cookie: /admin/api/tools, /admin/api/linear, /admin/grafo/, /admin/api/buildkite/status, /admin/api/tailscale, /admin/api/operational-snapshot, /admin/api/logs. Sem transporte de credenciais.</p>
 </div>
+<!-- FIXED POINT HUD: projecao dos owners existentes, sem juiz paralelo -->
+<div class="section" id="cd-fixed-point-ten" style="margin-top:16px" data-owner="docs/HUD/HUD.html">
+ <div class="section-header"><div class="section-icon">&#128274;</div><h2 class="section-title">Fixed Point &middot; 10 criterios rastreaveis</h2><span class="section-count" id="cd-fp-score">MEDINDO / 10</span></div>
+ <p class="cadeado-meta">Placar derivado de provas observaveis. SELADO historico nao equivale a servico online agora. Nenhuma prova e apagada por erro de rede. Total 10/10 exige receipt CURRENT do avaliador canonico; sem esse receipt, o fechamento permanece PENDENTE.</p>
+ <div class="hud-grid" id="cd-fp-grid">
+  <div class="hud-card"><h3>01 &middot; Owner unico</h3><div class="val warn" data-fp="owner">MEDINDO</div><div class="meta">HUD, MAPA e FORJA no mesmo HTML</div></div>
+  <div class="hud-card"><h3>02 &middot; Cadeados</h3><div class="val warn" data-fp="locks">MEDINDO</div><div class="meta">Inventario dinamico; selo nao se perde em falha transitória</div></div>
+  <div class="hud-card"><h3>03 &middot; MCP publico</h3><div class="val warn" data-fp="mcp">MEDINDO</div><div class="meta">toolCount e catalogVersion via /health vivo</div></div>
+  <div class="hud-card"><h3>04 &middot; One Heart</h3><div class="val warn" data-fp="heart">MEDINDO</div><div class="meta">Heartbeat fresco / estado ALIVE medido</div></div>
+  <div class="hud-card"><h3>05 &middot; Screenpipe</h3><div class="val warn" data-fp="screenpipe">MEDINDO</div><div class="meta">Health Casa no navegador; bloqueio CORS = UNKNOWN</div></div>
+  <div class="hud-card"><h3>06 &middot; AionUi MCP stdio</h3><div class="val warn" data-fp="aion">MEDINDO</div><div class="meta">Prova selada no aprendizado #168; atual requer replay READ-ONLY</div></div>
+  <div class="hud-card"><h3>07 &middot; Privacidade dos logs</h3><div class="val warn" data-fp="privacy">MEDINDO</div><div class="meta">Nao sobrescrever CENTRALDARK-CORPO-UNICO-HUD-LOGS</div></div>
+  <div class="hud-card"><h3>08 &middot; Goal Clause</h3><div class="val warn" data-fp="goal">MEDINDO</div><div class="meta">Receipt do avaliador Horn; sem prova, UNKNOWN</div></div>
+  <div class="hud-card"><h3>09 &middot; Casa &harr; main</h3><div class="val warn" data-fp="sync">MEDINDO</div><div class="meta">Comparacao de hash e readback nos dois lados exigidos</div></div>
+  <div class="hud-card"><h3>10 &middot; Fixed Point final</h3><div class="val warn" data-fp="fixed">MEDINDO</div><div class="meta">Avaliador canonico + readback + contraprova + estabilidade</div></div>
+ </div>
+ <div class="cadeado-prova" id="cd-fp-receipt">Aguardando evidencias do owner vivo; nenhum PASS sintetico.</div>
+</div>
+
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
@@ -1121,6 +1140,7 @@ body {
  </div>
 </div>
 
+  <div class="section"><div class="section-header"><h2 class="section-title">Fixed Point &mdash; owner unico</h2></div><p class="cadeado-meta">Acompanhe os 10 criterios na aba HUD. MAPA reutiliza o mesmo receipt, sem juiz duplicado.</p></div>
   <div class="match-info" id="matchInfo"></div>
   <div class="grid" id="gridMapa">
 
@@ -1330,6 +1350,7 @@ body {
  </div>
 </div>
 
+  <div class="section"><div class="section-header"><h2 class="section-title">Forja &mdash; Fixed Point</h2></div><p class="cadeado-meta">Cartas e cadeados refletem as provas do mesmo HUD. Veredito final somente pelo avaliador canônico.</p></div>
   <div class="forja-intro">
     <strong>Forja de Cartas</strong> &mdash; Cada componente do CentralDark e uma carta
     com nome, nivel, procedencia e habilidades. A forja completa (206KB, editor + export)
@@ -1707,6 +1728,53 @@ function refreshCentralDarkMcpCatalog() {
 }
 refreshCentralDarkMcpCatalog();
 setInterval(refreshCentralDarkMcpCatalog, 15000);
+
+/* Fixed Point 10/10: painel de leitura, NAO um segundo avaliador.
+ * PASS do criterio corrente apenas com sinal causal; historico permanece historico.
+ * Fechamento global EXIGE receipt fresco do owner Horn, nunca soma de cards.
+ */
+(function() {
+  var conditions = ['owner','locks','mcp','heart','screenpipe','aion','privacy','goal','sync','fixed'];
+  function set(name,good,detail) {
+    var node=document.querySelector('[data-fp="'+name+'"]');
+    if (!node) return;
+    node.textContent=good===true?'PASS':good===false?'PENDENTE':'UNKNOWN';
+    node.className='val '+(good===true?'ok':'warn');
+    node.title=detail||'';
+  }
+  function evaluate() {
+    var area=document.getElementById('cd-fixed-point-ten');
+    if(!area)return;
+    var tabs=['tab-hud','tab-mapa','tab-forja'].every(function(id){return Boolean(document.getElementById(id));});
+    set('owner',tabs,'Um unico HTML, tres abas preservadas.');
+    var list=document.querySelector('#cadeados-count')?.closest('.section')?.querySelectorAll('.cadeado-grid > .cadeado-card');
+    var sealed=list?Array.from(list).filter(function(c){return c.classList.contains('selado');}):[];
+    set('locks',Boolean(list && sealed.length>0 && document.getElementById('cadeados-count')),'Selo historico preservado: '+sealed.length);
+    var catalog=document.querySelector('.cd-mcp-admin-map .cd-mcp-count');
+    set('mcp',catalog && catalog.classList.contains('ok')?true:null,'Fonte runtime /health; nao comprova cada operacao.');
+    var heart=document.getElementById('live-heart-state');
+    set('heart',heart && heart.classList.contains('ok')?true:null,'Heartbeat do owner; verificar frescor da medicao.');
+    var screen=document.getElementById('cd-route-screenpipe');
+    set('screenpipe',screen && screen.classList.contains('ok')?true:null,'Health Windows visto pelo navegador.');
+    set('aion',null,'Aprendizado #168 e comando --verify-only sao selados; status CURRENT nao e transferido ao navegador.');
+    set('privacy',null,'Logs Casa preservados; sem acesso direto ao arquivo nao declarar integridade comprovada.');
+    var receipt=document.getElementById('goal-clause-verdict');
+    var receiptBadge=document.getElementById('goal-clause-badge');
+    var hasReceipt=Boolean(receiptBadge && !/UNKNOWN|sem receipt|conectando/i.test(receiptBadge.textContent));
+    set('goal',hasReceipt?true:null,'Somente owner horn-reuse-fixed-point.mjs pode emitir a prova.');
+    set('sync',null,'Tailscale Taildrop nao prova sincronizacao bidirecional Casa/main.');
+    var fixed=Boolean(hasReceipt && receipt && /FIXED_POINT/i.test(receipt.textContent));
+    set('fixed',fixed?true:null,'Veredito de fixed point pertence ao receipt do avaliador.');
+    var proven=conditions.filter(function(key){var el=document.querySelector('[data-fp="'+key+'"]');return el && el.textContent==='PASS';}).length;
+    var score=document.getElementById('cd-fp-score');
+    if(score)score.textContent=proven+'/10 observaveis'+(fixed?' · RECEIPT FP':' · NAO FINAL');
+    var proof=document.getElementById('cd-fp-receipt');
+    if(proof)proof.textContent='Selos historicos: '+sealed.length+' | Observacoes nesta abertura: '+proven+'/10 | Fixed Point TOTAL: '+(fixed && proven===10?'PASS':'NAO COMPROVADO')+' | Nenhuma leitura deste HUD grava arquivos no Obsidian.';
+  }
+  evaluate();
+  setInterval(evaluate,5000);
+})();
+
 
 /* Contador real do mesmo inventario: nunca fixar numero de cadeados no HTML. */
 (function() {
