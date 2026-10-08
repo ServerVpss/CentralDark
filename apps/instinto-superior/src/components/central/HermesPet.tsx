@@ -75,7 +75,7 @@ const LIMIAR_CURTO = 6;
 
 const MOVIMENTOS_INSTINTO = instinto.movimentos;
 
-type VisualHermes = "instinto" | PeleHermes;
+type VisualHermes = "instinto" | "ego" | PeleHermes;
 type ControleHermes = {
   visual: VisualHermes;
   movimento: number;
@@ -129,9 +129,11 @@ function SpriteHermes({
   largura,
   apenasPose,
   className,
+  rotulo,
 }: {
   pele: (typeof PELES)[number];
   largura: number;
+  rotulo?: string;
   /** Quando definido, fica só nessa pose e repete os quadros dela. */
   quadroForcado?: number;
   reproduzindo?: boolean;
@@ -175,8 +177,8 @@ function SpriteHermes({
       role="img"
       aria-label={
         apenasPose === undefined
-          ? t(`pet.${pele.id}`)
-          : `${t(`pet.${pele.id}`)} — ${t(`pet.pose.${POSES[apenasPose]!.id}`)}`
+          ? (rotulo ?? t(`pet.${pele.id}`))
+          : `${rotulo ?? t(`pet.${pele.id}`)} — ${t(`pet.pose.${POSES[apenasPose]!.id}`)}`
       }
       className={`hermes-sprite ${className ?? ""}`}
       style={
@@ -324,7 +326,7 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
   const { controle, atualizar } = useControleHermes();
   const movimento = MOVIMENTOS_INSTINTO[controle.movimento] ?? MOVIMENTOS_INSTINTO[0];
   if (!movimento) return null;
-  const pele = PELES.find((item) => item.id === controle.visual);
+  const pele = PELES.find((item) => item.id === (controle.visual === "ego" ? "ascensao" : controle.visual));
   const poseAntiga = POSES[controle.movimento] ?? POSES[0];
   if (!poseAntiga) return null;
   const maximo = controle.visual === "instinto" ? movimento.quadros : poseAntiga.quadros;
@@ -348,7 +350,14 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
               reproduzindo={controle.reproduzindo}
             />
           ) : pele ? (
-            <SpriteHermes pele={pele} largura={180} apenasPose={controle.movimento} />
+            <SpriteHermes
+               pele={pele}
+               largura={180}
+               apenasPose={Math.min(controle.movimento, POSES.length - 1)}
+               reproduzindo={controle.reproduzindo}
+               quadroForcado={controle.quadro}
+               rotulo={controle.visual === "ego" ? t("pet.ego") : undefined}
+             />
           ) : null}
         </div>
         <div>
@@ -377,6 +386,7 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="instinto">{t("pet.instinto")}</SelectItem>
+                   <SelectItem value="ego">{t("pet.ego")}</SelectItem>
                   {PELES.map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       {t(`pet.${item.id}`)}
@@ -397,7 +407,7 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
                 <SelectContent>
                   {movimentosDisponiveis.map((item, indice) => (
                     <SelectItem key={item.id} value={String(indice)}>
-                      {t(`pet.movimento.${item.id}`)}
+                      {t(`${controle.visual === "instinto" ? "pet.movimento" : "pet.pose"}.${item.id}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -587,7 +597,9 @@ export function HermesPeles() {
   const { t } = useI18n();
   const { pele, trocar } = usePeleHermes();
   const peleAtual = PELES.find((p) => p.id === pele);
-  if (!peleAtual) return null;
+  const ascensao = PELES.find((p) => p.id === "ascensao");
+  const { controle, atualizar } = useControleHermes();
+  if (!peleAtual || !ascensao) return null;
 
   return (
     <section id="hermes" className="scroll-mt-24 px-4 py-24 sm:px-6">
@@ -599,6 +611,29 @@ export function HermesPeles() {
           tone="neon"
         />
         <PainelHermes />
+        <div role="group" aria-label={t("pet.dupla")} className="mt-8 grid gap-4 sm:grid-cols-2">
+          <button
+            type="button"
+            aria-pressed={controle.visual === "instinto"}
+            onClick={() => atualizar({ visual: "instinto", movimento: 0, quadro: 0 })}
+            className={`panel flex flex-col items-center gap-3 p-5 text-center transition-colors ${controle.visual === "instinto" ? "border-neon-blue" : "hover:border-neon-blue/60"}`}
+          >
+            <SpriteInstintoSuperior largura={96} apenasMovimento={0} />
+            <span className="font-semibold text-foreground">{t("pet.instinto")}</span>
+            <span className="text-xs text-muted-foreground">{t("pet.instintoFace")}</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={controle.visual === "ego"}
+            onClick={() => atualizar({ visual: "ego", movimento: 0, quadro: 0 })}
+            className={`panel flex flex-col items-center gap-3 p-5 text-center transition-colors ${controle.visual === "ego" ? "border-neon-purple" : "hover:border-neon-purple/60"}`}
+          >
+            <SpriteHermes pele={ascensao} largura={96} apenasPose={0} rotulo={t("pet.ego")} />
+            <span className="font-semibold text-foreground">{t("pet.ego")}</span>
+            <span className="text-xs text-muted-foreground">{t("pet.egoLead")}</span>
+          </button>
+        </div>
+        <p className="mt-3 text-center text-xs text-muted-foreground">{t("pet.duplaNota")}</p>
         <HermesInstintoFolha />
         <div className="mt-16 border-t border-border pt-10">
           <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
@@ -706,6 +741,7 @@ export function HermesFlutuante() {
     return () => cancelAnimationFrame(id);
   }, [controle.passeando, controle.velocidade]);
   if (!montado) return null;
+  const peleFlutuante = PELES.find((item) => item.id === (controle.visual === "ego" ? "ascensao" : controle.visual));
   const movimentoFlutuante = controle.passeando
     ? pausado
       ? 6
@@ -722,12 +758,23 @@ export function HermesFlutuante() {
     >
       {visivel && (
         <div className="animate-[flutuar_4.5s_ease-in-out_infinite] motion-reduce:animate-none">
-          <SpriteInstintoSuperior
-            largura={typeof window !== "undefined" && window.innerWidth < 640 ? 48 : 132}
-            apenasMovimento={movimentoFlutuante}
-            quadroForcado={controle.quadro}
-            reproduzindo={controle.reproduzindo}
-          />
+          {controle.visual === "instinto" ? (
+            <SpriteInstintoSuperior
+              largura={typeof window !== "undefined" && window.innerWidth < 640 ? 48 : 132}
+              apenasMovimento={movimentoFlutuante}
+              quadroForcado={controle.quadro}
+              reproduzindo={controle.reproduzindo}
+            />
+          ) : peleFlutuante ? (
+            <SpriteHermes
+              pele={peleFlutuante}
+              largura={typeof window !== "undefined" && window.innerWidth < 640 ? 48 : 132}
+              apenasPose={Math.min(movimentoFlutuante, POSES.length - 1)}
+              quadroForcado={controle.quadro}
+              reproduzindo={controle.reproduzindo}
+              rotulo={controle.visual === "ego" ? t("pet.ego") : undefined}
+            />
+          ) : null}
         </div>
       )}
       <button
