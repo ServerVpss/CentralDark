@@ -1,6 +1,9 @@
 ---
 name: meta-lupa
 description: Aplicar a META LUPA com três temperaturas operacionais — FRIA, MÉDIA e QUENTE — preservando Bayes, entropia, valor da informação, mapa canônico, AutoLupa, contract_digest, candidate_ref, comitês independentes, registro auditável e autorização humana. Usar em auditorias, investigações, debugging multimodal, decisões arquiteturais, incidentes, avaliações de agentes, alegações conflitantes ou situações em que evidência deva alterar uma hipótese sem transformar confiança em autorização.
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # META LUPA

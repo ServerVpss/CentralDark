@@ -5,6 +5,9 @@ metadata:
   type: operational
   version: "1.0"
   owner: SEGREDO/CHEFE
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CENTRALDARK HUB CREDENTIAL CONTROL PLANE

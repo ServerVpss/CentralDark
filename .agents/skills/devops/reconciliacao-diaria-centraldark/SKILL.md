@@ -13,6 +13,9 @@ metadata:
 related_skills: [centraldark-ops, centraldark-hermes-operations, skill-synchronization]
 environments:
   - centraldark
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # Reconciliação Diária CentralDark
