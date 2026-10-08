@@ -21,7 +21,7 @@ if args.verify_only:
         if not proc.name.isdigit():
             continue
         try:
-            argv=[x.decode(errors="replace") for x in (proc/"cmdline").read_bytes().split(b"\\0") if x]
+            argv=[x.decode(errors="replace") for x in (proc/"cmdline").read_bytes().split(b"\0") if x]
             if len(argv)<5 or Path(argv[0]).resolve()!=node or Path(argv[1]).resolve()!=entry:
                 continue
             inspected+=1
@@ -29,7 +29,7 @@ if args.verify_only:
             parent=int(next(line.split()[1] for line in (proc/"status").read_text().splitlines() if line.startswith("PPid:")))
             parent_name=(Path("/proc")/str(parent)/"comm").read_text().strip()
             # Read only the required label. Never echo, hash, or persist credentials.
-            label=next((item.split(b"=",1)[1] for item in (proc/"environ").read_bytes().split(b"\\0")
+            label=next((item.split(b"=",1)[1] for item in (proc/"environ").read_bytes().split(b"\0")
                         if item.startswith(b"CENTRALDARK_CLIENT_LABEL=")),b"")
             if {"--stdio","--compact","--admin"}.issubset(flags) and parent_name=="aioncore" and label==b"AionUi":
                 matches+=1
