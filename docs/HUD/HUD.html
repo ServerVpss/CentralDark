@@ -814,7 +814,7 @@ body {
     <div class="section-header">
       <div class="section-icon">&#128274;</div>
       <h2 class="section-title">Cadeados &mdash; Lugares Provados e Selados</h2>
-      <span class="section-count">9 selados</span>
+      <span class="section-count" id="cadeados-count">contando provas...</span>
     </div>
     <div class="cadeado-grid">
       <div class="cadeado-card selado">
@@ -898,6 +898,27 @@ body {
         </div>
         <div class="cadeado-meta">CentralDark entra no Hermes Desktop como plugin nativo do mesmo organismo. HUD fixo de status em cima + stream vivo de logs/eventos embaixo. Obsidian e Hermes Desktop compartilham a mesma telemetria; nenhum segundo app, daemon, porta, scheduler, banco ou HUD owner.</div>
         <div class="cadeado-prova">MAIN: 393b16855 &middot; HERMES_DESKTOP_NATIVE_EXTENSION=true &middot; implementacao fisica = NEXT_CURSOR</div>
+      </div>
+      <!-- Evolucao medida: mesma grade e mesmo owner, evidencias com escopo e data -->
+      <div class="cadeado-card selado">
+        <div class="cadeado-header"><span class="cadeado-icon">&#128065;</span><span class="cadeado-nome">Screenpipe Casa / Health</span><span class="cadeado-status pass">PROVA HTTP</span></div>
+        <div class="cadeado-meta">VPS &#8594; Tailscale &#8594; SEGREDO 100.123.93.25:3030/health. Respondeu HTTP 200 em 08/10/2026. Nao significa captura de audio ou logs completos disponiveis.</div>
+        <div class="cadeado-prova">PROVADO_ESCOPO: HTTP 200 pela VPS, 08/10/2026. Atualizacao live na secao Conexoes.</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header"><span class="cadeado-icon">&#129528;</span><span class="cadeado-nome">One Heart VPS</span><span class="cadeado-status pass">PROVA HTTP</span></div>
+        <div class="cadeado-meta">VPS 127.0.0.1:9100/heartbeat e /health responderam HTTP 200 em 08/10/2026. Vida do endpoint nao e prova de todos os workers.</div>
+        <div class="cadeado-prova">PROVADO_ESCOPO: dois endpoints 200; one heart unico.</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header"><span class="cadeado-icon">&#9881;</span><span class="cadeado-nome">Runtime / Modelo VPS</span><span class="cadeado-status pass">PROVA HTTP</span></div>
+        <div class="cadeado-meta">VPS 127.0.0.1:18435/health HTTP 200 em 08/10/2026; inferencia e disponibilidade de modelos continuam provas separadas.</div>
+        <div class="cadeado-prova">PROVADO_ESCOPO: health HTTP 200, 08/10/2026.</div>
+      </div>
+      <div class="cadeado-card aberto">
+        <div class="cadeado-header"><span class="cadeado-icon">&#129302;</span><span class="cadeado-nome">Hermes WebUI / Sessao</span><span class="cadeado-status warn">PENDENTE</span></div>
+        <div class="cadeado-meta">VPS 127.0.0.1:9119 respondeu HTTP 302 em 08/10/2026. Servico acessivel, mas sessao autenticada e painel funcional ainda nao comprovados.</div>
+        <div class="cadeado-prova">PROVA PARCIAL: HTTP 302. A antiga porta 8788 nao conectou.</div>
       </div>
     </div>
   </div>
@@ -1555,6 +1576,24 @@ function refreshCentralDarkLive() {
 
 refreshCentralDarkLive();
 setInterval(refreshCentralDarkLive, CENTRALDARK_LIVE.refreshMs);
+/* Contador real do mesmo inventario: nunca fixar numero de cadeados no HTML. */
+(function() {
+  function contarCadeados() {
+    var area = document.getElementById('cadeados-count');
+    if (!area) return;
+    var grade = area.closest('.section');
+    if (!grade) return;
+    var cards = grade.querySelectorAll('.cadeado-grid > .cadeado-card');
+    var selados = grade.querySelectorAll('.cadeado-grid > .cadeado-card.selado').length;
+    var pendentes = cards.length - selados;
+    area.textContent = cards.length + ' registros · ' + selados + ' selados · ' + pendentes + ' pendentes';
+    area.title = 'Inventario contabilizado diretamente dos cartoes, nao dos servicos atuais';
+  }
+  contarCadeados();
+  var grade = document.querySelector('#cadeados-count')?.closest('.section')?.querySelector('.cadeado-grid');
+  if (grade && window.MutationObserver) new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+})();
+
 /* CD monitor integrado: eventos de saude, nunca transcricao de tela/audio. */
 (function() {
   var history = [], last = Object.create(null);
