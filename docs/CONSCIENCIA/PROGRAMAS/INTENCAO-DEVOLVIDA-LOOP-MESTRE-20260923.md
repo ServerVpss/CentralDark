@@ -1032,3 +1032,15 @@ Alvo local do CHEFE: vault Windows `.../Obsidian Vault/.../HUD.html`. O caminho 
 **A01–A20 e G01–G12 continuam literalmente definidos acima; M01–M12 apenas verificam este complemento.** O owner de avaliação permanece `scripts/lupa/horn-reuse-fixed-point.mjs`. Nenhum workflow, bridge, gate ou scheduler paralelo. GOAL `t_9040803d` · LOOP_ID `centraldark-hermes-claude-oracle-convergence-v1`.
 
 `PR/COMMIT != DEPLOY`; `PET != PROVA_DE_HERMES`; `UNKNOWN != PASS`; `REALITY_JUDGE_AFTER_EFFECT`; `NEXT_CURSOR=PR1785_INTEGRAL_VERIFY`.
+
+---
+
+## 🫀 Expansões I–VI da mesma intenção — incorporação do PR #1785 na main
+
+O CHEFE autorizou a promoção **documental integral** do PR #1785. A transcrição completa dos inventários, hipóteses, receitas, riscos, funcionalidades, metáforas, score, JEV/HeyGen, Braintrust, GPU local, captura de chat, espelho filosófico e modos de trabalho agora está em `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md`, seção **“CRISTALIZAÇÃO INTEGRAL DO PR #1785 — EXPANSÕES NO MESMO CORAÇÃO”**. Este Loop Mestre **continua owner**, não se cria outro.
+
+`GOAL=t_9040803d`; `SAME_HERMES=true`; `SAME_ORACLE_SKILL=true`; `ONE_WRITER_PER_SCOPE=true`; `REUSE_BEFORE_CREATE=true`. AionUi-first reaproveita overlay pré-existente. Expansão I: quatro rotas/espelho; II: catálogo opcional e integração visual; III: botão Autoevolução/cápsula/replay GPU; IV: seis papéis/erro exato; V: placar e captura; VI: hipóteses Tartaruga e filosofia/Meta-Grill. Os rótulos V/VI duplicados refletem ordem histórica do PR.
+
+**Fronteira:** documentação aprovada na main, execução/integração/runtime ainda por prova; ideias `OPCIONAL_FUTURO` não são bloqueadores de CI. `DOCUMENTED!=EXECUTED`; `MERGED!=DEPLOYED`; `UNKNOWN!=PASS`.
+
+`NEXT_CURSOR=RECONCILE_CURRENT_CAPABILITIES_FOR_FIRST_MINIMUM_DELTA`.
