@@ -87,3 +87,21 @@ SOURCE_DIST_PARITY_REQUIRED=true
 RUNTIME_TREE_MAY_DIFFER_FROM_CANONICAL_REPO_TREE=true
 MEASURE_EXEC_PATH_BEFORE_DEPLOY=true
 ```
+
+## Recibo de prova reutilizavel — AionUi MCP stdio (08/10/2026)
+
+**Owner ja existente:** `scripts/vps/aionui-native-integrate.py`. A unificacao nao cria outro servidor nem altera a arquitetura. O processo pai `aioncore` iniciou 3 processos filhos do MCP nativo com executavel `/usr/local/bin/node`, `--stdio --compact --admin` e `CENTRALDARK_CLIENT_LABEL=AionUi`; a WebUI respondeu HTTP 200 em `127.0.0.1:25808`.
+
+**Receita deterministica READ-ONLY (repetivel sempre que necessario):**
+
+```bash
+python3 scripts/vps/aionui-native-integrate.py --repo /root/CentralDark_MCP_RUNTIME --verify-only
+```
+
+O comando confirma dinamicamente o pai `aioncore`, os argumentos de cada filho, o label no ambiente **sem imprimir os demais valores**, a existencia e SHA256 do executavel MCP e HTTP 200 da WebUI. Nao depende de PID fixo; nao reinicia, recria, nem reconfigura processos. Saida JSON `PASS`/exit 0 quando a cadeia atual foi observada. Caso falhe uma das clausulas, `UNKNOWN`/exit 2 e reabrir apenas o setor afetado. O hash do dist e evidencia de identidade do arquivo, **nao** criterio de igualdade com a source da main.
+
+**Medicao e contraprova da VPS:** comando positivo resultou `matching_children=3`, `inspected_mcp_children=7`, `webui_http_200=true`, `runtime_entry_exists=true`, hash dist `b3c28cbb26e538d00ad22e56e9a1e8b435a5b0a71af8b1d631be2152e0c76b48`, saida 0. Mesmo verificador apontado para repo inexistente devolveu `UNKNOWN`, saida 2: **FAIL CLOSED PASS**. Verificador validado com `py_compile`.
+
+**Fronteira:** `AIONUI_MCP_STDIO_PROCESS_BINDING=PASS`; `MCP_TOOL_INVOCATION_E2E=NOT_TESTED`. Prova e reutilizavel enquanto execucao e fingerprint correspondentes permanecerem atuais; drift relevante obriga novo teste, nao nova arquitetura. O PR #1757 foi marcado RETIRED; #1562 e LEGACY/NAO MERGEAR. Esta cristalizacao foi feita diretamente no owner atual da `main`, sem novo PR/branch.
+
+**Commits do verificador:** `5287e7343b41837f8a6b7a1aa7b0ea9cc4f4dcb0` (verificador) e `1d69ed8409ecd7b69ef80bc03f2e3ec857325252` (correcao NUL do /proc e contraprova).
