@@ -740,6 +740,36 @@ SPECIALISTS_ARE_OPTIONAL_CAPABILITIES_NOT_REQUIRED_IDENTITIES=true
 
 **Escopo:** esta é uma atualização do mesmo MOC canônico, não outro mapa, projeto, owner, painel, executor, serviço, branch ou sistema. O passado e as provas anteriores permanecem acima, sem reescrita. `REUSE_BEFORE_CREATE=true` · `ONE_SYSTEM_ONLY=true` · `CURRENT>HISTORY` · `UNKNOWN!=PASS`.
 
+<!-- INSTINTO_SUPERIOR_DIAGRAMA_ORIGINAL -->
+### 👑 Desenho da convergência — Instinto Superior
+
+Mesmo desenho aprovado pelo CHEFE: **uma autoridade, um programa com Tray, duas superfícies ligadas nos dois sentidos, os serviços existentes e a main canônica**. As setas descrevem **fluxo de informação e leitura/retorno**; não autorizam dois writers sobre o mesmo estado. Este desenho é topologia pretendida; o CentralDarkBridge.exe não foi encontrado em execução na Casa no mapeamento.
+
+```mermaid
+flowchart TB
+    IS["👑 CentralDark — Instinto Superior<br/>Autoridade única"]
+    OS["CentralDark Bridge · One Shot<br/>Um programa Windows + Tray no mesmo processo"]
+
+    subgraph CAMADA[" "]
+        direction LR
+        HUD["HUD + Obsidian<br/>Interface, logs, Grafo Vivo, conhecimento"]
+        CASA["Casa / Sensores<br/>Screenpipe, Tailscale, SSH, estado local"]
+        HUD <--> CASA
+    end
+
+    SERV["MCP CentralDark · Hermes · VPS · Supabase<br/>Rotas existentes de serviços, execução e dados"]
+    GIT["GitHub ServerVpss/CentralDark@main<br/>Código canônico, histórico e cadeados de contraprova"]
+
+    IS --> OS
+    OS <--> HUD
+    OS <--> CASA
+    HUD <--> SERV
+    CASA <--> SERV
+    SERV <--> GIT
+```
+
+**Uma só leitura do desenho:** Instinto Superior ↓ Bridge One Shot ↓ **HUD + Obsidian ↔ Casa / Sensores** ↓ MCP · Hermes · VPS · Supabase ↓ GitHub main. O retorno percorre a mesma rota. **Interface ≠ autoridade; transporte ≠ execução; documento ≠ prova de runtime.**
+
 ### Uma intenção, superfícies reaproveitadas
 
 ```text
