@@ -39,8 +39,7 @@ on:
     types:
       - centraldark_update_branch_reconcile
       - centraldark_pr_update_branch
-  schedule:
-    - cron: '11,41 * * * *'
+
 
 permissions:
   contents: write

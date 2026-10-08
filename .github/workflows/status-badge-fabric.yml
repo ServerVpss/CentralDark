@@ -2,8 +2,6 @@ name: 🏷️ Status Badge Fabric
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '23 */6 * * *'
   push:
     paths:
       - '.github/workflows/**'

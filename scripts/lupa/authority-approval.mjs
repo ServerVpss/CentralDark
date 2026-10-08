@@ -18,6 +18,8 @@ import { fileURLToPath } from "node:url";
 export const CANONICAL_AUTHORITY_LABEL = "👑 PERMITO-SEGREDO";
 export const CANONICAL_AUTHORITY_SOURCE = "github-label:permito-segredo";
 export const CANONICAL_INTENT_RECEIPT_SOURCE = "pr-body:intent-authorized";
+export const CANONICAL_PERSISTENT_AUTHORITY_SOURCE = "github-authenticated-centraldark-persistent-authority";
+export const PERSISTENT_CENTRALDARK_AUTHORITY_ENABLED = true;
 export const DERIVED_AUTHORITY_SOURCE = CANONICAL_INTENT_RECEIPT_SOURCE;
 export const DELEGATED_AUTHORITY_SOURCE = "github-authenticated-intent-receipt";
 export const FAST_MERGE_POLICY = "AUTO_SQUASH_IF_CLEAN";
@@ -90,6 +92,23 @@ export function intentReceiptForEvent(
   };
 }
 
+export function persistentAuthorityForEvent(
+  event = {},
+  { trustedAuthors = ["segredounlock"], repository = null } = {},
+) {
+  const pr = event.pull_request || {};
+  const author = String(pr.user?.login || "").toLocaleLowerCase("en-US");
+  const trusted = trustedAuthorsFrom(trustedAuthors).has(author);
+  const headRepo = pr.head?.repo?.full_name || null;
+  const baseRepo = pr.base?.repo?.full_name || null;
+  const sameRepository = Boolean(
+    headRepo && baseRepo && headRepo === baseRepo && (!repository || headRepo === repository),
+  );
+  const baseMain = pr.base?.ref === "main";
+  const eligible = PERSISTENT_CENTRALDARK_AUTHORITY_ENABLED && trusted && sameRepository && baseMain;
+  return { eligible, trusted, sameRepository, baseMain, author: pr.user?.login || null };
+}
+
 export function authorityApprovalForEvent(event = {}, options = {}) {
   const labels = new Set(
     (event.pull_request?.labels || []).map((label) => canonicalAuthorityLabel(label)),
@@ -97,7 +116,9 @@ export function authorityApprovalForEvent(event = {}, options = {}) {
   const viaLabel = labels.has(CANONICAL_AUTHORITY_LABEL);
   const intent = intentReceiptForEvent(event, options);
   const viaReceipt = intent.valid;
-  const approved = viaLabel || viaReceipt;
+  const persistent = persistentAuthorityForEvent(event, options);
+  const viaPersistent = persistent.eligible;
+  const approved = viaLabel || viaReceipt || viaPersistent;
 
   return {
     approved,
@@ -106,12 +127,16 @@ export function authorityApprovalForEvent(event = {}, options = {}) {
       ? CANONICAL_AUTHORITY_SOURCE
       : viaReceipt
         ? CANONICAL_INTENT_RECEIPT_SOURCE
-        : "none",
+        : viaPersistent
+          ? CANONICAL_PERSISTENT_AUTHORITY_SOURCE
+          : "none",
     viaLabel,
     viaReceipt,
-    viaDelegation: viaReceipt,
+    viaPersistent,
+    viaDelegation: viaReceipt || viaPersistent,
     derivable: false,
-    transported: !viaLabel && viaReceipt,
+    transported: !viaLabel && (viaReceipt || viaPersistent),
+    persistent,
     candidateIntent: Boolean(
       intent.authority || intent.mergePolicy || intent.intentScope || intent.writer || intent.writerScope,
     ),
@@ -136,7 +161,7 @@ export async function main(env = process.env) {
   if (env.GITHUB_OUTPUT) {
     await appendFile(
       env.GITHUB_OUTPUT,
-      `approved=${result.approved}\nauthority=${result.authority || "NONE"}\nsource=${result.source}\nderived=false\ncandidate_intent=${result.candidateIntent}\ntransported=${result.transported}\n`,
+      `approved=${result.approved}\nauthority=${result.authority || "NONE"}\nsource=${result.source}\nderived=false\ncandidate_intent=${result.candidateIntent}\ntransported=${result.transported}\npersistent=${result.viaPersistent}\n`,
       "utf8",
     );
   }

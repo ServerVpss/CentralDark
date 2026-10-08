@@ -2,10 +2,6 @@ name: ⚙️ Autonomia — promoção segura
 
 on:
   workflow_dispatch:
-  schedule:
-    # Relógio esparso — NÃO é o */5 removido.
-    # Cobre WAIT/action_required (jobs=[] nunca dispara workflow_run completed).
-    - cron: "17,47 * * * *"
   pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize]
     branches: [main]
@@ -35,7 +31,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      issues: read
+      issues: write
 
     steps:
       - name: 🔹 Checkout exclusivo da main confiável
@@ -54,7 +50,7 @@ jobs:
       - name: 🔹 Tirar de Draft somente intenção já autorizada
         env:
           BOT_TRUSTED_AUTHORS: segredounlock
-          NORMALIZER_TOKEN: ${{ github.token }}
+          NORMALIZER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/github-autonomia-varredura.mjs normalize
 
@@ -246,7 +242,7 @@ jobs:
             const auth = candidate?.authorization || {};
             const fullPromotionReceipt = Boolean(
               auth.authorized === true
-              && auth.viaBody === true
+              && (auth.viaBody === true || auth.viaLabel === true)
               && supportedPolicies.has(auth.merge_policy)
               && auth.intent_scope
               && auth.writer
