@@ -1088,3 +1088,35 @@ Os dois conjuntos de vinte requisitos do `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DE
 - [ ] **M12** — GOAL t_9040803d, G01–G12, readback de runtime/HUD/Obsidian, receipt e fixed point real; UNKNOWN sem falso PASS.
 
 **Decisão:** `DOCUMENTED != EXECUTED` · `UNKNOWN != PASS` · `MERGED != DEPLOYED` · `ERRO_SUMIU != GOAL_RESOLVIDO`. Item marcado só após prova positiva, contraprova, timestamp, ref e readback no alvo. **NEXT_CURSOR:** `PR1785_INTEGRAL → UI_BUILD_VISUAL_PET → G01_G12_RUNTIME → RECEIPT → FIXED_POINT_IF_PROVED`.
+
+
+## 🧿 A evolução do Oráculo que não confunde texto visível com resposta completa
+
+**Origem:** Expansão de Domínio do CHEFE preservada no PR #1785. **Owner executável:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md` v0.5.2; **owner de continuidade:** `apps/modulos/HERMES-CORE/core/continuity-guard.mjs`; **owner de provas/score:** `scripts/trigger-fabric/centraldark_master_cycle.py`, `scripts/lupa/horn-reuse-fixed-point.mjs` e Reality Judge já existentes.
+
+O Hermes continua **um só**. Geoff, Ian, Greg, Dex, Hermes e Realidade são papéis da mesma missão, nunca seis writers. Braintrust, JEV/System One e ferramentas externas são opções complementares, sujeitas a capacidade/preço/licença/prova quando selecionadas; não recriar scheduler, cérebro ou scorer porque uma marca existe.
+
+### Microciclo de erro com evidência
+
+```text
+INTENT + CÁPSULA + GOAL → OBSERVAÇÃO
+→ CLASSIFICAR ESTADO DA RESPOSTA (STREAMING ≠ COMPLETE)
+→ COBERTURA DE CONVERSA (PARTIAL ≠ COMPLETE)
+→ EVIDÊNCIA DISCRIMINANTE (class/file/line quando medidos)
+→ PONTUAR PROGRESSO + CAUSA PROVÁVEL
+→ OWNER EXISTENTE / UM WRITER / MENOR DELTA
+→ TESTE / NEGATIVO / REALITY JUDGE
+→ RECEIPT / NEUROLINK / NEXT_CURSOR → REPLAY
+```
+
+**Erro exato** só pode ser atribuído a `arquivo:linha:tipo` quando stacktrace/diagnóstico/compilador/teste registra essa localização; não inferir linha de screenshot ou resposta de IA. Scorer fornece avaliação, não localização de origem por si só. Sem sinal novo: fingerprint, budget, backoff, pausa diagnosticada. Falha recuperável: patch mínimo, prova e retomada. GPU Casa e botão do cockpit continuam candidatos até medição; não ativar automaticamente.
+
+### Protocolo de observação de chat
+
+Usar o browser oficial da Nous (snapshot, scroll, vision, console) quando exposto e autorizado; caso contrário Hermes Desktop Preview suportado, **sem inventar APIs de tabs/transcript**. Nunca clicar em `...`, seta ou indicador de pulsação sem inspecionar papel/estado. Confirmar **finalização da geração** e **cobertura de todos os blocos relevantes**, separadamente, com identificadores de turno e `NEXT_CURSOR`. Sem estado terminal ou com gaps de virtualização: `UNKNOWN/PARTIAL` e resposta não promovida a prova. Nem o scroll nem o console validam a verdade do conteúdo.
+
+**Contraprovas mínimas:** atraso no streaming, reticências ambíguas, rolagem, virtualização, resposta longa, troca de sessão, deduplicação, concorrência de dois Oráculos e três turnos Hermes↔Oracle↔Hermes correlacionados. `SOURCE_IMPLEMENTED != RUNTIME_E2E_PASS`.
+
+**Fontes upstream:** `hermes-agent.nousresearch.com/docs/user-stories` (371 relatos públicos classificados, **sem índice independente de 99–100% de sucesso**); `github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/tools-reference.md`; `github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/desktop.md`.
+
+**Protocolo:** preservar 28 peças, C01–C20, A01–A20, G01–G12, dois ciclos de sete batidas, Gojo/Whis/Bills/Goku/Vegeta/Yuji/Sukuna e as Expansões I–IV do PR #1785. O único cristal se amplia, não troca de identidade.
