@@ -751,7 +751,7 @@ body {
 <div class="tab-painel visivel" id="tab-hud">
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
-<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 01:05:56 BRT</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
+<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 01:12 BRT</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
 
 
   <!-- AION UI BANNER -->
@@ -926,6 +926,23 @@ body {
     </div>
   </div>
 
+<!-- CANONICAL MCP ADMIN OWNER: fonte e provas do mesmo kernel (sem novo backend) -->
+<div class="section cd-mcp-admin-map" style="margin-top:16px" data-source="mcp.centralldark.com/health">
+  <div class="section-header">
+    <div class="section-icon">&#128736;</div>
+    <h2 class="section-title">MCP Admin &middot; Kernel vivo &amp; setores</h2>
+    <span class="section-count cd-mcp-health">MEDINDO</span>
+  </div>
+  <div class="cadeado-meta">Fonte runtime: <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">/health</a> do MCP 0.4.0; owner administrativo: <a href="https://mcp.centralldark.com/admin" target="_blank" rel="noopener">/admin</a> (login exigido). Auditoria em 08/10/2026: 153 ferramentas publicadas, 141 dispatchables no inventario unificado e 11 rotas catalogadas. Sao escopos de catalogo diferentes, nao somar ou igualar; health e catalogo nao comprovam autorizacao de cada tool.</div>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Ferramentas publicas</h3><div class="val cd-mcp-count">MEDINDO</div><div class="meta">/health: campo toolCount, consulta ao owner a cada 15s.</div></div>
+    <div class="hud-card"><h3>Catalogo / versao</h3><div class="val cd-mcp-version">MEDINDO</div><div class="meta cd-mcp-time">Sem leitura de runtime nesta abertura</div></div>
+    <div class="hud-card"><h3>Admin unificado</h3><div class="val ok">ROTA 200</div><div class="meta">/admin serve login; abas internas exigem sessao autenticada.</div></div>
+    <div class="hud-card"><h3>Validador Admin</h3><div class="val warn">PARCIAL / 2 FALTANTES</div><div class="meta">vps_limpar_pasta_projeto e vps_listar_pastas_limpaveis ausentes no catalogo publico esperado, leitura datada 08/10/2026.</div></div>
+  </div>
+  <p class="cadeado-meta"><strong>Abas reais do owner:</strong> &#128065; Visao Geral &middot; &#129520; Ferramentas &middot; &#128203; Linear &middot; &#127756; Grafo Celestial &middot; &#129513; Padroes &middot; &#127899; Comandos &middot; Auditoria &middot; Grok &middot; Buildkite &middot; Conector &middot; Diagnostico &middot; Omni &middot; Tailscale. Presenca no codigo nao equivale a sessao operacional provada.</p>
+  <p class="cadeado-prova">Owners medidos: apps/modulos/mcp/src/admin.js, MCP /health, catalogo mcp_admin_catalog. Rotas administrativas que requerem cookie: /admin/api/tools, /admin/api/linear, /admin/grafo/, /admin/api/buildkite/status, /admin/api/tailscale, /admin/api/operational-snapshot, /admin/api/logs. Sem transporte de credenciais.</p>
+</div>
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
@@ -961,8 +978,8 @@ body {
       </div>
       <div class="hud-card">
         <h3>MCP tools</h3>
-        <div class="val warn" id="live-heart-tools">UNKNOWN</div>
-        <div class="meta">catalogo vivo em /health</div>
+        <div class="val warn" id="live-heart-tools">MEDINDO</div>
+        <div class="meta">/health.toolCount &middot; mesmo owner MCP</div>
       </div>
       <div class="hud-card">
         <h3>Chat nativo</h3>
@@ -1064,6 +1081,24 @@ body {
      ================================================================ -->
 <div class="tab-painel" id="tab-mapa">
 <div class="page">
+<!-- CANONICAL MCP ADMIN OWNER: fonte e provas do mesmo kernel (sem novo backend) -->
+<div class="section cd-mcp-admin-map" style="margin-top:16px" data-source="mcp.centralldark.com/health">
+  <div class="section-header">
+    <div class="section-icon">&#128736;</div>
+    <h2 class="section-title">MCP Admin &middot; Kernel vivo &amp; setores</h2>
+    <span class="section-count cd-mcp-health">MEDINDO</span>
+  </div>
+  <div class="cadeado-meta">Fonte runtime: <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">/health</a> do MCP 0.4.0; owner administrativo: <a href="https://mcp.centralldark.com/admin" target="_blank" rel="noopener">/admin</a> (login exigido). Auditoria em 08/10/2026: 153 ferramentas publicadas, 141 dispatchables no inventario unificado e 11 rotas catalogadas. Sao escopos de catalogo diferentes, nao somar ou igualar; health e catalogo nao comprovam autorizacao de cada tool.</div>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Ferramentas publicas</h3><div class="val cd-mcp-count">MEDINDO</div><div class="meta">/health: campo toolCount, consulta ao owner a cada 15s.</div></div>
+    <div class="hud-card"><h3>Catalogo / versao</h3><div class="val cd-mcp-version">MEDINDO</div><div class="meta cd-mcp-time">Sem leitura de runtime nesta abertura</div></div>
+    <div class="hud-card"><h3>Admin unificado</h3><div class="val ok">ROTA 200</div><div class="meta">/admin serve login; abas internas exigem sessao autenticada.</div></div>
+    <div class="hud-card"><h3>Validador Admin</h3><div class="val warn">PARCIAL / 2 FALTANTES</div><div class="meta">vps_limpar_pasta_projeto e vps_listar_pastas_limpaveis ausentes no catalogo publico esperado, leitura datada 08/10/2026.</div></div>
+  </div>
+  <p class="cadeado-meta"><strong>Abas reais do owner:</strong> &#128065; Visao Geral &middot; &#129520; Ferramentas &middot; &#128203; Linear &middot; &#127756; Grafo Celestial &middot; &#129513; Padroes &middot; &#127899; Comandos &middot; Auditoria &middot; Grok &middot; Buildkite &middot; Conector &middot; Diagnostico &middot; Omni &middot; Tailscale. Presenca no codigo nao equivale a sessao operacional provada.</p>
+  <p class="cadeado-prova">Owners medidos: apps/modulos/mcp/src/admin.js, MCP /health, catalogo mcp_admin_catalog. Rotas administrativas que requerem cookie: /admin/api/tools, /admin/api/linear, /admin/grafo/, /admin/api/buildkite/status, /admin/api/tailscale, /admin/api/operational-snapshot, /admin/api/logs. Sem transporte de credenciais.</p>
+</div>
+
 <div class="section cd-measured-status" style="margin-top:16px" data-cd-proof="2026-10-08T04:05:56Z">
  <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">08/10/2026 01:05 BRT</span></div>
  <p class="cadeado-meta">Provas coletadas na VPS CENTRALDARK-OS em 08/10/2026 04:05:56 UTC. Sinais sao historicos ate nova medicao; portas abertas != sessao autenticada. O One Heart da aba HUD refaz a consulta ao owner a cada 5 s.</p>
@@ -1254,6 +1289,24 @@ body {
      ================================================================ -->
 <div class="tab-painel" id="tab-forja">
 <div class="page">
+<!-- CANONICAL MCP ADMIN OWNER: fonte e provas do mesmo kernel (sem novo backend) -->
+<div class="section cd-mcp-admin-map" style="margin-top:16px" data-source="mcp.centralldark.com/health">
+  <div class="section-header">
+    <div class="section-icon">&#128736;</div>
+    <h2 class="section-title">MCP Admin &middot; Kernel vivo &amp; setores</h2>
+    <span class="section-count cd-mcp-health">MEDINDO</span>
+  </div>
+  <div class="cadeado-meta">Fonte runtime: <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">/health</a> do MCP 0.4.0; owner administrativo: <a href="https://mcp.centralldark.com/admin" target="_blank" rel="noopener">/admin</a> (login exigido). Auditoria em 08/10/2026: 153 ferramentas publicadas, 141 dispatchables no inventario unificado e 11 rotas catalogadas. Sao escopos de catalogo diferentes, nao somar ou igualar; health e catalogo nao comprovam autorizacao de cada tool.</div>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Ferramentas publicas</h3><div class="val cd-mcp-count">MEDINDO</div><div class="meta">/health: campo toolCount, consulta ao owner a cada 15s.</div></div>
+    <div class="hud-card"><h3>Catalogo / versao</h3><div class="val cd-mcp-version">MEDINDO</div><div class="meta cd-mcp-time">Sem leitura de runtime nesta abertura</div></div>
+    <div class="hud-card"><h3>Admin unificado</h3><div class="val ok">ROTA 200</div><div class="meta">/admin serve login; abas internas exigem sessao autenticada.</div></div>
+    <div class="hud-card"><h3>Validador Admin</h3><div class="val warn">PARCIAL / 2 FALTANTES</div><div class="meta">vps_limpar_pasta_projeto e vps_listar_pastas_limpaveis ausentes no catalogo publico esperado, leitura datada 08/10/2026.</div></div>
+  </div>
+  <p class="cadeado-meta"><strong>Abas reais do owner:</strong> &#128065; Visao Geral &middot; &#129520; Ferramentas &middot; &#128203; Linear &middot; &#127756; Grafo Celestial &middot; &#129513; Padroes &middot; &#127899; Comandos &middot; Auditoria &middot; Grok &middot; Buildkite &middot; Conector &middot; Diagnostico &middot; Omni &middot; Tailscale. Presenca no codigo nao equivale a sessao operacional provada.</p>
+  <p class="cadeado-prova">Owners medidos: apps/modulos/mcp/src/admin.js, MCP /health, catalogo mcp_admin_catalog. Rotas administrativas que requerem cookie: /admin/api/tools, /admin/api/linear, /admin/grafo/, /admin/api/buildkite/status, /admin/api/tailscale, /admin/api/operational-snapshot, /admin/api/logs. Sem transporte de credenciais.</p>
+</div>
+
 <div class="forja-intro"><strong>Forja &middot; Componentes medidos</strong> &mdash; Camada visual da mesma CentralDark; cada carta de evidencia abaixo diferencia efeito comprovado e operacao pendente. Sem segunda arquitetura.</div>
 <div class="section cd-measured-status" style="margin-top:16px" data-cd-proof="2026-10-08T04:05:56Z">
  <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">08/10/2026 01:05 BRT</span></div>
@@ -1595,7 +1648,7 @@ function refreshCentralDarkLive() {
         liveSet('live-heart-orchestrator', orchestrator.model || 'UNKNOWN', orchestrator.state === 'SELECTED');
         liveSet('live-heart-worker', worker.model || 'UNKNOWN', worker.state === 'SELECTED');
         liveSet('live-heart-execution', topology.verdict || 'UNKNOWN', /^RUNNING|EXECUTION/i.test(String(topology.verdict || '')));
-        liveSet('live-heart-tools', health && Number.isFinite(Number(health.totalTools)) ? String(health.totalTools) + ' tools' : 'UNKNOWN', Boolean(health && Number.isFinite(Number(health.totalTools))));
+        liveSet('live-heart-tools', health && health.ok === true && Number.isFinite(Number(health.toolCount)) ? String(health.toolCount) + ' tools' : 'UNKNOWN', Boolean(health && health.ok === true && Number.isFinite(Number(health.toolCount))));
         liveSet('live-heart-chat', 'UNKNOWN', false);
         liveSet('live-heart-provider', 'provider: ' + (orchestrator.provider || 'UNKNOWN'));
         liveSet('live-heart-remote', 'Remote Desktop: ' + ((remoteLane || {}).state || 'UNKNOWN'));
@@ -1615,6 +1668,37 @@ function refreshCentralDarkLive() {
 
 refreshCentralDarkLive();
 setInterval(refreshCentralDarkLive, CENTRALDARK_LIVE.refreshMs);
+/* MCP catalogo: independente do heartbeat e do login administrativo.
+   Fonte HTTP /health fornece toolCount (nao totalTools). */
+function refreshCentralDarkMcpCatalog() {
+  var endpoints = resolveCentralDarkApiBases();
+  var index = 0;
+  function paint(ok, health) {
+    document.querySelectorAll('.cd-mcp-admin-map').forEach(function(area) {
+      var count = area.querySelector('.cd-mcp-count');
+      var version = area.querySelector('.cd-mcp-version');
+      var time = area.querySelector('.cd-mcp-time');
+      var status = area.querySelector('.cd-mcp-health');
+      var proven = Boolean(ok && health && health.ok === true && Number.isFinite(Number(health.toolCount)));
+      if (count) {count.textContent = proven ? String(health.toolCount)+' tools' : 'UNKNOWN';count.classList.toggle('ok',proven);count.classList.toggle('warn',!proven);}
+      if (version) {version.textContent = proven ? String(health.catalogVersion || health.version || 'sem versao') : 'UNKNOWN';version.classList.toggle('ok',proven);version.classList.toggle('warn',!proven);}
+      if (time) time.textContent = proven ? 'Resposta /health em '+new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})+' BRT' : 'Leitura atual indisponivel; manter provas historicas datadas';
+      if (status) status.textContent = proven ? 'HTTP 200 / CATALOGO' : 'UNKNOWN / REDE';
+    });
+  }
+  function next() {
+    if (index >= endpoints.length) { paint(false,null); return; }
+    var base = endpoints[index++];
+    liveFetchJson(base + '/health', 4000).then(function(h) {
+      if (h && h.ok === true && Number.isFinite(Number(h.toolCount))) paint(true,h);
+      else next();
+    }).catch(next);
+  }
+  next();
+}
+refreshCentralDarkMcpCatalog();
+setInterval(refreshCentralDarkMcpCatalog, 15000);
+
 /* Contador real do mesmo inventario: nunca fixar numero de cadeados no HTML. */
 (function() {
   function contarCadeados() {
