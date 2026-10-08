@@ -335,7 +335,7 @@ machine_projection:
 convergence_gate:
   target:
     canonical_repo: ServerVpss/CentralDark
-    canonical_visual_owner: public/central-dark-instinct-2
+    canonical_visual_owner: apps/instinto-superior
     product_identity: CentralDark Instinto Superior
     parallel_centraldark_designs_target: 0
 
@@ -567,7 +567,7 @@ convergence_gate:
 
     "21_single_design":
       requires:
-        CANONICAL_VISUAL_OWNER: public/central-dark-instinct-2
+        CANONICAL_VISUAL_OWNER: apps/instinto-superior
         PARALLEL_CENTRALDARK_DESIGNS_ACTIVE: 0
 
     "22_complete_domain":
