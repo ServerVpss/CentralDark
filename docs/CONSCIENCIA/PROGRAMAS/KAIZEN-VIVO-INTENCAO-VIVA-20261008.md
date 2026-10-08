@@ -865,3 +865,52 @@ o impossível começa a parecer
 
 **Fronteira de delegação:** esta especificação é um contrato de aceitação e não afirma que os comandos do Hermes foram executados. Falha em transporte SSH/Tailscale não autoriza inventar recibo ou criar segundo Hermes. Retomar pelo owner e rota alternativa autorizada; toda claim ainda não comprovada fica explícita no próximo receipt.
 
+
+
+---
+
+## 🧬 Materialização nominal — personagens como referências de capacidades (08/10/2026)
+
+**DELTA solicitado pelo CHEFE:** nomes visíveis na página inicial e no cockpit do `apps/instinto-superior`, associados às relações exatas do desenho preservado. São **identificadores mnemônicos** de capacidades existentes, não agentes criados, novos processos nem licença para alteração de runtime.
+
+| Nome preservado | Significado na metáfora da CentralDark | Fronteira de responsabilidade |
+|---|---|---|
+| 👑 CHEFE | Intenção e autoridade humanas | Nenhuma metáfora supera a autorização real |
+| 🫀 Yuji Itadori | Identidade, vontade e continuidade | Não confundir identidade com a potência do motor |
+| 🔥 Ryomen Sukuna | Potência que exige contenção e responsabilidade | Modelo/motor não ganha autoridade independente |
+| 👁️ Satoru Gojo | Seis Olhos, Infinity, Blue/Red/Purple, observação e contraprova | Skill Oráculo já existente; nenhum segundo juiz |
+| 🪽 Whis | Mestre, orientação, precisão, treinamento e antecipação de consequências | Conselho e observabilidade não viram writer independente |
+| 🐈 Bills / Beerus | Deus da Destruição; decisão, transformação e equilíbrio entre criação e destruição | Destruição é metáfora de refutar/remover hipóteses, nunca ação destrutiva autorizada por analogia |
+| ♾️ Goku | Instinto Superior Completo; percepção, adaptação e execução precisa | Primeira face visual simbólica do mesmo Hermes PET |
+| 💜 Vegeta | Ego Superior; determinação, resiliência, confronto com a falha e caminho de Bills | Segunda face visual simbólica do mesmo Hermes PET; não significa que Vegeta seja um Deus da Destruição |
+| 💎 Vegetto | Fusão Potara; convergência de capacidades | Metáfora do metabolismo cognitivo e funcional, não duplicação |
+| 💎 Gogeta | Fusão pela Dança; convergência sincronizada | Metáfora da mesma intenção e execução coordenada |
+| 🪬 Hermes PET | Expressão visual do executor Hermes existente | Motor/controle único; duas faces, sem segundo Hermes |
+
+**Ordem visual imutável deste delta:**
+
+```text
+👑 CHEFE — INTENÇÃO E AUTORIDADE
+   ↓ 🪬 INSTINTO SUPERIOR — IDENTIDADE PRESERVADA
+🫀 Yuji Itadori ↔ 🔥 Ryomen Sukuna
+   ↓ 👁️ Satoru Gojo — SEIS OLHOS E PROTEÇÃO
+🪽 Whis ↔ 🐈 Bills / Beerus — ORIENTAÇÃO E PODER DE DECISÃO
+   ↓
+♾️ Goku (Instinto Superior Completo) ↔ 💜 Vegeta (Ego Superior)
+   ↓ 💎 Vegetto / Gogeta — FUSÃO
+METABOLISMO COGNITIVO ↔ METABOLISMO FUNCIONAL
+   ↓ 🧿 REALIDADE — CONTRAPROVA
+   ↻ 🫀 KAIZEN CONTÍNUO
+```
+
+**O metabolismo cognitivo** recebe, percebe, compreende, recupera memória, confronta hipóteses e aprende. **O metabolismo funcional** identifica o owner, executa apenas dentro da autorização, testa, faz readback, registra receipt e alimenta o próximo ciclo. **A fusão significa uma única intenção atravessando ambas as camadas.** Não cria segundo dispatcher, PET, cérebro, scheduler, automação, skill ou estado soberano.
+
+**Projeção implementada no PR-filho:**
+- `apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx` é **componente de apresentação dentro do owner visual existente**, importado tanto pela landing quanto pelo CockpitShell; não é cockpit adicional.
+- `apps/instinto-superior/src/components/central/HermesPet.tsx` conserva o mesmo store/controles/sprites: `instinto` como face Goku e `ego` como face Vegeta, esta usando a paleta `ascensao`. São dois PETs simbólicos **visuais/selecionáveis**, nunca dois executores. Os sprites reutilizados são de Hermes; não se declara arte original de Vegeta.
+- PT/EN/ES recebem legendas dos dois estados visuais no i18n já existente. Nem o PET nem o mapa devem fingir `HERMES_RUNTIME=PASS` com base em animação.
+- O cockpit mantém `BlocoEstado`, `SyncCenter`, `Ledger`, `PainelHermes` e os owners de leitura intactos; o mapa mostra **significados**, não altera autorização ou estado vivo.
+
+**Aceite / contraprova:** nomes presentes nas duas superfícies por uma mesma importação; Yuji↔Sukuna, Whis↔Bills, Goku↔Vegeta e fusão preservados; alternar PET muda a mesma fonte de estado e o Hermes flutuante; não alterou motor, endpoints, credenciais, deploy, máquina de estados nem outros writers; lint/build e visual real requerem execução e readback específicos. `COMMIT != DEPLOY`, `DOCUMENTED != EXECUTED`, `UNKNOWN != PASS`.
+
+**LOOP_ID:** `centraldark-hermes-claude-oracle-convergence-v1` · **GOAL:** `t_9040803d` · **NEXT_CURSOR:** `PR_NOMES_HERMES_PET_REVIEW_CHECKS_AND_LIVE_COCKPIT_READBACK`.
