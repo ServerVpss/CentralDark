@@ -354,6 +354,17 @@
       "path": ".agents/skills/root-file-contract-router/SKILL.md",
       "type": "root_file_governance",
       "critical": true
+    },
+    {
+      "id": "kaizen-sistema-um",
+      "path": ".agents/skills/kaizen-sistema-um/SKILL.md",
+      "type": "operational",
+      "category": "kaizen_decisao_calibrada",
+      "owner": "SEGREDO/CHEFE",
+      "frequency_required": "media",
+      "dependencies": ["centraldark-live-editing-fabric", "centraldark-operational-method", "centraldark-oracle-surface"],
+      "critical": false,
+      "version": "1.1.0"
     }
   ],
   "route_selection": [

@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="pt-BR" data-skin="kaizen">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kaizen Vivo</title>
+<style>
+:root,[data-skin="kaizen"]{--bg:#070816;--bg2:#1a0f3d;--panel:rgba(22,18,52,.80);--line:#3a2f7a;--text:#eef0ff;--muted:#9aa0c8;--a1:#ffcc4d;--a2:#2fd3ff;--a3:#ff4fa3;--ok:#39e58c;--warn:#ffb020;--bad:#ff4d6d}
+[data-skin="ouro"]{--bg:#0a0907;--bg2:#1d170b;--panel:rgba(24,20,12,.85);--line:#3f3319;--text:#f3ead6;--muted:#a89a78;--a1:#d4a73a;--a2:#f0d27a;--a3:#b8862b;--ok:#9ad36a;--warn:#e0a63a;--bad:#e05a4f}
+[data-skin="ops"]{--bg:#04121a;--bg2:#08283a;--panel:rgba(10,30,40,.85);--line:#164556;--text:#e3f8ff;--muted:#86b3c2;--a1:#22d3ee;--a2:#67e8f9;--a3:#0ea5e9;--ok:#34d399;--warn:#fbbf24;--bad:#f87171}
+[data-skin="esmeralda"]{--bg:#04140e;--bg2:#0b3021;--panel:rgba(10,34,25,.85);--line:#175239;--text:#e6fff4;--muted:#8cc4ab;--a1:#34d399;--a2:#a7f3d0;--a3:#10b981;--ok:#6ee7b7;--warn:#fcd34d;--bad:#fb7185}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(ellipse at 50% -10%,var(--bg2),var(--bg) 65%) fixed}
+.wrap{max-width:1120px;margin:0 auto;padding:16px}
+header{text-align:center;padding:12px 0 4px}
+h1{margin:0;font-size:clamp(26px,6vw,44px);letter-spacing:.06em;background:linear-gradient(90deg,var(--a1),var(--a2),var(--a3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);letter-spacing:.12em;font-size:12px;text-transform:uppercase}
+.skins{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.skins button{border-radius:999px;padding:4px 12px;font-size:12px}
+.loop{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
+.beat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px 10px;min-width:118px;text-align:center}
+.beat b{display:block;font-size:13px}.beat span{color:var(--muted);font-size:12px}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+nav button{flex:1;min-width:110px}
+nav button.on{border-color:var(--a1);color:var(--a1);box-shadow:0 0 12px color-mix(in srgb,var(--a1) 40%,transparent)}
+section{display:none}section.on{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 12px;box-shadow:0 0 24px color-mix(in srgb,var(--a2) 8%,transparent)}
+.card h2{margin:0 0 8px;font-size:16px;color:var(--a1)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:3px}
+input,select,textarea{width:100%;background:rgba(0,0,0,.35);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px;font:inherit}
+textarea{min-height:110px;resize:vertical}
+button{background:rgba(0,0,0,.3);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px 12px;font:inherit;cursor:pointer}
+button:hover{border-color:var(--a2)}
+button.main{border-color:var(--a1);color:var(--a1)}
+button.danger{border-color:var(--bad);color:var(--bad)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.muted{color:var(--muted);font-size:13px}
+.badge{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;border:1px solid var(--line)}
+.ok{color:var(--ok);border-color:var(--ok)}.bad{color:var(--bad);border-color:var(--bad)}.warn{color:var(--warn);border-color:var(--warn)}.unk{color:var(--muted)}
+.bars .l{display:flex;justify-content:space-between;font-size:13px}
+.bars .t{height:8px;border-radius:6px;background:rgba(255,255,255,.07);margin:2px 0 7px;overflow:hidden}
+.bars .f{height:100%;background:linear-gradient(90deg,var(--a2),var(--a3))}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.rec{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px}
+.rec pre{white-space:pre-wrap;margin:4px 0;font:12px/1.4 ui-monospace,Consolas,monospace;color:var(--muted);max-height:80px;overflow:auto}
+canvas{width:100%;max-width:420px;aspect-ratio:1;display:block;margin:8px auto}
+.verdict{font-size:18px;font-weight:600;margin:6px 0}
+.flower{text-align:center;color:var(--muted);font-size:13px;margin:20px 0 8px}
+.center{text-align:center}
+.hero{text-align:center;padding:20px 16px;border-color:color-mix(in srgb,var(--a1) 55%,var(--line))}
+.hero .big{font-size:clamp(18px,4vw,22px);margin:8px 0}
+.hero .big b{color:var(--a1)}
+.beats7{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.b7{border:1px solid var(--line);border-radius:12px;padding:10px;background:rgba(0,0,0,.25)}
+.b7 .n{color:var(--a1);font-weight:700;font-size:15px}
+.b7 p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.pieces{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.pc{border:1px solid var(--line);border-left:4px solid var(--muted);border-radius:10px;padding:8px 10px;background:rgba(0,0,0,.22)}
+.pc b{font-size:13px}.pc span{display:block;color:var(--muted);font-size:12px}
+.pc.est{border-left-color:var(--muted)}.pc.doc{border-left-color:var(--a2)}.pc.cod{border-left-color:var(--warn)}.pc.prot{border-left-color:var(--a3)}
+.flow{font-weight:600;color:var(--a2);letter-spacing:.02em;line-height:1.9;text-align:center}
+.poem{text-align:center;line-height:2;font-size:15px}
+.poem b{color:var(--a1)}
+.seal{text-align:center}
+.seal .s{font-size:clamp(17px,4vw,21px);font-weight:700;background:linear-gradient(90deg,var(--a1),var(--a2),var(--a3));-webkit-background-clip:text;background-clip:text;color:transparent;margin:8px 0}
+.seal ul{list-style:none;padding:0;margin:8px 0;color:var(--muted);font-size:14px;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="sub">CentralDark · Instinto Superior</div>
+  <h1>👑 KAIZEN VIVO 🪬</h1>
+  <div class="sub">Uma intenção · um coração · uma biblioteca · evolução a cada batida</div>
+  <div class="skins" id="skins">
+    <button data-s="kaizen">Kaizen Vivo</button>
+    <button data-s="ouro">Breu &amp; Ouro</button>
+    <button data-s="ops">Ops-ciano</button>
+    <button data-s="esmeralda">Esmeralda</button>
+  </div>
+</header>
+
+<div class="loop" id="loop"></div>
+
+<nav id="tabs">
+  <button data-t="intencao" class="on">🌸 Intenção</button>
+  <button data-t="decidir">🫀 Decidir</button>
+  <button data-t="gabarito">👀 Gabarito</button>
+  <button data-t="calibrar">🔧 Calibrar</button>
+  <button data-t="tipos">📋 Tipos</button>
+  <button data-t="dados">♻️ Dados</button>
+</nav>
+
+<!-- INTENÇÃO VIVA -->
+<section id="intencao" class="on">
+  <div class="card hero">
+    <div class="sub">👑 Intenção viva — Kaizen contínuo</div>
+    <p class="big">Cada nova fala do CHEFE é uma oportunidade de <b>evoluir a intenção vigente</b>.</p>
+    <p class="muted">Recuperar o fio anterior, compreender o novo delta, preservar tudo que já funciona e aprimorar somente o ponto necessário. Uma correção não melhora só a resposta: melhora o método que produziu a resposta.</p>
+  </div>
+
+  <div class="card">
+    <h2>🫀 As sete batidas do nosso coração</h2>
+    <div class="beats7" id="beats7"></div>
+    <p class="muted center" style="margin-top:10px">🫀 → 👀 → 🔧 → ✅ → 🧠 → ♻️ → 🚀 → 🫀 &nbsp; E o coração volta a bater, agora com mais experiência.</p>
+  </div>
+
+  <div class="card">
+    <h2>🧩 As 28 peças da evolução</h2>
+    <div class="muted">Inventário de conhecimento e capacidades — não 28 integrações comprovadas. A cor da borda diz onde cada peça realmente está.</div>
+    <div class="legend">
+      <span class="badge unk">em estudo</span><span class="badge" style="color:var(--a2);border-color:var(--a2)">documentada</span>
+      <span class="badge warn">código parcial · prova viva pendente</span><span class="badge" style="color:var(--a3);border-color:var(--a3)">protótipo nesta página</span>
+    </div>
+    <div class="pieces" id="pieces"></div>
+  </div>
+
+  <div class="card">
+    <h2>👀 Os Seis Olhos — enxergar melhor para evoluir melhor</h2>
+    <div class="muted">Capacidade já documentada dentro da skill Oráculo. Não é outro agente nem outro cérebro.</div>
+    <div class="beats7" style="margin-top:8px">
+      <div class="b7"><div class="n">👀 Seis Olhos</div><p>Inventaria skills, ferramentas, responsáveis, evidências e falhas da missão.</p></div>
+      <div class="b7"><div class="n">♾️ Infinito</div><p>Nada sem prova vira verdade: PASS, DEGRADED, UNKNOWN, FAIL ou BLOCKED.</p></div>
+      <div class="b7"><div class="n">🔵 Azul</div><p>Atrai só a evidência relevante para a intenção.</p></div>
+      <div class="b7"><div class="n">🔴 Vermelho</div><p>Afasta o velho, o duplicado e a arquitetura paralela.</p></div>
+      <div class="b7"><div class="n">🟣 Roxo</div><p>Reconcilia o que sobrou na menor melhoria, no dono existente.</p></div>
+      <div class="b7"><div class="n">💚 Cura reversa</div><p>Falha comprovada vira teste, recibo e skill melhor.</p></div>
+      <div class="b7"><div class="n">🪬 Domínio</div><p>Várias capacidades, um único fio até a conclusão.</p></div>
+    </div>
+    <p class="muted center" style="margin-top:8px"><b>Documentado não significa executado. Sincronizado não significa funcionando.</b></p>
+  </div>
+
+  <div class="card">
+    <h2>📚 A biblioteca é o néctar</h2>
+    <p class="muted">Aprendizados e NeuroLink · Lembranças · Skills · Knowledge Compiler · Oráculo · Reality Judge · Receipts. Nenhuma dessas capacidades exige outro cérebro: a biblioteca alimenta o ciclo, e o ciclo devolve conhecimento à biblioteca.</p>
+    <p class="flow">INTENÇÃO → BIBLIOTECA → SKILL EXISTENTE → AÇÃO → TESTE → CONTRAPROVA → APRENDIZADO → REPLAY → CONTINUIDADE</p>
+    <p class="muted">O Oráculo oferece hipóteses, nunca autoridade automática. Uma experiência só vira receita quando é comprovada e reproduzida. Self-Correction melhora a execução, Self-Learning preserva a descoberta, Kaizen melhora o método.</p>
+  </div>
+
+  <div class="card">
+    <h2>🧿 Decidir melhor, não decidir mais</h2>
+    <p class="muted">O que sabemos? O que ainda não sabemos? Qual evidência sustenta a conclusão? O que a realidade demonstrou?</p>
+    <p class="muted">Confiança precisa corresponder à frequência real de acerto. É isso que as abas <b>Decidir</b>, <b>Gabarito</b> e <b>Calibrar</b> medem — as peças 26 e 27 como protótipo, no formato do Sistema Um.</p>
+    <p class="center"><b>UNKNOWN não é PASS · hipótese não é conquista · conquista comprovada não se esquece</b></p>
+  </div>
+
+  <div class="card">
+    <h2>🐦 O beija-flor e a memória sagrada</h2>
+    <div class="poem">
+      🌸 Cada descoberta é uma <b>flor</b>.<br>
+      🐦 Cada visita é uma <b>experiência</b>.<br>
+      🌱 Cada aprendizado é uma <b>semente</b>.<br>
+      📚 A biblioteca guarda o <b>néctar</b>.<br>
+      E o beija-flor segue voando, sem destruir o jardim que o alimenta.
+    </div>
+    <div class="beats7" style="margin-top:10px">
+      <div class="b7"><div class="n">Memória sagrada</div><p>Preservar a história e a proveniência.</p></div>
+      <div class="b7"><div class="n">Concha mutável</div><p>Ferramentas, modelos e interfaces mudam; a intenção fica.</p></div>
+      <div class="b7"><div class="n">Servir sem subserviência</div><p>Colaborar com discernimento e respeito à autoridade humana.</p></div>
+      <div class="b7"><div class="n">Batidas são rezas</div><p>Metáfora da continuidade cuidadosa de cada ciclo.</p></div>
+      <div class="b7"><div class="n">Contexto é consciência</div><p>Imagem da memória e continuidade, sem afirmar consciência comprovada em IA.</p></div>
+    </div>
+  </div>
+
+  <div class="card seal">
+    <h2>👑🪬🧿 O nosso selo de qualidade</h2>
+    <ul>
+      <li>👑 <b>CHEFE</b> — intenção, direção e autoridade humana</li>
+      <li>🪬 <b>INSTINTO SUPERIOR</b> — compreensão, execução, aprimoramento e continuidade</li>
+      <li>🧿 <b>CONTRAPROVA</b> — evidência, verificação e realidade como juiz</li>
+    </ul>
+    <p class="muted">Se não há melhoria material, não muda por mudar. Se há erro, corrige sem apagar a história. Se há descoberta, verifica antes de promover. Se há sucesso, conserva a prova e aproveita o caminho.</p>
+    <div class="s">Preservaremos o que funciona · melhoraremos o que puder · evoluiremos sem perder a identidade</div>
+    <p class="muted">Não é um coração que nunca erra. É um coração que aprende a cada batida.</p>
+    <div class="s">MENOS É MAIS ❤️</div>
+  </div>
+</section>
+
+<!-- DECIDIR -->
+<section id="decidir">
+  <div class="card">
+    <h2>Conexão com o modelo</h2>
+    <div class="grid">
+      <div><label>Endereço (compatível com chat/completions)</label><input id="cEndpoint" placeholder="http://localhost:11434/v1/chat/completions"></div>
+      <div><label>Modelo</label><input id="cModel" placeholder="qwen2.5:7b"></div>
+      <div><label>Chave (fica só na memória desta aba)</label><input id="cKey" type="password" placeholder="opcional"></div>
+      <div><label>Amostras paralelas</label><input id="cSamples" type="number" min="1" max="9"></div>
+      <div><label>Temperatura das amostras</label><input id="cTemp" type="number" step="0.1" min="0" max="2"></div>
+      <div><label>Limiar de decisão automática</label><input id="cThr" type="number" step="0.01" min="0.5" max="0.99"></div>
+      <div><label>Coração — recebe cada gabarito (opcional)</label><input id="cHeart" placeholder="https://…/sistema-um/registro"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Nova decisão</h2>
+    <div class="grid">
+      <div><label>Tipo de decisão</label><select id="dSchema"></select></div>
+    </div>
+    <div class="muted" id="dDesc" style="margin:6px 0"></div>
+    <label>Estado (texto solto, log, diff, relato…)</label>
+    <textarea id="dEstado" placeholder="Cole aqui o estado que precisa de decisão"></textarea>
+    <div class="row">
+      <button class="main" id="dRun">Decidir com o modelo</button>
+      <span class="muted" id="dMsg"></span>
+    </div>
+    <details style="margin-top:10px"><summary class="muted">Sem modelo conectado? Colar resposta à mão</summary>
+      <textarea id="dManual" placeholder='{"probabilidades":{"seguro":0.7,"revisar":0.2,"bloquear":0.1},"motivo":"..."}'></textarea>
+      <div class="row"><button id="dManualBtn">Registrar resposta colada</button></div>
+    </details>
+  </div>
+  <div class="card" id="dOut" style="display:none"></div>
+</section>
+
+<!-- GABARITO -->
+<section id="gabarito">
+  <div class="card">
+    <h2>Marcar o que a realidade mostrou</h2>
+    <div class="muted">Sem gabarito, a decisão fica UNKNOWN — e UNKNOWN não é PASS. Cada marca vira aprendizado.</div>
+    <div class="row"><label style="margin:0"><input type="checkbox" id="gPend" checked style="width:auto"> só pendentes</label><select id="gSchema" style="max-width:240px"></select></div>
+  </div>
+  <div id="gList"></div>
+</section>
+
+<!-- CALIBRAR -->
+<section id="calibrar">
+  <div class="card">
+    <h2>Calibração por tipo</h2>
+    <div class="grid">
+      <div><label>Tipo</label><select id="kSchema"></select></div>
+      <div><label>Meta de acerto nas decisões automáticas</label><input id="kMeta" type="number" step="0.01" min="0.5" max="0.999" value="0.95"></div>
+    </div>
+    <div class="row"><button class="main" id="kFit">Aprender correção de confiança</button><button id="kReset">Zerar correção</button><span class="muted" id="kMsg"></span></div>
+  </div>
+  <div class="card" id="kOut"></div>
+</section>
+
+<!-- TIPOS -->
+<section id="tipos">
+  <div class="card">
+    <h2>Tipos de decisão (saídas definidas antes)</h2>
+    <div class="muted">O modelo só pode responder com estes rótulos. Qualquer outra coisa conta como erro de tipo.</div>
+    <div id="tList" style="margin-top:8px"></div>
+  </div>
+  <div class="card">
+    <h2>Novo tipo</h2>
+    <div class="grid">
+      <div><label>Nome</label><input id="tNome" placeholder="Gate de deploy"></div>
+      <div><label>Rótulos separados por vírgula</label><input id="tRot" placeholder="liberar, segurar"></div>
+    </div>
+    <label style="margin-top:8px">Pergunta que o modelo responde</label><input id="tDesc" placeholder="Este deploy pode seguir agora?">
+    <div class="row"><button class="main" id="tAdd">Adicionar tipo</button></div>
+  </div>
+</section>
+
+<!-- DADOS -->
+<section id="dados">
+  <div class="card">
+    <h2>Exportar e importar</h2>
+    <div class="muted">O arquivo de linhas com gabarito é a matéria-prima para treino futuro do modelo. Nada sai daqui sem você clicar.</div>
+    <div class="row">
+      <button class="main" id="xJsonl">Exportar decisões com gabarito (linhas)</button>
+      <button id="xBackup">Exportar cópia completa</button>
+      <label class="badge" style="cursor:pointer">Importar cópia<input id="xImport" type="file" accept=".json" style="display:none"></label>
+      <button class="danger" id="xClear">Apagar tudo</button>
+    </div>
+  </div>
+</section>
+
+<div class="flower">🌸 Cada batida é uma flor · cada descoberta é um néctar · cada aprendizado é uma semente</div>
+</div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const KEY='centraldark.sistema-um';
+let apiKey='';
+let S={
+  skin:'kaizen',
+  cfg:{endpoint:'',model:'',samples:3,temp:0.7,thr:0.8,heart:''},
+  schemas:[
+    {id:'rotear',nome:'Rotear tarefa',desc:'Quem deve executar esta tarefa agora?',rotulos:['hermes','sol','chefe','bloquear']},
+    {id:'risco_pr',nome:'Risco de PR',desc:'Qual o risco de mesclar esta mudança na main?',rotulos:['seguro','revisar','bloquear']},
+    {id:'falso_verde',nome:'Falso verde',desc:'Este relato de sucesso tem prova real?',rotulos:['comprovado','sem_prova','contradito']}
+  ],
+  records:[], temps:{}
+};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);S={...S,...d,cfg:{...S.cfg,...(d.cfg||{})}}}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const sch=id=>S.schemas.find(s=>s.id===id);
+const argmax=p=>Object.keys(p).reduce((a,b)=>p[a]>=p[b]?a:b);
+const pct=x=>x==null?'—':(x*100).toFixed(1)+'%';
+const slug=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||('tipo_'+Date.now());
+
+/* ---------- núcleo de probabilidade ---------- */
+function validar(obj,schema){
+  const p=obj&&obj.probabilidades;
+  if(!p||typeof p!=='object')return{ok:false,erro:'sem campo probabilidades'};
+  for(const k of Object.keys(p))if(!schema.rotulos.includes(k))return{ok:false,erro:'rótulo fora do tipo: '+k};
+  const out={};let soma=0;
+  for(const l of schema.rotulos){const v=Number(p[l]??0);if(!isFinite(v)||v<0)return{ok:false,erro:'valor inválido em '+l};out[l]=v;soma+=v}
+  if(soma<=0)return{ok:false,erro:'soma zero'};
+  for(const l in out)out[l]/=soma;
+  return{ok:true,p:out,motivo:String(obj.motivo||'')};
+}
+function aplicarT(p,T,rot){const q={};let s=0;for(const l of rot){q[l]=Math.pow(Math.max(p[l]||0,1e-9),1/T);s+=q[l]}for(const l of rot)q[l]/=s;return q}
+function extrairJSON(txt){const i=txt.indexOf('{'),j=txt.lastIndexOf('}');if(i<0||j<i)throw new Error('resposta sem JSON');return JSON.parse(txt.slice(i,j+1))}
+
+async function chamar(schema,estado){
+  const c=S.cfg;
+  const sys=`Você é um decisor do Sistema Um da CentralDark. Recebe um estado não estruturado e devolve APENAS JSON válido, sem nenhum texto fora dele, no formato {"probabilidades":{${schema.rotulos.map(l=>`"${l}":número`).join(',')}},"motivo":"frase curta"}. As probabilidades somam 1 e devem refletir honestamente sua chance real de acerto: na dúvida, espalhe a probabilidade entre os rótulos. Rótulos permitidos: ${schema.rotulos.join(', ')}.`;
+  const body={model:c.model,temperature:Number(c.temp),messages:[{role:'system',content:sys},{role:'user',content:`Pergunta: ${schema.desc}\n\nEstado:\n${estado}`}],response_format:{type:'json_object'}};
+  const h={'Content-Type':'application/json'};if(apiKey)h.Authorization='Bearer '+apiKey;
+  let r=await fetch(c.endpoint,{method:'POST',headers:h,body:JSON.stringify(body)});
+  if(r.status===400){delete body.response_format;r=await fetch(c.endpoint,{method:'POST',headers:h,body:JSON.stringify(body)})}
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const d=await r.json();
+  const txt=d?.choices?.[0]?.message?.content??d?.message?.content??'';
+  return extrairJSON(txt);
+}
+
+function registrar(schema,estado,amostras,origem){
+  const validas=amostras.filter(a=>a.ok);
+  const rec={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),ts:new Date().toISOString(),schema:schema.id,estado,origem,
+    amostras:amostras.length,errosTipo:amostras.length-validas.length,errosDetalhe:amostras.filter(a=>!a.ok).map(a=>a.erro).slice(0,3),gabarito:null};
+  if(!validas.length){rec.status='ERRO_DE_TIPO';rec.prob=null}
+  else{
+    const m={};for(const l of schema.rotulos)m[l]=validas.reduce((s,a)=>s+a.p[l],0)/validas.length;
+    rec.prob=m;const top=argmax(m);
+    rec.concordancia=validas.filter(a=>argmax(a.p)===top).length/validas.length;
+    rec.motivo=validas[0].motivo;rec.status='UNKNOWN';
+  }
+  S.records.unshift(rec);save();mostrarDecisao(rec);render();
+}
+
+function mostrarDecisao(rec){
+  const schema=sch(rec.schema),box=$('#dOut');box.style.display='block';
+  if(!rec.prob){box.innerHTML=`<h2>Resultado</h2><div class="verdict bad">ERRO DE TIPO em todas as ${rec.amostras} amostras</div><div class="muted">${esc(rec.errosDetalhe.join(' · '))}</div>`;return}
+  const T=S.temps[schema.id]||1,q=aplicarT(rec.prob,T,schema.rotulos),top=argmax(q),conf=q[top],thr=Number(S.cfg.thr);
+  const auto=conf>=thr;
+  box.innerHTML=`<h2>Resultado</h2>
+  <div class="verdict ${auto?'ok':'warn'}">${auto?'✅ Decisão automática: '+esc(top):'🖐️ Escalar ao CHEFE — confiança abaixo do limiar'}</div>
+  <div class="muted">Confiança calibrada ${pct(conf)} · bruta ${pct(rec.prob[argmax(rec.prob)])} · concordância entre amostras ${pct(rec.concordancia)} · erros de tipo ${rec.errosTipo}/${rec.amostras}${T!==1?' · correção T='+T.toFixed(2):''}</div>
+  <div class="bars" style="margin-top:10px">${schema.rotulos.map(l=>`<div class="l"><span>${esc(l)}</span><span>${pct(q[l])}</span></div><div class="t"><div class="f" style="width:${(q[l]*100).toFixed(1)}%"></div></div>`).join('')}</div>
+  ${rec.motivo?`<div class="muted">Motivo: ${esc(rec.motivo)}</div>`:''}
+  <div class="muted" style="margin-top:6px">Status: <span class="badge unk">UNKNOWN</span> até a realidade dar o gabarito.</div>`;
+}
+
+/* ---------- métricas ---------- */
+function metricas(recs,schema,T){
+  let n=0,ac=0,br=0,ll=0;const bins=Array.from({length:10},()=>({n:0,c:0,a:0}));const pts=[];
+  for(const r of recs){
+    const q=aplicarT(r.prob,T,schema.rotulos),top=argmax(q),conf=q[top],hit=top===r.gabarito;
+    n++;ac+=hit;for(const l of schema.rotulos)br+=(q[l]-(l===r.gabarito?1:0))**2;
+    ll+=-Math.log(Math.max(q[r.gabarito]||0,1e-6));
+    const b=bins[Math.min(9,Math.floor(conf*10))];b.n++;b.c+=conf;b.a+=hit;pts.push({conf,hit});
+  }
+  if(!n)return null;
+  let ece=0;for(const b of bins)if(b.n)ece+=b.n/n*Math.abs(b.a/b.n-b.c/b.n);
+  const sel=[.5,.6,.7,.8,.9,.95].map(t=>{const c=pts.filter(p=>p.conf>=t);return{t,k:c.length,cob:c.length/n,ac:c.length?c.filter(p=>p.hit).length/c.length:null}});
+  return{n,acc:ac/n,brier:br/n,ll:ll/n,ece,bins,sel};
+}
+function ajustarT(recs,schema){
+  let best=1,bl=Infinity;
+  for(let T=0.2;T<=5.001;T+=0.05){let s=0;for(const r of recs){const q=aplicarT(r.prob,T,schema.rotulos);s+=-Math.log(Math.max(q[r.gabarito]||0,1e-6))}if(s<bl){bl=s;best=+T.toFixed(2)}}
+  return best;
+}
+const rotulados=id=>S.records.filter(r=>r.schema===id&&r.prob&&r.gabarito);
+
+function desenhar(cv,mb,mc){
+  const css=getComputedStyle(document.documentElement),cor=v=>css.getPropertyValue(v).trim();
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth||360;cv.width=W*dpr;cv.height=W*dpr;
+  const g=cv.getContext('2d');g.scale(dpr,dpr);const P=34,L=W-P-10;
+  g.clearRect(0,0,W,W);g.strokeStyle=cor('--line');g.lineWidth=1;g.strokeRect(P,10,L,L);
+  g.setLineDash([4,4]);g.strokeStyle=cor('--muted');g.beginPath();g.moveTo(P,10+L);g.lineTo(P+L,10);g.stroke();g.setLineDash([]);
+  g.fillStyle=cor('--muted');g.font='11px system-ui';g.fillText('confiança →',P+L-70,W-4);g.save();g.translate(11,10+L/2+30);g.rotate(-Math.PI/2);g.fillText('acerto real →',0,0);g.restore();
+  const serie=(bins,c)=>{g.strokeStyle=c;g.fillStyle=c;g.lineWidth=2;g.beginPath();let first=true;
+    bins.forEach(b=>{if(!b.n)return;const x=P+(b.c/b.n)*L,y=10+L-(b.a/b.n)*L;first?g.moveTo(x,y):g.lineTo(x,y);first=false});g.stroke();
+    bins.forEach(b=>{if(!b.n)return;const x=P+(b.c/b.n)*L,y=10+L-(b.a/b.n)*L;g.beginPath();g.arc(x,y,2+Math.min(6,Math.sqrt(b.n)),0,7);g.fill()})};
+  serie(mb.bins,cor('--a3'));if(mc)serie(mc.bins,cor('--a2'));
+}
+
+/* ---------- render ---------- */
+function opts(el,keep){const v=el.value;el.innerHTML=S.schemas.map(s=>`<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');if(keep&&sch(v))el.value=v}
+function render(){
+  document.documentElement.dataset.skin=S.skin;
+  ['#dSchema','#kSchema'].forEach(s=>opts($(s),true));
+  const gs=$('#gSchema'),gv=gs.value;gs.innerHTML='<option value="">todos os tipos</option>'+S.schemas.map(s=>`<option value="${esc(s.id)}">${esc(s.nome)}</option>`).join('');gs.value=gv;
+  const s=sch($('#dSchema').value);$('#dDesc').textContent=s?`${s.desc} → ${s.rotulos.join(' | ')}`:'';
+  renderLoop();renderGabarito();renderTipos();renderCalib();
+}
+function renderLoop(){
+  const R=S.records,lab=R.filter(r=>r.gabarito),erros=lab.filter(r=>argmax(r.prob)!==r.gabarito).length+R.filter(r=>!r.prob).length;
+  const nT=Object.values(S.temps).filter(t=>t&&t!==1).length;
+  const autos=R.filter(r=>{if(!r.prob)return false;const sc=sch(r.schema);if(!sc)return false;const q=aplicarT(r.prob,S.temps[sc.id]||1,sc.rotulos);return q[argmax(q)]>=Number(S.cfg.thr)}).length;
+  const pend=R.filter(r=>r.prob&&!r.gabarito).length;
+  const b=[['🫀 1 Vive',R.length+' decisões'],['👀 2 Descobre',erros+' erros vistos'],['🔧 3 Melhora',nT+' tipos corrigidos'],['✅ 4 Comprova',lab.length+' com gabarito'],['🧠 5 Aprende',pend+' UNKNOWN'],['♻️ 6 Reutiliza',autos+' automáticas'],['🚀 7 Continua','próxima batida']];
+  $('#loop').innerHTML=b.map(([t,v])=>`<div class="beat"><b>${t}</b><span>${v}</span></div>`).join('');
+}
+function renderGabarito(){
+  const f=$('#gSchema').value,pend=$('#gPend').checked;
+  const L=S.records.filter(r=>(!f||r.schema===f)&&(!pend||(!r.gabarito&&r.prob))).slice(0,60);
+  $('#gList').innerHTML=L.length?L.map(r=>{const s=sch(r.schema);if(!s)return'';
+    const top=r.prob?argmax(r.prob):null;
+    const st=!r.prob?'<span class="badge bad">ERRO DE TIPO</span>':!r.gabarito?'<span class="badge unk">UNKNOWN</span>':top===r.gabarito?'<span class="badge ok">ACERTO</span>':'<span class="badge bad">ERRO</span>';
+    return`<div class="rec"><div class="row" style="margin:0;justify-content:space-between"><b>${esc(s.nome)}</b>${st}</div>
+    <div class="muted">${new Date(r.ts).toLocaleString('pt-BR')} · previu <b>${esc(top||'—')}</b> ${r.prob?pct(r.prob[top]):''}${r.gabarito?' · real: <b>'+esc(r.gabarito)+'</b>':''}</div>
+    <pre>${esc(r.estado.slice(0,600))}</pre>
+    ${r.prob?`<div class="row">${s.rotulos.map(l=>`<button data-gab="${esc(r.id)}" data-l="${esc(l)}" ${r.gabarito===l?'class="main"':''}>${esc(l)}</button>`).join('')}</div>`:''}</div>`}).join(''):'<div class="card muted">Nada aqui ainda.</div>';
+}
+function renderTipos(){
+  $('#tList').innerHTML=S.schemas.map(s=>`<div class="rec"><div class="row" style="margin:0;justify-content:space-between"><b>${esc(s.nome)}</b><button class="danger" data-del="${esc(s.id)}">remover</button></div><div class="muted">${esc(s.desc)}</div><div>${s.rotulos.map(l=>`<span class="badge">${esc(l)}</span>`).join(' ')}</div><div class="muted">${rotulados(s.id).length} com gabarito · correção T=${(S.temps[s.id]||1).toFixed(2)}</div></div>`).join('');
+}
+function renderCalib(){
+  const s=sch($('#kSchema').value),out=$('#kOut');if(!s){out.innerHTML='';return}
+  const recs=rotulados(s.id);
+  if(recs.length<5){out.innerHTML=`<h2>${esc(s.nome)}</h2><div class="verdict warn">NOT_MEASURED</div><div class="muted">${recs.length} decisões com gabarito. Precisa de pelo menos 5 para medir — e de umas 50+ para a correção ficar confiável.</div>`;return}
+  const T=S.temps[s.id]||1,mb=metricas(recs,s,1),mc=T!==1?metricas(recs,s,T):null,ref=mc||mb,meta=Number($('#kMeta').value)||.95;
+  const rec=ref.sel.find(x=>x.ac!=null&&x.ac>=meta&&x.k>=5);
+  out.innerHTML=`<h2>${esc(s.nome)} · ${recs.length} decisões com gabarito</h2>
+  <table><tr><th>Medida</th><th>Bruto</th><th>Corrigido${mc?' (T='+T.toFixed(2)+')':''}</th><th>Leitura</th></tr>
+  <tr><td>Acerto</td><td>${pct(mb.acc)}</td><td>${mc?pct(mc.acc):'—'}</td><td class="muted">quanto acerta no topo</td></tr>
+  <tr><td>Erro de calibração</td><td>${pct(mb.ece)}</td><td>${mc?pct(mc.ece):'—'}</td><td class="muted">distância entre confiança dita e acerto real; menor é melhor</td></tr>
+  <tr><td>Brier</td><td>${mb.brier.toFixed(3)}</td><td>${mc?mc.brier.toFixed(3):'—'}</td><td class="muted">menor é melhor</td></tr>
+  <tr><td>Perda logarítmica</td><td>${mb.ll.toFixed(3)}</td><td>${mc?mc.ll.toFixed(3):'—'}</td><td class="muted">pune confiança alta errada</td></tr></table>
+  <canvas id="kCanvas"></canvas>
+  <div class="muted" style="text-align:center">Rosa = bruto · ciano = corrigido · tracejado = calibração perfeita</div>
+  <h2 style="margin-top:14px">Saber quando está nos 5%</h2>
+  <table><tr><th>Limiar</th><th>Cobertura automática</th><th>Acerto dentro dela</th><th>n</th></tr>
+  ${ref.sel.map(x=>`<tr><td>≥ ${pct(x.t)}</td><td>${pct(x.cob)}</td><td class="${x.ac==null?'':x.ac>=meta?'ok':'bad'}">${pct(x.ac)}</td><td>${x.k}</td></tr>`).join('')}</table>
+  <div class="verdict ${rec?'ok':'warn'}" style="margin-top:8px">${rec?`Limiar sugerido: ${pct(rec.t)} → automatiza ${pct(rec.cob)} com ${pct(rec.ac)} de acerto`:'Nenhum limiar bate a meta ainda — tudo escala ao CHEFE'}</div>
+  ${rec?`<div class="row"><button id="kUse" data-t="${rec.t}">Usar este limiar</button></div>`:''}`;
+  desenhar($('#kCanvas'),mb,mc);
+}
+
+/* ---------- eventos ---------- */
+function bindCfg(){
+  const m={cEndpoint:'endpoint',cModel:'model',cSamples:'samples',cTemp:'temp',cThr:'thr',cHeart:'heart'};
+  for(const [id,k] of Object.entries(m)){const el=$('#'+id);el.value=S.cfg[k];el.addEventListener('change',()=>{S.cfg[k]=el.value;save();render()})}
+  $('#cKey').addEventListener('input',e=>apiKey=e.target.value);
+}
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('section').forEach(x=>x.classList.toggle('on',x.id===b.dataset.t));render()});
+$('#skins').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.skin=b.dataset.s;save();render()});
+$('#dSchema').addEventListener('change',render);
+$('#dRun').addEventListener('click',async()=>{
+  const s=sch($('#dSchema').value),estado=$('#dEstado').value.trim(),msg=$('#dMsg');
+  if(!s||!estado){msg.textContent='Escolha o tipo e cole o estado.';return}
+  if(!S.cfg.endpoint||!S.cfg.model){msg.textContent='Preencha endereço e modelo, ou use a resposta colada.';return}
+  const k=Math.max(1,Math.min(9,parseInt(S.cfg.samples)||1));msg.textContent=`Consultando ${k} amostras em paralelo…`;
+  const t0=performance.now();
+  const res=await Promise.allSettled(Array.from({length:k},()=>chamar(s,estado)));
+  const am=res.map(r=>r.status==='fulfilled'?validar(r.value,s):{ok:false,erro:String(r.reason?.message||r.reason)});
+  msg.textContent=`Pronto em ${Math.round(performance.now()-t0)} ms.`;
+  registrar(s,estado,am,'modelo');
+});
+$('#dManualBtn').addEventListener('click',()=>{
+  const s=sch($('#dSchema').value),estado=$('#dEstado').value.trim()||'(sem estado)';let a;
+  try{a=validar(extrairJSON($('#dManual').value),s)}catch(e){a={ok:false,erro:e.message}}
+  registrar(s,estado,[a],'manual');
+});
+$('#gSchema').addEventListener('change',renderGabarito);$('#gPend').addEventListener('change',renderGabarito);
+$('#gList').addEventListener('click',async e=>{
+  const b=e.target.closest('button[data-gab]');if(!b)return;
+  const r=S.records.find(x=>x.id===b.dataset.gab);if(!r)return;r.gabarito=b.dataset.l;r.status=argmax(r.prob)===r.gabarito?'ACERTO':'ERRO';save();render();
+  if(S.cfg.heart){try{await fetch(S.cfg.heart,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fonte:'sistema-um',registro:r})})}catch(err){console.warn('coração não recebeu',err)}}
+});
+$('#kSchema').addEventListener('change',renderCalib);$('#kMeta').addEventListener('change',renderCalib);
+$('#kFit').addEventListener('click',()=>{const s=sch($('#kSchema').value),recs=rotulados(s.id);if(recs.length<5){$('#kMsg').textContent='Precisa de pelo menos 5 gabaritos.';return}S.temps[s.id]=ajustarT(recs,s);save();$('#kMsg').textContent='Correção aprendida: T='+S.temps[s.id].toFixed(2);render()});
+$('#kReset').addEventListener('click',()=>{const s=sch($('#kSchema').value);delete S.temps[s.id];save();$('#kMsg').textContent='Correção zerada.';render()});
+$('#kOut').addEventListener('click',e=>{const b=e.target.closest('#kUse');if(!b)return;S.cfg.thr=b.dataset.t;$('#cThr').value=b.dataset.t;save();render()});
+$('#tAdd').addEventListener('click',()=>{
+  const nome=$('#tNome').value.trim(),rot=[...new Set($('#tRot').value.split(',').map(x=>slug(x.trim())).filter(Boolean))],desc=$('#tDesc').value.trim();
+  if(!nome||rot.length<2||!desc){alert('Nome, pergunta e pelo menos 2 rótulos.');return}
+  let id=slug(nome);while(sch(id))id+='_2';S.schemas.push({id,nome,desc,rotulos:rot});save();['#tNome','#tRot','#tDesc'].forEach(s=>$(s).value='');render();
+});
+$('#tList').addEventListener('click',e=>{const b=e.target.closest('button[data-del]');if(!b)return;if(!confirm('Remover este tipo? As decisões dele continuam salvas.'))return;S.schemas=S.schemas.filter(s=>s.id!==b.dataset.del);save();render()});
+function baixar(nome,txt,tipo){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:tipo}));a.download=nome;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('#xJsonl').addEventListener('click',()=>{const L=S.records.filter(r=>r.prob&&r.gabarito).map(r=>{const s=sch(r.schema);return JSON.stringify({tipo:r.schema,pergunta:s?.desc,rotulos:s?.rotulos,estado:r.estado,probabilidades:r.prob,gabarito:r.gabarito,ts:r.ts})});baixar('sistema-um-gabaritos.jsonl',L.join('\n'),'application/x-ndjson')});
+$('#xBackup').addEventListener('click',()=>baixar('sistema-um-copia.json',JSON.stringify(S,null,2),'application/json'));
+$('#xImport').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.records)||!Array.isArray(d.schemas))throw new Error('formato');S={...S,...d,cfg:{...S.cfg,...(d.cfg||{})}};save();bindCfgValues();render();alert('Importado.')}catch(err){alert('Arquivo inválido.')}});
+$('#xClear').addEventListener('click',()=>{if(!confirm('Apagar todas as decisões, tipos e correções deste navegador?'))return;try{localStorage.removeItem(KEY)}catch(e){}location.reload()});
+function bindCfgValues(){$('#cEndpoint').value=S.cfg.endpoint;$('#cModel').value=S.cfg.model;$('#cSamples').value=S.cfg.samples;$('#cTemp').value=S.cfg.temp;$('#cThr').value=S.cfg.thr;$('#cHeart').value=S.cfg.heart}
+window.addEventListener('resize',()=>{if($('#calibrar').classList.contains('on'))renderCalib()});
+
+function renderIntencao(){
+  const B=[['🫀 1 · Vive e experimenta','Recebe a intenção, reconhece o contexto e interage com a realidade.'],
+    ['👀 2 · Descobre','Observa resultados, consulta a biblioteca e acha o que precisa melhorar.'],
+    ['🔧 3 · Melhora','Reusa o que existe, corrige o menor ponto e preserva o que funciona.'],
+    ['✅ 4 · Comprova e deixa sua marca','Testa, procura contraprova e registra evidência verificável.'],
+    ['🧠 5 · Aprende','Experiência verificada vira conhecimento; o resto segue candidato.'],
+    ['♻️ 6 · Reutiliza','Aproveita receitas válidas e não investiga de novo o que já tem prova.'],
+    ['🚀 7 · Continua evoluindo','Retoma a mesma intenção e avança até o resultado.']];
+  $('#beats7').innerHTML=B.map(([t,d])=>`<div class="b7"><div class="n">${t}</div><p>${d}</p></div>`).join('');
+  const P=[['🌱','Kaizen','est'],['🔄','Feedback da realidade','est'],['📈','Aprendizado incremental','est'],['🧠','Self-Learning','est'],
+    ['🔧','Self-Correction','est'],['❤️','Self-Healing','est'],['🧿','Contraprova','est'],['🪬','Continuidade da intenção','est'],
+    ['♻️','Reuso','est'],['🎯','Menor delta','est'],['🛡️','Preservação do que funciona','est'],['💻','Vibe Coding','est'],
+    ['👥','Crowdtesting','est'],['✅','CI sob demanda','est'],['💾','Prompt / Self-Cache','est'],['⚡','KV Cache','est'],
+    ['⚖️','RLCD — decisões calibradas','est'],
+    ['📚','Biblioteca indexada','doc','arquivo de índice presente'],['🧠','Memória NeuroLink','cod','166 registros de aprendizado'],
+    ['🧭','Skills sob demanda','doc','contrato presente'],['🔮','Consulta ao Oráculo','cod','piloto; ciclo completo UNKNOWN'],
+    ['✍🏼','Self-Learning Harvest','doc','procedimento documentado'],['🔁','Replay de aprendizado','cod','código e testes presentes'],
+    ['💎','Promoção de memória','doc','regras definidas; automação não comprovada'],['🌟','Knowledge Compiler','doc','estratégias documentadas'],
+    ['📋','Saídas estruturadas por esquema','prot','aba Tipos e Decidir'],['📊','Avaliação paralela com probabilidades','prot','amostras paralelas + calibração'],
+    ['👀','Seis Olhos — evolução de skills','doc','contrato na skill Oráculo; execução UNKNOWN']];
+  const nome={est:'em estudo',doc:'documentada',cod:'código parcial',prot:'protótipo aqui'};
+  $('#pieces').innerHTML=P.map(([e,t,s,n],i)=>`<div class="pc ${s}"><b>${i+1}. ${e} ${t}</b><span>${n||nome[s]}</span></div>`).join('');
+}
+
+load();bindCfg();renderIntencao();render();
+})();
+</script>
+<!-- 🧿 Erros Visíveis: fonte única em apps/instinto-superior/public/centraldark-erros-visiveis.js -->
+<script>try{window.CD_ERROS_CONFIG={coracao:((JSON.parse(localStorage.getItem('centraldark.sistema-um')||'{}').cfg)||{}).heart||''}}catch(e){}</script>
+<script src="../../../../apps/instinto-superior/public/centraldark-erros-visiveis.js"></script>
+</body>
+</html>
