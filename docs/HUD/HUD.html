@@ -751,7 +751,7 @@ body {
 <div class="tab-painel visivel" id="tab-hud">
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
-<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 - Tailscale prioritario</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
+<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 - Skill E01–E10 / PR #1783</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
 
 
   <!-- AION UI BANNER -->
@@ -982,6 +982,23 @@ body {
     <div class="hud-card"><h3>Desktop Commander &middot; legado</h3><div class="val ok">NAO REQUERIDO</div><div class="meta">Removido dos pre-requisitos do fluxo novo; preservado apenas como componente opcional historico.</div></div>
   </div>
   <div class="cadeado-prova">REGRA SELADA COMO DECISAO: TAILSCALE_PRIORITY / CENTRALDARK_MCP_OWNER / NATIVE_EXECUTOR. Execucao remota Casa+sincronizacao Obsidian: depende de prova funcional; nao promover por declaracao.</div>
+</div>
+
+<!-- SKILL SYNC ACCEPTANCE: single existing HUD / projection not authority -->
+<div class="section" id="cd-skill-sync-e2e" style="margin-top:16px" data-pr="1783">
+ <div class="section-header"><div class="section-icon">&#129520;</div><h2 class="section-title">Skill Auto-Sync &middot; PR #1783 / E01–E10</h2><span class="section-count">0/10 E2E CONFIRMADOS</span></div>
+ <p class="cadeado-meta">Mesmo owner de sincronizacao: scripts/skill-sync-check.sh / skill-synchronization. CURRENT da medicao: main <code>037ad99ed9c6</code>; checkout VPS <code>989038e8</code> em branch separada e dirty. Inventarios 992/84 sao escopos diferentes. Itens abaixo sao <strong>pendencias de aceitacao</strong>, nao dez falhas provadas. Sem segundo writer, scheduler, sincronizador ou HUD.</p>
+ <div class="hud-grid"><div class="hud-card"><h3>E01 &middot; Baseline causal main/VPS/runtime no mesmo SHA</h3><div class="val warn" data-skill-gate="E01">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E02 &middot; Inventário opt-in centraldark_autosync=true (sem 992−84)</h3><div class="val warn" data-skill-gate="E02">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E03 &middot; Writer/lock ativo e segunda escrita fail-closed</h3><div class="val warn" data-skill-gate="E03">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E04 &middot; --check e diff por identidade/fingerprint</h3><div class="val warn" data-skill-gate="E04">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E05 &middot; Preservação das melhorias locais / comparação semântica</h3><div class="val warn" data-skill-gate="E05">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E06 &middot; Oracle consultivo apenas para mudança material</h3><div class="val warn" data-skill-gate="E06">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E07 &middot; Backup, --apply seguro e readback dos arquivos</h3><div class="val warn" data-skill-gate="E07">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E08 &middot; --seal com hashes e contraprova de drift</h3><div class="val warn" data-skill-gate="E08">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E09 &middot; Eternal Self-Heal wake comprovado sem novo scheduler</h3><div class="val warn" data-skill-gate="E09">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E10 &middot; Dois ciclos estáveis + Casa/VPS/main/receipts + Fixed Point</h3><div class="val warn" data-skill-gate="E10">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div></div>
+ <div class="cadeado-prova">Fonte de aceite: <a href="https://github.com/ServerVpss/CentralDark/pull/1783" target="_blank" rel="noopener">PR #1783</a>. A marcacao real vive na PR e em receipts verificaveis; este snapshot permanece nao provado ate readback atualizado e nao transforma documentacao em runtime. NEXT_CURSOR=SKILL_SYNC_OPTIN_INVENTORY_AND_LOCK_READONLY_THEN_SAFE_DIFF. Nenhuma tentativa de modificar o BAT original ou sobrescrever skills locais.</div>
 </div>
 
   <!-- ONE HEART - LIVE -->
