@@ -60,7 +60,24 @@ jobs:
           args: --target x86_64-pc-windows-msvc
 
       - name: 🔹 Upload Artifacts
+        id: artifact_mirror_tauri_sign_1
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: sol-desktop-signed
           path: apps/sol-desktop/src-tauri/target/release/bundle/msi/*.msi
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_tauri_sign_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi

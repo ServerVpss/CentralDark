@@ -308,6 +308,8 @@ jobs:
             | tee .artifacts/trigger-fabric/ZIP-SHA256.txt
 
       - name: 📤 Publicar artefato canônico do gate
+        id: artifact_mirror_trigger_fabric_package_1
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: CENTRALDARK_TRIGGER_FABRIC_FULL_PACKAGE
@@ -361,3 +363,17 @@ jobs:
           echo "FAMILY_COUNT=7"
           echo "CLOCK_CRON=${CLOCK_CRON}"
           echo "JOB_STATUS=${JOB_STATUS}"
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_trigger_fabric_package_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi
