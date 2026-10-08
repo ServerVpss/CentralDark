@@ -756,3 +756,12 @@ python scripts/percentual_evidencial.py self-test
 
 A saída pode declarar `100%` **somente dentro daquele denominador fechado e reproduzível**. Isso não contradiz a proibição de prometer certeza universal: `100% do contrato medido` é diferente de `100% de certeza sobre o mundo`.
 menos duas seeds válidas por braço.
+
+
+## META-GRILL / autoentrevista CURRENT
+
+Antes de resposta operacional material ou mutação, usar o gancho **já existente** `KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md`: intenção explícita → hierarquia CURRENT → cláusulas do Goal → GREEN_STATE → owner → sintoma/causa → contraprova (inclusive sensor) → menor delta → necessidade real de Oracle → veredito/receipt/NEXT_CURSOR. A entrevista é verificação de critérios, não diálogo inventado em nome do CHEFE, nem exposição de cadeia de pensamento privada. Respostas casuais não exigem ritual; só o cone causal pertinente é revalidado.
+
+`META_GRILL != AUTHORIZATION`; `DOCS_HISTORICAL != CURRENT_AUTHORITY`; `GREEN_STATE_MUST_BE_PRESERVED`; `REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION`; `GOAL_CLAUSE_STATUS != UI_COLOR`.
+
+Contrato completo e G01..G12: `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#21-cristal-2026-10-08--goal-clause--meta-grill--oracle--obsidian`.

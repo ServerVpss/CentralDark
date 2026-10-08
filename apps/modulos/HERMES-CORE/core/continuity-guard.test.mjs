@@ -5,6 +5,8 @@ import './cognitive-council.test.mjs';
 import {
   continuityBlockReceipt,
   validateContinuityState,
+  buildDeepContextCapsule,
+  validateDeepContextCapsule,
 } from './continuity-guard.mjs';
 import {
   PERCEPTION_ATTACKS,
@@ -389,4 +391,34 @@ test('stdout prefixado por exit=2 ainda é reconhecido como receipt bloqueado', 
   const active = activePerceptionGate([entry]);
   assert.equal(active.ready_for_writer, false);
   assert.equal(active.next_rule, 'RETRY_MISSING_PERCEPTIONS_BEFORE_MUTATION');
+});
+
+
+const CAPSULE_TIME = '2026-10-08T03:00:00.000Z';
+function capsuleSample(overrides = {}) {
+  return {
+    schema_version: 'centraldark.deep-context-capsule.v1',
+    loop_id: 'loop-1', intent_id: 'intent-1', goal_fingerprint: 'goal-1',
+    chefe_intent_summary: 'Resolver clausulas com prova',
+    current_main_sha: HEAD, owner_map: { horn: 'scripts/lupa/horn-reuse-fixed-point.mjs' },
+    clause_states: [{ id: 'G01', status: 'UNKNOWN' }],
+    evidence_refs: ['receipt:one'], receipts: ['receipt:one'],
+    next_cursor: 'REMEASURE_G01', observed_at_utc: CAPSULE_TIME,
+    expires_at_utc: '2026-10-08T04:00:00.000Z', ...overrides,
+  };
+}
+
+test('deep context capsule is allowlisted and valid for rehydration', () => {
+  const nowMs = Date.parse(CAPSULE_TIME) + 1000;
+  const input = capsuleSample({ extra_private_reasoning: 'not persisted' });
+  const capsule = buildDeepContextCapsule(input, { nowMs });
+  assert.equal(Object.hasOwn(capsule, 'extra_private_reasoning'), false);
+  assert.equal(validateDeepContextCapsule(capsule, { nowMs }).ok, true);
+});
+
+test('deep context capsule refuses expired/stale and secret-bearing snapshots', () => {
+  const nowMs = Date.parse(CAPSULE_TIME) + 1000;
+  assert.equal(validateDeepContextCapsule(capsuleSample({ expires_at_utc: CAPSULE_TIME }), { nowMs }).ok, false);
+  assert.equal(validateDeepContextCapsule(capsuleSample({ owner_map: { token: 'hidden' } }), { nowMs }).reasons.includes('SENSITIVE_CONTENT_DETECTED'), true);
+  assert.throws(() => buildDeepContextCapsule(capsuleSample({ current_main_sha: 'not-a-sha' }), { nowMs }), /DEEP_CONTEXT_CAPSULE_BLOCKED/);
 });
