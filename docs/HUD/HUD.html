@@ -1001,6 +1001,22 @@ body {
  <div class="cadeado-prova">Fonte de aceite: <a href="https://github.com/ServerVpss/CentralDark/pull/1783" target="_blank" rel="noopener">PR #1783</a>. A marcacao real vive na PR e em receipts verificaveis; este snapshot permanece nao provado ate readback atualizado e nao transforma documentacao em runtime. NEXT_CURSOR=SKILL_SYNC_OPTIN_INVENTORY_AND_LOCK_READONLY_THEN_SAFE_DIFF. Nenhuma tentativa de modificar o BAT original ou sobrescrever skills locais.</div>
 </div>
 
+
+<!-- SEALED SYSTEMD MCP / ORACLE OWNER PROOFS : PR #1783 -->
+<div class="section" id="cd-sealed-causal-proof" style="margin-top:16px" data-pr="1783">
+ <div class="section-header"><div class="section-icon">&#128274;</div><h2 class="section-title">Cadeados causais &middot; MCP / Oracle / continuidade</h2><span class="section-count">4 selos escopados &middot; 6 lacunas E2E</span></div>
+ <p class="cadeado-meta">Uma prova selada se reutiliza enquanto owner/fingerprint/escopo/validade forem compativeis. Os selos abaixo distinguem <strong>codigo presente</strong>, <strong>catalogo observado</strong> e <strong>historico de execucao</strong>; nenhum substitui CURRENT de servico. Evidencias e checkboxes: <a href="https://github.com/ServerVpss/CentralDark/pull/1783" target="_blank" rel="noopener">PR #1783</a>.</p>
+ <div class="hud-grid">
+  <div class="hud-card"><h3>&#128274; S01 &middot; Owner microdeploy systemd</h3><div class="val ok">SELADO / CODIGO</div><div class="meta">main-pinned-microdeploy.sh: runtime MCP em /root/CentralDark_MCP_RUNTIME, allowlist src+dist/index.js, guard ancestral/main, lock, backup, health/heartbeat/tools e rollback. Nao equivale a deploy CURRENT.</div></div>
+  <div class="hud-card"><h3>&#128274; S02 &middot; Oracle / Meta-Memoria</h3><div class="val ok">SELADO / CONTRATO</div><div class="meta">Skill unica: CHEFE_INTENT_CALIBRATION_GATE, score com hard gates, FULL_CHAT_TRAVERSAL e recuperacao de DOM stale. Execucao integral ainda depende de cobertura comprovada.</div></div>
+  <div class="hud-card"><h3>&#128274; S03 &middot; Catalogo MCP</h3><div class="val ok">SELADO / CATALOGO</div><div class="meta">MCP admin: ok=true, 141 ferramentas / 11 rotas, fingerprint 42c132bf... em 08/10/2026 04:59 UTC. Escopo distinto das 153 tools publicas.</div></div>
+  <div class="hud-card"><h3>&#128274; S04 &middot; Heartbeat MCP recuperado</h3><div class="val ok">SELADO / HISTORICO</div><div class="meta">Receipt relatado de 07/10: systemd /health 200; /heartbeat 500&rarr;200; tools 153&rarr;153. Nao repetir restart somente para reproduzir prova antiga.</div></div>
+  <div class="hud-card"><h3>&#129000; U01 &middot; Deep health</h3><div class="val warn">CLASSIFICAR OWNER</div><div class="meta">/health/deep 503 foi reportado com hub_mission_consumer / SUPABASE_URL_MISSING. Verificar se consumer e opcional; nao inferir configuracao faltante como falha obrigatoria.</div></div>
+  <div class="hud-card"><h3>&#129000; U02–U06 &middot; Efeito ponta a ponta</h3><div class="val warn">PENDENTE DE READBACK</div><div class="meta">MCP runtime/source; Oracle full chat; memory pending; HUD+BAT copia Casa; G01–G12/E01–E10 e Fixed Point. Nao sobrescrever BAT original nem skills locais.</div></div>
+ </div>
+ <div class="cadeado-prova">OWNER: scripts/vps/main-pinned-microdeploy.sh + centraldark-oracle-surface/SKILL.md + MCP admin. NEXT_CURSOR=READONLY_CLASSIFY_HUB_MISSION_CONSUMER_THEN_WINDOWS_COPY_HASH_AND_HUD_MAIN_RECONCILE. Estes cards nao iniciam processos nem alteram as rotas existentes.</div>
+</div>
+
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
