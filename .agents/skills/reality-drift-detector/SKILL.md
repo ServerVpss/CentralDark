@@ -5,6 +5,9 @@ type: "automation"
 trigger: "continuous"
 authority: "SEGREDO/CHEFE (auto-execute sem prompt)"
 version: "1.0.0"
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # Reality Drift Detector

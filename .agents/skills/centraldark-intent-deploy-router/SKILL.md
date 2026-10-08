@@ -5,6 +5,9 @@ metadata:
   type: routing
   version: "1.1"
   owner: SEGREDO/CHEFE
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CENTRALDARK INTENT DEPLOY ROUTER

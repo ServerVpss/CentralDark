@@ -14,6 +14,9 @@ proof_replay: PR1577_BOT_REPLAY=PASS
 proof_head: ba95780322b45a16a3950977a618a2e104dc178c
 yellow_semantics: PROGRESS_BOUNDARY_NOT_FAILURE
 owner_rule: THIS_SKILL_DOES_NOT_REPLACE_CANONICAL_CONFLICT_OWNER
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # 🪡 CENTRALDARK — COSTURA AUTÔNOMA DE CONFLITOS
