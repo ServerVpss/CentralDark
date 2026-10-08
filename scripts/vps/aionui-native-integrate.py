@@ -1,16 +1,59 @@
 #!/usr/bin/env python3
 """Replay the AionUi/Hermes binding using the existing CentralDark owners."""
-import argparse,json,shutil,subprocess,urllib.request,urllib.parse,sys
+import argparse,json,shutil,subprocess,urllib.request,urllib.parse,sys,hashlib
 from pathlib import Path
 import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from current_model_resolver import resolve_current_model
 parser=argparse.ArgumentParser()
 parser.add_argument("--repo",type=Path,default=Path(__file__).resolve().parents[2])
 parser.add_argument("--web-url",default="http://127.0.0.1:25808")
 parser.add_argument("--apply",action="store_true")
+parser.add_argument("--verify-only",action="store_true",help="Read-only proof of existing AionUi -> CentralDark MCP stdio binding; no API mutations")
 args=parser.parse_args()
 repo=args.repo.resolve()
+if args.verify_only:
+    # Idempotent proof: do not persist/process secrets or change the current runtime.
+    entry=(repo/"apps/modulos/mcp/dist/mcp-server.js").resolve()
+    node=Path("/usr/local/bin/node").resolve()
+    inspected=0
+    matches=0
+    for proc in Path("/proc").iterdir():
+        if not proc.name.isdigit():
+            continue
+        try:
+            argv=[x.decode(errors="replace") for x in (proc/"cmdline").read_bytes().split(b"\\0") if x]
+            if len(argv)<5 or Path(argv[0]).resolve()!=node or Path(argv[1]).resolve()!=entry:
+                continue
+            inspected+=1
+            flags=set(argv[2:])
+            parent=int(next(line.split()[1] for line in (proc/"status").read_text().splitlines() if line.startswith("PPid:")))
+            parent_name=(Path("/proc")/str(parent)/"comm").read_text().strip()
+            # Read only the required label. Never echo, hash, or persist credentials.
+            label=next((item.split(b"=",1)[1] for item in (proc/"environ").read_bytes().split(b"\\0")
+                        if item.startswith(b"CENTRALDARK_CLIENT_LABEL=")),b"")
+            if {"--stdio","--compact","--admin"}.issubset(flags) and parent_name=="aioncore" and label==b"AionUi":
+                matches+=1
+        except (OSError,ValueError,StopIteration):
+            continue
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:25808/",timeout=5) as response:
+            web_ok=response.status==200
+    except (OSError,ValueError):
+        web_ok=False
+    entry_ok=entry.is_file()
+    digest=hashlib.sha256(entry.read_bytes()).hexdigest() if entry_ok else None
+    passed=bool(entry_ok and matches>0 and web_ok)
+    print(json.dumps({"status":"PASS" if passed else "UNKNOWN",
+       "owner":"scripts/vps/aionui-native-integrate.py",
+       "binding":"AionUi -> aioncore -> existing CentralDark MCP stdio",
+       "transport":"stdio","flags":["--stdio","--compact","--admin"],
+       "client_label":"AionUi","matching_children":matches,
+       "inspected_mcp_children":inspected,"webui_http_200":web_ok,
+       "runtime_entry_exists":entry_ok,"runtime_dist_sha256":digest,
+       "scope":"process_binding_only; tool_call_E2E_not_proven",
+       "secrets_exposed":False},ensure_ascii=False))
+    raise SystemExit(0 if passed else 2)
+from current_model_resolver import resolve_current_model
 current_model=resolve_current_model()
 if urllib.parse.urlparse(args.web_url).hostname not in {"127.0.0.1","localhost"}:raise SystemExit("LOCAL_WEBUI_REQUIRED")
 def api(path,data=None,method=None):
