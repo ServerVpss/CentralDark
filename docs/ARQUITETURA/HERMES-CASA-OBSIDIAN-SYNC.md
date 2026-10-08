@@ -143,3 +143,25 @@ NO_BLIND_OVERWRITE=true
 O script existente `scripts/casa/sync-hermes-obsidian.ps1` ja protege `docs/BRAIN` com hashes e conflitos; ele **nao deve ser declarado responsavel pelo HUD.html ou BAT** sem medir e ampliar o owner existente conforme necessario. Tailscale conectado nao comprova execucao Windows/SMB/SSH autenticada. Quando a rota autorizada de escrita estiver indisponivel, nao falsificar sincronizacao: anotar o bloqueio especifico e preservar arquivos, incluindo o original ativo.
 
 **Status da decisao:** `INTENT_REGISTERED`. **Status de Casa→main automatico:** `NOT_PROVEN` ate leitura de hash local + escrita + readback; promover selo so apos esses testes. Nenhum arquivo Windows e alterado pela declaracao documental.
+
+
+## Cristal CURRENT — source canônica do HUD Corpo Único (08/10/2026)
+
+O artefato entregue pelo CHEFE foi reconciliado contra `main` e a árvore VPS `scripts/casa`. Nenhum dos dois continha o launcher versionado; a arquitetura já referenciava o BAT como superfície da Casa. O menor delta canônico é versionar **o mesmo launcher read-only**, sem criar segundo HUD, bridge ou Screenpipe.
+
+```text
+CANONICAL_SOURCE=scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat
+CASA_ORIGINAL_RUNTIME=DO_NOT_BLIND_OVERWRITE
+HUD_MODE=READ_ONLY_MONITOR
+SINGLE_INSTANCE_MUTEX=true
+SCREENPIPE_AUTOSTART=false
+SSH_PROBE=READ_ONLY
+SSH_ALIAS=Segredo-VPS
+UNKNOWN_IS_NOT_PASS=true
+MAIN_IS_CANONICAL_SOURCE=true
+WINDOWS_RUNTIME_E2E=UNKNOWN_UNTIL_CASA_READBACK
+```
+
+O arquivo `CENTRALDARK-CORPO-UNICO-HUD-BRIDGE(2).ps1` fornecido na mesma rodada foi preservado apenas como evidência de comparação nesta receipt, **não promovido como owner executável**, porque contém `Start-ScreenpipeHidden` / `npx screenpipe record` e portanto pode abrir um segundo writer do Screenpipe. A funcionalidade útil continua candidata a absorção no owner existente somente após teste discriminante.
+
+Promoção física ao BAT original da Casa continua exigindo hash/readback do arquivo ativo e writer único; commit na main não substitui esse readback.
