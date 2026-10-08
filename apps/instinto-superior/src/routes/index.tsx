@@ -32,6 +32,7 @@ import { Ledger } from "@/components/central/Ledger";
 import { Projecao } from "@/components/central/Projecao";
 import { ExportPdf } from "@/components/central/ExportPdf";
 import { HermesFlutuante, HermesPeles } from "@/components/central/HermesPet";
+import { MapaMetabolicoCristal } from "@/components/central/MapaMetabolicoCristal";
 
 import { SeoI18n } from "@/components/central/SeoI18n";
 import { Button } from "@/components/ui/button";
@@ -512,6 +513,9 @@ function PaginaCentralDark() {
         <Idiomas />
         <Selo />
         <HermesPeles />
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+          <MapaMetabolicoCristal />
+        </div>
         <Pacotao />
         <Projecao />
         <Provenance />
