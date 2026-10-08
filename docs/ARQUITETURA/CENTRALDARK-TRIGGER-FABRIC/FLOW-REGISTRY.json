@@ -2354,6 +2354,26 @@
       "status": "ACTIVE_EXISTING_ROUTE",
       "evidence_ref": "apps/instinto-superior/README.md",
       "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
+    },
+    {
+      "id": "heart.operational-telemetry.gitSyncFront",
+      "kind": "FUNCTION",
+      "capability": "ONE_HEART_TELEMETRY",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/operational-telemetry.js",
+      "symbol": "gitSyncFront",
+      "activation": "CALL",
+      "from": "AUTO_SYNC_MAIN",
+      "to": "ONE_HEART_F1_GIT",
+      "owner": "apps/modulos/mcp/src/operational-telemetry.js",
+      "canonical_route": "one-heart-heartbeat",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/operational-telemetry.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/operational-telemetry.js#fronts F1_GIT era MEASURE_EXTERNALLY"
+      }
     }
   ]
 }
