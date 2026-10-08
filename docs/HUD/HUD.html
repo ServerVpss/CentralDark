@@ -751,7 +751,7 @@ body {
 <div class="tab-painel visivel" id="tab-hud">
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
-<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 01:12 BRT</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
+<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 - Tailscale prioritario</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
 
 
   <!-- AION UI BANNER -->
@@ -971,6 +971,19 @@ body {
  <div class="cadeado-prova" id="cd-fp-receipt">Aguardando evidencias do owner vivo; nenhum PASS sintetico.</div>
 </div>
 
+<!-- CANONICAL PRIVATE TRANSPORT POLICY / OWNER docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md -->
+<div class="section cd-transport-policy" style="margin-top:16px">
+  <div class="section-header"><div class="section-icon">&#127760;</div><h2 class="section-title">Bridge privado &middot; Tailscale prioritario</h2><span class="section-count">DECISAO CANONICA 08/10/2026</span></div>
+  <p class="cadeado-meta"><strong>Casa &harr; Tailscale &harr; VPS &harr; MCP CentralDark &harr; Hermes.</strong> Um sistema, sem bridge/admin paralelo. Desktop Commander NAO e dependencia: legado opcional, default OFF. Componentes funcionais nao sao apagados.</p>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Tailscale &middot; transporte privado</h3><div class="val ok">ROTA PROVADA</div><div class="meta">VPS &harr; Casa / Taildrop medidos anteriormente. Estado CURRENT requer nova medicao de sensor; tailnet sozinha nao concede permissao admin.</div></div>
+    <div class="hud-card"><h3>MCP &middot; control plane unico</h3><div class="val ok">OWNER EXISTENTE</div><div class="meta">mcp.centralldark.com/mcp. Publico segue HTTPS + OAuth2/PKCE; admin e execucao exigem autorizacao propria.</div></div>
+    <div class="hud-card"><h3>Hermes &middot; executor autorizado</h3><div class="val warn">TESTE POR EFEITO</div><div class="meta">Usar executores nativos existentes. Transporte vivo != escrita no Windows comprovada.</div></div>
+    <div class="hud-card"><h3>Desktop Commander &middot; legado</h3><div class="val ok">NAO REQUERIDO</div><div class="meta">Removido dos pre-requisitos do fluxo novo; preservado apenas como componente opcional historico.</div></div>
+  </div>
+  <div class="cadeado-prova">REGRA SELADA COMO DECISAO: TAILSCALE_PRIORITY / CENTRALDARK_MCP_OWNER / NATIVE_EXECUTOR. Execucao remota Casa+sincronizacao Obsidian: depende de prova funcional; nao promover por declaracao.</div>
+</div>
+
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
@@ -1109,6 +1122,20 @@ body {
      ================================================================ -->
 <div class="tab-painel" id="tab-mapa">
 <div class="page">
+<!-- CANONICAL PRIVATE TRANSPORT POLICY / OWNER docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md -->
+<div class="section cd-transport-policy" style="margin-top:16px">
+  <div class="section-header"><div class="section-icon">&#127760;</div><h2 class="section-title">Bridge privado &middot; Tailscale prioritario</h2><span class="section-count">DECISAO CANONICA 08/10/2026</span></div>
+  <p class="cadeado-meta"><strong>Casa &harr; Tailscale &harr; VPS &harr; MCP CentralDark &harr; Hermes.</strong> Um sistema, sem bridge/admin paralelo. Desktop Commander NAO e dependencia: legado opcional, default OFF. Componentes funcionais nao sao apagados.</p>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Tailscale &middot; transporte privado</h3><div class="val ok">ROTA PROVADA</div><div class="meta">VPS &harr; Casa / Taildrop medidos anteriormente. Estado CURRENT requer nova medicao de sensor; tailnet sozinha nao concede permissao admin.</div></div>
+    <div class="hud-card"><h3>MCP &middot; control plane unico</h3><div class="val ok">OWNER EXISTENTE</div><div class="meta">mcp.centralldark.com/mcp. Publico segue HTTPS + OAuth2/PKCE; admin e execucao exigem autorizacao propria.</div></div>
+    <div class="hud-card"><h3>Hermes &middot; executor autorizado</h3><div class="val warn">TESTE POR EFEITO</div><div class="meta">Usar executores nativos existentes. Transporte vivo != escrita no Windows comprovada.</div></div>
+    <div class="hud-card"><h3>Desktop Commander &middot; legado</h3><div class="val ok">NAO REQUERIDO</div><div class="meta">Removido dos pre-requisitos do fluxo novo; preservado apenas como componente opcional historico.</div></div>
+  </div>
+  <div class="cadeado-prova">REGRA SELADA COMO DECISAO: TAILSCALE_PRIORITY / CENTRALDARK_MCP_OWNER / NATIVE_EXECUTOR. Execucao remota Casa+sincronizacao Obsidian: depende de prova funcional; nao promover por declaracao.</div>
+</div>
+
+
 <!-- CANONICAL MCP ADMIN OWNER: fonte e provas do mesmo kernel (sem novo backend) -->
 <div class="section cd-mcp-admin-map" style="margin-top:16px" data-source="mcp.centralldark.com/health">
   <div class="section-header">
@@ -1318,6 +1345,20 @@ body {
      ================================================================ -->
 <div class="tab-painel" id="tab-forja">
 <div class="page">
+<!-- CANONICAL PRIVATE TRANSPORT POLICY / OWNER docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md -->
+<div class="section cd-transport-policy" style="margin-top:16px">
+  <div class="section-header"><div class="section-icon">&#127760;</div><h2 class="section-title">Bridge privado &middot; Tailscale prioritario</h2><span class="section-count">DECISAO CANONICA 08/10/2026</span></div>
+  <p class="cadeado-meta"><strong>Casa &harr; Tailscale &harr; VPS &harr; MCP CentralDark &harr; Hermes.</strong> Um sistema, sem bridge/admin paralelo. Desktop Commander NAO e dependencia: legado opcional, default OFF. Componentes funcionais nao sao apagados.</p>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Tailscale &middot; transporte privado</h3><div class="val ok">ROTA PROVADA</div><div class="meta">VPS &harr; Casa / Taildrop medidos anteriormente. Estado CURRENT requer nova medicao de sensor; tailnet sozinha nao concede permissao admin.</div></div>
+    <div class="hud-card"><h3>MCP &middot; control plane unico</h3><div class="val ok">OWNER EXISTENTE</div><div class="meta">mcp.centralldark.com/mcp. Publico segue HTTPS + OAuth2/PKCE; admin e execucao exigem autorizacao propria.</div></div>
+    <div class="hud-card"><h3>Hermes &middot; executor autorizado</h3><div class="val warn">TESTE POR EFEITO</div><div class="meta">Usar executores nativos existentes. Transporte vivo != escrita no Windows comprovada.</div></div>
+    <div class="hud-card"><h3>Desktop Commander &middot; legado</h3><div class="val ok">NAO REQUERIDO</div><div class="meta">Removido dos pre-requisitos do fluxo novo; preservado apenas como componente opcional historico.</div></div>
+  </div>
+  <div class="cadeado-prova">REGRA SELADA COMO DECISAO: TAILSCALE_PRIORITY / CENTRALDARK_MCP_OWNER / NATIVE_EXECUTOR. Execucao remota Casa+sincronizacao Obsidian: depende de prova funcional; nao promover por declaracao.</div>
+</div>
+
+
 <!-- CANONICAL MCP ADMIN OWNER: fonte e provas do mesmo kernel (sem novo backend) -->
 <div class="section cd-mcp-admin-map" style="margin-top:16px" data-source="mcp.centralldark.com/health">
   <div class="section-header">
