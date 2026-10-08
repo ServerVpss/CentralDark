@@ -934,7 +934,7 @@ body {
       <div class="hud-card">
         <h3>Heartbeat</h3>
         <div class="val warn" id="live-heart-state">UNKNOWN</div>
-        <div class="meta" id="live-heart-source">fonte: IP direto CURRENT</div>
+        <div class="meta" id="live-heart-source">fonte: procurando owner CURRENT</div>
       </div>
       <div class="hud-card">
         <h3>Medido em</h3>
@@ -1411,28 +1411,33 @@ cartas.forEach(function(c) {
 /* ============================================================
    HUD LIVE - ONE HEART
    ============================================================ */
-function resolveCentralDarkApiBase() {
-  var fallback = 'http://89.117.78.124:9100';
-  try {
-    var params = new URLSearchParams(location.search);
-    var fromQuery = (params.get('api') || '').replace(/\/$/, '');
-    if (fromQuery) {
-      localStorage.setItem('centraldark-hud-api-base', fromQuery);
-      return fromQuery;
-    }
-    return (localStorage.getItem('centraldark-hud-api-base') || fallback).replace(/\/$/, '');
-  } catch (_) {
-    return fallback;
+/* ONE_HEART: descobre o owner existente; nunca amarra o HUD ao IP da VPS.
+ * file:// usa o rendezvous MCP existente. HTTP(S) tenta origem propria primeiro.
+ * ?api=https://... permite override voluntario, sem gravar credenciais.
+ */
+function resolveCentralDarkApiBases() {
+  var bases = [];
+  function add(x) {
+    if (!x || typeof x !== 'string') return;
+    x = x.trim().replace(/\/+$/, '');
+    if (!/^https?:\/\//i.test(x)) return;
+    if (bases.indexOf(x) < 0) bases.push(x);
   }
+  try {
+    var query = new URLSearchParams(location.search).get('api');
+    if (query) { add(query); localStorage.setItem('centraldark-hud-api-base',query); }
+    else add(localStorage.getItem('centraldark-hud-api-base'));
+  } catch (_) {}
+  if (/^https?:$/.test(location.protocol)) add(location.origin);
+  // Rendezvous do proprio owner MCP, independente do endereco IP da maquina.
+  add('https://mcp.centralldark.com');
+  return bases;
 }
-
-var CENTRALDARK_DIRECT_BASE = resolveCentralDarkApiBase();
 var CENTRALDARK_LIVE = {
   refreshMs: 5000,
-  endpoints: [
-    { name: 'IP/binding CURRENT', heartbeat: CENTRALDARK_DIRECT_BASE + '/heartbeat', health: CENTRALDARK_DIRECT_BASE + '/health' },
-    { name: 'dominio canonico', heartbeat: 'https://api.centralldark.com/heartbeat', health: 'https://api.centralldark.com/health' }
-  ]
+  endpoints: resolveCentralDarkApiBases().map(function(base) {
+    return { name: base === location.origin ? 'mesma origem/owner' : 'owner MCP/rota configurada', heartbeat:base+'/heartbeat',health:base+'/health' };
+  })
 };
 
 function liveSet(id, text, ok) {
@@ -1544,15 +1549,19 @@ function refreshCentralDarkLive() {
         var orchestrator = binding.orchestrator || {};
         var worker = binding.localWorker || {};
         var remoteLane = Array.isArray(topology.lanes) ? topology.lanes.find(function(x) { return x && x.id === 'REMOTE_DESKTOP'; }) : null;
-        var alive = heartbeat.ok === true && String((op.heartbeat || {}).self || '').toLowerCase() === 'alive';
-        var measuredRaw = heartbeat.measuredAt || op.observedAt || null;
+        var self = String(heartbeat.self || ((op.heartbeat || {}).self) || '').toLowerCase();
+        var measuredRaw = heartbeat.t || heartbeat.measuredAt || op.observedAt || null;
         var measuredDate = measuredRaw ? new Date(measuredRaw) : null;
         var measuredAgeMs = measuredDate && !isNaN(measuredDate.getTime()) ? Date.now() - measuredDate.getTime() : null;
-        var fresh = measuredAgeMs !== null && measuredAgeMs >= 0 && measuredAgeMs <= 15000;
-        var measured = measuredDate && !isNaN(measuredDate.getTime()) ? measuredDate.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) + ' BRT · ' + (fresh ? 'FRESH' : 'STALE') : 'UNKNOWN';
+        // A janela respeita o ciclo real do owner; stale/reported != PASS.
+        var fresh = measuredAgeMs !== null && measuredAgeMs >= -5000 && measuredAgeMs <= 30000;
+        var alive = heartbeat.ok === true && self === 'alive' && fresh;
+        var measured = measuredDate && !isNaN(measuredDate.getTime())
+          ? measuredDate.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }) + ' BRT · ' + (fresh ? 'FRESH' : 'STALE')
+          : 'UNKNOWN';
 
-        liveSet('live-heart-state', alive ? 'ALIVE' : 'UNKNOWN', alive && fresh);
-        liveSet('live-heart-measured', measured, Boolean(measuredRaw));
+        liveSet('live-heart-state', alive ? 'ALIVE' : (self === 'stale' ? 'STALE' : 'UNKNOWN'), alive);
+        liveSet('live-heart-measured', measured, Boolean(measuredRaw) && fresh);
         liveSet('live-heart-orchestrator', orchestrator.model || 'UNKNOWN', orchestrator.state === 'SELECTED');
         liveSet('live-heart-worker', worker.model || 'UNKNOWN', worker.state === 'SELECTED');
         liveSet('live-heart-execution', topology.verdict || 'UNKNOWN', /^RUNNING|EXECUTION/i.test(String(topology.verdict || '')));
@@ -1564,7 +1573,7 @@ function refreshCentralDarkLive() {
         var source = document.getElementById('live-heart-source');
         if (source) source.textContent = 'fonte: ' + ep.name + ' \u00B7 ' + ep.heartbeat;
         var badge = document.getElementById('live-heart-badge');
-        if (badge) badge.textContent = alive ? 'LIVE \u00B7 5s' : 'UNKNOWN \u00B7 5s';
+        if (badge) badge.textContent = alive ? 'LIVE \u00B7 5s' : (self === 'stale' ? 'STALE \u00B7 5s' : 'UNKNOWN \u00B7 5s');
       });
     }).catch(function() {
       idx++;
