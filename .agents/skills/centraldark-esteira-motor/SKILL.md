@@ -5,6 +5,9 @@ metadata:
   type: operational
   version: "1.3"
   owner: SEGREDO/CHEFE
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CentralDark — Esteira vs Motor

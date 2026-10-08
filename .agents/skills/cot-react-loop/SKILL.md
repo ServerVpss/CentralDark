@@ -6,6 +6,9 @@ description: >-
   automaticamente diante de ERROR, FAIL, DRIFT, REGRESSION, CONFLICT, UNKNOWN
   material, check vermelho, contrato/teste/hash divergente, estado obsoleto,
   autoridade ambígua ou tool failure; o gatilho abre diagnóstico, não autoridade.
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # COT-REACT-LOOP

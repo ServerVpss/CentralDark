@@ -2,6 +2,9 @@
 name: centraldark-reuse-runtime
 description: Preflight runtime CentralDark que força descoberta/reuso de decisões e owners existentes antes de criar capability, arquivo, serviço, router ou arquitetura. Deve ser selecionada no início de missões materiais e antes de criação estrutural.
 trigger: /centraldark-reuse-runtime
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CentralDark Reuse Runtime
