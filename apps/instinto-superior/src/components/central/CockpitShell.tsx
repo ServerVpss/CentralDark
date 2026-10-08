@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import { PainelHermes } from "@/components/central/HermesPet";
+import { MapaMetabolicoCristal } from "@/components/central/MapaMetabolicoCristal";
 import { DesignCenter, usePeleCockpit } from "@/components/central/DesignCenter";
 import { Ledger } from "@/components/central/Ledger";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
@@ -216,6 +217,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   icone={<Radar className="size-5" />}
                 />
               </div>
+              <div className="mt-8"><MapaMetabolicoCristal compacto /></div>
               <Ledger compacto />
             </TabsContent>
             <TabsContent value="sync" className="mt-10">
