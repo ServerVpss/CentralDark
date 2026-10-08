@@ -751,7 +751,7 @@ body {
 <div class="tab-painel visivel" id="tab-hud">
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
-<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 - Skill E01–E10 / PR #1783</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
+<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 06:30 BRT - VPS realinhada a main / auto-sync PASS</span></div><div class="cadeado-meta">Main: VPS saiu do ramo docs/hermes-local-loop-receipt-20261007 e voltou para main; auto-sync voltou a passar. Antes: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa (Skill E01–E10 / PR #1783). Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
 
 
   <!-- AION UI BANNER -->
@@ -792,7 +792,7 @@ body {
       <div class="hud-card">
         <h3>VPS CENTRALDARK-OS</h3>
         <div class="val ok">One Heart HTTP 200</div>
-        <div class="meta">openKylin 3.0 &middot; kernel 7.0 &middot; git pull auto cada 5min via cron</div>
+        <div class="meta">openKylin 3.0 &middot; kernel 7.0 &middot; auto-sync */5 via cron (so avanco direto, fecha se ramo/sujeira)</div>
       </div>
       <div class="hud-card">
         <h3>AionUi &middot; VPS</h3>
@@ -826,8 +826,8 @@ body {
           <span class="cadeado-nome">VPS Auto-Sync</span>
           <span class="cadeado-status pass">SELADO</span>
         </div>
-        <div class="cadeado-meta">Cron */5 * * * * puxa origin/main automaticamente. Script com flock, stash, ff-only/rebase, log rotation.</div>
-        <div class="cadeado-prova">commit: 6ae79a9ec &middot; script: scripts/vps/auto-sync-main.sh</div>
+        <div class="cadeado-meta">Cron */5 * * * * puxa origin/main automaticamente. Versao CURRENT: flock + so avanco direto (ff-only), fecha sem mexer se o checkout nao estiver na main ou estiver sujo; sem stash, rebase, reset ou restart. Ferida 08/10/2026: BLOCKED 63x de 04:10Z a 09:20Z porque /root/CentralDark estava no ramo docs/hermes-local-loop-receipt-20261007 com 3 arquivos alterados + 1 novo. Realinhado em 09:29Z com backup em /root/CentralDark-preserve/align-main-20261008T092458Z e stash align-main-preserve-20261008T092458Z.</div>
+        <div class="cadeado-prova">PROVA 08/10/2026 09:30:17Z: CHECKOUT_SYNC_PASS sha=a2983b7e6 &middot; RUNTIME_DEPLOY_UNKNOWN &middot; script: scripts/vps/auto-sync-main.sh &middot; log: scripts/vps/auto-sync.log</div>
       </div>
       <div class="cadeado-card selado">
         <div class="cadeado-header">
@@ -996,7 +996,7 @@ body {
 <!-- SKILL SYNC ACCEPTANCE: single existing HUD / projection not authority -->
 <div class="section" id="cd-skill-sync-e2e" style="margin-top:16px" data-pr="1783">
  <div class="section-header"><div class="section-icon">&#129520;</div><h2 class="section-title">Skill Auto-Sync &middot; PR #1783 / E01–E10</h2><span class="section-count">0/10 E2E CONFIRMADOS</span></div>
- <p class="cadeado-meta">Mesmo owner de sincronizacao: scripts/skill-sync-check.sh / skill-synchronization. CURRENT da medicao: main <code>037ad99ed9c6</code>; checkout VPS <code>989038e8</code> em branch separada e dirty. Inventarios 992/84 sao escopos diferentes. Itens abaixo sao <strong>pendencias de aceitacao</strong>, nao dez falhas provadas. Sem segundo writer, scheduler, sincronizador ou HUD.</p>
+ <p class="cadeado-meta">Mesmo owner de sincronizacao: scripts/skill-sync-check.sh / skill-synchronization. CURRENT da medicao: main <code>037ad99ed9c6</code>; checkout VPS <code>989038e8</code> em branch separada e dirty (medicao anterior; realinhado a main em 08/10/2026 09:29Z, ver cadeado VPS Auto-Sync). Inventarios 992/84 sao escopos diferentes. Itens abaixo sao <strong>pendencias de aceitacao</strong>, nao dez falhas provadas. Sem segundo writer, scheduler, sincronizador ou HUD.</p>
  <div class="hud-grid"><div class="hud-card"><h3>E01 &middot; Baseline causal main/VPS/runtime no mesmo SHA</h3><div class="val warn" data-skill-gate="E01">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
   <div class="hud-card"><h3>E02 &middot; Inventário opt-in centraldark_autosync=true (sem 992−84)</h3><div class="val warn" data-skill-gate="E02">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
   <div class="hud-card"><h3>E03 &middot; Writer/lock ativo e segunda escrita fail-closed</h3><div class="val warn" data-skill-gate="E03">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
