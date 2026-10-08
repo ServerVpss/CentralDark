@@ -130,6 +130,16 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const caminho = useRouterState({ select: (state) => state.location.pathname });
 
+  // 🧿 Erros visíveis: sensor único em public/centraldark-erros-visiveis.js (skill kaizen-sistema-um).
+  useEffect(() => {
+    if (document.getElementById("cd-erros-visiveis-script")) return;
+    const sensor = document.createElement("script");
+    sensor.id = "cd-erros-visiveis-script";
+    sensor.src = "/centraldark-erros-visiveis.js";
+    sensor.async = true;
+    document.body.appendChild(sensor);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
