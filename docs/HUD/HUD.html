@@ -826,8 +826,8 @@ body {
           <span class="cadeado-nome">VPS Auto-Sync</span>
           <span class="cadeado-status pass">SELADO</span>
         </div>
-        <div class="cadeado-meta">Cron */5 * * * * puxa origin/main automaticamente. Versao CURRENT: flock + so avanco direto (ff-only), fecha sem mexer se o checkout nao estiver na main ou estiver sujo; sem stash, rebase, reset ou restart. Ferida 08/10/2026: BLOCKED 63x de 04:10Z a 09:20Z porque /root/CentralDark estava no ramo docs/hermes-local-loop-receipt-20261007 com 3 arquivos alterados + 1 novo. Realinhado em 09:29Z com backup em /root/CentralDark-preserve/align-main-20261008T092458Z e stash align-main-preserve-20261008T092458Z.</div>
-        <div class="cadeado-prova">PROVA 08/10/2026 09:30:17Z: CHECKOUT_SYNC_PASS sha=a2983b7e6 &middot; RUNTIME_DEPLOY_UNKNOWN &middot; script: scripts/vps/auto-sync-main.sh &middot; log: scripts/vps/auto-sync.log</div>
+        <div class="cadeado-meta">Cron */5 * * * * puxa origin/main automaticamente. Versao CURRENT: flock + so avanco direto (ff-only), fecha sem mexer se o checkout nao estiver na main ou estiver sujo; sem stash, rebase, reset ou restart. Ferida 08/10/2026: BLOCKED 63x de 04:10Z a 09:20Z porque /root/CentralDark estava no ramo docs/hermes-local-loop-receipt-20261007 com 3 arquivos alterados + 1 novo. Realinhado em 09:29Z com backup em /root/CentralDark-preserve/align-main-20261008T092458Z e stash align-main-preserve-20261008T092458Z. Segunda causa: apps/modulos/HERMES-CORE/core/orchestrator.mjs reescreve .artifacts/system-sentinel/reconciliation.json dentro do checkout; sem ignore, o checkout voltava sujo (BLOCKED 09:35:01Z). Corrigido em .gitignore no commit db57da27a.</div>
+        <div class="cadeado-prova">PROVA 08/10/2026: CHECKOUT_SYNC_PASS manual 09:38:31Z e pelo proprio cron 09:40:06Z, sha=db57da27a, checkout limpo &middot; RUNTIME_DEPLOY_UNKNOWN &middot; script: scripts/vps/auto-sync-main.sh &middot; log: scripts/vps/auto-sync.log</div>
       </div>
       <div class="cadeado-card selado">
         <div class="cadeado-header">
