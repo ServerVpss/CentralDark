@@ -736,3 +736,45 @@ HERMES_SINGLE_EXECUTOR_IS_SUFFICIENT_WHEN_CAPABILITY_COVERS_MISSION=true
 SPECIALISTS_ARE_OPTIONAL_CAPABILITIES_NOT_REQUIRED_IDENTITIES=true
 ```
 
+## Convergência da Casa + VPS + GitHub + Instinto Superior — delta de 08/10/2026
+
+**Escopo:** esta é uma atualização do mesmo MOC canônico, não outro mapa, projeto, owner, painel, executor, serviço, branch ou sistema. O passado e as provas anteriores permanecem acima, sem reescrita. `REUSE_BEFORE_CREATE=true` · `ONE_SYSTEM_ONLY=true` · `CURRENT>HISTORY` · `UNKNOWN!=PASS`.
+
+### Uma intenção, superfícies reaproveitadas
+
+```text
+SEGREDO/CHEFE (intenção/autoridade)
+  → SOL / CHAT GLOBAL (coordena; GPT/Claude são motores/superfícies, não owners)
+  → MCP CentralDark + Trigger Fabric + Hermes (capacidade e execução existentes)
+     ↔ VPS/openKylin (continuidade operacional pretendida, 24/7 exige prova viva)
+     ↔ Casa/SEGREDO (laboratório, GPU, Obsidian e Screenpipe)
+  → HUD único: docs/HUD/HUD.html (abas HUD/MAPA/FORJA)
+     ↔ Vault Obsidian: memória e Grafo Vivo, sem autoridade paralela
+     ↔ CentralDark Bridge · One Shot: entrada Windows + Tray no mesmo processo, quando recuperado
+     ↔ Instinto Superior: evolução do cockpit/OS sob owners e etapas S0–S8 existentes
+  → GitHub main (fonte versionada) + BRAIN/APRENDIZADOS/LEMBRANCAS
+  → PR-mãe #1562 (rastro histórico; não é escritor, não é deploy)
+  → readback + contraprova + Reality Judge
+```
+
+### Recorte material observado em 08/10/2026
+
+| Fonte | Observação e fronteira | Reaproveitar em |
+| --- | --- | --- |
+| Casa, Vault `C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬` | `HUD.html` (151931 bytes), `.obsidian/plugins/centraldark-grafo-vivo` e scripts `CENTRALDARK-CORPO-UNICO-HUD-*` presentes; Obsidian não estava em execução no momento da sondagem | Plugin existente `apps/modulos/obsidian-plugin-grafo-vivo` + HUD existente `docs/HUD/HUD.html`; NÃO criar segundo painel |
+| CentralDark Bridge · One Shot | Histórico prova build, OAuth, MCP e modo Tray no mesmo `CentralDarkBridge.exe`; na Casa atual, processo ausente e caminho histórico `E:\CentralDark\CentralDark-Unified-OneShot` ausente. A busca delimitada não encontrou o EXE, portanto **runtime atual UNKNOWN/NOT_FOUND**, sem afirmar que o produto nunca existiu | Mesmo produto e owner documentados em `docs/RECEIPTS/CENTRALDARK_DIRECT_MCP_BRIDGE_2026-09-18.md` e `docs/HANDOFF/2026-09-11-centraldark-unified-oneshot-bridge-exe-remediacao.md` |
+| Casa/Windows | Hermes, Screenpipe e AionUi observados como processos; `CentralDarkBridge.exe` e Obsidian não observados rodando. Processo presente não prova conexão E2E | Donors/sensores existentes; Instinto Superior reutiliza AionUi e owners S0–S8 de `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md` |
+| `%TEMP%` da Casa | 54 pastas com nomes relacionados: 31 `codeagentswarm*`, 3 `CentralDark-Main-Sync*`, 4 HUD/Grafo, 2 CentralDark adicionais e 14 outras/Hermes/Claude. São caches, sessões, worktrees e candidatos; **não são 54 projetos ou 54 provas de integração** | Confrontar apenas o delta útil com os owners Git/HUD/Bridge; não promover `Temp` a runtime canônico nem importar lixo/duplicatas |
+| `centraldark-hud-live-worktree` | Worktree detached no commit `1432a9f660d0b7d926e8b343c1b321856df3d077` (integra telemetria Hermes ao plugin Obsidian). Servidor HTTP 200 do HUD observado na Casa; isto não prova sync da memória ou deploy na VPS | GitHub `main` continua autoridade de fonte; `docs/HUD/HUD.html` e plugin são os owners, não o checkout temporário |
+| VPS | MCP informou branch `docs/hermes-local-loop-receipt-20261007`, HEAD local `989038e8b`, arquivos modificados e não rastreados. Sync Obsidian bidirecional `false`/sem vault acessível nesse runtime | Preservar dirty tree; confrontar HEAD, services e caminho do vault, depois medir fluxo real; **não executar reset/pull/reinstall cegamente** |
+| GitHub | Main observada em `fc87e65e9d0a4a8197f5ee7da724593a8458c539` no início deste recorte. PR-mãe `#1562` encontrada `closed`, `merged=false`; não afirmar merge nem deploy dos filhos sem medir SHA/CI | `main` + BRAIN + Aprendizados + Lembranças; PR-mãe preserva trilha histórica |
+| Chats/modelos | GPT, Claude e outros são superfícies/motores; o contexto entre chats é recuperado por documentos, memória, artefatos e ferramentas quando acessíveis, não por telepatia nem cache de `Temp` | Papéis SOL/Hermes do presente MOC; registrar apenas proveniência verificada |
+
+### Encaminhamento único — sem reiniciar a arquitetura
+
+1. **REUSE:** preservar o Vault, Grafo Vivo, `docs/HUD/HUD.html`, Bridge/Tray One Shot, MCP, Hermes, rotas Casa/VPS, Git/BRAIN e Instinto Superior existentes.
+2. **REBIND:** localizar o código/artefato real do **mesmo One Shot** após mudança de caminhos na Casa. Só então integrar ao Tray existente um acesso/visão ao HUD e ao Vault; não compilar outro produto nem confundir botão com runtime.
+3. **VERIFY:** testar botão do Tray → HUD/Obsidian → sensor/API → Hermes/VPS → receipt no mesmo alvo. Sem teste E2E, `INTEGRADO=UNKNOWN`; `TRAY_ABSENT` não derruba VPS já operante.
+4. **PROMOTE:** delta de fonte validado retorna ao `main` pelo owner autorizado, respeitando conflitos e checks; no histórico da PR-mãe constam vínculos, nunca PASS fictício. `MERGED!=DEPLOYED`.
+
+**Próximo gap discriminante:** recuperar o **executável e fonte editável do One Shot original** na localização atual, confrontar com o receipt e confirmar que o mesmo Tray pode abrir a superfície Obsidian/HUD sem perder perfis, OAuth ou supervisão. Nenhuma mutação de runtime ou novos processos foi necessária para este mapeamento.
