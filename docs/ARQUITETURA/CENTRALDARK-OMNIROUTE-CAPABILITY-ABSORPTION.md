@@ -39,7 +39,7 @@ A fonte expõe, entre outras famílias, gateway multi-provider, providers/nodes/
 O inventário operacional está em:
 
 ```text
-public/central-dark-instinct-2/public/centraldark/router-capabilities.json
+apps/instinto-superior/public/centraldark/router-capabilities.json
 ```
 
 Cada família possui:
@@ -86,7 +86,7 @@ SOURCE_FEATURE != CENTRALDARK_RUNTIME_PROOF
 
 ## Superfície única
 
-A UI existente `public/central-dark-instinct-2` é TanStack Start com file-based routing. Portanto a extensão correta é uma rota no owner existente, não `src/pages` nem outro painel.
+A UI existente `apps/instinto-superior` é TanStack Start com file-based routing. Portanto a extensão correta é uma rota no owner existente, não `src/pages` nem outro painel.
 
 ```text
 Header CentralDark
@@ -176,7 +176,7 @@ Antes da promoção:
 
 1. JSON do capability registry deve ser válido e conter o pin da fonte.
 2. Nenhuma capability pedida pode sumir silenciosamente do denominador.
-3. Build/lint do `public/central-dark-instinct-2` devem permanecer aplicáveis.
+3. Build/lint do `apps/instinto-superior` devem permanecer aplicáveis.
 4. A rota `/roteador` deve pertencer ao file router existente.
 5. O menu deve continuar funcionando na home e na nova rota.
 6. Nenhum segredo deve estar presente no manifest/UI.
