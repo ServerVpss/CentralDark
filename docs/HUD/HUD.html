@@ -814,7 +814,7 @@ body {
     <div class="section-header">
       <div class="section-icon">&#128274;</div>
       <h2 class="section-title">Cadeados &mdash; Lugares Provados e Selados</h2>
-      <span class="section-count">9 selados</span>
+      <span class="section-count" id="cadeados-count">contando provas...</span>
     </div>
     <div class="cadeado-grid">
       <div class="cadeado-card selado">
@@ -899,6 +899,27 @@ body {
         <div class="cadeado-meta">CentralDark entra no Hermes Desktop como plugin nativo do mesmo organismo. HUD fixo de status em cima + stream vivo de logs/eventos embaixo. Obsidian e Hermes Desktop compartilham a mesma telemetria; nenhum segundo app, daemon, porta, scheduler, banco ou HUD owner.</div>
         <div class="cadeado-prova">MAIN: 393b16855 &middot; HERMES_DESKTOP_NATIVE_EXTENSION=true &middot; implementacao fisica = NEXT_CURSOR</div>
       </div>
+      <!-- Evolucao medida: mesma grade e mesmo owner, evidencias com escopo e data -->
+      <div class="cadeado-card selado">
+        <div class="cadeado-header"><span class="cadeado-icon">&#128065;</span><span class="cadeado-nome">Screenpipe Casa / Health</span><span class="cadeado-status pass">PROVA HTTP</span></div>
+        <div class="cadeado-meta">VPS &#8594; Tailscale &#8594; SEGREDO 100.123.93.25:3030/health. Respondeu HTTP 200 em 08/10/2026. Nao significa captura de audio ou logs completos disponiveis.</div>
+        <div class="cadeado-prova">PROVADO_ESCOPO: HTTP 200 pela VPS, 08/10/2026. Atualizacao live na secao Conexoes.</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header"><span class="cadeado-icon">&#129528;</span><span class="cadeado-nome">One Heart VPS</span><span class="cadeado-status pass">PROVA HTTP</span></div>
+        <div class="cadeado-meta">VPS 127.0.0.1:9100/heartbeat e /health responderam HTTP 200 em 08/10/2026. Vida do endpoint nao e prova de todos os workers.</div>
+        <div class="cadeado-prova">PROVADO_ESCOPO: dois endpoints 200; one heart unico.</div>
+      </div>
+      <div class="cadeado-card selado">
+        <div class="cadeado-header"><span class="cadeado-icon">&#9881;</span><span class="cadeado-nome">Runtime / Modelo VPS</span><span class="cadeado-status pass">PROVA HTTP</span></div>
+        <div class="cadeado-meta">VPS 127.0.0.1:18435/health HTTP 200 em 08/10/2026; inferencia e disponibilidade de modelos continuam provas separadas.</div>
+        <div class="cadeado-prova">PROVADO_ESCOPO: health HTTP 200, 08/10/2026.</div>
+      </div>
+      <div class="cadeado-card aberto">
+        <div class="cadeado-header"><span class="cadeado-icon">&#129302;</span><span class="cadeado-nome">Hermes WebUI / Sessao</span><span class="cadeado-status warn">PENDENTE</span></div>
+        <div class="cadeado-meta">VPS 127.0.0.1:9119 respondeu HTTP 302 em 08/10/2026. Servico acessivel, mas sessao autenticada e painel funcional ainda nao comprovados.</div>
+        <div class="cadeado-prova">PROVA PARCIAL: HTTP 302. A antiga porta 8788 nao conectou.</div>
+      </div>
     </div>
   </div>
 
@@ -946,6 +967,33 @@ body {
         <div class="meta">heartbeat não executa inferência; prova separada</div>
       </div>
     </div>
+  </div>
+
+  <!-- CD ROUTES: mesma superficie HUD / evidencia nao e acesso administrativo -->
+  <div class="section" id="cd-routes-live" style="margin-top:16px;">
+    <div class="section-header">
+      <div class="section-icon">&#128279;</div>
+      <h2 class="section-title">Conexoes provadas &middot; setores e eventos</h2>
+      <span class="section-count" id="cd-routes-time">ultima prova: 08/10/2026</span>
+    </div>
+    <p class="cadeado-meta" style="margin:0 0 12px">Uma superficie e um owner. Estado historico identificado por data; LIVE somente apos leitura real no navegador. Porta aberta nao prova login, controle da tela ou leitura de logs.</p>
+    <div class="hud-grid">
+      <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val warn" id="cd-route-casa">ULTIMA PROVA</div><div class="meta">SEGREDO 100.123.93.25 &#8596; VPS 100.90.199.124. PONG por DERP(sao), 727 ms; 08/10/2026.</div></div>
+      <div class="hud-card"><h3>Windows / portas</h3><div class="val warn">PORTAS ABERTAS</div><div class="meta">3389 RDP; 445 arquivos; 5985 comandos. Autenticacao e controle da tela nao comprovados. SSH 22 e 4175 indisponiveis na medicao.</div></div>
+      <div class="hud-card"><h3>Screenpipe / Casa</h3><div class="val warn" id="cd-route-screenpipe">ULTIMA PROVA HTTP 200</div><div class="meta">http://100.123.93.25:3030/health. Prova feita pela VPS em 08/10/2026; navegador mede novamente abaixo.</div></div>
+      <div class="hud-card"><h3>One Heart / VPS</h3><div class="val warn" id="cd-route-heart">AGUARDANDO</div><div class="meta">Mesmo heartbeat do HUD; medido pela VPS com HTTP 200 em 08/10/2026. Atualizacao ao vivo depende do endpoint e CORS.</div></div>
+      <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / HISTORICO</div><div class="meta">VPS 127.0.0.1:9119 respondeu 302; 8788 fechada. UI autenticada nao provada pelo 302.</div></div>
+      <div class="hud-card"><h3>Runtime / modelo</h3><div class="val warn">HTTP 200 / HISTORICO</div><div class="meta">VPS 18435/health respondeu 200; portas 8000, 8001, 8002 e 9100 escutando na medicao. Sem inferencia comprovada.</div></div>
+    </div>
+    <h3 class="section-title" style="margin:16px 0 8px">Eventos de saude por setor (nao sao logs integrais do sistema)</h3>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+      <label class="cadeado-meta" for="cd-event-filter">Setor</label>
+      <select id="cd-event-filter" style="background:var(--surface);color:var(--text);border:1px solid var(--border);padding:7px">
+        <option value="TODOS">TODOS</option><option value="CASA">CASA</option><option value="SCREENPIPE">SCREENPIPE</option><option value="VPS">VPS</option><option value="HERMES">HERMES</option><option value="RUNTIME">RUNTIME</option><option value="HUD">HUD</option>
+      </select>
+      <span class="cadeado-meta" id="cd-event-summary">Aguardando observacao local...</span>
+    </div>
+    <pre id="cd-event-stream" aria-live="polite" style="height:170px;overflow:auto;background:var(--ground);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:10px;white-space:pre-wrap;color:var(--text-dim)">[HUD] Estado inicial: aguardando provas atuais do navegador.</pre>
   </div>
 
   <!-- HERMES JUIZ AO VIVO (PowerShell 7) -->
@@ -1528,6 +1576,82 @@ function refreshCentralDarkLive() {
 
 refreshCentralDarkLive();
 setInterval(refreshCentralDarkLive, CENTRALDARK_LIVE.refreshMs);
+/* Contador real do mesmo inventario: nunca fixar numero de cadeados no HTML. */
+(function() {
+  function contarCadeados() {
+    var area = document.getElementById('cadeados-count');
+    if (!area) return;
+    var grade = area.closest('.section');
+    if (!grade) return;
+    var cards = grade.querySelectorAll('.cadeado-grid > .cadeado-card');
+    var selados = grade.querySelectorAll('.cadeado-grid > .cadeado-card.selado').length;
+    var pendentes = cards.length - selados;
+    area.textContent = cards.length + ' registros · ' + selados + ' selados · ' + pendentes + ' pendentes';
+    area.title = 'Inventario contabilizado diretamente dos cartoes, nao dos servicos atuais';
+  }
+  contarCadeados();
+  var grade = document.querySelector('#cadeados-count')?.closest('.section')?.querySelector('.cadeado-grid');
+  if (grade && window.MutationObserver) new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+})();
+
+/* CD monitor integrado: eventos de saude, nunca transcricao de tela/audio. */
+(function() {
+  var history = [], last = Object.create(null);
+  function log(sector, state) {
+    if(last[sector] === state) return;
+    last[sector] = state;
+    history.push({sector:sector, state:state, at:new Date().toLocaleString('pt-BR')});
+    if(history.length > 120) history.shift();
+    render();
+  }
+  function render() {
+    var out = document.getElementById('cd-event-stream');
+    var filter = document.getElementById('cd-event-filter');
+    if (!out) return;
+    var kind = filter ? filter.value : 'TODOS';
+    out.textContent = history.filter(function(item){return kind==='TODOS'||kind===item.sector;})
+      .map(function(item){return '['+item.at+'] ['+item.sector+'] '+item.state;}).join('\n') || '[HUD] Nenhuma mudanca nesse setor';
+    out.scrollTop = out.scrollHeight;
+    var sum = document.getElementById('cd-event-summary');
+    if(sum) sum.textContent = history.length + ' mudancas de estado nesta sessao';
+  }
+  var select = document.getElementById('cd-event-filter');
+  if(select) select.addEventListener('change', render);
+  log('CASA', 'Ultima prova: Tailscale PONG via DERP(sao); nao e leitura live do navegador');
+  log('HERMES', 'Ultima prova: porta 9119 HTTP 302; acesso autenticado UNKNOWN');
+  log('RUNTIME', 'Ultima prova: endpoint de modelo HTTP 200; inferencia UNKNOWN');
+  var heart = document.getElementById('live-heart-state');
+  if(heart && window.MutationObserver) {
+    var observe = function(){
+      var state = heart.textContent.trim();
+      var node = document.getElementById('cd-route-heart');
+      if(node){node.textContent = state === 'ALIVE' ? 'LIVE: ALIVE' : 'UNKNOWN';node.className='val '+(state==='ALIVE'?'ok':'warn');}
+      log('VPS', 'One Heart no navegador: '+state);
+    };
+    new MutationObserver(observe).observe(heart,{childList:true,characterData:true,subtree:true});
+    observe();
+  }
+  function screenCheck(){
+    var controller=window.AbortController?new AbortController():null;
+    var timer=controller?setTimeout(function(){controller.abort();},3500):null;
+    fetch('http://100.123.93.25:3030/health',{cache:'no-store',mode:'cors',signal:controller?controller.signal:undefined})
+      .then(function(resp){
+        var ok=resp.status===200;
+        var node=document.getElementById('cd-route-screenpipe');
+        if(node){node.textContent=ok?'LIVE: HTTP 200':'UNKNOWN: HTTP '+resp.status;node.className='val '+(ok?'ok':'warn');}
+        log('SCREENPIPE', ok?'Health HTTP 200 no navegador':'HTTP '+resp.status+'; sem PASS');
+      }).catch(function(){
+        var node=document.getElementById('cd-route-screenpipe');
+        if(node){node.textContent='UNKNOWN / SEM LEITURA';node.className='val warn';}
+        log('SCREENPIPE','Sem leitura no navegador (rede, CORS ou bloqueio); prova historica preservada');
+      }).then(function(){if(timer)clearTimeout(timer);});
+  }
+  screenCheck();
+  setInterval(screenCheck,15000);
+  log('HUD','Projecao local iniciada; logs completos pertencem aos owners existentes');
+})();
+
+
 
 /* ============================================================
    MISSOES
