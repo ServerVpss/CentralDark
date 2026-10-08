@@ -62,6 +62,8 @@ if [[ "$OWNER" == "mcp" ]]; then
   for rel in "${FILES[@]}"; do
     case "$rel" in
       apps/modulos/mcp/src/index.js|apps/modulos/mcp/dist/index.js) ;;
+      # Promovido 2026-10-08: F1_GIT do One Heart (teste tests/operational-telemetry.test.mjs).
+      apps/modulos/mcp/src/operational-telemetry.js|apps/modulos/mcp/dist/operational-telemetry.js) ;;
       *) echo "MCP_NATIVE_FILESET_NOT_APPROVED=$rel"; exit 6 ;;
     esac
   done
