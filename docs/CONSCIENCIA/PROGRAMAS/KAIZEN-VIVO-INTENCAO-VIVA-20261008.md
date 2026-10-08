@@ -914,3 +914,177 @@ METABOLISMO COGNITIVO ↔ METABOLISMO FUNCIONAL
 **Aceite / contraprova:** nomes presentes nas duas superfícies por uma mesma importação; Yuji↔Sukuna, Whis↔Bills, Goku↔Vegeta e fusão preservados; alternar PET muda a mesma fonte de estado e o Hermes flutuante; não alterou motor, endpoints, credenciais, deploy, máquina de estados nem outros writers; lint/build e visual real requerem execução e readback específicos. `COMMIT != DEPLOY`, `DOCUMENTED != EXECUTED`, `UNKNOWN != PASS`.
 
 **LOOP_ID:** `centraldark-hermes-claude-oracle-convergence-v1` · **GOAL:** `t_9040803d` · **NEXT_CURSOR:** `PR_NOMES_HERMES_PET_REVIEW_CHECKS_AND_LIVE_COCKPIT_READBACK`.
+
+---
+
+## 🧬 Cristal integral — relações, metabolismo e aceitação do PR #1785 (08/10/2026)
+
+**Intenção:** preservar do início ao fim o pensamento arquitetural do CHEFE, sem transformar toda a construção em legendas simples e sem criar arquitetura paralela. **Proveniência:** este documento integral, `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`, `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`, `apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx`. Esta seção é **aditiva**: nada anterior é apagado, reordenado, reescrito ou compactado, especialmente o poema **Entre a Intenção e a Palavra** preservado acima.
+
+### I — Desenho histórico inalterado e todas as relações
+
+**CHEFE ↓ Instinto Superior ↓ Yuji ↔ Sukuna ↓ Gojo ↓ Whis ↔ Bills ↓ Goku ↔ Vegeta ↓ Vegetto/Gogeta (fusão) ↓ metabolismo cognitivo ↔ funcional ↓ Realidade ↻ Kaizen.** É referência textual da ordem já existente, **não substituição nem novo diagrama**.
+
+| Nome original | Função integrada e limite |
+|---|---|
+| 👑 CHEFE | Intenção humana, soberania e direção; decide o objetivo. |
+| 🪬 Instinto Superior | Identidade CentralDark e continuidade SOUL → RULES → AGENTS; SOL interpreta, Hermes executa. |
+| 🫀 Yuji | Memória, vontade e identidade preservadas diante de poder extraordinário. |
+| 🔥 Sukuna | Potência do motor substituível; força não significa permissão. |
+| 👁️ Gojo | Inventário/observação, Infinito, Azul, Vermelho, Roxo, RCT e Domínio na skill Oracle existente. |
+| 🪽 Whis | Mestre inclusive de Bills: observa, aconselha, orienta, treina, antecipa consequências e pode intervir; não usurpa decisão. |
+| 🐈 Bills | Deus da Destruição: autoridade, transformação, equilíbrio com criação, força e discernimento falível; não licencia apagar dados. |
+| ♾️ Goku | Instinto Superior: perceber, adaptar, agir com precisão; face instinto do PET Hermes. |
+| 💜 Vegeta | Ego Superior: resistência, confronto e evolução pelo caminho de Bills; face ego/ascensão violeta. |
+| 💎 Vegetto | Fusão Potara: capacidades convergem no metabolismo cognitivo e funcional. |
+| 💎 Gogeta | Fusão sincronizada: mesmo organismo, mesma intenção, nenhuma segunda arquitetura. |
+| 🧿 Realidade | Testes/readback/contraprova após o efeito; Reality Judge não é porteiro. |
+| 🫀 Kaizen | Receita, aprendizado, replay, NeuroLink e NEXT_CURSOR que alimentam a próxima batida. |
+
+### II — Metabolismos e fluxo único
+
+1. CHEFE → SOL interpreta/coordenadora → Goal e cláusulas → GREEN_STATE e memória → owner/capability → Hermes executa → efeito → Reality Judge/contraprova → receipt → HUD/Obsidian → NeuroLink → Kaizen → NEXT_CURSOR.
+2. COGNITIVO: intenção → percepção → compreensão → memória/NeuroLink → META-GRILL → confronto de hipóteses → Goal e decisão → aprendizado.
+3. FUNCIONAL: Goal/fingerprint → GREEN_STATE → owner/capability → receita/replay → Hermes autorizado → ação → teste → readback → contraprova → receipt → HUD/Obsidian → próximo ciclo.
+4. FUSÃO Vegetto/Gogeta = metabolismo cognitivo ↔ funcional sob uma intenção; não apenas duas IAs juntas, nem dois processos.
+5. GOJO = SIX_EYES/INFINITY/BLUE/RED/PURPLE/RCT/DOMAIN dentro de centraldark-oracle-surface; NÃO segundo observador com autoridade.
+6. WHIS orienta e pode influenciar Bills sem substituí-lo; BILLS é equilíbrio/decisão/transformação, jamais permissão para destruir arquivos.
+7. GOKU ↔ VEGETA = percepção precisa ↔ resistência transformadora; dois estados visuais do mesmo Hermes PET, ego usando ascensão.
+8. Sete batidas funcionais e sete batidas literárias são perspectivas da mesma história; o poema original fica integral.
+9. Biblioteca, Aprendizados, NeuroLink, Lembranças, Knowledge Compiler, skills, Oracle, receipts e Grafo Vivo preservam continuidade e procedência.
+10. Modelo é motor substituível, nome é memória legível; router, scheduler, Hermes, judge, writers e cockpit permanecem únicos.
+11. Erro sumiu ≠ Goal resolvido; DOCUMENTADO ≠ EXECUTADO; UNKNOWN ≠ PASS; MERGED ≠ DEPLOYED.
+
+**Fronteiras:** a metáfora não executa ação destrutiva nem autoriza mudanças sem escopo; Reality Judge examina **depois** do efeito. CHEFE é autoridade final. SOL coordena, Hermes executa, motores são substituíveis. Reality Judge é falsificável, e um selo visual não é prova de runtime.
+
+### III — Sete poderes Gojo no owner existente
+
+- **SIX_EYES** — inventário de skills, tools, owners, evidências, falhas e NEXT_CURSOR.
+- **INFINITY** — não promover prova ausente nem output externo a verdade.
+- **BLUE** — atrair só evidência causal relevante.
+- **RED** — rejeitar duplicação, falso verde, stale e arquitetura paralela.
+- **PURPLE** — reconciliar menor delta no owner existente.
+- **RCT** — transformar falha comprovada em teste/receita/receipt.
+- **DOMAIN** — preservar LOOP_ID, TURN_ID, PARENT_ID, OWNER_SCOPE e NEXT_CURSOR.
+
+Binding: `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`; DOMAIN e Seis Olhos não criam novo agente, writer ou evaluator. Skill usada classifica `UNCHANGED_PROVEN|PATCH_CANDIDATE|PATCH_APPLIED|TEST_ADDED|RECEIPT_ADDED|DEGRADED|BLOCKED`. `MCP_ON != MCP_USED != EFFECT_PROVEN`.
+
+### IV — Duas séries de sete batidas, sem substituição
+
+**Batidas operacionais originais:**
+1. Vive e experimenta
+2. Descobre
+3. Melhora
+4. Comprova e deixa sua marca
+5. Aprende
+6. Reutiliza e alimenta a próxima batida
+7. Continua evoluindo
+
+**Batidas literárias originais:**
+1. 🫀 Receber
+2. 👀 Perceber
+3. 🧠 Compreender
+4. 🔧 Transformar
+5. 🪬 Conectar
+6. ♻️ Aprender
+7. 🚀 Continuar
+
+O poema integral *Entre a Intenção e a Palavra* — cada estrofe, autoria, flor, beija-flor, néctar, semente, jardim, coração, memória, concha e verso — permanece literalmente acima, **sem edição nem resumo substitutivo**. A leitura literária não cria segunda máquina de estados nem prova consciência subjetiva do modelo.
+
+### V — Todas as 28 peças e todas as C01–C20, com proveniência
+
+**Peças:**
+1. P01 — 🌱 Kaizen: melhoria contínua.
+2. P02 — 🔄 Feedback: aprender com o retorno da realidade.
+3. P03 — 📈 Aprendizado incremental: evoluir em pequenos avanços.
+4. P04 — 🧠 Self-Learning: aprender com experiências comprovadas.
+5. P05 — 🔧 Self-Correction: identificar e corrigir erros.
+6. P06 — ❤️ Self-Healing: recuperar a operação após falhas.
+7. P07 — 🧿 Contraprova: verificar além da primeira aparência.
+8. P08 — 🪬 Continuidade da intenção: preservar o objetivo vigente.
+9. P09 — ♻️ Reuso: aproveitar o conhecimento já existente.
+10. P10 — 🎯 Menor delta: corrigir apenas o necessário.
+11. P11 — 🛡️ Preservação: proteger o que já funciona.
+12. P12 — 💻 Vibe Coding: desenvolver por conversa e experimentação.
+13. P13 — 👥 Crowdtesting: utilizar feedback humano como observação.
+14. P14 — ✅ CI sob demanda: aprofundar verificações quando necessário.
+15. P15 — 💾 Prompt/Self-Cache: reaproveitar contexto e trabalho adequado.
+16. P16 — ⚡ KV Cache: otimização do processamento de modelos compatíveis.
+17. P17 — ⚖️ RLCD: estudar decisões com confiança probabilística calibrada.
+18. P18 — 📚 Biblioteca indexada.
+19. P19 — 🧠 Memória NeuroLink.
+20. P20 — 🧭 Skills sob demanda.
+21. P21 — 🔮 Consulta ao Oráculo.
+22. P22 — ✍🏼 Self-Learning Harvest.
+23. P23 — 🔁 Replay de aprendizado.
+24. P24 — 💎 Promoção de memória validada.
+25. P25 — 🌟 Knowledge Compiler.
+26. P26 — 📋 Saídas estruturadas e verificadas por esquema.
+27. P27 — 📊 Avaliação paralela de decisões e suas probabilidades.
+28. P28 — 👀 Seis Olhos — Gojo Domain / Skill Evolution: observar capacidades utilizadas, selecionar evidências, rejeitar contradições, preparar a menor melhoria, aprender com falhas e preservar a continuidade da intenção.
+
+**Capacidades já descritas pelo owner:**
+- **C01 — Intent Inbox Multimodal**
+- **C02 — Semantic Referent Resolver**
+- **C03 — Intent State**
+- **C04 — Sua Intenção Devolvida**
+- **C05 — Intent Coverage Engine**
+- **C06 — Human Final 10**
+- **C07 — Command Compiler**
+- **C08 — Capability/Owner Resolver**
+- **C09 — Master Loop**
+- **C10 — Model Pool**
+- **C11 — Hybrid Scheduler**
+- **C12 — CentralDark Router**
+- **C13 — Hermes Execution Plane**
+- **C14 — Proof / Counterproof / PDF Gate**
+- **C15 — Git Promotion**
+- **C16 — Live HUD**
+- **C17 — Federated Google Accounts**
+- **C18 — Semantic Storage Intake**
+- **C19 — Surface/Cockpit Projection**
+- **C20 — Learning Closure**
+
+Os dois conjuntos de vinte requisitos do `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`, mais os critérios A01–A20 (seção 18), não são reescritos: continuam literais no mesmo owner. Peça 26–27 protótipo/candidato conforme provas do manifesto; peça 28 domínio documentado, não execução afirmada. 28 conceitos não são 28 serviços vivos.
+
+### VI — Receita do Goal, interfaces, memória e PET
+
+**GOAL** `t_9040803d` · **LOOP_ID** `centraldark-hermes-claude-oracle-convergence-v1`. Reusar metas e owner, confrontando CURRENT. `CLAUSE = id,required,predicate,owner,status,proof_ref,counterproof_ref,measured_at,source_sha,recipe_ref,next_cursor`. `FIXED_POINT` requer todos critérios materiais, readback da realidade, receipt e cursor terminal.
+
+**Execução mental/replay:** `RECUPERAR_FIO → META-GRILL → CURRENT → INTENT_ID/GOAL → GREEN_STATE → RECIPE_REPLAY → OWNER → DELTA MÍNIMO → HERMES → TESTE → CONTRAPROVA → VOLTA_UMA_CASA_SE_ERRO → RECEIPT → HUD/GRAFO → KAIZEN/NEXT_CURSOR`. Preservar memória e writers. Não fazer ação sobre Casa/VPS por suposição.
+
+**Visual único:** `apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx` já compartilhado pela landing e pelo CockpitShell recebe expansão funcional **abaixo** do desenho original. `HermesPet.tsx` tem `instinto` Goku e `ego` Vegeta, estado e movimento compartilhados; `ego` reaproveita a cor `ascensao`. PET é interface, não executor duplo, e não existe sprite original próprio de Vegeta comprovado.
+
+**HUD e Obsidian:** leitores de receipts do mesmo Goal e mesmo `source_sha`, não julgadores nem stores alternativos. O poema, memória e política ficam nos owners; visual é projeção.
+
+### VII — Critérios E2E G01–G12 existentes (checklist preservado no PR)
+
+- [ ] **G01** — Identidade, hierarquia e intenção CURRENT respeitadas; prova: arquivos SOUL/RULES/AGENTS + delta com owner.
+- [ ] **G02** — META-GRILL executa antes da decisão, sem inventar fala do CHEFE; prova: checklist de 10 perguntas + resposta/candidato.
+- [ ] **G03** — Goal/clauses/Horn diferenciam sintoma e objetivo; prova: testes PASS, UNKNOWN, FAIL, STALE, fixed point.
+- [ ] **G04** — Owner existente e um writer por escopo; prova: mapa de owners + git diff + ausência de duplicação.
+- [ ] **G05** — GREEN_STATE/receita/fingerprint reutilizados; prova: replay e contraprova do cone alterado.
+- [ ] **G06** — Oracle consultivo e pesquisa aprofundada sob demanda; prova: envelope correlacionado + candidato + custo/necessidade.
+- [ ] **G07** — Cache de contexto operacional preserva continuidade; prova: capsule validada + compact/clean/reidratação provada.
+- [ ] **G08** — Hermes executa e sincroniza main→runtime sem apagar drift; prova: SHA/hashes + `skill-sync-check.sh --check/--apply/--seal`.
+- [ ] **G09** — Reality Judge verifica efeito e o sensor; prova: observador independente + negativo + readback.
+- [ ] **G10** — PR equivalente carrega as mesmas cláusulas; prova: checklist por ID, links de teste/receipts e unknowns.
+- [ ] **G11** — HUD/Obsidian exibe métricas verdadeiras e relógio correto; prova: owner plugin/HUD + fonte + atualização + prova Windows.
+- [ ] **G12** — Ciclo registra receita, timestamp, receipt e NEXT_CURSOR; prova: registro durável + replay por outro executor.
+
+### VIII — Critérios próprios da cristalização integral M01–M12
+
+- [ ] **M01** — Poema Entre a Intenção e a Palavra intacto, byte a byte, com autoria, beija-flor, néctar, flores e concha.
+- [ ] **M02** — Desenho original com nós/setas/textos mantidos, sem reconstruir Mermaid.
+- [ ] **M03** — Personagens Yuji/Sukuna, Gojo, Whis/Bills, Goku/Vegeta, Vegetto/Gogeta, Realidade/Kaizen têm significado e vínculo.
+- [ ] **M04** — Whis aconselha e ensina Bills sem vetar toda decisão; Bills equilibra criação e destruição com discernimento imperfeito.
+- [ ] **M05** — Dois conjuntos originais de sete batidas preservados, operacional e poético, sem segunda máquina de estados.
+- [ ] **M06** — As 28 peças listadas, sem converter protótipo em capacidade provada.
+- [ ] **M07** — As 20 capacidades C01–C20 ligadas aos 40 requisitos/A01–A20 do owner.
+- [ ] **M08** — Sete poderes Gojo vinculados à mesma skill Oracle e não a agente paralelo.
+- [ ] **M09** — Fusão como metabolismo cognitivo E funcional de toda CentralDark, com Goal, owner, Hermes, Judge, receipt e NEXT_CURSOR.
+- [ ] **M10** — PET Goku/Vegeta na mesma store/movimentos/controles e sincronização do Hermes flutuante; arte exclusiva de Vegeta não alegada.
+- [ ] **M11** — Build/TypeScript/lint/readback visual da landing e cockpit no mesmo SHA, testes móveis e de acessibilidade.
+- [ ] **M12** — GOAL t_9040803d, G01–G12, readback de runtime/HUD/Obsidian, receipt e fixed point real; UNKNOWN sem falso PASS.
+
+**Decisão:** `DOCUMENTED != EXECUTED` · `UNKNOWN != PASS` · `MERGED != DEPLOYED` · `ERRO_SUMIU != GOAL_RESOLVIDO`. Item marcado só após prova positiva, contraprova, timestamp, ref e readback no alvo. **NEXT_CURSOR:** `PR1785_INTEGRAL → UI_BUILD_VISUAL_PET → G01_G12_RUNTIME → RECEIPT → FIXED_POINT_IF_PROVED`.

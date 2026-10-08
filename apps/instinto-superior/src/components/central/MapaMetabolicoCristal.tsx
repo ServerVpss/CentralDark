@@ -4,6 +4,16 @@
  * Fonte da intenção: docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md
  */
 type Polo = { nome: string; significado: string };
+/** Projeção estática dos owners existentes; não cria motor de Goal nem de PET. */
+const NOMES_INTEGRAIS = [{"nome":"👑 CHEFE","text":"Intenção humana, soberania e direção; decide o objetivo."},{"nome":"🪬 Instinto Superior","text":"Identidade CentralDark e continuidade SOUL → RULES → AGENTS; SOL interpreta, Hermes executa."},{"nome":"🫀 Yuji","text":"Memória, vontade e identidade preservadas diante de poder extraordinário."},{"nome":"🔥 Sukuna","text":"Potência do motor substituível; força não significa permissão."},{"nome":"👁️ Gojo","text":"Inventário/observação, Infinito, Azul, Vermelho, Roxo, RCT e Domínio na skill Oracle existente."},{"nome":"🪽 Whis","text":"Mestre inclusive de Bills: observa, aconselha, orienta, treina, antecipa consequências e pode intervir; não usurpa decisão."},{"nome":"🐈 Bills","text":"Deus da Destruição: autoridade, transformação, equilíbrio com criação, força e discernimento falível; não licencia apagar dados."},{"nome":"♾️ Goku","text":"Instinto Superior: perceber, adaptar, agir com precisão; face instinto do PET Hermes."},{"nome":"💜 Vegeta","text":"Ego Superior: resistência, confronto e evolução pelo caminho de Bills; face ego/ascensão violeta."},{"nome":"💎 Vegetto","text":"Fusão Potara: capacidades convergem no metabolismo cognitivo e funcional."},{"nome":"💎 Gogeta","text":"Fusão sincronizada: mesmo organismo, mesma intenção, nenhuma segunda arquitetura."},{"nome":"🧿 Realidade","text":"Testes/readback/contraprova após o efeito; Reality Judge não é porteiro."},{"nome":"🫀 Kaizen","text":"Receita, aprendizado, replay, NeuroLink e NEXT_CURSOR que alimentam a próxima batida."}] as const;
+const PODERES_INTEGRAIS = [{"name":"SIX_EYES","text":"inventário de skills, tools, owners, evidências, falhas e NEXT_CURSOR"},{"name":"INFINITY","text":"não promover prova ausente nem output externo a verdade"},{"name":"BLUE","text":"atrair só evidência causal relevante"},{"name":"RED","text":"rejeitar duplicação, falso verde, stale e arquitetura paralela"},{"name":"PURPLE","text":"reconciliar menor delta no owner existente"},{"name":"RCT","text":"transformar falha comprovada em teste/receita/receipt"},{"name":"DOMAIN","text":"preservar LOOP_ID, TURN_ID, PARENT_ID, OWNER_SCOPE e NEXT_CURSOR"}] as const;
+const BATIDAS_OP = [{"n":1,"text":"Vive e experimenta"},{"n":2,"text":"Descobre"},{"n":3,"text":"Melhora"},{"n":4,"text":"Comprova e deixa sua marca"},{"n":5,"text":"Aprende"},{"n":6,"text":"Reutiliza e alimenta a próxima batida"},{"n":7,"text":"Continua evoluindo"}] as const;
+const BATIDAS_POEMA = [{"n":1,"text":"🫀 Receber"},{"n":2,"text":"👀 Perceber"},{"n":3,"text":"🧠 Compreender"},{"n":4,"text":"🔧 Transformar"},{"n":5,"text":"🪬 Conectar"},{"n":6,"text":"♻️ Aprender"},{"n":7,"text":"🚀 Continuar"}] as const;
+const PECAS_INTEGRAIS = ["🌱 Kaizen: melhoria contínua.","🔄 Feedback: aprender com o retorno da realidade.","📈 Aprendizado incremental: evoluir em pequenos avanços.","🧠 Self-Learning: aprender com experiências comprovadas.","🔧 Self-Correction: identificar e corrigir erros.","❤️ Self-Healing: recuperar a operação após falhas.","🧿 Contraprova: verificar além da primeira aparência.","🪬 Continuidade da intenção: preservar o objetivo vigente.","♻️ Reuso: aproveitar o conhecimento já existente.","🎯 Menor delta: corrigir apenas o necessário.","🛡️ Preservação: proteger o que já funciona.","💻 Vibe Coding: desenvolver por conversa e experimentação.","👥 Crowdtesting: utilizar feedback humano como observação.","✅ CI sob demanda: aprofundar verificações quando necessário.","💾 Prompt/Self-Cache: reaproveitar contexto e trabalho adequado.","⚡ KV Cache: otimização do processamento de modelos compatíveis.","⚖️ RLCD: estudar decisões com confiança probabilística calibrada.","📚 Biblioteca indexada.","🧠 Memória NeuroLink.","🧭 Skills sob demanda.","🔮 Consulta ao Oráculo.","✍🏼 Self-Learning Harvest.","🔁 Replay de aprendizado.","💎 Promoção de memória validada.","🌟 Knowledge Compiler.","📋 Saídas estruturadas e verificadas por esquema.","📊 Avaliação paralela de decisões e suas probabilidades.","👀 Seis Olhos — Gojo Domain / Skill Evolution: observar capacidades utilizadas, selecionar evidências, rejeitar contradições, preparar a menor melhoria, aprender com falhas e preservar a continuidade da intenção."] as const;
+const CAPACIDADES_INTEGRAIS = [{"id":"C01","text":"Intent Inbox Multimodal"},{"id":"C02","text":"Semantic Referent Resolver"},{"id":"C03","text":"Intent State"},{"id":"C04","text":"Sua Intenção Devolvida"},{"id":"C05","text":"Intent Coverage Engine"},{"id":"C06","text":"Human Final 10"},{"id":"C07","text":"Command Compiler"},{"id":"C08","text":"Capability/Owner Resolver"},{"id":"C09","text":"Master Loop"},{"id":"C10","text":"Model Pool"},{"id":"C11","text":"Hybrid Scheduler"},{"id":"C12","text":"CentralDark Router"},{"id":"C13","text":"Hermes Execution Plane"},{"id":"C14","text":"Proof / Counterproof / PDF Gate"},{"id":"C15","text":"Git Promotion"},{"id":"C16","text":"Live HUD"},{"id":"C17","text":"Federated Google Accounts"},{"id":"C18","text":"Semantic Storage Intake"},{"id":"C19","text":"Surface/Cockpit Projection"},{"id":"C20","text":"Learning Closure"}] as const;
+const CLAUSULAS_G = [{"id":"G01","text":"Identidade, hierarquia e intenção CURRENT respeitadas","proof":"arquivos SOUL/RULES/AGENTS + delta com owner"},{"id":"G02","text":"META-GRILL executa antes da decisão, sem inventar fala do CHEFE","proof":"checklist de 10 perguntas + resposta/candidato"},{"id":"G03","text":"Goal/clauses/Horn diferenciam sintoma e objetivo","proof":"testes PASS, UNKNOWN, FAIL, STALE, fixed point"},{"id":"G04","text":"Owner existente e um writer por escopo","proof":"mapa de owners + git diff + ausência de duplicação"},{"id":"G05","text":"GREEN_STATE/receita/fingerprint reutilizados","proof":"replay e contraprova do cone alterado"},{"id":"G06","text":"Oracle consultivo e pesquisa aprofundada sob demanda","proof":"envelope correlacionado + candidato + custo/necessidade"},{"id":"G07","text":"Cache de contexto operacional preserva continuidade","proof":"capsule validada + compact/clean/reidratação provada"},{"id":"G08","text":"Hermes executa e sincroniza main→runtime sem apagar drift","proof":"SHA/hashes + `skill-sync-check.sh --check/--apply/--seal`"},{"id":"G09","text":"Reality Judge verifica efeito e o sensor","proof":"observador independente + negativo + readback"},{"id":"G10","text":"PR equivalente carrega as mesmas cláusulas","proof":"checklist por ID, links de teste/receipts e unknowns"},{"id":"G11","text":"HUD/Obsidian exibe métricas verdadeiras e relógio correto","proof":"owner plugin/HUD + fonte + atualização + prova Windows"},{"id":"G12","text":"Ciclo registra receita, timestamp, receipt e NEXT_CURSOR","proof":"registro durável + replay por outro executor"}] as const;
+const CLAUSULAS_M = [{"id":"M01","text":"Poema Entre a Intenção e a Palavra intacto, byte a byte, com autoria, beija-flor, néctar, flores e concha."},{"id":"M02","text":"Desenho original com nós/setas/textos mantidos, sem reconstruir Mermaid."},{"id":"M03","text":"Personagens Yuji/Sukuna, Gojo, Whis/Bills, Goku/Vegeta, Vegetto/Gogeta, Realidade/Kaizen têm significado e vínculo."},{"id":"M04","text":"Whis aconselha e ensina Bills sem vetar toda decisão; Bills equilibra criação e destruição com discernimento imperfeito."},{"id":"M05","text":"Dois conjuntos originais de sete batidas preservados, operacional e poético, sem segunda máquina de estados."},{"id":"M06","text":"As 28 peças listadas, sem converter protótipo em capacidade provada."},{"id":"M07","text":"As 20 capacidades C01–C20 ligadas aos 40 requisitos/A01–A20 do owner."},{"id":"M08","text":"Sete poderes Gojo vinculados à mesma skill Oracle e não a agente paralelo."},{"id":"M09","text":"Fusão como metabolismo cognitivo E funcional de toda CentralDark, com Goal, owner, Hermes, Judge, receipt e NEXT_CURSOR."},{"id":"M10","text":"PET Goku/Vegeta na mesma store/movimentos/controles e sincronização do Hermes flutuante; arte exclusiva de Vegeta não alegada."},{"id":"M11","text":"Build/TypeScript/lint/readback visual da landing e cockpit no mesmo SHA, testes móveis e de acessibilidade."},{"id":"M12","text":"GOAL t_9040803d, G01–G12, readback de runtime/HUD/Obsidian, receipt e fixed point real; UNKNOWN sem falso PASS."}] as const;
+
 
 function ParDoCristal({
   titulo,
@@ -119,6 +129,76 @@ export function MapaMetabolicoCristal({ compacto = false }: { compacto?: boolean
             MAPA CONCEITUAL · RUNTIME/DEPLOY NÃO AFERIDOS · UNKNOWN ≠ PASS
           </p>
         </div>
+        {/* Preserva o desenho anterior completo; conteúdo aditivo compartilhado entre landing e cockpit. */}
+        <div className="space-y-5 border-t border-border pt-6" data-cd-cristal="metabolismo-integral">
+          <h3 className="text-center text-lg font-semibold text-foreground">💎 Fusão = metabolismo cognitivo + funcional da CentralDark inteira</h3>
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-lg border border-neon-blue/30 p-4">
+              <h4 className="text-sm font-semibold text-neon-blue">🧠 Metabolismo cognitivo</h4>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Intenção → CURRENT → percepção → compreensão → memória/NeuroLink → META-GRILL → confronto de hipóteses → Goal/cláusulas → decisão → aprendizado.</p>
+            </div>
+            <div className="rounded-lg border border-neon-purple/30 p-4">
+              <h4 className="text-sm font-semibold text-neon-purple">⚙️ Metabolismo funcional</h4>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Goal → GREEN_STATE/receita → owner/capability → Hermes → ação → teste → readback → Reality Judge/contraprova → receipt → HUD/Obsidian → NEXT_CURSOR.</p>
+            </div>
+          </div>
+          <p className="text-center text-xs text-muted-foreground">👑 CHEFE → SOL coordena → Hermes executa → 🧿 realidade verifica o efeito → 🫀 Kaizen aprende. Nenhum segundo cérebro, PET executor ou writer.</p>
+          <div className="rounded-lg border border-border p-4">
+            <h4 className="text-sm font-semibold text-foreground">🧬 Nome, função, vínculo, limite</h4>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {NOMES_INTEGRAIS.map((n) => <div key={n.nome} className="rounded-md bg-background/40 p-3"><p className="text-xs font-semibold text-foreground">{n.nome}</p><p className="mt-1 text-xs text-muted-foreground">{n.text}</p></div>)}
+            </div>
+          </div>
+          <div className="rounded-lg border border-border p-4">
+            <h4 className="text-sm font-semibold text-foreground">👁️ Gojo — Domain da mesma skill Oracle</h4>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {PODERES_INTEGRAIS.map((poder) => <div key={poder.name} className="rounded-md bg-background/40 p-3"><p className="text-xs font-semibold text-foreground">{poder.name}</p><p className="mt-1 text-xs text-muted-foreground">{poder.text}</p></div>)}
+            </div>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-lg border border-border p-4">
+              <h4 className="text-sm font-semibold text-foreground">🫀 Sete batidas operacionais</h4>
+              <ol className="mt-3 list-inside list-decimal space-y-1 text-xs text-muted-foreground">
+                {BATIDAS_OP.map((b) => <li key={b.n}>{b.text}</li>)}
+              </ol>
+            </div>
+            <div className="rounded-lg border border-border p-4">
+              <h4 className="text-sm font-semibold text-foreground">🌸 Sete batidas do poema</h4>
+              <ol className="mt-3 list-inside list-decimal space-y-1 text-xs text-muted-foreground">
+                {BATIDAS_POEMA.map((b) => <li key={b.n}>{b.text}</li>)}
+              </ol>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">"Entre a Intenção e a Palavra" permanece integral no manifesto: beija-flor, néctar, semente, jardim, flores, biblioteca, concha, memória e coração. Metáfora literária não substitui o ciclo funcional.</p>
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-lg border border-border p-4">
+              <h4 className="text-sm font-semibold text-foreground">📚 As 28 peças sem perda</h4>
+              <ol className="mt-3 list-inside list-decimal space-y-1 text-xs text-muted-foreground">
+                {PECAS_INTEGRAIS.map((item) => <li key={item}>{item}</li>)}
+              </ol>
+              <p className="mt-2 text-xs text-muted-foreground">28 conceitos ≠ 28 serviços provados.</p>
+            </div>
+            <div className="rounded-lg border border-border p-4">
+              <h4 className="text-sm font-semibold text-foreground">🪬 C01–C20 do Loop Mestre</h4>
+              <ol className="mt-3 space-y-1 text-xs text-muted-foreground">
+                {CAPACIDADES_INTEGRAIS.map((cap) => <li key={cap.id}><span className="font-mono text-neon-blue">{cap.id}</span> · {cap.text}</li>)}
+              </ol>
+              <p className="mt-2 text-xs text-muted-foreground">40 requisitos e A01–A20 preservados no owner original.</p>
+            </div>
+          </div>
+          <div className="rounded-lg border border-border p-4">
+            <h4 className="text-sm font-semibold text-foreground">🧿 G01–G12 · Goal existente (checklist, não PASS)</h4>
+            <ul className="mt-3 space-y-2 text-xs text-muted-foreground">
+              {CLAUSULAS_G.map((cl) => <li key={cl.id}><span className="font-mono text-neon-blue">[ ] {cl.id}</span> — {cl.text} · {cl.proof}</li>)}
+            </ul>
+            <h4 className="mt-4 text-sm font-semibold text-foreground">🫀 M01–M12 · Critérios de integração do cristal</h4>
+            <ul className="mt-3 space-y-2 text-xs text-muted-foreground">
+              {CLAUSULAS_M.map((cl) => <li key={cl.id}><span className="font-mono text-neon-purple">[ ] {cl.id}</span> — {cl.text}</li>)}
+            </ul>
+          </div>
+          <p className="text-center font-mono text-[10px] text-muted-foreground">GOAL t_9040803d · SAME OWNER · RUNTIME UNKNOWN · FIXED_POINT NÃO PROVADO</p>
+        </div>
+
       </div>
     </section>
   );
