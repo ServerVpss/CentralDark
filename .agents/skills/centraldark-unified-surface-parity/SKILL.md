@@ -11,6 +11,9 @@ owners:
 canonical_id: CENTRALDARK_UNIFIED_SURFACE_PARITY_01
 trigger: "!CENTRALDARK"
 status: contract_first_engine_later
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CENTRALDARK_UNIFIED_SURFACE_PARITY_01

@@ -11,6 +11,9 @@ metadata:
     category: devops
     requires_toolsets: [terminal]
 related_skills: [centraldark-ops, centraldark-hermes-operations]
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # GitHub Actions Runner Diagnostics

@@ -1,51 +1,78 @@
 ---
 name: skill-synchronization
-description: "Verify CentralDark Hermes skill sync against canon."
-related_skills: [centraldark-ops, reconciliacao-diaria-centraldark, centraldark-hermes-operations]
+description: "Keep CentralDark autonomous skills sealed between current main and Hermes runtime."
+version: 0.2.0
+related_skills: [centraldark-ops, reconciliacao-diaria-centraldark, centraldark-hermes-operations, centraldark-oracle-surface]
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # Skill Synchronization
 
-Part of the `centraldark-ops` operational family. Verifies that local Hermes Agent skills match the canonical versions in the CentralDark repository and reports any discrepancies via a comment on PR #1562. All changes must flow through the PR-magazine #1562 workflow; this skill only reports.
+This is the single synchronization owner for CentralDark autonomous/core skills.
 
-## Always-on
-- REUSE_BEFORE_CREATE: use the existing verification script; do not invent ad‑hoc checks.
-- ONE_SYSTEM_ONLY: source of truth is the canonical repo (`docs/CONSCIENCIA/HERMES-SKILLS/` on `main`).
-- UNKNOWN_IS_NOT_PASS: treat ambiguous skill presence as unknown, not as present or missing.
-- NO AUTOMATIC MUTATION: the skill only reports; never applies changes directly.
-- ONE WRITER PER SCOPE: only PR #1562 comments are the output; no direct pushes to skills dir.
+Canonical source:
+ServerVpss/CentralDark@main under .agents/skills/**/SKILL.md
+
+Runtime consumer/mirror:
+~/.hermes/skills/<same-relative-path>/SKILL.md
+
+## Contract
+
+CURRENT_MAIN_IS_CANONICAL=true
+RUNTIME_IS_EVIDENCE_AND_CONSUMER=true
+NO_SECOND_SKILL_SYNC_ENGINE=true
+ONE_WRITER_PER_SCOPE=true
+NO_BLIND_OVERWRITE=true
+ORACLE_REVIEW_ON_MATERIAL_SKILL_CHANGE=true
+MAIN_RUNTIME_HASH_SEAL=true
+
+Only skills with centraldark_autosync: true are in automatic scope. This avoids bulk-enabling unrelated third-party/security skills.
 
 ## Procedure
-1. **Prerequisites**
-   - `gh` CLI authenticated (`gh auth status`).
-   - `jq` installed.
-   - Access to the Hermes Agent local skills directory (`%LOCALAPPDATA%\hermes\skills`).
-   - Workspace root of CentralDark repo (where `scripts/skill-sync-check.sh` resides).
 
-2. **Run verification**
-   - Execute `bash scripts/skill-sync-check.sh` from the repo root.
-   - The script compares canonical skills (from `docs/CONSCIENCIA/HERMES-SKILLS/`) with locally installed skills.
-   - It logs to `/tmp/skill-sync-check-<timestamp>.log` and, if differences exist, posts a comment to PR #1562.
+At every CentralDark Eternal Self-Heal wake and after a canonical autonomous-skill mutation:
 
-3. **Interpret the report**
-   - **Missing canonical skills** (❌): skills present in the repo but not installed locally. Install via:
-     `skill_manage create --name <skill> --content <canonical file>`
-   - **Extra local skills** (⚠️): skills present locally but not in the canon. Evaluate:
-     - If they are work‑in‑progress, propose them as new skills via a PR.
-     - If obsolete, consider removing them (still via PR).
-   - **No comment**: skills are synchronized; no action needed.
+bash scripts/skill-sync-check.sh --apply
 
-4. **Frequency**
-   - Run daily (e.g., via Windows Task Scheduler) to keep PR #1562 informed.
-   - Also run after any local skill installation or before starting a reconciliação loop.
+The existing script must:
+1. fetch exact origin/main and record SHA;
+2. inventory opt-in skills from that exact main;
+3. map each to the same relative Hermes runtime path;
+4. serialize with one lock;
+5. back up any runtime replacement;
+6. mirror main to runtime only when runtime is missing, identical, or still equals the previously sealed canonical hash;
+7. refuse independent runtime drift;
+8. seal main SHA + canonical hash + runtime hash;
+9. emit ORACLE_REQUIRED_RUNTIME_DRIFT when the live copy changed independently.
 
-## Pitfalls
-- **Do not treat the script as an automatic sync**: it only reports differences; never assume it has updated skills.
-- **Preserve UNKNOWN**: if the script cannot determine a skill’s status (e.g., permission issues), report it as unknown.
-- **Avoid skill drift**: regular verification prevents accumulation of divergences that would break the "no work stays only local" rule.
-- **Never bypass the PR**: even if you are sure a change is safe, still submit it via a branch → PR → comment on #1562 → review → merge.
+On ORACLE_REQUIRED_RUNTIME_DRIFT:
 
-## References
-- See `scripts/skill-sync-check.sh` for the exact verification implementation.
-- See `docs/CONSCIENCIA/HERMES-SKILLS/` for the canonical skill definitions.
-- See PR #1562 for the historical record of skill‑sync reports and decisions.
+PRESERVE_RUNTIME_DELTA
+→ centraldark-oracle-surface
+→ compare CHEFE intent + CURRENT main/docs + owner + live runtime
+→ counterproof
+→ canonical writer promotes only surviving minimum delta
+→ rerun --apply
+→ seal hashes
+
+No human /memory approve or manual file copy is required when the applicable existing gates already prove alignment. UNKNOWN remains UNKNOWN.
+
+## Modes
+
+--check = read-only classification.
+--apply = safe main-to-runtime convergence.
+--seal = apply and fail nonzero if any opt-in skill remains divergent.
+
+Never reset a repository, delete local runtime skills or overwrite independently changed runtime files.
+
+## Success
+
+MAIN_SHA=<current origin/main>
+AUTOSYNC_SKILLS=<n>
+SYNCED=<n>
+ORACLE_REQUIRED=0
+MAIN_RUNTIME_LOCK=PASS
+
+SYNCED != EXECUTED.

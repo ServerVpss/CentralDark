@@ -2,6 +2,9 @@
 name: centraldark-ops
 description: "Operate CentralDark across Casa, GitHub, VPS, Hermes."
 related_skills: [centraldark-hermes-operations, reconciliacao-diaria-centraldark, github-actions-runner-diagnostics, skill-synchronization]
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CentralDark ops (CASA · GitHub · VPS)
