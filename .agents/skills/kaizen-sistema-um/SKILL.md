@@ -26,6 +26,32 @@ Esta skill não cria outro sistema: consulta e alimenta o que já existe.
 - Uma nota ou documento novo precisa herdar a intenção sem copiar a história.
 - Apareceu erro na tela e o CHEFE quer corrigir só aquela parte.
 
+## Gatilho semântico de resposta — reconvocar a intenção (pré-saída)
+
+**Aplicação:** antes de qualquer resposta **material** elaborada com esta skill, inclusive ao retomar um Goal, interpretar print, receber Oracle/Claude/Hermes ou propor código. É um gate semântico no owner existente, **não** um novo agente, hook global, roteador ou autorização. Perguntas triviais mantêm resposta breve; não repetir preâmbulos sem valor.
+
+**Fonte da intenção:** recuperar primeiro a última intenção explícita do CHEFE e o Goal vigente. Reusar o OWNER raiz `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`, o satélite Kaizen/Crystal e o último receipt válido só quando materialmente pertinentes. A fala nova é `DELTA` da mesma intenção por padrão; `OVERRIDE` ou novo objetivo só quando o CHEFE realmente mudar de direção. Histórico não pode prevalecer contra intenção atual nem realidade medida.
+
+**TRIGGER:** nova resposta material `OR` resposta de ferramenta/Oracle `OR` imagem/arquivo novo `OR` erro/desvio `OR` retorno do `NEXT_CURSOR` → **PRE_RESPONSE_INTENT_RECALL**.
+
+1. **Reconhecer:** qual o título/tema da missão? Qual intenção humana vigente? Qual é a novidade da rodada? Quem é o owner efetivo? Qual superfície/modelo está falando? Não confundir nome da interface com executor ou autoridade.
+2. **Ancorar:** quando o Goal existir na evidência, herdar `GOAL_ID/PARENT_ID`, `LOOP_ID`, `INTENT_ID`, `NEXT_CURSOR`, `LAST_GOOD_STATE` e `RECEIPT_ID` pertinentes. Se um identificador não estiver disponível, **`UNKNOWN`**; nunca inventar, trocar ou reiniciar o Goal.
+3. **Confrontar:** resposta proposta, escopo e estado `CURRENT` versus intenção do CHEFE, cláusulas do Goal e receipt anterior. Classificar `SAME_INTENT_DELTA | INTENT_OVERRIDE_BY_CHEFE | INDEPENDENT_QUERY | CONTEXT_DRIFT | UNKNOWN`. `ORACLE_OUTPUT=CANDIDATE`; opinião/discordância justificada não é drift se continua respondendo à missão.
+4. **Recuperar se desviar:** preservar o candidato e a proveniência; reancorar no mesmo Goal e no último cursor comprovado, corrigir somente a parte desalinhada; se a reconciliação não for verificável, declarar `UNKNOWN/BLOCKED`, sem fazer commit nem mandar repetir consulta em loop vazio.
+5. **Antes de enviar:** checar que a resposta traz **a mudança material desta batida**, não inventa `PASS`, não confunde `COMMIT` com `DEPLOY` ou `CHILD_DONE` com `PARENT_DONE`, e não declara resultado de ferramenta não executada.
+6. **Formato humano pertinente:** para continuidade operacional, manter título reconhecível da intenção (ex.: `👑🪬🫀 O Cristal da Inteligência — Entre a Intenção e a Palavra`) e informar em texto natural **INTENÇÃO · OWNER · DELTA · PROVA · Goal/LOOP · NEXT_CURSOR · ESTADO** quando esses campos forem relevantes. Repetir só valores alterados após o primeiro vínculo; o modelo não deve despejar um placar inteiro a cada conversa. Preservar o tom direto do CHEFE.
+7. **Fecho:** devolver a próxima batida para o **mesmo fio** com `RECEIPT`/`NEXT_CURSOR` sustentados por evidência. `NO_CHANGE` é resultado legítimo quando a intenção já está atendida; não criar outro sistema para satisfazer o gatilho.
+
+**Contraprova de saída:**
+
+- Uma resposta sobre o Goal `t_9040803d` que troque o objetivo por outro sem comando do CHEFE → `CONTEXT_DRIFT` e **não promover**.
+- Resposta Oracle com identificadores corretos mas sem evidência de Hermes/runtime → **`CANDIDATE/PARTIAL`**, nunca `PASS`.
+- Ausência de conexão/identificador → **`UNKNOWN`**, mas continuar a conversa com o que está comprovado.
+- Intenção explicitamente alterada pelo CHEFE → reconhecer `OVERRIDE`, não prender a pessoa a um Goal antigo.
+- Resposta casual/uma palavra → respeitar a intenção em silêncio; nenhum cabeçalho cerimonial obrigatório.
+
+`NEW_RESPONSE != NEW_INTENT` · `PRE_RESPONSE_INTENT_RECALL=true` · `SAME_GOAL_UNTIL_PROVEN_OR_CHEFE_OVERRIDE=true` · `DOCUMENTED != EXECUTED` · `UNKNOWN != PASS` · `ONE_WRITER_PER_SCOPE=true`
+
 ## As sete batidas (ordem fixa) com os Seis Olhos
 1. Vive e experimenta — DOMÍNIO conserva intenção e contexto.
 2. Descobre — consultar APRENDIZADOS, NeuroLink, skills e `.agents/library-index.json` antes de investigar. SEIS OLHOS inventaria capacidades; AZUL atrai só evidência relevante.
