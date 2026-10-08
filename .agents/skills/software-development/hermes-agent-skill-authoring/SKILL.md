@@ -9,6 +9,9 @@ metadata:
   hermes:
     tags: [skills, authoring, hermes-agent, conventions, skill-md]
     related_skills: [requesting-code-review]
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # Authoring Hermes-Agent Skills (in-repo)
@@ -212,3 +215,13 @@ A skill exists to make the agent's process more predictable — the agent reliab
 - [ ] Tests at `tests/skills/test_<skill>_skill.py` pass under `scripts/run_tests.sh`
 - [ ] Docs regenerated with scope discipline; sidebar has exactly one entry for the slug
 - [ ] `git add` + commit on the intended branch; PR opened
+
+### CentralDark autonomous skill auto-sync
+
+For a CentralDark-owned autonomous/core skill, reuse the global skill synchronization owner and add these frontmatter fields:
+
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
+
+A material skill change must be reviewed through centraldark-oracle-surface, reconciled against CURRENT main/docs and live runtime, committed canonically, then mirrored by scripts/skill-sync-check.sh --apply. Never leave a runtime-only final skill while main stays stale.

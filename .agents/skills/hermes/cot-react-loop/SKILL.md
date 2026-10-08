@@ -15,6 +15,9 @@ triggers:
   - "auto-crítica durante execução"
   - "tarefa complexa multi-step"
   - "cot-react-loop"
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # Chain-of-Thought + ReAct Execution Loop (profile pivete)

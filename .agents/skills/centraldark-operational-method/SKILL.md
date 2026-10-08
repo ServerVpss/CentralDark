@@ -1,6 +1,9 @@
 ---
 name: centraldark-operational-method
 description: Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # METODO OPERACIONAL CENTRALDARK

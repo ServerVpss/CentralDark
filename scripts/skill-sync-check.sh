@@ -1,110 +1,172 @@
 #!/usr/bin/env bash
 set -euo pipefail
-LOG_FILE="/tmp/skill-sync-check-$(date +%Y%m%d-%H%M%S).log"
-exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "[$(date -Iseconds)] Iniciando verificação de sincronização de skills..."
+MODE="check"
+case "${1:-}" in
+  --check|"") MODE="check" ;;
+  --apply) MODE="apply" ;;
+  --seal) MODE="seal" ;;
+  *) echo "usage: $0 [--check|--apply|--seal]" >&2; exit 64 ;;
+esac
 
-# Configuração
-REPO="ServerVpss/CentralDark"
-PR_NUMBER=1562
-SKILLS_PATH="docs/CONSCIENCIA/HERMES-SKILLS"
+ROOT="${CENTRALDARK_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
+RUNTIME_ROOT="${CENTRALDARK_SKILL_RUNTIME_ROOT:-$HERMES_HOME/skills}"
+STATE_DIR="${CENTRALDARK_SKILL_SYNC_STATE_DIR:-$HERMES_HOME/state}"
+STATE_FILE="$STATE_DIR/centraldark-skill-sync.tsv"
+LOCK_FILE="$STATE_DIR/centraldark-skill-sync.lock"
+BACKUP_ROOT="$HERMES_HOME/backups/skill-sync"
+REF="${CENTRALDARK_SKILL_SYNC_REF:-origin/main}"
 
-# 1. Obter lista de skills canônicas do repositório
-echo "Buscando skills canônicas em $REPO/$SKILLS_PATH..."
-CANONICAL_SKILLS=$(gh api -H "Accept: application/vnd.github.v3+json" "repos/$REPO/contents/$SKILLS_PATH?ref=main" --jq '.[].name' 2>/dev/null || true)
-
-if [ -z "$CANONICAL_SKILLS" ]; then
-    echo "ERRO: Falha ao buscar lista de skills canônicas"
-    exit 1
+mkdir -p "$STATE_DIR" "$RUNTIME_ROOT" "$BACKUP_ROOT"
+touch "$LOCK_FILE"
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+  echo "SKILL_SYNC=BLOCKED_WRITER_LOCK"
+  exit 75
 fi
 
-# 2. Obter lista de skills locais (Hermes Desktop)
-# Caminho padrão do Hermes Agent no Windows
-LOCAL_SKILLS_DIR="${USERPROFILE}/AppData/Local/hermes/skills"
-if [ ! -d "$LOCAL_SKILLS_DIR" ]; then
-    # Tentativa para Linux/WSL (fallback)
-    LOCAL_SKILLS_DIR="${HOME}/.hermes/skills"
+cd "$ROOT"
+if [[ "$REF" == "origin/main" ]]; then
+  git fetch -q origin main
+fi
+MAIN_SHA="$(git rev-parse "$REF")"
+STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+BACKUP_DIR="$BACKUP_ROOT/$STAMP"
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+declare -A PREV_HASH
+if [[ -f "$STATE_FILE" ]]; then
+  while IFS=$'\t' read -r p sha ch rh ts; do
+    [[ -n "$p" ]] || continue
+    PREV_HASH["$p"]="$ch"
+  done < "$STATE_FILE"
 fi
 
-if [ ! -d "$LOCAL_SKILLS_DIR" ]; then
-    echo "ERRO: Diretório de skills local não encontrado em:"
-    echo "  - $LOCAL_SKILLS_DIR (Windows)"
-    echo "  - $HOME/.hermes/skills (Linux/WSL)"
-    exit 1
-fi
+hash_file() {
+  sha256sum "$1" | awk '{print $1}'
+}
 
-LOCAL_SKILLS=$(ls -1 "$LOCAL_SKILLS_DIR" 2>/dev/null || true)
+safe_install() {
+  local src="$1" dst="$2" rel="$3"
+  mkdir -p "$(dirname "$dst")"
+  if [[ -f "$dst" ]]; then
+    mkdir -p "$BACKUP_DIR/$(dirname "$rel")"
+    cp -a "$dst" "$BACKUP_DIR/$rel"
+  fi
+  local tmpdst
+  tmpdst="$(mktemp "$(dirname "$dst")/.skill-sync.XXXXXX")"
+  cp "$src" "$tmpdst"
+  chmod --reference="$src" "$tmpdst" 2>/dev/null || chmod 0644 "$tmpdst"
+  mv -f "$tmpdst" "$dst"
+}
 
-# 3. Comparar e gerar relatório
-echo ""
-echo "=== RELATÓRIO DE SINCRONIZAÇÃO DE SKILLS ==="
-echo "Data/Hora: $(date -Iseconds)"
-echo "Repositório: $REPO"
-echo "PR-Magazine: #$PR_NUMBER"
-echo ""
-echo "Skills canônicas ($SKILLS_PATH):"
-echo "$CANONICAL_SKILLS" | sort
-echo ""
-echo "Skills locais:"
-echo "$LOCAL_SKILLS" | sort
-echo ""
-
-# Skills que estão no canônico mas faltam localmente
-MISSING_LOCALLY=$(comm -23 <(echo "$CANONICAL_SKILLS" | sort) <(echo "$LOCAL_SKILLS" | sort) || true)
-# Skills que estão localmente mas não no canônico (potencial trabalho local em progresso)
-EXTRA_LOCALLY=$(comm -13 <(echo "$CANONICAL_SKILLS" | sort) <(echo "$LOCAL_SKILLS" | sort) || true)
-
-# 4. Se houver diferenças, comentar no PR-magazine
-if [ -n "$MISSING_LOCALLY" ] || [ -n "$EXTRA_LOCALLY" ]; then
-    echo "📝 Diferenças encontradas. Postando relatório no PR-magazine #$PR_NUMBER..."
-    
-    # Construir comentário formatado
-    COMMENT=$(cat <<EOF
-## 🔄 Verificação Automática de Sincronização de Skills - $(date -Iseconds)
-
-*Este é um relatório diário de verificação. **Nenhuma alteração foi aplicada automaticamente.** Todas as decisões devem seguir o fluxo: trabalho local → PR-magazine #$PR_NUMBER → revisão → merge.*
-
-### 📊 Resumo
-- Skills canônicas: $(echo "$CANONICAL_SKILLS" | wc -l)
-- Skills locais: $(echo "$LOCAL_SKILLS" | wc -l)
-
-### 🔍 Detalhes
-
-**❌ Skills canônicas faltando localmente**  
-*(Estas skills existem no repositório mas não estão instaladas no Hermes Agent local)*  
-$(if [ -n "$MISSING_LOCALLY" ]; then echo "$MISSING_LOCALLY" | sed 's/^/- /'; else echo "_Nenhum_"; fi)
-
-**⚠️ Skills locais extras**  
-*(Estas skills existem localmente mas não estão no repositório canônico - podem ser trabalho local em progresso ou habilidades obsoletas)*  
-$(if [ -n "$EXTRA_LOCALLY" ]; then echo "$EXTRA_LOCALLY" | sed 's/^/- /'; else echo "_Nenhum_"; fi)
-
-### 🛠️ Próximos passos recomendados
-1. **Para skills canônicas faltando localmente:**  
-   Considere instalar/atualizar via:  
-   `skill_manage create --name <skill> --content <conteúdo canônico>`  
-   (Use o conteúdo exato do arquivo no repositório em $SKILLS_PATH/$skill)
-
-2. **Para skills locais extras:**  
-   Verifique se este é trabalho local válido que deveria ser proposto como nova skill via PR.  
-   Se for trabalho concluído, siga o fluxo: branch → PR → comentário no #$PR_NUMBER → merge.
-
-3. **Para skills com conteúdo divergente:**  
-   Este script não verifica diferenças de conteúdo — apenas presença/ausência.  
-   Para verificar conteúdo, use:  
-   `diff -u <canonical_path> <local_path>`
-
-*Este relatório foi gerado automaticamente. Nenhuma ação foi tomada por este script.*
-EOF
+mapfile -t SKILL_PATHS < <(
+  git ls-tree -r --name-only "$MAIN_SHA" .agents/skills     | grep '/SKILL\.md$'     | sort
 )
 
-    # Postar comentário no PR-magazine
-    gh api -X POST "repos/$REPO/issues/$PR_NUMBER/comments"         -f body="$(echo "$COMMENT")" > /dev/null
+AUTOSYNC=0
+SYNCED=0
+UPDATED=0
+INSTALLED=0
+ORACLE_REQUIRED=0
+UNKNOWN=0
+STATE_TMP="$TMP_DIR/state.tsv"
+: > "$STATE_TMP"
 
-    echo "✅ Relatório postado com sucesso no PR-magazine #$PR_NUMBER"
-else
-    echo "✅ Todas as skills estão sincronizadas. Nenhuma ação necessária."
+for path in "${SKILL_PATHS[@]}"; do
+  canon="$TMP_DIR/canonical"
+  if ! git show "$MAIN_SHA:$path" > "$canon" 2>/dev/null; then
+    continue
+  fi
+  if ! grep -Eq '^centraldark_autosync:[[:space:]]*true[[:space:]]*$' "$canon"; then
+    continue
+  fi
+
+  AUTOSYNC=$((AUTOSYNC + 1))
+  rel="${path#.agents/skills/}"
+  runtime="$RUNTIME_ROOT/$rel"
+  canon_hash="$(hash_file "$canon")"
+  runtime_hash=""
+  prev="${PREV_HASH[$path]:-}"
+
+  if [[ ! -f "$runtime" ]]; then
+    echo "MISSING_RUNTIME|$path|canonical=$canon_hash"
+    if [[ "$MODE" == "apply" || "$MODE" == "seal" ]]; then
+      safe_install "$canon" "$runtime" "$rel"
+      runtime_hash="$(hash_file "$runtime")"
+      INSTALLED=$((INSTALLED + 1))
+      if [[ "$runtime_hash" != "$canon_hash" ]]; then
+        echo "VERIFY_FAIL|$path|canonical=$canon_hash|runtime=$runtime_hash"
+        exit 70
+      fi
+      printf '%s\t%s\t%s\t%s\t%s\n' "$path" "$MAIN_SHA" "$canon_hash" "$runtime_hash" "$STAMP" >> "$STATE_TMP"
+      echo "INSTALLED|$path|hash=$runtime_hash"
+    else
+      UNKNOWN=$((UNKNOWN + 1))
+    fi
+    continue
+  fi
+
+  runtime_hash="$(hash_file "$runtime")"
+
+  if [[ "$runtime_hash" == "$canon_hash" ]]; then
+    SYNCED=$((SYNCED + 1))
+    printf '%s\t%s\t%s\t%s\t%s\n' "$path" "$MAIN_SHA" "$canon_hash" "$runtime_hash" "$STAMP" >> "$STATE_TMP"
+    echo "SYNCED|$path|hash=$runtime_hash"
+    continue
+  fi
+
+  if [[ -n "$prev" && "$runtime_hash" == "$prev" ]]; then
+    echo "SAFE_FAST_FORWARD|$path|from=$runtime_hash|to=$canon_hash"
+    if [[ "$MODE" == "apply" || "$MODE" == "seal" ]]; then
+      safe_install "$canon" "$runtime" "$rel"
+      runtime_hash="$(hash_file "$runtime")"
+      if [[ "$runtime_hash" != "$canon_hash" ]]; then
+        echo "VERIFY_FAIL|$path|canonical=$canon_hash|runtime=$runtime_hash"
+        exit 70
+      fi
+      UPDATED=$((UPDATED + 1))
+      printf '%s\t%s\t%s\t%s\t%s\n' "$path" "$MAIN_SHA" "$canon_hash" "$runtime_hash" "$STAMP" >> "$STATE_TMP"
+      echo "UPDATED|$path|hash=$runtime_hash"
+    else
+      UNKNOWN=$((UNKNOWN + 1))
+    fi
+    continue
+  fi
+
+  ORACLE_REQUIRED=$((ORACLE_REQUIRED + 1))
+  echo "ORACLE_REQUIRED_RUNTIME_DRIFT|$path|canonical=$canon_hash|runtime=$runtime_hash|sealed_previous=${prev:-none}"
+done
+
+if [[ "$MODE" == "apply" || "$MODE" == "seal" ]]; then
+  if [[ -f "$STATE_FILE" ]]; then
+    while IFS=$'\t' read -r p sha ch rh ts; do
+      [[ -n "$p" ]] || continue
+      if ! grep -Fq "$p"$'\t' "$STATE_TMP"; then
+        printf '%s\t%s\t%s\t%s\t%s\n' "$p" "$sha" "$ch" "$rh" "$ts" >> "$STATE_TMP"
+      fi
+    done < "$STATE_FILE"
+  fi
+  sort -u "$STATE_TMP" > "$STATE_FILE.tmp"
+  mv -f "$STATE_FILE.tmp" "$STATE_FILE"
 fi
 
-echo "[$(date -Iseconds)] Verificação concluída."
-exit 0
+echo "MAIN_SHA=$MAIN_SHA"
+echo "AUTOSYNC_SKILLS=$AUTOSYNC"
+echo "SYNCED=$SYNCED"
+echo "INSTALLED=$INSTALLED"
+echo "UPDATED=$UPDATED"
+echo "ORACLE_REQUIRED=$ORACLE_REQUIRED"
+echo "UNKNOWN=$UNKNOWN"
+
+if [[ "$ORACLE_REQUIRED" -eq 0 && "$UNKNOWN" -eq 0 ]]; then
+  echo "MAIN_RUNTIME_LOCK=PASS"
+else
+  echo "MAIN_RUNTIME_LOCK=PARTIAL"
+fi
+
+if [[ "$MODE" == "seal" && "$ORACLE_REQUIRED" -ne 0 ]]; then
+  exit 20
+fi
