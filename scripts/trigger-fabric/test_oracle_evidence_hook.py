@@ -13,11 +13,16 @@ spec.loader.exec_module(oracle)
 class OracleEvidenceHookTests(unittest.TestCase):
     def base(self):
         return {
+            "loop_id": "centraldark-oracle-loop-001",
+            "turn_id": "turn-003",
+            "receipt_id": "receipt-003",
+            "parent_id": "goal-parent-001",
             "intent_id": "oracle-runtime-002",
             "event_id": "preview-current-tab-replay-003",
             "causation_id": "hermes-replay-003",
             "surface_id": "CHATGPT-ORACLE-CURRENT-TAB",
             "attempt_id": "attempt-2",
+            "next_cursor": "NEXT_READONLY_PROBE",
         }
 
     def test_query_carries_canonical_prefix_and_ids(self):
@@ -25,7 +30,11 @@ class OracleEvidenceHookTests(unittest.TestCase):
         query = oracle.build_oracle_query(data)
         self.assertIn("!CENTRALDARK #ACORDAR !CALIBRAR !MULTIBUSSOLA", query)
         self.assertIn("INTENT_ID=oracle-runtime-002", query)
-        self.assertIn("ATTEMPT_ID=attempt-2", query)
+        self.assertIn("LOOP_ID=centraldark-oracle-loop-001", query)
+        self.assertIn("TURN_ID=turn-003", query)
+        self.assertIn("RECEIPT_ID=receipt-003", query)
+        self.assertIn("PARENT_ID=goal-parent-001", query)
+        self.assertIn("NEXT_CURSOR=NEXT_READONLY_PROBE", query)
 
     def test_evidence_payload_preserves_replay_and_boundary(self):
         data = self.base() | {
