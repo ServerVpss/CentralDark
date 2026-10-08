@@ -304,5 +304,35 @@ CD_REG_78_A["CHEFE"] -->|"!RASTRO"| CD_REG_78_B["AGENTS.md + docs/ARQUITETURA/CE
 CD_REG_79_A["RUNTIME_EVENT_BUS"] -->|"VPS_KERNEL_DELTA_MATERIAL"| CD_REG_79_B["apps/modulos/elite-gateway/scripts/centraldark_omni_router.py + Trigger Fabric"]
 %% CD_FLOW:trigger.automatic.LOG_INCIDENT_MATERIAL
 CD_REG_80_A["RUNTIME_EVENT_BUS"] -->|"LOG_INCIDENT_MATERIAL"| CD_REG_80_B["apps/modulos/mcp/src/admin.js + Trigger Fabric"]
+%% CD_FLOW:trigger.learning.ORACLE_QUERY_SUBMITTED
+CD_REG_81_A["LEARNING_EVENT_BUS"] -->|"ORACLE_QUERY_SUBMITTED"| CD_REG_81_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + supabase/functions/_shared/evidence-envelope.mjs"]
+%% CD_FLOW:trigger.learning.ORACLE_RESPONSE_CAPTURED
+CD_REG_82_A["LEARNING_EVENT_BUS"] -->|"ORACLE_RESPONSE_CAPTURED"| CD_REG_82_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + apps/modulos/HERMES-CORE/core/perception-orchestra.mjs + supabase/functions/_shared/evidence-envelope.mjs"]
+%% CD_FLOW:trigger.learning.ORACLE_SEND_FAILED
+CD_REG_83_A["LEARNING_EVENT_BUS"] -->|"ORACLE_SEND_FAILED"| CD_REG_83_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md"]
+%% CD_FLOW:trigger.learning.ORACLE_PROVEN_NEW_PATH
+CD_REG_84_A["LEARNING_EVENT_BUS"] -->|"ORACLE_PROVEN_NEW_PATH"| CD_REG_84_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/memory-linker/"]
+%% CD_FLOW:gate.diagram-route.stripQuoted
+CD_REG_85_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_85_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.normalizeOp
+CD_REG_86_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_86_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.labelOf
+CD_REG_87_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_87_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.parseMermaid
+CD_REG_88_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_88_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.extractMermaidSource
+CD_REG_89_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_89_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.compareMermaid
+CD_REG_90_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_90_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.authorizedMermaidItems
+CD_REG_91_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_91_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.applyMermaidAuthorization
+CD_REG_92_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_92_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.readEventApproval
+CD_REG_93_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_93_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.showAt
+CD_REG_94_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_94_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.validateMermaidPreservation
+CD_REG_95_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_95_B["DIAGRAM_ROUTE_GATE"]
 end
 %% CD_REGISTRY_PROJECTION_END
