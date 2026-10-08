@@ -1,0 +1,24 @@
+{
+  "schema": "centraldark.reconciliation.v1",
+  "observado_em": "2026-10-08T04:35:50.051Z",
+  "fonte": "HERMES_CORE_HEARTBEAT",
+  "status": "UNKNOWN",
+  "current": {
+    "head": "989038e8b4efe576fde2495e20e5ba927c90bc90",
+    "origin_main": "eb0bc17c0334dadb7eb3c5228d03e62d502dfee2",
+    "alinhado": false
+  },
+  "checklist_diario": {
+    "path": "/root/CentralDark/docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md",
+    "presente": true
+  },
+  "pr_mother_1562": {
+    "status": "UNKNOWN",
+    "motivo": "HTTP_404"
+  },
+  "prs_abertos": {
+    "status": "UNKNOWN",
+    "motivo": "HTTP_404"
+  },
+  "regra": "UNKNOWN_NAO_VIRA_PASS"
+}
