@@ -1,7 +1,7 @@
 ---
 name: centraldark-oracle-surface
 description: "Use when consulting an external browser oracle."
-version: 0.4.0
+version: 0.5.0
 author: SEGREDO/CHEFE, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -670,6 +670,82 @@ UNCHANGED_PROVEN | PATCH_CANDIDATE | PATCH_APPLIED | TEST_ADDED | RECEIPT_ADDED 
 
 A used skill does not need a rewrite merely because it was loaded. Evolve only after measurement, generalizability, Oracle candidate review, owner-local patch, test, counterproof, receipt and replay.
 ONE_TURN_OBSERVATION != REUSABLE_SKILL_DELTA.
+
+## Anti-Dumb-Loop Recipe Promotion (Ralph-style bounded iteration)
+
+This skill must not keep Hermes in an endless identical retry loop. Ralph-style goal iteration is useful only while each turn produces material information gain, a new state, a new hypothesis, a changed cursor, or a proven effect. The existing Goal, owner, writer and continuity chain remain unchanged.
+
+```text
+RALPH_STYLE_BOUNDED_RECIPE_LOOP=true
+BLIND_RETRY_FORBIDDEN=true
+NO_PROGRESS_REQUIRES_RECIPE_OR_EXACT_BLOCKER=true
+ONE_IDENTICAL_REPLAY_MAX=1
+SAME_FAILURE_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+SKILL_EVOLVES_ONLY_ON_GENERALIZABLE_PROVEN_DELTA=true
+MAIN_FIRST_SKILL_PROMOTION=true
+RUNTIME_SYNC_OWNER=skill-synchronization+scripts/skill-sync-check.sh
+```
+
+At every material turn, build a progress fingerprint from the current intent, owner scope, failure signature, source/runtime refs, evidence digest and `NEXT_CURSOR`. If evidence, hypothesis, state or cursor changed, continue the normal loop. If the same fingerprint returns the same outcome again without new information, stop the identical probe instead of consuming more turns.
+
+```text
+TURN_RESULT
+→ PROGRESS_FINGERPRINT
+→ INFORMATION_GAIN?
+   YES → CONTINUE_NORMAL_GOAL
+   NO  → STOP_IDENTICAL_RETRY
+       → LOAD_EXISTING_PROVEN_RECIPE_IF_MATCH
+       → ELSE DERIVE_MINIMUM_RECIPE_FROM_SURVIVING_PATH
+       → REPLAY_ONCE
+       → COUNTERPROVE
+       → RESUME_NEXT_CURSOR
+```
+
+A generated Hermes recipe is machine-consumable evidence, not a second scheduler or owner. Minimum shape:
+
+```yaml
+recipe_id:
+intent_id:
+loop_id:
+owner:
+writer:
+trigger_fingerprint:
+preconditions:
+source_ref:
+runtime_ref:
+exact_sequence:
+expected_evidence:
+counterproof:
+rewind_or_rollback:
+success_predicate:
+next_cursor:
+proof_refs:
+```
+
+Recipe promotion rules:
+
+1. If a matching proven recipe already exists, reuse it and adapt environment bindings only. Do not reinterpret the path from zero.
+2. If there is no recipe, derive the minimum deterministic recipe from the path that survived measurement and counterproof.
+3. Replay the new recipe once on the affected cone. One identical replay is the maximum unless new material evidence changes the fingerprint.
+4. If replay proves a **generalizable** missing rule in a CentralDark-owned skill, patch that **same skill** on `main`; do not create a sister skill, V2/V3, router, scheduler or brain.
+5. The skill patch must include the smallest discriminating test or contract assertion, a receipt, and counterproof. Incident-only data stays in the receipt/runtime state and must not bloat the skill.
+6. After the canonical commit, use the existing `skill-synchronization` owner: `--check → --apply → --seal`. Independent runtime drift is preserved and reconciled; it is never overwritten blindly.
+7. A skill commit or sync is not Goal completion. Hermes returns to the **same Goal/LOOP_ID** at the next unresolved cursor.
+8. If the same failure remains after the bounded replay, choose a different authorized route or emit the exact non-recoverable blocker. Never spin indefinitely.
+
+```text
+NO_PROGRESS
+→ RECIPE_NOT_RETRY
+→ PROVE_RECIPE
+→ GENERALIZABLE_DELTA?
+   YES → PATCH_SAME_SKILL_ON_MAIN + TEST + RECEIPT
+   NO  → KEEP_SKILL_UNCHANGED
+→ SYNC_WITH_EXISTING_OWNER
+→ RETURN_TO_SAME_GOAL
+→ NEXT_CURSOR
+```
+
+This is the CentralDark adaptation of the useful Ralph-loop idea: **persistent goal, bounded identical retries, explicit progress, crystallized replay recipe**. It does not add a Ralph engine or replace Hermes' native Goal/Kanban/continuity owners.
 
 ## CHEFE Intent Calibration and Autonomous Memory Promotion
 
