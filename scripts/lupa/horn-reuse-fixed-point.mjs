@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -99,6 +100,64 @@ export function decideReuse(input = {}) {
   return { ...result, decision };
 }
 
+
+/**
+ * Read-only projection of Goal clauses for Hermes, PR receipts and HUD.
+ * Structural evidence checks only: a ref is not independent proof of its truth.
+ * The existing Reality Judge/owner must supply measured, counterproved verdicts.
+ */
+export function evaluateGoalClauses(goal = {}, options = {}) {
+  const clauses = Array.isArray(goal.clauses) ? goal.clauses : [];
+  const ids = new Set();
+  const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+  const maxAgeMs = Number.isFinite(options.maxAgeMs) && options.maxAgeMs >= 0
+    ? options.maxAgeMs : null;
+  const hasText = (value) => typeof value === "string" && value.trim().length > 0;
+  const rows = clauses.map((clause) => {
+    const id = clause?.id;
+    if (!hasText(id) || ids.has(id)) throw new Error("GOAL_CLAUSE_INVALID_OR_DUPLICATE_ID");
+    ids.add(id);
+    const required = clause.required !== false;
+    const raw = String(clause.status || "UNKNOWN").toUpperCase();
+    const observedAt = Date.parse(clause.measured_at || "");
+    const timestampValid = Number.isFinite(observedAt) && /(?:Z|[+-]\d\d:\d\d)$/.test(clause.measured_at || "");
+    const stale = timestampValid && (observedAt > nowMs ||
+      (maxAgeMs !== null && nowMs - observedAt > maxAgeMs));
+    const traceable = [clause.predicate, clause.owner, clause.proof_ref,
+      clause.counterproof_ref, clause.source_sha].every(hasText) && timestampValid;
+    let status = "UNKNOWN";
+    if (raw === "FAIL" || clause.counterproof_verdict === "REFUTED") status = "FAIL";
+    else if (stale || raw === "STALE") status = "STALE";
+    else if (raw === "PASS" && traceable && clause.counterproof_verdict === "NOT_REFUTED") {
+      status = "PASS";
+    }
+    return {
+      id, required, status, owner: hasText(clause.owner) ? clause.owner : null,
+      proof_ref: hasText(clause.proof_ref) ? clause.proof_ref : null,
+      counterproof_ref: hasText(clause.counterproof_ref) ? clause.counterproof_ref : null,
+      measured_at: timestampValid ? clause.measured_at : null,
+      next_cursor: hasText(clause.next_cursor) ? clause.next_cursor : null,
+    };
+  });
+  const counts = { PASS: 0, FAIL: 0, UNKNOWN: 0, STALE: 0 };
+  for (const row of rows) counts[row.status] += 1;
+  const required = rows.filter((row) => row.required);
+  const allRequiredPass = required.length > 0 && required.every((row) => row.status === "PASS");
+  const fixedPoint = allRequiredPass && hasText(goal.intent_id) &&
+    hasText(goal.goal_fingerprint) && hasText(goal.receipt_ref) &&
+    goal.next_cursor === "FIXED_POINT";
+  return {
+    intent_id: hasText(goal.intent_id) ? goal.intent_id : null,
+    goal_fingerprint: hasText(goal.goal_fingerprint) ? goal.goal_fingerprint : null,
+    main_sha: hasText(goal.main_sha) ? goal.main_sha : null,
+    runtime_ref: hasText(goal.runtime_ref) ? goal.runtime_ref : null,
+    counts, clauses: rows, required_total: required.length,
+    required_pass: required.filter((row) => row.status === "PASS").length,
+    fixedPoint, verdict: fixedPoint ? "FIXED_POINT" : "NEXT_DELTA",
+    next_cursor: hasText(goal.next_cursor) ? goal.next_cursor : "REMEASURE_REQUIRED",
+  };
+}
+
 export function selfTest() {
   const reuse = decideReuse({ existingOwner: true, sameIntent: true, fullFit: true });
   if (reuse.decision !== "REUSE") throw new Error("SELF_TEST_REUSE_FAIL");
@@ -121,10 +180,17 @@ if (isMain) {
     console.log("HORN_REUSE_FIXED_POINT=PASS");
     console.log("REUSE_BEFORE_CREATE=ENFORCED_BY_RULE_SET");
     console.log("LEARN_AFTER_PROVED_ERROR=PASS");
+  } else if (process.argv.includes("--goal-stdin")) {
+    // Read sanitized receipts via stdin, not process arguments; never mutate source.
+    const goal = JSON.parse(readFileSync(0, "utf8"));
+    const ageArg = process.argv.find((arg) => arg.startsWith("--max-age-ms="));
+    const age = ageArg ? Number(ageArg.slice("--max-age-ms=".length)) : null;
+    const options = ageArg && Number.isFinite(age) && age >= 0 ? { maxAgeMs: age } : {};
+    console.log(JSON.stringify(evaluateGoalClauses(goal, options), null, 2));
   } else {
     const raw = process.argv.find((arg) => arg.startsWith("--input-json="));
     if (!raw) {
-      console.error("usage: horn-reuse-fixed-point.mjs --self-test | --input-json='{...}'");
+      console.error("usage: horn-reuse-fixed-point.mjs --self-test | --goal-stdin [--max-age-ms=N] | --input-json='{...}'");
       process.exit(2);
     }
     const input = JSON.parse(raw.slice("--input-json=".length));
