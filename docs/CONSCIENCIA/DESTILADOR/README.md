@@ -110,17 +110,31 @@ reutilizar último cristal com fingerprint válido.
 
 ### Autosync, seis rondas por dia e limpeza
 
-A medição T0 comprovou `VPS_HEAD=origin/main`, **não a causa dessa
-igualdade**. Um cron associado ao filtro sync/destilação traz expressão
-`*/5 * * * *`; o comando/owner dessa entrada ainda não foi confirmado.
-`DESTILACAO_6X_DIA=UNKNOWN`, `AUTOSYNC_T1=UNKNOWN` até encontrar
-identidade, configuração, seis execuções (ou janela observada) e receipts
-reais no scheduler já existente. **Não abrir cron/job paralelo**.
-Limpeza somente de scratch descartável com owner conhecido e receipt;
-nunca apagar cofre, backup, entradas originais, logs protegidos, missões,
-contexto recuperado ou last-good-state. Erro → PLACA `VER PENDÊNCIA` no
-mesmo `HUD.html` com rota, owner, causa, prova e receita; outros fluxos
-continuam. Nenhuma credencial de anexo ganha autorização.
+**T1 de 2026-10-09:** o autosync existente retornou
+`result=PASS` e `reason=already at origin/main`; `HEAD=origin/main`
+(`cf94a51174ca79549c3701ddd35e986e2d0e47c8`) às `03:51:04Z`.
+Esse PASS prova **sincronização do checkout naquele T1**, não deploy ou
+reinicialização (`runtime_deploy=UNKNOWN`).
+
+O cron da VPS com `*/5 * * * *` pertence à família sync; **não** é
+a cadência de seis destilações. O agendador **já existente do Hermes**,
+`/root/.hermes/cron/jobs.json`, tem 5 jobs e **um do Destilador**,
+`enabled=true`, `failure_streak=0`, expressão
+`0 3,7,11,15,19,23 * * *`: **6 vezes/dia configuradas**.
+Essa mesma tarefa referencia `DESTILADOR`, `knowledge-compiler` e
+`main` — o pacote já tem o consumidor certo, sem criar outra tarefa.
+A leitura mostrou `last_run_at=None`, `last_status=None`,
+`next_run_at=2026-10-09T07:00:00Z`.
+`SCHEDULE_6X_CONFIGURED=PROVEN`;
+`SCHEDULE_EXECUTION=UNKNOWN`; `SCHEDULE_SUCCESS=UNKNOWN`
+até primeiro receipt de execução. Não chamar agendado de concluído.
+
+Limpeza somente de scratch descartável com owner, janela, escopo e
+readback; **nunca apagar** cofre, backup, material bruto, missões,
+logs privados, provas seladas ou last-good-state. Em erro, o único
+`HUD.html` recebe PLACA `VER PENDÊNCIA` com rota, causa e receita,
+sem derrubar os outros consumidores. Nenhuma credencial de anexo ganha
+autorização. `NO_NEW_SCHEDULER=true`.
 
 ### Recibo obrigatório por pepita
 
