@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 # CENTRALDARK Auto-Sync: existing owner; cron every 5 minutes.
-# Fail closed on dirty/divergent/non-main checkouts. No stash, rebase, reset, force or restart.
+# Fail closed on dirty/divergent/non-main checkouts. No stash, rebase, reset or force.
+# MVP manual: --manual prints readback; --restart-service NAME is strictly optional and owner-scoped.
 set -euo pipefail
+
+MANUAL=0
+RESTART_SERVICE=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --manual) MANUAL=1; shift ;;
+    --restart-service)
+      [[ $# -ge 2 && -n "${2:-}" ]] || { echo "USAGE: --restart-service NAME" >&2; exit 64; }
+      RESTART_SERVICE="$2"; MANUAL=1; shift 2 ;;
+    *) echo "UNKNOWN_OPTION=$1 (use --manual [--restart-service NAME])" >&2; exit 64 ;;
+  esac
+done
 
 REPO="/root/CentralDark"
 LOG="$REPO/scripts/vps/auto-sync.log"
@@ -13,7 +26,13 @@ cd "$REPO"
 
 STATUS="$REPO/logs/auto-sync-status.json"
 
-log() { printf '%s [%s] %s\n' "$(date -u +%FT%TZ)" "$1" "$2" >> "$LOG"; }
+log() {
+  if [[ "$MANUAL" -eq 1 ]]; then
+    printf '%s [%s] %s\n' "$(date -u +%FT%TZ)" "$1" "$2" | tee -a "$LOG"
+  else
+    printf '%s [%s] %s\n' "$(date -u +%FT%TZ)" "$1" "$2" >> "$LOG"
+  fi
+}
 # Alimenta o coração (operational-telemetry F1_GIT): um arquivo, sobrescrito a cada ciclo.
 status() {
   mkdir -p "$REPO/logs" 2>/dev/null || return 0
@@ -31,6 +50,50 @@ os.replace(tmp, path)
 PY
 }
 blocked() { log "BLOCKED" "$1"; status "BLOCKED" "$1"; exit 2; }
+
+# Only a named service whose ACTIVE unit consumes this exact checkout can be
+# restarted. Separate MCP runtime (/root/CentralDark_MCP_RUNTIME) is NOT touched
+# by git fast-forward and must never be marked as synchronized by a restart.
+restart_if_needed() {
+  local from="$1" to="$2"
+  [[ -n "$RESTART_SERVICE" ]] || return 0
+  local prefix="" unit="" active=""
+  case "$RESTART_SERVICE" in
+    centraldark-native-mcp-http.service) prefix="apps/modulos/mcp/" ;;
+    hermes-gateway.service) prefix="apps/modulos/HERMES-CORE/" ;;
+    *) log "BLOCKED" "RESTART_SERVICE_NOT_ALLOWLISTED name=$RESTART_SERVICE"; return 3 ;;
+  esac
+  if [[ "$from" == "$to" ]]; then
+    log "SKIP" "RESTART_NOT_NEEDED main unchanged; service=$RESTART_SERVICE"
+    return 0
+  fi
+  if ! git diff --name-only "$from" "$to" | grep -q "^$prefix"; then
+    log "SKIP" "RESTART_NOT_NEEDED no service-owned source delta; service=$RESTART_SERVICE"
+    return 0
+  fi
+  if ! command -v systemctl >/dev/null 2>&1; then
+    log "BLOCKED" "SYSTEMCTL_UNAVAILABLE service=$RESTART_SERVICE"
+    return 3
+  fi
+  unit="$(systemctl show "$RESTART_SERVICE" --property=ExecStart --property=WorkingDirectory --no-pager 2>/dev/null)" || {
+    log "BLOCKED" "SERVICE_UNIT_READ_FAILED service=$RESTART_SERVICE"
+    return 3
+  }
+  if [[ "$unit" != *"/root/CentralDark/"* && "$unit" != *"WorkingDirectory=/root/CentralDark"* ]]; then
+    log "BLOCKED" "SERVICE_SOURCE_OUTSIDE_CHECKOUT service=$RESTART_SERVICE; CHECKOUT_SYNC_ONLY; RUNTIME_UNKNOWN"
+    return 3
+  fi
+  if ! systemctl restart "$RESTART_SERVICE"; then
+    log "BLOCKED" "SERVICE_RESTART_FAILED service=$RESTART_SERVICE"
+    return 3
+  fi
+  if ! systemctl is-active --quiet "$RESTART_SERVICE"; then
+    log "BLOCKED" "SERVICE_NOT_ACTIVE_AFTER_RESTART service=$RESTART_SERVICE"
+    return 3
+  fi
+  log "OK" "SERVICE_RESTART_SCOPED_PASS service=$RESTART_SERVICE; HEALTH_E2E_UNKNOWN"
+}
+
 
 branch=$(git symbolic-ref --quiet --short HEAD) || blocked "detached HEAD; no checkout mutation"
 before=$(git rev-parse --verify HEAD) || blocked "HEAD unavailable"
@@ -89,6 +152,7 @@ remote=$(git rev-parse --verify refs/remotes/origin/main) || blocked "origin/mai
 if [[ "$before" == "$remote" ]]; then
   log "OK" "CHECKOUT_SYNC_PASS sha=$before; RUNTIME_DEPLOY_UNKNOWN"
   status "PASS" "already at origin/main"
+  restart_if_needed "$before" "$before"
   exit 0
 fi
 if ! git merge-base --is-ancestor "$before" "$remote"; then
@@ -101,3 +165,4 @@ after=$(git rev-parse --verify HEAD)
 [[ "$after" == "$remote" ]] || blocked "readback mismatch: HEAD=$after origin/main=$remote"
 log "SYNC" "CHECKOUT_SYNC_PASS from=$before to=$after; RUNTIME_DEPLOY_UNKNOWN"
 status "PASS" "fast-forward from=$before"
+restart_if_needed "$before" "$after"

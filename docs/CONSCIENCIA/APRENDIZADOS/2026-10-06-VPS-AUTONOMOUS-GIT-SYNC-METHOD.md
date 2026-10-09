@@ -120,3 +120,36 @@ Verificar:
 - gh auth login quando CHEFE quiser usar gh CLI
 - Considerar systemd timer se cron não for suficiente
 - Se pm2 voltar ao PATH, registrar como processo monitorado
+
+
+## Delta MVP 2026-10-09 — um único sync manual; sem novo deploy
+
+**Preserva-se a prova histórica de 06/10 acima; a receita CURRENT é o script
+`scripts/vps/auto-sync-main.sh` na main, não o antigo stash/rebase registrado
+historicamente.** Em 08/10 o checkout em branch não-main/tracked dirty bloqueou
+o cron 63 vezes; após realinhamento controlado, `CHECKOUT_SYNC_PASS` foi observado
+tanto manualmente quanto pelo cron. Isto **não** foi prova de runtime reiniciado.
+
+**Comando único (PowerShell Casa, Git OpenSSH existente):**
+
+```powershell
+& 'C:\Program Files\Git\usr\bin\ssh.exe' Segredo-VPS 'bash /root/CentralDark/scripts/vps/auto-sync-main.sh && bash /root/CentralDark/scripts/vps/auto-sync-main.sh --manual'
+```
+
+Primeira chamada: atualiza o script existente na VPS com `fetch + ff-only`.
+Segunda: readback legível; na primeira aplicação, funciona mesmo se o script
+antigo ignorar `--manual`. O cron `*/5` permanece inalterado e não reinicia
+serviços. `--restart-service centraldark-native-mcp-http.service` é opção
+**apenas se** a unidade estiver materialmente ligada ao checkout /root/CentralDark
+e arquivos do MCP mudarem; se a unidade consumir
+`/root/CentralDark_MCP_RUNTIME` (owner registrado), o script recusa reinício,
+registra `SERVICE_SOURCE_OUTSIDE_CHECKOUT` e mantém RUNTIME_UNKNOWN. Não
+copiar runtime externo nem iniciar pipeline oculto: a distinção fica na placa.
+
+**Deu bom:** um writer/lock `flock`, avanço `ff-only`, preservação de untracked,
+sem force/reset/rebase, sem restart geral, readback do HEAD. **Deu ruim:**
+branch fora da main, tracked dirty e confundir `CHECKOUT_SYNC_PASS` com
+`MCP_RUNTIME_PASS`; o script marca blocker exato, sem apagar o verde histórico.
+**Próximo cursor:** executar comando pela rota SSH já provada, comparar
+`HEAD == origin/main` na VPS e medir separadamente service source, health e
+consumo da skill pelo Hermes. Sem SSH vivo/readback, `VPS_CURRENT=UNKNOWN`.
