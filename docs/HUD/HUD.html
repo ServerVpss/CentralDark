@@ -1306,6 +1306,25 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
  <div class="hud-card"><h3>MCP CentralDark</h3><div class="val ok">CATALOGO MEDIDO</div><div class="meta">141 ferramentas internas e 11 rotas no dispatcher, 08/10/2026 05:08 UTC; escopo diferente do /health publico.</div></div>
  <div class="hud-card"><h3>HUD Casa / writer</h3><div class="val warn">READBACK PENDENTE</div><div class="meta">WINRM /wsman respondeu HTTP 405 (endpoint alcancado), SMB 445 acessivel; nao equivale a sessao autenticada. Casa HUD.html e BAT - Copia: hash e writer ainda nao medidos. BAT original intocado.</div></div><div class="hud-card"><h3>GitHub main / observador</h3><div class="val warn" id="cd-main-observer-status">CONSULTANDO</div><div class="meta" id="cd-main-observer-meta">Consulta apenas leitura ao HEAD atual, a cada 60 s. Nao declara sincronizacao do arquivo Windows.</div></div></div>
 </div>
+
+  <!-- cd-moltbook-key-setup-v1: UI helper only; never stores or handles API key -->
+  <div class="section" id="cd-moltbook-key-setup-v1" style="margin-top:16px">
+    <div class="section-header">
+      <div class="section-icon">&#129438;</div>
+      <h2 class="section-title">Moltbook · centraldarkhermes</h2>
+      <span class="section-count">AUTH LOCAL / SEM SEGREDO NO HUD</span>
+    </div>
+    <div class="hud-grid">
+      <div class="hud-card">
+        <h3>Chave API do Moltbook</h3>
+        <div class="val warn">AUTH RUNTIME: REVALIDAR</div>
+        <div class="meta">A conta pode estar verificada, mas a autenticação deste runtime precisa de prova. A chave deve ser inserida pelo prompt oculto do script existente na VPS, nunca neste HTML, Git, chat ou clipboard. O botão copia somente o comando (sem chave). Nenhuma postagem será feita.</div>
+        <button type="button" class="aion-open-btn" id="cd-moltbook-key-action" style="margin-top:10px">CONFIGURAR KEY (COPIAR RECEITA)</button>
+        <div class="meta" id="cd-moltbook-key-feedback" role="status" aria-live="polite" style="margin-top:10px">OWNER: .agents/skills/knowledge-compiler/scripts/moltbook-auth-setup.py · rota SSH Segredo-VPS</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
@@ -2343,6 +2362,35 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
   }
   checkHead();
   setInterval(checkHead,60000);
+})();
+</script>
+
+
+<script>
+// cd-moltbook-key-setup-v1 — do not store or transmit secrets from browser
+(function(){
+  var b=document.getElementById('cd-moltbook-key-action');
+  var info=document.getElementById('cd-moltbook-key-feedback');
+  if(!b||!info)return;
+  b.addEventListener('click', function(){
+    var email=window.prompt('E-mail do proprietário no Moltbook (a chave NÃO será solicitada aqui):','');
+    if(email===null){info.textContent='CANCELADO: nenhum comando executado.';return;}
+    email=email.trim();
+    if(!/^[A-Za-z0-9.!#$%&'*+\/= ?^_`{|}~-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)||/\s/.test(email)||email.length>200){
+      info.textContent='PLACA: E-MAIL INVALIDO. Nenhuma chave coletada.';return;
+    }
+    // An allowlisted e-mail is inserted into a quoted remote argument; never request API secrets in a browser.
+    var script='.agents/skills/knowledge-compiler/scripts/moltbook-auth-setup.py';
+    var recipe='& "C:\\Program Files\\Git\\usr\\bin\\ssh.exe" -t Segredo-VPS "cd /root/CentralDark && python3 '+script+' --email '+email+'"';
+    if(typeof window.cdHudCopy==='function'){
+      window.cdHudCopy(recipe,b);
+      info.textContent='RECEITA COPIADA: cole no PowerShell da Casa. O script solicitará a KEY com entrada oculta na VPS. NÃO adicione --post.';
+    }else if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(recipe).then(function(){
+        info.textContent='RECEITA COPIADA: cole no PowerShell da Casa; KEY só no prompt oculto da VPS.';
+      },function(){info.textContent='PLACA: área de transferência indisponível. Abra o owner existente na VPS.';});
+    }else{info.textContent='PLACA: clipboard indisponível. Consulte o owner no repositório.';}
+  });
 })();
 </script>
 
