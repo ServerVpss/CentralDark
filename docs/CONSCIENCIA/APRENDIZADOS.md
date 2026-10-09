@@ -1849,8 +1849,10 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Receipt:** docs/CONSCIENCIA/RECEIPTS/2026-10-06-vps-autonomous-git-sync.md
 - **Ferida:** VPS CENTRALDARK-OS ficava dessincronizada com origin/main (drift de 177 arquivos).
 - **Aprendizado:** script auto-sync com flock/stash/ff-only/rebase + cron a cada 5 min resolve o drift autônomo. Método inteiro documentado pra qualquer agente reproduzir.
-- **Commit de prova:** 6ae79a9ec
-- **Regra:** STASH_BEFORE_PULL=true; FF_ONLY_FIRST=true; FLOCK_REQUIRED=true; NO_FORCE_PUSH=true; NO_BLIND_RESET=true.
+- **Commit de prova (06/10):** 6ae79a9ec; método de stash/rebase é histórico, NÃO receita CURRENT.
+- **Delta CURRENT de 08–09/10 (MVP):** o mesmo `scripts/vps/auto-sync-main.sh` usa flock, branch main + tracked clean, fetch, ancestralidade e fast-forward only com readback; não usa stash/rebase/reset. Em 08/10, branch divergente/dirty bloqueou 63 ciclos; realinhamento provou checkout sync, mas não runtime. Chamada manual pelo Git OpenSSH do Windows (alias Segredo-VPS) e --manual é o replay, sem pipelines ou restart global. Restart nominal opcional só quando unit ativa consome o mesmo checkout e arquivos do owner mudaram; MCP separado em /root/CentralDark_MCP_RUNTIME continua UNKNOWN após pull.
+- **Placa existente:** `docs/HUD/HUD.html` → VPS Sync direto MVP → VER PENDENCIA / ACEITAR MISSAO (COPIAR); sintomas locais não vetam a CentralDark inteira.
+- **Regra CURRENT:** `SINGLE_EXISTING_SYNC_SCRIPT=true`; `FF_ONLY=true`; `DIRTY_TRACKED_FAIL_CLOSED=true`; `NO_DEPLOY_PIPELINE_REQUIRED_FOR_CHECKOUT_SYNC=true`; `CHECKOUT_SYNC != RUNTIME_SYNC`; `NO_GLOBAL_RESTART=true`.
 
 ### Lei Transversal de Preenchimento de Lacunas — Metabolismo do Instinto Superior (2026-10-06)
 - **Owner detalhado:** docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-LEI-PREENCHIMENTO-LACUNAS-METABOLISMO-INSTINTO-SUPERIOR.md

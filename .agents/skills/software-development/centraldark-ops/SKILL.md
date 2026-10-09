@@ -52,6 +52,25 @@ UNKNOWN != PASS
 
 Para MCP com variáveis ausentes/duplicadas, conferir a precedência/EnvironmentFile **do serviço existente**, selecionar somente o necessário no cofre/runtime autorizado, reiniciar apenas o consumidor afetado quando causal e validar porta/health/readback. **Não** transportar valores do chat/anexo para GitHub, nenhum log, env temporário versionado, HUD, PR, receipt ou memória. Em caso de ferramenta indisponível, reportar essa ferramenta; não atribuir veto inexistente ao dono das chaves. Uma skill não pode redefinir a intenção ou a política canônica da CentralDark.
 
+## MVP VPS — um comando, mesmo auto-sync, sem esteira de deploy
+
+Quando CHEFE pedir apenas **puxar a main para a VPS**, reutilize
+`scripts/vps/auto-sync-main.sh` (cron atual */5; mesma trava flock).
+Via Casa já provada: `C:\Program Files\Git\usr\bin\ssh.exe` + alias
+`Segredo-VPS`. Comando manual:
+```powershell
+& 'C:\Program Files\Git\usr\bin\ssh.exe' Segredo-VPS 'bash /root/CentralDark/scripts/vps/auto-sync-main.sh && bash /root/CentralDark/scripts/vps/auto-sync-main.sh --manual'
+```
+Isto substitui a **necessidade de pipeline para sincronizar checkout**, não
+rebatiza CHECKOUT_SYNC como serviço ativo. `--restart-service NAME` só alcança
+serviço nomeado permitido, com diff causal e unit consumindo o checkout físico;
+quando o MCP roda em `/root/CentralDark_MCP_RUNTIME`, a placa permanece
+`SERVICE_SOURCE_OUTSIDE_CHECKOUT / RUNTIME_UNKNOWN` sem reinício fingido,
+cópia oculta ou deploy extra. Escopo de outra unidade precisa de owner/prova;
+não usar `restart all`. Reaproveitar o MESMO HUD `docs/HUD/HUD.html`
+com VER PENDENCIA / ACEITAR MISSAO; consultar o método existente em
+`docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-VPS-AUTONOMOUS-GIT-SYNC-METHOD.md`.
+
 ## Communication and environment clarity
 
 Always read `references/hermes-desktop-communication-style.md` when working with CHEFE in Hermes Desktop — it covers communication density preference and browser automation behavior in the preview rail.

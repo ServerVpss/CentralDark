@@ -1437,6 +1437,7 @@ body {
  <div class="hud-grid">
   <div class="hud-card"><h3>GitHub main &middot; referencia de origem</h3><div class="val ok">SOURCE MEDIDO</div><div class="meta">HEAD observado agora: <code>75115cfe063f</code>. Commit nao implica deploy; o HUD registra a fonte e separa efeito runtime.</div></div>
   <div class="hud-card"><h3>VPS &middot; source / deploy</h3><div class="val warn">DRIFT OBSERVADO</div><div class="meta">Checkout HEAD <code>bdf2f09ad</code> na medicao anterior a este commit. Codigo em disco, servico carregado e inferencia sao provas distintas. Missões Hermes e zip MCP untracked preservados.</div></div>
+  <div class="hud-card" id="cd-mvp-vps-sync"><h3>VPS &middot; Sync direto MVP (um comando)</h3><div class="val warn">RECEITA NA MAIN / VPS RUNTIME UNKNOWN</div><div class="meta">REUSE: scripts/vps/auto-sync-main.sh &middot; PowerShell Casa + Git OpenSSH + Segredo-VPS. Sem pipeline de deploy, sem reinicio global. Execute: <code>&amp; 'C:\Program Files\Git\usr\bin\ssh.exe' Segredo-VPS 'bash /root/CentralDark/scripts/vps/auto-sync-main.sh &amp;&amp; bash /root/CentralDark/scripts/vps/auto-sync-main.sh --manual'</code>. A unidade MCP historicamente usa outra raiz: /root/CentralDark_MCP_RUNTIME; checkout PASS nao prova MCP/skill ativa. A placa abaixo tem a receita copiavel.</div></div>
   <div class="hud-card"><h3>Casa &middot; Obsidian</h3><div class="val warn">SINCRONIZACAO SOB READBACK</div><div class="meta">Mesmo <code>HUD.html</code> do vault; hash antigo da Casa <code>742c96ad...</code>. Escrita fisica requer preservacao do original e readback do arquivo final, sem criar HUD paralelo.</div></div>
   <div class="hud-card"><h3>Triton 2.49.0 &middot; inventario</h3><div class="val ok">21 READY / 30 CATALOGADOS</div><div class="meta">Sensor Kylin/Triton: 21 com state READY, 1 UNAVAILABLE (OCR), 8 sem estado READY informado. Nenhum LLM generativo de conversa identificado no catalogo; Triton READY nao e chat NLP PASS.</div></div>
   <div class="hud-card"><h3>Kylin NLP &middot; geracao</h3><div class="val warn">INIT_FAILED:10 / 502</div><div class="meta">Falha nativa registrada e reproduzida em receipt; SDK/modelo indisponivel e hipoteses separadas. Patch de ordem `bdf2f09ad` no source, nao equivale a correcao comprovada no processo ativo.</div></div>
@@ -1467,6 +1468,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
   // cd-plaque-multiplex-v1: uma placa por cartao no MESMO HUD, sem segundas rotas.
   // Cada boto abre sua propria causa/prova/proximo passo; sem acionar servicos.
   function cdPlaqueInfo(title) {
+    if (title.indexOf('VPS') >= 0 && title.indexOf('Sync direto MVP') >= 0) return ['Apenas sincroniza o checkout de main via flock + fetch + ff-only; nao executa pipeline de deploy.', 'Script atual na main; VPS precisa executar SSH/readback. MCP roda historicamente em outra raiz; runtime ativo UNKNOWN.', 'Colar a chamada SSH da placa em PowerShell Casa; confrontar HEAD=origin/main e medir unit/health/skill separadamente.'];
     if (title.indexOf('GitHub main') >= 0) return ['Referência de código, não atestado de deploy.', 'HEAD visível no cartão é histórico até nova leitura.', 'Confrontar HEAD atual do owner com checkout e runtime.'];
     if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) return ['Um checkout antigo ou dirty não derruba outros serviços.', 'A placa mostra o último HEAD medido; NÃO é probe contínua.', 'Reconciliar owner git sem apagar missões nem sobrescrever trabalho.'];
     if (title.indexOf('SSH Casa') >= 0) return ['SSH AUTENTICADO PROVADO com cliente OpenSSH do Git; a ferida remanescente e do ssh.exe nativo do Windows (EXIT 255 ate em -V).', 'T5 Casa: alias Segredo-VPS presente e mapeado para root@89.117.78.124 via chave ed25519 ja existente; Git OpenSSH 10.3 / BatchMode / StrictHostKeyChecking=yes => SSH_EXIT=0, hostname CENTRALDARK-OS, whoami root, repo /root/CentralDark HEAD=d921e94e4. Windows System32 OpenSSH -V e -G retornam 255 sem stderr; isso nao e falha de login na VPS.', 'Reutilizar a rota Git OpenSSH que passou, sem copiar chaves nem alterar sshd. Deixar o Windows OpenSSH como pendencia local e remedir se necessario. Promover VPS main/deploy por fluxo canonico separado: HEAD da VPS atras nao significa SSH offline.'];
@@ -1483,7 +1485,13 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
   // A failed delivery/check is a local plaque, never an automatic global veto.
   function cdPlaqueLocator(title, card) {
     var result={route:'UNKNOWN (sem medicao de rota)',owner:'UNKNOWN',file:'UNKNOWN',line:'UNKNOWN',error:'UNKNOWN'};
-    if (title.indexOf('GitHub main') >= 0) {
+    if (title.indexOf('VPS') >= 0 && title.indexOf('Sync direto MVP') >= 0) {
+      result.route='Git OpenSSH Casa → Segredo-VPS → /root/CentralDark (auto-sync-main.sh)';
+      result.owner='scripts/vps/auto-sync-main.sh';
+      result.file='scripts/vps/auto-sync-main.sh';
+      result.line='main manual --manual; nao e prova runtime';
+      result.error='VPS_RUNTIME_NOT_REMEASURED / MCP_RUNTIME_ROOT_SEPARATE';
+    } else if (title.indexOf('GitHub main') >= 0) {
       result.route='https://github.com/ServerVpss/CentralDark/tree/main';
       result.owner='ServerVpss/CentralDark@main';
       result.file='docs/HUD/HUD.html';result.error='HEAD_SNAPSHOT_PODE_ESTAR_STALE';
