@@ -2065,7 +2065,74 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
     </div>
   </div>
 
-  <!-- ONE HEART - LIVE -->
+  <!-- CENTRALDARK_API_ONE_HEART_MAP_V1_START -->
+<style>
+#cd-api-oneheart-map{margin-top:16px;border:1px solid var(--border-strong);border-radius:12px;padding:16px;background:var(--surface);color:var(--text)}
+#cd-api-oneheart-map .cd-oh-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+#cd-api-oneheart-map .cd-oh-flow{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:15px 0}
+#cd-api-oneheart-map .cd-oh-node{border:1px solid var(--border-strong);border-radius:8px;padding:10px;text-align:center;min-width:106px;background:var(--surface-2);font:600 12px var(--mono)}
+#cd-api-oneheart-map .cd-oh-arr{font:700 21px var(--mono);color:var(--accent)}
+#cd-api-oneheart-map .cd-oh-heart{width:82px;height:82px;display:block;margin:auto;transform-origin:center;animation:cd-oh-pulse 1.7s ease-in-out infinite;filter:drop-shadow(0 0 9px var(--amber))}
+#cd-api-oneheart-map[data-heart="alive"] .cd-oh-heart{filter:drop-shadow(0 0 9px var(--green))}
+#cd-api-oneheart-map[data-heart="alive"] .cd-oh-heart path{fill:var(--green)}
+#cd-api-oneheart-map .cd-oh-heart path{fill:var(--amber)}
+@keyframes cd-oh-pulse{0%,100%{transform:scale(1)}15%{transform:scale(1.14)}28%{transform:scale(1.02)}40%{transform:scale(1.10)}55%{transform:scale(1)}}
+#cd-api-oneheart-map .cd-oh-routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:7px}
+#cd-api-oneheart-map .cd-oh-route{padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface-2);display:flex;flex-direction:column;gap:3px}
+#cd-api-oneheart-map .cd-oh-route strong{font-size:12px}
+#cd-api-oneheart-map .cd-oh-route small{font:10px var(--mono);opacity:.76;word-break:break-all}
+#cd-api-oneheart-map .cd-oh-route em{font:600 11px var(--mono);font-style:normal;color:var(--amber)}
+#cd-api-oneheart-map .cd-oh-proof{font-size:11px;line-height:1.65;color:var(--text-dim);margin:9px 0 0}
+#cd-api-oneheart-map .cd-oh-lock{display:inline-block;font-size:13px}
+@media(prefers-reduced-motion:reduce){#cd-api-oneheart-map .cd-oh-heart{animation:none}}
+</style>
+<div class="section" id="cd-api-oneheart-map" data-heart="unknown" data-proof-time="2026-10-09T20:34:53Z" data-busca="mapa API centraldark One Heart MCP 13 rotas cadeados selos github cloudflare casas">
+  <div class="cd-oh-head"><h2 class="section-title">🫀 Mapa da API · 13 rotas · One Heart único</h2><span id="cd-oh-live-badge" class="section-count">HEART: UNKNOWN / consultando owner existente</span></div>
+  <p class="cd-oh-proof">🔒 PROVA SELADA POR ESCOPO: MCP admin 141 tools / 13 rotas / 20 ações (20:34 UTC); API MCP pública /health 200 com 153 tools; Cloudflare DNS api/mcp/deploy apontando à VPS com proxy ativo; Casa SEGREDO online. Selos históricos não significam disponibilidade atual.</p>
+  <div class="cd-oh-flow" role="img" aria-label="Intenção do CHEFE passa pela API Cloudflare, catálogo MCP e One Heart; GitHub e VPS sincronizam em duas direções sob cadeado">
+    <div class="cd-oh-node">👑 CHEFE<br><small>Intenção / dono</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">→</span>
+    <div class="cd-oh-node">🌐 Cloudflare<br><small>API · MCP · Deploy</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">→</span>
+    <div class="cd-oh-node">🪬 MCP<br><small>141 / 13 / 20</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">↔</span>
+    <div class="cd-oh-node"><svg class="cd-oh-heart" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 86C18 63 7 46 13 28c7-19 29-23 37-7 8-16 30-12 37 7 6 18-5 35-37 58Z"/></svg><small>ONE HEART</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">↔</span>
+    <div class="cd-oh-node">🐙 GitHub ⇄ VPS<br><small>Sync / owner / receipt</small></div>
+  </div>
+  <div class="cd-oh-head"><strong>🔐 Cadeados das 13 rotas do catálogo</strong><span class="section-count">LISTADA ≠ EXECUTANDO · UNKNOWN ≠ PASS</span></div>
+  <div class="cd-oh-routes"><div class="cd-oh-route" data-oh-route="AIONUI_MCP_STDIO"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>AionUi → MCP</strong><small>AIONUI_MCP_STDIO</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="CAS_CLOUD_RELAY"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa ↔ CAS Cloud</strong><small>CAS_CLOUD_RELAY</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="GITHUB_RUNTIME"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>GitHub API admin</strong><small>GITHUB_RUNTIME</small><em>AUTH PASS</em></div>
+<div class="cd-oh-route" data-oh-route="HERMES_DELEGATED_COMMIT_PATH"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Hermes commit delegado</strong><small>HERMES_DELEGATED_COMMIT_PATH</small><em>PR1748 / HISTÓRICO</em></div>
+<div class="cd-oh-route" data-oh-route="HERMES_SHELL"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Hermes executor</strong><small>HERMES_SHELL</small><em>HEALTH HISTÓRICO</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_CASA_TO_VPS"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa → VPS MCP</strong><small>MCP_CASA_TO_VPS</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_REMOTE_OAUTH"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>MCP público OAuth</strong><small>MCP_REMOTE_OAUTH</small><em>HEALTH 200; AUTH UNKNOWN</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_VPS_NATIVE_HTTP"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>MCP HTTP :9100</strong><small>MCP_VPS_NATIVE_HTTP</small><em>RUNTIME T1 PENDENTE</em></div>
+<div class="cd-oh-route" data-oh-route="RDC_DESKTOP_COMMANDER"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa SEGREDO</strong><small>RDC_DESKTOP_COMMANDER</small><em>ONLINE</em></div>
+<div class="cd-oh-route" data-oh-route="SCREENPIPE_CLI_RECORDER"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Screenpipe CLI</strong><small>SCREENPIPE_CLI_RECORDER</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="SCREENPIPE_LOCAL_SENSOR"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Sensor :3030</strong><small>SCREENPIPE_LOCAL_SENSOR</small><em>OWNER UNKNOWN</em></div>
+<div class="cd-oh-route" data-oh-route="SSH_VPS_DIRECT"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>SSH VPS</strong><small>SSH_VPS_DIRECT</small><em>PROVA HISTÓRICA</em></div>
+<div class="cd-oh-route" data-oh-route="TAILSCALE_PRIVATE_ROUTE"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Tailscale privado</strong><small>TAILSCALE_PRIVATE_ROUTE</small><em>PONG HISTÓRICO; API 401</em></div></div>
+  <p class="cd-oh-proof">🟢 Provado: GitHub API autenticada/admin, SEGREDO online, Cloudflare DNS 3 entradas, MCP catálogo/health, Kylin Triton. 🟡 Pendente: Tailscale Admin HTTP 401; broker fetch failed; One Heart self UNKNOWN/STALE; VPS checkout divergente; MCP runtime local e todas as 13 rotas T1 individualmente. Nenhum serviço reiniciado por esta placa.</p>
+  <p class="cd-oh-proof">Fontes: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">Hermes /health</a> · <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">MCP /health</a> · <a href="https://github.com/ServerVpss/CentralDark/pull/1788" target="_blank" rel="noopener">PR #1788 / handoff</a>. A animação é visual: somente a telemetria do One Heart existente pode mudar o estado para ALIVE.</p>
+</div>
+<script>
+(function(){
+  var panel=document.getElementById('cd-api-oneheart-map'),src=document.getElementById('live-heart-state'),badge=document.getElementById('cd-oh-live-badge');
+  if(!panel||!src||!badge)return;
+  function project(){
+    var label=(src.textContent||'').trim(),bad=/(UNKNOWN|STALE|FAIL|BLOCKED|ERROR|OFFLINE|PENDING|TIMEOUT)/i.test(label);
+    var alive=!bad && /\b(ALIVE|HEALTHY|PASS)\b/i.test(label);
+    panel.setAttribute('data-heart',alive?'alive':'unknown');
+    badge.textContent='HEART: '+(label||'UNKNOWN')+' · fonte: One Heart existente';
+  }
+  var obs=new MutationObserver(project);obs.observe(src,{childList:true,subtree:true,characterData:true});project();
+})();
+</script>
+<!-- CENTRALDARK_API_ONE_HEART_MAP_V1_END -->
+
+<!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
       <div class="section-icon">&#129528;</div>
