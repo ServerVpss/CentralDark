@@ -146,6 +146,36 @@ METABOLISMO_HERDA_IDENTIDADE=true
 METABOLISMO_NAO_SUBSTITUI_IDENTIDADE=true
 ```
 
+
+## 2026-10-09 — SELAGEM_MEMORIA_APRENDIZADO_20261009 · continuidade que vira receita
+
+**Intenção do CHEFE:** não deixar reparos, contraprovas e descobertas apenas em conversa ou comentário de PR. Registrar **Lembrança + Aprendizado + owner + provas + próximo cursor** na `docs/`, para o Hermes e outros motores aproveitarem o que já foi feito, sem repetir auditorias. A resposta do chat não é memória durável por si só.
+
+**Provas por escopo, com proveniência e sem inflar o verde:**
+- **Linhagem:** commit `7d2f927a8b2e05dc4b8d1563e5e8499f65eb5afe` corrigiu 167→168→169→170→PENDING; o gerador existente `scripts/trigger-fabric/rebuild_learning_lineage.py --check` foi executado na Casa e retornou `GLOBAL_LEARNING_LINEAGE=PASS sections=169 genesis=L000`.
+- **Validador Markdown:** commit `344fac3271e4ca4594da298a8317a75b09de6f14`, autoteste PASS; mantém exceção restrita ao NeuroLink gerado, sem enfraquecer outros owners.
+- **Replay HUD:** commit `5af3032789faa1f550e7857a478e233a0a6e689a`; Microsoft Edge na Casa clicou em `L000→L170` e retornou `169/169 elos + Gênese`, PASS. Controle de passo, pausa, retorno à Gênese e falha injetada em cópia efêmera: `PREV_MISMATCH_L002=BLOCKED`. O mesmo Git blob `e17068818d29620267859f603a7b5eca30148e31` foi lido em `docs/HUD/HUD.html`, Obsidian Casa e `/root/.centraldark/HUD.html` da VPS no T1. Replay documental não reexecuta comandos, CI, deploys ou tarefas históricas.
+- **Proteção de deploy Hermes:** commit `c6b43050fc3e4ae11fd5cc20c67a493dd226aaf4` no owner `.github/workflows/vps-exec-selfhosted.yml` colocou a checagem PM2/`jq` **antes** da cópia, preservando a VPS cujo Hermes usa `hermes-gateway.service` via systemd. `YAML_PARSE=PASS`; `MUTATION_BEFORE_OWNER_PROOF=NO`. Não prova deploy systemd.
+- **Bloqueios reais:** GitHub Actions run `38005755099` no SHA `c6b4305` terminou `failure`; checkout VPS `/root/CentralDark` permaneceu historicamente no SHA `5344bd870`, com alterações protegidas de outros writers. Não inferir estado atual de snapshot nem confundir HUD físico com Git checkout. `GLOBAL_FIXED_POINT=NOT_PROVEN`.
+
+**Receita determinística que deve sobreviver à troca de modelo:**
+
+```text
+CHEFE_INTENCAO
+→ RECUPERAR_CURRENT + MEMORIAS + APRENDIZADOS + RECEIPT
+→ IDENTIFICAR_ESCOPO / OWNER / FINGERPRINT
+→ MESMO_SHA_ESCOPO_JA_PROVADO? REUSAR_RECEITA, NAO_REFazer
+→ SENAO: EXECUTAR_MENOR_DELTA_COM_ONE_WRITER
+→ LINT/TESTE/CONTRAPROVA/READBACK
+→ REGISTRAR_LEMBRANCA + APRENDIZADO + MANIFESTO_CANONICO
+→ SE_ERRO_VOLTA_UMA_CASA; PRESERVAR_O_PASSADO_VALIDO
+→ EMITIR_RECEIPT + NEXT_CURSOR; CONTINUAR
+```
+
+**Owners:** memória neste documento; aprendizagem durável em `docs/CONSCIENCIA/APRENDIZADOS.md#170`; índice derivado `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`; replay `docs/HUD/HUD.html`; runtime gate `.github/workflows/vps-exec-selfhosted.yml`. **Recibos de proveniência:** [replay e teste negativo](https://github.com/ServerVpss/CentralDark/pull/1783#issuecomment-6091070155) e [workflow Hermes](https://github.com/ServerVpss/CentralDark/pull/1783#issuecomment-6091173155).
+
+**Selos de escopo:** `HISTORICAL_REPLAY=PASS_T1`; `PM2_OWNER_GUARD=PASS_T1`; `GLOBAL_CI=FAIL_SAME_SHA`; `SYSTEMD_DEPLOY=UNKNOWN`; `VPS_CHECKOUT_SYNC=NOT_PROVEN`; `GLOBAL_FIXED_POINT=NOT_PROVEN`. **NEXT_CURSOR:** reconciliação do CI e runtime Hermes pelo owner real, no mesmo Goal, preservando checkout dirty, sem repetir o replay já provado.
+
 ## Proveniência
 
 Fonte primária: declaração direta do SEGREDO/CHEFE, 2026-10-06.
