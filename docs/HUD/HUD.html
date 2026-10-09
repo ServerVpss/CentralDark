@@ -751,7 +751,35 @@ body {
 <div class="tab-painel visivel" id="tab-hud">
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
-<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 11:55 BRT - disco VPS 100% -&gt; 57% + auto-sync PASS + Kaizen/Sistema Um na main</span></div><div class="cadeado-meta">FERIDA FECHADA (disco): 95,1G em /root/actions-runners; ~21G por runner em _work/CentralDark (copia de trabalho refeita a cada job). Limpeza so com runner ocioso: stop servico -> rm _work/CentralDark -> start; vps-1..4 voltaram active. df: 196G/104G usados, 82G livres (57%). Maiores restantes: /root/.hermes 16G, /root/_QUARANTINE 10,8G, /usr 13,2G, /var/opt 9G. Recorrencia: _work cresce a cada job, sem limpeza automatica = NEXT_CURSOR. FERIDA FECHADA (auto-sync): .artifacts/system-sentinel/state.json versionado e reescrito pelo Hermes Core travava o cron (BLOCKED 13:50Z..14:35Z); commit cb80d7914 (git rm --cached + .gitignore, mesma classe de db57da27a); cron sozinho CHECKOUT_SYNC_PASS 14:40:35Z ate e590b6f1c. Main tambem recebeu 1f9a67126: Kaizen Vivo (28 pecas) + skill kaizen-sistema-um + sensor de erros visiveis em apps/instinto-superior; producao do sensor UNKNOWN ate medir. Antes: Main: Instinto Superior agora mora so em apps/instinto-superior (commit 207bc4b0c): juntou o repositorio separado centraldark-instinto-superior com a copia da main, sem perder nada dos dois lados. Quarentena com lista: 30 copias de trabalho antigas da VPS + copia do Instinto Superior em /root/_QUARANTINE/2026-10-08-um-lugar-so; CentralDark.zip saiu do C: para E:\CentralDark\_QUARANTINE. FERIDA ABERTA: disco da VPS 100% cheio (196G). Antes: VPS saiu do ramo docs/hermes-local-loop-receipt-20261007 e voltou para main; auto-sync voltou a passar. Antes: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa (Skill E01–E10 / PR #1783). Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
+<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026, 22:35:04 BRT - reconciliacao CURRENT sem falso verde</span></div><div class="cadeado-meta">FONTE OBSERVADA: GitHub main 981e1f3a48dd (HEAD antes da publicacao desta edicao) e checkout VPS bdf2f09ad. O HUD Casa divergia da main em uma unica linha de atualizacao: 07:30 versus a medicao 11:55 BRT de 08/10. O registro antigo de disco 100% foi superado por medicões posteriores (receipt KYLIN: 65% usados, 66 GB livres); nao apresentar a antiga ferida como CURRENT. Indicadores operacionais abaixo sao snapshots datados e NAO substituem sensores vivos, autenticao, inferencia ou backcheck. A secao de historico embutido permanece apenas evidencia datada no mesmo arquivo. Owner: docs/HUD/HUD.html.</div></div>
+<!-- CURRENT_PROVENANCE_COMPASSO 2026-10-09: ONE_SYSTEM_ONE_HUD; read-only projection -->
+<div class="section cd-index-current" id="cd-hud-compasso-current" data-busca="centraldark index current vps main casa triton kylin proveniencia frescor peso source runtime" data-observed-at="2026-10-09T01:35:04.340Z" style="margin-top:16px">
+ <div class="section-header"><div class="section-icon">&#128065;</div><h2 class="section-title">Index + HUD &middot; Compasso CURRENT</h2><span class="section-count" id="cd-hud-current-age">CALCULANDO FRESCOR</span></div>
+ <p class="cadeado-meta">Prova da fonte &gt; historico narrado. Peso: <strong>efeito real + contraprova</strong> &gt; <strong>source/HEAD verificados</strong> &gt; <strong>documento ou HTTP 200 isolado</strong>. Este quadro e um snapshot de leitura, nunca um segundo juiz; quando envelhecer vira STALE.</p>
+ <div class="hud-grid">
+  <div class="hud-card"><h3>GitHub main &middot; referencia de origem</h3><div class="val ok">SOURCE MEDIDO</div><div class="meta">HEAD antes da publicacao: <code>981e1f3a48dd</code>. Apos commit, consultar o owner GitHub para HEAD novo; commit nao implica deploy.</div></div>
+  <div class="hud-card"><h3>VPS &middot; source / deploy</h3><div class="val warn">DRIFT OBSERVADO</div><div class="meta">Checkout HEAD <code>bdf2f09ad</code> na medicao anterior a este commit. Codigo em disco, servico carregado e inferencia sao provas distintas. Missões Hermes e zip MCP untracked preservados.</div></div>
+  <div class="hud-card"><h3>Casa &middot; Obsidian</h3><div class="val warn">SINCRONIZACAO SOB READBACK</div><div class="meta">Mesmo <code>HUD.html</code> do vault; hash antigo da Casa <code>742c96ad...</code>. Escrita fisica requer preservacao do original e readback do arquivo final, sem criar HUD paralelo.</div></div>
+  <div class="hud-card"><h3>Triton 2.49.0 &middot; inventario</h3><div class="val ok">21 READY / 30 CATALOGADOS</div><div class="meta">Sensor Kylin/Triton: 21 com state READY, 1 UNAVAILABLE (OCR), 8 sem estado READY informado. Nenhum LLM generativo de conversa identificado no catalogo; Triton READY nao e chat NLP PASS.</div></div>
+  <div class="hud-card"><h3>Kylin NLP &middot; geracao</h3><div class="val warn">INIT_FAILED:10 / 502</div><div class="meta">Falha nativa registrada e reproduzida em receipt; SDK/modelo indisponivel e hipoteses separadas. Patch de ordem `bdf2f09ad` no source, nao equivale a correcao comprovada no processo ativo.</div></div>
+  <div class="hud-card"><h3>Fio da missao / evidencias</h3><div class="val warn">FIXED_POINT: NAO COMPROVADO</div><div class="meta">GOAL t_9040803d. Receber &#8594; Perceber &#8594; Compreender &#8594; Costurar &#8594; Comprovar &#8594; Cristalizar &#8594; Continuar. NEXT_CURSOR: reconciliar modelo disponivel &#8594; native-once &#8594; bridge completion &#8594; Hermes.</div></div>
+ </div>
+ <p class="cadeado-prova">Fonte: snapshot operacional 2026-10-09T01:35:04.340Z (sensor) + GitHub `main` + VPS git + <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/RECEIPTS/2026-10-09-KYLIN-BRIDGE-CHAT-502-INIT-FAILED-10.md" target="_blank" rel="noopener">receipt Kylin</a>. O One Heart existente continua como fonte dinamica separada; CORS/timeout no file:// vira UNKNOWN, nunca PASS.</p>
+</div>
+<script>
+(function(){
+  var parent=document.getElementById('cd-hud-compasso-current'), badge=document.getElementById('cd-hud-current-age');
+  if(!parent||!badge)return;
+  function refresh(){
+    var t=Date.parse(parent.getAttribute('data-observed-at')), age=Date.now()-t;
+    var fresh=Number.isFinite(age)&&age>=-5000&&age<=15*60*1000;
+    badge.textContent=fresh?'SNAPSHOT RECENTE / <= 15 min':'SNAPSHOT STALE / MEDIR CURRENT';
+    badge.title='Snapshot gravado em '+(parent.getAttribute('data-observed-at')||'UNKNOWN')+'; nao prova situacao do runtime depois disso.';
+  }
+  refresh(); setInterval(refresh,30000);
+})();
+</script>
+<!-- END_CURRENT_PROVENANCE_COMPASSO -->
 
 
   <!-- AION UI BANNER -->
