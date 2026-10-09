@@ -91,6 +91,32 @@ O fluxo do CHEFE (conversa → muda → vê → erro aparece → corrige só aqu
 - Repetição não vira conquista nova; hipótese sem prova não é promovida.
 - Testar no escritor existente (`obsidian-writer.cjs`), nunca criar outro escritor. Estado: simulado; geração real UNKNOWN.
 
+## Arena ARC-AGI — Instinto Superior por prova
+
+**Intenção do CHEFE (09/10/2026):** usar os desafios ARC-AGI como uma **arena de aprendizado** para o Hermes já existente, e transferir somente capacidades gerais comprovadas à CentralDark. Não criar segundo agente, segundo cérebro, novo gatilho, HUD ou bridge. Esta skill é a receita de decisão; o executor continua `apps/modulos/HERMES-CORE`, a avaliação reutiliza os owners existentes de testes/contraprova e a evidência aparece no HUD único.
+
+**Referências oficiais (consultar CURRENT antes de operar):**
+- ARC-AGI série: https://arcprize.org/arc-agi
+- ARC-AGI-3: https://arcprize.org/arc-agi/3
+- Documentação e toolkit oficial: https://docs.arcprize.org/
+- Competição e elegibilidade: https://arcprize.org/competitions/2026/arc-agi-3
+
+**Separação de universos:** ARC-AGI-1/2 são problemas visuais estáticos de transformação de grades; ARC-AGI-3 são ambientes interativos com observações, ações e progressão; `arc_challenge` do `lm-eval` é o benchmark de ciência **AI2 ARC**, não ARC-AGI. Não confundir pontuações nem transformar treino em avaliação independente. SDK oficial `arc-agi` é uma capacidade reutilizável, não autorização para instalar ou gastar créditos na VPS.
+
+**Compasso operacional (sob o mesmo Goal):**
+1. **Receber:** HUD_FIRST, intenção, dono e último GREEN_STATE; checar ruleset, dataset público, versões, motor acessível, recursos, licença, conectividade e orçamento disponível. Sem backend/modelo válido, `BLOCKED/UNKNOWN` local com placa; demais serviços seguem vivos.
+2. **Perceber:** selecionar tarefas **públicas** ARC-AGI-1/2 ou ambientes públicos ARC-AGI-3, usando apenas interface oficial. Para cada tentativa registrar `benchmark_version / game_id / level_id / run_id / seed_se_houver / executor / engine / attempt / timestamp`.
+3. **Compreender:** observar estado, registrar hipótese explícita (somente resumo público: decisão, evidência, previsão), selecionar menor ação que distingue hipóteses, comparar previsão versus consequência. Em tarefas estáticas: exemplos de entrada/saída → regra candidata → teste novo.
+4. **Experimentar:** ação autorizada e de baixo custo; novas tentativas só com informação nova. Limitar tempo, ações por episódio, tentativas por hipótese e custo de API; nunca loop infinito, consumo ilimitado, trapaça ou acesso ao holdout privado.
+5. **Comprovar:** registrar `WIN/GAME_OVER/NOT_FINISHED`, ações e eficiência, denominador e universo; para 1/2 comparar resposta exata. Atribuir crédito somente ao evento observado/avaliador oficial. Registrar erros e casos negativos. `GAME_WIN != GENERALIZATION_PROVEN`.
+6. **Cristalizar:** causa, delta de estratégia, pré-condições, fingerprint, score, teste, contraprova, replay e `NEXT_CURSOR` vão para a receita/aprendizado canônicos existentes, nunca só para contexto transitório. Não copiar puzzles de avaliação privada para memória/treino.
+7. **Transferir à CentralDark:** só abstrações úteis e comprovadas (observação seletiva, planejamento multi-etapas, rollback local, detecção de erro, exploração eficiente, escolha do próximo teste) viram **candidatas** a melhorias nos owners existentes. Implementar menor delta, testar regressão da CentralDark, preservar o estado bom e comparar o efeito. `ARC_SCORE != CENTRALDARK_RUNTIME_PASS`.
+8. **Continuar:** episódios independentes em lotes limitados com novos fingerprints; reavaliar o que generalizou em tarefas não usadas no ajuste. Parar no orçamento, esgotamento de novidade, bloqueio real ou fronteira de autorização; o Goal continua com cursor e placa.
+
+**Selo do Instinto Superior:** `EM_ESTUDO` por padrão; `CANDIDATO` após primeira vitória observada; `PROVADO_NO_ESCOPO` só com contraprova + replay em tarefas inéditas; `PREMIUM_INTERNO` é **meta visual opcional**, nunca certificado oficial de AGI ou substituto do avaliador. O 100% ARC-AGI-3 se refere ao universo e à eficiência da **avaliação oficial**, não a "todo jogo da internet" nem a "toda CentralDark"; prêmio oficial requer regras, elegibilidade, código aberto e verificação própria. Sem prova completa, **mostrar progresso e pendências sem falso verde**.
+
+**Missão de Hermes, quando houver executor/SDK e permissão:** `!CENTRALDARK #ACORDAR !SOL_EXECUTORA` → `HUD_FIRST` → `ARC_PUBLIC_TASK` → `OBSERVE / HYPOTHESIZE / ACTION / COUNTERPROOF` → `SCORE` → `CRYSTAL_IF_PROVEN` → `TRANSFER_TO_EXISTING_OWNER_IF_USEFUL` → `HUD_PLAQUE_AND_NEXT_CURSOR`. **A escrita desta skill não significa que o Hermes carregou, jogou, ganhou ou aprendeu no runtime.**
+
 ## Limites honestos
 - Isto calibra a confiança por cima do modelo; não treina pesos. RLCD/Jev da TypeSafe não tem método publicado por inteiro.
 - Escore interno não é probabilidade calibrada até a medição provar.
