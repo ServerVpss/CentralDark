@@ -2085,9 +2085,9 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
     <div class="section-header">
       <div class="section-icon">&#128279;</div>
       <h2 class="section-title">Conexoes provadas &middot; setores e eventos</h2>
-      <span class="section-count" id="cd-routes-time">ultima prova: 08/10/2026</span>
+      <span class="section-count" id="cd-routes-time">provas 08–09/10 · CURRENT por sensor</span>
     </div>
-    <p class="cadeado-meta" style="margin:0 0 12px">Uma superficie e um owner. Estado historico identificado por data; LIVE somente apos leitura real no navegador. Porta aberta nao prova login, controle da tela ou leitura de logs.</p>
+    <p class="cadeado-meta" style="margin:0 0 12px">Uma superficie e um owner. Estado historico identificado por data; LIVE somente apos leitura real no navegador. Porta aberta nao prova login, controle da tela ou leitura de logs. Reconciliacao 09/10: consultas ao MCP e API Tailscale falharam internamente (CURRENT UNKNOWN); Desktop Commander listou SEGREDO Offline (prova de execucao remota anterior preservada). Nenhuma conexao foi modificada.</p>
     <div class="hud-grid">
       <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val ok" id="cd-route-casa">SELADO / PONG HISTORICO</div><div class="meta">SEGREDO 100.123.93.25 &#8596; VPS 100.90.199.124. PONG por DERP(sao), 727 ms; 08/10/2026. API administrativa sem credenciais e uma falha de OBSERVACAO, nao revoga a rota ja provada. CURRENT Casa: medir pelo owner do transporte, sem falsificar online.</div></div>
       <div class="hud-card"><h3>Windows / portas</h3><div class="val warn">PORTAS ABERTAS</div><div class="meta">3389 RDP; 445 arquivos; 5985 comandos. Autenticacao e controle da tela nao comprovados. SSH 22 e 4175 indisponiveis na medicao.</div></div>
@@ -2109,7 +2109,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
       <label class="cadeado-meta" for="cd-event-filter">Setor</label>
       <select id="cd-event-filter" style="background:var(--surface);color:var(--text);border:1px solid var(--border);padding:7px">
-        <option value="TODOS">TODOS</option><option value="CASA">CASA</option><option value="SCREENPIPE">SCREENPIPE</option><option value="VPS">VPS</option><option value="HERMES">HERMES</option><option value="RUNTIME">RUNTIME</option><option value="HUD">HUD</option>
+        <option value="TODOS">TODOS</option><option value="CASA">CASA</option><option value="SCREENPIPE">SCREENPIPE</option><option value="VPS">VPS</option><option value="HERMES">HERMES</option><option value="RUNTIME">RUNTIME</option><option value="HUD">HUD</option><option value="TAILSCALE">TAILSCALE</option><option value="SSH">SSH</option><option value="MCP">MCP</option><option value="DESKTOP">DESKTOP</option><option value="AIONUI">AIONUI</option><option value="SUPABASE">SUPABASE</option>
       </select>
       <span class="cadeado-meta" id="cd-event-summary">Aguardando observacao local...</span>
     </div>
@@ -2921,6 +2921,12 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
   var select = document.getElementById('cd-event-filter');
   if(select) select.addEventListener('change', render);
   log('CASA', 'Ultima prova: Tailscale PONG via DERP(sao); nao e leitura live do navegador');
+  log('TAILSCALE', 'PASS HISTORICO: Casa e VPS PONG bidirecional; TCP 445, 5985 e 3030 OPEN; API administrativa MCP CURRENT UNKNOWN');
+  log('SSH', 'PASS HISTORICO: Segredo-VPS BatchMode autenticado e hostname CENTRALDARK-OS retornado; CURRENT requer readback');
+  log('MCP', 'CATALOGO HISTORICO: 141 tools, 11 rotas, 20 operacoes admin; 153 tools publicas em escopo diferente; CURRENT UNKNOWN por falha da consulta');
+  log('DESKTOP', 'PASS HISTORICO: execucao remota hostname SEGREDO; ultima listagem CURRENT Offline, sem promover a PASS');
+  log('AIONUI', 'PASS HISTORICO: WebUI 25808 HTTP 200 titulo AionUi; AionUi e AionCore encontrados na Casa; E2E CENTRALDARK UNKNOWN');
+  log('SUPABASE', 'PASS HISTORICO: projeto CentralDark acessivel via plugin; HUD-Obsidian-Supabase E2E UNKNOWN');
   log('HERMES', 'Ultima prova: porta 9119 HTTP 302; acesso autenticado UNKNOWN');
   log('RUNTIME', 'Ultima prova: endpoint de modelo HTTP 200; inferencia UNKNOWN');
   var heart = document.getElementById('live-heart-state');
