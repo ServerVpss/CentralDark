@@ -111,12 +111,24 @@ def save_credentials(key: str) -> None:
     CREDENTIALS.chmod(stat.S_IRUSR | stat.S_IWUSR)
 
 
+def load_saved_key(path: Path = CREDENTIALS) -> str:
+    try:
+        data = json.loads(path.read_text())
+        key = data['api_key']
+    except (OSError, KeyError, json.JSONDecodeError) as error:
+        raise ValueError('SAVED_CREDENTIALS_INVALID') from error
+    if not isinstance(key, str) or not key.startswith('moltbook_'):
+        raise ValueError('SAVED_CREDENTIALS_INVALID')
+    return key
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description='Configura Moltbook sem colocar segredo no HUD/Git.')
     parser.add_argument('--email', required=True, help='e-mail já autorizado do proprietário')
     parser.add_argument('--post', action='store_true', help='cria e verifica a primeira postagem')
+    parser.add_argument('--use-saved', action='store_true', help='usa ~/.config/moltbook/credentials.json sem pedir a chave')
     args = parser.parse_args()
-    key = getpass.getpass('Moltbook API key (não será exibida): ')
+    key = load_saved_key() if args.use_saved else getpass.getpass('Moltbook API key (não será exibida): ')
     save_credentials(key)
     status, account = api_call(key, 'GET', 'agents/me')
     print(f'AUTH_HTTP={status}')

@@ -1318,7 +1318,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       <div class="hud-card">
         <h3>Chave API do Moltbook</h3>
         <div class="val warn">AUTH RUNTIME: REVALIDAR</div>
-        <div class="meta">A conta pode estar verificada, mas a autenticação deste runtime precisa de prova. A chave deve ser inserida pelo prompt oculto do script existente na VPS, nunca neste HTML, Git, chat ou clipboard. O botão copia somente o comando (sem chave). Nenhuma postagem será feita.</div>
+        <div class="meta">A conta e a postagem ficam separadas do HUD. A chave permanece somente no cofre local; o botão copia uma receita para revalidar a autenticação, sem transportar segredo. A postagem pública já possui página própria no Moltbook; uma nova postagem exige a opção explícita <code>--post</code>.</div>
         <button type="button" class="aion-open-btn" id="cd-moltbook-key-action" style="margin-top:10px">CONFIGURAR KEY (COPIAR RECEITA)</button>
         <div class="meta" id="cd-moltbook-key-feedback" role="status" aria-live="polite" style="margin-top:10px">OWNER: .agents/skills/knowledge-compiler/scripts/moltbook-auth-setup.py · rota SSH Segredo-VPS</div>
       </div>
@@ -2440,13 +2440,13 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
     }
     // An allowlisted e-mail is inserted into a quoted remote argument; never request API secrets in a browser.
     var script='.agents/skills/knowledge-compiler/scripts/moltbook-auth-setup.py';
-    var recipe='& "C:\\Program Files\\Git\\usr\\bin\\ssh.exe" -t Segredo-VPS "cd /root/CentralDark && python3 '+script+' --email '+email+'"';
+    var recipe='& "C:\\Program Files\\Git\\usr\\bin\\ssh.exe" -t Segredo-VPS "cd /root/CentralDark && python3 '+script+' --email '+email+' --use-saved"';
     if(typeof window.cdHudCopy==='function'){
       window.cdHudCopy(recipe,b);
-      info.textContent='RECEITA COPIADA: cole no PowerShell da Casa. O script solicitará a KEY com entrada oculta na VPS. NÃO adicione --post.';
+      info.textContent='RECEITA COPIADA: cole no PowerShell da Casa. O script usará o cofre local. --post só deve ser usado para uma nova postagem.';
     }else if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(recipe).then(function(){
-        info.textContent='RECEITA COPIADA: cole no PowerShell da Casa; KEY só no prompt oculto da VPS.';
+        info.textContent='RECEITA COPIADA: cole no PowerShell da Casa; o script usará o cofre local.';
       },function(){info.textContent='PLACA: área de transferência indisponível. Abra o owner existente na VPS.';});
     }else{info.textContent='PLACA: clipboard indisponível. Consulte o owner no repositório.';}
   });
