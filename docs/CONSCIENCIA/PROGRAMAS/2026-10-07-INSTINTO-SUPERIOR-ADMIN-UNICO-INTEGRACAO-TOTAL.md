@@ -440,3 +440,40 @@ Esses três caminhos são materializações do mesmo evento (\`event_id\`/timest
 
 **Estado:** `HASH_MIRROR_3_OF_3=PASS`; `API14=PARTIAL`; `API15_FILE_MIRROR=PASS`; `API15_UI=UNKNOWN`; `API16=PARTIAL`; `NO_NEW_ARCHITECTURE=true`. A fonte e o writer canônicos continuam os mesmos.
 <!-- /PR1788_API14_API15_API16_HUD_TRIPLE_SHA_READBACK_20261009 -->
+
+<!-- PR1788_MCP_WEBHOOK_AUTOSYNC_READBACK_20261009 -->
+## Readback MCP + webhook + sync autônomo — CURRENT
+
+**Fonte da medição:** `main=5344bd87074c334ddf3ac322ae7d6aaacecdf665`; PR #1788 antes deste commit: `9fac8bfc1d7345b9ee64d2eb5a009ed9a4523553`.
+
+### Acertos provados
+
+- `centraldark-native-mcp-http.service=active`, PID `197693`, processo carregado pelo `EnvironmentFile` protegido existente.
+- `:9100` escutando e `http://127.0.0.1:9100/health` respondeu `ok=true`, `service=mcp-centraldark`.
+- `https://api.centralldark.com/deploy/health` respondeu HTTP 200 e declarou `canonicalOwner=scripts/vps/auto-sync-main.sh`.
+- Assinatura inválida no `POST /webhook` foi rejeitada com HTTP 401 `INVALID_SIGNATURE`.
+- Webhook GitHub existente ID `647381247`: ativo, evento `push`, URL `https://api.centralldark.com/webhook`.
+- Cron existente na VPS: `*/5 * * * * /root/CentralDark/scripts/vps/auto-sync-main.sh`.
+- O handler existente delega `push` assinado de `refs/heads/main` para `scripts/vps/auto-sync-main.sh`; não há segundo webhook, scheduler ou dispatcher.
+
+### Limites mantidos
+
+- O webhook reage a `push` na `main`; não é um evento direto de `pull_request`.
+- `VALID_GITHUB_WEBHOOK_DELIVERY=UNKNOWN`: não foi executada entrega assinada válida nesta medição.
+- A resposta pública de `deploy/health` indicou `signature=missing`; portanto o transporte está vivo, mas a chave HMAC do webhook ainda não está comprovada no runtime.
+- `VPS_HEAD == origin/main` e `auto-sync.log` devem ser lidos após uma entrega válida antes de fechar o efeito autônomo.
+
+```text
+MCP_LISTENER=PASS
+MCP_HEALTH=PASS
+PUBLIC_DEPLOY_HEALTH=PASS
+INVALID_SIGNATURE_REJECT=PASS
+WEBHOOK_DECLARATION=PASS
+VPS_CRON_OWNER=PASS
+VALID_WEBHOOK_DELIVERY=UNKNOWN
+AUTOSYNC_EFFECT=UNKNOWN
+FIXED_POINT_GLOBAL=FALSE
+```
+
+**NEXT_CURSOR:** disponibilizar/provar `GITHUB_WEBHOOK_SECRET` no environment protegido → enviar entrega assinada atual ao `/webhook` → ler `auto-sync.log` + `auto-sync-status.json` → confirmar `VPS_HEAD == origin/main` → registrar receipt final no mesmo PR.
+<!-- /PR1788_MCP_WEBHOOK_AUTOSYNC_READBACK_20261009 -->
