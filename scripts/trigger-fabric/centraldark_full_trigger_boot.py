@@ -580,8 +580,100 @@ def atomic_write_json(path: Path, data: dict) -> None:
     tmp.replace(path)
 
 
+def hud_first_gate(repo: Path) -> dict:
+    """HUD-first hard gate: exact main bytes must be materialized and READ BACK.
+
+    This is a control-plane entry gate, not a health verdict for optional services.
+    Fail-closed on unavailable remote, missing files or mismatched bytes.
+    Never extract secrets, mutate checkout, or issue a runtime restart.
+    """
+    rel = "docs/HUD/HUD.html"
+    source = repo / rel
+    # One canonical source, two materializations, never a second HUD owner.
+    mirror = Path(os.environ.get("CENTRALDARK_HUD_RUNTIME_PATH") or (
+        str(Path.home() / "Documents" / "Obsidian Vault" / "🪬Centraldark -HUD🪬" / "HUD.html")
+        if os.name == "nt" else "/root/.centraldark/HUD.html"
+    ))
+    evidence = {
+        "status": "FAIL_CLOSED",
+        "owner": rel,
+        "mirror": str(mirror),
+        "hud_read_first": True,
+        "authorization": "UNCHANGED",
+        "next_cursor": "MATERIALIZE_MAIN_HUD_AND_REMEASURE",
+    }
+    if not source.is_file() or source.is_symlink():
+        evidence["reason"] = "HUD_MAIN_SOURCE_MISSING_OR_LINK"
+        return evidence
+    try:
+        current_bytes = source.read_bytes()  # mandatory first content read
+    except OSError:
+        evidence["reason"] = "HUD_MAIN_SOURCE_READ_FAILED"
+        return evidence
+    evidence["source_sha256"] = hashlib.sha256(current_bytes).hexdigest()
+    if not current_bytes.startswith(b"<!DOCTYPE html") or b"CentralDark Index + HUD" not in current_bytes:
+        evidence["reason"] = "HUD_MAIN_CONTENT_INVALID"
+        return evidence
+
+    def git(*args: str) -> str | None:
+        try:
+            cmd = ["git", "-C", str(repo), *args]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=12,
+                                    env={**os.environ, "GIT_TERMINAL_PROMPT": "0"})
+            return result.stdout.strip() if result.returncode == 0 else None
+        except (OSError, subprocess.TimeoutExpired):
+            return None
+
+    head = git("rev-parse", "HEAD")
+    # Do not trust cached origin/main for CURRENT. A fresh remote read is required.
+    live_ref = git("ls-remote", "--exit-code", "origin", "refs/heads/main")
+    live_main = live_ref.split()[0] if live_ref else None
+    evidence["head"] = head or "UNKNOWN"
+    evidence["main_live"] = live_main or "UNKNOWN"
+    if not head or not live_main or head != live_main:
+        evidence["reason"] = "MAIN_REMOTE_UNVERIFIED_OR_NOT_CURRENT"
+        return evidence
+    canonical_bytes = git("show", f"{head}:{rel}")
+    # git text-mode commands are not a byte-proof. Use subprocess binary output.
+    try:
+        result = subprocess.run(["git", "-C", str(repo), "show", f"{head}:{rel}"],
+                                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                                timeout=12, check=False)
+        if result.returncode != 0 or result.stdout != current_bytes:
+            evidence["reason"] = "HUD_DISK_DIFFERS_FROM_PINNED_MAIN"
+            return evidence
+    except (OSError, subprocess.TimeoutExpired):
+        evidence["reason"] = "HUD_COMMIT_BLOB_UNREADABLE"
+        return evidence
+
+    if mirror.is_symlink() or not mirror.is_file():
+        evidence["reason"] = "HUD_RUNTIME_NOT_MATERIALIZED"
+        return evidence
+    try:
+        runtime_bytes = mirror.read_bytes()
+    except OSError:
+        evidence["reason"] = "HUD_RUNTIME_READ_FAILED"
+        return evidence
+    evidence["runtime_sha256"] = hashlib.sha256(runtime_bytes).hexdigest()
+    if current_bytes != runtime_bytes:
+        evidence["reason"] = "HUD_MAIN_RUNTIME_SHA_MISMATCH"
+        return evidence
+    evidence.update({"status": "PASS", "reason": "SAME_MAIN_BYTES_AND_RUNTIME",
+                     "next_cursor": "CONTINUE_SAME_GOAL"})
+    return evidence
+
+
 def cmd_boot(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
+    # First operation: use the canonical HUD. No stale or missing HUD can
+    # start the CentralDark control-plane boot; optional failures stay plaques.
+    hud_first = hud_first_gate(repo)
+    if hud_first["status"] != "PASS":
+        print(json.dumps({"schema": "centraldark.full-trigger-boot.v1",
+                          "status": "FAIL_CLOSED",
+                          "hud_first": hud_first,
+                          "boot_executed": False}, ensure_ascii=False, indent=2))
+        return 16
     source_hashes = require_files(repo)
     registry = discover_registry(repo)
     bios = cognitive_bios_state(repo)
@@ -603,6 +695,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "runtime_preflight_contract": preflight_contract,
         "canonical_consumption": canonical_consumption,
         "hud": bios["hud"],
+        "hud_first": hud_first,
         "rules": {
             "case_insensitive": True,
             "bang_hash_equivalent_at_command_entry": True,
