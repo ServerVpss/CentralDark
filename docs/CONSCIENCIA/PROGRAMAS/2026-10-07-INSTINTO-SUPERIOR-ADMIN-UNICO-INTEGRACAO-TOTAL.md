@@ -541,3 +541,34 @@ FIXED_POINT_GLOBAL=FALSE
 
 **NEXT_CURSOR:** classificar `run-once` inseguro sem rodar → provar consumidor de `jq/pm2` no runtime efetivo → comparar SHA dos scripts chamados por Hermes/MCP/cron, sem apagar as cópias → testar a correção JS na suíte do mesmo SHA → correlacionar cron/webhook/One Heart/log-funnel/HUD por recibo causal → registrar PASS/UNKNOWN na **mesma PR #1788**.
 <!-- /PR1788_SCRIPTS_METABOLIC_DEPENDENCIES_20261009 -->
+
+<!-- PR1788_CASA_HUD_LAW_MIRROR_RECEIPT_20261009 -->
+## CASA / Obsidian — reconciliação da lei “ENTROU, TEM QUE SELAR” com HUD.html (09/10/2026)
+
+**INTENÇÃO:** reconciliar **o mesmo HTML físico** da Casa com a lei já implementada em `docs/HUD/HUD.html` no branch da **PR #1788**. Escrita somente no HUD físico preexistente; nenhum segundo manifesto, nova aba, nova skill, novo serviço ou arquitetura. Esta seção é o receipt canônico no contrato existente do PR; não é outro HUD.
+
+### Preflight byte a byte, antes da escrita
+
+- **Origem lida:** `main` GitHub e `PR #1788` via `gh api` autenticado da Casa. A PR estava **OPEN** e seu HEAD não mudou durante o espelhamento: `75720ec71c1b83985f8798e7a95ae0add3a8b907`.
+- **Alvo físico:** `C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬\HUD.html` na Casa `SEGREDO` (Desktop Commander online, processo PowerShell no Windows). A verificação inicial encontrou **exatamente o mesmo conteúdo byte por byte** que `docs/HUD/HUD.html@main`.
+- **Antes, MAIN + CASA:** `221001 bytes`; **SHA256** `00A35C33DCE62AEC5E34B72B1DF6AF784D6ECA2E1451DD08BCFBDA0C86EA9950`. Não houve alterações locais exclusivas a preservar. O arquivo da main não foi alterado.
+- **Fonte do delta:** `docs/HUD/HUD.html@PR1788` com **225379 bytes** e SHA256 `6AAB13D3170D75306C83AFBC7EAAE1727323550EE9819B453938FB0B065A7452`, incluindo `CD_HUD_MANIFESTO_ENTROU_TEM_QUE_SELAR_20261009` e a grade histórica intacta.
+- **Proteção da escrita:** exigido HEAD da PR igual ao SHA pinado; arquivo da Casa igual ao SHA anterior; blob remoto igual ao SHA esperado; lei, três abas, 15 cadeados e quatro `<script>` presentes. Na falha da gravação ou do hash pós-escrita, o procedimento preparado restauraria em memória os bytes originais. Não houve falha nem rollback.
+- **Depois, CASA:** SHA256 `6AAB13D3170D75306C83AFBC7EAAE1727323550EE9819B453938FB0B065A7452`; **225379 bytes**. `CASA_HUD_MIRROR=PASS`; `CASA_MATCHES_PR_SOURCE=True`; `PR_MOVED_DURING_SYNC=False`. Apenas o HUD físico existente foi atualizado.
+
+### Readback físico e testes no próprio PC
+
+- `HUD_LAW_PRESENT=PASS`, `HISTORIC_CADEADOS=15`, sendo **12 selados históricos + 3 abertos**; abas `HUD/MAPA/FORJA` preservadas, **4 blocos JavaScript**.
+- `CASA_HTML_SCRIPT_SYNTAX=4/4_PASS` via Node instalado na Casa, compilando os quatro blocos extraídos do **arquivo físico pós-escrita** em `vm.Script`, sem executar chamadas de rede.
+- `CASA_LAW_GATE_MOCK=PASS` sobre o **código de gate extraído do HTML físico**, executado com DOM simulado sem instalar dependências: ao inserir cartão dinâmico `SELADO` sem receipt, passou a `aberto/VER PENDÊNCIA`; 15 cadeados originais preservados; segunda execução da verificação manteve a pendência. O primeiro mock tinha apenas uma falha de harness (`MutationObserver` ausente do contexto artificial), corrigida no próprio teste sem mudar a lei.
+- `OBSIDIAN_PROCESS=OFF` durante a medida. Por isso `OBSIDIAN_VISUAL_READBACK=UNKNOWN` e `REAL_EVENT_TO_HUD_E2E=UNKNOWN`. **Teste sintático ou mock não é execução de evento real**.
+- Esta escrita **não promoveu** o PR à `main`, **não atualizou** checkout, processo ou HUD da **VPS** e não reclassificou o status de serviço. A Casa está espelhando deliberadamente o **HTML do branch não mergeado**, não a `main` de produção.
+
+### Regra executável, sem falso verde
+
+**ENTROU → EXIGIR OWNER, SCOPE, PROOF_KEY, SOURCE_SHA, RECEIPT, READBACK, OBSERVED_AT, NEXT_CURSOR.** Sem prova atribuível e recente, entrada nova na grade existente → `VER PENDÊNCIA`. **SELADO histórico = prova datada, nunca RUNTIME CURRENT automático.** O HTML **não valida assinaturas nem substitui o juiz backend**; `READBACK_PASS` no DOM é apenas metadado declarado até o owner operacional prová-lo.
+
+**ESTADO:** `SOURCE_BRANCH_HUD=PASS`; `CASA_HUD_BYTES_EQUAL_PR=PASS`; `CASA_LAW_MOCK=PASS`; `CASA_HTML_JS_SYNTAX=PASS`; `CASA_HISTORIC_CADEADOS_PRESERVED=PASS`; `OBSIDIAN_GUI=UNKNOWN`; `VPS_HUD_EQUALS_PR=UNKNOWN`; `MAIN_EQUALS_PR=FALSE` enquanto não mergear; `E2E_REAL_EVENT=UNKNOWN`; `FIXED_POINT_GLOBAL=FALSE`.
+
+**NEXT_CURSOR:** abrir o mesmo HUD no Obsidian/visualizar a grade quando a UI estiver disponível → correlacionar evento real `event_id` do MCP/One Heart com receipt do owner e estado do cadeado → verificar CI e merge da **mesma PR #1788** → depois de promover o PR, espelhar somente o HTML canônico da `main` na Casa e VPS com readback de SHA-256 em ambos, preservando qualquer delta local legítimo.
+<!-- /PR1788_CASA_HUD_LAW_MIRROR_RECEIPT_20261009 -->
