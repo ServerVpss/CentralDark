@@ -160,7 +160,12 @@ def main():
     try:
         result = run()
     except (OSError, ValueError, urllib.error.URLError, json.JSONDecodeError) as exc:
-        reason = exc.args[0] if isinstance(exc, ValueError) and exc.args and str(exc.args[0]).isupper() else type(exc).__name__
+        if isinstance(exc, urllib.error.HTTPError):
+            reason = "HTTP_" + str(exc.code)
+        elif isinstance(exc, ValueError) and exc.args and str(exc.args[0]).isupper():
+            reason = str(exc.args[0])
+        else:
+            reason = type(exc).__name__
         print(json.dumps({"status": "MOLTBOOK_READONLY_PLAQUE",
                           "reason": reason, "no_secret_printed": True,
                           "next_cursor": "CHECK_EXISTING_VPS_CREDENTIAL_AND_CLAIM"}))
