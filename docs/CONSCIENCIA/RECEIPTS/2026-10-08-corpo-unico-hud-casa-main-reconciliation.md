@@ -113,3 +113,72 @@ SUBAGENT_RESULT=BLOCKED_QUOTA
 FIXED_POINT_GLOBAL=FALSE
 NEXT_CURSOR=MEASURE_VPS_AUTO_SYNC_GATE_AND_OWNER_FIRST_THEN_PRESERVE_UNTRACKED_THEN_SAFE_FAST_FORWARD_AND_HUD_HASH_READBACK
 ```
+
+## 09/10/2026 — API CentralDark + Vault off-host Claude readback
+
+**Intent:** CHEFE pediu reutilizar a API existente e o Vault completo off-host da VPS que o Claude deixou no Google Drive, sem novo backend/segundo cerebro. Fonte do projeto continua GitHub main; Drive e backup, nao runtime.
+
+**Google Drive (conta conectada SONASMARCAS; metadata lida diretamente do provider):**
+```text
+GOOGLE_DRIVE_FOLDER=CentralDark/Vault
+VAULT_ARCHIVE_BASENAME=Vault-Cofre-CentralDark-20260930T105330Z.tar.gz
+VAULT_FILE_BYTES=752981967
+VAULT_SHA256_SIDECAR_PRESENT=true
+VAULT_EXPECTED_SHA256=383eb16f6ccd8b61585d7589aa88d0c21b10ad09a44cfc34b70bfed60946e8e4
+SIDECAR_MATCHES_REPO_RECEIPT=true
+VAULT_FULL_ARCHIVE_BYTES_REHASHED_THIS_TURN=false
+VAULT_FULL_ARCHIVE_INTEGRITY_CURRENT=UNKNOWN
+PRIVATE_GDRIVE_FILE_IDS_IN_PUBLIC_REPO=false
+VAULT_PAYLOAD_COPIED_TO_PUBLIC_API=false
+```
+
+**Proveniencia preexistente:** `artifacts/centraldark-os/vault-offhost-20260930T105330Z.receipt` tinha `OFFHOST_READBACK=PASS` e o mesmo digest; `artifacts/centraldark-os/gate-c-readonly-20261001.json` manteve `GO_REINSTALL=NO`, `GATE_C=FAIL`. O `INVENTARIO-KERNEL-PROPRIO.md` cita snapshot anterior com SHA `b492b06f...` e ~16 MB para nome semelhante: snapshots/fingerprints distintos, nao presumir igualdade com o objeto Drive (~753 MB). O archive inclui arquivos de credenciais e process env; NUNCA extraí-los/publicá-los em HTTP, HTML, repo ou chat.
+
+**Rota de API medida a partir da Casa SEGREDO sem token:**
+```text
+https://api.centralldark.com/health=200 (servico=hermes-core, versao=5.0)
+https://api.centralldark.com/heartbeat=404
+https://api.centralldark.com/v1/models=404
+https://api.centralldark.com/api/operational-snapshot=404
+https://api.centralldark.com/api/omni/status=404
+https://api.centralldark.com/api/live-fabric/status=404
+https://mcp.centralldark.com/health=200 (mcp-centraldark, toolCount=153)
+https://mcp.centralldark.com/heartbeat=200 (payload not promoted as global green)
+https://mcp.centralldark.com/admin/api/operational-snapshot=401 (requires auth, expected gate)
+https://hub.centralldark.com/health=503
+https://hub.centralldark.com/api/providers=503
+```
+
+**Arquitetura existente:** `api.centralldark.com` = entrada HTTP publica atualmente roteando o Hermes Core neste probe, nao acesso livre ao Drive privado; `mcp.centralldark.com/mcp` = control plane com auth, admin protegido; `apps/modulos/oauth-broker/server.mjs` = owner OAuth gdrive, com `/oauth/gdrive/start` e `/api/providers`; `gdrive:CentralDark/Vault` = off-host privado recuperado. `scripts/drive-ingest-once.sh` e `scripts/sync-loop.sh` sao os owners existentes para ingest de documentos de trabalho, nao para expor/restaurar Vault com segredos.
+
+**Same file HUD update:**
+```text
+OWNER=docs/HUD/HUD.html
+MAIN_SOURCE_COMMIT=7e9468302a5c06f5af10e0fdd3c096083d5e2d81
+GITHUB_HUD_BLOB_READBACK=6eca3c7136bb683d4a2be6b0a5b47a1a202c2d16
+CASA_PHYSICAL_HUD_SHA256=65FD449AC85F90ED4D28EBF4BCB92F76D5BE380BB1DCAC65091559E955CF5EF8
+CASA_READBACK_MATCH_STAGE=PASS
+CASA_ORIGINAL_BACKUP=PRESERVED
+HUD_JS_SYNTAX=PASS_2_SCRIPT_BLOCKS
+HUD_VISUALS=THREE_ORIGINAL_TABS_PRESERVED
+API_BROWSER_CORS_ORIGIN=*
+GOOGLE_DRIVE_VAULT=METADATA_ONLY
+```
+
+Nao houve Caddy/DNS/SSL alterados, reinstalacao, extracao de material sensivel, upload da copia privada na API publica ou workaround de auth. Toda alteracao do HUD Casa aconteceu depois de hash base e backup atomico com readback. Os objetos do Drive permanecem privados.
+
+**VPS status:** checkout sujo (untracked Hermes missions e zip MCP) com ultimo commit `bdf2f09ad` na medicao imediatamente anterior a esta receipt. A main ja tem o HUD novo, mas API/publicador/source em runtime so podem ser considerados atualizados depois de owner deploy/CI, checkout readback e efeito observado. O endpoint Hermes Core responder nao comprova deploy do HUD.
+
+```text
+API_HERMES_HEALTH=PASS_SCOPED
+MCP_HEALTH=PASS_SCOPED
+DRIVE_OFFHOST_OBJECT_FOUND=PASS
+DRIVE_SIDECAR_VS_RECEIPT_MATCH=PASS
+DRIVE_TAR_BYTES_CURRENT_INTEGRITY=UNKNOWN
+HUB_OAUTH_PUBLIC=503
+VPS_HUD_MAIN_SYNC=UNKNOWN
+CONTABO_MUTATION=0
+GO_REINSTALL=NO
+FIXED_POINT_GLOBAL=FALSE
+NEXT_CURSOR=RESTORE_VPS_SYNC_OWNER_SAFELY_WITH_UNTRACKED_PRESERVATION_THEN_READBACK_HUD_FROM_API_CONTROL_PLANE
+```
