@@ -307,3 +307,75 @@ FIXED_POINT=true
 ## NEXT_CURSOR
 
 Remeasure CURRENT/main and active writers, then execute this integration through the existing Hermes continuity/oracle loop. Do not stop at a report; stop only at proven FIXED_POINT, real HUMAN_FRONTIER, or explicit CHEFE cancellation.
+
+
+## Convergência API + MCP + One Heart — PR único de aceite E2E (2026-10-09)
+
+**Intenção vigente do CHEFE:** um Instinto Superior administrativo, **uma API/fachada canônica, um MCP/dispatcher oficial e um One Heart**, sem novos serviços, motores de log, gateways, schedulers, painéis ou owners. O Hermes usa o catálogo e os endpoints autorizados; Casa/VPS/Omni permanecem capacidades atrás dos owners existentes. Todas as frentes convergem no **mesmo PR de aceite**; os PRs anteriores servem de proveniência, não de segundo trabalho concorrente.
+
+**Baseline GitHub para início:** \`main@98eb21d292465e74b030b6a48f38441fd470b0c9\`. Qualquer HEAD posterior exige remedição antes de afirmar CURRENT. As contagens \`141 dispatchables / 11 rotas / 20 operações administrativas\` e \`153 tools MCP público\` são inventários históricos de **escopos distintos**; código de \`mcp-admin.js\` descreveu **13 rotas lógicas** numa leitura posterior. Não consolidar contagens sem \`catalogVersion + policy + runtime\` do mesmo alvo. API única significa **entrada/roteamento coerente**, não apagar portas, serviços técnicos ou compatibilidade.
+
+### Owners que NÃO mudam
+
+| Escopo | Owner existente |
+|---|---|
+| Intenção, aceitação e convergência visual | Este programa e \`docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md\` |
+| API/MCP HTTP, OAuth e compatibilidade | \`apps/modulos/mcp/src/index.js\`, \`src/mcp-server.js\`, \`src/oauth.js\` |
+| Dispatcher e rotas de capacidade | \`apps/modulos/mcp/src/tools/core/mcp-admin.js\`, \`tools-catalog.js\` |
+| Logs canônicos | \`apps/modulos/mcp/src/log-funnel.js\` e consumidores \`/admin/logs/stream\`; **não criar coletor novo** |
+| One Heart e telemetria | \`apps/modulos/mcp/src/operational-telemetry.js\` + \`GET /heartbeat\` existente |
+| Omni/FastAPI | \`apps/modulos/elite-gateway/scripts/centraldark_omni_router.py\` |
+| Hermes/Goal/Oracle | Hermes Core e \`centraldark-oracle-surface\` existentes; Goal vigente quando aplicável |
+| HUD/Obsidian/Casa | \`docs/HUD/HUD.html\` nas três abas + plugin/vault existentes; **cópia da Casa não é outro owner** |
+| Rotas Tailscale/SSH/edge | \`mcp-admin.js\` + documentos de gateway/rotas existentes; configuração real do proxy medida antes de mudanças |
+
+### Fluxo obrigatório de evidência — uma só linha causal
+
+\`CHEFE → Instinto Superior/HUD → API autorizada → MCP catalog/dispatcher → Hermes / Omni / Casa via Tailscale / VPS → efeito real → log-funnel existente → /heartbeat + /admin/logs/stream → readback no HUD + receipt + NEXT_CURSOR\`.
+
+Logs de serviços distintos usam **adapters/consumers que já existem** e não ganham writer global adicional. Se um serviço ainda não emite para esse funil, marcar GAP específico do producer/adapter e provar o delta mínimo no seu owner; não declarar que a integração está pronta por existir a pasta.
+
+A estrutura do coletor é **única**, com segregação por finalidade e serviço:
+
+\`\`\`text
+/root/CentralDark/logs/
+  events/YYYY-MM-DD.jsonl            # trilha normalizada comum
+  sectors/<setor>/YYYY-MM-DD.jsonl   # projeção por setor
+  services/<servico>/YYYY-MM-DD.jsonl # projeção por serviço, inclusive MCP e Hermes quando emissão estiver comprovada
+\`\`\`
+
+Esses três caminhos são materializações do mesmo evento (\`event_id\`/timestamp/proveniência), **não três coletores**; preservar logs brutos de PM2/systemd e trilhas/auditorias pré-existentes. \`CENTRALDARK_LOG_ROOT\` deve continuar resolvido pelo owner; não assumir que todos os runtimes usam o mesmo filesystem. Nunca registrar tokens/corpos sensíveis.
+
+### Critérios de aceite únicos deste PR — todos começam UNKNOWN até prova por SHA/alvo
+
+- [ ] **API01 — CURRENT/owners:** GitHub \`main\`, HEAD do PR, VPS, checkout de execução, dirty files, writers e serviços/PIDs com timestamp; sem misturar source e runtime.
+- [ ] **API02 — edge/rotas:** confirmar configuração viva para \`admin.centralldark.com\`, \`mcp.centralldark.com\`, \`api.centralldark.com\`, \`ui.centralldark.com\`; HTTPS, paths legados e reverso da VPS comprovados; não inventar nova API pública.
+- [ ] **API03 — serviço MCP carregado:** systemd/ExecStart/cwd/PID, \`src\`/\`dist\` e \`:9100\` correlacionados; \`GET /health\`, \`/health/deep\`, \`/heartbeat\`, \`/tools.json\`; \`HTTP200 != E2E\`.
+- [ ] **API04 — autenticação real:** OAuth/PKCE discovery/\`authorize\`/\`token\`, Bearer/escopos MCP vs Admin, cookies de sessão admin, 401/403 esperados; somente metadados sanitizados, nunca valores secretos.
+- [ ] **API05 — catálogo único:** \`mcp_admin_catalog\`, \`tools-catalog.js\`, \`mcp_admin_call\`, \`catalogVersion\`, policy, ferramentas e rotas com mesma versão carregada; não somar 141/153/13.
+- [ ] **API06 — execução Hermes→MCP:** o Hermes aciona tool read-only já autorizada via dispatcher; provar request-id, policy, resultado real, readback e receipt do MESMO \`LOOP_ID\`/\`PARENT_ID\`.
+- [ ] **API07 — Casa/Tailscale/SSH:** confirmar tailnet e rota bidirecional atual, autenticação da tool e execução de uma capacidade segura na Casa. PONG histórico, porta OPEN e dispositivo online são provas separadas.
+- [ ] **API08 — Omni/FastAPI:** conferir serviço/portas e \`/health\`, \`/v1/models\`, rotas de inferência e \`/kernel/vps/delta/*\`; Omni não substitui o MCP.
+- [ ] **API09 — coletor único:** testar \`appendCentralEvent\` sem segredos, mesmo \`event_id\` nas três materializações \`events\`, \`sectors\`, \`services\`, schemas, permissões e append-safe; rollback/contraprova.
+- [ ] **API10 — logs MCP:** uma chamada MCP autorizada deve produzir evento sanitizado atribuível ao MCP no funil e readback via consultas/stream existentes; eventos não devem depender de abrir o painel.
+- [ ] **API11 — logs Hermes e outros setores:** validar producers/adapters existentes (Hermes/agents/VPS/Omni/Screenpipe quando aplicável) e respectivas pastas por setor/serviço; ausência de source vira PLACA, não novo coletor.
+- [ ] **API12 — One Heart:** \`GET /heartbeat\` agrega **estado derivado** dos setores, sem substituir o log completo; inclui status, timestamp, frescor, contadores, erros, warnings e \`UNKNOWN\` correto quando fonte falha.
+- [ ] **API13 — SSE/autorização:** \`/admin/logs/stream\` autenticado propaga eventos com filtro/proveniência, reconexão e consumer real, sem cruzar boundaries nem vazar segredos.
+- [ ] **API14 — HUD três abas:** \`HUD/MAPA/FORJA\` existentes exibem acertos, fingerprints, PROVEN_FLOOR, erros/UNKNOWN com \`VER PENDÊNCIA\`, dono, receita e NEXT_CURSOR; não criar quarto painel nem sobrepor writer do PR #1767/#1777.
+- [ ] **API15 — espelho Casa/Obsidian:** comparar hash do \`docs/HUD/HUD.html\` aprovado com arquivo local Windows; espelhar **somente por rota autorizada viva**, testar abertura/atualização do HUD existente. Ponte offline = BLOCKED neste critério, não PASS.
+- [ ] **API16 — provas e recuperação:** testes do cone afetado, rollback, prova negativa auth, source/runtime hash, CI mesmo SHA, receipt sanitizado e Reality Judge **após** efeito; \`MERGED != DEPLOYED\`, \`CODE=CURRENT != RUNTIME=LOADED\`.
+
+### Coordenação dos trabalhos no PR ÚNICO
+
+- **ONE_WRITER_PER_SCOPE:** Hermes executa/coordena o writer de cada owner, leitores/Oracles podem operar em paralelo; não gravar simultaneamente \`docs/HUD/HUD.html\` em #1767, #1777 e neste PR.
+- **PRs #1767 e #1777:** recuperar resultados/patches aproveitáveis e conciliar no cone correto antes de promover; sem fechar, rebasear ou sobrescrever PR alheio automaticamente.
+- **PRs-mãe #1562 e #1757:** histórico fechado; não reabrir nem tratar como trabalho ativo.
+- **GOAL/CRITÉRIOS:** parent continua vivo até aceitação real; \`CHILD_DONE != PARENT_DONE\`. Acompanhar cada APIxx com \`PROVEN/FAIL/UNKNOWN/BLOCKED\`, fonte, SHA/PID, receipt, contraprova e cursor.
+- **VPS e Casa:** cópia de docs/receitas não é deploy de código; nenhum reset, stash, rebase destrutivo ou restart por reflexo. Se recarregar binário for causalmente necessário, medir primeiro e registrar como delta separado.
+- **SEM_NOVO_MOTOR:** nenhuma segunda API, MCP, gateway, scheduler, health, heartbeat, agregador, coletor, dashboard, pasta nova de logs ou engine de memória.
+- **FALHA:** \`PLACA → VER PENDÊNCIA → owner → receita → NEXT_CURSOR\`. **ACERTO:** \`proof_key/fingerprint compatíveis → REPLAY_BEFORE_REDISCOVERY\`; nada de provar tudo outra vez.
+- **Casa indisponível nesta consulta:** Desktop Commander informou \`SEGREDO OFFLINE\`, portanto \`API15=BLOCKED_BY_CURRENT_ROUTE\`; não apresentar arquivo Windows como sincronizado.
+
+**NEXT_CURSOR:** \`CURRENT_MAIN_PR_VPS_CASA → IDENTIFY_ACTIVE_WRITERS → API03_MCP_9100_ENTRYPOINT → API04_AUTH → API05_CATALOG → API09_LOG_FUNNEL → API10_MCP_EVENT → API12_HEARTBEAT → API13_SSE → API14_HUD → API15_OBSIDIAN → API16_RECEIPT\`.
+
+**FIXED_POINT:** somente quando todos os API01–API16 necessários ao objetivo estiverem satisfeitos por evidência causal, com nenhum UNKNOWN material; nenhum PASS por declaração textual.
