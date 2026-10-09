@@ -983,7 +983,7 @@ body {
   <div class="hud-grid">
     <div class="hud-card"><h3>Ferramentas publicas</h3><div class="val cd-mcp-count">MEDINDO</div><div class="meta">/health: campo toolCount, consulta ao owner a cada 15s.</div></div>
     <div class="hud-card"><h3>Catalogo / versao</h3><div class="val cd-mcp-version">MEDINDO</div><div class="meta cd-mcp-time">Sem leitura de runtime nesta abertura</div></div>
-    <div class="hud-card"><h3>Admin unificado</h3><div class="val ok">ROTA 200</div><div class="meta">/admin serve login; abas internas exigem sessao autenticada.</div></div>
+    <div class="hud-card"><h3>Admin unificado</h3><div class="val warn">HISTORICO: ROTA 200</div><div class="meta">/admin serve login; abas internas exigem sessao autenticada.</div></div>
     <div class="hud-card"><h3>Validador Admin</h3><div class="val warn">PARCIAL / 2 FALTANTES</div><div class="meta">vps_limpar_pasta_projeto e vps_listar_pastas_limpaveis ausentes no catalogo publico esperado, leitura datada 08/10/2026.</div></div>
   </div>
   <p class="cadeado-meta"><strong>Abas reais do owner:</strong> &#128065; Visao Geral &middot; &#129520; Ferramentas &middot; &#128203; Linear &middot; &#127756; Grafo Celestial &middot; &#129513; Padroes &middot; &#127899; Comandos &middot; Auditoria &middot; Grok &middot; Buildkite &middot; Conector &middot; Diagnostico &middot; Omni &middot; Tailscale. Presenca no codigo nao equivale a sessao operacional provada.</p>
@@ -1013,7 +1013,7 @@ body {
   <div class="section-header"><div class="section-icon">&#127760;</div><h2 class="section-title">Bridge privado &middot; Tailscale prioritario</h2><span class="section-count">DECISAO CANONICA 08/10/2026</span></div>
   <p class="cadeado-meta"><strong>Casa &harr; Tailscale &harr; VPS &harr; MCP CentralDark &harr; Hermes.</strong> Um sistema, sem bridge/admin paralelo. Desktop Commander NAO e dependencia: legado opcional, default OFF. Componentes funcionais nao sao apagados.</p>
   <div class="hud-grid">
-    <div class="hud-card"><h3>Tailscale &middot; transporte privado</h3><div class="val ok">ROTA PROVADA</div><div class="meta">VPS &harr; Casa / Taildrop medidos anteriormente. Estado CURRENT requer nova medicao de sensor; tailnet sozinha nao concede permissao admin.</div></div>
+    <div class="hud-card"><h3>Tailscale &middot; transporte privado</h3><div class="val warn">HISTORICO / REVALIDAR</div><div class="meta">VPS &harr; Casa / Taildrop medidos anteriormente. Estado CURRENT requer nova medicao de sensor; tailnet sozinha nao concede permissao admin.</div></div>
     <div class="hud-card"><h3>MCP &middot; control plane unico</h3><div class="val ok">OWNER EXISTENTE</div><div class="meta">mcp.centralldark.com/mcp. Publico segue HTTPS + OAuth2/PKCE; admin e execucao exigem autorizacao propria.</div></div>
     <div class="hud-card"><h3>Hermes &middot; executor autorizado</h3><div class="val warn">TESTE POR EFEITO</div><div class="meta">Usar executores nativos existentes. Transporte vivo != escrita no Windows comprovada.</div></div>
     <div class="hud-card"><h3>Desktop Commander &middot; legado</h3><div class="val ok">NAO REQUERIDO</div><div class="meta">Removido dos pre-requisitos do fluxo novo; preservado apenas como componente opcional historico.</div></div>
@@ -1234,13 +1234,13 @@ body {
 </div>
 
 <div class="section cd-measured-status" style="margin-top:16px" data-cd-proof="2026-10-08T04:05:56Z">
- <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">08/10/2026 01:05 BRT</span></div>
+ <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">HISTORICO 08/10 / CURRENT REQUER SENSOR</span></div>
  <p class="cadeado-meta">Provas coletadas na VPS CENTRALDARK-OS em 08/10/2026 04:05:56 UTC. Sinais sao historicos ate nova medicao; portas abertas != sessao autenticada. O One Heart da aba HUD refaz a consulta ao owner a cada 5 s.</p>
  <div class="hud-grid">
-  <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val ok">PASS / PONG 103 ms</div><div class="meta">SEGREDO 100.123.93.25 alcancado diretamente em 08/10/2026.</div></div>
-  <div class="hud-card"><h3>Screenpipe Casa</h3><div class="val ok">HTTP 200</div><div class="meta">/health pela VPS, via Tailscale. Audio e logs integrais exigem provas separadas.</div></div>
-  <div class="hud-card"><h3>API / One Heart</h3><div class="val ok">HTTP 200 &amp; ALIVE</div><div class="meta">Owner existente mcp.centralldark.com/heartbeat e heart local 9100. Medicao datada, sujeito a staleness.</div></div>
-  <div class="hud-card"><h3>Modelo runtime</h3><div class="val ok">HEALTH 200</div><div class="meta">Modelo 18435/health; nao equivale a inferencia de IA comprovada.</div></div>
+  <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val warn">HISTORICO: PONG 103 ms</div><div class="meta">SEGREDO 100.123.93.25 alcancado diretamente em 08/10/2026.</div></div>
+  <div class="hud-card"><h3>Screenpipe Casa</h3><div class="val warn">HISTORICO: HTTP 200</div><div class="meta">Prova 08/10 via Tailscale; CURRENT requer nova medicao. Audio e logs exigem provas separadas.</div></div>
+  <div class="hud-card"><h3>API / One Heart</h3><div class="val warn">HISTORICO: 200 / ALIVE</div><div class="meta">Owner existente mcp.centralldark.com/heartbeat e heart local 9100. Medicao datada, sujeito a staleness.</div></div>
+  <div class="hud-card"><h3>Modelo runtime</h3><div class="val warn">HISTORICO: HEALTH 200</div><div class="meta">18435/health observado 08/10; nao comprova inferencia nativa nem modelo CURRENT.</div></div>
   <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / PARCIAL</div><div class="meta">Servico 9119 responde, mas login e operacao no painel nao foram provados.</div></div>
   <div class="hud-card"><h3>SSH Windows / portas legadas</h3><div class="val warn">NAO CONECTA</div><div class="meta">Casa 22, VPS 8788 e 4175 nao passaram; rota principal permanece viva.</div></div>
  </div>
