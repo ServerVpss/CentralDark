@@ -1892,3 +1892,9 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Proteção:** runtime drift independente nunca é sobrescrito cegamente; `COMMIT != SYNC`; `SYNCED != EXECUTED`; `UNKNOWN != PASS`.
 - **Cristal:** `BLIND_RETRY_FORBIDDEN=true`; `ONE_IDENTICAL_REPLAY_MAX=1`; `SAME_FAILURE_FINGERPRINT_REUSES_PROVEN_RECIPE=true`; `MAIN_FIRST_SKILL_PROMOTION=true`; `SYNC_REQUESTED_BY_CHEFE=true`; `SAME_GOAL_RETURN_REQUIRED=true`.
 - **Next cursor:** `HERMES_SKILL_SYNC_CHECK_RECONCILE_APPLY_SEAL_HASH_READBACK_THEN_RETURN_SAME_GOAL`.
+
+### 168. Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-09
+- **Contexto:** Em 2026-10-09, mesmo Goal t_9040803d já continha o Cristal e a intenção; runtime Herm es estava em status todo com dois crashes de limite de contexto. scripts/skill-sync-check.sh --check via executor MCP falhou com HOME unset. Repo canônico main fddeb265, skill Kaizen existente.
+- **Aprendizado:** Reusar o Goal e o owner Kaizen existentes. Para rodar a receita de sync da VPS via executor MCP, passar HOME=/root somente no processo; --check, --apply e --seal têm limites próprios. Execução T1: 56 targets, 5 UPDATED e 1 INSTALLED seguros, readback 49 SYNCED/7 ORACLE_REQUIRED, hash Kaizen idêntico em source e runtime. Não sobrescrever drifts protegidos nem disparar Goal em todo/crashed sem resolver dependências e contexto; DOCUMENTED != EXECUTED; entregar receipt e NEXT_CURSOR. Prova: PR #1783 comentário 6089952267.
