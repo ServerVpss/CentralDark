@@ -379,3 +379,26 @@ Esses três caminhos são materializações do mesmo evento (\`event_id\`/timest
 **NEXT_CURSOR:** \`CURRENT_MAIN_PR_VPS_CASA → IDENTIFY_ACTIVE_WRITERS → API03_MCP_9100_ENTRYPOINT → API04_AUTH → API05_CATALOG → API09_LOG_FUNNEL → API10_MCP_EVENT → API12_HEARTBEAT → API13_SSE → API14_HUD → API15_OBSIDIAN → API16_RECEIPT\`.
 
 **FIXED_POINT:** somente quando todos os API01–API16 necessários ao objetivo estiverem satisfeitos por evidência causal, com nenhum UNKNOWN material; nenhum PASS por declaração textual.
+
+<!-- API1788_HUD_CURRENT_CASA_PR_FIRST_20261009 -->
+### PR #1788 · HUD vivo MAIN + Casa · fase CURRENT, sem segunda caneta (09/10/2026)
+
+**Intenção viva:** antes de qualquer função operacional de API/MCP/Hermes/One Heart consultar o PR ativo do escopo **dentro da projeção do HUD existente**, e confrontar `MAIN_HEAD`, `PR_HEAD`, checks do mesmo SHA, receipts, `docs/HUD/HUD.html@main`, materialização VPS e arquivo Obsidian da Casa. Reutilizar a leitura dentro do turno enquanto `proof_key` não mudar; se mudar, atualizar só o cone afetado. Owner de entrada já existente: `docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md`, `AGENTS.md` e `scripts/trigger-fabric/centraldark_full_trigger_boot.py`. **Não** criar outro gate, webhook, API, MCP, HUD ou scheduler.
+
+**CURRENT observado:** `main=e073059e0f76a53290886b56cbf668bf53d4b7f5`, PR #1788 no HEAD `f0ec9e09ef720b5f28f0ed3bfdfac2016c2d2539`, com os critérios API01–API16 ainda abertos. Origem/PR avançam: revalidar antes de promover. A correção documental de credenciais `e073059` consta na main; isso não comprova revisão de credenciais no runtime. `LINEAGE_MANIFEST_DRIFT` foi reportado no gate e continua pendência até readback por SHA.
+
+**Contraprova Casa→VPS enviada no terminal (snapshot, não estado eterno):** `SYNC_RC=2`, `VPS_HEAD=8ef0f065db197e4f2d3a68d2a1747f1e4d0f3588`, `MAIN_HEAD=98eb21d292465e74b030b6a48f38441fd470b0c9` naquele fetch, `TRACKED_DIRTY=1`, `HUD_MIRROR_MATCH_RC=1`, `SSH_EXIT=2`. A rota Remote Desktop Commander `SEGREDO` apareceu offline neste turno. **Sem** promover VPS/Casa sync a PASS, sem reset/stash/clean/rebase nem substituir arquivo físico desconhecido.
+
+**Contrato de aceitação que já pertence aos critérios API01, API09–API16:**
+- **PR/HUD primeiro:** projetar PR #1788 (ou sucessor medido), main, HEAD, checks, fonte de prova, observado_em, frescor e `NEXT_CURSOR` nos campos do HUD/MAPA/FORJA já existentes; valor vencido vira `STALE`, falha vira `VER PENDÊNCIA`. Não gravar HEAD estático como se fosse LIVE. Reutilizar polling/SSE e consumidores já existentes em vez de inventar atualização paralela.
+- **Logs com mesmo coração:** `event_id` do producer autorizado atravessa o único `apps/modulos/mcp/src/log-funnel.js`, materializa `logs/events`, `logs/sectors/<setor>`, `logs/services/<servico>`; `GET /heartbeat` consome estado derivado e `/admin/logs/stream` transmite via auth. Falta de prova do producer vira PLACA, não novo coletor.
+- **MAIN ↔ VPS ↔ Casa:** o único `docs/HUD/HUD.html` é a fonte de projeção aprovada; materialização de `/root/.centraldark/HUD.html` e espelho Obsidian usam owners e rotas autorizados existentes. Só `SHA256_MAIN=SHA256_VPS=SHA256_CASA` + abertura visual comprova API15. Caso Casa offline, `API15=BLOCKED`, sem falso verde.
+- **Único writer HUD:** #1767 e #1777 já modificam o mesmo owner. Primeiro recuperar patches e combinar critérios, escolher um writer, e **só então** aplicar ao `docs/HUD/HUD.html` no PR #1788. Nenhuma escrita concorrente desse arquivo.
+- **Proven floor:** preferir ACERTOS históricos com `OWNER/PROOF_KEY/FINGERPRINT/RECEIPT`; fracassos viram PLACA com `ERRO/ROTA/OWNER/PROVA/NEXT_CURSOR`. O que não mudou reutiliza prova, o que mudou retesta apenas o cone.
+
+**Memória — apenas recibo pendente informado, não mutação:** revisão de 20 propostas = `1 MERGE_CANDIDATE`, `5 DUPLICATE_REJECT`, `14 REBUILD_REQUIRED`, `APPROVED=0`; memória ativa e aprendizagem pertencem aos owners existentes, não à caneta da API/MCP.
+
+**PLACAR NESTE DOCUMENTO:** `PR_CURRENT_READ=PASS`; `API01_FULL=UNKNOWN`; `API09-API13_E2E=UNKNOWN`; `API14_LIVE_HUD=UNKNOWN`; `API15_CASA_MIRROR=BLOCKED_BY_ROUTE`; `GLOBAL_FIXED_POINT=FALSE`. Este delta é **contrato/coordenação**, não implementação nem prova de runtime.
+
+**NEXT_CURSOR:** `PR1788_READBACK → ONE_HUD_WRITER → API03_MCP_LOADED → API09_LOG_EVENT_ID → API12_ONE_HEART → API14_PR_HUD_LIVE → API15_CASA_MIRROR_SHA → API16_RECEIPT`.
+<!-- /API1788_HUD_CURRENT_CASA_PR_FIRST_20261009 -->
