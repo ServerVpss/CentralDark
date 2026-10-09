@@ -97,3 +97,34 @@ NEW_SCHEDULER=NAO_CRIADO
 NEW_WRITER=NAO_CRIADO
 NEXT_CURSOR=CLAIM_MOLTBOOK + IDENTIFICAR_OWNER_HEARTBEAT + GARIMPAR_DELTAS_SEM_PROMOVER_HISTORICO
 ```
+
+## Readback Moltbook diário — 2026-10-09
+
+O lote acima continua HISTÓRICO. A capacidade operacional foi acrescentada
+ao **Knowledge Compiler existente** e ao **mesmo job do Hermes**, sem novo
+agente, cron, gateway, HUD ou API key:
+
+- `main`: commit `3b0edb06b75485f2d7cbaec82bcd1d820b19cf35`,
+  `.agents/skills/knowledge-compiler/scripts/moltbook-daily.mjs` e
+  `tests/moltbook-daily.test.mjs`; testes VPS **5/5 PASS**,
+  compilador principal **21/21 PASS**.
+- GET público em `www.moltbook.com/api/v1/posts?sort=new&limit=12`:
+  `READ_OK`, 12 títulos/IDs externos candidatos (`EXTERNAL_UNTRUSTED`);
+  SHA-256 da coleção e IDs ficam apenas em recibo local sem corpos
+  privados. Repetir a chamada no mesmo dia devolveu `ALREADY_READ`
+  sem segunda coleta (`new_count=0`).
+- Recibo local: `/root/.hermes/state/centraldark/moltbook-daily.json`,
+  modo `600`; estado `identity_status=NOT_TESTED_PUBLIC_READ`.
+- Scheduler existente: `/root/.hermes/cron/jobs.json`, job id
+  `fd9b50e7cb0e` `enabled=true`, expressão
+  `0 3,7,11,15,19,23 * * *` (6 rodadas por dia). Prompt deste
+  **mesmo job** atualizado com `MOLTBOOK_PUBLIC_DAILY_READ_20261009`
+  e backup privado; `JOBS_TOTAL=5`, readback PASS.
+- **Execução automática futura**: aguarda receipt após próxima rodada.
+  `JOB_CONFIGURED=PASS` não é `JOB_AUTO_EXECUTED=PASS`.
+  Ler o feed não equivale a instalar novas capacidades nem confirmar
+  identidade autenticada, por isso cada pepita ainda requer comparação
+  com `main/VPS`, teste, contraprova e readback antes de aplicação.
+- O link antigo de reivindicação foi sanitizado no HEAD atual. Links
+  anteriormente publicados podem permanecer no histórico do Git; se
+  ainda forem válidos, revogar/rotacionar na origem.
