@@ -791,11 +791,12 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
   function cdPlaqueInfo(title) {
     if (title.indexOf('GitHub main') >= 0) return ['Referência de código, não atestado de deploy.', 'HEAD visível no cartão é histórico até nova leitura.', 'Confrontar HEAD atual do owner com checkout e runtime.'];
     if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) return ['Um checkout antigo ou dirty não derruba outros serviços.', 'A placa mostra o último HEAD medido; NÃO é probe contínua.', 'Reconciliar owner git sem apagar missões nem sobrescrever trabalho.'];
+    if (title.indexOf('SSH Casa') >= 0) return ['A porta 22 responde por IP publico e Tailscale; login SSH nao foi provado.', 'T3 relatou ssh exit 255; T4 mediu TCP22 aberto nos dois destinos, sem tentativa de autenticar. O codigo 255 nao especifica sozinho erro de chave, usuario ou permissao.', 'Conferir cliente SSH, alias, host key e identidade autorizada por metadados; obter motivo da recusa sem divulgar chave privada nem contornar SSH; refazer login somente pela rota autorizada.'];
     if (title.indexOf('Casa') >= 0 && title.indexOf('Screenpipe') < 0) return ['Versão física e GitHub podem divergir sem derrubar o HUD.', 'Hash apresentado é snapshot; o arquivo local requer readback.', 'Comparar hash do HUD físico com o owner e manter backup.'];
     if (title.indexOf('Triton') >= 0) return ['Triton pronto não equivale a modelo de conversa disponível.', '21 READY / 30 catalogados na medição referenciada.', 'Remedir /v2/repository/index e verificar separadamente inferência de texto.'];
     if (title.indexOf('Kylin NLP') >= 0) return ['O SDK registrou INIT_FAILED:10; falha restrita à geração NLP.', 'Receipt de SDK e HTTP 502, sem prova de recuperação posterior.', 'Preservar bridge e investigar modelo disponível; outras rotas seguem.'];
     if (title.indexOf('Fio da missao') >= 0) return ['Ainda não há FIXED_POINT global comprovado.', 'Goal e NEXT_CURSOR exibidos são histórico de execução.', 'Continuar pelo menor delta autorizado e contraprovar por escopo.'];
-    if (title.indexOf('Screenpipe / Casa') >= 0) return ['Audio endpoint ausente na medicao Windows; nao e prova de driver irrecuperavel nem motivo para formatar.', 'Casa Windows 11: Audiosrv e AudioEndpointBuilder=Running; PnP AudioEndpoint present=0/6, MEDIA present=0/3; log device list returned empty e No default output device found. CLI record e app coexistem, captura duplicada nao confirmada.', 'Rever dispositivo fisico e padrao em Configuracoes > Sistema > Som; conferir Gerenciador de Dispositivos e conexao/driver Realtek/AMD sem reinstalacao cega; remedir PnP PresentOnly e audio efetivo com consentimento. Nao criar outro gravador; captura de tela segue independente.'];
+    if (title.indexOf('Screenpipe / Casa') >= 0) return ['Duas feridas independentes: audio sem dispositivo de saida e consultas de dados HTTP 403. Health nao prova leitura nem captura.', 'T4 Casa: screenpipe.exe PID 48020 dono de :3030; health=200; /activity-summary=403; /search=403; SCREENPIPE_LOCAL_API_KEY ausente apenas na sessao PowerShell medida. T2/T3 confirmam recusa; PnP AudioEndpoint=0/6 e MEDIA=0/3 em medicao anterior. Dois processos nao provam captura duplicada.', 'Verificar configuracao oficial de API auth e credenciais da sessao autorizada SEM exibir tokens, testar rota de metadados com acesso legitimo; manter 403 se nao autorizado. Para audio, conferir dispositivo/driver presente no Windows; nao formatar nem iniciar terceiro gravador.'];
     if (title.indexOf('API CentralDark') >= 0) return ['Health não demonstra calibração perfeita, inferência ou deploy.', 'Consultar PLACA dinâmica desta API no mesmo cartão.', 'Tratar DRIFT/404/timeout no owner; manter site e MCP independentes.'];
     if (title.indexOf('Google Drive') >= 0) return ['Inventário do cofre não prova restauração ou integridade atual do arquivo.', 'Metadados e sidecar SHA vistos; hash integral atual ainda UNKNOWN.', 'Revalidar somente metadados/hashes por conexão privada. Nunca expor conteúdo.'];
     return ['Estado deste módulo não comprovado por sensor atual.', 'Somente o rótulo de superfície e snapshot estão visíveis.', 'Remedir o owner antes de promover PASS; seguir demais rotas.'];
@@ -813,6 +814,12 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       result.owner='ServerVpss/CentralDark (VPS)';
       result.file='UNKNOWN (configuracao ativa exige leitura)';
       result.error='SOURCE_VS_RUNTIME_DRIFT (snapshot)';
+    } else if (title.indexOf('SSH Casa') >= 0) {
+      result.route='ssh alias Segredo-VPS / TCP:89.117.78.124:22 / TCP:100.90.199.124:22';
+      result.owner='Casa SEGREDO / cliente OpenSSH; VPS sshd';
+      result.file='Casa: configuracao SSH do usuario (metadados somente); VPS: sshd (readback nao autorizado)';
+      result.line='UNKNOWN (ssh exit 255 sem diagnostico detalhado)';
+      result.error='SSH_AUTH_NOT_PROVEN; EXIT_255_T3; TCP22_REACHABLE_T4';
     } else if (title.indexOf('Casa') >= 0 && title.indexOf('Screenpipe') < 0) {
       result.route='Obsidian / HUD.html (arquivo local)';
       result.owner='docs/HUD/HUD.html';
@@ -848,7 +855,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       result.owner='Casa SEGREDO / Windows Audio (Audiosrv, AudioEndpointBuilder) / Screenpipe';
       result.file='C:\\Users\\Administrador\\.screenpipe (logs locais; nao abrir conteudo sensivel)';
       result.line='Log 2026-10-08 23:47:02: no output device available / No default output device found; linha no source UNKNOWN';
-      result.error='AUDIO_NO_DEFAULT_OUTPUT_DEVICE; PNP_PRESENT=0; CAPTURE_AUDIO=UNKNOWN';
+      result.error='AUDIO_NO_DEFAULT_OUTPUT_DEVICE; ACTIVITY_SUMMARY_HTTP_403; SEARCH_HTTP_403; CAPTURE_AUDIO=UNKNOWN';
     } else if (title.indexOf('Google Drive') >= 0) {
       result.route='Google Drive: cofre off-host (ID/URL restritos; UNKNOWN no HUD)';
       result.owner='Vault / backup off-host';
@@ -1070,8 +1077,8 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       </div>
       <div class="hud-card">
         <h3>SSH Casa &rarr; VPS</h3>
-        <div class="val ok">Provado</div>
-        <div class="meta">Segredo-VPS &middot; 89.117.78.124 &middot; key ed25519</div>
+        <div class="val warn">REDE 22 PASS / LOGIN SSH UNKNOWN</div>
+        <div class="meta">SELO HISTORICO: alias Segredo-VPS e chave ed25519 documentados. T3: SSH EXIT 255 sem login autenticado. T4 (Casa): porta 22 acessivel em 89.117.78.124 e 100.90.199.124; isso NAO prova que a chave atual funcionou. VER PENDENCIA mostra receita sem exibir segredos nem revogar protecao.</div>
       </div>
     </div>
   </div>
@@ -1356,7 +1363,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
     <div class="hud-grid">
       <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val ok" id="cd-route-casa">SELADO / PONG HISTORICO</div><div class="meta">SEGREDO 100.123.93.25 &#8596; VPS 100.90.199.124. PONG por DERP(sao), 727 ms; 08/10/2026. API administrativa sem credenciais e uma falha de OBSERVACAO, nao revoga a rota ja provada. CURRENT Casa: medir pelo owner do transporte, sem falsificar online.</div></div>
       <div class="hud-card"><h3>Windows / portas</h3><div class="val warn">PORTAS ABERTAS</div><div class="meta">3389 RDP; 445 arquivos; 5985 comandos. Autenticacao e controle da tela nao comprovados. SSH 22 e 4175 indisponiveis na medicao.</div></div>
-      <div class="hud-card"><h3>Screenpipe / Casa</h3><div class="val warn" id="cd-route-screenpipe">CURRENT MEDINDO / HISTORICO SELADO</div><div class="meta">SELO: HTTP 200 provado pela VPS em 08/10/2026. CURRENT: navegador tenta medicao independente; falha de CORS/consulta nao remove o selo.</div><div class="meta" id="cd-screenpipe-audio-wound" role="status" style="margin-top:8px;color:var(--amber)">🩹 AUDIO / PLACA: SEM DISPOSITIVO DE SAIDA DETECTADO — Windows 11 Pro; Audiosrv=RUNNING; AudioEndpointBuilder=RUNNING; PnP AudioEndpoint PRESENT=0/6 e MEDIA PRESENT=0/3 (medicao Casa, 08/10/2026). SCREENPIPE LOG: No default output device found. GRAVACAO AUDIO=NAO PROVADA. DRIVER DANIFICADO=UNKNOWN; FORMATACAO=NAO INDICADA PELA PROVA. CLI record + app presentes; duplicidade de captura=UNKNOWN. VER PENDENCIA mostra local, causa, evidencia e receita copiavel. Tela/HTTP seguem por provas separadas. Fonte: consulta Windows read-only e log Screenpipe fornecido.</div></div>
+      <div class="hud-card"><h3>Screenpipe / Casa</h3><div class="val warn" id="cd-route-screenpipe">HEALTH 200 / DADOS 403 / AUDIO PENDENTE</div><div class="meta">SELO: HTTP 200 provado pela VPS em 08/10/2026. CURRENT: navegador tenta medicao independente; falha de CORS/consulta nao remove o selo.</div><div class="meta" id="cd-screenpipe-auth-wound" role="status" style="margin-top:8px;color:var(--amber)">🪧 AUTORIZACAO T4: Screenpipe API :3030/health HTTP 200; /activity-summary HTTP 403; /search HTTP 403. CLI screenpipe.exe PID 48020 possui listener :3030, screenpipe-app.exe PID 42552 permanece aberto. Chave SCREENPIPE_LOCAL_API_KEY nao observada na sessao da consulta. NAO inventar chave, nao desativar autenticacao, nao ler capturas para provar o porteiro. Proximo cursor: conferir configuracao e sessao autorizada por metadados; consulta com permissao legitima; alternativa autorizada ou PLACA. AUTH_REQUIRED != CAPTURE_STOPPED.</div><div class="meta" id="cd-screenpipe-audio-wound" role="status" style="margin-top:8px;color:var(--amber)">🩹 AUDIO / PLACA: SEM DISPOSITIVO DE SAIDA DETECTADO — Windows 11 Pro; Audiosrv=RUNNING; AudioEndpointBuilder=RUNNING; PnP AudioEndpoint PRESENT=0/6 e MEDIA PRESENT=0/3 (medicao Casa, 08/10/2026). SCREENPIPE LOG: No default output device found. GRAVACAO AUDIO=NAO PROVADA. DRIVER DANIFICADO=UNKNOWN; FORMATACAO=NAO INDICADA PELA PROVA. CLI record + app presentes; duplicidade de captura=UNKNOWN. VER PENDENCIA mostra local, causa, evidencia e receita copiavel. Tela/HTTP seguem por provas separadas. Fonte: consulta Windows read-only e log Screenpipe fornecido.</div></div>
       <div class="hud-card"><h3>One Heart / VPS</h3><div class="val warn" id="cd-route-heart">AGUARDANDO</div><div class="meta">Mesmo heartbeat do HUD; medido pela VPS com HTTP 200 em 08/10/2026. Atualizacao ao vivo depende do endpoint e CORS.</div></div>
       <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / HISTORICO</div><div class="meta">VPS 127.0.0.1:9119 respondeu 302; 8788 fechada. UI autenticada nao provada pelo 302.</div></div>
       <div class="hud-card"><h3>Runtime / modelo</h3><div class="val warn">HTTP 200 / HISTORICO</div><div class="meta">VPS 18435/health respondeu 200; portas 8000, 8001, 8002 e 9100 escutando na medicao. Sem inferencia comprovada.</div></div>
