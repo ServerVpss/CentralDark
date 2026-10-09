@@ -624,6 +624,10 @@ def hud_first_gate(repo: Path) -> dict:
         except (OSError, subprocess.TimeoutExpired):
             return None
 
+    origin = git("remote", "get-url", "origin")
+    if not origin or not re.search(r"github\\.com[:/]ServerVpss/CentralDark(\\.git)?$", origin, re.I):
+        evidence["reason"] = "HUD_ORIGIN_NOT_CANONICAL"
+        return evidence
     head = git("rev-parse", "HEAD")
     # Do not trust cached origin/main for CURRENT. A fresh remote read is required.
     live_ref = git("ls-remote", "--exit-code", "origin", "refs/heads/main")
@@ -633,8 +637,7 @@ def hud_first_gate(repo: Path) -> dict:
     if not head or not live_main or head != live_main:
         evidence["reason"] = "MAIN_REMOTE_UNVERIFIED_OR_NOT_CURRENT"
         return evidence
-    canonical_bytes = git("show", f"{head}:{rel}")
-    # git text-mode commands are not a byte-proof. Use subprocess binary output.
+    # Text-mode git output is not a byte proof; compare binary blob exactly.
     try:
         result = subprocess.run(["git", "-C", str(repo), "show", f"{head}:{rel}"],
                                 stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
