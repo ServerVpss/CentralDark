@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Activity,
+  AlertTriangle,
   CheckCircle2,
   CircleHelp,
   ExternalLink,
@@ -210,6 +211,7 @@ function RouterPage() {
   const [liveState, setLiveState] = useState<LiveState>(
     LIVE_ROUTER_URL ? "CHECKING" : "UNCONFIGURED",
   );
+  const [showLocalModelPlan, setShowLocalModelPlan] = useState(false);
   const [filter, setFilter] = useState<"ALL" | CapabilityState>("ALL");
 
   useEffect(() => {
@@ -343,6 +345,47 @@ function RouterPage() {
             </div>
           </section>
         </div>
+
+        <section
+          className="mt-5 rounded-xl border border-amber-500/40 bg-amber-500/10 p-5"
+          role="status"
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex gap-3">
+              <AlertTriangle className="mt-0.5 size-5 shrink-0 text-amber-300" />
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.16em] text-amber-300 uppercase">
+                  Aviso não bloqueante · rota auxiliar
+                </p>
+                <h2 className="mt-2 text-base font-semibold text-foreground">
+                  Rota de modelo local OFFLINE
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                  O site e as demais rotas continuam operacionais. Falta instalar/localizar um
+                  modelo conversacional local; isso não impede a publicação nem o uso das outras
+                  assinaturas e modelos.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowLocalModelPlan((visible) => !visible)}
+              className="inline-flex shrink-0 items-center justify-center rounded-md border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-xs font-semibold text-amber-200 hover:bg-amber-400/20"
+              aria-expanded={showLocalModelPlan}
+            >
+              {showLocalModelPlan ? "Ocultar pendência" : "Ver pendência"}
+            </button>
+          </div>
+          {showLocalModelPlan ? (
+            <div className="mt-4 rounded-lg border border-amber-400/20 bg-background/30 p-4 text-xs text-muted-foreground">
+              <p className="font-mono text-amber-200">ROTA_OFFLINE=NAO_BLOQUEANTE</p>
+              <p className="mt-2">
+                Próximo passo: localizar ou instalar o modelo local quando autorizado.
+              </p>
+              <p className="mt-1">Enquanto isso: seguir com o deploy e as demais rotas.</p>
+            </div>
+          ) : null}
+        </section>
 
         <section className="panel mt-5 p-6 sm:p-7">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
