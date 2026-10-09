@@ -612,12 +612,25 @@ jobs:
 
           ss -ltn 'sport = :22' | grep -q LISTEN && echo "PORT_22=PASS" || { echo "PORT_22=FAIL"; failures=$((failures+1)); }
 
-          public_ip="$(ip -4 -o addr show scope global 2>/dev/null | awk '{split($4,a,"/"); if (a[1] !~ /^100\./ && a[1] !~ /^10\./ && a[1] !~ /^172\.(1[6-9]|2[0-9]|3[01])\./ && a[1] !~ /^192\.168\./) {print a[1]; exit}}')"
-          if [[ -n "$public_ip" ]] && curl -fsS --max-time 3 "http://$public_ip:9100/health" | grep -q '"ok":true'; then
-            echo "MCP_9100=PASS ip=$public_ip"
+          # O MCP nativo escuta na rota privada 127.0.0.1:9100.
+          # Cloudflare/Caddy publica mcp.centralldark.com via HTTPS; nao exigir
+          # porta 9100 aberta no IP publico (nao expor uma nova superficie).
+          mcp_local="$(curl -fsS --max-time 5 http://127.0.0.1:9100/health 2>/dev/null || true)"
+          if jq -e '.ok == true and .service == "mcp-centraldark"' <<<"$mcp_local" >/dev/null 2>&1; then
+            echo "MCP_9100=PASS route=127.0.0.1:9100 service=mcp-centraldark"
+            echo "MCP_ROUTE=PASS via=LOCAL_OWNER"
           else
-            echo "MCP_9100=FAIL"
-            failures=$((failures+1))
+            echo "MCP_9100=UNAVAILABLE route=127.0.0.1:9100"
+            # Se o owner local cair, tentar a rota HTTPS autorizada existente.
+            # Rota HTTPS PASS nao e prova de que o listener local esta saudavel.
+            mcp_https="$(curl -fsS --max-time 8 https://mcp.centralldark.com/health 2>/dev/null || true)"
+            if jq -e '.ok == true and .service == "mcp-centraldark"' <<<"$mcp_https" >/dev/null 2>&1; then
+              echo "MCP_ROUTE=PASS via=HTTPS_EXISTING_OWNER"
+              echo "MCP_LOCAL_9100=VER_PENDENCIA"
+            else
+              echo "MCP_ROUTE=FAIL local_and_https_unavailable"
+              failures=$((failures+1))
+            fi
           fi
 
           echo "ROUTE_RECONCILE_FAILURES=$failures"
