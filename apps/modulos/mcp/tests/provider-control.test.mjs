@@ -11,6 +11,7 @@ import {
   tailscaleTools,
   validateFinancialGuard,
 } from "../src/modes/admin/tools/admin-provider-control.js";
+import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "../src/modes/admin/tools/cloudflare-openapi-catalog.js";
 
 const mutationTool = adminProviderControlTools.find((tool) => tool.name === "provider_mutate");
 const readTool = adminProviderControlTools.find((tool) => tool.name === "provider_read");
@@ -194,4 +195,54 @@ test("tools dedicadas Tailscale reutilizam provider-control e ficam read-only", 
   assert.ok(tailscaleTools.every((tool) => tool.annotations.readOnlyHint === true));
   assert.ok(tailscaleTools.every((tool) => tool.annotations.destructiveHint === false));
   assert.equal(new Set(tailscaleTools.map((tool) => tool.name)).size, tailscaleTools.length);
+});
+
+
+test("Cloudflare OpenAPI snapshot inventory covers all observed HTTP operations without execution authority", () => {
+  assert.equal(CLOUDFLARE_OPENAPI_META.operations, 3670);
+  assert.equal(CLOUDFLARE_OPENAPI_META.paths, 2303);
+  assert.equal(CLOUDFLARE_OPENAPI_META.tags, 745);
+  assert.deepEqual(CLOUDFLARE_OPENAPI_META.methods, { GET: 1798, POST: 782, PUT: 352, PATCH: 273, DELETE: 465 });
+  assert.match(CLOUDFLARE_OPENAPI_META.sha256, /^[a-f0-9]{64}$/);
+  const operations = new Set(CLOUDFLARE_OPENAPI_OPERATIONS.map((x) => x.method + " " + x.path));
+  assert.equal(operations.size, 3670);
+  assert.ok(CLOUDFLARE_OPENAPI_OPERATIONS.every((x) => x.executionStatus === "INVENTORY_ONLY"));
+  assert.ok(CLOUDFLARE_OPENAPI_OPERATIONS.every((x) => x.method && x.path.startsWith("/") && x.summary));
+  assert.equal(CLOUDFLARE_OPENAPI_META.executionAuthorizedByInventory, false);
+});
+
+test("provider_capabilities reuses original dispatcher with Cloudflare OpenAPI search and pagination", async () => {
+  const result = await matrixTool.handler({
+    provider: "cloudflare", view: "openapi", method: "GET", search: "/dns_records", limit: 3, offset: 0,
+  });
+  const data = JSON.parse(result.content[0].text);
+  assert.equal(data.status, "INVENTORY_PASS");
+  assert.equal(data.catalog.operations, 3670);
+  assert.ok(data.totalMatched >= 1 && data.items.length <= 3);
+  assert.ok(data.items.every((x) => x.method === "GET" && x.path.includes("/dns_records")));
+  assert.ok(data.items.every((x) => x.executionStatus === "INVENTORY_ONLY"));
+  const final = await matrixTool.handler({ provider: "cloudflare", view: "openapi", offset: 3669, limit: 1 });
+  const tail = JSON.parse(final.content[0].text);
+  assert.equal(tail.items.length, 1);
+  assert.equal(tail.nextOffset, null);
+  const legacy = JSON.parse((await matrixTool.handler({ provider: "cloudflare" })).content[0].text);
+  assert.equal(legacy.status, "PASS");
+  assert.ok(legacy.capabilities.some((x) => x.capability === "dns.list"));
+});
+
+test("Cloudflare inventory is not an escape hatch for provider_read or provider_mutate", async () => {
+  assert.throws(
+    () => buildProviderRequest("cloudflare", "openapi:GET /accounts", {}),
+    /PROVIDER_CAPABILITY_UNKNOWN/,
+  );
+  const denied = JSON.parse((await readTool.handler({
+    provider: "cloudflare", capability: "openapi:GET /accounts", params: {},
+  })).content[0].text);
+  assert.equal(denied.ok, false);
+  assert.match(denied.status, /PROVIDER_CAPABILITY_UNKNOWN/);
+  const mutateDenied = JSON.parse((await mutationTool.handler({
+    provider: "cloudflare", capability: "openapi:DELETE /accounts/{account_id}", params: { account_id: "test" },
+  })).content[0].text);
+  assert.equal(mutateDenied.ok, false);
+  assert.match(mutateDenied.status, /PROVIDER_CAPABILITY_UNKNOWN/);
 });
