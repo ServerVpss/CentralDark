@@ -949,6 +949,11 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
             + '\nPROVA / FONTE: ' + (live ? live.textContent : info[1])
             + '\nPROXIMO MOVIMENTO: ' + info[2]
             + '\nCONTINUIDADE: erro ou gate operacional gera PLACA; só a função dependente espera. Autorização e segurança permanecem.';
+          cdCopyButton(detail,function(){
+            var latest=title.indexOf('API CentralDark')>=0?document.getElementById('cd-api-hermes-plaque'):null;
+            return cdRecipe(title,locator,card.querySelector('.val')?.textContent||'UNKNOWN',
+              info,latest?.textContent||info[1]);
+          });
         }
         detail.hidden = !open;
         detail.style.display = open ? 'block' : 'none';
@@ -957,11 +962,6 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       });
       card.appendChild(toggle);
       card.appendChild(detail);
-      cdCopyButton(detail,function(){
-        var live=title.indexOf('API CentralDark')>=0?document.getElementById('cd-api-hermes-plaque'):null;
-        return cdRecipe(title,locator,card.querySelector('.val')?.textContent||'UNKNOWN',
-          info,live?.textContent||info[1]);
-      });
     });
   }
   cdMountIndependentPlaques();
