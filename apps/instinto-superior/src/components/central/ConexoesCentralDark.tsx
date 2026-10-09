@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -12,6 +12,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 const OAUTH_START_SUPPORTED = new Set(["github", "notion", "gdrive", "gmail", "tailscale", "cloudflare"]);
 
@@ -34,6 +35,7 @@ export function ConexoesCentralDark() {
   });
 
   const dados = q.data;
+  const [oauthError, setOauthError] = useState<string | null>(null);
   const agrupadas = useMemo(() => {
     const mapa = new Map<string, NonNullable<typeof dados>["connections"]>();
     for (const conexao of dados?.connections ?? []) {
@@ -49,7 +51,7 @@ export function ConexoesCentralDark() {
   const ativas = (dados?.connections ?? []).filter((c) => c.status === "active").length;
   const multi = [...agrupadas.values()].filter((lista) => lista.length > 1).length;
 
-  function conectar(providerId: string) {
+  async function conectar(providerId: string) {
     // Transporte OAuth só é acionável quando a consulta viva ao owner retornou PASS.
     if (!dados?.userId || typeof window === "undefined") return;
     if (providerId !== "cloudflare" && dados.estado !== "PASS") return;
@@ -58,6 +60,27 @@ export function ConexoesCentralDark() {
       user_id: dados.userId,
       redirect_to: window.location.href,
     });
+    if (providerId === "cloudflare") {
+      // One click; the current CentralDark session binds the OAuth grant to the right user.
+      setOauthError(null);
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error || !session?.access_token) throw Error("SESSAO_CENTRALDARK_AUSENTE");
+        const response = await fetch(`${base}/oauth/cloudflare/start?${params.toString()}`, {
+          headers: { Authorization: `Bearer ${session.access_token}`, Accept: "application/json" },
+          credentials: "same-origin",
+          cache: "no-store",
+        });
+        const payload = await response.json().catch(() => ({})) as { status?: string; authorize_url?: string };
+        if (!response.ok) throw Error(payload.status ?? `HTTP_${response.status}`);
+        if (!payload.authorize_url?.startsWith("https://dash.cloudflare.com/oauth2/auth?"))
+          throw Error("URL_AUTORIZACAO_INVALIDA");
+        window.location.assign(payload.authorize_url);
+      } catch (error) {
+        setOauthError(error instanceof Error ? error.message : "CLOUDFLARE_OAUTH_START_FAILED");
+      }
+      return;
+    }
     window.location.href = `${base}/oauth/${providerId}/start?${params.toString()}`;
   }
 
@@ -82,7 +105,7 @@ export function ConexoesCentralDark() {
             <RefreshCw className={q.isFetching ? "animate-spin" : ""} />
             Atualizar
           </Button>
-          <Button onClick={() => conectar("cloudflare")} disabled={!dados?.userId}>
+          <Button onClick={() => void conectar("cloudflare")} disabled={!dados?.userId}>
             <Link2 />
             Conectar Cloudflare
           </Button>
@@ -122,6 +145,12 @@ export function ConexoesCentralDark() {
           <strong className="mt-1 block text-xl">{multi}</strong>
         </article>
       </div>
+
+      {oauthError ? (
+        <div role="alert" className="mt-5 rounded-lg border border-gold/30 p-3 text-sm text-gold">
+          Cloudflare OAuth: {oauthError}
+        </div>
+      ) : null}
 
       {dados?.erro ? (
         <div className="mt-5 flex gap-3 rounded-lg border border-gold/30 bg-gold/5 p-4 text-sm">
@@ -183,7 +212,7 @@ export function ConexoesCentralDark() {
                 ))}
               </div>
               {OAUTH_START_SUPPORTED.has(providerId) ? (
-                <Button className="mt-4" variant="outline" disabled={!dados?.userId || (providerId !== "cloudflare" && dados?.estado !== "PASS")} onClick={() => conectar(providerId)}>
+                <Button className="mt-4" variant="outline" disabled={!dados?.userId || (providerId !== "cloudflare" && dados?.estado !== "PASS")} onClick={() => void conectar(providerId)}>
                   <Link2 />
                   Conectar outra conta
                 </Button>
