@@ -67,6 +67,8 @@ No human /memory approve or manual file copy is required when the applicable exi
 
 Never reset a repository, delete local runtime skills or overwrite independently changed runtime files.
 
+For the VPS checkout owner `scripts/vps/auto-sync-main.sh`, tracked worktree edits remain fail-closed, but known untracked runtime scopes must be quarantined automatically under `/root/CentralDark-preserve/auto-sync-untracked-<UTC>/`, fast-forward applied, and restored with a manifest after every outcome. A recurring cron entry alone is not proof: verify `VPS_HEAD == origin/main`, the exact backup path/hash, and the sync log/status readback. Never classify `BLOCKED dirty checkout` as autonomous sync success when only untracked runtime artifacts caused it.
+
 ## Success
 
 MAIN_SHA=<current origin/main>
