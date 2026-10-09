@@ -763,8 +763,15 @@ body {
   <div class="hud-card"><h3>Triton 2.49.0 &middot; inventario</h3><div class="val ok">21 READY / 30 CATALOGADOS</div><div class="meta">Sensor Kylin/Triton: 21 com state READY, 1 UNAVAILABLE (OCR), 8 sem estado READY informado. Nenhum LLM generativo de conversa identificado no catalogo; Triton READY nao e chat NLP PASS.</div></div>
   <div class="hud-card"><h3>Kylin NLP &middot; geracao</h3><div class="val warn">INIT_FAILED:10 / 502</div><div class="meta">Falha nativa registrada e reproduzida em receipt; SDK/modelo indisponivel e hipoteses separadas. Patch de ordem `bdf2f09ad` no source, nao equivale a correcao comprovada no processo ativo.</div></div>
   <div class="hud-card"><h3>Fio da missao / evidencias</h3><div class="val warn">FIXED_POINT: NAO COMPROVADO</div><div class="meta">GOAL t_9040803d. Receber &#8594; Perceber &#8594; Compreender &#8594; Costurar &#8594; Comprovar &#8594; Cristalizar &#8594; Continuar. NEXT_CURSOR: reconciliar modelo disponivel &#8594; native-once &#8594; bridge completion &#8594; Hermes.</div></div>
-  <div class="hud-card"><h3>Rota de modelo local &middot; auxiliar</h3><div class="val warn">OFFLINE / NAO BLOQUEANTE</div><div class="meta">Falta localizar ou instalar um modelo conversacional local. O site, o MCP, o Hermes Core e os demais modelos continuam seguindo normalmente.</div><button type="button" class="aion-open-btn" style="margin-top:10px" onclick="var n=document.getElementById('cd-local-model-note'); n.hidden=!n.hidden; this.textContent=n.hidden?'VER PENDENCIA':'OCULTAR PENDENCIA'">VER PENDENCIA</button><div id="cd-local-model-note" class="meta" hidden style="margin-top:10px">PROXIMO PASSO: localizar modelo local quando autorizado. ROTA_OFFLINE=NAO_BLOQUEANTE.</div></div>
-  <div class="hud-card"><h3>API CentralDark &middot; Hermes Core</h3><div class="val warn" id="cd-api-hermes-current">API HEALTH: MEDINDO</div><div class="meta">Owner real: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">api.centralldark.com/health</a> retorna `servico=hermes-core`, `versao=5.0` na medicao da Casa. Health nao equivale a IA inferindo, deploy nem acesso admin. A consulta HTTP sem credenciais roda no navegador, com UNKNOWN se indisponivel.</div></div>
+  <div class="hud-card"><h3>Rota de modelo local &middot; auxiliar</h3><div class="val warn">OFFLINE / NAO BLOQUEANTE</div><div class="meta">Falta localizar ou instalar um modelo conversacional local. O site, o MCP, o Hermes Core e os demais modelos continuam seguindo normalmente.</div><button type="button" class="aion-open-btn" style="margin-top:10px" onclick="var n=document.getElementById('cd-local-model-note'); n.hidden=!n.hidden; this.textContent=n.hidden?'VER PENDENCIA':'OCULTAR PENDENCIA'">VER PENDENCIA</button><div id="cd-local-model-note" class="meta" hidden style="margin-top:10px;white-space:pre-line;overflow-wrap:anywhere">PLACA: ROTA_OFFLINE_NAO_BLOQUEANTE
+ROTA: UNKNOWN (modelo conversacional local não cadastrado)
+OWNER: Kylin / Hermes catalog
+ARQUIVO: scripts/vps/kylin-openai-bridge.py
+LINHA: UNKNOWN (checar runtime)
+ERRO: modelo local não comprovado; INIT_FAILED:10 / HTTP 502 na rota NLP é ferida separada
+PROVA: último inventário Triton sem LLM generativo confirmado; health não prova chat
+PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.</div></div>
+  <div class="hud-card"><h3>API CentralDark &middot; Hermes Core</h3><div class="val warn" id="cd-api-hermes-current">API HEALTH: MEDINDO</div><div class="meta" id="cd-api-hermes-plaque" role="status" aria-live="polite" style="margin-top:8px;color:var(--amber)">PLACA: AGUARDANDO CONTRAPROVA /health</div><div class="meta">Owner real: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">api.centralldark.com/health</a> retorna `servico=hermes-core`, `versao=5.0` na medicao da Casa. Health nao equivale a IA inferindo, deploy nem acesso admin. A consulta HTTP sem credenciais roda no navegador, com UNKNOWN se indisponivel.</div></div>
   <div class="hud-card"><h3>Google Drive &middot; Vault VPS off-host</h3><div class="val warn">GOOGLE_DRIVE_VAULT_OFFHOST: IDENTIFICADO</div><div class="meta">Inventario Claude: `Vault-Cofre-CentralDark-20260930T105330Z.tar.gz` (752.981.967 bytes), e sidecar .sha256 presente. SHA esperado `383eb16f6ccd...e8e4` no Drive e receipt do Git. Metadata+sidecar PASS; SHA de bytes do arquivo inteiro CURRENT = UNKNOWN. Conteudo potencialmente secreto: sem upload ou abertura pela API publica.</div></div>
  </div>
  <p class="cadeado-prova">Fonte: snapshot operacional 2026-10-09T01:35:04.340Z (sensor) + GitHub `main` + VPS git + <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/RECEIPTS/2026-10-09-KYLIN-BRIDGE-CHAT-502-INIT-FAILED-10.md" target="_blank" rel="noopener">receipt Kylin</a>. O One Heart existente continua como fonte dinamica separada; CORS/timeout no file:// vira UNKNOWN, nunca PASS.</p>
@@ -779,10 +786,192 @@ body {
     badge.textContent=fresh?'SNAPSHOT RECENTE / <= 15 min':'SNAPSHOT STALE / MEDIR CURRENT';
     badge.title='Snapshot gravado em '+(parent.getAttribute('data-observed-at')||'UNKNOWN')+'; nao prova situacao do runtime depois disso.';
   }
+  // cd-plaque-multiplex-v1: uma placa por cartao no MESMO HUD, sem segundas rotas.
+  // Cada boto abre sua propria causa/prova/proximo passo; sem acionar servicos.
+  function cdPlaqueInfo(title) {
+    if (title.indexOf('GitHub main') >= 0) return ['Referência de código, não atestado de deploy.', 'HEAD visível no cartão é histórico até nova leitura.', 'Confrontar HEAD atual do owner com checkout e runtime.'];
+    if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) return ['Um checkout antigo ou dirty não derruba outros serviços.', 'A placa mostra o último HEAD medido; NÃO é probe contínua.', 'Reconciliar owner git sem apagar missões nem sobrescrever trabalho.'];
+    if (title.indexOf('Casa') >= 0) return ['Versão física e GitHub podem divergir sem derrubar o HUD.', 'Hash apresentado é snapshot; o arquivo local requer readback.', 'Comparar hash do HUD físico com o owner e manter backup.'];
+    if (title.indexOf('Triton') >= 0) return ['Triton pronto não equivale a modelo de conversa disponível.', '21 READY / 30 catalogados na medição referenciada.', 'Remedir /v2/repository/index e verificar separadamente inferência de texto.'];
+    if (title.indexOf('Kylin NLP') >= 0) return ['O SDK registrou INIT_FAILED:10; falha restrita à geração NLP.', 'Receipt de SDK e HTTP 502, sem prova de recuperação posterior.', 'Preservar bridge e investigar modelo disponível; outras rotas seguem.'];
+    if (title.indexOf('Fio da missao') >= 0) return ['Ainda não há FIXED_POINT global comprovado.', 'Goal e NEXT_CURSOR exibidos são histórico de execução.', 'Continuar pelo menor delta autorizado e contraprovar por escopo.'];
+    if (title.indexOf('API CentralDark') >= 0) return ['Health não demonstra calibração perfeita, inferência ou deploy.', 'Consultar PLACA dinâmica desta API no mesmo cartão.', 'Tratar DRIFT/404/timeout no owner; manter site e MCP independentes.'];
+    if (title.indexOf('Google Drive') >= 0) return ['Inventário do cofre não prova restauração ou integridade atual do arquivo.', 'Metadados e sidecar SHA vistos; hash integral atual ainda UNKNOWN.', 'Revalidar somente metadados/hashes por conexão privada. Nunca expor conteúdo.'];
+    return ['Estado deste módulo não comprovado por sensor atual.', 'Somente o rótulo de superfície e snapshot estão visíveis.', 'Remedir o owner antes de promover PASS; seguir demais rotas.'];
+  }
+  // Card projection only: show actual path and source when grounded; otherwise UNKNOWN.
+  // A failed delivery/check is a local plaque, never an automatic global veto.
+  function cdPlaqueLocator(title, card) {
+    var result={route:'UNKNOWN (sem medicao de rota)',owner:'UNKNOWN',file:'UNKNOWN',line:'UNKNOWN',error:'UNKNOWN'};
+    if (title.indexOf('GitHub main') >= 0) {
+      result.route='https://github.com/ServerVpss/CentralDark/tree/main';
+      result.owner='ServerVpss/CentralDark@main';
+      result.file='docs/HUD/HUD.html';result.error='HEAD_SNAPSHOT_PODE_ESTAR_STALE';
+    } else if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) {
+      result.route='VPS checkout main / deploy (runtime a medir)';
+      result.owner='ServerVpss/CentralDark (VPS)';
+      result.file='UNKNOWN (configuracao ativa exige leitura)';
+      result.error='SOURCE_VS_RUNTIME_DRIFT (snapshot)';
+    } else if (title.indexOf('Casa') >= 0) {
+      result.route='Obsidian / HUD.html (arquivo local)';
+      result.owner='docs/HUD/HUD.html';
+      result.file='HUD.html';result.error='HASH_READBACK_PENDENTE_OU_HISTORICO';
+    } else if (title.indexOf('Triton') >= 0) {
+      result.route='http://127.0.0.1:8000/v2/repository/index (runtime local, confirmar)';
+      result.owner='Triton / Kylin';
+      result.file='UNKNOWN (runtime nao inspecionado neste navegador)';
+      result.error='SEM_LLM_CONVERSACIONAL_PROVADO';
+    } else if (title.indexOf('Kylin NLP') >= 0) {
+      result.route='127.0.0.1:18435 / native-once (caminho da geracao)';
+      result.owner='centraldark-kylin-native-bridge.service';
+      result.file='/root/.hermes/kylin_openai_bridge.py';
+      result.line='202 (trace historico; confirmar no runtime atual)';
+      result.error='INIT_FAILED:10 / HTTP 502 (observado)';
+    } else if (title.indexOf('Fio da missao') >= 0) {
+      result.route='Goal t_9040803d / continuidade';
+      result.owner='KAIZEN-VIVO';
+      result.file='docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md';
+      result.error='FIXED_POINT_NAO_COMPROVADO';
+    } else if (title.indexOf('Rota de modelo local') >= 0) {
+      result.route='UNKNOWN (modelo conversacional local nao cadastrado)';
+      result.owner='Kylin / Hermes catalog (remedir)';
+      result.file='scripts/vps/kylin-openai-bridge.py';
+      result.error='ROTA_LOCAL_OFFLINE_NAO_BLOQUEANTE';
+    } else if (title.indexOf('API CentralDark') >= 0) {
+      result.route='https://api.centralldark.com/health';
+      result.owner='Hermes Core / API';
+      result.file='docs/HUD/HUD.html';
+      result.error='CALIBRACAO_DRIFT / 404 / REDE (conforme probe viva)';
+    } else if (title.indexOf('Google Drive') >= 0) {
+      result.route='Google Drive: cofre off-host (ID/URL restritos; UNKNOWN no HUD)';
+      result.owner='Vault / backup off-host';
+      result.file='UNKNOWN (cofre privado)';
+      result.error='INTEGRIDADE_COMPLETA_NAO_PROVADA';
+    } else {
+      var source=card.querySelector('a[href]');
+      if (source && /^https?:\/\//i.test(source.href)) result.route=source.href;
+      result.owner=(card.closest('.section')?.querySelector('.section-title')?.textContent || '').trim() || 'UNKNOWN';
+      result.error='ERRO_OU_ESTADO_NAO_COMPROVADO_NESTE_CARTAO';
+    }
+    return result;
+  }
+  function cdPlaqueRequired(card, parent) {
+    if (parent.contains(card)) return true;
+    var val=card.querySelector('.val');
+    var status=(val?.textContent || '').toUpperCase();
+    return !!(val && (val.classList.contains('warn') || val.classList.contains('fail') ||
+      /\b(OFFLINE|DRIFT|UNKNOWN|ERROR|ERRO|FAIL|BLOCKED|PENDING|STALE|502|404|NAO COMPROVADO|PARCIAL)\b/.test(status)));
+  }
+  // Existing HUD plaque -> exact known location -> copyable remedy mission. No second panel.
+  function cdRecipe(title, loc, status, info, proof) {
+    return [
+      '!CENTRALDARK #ACORDAR !PAPAGAIO_OFF',
+      'INTENCAO: COSTURAR '+String(title).trim(),
+      'ESTADO: '+String(status||'UNKNOWN').trim(),
+      'ROTA: '+loc.route,'OWNER: '+loc.owner,'ARQUIVO: '+loc.file,
+      'LINHA: '+loc.line,'ERRO: '+loc.error,
+      'MOTIVO: '+info[0],'EVIDENCIA: '+String(proof||info[1]).trim(),
+      'NEXT_CURSOR: '+info[2],
+      'RECEITA: MEDIR CURRENT -> REUTILIZAR OWNER/CLI OU ROTA AUTORIZADA -> TESTAR -> READBACK -> CONTRAPROVAR.',
+      'FALHOU? PLACA COM ROTA/ERRO/LINHA OU UNKNOWN; COSTURA SE DER; RESTANTE CONTINUA.',
+      'SEM NOVO HUD / GATE / BOT / CAPTURA DUPLICADA.',
+      'SEGURANCA E AUTORIZACAO PERMANECEM; UNKNOWN != PASS; COMMIT != DEPLOY.'
+    ].join('\n');
+  }
+  function cdCopy(text, btn) {
+    function success(){if(btn)btn.textContent='COPIADO - COLAR NO HERMES';}
+    function fallback(){
+      var area=document.createElement('textarea');
+      area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.left='-9999px';
+      document.body.appendChild(area);area.select();
+      var ok=false;try{ok=document.execCommand('copy');}catch(_){}
+      area.remove();if(ok)success();else if(btn)btn.textContent='COPIA INDISPONIVEL - SELECIONE RECEITA';
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(success,fallback);
+    else fallback();
+  }
+  function cdCopyButton(container, recipe) {
+    if(!container||container.querySelector('.cd-plaque-copy'))return;
+    var button=document.createElement('button');button.type='button';
+    button.className='aion-open-btn cd-plaque-copy';button.textContent='ACEITAR MISSAO (COPIAR)';
+    button.style.marginTop='10px';button.style.maxWidth='100%';button.style.whiteSpace='normal';
+    button.addEventListener('click',function(){cdCopy(recipe(),button);});
+    container.appendChild(button);
+  }
+  window.cdHudRecipe=cdRecipe;window.cdHudCopy=cdCopy;
+  function cdMountIndependentPlaques() {
+    var cards = document.querySelectorAll('.hud-grid > .hud-card');
+    Array.prototype.forEach.call(cards, function(card, index) {
+      // Um botao VER PENDENCIA por cartao; outros botoes nao substituem a placa.
+      if (!cdPlaqueRequired(card, parent) || card.querySelector('.cd-plaque-multiplex-v1')) return;
+      var title = (card.querySelector('h3') || {}).textContent || 'OWNER UNKNOWN';
+      var manual = card.querySelector('#cd-local-model-note');
+      if (manual) {
+        var manualInfo=cdPlaqueInfo(title), manualLocation=cdPlaqueLocator(title,card);
+        cdCopyButton(manual,function(){
+          return cdRecipe(title,manualLocation,card.querySelector('.val')?.textContent||'UNKNOWN',
+            manualInfo,manual.textContent);
+        });
+        return;
+      }
+      if (Array.prototype.some.call(card.querySelectorAll('button'),function(b){
+        return /^(VER|OCULTAR) PEND[ÊE]NCIA$/i.test(b.textContent.trim());
+      })) return;
+      var info = cdPlaqueInfo(title);
+      var locator = cdPlaqueLocator(title, card);
+      var toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'aion-open-btn cd-plaque-multiplex-v1';
+      toggle.textContent = 'VER PENDENCIA';
+      toggle.style.marginTop = '10px';
+      toggle.setAttribute('aria-expanded', 'false');
+      var detail = document.createElement('div');
+      detail.className = 'meta';
+      detail.id = 'cd-plaque-detail-' + index;
+      detail.hidden = true;
+      detail.style.display = 'none';
+      detail.style.whiteSpace = 'pre-line';
+      detail.style.overflowWrap = 'anywhere';
+      toggle.setAttribute('aria-controls', detail.id);
+      toggle.addEventListener('click', function() {
+        var open = detail.hidden;
+        if (open) {
+          var displayed = card.querySelector('.val');
+          var live = title.indexOf('API CentralDark') >= 0 ? document.getElementById('cd-api-hermes-plaque') : null;
+          detail.textContent = 'PLACA: ' + title.trim()
+            + '\nESTADO EXIBIDO: ' + (displayed ? displayed.textContent.trim() : 'UNKNOWN')
+            + '\nROTA EXATA OU UNKNOWN: ' + locator.route
+            + '\nOWNER: ' + locator.owner
+            + '\nARQUIVO: ' + locator.file
+            + '\nLINHA: ' + locator.line
+            + '\nERRO: ' + locator.error
+            + '\nMOTIVO: ' + info[0]
+            + '\nPROVA / FONTE: ' + (live ? live.textContent : info[1])
+            + '\nPROXIMO MOVIMENTO: ' + info[2]
+            + '\nCONTINUIDADE: erro ou gate operacional gera PLACA; só a função dependente espera. Autorização e segurança permanecem.';
+          cdCopyButton(detail,function(){
+            var latest=title.indexOf('API CentralDark')>=0?document.getElementById('cd-api-hermes-plaque'):null;
+            return cdRecipe(title,locator,card.querySelector('.val')?.textContent||'UNKNOWN',
+              info,latest?.textContent||info[1]);
+          });
+        }
+        detail.hidden = !open;
+        detail.style.display = open ? 'block' : 'none';
+        toggle.textContent = open ? 'OCULTAR PENDENCIA' : 'VER PENDENCIA';
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      card.appendChild(toggle);
+      card.appendChild(detail);
+    });
+  }
+  cdMountIndependentPlaques();
+  // Os cartões de MAPA/FORJA vêm depois deste script no HTML; reconciliar no DOM completo.
+  document.addEventListener('DOMContentLoaded', cdMountIndependentPlaques);
   // API-HERMES health: probe publica READ_ONLY; nao e prova de LLM, owner ou deploy.
   function apiHealth(){
     var el=document.getElementById('cd-api-hermes-current');
-    if(!el)return;
+    var plaque=document.getElementById('cd-api-hermes-plaque');
+    if(!el||!plaque)return;
     var ctrl=window.AbortController?new AbortController():null;
     var timeout=ctrl?setTimeout(function(){ctrl.abort();},6500):null;
     fetch('https://api.centralldark.com/health',{cache:'no-store',mode:'cors',signal:ctrl?ctrl.signal:undefined})
@@ -793,9 +982,26 @@ body {
         var isHermes=body.status==='ok'&&body.servico==='hermes-core'&&fresh;
         el.textContent=isHermes?'HEALTH HTTP 200 / HERMES CORE 5.0':'UNKNOWN / STALE OU OUTRO OWNER';
         el.className='val '+(isHermes?'ok':'warn');
-        el.title='HTTP/health exclusivamente; inferred generation, models, deploy e outras rotas = nao provados';
+        el.title='HTTP/health exclusivamente; inferencia, modelos, deploy e outras rotas = nao provados';
+        var calibration=body.calibracao_runtime;
+        if(!isHermes){
+          plaque.textContent='PLACA: HEALTH_UNKNOWN | motivo=owner ou frescor nao comprovado | proximo=remedir /health no owner';
+        }else if(calibration&&calibration.status==='DRIFT'){
+          var wounds=Number.isFinite(Number(calibration.wound_count))?Number(calibration.wound_count):'UNKNOWN';
+          plaque.textContent='PLACA: CALIBRACAO_DRIFT | feridas='+wounds+' | proximo=inspecionar owner da calibracao; nao marcar FIXED_POINT';
+        }else if(calibration&&calibration.status==='OK'&&Number(calibration.wound_count)===0){
+          plaque.textContent='PLACA: API_HEALTH_PASS / CALIBRACAO_OK | somente escopo observado; deploy e inferencia nao provados';
+        }else{
+          plaque.textContent='PLACA: CALIBRACAO_UNKNOWN | proximo=consultar owner; HTTP 200 nao prova modelo nem deploy';
+        }
+        plaque.title='Fonte: /health; a placa e uma projecao READ_ONLY, nao altera o runtime';
       })
-      .catch(function(){el.textContent='UNKNOWN / API OU CORS';el.className='val warn';})
+      .catch(function(error){
+         var message=error&&error.message?String(error.message):'';
+         var cause=/^HTTP_[0-9]{3}$/.test(message)?message:'REDE_CORS_OU_TIMEOUT';
+         el.textContent='UNKNOWN / API OU CORS';el.className='val warn';
+         plaque.textContent=(cause==='HTTP_404'?'PLACA: ROTA_NAO_ENCONTRADA':'PLACA: ROTA_NAO_COMPROVADA')+' | causa='+cause+' | proximo=verificar URL/owner e continuar pelo HUD';
+       })
       .then(function(){if(timeout)clearTimeout(timeout);});
   }
   apiHealth();setInterval(apiHealth,30000);
@@ -2021,21 +2227,38 @@ missions.forEach(function(m, i) {
   div.innerHTML =
     '<span class="hud-tag ' + m.tag + '">' + (m.tag === 'chefe' ? '\uD83E\uDDCD Chefe decide' : '\uD83E\uDD16 Agente resolve') + '</span>' +
     '<p><strong>' + m.label + '</strong><br>' + m.text + '</p>' +
-    '<button data-i="' + i + '">Aceitar missao (copiar)</button>';
+    '<button data-i="' + i + '" data-action="copy">Aceitar missao (copiar)</button>' +
+    '<button data-i="' + i + '" data-action="view" class="aion-open-btn" aria-expanded="false" style="margin:8px 0 0 0;padding:10px 16px">VER PENDENCIA</button>' +
+    '<div class="meta cd-mission-detail" hidden style="white-space:pre-line;overflow-wrap:anywhere;margin-top:10px"></div>';
   missionsEl.appendChild(div);
 });
 
 missionsEl.addEventListener('click', function(e) {
   if (e.target.tagName !== 'BUTTON') return;
-  var i = e.target.getAttribute('data-i');
-  var m = missions[i];
-  navigator.clipboard.writeText(m.text).then(function() {
-    e.target.textContent = 'Copiado \u2713 - cola no Hermes/Claude';
-    e.target.classList.add('done');
-    hudToast('Missao copiada. Cola no chat do agente que vai executar.');
-  }).catch(function() {
-    hudToast('Nao deu pra copiar sozinho - seleciona o texto manualmente.');
-  });
+  var i = Number(e.target.getAttribute('data-i')), m = missions[i];
+  if (!m) return;
+  var card=e.target.closest('.hud-mission');
+  var info=['Missao aberta: conclusao nao comprovada.',
+    'Fonte: docs/HUD/HUD.html / missions[]; runtime UNKNOWN.',m.text];
+  var loc={route:'UNKNOWN (missao sem URL comprovada)',
+    owner:m.tag==='chefe'?'CHEFE - DECISAO HUMANA':'AGENTE - EXECUTOR AUTORIZADO',
+    file:'docs/HUD/HUD.html',line:'UNKNOWN (indice '+i+')',
+    error:m.tag==='chefe'?'DECISAO_HUMANA_PENDENTE':'MISSAO_ABERTA_SEM_READBACK'};
+  var recipe=window.cdHudRecipe(m.label,loc,m.tag==='chefe'?'CHEFE_DECIDE':'AGENTE_RESOLVE',info,m.text);
+  if(e.target.getAttribute('data-action')==='copy'){
+    window.cdHudCopy(recipe,e.target);return;
+  }
+  if(e.target.getAttribute('data-action')==='view'){
+    var detail=card&&card.querySelector('.cd-mission-detail');
+    if(!detail)return;
+    var open=detail.hidden;
+    detail.textContent='PLACA: '+m.label+'\nROTA: '+loc.route+'\nOWNER: '+loc.owner+
+      '\nARQUIVO: '+loc.file+'\nLINHA: '+loc.line+'\nERRO: '+loc.error+
+      '\nPROVA: '+info[1]+'\nRECEITA:\n'+recipe;
+    detail.hidden=!open;
+    e.target.setAttribute('aria-expanded',String(open));
+    e.target.textContent=open?'OCULTAR PENDENCIA':'VER PENDENCIA';
+  }
 });
 
 function hudToast(msg) {

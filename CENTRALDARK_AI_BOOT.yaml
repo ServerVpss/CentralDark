@@ -589,6 +589,24 @@ CENTRALDARK_AI_BOOT:
     hud:
       required: true
       phase_order: [HUD_FIRST, HUD_UPDATE]
+      # Porta de confiança global. Isto não é gate de saúde opcional:
+      # toda entrada CentralDark primeiro consome o MESMO HUD da main.
+      entry_trust_gate:
+        enforced: true
+        canonical_owner: "docs/HUD/HUD.html"
+        canonical_branch: "ServerVpss/CentralDark@main"
+        must_read_before_goal_execution: true
+        vps_materialized_path: "/root/.centraldark/HUD.html"
+        compare_bytes_sha256: true
+        no_cached_stale_main_as_pass: true
+        failure_policy: FAIL_CLOSED
+        failure_blocks: [NEW_CANONICAL_BOOT, NEW_CONTROL_PLANE_ACTION, DEPLOY_PROMOTION]
+        preserve_already_running_services: true
+        optional_service_errors: PLAQUE_WITH_RECIPE_AND_CONTINUE
+        no_second_hud_owner: true
+        owners:
+          bootstrap: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+          deploy: .github/workflows/vps-exec-selfhosted.yml
       mental_compass:
         🎯_RUMO: "objetivo vigente + intenção do CHEFE"
         📍_AGORA: "estado atual medido (GitHub + Casa + VPS + runtime)"
