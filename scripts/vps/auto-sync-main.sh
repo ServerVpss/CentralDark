@@ -34,9 +34,53 @@ blocked() { log "BLOCKED" "$1"; status "BLOCKED" "$1"; exit 2; }
 
 branch=$(git symbolic-ref --quiet --short HEAD) || blocked "detached HEAD; no checkout mutation"
 before=$(git rev-parse --verify HEAD) || blocked "HEAD unavailable"
-# Never move a checkout owned by another branch or containing unique local work.
+# Tracked edits belong to another writer and remain fail-closed.
 [[ "$branch" == "main" ]] || blocked "branch=$branch is not main; reconcile with owner; HEAD=$before"
-[[ -z "$(git status --porcelain --untracked-files=normal)" ]] || blocked "dirty checkout; preserve local changes; HEAD=$before"
+[[ -z "$(git status --porcelain --untracked-files=no)" ]] || blocked "tracked changes owned elsewhere; HEAD=$before"
+
+# Untracked runtime scopes are preserved automatically so they cannot stall the
+# canonical main->VPS sync. They are restored after every path, including
+# fetch/merge failures; tracked edits still block above.
+STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+PRESERVE_DIR="/root/CentralDark-preserve/auto-sync-untracked-$STAMP"
+PRESERVE_MANIFEST="$PRESERVE_DIR/MANIFEST.tsv"
+RESTORED=0
+mkdir -p "$PRESERVE_DIR/untracked"
+: > "$PRESERVE_MANIFEST"
+restore_untracked() {
+  [[ "$RESTORED" -eq 0 ]] || return 0
+  if [[ -s "$PRESERVE_MANIFEST" ]]; then
+    tac "$PRESERVE_MANIFEST" | while IFS=$'\t' read -r rel saved; do
+      [[ -n "$rel" && -e "$saved" ]] || continue
+      if git ls-files --error-unmatch -- "$rel" >/dev/null 2>&1; then
+        log "PRESERVED" "untracked path became tracked; left backup=$saved path=$rel"
+        continue
+      fi
+      mkdir -p "$(dirname "$REPO/$rel")"
+      if [[ -e "$REPO/$rel" ]]; then
+        log "PRESERVED" "restore collision; left backup=$saved path=$rel"
+      else
+        mv -- "$saved" "$REPO/$rel"
+      fi
+    done
+  fi
+  RESTORED=1
+}
+trap 'restore_untracked' EXIT
+
+while IFS= read -r line; do
+  [[ "$line" == \?\?\ * ]] || continue
+  rel="${line#?? }"
+  rel="${rel%/}"
+  [[ -n "$rel" && -e "$REPO/$rel" ]] || continue
+  saved="$PRESERVE_DIR/untracked/$rel"
+  mkdir -p "$(dirname "$saved")"
+  mv -- "$REPO/$rel" "$saved"
+  printf '%s\t%s\n' "$rel" "$saved" >> "$PRESERVE_MANIFEST"
+done < <(git status --porcelain --untracked-files=normal)
+if [[ -s "$PRESERVE_MANIFEST" ]]; then
+  log "PRESERVE" "untracked runtime scopes moved to $PRESERVE_DIR"
+fi
 
 if ! git fetch --quiet origin main; then
   blocked "fetch failed; HEAD=$before"
