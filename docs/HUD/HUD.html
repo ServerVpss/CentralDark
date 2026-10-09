@@ -1784,6 +1784,21 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       <h2 class="section-title">Cadeados &mdash; Lugares Provados e Selados</h2>
       <span class="section-count" id="cadeados-count">contando provas...</span>
     </div>
+
+    <!-- CD_HUD_MANIFESTO_ENTROU_TEM_QUE_SELAR_20261009 -->
+    <div class="cadeado-prova" id="cd-seal-law-manifest" role="status" aria-live="polite"
+         data-manifest-law="ENTROU_TEM_QUE_SELAR" data-owner="docs/HUD/HUD.html"
+         data-pr="1788" data-policy="UNKNOWN_NEVER_PASS">
+      <strong>&#129668; LEI DO HUD &mdash; ENTROU, TEM QUE SELAR.</strong>
+      Entrada nova sem OWNER, ESCOPO, PROOF_KEY, SHA, RECIBO, READBACK, DATA e NEXT_CURSOR
+      fica <strong>VER PEND&Ecirc;NCIA</strong>; nunca SELADO por presen&ccedil;a no HTML.
+      Selos hist&oacute;ricos permanecem como prova datada, n&atilde;o como runtime CURRENT.
+      <span id="cd-seal-law-state">CONFERINDO ENTRADAS...</span>
+    </div>
+    <details class="cadeado-prova" id="cd-seal-law-pendencias">
+      <summary>VER PEND&Ecirc;NCIA &middot; entradas ainda sem selo v&aacute;lido</summary>
+      <ul id="cd-seal-law-list"></ul>
+    </details>
     <div class="cadeado-grid">
       <div class="cadeado-card selado">
         <div class="cadeado-header">
@@ -2895,22 +2910,78 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
 })();
 
 
-/* Contador real do mesmo inventario: nunca fixar numero de cadeados no HTML. */
+/* Lei no manifesto operacional deste mesmo HUD: ENTROU, TEM QUE SELAR.
+ * Os selos históricos NÃO são reclassificados por um browser sem prova nova.
+ * Entradas dinâmicas nunca ganham verde por texto/class isolado: owner/receipt/readback.
+ * Este HTML projeta evidências, não assina receipts nem substitui o Reality Judge.
+ */
 (function() {
-  function contarCadeados() {
-    var area = document.getElementById('cadeados-count');
-    if (!area) return;
-    var grade = area.closest('.section');
-    if (!grade) return;
-    var cards = grade.querySelectorAll('.cadeado-grid > .cadeado-card');
-    var selados = grade.querySelectorAll('.cadeado-grid > .cadeado-card.selado').length;
-    var pendentes = cards.length - selados;
-    area.textContent = cards.length + ' registros · ' + selados + ' selados · ' + pendentes + ' pendentes';
-    area.title = 'Inventario contabilizado diretamente dos cartoes, nao dos servicos atuais';
+  var area=document.getElementById('cadeados-count');
+  var grade=area && area.closest('.section') && area.closest('.section').querySelector('.cadeado-grid');
+  var law=document.getElementById('cd-seal-law-manifest');
+  var verdict=document.getElementById('cd-seal-law-state');
+  var issues=document.getElementById('cd-seal-law-list');
+  if(!area || !grade || !law || law.getAttribute('data-manifest-law')!=='ENTROU_TEM_QUE_SELAR')return;
+  var historicos=new WeakSet(Array.from(grade.children).filter(function(n){return n.classList && n.classList.contains('cadeado-card');}));
+  var campos=['owner','scope','proof-key','source-sha','receipt','readback','observed-at','next-cursor'];
+  function pendencia(card,missing) {
+    if(card.classList.contains('selado')){card.classList.remove('selado');card.classList.add('aberto');}
+    if(!card.classList.contains('aberto') && !card.classList.contains('falha'))card.classList.add('aberto');
+    var status=card.querySelector('.cadeado-status');
+    if(!status){
+      var header=card.querySelector('.cadeado-header')||card;
+      status=document.createElement('span');
+      status.className='cadeado-status warn';
+      header.appendChild(status);
+    }
+    status.classList.remove('pass');
+    status.classList.add('warn');
+    status.textContent='VER PENDÊNCIA';
+    card.setAttribute('data-cd-seal-verdict','PENDING');
+    return missing.length ? 'faltam '+missing.join(', ') : 'readback do owner nao comprovado';
+  }
+  function contarCadeados(){
+    var cards=Array.from(grade.children).filter(function(n){return n.classList && n.classList.contains('cadeado-card');});
+    var lista=[],novo=0,novoSelado=0;
+    cards.forEach(function(card){
+      var nome=(card.querySelector('.cadeado-nome')||{}).textContent||'Entrada sem nome';
+      nome=nome.trim().slice(0,110);
+      if(historicos.has(card)){
+        if(!card.classList.contains('selado'))lista.push(nome+' — pendencia historica; verificar owner e prova atual');
+        return;
+      }
+      novo++;
+      var faltam=campos.filter(function(c){return !String(card.getAttribute('data-cd-'+c)||'').trim();});
+      var sha=String(card.getAttribute('data-cd-source-sha')||'').trim();
+      if(sha && !/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i.test(sha))faltam.push('source-sha valido');
+      var dt=Date.parse(card.getAttribute('data-cd-observed-at')||'');
+      if(!Number.isFinite(dt)||dt>Date.now()+60000)faltam.push('data verificavel');
+      // Nenhum dado arbitrario no DOM se valida sozinho; readback precisa vir do owner.
+      var confirm=card.getAttribute('data-cd-owner-verdict')==='READBACK_PASS';
+      var valid=confirm && faltam.length===0 && card.classList.contains('selado');
+      if(valid){novoSelado++;card.setAttribute('data-cd-seal-verdict','RECEIPT_DECLARED');}
+      else lista.push(nome+' — '+pendencia(card,faltam));
+    });
+    var selados=cards.filter(function(c){return c.classList.contains('selado');}).length;
+    var pendentes=cards.length-selados;
+    area.textContent=cards.length+' registros · '+selados+' selos · '+pendentes+' pendentes';
+    area.title='Contagem da grade existente; selo historico nao equivale a runtime atual';
+    if(verdict)verdict.textContent=' · '+novo+' entradas novas · '+novoSelado+' com receipt declarado · '+lista.length+' VER PENDÊNCIA';
+    if(issues){
+      issues.replaceChildren();
+      if(!lista.length){
+        var li=document.createElement('li');
+        li.textContent='Nenhuma pendencia na grade desta abertura. Runtime e E2E exigem prova separada.';
+        issues.appendChild(li);
+      }else lista.forEach(function(item){
+        var li=document.createElement('li');
+        li.textContent=item;
+        issues.appendChild(li);
+      });
+    }
   }
   contarCadeados();
-  var grade = document.querySelector('#cadeados-count')?.closest('.section')?.querySelector('.cadeado-grid');
-  if (grade && window.MutationObserver) new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  if(window.MutationObserver)new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-cd-owner-verdict','data-cd-receipt','data-cd-readback']});
 })();
 
 /* CD monitor integrado: eventos de saude, nunca transcricao de tela/audio. */
