@@ -420,7 +420,7 @@ export function judgeHermesChallenge(challenge = {}) {
 
   // Nunca avaliar nem pontuar conteúdo bruto sensível ou sem classificação.
   if (challenge.sensitive === true || challenge.source_review === 'FAIL') {
-    return result('PEDRA', 'QUARANTENA', ['SENSITIVE_SOURCE']);
+    return result('PEDRA', 'QUARENTENA', ['SENSITIVE_SOURCE']);
   }
   if (challenge.duplicate === true && challenge.new_material_proven !== true) {
     return result('PEDRA', 'REUSE', ['DROP_DUPLICATE']);
