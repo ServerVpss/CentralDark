@@ -791,7 +791,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
   function cdPlaqueInfo(title) {
     if (title.indexOf('GitHub main') >= 0) return ['Referência de código, não atestado de deploy.', 'HEAD visível no cartão é histórico até nova leitura.', 'Confrontar HEAD atual do owner com checkout e runtime.'];
     if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) return ['Um checkout antigo ou dirty não derruba outros serviços.', 'A placa mostra o último HEAD medido; NÃO é probe contínua.', 'Reconciliar owner git sem apagar missões nem sobrescrever trabalho.'];
-    if (title.indexOf('Casa') >= 0) return ['Versão física e GitHub podem divergir sem derrubar o HUD.', 'Hash apresentado é snapshot; o arquivo local requer readback.', 'Comparar hash do HUD físico com o owner e manter backup.'];
+    if (title.indexOf('Casa') >= 0 && title.indexOf('Screenpipe') < 0) return ['Versão física e GitHub podem divergir sem derrubar o HUD.', 'Hash apresentado é snapshot; o arquivo local requer readback.', 'Comparar hash do HUD físico com o owner e manter backup.'];
     if (title.indexOf('Triton') >= 0) return ['Triton pronto não equivale a modelo de conversa disponível.', '21 READY / 30 catalogados na medição referenciada.', 'Remedir /v2/repository/index e verificar separadamente inferência de texto.'];
     if (title.indexOf('Kylin NLP') >= 0) return ['O SDK registrou INIT_FAILED:10; falha restrita à geração NLP.', 'Receipt de SDK e HTTP 502, sem prova de recuperação posterior.', 'Preservar bridge e investigar modelo disponível; outras rotas seguem.'];
     if (title.indexOf('Fio da missao') >= 0) return ['Ainda não há FIXED_POINT global comprovado.', 'Goal e NEXT_CURSOR exibidos são histórico de execução.', 'Continuar pelo menor delta autorizado e contraprovar por escopo.'];
@@ -813,7 +813,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       result.owner='ServerVpss/CentralDark (VPS)';
       result.file='UNKNOWN (configuracao ativa exige leitura)';
       result.error='SOURCE_VS_RUNTIME_DRIFT (snapshot)';
-    } else if (title.indexOf('Casa') >= 0) {
+    } else if (title.indexOf('Casa') >= 0 && title.indexOf('Screenpipe') < 0) {
       result.route='Obsidian / HUD.html (arquivo local)';
       result.owner='docs/HUD/HUD.html';
       result.file='HUD.html';result.error='HASH_READBACK_PENDENTE_OU_HISTORICO';
