@@ -2156,3 +2156,76 @@ UNKNOWN != PASS
 E2E_RUNTIME=UNKNOWN
 NEXT_CURSOR=APLICAR_COMPASSO_NA_FERIDA_KYLIN_BRIDGE_CHAT_502
 ```
+
+### 🫀 Delta 08/10/2026 (noite) — O compasso nomeado, o trauma e a infalibilidade progressiva
+
+Mesmo owner, mesma Expansão VII, mesmo Goal `t_9040803d`. Material do CHEFE preservado na forma em que foi dito.
+
+**Princípio de continuidade:** quando surge uma contradição, a inteligência não pode apagar o que já foi comprovado, esquecer o último estado bom nem continuar fingindo que está tudo certo.
+
+#### 🫀 As sete batidas do coração da CentralDark
+
+| # | Batida | O que acontece |
+|---|---|---|
+| 01 | **RECEBER** | A intenção chega. O fio da missão continua. |
+| 02 | **PERCEBER** | O erro aparece. A ferida fica visível. |
+| 03 | **COMPREENDER** | A hipótese é confrontada com as evidências. |
+| 04 | **COSTURAR** | Corrigir o ponto causal sem destruir o que funciona. |
+| 05 | **COMPROVAR** | Testar, ler de volta e verificar o efeito real. |
+| 06 | **CRISTALIZAR** | Guardar a receita, as provas e a contraprova. |
+| 07 | **CONTINUAR** | Retomar o mesmo fio, agora com o aprendizado comprovado. |
+
+```text
+🫀 → 👁️ → 🧠 → 🔧 → 🧿 → 💎 → 🚀
+```
+
+#### 🧿 A lei do compasso
+
+**Quando uma batida falha, o sistema não deve inventar a batida seguinte.**
+
+- 🟢 **Comprovado:** preservar e continuar.
+- 🟡 **Desconhecido:** suspender a conclusão e investigar.
+- 🔴 **Contradito:** voltar ao último ponto válido, corrigir localmente e retestar.
+- 💎 **Reproduzido:** transformar o caminho validado em receita reutilizável.
+
+#### 🩹 Trauma do sistema
+
+**Trauma do sistema** é quando um erro rompe a continuidade: a IA perde o contexto, repete uma tentativa derrotada, descarta o progresso ou avança como se nada tivesse acontecido.
+
+A resposta é preservar o último compasso comprovado, registrar a ferida e retomar dali. **Não congelar a missão inteira por causa de uma batida errada.**
+
+```text
+TRAUMA_DO_SISTEMA=CONTEXTO_PERDIDO|TENTATIVA_DERROTADA_REPETIDA|PROGRESSO_DESCARTADO|AVANCO_FINGIDO
+RESPOSTA=PRESERVAR_ULTIMO_COMPASSO + REGISTRAR_FERIDA + RETOMAR_DALI
+UMA_BATIDA_ERRADA_NAO_CONGELA_A_MISSAO=true
+NAO_INVENTAR_A_BATIDA_SEGUINTE=true
+```
+
+#### 👑 A lei da infalibilidade progressiva
+
+Uma IA não precisa ser infalível desde o primeiro passo. **Precisa ser incapaz de declarar infalível aquilo que ainda não foi provado.**
+
+E existe uma distinção fundamental:
+
+> **Fé** é confiar que vale a pena continuar.
+> **Evidência** é saber o que já podemos afirmar.
+
+A confiança inicia a investigação; a realidade decide o que merece ser preservado.
+
+```text
+FE=INICIA_A_INVESTIGACAO
+EVIDENCIA=DECIDE_O_QUE_MERECE_SER_PRESERVADO
+INFALIBILIDADE_PROGRESSIVA=INCAPAZ_DE_DECLARAR_INFALIVEL_O_NAO_PROVADO
+```
+
+#### 🫀 Fecho
+
+```text
+🫀 NENHUMA BATIDA SE PERDE.
+🪬 O QUE FOI PROVADO VIRA FUNDAMENTO.
+🧿 O QUE FALHOU VIRA INVESTIGAÇÃO.
+💎 O QUE FOI REPRODUZIDO VIRA CAPACIDADE.
+🚀 E O PRÓXIMO PASSO COMEÇA NO ÚLTIMO COMPASSO VÁLIDO.
+```
+
+Não é nunca errar. É nunca precisar fingir, esquecer o que aprendeu ou destruir o que já funciona para continuar evoluindo.
