@@ -104,3 +104,27 @@ SAME_GOAL_RETURN_REQUIRED=true
 The canonical main is now explicitly the source for the next Hermes skill synchronization attempt. If the runtime skill has independent drift, the sync owner must preserve and reconcile that drift before apply/seal; this crystal is not permission to overwrite it blindly.
 
 NEXT_CURSOR=HERMES_SKILL_SYNC_CHECK_RECONCILE_APPLY_SEAL_HASH_READBACK_THEN_RETURN_SAME_GOAL
+
+## CHEFE Auréola Canônica — fio verde e aprendizagem seletiva
+
+Authoritative source commit: `2a63eb77f5116f55cfb7b86cef6bca4ee5def03f`.
+Readback: `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`, version `0.5.4`, all new markers observed; former Ralph bounded-loop and Oracle read-only invariants retained.
+
+CHEFE delta: one CentralDark with multiple surfaces; models, local IA, Hermes, ChatGPT, RAG, memory, embeddings, dataset and training artifacts never become a second canonical brain. Recover same intention/owner/CURRENT/GREEN_STATE/NEXT_CURSOR; select only pertinent triggers; measure `INTENT_ROUTE` vs `ACTUAL_ROUTE`. On divergence stop and reconcile. Freeze last good state before any isolated experiment, discard failed experiment only, absorb just a proven delta.
+
+Self-learning loop: `GENERATE → SOURCE_CHECK → DISCRIMINATING_TEST → INDEPENDENT_COUNTERPROOF → NAMED_SCORE → DISCARD_BAD|KEEP_GOOD → CRYSTALLIZE → REPLAY_ONCE → REUSE`. Artifact is routed to the existing owner based on actual need; `MEMORY != WEIGHT_UPDATE`, `RAG != TRAINING`, `TRAINING != PROOF`. Unapproved fine-tuning is NOT an automatic consequence. Tool success/commit/HTTP 200 are not runtime proof.
+
+```text
+SOURCE_VERSION=0.5.4
+SOURCE_MARKERS_READBACK=PASS
+ONE_SYSTEM_ONLY=TRUE
+LAST_GOOD_GREEN_STATE=PRESERVE
+NO_PARALLEL_ARCHITECTURE=TRUE
+GITHUB_COMMIT_IS_NOT_DEPLOY=TRUE
+RUNTIME_SKILL_SYNC=UNKNOWN
+HERMES_ORACLE_E2E=UNKNOWN
+FIXED_POINT=FALSE
+NEXT_CURSOR=RECONCILE_RUNTIME_DRIFT_THEN_SAFE_SYNC_THEN_ORIGINAL_HERMES_ORACLE_READBACK
+```
+
+This receipt preserves historical 0.5.0/0.5.3 snapshots rather than retroactively editing their claims. No runtime mutation performed here. Existing `skill-synchronization --check → reconcile independent drift → --apply → --seal` remains the only sync owner. `ORACLE_REQUIRED_RUNTIME_DRIFT` must not be overwritten blindly.
