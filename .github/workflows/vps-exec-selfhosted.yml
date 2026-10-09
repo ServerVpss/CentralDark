@@ -822,6 +822,23 @@ jobs:
             exit 76
           }
 
+          # Owner do runner precisa existir ANTES de copiar qualquer contrato.
+          # A VPS atual executa Hermes Gateway via systemd; este job legado
+          # gerencia SOMENTE o app PM2. Não fingir que ambos são o mesmo runtime.
+          if ! command -v pm2 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+            if systemctl is-active --quiet hermes-gateway.service 2>/dev/null; then
+              echo "HERMES_RUNTIME_DEPLOY=BLOCKED owner=systemd job_owner=PM2"
+              echo "HERMES_GATEWAY_LIVE=PASS; SYSTEMD_NOT_PM2; NEED_OWNER_ADAPTER"
+              exit 84
+            fi
+            echo "HERMES_RUNTIME_DEPLOY=BLOCKED missing_pm2_or_jq"
+            exit 85
+          fi
+          if ! pm2 jlist | jq -e --arg app "$HERMES_APP" '.[] | select(.name == $app and .pid > 0)' >/dev/null 2>&1; then
+            echo "HERMES_RUNTIME_DEPLOY=BLOCKED pm2_app_missing_or_not_running"
+            exit 86
+          fi
+
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/hermes-runtime-validate.XXXXXX")"
           BACKUP_DIR="/root/CentralDark-Recovery/hermes-runtime/${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
           mkdir -p "$BACKUP_DIR"
