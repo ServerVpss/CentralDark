@@ -20,6 +20,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { supabase } from "@/integrations/supabase/client";
 
+
+/**
+ * Inventário da casca legada apps/modulos/hub/src/HubPage.tsx (12 abas).
+ * Fonte/owner medido ≠ feature transferida ≠ deploy provado.
+ * Mantido no próprio admin existente para conduzir a absorção sem segunda UI.
+ */
+const SETORES_HUB_LEGADO = [
+  { setor: "Dashboard", destino: "Visão geral / One Heart", cobertura: "PARCIAL_SOURCE", pendente: "Readback de saúde e cards originais" },
+  { setor: "Hermes", destino: "Hermes do cockpit", cobertura: "PARCIAL_SOURCE", pendente: "Histórico e ações do HermesTab" },
+  { setor: "Inventário", destino: "Módulos / Sistema CentralDark", cobertura: "PARCIAL_SOURCE", pendente: "Inventário completo e sync" },
+  { setor: "Boot", destino: "Sistema / Boot canônico", cobertura: "GAP_SOURCE", pendente: "Boot Studio com edição e rollback" },
+  { setor: "Gateway", destino: "Roteador / Runtime", cobertura: "PARCIAL_SOURCE", pendente: "API keys e telemetria Gateway" },
+  { setor: "Catálogo", destino: "Ferramentas / MCP", cobertura: "GAP_SOURCE", pendente: "Pesquisa, sync e catálogo operacional" },
+  { setor: "Políticas", destino: "Segurança / Permissões", cobertura: "PARCIAL_SOURCE", pendente: "CRUD de políticas sob autorização" },
+  { setor: "Conectores", destino: "Contas / Conexões", cobertura: "PARCIAL_SOURCE", pendente: "OAuth, multi-conta e broker com health vivo" },
+  { setor: "Abacus", destino: "Roteador / Modelos", cobertura: "PARCIAL_SOURCE", pendente: "Ações e observabilidade Abacus" },
+  { setor: "Auditoria", destino: "Observabilidade", cobertura: "PARCIAL_SOURCE", pendente: "Filtros, trilhas e exportação" },
+  { setor: "Missões", destino: "Hermes / Runtime Fabric", cobertura: "GAP_SOURCE", pendente: "Missões, eventos, causação e controle de execução" },
+  { setor: "Autonomia", destino: "Sistema CentralDark", cobertura: "PARCIAL_SOURCE", pendente: "Ações autônomas e contraprova de runtime" },
+] as const;
+
 type StatusModulo = "ativo" | "em processo";
 
 type ModuloPortal = {
@@ -234,6 +255,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
           <TabsTrigger value="modulos">Módulos</TabsTrigger>
           <TabsTrigger value="usuarios">Usuários</TabsTrigger>
           <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
+          <TabsTrigger value="hub-inventario">Integração HUB (12)</TabsTrigger>
           <TabsTrigger value="observabilidade">Observabilidade</TabsTrigger>
           <TabsTrigger value="cofre">Cofre / Credenciais</TabsTrigger>
           <TabsTrigger value="seguranca">Segurança / Permissões</TabsTrigger>
@@ -363,6 +385,35 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         </TabsContent>
         <TabsContent value="conexoes" className="mt-6">
           <ConexoesCentralDark />
+        </TabsContent>
+        <TabsContent value="hub-inventario" className="mt-6">
+          <div className="panel p-5">
+            <h3 className="text-lg font-semibold">Absorção do HUB legado no Instinto Superior</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Inventário das 12 abas da antiga casca HUB. A cobertura abaixo é somente
+              mapeamento do código-fonte, não certificação de funcionamento no runtime.
+              APIs, OAuth, cofre, logs e histórico permanecem nos owners canônicos;
+              excluir a casca exige contraprova funcional de cada setor.
+            </p>
+            <div className="mt-5 grid gap-3 md:grid-cols-2">
+              {SETORES_HUB_LEGADO.map((setor) => (
+                <article key={setor.setor} className="rounded-lg border border-border p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h4 className="font-semibold">{setor.setor}</h4>
+                    <code className="text-xs text-gold">{setor.cobertura}</code>
+                  </div>
+                  <p className="mt-2 text-sm">Dentro do cockpit: {setor.destino}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Para fechar: {setor.pendente}
+                  </p>
+                </article>
+              ))}
+            </div>
+            <p className="mt-5 text-xs text-muted-foreground">
+              MAPPED_SOURCE != RUNTIME_PASS · NO_SECOND_ADMIN=true ·
+              DELETE_LEGACY_ONLY_AFTER_ALL_FEATURES_COUNTERPROVEN=true
+            </p>
+          </div>
         </TabsContent>
         <TabsContent value="observabilidade" className="mt-6">
           <ObservabilidadeCentralDark />
