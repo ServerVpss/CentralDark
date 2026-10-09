@@ -764,7 +764,7 @@ body {
   <div class="hud-card"><h3>Kylin NLP &middot; geracao</h3><div class="val warn">INIT_FAILED:10 / 502</div><div class="meta">Falha nativa registrada e reproduzida em receipt; SDK/modelo indisponivel e hipoteses separadas. Patch de ordem `bdf2f09ad` no source, nao equivale a correcao comprovada no processo ativo.</div></div>
   <div class="hud-card"><h3>Fio da missao / evidencias</h3><div class="val warn">FIXED_POINT: NAO COMPROVADO</div><div class="meta">GOAL t_9040803d. Receber &#8594; Perceber &#8594; Compreender &#8594; Costurar &#8594; Comprovar &#8594; Cristalizar &#8594; Continuar. NEXT_CURSOR: reconciliar modelo disponivel &#8594; native-once &#8594; bridge completion &#8594; Hermes.</div></div>
   <div class="hud-card"><h3>Rota de modelo local &middot; auxiliar</h3><div class="val warn">OFFLINE / NAO BLOQUEANTE</div><div class="meta">Falta localizar ou instalar um modelo conversacional local. O site, o MCP, o Hermes Core e os demais modelos continuam seguindo normalmente.</div><button type="button" class="aion-open-btn" style="margin-top:10px" onclick="var n=document.getElementById('cd-local-model-note'); n.hidden=!n.hidden; this.textContent=n.hidden?'VER PENDENCIA':'OCULTAR PENDENCIA'">VER PENDENCIA</button><div id="cd-local-model-note" class="meta" hidden style="margin-top:10px">PROXIMO PASSO: localizar modelo local quando autorizado. ROTA_OFFLINE=NAO_BLOQUEANTE.</div></div>
-  <div class="hud-card"><h3>API CentralDark &middot; Hermes Core</h3><div class="val warn" id="cd-api-hermes-current">API HEALTH: MEDINDO</div><div class="meta">Owner real: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">api.centralldark.com/health</a> retorna `servico=hermes-core`, `versao=5.0` na medicao da Casa. Health nao equivale a IA inferindo, deploy nem acesso admin. A consulta HTTP sem credenciais roda no navegador, com UNKNOWN se indisponivel.</div></div>
+  <div class="hud-card"><h3>API CentralDark &middot; Hermes Core</h3><div class="val warn" id="cd-api-hermes-current">API HEALTH: MEDINDO</div><div class="meta" id="cd-api-hermes-plaque" role="status" aria-live="polite" style="margin-top:8px;color:var(--amber)">PLACA: AGUARDANDO CONTRAPROVA /health</div><div class="meta">Owner real: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">api.centralldark.com/health</a> retorna `servico=hermes-core`, `versao=5.0` na medicao da Casa. Health nao equivale a IA inferindo, deploy nem acesso admin. A consulta HTTP sem credenciais roda no navegador, com UNKNOWN se indisponivel.</div></div>
   <div class="hud-card"><h3>Google Drive &middot; Vault VPS off-host</h3><div class="val warn">GOOGLE_DRIVE_VAULT_OFFHOST: IDENTIFICADO</div><div class="meta">Inventario Claude: `Vault-Cofre-CentralDark-20260930T105330Z.tar.gz` (752.981.967 bytes), e sidecar .sha256 presente. SHA esperado `383eb16f6ccd...e8e4` no Drive e receipt do Git. Metadata+sidecar PASS; SHA de bytes do arquivo inteiro CURRENT = UNKNOWN. Conteudo potencialmente secreto: sem upload ou abertura pela API publica.</div></div>
  </div>
  <p class="cadeado-prova">Fonte: snapshot operacional 2026-10-09T01:35:04.340Z (sensor) + GitHub `main` + VPS git + <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/RECEIPTS/2026-10-09-KYLIN-BRIDGE-CHAT-502-INIT-FAILED-10.md" target="_blank" rel="noopener">receipt Kylin</a>. O One Heart existente continua como fonte dinamica separada; CORS/timeout no file:// vira UNKNOWN, nunca PASS.</p>
@@ -782,7 +782,8 @@ body {
   // API-HERMES health: probe publica READ_ONLY; nao e prova de LLM, owner ou deploy.
   function apiHealth(){
     var el=document.getElementById('cd-api-hermes-current');
-    if(!el)return;
+    var plaque=document.getElementById('cd-api-hermes-plaque');
+    if(!el||!plaque)return;
     var ctrl=window.AbortController?new AbortController():null;
     var timeout=ctrl?setTimeout(function(){ctrl.abort();},6500):null;
     fetch('https://api.centralldark.com/health',{cache:'no-store',mode:'cors',signal:ctrl?ctrl.signal:undefined})
@@ -793,9 +794,26 @@ body {
         var isHermes=body.status==='ok'&&body.servico==='hermes-core'&&fresh;
         el.textContent=isHermes?'HEALTH HTTP 200 / HERMES CORE 5.0':'UNKNOWN / STALE OU OUTRO OWNER';
         el.className='val '+(isHermes?'ok':'warn');
-        el.title='HTTP/health exclusivamente; inferred generation, models, deploy e outras rotas = nao provados';
+        el.title='HTTP/health exclusivamente; inferencia, modelos, deploy e outras rotas = nao provados';
+        var calibration=body.calibracao_runtime;
+        if(!isHermes){
+          plaque.textContent='PLACA: HEALTH_UNKNOWN | motivo=owner ou frescor nao comprovado | proximo=remedir /health no owner';
+        }else if(calibration&&calibration.status==='DRIFT'){
+          var wounds=Number.isFinite(Number(calibration.wound_count))?Number(calibration.wound_count):'UNKNOWN';
+          plaque.textContent='PLACA: CALIBRACAO_DRIFT | feridas='+wounds+' | proximo=inspecionar owner da calibracao; nao marcar FIXED_POINT';
+        }else if(calibration&&calibration.status==='OK'&&Number(calibration.wound_count)===0){
+          plaque.textContent='PLACA: API_HEALTH_PASS / CALIBRACAO_OK | somente escopo observado; deploy e inferencia nao provados';
+        }else{
+          plaque.textContent='PLACA: CALIBRACAO_UNKNOWN | proximo=consultar owner; HTTP 200 nao prova modelo nem deploy';
+        }
+        plaque.title='Fonte: /health; a placa e uma projecao READ_ONLY, nao altera o runtime';
       })
-      .catch(function(){el.textContent='UNKNOWN / API OU CORS';el.className='val warn';})
+      .catch(function(error){
+         var message=error&&error.message?String(error.message):'';
+         var cause=/^HTTP_[0-9]{3}$/.test(message)?message:'REDE_CORS_OU_TIMEOUT';
+         el.textContent='UNKNOWN / API OU CORS';el.className='val warn';
+         plaque.textContent=(cause==='HTTP_404'?'PLACA: ROTA_NAO_ENCONTRADA':'PLACA: ROTA_NAO_COMPROVADA')+' | causa='+cause+' | proximo=verificar URL/owner e continuar pelo HUD';
+       })
       .then(function(){if(timeout)clearTimeout(timeout);});
   }
   apiHealth();setInterval(apiHealth,30000);
