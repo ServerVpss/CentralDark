@@ -546,7 +546,9 @@ export function evaluateCandidate({
   let technicalGateNotGreen = false;
   const labels = normalizedLabels(pr);
   const auth = authorizationFor(pr);
-  const fastPath = auth.merge_policy === FAST_MERGE_POLICY && (auth.viaBody || auth.viaLabel);
+  const workflows = workflowVerdicts(workflowRuns, requiredWorkflows);
+  const approvalRequired = workflows.some((workflow) => workflow.state === "ACTION_REQUIRED");
+  const fastPath = auth.merge_policy === FAST_MERGE_POLICY && (auth.viaBody || auth.viaLabel) && !approvalRequired;
   const author = String(pr.user?.login || "").toLowerCase();
   const trusted = trustedAuthors.map((value) => value.toLowerCase()).includes(author);
   const sameRepository = pr.head?.repo?.full_name === repository;
@@ -580,11 +582,9 @@ export function evaluateCandidate({
   if (pr.mergeable === false || pr.mergeable_state === "dirty") reasons.push("MERGE_CONFLICT");
   if (pr.mergeable == null || pr.mergeable_state === "unknown") waits.push("MERGEABILITY_PENDING");
 
-  const applicableWorkflows = requiredWorkflows;
-  const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
+
   for (const workflow of workflows) {
     if (!fastPath && workflow.state !== "PASS" && workflow.state !== "ACTION_REQUIRED") technicalGateNotGreen = true;
-    if (!fastPath && workflow.state !== "PASS") technicalGateNotGreen = true;
     if (workflow.state === "FAIL") waits.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
     if (workflow.state === "ACTION_REQUIRED") waits.push(`WORKFLOW_ACTION_REQUIRED:${workflow.name}:${workflow.run_id}`);
