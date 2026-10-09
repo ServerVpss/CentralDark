@@ -477,3 +477,29 @@ FIXED_POINT_GLOBAL=FALSE
 
 **NEXT_CURSOR:** disponibilizar/provar `GITHUB_WEBHOOK_SECRET` no environment protegido → enviar entrega assinada atual ao `/webhook` → ler `auto-sync.log` + `auto-sync-status.json` → confirmar `VPS_HEAD == origin/main` → registrar receipt final no mesmo PR.
 <!-- /PR1788_MCP_WEBHOOK_AUTOSYNC_READBACK_20261009 -->
+
+<!-- PR1788_VPS_MAIN_SKILLS_AUDIT_RECEIPT_20261009 -->
+## Auditoria de skills — MAIN × VPS × PR #1788 (receipt 09/10/2026)
+
+**INTENÇÃO:** salvar neste PR as provas da auditoria de skills, sem duplicar skills/owners nem concorrer com o Hermes. A PR permaneceu aberta durante a leitura; o Hermes avançou o próprio HEAD enquanto esta auditoria era preparada. Este registro é SOMENTE documentação de prova; não promove skill nem altera runtime.
+
+| Fonte | Prova observada | Status |
+|---|---|---|
+| GitHub main | HEAD 5344bd87074c334ddf3ac322ae7d6aaacecdf665; árvore completa (truncated=false): 993 arquivos SKILL.md sob .agents/skills, 14 caminhos que contêm centraldark | INVENTÁRIO PASS |
+| VPS | /root/CentralDark @ e073059e0f76a53290886b56cbf668bf53d4b7f5: 993 SKILL.md, 14 caminhos centraldark; 993 SKILL.md Git-tracked e 0 não rastreados | INVENTÁRIO PASS |
+| Diferença main/VPS checkout | GitHub compare e073059e...5344bd87: 1 commit à frente na main, nenhuma modificação em .agents/skills nesse commit | GIT DIFF PASS |
+| Dirty na VPS | Somente .agents/skills/opus-magus/SKILL.md alterado entre SKILL.md locais: +4/-0, apontando para centraldark-evidence-reconciliation; scripts/register-github-webhook.sh também dirty, mas fora de skill | LOCAL DELTA PROVADO, PRESERVADO |
+| SHA256 da skill local opus-magus | 392520fd7026f49c31c062eb67d169c470466e2bae88a599c958e5e07154db8e | HASH VPS PROVADO |
+| SHA256 do library-index na VPS | bb92d6c57e0646c5d76c68e1d353d14e3dd4439b3b9deaea2f4f5b035ea23520 | HASH VPS PROVADO |
+| Skill do funil criada no mesmo PR | centraldark-evidence-reconciliation/SKILL.md e references/fixed-point-funnel.md, no commit 45abcf7098387148b1494142937620d27f2064c5; versão 1.1.0 e referências nas skills existentes verificadas por readback GitHub | CODE/PR PASS |
+| Evolução concorrente do Hermes | HEAD do PR avançou para a2d28c2b10f33a7d674396d916556dbe06adf05a, com alterações na skill centraldark-evidence-reconciliation, em centraldark-ops e na referência github-fast-inventory.md | COMMIT PRESERVADO; não auditado aqui |
+| Sincronização novo funil na VPS | Nova skill do branch PR não observada no checkout antigo da VPS; HEAD VPS anterior à criação | RUNTIME SYNC UNKNOWN |
+| Comparação SHA256 arquivo a arquivo 993/993 | Não completada; contagem e git-diff não são confirmação de SHA256 individual | PENDENTE |
+| PR/CI/E2E | PR #1788 continua aberta; self-test e gates do commit 45abcf7 registrados no receipt original; consulta a status combinado daquele SHA retornou lista vazia | CI GLOBAL UNKNOWN; MERGED != DEPLOYED |
+
+**Origem:** readback de árvore GitHub, comandos read-only na VPS via SEGREDO → SSH e receipt do Hermes https://github.com/ServerVpss/CentralDark/pull/1788#issuecomment-6086061833. A lacuna de owner do funil foi corrigida **no branch do PR**, não na main nem comprovadamente no runtime.
+
+**Regra operacional do CHEFE:** delta material → mesmo owner → commit no mesmo PR → push → readback SHA → receipt; ONE_WRITER_PER_SCOPE; preservar o avanço do Hermes; não fabricar PASS, não criar outra PR e não produzir commit vazio.
+
+**NEXT_CURSOR:** verificar SHA do funil no checkout/ambiente Hermes; confrontar os 993 conteúdos com SHA256 se houver necessidade discriminante; preservar arquivos locais dirty; reconciliar também o novo github-fast-inventory.md do Hermes; testes/CI do HEAD atual; somente então avaliar FIXED_POINT. GLOBAL_FIXED_POINT=FALSE.
+<!-- /PR1788_VPS_MAIN_SKILLS_AUDIT_RECEIPT_20261009 -->
