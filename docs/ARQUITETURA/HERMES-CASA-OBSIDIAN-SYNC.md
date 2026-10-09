@@ -165,3 +165,8 @@ WINDOWS_RUNTIME_E2E=UNKNOWN_UNTIL_CASA_READBACK
 O arquivo `CENTRALDARK-CORPO-UNICO-HUD-BRIDGE(2).ps1` fornecido na mesma rodada foi preservado apenas como evidência de comparação nesta receipt, **não promovido como owner executável**, porque contém `Start-ScreenpipeHidden` / `npx screenpipe record` e portanto pode abrir um segundo writer do Screenpipe. A funcionalidade útil continua candidata a absorção no owner existente somente após teste discriminante.
 
 Promoção física ao BAT original da Casa continua exigindo hash/readback do arquivo ativo e writer único; commit na main não substitui esse readback.
+
+
+## CURRENT Casa — cópia de worktrees para Kingston (2026-10-09)
+
+Por ordem do CHEFE, a árvore `E:\CentralDark\_worktrees` foi **copiada** para `K:\CentralDark\_worktrees` (Kingston SSD) na Casa `SEGREDO`, sem apagar nem alterar a origem. Operação `robocopy /E /COPY:DAT /DCOPY:DAT /R:1 /W:1 /XJ`: 131 diretórios, 664 arquivos, 10,98 MB, 0 falhas. Conferência após a cópia: 664 arquivos em cada lado e **0 divergências SHA-256** arquivo a arquivo. Destino é a cópia de trabalho escolhida pelo CHEFE; troca de processos ativos, vínculos Git e execução do cockpit a partir de K: **ainda não foram comprovadas** por esta cópia. O Hitachi (E:/F:/J:) permanece disponível para arquivos brutos sob demanda. Não criar segundo sistema nem confundir arquivo copiado com runtime validado.
