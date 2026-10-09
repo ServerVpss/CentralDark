@@ -86,10 +86,14 @@ extrair para Git/RAG nem usá-lo como credencial por esta skill**. A entrada
 `profiles.zip` permanece em quarentena; achievements são metadados
 candidatos. `VAULT_SHA_OK != VAULT_KNOWLEDGE_AUTHORIZED`.
 
-O scheduler continua sendo o **existente**; `SCHEDULE_6X_DIA=UNKNOWN` até
-medição de jobs e receipts da mesma janela. NÃO implantar outro cron,
-watcher, Hermes paralelo ou retenção destrutiva. Falha vira PLACA/receita
-no único HUD e não cancela capacidades independentes.
+O scheduler continua sendo o **existente**: no T1 de 2026-10-09,
+`/root/.hermes/cron/jobs.json` apresentou **um job do Destilador**,
+`enabled=true`, expressão `0 3,7,11,15,19,23 * * *`, com referências
+a `DESTILADOR`, `knowledge-compiler` e `main`.
+`SCHEDULE_6X_CONFIGURED=PROVEN`; porém `last_run_at=None` e
+`last_status=None`: `SCHEDULE_EXECUTION=UNKNOWN` até receipt.
+NÃO implantar outro cron, watcher, Hermes paralelo ou retenção destrutiva.
+Falha vira PLACA/receita no único HUD e não cancela capacidades independentes.
 `SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true`;
 `NO_PARALLEL_WRITER=true`; `UNKNOWN != PASS`.
 
