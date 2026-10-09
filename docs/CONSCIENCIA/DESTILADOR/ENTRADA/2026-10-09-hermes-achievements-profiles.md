@@ -37,3 +37,23 @@ NEXT_CURSOR=DESTILAR_ACHIEVEMENTS_METADATA_SEM_PROMOVER_HISTORICO_A_CURRENT
 
 Fonte bruta preservada em `/root/.hermes/attachments/`; achievements extraídos
 somente em quarentena temporária do Hermes.
+
+## Registro do objetivo recuperado
+
+```text
+INTENCAO=recuperar conhecimentos antigos sem perda nem duplicacao
+OWNER=destilador e memoria existentes da CentralDark
+DELTA=garimpar achievements; manter profiles em quarentena; promover somente delta provado
+PROVA=manifesto de entrada + hashes + quarentena sem travessia de caminho
+BOOT=REUTILIZAR_DESTILADOR_EXISTENTE
+```
+
+```text
+ENTRADA → QUARENTENA → INVENTÁRIO → GARIMPO
+→ CONFRONTO_MAIN_DOCS_RECEIPTS → CONTRAPROVA
+→ CRISTAL_SE_NOVO → REGISTER → BOOT
+```
+
+`profiles.zip` não é fonte autorizada para importar memória, skills, credenciais ou
+estado de runtime. A prova desta rodada limita-se à entrada/quarentena; a
+incorporação dos conhecimentos permanece `NOT_PROVEN` até revisão individual.
