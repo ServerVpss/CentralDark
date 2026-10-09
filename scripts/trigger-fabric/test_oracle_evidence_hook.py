@@ -36,6 +36,17 @@ class OracleEvidenceHookTests(unittest.TestCase):
         self.assertIn("PARENT_ID=goal-parent-001", query)
         self.assertIn("NEXT_CURSOR=NEXT_READONLY_PROBE", query)
 
+    def test_oracle_query_inherits_full_fabric_and_proven_learning_sources(self):
+        query = oracle.build_oracle_query(self.base() | {"question": "retome o Goal"})
+        self.assertIn("MASTER_PHASE_SOURCE=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml", query)
+        self.assertIn("TRIGGER_INVENTORY_SOURCE=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml", query)
+        self.assertIn("CONSIDER_ALL_PHASES=TRUE; EXECUTE_PERTINENT_ONLY=TRUE", query)
+        self.assertIn("LEARNING_SOURCE=docs/CONSCIENCIA/APRENDIZADOS.md", query)
+        self.assertIn("LEARNING_LINEAGE=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json", query)
+        self.assertIn("APPROVED_RECIPE_REGISTRY=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json", query)
+        self.assertIn("LOOP_ID=centraldark-oracle-loop-001", query)
+        self.assertIn("NEXT_CURSOR=NEXT_READONLY_PROBE", query)
+
     def test_evidence_payload_preserves_replay_and_boundary(self):
         data = self.base() | {
             "RESPONSE_STATE": "COMPLETE",

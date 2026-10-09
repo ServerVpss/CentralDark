@@ -1071,3 +1071,29 @@ Official upstream references (source links, not runtime proof):
 - `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/computer-use.md` — supported computer-use and visual limits.
 
 `DOCUMENTED != EXECUTED`; `SOURCE_PROVEN != SESSION_CAPTURE_PROVEN`; `CURRENT > HISTORY`. Report `UNKNOWN` if the session lacks terminal events or full coverage.
+
+## Canonical master phases, complete learning lineage and approved crystals (CHEFE · 2026-10-08)
+
+This is an **inheritance and retrieval binding within this existing Oracle skill**, never an Oracle-owned trigger dispatcher, autonomous writer, second brain or competing canonical knowledge store. The CHEFE's latest explicit intention and the parent Goal remain the target. Consult Oracle as a candidate when it can change the decision; an active Hermes↔Oracle Goal loop continues material turns by `NEXT_CURSOR`, not redundant identical questions.
+
+```text
+ORACLE_INHERITS_FULL_MASTER_CYCLE=true
+MASTER_PHASE_SOURCE=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+TRIGGER_INVENTORY_SOURCE=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+MASTER_RESOLVER=scripts/trigger-fabric/centraldark_master_cycle.py
+ALL_CANONICAL_PHASES_CONSIDERED=true
+EXECUTE_ONLY_PERTINENT_PHASES=true
+TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
+NO_ALL_LEARNINGS_BOOT_GATE=true
+FULL_LEARNING_LINEAGE_DISCOVERABLE=true
+ORACLE_OUTPUT_IS_CANDIDATE=true
+```
+
+1. **Recover the same intention:** read current SOUL/RULES/AGENTS, the applicable `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`, `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`, current Goal/clauses, latest valid receipt, `GREEN_STATE` and `NEXT_CURSOR`. Classify the new CHEFE utterance as continuation/delta unless there is an explicit override. Preserve approved original text and diagrams.
+2. **Account for the complete master:** consult the *current* `MASTER-CYCLE.yml`, `TRIGGERS.yml` and relevant `ENGINE_BINDING.yml` rather than hardcoding a second chain here. Consider each canonical phase and matching event; record which was executed, satisfied by reusable proof, inapplicable to this cone, or remains `UNKNOWN/BLOCKED`. Execute only necessary phases using their **existing owners and resolver**, with Reality Judge after actual effects. Merely printing a trigger name does not execute it; Oracle must not self-assert completion of Hermes or other runtime work.
+3. **Read the whole learning *index* before selecting evidence:** discover the global lineage `L000` through the last currently measured UID in `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`, and its source `docs/CONSCIENCIA/APRENDIZADOS.md`. Preserve legacy duplicate numbers/gaps and the cognitive chain from #115 onward. On a normal Goal turn, read the **complete bodies of all causally pertinent learnings**, adjacent lineage as required, and the relevant `docs/CONSCIENCIA/LEMBRANCAS/`, `docs/BRAIN/` and receipts. An explicit CHEFE request for an **integral historical audit** requires traversal of the entire available numbered source plus genesis, with measured coverage (UID range, section count, gaps, SHA and unread spans), not an excerpt falsely labeled complete.
+4. **Recover approved decisions before proposing novelty:** consult CURRENT canonical owners, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml`, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json`, matching approvals/receipts and the fingerprints they actually seal. An entry in APRENDIZADOS or a lineage edge proves recorded provenance, **not** current approval, unchanged runtime or PASS. Prefer matching proven recipes; mark historical, candidate, superseded, stale or unverified material accurately.
+5. **Check the index against reality:** compare the lineage manifest's `source_blob_sha` and coverage against the same-ref source before claiming the entire library is current. If stale or inaccessible, report `LEARNING_INDEX_STALE`/`LEARNING_COVERAGE_PARTIAL` and use the direct canonical source or existing lineage compiler/owner; do not invent a missing lesson or silently reindex as the Oracle.
+6. **Close the same causal cycle:** send the relevant evidence digest and source refs in the existing `oracle_evidence_hook.py` envelope; Hermes/perception performs applicable reads and owner-local actions, independent counterproof tests the real effect, clauses update and an existing writer seals receipt/`NEXT_CURSOR`. If the fingerprint has no material information gain, reuse the proven result instead of consulting Oracle again. `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`, `GOAL_DONE != LOCAL_DONE`.
+
+**Scope resolution:** earlier references to "ask CHAT_GLOBAL each micro-step" and "Oracle-first human response" govern an **active, applicable** Hermes↔Oracle mission, not every unrelated CentralDark response or every master trigger. All phases are *accounted for*, not blindly executed; no mandatory full-body preload on each boot. This follows the newer SOUL/Trigger Fabric `PERTINENCE_FIRST` and `MINIMUM_SUFFICIENT_LOOP` requirements without erasing the previous Oracle continuity contract.
