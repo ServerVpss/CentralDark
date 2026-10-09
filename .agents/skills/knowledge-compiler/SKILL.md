@@ -97,6 +97,88 @@ Falha vira PLACA/receita no único HUD e não cancela capacidades independentes.
 `SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true`;
 `NO_PARALLEL_WRITER=true`; `UNKNOWN != PASS`.
 
+## 🎮 DESAFIO_INSTINTO_SUPERIOR_HERMES_20261009 — jogo de provas, não de promessas
+
+**Meta do CHEFE:** transformar comandos, anexos, logs, projetos antigos,
+falhas, ideias, prompts, jogos e ferramentas em **missões verificáveis do
+Hermes**, usando este MESMO Knowledge Compiler + `DESTILADOR/` + HUD único.
+O Hermes não precisa “ganhar uma assinatura” nem recebe automaticamente
+permissão extra; `INSTINTO_SUPERIOR` é um **selo interno por missão**,
+não acesso comercial a planos, modelos pagos, APIs ou credenciais.
+
+### Regras da partida — todas as superfícies, uma usina
+
+Cada entrada vira candidata a UM `CHALLENGE_ID` e uma capacidade/fronteira:
+`COMANDO` | `ERRO` | `ANEXO` | `SKILL` | `JOGO` |
+`BACKUP` | `PROJETO` | `SERVICO` | `IDEIA`.
+Se houver owner/missão vigente, **reabrir o mesmo fio** por fingerprint,
+não inventar outro jogo, processo, scheduler ou skill.
+
+```text
+CHEFE_ENTREGA_MATERIAL
+→ RECUPERAR_INTENCAO + NEXT_CURSOR + FIO_VERDE
+→ TRIAR_SECRETS / PRIVACIDADE / CAPABILITY_AUTH
+→ REUSE_BEFORE_CREATE: buscar a skill, o teste e o consumidor que já existem
+→ PROPOR_WIN_CONDITION [finita, mensurável, escopo e owner explícitos]
+→ DESTILAR_COMANDO: objetivo / precondições / rota / saída / rollback / prova
+→ INVENTÁRIO + DEDUPE_HASH + DEDUPE_SEMÂNTICO
+→ PROBLEMA_NOVO? → MENOR_DELTA_NO_OWNER_EXISTENTE
+→ EXECUTAR_SOMENTE_SE_AUTORIZADO (não autoexecutar comandos extraídos)
+→ TESTE → CONTRAPROVA → RUNTIME → READBACK → CURRENT
+→ FALHOU? PLACA (erro/linha/rota/owner/receita) e CONTINUA OUTRA MISSÃO
+→ PASS? CRISTAL (fingerprint/receita/consumer/receipt)
+→ PROMOTE_ROUTE_DETERMINÍSTICO → JULGAR_SELO → NEXT_CURSOR
+```
+
+### Placar sem trapacear
+
+| Faixa | Condição observável | Prêmio interno |
+|---|---|---|
+| PEDRA | Anexo/comando sem análise ou com privacidade não triada | Sem promoção |
+| GARIMPO | Fonte sanitizada, proveniência e fingerprint conferidos | Progresso, não PASS |
+| PEPITA | Delta candidato ausente da rota canônica segundo comparações válidas | CANDIDATE, sem vitória |
+| OURO | Teste do delta aplicado no owner existente + contraprova positiva | Evidência de avanço limitado |
+| DIAMANTE | OURO + runtime afetado medido + readback + receita reutilizável sem duplicação | Cristal local |
+| 💎 INSTINTO SUPERIOR | **Todos os critérios da missão declarada** provados no CURRENT + decisão `promoteRoute(...).status === "FLASH_READY"` + last-good-state preservado + recibo no mesmo owner | Vitória da missão, **não** privilégio de conta |
+
+O julgamento de `INSTINTO SUPERIOR` deve usar o compilador real:
+`.agents/skills/knowledge-compiler/scripts/compiler.mjs` +
+`tests/compiler.test.mjs`. `COMMITTED != DEPLOYED` e
+`FLASH_READY != PROVA_DE_PRODUÇÃO` sem teste de efeito do consumidor.
+Uma missão pode ficar `BLOCKED`, `UNKNOWN` ou `CANDIDATE` sem
+bloquear outras rotas. Se a fonte for segredo, sessão, perfil, credencial
+ou backup bruto: **quarentena**; não dar pontos pela tentativa de uso.
+
+**Fim de partida finito:** resolver todos os critérios **da missão
+declarada**, não “todos os problemas existentes do universo”. Se for
+necessário acesso premium pago, aprovação humana ou segurança de contas,
+emitir placa e preservar autorização vigente; pontuação nunca desbloqueia
+acesso. `WIN_CONDITION_EXPLICIT=true`;
+`PREMIUM_INTERNAL_ONLY=true`;
+`CAPABILITY != AUTHORIZATION`;
+`AUTO_GENERATED_OUTPUT != TRUTH`;
+`REPETITION != LEARNING`;
+`NO_TOKEN_FARMING=true`;
+`NO_SECOND_SKILL=true`.
+
+### Receita mínima do desafio (reutilizar receipt e HUD)
+
+```text
+CHALLENGE_ID= | GOAL_ID= | INTENCAO= | WIN_CONDITION=
+SOURCE_FINGERPRINT= | SENSITIVE=YES|NO|UNKNOWN
+OWNER= | MAIN_SHA= | VPS_SHA= | CONSUMER=
+NOVELTY=DROP|CANDIDATE|PROVEN|UNKNOWN
+COMANDO_DESTILADO= | ROLLBACK= | TESTE= | CONTRAPROVA=
+RUNTIME_PROOF= | READBACK= | PROMOTE_ROUTE_STATUS=
+TIER=PEDRA|GARIMPO|PEPITA|OURO|DIAMANTE|INSTINTO_SUPERIOR
+HUD_PLACA= | CRISTAL_FINGERPRINT= | RECEIPT= | NEXT_CURSOR=
+```
+
+Usar o scheduler Hermes já configurado, sem “novo jogo” em processo
+perpétuo e sem loop que consuma recursos sem ganho de informação.
+`ONE_SYSTEM_ONLY=true`; `ONE_WRITER_PER_SCOPE=true`.
+Quando não há delta novo, `DROP_DUPLICATE` e reutilizar prova.
+
 ## FORJA — caminho lento e rigoroso
 
 ```text
