@@ -2119,6 +2119,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
 </div>
 <script>
 (function(){
+  function bind(){
   var panel=document.getElementById('cd-api-oneheart-map'),src=document.getElementById('live-heart-state'),badge=document.getElementById('cd-oh-live-badge');
   if(!panel||!src||!badge)return;
   function project(){
@@ -2128,6 +2129,8 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
     badge.textContent='HEART: '+(label||'UNKNOWN')+' · fonte: One Heart existente';
   }
   var obs=new MutationObserver(project);obs.observe(src,{childList:true,subtree:true,characterData:true});project();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
 })();
 </script>
 <!-- CENTRALDARK_API_ONE_HEART_MAP_V1_END -->
