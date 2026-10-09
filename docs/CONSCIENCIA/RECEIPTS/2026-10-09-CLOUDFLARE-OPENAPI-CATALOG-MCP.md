@@ -23,6 +23,17 @@ Inventariado != autorizado. Todas as operações descobertas ficam `INVENTORY_ON
 
 `MCP_RUNTIME_CREDENTIAL=MISSING` na medição prévia. Depois da confirmação pelo CHEFE, disponibilização da credencial deverá ser no owner de segredo existente, nunca no repo ou chat.
 
-## Teste e prova pendentes
+## Contraprova bancada (executada)
 
-Readback de commit + `node --test apps/modulos/mcp/tests/provider-control.test.mjs` sobre o mesmo SHA; catálogo visível em `mcp_admin_call(provider_capabilities)` somente após deploy comprovado; testes E2E de provider após credenciais. Nunca confundir commit/BUILD com deploy/funcionamento.
+Source pin: `7f9d03e59dc60a2349c9b2ec5aac12f5845637`. Checkout limpo (sparse) em `E:\\CentralDark\\_cache\\cf-openapi-mcp-20261009`, no dispositivo SEGREDO (sem mudar checkout produtivo da Casa ou VPS).
+
+- `npm ci --ignore-scripts --no-audit --no-fund`: PASS.
+- `node --test tests/provider-control.test.mjs`: 16 testes, 16 PASS, 0 FAIL.
+- `npm run build`: PASS (`tsc -p tsconfig.json --noResolve`).
+- `dist/modes/admin/tools/cloudflare-openapi-catalog.js` presente após build; importação Node no `dist`: 3670 operações, 2303 paths, 745 tags, todas `INVENTORY_ONLY`.
+- Fingerprint SHA-256 do JSON extraído: `70a3df4ccec5e8c0fd3a6e5f2219fbc4e6b160248d8248bf118b5e01bbe9ef08`.
+- Readback dos quatro arquivos no SHA `7f9d03e59dc60a2349c9b2ec5aac12f5845637`: PASS.
+
+**Não provado**: catálogo exposto no runtime real (`mcp_admin_call(provider_capabilities view=openapi)`), promoção de mesmo SHA para a VPS, integração de credencial e execução E2E com a Cloudflare. O snapshot representa a especificação OpenAPI obtida nesta medição; não promete cobrir alterações posteriores da API.
+
+Nunca confundir COMMIT, BUILD ou 16 testes locais com deploy/funcionamento.
