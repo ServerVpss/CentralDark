@@ -102,3 +102,7 @@ Fio da missão
 Aplicar o ciclo **Celestial** como disciplina de autocorreção dentro da missão:
 
 `evidência → hipótese → implementação → teste → correção → evidência final`
+
+## Funil CentralDark de ponto fixo
+
+Em missões CentralDark, usar `software-development/centraldark-evidence-reconciliation/references/fixed-point-funnel.md`: CURRENT → OWNER/WRITER → delta mínimo → teste → contraprova → readback exato → receipt → `NEXT_CURSOR`. `UNKNOWN != PASS`; `FIXED_POINT=true` somente quando a prova do alvo real fecha e nenhuma lacuna material permanece.

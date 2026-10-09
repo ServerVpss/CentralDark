@@ -351,3 +351,7 @@ Then short tables of what moved. UNKNOWN stays visible. Do not re-argue PR-mãe 
 See `references/selfhosted-runner-git-auth.md` for the self-hosted runner Git auth failure pattern (fatal: could not read Username) and the first diagnostic moves before assuming script, diff, or buffer problems.
 
 See `references/full-inventory-scans.md` for the C/E full-map scanner contract: resumable checkpoints, complete discovery, content hashing, and why sample/bounded receipts are not final proof.
+
+## Canonical fixed-point funnel
+
+All Casa/GitHub/VPS/Hermes actions pass through `software-development/centraldark-evidence-reconciliation/references/fixed-point-funnel.md`: CURRENT → owner/writer/scope → minimum reversible action → test → counterproof → live readback → sanitized receipt → `NEXT_CURSOR`. `FIXED_POINT=true` requires the exact target effect and no material UNKNOWN.
