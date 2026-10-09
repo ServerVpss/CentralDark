@@ -2936,7 +2936,7 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
     }
     status.classList.remove('pass');
     status.classList.add('warn');
-    status.textContent='VER PENDÊNCIA';
+    if(status.textContent!=='VER PENDÊNCIA')status.textContent='VER PENDÊNCIA';
     card.setAttribute('data-cd-seal-verdict','PENDING');
     return missing.length ? 'faltam '+missing.join(', ') : 'readback do owner nao comprovado';
   }
