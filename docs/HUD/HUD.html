@@ -1696,7 +1696,11 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
           plaque.textContent='PLACA: HEALTH_UNKNOWN | motivo=owner ou frescor nao comprovado | proximo=remedir /health no owner';
         }else if(calibration&&calibration.status==='DRIFT'){
           var wounds=Number.isFinite(Number(calibration.wound_count))?Number(calibration.wound_count):'UNKNOWN';
-          plaque.textContent='PLACA: CALIBRACAO_DRIFT | feridas='+wounds+' | proximo=inspecionar owner da calibracao; nao marcar FIXED_POINT';
+          var streak=Number.isFinite(Number(calibration.streak))?Number(calibration.streak):'UNKNOWN';
+          var trend=String(calibration.trend||'UNKNOWN').slice(0,24);
+          var model=String(calibration.local_model||'UNKNOWN').slice(0,72);
+          var advisory=String(calibration.advisory_status||'UNKNOWN').slice(0,24);
+          plaque.textContent='PLACA: CALIBRACAO_DRIFT | feridas='+wounds+' | streak='+streak+' | trend='+trend+' | modelo='+model+' | advisory='+advisory+' | NEXT=VER PENDENCIA / owner existente; nao marcar FIXED_POINT';
         }else if(calibration&&calibration.status==='OK'&&Number(calibration.wound_count)===0){
           plaque.textContent='PLACA: API_HEALTH_PASS / CALIBRACAO_OK | somente escopo observado; deploy e inferencia nao provados';
         }else{
@@ -2089,6 +2093,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
 <div class="section" id="cd-api-oneheart-map" data-heart="unknown" data-proof-time="2026-10-09T20:34:53Z" data-busca="mapa API centraldark One Heart MCP 13 rotas cadeados selos github cloudflare casas">
   <div class="cd-oh-head"><h2 class="section-title">🫀 Mapa da API · 13 rotas · One Heart único</h2><span id="cd-oh-live-badge" class="section-count">HEART: UNKNOWN / consultando owner existente</span></div>
   <p class="cd-oh-proof">🔒 PROVA SELADA POR ESCOPO: MCP admin 141 tools / 13 rotas / 20 ações (20:34 UTC); API MCP pública /health 200 com 153 tools; Cloudflare DNS api/mcp/deploy apontando à VPS com proxy ativo; Casa SEGREDO online. Selos históricos não significam disponibilidade atual.</p>
+  <p class="cd-oh-proof" data-proof-time="2026-10-09T21:15:00Z">🪧 INCIDENTE + CORREÇÃO DE GATE (prova datada): no runner, MCP interno 127.0.0.1:9100/health=PASS e mcp.centralldark.com/health=PASS; acesso direto público :9100 não é requisito. O owner .github/workflows/vps-exec-selfhosted.yml foi corrigido na main: 63715a4 (rota local/HTTPS), b1cca4f (TARGET_SHA_SUPERSEDED sem jobs mutantes), b8de35a (validação pela Python stdlib, jq ausente). Receita testada via SSH VPS: MCP_9100=PASS, MCP_ROUTE=PASS. Saúde do endpoint ≠ saúde de todas as missões. Workflow e CI têm placar próprio.</p>
   <div class="cd-oh-flow" role="img" aria-label="Intenção do CHEFE passa pela API Cloudflare, catálogo MCP e One Heart; GitHub e VPS sincronizam em duas direções sob cadeado">
     <div class="cd-oh-node">👑 CHEFE<br><small>Intenção / dono</small></div>
     <span class="cd-oh-arr" aria-hidden="true">→</span>
