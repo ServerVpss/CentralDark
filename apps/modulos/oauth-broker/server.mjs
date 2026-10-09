@@ -445,7 +445,7 @@ function cfAdminReturn(value) {
     return u.origin==="https://admin.centralldark.com" && !u.username && !u.password ? u.toString() : null;
   } catch { return null; }
 }
-app.get("/oauth/cloudflare/start", (req,res) => {
+app.get("/oauth/cloudflare/start", async (req,res) => {
   if(!CF_OAUTH_CLIENT_ID || !CF_OAUTH_CLIENT_SECRET)
     return res.status(503).json({ok:false,status:"CLOUDFLARE_OAUTH_CLIENT_NOT_CONFIGURED",
       callback:CF_OAUTH_REDIRECT,setup:"https://dash.cloudflare.com/?to=/:account/oauth-clients"});
@@ -453,13 +453,22 @@ app.get("/oauth/cloudflare/start", (req,res) => {
   const returnTo=cfAdminReturn(req.query.redirect_to);
   if(!CF_UUID.test(uid)) return res.status(401).json({ok:false,status:"IDENTITY_REQUIRED"});
   if(!returnTo) return res.status(400).json({ok:false,status:"ADMIN_RETURN_REQUIRED"});
+  const bearer=/^Bearer\s+(\S+)$/i.exec(String(req.headers.authorization||""))?.[1];
+  if(!bearer) return res.status(401).json({ok:false,status:"AUTH_REQUIRED"});
+  try {
+    const {data:identity,error:authError}=await sb.auth.getUser(bearer);
+    if(authError || identity?.user?.id!==uid)
+      return res.status(403).json({ok:false,status:"IDENTITY_MISMATCH"});
+    const {data:role,error:roleError}=await sb.from("user_roles").select("role").eq("user_id",uid).eq("role","admin").maybeSingle();
+    if(roleError || !role) return res.status(403).json({ok:false,status:"ADMIN_REQUIRED"});
+  } catch { return res.status(503).json({ok:false,status:"IDENTITY_CHECK_UNAVAILABLE"}); }
   const state=crypto.randomBytes(32).toString("hex");
   stateCache.set(state,{provider:"cloudflare",user_id:uid,redirect_to:returnTo,exp:Date.now()+600000});
   res.cookie(CF_STATE_COOKIE,state,{httpOnly:true,secure:true,sameSite:"lax",path:"/oauth/cloudflare",maxAge:600000});
   const params=new URLSearchParams({response_type:"code",client_id:CF_OAUTH_CLIENT_ID,
     redirect_uri:CF_OAUTH_REDIRECT,scope:CF_OAUTH_SCOPES,state});
   logAction({kind:"oauth_start",provider:"cloudflare",status:"authorization_pending"});
-  return res.redirect(302,"https://dash.cloudflare.com/oauth2/auth?"+params.toString());
+  return res.json({ok:true,provider:"cloudflare",authorize_url:"https://dash.cloudflare.com/oauth2/auth?"+params.toString()});
 });
 app.get("/oauth/cloudflare/callback", async (req,res) => {
   const state=String(req.query.state || ""),code=String(req.query.code || "");
