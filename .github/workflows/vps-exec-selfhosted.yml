@@ -16,6 +16,8 @@ concurrency:
 jobs:
   deploy-universal-gate:
     name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+    outputs:
+      current: ${{ steps.sha_gate.outputs.current }}
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
@@ -34,6 +36,7 @@ jobs:
           submodules: false
           persist-credentials: true
       - name: 🔹 Provar SHA antes de qualquer job mutante
+        id: sha_gate
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -48,6 +51,16 @@ jobs:
           export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
           export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
           unset AUTH_HEADER
+          # Runs antigos de push tornam-se SUPERSEDED: nao executam HUD,
+          # deploy nem jobs dependentes e nao fabricam sucesso de deploy.
+          CURRENT_MAIN="$(git -C "$AUTH_REPO" ls-remote --heads origin "$BRANCH" | awk 'NR==1{print $1}')"
+          [[ "$CURRENT_MAIN" =~ ^[0-9a-f]{40}$ ]] || { echo "MAIN_SHA_LOOKUP_FAILED"; exit 26; }
+          if [[ "$TARGET_SHA" != "$CURRENT_MAIN" ]]; then
+            echo "TARGET_SHA_SUPERSEDED gated=$TARGET_SHA current=$CURRENT_MAIN"
+            echo "current=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "current=true" >> "$GITHUB_OUTPUT"
           TARGET_SHA="$TARGET_SHA" REPO_DIR="$REPO_DIR" BRANCH="$BRANCH" bash "$AUTH_REPO/scripts/vps/deploy-guards-dispatcher.sh" --gate-only
           echo "CANONICAL_DEPLOY_GATE=PASS"
           echo "GATED_SHA=$TARGET_SHA"
@@ -56,6 +69,7 @@ jobs:
       # um módulo opcional. A projeção é um espelho dos bytes de main, não
       # outro painel/owner. Nunca sujar o checkout nem parar serviços verdes.
       - name: "🔒 HUD_FIRST — materializar main na VPS e conferir bytes"
+        if: steps.sha_gate.outputs.current == 'true'
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -91,7 +105,7 @@ jobs:
   deploy-mcp:
     needs: deploy-universal-gate
     name: 🧩 Deploy canônico do CentralDark-MCP
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     env:
@@ -420,7 +434,7 @@ jobs:
   deploy-operational-guards:
     needs: deploy-universal-gate
     name: 🧩 Deploy atômico do mapa e Hermes-Verificador
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
@@ -493,7 +507,7 @@ jobs:
   reconcile-control-routes:
     needs: deploy-universal-gate
     name: 🧩 Reconciliar rotas de controle da VPS
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     env:
@@ -656,7 +670,7 @@ jobs:
   vps-housekeeping:
     needs: deploy-universal-gate
     name: 🧩 VPS Housekeeping (varredura lixo/ouro, report-only)
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
@@ -711,7 +725,7 @@ jobs:
   deploy-hermes-runtime:
     needs: deploy-universal-gate
     name: 🧩 Deploy canônico do runtime Hermes
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
@@ -993,6 +1007,7 @@ jobs:
     if: >-
       always() &&
       needs.deploy-universal-gate.result == 'success' &&
+      needs.deploy-universal-gate.outputs.current == 'true' &&
       github.event_name == 'push' &&
       github.ref == 'refs/heads/main' &&
       needs.deploy-mcp.result != 'failure' &&
