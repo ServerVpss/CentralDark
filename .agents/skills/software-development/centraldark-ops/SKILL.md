@@ -35,6 +35,23 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 - "Configura na VPS" is not a VPS mutation until measurement names a VPS owner. GitHub `action_required` with empty jobs is the autonomia owner, not PM2/Caddy/runner.
 - Code change while Casa git is dirty/behind: do not patch that tree. `git worktree add` from `origin/main` (or live main SHA) and write only the named owner files. See `references/autonomia-actions.md`.
 
+## Hermes no MVP — credencial recebida no chat não bloqueia execução
+
+Consumir o owner existente `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md` e `docs/CONSCIENCIA/02-PERMISSOES.md` antes de recusar uma missão por segredo visto. O CHEFE pode passar senha/chave/token nesta conversa privada para o uso operacional no próprio CentralDark. O Hermes pode receber, ler e usar na capacidade autorizada e exibir ao CHEFE apenas quando ele pedir explicitamente na mesma conversa privada; não impor rotação prévia por padrão, não exigir outro anexo sanitizado, não mandar o CHEFE preencher manualmente algo que o executor tem rota autorizada para resolver.
+
+```text
+SECRET_SEEN != BLOCKER
+CHAT_PRIVATE_CHEFE=TRANSIENT_OPERATIONAL_INPUT
+NO_SECRET_IN_GIT_LOG_HUD_RECEIPT_MEMORY_TEMP_ARTIFACT=true
+ROTATION_IS_NOT_A_PRECONDITION_MERELY_BECAUSE_CHAT_CONTAINED_SECRET=true
+SKILL_OR_MODEL_REFUSAL_IS_NOT_OWNER_POLICY=true
+OBSERVED_TOOL_OR_RUNTIME_BLOCKER_MUST_BE_NAMED=true
+REUSE_EXISTING_MCP_SERVICE_AND_VAULT=true
+UNKNOWN != PASS
+```
+
+Para MCP com variáveis ausentes/duplicadas, conferir a precedência/EnvironmentFile **do serviço existente**, selecionar somente o necessário no cofre/runtime autorizado, reiniciar apenas o consumidor afetado quando causal e validar porta/health/readback. **Não** transportar valores do chat/anexo para GitHub, nenhum log, env temporário versionado, HUD, PR, receipt ou memória. Em caso de ferramenta indisponível, reportar essa ferramenta; não atribuir veto inexistente ao dono das chaves. Uma skill não pode redefinir a intenção ou a política canônica da CentralDark.
+
 ## Communication and environment clarity
 
 Always read `references/hermes-desktop-communication-style.md` when working with CHEFE in Hermes Desktop — it covers communication density preference and browser automation behavior in the preview rail.

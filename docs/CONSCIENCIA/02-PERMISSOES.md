@@ -72,6 +72,8 @@ FULL_TEMPORARY
 FULL
 ```
 
+O lease de provider que fornece *capability*, não a chave bruta, continua distinto do uso transitório de credencial que o próprio CHEFE fornece no chat privado autorizado. Essa entrega não transforma o chat em cofre nem autoriza transportar o valor a Git, logs ou memória.
+
 `FULL_TEMPORARY` é uma elevação com TTL, não uma troca definitiva de baseline. Antes de elevar, deve preservar o modo imediatamente anterior; ao expirar, restaura **exatamente** esse modo.
 
 ```text
@@ -196,7 +198,9 @@ AUTHORIZED_CREDENTIAL_USE_REQUIRES_COMPATIBLE_SCOPE=true
 SECRET_VALUE_IS_NOT_CANONICAL_MEMORY=true
 SECRET_VALUE_IS_NOT_LEDGER=true
 TRANSIENT_OAUTH_CODE_IS_NOT_LEDGER=true
-SECRET_MUST_NOT_BE_ECHOED_LOGGED_OR_COMMITTED=true
+SECRET_MUST_NOT_BE_ECHOED_BY_DEFAULT=true
+CHEFE_EXPLICIT_AUTHENTICATED_PRIVATE_CHAT_DISPLAY_ALLOWED=true
+SECRET_MUST_NOT_BE_LOGGED_OR_COMMITTED=true
 VALID_RESTRICTION_STILL_APPLIES=true
 BYPASS_OF_VALID_RESTRICTION=SECURITY_FAILURE
 ```
@@ -205,7 +209,7 @@ Autorização legítima permite usar a capability no escopo concedido; não tran
 
 ## ⛔ Continua proibido
 
-- Expor, copiar para chat/log/commit ou publicar valor de token, senha, Authorization, cookie, chave privada ou secret.
+- Expor ou transportar valor de token, senha, Authorization, cookie, chave privada ou secret para logs, Git/commits, HUD, receipts, memória ou chats não autorizados. O chat privado autenticado do CHEFE permite entrada operacional e exibição apenas quando expressamente solicitada; não é armazenamento nem prova de runtime.
 - Force-push.
 - `git reset --hard` como mecanismo operacional destrutivo sobre trabalho vivo de outro Writer.
 - Apagar recurso externo/arquivo necessário sem mapear consumidor e rollback.
