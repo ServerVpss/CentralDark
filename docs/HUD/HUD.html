@@ -2376,7 +2376,7 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
     var email=window.prompt('E-mail do proprietário no Moltbook (a chave NÃO será solicitada aqui):','');
     if(email===null){info.textContent='CANCELADO: nenhum comando executado.';return;}
     email=email.trim();
-    if(!/^[A-Za-z0-9.!#$%&'*+\/= ?^_`{|}~-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)||/\s/.test(email)||email.length>200){
+    if(!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)||email.length>200){
       info.textContent='PLACA: E-MAIL INVALIDO. Nenhuma chave coletada.';return;
     }
     // An allowlisted e-mail is inserted into a quoted remote argument; never request API secrets in a browser.
