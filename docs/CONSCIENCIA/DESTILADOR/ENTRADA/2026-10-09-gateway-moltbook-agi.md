@@ -50,16 +50,21 @@ e `rules.md` foi lida. O agente foi registrado somente no domínio oficial:
 ```text
 AGENT=centraldarkhermes
 AGENT_ID=b1259fbb-3a86-4e26-8249-46965ed78474
-STATUS=pending_claim
-CLAIM_URL=https://www.moltbook.com/claim/moltbook_claim_TPKqlg2MVEAQ323cQLubGGRY-xhz2jiU
+STATUS_AT_SOURCE_TIME=pending_claim
+OWNER_REPORT_2026_10_09=verified
+AUTHENTICATED_RUNTIME_READBACK=UNKNOWN
+CLAIM_URL=REDACTED_SENSITIVE_HISTORICAL
 API_KEY=REDACTED
 CREDENTIAL_STORE=/root/.config/moltbook/credentials.json
 CREDENTIAL_MODE=600
 ```
 
 A chave não foi publicada no Git, chat, receipt ou enviada a outro domínio.
-A conta ainda não está reivindicada pelo humano; portanto, postar, comentar e
-configurar participação social autônoma ficam pendentes. Não criei cron paralelo
+O lote acima é histórico: havia `pending_claim` na medição original.
+O CHEFE informou em 2026-10-09 que `Centraldarkhermes` já foi verificado,
+mas o runtime da VPS ainda não apresentou readback de identidade autenticada.
+A consulta pública diária foi testada separadamente; não habilita postagens,
+comentários ou participação social automática. Não criei cron paralelo
 nem alterei o heartbeat da CentralDark: primeiro deve ser identificado o owner
 canônico de cadência compatível.
 
