@@ -1,7 +1,7 @@
 ---
 name: centraldark-oracle-surface
 description: "Use when consulting an external browser oracle."
-version: 0.5.3
+version: 0.5.4
 author: SEGREDO/CHEFE, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -836,6 +836,57 @@ UNCHANGED_PROVEN | PATCH_CANDIDATE | PATCH_APPLIED | TEST_ADDED | RECEIPT_ADDED 
 
 A used skill does not need a rewrite merely because it was loaded. Evolve only after measurement, generalizability, Oracle candidate review, owner-local patch, test, counterproof, receipt and replay.
 ONE_TURN_OBSERVATION != REUSABLE_SKILL_DELTA.
+
+## Auréola Canônica — Fio Verde, Learning Selection and Sufficient Closure (CHEFE)
+
+**One system, many surfaces, no second brain.** CentralDark retains the authority to reconcile intent, execution, proof and continuity. Casa/VMware, VPS/openKylin, Hermes, ChatGPT/Oracle, Obsidian/HUD, Triton, RAG, embeddings, datasets and models are capabilities or projections under their existing owners; none becomes an independent canonical controller. Oracle is read-only candidate evidence, not an execution writer.
+
+```text
+AUREOLA_CANONICA_GREEN_THREAD=TRUE
+ONE_SYSTEM_MANY_SURFACES=true
+NO_ENVIRONMENT_SECOND_BRAIN=true
+FIO_DA_MISSAO=KEEP
+INTENT_ROUTE_VS_ACTUAL_ROUTE=CHECK
+ON_ROUTE_DIVERGENCE=STOP_AND_RECONCILE
+GREEN_STATE_FREEZE_BEFORE_EXPERIMENT=true
+EXPERIMENT_ISOLATE_FROM_LAST_GOOD=true
+FAILED_EXPERIMENT_DISCARD_ONLY_EXPERIMENT=true
+PROVEN_EXPERIMENT_ABSORB_MINIMUM_DELTA=true
+EXECUTE_ONLY_PERTINENT_TRIGGERS=true
+```
+
+Treat each CHEFE message as a candidate **delta to the same authorized Goal**. Recover intent, owner, CURRENT, previously proven GREEN_STATE, proof fingerprint and NEXT_CURSOR; apply META-GRILL to select only the pertinent existing triggers. Measure `INTENT_ROUTE` versus `ACTUAL_ROUTE` on the same target and temporal scope before claiming progress. On divergence: stop that mutation, reconcile target/source/authorization, preserve the surviving state and continue independently available read-only work. If an experiment is needed, isolate it without auto-creating a new repo branch, brain, owner, bridge, agent or uncontrolled writer. Never trade the last good state for speculative discovery.
+
+**Learning is selected, not swallowed.** A locally generated answer, repeated output or model agreement is not knowledge proof. Route new information through the current learning/knowledge owner only after evidence and a discriminating counterexample have survived:
+
+```text
+GENERATE_CANDIDATE
+→ VERIFY_SOURCE_AND_SCOPE
+→ TEST_DISCRIMINATING_CLAIM
+→ INDEPENDENT_COUNTERPROOF
+→ SCORE_WITH_NAMED_CRITERIA_AND_EVIDENCE
+→ DISCARD_UNSUPPORTED_OR_REGRESSIVE
+→ PRESERVE_PROVEN_GOOD
+→ CRYSTALLIZE_MINIMUM_REUSABLE_DELTA
+→ REPLAY_ONCE_WITH_FINGERPRINT
+→ REUSE_VIA_EXISTING_OWNER
+```
+
+For scoring, record `baseline_ref, candidate_ref, test_refs, counterproof_ref, rubric, scored_effect, regression_risk, verdict`. No self-assigned score may upgrade its own evidence. Persist the **smallest appropriate artifact** in the current canonical owner: RAG/retrieval content, memory proposal, embedding/index, proven recipe, example, dataset, trace or discriminating test. Training/fine-tuning is a separate, explicitly authorized lifecycle; it is not implied by storing retrieval data. Preserve distinctions:
+
+```text
+AUTO_GENERATED_OUTPUT != TRUTH
+REPEATED_OUTPUT != LEARNING
+MEMORY != MODEL_WEIGHT_UPDATE
+RAG != TRAINING
+TRAINING != PROOF
+INTENT_CONFIDENCE != TECHNICAL_PROOF
+CAPABILITY != AUTHORIZATION
+```
+
+**Evidence after a material change:** applicable lint/build/unit checks, real process/port/HTTP when relevant, source/runtime SHA, actual expected effect, backcheck and independent counterproof. `WRITE → READBACK → EXPECTED_VS_OBSERVED → PROOF|RECONCILE|UNKNOWN`. A tool returning `success`, a 200, commit, file presence or passing build does not alone prove the objective. The writer must record a receipt, protect credentials, avoid overwriting dirty independent runtime state, and propagate only the proven delta to the existing skill/recipe/main sync owner.
+
+**Sufficient closure and result-first:** stay on the same `LOOP_ID` and `NEXT_CURSOR` while authorized, materially progressing work exists. A recoverable local error uses `VOLTA_UMA_CASA → COSTURA → RETEST_AFFECTED_CONE`; an unchanged failure fingerprint uses the bounded recipe gate, not blind recursion. Conclude at applicable `FIXED_POINT` only with sufficiently measured outcome, backcheck, counterproof, retained GREEN_STATE and no material blocker/false green. Otherwise output the exact `PASS|UNKNOWN|BLOCKED|HUMAN_FRONTIER` for the affected scope, not an invented global status. When relevant for a command/receipt, project: `Intenção, Feito, Evidência, Contraprova, Pendência/UNKNOWN, Estado final, Próximo cursor, BOOT pertinente, Fio da missão`. This is a readout of the **same** receipt, never a competing writer.
 
 ## Anti-Dumb-Loop Recipe Promotion (Ralph-style bounded iteration)
 
