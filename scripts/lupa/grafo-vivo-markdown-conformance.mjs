@@ -185,7 +185,14 @@ function markdownHygieneErrors(file, text) {
         if (headings.has(normalized)) findings.push(`MD024:duplicate-heading:${lineNo}`);
         else headings.set(normalized, lineNo);
         if (index > 0 && lines[index - 1] !== '') findings.push(`MD022:heading-before-blank:${lineNo}`);
-        if (index + 1 < lines.length && lines[index + 1] !== '') findings.push(`MD022:heading-after-blank:${lineNo}`);
+        // Projecao NeuroLink canonica: o metadado gerado vem logo apos o titulo.
+        // Excecao somente no owner exato e se UID concordar com o heading.
+        const learningNumber = file === 'docs/CONSCIENCIA/APRENDIZADOS.md'
+          ? line.match(/^###\s+(\d+)\.\s+/)?.[1] : null;
+        const generatedLink = learningNumber && (lines[index + 1] || '').startsWith(
+          '- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L' + learningNumber.padStart(3, '0') + '`'
+        );
+        if (index + 1 < lines.length && lines[index + 1] !== '' && !generatedLink) findings.push(`MD022:heading-after-blank:${lineNo}`);
       }
 
       const orderedMatch = line.match(/^(\s*)(\d+)\.\s+/);
@@ -230,7 +237,11 @@ function runSelfTest() {
   const fencedHeadingPasses = !markdownHygieneErrors('fenced-heading.md', fencedHeading).some((item) => item.startsWith('MD022'));
 
   const fencedSemanticsIgnored = !fencedFindings.some((item) => ['MD022', 'MD024', 'MD029', 'MD030'].some((code) => item.startsWith(code)));
-  const ok = goodPasses && badCovers && fencedHeadingPasses && fencedSemanticsIgnored;
+  const generated = '### 168. Catalogo\n- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L168`;\n';
+  const generatedPasses = !markdownHygieneErrors('docs/CONSCIENCIA/APRENDIZADOS.md', generated).some((f) => f.startsWith('MD022:heading-after-blank'));
+  const wrongOwnerFails = markdownHygieneErrors('docs/OTHER.md', generated).some((f) => f.startsWith('MD022:heading-after-blank'));
+  const wrongUidFails = markdownHygieneErrors('docs/CONSCIENCIA/APRENDIZADOS.md', generated.replace('L168','L999')).some((f) => f.startsWith('MD022:heading-after-blank'));
+  const ok = goodPasses && badCovers && fencedHeadingPasses && fencedSemanticsIgnored && generatedPasses && wrongOwnerFails && wrongUidFails;
 
   console.log(`GLOBAL_MARKDOWN_CONFORMANCE_SELF_TEST=${ok ? 'PASS' : 'FAIL'}`);
   if (!ok) process.exit(1);
