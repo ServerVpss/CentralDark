@@ -355,3 +355,5 @@ See `references/full-inventory-scans.md` for the C/E full-map scanner contract: 
 ## Canonical fixed-point funnel
 
 All Casa/GitHub/VPS/Hermes actions pass through `software-development/centraldark-evidence-reconciliation/references/fixed-point-funnel.md`: CURRENT → owner/writer/scope → minimum reversible action → test → counterproof → live readback → sanitized receipt → `NEXT_CURSOR`. `FIXED_POINT=true` requires the exact target effect and no material UNKNOWN.
+
+For fast PR/issue/commit/check reads, reuse `software-development/centraldark-evidence-reconciliation/references/github-fast-inventory.md` and `gh api`; correlate every check and workflow to the exact SHA before promotion.

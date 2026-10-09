@@ -54,6 +54,10 @@ INTENT
 
 Read the supporting contract at `references/fixed-point-funnel.md` before material mutation.
 
+## Fast GitHub API inventory
+
+For PR/issue/branch/commit/check reconciliation, reuse the existing authenticated `gh api` route and the exact correlated commands in `references/github-fast-inventory.md`. Bind `MAIN_SHA`, `BASE_SHA`, `PR_HEAD_SHA`, branch SHA, check-run SHA, workflow-run SHA, reviews, comments, and cursor in one receipt. Paginate lists; current `head_sha` wins over historical green checks. `GITHUB_API=PASS` proves reads only, never merge, deploy, or runtime effect.
+
 ## Evidence planes
 
 Keep these separate and report each as `PASS|UNKNOWN|FAIL|BLOCKED`:
