@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   CircleAlert,
-  ExternalLink,
   KeyRound,
   Link2,
   RefreshCw,
@@ -51,7 +50,8 @@ export function ConexoesCentralDark() {
   const multi = [...agrupadas.values()].filter((lista) => lista.length > 1).length;
 
   function conectar(providerId: string) {
-    if (!dados?.userId || typeof window === "undefined") return;
+    // Transporte OAuth só é acionável quando a consulta viva ao owner retornou PASS.
+    if (!dados?.userId || dados.estado !== "PASS" || typeof window === "undefined") return;
     const base = dados.fonte.replace(/\/$/, "");
     const params = new URLSearchParams({
       user_id: dados.userId,
@@ -81,16 +81,10 @@ export function ConexoesCentralDark() {
             <RefreshCw className={q.isFetching ? "animate-spin" : ""} />
             Atualizar
           </Button>
-          <Button asChild variant="outline">
-            <a
-              href={dados?.fonte ?? "https://hub.centralldark.com"}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <ExternalLink />
-              Abrir Hub
-            </a>
-          </Button>
+          <p className="max-w-60 text-xs text-muted-foreground">
+            HUB absorvido nesta navegação. OAuthBroker permanece como transporte técnico,
+            sem abrir outro painel administrativo.
+          </p>
         </div>
       </div>
 
@@ -185,7 +179,7 @@ export function ConexoesCentralDark() {
                 ))}
               </div>
               {OAUTH_START_SUPPORTED.has(providerId) ? (
-                <Button className="mt-4" variant="outline" onClick={() => conectar(providerId)}>
+                <Button className="mt-4" variant="outline" disabled={dados?.estado !== "PASS"} onClick={() => conectar(providerId)}>
                   <Link2 />
                   Conectar outra conta
                 </Button>
