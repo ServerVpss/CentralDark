@@ -2356,6 +2356,22 @@
       "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
     },
     {
+      "id": "instinto.roteador.modelo-local.ver-pendencia",
+      "kind": "BUTTON",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/routes/roteador.tsx",
+      "symbol": "instinto.roteador.modelo-local.ver-pendencia",
+      "activation": "CLICK",
+      "from": "CHEFE",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/routes/roteador.tsx",
+      "reuse_of": "instinto.CockpitShell.botao-01"
+    },
+    {
       "id": "heart.operational-telemetry.gitSyncFront",
       "kind": "FUNCTION",
       "capability": "ONE_HEART_TELEMETRY",

@@ -369,6 +369,7 @@ function RouterPage() {
             </div>
             <button
               type="button"
+              data-cd-flow="instinto.roteador.modelo-local.ver-pendencia"
               onClick={() => setShowLocalModelPlan((visible) => !visible)}
               className="inline-flex shrink-0 items-center justify-center rounded-md border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-xs font-semibold text-amber-200 hover:bg-amber-400/20"
               aria-expanded={showLocalModelPlan}
