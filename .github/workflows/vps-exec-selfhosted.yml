@@ -630,7 +630,7 @@ jobs:
           # Cloudflare/Caddy publica mcp.centralldark.com via HTTPS; nao exigir
           # porta 9100 aberta no IP publico (nao expor uma nova superficie).
           mcp_local="$(curl -fsS --max-time 5 http://127.0.0.1:9100/health 2>/dev/null || true)"
-          if jq -e '.ok == true and .service == "mcp-centraldark"' <<<"$mcp_local" >/dev/null 2>&1; then
+          if printf '%s' "$mcp_local" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("ok") is True and d.get("service")=="mcp-centraldark" else 1)' >/dev/null 2>&1; then
             echo "MCP_9100=PASS route=127.0.0.1:9100 service=mcp-centraldark"
             echo "MCP_ROUTE=PASS via=LOCAL_OWNER"
           else
@@ -638,7 +638,7 @@ jobs:
             # Se o owner local cair, tentar a rota HTTPS autorizada existente.
             # Rota HTTPS PASS nao e prova de que o listener local esta saudavel.
             mcp_https="$(curl -fsS --max-time 8 https://mcp.centralldark.com/health 2>/dev/null || true)"
-            if jq -e '.ok == true and .service == "mcp-centraldark"' <<<"$mcp_https" >/dev/null 2>&1; then
+            if printf '%s' "$mcp_https" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("ok") is True and d.get("service")=="mcp-centraldark" else 1)' >/dev/null 2>&1; then
               echo "MCP_ROUTE=PASS via=HTTPS_EXISTING_OWNER"
               echo "MCP_LOCAL_9100=VER_PENDENCIA"
             else
