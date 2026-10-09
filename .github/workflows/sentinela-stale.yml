@@ -4,8 +4,6 @@ name: ⚙️ sentinela-stale
 # sem PR linkado. Marca como `stale` e escala severidade.
 
 on:
-  schedule:
-    - cron: '0 12 * * *'
   workflow_dispatch:
 
 permissions:

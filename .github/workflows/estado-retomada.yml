@@ -5,8 +5,6 @@ name: ⚙️ estado-retomada
 # Regra da Casa: executor padrao = self-hosted Linux. GitHub-hosted = proibido.
 
 on:
-  schedule:
-    - cron: "23 6 * * *"
   push:
     branches: [main]
     paths:

@@ -447,3 +447,31 @@ ARQUIVO REAL
 
 ---
 🔗 [[BRAIN]] · [[MAPA-OBSIDIAN-BRAIN]] · [[SEMANTIC-LINKER]] · [[IPNAMES-EXTERNAL-NETWORK-REFERENCE]] · Knowledge Compiler
+
+## 2026-10-09 — Pacote físico PDF da Casa (metadados e receita)
+
+**Intenção:** CHEFE pediu reunir PDFs e comandos, destilar autoevolução/self-healing e preservar memória sem criar segundo cérebro. **Origem comprovada:** todos os quatro PDFs rastreados na árvore de `ServerVpss/CentralDark` no commit imutável `683edbf6f97646904af2a2ff377d981a5922f218`; releitura atual de main `2c24d02c7f5eb55135f63e217a29cda36b03ec67` preserva os mesmos quatro blobs (sem novos PDFs rastreados).
+
+```text
+CASA_PACKAGE_ROOT=E:\CentralDark\_IMPORTS\CENTRALDARK-PDF-PACOTE-20261009
+CASA_PRIVATE_ARCHIVE=CENTRALDARK-PDF-FONTES.zip
+CASA_MANIFEST=manifest.json
+CASA_RECIPE=RECEITA-CASA.md
+PDF_OBJECTS=4
+PACKAGE_ZIP_FILES=6
+CASA_PACKAGE_READBACK=PASS
+ZIP_SHA256=ECC804F2404FF376DA55C0B69815D7B0E4EC759D4422CB650AB0D4D0CB258565
+ZIP_SIZE_BYTES=1533396
+TLC23_SHA256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+CASA_HUD_SYNC=NOT_CLAIMED
+VPS_PDF_COPY=NOT_DONE
+AUTOMATIC_INFERENCE_OR_TRAINING=NOT_DONE
+PUBLIC_PDF_CONTENT_UPLOAD=NO
+```
+
+**Owners reutilizados:** `MATERIAL-INGEST.md` recebe fonte; `scripts/memory-linker/library-router.mjs` garante identidade/deduplicação; esta Biblioteca preserva referência; `docs/HUD/HUD.html` projeta prova e placas. Os PDFs não foram incorporados como novas regras/model weights/RAG pelo simples fato de serem empacotados. Cópia pessoal em `_IMPORTS` não significa consumo automático pelo Hermes. O arquivo `centraldark.pdf` e o template ICML permanecem com classificação pendente de conteúdo/licença; `tlc23.pdf` já possui owner de proveniência. O pacote preserva originais, bytes e hashes, sem enviar conteúdo sensível à API ou ao GitHub. O escopo **não** afirma inventário de todos os PDFs de outros discos, Vaults ou Drive.
+
+**Compasso destilado da receita Casa:** `RECEBER → PERCEBER → COMPREENDER → COSTURAR → COMPROVAR → CRISTALIZAR → CONTINUAR`; `SOURCE → HASH → CLASSIFY → DEDUPE → VERIFY → SCORE → REUSE → RECEIPT → HUD PLACA/NEXT_CURSOR`. `AUTO_GENERATED_OUTPUT != TRUTH`; `RAG != TRAINING`; `MEMORY != MODEL_WEIGHTS`. O aprendizado comprovado vive no owner existente, não no ZIP.
+
+**NEXT_CURSOR:** classificar direitos/sensibilidade e selecionar apenas os PDFs realmente pertinentes; então aplicar o leitor/roteador da Biblioteca num ensaio controlado, indexando somente conteúdo autorizado, com readback e contraprova. Integração runtime e replay permanecem `UNKNOWN`.
+

@@ -229,8 +229,44 @@ function sha256(value) {
   return createHash('sha256').update(String(value)).digest('hex');
 }
 
+function normalizeContinuation(decisao = {}) {
+  const raw = decisao?.continuity ?? decisao?.args?.continuity;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  return {
+    next_cursor: String(raw.next_cursor ?? '').trim(),
+    next_readonly_probe: String(raw.next_readonly_probe ?? '').trim(),
+    open_work: Number(raw.open_work ?? 0),
+    recoverable_unknown: Number(raw.recoverable_unknown ?? 0),
+    recoverable_fail: Number(raw.recoverable_fail ?? 0),
+    writer_conflict: raw.writer_conflict === true,
+    oracle_uncertainty: raw.oracle_uncertainty === true,
+    human_frontier: raw.human_frontier === true,
+    reality_judge: String(raw.reality_judge ?? '').trim().toUpperCase(),
+  };
+}
+
+function continuationRequiredByMission(missao = '') {
+  return /(?:CONTINUE_SAME_GOAL|HERMES_PARENT_GOAL_CONTINUOUS_LOOP|AUTO_CONTINUE_UNTIL_FIXED_POINT)\s*=\s*true|#HERMES_PARENT_GOAL_CONTINUOUS_LOOP/i.test(String(missao));
+}
+
+function continuationProblems(continuity, { required = false } = {}) {
+  if (!continuity) return required ? ['contrato de continuidade ativo sem estado de continuidade na decisão final'] : [];
+  const problems = [];
+  if (continuity.next_cursor !== 'FIXED_POINT') problems.push(`continuidade exige NEXT_CURSOR=FIXED_POINT (atual=${continuity.next_cursor || 'AUSENTE'})`);
+  if (continuity.next_readonly_probe) problems.push('continuidade possui NEXT_READONLY_PROBE pendente');
+  if (!Number.isFinite(continuity.open_work) || continuity.open_work > 0) problems.push('continuidade possui OPEN_WORK pendente');
+  if (!Number.isFinite(continuity.recoverable_unknown) || continuity.recoverable_unknown > 0) problems.push('continuidade possui RECOVERABLE_UNKNOWN pendente');
+  if (!Number.isFinite(continuity.recoverable_fail) || continuity.recoverable_fail > 0) problems.push('continuidade possui RECOVERABLE_FAIL pendente');
+  if (continuity.writer_conflict) problems.push('continuidade possui conflito de writer ativo');
+  if (continuity.oracle_uncertainty) problems.push('continuidade possui incerteza material do Oracle');
+  if (!continuity.human_frontier && continuity.reality_judge !== 'PASS') problems.push(`continuidade exige REALITY_JUDGE=PASS (atual=${continuity.reality_judge || 'AUSENTE'})`);
+  return problems;
+}
+
 export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] } = {}) {
   const problemas = [];
+  const continuity = normalizeContinuation(decisao);
+  const continuityRequired = continuationRequiredByMission(missao);
   const resumo = String(decisao?.args?.mensagem || decisao?.pensamento || '').trim();
   const ultimo = historico.length ? historico[historico.length - 1] : null;
   const mut = avaliarMutacoes(historico);
@@ -247,9 +283,10 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
   if (ultimo && ultimo.ok !== true) problemas.push('última etapa não está aprovada');
   if (ultimo?.critic) problemas.push('última etapa possui reprovação do Critic');
   problemas.push(...mut.problems);
+  problemas.push(...continuationProblems(continuity, { required: continuityRequired }));
 
   const receipt = {
-    schema_version: 2,
+    schema_version: 3,
     gate: 'HERMES_FINALIZATION_CRITIC',
     status: problemas.length ? 'BLOCKED' : 'PASS',
     semantic_state: estadoSemantico || null,
@@ -261,6 +298,20 @@ export function auditarFinalizacao({ missao = '', decisao = {}, historico = [] }
     last_mutation_index: ultimaMutacao?.index ?? -1,
     behavior_test_after_mutation_index: ultimaMutacao?.kind === 'LOCAL' ? (ultimaProva?.proof_index ?? -1) : -1,
     mutations_total: mut.mutacoes.length,
+    continuation: (continuity || continuityRequired) && {
+      declared: Boolean(continuity),
+      contract_required: continuityRequired,
+      next_cursor: continuity?.next_cursor || null,
+      next_readonly_probe: continuity?.next_readonly_probe || null,
+      open_work: continuity?.open_work ?? null,
+      recoverable_unknown: continuity?.recoverable_unknown ?? null,
+      recoverable_fail: continuity?.recoverable_fail ?? null,
+      writer_conflict: continuity?.writer_conflict ?? null,
+      oracle_uncertainty: continuity?.oracle_uncertainty ?? null,
+      human_frontier: continuity?.human_frontier ?? null,
+      reality_judge: continuity?.reality_judge || null,
+      continuation_required: continuationProblems(continuity, { required: continuityRequired }).length > 0,
+    },
     mutation_proofs: mut.proofs,
     unproven_mutations: mut.proofs.filter(p => !p.ok).map(p => ({ mutation_index: p.mutation_index, kind: p.kind })),
     checks: {

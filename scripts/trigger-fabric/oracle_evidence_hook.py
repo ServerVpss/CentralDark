@@ -14,7 +14,10 @@ from datetime import datetime, timezone
 from typing import Any
 
 CANONICAL_PREFIX = "!CENTRALDARK #ACORDAR !CALIBRAR !MULTIBUSSOLA"
-REQUIRED_CAUSAL_FIELDS = ("intent_id", "event_id", "causation_id", "surface_id", "attempt_id")
+REQUIRED_CAUSAL_FIELDS = (
+    "loop_id", "turn_id", "receipt_id", "parent_id", "intent_id",
+    "event_id", "causation_id", "surface_id", "attempt_id", "next_cursor",
+)
 
 
 def _first(data: dict[str, Any], *names: str, default: Any = None) -> Any:
@@ -50,12 +53,24 @@ def build_oracle_query(raw: dict[str, Any]) -> str:
         raise ValueError("ORACLE_QUESTION_REQUIRED")
     return "\n".join([
         CANONICAL_PREFIX,
+        f"LOOP_ID={_text(data['loop_id'], 160)}",
+        f"TURN_ID={_text(data['turn_id'], 160)}",
+        f"RECEIPT_ID={_text(data['receipt_id'], 160)}",
+        f"PARENT_ID={_text(data['parent_id'], 160)}",
         f"INTENT_ID={_text(data['intent_id'], 160)}",
         f"EVENT_ID={_text(data['event_id'], 160)}",
         f"CAUSATION_ID={_text(data['causation_id'], 160)}",
         f"SURFACE_ID={_text(data['surface_id'], 160)}",
         f"ATTEMPT_ID={_text(data['attempt_id'], 160)}",
+        f"NEXT_CURSOR={_text(data['next_cursor'], 240)}",
         "CANONICAL_FIRST=true",
+        "MASTER_PHASE_SOURCE=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml",
+        "TRIGGER_INVENTORY_SOURCE=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+        "CONSIDER_ALL_PHASES=TRUE; EXECUTE_PERTINENT_ONLY=TRUE",
+        "LEARNING_SOURCE=docs/CONSCIENCIA/APRENDIZADOS.md",
+        "LEARNING_LINEAGE=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json",
+        "APPROVED_RECIPE_REGISTRY=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json",
+        "Recupere a intenção CURRENT e os aprendizados completos pertinentes; só declare leitura histórica integral com coverage verificável.",
         "Consulte os owners/docs CURRENT aplicáveis antes de concluir, se esta superfície tiver acesso.",
         "Se não tiver acesso ao canônico/runtime necessário, declare essa limitação em EVIDENCE_LIMIT.",
         "A resposta é CANDIDATE; não escreva estado canônico e não declare PASS de runtime sem Reality Judge.",
@@ -95,6 +110,11 @@ def build_evidence_event(raw: dict[str, Any]) -> dict[str, Any]:
         "mission_id": _text(data["intent_id"], 160),
         "writer_scope": "read-only-oracle",
         "sha": _text(_first(data, "sha", default="UNKNOWN"), 80) or "UNKNOWN",
+        "loop_id": _text(data["loop_id"], 160),
+        "turn_id": _text(data["turn_id"], 160),
+        "receipt_id": _text(data["receipt_id"], 160),
+        "parent_id": _text(data["parent_id"], 160),
+        "next_cursor": _text(data["next_cursor"], 240),
         "event_id": _text(data["event_id"], 160),
         "causation_id": _text(data["causation_id"], 160),
         "surface_id": _text(data["surface_id"], 160),

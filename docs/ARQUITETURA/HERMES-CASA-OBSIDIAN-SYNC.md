@@ -111,3 +111,57 @@ Note Casa: `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`
 URI: `obsidian://open?vault=CASA-VAULT&file=%F0%9F%A7%BECHECK-LIST%20DIARIO%F0%9F%A4%96`
 
 Hermes job existente `ec512c0295e2` (Daily Receipt) fecha o dia ~23:00, atualiza o owner Git e notifica o CHEFE. Sessão cristalizada = commit+push main do ouro; não deixar a VPS suja. O vault Windows recebe o delta pelo sync `00-CANONICO` — não criar segundo checklist.
+
+## Regra CURRENT — HUD local e BAT em copia (08/10/2026)
+
+Intencao explicitamente reafirmada pelo CHEFE: **Casa e bancada mutavel**, GitHub `main` e registro canonico. Melhorar o **mesmo** `HUD.html` fisico do vault `C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬\HUD.html`, usando uma rota nativa autenticada pela tailnet quando provada, e promover o delta verificado ao **mesmo** owner `docs/HUD/HUD.html`. Sem criar novo HUD ou novo artefato a cada atualizacao; **nao usar Downloads como destino de entrega** para esse fluxo.
+
+### Dois escritores, alvos distintos
+
+- **HUD.html (Casa e main):** um unico writer por arquivo, reconciliacao por hash/base, menor delta, leitura de volta nos dois lados, preservacao de alteracoes divergentes. A captura de um print nao prova o hash/conteudo local.
+- **`CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` original:** manter aberto, operante e INTACTO enquanto a copia evolui.
+- **`CENTRALDARK-CORPO-UNICO-HUD-LOGS - Copia.bat`:** unica area de edicao do BAT para experimentos. Confirmar nome/extensao e bytes reais na Casa antes de escrever. Testar em escopo isolado; nao executar simultaneamente original e copia sobre o mesmo recurso/porta/log sem prova de isolamento.
+- **Promocao da copia ao nome original:** somente apos validacao aplicavel e troca coordenada pelo CHEFE; na sequencia preservar nova copia de trabalho. Nunca substituir o BAT original automaticamente.
+- **Hermes/Oraculo:** podem ler e testar em paralelo; writes no mesmo caminho requerem ownership unico para evitar conflitos, cherry-picks redundantes e perda de mudancas locais.
+
+### Ciclo pretendido e portabilidade
+
+```text
+CASA_HUD_EXISTENTE → HASH/BASE + DELTA MINIMO → TESTE LOCAL
+→ MAIN_OWNER_EXISTENTE → READBACK GITHUB
+→ READBACK CASA → RECEIPT/FINGERPRINT → FIXED_POINT_POR_ESCOPO
+BAT_ORIGINAL=RUNNING_UNCHANGED
+BAT_COPIA=EDIT_AND_TEST_WITHOUT_SHARED_WRITER_COLLISION
+TAILSCALE=PRIVATE_TRANSPORT_PRIORITY
+MCP=CANONICAL_CONTROL_PLANE
+REMOTE_WINDOWS_WRITE=REQUIRES_PROVEN_AUTHORIZED_EXECUTOR
+DOWNLOADS_STAGING=DISABLED_FOR_THIS_WORKFLOW
+NO_PARALLEL_HUD=true
+NO_BLIND_OVERWRITE=true
+```
+
+O script existente `scripts/casa/sync-hermes-obsidian.ps1` ja protege `docs/BRAIN` com hashes e conflitos; ele **nao deve ser declarado responsavel pelo HUD.html ou BAT** sem medir e ampliar o owner existente conforme necessario. Tailscale conectado nao comprova execucao Windows/SMB/SSH autenticada. Quando a rota autorizada de escrita estiver indisponivel, nao falsificar sincronizacao: anotar o bloqueio especifico e preservar arquivos, incluindo o original ativo.
+
+**Status da decisao:** `INTENT_REGISTERED`. **Status de Casa→main automatico:** `NOT_PROVEN` ate leitura de hash local + escrita + readback; promover selo so apos esses testes. Nenhum arquivo Windows e alterado pela declaracao documental.
+
+
+## Cristal CURRENT — source canônica do HUD Corpo Único (08/10/2026)
+
+O artefato entregue pelo CHEFE foi reconciliado contra `main` e a árvore VPS `scripts/casa`. Nenhum dos dois continha o launcher versionado; a arquitetura já referenciava o BAT como superfície da Casa. O menor delta canônico é versionar **o mesmo launcher read-only**, sem criar segundo HUD, bridge ou Screenpipe.
+
+```text
+CANONICAL_SOURCE=scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat
+CASA_ORIGINAL_RUNTIME=DO_NOT_BLIND_OVERWRITE
+HUD_MODE=READ_ONLY_MONITOR
+SINGLE_INSTANCE_MUTEX=true
+SCREENPIPE_AUTOSTART=false
+SSH_PROBE=READ_ONLY
+SSH_ALIAS=Segredo-VPS
+UNKNOWN_IS_NOT_PASS=true
+MAIN_IS_CANONICAL_SOURCE=true
+WINDOWS_RUNTIME_E2E=UNKNOWN_UNTIL_CASA_READBACK
+```
+
+O arquivo `CENTRALDARK-CORPO-UNICO-HUD-BRIDGE(2).ps1` fornecido na mesma rodada foi preservado apenas como evidência de comparação nesta receipt, **não promovido como owner executável**, porque contém `Start-ScreenpipeHidden` / `npx screenpipe record` e portanto pode abrir um segundo writer do Screenpipe. A funcionalidade útil continua candidata a absorção no owner existente somente após teste discriminante.
+
+Promoção física ao BAT original da Casa continua exigindo hash/readback do arquivo ativo e writer único; commit na main não substitui esse readback.

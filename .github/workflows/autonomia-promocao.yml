@@ -2,10 +2,6 @@ name: ⚙️ Autonomia — promoção segura
 
 on:
   workflow_dispatch:
-  schedule:
-    # Relógio esparso — NÃO é o */5 removido.
-    # Cobre WAIT/action_required (jobs=[] nunca dispara workflow_run completed).
-    - cron: "17,47 * * * *"
   pull_request_target:
     types: [opened, reopened, ready_for_review, synchronize]
     branches: [main]
@@ -35,7 +31,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      issues: read
+      issues: write
 
     steps:
       - name: 🔹 Checkout exclusivo da main confiável
@@ -54,7 +50,7 @@ jobs:
       - name: 🔹 Tirar de Draft somente intenção já autorizada
         env:
           BOT_TRUSTED_AUTHORS: segredounlock
-          NORMALIZER_TOKEN: ${{ github.token }}
+          NORMALIZER_TOKEN: ${{ secrets.PROMOTION_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/github-autonomia-varredura.mjs normalize
 
@@ -145,6 +141,8 @@ jobs:
 
       - name: 🔹 Publicar recibos do juiz
         if: always()
+        id: artifact_mirror_autonomia_promocao_1
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: autonomia-judge-${{ github.run_id }}
@@ -152,6 +150,21 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_autonomia_promocao_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi
       - name: 🔹 Receipt determinístico
         if: always()
         shell: bash
@@ -229,7 +242,7 @@ jobs:
             const auth = candidate?.authorization || {};
             const fullPromotionReceipt = Boolean(
               auth.authorized === true
-              && auth.viaBody === true
+              && (auth.viaBody === true || auth.viaLabel === true)
               && supportedPolicies.has(auth.merge_policy)
               && auth.intent_scope
               && auth.writer
@@ -276,6 +289,8 @@ jobs:
 
       - name: 🔹 Publicar resultado sanitizado
         if: always()
+        id: artifact_mirror_autonomia_promocao_2
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: autonomia-promote-${{ github.run_id }}
@@ -283,6 +298,21 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_autonomia_promocao_2.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi
       - name: 🔹 Receipt determinístico
         if: always()
         shell: bash

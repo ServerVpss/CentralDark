@@ -173,11 +173,11 @@ test("promotor materializa autoridade somente como parte do selo confiável", ()
   assert.equal(shouldMaterializeAuthority(pr({ head: { repo: { full_name: "outro/fork" } } }), "ServerVpss/CentralDark"), false);
 });
 
-test("label de autoridade sozinha permite investigação mas não fecha selo de promoção", () => {
+test("label persistente fecha autoridade; gates operacionais continuam separados", () => {
   const candidate = pr({ body: "sem recibo", labels: [{ name: "permito-segredo" }] });
   assert.equal(eligibleSummary(candidate, "ServerVpss/CentralDark"), true);
   const seal = promotionSealState(candidate, "ServerVpss/CentralDark");
-  assert.equal(seal.eligible, false);
+  assert.equal(seal.eligible, true);
   assert.equal(seal.complete, false);
 });
 

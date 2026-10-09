@@ -58,8 +58,8 @@ def ask_native(prompt, timeout=90, thinking=None, max_tokens=None):
     try:
         lib.genai_text_enable_internal_event_loop(sess, True)
         lib.genai_text_result_set_callback(sess, cb, None)
-        rc=lib.genai_text_init_session(sess)
-        if rc != 0: raise RuntimeError(f"INIT_FAILED:{rc}")
+        # Official openKylin GenAI SDK sequence: bind the model before session init.
+        # INIT_FAILED:10 must not be confused with a ready Triton embedding model.
         cfg=c_void_p(lib.chat_model_config_create())
         if not cfg: raise RuntimeError("CONFIG_CREATE_FAILED")
         try:
@@ -71,6 +71,8 @@ def ask_native(prompt, timeout=90, thinking=None, max_tokens=None):
                 code=lib.chat_model_config_set_max_completion_tokens(cfg,int(max_tokens))
                 if code:raise RuntimeError("TOKEN_LIMIT_CONFIG_UNSUPPORTED:"+str(code))
             lib.genai_text_set_model_config(sess, cfg)
+            rc=lib.genai_text_init_session(sess)
+            if rc != 0: raise RuntimeError(f"INIT_FAILED:{rc}")
         finally:
             lib.chat_model_config_destroy(ctypes.byref(cfg))
         lib.genai_text_chat_async(sess, prompt.encode())

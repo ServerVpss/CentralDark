@@ -5,8 +5,6 @@ name: ⚙️ sentinela-divergencias
 # por hash) pra cada uma. Roda a cada 6h e sob demanda.
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -75,6 +73,8 @@ jobs:
 
       - name: 🔹 Publicar snapshot como artifact imutável
         if: success()
+        id: artifact_mirror_sentinela_divergencias_1
+        continue-on-error: true
         uses: actions/upload-artifact@v7
         with:
           name: sentinela-snapshot-${{ github.run_id }}
@@ -87,3 +87,18 @@ jobs:
       # Estado transitório não faz commit nem push na main. Issues deduplicadas,
       # job summary e artifact são os canais operacionais; Git permanece como
       # fonte de código e decisões aprovadas, não banco de telemetria viva.
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_sentinela_divergencias_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi

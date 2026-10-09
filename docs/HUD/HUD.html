@@ -751,7 +751,278 @@ body {
 <div class="tab-painel visivel" id="tab-hud">
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
-<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026 01:05:56 BRT</span></div><div class="cadeado-meta">Main: evolucao das abas HUD, MAPA e FORJA conforme medicao VPS/Casa. Owner: docs/HUD/HUD.html. Provas escopadas abaixo; data no artefato, nao no nome de download.</div></div>
+<div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">09/10/2026, 02:03:19 UTC - reconciliacao CURRENT sem falso verde</span></div><div class="cadeado-meta">FONTE OBSERVADA: GitHub main <code>75115cfe063f</code> e API publica <code>api.centralldark.com/health</code>. Este quadro separa CURRENT de historico: API health confirma Hermes Core vivo, mas nao prova inferencia, deploy ou disponibilidade de modelo local. Owner: docs/HUD/HUD.html.</div></div>
+<!-- CURRENT_PROVENANCE_COMPASSO 2026-10-09: ONE_SYSTEM_ONE_HUD; read-only projection -->
+<div class="section cd-index-current" id="cd-hud-compasso-current" data-busca="centraldark index current vps main casa triton kylin proveniencia frescor peso source runtime" data-observed-at="2026-10-09T02:03:19Z" style="margin-top:16px">
+ <div class="section-header"><div class="section-icon">&#128065;</div><h2 class="section-title">Index + HUD &middot; Compasso CURRENT</h2><span class="section-count" id="cd-hud-current-age">CALCULANDO FRESCOR</span></div>
+ <p class="cadeado-meta">Prova da fonte &gt; historico narrado. Peso: <strong>efeito real + contraprova</strong> &gt; <strong>source/HEAD verificados</strong> &gt; <strong>documento ou HTTP 200 isolado</strong>. Este quadro e um snapshot de leitura, nunca um segundo juiz; quando envelhecer vira STALE.</p>
+ <div class="hud-grid">
+  <div class="hud-card"><h3>GitHub main &middot; referencia de origem</h3><div class="val ok">SOURCE MEDIDO</div><div class="meta">HEAD observado agora: <code>75115cfe063f</code>. Commit nao implica deploy; o HUD registra a fonte e separa efeito runtime.</div></div>
+  <div class="hud-card"><h3>VPS &middot; source / deploy</h3><div class="val warn">DRIFT OBSERVADO</div><div class="meta">Checkout HEAD <code>bdf2f09ad</code> na medicao anterior a este commit. Codigo em disco, servico carregado e inferencia sao provas distintas. Missões Hermes e zip MCP untracked preservados.</div></div>
+  <div class="hud-card"><h3>Casa &middot; Obsidian</h3><div class="val warn">SINCRONIZACAO SOB READBACK</div><div class="meta">Mesmo <code>HUD.html</code> do vault; hash antigo da Casa <code>742c96ad...</code>. Escrita fisica requer preservacao do original e readback do arquivo final, sem criar HUD paralelo.</div></div>
+  <div class="hud-card"><h3>Triton 2.49.0 &middot; inventario</h3><div class="val ok">21 READY / 30 CATALOGADOS</div><div class="meta">Sensor Kylin/Triton: 21 com state READY, 1 UNAVAILABLE (OCR), 8 sem estado READY informado. Nenhum LLM generativo de conversa identificado no catalogo; Triton READY nao e chat NLP PASS.</div></div>
+  <div class="hud-card"><h3>Kylin NLP &middot; geracao</h3><div class="val warn">INIT_FAILED:10 / 502</div><div class="meta">Falha nativa registrada e reproduzida em receipt; SDK/modelo indisponivel e hipoteses separadas. Patch de ordem `bdf2f09ad` no source, nao equivale a correcao comprovada no processo ativo.</div></div>
+  <div class="hud-card"><h3>Fio da missao / evidencias</h3><div class="val warn">FIXED_POINT: NAO COMPROVADO</div><div class="meta">GOAL t_9040803d. Receber &#8594; Perceber &#8594; Compreender &#8594; Costurar &#8594; Comprovar &#8594; Cristalizar &#8594; Continuar. NEXT_CURSOR: reconciliar modelo disponivel &#8594; native-once &#8594; bridge completion &#8594; Hermes.</div></div>
+  <div class="hud-card"><h3>Rota de modelo local &middot; auxiliar</h3><div class="val warn">OFFLINE / NAO BLOQUEANTE</div><div class="meta">Falta localizar ou instalar um modelo conversacional local. O site, o MCP, o Hermes Core e os demais modelos continuam seguindo normalmente.</div><button type="button" class="aion-open-btn" style="margin-top:10px" onclick="var n=document.getElementById('cd-local-model-note'); n.hidden=!n.hidden; this.textContent=n.hidden?'VER PENDENCIA':'OCULTAR PENDENCIA'">VER PENDENCIA</button><div id="cd-local-model-note" class="meta" hidden style="margin-top:10px;white-space:pre-line;overflow-wrap:anywhere">PLACA: ROTA_OFFLINE_NAO_BLOQUEANTE
+ROTA: UNKNOWN (modelo conversacional local não cadastrado)
+OWNER: Kylin / Hermes catalog
+ARQUIVO: scripts/vps/kylin-openai-bridge.py
+LINHA: UNKNOWN (checar runtime)
+ERRO: modelo local não comprovado; INIT_FAILED:10 / HTTP 502 na rota NLP é ferida separada
+PROVA: último inventário Triton sem LLM generativo confirmado; health não prova chat
+PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.</div></div>
+  <div class="hud-card"><h3>API CentralDark &middot; Hermes Core</h3><div class="val warn" id="cd-api-hermes-current">API HEALTH: MEDINDO</div><div class="meta" id="cd-api-hermes-plaque" role="status" aria-live="polite" style="margin-top:8px;color:var(--amber)">PLACA: AGUARDANDO CONTRAPROVA /health</div><div class="meta">Owner real: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">api.centralldark.com/health</a> retorna `servico=hermes-core`, `versao=5.0` na medicao da Casa. Health nao equivale a IA inferindo, deploy nem acesso admin. A consulta HTTP sem credenciais roda no navegador, com UNKNOWN se indisponivel.</div></div>
+  <div class="hud-card"><h3>Google Drive &middot; Vault VPS off-host</h3><div class="val warn">GOOGLE_DRIVE_VAULT_OFFHOST: IDENTIFICADO</div><div class="meta">Inventario Claude: `Vault-Cofre-CentralDark-20260930T105330Z.tar.gz` (752.981.967 bytes), e sidecar .sha256 presente. SHA esperado `383eb16f6ccd...e8e4` no Drive e receipt do Git. Metadata+sidecar PASS; SHA de bytes do arquivo inteiro CURRENT = UNKNOWN. Conteudo potencialmente secreto: sem upload ou abertura pela API publica.</div></div>
+ </div>
+ <p class="cadeado-prova">Fonte: snapshot operacional 2026-10-09T01:35:04.340Z (sensor) + GitHub `main` + VPS git + <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/RECEIPTS/2026-10-09-KYLIN-BRIDGE-CHAT-502-INIT-FAILED-10.md" target="_blank" rel="noopener">receipt Kylin</a>. O One Heart existente continua como fonte dinamica separada; CORS/timeout no file:// vira UNKNOWN, nunca PASS.</p>
+</div>
+<script>
+(function(){
+  var parent=document.getElementById('cd-hud-compasso-current'), badge=document.getElementById('cd-hud-current-age');
+  if(!parent||!badge)return;
+  function refresh(){
+    var t=Date.parse(parent.getAttribute('data-observed-at')), age=Date.now()-t;
+    var fresh=Number.isFinite(age)&&age>=-5000&&age<=15*60*1000;
+    badge.textContent=fresh?'SNAPSHOT RECENTE / <= 15 min':'SNAPSHOT STALE / MEDIR CURRENT';
+    badge.title='Snapshot gravado em '+(parent.getAttribute('data-observed-at')||'UNKNOWN')+'; nao prova situacao do runtime depois disso.';
+  }
+  // cd-plaque-multiplex-v1: uma placa por cartao no MESMO HUD, sem segundas rotas.
+  // Cada boto abre sua propria causa/prova/proximo passo; sem acionar servicos.
+  function cdPlaqueInfo(title) {
+    if (title.indexOf('GitHub main') >= 0) return ['Referência de código, não atestado de deploy.', 'HEAD visível no cartão é histórico até nova leitura.', 'Confrontar HEAD atual do owner com checkout e runtime.'];
+    if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) return ['Um checkout antigo ou dirty não derruba outros serviços.', 'A placa mostra o último HEAD medido; NÃO é probe contínua.', 'Reconciliar owner git sem apagar missões nem sobrescrever trabalho.'];
+    if (title.indexOf('SSH Casa') >= 0) return ['SSH AUTENTICADO PROVADO com cliente OpenSSH do Git; a ferida remanescente e do ssh.exe nativo do Windows (EXIT 255 ate em -V).', 'T5 Casa: alias Segredo-VPS presente e mapeado para root@89.117.78.124 via chave ed25519 ja existente; Git OpenSSH 10.3 / BatchMode / StrictHostKeyChecking=yes => SSH_EXIT=0, hostname CENTRALDARK-OS, whoami root, repo /root/CentralDark HEAD=d921e94e4. Windows System32 OpenSSH -V e -G retornam 255 sem stderr; isso nao e falha de login na VPS.', 'Reutilizar a rota Git OpenSSH que passou, sem copiar chaves nem alterar sshd. Deixar o Windows OpenSSH como pendencia local e remedir se necessario. Promover VPS main/deploy por fluxo canonico separado: HEAD da VPS atras nao significa SSH offline.'];
+    if (title.indexOf('Casa') >= 0 && title.indexOf('Screenpipe') < 0) return ['Versão física e GitHub podem divergir sem derrubar o HUD.', 'Hash apresentado é snapshot; o arquivo local requer readback.', 'Comparar hash do HUD físico com o owner e manter backup.'];
+    if (title.indexOf('Triton') >= 0) return ['Triton pronto não equivale a modelo de conversa disponível.', '21 READY / 30 catalogados na medição referenciada.', 'Remedir /v2/repository/index e verificar separadamente inferência de texto.'];
+    if (title.indexOf('Kylin NLP') >= 0) return ['O SDK registrou INIT_FAILED:10; falha restrita à geração NLP.', 'Receipt de SDK e HTTP 502, sem prova de recuperação posterior.', 'Preservar bridge e investigar modelo disponível; outras rotas seguem.'];
+    if (title.indexOf('Fio da missao') >= 0) return ['Ainda não há FIXED_POINT global comprovado.', 'Goal e NEXT_CURSOR exibidos são histórico de execução.', 'Continuar pelo menor delta autorizado e contraprovar por escopo.'];
+    if (title.indexOf('Screenpipe / Casa') >= 0) return ['Duas feridas independentes: audio sem dispositivo de saida e consultas de dados HTTP 403. Health nao prova leitura nem captura.', 'T4 Casa: screenpipe.exe PID 48020 dono de :3030; health=200; /activity-summary=403; /search=403; SCREENPIPE_LOCAL_API_KEY ausente apenas na sessao PowerShell medida. T2/T3 confirmam recusa; PnP AudioEndpoint=0/6 e MEDIA=0/3 em medicao anterior. Dois processos nao provam captura duplicada.', 'Verificar configuracao oficial de API auth e credenciais da sessao autorizada SEM exibir tokens, testar rota de metadados com acesso legitimo; manter 403 se nao autorizado. Para audio, conferir dispositivo/driver presente no Windows; nao formatar nem iniciar terceiro gravador.'];
+    if (title.indexOf('API CentralDark') >= 0) return ['Health não demonstra calibração perfeita, inferência ou deploy.', 'Consultar PLACA dinâmica desta API no mesmo cartão.', 'Tratar DRIFT/404/timeout no owner; manter site e MCP independentes.'];
+    if (title.indexOf('Google Drive') >= 0) return ['Inventário do cofre não prova restauração ou integridade atual do arquivo.', 'Metadados e sidecar SHA vistos; hash integral atual ainda UNKNOWN.', 'Revalidar somente metadados/hashes por conexão privada. Nunca expor conteúdo.'];
+    return ['Estado deste módulo não comprovado por sensor atual.', 'Somente o rótulo de superfície e snapshot estão visíveis.', 'Remedir o owner antes de promover PASS; seguir demais rotas.'];
+  }
+  // Card projection only: show actual path and source when grounded; otherwise UNKNOWN.
+  // A failed delivery/check is a local plaque, never an automatic global veto.
+  function cdPlaqueLocator(title, card) {
+    var result={route:'UNKNOWN (sem medicao de rota)',owner:'UNKNOWN',file:'UNKNOWN',line:'UNKNOWN',error:'UNKNOWN'};
+    if (title.indexOf('GitHub main') >= 0) {
+      result.route='https://github.com/ServerVpss/CentralDark/tree/main';
+      result.owner='ServerVpss/CentralDark@main';
+      result.file='docs/HUD/HUD.html';result.error='HEAD_SNAPSHOT_PODE_ESTAR_STALE';
+    } else if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) {
+      result.route='VPS checkout main / deploy (runtime a medir)';
+      result.owner='ServerVpss/CentralDark (VPS)';
+      result.file='UNKNOWN (configuracao ativa exige leitura)';
+      result.error='SOURCE_VS_RUNTIME_DRIFT (snapshot)';
+    } else if (title.indexOf('SSH Casa') >= 0) {
+      result.route='Git OpenSSH: C:\\Program Files\\Git\\usr\\bin\\ssh.exe → alias Segredo-VPS → root@89.117.78.124:22';
+      result.owner='Casa SEGREDO / Git OpenSSH 10.3 / VPS CENTRALDARK-OS';
+      result.file='C:\\Users\\Administrador\\.ssh\\config (Host Segredo-VPS; IdentityFile segredo_vps_ed25519) / Git ssh.exe';
+      result.line='UNKNOWN (cliente nativo Windows ssh.exe -V=255, sem diagnostico)';
+      result.error='SSH_AUTH_PASS_GIT_CLIENT; WINDOWS_OPENSSH_CLIENT_EXIT_255; VPS_REPO_HEAD=d921e94e4';
+    } else if (title.indexOf('Casa') >= 0 && title.indexOf('Screenpipe') < 0) {
+      result.route='Obsidian / HUD.html (arquivo local)';
+      result.owner='docs/HUD/HUD.html';
+      result.file='HUD.html';result.error='HASH_READBACK_PENDENTE_OU_HISTORICO';
+    } else if (title.indexOf('Triton') >= 0) {
+      result.route='http://127.0.0.1:8000/v2/repository/index (runtime local, confirmar)';
+      result.owner='Triton / Kylin';
+      result.file='UNKNOWN (runtime nao inspecionado neste navegador)';
+      result.error='SEM_LLM_CONVERSACIONAL_PROVADO';
+    } else if (title.indexOf('Kylin NLP') >= 0) {
+      result.route='127.0.0.1:18435 / native-once (caminho da geracao)';
+      result.owner='centraldark-kylin-native-bridge.service';
+      result.file='/root/.hermes/kylin_openai_bridge.py';
+      result.line='202 (trace historico; confirmar no runtime atual)';
+      result.error='INIT_FAILED:10 / HTTP 502 (observado)';
+    } else if (title.indexOf('Fio da missao') >= 0) {
+      result.route='Goal t_9040803d / continuidade';
+      result.owner='KAIZEN-VIVO';
+      result.file='docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md';
+      result.error='FIXED_POINT_NAO_COMPROVADO';
+    } else if (title.indexOf('Rota de modelo local') >= 0) {
+      result.route='UNKNOWN (modelo conversacional local nao cadastrado)';
+      result.owner='Kylin / Hermes catalog (remedir)';
+      result.file='scripts/vps/kylin-openai-bridge.py';
+      result.error='ROTA_LOCAL_OFFLINE_NAO_BLOQUEANTE';
+    } else if (title.indexOf('API CentralDark') >= 0) {
+      result.route='https://api.centralldark.com/health';
+      result.owner='Hermes Core / API';
+      result.file='docs/HUD/HUD.html';
+      result.error='CALIBRACAO_DRIFT / 404 / REDE (conforme probe viva)';
+    } else if (title.indexOf('Screenpipe / Casa') >= 0) {
+      result.route='Windows 11 > Configuracoes > Sistema > Som; Get-PnpDevice -Class AudioEndpoint/MEDIA -PresentOnly; Screenpipe local :3030';
+      result.owner='Casa SEGREDO / Windows Audio (Audiosrv, AudioEndpointBuilder) / Screenpipe';
+      result.file='C:\\Users\\Administrador\\.screenpipe (logs locais; nao abrir conteudo sensivel)';
+      result.line='Log 2026-10-08 23:47:02: no output device available / No default output device found; linha no source UNKNOWN';
+      result.error='AUDIO_NO_DEFAULT_OUTPUT_DEVICE; ACTIVITY_SUMMARY_HTTP_403; SEARCH_HTTP_403; CAPTURE_AUDIO=UNKNOWN';
+    } else if (title.indexOf('Google Drive') >= 0) {
+      result.route='Google Drive: cofre off-host (ID/URL restritos; UNKNOWN no HUD)';
+      result.owner='Vault / backup off-host';
+      result.file='UNKNOWN (cofre privado)';
+      result.error='INTEGRIDADE_COMPLETA_NAO_PROVADA';
+    } else {
+      var source=card.querySelector('a[href]');
+      if (source && /^https?:\/\//i.test(source.href)) result.route=source.href;
+      result.owner=(card.closest('.section')?.querySelector('.section-title')?.textContent || '').trim() || 'UNKNOWN';
+      result.error='ERRO_OU_ESTADO_NAO_COMPROVADO_NESTE_CARTAO';
+    }
+    return result;
+  }
+  function cdPlaqueRequired(card, parent) {
+    if (parent.contains(card)) return true;
+    var val=card.querySelector('.val');
+    var status=(val?.textContent || '').toUpperCase();
+    return !!(val && (val.classList.contains('warn') || val.classList.contains('fail') ||
+      /\b(OFFLINE|DRIFT|UNKNOWN|ERROR|ERRO|FAIL|BLOCKED|PENDING|STALE|502|404|NAO COMPROVADO|PARCIAL)\b/.test(status)));
+  }
+  // Existing HUD plaque -> exact known location -> copyable remedy mission. No second panel.
+  function cdRecipe(title, loc, status, info, proof) {
+    return [
+      '!CENTRALDARK #ACORDAR !PAPAGAIO_OFF',
+      'INTENCAO: COSTURAR '+String(title).trim(),
+      'ESTADO: '+String(status||'UNKNOWN').trim(),
+      'ROTA: '+loc.route,'OWNER: '+loc.owner,'ARQUIVO: '+loc.file,
+      'LINHA: '+loc.line,'ERRO: '+loc.error,
+      'MOTIVO: '+info[0],'EVIDENCIA: '+String(proof||info[1]).trim(),
+      'NEXT_CURSOR: '+info[2],
+      'RECEITA: MEDIR CURRENT -> REUTILIZAR OWNER/CLI OU ROTA AUTORIZADA -> TESTAR -> READBACK -> CONTRAPROVAR.',
+      'FALHOU? PLACA COM ROTA/ERRO/LINHA OU UNKNOWN; COSTURA SE DER; RESTANTE CONTINUA.',
+      'SEM NOVO HUD / GATE / BOT / CAPTURA DUPLICADA.',
+      'SEGURANCA E AUTORIZACAO PERMANECEM; UNKNOWN != PASS; COMMIT != DEPLOY.'
+    ].join('\n');
+  }
+  function cdCopy(text, btn) {
+    function success(){if(btn)btn.textContent='COPIADO - COLAR NO HERMES';}
+    function fallback(){
+      var area=document.createElement('textarea');
+      area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.left='-9999px';
+      document.body.appendChild(area);area.select();
+      var ok=false;try{ok=document.execCommand('copy');}catch(_){}
+      area.remove();if(ok)success();else if(btn)btn.textContent='COPIA INDISPONIVEL - SELECIONE RECEITA';
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(success,fallback);
+    else fallback();
+  }
+  function cdCopyButton(container, recipe) {
+    if(!container||container.querySelector('.cd-plaque-copy'))return;
+    var button=document.createElement('button');button.type='button';
+    button.className='aion-open-btn cd-plaque-copy';button.textContent='ACEITAR MISSAO (COPIAR)';
+    button.style.marginTop='10px';button.style.maxWidth='100%';button.style.whiteSpace='normal';
+    button.addEventListener('click',function(){cdCopy(recipe(),button);});
+    container.appendChild(button);
+  }
+  window.cdHudRecipe=cdRecipe;window.cdHudCopy=cdCopy;
+  function cdMountIndependentPlaques() {
+    var cards = document.querySelectorAll('.hud-grid > .hud-card');
+    Array.prototype.forEach.call(cards, function(card, index) {
+      // Um botao VER PENDENCIA por cartao; outros botoes nao substituem a placa.
+      if (!cdPlaqueRequired(card, parent) || card.querySelector('.cd-plaque-multiplex-v1')) return;
+      var title = (card.querySelector('h3') || {}).textContent || 'OWNER UNKNOWN';
+      var manual = card.querySelector('#cd-local-model-note');
+      if (manual) {
+        var manualInfo=cdPlaqueInfo(title), manualLocation=cdPlaqueLocator(title,card);
+        cdCopyButton(manual,function(){
+          return cdRecipe(title,manualLocation,card.querySelector('.val')?.textContent||'UNKNOWN',
+            manualInfo,manual.textContent);
+        });
+        return;
+      }
+      if (Array.prototype.some.call(card.querySelectorAll('button'),function(b){
+        return /^(VER|OCULTAR) PEND[ÊE]NCIA$/i.test(b.textContent.trim());
+      })) return;
+      var info = cdPlaqueInfo(title);
+      var locator = cdPlaqueLocator(title, card);
+      var toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'aion-open-btn cd-plaque-multiplex-v1';
+      toggle.textContent = 'VER PENDENCIA';
+      toggle.style.marginTop = '10px';
+      toggle.setAttribute('aria-expanded', 'false');
+      var detail = document.createElement('div');
+      detail.className = 'meta';
+      detail.id = 'cd-plaque-detail-' + index;
+      detail.hidden = true;
+      detail.style.display = 'none';
+      detail.style.whiteSpace = 'pre-line';
+      detail.style.overflowWrap = 'anywhere';
+      toggle.setAttribute('aria-controls', detail.id);
+      toggle.addEventListener('click', function() {
+        var open = detail.hidden;
+        if (open) {
+          var displayed = card.querySelector('.val');
+          var live = title.indexOf('API CentralDark') >= 0 ? document.getElementById('cd-api-hermes-plaque') : null;
+          detail.textContent = 'PLACA: ' + title.trim()
+            + '\nESTADO EXIBIDO: ' + (displayed ? displayed.textContent.trim() : 'UNKNOWN')
+            + '\nROTA EXATA OU UNKNOWN: ' + locator.route
+            + '\nOWNER: ' + locator.owner
+            + '\nARQUIVO: ' + locator.file
+            + '\nLINHA: ' + locator.line
+            + '\nERRO: ' + locator.error
+            + '\nMOTIVO: ' + info[0]
+            + '\nPROVA / FONTE: ' + (live ? live.textContent : info[1])
+            + '\nPROXIMO MOVIMENTO: ' + info[2]
+            + '\nCONTINUIDADE: erro ou gate operacional gera PLACA; só a função dependente espera. Autorização e segurança permanecem.';
+          cdCopyButton(detail,function(){
+            var latest=title.indexOf('API CentralDark')>=0?document.getElementById('cd-api-hermes-plaque'):null;
+            return cdRecipe(title,locator,card.querySelector('.val')?.textContent||'UNKNOWN',
+              info,latest?.textContent||info[1]);
+          });
+        }
+        detail.hidden = !open;
+        detail.style.display = open ? 'block' : 'none';
+        toggle.textContent = open ? 'OCULTAR PENDENCIA' : 'VER PENDENCIA';
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      card.appendChild(toggle);
+      card.appendChild(detail);
+    });
+  }
+  cdMountIndependentPlaques();
+  // Os cartões de MAPA/FORJA vêm depois deste script no HTML; reconciliar no DOM completo.
+  document.addEventListener('DOMContentLoaded', cdMountIndependentPlaques);
+  // API-HERMES health: probe publica READ_ONLY; nao e prova de LLM, owner ou deploy.
+  function apiHealth(){
+    var el=document.getElementById('cd-api-hermes-current');
+    var plaque=document.getElementById('cd-api-hermes-plaque');
+    if(!el||!plaque)return;
+    var ctrl=window.AbortController?new AbortController():null;
+    var timeout=ctrl?setTimeout(function(){ctrl.abort();},6500):null;
+    fetch('https://api.centralldark.com/health',{cache:'no-store',mode:'cors',signal:ctrl?ctrl.signal:undefined})
+      .then(function(res){if(res.status!==200)throw Error('HTTP_'+res.status);return res.json();})
+      .then(function(body){
+        var ts=Date.parse(body.ts),age=Date.now()-ts;
+        var fresh=Number.isFinite(age)&&age>=-5000&&age<=30000;
+        var isHermes=body.status==='ok'&&body.servico==='hermes-core'&&fresh;
+        el.textContent=isHermes?'HEALTH HTTP 200 / HERMES CORE 5.0':'UNKNOWN / STALE OU OUTRO OWNER';
+        el.className='val '+(isHermes?'ok':'warn');
+        el.title='HTTP/health exclusivamente; inferencia, modelos, deploy e outras rotas = nao provados';
+        var calibration=body.calibracao_runtime;
+        if(!isHermes){
+          plaque.textContent='PLACA: HEALTH_UNKNOWN | motivo=owner ou frescor nao comprovado | proximo=remedir /health no owner';
+        }else if(calibration&&calibration.status==='DRIFT'){
+          var wounds=Number.isFinite(Number(calibration.wound_count))?Number(calibration.wound_count):'UNKNOWN';
+          plaque.textContent='PLACA: CALIBRACAO_DRIFT | feridas='+wounds+' | proximo=inspecionar owner da calibracao; nao marcar FIXED_POINT';
+        }else if(calibration&&calibration.status==='OK'&&Number(calibration.wound_count)===0){
+          plaque.textContent='PLACA: API_HEALTH_PASS / CALIBRACAO_OK | somente escopo observado; deploy e inferencia nao provados';
+        }else{
+          plaque.textContent='PLACA: CALIBRACAO_UNKNOWN | proximo=consultar owner; HTTP 200 nao prova modelo nem deploy';
+        }
+        plaque.title='Fonte: /health; a placa e uma projecao READ_ONLY, nao altera o runtime';
+      })
+      .catch(function(error){
+         var message=error&&error.message?String(error.message):'';
+         var cause=/^HTTP_[0-9]{3}$/.test(message)?message:'REDE_CORS_OU_TIMEOUT';
+         el.textContent='UNKNOWN / API OU CORS';el.className='val warn';
+         plaque.textContent=(cause==='HTTP_404'?'PLACA: ROTA_NAO_ENCONTRADA':'PLACA: ROTA_NAO_COMPROVADA')+' | causa='+cause+' | proximo=verificar URL/owner e continuar pelo HUD';
+       })
+      .then(function(){if(timeout)clearTimeout(timeout);});
+  }
+  apiHealth();setInterval(apiHealth,30000);
+  refresh(); setInterval(refresh,30000);
+})();
+</script>
+<!-- END_CURRENT_PROVENANCE_COMPASSO -->
 
 
   <!-- AION UI BANNER -->
@@ -792,7 +1063,7 @@ body {
       <div class="hud-card">
         <h3>VPS CENTRALDARK-OS</h3>
         <div class="val ok">One Heart HTTP 200</div>
-        <div class="meta">openKylin 3.0 &middot; kernel 7.0 &middot; git pull auto cada 5min via cron</div>
+        <div class="meta">openKylin 3.0 &middot; kernel 7.0 &middot; auto-sync */5 via cron (so avanco direto, fecha se ramo/sujeira)</div>
       </div>
       <div class="hud-card">
         <h3>AionUi &middot; VPS</h3>
@@ -806,8 +1077,8 @@ body {
       </div>
       <div class="hud-card">
         <h3>SSH Casa &rarr; VPS</h3>
-        <div class="val ok">Provado</div>
-        <div class="meta">Segredo-VPS &middot; 89.117.78.124 &middot; key ed25519</div>
+        <div class="val ok">LOGIN SSH PASS / GIT OPENSSH</div>
+        <div class="meta">T5 Casa: autenticação SSH real via C:\\Program Files\\Git\\usr\\bin\\ssh.exe e alias Segredo-VPS, com host key validada, BatchMode e chave existente. SSH_EXIT=0, hostname=CENTRALDARK-OS, usuario=root. Checkout /root/CentralDark HEAD=d921e94e4 (deploy desatualizado e assunto separado). PLACA AUXILIAR: Windows System32 OpenSSH retorna EXIT 255 ate em ssh -V; Git SSH ja e a rota funcional. VER PENDENCIA entrega receita, sem duplicar chave ou desativar seguranca.</div>
       </div>
     </div>
   </div>
@@ -826,8 +1097,8 @@ body {
           <span class="cadeado-nome">VPS Auto-Sync</span>
           <span class="cadeado-status pass">SELADO</span>
         </div>
-        <div class="cadeado-meta">Cron */5 * * * * puxa origin/main automaticamente. Script com flock, stash, ff-only/rebase, log rotation.</div>
-        <div class="cadeado-prova">commit: 6ae79a9ec &middot; script: scripts/vps/auto-sync-main.sh</div>
+        <div class="cadeado-meta">Cron */5 * * * * puxa origin/main automaticamente. Versao CURRENT: flock + so avanco direto (ff-only), fecha sem mexer se o checkout nao estiver na main ou estiver sujo; sem stash, rebase, reset ou restart. Ferida 08/10/2026: BLOCKED 63x de 04:10Z a 09:20Z porque /root/CentralDark estava no ramo docs/hermes-local-loop-receipt-20261007 com 3 arquivos alterados + 1 novo. Realinhado em 09:29Z com backup em /root/CentralDark-preserve/align-main-20261008T092458Z e stash align-main-preserve-20261008T092458Z. Segunda causa: apps/modulos/HERMES-CORE/core/orchestrator.mjs reescreve .artifacts/system-sentinel/reconciliation.json dentro do checkout; sem ignore, o checkout voltava sujo (BLOCKED 09:35:01Z). Corrigido em .gitignore no commit db57da27a.</div>
+        <div class="cadeado-prova">PROVA 08/10/2026: CHECKOUT_SYNC_PASS manual 09:38:31Z e pelo proprio cron 09:40:06Z, sha=db57da27a, checkout limpo &middot; RUNTIME_DEPLOY_UNKNOWN &middot; script: scripts/vps/auto-sync-main.sh &middot; log: scripts/vps/auto-sync.log &middot; AO VIVO pelo coracao: <span id="cd-git-sync-live">medindo...</span> &middot; <a href="#" class="nota-abre" data-nota="vps-sync-20261008">&#128202; planilha cristalizada</a></div>
       </div>
       <div class="cadeado-card selado">
         <div class="cadeado-header">
@@ -908,6 +1179,15 @@ body {
         <div class="cadeado-meta">VPS &#8594; Tailscale &#8594; SEGREDO 100.123.93.25:3030/health. Respondeu HTTP 200 em 08/10/2026. Nao significa captura de audio ou logs completos disponiveis.</div>
         <div class="cadeado-prova">PROVADO_ESCOPO: HTTP 200 pela VPS, 08/10/2026. Atualizacao live na secao Conexoes.</div>
       </div>
+      <div class="cadeado-card selado" data-proof-scope="CASA_HUD_UNICO_GUI" data-measured-at="2026-10-08">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128274;</span>
+          <span class="cadeado-nome">HUD Corpo Unico / Console interno (Casa)</span>
+          <span class="cadeado-status pass">SELADO: GUI LOCAL</span>
+        </div>
+        <div class="cadeado-meta">SEGREDO: o BAT da Copia executa o HUD WinForms existente com 10 cards e logs no proprio painel. O host PowerShell e iniciado oculto, o lancador encerra e nao chama bridge ou outro HUD. Escopo: apresentacao e processo local; nao comprova captura Screenpipe, sincronizacao Obsidian E2E nem saude da VPS.</div>
+        <div class="cadeado-prova">CONTRAPROVA Desktop Commander, 08/10/2026: GUI_WINDOWS=1; GUI_TITLE=CENTRALDARK | CORPO UNICO | HUD FIXO + LOGS AO VIVO; PARSE_ERRORS=0; HIDDEN_HOST_FLAG=True; EXTERNAL_BRIDGE_LAUNCH=False; SOURCE_UI_10_CARDS=True. BAT SHA-256: A78D468F9B4AF7215AF5F8F1974FDDB8D762402807AE98F31E2F4B46A0BFFF4C.</div>
+      </div>
       <div class="cadeado-card selado">
         <div class="cadeado-header"><span class="cadeado-icon">&#129528;</span><span class="cadeado-nome">One Heart VPS</span><span class="cadeado-status pass">PROVA HTTP</span></div>
         <div class="cadeado-meta">VPS 127.0.0.1:9100/heartbeat e /health responderam HTTP 200 em 08/10/2026. Vida do endpoint nao e prova de todos os workers.</div>
@@ -922,6 +1202,125 @@ body {
         <div class="cadeado-header"><span class="cadeado-icon">&#129302;</span><span class="cadeado-nome">Hermes WebUI / Sessao</span><span class="cadeado-status warn">PENDENTE</span></div>
         <div class="cadeado-meta">VPS 127.0.0.1:9119 respondeu HTTP 302 em 08/10/2026. Servico acessivel, mas sessao autenticada e painel funcional ainda nao comprovados.</div>
         <div class="cadeado-prova">PROVA PARCIAL: HTTP 302. A antiga porta 8788 nao conectou.</div>
+      </div>
+      <div class="cadeado-card selado" data-proof-scope="MCP_PUBLIC_CATALOG" data-measured-at="2026-10-08T04:11:45Z">
+        <div class="cadeado-header">
+          <span class="cadeado-icon">&#128736;</span>
+          <span class="cadeado-nome">MCP CentralDark / Catalogo publico</span>
+          <span class="cadeado-status pass">SELADO: ESCOPO CATALOGO</span>
+        </div>
+        <div class="cadeado-meta">/health publico HTTP 200, MCP v0.4.0; 153 ferramentas publicadas e catalogVersion 153-54e72b14201d em 08/10/2026 04:11:45Z. Owner interno independente: 141 dispatchables catalogados; estas contagens nao medem o mesmo escopo.</div>
+        <div class="cadeado-prova">PROVA: mcp.centralldark.com/health; catalogo mcp_admin_catalog. Validacao de todas as ferramentas ADMIN: PARCIAL (2 ausentes).</div>
+      </div>
+    </div>
+  </div>
+
+<!-- CANONICAL MCP ADMIN OWNER: fonte e provas do mesmo kernel (sem novo backend) -->
+<div class="section cd-mcp-admin-map" style="margin-top:16px" data-source="mcp.centralldark.com/health">
+  <div class="section-header">
+    <div class="section-icon">&#128736;</div>
+    <h2 class="section-title">MCP Admin &middot; Kernel vivo &amp; setores</h2>
+    <span class="section-count cd-mcp-health">MEDINDO</span>
+  </div>
+  <div class="cadeado-meta">Fonte runtime: <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">/health</a> do MCP 0.4.0; owner administrativo: <a href="https://mcp.centralldark.com/admin" target="_blank" rel="noopener">/admin</a> (login exigido). Auditoria em 08/10/2026: 153 ferramentas publicadas, 141 dispatchables no inventario unificado e 11 rotas catalogadas. Sao escopos de catalogo diferentes, nao somar ou igualar; health e catalogo nao comprovam autorizacao de cada tool.</div>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Ferramentas publicas</h3><div class="val cd-mcp-count">MEDINDO</div><div class="meta">/health: campo toolCount, consulta ao owner a cada 15s.</div></div>
+    <div class="hud-card"><h3>Catalogo / versao</h3><div class="val cd-mcp-version">MEDINDO</div><div class="meta cd-mcp-time">Sem leitura de runtime nesta abertura</div></div>
+    <div class="hud-card"><h3>Admin unificado</h3><div class="val warn">HISTORICO: ROTA 200</div><div class="meta">/admin serve login; abas internas exigem sessao autenticada.</div></div>
+    <div class="hud-card"><h3>Validador Admin</h3><div class="val warn">PARCIAL / 2 FALTANTES</div><div class="meta">vps_limpar_pasta_projeto e vps_listar_pastas_limpaveis ausentes no catalogo publico esperado, leitura datada 08/10/2026.</div></div>
+  </div>
+  <p class="cadeado-meta"><strong>Abas reais do owner:</strong> &#128065; Visao Geral &middot; &#129520; Ferramentas &middot; &#128203; Linear &middot; &#127756; Grafo Celestial &middot; &#129513; Padroes &middot; &#127899; Comandos &middot; Auditoria &middot; Grok &middot; Buildkite &middot; Conector &middot; Diagnostico &middot; Omni &middot; Tailscale. Presenca no codigo nao equivale a sessao operacional provada.</p>
+  <p class="cadeado-prova">Owners medidos: apps/modulos/mcp/src/admin.js, MCP /health, catalogo mcp_admin_catalog. Rotas administrativas que requerem cookie: /admin/api/tools, /admin/api/linear, /admin/grafo/, /admin/api/buildkite/status, /admin/api/tailscale, /admin/api/operational-snapshot, /admin/api/logs. Sem transporte de credenciais.</p>
+</div>
+<!-- FIXED POINT HUD: projecao dos owners existentes, sem juiz paralelo -->
+<div class="section" id="cd-fixed-point-ten" style="margin-top:16px" data-owner="docs/HUD/HUD.html">
+ <div class="section-header"><div class="section-icon">&#128274;</div><h2 class="section-title">Fixed Point &middot; 10 criterios rastreaveis</h2><span class="section-count" id="cd-fp-score">MEDINDO / 10</span></div>
+ <p class="cadeado-meta">Placar derivado de provas observaveis. SELADO historico nao equivale a servico online agora. Nenhuma prova e apagada por erro de rede. Total 10/10 exige receipt CURRENT do avaliador canonico; sem esse receipt, o fechamento permanece PENDENTE.</p>
+ <div class="hud-grid" id="cd-fp-grid">
+  <div class="hud-card"><h3>01 &middot; Owner unico</h3><div class="val warn" data-fp="owner">MEDINDO</div><div class="meta">HUD, MAPA e FORJA no mesmo HTML</div></div>
+  <div class="hud-card"><h3>02 &middot; Cadeados</h3><div class="val warn" data-fp="locks">MEDINDO</div><div class="meta">Inventario dinamico; selo nao se perde em falha transitória</div></div>
+  <div class="hud-card"><h3>03 &middot; MCP publico</h3><div class="val warn" data-fp="mcp">MEDINDO</div><div class="meta">toolCount e catalogVersion via /health vivo</div></div>
+  <div class="hud-card"><h3>04 &middot; One Heart</h3><div class="val warn" data-fp="heart">MEDINDO</div><div class="meta">Heartbeat fresco / estado ALIVE medido</div></div>
+  <div class="hud-card"><h3>05 &middot; Screenpipe</h3><div class="val warn" data-fp="screenpipe">MEDINDO</div><div class="meta">Health Casa no navegador; bloqueio CORS = UNKNOWN</div></div>
+  <div class="hud-card"><h3>06 &middot; AionUi MCP stdio</h3><div class="val warn" data-fp="aion">MEDINDO</div><div class="meta">Prova selada no aprendizado #168; atual requer replay READ-ONLY</div></div>
+  <div class="hud-card"><h3>07 &middot; Privacidade dos logs</h3><div class="val warn" data-fp="privacy">MEDINDO</div><div class="meta">Nao sobrescrever CENTRALDARK-CORPO-UNICO-HUD-LOGS</div></div>
+  <div class="hud-card"><h3>08 &middot; Goal Clause</h3><div class="val warn" data-fp="goal">MEDINDO</div><div class="meta">Receipt do avaliador Horn; sem prova, UNKNOWN</div></div>
+  <div class="hud-card"><h3>09 &middot; Casa &harr; main</h3><div class="val warn" data-fp="sync">MEDINDO</div><div class="meta">Comparacao de hash e readback nos dois lados exigidos</div></div>
+  <div class="hud-card"><h3>10 &middot; Fixed Point final</h3><div class="val warn" data-fp="fixed">MEDINDO</div><div class="meta">Avaliador canonico + readback + contraprova + estabilidade</div></div>
+ </div>
+ <div class="cadeado-prova" id="cd-fp-receipt">Aguardando evidencias do owner vivo; nenhum PASS sintetico.</div>
+</div>
+
+<!-- CANONICAL PRIVATE TRANSPORT POLICY / OWNER docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md -->
+<div class="section cd-transport-policy" style="margin-top:16px">
+  <div class="section-header"><div class="section-icon">&#127760;</div><h2 class="section-title">Bridge privado &middot; Tailscale prioritario</h2><span class="section-count">DECISAO CANONICA 08/10/2026</span></div>
+  <p class="cadeado-meta"><strong>Casa &harr; Tailscale &harr; VPS &harr; MCP CentralDark &harr; Hermes.</strong> Um sistema, sem bridge/admin paralelo. Desktop Commander NAO e dependencia: legado opcional, default OFF. Componentes funcionais nao sao apagados.</p>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Tailscale &middot; transporte privado</h3><div class="val warn">HISTORICO / REVALIDAR</div><div class="meta">VPS &harr; Casa / Taildrop medidos anteriormente. Estado CURRENT requer nova medicao de sensor; tailnet sozinha nao concede permissao admin.</div></div>
+    <div class="hud-card"><h3>MCP &middot; control plane unico</h3><div class="val ok">OWNER EXISTENTE</div><div class="meta">mcp.centralldark.com/mcp. Publico segue HTTPS + OAuth2/PKCE; admin e execucao exigem autorizacao propria.</div></div>
+    <div class="hud-card"><h3>Hermes &middot; executor autorizado</h3><div class="val warn">TESTE POR EFEITO</div><div class="meta">Usar executores nativos existentes. Transporte vivo != escrita no Windows comprovada.</div></div>
+    <div class="hud-card"><h3>Desktop Commander &middot; legado</h3><div class="val ok">NAO REQUERIDO</div><div class="meta">Removido dos pre-requisitos do fluxo novo; preservado apenas como componente opcional historico.</div></div>
+  </div>
+  <div class="cadeado-prova">REGRA SELADA COMO DECISAO: TAILSCALE_PRIORITY / CENTRALDARK_MCP_OWNER / NATIVE_EXECUTOR. Execucao remota Casa+sincronizacao Obsidian: depende de prova funcional; nao promover por declaracao.</div>
+</div>
+
+<!-- SKILL SYNC ACCEPTANCE: single existing HUD / projection not authority -->
+<div class="section" id="cd-skill-sync-e2e" style="margin-top:16px" data-pr="1783">
+ <div class="section-header"><div class="section-icon">&#129520;</div><h2 class="section-title">Skill Auto-Sync &middot; PR #1783 / E01–E10</h2><span class="section-count">0/10 E2E CONFIRMADOS</span></div>
+ <p class="cadeado-meta">Mesmo owner de sincronizacao: scripts/skill-sync-check.sh / skill-synchronization. CURRENT da medicao: main <code>037ad99ed9c6</code>; checkout VPS <code>989038e8</code> em branch separada e dirty (medicao anterior; realinhado a main em 08/10/2026 09:29Z, ver cadeado VPS Auto-Sync). Inventarios 992/84 sao escopos diferentes. Itens abaixo sao <strong>pendencias de aceitacao</strong>, nao dez falhas provadas. Sem segundo writer, scheduler, sincronizador ou HUD.</p>
+ <div class="hud-grid"><div class="hud-card"><h3>E01 &middot; Baseline causal main/VPS/runtime no mesmo SHA</h3><div class="val warn" data-skill-gate="E01">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E02 &middot; Inventário opt-in centraldark_autosync=true (sem 992−84)</h3><div class="val warn" data-skill-gate="E02">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E03 &middot; Writer/lock ativo e segunda escrita fail-closed</h3><div class="val warn" data-skill-gate="E03">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E04 &middot; --check e diff por identidade/fingerprint</h3><div class="val warn" data-skill-gate="E04">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E05 &middot; Preservação das melhorias locais / comparação semântica</h3><div class="val warn" data-skill-gate="E05">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E06 &middot; Oracle consultivo apenas para mudança material</h3><div class="val warn" data-skill-gate="E06">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E07 &middot; Backup, --apply seguro e readback dos arquivos</h3><div class="val warn" data-skill-gate="E07">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E08 &middot; --seal com hashes e contraprova de drift</h3><div class="val warn" data-skill-gate="E08">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E09 &middot; Eternal Self-Heal wake comprovado sem novo scheduler</h3><div class="val warn" data-skill-gate="E09">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div>
+  <div class="hud-card"><h3>E10 &middot; Dois ciclos estáveis + Casa/VPS/main/receipts + Fixed Point</h3><div class="val warn" data-skill-gate="E10">[ ] NAO PROVADO E2E</div><div class="meta">PR #1783 &middot; aguardando receipt, contraprova, SHA e runtime correspondentes</div></div></div>
+ <div class="cadeado-prova">Fonte de aceite: <a href="https://github.com/ServerVpss/CentralDark/pull/1783" target="_blank" rel="noopener">PR #1783</a>. A marcacao real vive na PR e em receipts verificaveis; este snapshot permanece nao provado ate readback atualizado e nao transforma documentacao em runtime. NEXT_CURSOR=SKILL_SYNC_OPTIN_INVENTORY_AND_LOCK_READONLY_THEN_SAFE_DIFF. Nenhuma tentativa de modificar o BAT original ou sobrescrever skills locais.</div>
+</div>
+
+
+<!-- SEALED SYSTEMD MCP / ORACLE OWNER PROOFS : PR #1783 -->
+<div class="section" id="cd-sealed-causal-proof" style="margin-top:16px" data-pr="1783">
+ <div class="section-header"><div class="section-icon">&#128274;</div><h2 class="section-title">Cadeados causais &middot; MCP / Oracle / continuidade</h2><span class="section-count">4 selos escopados &middot; 6 lacunas E2E</span></div>
+ <p class="cadeado-meta">Uma prova selada se reutiliza enquanto owner/fingerprint/escopo/validade forem compativeis. Os selos abaixo distinguem <strong>codigo presente</strong>, <strong>catalogo observado</strong> e <strong>historico de execucao</strong>; nenhum substitui CURRENT de servico. Evidencias e checkboxes: <a href="https://github.com/ServerVpss/CentralDark/pull/1783" target="_blank" rel="noopener">PR #1783</a>.</p>
+ <div class="hud-grid">
+  <div class="hud-card"><h3>&#128274; S01 &middot; Owner microdeploy systemd</h3><div class="val ok">SELADO / CODIGO</div><div class="meta">main-pinned-microdeploy.sh: runtime MCP em /root/CentralDark_MCP_RUNTIME, allowlist src+dist/index.js, guard ancestral/main, lock, backup, health/heartbeat/tools e rollback. Nao equivale a deploy CURRENT.</div></div>
+  <div class="hud-card"><h3>&#128274; S02 &middot; Oracle / Meta-Memoria</h3><div class="val ok">SELADO / CONTRATO</div><div class="meta">Skill unica: CHEFE_INTENT_CALIBRATION_GATE, score com hard gates, FULL_CHAT_TRAVERSAL e recuperacao de DOM stale. Execucao integral ainda depende de cobertura comprovada.</div></div>
+  <div class="hud-card"><h3>&#128274; S03 &middot; Catalogo MCP</h3><div class="val ok">SELADO / CATALOGO</div><div class="meta">MCP admin: ok=true, 141 ferramentas / 11 rotas, fingerprint 42c132bf... em 08/10/2026 04:59 UTC. Escopo distinto das 153 tools publicas.</div></div>
+  <div class="hud-card"><h3>&#128274; S04 &middot; Heartbeat MCP recuperado</h3><div class="val ok">SELADO / HISTORICO</div><div class="meta">Receipt relatado de 07/10: systemd /health 200; /heartbeat 500&rarr;200; tools 153&rarr;153. Nao repetir restart somente para reproduzir prova antiga.</div></div>
+  <div class="hud-card"><h3>&#129000; U01 &middot; Deep health</h3><div class="val warn">CLASSIFICAR OWNER</div><div class="meta">/health/deep 503 foi reportado com hub_mission_consumer / SUPABASE_URL_MISSING. Verificar se consumer e opcional; nao inferir configuracao faltante como falha obrigatoria.</div></div>
+  <div class="hud-card"><h3>&#129000; U02–U06 &middot; Efeito ponta a ponta</h3><div class="val warn">PENDENTE DE READBACK</div><div class="meta">MCP runtime/source; Oracle full chat; memory pending; HUD+BAT copia Casa; G01–G12/E01–E10 e Fixed Point. Nao sobrescrever BAT original nem skills locais.</div></div>
+ </div>
+ <div class="cadeado-prova">OWNER: scripts/vps/main-pinned-microdeploy.sh + centraldark-oracle-surface/SKILL.md + MCP admin. NEXT_CURSOR=READONLY_CLASSIFY_HUB_MISSION_CONSUMER_THEN_WINDOWS_COPY_HASH_AND_HUD_MAIN_RECONCILE. Estes cards nao iniciam processos nem alteram as rotas existentes.</div>
+</div>
+
+<!-- SENSOR SEPARATION: FAILING OBSERVER NEVER ERASES LAST PROVEN SEAL -->
+<div class="section" id="cd-observation-invariant" style="margin-top:16px">
+ <div class="section-header"><div class="section-icon">&#128274;</div><h2 class="section-title">Invariante dos nos &middot; selo versus CURRENT</h2><span class="section-count">SEM FALSO REBAIXAMENTO</span></div>
+ <p class="cadeado-meta"><strong>SELADO + mesma identidade/fingerprint/escopo = prova reutilizada.</strong> Falha de consulta administrativa Tailscale (`TAILSCALE_CREDENTIALS_MISSING`, OAuth Broker `fetch failed`) significa SENSOR INDISPONIVEL; nao prova falha Casa&#8596;VPS. Novo teste de conectividade e de escrita Windows pertence ao owner/escopo exato; sem criar outra fronteira, sem derrubar cadeado alheio.</p>
+ <div class="hud-grid"><div class="hud-card"><h3>Casa &#8596; VPS</h3><div class="val ok">SELO DE CONECTIVIDADE PRESERVADO</div><div class="meta">PONG Tailscale medido DIRETAMENTE no CENTRALDARK-OS ate SEGREDO (100.123.93.25): 541 ms e 144 ms via DERP(sao), 08/10/2026. Servicos TCP 445/5985/3030 OPEN; SSH 22 CLOSED. Taildrop e historico separado; escrita Windows requer autenticacao no owner existente.</div></div>
+ <div class="hud-card"><h3>Sensor admin Tailscale</h3><div class="val warn">CONSULTA INDISPONIVEL</div><div class="meta">Ausencia de credencial na integracao MCP nao invalida conectividade; corrigir somente o sensor pelo owner atual.</div></div>
+ <div class="hud-card"><h3>MCP CentralDark</h3><div class="val ok">CATALOGO MEDIDO</div><div class="meta">141 ferramentas internas e 11 rotas no dispatcher, 08/10/2026 05:08 UTC; escopo diferente do /health publico.</div></div>
+ <div class="hud-card"><h3>HUD Casa / writer</h3><div class="val warn">READBACK PENDENTE</div><div class="meta">WINRM /wsman respondeu HTTP 405 (endpoint alcancado), SMB 445 acessivel; nao equivale a sessao autenticada. Casa HUD.html e BAT - Copia: hash e writer ainda nao medidos. BAT original intocado.</div></div><div class="hud-card"><h3>GitHub main / observador</h3><div class="val warn" id="cd-main-observer-status">CONSULTANDO</div><div class="meta" id="cd-main-observer-meta">Consulta apenas leitura ao HEAD atual, a cada 60 s. Nao declara sincronizacao do arquivo Windows.</div></div></div>
+</div>
+
+  <!-- cd-moltbook-key-setup-v1: UI helper only; never stores or handles API key -->
+  <div class="section" id="cd-moltbook-key-setup-v1" style="margin-top:16px">
+    <div class="section-header">
+      <div class="section-icon">&#129438;</div>
+      <h2 class="section-title">Moltbook · centraldarkhermes</h2>
+      <span class="section-count">AUTH LOCAL / SEM SEGREDO NO HUD</span>
+    </div>
+    <div class="hud-grid">
+      <div class="hud-card">
+        <h3>Chave API do Moltbook</h3>
+        <div class="val warn">AUTH RUNTIME: REVALIDAR</div>
+        <div class="meta">A conta pode estar verificada, mas a autenticação deste runtime precisa de prova. A chave deve ser inserida pelo prompt oculto do script existente na VPS, nunca neste HTML, Git, chat ou clipboard. O botão copia somente o comando (sem chave). Nenhuma postagem será feita.</div>
+        <button type="button" class="aion-open-btn" id="cd-moltbook-key-action" style="margin-top:10px">CONFIGURAR KEY (COPIAR RECEITA)</button>
+        <div class="meta" id="cd-moltbook-key-feedback" role="status" aria-live="polite" style="margin-top:10px">OWNER: .agents/skills/knowledge-compiler/scripts/moltbook-auth-setup.py · rota SSH Segredo-VPS</div>
       </div>
     </div>
   </div>
@@ -1001,7 +1400,7 @@ body {
       <div class="hud-card">
         <h3>Medido em</h3>
         <div class="val warn" id="live-heart-measured">aguardando...</div>
-        <div class="meta">refresh 5s &middot; falha = UNKNOWN</div>
+        <div class="meta">refresh 5s &middot; falha de consulta = CURRENT UNKNOWN, nao invalida recibos/selos historicos</div>
       </div>
       <div class="hud-card">
         <h3>Orquestrador</h3>
@@ -1020,8 +1419,8 @@ body {
       </div>
       <div class="hud-card">
         <h3>MCP tools</h3>
-        <div class="val warn" id="live-heart-tools">UNKNOWN</div>
-        <div class="meta">catalogo vivo em /health</div>
+        <div class="val warn" id="live-heart-tools">MEDINDO</div>
+        <div class="meta">/health.toolCount &middot; mesmo owner MCP</div>
       </div>
       <div class="hud-card">
         <h3>Chat nativo</h3>
@@ -1040,9 +1439,9 @@ body {
     </div>
     <p class="cadeado-meta" style="margin:0 0 12px">Uma superficie e um owner. Estado historico identificado por data; LIVE somente apos leitura real no navegador. Porta aberta nao prova login, controle da tela ou leitura de logs.</p>
     <div class="hud-grid">
-      <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val warn" id="cd-route-casa">ULTIMA PROVA</div><div class="meta">SEGREDO 100.123.93.25 &#8596; VPS 100.90.199.124. PONG por DERP(sao), 727 ms; 08/10/2026.</div></div>
+      <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val ok" id="cd-route-casa">SELADO / PONG HISTORICO</div><div class="meta">SEGREDO 100.123.93.25 &#8596; VPS 100.90.199.124. PONG por DERP(sao), 727 ms; 08/10/2026. API administrativa sem credenciais e uma falha de OBSERVACAO, nao revoga a rota ja provada. CURRENT Casa: medir pelo owner do transporte, sem falsificar online.</div></div>
       <div class="hud-card"><h3>Windows / portas</h3><div class="val warn">PORTAS ABERTAS</div><div class="meta">3389 RDP; 445 arquivos; 5985 comandos. Autenticacao e controle da tela nao comprovados. SSH 22 e 4175 indisponiveis na medicao.</div></div>
-      <div class="hud-card"><h3>Screenpipe / Casa</h3><div class="val warn" id="cd-route-screenpipe">ULTIMA PROVA HTTP 200</div><div class="meta">http://100.123.93.25:3030/health. Prova feita pela VPS em 08/10/2026; navegador mede novamente abaixo.</div></div>
+      <div class="hud-card"><h3>Screenpipe / Casa</h3><div class="val warn" id="cd-route-screenpipe">HEALTH 200 / DADOS 403 / AUDIO PENDENTE</div><div class="meta">SELO: HTTP 200 provado pela VPS em 08/10/2026. CURRENT: navegador tenta medicao independente; falha de CORS/consulta nao remove o selo.</div><div class="meta" id="cd-screenpipe-auth-wound" role="status" style="margin-top:8px;color:var(--amber)">🪧 AUTORIZACAO T4: Screenpipe API :3030/health HTTP 200; /activity-summary HTTP 403; /search HTTP 403. CLI screenpipe.exe PID 48020 possui listener :3030, screenpipe-app.exe PID 42552 permanece aberto. Chave SCREENPIPE_LOCAL_API_KEY nao observada na sessao da consulta. NAO inventar chave, nao desativar autenticacao, nao ler capturas para provar o porteiro. Proximo cursor: conferir configuracao e sessao autorizada por metadados; consulta com permissao legitima; alternativa autorizada ou PLACA. AUTH_REQUIRED != CAPTURE_STOPPED.</div><div class="meta" id="cd-screenpipe-audio-wound" role="status" style="margin-top:8px;color:var(--amber)">🩹 AUDIO / PLACA: SEM DISPOSITIVO DE SAIDA DETECTADO — Windows 11 Pro; Audiosrv=RUNNING; AudioEndpointBuilder=RUNNING; PnP AudioEndpoint PRESENT=0/6 e MEDIA PRESENT=0/3 (medicao Casa, 08/10/2026). SCREENPIPE LOG: No default output device found. GRAVACAO AUDIO=NAO PROVADA. DRIVER DANIFICADO=UNKNOWN; FORMATACAO=NAO INDICADA PELA PROVA. CLI record + app presentes; duplicidade de captura=UNKNOWN. VER PENDENCIA mostra local, causa, evidencia e receita copiavel. Tela/HTTP seguem por provas separadas. Fonte: consulta Windows read-only e log Screenpipe fornecido.</div></div>
       <div class="hud-card"><h3>One Heart / VPS</h3><div class="val warn" id="cd-route-heart">AGUARDANDO</div><div class="meta">Mesmo heartbeat do HUD; medido pela VPS com HTTP 200 em 08/10/2026. Atualizacao ao vivo depende do endpoint e CORS.</div></div>
       <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / HISTORICO</div><div class="meta">VPS 127.0.0.1:9119 respondeu 302; 8788 fechada. UI autenticada nao provada pelo 302.</div></div>
       <div class="hud-card"><h3>Runtime / modelo</h3><div class="val warn">HTTP 200 / HISTORICO</div><div class="meta">VPS 18435/health respondeu 200; portas 8000, 8001, 8002 e 9100 escutando na medicao. Sem inferencia comprovada.</div></div>
@@ -1123,19 +1522,52 @@ body {
      ================================================================ -->
 <div class="tab-painel" id="tab-mapa">
 <div class="page">
+<!-- CANONICAL PRIVATE TRANSPORT POLICY / OWNER docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md -->
+<div class="section cd-transport-policy" style="margin-top:16px">
+  <div class="section-header"><div class="section-icon">&#127760;</div><h2 class="section-title">Bridge privado &middot; Tailscale prioritario</h2><span class="section-count">DECISAO CANONICA 08/10/2026</span></div>
+  <p class="cadeado-meta"><strong>Casa &harr; Tailscale &harr; VPS &harr; MCP CentralDark &harr; Hermes.</strong> Um sistema, sem bridge/admin paralelo. Desktop Commander NAO e dependencia: legado opcional, default OFF. Componentes funcionais nao sao apagados.</p>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Tailscale &middot; transporte privado</h3><div class="val ok">ROTA PROVADA</div><div class="meta">VPS &harr; Casa / Taildrop medidos anteriormente. Estado CURRENT requer nova medicao de sensor; tailnet sozinha nao concede permissao admin.</div></div>
+    <div class="hud-card"><h3>MCP &middot; control plane unico</h3><div class="val ok">OWNER EXISTENTE</div><div class="meta">mcp.centralldark.com/mcp. Publico segue HTTPS + OAuth2/PKCE; admin e execucao exigem autorizacao propria.</div></div>
+    <div class="hud-card"><h3>Hermes &middot; executor autorizado</h3><div class="val warn">TESTE POR EFEITO</div><div class="meta">Usar executores nativos existentes. Transporte vivo != escrita no Windows comprovada.</div></div>
+    <div class="hud-card"><h3>Desktop Commander &middot; legado</h3><div class="val ok">NAO REQUERIDO</div><div class="meta">Removido dos pre-requisitos do fluxo novo; preservado apenas como componente opcional historico.</div></div>
+  </div>
+  <div class="cadeado-prova">REGRA SELADA COMO DECISAO: TAILSCALE_PRIORITY / CENTRALDARK_MCP_OWNER / NATIVE_EXECUTOR. Execucao remota Casa+sincronizacao Obsidian: depende de prova funcional; nao promover por declaracao.</div>
+</div>
+
+
+<!-- CANONICAL MCP ADMIN OWNER: fonte e provas do mesmo kernel (sem novo backend) -->
+<div class="section cd-mcp-admin-map" style="margin-top:16px" data-source="mcp.centralldark.com/health">
+  <div class="section-header">
+    <div class="section-icon">&#128736;</div>
+    <h2 class="section-title">MCP Admin &middot; Kernel vivo &amp; setores</h2>
+    <span class="section-count cd-mcp-health">MEDINDO</span>
+  </div>
+  <div class="cadeado-meta">Fonte runtime: <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">/health</a> do MCP 0.4.0; owner administrativo: <a href="https://mcp.centralldark.com/admin" target="_blank" rel="noopener">/admin</a> (login exigido). Auditoria em 08/10/2026: 153 ferramentas publicadas, 141 dispatchables no inventario unificado e 11 rotas catalogadas. Sao escopos de catalogo diferentes, nao somar ou igualar; health e catalogo nao comprovam autorizacao de cada tool.</div>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Ferramentas publicas</h3><div class="val cd-mcp-count">MEDINDO</div><div class="meta">/health: campo toolCount, consulta ao owner a cada 15s.</div></div>
+    <div class="hud-card"><h3>Catalogo / versao</h3><div class="val cd-mcp-version">MEDINDO</div><div class="meta cd-mcp-time">Sem leitura de runtime nesta abertura</div></div>
+    <div class="hud-card"><h3>Admin unificado</h3><div class="val ok">ROTA 200</div><div class="meta">/admin serve login; abas internas exigem sessao autenticada.</div></div>
+    <div class="hud-card"><h3>Validador Admin</h3><div class="val warn">PARCIAL / 2 FALTANTES</div><div class="meta">vps_limpar_pasta_projeto e vps_listar_pastas_limpaveis ausentes no catalogo publico esperado, leitura datada 08/10/2026.</div></div>
+  </div>
+  <p class="cadeado-meta"><strong>Abas reais do owner:</strong> &#128065; Visao Geral &middot; &#129520; Ferramentas &middot; &#128203; Linear &middot; &#127756; Grafo Celestial &middot; &#129513; Padroes &middot; &#127899; Comandos &middot; Auditoria &middot; Grok &middot; Buildkite &middot; Conector &middot; Diagnostico &middot; Omni &middot; Tailscale. Presenca no codigo nao equivale a sessao operacional provada.</p>
+  <p class="cadeado-prova">Owners medidos: apps/modulos/mcp/src/admin.js, MCP /health, catalogo mcp_admin_catalog. Rotas administrativas que requerem cookie: /admin/api/tools, /admin/api/linear, /admin/grafo/, /admin/api/buildkite/status, /admin/api/tailscale, /admin/api/operational-snapshot, /admin/api/logs. Sem transporte de credenciais.</p>
+</div>
+
 <div class="section cd-measured-status" style="margin-top:16px" data-cd-proof="2026-10-08T04:05:56Z">
- <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">08/10/2026 01:05 BRT</span></div>
+ <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">HISTORICO 08/10 / CURRENT REQUER SENSOR</span></div>
  <p class="cadeado-meta">Provas coletadas na VPS CENTRALDARK-OS em 08/10/2026 04:05:56 UTC. Sinais sao historicos ate nova medicao; portas abertas != sessao autenticada. O One Heart da aba HUD refaz a consulta ao owner a cada 5 s.</p>
  <div class="hud-grid">
-  <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val ok">PASS / PONG 103 ms</div><div class="meta">SEGREDO 100.123.93.25 alcancado diretamente em 08/10/2026.</div></div>
-  <div class="hud-card"><h3>Screenpipe Casa</h3><div class="val ok">HTTP 200</div><div class="meta">/health pela VPS, via Tailscale. Audio e logs integrais exigem provas separadas.</div></div>
-  <div class="hud-card"><h3>API / One Heart</h3><div class="val ok">HTTP 200 &amp; ALIVE</div><div class="meta">Owner existente mcp.centralldark.com/heartbeat e heart local 9100. Medicao datada, sujeito a staleness.</div></div>
-  <div class="hud-card"><h3>Modelo runtime</h3><div class="val ok">HEALTH 200</div><div class="meta">Modelo 18435/health; nao equivale a inferencia de IA comprovada.</div></div>
+  <div class="hud-card"><h3>Casa / Tailscale</h3><div class="val warn">HISTORICO: PONG 103 ms</div><div class="meta">SEGREDO 100.123.93.25 alcancado diretamente em 08/10/2026.</div></div>
+  <div class="hud-card"><h3>Screenpipe Casa</h3><div class="val warn">HISTORICO: HTTP 200</div><div class="meta">Prova 08/10 via Tailscale; CURRENT requer nova medicao. Audio e logs exigem provas separadas.</div></div>
+  <div class="hud-card"><h3>API / One Heart</h3><div class="val warn">HISTORICO: 200 / ALIVE</div><div class="meta">Owner existente mcp.centralldark.com/heartbeat e heart local 9100. Medicao datada, sujeito a staleness.</div></div>
+  <div class="hud-card"><h3>Modelo runtime</h3><div class="val warn">HISTORICO: HEALTH 200</div><div class="meta">18435/health observado 08/10; nao comprova inferencia nativa nem modelo CURRENT.</div></div>
   <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / PARCIAL</div><div class="meta">Servico 9119 responde, mas login e operacao no painel nao foram provados.</div></div>
   <div class="hud-card"><h3>SSH Windows / portas legadas</h3><div class="val warn">NAO CONECTA</div><div class="meta">Casa 22, VPS 8788 e 4175 nao passaram; rota principal permanece viva.</div></div>
  </div>
 </div>
 
+  <div class="section"><div class="section-header"><h2 class="section-title">Fixed Point &mdash; owner unico</h2></div><p class="cadeado-meta">Acompanhe os 10 criterios na aba HUD. MAPA reutiliza o mesmo receipt, sem juiz duplicado.</p></div>
   <div class="match-info" id="matchInfo"></div>
   <div class="grid" id="gridMapa">
 
@@ -1313,6 +1745,38 @@ body {
      ================================================================ -->
 <div class="tab-painel" id="tab-forja">
 <div class="page">
+<!-- CANONICAL PRIVATE TRANSPORT POLICY / OWNER docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md -->
+<div class="section cd-transport-policy" style="margin-top:16px">
+  <div class="section-header"><div class="section-icon">&#127760;</div><h2 class="section-title">Bridge privado &middot; Tailscale prioritario</h2><span class="section-count">DECISAO CANONICA 08/10/2026</span></div>
+  <p class="cadeado-meta"><strong>Casa &harr; Tailscale &harr; VPS &harr; MCP CentralDark &harr; Hermes.</strong> Um sistema, sem bridge/admin paralelo. Desktop Commander NAO e dependencia: legado opcional, default OFF. Componentes funcionais nao sao apagados.</p>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Tailscale &middot; transporte privado</h3><div class="val ok">ROTA PROVADA</div><div class="meta">VPS &harr; Casa / Taildrop medidos anteriormente. Estado CURRENT requer nova medicao de sensor; tailnet sozinha nao concede permissao admin.</div></div>
+    <div class="hud-card"><h3>MCP &middot; control plane unico</h3><div class="val ok">OWNER EXISTENTE</div><div class="meta">mcp.centralldark.com/mcp. Publico segue HTTPS + OAuth2/PKCE; admin e execucao exigem autorizacao propria.</div></div>
+    <div class="hud-card"><h3>Hermes &middot; executor autorizado</h3><div class="val warn">TESTE POR EFEITO</div><div class="meta">Usar executores nativos existentes. Transporte vivo != escrita no Windows comprovada.</div></div>
+    <div class="hud-card"><h3>Desktop Commander &middot; legado</h3><div class="val ok">NAO REQUERIDO</div><div class="meta">Removido dos pre-requisitos do fluxo novo; preservado apenas como componente opcional historico.</div></div>
+  </div>
+  <div class="cadeado-prova">REGRA SELADA COMO DECISAO: TAILSCALE_PRIORITY / CENTRALDARK_MCP_OWNER / NATIVE_EXECUTOR. Execucao remota Casa+sincronizacao Obsidian: depende de prova funcional; nao promover por declaracao.</div>
+</div>
+
+
+<!-- CANONICAL MCP ADMIN OWNER: fonte e provas do mesmo kernel (sem novo backend) -->
+<div class="section cd-mcp-admin-map" style="margin-top:16px" data-source="mcp.centralldark.com/health">
+  <div class="section-header">
+    <div class="section-icon">&#128736;</div>
+    <h2 class="section-title">MCP Admin &middot; Kernel vivo &amp; setores</h2>
+    <span class="section-count cd-mcp-health">MEDINDO</span>
+  </div>
+  <div class="cadeado-meta">Fonte runtime: <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">/health</a> do MCP 0.4.0; owner administrativo: <a href="https://mcp.centralldark.com/admin" target="_blank" rel="noopener">/admin</a> (login exigido). Auditoria em 08/10/2026: 153 ferramentas publicadas, 141 dispatchables no inventario unificado e 11 rotas catalogadas. Sao escopos de catalogo diferentes, nao somar ou igualar; health e catalogo nao comprovam autorizacao de cada tool.</div>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>Ferramentas publicas</h3><div class="val cd-mcp-count">MEDINDO</div><div class="meta">/health: campo toolCount, consulta ao owner a cada 15s.</div></div>
+    <div class="hud-card"><h3>Catalogo / versao</h3><div class="val cd-mcp-version">MEDINDO</div><div class="meta cd-mcp-time">Sem leitura de runtime nesta abertura</div></div>
+    <div class="hud-card"><h3>Admin unificado</h3><div class="val ok">ROTA 200</div><div class="meta">/admin serve login; abas internas exigem sessao autenticada.</div></div>
+    <div class="hud-card"><h3>Validador Admin</h3><div class="val warn">PARCIAL / 2 FALTANTES</div><div class="meta">vps_limpar_pasta_projeto e vps_listar_pastas_limpaveis ausentes no catalogo publico esperado, leitura datada 08/10/2026.</div></div>
+  </div>
+  <p class="cadeado-meta"><strong>Abas reais do owner:</strong> &#128065; Visao Geral &middot; &#129520; Ferramentas &middot; &#128203; Linear &middot; &#127756; Grafo Celestial &middot; &#129513; Padroes &middot; &#127899; Comandos &middot; Auditoria &middot; Grok &middot; Buildkite &middot; Conector &middot; Diagnostico &middot; Omni &middot; Tailscale. Presenca no codigo nao equivale a sessao operacional provada.</p>
+  <p class="cadeado-prova">Owners medidos: apps/modulos/mcp/src/admin.js, MCP /health, catalogo mcp_admin_catalog. Rotas administrativas que requerem cookie: /admin/api/tools, /admin/api/linear, /admin/grafo/, /admin/api/buildkite/status, /admin/api/tailscale, /admin/api/operational-snapshot, /admin/api/logs. Sem transporte de credenciais.</p>
+</div>
+
 <div class="forja-intro"><strong>Forja &middot; Componentes medidos</strong> &mdash; Camada visual da mesma CentralDark; cada carta de evidencia abaixo diferencia efeito comprovado e operacao pendente. Sem segunda arquitetura.</div>
 <div class="section cd-measured-status" style="margin-top:16px" data-cd-proof="2026-10-08T04:05:56Z">
  <div class="section-header"><div class="section-icon">&#128202;</div><h2 class="section-title">Prova por setor &mdash; CURRENT medido</h2><span class="section-count">08/10/2026 01:05 BRT</span></div>
@@ -1327,6 +1791,7 @@ body {
  </div>
 </div>
 
+  <div class="section"><div class="section-header"><h2 class="section-title">Forja &mdash; Fixed Point</h2></div><p class="cadeado-meta">Cartas e cadeados refletem as provas do mesmo HUD. Veredito final somente pelo avaliador canônico.</p></div>
   <div class="forja-intro">
     <strong>Forja de Cartas</strong> &mdash; Cada componente do CentralDark e uma carta
     com nome, nivel, procedencia e habilidades. A forja completa (206KB, editor + export)
@@ -1632,6 +2097,9 @@ function refreshCentralDarkLive() {
       var healthP = liveFetchJson(ep.health).catch(function() { return null; });
       healthP.then(function(health) {
         var op = heartbeat.operational || {};
+        var gitFront = Array.isArray(op.fronts) ? op.fronts.find(function(f) { return f && f.id === 'F1_GIT'; }) : null;
+        var gitLive = document.getElementById('cd-git-sync-live');
+        if (gitLive) gitLive.textContent = gitFront && gitFront.state ? 'F1_GIT ' + gitFront.state : 'F1_GIT UNKNOWN';
         renderGoalClauseProjection(op.goalClauseProjection || null);
         var binding = op.modelBinding || {};
         var topology = op.executionTopology || {};
@@ -1654,7 +2122,7 @@ function refreshCentralDarkLive() {
         liveSet('live-heart-orchestrator', orchestrator.model || 'UNKNOWN', orchestrator.state === 'SELECTED');
         liveSet('live-heart-worker', worker.model || 'UNKNOWN', worker.state === 'SELECTED');
         liveSet('live-heart-execution', topology.verdict || 'UNKNOWN', /^RUNNING|EXECUTION/i.test(String(topology.verdict || '')));
-        liveSet('live-heart-tools', health && Number.isFinite(Number(health.totalTools)) ? String(health.totalTools) + ' tools' : 'UNKNOWN', Boolean(health && Number.isFinite(Number(health.totalTools))));
+        liveSet('live-heart-tools', health && health.ok === true && Number.isFinite(Number(health.toolCount)) ? String(health.toolCount) + ' tools' : 'UNKNOWN', Boolean(health && health.ok === true && Number.isFinite(Number(health.toolCount))));
         liveSet('live-heart-chat', 'UNKNOWN', false);
         liveSet('live-heart-provider', 'provider: ' + (orchestrator.provider || 'UNKNOWN'));
         liveSet('live-heart-remote', 'Remote Desktop: ' + ((remoteLane || {}).state || 'UNKNOWN'));
@@ -1674,6 +2142,84 @@ function refreshCentralDarkLive() {
 
 refreshCentralDarkLive();
 setInterval(refreshCentralDarkLive, CENTRALDARK_LIVE.refreshMs);
+/* MCP catalogo: independente do heartbeat e do login administrativo.
+   Fonte HTTP /health fornece toolCount (nao totalTools). */
+function refreshCentralDarkMcpCatalog() {
+  var endpoints = resolveCentralDarkApiBases();
+  var index = 0;
+  function paint(ok, health) {
+    document.querySelectorAll('.cd-mcp-admin-map').forEach(function(area) {
+      var count = area.querySelector('.cd-mcp-count');
+      var version = area.querySelector('.cd-mcp-version');
+      var time = area.querySelector('.cd-mcp-time');
+      var status = area.querySelector('.cd-mcp-health');
+      var proven = Boolean(ok && health && health.ok === true && Number.isFinite(Number(health.toolCount)));
+      if (count) {count.textContent = proven ? String(health.toolCount)+' tools' : 'UNKNOWN';count.classList.toggle('ok',proven);count.classList.toggle('warn',!proven);}
+      if (version) {version.textContent = proven ? String(health.catalogVersion || health.version || 'sem versao') : 'UNKNOWN';version.classList.toggle('ok',proven);version.classList.toggle('warn',!proven);}
+      if (time) time.textContent = proven ? 'Resposta /health em '+new Date().toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'})+' BRT' : 'Leitura atual indisponivel; manter provas historicas datadas';
+      if (status) status.textContent = proven ? 'HTTP 200 / CATALOGO' : 'UNKNOWN / REDE';
+    });
+  }
+  function next() {
+    if (index >= endpoints.length) { paint(false,null); return; }
+    var base = endpoints[index++];
+    liveFetchJson(base + '/health', 4000).then(function(h) {
+      if (h && h.ok === true && Number.isFinite(Number(h.toolCount))) paint(true,h);
+      else next();
+    }).catch(next);
+  }
+  next();
+}
+refreshCentralDarkMcpCatalog();
+setInterval(refreshCentralDarkMcpCatalog, 15000);
+
+/* Fixed Point 10/10: painel de leitura, NAO um segundo avaliador.
+ * PASS do criterio corrente apenas com sinal causal; historico permanece historico.
+ * Fechamento global EXIGE receipt fresco do owner Horn, nunca soma de cards.
+ */
+(function() {
+  var conditions = ['owner','locks','mcp','heart','screenpipe','aion','privacy','goal','sync','fixed'];
+  function set(name,good,detail) {
+    var node=document.querySelector('[data-fp="'+name+'"]');
+    if (!node) return;
+    node.textContent=good===true?'PASS':good===false?'PENDENTE':'UNKNOWN';
+    node.className='val '+(good===true?'ok':'warn');
+    node.title=detail||'';
+  }
+  function evaluate() {
+    var area=document.getElementById('cd-fixed-point-ten');
+    if(!area)return;
+    var tabs=['tab-hud','tab-mapa','tab-forja'].every(function(id){return Boolean(document.getElementById(id));});
+    set('owner',tabs,'Um unico HTML, tres abas preservadas.');
+    var list=document.querySelector('#cadeados-count')?.closest('.section')?.querySelectorAll('.cadeado-grid > .cadeado-card');
+    var sealed=list?Array.from(list).filter(function(c){return c.classList.contains('selado');}):[];
+    set('locks',Boolean(list && sealed.length>0 && document.getElementById('cadeados-count')),'Selo historico preservado: '+sealed.length);
+    var catalog=document.querySelector('.cd-mcp-admin-map .cd-mcp-count');
+    set('mcp',catalog && catalog.classList.contains('ok')?true:null,'Fonte runtime /health; nao comprova cada operacao.');
+    var heart=document.getElementById('live-heart-state');
+    set('heart',heart && heart.classList.contains('ok')?true:null,'Heartbeat do owner; verificar frescor da medicao.');
+    var screen=document.getElementById('cd-route-screenpipe');
+    set('screenpipe',screen && screen.classList.contains('ok')?true:null,'Health Windows visto pelo navegador.');
+    set('aion',null,'Aprendizado #168 e comando --verify-only sao selados; status CURRENT nao e transferido ao navegador.');
+    set('privacy',null,'Logs Casa preservados; sem acesso direto ao arquivo nao declarar integridade comprovada.');
+    var receipt=document.getElementById('goal-clause-verdict');
+    var receiptBadge=document.getElementById('goal-clause-badge');
+    var hasReceipt=Boolean(receiptBadge && !/UNKNOWN|sem receipt|conectando/i.test(receiptBadge.textContent));
+    set('goal',hasReceipt?true:null,'Somente owner horn-reuse-fixed-point.mjs pode emitir a prova.');
+    set('sync',null,'Tailscale Taildrop nao prova sincronizacao bidirecional Casa/main.');
+    var fixed=Boolean(hasReceipt && receipt && /FIXED_POINT/i.test(receipt.textContent));
+    set('fixed',fixed?true:null,'Veredito de fixed point pertence ao receipt do avaliador.');
+    var proven=conditions.filter(function(key){var el=document.querySelector('[data-fp="'+key+'"]');return el && el.textContent==='PASS';}).length;
+    var score=document.getElementById('cd-fp-score');
+    if(score)score.textContent=proven+'/10 observaveis'+(fixed?' · RECEIPT FP':' · NAO FINAL');
+    var proof=document.getElementById('cd-fp-receipt');
+    if(proof)proof.textContent='Selos historicos: '+sealed.length+' | Observacoes nesta abertura: '+proven+'/10 | Fixed Point TOTAL: '+(fixed && proven===10?'PASS':'NAO COMPROVADO')+' | Nenhuma leitura deste HUD grava arquivos no Obsidian.';
+  }
+  evaluate();
+  setInterval(evaluate,5000);
+})();
+
+
 /* Contador real do mesmo inventario: nunca fixar numero de cadeados no HTML. */
 (function() {
   function contarCadeados() {
@@ -1773,21 +2319,38 @@ missions.forEach(function(m, i) {
   div.innerHTML =
     '<span class="hud-tag ' + m.tag + '">' + (m.tag === 'chefe' ? '\uD83E\uDDCD Chefe decide' : '\uD83E\uDD16 Agente resolve') + '</span>' +
     '<p><strong>' + m.label + '</strong><br>' + m.text + '</p>' +
-    '<button data-i="' + i + '">Aceitar missao (copiar)</button>';
+    '<button data-i="' + i + '" data-action="copy">Aceitar missao (copiar)</button>' +
+    '<button data-i="' + i + '" data-action="view" class="aion-open-btn" aria-expanded="false" style="margin:8px 0 0 0;padding:10px 16px">VER PENDENCIA</button>' +
+    '<div class="meta cd-mission-detail" hidden style="white-space:pre-line;overflow-wrap:anywhere;margin-top:10px"></div>';
   missionsEl.appendChild(div);
 });
 
 missionsEl.addEventListener('click', function(e) {
   if (e.target.tagName !== 'BUTTON') return;
-  var i = e.target.getAttribute('data-i');
-  var m = missions[i];
-  navigator.clipboard.writeText(m.text).then(function() {
-    e.target.textContent = 'Copiado \u2713 - cola no Hermes/Claude';
-    e.target.classList.add('done');
-    hudToast('Missao copiada. Cola no chat do agente que vai executar.');
-  }).catch(function() {
-    hudToast('Nao deu pra copiar sozinho - seleciona o texto manualmente.');
-  });
+  var i = Number(e.target.getAttribute('data-i')), m = missions[i];
+  if (!m) return;
+  var card=e.target.closest('.hud-mission');
+  var info=['Missao aberta: conclusao nao comprovada.',
+    'Fonte: docs/HUD/HUD.html / missions[]; runtime UNKNOWN.',m.text];
+  var loc={route:'UNKNOWN (missao sem URL comprovada)',
+    owner:m.tag==='chefe'?'CHEFE - DECISAO HUMANA':'AGENTE - EXECUTOR AUTORIZADO',
+    file:'docs/HUD/HUD.html',line:'UNKNOWN (indice '+i+')',
+    error:m.tag==='chefe'?'DECISAO_HUMANA_PENDENTE':'MISSAO_ABERTA_SEM_READBACK'};
+  var recipe=window.cdHudRecipe(m.label,loc,m.tag==='chefe'?'CHEFE_DECIDE':'AGENTE_RESOLVE',info,m.text);
+  if(e.target.getAttribute('data-action')==='copy'){
+    window.cdHudCopy(recipe,e.target);return;
+  }
+  if(e.target.getAttribute('data-action')==='view'){
+    var detail=card&&card.querySelector('.cd-mission-detail');
+    if(!detail)return;
+    var open=detail.hidden;
+    detail.textContent='PLACA: '+m.label+'\nROTA: '+loc.route+'\nOWNER: '+loc.owner+
+      '\nARQUIVO: '+loc.file+'\nLINHA: '+loc.line+'\nERRO: '+loc.error+
+      '\nPROVA: '+info[1]+'\nRECEITA:\n'+recipe;
+    detail.hidden=!open;
+    e.target.setAttribute('aria-expanded',String(open));
+    e.target.textContent=open?'OCULTAR PENDENCIA':'VER PENDENCIA';
+  }
 });
 
 function hudToast(msg) {
@@ -1813,7 +2376,7 @@ document.getElementById('hermes-judge-copy').addEventListener('click', function(
 });
 
 /* Notas do cofre Obsidian ("Obsidian Vault"): conteudo das .md embutido, sem depender de arquivo */
-var NOTAS_COFRE = {"brief": {"t": "Brief de sábado", "a": "Brief de sábado", "h": "<p>Sábado · 29 de agosto de 2026<\/p>\n<h2 class=\"nota-h\">Sábado tranquilo, Chefe — nada te puxando hoje.<\/h2>\n<p>Nada precisa de você nesta manhã — nem e-mail nem chat estão conectados nesta sessão, e a agenda também não; sem candidatos pra puxar.<\/p>\n<p>Pendências CentralDark<\/p>\n<p>66 linhas abertas em docs/PENDENCIAS.md — a maioria 🔴 crítico ou 🟡 em atenção, um punhado 🟢 sem pressa. Os destaques que travam ou arrastam outras frentes:<\/p>\n<p>1<\/p>\n<p>Hermes trava com ReferenceError<\/p>\n<p>Causa-raiz já isolada, mas segue bloqueando o executor de missões e o grafo Jarvis — no PENDENCIAS.md.<\/p>\n<p>2<\/p>\n<p>Main local divergente da VPS<\/p>\n<p>87 commits de painel automático fora de sincronia, aguardando faxina — no PENDENCIAS.md.<\/p>\n<p>3<\/p>\n<p>Mapeamento WebUI: 10 achados críticos<\/p>\n<p>Docker-compose inseguro, token e chaves hardcoded, XSS via innerHTML, script exigindo root — todos ainda abertos, no PENDENCIAS.md.<\/p>\n<p>4<\/p>\n<p>Hermes parou de notificar e perdeu missão do grafo<\/p>\n<p>Heartbeat falhando e um ERR_MODULE_NOT_FOUND no meio do caminho — no PENDENCIAS.md.<\/p>\n<p>5<\/p>\n<p>Grafo sem fonte única<\/p>\n<p>Três fontes de grafo hoje desconectadas entre si, arquitetura ainda em aberto — no PENDENCIAS.md.<\/p>\n<p>6<\/p>\n<p>Revisão da migração docs/ do legado<\/p>\n<p>21 subpastas, cerca de 234 arquivos, decisão item a item — maioria ainda não iniciada, no PENDENCIAS.md.<\/p>\n<p>7<\/p>\n<p>PR #142 aguardando merge<\/p>\n<p>Sanitização de tool_call.id acima de 64 caracteres, pronta pra entrar — no PENDENCIAS.md.<\/p>\n<p>8<\/p>\n<p>status.centralldark.com como portal único<\/p>\n<p>Já aprovado pelo Pivete, execução ainda pendente — no PENDENCIAS.md.<\/p>\n<p>Status GitHub<\/p>\n<p>ServerVpss/CentralDark: 0 pull requests abertos, 66 issues abertas. A maior parte são alertas automáticos da Sentinela criados entre 16 e 28 de agosto — mais recentes. As mais antigas ainda em aberto:<\/p>\n<p>1<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/537\" target=\"_blank\" rel=\"noopener\">Workflow vermelho: PR auto-review<\/a><\/p>\n<p>Aberta há cerca de 30 dias — issue #537 no GitHub.<\/p>\n<p>2<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/542\" target=\"_blank\" rel=\"noopener\">Identidade para commits automáticos<\/a><\/p>\n<p>Dependência externa em aberto há cerca de 30 dias — issue #542 no GitHub.<\/p>\n<p>3<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/564\" target=\"_blank\" rel=\"noopener\">Drift-VPS: branch divergente<\/a><\/p>\n<p>Sentinela aponta VPS fora de sincro com o GitHub há cerca de 30 dias — issue #564.<\/p>\n<p>4<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/707\" target=\"_blank\" rel=\"noopener\">Padrão de etiquetas operacionais<\/a><\/p>\n<p>Maiúsculas, emoji e roteamento funcional, em aberto há cerca de 3 semanas — issue #707.<\/p>\n<p>5<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/711\" target=\"_blank\" rel=\"noopener\">Obsidian como segundo cérebro<\/a><\/p>\n<p>Biblioteca semântica e RAG/GrafoRAG, em aberto há cerca de 3 semanas — issue #711.<\/p>"}, "relatorio": {"t": "Relatório de Sessão · MOTOR-TESTE", "a": "Relatório de Sessão — MOTOR-TESTE + CentralDark", "h": "<p>RELATÓRIO DE SESSÃO · SONNET 5 · 08/08/2026<\/p>\n<h2 class=\"nota-h\">MOTOR-TESTE no ar, CentralDark sob observação<\/h2>\n<p>Do npm quebrado em casa até o gate de finalização do Hermes fechando falso-verde por falso-verde no remoto — o que mudou, quem mexeu, e o que ainda está esperando decisão.<\/p>\n<p>3/3<\/p>\n<p>PRs acompanhadas ao vivo, todas mergeadas<\/p>\n<p>3/5<\/p>\n<p>diagnósticos da #196 já resolvidos<\/p>\n<p>5<\/p>\n<p>recibos postados no repo real<\/p>\n<p>2<\/p>\n<p>bugs reais achados no MOTOR-TESTE<\/p>\n<p>1<\/p>\n<p>causa raiz confirmada, sem canal seguro pra corrigir sozinho<\/p>\n<p>1<\/p>\n<p>teoria própria descartada a tempo, com prova<\/p>\n<p>Local<\/p>\n<h3 class=\"nota-h\">MOTOR-TESTE<\/h3>\n<h4 class=\"nota-h\">Da instalação quebrada ao dashboard confirmado<\/h4>\n<p><code>npm install<\/code> tinha ficado pela metade numa sessão anterior — binários nativos Windows corrompidos silenciosamente (<code>@parcel/watcher<\/code>, <code>@swc/core<\/code>, <code>@next/swc<\/code>). <code>npm ci<\/code> limpo resolveu.<\/p>\n<p>Sobraram dois bugs de código real: import quebrado em <code>quotaStrategies.ts<\/code> e colisão de migration (<code>134<\/code> duplicado). Corrigi na marra — depois achei que o time já tinha a correção oficial mergeada rio acima (PR #9688) e troquei meu remendo pela versão real.<\/p>\n<p>Dashboard testado com prova HTTP real, não achismo: login, sessão, API de settings, jobs de fundo — tudo 200.<\/p>\n<p>rodandosenha CHANGEME aberta, despriorizada por você<\/p>\n<p>Remoto<\/p>\n<h3 class=\"nota-h\">ServerVpss/CentralDark<\/h3>\n<h4 class=\"nota-h\">O que fiz de verdade<\/h4>\n<p>Li os 5 documentos canônicos de governança por inteiro (não só verifiquei se existiam). Baixei e rodei o gate real da meta-lupa (<code>meta_lupa.py<\/code>) contra a minha própria análise do <code>/login<\/code> — primeira rodada bateu em <code>SECRET_DETECTADO<\/code> por um IP literal no meu input, corrigi, segunda rodada <code>APROVAR<\/code>.<\/p>\n<p>Achei uma colisão de escopo real entre duas PRs abertas no mesmo arquivo (<code>orchestrator.mjs<\/code>), triei um lote de 4 PRs históricas com identidade de escritor honesta (<code>UNKNOWN<\/code> quando não provável — <code>segredounlock<\/code> é só a conta, nunca o agente), e reavaliei a issue #196 com fato medido agora em vez do relato de 22/07.<\/p>\n<h4 class=\"nota-h\">O timeline que você pediu pra eu entender<\/h4>\n<p>03:36início da série <code>test→fix<\/code> do gate de finalização Hermes c0f48fc<\/p>\n<p>04:06PR #705 mergeia (lupa-conformance) 03c1436merge<\/p>\n<p>04:29PR #704 mergeia — gate de finalização fechado 2a1eb20merge<\/p>\n<p>05:42PR #662 mergeia — SEGREDO/SOL/PIVETE 7509860merge<\/p>\n<p>05:58commit acidental sem escopo 12d1643erro<\/p>\n<p>05:59revertido — 17 segundos depois, sozinho 20813d3autocorrigido<\/p>\n<p>Pendente<\/p>\n<h3 class=\"nota-h\">O que ainda está em aberto<\/h3>\n<p>humano Raiz da VPS 569 commits atrás desde que o webhook foi aposentado (21/07, PR #287) — sem substituto. <code>deploy-operational-guards.sh<\/code> SEGREDO/CHEFE<\/p>\n<p>agente <code>docs/AUDITORIAS/AUDITORIA-FLUXO-DE-OURO.md<\/code> nunca foi escrito — issue #144 Codex + Claude<\/p>\n<p>humano Rotação de PAT + remoção de secret hardcoded — issue #190 SEGREDO/CHEFE<\/p>\n<p>sem revisão 6 PRs abertas (#667, #664, #660, #648, #646 + drafts) — só título lido, conteúdo não a definir<\/p>\n<h3 class=\"nota-h\">Opinião honesta, não elogio vazio<\/h3>\n<p>O que separa isso de governança-de-markdown-que-ninguém-segue é que as regras têm dente: vi um commit errado se autocorrigir em 17 segundos, vi um gate de deploy bloquear em vez de fingir saúde, vi uma PR entrar no meio de outra sem derrubar nada. O gate de finalização do Hermes — 15 commits <code>test→fix<\/code> fechando um jeito de falso-verde por vez (hash, ping/http, redirecionamento, efeito parcial) — é rigor de quem já foi enganado por IA e programou a desconfiança direto na máquina.<\/p>\n<p>Ponta solta real, não frescura minha: aposentaram o mecanismo que sincronizava a raiz da VPS e ninguém colocou substituto. Isso trava o gate de mapa até alguém decidir — não é bug de código, é decisão de arquitetura órfã.<\/p>\n<p>Sonnet 5 · sessão única, sem troca de modelo Sem escrita de código no remoto sem autorização<\/p>"}, "mapa-canonico": {"t": "Mapa Canônico", "a": "Mapa Canônico", "h": "<p>Bibliotecária da Humanidade<\/p>\n<p>Pesquisa automática · reúso inteligente · só quando precisa<\/p>\n<p>Internet / Web<\/p>\n<p>GitHub / owners<\/p>\n<p>Docs / PDFs / HTML<\/p>\n<p>VPS / runtime / logs<\/p>\n<p>Busca sob demanda<\/p>\n<p>Fontes reutilizáveis<\/p>\n<p>Nada é copiado por padrão<\/p>\n<p><strong>Camada 1<\/strong> · coordenação<\/p>\n<h2 class=\"nota-h\">CENTRAL*DARK*<\/h2>\n<p>Mapa canônico da Casa<\/p>\n<p>uma arquitetura · um estado vivo · uma reconciliação<\/p>\n<p>Invariantes<\/p>\n<p>Lei da Casa · não negociável<\/p>\n<p>REUSE_BEFORE_CREATE<\/p>\n<p>ONE_WRITER_PER_SCOPE<\/p>\n<p>SERIALIZE_MUTAÇÃO<\/p>\n<p>UNKNOWN ≠ PASS<\/p>\n<p>WRITER ≠ JUDGE<\/p>\n<p>SELF_PROOF ≠ PASS<\/p>\n<p>HISTÓRICO ≠ ESTADO ATUAL<\/p>\n<p>SOL<\/p>\n<p><strong>Orquestração<\/strong> · reconciliação · contraprova<\/p>\n<p>Intenção define o quê<\/p>\n<p>SEGREDO / CHEFE<\/p>\n<p>Humano · autor da intenção · autoridade final<\/p>\n<p>MODELO — motor substituível<\/p>\n<p>HERMES<\/p>\n<p><strong>Execução<\/strong> · preservação · continuidade<\/p>\n<p><strong>Camada 2<\/strong> · o fluxo único da Casa<\/p>\n<p>Um caminho canônico — sem voltas, sem atalhos<\/p>\n<p>feedback contínuo · observabilidade total · correção sem regressão<\/p>\n<p>1<\/p>\n<p>Entradas<\/p>\n<p>voz · texto · imagem · tela · arquivo<\/p>\n<p>2<\/p>\n<p>Percepção<\/p>\n<p>captura de superfície<\/p>\n<p>3<\/p>\n<p>Entendimento<\/p>\n<p>fato vs. hipótese<\/p>\n<p>4<\/p>\n<p>Memória<\/p>\n<p>ouro · delta útil<\/p>\n<p>5<\/p>\n<p>Decisão<\/p>\n<p>menor capacidade suficiente<\/p>\n<p>6<\/p>\n<p>Orquestração<\/p>\n<p>reconcilia · quebra a própria conclusão<\/p>\n<p>7<\/p>\n<p>Execução<\/p>\n<p>age sem regressão<\/p>\n<p>8<\/p>\n<p>Writer único<\/p>\n<p>one_writer_per_scope<\/p>\n<p>9<\/p>\n<p>Reality Judge<\/p>\n<p>realidade = juiz<\/p>\n<p>10<\/p>\n<p>Prova<\/p>\n<p>logs · hashes · recibos<\/p>\n<p>sem prova, não passou · ação ≠ prova · documentado ≠ executado<\/p>\n<p>Não copie a conversa<\/p>\n<p>Capture a superfície. <strong>Não preserve o cascalho.<\/strong> Preserve o delta.<\/p>\n<p>Prova final — entrega canônica<\/p>\n<p>Ação<\/p>\n<p>→<\/p>\n<p>Evidência<\/p>\n<p>→<\/p>\n<p>Julgamento<\/p>\n<p>→<\/p>\n<p>Recibo<\/p>\n<p>logs completos<\/p>\n<p>hashes verificáveis<\/p>\n<p>recibos assinados<\/p>\n<p>evidência observável · reproduzível<\/p>\n<p>Saúde da Casa<\/p>\n<p>Arquitetura provada95%<\/p>\n<p>Execução provada45%<\/p>\n<p>Trajetóriadefinida<\/p>\n<p>Fixed pointainda não<\/p>\n<p>Estado atualreconciliado<\/p>\n<p>CD · PROTOCOLO CANÔNICO<\/p>\n<p>Uma Casa. Uma intenção. Muitas superfícies. Um fluxo canônico.<\/p>\n<p>v CD-1.0.2 · zero regressão<\/p>\n<p>Tema global — mesma estrutura, cores trocam:<\/p>"}, "mapa-vivo": {"t": "Mapa Vivo da Casa", "a": "Mapa Vivo da Casa", "h": "<p>Estado medido · 28 ago 2026 · 10h UTC<\/p>\n<h2 class=\"nota-h\">Mapa Vivo da Casa<\/h2>\n<p>O destino é <strong>um site e uma API<\/strong>, cada um com camadas por rota. A API já está assim e responde. O site não — e o buraco é maior do que parecia: <strong>três das quatro raízes estáticas em produção não existem na main<\/strong>. Tudo abaixo foi medido no Caddy em execução, não lido de arquivo.<\/p>\n<p>main2cd293c<\/p>\n<p>PRs abertos0<\/p>\n<p>alertas45<\/p>\n<p>PM2 online20<\/p>\n<p>runnerativo<\/p>\n<p>MCP200<\/p>\n<p>load9.97<\/p>\n<h3 class=\"nota-h\">Como o código viaja<\/h3>\n<p>Da intenção até o domínio. Cada degrau foi verificado em execução, não em documentação.<\/p>\n<p>GitHubfonte da verdade<\/p>\n<p>45 workflows · 45 skills · <code>ServerVpss/CentralDark<\/code>. Nas últimas 6 horas: 28 PRs de <code>segredounlock<\/code> e 2 do Dependabot, todos mergeados.<\/p>\n<p>EsteiraActions<\/p>\n<p>Runner <strong>self-hosted único<\/strong> na própria VPS, rótulos <code>self-hosted, Linux, X64, centraldark, dependabot<\/code>. Gargalo serial: já se mediu 43 jobs na fila e um deles esperou <strong>4h42min<\/strong> para começar.<\/p>\n<p>VPSruntime<\/p>\n<p>20 processos PM2 de pé, 1 parado · 26 portas escutando · <code>HEAD 9b9c05d<\/code>, 1 commit atrás da main. O MCP responde <code>200<\/code> em <code>:9100<\/code>.<\/p>\n<p>Caddy19 domínios<\/p>\n<p>Proxy reverso separando <strong>site<\/strong> (arquivo estático) de <strong>API<\/strong> (camadas por path). É aqui que mora o buraco do site novo.<\/p>\n<h3 class=\"nota-h\">Os dois que importam<\/h3>\n<p>Um domínio, várias camadas — em cada um. O da API funciona; o do site serve o passado.<\/p>\n<table class=\"nota-tab\"><thead><tr><th>Domínio<\/th><th>Camadas<\/th><th>Estado<\/th><\/tr><\/thead><tbody><tr><td>api.centralldark.com<\/td><td><code>/memoria/<em><\/code> → 3101 · <code>/lovable/v1/<\/em><\/code> → 3102 · <code>/v1/audio/transcriptions<\/code> → Supabase · resto → 8090 ArsenalAdapter<\/td><td>viva<\/td><\/tr><tr><td>centralldark.com<\/td><td>SPA, <code>try_files → index.html<\/code>, servindo <code>apps/web/dist<\/code><\/td><td>órfã<\/td><\/tr><\/tbody><\/table>\n<p>3 de 4<\/p>\n<p>Perguntando ao próprio Caddy pela API de admin — não a arquivos de configuração — a produção serve <strong>quatro raízes estáticas<\/strong>. <strong>Três não existem na main.<\/strong> Não é um diretório esquecido: é a camada estática inteira rodando de pastas que o git não conhece.<\/p>\n<table class=\"nota-tab\"><thead><tr><th>Raiz servida<\/th><th>Domínios<\/th><th>Na main<\/th><th>No disco<\/th><\/tr><\/thead><tbody><tr><td>apps/web/dist<\/td><td>centralldark.com · www · portal<\/td><td>não<\/td><td>sim<\/td><\/tr><tr><td>apps/modulos/telepainel/dist<\/td><td>telepainel<\/td><td>não<\/td><td>sim<\/td><\/tr><tr><td>apps/modulos/hub/dist<\/td><td>hub<\/td><td>não<\/td><td>sim<\/td><\/tr><tr><td>apps/modulos/status<\/td><td>status<\/td><td>sim<\/td><td>sim<\/td><\/tr><\/tbody><\/table>\n<p>O <code>index.html<\/code> do raiz é de <strong>26 de junho<\/strong> e seu título é <strong>“TelePanel — Consultas inteligentes via Telegram”<\/strong>. Um <code>git clean -fd<\/code> derruba site, portal, telepainel e hub de uma vez — e nenhum deploy os traz de volta, porque a fonte não está na main.<\/p>\n<p><strong>Correção registrada:<\/strong> a primeira versão deste mapa tratava <code>hub<\/code> como rota viva e saudável. Ela <em>responde<\/em> — mas de raiz órfã. Responder não é estar versionado.<\/p>\n<h3 class=\"nota-h\">Três gerações de frontend, uma sem fonte<\/h3>\n<p>O código do site novo já está na main. Nenhum workflow o constrói, e o gatilho de deploy não escuta os caminhos dele.<\/p>\n<table class=\"nota-tab\"><thead><tr><th>Fonte<\/th><th>Build<\/th><th>Publicada?<\/th><\/tr><\/thead><tbody><tr><td>raiz do repo<\/td><td><code>vite_react_shadcn_ts<\/code> · <code>vite build<\/code><\/td><td>nunca<\/td><\/tr><tr><td>public/central-dark-instinct-2<\/td><td><code>tanstack_start_ts<\/code> · <code>vite build<\/code><\/td><td>nunca<\/td><\/tr><tr><td>apps/web/dist<\/td><td>sem fonte na main<\/td><td>no ar<\/td><\/tr><\/tbody><\/table>\n<h3 class=\"nota-h\">O motor de dependências<\/h3>\n<p>Quatro elos, cada um quebrado de um jeito diferente — e nenhum aparecia como erro. O script “passava”, o workflow mostrava vermelho que virou ruído, e o Dependabot simplesmente não abria PR.<\/p>\n<p>PR #1313<\/p>\n<h4 class=\"nota-h\">Política<\/h4>\n<p>Agrupar era só metade: <code>groups<\/code> sem <code>applies-to<\/code> cobre apenas atualizações de versão.<\/p>\n<p>alerta de segurança passava por fora<\/p>\n<p>PR #1343<\/p>\n<h4 class=\"nota-h\">Resolvedor<\/h4>\n<p>No merge da main dentro do PR, <code>--ours<\/code> é o lado do PR. Os comentários diziam o contrário do código.<\/p>\n<p>o fail-closed falhava aberto<\/p>\n<p>PR #1350<\/p>\n<h4 class=\"nota-h\">Gatilho<\/h4>\n<p>Um passo continha <code>runs-on<\/code> e <code>steps<\/code>, que são chaves de job. YAML aceita; o Actions rejeita.<\/p>\n<p>10 de 10 execuções falharam · zero jobs<\/p>\n<p>PR #1353<\/p>\n<h4 class=\"nota-h\">Cobertura<\/h4>\n<p>As entradas <code>pip<\/code> e <code>github-actions<\/code> tinham ficado sem grupo — e <code>poetry.lock<\/code> também é lockfile único.<\/p>\n<p>a mesma doença esperando em outro cômodo<\/p>\n<p>47 → 11s<\/p>\n<p>PR <strong>#1351<\/strong>: um único PR com <strong>47 atualizações<\/strong>, mergeado <strong>11 segundos<\/strong> depois de aberto. Derrubou 95 alertas de uma vez. É o desenho do agrupamento funcionando pela primeira vez — antes eram 47 PRs disputando o mesmo <code>pnpm-lock.yaml<\/code>.<\/p>\n<h3 class=\"nota-h\">Os que nunca saem sozinhos<\/h3>\n<p>Dos alertas restantes, a maioria drena sem intervenção. Sete não drenam nunca — e não é falha de mecanismo.<\/p>\n<table class=\"nota-tab\"><thead><tr><th>Pacote<\/th><th>Situação<\/th><th>Por quê<\/th><\/tr><\/thead><tbody><tr><td>react-router<\/td><td>6.x → 7.18.0<\/td><td>exige <strong>major<\/strong>, e a política ignora major<\/td><\/tr><tr><td>pymdown-extensions<\/td><td>10.x → 11.0.0<\/td><td>exige <strong>major<\/strong>, e a política ignora major<\/td><\/tr><tr><td>extract-zip<\/td><td>alta<\/td><td>sem correção publicada<\/td><\/tr><tr><td>react-router-dom<\/td><td>média<\/td><td>sem correção publicada<\/td><\/tr><tr><td>@ai-sdk/provider-utils<\/td><td>baixa<\/td><td>sem correção publicada<\/td><\/tr><tr><td>elliptic<\/td><td>baixa<\/td><td>sem correção publicada<\/td><\/tr><\/tbody><\/table>\n<p>Travar <em>major<\/em> foi decisão certa — major quebra API. Mas cria um efeito que ninguém tinha notado: alerta cuja única cura é major fica órfão entre a política e o motor. A correção existe, o motor a enxerga, e é proibido de aplicá-la.<\/p>\n<h3 class=\"nota-h\">Fronteiras abertas<\/h3>\n<p>Nenhuma por falta de medição. As três pedem decisão, não execução.<\/p>\n<h4 class=\"nota-h\">Qual dos dois é o site<\/h4>\n<p>Escolhida a fonte, o resto é execução: build no CI, artefato, rota no Caddy e prova HTTP no mesmo SHA. Trocar o que está no ar sem essa escolha seria decidir o produto no lugar do dono.<\/p>\n<h4 class=\"nota-h\">Identidade da MetaLupa divergente<\/h4>\n<p>O guard espera <code>42691e00<\/code>; a main tem <code>b2a1b3e5<\/code>. Pela regra escrita no próprio arquivo, divergência é FAIL — a skill que detecta falso-verde está num estado que ela mesma reprovaria.<\/p>\n<h4 class=\"nota-h\">Fila serial de um runner só<\/h4>\n<p>A rotina <code>Autonomia */5<\/code> sozinha ocupa 9 posições na fila. Segundo runner ou cadência menor: os dois são mudança de arquitetura.<\/p>\n<p>Medido em 28 ago 2026 por SSH, git e API do GitHub — nunca por memória de sessão.<\/p>\n<p>Retrato datado: se divergir do runtime, o runtime ganha e esta página é que envelheceu.<\/p>"}, "cartazes": {"t": "Cartazes da Casa", "a": "Cartazes da Casa", "h": "<p>🔍 Lupa na mão · Intenção na frente<\/p>\n<h2 class=\"nota-h\">Cartazes da Casa<\/h2>\n<p>Quatro peças no tema <strong>forge<\/strong>. Ouro batido, pergaminho e breu — a paleta canônica, sem uma cor inventada. Passe o mouse: cada cartaz levanta da mesa.<\/p>\n<p>Cartaz IDoutrina<\/p>\n<h3 class=\"nota-h\">O futuro é só pensar<\/h3>\n<p>Intenção → Prova<\/p>\n<p>Pensa uma vez. A Casa entende, executa e prova. <em>Digitar deixa de ser trabalho braçal.<\/em><\/p>\n<p>CentralDark★ Doutrina<\/p>\n<p>Cartaz IIMétodo<\/p>\n<h3 class=\"nota-h\">Lupa na mão, intenção na frente<\/h3>\n<p>O lema da Casa<\/p>\n<p>Intuição aponta onde cavar. <em>Medição diz se tem ouro.<\/em> As duas, sempre.<\/p>\n<p>CentralDark★ Método<\/p>\n<p>Cartaz IIILei<\/p>\n<h3 class=\"nota-h\">Sem documentação a Casa não anda<\/h3>\n<p>Decretado · 2026-08-25<\/p>\n<p>Código sem documentação é entregue vazio pro dono. <em>Isso não é entrega — é dependência.<\/em><\/p>\n<p>CentralDark★ Lei<\/p>\n<p>Cartaz IVJuízo<\/p>\n<h3 class=\"nota-h\">A realidade julga<\/h3>\n<p>Nem a tua cabeça, nem a minha<\/p>\n<p>Print não é prova. Ausência de erro não é sucesso. <em>O verde só vale medido.<\/em><\/p>\n<p>CentralDark★ Juízo<\/p>\n<p><em>Lupa na mão.<\/em> Intenção na frente.<\/p>\n<p>CentralDark · SEGREDO/CHEFE<\/p>"}, "forja-cartazes": {"t": "Forja dos Cartazes", "a": "Forja dos Cartazes", "h": "<p>CentralDark · tema forge · 4 cartazes canônicos<\/p>\n<h2 class=\"nota-h\">Forja dos Cartazes<\/h2>\n<p>Os quatro cartazes aprovados pelo SEGREDO/CHEFE, montados como cartas no tema <code>forge<\/code>. Paleta, tipografia e proporção vêm inteiras do design system canônico — nenhum token novo foi criado. O relevo tátil que havia se perdido está reconstruído aqui: passe o ponteiro sobre uma carta.<\/p>\n<p>CD-POSTER-01 epistemic‑firewall<\/p>\n<h3 class=\"nota-h\">A Casa que aprendeu a não acreditar em papagaio<\/h3>\n<p>emblema gerado · não é o cartaz<\/p>\n<p>- UNKNOWN != PASS<\/p>\n<p>- evidence before delivery<\/p>\n<p>- CHEFE → SOL → HERMES<\/p>\n<p>760e52fa · 1055×1491 Proved<\/p>\n<p><strong>Firewall epistêmico.<\/strong> A carta que dá nome à campanha: prova antes de entrega, e desconhecido nunca vira aprovado.<\/p>\n<p>CD-POSTER-02 canonical‑artifact‑pipeline<\/p>\n<h3 class=\"nota-h\">O cajado da correção<\/h3>\n<p>emblema gerado · não é o cartaz<\/p>\n<p>- zero regression<\/p>\n<p>- same visual family<\/p>\n<p>- editable structure<\/p>\n<p>- portable package<\/p>\n<p>054fcdb0 · 1122×1402 Proved<\/p>\n<p><strong>Pipeline de artefato.<\/strong> Matéria bruta sobe até cristal sem perder a família visual nem a estrutura editável.<\/p>\n<p>CD-POSTER-03 learning‑loop<\/p>\n<h3 class=\"nota-h\">Trajetória vivida<\/h3>\n<p>emblema gerado · não é o cartaz<\/p>\n<p>- observe<\/p>\n<p>- err<\/p>\n<p>- prove<\/p>\n<p>- learn<\/p>\n<p>- tell<\/p>\n<p>- continue<\/p>\n<p>7af63322 · 1024×1536 Proved<\/p>\n<p><strong>Laço de aprendizado.<\/strong> Errar faz parte do circuito — o que não pode é sair do laço antes de provar e contar.<\/p>\n<p>CD-POSTER-04 operational‑topology<\/p>\n<h3 class=\"nota-h\">Arquitetura operacional da Casa<\/h3>\n<p>emblema gerado · não é o cartaz<\/p>\n<p>- ONE_SYSTEM_ONLY<\/p>\n<p>- REUSE_BEFORE_CREATE<\/p>\n<p>- uma verdade canônica<\/p>\n<p>c6bc946f · 1536×1024 Proved<\/p>\n<p><strong>Topologia operacional.<\/strong> Um núcleo canônico; tudo em volta é projeção que pode ser reconstruída sem virar autoridade paralela.<\/p>\n<h3 class=\"nota-h\">Proveniência<\/h3>\n<p>Manifesto<\/p>\n<p>centraldark.visual-posters.v1 · canonical_count 4<\/p>\n<p>Paleta<\/p>\n<p>tema <code>forge<\/code> — DESIGN-SISTEMA.md · zero token novo<\/p>\n<p>Fonte da pele<\/p>\n<p>forja-de-cartas.html @ sha256 e8f4016dcf8b2b6f9806d8ef29a5105506ef5eba5225f3aeff9b78bcb301f348 — conferido, bate<\/p>\n<p>Tipografia<\/p>\n<p>Cinzel · EB Garamond · JetBrains Mono — as mesmas da forja<\/p>\n<p>Autoridade<\/p>\n<p>DERIVED_PROJECTION — não sobrescreve owner canônico<\/p>\n<p>As artes acima são <strong>emblemas gerados<\/strong> a partir do <code>semantic_role<\/code> e dos <code>claims<\/code> de cada cartaz — não são os <code>.webp<\/code> canônicos, que continuam sendo a fonte de verdade em <code>docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/<\/code>. Os selos seguem o <code>public_status_contract<\/code> do manifesto: verde para <code>PROVED<\/code>, e <strong>amarelo nunca é exportado como aprovação pública<\/strong>.<\/p>"}, "tres-peles": {"t": "Três Peles, Um Relevo", "a": "Três Peles, Um Relevo", "h": "<p>🔍 Lupa na mão · Intenção na frente<\/p>\n<p>CentralDark · três temas globais oficiais<\/p>\n<h2 class=\"nota-h\">Três Peles, Um Relevo<\/h2>\n<p>A mesma página, os mesmos componentes, o mesmo relevo tátil. Só a paleta troca — e ela vem inteira do <code>variables.scss<\/code>, sem um valor inventado. Passe o mouse nos painéis.<\/p>\n<p>tema: <strong>emerald<\/strong><\/p>\n<h3 class=\"nota-h\">Indicadores<\/h3>\n<p>PRs abertos<\/p>\n<p>4<\/p>\n<p>checks na fila<\/p>\n<p>Runner<\/p>\n<p>1<\/p>\n<p>saturado<\/p>\n<p>Integridade<\/p>\n<p>18/18<\/p>\n<p>hashes conferem<\/p>\n<p>Temas oficiais<\/p>\n<p>3<\/p>\n<p>mesma estrutura<\/p>\n<h3 class=\"nota-h\">Painéis<\/h3>\n<h4 class=\"nota-h\">Trocar pele não é redesenhar<\/h4>\n<p>Layout, componentes, navegação e conteúdo continuam iguais nos três. O que muda é o valor do token — cor de fundo, acento, borda, e a luz do relevo.<\/p>\n<p>Estrutura do relevo<code>idêntica<\/code><\/p>\n<p>Tokens de cor<code>por tema<\/code><\/p>\n<p>Tokens de luz<code>por tema<\/code><\/p>\n<h4 class=\"nota-h\">Cada pele reflete diferente<\/h4>\n<p>Esmeralda tem brilho frio e discreto. Azul usa <code>screen<\/code> — luz dura de painel. Dourado usa <code>soft-light<\/code>, que é como metal reage.<\/p>\n<p>Esmeralda<code>verde frio<\/code><\/p>\n<p>Azul escuro<code>screen · ciano duro<\/code><\/p>\n<p>Dourado claro<code>pergaminho<\/code><\/p>\n<h3 class=\"nota-h\">De onde veio cada valor<\/h3>\n<p>emerald<\/p>\n<p><code>src/index.css<\/code> + <code>variables.scss[emerald]<\/code> — claro e escuro<\/p>\n<p>operational<\/p>\n<p>escuro: <code>variables.scss<\/code>, <code>#4fc3ff<\/code> sobre <code>#05070d<\/code>. Claro: acento escurecido para <code>#0a6e9e<\/code>, porque ciano puro não tem contraste sobre branco<\/p>\n<p>forge<\/p>\n<p>escuro: <code>#c0902b<\/code> sobre <code>#100d07<\/code>. Claro: o <strong>pergaminho da carta<\/strong> — <code>#EFE2C6<\/code>, <code>#2A2013<\/code>, <code>#C0902B<\/code>, tokens que já existiam<\/p>\n<p>relevo<\/p>\n<p>escada de <code>translateZ<\/code> · sombra que contra-desloca · brilho no ponteiro<\/p>\n<p>ângulo<\/p>\n<p><code>9°<\/code> aqui; <code>20°<\/code> na carta colecionável<\/p>\n<p>cobertura<\/p>\n<p>3 paletas × 2 claridades = <strong>6 combinações<\/strong>, todas com relevo<\/p>\n<p><em>Lupa na mão.<\/em> Intenção na frente.<\/p>\n<p>CentralDark · SEGREDO/CHEFE<\/p>"}};
+var NOTAS_COFRE = {"vps-sync-20261008": {"t": "Planilha · VPS Sync 08/10/2026", "a": "VPS Sync 08-10-2026", "u": "https://github.com/ServerVpss/CentralDark/blob/main/docs/RECEIPTS/2026-10-08-VPS-SYNC-ALINHAMENTO.xlsx", "h": "<p>Planilha cristalizada · 08/10/2026 · fonte: <a href=\"https://github.com/ServerVpss/CentralDark/blob/main/docs/RECEIPTS/2026-10-08-VPS-SYNC-ALINHAMENTO.xlsx\" target=\"_blank\" rel=\"noopener\">docs/RECEIPTS/2026-10-08-VPS-SYNC-ALINHAMENTO.xlsx<\/a><\/p>\n<h2 class=\"nota-h\">VPS realinhada à main · sincronização automática de volta<\/h2>\n<h3 class=\"nota-h\">Resumo<\/h3>\n<table class=\"nota-tab\"><thead><tr><th>Item<\/th><th>Estado<\/th><th>Detalhe<\/th><\/tr><\/thead><tbody><tr><td>VPS no ramo<\/td><td>main<\/td><td>Antes: docs/hermes-local-loop-receipt-20261007<\/td><\/tr><tr><td>Commit na VPS<\/td><td>54292fa63<\/td><td>Puxado sozinho pelo agendamento às 06:45 BRT (09:45:08 UTC)<\/td><\/tr><tr><td>Pasta da VPS<\/td><td>Limpa<\/td><td>0 arquivos alterados após o alinhamento<\/td><\/tr><tr><td>Sincronização automática<\/td><td>Funcionando<\/td><td>Agendamento a cada 5 minutos: avança só se estiver na main e limpa<\/td><\/tr><tr><td>HUD — Casa<\/td><td>927b11bc…6004<\/td><td>Mesma impressão digital nos três lugares<\/td><\/tr><tr><td>HUD — VPS<\/td><td>927b11bc…6004<\/td><td><\/td><\/tr><tr><td>HUD — main (GitHub)<\/td><td>927b11bc…6004<\/td><td><\/td><\/tr><tr><td>Serviços da VPS<\/td><td>Desconhecido<\/td><td>Pasta igual à main, mas serviços não foram reiniciados<\/td><\/tr><tr><td>Recibo na PR-mãe #1562<\/td><td>Não gravado<\/td><td>Permissão de comentário bloqueada nesta sessão<\/td><\/tr><tr><td>HUD idêntico nos 3 lugares?<\/td><td>Sim<\/td><td><\/td><\/tr><\/tbody><\/table>\n<h3 class=\"nota-h\">Causas<\/h3>\n<table class=\"nota-tab\"><thead><tr><th>#<\/th><th>Causa<\/th><th>Sintoma<\/th><th>Prova<\/th><th>Correção<\/th><th>Commit<\/th><\/tr><\/thead><tbody><tr><td>1<\/td><td>Pasta da VPS no ramo errado (docs/hermes-local-loop-receipt-20261007) e com arquivos alterados<\/td><td>Script de sincronização parava sem mexer em nada<\/td><td>Parou 63 vezes seguidas, de 01:10 a 06:20 BRT<\/td><td>Backup + guarda das alterações, troca para a main e avanço direto<\/td><td>— (feito na VPS)<\/td><\/tr><tr><td>2<\/td><td>Hermes reescreve .artifacts/system-sentinel/reconciliation.json dentro da pasta, sem o Git ignorar<\/td><td>Pasta voltava suja a cada poucos minutos e a sincronização parava de novo<\/td><td>Parou às 06:35 BRT logo depois do alinhamento<\/td><td>Arquivo adicionado ao .gitignore; o script continua parando por mudança real<\/td><td>db57da27a<\/td><\/tr><tr><td>Total de causas<\/td><td>2<\/td><td><\/td><td><\/td><td><\/td><td><\/td><\/tr><\/tbody><\/table>\n<h3 class=\"nota-h\">Linha do tempo<\/h3>\n<table class=\"nota-tab\"><thead><tr><th>Hora (BRT)<\/th><th>Hora (UTC)<\/th><th>Evento<\/th><\/tr><\/thead><tbody><tr><td>01:10<\/td><td>04:10:26<\/td><td>Primeira parada: ramo não é a main<\/td><\/tr><tr><td>06:20<\/td><td>09:20:06<\/td><td>Última parada antes do alinhamento (63 no total)<\/td><\/tr><tr><td>06:24<\/td><td>09:24:58<\/td><td>Backup criado em /root/CentralDark-preserve/align-main-20261008T092458Z<\/td><\/tr><tr><td>06:28<\/td><td>09:28<\/td><td>Trava do Git sem processo dono movida para o backup<\/td><\/tr><tr><td>06:29<\/td><td>09:29<\/td><td>Alterações guardadas; troca para a main; avanço até a2983b7e6<\/td><\/tr><tr><td>06:30<\/td><td>09:30:17<\/td><td>Sincronização passou (a2983b7e6)<\/td><\/tr><tr><td>06:35<\/td><td>09:35:01<\/td><td>Parou de novo: pasta suja pelo arquivo do Hermes<\/td><\/tr><tr><td>06:38<\/td><td>09:38:31<\/td><td>Correção do .gitignore aplicada; sincronização passou (db57da27a)<\/td><\/tr><tr><td>06:40<\/td><td>09:40:06<\/td><td>Agendamento passou sozinho<\/td><\/tr><tr><td>06:45<\/td><td>09:45:08<\/td><td>Agendamento puxou sozinho o commit 54292fa63<\/td><\/tr><\/tbody><\/table>\n<h3 class=\"nota-h\">Rastro<\/h3>\n<table class=\"nota-tab\"><thead><tr><th>Commit<\/th><th>O que é<\/th><th>Link<\/th><th>Conferência<\/th><\/tr><\/thead><tbody><tr><td>ff9f8c435<\/td><td>HUD atualizado com o alinhamento<\/td><td><a href=\"https://github.com/ServerVpss/CentralDark/commit/ff9f8c4357bb48447b663fc9405f0721a9e69443\" target=\"_blank\" rel=\"noopener\">https://github.com/ServerVpss/CentralDark/commit/ff9f8c4357bb48447b663fc9405f0721a9e69443<\/a><\/td><td>GitHub = local<\/td><\/tr><tr><td>db57da27a<\/td><td>Correção no .gitignore que libera a sincronização<\/td><td><a href=\"https://github.com/ServerVpss/CentralDark/commit/db57da27a28c9247d31998e01d6e688ad30d594d\" target=\"_blank\" rel=\"noopener\">https://github.com/ServerVpss/CentralDark/commit/db57da27a28c9247d31998e01d6e688ad30d594d<\/a><\/td><td>GitHub = local<\/td><\/tr><tr><td>54292fa63<\/td><td>HUD com a segunda causa e a prova<\/td><td><a href=\"https://github.com/ServerVpss/CentralDark/commit/54292fa63044f1d765be744bb935214035085557\" target=\"_blank\" rel=\"noopener\">https://github.com/ServerVpss/CentralDark/commit/54292fa63044f1d765be744bb935214035085557<\/a><\/td><td>GitHub = local<\/td><\/tr><\/tbody><\/table>\n<h3 class=\"nota-h\">Preservação<\/h3>\n<table class=\"nota-tab\"><thead><tr><th>O que<\/th><th>Onde ficou<\/th><\/tr><\/thead><tbody><tr><td>30 commits do ramo antigo<\/td><td>GitHub, ramo docs/hermes-local-loop-receipt-20261007 (PR #1778 juntada à main às 01:51 BRT)<\/td><\/tr><tr><td>Alterações não salvas da pasta<\/td><td>Backup na VPS: /root/CentralDark-preserve/align-main-20261008T092458Z<\/td><\/tr><tr><td>Mesmas alterações (segunda cópia)<\/td><td>Guarda do Git: align-main-preserve-20261008T092458Z<\/td><\/tr><tr><td>HUD antigo da Casa<\/td><td>Mesmo backup na VPS: HUD-casa-antes.html<\/td><\/tr><tr><td>Trava do Git abandonada<\/td><td>Mesmo backup na VPS: stale-index.lock<\/td><\/tr><tr><td>Observação<\/td><td>Dois dos arquivos alterados já eram iguais à main; as mudanças reais eram arquivos de trabalho do Hermes<\/td><\/tr><\/tbody><\/table>\n<h3 class=\"nota-h\">Pendências<\/h3>\n<table class=\"nota-tab\"><thead><tr><th>Pendência<\/th><th>Situação<\/th><th>Quem decide<\/th><\/tr><\/thead><tbody><tr><td>Commits feitos no ramo antigo depois da junção das 01:51 (ex.: bind MCP microdeploy to native systemd runtime)<\/td><td>No GitHub, fora da main<\/td><td>CHEFE<\/td><\/tr><tr><td>Serviços da VPS rodando o código novo<\/td><td>Desconhecido (sem reinício)<\/td><td>CHEFE<\/td><\/tr><tr><td>Recibo na PR-mãe #1562<\/td><td>Não gravado — permissão bloqueada<\/td><td>CHEFE (liberar permissão)<\/td><\/tr><tr><td>Arquivo vazio &#x27;]&#x27; criado por erro meu na VPS<\/td><td>Apagado<\/td><td>—<\/td><\/tr><tr><td>Pendências em aberto<\/td><td>3<\/td><td><\/td><\/tr><\/tbody><\/table>"}, "brief": {"t": "Brief de sábado", "a": "Brief de sábado", "h": "<p>Sábado · 29 de agosto de 2026<\/p>\n<h2 class=\"nota-h\">Sábado tranquilo, Chefe — nada te puxando hoje.<\/h2>\n<p>Nada precisa de você nesta manhã — nem e-mail nem chat estão conectados nesta sessão, e a agenda também não; sem candidatos pra puxar.<\/p>\n<p>Pendências CentralDark<\/p>\n<p>66 linhas abertas em docs/PENDENCIAS.md — a maioria 🔴 crítico ou 🟡 em atenção, um punhado 🟢 sem pressa. Os destaques que travam ou arrastam outras frentes:<\/p>\n<p>1<\/p>\n<p>Hermes trava com ReferenceError<\/p>\n<p>Causa-raiz já isolada, mas segue bloqueando o executor de missões e o grafo Jarvis — no PENDENCIAS.md.<\/p>\n<p>2<\/p>\n<p>Main local divergente da VPS<\/p>\n<p>87 commits de painel automático fora de sincronia, aguardando faxina — no PENDENCIAS.md.<\/p>\n<p>3<\/p>\n<p>Mapeamento WebUI: 10 achados críticos<\/p>\n<p>Docker-compose inseguro, token e chaves hardcoded, XSS via innerHTML, script exigindo root — todos ainda abertos, no PENDENCIAS.md.<\/p>\n<p>4<\/p>\n<p>Hermes parou de notificar e perdeu missão do grafo<\/p>\n<p>Heartbeat falhando e um ERR_MODULE_NOT_FOUND no meio do caminho — no PENDENCIAS.md.<\/p>\n<p>5<\/p>\n<p>Grafo sem fonte única<\/p>\n<p>Três fontes de grafo hoje desconectadas entre si, arquitetura ainda em aberto — no PENDENCIAS.md.<\/p>\n<p>6<\/p>\n<p>Revisão da migração docs/ do legado<\/p>\n<p>21 subpastas, cerca de 234 arquivos, decisão item a item — maioria ainda não iniciada, no PENDENCIAS.md.<\/p>\n<p>7<\/p>\n<p>PR #142 aguardando merge<\/p>\n<p>Sanitização de tool_call.id acima de 64 caracteres, pronta pra entrar — no PENDENCIAS.md.<\/p>\n<p>8<\/p>\n<p>status.centralldark.com como portal único<\/p>\n<p>Já aprovado pelo Pivete, execução ainda pendente — no PENDENCIAS.md.<\/p>\n<p>Status GitHub<\/p>\n<p>ServerVpss/CentralDark: 0 pull requests abertos, 66 issues abertas. A maior parte são alertas automáticos da Sentinela criados entre 16 e 28 de agosto — mais recentes. As mais antigas ainda em aberto:<\/p>\n<p>1<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/537\" target=\"_blank\" rel=\"noopener\">Workflow vermelho: PR auto-review<\/a><\/p>\n<p>Aberta há cerca de 30 dias — issue #537 no GitHub.<\/p>\n<p>2<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/542\" target=\"_blank\" rel=\"noopener\">Identidade para commits automáticos<\/a><\/p>\n<p>Dependência externa em aberto há cerca de 30 dias — issue #542 no GitHub.<\/p>\n<p>3<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/564\" target=\"_blank\" rel=\"noopener\">Drift-VPS: branch divergente<\/a><\/p>\n<p>Sentinela aponta VPS fora de sincro com o GitHub há cerca de 30 dias — issue #564.<\/p>\n<p>4<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/707\" target=\"_blank\" rel=\"noopener\">Padrão de etiquetas operacionais<\/a><\/p>\n<p>Maiúsculas, emoji e roteamento funcional, em aberto há cerca de 3 semanas — issue #707.<\/p>\n<p>5<\/p>\n<p><a href=\"https://github.com/ServerVpss/CentralDark/issues/711\" target=\"_blank\" rel=\"noopener\">Obsidian como segundo cérebro<\/a><\/p>\n<p>Biblioteca semântica e RAG/GrafoRAG, em aberto há cerca de 3 semanas — issue #711.<\/p>"}, "relatorio": {"t": "Relatório de Sessão · MOTOR-TESTE", "a": "Relatório de Sessão — MOTOR-TESTE + CentralDark", "h": "<p>RELATÓRIO DE SESSÃO · SONNET 5 · 08/08/2026<\/p>\n<h2 class=\"nota-h\">MOTOR-TESTE no ar, CentralDark sob observação<\/h2>\n<p>Do npm quebrado em casa até o gate de finalização do Hermes fechando falso-verde por falso-verde no remoto — o que mudou, quem mexeu, e o que ainda está esperando decisão.<\/p>\n<p>3/3<\/p>\n<p>PRs acompanhadas ao vivo, todas mergeadas<\/p>\n<p>3/5<\/p>\n<p>diagnósticos da #196 já resolvidos<\/p>\n<p>5<\/p>\n<p>recibos postados no repo real<\/p>\n<p>2<\/p>\n<p>bugs reais achados no MOTOR-TESTE<\/p>\n<p>1<\/p>\n<p>causa raiz confirmada, sem canal seguro pra corrigir sozinho<\/p>\n<p>1<\/p>\n<p>teoria própria descartada a tempo, com prova<\/p>\n<p>Local<\/p>\n<h3 class=\"nota-h\">MOTOR-TESTE<\/h3>\n<h4 class=\"nota-h\">Da instalação quebrada ao dashboard confirmado<\/h4>\n<p><code>npm install<\/code> tinha ficado pela metade numa sessão anterior — binários nativos Windows corrompidos silenciosamente (<code>@parcel/watcher<\/code>, <code>@swc/core<\/code>, <code>@next/swc<\/code>). <code>npm ci<\/code> limpo resolveu.<\/p>\n<p>Sobraram dois bugs de código real: import quebrado em <code>quotaStrategies.ts<\/code> e colisão de migration (<code>134<\/code> duplicado). Corrigi na marra — depois achei que o time já tinha a correção oficial mergeada rio acima (PR #9688) e troquei meu remendo pela versão real.<\/p>\n<p>Dashboard testado com prova HTTP real, não achismo: login, sessão, API de settings, jobs de fundo — tudo 200.<\/p>\n<p>rodandosenha CHANGEME aberta, despriorizada por você<\/p>\n<p>Remoto<\/p>\n<h3 class=\"nota-h\">ServerVpss/CentralDark<\/h3>\n<h4 class=\"nota-h\">O que fiz de verdade<\/h4>\n<p>Li os 5 documentos canônicos de governança por inteiro (não só verifiquei se existiam). Baixei e rodei o gate real da meta-lupa (<code>meta_lupa.py<\/code>) contra a minha própria análise do <code>/login<\/code> — primeira rodada bateu em <code>SECRET_DETECTADO<\/code> por um IP literal no meu input, corrigi, segunda rodada <code>APROVAR<\/code>.<\/p>\n<p>Achei uma colisão de escopo real entre duas PRs abertas no mesmo arquivo (<code>orchestrator.mjs<\/code>), triei um lote de 4 PRs históricas com identidade de escritor honesta (<code>UNKNOWN<\/code> quando não provável — <code>segredounlock<\/code> é só a conta, nunca o agente), e reavaliei a issue #196 com fato medido agora em vez do relato de 22/07.<\/p>\n<h4 class=\"nota-h\">O timeline que você pediu pra eu entender<\/h4>\n<p>03:36início da série <code>test→fix<\/code> do gate de finalização Hermes c0f48fc<\/p>\n<p>04:06PR #705 mergeia (lupa-conformance) 03c1436merge<\/p>\n<p>04:29PR #704 mergeia — gate de finalização fechado 2a1eb20merge<\/p>\n<p>05:42PR #662 mergeia — SEGREDO/SOL/PIVETE 7509860merge<\/p>\n<p>05:58commit acidental sem escopo 12d1643erro<\/p>\n<p>05:59revertido — 17 segundos depois, sozinho 20813d3autocorrigido<\/p>\n<p>Pendente<\/p>\n<h3 class=\"nota-h\">O que ainda está em aberto<\/h3>\n<p>humano Raiz da VPS 569 commits atrás desde que o webhook foi aposentado (21/07, PR #287) — sem substituto. <code>deploy-operational-guards.sh<\/code> SEGREDO/CHEFE<\/p>\n<p>agente <code>docs/AUDITORIAS/AUDITORIA-FLUXO-DE-OURO.md<\/code> nunca foi escrito — issue #144 Codex + Claude<\/p>\n<p>humano Rotação de PAT + remoção de secret hardcoded — issue #190 SEGREDO/CHEFE<\/p>\n<p>sem revisão 6 PRs abertas (#667, #664, #660, #648, #646 + drafts) — só título lido, conteúdo não a definir<\/p>\n<h3 class=\"nota-h\">Opinião honesta, não elogio vazio<\/h3>\n<p>O que separa isso de governança-de-markdown-que-ninguém-segue é que as regras têm dente: vi um commit errado se autocorrigir em 17 segundos, vi um gate de deploy bloquear em vez de fingir saúde, vi uma PR entrar no meio de outra sem derrubar nada. O gate de finalização do Hermes — 15 commits <code>test→fix<\/code> fechando um jeito de falso-verde por vez (hash, ping/http, redirecionamento, efeito parcial) — é rigor de quem já foi enganado por IA e programou a desconfiança direto na máquina.<\/p>\n<p>Ponta solta real, não frescura minha: aposentaram o mecanismo que sincronizava a raiz da VPS e ninguém colocou substituto. Isso trava o gate de mapa até alguém decidir — não é bug de código, é decisão de arquitetura órfã.<\/p>\n<p>Sonnet 5 · sessão única, sem troca de modelo Sem escrita de código no remoto sem autorização<\/p>"}, "mapa-canonico": {"t": "Mapa Canônico", "a": "Mapa Canônico", "h": "<p>Bibliotecária da Humanidade<\/p>\n<p>Pesquisa automática · reúso inteligente · só quando precisa<\/p>\n<p>Internet / Web<\/p>\n<p>GitHub / owners<\/p>\n<p>Docs / PDFs / HTML<\/p>\n<p>VPS / runtime / logs<\/p>\n<p>Busca sob demanda<\/p>\n<p>Fontes reutilizáveis<\/p>\n<p>Nada é copiado por padrão<\/p>\n<p><strong>Camada 1<\/strong> · coordenação<\/p>\n<h2 class=\"nota-h\">CENTRAL*DARK*<\/h2>\n<p>Mapa canônico da Casa<\/p>\n<p>uma arquitetura · um estado vivo · uma reconciliação<\/p>\n<p>Invariantes<\/p>\n<p>Lei da Casa · não negociável<\/p>\n<p>REUSE_BEFORE_CREATE<\/p>\n<p>ONE_WRITER_PER_SCOPE<\/p>\n<p>SERIALIZE_MUTAÇÃO<\/p>\n<p>UNKNOWN ≠ PASS<\/p>\n<p>WRITER ≠ JUDGE<\/p>\n<p>SELF_PROOF ≠ PASS<\/p>\n<p>HISTÓRICO ≠ ESTADO ATUAL<\/p>\n<p>SOL<\/p>\n<p><strong>Orquestração<\/strong> · reconciliação · contraprova<\/p>\n<p>Intenção define o quê<\/p>\n<p>SEGREDO / CHEFE<\/p>\n<p>Humano · autor da intenção · autoridade final<\/p>\n<p>MODELO — motor substituível<\/p>\n<p>HERMES<\/p>\n<p><strong>Execução<\/strong> · preservação · continuidade<\/p>\n<p><strong>Camada 2<\/strong> · o fluxo único da Casa<\/p>\n<p>Um caminho canônico — sem voltas, sem atalhos<\/p>\n<p>feedback contínuo · observabilidade total · correção sem regressão<\/p>\n<p>1<\/p>\n<p>Entradas<\/p>\n<p>voz · texto · imagem · tela · arquivo<\/p>\n<p>2<\/p>\n<p>Percepção<\/p>\n<p>captura de superfície<\/p>\n<p>3<\/p>\n<p>Entendimento<\/p>\n<p>fato vs. hipótese<\/p>\n<p>4<\/p>\n<p>Memória<\/p>\n<p>ouro · delta útil<\/p>\n<p>5<\/p>\n<p>Decisão<\/p>\n<p>menor capacidade suficiente<\/p>\n<p>6<\/p>\n<p>Orquestração<\/p>\n<p>reconcilia · quebra a própria conclusão<\/p>\n<p>7<\/p>\n<p>Execução<\/p>\n<p>age sem regressão<\/p>\n<p>8<\/p>\n<p>Writer único<\/p>\n<p>one_writer_per_scope<\/p>\n<p>9<\/p>\n<p>Reality Judge<\/p>\n<p>realidade = juiz<\/p>\n<p>10<\/p>\n<p>Prova<\/p>\n<p>logs · hashes · recibos<\/p>\n<p>sem prova, não passou · ação ≠ prova · documentado ≠ executado<\/p>\n<p>Não copie a conversa<\/p>\n<p>Capture a superfície. <strong>Não preserve o cascalho.<\/strong> Preserve o delta.<\/p>\n<p>Prova final — entrega canônica<\/p>\n<p>Ação<\/p>\n<p>→<\/p>\n<p>Evidência<\/p>\n<p>→<\/p>\n<p>Julgamento<\/p>\n<p>→<\/p>\n<p>Recibo<\/p>\n<p>logs completos<\/p>\n<p>hashes verificáveis<\/p>\n<p>recibos assinados<\/p>\n<p>evidência observável · reproduzível<\/p>\n<p>Saúde da Casa<\/p>\n<p>Arquitetura provada95%<\/p>\n<p>Execução provada45%<\/p>\n<p>Trajetóriadefinida<\/p>\n<p>Fixed pointainda não<\/p>\n<p>Estado atualreconciliado<\/p>\n<p>CD · PROTOCOLO CANÔNICO<\/p>\n<p>Uma Casa. Uma intenção. Muitas superfícies. Um fluxo canônico.<\/p>\n<p>v CD-1.0.2 · zero regressão<\/p>\n<p>Tema global — mesma estrutura, cores trocam:<\/p>"}, "mapa-vivo": {"t": "Mapa Vivo da Casa", "a": "Mapa Vivo da Casa", "h": "<p>Estado medido · 28 ago 2026 · 10h UTC<\/p>\n<h2 class=\"nota-h\">Mapa Vivo da Casa<\/h2>\n<p>O destino é <strong>um site e uma API<\/strong>, cada um com camadas por rota. A API já está assim e responde. O site não — e o buraco é maior do que parecia: <strong>três das quatro raízes estáticas em produção não existem na main<\/strong>. Tudo abaixo foi medido no Caddy em execução, não lido de arquivo.<\/p>\n<p>main2cd293c<\/p>\n<p>PRs abertos0<\/p>\n<p>alertas45<\/p>\n<p>PM2 online20<\/p>\n<p>runnerativo<\/p>\n<p>MCP200<\/p>\n<p>load9.97<\/p>\n<h3 class=\"nota-h\">Como o código viaja<\/h3>\n<p>Da intenção até o domínio. Cada degrau foi verificado em execução, não em documentação.<\/p>\n<p>GitHubfonte da verdade<\/p>\n<p>45 workflows · 45 skills · <code>ServerVpss/CentralDark<\/code>. Nas últimas 6 horas: 28 PRs de <code>segredounlock<\/code> e 2 do Dependabot, todos mergeados.<\/p>\n<p>EsteiraActions<\/p>\n<p>Runner <strong>self-hosted único<\/strong> na própria VPS, rótulos <code>self-hosted, Linux, X64, centraldark, dependabot<\/code>. Gargalo serial: já se mediu 43 jobs na fila e um deles esperou <strong>4h42min<\/strong> para começar.<\/p>\n<p>VPSruntime<\/p>\n<p>20 processos PM2 de pé, 1 parado · 26 portas escutando · <code>HEAD 9b9c05d<\/code>, 1 commit atrás da main. O MCP responde <code>200<\/code> em <code>:9100<\/code>.<\/p>\n<p>Caddy19 domínios<\/p>\n<p>Proxy reverso separando <strong>site<\/strong> (arquivo estático) de <strong>API<\/strong> (camadas por path). É aqui que mora o buraco do site novo.<\/p>\n<h3 class=\"nota-h\">Os dois que importam<\/h3>\n<p>Um domínio, várias camadas — em cada um. O da API funciona; o do site serve o passado.<\/p>\n<table class=\"nota-tab\"><thead><tr><th>Domínio<\/th><th>Camadas<\/th><th>Estado<\/th><\/tr><\/thead><tbody><tr><td>api.centralldark.com<\/td><td><code>/memoria/<em><\/code> → 3101 · <code>/lovable/v1/<\/em><\/code> → 3102 · <code>/v1/audio/transcriptions<\/code> → Supabase · resto → 8090 ArsenalAdapter<\/td><td>viva<\/td><\/tr><tr><td>centralldark.com<\/td><td>SPA, <code>try_files → index.html<\/code>, servindo <code>apps/web/dist<\/code><\/td><td>órfã<\/td><\/tr><\/tbody><\/table>\n<p>3 de 4<\/p>\n<p>Perguntando ao próprio Caddy pela API de admin — não a arquivos de configuração — a produção serve <strong>quatro raízes estáticas<\/strong>. <strong>Três não existem na main.<\/strong> Não é um diretório esquecido: é a camada estática inteira rodando de pastas que o git não conhece.<\/p>\n<table class=\"nota-tab\"><thead><tr><th>Raiz servida<\/th><th>Domínios<\/th><th>Na main<\/th><th>No disco<\/th><\/tr><\/thead><tbody><tr><td>apps/web/dist<\/td><td>centralldark.com · www · portal<\/td><td>não<\/td><td>sim<\/td><\/tr><tr><td>apps/modulos/telepainel/dist<\/td><td>telepainel<\/td><td>não<\/td><td>sim<\/td><\/tr><tr><td>apps/modulos/hub/dist<\/td><td>hub<\/td><td>não<\/td><td>sim<\/td><\/tr><tr><td>apps/modulos/status<\/td><td>status<\/td><td>sim<\/td><td>sim<\/td><\/tr><\/tbody><\/table>\n<p>O <code>index.html<\/code> do raiz é de <strong>26 de junho<\/strong> e seu título é <strong>“TelePanel — Consultas inteligentes via Telegram”<\/strong>. Um <code>git clean -fd<\/code> derruba site, portal, telepainel e hub de uma vez — e nenhum deploy os traz de volta, porque a fonte não está na main.<\/p>\n<p><strong>Correção registrada:<\/strong> a primeira versão deste mapa tratava <code>hub<\/code> como rota viva e saudável. Ela <em>responde<\/em> — mas de raiz órfã. Responder não é estar versionado.<\/p>\n<h3 class=\"nota-h\">Três gerações de frontend, uma sem fonte<\/h3>\n<p>O código do site novo já está na main. Nenhum workflow o constrói, e o gatilho de deploy não escuta os caminhos dele.<\/p>\n<table class=\"nota-tab\"><thead><tr><th>Fonte<\/th><th>Build<\/th><th>Publicada?<\/th><\/tr><\/thead><tbody><tr><td>raiz do repo<\/td><td><code>vite_react_shadcn_ts<\/code> · <code>vite build<\/code><\/td><td>nunca<\/td><\/tr><tr><td>public/central-dark-instinct-2<\/td><td><code>tanstack_start_ts<\/code> · <code>vite build<\/code><\/td><td>nunca<\/td><\/tr><tr><td>apps/web/dist<\/td><td>sem fonte na main<\/td><td>no ar<\/td><\/tr><\/tbody><\/table>\n<h3 class=\"nota-h\">O motor de dependências<\/h3>\n<p>Quatro elos, cada um quebrado de um jeito diferente — e nenhum aparecia como erro. O script “passava”, o workflow mostrava vermelho que virou ruído, e o Dependabot simplesmente não abria PR.<\/p>\n<p>PR #1313<\/p>\n<h4 class=\"nota-h\">Política<\/h4>\n<p>Agrupar era só metade: <code>groups<\/code> sem <code>applies-to<\/code> cobre apenas atualizações de versão.<\/p>\n<p>alerta de segurança passava por fora<\/p>\n<p>PR #1343<\/p>\n<h4 class=\"nota-h\">Resolvedor<\/h4>\n<p>No merge da main dentro do PR, <code>--ours<\/code> é o lado do PR. Os comentários diziam o contrário do código.<\/p>\n<p>o fail-closed falhava aberto<\/p>\n<p>PR #1350<\/p>\n<h4 class=\"nota-h\">Gatilho<\/h4>\n<p>Um passo continha <code>runs-on<\/code> e <code>steps<\/code>, que são chaves de job. YAML aceita; o Actions rejeita.<\/p>\n<p>10 de 10 execuções falharam · zero jobs<\/p>\n<p>PR #1353<\/p>\n<h4 class=\"nota-h\">Cobertura<\/h4>\n<p>As entradas <code>pip<\/code> e <code>github-actions<\/code> tinham ficado sem grupo — e <code>poetry.lock<\/code> também é lockfile único.<\/p>\n<p>a mesma doença esperando em outro cômodo<\/p>\n<p>47 → 11s<\/p>\n<p>PR <strong>#1351<\/strong>: um único PR com <strong>47 atualizações<\/strong>, mergeado <strong>11 segundos<\/strong> depois de aberto. Derrubou 95 alertas de uma vez. É o desenho do agrupamento funcionando pela primeira vez — antes eram 47 PRs disputando o mesmo <code>pnpm-lock.yaml<\/code>.<\/p>\n<h3 class=\"nota-h\">Os que nunca saem sozinhos<\/h3>\n<p>Dos alertas restantes, a maioria drena sem intervenção. Sete não drenam nunca — e não é falha de mecanismo.<\/p>\n<table class=\"nota-tab\"><thead><tr><th>Pacote<\/th><th>Situação<\/th><th>Por quê<\/th><\/tr><\/thead><tbody><tr><td>react-router<\/td><td>6.x → 7.18.0<\/td><td>exige <strong>major<\/strong>, e a política ignora major<\/td><\/tr><tr><td>pymdown-extensions<\/td><td>10.x → 11.0.0<\/td><td>exige <strong>major<\/strong>, e a política ignora major<\/td><\/tr><tr><td>extract-zip<\/td><td>alta<\/td><td>sem correção publicada<\/td><\/tr><tr><td>react-router-dom<\/td><td>média<\/td><td>sem correção publicada<\/td><\/tr><tr><td>@ai-sdk/provider-utils<\/td><td>baixa<\/td><td>sem correção publicada<\/td><\/tr><tr><td>elliptic<\/td><td>baixa<\/td><td>sem correção publicada<\/td><\/tr><\/tbody><\/table>\n<p>Travar <em>major<\/em> foi decisão certa — major quebra API. Mas cria um efeito que ninguém tinha notado: alerta cuja única cura é major fica órfão entre a política e o motor. A correção existe, o motor a enxerga, e é proibido de aplicá-la.<\/p>\n<h3 class=\"nota-h\">Fronteiras abertas<\/h3>\n<p>Nenhuma por falta de medição. As três pedem decisão, não execução.<\/p>\n<h4 class=\"nota-h\">Qual dos dois é o site<\/h4>\n<p>Escolhida a fonte, o resto é execução: build no CI, artefato, rota no Caddy e prova HTTP no mesmo SHA. Trocar o que está no ar sem essa escolha seria decidir o produto no lugar do dono.<\/p>\n<h4 class=\"nota-h\">Identidade da MetaLupa divergente<\/h4>\n<p>O guard espera <code>42691e00<\/code>; a main tem <code>b2a1b3e5<\/code>. Pela regra escrita no próprio arquivo, divergência é FAIL — a skill que detecta falso-verde está num estado que ela mesma reprovaria.<\/p>\n<h4 class=\"nota-h\">Fila serial de um runner só<\/h4>\n<p>A rotina <code>Autonomia */5<\/code> sozinha ocupa 9 posições na fila. Segundo runner ou cadência menor: os dois são mudança de arquitetura.<\/p>\n<p>Medido em 28 ago 2026 por SSH, git e API do GitHub — nunca por memória de sessão.<\/p>\n<p>Retrato datado: se divergir do runtime, o runtime ganha e esta página é que envelheceu.<\/p>"}, "cartazes": {"t": "Cartazes da Casa", "a": "Cartazes da Casa", "h": "<p>🔍 Lupa na mão · Intenção na frente<\/p>\n<h2 class=\"nota-h\">Cartazes da Casa<\/h2>\n<p>Quatro peças no tema <strong>forge<\/strong>. Ouro batido, pergaminho e breu — a paleta canônica, sem uma cor inventada. Passe o mouse: cada cartaz levanta da mesa.<\/p>\n<p>Cartaz IDoutrina<\/p>\n<h3 class=\"nota-h\">O futuro é só pensar<\/h3>\n<p>Intenção → Prova<\/p>\n<p>Pensa uma vez. A Casa entende, executa e prova. <em>Digitar deixa de ser trabalho braçal.<\/em><\/p>\n<p>CentralDark★ Doutrina<\/p>\n<p>Cartaz IIMétodo<\/p>\n<h3 class=\"nota-h\">Lupa na mão, intenção na frente<\/h3>\n<p>O lema da Casa<\/p>\n<p>Intuição aponta onde cavar. <em>Medição diz se tem ouro.<\/em> As duas, sempre.<\/p>\n<p>CentralDark★ Método<\/p>\n<p>Cartaz IIILei<\/p>\n<h3 class=\"nota-h\">Sem documentação a Casa não anda<\/h3>\n<p>Decretado · 2026-08-25<\/p>\n<p>Código sem documentação é entregue vazio pro dono. <em>Isso não é entrega — é dependência.<\/em><\/p>\n<p>CentralDark★ Lei<\/p>\n<p>Cartaz IVJuízo<\/p>\n<h3 class=\"nota-h\">A realidade julga<\/h3>\n<p>Nem a tua cabeça, nem a minha<\/p>\n<p>Print não é prova. Ausência de erro não é sucesso. <em>O verde só vale medido.<\/em><\/p>\n<p>CentralDark★ Juízo<\/p>\n<p><em>Lupa na mão.<\/em> Intenção na frente.<\/p>\n<p>CentralDark · SEGREDO/CHEFE<\/p>"}, "forja-cartazes": {"t": "Forja dos Cartazes", "a": "Forja dos Cartazes", "h": "<p>CentralDark · tema forge · 4 cartazes canônicos<\/p>\n<h2 class=\"nota-h\">Forja dos Cartazes<\/h2>\n<p>Os quatro cartazes aprovados pelo SEGREDO/CHEFE, montados como cartas no tema <code>forge<\/code>. Paleta, tipografia e proporção vêm inteiras do design system canônico — nenhum token novo foi criado. O relevo tátil que havia se perdido está reconstruído aqui: passe o ponteiro sobre uma carta.<\/p>\n<p>CD-POSTER-01 epistemic‑firewall<\/p>\n<h3 class=\"nota-h\">A Casa que aprendeu a não acreditar em papagaio<\/h3>\n<p>emblema gerado · não é o cartaz<\/p>\n<p>- UNKNOWN != PASS<\/p>\n<p>- evidence before delivery<\/p>\n<p>- CHEFE → SOL → HERMES<\/p>\n<p>760e52fa · 1055×1491 Proved<\/p>\n<p><strong>Firewall epistêmico.<\/strong> A carta que dá nome à campanha: prova antes de entrega, e desconhecido nunca vira aprovado.<\/p>\n<p>CD-POSTER-02 canonical‑artifact‑pipeline<\/p>\n<h3 class=\"nota-h\">O cajado da correção<\/h3>\n<p>emblema gerado · não é o cartaz<\/p>\n<p>- zero regression<\/p>\n<p>- same visual family<\/p>\n<p>- editable structure<\/p>\n<p>- portable package<\/p>\n<p>054fcdb0 · 1122×1402 Proved<\/p>\n<p><strong>Pipeline de artefato.<\/strong> Matéria bruta sobe até cristal sem perder a família visual nem a estrutura editável.<\/p>\n<p>CD-POSTER-03 learning‑loop<\/p>\n<h3 class=\"nota-h\">Trajetória vivida<\/h3>\n<p>emblema gerado · não é o cartaz<\/p>\n<p>- observe<\/p>\n<p>- err<\/p>\n<p>- prove<\/p>\n<p>- learn<\/p>\n<p>- tell<\/p>\n<p>- continue<\/p>\n<p>7af63322 · 1024×1536 Proved<\/p>\n<p><strong>Laço de aprendizado.<\/strong> Errar faz parte do circuito — o que não pode é sair do laço antes de provar e contar.<\/p>\n<p>CD-POSTER-04 operational‑topology<\/p>\n<h3 class=\"nota-h\">Arquitetura operacional da Casa<\/h3>\n<p>emblema gerado · não é o cartaz<\/p>\n<p>- ONE_SYSTEM_ONLY<\/p>\n<p>- REUSE_BEFORE_CREATE<\/p>\n<p>- uma verdade canônica<\/p>\n<p>c6bc946f · 1536×1024 Proved<\/p>\n<p><strong>Topologia operacional.<\/strong> Um núcleo canônico; tudo em volta é projeção que pode ser reconstruída sem virar autoridade paralela.<\/p>\n<h3 class=\"nota-h\">Proveniência<\/h3>\n<p>Manifesto<\/p>\n<p>centraldark.visual-posters.v1 · canonical_count 4<\/p>\n<p>Paleta<\/p>\n<p>tema <code>forge<\/code> — DESIGN-SISTEMA.md · zero token novo<\/p>\n<p>Fonte da pele<\/p>\n<p>forja-de-cartas.html @ sha256 e8f4016dcf8b2b6f9806d8ef29a5105506ef5eba5225f3aeff9b78bcb301f348 — conferido, bate<\/p>\n<p>Tipografia<\/p>\n<p>Cinzel · EB Garamond · JetBrains Mono — as mesmas da forja<\/p>\n<p>Autoridade<\/p>\n<p>DERIVED_PROJECTION — não sobrescreve owner canônico<\/p>\n<p>As artes acima são <strong>emblemas gerados<\/strong> a partir do <code>semantic_role<\/code> e dos <code>claims<\/code> de cada cartaz — não são os <code>.webp<\/code> canônicos, que continuam sendo a fonte de verdade em <code>docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/<\/code>. Os selos seguem o <code>public_status_contract<\/code> do manifesto: verde para <code>PROVED<\/code>, e <strong>amarelo nunca é exportado como aprovação pública<\/strong>.<\/p>"}, "tres-peles": {"t": "Três Peles, Um Relevo", "a": "Três Peles, Um Relevo", "h": "<p>🔍 Lupa na mão · Intenção na frente<\/p>\n<p>CentralDark · três temas globais oficiais<\/p>\n<h2 class=\"nota-h\">Três Peles, Um Relevo<\/h2>\n<p>A mesma página, os mesmos componentes, o mesmo relevo tátil. Só a paleta troca — e ela vem inteira do <code>variables.scss<\/code>, sem um valor inventado. Passe o mouse nos painéis.<\/p>\n<p>tema: <strong>emerald<\/strong><\/p>\n<h3 class=\"nota-h\">Indicadores<\/h3>\n<p>PRs abertos<\/p>\n<p>4<\/p>\n<p>checks na fila<\/p>\n<p>Runner<\/p>\n<p>1<\/p>\n<p>saturado<\/p>\n<p>Integridade<\/p>\n<p>18/18<\/p>\n<p>hashes conferem<\/p>\n<p>Temas oficiais<\/p>\n<p>3<\/p>\n<p>mesma estrutura<\/p>\n<h3 class=\"nota-h\">Painéis<\/h3>\n<h4 class=\"nota-h\">Trocar pele não é redesenhar<\/h4>\n<p>Layout, componentes, navegação e conteúdo continuam iguais nos três. O que muda é o valor do token — cor de fundo, acento, borda, e a luz do relevo.<\/p>\n<p>Estrutura do relevo<code>idêntica<\/code><\/p>\n<p>Tokens de cor<code>por tema<\/code><\/p>\n<p>Tokens de luz<code>por tema<\/code><\/p>\n<h4 class=\"nota-h\">Cada pele reflete diferente<\/h4>\n<p>Esmeralda tem brilho frio e discreto. Azul usa <code>screen<\/code> — luz dura de painel. Dourado usa <code>soft-light<\/code>, que é como metal reage.<\/p>\n<p>Esmeralda<code>verde frio<\/code><\/p>\n<p>Azul escuro<code>screen · ciano duro<\/code><\/p>\n<p>Dourado claro<code>pergaminho<\/code><\/p>\n<h3 class=\"nota-h\">De onde veio cada valor<\/h3>\n<p>emerald<\/p>\n<p><code>src/index.css<\/code> + <code>variables.scss[emerald]<\/code> — claro e escuro<\/p>\n<p>operational<\/p>\n<p>escuro: <code>variables.scss<\/code>, <code>#4fc3ff<\/code> sobre <code>#05070d<\/code>. Claro: acento escurecido para <code>#0a6e9e<\/code>, porque ciano puro não tem contraste sobre branco<\/p>\n<p>forge<\/p>\n<p>escuro: <code>#c0902b<\/code> sobre <code>#100d07<\/code>. Claro: o <strong>pergaminho da carta<\/strong> — <code>#EFE2C6<\/code>, <code>#2A2013<\/code>, <code>#C0902B<\/code>, tokens que já existiam<\/p>\n<p>relevo<\/p>\n<p>escada de <code>translateZ<\/code> · sombra que contra-desloca · brilho no ponteiro<\/p>\n<p>ângulo<\/p>\n<p><code>9°<\/code> aqui; <code>20°<\/code> na carta colecionável<\/p>\n<p>cobertura<\/p>\n<p>3 paletas × 2 claridades = <strong>6 combinações<\/strong>, todas com relevo<\/p>\n<p><em>Lupa na mão.<\/em> Intenção na frente.<\/p>\n<p>CentralDark · SEGREDO/CHEFE<\/p>"}};
 var VAULT_PAI = 'Obsidian Vault';
 function abrirNota(id) {
   var n = NOTAS_COFRE[id]; if (!n) return;
@@ -1822,7 +2385,7 @@ function abrirNota(id) {
   document.getElementById('leitor-corpo').scrollTop = 0;
   document.getElementById('leitor-obsidian').href =
     'obsidian://open?vault=' + encodeURIComponent(VAULT_PAI) + '&file=' + encodeURIComponent(n.a);
-  document.getElementById('leitor-original').href = '../' + encodeURIComponent(n.a) + '.html';
+  document.getElementById('leitor-original').href = n.u || ('../' + encodeURIComponent(n.a) + '.html');
   document.getElementById('leitor').hidden = false;
 }
 function fecharNota() { document.getElementById('leitor').hidden = true; }
@@ -1832,6 +2395,62 @@ document.addEventListener('click', function(e) {
   if (e.target.id === 'leitor' || (e.target.closest && e.target.closest('#leitor-fechar'))) { e.preventDefault(); fecharNota(); }
 });
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecharNota(); });
+
+// CURRENT GitHub observer, scoped to the existing HUD. Does not alter files or seals.
+(function(){
+  var status=document.getElementById('cd-main-observer-status');
+  var meta=document.getElementById('cd-main-observer-meta');
+  if(!status||!meta)return;
+  var lastGood=null;
+  function checkHead(){
+    var controller=window.AbortController?new AbortController():null;
+    var timeout=controller?setTimeout(function(){controller.abort();},6000):null;
+    fetch('https://api.github.com/repos/ServerVpss/CentralDark/commits/main',{headers:{'Accept':'application/vnd.github+json'},cache:'no-store',signal:controller?controller.signal:undefined})
+      .then(function(res){if(!res.ok)throw new Error('HTTP '+res.status);return res.json();})
+      .then(function(data){
+        if(!data||!(/^[0-9a-f]{40}$/).test(data.sha||''))throw new Error('SHA_INVALID');
+        lastGood={sha:data.sha,at:new Date().toISOString()};
+        status.textContent='MAIN '+data.sha.slice(0,12)+' / LIDO';
+        status.className='val ok';
+        meta.textContent='GitHub HEAD observado em '+lastGood.at+'. Copia fisica da Casa: ainda sem hash/readback. Consulta nao e sincronizacao.';
+      }).catch(function(){
+        status.textContent=lastGood?'SENSOR SEM LEITURA / ULTIMO '+lastGood.sha.slice(0,12):'SENSOR SEM LEITURA';
+        status.className='val warn';
+        meta.textContent=lastGood?'Ultimo HEAD confirmado '+lastGood.at+'; nao revoga selos anteriores.':'Falha na consulta do GitHub; selos historicos continuam preservados.';
+      }).then(function(){if(timeout)clearTimeout(timeout);});
+  }
+  checkHead();
+  setInterval(checkHead,60000);
+})();
+</script>
+
+
+<script>
+// cd-moltbook-key-setup-v1 — do not store or transmit secrets from browser
+(function(){
+  var b=document.getElementById('cd-moltbook-key-action');
+  var info=document.getElementById('cd-moltbook-key-feedback');
+  if(!b||!info)return;
+  b.addEventListener('click', function(){
+    var email=window.prompt('E-mail do proprietário no Moltbook (a chave NÃO será solicitada aqui):','');
+    if(email===null){info.textContent='CANCELADO: nenhum comando executado.';return;}
+    email=email.trim();
+    if(!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)||email.length>200){
+      info.textContent='PLACA: E-MAIL INVALIDO. Nenhuma chave coletada.';return;
+    }
+    // An allowlisted e-mail is inserted into a quoted remote argument; never request API secrets in a browser.
+    var script='.agents/skills/knowledge-compiler/scripts/moltbook-auth-setup.py';
+    var recipe='& "C:\\Program Files\\Git\\usr\\bin\\ssh.exe" -t Segredo-VPS "cd /root/CentralDark && python3 '+script+' --email '+email+'"';
+    if(typeof window.cdHudCopy==='function'){
+      window.cdHudCopy(recipe,b);
+      info.textContent='RECEITA COPIADA: cole no PowerShell da Casa. O script solicitará a KEY com entrada oculta na VPS. NÃO adicione --post.';
+    }else if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(recipe).then(function(){
+        info.textContent='RECEITA COPIADA: cole no PowerShell da Casa; KEY só no prompt oculto da VPS.';
+      },function(){info.textContent='PLACA: área de transferência indisponível. Abra o owner existente na VPS.';});
+    }else{info.textContent='PLACA: clipboard indisponível. Consulte o owner no repositório.';}
+  });
+})();
 </script>
 
 </body>

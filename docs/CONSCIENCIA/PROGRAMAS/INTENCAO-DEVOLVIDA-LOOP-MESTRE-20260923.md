@@ -1020,3 +1020,27 @@ Alvo local do CHEFE: vault Windows `.../Obsidian Vault/.../HUD.html`. O caminho 
 7. Registrar `BEGIN/FINAL`, horário UTC e apresentação Bahia, `GOAL_FINGERPRINT`, SHA, testes, contraprovas, `GREEN_STATE`, `NEXT_CURSOR`. Sem prova independente, marcar `PARTIAL` e continuar do cursor.
 
 **Critério de conclusão:** `GOAL_CLAUSES_ALL_REQUIRED_PASS && RUNTIME_READBACK_PASS && HUD_WINDOWS_READBACK_PASS && RECEIPT_PRESENT && NEXT_CURSOR=FIXED_POINT`. O que faltar fica nomeado como `UNKNOWN`, não como promessa concluída.
+
+---
+
+## 22. Conexão do cristal integral no owner existente (PR #1785)
+
+**Delta autorizado:** completar a mesma arquitetura do Instinto Superior sem modificar diagramas ou apagar história: CHEFE → Yuji/Sukuna → Gojo → Whis/Bills → Goku/Vegeta → fusão Vegetto/Gogeta → metabolismo cognitivo ↔ metabolismo funcional → Reality Judge ↻ Kaizen. Whis aconselha, orienta e treina inclusive Bills; Bills personifica decisão, transformação e equilíbrio com criação sem ser infalível. Nomes não representam executores recém-criados.
+
+**Fonte integral:** `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md` seção *Cristal integral — relações, metabolismo e aceitação*, incluindo as sete batidas operacionais, sete batidas poéticas, 28 peças, C01–C20, texto literário intacto, circuito da memória, funções Gojo, dois PETs visuais do mesmo Hermes e M01–M12. `apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx` materializa a leitura na landing e no cockpit **abaixo** do desenho anterior, sem segundo painel/owner.
+
+**A01–A20 e G01–G12 continuam literalmente definidos acima; M01–M12 apenas verificam este complemento.** O owner de avaliação permanece `scripts/lupa/horn-reuse-fixed-point.mjs`. Nenhum workflow, bridge, gate ou scheduler paralelo. GOAL `t_9040803d` · LOOP_ID `centraldark-hermes-claude-oracle-convergence-v1`.
+
+`PR/COMMIT != DEPLOY`; `PET != PROVA_DE_HERMES`; `UNKNOWN != PASS`; `REALITY_JUDGE_AFTER_EFFECT`; `NEXT_CURSOR=PR1785_INTEGRAL_VERIFY`.
+
+---
+
+## 🫀 Expansões I–VI da mesma intenção — incorporação do PR #1785 na main
+
+O CHEFE autorizou a promoção **documental integral** do PR #1785. A transcrição completa dos inventários, hipóteses, receitas, riscos, funcionalidades, metáforas, score, JEV/HeyGen, Braintrust, GPU local, captura de chat, espelho filosófico e modos de trabalho agora está em `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md`, seção **“CRISTALIZAÇÃO INTEGRAL DO PR #1785 — EXPANSÕES NO MESMO CORAÇÃO”**. Este Loop Mestre **continua owner**, não se cria outro.
+
+`GOAL=t_9040803d`; `SAME_HERMES=true`; `SAME_ORACLE_SKILL=true`; `ONE_WRITER_PER_SCOPE=true`; `REUSE_BEFORE_CREATE=true`. AionUi-first reaproveita overlay pré-existente. Expansão I: quatro rotas/espelho; II: catálogo opcional e integração visual; III: botão Autoevolução/cápsula/replay GPU; IV: seis papéis/erro exato; V: placar e captura; VI: hipóteses Tartaruga e filosofia/Meta-Grill. Os rótulos V/VI duplicados refletem ordem histórica do PR.
+
+**Fronteira:** documentação aprovada na main, execução/integração/runtime ainda por prova; ideias `OPCIONAL_FUTURO` não são bloqueadores de CI. `DOCUMENTED!=EXECUTED`; `MERGED!=DEPLOYED`; `UNKNOWN!=PASS`.
+
+`NEXT_CURSOR=RECONCILE_CURRENT_CAPABILITIES_FOR_FIRST_MINIMUM_DELTA`.

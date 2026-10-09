@@ -12,8 +12,6 @@ on:
       - 'apps/modulos/HERMES-CORE/**'
       - 'scripts/hermes/signal-watch-notify.mjs'
       - 'scripts/webhook/lib/notify-telegram.mjs'
-  schedule:
-    - cron: '17 7 * * *'
   pull_request_review:
     types: [submitted, edited]
   issue_comment:

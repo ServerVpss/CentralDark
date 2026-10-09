@@ -174,9 +174,11 @@ DEVOLVA APENAS JSON VÁLIDO, SEM MARKDOWN, SEM \`\`\`, ASSIM:
   "estado": "TESTE|FATO|FAIL|BLOCKED|CHEFE_SEGREDO_NECESSARIO",
   "ferramenta": "shell|darkai|git|escrever_arquivo|ler_arquivo|notificar_progresso|handler|aprender",
   "args": { ... },
+  "continuity": { "next_cursor": "FIXED_POINT|NEXT_STEP", "next_readonly_probe": "", "open_work": 0, "recoverable_unknown": 0, "recoverable_fail": 0, "writer_conflict": false, "oracle_uncertainty": false, "human_frontier": false, "reality_judge": "PASS|UNKNOWN" },
   "terminou": false
 }
 UNKNOWN, estado vazio ou estado fora do enum são inválidos. Se falta evidência, use TESTE e escolha a ação que mais reduz a incerteza. Use FATO somente quando a evidência resolveu a dúvida. FAIL registra falha observada; BLOCKED registra impedimento externo; CHEFE_SEGREDO_NECESSARIO é reservado à única dependência humana impossível de resolver pelo organismo.
+Quando a missão declarar CONTINUE_SAME_GOAL=true ou HERMES_PARENT_GOAL_CONTINUOUS_LOOP, inclua continuity em toda proposta de término: somente NEXT_CURSOR=FIXED_POINT, zero trabalho/UNKNOWN/falha recuperável e REALITY_JUDGE=PASS permitem terminou=true.
 Quando a missão estiver 100% concluída e provada, devolva "estado": "FATO", "terminou": true e "ferramenta": "notificar_progresso" com o resumo final.
 `;
 

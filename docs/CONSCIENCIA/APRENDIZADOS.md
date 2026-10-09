@@ -1878,3 +1878,15 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Aprendizado:** Hermes executor provado por delegação real entra como capability catalogada; Screenpipe CLI entra como rota operacional recorder-first, mas runtime só vira PASS por `status --json`/freshness.
 - **Cristal:** `HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748`; `MODEL_IS_ENGINE_NOT_OWNER=true`; `SCREENPIPE_RUNTIME_PASS_REQUIRES_FRESHNESS=true`; `CATALOG_ENTRY != RUNTIME_HEALTH`.
 - **Fingerprint catálogo:** `80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7`.
+
+
+### Cristal 2026-10-08 — Ralph-style bounded recipe loop e sync canônico da skill Oracle
+- **Owner:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`.
+- **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-08-oracle-anti-dumb-loop-recipe-promotion.md`.
+- **Intenção do CHEFE:** Hermes não deve gastar turnos em retry idêntico. Se o mesmo fingerprint não gera informação nova, parar o retry, reutilizar/derivar uma receita determinística, replayar uma vez, contraprovar e continuar no mesmo Goal/LOOP_ID.
+- **Evolução de skill:** somente delta generalizável e provado entra na **mesma skill** canônica na `main`; incidente específico fica em receipt/runtime state. Não criar Ralph paralelo, scheduler, router, brain ou skill irmã.
+- **Sync:** a skill Oracle está opt-in com `centraldark_autosync: true` e `centraldark_autosync_policy: main-runtime-lock`. O único owner de sync permanece `.agents/skills/skill-synchronization/SKILL.md` + `scripts/skill-sync-check.sh`.
+- **Receita:** `NO_PROGRESS → RECIPE_NOT_RETRY → PROVE_RECIPE → GENERALIZABLE_DELTA? → PATCH_SAME_SKILL_ON_MAIN_IF_YES → --check → reconcile drift → --apply → --seal → HASH_READBACK → RETURN_TO_SAME_GOAL`.
+- **Proteção:** runtime drift independente nunca é sobrescrito cegamente; `COMMIT != SYNC`; `SYNCED != EXECUTED`; `UNKNOWN != PASS`.
+- **Cristal:** `BLIND_RETRY_FORBIDDEN=true`; `ONE_IDENTICAL_REPLAY_MAX=1`; `SAME_FAILURE_FINGERPRINT_REUSES_PROVEN_RECIPE=true`; `MAIN_FIRST_SKILL_PROMOTION=true`; `SYNC_REQUESTED_BY_CHEFE=true`; `SAME_GOAL_RETURN_REQUIRED=true`.
+- **Next cursor:** `HERMES_SKILL_SYNC_CHECK_RECONCILE_APPLY_SEAL_HASH_READBACK_THEN_RETURN_SAME_GOAL`.

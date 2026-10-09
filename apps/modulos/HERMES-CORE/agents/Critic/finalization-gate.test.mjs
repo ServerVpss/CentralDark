@@ -21,6 +21,78 @@ const testeNode = (arquivo = 'a.test.mjs') => ({
   resultado: 'pass', ok: true,
 });
 
+const continuidadeFixa = (extra = {}) => ({
+  next_cursor: 'FIXED_POINT',
+  next_readonly_probe: '',
+  open_work: 0,
+  recoverable_unknown: 0,
+  recoverable_fail: 0,
+  writer_conflict: false,
+  oracle_uncertainty: false,
+  human_frontier: false,
+  reality_judge: 'PASS',
+  ...extra,
+});
+
+test('continuidade declarada bloqueia conclusão enquanto NEXT_CURSOR não chega ao fixed point', () => {
+  const r = auditarFinalizacao({
+    missao: 'x',
+    decisao: concluir({ continuity: continuidadeFixa({ next_cursor: 'REMEASURE_RUNTIME' }) }),
+    historico: [testeNode()],
+  });
+  assert.equal(r.aprovado, false);
+  assert.equal(r.receipt.status, 'BLOCKED');
+  assert.equal(r.receipt.continuation.continuation_required, true);
+  assert.match(r.parecer, /NEXT_CURSOR=FIXED_POINT/);
+});
+
+test('continuidade declarada preserva parent ativo com probe, trabalho, unknown, falha ou conflito', () => {
+  for (const [name, extra] of [
+    ['probe', { next_readonly_probe: 'health' }],
+    ['work', { open_work: 1 }],
+    ['unknown', { recoverable_unknown: 1 }],
+    ['fail', { recoverable_fail: 1 }],
+    ['writer', { writer_conflict: true }],
+    ['oracle', { oracle_uncertainty: true }],
+  ]) {
+    const r = auditarFinalizacao({
+      missao: 'x', decisao: concluir({ continuity: continuidadeFixa(extra) }), historico: [testeNode()],
+    });
+    assert.equal(r.aprovado, false, name);
+    assert.equal(r.receipt.continuation.continuation_required, true, name);
+  }
+});
+
+test('continuidade declarada só permite conclusão com fixed point, zero residual e Reality Judge PASS', () => {
+  const r = auditarFinalizacao({
+    missao: 'x', decisao: concluir({ continuity: continuidadeFixa() }), historico: [testeNode()],
+  });
+  assert.equal(r.aprovado, true);
+  assert.equal(r.receipt.status, 'PASS');
+  assert.equal(r.receipt.continuation.continuation_required, false);
+});
+
+test('continuidade declarada sem Reality Judge PASS não fecha sem fronteira humana', () => {
+  const r = auditarFinalizacao({
+    missao: 'x',
+    decisao: concluir({ continuity: continuidadeFixa({ reality_judge: 'UNKNOWN' }) }),
+    historico: [testeNode()],
+  });
+  assert.equal(r.aprovado, false);
+  assert.match(r.parecer, /REALITY_JUDGE=PASS/);
+});
+test('contrato contínuo explícito não fecha sem receipt de continuidade', () => {
+  const r = auditarFinalizacao({
+    missao: '!CENTRALDARK #ACORDAR\nCONTINUE_SAME_GOAL=true\n',
+    decisao: concluir(),
+    historico: [testeNode()],
+  });
+  assert.equal(r.aprovado, false);
+  assert.equal(r.receipt.continuation.contract_required, true);
+  assert.equal(r.receipt.continuation.declared, false);
+  assert.match(r.parecer, /contrato de continuidade ativo/);
+});
+
 test('resultado efetivo exige Executor e Critic verdes', () => {
   assert.equal(resultadoAprovadoPeloCritic({ ok: true }, { aprovado: true }), true);
   assert.equal(resultadoAprovadoPeloCritic({ ok: true }, { aprovado: false }), false);
@@ -32,7 +104,7 @@ test('bloqueia terminou=true sem histórico/evidência', () => {
   const r = auditarFinalizacao({ missao: 'x', decisao: concluir(), historico: [] });
   assert.equal(r.aprovado, false);
   assert.equal(r.receipt.status, 'BLOCKED');
-  assert.equal(r.receipt.schema_version, 2);
+  assert.equal(r.receipt.schema_version, 3);
   assert.match(r.parecer, /histórico vazio/);
 });
 

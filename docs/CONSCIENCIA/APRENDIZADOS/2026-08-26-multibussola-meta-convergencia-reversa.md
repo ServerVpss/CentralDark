@@ -356,6 +356,64 @@ AUTHENTICATION_STATE=UNKNOWN
 CUSTOM_PROMPT_EXECUTED=UNKNOWN
 ```
 
+## Colheita 2026-10-09 — bearings explícitos e missão não encerrada
+
+O CHEFE forneceu uma formulação expandida do mesmo owner `!MULTIBUSSOLA`, com
+`TRUE_NORTH_LOCK`, `FORWARD_ROUTE`, `REVERSE_ROUTE`, `INVERSE_ROUTE`,
+`CROSS_BEARING_RENDEZVOUS`, invalidação seletiva de bearings stale e retorno a
+`!META_LUPA`/`!RECONCILIAR` quando houver divergência.
+
+Classificação:
+
+```text
+OWNER_EXISTENTE=docs/CONSCIENCIA/MULTIBUSSOLA.md
+NEW_OWNER=false
+NEW_ORCHESTRATOR=false
+SEMANTIC_DELTA=REUSE_AND_EXPLICIT_REGISTER
+```
+
+A semântica nova preservada é:
+
+```text
+INTENT + DESTINATION + PROOF_TARGET + MATERIAL_SCOPE
+→ REQUIRED_BEARINGS
+→ FORWARD/REVERSE/INVERSE
+→ CROSS_BEARING_RENDEZVOUS
+→ DIVERGENCE? META_LUPA + RECONCILIAR + TESTE_DISCRIMINANTE
+→ MATERIAL_STATE_CHANGED? INVALIDATE_ONLY_DEPENDENT_BEARINGS + RE-FIX
+→ CONTRAPROVA + REMEDIÇÃO_T1 + REALITY_JUDGE
+→ FIXED_POINT_PASS | FAIL | BLOCKED | NOT_YET
+```
+
+A narrativa recebida também declarou `684a12f9...`, `1ba30266...`,
+`ed5970dc...` e workflows em fila. O readback GitHub desta sessão verificou
+apenas a proveniência histórica do PR, não esses valores como CURRENT:
+
+```text
+PR_1189=MERGED
+PR_1189_MERGED_AT=2026-08-26T20:10:01Z
+PR_1189_MERGE_COMMIT=e1d7aac29f03a32699514683b8da7df341f745b8
+PR_1189_HEAD_AT_MERGE=684a12f9f8e5a527352531388411d30fde4230c1
+CURRENT_MAIN_AT_READBACK=6d53ed6db2dad5f59ca909a3b9cdf67c6830170c
+HISTORICAL_HEAD != CURRENT_MAIN
+QUEUED_OR_CANCELLED != PASS
+```
+
+Veredito da colheita:
+
+```text
+LOCAL_ANALYSIS_STABLE=UNKNOWN
+LOCAL_FIXED_POINT=UNKNOWN
+GLOBAL_FIXED_POINT=UNKNOWN
+MISSION_STATE=NOT_YET
+UNKNOWN_MATERIAL_REMAINING=true
+```
+
+O texto foi registrado como aprendizado/proveniência, não como declaração de
+missão concluída. Próximo cursor: medir o alvo material atual, resolver somente
+os bearings exigidos, executar contraprova independente e remedir T1 antes de
+qualquer `!FIXED_POINT`.
+
 ---
 
 ## Conexões Rápidas
@@ -363,3 +421,209 @@ CUSTOM_PROMPT_EXECUTED=UNKNOWN
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+
+## Registro CURRENT — 2026-10-09 — cone causal + Fixed Point global
+
+Esta sessão fechou a diferença entre **diagnóstico local estável** e **missão global encerrada** sem criar método, router, agente ou owner novo.
+
+```text
+PAPAGAIO_MODE=OFF
+POMBO_MODE=CHECKSUM_ON
+ACTION != PROOF
+HISTORY != CURRENT_STATE
+LOCAL_FIXED_POINT != GLOBAL_MISSION_CLOSED
+```
+
+### Fluxo reconciliado
+
+```text
+!CENTRALDARK
+→ #ACORDAR
+→ !CALIBRAR
+→ !MULTIBUSSOLA
+   └→ MODE=META quando !MULTIBÚSSOLA_META
+      → TRUE_NORTH_LOCK
+         INTENT
+         DESTINATION
+         PROOF_TARGET
+         MATERIAL_SCOPE
+      → RESOLVE_REQUIRED_BEARINGS
+      → EXECUTE_MATERIAL_BEARINGS
+         + SKIP_JUSTIFICADO somente para eixo não material
+      → FORWARD_ROUTE
+      → REVERSE_ROUTE
+      → INVERSE_ROUTE quando discriminante
+      → CROSS_BEARING_RENDEZVOUS
+      → SE DIVERGIR:
+         !META_LUPA
+         → TESTE_DISCRIMINANTE
+         → !RECONCILIAR
+         → RENDEZVOUS
+      → SE ESTADO MATERIAL MUDAR:
+         IDENTIFY_CAUSAL_CONE
+         → INVALIDATE_ONLY_DEPENDENT_CLAIMS
+         → PRESERVE_INDEPENDENT_PROOFS
+         → RE_FIX_AFFECTED_AXES
+         → RENDEZVOUS
+      → LOCAL_ANALYSIS_STABLE?
+         NÃO → RESIDUAL_MAP → NEXT_CURSOR
+         SIM → LOCAL_FIXED_POINT
+               → LOCAL_FIXED_POINT_ENDS_GLOBAL_MISSION=false
+→ !META_LUPA quando aplicável
+→ !RECONCILIAR quando aplicável
+→ !CONTRAPROVA
+   → PROOF_TARGET_MATCH
+   → PROOF_OWNERSHIP
+   → INDEPENDENT_COUNTERPROOF
+   → EXTERNAL_ANCHOR quando aplicável
+→ !REMEDIÇÃO_T1
+→ REALITY_JUDGE
+→ VERDICT
+   PASS:
+     UNKNOWN_MATERIAL=0
+     + REQUIRED_BEARINGS_COVERED
+     + NO_MATERIAL_CONTRADICTION
+     + PROOF_TARGET_MATCH
+     + PROOF_OWNERSHIP
+     + INDEPENDENT_COUNTERPROOF
+     + EXTERNAL_ANCHOR_OK_WHEN_APPLICABLE
+     + COUNTERPROOF_SURVIVES
+     + T1_STABLE
+     + REALITY_JUDGE_PASS
+     + EPHEMERAL_CLEANUP_OK_WHEN_USED
+   → FIXED_POINT_PASS
+   → GLOBAL_MISSION_CLOSED somente se GLOBAL_OBJECTIVE_CLOSED=true
+
+   FALHA_ESTÁVEL
+   → FIXED_POINT_FAIL
+
+   FRONTEIRA_REAL_ESTÁVEL
+   → FIXED_POINT_BLOCKED
+
+   CASO CONTRÁRIO
+   → NOT_YET
+→ !REGISTRA
+→ !BOOT
+```
+
+### Lei do cone causal
+
+Mudança material não invalida a missão inteira por reflexo.
+
+```text
+MATERIAL_STATE_CHANGED
+→ IDENTIFY_CAUSAL_CONE
+→ INVALIDATE_ONLY_CLAIMS_DEPENDENT_ON_CHANGED_FACT
+→ PRESERVE_INDEPENDENT_EVIDENCE
+→ RE_FIX_ONLY_AFFECTED_AXES
+→ RENDEZVOUS
+```
+
+Isso evita dois erros simétricos:
+
+```text
+STALE_PROOF_PRESERVED_AS_CURRENT = FAIL
+VALID_INDEPENDENT_PROOF_DISCARDED_WITHOUT_CAUSE = WASTE
+```
+
+### Remedição CURRENT desta sessão
+
+No momento imediatamente anterior a este registro:
+
+```text
+CURRENT_MAIN_BEFORE_REGISTER=4eed868d362b9f50f7fd61cec7b4db30032ed0fa
+PR_1189_STATE=MERGED
+PR_1189_SOURCE_HEAD=684a12f9f8e5a527352531388411d30fde4230c1
+PR_1189_MERGE_COMMIT=e1d7aac29f03a32699514683b8da7df341f745b8
+```
+
+Logo, referências anteriores a `main=1ba30266...`, `HEAD=ed5970dc...`, `19 ahead / 4 behind` e gates `queued` pertencem ao histórico daquele instante. Não governam o CURRENT de 2026-10-09.
+
+```text
+OLD_HEAD_STATUS=HISTORY
+OLD_QUEUE_STATE=HISTORY
+MERGED != DEPLOYED
+CURRENT > HISTORY
+```
+
+### Contraprova do próprio registro — documentação != enforcement
+
+A inspeção do resolver existente em `scripts/trigger-fabric/centraldark_master_cycle.py` mostrou que o mecanismo atual já possui:
+
+```text
+MULTIBUSSOLA_META_ROUTES
+= FORWARD_ROUTE
++ REVERSE_ROUTE
++ INVERSE_ROUTE
++ CROSS_BEARING_RENDEZVOUS
+
+MULTIBUSSOLA_PROOF_GATES
+= PROOF_TARGET_MATCH
++ PROOF_OWNERSHIP
++ INDEPENDENT_COUNTERPROOF
++ EXTERNAL_ANCHOR_WHEN_APPLICABLE
++ REMEDICAO_T1
++ REALITY_JUDGE
+```
+
+e o avaliador executável já distingue:
+
+```text
+RESIDUAL_MAP_NEXT_CURSOR
+LOCAL_FIXED_POINT_NOT_YET
+FIXED_POINT_FAIL
+FIXED_POINT_BLOCKED
+FIXED_POINT_PASS
+```
+
+com `UNKNOWN_MATERIAL`, bearings obrigatórios, contradição material, contraprova, T1, limpeza efêmera e fechamento global separados.
+
+Porém, no CURRENT medido antes deste registro, `evaluate_multibussola_state()` **ainda não recebe nem exige explicitamente** todos estes gates como campos independentes:
+
+```text
+PROOF_TARGET_MATCH
+PROOF_OWNERSHIP
+EXTERNAL_ANCHOR_OK_WHEN_APPLICABLE
+REALITY_JUDGE_PASS
+```
+
+Também não modela o `CAUSAL_CONE` como estrutura executável; a invalidação seletiva permanece contrato semântico/documental.
+
+Portanto:
+
+```text
+SEMANTIC_CONTRACT=REGISTERED
+ROUTES=BOUND
+VERDICT_TAXONOMY=IMPLEMENTED
+EXECUTABLE_ENFORCEMENT=PARTIAL
+DOCUMENTED != FULLY_EXECUTED
+FALSE_GREEN_RISK_ON_MISSING_EXPLICIT_PROOF_GATES=OPEN
+UNKNOWN != PASS
+```
+
+O próximo cursor técnico correto **não** é criar outro método. É, somente quando esta frente for retomada para implementação, fechar o delta no mesmo owner/resolver com testes negativos que provem que nenhum `FIXED_POINT_PASS` ocorre sem o conjunto material de proof gates.
+
+```text
+NEXT_CURSOR=
+EXISTING_EVALUATOR
+→ TARGETED_BINDING_TESTS
+→ MINIMAL_BINDING_DELTA
+→ NEGATIVE_COUNTERPROOF
+→ T1
+→ REALITY_JUDGE
+```
+
+### Fixed Point deste registro
+
+Este ato registra o aprendizado e reconcilia a história com o CURRENT. Ele **não** declara deploy, runtime ou enforcement total do fluxo.
+
+```text
+REGISTRATION_SCOPE=PASS
+RUNTIME_ENFORCEMENT_SCOPE=NOT_YET
+NO_NEW_SYSTEM=true
+NO_NEW_OWNER=true
+NO_V2_V3=true
+REUSE_BEFORE_CREATE=true
+REALITY_IS_JUDGE=true
+```

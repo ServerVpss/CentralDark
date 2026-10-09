@@ -736,3 +736,78 @@ HERMES_SINGLE_EXECUTOR_IS_SUFFICIENT_WHEN_CAPABILITY_COVERS_MISSION=true
 SPECIALISTS_ARE_OPTIONAL_CAPABILITIES_NOT_REQUIRED_IDENTITIES=true
 ```
 
+## Convergência da Casa + VPS + GitHub + Instinto Superior — delta de 08/10/2026
+
+**Escopo:** esta é uma atualização do mesmo MOC canônico, não outro mapa, projeto, owner, painel, executor, serviço, branch ou sistema. O passado e as provas anteriores permanecem acima, sem reescrita. `REUSE_BEFORE_CREATE=true` · `ONE_SYSTEM_ONLY=true` · `CURRENT>HISTORY` · `UNKNOWN!=PASS`.
+
+<!-- INSTINTO_SUPERIOR_DIAGRAMA_ORIGINAL -->
+### 👑 Desenho da convergência — Instinto Superior
+
+**Intenção CURRENT corrigida pelo CHEFE:** a única entrada humana é **CHEFE → Instinto Superior**. O Instinto Superior incorpora o comportamento de janela/Tray do One Shot (**abrir ⇄ minimizar para o ícone ao lado do relógio ⇄ restaurar a mesma janela, no mesmo processo**); One Shot não é segundo programa nem etapa de navegação. HUD/Obsidian, Casa, MCP, Hermes, VPS, GitHub e memória ficam como capacidades internas por seus owners já existentes. As setas representam fluxo desejado, não E2E já entregue. O CentralDarkBridge.exe não foi encontrado em execução na Casa no mapeamento.
+
+```mermaid
+flowchart TB
+    CHEFE["👑 CHEFE<br/>Intenção e autoridade"]
+    IS["🪬 CentralDark — Instinto Superior<br/>ÚNICA entrada e aplicativo visível"]
+    TRAY["Capacidade absorvida do One Shot<br/>Janela única ⇄ Tray ⇄ Restaurar<br/>MESMO PROCESSO"]
+
+    subgraph CAMADA[" "]
+        direction LR
+        HUD["HUD + Obsidian<br/>Interface, logs, Grafo Vivo, conhecimento"]
+        CASA["Casa / Sensores<br/>Screenpipe, Tailscale, SSH, estado local"]
+        HUD <--> CASA
+    end
+
+    SERV["MCP CentralDark · Hermes · VPS · Supabase<br/>Rotas existentes de serviços, execução e dados"]
+    GIT["GitHub ServerVpss/CentralDark@main<br/>Código canônico, histórico e cadeados de contraprova"]
+
+    CHEFE --> IS
+    IS --> TRAY
+    IS <--> HUD
+    IS <--> CASA
+    HUD <--> SERV
+    CASA <--> SERV
+    SERV <--> GIT
+```
+
+**Uma só leitura do desenho:** **CHEFE → Instinto Superior**. A janela do Instinto Superior reaproveita **internamente** o comportamento Tray do One Shot; HUD/Obsidian, Casa/Sensores, MCP/Hermes/VPS/Supabase e GitHub/Aprendizados são capacidades do mesmo organismo, com ida e retorno pelas rotas já existentes. **Tray ≠ outro aplicativo; interface ≠ autoridade; documento ≠ prova de runtime.**
+
+### Uma intenção, superfícies reaproveitadas
+
+```text
+SEGREDO/CHEFE (intenção/autoridade)
+  → SOL / CHAT GLOBAL (coordena; GPT/Claude são motores/superfícies, não owners)
+  → MCP CentralDark + Trigger Fabric + Hermes (capacidade e execução existentes)
+     ↔ VPS/openKylin (continuidade operacional pretendida, 24/7 exige prova viva)
+     ↔ Casa/SEGREDO (laboratório, GPU, Obsidian e Screenpipe)
+  → HUD único: docs/HUD/HUD.html (abas HUD/MAPA/FORJA)
+     ↔ Vault Obsidian: memória e Grafo Vivo, sem autoridade paralela
+     ↔ capacidade original do Bridge · One Shot: Tray/minimização/restauração absorvidos pela janela do Instinto Superior, sem segundo processo (binding final UNKNOWN)
+     ↔ Instinto Superior: evolução do cockpit/OS sob owners e etapas S0–S8 existentes
+  → GitHub main (fonte versionada) + BRAIN/APRENDIZADOS/LEMBRANCAS
+  → PR-mãe #1562 (rastro histórico; não é escritor, não é deploy)
+  → readback + contraprova + Reality Judge
+```
+
+### Recorte material observado em 08/10/2026
+
+| Fonte | Observação e fronteira | Reaproveitar em |
+| --- | --- | --- |
+| Casa, Vault `C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬` | `HUD.html` (151931 bytes), `.obsidian/plugins/centraldark-grafo-vivo` e scripts `CENTRALDARK-CORPO-UNICO-HUD-*` presentes; Obsidian não estava em execução no momento da sondagem | Plugin existente `apps/modulos/obsidian-plugin-grafo-vivo` + HUD existente `docs/HUD/HUD.html`; NÃO criar segundo painel |
+| Capacidade Tray do Bridge · One Shot | Receipt histórico prova **minimizar → ícone do relógio → restaurar a MESMA janela, mesmo processo, single-instance**, sem segundo EXE. Na Casa atual `CentralDarkBridge.exe` não foi observado e seu path histórico não existe; **não afirmar que o Instinto Superior já herdou isso** | Absorver comportamento na casca Windows do Instinto Superior, preservando OAuth/MCP/perfis; fonte: `docs/RECEIPTS/CENTRALDARK_DIRECT_MCP_BRIDGE_2026-09-18.md` |
+| Casa/Windows | Hermes, Screenpipe e AionUi observados como processos; `CentralDarkBridge.exe` e Obsidian não observados rodando. Processo presente não prova conexão E2E | Donors/sensores existentes; Instinto Superior reutiliza AionUi e owners S0–S8 de `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md` |
+| Casca Windows / renderer | `apps/instinto-superior` é owner visual; `apps/modulos/Bolt/source/electron/main/index.ts` é donor Electron que tem `BrowserWindow` e hoje executa `app.quit()` em `window-all-closed` (fora macOS); **não foi observada integração Tray nessa casca** | Reutilizar casca/renderer com proprietário confirmado e incorporar minimização/restauração do Tray One Shot, sem segundo app, segundo processo ou duplicação de autenticação |
+| `%TEMP%` da Casa | 54 pastas com nomes relacionados: 31 `codeagentswarm*`, 3 `CentralDark-Main-Sync*`, 4 HUD/Grafo, 2 CentralDark adicionais e 14 outras/Hermes/Claude. São caches, sessões, worktrees e candidatos; **não são 54 projetos ou 54 provas de integração** | Confrontar apenas o delta útil com os owners Git/HUD/Bridge; não promover `Temp` a runtime canônico nem importar lixo/duplicatas |
+| `centraldark-hud-live-worktree` | Worktree detached no commit `1432a9f660d0b7d926e8b343c1b321856df3d077` (integra telemetria Hermes ao plugin Obsidian). Servidor HTTP 200 do HUD observado na Casa; isto não prova sync da memória ou deploy na VPS | GitHub `main` continua autoridade de fonte; `docs/HUD/HUD.html` e plugin são os owners, não o checkout temporário |
+| VPS | MCP informou branch `docs/hermes-local-loop-receipt-20261007`, HEAD local `989038e8b`, arquivos modificados e não rastreados. Sync Obsidian bidirecional `false`/sem vault acessível nesse runtime | Preservar dirty tree; confrontar HEAD, services e caminho do vault, depois medir fluxo real; **não executar reset/pull/reinstall cegamente** |
+| GitHub | Main observada em `fc87e65e9d0a4a8197f5ee7da724593a8458c539` no início deste recorte. PR-mãe `#1562` encontrada `closed`, `merged=false`; não afirmar merge nem deploy dos filhos sem medir SHA/CI | `main` + BRAIN + Aprendizados + Lembranças; PR-mãe preserva trilha histórica |
+| Chats/modelos | GPT, Claude e outros são superfícies/motores; o contexto entre chats é recuperado por documentos, memória, artefatos e ferramentas quando acessíveis, não por telepatia nem cache de `Temp` | Papéis SOL/Hermes do presente MOC; registrar apenas proveniência verificada |
+
+### Encaminhamento único — sem reiniciar a arquitetura
+
+1. **REUSE:** preservar o Vault, Grafo Vivo, `docs/HUD/HUD.html`, Bridge/Tray One Shot, MCP, Hermes, rotas Casa/VPS, Git/BRAIN e Instinto Superior existentes.
+2. **REBIND:** recuperar a fonte/artefato original do **Tray One Shot** e incorporar sua capacidade de janela/minimização/restauração **dentro da casca Instinto Superior**; reaproveitar renderer e owners do HUD/Vault, sem segundo app, janela irmã, motor ou projeto.
+3. **VERIFY:** testar Instinto Superior abrir → minimizar ao Tray → restaurar a MESMA janela/PID → segunda abertura não duplica instância; depois HUD/Obsidian → sensor/API → Hermes/VPS → receipt. Sem teste E2E, `INTEGRADO=UNKNOWN`; `TRAY_ABSENT` não derruba VPS já operante.
+4. **PROMOTE:** delta de fonte validado retorna ao `main` pelo owner autorizado, respeitando conflitos e checks; no histórico da PR-mãe constam vínculos, nunca PASS fictício. `MERGED!=DEPLOYED`.
+
+**Próximo gap discriminante:** recuperar **fonte/artefato original da capacidade Tray do One Shot**, localizar o owner da casca desktop Instinto Superior e demonstrar **minimizar/restaurar o aplicativo INTEIRO, mesmo PID e single-instance**, preservando perfis, OAuth e supervisão. O Tray vira **capacidade interna**, não outra entrada. Sem readback Windows, `TRAY_INTEGRATED=UNKNOWN`; nenhuma mutação de runtime é pressuposta por este mapeamento.

@@ -23,8 +23,6 @@ on:
     types: [closed]
   repository_dispatch:
     types: [centraldark_post_merge]
-  schedule:
-    - cron: "17 9 * * *"
 
 permissions:
   contents: read

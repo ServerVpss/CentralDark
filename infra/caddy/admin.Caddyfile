@@ -9,6 +9,11 @@ admin.centralldark.com {
 	@contasRoot path /contas /contas/
 	redir @contasRoot /contas/ai-review.html 302
 
+	# OAuth Cloudflare no mesmo host administrativo; broker existente na porta 8098.
+	handle /oauth/cloudflare/* {
+		reverse_proxy 127.0.0.1:8098
+	}
+
 	handle_path /contas* {
 		reverse_proxy 127.0.0.1:9400
 	}

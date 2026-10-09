@@ -52,6 +52,42 @@ jobs:
           echo "CANONICAL_DEPLOY_GATE=PASS"
           echo "GATED_SHA=$TARGET_SHA"
 
+      # HUD-first é gate de entrada do MESMO control plane, não health de
+      # um módulo opcional. A projeção é um espelho dos bytes de main, não
+      # outro painel/owner. Nunca sujar o checkout nem parar serviços verdes.
+      - name: "🔒 HUD_FIRST — materializar main na VPS e conferir bytes"
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-deploy-gate"
+          SOURCE="$AUTH_REPO/docs/HUD/HUD.html"
+          MIRROR="/root/.centraldark/HUD.html"
+          HEAD_SHA="${{ github.sha }}"
+          [[ -f "$SOURCE" && ! -L "$SOURCE" ]] || { echo "HUD_MAIN_MISSING_FAIL_CLOSED"; exit 73; }
+          [[ "$(git -C "$AUTH_REPO" rev-parse HEAD)" == "$HEAD_SHA" ]] || { echo "HUD_HEAD_MISMATCH_FAIL_CLOSED"; exit 73; }
+          EXPECTED="$(sha256sum "$SOURCE" | cut -d' ' -f1)"
+          git -C "$AUTH_REPO" show "$HEAD_SHA:docs/HUD/HUD.html" | sha256sum | grep -q "^$EXPECTED " || { echo "HUD_MAIN_BLOB_MISMATCH_FAIL_CLOSED"; exit 73; }
+          install -d -m 700 /root/.centraldark
+          [[ ! -L "$MIRROR" ]] || { echo "HUD_RUNTIME_SYMLINK_FAIL_CLOSED"; exit 73; }
+          CURRENT="$(test -f "$MIRROR" && sha256sum "$MIRROR" | cut -d' ' -f1 || true)"
+          if [[ "$CURRENT" != "$EXPECTED" ]]; then
+            TMP="$(mktemp /root/.centraldark/.hud-XXXXXX)"
+            trap 'rm -f "$TMP"' EXIT
+            cp -- "$SOURCE" "$TMP"
+            chmod 600 "$TMP"
+            [[ "$(sha256sum "$TMP" | cut -d' ' -f1)" == "$EXPECTED" ]] || { echo "HUD_STAGE_MISMATCH_FAIL_CLOSED"; exit 73; }
+            if [[ -f "$MIRROR" ]]; then
+              cp -p -- "$MIRROR" /root/.centraldark/HUD.previous.html
+            fi
+            mv -f -- "$TMP" "$MIRROR"
+          fi
+          [[ "$(sha256sum "$MIRROR" | cut -d' ' -f1)" == "$EXPECTED" ]] || { echo "HUD_VPS_READBACK_FAIL_CLOSED"; exit 73; }
+          echo "HUD_MAIN_VPS_MATERIALIZATION=PASS"
+          echo "HUD_CANONICAL_HEAD=$HEAD_SHA"
+          echo "HUD_BYTES_SHA256=$EXPECTED"
+          echo "HUD_RUNTIME_PATH=$MIRROR"
+
   deploy-mcp:
     needs: deploy-universal-gate
     name: 🧩 Deploy canônico do CentralDark-MCP
@@ -455,6 +491,7 @@ jobs:
             });
 
   reconcile-control-routes:
+    needs: deploy-universal-gate
     name: 🧩 Reconciliar rotas de controle da VPS
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
@@ -604,6 +641,7 @@ jobs:
             });
 
   vps-housekeeping:
+    needs: deploy-universal-gate
     name: 🧩 VPS Housekeeping (varredura lixo/ouro, report-only)
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]

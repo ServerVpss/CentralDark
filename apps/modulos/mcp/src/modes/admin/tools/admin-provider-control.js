@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { z } from "zod";
+import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "./cloudflare-openapi-catalog.js";
 
 const READ = {
   readOnlyHint: true,
@@ -906,16 +907,55 @@ export const adminProviderControlTools = [
     name: "provider_capabilities",
     description: "Matriz canônica de capacidades oficiais Contabo/Cloudflare/Tailscale usadas pelo cockpit Admin. Não executa ação externa.",
     annotations: { ...READ, title: "Providers — matriz de capacidades" },
-    inputSchema: z.object({ provider: z.enum(["cloudflare", "contabo", "tailscale", "buildkite"]).optional() }),
-    handler: async (input) => jsonBlock({
-      ok: true,
-      status: "PASS",
-      verifiedAt: VERIFIED_AT,
-      provider: input.provider ?? "all",
-      capabilities: PROVIDER_CAPABILITY_MATRIX.filter((item) => !input.provider || item.provider === input.provider),
-      mutationPolicy: "QUARANTINED_UNTIL_RUNTIME_COMPENSATION_PROVEN",
-      paymentPolicy: "NO_UNDOCUMENTED_PAY_ENDPOINT",
+    inputSchema: z.object({
+      provider: z.enum(["cloudflare", "contabo", "tailscale", "buildkite"]).optional(),
+      view: z.enum(["curated", "openapi"]).optional(),
+      method: z.enum(["GET", "POST", "PUT", "PATCH", "DELETE"]).optional(),
+      tag: z.string().max(160).optional(),
+      search: z.string().max(160).optional(),
+      offset: z.number().int().min(0).optional(),
+      limit: z.number().int().min(1).max(200).optional(),
     }),
+    handler: async (input) => {
+      if (input.view === "openapi") {
+        if (input.provider && input.provider !== "cloudflare") {
+          return jsonBlock({ ok: false, status: "OPENAPI_INVENTORY_CLOUDFLARE_ONLY" });
+        }
+        const needle = String(input.search ?? "").trim().toLowerCase();
+        const tag = String(input.tag ?? "").trim().toLowerCase();
+        const filtered = CLOUDFLARE_OPENAPI_OPERATIONS.filter((op) =>
+          (!input.method || op.method === input.method) &&
+          (!tag || op.tags.some((label) => label.toLowerCase() === tag)) &&
+          (!needle || [op.method, op.path, op.summary, ...op.tags].some((value) => value.toLowerCase().includes(needle)))
+        );
+        const offset = input.offset ?? 0;
+        const limit = input.limit ?? 100;
+        return jsonBlock({
+          ok: true,
+          status: "INVENTORY_PASS",
+          provider: "cloudflare",
+          catalog: CLOUDFLARE_OPENAPI_META,
+          totalMatched: filtered.length,
+          offset,
+          limit,
+          nextOffset: offset + limit < filtered.length ? offset + limit : null,
+          items: filtered.slice(offset, offset + limit),
+          executionPolicy: "INVENTORY_ONLY_UNLESS_SEPARATELY_ALLOWLISTED_AND_PROVEN",
+          credentialPolicy: "NO_CREDENTIAL_FOR_DISCOVERY",
+          mutationPolicy: "FAIL_CLOSED_WITHOUT_RUNTIME_COMPENSATION_AND_ADMIN",
+        });
+      }
+      return jsonBlock({
+        ok: true,
+        status: "PASS",
+        verifiedAt: VERIFIED_AT,
+        provider: input.provider ?? "all",
+        capabilities: PROVIDER_CAPABILITY_MATRIX.filter((item) => !input.provider || item.provider === input.provider),
+        cloudflareOpenApiCatalog: CLOUDFLARE_OPENAPI_META,
+        mutationPolicy: "QUARANTINED_UNTIL_RUNTIME_COMPENSATION_PROVEN",
+        paymentPolicy: "NO_UNDOCUMENTED_PAY_ENDPOINT",
+      });
+    },
   },
   {
     name: "provider_credentials_status",

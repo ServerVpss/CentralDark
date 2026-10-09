@@ -9,8 +9,6 @@ on:
         description: 'PR específico para remeasure (deixar vazio para todos abertos)'
         required: false
         type: string
-  schedule:
-    - cron: '*/30 * * * *'  # A cada 30 minutos
 
 permissions:
   contents: read
