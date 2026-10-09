@@ -572,3 +572,39 @@ FIXED_POINT_GLOBAL=FALSE
 
 **NEXT_CURSOR:** abrir o mesmo HUD no Obsidian/visualizar a grade quando a UI estiver disponível → correlacionar evento real `event_id` do MCP/One Heart com receipt do owner e estado do cadeado → verificar CI e merge da **mesma PR #1788** → depois de promover o PR, espelhar somente o HTML canônico da `main` na Casa e VPS com readback de SHA-256 em ambos, preservando qualquer delta local legítimo.
 <!-- /PR1788_CASA_HUD_LAW_MIRROR_RECEIPT_20261009 -->
+
+
+<!-- PR1788_GITHUB_MINERAL_ESCAVACAO_API_LOG_ONEHEART_20261009 -->
+## Escavação de PRs, issues e branches via a MESMA API/MCP/log-funnel/One Heart/HUD (09/10/2026)
+
+**Intenção do CHEFE:** examinar todos os PRs (open/closed/merged), issues e branches acessíveis da CentralDark; extrair critérios/provas ainda úteis, inclusive dos merged antigos, e reconciliar SOMENTE lacunas reais no PR #1788. 'Examinai tudo; retende o bem'. Não reabrir #1562/#1757, nem criar outro PR, owner, API, logger, heartbeat, serviço, HUD ou plugin. Estado histórico é minério CANDIDATO; merge nunca prova runtime.
+
+### Owners existentes preservados
+
+- GitHub API: ferramentas GitHub já registradas no catálogo 'apps/modulos/mcp/src/tools/core/tools-catalog.js'; dispatcher 'apps/modulos/mcp/src/tools/core/mcp-admin.js'; OAuth/admin existentes. Consultas com rota autorizada; não despejar tokens, headers, comentários brutos ou segredos.
+- Logs: 'apps/modulos/mcp/src/log-funnel.js' + as três projeções do MESMO evento em 'logs/events/YYYY-MM-DD.jsonl', 'logs/sectors/<setor>/YYYY-MM-DD.jsonl', 'logs/services/<servico>/YYYY-MM-DD.jsonl', mantendo um 'event_id'. Logs originais systemd/PM2 continuam preservados; não criar quarto fluxo/coletor.
+- One Heart/stream: '/heartbeat', 'apps/modulos/mcp/src/operational-telemetry.js' e '/admin/logs/stream' autenticado; mesmo evento chega como estado derivado sem fingir que a existência do código prova funcionamento.
+- Interface: 'docs/HUD/HUD.html' nas abas HUD/MAPA/FORJA com 15 cadeados históricos; Obsidian pela capacidade já existente em 'apps/modulos/obsidian-plugin-grafo-vivo/'. O HUD não é outro writer, o vault da Casa não é owner concorrente; 'HUD_WRITE_HOLD=ON' até ACK de writer/branch/base-SHA neste PR.
+- Memória, receitas e lineage: 'docs/CONSCIENCIA/APRENDIZADOS.md', 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md' e receipts existentes. Deduplicação por PROOF_KEY/fingerprint antes de qualquer patch; não misturar memória pendente com promoção automática.
+
+### Contrato adicional de aceite: integra API01, API05 e API09–API16 existentes
+
+1. **Inventário EXAUSTIVO POR PAGINAÇÃO:** obter PRs de todos os estados, issues de todos os estados e branches pela API GitHub existente até cada cursor acabar. Registrar contagem, estado, SHA/ref, fonte, data, target, page/cursor e resultado. 'Primeiros 100' != 'ALL'. Se a paginação não acabar, apresentar 'INVENTORY=PARTIAL' + 'NEXT_CURSOR', nunca PASS.
+2. **Minerar cláusulas perdidas, não duplicar:** cada candidato deve carregar 'source_kind', 'pr_or_issue_number|branch_ref', 'source_sha', 'source_url', 'criterion_claim', 'existing_owner', 'existing_APIxx', 'proof_key', 'fingerprint', 'observed_at', 'counterproof', 'classificacao' e 'NEXT_CURSOR'. Classificações: 'ALREADY_COVERED', 'REUSABLE_PROOF', 'MISSING_CLAUSE', 'HISTORICAL', 'SUPERSEDED', 'UNKNOWN'. Confrontar 'main', PR #1788 e runtime; não fazer merge/cherry-pick automático do legado nem importar branches inteiros.
+3. **PASSAGEM PELA MESMA API E LOGS:** para nova leitura ou alteração MATERIAL efetuada por consumer autorizado, producer existente registra um evento sanitizado via 'appendCentralEvent' com 'event_id', 'sector', 'service', 'source', 'kind', 'sha', 'correlation_id', 'level' e metadados mínimos; NÃO salvar comentários inteiros, credenciais, tokens ou logs secretos. Exigir readback do MESMO 'event_id' em events/sectors/services; até a chamada ocorrer no runtime marcar 'MCP_TO_LOG=UNKNOWN', não documentar como já executado.
+4. **ONE HEART + HUD:** consumir o estado derivado desse evento em '/heartbeat', comprovar SSE autenticado em '/admin/logs/stream', e a atualização de ACERTOS/VER PENDÊNCIA na grade HUD/MAPA/FORJA do HTML existente. Falha recebe placa com OWNER, ROTA, ERRO, PROVA e NEXT_CURSOR; prova histórica continua datada. Mesmo fingerprint compatível usa 'REPLAY_BEFORE_REDISCOVERY', sem repetir todo o trabalho.
+5. **OBSIDIAN/CASA:** reusar 'autoUpdater' e 'knowledgeHub' do plugin existente, preservar Grafo Vivo 2D/3D e único arquivo HUD.html físico. Comparar hash do branch em PR aberto versus Casa, main e VPS separadamente; 'HASH_EQUAL' não equivale a 'OBSIDIAN_GUI_PASS'. Exigir readback visual pelo consumer autorizado, sem nova UI e sem escrita concorrente.
+6. **SEGURANÇA E FECHAMENTO:** preservar GREEN_STATE; cada patch pertence ao owner existente, um writer por arquivo, commit no mesmo PR, teste, readback e receipt versionado por SHA; revisar especificamente comentários de code review do #1788 sobre pulse/sync SHA, backup/missões e cadeados iniciais. 'MERGED != DEPLOYED', 'CODE != RUNTIME', 'DOCUMENTED != EXECUTED', 'UNKNOWN != PASS'.
+
+### Inventário de partida medido na consulta, NÃO conclusão integral
+
+- #1788 OPEN, rendezvous único; #1562 CLOSED/UNMERGED (162 arquivos/529 commits); #1757 CLOSED/UNMERGED. Handoff do legado já registrado em https://github.com/ServerVpss/CentralDark/pull/1788#issuecomment-6086697803 — não duplicar os 2.500 comentários como ledger.
+- Merged verificados nesta amostra: #998 (Relíquia/HUD escavação), #1583 (heartbeat), #1604 (logs + MCP + painel), #1783 (G01–G12), #1784 (Kaizen/placas), #1786 (placa HUD). São referências de origem, NÃO PASS de runtime.
+- #1767 (Cartographer) e #1777 (Oracle HUD) seguem OPEN nesta leitura; possível colisão em 'docs/HUD/HUD.html', portanto sem ACK não editar o HTML. Reviews do #1788 trouxeram achados pendentes sobre preservação de missões, rollback, fileset, pin de SHA e validação de selos iniciais.
+- Busca retornou os PRIMEIROS 100 PRs e os PRIMEIROS 100 issues; não é inventário completo. A enumeração de branches via cursor chegou ao fim com 770 refs nesta medição, mas o conteúdo de cada branch não foi reconciliado. 'PR_ISSUE_EXHAUSTED=false', 'BRANCH_LIST_EXHAUSTED=true', 'CLAUSE_MINING_COMPLETE=false'.
+- Prova real GitHub API -> MCP autenticado -> 'log-funnel.js' -> events/sectors/services -> heartbeat -> SSE -> HUD -> Obsidian: 'E2E=UNKNOWN' nesta rodada. Nenhum evento operacional foi produzido e nenhuma alteração foi feita em VPS/Casa.
+
+**NEXT_CURSOR:** 'EXHAUST_ALL_PR_AND_ISSUE_PAGINATION -> CLASSIFY_MISSING_CLAUSES_IN_EXISTING_API01_API16 -> ACK_ACTIVE_WRITER -> FIRST_OWNER_LOCAL_DELTA -> API09_EVENT_ID_3_PROJECTIONS -> API12_HEARTBEAT -> API13_AUTH_SSE -> API14_HUD_LIVE -> API15_OBSIDIAN_VISUAL -> API16_RECEIPT_SAME_SHA'.
+
+**Sem falso verde:** este contrato foi documentado dentro do PR #1788. A execução da mineração completa e o fechamento ponta a ponta permanecem pendentes até prova causal.
+<!-- /PR1788_GITHUB_MINERAL_ESCAVACAO_API_LOG_ONEHEART_20261009 -->
