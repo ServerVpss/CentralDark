@@ -791,7 +791,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
   function cdPlaqueInfo(title) {
     if (title.indexOf('GitHub main') >= 0) return ['Referência de código, não atestado de deploy.', 'HEAD visível no cartão é histórico até nova leitura.', 'Confrontar HEAD atual do owner com checkout e runtime.'];
     if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) return ['Um checkout antigo ou dirty não derruba outros serviços.', 'A placa mostra o último HEAD medido; NÃO é probe contínua.', 'Reconciliar owner git sem apagar missões nem sobrescrever trabalho.'];
-    if (title.indexOf('SSH Casa') >= 0) return ['A porta 22 responde por IP publico e Tailscale; login SSH nao foi provado.', 'T3 relatou ssh exit 255; T4 mediu TCP22 aberto nos dois destinos, sem tentativa de autenticar. O codigo 255 nao especifica sozinho erro de chave, usuario ou permissao.', 'Conferir cliente SSH, alias, host key e identidade autorizada por metadados; obter motivo da recusa sem divulgar chave privada nem contornar SSH; refazer login somente pela rota autorizada.'];
+    if (title.indexOf('SSH Casa') >= 0) return ['SSH AUTENTICADO PROVADO com cliente OpenSSH do Git; a ferida remanescente e do ssh.exe nativo do Windows (EXIT 255 ate em -V).', 'T5 Casa: alias Segredo-VPS presente e mapeado para root@89.117.78.124 via chave ed25519 ja existente; Git OpenSSH 10.3 / BatchMode / StrictHostKeyChecking=yes => SSH_EXIT=0, hostname CENTRALDARK-OS, whoami root, repo /root/CentralDark HEAD=d921e94e4. Windows System32 OpenSSH -V e -G retornam 255 sem stderr; isso nao e falha de login na VPS.', 'Reutilizar a rota Git OpenSSH que passou, sem copiar chaves nem alterar sshd. Deixar o Windows OpenSSH como pendencia local e remedir se necessario. Promover VPS main/deploy por fluxo canonico separado: HEAD da VPS atras nao significa SSH offline.'];
     if (title.indexOf('Casa') >= 0 && title.indexOf('Screenpipe') < 0) return ['Versão física e GitHub podem divergir sem derrubar o HUD.', 'Hash apresentado é snapshot; o arquivo local requer readback.', 'Comparar hash do HUD físico com o owner e manter backup.'];
     if (title.indexOf('Triton') >= 0) return ['Triton pronto não equivale a modelo de conversa disponível.', '21 READY / 30 catalogados na medição referenciada.', 'Remedir /v2/repository/index e verificar separadamente inferência de texto.'];
     if (title.indexOf('Kylin NLP') >= 0) return ['O SDK registrou INIT_FAILED:10; falha restrita à geração NLP.', 'Receipt de SDK e HTTP 502, sem prova de recuperação posterior.', 'Preservar bridge e investigar modelo disponível; outras rotas seguem.'];
@@ -815,11 +815,11 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       result.file='UNKNOWN (configuracao ativa exige leitura)';
       result.error='SOURCE_VS_RUNTIME_DRIFT (snapshot)';
     } else if (title.indexOf('SSH Casa') >= 0) {
-      result.route='ssh alias Segredo-VPS / TCP:89.117.78.124:22 / TCP:100.90.199.124:22';
-      result.owner='Casa SEGREDO / cliente OpenSSH; VPS sshd';
-      result.file='Casa: configuracao SSH do usuario (metadados somente); VPS: sshd (readback nao autorizado)';
-      result.line='UNKNOWN (ssh exit 255 sem diagnostico detalhado)';
-      result.error='SSH_AUTH_NOT_PROVEN; EXIT_255_T3; TCP22_REACHABLE_T4';
+      result.route='Git OpenSSH: C:\\Program Files\\Git\\usr\\bin\\ssh.exe → alias Segredo-VPS → root@89.117.78.124:22';
+      result.owner='Casa SEGREDO / Git OpenSSH 10.3 / VPS CENTRALDARK-OS';
+      result.file='C:\\Users\\Administrador\\.ssh\\config (Host Segredo-VPS; IdentityFile segredo_vps_ed25519) / Git ssh.exe';
+      result.line='UNKNOWN (cliente nativo Windows ssh.exe -V=255, sem diagnostico)';
+      result.error='SSH_AUTH_PASS_GIT_CLIENT; WINDOWS_OPENSSH_CLIENT_EXIT_255; VPS_REPO_HEAD=d921e94e4';
     } else if (title.indexOf('Casa') >= 0 && title.indexOf('Screenpipe') < 0) {
       result.route='Obsidian / HUD.html (arquivo local)';
       result.owner='docs/HUD/HUD.html';
@@ -1077,8 +1077,8 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       </div>
       <div class="hud-card">
         <h3>SSH Casa &rarr; VPS</h3>
-        <div class="val warn">REDE 22 PASS / LOGIN SSH UNKNOWN</div>
-        <div class="meta">SELO HISTORICO: alias Segredo-VPS e chave ed25519 documentados. T3: SSH EXIT 255 sem login autenticado. T4 (Casa): porta 22 acessivel em 89.117.78.124 e 100.90.199.124; isso NAO prova que a chave atual funcionou. VER PENDENCIA mostra receita sem exibir segredos nem revogar protecao.</div>
+        <div class="val ok">LOGIN SSH PASS / GIT OPENSSH</div>
+        <div class="meta">T5 Casa: autenticação SSH real via C:\\Program Files\\Git\\usr\\bin\\ssh.exe e alias Segredo-VPS, com host key validada, BatchMode e chave existente. SSH_EXIT=0, hostname=CENTRALDARK-OS, usuario=root. Checkout /root/CentralDark HEAD=d921e94e4 (deploy desatualizado e assunto separado). PLACA AUXILIAR: Windows System32 OpenSSH retorna EXIT 255 ate em ssh -V; Git SSH ja e a rota funcional. VER PENDENCIA entrega receita, sem duplicar chave ou desativar seguranca.</div>
       </div>
     </div>
   </div>
