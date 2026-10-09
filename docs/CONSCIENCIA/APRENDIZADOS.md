@@ -1813,8 +1813,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 167. Ápeiron operacional: identidade invariável, concha mutável, capacidades abertas e prova temporal sem arquitetura paralela
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L167`; `PREV_GLOBAL_UID=L166`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=167`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=167`; `PREV_LEARNING_REF=166`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L167`; `PREV_GLOBAL_UID=L166`; `NEXT_GLOBAL_UID=L168`; `LEGACY_LEARNING_NUMBER=167`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=167`; `PREV_LEARNING_REF=166`; `NEXT_LEARNING_REF=168`.
 - **Categoria:** anaximander-inspired-core-shell-open-capability-space-temporal-proof-operational-graph.
 - **Data:** 2026-10-05.
 - **Proveniência:** analogia filosófico-matemática inspirada em Anaximandro, normalizada pela CentralDark. A fonte histórica é proveniência/candidato, nunca autoridade da Casa; a validade operacional vem somente de owners CURRENT, testes, gates e efeito observado.
@@ -1863,7 +1863,9 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** EVERY_GAP_IS_A_CAPABILITY_OPPORTUNITY; EVERY_PROVEN_PATH_CAN_BECOME_REPLAY; ONE_HEART; REALITY_IS_JUDGE.
 
 
-### #168 — Catálogo MCP unificado de capabilities e rotas (2026-10-06)
+### 168. Catálogo MCP unificado de capabilities e rotas (2026-10-06)
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L168`; `PREV_GLOBAL_UID=L167`; `NEXT_GLOBAL_UID=L169`; `LEGACY_LEARNING_NUMBER=168`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=168`; `PREV_LEARNING_REF=167`; `NEXT_LEARNING_REF=169`.
 - **Owner detalhado:** `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
 - **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md`
@@ -1873,7 +1875,9 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Fingerprint:** `42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5`.
 
 
-### #169 — Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
+### 169. Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L169`; `PREV_GLOBAL_UID=L168`; `NEXT_GLOBAL_UID=L170`; `LEGACY_LEARNING_NUMBER=169`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=169`; `PREV_LEARNING_REF=168`; `NEXT_LEARNING_REF=170`.
 - **Owner detalhado:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
 - **Commit Hermes:** `c893a949b3051ae8a96cc4bc8b910857534c55e7`.
 - **Arquivo de prova:** `experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md`.
@@ -1893,7 +1897,9 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** `BLIND_RETRY_FORBIDDEN=true`; `ONE_IDENTICAL_REPLAY_MAX=1`; `SAME_FAILURE_FINGERPRINT_REUSES_PROVEN_RECIPE=true`; `MAIN_FIRST_SKILL_PROMOTION=true`; `SYNC_REQUESTED_BY_CHEFE=true`; `SAME_GOAL_RETURN_REQUIRED=true`.
 - **Next cursor:** `HERMES_SKILL_SYNC_CHECK_RECONCILE_APPLY_SEAL_HASH_READBACK_THEN_RETURN_SAME_GOAL`.
 
-### 168. Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit
+### 170. Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L170`; `PREV_GLOBAL_UID=L169`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=170`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-09
 - **Contexto:** Em 2026-10-09, mesmo Goal t_9040803d já continha o Cristal e a intenção; runtime Herm es estava em status todo com dois crashes de limite de contexto. scripts/skill-sync-check.sh --check via executor MCP falhou com HOME unset. Repo canônico main fddeb265, skill Kaizen existente.
