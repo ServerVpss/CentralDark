@@ -862,13 +862,61 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
     return !!(val && (val.classList.contains('warn') || val.classList.contains('fail') ||
       /\b(OFFLINE|DRIFT|UNKNOWN|ERROR|ERRO|FAIL|BLOCKED|PENDING|STALE|502|404|NAO COMPROVADO|PARCIAL)\b/.test(status)));
   }
+  // Existing HUD plaque -> exact known location -> copyable remedy mission. No second panel.
+  function cdRecipe(title, loc, status, info, proof) {
+    return [
+      '!CENTRALDARK #ACORDAR !PAPAGAIO_OFF',
+      'INTENCAO: COSTURAR '+String(title).trim(),
+      'ESTADO: '+String(status||'UNKNOWN').trim(),
+      'ROTA: '+loc.route,'OWNER: '+loc.owner,'ARQUIVO: '+loc.file,
+      'LINHA: '+loc.line,'ERRO: '+loc.error,
+      'MOTIVO: '+info[0],'EVIDENCIA: '+String(proof||info[1]).trim(),
+      'NEXT_CURSOR: '+info[2],
+      'RECEITA: MEDIR CURRENT -> REUTILIZAR OWNER/CLI OU ROTA AUTORIZADA -> TESTAR -> READBACK -> CONTRAPROVAR.',
+      'FALHOU? PLACA COM ROTA/ERRO/LINHA OU UNKNOWN; COSTURA SE DER; RESTANTE CONTINUA.',
+      'SEM NOVO HUD / GATE / BOT / CAPTURA DUPLICADA.',
+      'SEGURANCA E AUTORIZACAO PERMANECEM; UNKNOWN != PASS; COMMIT != DEPLOY.'
+    ].join('\n');
+  }
+  function cdCopy(text, btn) {
+    function success(){if(btn)btn.textContent='COPIADO - COLAR NO HERMES';}
+    function fallback(){
+      var area=document.createElement('textarea');
+      area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.left='-9999px';
+      document.body.appendChild(area);area.select();
+      var ok=false;try{ok=document.execCommand('copy');}catch(_){}
+      area.remove();if(ok)success();else if(btn)btn.textContent='COPIA INDISPONIVEL - SELECIONE RECEITA';
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(success,fallback);
+    else fallback();
+  }
+  function cdCopyButton(container, recipe) {
+    if(!container||container.querySelector('.cd-plaque-copy'))return;
+    var button=document.createElement('button');button.type='button';
+    button.className='aion-open-btn cd-plaque-copy';button.textContent='ACEITAR MISSAO (COPIAR)';
+    button.style.marginTop='10px';button.style.maxWidth='100%';button.style.whiteSpace='normal';
+    button.addEventListener('click',function(){cdCopy(recipe(),button);});
+    container.appendChild(button);
+  }
+  window.cdHudRecipe=cdRecipe;window.cdHudCopy=cdCopy;
   function cdMountIndependentPlaques() {
     var cards = document.querySelectorAll('.hud-grid > .hud-card');
     Array.prototype.forEach.call(cards, function(card, index) {
-      // Mesmo HUD, tres abas; preserva os controles/placas existentes e um writer por card.
-      if (!cdPlaqueRequired(card, parent)) return;
-      if (card.querySelector('button') || card.querySelector('.cd-plaque-multiplex-v1')) return;
+      // Um botao VER PENDENCIA por cartao; outros botoes nao substituem a placa.
+      if (!cdPlaqueRequired(card, parent) || card.querySelector('.cd-plaque-multiplex-v1')) return;
       var title = (card.querySelector('h3') || {}).textContent || 'OWNER UNKNOWN';
+      var manual = card.querySelector('#cd-local-model-note');
+      if (manual) {
+        var manualInfo=cdPlaqueInfo(title), manualLocation=cdPlaqueLocator(title,card);
+        cdCopyButton(manual,function(){
+          return cdRecipe(title,manualLocation,card.querySelector('.val')?.textContent||'UNKNOWN',
+            manualInfo,manual.textContent);
+        });
+        return;
+      }
+      if (Array.prototype.some.call(card.querySelectorAll('button'),function(b){
+        return /^(VER|OCULTAR) PEND[ÊE]NCIA$/i.test(b.textContent.trim());
+      })) return;
       var info = cdPlaqueInfo(title);
       var locator = cdPlaqueLocator(title, card);
       var toggle = document.createElement('button');
@@ -909,6 +957,11 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       });
       card.appendChild(toggle);
       card.appendChild(detail);
+      cdCopyButton(detail,function(){
+        var live=title.indexOf('API CentralDark')>=0?document.getElementById('cd-api-hermes-plaque'):null;
+        return cdRecipe(title,locator,card.querySelector('.val')?.textContent||'UNKNOWN',
+          info,live?.textContent||info[1]);
+      });
     });
   }
   cdMountIndependentPlaques();
@@ -2174,21 +2227,38 @@ missions.forEach(function(m, i) {
   div.innerHTML =
     '<span class="hud-tag ' + m.tag + '">' + (m.tag === 'chefe' ? '\uD83E\uDDCD Chefe decide' : '\uD83E\uDD16 Agente resolve') + '</span>' +
     '<p><strong>' + m.label + '</strong><br>' + m.text + '</p>' +
-    '<button data-i="' + i + '">Aceitar missao (copiar)</button>';
+    '<button data-i="' + i + '" data-action="copy">Aceitar missao (copiar)</button>' +
+    '<button data-i="' + i + '" data-action="view" class="aion-open-btn" aria-expanded="false" style="margin:8px 0 0 0;padding:10px 16px">VER PENDENCIA</button>' +
+    '<div class="meta cd-mission-detail" hidden style="white-space:pre-line;overflow-wrap:anywhere;margin-top:10px"></div>';
   missionsEl.appendChild(div);
 });
 
 missionsEl.addEventListener('click', function(e) {
   if (e.target.tagName !== 'BUTTON') return;
-  var i = e.target.getAttribute('data-i');
-  var m = missions[i];
-  navigator.clipboard.writeText(m.text).then(function() {
-    e.target.textContent = 'Copiado \u2713 - cola no Hermes/Claude';
-    e.target.classList.add('done');
-    hudToast('Missao copiada. Cola no chat do agente que vai executar.');
-  }).catch(function() {
-    hudToast('Nao deu pra copiar sozinho - seleciona o texto manualmente.');
-  });
+  var i = Number(e.target.getAttribute('data-i')), m = missions[i];
+  if (!m) return;
+  var card=e.target.closest('.hud-mission');
+  var info=['Missao aberta: conclusao nao comprovada.',
+    'Fonte: docs/HUD/HUD.html / missions[]; runtime UNKNOWN.',m.text];
+  var loc={route:'UNKNOWN (missao sem URL comprovada)',
+    owner:m.tag==='chefe'?'CHEFE - DECISAO HUMANA':'AGENTE - EXECUTOR AUTORIZADO',
+    file:'docs/HUD/HUD.html',line:'UNKNOWN (indice '+i+')',
+    error:m.tag==='chefe'?'DECISAO_HUMANA_PENDENTE':'MISSAO_ABERTA_SEM_READBACK'};
+  var recipe=window.cdHudRecipe(m.label,loc,m.tag==='chefe'?'CHEFE_DECIDE':'AGENTE_RESOLVE',info,m.text);
+  if(e.target.getAttribute('data-action')==='copy'){
+    window.cdHudCopy(recipe,e.target);return;
+  }
+  if(e.target.getAttribute('data-action')==='view'){
+    var detail=card&&card.querySelector('.cd-mission-detail');
+    if(!detail)return;
+    var open=detail.hidden;
+    detail.textContent='PLACA: '+m.label+'\nROTA: '+loc.route+'\nOWNER: '+loc.owner+
+      '\nARQUIVO: '+loc.file+'\nLINHA: '+loc.line+'\nERRO: '+loc.error+
+      '\nPROVA: '+info[1]+'\nRECEITA:\n'+recipe;
+    detail.hidden=!open;
+    e.target.setAttribute('aria-expanded',String(open));
+    e.target.textContent=open?'OCULTAR PENDENCIA':'VER PENDENCIA';
+  }
 });
 
 function hudToast(msg) {
