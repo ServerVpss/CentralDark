@@ -180,3 +180,29 @@ Após o recorte solicitado pelo CHEFE e executado na Casa, leitura remota de pri
 ### Receipt de conclusão do recorte — 2026-10-09 (captura PowerShell do CHEFE)
 
 A captura do PowerShell 7 no Kingston `K:` comprova que o Robocopy **terminou** às 16:55 com `RESULTADO: 1` (êxito com itens copiados), `FALHA=0`, `Incompatibilidade=0`. Resumo mostrado: 6.535 diretórios copiados, 73.797 arquivos copiados, 664 ignorados, 1,559 GB copiados de 1,570 GB totais, 21 segundos de tempo efetivo de cópia reportado; o resumo também exibe duração total de 1h39m42s. Estado da **transferência reportada: DONE**, conforme saída real e captura da Casa. A leitura anterior já comprovava `K:\CentralDark` com a árvore de primeiro nível; `E:\CentralDark` ainda continha `_cache` e `_worktrees` na observação anterior. **Não confundir DONE da execução Robocopy com prova de exclusão integral da origem, integridade total ou runtime validado**: esses pontos permanecem não medidos após a captura. Registro factual, sem novo sistema e sem alterar scripts.
+
+<!-- PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->
+## Manifesto de entrada e selo da Casa/Obsidian — mesmo HUD, mesma verdade (09/10/2026)
+
+**Obrigação de quem opera a Casa:** antes de agir por plugin, Hermes, MCP, nota, comando ou painel, **consultar o mesmo HUD.html e o PR ativo que nele está indicado**, mais os owners/referências correntes. O manifesto `.hermes-sync/` continua sendo o **índice local de hashes**; o `manifest.json` de `centraldark-grafo-vivo` continua sendo metadado técnico do plugin. Nenhum dos dois se torna novo manifesto de autoridade ou executor. O pacto operacional é este owner, consumido pelo Grafo Vivo/sync existentes.
+
+```text
+ENTROU_TEM_QUE_SELAR=true
+HUD_SOURCE=docs/HUD/HUD.html
+OBSIDIAN_HUD=mesmo HUD.html fisico da Casa
+ACTIVE_RENDEZVOUS_PR=1788 (medir CURRENT, nao hardcodar como eterno)
+PROVEN_SEAL + MATCHING_FINGERPRINT_AND_BINDINGS
+  -> REPLAY_EXISTING_OWNER_RECIPE_WITHOUT_LLM
+  -> TARGET_EFFECT_READBACK + SAME_PROOF_KEY_RECEIPT
+NO_VALID_SEAL -> VER_PENDENCIA + OWNER + ROUTE + NEXT_CURSOR
+NO_SECOND_HUD=true
+NO_SECOND_MANIFEST_WRITER=true
+NO_BLIND_OVERWRITE=true
+```
+
+Cada selo carrega `OWNER, SCOPE, PROOF_KEY, SOURCE_SHA, RECEIPT, READBACK, OBSERVED_AT, NEXT_CURSOR`, além dos fingerprints de artefato/dependência, versão de política, binding, sequência executável, efeito esperado e invalidações. **Selado = prova por escopo e data**; só entra em replay sem IA quando o owner possui runner determinístico autorizado e os bindings/efeito foram equivalentes. Falha de acesso, stale, diferença de hashes, falta de prova ou efeito divergente vira **PLACA/VER PENDÊNCIA** sem apagar o acerto anterior. Não repetir a investigação inteira.
+
+Se `docs/HUD/HUD.html@PR`, `@main` e arquivo físico divergirem, exibir as três versões com SHA/proveniência e preservar o arquivo local; `scripts/casa/sync-hermes-obsidian.ps1` **não cobre automaticamente o HUD.html**. A cópia aprovada requer escritor exclusivo, comparação de hashes e readback na Casa. O plugin Grafo Vivo conserva 2D/3D; **Obsidian aberto ou arquivo copiado não prova renderização nem ação MCP**. Segredos e memória privada nunca entram em receipts públicos.
+
+Quando o PR apontado pelo HUD fechar, for concluído ou esgotar comentários, carregar **o mesmo Goal/linha causal** e somente as pendências ainda não seladas no sucessor autorizado; exibir predecessor/sucessor no **mesmo HUD**, nunca em outro painel. Se nada permanecer pendente, não criar PR por cerimônia. `CURRENT > HISTORY`, `DOCUMENTED != EXECUTED`, `ONE_WRITER_PER_EXACT_PATH=true`.
+<!-- /PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->

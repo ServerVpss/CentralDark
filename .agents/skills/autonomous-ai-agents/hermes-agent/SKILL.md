@@ -214,3 +214,7 @@ terminal(command="tmux new-session -d -s resumed 'hermes --resume 20260225_14305
 - **Secrets in `.env`, settings in `config.yaml`** — never tell a user to put a non-credential setting in `.env`.
 - **Profile-safe paths** — `get_hermes_home()` in code, `$HERMES_HOME` when resolving paths in a session.
 - **Never hand-edit `config.yaml` for the user** — use `hermes config set KEY VAL`; a stray indent can corrupt the file and break the live gateway.
+
+## CentralDark fixed-point funnel
+
+When Hermes operates CentralDark, apply `software-development/centraldark-evidence-reconciliation/references/fixed-point-funnel.md`: CURRENT → owner/writer/scope → minimum delta → test → counterproof → exact runtime/readback → sanitized receipt → `NEXT_CURSOR`. `UNKNOWN != PASS`; `FIXED_POINT=true` only when the affected plane is read back and no material UNKNOWN remains.

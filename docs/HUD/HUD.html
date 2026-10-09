@@ -1784,6 +1784,21 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       <h2 class="section-title">Cadeados &mdash; Lugares Provados e Selados</h2>
       <span class="section-count" id="cadeados-count">contando provas...</span>
     </div>
+
+    <!-- CD_HUD_MANIFESTO_ENTROU_TEM_QUE_SELAR_20261009 -->
+    <div class="cadeado-prova" id="cd-seal-law-manifest" role="status" aria-live="polite"
+         data-manifest-law="ENTROU_TEM_QUE_SELAR" data-owner="docs/HUD/HUD.html"
+         data-pr="1788" data-policy="UNKNOWN_NEVER_PASS">
+      <strong>&#129668; LEI DO HUD &mdash; ENTROU, TEM QUE SELAR.</strong>
+      Entrada nova sem OWNER, ESCOPO, PROOF_KEY, SHA, RECIBO, READBACK, DATA e NEXT_CURSOR
+      fica <strong>VER PEND&Ecirc;NCIA</strong>; nunca SELADO por presen&ccedil;a no HTML.
+      Selos hist&oacute;ricos permanecem como prova datada, n&atilde;o como runtime CURRENT.
+      <span id="cd-seal-law-state">CONFERINDO ENTRADAS...</span>
+    </div>
+    <details class="cadeado-prova" id="cd-seal-law-pendencias">
+      <summary>VER PEND&Ecirc;NCIA &middot; entradas ainda sem selo v&aacute;lido</summary>
+      <ul id="cd-seal-law-list"></ul>
+    </details>
     <div class="cadeado-grid">
       <div class="cadeado-card selado">
         <div class="cadeado-header">
@@ -2050,7 +2065,77 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
     </div>
   </div>
 
-  <!-- ONE HEART - LIVE -->
+  <!-- CENTRALDARK_API_ONE_HEART_MAP_V1_START -->
+<style>
+#cd-api-oneheart-map{margin-top:16px;border:1px solid var(--border-strong);border-radius:12px;padding:16px;background:var(--surface);color:var(--text)}
+#cd-api-oneheart-map .cd-oh-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+#cd-api-oneheart-map .cd-oh-flow{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:15px 0}
+#cd-api-oneheart-map .cd-oh-node{border:1px solid var(--border-strong);border-radius:8px;padding:10px;text-align:center;min-width:106px;background:var(--surface-2);font:600 12px var(--mono)}
+#cd-api-oneheart-map .cd-oh-arr{font:700 21px var(--mono);color:var(--accent)}
+#cd-api-oneheart-map .cd-oh-heart{width:82px;height:82px;display:block;margin:auto;transform-origin:center;animation:cd-oh-pulse 1.7s ease-in-out infinite;filter:drop-shadow(0 0 9px var(--amber))}
+#cd-api-oneheart-map[data-heart="alive"] .cd-oh-heart{filter:drop-shadow(0 0 9px var(--green))}
+#cd-api-oneheart-map[data-heart="alive"] .cd-oh-heart path{fill:var(--green)}
+#cd-api-oneheart-map .cd-oh-heart path{fill:var(--amber)}
+@keyframes cd-oh-pulse{0%,100%{transform:scale(1)}15%{transform:scale(1.14)}28%{transform:scale(1.02)}40%{transform:scale(1.10)}55%{transform:scale(1)}}
+#cd-api-oneheart-map .cd-oh-routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:7px}
+#cd-api-oneheart-map .cd-oh-route{padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface-2);display:flex;flex-direction:column;gap:3px}
+#cd-api-oneheart-map .cd-oh-route strong{font-size:12px}
+#cd-api-oneheart-map .cd-oh-route small{font:10px var(--mono);opacity:.76;word-break:break-all}
+#cd-api-oneheart-map .cd-oh-route em{font:600 11px var(--mono);font-style:normal;color:var(--amber)}
+#cd-api-oneheart-map .cd-oh-proof{font-size:11px;line-height:1.65;color:var(--text-dim);margin:9px 0 0}
+#cd-api-oneheart-map .cd-oh-lock{display:inline-block;font-size:13px}
+@media(prefers-reduced-motion:reduce){#cd-api-oneheart-map .cd-oh-heart{animation:none}}
+</style>
+<div class="section" id="cd-api-oneheart-map" data-heart="unknown" data-proof-time="2026-10-09T20:34:53Z" data-busca="mapa API centraldark One Heart MCP 13 rotas cadeados selos github cloudflare casas">
+  <div class="cd-oh-head"><h2 class="section-title">🫀 Mapa da API · 13 rotas · One Heart único</h2><span id="cd-oh-live-badge" class="section-count">HEART: UNKNOWN / consultando owner existente</span></div>
+  <p class="cd-oh-proof">🔒 PROVA SELADA POR ESCOPO: MCP admin 141 tools / 13 rotas / 20 ações (20:34 UTC); API MCP pública /health 200 com 153 tools; Cloudflare DNS api/mcp/deploy apontando à VPS com proxy ativo; Casa SEGREDO online. Selos históricos não significam disponibilidade atual.</p>
+  <div class="cd-oh-flow" role="img" aria-label="Intenção do CHEFE passa pela API Cloudflare, catálogo MCP e One Heart; GitHub e VPS sincronizam em duas direções sob cadeado">
+    <div class="cd-oh-node">👑 CHEFE<br><small>Intenção / dono</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">→</span>
+    <div class="cd-oh-node">🌐 Cloudflare<br><small>API · MCP · Deploy</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">→</span>
+    <div class="cd-oh-node">🪬 MCP<br><small>141 / 13 / 20</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">↔</span>
+    <div class="cd-oh-node"><svg class="cd-oh-heart" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 86C18 63 7 46 13 28c7-19 29-23 37-7 8-16 30-12 37 7 6 18-5 35-37 58Z"/></svg><small>ONE HEART</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">↔</span>
+    <div class="cd-oh-node">🐙 GitHub ⇄ VPS<br><small>Sync / owner / receipt</small></div>
+  </div>
+  <div class="cd-oh-head"><strong>🔐 Cadeados das 13 rotas do catálogo</strong><span class="section-count">LISTADA ≠ EXECUTANDO · UNKNOWN ≠ PASS</span></div>
+  <div class="cd-oh-routes"><div class="cd-oh-route" data-oh-route="AIONUI_MCP_STDIO"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>AionUi → MCP</strong><small>AIONUI_MCP_STDIO</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="CAS_CLOUD_RELAY"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa ↔ CAS Cloud</strong><small>CAS_CLOUD_RELAY</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="GITHUB_RUNTIME"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>GitHub API admin</strong><small>GITHUB_RUNTIME</small><em>AUTH PASS</em></div>
+<div class="cd-oh-route" data-oh-route="HERMES_DELEGATED_COMMIT_PATH"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Hermes commit delegado</strong><small>HERMES_DELEGATED_COMMIT_PATH</small><em>PR1748 / HISTÓRICO</em></div>
+<div class="cd-oh-route" data-oh-route="HERMES_SHELL"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Hermes executor</strong><small>HERMES_SHELL</small><em>HEALTH HISTÓRICO</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_CASA_TO_VPS"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa → VPS MCP</strong><small>MCP_CASA_TO_VPS</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_REMOTE_OAUTH"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>MCP público OAuth</strong><small>MCP_REMOTE_OAUTH</small><em>HEALTH 200; AUTH UNKNOWN</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_VPS_NATIVE_HTTP"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>MCP HTTP :9100</strong><small>MCP_VPS_NATIVE_HTTP</small><em>RUNTIME T1 PENDENTE</em></div>
+<div class="cd-oh-route" data-oh-route="RDC_DESKTOP_COMMANDER"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa SEGREDO</strong><small>RDC_DESKTOP_COMMANDER</small><em>ONLINE</em></div>
+<div class="cd-oh-route" data-oh-route="SCREENPIPE_CLI_RECORDER"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Screenpipe CLI</strong><small>SCREENPIPE_CLI_RECORDER</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="SCREENPIPE_LOCAL_SENSOR"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Sensor :3030</strong><small>SCREENPIPE_LOCAL_SENSOR</small><em>OWNER UNKNOWN</em></div>
+<div class="cd-oh-route" data-oh-route="SSH_VPS_DIRECT"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>SSH VPS</strong><small>SSH_VPS_DIRECT</small><em>PROVA HISTÓRICA</em></div>
+<div class="cd-oh-route" data-oh-route="TAILSCALE_PRIVATE_ROUTE"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Tailscale privado</strong><small>TAILSCALE_PRIVATE_ROUTE</small><em>PONG HISTÓRICO; API 401</em></div></div>
+  <p class="cd-oh-proof">🟢 Provado: GitHub API autenticada/admin, SEGREDO online, Cloudflare DNS 3 entradas, MCP catálogo/health, Kylin Triton. 🟢 One Heart público self=alive (20:38:07 UTC; lag 10763ms; SSE 47 eventos/min) em leitura pontual. 🟡 Pendente: Tailscale Admin HTTP 401; broker fetch failed; VPS checkout divergente; cobertura T1 das 13 rotas. Nenhum serviço reiniciado por esta placa.</p>
+  <p class="cd-oh-proof">Fontes: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">Hermes /health</a> · <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">MCP /health</a> · <a href="https://github.com/ServerVpss/CentralDark/pull/1788" target="_blank" rel="noopener">PR #1788 / handoff</a>. A animação é visual: somente a telemetria do One Heart existente pode mudar o estado para ALIVE.</p>
+</div>
+<script>
+(function(){
+  function bind(){
+  var panel=document.getElementById('cd-api-oneheart-map'),src=document.getElementById('live-heart-state'),badge=document.getElementById('cd-oh-live-badge');
+  if(!panel||!src||!badge)return;
+  function project(){
+    var label=(src.textContent||'').trim(),bad=/(UNKNOWN|STALE|FAIL|BLOCKED|ERROR|OFFLINE|PENDING|TIMEOUT)/i.test(label);
+    var alive=!bad && /\b(ALIVE|HEALTHY|PASS)\b/i.test(label);
+    panel.setAttribute('data-heart',alive?'alive':'unknown');
+    badge.textContent='HEART: '+(label||'UNKNOWN')+' · fonte: One Heart existente';
+  }
+  var obs=new MutationObserver(project);obs.observe(src,{childList:true,subtree:true,characterData:true});project();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
+})();
+</script>
+<!-- CENTRALDARK_API_ONE_HEART_MAP_V1_END -->
+
+<!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
       <div class="section-icon">&#129528;</div>
@@ -2139,9 +2224,9 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       <h2 class="section-title">Hermes &mdash; juiz ao vivo (PowerShell 7)</h2>
       <span class="section-count">terminal da VPS</span>
     </div>
-    <p style="font-size:12px;color:var(--text);margin:0 0 10px;">Mesma vista do Hermes, no terminal: PowerShell 7 entra na VPS (Segredo-VPS) e roda <code>/root/hermes-hud.sh</code>. Uma pagina HTML nao abre terminal sozinha: copie o comando e cole no PowerShell 7. O estado verde so vale o que o script medir na hora.</p>
+    <p style="font-size:12px;color:var(--text);margin:0 0 10px;">Mesma vista do Hermes, no terminal: PowerShell 7 entra na VPS (Segredo-VPS) e roda <code>/root/hermes-hud.sh</code>. Uma pagina HTML nao abre terminal sozinha: copie o comando e cole no PowerShell 7. Na Casa foi comprovado o OpenSSH do Git (o ssh.exe do Windows falhou). O juiz consulta o mesmo MCP/One Heart; erro ou lag vira PLACA, nao verde. O estado verde so vale o que o script medir na hora.</p>
     <div class="hud-missions">
-      <pre id="hermes-judge-cmd" style="margin:0 0 10px;padding:10px;border:1px solid var(--border,#333);border-radius:8px;overflow:auto;white-space:pre-wrap;">ssh -t Segredo-VPS 'bash /root/hermes-hud.sh'</pre>
+      <pre id="hermes-judge-cmd" style="margin:0 0 10px;padding:10px;border:1px solid var(--border,#333);border-radius:8px;overflow:auto;white-space:pre-wrap;">&amp; 'C:\Program Files\Git\usr\bin\ssh.exe' -t Segredo-VPS 'bash /root/hermes-hud.sh'</pre>
       <a class="hud-linkbtn" id="hermes-judge-copy" href="#">&#128203; Copiar comando</a>
     </div>
   </div>
@@ -2895,22 +2980,78 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
 })();
 
 
-/* Contador real do mesmo inventario: nunca fixar numero de cadeados no HTML. */
+/* Lei no manifesto operacional deste mesmo HUD: ENTROU, TEM QUE SELAR.
+ * Os selos históricos NÃO são reclassificados por um browser sem prova nova.
+ * Entradas dinâmicas nunca ganham verde por texto/class isolado: owner/receipt/readback.
+ * Este HTML projeta evidências, não assina receipts nem substitui o Reality Judge.
+ */
 (function() {
-  function contarCadeados() {
-    var area = document.getElementById('cadeados-count');
-    if (!area) return;
-    var grade = area.closest('.section');
-    if (!grade) return;
-    var cards = grade.querySelectorAll('.cadeado-grid > .cadeado-card');
-    var selados = grade.querySelectorAll('.cadeado-grid > .cadeado-card.selado').length;
-    var pendentes = cards.length - selados;
-    area.textContent = cards.length + ' registros · ' + selados + ' selados · ' + pendentes + ' pendentes';
-    area.title = 'Inventario contabilizado diretamente dos cartoes, nao dos servicos atuais';
+  var area=document.getElementById('cadeados-count');
+  var grade=area && area.closest('.section') && area.closest('.section').querySelector('.cadeado-grid');
+  var law=document.getElementById('cd-seal-law-manifest');
+  var verdict=document.getElementById('cd-seal-law-state');
+  var issues=document.getElementById('cd-seal-law-list');
+  if(!area || !grade || !law || law.getAttribute('data-manifest-law')!=='ENTROU_TEM_QUE_SELAR')return;
+  var historicos=new WeakSet(Array.from(grade.children).filter(function(n){return n.classList && n.classList.contains('cadeado-card');}));
+  var campos=['owner','scope','proof-key','source-sha','receipt','readback','observed-at','next-cursor'];
+  function pendencia(card,missing) {
+    if(card.classList.contains('selado')){card.classList.remove('selado');card.classList.add('aberto');}
+    if(!card.classList.contains('aberto') && !card.classList.contains('falha'))card.classList.add('aberto');
+    var status=card.querySelector('.cadeado-status');
+    if(!status){
+      var header=card.querySelector('.cadeado-header')||card;
+      status=document.createElement('span');
+      status.className='cadeado-status warn';
+      header.appendChild(status);
+    }
+    if(status.classList.contains('pass'))status.classList.remove('pass');
+    if(!status.classList.contains('warn'))status.classList.add('warn');
+    if(status.textContent!=='VER PENDÊNCIA')status.textContent='VER PENDÊNCIA';
+    card.setAttribute('data-cd-seal-verdict','PENDING');
+    return missing.length ? 'faltam '+missing.join(', ') : 'readback do owner nao comprovado';
+  }
+  function contarCadeados(){
+    var cards=Array.from(grade.children).filter(function(n){return n.classList && n.classList.contains('cadeado-card');});
+    var lista=[],novo=0,novoSelado=0;
+    cards.forEach(function(card){
+      var nome=(card.querySelector('.cadeado-nome')||{}).textContent||'Entrada sem nome';
+      nome=nome.trim().slice(0,110);
+      if(historicos.has(card)){
+        if(!card.classList.contains('selado'))lista.push(nome+' — pendencia historica; verificar owner e prova atual');
+        return;
+      }
+      novo++;
+      var faltam=campos.filter(function(c){return !String(card.getAttribute('data-cd-'+c)||'').trim();});
+      var sha=String(card.getAttribute('data-cd-source-sha')||'').trim();
+      if(sha && !/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i.test(sha))faltam.push('source-sha valido');
+      var dt=Date.parse(card.getAttribute('data-cd-observed-at')||'');
+      if(!Number.isFinite(dt)||dt>Date.now()+60000)faltam.push('data verificavel');
+      // Nenhum dado arbitrario no DOM se valida sozinho; readback precisa vir do owner.
+      var confirm=card.getAttribute('data-cd-owner-verdict')==='READBACK_PASS';
+      var valid=confirm && faltam.length===0 && card.classList.contains('selado');
+      if(valid){novoSelado++;card.setAttribute('data-cd-seal-verdict','RECEIPT_DECLARED');}
+      else lista.push(nome+' — '+pendencia(card,faltam));
+    });
+    var selados=cards.filter(function(c){return c.classList.contains('selado');}).length;
+    var pendentes=cards.length-selados;
+    area.textContent=cards.length+' registros · '+selados+' selos · '+pendentes+' pendentes';
+    area.title='Contagem da grade existente; selo historico nao equivale a runtime atual';
+    if(verdict)verdict.textContent=' · '+novo+' entradas novas · '+novoSelado+' com receipt declarado · '+lista.length+' VER PENDÊNCIA';
+    if(issues){
+      issues.replaceChildren();
+      if(!lista.length){
+        var li=document.createElement('li');
+        li.textContent='Nenhuma pendencia na grade desta abertura. Runtime e E2E exigem prova separada.';
+        issues.appendChild(li);
+      }else lista.forEach(function(item){
+        var li=document.createElement('li');
+        li.textContent=item;
+        issues.appendChild(li);
+      });
+    }
   }
   contarCadeados();
-  var grade = document.querySelector('#cadeados-count')?.closest('.section')?.querySelector('.cadeado-grid');
-  if (grade && window.MutationObserver) new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  if(window.MutationObserver)new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-cd-owner-verdict','data-cd-receipt','data-cd-readback']});
 })();
 
 /* CD monitor integrado: eventos de saude, nunca transcricao de tela/audio. */

@@ -137,7 +137,7 @@ function changedMarkdownLineMap(baseSha) {
   if (!/^[0-9a-f]{40}$/i.test(baseSha) || /^0{40}$/i.test(baseSha)) return byFile;
   const diff = execFileSync(
     'git',
-    ['diff', '--unified=0', '--no-ext-diff', `${baseSha}...HEAD`, '--'],
+    ['diff', '--unified=0', '--no-ext-diff', `${baseSha}...HEAD`, '--', '*.md'],
     { cwd: ROOT, encoding: 'utf8' },
   );
   let current = null;
