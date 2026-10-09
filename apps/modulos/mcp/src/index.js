@@ -17,6 +17,7 @@ import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-miss
 import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
+import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
 import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
@@ -84,7 +85,7 @@ app.use(express.json({
     limit: "2mb",
     verify: (req, _res, buf) => {
         const url = String(req.originalUrl || req.url || "");
-        if (url.startsWith("/integrations/buildkite/webhook")) {
+        if (url.startsWith("/integrations/buildkite/webhook") || url === "/webhook") {
             req.rawBody = Buffer.from(buf);
         }
     },
@@ -105,6 +106,10 @@ app.post("/integrations/buildkite/webhook", (req, res) => {
         });
     }
 });
+// GitHub deploy.centralldark.com -> this API. The handler validates the raw
+// HMAC body, then delegates mutation to the canonical VPS sync owner.
+app.get("/deploy/health", githubDeployHealth);
+app.post("/webhook", githubDeployWebhook);
 // ─────────────────────────────── Health ──────────────────────────────────
 app.get("/health", (_req, res) => {
     res.json({
