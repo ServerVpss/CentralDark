@@ -402,3 +402,41 @@ Esses três caminhos são materializações do mesmo evento (\`event_id\`/timest
 
 **NEXT_CURSOR:** `PR1788_READBACK → ONE_HUD_WRITER → API03_MCP_LOADED → API09_LOG_EVENT_ID → API12_ONE_HEART → API14_PR_HUD_LIVE → API15_CASA_MIRROR_SHA → API16_RECEIPT`.
 <!-- /API1788_HUD_CURRENT_CASA_PR_FIRST_20261009 -->
+
+<!-- PR1788_API14_API15_API16_HUD_TRIPLE_SHA_READBACK_20261009 -->
+## Contraprova API14–API16 · HUD único / Espelho MAIN ↔ VPS ↔ CASA (09/10/2026)
+
+**Pedido do CHEFE:** executar no owner existente e atualizar **este mesmo PR #1788**, sem segundo HUD, coletor, PR, serviço, arquivo auxiliar nem reset da VPS. Prova de arquivo ≠ prova de UI/runtime. Este receipt é um snapshot mais recente que a placa `API15=BLOCKED_BY_ROUTE` histórica acima: a rota Desktop Commander foi reavaliada e respondeu.
+
+### CURRENT e proveniência do mesmo escopo
+
+- `MAIN_HEAD=5344bd87074c334ddf3ac322ae7d6aaacecdf665` (medido via GitHub e novamente por `gh api` na Casa antes do espelho).
+- `PR1788_HEAD_BEFORE_RECEIPT=c33197eb5da69b06ba045ec6c5006a7efa89239e`; após este commit, usar o HEAD atualizado da PR.
+- `CASA_DEVICE=SEGREDO`: Desktop Commander `Online` + `pong`, e execução PowerShell remota confirmada neste turno.
+- `CASA_TO_VPS_SSH=PASS`: alias preexistente `Segredo-VPS` retornou `CENTRALDARK-OS`, `SSH_EXIT=0`. Não foi criada outra rota ou alterada chave.
+- `VPS_REPO_HEAD=e073059e0f76a53290886b56cbf668bf53d4b7f5` anterior ao espelho; `TRACKED_DIRTY=1` no script `scripts/register-github-webhook.sh`. Checkout não sofreu pull/reset/clean; **espelhar o HTML não é atualizar o checkout nem carregar serviço**.
+
+### API15 — espelho do MESMO HUD.html, arquivo por arquivo
+
+| Ponto | Antes do delta (SHA-256) | Readback pós-delta (SHA-256) |
+|---|---|---|
+| `docs/HUD/HUD.html@main` | `00A35C33…EA9950` | `00A35C33…EA9950` |
+| VPS `/root/.centraldark/HUD.html` | `28036038…6F6621E` | `00A35C33…EA9950` |
+| Casa `C:\\Users\\Administrador\\Documents\\Obsidian Vault\\🪬Centraldark -HUD🪬\\HUD.html` | `B20A3949…3C243C3` | `00A35C33…EA9950` |
+
+**SHA-256 integral 3/3:** `00A35C33DCE62AEC5E34B72B1DF6AF784D6ECA2E1451DD08BCFBDA0C86EA9950`, `221001 bytes` em cada materialização. Na **segunda leitura independente**, `MATCH_3=True` com o mesmo MAIN_HEAD. Foram escritos **somente os dois `HUD.html` físicos já existentes**, sem backup, arquivo auxiliar, restart, cópia de chaves, alteração do checkout ou modificação do `docs/HUD/HUD.html@main`.
+
+**Conservação de conteúdo:** os três HTMLs já tinham 15 cadeados históricos com os mesmos nomes; a versão da main preserva esses 15 e inclui o catálogo de 13 rotas. O readback de arquivo **passou**. A Casa tinha Obsidian/HUD GUI **fechados** no teste final; não abriu janela nova. `API15_FILE_HASH=PASS`, `API15_UI_VISUAL_READBACK=UNKNOWN`, portanto **API15 E2E ainda NÃO é PASS global**.
+
+### API14 / API16 — escopo e lacunas sem falso verde
+
+- `API14=PARTIAL`: `docs/HUD/HUD.html` da main preserva o catálogo de 13 rotas e os 15 cadeados. Leitura do HTML demonstrou superfície documental; prova de atualização dinâmica HUD/MAPA/FORJA com `event_id`, `VER PENDÊNCIA`, serviço e usuário autenticado segue `UNKNOWN`.
+- `API16=PARTIAL`: proveniência com `MAIN_HEAD`, pré-hashes, pós-hashes e readback independente está registrada. A consulta a status GitHub do HEAD anterior da PR devolveu lista vazia `statuses=[]`: **não equivale a CI PASS**. Testes negativos OAuth, evento sanitizado no funil, SSE real e UI visual não foram executados.
+- `MCP_9100_HTTP=000`, `ONE_HEART_9100_HTTP=000`, `SSE_9100_UNAUTH_HTTP=000` em sondagem pela VPS: sem resposta HTTP, não equivale a 401/403 nem a autenticação reprovada. Nenhum restart foi tentado.
+- Conector administrativo CentralDark para status VPS/deploy/Tailscale retornou `The tool failed internally` neste turno; **somente essa rota falhou**. A SSH Casa→VPS foi provada independentemente.
+- `API09_API13_E2E=UNKNOWN`; `VPS_RUNTIME_LOADED=UNKNOWN`; `MAIN_TO_VPS_CHECKOUT_SYNC=NOT_DONE`; `GLOBAL_FIXED_POINT=FALSE`. Não elevar documentação ou espelho de HTML a deploy.
+
+**NEXT_CURSOR do mesmo PR:** medir owner MCP `:9100` (processo/ExecStart, sem reiniciar por reflexo) → provar evento sanitizado no `log-funnel.js` `events/sectors/services` → provar One Heart/SSE autenticado → HUD/MAPA/FORJA atualizar no mesmo evento → abrir o HUD existente no Obsidian sem outro painel → readback visual e CI no mesmo SHA → fechar API14–API16 apenas se todos os critérios sobreviverem à contraprova.
+
+**Estado:** `HASH_MIRROR_3_OF_3=PASS`; `API14=PARTIAL`; `API15_FILE_MIRROR=PASS`; `API15_UI=UNKNOWN`; `API16=PARTIAL`; `NO_NEW_ARCHITECTURE=true`. A fonte e o writer canônicos continuam os mesmos.
+<!-- /PR1788_API14_API15_API16_HUD_TRIPLE_SHA_READBACK_20261009 -->
