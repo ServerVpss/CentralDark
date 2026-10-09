@@ -153,3 +153,55 @@ branch fora da main, tracked dirty e confundir `CHECKOUT_SYNC_PASS` com
 **Próximo cursor:** executar comando pela rota SSH já provada, comparar
 `HEAD == origin/main` na VPS e medir separadamente service source, health e
 consumo da skill pelo Hermes. Sem SSH vivo/readback, `VPS_CURRENT=UNKNOWN`.
+
+
+## Readback CHEFE 2026-10-09 — checkout e HUD fisico PASS, MCP 9100 recusado
+
+Evidencia fornecida pelo CHEFE, executada via Git OpenSSH na Casa (nao e
+inferida de GitHub Actions). Estado antes: `SYNC_RC=2`, VPS_HEAD
+`8ef0f065db197e4f2d3a68d2a1747f1e4d0f3588`, origin/main
+`98eb21d292465e74b030b6a48f38441fd470b0c9`, branch main,
+`TRACKED_DIRTY=1`, HUD espelho diferente. **Causa discriminada:**
+` M scripts/register-github-webhook.sh`; nao e lixo a apagar.
+
+Uma execucao unica do mesmo owner `/root/CentralDark` com lock compartilhado
+`/tmp/centraldark-auto-sync.lock`, `fetch`, `ff-only`, protecao de dirty que
+nao sobrepoe arquivos alterados na main e comparacao de bytes do HUD resultou:
+
+```text
+CHECKOUT_SYNC=PASS
+HUD_MAIN_VPS=PASS
+VPS_HEAD=e073059e0f76a53290886b56cbf668bf53d4b7f5
+MAIN_HEAD=e073059e0f76a53290886b56cbf668bf53d4b7f5
+TRACKED_DIRTY=1  # scripts/register-github-webhook.sh preservado
+HUD_BACKUP=/root/.centraldark/.HUD.previous.2zfhofFJ
+RUNTIME_SERVICE=NOT_RESTARTED
+MCP_RUNTIME=UNKNOWN
+```
+
+**Contraprova runtime posterior, mesma Casa/VPS:**
+`systemctl is-active centraldark-native-mcp-http.service = active`;
+`systemctl is-active hermes-gateway.service = active`;
+`curl -sS http://127.0.0.1:9100/health` recusou conexao com
+`curl exit 7` e `HTTP=000`. **Nao declarar MCP HEALTH PASS** nem chamar
+isso de sistema todo offline. `systemd active != PORT LISTEN != HTTP HEALTH`.
+Causa de 9100 (bind/porta, crash de worker, unit ExecStart, EnvironmentFile)
+ainda UNKNOWN. Diagnosticar por leitura somente `systemctl show` com campos
+nao sensiveis, `ss -ltnp` e logs sanitizados; depois corrigir apenas o owner
+causal, com readback de health. Nao aplicar restart geral.
+
+**CI separada:** run `37963376354` do deploy self-hosted falhou no gate
+(`GLOBAL_LEARNING_LINEAGE=FAIL / LINEAGE_MANIFEST_DRIFT`); o mesmo SHA da
+main pode ter checkout sincronizado apesar desse gate bloqueado. Run
+`37963376374` da Lupa falhou no hash de identidade local; nenhum desses
+fracassos muda a prova de checkout/HUD na VPS. Dados sao snapshots e podem
+ser alterados por novos runs.
+
+**Preservacao:** nenhum `git clean`, reset, stash-pop ou overwrite sobre o
+webhook modificado. Backup do HUD antigo mantido. Com o presente commit
+em `main`, o `e073059e...` passa a ser **baseline historica** da VPS ate
+novo sync/readback. A mesma placa de `docs/HUD/HUD.html` mostra o diagnostico;
+nenhum HUD, scheduler, deploy ou memoria paralela foi criado.
+
+**NEXT_CURSOR:** `RE-SYNC_SAME_OWNER_AFTER_COMMIT -> HEAD/HUD_READBACK ->
+READONLY_MCP_9100_BIND_UNIT -> ISOLATED_MCP_REPAIR_IF_PROVEN -> HEALTH_CHECK`.
