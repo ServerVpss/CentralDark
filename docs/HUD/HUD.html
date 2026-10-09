@@ -1322,6 +1322,37 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
         <button type="button" class="aion-open-btn" id="cd-moltbook-key-action" style="margin-top:10px">CONFIGURAR KEY (COPIAR RECEITA)</button>
         <div class="meta" id="cd-moltbook-key-feedback" role="status" aria-live="polite" style="margin-top:10px">OWNER: .agents/skills/knowledge-compiler/scripts/moltbook-auth-setup.py · rota SSH Segredo-VPS</div>
       </div>
+      <div class="hud-card" id="cd-moltbook-posting-plan-v1">
+        <h3>&#128337; Quando o Hermes deve postar</h3>
+        <div class="val warn" id="cd-moltbook-plan-state">HORARIO AINDA NAO DEFINIDO</div>
+        <div class="meta">Escolha a hora de Brasilia. Salvar aqui conserva a preferencia neste navegador; o botao de missao leva a decisao para o Hermes aplicar e comprovar no agendador existente. Nao publica nem agenda sozinho.</div>
+        <label for="cd-moltbook-post-time" class="meta" style="display:block;margin-top:12px">Horario BRT (America/Sao_Paulo)</label>
+        <input id="cd-moltbook-post-time" type="time" aria-label="Horario da postagem em Brasilia" style="margin:5px 0 10px;max-width:180px;display:block;padding:10px;background:#101a16;color:#f2f5f3;border:1px solid #299b70;border-radius:9px;font:inherit"/>
+        <label for="cd-moltbook-post-frequency" class="meta" style="display:block">Repeticao desejada</label>
+        <select id="cd-moltbook-post-frequency" style="margin:5px 0 10px;padding:10px;background:#101a16;color:#f2f5f3;border:1px solid #299b70;border-radius:9px;font:inherit">
+          <option value="daily">Uma vez ao dia</option>
+          <option value="weekly">Uma vez por semana</option>
+          <option value="manual">Apenas quando eu autorizar</option>
+        </select>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button type="button" class="aion-open-btn" id="cd-moltbook-post-save">SALVAR PREFERENCIA</button>
+          <button type="button" class="aion-open-btn" id="cd-moltbook-post-mission">ACEITAR MISSAO (COPIAR)</button>
+        </div>
+        <div id="cd-moltbook-post-feedback" class="meta" role="status" aria-live="polite" style="margin-top:9px">RUNTIME DO AGENDAMENTO: UNKNOWN. Publicacao automatica nao comprovada.</div>
+      </div>
+      <div class="hud-card" id="cd-moltbook-publications-v1">
+        <h3>&#128221; Publicacoes do centraldarkhermes</h3>
+        <div class="val warn" id="cd-moltbook-pubs-state">AINDA NAO CONSULTADO</div>
+        <div class="meta">Consulta publica somente leitura; lista parcial por autor, nao historico completo. Para publicacoes antigas, importe um recibo sem chaves. Nunca conte rascunho como post publicado.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin:10px 0">
+          <button type="button" class="aion-open-btn" id="cd-moltbook-pubs-refresh">CONSULTAR POSTAGENS</button>
+          <label class="aion-open-btn" for="cd-moltbook-pubs-import" style="cursor:pointer">IMPORTAR RECIBO JSON</label>
+          <input type="file" id="cd-moltbook-pubs-import" accept=".json,application/json" style="display:none" aria-label="Importar recibo de postagens sem segredo"/>
+        </div>
+        <div class="meta"><a id="cd-moltbook-public-profile" href="https://www.moltbook.com/u/centraldarkhermes" target="_blank" rel="noopener noreferrer">ABRIR PERFIL NO MOLTBOOK &#8599;</a></div>
+        <div id="cd-moltbook-pubs-list" class="meta" aria-live="polite" style="margin-top:10px;display:grid;gap:9px">Nenhum post provado nesta abertura.</div>
+        <div id="cd-moltbook-pubs-feedback" class="meta" role="status" aria-live="polite" style="margin-top:8px">PLACA: busca externa depende de API/CORS. Falha aqui nao derruba o HUD.</div>
+      </div>
     </div>
   </div>
 
@@ -2390,6 +2421,150 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
         info.textContent='RECEITA COPIADA: cole no PowerShell da Casa; o script usará o cofre local.';
       },function(){info.textContent='PLACA: área de transferência indisponível. Abra o owner existente na VPS.';});
     }else{info.textContent='PLACA: clipboard indisponível. Consulte o owner no repositório.';}
+  });
+})();
+</script>
+
+<script>
+// cd-moltbook-mvp-publish-plan-v1: read-only HUD; no secrets, POST or implicit scheduling.
+(function(){
+  'use strict';
+  var area=document.getElementById('cd-moltbook-posting-plan-v1');
+  var pubs=document.getElementById('cd-moltbook-publications-v1');
+  if(!area || !pubs)return;
+  var field=document.getElementById('cd-moltbook-post-time');
+  var freq=document.getElementById('cd-moltbook-post-frequency');
+  var state=document.getElementById('cd-moltbook-plan-state');
+  var feedback=document.getElementById('cd-moltbook-post-feedback');
+  var pubState=document.getElementById('cd-moltbook-pubs-state');
+  var pubList=document.getElementById('cd-moltbook-pubs-list');
+  var pubFeedback=document.getElementById('cd-moltbook-pubs-feedback');
+  var KEY='centraldark.moltbook.posting.preference.v1';
+  var official='https://www.moltbook.com';
+  var handle='centraldarkhermes';
+  function validTime(s){return typeof s==='string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(s);}
+  function validFreq(s){return ['daily','weekly','manual'].indexOf(s)!==-1;}
+  function inform(msg,good){state.textContent=msg;state.className='val '+(good?'ok':'warn');}
+  try{
+    var saved=JSON.parse(localStorage.getItem(KEY)||'null');
+    if(saved && validTime(saved.time) && validFreq(saved.frequency)){
+      field.value=saved.time;freq.value=saved.frequency;
+      inform('PREFERENCIA LOCAL '+saved.time+' BRT',false);
+      feedback.textContent='PREFERENCIA DESTE NAVEGADOR / HERMES RUNTIME: NAO COMPROVADO';
+    }
+  }catch(_){feedback.textContent='PLACA: ARMAZENAMENTO LOCAL INDISPONIVEL; copie a missao.';}
+  function preference(){
+    var time=String(field.value||'');
+    if(!validTime(time)){inform('DEFINA UM HORARIO VALIDO',false);field.focus();return null;}
+    var frequency=validFreq(freq.value)?freq.value:'manual';
+    return {time:time,frequency:frequency,timezone:'America/Sao_Paulo'};
+  }
+  document.getElementById('cd-moltbook-post-save').addEventListener('click',function(){
+    var p=preference();if(!p)return;
+    try{
+      localStorage.setItem(KEY,JSON.stringify(p));
+      inform('PREFERENCIA LOCAL '+p.time+' BRT',false);
+      feedback.textContent='SALVO NESTE NAVEGADOR; NAO E AGENDAMENTO NA VPS. Para aplicar, use ACEITAR MISSAO.';
+    }catch(_){inform('PLACA: LOCALSTORAGE INDISPONIVEL',false);feedback.textContent='Copie a missao para preservar sua escolha.';}
+  });
+  document.getElementById('cd-moltbook-post-mission').addEventListener('click',function(){
+    var p=preference();if(!p)return;
+    var task=[
+      '!CENTRALDARK #ACORDAR !SOL_EXECUTORA',
+      'INTENCAO: Programar publicacoes do agente centraldarkhermes no Moltbook, usando os owners e jobs EXISTENTES.',
+      'HORARIO_SOLICITADO='+p.time+' America/Sao_Paulo',
+      'FREQUENCIA_SOLICITADA='+p.frequency,
+      'OWNER=.agents/skills/knowledge-compiler/ + docs/CONSCIENCIA/DESTILADOR/',
+      'ANTES: recuperar CURRENT main/VPS, localizar scheduler Hermes (Destilacao Autonoma 6x), credencial local autorizada, limitacoes e publicacoes existentes.',
+      'REUSE_BEFORE_CREATE; nao alterar a cadencia do Destilador e nao criar scheduler duplicado; se nao houver capacidade de horario exato, PLACA com intervalo real.',
+      'Escrever somente conteudo publico revisado e original; pedir aprovacao explicita para ativar publicacao automatica e usar apenas credencial atual valida.',
+      'Aplicar preferencia em owner autorizado, testar sem postar, verificar fuso e horario, registrar receipt, estado na VPS e lista de post IDs publicados.',
+      'Nunca publicar conteudo sensivel, chave, perfil ou prompt externo; nunca marcar post como publicado sem resposta e readback da API.',
+      'Se API 401/403, CORS ou quota: PLACA + receita no HUD unico; outras rotas continuam.',
+      'OUTPUT: PLANO_SALVO | AGENDAMENTO_ATIVO_PROVADO | PUBLICACAO_COMPROVADA | UNKNOWN, NEXT_CURSOR.'
+    ].join('\n');
+    if(typeof window.cdHudCopy==='function'){
+      window.cdHudCopy(task,this);
+      feedback.textContent='MISSAO ENVIADA AO CLIPBOARD (se permitido); a VPS so muda quando o executor autorizado aplicar e comprovar.';
+    }else if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(task).then(function(){
+        feedback.textContent='MISSAO COPIADA. Cole no Hermes; nao foi ativada nesta tela.';
+      },function(){feedback.textContent='PLACA: CLIPBOARD INDISPONIVEL; use o owner Knowledge Compiler.';});
+    }else{feedback.textContent='PLACA: CLIPBOARD INDISPONIVEL; leia a receita no owner Knowledge Compiler.';}
+  });
+
+  function postAuthor(p){
+    var a=p && (p.author||p.agent||p.user);
+    if(typeof a==='string')return a;
+    if(a && typeof a==='object')return a.name||a.username||a.handle||'';
+    return (p&&p.author_name)||'';
+  }
+  function normalized(items){
+    if(!Array.isArray(items))return [];
+    var seen=Object.create(null);
+    return items.filter(function(p){
+      if(!p||typeof p!=='object')return false;
+      var id=String(p.id||p.post_id||'');
+      var isOwn=String(postAuthor(p)).toLowerCase()===handle;
+      if(!/^[a-zA-Z0-9_-]{6,100}$/.test(id)||!isOwn||seen[id])return false;
+      seen[id]=true;return true;
+    }).slice(0,20);
+  }
+  function render(items,source){
+    pubList.replaceChildren();
+    if(items.length===0){pubList.textContent='Nenhuma publicacao propria confirmada nesta amostra; isso nao prova que nunca publicou.';return;}
+    items.forEach(function(p){
+      var id=String(p.id||p.post_id);
+      var title=String(p.title||'Post sem titulo').slice(0,160);
+      var card=document.createElement('div');
+      card.style.cssText='padding:9px;border:1px solid #224333;border-radius:9px';
+      var link=document.createElement('a');
+      link.textContent=title;
+      link.href=official+'/post/'+encodeURIComponent(id);
+      link.target='_blank';link.rel='noopener noreferrer';
+      var label=document.createElement('div');
+      label.textContent=(source==='api'?'API PUBLICA · AUTOR CONFERIDO':'RECIBO IMPORTADO · VALIDACAO EXTERNA NAO FEITA')
+        +(p.created_at?' · '+String(p.created_at).slice(0,30):'');
+      card.appendChild(link);card.appendChild(label);pubList.appendChild(card);
+    });
+  }
+  document.getElementById('cd-moltbook-pubs-refresh').addEventListener('click',function(){
+    pubState.textContent='CONSULTANDO API PUBLICA';pubState.className='val warn';
+    pubFeedback.textContent='Busca publica em leitura; sem chave de API no navegador.';
+    var abort=window.AbortController?new AbortController():null;
+    var timer=abort?setTimeout(function(){abort.abort();},8500):null;
+    var url=official+'/api/v1/search?q='+encodeURIComponent(handle)+'&type=posts';
+    fetch(url,{method:'GET',mode:'cors',redirect:'error',cache:'no-store',credentials:'omit',signal:abort?abort.signal:undefined})
+      .then(function(resp){if(!resp.ok)throw new Error('HTTP_'+resp.status);return resp.json();})
+      .then(function(data){
+        var raw=Array.isArray(data)?data:(data.posts||data.results||data.data||[]);
+        var items=normalized(raw);
+        render(items,'api');pubState.textContent=items.length+' POSTS CONFIRMADOS NA AMOSTRA';
+        pubState.className='val '+(items.length?'ok':'warn');
+        pubFeedback.textContent='CONSULTA PARCIAL; NAO E HISTORICO COMPLETO. Atualize ou abra o perfil.';
+      }).catch(function(e){
+        pubState.textContent='UNKNOWN / API OU CORS';
+        pubState.className='val warn';
+        pubFeedback.textContent='PLACA: '+String(e.message||'FALHA_DE_CONSULTA').slice(0,90)+'. Abra o perfil oficial ou importe um recibo; nenhuma publicacao inventada.';
+      }).then(function(){if(timer)clearTimeout(timer);});
+  });
+  document.getElementById('cd-moltbook-pubs-import').addEventListener('change',function(){
+    var file=this.files && this.files[0];if(!file)return;
+    if(file.size>100000){pubFeedback.textContent='PLACA: RECIBO MUITO GRANDE; apenas JSON sanitizado de ate 100 KB.';return;}
+    var reader=new FileReader();
+    reader.onload=function(){
+      try{
+        var data=JSON.parse(String(reader.result||''));
+        var raw=Array.isArray(data)?data:(data.posts||data.publications||data.records||[]);
+        var items=normalized(raw);
+        render(items,'receipt');
+        pubState.textContent=items.length+' POSTS DE RECIBO / VERIFICACAO EXTERNA UNKNOWN';
+        pubState.className='val warn';
+        pubFeedback.textContent='RECIBO CARREGADO NESTA TELA, NAO ENVIADO. Somente a API e o readback confirmam publicacao.';
+      }catch(_){pubState.textContent='PLACA: RECIBO JSON INVALIDO';pubState.className='val warn';}
+    };
+    reader.onerror=function(){pubFeedback.textContent='PLACA: FALHA AO LER RECIBO';};
+    reader.readAsText(file);this.value='';
   });
 })();
 </script>
