@@ -2224,9 +2224,9 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       <h2 class="section-title">Hermes &mdash; juiz ao vivo (PowerShell 7)</h2>
       <span class="section-count">terminal da VPS</span>
     </div>
-    <p style="font-size:12px;color:var(--text);margin:0 0 10px;">Mesma vista do Hermes, no terminal: PowerShell 7 entra na VPS (Segredo-VPS) e roda <code>/root/hermes-hud.sh</code>. Uma pagina HTML nao abre terminal sozinha: copie o comando e cole no PowerShell 7. O estado verde so vale o que o script medir na hora.</p>
+    <p style="font-size:12px;color:var(--text);margin:0 0 10px;">Mesma vista do Hermes, no terminal: PowerShell 7 entra na VPS (Segredo-VPS) e roda <code>/root/hermes-hud.sh</code>. Uma pagina HTML nao abre terminal sozinha: copie o comando e cole no PowerShell 7. Na Casa foi comprovado o OpenSSH do Git (o ssh.exe do Windows falhou). O juiz consulta o mesmo MCP/One Heart; erro ou lag vira PLACA, nao verde. O estado verde so vale o que o script medir na hora.</p>
     <div class="hud-missions">
-      <pre id="hermes-judge-cmd" style="margin:0 0 10px;padding:10px;border:1px solid var(--border,#333);border-radius:8px;overflow:auto;white-space:pre-wrap;">ssh -t Segredo-VPS 'bash /root/hermes-hud.sh'</pre>
+      <pre id="hermes-judge-cmd" style="margin:0 0 10px;padding:10px;border:1px solid var(--border,#333);border-radius:8px;overflow:auto;white-space:pre-wrap;">&amp; 'C:\Program Files\Git\usr\bin\ssh.exe' -t Segredo-VPS 'bash /root/hermes-hud.sh'</pre>
       <a class="hud-linkbtn" id="hermes-judge-copy" href="#">&#128203; Copiar comando</a>
     </div>
   </div>
