@@ -356,6 +356,64 @@ AUTHENTICATION_STATE=UNKNOWN
 CUSTOM_PROMPT_EXECUTED=UNKNOWN
 ```
 
+## Colheita 2026-10-09 — bearings explícitos e missão não encerrada
+
+O CHEFE forneceu uma formulação expandida do mesmo owner `!MULTIBUSSOLA`, com
+`TRUE_NORTH_LOCK`, `FORWARD_ROUTE`, `REVERSE_ROUTE`, `INVERSE_ROUTE`,
+`CROSS_BEARING_RENDEZVOUS`, invalidação seletiva de bearings stale e retorno a
+`!META_LUPA`/`!RECONCILIAR` quando houver divergência.
+
+Classificação:
+
+```text
+OWNER_EXISTENTE=docs/CONSCIENCIA/MULTIBUSSOLA.md
+NEW_OWNER=false
+NEW_ORCHESTRATOR=false
+SEMANTIC_DELTA=REUSE_AND_EXPLICIT_REGISTER
+```
+
+A semântica nova preservada é:
+
+```text
+INTENT + DESTINATION + PROOF_TARGET + MATERIAL_SCOPE
+→ REQUIRED_BEARINGS
+→ FORWARD/REVERSE/INVERSE
+→ CROSS_BEARING_RENDEZVOUS
+→ DIVERGENCE? META_LUPA + RECONCILIAR + TESTE_DISCRIMINANTE
+→ MATERIAL_STATE_CHANGED? INVALIDATE_ONLY_DEPENDENT_BEARINGS + RE-FIX
+→ CONTRAPROVA + REMEDIÇÃO_T1 + REALITY_JUDGE
+→ FIXED_POINT_PASS | FAIL | BLOCKED | NOT_YET
+```
+
+A narrativa recebida também declarou `684a12f9...`, `1ba30266...`,
+`ed5970dc...` e workflows em fila. O readback GitHub desta sessão verificou
+apenas a proveniência histórica do PR, não esses valores como CURRENT:
+
+```text
+PR_1189=MERGED
+PR_1189_MERGED_AT=2026-08-26T20:10:01Z
+PR_1189_MERGE_COMMIT=e1d7aac29f03a32699514683b8da7df341f745b8
+PR_1189_HEAD_AT_MERGE=684a12f9f8e5a527352531388411d30fde4230c1
+CURRENT_MAIN_AT_READBACK=6d53ed6db2dad5f59ca909a3b9cdf67c6830170c
+HISTORICAL_HEAD != CURRENT_MAIN
+QUEUED_OR_CANCELLED != PASS
+```
+
+Veredito da colheita:
+
+```text
+LOCAL_ANALYSIS_STABLE=UNKNOWN
+LOCAL_FIXED_POINT=UNKNOWN
+GLOBAL_FIXED_POINT=UNKNOWN
+MISSION_STATE=NOT_YET
+UNKNOWN_MATERIAL_REMAINING=true
+```
+
+O texto foi registrado como aprendizado/proveniência, não como declaração de
+missão concluída. Próximo cursor: medir o alvo material atual, resolver somente
+os bearings exigidos, executar contraprova independente e remedir T1 antes de
+qualquer `!FIXED_POINT`.
+
 ---
 
 ## Conexões Rápidas
