@@ -182,3 +182,35 @@ GO_REINSTALL=NO
 FIXED_POINT_GLOBAL=FALSE
 NEXT_CURSOR=RESTORE_VPS_SYNC_OWNER_SAFELY_WITH_UNTRACKED_PRESERVATION_THEN_READBACK_HUD_FROM_API_CONTROL_PLANE
 ```
+
+
+## 09/10/2026 — Placa MVP e telemetria Casa por metadados
+
+INTENCAO=CONTINUAR_SITE_E_ROTAS_SEM_BLOQUEAR_POR_MODELO_LOCAL_AUSENTE
+OWNER_HUD=docs/HUD/HUD.html
+OWNER_ROTEADOR=apps/instinto-superior/src/routes/roteador.tsx
+OWNER_TELEMETRIA=Screenpipe/Remote Desktop Commander existentes
+GOAL=t_9040803d
+
+### Readback source e runtime (medidos nesta sessão)
+
+- Commit `d921e94e44a99de80e5117e84937114f120940d3` da `main`: placa não bloqueante no roteador e HUD único. Readback GitHub dos dois arquivos: PASS.
+- VPS `main` HEAD no mesmo SHA `d921e94e4`, `git diff` desses dois arquivos vazio; untracked `HERMES-CORE/missions/`, `mcp/src/agents/agents-main.zip` e `apps/portal/` preservados.
+- Fonte HUD do Git: blob `f2e81aa1cd158a75b7208ed9edc0a3a0d84a9f8f`, SHA256 `1887ef02552db71732a282b90bc3260fdfa4f081c30610b6edb6f766bd83730f`.
+- Antes na Casa: blob `6eca3c7136bb683d4a2be6b0a5b47a1a202c2d16`; diff contra a main = 4 adições e 3 remoções, atualização de provenance e uma placa local; backup atômico preservado no Temp.
+- Depois na Casa (mesmo Obsidian `HUD.html`, sem segundo HUD): blob `f2e81aa1cd158a75b7208ed9edc0a3a0d84a9f8f`, readback exato PASS; 170490 bytes. Original no backup: blob `6eca3c7136bb683d4a2be6b0a5b47a1a202c2d16` PASS.
+- Site público `https://centralldark.com/` → HTTP 200, HTML identificado AionUi. `http://89.117.78.124:25808/` → HTTP 200, AionUi. `https://api.centralldark.com/health` → HTTP 200, JSON `servico=hermes-core`.
+- `https://admin.centralldark.com/` → HTTP 200, HTML Rakazo; `/oauth/cloudflare/start` também → HTTP 200 HTML Rakazo, não comprova rota OAuth funcional. `https://hub.centralldark.com/` → HTTP 503, `BACKEND_NOT_RUNNING`.
+- Casa: `screenpipe-app.exe` é PID 42552 e dono da porta 3030, `GET /health`=200 e `GET /status`=403. Processo AionUi PID 11448 e aioncore PID 20424 presentes; Remote Desktop Commander ativo, casa acessível. Não houve leitura de conteúdo de tela, áudio, câmera, teclado ou clipboard; CAPTURE_ACTIVE=UNKNOWN e DATA_DESTINATION_MEANING=UNKNOWN (conexões TCP de processo observadas apenas como metadados).
+- Trigger Fabric: `TRIGGERS.yml` contém 15 gatilhos humanos, 15 tokens únicos, sem duplicata de token; `MASTER-CYCLE.yml` usa `!CENTRALDARK` como gatilho mestre e serializa mutação por owner. NO_NEW_TRIGGER e NO_NEW_ROUTER.
+- O computador da Casa aceitou abrir Edge para o site, admin, API e HUD físico atualizado. A posição visual/visibilidade das abas não foi inspecionada.
+
+### Fronteira de prova
+
+`HTTP_200 != ADMIN_E2E_PASS`; `VPS_HEAD_ALIGNED != PUBLIC_DEPLOY`; `SCREENPIPE_PROCESS_ALIVE != SCREEN_OR_AUDIO_RECORDING_ACTIVE`; `ROTA_AUXILIAR_OFFLINE != SISTEMA_INTEIRO_OFFLINE`.
+
+O workflow de deploy do site ainda aparecia QUEUED na última medição. O `deploy_status` indica erro de parsing no PM2 (`SyntaxError: Unexpected end of JSON input`); não traduzir isso para falha do site sem confirmação causal.
+
+MUTATIONS_THIS_SCOPE=CASA_HUD_ATOMIC_SYNC_WITH_BACKUP; DOC_RECEIPT_APPEND_ONLY.
+NO_KYLIN_RESTART=true; NO_NEW_SERVICE=true; NO_CAPTURE_ACTIVATION=true; NO_SECRET_ACCESS=true.
+NEXT_CURSOR=SITE_DEPLOY_SAME_SHA_AND_PUBLIC_PLAQUE_READBACK -> ADMIN_ROUTE_OWNER -> OAUTH_ROUTE_READBACK -> OPTIONAL_RUNTIME_WARNINGS; manter site e API operantes.
