@@ -625,7 +625,7 @@ def hud_first_gate(repo: Path) -> dict:
             return None
 
     origin = git("remote", "get-url", "origin")
-    if not origin or not re.search(r"github\\.com[:/]ServerVpss/CentralDark(\\.git)?$", origin, re.I):
+    if not origin or not re.search(r"github\.com[:/]ServerVpss/CentralDark(\.git)?$", origin, re.I):
         evidence["reason"] = "HUD_ORIGIN_NOT_CANONICAL"
         return evidence
     head = git("rev-parse", "HEAD")
