@@ -753,7 +753,7 @@ body {
 <!-- Ultimo delta, sem novo owner -->
 <div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">08/10/2026, 22:35:04 BRT - reconciliacao CURRENT sem falso verde</span></div><div class="cadeado-meta">FONTE OBSERVADA: GitHub main 981e1f3a48dd (HEAD antes da publicacao desta edicao) e checkout VPS bdf2f09ad. O HUD Casa divergia da main em uma unica linha de atualizacao: 07:30 versus a medicao 11:55 BRT de 08/10. O registro antigo de disco 100% foi superado por medicões posteriores (receipt KYLIN: 65% usados, 66 GB livres); nao apresentar a antiga ferida como CURRENT. Indicadores operacionais abaixo sao snapshots datados e NAO substituem sensores vivos, autenticao, inferencia ou backcheck. A secao de historico embutido permanece apenas evidencia datada no mesmo arquivo. Owner: docs/HUD/HUD.html.</div></div>
 <!-- CURRENT_PROVENANCE_COMPASSO 2026-10-09: ONE_SYSTEM_ONE_HUD; read-only projection -->
-<div class="section cd-index-current" id="cd-hud-compasso-current" data-busca="centraldark index current vps main casa triton kylin proveniencia frescor peso source runtime" data-observed-at="2026-10-09T01:35:04.340Z" style="margin-top:16px">
+<div class="section cd-index-current" id="cd-hud-compasso-current" data-busca="centraldark index current vps main casa triton kylin proveniencia frescor peso source runtime" data-observed-at="2026-10-09T01:52:57.600Z" style="margin-top:16px">
  <div class="section-header"><div class="section-icon">&#128065;</div><h2 class="section-title">Index + HUD &middot; Compasso CURRENT</h2><span class="section-count" id="cd-hud-current-age">CALCULANDO FRESCOR</span></div>
  <p class="cadeado-meta">Prova da fonte &gt; historico narrado. Peso: <strong>efeito real + contraprova</strong> &gt; <strong>source/HEAD verificados</strong> &gt; <strong>documento ou HTTP 200 isolado</strong>. Este quadro e um snapshot de leitura, nunca um segundo juiz; quando envelhecer vira STALE.</p>
  <div class="hud-grid">
@@ -763,6 +763,8 @@ body {
   <div class="hud-card"><h3>Triton 2.49.0 &middot; inventario</h3><div class="val ok">21 READY / 30 CATALOGADOS</div><div class="meta">Sensor Kylin/Triton: 21 com state READY, 1 UNAVAILABLE (OCR), 8 sem estado READY informado. Nenhum LLM generativo de conversa identificado no catalogo; Triton READY nao e chat NLP PASS.</div></div>
   <div class="hud-card"><h3>Kylin NLP &middot; geracao</h3><div class="val warn">INIT_FAILED:10 / 502</div><div class="meta">Falha nativa registrada e reproduzida em receipt; SDK/modelo indisponivel e hipoteses separadas. Patch de ordem `bdf2f09ad` no source, nao equivale a correcao comprovada no processo ativo.</div></div>
   <div class="hud-card"><h3>Fio da missao / evidencias</h3><div class="val warn">FIXED_POINT: NAO COMPROVADO</div><div class="meta">GOAL t_9040803d. Receber &#8594; Perceber &#8594; Compreender &#8594; Costurar &#8594; Comprovar &#8594; Cristalizar &#8594; Continuar. NEXT_CURSOR: reconciliar modelo disponivel &#8594; native-once &#8594; bridge completion &#8594; Hermes.</div></div>
+  <div class="hud-card"><h3>API CentralDark &middot; Hermes Core</h3><div class="val warn" id="cd-api-hermes-current">API HEALTH: MEDINDO</div><div class="meta">Owner real: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">api.centralldark.com/health</a> retorna `servico=hermes-core`, `versao=5.0` na medicao da Casa. Health nao equivale a IA inferindo, deploy nem acesso admin. A consulta HTTP sem credenciais roda no navegador, com UNKNOWN se indisponivel.</div></div>
+  <div class="hud-card"><h3>Google Drive &middot; Vault VPS off-host</h3><div class="val warn">GOOGLE_DRIVE_VAULT_OFFHOST: IDENTIFICADO</div><div class="meta">Inventario Claude: `Vault-Cofre-CentralDark-20260930T105330Z.tar.gz` (752.981.967 bytes), e sidecar .sha256 presente. SHA esperado `383eb16f6ccd...e8e4` no Drive e receipt do Git. Metadata+sidecar PASS; SHA de bytes do arquivo inteiro CURRENT = UNKNOWN. Conteudo potencialmente secreto: sem upload ou abertura pela API publica.</div></div>
  </div>
  <p class="cadeado-prova">Fonte: snapshot operacional 2026-10-09T01:35:04.340Z (sensor) + GitHub `main` + VPS git + <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/RECEIPTS/2026-10-09-KYLIN-BRIDGE-CHAT-502-INIT-FAILED-10.md" target="_blank" rel="noopener">receipt Kylin</a>. O One Heart existente continua como fonte dinamica separada; CORS/timeout no file:// vira UNKNOWN, nunca PASS.</p>
 </div>
@@ -776,6 +778,26 @@ body {
     badge.textContent=fresh?'SNAPSHOT RECENTE / <= 15 min':'SNAPSHOT STALE / MEDIR CURRENT';
     badge.title='Snapshot gravado em '+(parent.getAttribute('data-observed-at')||'UNKNOWN')+'; nao prova situacao do runtime depois disso.';
   }
+  // API-HERMES health: probe publica READ_ONLY; nao e prova de LLM, owner ou deploy.
+  function apiHealth(){
+    var el=document.getElementById('cd-api-hermes-current');
+    if(!el)return;
+    var ctrl=window.AbortController?new AbortController():null;
+    var timeout=ctrl?setTimeout(function(){ctrl.abort();},6500):null;
+    fetch('https://api.centralldark.com/health',{cache:'no-store',mode:'cors',signal:ctrl?ctrl.signal:undefined})
+      .then(function(res){if(res.status!==200)throw Error('HTTP_'+res.status);return res.json();})
+      .then(function(body){
+        var ts=Date.parse(body.ts),age=Date.now()-ts;
+        var fresh=Number.isFinite(age)&&age>=-5000&&age<=30000;
+        var isHermes=body.status==='ok'&&body.servico==='hermes-core'&&fresh;
+        el.textContent=isHermes?'HEALTH HTTP 200 / HERMES CORE 5.0':'UNKNOWN / STALE OU OUTRO OWNER';
+        el.className='val '+(isHermes?'ok':'warn');
+        el.title='HTTP/health exclusivamente; inferred generation, models, deploy e outras rotas = nao provados';
+      })
+      .catch(function(){el.textContent='UNKNOWN / API OU CORS';el.className='val warn';})
+      .then(function(){if(timeout)clearTimeout(timeout);});
+  }
+  apiHealth();setInterval(apiHealth,30000);
   refresh(); setInterval(refresh,30000);
 })();
 </script>
