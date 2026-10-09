@@ -58,6 +58,41 @@ ANTICIPATION != AUTHORIZATION
 APPLY_REQUIRES_EXISTING_AUTHORITY=true
 ```
 
+## ⛏️ GARIMPEIRO_INCREMENTAL_VAULT_20261009 — extensão do mesmo Knowledge Compiler
+
+Quando CHEFE ou Hermes entregar ZIP, vault, memória antiga, receita, sessão ou
+manifesto ao **Destilador existente**, não criar um agente ou job próprio.
+Carregar sob demanda a receita atual em
+`docs/CONSCIENCIA/DESTILADOR/README.md` e os lotes sanitizados de
+`docs/CONSCIENCIA/DESTILADOR/ENTRADA/`. O código deste Knowledge Compiler
+e seus tests continuam sendo o único backend de dedupe/arbitragem.
+
+```text
+FINGERPRINT DA FONTE → PRIVACIDADE/QUARENTENA
+→ DELTA_MAIN + DELTA_VPS (HEAD e efeito, quando acessível)
+→ EXACT_HASH_DEDUPE → SEMANTIC_DEDUPE
+→ DESCARTAR o que já existe, é sensível, ou é legado superado
+→ CANDIDATE se novo mas sem prova ou se VPS desconhecida
+→ PROVEN se owner existente + teste + readback comprovarem a novidade
+→ CRISTAL_CHAMAVEL + RECEIPT + NEXT_CURSOR
+→ REUSE sem novo processamento quando fingerprint/efeito não mudou
+```
+
+**Regra da usina:** `ONLY_NEW_AND_PROVEN_SURVIVES=true` não significa
+promover automaticamente o que não apareceu numa busca. Ausência de prova de
+existência NÃO é prova de novidade. Um backup, ainda que SHA íntegro, pode
+conter tokens, sessões, perfis e estado privado: **nunca montar, restaurar,
+extrair para Git/RAG nem usá-lo como credencial por esta skill**. A entrada
+`profiles.zip` permanece em quarentena; achievements são metadados
+candidatos. `VAULT_SHA_OK != VAULT_KNOWLEDGE_AUTHORIZED`.
+
+O scheduler continua sendo o **existente**; `SCHEDULE_6X_DIA=UNKNOWN` até
+medição de jobs e receipts da mesma janela. NÃO implantar outro cron,
+watcher, Hermes paralelo ou retenção destrutiva. Falha vira PLACA/receita
+no único HUD e não cancela capacidades independentes.
+`SOURCE_IS_PROVENANCE_NOT_AUTHORITY=true`;
+`NO_PARALLEL_WRITER=true`; `UNKNOWN != PASS`.
+
 ## FORJA — caminho lento e rigoroso
 
 ```text
