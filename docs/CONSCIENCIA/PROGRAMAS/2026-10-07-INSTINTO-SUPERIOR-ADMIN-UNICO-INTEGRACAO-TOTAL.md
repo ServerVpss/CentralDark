@@ -631,3 +631,29 @@ NO_NEW_ARCHITECTURE = TRUE
 
 **Prova nesta alteração:** contrato publicado no PR #1788, não prova de runtime; `API14_HUD_LAW=DOCUMENTED`, `API15_OBSIDIAN_GUI=UNKNOWN`, `API09–API13_ONE_HEART_E2E=UNKNOWN`, `DETERMINISTIC_SEAL_REPLAY_RUNTIME=UNKNOWN`. Atualização física do Obsidian/VPS depende de writer autorizado, mesmo hash e readback após promoção.
 <!-- /PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->
+
+<!-- PR1788_HERMES_AUTONOMY_SKILL_SYNC_READBACK_20261009 -->
+## Hermes — autonomia delegada + integração automática das skills na VPS após MAIN (09/10/2026)
+
+**INTENÇÃO vigente do CHEFE:** Hermes deve executar o trabalho técnico autorizado **sem micro-passos** (inventariar, editar arquivos/skills/scripts dos owners, testar, corrigir, commitar no PR ativo, publicar receipt e SELAR a prova no HUD), inclusive no workspace da VPS sob `/root/CentralDark`. Não criar outro agente, timer, script-engine, PR ou arquitetura. **/root como caminho não impede que o usuário root altere o sistema fora da pasta**, então essa delegação mantém os gates para ações destrutivas, não libera YOLO nem substitui o mecanismo de aprovação real do Hermes.
+
+### DELTA CANÔNICO — TRÊS COMMITS NO MESMO PR #1788
+
+| Commit | Owner existente | Delta |
+|---|---|---|
+| `b550cc903ea21b462b716cedb06ae6663c382fda` | `scripts/vps/auto-sync-main.sh` | Com fast-forward válido da `main` e diff em `.agents/skills/`, executa o owner `scripts/skill-sync-check.sh --apply` uma vez, com `CENTRALDARK_ROOT` e `CENTRALDARK_SKILL_SYNC_REF=<SHA_exato_promovido>`. Reutiliza lock/backup/hash/oracle sem sobrescrever drift e sem restart. |
+| `099cd09e1e0c903dadecb04dcfb6e6601dbc3afc` | `.agents/skills/skill-synchronization/SKILL.md` | Atualiza skill opt-in para `version: 0.3.0`, descrevendo execução contínua no scope, sync pós-main e a fronteira `SYNCED != LOADED`. |
+| `7a0cf71d5a45b6bbd5d2ee07930bfe87b54f423e` | `.agents/skills/software-development/centraldark-ops/SKILL.md` | Incorpora a delegação de trabalho com scripts `.sh`, Node/Python, CI, readback e receipt; sem reaprovação por etapa rotineira, sem permissão ilimitada fora do owner. |
+
+### TESTE E CONTRAPROVA
+
+- `bash -n` sobre o script recuperado do **branch do PR** e enviado somente à entrada padrão da shell na VPS: **PASS, exit 0**. Nenhum script de deploy nem skill-sync real foi executado neste teste.
+- Readback estático no arquivo do PR: `SYNC_FUNCTION_COUNT=1`, `SYNC_CALL_COUNT=1`, `PIN_SAME_SHA=true`, `BLOCK_DIRTY=true`, `NO_SECURITY_CONFIG_TOUCH=true`. Guard existente exige `branch=main` e worktree rastreada limpa; novo helper exige `HEAD=<SHA_promovido>`; `skill-sync-check.sh` existente recusa drift independente.
+- Fonte VPS medida via Casa→SSH: `VPS_HEAD=e073059e0f76a53290886b56cbf668bf53d4b7f5`, `BRANCH=main`; alterações rastreadas `.agents/skills/opus-magus/SKILL.md` e `scripts/register-github-webhook.sh` **PRESERVADAS**. Com esse tracked dirty o auto-sync permanece **BLOCKED**; não executar `reset --hard`, stash, force ou merge automático para ocultar.
+- `PR #1788` está **OPEN**, base `5344bd87074c334ddf3ac322ae7d6aaacecdf665`; commit de branch **não é push em main**. Cron/webhook existente acompanha `refs/heads/main`, não PR não-mergeado; este delta só passa ao runtime após promoção legítima, avanço do checkout e readback.
+- **AUTONOMIA CONCEDIDA NO CONTRATO ≠ ALTERAÇÃO DAS APPROVALS:** nenhum `~/.hermes/config.yaml` ou allowlist foi alterado na VPS. Modo `smart` recomendado com confirmação apenas para operações realmente críticas; nenhuma permissão é ilimitada. Carregamento da skill por processo Hermes já em execução ainda `UNKNOWN`.
+
+**ESTADO DE PROVA:** `PR_CODE_COMMITTED=PASS`; `SHELL_SYNTAX=PASS`; `SAME_SHA_HOOK_STATIC=PASS`; `MAIN_MERGED=NO`; `VPS_MAIN_SYNC=BLOCKED_TRACKED_DIRTY`; `HERMES_SKILL_RUNTIME_HASH=UNKNOWN`; `HERMES_ACTIVE_SESSION_POLICY=UNKNOWN`; `AUTONOMOUS_OPERATIONAL_E2E=UNKNOWN`; `GLOBAL_FIXED_POINT=FALSE`.
+
+**NEXT_CURSOR:** o writer correto reconcilia o tracked dirty sem perda → valida PR #1788 e seus checks no **mesmo SHA** → promove para `main` pelo gate vigente → cron atual realiza ff-only e chama o **mesmo** `skill-sync-check.sh` → comparar hash da `skill-synchronization v0.3.0` e `centraldark-ops` em `main`, checkout, `~/.hermes/skills` → carregar nova sessão Hermes se necessário → testar pequena missão reversível com execução/receipt → atualizar o **mesmo** HUD com `SELADO` apenas após readback causal. `MERGED != DEPLOYED`; `SYNCED != LOADED`; `UNKNOWN != PASS`.
+<!-- /PR1788_HERMES_AUTONOMY_SKILL_SYNC_READBACK_20261009 -->
