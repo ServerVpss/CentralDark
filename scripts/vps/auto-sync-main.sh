@@ -94,6 +94,16 @@ restart_if_needed() {
   log "OK" "SERVICE_RESTART_SCOPED_PASS service=$RESTART_SERVICE; HEALTH_E2E_UNKNOWN"
 }
 
+run_pulse() {
+  local pulse="${CENTRALDARK_MAIN_PULSE_RECONCILER:-$REPO/scripts/vps/main-pulse-reconciler.sh}"
+  [[ -x "$pulse" ]] || { log "PULSE_UNKNOWN" "owner_missing path=$pulse"; return 0; }
+  if "$pulse" --source "${1:-}" --trigger auto-sync >>"$LOG" 2>&1; then
+    log "PULSE_PASS" "owner=$pulse"
+  else
+    local rc=$?
+    log "PULSE_UNKNOWN" "owner=$pulse exit=$rc; CHECKOUT_SYNC_REMAINS_PASS"
+  fi
+}
 
 branch=$(git symbolic-ref --quiet --short HEAD) || blocked "detached HEAD; no checkout mutation"
 before=$(git rev-parse --verify HEAD) || blocked "HEAD unavailable"
@@ -153,6 +163,7 @@ if [[ "$before" == "$remote" ]]; then
   log "OK" "CHECKOUT_SYNC_PASS sha=$before; RUNTIME_DEPLOY_UNKNOWN"
   status "PASS" "already at origin/main"
   restart_if_needed "$before" "$before"
+  run_pulse || true
   exit 0
 fi
 if ! git merge-base --is-ancestor "$before" "$remote"; then
@@ -166,3 +177,4 @@ after=$(git rev-parse --verify HEAD)
 log "SYNC" "CHECKOUT_SYNC_PASS from=$before to=$after; RUNTIME_DEPLOY_UNKNOWN"
 status "PASS" "fast-forward from=$before"
 restart_if_needed "$before" "$after"
+run_pulse "$after" || true
