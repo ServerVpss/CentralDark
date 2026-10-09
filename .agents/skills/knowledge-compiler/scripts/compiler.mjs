@@ -396,6 +396,74 @@ export function flashDecision(route, delta = {}) {
   };
 }
 
+
+/**
+ * Julgamento somente de dados comprovados de uma missão do Hermes.
+ * É um selo interno; nunca muda autorização, plano pago nem runtime.
+ */
+export function judgeHermesChallenge(challenge = {}) {
+  const id = String(challenge.challenge_id || '').trim();
+  const receipt = challenge.promotion_receipt || {};
+  const input = challenge.route_input || {};
+  const head = String(challenge.current_head || '').trim();
+  const criteria = Array.isArray(challenge.win_conditions) ? challenge.win_conditions : [];
+  const result = (tier, status, reasons, promotion = 'NOT_EVALUATED') => ({
+    challenge_id: id || 'UNKNOWN',
+    tier,
+    status,
+    promotion_status: promotion,
+    reasons: [...new Set(reasons)],
+    reward: tier === 'INSTINTO_SUPERIOR'
+      ? { kind: 'INTERNAL_MISSION_BADGE', name: 'INSTINTO_SUPERIOR', paid_entitlement: false }
+      : null,
+  });
+
+  // Nunca avaliar nem pontuar conteúdo bruto sensível ou sem classificação.
+  if (challenge.sensitive === true || challenge.source_review === 'FAIL') {
+    return result('PEDRA', 'QUARANTENA', ['SENSITIVE_SOURCE']);
+  }
+  if (challenge.duplicate === true && challenge.new_material_proven !== true) {
+    return result('PEDRA', 'REUSE', ['DROP_DUPLICATE']);
+  }
+  const issues = [];
+  if (!id) issues.push('CHALLENGE_ID_MISSING');
+  if (challenge.source_review !== PASS) issues.push('SOURCE_REVIEW_NOT_PASS');
+  if (!nonEmpty(challenge.owner) || challenge.owner !== input.canonical_owner) issues.push('OWNER_NOT_CURRENT');
+  if (!nonEmpty(challenge.boundary) || challenge.boundary !== input.boundary) issues.push('BOUNDARY_NOT_CURRENT');
+  if (criteria.length === 0) issues.push('WIN_CONDITIONS_MISSING');
+  if (criteria.some((condition) =>
+    !nonEmpty(condition?.id) || condition?.state !== PASS || !nonEmpty(condition?.evidence_ref)
+  )) issues.push('WIN_CONDITIONS_NOT_PROVEN');
+
+  const compiled = compileRoute(input);
+  const promoted = promoteRoute(compiled, receipt);
+  if (compiled.status !== 'COMPILED') issues.push('ROUTE_NOT_COMPILED');
+  if (promoted.status !== 'FLASH_READY') issues.push('ROUTE_NOT_FLASH_READY');
+
+  const routeProven = promoted.status === 'FLASH_READY';
+  const progressTier = routeProven && criteria.length > 0
+    && !issues.includes('WIN_CONDITIONS_NOT_PROVEN') ? 'OURO'
+    : compiled.status === 'COMPILED' ? 'PEPITA' : 'GARIMPO';
+
+  const effect = challenge.runtime_effect || {};
+  const backcheck = challenge.readback || {};
+  const effectPass = effect.status === PASS && nonEmpty(effect.evidence_ref);
+  const readbackPass = backcheck.status === PASS && nonEmpty(backcheck.evidence_ref);
+  if (!effectPass) issues.push('RUNTIME_EFFECT_NOT_PROVEN');
+  if (!readbackPass) issues.push('READBACK_NOT_PROVEN');
+  const verifiedHead = String(promoted.route?.verified_at_head || '');
+  if (!nonEmpty(head) || head !== verifiedHead || head !== input.compiled_from_head) {
+    issues.push('HEAD_NOT_MATCHED');
+  }
+  if (challenge.last_good_preserved !== true) issues.push('LAST_GOOD_NOT_PROVEN');
+  if (!nonEmpty(challenge.receipt_ref)) issues.push('RECEIPT_MISSING');
+  if (!nonEmpty(challenge.crystal_fingerprint)) issues.push('CRYSTAL_FINGERPRINT_MISSING');
+
+  if (issues.length === 0) return result('INSTINTO_SUPERIOR', 'WIN', [], promoted.status);
+  const tier = progressTier === 'OURO' && effectPass && readbackPass ? 'DIAMANTE' : progressTier;
+  return result(tier, receipt.authority_valid === false ? 'BLOCKED' : 'CANDIDATE', issues, promoted.status);
+}
+
 export function tick({ phase, delta = 'NO_CHANGE', owner = 'UNKNOWN', route = 'PENDING', blocker = 0, next = 'UNKNOWN' } = {}) {
   return {
     phase: phase || 'UNKNOWN',

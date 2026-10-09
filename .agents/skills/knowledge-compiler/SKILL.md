@@ -141,6 +141,8 @@ CHEFE_ENTREGA_MATERIAL
 | DIAMANTE | OURO + runtime afetado medido + readback + receita reutilizável sem duplicação | Cristal local |
 | 💎 INSTINTO SUPERIOR | **Todos os critérios da missão declarada** provados no CURRENT + decisão `promoteRoute(...).status === "FLASH_READY"` + last-good-state preservado + recibo no mesmo owner | Vitória da missão, **não** privilégio de conta |
 
+O julgamento executável usa `judgeHermesChallenge(challenge)` exportado pelo mesmo `scripts/compiler.mjs`, que recompila a rota, chama `promoteRoute` e rejeita fonte sensível, HEAD divergente, critério sem referência de prova, efeito/recebimento `UNKNOWN` e ausência de readback. O retorno é somente selo/diagnóstico, **não concede acesso, modifica runtime ou paga premium**.
+
 O julgamento de `INSTINTO SUPERIOR` deve usar o compilador real:
 `.agents/skills/knowledge-compiler/scripts/compiler.mjs` +
 `tests/compiler.test.mjs`. `COMMITTED != DEPLOYED` e
