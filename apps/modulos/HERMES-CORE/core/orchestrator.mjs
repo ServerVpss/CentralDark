@@ -328,6 +328,20 @@ async function retomarOrfas() {
   }
 }
 
+// Persist the same Goal's live cursor without replacing its validated T0 contract.
+// Only action-result metadata from the existing Hermes decider is carried forward.
+function stitchGoalCursor(existing, decisao) {
+  const cursor = decisao?.continuity ?? decisao?.args?.continuity;
+  if (!cursor || typeof cursor !== 'object' || Array.isArray(cursor)) return existing;
+  const delta = {};
+  for (const field of ['next_cursor', 'next_readonly_probe', 'open_work',
+    'recoverable_unknown', 'recoverable_fail', 'oracle_uncertainty',
+    'writer_conflict', 'reality_judge']) {
+    if (Object.hasOwn(cursor, field)) delta[field] = cursor[field];
+  }
+  return { ...existing, ...delta };
+}
+
 async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, continuityState = {}) {
   const logPath = join(dir, 'hermes.log');
   const statePath = join(dir, 'state.json');
@@ -343,6 +357,8 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
   let terminalState = 'RUNNING';
   let terminalReason = null;
   let finalMessage = null;
+  let lastFinalizationFingerprint = null;
+  let repeatedFinalizationWithoutProgress = 0;
 
   while (true) {
     etapa++;
@@ -366,6 +382,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     }
 
     const { etapa_titulo, ferramenta, args = {}, terminou } = decisao;
+    continuityState = stitchGoalCursor(continuityState, decisao);
 
     if (terminou) {
       let finalizacao;
@@ -401,7 +418,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
           ok: false,
           critic: bloqueio,
         });
-        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
+        await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
         registrarEtapa(false);
         registrarFalha();
         await notificar(
@@ -414,6 +431,29 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
 
       if (!finalizacao.aprovado) {
         const bloqueio = String(finalizacao.parecer || 'prova insuficiente').slice(0, 500);
+        // Repeated identical refusal is not information gain. Do not loop endlessly.
+        const fingerprint = JSON.stringify({
+          gate: finalizacao.receipt?.problems || bloqueio,
+          cursor: continuityState.next_cursor || '',
+          probe: continuityState.next_readonly_probe || '',
+          ferramenta,
+        });
+        repeatedFinalizationWithoutProgress = fingerprint === lastFinalizationFingerprint
+          ? repeatedFinalizationWithoutProgress + 1 : 0;
+        lastFinalizationFingerprint = fingerprint;
+        if (repeatedFinalizationWithoutProgress >= 1) {
+          terminalState = 'BLOCKED';
+          terminalReason = 'REPEATED_FINALIZATION_NO_PROGRESS';
+          await writeFile(statePath, JSON.stringify({
+            ...continuityState, missao, historico, retomadas,
+            terminal_state: terminalState, terminal_reason: terminalReason,
+          }, null, 2));
+          await lg('⛔ fingerprint de finalização repetido; preserving Goal/cursor sem retry cego');
+          await notificar('Hermes: revisão causal necessária',
+            `⛔ <b>${slug}</b>\\nFinalization sem nova evidência. Cursor preservado; exigir outra rota/receita.`,
+            'admin');
+          break;
+        }
         await lg(`⛔ conclusão bloqueada na etapa ${etapa}: ${bloqueio}`);
         historico.push({
           etapa_titulo: 'Gate final de conclusão',
@@ -423,7 +463,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
           ok: false,
           critic: bloqueio,
         });
-        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: 'FINALIZATION_GATE_BLOCKED' }, null, 2));
+        await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: 'FINALIZATION_GATE_BLOCKED' }, null, 2));
         registrarEtapa(false);
         await notificar(
           'Hermes: conclusão BLOQUEADA ⛔',
@@ -517,7 +557,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     await new Promise(r => setTimeout(r, 2000));
   }
 
-  await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
+  await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
 
   if (terminalState !== 'CONCLUIDA') {
     await lg(`⏸️ missão permanece em-andamento: state=${terminalState} reason=${terminalReason || 'UNKNOWN'}`);
@@ -529,7 +569,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     terminalState = 'BLOCKED';
     terminalReason = `MOVE_CONCLUIDAS_FAILED:${movida.reason || 'UNKNOWN'}`;
     registrarFalha();
-    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2)).catch(() => {});
+    await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2)).catch(() => {});
     await notificar(
       'Hermes: conclusão BLOQUEADA ⛔',
       `⛔ <b>${slug}</b>\nGate final passou, mas a promoção física para concluídas falhou.\nMotivo: <code>${String(movida.reason || 'UNKNOWN').replace(/</g,'&lt;')}</code>\nNenhum verde final foi emitido.`,
@@ -541,7 +581,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
   registrarConclusao();
   await writeFile(
     join(movida.path, 'state.json'),
-    JSON.stringify({ missao, historico, retomadas, terminal_state: 'CONCLUIDA', terminal_reason: terminalReason }, null, 2)
+    JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: 'CONCLUIDA', terminal_reason: terminalReason }, null, 2)
   ).catch(() => {});
   await notificar(
     `Hermes: MISSÃO CONCLUÍDA 🎉`,
