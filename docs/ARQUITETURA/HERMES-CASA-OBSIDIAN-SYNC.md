@@ -165,3 +165,29 @@ WINDOWS_RUNTIME_E2E=UNKNOWN_UNTIL_CASA_READBACK
 O arquivo `CENTRALDARK-CORPO-UNICO-HUD-BRIDGE(2).ps1` fornecido na mesma rodada foi preservado apenas como evidência de comparação nesta receipt, **não promovido como owner executável**, porque contém `Start-ScreenpipeHidden` / `npx screenpipe record` e portanto pode abrir um segundo writer do Screenpipe. A funcionalidade útil continua candidata a absorção no owner existente somente após teste discriminante.
 
 Promoção física ao BAT original da Casa continua exigindo hash/readback do arquivo ativo e writer único; commit na main não substitui esse readback.
+
+<!-- PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->
+## Manifesto de entrada e selo da Casa/Obsidian — mesmo HUD, mesma verdade (09/10/2026)
+
+**Obrigação de quem opera a Casa:** antes de agir por plugin, Hermes, MCP, nota, comando ou painel, **consultar o mesmo HUD.html e o PR ativo que nele está indicado**, mais os owners/referências correntes. O manifesto `.hermes-sync/` continua sendo o **índice local de hashes**; o `manifest.json` de `centraldark-grafo-vivo` continua sendo metadado técnico do plugin. Nenhum dos dois se torna novo manifesto de autoridade ou executor. O pacto operacional é este owner, consumido pelo Grafo Vivo/sync existentes.
+
+```text
+ENTROU_TEM_QUE_SELAR=true
+HUD_SOURCE=docs/HUD/HUD.html
+OBSIDIAN_HUD=mesmo HUD.html fisico da Casa
+ACTIVE_RENDEZVOUS_PR=1788 (medir CURRENT, nao hardcodar como eterno)
+PROVEN_SEAL + MATCHING_FINGERPRINT_AND_BINDINGS
+  -> REPLAY_EXISTING_OWNER_RECIPE_WITHOUT_LLM
+  -> TARGET_EFFECT_READBACK + SAME_PROOF_KEY_RECEIPT
+NO_VALID_SEAL -> VER_PENDENCIA + OWNER + ROUTE + NEXT_CURSOR
+NO_SECOND_HUD=true
+NO_SECOND_MANIFEST_WRITER=true
+NO_BLIND_OVERWRITE=true
+```
+
+Cada selo carrega `OWNER, SCOPE, PROOF_KEY, SOURCE_SHA, RECEIPT, READBACK, OBSERVED_AT, NEXT_CURSOR`, além dos fingerprints de artefato/dependência, versão de política, binding, sequência executável, efeito esperado e invalidações. **Selado = prova por escopo e data**; só entra em replay sem IA quando o owner possui runner determinístico autorizado e os bindings/efeito foram equivalentes. Falha de acesso, stale, diferença de hashes, falta de prova ou efeito divergente vira **PLACA/VER PENDÊNCIA** sem apagar o acerto anterior. Não repetir a investigação inteira.
+
+Se `docs/HUD/HUD.html@PR`, `@main` e arquivo físico divergirem, exibir as três versões com SHA/proveniência e preservar o arquivo local; `scripts/casa/sync-hermes-obsidian.ps1` **não cobre automaticamente o HUD.html**. A cópia aprovada requer escritor exclusivo, comparação de hashes e readback na Casa. O plugin Grafo Vivo conserva 2D/3D; **Obsidian aberto ou arquivo copiado não prova renderização nem ação MCP**. Segredos e memória privada nunca entram em receipts públicos.
+
+Quando o PR apontado pelo HUD fechar, for concluído ou esgotar comentários, carregar **o mesmo Goal/linha causal** e somente as pendências ainda não seladas no sucessor autorizado; exibir predecessor/sucessor no **mesmo HUD**, nunca em outro painel. Se nada permanecer pendente, não criar PR por cerimônia. `CURRENT > HISTORY`, `DOCUMENTED != EXECUTED`, `ONE_WRITER_PER_EXACT_PATH=true`.
+<!-- /PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->

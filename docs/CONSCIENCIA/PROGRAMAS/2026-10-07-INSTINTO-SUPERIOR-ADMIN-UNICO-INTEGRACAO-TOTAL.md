@@ -608,3 +608,26 @@ FIXED_POINT_GLOBAL=FALSE
 
 **Sem falso verde:** este contrato foi documentado dentro do PR #1788. A execução da mineração completa e o fechamento ponta a ponta permanecem pendentes até prova causal.
 <!-- /PR1788_GITHUB_MINERAL_ESCAVACAO_API_LOG_ONEHEART_20261009 -->
+
+<!-- PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->
+## Continuidade selada HUD ⇄ Obsidian ⇄ PR #1788 — casca mutável, essência preservada (09/10/2026)
+
+**Novo delta do CHEFE sobre API14–API16, sem alterar critérios nem owners:** a entrada operacional consulta obrigatoriamente o **mesmo HUD atual e o PR rendezvous nele indicado**, mais `main`, owner e receipt correspondente. O HUD é a placa viva consultiva, junto ao Obsidian como espelho da Casa; `docs/`, commits, logs e efeito medido continuam a fonte canônica verificável. Não declarar verdade apenas porque um cartão está verde.
+
+A lei **ENTROU, TEM QUE SELAR** já reside em `docs/HUD/HUD.html` neste PR (`CD_HUD_MANIFESTO_ENTROU_TEM_QUE_SELAR_20261009`); **não reescrever o HTML ou disputar `HUD_WRITE_HOLD=ON`**. O contrato complementar está nos owners de entrada `docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md` e de Obsidian `docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md`. Manter as três abas, os cadeados existentes, o mesmo arquivo físico e o plugin Obsidian existentes.
+
+```text
+PROVEN_FLOOR = receipts + PROOF_KEY + scope + target + SHA + fingerprints
+SELADO + UNCHANGED_DEPENDENCIES + AUTHORIZED_DETERMINISTIC_RUNNER
+  -> REPLAY_SAME_OWNER_SCRIPT_WITHOUT_AI -> MINIMUM_REALITY_READBACK -> RECEIPT
+UNKNOWN|STALE|DIRTY|INVALIDATED|FAIL
+  -> PRESERVE_LAST_GOOD -> PLACA_VER_PENDENCIA(OWNER, ROUTE, ERROR, NEXT_CURSOR)
+NO_NEW_ARCHITECTURE = TRUE
+```
+
+**Não repetir missão determinística já selada** significa **reutilizar receita e prova histórica**, rodando somente a verificação mínima dos bindings/efeitos que podem mudar. Não significa suprimir readback ou eternizar selo de serviço. Runner não encontrado = `UNKNOWN/BLOCKED`, jamais inventar daemon/cron/gatilho. Registrar `event_id` no `log-funnel.js` e projetar no One Heart/HUD somente quando o evento realmente atravessar o MCP; sem simular E2E.
+
+**Continuidade da casca do PR:** #1788 permanece o único PR ativo deste escopo enquanto `OPEN` e com capacidade. Comentários são sinalização, não ledger. Se houver fechamento/merge ou limite de comentários **e ainda restarem APIxx/Goal pendentes**, usar a receita de `2026-10-06-pr-mae-ledger-rollover.md` para levar **somente deltas não selados**, links de receipts, cláusulas, owners e `NEXT_CURSOR` ao próximo PR autorizado, marcando predecessor e sucessor no **mesmo HUD.html**; nunca reexecutar provas seladas por causa da troca de PR. Nenhum sucessor é aberto nesta declaração; sem pendências, nenhum PR adicional.
+
+**Prova nesta alteração:** contrato publicado no PR #1788, não prova de runtime; `API14_HUD_LAW=DOCUMENTED`, `API15_OBSIDIAN_GUI=UNKNOWN`, `API09–API13_ONE_HEART_E2E=UNKNOWN`, `DETERMINISTIC_SEAL_REPLAY_RUNTIME=UNKNOWN`. Atualização física do Obsidian/VPS depende de writer autorizado, mesmo hash e readback após promoção.
+<!-- /PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->
