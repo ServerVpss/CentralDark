@@ -763,7 +763,14 @@ body {
   <div class="hud-card"><h3>Triton 2.49.0 &middot; inventario</h3><div class="val ok">21 READY / 30 CATALOGADOS</div><div class="meta">Sensor Kylin/Triton: 21 com state READY, 1 UNAVAILABLE (OCR), 8 sem estado READY informado. Nenhum LLM generativo de conversa identificado no catalogo; Triton READY nao e chat NLP PASS.</div></div>
   <div class="hud-card"><h3>Kylin NLP &middot; geracao</h3><div class="val warn">INIT_FAILED:10 / 502</div><div class="meta">Falha nativa registrada e reproduzida em receipt; SDK/modelo indisponivel e hipoteses separadas. Patch de ordem `bdf2f09ad` no source, nao equivale a correcao comprovada no processo ativo.</div></div>
   <div class="hud-card"><h3>Fio da missao / evidencias</h3><div class="val warn">FIXED_POINT: NAO COMPROVADO</div><div class="meta">GOAL t_9040803d. Receber &#8594; Perceber &#8594; Compreender &#8594; Costurar &#8594; Comprovar &#8594; Cristalizar &#8594; Continuar. NEXT_CURSOR: reconciliar modelo disponivel &#8594; native-once &#8594; bridge completion &#8594; Hermes.</div></div>
-  <div class="hud-card"><h3>Rota de modelo local &middot; auxiliar</h3><div class="val warn">OFFLINE / NAO BLOQUEANTE</div><div class="meta">Falta localizar ou instalar um modelo conversacional local. O site, o MCP, o Hermes Core e os demais modelos continuam seguindo normalmente.</div><button type="button" class="aion-open-btn" style="margin-top:10px" onclick="var n=document.getElementById('cd-local-model-note'); n.hidden=!n.hidden; this.textContent=n.hidden?'VER PENDENCIA':'OCULTAR PENDENCIA'">VER PENDENCIA</button><div id="cd-local-model-note" class="meta" hidden style="margin-top:10px">PROXIMO PASSO: localizar modelo local quando autorizado. ROTA_OFFLINE=NAO_BLOQUEANTE.</div></div>
+  <div class="hud-card"><h3>Rota de modelo local &middot; auxiliar</h3><div class="val warn">OFFLINE / NAO BLOQUEANTE</div><div class="meta">Falta localizar ou instalar um modelo conversacional local. O site, o MCP, o Hermes Core e os demais modelos continuam seguindo normalmente.</div><button type="button" class="aion-open-btn" style="margin-top:10px" onclick="var n=document.getElementById('cd-local-model-note'); n.hidden=!n.hidden; this.textContent=n.hidden?'VER PENDENCIA':'OCULTAR PENDENCIA'">VER PENDENCIA</button><div id="cd-local-model-note" class="meta" hidden style="margin-top:10px;white-space:pre-line;overflow-wrap:anywhere">PLACA: ROTA_OFFLINE_NAO_BLOQUEANTE
+ROTA: UNKNOWN (modelo conversacional local não cadastrado)
+OWNER: Kylin / Hermes catalog
+ARQUIVO: scripts/vps/kylin-openai-bridge.py
+LINHA: UNKNOWN (checar runtime)
+ERRO: modelo local não comprovado; INIT_FAILED:10 / HTTP 502 na rota NLP é ferida separada
+PROVA: último inventário Triton sem LLM generativo confirmado; health não prova chat
+PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.</div></div>
   <div class="hud-card"><h3>API CentralDark &middot; Hermes Core</h3><div class="val warn" id="cd-api-hermes-current">API HEALTH: MEDINDO</div><div class="meta" id="cd-api-hermes-plaque" role="status" aria-live="polite" style="margin-top:8px;color:var(--amber)">PLACA: AGUARDANDO CONTRAPROVA /health</div><div class="meta">Owner real: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">api.centralldark.com/health</a> retorna `servico=hermes-core`, `versao=5.0` na medicao da Casa. Health nao equivale a IA inferindo, deploy nem acesso admin. A consulta HTTP sem credenciais roda no navegador, com UNKNOWN se indisponivel.</div></div>
   <div class="hud-card"><h3>Google Drive &middot; Vault VPS off-host</h3><div class="val warn">GOOGLE_DRIVE_VAULT_OFFHOST: IDENTIFICADO</div><div class="meta">Inventario Claude: `Vault-Cofre-CentralDark-20260930T105330Z.tar.gz` (752.981.967 bytes), e sidecar .sha256 presente. SHA esperado `383eb16f6ccd...e8e4` no Drive e receipt do Git. Metadata+sidecar PASS; SHA de bytes do arquivo inteiro CURRENT = UNKNOWN. Conteudo potencialmente secreto: sem upload ou abertura pela API publica.</div></div>
  </div>
@@ -792,13 +799,78 @@ body {
     if (title.indexOf('Google Drive') >= 0) return ['Inventário do cofre não prova restauração ou integridade atual do arquivo.', 'Metadados e sidecar SHA vistos; hash integral atual ainda UNKNOWN.', 'Revalidar somente metadados/hashes por conexão privada. Nunca expor conteúdo.'];
     return ['Estado deste módulo não comprovado por sensor atual.', 'Somente o rótulo de superfície e snapshot estão visíveis.', 'Remedir o owner antes de promover PASS; seguir demais rotas.'];
   }
+  // Card projection only: show actual path and source when grounded; otherwise UNKNOWN.
+  // A failed delivery/check is a local plaque, never an automatic global veto.
+  function cdPlaqueLocator(title, card) {
+    var result={route:'UNKNOWN (sem medicao de rota)',owner:'UNKNOWN',file:'UNKNOWN',line:'UNKNOWN',error:'UNKNOWN'};
+    if (title.indexOf('GitHub main') >= 0) {
+      result.route='https://github.com/ServerVpss/CentralDark/tree/main';
+      result.owner='ServerVpss/CentralDark@main';
+      result.file='docs/HUD/HUD.html';result.error='HEAD_SNAPSHOT_PODE_ESTAR_STALE';
+    } else if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) {
+      result.route='VPS checkout main / deploy (runtime a medir)';
+      result.owner='ServerVpss/CentralDark (VPS)';
+      result.file='UNKNOWN (configuracao ativa exige leitura)';
+      result.error='SOURCE_VS_RUNTIME_DRIFT (snapshot)';
+    } else if (title.indexOf('Casa') >= 0) {
+      result.route='Obsidian / HUD.html (arquivo local)';
+      result.owner='docs/HUD/HUD.html';
+      result.file='HUD.html';result.error='HASH_READBACK_PENDENTE_OU_HISTORICO';
+    } else if (title.indexOf('Triton') >= 0) {
+      result.route='http://127.0.0.1:8000/v2/repository/index (runtime local, confirmar)';
+      result.owner='Triton / Kylin';
+      result.file='UNKNOWN (runtime nao inspecionado neste navegador)';
+      result.error='SEM_LLM_CONVERSACIONAL_PROVADO';
+    } else if (title.indexOf('Kylin NLP') >= 0) {
+      result.route='127.0.0.1:18435 / native-once (caminho da geracao)';
+      result.owner='centraldark-kylin-native-bridge.service';
+      result.file='/root/.hermes/kylin_openai_bridge.py';
+      result.line='202 (trace historico; confirmar no runtime atual)';
+      result.error='INIT_FAILED:10 / HTTP 502 (observado)';
+    } else if (title.indexOf('Fio da missao') >= 0) {
+      result.route='Goal t_9040803d / continuidade';
+      result.owner='KAIZEN-VIVO';
+      result.file='docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md';
+      result.error='FIXED_POINT_NAO_COMPROVADO';
+    } else if (title.indexOf('Rota de modelo local') >= 0) {
+      result.route='UNKNOWN (modelo conversacional local nao cadastrado)';
+      result.owner='Kylin / Hermes catalog (remedir)';
+      result.file='scripts/vps/kylin-openai-bridge.py';
+      result.error='ROTA_LOCAL_OFFLINE_NAO_BLOQUEANTE';
+    } else if (title.indexOf('API CentralDark') >= 0) {
+      result.route='https://api.centralldark.com/health';
+      result.owner='Hermes Core / API';
+      result.file='docs/HUD/HUD.html';
+      result.error='CALIBRACAO_DRIFT / 404 / REDE (conforme probe viva)';
+    } else if (title.indexOf('Google Drive') >= 0) {
+      result.route='Google Drive: cofre off-host (ID/URL restritos; UNKNOWN no HUD)';
+      result.owner='Vault / backup off-host';
+      result.file='UNKNOWN (cofre privado)';
+      result.error='INTEGRIDADE_COMPLETA_NAO_PROVADA';
+    } else {
+      var source=card.querySelector('a[href]');
+      if (source && /^https?:\/\//i.test(source.href)) result.route=source.href;
+      result.owner=(card.closest('.section')?.querySelector('.section-title')?.textContent || '').trim() || 'UNKNOWN';
+      result.error='ERRO_OU_ESTADO_NAO_COMPROVADO_NESTE_CARTAO';
+    }
+    return result;
+  }
+  function cdPlaqueRequired(card, parent) {
+    if (parent.contains(card)) return true;
+    var val=card.querySelector('.val');
+    var status=(val?.textContent || '').toUpperCase();
+    return !!(val && (val.classList.contains('warn') || val.classList.contains('fail') ||
+      /\b(OFFLINE|DRIFT|UNKNOWN|ERROR|ERRO|FAIL|BLOCKED|PENDING|STALE|502|404|NAO COMPROVADO|PARCIAL)\b/.test(status)));
+  }
   function cdMountIndependentPlaques() {
-    var cards = parent.querySelectorAll('.hud-grid > .hud-card');
+    var cards = document.querySelectorAll('.hud-grid > .hud-card');
     Array.prototype.forEach.call(cards, function(card, index) {
-      // Respeita botao manual existente no modelo local; evita duplicar o owner.
+      // Mesmo HUD, tres abas; preserva os controles/placas existentes e um writer por card.
+      if (!cdPlaqueRequired(card, parent)) return;
       if (card.querySelector('button') || card.querySelector('.cd-plaque-multiplex-v1')) return;
       var title = (card.querySelector('h3') || {}).textContent || 'OWNER UNKNOWN';
       var info = cdPlaqueInfo(title);
+      var locator = cdPlaqueLocator(title, card);
       var toggle = document.createElement('button');
       toggle.type = 'button';
       toggle.className = 'aion-open-btn cd-plaque-multiplex-v1';
@@ -820,10 +892,15 @@ body {
           var live = title.indexOf('API CentralDark') >= 0 ? document.getElementById('cd-api-hermes-plaque') : null;
           detail.textContent = 'PLACA: ' + title.trim()
             + '\nESTADO EXIBIDO: ' + (displayed ? displayed.textContent.trim() : 'UNKNOWN')
+            + '\nROTA EXATA OU UNKNOWN: ' + locator.route
+            + '\nOWNER: ' + locator.owner
+            + '\nARQUIVO: ' + locator.file
+            + '\nLINHA: ' + locator.line
+            + '\nERRO: ' + locator.error
             + '\nMOTIVO: ' + info[0]
-            + '\nEVIDENCIA: ' + (live ? live.textContent : info[1])
-            + '\nPROXIMO: ' + info[2]
-            + '\nCONTINUIDADE: rota auxiliar não bloqueia outras; gates de segurança permanecem.';
+            + '\nPROVA / FONTE: ' + (live ? live.textContent : info[1])
+            + '\nPROXIMO MOVIMENTO: ' + info[2]
+            + '\nCONTINUIDADE: erro ou gate operacional gera PLACA; só a função dependente espera. Autorização e segurança permanecem.';
         }
         detail.hidden = !open;
         detail.style.display = open ? 'block' : 'none';
@@ -835,6 +912,8 @@ body {
     });
   }
   cdMountIndependentPlaques();
+  // Os cartões de MAPA/FORJA vêm depois deste script no HTML; reconciliar no DOM completo.
+  document.addEventListener('DOMContentLoaded', cdMountIndependentPlaques);
   // API-HERMES health: probe publica READ_ONLY; nao e prova de LLM, owner ou deploy.
   function apiHealth(){
     var el=document.getElementById('cd-api-hermes-current');
