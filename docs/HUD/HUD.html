@@ -779,6 +779,62 @@ body {
     badge.textContent=fresh?'SNAPSHOT RECENTE / <= 15 min':'SNAPSHOT STALE / MEDIR CURRENT';
     badge.title='Snapshot gravado em '+(parent.getAttribute('data-observed-at')||'UNKNOWN')+'; nao prova situacao do runtime depois disso.';
   }
+  // cd-plaque-multiplex-v1: uma placa por cartao no MESMO HUD, sem segundas rotas.
+  // Cada boto abre sua propria causa/prova/proximo passo; sem acionar servicos.
+  function cdPlaqueInfo(title) {
+    if (title.indexOf('GitHub main') >= 0) return ['Referência de código, não atestado de deploy.', 'HEAD visível no cartão é histórico até nova leitura.', 'Confrontar HEAD atual do owner com checkout e runtime.'];
+    if (title.indexOf('VPS') >= 0 && title.indexOf('deploy') >= 0) return ['Um checkout antigo ou dirty não derruba outros serviços.', 'A placa mostra o último HEAD medido; NÃO é probe contínua.', 'Reconciliar owner git sem apagar missões nem sobrescrever trabalho.'];
+    if (title.indexOf('Casa') >= 0) return ['Versão física e GitHub podem divergir sem derrubar o HUD.', 'Hash apresentado é snapshot; o arquivo local requer readback.', 'Comparar hash do HUD físico com o owner e manter backup.'];
+    if (title.indexOf('Triton') >= 0) return ['Triton pronto não equivale a modelo de conversa disponível.', '21 READY / 30 catalogados na medição referenciada.', 'Remedir /v2/repository/index e verificar separadamente inferência de texto.'];
+    if (title.indexOf('Kylin NLP') >= 0) return ['O SDK registrou INIT_FAILED:10; falha restrita à geração NLP.', 'Receipt de SDK e HTTP 502, sem prova de recuperação posterior.', 'Preservar bridge e investigar modelo disponível; outras rotas seguem.'];
+    if (title.indexOf('Fio da missao') >= 0) return ['Ainda não há FIXED_POINT global comprovado.', 'Goal e NEXT_CURSOR exibidos são histórico de execução.', 'Continuar pelo menor delta autorizado e contraprovar por escopo.'];
+    if (title.indexOf('API CentralDark') >= 0) return ['Health não demonstra calibração perfeita, inferência ou deploy.', 'Consultar PLACA dinâmica desta API no mesmo cartão.', 'Tratar DRIFT/404/timeout no owner; manter site e MCP independentes.'];
+    if (title.indexOf('Google Drive') >= 0) return ['Inventário do cofre não prova restauração ou integridade atual do arquivo.', 'Metadados e sidecar SHA vistos; hash integral atual ainda UNKNOWN.', 'Revalidar somente metadados/hashes por conexão privada. Nunca expor conteúdo.'];
+    return ['Estado deste módulo não comprovado por sensor atual.', 'Somente o rótulo de superfície e snapshot estão visíveis.', 'Remedir o owner antes de promover PASS; seguir demais rotas.'];
+  }
+  function cdMountIndependentPlaques() {
+    var cards = parent.querySelectorAll('.hud-grid > .hud-card');
+    Array.prototype.forEach.call(cards, function(card, index) {
+      // Respeita botao manual existente no modelo local; evita duplicar o owner.
+      if (card.querySelector('button') || card.querySelector('.cd-plaque-multiplex-v1')) return;
+      var title = (card.querySelector('h3') || {}).textContent || 'OWNER UNKNOWN';
+      var info = cdPlaqueInfo(title);
+      var toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'aion-open-btn cd-plaque-multiplex-v1';
+      toggle.textContent = 'VER PENDENCIA';
+      toggle.style.marginTop = '10px';
+      toggle.setAttribute('aria-expanded', 'false');
+      var detail = document.createElement('div');
+      detail.className = 'meta';
+      detail.id = 'cd-plaque-detail-' + index;
+      detail.hidden = true;
+      detail.style.display = 'none';
+      detail.style.whiteSpace = 'pre-line';
+      detail.style.overflowWrap = 'anywhere';
+      toggle.setAttribute('aria-controls', detail.id);
+      toggle.addEventListener('click', function() {
+        var open = detail.hidden;
+        if (open) {
+          var displayed = card.querySelector('.val');
+          var live = title.indexOf('API CentralDark') >= 0 ? document.getElementById('cd-api-hermes-plaque') : null;
+          detail.textContent = 'PLACA: ' + title.trim()
+            + '\nESTADO EXIBIDO: ' + (displayed ? displayed.textContent.trim() : 'UNKNOWN')
+            + '\nMOTIVO: ' + info[0]
+            + '\nEVIDENCIA: ' + (live ? live.textContent : info[1])
+            + '\nPROXIMO: ' + info[2]
+            + '\nCONTINUIDADE: rota auxiliar não bloqueia outras; gates de segurança permanecem.';
+        }
+        detail.hidden = !open;
+        detail.style.display = open ? 'block' : 'none';
+        toggle.textContent = open ? 'OCULTAR PENDENCIA' : 'VER PENDENCIA';
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      card.appendChild(toggle);
+      card.appendChild(detail);
+    });
+  }
+  cdMountIndependentPlaques();
   // API-HERMES health: probe publica READ_ONLY; nao e prova de LLM, owner ou deploy.
   function apiHealth(){
     var el=document.getElementById('cd-api-hermes-current');
