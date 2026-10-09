@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
 
-const OAUTH_START_SUPPORTED = new Set(["github", "notion", "gdrive", "gmail", "tailscale"]);
+const OAUTH_START_SUPPORTED = new Set(["github", "notion", "gdrive", "gmail", "tailscale", "cloudflare"]);
 
 function tom(status: string) {
   if (status === "active" || status === "ok")
@@ -51,8 +51,9 @@ export function ConexoesCentralDark() {
 
   function conectar(providerId: string) {
     // Transporte OAuth só é acionável quando a consulta viva ao owner retornou PASS.
-    if (!dados?.userId || dados.estado !== "PASS" || typeof window === "undefined") return;
-    const base = dados.fonte.replace(/\/$/, "");
+    if (!dados?.userId || typeof window === "undefined") return;
+    if (providerId !== "cloudflare" && dados.estado !== "PASS") return;
+    const base = providerId === "cloudflare" ? window.location.origin : dados.fonte.replace(/\/$/, "");
     const params = new URLSearchParams({
       user_id: dados.userId,
       redirect_to: window.location.href,
@@ -81,9 +82,12 @@ export function ConexoesCentralDark() {
             <RefreshCw className={q.isFetching ? "animate-spin" : ""} />
             Atualizar
           </Button>
+          <Button onClick={() => conectar("cloudflare")} disabled={!dados?.userId}>
+            <Link2 />
+            Conectar Cloudflare
+          </Button>
           <p className="max-w-60 text-xs text-muted-foreground">
-            HUB absorvido nesta navegação. OAuthBroker permanece como transporte técnico,
-            sem abrir outro painel administrativo.
+            Cloudflare OAuth pelo admin; token guardado no cofre já existente.
           </p>
         </div>
       </div>
@@ -179,7 +183,7 @@ export function ConexoesCentralDark() {
                 ))}
               </div>
               {OAUTH_START_SUPPORTED.has(providerId) ? (
-                <Button className="mt-4" variant="outline" disabled={dados?.estado !== "PASS"} onClick={() => conectar(providerId)}>
+                <Button className="mt-4" variant="outline" disabled={!dados?.userId || (providerId !== "cloudflare" && dados?.estado !== "PASS")} onClick={() => conectar(providerId)}>
                   <Link2 />
                   Conectar outra conta
                 </Button>

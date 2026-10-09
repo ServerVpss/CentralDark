@@ -201,6 +201,9 @@ app.get("/api/providers", async (_q,res)=>{
     if(!items.some((x)=>x.id==="tailscale")){
       items.push({id:"tailscale",display_name:"Tailscale",color:"#242424",icon:"TS",scopes:"tailnet route + human login",auth_type:"oauth",tier:1,enabled:true});
     }
+    const cf=items.find(p=>p.id==="cloudflare");
+    if(cf) cf.auth_type="oauth";
+    else items.push({id:"cloudflare",display_name:"Cloudflare",color:"#f38020",icon:"CF",scopes:CF_OAUTH_SCOPES,auth_type:"oauth",tier:1,enabled:true});
     return res.json({ok:true,items});
   }catch(e){return res.status(500).json({ok:false,error:e.message});}
 });
@@ -378,6 +381,8 @@ app.get("/api/welcome-kit", async (req,res)=>{
   try{
     const uid = req.query.user_id ? toUuid(req.query.user_id) : null;
     const {data:providers}=await sb.from("oauth_providers").select("id,display_name,auth_type,tier").eq("enabled",true);
+    const availableProviders=(providers||[]).map(p=>p.id==="cloudflare"?{...p,auth_type:"oauth"}:p);
+    if(!availableProviders.some(p=>p.id==="cloudflare"))availableProviders.push({id:"cloudflare",display_name:"Cloudflare",auth_type:"oauth",tier:1});
     let connections = [];
     if(uid){
       const {data}=await sb.from("oauth_connections").select("id,provider_id,account_label,status,last_test_status,last_test_at,expires_at").eq("user_id",uid);
@@ -392,13 +397,13 @@ app.get("/api/welcome-kit", async (req,res)=>{
         broker_version:"2.2",
         principle:"todas as contas de todos os providers vivem AQUI, cifradas AES-256-GCM, com log auditável",
       },
-      providers: providers||[],
+      providers: availableProviders,
       connections,
       endpoints:{
         list:"GET /api/keys/list?user_id=X",
         store:"POST /api/keys/store {user_id,provider_id,api_key,account_label}",
         test:"POST /api/keys/:id/test",
-        oauth_start:"GET /oauth/{github|notion|gdrive|gmail}/start?user_id=X&redirect_to=URL",
+        oauth_start:"GET /oauth/{github|notion|gdrive|gmail|cloudflare}/start?user_id=X&redirect_to=URL",
         welcome:"GET /api/welcome-kit?user_id=X",
       },
       timestamp: new Date().toISOString(),
@@ -426,6 +431,82 @@ const OAUTH_CFG = {
     client_id:GOOGLE_OAUTH_CLIENT_ID, client_secret:GOOGLE_OAUTH_CLIENT_SECRET, extraAuth:{access_type:"offline",prompt:"consent"},
     userinfo: async(t)=>{const r=await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:`Bearer ${t}`}});const j=await r.json();return j.email||"gmail";} },
 };
+
+// Cloudflare OAuth lives inside the existing CentralDark OAuthBroker; no second MCP, UI or vault.
+const CF_OAUTH_CLIENT_ID = process.env.CLOUDFLARE_OAUTH_CLIENT_ID || process.env.CF_OAUTH_CLIENT_ID;
+const CF_OAUTH_CLIENT_SECRET = process.env.CLOUDFLARE_OAUTH_CLIENT_SECRET || process.env.CF_OAUTH_CLIENT_SECRET;
+const CF_OAUTH_REDIRECT = process.env.CLOUDFLARE_OAUTH_REDIRECT_URI || "https://admin.centralldark.com/oauth/cloudflare/callback";
+const CF_OAUTH_SCOPES = process.env.CLOUDFLARE_OAUTH_SCOPES || "zone.read";
+const CF_STATE_COOKIE = "cd_cf_oauth_state";
+const CF_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function cfAdminReturn(value) {
+  try {
+    const u=new URL(String(value || "https://admin.centralldark.com/"));
+    return u.origin==="https://admin.centralldark.com" && !u.username && !u.password ? u.toString() : null;
+  } catch { return null; }
+}
+app.get("/oauth/cloudflare/start", (req,res) => {
+  if(!CF_OAUTH_CLIENT_ID || !CF_OAUTH_CLIENT_SECRET)
+    return res.status(503).json({ok:false,status:"CLOUDFLARE_OAUTH_CLIENT_NOT_CONFIGURED",
+      callback:CF_OAUTH_REDIRECT,setup:"https://dash.cloudflare.com/?to=/:account/oauth-clients"});
+  const uid=String(req.query.user_id || "");
+  const returnTo=cfAdminReturn(req.query.redirect_to);
+  if(!CF_UUID.test(uid)) return res.status(401).json({ok:false,status:"IDENTITY_REQUIRED"});
+  if(!returnTo) return res.status(400).json({ok:false,status:"ADMIN_RETURN_REQUIRED"});
+  const state=crypto.randomBytes(32).toString("hex");
+  stateCache.set(state,{provider:"cloudflare",user_id:uid,redirect_to:returnTo,exp:Date.now()+600000});
+  res.cookie(CF_STATE_COOKIE,state,{httpOnly:true,secure:true,sameSite:"lax",path:"/oauth/cloudflare",maxAge:600000});
+  const params=new URLSearchParams({response_type:"code",client_id:CF_OAUTH_CLIENT_ID,
+    redirect_uri:CF_OAUTH_REDIRECT,scope:CF_OAUTH_SCOPES,state});
+  logAction({kind:"oauth_start",provider:"cloudflare",status:"authorization_pending"});
+  return res.redirect(302,"https://dash.cloudflare.com/oauth2/auth?"+params.toString());
+});
+app.get("/oauth/cloudflare/callback", async (req,res) => {
+  const state=String(req.query.state || ""),code=String(req.query.code || "");
+  const cookie=String(req.headers.cookie || "").split(";").map(s=>s.trim()).find(s=>s.startsWith(CF_STATE_COOKIE+"="));
+  const cookieState=cookie?.slice(CF_STATE_COOKIE.length+1);
+  const entry=stateCache.get(state);
+  res.clearCookie(CF_STATE_COOKIE,{httpOnly:true,secure:true,sameSite:"lax",path:"/oauth/cloudflare"});
+  if(!state || state!==cookieState || !entry || entry.provider!=="cloudflare" || entry.exp<Date.now())
+    return res.status(400).json({ok:false,status:"OAUTH_STATE_INVALID"});
+  stateCache.delete(state);
+  if(req.query.error || !code) return res.status(400).json({ok:false,status:"OAUTH_NOT_AUTHORIZED"});
+  try {
+    const response=await fetch("https://dash.cloudflare.com/oauth2/token",{
+      method:"POST",
+      headers:{Accept:"application/json","Content-Type":"application/x-www-form-urlencoded",
+        Authorization:"Basic "+Buffer.from(CF_OAUTH_CLIENT_ID+":"+CF_OAUTH_CLIENT_SECRET).toString("base64")},
+      body:new URLSearchParams({grant_type:"authorization_code",code,redirect_uri:CF_OAUTH_REDIRECT}),
+      signal:AbortSignal.timeout(15000),
+    });
+    if(!response.ok) throw Error("TOKEN_EXCHANGE_FAILED");
+    const tokens=await response.json();
+    if(typeof tokens.access_token!=="string" || !tokens.access_token) throw Error("TOKEN_MISSING");
+    let label="cloudflare-conta";
+    try {
+      const r=await fetch("https://dash.cloudflare.com/oauth2/userinfo",{
+        headers:{Authorization:"Bearer "+tokens.access_token,Accept:"application/json"},
+        signal:AbortSignal.timeout(7000)});
+      if(r.ok){const data=await r.json();label=String(data.email||data.name||data.sub||label).slice(0,60);}
+    } catch { /* userinfo optional; preserve grant */ }
+    const expires=Number(tokens.expires_in);
+    const expiresAt=Number.isFinite(expires)&&expires>0?new Date(Date.now()+expires*1000).toISOString():null;
+    const {error:dbError}=await sb.from("oauth_connections").upsert({
+      user_id:entry.user_id,provider_id:"cloudflare",account_label:label,
+      access_token_enc:encrypt(tokens.access_token),
+      refresh_token_enc:tokens.refresh_token?encrypt(tokens.refresh_token):null,
+      scopes_granted:String(tokens.scope||CF_OAUTH_SCOPES),
+      expires_at:expiresAt,consent_at:new Date().toISOString(),status:"active",
+    },{onConflict:"user_id,provider_id,account_label"});
+    if(dbError) throw Error("VAULT_WRITE_FAILED");
+    logAction({kind:"oauth_success",provider:"cloudflare",status:"stored_in_existing_vault"});
+    const back=new URL(entry.redirect_to);back.searchParams.set("oauth_ok","cloudflare");
+    return res.redirect(302,back.toString());
+  } catch {
+    logAction({kind:"oauth_error",provider:"cloudflare",status:"exchange_or_storage_failed"});
+    return res.status(502).json({ok:false,status:"CLOUDFLARE_OAUTH_NOT_COMPLETED"});
+  }
+});
 
 app.get("/oauth/:provider/start", async (req,res)=>{
   const p=req.params.provider; const cfg=OAUTH_CFG[p];
