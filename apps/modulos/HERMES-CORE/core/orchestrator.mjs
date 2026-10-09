@@ -518,6 +518,10 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     }
 
     historico.push(entrada);
+    // Any new executed action changes the causal cone; a previous finalization
+    // fingerprint cannot classify this new evidence as an identical blind retry.
+    lastFinalizationFingerprint = null;
+    repeatedFinalizationWithoutProgress = 0;
     const runningState = {
       ...continuityState,
       missao,
