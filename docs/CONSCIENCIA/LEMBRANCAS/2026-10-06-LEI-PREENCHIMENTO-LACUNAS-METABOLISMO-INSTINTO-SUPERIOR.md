@@ -176,6 +176,67 @@ CHEFE_INTENCAO
 
 **Selos de escopo:** `HISTORICAL_REPLAY=PASS_T1`; `PM2_OWNER_GUARD=PASS_T1`; `GLOBAL_CI=FAIL_SAME_SHA`; `SYSTEMD_DEPLOY=UNKNOWN`; `VPS_CHECKOUT_SYNC=NOT_PROVEN`; `GLOBAL_FIXED_POINT=NOT_PROVEN`. **NEXT_CURSOR:** reconciliação do CI e runtime Hermes pelo owner real, no mesmo Goal, preservando checkout dirty, sem repetir o replay já provado.
 
+## Contrato de critérios de aceite — CRITERIOS_EXECUCAO_CENTRALDARK_20261009_V1
+
+**Pedido do CHEFE:** os critérios não podem ficar implícitos na conversa ou confundidos com os receipts. Este é o índice de aceitação **da execução operacional reutilizável**, herdado da Constituição `SOUL-SOL.md → RULES.md → AGENTS.md`, da skill Oracle existente `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md` e do mesmo Goal `t_9040803d`. **Não cria nova autoridade, executor, mecanismo de disparo nem permissão administrativa.** Toda revisão do estado exige CURRENT por alvo/SHA/instante.
+
+### Critérios obrigatórios por escopo
+
+| ID | Critério | Prova de aceite / antiprova |
+|---|---|---|
+| C01 | CHEFE governa intenção, efeito suficiente e autorização | Intenção, alvo, classe de permissão e sucesso esperado registrados; não inventar autorização |
+| C02 | Continuidade do mesmo Goal e critério hereditário | Goal/LOOP_ID e critério do pai identificados; `LOCAL_DONE != PARENT_DONE`; filho não enfraquece o pai |
+| C03 | Motor substituível, Hermes original prioritário | Se CHEFE pedir Hermes, rota original autenticada e resposta/receipt verificáveis; não impersonar |
+| C04 | Direto sem micro-passos nem ritual | Com escopo claro e autorizado, executar leitura/correção reversível; sem menus ou pedir que humano execute o que a ferramenta já permite |
+| C05 | Owner único / reaproveitar antes de criar | Evidência de busca por owner, script, skill, ferramenta e rota existentes; `REUSE_BEFORE_CREATE`, `ONE_SYSTEM_ONLY` |
+| C06 | Escritura serial por escopo | Lease/owner único confirmado; ausência de writer concorrente no mesmo arquivo/Goal |
+| C07 | CURRENT prevalece sobre histórico | SHA da `main`, HEAD/dirty da VPS, estado de serviço, Goal e tempo medidos; relatos antigos apenas proveniência |
+| C08 | Progresso não repete auditoria aprovada | Fingerprint + receipt + escopo + SHA coincidentes: reutilizar receita/prova; se mudaram, medir a diferença |
+| C09 | Rota que falha não derruba o organismo | Nome da rota, erro exato, alternativas autorizadas, contraprova da alternativa; sem alterar credenciais/rede sem autorização própria |
+| C10 | Preservação antes da mudança | Backups/último estado bom quando aplicáveis; não usar `reset --hard`, `clean`, overwrite de trabalho dirty ou force-push como atalho |
+| C11 | GitHub com versão provada | HEAD e owner antes da escrita; diff mínimo, checagem de drift; commit e readback no mesmo SHA, com reconciliação de PR vigente |
+| C12 | Código não é efeito | `DOCUMENTED!=EXECUTED`, `COMMIT!=DEPLOY`, `MERGED!=DEPLOYED`; prova de runtime independente |
+| C13 | Gerenciador real do Hermes | systemd/PM2 medido no host antes de copiar/reiniciar; não gerenciar systemd como PM2 nem declarar PASS por comando ausente |
+| C14 | Health por setor | API Hermes, MCP local/público, One Heart e `health/deep` cada qual com status, rota, recência e causa; `HTTP_200 != HEALTH_GLOBAL_PASS` |
+| C15 | Funil de Logs | `events/sectors/services`, append, leitura autenticada e materialização testados no owner; logs ausentes recebem placa |
+| C16 | CI/CD por SHA exato | lint/build/testes/gates relevantes do mesmo HEAD; FAILED/QUEUED/SKIPPED não equivalem a PASS |
+| C17 | Teste e backcheck pós-delta | Saída/erro capturados; reexecução de teste do cone afetado, readback e comparação antes/depois |
+| C18 | Contraprova independente / falha negativa | Teste que consegue detectar regressão; bloqueia selo quando prev/next, owner ou runtime mentirem |
+| C19 | Erro local → voltar uma casa | Preservar PASS sobrevivente, corrigir causa mínima, retestar somente cone afetado e continuar do mesmo cursor |
+| C20 | Bounded retry / conhecimento novo | Fingerprint repetido sem ganho informacional não entra em loop burro; suspender essa frente com causa e teste discriminante |
+| C21 | Gênese e memória histórica íntegras | `L000→L170` por UID `PREV/NEXT`, duplicatas e lacunas preservadas; não reconstruir/apagar história comprovada |
+| C22 | Replay documental ≠ replay mutante | UI e manifesto podem validar trilha, mas só receita autorizada com receipt do owner permite repetir efeito/deploy |
+| C23 | Aprendizado e Lembrança materializados | `docs/CONSCIENCIA/APRENDIZADOS.md` + owner em `LEMBRANCAS/` + índice/manifesto derivados; gerar/check via `rebuild_learning_lineage.py` quando aprender algo novo |
+| C24 | Receipt reprodutível e autossuficiente | Intenção, owner, fingerprint, SHA, comando/caminho, prova T1, contraprova, tempo, estado, bloqueio e `NEXT_CURSOR` |
+| C25 | Segredos e ações sensíveis preservados | Nunca mostrar/comitar segredo; mudanças irreversíveis/admin de conta/rede/segurança precisam da autorização explícita adequada |
+| C26 | Fixed Point por objetivo suficiente, sem falso verde | Efeito + backcheck + contraprova + receipt + nenhum blocker material no escopo; não exigir perfeição de setores independentes |
+| C27 | Stop legítimo e continuidade segura | Sem rota autorizada, bloqueio real ou fronteira humana: `BLOCKED/UNKNOWN` com teste seguinte; não encerrar Goal pai como `DONE` |
+| C28 | UI/One Heart projeta provas, não autoridade | HUD exibe origem e freshness dos recibos; verde histórico não promove API, saúde profunda nem runtime atual |
+| C29 | Voz do CHEFE e limites preservados | Ouvir e executar conforme a intenção, sem reescrevê-la, ultrapassá-la ou inventar progresso; `PAPAGAIO=OFF` |
+| C30 | Reuso entre motores | Mesmo contrato/receita/manifesto/receipts reconstroem estado sem exigir a conversa anterior; resultado depende das mesmas condições de ambiente e permissões, não de nome de modelo |
+
+### Critérios de aceitação desta intervenção específica (sem trocar de escopo)
+
+```text
+SOURCE_MAIN_SHA=1e3c37c0b95fde5e1205914eeeda3e80e217a34b  # baseline documental na medição
+LEARNING_L000_L170_GENERATOR=PASS_T1
+HUD_L000_L170_BROWSER_REPLAY=PASS_T1
+HUD_STEP_PAUSE_RESET_AND_FAIL_CLOSED=PASS_T1
+MEMORY_AND_LEARNING_IN_DOCS=PASS_T1
+HERMS_PM2_SYSTEMD_PREMUTATION_GUARD=PASS_STATIC_T1
+GITHUB_CI_GLOBAL=FAIL_OR_PENDING_AS_OF_LAST_CHECK
+HERMES_REAL_SYSTEMD_DEPLOY=UNKNOWN
+VPS_DIRTY_CHECKOUT_RECONCILIATION=NOT_PROVEN
+FULL_LIVE_ONE_HEART_HUD_CI_INTEGRATION=NOT_PROVEN
+GLOBAL_FIXED_POINT=NOT_PROVEN
+```
+
+**Como aferir sem papagaiar:** para cada `C01–C30`, recuperar no momento da execução evidência com mesmo alvo/tempo/escopo; em falta, `UNKNOWN` e um teste discriminante. Um critério aplicável que falha recebe `BLOCKED` ou `FAIL`. Só resultado material provado pode ser `PASS`; critério que não se aplica deve registrar `N/A` justificado, sem entrar artificialmente no denominador. A matriz documentada é **aceite exigido**, não certificado de aplicação automática no Hermes. Governança real permanece nos owners existentes.
+
+**Referências de implementação já existentes:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md` (SOL_EXECUTORA/handoff), `scripts/trigger-fabric/rebuild_learning_lineage.py`, `docs/HUD/HUD.html`, `.github/workflows/vps-exec-selfhosted.yml` e o mesmo Goal `t_9040803d`.
+
+**Lei de fechamento:** `INTENCAO_AUTORIZADA + EFEITO_MEDIDO + BACKCHECK + CONTRAPROVA + RECEIPT + SEM_BLOCKER_MATERIAL = FIXED_POINT_DO_ESCOPO`. Não repetir aprendizado já provado nem confundir replay visual com operação real.
+
 ## Proveniência
 
 Fonte primária: declaração direta do SEGREDO/CHEFE, 2026-10-06.
