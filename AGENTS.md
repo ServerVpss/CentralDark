@@ -113,6 +113,25 @@ Qualquer agente/superfície que entra pelo GitHub deve primeiro medir `main`, la
 
 Regra de prova: GitHub real medido ganha de print, memória de chat, texto colado ou UI truncada. Skill, botão, aba, workflow ou serviço listado não é PASS até haver owner + consumer + readback aplicável.
 
+## 🔒 HUD único — entrada canônica obrigatória (CHEFE 09/10)
+
+Owner de conteúdo: `docs/HUD/HUD.html` em `ServerVpss/CentralDark@main`. Owner de boot: `scripts/trigger-fabric/centraldark_full_trigger_boot.py`. Owner de materialização: `.github/workflows/vps-exec-selfhosted.yml`. Esta é uma obrigação **causal de confiança do control plane**, não um veto de saúde auxiliar nem um segundo painel.
+
+```text
+GLOBAL_HUD_FIRST_MAIN_VPS_FAIL_CLOSED=true
+CANONICAL_HUD=docs/HUD/HUD.html@main
+VPS_HUD_PROJECTION=/root/.centraldark/HUD.html
+READ_HUD_BEFORE_CENTRALDARK_GOAL=true
+MAIN_LIVE_HEAD_REQUIRED=true
+MATERIALIZED_BYTES_SHA256_MUST_MATCH_MAIN=true
+MISSING_OR_MISMATCHED_HUD=FAIL_CLOSED_FOR_NEW_CANONICAL_EXECUTION
+UNKNOWN_NEVER_PASS=true
+SCREENPIPE_KYLIN_OPTIONAL_FAILURE=PLACA_NO_HUD_AND_CONTINUE_UNAFFECTED
+OLD_HEALTHY_PROCESSES_NOT_KILLED_BY_GATE=true
+```
+
+**Ordem:** ler o `HUD.html` do commit remoto vivo de `main`; confrontar o hash e o corpo HTML com o HUD materializado na VPS; só com readback `PASS` permitir **novo** boot, Goal de execução e promoção de deploy. Não tratar um `HTTP 200`, um `git HEAD` igual ou um arquivo existente como prova substituta. Gate reprovado não concede acesso administrativo, não autoriza sobrescrever checkout dirty, não mata serviços já vivos e não impede investigação/leitura para repará-lo. Com fonte íntegra, erros opcionais exibem **placa própria com motivo, prova, owner, receita e NEXT_CURSOR**, aproveitando a seção existente `Missões — clica, copia, cola onde for resolver`; não criam nova arquitetura. Uma superfície não ligada a esse gate permanece `UNKNOWN` — nunca declarar aplicação global comprovada só pelo documento.
+
 ## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
 
 Isto não cria uma lei nova. Faz o contrário: remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação que não seja dependência causal real do objetivo.
