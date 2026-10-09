@@ -1969,3 +1969,190 @@ NEXT_CURSOR=WAIT_CHEFE_TO_FINISH_THEN_RECONCILE_MAIN
 Toda a descrição da PR foi incorporada literalmente para evitar perda de microfilosofias e funcionalidades. **É um contrato e inventário, não uma ativação automática.** Os marcadores de HOLD dentro da fonte permanecem história; promover o código de cada capacidade continua exigindo medição, menor delta e contraprova no owner existente. Não realizar operações SSD/RAW-disk descritas como hipóteses por efeito deste documento.
 
 `PR1785_INTENT_REGISTERED_ON_MAIN=true`; `RUNTIME_FIXED_POINT=NOT_CLAIMED`; `NEXT_CURSOR=MEASURE_CURRENT_AND_SELECT_MINIMUM_IMPLEMENTATION_DELTA`.
+
+---
+
+## 🤝 EXPANSÃO VII — LEI DA COOPERAÇÃO, DO COMPASSO E DO APRENDIZADO COMPROVADO
+
+**08/10/2026 · mesma intenção/Goal `t_9040803d` · MESMO owner, MESMO coração, MESMA biblioteca.** Cristalizada integralmente a partir do material do CHEFE, sem resumo e sem arquitetura paralela.
+
+**Princípio central:** transformar erros em capacidade reutilizável, preservando o último estado comprovadamente bom e mantendo a continuidade da intenção.
+
+**REALIDADE É O JUIZ. EVIDÊNCIA É O CRITÉRIO. CONTINUIDADE É A LEI.**
+
+### 1. 🫀 AS SETE BATIDAS
+
+**01 — RECEBER**
+
+Recuperar a intenção vigente, o contexto compatível, o estado atual e o último GREEN_STATE.
+
+Evidência: intenção, objetivo, owner e estado anterior identificáveis.
+
+**02 — PERCEBER**
+
+Detectar e expor a falha real, incluindo o ponto de ocorrência, o contexto necessário e os registros disponíveis.
+
+Evidência: erro reproduzível ou registro verificável, origem identificada e limitações explicitadas.
+
+**03 — COMPREENDER**
+
+Formular hipóteses causais e confrontá-las com evidências e explicações alternativas.
+
+Evidência: causa confirmada, causa provável ou UNKNOWN explicitamente registrado. Hipótese não é causa comprovada.
+
+**04 — COSTURAR**
+
+Aplicar a menor correção suficiente no owner existente, preservando o que continua válido.
+
+Evidência: alteração identificável, escopo delimitado, estado anterior preservado quando necessário e readback da mudança.
+
+**05 — COMPROVAR**
+
+Executar testes, reproduzir o cenário original e verificar o efeito esperado, as regressões e os efeitos colaterais relevantes.
+
+Evidência: resultados observados, critérios de aceitação atendidos e contraprova registrada.
+
+**06 — CRISTALIZAR**
+
+Persistir o aprendizado em uma receita executável, rastreável e recuperável pelo próximo executor.
+
+Evidência: registro durável contendo causa, correção, pré-condições, sequência, fingerprint, testes, contraprova e resultado esperado, conforme aplicável.
+
+**07 — CONTINUAR**
+
+Recuperar o aprendizado persistido e reutilizar a receita quando aplicável, validando as diferenças relevantes do ambiente.
+
+Evidência: replay executado, resultado observado e comparação com a referência anterior.
+
+```text
+COMPASSO: RECEBER → PERCEBER → COMPREENDER → COSTURAR → COMPROVAR → CRISTALIZAR → CONTINUAR
+```
+
+### 2. 🧿 ESTADOS OPERACIONAIS
+
+```text
+GREEN_STATE       = critérios de aceitação atendidos, evidências preservadas e resultado reproduzível no escopo declarado
+UNKNOWN           = evidência insuficiente, causa não confirmada ou validação incompleta
+REGRESSION        = comportamento anteriormente válido deixou de atender a um critério comprovado
+REPAIRING         = correção em andamento; ainda não representa PASS
+REPLAY_PROVEN     = receita recuperada e executada com resultado compatível com o esperado
+FIXEDPOINTLOCAL   = objetivo local atendido, sem bloqueador material conhecido e com as verificações previstas concluídas
+```
+
+Nenhum estado é promovido por narrativa, intenção, confiança ou aparência visual.
+
+### 3. 🔙 LEI DA VOLTA UMA CASA
+
+Quando surgir erro, conflito ou regressão:
+
+1. Identificar o menor ponto causal conhecido.
+2. Preservar evidências e o último estado bom.
+3. Reverter somente o delta incorreto, quando necessário.
+4. Corrigir o owner responsável.
+5. Repetir os testes afetados.
+6. Executar a contraprova.
+7. Comparar o resultado com o estado anterior.
+8. Continuar do mesmo fio se os critérios forem atendidos.
+
+```text
+REGRA: ERRO LOCAL → REWIND LOCAL → COSTURA → RETESTE → CONTRAPROVA → CONTINUIDADE
+```
+
+Se o ponto causal não estiver identificado, manter UNKNOWN e investigar. Não inventar a causa nem realizar rollback indiscriminado.
+
+### 4. 💎 APRENDIZADO REUTILIZÁVEL
+
+Um aprendizado só pode ser promovido como comprovado quando houver:
+
+- **Proveniência:** ambiente, versão, owner e contexto da ocorrência.
+- **Causa:** hipótese, evidências e confirmação ou incerteza explícita.
+- **Correção:** delta aplicado e justificativa.
+- **Prova:** testes, resultados e critérios de aceitação.
+- **Contraprova:** tentativa relevante de refutar o resultado.
+- **Persistência:** receita armazenada em local durável e recuperável.
+- **Replay:** execução posterior que demonstra reutilização efetiva.
+
+Se faltar uma etapa, registrar o nível realmente alcançado. Não converter aprendizado documentado em aprendizado executável.
+
+O fingerprint identifica a versão e as condições relevantes da receita. Se houver mudança material, revalidar somente o escopo afetado, sem presumir equivalência.
+
+### 5. 🤝 COOPERAÇÃO ENTRE AMIGOS
+
+Uma pessoa pode compartilhar um erro e autorizar a investigação do ambiente correspondente.
+
+```text
+RELATO → EVIDÊNCIA AUTORIZADA → INVESTIGAÇÃO → CORREÇÃO → PROVA → RECEITA REUTILIZÁVEL → BENEFÍCIO COMPARTILHADO
+```
+
+Compartilhar somente o necessário. Proteger tokens, credenciais, dados pessoais e informações de terceiros. A cooperação não concede autorização automática para acessar ou modificar ambientes alheios.
+
+### 6. 📏 MÉTRICAS OBRIGATÓRIAS
+
+Medir por período, projeto e tipo de falha, sem misturar universos diferentes.
+
+| Métrica | Fórmula |
+|---|---|
+| Taxa de diagnóstico confirmado | falhas com causa confirmada ÷ falhas investigadas |
+| Taxa de reparo comprovado | correções que passaram nos critérios e na contraprova ÷ correções avaliadas |
+| Taxa de persistência | aprendizados elegíveis recuperáveis ÷ aprendizados elegíveis registrados |
+| Taxa de replay bem-sucedido | replays compatíveis com o esperado ÷ replays executados em condições válidas |
+| Taxa de recorrência | falhas equivalentes após correção ÷ falhas corrigidas acompanhadas |
+| Tempo de recuperação | tempo entre a detecção e a restauração comprovada |
+| Taxa de regressão | alterações que quebraram critérios previamente atendidos ÷ alterações avaliadas |
+| Taxa de UNKNOWN | casos sem evidência suficiente ÷ casos avaliados |
+
+Sempre informar numerador, denominador, janela temporal e exclusões relevantes. Ausência de dados significa UNKNOWN, não 0% nem 100%.
+
+### 7. 🧪 CRITÉRIOS DE ACEITAÇÃO
+
+Uma correção só recebe PASS quando:
+
+- O erro original foi reproduzido ou sua ocorrência foi sustentada por evidência verificável.
+- O comportamento corrigido atende aos critérios definidos.
+- As verificações de regressão pertinentes passaram.
+- A mudança foi lida de volta e comparada com o esperado, quando tecnicamente possível.
+- A evidência é rastreável ao código, versão e ambiente avaliados.
+- As limitações e os testes não executados estão explícitos.
+
+Uma aprendizagem só recebe `REPLAY_PROVEN` quando, adicionalmente, sua receita foi recuperada e executada novamente com resultado compatível.
+
+**PASS local não significa PASS global, deploy ou saúde de produção.**
+
+### 8. 👑 LEI FINAL
+
+```text
+NÃO ESCONDER A FERIDA
+MOSTRAR A EVIDÊNCIA
+INVESTIGAR A CAUSA
+PRESERVAR O QUE FOI COMPROVADO
+CORRIGIR O MENOR DELTA NECESSÁRIO
+TESTAR E CONTRAPROVAR
+CRISTALIZAR O APRENDIZADO
+REUTILIZAR O QUE FUNCIONOU
+MEDIR SE A RECORRÊNCIA DIMINUIU
+CONTINUAR DO ÚLTIMO COMPASSO VÁLIDO
+```
+
+A infalibilidade não é uma promessa de nunca errar. É a disciplina de não declarar certeza sem prova, não desperdiçar aprendizado comprovado e não abandonar a evolução quando surge uma falha.
+
+🫀 Nenhuma falha precisa ser escondida.
+
+🪬 Nenhuma hipótese precisa ser tratada como verdade.
+
+💎 Nenhum aprendizado precisa depender apenas da memória da conversa.
+
+🚀 Cada correção comprovada pode se tornar o fundamento da próxima.
+
+```text
+EXPANSAO_VII=CRYSTALLIZED_ON_MAIN
+SAME_OWNER=true
+SAME_GOAL=t_9040803d
+NO_PARALLEL_ARCHITECTURE=true
+COMPASSO_SETE_BATIDAS=RECEBER|PERCEBER|COMPREENDER|COSTURAR|COMPROVAR|CRISTALIZAR|CONTINUAR
+ESTADOS=GREEN_STATE|UNKNOWN|REGRESSION|REPAIRING|REPLAY_PROVEN|FIXEDPOINTLOCAL
+NARRATIVE_PROMOTION_FORBIDDEN=true
+DOCUMENTED != EXECUTED
+UNKNOWN != PASS
+E2E_RUNTIME=UNKNOWN
+NEXT_CURSOR=APLICAR_COMPASSO_NA_FERIDA_KYLIN_BRIDGE_CHAT_502
+```
