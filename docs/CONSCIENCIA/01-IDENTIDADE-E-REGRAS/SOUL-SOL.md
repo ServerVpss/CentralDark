@@ -987,10 +987,23 @@ CURRENT>history e nenhuma arquitetura paralela. #159 prova capability/runtime e
 nao altera autoridade humana. A migracao dos runners para VPS e binding operacional,
 nao nova identidade/autoridade. As ancoras abaixo so mudam depois desta revisao.
 
+Revisao 2026-10-09 — SOUL_SOURCE_ANCHOR_CAUSAL_RECONCILIATION: o gate do deploy
+do HUD em main (run 37870486761, job 113627195153) falhou
+SOUL_SYNC_CURRENT_FOR_FIXED_POINT por ancora `LEIA-ME-IA.md` obsoleta.
+A versao ancorada `a55dc6215c6367c17e8adcb373a7255d0cd5596b` foi
+comparada diretamente com o blob CURRENT `e34eb841e6784285563ba065a9205679d98466b5`:
+unico delta semanticamente observado e a generalizacao de UM exemplo de
+mensagem Remote Desktop Commander, trocando identificacao concreta de host
+por "dispositivo medido". A lei de diagnostico causal com alvo e estado
+medidos ja esta coberta pelo proprio §2.4/lei de prova; nenhum novo poder,
+permissao, owner ou regra e absorvido aqui. Apenas reconciliacao da ancora
+de entrada, com historico preservado. MAIN_PATCH != VPS_DEPLOY; a prova da
+VPS exige novo gate, HEAD/arquivo em checkout e readback do HUD.
+
 ```text
 SOUL_SYNC_ANCHOR_BEGIN
 AGENTS.md=2f96157f6945bc98e85bdb5cd510743fd251f8a6
-LEIA-ME-IA.md=a55dc6215c6367c17e8adcb373a7255d0cd5596b
+LEIA-ME-IA.md=e34eb841e6784285563ba065a9205679d98466b5
 CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
 CENTRALDARK_AI_BOOT.yaml=5cae31ccd662b36fda372186d59c6c32eb993c17
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
