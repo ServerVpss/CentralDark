@@ -193,3 +193,29 @@ changed owner/behavior
 **Nenhuma mutação de runtime é autorizada por este receipt.** Este adendo não altera G01–G12, não marca checklist como PASS, não modifica a cápsula nem substitui o receipt anterior. Seguir a prova mais próxima sem criar Goal, arquitetura ou sistema paralelo.
 
 **NEXT_CURSOR:** `REMEDIR_HERMES_RUNTIME → PROVAR_3_TURNOS_MESMO_LOOP_ID → VERIFICAR_EVOLUCAO_DAS_SKILLS`.
+
+
+## Patch local Hermes Desktop Casa — 08/10/2026
+
+CHEFE explicitamente solicitou código direto no **Hermes original**, sem nova arquitetura, sem ciclo de testes e sem pedir que ele copie comandos. A fonte `%LOCALAPPDATA%/hermes/hermes-agent/hermes_cli/goals.py` foi inspecionada e alterada diretamente na **Casa SEGREDO** pelo Remote Desktop Commander conectado, preservando o arquivo original em um backup local fora do checkout; não há push para NousResearch nem instalação de segundo Hermes.
+
+```text
+CASA_HERMES_SOURCE_HEAD_BEFORE=7951ddd7297
+SOURCE_FILE=hermes_cli/goals.py
+BACKUP_SHA256=0BF1541B1FED7BAB0947E1B622065C766AC3ACC49CC3161BDDC42EBB09D78AB3
+SOURCE_AFTER_SHA256=90C32486489B513EB3D3A7BB3C9EE076857702F7E04D45B3A7A9CAD89A061F21
+SOURCE_DIRTY=MODIFIED
+PYTHON_AST_PARSE=PASS
+HERMES_DESKTOP_RUNTIME_RELOAD=UNKNOWN
+CHAT_GLOBAL_AUTO_SUBMIT=UNKNOWN
+THREE_ORACLE_TURNS=UNKNOWN
+```
+
+**Código efetivamente corrigido:** `GoalManager.evaluate_after_turn()` reconhece `NEXT_CURSOR` / `NEXT_READONLY_PROBE` abertos em respostas de Goals CentralDark/Hermes/Oracle, preserva o Goal ativo e devolve uma `continuation_prompt` ao **mesmo** GoalManager original antes de tratar a resposta intermediária como `done`. A instrução de continuação exige conservar envelope, usar apenas o transporte CHAT_GLOBAL autorizado/medido, capturar resposta completa e voltar com receipt e cursor. O orçamento `max_turns` e gates originais permanecem intactos (não é loop infinito).
+
+**Código CentralDark na main:** `apps/modulos/HERMES-CORE/core/orchestrator.mjs` agora preserva `continuityState` nas gravações de `state.json`, costura `next_cursor`/probe oriundos da decisão e bloqueia finalizações idênticas sem ganho de informação; uma ação material reabre a oportunidade de julgamento. Commits `b83ac404c69479c0124894b82999eda892794ef2` e `e05993222b026792fe4e20e3e1ed9887fed84662`.
+
+**Limite:** fonte alterada != processo Hermes Desktop recarregado. Nenhuma sessão atual foi reiniciada/fechada, para preservar o mesmo chat e o estado do CHEFE. O browser/Preview continua responsável pelo transporte real e pela captura; o código não pode prometer envio automático ao ChatGPT sem essa ligação em runtime.
+
+NEXT_CURSOR=CONFIRM_ACTIVE_HERMES_DESKTOP_GOALMANAGER_LOADED_SAME_SOURCE_THEN_OBSERVE_NEXT_CORRELATED_ORACLE_TURN
+FIXED_POINT=FALSE
