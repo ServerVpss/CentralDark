@@ -2158,6 +2158,10 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
 #cd-genesis-replay .cdr-sub{font:11px var(--mono);opacity:.75}
 #cd-genesis-replay .cdr-note{font-size:12px;color:var(--text-dim);line-height:1.6}
 @keyframes cdr-pulse{from{opacity:.55;transform:scale(.98)}to{opacity:1;transform:scale(1.035)}}
+#cd-genesis-replay #cdr-number{cursor:pointer;text-decoration:underline dotted;text-underline-offset:5px}
+#cd-genesis-replay #cdr-operator{margin:14px 0;padding:12px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2)}
+#cd-genesis-replay #cdr-operator[hidden]{display:none}
+#cd-genesis-replay #cdr-operator pre{white-space:pre-wrap;word-break:break-word;font-size:11px}
 @media(prefers-reduced-motion:reduce){#cd-genesis-replay .cdr-number{animation:none!important}#cd-genesis-replay .cdr-fill{transition:none}}
 </style>
 <div class="section" id="cd-genesis-replay" data-result="UNKNOWN" data-playing="no" data-busca="genesis apocalipse replay deterministico fixed point aprendizagem neur olink neuroLink bootstrap receita historica">
@@ -2167,6 +2171,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
  <div class="cdr-head"><span class="cdr-number" id="cdr-number">L000</span><span id="cdr-counter">0 / 169 elos</span></div>
  <div class="cdr-track" role="progressbar" aria-label="Trilha histórica NeuroLink" aria-valuemin="0" aria-valuemax="170" aria-valuenow="0" id="cdr-track"><div class="cdr-fill" id="cdr-fill"></div></div>
  <div class="cdr-details"><div><div class="cdr-sub">RECIPIENTE / BOOTSTRAP</div><strong id="cdr-title">Gênese histórica</strong></div><div><div class="cdr-sub">ANTERIOR → PRÓXIMO</div><strong id="cdr-edge">L000 → L001</strong></div><div><div class="cdr-sub">CONTRAPROVA / CURSOR</div><strong id="cdr-proof">AINDA NÃO EXECUTADA</strong></div></div>
+ <div id="cdr-operator" hidden><strong id="cdr-operator-title">NeuroLink · UID</strong><p class="cdr-note">Clique no numero Lxxx para pedir ao Hermes existente a receita comprovada. Envio de tarefa nao e execucao nem Fixed Point; nao executar shell inventado.</p><button type="button" id="cdr-operator-send">⚙ Encaminhar ao Hermes Gateway</button> <button type="button" id="cdr-operator-copy">📋 Copiar missao</button> <button type="button" id="cdr-operator-close">Fechar</button><pre id="cdr-operator-status" role="status">AGUARDANDO AUTORIZACAO DO CLIQUE</pre></div>
  <p id="cdr-gap" class="cdr-note">Lacunas legadas 36–42; duplicatas #16, #50, #84, #85, #105 e #110 têm UIDs individuais, preservados.</p>
  <p class="cdr-note">Fonte selada: <a href="https://github.com/ServerVpss/CentralDark/blob/344fac3271e4ca4594da298a8317a75b09de6f14/docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json" target="_blank" rel="noopener">Manifesto NeuroLink (SHA de origem 344fac3)</a> · <a href="https://github.com/ServerVpss/CentralDark/blob/main/scripts/trigger-fabric/rebuild_learning_lineage.py" target="_blank" rel="noopener">gerador canônico</a>. CURRENT GitHub e runtime são verificados por seus sensores próprios.</p>
 </div>
@@ -2179,6 +2184,52 @@ root=document.getElementById('cd-genesis-replay');if(!root)return;
 var run=document.getElementById('cdr-run'),step=document.getElementById('cdr-step'),pause=document.getElementById('cdr-pause'),reset=document.getElementById('cdr-reset');
 var num=document.getElementById('cdr-number'),counter=document.getElementById('cdr-counter'),title=document.getElementById('cdr-title'),edge=document.getElementById('cdr-edge'),proof=document.getElementById('cdr-proof'),badge=document.getElementById('cdr-state'),gap=document.getElementById('cdr-gap'),bar=document.getElementById('cdr-fill'),track=document.getElementById('cdr-track');
 var index=-1,timer=null,failed=false;var total=chain.length;
+
+var operator=document.getElementById('cdr-operator'),opTitle=document.getElementById('cdr-operator-title'),opStatus=document.getElementById('cdr-operator-status'),opSend=document.getElementById('cdr-operator-send');
+var selected=-1,busy=false;
+num.setAttribute('role','button');num.setAttribute('tabindex','0');num.setAttribute('aria-label','Abrir a receita do UID NeuroLink no Hermes');
+function openUid(){
+  var i=index<0?0:index,err=integrity(i);operator.hidden=false;
+  if(err){opStatus.textContent='BLOCKED_UID_INTEGRITY='+err;opSend.disabled=true;return}
+  selected=i;opSend.disabled=false;opTitle.textContent=chain[i][0]+' · '+chain[i][4];
+  opStatus.textContent='UID='+chain[i][0]+' / PREV='+chain[i][2]+' / NEXT='+chain[i][3]+' / RUNTIME=NAO_DESPACHADO';
+}
+function missionText(){
+  var n=chain[selected];if(!n||integrity(selected))throw Error('UID_NOT_VALID');
+  return 'INTENCAO=NEUROLINK_OPERACIONAL; UID='+n[0]+'; PREV='+n[2]+'; NEXT='+n[3]+'; TITULO='+n[4]+
+  '\nMANIFESTO=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json@CURRENT_MAIN'+
+  '\nOWNER=HERMES_GATEWAY_KANBAN_EXISTENTE; ONE_WRITER_PER_SCOPE=true; ONE_SYSTEM_ONLY=true'+
+  '\nANTES_DE_EXECUTAR: validar UID, CURRENT_SHA, script/receita selada, autorizacao e owner.'+
+  '\nSEM_RECEITA_PROVADA: BLOCKED_RECIPE_NOT_PROVEN; nunca inventar comando.'+
+  '\nCOM_RECEITA_PROVADA: executar delta minimo, ler efeito, contraprova, receipt, NEXT_CURSOR.'+
+  '\nENFILEIRADO!=EXECUTADO; REPLAY_DOCUMENTAL!=RUNTIME; UNKNOWN!=PASS.';
+}
+num.addEventListener('click',openUid);
+num.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openUid()}});
+document.getElementById('cdr-operator-close').addEventListener('click',function(){operator.hidden=true});
+document.getElementById('cdr-operator-copy').addEventListener('click',async function(){
+  try{await navigator.clipboard.writeText(missionText());opStatus.textContent='MISSAO_COPIADA: sem entrega/execucao comprovada'}catch(e){opStatus.textContent='BLOCKED_CLIPBOARD: '+(e&&e.name||'UNKNOWN')}
+});
+opSend.addEventListener('click',async function(){
+  if(busy)return;
+  var body;try{body=missionText()}catch(e){opStatus.textContent='BLOCKED_UID='+e.message;return}
+  // Gateway 9119 exige cookie de login e nao permite tratar file:// como origem autenticada.
+  // Nao enviar cookies a host alternativo nem abrir API administrativa publica.
+  if(!/^https?:$/.test(location.protocol)||location.port!=='9119'){
+    opStatus.textContent='BLOCKED_GATEWAY_ORIGIN: o HUD local/Obsidian nao compartilha a sessao autenticada do Hermes :9119. Use Copiar missao no Hermes; nada foi enviado.';return;
+  }
+  busy=true;opSend.disabled=true;opStatus.textContent='GATEWAY_REQUEST_PENDING';
+  try{
+    var task={title:'[NEUROLINK] '+chain[selected][0]+' · receita comprovada',body:body,status:'todo',priority:1};
+    var res=await fetch('/api/kanban/tasks',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(task)});
+    var raw=await res.text(),json={};try{json=JSON.parse(raw)}catch(_){}
+    if(!res.ok){opStatus.textContent='BLOCKED_GATEWAY_HTTP_'+res.status+'; sem execucao comprovada';return}
+    var id=json.id||json.task_id||(json.task&&json.task.id);
+    opStatus.textContent=id?'KANBAN_TASK_CREATED='+String(id).slice(0,70)+'; EXECUCAO=UNKNOWN ate receipt':'GATEWAY_HTTP_'+res.status+'; TASK_ID=UNKNOWN / sem prova de criacao';
+  }catch(e){opStatus.textContent='BLOCKED_GATEWAY_CONNECTION='+String(e&&e.name||'UNKNOWN')}
+  finally{busy=false;opSend.disabled=false}
+});
+
 function halt(){if(timer!==null){clearInterval(timer);timer=null;}root.dataset.playing='no'}
 function fail(msg){halt();failed=true;root.dataset.result='BLOCKED';badge.textContent='🪧 VER PENDÊNCIA';proof.textContent=msg;run.disabled=true;step.disabled=true}
 function integrity(i){var n=chain[i],prior=chain[i-1],next=chain[i+1];if(!n||n[0]!==String(n[0])||n[1]!==Number(n[1]))return 'INVALID_NODE';if(i===0&&n[0]!=='L000')return 'GENESIS_MISSING';if(i>0&&n[2]!==prior[0])return 'PREV_MISMATCH_'+n[0];if(i>0&&prior[3]!==n[0])return 'NEXT_MISMATCH_'+prior[0];if(i===total-1&&n[3]!=='PENDING_NEXT_CURSOR')return 'LAST_NOT_PENDING';if(next&&n[3]!==next[0])return 'NEXT_MISMATCH_'+n[0];return null;}
