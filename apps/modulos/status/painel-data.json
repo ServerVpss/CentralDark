@@ -1,0 +1,322 @@
+{
+  "project": {
+    "branch": "main",
+    "lastCommit": "fix: usar dispatcher do checkout no gate do portal",
+    "phase": "UNKNOWN — não medido neste push",
+    "currentTask": "UNKNOWN — não medido neste push",
+    "overallProgress": null,
+    "stateSource": "git-push-only",
+    "stateMeasuredAt": null
+  },
+  "milestones": [],
+  "events": [
+    {
+      "time": "2026-10-10T21:35:49.491Z",
+      "titulo": "Push na main · 3175b384f1d3103872006096faeefba0ee78c7d9",
+      "detalhe": "fix: usar dispatcher do checkout no gate do portal",
+      "area": "Repositório",
+      "sha": "3175b38",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T21:35:19.631Z",
+      "titulo": "Push na main · af168af5d68083ceb94a7f7df161889821c25fa1",
+      "detalhe": "fix: usar Bun no build do portal monorepo",
+      "area": "Repositório",
+      "sha": "af168af",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T21:28:09.808Z",
+      "titulo": "Push na main · 2781102d9a7c19eb434e76820ad0ad8682e53993",
+      "detalhe": "fix: tornar dispatch do deploy VPS explicitamente válido",
+      "area": "Repositório",
+      "sha": "2781102",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T21:27:33.647Z",
+      "titulo": "Push na main · 50211ef297149d02e2cd9da3f617eaedc18d582e",
+      "detalhe": "fix: alinhar healthcheck Hermes ao PM2_HOME do owner VPS",
+      "area": "Repositório",
+      "sha": "50211ef",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T21:22:22.072Z",
+      "titulo": "Push na main · bdafbbf250b152fd6625a90320def50b8025894a",
+      "detalhe": "docs: registrar recovery requerido do owner GitHub Actions",
+      "area": "Repositório",
+      "sha": "bdafbbf",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T21:21:24.602Z",
+      "titulo": "Push na main · 7893b3396b29b6b57a191fd378130ee337416a6f",
+      "detalhe": "chore: rollback invalid Hermes adapter workflow to last valid revision",
+      "area": "Repositório",
+      "sha": "7893b33",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T21:19:29.517Z",
+      "titulo": "Push na main · 19214b3a75b926eb07944dee56e53a676c3d8406",
+      "detalhe": "🪬 adaptar deploy Hermes ao owner systemd existente",
+      "area": "Repositório",
+      "sha": "19214b3",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T21:01:00.636Z",
+      "titulo": "Push na main · aeba7ac4c874077eefdfeed62f162824eeb23760",
+      "detalhe": "🪬 testar selo monotônico, prova e próximo cursor",
+      "area": "Repositório",
+      "sha": "aeba7ac",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T20:59:21.359Z",
+      "titulo": "Push na main · e9eeb62aca542c4158d7b0f7ac63bccf77e4180d",
+      "detalhe": "🪬 selar cada evento do HUD com prova e próximo cursor",
+      "area": "Repositório",
+      "sha": "e9eeb62",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T20:42:32.136Z",
+      "titulo": "Push na main · ab7bda321322c7af0bc6092b2a5d11ef28c595e9",
+      "detalhe": "fix(vps): install jq required by canonical deploy receipts",
+      "area": "Repositório",
+      "sha": "ab7bda3",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-10T20:08:43.5363837Z",
+      "titulo": "Medição Casa/VPS",
+      "detalhe": "Casa CPU 47% medido; VPS CPU UNKNOWN; portas 4174/4175 sem listener; Tailscale VPS→Casa BLOCKED.",
+      "area": "Casa/VPS",
+      "sha": "",
+      "actor": "SOL"
+    }
+  ],
+  "iaTimeline": [
+    {
+      "time": "2026-10-10T21:35:49.491Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3175b384f1d3103872006096faeefba0ee78c7d9 (3175b38)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T21:35:19.631Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · af168af5d68083ceb94a7f7df161889821c25fa1 (af168af)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T21:28:09.808Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2781102d9a7c19eb434e76820ad0ad8682e53993 (2781102)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T21:27:33.647Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 50211ef297149d02e2cd9da3f617eaedc18d582e (50211ef)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T21:22:22.072Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · bdafbbf250b152fd6625a90320def50b8025894a (bdafbbf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T21:21:24.602Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7893b3396b29b6b57a191fd378130ee337416a6f (7893b33)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T21:19:29.517Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 19214b3a75b926eb07944dee56e53a676c3d8406 (19214b3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T21:01:00.636Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · aeba7ac4c874077eefdfeed62f162824eeb23760 (aeba7ac)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T20:59:21.359Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e9eeb62aca542c4158d7b0f7ac63bccf77e4180d (e9eeb62)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T20:42:32.136Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ab7bda321322c7af0bc6092b2a5d11ef28c595e9 (ab7bda3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-10T20:08:43.5363837Z",
+      "ia": "@SOL",
+      "action": "📌 Medição Casa/VPS",
+      "area": "Casa/VPS",
+      "status": "bloqueado"
+    }
+  ],
+  "centraldark_measurement": {
+    "samples": [
+      {
+        "host": "casa",
+        "scope": "host",
+        "proof": "MEASURED",
+        "cpu_percent": 47,
+        "observed_at": "2026-10-10T20:08:43.5363837Z",
+        "source": "Remote Desktop Commander / Win32_Processor",
+        "receipt": "device SEGREDO"
+      },
+      {
+        "host": "vps",
+        "scope": "host",
+        "proof": "UNKNOWN",
+        "cpu_percent": null,
+        "observed_at": null,
+        "source": "sensor VPS não exposto; /proc/stat NAO_ENCONTRADO",
+        "receipt": "centraldark_vps_read_file_safe"
+      }
+    ],
+    "casa": {
+      "ports": [],
+      "processes": [
+        {
+          "name": "codex",
+          "pids": [
+            23416,
+            28504
+          ]
+        },
+        {
+          "name": "codex-code-mode-host",
+          "pids": [
+            1924
+          ]
+        },
+        {
+          "name": "codex-computer-use-swift",
+          "pids": [
+            13040
+          ]
+        },
+        {
+          "name": "codex-windows-sandbox-service",
+          "pids": [
+            18512
+          ]
+        },
+        {
+          "name": "node",
+          "pids": [
+            4568,
+            18152,
+            28616,
+            30524,
+            32284
+          ]
+        },
+        {
+          "name": "tailscaled",
+          "pids": [
+            4960,
+            9740
+          ]
+        },
+        {
+          "name": "tailscale-ipn",
+          "pids": [
+            29860
+          ]
+        }
+      ],
+      "programs": [
+        {
+          "name": "AionUi",
+          "version": "2.2.2.0"
+        },
+        {
+          "name": "CodeAgentSwarm",
+          "version": "2.4.3.0"
+        },
+        {
+          "name": "Common",
+          "version": null
+        },
+        {
+          "name": "Cua",
+          "version": null
+        },
+        {
+          "name": "DockerDesktop",
+          "version": null
+        },
+        {
+          "name": "Hydra",
+          "version": "3.7.3.0"
+        },
+        {
+          "name": "Obsidian",
+          "version": "1.13.7.0"
+        }
+      ],
+      "hud": {
+        "sha256": "CD0FCB26E8DCF96DDE9279BF980A7AAB3282EB037BC4B1530EA4B720D0576409",
+        "bytes": 283102,
+        "observed_at": "2026-10-10T20:08:43.5363837Z"
+      }
+    },
+    "vps": {
+      "branch": "main",
+      "head": "5344bd870",
+      "dirty": true,
+      "hud": {
+        "path": "docs/HUD/HUD.html",
+        "bytes": 221401,
+        "sha256": null,
+        "hash_proof": "UNKNOWN"
+      }
+    },
+    "github_main": {
+      "head": "f5293b63cf43c26b54c1a8bdbf2454d779efcf22"
+    },
+    "tailscale": {
+      "status": "BLOCKED",
+      "api": "PROVIDER_HTTP_401",
+      "bridge": "fetch failed",
+      "vps_to_casa_ping": "NOT_PROVEN"
+    },
+    "errors": [
+      {
+        "name": "ENOENT",
+        "message": "no such file or directory, open '<caminho-vps>'",
+        "owner": "apps/modulos/status/atualizar-painel-vivo.mjs",
+        "line": 42,
+        "missing": "apps/modulos/status/painel-data.json"
+      }
+    ]
+  },
+  "updatedAt": "2026-10-10T21:35:49.491Z",
+  "updatedAtBR": "10/10/2026, 18:35:49 BRT"
+}

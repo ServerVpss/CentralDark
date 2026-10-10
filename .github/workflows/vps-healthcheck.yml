@@ -30,27 +30,27 @@ jobs:
           DISK=$(df -h / | awk 'NR==2{print $3"/"$2" ("$5")"}')
           DISK_PCT=$(df / | awk 'NR==2{gsub("%","",$5);print $5+0}')
           MEM=$(free -h | awk '/Mem:/{print $3"/"$2}')
-          PM2_JSON=$(pm2 jlist 2>/dev/null || echo "[]")
+          PM2_JSON=$(PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null || echo "[]")
           PM2_ON=$(echo "$PM2_JSON"  | jq '[.[]|select(.pm2_env.status=="online")]  | length' 2>/dev/null || echo 0)
           PM2_OFF=$(echo "$PM2_JSON" | jq '[.[]|select(.pm2_env.status=="stopped")] | length' 2>/dev/null || echo 0)
           PM2_ERR=$(echo "$PM2_JSON" | jq '[.[]|select(.pm2_env.status=="errored")] | length' 2>/dev/null || echo 0)
 
           TIPO="sucesso"; EMOJI="✅"; ALERTAS=""
           VERIFIER_APP="CentralDark-HermesVerificador"
-          VERIFIER_DIR="/root/CentralDark/apps/modulos/HERMES-CORE/agents/Log-Verificador"
+          VERIFIER_DIR="<caminho-vps>"
           VERIFIER_EXEC="$VERIFIER_DIR/daemon.mjs"
           VERIFIER_STATE="$VERIFIER_DIR/.estado.json"
           WEBHOOK_APP="CentralDark-WebhookDeploy"
-          WEBHOOK_EXPECTED_EXEC="/root/CentralDark/scripts/webhook/github-webhook-deploy.mjs"
+          WEBHOOK_EXPECTED_EXEC="<caminho-vps>"
 
           verifier_json() {
-            pm2 jlist 2>/dev/null | jq -c --arg app "$VERIFIER_APP" '.[] | select(.name == $app)' | head -n1
+            PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | jq -c --arg app "$VERIFIER_APP" '.[] | select(.name == $app)' | head -n1
           }
 
           VJSON="$(verifier_json)"
           if [ -z "$VJSON" ] && [ -f "$VERIFIER_EXEC" ]; then
-            pm2 start "$VERIFIER_EXEC" --name "$VERIFIER_APP" --time >/dev/null 2>&1
-            pm2 save --force >/dev/null 2>&1
+            PM2_HOME=/root/.pm2 pm2 start "$VERIFIER_EXEC" --name "$VERIFIER_APP" --time >/dev/null 2>&1
+            PM2_HOME=/root/.pm2 pm2 save --force >/dev/null 2>&1
             sleep 4
             echo "HERMES_VERIFIER_SELF_HEAL=BOOTSTRAP"
             VJSON="$(verifier_json)"
@@ -60,8 +60,8 @@ jobs:
             VEXEC=$(echo "$VJSON" | jq -r '.pm2_env.pm_exec_path // ""')
             VSTATUS=$(echo "$VJSON" | jq -r '.pm2_env.status // "unknown"')
             if [ "$VEXEC" = "$VERIFIER_EXEC" ] && [ "$VSTATUS" != "online" ]; then
-              pm2 restart "$VERIFIER_APP" >/dev/null 2>&1
-              pm2 save --force >/dev/null 2>&1
+              PM2_HOME=/root/.pm2 pm2 restart "$VERIFIER_APP" >/dev/null 2>&1
+              PM2_HOME=/root/.pm2 pm2 save --force >/dev/null 2>&1
               sleep 4
               echo "HERMES_VERIFIER_SELF_HEAL=RESTART"
               VJSON="$(verifier_json)"
@@ -87,7 +87,7 @@ jobs:
             if [ "$AGE" -ge 0 ] && [ "$AGE" -le 180 ]; then VERIFIER_HEARTBEAT="PASS"; fi
           fi
           if [ "$VERIFIER_HEARTBEAT" != "PASS" ] && [ "$VERIFIER_PM2" = "PASS" ]; then
-            pm2 restart "$VERIFIER_APP" >/dev/null 2>&1
+            PM2_HOME=/root/.pm2 pm2 restart "$VERIFIER_APP" >/dev/null 2>&1
             sleep 6
             NOW=$(date +%s); MTIME=$(stat -c %Y "$VERIFIER_STATE" 2>/dev/null || echo 0); AGE=$((NOW-MTIME))
             if [ -f "$VERIFIER_STATE" ] && [ "$AGE" -ge 0 ] && [ "$AGE" -le 180 ]; then
@@ -102,15 +102,15 @@ jobs:
 
           # Auto-cura do executor interno do webhook: stopped também é falha material.
           # O listener systemd externo pode continuar ativo enquanto o executor PM2/porta 9300 morre.
-          WEBHOOK_JSON="$(PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
+          WEBHOOK_JSON="$(PM2_HOME=<caminho-vps> PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
           WEBHOOK_STATUS="$(echo "$WEBHOOK_JSON" | jq -r '.pm2_env.status // "missing"' 2>/dev/null)"
           WEBHOOK_EXEC="$(echo "$WEBHOOK_JSON" | jq -r '.pm2_env.pm_exec_path // ""' 2>/dev/null)"
           if [ -n "$WEBHOOK_JSON" ] && [ "$WEBHOOK_EXEC" = "$WEBHOOK_EXPECTED_EXEC" ] && [ "$WEBHOOK_STATUS" != "online" ]; then
-            PM2_HOME=/root/.pm2 pm2 restart "$WEBHOOK_APP" >/dev/null 2>&1
-            PM2_HOME=/root/.pm2 pm2 save --force >/dev/null 2>&1
+            PM2_HOME=<caminho-vps> PM2_HOME=/root/.pm2 pm2 restart "$WEBHOOK_APP" >/dev/null 2>&1
+            PM2_HOME=<caminho-vps> PM2_HOME=/root/.pm2 pm2 save --force >/dev/null 2>&1
             sleep 5
             echo "WEBHOOK_DEPLOY_SELF_HEAL=RESTART"
-            WEBHOOK_JSON="$(PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
+            WEBHOOK_JSON="$(PM2_HOME=<caminho-vps> PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
             WEBHOOK_STATUS="$(echo "$WEBHOOK_JSON" | jq -r '.pm2_env.status // "missing"' 2>/dev/null)"
             WEBHOOK_EXEC="$(echo "$WEBHOOK_JSON" | jq -r '.pm2_env.pm_exec_path // ""' 2>/dev/null)"
           fi
@@ -146,7 +146,7 @@ jobs:
               ROUTER_TOKEN=$(tr '\0' '\n' < "/proc/$ROUTER_PID/environ" | sed -n 's/^CENTRALDARK_ROUTER_TOKEN=//p' | head -n1)
             fi
             AUTH_ARGS=()
-            if [ -n "$ROUTER_TOKEN" ]; then AUTH_ARGS=(-H "Authorization: Bearer $ROUTER_TOKEN"); fi
+            if [ -n "<variavel-segredo>" ]; then AUTH_ARGS=(-H "Authorization: Bearer <variavel-segredo>"); fi
             MODELS=$(curl -fsS --max-time 12 "${AUTH_ARGS[@]}" http://127.0.0.1:8099/v1/models 2>/dev/null)
             FREE_MODEL=$(echo "$MODELS" | jq -r '.data[]?.id | select(startswith("nous/") and endswith(":free"))' 2>/dev/null | head -n1)
 
@@ -189,9 +189,9 @@ jobs:
           echo "UNKNOWN_IS_PASS=0"
           echo "==================="
 
-          if [ -n "${NOTIFY_API_KEY:-}" ]; then
+          if [ -n "<variavel-segredo>:-}" ]; then
             PAYLOAD_NOTIFY=$(jq -nc --arg origem "vps-healthcheck" --arg tipo "$TIPO" --arg titulo "$TITULO" --arg mensagem "$(echo -e "$MSG")" '{origem:$origem,tipo:$tipo,titulo:$titulo,mensagem:$mensagem}')
-            curl -sS -X POST "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/notify-telegram" -H "x-notify-key: ${NOTIFY_API_KEY}" -H "Content-Type: application/json" -d "$PAYLOAD_NOTIFY" >/dev/null 2>&1 || true
+            curl -sS -X POST "https://kagejpghnwdfymddwxuf.supabase.co/functions/v1/notify-telegram" -H "x-notify-key: <variavel-segredo>" -H "Content-Type: application/json" -d "$PAYLOAD_NOTIFY" >/dev/null 2>&1 || true
           else
             echo "::warning::NOTIFY_API_KEY ausente — relatório preservado no log."
           fi
