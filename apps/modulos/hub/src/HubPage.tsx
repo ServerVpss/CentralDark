@@ -16,12 +16,13 @@ import { RoleGuard } from './components/shared/RoleGuard';
 import { Sparkles, LogIn, LogOut } from 'lucide-react';
 import { ButtonLogDrawer } from './components/ButtonLogDrawer';
 import { logButton, trackAction } from './lib/buttonLog';
-import { useHubAutoRefresh } from './hooks/useHubAutoRefresh';
+import { useHubAutoRefresh, type HubDeploySnapshot } from './hooks/useHubAutoRefresh';
 import { hubAuth } from './integrations/supabase/hub-client';
 
 export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
-  useHubAutoRefresh({ intervalMs: 60000 });
+  const [deploy, setDeploy] = useState<HubDeploySnapshot | null>(null);
+  useHubAutoRefresh({ intervalMs: 60000, onDeploy: setDeploy });
 
   useEffect(() => {
     hubAuth.auth.getSession().then(({ data }) => setUserEmail(data.session?.user.email ?? null));
@@ -60,6 +61,14 @@ export default function HubPage() {
             <span className="hidden sm:inline-flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
               <span>mcp.centralldark.com</span>
+            </span>
+            <span role="status" aria-live="polite" className={deploy?.state === 'FAILED' || deploy?.state === 'PENDING' ? 'text-amber-500 font-medium' : 'text-muted-foreground'}>
+              {deploy === null ? 'Deploy: medindo' :
+               deploy.state === 'SENSOR_BLOCKED' ? 'Deploy: sensor indisponível' :
+               deploy.state === 'AWAIT_RUNTIME_PROOF' ? 'Deploy: falta provar VPS' :
+               deploy.state === 'RUNNING' ? 'Deploy: executando' :
+               deploy.state === 'QUEUED' ? 'Deploy: na fila' :
+               deploy.state === 'FAILED' ? 'Deploy: falhou' : 'Deploy: pendente'}
             </span>
             {userEmail ? (
               <button
@@ -101,7 +110,7 @@ export default function HubPage() {
             <TabsTrigger value="autonomy" className="data-[state=active]:gradient-emerald data-[state=active]:text-primary-foreground data-[state=active]:shadow-3d-primary transition-all">⚙️ Autonomia</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="dashboard"><DashboardTab /></TabsContent>
+          <TabsContent value="dashboard"><DashboardTab deploy={deploy} /></TabsContent>
           <TabsContent value="hermes"><HermesTab /></TabsContent>
           <TabsContent value="inventory"><RoleGuard requiredRole="admin"><InventoryTab /></RoleGuard></TabsContent>
           <TabsContent value="boot"><RoleGuard requiredRole="admin"><BootStudioTab /></RoleGuard></TabsContent>
