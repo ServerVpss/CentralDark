@@ -771,7 +771,7 @@ MAIN_HEAD=94406d8085438d92e14e60fd75fe446a519ab9fd
 VPS_HEAD=5344bd87074c334ddf3ac322ae7d6aaacecdf665
 VPS_ORIGIN_MAIN=94406d8085438d92e14e60fd75fe446a519ab9fd
 VPS_HEAD_MATCH_MAIN=FAIL
-VPS_WORKTREE_DIRTY=UNKNOWN
+VPS_WORKTREE_DIRTY=FAIL_DIRTY_COUNT_13
 VPS_DIRTY_COUNT=13
 PM2=UNKNOWN
 MCP_SYSTEMD=PASS
@@ -786,7 +786,7 @@ NEXT_CURSOR=reconcile VPS to main without destructive reset -> prove PM2 via ins
 ```
 
 - [ ] **FAIL:** VPS checkout está atrasado em relação à `origin/main` (VPS `5344bd8`, origin/main `94406d8`).
-- [ ] **UNKNOWN:** PM2 não está disponível no PATH remoto; estado dos processos não foi provado. Não tratar `systemd active` como PM2 PASS.
+- [ ] **FAIL/DELTA:** VPS working tree está suja: 13 linhas de status foram medidas; conteúdo não foi alterado. no PATH remoto; estado dos processos não foi provado. Não tratar `systemd active` como PM2 PASS.
 - [x] **PASS:** `centraldark-native-mcp-http.service` ativo e `http://127.0.0.1:9100/health` respondeu HTTP 200.
 - [x] **PASS:** Hermes gateway local ativo (PID 18492), cron `f052f0dc37ed` existente; execução de hoje ocorreu via catch-up com atraso de 8h41, sem transformar atraso em PASS de pontualidade.
 - [ ] **FAIL/DELTA:** 5 PRs abertas medidas: #1793, #1792, #1777, #1774, #1767.
