@@ -8,7 +8,7 @@ pr_mother: "RETIRED"
 semantic_role: "hud_current_projection_history_and_learning_map"
 priority: "PROVENANCE"
 checked_day_utc: "2026-10-07"
-updated: "2026-10-07"
+updated: 2026-10-10T15:59:49-03:00
 source_rule: "HUD CURRENT deriva realidade viva; este arquivo preserva história e aprendizados"
 mirror_role: "CASA-VAULT = memoria operacional/espelho; Git+owners continuam autoridade tecnica"
 aliases:
@@ -761,3 +761,35 @@ HUD_RELATED_FILES=535
 FULL_UI_BUTTON_TAB_MAP=PARTIAL_COUNTED_NOT_FULLY_ENUMERATED
 NEXT_CURSOR=GENERATE_MACHINE_INVENTORY_JSON_FOR_UI_SKILLS_WORKFLOWS
 ```
+
+## 2026-10-10 — RECONCILIAÇÃO CURRENT / PROJEÇÃO HUD
+
+```text
+RECONCILIATION_AT=2026-10-10T15:59:49-03:00
+SOURCE=GitHub main + VPS SSH + Hermes cron + HUD existente (projeção somente)
+MAIN_HEAD=94406d8085438d92e14e60fd75fe446a519ab9fd
+VPS_HEAD=5344bd87074c334ddf3ac322ae7d6aaacecdf665
+VPS_ORIGIN_MAIN=94406d8085438d92e14e60fd75fe446a519ab9fd
+VPS_HEAD_MATCH_MAIN=FAIL
+VPS_WORKTREE_DIRTY=UNKNOWN
+VPS_DIRTY_COUNT=13
+PM2=UNKNOWN
+MCP_SYSTEMD=PASS
+MCP_HEALTH_127001_9100=PASS_HTTP_200
+OPEN_PRS=5
+HERMES_GATEWAY=PASS_RUNNING_PID_18492
+RECONCILIACAO_CRON=f052f0dc37ed
+CRON_LAST_DISPATCH=UNKNOWN_RUNNING_CATCHUP_LATE_8H41
+HUD_IS_NOT_AUTHORITY=true
+FINGERPRINT=main:94406d8085438d92e14e60fd75fe446a519ab9fd|vps:5344bd87074c334ddf3ac322ae7d6aaacecdf665|vps_origin:94406d8085438d92e14e60fd75fe446a519ab9fd|prs:1792,1777,1774,1767,1793|pm2:UNKNOWN|mcp9100:HTTP200|cron:f052f0dc37ed-catchup
+NEXT_CURSOR=reconcile VPS to main without destructive reset -> prove PM2 via installed owner -> inspect existing HUD projection freshness -> remeasure
+```
+
+- [ ] **FAIL:** VPS checkout está atrasado em relação à `origin/main` (VPS `5344bd8`, origin/main `94406d8`).
+- [ ] **UNKNOWN:** PM2 não está disponível no PATH remoto; estado dos processos não foi provado. Não tratar `systemd active` como PM2 PASS.
+- [x] **PASS:** `centraldark-native-mcp-http.service` ativo e `http://127.0.0.1:9100/health` respondeu HTTP 200.
+- [x] **PASS:** Hermes gateway local ativo (PID 18492), cron `f052f0dc37ed` existente; execução de hoje ocorreu via catch-up com atraso de 8h41, sem transformar atraso em PASS de pontualidade.
+- [ ] **FAIL/DELTA:** 5 PRs abertas medidas: #1793, #1792, #1777, #1774, #1767.
+- [ ] **UNKNOWN:** espelho Obsidian do checklist não localizado nesta execução; HUD local foi lido como projeção existente, não como autoridade. HUD mantém 7 missões e `Pendências.md` mantém 8 itens; divergência de projeção permanece sem mutação física.
+
+**Estado consolidado:** `FAIL` para convergência VPS/main; `PASS` apenas para os claims MCP/gateway medidos; `UNKNOWN` para PM2 e espelho do checklist. `FIXED_POINT=false`.
