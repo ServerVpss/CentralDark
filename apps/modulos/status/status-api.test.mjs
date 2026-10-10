@@ -47,7 +47,7 @@ test('Mega Painel no One Heart: fonte, frescor, sanitização e sem falso verde'
     assert.equal(fresh.sections.mcp_24h.data.last_24h.uptime_pct, null);
     assert(!JSON.stringify(fresh).includes('would_leak'), 'internal node details must not escape');
     assert(!JSON.stringify(fresh).includes('top_secret_value'), 'credential-like text must be redacted');
-    const detail = await buildStatusDetail('grafo', { now: at });
+    // Fonte de CPU ausente não pode se transformar em leitura artificial de 0.\n    await writeFile(join(home, 'infra-vivo.json'), JSON.stringify({\n      updatedAt: '2026-10-10T21:59:00Z', mem: { used_pct: 28 },\n      // load propositalmente omitido: UNKNOWN em vez de zero.\n    }));\n    const withoutCpu = await buildStatusOverview({ now: at });\n    assert.equal(withoutCpu.sections.infraestrutura.state, 'OBSERVED');\n    assert.equal(withoutCpu.sections.infraestrutura.data.cpu_load.one_min, null);\n    assert.equal(withoutCpu.sections.infraestrutura.data.cpu_load.five_min, null);\n    assert.equal(withoutCpu.sections.infraestrutura.data.memory.used_pct, 28);\n    const detail = await buildStatusDetail('grafo', { now: at });
     assert.equal(detail.section, 'grafo');
     assert.equal(detail.state, 'OBSERVED');
     const old = await buildStatusOverview({ now: new Date('2026-10-12T22:00:00Z') });
