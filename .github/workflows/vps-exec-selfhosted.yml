@@ -739,7 +739,6 @@ jobs:
       REPO_DIR: <caminho-vps>
       GH_TOKEN: ${{ github.token }}
       HERMES_APP: CentralDark-Hermes
-      HERMES_SERVICE: hermes-gateway.service
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
       VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
       HERMES_PROMPT: apps/modulos/HERMES-CORE/prompts/hermes-core.md
@@ -823,23 +822,21 @@ jobs:
             exit 76
           }
 
-          # Descobrir o owner vivo antes de copiar qualquer contrato.
-          # Hermes Gateway atual é systemd; PM2 continua suportado quando for o owner real.
-          HERMES_OWNER="pm2"
-          if systemctl is-active --quiet "$HERMES_SERVICE" 2>/dev/null; then
-            HERMES_OWNER="systemd"
-          fi
-          echo "HERMES_RUNTIME_OWNER=$HERMES_OWNER"
-          if [[ "$HERMES_OWNER" == "systemd" ]]; then
-            SYSTEMD_OLD_PID="$(systemctl show -p MainPID --value "$HERMES_SERVICE" 2>/dev/null || true)"
-            [[ "$SYSTEMD_OLD_PID" =~ ^[0-9]+$ && "$SYSTEMD_OLD_PID" -gt 0 ]] || { echo "HERMES_SYSTEMD_MAINPID_INVALID"; exit 84; }
-          else
-            command -v pm2 >/dev/null 2>&1 || { echo "HERMES_RUNTIME_DEPLOY=BLOCKED missing_pm2"; exit 85; }
-            command -v jq >/dev/null 2>&1 || { echo "HERMES_RUNTIME_DEPLOY=BLOCKED missing_jq"; exit 85; }
-            if ! pm2 jlist | jq -e --arg app "$HERMES_APP" '.[] | select(.name == $app and .pid > 0)' >/dev/null 2>&1; then
-              echo "HERMES_RUNTIME_DEPLOY=BLOCKED pm2_app_missing_or_not_running"
-              exit 86
+          # Owner do runner precisa existir ANTES de copiar qualquer contrato.
+          # A VPS atual executa Hermes Gateway via systemd; este job legado
+          # gerencia SOMENTE o app PM2. Não fingir que ambos são o mesmo runtime.
+          if ! command -v pm2 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+            if systemctl is-active --quiet hermes-gateway.service 2>/dev/null; then
+              echo "HERMES_RUNTIME_DEPLOY=BLOCKED owner=systemd job_owner=PM2"
+              echo "HERMES_GATEWAY_LIVE=PASS; SYSTEMD_NOT_PM2; NEED_OWNER_ADAPTER"
+              exit 84
             fi
+            echo "HERMES_RUNTIME_DEPLOY=BLOCKED missing_pm2_or_jq"
+            exit 85
+          fi
+          if ! pm2 jlist | jq -e --arg app "$HERMES_APP" '.[] | select(.name == $app and .pid > 0)' >/dev/null 2>&1; then
+            echo "HERMES_RUNTIME_DEPLOY=BLOCKED pm2_app_missing_or_not_running"
+            exit 86
           fi
 
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/hermes-runtime-validate.XXXXXX")"
@@ -861,11 +858,7 @@ jobs:
                 fi
               done
               if [[ "$restart_attempted" == "1" ]]; then
-                if [[ "$HERMES_OWNER" == "systemd" ]]; then
-                  systemctl restart "$HERMES_SERVICE" >/dev/null 2>&1 || true
-                else
-                  pm2 restart "$HERMES_APP" --update-env >/dev/null 2>&1 || true
-                fi
+                pm2 restart "$HERMES_APP" --update-env >/dev/null 2>&1 || true
               fi
               echo "HERMES_RUNTIME_ROLLBACK_END"
             fi
@@ -900,63 +893,37 @@ jobs:
           node "$VALIDATOR" --self-test | tee "$RUNNER_TEMP/hermes-runtime-live-self-test.txt"
           grep -q '^UNIVERSAL_ENGINE_METHOD_SELF_TEST=PASS$' "$RUNNER_TEMP/hermes-runtime-live-self-test.txt"
 
-          OLD_PID=0
+          HERMES_JSON="$(pm2 jlist | jq -c --arg app "$HERMES_APP" '.[] | select(.name == $app)' | head -n1)"
+          [[ -n "$HERMES_JSON" ]] || { echo "HERMES_PM2_APP_NOT_FOUND"; exit 77; }
+          OLD_PID="$(jq -r '.pid // 0' <<<"$HERMES_JSON")"
+          [[ "$OLD_PID" =~ ^[0-9]+$ && "$OLD_PID" -gt 0 ]] || { echo "HERMES_OLD_PID_INVALID"; exit 78; }
+
+          restart_attempted=1
+          pm2 restart "$HERMES_APP" --update-env >/dev/null
           NEW_PID=0
-          RUNTIME_STATUS=""
-          if [[ "$HERMES_OWNER" == "systemd" ]]; then
-            OLD_PID="$SYSTEMD_OLD_PID"
-            restart_attempted=1
-            systemctl restart "$HERMES_SERVICE"
-            for _ in $(seq 1 20); do
-              NEW_PID="$(systemctl show -p MainPID --value "$HERMES_SERVICE" 2>/dev/null || true)"
-              RUNTIME_STATUS="$(systemctl is-active "$HERMES_SERVICE" 2>/dev/null || true)"
-              if [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$RUNTIME_STATUS" == "active" ]]; then
-                break
-              fi
-              sleep 1
-            done
-            [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$RUNTIME_STATUS" == "active" ]] || {
-              echo "HERMES_SYSTEMD_NOT_REPLACED"
-              exit 79
+          for _ in $(seq 1 20); do
+            NEW_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+            STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
+            if [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$STATUS" == "online" ]]; then
+              break
+            fi
+            sleep 1
+          done
+
+          [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || {
+            echo "HERMES_PID_NOT_REPLACED"
+            exit 79
+          }
+
+          for _ in $(seq 1 5); do
+            sleep 3
+            STABLE_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+            STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
+            [[ "$STABLE_PID" == "$NEW_PID" && "$STATUS" == "online" ]] || {
+              echo "HERMES_RUNTIME_UNSTABLE"
+              exit 80
             }
-            for _ in $(seq 1 5); do
-              sleep 3
-              STABLE_PID="$(systemctl show -p MainPID --value "$HERMES_SERVICE" 2>/dev/null || true)"
-              RUNTIME_STATUS="$(systemctl is-active "$HERMES_SERVICE" 2>/dev/null || true)"
-              [[ "$STABLE_PID" == "$NEW_PID" && "$RUNTIME_STATUS" == "active" ]] || {
-                echo "HERMES_SYSTEMD_UNSTABLE"
-                exit 80
-              }
-            done
-          else
-            HERMES_JSON="$(pm2 jlist | jq -c --arg app "$HERMES_APP" '.[] | select(.name == $app)' | head -n1)"
-            [[ -n "$HERMES_JSON" ]] || { echo "HERMES_PM2_APP_NOT_FOUND"; exit 77; }
-            OLD_PID="$(jq -r '.pid // 0' <<<"$HERMES_JSON")"
-            [[ "$OLD_PID" =~ ^[0-9]+$ && "$OLD_PID" -gt 0 ]] || { echo "HERMES_OLD_PID_INVALID"; exit 78; }
-            restart_attempted=1
-            pm2 restart "$HERMES_APP" --update-env >/dev/null
-            for _ in $(seq 1 20); do
-              NEW_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
-              RUNTIME_STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
-              if [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$RUNTIME_STATUS" == "online" ]]; then
-                break
-              fi
-              sleep 1
-            done
-            [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || {
-              echo "HERMES_PID_NOT_REPLACED"
-              exit 79
-            }
-            for _ in $(seq 1 5); do
-              sleep 3
-              STABLE_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
-              RUNTIME_STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
-              [[ "$STABLE_PID" == "$NEW_PID" && "$RUNTIME_STATUS" == "online" ]] || {
-                echo "HERMES_RUNTIME_UNSTABLE"
-                exit 80
-              }
-            done
-          fi
+          done
 
           LIVE_RUNTIME_HASH="$(sha256sum "$RUNTIME_CONTRACT" | awk '{print $1}')"
           TARGET_RUNTIME_HASH="$(git -C "$BUILD_DIR" show "$TARGET_SHA:$RUNTIME_CONTRACT" | sha256sum | awk '{print $1}')"
@@ -1015,8 +982,7 @@ jobs:
               contract_coverage: {defined: 9, deployed: 9, percent: 100, meaning: "DEFINED_CANONICAL_RUNTIME_SET"},
               old_pid: $old_pid,
               new_pid: $new_pid,
-              runtime_owner: $owner_runtime,
-              runtime_status: $runtime_status,
+              pm2_status: "online",
               progressive_autonomy: ["SONHAR", "EXPERIMENTAR", "CRISTALIZAR"],
               observed_at: $observed_at,
               action_is_proof: false,
