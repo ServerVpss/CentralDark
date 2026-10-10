@@ -1,0 +1,33 @@
+{
+  "project": {
+    "branch": "main",
+    "lastCommit": "selado: medição Casa/VPS 2026-10-10",
+    "phase": "MEDICAO_READ_ONLY",
+    "currentTask": "Inventário Casa/VPS, CPU, portas, PIDs e HUD",
+    "overallProgress": null,
+    "stateSource": "explicit-event-payload",
+    "stateMeasuredAt": "2026-10-10T20:08:43.5363837Z"
+  },
+  "milestones": [],
+  "events": [
+    {
+      "time": "2026-10-10T20:08:43.5363837Z",
+      "titulo": "Medição Casa/VPS",
+      "detalhe": "Casa CPU 47% medido; VPS CPU UNKNOWN; portas 4174/4175 sem listener; Tailscale VPS→Casa BLOCKED.",
+      "area": "Casa/VPS",
+      "sha": "",
+      "actor": "SOL"
+    }
+  ],
+  "iaTimeline": [
+    {
+      "time": "2026-10-10T20:08:43.5363837Z",
+      "ia": "@SOL",
+      "action": "📌 Medição Casa/VPS",
+      "area": "Casa/VPS",
+      "status": "bloqueado"
+    }
+  ],
+  "updatedAt": "2026-10-10T20:08:43.5363837Z",
+  "updatedAtBR": "10/10/2026 17:08:43 BRT"
+}
