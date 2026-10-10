@@ -9,10 +9,10 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 **Status:** concluído (código pronto, executado na VPS)
 **Sintoma:** site só responde pelo preview do Lovable; domínios próprios ainda não apontam.
 **Como fechar:**
-1. Apontar DNS dos 3 hostnames pro IP da VPS (`89.117.78.124`):
-   - `centralldark.com` → A `89.117.78.124`
-   - `www.centralldark.com` → A `89.117.78.124`
-   - `telepainel.centralldark.com` → A `89.117.78.124`
+1. Apontar DNS dos 3 hostnames pro IP da VPS (`<servidor-publico>`):
+   - `centralldark.com` → A `<servidor-publico>`
+   - `www.centralldark.com` → A `<servidor-publico>`
+   - `telepainel.centralldark.com` → A `<servidor-publico>`
 2. Na VPS rodar `bash install.sh setup_centraldark_portal` (cria pastas, clona, builda).
 3. Confirmar comigo pra eu editar o Caddyfile (regra: Caddy não muda sem OK).
 4. `curl -I https://centralldark.com` e `curl -I https://telepainel.centralldark.com/dashboard` devem retornar `200`.
@@ -24,7 +24,7 @@ Detalhes técnicos: `docs/INSTALADOR/13-centraldark-portal.md`.
 ---
 
 ## ✅ #2 — Reestruturação do repo no padrão VPS (concluído 2026-06-20)
-**O que foi feito:** `src/` reorganizado pra espelhar `/root/CentralDark/apps/`.
+**O que foi feito:** `src/` reorganizado pra espelhar `<caminho-vps>`.
 Páginas e componentes do TelePainel movidos pra `src/apps/modulos/telepainel/`,
 landings dos outros módulos pra `src/apps/modulos/{bot-whatsapp,crm,financeiro}/`,
 portal público pra `src/apps/web/`, código compartilhado pra `src/shared/`.
@@ -439,7 +439,7 @@ Cada módulo tem seu README com a lista do que falta.
 
 #### Pendência sugerida — Grupo 3: workflows e deploy
 - **Título:** Avaliar docs de deploy/workflow
-- **Local no legado:** `CHANGELOG_TECNICO.md`, `ORGANIZACAO_VPS.md`, `ORQUESTRADOR_WORKFLOW_VPS.md`, `SUPABASE_WORKFLOW.md`, `SYNC_REPOS.md`, `WEBHOOKS.md`, `deploy.md`, `architecture.md`, `structure.md`, `lovable-sync-check.md`
+- **Local no legado:** `CHANGELOG_TECNICO.md`, `ORGANIZACAO_VPS.md`, `ORQUESTRADOR_WORKFLOW_VPS.md`, `<nome-de-segredo>.md`, `SYNC_REPOS.md`, `WEBHOOKS.md`, `deploy.md`, `architecture.md`, `structure.md`, `lovable-sync-check.md`
 - **Sugestão:** Revisar conteúdo
 - **Justificativa:** muito disso pode estar coberto por `INSTALADOR/`, `CONSCIENCIA/03-FLUXO-DEPLOY.md` e `CLAUDE.md`. Conferir um a um.
 
@@ -476,7 +476,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 **Mapeamento completo feito em 30/06/2026 (60 arquivos lidos: 45 em docs/CONSCIENCIA/ + 7 em relatorios/ + diretrizes) — 6 achados específicos a revisar, um por um, com o Pivete:**
 
 1. **`CONSCIENCIA.md` duplica quase todo o conteúdo dos arquivos numerados (00 a 14)** — risco de desincronia: atualiza um lado, esquece o outro. Decidir: vira só um índice que linka pros numerados, ou mantém duplicado com checagem periódica.
-2. **`06-MCP-CENTRALDARK.md` cita pasta `/APP/`** (`/root/CentralDark/APP/infra/mcp/`, `/root/CentralDark/APP/secrets/mcp.env`) que `04-ESTRUTURA-VPS.md` e `CONSCIENCIA.md` (seção 7) dizem explicitamente que **nunca existiu** — arquivo desatualizado, precisa correção.
+2. **`06-MCP-CENTRALDARK.md` cita pasta `/APP/`** (`<caminho-vps>`, `<caminho-vps>`) que `04-ESTRUTURA-VPS.md` e `CONSCIENCIA.md` (seção 7) dizem explicitamente que **nunca existiu** — arquivo desatualizado, precisa correção.
 3. **Dado divergente do MCP entre docs:** `MAPA-DO-CEREBRO.md` diz "95 ferramentas, porta 9200"; `09-ESTADO-ATUAL.md` (correto, confirmado ao vivo) diz "96 tools, porta 9100". Corrigir o `MAPA-DO-CEREBRO.md`.
 4. **2 arquivos quase idênticos sobre GitHub:** `GITHUB-PROFISSIONAL-AUTOMACAO-CONTINUA.md` e `GITHUB-PROFISSIONAL-E-INTELIGENCIA-VIVA.md` dizem a mesma coisa com texto diferente — candidatos a fundir em um só.
 5. **Vários arquivos antigos citam `segredounlock/clone-deck` como repo principal** (`00-PORTA-DE-ENTRADA-IA.md`, `CUSTOM-GPT-SETUP.md`, `CODEX-INTEGRADO.md`, `REPOSITORIO-OFICIAL.md`, `MODO-SEGREDO.md`) — desatualizado, hoje é `ServerVpss/CentralDark` (Seção 8 do CLAUDE.md).
@@ -490,7 +490,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 ### 10. Processos fantasma no PM2 — id 3, 4, 6 com pid N/A — 🟡 ABERTO (30/06/2026, 22:15 BRT) — ✅ CONCLUÍDO em 2026-07-06
 - **Nota final:** Confirmado via enxame (06/07): CentralDark-BotServer, MultiZap-Gateway e CloneDeck-CRM não aparecem mais nem no runtime PM2 nem no dump.pm2 salvo. Fantasmas eliminados sem necessidade de ação — não existe mais processo pra apagar. Fechado.
 - **Sintoma:** `pm2 list` mostra 3 processos como "online" mas sem PID real (não estão de fato rodando): `CentralDark-BotServer` (id 4), `MultiZap-Gateway` (id 3), `CloneDeck-CRM` (id 6).
-- **Causa identificada:** `CentralDark-BotServer` aponta pro script `apps/bot-server/start.sh`, que não existe mais — sumiu na reestruturação pra `apps/bot-telegram/` (o bot real que roda é `CentralDark-HubBot`, id 27, via `unified-bot.cjs`). `MultiZap-Gateway` e `CloneDeck-CRM` apontam pra `/root/Multizap/` — sistema legado (CentralDark1VPS).
+- **Causa identificada:** `CentralDark-BotServer` aponta pro script `apps/bot-server/start.sh`, que não existe mais — sumiu na reestruturação pra `apps/bot-telegram/` (o bot real que roda é `CentralDark-HubBot`, id 27, via `unified-bot.cjs`). `MultiZap-Gateway` e `CloneDeck-CRM` apontam pra `<caminho-vps>` — sistema legado (CentralDark1VPS).
 - **Onde mexer:** PM2 (`pm2 delete`/`pm2 restart` conforme decisão) + `dump.pm2` (rodar `pm2 save` depois)
 - **Critério pra fechar:** Decidir com o Pivete: (a) apagar os 3 do PM2 por serem ghost/legado, ou (b) para o id 4 especificamente, corrigir o script path pra apontar pro lugar certo se ele tiver uso real separado do HubBot. Os ids 3 e 6 são do sistema legado `CentralDark1VPS` — não mexer sem "Migração de Automação" (regra da Seção 8 do CLAUDE.md).
 
@@ -501,7 +501,7 @@ Quando você quiser revisar, abre item por item (5.1 → 5.21) e me fala "execut
 - **Critério pra fechar:** Decisão explícita do Pivete — não é automática só porque a data passou. Avaliar histórico de propostas em `fila/events.jsonl` antes de decidir.
 
 ### 12. Provedores LLM extras ativados (Groq, OpenRouter, Gemini) — ✅ CONCLUÍDO em 30/06/2026
-- **O que foi feito:** chaves organizadas em `apps/modulos/mcp/.env` (estava uma bagunça de texto colado de 3 painéis diferentes). Groq e Gemini preenchidas em `apps/modulos/Bolt/source/.env` (OpenRouter já estava certa lá). Open WebUI (`apps/modulos/WebUI/docker-compose.yml`) ganhou `OPENAI_API_BASE_URLS`/`OPENAI_API_KEYS` com 4 conexões: Elite Gateway, Groq, OpenRouter, Gemini. Os 2 containers (`CentralDark-WebUI`, `CentralDark-Builder`) foram recriados e confirmados healthy/200.
+- **O que foi feito:** chaves organizadas em `apps/modulos/mcp/.env` (estava uma bagunça de texto colado de 3 painéis diferentes). Groq e Gemini preenchidas em `apps/modulos/Bolt/source/.env` (OpenRouter já estava certa lá). Open WebUI (`apps/modulos/WebUI/docker-compose.yml`) ganhou `<nome-de-segredo>`/`<nome-de-segredo>` com 4 conexões: Elite Gateway, Groq, OpenRouter, Gemini. Os 2 containers (`CentralDark-WebUI`, `CentralDark-Builder`) foram recriados e confirmados healthy/200.
 - **O que ficou no ar:** o modelo `gpt-4o 🔗` antigo (cadastrado direto no admin do Open WebUI, sem key válida, causava o erro `'JSONResponse' object has no attribute 'body_iterator'`) continua na lista — não foi removido, só ficaram disponíveis alternativas funcionais (OpenRouter serve gpt-4o de verdade). Há também uma key OpenRouter alternativa não confirmada, comentada em `mcp/.env`, e um UUID + webhook secret de origem incerta também comentados lá — confirmar com o Pivete se algum desses tem uso.
 
 ### 13. Faxina de numeração em docs/CONSCIENCIA — números duplicados e fora de ordem — 🟡 ABERTO (30/06/2026)
@@ -525,7 +525,7 @@ Padrão mono: já é regra (ver memória do padrão visual). Falta: o gatilho de
 Cuidado: definir granularidade — notificar por SESSÃO/ação relevante, NÃO cada tool call (evita spam). Implementação no MCP (dist/audit-logger.js é a base) + reusar scripts/notify-claude/notify-telegram.sh (já manda pro privado + canal).
 
 🟡 #16 — Sync-loop do Google Drive — temporário até o Hub ficar pronto — 🟡 ABERTO (01/07/2026)
-O que é: /root/CentralDark/scripts/sync-loop.sh — loop infinito que sincroniza docs/ pro Google Drive via rclone a cada 2 minutos.
+O que é: <caminho-vps> — loop infinito que sincroniza docs/ pro Google Drive via rclone a cada 2 minutos.
 
 Ajustes feitos (01/07): removido --verbose (estava enchendo log), nome do processo PM2 corrigido de CentralDark-SycDrive para CentralDark-SyncDrive.
 
@@ -593,7 +593,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 
 ---
 
-## 🟡 #15 — Consolidar módulos soltos em /root → /root/CentralDark
+## 🟡 #15 — Consolidar módulos soltos em /root → <caminho-vps>
 **Status:** aguardar (fazer DEPOIS de fechar o trabalho atual dentro de CentralDark)
 **Data de registro:** 02/07/2026
 **Contexto:** o Pivete mostrou o FileZilla da VPS — dentro de `/root` existem várias pastas fora do CentralDark que ainda precisam ser comparadas/migradas/arquivadas.
@@ -602,10 +602,10 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 `Multizap`, `Multizap1`, `multizap-webhook`, `clone-deck-webhook`, `wabot-bridge`, `whatsapp-server`, `conexao-ia`, `central-horario`, `dark`, `dist`, `guarda`, `infra`, `scripts`, `security`, `tools`, `snap`, `backups`, `revisoes`, `Cline`, `node_modules`.
 
 **Como fechar:**
-1. Terminar primeiro tudo que está em andamento dentro de `/root/CentralDark`.
+1. Terminar primeiro tudo que está em andamento dentro de `<caminho-vps>`.
 2. Para cada pasta: listar conteúdo, comparar com o equivalente já dentro de `CentralDark/apps/modulos/`.
 3. Migrar o que for útil pro lugar canônico.
-4. Arquivar em `/root/backups/legado-YYYYMMDD/` o que não for mais usado.
+4. Arquivar em `<caminho-vps>` o que não for mais usado.
 5. Remover só depois de confirmação do Pivete.
 
 **Regra:** NÃO mexer agora. Só registro pra não esquecer.
@@ -712,10 +712,10 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 ### 43. [WebUI/04] Bearer token hardcoded em `mcpo-config/config.json` — 🔴 ABERTO (08/07/2026)
 - **Sintoma:** Campo `Authorization` contém `Bearer 1eb4912da7a27677...` fixo. Sem timeout definido pra conexão com servidor centraldark.
 - **Onde mexer:** `apps/modulos/WebUI/mcpo-config/config.json`
-- **Critério pra fechar:** Substituir token literal por `${MCP_TOKEN}` via env, rotacionar o token exposto, adicionar `timeout`/`requestTimeout`.
+- **Critério pra fechar:** Substituir token literal por `<variavel-segredo>` via env, rotacionar o token exposto, adicionar `timeout`/`requestTimeout`.
 
 ### 44. [WebUI/06] `popular-webui.sh` acessa `/var/lib/docker/volumes` direto (exige root, quebra portabilidade) — 🔴 ABERTO (08/07/2026)
-- **Sintoma:** Script acessa path do volume docker no host e assume `/root/CentralDark/` fixo. Falha em qualquer host com root do docker em outro path ou sem sudo.
+- **Sintoma:** Script acessa path do volume docker no host e assume `<caminho-vps>` fixo. Falha em qualquer host com root do docker em outro path ou sem sudo.
 - **Onde mexer:** `apps/modulos/WebUI/scripts/popular-webui.sh`
 - **Critério pra fechar:** Trocar acesso direto ao volume por `docker exec` no container ou `docker cp`, e resolver path do projeto via `$(git rev-parse --show-toplevel)` ou variável.
 
@@ -977,3 +977,9 @@ BRAIN_GRAPH_IS_DERIVED_NAVIGATION=true
 - **Critério pra fechar:** provar um ciclo completo em que um caso real autorizado gera conhecimento reutilizável, vira material/procedimento consumível e retorna como melhoria mensurável no atendimento seguinte.
 - **Guardrail:** conhecimento contribuído por terceiros só entra no acervo reutilizável quando a permissão e a finalidade forem claras; privado não vira corpus compartilhado por padrão.
 
+
+### 61. RECOVERY_REQUIRED — owner GitHub Actions do deploy VPS sem jobs — 🟡 ABERTO (10/10/2026)
+- **Fato medido:** os runs 1714 e 1715 de `.github/workflows/vps-exec-selfhosted.yml` terminaram com `jobs=[]`; `workflow_dispatch` retorna HTTP 422 mesmo com Actions habilitado.
+- **Preservação:** rollback seguro aplicado em `7893b3396b29b6b57a191fd378130ee337416a6f`; nenhum arquivo da VPS foi apagado. A VPS permanece em `5344bd870`, 83 commits atrás da `main`.
+- **Como fechar:** recuperar o owner GitHub Actions/runner, obter jobs reais, executar o deploy canônico, provar Hermes/MCP/guards, readback de serviço e receipt; somente então emitir selo funcional.
+- **NEXT_CURSOR:** `RECOVERY_GITHUB_ACTIONS_WORKFLOW_OWNER → RUNNER_JOBS_REAL → VPS_READBACK → HERMES_READBACK → MCP_READBACK → RECEIPT → SEAL`.
