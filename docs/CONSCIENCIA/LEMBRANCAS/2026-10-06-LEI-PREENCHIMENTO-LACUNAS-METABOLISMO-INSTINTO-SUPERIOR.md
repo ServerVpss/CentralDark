@@ -297,6 +297,28 @@ CHEFE_INTENCAO
 
 **NEXT_CURSOR:** consultar o último run de `t_140910d4` no board/perfil correto, confirmar tool calls e receipts do turno corrente, recuperar próximo cursor e continuar com o mesmo Goal; jamais reiniciar por impulso só por ver `rc=75` antigo.
 
+
+## 2026-10-09 — INSTINTO_SUPERIOR_APRENDIZADO_VIRA_CAPACIDADE_20261009: Instinto Superior incorpora a experiência
+
+**CHEFE ensinou:** a execução comprovada não deve ser repetida para o Hermes “aprender”; **sua receita já registrada é o aprendizado a incorporar no owner runtime correto**. A memória é sagrada, a casca é mutável e o juiz continua sendo a realidade. Yuji/Sukuna/Gojo/Whis/Bills/Goku/Vegeta representam capacidades já nomeadas do mesmo organismo, não novos escritores.
+
+**Owner da intenção/cristal:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md` (seção `INSTINTO_SUPERIOR_APRENDIZADO_VIRA_CAPACIDADE_20261009`). **Aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md` item #170, ampliado sem renumeração; índice NeuroLink conserva `L000→L170`.
+
+**Receita herdável:**
+```text
+RECUPERAR_GOAL_E_OWNER
+→ CONSUMIR_RECEITA_PERTINENTE + PROOF_KEY/FINGERPRINT/SHA/SCOPE
+→ MESMO_EFEITO_JA_COMPROVADO_NO_CURRENT? REUSAR_RECEIPT_SEM_MUTACAO
+→ SENAO: MENOR_DELTA_NO_OWNER_EXISTENTE
+→ EXECUTAR → MEDIR → BACKCHECK → CONTRAPROVAR
+→ ERRO: VOLTAR_UMA_CASA; PRESERVAR_GREEN_STATE; RETESTAR_CONE
+→ REGISTRAR_RECEIPT + APRENDIZADO + NEXT_CURSOR; CONTINUAR
+```
+
+**Fato medido:** `orchestrator.mjs` já registra aprendizado após Critic; `Knowledge-Collector/agent.mjs` já implementa `registrar/consultarContexto`; `canonical-consumption-gate.mjs` já seleciona aprendizado pertinente. **Não comprovado:** Hermes original consumir automaticamente o aprendizado antes da decisão e tornar essa receita executável no runtime atual. `LEARNING_RECORDED != LEARNING_CONSUMED`; `REPLAY_PASS != RUNTIME_PASS`; `FIXED_POINT_GLOBAL=UNKNOWN`.
+
+**NEXT_CURSOR:** medir a herança no mesmo Goal e fazer apenas o encaixe causal, com teste negativo de fingerprint divergente; sem segunda arquitetura ou repetição de auditoria.
+
 ## Proveniência
 
 Fonte primária: declaração direta do SEGREDO/CHEFE, 2026-10-06.

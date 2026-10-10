@@ -1044,3 +1044,21 @@ O CHEFE autorizou a promoção **documental integral** do PR #1785. A transcriç
 **Fronteira:** documentação aprovada na main, execução/integração/runtime ainda por prova; ideias `OPCIONAL_FUTURO` não são bloqueadores de CI. `DOCUMENTED!=EXECUTED`; `MERGED!=DEPLOYED`; `UNKNOWN!=PASS`.
 
 `NEXT_CURSOR=RECONCILE_CURRENT_CAPABILITIES_FOR_FIRST_MINIMUM_DELTA`.
+
+### INSTINTO_SUPERIOR_APRENDIZADO_VIRA_CAPACIDADE_20261009 — experiência reproduzida vira capacidade, no mesmo owner
+
+**Intenção do CHEFE, 2026-10-09:** a própria execução com efeito comprovado, já preservada em Lembranças/Aprendizados/NeuroLink, é o aprendizado que deve ser **encaixado no owner do executor**, sem o Hermes repetir a descoberta nem recriar sistema. Não é instalar conhecimento sem testar; é fazer a próxima decisão aproveitar a receita que já ganhou contraprova. A casca e os bindings mudam, a intenção e a memória permanecem.
+
+**Simulação mental desta descoberta, NÃO execução em produção:** `mesmo Goal → recuperar owner e receita pertinente → confrontar fingerprint/proof_key/SHA/escopo/bindings com CURRENT → se correspondência e efeito ainda válidos, reutilizar receipt e pular a mutação já feita → se divergirem, menor delta no owner existente → Hermes executa → efeito → contraprova → volta uma casa caso erro → receipt + aprendizado → próxima batida → Fixed Point suficiente`. Não equiparar replay documental `L000→L170` a deploy histórico ou runtime vivo.
+
+**Encaixes existentes verificados por leitura de código:**
+- `apps/modulos/HERMES-CORE/core/orchestrator.mjs` já chama `registrarAprendizadoMaterial` após a aprovação material pelo Critic; **não foi observada nesse arquivo** chamada de `consultarContexto` antes de decidir.
+- `apps/modulos/HERMES-CORE/agents/Knowledge-Collector/agent.mjs` já possui `registrar` deduplicado e `consultarContexto` no ledger `docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md`.
+- `scripts/centraldark/canonical-consumption-gate.mjs` seleciona aprendizados por pertinência/número. `docs/CONSCIENCIA/APRENDIZADOS.md`, Lembranças, NeuroLink e HUD são fontes/projeções, não novos executores.
+- Hermes original, Oracle existente, Goal `t_9040803d`, `ONE_WRITER_PER_SCOPE=true` e contrato de fonte prevalecem; sem módulo, rota, owner, skill, cron ou agente paralelo.
+
+**Metáfora existente, preservada sem mudar diagramas:** Yuji/Itadori (continuidade), Sukuna (potência do motor), Gojo (percepção/contraprova), Whis (refinamento), Bills (refutação disciplinada), Goku (adaptação), Vegeta (resiliência), todos sob uma intenção e mesmo Hermes. Fonte: `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md`.
+
+**Discriminante para promover a hipótese a efeito (ainda não executado):** mostrar o Hermes recuperar automaticamente uma receita canônica **antes da decisão**, carregar `learning_ref` e `proof_key` para o mesmo Goal e, em teste controlado, (a) não repetir um efeito já comprovado no mesmo alvo e versão, (b) retestar só o cone quando o fingerprint divergir, (c) produzir receipt, contraprova e readback. `KNOWLEDGE_ALREADY_RECORDED=PASS_CODE_READ`; `PREDICISION_AUTOCONSUMPTION=UNKNOWN`; `RUNTIME_OWNER_BINDING=UNKNOWN`; `GLOBAL_FIXED_POINT=NOT_PROVEN`.
+
+**NEXT_CURSOR:** no owner original do Hermes, conferir decisor→recuperação pertinente→prova→efeito; corrigir somente o ponto de encaixe que a medição demonstrar, sem repetir Gênesis nem reiniciar missão.
