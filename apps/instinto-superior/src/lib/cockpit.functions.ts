@@ -16,6 +16,14 @@ type Probe = {
   dados: JsonObject | null;
 };
 
+export type EventoMcpCentralDark = {
+  at: string | null;
+  sector: string | null;
+  service: string | null;
+  kind: string | null;
+  level: "info" | "warn" | "error" | "other";
+};
+
 type CommitCentralDark = {
   sha: string;
   mensagem: string;
@@ -24,6 +32,14 @@ type CommitCentralDark = {
 
 export type EstadoCentralDark = {
   gmail: Estado;
+  mcpHealth: Estado;
+  mcpHealthHttp: number | null;
+  mcpEventosEstado: "OBSERVED" | "NO_RECENT_EVENTS" | "UNAVAILABLE" | "UNKNOWN";
+  mcpEventosContagem: number | null;
+  mcpEventosNiveis: Record<"info" | "warn" | "error" | "other", number> | null;
+  mcpEventosRecentes: EventoMcpCentralDark[];
+  mcpEventosFonte: string;
+  mcpEventosObservadoEm: string | null;
   githubLovable: Estado;
   desktop: Estado;
   repositorio: "ServerVpss/CentralDark";
@@ -388,6 +404,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniRouter,
       apiHealth,
       heartbeatRaw,
+      mcpHealthRaw,
       omniModels,
       receipts,
       casaSite,
@@ -400,6 +417,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/omni/status"),
       medirApi("/health"),
       medirApi("/heartbeat"),
+      medirApi("/health", (process.env["CENTRALDARK_MCP_BASE_URL"] || "https://mcp.centralldark.com").replace(/\/+$/, "")),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:4175/", true),
@@ -412,6 +430,40 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
         ? { ...heartbeatRaw, estado: "FAIL", erro: "self=stale" }
         : heartbeatRaw;
 
+    // PROJECT_BOUNDARY_V1: only CentralDark official event funnel;
+    // NEVER query TelePainel notifications_log from this cockpit.
+    const mcpEvidence = objetoJson(mcpHealthRaw.dados?.["sectorEvidence"]) ? mcpHealthRaw.dados["sectorEvidence"] : null;
+    const mcpEvents = objetoJson(mcpEvidence?.["events"]) ? mcpEvidence["events"] : null;
+    const eventStateRaw = texto(mcpEvents?.["state"]);
+    const mcpEventosEstado: EstadoCentralDark["mcpEventosEstado"] =
+      mcpHealthRaw.httpStatus !== 200 ? "UNAVAILABLE" :
+      eventStateRaw === "OBSERVED" || eventStateRaw === "NO_RECENT_EVENTS" || eventStateRaw === "UNAVAILABLE"
+        ? eventStateRaw : "UNKNOWN";
+    const sampleCount = mcpEvents?.["countInSample"];
+    const mcpEventosContagem = typeof sampleCount === "number" && Number.isSafeInteger(sampleCount) && sampleCount >= 0
+      ? sampleCount : null;
+    const rawLevels = objetoJson(mcpEvents?.["byLevel"]) ? mcpEvents["byLevel"] : null;
+    const eventLevels = ["info", "warn", "error", "other"] as const;
+    const mcpEventosNiveis = rawLevels
+      ? Object.fromEntries(eventLevels.map((name) => {
+          const val = rawLevels[name];
+          return [name, typeof val === "number" && Number.isSafeInteger(val) && val >= 0 ? val : 0];
+        })) as Record<"info" | "warn" | "error" | "other", number>
+      : null;
+    const bounded = (value: unknown, length = 48): string | null =>
+      typeof value === "string" && /^[a-z][a-z0-9._-]*$/.test(value) && value.length <= length ? value : null;
+    const rawRecent = Array.isArray(mcpEvents?.["recent"]) ? mcpEvents["recent"] : [];
+    const mcpEventosRecentes: EventoMcpCentralDark[] = rawRecent.slice(0, 12)
+      .filter(objetoJson).map((item) => {
+        const level = item["level"];
+        return {
+          at: typeof item["at"] === "string" && !Number.isNaN(Date.parse(item["at"])) ? item["at"].slice(0, 40) : null,
+          sector: bounded(item["sector"]),
+          service: bounded(item["service"]),
+          kind: bounded(item["kind"]),
+          level: level === "info" || level === "warn" || level === "error" ? level : "other",
+        };
+      });
     const atual = github.commits[0] ?? null;
     const gitLive = objetoJson(liveFabric.dados?.["git"]) ? liveFabric.dados["git"] : null;
     const vpsSha = texto(gitLive?.["head"]);
@@ -422,6 +474,14 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
 
     return {
       gmail: "AUTH_REQUIRED",
+      mcpHealth: mcpHealthRaw.estado,
+      mcpHealthHttp: mcpHealthRaw.httpStatus,
+      mcpEventosEstado,
+      mcpEventosContagem,
+      mcpEventosNiveis,
+      mcpEventosRecentes,
+      mcpEventosFonte: "https://mcp.centralldark.com/health#sectorEvidence.events",
+      mcpEventosObservadoEm: texto(mcpEvidence?.["observedAt"]),
       githubLovable: github.estado,
       desktop: "UNKNOWN",
       repositorio: "ServerVpss/CentralDark",
