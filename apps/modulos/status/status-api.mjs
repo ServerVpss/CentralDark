@@ -118,7 +118,7 @@ function capsule(d) {
 }
 const PICK = {
   projeto: project, infraestrutura: infrastructure, mcp_24h: health,
-  diagnostico_ias: diag, conselho, capsula,
+  diagnostico_ias: diag, conselho: council, capsula: capsule,
   mcp_legado: d => ({ checked_at: iso(d.checado_em), status: safeText(d.status, 60),
     process_status: safeText(d.pm2_status, 60) }),
 };
