@@ -3,7 +3,7 @@ name: kaizen-sistema-um
 description: Use quando a CentralDark precisar transformar estado solto em decisão tipada com probabilidade calibrada, registrar ou evoluir a Intenção Viva / Kaizen das 28 peças, ou mostrar e corrigir erros visíveis na tela.
 metadata:
   type: operational
-  version: "1.1"
+  version: "1.2"
   owner: SEGREDO/CHEFE
 centraldark_autosync: true
 ---
@@ -62,6 +62,37 @@ Esta skill não cria outro sistema: consulta e alimenta o que já existe.
 7. Continua evoluindo — DOMÍNIO mantém o fio até a conclusão demonstrada.
 
 Os Seis Olhos são capacidade composta da skill Oráculo, não outro agente.
+
+## Fechamento autonomo verificavel — Hermes aprende e registra
+
+**Gatilho pertinente:** ao obter **efeito material comprovado**, detectar uma **falha causal generalizável** ou encerrar uma batida com `NEXT_CURSOR`, o próprio **Hermes original** executa este fechamento no mesmo Goal. Não precisa o CHEFE voltar ao chat e dizer "REGISTRA". Esta regra complementa as batidas 4–7 e os owners de `docs/CONSCIENCIA/`; não é serviço, scheduler, writer ou memória paralela.
+
+**Pré-leitura antes de escrever:** recuperar `SOUL-SOL.md`, `RULES.md`, `AGENTS.md`, a Lembrança pertinente, `docs/CONSCIENCIA/APRENDIZADOS.md`, o manifesto `APRENDIZADOS-NEUROLINK-LINEAGE.json`, o receipt e `CURRENT/main` do escopo. Buscar `fingerprint + owner + intenção + tipo de efeito + SHA + receipt`. `RUNNING`, heartbeat, número de atividades, comentário enviado, `Goal done · 1 turn` ou arquivo existente **não provam** aprendizado. `OLD_RUN_FAIL != CURRENT_WORKER_FAIL`.
+
+**Rito executável obrigatório na própria batida (somente escrita autorizada e ONE_WRITER):**
+
+1. **Recuperar:** vincular `GOAL_ID / TASK_ID / LOOP_ID / LAST_GOOD_STATE / NEXT_CURSOR` reais, ou `UNKNOWN`; não criar outro Goal, requeue ou subgoal se a tarefa só precisa continuar. Preferir nota simples para worker já ativo.
+2. **Deduplicar:** se `24c159078bf65be9cbcb19332afa0e2cf55aac91` ou um receipt mais novo **já** selou a mesma lição com fingerprint equivalente e escopo de prova ainda válido, **não reaplicar correções**, não criar outro aprendizado, não renumerar `L170`: retornar `REUSED_PROVEN_RECEIPT` com referência e `NEXT_CURSOR`. O SHA citado é proveniência inicial, **não** CURRENT perpétuo.
+3. **Medir:** observar T1 pelo executor real; coletar comando/tool, saída/erro, HEAD, owner, tempo, antes/depois, teste e contraprova. `0 tool calls` em um run antigo não caracteriza todos os outros runs.
+4. **Aprender:** separar `PROVEN_LEARNING` de `CANDIDATE/UNKNOWN`. Registrar a **menor lição nova** no owner existente: Lembrança pertinente em `docs/CONSCIENCIA/LEMBRANCAS/`, Aprendizado existente em `docs/CONSCIENCIA/APRENDIZADOS.md` quando pertence à mesma família, e receipt em `docs/CONSCIENCIA/RECEIPTS/` quando material. Novo número somente com aprendizado realmente novo e cadeia verificada. Sem duplicar manifesto, notas ou escritor.
+5. **Projetar:** se alterou `APRENDIZADOS.md`, reutilizar `python scripts/trigger-fabric/rebuild_learning_lineage.py --write` e depois `--check` na **mesma árvore de trabalho autorizada**, sem sobrescrever dirty de outro writer. Verificar `source_blob_sha`, elos `PREV/NEXT`, contagem e `scripts/trigger-fabric/verify_repo_contract.py` quando aplicável. Não modificar o índice se só houve `REUSED_PROVEN_RECEIPT`.
+6. **Selar:** confirmar `main` antes de gravar; garantir writer exclusivo, sanitização de segredos e diff mínimo; executar tests/contraprova; commit/readback no mesmo SHA; confirmar os arquivos e o receipt via ferramenta. `DOC_WRITE != MEMORY_SEALED` até o readback; `COMMIT != DEPLOY`.
+7. **Retomar:** atualizar **o mesmo cartão** Kanban com receipt curto e `NEXT_CURSOR`, sem relançar tarefa concluída para "aprender"; seguir somente o erro/critério ainda pendente. Se modelo/quota/rota impedir escrita, conservar o cursor e emitir `LEARNING_SEAL=BLOCKED` com fronteira exata, sem alegar aprendizado persistido.
+
+```text
+INTENT + GOAL + SAME_SCOPE_CURRENT
+→ RECEIPT_FINGERPRINT_ALREADY_PROVED?
+   ├─ YES → REUSE_PROVEN_RECEIPT + NEXT_CURSOR; NO_NEW_LEARNING; NO_REQUEUE
+   └─ NO  → REAL_EFFECT + COUNTERPROOF
+          → EXISTING_LEMBRANCA + APRENDIZADO + EXISTING_RECEIPT
+          → NEUROLINK_COMPILER_ONLY_IF_APRENDIZADOS_CHANGED
+          → SAME_SHA_READBACK + KANBAN_RECEIPT + NEXT_CURSOR
+          → CONTINUE_SAME_GOAL
+```
+
+**Teste de aprendizado, não só de sintaxe:** dê ao Hermes dois eventos. (A) a mesma lição de heartbeat/worker já registrada no `24c1590` ⇒ resultado correto `REUSED_PROVEN_RECEIPT`, zero escrita, zero número novo. (B) um novo erro causal com efeito e contraprova válidos ⇒ escreve no owner existente, recompila índice somente se mudou aprendizados, comprova hash/receipt e continua no mesmo Goal. Se a cota impedir a chamada, classifique `BEHAVIORAL_TEST=BLOCKED_QUOTA`; não finja resultado.
+
+**Fonte canônica já materializada (não repetir auditoria):** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-LEI-PREENCHIMENTO-LACUNAS-METABOLISMO-INSTINTO-SUPERIOR.md` seção `KANBAN_HEARTBEAT_NAO_E_PROGRESSO_20261009`; aprendizado #170, manifesto já selado, `GOAL=t_9040803d` e tarefa `t_140910d4`. O feedback do CHEFE **muda o método futuro**, não reexecuta essa lição.
 
 ## Protocolo do Sistema Um (decisão tipada)
 1. Defina o tipo ANTES: nome, pergunta e rótulos permitidos (mínimo 2).
