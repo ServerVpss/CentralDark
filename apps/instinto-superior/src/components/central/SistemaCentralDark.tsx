@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
-import { useNotificationsLog, type NotifyTipo } from "@/hooks/useNotificationsLog";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,7 +49,6 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
     const data = Date.parse(commit.data);
     return Number.isFinite(data) && data >= limite;
   });
-  const notificacoes = useNotificationsLog(periodo);
 
   return (
     <section aria-labelledby="mega-painel-titulo">
@@ -130,22 +128,37 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
             ["Avisos", AlertTriangle, "aviso"],
             ["Erros", XCircle, "erro"],
             ["Críticos", Siren, "critico"],
-          ] satisfies Array<[string, LucideIcon, NotifyTipo]>
+          ] satisfies Array<[string, LucideIcon, string]>
         ).map(([titulo, Icone, tipo]) => (
           <article key={String(titulo)} className="panel p-4">
             <Icone className="size-4 text-muted-foreground" />
             <p className="mt-3 text-xs text-muted-foreground">{String(titulo)}</p>
             <p className="mt-1 font-mono text-lg">
-              {notificacoes.stats ? notificacoes.stats.porTipo[tipo] : "UNKNOWN"}
+              {tipo === "sucesso"
+                ? "UNKNOWN"
+                : estado?.mcpEventosNiveis?.[tipo as keyof NonNullable<EstadoCentralDark["mcpEventosNiveis"]>] ?? "UNKNOWN"}
             </p>
           </article>
         ))}
       </div>
-      {notificacoes.erro && (
-        <p className="mt-3 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
-          Notificações: {notificacoes.erro}
-        </p>
-      )}
+      <p className="mt-3 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
+        Eventos do MCP oficial · {estado?.mcpEventosEstado ?? "UNKNOWN"} ·
+        amostra limitada aos 15 minutos mais recentes ·
+        sucesso não é inferido de level=info · {estado?.mcpEventosFonte ?? "SEM FONTE"}
+      </p>
+      {estado?.mcpEventosRecentes?.length ? (
+        <div className="mt-3 rounded-md border border-border p-3">
+          <p className="text-xs text-muted-foreground">Eventos setoriais recentes (sanitizados)</p>
+          <ol className="mt-2 divide-y divide-border">
+            {estado.mcpEventosRecentes.map((ev, index) => (
+              <li key={index} className="py-2 font-mono text-[11px]">
+                {ev.at ?? "SEM HORARIO"} · {ev.sector ?? "UNKNOWN"}/
+                {ev.service ?? "UNKNOWN"} · {ev.level} · {ev.kind ?? "UNKNOWN"}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
 
       <div className="mt-6 overflow-hidden rounded-md border border-border">
         <div className="border-b border-border bg-muted/40 px-4 py-3 font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
@@ -180,7 +193,6 @@ function CentralStatus({ estado, atualizando, atualizar }: SistemaCentralDarkPro
   const medidoEm = estado?.atualizadoEm
     ? new Date(estado.atualizadoEm).toLocaleString("pt-BR")
     : "UNKNOWN";
-  const notificacoes = useNotificationsLog("24h");
 
   return (
     <section aria-labelledby="status-titulo">
@@ -242,13 +254,13 @@ function CentralStatus({ estado, atualizando, atualizar }: SistemaCentralDarkPro
           estado="UNKNOWN"
         />
         <ItemCofre
-          titulo="Feed de notificações"
+          titulo="Eventos oficiais MCP"
           detalhe={
-            notificacoes.stats
-              ? `${notificacoes.stats.total} evento(s) nas últimas 24h · ${notificacoes.stats.sucessoPct}% sem erro/crítico.`
-              : "Ponte de leitura do TelePainel não configurada nesta superfície."
+            estado?.mcpEventosContagem == null
+              ? `Fonte oficial: ${estado?.mcpEventosFonte ?? "UNKNOWN"} · ${estado?.mcpEventosEstado ?? "UNKNOWN"}`
+              : `${estado.mcpEventosContagem} evento(s) observados na amostra de 15 minutos; não é histórico integral nem porcentagem de sucesso.`
           }
-          estado={notificacoes.stats ? "PASS" : "AUTH_REQUIRED"}
+          estado={estado?.mcpEventosEstado === "OBSERVED" ? "PASS" : "UNKNOWN"}
         />
         <article className="panel p-5 lg:col-span-2">
           <div className="flex items-start gap-3">
