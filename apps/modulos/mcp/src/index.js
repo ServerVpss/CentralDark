@@ -12,7 +12,7 @@ import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.j
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
-import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { getOperationalSnapshot, getHealthSectorSummary } from "./operational-telemetry.js";
 import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
@@ -112,6 +112,11 @@ app.get("/deploy/health", githubDeployHealth);
 app.post("/webhook", githubDeployWebhook);
 // ─────────────────────────────── Health ──────────────────────────────────
 app.get("/health", (_req, res) => {
+    // CD_HEALTH_SECTORS_V1: real metadata from existing owners, fail-closed;
+    // public GET does not perform SSH, ingest, privileged API calls or mutations.
+    const evidence = getHealthSectorSummary();
+    const sse = getSseDiagnostics();
+    res.setHeader("Cache-Control", "no-store");
     res.json({
         ok: true,
         service: "mcp-centraldark",
@@ -119,6 +124,16 @@ app.get("/health", (_req, res) => {
         catalogVersion: CATALOG_VERSION,
         toolCount: getCatalogSummary().toolCount,
         time: new Date().toISOString(),
+        sectorEvidence: evidence,
+        eventStream: {
+            source: "/admin/logs/stream",
+            scope: "AUTH_REQUIRED",
+            connections: sse.conexoesAtivas,
+            eventsPerMinute: sse.eventosPorMinuto,
+            lastEventAgeMs: sse.ultimoEventoHaMs,
+            authenticated: false,
+        },
+        ownerLinks: { heartbeat: "/heartbeat", deep: "/health/deep", intent: "/intent/status" },
     });
 });
 // V2: healthcheck profundo (Health Score consumido pelo painel /admin)
