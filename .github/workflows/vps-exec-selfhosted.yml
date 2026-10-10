@@ -3,7 +3,7 @@ name: ⚙️ VPS Deploy canônico (self-hosted)
 on:
   push:
     branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
   contents: read
