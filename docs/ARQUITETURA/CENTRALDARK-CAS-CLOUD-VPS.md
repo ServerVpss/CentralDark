@@ -90,7 +90,8 @@ RELAY=CodeAgentSwarm relay (cloud)
 VPS_HOST=89.117.78.124
 SSH_ALIAS=Segredo-VPS
 PROJECT_ROOT=/root/CentralDark
-TAILSCALE_IP=100.118.223.100 (Casa)
+TAILSCALE_HOME_HOST=segredo
+TAILSCALE_IP=100.123.93.25 (Casa; peer da malha servervpss.org.github)
 GIT_SYNC=cron */5 * * * * auto-sync-main.sh
 ```
 
@@ -113,6 +114,23 @@ RELAY_LOST → cas connect (reconecta)
 PATH_BROKEN → source ~/.bashrc
 GIT_DRIFT → auto-sync-main.sh (cron)
 ```
+
+## Selo de reconciliação — 2026-10-10
+
+```text
+INTENCAO=Reconciliar IP Tailscale da Casa, sem mudar autoridade nem runtime
+OWNER=docs/ARQUITETURA/CENTRALDARK-CAS-CLOUD-VPS.md
+CASA_NODE=segredo
+CASA_TAILSCALE_IPV4=100.123.93.25
+IP_ANTIGO=100.118.223.100
+CONTRAPROVA=IP antigo retornou "no matching peer" no teste VPS de 2026-10-10
+EVIDENCIA=VPS tailscale status listou segredo 100.123.93.25; HUD/main e oauth-broker/server.mjs concordam
+SELO_DOCUMENTAL=RECONCILIADO
+PROVA_RUNTIME_VPS_PARA_CASA=UNKNOWN (teste novo ao IP atual bloqueado pela ferramenta)
+CAS_CONNECTED=UNKNOWN
+```
+
+O `TAILSCALE_IP` acima é referência observada, não configuração obrigatória do CAS Cloud. Em execução, preferir resolver o nó `segredo` pela malha Tailscale viva antes de usar IP fixo. Não promover selo documental a conectividade comprovada.
 
 ## Proveniência
 
