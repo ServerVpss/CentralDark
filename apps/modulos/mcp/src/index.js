@@ -654,6 +654,8 @@ app.post("/admin/mcp", (req, res) => {
         callerUser: auth.callerUser,
         clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-admin").slice(0, 160),
         oauthScope: auth.oauthScope,
+        // requireAdminScope() validated the unexpired OAuth bearer + admin scope.
+        authProvenance: "verified_oauth_admin",
     }).catch((err) => {
         l.error("mcp_admin_handler_unhandled", { error: String(err) });
         if (!res.headersSent) {
@@ -687,6 +689,8 @@ app.post("/mcp/admin", (req, res) => {
         admin: true,
         callerUser: auth.callerUser,
         oauthScope: auth.oauthScope,
+        // requireAdminScope() validated the unexpired OAuth bearer + admin scope.
+        authProvenance: "verified_oauth_admin",
     }).catch((err) => {
         l.error("mcp_admin_compat_handler_unhandled", { error: String(err) });
         if (!res.headersSent) {

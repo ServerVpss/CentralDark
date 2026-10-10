@@ -120,6 +120,8 @@ export async function providerAdminBridge(req, res) {
       autoMission: false,
       callerUser: auth.actor,
       oauthScope: "admin",
+      // Hub identity/role were verified before this direct dispatch.
+      authProvenance: "verified_hub_admin",
       correlationId: String(req.cid || req.headers["x-correlation-id"] || "provider-admin").slice(0, 160),
       token: "",
     });
