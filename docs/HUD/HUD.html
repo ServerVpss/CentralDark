@@ -1746,6 +1746,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       .then(function(){if(timeout)clearTimeout(timeout);});
   }
   apiHealth();setInterval(apiHealth,30000);
+  window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&(e.detail.sector==='HERMES'||e.detail.sector==='RUNTIME'))apiHealth();});
   refresh(); setInterval(refresh,30000);
 })();
 </script>
@@ -2413,9 +2414,11 @@ refresh();
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
       <label class="cadeado-meta" for="cd-event-filter">Setor</label>
       <select id="cd-event-filter" style="background:var(--surface);color:var(--text);border:1px solid var(--border);padding:7px">
-        <option value="TODOS">TODOS</option><option value="CASA">CASA</option><option value="SCREENPIPE">SCREENPIPE</option><option value="VPS">VPS</option><option value="HERMES">HERMES</option><option value="RUNTIME">RUNTIME</option><option value="HUD">HUD</option><option value="TAILSCALE">TAILSCALE</option><option value="SSH">SSH</option><option value="MCP">MCP</option><option value="DESKTOP">DESKTOP</option><option value="AIONUI">AIONUI</option><option value="SUPABASE">SUPABASE</option>
+        <option value="TODOS">TODOS</option><option value="CASA">CASA</option><option value="SCREENPIPE">SCREENPIPE</option><option value="VPS">VPS</option><option value="HERMES">HERMES</option><option value="RUNTIME">RUNTIME</option><option value="HUD">HUD</option><option value="TAILSCALE">TAILSCALE</option><option value="SSH">SSH</option><option value="MCP">MCP</option><option value="DESKTOP">DESKTOP</option><option value="AIONUI">AIONUI</option><option value="SUPABASE">SUPABASE</option><option value="GITHUB">GITHUB</option><option value="PR">PR</option><option value="DISCOS">DISCOS</option><option value="OBSIDIAN">OBSIDIAN</option>
       </select>
+      <button type="button" id="cd-sector-touch-probe" class="hud-linkbtn" title="Usa sondas oficiais existentes; nao cria selo">🧿 TOCOU → MEDIR SETOR</button>
       <span class="cadeado-meta" id="cd-event-summary">Aguardando observacao local...</span>
+      <span class="cadeado-meta" id="cd-sector-touch-status" role="status" aria-live="polite">SELO: requer receipt + readback do owner; navegador so observa.</span>
     </div>
     <div id="cd-event-stream" class="cd-health-events" role="log" aria-live="polite">🟡 Aguardando prova atual no navegador.</div>
   </div>
@@ -3105,6 +3108,7 @@ function refreshCentralDarkLive() {
 
 refreshCentralDarkLive();
 setInterval(refreshCentralDarkLive, CENTRALDARK_LIVE.refreshMs);
+window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.detail.sector==='VPS')refreshCentralDarkLive();});
 /* MCP catalogo: independente do heartbeat e do login administrativo.
    Fonte HTTP /health fornece toolCount (nao totalTools). */
 function refreshCentralDarkMcpCatalog() {
@@ -3135,6 +3139,7 @@ function refreshCentralDarkMcpCatalog() {
 }
 refreshCentralDarkMcpCatalog();
 setInterval(refreshCentralDarkMcpCatalog, 15000);
+window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.detail.sector==='MCP')refreshCentralDarkMcpCatalog();});
 
 /* Fixed Point 10/10: painel de leitura, NAO um segundo avaliador.
  * PASS do criterio corrente apenas com sinal causal; historico permanece historico.
@@ -3330,7 +3335,7 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
     var filter = document.getElementById('cd-event-filter');
     if (!out) return;
     var kind = filter ? filter.value : 'TODOS';
-    var icons={CASA:'🏠',TAILSCALE:'🌐',SSH:'🔐',MCP:'🔌',DESKTOP:'🖥️',AIONUI:'✨',SUPABASE:'🗄️',HERMES:'🤖',RUNTIME:'🧠',SCREENPIPE:'🎥',HUD:'🪬',VPS:'🖧'};
+    var icons={CASA:'🏠',TAILSCALE:'🌐',SSH:'🔐',MCP:'🔌',DESKTOP:'🖥️',AIONUI:'✨',SUPABASE:'🗄️',HERMES:'🤖',RUNTIME:'🧠',SCREENPIPE:'🎥',HUD:'🪬',VPS:'🖧',GITHUB:'🐙',PR:'📋',DISCOS:'💽',OBSIDIAN:'📚'};
     var rows=document.createDocumentFragment(),filtered=history.filter(function(item){return kind==='TODOS'||kind===item.sector;});
     filtered.forEach(function(item){
       var state=String(item.state||'UNKNOWN');
@@ -3389,6 +3394,7 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
   }
   screenCheck();
   setInterval(screenCheck,15000);
+  window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.detail.sector==='SCREENPIPE')screenCheck();});
   log('HUD','Projecao local iniciada; logs completos pertencem aos owners existentes');
 })();
 
@@ -3518,6 +3524,7 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
   }
   checkHead();
   setInterval(checkHead,60000);
+  window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.detail.sector==='GITHUB')checkHead();});
 })();
 </script>
 
@@ -3717,6 +3724,7 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
       .then(function(){if(timer)clearTimeout(timer);});
   }
   readPr();setInterval(readPr,60000);
+  window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.detail.sector==='PR')readPr();});
 })();
 </script>
 </body>
