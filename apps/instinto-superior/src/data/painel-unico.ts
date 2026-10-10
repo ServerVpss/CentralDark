@@ -256,6 +256,51 @@ export const VAULT = {
     "HUD.html é a projeção estática do vault; apps/modulos/obsidian-plugin-grafo-vivo é o plugin vivo. O cockpit é o único corpo visual (ONE_SYSTEM_ONLY).",
 };
 
+/** CATALOGO_PROJETOS_INDEPENDENTES_V1
+ * Catálogo de referências, não transferência de runtime, código ou administração.
+ * TelePainel e Bolt Desktop continuam com owners próprios; nenhum deles entra
+ * como módulo executável/administrável da CentralDark.
+ */
+export const PROJETOS_INDEPENDENTES = [
+  {
+    id: "telepainel",
+    nome: "TelePainel",
+    escopo: "PROJETO_SEPARADO" as const,
+    origem: "src/apps/modulos/telepainel/",
+    destino: "https://telepainel.centralldark.com",
+    observacao: "Projeto independente; manter suas telas, autenticação, dados e administração no TelePainel.",
+    runtime: "UNKNOWN" as const,
+  },
+  {
+    id: "bolt-desktop",
+    nome: "Bolt Desktop",
+    escopo: "WORKTREE_EXTERNO" as const,
+    origem: "K:\\CentralDark\\_worktrees\\bolt-desktop",
+    destino: null,
+    observacao: "Bancada da Casa; apenas referência catalogada, sem importar código ou promover build não testado.",
+    runtime: "UNKNOWN" as const,
+  },
+];
+
+export const LEGADOS_SUPERFICIE_STATUS = [
+  {
+    id: "status-legacy",
+    dominio: "status.centralldark.com",
+    owner: "apps/modulos/status/",
+    estado: "LEGADO_PRESERVADO" as const,
+    prova: "HTTP 503 observado na VPS em 2026-10-10; operação não comprovada agora.",
+  },
+  {
+    id: "hud-legacy",
+    dominio: "hud.centralldark.com",
+    owner: "Caddy/edge legado; rota viva deve ser confrontada com /etc/caddy/Caddyfile",
+    estado: "LEGADO_PRESERVADO" as const,
+    prova: "HTTP 525 observado na VPS em 2026-10-10; não confundir com docs/HUD/HUD.html.",
+  },
+];
+
+/** A remoção das rotas legadas exige paridade, consumidores migrados,
+ * readback autenticado, HTTPS e rollback, nunca apenas 'existe no código'. */
 export const PAINEIS_HISTORICOS = [
   { nome: "Painel CentralDark (md)", tipo: "Documento", destino: "Sistema › Infraestrutura" },
   { nome: "Painel CentralDark (html)", tipo: "Painel estático antigo", destino: "DONOR_HISTORY" },
