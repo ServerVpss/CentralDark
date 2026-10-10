@@ -30,6 +30,7 @@ const BLOCK_REASONS = new Set([
 const CHIEF_DECISIONS = new Set(['PENDING', 'APPROVED', 'REJECTED']);
 const DIGEST_RE = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/;
 const HASH_RE = /^[a-f0-9]{64}$/;
+const SEAL_ID_RE = /^S[0-9]{6}$/;
 const CAPABILITY_ID_RE = /^[A-Z0-9_:-]{1,80}$/;
 
 export const EVENT_ALLOWED_KEYS = Object.freeze([
@@ -53,6 +54,10 @@ export const EVENT_ALLOWED_KEYS = Object.freeze([
   'chief_decision',
   'chief_receipt_ref',
   'chief_receipt_hash',
+  'seal_number',
+  'seal_id',
+  'seal_proof_hash',
+  'next_cursor',
   'tests',
   'evidence_hash',
   'failure_observed',
@@ -183,6 +188,22 @@ export function validateEvent(event, index = 0) {
   if (!isNonNegativeInteger(event.iteration) || event.iteration < 1) problems.push(`${at}:ITERATION_INVALID`);
   if (!DIGEST_RE.test(asString(event.candidate_digest))) problems.push(`${at}:CANDIDATE_DIGEST_INVALID`);
   if (!HASH_RE.test(asString(event.evidence_hash))) problems.push(`${at}:EVIDENCE_HASH_INVALID`);
+
+  const sealFields = [event.seal_number, event.seal_id, event.seal_proof_hash, event.next_cursor];
+  const hasSeal = sealFields.some((value) => value != null && value !== '');
+  if (hasSeal) {
+    if (!isNonNegativeInteger(event.seal_number) || event.seal_number < 1) problems.push(`${at}:SEAL_NUMBER_INVALID`);
+    if (!SEAL_ID_RE.test(asString(event.seal_id))) problems.push(`${at}:SEAL_ID_INVALID`);
+    if (!HASH_RE.test(asString(event.seal_proof_hash))) problems.push(`${at}:SEAL_PROOF_HASH_INVALID`);
+    if (!SEAL_ID_RE.test(asString(event.next_cursor))) problems.push(`${at}:NEXT_CURSOR_INVALID`);
+    if (isNonNegativeInteger(event.seal_number) && SEAL_ID_RE.test(asString(event.seal_id)) && event.seal_id !== `S${String(event.seal_number).padStart(6, '0')}`) {
+      problems.push(`${at}:SEAL_ID_MISMATCH`);
+    }
+    if (asString(event.seal_proof_hash) !== asString(event.evidence_hash)) problems.push(`${at}:SEAL_PROOF_NOT_EVIDENCE`);
+    if (isNonNegativeInteger(event.seal_number) && SEAL_ID_RE.test(asString(event.next_cursor)) && event.next_cursor !== `S${String(event.seal_number + 1).padStart(6, '0')}`) {
+      problems.push(`${at}:NEXT_CURSOR_MISMATCH`);
+    }
+  }
   if (Number.isNaN(Date.parse(event.timestamp_utc))) problems.push(`${at}:TIMESTAMP_INVALID`);
 
   if (event.active_capabilities != null) {
@@ -328,6 +349,9 @@ function currentRunSummary(runEvents) {
     retention: metric(decision?.retention?.pass || 0, decision?.retention?.total || 0),
     last_event_at_utc: latest?.timestamp_utc || null,
     decision_event_present: Boolean(decision),
+    seal_number: decision?.seal_number || latest?.seal_number || null,
+    seal_id: asString(decision?.seal_id || latest?.seal_id) || null,
+    next_cursor: asString(decision?.next_cursor || latest?.next_cursor) || null,
   };
 }
 
@@ -552,11 +576,32 @@ function withLedgerLock(ledgerPath, callback) {
   }
 }
 
+function nextSealNumber(events) {
+  return events.reduce((highest, event) => (
+    isNonNegativeInteger(event?.seal_number) ? Math.max(highest, event.seal_number) : highest
+  ), 0) + 1;
+}
+
+function sealEvent(event, number) {
+  return {
+    ...event,
+    seal_number: number,
+    seal_id: `S${String(number).padStart(6, '0')}`,
+    seal_proof_hash: asString(event.evidence_hash),
+    next_cursor: `S${String(number + 1).padStart(6, '0')}`,
+  };
+}
+
 function appendEventWithLock({ ledgerPath, eventPath }) {
   return withLedgerLock(ledgerPath, () => {
     const existing = readLedger(ledgerPath);
     if (existing.errors.length) throw new Error(`LEDGER_INVALID:${existing.errors.join('|')}`);
-    const event = JSON.parse(readFileSync(eventPath, 'utf8'));
+    const inputEvent = JSON.parse(readFileSync(eventPath, 'utf8'));
+    if ([inputEvent.seal_number, inputEvent.seal_id, inputEvent.seal_proof_hash, inputEvent.next_cursor]
+      .some((value) => value != null && value !== '')) {
+      throw new Error('EVENT_REJECTED:SEAL_MUST_BE_ISSUED_BY_LEDGER');
+    }
+    const event = sealEvent(inputEvent, nextSealNumber(existing.events));
     const eventProblems = validateEvent(event, existing.events.length);
     if (eventProblems.length) throw new Error(`EVENT_REJECTED:${eventProblems.join('|')}`);
 
