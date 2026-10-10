@@ -677,3 +677,17 @@ NO_NEW_ARCHITECTURE = TRUE
 **NEXT_CURSOR:** `READ_SUCCESSOR_PR_HEAD → ACK_ONE_HUD_WRITER → IDENTIFY_TRACKED_DIRTY_OWNER → RECONCILE_SYNC → API03_MCP_RUNTIME → API09_EVENT_ID_3_PROJECTIONS → API12_HEARTBEAT → API13_SSE → API14_HUD → API15_CASA_READBACK → API16_SAME_SHA_RECEIPT`.
 `NO_NEW_ARCHITECTURE=true · FIXED_POINT=NOT_PROVEN · DOCUMENTED!=EXECUTED · MERGED!=DEPLOYED`
 <!-- /CURRENT_PR_SUCCESSOR_20261010 -->
+
+<!-- PROJECT_BOUNDARY_L171_20261010 -->
+## Aprendizado #171 · Instinto Superior é o corpo da CentralDark; TelePainel não é capability administrativa absorvível
+
+**INTENÇÃO CURRENT (CHEFE, 2026-10-10):** Um HUD/Cockpit do **Instinto Superior** reúne interfaces operacionais CentralDark, cada qual com owner/setor original: Casa/Obsidian, VPS, MCP, Hermes, One Heart, Saúde/Status e Admin. Telas antigas `status.centralldark.com` e `hud.centralldark.com` são fontes doadoras e rotas de compatibilidade; não apagar até paridade + E2E/consumidor/rollback.
+
+**FRONTEIRA DE PROJETO NÃO NEGOCIÁVEL:** TelePainel é projeto externo/independente, como projetos listados no catálogo Lovable. Seu caminho histórico `src/apps/modulos/telepainel` e seu domínio `telepainel.centralldark.com` não transferem administração, banco, autenticação, telas nem governança para o Instinto Superior. `K:\CentralDark\_worktrees\bolt-desktop` é outra bancada catalogada; nunca importar seu script de build na CentralDark sem dono/caminho/teste.
+
+**CONTRAPROVA LOCALIZADA:** `PainelAdminCentralDark.tsx` continha o texto enganoso "Administração absorvida do TelePainel". `SistemaCentralDark.tsx` e `AdminCofreSeguranca.tsx` consultavam `useNotificationsLog` herdado do TelePainel. **Owner do dado** foi corrigido nas superfícies tocadas para `mcp.centralldark.com/health#sectorEvidence.events` (sanitizado, limitado). Dado de amostra não representa histórico completo nem porcentagem de êxitos; evento ausente continua `UNKNOWN/UNAVAILABLE`. Hook legado preservado sem uso nessas telas; sua existência não comprova consumidores migrados fora delas.
+
+**Rastro de aplicação:** PR #1793 · commits `5dbccc2`, `aa654cd`, `d7f8578`, `75fa636`, `38a7a9b`. Aprendizado [#171](../APRENDIZADOS.md), índice em `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`, linhagem `L170 → L171`. **PR commit não é deploy.**
+
+**Cadeados:** `CATALOG != OWNERSHIP`; `CODE != RUNTIME`; `MCP_HEALTH_200 != COMPLETE_SECTOR_HEALTH`; `TELEPAINEL_ADMIN_STAYS_TELEPAINEL`; `LEGACY_DELETE_AFTER_PARITY_ONLY`; `ONE_HUD_ONE_HEART_ONE_MCP`. **NEXT_CURSOR:** typecheck/testar PR SHA → verificar /health sob runtime carregado → testar catálogo/seleção e isolação de dados no navegador → paridade das duas rotas legadas → readback/receipt → promoção segura pela esteira já existente.
+<!-- /PROJECT_BOUNDARY_L171_20261010 -->
