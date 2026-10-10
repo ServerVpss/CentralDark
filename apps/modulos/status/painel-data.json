@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix: alinhar healthcheck Hermes ao PM2_HOME do owner VPS",
+    "lastCommit": "fix: tornar dispatch do deploy VPS explicitamente válido",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-10T21:28:09.808Z",
+      "titulo": "Push na main · 2781102d9a7c19eb434e76820ad0ad8682e53993",
+      "detalhe": "fix: tornar dispatch do deploy VPS explicitamente válido",
+      "area": "Repositório",
+      "sha": "2781102",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-10T21:27:33.647Z",
       "titulo": "Push na main · 50211ef297149d02e2cd9da3f617eaedc18d582e",
@@ -76,6 +84,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-10T21:28:09.808Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2781102d9a7c19eb434e76820ad0ad8682e53993 (2781102)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-10T21:27:33.647Z",
       "ia": "@segredounlock",
@@ -272,6 +287,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-10T21:27:33.647Z",
-  "updatedAtBR": "10/10/2026, 18:27:33 BRT"
+  "updatedAt": "2026-10-10T21:28:09.808Z",
+  "updatedAtBR": "10/10/2026, 18:28:09 BRT"
 }
