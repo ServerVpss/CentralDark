@@ -397,6 +397,7 @@ async function medirDelta(vpsSha: string | null, mainSha: string | null) {
 // Único owner do HUD vivo: agrega GitHub + API CentralDark e nunca promove ausência de prova.
 export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
+    const mcpBase = (process.env["CENTRALDARK_MCP_BASE_URL"] || "https://mcp.centralldark.com").replace(/\/+$/, "");
     const [
       github,
       liveFabric,
@@ -416,8 +417,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/live-fabric/graph"),
       medirApi("/api/omni/status"),
       medirApi("/health"),
-      medirApi("/heartbeat"),
-      medirApi("/health", (process.env["CENTRALDARK_MCP_BASE_URL"] || "https://mcp.centralldark.com").replace(/\/+$/, "")),
+      medirApi("/heartbeat", mcpBase),
+      medirApi("/health", mcpBase),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:4175/", true),
@@ -470,7 +471,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const mainSha = atual?.sha ?? null;
     const sincronizado = !!mainSha && !!vpsSha && mainSha === vpsSha;
     const deltaVps = await medirDelta(vpsSha, mainSha);
-    const deploy: Estado = !mainSha || !vpsSha ? "UNKNOWN" : sincronizado ? "PASS" : "FAIL";
+    // A checkout SHA coincidence is a Git sync observation, NOT loaded runtime proof.
+    // Keep deployment UNKNOWN until the canonical deploy owner returns a signed/current receipt.
+    const deploy: Estado = !mainSha || !vpsSha ? "UNKNOWN" : sincronizado ? "UNKNOWN" : "BLOCKED";
 
     return {
       gmail: "AUTH_REQUIRED",
@@ -480,7 +483,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       mcpEventosContagem,
       mcpEventosNiveis,
       mcpEventosRecentes,
-      mcpEventosFonte: "https://mcp.centralldark.com/health#sectorEvidence.events",
+      mcpEventosFonte: mcpBase + "/health#sectorEvidence.events",
       mcpEventosObservadoEm: texto(mcpEvidence?.["observedAt"]),
       githubLovable: github.estado,
       desktop: "UNKNOWN",
