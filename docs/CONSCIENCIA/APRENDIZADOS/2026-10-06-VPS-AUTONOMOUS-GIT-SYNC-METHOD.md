@@ -220,3 +220,8 @@ Na VPS, HEAD 5344bd e origin/main 300bb936 durante preflight, com 7 tracked dirt
 ### Ponte HTML autenticada existente (10/10)
 
 O HUD Obsidian `file://` nao pode enviar credenciais cross-origin. Foi criada a **ponte minima de submissao**, sem novo daemon, em `--publish-bridge` do MESMO `scripts/vps/neurolink-gateway-dispatch.sh`. Materializa apenas `neurolink-dispatch.html` no `web_dist` do Hermes **ja servido pela rota SPA autenticada :9119**; o HUD principal nao e duplicado nessa origem privilegiada. Clique Lxxx → abrir `http://100.90.199.124:9119/neurolink-dispatch.html?uid=Lxxx` → login nativo existente → clique explicito → POST same-origin /api/kanban/tasks → task ID/receipt pendente. HTTP 401 sem cookie e resposta comprovada. Testar portal autenticado + task ID antes de declarar ENQUEUED. Nenhum servidor reiniciado nem OAuth desativado.
+
+
+### Correção de rota nativa comprovada na VPS (10/10)
+
+Sonda inicial `/api/kanban/tasks` resultou 401 sem cookie, **mas esse prefixo era legado/documental** e não prova que a rota exista no Hermes atual. Leitura do OWNER REAL `/root/.hermes/hermes-agent/plugins/kanban/dashboard/plugin_api.py` confirmou `@router.post('/tasks')` montado em `/api/plugins/kanban/` (módulo/plugin existente), schema `CreateTaskBody` com `title,body,assignee,priority,goal_mode,goal_max_turns,idempotency_key,workspace_kind` e resposta `task.id`. HUD e ponte corrigidos para `POST /api/plugins/kanban/tasks`, `assignee=default`, `goal_mode=true`, `workspace_kind=scratch`, `idempotency_key=centraldark:neurolink:UID` compartilhada com CLI. **Rota+schema comprovados por fonte runtime; POST autenticado, task criada e worker ainda nao comprovados.** Despacho so apos clique autenticado.

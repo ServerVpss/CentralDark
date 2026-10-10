@@ -38,7 +38,7 @@ button.addEventListener('click',async function(){
  '\\nSE_RECEITA_NAO_PROVADA=BLOCKED_RECIPE_NOT_PROVEN; SEM_SHELL_ARBITRARIO'+
  '\\nPROVA=READBACK_RECEIPT; ENQUEUED_NAO_E_EXECUTED; UNKNOWN!=PASS';
  try{
-  var reply=await fetch('/api/kanban/tasks',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'[NEUROLINK] '+uid+' · receita comprovada',body:body,status:'todo',priority:1})});
+  var reply=await fetch('/api/plugins/kanban/tasks',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'[NEUROLINK] '+uid+' · receita comprovada',body:body,assignee:'default',priority:1,goal_mode:true,goal_max_turns:20,workspace_kind:'scratch',idempotency_key:'centraldark:neurolink:'+uid})});
   var raw=await reply.text(),j={};try{j=JSON.parse(raw)}catch(_){}
   if(reply.status===401){status.textContent='BLOCKED_LOGIN_REQUIRED · autentique-se no Hermes e retorne aqui';return}
   if(!reply.ok){status.textContent='BLOCKED_GATEWAY_HTTP_'+reply.status;return}
@@ -88,7 +88,7 @@ print(json.dumps({'uid':uid,'title':n.get('title'),'prev':n.get('prev_uid'),'nex
 PY
 exit 0
 fi
-KEY="centraldark:neurolink:$NODE_UID:$SOURCE"
+KEY="centraldark:neurolink:$NODE_UID"
 TITLE="NEUROLINK $NODE_UID - receita comprovada"
 python3 - <(git -C "$ROOT" show "$OBJECT") "$NODE_UID" "$PIN" <<'PY' | "$HERMES" kanban create --goal --goal-max-turns 20 --idempotency-key "$KEY" --body-file - --created-by centraldark-genesis-hud --json "$TITLE"
 import json,sys
