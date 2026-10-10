@@ -15,6 +15,7 @@ const SOURCES = Object.freeze({
   conselho: ['conselho-vivo.json', 5 * 60_000],
   capsula: ['capsula-data.json', 5 * 60_000],
   mcp_legado: ['mcp-status.json', 2 * 60_000],
+  grafo: ['graph-data.json', 30 * 60_000],
 });
 const number = (v) => typeof v === 'number' && Number.isFinite(v) ? v : null;
 const truth = (v) => typeof v === 'boolean' ? v : null;
@@ -109,6 +110,20 @@ function council(d) {
     recent_debates: (Array.isArray(d.ultimosDebates) ? d.ultimosDebates.slice(0, 8) : [])
       .map(x => ({ at: iso(x.quando), summary: safeText(x.preview, 170) })) };
 }
+function graph(d) {
+  return {
+    updated_at: iso(d.updatedAt),
+    total_nodes: number(d.stats?.total_nodes),
+    total_edges: number(d.stats?.total_edges),
+    monitored: number(d.stats?.monitorados),
+    online: number(d.stats?.online),
+    offline: number(d.stats?.offline),
+    gateway_req_15min: number(d.stats?.gateway_req_15min),
+    compass_links_total: number(d.stats?.compass_links_total),
+    compass_links_broken: number(d.stats?.compass_links_broken),
+    // Segurança: os nomes, endereços e ligações do grafo não são expostos na API pública.
+  };
+}
 function capsule(d) {
   return { updated_at: iso(d.generated_at_utc), source_event_count: number(d.source?.event_count),
     source_run_count: number(d.source?.run_count),
@@ -119,6 +134,7 @@ function capsule(d) {
 const PICK = {
   projeto: project, infraestrutura: infrastructure, mcp_24h: health,
   diagnostico_ias: diag, conselho: council, capsula: capsule,
+  grafo: graph,
   mcp_legado: d => ({ checked_at: iso(d.checado_em), status: safeText(d.status, 60),
     process_status: safeText(d.pm2_status, 60) }),
 };
