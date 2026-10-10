@@ -548,4 +548,123 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, 
         verdict: diagnostics.status === "OBSERVED" ? "OBSERVED_NOT_FIXED_POINT" : "UNKNOWN_NOT_PASS",
     };
 }
-//# sourceMappingURL=operational-telemetry.js.map
+
+
+/* HEALTH_SECTORS_V1: Public, bounded, read-only projection of the SAME
+ * canonical event funnel and Git/heartbeat receipts. Never publishes messages,
+ * actors, data, credentials or correlation IDs. No new logger, endpoint or poller.
+ */
+export function getHealthSectorSummary({ root = DEFAULT_ROOT, nowMs = Date.now() } = {}) {
+  const observedAt = new Date(nowMs).toISOString();
+  const gitReceipt = readJsonSafe(path.join(root, "logs/auto-sync-status.json"));
+  const gitAt = Date.parse(String(gitReceipt?.t || ""));
+  const gitFresh = Number.isFinite(gitAt) && gitAt <= nowMs + 5000 &&
+    nowMs - gitAt <= AUTO_SYNC_STATUS_MAX_AGE_MS;
+  const gitState = !gitReceipt ? "UNAVAILABLE" : !gitFresh ? "STALE" :
+    gitReceipt.result === "PASS" ? "OBSERVED" :
+    gitReceipt.result === "BLOCKED" ? "BLOCKED" : "UNKNOWN";
+  const gitSha = gitFresh && /^[a-f0-9]{40}$/i.test(String(gitReceipt?.head || ""))
+    ? gitReceipt.head.slice(0, 12) : null;
+
+  const heartbeat = readJsonSafe(path.join(root, "logs/heartbeat-api.json"));
+  const heartAt = Date.parse(String(heartbeat?.t || ""));
+  const heartFresh = Number.isFinite(heartAt) && heartAt <= nowMs + 5000 &&
+    nowMs - heartAt <= 120000;
+  // This file is updated by a GET /heartbeat: it proves observation,
+  // NOT a separate autonomous heart/executor.
+  const heartState = !heartbeat ? "UNAVAILABLE" : !heartFresh ? "STALE" :
+    heartbeat.self === "alive" ? "OBSERVED" : "UNKNOWN";
+
+  const windowMs = 15 * 60 * 1000;
+  const safeName = (raw) => {
+    const s = String(raw || "").toLowerCase();
+    return /^[a-z][a-z0-9._-]{0,47}$/.test(s) ? s : "unclassified";
+  };
+  const logDir = path.join(
+    process.env.CENTRALDARK_LOG_ROOT || path.join(root, "logs"), "events"
+  );
+  const dates = [new Date(nowMs - windowMs).toISOString().slice(0, 10),
+    observedAt.slice(0, 10)];
+  const records = [];
+  let available = false;
+  for (const day of new Set(dates)) {
+    const file = path.join(logDir, day + ".jsonl");
+    if (!exists(file)) continue;
+    available = true;
+    for (const line of readTailSafe(file, 64 * 1024).split(/\r?\n/)) {
+      if (!line.trim()) continue;
+      let obj;
+      try { obj = JSON.parse(line); } catch { continue; }
+      if (obj?.schema !== "centraldark.event.v1") continue;
+      const ms = Date.parse(String(obj.timestamp || ""));
+      if (!Number.isFinite(ms) || ms > nowMs + 5000 || nowMs - ms > windowMs) continue;
+      const level = ["info", "warn", "error"].includes(obj.level) ? obj.level : "other";
+      records.push({
+        at: new Date(ms).toISOString(),
+        sector: safeName(obj.sector),
+        service: safeName(obj.service),
+        level,
+        kind: safeName(obj.kind),
+      });
+    }
+  }
+  records.sort((a, b) => b.at.localeCompare(a.at));
+  const bySector = {};
+  const byLevel = {};
+  for (const event of records) {
+    bySector[event.sector] = (bySector[event.sector] || 0) + 1;
+    byLevel[event.level] = (byLevel[event.level] || 0) + 1;
+  }
+  const events = {
+    source: "logs/events/YYYY-MM-DD.jsonl",
+    state: !available ? "UNAVAILABLE" : records.length ? "OBSERVED" : "NO_RECENT_EVENTS",
+    observedAt,
+    windowMs,
+    boundedTailBytesPerFile: 65536,
+    countInSample: available ? records.length : null,
+    bySector,
+    byLevel,
+    recent: records.slice(0, 12),
+    scope: "SANITIZED_BOUNDED_SAMPLE_NOT_COMPLETE_LEDGER",
+  };
+  const sectors = [
+    { id: "MCP", state: "OBSERVED", source: "/health", scope: "HTTP_RESPONSE_ONLY",
+      observedAt, nextCursor: "CHECK_AUTHENTICATED_OPERATION" },
+    { id: "ONE_HEART", state: heartState, source: "logs/heartbeat-api.json",
+      scope: "LAST_RESPONSE_NOT_EXECUTOR_PROOF",
+      observedAt: heartFresh ? heartbeat.t : null, nextCursor: "READ_HEARTBEAT_AND_VERIFY_FRESHNESS" },
+    { id: "GITHUB_SYNC", state: gitState, source: "logs/auto-sync-status.json",
+      scope: "GIT_SYNC_RECEIPT_NOT_RUNTIME_DEPLOY", observedAt: gitFresh ? gitReceipt.t : null,
+      sha: gitSha, nextCursor: gitState === "BLOCKED" ? "PRESERVE_DIRTY_AND_RECONCILE_OWNER" : "VERIFY_MAIN_AND_RUNTIME_SHA" },
+    { id: "EVENT_FUNNEL", state: events.state, source: events.source,
+      scope: events.scope, observedAt: records[0]?.at || null,
+      nextCursor: "VERIFY_SAME_EVENT_ID_IN_EVENTS_SECTORS_SERVICES" },
+  ];
+  // No CLI probes, bridge tokens, SSH or process execution in a public GET.
+  for (const [id, owner] of [
+    ["CASA", "Tailscale/authorized-Casa-runtime"],
+    ["TAILSCALE", "Tailscale-private-route"],
+    ["HERMES", "Hermes-Serve/Gateway"],
+    ["SCREENPIPE", "Casa-Screenpipe:3030"],
+    ["OBSIDIAN", "Casa-Obsidian/HUD.html"],
+    ["VPS_DEPLOY", "VPS-native-MCP-systemd"],
+  ]) {
+    sectors.push({ id, state: "UNKNOWN", source: owner,
+      scope: "NOT_MEASURED_BY_PUBLIC_HEALTH", observedAt: null,
+      nextCursor: "OWNER_AUTHORIZED_RUNTIME_PROBE" });
+  }
+  return {
+    schema: "centraldark.health.sectors.v1",
+    observedAt, sectors, events,
+    summary: {
+      observed: sectors.filter((x) => x.state === "OBSERVED").length,
+      blocked: sectors.filter((x) => x.state === "BLOCKED").length,
+      unknownOrUnavailable: sectors.filter((x) =>
+        ["UNKNOWN", "UNAVAILABLE", "STALE", "NO_RECENT_EVENTS"].includes(x.state)).length,
+      fixedPoint: false,
+      optionalUnavailableIsNotGlobalFailure: true,
+      sourceIsNotRuntime: true,
+    },
+  };
+}
+
