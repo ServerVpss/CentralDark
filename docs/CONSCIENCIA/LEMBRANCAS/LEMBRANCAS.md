@@ -754,3 +754,14 @@ CURRENT_OVER_HISTORY = true
 - **Conteúdo:** o cockpit CentralDark passa a ser extensão nativa do próprio Hermes Desktop, reutilizando gateway/model/profile/subagents/tool calls/jobs/logs já existentes. Obsidian e Hermes Desktop são duas projeções da mesma telemetria e não criam segundo organismo, daemon, porta, scheduler, banco ou HUD owner.
 - **Cristal:** `HERMES_DESKTOP_NATIVE_EXTENSION=true`; `CENTRALDARK_COCKPIT_IS_PLUGIN_NOT_SECOND_APP=true`; `OBSIDIAN_AND_HERMES_DESKTOP_SHARE_TELEMETRY=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `NO_SECOND_HUD_OWNER=true`; `REUSE_EXISTING_HERMES_STATE_AND_LOGS=true`.
 - **Next cursor:** materializar o menor plugin nativo no Hermes Desktop e provar hot-load/readback visual sem criar runtime paralelo.
+
+### [2026-10-10] Instinto Superior e TelePainel — fronteira selável, sem absorção de projetos
+
+- **Chave:** `INSTINTO_SUPERIOR_TELEPAINEL_FRONTEIRA_L171`.
+- **Intenção do CHEFE:** Instinto Superior é o **único cockpit/HUD operacional da CentralDark**, com status, MCP, Hermes, Casa, VPS, Admin, Grafo e One Heart por setor; **TelePainel continua projeto autônomo**, mostrado apenas no catálogo de projetos, sem mover dados, login, telas, permissões ou administração.
+- **Bancada externa:** `K:\CentralDark\_worktrees\bolt-desktop` é referência de trabalho; não importar nem executar seu `BUILD-CENTRALDARK-DESKTOP.cmd` sem validação de caminhos/owner.
+- **Erro detectado:** texto do Admin dizia que TelePainel foi absorvido; `useNotificationsLog` no Instinto consultava `notifications_log` da superfície herdada. Corrigir rótulo sem substituir a fonte perpetuava mistura de domínio.
+- **Delta rastreável:** PR #1793, mesma caneta; catálogo de projetos separados; Sistema e Cofre usam eventos sanitizados do `mcp.centralldark.com/health`, com estado/frescor e amostra limitada, nunca estatística falsa. Legados `status.centralldark.com` e `hud.centralldark.com` preservados enquanto não houver paridade, consumidores migrados e rollback.
+- **Aprendizado canônico:** [L171](../APRENDIZADOS.md) · `GLOBAL_LINEAGE_UID=L171` · `PREV_GLOBAL_UID=L170`.
+- **Regra:** `PROJECT_CATALOG_IS_REFERENCE` · `OWNERSHIP_NOT_TRANSFERRED` · `NO_SECOND_HUD` · `SOURCE_NOT_RUNTIME` · `TOCOU → TESTOU → READBACK → SELOU`.
+- **Prova:** commits versionados no PR #1793; validar tests/CI/current runtime antes de dizer EXECUTED. **NEXT_CURSOR:** `PR1793_L171_GENERATOR_CHECK → COCKPIT_TYPECHECK → MCP_EVENT_READBACK → PR_RECEIPT → SAFE_DEPLOY_GATE`.
