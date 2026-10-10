@@ -16,6 +16,7 @@ import {
 import { CofreAdministrativo, HubSeguranca } from "@/components/central/AdminCofreSeguranca";
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
 import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
+import { McpOperacoesCentralDark } from "@/components/central/McpOperacoesCentralDark";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
@@ -260,6 +261,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
           <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
           <TabsTrigger value="hub-inventario">Integração HUB (12)</TabsTrigger>
           <TabsTrigger value="observabilidade">Observabilidade</TabsTrigger>
+          <TabsTrigger value="mcp-centraldark">Operações MCP</TabsTrigger>
           <TabsTrigger value="cofre">Cofre / Credenciais</TabsTrigger>
           <TabsTrigger value="seguranca">Segurança / Permissões</TabsTrigger>
         </TabsList>
@@ -467,6 +469,9 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
               DELETE_LEGACY_ONLY_AFTER_ALL_FEATURES_COUNTERPROVEN=true
             </p>
           </div>
+        </TabsContent>
+        <TabsContent value="mcp-centraldark" className="mt-6">
+          <McpOperacoesCentralDark />
         </TabsContent>
         <TabsContent value="observabilidade" className="mt-6">
           <ObservabilidadeCentralDark />
