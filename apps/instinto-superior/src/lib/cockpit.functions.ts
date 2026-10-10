@@ -693,7 +693,8 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
   const rawSections = objetoJson(statusOverview.dados?.["sections"]) ? statusOverview.dados["sections"] : null;
   const allowedSections = ["projeto", "infraestrutura", "mcp_24h", "diagnostico_ias", "conselho", "capsula", "mcp_legado"];
   const sections = allowedSections.map((key) => {
-    const d = objetoJson(rawSections?.[key]) ? rawSections[key] : null;
+    const candidate = rawSections?.[key];
+    const d = objetoJson(candidate) ? candidate : null;
     const status = textField(d?.["state"], 30) ?? "UNKNOWN";
     return {
       id: key,
@@ -715,7 +716,7 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
     checks: setores.checks,
     sectors: setores.sectors,
     events: setores.events,
-    tools: { probe: safeProbe(tools), reported: countField(toolsPayload?.["toolCount"]) ?? toolList.length || null, names: toolNames },
+    tools: { probe: safeProbe(tools), reported: countField(toolsPayload?.["toolCount"]) ?? (toolList.length || null), names: toolNames },
     integrations: {
       linear: { ...safeProbe(linear), ok: linear.dados?.["ok"] === true },
       figma: { ...safeProbe(figma), ok: figma.dados?.["ok"] === true },
