@@ -117,12 +117,12 @@ function texto(valor: unknown) {
   return typeof valor === "string" && valor.length > 0 ? valor : null;
 }
 
-async function medirApi(path: string): Promise<Probe> {
+async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
-    const resposta = await fetch(`${apiBase()}${path}`, {
+    const resposta = await fetch(`${base}${path}`, {
       headers: { accept: "application/json" },
       cache: "no-store",
       signal: controller.signal,
@@ -476,3 +476,124 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     };
   },
 );
+
+
+/**
+ * CENTRALDARK_COCKPIT_STATUS_V1
+ * Projeção pública mínima dos MESMOS sensores do Cockpit e MCP oficial.
+ * Não cria outro monitor, não autentica como admin, não lê credenciais.
+ * api.centralldark.com (Hermes Core) e mcp.centralldark.com (MCP)
+ * são donos diferentes; health=200 não é deploy nem execução comprovada.
+ */
+export async function obterStatusSetorialCentralDark() {
+  const mcpBase = (process.env["CENTRALDARK_MCP_BASE_URL"] || "https://mcp.centralldark.com").replace(/\/+$/, "");
+  const observedAt = new Date().toISOString();
+  const [mcp, deep, heart, intent, hermes, github] = await Promise.all([
+    medirApi("/health", mcpBase),
+    medirApi("/health/deep", mcpBase),
+    medirApi("/heartbeat", mcpBase),
+    medirApi("/intent/status", mcpBase),
+    medirApi("/health"),
+    medirGithub(),
+  ]);
+
+  type PublicState = "OBSERVED" | "DEGRADED" | "BLOCKED" | "STALE" | "AUTH_REQUIRED" | "UNAVAILABLE" | "UNKNOWN";
+  const resultState = (probe: Probe): PublicState => {
+    if (probe.httpStatus === 401 || probe.httpStatus === 403) return "AUTH_REQUIRED";
+    if (probe.httpStatus !== 200) return probe.httpStatus ? "UNAVAILABLE" : "UNKNOWN";
+    return "OBSERVED";
+  };
+  const stringOf = (value: unknown, max = 100): string | null =>
+    typeof value === "string" && value.length > 0 ? value.slice(0, max) : null;
+  const numberOf = (value: unknown): number | null =>
+    typeof value === "number" && Number.isFinite(value) ? value : null;
+  const cleanSectorState = (raw: unknown): PublicState => {
+    switch (raw) {
+      case "OBSERVED": case "DEGRADED": case "BLOCKED": case "STALE":
+      case "AUTH_REQUIRED": case "UNAVAILABLE": case "UNKNOWN": return raw;
+      default: return "UNKNOWN";
+    }
+  };
+  const evidence = objetoJson(mcp.dados?.["sectorEvidence"]) ? mcp.dados["sectorEvidence"] : null;
+  const eventsRaw = objetoJson(evidence?.["events"]) ? evidence["events"] : null;
+  const sectorsRaw = Array.isArray(evidence?.["sectors"]) ? evidence["sectors"] : [];
+  const sectors = sectorsRaw.slice(0, 24).filter(objetoJson).map((row) => ({
+    id: stringOf(row["id"], 48) || "UNCLASSIFIED",
+    state: cleanSectorState(row["state"]),
+    source: stringOf(row["source"], 120),
+    observedAt: stringOf(row["observedAt"], 40),
+    nextCursor: stringOf(row["nextCursor"], 120),
+  }));
+  const recentRaw = Array.isArray(eventsRaw?.["recent"]) ? eventsRaw["recent"] : [];
+  const recent = recentRaw.slice(0, 12).filter(objetoJson).map((row) => ({
+    at: stringOf(row["at"], 40),
+    sector: stringOf(row["sector"], 48),
+    service: stringOf(row["service"], 48),
+    kind: stringOf(row["kind"], 48),
+    level: stringOf(row["level"], 16),
+  }));
+  const levelCounts: Record<string, number> = {};
+  if (objetoJson(eventsRaw?.["byLevel"])) {
+    for (const key of ["info", "warn", "error", "other"]) {
+      const value = numberOf(eventsRaw["byLevel"][key]);
+      if (value !== null && value >= 0) levelCounts[key] = value;
+    }
+  }
+
+  const heartSelf = stringOf(heart.dados?.["self"], 24);
+  const intentState = stringOf(intent.dados?.["state"], 48);
+  const deepStatus = stringOf(deep.dados?.["status"], 40);
+  const healthScore = numberOf(deep.dados?.["score"]);
+  const mcpState = resultState(mcp);
+  const deepState = resultState(deep) === "OBSERVED" && deepStatus === "degraded"
+    ? "DEGRADED" : resultState(deep);
+  const heartState: PublicState = resultState(heart) === "OBSERVED" && heartSelf === "stale"
+    ? "STALE" : resultState(heart);
+  const items = [
+    { id: "MCP", state: mcpState, source: mcpBase + "/health", httpStatus: mcp.httpStatus },
+    { id: "MCP_DEEP", state: deepState, source: mcpBase + "/health/deep", httpStatus: deep.httpStatus, score: healthScore },
+    { id: "ONE_HEART", state: heartState, source: mcpBase + "/heartbeat", httpStatus: heart.httpStatus, self: heartSelf },
+    { id: "INTENT", state: resultState(intent), source: mcpBase + "/intent/status",
+      httpStatus: intent.httpStatus, stateOwner: intentState,
+      fixedPoint: intent.dados?.["fixedPoint"] === true && intent.dados?.["executionProven"] === true },
+    { id: "HERMES_CORE", state: resultState(hermes), source: apiBase() + "/health", httpStatus: hermes.httpStatus },
+    { id: "GITHUB_MAIN", state: github.estado === "PASS" ? "OBSERVED" : github.estado === "AUTH_REQUIRED" ? "AUTH_REQUIRED" : "UNKNOWN",
+      source: "GitHub API · ServerVpss/CentralDark@main", sha: github.commits[0]?.sha || null },
+  ];
+  const available = items.filter((x) => x.state === "OBSERVED").length;
+  const unknown = items.filter((x) => ["UNKNOWN","UNAVAILABLE","AUTH_REQUIRED","STALE"].includes(x.state)).length;
+  return {
+    schema: "centraldark.cockpit.status.v1",
+    ok: true, // o agregador respondeu; jamais significa FIXED_POINT global
+    service: "centraldark-instinto-superior",
+    observedAt,
+    status: available > 0 ? "PARTIAL_OBSERVED" : "UNAVAILABLE",
+    fixedPointGlobal: false,
+    owners: { cockpit: "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      mcp: "apps/modulos/mcp/src/index.js",
+      oldPanel: "apps/modulos/status/",
+      hud: "docs/HUD/HUD.html" },
+    checks: items,
+    sectors,
+    events: {
+      source: mcpBase + "/health#sectorEvidence.events",
+      state: eventsRaw ? "OBSERVED_SAMPLE" : "UNAVAILABLE",
+      countInSample: numberOf(eventsRaw?.["countInSample"]),
+      windowMs: numberOf(eventsRaw?.["windowMs"]),
+      byLevel: levelCounts,
+      recent,
+      scope: "BOUNDED_SANITIZED_SAMPLE_NOT_COMPLETE_LEDGER",
+    },
+    summary: {
+      observed: available, unavailableOrUnknown: unknown,
+      optionalUnavailableIsNotGlobalFailure: true,
+      originStatusIsNotRuntimeDeploy: true,
+    },
+    legacy: {
+      domain: "status.centralldark.com",
+      owner: "apps/modulos/status/",
+      state: "PRESERVED_PENDING_PARITY_AND_RUNTIME_PROOF",
+      policy: "DO_NOT_DELETE_CADDY_DNS_OR_LEGACY_ASSETS_BEFORE_CONSUMER_MIGRATION",
+    },
+  };
+}
