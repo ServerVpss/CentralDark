@@ -31,6 +31,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { ItemCofre, RotuloEstado, SEM_FONTE } from "@/components/central/AdminCofreSeguranca";
 import { RuntimeSistema } from "@/components/central/RuntimeSistema";
+import { MegaPainelLegadoCentralDark } from "@/components/central/MegaPainelLegadoCentralDark";
 import { InfraestruturaSistema } from "@/components/central/InfraestruturaSistema";
 
 type SistemaCentralDarkProps = {
@@ -185,6 +186,7 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
           </p>
         )}
       </div>
+      <MegaPainelLegadoCentralDark />
     </section>
   );
 }
