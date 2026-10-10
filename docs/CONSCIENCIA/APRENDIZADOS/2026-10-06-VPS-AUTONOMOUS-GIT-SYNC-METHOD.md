@@ -225,3 +225,20 @@ O HUD Obsidian `file://` nao pode enviar credenciais cross-origin. Foi criada a 
 ### Correção de rota nativa comprovada na VPS (10/10)
 
 Sonda inicial `/api/kanban/tasks` resultou 401 sem cookie, **mas esse prefixo era legado/documental** e não prova que a rota exista no Hermes atual. Leitura do OWNER REAL `/root/.hermes/hermes-agent/plugins/kanban/dashboard/plugin_api.py` confirmou `@router.post('/tasks')` montado em `/api/plugins/kanban/` (módulo/plugin existente), schema `CreateTaskBody` com `title,body,assignee,priority,goal_mode,goal_max_turns,idempotency_key,workspace_kind` e resposta `task.id`. HUD e ponte corrigidos para `POST /api/plugins/kanban/tasks`, `assignee=default`, `goal_mode=true`, `workspace_kind=scratch`, `idempotency_key=centraldark:neurolink:UID` compartilhada com CLI. **Rota+schema comprovados por fonte runtime; POST autenticado, task criada e worker ainda nao comprovados.** Despacho so apos clique autenticado.
+
+
+## RECEIPT T1 — NeuroLink UID / Hermes gateway nativo (2026-10-10)
+
+**Intencao:** clique em L000..L170 solicitar receita comprovada ao MESMO Hermes, sem segundo HUD, gateway, agente ou cron. **Owners:** `docs/HUD/HUD.html`; `scripts/vps/neurolink-gateway-dispatch.sh`; plugin nativo do Hermes em `/root/.hermes/hermes-agent/plugins/kanban/dashboard/plugin_api.py`.
+
+**Readback e commits:** `300bb936` adicionou seletor UID + script; `68ecac3e` fez PIN do manifesto via objeto Git, preservando checkout sujo; `f08ba968` corrigiu erro real `UID: readonly variable` no Bash; `2506f523` incorporou ponte minima no WebUI nativo sem publicar HUD inteiro na origem autenticada; `5c066d94` corrigiu chamada para **ROTA REAL** `POST /api/plugins/kanban/tasks` e schema `CreateTaskBody` (assignee=default, goal_mode, idempotency_key, workspace_kind=scratch). Prova de fonte: classe `CreateTaskBody` e `@router.post("/tasks")` inspecionados diretamente na VPS; Gateway Uvicorn 9119 em LISTEN.
+
+**Prova independente VPS:** `bash -n` script de `origin/main` passou; `--inspect L000` e `--inspect L170` validaram UID+PREV/NEXT no SHA do manifesto MAIN-PINNED. `--publish-bridge` criou `/root/.hermes/hermes-agent/hermes_cli/web_dist/neurolink-dispatch.html` (sha256 depois da correcao de rota `3a856ca66660885c11d19406079c077804f3133cf641ae7197c1319dfbac1ff9`). GET nao autenticado resultou **302 /login?next=...uid=L170**, comprovando preservacao da barreira de login, nao POST.
+
+**Prova browser Casa:** Microsoft Edge real, HUD unico do Obsidian, `#cdr-number` clicado em L000, painel exibiu UID e titulo; botao `Encaminhar ao Hermes` abriu popup do gateway pelo Tailscale `100.90.199.124:9119` com destino `/login?next=%2Fneurolink-dispatch.html%3Fuid%3DL000`. `T1=PASS`, erros JS observados=0, tarefa criada=**NAO** (usuario nao estava autenticado). O script temporario de teste foi removido; sem arquivo de teste residual.
+
+**Readback fisico do mesmo HUD:** Git blob `86c257e066d8d0821396ffcc756837f712f7487e` idêntico em `main`, `/root/.centraldark/HUD.html` VPS e `HUD.html` Obsidian Casa, apos backup. CLI VPS `/root/.centraldark/neurolink-gateway-dispatch.sh` = blob `87cd6ba5419bdb69eecda674b801989f2c4c7314`, igual ao source pinado. Nenhum restart foi necessario. Checkout `/root/CentralDark` permaneceu em `5344bd870...` com tracked/untracked de outros owners preservados; `origin/main` foi atualizado independentemente.
+
+**Fronteira honesta:** `HUD_CLICK_T1=PASS`; `GATEWAY_LOGIN_GATE=PASS`; `CLI_INSPECT_2_2=PASS`; `GATEWAY_AUTHENTICATED_POST=UNKNOWN`; `TASK_CREATED=UNKNOWN/NOT_ATTEMPTED`; `WORKER_EXECUTION=UNKNOWN`; `HISTORIC_RECIPE_PROVEN_FOR_EVERY_UID=NO`; `GLOBAL_FIXED_POINT=BLOCKED`. O clique nao executa shell historico. O Hermes deve autenticar, enfileirar goal idempotente e emitir receipt real antes de elevar status.
+
+**NEXT_CURSOR:** prova de login/sessao existente no Hermes → clique no botao do bridge → retorno `task.id` → worker/receipt + readback → criterios de aceite. Nenhuma criacao de segundo modelo/gateway/HUD. ONE_WRITER_PER_SCOPE=true.
