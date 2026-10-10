@@ -691,7 +691,7 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
     error: p.erro ? String(p.erro).slice(0, 140) : null,
   });
   const rawSections = objetoJson(statusOverview.dados?.["sections"]) ? statusOverview.dados["sections"] : null;
-  const allowedSections = ["projeto", "infraestrutura", "mcp_24h", "diagnostico_ias", "conselho", "capsula", "mcp_legado"];
+  const allowedSections = ["projeto", "infraestrutura", "mcp_24h", "diagnostico_ias", "conselho", "capsula", "mcp_legado", "grafo"];
   const sections = allowedSections.map((key) => {
     const candidate = rawSections?.[key];
     const d = objetoJson(candidate) ? candidate : null;
