@@ -3,9 +3,9 @@
 set -euo pipefail
 umask 077
 [[ $# == 2 ]] || { echo "USAGE: $0 --inspect|--dispatch L000|L016A|L170" >&2; exit 64; }
-MODE="$1"; UID="$2"
+MODE="$1"; NODE_UID="$2"
 [[ "$MODE" == --inspect || "$MODE" == --dispatch ]] || { echo INVALID_MODE >&2; exit 64; }
-[[ "$UID" =~ ^L[0-9]{3}[AB]?$ ]] || { echo INVALID_UID >&2; exit 65; }
+[[ "$NODE_UID" =~ ^L[0-9]{3}[AB]?$ ]] || { echo INVALID_UID >&2; exit 65; }
 ROOT=/root/CentralDark
 HERMES=/root/.hermes/hermes-agent/.hermes/bin/hermes
 # Objeto Git pinado: preserva o checkout tracked/untracked da VPS sem reset/stash.
@@ -17,7 +17,7 @@ if [[ "$MODE" == --dispatch ]]; then
 fi
 # Valida a cadeia completa sem inventar numeracao: genese separada + 169 entradas.
 if [[ "$MODE" == --inspect ]]; then
-python3 - <(git -C "$ROOT" show "$OBJECT") "$UID" "$PIN" <<'PY'
+python3 - <(git -C "$ROOT" show "$OBJECT") "$NODE_UID" "$PIN" <<'PY'
 import json,sys
 f,uid,sha=sys.argv[1:]
 d=json.load(open(f,encoding='utf-8')); a=[d['genesis']]+d['nodes']
@@ -30,9 +30,9 @@ print(json.dumps({'uid':uid,'title':n.get('title'),'prev':n.get('prev_uid'),'nex
 PY
 exit 0
 fi
-KEY="centraldark:neurolink:$UID:$SOURCE"
-TITLE="NEUROLINK $UID - receita comprovada"
-python3 - <(git -C "$ROOT" show "$OBJECT") "$UID" "$PIN" <<'PY' | "$HERMES" kanban create --goal --goal-max-turns 20 --idempotency-key "$KEY" --body-file - --created-by centraldark-genesis-hud --json "$TITLE"
+KEY="centraldark:neurolink:$NODE_UID:$SOURCE"
+TITLE="NEUROLINK $NODE_UID - receita comprovada"
+python3 - <(git -C "$ROOT" show "$OBJECT") "$NODE_UID" "$PIN" <<'PY' | "$HERMES" kanban create --goal --goal-max-turns 20 --idempotency-key "$KEY" --body-file - --created-by centraldark-genesis-hud --json "$TITLE"
 import json,sys
 f,uid,sha=sys.argv[1:]
 d=json.load(open(f,encoding='utf-8'));a=[d['genesis']]+d['nodes']
