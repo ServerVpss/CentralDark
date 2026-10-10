@@ -215,3 +215,8 @@ UID L000–L170 agora clicavel no MESMO HUD (sem mudar replay documental); paine
 ### Binding MAIN-PINNED preservativo — 10/10
 
 Na VPS, HEAD 5344bd e origin/main 300bb936 durante preflight, com 7 tracked dirty e 4 untracked preservados. O mesmo script `scripts/vps/neurolink-gateway-dispatch.sh` le manifesto pelo OBJETO GIT `origin/main:docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json` no SHA fixado a cada chamada: nao altera checkout, nem tenta reexecutar tarefas antigas. `--inspect UID` READ_ONLY; `--dispatch UID` cria/retoma tarefa Kanban idempotente so em invocacao explicita; task criada nao prova worker. Browser Obsidian file:// nao possui sessao autenticada :9119; mantem fallback fail-closed.
+
+
+### Ponte HTML autenticada existente (10/10)
+
+O HUD Obsidian `file://` nao pode enviar credenciais cross-origin. Foi criada a **ponte minima de submissao**, sem novo daemon, em `--publish-bridge` do MESMO `scripts/vps/neurolink-gateway-dispatch.sh`. Materializa apenas `neurolink-dispatch.html` no `web_dist` do Hermes **ja servido pela rota SPA autenticada :9119**; o HUD principal nao e duplicado nessa origem privilegiada. Clique Lxxx → abrir `http://100.90.199.124:9119/neurolink-dispatch.html?uid=Lxxx` → login nativo existente → clique explicito → POST same-origin /api/kanban/tasks → task ID/receipt pendente. HTTP 401 sem cookie e resposta comprovada. Testar portal autenticado + task ID antes de declarar ENQUEUED. Nenhum servidor reiniciado nem OAuth desativado.

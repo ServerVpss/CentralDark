@@ -2,6 +2,64 @@
 # UID validado -> Hermes Kanban nativo; sem segundo gateway, shell arbitrario ou cron.
 set -euo pipefail
 umask 077
+# Publica somente a PONTE MINIMA de UID, nao o HUD inteiro na origem privilegiada.
+# O proprio Hermes ja serve arquivos em web_dist por rota SPA autenticada.
+if [[ "$#" == 1 && "$1" == --publish-bridge ]]; then
+  WEB_DIST=/root/.hermes/hermes-agent/hermes_cli/web_dist
+  TARGET="$WEB_DIST/neurolink-dispatch.html"
+  [[ -d "$WEB_DIST" && ! -L "$TARGET" ]] || { echo BLOCKED_HERMES_WEB_DIST; exit 2; }
+  TMP="$(mktemp "$WEB_DIST/.neurolink.XXXXXXXX")"
+  trap 'rm -f "$TMP"' EXIT
+  cat > "$TMP" <<'NEUROLINK_HTML'
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>CentralDark · NeuroLink → Hermes existente</title>
+<style>body{background:#111d28;color:#e0e9ef;font:16px system-ui;margin:2rem auto;max-width:680px;padding:1rem}button{padding:12px;border-radius:8px;background:#19456b;color:#fff;border:1px solid #5290b8;cursor:pointer}pre{white-space:pre-wrap;border:1px solid #536779;padding:14px;overflow-wrap:anywhere}a{color:#9acbff}</style></head>
+<body><h1>🪬 NeuroLink → Hermes</h1><p>Mesmo Hermes Gateway / Kanban autenticado. UID: <strong id="uid">?</strong></p>
+<p>Esta ação solicita ao executor existente uma receita comprovada; não reexecuta automaticamente scripts históricos nem promove Fixed Point por enfileiramento.</p>
+<button type="button" id="submit">⚙ Enviar intenção ao Kanban (clique explícito)</button>
+<pre id="status" role="status">AGUARDANDO_CLIQUE</pre>
+<a href="/" rel="noopener">Voltar ao Hermes</a>
+<script>
+(function(){'use strict';
+var uid=new URLSearchParams(location.search).get('uid')||'';
+var valid=/^L[0-9]{3}(?:A|B)?$/.test(uid);
+var status=document.getElementById('status'),button=document.getElementById('submit');
+document.getElementById('uid').textContent=valid?uid:'UID_INVALIDO';
+if(!valid){button.disabled=true;status.textContent='BLOCKED_INVALID_UID';return}
+var busy=false;
+button.addEventListener('click',async function(){
+ if(busy)return;busy=true;button.disabled=true;status.textContent='GATEWAY_REQUEST_PENDING';
+ var body='INTENCAO=NEUROLINK_OPERACIONAL; UID='+uid+
+ '\\nSOURCE=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json@CURRENT_MAIN'+
+ '\\nOWNER=HERMES_KANBAN_EXISTENTE; ONE_WRITER_PER_SCOPE=true'+
+ '\\nVALIDAR_UID_PREV_NEXT_OWNER_RECEITA_ANTES_DA_EXECUCAO=true'+
+ '\\nSE_RECEITA_NAO_PROVADA=BLOCKED_RECIPE_NOT_PROVEN; SEM_SHELL_ARBITRARIO'+
+ '\\nPROVA=READBACK_RECEIPT; ENQUEUED_NAO_E_EXECUTED; UNKNOWN!=PASS';
+ try{
+  var reply=await fetch('/api/kanban/tasks',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:'[NEUROLINK] '+uid+' · receita comprovada',body:body,status:'todo',priority:1})});
+  var raw=await reply.text(),j={};try{j=JSON.parse(raw)}catch(_){}
+  if(reply.status===401){status.textContent='BLOCKED_LOGIN_REQUIRED · autentique-se no Hermes e retorne aqui';return}
+  if(!reply.ok){status.textContent='BLOCKED_GATEWAY_HTTP_'+reply.status;return}
+  var id=j.id||j.task_id||(j.task&&j.task.id);
+  status.textContent=id?'KANBAN_TASK_CREATED='+String(id).slice(0,70)+' · RUNTIME_EXECUTION_UNKNOWN (verificar Kanban + receipt)':'HTTP_'+reply.status+' · TASK_ID_UNKNOWN / sem prova';
+ }catch(e){status.textContent='BLOCKED_GATEWAY_CONNECTION '+(e&&e.name||'UNKNOWN')}
+ finally{busy=false;button.disabled=false}
+});
+})();
+</script></body></html>
+NEUROLINK_HTML
+  chmod 644 "$TMP"
+  if [[ -f "$TARGET" ]]; then
+    cp -p "$TARGET" "$TARGET.before-$(date -u +%Y%m%dT%H%M%SZ)"
+  fi
+  mv -f "$TMP" "$TARGET"
+  echo "HERMES_GATEWAY_BRIDGE_PUBLISHED=$TARGET"
+  echo "BRIDGE_SHA256=$(sha256sum "$TARGET" | cut -d' ' -f1)"
+  echo "AUTH_REQUIRED=HERMES_NATIVE_LOGIN; AUTO_EXECUTION=NO"
+  exit 0
+fi
 [[ $# == 2 ]] || { echo "USAGE: $0 --inspect|--dispatch L000|L016A|L170" >&2; exit 64; }
 MODE="$1"; NODE_UID="$2"
 [[ "$MODE" == --inspect || "$MODE" == --dispatch ]] || { echo INVALID_MODE >&2; exit 64; }

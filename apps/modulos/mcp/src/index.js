@@ -18,7 +18,7 @@ import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
 import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
-import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
@@ -259,6 +259,9 @@ app.get("/admin/api/buildkite/status", adminBuildkiteStatus);
 app.get("/admin/api/operational-snapshot", adminOperationalSnapshot);
 app.get("/admin/api/linear", adminLinear);
 app.get("/admin/api/tailscale", adminTailscale);
+app.get("/intent/status", intentPublicStatus); // projeção pública sanitizada, sem mutação
+app.get("/admin/api/intent", adminIntentGet);
+app.post("/admin/api/intent", adminIntentRun);
 app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);

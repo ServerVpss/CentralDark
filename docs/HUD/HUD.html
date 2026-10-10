@@ -2216,7 +2216,12 @@ opSend.addEventListener('click',async function(){
   // Gateway 9119 exige cookie de login e nao permite tratar file:// como origem autenticada.
   // Nao enviar cookies a host alternativo nem abrir API administrativa publica.
   if(!/^https?:$/.test(location.protocol)||location.port!=='9119'){
-    opStatus.textContent='BLOCKED_GATEWAY_ORIGIN: o HUD local/Obsidian nao compartilha a sessao autenticada do Hermes :9119. Use Copiar missao no Hermes; nada foi enviado.';return;
+    // A Casa/Obsidian abre a ponte HTML MINIMA na propria origem do Hermes,
+    // que exige login e usa os cookies somente no destino autenticado.
+    var url='http://100.90.199.124:9119/neurolink-dispatch.html?uid='+encodeURIComponent(chain[selected][0]);
+    window.open(url,'_blank','noopener');
+    opStatus.textContent='GATEWAY_BRIDGE_OPEN_ATTEMPT · janela do Hermes exige login + clique em Enviar; ainda sem tarefa/execucao comprovada. Se bloqueada, use Copiar missao.';
+    return;
   }
   busy=true;opSend.disabled=true;opStatus.textContent='GATEWAY_REQUEST_PENDING';
   try{
@@ -2249,6 +2254,53 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <!-- /CD_GENESIS_REPLAY_V1 -->
+<!-- CENTRALDARK_INTENT_API_LOOP_V1 -->
+<section class="section" id="cd-intent-api-loop" data-status="UNKNOWN" aria-label="Intenção tipada e progresso real da API">
+<h2 class="section-title">🧠 Instinto Superior · Intenção → Realidade → Δ → Fixed Point</h2>
+<p class="cdr-note">Leitura direta do MCP, sem simular execução. Os três modos usam o mesmo contrato tipado e a mesma API autenticada. Reproduzir uma prova histórica não dispara missão.</p>
+<div class="cdr-controls">
+<button type="button" class="cd-intent-mode" data-mode="COM_CRITERIOS">🧿 Com critérios</button>
+<button type="button" class="cd-intent-mode" data-mode="AUTOMATICO">⚙️ Automático</button>
+<button type="button" class="cd-intent-mode" data-mode="AUTONOMO">🫀 Autônomo</button>
+<button type="button" id="cd-intent-refresh">📡 Medir API</button>
+<a href="https://mcp.centralldark.com/admin" target="_blank" rel="noopener" style="padding:10px;color:var(--green)">🔐 Abrir executor autenticado</a>
+</div>
+<div class="cdr-details">
+<div><div class="cdr-sub">MODO / MODELO SUBSTITUÍVEL</div><strong id="cd-intent-mode-name">COM_CRITERIOS</strong></div>
+<div><div class="cdr-sub">FIXED POINT AO VIVO</div><strong id="cd-intent-live-state">UNKNOWN · sem receipt</strong></div>
+<div><div class="cdr-sub">PRÓXIMO CURSOR</div><strong id="cd-intent-live-cursor">NO_RECEIPT</strong></div>
+</div>
+<div class="cdr-track" role="progressbar" aria-label="Proporção de critérios comprovados" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="cd-intent-live-progress"><div class="cdr-fill" id="cd-intent-live-fill"></div></div>
+<p class="cdr-note" id="cd-intent-live-proof">Fonte: /intent/status · UNKNOWN até ler evidence. Última prova e versão serão conferidas no servidor.</p>
+</section>
+<script>
+(function(){
+'use strict';
+var root=document.getElementById('cd-intent-api-loop');
+if(!root)return;
+var selected='COM_CRITERIOS';
+var url='https://mcp.centralldark.com/intent/status';
+function txt(id,value){var e=document.getElementById(id);if(e)e.textContent=String(value);}
+Array.from(root.querySelectorAll('.cd-intent-mode')).forEach(function(b){b.addEventListener('click',function(){selected=b.getAttribute('data-mode');txt('cd-intent-mode-name',selected);Array.from(root.querySelectorAll('.cd-intent-mode')).forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});});});
+async function refresh(){
+try{
+var ctrl=new AbortController();var timeout=setTimeout(function(){ctrl.abort();},6500);
+var response=await fetch(url,{cache:'no-store',mode:'cors',signal:ctrl.signal});clearTimeout(timeout);
+if(!response.ok)throw Error('HTTP_'+response.status);
+var d=await response.json();root.dataset.status=String(d.state||'UNKNOWN');
+txt('cd-intent-live-state',String(d.state||'UNKNOWN')+(d.fixedPoint===true?' · FIXED POINT':' · PENDENTE'));
+txt('cd-intent-live-cursor',d.nextCursor||'NO_RECEIPT');
+var cs=Array.isArray(d.criteria)?d.criteria:[];var pass=cs.filter(function(c){return c.status==='PASS';}).length;var ratio=cs.length?Math.round(100*pass/cs.length):0;
+var bar=document.getElementById('cd-intent-live-fill');if(bar)bar.style.width=ratio+'%';
+var track=document.getElementById('cd-intent-live-progress');if(track)track.setAttribute('aria-valuenow',String(ratio));
+txt('cd-intent-live-proof','MCP '+response.status+' · '+pass+'/'+cs.length+' critérios PASS · medido '+(d.observedAt||'UNKNOWN')+' · HEAD '+(d.currentHead||'UNKNOWN')+' · queue='+(d.queued?'QUEUED':'NO')+' · execution='+(d.executionProven?'PROVEN':'NOT_PROVEN'));
+}catch(e){root.dataset.status='UNKNOWN';txt('cd-intent-live-state','UNKNOWN · API indisponível');txt('cd-intent-live-proof','Leitura falhou: '+String(e)+' · NÃO promove verde');}
+}
+document.getElementById('cd-intent-refresh').addEventListener('click',refresh);
+refresh();
+})();
+</script>
+<!-- /CENTRALDARK_INTENT_API_LOOP_V1 -->
 
 <!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
