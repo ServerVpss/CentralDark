@@ -7,19 +7,17 @@ MODE="$1"; UID="$2"
 [[ "$MODE" == --inspect || "$MODE" == --dispatch ]] || { echo INVALID_MODE >&2; exit 64; }
 [[ "$UID" =~ ^L[0-9]{3}[AB]?$ ]] || { echo INVALID_UID >&2; exit 65; }
 ROOT=/root/CentralDark
-PATH_MANIFEST="$ROOT/docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json"
 HERMES=/root/.hermes/hermes-agent/.hermes/bin/hermes
-[[ -r "$PATH_MANIFEST" ]] || { echo BLOCKED_MANIFEST_MISSING; exit 2; }
-HEAD="$(git -C "$ROOT" rev-parse HEAD)" || exit 2
-SOURCE="$(git -C "$ROOT" rev-parse HEAD:docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json)" || exit 2
-[[ "$SOURCE" == "$(git -C "$ROOT" hash-object "$PATH_MANIFEST")" ]] || { echo BLOCKED_MANIFEST_DIRTY; exit 2; }
+# Objeto Git pinado: preserva o checkout tracked/untracked da VPS sem reset/stash.
+PIN="$(git -C "$ROOT" rev-parse refs/remotes/origin/main 2>/dev/null)" || { echo BLOCKED_ORIGIN_MAIN_UNAVAILABLE; exit 2; }
+OBJECT="$PIN:docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json"
+SOURCE="$(git -C "$ROOT" rev-parse "$OBJECT" 2>/dev/null)" || { echo BLOCKED_PINNED_MANIFEST_MISSING; exit 2; }
 if [[ "$MODE" == --dispatch ]]; then
-  [[ "$HEAD" == "$(git -C "$ROOT" rev-parse refs/remotes/origin/main)" ]] || { echo BLOCKED_CHECKOUT_BEHIND_MAIN; exit 2; }
   [[ -x "$HERMES" ]] || { echo BLOCKED_HERMES_CLI_MISSING; exit 2; }
 fi
 # Valida a cadeia completa sem inventar numeracao: genese separada + 169 entradas.
 if [[ "$MODE" == --inspect ]]; then
-python3 - "$PATH_MANIFEST" "$UID" "$HEAD" <<'PY'
+python3 - <(git -C "$ROOT" show "$OBJECT") "$UID" "$PIN" <<'PY'
 import json,sys
 f,uid,sha=sys.argv[1:]
 d=json.load(open(f,encoding='utf-8')); a=[d['genesis']]+d['nodes']
@@ -34,7 +32,7 @@ exit 0
 fi
 KEY="centraldark:neurolink:$UID:$SOURCE"
 TITLE="NEUROLINK $UID - receita comprovada"
-python3 - "$PATH_MANIFEST" "$UID" "$HEAD" <<'PY' | "$HERMES" kanban create --goal --goal-max-turns 20 --idempotency-key "$KEY" --body-file - --created-by centraldark-genesis-hud --json "$TITLE"
+python3 - <(git -C "$ROOT" show "$OBJECT") "$UID" "$PIN" <<'PY' | "$HERMES" kanban create --goal --goal-max-turns 20 --idempotency-key "$KEY" --body-file - --created-by centraldark-genesis-hud --json "$TITLE"
 import json,sys
 f,uid,sha=sys.argv[1:]
 d=json.load(open(f,encoding='utf-8'));a=[d['genesis']]+d['nodes']

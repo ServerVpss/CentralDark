@@ -210,3 +210,8 @@ READONLY_MCP_9100_BIND_UNIT -> ISOLATED_MCP_REPAIR_IF_PROVEN -> HEALTH_CHECK`.
 ## NeuroLink acionavel — delta 2026-10-10 (CHEFE)
 
 UID L000–L170 agora clicavel no MESMO HUD (sem mudar replay documental); painel apresenta tarefa e tenta `POST /api/kanban/tasks` apenas da mesma origem 9119 autenticada. A sonda VPS provou 9119 ativo mas API 401 sem cookie. No Obsidian/file:// a chamada fica `BLOCKED_GATEWAY_ORIGIN` com copia manual; nao ha bypass de OAuth, cookie nem promessa de execucao. O unico script especializado `scripts/vps/neurolink-gateway-dispatch.sh --inspect|--dispatch UID` reutiliza Hermes Kanban CLI existente, manifesto NeuroLink e idempotencia, sem novo servico. Cada UID e candidato ate haver owner+receita provados. `TASK_CREATED != EXECUTED`. VPS checkout dirty preservado; materializar e testar fisico antes de PASS.
+
+
+### Binding MAIN-PINNED preservativo — 10/10
+
+Na VPS, HEAD 5344bd e origin/main 300bb936 durante preflight, com 7 tracked dirty e 4 untracked preservados. O mesmo script `scripts/vps/neurolink-gateway-dispatch.sh` le manifesto pelo OBJETO GIT `origin/main:docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json` no SHA fixado a cada chamada: nao altera checkout, nem tenta reexecutar tarefas antigas. `--inspect UID` READ_ONLY; `--dispatch UID` cria/retoma tarefa Kanban idempotente so em invocacao explicita; task criada nao prova worker. Browser Obsidian file:// nao possui sessao autenticada :9119; mantem fallback fail-closed.
