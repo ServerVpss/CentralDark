@@ -690,7 +690,8 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
       p.httpStatus === null ? "UNAVAILABLE" : "HTTP_FAIL",
     error: p.erro ? String(p.erro).slice(0, 140) : null,
   });
-  const rawSections = objetoJson(statusOverview.dados?.["sections"]) ? statusOverview.dados["sections"] : null;
+  const sectionsCandidate = statusOverview.dados?.["sections"];
+  const rawSections = objetoJson(sectionsCandidate) ? sectionsCandidate : null;
   const allowedSections = ["projeto", "infraestrutura", "mcp_24h", "diagnostico_ias", "conselho", "capsula", "mcp_legado", "grafo"];
   const sections = allowedSections.map((key) => {
     const candidate = rawSections?.[key];
@@ -731,10 +732,14 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
   }));
   const catalogCandidate = catalog.dados?.["catalog"];
   const catalogSummary = objetoJson(catalogCandidate) ? catalogCandidate : null;
-  const catalogDiff = objetoJson(catalog.dados?.["catalogDiff"]) ? catalog.dados?.["catalogDiff"] : null;
-  const deploy = objetoJson(catalog.dados?.["deploy"]) ? catalog.dados["deploy"] : null;
-  const gitDeploy = objetoJson(deploy?.["github"]) ? deploy["github"] : null;
-  const vpsDeploy = objetoJson(deploy?.["local"]) ? deploy["local"] : null;
+  const diffCandidate = catalog.dados?.["catalogDiff"];
+  const catalogDiff = objetoJson(diffCandidate) ? diffCandidate : null;
+  const deployCandidate = catalog.dados?.["deploy"];
+  const deploy = objetoJson(deployCandidate) ? deployCandidate : null;
+  const githubCandidate = deploy?.["github"];
+  const gitDeploy = objetoJson(githubCandidate) ? githubCandidate : null;
+  const localCandidate = deploy?.["local"];
+  const vpsDeploy = objetoJson(localCandidate) ? localCandidate : null;
   return {
     schema: "centraldark.cockpit.mcp-admin-migration.v1",
     observedAt: new Date().toISOString(),
