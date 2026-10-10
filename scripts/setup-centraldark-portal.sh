@@ -16,7 +16,7 @@ umask 022
 REPO_URL="https://github.com/segredounlock/clone-deck.git"
 CENTRALDARK_ROOT="<caminho-vps>"
 DEPLOY_GATE_REPO_DIR="${DEPLOY_GATE_REPO_DIR:-$CENTRALDARK_ROOT}"
-DISPATCHER="${CENTRALDARK_DEPLOY_GATE_SCRIPT:-$CENTRALDARK_ROOT/scripts/vps/deploy-guards-dispatcher.sh}"
+DISPATCHER="${CENTRALDARK_DEPLOY_GATE_SCRIPT:-$DEPLOY_GATE_REPO_DIR/scripts/vps/deploy-guards-dispatcher.sh}"
 SOURCE_HEAD="${SOURCE_HEAD:-$(git -C "$CENTRALDARK_ROOT" rev-parse HEAD 2>/dev/null || true)}"
 [[ "$SOURCE_HEAD" =~ ^[0-9a-f]{40}$ ]] || { echo "[centraldark-portal] SOURCE_HEAD_INVALID"; exit 16; }
 [[ -x "$DISPATCHER" ]] || { echo "[centraldark-portal] CANONICAL_DEPLOY_GATE_MISSING"; exit 16; }
