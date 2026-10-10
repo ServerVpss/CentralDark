@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs: registrar recovery requerido do owner GitHub Actions",
+    "lastCommit": "fix: alinhar healthcheck Hermes ao PM2_HOME do owner VPS",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-10T21:27:33.647Z",
+      "titulo": "Push na main · 50211ef297149d02e2cd9da3f617eaedc18d582e",
+      "detalhe": "fix: alinhar healthcheck Hermes ao PM2_HOME do owner VPS",
+      "area": "Repositório",
+      "sha": "50211ef",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-10T21:22:22.072Z",
       "titulo": "Push na main · bdafbbf250b152fd6625a90320def50b8025894a",
@@ -68,6 +76,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-10T21:27:33.647Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 50211ef297149d02e2cd9da3f617eaedc18d582e (50211ef)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-10T21:22:22.072Z",
       "ia": "@segredounlock",
@@ -257,6 +272,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-10T21:22:22.072Z",
-  "updatedAtBR": "10/10/2026, 18:22:22 BRT"
+  "updatedAt": "2026-10-10T21:27:33.647Z",
+  "updatedAtBR": "10/10/2026, 18:27:33 BRT"
 }
