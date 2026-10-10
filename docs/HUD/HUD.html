@@ -3267,8 +3267,8 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
   if(!Number.isFinite(stamp)||Math.abs(Date.now()-stamp)>120000)return false;
   var isCasa=v.host==='casa',label=document.getElementById(isCasa?'cd-casa-cpu':'cd-vps-cpu'),proof=document.getElementById(isCasa?'cd-casa-cpu-proof':'cd-vps-cpu-proof');
   if(!label||!proof)return false;
-  label.textContent='🟢 CPU '+v.cpu_percent.toFixed(1)+'% · T1';
-  proof.textContent=String(v.source||'SENSOR EXISTENTE').slice(0,100)+' · '+new Date(stamp).toLocaleString('pt-BR')+' · '+String(v.receipt||'RECIBO LOCAL').slice(0,70);
+  label.textContent='🟡 CPU '+v.cpu_percent.toFixed(1)+'% · IMPORTADO / NÃO VALIDADO';
+  proof.textContent='Arquivo local não autenticado · '+String(v.source||'SENSOR DECLARADO').slice(0,80)+' · '+new Date(stamp).toLocaleString('pt-BR')+' · conferir receipt com owner antes de promover PASS';
   return true;
  }
  var button=document.getElementById('cd-cpu-measure-import'),file=document.getElementById('cd-cpu-measure-file');
