@@ -660,6 +660,8 @@ NO_NEW_ARCHITECTURE = TRUE
 
 
 <!-- CURRENT_PR_SUCCESSOR_20261010 -->
+
+
 ## Continuidade do PR #1788 após MERGE — API + MCP + ONE HEART (10/10/2026)
 
 **CHEFE, INTENÇÃO INALTERADA:** uma API lógica, um catálogo MCP, um log-funnel, um One Heart e um HUD (HUD/MAPA/FORJA) com espelho autorizado no Obsidian Casa; Hermes executa pelos owners existentes. PR #1788 foi **MERGED em b43cb28c42470b5489d48a7867989bfa3add0eb8** (09/10/2026, 20:56:47Z), mas isso não prova API01–API16 no runtime. Esta seção transfere somente critérios não selados ao PR sucessor explícito marcado `CENTRALDARK_API_MCP_ONEHEART_CURRENT_PR`; #1767 e #1777 permanecem fontes de patches/receipts com writer separado no mesmo HUD, sem sobrescrita concorrente.
@@ -679,6 +681,8 @@ NO_NEW_ARCHITECTURE = TRUE
 <!-- /CURRENT_PR_SUCCESSOR_20261010 -->
 
 <!-- PROJECT_BOUNDARY_L171_20261010 -->
+
+
 ## Aprendizado #171 · Instinto Superior é o corpo da CentralDark; TelePainel não é capability administrativa absorvível
 
 **INTENÇÃO CURRENT (CHEFE, 2026-10-10):** Um HUD/Cockpit do **Instinto Superior** reúne interfaces operacionais CentralDark, cada qual com owner/setor original: Casa/Obsidian, VPS, MCP, Hermes, One Heart, Saúde/Status e Admin. Telas antigas `status.centralldark.com` e `hud.centralldark.com` são fontes doadoras e rotas de compatibilidade; não apagar até paridade + E2E/consumidor/rollback.
@@ -690,6 +694,8 @@ NO_NEW_ARCHITECTURE = TRUE
 **Rastro de aplicação:** PR #1793 · commits `5dbccc2`, `aa654cd`, `d7f8578`, `75fa636`, `38a7a9b`. Aprendizado [#171](../APRENDIZADOS.md), índice em `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`, linhagem `L170 → L171`. **PR commit não é deploy.**
 
 **Cadeados:** `CATALOG != OWNERSHIP`; `CODE != RUNTIME`; `MCP_HEALTH_200 != COMPLETE_SECTOR_HEALTH`; `TELEPAINEL_ADMIN_STAYS_TELEPAINEL`; `LEGACY_DELETE_AFTER_PARITY_ONLY`; `ONE_HUD_ONE_HEART_ONE_MCP`. **NEXT_CURSOR:** typecheck/testar PR SHA → verificar /health sob runtime carregado → testar catálogo/seleção e isolação de dados no navegador → paridade das duas rotas legadas → readback/receipt → promoção segura pela esteira já existente.
+
+
 ### Receipt T1 — 2026-10-10 · Casa/PR #1793 (sem deploy)
 
 ```text
