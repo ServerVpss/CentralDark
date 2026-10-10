@@ -1397,6 +1397,26 @@ body {
   }
 }
 </style>
+
+<style id="cd-telemetry-emoji-style">
+/* CD-TELEMETRY-EMOJI-HUD-20261010 */
+.cd-top-sensors{display:flex;gap:8px;flex-wrap:wrap;padding:9px 13px;border-bottom:1px solid var(--border);background:var(--ground);}
+.cd-top-sensor{flex:1 1 170px;min-width:155px;border:1px solid var(--border);border-radius:9px;padding:8px 10px;background:var(--surface);font:11px var(--mono);color:var(--text);}
+.cd-top-sensor strong,.cd-top-sensor small,.cd-top-sensor .cd-top-value{display:block;}
+.cd-top-sensor strong{color:var(--accent);letter-spacing:.03em;}
+.cd-top-sensor .cd-top-value{font-size:12px;font-weight:700;margin-top:4px;color:var(--amber);}
+.cd-top-sensor small{color:var(--text-dim);line-height:1.45;margin-top:3px;overflow-wrap:anywhere;}
+.cd-top-sensors button{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:7px;cursor:pointer;}
+.cd-health-events{height:min(460px,50vh);min-height:230px;display:grid;align-content:start;gap:7px;overflow-y:auto;border:1px solid var(--border);background:var(--ground);border-radius:9px;padding:9px;font:11px var(--mono);}
+.cd-health-event{display:grid;grid-template-columns:125px 112px minmax(0,1fr);gap:7px;line-height:1.5;border:1px solid var(--border);border-left:4px solid var(--amber);border-radius:9px;padding:8px;background:var(--surface);overflow-wrap:anywhere;}
+.cd-health-event[data-status="pass"]{border-left-color:var(--green)}
+.cd-health-event[data-status="fail"]{border-left-color:var(--red)}
+.cd-health-event[data-status="warn"]{border-left-color:var(--amber)}
+.cd-health-event time{color:var(--text-dim);font-size:10px}
+.cd-health-event strong{color:var(--accent)}
+.cd-health-event span{color:var(--text);white-space:pre-wrap}
+@media(max-width:700px){.cd-health-event{grid-template-columns:1fr}.cd-top-sensor{flex-basis:125px;min-width:120px}}
+</style>
 </head>
 <body>
 
@@ -1414,6 +1434,15 @@ body {
   <div class="barra-meta">
     <span class="live" id="cd-global-indicator" style="color:var(--amber)">&#9679; SISTEMA / PROVA POR SETOR</span> &middot; ServerVpss/CentralDark &middot; <span class="hud-clock-live" id="hud-clock-top">sincronizando data/hora...</span>
   </div>
+</div>
+
+
+<!-- CD-TELEMETRY-EMOJI-HUD-20261010: CPU host never inferred from load average or browser health -->
+<div class="cd-top-sensors" id="cd-hud-sensor-strip" data-owner="docs/HUD/HUD.html">
+ <div class="cd-top-sensor"><strong>🖥️ CPU · CASA</strong><span class="cd-top-value" id="cd-casa-cpu">🟡 SEM LEITURA</span><small id="cd-casa-cpu-proof">segredo / 100.123.93.25 · Desktop remoto OFFLINE no T0. CPU% não comprovada.</small></div>
+ <div class="cd-top-sensor"><strong>🖧 CPU · VPS</strong><span class="cd-top-value" id="cd-vps-cpu">🟡 CPU% SEM LEITURA</span><small id="cd-vps-cpu-proof">Carga observada: 17.74 em 8 CPUs no T0 10/10 18:59Z. Loadavg ≠ uso %.</small></div>
+ <div class="cd-top-sensor"><strong>🧠 HERMES · RUNTIME</strong><span class="cd-top-value" id="cd-live-runtime">🟡 MEDINDO</span><small id="cd-live-runtime-proof">Fonte existente: /health. Serviço vivo ≠ inferência testada.</small></div>
+ <button type="button" id="cd-cpu-measure-import" title="Importa JSON sanitizado de medição do sensor existente: só nesta aba">📥 CPU T1</button><input type="file" accept=".json,application/json" id="cd-cpu-measure-file" hidden>
 </div>
 
 <!-- TABS -->
@@ -2373,6 +2402,12 @@ refresh();
       <div class="hud-card" data-proof-binding="AIONUI_WEBUI_CASA"><h3>AionUi / Instinto Superior</h3><div class="val ok">PASS · HTTP 200 + PROCESSOS CASA</div><div class="meta">http://89.117.78.124:25808/ retornou HTTP 200 e titulo AionUi; Casa nesta sessao: AionUi.exe x5 e aioncore.exe x1. Novo teste Casa 09/10 20:27Z: HTTP 200 confirmado; processos locais observados anteriormente. Integracao total CentralDark, login e runtime 24/7 permanecem UNKNOWN.</div></div>
       <div class="hud-card" data-proof-binding="SUPABASE_PLUGIN_CASABRIDGE"><h3>Supabase / plugin CentralDark</h3><div class="val warn">PASS DE PROJETO · E2E UNKNOWN</div><div class="meta">Projeto CentralDark sa-east-1 e bridge responderam em leitura anterior; 5 agents e 3 missions no snapshot, nao E2E. Conexao HUD &#8596; Obsidian &#8596; Supabase e status atual necessitam readback; sem criar tabela ou bridge.</div></div>
     </div>
+    
+<div class="hud-card" id="cd-local-programs-map"><h3>🧰 Programas Casa · componentes existentes</h3>
+ <div class="val warn">🟡 INVENTÁRIO CURRENT / SEM LEITURA</div>
+ <div class="meta">Pasta solicitada: <code>C:\Users\Administrador\AppData\Local\Programs</code>. Vault existente: <code>C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬\HUD.html</code>. Desktop Commander SEGREDO aparece OFFLINE; componentes novos precisam de inventário por metadados, sem ler conteúdo privado. AionUi/Screenpipe/Hermes têm referências históricas, não confirmação de instalação nova.</div>
+ <button type="button" id="cd-local-programs-copy" class="hud-linkbtn">📋 ACEITAR MISSÃO (COPIAR)</button>
+</div>
     <h3 class="section-title" style="margin:16px 0 8px">Eventos de saude por setor (nao sao logs integrais do sistema)</h3>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
       <label class="cadeado-meta" for="cd-event-filter">Setor</label>
@@ -2381,7 +2416,7 @@ refresh();
       </select>
       <span class="cadeado-meta" id="cd-event-summary">Aguardando observacao local...</span>
     </div>
-    <pre id="cd-event-stream" aria-live="polite" style="height:170px;overflow:auto;background:var(--ground);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:10px;white-space:pre-wrap;color:var(--text-dim)">[HUD] Estado inicial: aguardando provas atuais do navegador.</pre>
+    <div id="cd-event-stream" class="cd-health-events" role="log" aria-live="polite">🟡 Aguardando prova atual no navegador.</div>
   </div>
 
   <!-- HERMES JUIZ AO VIVO (PowerShell 7) -->
@@ -3221,6 +3256,64 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
   if(window.MutationObserver)new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-cd-owner-verdict','data-cd-receipt','data-cd-readback']});
 })();
 
+
+/* CD-TELEMETRY-EMOJI-HUD-20261010: visible observability, only true CPU samples from existing sensors. */
+(function(){
+ 'use strict';
+ function sample(v){
+  if(!v||!['casa','vps'].includes(v.host)||v.scope!=='host'||v.proof!=='MEASURED')return false;
+  if(typeof v.cpu_percent!=='number'||!Number.isFinite(v.cpu_percent)||v.cpu_percent<0||v.cpu_percent>100)return false;
+  var stamp=Date.parse(v.observed_at);
+  if(!Number.isFinite(stamp)||Math.abs(Date.now()-stamp)>120000)return false;
+  var isCasa=v.host==='casa',label=document.getElementById(isCasa?'cd-casa-cpu':'cd-vps-cpu'),proof=document.getElementById(isCasa?'cd-casa-cpu-proof':'cd-vps-cpu-proof');
+  if(!label||!proof)return false;
+  label.textContent='🟢 CPU '+v.cpu_percent.toFixed(1)+'% · T1';
+  proof.textContent=String(v.source||'SENSOR EXISTENTE').slice(0,100)+' · '+new Date(stamp).toLocaleString('pt-BR')+' · '+String(v.receipt||'RECIBO LOCAL').slice(0,70);
+  return true;
+ }
+ var button=document.getElementById('cd-cpu-measure-import'),file=document.getElementById('cd-cpu-measure-file');
+ if(button&&file){
+  button.addEventListener('click',function(){file.click();});
+  file.addEventListener('change',function(){
+   var selected=file.files&&file.files[0];if(!selected)return;
+   if(selected.size>20000){button.textContent='🟡 ARQUIVO GRANDE';file.value='';return;}
+   var reader=new FileReader();
+   reader.onload=function(){
+    try{var data=JSON.parse(String(reader.result||'')),samples=Array.isArray(data.samples)?data.samples:[data],total=0;
+      samples.forEach(function(v){if(sample(v))total++;});button.textContent=total?'✅ CPU T1 '+total:'🟡 SEM PROVA RECENTE';
+    }catch(_){button.textContent='🟡 JSON INVÁLIDO';}
+   };reader.onerror=function(){button.textContent='🟡 LEITURA FALHOU';};reader.readAsText(selected);file.value='';
+  });
+ }
+ var api=document.getElementById('cd-api-hermes-current'),r=document.getElementById('cd-live-runtime'),info=document.getElementById('cd-live-runtime-proof');
+ function live(){
+  if(!api||!r)return;
+  var ok=/HEALTH HTTP 200/.test(String(api.textContent||''));
+  r.textContent=ok?'🟢 /health HTTP 200':'🟡 API SEM PROVA ATUAL';
+  info.textContent=ok?'API respondeu nesta abertura; inferência, execução e CPU do host exigem provas separadas.':'API sem prova de health atual nesta aba; manter placa, não derrubar outras rotas.';
+ }
+ if(api&&window.MutationObserver)new MutationObserver(live).observe(api,{childList:true,characterData:true,subtree:true});live();
+ var recipeBtn=document.getElementById('cd-local-programs-copy');
+ if(recipeBtn)recipeBtn.addEventListener('click',function(){
+  var recipe=[
+    '!CENTRALDARK #ACORDAR !SOL_EXECUTORA',
+    'INTENCAO: inventariar somente metadados dos programas Windows e CPU host Casa/VPS; integrar no MESMO HUD.',
+    'CASA: segredo / Tailscale 100.123.93.25',
+    'PATH: C:\\Users\\Administrador\\AppData\\Local\\Programs',
+    'OBSIDIAN: C:\\Users\\Administrador\\Documents\\Obsidian Vault\\🪬Centraldark -HUD🪬\\HUD.html',
+    'Read-only: nomes, versões, processos, portas e PIDs de componentes existentes; NÃO ler arquivos privados, áudio, capturas ou credenciais.',
+    'Medir CPU% HOST de Casa e VPS separadamente com sensor atual e timestamp UTC. loadavg != CPU%.',
+    'Emitir JSON sanitizado: {\"samples\":[{\"host\":\"casa\",\"scope\":\"host\",\"proof\":\"MEASURED\",\"cpu_percent\":0,\"observed_at\":\"ISO_UTC\",\"source\":\"SENSOR_EXISTENTE\",\"receipt\":\"PATH_RECEIPT\"}]} (substituir valores exemplo por medição real).',
+    'Reconciliar HEAD main/VPS e HASH dos HUD.html físicos; preservar arquivos locais sujos e selos históricos.',
+    'Testar VPS->Casa via Tailscale e registrar PASS somente com PONG atual; se OFFLINE emitir PLACA com rota e próximo cursor.',
+    'Sem novo HUD, watcher, MCP, bridge, processo de captura ou configuração de privacidade.'
+  ].join('\n');
+  if(typeof window.cdHudCopy==='function')window.cdHudCopy(recipe,recipeBtn);
+  else if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(recipe).then(function(){recipeBtn.textContent='✅ COPIADO';},function(){recipeBtn.textContent='🟡 CLIPBOARD BLOQUEADO';});
+  else recipeBtn.textContent='🟡 CLIPBOARD INDISPONÍVEL';
+ });
+})();
+
 /* CD monitor integrado: eventos de saude, nunca transcricao de tela/audio. */
 (function() {
   var history = [], last = Object.create(null);
@@ -3236,9 +3329,23 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
     var filter = document.getElementById('cd-event-filter');
     if (!out) return;
     var kind = filter ? filter.value : 'TODOS';
-    out.textContent = history.filter(function(item){return kind==='TODOS'||kind===item.sector;})
-      .map(function(item){return '['+item.at+'] ['+item.sector+'] '+item.state;}).join('\n') || '[HUD] Nenhuma mudanca nesse setor';
-    out.scrollTop = out.scrollHeight;
+    var icons={CASA:'🏠',TAILSCALE:'🌐',SSH:'🔐',MCP:'🔌',DESKTOP:'🖥️',AIONUI:'✨',SUPABASE:'🗄️',HERMES:'🤖',RUNTIME:'🧠',SCREENPIPE:'🎥',HUD:'🪬',VPS:'🖧'};
+    var rows=document.createDocumentFragment(),filtered=history.filter(function(item){return kind==='TODOS'||kind===item.sector;});
+    filtered.forEach(function(item){
+      var state=String(item.state||'UNKNOWN');
+      var fail=/\b(FAIL|ERROR|ERRO|BLOQUEADA|BLOQUEADO|HTTP 401|HTTP 403|HTTP 5\d\d|OFFLINE)\b/i.test(state);
+      var unknown=/\b(UNKNOWN|PENDENTE|STALE|HISTORICO|HISTÓRICO|NAO PROVADA|NAO PROVADO|NÃO PROVADO|SEM LEITURA|AGUARDANDO)\b/i.test(state);
+      var pass=/\b(PASS|ALIVE|HTTP 200|AUTENTICADO)\b/i.test(state);
+      var verdict=fail?'fail':(unknown||!pass?'warn':'pass'),emoji=verdict==='fail'?'🔴':(verdict==='pass'?'🟢':'🟡');
+      var row=document.createElement('div');row.className='cd-health-event';row.dataset.status=verdict;
+      var time=document.createElement('time');time.textContent='🕒 '+item.at;
+      var name=document.createElement('strong');name.textContent=(icons[item.sector]||'🧩')+' '+item.sector;
+      var message=document.createElement('span');message.textContent=emoji+' '+state;
+      row.appendChild(time);row.appendChild(name);row.appendChild(message);rows.appendChild(row);
+    });
+    out.replaceChildren(rows);
+    if(filtered.length===0)out.textContent='🟡 Sem evento nesta sessão neste setor; não significa ausência de falhas.';
+    out.scrollTop=out.scrollHeight;
     var sum = document.getElementById('cd-event-summary');
     if(sum) sum.textContent = history.length + ' mudancas de estado nesta sessao';
   }
