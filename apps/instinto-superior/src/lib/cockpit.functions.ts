@@ -708,7 +708,31 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
   });
   const toolsPayload = tools.dados;
   const toolList = Array.isArray(toolsPayload?.["tools"]) ? toolsPayload["tools"] : [];
-  const toolNames = toolList.slice(0, 90).filter(objetoJson).map(t => textField(t["name"], 90)).filter((name): name is string => !!name);
+  const sourceNames = Array.isArray(toolsPayload?.["toolNames"]) ? toolsPayload["toolNames"] : toolList;
+  const toolNames = sourceNames.slice(0, 180)
+    .map(value => typeof value === "string" ? textField(value, 90) :
+      objetoJson(value) ? textField(value["name"], 90) : null)
+    .filter((name): name is string => !!name);
+  const groupsRaw = Array.isArray(catalog.dados?.["groups"]) ? catalog.dados["groups"] : [];
+  const connectorsRaw = Array.isArray(catalog.dados?.["connectors"]) ? catalog.dados["connectors"] : [];
+  const publishedGroups = groupsRaw.slice(0, 24).filter(objetoJson).map(group => ({
+    id: textField(group["id"], 48),
+    label: textField(group["label"], 70),
+    count: countField(group["count"]),
+    level: textField(group["level"], 25),
+    names: (Array.isArray(group["names"]) ? group["names"] : []).slice(0, 80)
+      .map(n => textField(n, 90)).filter((n): n is string => !!n),
+  }));
+  const publicConnectors = connectorsRaw.slice(0, 20).filter(objetoJson).map(connector => ({
+    name: textField(connector["name"], 90),
+    level: textField(connector["level"], 25),
+    latencyMs: countField(connector["latencyMs"]),
+    // Don't relay raw detail/env hints or any credential-bearing fields.
+  }));
+  const catalogDiff = objetoJson(catalog.dados?.["catalogDiff"]) ? catalog.dados["catalogDiff"] : null;
+  const deploy = objetoJson(catalog.dados?.["deploy"]) ? catalog.dados["deploy"] : null;
+  const gitDeploy = objetoJson(deploy?.["github"]) ? deploy["github"] : null;
+  const vpsDeploy = objetoJson(deploy?.["local"]) ? deploy["local"] : null;
   return {
     schema: "centraldark.cockpit.mcp-admin-migration.v1",
     observedAt: new Date().toISOString(),
@@ -717,11 +741,21 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
       httpStatus: "httpStatus" in item && typeof item.httpStatus === "number" ? item.httpStatus : null })),
     sectors: setores.sectors,
     events: setores.events,
-    tools: { probe: safeProbe(tools), reported: countField(toolsPayload?.["toolCount"]) ?? (toolList.length || null), names: toolNames },
+    tools: { probe: safeProbe(tools), reported: countField(toolsPayload?.["toolCount"]) ??
+      countField(objetoJson(catalog.dados?.["catalog"]) ? catalog.dados["catalog"]["toolCount"] : null) ??
+      (toolNames.length || null), names: toolNames, groups: publishedGroups },
+    catalogHealth: { probe: safeProbe(catalog), connectors: publicConnectors,
+      diff: { level: textField(catalogDiff?.["level"], 25),
+        inCode: countField(catalogDiff?.["inCode"]),
+        published: countField(catalogDiff?.["published"]),
+        missing: Array.isArray(catalogDiff?.["missingPublish"]) ? catalogDiff["missingPublish"].length : null,
+        orphan: Array.isArray(catalogDiff?.["orphanPublished"]) ? catalogDiff["orphanPublished"].length : null },
+      deploy: { mainSha: textField(gitDeploy?.["sha"], 40),
+        vpsSha: textField(vpsDeploy?.["sha"], 40) } },
     integrations: {
       linear: { ...safeProbe(linear), ok: linear.dados?.["ok"] === true },
       figma: { ...safeProbe(figma), ok: figma.dados?.["ok"] === true },
-      connectors: { ...safeProbe(catalog), count: Array.isArray(catalog.dados?.["connections"]) ? catalog.dados["connections"].length : null },
+      connectors: { ...safeProbe(catalog), count: publicConnectors.length, evidence: publicConnectors },
       e2ePublic: { ...safeProbe(legacy), ok: legacy.dados?.["ok"] === true },
     },
     megaPainel: {
