@@ -107,3 +107,8 @@ Rendezvous de API/MCP/One Heart corrente: **PR #1788**, enquanto aberto. Os `API
 
 `CONTRACT_DOCUMENTED != RUNTIME_HOOK_IMPLEMENTED`. Execução automática global só recebe PASS após teste no consumer existente.
 <!-- /PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->
+
+<!-- CURRENT_API_PR_HUD_ENTRY_20261010 -->
+### API/MCP/One Heart após merge do PR #1788
+O PR #1788 está MERGED e já não é rendezvous OPEN. Resolver o sucessor explícito com o marcador `CENTRALDARK_API_MCP_ONEHEART_CURRENT_PR` em PR aberto e consultar seu HEAD, checks, owner, receipts e a projeção do HUD antes de qualquer mutação material. `docs/HUD/HUD.html` exibe essa leitura (GitHub API pública, 60s), mas ela **não** substitui a validação do consumer, nem replica bytes na Casa. #1767/#1777 preservados sem disputa de writer. Se consulta falhar: UNKNOWN + VER PENDÊNCIA; nunca PASS por texto histórico.
+<!-- /CURRENT_API_PR_HUD_ENTRY_20261010 -->

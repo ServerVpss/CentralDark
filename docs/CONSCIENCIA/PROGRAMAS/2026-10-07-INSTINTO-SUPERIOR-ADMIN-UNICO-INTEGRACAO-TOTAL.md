@@ -657,3 +657,23 @@ NO_NEW_ARCHITECTURE = TRUE
 
 **NEXT_CURSOR:** o writer correto reconcilia o tracked dirty sem perda → valida PR #1788 e seus checks no **mesmo SHA** → promove para `main` pelo gate vigente → cron atual realiza ff-only e chama o **mesmo** `skill-sync-check.sh` → comparar hash da `skill-synchronization v0.3.0` e `centraldark-ops` em `main`, checkout, `~/.hermes/skills` → carregar nova sessão Hermes se necessário → testar pequena missão reversível com execução/receipt → atualizar o **mesmo** HUD com `SELADO` apenas após readback causal. `MERGED != DEPLOYED`; `SYNCED != LOADED`; `UNKNOWN != PASS`.
 <!-- /PR1788_HERMES_AUTONOMY_SKILL_SYNC_READBACK_20261009 -->
+
+
+<!-- CURRENT_PR_SUCCESSOR_20261010 -->
+## Continuidade do PR #1788 após MERGE — API + MCP + ONE HEART (10/10/2026)
+
+**CHEFE, INTENÇÃO INALTERADA:** uma API lógica, um catálogo MCP, um log-funnel, um One Heart e um HUD (HUD/MAPA/FORJA) com espelho autorizado no Obsidian Casa; Hermes executa pelos owners existentes. PR #1788 foi **MERGED em b43cb28c42470b5489d48a7867989bfa3add0eb8** (09/10/2026, 20:56:47Z), mas isso não prova API01–API16 no runtime. Esta seção transfere somente critérios não selados ao PR sucessor explícito marcado `CENTRALDARK_API_MCP_ONEHEART_CURRENT_PR`; #1767 e #1777 permanecem fontes de patches/receipts com writer separado no mesmo HUD, sem sobrescrita concorrente.
+
+**CURRENT / PLACA:** GitHub main da consulta = `5cc36d75fcbb7325042568cdfb1cbb0096c3d746`. PowerShell do CHEFE (prova pontual histórica, não observação atual): `VPS_HEAD=8ef0f065db197e4f2d3a68d2a1747f1e4d0f3588`, `origin/main=98eb21d292465e74b030b6a48f38441fd470b0c9`, `TRACKED_DIRTY=1`, `SYNC_RC=2`, `HUD_MIRROR_MATCH_RC=1`, `SSH_EXIT=2`. Owner do sync = `scripts/vps/auto-sync-main.sh`. Preservar alterações locais, sem reset, stash, clean ou rebase cego. A Casa está sem ponte remota nesta consulta: `CASA_HUD_HASH=UNKNOWN`, não PASS.
+
+**Critérios API01–API16 herdados (NÃO recomeçar o placar):** API01=main/PR/VPS/Casa/writers; API02=edge/rotas; API03=MCP :9100 carregado; API04=OAuth/autorização/scopes; API05=tools/dispatcher; API06=Hermes→API/MCP→efeito; API07=Tailscale/SSH/Casa; API08=Omni; API09=um `event_id` em `logs/events/YYYY-MM-DD.jsonl`, `logs/sectors/<sector>/YYYY-MM-DD.jsonl`, `logs/services/<service>/YYYY-MM-DD.jsonl`; API10=MCP producer→log; API11=Hermes/agents producers; API12=`/heartbeat` One Heart; API13=`/admin/logs/stream` SSE autenticado; API14=HUD nas 3 abas com ACERTOS e VER PENDÊNCIA; API15=Casa/Obsidian hash + GUI readback; API16=regressão no mesmo SHA, rollback, contraprova e receipt. Continuam `UNKNOWN/PARTIAL` até prova causal; não promover verde por commit ou health isolado.
+
+**Owners, sem novas camadas:** `apps/modulos/mcp/src/index.js`, `src/tools/core/mcp-admin.js`, `src/tools/core/tools-catalog.js`, `src/log-funnel.js` (appendCentralEvent), `src/operational-telemetry.js`, `docs/HUD/HUD.html`, `apps/modulos/obsidian-plugin-grafo-vivo/`, `docs/CONSCIENCIA/APRENDIZADOS.md`, `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`. O mesmo `event_id` deve chegar às três pastas setorizadas e daí a heartbeat/SSE/HUD apenas quando consumer provar. Selos anteriores são PROVEN_FLOOR datado; fingerprint/target igual = receita + readback mínimo, não repetição de auditoria inteira.
+
+**Entrada antes de trabalho MATERIAL:** ler `docs/HUD/HUD.html`, recuperar PR aberto marcado `CENTRALDARK_API_MCP_ONEHEART_CURRENT_PR`, HEAD, owner e receipts; resolver one-writer por arquivo e `NEXT_CURSOR`. O HUD terá ponteiro público read-only ao PR com refresh de 60s via GitHub API existente; One Heart permanece refresh de 5s. Essa projeção não sincroniza o arquivo físico Windows automaticamente. Sem ponte Casa autorizada: PLACA de sync pendente, sem afirmar real-time Casa.
+
+**Triagem memory fornecida pelo CHEFE, SEM mutação automática:** 20 propostas; 1 MERGE_CANDIDATE `0e1dcdb5`; 5 duplicatas indicadas `f7cc70d4,661179b3,67d9220b,7f00746e,edfa2ac0`; 14 REBUILD_REQUIRED; `APPROVED=0`. Nunca sobrescrever memória durável ou converter revisão em aprovação.
+
+**NEXT_CURSOR:** `READ_SUCCESSOR_PR_HEAD → ACK_ONE_HUD_WRITER → IDENTIFY_TRACKED_DIRTY_OWNER → RECONCILE_SYNC → API03_MCP_RUNTIME → API09_EVENT_ID_3_PROJECTIONS → API12_HEARTBEAT → API13_SSE → API14_HUD → API15_CASA_READBACK → API16_SAME_SHA_RECEIPT`.
+`NO_NEW_ARCHITECTURE=true · FIXED_POINT=NOT_PROVEN · DOCUMENTED!=EXECUTED · MERGED!=DEPLOYED`
+<!-- /CURRENT_PR_SUCCESSOR_20261010 -->
