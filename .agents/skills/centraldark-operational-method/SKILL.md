@@ -1,6 +1,9 @@
 ---
 name: centraldark-operational-method
 description: Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # METODO OPERACIONAL CENTRALDARK
@@ -118,7 +121,7 @@ OWNER=AGENTS.md
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+HUD_CURRENT_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 APPLIES_TO_ALL_ENGINES=true
 ```
 
@@ -153,6 +156,65 @@ EVIDÊNCIA
   → PROVA (SHA, diff, arquivo alterado, teste, log, estado do PR, resultado repetível)
   → REGISTRO DO OURO (só aprendizado útil e comprovado — o que aconteceu, quem decidiu, por que, evidência, o que mudou, resultado, aprendizado, onde reaparecer)
   → PRÓXIMO PASSO (um só, claro)
+```
+
+## Pairwise Reality Selection — comparar rotas e cristalizar o vencedor
+
+Comparação pareada é uma especialização condicional da MULTIBÚSSOLA + CONTRAPROVA + REALITY JUDGE. Não cria agente, juiz, workflow ou arquitetura nova.
+
+A inspiração pode vir de uma superfície externa que apresenta duas opções ao humano, mas a CentralDark não promove hipótese sobre o mecanismo interno dessa superfície. O que se retém é o padrão observável: candidatos comparáveis + critério de escolha + registro do vencedor.
+
+```text
+PAIRWISE_REALITY_SELECTION=true
+PAIRWISE_IS_CONDITIONAL_NOT_RITUAL=true
+PAIRWISE_ONLY_WHEN=MATERIAL_ROUTE_AMBIGUITY_SURVIVES_REUSE_AND_DETERMINISTIC_FAST_PATH
+SAME_INTENT_REQUIRED=true
+SAME_TARGET_REQUIRED=true
+SAME_BASELINE_OR_EQUIVALENT_BINDINGS_REQUIRED=true
+SAME_EVIDENCE_SCHEMA_REQUIRED=true
+REALITY_JUDGE_SELECTS_TECHNICAL_EFFECT_WINNER=true
+ELOQUENCE_OR_MODEL_CONFIDENCE_IS_NOT_WINNER_PROOF=true
+HUMAN_PREFERENCE_SELECTS_SUBJECTIVE_GOALS=true
+NO_DISCRIMINATING_EVIDENCE=NO_WINNER
+TIE_OR_INCOMPARABLE=UNKNOWN
+LOSER_IS_NOT_DELETED_BLINDLY=true
+WINNER_REQUIRES=PROOF+COUNTERPROOF+EFFECT_READBACK
+WINNER_CRYSTAL_REQUIRES=OWNER+SEQUENCE+BINDINGS+FINGERPRINT+PROOF+COUNTERPROOF+EXPECTED_EFFECT+EVIDENCE+NEXT_CURSOR
+REPLAY_WINNER_BEFORE_REDISCOVERY=true
+CHANGED_FINGERPRINT=REVALIDATE_AFFECTED_CONE_ONLY
+```
+
+Fluxo mínimo:
+
+```text
+INTENÇÃO
+→ REUSE/DETERMINISTIC_FAST_PATH
+→ SE AINDA HOUVER ≥2 ROTAS MATERIALMENTE VIÁVEIS:
+     CANDIDATO_A + CANDIDATO_B
+     → NORMALIZAR MESMO ALVO/BASELINE/EVIDÊNCIA
+     → EXECUTAR/PROVAR CADA ROTA SEM DUPLICAR WRITER
+     → CONTRAPROVAR
+     → REALITY_JUDGE_COMPARA_EFEITO
+     → WINNER | TIE | UNKNOWN
+     → WINNER: CRISTAL + FINGERPRINT + REPLAY
+→ SENÃO:
+     USAR ROTA DETERMINÍSTICA EXISTENTE
+```
+
+Critério técnico compara resultado observável: correção, completude, regressão, custo/latência quando material, estabilidade, reversibilidade e aderência ao owner/escopo. "Resposta mais bonita" não vence teste técnico.
+
+Quando a intenção for subjetiva (estilo, preferência visual, escolha humana genuína), o humano é o juiz de preferência. Reality Judge continua verificando apenas claims técnicos e efeitos observáveis.
+
+A comparação não autoriza executar duas mutações concorrentes no mesmo escopo. Leitura/probe pode ser paralelo; mutação respeita Writer único, isolamento e rollback. Se uma rota já está provada com fingerprint compatível, `REPLAY_BEFORE_REDISCOVERY` vence a experimentação redundante.
+
+### Origem observada e limite de evidência
+
+```text
+OBSERVED_EXTERNAL_PATTERN=PAIRWISE_OPTION_PREFERENCE_SURFACE
+OBSERVED_FACT=TWO_CANDIDATE_OPTIONS_PRESENTED_FOR_HUMAN_PREFERENCE
+UNKNOWN=INTERNAL_MODEL_IDENTITIES|EXPERIMENT_SELECTION_REASON|HIDDEN_ROUTING
+EXTERNAL_UI_IS_SEMANTIC_INPUT_NOT_INTERNAL_PROOF=true
+CENTRALDARK_ADAPTATION_IS_OWN_METHOD_DELTA=true
 ```
 
 ## Contrato humano de execução integral
@@ -2236,8 +2298,8 @@ REGISTRA
 → menor MVP útil
 → teste aplicável + contraprova
 → commit
-→ push em branch filha
-→ abrir PR filha vinculada à #1757
+→ push em branch filha somente quando PR for materialmente necessária
+→ abrir/reusar PR filha por OWNER+SCOPE+CAPABILITY sem vínculo obrigatório com PR-MÃE
 → remeasure live
 → blocker técnico recuperável: continuar até HUMAN_FRONTIER real
 → conflito: usar git-conflict-resolve-house-standard
@@ -2246,12 +2308,13 @@ REGISTRA
 → readback da main + novo CURRENT_MAIN_SHA
 → DEPLOY_CAUSAL somente se o delta exigir runtime
 → T1 quando houver deploy causal
-→ receipt no PR filho e na PR-mãe
+→ receipt no repositório e no PR filho quando aplicável
+→ HUD_CURRENT_READBACK
 → fixed point do delta
-→ voltar ao #1757
 ```
 
-A `#1757` permanece aberta como PR-MÃE ativa, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
+`#1562` e `#1757` são provenance histórica preservada. A superfície operacional
+CURRENT é o HUD existente; nenhuma nova PR-MÃE nasce para rendezvous/checklist.
 
 ### Lapidação progressiva
 
@@ -2365,6 +2428,57 @@ OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
 ```
 
 Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrigir o menor gate causal e continuar. Não transformar prudência em bloqueio.
+
+## HEREDITARY_CRITERION_DNA — Goal/intent fractal no owner existente
+
+O mesmo Criterion/intent nasce no `GOAL` e é herdado, sem virar lista rígida de passos,
+por toda a árvore `GOAL → SUBGOAL → LOTE/BATCH → SUBAGENT/SUBSUBGOAL`. Este é o
+contrato aditivo do owner operacional/TLC23 existente; não cria segundo criterion
+engine, scheduler, goal system, memory engine ou arquitetura.
+
+```text
+HEREDITARY_CRITERION_DNA=true
+CRITERION_ENGINE_OWNER=.agents/skills/centraldark-operational-method
+GOAL → SUBGOAL → LOTE/BATCH → SUBAGENT/SUBSUBGOAL
+
+INHERIT:
+  WHY/INTENTION/OBJECTIVE + SUCCESS_PREDICATE_TERMINAL_INDIVISIBLE
+  CURRENT/BASELINE + OWNER/SCOPE + PROOF_DESTINATION
+  REUSE_BEFORE_CREATE
+  PARALLEL_PERCEPTION_AS_LENSES_OR_CAPABILITIES
+  ONE_WRITER_PER_SCOPE
+  COUNTERPROOF + REALITY_JUDGE
+  REMEDIATION_AFTER_STATE_CHANGE
+  RECEIPT + NEXT_CURSOR
+
+REFINE_WITHOUT_WEAKENING:
+  CHILD_CAN_REFINE_CRITERION=true
+  CHILD_CANNOT_WEAKEN_PARENT_CRITERION=true
+  LOCAL_DONE != PARENT_DONE
+  EVIDENCE_RETURNS_TO_PARENT=true
+  INTELLIGENCE_LIVES_IN_PROCESS_AND_INHERITANCE=true
+
+DO_NOT_INHERIT_AS_RIGID_SCRIPT:
+  STEPS
+  COMMIT/PUSH/PR/MERGE/QUEUED/GREEN/DEPLOY_TRIGGERED
+
+DONE_ONLY:
+  FIXED_POINT | HUMAN_ONLY_BLOCKER
+```
+
+Regras de composição: o descendente preserva intenção e predicate terminal, pode
+estreitar o escopo, mas mede novamente `CURRENT/BASELINE` e reatacha `OWNER/SCOPE`.
+Lentes só observam; toda mutação é serializada no escopo. Mudança de estado expira
+a prova dependente e exige remediação, nova contraprova, readback e receipt próprio.
+Cada nó continua até `FIXED_POINT` ou até um `HUMAN_ONLY_BLOCKER` exato; etapas de
+entrega e deploy são intermediários, nunca `DONE`.
+
+### Teste e proveniência
+
+A formulação executável vive em `contracts/TLC23-RUNTIME-GATE.yml` sob
+`hereditary_criterion_dna`, ligada à PR-mãe `#1562` pelo contrato TLC23 existente.
+O teste `scripts/test_goal_criterion_inheritance.py` verifica as quatro escalas,
+o DNA herdado, a ausência de lista de passos herdada e a fronteira terminal.
 
 ## Padrão aprendido do CHEFE — transformação de sistemas por invariantes
 
@@ -2539,3 +2653,31 @@ DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
 LEGACY_PR_MOTHER_1562_PROTECTED=true
 SHELL_IS_MUTABLE=true
 LEGACY_IS_PRESERVED=true
+
+
+### 26. WORKTREE TEARDOWN — bancada temporária, rastro permanente
+
+Regra operacional para agentes/subagentes que usam worktree isolado:
+
+```text
+MISSION_DONE
+→ CLASSIFY_WORKTREE
+→ UNIQUE_DELTA? PRESERVE/PROMOTE_FIRST
+→ RECEIPT
+→ REMOVE_WORKTREE
+→ PRUNE_IF_APPLICABLE
+```
+
+Invariantes:
+
+`WORKTREE_IS_DISPOSABLE=true`
+`UNIQUE_DELTA_MUST_SURVIVE_BEFORE_TEARDOWN=true`
+`CLEAN_OR_PROMOTED_BEFORE_REMOVE=true`
+`TEARDOWN_REQUIRES_RECEIPT=true`
+`GIT_WORKTREE_PRUNE_AFTER_SAFE_REMOVE=true`
+`TEMPORARY_BENCH_IS_NOT_MEMORY=true`
+`GIT_RECEIPT_CRYSTAL_IS_MEMORY=true`
+
+Não remover worktree quando existir commit apenas local, arquivo modificado/untracked com delta único, receipt pendente, prova ainda não promovida ou classificação UNKNOWN. Worktree pode ser deletado após o delta útil estar promovido/preservado e a trilha de proveniência estar registrada. A limpeza deve deixar rastro suficiente para responder: qual missão criou a bancada, qual HEAD/base usou, qual delta sobreviveu, onde foi promovido e quando a bancada foi removida.
+
+Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode compartilhar leitura; mutação paralela usa isolamento quando necessário; cada escopo mantém um único writer.

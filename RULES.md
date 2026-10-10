@@ -233,6 +233,26 @@ Tradução operacional:
 - Se destruir é o menor delta necessário, explicitamente autorizado e recuperável quando aplicável, executa.
 - Se é irreversível, caro, externo ou fora do escopo provado, torna o bloqueio material explícito.
 
+### 🪬 Lei do desenho preservado — adaptar ≠ reestruturar
+
+Origem: commit `bb60b2d` (2026-10-08), quando um agente refez o Mermaid do `MAPA-DO-CEREBRO.md` em vez de adaptar o mesmo desenho.
+
+```text
+ADAPTAR=MESMO_ARQUIVO+MESMOS_NOS+MESMAS_SETAS+MESMOS_TEXTOS+SO_SOMA_O_DELTA
+ADDITIVE_DIAGRAM_DELTA=FREE
+DIAGRAM_NODE_EDGE_SUBGRAPH_LABEL_REMOVAL=REQUIRES_EXPLICIT_ITEM
+MERMAID_DELETE_REQUIRES_EXPLICIT_ITEM=true
+WILDCARD_AUTHORIZATION=INVALID
+NO_PARALLEL_ARCHITECTURE=true
+ENFORCED_BY=scripts/lupa/diagram-route-gate.mjs#validateMermaidPreservation
+CI=.github/workflows/porta-de-entrada.yml
+NEGATIVE_TEST=scripts/lupa/diagram-route-gate.test.mjs (erro real bb60b2d)
+```
+
+- Apagar ou trocar nó, seta, subgraph ou texto de Mermaid em qualquer `.md`/`.mmd` deixa a porta de entrada vermelha.
+- Liberação só item a item: label `👑 PERMITO-SEGREDO` na PR, ou linha `Mermaid-Autorizado: <código exato impresso pelo gate>` no commit.
+- Push direto na `main` não é recusado pelo GitHub; o gate acusa vermelho logo depois do push.
+
 ---
 
 ## Secrets e credenciais

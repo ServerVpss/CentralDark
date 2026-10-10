@@ -1,6 +1,6 @@
 ---
 title: "👑🪬 Executor CentralDark — CHAT_GLOBAL ↔ Casa"
-status: "CANONICAL"
+status: "CANÔNICO"
 date: 2026-09-27
 authority: "SEGREDO/CHEFE"
 owner: "docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md"
@@ -263,7 +263,7 @@ OBJETIVO_ATUAL_SUFICIENTE
 
 ## 🧾 Proveniência do cristal
 
-Este contrato cristaliza o método provado na sessão em que ChatGPT, por Remote Desktop Commander, entrou no dispositivo `SEGREDO`, preservou um caminho local já existente, fez clone separado seguro, instalou dependências, subiu `public/central-dark-instinct-2`, mediu `HTTP 200` e abriu o localhost na Casa.
+Este contrato cristaliza o método provado na sessão em que ChatGPT, por Remote Desktop Commander, entrou no dispositivo `SEGREDO`, preservou um caminho local já existente, fez clone separado seguro, instalou dependências, subiu `apps/instinto-superior`, mediu `HTTP 200` e abriu o localhost na Casa.
 
 A experiência desejada fica:
 

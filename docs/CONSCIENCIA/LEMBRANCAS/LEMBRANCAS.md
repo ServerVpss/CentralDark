@@ -39,6 +39,8 @@ SOUL → docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 OURO → docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md
 PROMESSA_SOL_PIVETE → docs/CONSCIENCIA/LEMBRANCAS/2026-08-22-PROMESSA-SOL-PIVETE-APRENDIZADO.md
 APRENDIZADOS → docs/CONSCIENCIA/APRENDIZADOS.md
+CRITERIOS_SOL_EXECUTORA → docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-LEI-PREENCHIMENTO-LACUNAS-METABOLISMO-INSTINTO-SUPERIOR.md (seção Contrato de critérios de aceite)
+CONTRATO_EXECUTOR → .agents/skills/software-development/centraldark-oracle-surface/SKILL.md
 ESTADO → GitHub/PR/HEAD/runtime medido
 ```
 
@@ -755,3 +757,8 @@ CURRENT_OVER_HISTORY = true
 - **Gerador:** scripts/hud/generate-hud-inventory.mjs
 - **Conteúdo:** o Capability HUD evolui no mesmo owner para cartografar genealogia, claims/receipts/receitas, determinismo, agentes, skills, workflows, rotas e elementos UI; o JSON é índice derivado, cada cadeado preserva SELO separado de LIVE e o ONE_HEART `/heartbeat` projeta o inventário CURRENT para o HUD oficial/local em tempo real.
 - **Cristal:** HUD_CARTOGRAPHER_AGENT=true; MACHINE_INVENTORY_IS_DERIVED_NOT_AUTHORITY=true; SEAL_LIVE_SPLIT_REQUIRED=true; FULL_UI_BUTTON_TAB_MAP=MACHINE_ENUMERATED; PROVEN_RUNTIME_AFFECTING_DELTA_TO_HEARTBEAT_HUD=true; LOCAL_OBSIDIAN_HUD_IS_PROJECTION_NOT_AUTHORITY=true; ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT; REPLAY_BEFORE_REDISCOVERY=true.
+### [2026-10-06] Hermes Desktop nativo como projeção do One Heart
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-METABOLISMO-AUTONOMO-CURRENT-MODEL-ONE-HEART.md`
+- **Conteúdo:** o cockpit CentralDark passa a ser extensão nativa do próprio Hermes Desktop, reutilizando gateway/model/profile/subagents/tool calls/jobs/logs já existentes. Obsidian e Hermes Desktop são duas projeções da mesma telemetria e não criam segundo organismo, daemon, porta, scheduler, banco ou HUD owner.
+- **Cristal:** `HERMES_DESKTOP_NATIVE_EXTENSION=true`; `CENTRALDARK_COCKPIT_IS_PLUGIN_NOT_SECOND_APP=true`; `OBSIDIAN_AND_HERMES_DESKTOP_SHARE_TELEMETRY=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `NO_SECOND_HUD_OWNER=true`; `REUSE_EXISTING_HERMES_STATE_AND_LOGS=true`.
+- **Next cursor:** materializar o menor plugin nativo no Hermes Desktop e provar hot-load/readback visual sem criar runtime paralelo.

@@ -29,6 +29,7 @@ const { decidir, provarContratoRuntime } = await import('./decisor.mjs'); // cé
 const { executar } = await import('../agents/Executor/agent.mjs');     // braço (com travas)
 const { auditar, auditarFinalizacao, resultadoAprovadoPeloCritic, vetar } = await import('../agents/Critic/agent.mjs'); // auditor + gate final
 const { atualizarGrafo } = await import('../agents/GraphRAG-Master/agent.mjs'); // memória viva + auto-update do grafo
+const { calibrateRuntime, buildCalibrationMission, markCalibrationEnqueued, getCalibrationSummary } = await import('./runtime-calibrator.mjs'); // máquina de estado calibra o runtime; Hermes executa
 
 const BASE = dirname(dirname(fileURLToPath(import.meta.url))); // /root/CentralDark/apps/modulos/HERMES-CORE
 const PENDENTE  = `${BASE}/missions/pendente`;
@@ -38,6 +39,7 @@ const CONCLUIDA = `${BASE}/missions/concluidas`;
 const NOTIFY    = `${BASE}/utils/notify.mjs`;
 const INTERVAL  = 5000;
 const MAX_FALHAS = 3;
+const RUNTIME_CALIBRATION_INTERVAL = Number(process.env.CENTRALDARK_RUNTIME_CALIBRATION_INTERVAL_MS || 60_000);
 
 async function garantirRuntimeDirs() {
   await mkdir(PENDENTE, { recursive: true });
@@ -46,8 +48,52 @@ async function garantirRuntimeDirs() {
 }
 
 let ocupado = false; // trava: nunca rodar duas missões ao mesmo tempo
+let calibracaoRuntimeEmCurso = false;
 
 const log = (...a) => console.log(`[${new Date().toISOString()}]`, ...a);
+
+async function calibrarRuntimeInterno() {
+  if (calibracaoRuntimeEmCurso) return;
+  calibracaoRuntimeEmCurso = true;
+  try {
+    // Mission directories are runtime state and may disappear after boot.
+    // Recreate them before a calibration sidecar is enqueued.
+    await garantirRuntimeDirs();
+    const estado = await calibrateRuntime();
+    log(`[calibracao] verdict=${estado.verdict} wounds=${estado.wound_count} streak=${estado.streak} reward=${estado.reward}`);
+
+    const headSha = await new Promise((resolve, reject) => {
+      exec("git -C /root/CentralDark rev-parse HEAD", { timeout: 10_000 }, (error, stdout, stderr) => {
+        if (error) return reject(new Error(String(stderr || error.message).trim()));
+        resolve(String(stdout || "").trim());
+      });
+    });
+    const missao = buildCalibrationMission(estado, { headSha });
+    if (!missao) return;
+    if (!missao.continuity_state) throw new Error("CALIBRATION_CONTINUITY_STATE_MISSING");
+
+    const destino = join(PENDENTE, missao.filename);
+    const sidecar = destino + '.state.json';
+    try {
+      // Sidecar primeiro e .md por último: o dispatcher nunca enxerga missão sem contrato.
+      await writeFile(sidecar, JSON.stringify(missao.continuity_state, null, 2) + '\n', {
+        encoding: 'utf8',
+        mode: 0o600,
+        flag: 'wx',
+      });
+      await writeFile(destino, missao.content, { encoding: 'utf8', mode: 0o600, flag: 'wx' });
+      await markCalibrationEnqueued(estado, destino);
+      log(`[calibracao] missão interna enfileirada ${destino} com continuity sidecar`);
+    } catch (error) {
+      if (error?.code !== 'EEXIST') throw error;
+      log(`[calibracao] missão equivalente já pendente ${destino}`);
+    }
+  } catch (error) {
+    log(`[calibracao] erro sem mascarar loop: ${String(error?.message || error).slice(0, 220)}`);
+  } finally {
+    calibracaoRuntimeEmCurso = false;
+  }
+}
 
 const LEARNING_ALWAYS_TOOLS = new Set(['git', 'escrever_arquivo', 'handler']);
 const LEARNING_SKIP_TOOLS = new Set(['ler_arquivo', 'darkai', 'notificar_progresso', 'aprender']);
@@ -134,14 +180,28 @@ async function executarMissao(arquivoPendente) {
   await mkdir(dir, { recursive: true });
 
   const missao = (await readFile(arquivoPendente, 'utf8')).trim();
+  const sidecar = arquivoPendente + '.state.json';
+  let continuityState = {};
+  if (existsSync(sidecar)) {
+    continuityState = JSON.parse(await readFile(sidecar, 'utf8'));
+    const validation = validateContinuityState(continuityState);
+    if (!validation.ok) {
+      throw new Error('continuity sidecar inválido: ' + validation.reasons.join(','));
+    }
+  }
+
   { const rr = await renameComRetry(arquivoPendente, join(dir, 'missao.md'), 'pend->and'); if (!rr.ok) throw new Error('mover pendente falhou: ' + rr.error); }
+  if (existsSync(sidecar)) {
+    const rrState = await renameComRetry(sidecar, join(dir, 'state.json'), 'pend-state->and');
+    if (!rrState.ok) throw new Error('mover continuity sidecar falhou: ' + rrState.error);
+  }
 
   await notificar(
     `Hermes: nova missão`,
     `🚀 <b>${slug}</b>\n\n<i>${missao.slice(0, 400)}</i>\n\nProgresso será postado a cada etapa.`
   );
 
-  await rodarMissao(dir, slug, missao, [], 0);
+  await rodarMissao(dir, slug, missao, [], 0, continuityState);
 }
 
 // 🔄 Missões órfãs: daemon caiu/reiniciou no meio — continua da etapa onde parou usando o state.json
@@ -268,6 +328,20 @@ async function retomarOrfas() {
   }
 }
 
+// Persist the same Goal's live cursor without replacing its validated T0 contract.
+// Only action-result metadata from the existing Hermes decider is carried forward.
+function stitchGoalCursor(existing, decisao) {
+  const cursor = decisao?.continuity ?? decisao?.args?.continuity;
+  if (!cursor || typeof cursor !== 'object' || Array.isArray(cursor)) return existing;
+  const delta = {};
+  for (const field of ['next_cursor', 'next_readonly_probe', 'open_work',
+    'recoverable_unknown', 'recoverable_fail', 'oracle_uncertainty',
+    'writer_conflict', 'reality_judge']) {
+    if (Object.hasOwn(cursor, field)) delta[field] = cursor[field];
+  }
+  return { ...existing, ...delta };
+}
+
 async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, continuityState = {}) {
   const logPath = join(dir, 'hermes.log');
   const statePath = join(dir, 'state.json');
@@ -283,6 +357,8 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
   let terminalState = 'RUNNING';
   let terminalReason = null;
   let finalMessage = null;
+  let lastFinalizationFingerprint = null;
+  let repeatedFinalizationWithoutProgress = 0;
 
   while (true) {
     etapa++;
@@ -306,6 +382,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     }
 
     const { etapa_titulo, ferramenta, args = {}, terminou } = decisao;
+    continuityState = stitchGoalCursor(continuityState, decisao);
 
     if (terminou) {
       let finalizacao;
@@ -341,7 +418,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
           ok: false,
           critic: bloqueio,
         });
-        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
+        await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
         registrarEtapa(false);
         registrarFalha();
         await notificar(
@@ -354,6 +431,29 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
 
       if (!finalizacao.aprovado) {
         const bloqueio = String(finalizacao.parecer || 'prova insuficiente').slice(0, 500);
+        // Repeated identical refusal is not information gain. Do not loop endlessly.
+        const fingerprint = JSON.stringify({
+          gate: finalizacao.receipt?.problems || bloqueio,
+          cursor: continuityState.next_cursor || '',
+          probe: continuityState.next_readonly_probe || '',
+          ferramenta,
+        });
+        repeatedFinalizationWithoutProgress = fingerprint === lastFinalizationFingerprint
+          ? repeatedFinalizationWithoutProgress + 1 : 0;
+        lastFinalizationFingerprint = fingerprint;
+        if (repeatedFinalizationWithoutProgress >= 1) {
+          terminalState = 'BLOCKED';
+          terminalReason = 'REPEATED_FINALIZATION_NO_PROGRESS';
+          await writeFile(statePath, JSON.stringify({
+            ...continuityState, missao, historico, retomadas,
+            terminal_state: terminalState, terminal_reason: terminalReason,
+          }, null, 2));
+          await lg('⛔ fingerprint de finalização repetido; preserving Goal/cursor sem retry cego');
+          await notificar('Hermes: revisão causal necessária',
+            `⛔ <b>${slug}</b>\\nFinalization sem nova evidência. Cursor preservado; exigir outra rota/receita.`,
+            'admin');
+          break;
+        }
         await lg(`⛔ conclusão bloqueada na etapa ${etapa}: ${bloqueio}`);
         historico.push({
           etapa_titulo: 'Gate final de conclusão',
@@ -363,7 +463,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
           ok: false,
           critic: bloqueio,
         });
-        await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: 'FINALIZATION_GATE_BLOCKED' }, null, 2));
+        await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: 'RUNNING', terminal_reason: 'FINALIZATION_GATE_BLOCKED' }, null, 2));
         registrarEtapa(false);
         await notificar(
           'Hermes: conclusão BLOQUEADA ⛔',
@@ -418,6 +518,10 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     }
 
     historico.push(entrada);
+    // Any new executed action changes the causal cone; a previous finalization
+    // fingerprint cannot classify this new evidence as an identical blind retry.
+    lastFinalizationFingerprint = null;
+    repeatedFinalizationWithoutProgress = 0;
     const runningState = {
       ...continuityState,
       missao,
@@ -457,7 +561,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     await new Promise(r => setTimeout(r, 2000));
   }
 
-  await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
+  await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2));
 
   if (terminalState !== 'CONCLUIDA') {
     await lg(`⏸️ missão permanece em-andamento: state=${terminalState} reason=${terminalReason || 'UNKNOWN'}`);
@@ -469,7 +573,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     terminalState = 'BLOCKED';
     terminalReason = `MOVE_CONCLUIDAS_FAILED:${movida.reason || 'UNKNOWN'}`;
     registrarFalha();
-    await writeFile(statePath, JSON.stringify({ missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2)).catch(() => {});
+    await writeFile(statePath, JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: terminalState, terminal_reason: terminalReason }, null, 2)).catch(() => {});
     await notificar(
       'Hermes: conclusão BLOQUEADA ⛔',
       `⛔ <b>${slug}</b>\nGate final passou, mas a promoção física para concluídas falhou.\nMotivo: <code>${String(movida.reason || 'UNKNOWN').replace(/</g,'&lt;')}</code>\nNenhum verde final foi emitido.`,
@@ -481,7 +585,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
   registrarConclusao();
   await writeFile(
     join(movida.path, 'state.json'),
-    JSON.stringify({ missao, historico, retomadas, terminal_state: 'CONCLUIDA', terminal_reason: terminalReason }, null, 2)
+    JSON.stringify({ ...continuityState, missao, historico, retomadas, terminal_state: 'CONCLUIDA', terminal_reason: terminalReason }, null, 2)
   ).catch(() => {});
   await notificar(
     `Hermes: MISSÃO CONCLUÍDA 🎉`,
@@ -791,6 +895,7 @@ async function montarHealth() {
       ok: ultimoGrafoResumo.ok,
       resumo: ultimoGrafoResumo.saida,
     },
+    calibracao_runtime: await getCalibrationSummary(),
   };
 }
 
@@ -827,6 +932,7 @@ let ultimaRetomada = 0;
 let ultimoGC = 0;
 let ultimoHeartbeatEnvio = 0;
 let ultimoGrafo = 0;
+let ultimaCalibracaoRuntime = 0;
 let ultimoGrafoResumo = { ts: 0, ok: null, saida: null };
 
 async function loop() {
@@ -860,6 +966,13 @@ async function loop() {
           ultimaRetomada = Date.now();
           try { await retomarOrfas(); }
           catch (e) { log('erro na retomada periódica:', e.message); }
+        }
+
+        // Calibração interna do runtime: duas leituras iguais fecham falso-verde.
+        // A IA local sugere; Hermes/Executor/Critic executam; Reality Judge fecha.
+        if (Date.now() - ultimaCalibracaoRuntime >= RUNTIME_CALIBRATION_INTERVAL) {
+          ultimaCalibracaoRuntime = Date.now();
+          calibrarRuntimeInterno(); // fire-and-forget; não bloqueia watchdog/loop
         }
 
         // GC periódico

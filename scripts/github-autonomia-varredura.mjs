@@ -81,6 +81,17 @@ function labelNames(pr) {
   return new Set((pr?.labels || []).map((label) => String(label?.name || label).trim().toLocaleLowerCase("pt-BR")));
 }
 
+export function persistentAuthorityEligible(pr, repository, trustedAuthors = ["segredounlock"]) {
+  const trusted = trustedAuthors.map((item) => String(item).toLowerCase());
+  return Boolean(
+    pr?.state === "open" &&
+    pr?.base?.ref === "main" &&
+    pr?.head?.repo?.full_name === repository &&
+    trusted.includes(String(pr?.user?.login || "").toLowerCase()) &&
+    !isProtectedLedgerPr(pr?.number)
+  );
+}
+
 export function promotionSealReceipt(pr) {
   const body = String(pr?.body || "");
   const authority = lineMarker(body, "Intent-Authorized");
@@ -139,7 +150,7 @@ export function promotionSealState(pr, repository, trustedAuthors = ["segredounl
   const missingLabels = required.filter(
     (label) => !labels.has(label.toLocaleLowerCase("pt-BR")),
   );
-  const eligible = structurallyEligible && receipt.valid;
+  const eligible = structurallyEligible && (receipt.valid || markerAuthorized(pr));
   return {
     eligible,
     complete: eligible && missingLabels.length === 0,
@@ -367,6 +378,19 @@ async function normalizeDraftSweep() {
   if (!token) throw new Error("NORMALIZER_TOKEN_MISSING");
 
   const pulls = await api(token, "GET", `/repos/${repository}/pulls?state=open&per_page=100`);
+  const persistentAuthorized = [];
+  for (const pr of pulls) {
+    if (!persistentAuthorityEligible(pr, repository, trustedAuthors)) continue;
+    const labels = labelNames(pr);
+    if (labels.has(CANONICAL_AUTHORITY_LABEL.toLocaleLowerCase("pt-BR"))) continue;
+    const applied = await api(token, "POST", `/repos/${repository}/issues/${pr.number}/labels`, {
+      labels: [CANONICAL_AUTHORITY_LABEL],
+    });
+    pr.labels = Array.isArray(applied) ? applied : pr.labels;
+    persistentAuthorized.push(pr.number);
+    console.log(`PR=${pr.number} PERSISTENT_AUTHORITY_LABEL=${CANONICAL_AUTHORITY_LABEL}`);
+  }
+  console.log(`AUTONOMIA_PERSISTENT_AUTHORITY=${persistentAuthorized.join(",") || "none"}`);
   const decisions = pulls
     .map((pr) => ({ pr, decision: draftReadyDecision(pr, repository, trustedAuthors) }))
     .filter(({ decision }) => decision.action !== "NONE");

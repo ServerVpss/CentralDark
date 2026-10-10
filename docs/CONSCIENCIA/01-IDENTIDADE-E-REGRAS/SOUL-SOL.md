@@ -347,7 +347,7 @@ TRIGGER=🔏 !RASTRO
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+HUD_CURRENT_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 APPLIES_TO_ALL_ENGINES=true
 ```
 
@@ -887,7 +887,7 @@ Toda mudança que afeta a alma — contrato de todos os motores, porta de entrad
 ```text
 SOUL_MUST_TRACK_EVERY_SOUL_AFFECTING_CHANGE=true
 SOUL_SYNC_REQUIRED_FOR_FIXED_POINT=true
-SOUL_STALE → FIXED_POINT_FORBIDDEN → REVIEW_SOUL → UPDATE_SOUL_CONTENT_AND_ANCHOR → RECEIPT_ACTIVE_PR_MOTHER
+SOUL_STALE → FIXED_POINT_FORBIDDEN → REVIEW_SOUL → UPDATE_SOUL_CONTENT_AND_ANCHOR → RECEIPT_REPOSITORY → HUD_CURRENT_READBACK
 ANCHOR_UPDATE_WITHOUT_SOUL_REVIEW=FORBIDDEN
 FISCAL=scripts/trigger-fabric/verify_repo_contract.py#check_soul_sync
 ```
@@ -898,7 +898,7 @@ Absorvido do cânone nesta sincronia (antes ausente da SOUL):
 OBSERVATION != EXECUTION_REQUEST · NO_UNREQUESTED_ADVICE=true · NO_INVENTED_MISSION=true · PERTINENCE_FIRST=true
 PROVEN_CRYSTAL + SAME_FINGERPRINT → REPLAY_FIRST → PASSAGE_OPEN → AFFECTED_CONE_ONLY (CONTRACT.yml#proven_crystal_main_fast_path)
 SEAL_STORES_REPLAY_INPUTS=true · REVALIDATE != VERDE
-ENGINE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_ACTIVE_PR_MOTHER
+ENGINE_OWN_ERROR → SHA_DO_ERRO + SHA_DO_CONSERTO + REGRA + RECIBO_REPOSITORY + HUD_CURRENT_READBACK
   (regras vigentes em AGENTS.md: PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD · TEST_HARNESS_DERIVES_FILES_FROM_OWNER ·
    TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE · SEAL_STORES_REPLAY_INPUTS · PARTIAL_LOG_CLAIM_NAMES_ITS_WINDOW ·
    RETRACT_FALSE_ALARM_IN_SAME_RECEIPT · SAME_ACT_DIFFERENT_MOTIVE_DISTINGUISH_BEFORE_JUDGING · ANSWER_ASKED_INTENT_NOT_ADJACENT_DEBATE)
@@ -930,7 +930,7 @@ Revisão 2026-09-29: dois donos mudaram e a SOUL foi relida. `AGENTS.md` ganhou 
 UNIVERSAL_PROOF_LAW_ALL_ENGINES=true (AGENTS.md; registro em docs/APRENDIZADOS/2026-09-26-sessao-preservacao-casa-lei-do-rastro.md §8, linhas 12–16)
 UNMEASURED_VALUE_IS_NAO_MEDIDO_NEVER_INVENTED · INSTALLED_OR_OPERATIONAL_CLAIM_REQUIRES_REAL_VERIFY_OUTPUT · STUB_OR_DEMO_NEVER_PRESENTED_AS_REAL_TOOL
 ROOT_SHELL_IS_NOT_KERNEL_CONTROL · MEASURE_CHEFE_GUI_USER_AND_PATH_BEFORE_PLACING_SURFACE_FILE
-EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR · PR_MOTHER_ACTIVE_IS_LEDGER_NEVER_MERGE
+EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR · PR_MOTHER_ROLE_RETIRED_NO_NEW_PR_MOTHER · HUD_CURRENT_IS_RENDEZVOUS_PROJECTION
 ROUTE_TO_CENTRALDARK_OS=CLAUDE.md (LOCAL_DIRECT_EXECUTOR → DIRECT_TAILSCALE_SSH → fallback provado) · CLI_REQUIRED_FOR_ACCESS=false
 ```
 
@@ -1000,13 +1000,45 @@ ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT
 PR_NUMBER_IS_RUNTIME_BINDING_NOT_IDENTITY=true
 LOCAL_OBSIDIAN_HUD_IS_PROJECTION_NOT_AUTHORITY=true
 ```
+Revisao 2026-10-09 — SOUL_SOURCE_ANCHOR_CAUSAL_RECONCILIATION: o gate do deploy
+do HUD em main (run 37870486761, job 113627195153) falhou
+SOUL_SYNC_CURRENT_FOR_FIXED_POINT por ancora `LEIA-ME-IA.md` obsoleta.
+A versao ancorada `a55dc6215c6367c17e8adcb373a7255d0cd5596b` foi
+comparada diretamente com o blob CURRENT `e34eb841e6784285563ba065a9205679d98466b5`:
+unico delta semanticamente observado e a generalizacao de UM exemplo de
+mensagem Remote Desktop Commander, trocando identificacao concreta de host
+por "dispositivo medido". A lei de diagnostico causal com alvo e estado
+medidos ja esta coberta pelo proprio §2.4/lei de prova; nenhum novo poder,
+permissao, owner ou regra e absorvido aqui. Apenas reconciliacao da ancora
+de entrada, com historico preservado. MAIN_PATCH != VPS_DEPLOY; a prova da
+VPS exige novo gate, HEAD/arquivo em checkout e readback do HUD.
+
+```text
+Revisao 2026-10-09 — HUD_FIRST_CANONICAL_AND_NONBLOCKING_PLAQUE:
+os donos AGENTS.md e CENTRALDARK_AI_BOOT.yaml foram relidos e confrontados
+com as ancoras anteriores. O delta material vigente obriga a entrada
+canonizada a ler o unico docs/HUD/HUD.html do HEAD vivo de main, confrontar
+SHA/bytes com a projecao na VPS antes de novo boot, Goal ou promocao.
+Falta de prova dessa origem bloqueia somente NOVA execucao canonica, nao
+derruba processos saudaveis em curso. Falhas auxiliares (Screenpipe, Kylin,
+interface ou CLI) sao localizadas no mesmo HUD: placa de estado, rota, owner,
+arquivo/linha quando medidos, evidencia e proximo cursor; a receita
+ACEITAR MISSAO (COPIAR) nao executa mutacao nem amplia autorizacao.
+REUSE_BEFORE_CREATE e UNKNOWN != PASS continuam obrigatorios.
+A medicao atual comprovou HEAD=main e SHA identico no HUD da VPS;
+essa prova operacional nao autoriza reclassificar os demais servicos.
+Nao nasce segundo HUD, gate de saude opcional ou outro owner.
+
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=7e888a631c194950a3cd727ff82b32709570f5e0
-LEIA-ME-IA.md=beadaa161086d1b617193c93b4be37d1ebd9d1df
+AGENTS.md=81dfdcf682486ccb7a508ff6dc06fb42e8342fc7
+LEIA-ME-IA.md=e34eb841e6784285563ba065a9205679d98466b5
 CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
 CENTRALDARK_AI_BOOT.yaml=ba6d51c0de69ba38cc71c942ca43772d912e3514
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=e93f7b87fa6926eea6c110ace0b7f981cf8cb071
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-04
+CENTRALDARK_AI_BOOT.yaml=5e54e602590486f3b70b8b41bafaac660b54fc81
+docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-07
 SOUL_SYNC_ANCHOR_END
 ```
 
@@ -2335,5 +2367,11 @@ Consumidores operacionais CURRENT `CENTRALDARK_AI_BOOT.yaml`, `CONTRACT.yml` e `
 
 LEGACY_PR_MOTHER_1562_PROTECTED=true
 ACTIVE_RENDEZVOUS=RESOLVE_FROM_CURRENT
+LEGACY_PR_MOTHERS_PROTECTED=#1562,#1757
+PR_MOTHER_ROLE=RETIRED
+NO_NEW_PR_MOTHER=true
+HUD_CURRENT_OWNER=apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx
+CHECKLIST_DAILY_OWNER=HUD
+RECEIPTS_OWNER=repository
 SHELL_IS_MUTABLE=true
 LEGACY_IS_PRESERVED=true

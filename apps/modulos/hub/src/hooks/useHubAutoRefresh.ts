@@ -4,13 +4,28 @@ import { hubAuth } from "@/integrations/supabase/hub-client";
 import { trackAction, logWarn } from "@/lib/buttonLog";
 import { abacusApi } from "@/services/abacus-client";
 
+export type HubDeployState = 'SENSOR_BLOCKED' | 'PENDING' | 'QUEUED' | 'RUNNING' | 'FAILED' | 'AWAIT_RUNTIME_PROOF';
+export interface HubDeploySnapshot {
+  state: HubDeployState;
+  mainSha?: string;
+  runId?: number | null;
+  runStatus?: string;
+  conclusion?: string | null;
+  runUrl?: string | null;
+  workflowUrl?: string;
+  runtimeProof: false;
+  verifiedAt: string;
+  reason?: string | null;
+}
+
 export interface UseHubAutoRefreshOpts {
   intervalMs?: number;
+  onDeploy?: (deploy: HubDeploySnapshot) => void;
   onStatus?: (s: Awaited<ReturnType<typeof abacusApi.status>>) => void;
   onModels?: (m: Awaited<ReturnType<typeof abacusApi.models>>) => void;
 }
 
-export function useHubAutoRefresh({ intervalMs = 60_000, onStatus, onModels }: UseHubAutoRefreshOpts = {}) {
+export function useHubAutoRefresh({ intervalMs = 60_000, onStatus, onModels, onDeploy }: UseHubAutoRefreshOpts = {}) {
   const running = useRef(false);
 
   useEffect(() => {
@@ -32,7 +47,19 @@ export function useHubAutoRefresh({ intervalMs = 60_000, onStatus, onModels }: U
         const { data: { session } } = await hubAuth.auth.getSession();
         if (!session?.access_token) {
           logWarn("hub:auto:models", "Pulado — sem sessão ativa. Faça login para carregar modelos.");
+          if (mounted) onDeploy?.({ state: 'SENSOR_BLOCKED', reason: 'HUB_AUTH_REQUIRED', runtimeProof: false, verifiedAt: new Date().toISOString() });
         } else {
+          // HUB deploy radar: mounted, every minute and on visibility regain.
+          // Uses the existing hub-read authenticated function; no GitHub token in browser.
+          try {
+            const { data, error } = await hubAuth.functions.invoke('hub-read', {
+              method: 'POST', body: { scope: 'deploy' },
+            });
+            if (error || !data?.deploy?.state) throw new Error('HUB_DEPLOY_READ_UNAVAILABLE');
+            if (mounted) onDeploy?.(data.deploy as HubDeploySnapshot);
+          } catch {
+            if (mounted) onDeploy?.({ state: 'SENSOR_BLOCKED', reason: 'HUB_DEPLOY_READ_UNAVAILABLE', runtimeProof: false, verifiedAt: new Date().toISOString() });
+          }
           await trackAction("hub:auto:models", async () => {
             const m = await abacusApi.models();
             if (mounted) onModels?.(m);

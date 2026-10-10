@@ -17,7 +17,8 @@ import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-miss
 import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
-import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
+import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
@@ -84,7 +85,7 @@ app.use(express.json({
     limit: "2mb",
     verify: (req, _res, buf) => {
         const url = String(req.originalUrl || req.url || "");
-        if (url.startsWith("/integrations/buildkite/webhook")) {
+        if (url.startsWith("/integrations/buildkite/webhook") || url === "/webhook") {
             req.rawBody = Buffer.from(buf);
         }
     },
@@ -105,6 +106,10 @@ app.post("/integrations/buildkite/webhook", (req, res) => {
         });
     }
 });
+// GitHub deploy.centralldark.com -> this API. The handler validates the raw
+// HMAC body, then delegates mutation to the canonical VPS sync owner.
+app.get("/deploy/health", githubDeployHealth);
+app.post("/webhook", githubDeployWebhook);
 // ─────────────────────────────── Health ──────────────────────────────────
 app.get("/health", (_req, res) => {
     res.json({
@@ -254,6 +259,9 @@ app.get("/admin/api/buildkite/status", adminBuildkiteStatus);
 app.get("/admin/api/operational-snapshot", adminOperationalSnapshot);
 app.get("/admin/api/linear", adminLinear);
 app.get("/admin/api/tailscale", adminTailscale);
+app.get("/intent/status", intentPublicStatus); // projeção pública sanitizada, sem mutação
+app.get("/admin/api/intent", adminIntentGet);
+app.post("/admin/api/intent", adminIntentRun);
 app.post("/admin/api/e2e", adminE2E);
 app.get("/admin/api/e2e/publico", adminE2EPublico);
 app.get("/admin/logs/stream", adminLogsStream);
@@ -646,6 +654,8 @@ app.post("/admin/mcp", (req, res) => {
         callerUser: auth.callerUser,
         clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-admin").slice(0, 160),
         oauthScope: auth.oauthScope,
+        // requireAdminScope() validated the unexpired OAuth bearer + admin scope.
+        authProvenance: "verified_oauth_admin",
     }).catch((err) => {
         l.error("mcp_admin_handler_unhandled", { error: String(err) });
         if (!res.headersSent) {
@@ -679,6 +689,8 @@ app.post("/mcp/admin", (req, res) => {
         admin: true,
         callerUser: auth.callerUser,
         oauthScope: auth.oauthScope,
+        // requireAdminScope() validated the unexpired OAuth bearer + admin scope.
+        authProvenance: "verified_oauth_admin",
     }).catch((err) => {
         l.error("mcp_admin_compat_handler_unhandled", { error: String(err) });
         if (!res.headersSent) {

@@ -2,8 +2,6 @@ name: ⚙️ CORS Validator
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 6 * * *" # 1x/dia (era a cada 6h — reduzido pra economizar Actions)
   push:
     paths:
       - "CentralDark/infra/caddy/**"

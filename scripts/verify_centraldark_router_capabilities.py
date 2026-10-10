@@ -7,9 +7,9 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "public/central-dark-instinct-2/public/centraldark/router-capabilities.json"
-ROUTE = ROOT / "public/central-dark-instinct-2/src/routes/roteador.tsx"
-HEADER = ROOT / "public/central-dark-instinct-2/src/components/central/Header.tsx"
+MANIFEST = ROOT / "apps/instinto-superior/public/centraldark/router-capabilities.json"
+ROUTE = ROOT / "apps/instinto-superior/src/routes/roteador.tsx"
+HEADER = ROOT / "apps/instinto-superior/src/components/central/Header.tsx"
 ROUTER = ROOT / "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py"
 
 EXPECTED_SOURCE = {

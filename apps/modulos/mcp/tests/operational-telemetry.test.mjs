@@ -162,4 +162,22 @@ test("hudInventory projeta inventário derivado no ONE_HEART sem promover LIVE",
   assert.equal(snap.hudInventory.summary.skills, 992);
   assert.equal(snap.hudInventory.rules.inventoryIsDerivedNotAuthority, true);
   assert.equal(snap.hudInventory.rules.sealIsNotLive, true);
+test("F1_GIT lê o recibo do auto-sync, nunca inventa PASS", async () => {
+  const { gitSyncFront, AUTO_SYNC_STATUS_MAX_AGE_MS } = await import("../src/operational-telemetry.js");
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-gitsync-"));
+  assert.equal(gitSyncFront(root), "MEASURE_EXTERNALLY");
+  fs.mkdirSync(path.join(root, "logs"), { recursive: true });
+  const file = path.join(root, "logs", "auto-sync-status.json");
+  const now = Date.parse("2026-10-08T10:00:00Z");
+  fs.writeFileSync(file, JSON.stringify({ t: "2026-10-08T09:59:00Z", result: "PASS", head: "aaf9d255d95c18cd" }));
+  assert.equal(gitSyncFront(root, now), "SYNC_PASS@aaf9d255d");
+  fs.writeFileSync(file, JSON.stringify({ t: "2026-10-08T09:59:00Z", result: "BLOCKED", reason: "dirty checkout" }));
+  assert.equal(gitSyncFront(root, now), "BLOCKED:dirty checkout");
+  fs.writeFileSync(file, JSON.stringify({ t: new Date(now - AUTO_SYNC_STATUS_MAX_AGE_MS - 1).toISOString(), result: "PASS", head: "x" }));
+  assert.equal(gitSyncFront(root, now), "STALE");
+  fs.writeFileSync(file, "{quebrado");
+  assert.equal(gitSyncFront(root, now), "MEASURE_EXTERNALLY");
+  const snap = getOperationalSnapshot({ root, heartbeat: { self: "alive" } });
+  assert.equal(snap.fronts[0].id, "F1_GIT");
+  assert.ok(snap.statusFiles["logs/auto-sync-status.json"]);
 });

@@ -5,6 +5,9 @@ metadata:
   type: diagnostic
   version: "2.0"
   owner: SEGREDO/CHEFE
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CENTRALDARK CAPABILITY HUD

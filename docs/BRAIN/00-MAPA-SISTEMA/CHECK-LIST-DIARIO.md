@@ -1,14 +1,15 @@
 ---
-title: "CHECK-LIST DIARIO CENTRALDARK — HUD + PENDENCIAS + CRISTAL"
-status: "CANÔNICO"
+title: "CHECK-LIST DIARIO CENTRALDARK — PROVENANCE DO HUD CURRENT"
+status: "HISTORICAL_PROVENANCE"
 authority: "SEGREDO/CHEFE"
-owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
-pr_mother: 1757
-semantic_role: "session_crystal_continuity_learning_map"
-priority: "OBRIGATORIO"
-checked_day_utc: "2026-10-02"
-updated: "2026-10-02"
-source_rule: "CANONICO -> ARTEFATO; artefato nao inventa canonico"
+owner: "apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx"
+history_owner: "docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md"
+pr_mother: "RETIRED"
+semantic_role: "hud_current_projection_history_and_learning_map"
+priority: "PROVENANCE"
+checked_day_utc: "2026-10-07"
+updated: 2026-10-10T15:59:49-03:00
+source_rule: "HUD CURRENT deriva realidade viva; este arquivo preserva história e aprendizados"
 mirror_role: "CASA-VAULT = memoria operacional/espelho; Git+owners continuam autoridade tecnica"
 aliases:
   - "CHECKLISTDIARIO"
@@ -29,19 +30,27 @@ aliases:
 - [x] Causa conhecida reutiliza owner/resolvedor existente; causa desconhecida permanece UNKNOWN.
 - [x] Depois do reparo, repetir a mesma probe discriminante antes de verde.
 
-## 🫀 CURRENT VIVO — 2026-10-02 — FUNIL BAYESIANO
+## 🫀 CURRENT VIVO — PROJEÇÃO MIGRADA PARA O HUD — 2026-10-07
 
 ```text
-MAIN_BASE_MEASURED_FOR_FUNNEL=b5a50c084e389f4c0d1ff26541af8bb7023473f5
-PORTABLE_OPERATION_CONTRACT=CANONICAL_REQUIRED
-BAYESIAN_REANCHOR_MEASUREMENT=CANONICAL_REQUIRED
-PR_MOTHER=#1757
-PR_MOTHER_ROLE=GLOBAL_RENDEZVOUS_LEDGER
-PR_MOTHER_LEGACY=#1562
-PR_MOTHER_COMMENTS_ARE_NOT_LEDGER=true
-PR_MOTHER_RECEIPTS_OWNER=repository
-CHECKLIST_ROLE=OPERATIONAL_HUD_NOT_SOURCE_OF_TRUTH
+HUD_CURRENT_OWNER=apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx
+HUD_CURRENT_SOURCE=apps/modulos/Bolt/source/app/routes/api.github-stats.ts
+HUD_IS_CURRENT_PROJECTION=true
+HUD_IS_NOT_AUTHORITY=true
+CHECKLIST_DAILY_OWNER=HUD
+CHECKLIST_HISTORY_OWNER=docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md
+RECEIPTS_OWNER=repository
+PR_MOTHER_ROLE=RETIRED
+LEGACY_PR_MOTHERS=#1562,#1757
+NO_NEW_PR_MOTHER=true
+NO_DAILY_PR=true
+CURRENT_OVER_HISTORY=true
+UNKNOWN_IS_NOT_PASS=true
 ```
+
+O restante deste arquivo preserva histórico/aprendizados anteriores. Estado operacional
+vivo, filhos/lanes, PASS/FAIL/UNKNOWN/BLOCKED, receipt fingerprint e NEXT_CURSOR
+são medidos e projetados diretamente no HUD; não abrir PR diária para atualizar este arquivo.
 
 ### ✅ Passagem do mini contrato pelo funil oficial
 
@@ -457,7 +466,7 @@ O CHEFE deve conseguir responder olhando só este painel:
 6. O que foi selado e não deve ser refeito?
 7. Qual é a próxima ação única?
 
-## 🫀 CURRENT VIVO — 2026-10-03 — PREFLIGHT GLOBAL CROSS-CONTEXT
+## 🧾 SNAPSHOT HISTÓRICO — 2026-10-03 — PREFLIGHT GLOBAL CROSS-CONTEXT
 
 ```text
 MAIN_CURRENT=RESOLVE_AT_READ\nMAIN_PREWRITE_MEASUREMENT=3deb814ebb4feddb9d57fac3a762b56b08fd05b4
@@ -786,3 +795,34 @@ DEPENDENCY_FINGERPRINT=d4d3ceda8e7c842e067af04cb8aeb52b88b787a47078257a24f605590
 
 ### ➡️ NEXT_CURSOR
 `FINAL_REGENERATE → SAME_HEAD_VERIFY → PROMOTE_MAIN → PR1757_HUD_READBACK`
+## 2026-10-10 — RECONCILIAÇÃO CURRENT / PROJEÇÃO HUD
+
+```text
+RECONCILIATION_AT=2026-10-10T15:59:49-03:00
+SOURCE=GitHub main + VPS SSH + Hermes cron + HUD existente (projeção somente)
+MAIN_HEAD=94406d8085438d92e14e60fd75fe446a519ab9fd
+VPS_HEAD=5344bd87074c334ddf3ac322ae7d6aaacecdf665
+VPS_ORIGIN_MAIN=94406d8085438d92e14e60fd75fe446a519ab9fd
+VPS_HEAD_MATCH_MAIN=FAIL
+VPS_WORKTREE_DIRTY=FAIL_DIRTY_COUNT_13
+VPS_DIRTY_COUNT=13
+PM2=UNKNOWN
+MCP_SYSTEMD=PASS
+MCP_HEALTH_127001_9100=PASS_HTTP_200
+OPEN_PRS=5
+HERMES_GATEWAY=PASS_RUNNING_PID_18492
+RECONCILIACAO_CRON=f052f0dc37ed
+CRON_LAST_DISPATCH=UNKNOWN_RUNNING_CATCHUP_LATE_8H41
+HUD_IS_NOT_AUTHORITY=true
+FINGERPRINT=main:94406d8085438d92e14e60fd75fe446a519ab9fd|vps:5344bd87074c334ddf3ac322ae7d6aaacecdf665|vps_origin:94406d8085438d92e14e60fd75fe446a519ab9fd|prs:1792,1777,1774,1767,1793|pm2:UNKNOWN|mcp9100:HTTP200|cron:f052f0dc37ed-catchup
+NEXT_CURSOR=reconcile VPS to main without destructive reset -> prove PM2 via installed owner -> inspect existing HUD projection freshness -> remeasure
+```
+
+- [ ] **FAIL:** VPS checkout está atrasado em relação à `origin/main` (VPS `5344bd8`, origin/main `94406d8`).
+- [ ] **FAIL/DELTA:** VPS working tree está suja: 13 linhas de status foram medidas; conteúdo não foi alterado. no PATH remoto; estado dos processos não foi provado. Não tratar `systemd active` como PM2 PASS.
+- [x] **PASS:** `centraldark-native-mcp-http.service` ativo e `http://127.0.0.1:9100/health` respondeu HTTP 200.
+- [x] **PASS:** Hermes gateway local ativo (PID 18492), cron `f052f0dc37ed` existente; execução de hoje ocorreu via catch-up com atraso de 8h41, sem transformar atraso em PASS de pontualidade.
+- [ ] **FAIL/DELTA:** 5 PRs abertas medidas: #1793, #1792, #1777, #1774, #1767.
+- [ ] **UNKNOWN:** espelho Obsidian do checklist não localizado nesta execução; HUD local foi lido como projeção existente, não como autoridade. HUD mantém 7 missões e `Pendências.md` mantém 8 itens; divergência de projeção permanece sem mutação física.
+
+**Estado consolidado:** `FAIL` para convergência VPS/main; `PASS` apenas para os claims MCP/gateway medidos; `UNKNOWN` para PM2 e espelho do checklist. `FIXED_POINT=false`.

@@ -603,6 +603,24 @@ CENTRALDARK_AI_BOOT:
     hud:
       required: true
       phase_order: [HUD_FIRST, HUD_UPDATE]
+      # Porta de confiança global. Isto não é gate de saúde opcional:
+      # toda entrada CentralDark primeiro consome o MESMO HUD da main.
+      entry_trust_gate:
+        enforced: true
+        canonical_owner: "docs/HUD/HUD.html"
+        canonical_branch: "ServerVpss/CentralDark@main"
+        must_read_before_goal_execution: true
+        vps_materialized_path: "/root/.centraldark/HUD.html"
+        compare_bytes_sha256: true
+        no_cached_stale_main_as_pass: true
+        failure_policy: FAIL_CLOSED
+        failure_blocks: [NEW_CANONICAL_BOOT, NEW_CONTROL_PLANE_ACTION, DEPLOY_PROMOTION]
+        preserve_already_running_services: true
+        optional_service_errors: PLAQUE_WITH_RECIPE_AND_CONTINUE
+        no_second_hud_owner: true
+        owners:
+          bootstrap: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+          deploy: .github/workflows/vps-exec-selfhosted.yml
       mental_compass:
         🎯_RUMO: "objetivo vigente + intenção do CHEFE"
         📍_AGORA: "estado atual medido (GitHub + Casa + VPS + runtime)"
@@ -1469,7 +1487,7 @@ global_cross_context_response_preflight:
     required_current_sources:
       - "SEGREDO_CHEFE_INTENT"
       - "GITHUB_MAIN_CURRENT"
-      - "PR_MOTHER_1757_CURRENT"
+      - "HUD_CURRENT_PROJECTION"
       - "ALL_OPEN_PRS_CURRENT"
       - "CHECK_LIST_DIARIO_CURRENT"
       - "SOUL_SOL"
@@ -1486,11 +1504,16 @@ global_cross_context_response_preflight:
     causal_history_closure_required: true
     sieve_before_human_return: true
 
-ledger_rollover:
-  ACTIVE_PR_MOTHER: 1757
-  LEGACY_PR_MOTHER_1562_PROTECTED: true
-  COMMENTS_ARE_NOT_PRIMARY_LEDGER: true
-  RECEIPTS_LIVE_IN_REPOSITORY: true
-  HUD_BODY_UPDATED_IN_PLACE: true
+hud_current_projection:
+  HUD_CURRENT_OWNER: "apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx"
+  HUD_CURRENT_SOURCE: "apps/modulos/Bolt/source/app/routes/api.github-stats.ts"
+  HUD_IS_CURRENT_PROJECTION: true
+  HUD_IS_NOT_AUTHORITY: true
+  CHECKLIST_DAILY_OWNER: "HUD"
+  RECEIPTS_OWNER: "repository"
+  PR_MOTHER_ROLE: "RETIRED"
+  LEGACY_PR_MOTHERS: [1562, 1757]
+  NO_NEW_PR_MOTHER: true
+  NO_DAILY_PR: true
   SHELL_IS_MUTABLE: true
   LEGACY_IS_PRESERVED: true

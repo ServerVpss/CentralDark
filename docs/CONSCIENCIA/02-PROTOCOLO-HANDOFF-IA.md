@@ -561,6 +561,70 @@ Não chamar tudo isso de “camada de segurança”. O nome material do mecanism
 parte da prova e permite ao próximo executor escolher a rota correta sem devolver
 trabalho mecânico ao CHEFE.
 
+
+## 9.2 Ferida cristalizada — chamada MCP mal envelopada no Cockpit/Lovable (09/10/2026)
+
+**INTENÇÃO:** não transformar erro do *cliente chamador* em diagnóstico falso da VPS. Esta é uma **receita de triagem reaproveitável**, não um conserto do 503 comprovado, nem autorização de alterar terceiros.
+
+```text
+FINGERPRINT=CLIENT_TOOL_DISPATCH_ENVELOPE_MISMATCH|default_api:dispatch|name/arguments|Lovable
+CASE_STATUS=OBSERVED_UI_CANDIDATE
+INCIDENT_CLASS=CLIENT_TOOL_INVOCATION_OR_ADAPTER
+EXECUTOR_CLIENT=LOVABLE_COCKPIT_UI (print enviado pelo CHEFE)
+EXPECTED_DISPATCH_ENVELOPE=TOP_LEVEL_NAME_AND_ARGUMENTS
+TOOL_SEEN_IN_UI=mcp_custom_ShUEO--deploy_status (rótulo de interface, não binding auditado)
+CLIENT_RAW_DISPATCH_PAYLOAD=UNKNOWN
+LOVABLE_REPLAY=NOT_EXECUTED
+HTTP_503_UPSTREAM_ROOT_CAUSE=UNKNOWN
+MCP_SERVER_ROOT_CAUSE=NOT_ESTABLISHED
+```
+
+### RECEBER / PERCEBER — evidência e fronteiras
+
+No print, o executor da interface Lovable/Cockpit relata que está depurando `default_api:dispatch` e **suspeita** que o nome da tool de `deploy_status` foi posto dentro de `arguments`, e não no campo principal `name`. A interface exibiu tentativas e pensamentos sobre erros de *dispatch/envelope*; **não forneceu o payload bruto aceito pelo servidor nem uma repetição independente do erro**. Logo: forma errada é *hipótese fortemente localizada*, não root cause E2E provada do HTTP 503.
+
+Contraprova independente, lida em 09/10/2026 07:07 UTC por outra rota autorizada do mesmo ecossistema: a chamada `mcp_admin_catalog(filter=deploy_status)` encontrou **uma** tool real `deploy_status`; a chamada direta `deploy_status(ServerVpss/CentralDark@main)` retornou um envelope de resultado com `status=ERRO` (alertou workflow GitHub falho e erro de decodificação do PM2). A medição `mcp.centralldark.com/health` retornou `ok=true`, `service=mcp-centraldark`, versão 0.4.0, 153 tools públicas. A validação agregada do catálogo retornou `ok=false` por duas ferramentas esperadas ausentes; portanto **nem catálogo inteiro = PASS**, nem API inteira = caída. Esse teste é do cliente CentralDark conectado, **não prova que a invocação Lovable está funcionando**.
+
+### COMPREENDER / COSTURAR — receita mínima no owner existente
+
+A estrutura observada no *servidor MCP real* é `apps/modulos/mcp/src/mcp-server.js`: handler `CallToolRequestSchema` resolve `req.params.name` e valida `req.params.arguments ?? {}` separadamente. O wrapper `default_api:dispatch` pertence à superfície chamadora e **seu contrato em runtime não foi inspecionado aqui**. Por isso a receita abaixo é esquema lógico, não promessa de payload compatível com qualquer versão do Lovable.
+
+```text
+1. ANTES: identificar schema EXATO do dispatcher do cliente (name, arguments),
+   tool-id real e autorização vigente; não usar alias inventado do print.
+2. SE o schema do cliente exigir name e arguments no nível superior:
+   CORRETO: dispatch(name="<tool_exata>", arguments={...args_da_tool...})
+   SUSPEITO: dispatch(arguments={name:"<tool_exata>", arguments:{...}})
+3. Corrigir apenas a montagem da chamada, no adapter/cliente existente;
+   NUNCA trocar a API, restartar a VPS ou recriar o MCP só pela mensagem 503.
+4. Retestar chamada READ_ONLY equivalente (ex.: deploy_status) PELO MESMO
+   cliente que falhou; registrar request id, tool, envelope redigido, resultado
+   e retorno da ferramenta sem tokens/segredos.
+5. Comparar com chamada independente do mesmo owner; se a ferramenta passar
+   mas a página continuar em 503, abrir FERIDA SEPARADA de proxy/upstream,
+   com HTTP status, rota, timestamp, owner e trace correspondentes.
+6. Persistir evidência e replay somente após resultado + contraprova do
+   mesmo cliente/versão; se faltar, manter UNKNOWN e continuar outros setores.
+```
+
+**Placa no HUD único:** `VER PENDÊNCIA` → `CAMADA: Lovable/client dispatch`, `ERRO: possible name/arguments envelope mismatch`, `OWNER: adapter Lovable/cliente (arquivo CURRENT UNKNOWN)`, `PROVA: print do CHEFE + leitura separada do MCP`, `RECEITA: conferir schema → corrigir somente adapter → retry read-only no cliente → backcheck`; `HTTP 503 CAUSA: UNKNOWN`. Reutilizar `Missões — clica, copia, cola onde for resolver`; não criar painel, bot, bridge ou gate novo.
+
+```text
+UI_TRACE_PRESENT=PASS
+EXISTING_MCP_TOOL_FOUND=PASS (outra rota)
+DIRECT_CENTRALDARK_TOOL_INVOCATION=PASS_AS_CALL (resultado status ERRO != tool down)
+CLIENT_ENVELOPE_CAUSE=PROBABLE_NOT_CONFIRMED
+LOVABLE_CLIENT_FIX_APPLIED=NO
+HTTP_503_EXPLAINED=NO
+REPLAY_PROVEN=NO
+MCP_GLOBAL_FAILURE=NOT_PROVEN
+NEW_ARCHITECTURE=NO
+NEXT_CURSOR=CAPTURE_REDACTED_LOVABLE_DISPATCH_PAYLOAD_AND_REPLAY_READONLY_ON_SAME_CLIENT
+```
+
+**Lei reutilizável:** `CLIENT_DISPATCH_FAILURE != MCP_SERVER_DOWN != HTTP_UPSTREAM_503`; diagnosticar cada camada por sua evidência, preservar o que funciona e deixar placa no setor afetado. `INFERENCIA != CAUSA`, `SCREENSHOT != RAW_TRACE`, `COMMIT != DEPLOY`.
+
+
 ## 10. Relações canônicas
 
 - `LEIA-ME-IA.md` — boot e estado vivo.

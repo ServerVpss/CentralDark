@@ -77,6 +77,8 @@ jobs:
           Write-Host "INSTALLER_CONTRACT=PASS"
 
       - name: 📤 Publicar artifact de build
+        id: artifact_mirror_centraldark_desktop_windows_installer_1
+        continue-on-error: true
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: CentralDark-Windows-Installer-${{ github.sha }}
@@ -89,6 +91,21 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_centraldark_desktop_windows_installer_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi
       - name: 🚀 Publicar release para auto-update
         if: startsWith(github.ref, 'refs/tags/desktop-v')
         run: pnpm exec electron-builder --win --publish always

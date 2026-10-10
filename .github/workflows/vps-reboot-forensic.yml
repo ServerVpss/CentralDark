@@ -42,6 +42,8 @@ jobs:
 
       - name: 🔹 Upload forensics artifacts
         if: always()
+        id: artifact_mirror_vps_reboot_forensic_1
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: vps-forensics-${{ github.run_id }}
@@ -49,3 +51,18 @@ jobs:
             /home/runner/work/CentralDark/CentralDark/.forensics/contabo/
             /home/runner/work/CentralDark/CentralDark/.forensics/cloudflare/
           retention-days: 30
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_vps_reboot_forensic_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi

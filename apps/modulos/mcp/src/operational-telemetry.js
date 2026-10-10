@@ -62,6 +62,7 @@ function statusFileSnapshot(root) {
   const candidates = [
     path.join(root, "apps/modulos/status/mcp-status.json"),
     path.join(root, "logs/heartbeat-api.json"),
+    path.join(root, "logs/auto-sync-status.json"),
   ];
   const found = {};
   for (const file of candidates) {
@@ -468,12 +469,27 @@ function patternAlignmentSnapshot({ root, diagnostics, boundary, rules }) {
   };
 }
 
+// F1_GIT: o próprio owner scripts/vps/auto-sync-main.sh grava o último ciclo em
+// logs/auto-sync-status.json; o coração só lê. Sem arquivo ou velho demais = não é PASS.
+export const AUTO_SYNC_STATUS_MAX_AGE_MS = 15 * 60 * 1000;
+export function gitSyncFront(root, nowMs = Date.now()) {
+  const status = readJsonSafe(path.join(root, "logs/auto-sync-status.json"));
+  if (!status || typeof status !== "object") return "MEASURE_EXTERNALLY";
+  const at = Date.parse(status.t || "");
+  if (!Number.isFinite(at)) return "UNKNOWN";
+  if (nowMs - at > AUTO_SYNC_STATUS_MAX_AGE_MS) return "STALE";
+  const sha = String(status.head || "").slice(0, 9);
+  if (status.result === "PASS") return `SYNC_PASS@${sha}`;
+  if (status.result === "BLOCKED") return `BLOCKED:${String(status.reason || "unknown").slice(0, 80)}`;
+  return "UNKNOWN";
+}
+
 export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, procRoot = "/proc", nowMs = Date.now() } = {}) {
   const diagnostics = latestForensic(root);
   const cpus = os.cpus()?.length || 0;
   const load = os.loadavg();
   const fronts = [
-    { id: "F1_GIT", source: "git/main/runtime", state: "MEASURE_EXTERNALLY" },
+    { id: "F1_GIT", source: "scripts/vps/auto-sync-main.sh -> logs/auto-sync-status.json", state: gitSyncFront(root, nowMs) },
     { id: "F2_MCP", source: "/health + /mcp", state: "OBSERVE" },
     { id: "F3_HEARTBEAT", source: "/heartbeat", state: heartbeat?.self || "UNKNOWN" },
     { id: "F4_LOG_STREAM", source: "/admin/logs/stream", state: "OBSERVE" },

@@ -146,3 +146,33 @@ test("ausência de autoridade é BLOCKED, nunca PASS por silêncio", () => {
   assert.equal(result.authority, null);
   assert.equal(result.derivable, false);
 });
+
+
+test("PR interno confiável herda autorização persistente sem clique ou receipt repetido", () => {
+  const result = authorityApprovalForEvent(prEvent({
+    body: "",
+    labels: [],
+    base: { ref: "main", repo: { full_name: REPO } },
+  }), { repository: REPO });
+  assert.equal(result.approved, true);
+  assert.equal(result.viaPersistent, true);
+  assert.equal(result.authority, "SEGREDO/CHEFE");
+});
+
+test("autorização persistente não atravessa fork nem autor não confiável", () => {
+  const fork = authorityApprovalForEvent(prEvent({
+    body: "",
+    labels: [],
+    base: { ref: "main", repo: { full_name: REPO } },
+    head: { repo: { full_name: "Outro/Fork" } },
+  }), { repository: REPO });
+  assert.equal(fork.viaPersistent, false);
+
+  const intruso = authorityApprovalForEvent(prEvent({
+    body: "",
+    labels: [],
+    base: { ref: "main", repo: { full_name: REPO } },
+    user: { login: "intruso" },
+  }), { repository: REPO });
+  assert.equal(intruso.viaPersistent, false);
+});

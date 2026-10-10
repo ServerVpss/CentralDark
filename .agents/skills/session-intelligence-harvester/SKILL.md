@@ -1,6 +1,9 @@
 ---
 name: session-intelligence-harvester
 description: Extract actionable intelligence from session logs, chat exports, screenshots, receipts, browser/navigation evidence and agent transcripts. Use when you need to distill patterns, decisions, errors, continuity deltas and learnings from historical or current sessions without promoting history to live truth.
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # Session Intelligence Harvester

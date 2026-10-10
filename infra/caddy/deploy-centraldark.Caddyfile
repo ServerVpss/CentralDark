@@ -1,0 +1,18 @@
+# Canonical GitHub deploy route through the existing CentralDark API.
+# The API validates X-Hub-Signature-256 and delegates to auto-sync-main.sh.
+deploy.centralldark.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:9100 {
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+	log {
+		output file /var/log/caddy/deploy-centraldark-access.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+		format json
+	}
+}

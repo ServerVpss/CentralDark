@@ -99,7 +99,7 @@ Owner: `docs/ARQUITETURA/CENTRALDARK-GITHUB-ENTRY-HUD-GATE.md`
 
 ```text
 GITHUB_ENTRY_HUD_FIRST=true
-FIRST_GITHUB_ACTION_MUST_REFRESH_PR_MOTHER_HUD=true
+FIRST_GITHUB_ACTION_MUST_REFRESH_HUD_CURRENT_PROJECTION=true
 AGENT_DEPENDENCY_MAP_REQUIRED=true
 GITHUB_REALITY_CROSSCHECK_REQUIRED=true
 UI_SURFACE_INVENTORY_REQUIRED=true
@@ -109,9 +109,52 @@ BUTTON_TAB_SECTOR_SURFACE_MAP_REQUIRED=true
 HUD_UPDATE_IS_ENTRY_GATE_NOT_OPTIONAL=true
 ```
 
-Qualquer agente/superfície que entra pelo GitHub deve primeiro medir `main`, PR-mãe `#1757`, filhos abertos e dependências de agente; se o HUD vivo estiver stale, deve atualizá-lo ou marcar `HUD_STALE_BLOCKS_HUMAN_RETURN=true` para o escopo dependente.
+Qualquer agente/superfície que entra pelo GitHub deve primeiro medir `main`, lanes/PRs abertos, checks, receipts fingerprint e dependências de agente; se o HUD CURRENT estiver stale, deve atualizá-lo ou marcar `HUD_STALE_BLOCKS_HUMAN_RETURN=true` para o escopo dependente. #1562/#1757 são somente provenance histórica.
 
 Regra de prova: GitHub real medido ganha de print, memória de chat, texto colado ou UI truncada. Skill, botão, aba, workflow ou serviço listado não é PASS até haver owner + consumer + readback aplicável.
+
+## 🔒 HUD único — entrada canônica obrigatória (CHEFE 09/10)
+
+Owner de conteúdo: `docs/HUD/HUD.html` em `ServerVpss/CentralDark@main`. Owner de boot: `scripts/trigger-fabric/centraldark_full_trigger_boot.py`. Owner de materialização: `.github/workflows/vps-exec-selfhosted.yml`. Esta é uma obrigação **causal de confiança do control plane**, não um veto de saúde auxiliar nem um segundo painel.
+
+```text
+GLOBAL_HUD_FIRST_MAIN_VPS_FAIL_CLOSED=true
+CANONICAL_HUD=docs/HUD/HUD.html@main
+VPS_HUD_PROJECTION=/root/.centraldark/HUD.html
+READ_HUD_BEFORE_CENTRALDARK_GOAL=true
+MAIN_LIVE_HEAD_REQUIRED=true
+MATERIALIZED_BYTES_SHA256_MUST_MATCH_MAIN=true
+MISSING_OR_MISMATCHED_HUD=FAIL_CLOSED_FOR_NEW_CANONICAL_EXECUTION
+UNKNOWN_NEVER_PASS=true
+SCREENPIPE_KYLIN_OPTIONAL_FAILURE=PLACA_NO_HUD_AND_CONTINUE_UNAFFECTED
+OLD_HEALTHY_PROCESSES_NOT_KILLED_BY_GATE=true
+```
+
+**Ordem:** ler o `HUD.html` do commit remoto vivo de `main`; confrontar o hash e o corpo HTML com o HUD materializado na VPS; só com readback `PASS` permitir **novo** boot, Goal de execução e promoção de deploy. Não tratar um `HTTP 200`, um `git HEAD` igual ou um arquivo existente como prova substituta. Gate reprovado não concede acesso administrativo, não autoriza sobrescrever checkout dirty, não mata serviços já vivos e não impede investigação/leitura para repará-lo. Com fonte íntegra, erros opcionais exibem **placa própria com motivo, prova, owner, receita e NEXT_CURSOR**, aproveitando a seção existente `Missões — clica, copia, cola onde for resolver`; não criam nova arquitetura. Uma superfície não ligada a esse gate permanece `UNKNOWN` — nunca declarar aplicação global comprovada só pelo documento.
+
+<!-- CENTRALDARK_HUD_FERIDA_PLACA_MVP_V1 -->
+## 🩹 HUD único — ferida, placa, receita e continuidade
+
+**Owner existente:** docs/HUD/HUD.html. Regra operacional de todas as superfícies e agentes que leem/escrevem status no HUD, sem criar outro HUD, serviço, gate ou contrato paralelo.
+
+```text
+YELLOW_OR_FAIL_OR_UNKNOWN_OR_PENDING -> VER_PENDENCIA_REQUIRED
+PLACA -> ESTADO + ROTA + OWNER + ARQUIVO + LINHA + ERRO + PROVA + NEXT_CURSOR
+NO_MEASURED_LINE_OR_ROUTE -> UNKNOWN
+CLICK_VER_PENDENCIA -> SHOW_CAUSE_AND_LOCATION
+PLACA_OPEN -> ACEITAR_MISSAO_COPIAR_RECEITA
+RECIPE -> INTENCAO + CURRENT + OWNER + FALHA + PROVA + MENOR_DELTA + TESTE + READBACK + NEXT_CURSOR
+APP_FALHOU != SISTEMA_INTEIRO_FALHOU
+OPERATIONAL_GATE_FAIL -> LOCAL_PLAQUE + CONTINUE_INDEPENDENT_ROUTES
+NO_DUPLICATE_PANEL=true
+NO_DUPLICATE_CAPTURE=true
+SECURITY_AND_AUTHORIZATION_STILL_REQUIRED=true
+UNKNOWN != PASS
+MERGED != DEPLOYED
+```
+
+Não inventar rota, linha ou causa. Se uma operação dependente não pode prosseguir, ela recebe placa específica; outras capacidades seguem. A opção de copiar missão jamais executa mudanças automaticamente nem dá autorização nova. Antes de adicionar controle, reutilizar o botão, o owner, a lista Missões e os fluxos já existentes. Contraprova em navegador e readback são a evidência de UI, não saúde global.
+<!-- /CENTRALDARK_HUD_FERIDA_PLACA_MVP_V1 -->
 
 ## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
 
@@ -323,10 +366,17 @@ EXISTING_COMPATIBLE_CHILD_PR_IS_MANDATORY_LANE=true
 CHILD_MATCH_KEY=OWNER+SCOPE+CAPABILITY
 DIRECT_MAIN_FORBIDDEN_WHEN_COMPATIBLE_CHILD_IS_HEALTHY=true
 STALE_OR_CONFLICTING_CHILD_REQUIRES_RECEIPT_BEFORE_BYPASS=true
-MAIN_READBACK_MUST_RETURN_TO_CHILD_AND_PR_MOTHER=true
-PR_MOTHER=#1757
-PR_MOTHER_ROLE=HISTORY_HANDOFF_LEDGER
-PR_MOTHER_MERGE_FORBIDDEN=true
+MAIN_READBACK_MUST_RETURN_TO_CHILD_AND_HUD=true
+HUD_CURRENT_OWNER=apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx
+HUD_CURRENT_SOURCE=apps/modulos/Bolt/source/app/routes/api.github-stats.ts
+HUD_IS_CURRENT_PROJECTION=true
+HUD_IS_NOT_AUTHORITY=true
+CHECKLIST_DAILY_OWNER=HUD
+RECEIPTS_OWNER=repository
+PR_MOTHER_ROLE=RETIRED
+LEGACY_PR_MOTHERS=#1562,#1757
+NO_NEW_PR_MOTHER=true
+NO_DAILY_PR=true
 SHELL_IS_MUTABLE=true
 LEGACY_IS_PRESERVED=true
 PR_GATE_HARDENING=DEFERRED_UNTIL_CHEFE_REENABLES
@@ -334,11 +384,10 @@ MIN_SECURITY_ONLY=true
 MIN_SECURITY_CHECKS=SECRET_SCAN|SYNTAX_OR_PARSE_WHEN_APPLICABLE|TARGETED_TEST_WHEN_AVAILABLE|MAIN_READBACK
 DIRECT_MAIN_COMMIT_REQUIRES_CURRENT_MAIN_REMEASURE=true
 PR_BODY_IS_HISTORY_NOT_CURRENT=true
-LEDGER_CURRENT_REQUIRES_EXPLICIT_CURRENT_MAIN=true
-EXACT_COMMENT_ID_DIRECT_LOOKUP_BEFORE_PAGINATION=true
+HUD_CURRENT_REQUIRES_EXPLICIT_CURRENT_MAIN=true
 MEASURABLE_CURRENT_UNKNOWN_IS_FAIL=true
-RASTRO_FISCAL_BEFORE_CURRENT_LEDGER_RETURN=true
-DIRECT_MAIN_COMMIT_REQUIRES_RECEIPT_IN_PR_MOTHER=true
+RASTRO_FISCAL_BEFORE_CURRENT_HUD_RETURN=true
+DIRECT_MAIN_COMMIT_REQUIRES_REPOSITORY_RECEIPT_WHEN_MATERIAL=true
 PROVEN_CRYSTAL_DIRECT_MAIN_FAST_PATH=true
 PROVEN_CRYSTAL_FULL_CI_REPROOF=false
 PROVEN_CRYSTAL_REVALIDATE=AFFECTED_CONE_ONLY
@@ -347,15 +396,16 @@ PROVEN_CRYSTAL_MIN_CHECKS=CURRENT_MAIN_REMEASURE|OWNER_MATCH|PROVENANCE_READBACK
 PROVEN_CRYSTAL_DIVERGENCE=REOPEN_AFFECTED_CONE_ONLY
 UNPROVEN_OR_DIVERGENT_DELTA_USES_NORMAL_GATE=true
 CENTRALDARK_UNIFIED_SURFACE_PARITY_OWNER=docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
-EVERY_NOVELTY_FEEDS_PR_MOTHER=true
-PR_MOTHER_BODY_MUTABLE_HUD=true
-PR_MOTHER_COMMENTS_ARE_NOT_LEDGER=true
-PR_MOTHER_RECEIPTS_LIVE_IN_REPOSITORY=true
-PR_MOTHER_LEGACY_PREDECESSOR=#1562
-PR_MOTHER_LEGACY_PROTECTED=true
-PR_MOTHER_RECORDS_PASS_FAIL_UNKNOWN_BLOCKED_STALE=true
+EVERY_NOVELTY_FEEDS_HUD_CURRENT=true
+HUD_CURRENT_RECORDS_PASS_FAIL_UNKNOWN_BLOCKED=true
+HUD_CURRENT_SOURCE_FINGERPRINT_REQUIRED=true
+HUD_CURRENT_NEXT_CURSOR_REQUIRED=true
+HUD_CURRENT_ACTIVE_LANES_REQUIRED=true
+HUD_COMMENTS_ARE_NOT_LEDGER=true
+HUD_RECEIPTS_LIVE_IN_REPOSITORY=true
+LEGACY_PR_MOTHERS_PROTECTED=#1562,#1757
 EXACT_REPEAT_MAY_DEDUPE=true
-NO_SECRET_IN_PR_MOTHER_LEDGER=true
+NO_SECRET_IN_HUD_PROJECTION=true
 REUSE_BEFORE_CREATE=true
 NO_V1_V2_V3_PARALLEL_OWNER=true
 REALITY_IS_JUDGE=true
@@ -363,7 +413,7 @@ TRIGGER=🔏 !RASTRO
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-LEDGER_1757_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+HUD_CURRENT_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 PUSH_ONLY_AFTER_GATE_GREEN_ON_REBASED_HEAD=true
 TEST_HARNESS_DERIVES_FILES_FROM_OWNER=true
 TEST_MUST_NOT_ANCHOR_ON_MUTABLE_REAL_STATE=true
@@ -379,16 +429,17 @@ STUB_OR_DEMO_NEVER_PRESENTED_AS_REAL_TOOL=true
 ROOT_SHELL_IS_NOT_KERNEL_CONTROL=true
 MEASURE_CHEFE_GUI_USER_AND_PATH_BEFORE_PLACING_SURFACE_FILE=true
 EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR=true
-PR_MOTHER_1757_IS_LEDGER_NEVER_MERGE=true
+PR_MOTHER_ROLE=RETIRED
+NO_NEW_PR_MOTHER=true
 ```
 
-Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?REUSE_CHILD:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DIRECT_MAIN_IF_ALLOWED_ELSE_CREATE_EPHEMERAL_BRANCH_WITH_READY_PR -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> DELETE_EPHEMERAL_BRANCH_AFTER_MERGE -> MAIN_READBACK -> RECEIPT_EXISTING_CHILD_IF_ANY -> RECEIPT_1757 -> FIXED_POINT.
+Fluxo CURRENT: CURRENT_MAIN -> REUSE_PROVEN -> OWNER_EXISTENTE -> FIND_MATCHING_CHILD(OWNER+SCOPE+CAPABILITY) -> CHILD_HEALTHY?REUSE_CHILD:CHILD_STALE?CHILD_TRACE_BLOCKED:NO_CHILD -> DIRECT_MAIN_IF_ALLOWED_ELSE_CREATE_EPHEMERAL_BRANCH_WITH_READY_PR -> DELTA_MINIMO -> PROVA -> CONTRAPROVA -> CHILD_SAME_HEAD_SQUASH_OR_ALLOWED_DIRECT_MAIN -> DELETE_EPHEMERAL_BRANCH_AFTER_MERGE -> MAIN_READBACK -> RECEIPT_REPOSITORY_WHEN_MATERIAL -> HUD_CURRENT_READBACK -> FIXED_POINT.
 
 Branch remota não é estacionamento de intenção. Trabalho ainda não pronto permanece em worktree/local isolado quando isso for suficiente; branch remota nova só existe quando uma necessidade material exige transporte/CI/handoff/isolamento e já nasce com owner, escopo e destino de fechamento. PR autônomo com intenção já autorizada nasce `draft=false`; se uma superfície o criar como Draft sem causa explícita, o normalizador canônico o promove a Ready. `KEEP_DRAFT` explícito continua soberano para rascunho humano/material real.
 
-Toda novidade real do sistema alimenta o PR-mãe #1757 no mesmo ciclo em que for observada. Isso inclui PASS, FAIL, UNKNOWN, BLOCKED, STALE, nova integração, novo acesso, nova rota, commit/PR/merge/deploy, mudança de runtime, contraprova, correção de diagnóstico, descoberta de owner, ferramenta/conector e decisão canônica. Repetição exata pode ser deduplicada; novidade não pode esperar PASS para ser registrada. Segredos nunca entram no ledger.
+Toda novidade real do sistema alimenta a projeção CURRENT do HUD no mesmo ciclo em que for observada. PASS, FAIL, UNKNOWN, BLOCKED, filhos/lanes, fingerprints e NEXT_CURSOR são derivados da realidade medida; receipts duráveis continuam no repositório. #1562 e #1757 permanecem somente como provenance histórica. Segredos nunca entram na projeção.
 
-PR existente compatível por OWNER+SCOPE+CAPABILITY não é opcional: é a promotion lane obrigatória enquanto saudável/reconciliável. Se estiver STALE ou CONFLICTING, registrar receipt no próprio filho antes de qualquer bypass; direct-main só ocorre por autorização aplicável ou regra global, e MAIN_READBACK volta ao filho e ao #1757. PR_STALE != IGNORAR_PR.
+PR existente compatível por OWNER+SCOPE+CAPABILITY não é opcional: é a promotion lane obrigatória enquanto saudável/reconciliável. Se estiver STALE ou CONFLICTING, registrar receipt no próprio filho antes de qualquer bypass; direct-main só ocorre por autorização aplicável ou regra global, e MAIN_READBACK volta ao filho e ao HUD CURRENT. PR_STALE != IGNORAR_PR.
 
 ## Identidade
 
@@ -1855,7 +1906,8 @@ MEDIR ESTADO
 → CONTRAPROVAR
 → COMMIT
 → PUSH
-→ RECEIPT NO PR-MÃE #1757 OU PR FILHO EQUIVALENTE
+→ RECEIPT NO REPOSITÓRIO OU PR FILHO EQUIVALENTE QUANDO MATERIAL
+→ HUD CURRENT READBACK
 → SÓ ENTÃO DECLARAR CONCLUÍDO
 ```
 
@@ -1875,7 +1927,8 @@ Casa local do CHEFE (`E:\CentralDark`) herda o mesmo contrato. Mudança local im
 LOCAL_ONLY_CHANGE_FORBIDDEN=true
 IMPORTANT_UNTRACKED_ALERT_NOT_DELETE=true
 DIRECT_MAIN_REQUIRES_EXPLICIT_AUTH=true
-PR_MOTHER_OR_CHILD_RECEIPT_REQUIRED=true
+REPOSITORY_OR_CHILD_RECEIPT_REQUIRED_WHEN_MATERIAL=true
+HUD_CURRENT_READBACK_REQUIRED=true
 ```
 
 ## Contrato — Tool Call executada ≠ Tool Call visível
@@ -1914,9 +1967,11 @@ CENTRALDARK_GLOBAL_CROSS_CONTEXT_PREFLIGHT_V1=true
 ALL_CURRENT_AND_FUTURE_AGENTS_INHERIT=true
 ALL_DOT_AGENTS_ARTIFACTS_INHERIT_BY_CONTAINMENT=true
 EVERY_CENTRALDARK_RESPONSE_REENTERS_PREFLIGHT=true
-PR_MOTHER_1757_CURRENT_REQUIRED=true
+HUD_CURRENT_PROJECTION_REQUIRED=true
 OPEN_PRS_CURRENT_REQUIRED=true
 CHECK_LIST_DIARIO_CURRENT_REQUIRED=true
+PR_MOTHER_CURRENT_REQUIRED=false
+NO_NEW_PR_MOTHER=true
 ALL_NUMBERED_LEARNINGS_INDEX_REQUIRED=true
 CAUSAL_HISTORY_CLOSURE_REQUIRED=true
 MUTABLE_CLAIM_REQUIRES_RUNTIME_REMEASUREMENT=true

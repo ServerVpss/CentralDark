@@ -16,6 +16,8 @@ concurrency:
 jobs:
   deploy-universal-gate:
     name: 🧿 TLC23 · Universal · Meta-Lupa · Horn
+    outputs:
+      current: ${{ steps.sha_gate.outputs.current }}
     if: github.repository == 'ServerVpss/CentralDark'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
@@ -34,6 +36,7 @@ jobs:
           submodules: false
           persist-credentials: true
       - name: 🔹 Provar SHA antes de qualquer job mutante
+        id: sha_gate
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -48,14 +51,67 @@ jobs:
           export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
           export GIT_CONFIG_VALUE_0="$AUTH_HEADER"
           unset AUTH_HEADER
+          # Runs antigos de push tornam-se SUPERSEDED: nao executam HUD,
+          # deploy nem jobs dependentes e nao fabricam sucesso de deploy.
+          # GitHub API evita o extraheader duplicado do checkout + auth efemera Git.
+          # Consulta estritamente READ_ONLY ao ref atual, sem expor credenciais.
+          CURRENT_MAIN="$(curl -fsS --max-time 10 \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H 'Accept: application/vnd.github+json' \
+            https://api.github.com/repos/ServerVpss/CentralDark/git/ref/heads/main \
+            | python3 -c 'import json,sys; print(json.load(sys.stdin)["object"]["sha"])' 2>/dev/null || true)"
+          [[ "$CURRENT_MAIN" =~ ^[0-9a-f]{40}$ ]] || { echo "MAIN_SHA_LOOKUP_FAILED"; exit 26; }
+          if [[ "$TARGET_SHA" != "$CURRENT_MAIN" ]]; then
+            echo "TARGET_SHA_SUPERSEDED gated=$TARGET_SHA current=$CURRENT_MAIN"
+            echo "current=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "current=true" >> "$GITHUB_OUTPUT"
           TARGET_SHA="$TARGET_SHA" REPO_DIR="$REPO_DIR" BRANCH="$BRANCH" bash "$AUTH_REPO/scripts/vps/deploy-guards-dispatcher.sh" --gate-only
           echo "CANONICAL_DEPLOY_GATE=PASS"
           echo "GATED_SHA=$TARGET_SHA"
 
+      # HUD-first é gate de entrada do MESMO control plane, não health de
+      # um módulo opcional. A projeção é um espelho dos bytes de main, não
+      # outro painel/owner. Nunca sujar o checkout nem parar serviços verdes.
+      - name: "🔒 HUD_FIRST — materializar main na VPS e conferir bytes"
+        if: steps.sha_gate.outputs.current == 'true'
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          AUTH_REPO="$GITHUB_WORKSPACE/.ci-deploy-gate"
+          SOURCE="$AUTH_REPO/docs/HUD/HUD.html"
+          MIRROR="/root/.centraldark/HUD.html"
+          HEAD_SHA="${{ github.sha }}"
+          [[ -f "$SOURCE" && ! -L "$SOURCE" ]] || { echo "HUD_MAIN_MISSING_FAIL_CLOSED"; exit 73; }
+          [[ "$(git -C "$AUTH_REPO" rev-parse HEAD)" == "$HEAD_SHA" ]] || { echo "HUD_HEAD_MISMATCH_FAIL_CLOSED"; exit 73; }
+          EXPECTED="$(sha256sum "$SOURCE" | cut -d' ' -f1)"
+          git -C "$AUTH_REPO" show "$HEAD_SHA:docs/HUD/HUD.html" | sha256sum | grep -q "^$EXPECTED " || { echo "HUD_MAIN_BLOB_MISMATCH_FAIL_CLOSED"; exit 73; }
+          install -d -m 700 /root/.centraldark
+          [[ ! -L "$MIRROR" ]] || { echo "HUD_RUNTIME_SYMLINK_FAIL_CLOSED"; exit 73; }
+          CURRENT="$(test -f "$MIRROR" && sha256sum "$MIRROR" | cut -d' ' -f1 || true)"
+          if [[ "$CURRENT" != "$EXPECTED" ]]; then
+            TMP="$(mktemp /root/.centraldark/.hud-XXXXXX)"
+            trap 'rm -f "$TMP"' EXIT
+            cp -- "$SOURCE" "$TMP"
+            chmod 600 "$TMP"
+            [[ "$(sha256sum "$TMP" | cut -d' ' -f1)" == "$EXPECTED" ]] || { echo "HUD_STAGE_MISMATCH_FAIL_CLOSED"; exit 73; }
+            if [[ -f "$MIRROR" ]]; then
+              cp -p -- "$MIRROR" /root/.centraldark/HUD.previous.html
+            fi
+            mv -f -- "$TMP" "$MIRROR"
+          fi
+          [[ "$(sha256sum "$MIRROR" | cut -d' ' -f1)" == "$EXPECTED" ]] || { echo "HUD_VPS_READBACK_FAIL_CLOSED"; exit 73; }
+          echo "HUD_MAIN_VPS_MATERIALIZATION=PASS"
+          echo "HUD_CANONICAL_HEAD=$HEAD_SHA"
+          echo "HUD_BYTES_SHA256=$EXPECTED"
+          echo "HUD_RUNTIME_PATH=$MIRROR"
+
   deploy-mcp:
     needs: deploy-universal-gate
     name: 🧩 Deploy canônico do CentralDark-MCP
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     env:
@@ -384,7 +440,7 @@ jobs:
   deploy-operational-guards:
     needs: deploy-universal-gate
     name: 🧩 Deploy atômico do mapa e Hermes-Verificador
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
@@ -455,8 +511,9 @@ jobs:
             });
 
   reconcile-control-routes:
+    needs: deploy-universal-gate
     name: 🧩 Reconciliar rotas de controle da VPS
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 10
     env:
@@ -575,12 +632,25 @@ jobs:
 
           ss -ltn 'sport = :22' | grep -q LISTEN && echo "PORT_22=PASS" || { echo "PORT_22=FAIL"; failures=$((failures+1)); }
 
-          public_ip="$(ip -4 -o addr show scope global 2>/dev/null | awk '{split($4,a,"/"); if (a[1] !~ /^100\./ && a[1] !~ /^10\./ && a[1] !~ /^172\.(1[6-9]|2[0-9]|3[01])\./ && a[1] !~ /^192\.168\./) {print a[1]; exit}}')"
-          if [[ -n "$public_ip" ]] && curl -fsS --max-time 3 "http://$public_ip:9100/health" | grep -q '"ok":true'; then
-            echo "MCP_9100=PASS ip=$public_ip"
+          # O MCP nativo escuta na rota privada 127.0.0.1:9100.
+          # Cloudflare/Caddy publica mcp.centralldark.com via HTTPS; nao exigir
+          # porta 9100 aberta no IP publico (nao expor uma nova superficie).
+          mcp_local="$(curl -fsS --max-time 5 http://127.0.0.1:9100/health 2>/dev/null || true)"
+          if printf '%s' "$mcp_local" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("ok") is True and d.get("service")=="mcp-centraldark" else 1)' >/dev/null 2>&1; then
+            echo "MCP_9100=PASS route=127.0.0.1:9100 service=mcp-centraldark"
+            echo "MCP_ROUTE=PASS via=LOCAL_OWNER"
           else
-            echo "MCP_9100=FAIL"
-            failures=$((failures+1))
+            echo "MCP_9100=UNAVAILABLE route=127.0.0.1:9100"
+            # Se o owner local cair, tentar a rota HTTPS autorizada existente.
+            # Rota HTTPS PASS nao e prova de que o listener local esta saudavel.
+            mcp_https="$(curl -fsS --max-time 8 https://mcp.centralldark.com/health 2>/dev/null || true)"
+            if printf '%s' "$mcp_https" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("ok") is True and d.get("service")=="mcp-centraldark" else 1)' >/dev/null 2>&1; then
+              echo "MCP_ROUTE=PASS via=HTTPS_EXISTING_OWNER"
+              echo "MCP_LOCAL_9100=VER_PENDENCIA"
+            else
+              echo "MCP_ROUTE=FAIL local_and_https_unavailable"
+              failures=$((failures+1))
+            fi
           fi
 
           echo "ROUTE_RECONCILE_FAILURES=$failures"
@@ -604,8 +674,9 @@ jobs:
             });
 
   vps-housekeeping:
+    needs: deploy-universal-gate
     name: 🧩 VPS Housekeeping (varredura lixo/ouro, report-only)
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
@@ -660,7 +731,7 @@ jobs:
   deploy-hermes-runtime:
     needs: deploy-universal-gate
     name: 🧩 Deploy canônico do runtime Hermes
-    if: github.repository == 'ServerVpss/CentralDark'
+    if: github.repository == 'ServerVpss/CentralDark' && needs.deploy-universal-gate.outputs.current == 'true'
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
@@ -750,6 +821,23 @@ jobs:
             printf '%s\n' "$DIRTY_TARGETS"
             exit 76
           }
+
+          # Owner do runner precisa existir ANTES de copiar qualquer contrato.
+          # A VPS atual executa Hermes Gateway via systemd; este job legado
+          # gerencia SOMENTE o app PM2. Não fingir que ambos são o mesmo runtime.
+          if ! command -v pm2 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+            if systemctl is-active --quiet hermes-gateway.service 2>/dev/null; then
+              echo "HERMES_RUNTIME_DEPLOY=BLOCKED owner=systemd job_owner=PM2"
+              echo "HERMES_GATEWAY_LIVE=PASS; SYSTEMD_NOT_PM2; NEED_OWNER_ADAPTER"
+              exit 84
+            fi
+            echo "HERMES_RUNTIME_DEPLOY=BLOCKED missing_pm2_or_jq"
+            exit 85
+          fi
+          if ! pm2 jlist | jq -e --arg app "$HERMES_APP" '.[] | select(.name == $app and .pid > 0)' >/dev/null 2>&1; then
+            echo "HERMES_RUNTIME_DEPLOY=BLOCKED pm2_app_missing_or_not_running"
+            exit 86
+          fi
 
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/hermes-runtime-validate.XXXXXX")"
           BACKUP_DIR="/root/CentralDark-Recovery/hermes-runtime/${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
@@ -942,6 +1030,7 @@ jobs:
     if: >-
       always() &&
       needs.deploy-universal-gate.result == 'success' &&
+      needs.deploy-universal-gate.outputs.current == 'true' &&
       github.event_name == 'push' &&
       github.ref == 'refs/heads/main' &&
       needs.deploy-mcp.result != 'failure' &&

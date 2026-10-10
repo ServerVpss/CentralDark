@@ -20,7 +20,7 @@ jobs:
       - name: 🔹 Ensure PR exists (create if missing)
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROMOTION_TOKEN }}
           script: |
             const branch = process.env.GITHUB_REF.replace('refs/heads/', '');
             const owner = context.repo.owner;
@@ -57,7 +57,24 @@ jobs:
           ./scripts/micro_deploy.sh "$GITHUB_REF" "$GITHUB_SHA"
 
       - name: 🔹 Upload deploy log
+        id: artifact_mirror_auto_pr_and_deploy_1
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: micro-deploy-log
           path: files/deploy-*.log
+
+      - name: 🔹 Classificar espelho de artifact
+        if: always()
+        shell: bash
+        env:
+          UPLOAD_OUTCOME: ${{ steps.artifact_mirror_auto_pr_and_deploy_1.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "${UPLOAD_OUTCOME:-}" = "success" ]; then
+            echo "ARTIFACT_MIRROR=PASS"
+          elif [ "${UPLOAD_OUTCOME:-}" = "failure" ]; then
+            echo "ARTIFACT_MIRROR=DEGRADED"
+          else
+            echo "ARTIFACT_MIRROR=UNKNOWN"
+          fi

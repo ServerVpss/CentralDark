@@ -5,6 +5,9 @@ author: HERMES-CASA (perfil pivete), derivado de cot-react-loop e learning-cryst
 canonical_sha_target: AUTO
 status: CRYSTALLIZED_AS_READ_ONLY_METHOD
 default_routing: false
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # FABLE LOOP — método de calibração e estabilização

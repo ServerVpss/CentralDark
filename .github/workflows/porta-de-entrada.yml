@@ -68,6 +68,13 @@ jobs:
       - name: 🔹 Setup Node 24 (fast path self-hosted)
         uses: ./.github/actions/setup-node24-selfhosted
 
+      - name: 🔹 Testar fonte autenticada de autorização
+        run: node --test scripts/lupa/authority-approval.test.mjs
+
+      - name: 🔹 Resolver autorização autenticada
+        id: authority
+        run: node scripts/lupa/authority-approval.mjs
+
       - name: 🔹 Gate global — Trigger Fabric + runner policy + self-healing contract
         shell: bash
         run: |
@@ -80,15 +87,21 @@ jobs:
       - name: 🔹 Validar continuidade global e fronteira de autoridade da entrada
         run: node scripts/lupa/validar-continuidade-global.mjs
 
-      - name: Testar obrigação universal de diagrama e rota
+      - name: 🧭 Testar obrigação universal de diagrama e rota
         run: node --test scripts/lupa/diagram-route-gate.test.mjs
 
-      - name: Gate universal — função/app/botão/gatilho/gancho precisa de seta e rota
+      - name: 🚦 Gate universal — função/app/botão/gatilho/gancho precisa de seta e rota
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
+          # Handle first-push case where BASE_SHA is all zeros
+          if [ "${BASE_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            git fetch origin main --depth=1
+            BASE_SHA="$(git rev-parse origin/main)"
+            echo "GATE_BASE_FALLBACK=origin/main:${BASE_SHA}"
+          fi
           node scripts/lupa/diagram-route-gate.mjs --base-ref "$BASE_SHA" --head-ref "$HEAD_SHA"
 
       - name: 🔹 Gate INTERLIGADOS — padrões de PR e dívida runtime explícita
@@ -139,13 +152,6 @@ jobs:
           done < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
           test "$failed" -eq 0
           echo "CENTRALDARK_API_SINGLE_ENTRY=PASS"
-
-      - name: 🔹 Testar fonte autenticada de autorização
-        run: node --test scripts/lupa/authority-approval.test.mjs
-
-      - name: 🔹 Resolver autorização autenticada
-        id: authority
-        run: node scripts/lupa/authority-approval.mjs
 
       - name: 🔹 Testar contrato de identidade operacional
         run: node --test scripts/lupa/validar-identidade-operacional.test.mjs

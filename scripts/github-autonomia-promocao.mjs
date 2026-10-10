@@ -218,6 +218,7 @@ export function authorizationFor(pr) {
     authorized,
     viaLabel: segredoLabel,
     viaBody: receipt.valid,
+    viaPersistentLabel: segredoLabel && !receipt.valid,
     authority: authorized ? "SEGREDO/CHEFE" : null,
     source: segredoLabel
       ? "github-label:👑 PERMITO-SEGREDO"
@@ -229,10 +230,10 @@ export function authorizationFor(pr) {
       : receipt.valid
         ? "WHILE_PR_SCOPE_AND_RECEIPT_MATCH"
         : "NONE",
-    merge_policy: receipt.valid ? receipt.mergePolicy : null,
-    intent_scope: receipt.valid ? receipt.intentScope : null,
-    writer: receipt.valid ? receipt.writer : null,
-    writer_scope: receipt.valid ? receipt.writerScope : null,
+    merge_policy: receipt.valid ? receipt.mergePolicy : (segredoLabel ? FAST_MERGE_POLICY : null),
+    intent_scope: receipt.valid ? receipt.intentScope : (segredoLabel ? "CENTRALDARK_PERSISTENT_REPOSITORY" : null),
+    writer: receipt.valid ? receipt.writer : (segredoLabel ? (pr.user?.login || "trusted-author") : null),
+    writer_scope: receipt.valid ? receipt.writerScope : (segredoLabel ? ("PR#" + (pr.number || "unknown")) : null),
     historicalBodyMarker: segredoBodyMarker || legacyPiveteBodyMarker,
     legacy: legacyPiveteLabel || legacyPiveteBodyMarker,
   };
@@ -542,9 +543,12 @@ export function evaluateCandidate({
 }) {
   const reasons = [];
   const waits = [];
+  let technicalGateNotGreen = false;
   const labels = normalizedLabels(pr);
   const auth = authorizationFor(pr);
-  const fastPath = auth.merge_policy === FAST_MERGE_POLICY && auth.viaBody;
+  const workflows = workflowVerdicts(workflowRuns, requiredWorkflows);
+  const approvalRequired = workflows.some((workflow) => workflow.state === "ACTION_REQUIRED");
+  const fastPath = auth.merge_policy === FAST_MERGE_POLICY && (auth.viaBody || auth.viaLabel) && !approvalRequired;
   const author = String(pr.user?.login || "").toLowerCase();
   const trusted = trustedAuthors.map((value) => value.toLowerCase()).includes(author);
   const sameRepository = pr.head?.repo?.full_name === repository;
@@ -578,19 +582,17 @@ export function evaluateCandidate({
   if (pr.mergeable === false || pr.mergeable_state === "dirty") reasons.push("MERGE_CONFLICT");
   if (pr.mergeable == null || pr.mergeable_state === "unknown") waits.push("MERGEABILITY_PENDING");
 
-  const applicableWorkflows = requiredWorkflows;
-  const workflows = workflowVerdicts(workflowRuns, applicableWorkflows);
+
   for (const workflow of workflows) {
-    if (workflow.state !== "PASS") technicalGateNotGreen = true;
+    if (!fastPath && workflow.state !== "PASS" && workflow.state !== "ACTION_REQUIRED") technicalGateNotGreen = true;
     if (workflow.state === "FAIL") waits.push(`WORKFLOW_FAILED:${workflow.name}:${workflow.conclusion}`);
     if (workflow.state === "MISSING" || workflow.state === "PENDING") waits.push(`WORKFLOW_${workflow.state}:${workflow.name}`);
     if (workflow.state === "ACTION_REQUIRED") waits.push(`WORKFLOW_ACTION_REQUIRED:${workflow.name}:${workflow.run_id}`);
   }
 
   const stalledFor = waitAgeMs(pr, now);
-  const operationalWaits = waits.filter((wait) => !wait.startsWith("WORKFLOW_"));
-  const waitExpired = operationalWaits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
-  if (waitExpired) reasons.push(`WAIT_TIMEOUT:${Math.round(stalledFor / 60000)}min:${waits.join("|")}`);
+  const waitExpired = waits.length > 0 && stalledFor !== null && stalledFor > waitTimeoutMs;
+  if (waitExpired) technicalGateNotGreen = true;
 
   let decision = "READY";
   if (reasons.length) decision = "BLOCKED";

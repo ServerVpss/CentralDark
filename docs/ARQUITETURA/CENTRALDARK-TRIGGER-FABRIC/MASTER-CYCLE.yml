@@ -109,6 +109,9 @@ phase_contracts:
     owner: "LEIA-ME-IA.md + AGENTS.md"
     parent: CENTRALDARK_MASTER
     precedence: "CENTRALDARK_MASTER > ACORDAR"
+    surface_discovery: [CURRENT_APP_OR_SURFACE, CURRENT_RUNTIME, AVAILABLE_TOOLS, CURRENT_REPO_OR_WORKSPACE_IF_ANY]
+    assumptions_forbidden: [ASSUME_VSCODE, ASSUME_SHELL, ASSUME_HERMES_DESKTOP, ASSUME_BROWSER, ASSUME_REMOTE_RUNTIME]
+    on_material_unknown_or_failure: FAILURE_DISCRIMINANT
   CALIBRAR:
     meaning: ALIGN_INTENT_ROLE_SCOPE_TOOLS_PROOF
     owner: "LEIA-ME-IA.md + AGENTS.md"
@@ -131,6 +134,16 @@ phase_contracts:
       triggers_are_conditional_not_ritual: true
       do_not_parrot_chefe: true
       align_thought_not_wording: true
+  FAILURE_DISCRIMINANT:
+    meaning: FIND_FIRST_MATERIAL_FAILURE_OR_UNKNOWN_AND_ROUTE_EXACTLY_WITHOUT_FREEZING_UNAFFECTED_WORK
+    owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#failure_discriminant
+    source_learning: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml#conversational_counterproof
+    activate_from: [CENTRALDARK_MASTER, ACORDAR, CALIBRAR]
+    mode: CONDITIONAL_METHOD_NOT_NEW_RESOLVER_PHASE
+    runtime_binding_status: UNPROVEN_UNTIL_CONSUMER_TEST
+    flow: [DISCOVER_CURRENT_SURFACE, IDENTIFY_FIRST_MATERIAL_UNKNOWN_OR_FAILURE, CLASSIFY_EXACT_WOUND, EMIT_EXACT_ERROR_ROUTE, CHOOSE_DISCRIMINATING_TEST, OBSERVE_READ_ONLY_FIRST, REUSE_EXISTING_OWNER, REMEDIATE_MINIMUM_ONLY_WHEN_AUTHORIZED, RETEST, COUNTERPROOF, REMEASURE_T1, REALITY_JUDGE, CONTINUE_UNAFFECTED_SCOPE]
+    error_route_fields: [SURFACE, FILE_OR_OWNER, LINE_OR_ENDPOINT_WHEN_KNOWN, FUNCTION_OR_PROCESS_WHEN_KNOWN, FAILURE_TYPE, CAUSE, EVIDENCE, NEXT_CURSOR]
+    invariants: [ERROR_BLOCKS_ONLY_AFFECTED_CLAIM, ROUTE_FAILURE_IS_LOCAL, NO_GLOBAL_FREEZE_FROM_LOCAL_FAILURE, UNKNOWN_IS_NOT_PASS, ACTION_IS_NOT_PROOF, NO_SECRET_ECHO, NO_PARALLEL_OWNER]
   MULTIBUSSOLA:
     meaning: MULTIAXIS_MATERIAL_PERCEPTION
     owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
@@ -179,6 +192,18 @@ phase_contracts:
     meaning: RETURN_NEXT_CYCLE_RECOVERABLE
     owner: LEIA-ME-IA.md
     runtime_restart_implied: false
+
+failure_discriminant:
+  status: CANONICAL_INTERNAL_METHOD
+  human_trigger_required: false
+  explicit_human_alias_created: false
+  purpose: >-
+    Quando o comando mestre, ACORDAR ou CALIBRAR encontra falha/UNKNOWN material,
+    localizar a ferida exata, mostrar a rota causal e escolher a primeira contraprova
+    discriminante sem travar o CHEFE nem congelar escopos independentes.
+  output_shape: [ERROR_NAME, EXACT_ROUTE, EVIDENCE, AFFECTED_SCOPE, UNAFFECTED_SCOPE, NEXT_DISCRIMINATING_TEST, NEXT_CURSOR]
+  local_failure_policy: BLOCK_AFFECTED_SCOPE_CONTINUE_INDEPENDENT_SCOPE
+  no_new_architecture: true
 
 supporting_methods:
   FABLE_LOOP:

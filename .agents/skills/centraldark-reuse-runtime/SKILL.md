@@ -2,6 +2,9 @@
 name: centraldark-reuse-runtime
 description: Preflight runtime CentralDark que força descoberta/reuso de decisões e owners existentes antes de criar capability, arquivo, serviço, router ou arquitetura. Deve ser selecionada no início de missões materiais e antes de criação estrutural.
 trigger: /centraldark-reuse-runtime
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CentralDark Reuse Runtime
@@ -64,4 +67,9 @@ OWNER
 PROOF_KEY
 EVIDENCE
 NEXT_CURSOR
+FIXED_POINT
 ```
+
+## Canonical fixed-point funnel
+
+Pass material reuse decisions through `software-development/centraldark-evidence-reconciliation/references/fixed-point-funnel.md`: CURRENT → owner/writer/scope → minimum delta → test → counterproof → exact readback → receipt. `UNKNOWN != PASS`; `FIXED_POINT=true` only when the reused binding and affected consumer are remeasured with no material gap.

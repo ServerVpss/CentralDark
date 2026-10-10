@@ -6,6 +6,7 @@ import {
   compileRoute,
   dedupeSources,
   flashDecision,
+  judgeHermesChallenge,
   promoteRoute,
   selfTest,
   tick,
@@ -281,6 +282,53 @@ test('TICK é recibo comprimido; não contém scratchpad/cadeia privada', () => 
   });
   assert.deepEqual(Object.keys(receipt).sort(), ['blocker', 'delta', 'next', 'owner', 'phase', 'route']);
   assert.equal(receipt.phase, 'COMPILE');
+});
+
+
+test('desafio Hermes: só ganha Instinto Superior com missão fechada no CURRENT e proof readback', () => {
+  const head = '3333333333333333333333333333333333333333';
+  const route_input = validInput({ compiled_from_head: head });
+  const winner = {
+    challenge_id: 'hermes-missao-1',
+    owner: route_input.canonical_owner,
+    boundary: route_input.boundary,
+    current_head: head,
+    source_review: 'PASS',
+    win_conditions: [{ id: 'prova-real', state: 'PASS', evidence_ref: 'receipt://goal/t1' }],
+    route_input,
+    promotion_receipt: passReceipt({ verified_at_head: head }),
+    runtime_effect: { status: 'PASS', evidence_ref: 'runtime://test/200+effect' },
+    readback: { status: 'PASS', evidence_ref: 'sha256://updated-owner' },
+    last_good_preserved: true,
+    receipt_ref: 'repo://receipts/goal',
+    crystal_fingerprint: 'sha256:verified-crystal',
+  };
+  const good = judgeHermesChallenge(winner);
+  assert.equal(good.tier, 'INSTINTO_SUPERIOR');
+  assert.equal(good.status, 'WIN');
+  assert.equal(good.reward.paid_entitlement, false);
+
+  assert.notEqual(judgeHermesChallenge({
+    ...winner, runtime_effect: { status: 'UNKNOWN' },
+  }).tier, 'INSTINTO_SUPERIOR');
+  assert.notEqual(judgeHermesChallenge({
+    ...winner, win_conditions: [{ id: 'claim', state: 'PASS' }],
+  }).tier, 'INSTINTO_SUPERIOR');
+  assert.notEqual(judgeHermesChallenge({
+    ...winner, promotion_receipt: passReceipt({ verified_at_head: head, gate: 'UNKNOWN' }),
+  }).tier, 'INSTINTO_SUPERIOR');
+  assert.notEqual(judgeHermesChallenge({
+    ...winner, current_head: 'different-head',
+  }).tier, 'INSTINTO_SUPERIOR');
+  assert.equal(judgeHermesChallenge({
+    ...winner, sensitive: true,
+  }).status, 'QUARENTENA');
+  assert.equal(judgeHermesChallenge({
+    ...winner, duplicate: true,
+  }).status, 'REUSE');
+  assert.equal(judgeHermesChallenge({
+    ...winner, promotion_receipt: passReceipt({ verified_at_head: head, authority_valid: false }),
+  }).status, 'BLOCKED');
 });
 
 test('self-test do compilador fecha FORJA -> FLASH, política externa e delta seletivo', () => {

@@ -7,8 +7,6 @@ on:
       - ".github/workflow-reuse-registry.json"
       - "scripts/ci/workflow_dedupe_radar.py"
   workflow_dispatch:
-  schedule:
-    - cron: "23 3 * * *"
 
 permissions:
   contents: read

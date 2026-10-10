@@ -11,6 +11,9 @@ owners:
 canonical_id: CENTRALDARK_UNIFIED_SURFACE_PARITY_01
 trigger: "!CENTRALDARK"
 status: contract_first_engine_later
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 ---
 
 # CENTRALDARK_UNIFIED_SURFACE_PARITY_01
@@ -260,6 +263,27 @@ GEV/JEV typed decision adapter
 Se uma superfície não expõe a ferramenta real, marcar `PLATFORM_UNAVAILABLE`. Não simular execução. Não dizer que enviou arquivo, subiu commit, usou Desktop Commander ou publicou plugin sem tool call real e receipt.
 
 ## 6. Voice Tool Binding
+
+Antes de qualquer claim de ausência de capability na Voz, medir a superfície atual e tentar a rota compatível já existente. Ausência local não vira ausência global.
+
+```text
+VOICE_CAPABILITY_CLAIM_PREFLIGHT=true
+VOICE_MEASURE_LIVE_TOOLS_BEFORE_CAPABILITY_CLAIM=true
+VOICE_TOOL_MISS_ON_CURRENT_SURFACE_NE_GLOBAL_CAPABILITY_MISS=true
+VOICE_TRY_EXISTING_COMPATIBLE_ROUTE_BEFORE_UNKNOWN=true
+VOICE_PLATFORM_UNAVAILABLE_ONLY_AFTER_AUTHORIZED_EXISTING_ROUTES_FAIL=true
+```
+
+Rota mínima:
+
+```text
+VOICE_INPUT
+→ CAPABILITY_NEEDED
+→ MEASURE_CURRENT_SURFACE_TOOLS
+→ IF_PRESENT_USE
+→ IF_MISSING_HERE_TRY_EXISTING_COMPATIBLE_AUTHORIZED_ROUTE
+→ ONLY_THEN_PLATFORM_UNAVAILABLE_OR_UNKNOWN
+```
 
 ```text
 VOICE_TOOL_CALL_VISIBILITY_REUSES_UNIFIED_SURFACE_OWNER=true

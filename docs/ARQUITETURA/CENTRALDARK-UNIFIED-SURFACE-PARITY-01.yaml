@@ -180,6 +180,17 @@ surface_parity:
     voice:
       expected: same_actions_as_text_when_platform_supports
       known_gap: voice_tool_binding_may_be_absent
+      capability_claim_preflight:
+        measure_live_tools_before_claim: true
+        local_tool_miss_is_global_capability_miss: false
+        try_existing_compatible_authorized_route_before_unknown: true
+        platform_unavailable_only_after_existing_routes_fail: true
+        route:
+          - capability_needed
+          - measure_current_surface_tools
+          - use_if_present
+          - try_existing_compatible_authorized_route_if_missing_here
+          - only_then_platform_unavailable_or_unknown
     work:
       expected: heavy_implementation_surface
     desktop:

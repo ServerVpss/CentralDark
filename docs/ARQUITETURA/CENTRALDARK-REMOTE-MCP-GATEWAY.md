@@ -154,3 +154,78 @@ Não significa presença física nem funcionamento quando o device estiver offli
 ### Receipt 2026-09-14
 
 `DEVICE_SEGREDO=ONLINE`; `AUTH_TOKEN=VALID`; `REMOTE_PING=PONG`; comando remoto observou `hostname=SEGREDO` e `whoami=segredo\danda`; GitHub respondeu `200`; MCP CentralDark respondeu `200` com catálogo ativo. A operação da Casa por ChatGPT foi, portanto, observada no runtime e não apenas documentada.
+
+## Decisao CURRENT — transporte privado Tailscale como prioridade (08/10/2026)
+
+Intencao explicita do CHEFE: eliminar dependencias redundantes na operacao Casa/VPS, usar **Tailscale como transporte privado principal**, **MCP CentralDark como control plane e catalogo unico**, e **Hermes/executor nativo autorizado como corpo de execucao**. A bridge publica ja existente continua autenticada por OAuth2/PKCE; nao converte acesso a tailnet em acesso administrativo publico.
+
+```text
+CASA_VPS_PRIVATE_TRANSPORT_PRIORITY=TAILSCALE
+CANONICAL_MCP_CONTROL_PLANE=CENTRALDARK_MCP
+ADMIN_EXECUTION=AUTHORIZED_NATIVE_EXECUTOR
+PUBLIC_BRIDGE=EXISTING_MCP_OAUTH2_PKCE
+DESKTOP_COMMANDER_REQUIRED=false
+DESKTOP_COMMANDER_DEFAULT_ROUTE=false
+DESKTOP_COMMANDER_LEGACY_OPTIONAL=true
+REMOVE_WORKING_COMPONENTS_AUTOMATICALLY=false
+TAILSCALE_CONNECTED_IS_NOT_ADMIN_AUTHORIZED=true
+NO_PARALLEL_BRIDGE=true
+ONE_SYSTEM_ONLY=true
+```
+
+A prioridade diz respeito ao **roteamento novo**: nao depender do Desktop Commander para abrir, escrever, sincronizar ou monitorar a Casa. A ferramenta pode permanecer instalada/historica como fallback opcional, mas nao vira condicao de sucesso nem bloqueio do fluxo canônico. Falha na rota privada obriga descobrir outra rota autorizada existente; nao autoriza abertura publica indiscriminada de SSH, SMB, tela, tokens ou portas de administracao.
+
+**Estado de prova:** Tailscale VPS/Casa e transferencia de `HUD.html` ja tiveram provas pontuais; escrita remota autenticada em `C:\Users\Administrador\Documents\Obsidian Vault\...` e sincronizacao bidirecional nao sao inferidas da conectividade da tailnet. Promover o efeito somente apos teste de permissao, readback, hash e criterio de rollback quando necessario.
+
+**Owners reutilizados:** este documento, `scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json`, `apps/modulos/mcp/`, `docs/HUD/HUD.html`. O config ja define `primary_control_plane=centraldark_mcp` e `legacy_remote_enabled_by_default=false`; manter sem editar para evitar delta cosmetico.
+
+
+## Prova Tailscale Casa → iPhone — 2026-10-09
+
+Registro append-only da medição realizada por SOL através do **Remote Desktop Commander** na máquina **SEGREDO** (Windows), durante a sessão de voz do CHEFE em 2026-10-09, horário local America/Bahia (-03:00). Esta evidência é **snapshot histórico verificável**, não afirmação de conectividade permanente ou de acesso à tela do celular.
+
+### Alvo, binding e evidência
+
+```text
+ORIGEM=SEGREDO (Windows; Tailscale 100.123.93.25)
+ORIGEM_EXECUCAO=Remote Desktop Commander / shell PowerShell
+DESTINO=celular-segredo-iphone (iOS; Tailscale 100.91.226.70)
+OUTRO_PEER_LISTADO=centraldark-os (Linux; Tailscale 100.90.199.124)
+DATA_DA_MEDICAO=2026-10-09
+STATUS_DISCOVERY=PEER_PRESENT
+TAILSCALE_PING_RESPONSES=3/3
+PONG_1=98ms via DERP(sao)
+PONG_2=86ms via DERP(sao)
+PONG_3=86ms via DERP(sao)
+P2P_DIRECT=NOT_ESTABLISHED
+TAILSCALE_PING_PROCESS_EXIT=1
+IP_REACHABILITY_VIA_TAILSCALE_DERP=PASS
+IPHONE_SCREEN_ACCESS=UNKNOWN_NOT_TESTED
+IPHONE_REMOTE_CONTROL=UNKNOWN_NOT_TESTED
+VPS_TO_IPHONE_DIRECT_PROBE=UNKNOWN_NOT_TESTED
+PROOF_SCOPE=CASA_WINDOWS_TO_IPHONE_VIA_DERP_AT_OBSERVED_TIME
+```
+
+O `tailscale ping` entregou três `pong` válidos **via DERP São Paulo**, mas finalizou com `direct connection not established` e código de saída **1**. Portanto **ping por retransmissão PASS** e **P2P direto NÃO estabelecido** são fatos compatíveis; não promover o comando inteiro a PASS nem inferir controle do telefone.
+
+### Receita de replay — REUSE_BEFORE_CREATE
+
+No PowerShell da **mesma máquina SEGREDO**, pela rota de shell autorizada já disponível:
+
+```powershell
+& 'C:\Program Files\Tailscale\tailscale.exe' status
+& 'C:\Program Files\Tailscale\tailscale.exe' ping --c=3 100.91.226.70
+```
+
+1. Identificar novamente o peer `celular-segredo-iphone`, iOS, e **confirmar IP atual**, que pode mudar. Se mudou, usar o IP novo retornado pelo `status`, não o histórico por suposição.
+2. Observar `pong`, contagem, latência e tipo de rota (DERP/P2P); registrar **separadamente** mensagens de falha, exit code e P2P.
+3. O mesmo binding pode ser usado via Remote Desktop Commander enquanto disponível; não criar outra bridge/daemon/owner para repetir o teste.
+4. Só alegar acesso à tela, controle do iOS ou transferência de dados após uma prova específica dessas capacidades. Tailscale apenas fornece transporte.
+
+```text
+FIXED_POINT_DESTA_MEDICAO=REACHABILITY_DERP_PROVEN_AT_DATE
+NO_NEW_ARCHITECTURE=true
+REPLAY_TRIGGER=NEED_TO_RECHECK_CURRENT_REACHABILITY
+INVALIDATION=PEER_IP|ONLINE_STATE|TAILNET_AUTH|TRANSPORT_PATH|DEVICE_STATE_CHANGED
+NEXT_CURSOR=REMEASURE_iphone_route_only_when_needed; keep screen/control as UNKNOWN
+```
