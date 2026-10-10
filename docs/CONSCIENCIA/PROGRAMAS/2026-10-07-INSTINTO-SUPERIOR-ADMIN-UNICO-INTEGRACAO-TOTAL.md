@@ -715,4 +715,31 @@ Teste feito na Casa SEGREDO com `gh` já autenticado, `node v26.5.1` e Python 3.
 
 **T1B_DEPLOY_FALSE_GREEN (10/10):** o agregador `cockpit.functions.ts` confundia `MAIN_SHA == VPS_CHECKOUT_SHA` com `deploy=PASS`. Corrigido no PR #1793 (`855d616c4e97`): checkout sincronizado continua representado por `sincronizado`, mas `deploy` é `UNKNOWN` até receipt do serviço carregado; quando hashes divergem, `BLOCKED` é localizado, não pane global. O `/heartbeat` do Cockpit passa a consultar `mcp.centralldark.com` como owner oficial, enquanto a saúde do Hermes em `api.centralldark.com` permanece independente. **Contraprova T1B:** Node26 TS syntax PASS + readback Git blob `de81a7c0fca32e37cc2dff4e144fe14fe4614100`; UI/browser/runtime UNKNOWN, nenhuma configuração de Caddy, DNS, VPS ou Casa tocada nesta fase.
 
+
+### 🪬 RECEIPT_T2_HUD_BYTE_PARITY_20261010 — mesmo HUD Casa/VPS/main, sem falsa prova de browser público
+
+**INTENÇÃO do CHEFE:** todo setor, botão, cartaz, API/health, função, string e byte precisa conservar intenção, owner, proveniência e selo por efeito. Reuse before create. O arquivo `docs/HUD/HUD.html` é o HUD único da CentralDark; a PR #1793 contém **delta em desenvolvimento**, não pode ser contada como o mesmo arquivo da produção. TelePainel permanece catálogo/projeto independente.
+
+**CURRENT medido**: GitHub `main@7b6a9b5261c9deee04b14ea44f2e83561fd43d68`, blob HUD `f9e8db6c963956f0a1acaa9e382b3042283d60cb`, SHA-256 `cd0fcb26e8dcf96dde9279bf980a7aab3282eb037bc4b1530ea4b720d0576409` e 283102 bytes. Casa `C:\Users\Administrador\Documents\Obsidian Vault\…\HUD.html` confirmado **mesmo blob + SHA-256 + bytes** via `git hash-object` e `Get-FileHash`. VPS `/root/CentralDark/docs/HUD/HUD.html` antes: 221401 bytes, SHA-256 `d2bd2cf9fc548904f3f1cfab49997396d3e741b709db926104b07535ea48a9a3`, blob `af26c19b64c499f7ad7ce767cf51affe3e0239f1`, HEAD checkout `5344bd870` e **13 entradas dirty**.
+
+**Ação física T2**: baixar `main` pelo `gh` previamente autenticado, verificar blob e SHA-256, guardar a versão VPS anterior **integral** e seu patch de sete linhas (8397 bytes) em `/root/.centraldark-backups/HUD/` (permissões privadas), validar backup, atualizar o arquivo via rename atômico, fazer readback: **VPS SHA-256 agora igual ao da Casa e main**. Alterações únicas do backup relatam publicação Hermes `api.centralldark.com/hermes/`, `/hermes/api/health` 200, `/hermes/` 302 com login protegido, sessão autenticada UNKNOWN; o backup/patch é fonte candidata para PR, **não deve ser apagado**. T2 não realizou `git pull`, reset, rebase, merge, restart, reconfiguração DNS/Caddy ou deploy.
+
+**Inventário estático por fonte, sem misturar layout gerado e fonte:**
+
+| Medida (arquivo HTML) | main/Casa/VPS pós-T2 | PR #1793 pendente | VPS antes do T2 |
+| --- | ---: | ---: | ---: |
+| IDs literais únicos no HTML | 139 | 144 | 93 |
+| Buttons literais no HTML | 29 | 30 | 16 |
+| Blocos JavaScript inline | 7 | 9 | 4 |
+| `addEventListener(` estático | 32 | 41 | 16 |
+| `node --check` JS inline | 7/7 PASS | 9/9 PASS | 4/4 PASS |
+
+**Contraprova GUI isolada Casa:** Puppeteer já em cache + Microsoft Edge já instalado, `file://` do HUD físico, **todos os pedidos externos bloqueados** (sem novas dependências ou mutações externas); `document.readyState=complete`, 215 IDs DOM únicos, **119 botões gerados em runtime**, dos quais 97 visíveis, 105 registros de listener click e 0 `pageerror`. O número 119 gerado dinamicamente não contradiz os 29 botões literais. Smoke click protegido: `HUD`, `MAPA`, `FORJA`, `VER PENDENCIA` reagiram sem erro; **não comprova que todos os 119 controles disparem efeitos reais**. `cd-sector-touch-probe` presente somente na PR #1793, não na main/VPS física até promoção aprovada.
+
+**Probes distintos:** `https://mcp.centralldark.com/health` HTTP 200 (312 bytes); `https://api.centralldark.com/hermes/api/health` HTTP 200; `https://api.centralldark.com/hermes/` HTTP 302 (login); `https://hud.centralldark.com/` HTTP **525**; `https://status.centralldark.com/` HTTP **503**. HTTP de health não prova autorização admin, execução Hermes nem page render pública. VPS checkout continua em SHA antigo; **igualdade física do HUD != serviços carregados na main**.
+
+**SELOS GRANULARES T2:** `HUD_MAIN_CASA_VPS_FILE_SHA256=PASS`; `VPS_LOCAL_PATCH_PRESERVED=PASS`; `HUD_INLINE_JS_SYNTAX=PASS`; `HUD_HEADLESS_ISOLATED_RENDER=PASS`; `HUD_SAFE_TAB_AND_PENDING_SMOKE=PASS`; `HUD_ALL_BUTTONS_BEHAVIOR=UNKNOWN`; `HUD_PUBLIC_HTTPS=FAIL_525`; `STATUS_LEGACY_HTTPS=FAIL_503`; `PR1793_MERGEABLE=false`; `PR1793_NOT_MERGED`; `HEREMES_AUTHENTICATED_UI=UNKNOWN`; `GLOBAL_FIXED_POINT=FALSE`.
+
+**NEXT_CURSOR:** `HUD_MAIN_CASA_VPS_RECHECK → PRESERVE_7_LINE_LEGACY_DIFF_IN_OWNER → PR1793_CONFLICT_RECONCILE → SAME_SHA_CI → OFFICIAL_API_MCP_HERMES_HUD_E2E → EACH_BUTTON_EFFECT_READBACK → API15_API16 → CERTIFY_SECTOR_OR_PLACA`. Autoridade do CHEFE, ONE_WRITER, sem destruir verde; `TOCOU → MEDIU → PRESERVOU → CORRIGIU → TESTOU → LEU → SELOU` aplica-se a cada superfície, mas **nunca converte UNKNOWN em PASS**.
+
 <!-- /PROJECT_BOUNDARY_L171_20261010 -->
