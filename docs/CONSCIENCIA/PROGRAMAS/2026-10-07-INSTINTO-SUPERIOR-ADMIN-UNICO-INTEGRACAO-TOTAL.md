@@ -713,4 +713,6 @@ GLOBAL_FIXED_POINT=FALSE
 
 Teste feito na Casa SEGREDO com `gh` já autenticado, `node v26.5.1` e Python 3.13. Somente cópias temporárias em `%TEMP%/CD-L171-PR1793-READBACK`; nenhum checkout sujo ou VMware alterado. `9/9` valida o módulo MCP, **não** a renderização da UI nem a implantação. `NEXT_CURSOR=CHECK_TSX_CI_ON_CURRENT_HEAD → COCKPIT_RUNTIME_READBACK → LEGACY_PARITY`.
 
+**T1B_DEPLOY_FALSE_GREEN (10/10):** o agregador `cockpit.functions.ts` confundia `MAIN_SHA == VPS_CHECKOUT_SHA` com `deploy=PASS`. Corrigido no PR #1793 (`855d616c4e97`): checkout sincronizado continua representado por `sincronizado`, mas `deploy` é `UNKNOWN` até receipt do serviço carregado; quando hashes divergem, `BLOCKED` é localizado, não pane global. O `/heartbeat` do Cockpit passa a consultar `mcp.centralldark.com` como owner oficial, enquanto a saúde do Hermes em `api.centralldark.com` permanece independente. **Contraprova T1B:** Node26 TS syntax PASS + readback Git blob `de81a7c0fca32e37cc2dff4e144fe14fe4614100`; UI/browser/runtime UNKNOWN, nenhuma configuração de Caddy, DNS, VPS ou Casa tocada nesta fase.
+
 <!-- /PROJECT_BOUNDARY_L171_20261010 -->
