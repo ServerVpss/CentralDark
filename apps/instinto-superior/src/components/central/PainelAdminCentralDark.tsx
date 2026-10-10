@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
+  ExternalLink,
   Clock3,
   Loader2,
   Package,
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { PROJETOS_INDEPENDENTES, LEGADOS_SUPERFICIE_STATUS } from "@/data/painel-unico";
 
 
 /**
@@ -230,7 +232,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
           </p>
           <h2 className="mt-3 text-3xl font-semibold">Admin CentralDark</h2>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Administração absorvida do TelePainel para a sala autenticada do Instinto Superior.
+            Administração exclusiva da CentralDark no Instinto Superior. TelePainel é projeto independente e aparece apenas no catálogo de projetos.
           </p>
         </div>
         <Button variant="outline" onClick={() => void carregar()} disabled={loading}>
@@ -253,6 +255,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         <TabsList className="h-auto flex-wrap justify-start">
           <TabsTrigger value="visao">Visão geral</TabsTrigger>
           <TabsTrigger value="modulos">Módulos</TabsTrigger>
+          <TabsTrigger value="projetos">Projetos</TabsTrigger>
           <TabsTrigger value="usuarios">Usuários</TabsTrigger>
           <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
           <TabsTrigger value="hub-inventario">Integração HUB (12)</TabsTrigger>
@@ -382,6 +385,56 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
               </div>
             ) : null}
           </div>
+        </TabsContent>
+        {/* CATALOGO_PROJETOS_INDEPENDENTES_V1: atalhos, não transferência de dono. */}
+        <TabsContent value="projetos" className="mt-6">
+          <h3 className="text-xl font-semibold">Catálogo de projetos independentes</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Como no catálogo da Lovable: aqui só aparecem referências aos projetos.
+            Nenhuma tela, login, banco ou operação do TelePainel é incorporada
+            ao Instinto Superior. Estado de runtime exige prova separada.
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {PROJETOS_INDEPENDENTES.map((projeto) => (
+              <article key={projeto.id} className="panel p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <h4 className="font-semibold">{projeto.nome}</h4>
+                  <span className="font-mono text-[10px] text-muted-foreground">
+                    {projeto.escopo} · {projeto.runtime}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm text-muted-foreground">{projeto.observacao}</p>
+                <p className="mt-3 break-all font-mono text-xs">{projeto.origem}</p>
+                {projeto.destino ? (
+                  <a className="mt-4 inline-flex items-center gap-2 text-sm text-neon-blue underline"
+                    href={projeto.destino} target="_blank" rel="noopener noreferrer">
+                    Abrir projeto <ExternalLink className="size-4" />
+                  </a>
+                ) : (
+                  <p className="mt-4 text-xs text-muted-foreground">
+                    Worktree na Casa: sem URL pública ou execução inferida.
+                  </p>
+                )}
+              </article>
+            ))}
+          </div>
+          <h4 className="mt-8 font-semibold">Fontes legadas a preservar até paridade</h4>
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            {LEGADOS_SUPERFICIE_STATUS.map((legado) => (
+              <article key={legado.id} className="rounded-lg border border-border p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <code className="text-xs">{legado.dominio}</code>
+                  <span className="font-mono text-[10px] text-muted-foreground">{legado.estado}</span>
+                </div>
+                <p className="mt-2 text-xs text-muted-foreground">{legado.owner}</p>
+                <p className="mt-2 text-xs">{legado.prova}</p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            Remoção de rota antiga só após paridade de funcionalidade, consumidores
+            migrados, leitura da resposta real, HTTPS e rollback comprovados.
+          </p>
         </TabsContent>
         <TabsContent value="conexoes" className="mt-6">
           <ConexoesCentralDark />
