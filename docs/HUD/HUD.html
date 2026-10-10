@@ -3736,5 +3736,61 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
   window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.detail.sector==='PR')readPr();});
 })();
 </script>
+<script>
+/* CD-SECTOR-TOUCH-SEAL-V1: event-driven projection of the SAME existing owner probes.
+ * No browser writer, no new endpoint, no copied credential, no implicit PASS/SELADO.
+ * To seal a change the owner must publish a receipt and independently read it back.
+ */
+(function(){
+  'use strict';
+  var targets=[
+    {sector:'VPS',selector:'#live-heart-state',source:'https://mcp.centralldark.com/heartbeat'},
+    {sector:'MCP',selector:'.cd-mcp-admin-map .cd-mcp-count',source:'https://mcp.centralldark.com/health'},
+    {sector:'HERMES',selector:'#cd-api-hermes-current',source:'https://api.centralldark.com/health'},
+    {sector:'RUNTIME',selector:'#cd-live-runtime',source:'https://api.centralldark.com/health'},
+    {sector:'SCREENPIPE',selector:'#cd-route-screenpipe',source:'http://100.123.93.25:3030/health'},
+    {sector:'GITHUB',selector:'#cd-main-observer-status',source:'https://api.github.com/repos/ServerVpss/CentralDark/commits/main'},
+    {sector:'PR',selector:'#cd-api-pr-active-status',source:'https://api.github.com/repos/ServerVpss/CentralDark/pulls'}
+  ];
+  var badge=document.getElementById("cd-sector-touch-status");
+  function announce(sector,state,source){
+    if(typeof window.CentralDarkHudSectorObserved==='function')window.CentralDarkHudSectorObserved(sector,state,source);
+    if(badge)badge.textContent=sector+' · OBSERVADO / SELO PENDENTE · '+new Date().toISOString()+' · '+source;
+  }
+  targets.forEach(function(entry){
+    var node=document.querySelector(entry.selector);
+    if(!node||!window.MutationObserver)return;
+    var last=(node.textContent||'').trim();
+    var card=node.closest&&node.closest(".hud-card");
+    if(card)card.setAttribute("data-cd-sector",entry.sector);
+    new MutationObserver(function(){
+      var current=(node.textContent||'').trim();
+      if(!current||current===last)return;
+      last=current;
+      announce(entry.sector,current,entry.source);
+    }).observe(node,{characterData:true,childList:true,subtree:true});
+  });
+  function touch(sector){
+    var matches=sector==="TODOS"?targets:targets.filter(function(t){return t.sector===sector;});
+    if(!matches.length){
+      announce(sector,'SEM SONDA DIRETA NO NAVEGADOR · EXIGE EXECUTOR AUTORIZADO E RECEIPT','OWNER NATIVO CASA/VPS');
+      return;
+    }
+    matches.forEach(function(entry){
+      announce(entry.sector,'TOQUE RECEBIDO · REMEDINDO SENSOR EXISTENTE',entry.source);
+      window.dispatchEvent(new CustomEvent('centraldark:sector-touch',{detail:{sector:entry.sector}}));
+    });
+  }
+  var button=document.getElementById("cd-sector-touch-probe");
+  var select=document.getElementById("cd-event-filter");
+  if(button)button.addEventListener('click',function(){touch(select?select.value:'TODOS');});
+  if(select)select.addEventListener('change',function(){if(select.value!=='TODOS')touch(select.value);});
+  document.addEventListener('click',function(event){
+    if(event.target.closest && event.target.closest('a,button,select,input'))return;
+    var card=event.target.closest&&event.target.closest('[data-cd-sector]');
+    if(card)touch(card.getAttribute('data-cd-sector'));
+  });
+})();
+</script>
 </body>
 </html>
