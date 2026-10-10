@@ -1,15 +1,23 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "selado: medição Casa/VPS 2026-10-10",
-    "phase": "MEDICAO_READ_ONLY",
-    "currentTask": "Inventário Casa/VPS, CPU, portas, PIDs e HUD",
+    "lastCommit": "fix(vps): install jq required by canonical deploy receipts",
+    "phase": "UNKNOWN — não medido neste push",
+    "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
-    "stateSource": "explicit-event-payload",
-    "stateMeasuredAt": "2026-10-10T20:08:43.5363837Z"
+    "stateSource": "git-push-only",
+    "stateMeasuredAt": null
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-10T20:42:32.136Z",
+      "titulo": "Push na main · ab7bda321322c7af0bc6092b2a5d11ef28c595e9",
+      "detalhe": "fix(vps): install jq required by canonical deploy receipts",
+      "area": "Repositório",
+      "sha": "ab7bda3",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-10T20:08:43.5363837Z",
       "titulo": "Medição Casa/VPS",
@@ -20,6 +28,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-10T20:42:32.136Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ab7bda321322c7af0bc6092b2a5d11ef28c595e9 (ab7bda3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-10T20:08:43.5363837Z",
       "ia": "@SOL",
@@ -167,6 +182,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-10T20:08:43.5363837Z",
-  "updatedAtBR": "10/10/2026 17:08:43 BRT"
+  "updatedAt": "2026-10-10T20:42:32.136Z",
+  "updatedAtBR": "10/10/2026, 17:42:32 BRT"
 }
