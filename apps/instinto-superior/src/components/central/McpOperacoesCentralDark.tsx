@@ -82,6 +82,17 @@ export function McpOperacoesCentralDark() {
           )}
           {!d ? <Signal title="Sensores" state="UNKNOWN" detail="Aguardando MCP."/> : null}
         </div>
+        <h4 className="mt-6 font-semibold">Catálogo e deploy — fonte MCP /status.json</h4>
+        <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <Signal title="Catálogo publicado" state={d?.catalogHealth.diff.level ?? "UNKNOWN"}
+            detail={"Código: " + (d?.catalogHealth.diff.inCode ?? "UNKNOWN") +
+              " · publicado: " + (d?.catalogHealth.diff.published ?? "UNKNOWN")} />
+          <Signal title="Ferramentas não publicadas" state={d?.catalogHealth.diff.missing === 0 ? "ZERO_MEDIDO" : "CHECK_REQUIRED"}
+            detail={String(d?.catalogHealth.diff.missing ?? "UNKNOWN")} />
+          <Signal title="Main ↔ VPS" state="DRIFT_EVIDENCE_ONLY"
+            detail={(d?.catalogHealth.deploy.mainSha ?? "MAIN_UNKNOWN") + " / " +
+              (d?.catalogHealth.deploy.vpsSha ?? "VPS_UNKNOWN")} />
+        </div>
         <h4 className="mt-6 font-semibold">Setores do MCP</h4>
         <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {(d?.sectors ?? []).map((item, index) =>
@@ -106,6 +117,14 @@ export function McpOperacoesCentralDark() {
         </div>
         <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {tools.map(name => <div key={name} className="rounded-md border border-border p-3 font-mono text-xs">{name}</div>)}
+        </div>
+        <h4 className="mt-6 font-semibold">Grupos originais de ferramentas</h4>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {(q.data?.tools.groups ?? []).map((group, index) => (
+            <Signal key={group.id ?? index} title={group.label ?? "GRUPO_UNKNOWN"}
+              state={group.level ?? "UNKNOWN"}
+              detail={String(group.count ?? "UNKNOWN") + " ferramentas · " + group.names.slice(0, 4).join(", ")} />
+          ))}
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
           Listagem e filtro funcionam; executar ferramenta exige escopo administrativo e receipt.
@@ -140,6 +159,13 @@ export function McpOperacoesCentralDark() {
             <p className="mt-2 break-all font-mono text-xs">
               {src.url} · HTTP {probe?.httpStatus ?? "UNKNOWN"}
             </p>
+            {id === "conector" ? <div className="mt-4 grid gap-3 md:grid-cols-2">
+              {(d?.catalogHealth.connectors ?? []).map((item, index) => (
+                <Signal key={item.name ?? index} title={item.name ?? "CONECTOR"}
+                  state={item.level ?? "UNKNOWN"} detail={"latência: " +
+                    (item.latencyMs ?? "UNKNOWN") + " ms · fonte MCP /status.json"} />
+              ))}
+            </div> : null}
             {id === "comandos" ? <p className="mt-3 text-sm">
               #ACORDAR · !CALIBRAR · !MULTIBÚSSOLA · !META_LUPA.
               Uma intenção apresentada não comprova missão executada.
