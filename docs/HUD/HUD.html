@@ -2216,7 +2216,12 @@ opSend.addEventListener('click',async function(){
   // Gateway 9119 exige cookie de login e nao permite tratar file:// como origem autenticada.
   // Nao enviar cookies a host alternativo nem abrir API administrativa publica.
   if(!/^https?:$/.test(location.protocol)||location.port!=='9119'){
-    opStatus.textContent='BLOCKED_GATEWAY_ORIGIN: o HUD local/Obsidian nao compartilha a sessao autenticada do Hermes :9119. Use Copiar missao no Hermes; nada foi enviado.';return;
+    // A Casa/Obsidian abre a ponte HTML MINIMA na propria origem do Hermes,
+    // que exige login e usa os cookies somente no destino autenticado.
+    var url='http://100.90.199.124:9119/neurolink-dispatch.html?uid='+encodeURIComponent(chain[selected][0]);
+    window.open(url,'_blank','noopener');
+    opStatus.textContent='GATEWAY_BRIDGE_OPEN_ATTEMPT · janela do Hermes exige login + clique em Enviar; ainda sem tarefa/execucao comprovada. Se bloqueada, use Copiar missao.';
+    return;
   }
   busy=true;opSend.disabled=true;opStatus.textContent='GATEWAY_REQUEST_PENDING';
   try{
