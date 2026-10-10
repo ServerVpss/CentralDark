@@ -3396,6 +3396,15 @@ window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.de
   setInterval(screenCheck,15000);
   window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.detail.sector==='SCREENPIPE')screenCheck();});
   log('HUD','Projecao local iniciada; logs completos pertencem aos owners existentes');
+  // CD-SECTOR-TOUCH-SEAL-V1: same event ledger; browser cannot issue seals.
+  window.CentralDarkHudSectorObserved=function(sector,state,source){
+    var allowed=['CASA','TAILSCALE','SSH','MCP','DESKTOP','AIONUI','SUPABASE','HERMES','RUNTIME','SCREENPIPE','HUD','VPS','GITHUB','PR','DISCOS','OBSIDIAN'];
+    if(allowed.indexOf(sector)<0)return false;
+    var message=String(state||'UNKNOWN').replace(/[\r\n]/g,' ').slice(0,170);
+    var origin=String(source||'SENSOR_UNKNOWN').replace(/[\r\n]/g,' ').slice(0,160);
+    log(sector,'OBSERVADO / SELO PENDENTE · '+message+' · fonte='+origin);
+    return true;
+  };
 })();
 
 
