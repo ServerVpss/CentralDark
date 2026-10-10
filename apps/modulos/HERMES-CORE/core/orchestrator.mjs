@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { exec } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { createServer as httpCreateServer } from 'node:http';
+import { buildStatusOverview, buildStatusDetail } from '../../status/status-api.mjs';
 import { renameComRetry as renameComRetryUtil } from '../utils/fs-safe.mjs';
 import { continuityBlockReceipt, validateContinuityState } from './continuity-guard.mjs';
 import { registrar as registrarAprendizado } from '../agents/Knowledge-Collector/agent.mjs';
@@ -903,6 +904,23 @@ function iniciarHealthServer() {
   const srv = httpCreateServer(async (req, res) => {
     try {
       const url = (req.url || '/').split('?')[0];
+      // O Mega Painel é uma capability da MESMA API pública, não outro serviço.
+      // /health conserva a semântica Hermes; /status/overview é a projeção rica sanitizada.
+      if (req.method === 'GET' && (url === '/status/overview' || url === '/status/details')) {
+        const query = new URL(req.url || '/', 'http://localhost');
+        const isDetail = url === '/status/details';
+        const result = isDetail
+          ? await buildStatusDetail(query.searchParams.get('section'))
+          : await buildStatusOverview();
+        res.writeHead(result ? 200 : 404, {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Cache-Control': 'no-store',
+          'X-Content-Type-Options': 'nosniff',
+          'Access-Control-Allow-Origin': '*',
+        });
+        res.end(JSON.stringify(result || { ok: false, error: 'UNKNOWN_STATUS_SECTION' }));
+        return;
+      }
       if (['/health', '/', '/status', '/metrics'].includes(url)) {
         const body = JSON.stringify(await montarHealth(), null, 2);
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
