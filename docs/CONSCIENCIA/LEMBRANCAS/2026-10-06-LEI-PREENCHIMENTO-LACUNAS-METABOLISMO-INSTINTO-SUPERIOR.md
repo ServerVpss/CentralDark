@@ -253,6 +253,50 @@ GLOBAL_FIXED_POINT=NOT_PROVEN
 
 **NEXT_CURSOR:** quando houver motor disponível, **retomar a mesma sessão Hermes** `20261009_211218_ab72e6` e o mesmo LOOP; recuperar o Goal no board/perfil correto; rodar/consumir o teste de linhagem existente e evidências do HUD; confrontar CI e runtime por SHA; corrigir só o primeiro erro causal em owner existente; retestar cone, recibo e Fixed Point suficiente. `REPLAY_DOCUMENTAL=PASS`; `HERMES_MODEL_CONTINUATION=BLOCKED_429`; `FULL_ORACLE_ROUNDTRIP=UNKNOWN`; `GLOBAL_FIXED_POINT=NOT_PROVEN`.
 
+## 2026-10-09 — KANBAN_HEARTBEAT_NAO_E_PROGRESSO_20261009 · continuidade entre batidas do Hermes
+
+**Intenção do CHEFE:** a experiência comprovada deve virar memória e receita para o mesmo Hermes/Goal. Ao dizer `REPLAY!`, quer preservar o trabalho feito, não gastar modelo/auditoria novamente. A leitura de UI deve distinguir vida, efeito, prova e retomada; não confundir fim de turno com fim da intenção.
+
+**Capturas observadas nesta sessão (evidência da UI; NÃO readback do worker ao vivo):**
+- Kanban `Ler Pertinente`, tarefa `t_140910d4`, referida ao Goal pai `t_9040803d`: etiqueta `RUNNING`, `Activity=155`, `Runs=7`, heartbeats sucessivos e comentário `REPLAY!`.
+- Um log de execução **anterior**, sessão `20261009_233325_cc35df`, exibe `Duration=25m14s`, `Messages=6 (3 user, 0 tool calls)`, `[kanban-worker-exit] rc=75`. O campo `Last failure` atribui um erro à `quota wall` do modelo; isso não prova o estado nem a causa de qualquer execução posterior.
+- Tooltip da interface afirma que comentário simples entra no turno do worker em andamento; `Requeue with note` reinicia a tarefa do começo. `REPLAY!` enviado à interface **não é prova de que o worker o processou**.
+- O nome `Ler Pertinente` exige leitura de `SOUL-SOL.md`, `LEIA-ME-IA.md`, `AGENTS.md`, `RULES.md`, `APRENDIZADOS.md`, biblioteca, `MAPA-DO-CEREBRO.md` e CURRENT; sem tool call/readback correspondente, leitura real ainda `UNKNOWN`.
+
+**Leis aprendidas no incidente:**
+
+```text
+HEARTBEAT != APRENDIZADO
+RUNNING != EXECUCAO_COMPROVADA
+ACTIVITY_COUNT != TASK_DONE
+RUN_COUNT != CRITERIA_PASS
+COMMENT_SENT != NOTE_PROCESSED
+OLD_RUN_RC75 != CURRENT_WORKER_FAILURE
+OLD_RUN_ZERO_TOOLS != EVERY_RUN_ZERO_TOOLS
+REQUEUE != RESUME
+LOCAL_DONE != GOAL_PAI_DONE
+```
+
+**Receita de retomada — REUSE_BEFORE_CREATE, sem outro Goal:**
+
+```text
+CHEFE_INTENCAO
+→ LEMBRANÇAS + APRENDIZADOS + C01..C30 + CURRENT
+→ GOAL=t_9040803d / TASK=t_140910d4 / RUN ATUAL
+→ COMPARAR RECEIPT + FINGERPRINT + SHA + NEXT_CURSOR
+→ JA_PROVADO_NO_MESMO_ESCOPO? REUTILIZAR, NÃO REEXECUTAR
+→ WORKER_RUNNING? NOTA_SIMPLES, NÃO REQUEUE AUTOMÁTICO
+→ LER RESULTADO DO WORKER (FERRAMENTAS, EFEITO, CONTRAPROVA, RECEIPT)
+→ QUOTA_WALL? PRESERVAR ESTADO, BACKOFF/FALLBACK AUTORIZADO
+→ CAUSA NOVA? VOLTAR UMA CASA → MENOR DELTA → TESTE
+→ REGISTRAR O RESULTADO E CONTINUAR A INTENÇÃO
+→ FIXED_POINT APENAS COM EFEITO MEDIDO
+```
+
+**Placar de prova do incidente:** `UI_RUNNING=OBSERVED`; `HEARTBEATS=OBSERVED`; `OLD_RUN_0_TOOL_CALLS_RC75=OBSERVED`; `CURRENT_WORKER_READ_DOCS=UNKNOWN`; `REPLAY_NOTE_APPLIED=UNKNOWN`; `GOAL_PAI_DONE=NOT_PROVEN`. Os critérios pertinentes são C02/C07/C08/C17/C18/C20/C23/C24/C26/C27/C30 da matriz já existente. **Nenhum runtime, worker, banco Kanban, modelo ou scheduler alterado neste registro.**
+
+**NEXT_CURSOR:** consultar o último run de `t_140910d4` no board/perfil correto, confirmar tool calls e receipts do turno corrente, recuperar próximo cursor e continuar com o mesmo Goal; jamais reiniciar por impulso só por ver `rc=75` antigo.
+
 ## Proveniência
 
 Fonte primária: declaração direta do SEGREDO/CHEFE, 2026-10-06.
