@@ -729,7 +729,9 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
     latencyMs: countField(connector["latencyMs"]),
     // Don't relay raw detail/env hints or any credential-bearing fields.
   }));
-  const catalogDiff = objetoJson(catalog.dados?.["catalogDiff"]) ? catalog.dados["catalogDiff"] : null;
+  const catalogCandidate = catalog.dados?.["catalog"];
+  const catalogSummary = objetoJson(catalogCandidate) ? catalogCandidate : null;
+  const catalogDiff = objetoJson(catalog.dados?.["catalogDiff"]) ? catalog.dados?.["catalogDiff"] : null;
   const deploy = objetoJson(catalog.dados?.["deploy"]) ? catalog.dados["deploy"] : null;
   const gitDeploy = objetoJson(deploy?.["github"]) ? deploy["github"] : null;
   const vpsDeploy = objetoJson(deploy?.["local"]) ? deploy["local"] : null;
@@ -742,7 +744,7 @@ export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler
     sectors: setores.sectors,
     events: setores.events,
     tools: { probe: safeProbe(tools), reported: countField(toolsPayload?.["toolCount"]) ??
-      countField(objetoJson(catalog.dados?.["catalog"]) ? catalog.dados["catalog"]["toolCount"] : null) ??
+      countField(catalogSummary?.["toolCount"]) ??
       (toolNames.length || null), names: toolNames, groups: publishedGroups },
     catalogHealth: { probe: safeProbe(catalog), connectors: publicConnectors,
       diff: { level: textField(catalogDiff?.["level"], 25),
