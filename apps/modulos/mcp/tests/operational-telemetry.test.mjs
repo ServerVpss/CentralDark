@@ -166,3 +166,60 @@ test("F1_GIT lê o recibo do auto-sync, nunca inventa PASS", async () => {
   assert.equal(snap.fronts[0].id, "F1_GIT");
   assert.ok(snap.statusFiles["logs/auto-sync-status.json"]);
 });
+
+
+// HEALTH_SECTORS_V1_TEST: endpoint projection reuses canonical receipts without secrets.
+test("health sectors read recent canonical events and isolate optional UNAVAILABLE", async () => {
+  const { getHealthSectorSummary } = await import("../src/operational-telemetry.js");
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-health-sector-"));
+  const nowMs = Date.parse("2026-10-10T19:30:00.000Z");
+  const day = "2026-10-10";
+  fs.mkdirSync(path.join(root, "logs/events"), { recursive: true });
+  fs.mkdirSync(path.join(root, "secrets"), { recursive: true });
+  fs.writeFileSync(path.join(root, "secrets", "token.txt"), "SECRET_NEVER_SHOW");
+  fs.writeFileSync(path.join(root, "logs/heartbeat-api.json"),
+    JSON.stringify({ t: "2026-10-10T19:29:40Z", self: "alive" }));
+  fs.writeFileSync(path.join(root, "logs/auto-sync-status.json"),
+    JSON.stringify({ t: "2026-10-10T19:29:40Z", result: "BLOCKED",
+      reason: "TOKEN_SHOULD_NEVER_LEAK", head: "a".repeat(40) }));
+  const event = {
+    schema: "centraldark.event.v1", timestamp: "2026-10-10T19:29:35Z",
+    event_id: "d6bf3957", sector: "mcp", service: "mcp-server",
+    kind: "mcp_tool_call", level: "warn",
+    message: "SECRET_NEVER_SHOW", actor: "SECRET_NEVER_SHOW",
+    data: { private_token: "SECRET_NEVER_SHOW" },
+  };
+  fs.writeFileSync(path.join(root, "logs/events", day + ".jsonl"),
+    JSON.stringify(event) + "\n");
+  const s = getHealthSectorSummary({ root, nowMs });
+  assert.equal(s.schema, "centraldark.health.sectors.v1");
+  assert.equal(s.events.state, "OBSERVED");
+  assert.equal(s.events.bySector.mcp, 1);
+  assert.equal(s.events.byLevel.warn, 1);
+  assert.equal(s.events.recent[0].kind, "mcp_tool_call");
+  assert.equal(s.sectors.find((x) => x.id === "GITHUB_SYNC").state, "BLOCKED");
+  assert.equal(s.sectors.find((x) => x.id === "ONE_HEART").state, "OBSERVED");
+  assert.equal(s.sectors.find((x) => x.id === "CASA").state, "UNKNOWN");
+  assert.equal(s.summary.fixedPoint, false);
+  assert.equal(JSON.stringify(s).includes("SECRET_NEVER_SHOW"), false);
+  assert.equal(JSON.stringify(s).includes("TOKEN_SHOULD_NEVER_LEAK"), false);
+  assert.equal(JSON.stringify(s).includes("private_token"), false);
+});
+
+test("health sectors never mistake missing or stale sources for global failure", async () => {
+  const { getHealthSectorSummary } = await import("../src/operational-telemetry.js");
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-health-empty-"));
+  const nowMs = Date.parse("2026-10-10T19:30:00.000Z");
+  const empty = getHealthSectorSummary({ root, nowMs });
+  assert.equal(empty.events.state, "UNAVAILABLE");
+  assert.equal(empty.events.countInSample, null);
+  assert.equal(empty.sectors.find((x) => x.id === "GITHUB_SYNC").state, "UNAVAILABLE");
+  assert.equal(empty.sectors.find((x) => x.id === "ONE_HEART").state, "UNAVAILABLE");
+  assert.equal(empty.sectors.find((x) => x.id === "MCP").scope, "HTTP_RESPONSE_ONLY");
+  assert.equal(empty.summary.optionalUnavailableIsNotGlobalFailure, true);
+  fs.mkdirSync(path.join(root, "logs"), { recursive: true });
+  fs.writeFileSync(path.join(root, "logs/heartbeat-api.json"),
+    JSON.stringify({ t: "2026-10-10T18:00:00Z", self: "alive" }));
+  const stale = getHealthSectorSummary({ root, nowMs });
+  assert.equal(stale.sectors.find((x) => x.id === "ONE_HEART").state, "STALE");
+});
