@@ -3402,7 +3402,8 @@ window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.de
     if(allowed.indexOf(sector)<0)return false;
     var message=String(state||'UNKNOWN').replace(/[\r\n]/g,' ').slice(0,170);
     var origin=String(source||'SENSOR_UNKNOWN').replace(/[\r\n]/g,' ').slice(0,160);
-    log(sector,'OBSERVADO / SELO PENDENTE · '+message+' · fonte='+origin);
+    var phase=message.indexOf('TOQUE RECEBIDO')===0?'MEDICAO SOLICITADA / AGUARDANDO SENSOR':message.indexOf('SEM SONDA')===0?'SEM SONDA / VER PENDENCIA':'MUDANCA VISUAL / REQUER READBACK DO SENSOR';
+    log(sector,phase+' · '+message+' · fonte='+origin);
     return true;
   };
 })();
@@ -3755,7 +3756,8 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
   var badge=document.getElementById("cd-sector-touch-status");
   function announce(sector,state,source){
     if(typeof window.CentralDarkHudSectorObserved==='function')window.CentralDarkHudSectorObserved(sector,state,source);
-    if(badge)badge.textContent=sector+' · OBSERVADO / SELO PENDENTE · '+new Date().toISOString()+' · '+source;
+    var phase=state.indexOf('TOQUE RECEBIDO')===0?'MEDICAO SOLICITADA / AGUARDANDO SENSOR':state.indexOf('SEM SONDA')===0?'SEM SONDA / VER PENDENCIA':'MUDANCA VISUAL / REQUER READBACK DO SENSOR';
+    if(badge)badge.textContent=sector+' · '+phase+' · '+new Date().toISOString()+' · '+source;
   }
   targets.forEach(function(entry){
     var node=document.querySelector(entry.selector);
