@@ -660,3 +660,75 @@ export async function obterStatusSetorialCentralDark() {
     },
   };
 }
+
+
+/**
+ * Migração incremental do /admin visual para Instinto Superior.
+ * Usa somente GETs públicos, de leitura, dos owners existentes.
+ * Sem cookie admin, sem token no browser e sem executar mutações.
+ * Os controles administrativos privilegiados continuam no MCP até que
+ * autenticação delegada e contraprova E2E sejam implementadas.
+ */
+export const lerMcpPainelCentralDark = createServerFn({ method: "GET" }).handler(async () => {
+  const mcpBase = (process.env["CENTRALDARK_MCP_BASE_URL"] || "https://mcp.centralldark.com").replace(/\/+$/, "");
+  const [setores, tools, linear, figma, catalog, legacy, statusOverview] = await Promise.all([
+    obterStatusSetorialCentralDark(),
+    medirApi("/tools.json", mcpBase),
+    medirApi("/linear/status", mcpBase),
+    medirApi("/figma/status", mcpBase),
+    medirApi("/status.json", mcpBase),
+    medirApi("/admin/api/e2e/publico", mcpBase),
+    medirApi("/status/overview"),
+  ]);
+
+  const textField = (v: unknown, length = 100) => typeof v === "string" ? v.slice(0, length) : null;
+  const countField = (v: unknown) => typeof v === "number" && Number.isFinite(v) ? v : null;
+  const safeProbe = (p: Probe) => ({
+    httpStatus: p.httpStatus,
+    state: p.httpStatus === 200 ? "HTTP_OBSERVED" :
+      p.httpStatus === 401 || p.httpStatus === 403 ? "AUTH_REQUIRED" :
+      p.httpStatus === null ? "UNAVAILABLE" : "HTTP_FAIL",
+    error: p.erro ? String(p.erro).slice(0, 140) : null,
+  });
+  const rawSections = objetoJson(statusOverview.dados?.["sections"]) ? statusOverview.dados["sections"] : null;
+  const allowedSections = ["projeto", "infraestrutura", "mcp_24h", "diagnostico_ias", "conselho", "capsula", "mcp_legado"];
+  const sections = allowedSections.map((key) => {
+    const d = objetoJson(rawSections?.[key]) ? rawSections[key] : null;
+    const status = textField(d?.["state"], 30) ?? "UNKNOWN";
+    return {
+      id: key,
+      state: ["OBSERVED", "STALE", "UNKNOWN"].includes(status) ? status : "UNKNOWN",
+      source: textField(d?.["source"], 90),
+      observedAt: textField(d?.["observed_at"], 35),
+      ageSeconds: countField(d?.["age_seconds"]),
+      // Apenas as projeções previamente sanitizadas do status-api existente.
+      data: objetoJson(d?.["data"]) ? d["data"] : null,
+    };
+  });
+  const toolsPayload = tools.dados;
+  const toolList = Array.isArray(toolsPayload?.["tools"]) ? toolsPayload["tools"] : [];
+  const toolNames = toolList.slice(0, 90).filter(objetoJson).map(t => textField(t["name"], 90)).filter((name): name is string => !!name);
+  return {
+    schema: "centraldark.cockpit.mcp-admin-migration.v1",
+    observedAt: new Date().toISOString(),
+    owners: { mcp: "apps/modulos/mcp/src/index.js", view: "apps/instinto-superior/src/components/central/PainelAdminCentralDark.tsx" },
+    checks: setores.checks,
+    sectors: setores.sectors,
+    events: setores.events,
+    tools: { probe: safeProbe(tools), reported: countField(toolsPayload?.["toolCount"]) ?? toolList.length || null, names: toolNames },
+    integrations: {
+      linear: { ...safeProbe(linear), ok: linear.dados?.["ok"] === true },
+      figma: { ...safeProbe(figma), ok: figma.dados?.["ok"] === true },
+      connectors: { ...safeProbe(catalog), count: Array.isArray(catalog.dados?.["connections"]) ? catalog.dados["connections"].length : null },
+      e2ePublic: { ...safeProbe(legacy), ok: legacy.dados?.["ok"] === true },
+    },
+    megaPainel: {
+      probe: safeProbe(statusOverview),
+      sections,
+      coverage: objetoJson(statusOverview.dados?.["coverage"]) ? statusOverview.dados["coverage"] : null,
+    },
+    access: "PUBLIC_SANITIZED_READ_ONLY",
+    adminMutations: "MCP_AUTH_DELEGATION_NOT_YET_PROVEN",
+    fixedPoint: false,
+  };
+});
