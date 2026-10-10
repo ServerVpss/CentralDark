@@ -2225,8 +2225,8 @@ opSend.addEventListener('click',async function(){
   }
   busy=true;opSend.disabled=true;opStatus.textContent='GATEWAY_REQUEST_PENDING';
   try{
-    var task={title:'[NEUROLINK] '+chain[selected][0]+' · receita comprovada',body:body,status:'todo',priority:1};
-    var res=await fetch('/api/kanban/tasks',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(task)});
+    var task={title:'[NEUROLINK] '+chain[selected][0]+' · receita comprovada',body:body,assignee:'default',priority:1,goal_mode:true,goal_max_turns:20,workspace_kind:'scratch',idempotency_key:'centraldark:neurolink:'+chain[selected][0]};
+    var res=await fetch('/api/plugins/kanban/tasks',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(task)});
     var raw=await res.text(),json={};try{json=JSON.parse(raw)}catch(_){}
     if(!res.ok){opStatus.textContent='BLOCKED_GATEWAY_HTTP_'+res.status+'; sem execucao comprovada';return}
     var id=json.id||json.task_id||(json.task&&json.task.id);
