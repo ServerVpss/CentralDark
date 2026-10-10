@@ -47,12 +47,12 @@ const previousSnapshot = existsSync(SNAPSHOT_FILE)
   : null;
 
 const ENDPOINTS = [
-  { name: 'MCP health', url: 'https://mcp.centralldark.com/health', bot: 'grok' },
-  { name: 'MCP status', url: 'https://mcp.centralldark.com/status.json', bot: 'grok' },
-  { name: 'MCP tools', url: 'https://mcp.centralldark.com/tools.json', bot: 'codex' },
-  { name: 'Install status', url: 'https://install.centralldark.com/status.json', bot: 'claude' },
-  { name: 'Painel', url: 'https://status.centralldark.com/', bot: 'claude' },
-  { name: 'API', url: 'https://api.centralldark.com/health', bot: 'codex' },
+  { name: 'MCP health', url: 'https://mcp.centralldark.com/health', expectedStatus: 200, bot: 'grok' },
+  { name: 'MCP status', url: 'https://mcp.centralldark.com/status.json', expectedStatus: 200, bot: 'grok' },
+  { name: 'MCP tools', url: 'https://mcp.centralldark.com/tools.json', expectedStatus: 200, bot: 'codex' },
+  { name: 'Install status', url: 'https://install.centralldark.com/status.json', expectedStatus: 200, bot: 'claude' },
+  { name: 'Painel', url: 'https://status.centralldark.com/', expectedStatus: 200, bot: 'claude' },
+  { name: 'API', url: 'https://api.centralldark.com/health', expectedStatus: 200, bot: 'codex' },
 ];
 
 const divergencias = [];
@@ -62,7 +62,7 @@ async function checkEndpoint(ep) {
   try {
     const ctrl = new AbortController();
     const to = setTimeout(() => ctrl.abort(), 5000);
-    const r = await fetch(ep.url, { signal: ctrl.signal });
+    const r = await fetch(ep.url, { signal: ctrl.signal, redirect: 'manual' });
     clearTimeout(to);
     const dt = Date.now() - t0;
     const cors = r.headers.get('access-control-allow-origin');
@@ -144,17 +144,17 @@ function ghOpenIssue({ title, body, labels }) {
 async function checkEndpoints() {
   const out = await Promise.all(ENDPOINTS.map(checkEndpoint));
   for (const r of out) {
-    if (r.status >= 200 && r.status < 400) continue;
+    if (r.status === r.expectedStatus) continue;
     divergencias.push({
       area: 'Endpoints',
       bot: r.bot,
       sev: r.status === 0 ? 'p1' : 'p2',
       titulo: `Endpoint ${r.name} fora do ar (HTTP ${r.status})`,
-      detalhe: `URL: ${r.url}\nStatus: ${r.status}\nLatência: ${r.latencyMs}ms\nErro: ${r.error || '-'}`,
+      detalhe: `URL: ${r.url}\nEsperado: HTTP ${r.expectedStatus}\nObtido: HTTP ${r.status}\nLatência: ${r.latencyMs}ms\nErro: ${r.error || '-'}`,
     });
   }
   for (const r of out) {
-    if (r.url.includes('mcp.centralldark.com') && r.status >= 200 && r.status < 400 && !r.cors) {
+    if (r.url.includes('mcp.centralldark.com') && r.status === r.expectedStatus && !r.cors) {
       divergencias.push({
         area: 'CORS',
         bot: 'grok',
@@ -346,7 +346,7 @@ const report = `# Sentinela — ${snapshot.at}
 | Métrica | Valor |
 |---|---|
 | Endpoints checados | ${endpointsResult.length} |
-| Endpoints fora | ${endpointsResult.filter((r) => r.status < 200 || r.status >= 400).length} |
+| Endpoints fora | ${endpointsResult.filter((r) => r.status !== r.expectedStatus).length} |
 | Workflows vermelhos 24h | ${wfCount} |
 | Divergências detectadas | ${divergencias.length} |
 | Issues novas | ${abertas.filter((a) => a.nova).length} |
@@ -355,7 +355,7 @@ const report = `# Sentinela — ${snapshot.at}
 
 ## Endpoints
 
-${endpointsResult.map((r) => `- ${r.status >= 200 && r.status < 400 ? '🟢' : '🔴'} **${r.name}** — \`${r.status}\` em ${r.latencyMs}ms${r.cors ? ` · CORS=\`${r.cors}\`` : ''}${r.error ? ` · erro: ${r.error}` : ''}`).join('\n')}
+${endpointsResult.map((r) => `- ${r.status === r.expectedStatus ? '🟢' : '🔴'} **${r.name}** — \`${r.status}\` em ${r.latencyMs}ms${r.cors ? ` · CORS=\`${r.cors}\`` : ''}${r.error ? ` · erro: ${r.error}` : ''}`).join('\n')}
 
 ## Divergências
 
