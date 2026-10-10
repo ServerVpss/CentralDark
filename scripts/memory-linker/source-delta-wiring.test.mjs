@@ -13,6 +13,10 @@ const HUB_COMMAND = readFileSync(resolve(ROOT, 'apps/modulos/hub/supabase/functi
 const HUB_PAGE = readFileSync(resolve(ROOT, 'apps/modulos/hub/src/HubPage.tsx'), 'utf8');
 const INVENTORY_UI = readFileSync(resolve(ROOT, 'apps/modulos/hub/src/components/inventory/InventoryTab.tsx'), 'utf8');
 const HUB_PACKAGE = readFileSync(resolve(ROOT, 'apps/modulos/hub/package.json'), 'utf8');
+const HUB_READ = readFileSync(resolve(ROOT, 'apps/modulos/hub/supabase/functions/hub-read/index.ts'), 'utf8');
+const HUB_REFRESH = readFileSync(resolve(ROOT, 'apps/modulos/hub/src/hooks/useHubAutoRefresh.ts'), 'utf8');
+const HUB_DASH = readFileSync(resolve(ROOT, 'apps/modulos/hub/src/components/dashboard/DashboardTab.tsx'), 'utf8');
+const HUB_ROUTES = JSON.parse(readFileSync(resolve(ROOT, 'MODULES/HUB/status-centraldark.routes.json'), 'utf8'));
 
 test('SOURCE_DELTA permanece um só motor com adapters e fonte sem autoridade', () => {
   for (const marker of [
@@ -53,6 +57,20 @@ test('hub-command não engole parse nem falha de auditoria', () => {
   assert.ok(HUB_COMMAND.includes('partial_success: true'));
   assert.ok(!HUB_COMMAND.includes('.then(() => {}, () => {})'));
   assert.ok(!HUB_COMMAND.includes('.catch(() => ({}))'));
+});
+
+test('Deploy watcher compartilha hub-read/hub-auto-refresh sem falso PASS', () => {
+  assert.match(HUB_READ, /body\?\.scope === 'deploy'/);
+  assert.match(HUB_READ, /Deno\.env\.get\('GITHUB_TOKEN'\)/);
+  assert.match(HUB_READ, /run\.head_sha === sha/);
+  assert.match(HUB_READ, /CI_SUCCESS_NOT_RUNTIME_READBACK/);
+  assert.match(HUB_READ, /runtimeProof: false/);
+  assert.match(HUB_REFRESH, /hubAuth\.functions\.invoke\('hub-read'/);
+  assert.match(HUB_REFRESH, /setInterval\(run, intervalMs\)/);
+  assert.match(HUB_REFRESH, /visibilitychange/);
+  assert.match(HUB_PAGE, /onDeploy: setDeploy/);
+  assert.match(HUB_DASH, /Radar de deploy/);
+  assert.ok(HUB_ROUTES.routes.some((r) => r.id === 'status.github.head' && r.must_show.includes('deploy_state')));
 });
 
 test('Inventário da Casa deriva owners reais sem criar segunda verdade', () => {
