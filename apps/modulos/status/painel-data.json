@@ -28,6 +28,145 @@
       "status": "bloqueado"
     }
   ],
+  "centraldark_measurement": {
+    "samples": [
+      {
+        "host": "casa",
+        "scope": "host",
+        "proof": "MEASURED",
+        "cpu_percent": 47,
+        "observed_at": "2026-10-10T20:08:43.5363837Z",
+        "source": "Remote Desktop Commander / Win32_Processor",
+        "receipt": "device SEGREDO"
+      },
+      {
+        "host": "vps",
+        "scope": "host",
+        "proof": "UNKNOWN",
+        "cpu_percent": null,
+        "observed_at": null,
+        "source": "sensor VPS não exposto; /proc/stat NAO_ENCONTRADO",
+        "receipt": "centraldark_vps_read_file_safe"
+      }
+    ],
+    "casa": {
+      "ports": [],
+      "processes": [
+        {
+          "name": "codex",
+          "pids": [
+            23416,
+            28504
+          ]
+        },
+        {
+          "name": "codex-code-mode-host",
+          "pids": [
+            1924
+          ]
+        },
+        {
+          "name": "codex-computer-use-swift",
+          "pids": [
+            13040
+          ]
+        },
+        {
+          "name": "codex-windows-sandbox-service",
+          "pids": [
+            18512
+          ]
+        },
+        {
+          "name": "node",
+          "pids": [
+            4568,
+            18152,
+            28616,
+            30524,
+            32284
+          ]
+        },
+        {
+          "name": "tailscaled",
+          "pids": [
+            4960,
+            9740
+          ]
+        },
+        {
+          "name": "tailscale-ipn",
+          "pids": [
+            29860
+          ]
+        }
+      ],
+      "programs": [
+        {
+          "name": "AionUi",
+          "version": "2.2.2.0"
+        },
+        {
+          "name": "CodeAgentSwarm",
+          "version": "2.4.3.0"
+        },
+        {
+          "name": "Common",
+          "version": null
+        },
+        {
+          "name": "Cua",
+          "version": null
+        },
+        {
+          "name": "DockerDesktop",
+          "version": null
+        },
+        {
+          "name": "Hydra",
+          "version": "3.7.3.0"
+        },
+        {
+          "name": "Obsidian",
+          "version": "1.13.7.0"
+        }
+      ],
+      "hud": {
+        "sha256": "CD0FCB26E8DCF96DDE9279BF980A7AAB3282EB037BC4B1530EA4B720D0576409",
+        "bytes": 283102,
+        "observed_at": "2026-10-10T20:08:43.5363837Z"
+      }
+    },
+    "vps": {
+      "branch": "main",
+      "head": "5344bd870",
+      "dirty": true,
+      "hud": {
+        "path": "docs/HUD/HUD.html",
+        "bytes": 221401,
+        "sha256": null,
+        "hash_proof": "UNKNOWN"
+      }
+    },
+    "github_main": {
+      "head": "f5293b63cf43c26b54c1a8bdbf2454d779efcf22"
+    },
+    "tailscale": {
+      "status": "BLOCKED",
+      "api": "PROVIDER_HTTP_401",
+      "bridge": "fetch failed",
+      "vps_to_casa_ping": "NOT_PROVEN"
+    },
+    "errors": [
+      {
+        "name": "ENOENT",
+        "message": "no such file or directory, open '<caminho-vps>'",
+        "owner": "apps/modulos/status/atualizar-painel-vivo.mjs",
+        "line": 42,
+        "missing": "apps/modulos/status/painel-data.json"
+      }
+    ]
+  },
   "updatedAt": "2026-10-10T20:08:43.5363837Z",
   "updatedAtBR": "10/10/2026 17:08:43 BRT"
 }
