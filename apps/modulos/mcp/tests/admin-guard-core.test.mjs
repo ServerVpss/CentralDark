@@ -252,6 +252,54 @@ test("guardDestructive: escopo admin ausente bloqueia e audita", async () => {
   assert.equal(g.audit.ok, true);
 });
 
+test("OAuth admin persistente: identidade, escopo e auditoria dispensam frase repetida", async () => {
+  const g = await guardDestructive({
+    toolName: "admin_pm2_restart", adminAuthorized: true,
+    persistentAdminAuthorization: true, actor: "oauth-admin",
+    correlationId: "authenticated-request-1", runtimeTools: makeRuntime().tools,
+    expectation: getCanonicalExpectation(),
+  });
+  assert.equal(g.allow, true);
+  assert.equal(g.status, "OK");
+  assert.equal(g.confirmationEval.confirmationMode, "authenticated_admin_session");
+  assert.equal(g.audit.confirmationMode, "authenticated_admin_session");
+});
+test("Autorizacao persistente sem escopo ou identidade nao concede permissao", async () => {
+  for (const input of [
+    { adminAuthorized: false, actor: "oauth-admin", correlationId: "id" },
+    { adminAuthorized: true, actor: "", correlationId: "id" },
+    { adminAuthorized: true, actor: "oauth-admin", correlationId: "" },
+  ]) {
+    const g = await guardDestructive({
+      toolName: "admin_pm2_restart", persistentAdminAuthorization: true,
+      runtimeTools: makeRuntime().tools, expectation: getCanonicalExpectation(), ...input,
+    });
+    assert.equal(g.allow, false);
+  }
+});
+test("Autorizacao persistente nao aceita frase explicitamente invalida", async () => {
+  const g = await guardDestructive({
+    toolName: "admin_pm2_restart", adminAuthorized: true,
+    persistentAdminAuthorization: true, actor: "oauth-admin",
+    correlationId: "id", confirmAdmin: "invalida",
+    runtimeTools: makeRuntime().tools, expectation: getCanonicalExpectation(),
+  });
+  assert.equal(g.allow, false);
+  assert.equal(g.status, "CONFIRMACAO_ADMIN_NECESSARIA");
+});
+test("Autorizacao persistente nao tira quarentena de ferramentas", async () => {
+  const g = await guardDestructive({
+    toolName: "tool_extra", adminAuthorized: true,
+    persistentAdminAuthorization: true, actor: "oauth-admin",
+    correlationId: "id",
+    runtimeTools: [...makeRuntime().tools,
+      { name: "tool_extra", annotations: { destructiveHint: true } }],
+    expectation: getCanonicalExpectation(),
+  });
+  assert.equal(g.allow, false);
+  assert.equal(g.status, "DESTRUTIVA_EM_QUARENTENA");
+});
+
 // MOTIVO  > este teste travava o comportamento antigo: QUALQUER divergencia
 //           bloqueava TODA destrutiva. Uma tool desconhecida derrubava o
 //           conjunto inteiro, inclusive as aprovadas sem relacao com ela.

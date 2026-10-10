@@ -188,6 +188,29 @@ CONVERGENCIA_TOTAL
 = somente quando SEGREDO/CHEFE solicitar para provar autonomia, arquitetura, robustez ou generalização
 ```
 
+## MCP Admin — autorização persistente sem confirmação repetitiva (2026-10-10)
+
+A rota existente `/admin/mcp` reutiliza a sessão OAuth vigente com escopo
+`admin` e identidade auditável; o bridge Hub autenticado também reutiliza sua
+sessão administrativa. Nessas entradas, ferramentas destrutivas **aprovadas no
+manifesto** não exigem digitar `CONFIRMO ADMIN` a cada chamada.
+
+- O OAuth precisa continuar válido em cada request; expiração/revogação corta
+  a autorização. A configuração é permanente, não o token.
+- A auditoria encadeada, a quarentena, a allowlist, o controle de escopo e os
+  limites próprios das ferramentas permanecem obrigatórios.
+- `autoMission` não recebe aprovação independente; nenhum modelo fabrica
+  autoridade humana a partir do texto do prompt.
+- Chamadas locais/stdio sem proveniência autenticada continuam no mecanismo
+  legado de confirmação explícita; sem frase e sem proveniência são bloqueadas.
+- Uma confirmação explícita inválida não é silenciosamente transformada em PASS.
+- Não cria novo auth server, arquivo de token persistente ou outro executor.
+
+OWNER_CODE=`apps/modulos/mcp/src/lib/admin-guard.js`
+CONSUMERS=`apps/modulos/mcp/src/tools/core/mcp-admin.js`,
+`apps/modulos/mcp/src/mcp-server.js`, `apps/modulos/mcp/src/index.js`,
+`apps/modulos/mcp/src/provider-admin-bridge.js`.
+
 ## Credencial autorizada não é bypass
 
 Receber ou usar uma credencial disponibilizada pelo próprio fluxo autorizado não é, por si só, jailbreak nem ampliação de autoridade. O julgamento continua sendo sobre **escopo + efeito + tratamento do segredo**.
