@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🪬 testar selo monotônico, prova e próximo cursor",
+    "lastCommit": "🪬 adaptar deploy Hermes ao owner systemd existente",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-10T21:19:29.517Z",
+      "titulo": "Push na main · 19214b3a75b926eb07944dee56e53a676c3d8406",
+      "detalhe": "🪬 adaptar deploy Hermes ao owner systemd existente",
+      "area": "Repositório",
+      "sha": "19214b3",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-10T21:01:00.636Z",
       "titulo": "Push na main · aeba7ac4c874077eefdfeed62f162824eeb23760",
@@ -44,6 +52,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-10T21:19:29.517Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 19214b3a75b926eb07944dee56e53a676c3d8406 (19214b3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-10T21:01:00.636Z",
       "ia": "@segredounlock",
@@ -212,6 +227,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-10T21:01:00.636Z",
-  "updatedAtBR": "10/10/2026, 18:01:00 BRT"
+  "updatedAt": "2026-10-10T21:19:29.517Z",
+  "updatedAtBR": "10/10/2026, 18:19:29 BRT"
 }
