@@ -3,7 +3,6 @@ import { Boxes, KeyRound, ShieldAlert, ShieldCheck } from "lucide-react";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
-import { useNotificationsLog } from "@/hooks/useNotificationsLog";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 
 export const SEM_FONTE = "Sem fonte operacional autorizada nesta superfície.";
@@ -84,7 +83,6 @@ export function HubSeguranca({ estado }: { estado: EstadoCentralDark | undefined
 }
 
 export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | undefined }) {
-  const notificacoes = useNotificationsLog("24h");
   const bots = useTelegramBotsResumo();
   const botsAtivos = bots.bots.filter((b) => b.is_active).length;
   return (
@@ -112,13 +110,13 @@ export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | un
         </div>
         <TabsContent value="visao" className="mt-6 grid gap-4 md:grid-cols-3">
           <ItemCofre
-            titulo="Notificações 24h"
+            titulo="Eventos oficiais CentralDark"
             detalhe={
-              notificacoes.stats
-                ? `${notificacoes.stats.total} evento(s) · ${notificacoes.stats.sucessoPct}% sem erro/crítico`
-                : SEM_FONTE
+              estado?.mcpEventosContagem == null
+                ? `MCP: ${estado?.mcpEventosEstado ?? "UNKNOWN"} · sem amostra comprovada nesta leitura`
+                : `${estado.mcpEventosContagem} evento(s) recentes na fonte MCP (15 min; amostra limitada)`
             }
-            estado={notificacoes.stats ? "PASS" : "AUTH_REQUIRED"}
+            estado={estado?.mcpEventosEstado === "OBSERVED" ? "PASS" : "UNKNOWN"}
           />
           <ItemCofre
             titulo="Bots ativos"
@@ -197,11 +195,6 @@ export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | un
             titulo="Cockpit CentralDark"
             detalhe="Owner ativo desta superfície administrativa."
             estado="PASS"
-          />
-          <ItemCofre
-            titulo="TelePainel"
-            detalhe="Fora desta medição; nenhuma saúde operacional foi inferida."
-            estado="UNKNOWN"
           />
           <ItemCofre
             titulo="Financeiro e CRM"
