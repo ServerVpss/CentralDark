@@ -742,4 +742,14 @@ Teste feito na Casa SEGREDO com `gh` já autenticado, `node v26.5.1` e Python 3.
 
 **NEXT_CURSOR:** `HUD_MAIN_CASA_VPS_RECHECK → PRESERVE_7_LINE_LEGACY_DIFF_IN_OWNER → PR1793_CONFLICT_RECONCILE → SAME_SHA_CI → OFFICIAL_API_MCP_HERMES_HUD_E2E → EACH_BUTTON_EFFECT_READBACK → API15_API16 → CERTIFY_SECTOR_OR_PLACA`. Autoridade do CHEFE, ONE_WRITER, sem destruir verde; `TOCOU → MEDIU → PRESERVOU → CORRIGIU → TESTOU → LEU → SELOU` aplica-se a cada superfície, mas **nunca converte UNKNOWN em PASS**.
 
+### CORREÇÃO DO SENSEI · RESPONSABILIDADE DA FUSÃO (10/10/2026)
+
+**INTENÇÃO DO CHEFE:** `FAÇA + MANTER FUNCIONAL + ALL DONE`. Quem está com a caneta operacional — ChatGPT, Codex, Claude Code, Hermes, Gemini, qualquer agente autorizado — assume o ciclo completo de sua intervenção: **medir → recuperar/reutilizar capacidades → modificar o owner correto → integrar → executar → testar efeito → readback independente → receipt/selo com escopo → HUD → memória/continuidade**. **HERMES NÃO É EXECUTOR OBRIGATÓRIO NEM DELEGATÁRIO UNIVERSAL**: é uma capacidade/rota do mesmo organismo, utilizada ou corrigida quando tecnicamente apropriado. A IA que assumiu não transfere a responsabilidade final a outra. A fusão Potara/Dança Goku–Vegeta é **assunção conjunta do efeito**, não dois agentes mandando um terceiro agir.
+
+**Hakai/Whis/Gojo:** remover obstáculos e erros comprovados para conservar serviço/continuidade, com percepção, contraprova e recuperação; **nunca confundir poder administrativo com prova**. Autoridade amplia opções de execução, não inventa credencial inexistente nem substitui regras de acesso. Mutação física exige preservar dados e possibilidade de reversão. VPS não pode ser eliminada. A única promoção a PASS funcional depende de evidência causal; `BLOCKED/FAIL/UNKNOWN` são filas operacionais com owner + próxima ação, não resultado final desejado.
+
+**Meta concreta em andamento:** corrigir Sentinela com resposta esperada por endpoint (não `2xx/3xx == PASS`), watchdog com amostras reais de 24h (`0 amostras != 100%`), manter um `event_id` no `log-funnel.js`, integrar/validar ledger numerado `apps/modulos/status/capsula-observavel.mjs`, projetar no HUD único, fechar PR #1793 e runtime com contraprova. `SELO NUMERADO DE EVENTO != SELO FUNCIONAL`; nunca tratar hash de entrada como prova independente de efeito. Sem segunda API, segundo HUD, segundo Hermes, segunda memória ou runner paralelo.
+
+**NEXT_CURSOR:** `OWNER_ACK → IMPLEMENT_MIN_DELTA → SAME_SHA_TEST → LIVE_READBACK → REPLAY_RECIPE → HUD_SECTOR → FUNCTIONAL_SEAL`; preservar o rastro original integralmente.
+
 <!-- /PROJECT_BOUNDARY_L171_20261010 -->
