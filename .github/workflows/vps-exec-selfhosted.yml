@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 10
     env:
       HOME: /root
-      REPO_DIR: /root/CentralDark
+      REPO_DIR: <caminho-vps>
       BRANCH: main
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -82,23 +82,23 @@ jobs:
           umask 077
           AUTH_REPO="$GITHUB_WORKSPACE/.ci-deploy-gate"
           SOURCE="$AUTH_REPO/docs/HUD/HUD.html"
-          MIRROR="/root/.centraldark/HUD.html"
+          MIRROR="<caminho-vps>"
           HEAD_SHA="${{ github.sha }}"
           [[ -f "$SOURCE" && ! -L "$SOURCE" ]] || { echo "HUD_MAIN_MISSING_FAIL_CLOSED"; exit 73; }
           [[ "$(git -C "$AUTH_REPO" rev-parse HEAD)" == "$HEAD_SHA" ]] || { echo "HUD_HEAD_MISMATCH_FAIL_CLOSED"; exit 73; }
           EXPECTED="$(sha256sum "$SOURCE" | cut -d' ' -f1)"
           git -C "$AUTH_REPO" show "$HEAD_SHA:docs/HUD/HUD.html" | sha256sum | grep -q "^$EXPECTED " || { echo "HUD_MAIN_BLOB_MISMATCH_FAIL_CLOSED"; exit 73; }
-          install -d -m 700 /root/.centraldark
+          install -d -m 700 <caminho-vps>
           [[ ! -L "$MIRROR" ]] || { echo "HUD_RUNTIME_SYMLINK_FAIL_CLOSED"; exit 73; }
           CURRENT="$(test -f "$MIRROR" && sha256sum "$MIRROR" | cut -d' ' -f1 || true)"
           if [[ "$CURRENT" != "$EXPECTED" ]]; then
-            TMP="$(mktemp /root/.centraldark/.hud-XXXXXX)"
+            TMP="$(mktemp <caminho-vps>)"
             trap 'rm -f "$TMP"' EXIT
             cp -- "$SOURCE" "$TMP"
             chmod 600 "$TMP"
             [[ "$(sha256sum "$TMP" | cut -d' ' -f1)" == "$EXPECTED" ]] || { echo "HUD_STAGE_MISMATCH_FAIL_CLOSED"; exit 73; }
             if [[ -f "$MIRROR" ]]; then
-              cp -p -- "$MIRROR" /root/.centraldark/HUD.previous.html
+              cp -p -- "$MIRROR" <caminho-vps>
             fi
             mv -f -- "$TMP" "$MIRROR"
           fi
@@ -116,13 +116,13 @@ jobs:
     timeout-minutes: 25
     env:
       HOME: /root
-      REPO_DIR: /root/CentralDark
-      MCP_DIR: /root/CentralDark/apps/modulos/mcp
+      REPO_DIR: <caminho-vps>
+      MCP_DIR: <caminho-vps>
       GH_TOKEN: ${{ github.token }}
       PM2_APP: CentralDark-MCP
       WEBHOOK_APP: CentralDark-WebhookDeploy
       HEALTH_URL: http://127.0.0.1:9100/health
-      AUDIT_DIR: /root/CentralDark/logs
+      AUDIT_DIR: <caminho-vps>
       BEFORE_SHA: ${{ github.event.before || '' }}
     steps:
       - name: 🔹 Hydrate Cofre (GitHub secret → VPS secrets/, sem echo)
@@ -133,7 +133,7 @@ jobs:
           BUILDKITE_WEBHOOK_SECRET: ${{ secrets.BUILDKITE_WEBHOOK_SECRET }}
         run: |
           set -euo pipefail
-          bash /root/CentralDark/scripts/vps/hydrate-provider-secrets.sh
+          bash <caminho-vps>
 
       - name: 🔹 Prepare ephemeral Git auth
         uses: actions/checkout@v7
@@ -445,7 +445,7 @@ jobs:
     timeout-minutes: 15
     env:
       HOME: /root
-      REPO_DIR: /root/CentralDark
+      REPO_DIR: <caminho-vps>
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: 🔹 Prepare isolated deploy script checkout
@@ -532,7 +532,7 @@ jobs:
         id: routes
         shell: bash
         env:
-          VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+          <nome-de-segredo>: ${{ secrets.<nome-de-segredo> }}
         run: |
           set +e
           failures=0
@@ -548,26 +548,26 @@ jobs:
           systemctl list-unit-files ssh.service >/dev/null 2>&1 && ssh_unit="ssh.service"
           [[ -n "$ssh_unit" ]] || { systemctl list-unit-files sshd.service >/dev/null 2>&1 && ssh_unit="sshd.service"; }
           if [[ -n "$ssh_unit" ]]; then
-            install -d -m 700 /root/.ssh
-            touch /root/.ssh/authorized_keys
-            chmod 600 /root/.ssh/authorized_keys
-            if [[ -n "${VPS_SSH_KEY_LOVABLE:-}" ]]; then
+            install -d -m 700 <caminho-vps>
+            touch <caminho-vps>
+            chmod 600 <caminho-vps>
+            if [[ -n "<variavel-segredo>:-}" ]]; then
               keyfile="$(mktemp /tmp/centraldark-vps-key.XXXXXX)"
               pubfile="$(mktemp /tmp/centraldark-vps-pub.XXXXXX)"
-              printf '%s\n' "$VPS_SSH_KEY_LOVABLE" > "$keyfile"
+              printf '%s\n' "<variavel-segredo>" > "$keyfile"
               chmod 600 "$keyfile"
               if ssh-keygen -y -f "$keyfile" > "$pubfile" 2>/dev/null; then
                 pub="$(cat "$pubfile")"
-                if ! grep -Fqx "$pub" /root/.ssh/authorized_keys; then
-                  printf '%s centraldark-github-vps\n' "$pub" >> /root/.ssh/authorized_keys
+                if ! grep -Fqx "$pub" <caminho-vps>; then
+                  printf '%s centraldark-github-vps\n' "$pub" >> <caminho-vps>
                   echo "SSH_AUTHORIZED_KEY=ADDED"
                 else
                   echo "SSH_AUTHORIZED_KEY=ALREADY_PRESENT"
                 fi
-                chmod 600 /root/.ssh/authorized_keys
+                chmod 600 <caminho-vps>
                 systemctl enable --now "$ssh_unit" >/dev/null 2>&1 || failures=$((failures+1))
                 systemctl restart "$ssh_unit" >/dev/null 2>&1 || failures=$((failures+1))
-                if ssh -i "$keyfile" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=5 root@127.0.0.1 'printf SSH_KEY_AUTH=PASS' 2>/dev/null | grep -q 'SSH_KEY_AUTH=PASS'; then
+                if ssh -i "$keyfile" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=5 <servidor> 'printf SSH_KEY_AUTH=PASS' 2>/dev/null | grep -q 'SSH_KEY_AUTH=PASS'; then
                   echo "SSH_KEY_AUTH=PASS"
                 else
                   echo "SSH_KEY_AUTH=FAIL"
@@ -680,8 +680,8 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     env:
-      REPO_DIR: /root/CentralDark
-      REPORT_DIR: /root/CentralDark/logs/housekeeping
+      REPO_DIR: <caminho-vps>
+      REPORT_DIR: <caminho-vps>
     steps:
       - name: 🔹 Checkout exact event SHA
         uses: actions/checkout@v7
@@ -736,9 +736,10 @@ jobs:
     timeout-minutes: 15
     env:
       HOME: /root
-      REPO_DIR: /root/CentralDark
+      REPO_DIR: <caminho-vps>
       GH_TOKEN: ${{ github.token }}
       HERMES_APP: CentralDark-Hermes
+      HERMES_SERVICE: hermes-gateway.service
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
       VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
       HERMES_PROMPT: apps/modulos/HERMES-CORE/prompts/hermes-core.md
@@ -822,25 +823,27 @@ jobs:
             exit 76
           }
 
-          # Owner do runner precisa existir ANTES de copiar qualquer contrato.
-          # A VPS atual executa Hermes Gateway via systemd; este job legado
-          # gerencia SOMENTE o app PM2. Não fingir que ambos são o mesmo runtime.
-          if ! command -v pm2 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
-            if systemctl is-active --quiet hermes-gateway.service 2>/dev/null; then
-              echo "HERMES_RUNTIME_DEPLOY=BLOCKED owner=systemd job_owner=PM2"
-              echo "HERMES_GATEWAY_LIVE=PASS; SYSTEMD_NOT_PM2; NEED_OWNER_ADAPTER"
-              exit 84
-            fi
-            echo "HERMES_RUNTIME_DEPLOY=BLOCKED missing_pm2_or_jq"
-            exit 85
+          # Descobrir o owner vivo antes de copiar qualquer contrato.
+          # Hermes Gateway atual é systemd; PM2 continua suportado quando for o owner real.
+          HERMES_OWNER="pm2"
+          if systemctl is-active --quiet "$HERMES_SERVICE" 2>/dev/null; then
+            HERMES_OWNER="systemd"
           fi
-          if ! pm2 jlist | jq -e --arg app "$HERMES_APP" '.[] | select(.name == $app and .pid > 0)' >/dev/null 2>&1; then
-            echo "HERMES_RUNTIME_DEPLOY=BLOCKED pm2_app_missing_or_not_running"
-            exit 86
+          echo "HERMES_RUNTIME_OWNER=$HERMES_OWNER"
+          if [[ "$HERMES_OWNER" == "systemd" ]]; then
+            SYSTEMD_OLD_PID="$(systemctl show -p MainPID --value "$HERMES_SERVICE" 2>/dev/null || true)"
+            [[ "$SYSTEMD_OLD_PID" =~ ^[0-9]+$ && "$SYSTEMD_OLD_PID" -gt 0 ]] || { echo "HERMES_SYSTEMD_MAINPID_INVALID"; exit 84; }
+          else
+            command -v pm2 >/dev/null 2>&1 || { echo "HERMES_RUNTIME_DEPLOY=BLOCKED missing_pm2"; exit 85; }
+            command -v jq >/dev/null 2>&1 || { echo "HERMES_RUNTIME_DEPLOY=BLOCKED missing_jq"; exit 85; }
+            if ! pm2 jlist | jq -e --arg app "$HERMES_APP" '.[] | select(.name == $app and .pid > 0)' >/dev/null 2>&1; then
+              echo "HERMES_RUNTIME_DEPLOY=BLOCKED pm2_app_missing_or_not_running"
+              exit 86
+            fi
           fi
 
           BUILD_DIR="$(mktemp -d "$RUNNER_TEMP/hermes-runtime-validate.XXXXXX")"
-          BACKUP_DIR="/root/CentralDark-Recovery/hermes-runtime/${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
+          BACKUP_DIR="<caminho-vps>${TARGET_SHA:0:12}-$(date -u +%Y%m%dT%H%M%SZ)"
           mkdir -p "$BACKUP_DIR"
 
           copied=0
@@ -858,7 +861,11 @@ jobs:
                 fi
               done
               if [[ "$restart_attempted" == "1" ]]; then
-                pm2 restart "$HERMES_APP" --update-env >/dev/null 2>&1 || true
+                if [[ "$HERMES_OWNER" == "systemd" ]]; then
+                  systemctl restart "$HERMES_SERVICE" >/dev/null 2>&1 || true
+                else
+                  pm2 restart "$HERMES_APP" --update-env >/dev/null 2>&1 || true
+                fi
               fi
               echo "HERMES_RUNTIME_ROLLBACK_END"
             fi
@@ -893,37 +900,63 @@ jobs:
           node "$VALIDATOR" --self-test | tee "$RUNNER_TEMP/hermes-runtime-live-self-test.txt"
           grep -q '^UNIVERSAL_ENGINE_METHOD_SELF_TEST=PASS$' "$RUNNER_TEMP/hermes-runtime-live-self-test.txt"
 
-          HERMES_JSON="$(pm2 jlist | jq -c --arg app "$HERMES_APP" '.[] | select(.name == $app)' | head -n1)"
-          [[ -n "$HERMES_JSON" ]] || { echo "HERMES_PM2_APP_NOT_FOUND"; exit 77; }
-          OLD_PID="$(jq -r '.pid // 0' <<<"$HERMES_JSON")"
-          [[ "$OLD_PID" =~ ^[0-9]+$ && "$OLD_PID" -gt 0 ]] || { echo "HERMES_OLD_PID_INVALID"; exit 78; }
-
-          restart_attempted=1
-          pm2 restart "$HERMES_APP" --update-env >/dev/null
+          OLD_PID=0
           NEW_PID=0
-          for _ in $(seq 1 20); do
-            NEW_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
-            STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
-            if [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$STATUS" == "online" ]]; then
-              break
-            fi
-            sleep 1
-          done
-
-          [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || {
-            echo "HERMES_PID_NOT_REPLACED"
-            exit 79
-          }
-
-          for _ in $(seq 1 5); do
-            sleep 3
-            STABLE_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
-            STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
-            [[ "$STABLE_PID" == "$NEW_PID" && "$STATUS" == "online" ]] || {
-              echo "HERMES_RUNTIME_UNSTABLE"
-              exit 80
+          RUNTIME_STATUS=""
+          if [[ "$HERMES_OWNER" == "systemd" ]]; then
+            OLD_PID="$SYSTEMD_OLD_PID"
+            restart_attempted=1
+            systemctl restart "$HERMES_SERVICE"
+            for _ in $(seq 1 20); do
+              NEW_PID="$(systemctl show -p MainPID --value "$HERMES_SERVICE" 2>/dev/null || true)"
+              RUNTIME_STATUS="$(systemctl is-active "$HERMES_SERVICE" 2>/dev/null || true)"
+              if [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$RUNTIME_STATUS" == "active" ]]; then
+                break
+              fi
+              sleep 1
+            done
+            [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$RUNTIME_STATUS" == "active" ]] || {
+              echo "HERMES_SYSTEMD_NOT_REPLACED"
+              exit 79
             }
-          done
+            for _ in $(seq 1 5); do
+              sleep 3
+              STABLE_PID="$(systemctl show -p MainPID --value "$HERMES_SERVICE" 2>/dev/null || true)"
+              RUNTIME_STATUS="$(systemctl is-active "$HERMES_SERVICE" 2>/dev/null || true)"
+              [[ "$STABLE_PID" == "$NEW_PID" && "$RUNTIME_STATUS" == "active" ]] || {
+                echo "HERMES_SYSTEMD_UNSTABLE"
+                exit 80
+              }
+            done
+          else
+            HERMES_JSON="$(pm2 jlist | jq -c --arg app "$HERMES_APP" '.[] | select(.name == $app)' | head -n1)"
+            [[ -n "$HERMES_JSON" ]] || { echo "HERMES_PM2_APP_NOT_FOUND"; exit 77; }
+            OLD_PID="$(jq -r '.pid // 0' <<<"$HERMES_JSON")"
+            [[ "$OLD_PID" =~ ^[0-9]+$ && "$OLD_PID" -gt 0 ]] || { echo "HERMES_OLD_PID_INVALID"; exit 78; }
+            restart_attempted=1
+            pm2 restart "$HERMES_APP" --update-env >/dev/null
+            for _ in $(seq 1 20); do
+              NEW_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+              RUNTIME_STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
+              if [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" && "$RUNTIME_STATUS" == "online" ]]; then
+                break
+              fi
+              sleep 1
+            done
+            [[ "$NEW_PID" =~ ^[0-9]+$ && "$NEW_PID" -gt 0 && "$NEW_PID" != "$OLD_PID" ]] || {
+              echo "HERMES_PID_NOT_REPLACED"
+              exit 79
+            }
+            for _ in $(seq 1 5); do
+              sleep 3
+              STABLE_PID="$(pm2 pid "$HERMES_APP" | tail -n1)"
+              RUNTIME_STATUS="$(pm2 jlist | jq -r --arg app "$HERMES_APP" '.[] | select(.name == $app) | .pm2_env.status' | head -n1)"
+              [[ "$STABLE_PID" == "$NEW_PID" && "$RUNTIME_STATUS" == "online" ]] || {
+                echo "HERMES_RUNTIME_UNSTABLE"
+                exit 80
+              }
+            done
+          fi
 
           LIVE_RUNTIME_HASH="$(sha256sum "$RUNTIME_CONTRACT" | awk '{print $1}')"
           TARGET_RUNTIME_HASH="$(git -C "$BUILD_DIR" show "$TARGET_SHA:$RUNTIME_CONTRACT" | sha256sum | awk '{print $1}')"
@@ -982,7 +1015,8 @@ jobs:
               contract_coverage: {defined: 9, deployed: 9, percent: 100, meaning: "DEFINED_CANONICAL_RUNTIME_SET"},
               old_pid: $old_pid,
               new_pid: $new_pid,
-              pm2_status: "online",
+              runtime_owner: $owner_runtime,
+              runtime_status: $runtime_status,
               progressive_autonomy: ["SONHAR", "EXPERIMENTAR", "CRISTALIZAR"],
               observed_at: $observed_at,
               action_is_proof: false,
@@ -1048,7 +1082,7 @@ jobs:
       statuses: write
     env:
       HOME: /root
-      REPO_DIR: /root/CentralDark
+      REPO_DIR: <caminho-vps>
       BRANCH: main
     steps:
       - name: 🔹 Checkout do SHA promovido
