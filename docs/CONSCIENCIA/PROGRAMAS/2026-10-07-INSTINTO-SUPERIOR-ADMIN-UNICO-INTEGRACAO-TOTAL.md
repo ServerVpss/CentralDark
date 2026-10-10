@@ -690,4 +690,27 @@ NO_NEW_ARCHITECTURE = TRUE
 **Rastro de aplicação:** PR #1793 · commits `5dbccc2`, `aa654cd`, `d7f8578`, `75fa636`, `38a7a9b`. Aprendizado [#171](../APRENDIZADOS.md), índice em `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`, linhagem `L170 → L171`. **PR commit não é deploy.**
 
 **Cadeados:** `CATALOG != OWNERSHIP`; `CODE != RUNTIME`; `MCP_HEALTH_200 != COMPLETE_SECTOR_HEALTH`; `TELEPAINEL_ADMIN_STAYS_TELEPAINEL`; `LEGACY_DELETE_AFTER_PARITY_ONLY`; `ONE_HUD_ONE_HEART_ONE_MCP`. **NEXT_CURSOR:** typecheck/testar PR SHA → verificar /health sob runtime carregado → testar catálogo/seleção e isolação de dados no navegador → paridade das duas rotas legadas → readback/receipt → promoção segura pela esteira já existente.
+### Receipt T1 — 2026-10-10 · Casa/PR #1793 (sem deploy)
+
+```text
+ACTOR=CHEFE_INTENTION / PR1793_EXISTING_BRANCH
+SOURCE=ServerVpss/CentralDark@work/api-mcp-oneheart-current-20261010
+NEUROLINK_GENERATOR=PASS sections=170 genesis=L000 EXIT=0
+MCP_NODE_SYNTAX_SRC_INDEX=PASS
+MCP_NODE_SYNTAX_SRC_TELEMETRY=PASS
+MCP_NODE_SYNTAX_DIST_INDEX=PASS
+MCP_NODE_SYNTAX_DIST_TELEMETRY=PASS
+MCP_OPERATIONAL_TELEMETRY_TESTS=9 PASS / 0 FAIL
+NODE26_TS_SERVER_SYNTAX=PASS (syntax only, NOT typecheck)
+TSX_TYPECHECK=UNKNOWN (deps not installed; no additional installation authorized)
+CI_PR1793_SAME_HEAD=QUEUED_OR_PENDING
+RUNTIME_COCKPIT=UNKNOWN
+LEGACY_CUTOVER=NOT_PERFORMED
+TELEPAINEL_DATABASE_WIRES_REMOVED_FROM_TOUCHED_COMPONENTS=SOURCE_PASS
+ONE_HUD_OWNER_PRESERVED=YES
+GLOBAL_FIXED_POINT=FALSE
+```
+
+Teste feito na Casa SEGREDO com `gh` já autenticado, `node v26.5.1` e Python 3.13. Somente cópias temporárias em `%TEMP%/CD-L171-PR1793-READBACK`; nenhum checkout sujo ou VMware alterado. `9/9` valida o módulo MCP, **não** a renderização da UI nem a implantação. `NEXT_CURSOR=CHECK_TSX_CI_ON_CURRENT_HEAD → COCKPIT_RUNTIME_READBACK → LEGACY_PARITY`.
+
 <!-- /PROJECT_BOUNDARY_L171_20261010 -->
