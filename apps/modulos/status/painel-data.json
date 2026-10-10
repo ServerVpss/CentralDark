@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix: usar Bun no build do portal monorepo",
+    "lastCommit": "fix: usar dispatcher do checkout no gate do portal",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-10T21:35:49.491Z",
+      "titulo": "Push na main · 3175b384f1d3103872006096faeefba0ee78c7d9",
+      "detalhe": "fix: usar dispatcher do checkout no gate do portal",
+      "area": "Repositório",
+      "sha": "3175b38",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-10T21:35:19.631Z",
       "titulo": "Push na main · af168af5d68083ceb94a7f7df161889821c25fa1",
@@ -92,6 +100,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-10T21:35:49.491Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3175b384f1d3103872006096faeefba0ee78c7d9 (3175b38)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-10T21:35:19.631Z",
       "ia": "@segredounlock",
@@ -302,6 +317,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-10T21:35:19.631Z",
-  "updatedAtBR": "10/10/2026, 18:35:19 BRT"
+  "updatedAt": "2026-10-10T21:35:49.491Z",
+  "updatedAtBR": "10/10/2026, 18:35:49 BRT"
 }
