@@ -73,7 +73,7 @@ function project(d) {
 function infrastructure(d) {
   return {
     updated_at: iso(d.updatedAt),
-    cpu_load: { one_min: number(Number(d.load?.['1m'])), five_min: number(Number(d.load?.['5m'])) },
+    cpu_load: { one_min: number(d.load?.['1m']), five_min: number(d.load?.['5m']) },
     memory: { total_gb: number(d.mem?.total_gb), used_gb: number(d.mem?.used_gb),
       used_pct: number(d.mem?.used_pct) },
     disk: { used_pct: number(d.disk?.used_pct) },
