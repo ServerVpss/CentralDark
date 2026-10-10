@@ -262,7 +262,10 @@ test("OAuth admin persistente: identidade, escopo e auditoria dispensam frase re
   assert.equal(g.allow, true);
   assert.equal(g.status, "OK");
   assert.equal(g.confirmationEval.confirmationMode, "authenticated_admin_session");
-  assert.equal(g.audit.confirmationMode, "authenticated_admin_session");
+  const event = fs.readFileSync(arqDia(), "utf8").trim().split("\n")
+    .map((line) => JSON.parse(line))
+    .find((item) => item.correlationId === "authenticated-request-1");
+  assert.equal(event?.confirmationMode, "authenticated_admin_session");
 });
 test("Autorizacao persistente sem escopo ou identidade nao concede permissao", async () => {
   for (const input of [
