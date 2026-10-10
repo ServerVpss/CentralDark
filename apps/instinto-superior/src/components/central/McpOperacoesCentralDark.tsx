@@ -147,11 +147,13 @@ export function McpOperacoesCentralDark() {
         const probe = id === "linear" ? d?.integrations.linear
           : id === "conector" ? d?.integrations.connectors
           : id === "diagnostico" ? d?.integrations.e2ePublic : null;
+        const restricted = src.url.startsWith(MCP + "/admin/api/");
+        const related = (d?.sectors ?? []).find(item => item.id.toLowerCase().includes(id));
         return <TabsContent key={id} value={id} className="mt-5">
           <div className="panel p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h4 className="font-semibold">{label}</h4>
-              <code>{probe?.state ?? "MEDIÇÃO ESPECÍFICA PENDENTE"}</code>
+              <code>{probe?.state ?? related?.state ?? (restricted ? "AUTH_REQUIRED" : "MEDIÇÃO ESPECÍFICA PENDENTE")}</code>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
               Owner: {src.owner}. Ações protegidas continuam exigindo a credencial do MCP original.
@@ -170,11 +172,14 @@ export function McpOperacoesCentralDark() {
               #ACORDAR · !CALIBRAR · !MULTIBÚSSOLA · !META_LUPA.
               Uma intenção apresentada não comprova missão executada.
             </p> : null}
-            <Button asChild variant="outline" className="mt-4">
+            {restricted ? <p className="mt-4 text-xs text-muted-foreground">
+              Ação privilegiada: exige a sessão administrativa original. Não abrir endpoint
+              protegido sem contexto nem confundir HTTP 401 com execução.
+            </p> : <Button asChild variant="outline" className="mt-4">
               <a href={src.url} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="size-4"/> Abrir fonte original
+                <ExternalLink className="size-4"/> Abrir fonte pública original
               </a>
-            </Button>
+            </Button>}
           </div>
         </TabsContent>;
       })}
