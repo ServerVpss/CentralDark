@@ -33,7 +33,25 @@ export function measureIntentWorld() {
   const head = measuredHead();
   const snapshot = getOperationalSnapshot({ root: ROOT });
   const e = {};
-  e.SOURCE_CURRENT = evidence(head ? 'PASS' : 'UNKNOWN', 'git:local-checkout-head', at, head);
+
+  // SOURCE_CURRENT exige upstream e sincronizacao comprovados, nao apenas HEAD local.
+  let upstream = null, dirty = null;
+  try {
+    const ref = execFileSync('git',['rev-parse','refs/remotes/origin/main'],{cwd:ROOT,encoding:'utf8',timeout:2500}).trim();
+    if (SHA.test(ref)) upstream = ref;
+  } catch { /* unknown */ }
+  try {
+    dirty = execFileSync('git',['status','--porcelain','--untracked-files=no'],{cwd:ROOT,encoding:'utf8',timeout:3500}).trim().length > 0;
+  } catch { /* unknown */ }
+  const sync = sealed(join(ROOT,'logs/auto-sync-status.json'));
+  const syncAt = Date.parse(sync?.t || '');
+  const syncFresh = Number.isFinite(syncAt) && Date.now()-syncAt >= -5000 && Date.now()-syncAt <= 15*60_000;
+  const sourceState = !head || !upstream ? 'UNKNOWN'
+    : head !== upstream ? 'STALE'
+    : dirty === true ? 'BLOCKED'
+    : dirty === null || !syncFresh ? 'UNKNOWN'
+    : sync?.result === 'PASS' && sync?.head === head && sync?.origin_main === upstream ? 'PASS' : 'UNKNOWN';
+  e.SOURCE_CURRENT = evidence(sourceState, 'git:checkout-vs-origin-main+tracked-dirty+autosync-receipt', at, head);
   e.MCP_HEALTH = evidence('PASS', 'mcp:authenticated-request-handler-alive', at, head);
   const beat = sealed(join(ROOT, 'logs/heartbeat-api.json'));
   const time = Date.parse(beat?.t || '');
@@ -46,10 +64,16 @@ export function measureIntentWorld() {
       n.next_uid === (i === a.length-1 ? 'PENDING_NEXT_CURSOR' : a[i+1].uid));
   const lineageOk = linksOk && manifest?.source_blob_sha === gitBlob(learn);
   e.NEUROLINK = evidence(lineageOk ? 'PASS' : 'UNKNOWN', 'neuro:manifest+git-blob+prev-next', at, head);
-  const deployedHud = join(ROOT, '.centraldark/HUD.html');
-  const hud = join(ROOT, 'docs/HUD/HUD.html');
-  const hudOk = existsSync(deployedHud) && existsSync(hud) && gitBlob(deployedHud) === gitBlob(hud);
-  e.HUD = evidence(hudOk ? 'PASS' : 'UNKNOWN', 'hud:physical-vs-checkout-blob', at, head);
+  // Prova do HUD fisico, nao da copia obsoleta do checkout.
+  const deployedHud = process.env.CENTRALDARK_HUD_PATH || '/root/.centraldark/HUD.html';
+  let mainHudBlob = null;
+  try {
+    mainHudBlob = execFileSync('git',['rev-parse','refs/remotes/origin/main:docs/HUD/HUD.html'],{
+      cwd:ROOT,encoding:'utf8',timeout:2500
+    }).trim();
+  } catch { /* unknown */ }
+  const hudOk = SHA.test(mainHudBlob || '') && existsSync(deployedHud) && gitBlob(deployedHud) === mainHudBlob;
+  e.HUD = evidence(hudOk ? 'PASS' : 'UNKNOWN', 'hud:physical-vs-origin-main-blob', at, head);
   let gateway = 'UNKNOWN';
   try { gateway = execFileSync('systemctl',['is-active','hermes-gateway.service'],{ timeout: 2500,encoding:'utf8' }).trim()==='active' ? 'PASS' : 'FAIL'; } catch { gateway='UNKNOWN'; }
   e.HERMES_RUNTIME = evidence(gateway, 'systemd:hermes-gateway.service-liveness-only', at, head);

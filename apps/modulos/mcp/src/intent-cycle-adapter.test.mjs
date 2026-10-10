@@ -13,6 +13,9 @@ test('API loop: fila original + dedupe + Critic + receipt imutavel (isolado)',as
   mkdirSync(join(root,'apps/modulos/HERMES-CORE/missions/pendente'),{recursive:true});
   execFileSync('git',['init','-q'],{cwd:root});
   execFileSync('git',['-c','user.name=fixture','-c','user.email=fixture@example.invalid','commit','--allow-empty','-qm','fixture'],{cwd:root});
+  const initHead=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+  execFileSync('git',['update-ref','refs/remotes/origin/main',initHead],{cwd:root});
+  writeFileSync(join(root,'logs/auto-sync-status.json'),JSON.stringify({t:new Date().toISOString(),result:'PASS',head:initHead,origin_main:initHead}));
   writeFileSync(join(root,'logs/heartbeat-api.json'),JSON.stringify({t:new Date().toISOString(),self:'alive'}));
   const {runIntentCycle,readIntentState,publicIntentStatus}=await import('./intent-cycle-adapter.js');
   const query={intent:'Executar uma intencao com prova no runtime existente',mode:'AUTONOMO',owner:'docs/HUD/HUD.html',goalId:'t_9040803d'};
@@ -38,4 +41,8 @@ test('API loop: fila original + dedupe + Critic + receipt imutavel (isolado)',as
   assert.ok(existsSync(join(root,'logs/events')));
   const stale=runIntentCycle({...query,intent:query.intent+' + uma etapa nova'},{dispatch:false});
   assert.equal(stale.fixedPoint,false);assert.equal(stale.executionProven,false);
+  execFileSync('git',['-c','user.name=fixture','-c','user.email=fixture@example.invalid','commit','--allow-empty','-qm','local-drift'],{cwd:root});
+  const diverged=runIntentCycle({...query,intent:query.intent+' com drift nova'},{dispatch:false});
+  assert.equal(diverged.fixedPoint,false);
+  assert.equal(diverged.criteria.find(c=>c.id==='SOURCE_CURRENT').status,'STALE');
 });
