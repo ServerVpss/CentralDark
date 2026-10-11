@@ -3,11 +3,12 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, renameSync, unlinkSync, openSync, closeSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
+import { homedir } from 'node:os';
 import { compileIntent, reconcileIntent } from './intent-cycle.js';
 import { getOperationalSnapshot } from './operational-telemetry.js';
 import { appendCentralEvent } from './log-funnel.js';
 
-const ROOT = process.env.CENTRALDARK_ROOT || '<caminho-vps>';
+const ROOT = process.env.CENTRALDARK_ROOT || join(homedir(), 'CentralDark');
 const STATE_PATH = join(ROOT, 'logs', 'intent-loop-state.json');
 const INBOX = join(ROOT, 'apps/modulos/HERMES-CORE/missions/pendente');
 const SHA = /^[0-9a-f]{40}$/i;
@@ -65,7 +66,7 @@ export function measureIntentWorld() {
   const lineageOk = linksOk && manifest?.source_blob_sha === gitBlob(learn);
   e.NEUROLINK = evidence(lineageOk ? 'PASS' : 'UNKNOWN', 'neuro:manifest+git-blob+prev-next', at, head);
   // Prova do HUD fisico, nao da copia obsoleta do checkout.
-  const deployedHud = process.env.CENTRALDARK_HUD_PATH || '<caminho-vps>';
+  const deployedHud = process.env.CENTRALDARK_HUD_PATH || join(homedir(), '.centraldark', 'HUD.html');
   let mainHudBlob = null;
   try {
     mainHudBlob = execFileSync('git',['rev-parse','refs/remotes/origin/main:docs/HUD/HUD.html'],{
