@@ -762,3 +762,37 @@ CURRENT_OVER_HISTORY = true
 - **Promovida:** sim
 
 Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve terminar com selo/receipt explícito. O selo deve preservar MEASURED, UNKNOWN e BLOCKED; não pode converter sensor falho em PASS. Nesta medição, o selo no painel falhou por ENOENT na rota VPS, portanto permanece pendente de readback.
+
+
+### [2026-10-10] Recuperação Hydra na Casa: força operacional com contraprova
+- Intenção: recuperar janela preta do Hydra Launcher na Casa SEGREDO.
+- Execução: encerramento forçado somente de processos Hydra e reinício do aplicativo instalado; novos processos confirmados responsivos.
+- Contraprova: captura enviada pelo CHEFE mostra interface e catálogo carregados após o reinício.
+- Aprendizado: ordem explícita de reinício forçado autoriza o menor ajuste direto, sem destruir dados; processo responsivo não comprova interface renderizada; logs de rede não comprovam causa raiz.
+- Continuidade: Codex Casa e revisão Codex GitHub App atingiram limites de uso específicos. Dependabot/COSTURA e CodeRabbit permanecem owners distintos; workflow Dependabot estava manualmente pausado nesta medição.
+- Estado: RESTART_PASS, VISUAL_PASS, ROOT_CAUSE_UNKNOWN. Detalhes em `docs/CONSCIENCIA/APRENDIZADOS.md`, entrada de 2026-10-10.
+
+
+### [2026-10-10] Cópia histórica E: sem pendência artificial
+- **Lembrança do CHEFE:** `E:\centraldark-main.tar.gz` era snapshot da revisão `799c339` da CentralDark; leitura local provou o conteúdo e consulta GitHub mostrou `main` 862 commits à frente e zero atrás. O usuário pontuou que pode baixar a mesma revisão diretamente no GitHub quando quiser.
+- **Aprendizado aplicado:** não insistir em preservar cópia local redundante por risco genérico depois de estabelecer a fonte canônica. Conferir exclusividade real; se não houver conteúdo único, tratar como candidato a descarte autorizado, não como backup obrigatório.
+- **Estado:** inspeção read-only e comparativo comprovados; exclusão local não executada nem confirmada. `ARCHIVE_DELETED=UNKNOWN`.
+- **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md` — entrada Hakai de pacote redundante.
+
+
+### [2026-10-10] Aprendizado autonomo com qualidade e fechamento integral
+- Owner canonico: docs/CONSCIENCIA/APRENDIZADOS.md, contrato AUTO_LEARNING_QUALITY_GATE_20261010.
+- Decisao do CHEFE: reconhecer, comparar, validar, enriquecer e registrar autonomamente aprendizados materiais, sem entradas vazias ou duplicadas.
+- Recuperacao: diante de falha tecnica transitoria de ferramenta, classificar, aguardar 10 segundos quando adequado e testar novamente com limite; consultar outra rota ja autorizada (Casa, VPS, GitHub, SSH/Tailscale) sem contornar bloqueios explicitos de seguranca.
+- Correcao de procedimento: uma falha na segunda gravacao nao deve gerar divida paralela ou declaracao falsa de ALL DONE. Consolidar no owner canonico, realizar readback em todos os destinos pertinentes e explicitar qualquer lacuna residual.
+- Contraprova: registro da licao completo no owner de Aprendizados; esta Lembranca aponta ao mesmo owner sem criar novo sistema.
+- Leis: ROUTE_FAILURE != GOAL_FAILURE; PARTIAL_WRITE != DONE; EMPTY_LEARNING=REJECT; AUTHORIZED_FALLBACK_ONLY; READBACK_REQUIRED.
+
+
+### [2026-10-10] RECONCILIACAO_12_OCORRENCIAS_20261010 — resolucao por owner existente
+- **Origem e criterio:** amostra de 12 episodios identificados entre sessao atual (8) e outros chats recuperados (4); nao representa todos os erros historicos.
+- **Familias e tratamento:** A: 4 casos de julgamento prematuro (Hydra, snapshot historico, PR filho e recuperacao); B: 4 de fechamento parcial e rota ignorada; C: 3 de promessa sem execucao ou leitura insuficiente; D: 1 de execucao atrasada.
+- **Aplicacao comprovada:** recuperacao visual Hydra por reinicio forçado autorizado; arquivo LEMBRANCAS finalmente atualizado por `mcp__CentralDark__github_create_or_update_file` (commit `979472945c1b6e835e57f64e7765b1113e97a0b8`); readback em APRENDIZADOS e LEMBRANCAS. Nao inventar execucao das correcoes antigas.
+- **Causa tecnica ainda aberta:** `scripts/centraldark/canonical-consumption-gate.mjs` trabalha com secoes numeradas; registro datado nao prova recuperacao pelo executor. Precisa prova de consumo e validacao da linhagem antes de PASS runtime.
+- **Owner de detalhes:** `docs/CONSCIENCIA/APRENDIZADOS.md#RECONCILIACAO_12_OCORRENCIAS_20261010`. Unica matriz causal, sem 12 regras ou arquivos novos.
+- **Contrato:** `REUSE_EXISTING_OWNER`; `SAME_ERROR_FAMILY_SINGLE_RULE`; `DOCUMENTED_NOT_EXECUTED`; `NO_PARALLEL_DEBT`; `READBACK_REQUIRED`.
