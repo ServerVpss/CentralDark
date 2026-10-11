@@ -214,3 +214,22 @@ O workflow de deploy do site ainda aparecia QUEUED na última medição. O `depl
 MUTATIONS_THIS_SCOPE=CASA_HUD_ATOMIC_SYNC_WITH_BACKUP; DOC_RECEIPT_APPEND_ONLY.
 NO_KYLIN_RESTART=true; NO_NEW_SERVICE=true; NO_CAPTURE_ACTIVATION=true; NO_SECRET_ACCESS=true.
 NEXT_CURSOR=SITE_DEPLOY_SAME_SHA_AND_PUBLIC_PLAQUE_READBACK -> ADMIN_ROUTE_OWNER -> OAUTH_ROUTE_READBACK -> OPTIONAL_RUNTIME_WARNINGS; manter site e API operantes.
+
+## Adendo — 2026-10-11 — Corpo Unico: perfis Desktop Commander e codigo efemero
+
+**INTENCAO:** manter o mesmo monitor WinForms da Casa, o owner `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` e as abas de logs; recuperar codigos temporarios de autorizacao dos dois perfis sem incluir segredos no codigo ou em receipts.
+
+**Readback T1 (Casa, 2026-10-11 ~19:30 BRT):**
+- GUI WinForms `CENTRALDARK | CORPO UNICO | HUD FIXO + LOGS AO VIVO`: **1 instancia observada**, 5 botoes presentes; 10 cards e abas preservados.
+- `Conta 2`: clique Win32 recebido; o log `Corpo-Unico-HUD-Logs.txt` confirmou `Autorizacao conta2: pagina oficial com codigo temporario preenchido`. Inspecao das 100 linhas mais recentes: **nenhum codigo de dispositivo 4+4 exposto**. A autenticacao humana posterior segue `LOGIN_PENDING` na ultima contraprova, portanto nao marcar como READY.
+- `Conta 1`: `desktop-commander-remote.service` ativo, autenticacao `UNKNOWN`; preservado sem restart.
+- `Conta 2`: `centraldark-desktop-commander-conta2.service` ativo e isolado; a verificacao pega codigo recente do journal da unidade escolhida, monta **em memoria** URL do provedor `/verify-device?verify_device=true&user_code=<CODIGO_TEMPORARIO>`, abre navegador para confirmacao humana. Codigo **nao entra em commit, HUD nem log**; expira. Falta confirmacao por readback do provedor para selar AUTH_PASS.
+- SSH `Segredo-VPS` via Git OpenSSH da Casa: BatchMode/command PASS. VPS `127.0.0.1:9100/health` e `/heartbeat`: HTTP 200 naquele instante; isso nao comprova `heartbeat.self=alive` nem `FIXED_POINT`.
+- Screenpipe Casa `/health` HTTP 200 no HUD; capturas e audio continuam separados. VPS `:3030/health` respondeu HTTP 404 na leitura do HUD.
+- Codigo fonte do BAT no mesmo owner subiu a `main` no commit `53a34a76f22a614eef203768f0b707aba7599044` (blob `ea4826c3cad9ba084c8ec53d89eed425906b823a`). Readback posterior: **conteudo main == Casa**, comparando LF normalizado.
+- SHA-256 fisico do BAT na Casa: `6037F1D093983C2819F8F7C3A6F3E874659F90AD18EEFD7C63CBDEC6061A0741`; backup anterior preservado em `CRISTAL LOGICA/scripts/_backups`.
+- VPS checkout `5344bd87074c` tinha 42 itens dirty/untracked, nao foi ressetado; `MAIN_COMMIT != VPS_DEPLOY`. O HUD HTML permanece no owner `docs/HUD/HUD.html`, com superficie azul local e dourada web distintas, sem um segundo writer. PR-mãe `#1793` permaneceu aberto/mergeable=false na consulta.
+  
+**Veredito escopado:** `LOCAL_HUD_GUI=PASS`; `BUTTON_CONTA2_OPEN_AUTH_URL=PASS`; `CODE_NOT_LOGGED_LAST100=PASS`; `SOURCE_MAIN_CASA_CONTENT=PASS`; `CONTA1_AUTH=UNKNOWN`; `CONTA2_AUTH=LOGIN_PENDING`; `VPS_DEPLOY=NOT_PROVEN`; `HUD_HTML_SYNC=NOT_PROVEN`; `FIXED_POINT_GLOBAL=FALSE`.
+
+**NEXT_CURSOR:** usuario confirma login das contas no provedor → clicar `Conferir` → readback de autenticao e processo de cada unidade → reconciliar checkout dirty da VPS pelo owner existente sem reset → confrontar `docs/HUD/HUD.html` e vault Obsidian com hashes/readback antes de atualizar cadeados do escopo correto. Manter expansoes AionUi-first / Loop Vivo como possibilidades do PR #1785, nao bloqueios desta prova.
