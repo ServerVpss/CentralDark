@@ -1813,8 +1813,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### 167. Ápeiron operacional: identidade invariável, concha mutável, capacidades abertas e prova temporal sem arquitetura paralela
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L167`; `PREV_GLOBAL_UID=L166`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=167`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=167`; `PREV_LEARNING_REF=166`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L167`; `PREV_GLOBAL_UID=L166`; `NEXT_GLOBAL_UID=L168`; `LEGACY_LEARNING_NUMBER=167`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=167`; `PREV_LEARNING_REF=166`; `NEXT_LEARNING_REF=168`.
 - **Categoria:** anaximander-inspired-core-shell-open-capability-space-temporal-proof-operational-graph.
 - **Data:** 2026-10-05.
 - **Proveniência:** analogia filosófico-matemática inspirada em Anaximandro, normalizada pela CentralDark. A fonte histórica é proveniência/candidato, nunca autoridade da Casa; a validade operacional vem somente de owners CURRENT, testes, gates e efeito observado.
@@ -1863,7 +1863,9 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Cristal:** EVERY_GAP_IS_A_CAPABILITY_OPPORTUNITY; EVERY_PROVEN_PATH_CAN_BECOME_REPLAY; ONE_HEART; REALITY_IS_JUDGE.
 
 
-### #168 — Catálogo MCP unificado de capabilities e rotas (2026-10-06)
+### 168. Catálogo MCP unificado de capabilities e rotas (2026-10-06)
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L168`; `PREV_GLOBAL_UID=L167`; `NEXT_GLOBAL_UID=L169`; `LEGACY_LEARNING_NUMBER=168`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=168`; `PREV_LEARNING_REF=167`; `NEXT_LEARNING_REF=169`.
 - **Owner detalhado:** `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
 - **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md`
@@ -1873,7 +1875,9 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Fingerprint:** `42c132bf864a3a82b16495bc6109a2d09c90e7c0806988fb389103e021011bd5`.
 
 
-### #169 — Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
+### 169. Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L169`; `PREV_GLOBAL_UID=L168`; `NEXT_GLOBAL_UID=L170`; `LEGACY_LEARNING_NUMBER=169`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=169`; `PREV_LEARNING_REF=168`; `NEXT_LEARNING_REF=170`.
 - **Owner detalhado:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
 - **Commit Hermes:** `c893a949b3051ae8a96cc4bc8b910857534c55e7`.
 - **Arquivo de prova:** `experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md`.
@@ -1892,3 +1896,69 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Proteção:** runtime drift independente nunca é sobrescrito cegamente; `COMMIT != SYNC`; `SYNCED != EXECUTED`; `UNKNOWN != PASS`.
 - **Cristal:** `BLIND_RETRY_FORBIDDEN=true`; `ONE_IDENTICAL_REPLAY_MAX=1`; `SAME_FAILURE_FINGERPRINT_REUSES_PROVEN_RECIPE=true`; `MAIN_FIRST_SKILL_PROMOTION=true`; `SYNC_REQUESTED_BY_CHEFE=true`; `SAME_GOAL_RETURN_REQUIRED=true`.
 - **Next cursor:** `HERMES_SKILL_SYNC_CHECK_RECONCILE_APPLY_SEAL_HASH_READBACK_THEN_RETURN_SAME_GOAL`.
+
+### 170. Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L170`; `PREV_GLOBAL_UID=L169`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=170`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-09
+- **Contexto:** Em 2026-10-09, mesmo Goal t_9040803d já continha o Cristal e a intenção; runtime Herm es estava em status todo com dois crashes de limite de contexto. scripts/skill-sync-check.sh --check via executor MCP falhou com HOME unset. Repo canônico main fddeb265, skill Kaizen existente.
+- **Aprendizado:** Reusar o Goal e o owner Kaizen existentes. Para rodar a receita de sync da VPS via executor MCP, passar HOME=/root somente no processo; --check, --apply e --seal têm limites próprios. Execução T1: 56 targets, 5 UPDATED e 1 INSTALLED seguros, readback 49 SYNCED/7 ORACLE_REQUIRED, hash Kaizen idêntico em source e runtime. Não sobrescrever drifts protegidos nem disparar Goal em todo/crashed sem resolver dependências e contexto; DOCUMENTED != EXECUTED; entregar receipt e NEXT_CURSOR. Prova: PR #1783 comentário 6089952267.
+
+- **SELAGEM_MEMORIA_APRENDIZADO_20261009:** CHEFE determinou que todo reparo material vire Lembrança, Aprendizado, receita reproduzível e receipt versionado, não só chat ou PR. Medido: `7d2f927a` reparou NeuroLink 167–170 e gerador original PASS; `344fac3` reparou compatibilidade Markdown, autoteste PASS; `5af3032` entregou replay L000→L170 no Edge (169/169 + Gênese, controles, teste negativo `PREV_MISMATCH_L002=BLOCKED`); `c6b4305` protegeu workflow PM2/`jq` antes de mutação numa VPS com Hermes systemd, YAML PASS. HUD físico da main/Casa/VPS igual em T1, mas checkout VPS e deploy independentes. CI run `38005755099` terminou `failure`. `REPLAY_DOCUMENTAL != DEPLOY`; `COMMIT != EXECUCAO`.
+- **Lembrança e receita:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-LEI-PREENCHIMENTO-LACUNAS-METABOLISMO-INSTINTO-SUPERIOR.md`; owners existentes `docs/HUD/HUD.html`, `scripts/trigger-fabric/rebuild_learning_lineage.py`, `.github/workflows/vps-exec-selfhosted.yml`. Não criar nova arquitetura nem novo Goal. `SAME_SCOPE_SAME_SHA_PROOF=true`; `LEMBRANCA != CURRENT_RUNTIME`; `ONE_WRITER_PER_SCOPE=true`; `NEXT_CURSOR=CONTINUE_CI_AND_HERMES_REAL_OWNER`.
+
+- **KANBAN_HEARTBEAT_NAO_E_PROGRESSO_20261009 — observação da execução Hermes/Kanban:** o CHEFE mostrou `Ler Pertinente` `RUNNING`, `Activity=155`, `Runs=7`, heartbeats e nota `REPLAY!`; um **run anterior específico** registrou `25m14s`, `0 tool calls`, `rc=75` e painel apontando `quota wall`. Não confundir esse run anterior com o worker atual, nem mensagem entregue com ação realizada; `Requeue with note` reinicia a tarefa. **Leis:** `HEARTBEAT != APRENDIZADO`, `RUNNING != EXECUCAO_COMPROVADA`, `COMMENT_SENT != PROCESSED`, `OLD_FAIL != CURRENT_STATE`, `REQUEUE != RESUME`, `LOCAL_DONE != GOAL_PAI_DONE`. Receita e NEXT_CURSOR no owner de Lembranças `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-LEI-PREENCHIMENTO-LACUNAS-METABOLISMO-INSTINTO-SUPERIOR.md`; Goal pai `t_9040803d`; tarefa `t_140910d4`. Preservar replay documental L000–L170 já provado; exigir prova do run atual antes de selar efeito.
+
+- **INSTINTO_SUPERIOR_APRENDIZADO_VIRA_CAPACIDADE_20261009 (2026-10-09, hipótese ensinada pelo CHEFE):** a própria execução com efeito comprovado é o aprendizado que deve ser **incorporado pelo owner de runtime existente**, não repetido pelo Hermes. Antes de decidir, recuperar `Goal + owner + receita pertinente + fingerprint/proof_key/SHA/scope/bindings`; se a prova ainda se aplicar, reaproveitar o receipt e não mutar de novo; se houver drift, menor delta → teste → contraprova → volta uma casa → receipt/next cursor. **Código existente lido:** `apps/modulos/HERMES-CORE/core/orchestrator.mjs` já registra aprendizado após Critic; `agents/Knowledge-Collector/agent.mjs` oferece `registrar/consultarContexto`; `scripts/centraldark/canonical-consumption-gate.mjs` lê o aprendizado pertinente. **Ainda hipótese:** herança automática na etapa pré-decisão, sem prova E2E no Hermes. Instinto Superior mantém metáforas Yuji/Sukuna/Gojo/Whis/Bills/Goku/Vegeta como capacidades do mesmo sistema, não agentes novos. `LEARNING_RECORDED != LEARNING_CONSUMED`; `REPLAY_DOCUMENTAL != RUNTIME_EXECUCAO`; `GLOBAL_FIXED_POINT=UNKNOWN`.
+- **Owner e receita:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`; Lembrança `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-LEI-PREENCHIMENTO-LACUNAS-METABOLISMO-INSTINTO-SUPERIOR.md`. **NEXT_CURSOR:** provar seleção da receita→decisor→efeito antes de aplicar eventual menor delta no código do executor, com contraprova de reutilização/deduplicação.
+
+
+### [2026-10-10] Menor delta executável: Hydra Casa — força controlada e contraprova visual
+- **Origem:** sessão interativa com o CHEFE, Windows Casa SEGREDO.
+- **Intenção:** recuperar janela preta do Hydra Launcher sem transformar incidente de interface em arquitetura nova.
+- **Estado inicial medido:** `Hydra.exe` e renderizadores vivos; `Responding=True` não provava renderização; logs `net::ERR_NAME_NOT_RESOLVED`, HTTP 401 e tentativas de atualização 4.1.6 eram sinais, não causa raiz demonstrada.
+- **Ordem autorizada:** encerrar Hydra à força e iniciar de novo, sem preservar os processos antigos. Execução via PowerShell `Stop-Process -Force` apenas nos processos `Hydra` e `Start-Process` do executável existente em `%LOCALAPPDATA%\Programs\Hydra\Hydra.exe`; não apagar arquivos, downloads ou configurações.
+- **Prova:** readback registrou novos PIDs responsivos; posteriormente o CHEFE enviou captura visual mostrando início, catálogo e biblioteca carregados. `HYDRA_UI_RECOVERED=PASS_SESSION_VISUAL`; `ROOT_CAUSE=UNKNOWN`.
+- **Aprendizado:** se o usuário autoriza expressamente reinício forçado de aplicativo recuperável, executar diretamente o menor delta reversível; não confundir `PROCESS_RESPONDING` com `UI_RENDERED`, nem diagnóstico indicativo com causa comprovada. Registrar antes/depois e pedir contraprova visual somente quando necessária. `FORCA_OPERACIONAL != DESTRUIR_DADOS`; `RECOVERY_FIRST`; `PROVA_REAL > NARRATIVA`.
+- **Outros achados da sessão:** Codex Casa registrou `usage limit` de 300 min a 100% e ausência de créditos adicionais; comentário oficial `chatgpt-codex-connector[bot]` no PR #1767 informou limite de *code reviews*. São quotas de superfícies distintas; não classificar como falha do GitHub ou Dependabot. Workflow `.github/workflows/dependabot-auto-merge.yml` confirmado `disabled_manually` com razão histórica Casa/runners; COSTURA existente `scripts/dependabot/resolve-conflicts.sh`, CodeRabbit `scripts/coderabbit-bridge.mjs`. O binário Codex Connector é GitHub App externa OpenAI, não workflow de código interno do repositório.
+- **Localizações Casa:** scripts COSTURA inspecionados na pasta temporária `cd-pr1793-costura-root`; `resolve-conflicts.sh` e `known-conflict-patterns.json` abertos no Notepad. VS Code não identificado nos caminhos padrão nem em varredura `C:`; página oficial de download aberta; sem instalação executada.
+- **NEXT_CURSOR:** em casos semelhantes, reutilizar owners/scripts existentes, medir efeito na tela ou no runtime e manter `UNKNOWN` explícito quando faltarem provas. Não promover este complemento a novo UID da linhagem sem execução do compilador e readback.
+
+
+### [2026-10-10] Hakai de pacote redundante — fonte canônica antes do medo abstrato
+- **Caso medido:** `E:\centraldark-main.tar.gz` (334.198.820 bytes, criado em 01/10/2026) contém snapshot `ServerVpss-CentralDark-799c33906b37b5a950324a096f38bbf610955fc0`. GitHub comparou snapshot com `main`: 862 commits à frente, zero atrás. Pacote foi inspecionado somente em leitura, sem extração nem exclusão pela ferramenta.
+- **Ensinamento do CHEFE:** quando a revisão histórica está recuperável pelo botão de download do GitHub, não converter automaticamente uma cópia `.tar.gz` redundante em obrigação de backup local. Prudência sem evidência vira resistência e cria pendência artificial.
+- **Regra operacional:** primeiro conferir se há conteúdo único fora do repositório, depois classificar `REDUNDANT_CANDIDATE` versus `UNIQUE_DATA`. Snapshot integral do histórico GitHub sem extras conhecidos não é requisito de funcionamento. Com autorização do dono, remoção da cópia local é decisão simples; nunca inferir que arquivos exclusivos ou dados de runtime também estão no GitHub.
+- **Cristal:** `GITHUB_MAIN_AND_HISTORY=CANONICAL_SOURCE`; `OLD_ARCHIVE != LOST_CODE`; `REDUNDANT_BACKUP != REQUIRED_BACKUP`; `SPECULATIVE_RISK != BLOCKER`; `EVIDENCE -> DECISION -> MINIMUM_ACTION -> COUNTERPROOF`.
+- **Prova e limite:** GitHub retornou `status=ahead`, `ahead_by=862`, `behind_by=0`; usuário mostrou diálogo de exclusão, não prova de clique ou remoção efetiva. `ARCHIVE_DELETED=UNKNOWN`.
+
+
+### [2026-10-10] AUTO_LEARNING_QUALITY_GATE_20261010 — cristalização autônoma com densidade e prova
+- **Intenção do CHEFE:** sempre que surgir lição operacional material ou semelhante a aprendizado anterior, reconhecer, confrontar, enriquecer e registrar autonomamente nos owners existentes, sem precisar receber novo `REGISTRA`.
+- **Gatilho:** erro e correção comprovados, contraprova que muda uma decisão, padrão recorrente confirmado, solução reutilizável ou lacuna de raciocínio corrigida.
+- **Qualidade obrigatória:** intenção, contexto e owner; fato versus hipótese; evidência e origem; delta causal; contraprova e limitações; critério de reutilização; próximos passos apenas se reais; deduplicação e atualização da propriedade pertinente no aprendizado existente.
+- **Exclusões:** elogios, conversa repetida, especulação não classificada, dados sensíveis, mera execução sem aprendizado novo, observação sem utilidade transferível. Não criar ID/linhagem artificial sem compilador e readback.
+- **Execução:** atualizar `docs/CONSCIENCIA/APRENDIZADOS.md` e, quando pertinente, `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` usando acesso autorizado; relatar se gravação falhar. Sem afirmar automação contínua fora das sessões ou herança em runtime não demonstrada.
+- **Recuperação de falha técnica:** identificar causa, aguardar 10 segundos se transitória, repetir com limite e reutilizar outra rota existente e autorizada; bloqueio explícito de segurança não deve ser contornado. `ROUTE_FAILURE != GOAL_FAILURE`; `AUTHORIZED_FALLBACK_ONLY`.
+- **Falha de continuidade reconhecida nesta sessão:** a tentativa de registrar em Lembranças foi bloqueada e eu deixei a regra nova apenas no chat, criando dívida paralela. Corrigir consolidando o aprendizado no owner canônico já gravável, dentro da mesma entrada, com readback e sem criar novo documento, ID ou promessa de registro concluído.
+- **Regra de fechamento:** `PARTIAL_WRITE != DONE`; se a segunda projeção estiver bloqueada, o registro canônico deve conter o aprendizado completo, indicando a projeção como pendente, sem fingir sincronia; não contornar proteções de segurança.
+- **Cristal:** `RECOGNIZE -> COMPARE -> VALIDATE -> ENRICH -> COMMIT -> READBACK -> REUSE`; `EMPTY_LEARNING=REJECT`; `DOCUMENTED != RUNTIME_CONSUMED`.
+
+
+### [2026-10-10] RECONCILIACAO_12_OCORRENCIAS_20261010 — correcao por familias, sem regras paralelas
+- **Intencao:** reconciliar os 12 episodios da amostra da conversa (8 nesta sessao, 4 em historicos recuperados), sem confundir amostra com auditoria exaustiva. Similaridades sao hipoteses de causa compartilhada ate contraprova.
+- **Familia A, decisao antes da prova (4):** A1 Hydra: processo vivo confundido com UI funcional; A2 arquivo tar redundante tratado como obrigacao de backup; A3 PR filho assumido como obrigatorio em historico; A4 sequencia antiga de recuperacao sem validacao. **Regra corretiva comum:** medir contexto e efeito desejado antes de inventar dependencia; menor delta autorizado e contraprova. Hydra teve recuperacao visual comprovada; as demais correcoes historicas de runtime nao foram remediadas nesta escrita.
+- **Familia B, fechamento incompleto (4):** B1 APRENDIZADOS gravado sem LEMBRANCAS; B2 fallback MCP CentralDark nao consultado inicialmente; B3 aprendizado abandonado no chat; B4 PASS prematuro com destino ainda pendente. **Correcao aplicada:** usar owner unico, consultar catalogo de rotas autorizadas, atualizar destinos existentes e readback antes de PASS. Prova: commit 979472945c1b6e835e57f64e7765b1113e97a0b8 em LEMBRANCAS e readback dos marcadores nos dois arquivos. Nenhuma rota deve contornar bloqueio de seguranca.
+- **Familia C, contrato e reutilizacao insuficientes (3):** C1 promessa de autoaprendizado maior que o mecanismo provado; C2 usuario pediu catalogo integral e recebeu apenas agregacao de 901 acoes; C3 historico anterior exigiu consulta canônica antes da resposta. **Correcao documental:** diferenciar compromisso conversacional de automacao executada, catalogar ferramentas relevantes antes de declarar impossibilidade, declarar escopo parcial. **Pendencia runtime:** `scripts/centraldark/canonical-consumption-gate.mjs` seleciona secoes por numero; este registro datado nao tem UID/indice da linhagem. Exigir teste real do consumidor e compiler antes de afirmar heranca automatica.
+- **Familia D, execucao atrasada (1):** D1 cobranca historica de execucao direta em 29/09. **Correcao:** quando acao e segura, autorizada, reversivel e executavel com owners existentes, executar menor delta e provar efeito sem prolongar diagnostico; nao aplicar forca destrutiva.
+- **Estados:** A1=EFFECT_PROVEN; A2=CLASSIFICATION_PROVEN_DELETE_UNKNOWN; A3/A4=HISTORICAL_REVIEW_ONLY; B1-B4=DOCUMENTARY_FIXED_READBACK; C1=CLAIM_CORRECTED_RUNTIME_UNKNOWN; C2=INVENTORY_AGGREGATED_NOT_FULL; C3=CONSUMPTION_TEST_PENDING; D1=BEHAVIORAL_CONTRACT_ONLY.
+- **Lei de consolidacao:** `SIMILAR_ERROR -> EXISTING_OWNER -> SINGLE_CAUSAL_RULE -> EFFECT_TEST -> RECEIPT`; `DOCUMENTED != EXECUTED`; `NO_PARALLEL_DEBT`; `NOT_EVERY_INCIDENT_REQUIRES_NEW_CODE`.
+
+
+### [2026-10-10] PROGRESSO_PARCIAL_COMPROVADO_20261010 — continuar do que ja passou
+- **Ensino do CHEFE (sensei):** resultado parcial medido e avanco real, mesmo sem conclusao integral. Nao classificar o conjunto como fracasso, nem alegar ALL DONE.
+- **Fato:** `scripts/skill-sync-check.sh --apply` executado na VPS, `exitCode=0`, 28 skills opt-in / 56 alvos: `SYNCED=49`, `ORACLE_REQUIRED=7`, `UPDATED=0`, `MAIN_RUNTIME_LOCK=PARTIAL`; nova leitura `--check` confirmou as sete divergencias. Nenhuma copia independente foi sobrescrita.
+- **Causa do erro de avaliacao:** comunicar apenas `nao concluido` ocultava o valor dos 49 alinhamentos e induzia narrativa de reinicio total.
+- **Correcao de estado:** manter placar por alvo e progresso acumulado, revalidar os 49 por hash/SHA quando retomar e reconciliar somente os 7 divergentes no owner existente com contraprova. `SYNCED` e verificacao de alinhamento, nao significa 49 arquivos alterados nesta rodada.
+- **Criterio:** `PROGRESSO_PROVEN != GLOBAL_DONE`; `PARTIAL_PASS != FAILURE`; `NEXT_CURSOR=7_ORACLE_DRIFTS`; `NO_BLIND_OVERWRITE`; `DONT_REDO_PROVEN_WORK`.

@@ -5,13 +5,81 @@ NETWORK_PORT_IS_NOT_AI_ENTRYPOINT=true
 ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 -->
 
-# CentralDark — TelePanel
+# 🪬 CentralDark — Instinto Superior
+
+**Uma CentralDark, um comando, vários módulos.** O **Instinto Superior** é a porta administrativa; o **Portal de Módulos** é a vitrine e entrada dos produtos; o **TelePainel** é um módulo dentro desse Portal. Hermes, AionUi, Rakazo, MCP, Omni Router, Hub de Contas e provedores têm owners internos e **não devem disputar o Admin**.
+
+> **Para agentes e motores:** a única porta de boot da IA é [`LEIA-ME-IA.md`](LEIA-ME-IA.md), com `AGENTS.md` e os contratos da `main`. Este README organiza a identidade do produto; **não substitui os contratos operacionais**.
+
+## 🏛️ Mapa de responsabilidades — Instinto Superior primeiro
+
+```text
+👑 CHEFE — intenção
+     │
+     ▼
+🪬 INSTINTO SUPERIOR — Admin CentralDark
+     ├── 🤖 Hermes: executor original / Loop Mestre / NEXT_CURSOR
+     ├── 🧠 AionUi: cockpit de agentes e modelos
+     │     └── 🤖 Rakazo: configuração de bots
+     ├── 🔐 Contas / Conexões: Hub e OAuth Broker existentes
+     ├── 🔌 MCP CentralDark / Omni Router / APIs
+     └── 🧿 HUD / Auditoria / Reality Judge
+
+🌐 PORTAL DE MÓDULOS — site dos produtos
+     ├── 📟 TelePainel: consultas pelo bot Telegram
+     ├── 💬 WhatsApp
+     ├── 👥 CRM
+     └── 💳 Financeiro
+```
+
+**Lei:** `REUSE_BEFORE_CREATE=true`; `ONE_SYSTEM_ONLY=true`; `ONE_WRITER_PER_SCOPE=true`. **Retirar interface antiga não significa apagar serviço, OAuth, banco, sessão, conta ou callback.** Não criar outro gateway/owner para obter o mesmo resultado.
+
+## 🌐 Endereços, código-fonte e realidade observada (11/10/2026)
+
+| Superfície | Responsabilidade / owner | Última medição, sem falso verde |
+|---|---|---|
+| [admin.centralldark.com](https://admin.centralldark.com/) | **Instinto Superior** — `apps/instinto-superior/`; SSR da VPS em `127.0.0.1:25812`, serviço `centraldark-instinto-superior-web.service` | **PUBLICADO**: `/`, `/auth`, `/cockpit`, `/sala-controle` retornaram HTTP 200. Serviço systemd `active/enabled`; login real **UNKNOWN**. |
+| Admin `/health`, `/mcp`, `/tools.json`, `/admin/mcp*` | Compatibilidade MCP existente → `127.0.0.1:9100` pelo Caddy | `/health` retornou **200**; não significa que todas as tools foram testadas. |
+| [centralldark.com](https://centralldark.com/) | **Portal de Módulos** — `src/paginas/portal-publico/pages/LandingCentralDark.tsx`, `Portal.tsx` | **REPUBLICAÇÃO PENDENTE**: o domínio respondeu HTTP 200, mas ainda encaminhava à interface legada do AionUi; HTTP 200 não prova o Portal publicado. |
+| `/portal`, `/telepainel/dashboard` | Catálogo de produtos e **TelePainel como módulo**, `src/app/rotas/rotas-telepainel.tsx`, `src/funcionalidades/telepainel/` | Código na `main`; publicação autenticada no domínio do Portal **ainda não medida**. |
+| AionUi / Rakazo | Ferramentas internas do Instinto, serviços históricos `25808` / `25810` | Serviços preservados; **botões e integração não equivalem a login ponta a ponta comprovado**. |
+| Hub / OAuth / contas | `apps/modulos/hub/`, `apps/modulos/oauth-broker/`, `apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx` | UI e backend com owners existentes; acesso individual a contas e provedores **não presumido**. |
+| Omni Router / Zendrive | `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`, launcher existente | **8099 OFFLINE** na última medição; recuperar o owner real PM2/systemd antes de tentar iniciar outro. |
+
+**Verdade da publicação:** o Admin já saiu da origem temporária Lovable e é servido **pela VPS**, com SSR local e Caddy. O build reproduzível do Instinto está na `main` no [commit `7f25ad2`](https://github.com/ServerVpss/CentralDark/commit/7f25ad2a6479d6de80858e345c878bb38b70b0d0) via `npm run build:vps`, corrigindo a dependência circular sem retirar CSRF. Verificar serviço, conteúdo, assets, autenticação e contraprova por rota: **`DOCUMENTED != EXECUTED` e `MERGED != DEPLOYED`**.
+
+### 🧩 Repositórios sem duplicação
+
+- **Fonte canônica:** [`ServerVpss/CentralDark@main`](https://github.com/ServerVpss/CentralDark) — arquitetura e owners vigentes.
+- **Portal Lovable/Pivete:** [`ServerVpss/centraldark-central-de-m-dulos@pivete/dev`](https://github.com/ServerVpss/centraldark-central-de-m-dulos/tree/pivete/dev). Landing, Portal e arquivos centrais do TelePainel já foram confrontados por SHA com a `main`; trazer **somente deltas úteis**, não copiar o repositório inteiro.
+- **Instinto Superior:** `apps/instinto-superior/`; gestão interna em `PainelAdminCentralDark.tsx` e `ConexoesCentralDark.tsx`.
+- **TelePainel:** módulo do Portal, não o nome do ecossistema nem seu Admin. Preservar os contratos específicos de Telegram, UI e autenticação já existentes.
+
+### ⭕ Auréola, método e continuidade
+
+```text
+👑 !CENTRALDARK → 🔗 !># INTERLIGADOS → ⭕ !AURÉOLA CANÔNICA
+→ 🧿 #ACORDAR → 🎛️ !CALIBRAR → 🧭 !MULTIBÚSSOLA
+→ 🔎 !META_LUPA → 🔄 !RECONCILIAR → OWNER EXISTENTE
+→ MENOR DELTA → 🧪 TESTE → ⚖️ !CONTRAPROVA
+→ ⚖️ REALIDADE → 🧾 !REGISTRA → NEXT_CURSOR → CONTINUAR
+```
+
+**Owners:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml`, `MASTER-CYCLE.yml`, `AUREOLA-BAHIA-BIBLICA.yml`, `HERMES-AUTOCONFIG-RUNTIME.yml`, `apps/modulos/HERMES-CORE/`. A Auréola mostra a rota e os versos como orientação humana, **não substitui logs, HEAD, gates nem runtime medido**. O Hermes é o executor existente; `NEXT_CURSOR` preserva continuidade, sem inventar outro executor.
+
+**Próximas comprovações:** `AUTHENTICATED_SALA_CONTROLE_SMOKE`; `RESTORE_EXISTING_PORTAL_AND_TELEPAINEL_DEPLOY`; `RECOVER_EXISTING_OMNI_PM2_OWNER`. `UNKNOWN != PASS`; falha local não é falha de toda a CentralDark.
+
+## 🧪 Workflows e badges — sinais, não provas globais
+
+
 
 [![⚙️ CentralDark Valida — determinístico](https://github.com/ServerVpss/CentralDark/actions/workflows/centraldark-validate.yml/badge.svg)](https://github.com/ServerVpss/CentralDark/actions/workflows/centraldark-validate.yml)
 [![🤖 Dependabot — radar, compatibilidade e squash seguro](https://github.com/ServerVpss/CentralDark/actions/workflows/dependabot-auto-merge.yml/badge.svg?branch=main)](https://github.com/ServerVpss/CentralDark/actions/workflows/dependabot-auto-merge.yml)
 [![🏷️ Status Badge Fabric](https://github.com/ServerVpss/CentralDark/actions/workflows/status-badge-fabric.yml/badge.svg?branch=main)](https://github.com/ServerVpss/CentralDark/actions/workflows/status-badge-fabric.yml)
 
 ➡️ [Matriz completa de badges de todos os workflows atuais e futuros](docs/STATUS-BADGES.md)
+
+> **Badges vermelhos continuam visíveis.** Identificar workflow, resultado e SHA antes de corrigir. Não ocultar falha nem promover `queued/pending` a `PASS`.
 
 
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
@@ -37,10 +105,9 @@ Texto legado conflitante perde para o owner canônico.
 <!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 
 
-> ⚠️ **TEMA OFICIAL DO SISTEMA: "Esmeralda" (Sistema 3D Tátil)**
+> ⚠️ **DESIGN EM RECONCILIAÇÃO — preservar owners e evitar recoloração automática**
 >
-> Este é o padrão visual **definitivo** de todo o ecossistema CentralDark.
-> Qualquer agente (IA ou humano) que editar este projeto **DEVE manter** este tema em toda nova tela, componente ou módulo. Não trocar paleta, não trocar fontes, não trocar estilo de sombras.
+> O design **Esmeralda / Sistema 3D Tátil** foi documentado como regra global no período TelePainel; a UI atual do Instinto Superior possui identidade própria, já publicada. Este README **não revoga o owner histórico de design** e **não autoriza recolorir o Instinto**. Manter os tokens existentes onde são usados e resolver a divergência com `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`, `.lovable/memory/design/sistema-3d-tatil.md` e o código visual do Instinto, antes de mexer na UI.
 
 > 🎴 **PADRÃO OFICIAL DE NOTIFICAÇÃO TELEGRAM: Card Hermes v1.2**
 >
@@ -117,7 +184,9 @@ O método ativo é: leitores paralelos quando houver ganho, escritor único por 
 
 ---
 
-## 🎨 Tema Oficial: **Esmeralda** (Sistema 3D Tátil)
+## 🎨 Design legado documentado — Esmeralda (Sistema 3D Tátil)
+
+> As instruções abaixo descrevem o sistema visual legado de módulos TelePainel/Hub. A aplicação indiscriminada desse estilo ao Instinto Superior está **em reconciliação com os owners de design**; não fazer migração visual sem medir a interface atual.
 
 Apelido curto: **Esmeralda**. Nome técnico: **Sistema 3D Tátil**.
 Inspiração: estilo app nativo (iOS/Android), com pegada Linear · Vercel · CLI tools.
@@ -146,16 +215,18 @@ Sempre usar `hsl(var(--primary))`, `bg-card`, `text-foreground`, etc.
 Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéricos.
 
 ### Regra de ouro
-> **Todo agente que editar daqui pra frente DEVE seguir o tema Esmeralda.**
-> Se for criar tela nova: reutilizar `.card-premium`, `.nav-item`, `.btn-money`, utilitários `shadow-3d-*`. Manter consistência absoluta.
+> **Nos componentes Esmeralda existentes, preservar os tokens e o contrato visual do próprio componente.**
+> Nas telas Esmeralda, reutilizar `.card-premium`, `.nav-item`, `.btn-money`, `shadow-3d-*`; no Instinto Superior, preservar o visual já implementado.
 
 ---
 
-## Projeto
+## Projeto — fontes e destinos
 
-- **Domínio oficial**: https://centralldark.com
-- **Painel de status**: https://status.centralldark.com
-- **Repositório**: `ServerVpss/CentralDark` (sincroniza automaticamente com a VPS em `/root/CentralDark/`)
+- **Instinto Superior / Admin:** https://admin.centralldark.com
+- **Portal de Módulos (destino):** https://centralldark.com — publicação ainda pendente na função de Portal.
+- **Painel de status:** https://status.centralldark.com — consultar saúde separadamente.
+- **GitHub canônico:** `ServerVpss/CentralDark@main`.
+- **Checkout VPS:** `/root/CentralDark/` — conferir HEAD, árvore suja, workflows e runtime. **Não pressupor sync automático.**
 
 ## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 
@@ -163,10 +234,14 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+RECEIPTS_OWNER=repository
+PR_MOTHER_ROLE=RETIRED
+LEGACY_PR_MOTHERS=#1562,#1757
+NO_NEW_PR_MOTHER=true
+DIRECT_MAIN_MUTATION_REQUIRES_VERSIONED_RECEIPT_WHEN_MATERIAL=true
 ```
 
-Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. PRs #1562 e #1757 são históricos; novos receipts pertencem ao repositório. O HUD CURRENT projeta, não substitui o rastro. Sem isso, não aconteceu.
 
 
 > **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.

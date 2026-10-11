@@ -3,8 +3,8 @@
 # setup-centraldark-portal.sh
 # Owner existente do build do Portal + TelePainel.
 #
-# centralldark.com / www.centralldark.com -> /root/CentralDark/apps/portal
-# telepainel.centralldark.com             -> /root/CentralDark/apps/Telepanel
+# centralldark.com / www.centralldark.com -> <caminho-vps>
+# telepainel.centralldark.com             -> <caminho-vps>
 #
 # Idempotente: atualiza os repos, builda e reconcilia o snippet Caddy.
 # A validação/reload do Caddy pertence ao workflow/caller.
@@ -14,9 +14,9 @@ set -Eeuo pipefail
 umask 022
 
 REPO_URL="https://github.com/segredounlock/clone-deck.git"
-CENTRALDARK_ROOT="/root/CentralDark"
+CENTRALDARK_ROOT="<caminho-vps>"
 DEPLOY_GATE_REPO_DIR="${DEPLOY_GATE_REPO_DIR:-$CENTRALDARK_ROOT}"
-DISPATCHER="${CENTRALDARK_DEPLOY_GATE_SCRIPT:-$CENTRALDARK_ROOT/scripts/vps/deploy-guards-dispatcher.sh}"
+DISPATCHER="${CENTRALDARK_DEPLOY_GATE_SCRIPT:-$DEPLOY_GATE_REPO_DIR/scripts/vps/deploy-guards-dispatcher.sh}"
 SOURCE_HEAD="${SOURCE_HEAD:-$(git -C "$CENTRALDARK_ROOT" rev-parse HEAD 2>/dev/null || true)}"
 [[ "$SOURCE_HEAD" =~ ^[0-9a-f]{40}$ ]] || { echo "[centraldark-portal] SOURCE_HEAD_INVALID"; exit 16; }
 [[ -x "$DISPATCHER" ]] || { echo "[centraldark-portal] CANONICAL_DEPLOY_GATE_MISSING"; exit 16; }
@@ -47,8 +47,16 @@ for TARGET in "$PORTAL_DIR" "$TELEPANEL_DIR"; do
   log "Buildando $TARGET"
   (
     cd "$TARGET"
-    npm ci --silent
-    npm run build
+    if command -v bun >/dev/null 2>&1; then
+      bun install --no-progress
+      bun run build
+    elif [ -f package-lock.json ]; then
+      npm ci --silent
+      npm run build
+    else
+      echo "[centraldark-portal] PACKAGE_MANAGER_LOCK_MISSING"
+      exit 24
+    fi
     test -f dist/index.html
   )
 done
@@ -57,7 +65,7 @@ TMP_SNIPPET="$(mktemp)"
 trap 'rm -f "$TMP_SNIPPET"' EXIT
 cat > "$TMP_SNIPPET" <<'CADDY'
 centralldark.com, www.centralldark.com {
-    root * /root/CentralDark/apps/portal/dist
+    root * <caminho-vps>
     try_files {path} /index.html
     file_server
     encode gzip
@@ -69,7 +77,7 @@ centralldark.com, www.centralldark.com {
 }
 
 telepainel.centralldark.com {
-    root * /root/CentralDark/apps/Telepanel/dist
+    root * <caminho-vps>
     try_files {path} /index.html
     file_server
     encode gzip

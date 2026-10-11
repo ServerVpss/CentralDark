@@ -64,6 +64,14 @@ ROUTE_FAILURE
 
 UNSCOPED_SHELL_FALLBACK_FORBIDDEN=true
 AUTHORIZED_ALTERNATE_ROUTE_ALLOWED=true
+
+## Seleção causal da rota de execução — Hermes VPS / MCP
+
+Quando o alvo pertence à VPS e existe Hermes autorizado no runtime, preferir a rota executora já registrada no catálogo (HERMES_SHELL) para executar o escopo autorizado. O MCP continua sendo catálogo/transporte e mantém suas confirmações próprias: CONFIRMACAO_ADMIN_NECESSARIA bloqueia apenas a chamada MCP que a exige; **não** autoriza contornar o dispatcher por shell genérico, herdar permissões novas nem declarar que uma segunda rota está viva sem teste.
+
+Antes da ação, medir o serviço Hermes real, a identidade/escopo e os comandos permitidos pelo owner existente. Se a rota direta não estiver comprovada/autorizada, manter BLOCKED apenas para a mutação dependente. Não alterar política MCP nem executar como root só para escapar de confirmação. Uma autorização de missão cobre apenas ações dentro do escopo concedido; confirmação explícita para ações novas, destrutivas ou fora do escopo permanece obrigatória.
+
+Receita de diagnóstico da VPS (read-only): conferir systemctl is-active hermes-gateway.service, systemctl show hermes-gateway.service -p ExecStart -p User -p FragmentPath, listeners locais e git status sem limpar worktree. Registrar ROUTE, OWNER, AUTH_SCOPE, RUNTIME_HEALTH, EFFECT_READBACK, NEXT_CURSOR; serviço ativo não prova chamada funcional e commit não prova deploy.
 ```
 
 Para ferramentas de sistema, prefira capabilities pequenas e explícitas (`status`, `read`, `restart`, `write` no owner autorizado) a uma função genérica irrestrita de execução. Capacidade ampla só existe quando o owner e o escopo realmente exigirem.
@@ -192,6 +200,8 @@ CANONICAL_CONSUMPTION_GATE_PATH=scripts/centraldark/canonical-consumption-gate.m
 CANONICAL_LEARNING_BOOT_MODE=PERTINENT_ONLY
 ALL_NUMBERED_LEARNINGS_AVAILABLE_ON_DEMAND=SIM
 CANONICAL_SEARCH_MISS_FALLBACK=docs/CONSCIENCIA/APRENDIZADOS.md
+FILE_EXISTENCE_CLAIM_REQUIRES_DIRECT_PATH_READ=true
+CONTENT_SEARCH_ZERO_RESULTS_DOES_NOT_PROVE_FILE_ABSENT=true
 POINTER_MUST_OPEN_SOURCE_BEFORE_RESPONSE=SIM
 TOOL_AVAILABLE_REQUIRES_ATTEMPT_BEFORE_UNKNOWN=SIM
 UNKNOWN_WITH_MEASUREMENT_ROUTE=TARGET_ONLY_CONTINUE

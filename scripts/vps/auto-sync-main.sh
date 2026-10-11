@@ -94,6 +94,54 @@ restart_if_needed() {
   log "OK" "SERVICE_RESTART_SCOPED_PASS service=$RESTART_SERVICE; HEALTH_E2E_UNKNOWN"
 }
 
+# Existing Hermes skill-sync owner: when canonical main advances an opted-in skill,
+# reconcile main -> ~/.hermes/skills through its hash/backup/one-writer gates.
+# Never use a PR HEAD, modify approvals config, or bypass dirty-checkout fail-close.
+sync_hermes_skills_on_main_delta() {
+  local from="$1" to="$2" checker="$REPO/scripts/skill-sync-check.sh"
+  local diff_rc=0 result=""
+  [[ "$from" != "$to" ]] || return 0
+  if git diff --quiet "$from" "$to" -- .agents/skills/; then
+    return 0
+  else
+    diff_rc=$?
+    if [[ "$diff_rc" -ne 1 ]]; then
+      log "SKILL_SYNC_UNKNOWN" "diff_unavailable main=$to"
+      return 0
+    fi
+  fi
+  [[ -f "$checker" ]] || {
+    log "SKILL_SYNC_UNKNOWN" "owner_missing=scripts/skill-sync-check.sh main=$to"
+    return 0
+  }
+  # Pin both the checked-out tree and skill-sync source to the SAME promoted SHA.
+  if [[ "$(git rev-parse --verify HEAD)" != "$to" ]] ||
+     [[ "$(git symbolic-ref --quiet --short HEAD)" != "main" ]]; then
+    log "SKILL_SYNC_BLOCKED" "checkout_not_at_promoted_main expected=$to"
+    return 0
+  fi
+  if result="$(CENTRALDARK_ROOT="$REPO" CENTRALDARK_SKILL_SYNC_REF="$to" bash "$checker" --apply 2>&1)"; then
+    if grep -qx 'MAIN_RUNTIME_LOCK=PASS' <<<"$result"; then
+      log "SKILL_SYNC_PASS" "main=$to owner=scripts/skill-sync-check.sh; SKILL_LOADED_IN_ACTIVE_SESSION=UNKNOWN"
+    else
+      log "SKILL_SYNC_PARTIAL" "main=$to owner=scripts/skill-sync-check.sh; ORACLE_REQUIRED_OR_UNKNOWN; SKILL_LOADED_IN_ACTIVE_SESSION=UNKNOWN"
+    fi
+  else
+    local rc=$?
+    log "SKILL_SYNC_BLOCKED" "main=$to owner=scripts/skill-sync-check.sh exit=$rc; no_forced_overwrite"
+  fi
+}
+
+run_pulse() {
+  local pulse="${CENTRALDARK_MAIN_PULSE_RECONCILER:-$REPO/scripts/vps/main-pulse-reconciler.sh}"
+  [[ -x "$pulse" ]] || { log "PULSE_UNKNOWN" "owner_missing path=$pulse"; return 0; }
+  if "$pulse" --source "${1:-}" --trigger auto-sync >>"$LOG" 2>&1; then
+    log "PULSE_PASS" "owner=$pulse"
+  else
+    local rc=$?
+    log "PULSE_UNKNOWN" "owner=$pulse exit=$rc; CHECKOUT_SYNC_REMAINS_PASS"
+  fi
+}
 
 branch=$(git symbolic-ref --quiet --short HEAD) || blocked "detached HEAD; no checkout mutation"
 before=$(git rev-parse --verify HEAD) || blocked "HEAD unavailable"
@@ -153,6 +201,7 @@ if [[ "$before" == "$remote" ]]; then
   log "OK" "CHECKOUT_SYNC_PASS sha=$before; RUNTIME_DEPLOY_UNKNOWN"
   status "PASS" "already at origin/main"
   restart_if_needed "$before" "$before"
+  run_pulse || true
   exit 0
 fi
 if ! git merge-base --is-ancestor "$before" "$remote"; then
@@ -165,4 +214,6 @@ after=$(git rev-parse --verify HEAD)
 [[ "$after" == "$remote" ]] || blocked "readback mismatch: HEAD=$after origin/main=$remote"
 log "SYNC" "CHECKOUT_SYNC_PASS from=$before to=$after; RUNTIME_DEPLOY_UNKNOWN"
 status "PASS" "fast-forward from=$before"
+sync_hermes_skills_on_main_delta "$before" "$after"
 restart_if_needed "$before" "$after"
+run_pulse "$after" || true

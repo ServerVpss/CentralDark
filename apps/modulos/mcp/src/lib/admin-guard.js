@@ -496,11 +496,20 @@ export async function auditStartupSnapshot(runtimeTools, options = {}) {
 /**
  * Guarda destrutiva: reconciliação + confirmação + auditoria → decisão.
  */
-export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, expectation, inputPayload, actor, correlationId, adminAuthorized }) {
+export async function guardDestructive({ toolName, confirmAdmin, runtimeTools, expectation, inputPayload, actor, correlationId, adminAuthorized, persistentAdminAuthorization = false }) {
   const effectiveExpectation = expectation ?? getCanonicalExpectation();
   const recon = reconcileCatalog(runtimeTools, effectiveExpectation);
-  const evalRes = evaluateAdminConfirmation(confirmAdmin);
   const hasAdminScope = adminAuthorized === true;
+  // Reuse the verified admin OAuth/Hub session; never mint a grant from tool input.
+  // Legacy local/stdio callers can still use an explicit confirmation.
+  const authenticatedSession = persistentAdminAuthorization === true
+    && hasAdminScope
+    && typeof actor === "string" && actor.trim().length > 0
+    && typeof correlationId === "string" && correlationId.trim().length > 0
+    && (confirmAdmin === undefined || confirmAdmin === null || confirmAdmin === "");
+  const evalRes = authenticatedSession
+    ? { decision: "released", confirmationMode: "authenticated_admin_session", reason: "verified_admin_session" }
+    : evaluateAdminConfirmation(confirmAdmin);
   // Fail-closed PONTUAL: so bloqueia por catalogo se a tool PEDIDA for a
   // divergente. Divergencia em outra tool nao derruba esta. Ver MOTIVO em
   // reconcileCatalog.

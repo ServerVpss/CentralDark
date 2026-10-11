@@ -1397,6 +1397,26 @@ body {
   }
 }
 </style>
+
+<style id="cd-telemetry-emoji-style">
+/* CD-TELEMETRY-EMOJI-HUD-20261010 */
+.cd-top-sensors{display:flex;gap:8px;flex-wrap:wrap;padding:9px 13px;border-bottom:1px solid var(--border);background:var(--ground);}
+.cd-top-sensor{flex:1 1 170px;min-width:155px;border:1px solid var(--border);border-radius:9px;padding:8px 10px;background:var(--surface);font:11px var(--mono);color:var(--text);}
+.cd-top-sensor strong,.cd-top-sensor small,.cd-top-sensor .cd-top-value{display:block;}
+.cd-top-sensor strong{color:var(--accent);letter-spacing:.03em;}
+.cd-top-sensor .cd-top-value{font-size:12px;font-weight:700;margin-top:4px;color:var(--amber);}
+.cd-top-sensor small{color:var(--text-dim);line-height:1.45;margin-top:3px;overflow-wrap:anywhere;}
+.cd-top-sensors button{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:7px;cursor:pointer;}
+.cd-health-events{height:min(460px,50vh);min-height:230px;display:grid;align-content:start;gap:7px;overflow-y:auto;border:1px solid var(--border);background:var(--ground);border-radius:9px;padding:9px;font:11px var(--mono);}
+.cd-health-event{display:grid;grid-template-columns:125px 112px minmax(0,1fr);gap:7px;line-height:1.5;border:1px solid var(--border);border-left:4px solid var(--amber);border-radius:9px;padding:8px;background:var(--surface);overflow-wrap:anywhere;}
+.cd-health-event[data-status="pass"]{border-left-color:var(--green)}
+.cd-health-event[data-status="fail"]{border-left-color:var(--red)}
+.cd-health-event[data-status="warn"]{border-left-color:var(--amber)}
+.cd-health-event time{color:var(--text-dim);font-size:10px}
+.cd-health-event strong{color:var(--accent)}
+.cd-health-event span{color:var(--text);white-space:pre-wrap}
+@media(max-width:700px){.cd-health-event{grid-template-columns:1fr}.cd-top-sensor{flex-basis:125px;min-width:120px}}
+</style>
 </head>
 <body>
 
@@ -1416,11 +1436,21 @@ body {
   </div>
 </div>
 
+
+<!-- CD-TELEMETRY-EMOJI-HUD-20261010: CPU host never inferred from load average or browser health -->
+<div class="cd-top-sensors" id="cd-hud-sensor-strip" data-owner="docs/HUD/HUD.html">
+ <div class="cd-top-sensor"><strong>🖥️ CPU · CASA</strong><span class="cd-top-value" id="cd-casa-cpu">🟡 SEM LEITURA</span><small id="cd-casa-cpu-proof">segredo / 100.123.93.25 · Desktop remoto OFFLINE no T0. CPU% não comprovada.</small></div>
+ <div class="cd-top-sensor"><strong>🖧 CPU · VPS</strong><span class="cd-top-value" id="cd-vps-cpu">🟡 CPU% SEM LEITURA</span><small id="cd-vps-cpu-proof">Carga observada: 17.74 em 8 CPUs no T0 10/10 18:59Z. Loadavg ≠ uso %.</small></div>
+ <div class="cd-top-sensor"><strong>🧠 HERMES · RUNTIME</strong><span class="cd-top-value" id="cd-live-runtime">🟡 MEDINDO</span><small id="cd-live-runtime-proof">Fonte existente: /health. Serviço vivo ≠ inferência testada.</small></div>
+ <button type="button" id="cd-cpu-measure-import" title="Importa JSON sanitizado de medição do sensor existente: só nesta aba">📥 CPU T1</button><input type="file" accept=".json,application/json" id="cd-cpu-measure-file" hidden>
+</div>
+
 <!-- TABS -->
 <div class="tabs">
   <button class="tab-btn ativa" data-tab="hud">HUD</button>
   <button class="tab-btn" data-tab="mapa">MAPA</button>
   <button class="tab-btn" data-tab="forja">FORJA</button>
+  <button class="tab-btn" data-tab="operacao">OPERAÇÃO</button>
 </div>
 
 <!-- ================================================================
@@ -1430,6 +1460,66 @@ body {
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
 <div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">09/10/2026, 20:27 UTC - rotas medidas; Tailscale API 401 / Heart STALE</span></div><div class="cadeado-meta">FONTE OBSERVADA: GitHub main <code>75115cfe063f</code> e API publica <code>api.centralldark.com/health</code>. Este quadro separa CURRENT de historico: API health confirma Hermes Core vivo, mas nao prova inferencia, deploy ou disponibilidade de modelo local. Owner: docs/HUD/HUD.html. READBACK 09/10/2026 20:27 UTC: catalogo MCP 141 ferramentas/13 rotas/20 operacoes; SSH/Tailscale PONG bidirecional, portas 445/5985/3030 e Screenpipe HTTP 200, AionUi HTTP 200. API administrativa Tailscale = HTTP 401 (API token invalid), broker = fetch failed; One Heart HTTP 200 mas self=stale (lag_ms=133427). PASS_GLOBAL = NAO COMPROVADO. Nenhuma credencial, processo ou conexao alterada.</div></div>
+
+<!-- CENTRALDARK_DEPLOY_OPERATION_CURRENT_20261011: append-only evidence snapshot; no runtime-green by inference -->
+<section class="section" id="cd-deploy-operation-current-20261011" data-observed-at="2026-10-11T04:06:58Z" aria-labelledby="cd-deploy-operation-title" style="margin-top:16px">
+  <div class="section-header">
+    <div class="section-icon">🧿</div>
+    <h2 class="section-title" id="cd-deploy-operation-title">Operação corrente · HUD → deploy → Hermes/MCP → selagem</h2>
+    <span class="section-count" id="cd-deploy-operation-age">SNAPSHOT / CONFERIR FRESCOR</span>
+  </div>
+  <p class="cadeado-meta">OWNER ÚNICO: <code>docs/HUD/HUD.html</code> · Snapshot de leitura de 11/10/2026 04:06Z, não estado perpetuamente ao vivo. Fontes: commits da main, GitHub Actions, MCP CentralDark, PR #1793 e readbacks de Casa/VPS. Nenhuma das etapas abaixo transforma CI verde em runtime ou aprova PR automaticamente.</p>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>🧩 MCP nativo · owner systemd</h3>
+      <div class="val ok">WORKFLOW MCP=SUCCESS · RUN 38108320068</div>
+      <div class="meta">Commit <a href="https://github.com/ServerVpss/CentralDark/commit/9630900d" target="_blank" rel="noopener">9630900d</a>: detecta <code>centraldark-native-mcp-http.service</code>, mede health e ignora PM2 quando o fileset do MCP não mudou. Log informado: <code>MCP_NATIVE_HEALTH=PASS; MCP_SOURCE_UNCHANGED; DEPLOY_SKIPPED</code>. SKIP significa nenhuma mutação de MCP nesta rodada, não reinstalação.</div>
+    </div>
+    <div class="hud-card"><h3>⚙️ Hermes + Mapa/Verificador</h3>
+      <div class="val ok">GATES=SUCCESS · NÃO É DEPLOY GLOBAL</div>
+      <div class="meta">Commit <a href="https://github.com/ServerVpss/CentralDark/commit/4434b8f" target="_blank" rel="noopener">4434b8f</a>: <code>BEFORE_SHA</code> e guards dos filesets. Run <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38108320068" target="_blank" rel="noopener">38108320068</a>: TLC23/HUD_FIRST, MCP, Hermes, mapa/verificador, rotas e housekeeping concluídos; regeneração total falhou. Gates SUCCESS não afirmam restart nem nova execução de inferência.</div>
+    </div>
+    <div class="hud-card"><h3>🔧 Regeneração total · autenticação</h3>
+      <div class="val warn">CORREÇÃO NA MAIN · RUN NOVO SEM VEREDITO</div>
+      <div class="meta">Falha anterior: auth efêmera/SSH ausente, exit 14, worktree da VPS com alterações locais preservadas. Commit <a href="https://github.com/ServerVpss/CentralDark/commit/11f81d2b607f3748142bd9002d6ce35b2154e6cc" target="_blank" rel="noopener">11f81d2b</a> repassa autenticação efêmera ao job. <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38110350507" target="_blank" rel="noopener">Run 38110350507</a> estava <strong>QUEUED</strong> na última leitura; <strong>RESULTADO ATUAL = REMEDIR</strong>.</div>
+    </div>
+    <div class="hud-card"><h3>🧬 PR-mãe sucessor #1793</h3>
+      <div class="val warn">OPEN · MERGE PENDENTE</div>
+      <div class="meta"><a href="https://github.com/ServerVpss/CentralDark/pull/1793" target="_blank" rel="noopener">PR #1793</a> aberto, não draft; HEAD medido <code>985e9cfac46d</code>, 58 commits e 24 arquivos. <code>mergeable=true</code> foi leitura pontual, não aprovação. Histórico anterior: 17 workflows ACTION_REQUIRED; verificar gates/checks do HEAD atual antes de merge.</div>
+    </div>
+    <div class="hud-card"><h3>🏠 Casa + VPS · HUD físico</h3>
+      <div class="val warn">SELO ANTERIOR PASS · NOVA REVISÃO REQUER SYNC</div>
+      <div class="meta">Antes destes novos registros, main, Casa/Obsidian e espelho VPS <code>/root/.centraldark/HUD.html</code> tiveram SHA-256 idêntico <code>505ede62d6c189e252508ed783518826616adc3b2788deba5d2265021e355455</code> no run 38107094108. O novo commit deste HUD altera o arquivo: Casa/VPS precisam receber os <em>novos bytes</em> e ter hash relido. Checkout VPS <code>5344bd870</code> estava atrás e modificado; preservar as mudanças locais.</div>
+    </div>
+    <div class="hud-card"><h3>🧠 Aprendizado L / selo S</h3>
+      <div class="val warn">NOVOS NÚMEROS = NÃO EMITIDOS</div>
+      <div class="meta">Manifesto histórico consultado: 169 seções, último rótulo L170; lacunas/duplicatas legadas preservadas. <code>L000 → 0/169</code> abaixo é início do replay documental, NÃO medidor de aprendizagens atuais. Novo aprendizado único exige dedupe + manifesto/readback. Selo <code>Sxxxxxx</code> exige evento no ledger JSONL e readback; não inventar próximo número.</div>
+    </div>
+  </div>
+  <p class="cadeado-prova">NEXT_CURSOR: verificar conclusão do run <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38110350507" target="_blank" rel="noopener">38110350507</a> → tratar apenas job ainda falho → readback do runtime → reconciliar <a href="https://github.com/ServerVpss/CentralDark/pull/1793" target="_blank" rel="noopener">PR #1793</a> → registrar selo operacional numerado e aprendizado novo sem duplicação → sincronizar este mesmo HUD na VPS/Casa e provar SHA-256. <strong>COMMITTED ≠ DEPLOYED · QUEUED ≠ PASS · HISTÓRICO ≠ CURRENT.</strong></p>
+  <p class="cadeado-meta" id="cd-deploy-operation-probe" role="status">Estado ativo: o sensor GitHub MAIN e o sensor MCP existem no próprio HUD; esta placa preserva a última medição. Sem credencial do repositório privado no navegador, a leitura do GitHub pode falhar fechado.</p>
+</section>
+<script>
+(function(){
+  'use strict';
+  var root=document.getElementById('cd-deploy-operation-current-20261011');
+  if(!root)return;
+  var age=document.getElementById('cd-deploy-operation-age');
+  var probe=document.getElementById('cd-deploy-operation-probe');
+  function refresh(){
+    var t=Date.parse(root.getAttribute('data-observed-at')),diff=Date.now()-t;
+    var fresh=Number.isFinite(diff)&&diff>=-60000&&diff<=15*60000;
+    age.textContent=fresh?'SNAPSHOT RECENTE · REMEDIR CHECKS':'SNAPSHOT STALE · VER PENDÊNCIAS';
+    age.title='Observado em '+root.getAttribute('data-observed-at')+'; o runtime e o GitHub podem ter avançado.';
+    var main=document.getElementById('cd-main-observer-status');
+    var mcp=document.getElementById('cd-intent-live-proof');
+    var mainText=main?main.textContent.trim():'SENSOR_MAIN_AUSENTE';
+    var mcpText=mcp?mcp.textContent.trim():'SENSOR_MCP_AUSENTE';
+    probe.textContent='Sensores já existentes: '+mainText+' · '+mcpText+'. Estes sensores não substituem os recibos do deploy e do ledger.';
+  }
+  refresh();setInterval(refresh,60000);
+})();
+</script>
+
 <!-- CURRENT_PROVENANCE_COMPASSO 2026-10-09: ONE_SYSTEM_ONE_HUD; read-only projection -->
 <div class="section cd-index-current" id="cd-hud-compasso-current" data-busca="centraldark index current vps main casa triton kylin proveniencia frescor peso source runtime" data-observed-at="2026-10-09T02:03:19Z" style="margin-top:16px">
  <div class="section-header"><div class="section-icon">&#128065;</div><h2 class="section-title">Index + HUD &middot; Compasso CURRENT</h2><span class="section-count" id="cd-hud-current-age">CALCULANDO FRESCOR</span></div>
@@ -1696,7 +1786,11 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
           plaque.textContent='PLACA: HEALTH_UNKNOWN | motivo=owner ou frescor nao comprovado | proximo=remedir /health no owner';
         }else if(calibration&&calibration.status==='DRIFT'){
           var wounds=Number.isFinite(Number(calibration.wound_count))?Number(calibration.wound_count):'UNKNOWN';
-          plaque.textContent='PLACA: CALIBRACAO_DRIFT | feridas='+wounds+' | proximo=inspecionar owner da calibracao; nao marcar FIXED_POINT';
+          var streak=Number.isFinite(Number(calibration.streak))?Number(calibration.streak):'UNKNOWN';
+          var trend=String(calibration.trend||'UNKNOWN').slice(0,24);
+          var model=String(calibration.local_model||'UNKNOWN').slice(0,72);
+          var advisory=String(calibration.advisory_status||'UNKNOWN').slice(0,24);
+          plaque.textContent='PLACA: CALIBRACAO_DRIFT | feridas='+wounds+' | streak='+streak+' | trend='+trend+' | modelo='+model+' | advisory='+advisory+' | NEXT=VER PENDENCIA / owner existente; nao marcar FIXED_POINT';
         }else if(calibration&&calibration.status==='OK'&&Number(calibration.wound_count)===0){
           plaque.textContent='PLACA: API_HEALTH_PASS / CALIBRACAO_OK | somente escopo observado; deploy e inferencia nao provados';
         }else{
@@ -1784,6 +1878,21 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       <h2 class="section-title">Cadeados &mdash; Lugares Provados e Selados</h2>
       <span class="section-count" id="cadeados-count">contando provas...</span>
     </div>
+
+    <!-- CD_HUD_MANIFESTO_ENTROU_TEM_QUE_SELAR_20261009 -->
+    <div class="cadeado-prova" id="cd-seal-law-manifest" role="status" aria-live="polite"
+         data-manifest-law="ENTROU_TEM_QUE_SELAR" data-owner="docs/HUD/HUD.html"
+         data-pr="1788" data-policy="UNKNOWN_NEVER_PASS">
+      <strong>&#129668; LEI DO HUD &mdash; ENTROU, TEM QUE SELAR.</strong>
+      Entrada nova sem OWNER, ESCOPO, PROOF_KEY, SHA, RECIBO, READBACK, DATA e NEXT_CURSOR
+      fica <strong>VER PEND&Ecirc;NCIA</strong>; nunca SELADO por presen&ccedil;a no HTML.
+      Selos hist&oacute;ricos permanecem como prova datada, n&atilde;o como runtime CURRENT.
+      <span id="cd-seal-law-state">CONFERINDO ENTRADAS...</span>
+    </div>
+    <details class="cadeado-prova" id="cd-seal-law-pendencias">
+      <summary>VER PEND&Ecirc;NCIA &middot; entradas ainda sem selo v&aacute;lido</summary>
+      <ul id="cd-seal-law-list"></ul>
+    </details>
     <div class="cadeado-grid">
       <div class="cadeado-card selado">
         <div class="cadeado-header">
@@ -2110,6 +2219,281 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
   </div>
 
   <!-- ONE HEART - LIVE -->
+  <!-- CENTRALDARK_API_ONE_HEART_MAP_V1_START -->
+<style>
+#cd-api-oneheart-map{margin-top:16px;border:1px solid var(--border-strong);border-radius:12px;padding:16px;background:var(--surface);color:var(--text)}
+#cd-api-oneheart-map .cd-oh-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+#cd-api-oneheart-map .cd-oh-flow{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:15px 0}
+#cd-api-oneheart-map .cd-oh-node{border:1px solid var(--border-strong);border-radius:8px;padding:10px;text-align:center;min-width:106px;background:var(--surface-2);font:600 12px var(--mono)}
+#cd-api-oneheart-map .cd-oh-arr{font:700 21px var(--mono);color:var(--accent)}
+#cd-api-oneheart-map .cd-oh-heart{width:82px;height:82px;display:block;margin:auto;transform-origin:center;animation:cd-oh-pulse 1.7s ease-in-out infinite;filter:drop-shadow(0 0 9px var(--amber))}
+#cd-api-oneheart-map[data-heart="alive"] .cd-oh-heart{filter:drop-shadow(0 0 9px var(--green))}
+#cd-api-oneheart-map[data-heart="alive"] .cd-oh-heart path{fill:var(--green)}
+#cd-api-oneheart-map .cd-oh-heart path{fill:var(--amber)}
+@keyframes cd-oh-pulse{0%,100%{transform:scale(1)}15%{transform:scale(1.14)}28%{transform:scale(1.02)}40%{transform:scale(1.10)}55%{transform:scale(1)}}
+#cd-api-oneheart-map .cd-oh-routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:7px}
+#cd-api-oneheart-map .cd-oh-route{padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface-2);display:flex;flex-direction:column;gap:3px}
+#cd-api-oneheart-map .cd-oh-route strong{font-size:12px}
+#cd-api-oneheart-map .cd-oh-route small{font:10px var(--mono);opacity:.76;word-break:break-all}
+#cd-api-oneheart-map .cd-oh-route em{font:600 11px var(--mono);font-style:normal;color:var(--amber)}
+#cd-api-oneheart-map .cd-oh-proof{font-size:11px;line-height:1.65;color:var(--text-dim);margin:9px 0 0}
+#cd-api-oneheart-map .cd-oh-lock{display:inline-block;font-size:13px}
+@media(prefers-reduced-motion:reduce){#cd-api-oneheart-map .cd-oh-heart{animation:none}}
+</style>
+<div class="section" id="cd-api-oneheart-map" data-heart="unknown" data-proof-time="2026-10-09T20:34:53Z" data-busca="mapa API centraldark One Heart MCP 13 rotas cadeados selos github cloudflare casas">
+  <div class="cd-oh-head"><h2 class="section-title">🫀 Mapa da API · 13 rotas · One Heart único</h2><span id="cd-oh-live-badge" class="section-count">HEART: UNKNOWN / consultando owner existente</span></div>
+  <p class="cd-oh-proof">🔒 PROVA SELADA POR ESCOPO: MCP admin 141 tools / 13 rotas / 20 ações (20:34 UTC); API MCP pública /health 200 com 153 tools; Cloudflare DNS api/mcp/deploy apontando à VPS com proxy ativo; Casa SEGREDO online. Selos históricos não significam disponibilidade atual.</p>
+  <p class="cd-oh-proof" data-proof-time="2026-10-09T21:15:00Z">🪧 INCIDENTE + CORREÇÃO DE GATE (prova datada): no runner, MCP interno 127.0.0.1:9100/health=PASS e mcp.centralldark.com/health=PASS; acesso direto público :9100 não é requisito. O owner .github/workflows/vps-exec-selfhosted.yml foi corrigido na main: 63715a4 (rota local/HTTPS), b1cca4f (TARGET_SHA_SUPERSEDED sem jobs mutantes), b8de35a (validação pela Python stdlib, jq ausente). Receita testada via SSH VPS: MCP_9100=PASS, MCP_ROUTE=PASS. Saúde do endpoint ≠ saúde de todas as missões. Workflow e CI têm placar próprio.</p>
+  <div class="cd-oh-flow" role="img" aria-label="Intenção do CHEFE passa pela API Cloudflare, catálogo MCP e One Heart; GitHub e VPS sincronizam em duas direções sob cadeado">
+    <div class="cd-oh-node">👑 CHEFE<br><small>Intenção / dono</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">→</span>
+    <div class="cd-oh-node">🌐 Cloudflare<br><small>API · MCP · Deploy</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">→</span>
+    <div class="cd-oh-node">🪬 MCP<br><small>141 / 13 / 20</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">↔</span>
+    <div class="cd-oh-node"><svg class="cd-oh-heart" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 86C18 63 7 46 13 28c7-19 29-23 37-7 8-16 30-12 37 7 6 18-5 35-37 58Z"/></svg><small>ONE HEART</small></div>
+    <span class="cd-oh-arr" aria-hidden="true">↔</span>
+    <div class="cd-oh-node">🐙 GitHub ⇄ VPS<br><small>Sync / owner / receipt</small></div>
+  </div>
+  <div class="cd-oh-head"><strong>🔐 Cadeados das 13 rotas do catálogo</strong><span class="section-count">LISTADA ≠ EXECUTANDO · UNKNOWN ≠ PASS</span></div>
+  <div class="cd-oh-routes"><div class="cd-oh-route" data-oh-route="AIONUI_MCP_STDIO"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>AionUi → MCP</strong><small>AIONUI_MCP_STDIO</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="CAS_CLOUD_RELAY"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa ↔ CAS Cloud</strong><small>CAS_CLOUD_RELAY</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="GITHUB_RUNTIME"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>GitHub API admin</strong><small>GITHUB_RUNTIME</small><em>AUTH PASS</em></div>
+<div class="cd-oh-route" data-oh-route="HERMES_DELEGATED_COMMIT_PATH"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Hermes commit delegado</strong><small>HERMES_DELEGATED_COMMIT_PATH</small><em>PR1748 / HISTÓRICO</em></div>
+<div class="cd-oh-route" data-oh-route="HERMES_SHELL"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Hermes executor</strong><small>HERMES_SHELL</small><em>HEALTH HISTÓRICO</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_CASA_TO_VPS"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa → VPS MCP</strong><small>MCP_CASA_TO_VPS</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_REMOTE_OAUTH"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>MCP público OAuth</strong><small>MCP_REMOTE_OAUTH</small><em>HEALTH 200; AUTH UNKNOWN</em></div>
+<div class="cd-oh-route" data-oh-route="MCP_VPS_NATIVE_HTTP"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>MCP HTTP :9100</strong><small>MCP_VPS_NATIVE_HTTP</small><em>RUNTIME T1 PENDENTE</em></div>
+<div class="cd-oh-route" data-oh-route="RDC_DESKTOP_COMMANDER"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Casa SEGREDO</strong><small>RDC_DESKTOP_COMMANDER</small><em>ONLINE</em></div>
+<div class="cd-oh-route" data-oh-route="SCREENPIPE_CLI_RECORDER"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Screenpipe CLI</strong><small>SCREENPIPE_CLI_RECORDER</small><em>CATALOGADA</em></div>
+<div class="cd-oh-route" data-oh-route="SCREENPIPE_LOCAL_SENSOR"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Sensor :3030</strong><small>SCREENPIPE_LOCAL_SENSOR</small><em>OWNER UNKNOWN</em></div>
+<div class="cd-oh-route" data-oh-route="SSH_VPS_DIRECT"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>SSH VPS</strong><small>SSH_VPS_DIRECT</small><em>PROVA HISTÓRICA</em></div>
+<div class="cd-oh-route" data-oh-route="TAILSCALE_PRIVATE_ROUTE"><span class="cd-oh-lock" aria-hidden="true">🔒</span><strong>Tailscale privado</strong><small>TAILSCALE_PRIVATE_ROUTE</small><em>PONG HISTÓRICO; API 401</em></div></div>
+  <p class="cd-oh-proof">🟢 Provado: GitHub API autenticada/admin, SEGREDO online, Cloudflare DNS 3 entradas, MCP catálogo/health, Kylin Triton. 🟢 One Heart público self=alive (20:38:07 UTC; lag 10763ms; SSE 47 eventos/min) em leitura pontual. 🟡 Pendente: Tailscale Admin HTTP 401; broker fetch failed; VPS checkout divergente; cobertura T1 das 13 rotas. Nenhum serviço reiniciado por esta placa.</p>
+  <p class="cd-oh-proof">Fontes: <a href="https://api.centralldark.com/health" target="_blank" rel="noopener">Hermes /health</a> · <a href="https://mcp.centralldark.com/health" target="_blank" rel="noopener">MCP /health</a> · <a href="https://github.com/ServerVpss/CentralDark/pull/1788" target="_blank" rel="noopener">PR #1788 / handoff</a>. A animação é visual: somente a telemetria do One Heart existente pode mudar o estado para ALIVE.</p>
+</div>
+<script>
+(function(){
+  function bind(){
+  var panel=document.getElementById('cd-api-oneheart-map'),src=document.getElementById('live-heart-state'),badge=document.getElementById('cd-oh-live-badge');
+  if(!panel||!src||!badge)return;
+  function project(){
+    var label=(src.textContent||'').trim(),bad=/(UNKNOWN|STALE|FAIL|BLOCKED|ERROR|OFFLINE|PENDING|TIMEOUT)/i.test(label);
+    var alive=!bad && /\b(ALIVE|HEALTHY|PASS)\b/i.test(label);
+    panel.setAttribute('data-heart',alive?'alive':'unknown');
+    badge.textContent='HEART: '+(label||'UNKNOWN')+' · fonte: One Heart existente';
+  }
+  var obs=new MutationObserver(project);obs.observe(src,{childList:true,subtree:true,characterData:true});project();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
+})();
+</script>
+<!-- CENTRALDARK_API_ONE_HEART_MAP_V1_END -->
+
+<!-- CD_GENESIS_REPLAY_V1 -->
+<style>
+#cd-genesis-replay{margin-top:16px;border:1px solid var(--border-strong);border-radius:12px;padding:16px;background:var(--surface);color:var(--text)}
+#cd-genesis-replay .cdr-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+#cd-genesis-replay button{border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text);border-radius:8px;padding:9px 13px;cursor:pointer}
+#cd-genesis-replay button:disabled{opacity:.4;cursor:default}
+#cd-genesis-replay .cdr-controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+#cd-genesis-replay .cdr-track{height:12px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface-2)}
+#cd-genesis-replay .cdr-fill{height:100%;width:0%;background:var(--green);transition:width .17s ease}
+#cd-genesis-replay .cdr-number{font:700 clamp(35px,6vw,68px) var(--mono);color:var(--amber);font-variant-numeric:tabular-nums}
+#cd-genesis-replay[data-playing="yes"] .cdr-number{animation:cdr-pulse .8s ease-in-out infinite alternate}
+#cd-genesis-replay[data-result="PASS"] .cdr-number{color:var(--green)}
+#cd-genesis-replay[data-result="BLOCKED"] .cdr-number{color:var(--red)}
+#cd-genesis-replay .cdr-details{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin:12px 0}
+#cd-genesis-replay .cdr-details > div{border:1px solid var(--border);padding:9px;border-radius:7px;overflow-wrap:anywhere}
+#cd-genesis-replay .cdr-sub{font:11px var(--mono);opacity:.75}
+#cd-genesis-replay .cdr-note{font-size:12px;color:var(--text-dim);line-height:1.6}
+@keyframes cdr-pulse{from{opacity:.55;transform:scale(.98)}to{opacity:1;transform:scale(1.035)}}
+#cd-genesis-replay #cdr-number{cursor:pointer;text-decoration:underline dotted;text-underline-offset:5px}
+#cd-genesis-replay #cdr-operator{margin:14px 0;padding:12px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface-2)}
+#cd-genesis-replay #cdr-operator[hidden]{display:none}
+#cd-genesis-replay #cdr-operator pre{white-space:pre-wrap;word-break:break-word;font-size:11px}
+@media(prefers-reduced-motion:reduce){#cd-genesis-replay .cdr-number{animation:none!important}#cd-genesis-replay .cdr-fill{transition:none}}
+</style>
+<div class="section" id="cd-genesis-replay" data-result="UNKNOWN" data-playing="no" data-busca="genesis apocalipse replay deterministico fixed point aprendizagem neur olink neuroLink bootstrap receita historica">
+ <div class="cdr-head"><h2 class="section-title">🪬 Gênesis → Fixed Point · Replay determinístico</h2><span class="section-count" id="cdr-state">AGUARDANDO CONTRAPROVA</span></div>
+ <p class="cdr-note">Mesmo Manifesto NeuroLink, mesmos recipientes; o botão valida e reproduz a trilha histórica por UID, <strong>não reexecuta mutações, deploys ou jobs passados</strong>. Nenhum número ausente será inventado. Este PASS pertence somente à continuidade documental, nunca ao CI/CD ou runtime.</p>
+ <div class="cdr-controls"><button type="button" id="cdr-run">▶ Reproduzir desde L000</button><button type="button" id="cdr-step">→ Uma batida</button><button type="button" id="cdr-pause">Ⅱ Pausar</button><button type="button" id="cdr-reset">↺ Voltar à Gênese</button></div>
+ <div class="cdr-head"><span class="cdr-number" id="cdr-number">L000</span><span id="cdr-counter">0 / 169 elos</span></div>
+ <div class="cdr-track" role="progressbar" aria-label="Trilha histórica NeuroLink" aria-valuemin="0" aria-valuemax="170" aria-valuenow="0" id="cdr-track"><div class="cdr-fill" id="cdr-fill"></div></div>
+ <div class="cdr-details"><div><div class="cdr-sub">RECIPIENTE / BOOTSTRAP</div><strong id="cdr-title">Gênese histórica</strong></div><div><div class="cdr-sub">ANTERIOR → PRÓXIMO</div><strong id="cdr-edge">L000 → L001</strong></div><div><div class="cdr-sub">CONTRAPROVA / CURSOR</div><strong id="cdr-proof">AINDA NÃO EXECUTADA</strong></div></div>
+ <div id="cdr-operator" hidden><strong id="cdr-operator-title">NeuroLink · UID</strong><p class="cdr-note">Clique no numero Lxxx para pedir ao Hermes existente a receita comprovada. Envio de tarefa nao e execucao nem Fixed Point; nao executar shell inventado.</p><button type="button" id="cdr-operator-send">⚙ Encaminhar ao Hermes Gateway</button> <button type="button" id="cdr-operator-copy">📋 Copiar missao</button> <button type="button" id="cdr-operator-close">Fechar</button><pre id="cdr-operator-status" role="status">AGUARDANDO AUTORIZACAO DO CLIQUE</pre></div>
+ <p id="cdr-gap" class="cdr-note">Lacunas legadas 36–42; duplicatas #16, #50, #84, #85, #105 e #110 têm UIDs individuais, preservados.</p>
+ <p class="cdr-note">Fonte selada: <a href="https://github.com/ServerVpss/CentralDark/blob/344fac3271e4ca4594da298a8317a75b09de6f14/docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json" target="_blank" rel="noopener">Manifesto NeuroLink (SHA de origem 344fac3)</a> · <a href="https://github.com/ServerVpss/CentralDark/blob/main/scripts/trigger-fabric/rebuild_learning_lineage.py" target="_blank" rel="noopener">gerador canônico</a>. CURRENT GitHub e runtime são verificados por seus sensores próprios.</p>
+</div>
+<script>
+(function(){
+'use strict';
+var chain=[["L000",0,null,"L001","Conhecimento só existe se está no repo ou no Mega Painel"],["L001",1,"L000","L002","Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo"],["L002",2,"L001","L003","git status limpo pode esconder pasta vazia: gitlink órfão entregava o Bolt vazio em todo clone"],["L003",3,"L002","L004","Auditoria do gatilho de XP da META LUPA: motor correto, defeito era de exposição na saída"],["L004",4,"L003","L005","Auditoria não vale sem HEAD_SHA declarado: 4 escopos, 3 lacunas falsas no PR #410"],["L005",5,"L004","L006","Workflow promovido sem o script que ele executa: o bot autônomo nunca rodou"],["L006",6,"L005","L007","A porta de entrada nunca existiu: por que nenhuma IA lia as regras da casa"],["L007",7,"L006","L008","github_commit (MCP) não deleta arquivo; duplicatas CONSCIENCIA/BRAIN nasceram do mesmo commit de bot"],["L008",8,"L007","L009","Nunca gerar -v2/-v3: refinar o arquivo que já existe"],["L009",9,"L008","L010","Escritor único: auditar e comentar na PR alheia em vez de abrir PR concorrente"],["L010",10,"L009","L011","Reconferir o blob na hora de publicar, não só na hora de auditar"],["L011",11,"L010","L012","Hash validado por regex não prova que o artefato existe"],["L012",12,"L011","L013","Modo novo não alcança problema empilhado antes da ramificação de modo"],["L013",13,"L012","L014","Recuo preventivo não é obediência"],["L014",14,"L013","L015","Mutante equivalente sai do denominador mas aponta a invariante sem teste"],["L015",15,"L014","L016A","Achado repetido é ruído, não reforço"],["L016A",16,"L015","L016B","Frase de agente não prova alinhamento; promessa maior que capacidade é falso compromisso"],["L016B",16,"L016A","L017","#ACORDAR é recuperação de estado real, não apenas comando de GitHub"],["L017",17,"L016B","L018","Uma SOL, um SOUL, uma superfície; modelos e ferramentas são capacidades substituíveis"],["L018",18,"L017","L019","O humano decide intenção; a máquina prova o estado e não devolve investigação mensurável ao humano"],["L019",19,"L018","L020","Em desenvolvimento autorizado, produção observável vem antes de perfeição global"],["L020",20,"L019","L021","Convergência, Judge e Meta Lupa servem para tentar quebrar; não para decidir a intenção do CHEFE"],["L021",21,"L020","L022","Falha local pede correção local e deploy no menor blast radius possível"],["L022",22,"L021","L023","Painel Admin precisa ser observabilidade operacional, não só configuração"],["L023",23,"L022","L024","HTTP 200, PM2 online, DNS resolvendo ou painel verde não provam LIVE"],["L024",24,"L023","L025","API paga é capacidade, não identidade nem caminho obrigatório"],["L025",25,"L024","L026","\"Menos é mais\" significa menor movimento compatível com efeito, observabilidade e segurança"],["L026",26,"L025","L027","Batch .bat: 4 armadilhas que passam em revisão superficial"],["L027",27,"L026","L028","Grok App Builder é adapter, não cérebro — não scaffoldar app paralelo"],["L028",28,"L027","L029","Ponte semântica fail-closed EXIT code=2 — não é verde; stderr engolido"],["L029",29,"L028","L030","Dois mundos vivos: GitHub main 81bbfc7 ≠ VPS 5958d3ce27 (1252 atrás, dirty)"],["L030",30,"L029","L031","Consolidacao de dominios: SPA ja e hibrido, nao falta construir path-routes"],["L031",31,"L030","L032","Provider sem crédito NÃO é router quebrado"],["L032",32,"L031","L033","Uma capacidade = uma linhagem = um PR de promoção por escopo"],["L033",33,"L032","L034","Opinião usada como medição gera falso verde e ação destrutiva"],["L034",34,"L033","L035","Sem TURN_CLASS não há gate entre ler e agir — a impressão ocupa o slot da medição"],["L035",35,"L034","L043","T3: ponte semântica EXIT 1, três catálogos, VPS na main 8 atrás"],["L043",43,"L035","L044","EXECUTION_OVER_EXPLANATION — User Values Doing over Talking"],["L044",44,"L043","L045","LINGUISTIC_CALIBRATION — Bahia Expression Accuracy"],["L045",45,"L044","L046","WEBUI_ADMIN_HUB — Localhost:8787 as CentralAdmin Surface"],["L046",46,"L045","L047","ONE_SYSTEM_ONLY_ENFORCEMENT — User's Operational Maxim"],["L047",47,"L046","L048","LARGE_FILE_INTEGRATION — Process Droped Files, Don't Just Acknowledge"],["L048",48,"L047","L056","COMMIT_LIMPO — Commit não é vassoura de git status"],["L056",56,"L048","L055","COMPLEXIDADE ABSORVIDA — simples na superfície, rigor na fundação; simples ≠ burro"],["L055",55,"L056","L054","SESSÃO NÃO MORRE SUJA — commit+push main; checklist diário; dia fecha sozinho"],["L054",54,"L055","L053","COMPRESSÃO ARQUITETURAL — crescer por dentro; DROP/EXTEND; sem contrato paralelo"],["L053",53,"L054","L052","CONTINUIDADE OPERACIONAL — GOAL PAI vive; conversa muda; a Casa lembra pelo motor"],["L052",52,"L053","L051","ORGANISMO ≠ FERRAMENTAS NA MESA — motor substituível; captura ≠ fixed point"],["L051",51,"L052","L050A","DELTA ÚTIL DA RESENHA — locução 2 min + base dos cavaleiros; não construir o que ainda é ⚫"],["L050A",50,"L051","L049","CRISTALIZAÇÃO_OPERACIONAL — medir, reconciliar, só então alterar; delegar ao Hermes existente"],["L049",49,"L050A","L050B","AUREOLA_PERMANENTE — Publicação segura e continuidade do aprendizado"],["L050B",50,"L049","L057","DOCKER_BUILD_CONTEXT — erro visual antigo não é estado atual"],["L057",57,"L050B","L058","Substring e regex enganam: provar import/ausência lendo a fonte e todas as refs"],["L058",58,"L057","L059","Não esperar o CHEFE tropeçar no ouro: medir antes de criar e melhorar o owner existente"],["L059",59,"L058","L060","Screenpipe: migração de storage travada trava o backend e o MCP"],["L060",60,"L059","L061","Observação não é execução; ordem explícita executa; rastro precisa ser verificável pela máquina"],["L061",61,"L060","L062","Dobradinha sem atrito: múltiplos modelos, um cristal, realidade única"],["L062",62,"L061","L063","Chat → Casa → Costura viva: execução conversacional, sensor de evento e identidade por evidência"],["L063",63,"L062","L064","Dependabot: aprovação autônoma de workflow run é diferente de aprovação de PR"],["L064",64,"L063","L065","COSTURA autônoma: resolver conhecido, amarelar desconhecido, aprender por replay"],["L065",65,"L064","L066","Lei do Papagaio Curioso: curiosidade + método + prova = detetive funcional"],["L066",66,"L065","L067","Um fio operacional; HTML é checkpoint entre janelas"],["L067",67,"L066","L068","Workflow vermelho pode ter executado delta útil e falhado fechado"],["L068",68,"L067","L069","Híbrido é por trilhos, não trocando o runner da COSTURA"],["L069",69,"L068","L070","Objeção hipotética repetida vira disputa de autoridade e queima a sessão"],["L070",70,"L069","L071","Painel não é estado: deploy_status dá falso VERMELHO com pm2 100% online"],["L071",71,"L070","L072","Mesmo nome, duas peças: receptor systemd ativo escondendo executor PM2 parado"],["L072",72,"L071","L073","Receptor religado não reprocessa histórico; e detecção provada não é cura provada"],["L073",73,"L072","L074","Percepção distribuída: ângulo × acesso × método, e o custo do barramento humano"],["L074",74,"L073","L075","Executor real fora do repositório: corrigir o ramo morto de um fallback e achar que consertou"],["L075",75,"L074","L076","Correção do #74: enfileirar não é deployar, e eu violei meu próprio #70 no mesmo dia"],["L076",76,"L075","L077","SKIP não é PASS: pulo por lock devolve zero e mente mais sob carga"],["L077",77,"L076","L078","A esteira não conserta a si mesma: correção do executor cai na fila órfã do próprio executor"],["L078",78,"L077","L079","Achado-mãe: três filas com entrada e sem saída, e o UNKNOWN que virou desculpa"],["L079",79,"L078","L080","Dupla caneta só converge depois da contraprova"],["L080",80,"L079","L081","Gatilhos de consumo: ferramenta, ponteiro e UNKNOWN medível"],["L081",81,"L080","L082","Contraprova humana reentra o loop enquanto houver delta material"],["L082",82,"L081","L083","Tool Call executada não é Tool Call visível na lateral"],["L083",83,"L082","L084A","Webhook PM2 e main-pulse não são checkout verde automático"],["L084A",84,"L083","L084B","Ritmo de resenha pode coexistir com trabalho sério"],["L084B",84,"L084A","L085A","Rota local 4175: publicar no CENTRALDARK-OS e consumir de fora sem abrir a VM"],["L085A",85,"L084B","L085B","openKylin 3.0 já traz uma camada nativa de IA; CentralDark deve integrar antes de reinventar"],["L085B",85,"L085A","L086","Variável com prefixo VITE_ não alimenta a checagem do servidor"],["L086",86,"L085B","L087","Sonda que mede o próprio localhost nunca enxerga a Casa"],["L087",87,"L086","L088","UNKNOWN cravado no código não é medição pendente"],["L088",88,"L087","L089","Pacote de asset mudou de grade e o contrato do app não foi remedido"],["L089",89,"L088","L090","Entrar como root não é controlar o kernel, e número sem medição é invenção"],["L090",90,"L089","L091","Rota, gatilho e PR novos quando já existe filho é arquitetura paralela"],["L091",91,"L090","L092","Entrega no desktop do root não chega ao CHEFE"],["L092",92,"L091","L093","As três rotas para o CENTRALDARK-OS dependem todas do mesmo shell"],["L093",93,"L092","L094","Ligar o SSH do Tailscale não autoriza o SSH do Tailscale"],["L094",94,"L093","L095","A camada de IA do openKylin está viva e presa ao laço local"],["L095",95,"L094","L096","Letra trocada no nome da máquina derruba SSH com erro que culpa a política"],["L096",96,"L095","L097","kytensor preserva localhost e ganha exposição Tailscale por proxy de socket"],["L097",97,"L096","L098","Reality Judge é verificador de efeito, não porteiro da autoridade do CHEFE"],["L098",98,"L097","L104","O aprendizado pertence à CentralDark; o executor atual é só o portador da rodada"],["L104",104,"L098","L100","Receita replay-able — diagnóstico e fix determinístico de falha de workflow GitHub"],["L100",100,"L104","L101","META-GRILL protege o executor de resolver a coisa errada (objetivo antes de sintoma)"],["L101",101,"L100","L102","Fiscal da SOUL: retorno estruturado e contraprova completa"],["L102",102,"L101","L103","Verde da interface exige prova do mesmo PR/HEAD; o ciclo pertence à CentralDark"],["L103",103,"L102","L099","Vault existe não significa restore provado; checksum do contêiner não prova o conteúdo esperado"],["L099",99,"L103","L105A","CentralDark é o sujeito operacional; modelos são interfaces"],["L105A",105,"L099","L105B","Cruzamento bidirecional: UNKNOWN local não congela o organismo e não pode virar PASS global"],["L105B",105,"L105A","L106","Voz é resolvedor de intenção por cláusulas, não segundo cérebro nem porteiro"],["L106",106,"L105B","L107","Regra global de horário sem fiscal executável volta a vazar UTC para o CHEFE"],["L107",107,"L106","L108","META-GRILL também grelha o próprio executor antes da resposta"],["L108",108,"L107","L109","Aprovação de Actions não é execução: action_required, fila e falha são estados distintos"],["L109",109,"L108","L110A","Precisão objetiva é delta do método; não é um modo novo nem substituto da prova"],["L110A",110,"L109","L110B","Multi-conta exige binding por capability; ausência local não é ausência global"],["L110B",110,"L110A","L111","O CHEFE transforma sistemas por invariantes; o executor não deve reduzir o padrão nem inventar o contrato mental"],["L111",111,"L110B","L112","A CentralDark deve aprender onde cada setor mora antes de escolher a ferramenta"],["L112",112,"L111","L113","Voz pode recuperar o significado certo e ainda citar um HEAD histórico; semântica e temporalidade são provas separadas"],["L113",113,"L112","L114","openKylin 3.0 usa um substrate compartilhado de IA; presença de IA no desktop não implica um modelo por janela"],["L114",114,"L113","L115","O twin local VMware é um corpo real da CentralDark: disco físico + shared tree + GPU 3D, não uma imagem isolada"],["L115",115,"L114","L116","GPT/modelo serve para multiplicar o raciocínio do CHEFE e devolver conhecimento útil à CentralDark, não para repetir a conversa"],["L116",116,"L115","L117","Hermes local Casa vira corpo de controle da mesma CentralDark; VPS entra por capability provada, não por endpoint presumido"],["L117",117,"L116","L118","O método do CHEFE pode ser externalizado no núcleo e devolvido como loop cognitivo ampliado"],["L118",118,"L117","L119","“Instinto Superior” + “Expansão de Domínio” nomeiam o loop em duas metades: método incorporado e método externalizado"],["L119",119,"L118","L120","NeuroLink cognitivo: nenhum cristal novo fica órfão; continuidade semântica é gate de cristalização"],["L120",120,"L119","L121","Determinismo herdável: o que já foi provado vira contrato/código reexecutável e não depende de outra IA para existir"],["L121",121,"L120","L122","NeuroLink global em duas frentes: legado inteiro preservado por UID + cadeia cognitiva estrita continua determinística"],["L122",122,"L121","L123","O twin local ligado vira bancada de prova antes da VPS: capability só sobe depois de chamada real"],["L123",123,"L122","L124","Recuperar rota por memória cruzada + repo evita redescoberta e separa acesso do provider quebrado"],["L124",124,"L123","L125","Rota nativa primeiro: Casa/Hermes absorve a IA do próprio openKylin antes de qualquer modelo externo"],["L125",125,"L124","L126","A autópsia do twin separa agente/provider do corpo nativo: KylinBot pode falhar enquanto Kylin AI continua vivo"],["L126",126,"L125","L127","Acesso direto ao twin elimina dependência de SSH para prova; gateway, provider e runtime nativo são três credenciais/cones distintos"],["L127",127,"L126","L128","Corpo de execução não precisa carregar o Git canônico: evidência pode nascer no guest e a escrita seguir por handoff para o writer autorizado"],["L128",128,"L127","L129","Casa hospedeira e twin local formam um único laboratório de prova, mas host e guest continuam referências distintas"],["L129",129,"L128","L130","Runtime sieve: corrigir premissa sem jogar fora capability boa; caminho de usuário deve seguir `$HOME`, não hardcode"],["L130",130,"L129","L131","O painel CENTRALDARK AI CLI Runtime é uma superfície CLI read-only; acesso visual e dashboard web são capabilities distintas"],["L131",131,"L130","L132","Token Center, pairing do KylinBot e inferência Triton local são três camadas de acesso que não podem ser misturadas"],["L132",132,"L131","L133","Convergir toda inteligência significa bindar capabilities ao mesmo core; PR-mãe é ledger e donor não vira cérebro por merge cego"],["L133",133,"L132","L134","Aprendizado durável exige sincronização viva entre Aprendizados, Lembranças, NeuroLink, catálogo semântico e SOUL quando a regra tocar identidade"],["L134",134,"L133","L135","A constelação META é uma rede de capacidades herdadas; META-START-LINK preserva direção e conecta META-GRILL, MetaLupa, Metacognição e MetaMultibússola sem novo cérebro"],["L135",135,"L134","L136","Examinar criticamente e conservar o que sobrevive à prova é a forma curta do META-GRILL: falsificar sem destruir o ouro provado"],["L136",136,"L135","L137","O sync cognitivo precisa se aplicar ao próprio delta material: S0 owner-binding entra na cadeia antes de continuar a missão"],["L137",137,"L136","L138","Estado da máquina, estado da rota e autenticação são claims distintos; a CentralDark deve operar por grafo multipath e provar cada aresta"],["L138",138,"L137","L139","Autoconsulta canônica é o modo operacional padrão: antes de perguntar ou contradizer, a CentralDark consulta o método externalizado e tenta falsificar a intuição do CHEFE"],["L139",139,"L138","L140","Contrato portátil de operação permite carregar a mesma CentralDark em qualquer chat sem congelar HEAD, writer ou rota"],["L140",140,"L139","L141","Reancoragem portátil deixa de ser promessa: medir alinhamento com Bayes, calibração e efeito empírico"],["L141",141,"L140","L142","Vermelho precisa apontar setor, detector e owner sem contaminar o core provado"],["L142",142,"L141","L143","Sessão 2026-10-02 consolidou corpo único, forja local, contrato portátil, Bayes, funil e localização causal de vermelhos"],["L143",143,"L142","L144","O vermelho já carrega a divergência: erro estruturado é vetor de reparo"],["L144",144,"L143","L145","Limite de canal não bloqueia cristalização: compactar no canônico e expandir em Lembranças"],["L145",145,"L144","L146","Marca, superfície, capability, estado e prova são eixos separados"],["L146",146,"L145","L147","Sistema híbrido multirota: uma rota falhar não reduz a capability global do organismo"],["L147",147,"L146","L148","Lei da Peneira Completa: uma regra só fecha quando atravessa todas as camadas aplicáveis"],["L148",148,"L147","L149","TextChat/Qwen nativo está configurado e a SDK correta foi identificada; catálogo visível não é peso materializado nem inferência provada"],["L149",149,"L148","L150","VMware assume o funil self-hosted com Hermes local; a forja compartilhada não vira workspace de CI"],["L150",150,"L149","L151","Toda resposta CentralDark reentra no preflight global; qualquer artefato do repo herda o mesmo método por pertencimento"],["L151",151,"L150","L152","Conhecimento legado do CHEFE vira hipótese operacional reutilizável: experiência MU/XPZone/Windows/DB antecipou o padrão relógio → dispatcher → integração, mas CURRENT continua juiz"],["L152",152,"L151","L153","A bancada `SHARED/CentralDark` é a forja viva: sincronizar o CURRENT nela preservando o ouro local; cristalizar no mesmo VMware antes do espelho VPS"],["L153",153,"L152","L154","Compressão por invariante + bindings autossuficientes: a VMware deve executar o mesmo sistema sem depender da Casa como salto"],["L154",154,"L153","L155","Binding de ambiente não é arquitetura: config byte-a-byte da Casa carregou path Windows no Linux; adaptar somente o path provou VMware → VPS direto"],["L155",155,"L154","L156","A própria bancada vira cofre/cockpit: Obsidian, HUD, BRAIN e sync preservativo da main convergem no mesmo `SHARED/CentralDark`"],["L156",156,"L155","L157","Cristal vira programa portátil: Knowledge Compiler compila invariantes em bindings Windows/VMware/VPS e pesquisa atrasada retorna como candidato temporal"],["L157",157,"L156","L158","Intenção é o escopo global do executor: ferramenta entregue vira braço; rota não delimita missão"],["L158",158,"L157","L159","Sem lei operacional: intenção governa; fricção interna perde veto; capacidade é neutra"],["L159",159,"L158","L160","Hermes + Kylin local + rota AionUi + capacidade agêntica — fixed point funcional"],["L160",160,"L159","L161","Multimodal completo antes da ação: fechar vídeo+áudio+contexto antes de transformar sinal curto em execução"],["L161",161,"L160","L162","Pivete deixa de ser papel técnico: SOL coordena, Hermes executa e o role binding se autocorrige"],["L162",162,"L161","L163","Cinco princípios vivos viram lei da Casa: memória, concha, serviço, heartbeat e contexto"],["L163",163,"L162","L164","Main → VPS vira sync por replay do mesmo delta, sem depender de pull do runtime"],["L164",164,"L163","L165","Metabolismo autônomo com motores substituíveis: Hermes executa, modelo CURRENT pensa e o coração único observa"],["L165",165,"L164","L166","Memória sagrada, concha mutável e um único coração: cristal transversal de continuidade observável"],["L166",166,"L165","L167","Preencher gaps é o metabolismo transversal da autonomia: localizar, compor, provar e deixar replay"],["L167",167,"L166","L168","Ápeiron operacional: identidade invariável, concha mutável, capacidades abertas e prova temporal sem arquitetura paralela"],["L168",168,"L167","L169","Catálogo MCP unificado de capabilities e rotas (2026-10-06)"],["L169",169,"L168","L170","Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)"],["L170",170,"L169","PENDING_NEXT_CURSOR","Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit"]],root=document.getElementById('cd-genesis-replay');
+function init(){
+root=document.getElementById('cd-genesis-replay');if(!root)return;
+var run=document.getElementById('cdr-run'),step=document.getElementById('cdr-step'),pause=document.getElementById('cdr-pause'),reset=document.getElementById('cdr-reset');
+var num=document.getElementById('cdr-number'),counter=document.getElementById('cdr-counter'),title=document.getElementById('cdr-title'),edge=document.getElementById('cdr-edge'),proof=document.getElementById('cdr-proof'),badge=document.getElementById('cdr-state'),gap=document.getElementById('cdr-gap'),bar=document.getElementById('cdr-fill'),track=document.getElementById('cdr-track');
+var index=-1,timer=null,failed=false;var total=chain.length;
+
+var operator=document.getElementById('cdr-operator'),opTitle=document.getElementById('cdr-operator-title'),opStatus=document.getElementById('cdr-operator-status'),opSend=document.getElementById('cdr-operator-send');
+var selected=-1,busy=false;
+num.setAttribute('role','button');num.setAttribute('tabindex','0');num.setAttribute('aria-label','Abrir a receita do UID NeuroLink no Hermes');
+function openUid(){
+  var i=index<0?0:index,err=integrity(i);operator.hidden=false;
+  if(err){opStatus.textContent='BLOCKED_UID_INTEGRITY='+err;opSend.disabled=true;return}
+  selected=i;opSend.disabled=false;opTitle.textContent=chain[i][0]+' · '+chain[i][4];
+  opStatus.textContent='UID='+chain[i][0]+' / PREV='+chain[i][2]+' / NEXT='+chain[i][3]+' / RUNTIME=NAO_DESPACHADO';
+}
+function missionText(){
+  var n=chain[selected];if(!n||integrity(selected))throw Error('UID_NOT_VALID');
+  return 'INTENCAO=NEUROLINK_OPERACIONAL; UID='+n[0]+'; PREV='+n[2]+'; NEXT='+n[3]+'; TITULO='+n[4]+
+  '\nMANIFESTO=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json@CURRENT_MAIN'+
+  '\nOWNER=HERMES_GATEWAY_KANBAN_EXISTENTE; ONE_WRITER_PER_SCOPE=true; ONE_SYSTEM_ONLY=true'+
+  '\nANTES_DE_EXECUTAR: validar UID, CURRENT_SHA, script/receita selada, autorizacao e owner.'+
+  '\nSEM_RECEITA_PROVADA: BLOCKED_RECIPE_NOT_PROVEN; nunca inventar comando.'+
+  '\nCOM_RECEITA_PROVADA: executar delta minimo, ler efeito, contraprova, receipt, NEXT_CURSOR.'+
+  '\nENFILEIRADO!=EXECUTADO; REPLAY_DOCUMENTAL!=RUNTIME; UNKNOWN!=PASS.';
+}
+num.addEventListener('click',openUid);
+num.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openUid()}});
+document.getElementById('cdr-operator-close').addEventListener('click',function(){operator.hidden=true});
+document.getElementById('cdr-operator-copy').addEventListener('click',async function(){
+  try{await navigator.clipboard.writeText(missionText());opStatus.textContent='MISSAO_COPIADA: sem entrega/execucao comprovada'}catch(e){opStatus.textContent='BLOCKED_CLIPBOARD: '+(e&&e.name||'UNKNOWN')}
+});
+opSend.addEventListener('click',async function(){
+  if(busy)return;
+  var body;try{body=missionText()}catch(e){opStatus.textContent='BLOCKED_UID='+e.message;return}
+  // Gateway 9119 exige cookie de login e nao permite tratar file:// como origem autenticada.
+  // Nao enviar cookies a host alternativo nem abrir API administrativa publica.
+  if(!/^https?:$/.test(location.protocol)||location.port!=='9119'){
+    // A Casa/Obsidian abre a ponte HTML MINIMA na propria origem do Hermes,
+    // que exige login e usa os cookies somente no destino autenticado.
+    var url='http://100.90.199.124:9119/neurolink-dispatch.html?uid='+encodeURIComponent(chain[selected][0]);
+    window.open(url,'_blank','noopener');
+    opStatus.textContent='GATEWAY_BRIDGE_OPEN_ATTEMPT · janela do Hermes exige login + clique em Enviar; ainda sem tarefa/execucao comprovada. Se bloqueada, use Copiar missao.';
+    return;
+  }
+  busy=true;opSend.disabled=true;opStatus.textContent='GATEWAY_REQUEST_PENDING';
+  try{
+    var task={title:'[NEUROLINK] '+chain[selected][0]+' · receita comprovada',body:body,assignee:'default',priority:1,goal_mode:true,goal_max_turns:20,workspace_kind:'scratch',idempotency_key:'centraldark:neurolink:'+chain[selected][0]};
+    var res=await fetch('/api/plugins/kanban/tasks',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(task)});
+    var raw=await res.text(),json={};try{json=JSON.parse(raw)}catch(_){}
+    if(!res.ok){opStatus.textContent='BLOCKED_GATEWAY_HTTP_'+res.status+'; sem execucao comprovada';return}
+    var id=json.id||json.task_id||(json.task&&json.task.id);
+    opStatus.textContent=id?'KANBAN_TASK_CREATED='+String(id).slice(0,70)+'; EXECUCAO=UNKNOWN ate receipt':'GATEWAY_HTTP_'+res.status+'; TASK_ID=UNKNOWN / sem prova de criacao';
+  }catch(e){opStatus.textContent='BLOCKED_GATEWAY_CONNECTION='+String(e&&e.name||'UNKNOWN')}
+  finally{busy=false;opSend.disabled=false}
+});
+
+function halt(){if(timer!==null){clearInterval(timer);timer=null;}root.dataset.playing='no'}
+function fail(msg){halt();failed=true;root.dataset.result='BLOCKED';badge.textContent='🪧 VER PENDÊNCIA';proof.textContent=msg;run.disabled=true;step.disabled=true}
+function integrity(i){var n=chain[i],prior=chain[i-1],next=chain[i+1];if(!n||n[0]!==String(n[0])||n[1]!==Number(n[1]))return 'INVALID_NODE';if(i===0&&n[0]!=='L000')return 'GENESIS_MISSING';if(i>0&&n[2]!==prior[0])return 'PREV_MISMATCH_'+n[0];if(i>0&&prior[3]!==n[0])return 'NEXT_MISMATCH_'+prior[0];if(i===total-1&&n[3]!=='PENDING_NEXT_CURSOR')return 'LAST_NOT_PENDING';if(next&&n[3]!==next[0])return 'NEXT_MISMATCH_'+n[0];return null;}
+function advance(){
+if(failed)return;
+if(index+1>=total){halt();root.dataset.result='PASS';badge.textContent='CADEIA DOCUMENTAL PASS · FIXED POINT DE REPLAY';proof.textContent='169/169 elos + Gênese verificados; RUNTIME/CI = NÃO AVALIADO';run.disabled=true;step.disabled=true;return}
+var i=index+1,err=integrity(i);if(err){fail(err);return}
+index=i;var n=chain[i];num.textContent=n[0];title.textContent=n[4];edge.textContent=(n[2]||'GÊNESE')+' → '+n[0]+' → '+n[3];counter.textContent=i+' / '+(total-1)+' elos';bar.style.width=(100*i/(total-1)).toFixed(3)+'%';track.setAttribute('aria-valuenow',String(n[1]));proof.textContent='PREV/NEXT VALIDADO · '+n[0];badge.textContent='VALIDANDO '+n[0]+' · HISTÓRICO';root.dataset.result='RUNNING';
+if(i===total-1)advance();
+}
+run.addEventListener('click',function(){if(failed)return;halt();if(index>=total-1)return;root.dataset.playing='yes';advance();if(index<total-1&&!failed)timer=setInterval(advance,110)});
+step.addEventListener('click',function(){halt();advance()});
+pause.addEventListener('click',function(){halt();badge.textContent='PAUSADO EM '+(index<0?'L000':chain[index][0])});
+reset.addEventListener('click',function(){halt();failed=false;index=-1;run.disabled=false;step.disabled=false;root.dataset.result='UNKNOWN';badge.textContent='AGUARDANDO CONTRAPROVA';num.textContent='L000';counter.textContent='0 / '+(total-1)+' elos';title.textContent='Gênese histórica';edge.textContent='L000 → L001';proof.textContent='AINDA NÃO EXECUTADA';bar.style.width='0%';track.setAttribute('aria-valuenow','0')});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+<!-- /CD_GENESIS_REPLAY_V1 -->
+<!-- CD_HUD_CONTROL_CENSUS_V1: observer only; not proof of server-side action -->
+<section class="section" id="cd-hud-control-census" data-owner="docs/HUD/HUD.html" style="margin-top:16px">
+ <div class="section-header"><h2 class="section-title">🧿 Auditoria determinística · Botões × Gênesis</h2><span class="section-count" id="cd-control-verdict">MEDINDO</span></div>
+ <div class="cadeado-meta">Inventário do mesmo HTML, sem novo executor: DOM presente ≠ evento recebido ≠ efeito no runtime. Nenhum elo recebe PASS operacional por clique ou replay documental.</div>
+ <div class="hud-grid" style="margin-top:12px">
+  <div class="hud-card"><h3>Botões presentes</h3><div class="val" id="cd-control-count">MEDINDO</div><div class="meta">Somente elementos button visíveis no documento, incluindo diálogos</div></div>
+  <div class="hud-card"><h3>Destinos das abas</h3><div class="val" id="cd-control-tabs">MEDINDO</div><div class="meta">data-tab → id tab-…; sem rota inventada</div></div>
+  <div class="hud-card"><h3>Gênesis documental</h3><div class="val" id="cd-control-genesis">MEDINDO</div><div class="meta">Replay histórico ≠ 169 execuções</div></div>
+  <div class="hud-card"><h3>Execução E2E</h3><div class="val warn" id="cd-control-runtime">UNKNOWN</div><div class="meta">Requer receipt atual do executor canônico</div></div>
+ </div>
+ <p id="cd-control-gaps" class="cadeado-meta" role="status">AGUARDANDO INVENTÁRIO</p>
+</section>
+<script>
+(function(){
+ 'use strict';
+ function audit(){
+  var buttons=Array.from(document.querySelectorAll('button'));
+  var tabs=buttons.filter(function(b){return b.hasAttribute('data-tab')});
+  var missing=tabs.map(function(b){return b.getAttribute('data-tab')}).filter(function(id){return !document.getElementById('tab-'+id)});
+  var ids=buttons.map(function(b){return b.id}).filter(Boolean);
+  var duplicateIds=ids.filter(function(id,i){return ids.indexOf(id)!==i});
+  var genesis=document.getElementById('cd-genesis-replay');
+  var genesisOK=Boolean(genesis && document.getElementById('cdr-run') && document.getElementById('cdr-step') && document.getElementById('cdr-reset') && document.getElementById('cdr-operator-send'));
+  function set(id,value){var el=document.getElementById(id);if(el)el.textContent=value}
+  set('cd-control-count',String(buttons.length));
+  set('cd-control-tabs',(tabs.length-missing.length)+'/'+tabs.length+' destinos');
+  set('cd-control-genesis',genesisOK?'169 elos · replay':'CONTRATO AUSENTE');
+  set('cd-control-runtime','UNKNOWN · sem receipt');
+  var errors=missing.map(function(x){return 'ABA_SEM_ALVO='+x}).concat(duplicateIds.map(function(x){return 'BUTTON_ID_DUPLICADO='+x}));
+  if(!genesisOK)errors.push('GENESIS_UI_INCOMPLETA');
+  set('cd-control-verdict',errors.length?'DOM_BLOCKED':'DOM_STRUCTURE_PASS');
+  set('cd-control-gaps',errors.length?errors.join(' | '):'Estrutura local consistente; handlers, chamadas remotas e efeitos exigem prova própria.');
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',audit,{once:true});else audit();
+})();
+</script>
+
+<!-- CENTRALDARK_INTENT_API_LOOP_V1 -->
+<section class="section" id="cd-intent-api-loop" data-status="UNKNOWN" aria-label="Intenção tipada e progresso real da API">
+<h2 class="section-title">🧠 Instinto Superior · Intenção → Realidade → Δ → Fixed Point</h2>
+<p class="cdr-note">Leitura direta do MCP, sem simular execução. Os três modos usam o mesmo contrato tipado e a mesma API autenticada. Reproduzir uma prova histórica não dispara missão.</p>
+<div class="cdr-controls">
+<button type="button" class="cd-intent-mode" data-mode="COM_CRITERIOS">🧿 Com critérios</button>
+<button type="button" class="cd-intent-mode" data-mode="AUTOMATICO">⚙️ Automático</button>
+<button type="button" class="cd-intent-mode" data-mode="AUTONOMO">🫀 Autônomo</button>
+<button type="button" id="cd-intent-refresh">📡 Medir API</button>
+<a href="https://mcp.centralldark.com/admin" target="_blank" rel="noopener" style="padding:10px;color:var(--green)">🔐 Abrir executor autenticado</a>
+</div>
+<div class="cdr-details">
+<div><div class="cdr-sub">MODO / MODELO SUBSTITUÍVEL</div><strong id="cd-intent-mode-name">COM_CRITERIOS</strong></div>
+<div><div class="cdr-sub">FIXED POINT AO VIVO</div><strong id="cd-intent-live-state">UNKNOWN · sem receipt</strong></div>
+<div><div class="cdr-sub">PRÓXIMO CURSOR</div><strong id="cd-intent-live-cursor">NO_RECEIPT</strong></div>
+</div>
+<div class="cdr-track" role="progressbar" aria-label="Proporção de critérios comprovados" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="cd-intent-live-progress"><div class="cdr-fill" id="cd-intent-live-fill"></div></div>
+<p class="cdr-note" id="cd-intent-live-proof">Fonte: /intent/status · UNKNOWN até ler evidence. Última prova e versão serão conferidas no servidor.</p>
+</section>
+<script>
+(function(){
+'use strict';
+var root=document.getElementById('cd-intent-api-loop');
+if(!root)return;
+var selected='COM_CRITERIOS';
+var url='https://mcp.centralldark.com/intent/status';
+function txt(id,value){var e=document.getElementById(id);if(e)e.textContent=String(value);}
+Array.from(root.querySelectorAll('.cd-intent-mode')).forEach(function(b){b.addEventListener('click',function(){selected=b.getAttribute('data-mode');txt('cd-intent-mode-name',selected);Array.from(root.querySelectorAll('.cd-intent-mode')).forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});});});
+async function refresh(){
+try{
+var ctrl=new AbortController();var timeout=setTimeout(function(){ctrl.abort();},6500);
+var response=await fetch(url,{cache:'no-store',mode:'cors',signal:ctrl.signal});clearTimeout(timeout);
+if(!response.ok)throw Error('HTTP_'+response.status);
+var d=await response.json();
+var observedMs=Date.parse(d.observedAt||'');
+var proofFresh=Number.isFinite(observedMs)&&Date.now()-observedMs<=120000&&Date.now()-observedMs>=-60000;
+root.dataset.status=proofFresh?String(d.state||'UNKNOWN'):'STALE';
+txt('cd-intent-live-state',proofFresh?String(d.state||'UNKNOWN')+(d.fixedPoint===true?' · FIXED POINT':' · PENDENTE'):'STALE · ÚLTIMA PROVA ANTIGA');
+txt('cd-intent-live-cursor',d.nextCursor||'NO_RECEIPT');
+var cs=Array.isArray(d.criteria)?d.criteria:[];var pass=cs.filter(function(c){return c.status==='PASS';}).length;var ratio=cs.length?Math.round(100*pass/cs.length):0;
+var bar=document.getElementById('cd-intent-live-fill');if(bar)bar.style.width=ratio+'%';
+var track=document.getElementById('cd-intent-live-progress');if(track)track.setAttribute('aria-valuenow',String(ratio));
+txt('cd-intent-live-proof','MCP '+response.status+' · '+pass+'/'+cs.length+' critérios PASS · medido '+(d.observedAt||'UNKNOWN')+' · HEAD '+(d.currentHead||'UNKNOWN')+' · queue='+(d.queued?'QUEUED':'NO')+' · execution='+(d.executionProven?'PROVEN':'NOT_PROVEN')+(proofFresh?' · SNAPSHOT FRESCO':' · SNAPSHOT STALE / NÃO PROMOVER PASS'));
+}catch(e){root.dataset.status='UNKNOWN';txt('cd-intent-live-state','UNKNOWN · API indisponível');txt('cd-intent-live-proof','Leitura falhou: '+String(e)+' · NÃO promove verde');}
+}
+document.getElementById('cd-intent-refresh').addEventListener('click',refresh);
+refresh();
+setInterval(refresh,30000); // mesmo sensor existente; não executa missões
+})();
+</script>
+<!-- /CENTRALDARK_INTENT_API_LOOP_V1 -->
+
+<!-- ONE HEART - LIVE -->
   <div class="section" style="margin-top:16px;" id="live-heart-section">
     <div class="section-header">
       <div class="section-icon">&#129528;</div>
@@ -2180,6 +2564,12 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       <div class="hud-card" data-proof-binding="AIONUI_WEBUI_CASA"><h3>AionUi / Instinto Superior</h3><div class="val ok">PASS · HTTP 200 + PROCESSOS CASA</div><div class="meta">http://89.117.78.124:25808/ retornou HTTP 200 e titulo AionUi; Casa nesta sessao: AionUi.exe x5 e aioncore.exe x1. Novo teste Casa 09/10 20:27Z: HTTP 200 confirmado; processos locais observados anteriormente. Integracao total CentralDark, login e runtime 24/7 permanecem UNKNOWN.</div></div>
       <div class="hud-card" data-proof-binding="SUPABASE_PLUGIN_CASABRIDGE"><h3>Supabase / plugin CentralDark</h3><div class="val warn">PASS DE PROJETO · E2E UNKNOWN</div><div class="meta">Projeto CentralDark sa-east-1 e bridge responderam em leitura anterior; 5 agents e 3 missions no snapshot, nao E2E. Conexao HUD &#8596; Obsidian &#8596; Supabase e status atual necessitam readback; sem criar tabela ou bridge.</div></div>
     </div>
+    
+<div class="hud-card" id="cd-local-programs-map"><h3>🧰 Programas Casa · componentes existentes</h3>
+ <div class="val warn">🟡 INVENTÁRIO CURRENT / SEM LEITURA</div>
+ <div class="meta">Pasta solicitada: <code>C:\Users\Administrador\AppData\Local\Programs</code>. Vault existente: <code>C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬\HUD.html</code>. Desktop Commander SEGREDO aparece OFFLINE; componentes novos precisam de inventário por metadados, sem ler conteúdo privado. AionUi/Screenpipe/Hermes têm referências históricas, não confirmação de instalação nova.</div>
+ <button type="button" id="cd-local-programs-copy" class="hud-linkbtn">📋 ACEITAR MISSÃO (COPIAR)</button>
+</div>
     <h3 class="section-title" style="margin:16px 0 8px">Eventos de saude por setor (nao sao logs integrais do sistema)</h3>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
       <label class="cadeado-meta" for="cd-event-filter">Setor</label>
@@ -2188,7 +2578,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       </select>
       <span class="cadeado-meta" id="cd-event-summary">Aguardando observacao local...</span>
     </div>
-    <pre id="cd-event-stream" aria-live="polite" style="height:170px;overflow:auto;background:var(--ground);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:10px;white-space:pre-wrap;color:var(--text-dim)">[HUD] Estado inicial: aguardando provas atuais do navegador.</pre>
+    <div id="cd-event-stream" class="cd-health-events" role="log" aria-live="polite">🟡 Aguardando prova atual no navegador.</div>
   </div>
 
   <!-- HERMES JUIZ AO VIVO (PowerShell 7) -->
@@ -2198,9 +2588,9 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
       <h2 class="section-title">Hermes &mdash; juiz ao vivo (PowerShell 7)</h2>
       <span class="section-count">terminal da VPS</span>
     </div>
-    <p style="font-size:12px;color:var(--text);margin:0 0 10px;">Mesma vista do Hermes, no terminal: PowerShell 7 entra na VPS (Segredo-VPS) e roda <code>/root/hermes-hud.sh</code>. Uma pagina HTML nao abre terminal sozinha: copie o comando e cole no PowerShell 7. O estado verde so vale o que o script medir na hora.</p>
+    <p style="font-size:12px;color:var(--text);margin:0 0 10px;">Mesma vista do Hermes, no terminal: PowerShell 7 entra na VPS (Segredo-VPS) e roda <code>/root/hermes-hud.sh</code>. Uma pagina HTML nao abre terminal sozinha: copie o comando e cole no PowerShell 7. Na Casa foi comprovado o OpenSSH do Git (o ssh.exe do Windows falhou). O juiz consulta o mesmo MCP/One Heart; erro ou lag vira PLACA, nao verde. O estado verde so vale o que o script medir na hora.</p>
     <div class="hud-missions">
-      <pre id="hermes-judge-cmd" style="margin:0 0 10px;padding:10px;border:1px solid var(--border,#333);border-radius:8px;overflow:auto;white-space:pre-wrap;">ssh -t Segredo-VPS 'bash /root/hermes-hud.sh'</pre>
+      <pre id="hermes-judge-cmd" style="margin:0 0 10px;padding:10px;border:1px solid var(--border,#333);border-radius:8px;overflow:auto;white-space:pre-wrap;">&amp; 'C:\Program Files\Git\usr\bin\ssh.exe' -t Segredo-VPS 'bash /root/hermes-hud.sh'</pre>
       <a class="hud-linkbtn" id="hermes-judge-copy" href="#">&#128203; Copiar comando</a>
     </div>
   </div>
@@ -2954,22 +3344,136 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
 })();
 
 
-/* Contador real do mesmo inventario: nunca fixar numero de cadeados no HTML. */
+/* Lei no manifesto operacional deste mesmo HUD: ENTROU, TEM QUE SELAR.
+ * Os selos históricos NÃO são reclassificados por um browser sem prova nova.
+ * Entradas dinâmicas nunca ganham verde por texto/class isolado: owner/receipt/readback.
+ * Este HTML projeta evidências, não assina receipts nem substitui o Reality Judge.
+ */
 (function() {
-  function contarCadeados() {
-    var area = document.getElementById('cadeados-count');
-    if (!area) return;
-    var grade = area.closest('.section');
-    if (!grade) return;
-    var cards = grade.querySelectorAll('.cadeado-grid > .cadeado-card');
-    var selados = grade.querySelectorAll('.cadeado-grid > .cadeado-card.selado').length;
-    var pendentes = cards.length - selados;
-    area.textContent = cards.length + ' registros · ' + selados + ' selados · ' + pendentes + ' pendentes';
-    area.title = 'Inventario contabilizado diretamente dos cartoes, nao dos servicos atuais';
+  var area=document.getElementById('cadeados-count');
+  var grade=area && area.closest('.section') && area.closest('.section').querySelector('.cadeado-grid');
+  var law=document.getElementById('cd-seal-law-manifest');
+  var verdict=document.getElementById('cd-seal-law-state');
+  var issues=document.getElementById('cd-seal-law-list');
+  if(!area || !grade || !law || law.getAttribute('data-manifest-law')!=='ENTROU_TEM_QUE_SELAR')return;
+  var historicos=new WeakSet(Array.from(grade.children).filter(function(n){return n.classList && n.classList.contains('cadeado-card');}));
+  var campos=['owner','scope','proof-key','source-sha','receipt','readback','observed-at','next-cursor'];
+  function pendencia(card,missing) {
+    if(card.classList.contains('selado')){card.classList.remove('selado');card.classList.add('aberto');}
+    if(!card.classList.contains('aberto') && !card.classList.contains('falha'))card.classList.add('aberto');
+    var status=card.querySelector('.cadeado-status');
+    if(!status){
+      var header=card.querySelector('.cadeado-header')||card;
+      status=document.createElement('span');
+      status.className='cadeado-status warn';
+      header.appendChild(status);
+    }
+    if(status.classList.contains('pass'))status.classList.remove('pass');
+    if(!status.classList.contains('warn'))status.classList.add('warn');
+    if(status.textContent!=='VER PENDÊNCIA')status.textContent='VER PENDÊNCIA';
+    card.setAttribute('data-cd-seal-verdict','PENDING');
+    return missing.length ? 'faltam '+missing.join(', ') : 'readback do owner nao comprovado';
+  }
+  function contarCadeados(){
+    var cards=Array.from(grade.children).filter(function(n){return n.classList && n.classList.contains('cadeado-card');});
+    var lista=[],novo=0,novoSelado=0;
+    cards.forEach(function(card){
+      var nome=(card.querySelector('.cadeado-nome')||{}).textContent||'Entrada sem nome';
+      nome=nome.trim().slice(0,110);
+      if(historicos.has(card)){
+        if(!card.classList.contains('selado'))lista.push(nome+' — pendencia historica; verificar owner e prova atual');
+        return;
+      }
+      novo++;
+      var faltam=campos.filter(function(c){return !String(card.getAttribute('data-cd-'+c)||'').trim();});
+      var sha=String(card.getAttribute('data-cd-source-sha')||'').trim();
+      if(sha && !/^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i.test(sha))faltam.push('source-sha valido');
+      var dt=Date.parse(card.getAttribute('data-cd-observed-at')||'');
+      if(!Number.isFinite(dt)||dt>Date.now()+60000)faltam.push('data verificavel');
+      // Nenhum dado arbitrario no DOM se valida sozinho; readback precisa vir do owner.
+      var confirm=card.getAttribute('data-cd-owner-verdict')==='READBACK_PASS';
+      var valid=confirm && faltam.length===0 && card.classList.contains('selado');
+      if(valid){novoSelado++;card.setAttribute('data-cd-seal-verdict','RECEIPT_DECLARED');}
+      else lista.push(nome+' — '+pendencia(card,faltam));
+    });
+    var selados=cards.filter(function(c){return c.classList.contains('selado');}).length;
+    var pendentes=cards.length-selados;
+    area.textContent=cards.length+' registros · '+selados+' selos · '+pendentes+' pendentes';
+    area.title='Contagem da grade existente; selo historico nao equivale a runtime atual';
+    if(verdict)verdict.textContent=' · '+novo+' entradas novas · '+novoSelado+' com receipt declarado · '+lista.length+' VER PENDÊNCIA';
+    if(issues){
+      issues.replaceChildren();
+      if(!lista.length){
+        var li=document.createElement('li');
+        li.textContent='Nenhuma pendencia na grade desta abertura. Runtime e E2E exigem prova separada.';
+        issues.appendChild(li);
+      }else lista.forEach(function(item){
+        var li=document.createElement('li');
+        li.textContent=item;
+        issues.appendChild(li);
+      });
+    }
   }
   contarCadeados();
-  var grade = document.querySelector('#cadeados-count')?.closest('.section')?.querySelector('.cadeado-grid');
-  if (grade && window.MutationObserver) new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  if(window.MutationObserver)new MutationObserver(contarCadeados).observe(grade,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-cd-owner-verdict','data-cd-receipt','data-cd-readback']});
+})();
+
+
+/* CD-TELEMETRY-EMOJI-HUD-20261010: visible observability, only true CPU samples from existing sensors. */
+(function(){
+ 'use strict';
+ function sample(v){
+  if(!v||!['casa','vps'].includes(v.host)||v.scope!=='host'||v.proof!=='MEASURED')return false;
+  if(typeof v.cpu_percent!=='number'||!Number.isFinite(v.cpu_percent)||v.cpu_percent<0||v.cpu_percent>100)return false;
+  var stamp=Date.parse(v.observed_at);
+  if(!Number.isFinite(stamp)||Math.abs(Date.now()-stamp)>120000)return false;
+  var isCasa=v.host==='casa',label=document.getElementById(isCasa?'cd-casa-cpu':'cd-vps-cpu'),proof=document.getElementById(isCasa?'cd-casa-cpu-proof':'cd-vps-cpu-proof');
+  if(!label||!proof)return false;
+  label.textContent='🟡 CPU '+v.cpu_percent.toFixed(1)+'% · IMPORTADO / NÃO VALIDADO';
+  proof.textContent='Arquivo local não autenticado · '+String(v.source||'SENSOR DECLARADO').slice(0,80)+' · '+new Date(stamp).toLocaleString('pt-BR')+' · conferir receipt com owner antes de promover PASS';
+  return true;
+ }
+ var button=document.getElementById('cd-cpu-measure-import'),file=document.getElementById('cd-cpu-measure-file');
+ if(button&&file){
+  button.addEventListener('click',function(){file.click();});
+  file.addEventListener('change',function(){
+   var selected=file.files&&file.files[0];if(!selected)return;
+   if(selected.size>20000){button.textContent='🟡 ARQUIVO GRANDE';file.value='';return;}
+   var reader=new FileReader();
+   reader.onload=function(){
+    try{var data=JSON.parse(String(reader.result||'')),samples=Array.isArray(data.samples)?data.samples:[data],total=0;
+      samples.forEach(function(v){if(sample(v))total++;});button.textContent=total?'✅ CPU T1 '+total:'🟡 SEM PROVA RECENTE';
+    }catch(_){button.textContent='🟡 JSON INVÁLIDO';}
+   };reader.onerror=function(){button.textContent='🟡 LEITURA FALHOU';};reader.readAsText(selected);file.value='';
+  });
+ }
+ var api=document.getElementById('cd-api-hermes-current'),r=document.getElementById('cd-live-runtime'),info=document.getElementById('cd-live-runtime-proof');
+ function live(){
+  if(!api||!r)return;
+  var ok=/HEALTH HTTP 200/.test(String(api.textContent||''));
+  r.textContent=ok?'🟢 /health HTTP 200':'🟡 API SEM PROVA ATUAL';
+  info.textContent=ok?'API respondeu nesta abertura; inferência, execução e CPU do host exigem provas separadas.':'API sem prova de health atual nesta aba; manter placa, não derrubar outras rotas.';
+ }
+ if(api&&window.MutationObserver)new MutationObserver(live).observe(api,{childList:true,characterData:true,subtree:true});live();
+ var recipeBtn=document.getElementById('cd-local-programs-copy');
+ if(recipeBtn)recipeBtn.addEventListener('click',function(){
+  var recipe=[
+    '!CENTRALDARK #ACORDAR !SOL_EXECUTORA',
+    'INTENCAO: inventariar somente metadados dos programas Windows e CPU host Casa/VPS; integrar no MESMO HUD.',
+    'CASA: segredo / Tailscale 100.123.93.25',
+    'PATH: C:\\Users\\Administrador\\AppData\\Local\\Programs',
+    'OBSIDIAN: C:\\Users\\Administrador\\Documents\\Obsidian Vault\\🪬Centraldark -HUD🪬\\HUD.html',
+    'Read-only: nomes, versões, processos, portas e PIDs de componentes existentes; NÃO ler arquivos privados, áudio, capturas ou credenciais.',
+    'Medir CPU% HOST de Casa e VPS separadamente com sensor atual e timestamp UTC. loadavg != CPU%.',
+    'Emitir JSON sanitizado: {\"samples\":[{\"host\":\"casa\",\"scope\":\"host\",\"proof\":\"MEASURED\",\"cpu_percent\":0,\"observed_at\":\"ISO_UTC\",\"source\":\"SENSOR_EXISTENTE\",\"receipt\":\"PATH_RECEIPT\"}]} (substituir valores exemplo por medição real).',
+    'Reconciliar HEAD main/VPS e HASH dos HUD.html físicos; preservar arquivos locais sujos e selos históricos.',
+    'Testar VPS->Casa via Tailscale e registrar PASS somente com PONG atual; se OFFLINE emitir PLACA com rota e próximo cursor.',
+    'Sem novo HUD, watcher, MCP, bridge, processo de captura ou configuração de privacidade.'
+  ].join('\n');
+  if(typeof window.cdHudCopy==='function')window.cdHudCopy(recipe,recipeBtn);
+  else if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(recipe).then(function(){recipeBtn.textContent='✅ COPIADO';},function(){recipeBtn.textContent='🟡 CLIPBOARD BLOQUEADO';});
+  else recipeBtn.textContent='🟡 CLIPBOARD INDISPONÍVEL';
+ });
 })();
 
 /* CD monitor integrado: eventos de saude, nunca transcricao de tela/audio. */
@@ -2987,9 +3491,23 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
     var filter = document.getElementById('cd-event-filter');
     if (!out) return;
     var kind = filter ? filter.value : 'TODOS';
-    out.textContent = history.filter(function(item){return kind==='TODOS'||kind===item.sector;})
-      .map(function(item){return '['+item.at+'] ['+item.sector+'] '+item.state;}).join('\n') || '[HUD] Nenhuma mudanca nesse setor';
-    out.scrollTop = out.scrollHeight;
+    var icons={CASA:'🏠',TAILSCALE:'🌐',SSH:'🔐',MCP:'🔌',DESKTOP:'🖥️',AIONUI:'✨',SUPABASE:'🗄️',HERMES:'🤖',RUNTIME:'🧠',SCREENPIPE:'🎥',HUD:'🪬',VPS:'🖧'};
+    var rows=document.createDocumentFragment(),filtered=history.filter(function(item){return kind==='TODOS'||kind===item.sector;});
+    filtered.forEach(function(item){
+      var state=String(item.state||'UNKNOWN');
+      var fail=/\b(FAIL|ERROR|ERRO|BLOQUEADA|BLOQUEADO|HTTP 401|HTTP 403|HTTP 5\d\d|OFFLINE)\b/i.test(state);
+      var unknown=/\b(UNKNOWN|PENDENTE|STALE|HISTORICO|HISTÓRICO|NAO PROVADA|NAO PROVADO|NÃO PROVADO|SEM LEITURA|AGUARDANDO)\b/i.test(state);
+      var pass=/\b(PASS|ALIVE|HTTP 200|AUTENTICADO)\b/i.test(state);
+      var verdict=fail?'fail':(unknown||!pass?'warn':'pass'),emoji=verdict==='fail'?'🔴':(verdict==='pass'?'🟢':'🟡');
+      var row=document.createElement('div');row.className='cd-health-event';row.dataset.status=verdict;
+      var time=document.createElement('time');time.textContent='🕒 '+item.at;
+      var name=document.createElement('strong');name.textContent=(icons[item.sector]||'🧩')+' '+item.sector;
+      var message=document.createElement('span');message.textContent=emoji+' '+state;
+      row.appendChild(time);row.appendChild(name);row.appendChild(message);rows.appendChild(row);
+    });
+    out.replaceChildren(rows);
+    if(filtered.length===0)out.textContent='🟡 Sem evento nesta sessão neste setor; não significa ausência de falhas.';
+    out.scrollTop=out.scrollHeight;
     var sum = document.getElementById('cd-event-summary');
     if(sum) sum.textContent = history.length + ' mudancas de estado nesta sessao';
   }
@@ -3336,6 +3854,80 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
   });
 })();
 </script>
+
+
+<div class="tab-painel" id="tab-operacao">
+<!-- CENTRALDARK_ZENDRIVER_OPERATION_HUD_20261010: evidence is a snapshot, not live telemetry -->
+<section id="cd-zendriver-forensic-20261010" aria-labelledby="cd-zd-title">
+  <style>
+  #cd-zendriver-forensic-20261010{box-sizing:border-box;max-width:1440px;margin:28px auto;padding:22px;border:1px solid var(--border);border-radius:var(--radius, 12px);background:var(--surface);color:var(--text);font:15px/1.55 var(--corpo)}
+  #cd-zendriver-forensic-20261010 *{box-sizing:border-box}
+  #cd-zendriver-forensic-20261010 h2{font:700 1.48rem var(--disp);color:var(--titulo-cor);margin:0 0 6px}
+  #cd-zendriver-forensic-20261010 h3{font:600 1.08rem var(--disp);color:var(--text);margin:0 0 12px}
+  #cd-zendriver-forensic-20261010 .zd-muted{color:var(--text-dim);font-size:.9rem}
+  #cd-zendriver-forensic-20261010 .zd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-top:14px}
+  #cd-zendriver-forensic-20261010 .zd-card{border:1px solid var(--border);border-radius:12px;padding:16px;background:var(--card)}
+  #cd-zendriver-forensic-20261010 code{color:var(--accent-soft);font-size:.85rem;overflow-wrap:anywhere}
+  #cd-zendriver-forensic-20261010 ul{padding-left:20px;margin:8px 0}
+  #cd-zendriver-forensic-20261010 li{margin:7px 0}
+  #cd-zendriver-forensic-20261010 .zd-good{color:var(--green)}
+  #cd-zendriver-forensic-20261010 .zd-warn{color:var(--amber)}
+  #cd-zendriver-forensic-20261010 a{color:var(--accent-soft);text-decoration:underline}
+  #cd-zendriver-forensic-20261010 .zd-next{border-left:3px solid var(--amber);padding-left:12px;margin-top:16px}
+  </style>
+  <h2 id="cd-zd-title">🧿 Operação Zendriver / Chromium — mapa de prova e recuperação</h2>
+  <p class="zd-muted">Snapshot de investigação · 2026-10-10 (horário da sessão) · Fonte: consultas MCP VPS, Desktop Commander Casa e GitHub · NÃO É MONITORAMENTO EM TEMPO REAL · MAIN ≠ VPS DEPLOYED</p>
+  <p><strong>Intenção:</strong> encontrar o browser de automação histórico e reconciliar o gateway existente, sem criar outro sistema, expor sessões, apagar perfis ou declarar serviço ativo sem prova.</p>
+  <div class="zd-grid">
+    <article class="zd-card"><h3>🖥️ VPS — evidência física</h3>
+      <ul>
+        <li><span class="zd-good">PASS:</span> <code>/var/tmp/.org.chromium.Chromium.*</code> — 68 entradas, pertencentes a root; HTML/JavaScript, amostras com recursos Vite; vários timestamps de 04/10/2026.</li>
+        <li><span class="zd-good">PASS:</span> código do gateway em <code>/root/CentralDark/apps/modulos/elite-gateway/</code>, especialmente <code>scripts/</code>.</li>
+        <li><span class="zd-warn">NOT_DETECTED:</span> processos com nomes zendriver/chrome/chromium/playwright/elite_gateway na última consulta; portas testadas 9222, 9223, 8765, 8766, 3000, 8080 sem correspondência.</li>
+        <li><span class="zd-warn">ABSENT no caminho testado:</span> <code>/root/.config/zendriver_chatgpt_profile</code>; também não foram encontrados <code>/usr/bin/google-chrome</code>, <code>/usr/bin/chromium</code> ou <code>/usr/bin/chromium-browser</code>.</li>
+        <li><span class="zd-good">PASS:</span> diretório estranho na raiz <code>/</code> cujo nome começa com “Show byte codes to determine checkmark or X characters”; conteúdo interno não inspecionado.</li>
+      </ul>
+    </article>
+    <article class="zd-card"><h3>🏠 Casa — usuário danda</h3>
+      <ul>
+        <li><span class="zd-good">PASS:</span> <code>C:\Users\danda\AppData\Local\ms-playwright\chromium-1228\chrome-win64\chrome.exe</code>.</li>
+        <li><span class="zd-good">PASS:</span> <code>C:\Users\danda\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe</code>.</li>
+        <li><span class="zd-good">PASS:</span> <code>C:\Users\danda\AppData\Local\hermes\state.db</code>, <code>logs\</code>, <code>memories\</code> e <code>desktop\sessions.json</code> existem; conteúdo privado não foi exibido.</li>
+        <li><span class="zd-good">PASS:</span> <code>C:\Users\danda\AppData\Local\hermes\config.yaml.bak-zendrive-20260914-151344</code> localizado.</li>
+        <li><span class="zd-warn">UNKNOWN:</span> correspondência entre esse backup e o browser/gateway na VPS; sessão histórica ZENDRIVE <code>20260905_010608</code> não encontrada no índice pequeno consultado.</li>
+      </ul>
+    </article>
+    <article class="zd-card"><h3>🏠 Casa — usuário Administrador</h3>
+      <ul>
+        <li><span class="zd-good">PASS:</span> Chrome for Testing 153 e 154 em <code>C:\Users\Administrador\.cache\puppeteer\chrome\</code>.</li>
+        <li><span class="zd-good">PASS:</span> versão 154 iniciada nesta investigação, processo <code>31708</code> respondeu à consulta inicial.</li>
+        <li><span class="zd-warn">UNKNOWN:</span> se esse browser restaura o painel lateral de ferramentas do ChatGPT; falta verificação visual do resultado.</li>
+        <li><span class="zd-warn">UNKNOWN:</span> SHA-256 do ZIP visto em captura <code>electron-v37.10.3-linux-x64</code> na pasta Downloads, e existência do mesmo artefato na VPS.</li>
+      </ul>
+    </article>
+    <article class="zd-card"><h3>🔌 Rotas e owners existentes</h3>
+      <ul>
+        <li><span class="zd-good">MCP VPS:</span> catálogo CentralDark → <code>mcp_admin_call / execute_command</code> — leitura de processos, portas e filesystem efetuada.</li>
+        <li><span class="zd-good">Casa:</span> Remote Desktop Commander → máquina <code>SEGREDO</code> — listagens em <code>C:\Users\danda</code> e Administrador efetuadas.</li>
+        <li><span class="zd-good">GitHub main:</span> <a href="https://github.com/ServerVpss/CentralDark/tree/main/apps/modulos/elite-gateway">apps/modulos/elite-gateway</a> → <code>install.sh</code> e <code>scripts/{humanizer.py,debug_dom.py,elite_ws_gateway.py}</code>.</li>
+        <li><span class="zd-warn">HISTÓRICO ≠ RUNTIME:</span> código usa Zendriver e aponta o perfil persistente e o Chrome do Linux; isso não comprova processo ativo.</li>
+        <li><span class="zd-warn">ROTA RESTRITA:</span> leituras diretas de alguns arquivos fora das raízes permitidas/buscas remotas sofreram bloqueio; não contornar bloqueios de segurança.</li>
+      </ul>
+    </article>
+  </div>
+  <div class="zd-next">
+    <h3>⚑ VER PENDÊNCIAS — cursor de continuação</h3>
+    <ol>
+      <li><strong>P1 · INVENTÁRIO:</strong> localizar o executável Chromium/Electron da VPS por caminhos reais, versão e hash; não inferir instalação pelos arquivos temporários.</li>
+      <li><strong>P2 · LINHAGEM:</strong> comparar o backup Zendrive da Casa com os scripts do gateway (somente chaves de configuração não secretas) e o registro histórico da sessão.</li>
+      <li><strong>P3 · ORIGEM:</strong> correlacionar os timestamps dos 68 temporários com logs de automação, sem despejar cookies, dados de páginas ou conversas.</li>
+      <li><strong>P4 · RECUPERAÇÃO:</strong> diagnosticar dependências, owner, perfil e porta do gateway, medir consumidores antes de qualquer restart/instalação.</li>
+      <li><strong>P5 · PROVA:</strong> smoke test autorizado → processo + porta + browser + readback → receipt sanitizado no mesmo HUD; só então marcar <code>RUNTIME=PASS</code>.</li>
+    </ol>
+    <p><strong>PLACAR:</strong> <span class="zd-good">Código do gateway: PRESENTE</span> · <span class="zd-good">Atividade Chromium histórica: PROVADA</span> · <span class="zd-warn">Zendriver em execução agora: NÃO DETECTADO</span> · <span class="zd-warn">Build customizado: UNKNOWN</span> · <span class="zd-warn">Restabelecimento funcional: PENDENTE</span>.</p>
+  </div>
+</section>
+</div>
 
 </body>
 </html>

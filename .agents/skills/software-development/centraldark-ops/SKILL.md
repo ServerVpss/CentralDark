@@ -20,6 +20,19 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 - Remote connector down is not a Casa blocker. Measure this machine directly.
 - UNKNOWN != PASS. ACTION != PROOF. PID != SESSION_ID. HISTORY != CURRENT_STATE.
 - One writer per scope. Restart only the named PM2 process. Never `restart all`.
+
+## Autonomia do Hermes na VPS — mesma missão, sem micro-passos
+
+A autorização vigente do CHEFE permite que Hermes conclua **sequências operacionais reversíveis dentro do owner autorizado**, inclusive scripts `.sh` locais e skills da CentralDark, sem voltar ao humano em cada leitura, correção, teste, commit e readback. Executar em lote até PASS da cláusula provada ou uma pendência material nomeada; registrar receipt no **PR ativo compatível** (nesta missão, **#1788**) e aplicar a lei do mesmo HUD **ENTROU, TEM QUE SELAR**.
+
+- `/root/CentralDark` é workspace autorizado **por escopo**, mas executar como usuário `root` não limita a ação a essa pasta. Não expandir silenciosamente para o sistema operacional; preservar dados, serviços, vault e writers.
+- Classificar `bash/node/python`, cron, systemd, binários, secrets, dependências, source SHA, runtime SHA e consumidor antes do delta. Scripts locais necessários podem ser executados quando o efeito esperado for reversível e delimitado; não executar conteúdo remoto não verificado nem operação destrutiva sem gate específico.
+- `approvals.mode=smart` permanece controle de risco. Não reconfigurar `~/.hermes/config.yaml`, nem usar `off`, YOLO ou allowlist irrestrita de `recursive delete`, `delete in root path` e `pipe remote content to shell`. Evitar micro-aprovação para trabalho normal não significa desabilitar guardas críticos.
+- Ao entrar uma evolução em `main`, o **mesmo** `scripts/vps/auto-sync-main.sh` invoca `scripts/skill-sync-check.sh --apply` apenas se o fast-forward válido alterar `.agents/skills/`, com `CENTRALDARK_SKILL_SYNC_REF` pinado no mesmo SHA. Revalidar `MAIN_RUNTIME_LOCK`, processo consumidor e carregamento da sessão; **sync de arquivos não é reload nem autoriza PASS operacional**. Se checkout dirty bloquear avanço, preservar alterações e registrar `BLOCKED` no PR, sem reset automático.
+
+**NEXT_CURSOR:** `CURRENT_MAIN -> CHECKOUT_FF -> SKILL_SYNC_SHA -> HERMES_SESSION_LOAD -> OWNER_LOCAL_EXECUTION -> RECEIPT_PR -> HUD_SEAL`; `UNKNOWN != PASS`.
+
+
 - `git -C <dir>` succeeding is **not** proof of a separate repository. Any subdirectory of an existing worktree is a valid `git -C` target and will report the **same** `.git` dir as the root. To test whether a path is a *distinct* repo root, compare `git -C <path> rev-parse --git-common-dir` across candidates: if several paths return the same common-dir, they are one repo, not many. Cross-check with `git worktree list` (separate worktrees appear there with their own HEAD) and with `.gitmodules` (real submodules are registered there, and an uninitialized submodule is a tracked path, not a second repo). Do not conclude "sprawling submodules / clones" from `git -C` success alone.
 
   **Diagnostic procedure when suspecting scattered repos:**
@@ -351,3 +364,9 @@ Then short tables of what moved. UNKNOWN stays visible. Do not re-argue PR-mãe 
 See `references/selfhosted-runner-git-auth.md` for the self-hosted runner Git auth failure pattern (fatal: could not read Username) and the first diagnostic moves before assuming script, diff, or buffer problems.
 
 See `references/full-inventory-scans.md` for the C/E full-map scanner contract: resumable checkpoints, complete discovery, content hashing, and why sample/bounded receipts are not final proof.
+
+## Canonical fixed-point funnel
+
+All Casa/GitHub/VPS/Hermes actions pass through `software-development/centraldark-evidence-reconciliation/references/fixed-point-funnel.md`: CURRENT → owner/writer/scope → minimum reversible action → test → counterproof → live readback → sanitized receipt → `NEXT_CURSOR`. `FIXED_POINT=true` requires the exact target effect and no material UNKNOWN.
+
+For fast PR/issue/commit/check reads, reuse `software-development/centraldark-evidence-reconciliation/references/github-fast-inventory.md` and `gh api`; correlate every check and workflow to the exact SHA before promotion.
