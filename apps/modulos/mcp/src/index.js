@@ -121,6 +121,35 @@ app.get("/health", (_req, res) => {
         time: new Date().toISOString(),
     });
 });
+// Projecao unica de rotas locais para HUD/API. Leitura limitada, sem varredura,
+// comandos, credenciais ou modificacao dos servicos. HTTP nao prova efeito E2E.
+const LOCAL_HEALTH_TARGETS = Object.freeze([
+    { id: "hermes-gateway", port: 9900, path: "/health" },
+    { id: "hermes-agent", port: 9901, path: "/" },
+    { id: "mcp-native", port: 9100, path: "/health" },
+    { id: "hermes-webui-casa-target", port: 8787, path: "/health" },
+    { id: "hermes-webui-vps-target", port: 8788, path: "/health" },
+]);
+app.get("/health/routes", async (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    const probes = await Promise.all(LOCAL_HEALTH_TARGETS.map(async ({ id, port, path }) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:${port}${path}`, {
+                signal: AbortSignal.timeout(1200),
+            });
+            return { id, httpStatus: response.status, reachable: true,
+                state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX" };
+        } catch {
+            return { id, httpStatus: null, reachable: false, state: "NOT_REACHABLE" };
+        }
+    }));
+    res.json({ schema: "centraldark.health-routes.v1", ok: true,
+        measuredAt: new Date().toISOString(),
+        proofLevel: "HTTP_ONLY_NOT_E2E",
+        catalog: { path: "/tools.json", openapi: "/openapi.json",
+            count: getCatalogSummary().toolCount },
+        probes });
+});
 // V2: healthcheck profundo (Health Score consumido pelo painel /admin)
 app.get("/health/deep", healthDeep);
 app.get("/linear/status", async (_req, res) => {
