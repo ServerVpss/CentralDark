@@ -67,6 +67,20 @@ ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 
 **Owners:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml`, `MASTER-CYCLE.yml`, `AUREOLA-BAHIA-BIBLICA.yml`, `HERMES-AUTOCONFIG-RUNTIME.yml`, `apps/modulos/HERMES-CORE/`. A Auréola mostra a rota e os versos como orientação humana, **não substitui logs, HEAD, gates nem runtime medido**. O Hermes é o executor existente; `NEXT_CURSOR` preserva continuidade, sem inventar outro executor.
 
+
+### 🧿 Casa e missões do HUD — atualização de evidências (11/10/2026)
+
+A seção **Missões — clica, copia, cola** do único owner [docs/HUD/HUD.html](docs/HUD/HUD.html) foi reconciliada com o README e a leitura física da Casa. **As sete missões continuam abertas por suas cláusulas finais**, mas fatos já comprovados não devem reaparecer como decisões em branco.
+
+- **Casa, scripts:** 12 arquivos de script em \`F:\scripts\`; \`CENTRALDARK-ABRIR-TUDO.bat\` abriu o monitor já existente, sem novo executável. A pasta antiga em Downloads não existe mais. Fonte/contraprova: [receipt Corpo Único — T3](docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md).
+- **Casa, perfis e garimpo:** \`F:\UnifiedRuntime\` preserva perfis Segredo/Fulano, com \`Fulanoo\` físico observado; nenhum perfil foi migrado automaticamente. \`E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE\` não foi encontrado no caminho testado. \`F:\_MAPA_CASA\` existe, com \`chefe-gabinete\`, mas a coleção Garimpo precisa de localização própria; não inferir realocação só pelo nome do disco.
+- **Obsidian:** a decisão já está no owner [HERMES-CASA-OBSIDIAN-SYNC.md](docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md): cofre privado separado + espelho canônico \`docs/BRAIN\` por hashes e preservação de conflitos. Implementação no caminho físico/current e sincronização E2E continuam provas independentes.
+- **Admin versus produtos:** os endereços e responsabilidades já constam deste README; a missão restante não é redescobrir cockpit, mas **comprovar login/autorização Lovable**. Identidade visual e escolha futura de \`centraldark.exe\` não são requisito automático para o Admin web funcionar; TelePainel/CRM/Multizap/bot exigem comparação funcional por owner.
+
+**Não promover deploy por esta atualização:** o HUD \`/root/CentralDark/docs/HUD/HUD.html\` da VPS estava **modificado** (\`git hash-object=274ce5bdb9a3c84a4559b1fb8facf4877384e3ea\`), checkout \`5344bd87074c\` com 42 entradas dirty/untracked; o HUD anterior da \`main\` era blob \`196a0bab3e6af2add003864aa49071e5931f6ea5\`. O \`HUD.html\` físico do cofre do Windows tinha SHA-256 \`960f6f23eb07f386e3cabd02dbb696f71777e90a0e087d5157aa1aa802979a5e\`. **São três superfícies a reconciliar por diff e writer único**, sem reset, overwrite ou alegar mirror já concluído.
+
+\`MISION_SOURCE_UPDATED=MAIN_ONLY\`; \`VPS_HUD_DEPLOY=UNKNOWN\`; \`CASA_OBSIDIAN_HUD_SYNC=UNKNOWN\`; \`MISSIONS_GLOBAL_DONE=FALSE\`.
+
 **Próximas comprovações:** `AUTHENTICATED_SALA_CONTROLE_SMOKE`; `RESTORE_EXISTING_PORTAL_AND_TELEPAINEL_DEPLOY`; `RECOVER_EXISTING_OMNI_PM2_OWNER`. `UNKNOWN != PASS`; falha local não é falha de toda a CentralDark.
 
 ## 🧪 Workflows e badges — sinais, não provas globais
