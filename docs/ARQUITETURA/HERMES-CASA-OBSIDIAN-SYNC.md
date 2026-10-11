@@ -1,5 +1,7 @@
 # Hermes Casa + Obsidian — memória viva sem expor a Casa
 
+> **CURRENT da migração física (11/10/2026):** o CHEFE está movendo o acervo de `F:\` para `K:\CentralDark` (SSD). `K:\CentralDark\.obsidian` e `K:\CentralDark\HUD.html` foram encontrados durante a transferência. **Destino planejado/observado:** `K:\CentralDark`; **migração completa, sincronização e alteração de caminhos nos executores:** ainda NÃO comprovadas. Os endereços `E:\CentralDark\Pivete\CASA-VAULT` abaixo permanecem como **referência histórica/contrato anterior**, e não representam o destino atual pretendido. Não executar scripts com esses caminhos legados até readback por owner. 
+
 ## Decisão
 
 A memória visual da Casa usa um cofre separado em:
