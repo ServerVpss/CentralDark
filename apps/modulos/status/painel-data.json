@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(rotas): selar SSH Casa→VPS pelo Git OpenSSH com readback e escopo",
+    "lastCommit": "docs(hud): registrar SSH Casa→VPS comprovado e drift HUD físico sem falso verde",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T20:41:39.522Z",
+      "titulo": "Push na main · 71eccc75bf41d324f2065f9068808bb2cbeef393",
+      "detalhe": "docs(hud): registrar SSH Casa→VPS comprovado e drift HUD físico sem falso verde",
+      "area": "Repositório",
+      "sha": "71eccc7",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T20:39:06.634Z",
       "titulo": "Push na main · 5d7196b894a3aa90113914ba8eac0aeba8024bf2",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "e9eeb62",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-10T20:42:32.136Z",
-      "titulo": "Push na main · ab7bda321322c7af0bc6092b2a5d11ef28c595e9",
-      "detalhe": "fix(vps): install jq required by canonical deploy receipts",
-      "area": "Repositório",
-      "sha": "ab7bda3",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T20:41:39.522Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 71eccc75bf41d324f2065f9068808bb2cbeef393 (71eccc7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T20:39:06.634Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · e9eeb62aca542c4158d7b0f7ac63bccf77e4180d (e9eeb62)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-10T20:42:32.136Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ab7bda321322c7af0bc6092b2a5d11ef28c595e9 (ab7bda3)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T20:39:06.634Z",
-  "updatedAtBR": "11/10/2026, 17:39:06 BRT"
+  "updatedAt": "2026-10-11T20:41:39.522Z",
+  "updatedAtBR": "11/10/2026, 17:41:39 BRT"
 }
