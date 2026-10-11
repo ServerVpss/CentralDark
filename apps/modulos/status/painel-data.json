@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(lembrancas): vincular reconciliação de 12 erros ao owner",
+    "lastCommit": "fix(skill-sync): resolve missing HOME under MCP executor",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T00:30:19.183Z",
+      "titulo": "Push na main · df72fafceb0bee48d2ab8c18f3c10d8c0df775f2",
+      "detalhe": "fix(skill-sync): resolve missing HOME under MCP executor",
+      "area": "Repositório",
+      "sha": "df72faf",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T00:24:30.277Z",
       "titulo": "Push na main · b6e66341f5b5a73243ef202e6ee199fc6b22d6a8",
@@ -164,6 +172,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T00:30:19.183Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · df72fafceb0bee48d2ab8c18f3c10d8c0df775f2 (df72faf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T00:24:30.277Z",
       "ia": "@segredounlock",
@@ -437,6 +452,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T00:24:30.277Z",
-  "updatedAtBR": "10/10/2026, 21:24:30 BRT"
+  "updatedAt": "2026-10-11T00:30:19.183Z",
+  "updatedAtBR": "10/10/2026, 21:30:19 BRT"
 }
