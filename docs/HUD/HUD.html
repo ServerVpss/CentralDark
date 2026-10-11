@@ -3761,21 +3761,22 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
 
 <div class="tab-painel" id="tab-operacao">
 <!-- CENTRALDARK_ZENDRIVER_OPERATION_HUD_20261010: evidence is a snapshot, not live telemetry -->
-<section id="cd-zendriver-forensic-20261010" aria-labelledby="cd-zd-title" style="max-width:1440px;margin:28px auto;padding:22px;border:1px solid #4a6573;border-radius:18px;background:linear-gradient(140deg,#101e2b,#102b32);color:#ecf5fa;font:15px/1.55 system-ui,sans-serif;">
+<section id="cd-zendriver-forensic-20261010" aria-labelledby="cd-zd-title">
   <style>
+  #cd-zendriver-forensic-20261010{box-sizing:border-box;max-width:1440px;margin:28px auto;padding:22px;border:1px solid var(--border);border-radius:var(--radius, 12px);background:var(--surface);color:var(--text);font:15px/1.55 var(--corpo)}
   #cd-zendriver-forensic-20261010 *{box-sizing:border-box}
-  #cd-zendriver-forensic-20261010 h2{font-size:1.48rem;color:#baf7dc;margin:0 0 6px}
-  #cd-zendriver-forensic-20261010 h3{font-size:1.08rem;color:#c7edfa;margin:0 0 12px}
-  #cd-zendriver-forensic-20261010 .zd-muted{color:#b4c5d3;font-size:.9rem}
+  #cd-zendriver-forensic-20261010 h2{font:700 1.48rem var(--disp);color:var(--titulo-cor);margin:0 0 6px}
+  #cd-zendriver-forensic-20261010 h3{font:600 1.08rem var(--disp);color:var(--text);margin:0 0 12px}
+  #cd-zendriver-forensic-20261010 .zd-muted{color:var(--text-dim);font-size:.9rem}
   #cd-zendriver-forensic-20261010 .zd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-top:14px}
-  #cd-zendriver-forensic-20261010 .zd-card{border:1px solid #47606d;border-radius:12px;padding:16px;background:#132735}
-  #cd-zendriver-forensic-20261010 code{color:#c9f3e7;font-size:.85rem;overflow-wrap:anywhere}
+  #cd-zendriver-forensic-20261010 .zd-card{border:1px solid var(--border);border-radius:12px;padding:16px;background:var(--card)}
+  #cd-zendriver-forensic-20261010 code{color:var(--accent-soft);font-size:.85rem;overflow-wrap:anywhere}
   #cd-zendriver-forensic-20261010 ul{padding-left:20px;margin:8px 0}
   #cd-zendriver-forensic-20261010 li{margin:7px 0}
-  #cd-zendriver-forensic-20261010 .zd-good{color:#90f6c1}
-  #cd-zendriver-forensic-20261010 .zd-warn{color:#ffd88a}
-  #cd-zendriver-forensic-20261010 a{color:#9cddff;text-decoration:underline}
-  #cd-zendriver-forensic-20261010 .zd-next{border-left:3px solid #ffd88a;padding-left:12px;margin-top:16px}
+  #cd-zendriver-forensic-20261010 .zd-good{color:var(--green)}
+  #cd-zendriver-forensic-20261010 .zd-warn{color:var(--amber)}
+  #cd-zendriver-forensic-20261010 a{color:var(--accent-soft);text-decoration:underline}
+  #cd-zendriver-forensic-20261010 .zd-next{border-left:3px solid var(--amber);padding-left:12px;margin-top:16px}
   </style>
   <h2 id="cd-zd-title">🧿 Operação Zendriver / Chromium — mapa de prova e recuperação</h2>
   <p class="zd-muted">Snapshot de investigação · 2026-10-10 (horário da sessão) · Fonte: consultas MCP VPS, Desktop Commander Casa e GitHub · NÃO É MONITORAMENTO EM TEMPO REAL · MAIN ≠ VPS DEPLOYED</p>
