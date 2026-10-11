@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(hermes-core): reconcile mission continuity, retry and decision state",
+    "lastCommit": "fix(instinto-superior): reproducible node SSR build preserves CSRF and resolves chunk cycle",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T09:09:14.253Z",
+      "titulo": "Push na main · 7f25ad2a6479d6de80858e345c878bb38b70b0d0",
+      "detalhe": "fix(instinto-superior): reproducible node SSR build preserves CSRF and resolves chunk cycle",
+      "area": "Repositório",
+      "sha": "7f25ad2",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T07:26:20.566Z",
       "titulo": "Push na main · 930f6693ba42522a04293a280d9fcb9ca64cc682",
@@ -292,6 +300,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T09:09:14.253Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7f25ad2a6479d6de80858e345c878bb38b70b0d0 (7f25ad2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T07:26:20.566Z",
       "ia": "@segredounlock",
@@ -677,6 +692,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T07:26:20.566Z",
-  "updatedAtBR": "11/10/2026, 04:26:20 BRT"
+  "updatedAt": "2026-10-11T09:09:14.253Z",
+  "updatedAtBR": "11/10/2026, 06:09:14 BRT"
 }
