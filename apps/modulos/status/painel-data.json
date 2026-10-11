@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧿 FIX(SENTINEL): PRESERVE HEALTHY OBSERVATIONS (#1792)",
+    "lastCommit": "fix(contract): retire legacy PR-mother receipts in microdeploy recipe; preserve local/versioned proof boundary",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T10:27:28.919Z",
+      "titulo": "Push na main · 171bdf8a864e0b6ca5482dfe8d9233a66f4167b2",
+      "detalhe": "fix(contract): retire legacy PR-mother receipts in microdeploy recipe; preserve local/versioned proof boundary",
+      "area": "Repositório",
+      "sha": "171bdf8",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T10:17:51.408Z",
       "titulo": "Push na main · 659d7aac06abc3cb36afb85c507226bb95996a33",
@@ -324,6 +332,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T10:27:28.919Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 171bdf8a864e0b6ca5482dfe8d9233a66f4167b2 (171bdf8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T10:17:51.408Z",
       "ia": "@segredounlock",
@@ -737,6 +752,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T10:17:51.408Z",
-  "updatedAtBR": "11/10/2026, 07:17:51 BRT"
+  "updatedAt": "2026-10-11T10:27:28.919Z",
+  "updatedAtBR": "11/10/2026, 07:27:28 BRT"
 }
