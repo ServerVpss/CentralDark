@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(intent): invalidate stale public status on HEAD or evidence drift",
+    "lastCommit": "fix(intent): derive runtime paths from HOME instead of masked transport strings",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T18:48:28.391Z",
+      "titulo": "Push na main · 97e5c410f4243fef8002ff8064f081187afdc3fb",
+      "detalhe": "fix(intent): derive runtime paths from HOME instead of masked transport strings",
+      "area": "Repositório",
+      "sha": "97e5c41",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T18:45:19.293Z",
       "titulo": "Push na main · 647be27fb60f2c3a04e2c9218409852afcf3cc68",
@@ -388,6 +396,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T18:48:28.391Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 97e5c410f4243fef8002ff8064f081187afdc3fb (97e5c41)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T18:45:19.293Z",
       "ia": "@segredounlock",
@@ -857,6 +872,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T18:45:19.293Z",
-  "updatedAtBR": "11/10/2026, 15:45:19 BRT"
+  "updatedAt": "2026-10-11T18:48:28.391Z",
+  "updatedAtBR": "11/10/2026, 15:48:28 BRT"
 }
