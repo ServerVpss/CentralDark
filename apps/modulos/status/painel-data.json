@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): seal four-file VPS readback, Casa/VPS probes and runner-counter counterproof",
+    "lastCommit": "docs(hud): reuse Brain Biblioteca Agents map; separate PR1574/PDF/CI evidence without false green",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T10:53:10.050Z",
+      "titulo": "Push na main · 589e04924cc460f03dcb131016a02451a885b400",
+      "detalhe": "docs(hud): reuse Brain Biblioteca Agents map; separate PR1574/PDF/CI evidence without false green",
+      "area": "Repositório",
+      "sha": "589e049",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T10:37:54.565Z",
       "titulo": "Push na main · 2f02e6b20abebe18862e6fa2740211a89aee6e0d",
@@ -340,6 +348,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T10:53:10.050Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 589e04924cc460f03dcb131016a02451a885b400 (589e049)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T10:37:54.565Z",
       "ia": "@segredounlock",
@@ -767,6 +782,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T10:37:54.565Z",
-  "updatedAtBR": "11/10/2026, 07:37:54 BRT"
+  "updatedAt": "2026-10-11T10:53:10.050Z",
+  "updatedAtBR": "11/10/2026, 07:53:10 BRT"
 }
