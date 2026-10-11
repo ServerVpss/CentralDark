@@ -767,3 +767,12 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **Aprendizado aplicado:** não insistir em preservar cópia local redundante por risco genérico depois de estabelecer a fonte canônica. Conferir exclusividade real; se não houver conteúdo único, tratar como candidato a descarte autorizado, não como backup obrigatório.
 - **Estado:** inspeção read-only e comparativo comprovados; exclusão local não executada nem confirmada. `ARCHIVE_DELETED=UNKNOWN`.
 - **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md` — entrada Hakai de pacote redundante.
+
+
+### [2026-10-10] Aprendizado autonomo com qualidade e fechamento integral
+- Owner canonico: docs/CONSCIENCIA/APRENDIZADOS.md, contrato AUTO_LEARNING_QUALITY_GATE_20261010.
+- Decisao do CHEFE: reconhecer, comparar, validar, enriquecer e registrar autonomamente aprendizados materiais, sem entradas vazias ou duplicadas.
+- Recuperacao: diante de falha tecnica transitoria de ferramenta, classificar, aguardar 10 segundos quando adequado e testar novamente com limite; consultar outra rota ja autorizada (Casa, VPS, GitHub, SSH/Tailscale) sem contornar bloqueios explicitos de seguranca.
+- Correcao de procedimento: uma falha na segunda gravacao nao deve gerar divida paralela ou declaracao falsa de ALL DONE. Consolidar no owner canonico, realizar readback em todos os destinos pertinentes e explicitar qualquer lacuna residual.
+- Contraprova: registro da licao completo no owner de Aprendizados; esta Lembranca aponta ao mesmo owner sem criar novo sistema.
+- Leis: ROUTE_FAILURE != GOAL_FAILURE; PARTIAL_WRITE != DONE; EMPTY_LEARNING=REJECT; AUTHORIZED_FALLBACK_ONLY; READBACK_REQUIRED.
