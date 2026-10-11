@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(hud): refletir diretorio real dos scripts apos mudanca para F",
+    "lastCommit": "docs(receipt): readback HUD transferido para F:\\scripts sem reset de perfis",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T22:54:18.777Z",
+      "titulo": "Push na main · fba012db4a0b0e924b3bc912cfbc54413ac690cf",
+      "detalhe": "docs(receipt): readback HUD transferido para F:\\scripts sem reset de perfis",
+      "area": "Repositório",
+      "sha": "fba012d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T22:53:37.851Z",
       "titulo": "Push na main · 6a3b30e9df48fa514112a2eda4a95d35942fca62",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "2781102",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-10T21:27:33.647Z",
-      "titulo": "Push na main · 50211ef297149d02e2cd9da3f617eaedc18d582e",
-      "detalhe": "fix: alinhar healthcheck Hermes ao PM2_HOME do owner VPS",
-      "area": "Repositório",
-      "sha": "50211ef",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T22:54:18.777Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · fba012db4a0b0e924b3bc912cfbc54413ac690cf (fba012d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T22:53:37.851Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 2781102d9a7c19eb434e76820ad0ad8682e53993 (2781102)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-10T21:27:33.647Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 50211ef297149d02e2cd9da3f617eaedc18d582e (50211ef)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T22:53:37.851Z",
-  "updatedAtBR": "11/10/2026, 19:53:37 BRT"
+  "updatedAt": "2026-10-11T22:54:18.777Z",
+  "updatedAtBR": "11/10/2026, 19:54:18 BRT"
 }
