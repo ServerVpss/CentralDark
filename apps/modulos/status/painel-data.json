@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(hud): add deterministic button and Genesis structural audit without false runtime PASS",
+    "lastCommit": "fix(hermes-core): reconcile mission continuity, retry and decision state",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T07:26:20.566Z",
+      "titulo": "Push na main · 930f6693ba42522a04293a280d9fcb9ca64cc682",
+      "detalhe": "fix(hermes-core): reconcile mission continuity, retry and decision state",
+      "area": "Repositório",
+      "sha": "930f669",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T05:08:11.434Z",
       "titulo": "Push na main · fe5096af0d1d90480a85a962ba9256b757f124d5",
@@ -284,6 +292,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T07:26:20.566Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 930f6693ba42522a04293a280d9fcb9ca64cc682 (930f669)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T05:08:11.434Z",
       "ia": "@segredounlock",
@@ -662,6 +677,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T05:08:11.434Z",
-  "updatedAtBR": "11/10/2026, 02:08:11 BRT"
+  "updatedAt": "2026-10-11T07:26:20.566Z",
+  "updatedAtBR": "11/10/2026, 04:26:20 BRT"
 }
