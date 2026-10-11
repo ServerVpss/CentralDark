@@ -955,3 +955,50 @@ GLOBAL_PREFLIGHT_IS_NOT_PERMISSION=true
 ```
 
 Artefatos herdam o owner pertinente por referência. Expansão de contexto acontece somente quando pode mudar a decisão; material causal conhecido não é omitido, mas inventário total não é pré-condição.
+
+---
+
+## Espelho cognitivo — fidelidade e impacto decisório (2026-10-11)
+
+**Owner existente:** este documento de metacognição; AutoLupa em `.agents/skills/meta-lupa/`; regressão em `scripts/lupa/controlled-dissonance.test.mjs`. Nada aqui cria novo motor, skill, auditor, gate global, ou autoridade.
+
+**Propósito humano:** tornar o pensamento explicitamente expresso examinável sem substituí-lo por interpretação da IA. Não inferir pensamento que o humano não declarou.
+
+```text
+ORIGINAL_EXATO
+→ TRANSFORMACAO_PRODUZIDA_PELA_IA
+→ DIFERENCA_SEMANTICA_CANDIDATA
+→ DECISOES_RESULTANTES
+→ IMPACTO_OBSERVAVEL_OU_UNKNOWN
+→ CONTRAPROVA
+→ AVALIACAO_HUMANA
+→ RECEIPT + NEXT_CURSOR
+```
+
+1. **Original:** preservar literalmente a expressão humana ou referência verificável, com contexto.
+2. **Transformação:** declarar a paráfrase da IA como paráfrase, nunca como fala original.
+3. **Diferença:** identificar adição, omissão, simplificação ou mudança de ênfase, sem presumir dano.
+4. **Impacto:** comparar owner, rota ou decisão que cada leitura produziria para o mesmo objetivo. Sem ação comparável, `DECISION_IMPACT=UNKNOWN`. Mesma decisão não prova equivalência integral.
+5. **Validação:** medir o efeito por evidência independente quando possível; deixar ao humano a correção da intenção e preservar o histórico.
+
+### Caso discriminante em CentralDark: entrada administrativa
+
+- **Intenção explicitamente dada pelo CHEFE:** `admin.centralldark.com` exibe Instinto Superior; Rakazo/AionUi permanecem capacidades internas. Portal de Módulos pertence ao domínio principal e TelePainel é um módulo do Portal.
+- **Leitura alternativa propositalmente distorcida para o teste:** publicar Rakazo como a interface principal de `admin.centralldark.com`.
+- **Decisão:** original → backend Instinto `127.0.0.1:25812`; alternativa → Rakazo `127.0.0.1:25810`.
+- **Readback runtime de 2026-10-11T09:58Z:** Caddy encaminhou o Admin à porta `25812`; porta `25812` HTTP 200 com título `CentralDark — Instinto Superior`; porta `25810` HTTP 200 com título `Rakazo`; porta `25808` HTTP 200 com título `AionUi`.
+- **Conclusão limitada:** `DECISION_DELTA=MATERIAL` e destinos empiricamente distintos. **A alternativa é um contrafactual**, não prova de que a paráfrase ou a AutoLupa causaram o antigo erro de roteamento.
+- **Controle negativo:** `TelePainel é um módulo do Portal` versus `Portal contém o módulo TelePainel` preserva a ação `/telepainel/dashboard` no cenário explicitamente controlado. Isso não demonstra equivalência semântica geral.
+- **Par abstrato da AutoLupa:** `examinar se a própria IA distorce durante a externalização` versus `auditar fidelidade ao pensamento recebido` muda a ênfase, mas sem ação comparável `DECISION_IMPACT=UNKNOWN`; não declarar dano sem evidência.
+
+```text
+ORIGINAL != INTERPRETATION != VERIFIED_CONCLUSION
+PARAPHRASE_DIFF != HARM
+SAME_ACTION != FULL_SEMANTIC_EQUIVALENCE
+DIFFERENT_ACTION_REQUIRES_IMPACT_TEST=true
+NO_ACTION_TO_COMPARE=DECISION_IMPACT_UNKNOWN
+COUNTERFACTUAL_IS_NOT_HISTORICAL_CAUSAL_PROOF=true
+HUMAN_CORRECTION_HAS_AUTHORITY=true
+```
+
+**Classificação da prova:** código de regressão verifica a separação e decisões em casos controlados; não executa um modelo semântico. Readback da VPS verifica os destinos atuais, não uma cadeia causal passada. Nenhuma medição de melhoria cognitiva em usuários foi realizada; `FIXED_POINT_GLOBAL=UNKNOWN`.

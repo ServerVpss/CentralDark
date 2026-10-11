@@ -102,3 +102,49 @@ assert.equal(
 
 assert.deepEqual(canonical, { owner: 'meta-lupa', writer: 'one', deploy: false });
 console.log('controlled-dissonance: PASS');
+
+
+// COGNITIVE_MIRROR_DECISION_IMPACT_V1
+// O teste exercita o impacto decisorio explicitamente rotulado.
+// Nao alega compreender a semantica de linguagem natural automaticamente.
+function auditDecisionImpact({original,paraphrase,originalDecision,interpretedDecision}) {
+  assert.equal(typeof original, 'string');
+  assert.equal(typeof paraphrase, 'string');
+  assert.ok(original.trim() && paraphrase.trim(), 'preservar expressoes separadamente');
+  if (typeof originalDecision !== 'string' || typeof interpretedDecision !== 'string') {
+    return { status:'UNKNOWN', semanticFidelity:'NOT_AUTO_VERIFIED' };
+  }
+  return {
+    status: originalDecision === interpretedDecision
+      ? 'SAME_DECISION_NOT_SEMANTIC_PROOF'
+      : 'DIFFERENT_DECISION_REQUIRES_OBSERVED_IMPACT',
+    semanticFidelity:'NOT_AUTO_VERIFIED',
+  };
+}
+const abstractPair = auditDecisionImpact({
+  original:'A AutoLupa também precisa examinar se a própria IA está distorcendo o pensamento que deveria externalizar.',
+  paraphrase:'A AutoLupa precisa auditar também a fidelidade da própria IA ao pensamento que recebeu.',
+});
+assert.equal(abstractPair.status,'UNKNOWN');
+const adminPair = auditDecisionImpact({
+  original:'Admin CentralDark mostra Instinto Superior; Rakazo fica interno.',
+  paraphrase:'Admin CentralDark mostra Rakazo como aplicação principal.',
+  originalDecision:'admin.centralldark.com -> instinto-superior:25812',
+  interpretedDecision:'admin.centralldark.com -> rakazo:25810',
+});
+assert.equal(adminPair.status,'DIFFERENT_DECISION_REQUIRES_OBSERVED_IMPACT');
+const benignPair = auditDecisionImpact({
+  original:'TelePainel é um módulo do Portal.',
+  paraphrase:'O Portal contém o módulo TelePainel.',
+  originalDecision:'/telepainel/dashboard',
+  interpretedDecision:'/telepainel/dashboard',
+});
+assert.equal(benignPair.status,'SAME_DECISION_NOT_SEMANTIC_PROOF');
+assert.equal(benignPair.semanticFidelity,'NOT_AUTO_VERIFIED');
+const missingAction = auditDecisionImpact({
+  original:'Admin é Instinto Superior.',
+  paraphrase:'O Admin concentra as ferramentas.',
+  originalDecision:'instinto-superior:25812',
+});
+assert.equal(missingAction.status,'UNKNOWN');
+console.log('cognitive-mirror-decision-impact: PASS (controlled fixtures, no causal claim)');
