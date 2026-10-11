@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): contraprova Conta 2 online sem inferir duas identidades autenticadas",
+    "lastCommit": "fix(hud): refletir diretorio real dos scripts apos mudanca para F",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T22:53:37.851Z",
+      "titulo": "Push na main · 6a3b30e9df48fa514112a2eda4a95d35942fca62",
+      "detalhe": "fix(hud): refletir diretorio real dos scripts apos mudanca para F",
+      "area": "Repositório",
+      "sha": "6a3b30e",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T22:38:50.913Z",
       "titulo": "Push na main · 3e091bbdcda1dc74d29ea833b49415d12811a79a",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "50211ef",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-10T21:22:22.072Z",
-      "titulo": "Push na main · bdafbbf250b152fd6625a90320def50b8025894a",
-      "detalhe": "docs: registrar recovery requerido do owner GitHub Actions",
-      "area": "Repositório",
-      "sha": "bdafbbf",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T22:53:37.851Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6a3b30e9df48fa514112a2eda4a95d35942fca62 (6a3b30e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T22:38:50.913Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 50211ef297149d02e2cd9da3f617eaedc18d582e (50211ef)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-10T21:22:22.072Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · bdafbbf250b152fd6625a90320def50b8025894a (bdafbbf)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T22:38:50.913Z",
-  "updatedAtBR": "11/10/2026, 19:38:50 BRT"
+  "updatedAt": "2026-10-11T22:53:37.851Z",
+  "updatedAtBR": "11/10/2026, 19:53:37 BRT"
 }
