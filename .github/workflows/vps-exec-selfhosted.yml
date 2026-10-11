@@ -1104,6 +1104,7 @@ jobs:
       HOME: /root
       REPO_DIR: /root/CentralDark
       BRANCH: main
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: 🔹 Checkout do SHA promovido
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -1114,9 +1115,19 @@ jobs:
 
       - name: 🔹 Regenerar todo runtime CentralDark já provado/populado
         shell: bash
+        env:
+          TARGET_SHA: ${{ github.sha }}
         run: |
           set -Eeuo pipefail
           bash -n scripts/vps/deploy-guards-dispatcher.sh
+          # Reuse the same ephemeral GitHub auth as other canonical jobs.
+          # Never write credentials to the VPS checkout or to logs.
+          [[ -n "${GH_TOKEN:-}" ]] || { echo "GIT_EPHEMERAL_AUTH_MISSING"; exit 26; }
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0='http.https://github.com/.extraheader'
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: bearer $GH_TOKEN"
+          unset GH_TOKEN
+          # Pin event SHA and preserve the dispatcher's dirty-worktree guard.
           REPO_DIR="$REPO_DIR" BRANCH="$BRANCH" \
             bash scripts/vps/deploy-guards-dispatcher.sh --apply --total
 
