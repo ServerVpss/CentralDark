@@ -760,3 +760,10 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - Aprendizado: ordem explícita de reinício forçado autoriza o menor ajuste direto, sem destruir dados; processo responsivo não comprova interface renderizada; logs de rede não comprovam causa raiz.
 - Continuidade: Codex Casa e revisão Codex GitHub App atingiram limites de uso específicos. Dependabot/COSTURA e CodeRabbit permanecem owners distintos; workflow Dependabot estava manualmente pausado nesta medição.
 - Estado: RESTART_PASS, VISUAL_PASS, ROOT_CAUSE_UNKNOWN. Detalhes em `docs/CONSCIENCIA/APRENDIZADOS.md`, entrada de 2026-10-10.
+
+
+### [2026-10-10] Cópia histórica E: sem pendência artificial
+- **Lembrança do CHEFE:** `E:\centraldark-main.tar.gz` era snapshot da revisão `799c339` da CentralDark; leitura local provou o conteúdo e consulta GitHub mostrou `main` 862 commits à frente e zero atrás. O usuário pontuou que pode baixar a mesma revisão diretamente no GitHub quando quiser.
+- **Aprendizado aplicado:** não insistir em preservar cópia local redundante por risco genérico depois de estabelecer a fonte canônica. Conferir exclusividade real; se não houver conteúdo único, tratar como candidato a descarte autorizado, não como backup obrigatório.
+- **Estado:** inspeção read-only e comparativo comprovados; exclusão local não executada nem confirmada. `ARCHIVE_DELETED=UNKNOWN`.
+- **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md` — entrada Hakai de pacote redundante.
