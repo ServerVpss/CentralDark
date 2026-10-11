@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(obsidian): apontar K CentralDark como destino da migracao e qualificar rotas legadas",
+    "lastCommit": "docs(agents): separar checkout legado da nova rota K Obsidian em migracao",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T23:13:17.906Z",
+      "titulo": "Push na main · ef8b420b5f03911f2c928ef069c33b74a3acc64b",
+      "detalhe": "docs(agents): separar checkout legado da nova rota K Obsidian em migracao",
+      "area": "Repositório",
+      "sha": "ef8b420",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T23:12:14.973Z",
       "titulo": "Push na main · dc10001c92f11c2494bfd5d09db15abb898ba636",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "1a286de",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T00:05:55.209Z",
-      "titulo": "Push na main · 53e680a0f61d5dd882b6b380afc5e8cb50379bed",
-      "detalhe": "docs(lembrancas): cristalizar prova visual Hydra Casa",
-      "area": "Repositório",
-      "sha": "53e680a",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T23:13:17.906Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ef8b420b5f03911f2c928ef069c33b74a3acc64b (ef8b420)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T23:12:14.973Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 1a286dec5e2a1a1fa0162e167f351a9f86600154 (1a286de)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T00:05:55.209Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 53e680a0f61d5dd882b6b380afc5e8cb50379bed (53e680a)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T23:12:14.973Z",
-  "updatedAtBR": "11/10/2026, 20:12:14 BRT"
+  "updatedAt": "2026-10-11T23:13:17.906Z",
+  "updatedAtBR": "11/10/2026, 20:13:17 BRT"
 }
