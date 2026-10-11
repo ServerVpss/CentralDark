@@ -70,6 +70,8 @@ ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 
 ### 🧿 Casa e missões do HUD — atualização de evidências (11/10/2026)
 
+> **Rota CURRENT em migração:** `K:\CentralDark` é o destino da biblioteca Obsidian e dos arquivos da Casa no SSD (configuração `.obsidian` e `HUD.html` já observados). A movimentação `F:` → `K:` ainda estava em curso na última imagem, portanto **não** inferir recorte concluído, exclusão das origens ou sincronização Git/VPS. As rotas `F:` e `E:` citadas abaixo são medições históricas, não o mapa final de execução. `C:` pessoal preservado.
+
 A seção **Missões — clica, copia, cola** do único owner [docs/HUD/HUD.html](docs/HUD/HUD.html) foi reconciliada com o README e a leitura física da Casa. **As sete missões continuam abertas por suas cláusulas finais**, mas fatos já comprovados não devem reaparecer como decisões em branco.
 
 - **Casa, scripts:** 12 arquivos de script em `F:\scripts`; `CENTRALDARK-ABRIR-TUDO.bat` abriu o monitor já existente, sem novo executável. A pasta antiga em Downloads não existe mais. Fonte/contraprova: [receipt Corpo Único — T3](docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md).
