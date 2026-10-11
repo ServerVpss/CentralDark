@@ -3,7 +3,7 @@ setlocal EnableExtensions DisableDelayedExpansion
 title CENTRALDARK - CORPO UNICO - HUD + LOGS
 set "CD_MONITOR_SOURCE=%~f0"
 set "CD_MONITOR_PS=%TEMP%\CentralDark-CorpoUnico-%RANDOM%-%RANDOM%.ps1"
-powershell.exe -NoProfile -Command "$s=[IO.File]::ReadAllText($env:CD_MONITOR_SOURCE);$m='::CENTRALDARK_PS_PAYLOAD_BEGIN';$p=$s.LastIndexOf([string][char]10+$m);if($p -lt 0){exit 3};$c=$s.Substring($p+1+$m.Length).TrimStart([char]13,[char]10);[IO.File]::WriteAllText($env:CD_MONITOR_PS,$c,(New-Object System.Text.UTF8Encoding($false)))"
+powershell.exe -NoProfile -Command "$s=[IO.File]::ReadAllText($env:CD_MONITOR_SOURCE);$m='::CENTRALDARK_PS_PAYLOAD_BEGIN';$p=$s.LastIndexOf([string][char]10+$m);if($p -lt 0){exit 3};$c=$s.Substring($p+1+$m.Length).TrimStart([char]13,[char]10);[IO.File]::WriteAllText($env:CD_MONITOR_PS,$c,(New-Object System.Text.UTF8Encoding($true)))"
 if errorlevel 1 (
  echo [ERRO] Falha preparando HUD unico.
  pause
@@ -28,6 +28,14 @@ $Casa = '100.123.93.25'
 $Vps  = '100.90.199.124'
 $script:LogRoot = Join-Path $env:LOCALAPPDATA 'CentralDark'
 $script:LogFile = Join-Path $script:LogRoot 'Corpo-Unico-HUD-Logs.txt'
+# Reaproveita os scripts existentes: fonte != execucao; NUNCA le tailscale.env.
+$script:ScriptRoot = if($env:CD_MONITOR_SOURCE){Split-Path -Parent $env:CD_MONITOR_SOURCE}else{$null}
+if (-not $script:ScriptRoot -or -not (Test-Path -LiteralPath $script:ScriptRoot)) {
+  $script:ScriptRoot = Join-Path $env:USERPROFILE 'Downloads\CRISTAL LOGICA\scripts'
+}
+$script:ScriptSeen = @{}
+$script:ScriptLogSeen = @{}
+$script:ScriptPollOnce = $false
 $script:Cycle = 0
 $script:RemoteJob = $null
 $script:RemoteLast = [datetime]::MinValue
@@ -49,6 +57,9 @@ function Clean([string]$Value) {
   if (-not $Value) { return '' }
   $Value = $Value -replace '(?i)(authorization\s*[:=]\s*(?:bearer|basic)\s+)\S+','$1[OCULTO]'
   $Value = $Value -replace '(?i)((?:api[_-]?key|token|password|secret)\s*[:=]\s*)\S+','$1[OCULTO]'
+  $Value = $Value -replace '(?i)(--(?:api-key|token|password|secret)\s+)\S+','$1[OCULTO]'
+  $Value = $Value -replace '(?i)(user_code=)[A-Z0-9-]+','$1[OCULTO]'
+  $Value = $Value -replace '(?i)(cookie\s*[:=]\s*)\S+','$1[OCULTO]'
   if ($Value.Length -gt 500) { return $Value.Substring(0,500) + ' ...' }
   return $Value
 }
@@ -69,7 +80,7 @@ $form.BackColor = $bg
 $form.ForeColor = $light
 $form.Font = New-Object Drawing.Font('Segoe UI',10)
 $header = New-Object Windows.Forms.Panel
-$header.Dock = 'Top'; $header.Height = 74; $header.BackColor = $panel
+$header.Dock = 'Top'; $header.Height = 116; $header.BackColor = $panel
 $form.Controls.Add($header)
 $title = New-Object Windows.Forms.Label
 $title.Text = 'CENTRALDARK  /  UM CORPO  /  UM MONITOR'
@@ -80,6 +91,29 @@ $subtitle = New-Object Windows.Forms.Label
 $subtitle.Text = 'Casa + Tailscale + Screenpipe + Hermes + VPS + Supabase + Desktop Commander + HUD | somente leitura'
 $subtitle.ForeColor=$dim;$subtitle.AutoSize=$true;$subtitle.Location=New-Object Drawing.Point(22,45)
 $header.Controls.Add($subtitle)
+# ACTION STRIP: mesma janela WinForms, visual preservado, login sempre humano no provedor.
+$actions = New-Object Windows.Forms.FlowLayoutPanel
+$actions.Dock = 'Bottom'; $actions.Height = 44
+$actions.BackColor = $panel; $actions.WrapContents = $false
+$actions.Padding = New-Object Windows.Forms.Padding(17,4,0,1)
+$header.Controls.Add($actions)
+function New-HudAction([string]$Caption,[int]$Width) {
+  $b = New-Object Windows.Forms.Button
+  $b.Text = $Caption; $b.Width=$Width; $b.Height=31
+  $b.Margin = New-Object Windows.Forms.Padding(3,0,5,0)
+  $b.BackColor=[Drawing.Color]::FromArgb(33,47,63)
+  $b.ForeColor=$cyan; $b.FlatStyle='Flat'
+  $b.FlatAppearance.BorderColor=[Drawing.Color]::FromArgb(56,85,111)
+  $b.Cursor='Hand';$b.Font=New-Object Drawing.Font('Segoe UI Semibold',9)
+  $actions.Controls.Add($b)
+  return $b
+}
+$script:BtnProfile1=New-HudAction '🔐 Conta 1' 133
+$script:BtnProfile2=New-HudAction '🔐 Conta 2' 133
+$script:BtnScreenpipe=New-HudAction '👁 Screenpipe' 140
+$script:BtnDesktop=New-HudAction '🖥 Desktop Commander' 183
+$script:BtnVerify=New-HudAction '🔄 Conferir' 118
+
 $footer = New-Object Windows.Forms.Panel
 $footer.Dock='Bottom';$footer.Height=39;$footer.BackColor=$panel
 $form.Controls.Add($footer)
@@ -123,7 +157,7 @@ $tab=New-Object Windows.Forms.TabControl
 $tab.Dock='Fill';$tab.Font=New-Object Drawing.Font('Segoe UI',9)
 $split.Panel2.Controls.Add($tab)
 $script:LogViews=@{}
-$names=@('TODOS','SCREENPIPE','VPS','HERMES','HUD','RUNTIME','TAILSCALE','WINDOWS','DESKTOP','SUPABASE')
+$names=@('TODOS','SCREENPIPE','VPS','HERMES','HUD','RUNTIME','TAILSCALE','WINDOWS','DESKTOP','SUPABASE','SCRIPTS')
 foreach($n in $names){
   $page=New-Object Windows.Forms.TabPage
   $page.Text=$n;$page.BackColor=$bg
@@ -157,6 +191,64 @@ function Set-Card([string]$Sector,[string]$State,[string]$Details){
     $logSector=switch -Wildcard ($Sector){'CASA*'{'WINDOWS'};'TAILSCALE*'{'TAILSCALE'};'SCREENPIPE*'{'SCREENPIPE'};'HERMES*'{'HERMES'};'VPS*'{'VPS'};'RUNTIME*'{'RUNTIME'};'HUD*'{'HUD'};'PROVA*'{'WINDOWS'};'DESKTOP*'{'DESKTOP'};'SUPABASE*'{'SUPABASE'}}
     Add-Log $logSector $State ($Sector+': '+$Details)
   }
+}
+function Refresh-Scripts {
+  # Catalogo da raiz ja escolhida: loga fonte e mudancas, nao inventa runtime.
+  $extensions=@('.bat','.batt','.cmd','.ps1','.sh','.py','.pyw','.js','.mjs','.cjs')
+  $sources=@()
+  try {
+    $sources=@(Get-ChildItem -LiteralPath $script:ScriptRoot -File -ErrorAction Stop |
+      Where-Object { $extensions -contains $_.Extension.ToLowerInvariant() })
+  } catch {
+    if (-not $script:ScriptPollOnce) { Add-Log 'SCRIPTS' 'UNKNOWN' 'Pasta de scripts indisponivel' }
+  }
+  if (-not $script:ScriptPollOnce) {
+    Add-Log 'SCRIPTS' 'INFO' ("Catalogo: {0} arquivo(s) em CRISTAL LOGICA\scripts; fonte != executado" -f $sources.Count)
+    Add-Log 'SCRIPTS' 'INFO' 'tail de logs autorizados: scripts\logs\*.log + bridge preexistente. Nunca le .env.'
+  }
+  foreach($f in $sources) {
+    $signature=('{0}|{1}' -f $f.Length,$f.LastWriteTimeUtc.Ticks)
+    if (-not $script:ScriptSeen.ContainsKey($f.FullName)) {
+      $script:ScriptSeen[$f.FullName]=$signature
+      Add-Log 'SCRIPTS' 'INFO' ("{0}: SOURCE_PRESENT; execucao UNKNOWN" -f $f.Name)
+    } elseif($script:ScriptSeen[$f.FullName] -ne $signature) {
+      $script:ScriptSeen[$f.FullName]=$signature
+      Add-Log 'SCRIPTS' 'WARN' ("{0}: arquivo alterado; validar origem/checksum" -f $f.Name)
+    }
+  }
+  # So arquivos de LOG previamente existentes; nao executa .sh/.py/.js.
+  $logItems=[System.Collections.ArrayList]::new()
+  $localLogs=Join-Path $script:ScriptRoot 'logs'
+  if (Test-Path -LiteralPath $localLogs -PathType Container) {
+    Get-ChildItem -LiteralPath $localLogs -File -Filter '*.log' -ErrorAction SilentlyContinue |
+      Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 18 |
+      ForEach-Object { [void]$logItems.Add($_) }
+  }
+  $known=@(
+    (Join-Path $env:TEMP 'centraldark-hud-unified\centraldark-hud-live.log'),
+    'F:\Bridge\logs\bridge.log'
+  )
+  foreach($path in $known) {
+    if(Test-Path -LiteralPath $path -PathType Leaf) {
+      try { [void]$logItems.Add((Get-Item -LiteralPath $path -ErrorAction Stop)) } catch {}
+    }
+  }
+  foreach($log in $logItems) {
+    $signature=('{0}|{1}' -f $log.Length,$log.LastWriteTimeUtc.Ticks)
+    if($script:ScriptLogSeen.ContainsKey($log.FullName) -and $script:ScriptLogSeen[$log.FullName] -eq $signature){ continue }
+    $script:ScriptLogSeen[$log.FullName]=$signature
+    try {
+      $samples=@(Get-Content -LiteralPath $log.FullName -Tail 6 -ErrorAction Stop)
+      foreach($entry in $samples) {
+        if(-not [string]::IsNullOrWhiteSpace($entry)) {
+          Add-Log 'SCRIPTS' 'LOG' ("[{0}] {1}" -f $log.Name,$entry)
+        }
+      }
+    } catch {
+      Add-Log 'SCRIPTS' 'WARN' ("Log presente mas leitura falhou: {0}" -f $log.Name)
+    }
+  }
+  $script:ScriptPollOnce=$true
 }
 function Port-Open([int]$Port){
   try {return (@(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction Stop).Count -gt 0)} catch { return $false }
@@ -278,8 +370,9 @@ $script:RemoteScript = {
   $sshPath=Join-Path $env:ProgramFiles 'Git\usr\bin\ssh.exe'
   if(-not (Test-Path -LiteralPath $sshPath -PathType Leaf)){return 'CD_SSH=UNKNOWN|Git SSH nao encontrado'}
   $exe=$sshPath
-  $remote='echo CD_SSH=PASS; printf "CD_HEART="; curl -fsS --max-time 3 http://127.0.0.1:9100/heartbeat 2>/dev/null; echo; echo CD_RUNTIME; uptime; ps -eo comm= | grep -E "(node|pm2|screenpipe|llama|hermes)" | sort -u | head -8; echo CD_VPS_LOG; journalctl -n 8 -p warning --no-pager --output=short-iso 2>/dev/null | tail -8'
-  $out=& $exe -T -o BatchMode=yes -o ConnectTimeout=5 -o ConnectionAttempts=1 -o StrictHostKeyChecking=yes Segredo-VPS $remote 2>&1 | Out-String
+  $remote='echo CD_SSH=PASS; printf "CD_HEART="; curl -fsS --max-time 3 http://127.0.0.1:9100/heartbeat 2>/dev/null; echo; echo CD_RUNTIME; uptime; ps -eo comm= | grep -E "(node|pm2|screenpipe|llama|hermes)" | sort -u | head -8; echo CD_VPS_SENSORS; for unit in desktop-commander-remote.service centraldark-desktop-commander-conta2.service; do state=$(systemctl is-active "$unit" 2>/dev/null || true); echo "CD_DC=$unit,${state:-UNKNOWN}"; done; sc=$(curl --noproxy "*" -s -o /dev/null -w "%{http_code}" --connect-timeout 2 --max-time 3 http://127.0.0.1:3030/health 2>/dev/null || true); echo "CD_SCREENPIPE_VPS=${sc:-000}"; if [ -f /root/CentralDark/apps/modulos/elite-gateway/test-local/local_send_dump.py ]; then echo CD_ZENDRIVE=CODE_PRESENT_RUNTIME_UNKNOWN; else echo CD_ZENDRIVE=CODE_NOT_FOUND_RUNTIME_UNKNOWN; fi; echo CD_VPS_LOG; journalctl -n 8 -p warning --no-pager --output=short-iso 2>/dev/null | tail -8'
+  $encoded=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($remote))
+  $out=$encoded | & $exe -T -o BatchMode=yes -o ConnectTimeout=5 -o ConnectionAttempts=1 -o StrictHostKeyChecking=yes Segredo-VPS 'base64 -d | bash -s' 2>&1 | Out-String
   if($LASTEXITCODE -ne 0){return ('CD_SSH=UNKNOWN|ssh exit '+$LASTEXITCODE)}
   return $out
 }
@@ -301,7 +394,23 @@ function Poll-Remote {
       $sect='HERMES'
       foreach($line in $lines){
         if($line -match '^CD_RUNTIME'){$sect='RUNTIME';continue}
+        if($line -match '^CD_VPS_SENSORS'){$sect='RUNTIME';continue}
         if($line -match '^CD_VPS_LOG'){$sect='VPS';continue}
+        if($line -match '^CD_DC=(.+)$'){
+          $state=$Matches[1];$level=if($state -match ',active$'){'WARN'}else{'UNKNOWN'}
+          Add-Log 'DESKTOP' $level ('VPS Desktop Commander '+$state+'; conta autenticada nao comprovada')
+          continue
+        }
+        if($line -match '^CD_SCREENPIPE_VPS=(\d+)$'){
+          $code=$Matches[1]
+          $level=if($code -eq '200'){'PASS'}else{'UNKNOWN'}
+          Add-Log 'SCREENPIPE' $level ('VPS Screenpipe /health HTTP '+$code+'; captura e MCP nao inferidos')
+          continue
+        }
+        if($line -match '^CD_ZENDRIVE=(.+)$'){
+          Add-Log 'SCRIPTS' 'UNKNOWN' ('VPS Zendrive: '+$Matches[1]+' (arquivo nao prova sessao)')
+          continue
+        }
         if($line -match '^CD_HEART='){Add-Log 'VPS' 'LOG' 'Heartbeat consultado; detalhes tecnicos disponiveis no SSH';continue}
         if($line -match '^CD_SSH='){continue}
         if(-not [string]::IsNullOrWhiteSpace($line)){Add-Log $sect 'LOG' $line}
@@ -317,22 +426,156 @@ function Poll-Remote {
     $script:RemoteJob=Start-Job -ScriptBlock $script:RemoteScript -ArgumentList 'none'
   }
 }
+
+# Botões somente no HUD WinForms original. Login e troca de conta ocorrem no provedor.
+$script:AccountProbeJob=$null
+function Start-AccountProbe([string]$StartProfile='none') {
+  if($script:AccountProbeJob -and $script:AccountProbeJob.State -eq 'Running') {
+    Add-Log 'DESKTOP' 'INFO' 'Consulta anterior rodando; SSH nao duplicado'
+    return
+  }
+  if($script:AccountProbeJob) {
+    Remove-Job $script:AccountProbeJob -Force -ErrorAction SilentlyContinue
+    $script:AccountProbeJob=$null
+  }
+  $script:AccountProbeJob=Start-Job -ArgumentList $StartProfile -ScriptBlock {
+    param([string]$StartFor)
+    $ssh=Join-Path $env:ProgramFiles 'Git\usr\bin\ssh.exe'
+    if(!(Test-Path -LiteralPath $ssh)) { return 'CD_PROBE_ERROR|GIT_SSH_MISSING' }
+    $remote=@'
+for entry in principal:desktop-commander-remote.service conta2:centraldark-desktop-commander-conta2.service; do
+  name="$(printf '%s' "$entry" | cut -d: -f1)"
+  unit="$(printf '%s' "$entry" | cut -d: -f2)"
+  load="$(systemctl show "$unit" -p LoadState --value 2>/dev/null || true)"
+  state="$(systemctl is-active "$unit" 2>/dev/null || true)"
+  if [ "$START_FOR" = "$name" ] && [ "$load" = loaded ] && [ "$state" != active ]; then
+    systemctl start "$unit" >/dev/null 2>&1 || true
+    state="$(systemctl is-active "$unit" 2>/dev/null || true)"
+  fi
+  auth=UNKNOWN
+  if [ "$state" = active ]; then
+    recent="$(journalctl -u "$unit" --since '-15 minutes' --no-pager -o cat 2>/dev/null | tail -n 90)"
+    last_event="$(printf '%s\n' "$recent" | grep -Ei 'Device ready|Device marked as online|Device marked as offline|Authorization successful|Waiting for authorization|Device code received|Starting device authorization' | tail -1)"
+    if printf '%s' "$last_event" | grep -Eiq 'Device ready|Device marked as online|Authorization successful'; then auth=READY_LOG
+    elif printf '%s' "$last_event" | grep -Eiq 'Waiting for authorization|Device code received|Starting device authorization'; then auth=LOGIN_PENDING
+    else auth=UNKNOWN
+    fi
+  fi
+  printf 'CD_PROFILE|%s|%s|%s|%s\n' "$name" "$load" "$state" "$auth"
+done
+'@
+    $prefix='START_FOR=none; '
+    if($StartFor -eq 'principal') {$prefix='START_FOR=principal; '}
+    elseif($StartFor -eq 'conta2') {$prefix='START_FOR=conta2; '}
+    # Codigo do device vem do journal do perfil escolhido, nunca salvo no BAT.
+    if($StartFor -eq 'principal' -or $StartFor -eq 'conta2') {
+      $remote += @'
+
+if [ "$START_FOR" = principal ]; then selected_unit=desktop-commander-remote.service; else selected_unit=centraldark-desktop-commander-conta2.service; fi
+logs="$(journalctl -u "$selected_unit" --since "-10 minutes" --no-pager -o cat 2>/dev/null)"
+code="$(printf '%s\n' "$logs" | grep -Eo '[A-Z0-9]{4}-[A-Z0-9]{4}' | tail -1)"
+last_auth="$(printf '%s\n' "$logs" | grep -Ei 'Device marked as online|Device ready|Waiting for authorization|Device marked as offline' | tail -1)"
+# So regenera o codigo da conta2 quando o clique e explicito e ela nao esta autenticada.
+if [ -z "$code" ] && [ "$START_FOR" = conta2 ] && ! printf '%s' "$last_auth" | grep -Eiq 'Device marked as online|Device ready'; then
+  systemctl restart "$selected_unit" >/dev/null 2>&1 || true
+  for wait_attempt in 1 2 3 4 5 6; do
+    sleep 1
+    logs="$(journalctl -u "$selected_unit" --since "-2 minutes" --no-pager -o cat 2>/dev/null)"
+    code="$(printf '%s\n' "$logs" | grep -Eo '[A-Z0-9]{4}-[A-Z0-9]{4}' | tail -1)"
+    if [ -n "$code" ]; then break; fi
+  done
+fi
+if [ -n "$code" ]; then printf 'CD_VERIFY|%s|%s\n' "$START_FOR" "$code"; else printf 'CD_VERIFY|%s|UNAVAILABLE\n' "$START_FOR"; fi
+'@
+    }
+    # Script via stdin: evita quebra de aspas do shell remoto (SSH_EXIT_2).
+    $cmdText=($prefix+"`n"+$remote).Replace("`r",'')
+    $payload=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($cmdText))
+    $out=$payload | & $ssh -T -o BatchMode=yes -o ConnectTimeout=7 -o StrictHostKeyChecking=yes Segredo-VPS 'base64 -d | bash -s' 2>$null | Out-String
+    if($LASTEXITCODE -ne 0) {return ('CD_PROBE_ERROR|SSH_EXIT_'+$LASTEXITCODE)}
+    return $out
+  }
+}
+function Poll-AccountProbe {
+  if(!$script:AccountProbeJob -or $script:AccountProbeJob.State -eq 'Running'){return}
+  $output=(Receive-Job $script:AccountProbeJob -ErrorAction SilentlyContinue | Out-String)
+  Remove-Job $script:AccountProbeJob -Force -ErrorAction SilentlyContinue
+  $script:AccountProbeJob=$null
+  $lines=@($output -split '[\r\n]+' | Where-Object {$_ -match '^CD_PROFILE\|' })
+  # Abre apenas URL do perfil que o humano clicou. Nunca registra/mostra codigo em log.
+  if($script:PendingAuthProfile) {
+    $selected=$script:PendingAuthProfile
+    $script:PendingAuthProfile=$null
+    $verify=@($output -split '[\r\n]+' | Where-Object {$_ -match '^CD_VERIFY\|' } | Select-Object -Last 1)
+    $parts=if($verify.Count){$verify[0].Split('|')}else{@()}
+    if($parts.Count -eq 3 -and $parts[1] -eq $selected -and $parts[2] -match '^[A-Z0-9]{4}-[A-Z0-9]{4}$') {
+      $url='https://mcp.desktopcommander.app/verify-device?verify_device=true&user_code='+[uri]::EscapeDataString($parts[2])
+      try {Start-Process $url -ErrorAction Stop|Out-Null; Add-Log 'DESKTOP' 'INFO' ('Autorizacao '+$selected+': pagina oficial com codigo temporario preenchido')}
+      catch {Add-Log 'DESKTOP' 'WARN' 'Navegador nao abriu para verificar dispositivo'}
+    } else {
+      Add-Log 'DESKTOP' 'UNKNOWN' ('Codigo fresco nao disponivel para '+$selected+'; abrindo dispositivos, sem usar codigo antigo')
+      try {Start-Process 'https://mcp.desktopcommander.app/' -ErrorAction Stop|Out-Null}catch{}
+    }
+  }
+  if($lines.Count -eq 0) {
+    $signal=($output -split '[\r\n]+' | Where-Object { $_ -match '^CD_PROBE_ERROR\|' } | Select-Object -First 1)
+    if(-not $signal){$signal='NO_JOB_RECEIPT'}
+    Add-Log 'DESKTOP' 'UNKNOWN' ('Consulta sem receipt: '+$signal+'; autorizacao nao inferida')
+    return
+  }
+  foreach($line in $lines) {
+    $fields=$line.Split('|')
+    if($fields.Count -ne 5){continue}
+    $label=if($fields[1] -eq 'principal'){'CONTA 1'}else{'CONTA 2'}
+    $level=if($fields[2] -eq 'loaded' -and $fields[3] -eq 'active' -and $fields[4] -eq 'READY_LOG'){'PASS'}else{'UNKNOWN'}
+    Add-Log 'DESKTOP' $level ("{0} | service={1} | process={2} | autorizacao={3}" -f $label,$fields[2],$fields[3],$fields[4])
+  }
+}
+function Open-DesktopAccount([string]$Profile) {
+  $chosen=if($Profile -eq 'CONTA 1'){'principal'}else{'conta2'}
+  if($script:AccountProbeJob -and $script:AccountProbeJob.State -eq 'Running') {
+    Add-Log 'DESKTOP' 'INFO' 'Outra consulta de perfil em andamento; aguarde a leitura antes de trocar conta'
+    return
+  }
+  # A escolha humana fica vinculada SOMENTE a este job ate receber o receipt.
+  $script:PendingAuthProfile=$chosen
+  Add-Log 'DESKTOP' 'INFO' ("{0}: recuperando codigo temporario do perfil selecionado; credenciais nao sao registradas" -f $Profile)
+  Start-AccountProbe -StartProfile $chosen
+  foreach($page in $tab.TabPages) {if($page.Text -eq 'DESKTOP'){$tab.SelectedTab=$page;break}}
+}
+$script:BtnProfile1.Add_Click({ Open-DesktopAccount 'CONTA 1' })
+$script:BtnProfile2.Add_Click({ Open-DesktopAccount 'CONTA 2' })
+$script:BtnScreenpipe.Add_Click({
+  Add-Log 'SCREENPIPE' 'INFO' 'Abrindo Screenpipe local, sem iniciar captura duplicada'
+  try { Start-Process 'http://127.0.0.1:3030' -ErrorAction Stop | Out-Null }
+  catch { Add-Log 'SCREENPIPE' 'WARN' 'Navegador indisponivel' }
+})
+$script:BtnDesktop.Add_Click({
+  Add-Log 'DESKTOP' 'INFO' 'Abrindo painel oficial; troque de conta no site antes de confirmar a segunda'
+  try { Start-Process 'https://mcp.desktopcommander.app/' -ErrorAction Stop | Out-Null }
+  catch { Add-Log 'DESKTOP' 'WARN' 'Navegador indisponivel' }
+})
+$script:BtnVerify.Add_Click({
+  Add-Log 'DESKTOP' 'INFO' 'Conferindo dois perfis sem reiniciar servicos ativos'
+  Start-AccountProbe -StartProfile 'none'
+})
 $timer=New-Object Windows.Forms.Timer
 $timer.Interval=10000
 $timer.Add_Tick({
   if($script:Loading){return}
   $script:Loading=$true
-  try{Local-Refresh;Poll-Remote}catch{Add-Log 'RUNTIME' 'WARN' ('Erro na leitura: '+$_.Exception.Message)}finally{$script:Loading=$false}
+  try{Local-Refresh;Poll-Remote;Refresh-Scripts;Poll-AccountProbe}catch{Add-Log 'RUNTIME' 'WARN' ('Erro na leitura: '+$_.Exception.Message)}finally{$script:Loading=$false}
 })
 $form.Add_Shown({
   try{$split.SplitterDistance=[int][Math]::Max(340,$split.Height*0.52)}catch{}
   Add-Log 'RUNTIME' 'INFO' 'Terminal incorporado nos logs deste HUD; processo PowerShell oculto; nenhum painel/bridge paralelo.'
-  try{Local-Refresh;Poll-Remote}catch{Add-Log 'RUNTIME' 'WARN' $_.Exception.Message}
+  try{Local-Refresh;Poll-Remote;Refresh-Scripts}catch{Add-Log 'RUNTIME' 'WARN' $_.Exception.Message}
   $timer.Start()
 })
 $form.Add_FormClosing({
   $timer.Stop()
   if($script:RemoteJob){Stop-Job $script:RemoteJob -ErrorAction SilentlyContinue;Remove-Job $script:RemoteJob -Force -ErrorAction SilentlyContinue}
+  if($script:AccountProbeJob){Stop-Job $script:AccountProbeJob -ErrorAction SilentlyContinue;Remove-Job $script:AccountProbeJob -Force -ErrorAction SilentlyContinue}
   try{$mutex.ReleaseMutex()}catch{}
   $mutex.Dispose()
 })
