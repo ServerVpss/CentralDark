@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(hud): reconciliar 7 missoes Casa com README e evidencias sem falso verde",
+    "lastCommit": "docs(hud): corrigir formatacao Markdown do receipt e README",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T23:06:32.017Z",
+      "titulo": "Push na main · ea387384109e8d1afa1dcd038e29d1611973d80f",
+      "detalhe": "docs(hud): corrigir formatacao Markdown do receipt e README",
+      "area": "Repositório",
+      "sha": "ea38738",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T23:04:36.653Z",
       "titulo": "Push na main · e109f0b44883d167c6c5dbbe9074d3cc3f2173cc",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "e134a7f",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-10T21:35:49.491Z",
-      "titulo": "Push na main · 3175b384f1d3103872006096faeefba0ee78c7d9",
-      "detalhe": "fix: usar dispatcher do checkout no gate do portal",
-      "area": "Repositório",
-      "sha": "3175b38",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T23:06:32.017Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ea387384109e8d1afa1dcd038e29d1611973d80f (ea38738)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T23:04:36.653Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · e134a7f22ba13a313a96287090ae9ac77485522e (e134a7f)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-10T21:35:49.491Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3175b384f1d3103872006096faeefba0ee78c7d9 (3175b38)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T23:04:36.653Z",
-  "updatedAtBR": "11/10/2026, 20:04:36 BRT"
+  "updatedAt": "2026-10-11T23:06:32.017Z",
+  "updatedAtBR": "11/10/2026, 20:06:32 BRT"
 }
