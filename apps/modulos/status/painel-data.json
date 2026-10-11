@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(memory): apontar vault Casa K em migracao no owner docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/OBSIDIAN-CASA-SINCRONIZACAO.md",
+    "lastCommit": "docs(memory): apontar vault Casa K em migracao no owner mem/index.md",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T23:15:30.751Z",
+      "titulo": "Push na main · 06da8aad878f624d2717661a2ceb9d4901dffe5b",
+      "detalhe": "docs(memory): apontar vault Casa K em migracao no owner mem/index.md",
+      "area": "Repositório",
+      "sha": "06da8aa",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T23:14:52.017Z",
       "titulo": "Push na main · 95fa4e2a3e30290ef191edfafb90d61a0efd4b1c",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "cf70376",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T00:13:45.529Z",
-      "titulo": "Push na main · a21f1131fa56764bd4c4781007fc4b4a8a38d341",
-      "detalhe": "docs(consciencia): cristalizar licao de snapshot redundante e fonte canonica",
-      "area": "Repositório",
-      "sha": "a21f113",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T23:15:30.751Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 06da8aad878f624d2717661a2ceb9d4901dffe5b (06da8aa)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T23:14:52.017Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · cf7037636a1cc51798f260869e1ca9c53cb33ef3 (cf70376)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T00:13:45.529Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · a21f1131fa56764bd4c4781007fc4b4a8a38d341 (a21f113)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T23:14:52.017Z",
-  "updatedAtBR": "11/10/2026, 20:14:52 BRT"
+  "updatedAt": "2026-10-11T23:15:30.751Z",
+  "updatedAtBR": "11/10/2026, 20:15:30 BRT"
 }
