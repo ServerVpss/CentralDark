@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(contract): retire legacy PR-mother receipts in microdeploy recipe; preserve local/versioned proof boundary",
+    "lastCommit": "docs(receipt): seal four-file VPS readback, Casa/VPS probes and runner-counter counterproof",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T10:37:54.565Z",
+      "titulo": "Push na main · 2f02e6b20abebe18862e6fa2740211a89aee6e0d",
+      "detalhe": "docs(receipt): seal four-file VPS readback, Casa/VPS probes and runner-counter counterproof",
+      "area": "Repositório",
+      "sha": "2f02e6b",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T10:27:28.919Z",
       "titulo": "Push na main · 171bdf8a864e0b6ca5482dfe8d9233a66f4167b2",
@@ -332,6 +340,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T10:37:54.565Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2f02e6b20abebe18862e6fa2740211a89aee6e0d (2f02e6b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T10:27:28.919Z",
       "ia": "@segredounlock",
@@ -752,6 +767,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T10:27:28.919Z",
-  "updatedAtBR": "11/10/2026, 07:27:28 BRT"
+  "updatedAt": "2026-10-11T10:37:54.565Z",
+  "updatedAtBR": "11/10/2026, 07:37:54 BRT"
 }
