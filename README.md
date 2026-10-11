@@ -234,10 +234,14 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK(remote_tip==local_sha)
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+RECEIPTS_OWNER=repository
+PR_MOTHER_ROLE=RETIRED
+LEGACY_PR_MOTHERS=#1562,#1757
+NO_NEW_PR_MOTHER=true
+DIRECT_MAIN_MUTATION_REQUIRES_VERSIONED_RECEIPT_WHEN_MATERIAL=true
 ```
 
-Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. PRs #1562 e #1757 são históricos; novos receipts pertencem ao repositório. O HUD CURRENT projeta, não substitui o rastro. Sem isso, não aconteceu.
 
 
 > **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.
