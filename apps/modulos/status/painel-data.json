@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "test(meta-lupa): compare interpretation against real route decisions, preserve unknown impact",
+    "lastCommit": "🧿 FIX(SENTINEL): PRESERVE HEALTHY OBSERVATIONS (#1792)",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T10:17:51.408Z",
+      "titulo": "Push na main · 659d7aac06abc3cb36afb85c507226bb95996a33",
+      "detalhe": "🧿 FIX(SENTINEL): PRESERVE HEALTHY OBSERVATIONS (#1792)",
+      "area": "Repositório",
+      "sha": "659d7aa",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T10:03:17.452Z",
       "titulo": "Push na main · daf32998d30d21dc4bfea34908493963e4f48f1b",
@@ -316,6 +324,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T10:17:51.408Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 659d7aac06abc3cb36afb85c507226bb95996a33 (659d7aa)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T10:03:17.452Z",
       "ia": "@segredounlock",
@@ -722,6 +737,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T10:03:17.452Z",
-  "updatedAtBR": "11/10/2026, 07:03:17 BRT"
+  "updatedAt": "2026-10-11T10:17:51.408Z",
+  "updatedAtBR": "11/10/2026, 07:17:51 BRT"
 }
