@@ -3594,13 +3594,13 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
 var VAULT = '\uD83E\uDEAC Centraldark -HUD\uD83E\uDEAC';
 
 var missions = [
-  {tag:'chefe', label:'Confirmar cockpit pro Lovable', text:'Liberar pro Lovable os enderecos (publico + logado) do cockpit real da CentralDark, pra Hermes poder andar nos 3 lugares.'},
-  {tag:'chefe', label:'Motor do app: Tauri ou Electron', text:'Decisao: motor do centraldark.exe - Tauri (leve, Rust) ou Electron (mais pronto, mais pesado). Bater o martelo.'},
-  {tag:'chefe', label:'Memoria dentro do Obsidian?', text:'Decidir se a memoria da Casa/VPS fica embutida dentro do vault Obsidian da CentralDark (bidirecional) ou separada.'},
-  {tag:'agente', label:'Filtrar Garimpo-Chefe', text:'#acordar - Na pasta E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE, separar as imagens reais (Screenshots, PASTA CHEFE, raiz - ~800) do ruido (.gradle, .codex, pastas _files) e trazer o resultado organizado.'},
-  {tag:'agente', label:'Confirmar equipe do Grok', text:'#acordar - Confirmar por captura de tela a equipe de agentes nomeados na conta Grok do Chefe antes de tratar como fato.'},
-  {tag:'agente', label:'Separar telepainel/CRM/Multizap/bot', text:'#acordar - Assim que o Chefe mostrar o codigo, separar e documentar a distincao entre telepainel, CRM, Multizap e o robo do WhatsApp.'},
-  {tag:'chefe', label:'Hermes: consolidar perfil', text:'Hermes roda em 2 perfis Windows. Decidir: traz o danda pro Administrador ou leva o Administrador pro danda (herda 849 skills). Pendente confirmar acesso ao E:\\CentralDark.'},
+  {tag:'chefe', label:'Cockpit Lovable: autorizar acesso real', text:'O Instinto Superior ja tem Admin na VPS: admin.centralldark.com (/, /auth, /cockpit, /sala-controle HTTP 200 na ultima medicao do README). Falta login autenticado e decidir o acesso autorizado do Lovable, sem copiar sessao nem criar segundo Admin.'},
+  {tag:'chefe', label:'Motor do centraldark.exe (se necessario)', text:'Instinto Superior web ja possui owner apps/instinto-superior; Bolt/Electron e One Shot/Tray sao capacidades/donors existentes. A escolha Tauri x Electron para novo .exe segue decisao do CHEFE, sem concluir que outro aplicativo seja obrigatorio.'},
+  {tag:'agente', label:'Obsidian: provar sync da decisao existente', text:'Decisao ja documentada em docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md: cofre privado separado; 00-CANONICO ligado a docs/BRAIN via sync por hashes, sem sobrescrever conflitos. Agente deve provar caminho fisico atual e E2E; documentado != sincronizado.'},
+  {tag:'agente', label:'Localizar Garimpo-Chefe antes de filtrar', text:'Fato Casa 11/10: E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE nao existe no caminho testado; F:\\_MAPA_CASA existe com chefe-gabinete, mas GARIMPO-CHEFE nao foi localizado em F. Localizar origem real e so entao separar imagens do ruido. Contrato: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GARIMPO-CHEFE.md.'},
+  {tag:'agente', label:'Confirmar equipe do Grok', text:'#acordar - Confirmar por captura autenticada a equipe de agentes nomeados na conta Grok do CHEFE. Sem print e readback, nomes/perfis permanecem UNKNOWN.'},
+  {tag:'agente', label:'TelePainel/CRM/Multizap/bot: provar divisao', text:'README ja diferencia: TelePainel = modulo do Portal; CRM e WhatsApp = produtos; bots/Hermes = owners internos. Confrontar codigo e rotas reais de Multizap e robo antes de declarar separacao operacional ou deploy. Nao retirar servico/OAuth ao alterar UI.'},
+  {tag:'chefe', label:'Hermes: consolidacao de perfis so se util', text:'Casa 11/10: F:\\UnifiedRuntime possui perfis Segredo e Fulano, pasta Fulanoo e bridges; F:\\scripts tem 12 scripts e launcher funcional. Isso nao equivale a migracao dos perfis Windows danda/Administrador nem comprova as 849 skills atuais. Preservar sessoes e decidir consolidacao somente se houver dependencia real.'},
 ];
 
 var missionsEl = document.getElementById('hud-missions');
