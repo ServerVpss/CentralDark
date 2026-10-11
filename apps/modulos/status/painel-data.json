@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(hud): make Zendriver operation inherit canonical three-skin tokens",
+    "lastCommit": "docs(agents): select verified Hermes VPS route while preserving MCP admin approval",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T04:51:57.142Z",
+      "titulo": "Push na main · e73c95c914e9decd0da49d2ac702cfab0e5bf633",
+      "detalhe": "docs(agents): select verified Hermes VPS route while preserving MCP admin approval",
+      "area": "Repositório",
+      "sha": "e73c95c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T04:48:54.280Z",
       "titulo": "Push na main · d2d4078cbc9b41319f68e61c118a067ffd3aed8a",
@@ -260,6 +268,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T04:51:57.142Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e73c95c914e9decd0da49d2ac702cfab0e5bf633 (e73c95c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T04:48:54.280Z",
       "ia": "@segredounlock",
@@ -617,6 +632,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T04:48:54.280Z",
-  "updatedAtBR": "11/10/2026, 01:48:54 BRT"
+  "updatedAt": "2026-10-11T04:51:57.142Z",
+  "updatedAtBR": "11/10/2026, 01:51:57 BRT"
 }
