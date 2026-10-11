@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(vps-deploy): restore canonical paths and SSH bindings from verified workflow",
+    "lastCommit": "fix(neurolink): rebuild canonical manifest from current APRENDIZADOS",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T03:01:43.316Z",
+      "titulo": "Push na main · 2b636425550e6d48e346cea32722b905ca00f2f2",
+      "detalhe": "fix(neurolink): rebuild canonical manifest from current APRENDIZADOS",
+      "area": "Repositório",
+      "sha": "2b63642",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T02:55:21.855Z",
       "titulo": "Push na main · f5996835df5b6786cd348851ea760e383876156d",
@@ -196,6 +204,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T03:01:43.316Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2b636425550e6d48e346cea32722b905ca00f2f2 (2b63642)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T02:55:21.855Z",
       "ia": "@segredounlock",
@@ -497,6 +512,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T02:55:21.855Z",
-  "updatedAtBR": "10/10/2026, 23:55:21 BRT"
+  "updatedAt": "2026-10-11T03:01:43.316Z",
+  "updatedAtBR": "11/10/2026, 00:01:43 BRT"
 }
