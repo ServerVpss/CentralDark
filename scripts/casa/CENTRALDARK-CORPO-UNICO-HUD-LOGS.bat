@@ -203,7 +203,7 @@ function Refresh-Scripts {
     if (-not $script:ScriptPollOnce) { Add-Log 'SCRIPTS' 'UNKNOWN' 'Pasta de scripts indisponivel' }
   }
   if (-not $script:ScriptPollOnce) {
-    Add-Log 'SCRIPTS' 'INFO' ("Catalogo: {0} arquivo(s) em CRISTAL LOGICA\scripts; fonte != executado" -f $sources.Count)
+    Add-Log 'SCRIPTS' 'INFO' ("Catalogo: {0} arquivo(s) em {1}; fonte != executado" -f $sources.Count,$script:ScriptRoot)
     Add-Log 'SCRIPTS' 'INFO' 'tail de logs autorizados: scripts\logs\*.log + bridge preexistente. Nunca le .env.'
   }
   foreach($f in $sources) {
