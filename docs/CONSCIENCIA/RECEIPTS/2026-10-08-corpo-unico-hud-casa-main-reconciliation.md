@@ -247,3 +247,21 @@ Contraprova posterior ao clique com codigo efemero (sem expor codigo no registro
 Nao reabrir prova de `BUTTON_CONTA2_OPEN_AUTH_URL` ja registrada; pendencia apenas comparar qual conta efetivamente possui cada dispositivo por autentificacao legitima no provedor, sem revelar tokens.
 
 **NEXT_CURSOR_T2:** reconciliar ownership das contas com readback autenticado do provedor → se duas contas realmente diferentes, selar so essa clausula → VPS dirty checkout separado → alinhar HTML dourado por seu writer atual e provar hash do mirror Casa/VPS.
+
+### T3 — 2026-10-11 — Mudança física para F:\scripts com mesmo HUD
+
+**Intenção:** preservar o recorte executado pelo CHEFE, sem deslocar novamente OneShot/Remote-Tray/UnifiedRuntime, sem recriar painel e sem alterar credenciais.
+
+**READBACK FÍSICO CASA:**
+- `F:\scripts`: 12 scripts na raiz (incluindo `CENTRALDARK-ABRIR-TUDO.bat` e `CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`) e diretório `_backups`. O caminho `C:\Users\Administrador\Downloads\CRISTAL LOGICA\scripts` não existe mais.
+- Launcher `F:\scripts\CENTRALDARK-ABRIR-TUDO.bat` chama HUD relativo ao próprio diretório (`%~dp0`); `CD_MONITOR_SOURCE` transmite o mesmo caminho ao payload, sem dependência do antigo Downloads.
+- **Único delta de código necessário:** substituição da mensagem literal do catálogo por diretório medido via `$script:ScriptRoot`. `PARSE_ERRORS=0`; commit `6a3b30e9df48fa514112a2eda4a95d35942fca62` no owner `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`. Readback do owner: **conteúdo main == F:\scripts** após normalizar CRLF.
+- GUI anterior encerrada **somente para aplicar essa mudança visual**; mesma GUI reaberta via `F:\scripts\CENTRALDARK-ABRIR-TUDO.bat`; 1 instância ativa e título original.
+- Contraprova do log central: `[19:52:14] [SCRIPTS] [INFO] Catalogo: 12 arquivo(s) em F:\scripts; fonte != executado`.
+- `F:\UnifiedRuntime`, `F:\OneShot`, `F:\Remote-Tray` e `F:\Bridge` preservados nos locais anteriores. Os quatro scripts de LogCollector foram **copiados** anteriormente com SHA-256 para subárvore própria de `CRISTAL LOGICA\scripts` na ocasião; após o recorte a referência a essa cópia deve ser remapeada **somente se necessária**, sem inferir que os coletores foram executados.
+- `F:\UnifiedRuntime\profiles.json` possui ids Segredo/Fulano e active=`Fulanoo`; `F:\UnifiedRuntime\profiles\Fulanoo` **existe** com `bridgemind/binding.json`. Portanto, não renomear `Fulanoo` para `Fulano` às cegas: vínculo runtime versus cadastro ainda precisa readback discriminante.
+- Conta 2 já possuía `ONLINE_LOG` na T2. Mudança de pasta **não equivale a confirmação de duas identidades do provedor**; preservar `TWO_DISTINCT_PROVIDER_ACCOUNTS_AUTHENTICATED=UNKNOWN`.
+
+**SELO ESCOPO:** `F_SCRIPTS=PASS`; `LAUNCHER_F_TO_GUI=PASS`; `SCRIPTS_LOG_REAL_PATH=PASS`; `SOURCE_MAIN_F_SAME_CONTENT=PASS`; `PROFILE_IDENTITY_MAPPING=UNKNOWN`; `FIXED_POINT_GLOBAL=FALSE`.
+
+**NEXT_CURSOR:** sem duplicar entrada nem mover runtime; mapear consumo efetivo do perfil Fulanoo e validar vínculo de e-mail no provedor autenticado antes de qualquer alteração na identidade. Preservar Main != VPS deploy.
