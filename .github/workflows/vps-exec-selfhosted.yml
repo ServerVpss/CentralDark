@@ -782,6 +782,7 @@ jobs:
       HOME: /root
       REPO_DIR: /root/CentralDark
       GH_TOKEN: ${{ github.token }}
+      BEFORE_SHA: ${{ github.event.before || '' }}
       HERMES_APP: CentralDark-Hermes
       RUNTIME_CONTRACT: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
       VALIDATOR: apps/modulos/HERMES-CORE/core/universal-method-contract.mjs
