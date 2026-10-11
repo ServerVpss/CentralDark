@@ -97,6 +97,7 @@ ERROR_SIGNATURES = [
 ]
 
 TRIGGER_ROUTE = {
+    "OBSERVATION_PASS": ["PRESERVE_EVIDENCE", "WAIT_FOR_MATERIAL_DELTA"],
     "PROVIDER_SPENDING_LIMIT": ["MODEL_UNAVAILABLE", "MARK_ROUTE_BROKEN", "MEASURE_ALTERNATIVE_ENGINE_CAPABILITY", "FAILOVER_ALLOWED_ROUTE", "RETEST"],
     "MODEL_EXPIRED": ["MODEL_UNAVAILABLE", "REFRESH_MODEL_CATALOG", "MARK_ROUTE_BROKEN", "MEASURE_ALTERNATIVE_ENGINE_CAPABILITY", "FAILOVER_ALLOWED_ROUTE", "RETEST"],
     "MISSING_PROVIDER_KEY": ["DEPENDENCY_FAILURE", "MARK_OPTIONAL_ROUTE_UNCONFIGURED", "SURFACE_ROUTE_DRIFT_CHECK", "TRY_NEXT_PROVEN_ALLOWED_ROUTE", "RETEST"],
@@ -157,8 +158,12 @@ def route_seals(route: list[str]) -> list[dict[str, str]]:
 
 def normalize_event(raw: dict[str, Any]) -> dict[str, Any]:
     error_text = str(raw.get("error_text") or raw.get("message") or raw.get("detail") or "")
-    signature = str(raw.get("signature") or classify_signature(error_text))
     state = str(raw.get("state") or "FAILURE").upper()
+    observation_pass = bool(
+        state in {"OBSERVED", "PASS", "HEALTHY"}
+        and re.search(r"\bHTTP\s*=?\s*2\d{2}\b", error_text, re.I)
+    )
+    signature = "OBSERVATION_PASS" if observation_pass else str(raw.get("signature") or classify_signature(error_text))
     source_surface = str(raw.get("source_surface") or raw.get("surface") or "UNKNOWN")
     route = TRIGGER_ROUTE.get(signature, TRIGGER_ROUTE["UNKNOWN_ERROR"])
     event = {
@@ -186,7 +191,9 @@ def normalize_event(raw: dict[str, Any]) -> dict[str, Any]:
     ):
         if raw.get(key) is not None:
             event[key] = raw[key]
-    if error_text:
+    if observation_pass:
+        event["observation"] = error_text[:2000]
+    elif error_text:
         event["error_text_sanitized"] = error_text[:2000]
     return event
 
