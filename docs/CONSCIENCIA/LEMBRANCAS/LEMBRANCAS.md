@@ -776,3 +776,12 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - Correcao de procedimento: uma falha na segunda gravacao nao deve gerar divida paralela ou declaracao falsa de ALL DONE. Consolidar no owner canonico, realizar readback em todos os destinos pertinentes e explicitar qualquer lacuna residual.
 - Contraprova: registro da licao completo no owner de Aprendizados; esta Lembranca aponta ao mesmo owner sem criar novo sistema.
 - Leis: ROUTE_FAILURE != GOAL_FAILURE; PARTIAL_WRITE != DONE; EMPTY_LEARNING=REJECT; AUTHORIZED_FALLBACK_ONLY; READBACK_REQUIRED.
+
+
+### [2026-10-10] RECONCILIACAO_12_OCORRENCIAS_20261010 — resolucao por owner existente
+- **Origem e criterio:** amostra de 12 episodios identificados entre sessao atual (8) e outros chats recuperados (4); nao representa todos os erros historicos.
+- **Familias e tratamento:** A: 4 casos de julgamento prematuro (Hydra, snapshot historico, PR filho e recuperacao); B: 4 de fechamento parcial e rota ignorada; C: 3 de promessa sem execucao ou leitura insuficiente; D: 1 de execucao atrasada.
+- **Aplicacao comprovada:** recuperacao visual Hydra por reinicio forçado autorizado; arquivo LEMBRANCAS finalmente atualizado por `mcp__CentralDark__github_create_or_update_file` (commit `979472945c1b6e835e57f64e7765b1113e97a0b8`); readback em APRENDIZADOS e LEMBRANCAS. Nao inventar execucao das correcoes antigas.
+- **Causa tecnica ainda aberta:** `scripts/centraldark/canonical-consumption-gate.mjs` trabalha com secoes numeradas; registro datado nao prova recuperacao pelo executor. Precisa prova de consumo e validacao da linhagem antes de PASS runtime.
+- **Owner de detalhes:** `docs/CONSCIENCIA/APRENDIZADOS.md#RECONCILIACAO_12_OCORRENCIAS_20261010`. Unica matriz causal, sem 12 regras ou arquivos novos.
+- **Contrato:** `REUSE_EXISTING_OWNER`; `SAME_ERROR_FAMILY_SINGLE_RULE`; `DOCUMENTED_NOT_EXECUTED`; `NO_PARALLEL_DEBT`; `READBACK_REQUIRED`.
