@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(consciencia): exigir aprendizado autonomo denso e deduplicado",
+    "lastCommit": "docs(aprendizados): consolidar recovery e evitar divida paralela",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T00:16:13.735Z",
+      "titulo": "Push na main · 952d85dcd1532806c067f18e8118e26a1a7a873c",
+      "detalhe": "docs(aprendizados): consolidar recovery e evitar divida paralela",
+      "area": "Repositório",
+      "sha": "952d85d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T00:15:26.211Z",
       "titulo": "Push na main · cf7037636a1cc51798f260869e1ca9c53cb33ef3",
@@ -140,6 +148,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T00:16:13.735Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 952d85dcd1532806c067f18e8118e26a1a7a873c (952d85d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T00:15:26.211Z",
       "ia": "@segredounlock",
@@ -392,6 +407,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T00:15:26.211Z",
-  "updatedAtBR": "10/10/2026, 21:15:26 BRT"
+  "updatedAt": "2026-10-11T00:16:13.735Z",
+  "updatedAtBR": "10/10/2026, 21:16:13 BRT"
 }
