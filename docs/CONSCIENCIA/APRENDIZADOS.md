@@ -1932,3 +1932,12 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Regra operacional:** primeiro conferir se há conteúdo único fora do repositório, depois classificar `REDUNDANT_CANDIDATE` versus `UNIQUE_DATA`. Snapshot integral do histórico GitHub sem extras conhecidos não é requisito de funcionamento. Com autorização do dono, remoção da cópia local é decisão simples; nunca inferir que arquivos exclusivos ou dados de runtime também estão no GitHub.
 - **Cristal:** `GITHUB_MAIN_AND_HISTORY=CANONICAL_SOURCE`; `OLD_ARCHIVE != LOST_CODE`; `REDUNDANT_BACKUP != REQUIRED_BACKUP`; `SPECULATIVE_RISK != BLOCKER`; `EVIDENCE -> DECISION -> MINIMUM_ACTION -> COUNTERPROOF`.
 - **Prova e limite:** GitHub retornou `status=ahead`, `ahead_by=862`, `behind_by=0`; usuário mostrou diálogo de exclusão, não prova de clique ou remoção efetiva. `ARCHIVE_DELETED=UNKNOWN`.
+
+
+### [2026-10-10] AUTO_LEARNING_QUALITY_GATE_20261010 — cristalização autônoma com densidade e prova
+- **Intenção do CHEFE:** sempre que surgir lição operacional material ou semelhante a aprendizado anterior, reconhecer, confrontar, enriquecer e registrar autonomamente nos owners existentes, sem precisar receber novo `REGISTRA`.
+- **Gatilho:** erro e correção comprovados, contraprova que muda uma decisão, padrão recorrente confirmado, solução reutilizável ou lacuna de raciocínio corrigida.
+- **Qualidade obrigatória:** intenção, contexto e owner; fato versus hipótese; evidência e origem; delta causal; contraprova e limitações; critério de reutilização; próximos passos apenas se reais; deduplicação e atualização da propriedade pertinente no aprendizado existente.
+- **Exclusões:** elogios, conversa repetida, especulação não classificada, dados sensíveis, mera execução sem aprendizado novo, observação sem utilidade transferível. Não criar ID/linhagem artificial sem compilador e readback.
+- **Execução:** atualizar `docs/CONSCIENCIA/APRENDIZADOS.md` e, quando pertinente, `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` usando acesso autorizado; relatar se gravação falhar. Sem afirmar automação contínua fora das sessões ou herança em runtime não demonstrada.
+- **Cristal:** `RECOGNIZE -> COMPARE -> VALIDATE -> ENRICH -> COMMIT -> READBACK -> REUSE`; `EMPTY_LEARNING=REJECT`; `DOCUMENTED != RUNTIME_CONSUMED`.
