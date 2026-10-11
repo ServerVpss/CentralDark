@@ -751,3 +751,12 @@ CURRENT_OVER_HISTORY = true
 - **Promovida:** sim
 
 Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve terminar com selo/receipt explícito. O selo deve preservar MEASURED, UNKNOWN e BLOCKED; não pode converter sensor falho em PASS. Nesta medição, o selo no painel falhou por ENOENT na rota VPS, portanto permanece pendente de readback.
+
+
+### [2026-10-10] Recuperação Hydra na Casa: força operacional com contraprova
+- Intenção: recuperar janela preta do Hydra Launcher na Casa SEGREDO.
+- Execução: encerramento forçado somente de processos Hydra e reinício do aplicativo instalado; novos processos confirmados responsivos.
+- Contraprova: captura enviada pelo CHEFE mostra interface e catálogo carregados após o reinício.
+- Aprendizado: ordem explícita de reinício forçado autoriza o menor ajuste direto, sem destruir dados; processo responsivo não comprova interface renderizada; logs de rede não comprovam causa raiz.
+- Continuidade: Codex Casa e revisão Codex GitHub App atingiram limites de uso específicos. Dependabot/COSTURA e CodeRabbit permanecem owners distintos; workflow Dependabot estava manualmente pausado nesta medição.
+- Estado: RESTART_PASS, VISUAL_PASS, ROOT_CAUSE_UNKNOWN. Detalhes em `docs/CONSCIENCIA/APRENDIZADOS.md`, entrada de 2026-10-10.
