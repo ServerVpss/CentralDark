@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): selar botao Conta 2 e readback Casa-main sem falso verde",
+    "lastCommit": "docs(receipt): contraprova Conta 2 online sem inferir duas identidades autenticadas",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T22:38:50.913Z",
+      "titulo": "Push na main · 3e091bbdcda1dc74d29ea833b49415d12811a79a",
+      "detalhe": "docs(receipt): contraprova Conta 2 online sem inferir duas identidades autenticadas",
+      "area": "Repositório",
+      "sha": "3e091bb",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T22:35:13.625Z",
       "titulo": "Push na main · 0e06a5862a21f531d7e4fe6d4a5ed0f6ce044628",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "bdafbbf",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-10T21:21:24.602Z",
-      "titulo": "Push na main · 7893b3396b29b6b57a191fd378130ee337416a6f",
-      "detalhe": "chore: rollback invalid Hermes adapter workflow to last valid revision",
-      "area": "Repositório",
-      "sha": "7893b33",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T22:38:50.913Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3e091bbdcda1dc74d29ea833b49415d12811a79a (3e091bb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T22:35:13.625Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · bdafbbf250b152fd6625a90320def50b8025894a (bdafbbf)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-10T21:21:24.602Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 7893b3396b29b6b57a191fd378130ee337416a6f (7893b33)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T22:35:13.625Z",
-  "updatedAtBR": "11/10/2026, 19:35:13 BRT"
+  "updatedAt": "2026-10-11T22:38:50.913Z",
+  "updatedAtBR": "11/10/2026, 19:38:50 BRT"
 }
