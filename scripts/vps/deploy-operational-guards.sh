@@ -31,6 +31,21 @@ case "$BACKUP_ROOT_REAL" in
   "$REPO_REAL"|"$REPO_REAL"/*) echo "BACKUP_ROOT_INSIDE_REPOSITORY"; exit 82 ;;
 esac
 [[ -x "$DISPATCHER" ]] || { echo "CANONICAL_DEPLOY_GATE_UNAVAILABLE"; exit 90; }
+# No runtime-owner delta in this push: do not force TLC23 source-sync
+# or touch the map/verifier because a workflow/document changed.
+# The universal gate already checked the exact event SHA and HUD.
+if [[ "${GITHUB_EVENT_NAME:-}" == "push" && "${BEFORE_SHA:-}" =~ ^[0-9a-f]{40}$ && ! "${BEFORE_SHA}" =~ ^0{40}$ ]]; then
+  ORIGIN_URL="$(git -C "$REPO_DIR" remote get-url origin)"
+  [[ "$ORIGIN_URL" =~ github\.com[:/]ServerVpss/CentralDark(\.git)?$ ]] || { echo "GUARDS_ORIGIN_MISMATCH"; exit 92; }
+  git -C "$REPO_DIR" fetch --no-tags origin main >/dev/null
+  git -C "$REPO_DIR" merge-base --is-ancestor "$TARGET_SHA" origin/main || { echo "GUARDS_EVENT_NOT_IN_MAIN"; exit 93; }
+  if git -C "$REPO_DIR" cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null &&      git -C "$REPO_DIR" diff --quiet "$BEFORE_SHA" "$TARGET_SHA" --         "$POLICY_PATH" "$SOURCE_DEPLOY_PATH"         apps/modulos/mapeamento         apps/modulos/HERMES-CORE/agents/Log-Verificador; then
+    echo "GUARDS_RUNTIME_FILESET_UNCHANGED=1; DEPLOY_SKIPPED"
+    echo "deployed=false" >> "$GITHUB_OUTPUT"
+    exit 0
+  fi
+fi
+
 TARGET_SHA="$TARGET_SHA" REPO_DIR="$REPO_DIR" BRANCH=main bash "$DISPATCHER" --gate-only || {
   echo "CANONICAL_TLC23_DEPLOY_GATE=BLOCK"
   exit 91
