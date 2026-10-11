@@ -19,3 +19,15 @@
 JSON deve parsear; `sequence` original permanece inalterada salvo último item; guardas `no_force_push`, `no_blind_reset` e `scratch_worktree.destructive_guard` preservados. YML/MD devem convergir no destino. Hash dos arquivos alterados deve ser relido na main; sincronização VPS é etapa separada.
 **PENDENTE:** gates #1774/#1767 e prove de CI no mesmo HEAD, drift main/VPS e autenticação E2E dos demais módulos. `MERGED != DEPLOYED`, `DOCUMENTED != EXECUTED`, `UNKNOWN != PASS`.
 **NEXT_CURSOR:** `RECONCILE_PR1774_PR1767_GATES_SAME_HEAD_THEN_VPS_DELTA_SAFE`.
+
+## Readback físico pós-microcorreção (observado 2026-10-11T10:22–10:25Z)
+
+- **Commit de origem:** [171bdf8](https://github.com/ServerVpss/CentralDark/commit/171bdf8a864e0b6ca5482dfe8d9233a66f4167b2), cinco arquivos versionados. Os quatro arquivos de contrato foram espelhados individualmente para a VPS após pré-condição de blob SHA exato e backup separado.
+- **Hash igual main ↔ VPS:** `README.md=914d9ba9d4c520c431cfd9b52cecace66773700c`; `MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json=2b820259ff40c6322500a11ec7dfbda9a5655940`; `*.yml=8e635e6014c8f4137a1f3eab33ce92761a55b83f`; `*.md=fbd962b8585ca3a29bbc03ceecab96169af5e896`. `MICRODEPLOY_CONTRACT_CROSSCHECK=PASS` executado no shell VPS.
+- **Consumer vivo:** `centraldark_deploy_recipe_status` passou a devolver último passo `receipt_local_then_reconcile_repository` e `CANONICAL_FALLBACK_RECIPE`. **Isso confirma leitura do contrato e não execução do microdeploy.**
+- **VPS @ 10:24:48Z:** portas `25808,25810,3100,18435,8899,9100,25812` responderam HTTP 200 em `/health` ou `/`; Omni `8099` retornou `000`. `3030` respondeu `/ = 200`, `/health = 404` (endpoint inadequado para provar health). Containers `rakazo-web/api/worker/supervisor/postgres` apareceram `Up`, API/supervisor/postgres `healthy`.
+- **Casa SEGREDO @ 10:24:22Z:** Desktop Commander executou PowerShell 7 autorizado. `9900` escuta por processo Python sob Hermes, `/health` reportou `ok`; `3030` escuta por `screenpipe-app`; `9222,8787,8788,8099,9119` não tinham listener local. Dez processos `Hermes` e cinco `AionUi` observados; múltiplos processos **não** equivalem a múltiplos executores independentes ou sessão E2E validada.
+- **Correção de autocontagem:** um `ps -eo args | grep` produziu contagem contaminável por texto do próprio comando (`6/6`); contraprova `ps -eo comm=` com igualdade do nome identificou **4 `Runner.Listener` e 4 `Runner.Worker`** no instante observado. A contagem antiga fica como erro de instrumento, não vira evidência de concorrência.
+- **Regra de prova:** este receipt + o readback 4/4 comprovam o **delta contratual**. Não afirmam `CI_GLOBAL=PASS`, `VPS_HEAD=main`, `OMNI_8099=PASS`, `RUNTIME_TAILSCALE_E2E=PASS` nem `HERMES_GOAL_COMPLETED`.
+
+**Estado final do escopo:** `MAIN_CONTRACT=PASS`; `VPS_CONTRACT_FILES=PASS`; `RUNTIME_CONSUMER_READBACK=PASS`; `GLOBAL_DEPLOY=PARTIAL`; `CI=FAIL_OWNERS_ACTIVE`; `OMNI_8099=FAIL_PROBE`.
