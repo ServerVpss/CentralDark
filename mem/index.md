@@ -1,5 +1,12 @@
 # Project Memory — índice ativo
 
+## Rota do cofre — 2026-10-11
+
+- `K:\CentralDark` = destino **em migração** do vault Obsidian da Casa (observados `.obsidian` e `HUD.html` no SSD). `K:\CentralDark` não é automaticamente o checkout Git.
+- `F:\` = fonte/legado do movimento em curso; endereços históricos `E:\CentralDark\...` não devem ser promovidos a rotas atuais.
+- `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` continuam owners versionados de memória; `docs/BRAIN` é camada canônica de conhecimento para sync com contraprova. Notas privadas permanecem locais.
+- Estado: `K_VAULT_FILES=OBSERVED`, `F_TO_K_COMPLETE=UNKNOWN`, `SYNC_K_MAIN=UNKNOWN`, `VPS_DEPLOY=UNKNOWN`. A substituição dos caminhos usados pelos executores exige medição depois da cópia.
+
 Este índice não é uma segunda SOUL nem inventário de runtime. Ele roteia somente memória compatível com o contrato atual.
 
 ## Identidade
