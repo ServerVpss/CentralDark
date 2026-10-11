@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(hud): selar subgoal BRAIN e contraprovas CI por SHA sem falso verde",
+    "lastCommit": "docs(hud): registrar SSH Casa→VPS comprovado e drift HUD físico sem falso verde",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,22 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T20:41:39.522Z",
+      "titulo": "Push na main · 71eccc75bf41d324f2065f9068808bb2cbeef393",
+      "detalhe": "docs(hud): registrar SSH Casa→VPS comprovado e drift HUD físico sem falso verde",
+      "area": "Repositório",
+      "sha": "71eccc7",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-11T20:39:06.634Z",
+      "titulo": "Push na main · 5d7196b894a3aa90113914ba8eac0aeba8024bf2",
+      "detalhe": "docs(rotas): selar SSH Casa→VPS pelo Git OpenSSH com readback e escopo",
+      "area": "Repositório",
+      "sha": "5d7196b",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T20:03:46.208Z",
       "titulo": "Push na main · 141782a81bdf19c619b8f250ebc3a1a9a734a161",
@@ -393,25 +409,23 @@
       "area": "Repositório",
       "sha": "e9eeb62",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-10T20:42:32.136Z",
-      "titulo": "Push na main · ab7bda321322c7af0bc6092b2a5d11ef28c595e9",
-      "detalhe": "fix(vps): install jq required by canonical deploy receipts",
-      "area": "Repositório",
-      "sha": "ab7bda3",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-10T20:08:43.5363837Z",
-      "titulo": "Medição Casa/VPS",
-      "detalhe": "Casa CPU 47% medido; VPS CPU UNKNOWN; portas 4174/4175 sem listener; Tailscale VPS→Casa BLOCKED.",
-      "area": "Casa/VPS",
-      "sha": "",
-      "actor": "SOL"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T20:41:39.522Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 71eccc75bf41d324f2065f9068808bb2cbeef393 (71eccc7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-11T20:39:06.634Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5d7196b894a3aa90113914ba8eac0aeba8024bf2 (5d7196b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T20:03:46.208Z",
       "ia": "@segredounlock",
@@ -747,20 +761,6 @@
       "action": "📌 Push na main · e9eeb62aca542c4158d7b0f7ac63bccf77e4180d (e9eeb62)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-10T20:42:32.136Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ab7bda321322c7af0bc6092b2a5d11ef28c595e9 (ab7bda3)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-10T20:08:43.5363837Z",
-      "ia": "@SOL",
-      "action": "📌 Medição Casa/VPS",
-      "area": "Casa/VPS",
-      "status": "bloqueado"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T20:03:46.208Z",
-  "updatedAtBR": "11/10/2026, 17:03:46 BRT"
+  "updatedAt": "2026-10-11T20:41:39.522Z",
+  "updatedAtBR": "11/10/2026, 17:41:39 BRT"
 }
