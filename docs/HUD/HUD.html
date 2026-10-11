@@ -1459,6 +1459,66 @@ body {
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
 <div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">09/10/2026, 20:27 UTC - rotas medidas; Tailscale API 401 / Heart STALE</span></div><div class="cadeado-meta">FONTE OBSERVADA: GitHub main <code>75115cfe063f</code> e API publica <code>api.centralldark.com/health</code>. Este quadro separa CURRENT de historico: API health confirma Hermes Core vivo, mas nao prova inferencia, deploy ou disponibilidade de modelo local. Owner: docs/HUD/HUD.html. READBACK 09/10/2026 20:27 UTC: catalogo MCP 141 ferramentas/13 rotas/20 operacoes; SSH/Tailscale PONG bidirecional, portas 445/5985/3030 e Screenpipe HTTP 200, AionUi HTTP 200. API administrativa Tailscale = HTTP 401 (API token invalid), broker = fetch failed; One Heart HTTP 200 mas self=stale (lag_ms=133427). PASS_GLOBAL = NAO COMPROVADO. Nenhuma credencial, processo ou conexao alterada.</div></div>
+
+<!-- CENTRALDARK_DEPLOY_OPERATION_CURRENT_20261011: append-only evidence snapshot; no runtime-green by inference -->
+<section class="section" id="cd-deploy-operation-current-20261011" data-observed-at="2026-10-11T04:06:58Z" aria-labelledby="cd-deploy-operation-title" style="margin-top:16px">
+  <div class="section-header">
+    <div class="section-icon">🧿</div>
+    <h2 class="section-title" id="cd-deploy-operation-title">Operação corrente · HUD → deploy → Hermes/MCP → selagem</h2>
+    <span class="section-count" id="cd-deploy-operation-age">SNAPSHOT / CONFERIR FRESCOR</span>
+  </div>
+  <p class="cadeado-meta">OWNER ÚNICO: <code>docs/HUD/HUD.html</code> · Snapshot de leitura de 11/10/2026 04:06Z, não estado perpetuamente ao vivo. Fontes: commits da main, GitHub Actions, MCP CentralDark, PR #1793 e readbacks de Casa/VPS. Nenhuma das etapas abaixo transforma CI verde em runtime ou aprova PR automaticamente.</p>
+  <div class="hud-grid">
+    <div class="hud-card"><h3>🧩 MCP nativo · owner systemd</h3>
+      <div class="val ok">WORKFLOW MCP=SUCCESS · RUN 38108320068</div>
+      <div class="meta">Commit <a href="https://github.com/ServerVpss/CentralDark/commit/9630900d" target="_blank" rel="noopener">9630900d</a>: detecta <code>centraldark-native-mcp-http.service</code>, mede health e ignora PM2 quando o fileset do MCP não mudou. Log informado: <code>MCP_NATIVE_HEALTH=PASS; MCP_SOURCE_UNCHANGED; DEPLOY_SKIPPED</code>. SKIP significa nenhuma mutação de MCP nesta rodada, não reinstalação.</div>
+    </div>
+    <div class="hud-card"><h3>⚙️ Hermes + Mapa/Verificador</h3>
+      <div class="val ok">GATES=SUCCESS · NÃO É DEPLOY GLOBAL</div>
+      <div class="meta">Commit <a href="https://github.com/ServerVpss/CentralDark/commit/4434b8f" target="_blank" rel="noopener">4434b8f</a>: <code>BEFORE_SHA</code> e guards dos filesets. Run <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38108320068" target="_blank" rel="noopener">38108320068</a>: TLC23/HUD_FIRST, MCP, Hermes, mapa/verificador, rotas e housekeeping concluídos; regeneração total falhou. Gates SUCCESS não afirmam restart nem nova execução de inferência.</div>
+    </div>
+    <div class="hud-card"><h3>🔧 Regeneração total · autenticação</h3>
+      <div class="val warn">CORREÇÃO NA MAIN · RUN NOVO SEM VEREDITO</div>
+      <div class="meta">Falha anterior: auth efêmera/SSH ausente, exit 14, worktree da VPS com alterações locais preservadas. Commit <a href="https://github.com/ServerVpss/CentralDark/commit/11f81d2b607f3748142bd9002d6ce35b2154e6cc" target="_blank" rel="noopener">11f81d2b</a> repassa autenticação efêmera ao job. <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38110350507" target="_blank" rel="noopener">Run 38110350507</a> estava <strong>QUEUED</strong> na última leitura; <strong>RESULTADO ATUAL = REMEDIR</strong>.</div>
+    </div>
+    <div class="hud-card"><h3>🧬 PR-mãe sucessor #1793</h3>
+      <div class="val warn">OPEN · MERGE PENDENTE</div>
+      <div class="meta"><a href="https://github.com/ServerVpss/CentralDark/pull/1793" target="_blank" rel="noopener">PR #1793</a> aberto, não draft; HEAD medido <code>985e9cfac46d</code>, 58 commits e 24 arquivos. <code>mergeable=true</code> foi leitura pontual, não aprovação. Histórico anterior: 17 workflows ACTION_REQUIRED; verificar gates/checks do HEAD atual antes de merge.</div>
+    </div>
+    <div class="hud-card"><h3>🏠 Casa + VPS · HUD físico</h3>
+      <div class="val warn">SELO ANTERIOR PASS · NOVA REVISÃO REQUER SYNC</div>
+      <div class="meta">Antes destes novos registros, main, Casa/Obsidian e espelho VPS <code>/root/.centraldark/HUD.html</code> tiveram SHA-256 idêntico <code>505ede62d6c189e252508ed783518826616adc3b2788deba5d2265021e355455</code> no run 38107094108. O novo commit deste HUD altera o arquivo: Casa/VPS precisam receber os <em>novos bytes</em> e ter hash relido. Checkout VPS <code>5344bd870</code> estava atrás e modificado; preservar as mudanças locais.</div>
+    </div>
+    <div class="hud-card"><h3>🧠 Aprendizado L / selo S</h3>
+      <div class="val warn">NOVOS NÚMEROS = NÃO EMITIDOS</div>
+      <div class="meta">Manifesto histórico consultado: 169 seções, último rótulo L170; lacunas/duplicatas legadas preservadas. <code>L000 → 0/169</code> abaixo é início do replay documental, NÃO medidor de aprendizagens atuais. Novo aprendizado único exige dedupe + manifesto/readback. Selo <code>Sxxxxxx</code> exige evento no ledger JSONL e readback; não inventar próximo número.</div>
+    </div>
+  </div>
+  <p class="cadeado-prova">NEXT_CURSOR: verificar conclusão do run <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38110350507" target="_blank" rel="noopener">38110350507</a> → tratar apenas job ainda falho → readback do runtime → reconciliar <a href="https://github.com/ServerVpss/CentralDark/pull/1793" target="_blank" rel="noopener">PR #1793</a> → registrar selo operacional numerado e aprendizado novo sem duplicação → sincronizar este mesmo HUD na VPS/Casa e provar SHA-256. <strong>COMMITTED ≠ DEPLOYED · QUEUED ≠ PASS · HISTÓRICO ≠ CURRENT.</strong></p>
+  <p class="cadeado-meta" id="cd-deploy-operation-probe" role="status">Estado ativo: o sensor GitHub MAIN e o sensor MCP existem no próprio HUD; esta placa preserva a última medição. Sem credencial do repositório privado no navegador, a leitura do GitHub pode falhar fechado.</p>
+</section>
+<script>
+(function(){
+  'use strict';
+  var root=document.getElementById('cd-deploy-operation-current-20261011');
+  if(!root)return;
+  var age=document.getElementById('cd-deploy-operation-age');
+  var probe=document.getElementById('cd-deploy-operation-probe');
+  function refresh(){
+    var t=Date.parse(root.getAttribute('data-observed-at')),diff=Date.now()-t;
+    var fresh=Number.isFinite(diff)&&diff>=-60000&&diff<=15*60000;
+    age.textContent=fresh?'SNAPSHOT RECENTE · REMEDIR CHECKS':'SNAPSHOT STALE · VER PENDÊNCIAS';
+    age.title='Observado em '+root.getAttribute('data-observed-at')+'; o runtime e o GitHub podem ter avançado.';
+    var main=document.getElementById('cd-main-observer-status');
+    var mcp=document.getElementById('cd-intent-live-proof');
+    var mainText=main?main.textContent.trim():'SENSOR_MAIN_AUSENTE';
+    var mcpText=mcp?mcp.textContent.trim():'SENSOR_MCP_AUSENTE';
+    probe.textContent='Sensores já existentes: '+mainText+' · '+mcpText+'. Estes sensores não substituem os recibos do deploy e do ledger.';
+  }
+  refresh();setInterval(refresh,60000);
+})();
+</script>
+
 <!-- CURRENT_PROVENANCE_COMPASSO 2026-10-09: ONE_SYSTEM_ONE_HUD; read-only projection -->
 <div class="section cd-index-current" id="cd-hud-compasso-current" data-busca="centraldark index current vps main casa triton kylin proveniencia frescor peso source runtime" data-observed-at="2026-10-09T02:03:19Z" style="margin-top:16px">
  <div class="section-header"><div class="section-icon">&#128065;</div><h2 class="section-title">Index + HUD &middot; Compasso CURRENT</h2><span class="section-count" id="cd-hud-current-age">CALCULANDO FRESCOR</span></div>
@@ -2316,17 +2376,21 @@ try{
 var ctrl=new AbortController();var timeout=setTimeout(function(){ctrl.abort();},6500);
 var response=await fetch(url,{cache:'no-store',mode:'cors',signal:ctrl.signal});clearTimeout(timeout);
 if(!response.ok)throw Error('HTTP_'+response.status);
-var d=await response.json();root.dataset.status=String(d.state||'UNKNOWN');
-txt('cd-intent-live-state',String(d.state||'UNKNOWN')+(d.fixedPoint===true?' · FIXED POINT':' · PENDENTE'));
+var d=await response.json();
+var observedMs=Date.parse(d.observedAt||'');
+var proofFresh=Number.isFinite(observedMs)&&Date.now()-observedMs<=120000&&Date.now()-observedMs>=-60000;
+root.dataset.status=proofFresh?String(d.state||'UNKNOWN'):'STALE';
+txt('cd-intent-live-state',proofFresh?String(d.state||'UNKNOWN')+(d.fixedPoint===true?' · FIXED POINT':' · PENDENTE'):'STALE · ÚLTIMA PROVA ANTIGA');
 txt('cd-intent-live-cursor',d.nextCursor||'NO_RECEIPT');
 var cs=Array.isArray(d.criteria)?d.criteria:[];var pass=cs.filter(function(c){return c.status==='PASS';}).length;var ratio=cs.length?Math.round(100*pass/cs.length):0;
 var bar=document.getElementById('cd-intent-live-fill');if(bar)bar.style.width=ratio+'%';
 var track=document.getElementById('cd-intent-live-progress');if(track)track.setAttribute('aria-valuenow',String(ratio));
-txt('cd-intent-live-proof','MCP '+response.status+' · '+pass+'/'+cs.length+' critérios PASS · medido '+(d.observedAt||'UNKNOWN')+' · HEAD '+(d.currentHead||'UNKNOWN')+' · queue='+(d.queued?'QUEUED':'NO')+' · execution='+(d.executionProven?'PROVEN':'NOT_PROVEN'));
+txt('cd-intent-live-proof','MCP '+response.status+' · '+pass+'/'+cs.length+' critérios PASS · medido '+(d.observedAt||'UNKNOWN')+' · HEAD '+(d.currentHead||'UNKNOWN')+' · queue='+(d.queued?'QUEUED':'NO')+' · execution='+(d.executionProven?'PROVEN':'NOT_PROVEN')+(proofFresh?' · SNAPSHOT FRESCO':' · SNAPSHOT STALE / NÃO PROMOVER PASS'));
 }catch(e){root.dataset.status='UNKNOWN';txt('cd-intent-live-state','UNKNOWN · API indisponível');txt('cd-intent-live-proof','Leitura falhou: '+String(e)+' · NÃO promove verde');}
 }
 document.getElementById('cd-intent-refresh').addEventListener('click',refresh);
 refresh();
+setInterval(refresh,30000); // mesmo sensor existente; não executa missões
 })();
 </script>
 <!-- /CENTRALDARK_INTENT_API_LOOP_V1 -->
