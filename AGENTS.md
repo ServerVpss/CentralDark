@@ -1652,6 +1652,8 @@ PAPEL_HERMES=EXECUTOR_PRESERVACAO_CONTINUIDADE
 PIVETE_ROLE=RETIRED
 
 RAIZ_LOCAL=E:\CentralDark\Pivete\CentralDark
+# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. RAIZ_LOCAL acima descreve checkout legado; NAO usar como destino implicito do Obsidian nem reescrever paths de executores ate smoke test/receipts. C: pessoal intocavel. Movimento ainda nao comprovado concluido.
+
 CASA_PRIMEIRO=SIM
 VPS_POR_ULTIMO=SIM
 
