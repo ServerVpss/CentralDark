@@ -3817,5 +3817,76 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
 })();
 </script>
 
+
+<!-- CENTRALDARK_ZENDRIVER_OPERATION_HUD_20261010: evidence is a snapshot, not live telemetry -->
+<section id="cd-zendriver-forensic-20261010" aria-labelledby="cd-zd-title" style="max-width:1440px;margin:28px auto;padding:22px;border:1px solid #4a6573;border-radius:18px;background:linear-gradient(140deg,#101e2b,#102b32);color:#ecf5fa;font:15px/1.55 system-ui,sans-serif;">
+  <style>
+  #cd-zendriver-forensic-20261010 *{box-sizing:border-box}
+  #cd-zendriver-forensic-20261010 h2{font-size:1.48rem;color:#baf7dc;margin:0 0 6px}
+  #cd-zendriver-forensic-20261010 h3{font-size:1.08rem;color:#c7edfa;margin:0 0 12px}
+  #cd-zendriver-forensic-20261010 .zd-muted{color:#b4c5d3;font-size:.9rem}
+  #cd-zendriver-forensic-20261010 .zd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-top:14px}
+  #cd-zendriver-forensic-20261010 .zd-card{border:1px solid #47606d;border-radius:12px;padding:16px;background:#132735}
+  #cd-zendriver-forensic-20261010 code{color:#c9f3e7;font-size:.85rem;overflow-wrap:anywhere}
+  #cd-zendriver-forensic-20261010 ul{padding-left:20px;margin:8px 0}
+  #cd-zendriver-forensic-20261010 li{margin:7px 0}
+  #cd-zendriver-forensic-20261010 .zd-good{color:#90f6c1}
+  #cd-zendriver-forensic-20261010 .zd-warn{color:#ffd88a}
+  #cd-zendriver-forensic-20261010 a{color:#9cddff;text-decoration:underline}
+  #cd-zendriver-forensic-20261010 .zd-next{border-left:3px solid #ffd88a;padding-left:12px;margin-top:16px}
+  </style>
+  <h2 id="cd-zd-title">🧿 Operação Zendriver / Chromium — mapa de prova e recuperação</h2>
+  <p class="zd-muted">Snapshot de investigação · 2026-10-10 (horário da sessão) · Fonte: consultas MCP VPS, Desktop Commander Casa e GitHub · NÃO É MONITORAMENTO EM TEMPO REAL · MAIN ≠ VPS DEPLOYED</p>
+  <p><strong>Intenção:</strong> encontrar o browser de automação histórico e reconciliar o gateway existente, sem criar outro sistema, expor sessões, apagar perfis ou declarar serviço ativo sem prova.</p>
+  <div class="zd-grid">
+    <article class="zd-card"><h3>🖥️ VPS — evidência física</h3>
+      <ul>
+        <li><span class="zd-good">PASS:</span> <code>/var/tmp/.org.chromium.Chromium.*</code> — 68 entradas, pertencentes a root; HTML/JavaScript, amostras com recursos Vite; vários timestamps de 04/10/2026.</li>
+        <li><span class="zd-good">PASS:</span> código do gateway em <code>/root/CentralDark/apps/modulos/elite-gateway/</code>, especialmente <code>scripts/</code>.</li>
+        <li><span class="zd-warn">NOT_DETECTED:</span> processos com nomes zendriver/chrome/chromium/playwright/elite_gateway na última consulta; portas testadas 9222, 9223, 8765, 8766, 3000, 8080 sem correspondência.</li>
+        <li><span class="zd-warn">ABSENT no caminho testado:</span> <code>/root/.config/zendriver_chatgpt_profile</code>; também não foram encontrados <code>/usr/bin/google-chrome</code>, <code>/usr/bin/chromium</code> ou <code>/usr/bin/chromium-browser</code>.</li>
+        <li><span class="zd-good">PASS:</span> diretório estranho na raiz <code>/</code> cujo nome começa com “Show byte codes to determine checkmark or X characters”; conteúdo interno não inspecionado.</li>
+      </ul>
+    </article>
+    <article class="zd-card"><h3>🏠 Casa — usuário danda</h3>
+      <ul>
+        <li><span class="zd-good">PASS:</span> <code>C:\Users\danda\AppData\Local\ms-playwright\chromium-1228\chrome-win64\chrome.exe</code>.</li>
+        <li><span class="zd-good">PASS:</span> <code>C:\Users\danda\AppData\Local\ms-playwright\chromium_headless_shell-1228\chrome-headless-shell-win64\chrome-headless-shell.exe</code>.</li>
+        <li><span class="zd-good">PASS:</span> <code>C:\Users\danda\AppData\Local\hermes\state.db</code>, <code>logs\</code>, <code>memories\</code> e <code>desktop\sessions.json</code> existem; conteúdo privado não foi exibido.</li>
+        <li><span class="zd-good">PASS:</span> <code>C:\Users\danda\AppData\Local\hermes\config.yaml.bak-zendrive-20260914-151344</code> localizado.</li>
+        <li><span class="zd-warn">UNKNOWN:</span> correspondência entre esse backup e o browser/gateway na VPS; sessão histórica ZENDRIVE <code>20260905_010608</code> não encontrada no índice pequeno consultado.</li>
+      </ul>
+    </article>
+    <article class="zd-card"><h3>🏠 Casa — usuário Administrador</h3>
+      <ul>
+        <li><span class="zd-good">PASS:</span> Chrome for Testing 153 e 154 em <code>C:\Users\Administrador\.cache\puppeteer\chrome\</code>.</li>
+        <li><span class="zd-good">PASS:</span> versão 154 iniciada nesta investigação, processo <code>31708</code> respondeu à consulta inicial.</li>
+        <li><span class="zd-warn">UNKNOWN:</span> se esse browser restaura o painel lateral de ferramentas do ChatGPT; falta verificação visual do resultado.</li>
+        <li><span class="zd-warn">UNKNOWN:</span> SHA-256 do ZIP visto em captura <code>electron-v37.10.3-linux-x64</code> na pasta Downloads, e existência do mesmo artefato na VPS.</li>
+      </ul>
+    </article>
+    <article class="zd-card"><h3>🔌 Rotas e owners existentes</h3>
+      <ul>
+        <li><span class="zd-good">MCP VPS:</span> catálogo CentralDark → <code>mcp_admin_call / execute_command</code> — leitura de processos, portas e filesystem efetuada.</li>
+        <li><span class="zd-good">Casa:</span> Remote Desktop Commander → máquina <code>SEGREDO</code> — listagens em <code>C:\Users\danda</code> e Administrador efetuadas.</li>
+        <li><span class="zd-good">GitHub main:</span> <a href="https://github.com/ServerVpss/CentralDark/tree/main/apps/modulos/elite-gateway">apps/modulos/elite-gateway</a> → <code>install.sh</code> e <code>scripts/{humanizer.py,debug_dom.py,elite_ws_gateway.py}</code>.</li>
+        <li><span class="zd-warn">HISTÓRICO ≠ RUNTIME:</span> código usa Zendriver e aponta o perfil persistente e o Chrome do Linux; isso não comprova processo ativo.</li>
+        <li><span class="zd-warn">ROTA RESTRITA:</span> leituras diretas de alguns arquivos fora das raízes permitidas/buscas remotas sofreram bloqueio; não contornar bloqueios de segurança.</li>
+      </ul>
+    </article>
+  </div>
+  <div class="zd-next">
+    <h3>⚑ VER PENDÊNCIAS — cursor de continuação</h3>
+    <ol>
+      <li><strong>P1 · INVENTÁRIO:</strong> localizar o executável Chromium/Electron da VPS por caminhos reais, versão e hash; não inferir instalação pelos arquivos temporários.</li>
+      <li><strong>P2 · LINHAGEM:</strong> comparar o backup Zendrive da Casa com os scripts do gateway (somente chaves de configuração não secretas) e o registro histórico da sessão.</li>
+      <li><strong>P3 · ORIGEM:</strong> correlacionar os timestamps dos 68 temporários com logs de automação, sem despejar cookies, dados de páginas ou conversas.</li>
+      <li><strong>P4 · RECUPERAÇÃO:</strong> diagnosticar dependências, owner, perfil e porta do gateway, medir consumidores antes de qualquer restart/instalação.</li>
+      <li><strong>P5 · PROVA:</strong> smoke test autorizado → processo + porta + browser + readback → receipt sanitizado no mesmo HUD; só então marcar <code>RUNTIME=PASS</code>.</li>
+    </ol>
+    <p><strong>PLACAR:</strong> <span class="zd-good">Código do gateway: PRESENTE</span> · <span class="zd-good">Atividade Chromium histórica: PROVADA</span> · <span class="zd-warn">Zendriver em execução agora: NÃO DETECTADO</span> · <span class="zd-warn">Build customizado: UNKNOWN</span> · <span class="zd-warn">Restabelecimento funcional: PENDENTE</span>.</p>
+  </div>
+</section>
+
 </body>
 </html>

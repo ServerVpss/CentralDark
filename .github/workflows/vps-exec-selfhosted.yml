@@ -3,7 +3,7 @@ name: ⚙️ VPS Deploy canônico (self-hosted)
 on:
   push:
     branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -219,6 +219,47 @@ jobs:
 
           # Legacy deploy webhook is retired. Reuse the existing PM2 owner only
           # to stop an exact legacy target; never require or recreate it.
+          # Contract owner autodetection: the active MCP may be the already-
+          # installed native systemd unit instead of the legacy PM2 app.
+          # Never install PM2, overwrite the native worktree or restart a
+          # different service to satisfy this legacy workflow.
+          PM2_MCP_READY=false
+          if command -v pm2 >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+            if pm2 jlist 2>/dev/null | jq -e --arg app "$PM2_APP" 'any(.[]; .name == $app and (.pid | tonumber) > 0)' >/dev/null 2>&1; then
+              PM2_MCP_READY=true
+            fi
+          fi
+          if [[ "$PM2_MCP_READY" != "true" ]]; then
+            NATIVE_UNIT="centraldark-native-mcp-http.service"
+            NATIVE_DIR="/root/CentralDark_MCP_RUNTIME/apps/modulos/mcp"
+            [[ "$(systemctl show "$NATIVE_UNIT" --no-pager -p ActiveState --value 2>/dev/null)" == "active" ]] || { echo "MCP_NO_ACTIVE_PM2_OR_NATIVE_OWNER"; exit 48; }
+            [[ "$(systemctl show "$NATIVE_UNIT" --no-pager -p WorkingDirectory --value 2>/dev/null)" == "$NATIVE_DIR" ]] || { echo "MCP_NATIVE_WORKDIR_MISMATCH"; exit 49; }
+            curl -fsS --max-time 3 "$HEALTH_URL" | jq -e '.ok == true and .service == "mcp-centraldark"' >/dev/null || { echo "MCP_NATIVE_PREHEALTH_FAILED"; exit 50; }
+            [[ "${GITHUB_EVENT_NAME:-}" == "push" && "${BEFORE_SHA:-}" =~ ^[0-9a-f]{40}$ && ! "${BEFORE_SHA}" =~ ^0{40}$ ]] || { echo "MCP_NATIVE_EVENT_SCOPE_UNPROVEN"; exit 51; }
+            git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null || { echo "MCP_NATIVE_BEFORE_SHA_MISSING"; exit 52; }
+            CHANGED_MCP="$(git diff --name-only "$BEFORE_SHA" "$TARGET_SHA" -- apps/modulos/mcp)"
+            if [[ -z "$CHANGED_MCP" ]]; then
+              echo "MCP_NATIVE_HEALTH=PASS; MCP_SOURCE_UNCHANGED; DEPLOY_SKIPPED"
+              echo "deployed=false" >> "$GITHUB_OUTPUT"
+              echo "owner_mode=native_systemd" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            NATIVE_ARGS=(--owner mcp --source "$TARGET_SHA")
+            while IFS= read -r rel; do
+              case "$rel" in
+                apps/modulos/mcp/src/index.js|apps/modulos/mcp/dist/index.js|apps/modulos/mcp/src/operational-telemetry.js|apps/modulos/mcp/dist/operational-telemetry.js)
+                  NATIVE_ARGS+=(--file "$rel") ;;
+                *) echo "MCP_NATIVE_SCOPE_NOT_ALLOWLISTED=$rel"; exit 53 ;;
+              esac
+            done <<< "$CHANGED_MCP"
+            [[ -f "$AUTH_REPO/scripts/vps/main-pinned-microdeploy.sh" ]] || { echo "MCP_NATIVE_MICRODEPLOY_SOURCE_MISSING"; exit 54; }
+            bash "$AUTH_REPO/scripts/vps/main-pinned-microdeploy.sh" "${NATIVE_ARGS[@]}"
+            echo "deployed=true" >> "$GITHUB_OUTPUT"
+            echo "owner_mode=native_systemd" >> "$GITHUB_OUTPUT"
+            echo "MCP_NATIVE_MICRODEPLOY=PASS"
+            exit 0
+          fi
+
           WEBHOOK_JSON="$(pm2 jlist | jq -c --arg app "$WEBHOOK_APP" '.[] | select(.name == $app)' | head -n1)"
           if [[ -n "$WEBHOOK_JSON" ]]; then
             WEBHOOK_PID="$(jq -r '.pid // 0' <<<"$WEBHOOK_JSON")"
@@ -420,6 +461,7 @@ jobs:
         env:
           DEPLOY_OUTCOME: ${{ steps.deploy.outcome }}
           MCP_DEPLOYED: ${{ steps.deploy.outputs.deployed }}
+          MCP_OWNER_MODE: ${{ steps.deploy.outputs.owner_mode }}
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -433,7 +475,9 @@ jobs:
               context: 'centraldark/mcp-deploy',
               target_url: `https://github.com/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`,
               description: success
-                ? (deployed ? 'worktree, PM2, health, audit e porta 9300 comprovados' : 'escopo MCP sem mudança; runtime preservado')
+                ? (process.env.MCP_OWNER_MODE === 'native_systemd'
+                    ? (deployed ? 'microdeploy native systemd + health + receipt comprovados' : 'native systemd health PASS; sem delta MCP neste evento')
+                    : (deployed ? 'worktree, PM2, health, audit e porta 9300 comprovados' : 'escopo MCP sem mudança; runtime preservado'))
                 : 'deploy bloqueado em fail-closed; consultar job sanitizado',
             });
 
@@ -825,6 +869,15 @@ jobs:
           # Owner do runner precisa existir ANTES de copiar qualquer contrato.
           # A VPS atual executa Hermes Gateway via systemd; este job legado
           # gerencia SOMENTE o app PM2. Não fingir que ambos são o mesmo runtime.
+          # Event without HERMES-CORE contract delta does not require a
+          # legacy PM2 deployment. The active hermes-gateway.service is a
+          # separate owner and is never restarted by this job.
+          if [[ "${GITHUB_EVENT_NAME:-}" == "push" && "${BEFORE_SHA:-}" =~ ^[0-9a-f]{40}$ && ! "${BEFORE_SHA}" =~ ^0{40}$ ]] && git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+            if git diff --quiet "$BEFORE_SHA" "$TARGET_SHA" -- "${RUNTIME_FILES[@]}"; then
+              echo "HERMES_RUNTIME_CONTRACT_UNCHANGED=1; DEPLOY_SKIPPED"
+              exit 0
+            fi
+          fi
           if ! command -v pm2 >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
             if systemctl is-active --quiet hermes-gateway.service 2>/dev/null; then
               echo "HERMES_RUNTIME_DEPLOY=BLOCKED owner=systemd job_owner=PM2"

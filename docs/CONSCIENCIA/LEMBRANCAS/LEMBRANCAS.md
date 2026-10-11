@@ -348,6 +348,7 @@ NO_MAQUIAGEM=true
 ```
 
 Lembrança operacional: o primeiro alvo do META-GRILL é o próprio executor — Q0 vem antes de Q1-Q5: "estou resolvendo o objetivo do CHEFE ou só o sintoma que apareceu?". O erro não é o centro; o objetivo é. Intenção → objetivo → cláusulas → função que resolve a cláusula UNKNOWN → mundo devolve valor → gate avalia corpo completo → contraprova → Reality Judge pós-efeito → fixed point → receita+fingerprint → próximo executor dá replay. TLC23/Horn é motor de falsificação dentro do fluxo, não portão burocrático. Nunca maquiar verde.
+
 ### [2026-09-30T15:53] Não chamar CentralDark de Claude
 - **Data:** 2026-09-30
 - **Tags:** centraldark-os, identidade, meta-grill, sol-executora, receipts
@@ -374,7 +375,6 @@ NO_PARALLEL_TOOL_FOR_MISSING_NAMESPACE=true
 VOICE_INHERITS_SAME_MATRIX=true
 SOL_EXECUTORA_REUSES_EXISTING_CANONICAL_CONTRACT=true
 ```
-
 
 ### [2026-10-01] SEGREDO — intenção e transformação por invariantes
 - **Data:** 2026-10-01
@@ -506,7 +506,6 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SESSAO-CORPO-FORJA-CONTRATO-BAYES-FUNIL.md`
 - **Conteúdo:** corpo único CentralDark-OS; Casa/VMware como forja; VPS como twin headless; SELF-GRILL docs-first; contrato portátil; Bayes da reancoragem; funil de dedupe/absorção; Meta-Lupa/Meta-Multibússola; matriz causal de vermelhos.
 
-
 ### [2026-10-02] Erro estruturado é vetor de reparo
 - **Tipo:** LEARNING_INDEX
 - **Learning:** #143
@@ -518,13 +517,11 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHANNEL-LIMIT-COMPACT-RECORD-EXPANDED-REMEMBRANCE.md`
 - **Conteúdo:** quando o canal barra registro grande, compactar no canônico, guardar expansão recuperável em Lembranças, backlinkar e continuar no mesmo owner; sem v1/v2/v3.
 
-
 ### [2026-10-02] CHAT_GLOBAL — superfície, capability e evidência
 - **Tipo:** LEARNING_INDEX
 - **Learning:** #145
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVIDENCE.md`
 - **Conteúdo:** ChatGPT/Claude/Gemini/Grok são superfícies da classe `CHAT_GLOBAL`; capability deriva do toolset medido. `GITHUB_ACCESS != SHELL_ACCESS`; evidência medida vence inferência não medida no mesmo claim/escopo/tempo; provenance histórica de marca é preservada.
-
 
 ### [2026-10-02] Sistema híbrido multirota, bidirecional e transversal
 - **Tipo:** LEARNING_INDEX
@@ -559,7 +556,6 @@ LATEX_FORMULAS_LIVE_IN_PORTABLE_CONTRACT=true
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-PREFLIGHT-GLOBAL-CROSS-CONTEXT-CENTRALDARK.md`
 - **Owner:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`
 - **Conteúdo:** qualquer resposta/ação CentralDark em fio atual ou futuro reentra no preflight; intenção do CHEFE + main CURRENT + PR-mãe #1562 + PRs abertos + checklist + núcleo + Aprendizados + Lembranças + owner/runtime aplicável são cruzados antes do retorno. Todo artefato do repositório herda o contrato por pertencimento; fonte necessária indisponível mantém apenas o claim afetado UNKNOWN; resposta genérica substitutiva é proibida.
-
 
 ### [2026-10-03] Conhecimento legado do CHEFE — MU/XPZone/Windows/DB → invariante local reutilizável
 - **Data:** 2026-10-03
@@ -642,8 +638,6 @@ CURRENT_OVER_HISTORY = true
 - **Prova:** `CRYSTAL_RUNTIME_COMPILER_TEST=PASS` executado na VMware com plano `centraldark.compiled-plan.v2`.
 - **Cristal:** `PYTHON=KNOWLEDGE_EXECUTABLE_BACKEND`; `JSON=MATERIALIZED_CRYSTAL`; `HASH=IDENTITY`; `RECEIPT=RUNTIME_EFFECT_PROOF`.
 
-
-
 ### [2026-10-03] Hermes — intenção = escopo global, ferramenta = braço
 - **Tipo:** LEARNING_INDEX / SESSION_MEMORY
 - **Learning:** #157
@@ -657,7 +651,6 @@ CURRENT_OVER_HISTORY = true
 - **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-SEM-LEI-ANTI-FRICCAO.md`
 - **Conteúdo:** intenção governa; capacidade é neutra; poder técnico não implica malícia; ritual/checklist/gate interno não é permissão nem freio global. Contexto e prova entram por pertinência; UNKNOWN bloqueia somente claim dependente.
 - **Cristal:** `SEM_LEI=true`; `CAPABILITY_IS_NEUTRAL=true`; `PERTINENT_CONTEXT_ONLY=true`; `ALL_LEARNINGS_BOOT=false`; `CANONICAL_GATE_NON_BLOCKING=true`.
-
 
 ### [2026-10-04] Hermes + Kylin local + AionUi + capacidade agêntica — fixed point
 - **Tipo:** LEARNING_INDEX / RUNTIME_FIXED_POINT
@@ -675,8 +668,6 @@ CURRENT_OVER_HISTORY = true
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-04-multimodal-context-symbolic-execution.md`
 - **Conteúdo:** fechar bytes/metadados, cobertura visual, áudio e transcrição antes de promover interpretação; cue simbólico recupera receita/contexto, mas não concede write sozinho; provider conectado pode fechar gap sem virar owner; claim local/nativo permanece separado.
 - **Cristal:** `MULTIMODAL_COMPLETE_BEFORE_ACTION=true`; `CUE_IS_POINTER_NOT_AUTHORITY=true`; `CONNECTED_PROVIDER_CAN_CLOSE_CAPABILITY_GAP_WITHOUT_BECOMING_OWNER=true`; `ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true`.
-
-
 
 ### [2026-10-04] SOL ↔ HERMES — Pivete aposentado como papel técnico
 - **Tipo:** LEARNING_INDEX / ROLE_BINDING
@@ -710,7 +701,6 @@ CURRENT_OVER_HISTORY = true
 - **Conteúdo:** Hermes permanece corpo executor e continuidade; o modelo selecionado no Hermes é motor do orquestrador; o modelo local CURRENT é worker cognitivo pesado; Self-Evolution reutiliza donor oficial e resolve optimizer/evaluator no início de cada lote; cron horário mantém metabolismo sem chamar modelo quando nada mudou; `/heartbeat` é o coração único e o HUD é projeção.
 - **Cristal:** `MODEL_NAME_IS_BINDING=true`; `ORCHESTRATOR=HERMES_CURRENT_SELECTED_MODEL`; `LOCAL_WORKER=CENTRALDARK_CURRENT_LOCAL_MODEL`; `MID_LOTE_MODEL_SWAP=false`; `ONE_HEART=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `NO_SECOND_EVOLUTION_ENGINE=true`.
 
-
 ### [2026-10-06] Criterion hereditário + Oráculo setorial + Preview
 - **Tipo:** LEARNING_INDEX / SESSION_CRYSTAL / ORACLE_SURFACE
 - **Learning:** #165
@@ -730,7 +720,6 @@ CURRENT_OVER_HISTORY = true
 - **Conteúdo:** #1562 é predecessor histórico preservado e não mergeado; #1757 é a casca/rendezvous ativa. Comentários deixam de ser armazenamento primário de receipt; Git versionado guarda a memória durável e o body da PR ativa fica como HUD compacto atualizado no lugar.
 - **Cristal:** `LEGACY_IS_PRESERVED=true`; `SHELL_IS_MUTABLE=true`; `COMMENTS_ARE_NOT_PRIMARY_LEDGER=true`; `RECEIPTS_LIVE_IN_REPOSITORY=true`; `ONE_ACTIVE_RENDEZVOUS=true`.
 
-
 ### [2026-10-06] Catálogo MCP unificado — tools + rotas + Screenpipe + Desktop Commander
 - **Tipo:** LEARNING_INDEX / MCP_CAPABILITY_CATALOG / MULTIROUTE_METABOLISM
 - **Learning:** #168
@@ -739,7 +728,6 @@ CURRENT_OVER_HISTORY = true
 - **Receita:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`
 - **Conteúdo:** o mesmo catálogo MCP descreve tools internas e rotas/capabilities externas. Remote Desktop Commander e Screenpipe compartilham o catálogo, mas preservam estados independentes e exigem remedição no binding.
 - **Cristal:** `ONE_MCP_CATALOG=true`; `RDC_STATE != SCREENPIPE_STATE`; `CATALOG_ENTRY != RUNTIME_HEALTH`; `ONE_ROUTE_FAILED != SYSTEM_FAILED`.
-
 
 ### [2026-10-06] Hermes delegado + Screenpipe CLI no metabolismo
 - **Tipo:** LEARNING_INDEX / EXECUTOR_PROOF / SCREENPIPE_CLI / MCP_CATALOG
@@ -762,3 +750,47 @@ CURRENT_OVER_HISTORY = true
 - **Conteúdo:** o cockpit CentralDark passa a ser extensão nativa do próprio Hermes Desktop, reutilizando gateway/model/profile/subagents/tool calls/jobs/logs já existentes. Obsidian e Hermes Desktop são duas projeções da mesma telemetria e não criam segundo organismo, daemon, porta, scheduler, banco ou HUD owner.
 - **Cristal:** `HERMES_DESKTOP_NATIVE_EXTENSION=true`; `CENTRALDARK_COCKPIT_IS_PLUGIN_NOT_SECOND_APP=true`; `OBSIDIAN_AND_HERMES_DESKTOP_SHARE_TELEMETRY=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `NO_SECOND_HUD_OWNER=true`; `REUSE_EXISTING_HERMES_STATE_AND_LOGS=true`.
 - **Next cursor:** materializar o menor plugin nativo no Hermes Desktop e provar hot-load/readback visual sem criar runtime paralelo.
+
+### [2026-10-10T17:10] Selo obrigatório após toque operacional
+- **Data:** 2026-10-10
+- **Tags:** selo, receipt, readback, unknown-nao-pass, casa-vps
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-09
+- **Promovida:** sim
+
+Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve terminar com selo/receipt explícito. O selo deve preservar MEASURED, UNKNOWN e BLOCKED; não pode converter sensor falho em PASS. Nesta medição, o selo no painel falhou por ENOENT na rota VPS, portanto permanece pendente de readback.
+
+
+### [2026-10-10] Recuperação Hydra na Casa: força operacional com contraprova
+- Intenção: recuperar janela preta do Hydra Launcher na Casa SEGREDO.
+- Execução: encerramento forçado somente de processos Hydra e reinício do aplicativo instalado; novos processos confirmados responsivos.
+- Contraprova: captura enviada pelo CHEFE mostra interface e catálogo carregados após o reinício.
+- Aprendizado: ordem explícita de reinício forçado autoriza o menor ajuste direto, sem destruir dados; processo responsivo não comprova interface renderizada; logs de rede não comprovam causa raiz.
+- Continuidade: Codex Casa e revisão Codex GitHub App atingiram limites de uso específicos. Dependabot/COSTURA e CodeRabbit permanecem owners distintos; workflow Dependabot estava manualmente pausado nesta medição.
+- Estado: RESTART_PASS, VISUAL_PASS, ROOT_CAUSE_UNKNOWN. Detalhes em `docs/CONSCIENCIA/APRENDIZADOS.md`, entrada de 2026-10-10.
+
+
+### [2026-10-10] Cópia histórica E: sem pendência artificial
+- **Lembrança do CHEFE:** `E:\centraldark-main.tar.gz` era snapshot da revisão `799c339` da CentralDark; leitura local provou o conteúdo e consulta GitHub mostrou `main` 862 commits à frente e zero atrás. O usuário pontuou que pode baixar a mesma revisão diretamente no GitHub quando quiser.
+- **Aprendizado aplicado:** não insistir em preservar cópia local redundante por risco genérico depois de estabelecer a fonte canônica. Conferir exclusividade real; se não houver conteúdo único, tratar como candidato a descarte autorizado, não como backup obrigatório.
+- **Estado:** inspeção read-only e comparativo comprovados; exclusão local não executada nem confirmada. `ARCHIVE_DELETED=UNKNOWN`.
+- **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md` — entrada Hakai de pacote redundante.
+
+
+### [2026-10-10] Aprendizado autonomo com qualidade e fechamento integral
+- Owner canonico: docs/CONSCIENCIA/APRENDIZADOS.md, contrato AUTO_LEARNING_QUALITY_GATE_20261010.
+- Decisao do CHEFE: reconhecer, comparar, validar, enriquecer e registrar autonomamente aprendizados materiais, sem entradas vazias ou duplicadas.
+- Recuperacao: diante de falha tecnica transitoria de ferramenta, classificar, aguardar 10 segundos quando adequado e testar novamente com limite; consultar outra rota ja autorizada (Casa, VPS, GitHub, SSH/Tailscale) sem contornar bloqueios explicitos de seguranca.
+- Correcao de procedimento: uma falha na segunda gravacao nao deve gerar divida paralela ou declaracao falsa de ALL DONE. Consolidar no owner canonico, realizar readback em todos os destinos pertinentes e explicitar qualquer lacuna residual.
+- Contraprova: registro da licao completo no owner de Aprendizados; esta Lembranca aponta ao mesmo owner sem criar novo sistema.
+- Leis: ROUTE_FAILURE != GOAL_FAILURE; PARTIAL_WRITE != DONE; EMPTY_LEARNING=REJECT; AUTHORIZED_FALLBACK_ONLY; READBACK_REQUIRED.
+
+
+### [2026-10-10] RECONCILIACAO_12_OCORRENCIAS_20261010 — resolucao por owner existente
+- **Origem e criterio:** amostra de 12 episodios identificados entre sessao atual (8) e outros chats recuperados (4); nao representa todos os erros historicos.
+- **Familias e tratamento:** A: 4 casos de julgamento prematuro (Hydra, snapshot historico, PR filho e recuperacao); B: 4 de fechamento parcial e rota ignorada; C: 3 de promessa sem execucao ou leitura insuficiente; D: 1 de execucao atrasada.
+- **Aplicacao comprovada:** recuperacao visual Hydra por reinicio forçado autorizado; arquivo LEMBRANCAS finalmente atualizado por `mcp__CentralDark__github_create_or_update_file` (commit `979472945c1b6e835e57f64e7765b1113e97a0b8`); readback em APRENDIZADOS e LEMBRANCAS. Nao inventar execucao das correcoes antigas.
+- **Causa tecnica ainda aberta:** `scripts/centraldark/canonical-consumption-gate.mjs` trabalha com secoes numeradas; registro datado nao prova recuperacao pelo executor. Precisa prova de consumo e validacao da linhagem antes de PASS runtime.
+- **Owner de detalhes:** `docs/CONSCIENCIA/APRENDIZADOS.md#RECONCILIACAO_12_OCORRENCIAS_20261010`. Unica matriz causal, sem 12 regras ou arquivos novos.
+- **Contrato:** `REUSE_EXISTING_OWNER`; `SAME_ERROR_FAMILY_SINGLE_RULE`; `DOCUMENTED_NOT_EXECUTED`; `NO_PARALLEL_DEBT`; `READBACK_REQUIRED`.

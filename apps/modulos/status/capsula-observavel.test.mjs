@@ -290,6 +290,11 @@ test('append com lock aceita evento, rejeita drift e não altera o ledger', () =
   const before = readFileSync(ledger, 'utf8');
   assert.match(before, /erro-classe-a/);
   assert.equal(statSync(ledger).mode & 0o777, 0o600);
+  const sealed = JSON.parse(readFileSync(ledger, 'utf8').trim());
+  assert.equal(sealed.seal_number, 1);
+  assert.equal(sealed.seal_id, 'S000001');
+  assert.equal(sealed.seal_proof_hash, sealed.evidence_hash);
+  assert.equal(sealed.next_cursor, 'S000002');
 
   writeFileSync(drift, JSON.stringify(event({ iteration: 2, candidate_digest: DIGEST_B, evidence_hash: HASH_B })), 'utf8');
   assert.throws(() => main(['--ledger', ledger, '--append-event', drift]), /LEDGER_REJECTED/);
