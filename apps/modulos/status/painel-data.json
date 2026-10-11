@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(hud): corrigir formatacao Markdown do receipt e README",
+    "lastCommit": "docs(obsidian): apontar K CentralDark como destino da migracao e qualificar rotas legadas",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T23:12:14.973Z",
+      "titulo": "Push na main · dc10001c92f11c2494bfd5d09db15abb898ba636",
+      "detalhe": "docs(obsidian): apontar K CentralDark como destino da migracao e qualificar rotas legadas",
+      "area": "Repositório",
+      "sha": "dc10001",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T23:06:32.017Z",
       "titulo": "Push na main · ea387384109e8d1afa1dcd038e29d1611973d80f",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "53e680a",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T00:04:51.845Z",
-      "titulo": "Push na main · e134a7f22ba13a313a96287090ae9ac77485522e",
-      "detalhe": "docs(consciencia): registrar recuperacao Hydra e aprendizado operacional Casa 2026-10-10",
-      "area": "Repositório",
-      "sha": "e134a7f",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T23:12:14.973Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · dc10001c92f11c2494bfd5d09db15abb898ba636 (dc10001)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T23:06:32.017Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 53e680a0f61d5dd882b6b380afc5e8cb50379bed (53e680a)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T00:04:51.845Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e134a7f22ba13a313a96287090ae9ac77485522e (e134a7f)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T23:06:32.017Z",
-  "updatedAtBR": "11/10/2026, 20:06:32 BRT"
+  "updatedAt": "2026-10-11T23:12:14.973Z",
+  "updatedAtBR": "11/10/2026, 20:12:14 BRT"
 }
