@@ -2344,6 +2344,43 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <!-- /CD_GENESIS_REPLAY_V1 -->
+<!-- CD_HUD_CONTROL_CENSUS_V1: observer only; not proof of server-side action -->
+<section class="section" id="cd-hud-control-census" data-owner="docs/HUD/HUD.html" style="margin-top:16px">
+ <div class="section-header"><h2 class="section-title">🧿 Auditoria determinística · Botões × Gênesis</h2><span class="section-count" id="cd-control-verdict">MEDINDO</span></div>
+ <div class="cadeado-meta">Inventário do mesmo HTML, sem novo executor: DOM presente ≠ evento recebido ≠ efeito no runtime. Nenhum elo recebe PASS operacional por clique ou replay documental.</div>
+ <div class="hud-grid" style="margin-top:12px">
+  <div class="hud-card"><h3>Botões presentes</h3><div class="val" id="cd-control-count">MEDINDO</div><div class="meta">Somente elementos button visíveis no documento, incluindo diálogos</div></div>
+  <div class="hud-card"><h3>Destinos das abas</h3><div class="val" id="cd-control-tabs">MEDINDO</div><div class="meta">data-tab → id tab-…; sem rota inventada</div></div>
+  <div class="hud-card"><h3>Gênesis documental</h3><div class="val" id="cd-control-genesis">MEDINDO</div><div class="meta">Replay histórico ≠ 169 execuções</div></div>
+  <div class="hud-card"><h3>Execução E2E</h3><div class="val warn" id="cd-control-runtime">UNKNOWN</div><div class="meta">Requer receipt atual do executor canônico</div></div>
+ </div>
+ <p id="cd-control-gaps" class="cadeado-meta" role="status">AGUARDANDO INVENTÁRIO</p>
+</section>
+<script>
+(function(){
+ 'use strict';
+ function audit(){
+  var buttons=Array.from(document.querySelectorAll('button'));
+  var tabs=buttons.filter(function(b){return b.hasAttribute('data-tab')});
+  var missing=tabs.map(function(b){return b.getAttribute('data-tab')}).filter(function(id){return !document.getElementById('tab-'+id)});
+  var ids=buttons.map(function(b){return b.id}).filter(Boolean);
+  var duplicateIds=ids.filter(function(id,i){return ids.indexOf(id)!==i});
+  var genesis=document.getElementById('cd-genesis-replay');
+  var genesisOK=Boolean(genesis && document.getElementById('cdr-run') && document.getElementById('cdr-step') && document.getElementById('cdr-reset') && document.getElementById('cdr-operator-send'));
+  function set(id,value){var el=document.getElementById(id);if(el)el.textContent=value}
+  set('cd-control-count',String(buttons.length));
+  set('cd-control-tabs',(tabs.length-missing.length)+'/'+tabs.length+' destinos');
+  set('cd-control-genesis',genesisOK?'169 elos · replay':'CONTRATO AUSENTE');
+  set('cd-control-runtime','UNKNOWN · sem receipt');
+  var errors=missing.map(function(x){return 'ABA_SEM_ALVO='+x}).concat(duplicateIds.map(function(x){return 'BUTTON_ID_DUPLICADO='+x}));
+  if(!genesisOK)errors.push('GENESIS_UI_INCOMPLETA');
+  set('cd-control-verdict',errors.length?'DOM_BLOCKED':'DOM_STRUCTURE_PASS');
+  set('cd-control-gaps',errors.length?errors.join(' | '):'Estrutura local consistente; handlers, chamadas remotas e efeitos exigem prova própria.');
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',audit,{once:true});else audit();
+})();
+</script>
+
 <!-- CENTRALDARK_INTENT_API_LOOP_V1 -->
 <section class="section" id="cd-intent-api-loop" data-status="UNKNOWN" aria-label="Intenção tipada e progresso real da API">
 <h2 class="section-title">🧠 Instinto Superior · Intenção → Realidade → Δ → Fixed Point</h2>
