@@ -315,8 +315,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m pip install --disable-pip-version-check "numpy>=1.26" "safetensors>=0.4.5"
-          python3 -m unittest discover -s infra/mcp/tests -v
+          # Reutiliza o isolamento --target ja comprovado para pytest neste workflow.
+          # PEP 668: nunca instalar no Python global do runner persistente.
+          SEMANTIC_TARGET="${RUNNER_TEMP}/centraldark-semantic-${GITHUB_RUN_ID}"
+          mkdir -p "${SEMANTIC_TARGET}"
+          python3 -m pip install --disable-pip-version-check --target "${SEMANTIC_TARGET}" "numpy>=1.26" "safetensors>=0.4.5"
+          PYTHONPATH="${SEMANTIC_TARGET}${PYTHONPATH:+:${PYTHONPATH}}" python3 -m unittest discover -s infra/mcp/tests -v
 
       - name: 🔹 Receipt determinístico (sempre)
         if: always()
