@@ -1954,3 +1954,11 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Familia D, execucao atrasada (1):** D1 cobranca historica de execucao direta em 29/09. **Correcao:** quando acao e segura, autorizada, reversivel e executavel com owners existentes, executar menor delta e provar efeito sem prolongar diagnostico; nao aplicar forca destrutiva.
 - **Estados:** A1=EFFECT_PROVEN; A2=CLASSIFICATION_PROVEN_DELETE_UNKNOWN; A3/A4=HISTORICAL_REVIEW_ONLY; B1-B4=DOCUMENTARY_FIXED_READBACK; C1=CLAIM_CORRECTED_RUNTIME_UNKNOWN; C2=INVENTORY_AGGREGATED_NOT_FULL; C3=CONSUMPTION_TEST_PENDING; D1=BEHAVIORAL_CONTRACT_ONLY.
 - **Lei de consolidacao:** `SIMILAR_ERROR -> EXISTING_OWNER -> SINGLE_CAUSAL_RULE -> EFFECT_TEST -> RECEIPT`; `DOCUMENTED != EXECUTED`; `NO_PARALLEL_DEBT`; `NOT_EVERY_INCIDENT_REQUIRES_NEW_CODE`.
+
+
+### [2026-10-10] PROGRESSO_PARCIAL_COMPROVADO_20261010 — continuar do que ja passou
+- **Ensino do CHEFE (sensei):** resultado parcial medido e avanco real, mesmo sem conclusao integral. Nao classificar o conjunto como fracasso, nem alegar ALL DONE.
+- **Fato:** `scripts/skill-sync-check.sh --apply` executado na VPS, `exitCode=0`, 28 skills opt-in / 56 alvos: `SYNCED=49`, `ORACLE_REQUIRED=7`, `UPDATED=0`, `MAIN_RUNTIME_LOCK=PARTIAL`; nova leitura `--check` confirmou as sete divergencias. Nenhuma copia independente foi sobrescrita.
+- **Causa do erro de avaliacao:** comunicar apenas `nao concluido` ocultava o valor dos 49 alinhamentos e induzia narrativa de reinicio total.
+- **Correcao de estado:** manter placar por alvo e progresso acumulado, revalidar os 49 por hash/SHA quando retomar e reconciliar somente os 7 divergentes no owner existente com contraprova. `SYNCED` e verificacao de alinhamento, nao significa 49 arquivos alterados nesta rodada.
+- **Criterio:** `PROGRESSO_PROVEN != GLOBAL_DONE`; `PARTIAL_PASS != FAILURE`; `NEXT_CURSOR=7_ORACLE_DRIFTS`; `NO_BLIND_OVERWRITE`; `DONT_REDO_PROVEN_WORK`.
