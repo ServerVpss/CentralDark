@@ -27,7 +27,7 @@ sequence:
 - WAIT_READINESS
 - MEASURE_RUNTIME
 - COMPARE_EXPECTED_EFFECT
-- RECEIPT_PR_1562
+- RECEIPT_LOCAL_THEN_RECONCILE_REPOSITORY
 locks:
   UNKNOWN_IS_NOT_PASS: true
   NO_FORCE_PUSH: true
@@ -67,3 +67,14 @@ scratch_worktree:
     - /root/CentralDark
     - RUNTIME_ROOT
     - PRIMARY_REPO_ROOT
+receipt_policy:
+  authority: docs/CONSCIENCIA/LEDGER-SURFACE-ANCHOR.md
+  owner: repository
+  runtime_receipt_file: logs/receipts/main-pinned-<OWNER>-<STAMP>.json
+  runtime_receipt_is_versioned_proof: false
+  repository_readback_required_for_global_seal: true
+  local_only: PARTIAL_NOT_GLOBAL_SEAL
+  legacy_pr_mothers:
+  - '#1562'
+  - '#1757'
+  no_new_pr_mother: true
