@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(deploy): detect native systemd MCP and scope Hermes PM2 deployment",
+    "lastCommit": "fix(deploy): feed Hermes event SHA and skip unchanged guards owner",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T03:33:55.038Z",
+      "titulo": "Push na main · 4434b8f692956a38c033334b9d275d337d4ac9c4",
+      "detalhe": "fix(deploy): feed Hermes event SHA and skip unchanged guards owner",
+      "area": "Repositório",
+      "sha": "4434b8f",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T03:21:48.338Z",
       "titulo": "Push na main · 9630900d260b5a9ae23837dc0bbe0dd81a3aca19",
@@ -212,6 +220,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T03:33:55.038Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4434b8f692956a38c033334b9d275d337d4ac9c4 (4434b8f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T03:21:48.338Z",
       "ia": "@segredounlock",
@@ -527,6 +542,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T03:21:48.338Z",
-  "updatedAtBR": "11/10/2026, 00:21:48 BRT"
+  "updatedAt": "2026-10-11T03:33:55.038Z",
+  "updatedAtBR": "11/10/2026, 00:33:55 BRT"
 }
