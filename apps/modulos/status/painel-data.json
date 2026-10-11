@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(hud): refresh existing MCP intent probe and flag stale evidence",
+    "lastCommit": "fix(agents): verify canonical file by exact path before declaring absence",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-11T04:20:48.431Z",
+      "titulo": "Push na main · aef665cb9b030628352a0412efe022f7d25d4d04",
+      "detalhe": "fix(agents): verify canonical file by exact path before declaring absence",
+      "area": "Repositório",
+      "sha": "aef665c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-11T04:15:19.047Z",
       "titulo": "Push na main · 33001f6ae133cc024a4ffcd5315dee2a8cca8d06",
@@ -236,6 +244,13 @@
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-11T04:20:48.431Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · aef665cb9b030628352a0412efe022f7d25d4d04 (aef665c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-11T04:15:19.047Z",
       "ia": "@segredounlock",
@@ -572,6 +587,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-11T04:15:19.047Z",
-  "updatedAtBR": "11/10/2026, 01:15:19 BRT"
+  "updatedAt": "2026-10-11T04:20:48.431Z",
+  "updatedAtBR": "11/10/2026, 01:20:48 BRT"
 }
