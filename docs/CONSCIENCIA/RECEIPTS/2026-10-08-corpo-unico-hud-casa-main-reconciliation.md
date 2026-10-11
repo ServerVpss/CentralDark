@@ -233,3 +233,17 @@ NEXT_CURSOR=SITE_DEPLOY_SAME_SHA_AND_PUBLIC_PLAQUE_READBACK -> ADMIN_ROUTE_OWNER
 **Veredito escopado:** `LOCAL_HUD_GUI=PASS`; `BUTTON_CONTA2_OPEN_AUTH_URL=PASS`; `CODE_NOT_LOGGED_LAST100=PASS`; `SOURCE_MAIN_CASA_CONTENT=PASS`; `CONTA1_AUTH=UNKNOWN`; `CONTA2_AUTH=LOGIN_PENDING`; `VPS_DEPLOY=NOT_PROVEN`; `HUD_HTML_SYNC=NOT_PROVEN`; `FIXED_POINT_GLOBAL=FALSE`.
 
 **NEXT_CURSOR:** usuario confirma login das contas no provedor → clicar `Conferir` → readback de autenticao e processo de cada unidade → reconciliar checkout dirty da VPS pelo owner existente sem reset → confrontar `docs/HUD/HUD.html` e vault Obsidian com hashes/readback antes de atualizar cadeados do escopo correto. Manter expansoes AionUi-first / Loop Vivo como possibilidades do PR #1785, nao bloqueios desta prova.
+
+### T2 — 2026-10-11 19:37 BRT — Conta 2 Online
+
+Contraprova posterior ao clique com codigo efemero (sem expor codigo no registro):
+
+- `desktop-commander-remote.service` e `centraldark-desktop-commander-conta2.service`: ambos `active` no systemd.
+- `centraldark-desktop-commander-conta2.service`: ultimo evento relevante do journal = `Device marked as online` / `Presence tracked` (identificador de dispositivo omitido).
+- Conector Remote Desktop Commander: dispositivos `CENTRALDARK-OS` e `SEGREDO` listados **Online** na leitura T2. Isto comprova presenca dos dispositivos no escopo do conector, **nao** duas identidades provedor distintas.
+- Botao `Conferir` do mesmo HUD clicado na Casa, receipt local `19:37:45 [DESKTOP] [PASS] CONTA 2 | service=loaded | process=active | autorizacao=READY_LOG`; `CONTA 1 | autorizacao=UNKNOWN`. A GUI permaneceu uma janela.
+- `CONTA2_DEVICE_ONLINE=PASS` com prova dupla log do servico + dispositivo Online; `CONTA2_PROVIDER_ACCOUNT_IDENTITY=UNKNOWN`; `CONTA1_AUTH=UNKNOWN`; `TWO_DISTINCT_PROVIDER_ACCOUNTS_AUTHENTICATED=UNKNOWN`. Nenhuma alegacao de FIXED_POINT global.
+
+Nao reabrir prova de `BUTTON_CONTA2_OPEN_AUTH_URL` ja registrada; pendencia apenas comparar qual conta efetivamente possui cada dispositivo por autentificacao legitima no provedor, sem revelar tokens.
+
+**NEXT_CURSOR_T2:** reconciliar ownership das contas com readback autenticado do provedor → se duas contas realmente diferentes, selar so essa clausula → VPS dirty checkout separado → alinhar HTML dourado por seu writer atual e provar hash do mirror Casa/VPS.
