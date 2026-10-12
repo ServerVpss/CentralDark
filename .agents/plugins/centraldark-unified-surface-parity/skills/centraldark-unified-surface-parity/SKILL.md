@@ -163,3 +163,12 @@ O CHEFE autorizou que **a distribuição** CentralDark evolua em uma única iden
 5. **Só desinstalar wrappers específicos** quando seu dono comprovar a mesma capacidade no novo plugin e autorizar a retirada. Não revogar tokens, apagar histórico, reiniciar runtime nem substituir `asdk_app_*` silenciosamente.
 
 `APP_BINDING_MISMATCH` é rótulo descritivo de hipótese, não erro oficial da plataforma. `TOOL_NOT_EXPOSED` é condição; `PLATFORM_UNAVAILABLE` é a classificação canônica quando a superfície comprovadamente não a expõe. `VOICE_BINDING=UNKNOWN` até prova de execução na voz.
+
+
+## Regressão de vínculo multi-conta — evidência 2026-10-12
+
+Caso demonstrado pelo CHEFE: na conta funcional, Voz chamou `mcp_status`, e o resultado estruturado exibiu `ok=true`, `dispatcher=mcp_admin_call`, `runtimeTools=141`, `routeCount=13`, `catalogVersion=v1-f8ff6720fec3`, com timestamp `2026-10-12T03:16:54.647Z`. Isso é prova da conta/superfície de origem, não do vínculo da outra conta, nem garantia de `TOOL_CALL_ID` visível. Não solicitar repetição dessa demonstração.
+
+Quando a conta atual disser que não existe ferramenta, reutilizar a recuperação já aprovada nas PRs mergeadas #1611, #1616, #1725, #1740: `TOOL_DISCOVERY` da sessão → alias real/recipient → conta/link autorizado com capability equivalente → `mcp_status` read-only → `mcp_admin_catalog` → executar apenas capability autorizada → receipt e contraprova. Não tratar `INVALID_RECIPIENT` como ausência do MCP; não confundir `not_installed` por ID do Plugin Creator com inexistência das duas entradas `CENTRALDARK` que o CHEFE mostrou na interface. Resolver identidade por binding, não pelo nome da UI.
+
+Sem ferramenta nativa exposta na sessão de Voz, nenhum prompt/skill/manifest consegue concedê-la por si só: `VOICE_BINDING_CURRENT_ACCOUNT=UNKNOWN`, reportar qual binding faltou e continuar apenas pelas rotas autorizadas existentes. `PUBLISHED_PLUGIN != INSTALLED_APP != VOICE_TOOL_EXPOSED`. Sem novo plugin, sem nova estrutura, sem exclusão de wrappers e sem falsa alegação de correção da plataforma.
