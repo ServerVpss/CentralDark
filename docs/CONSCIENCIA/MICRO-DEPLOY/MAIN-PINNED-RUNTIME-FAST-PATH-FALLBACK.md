@@ -22,7 +22,9 @@ DEPLOY_CANÔNICO
   → COPIA_FILESET_CAUSAL
   → RESTART_ISOLADO
   → HEALTH/PROVA_RUNTIME
-  → RECEIPT_#1562
+  → RECEIPT_RUNTIME_LOCAL
+  → RECONCILIAR_RECEIPT_VERSIONADO_NA_MAIN
+  → READBACK ou PARTIAL se pendente
   → continuar corrigindo pipeline primário
 
 ## Pré-condições
@@ -50,7 +52,7 @@ DEPLOY_CANÔNICO
 10. Aguardar readiness.
 11. Medir processo, porta, health e efeito esperado.
 12. Comparar esperado × observado.
-13. PASS → receipt #1562 + NEXT_CURSOR.
+13. PASS de runtime → receipt local já suportado pelo script; conciliar receipt versionado na main + NEXT_CURSOR; local-only fica PARTIAL para selo global.
 14. FAIL → rollback do mesmo owner + causa localizada.
 
 ## Bindings
@@ -67,7 +69,10 @@ BUILD_COMMAND=<build_ou_NA>
 RESTART_COMMAND=<restart_owner>
 HEALTH_COMMAND=<health_owner>
 ROLLBACK_SOURCE=<runtime_anterior>
-PR_MOTHER=1562
+RECEIPTS_OWNER=repository
+RUNTIME_RECEIPT=logs/receipts/main-pinned-<OWNER>-<STAMP>.json
+REPOSITORY_RECEIPT_STATUS=PENDING_UNTIL_READBACK
+LEGACY_PR_MOTHER=#1562,#1757
 
 ## Exemplo já provado — MCP Admin
 
@@ -138,7 +143,10 @@ SAME_SHA=
 ROLLBACK_TARGET=
 SECRET_EXPOSED=false
 RESULT=PASS|FAIL|ROLLED_BACK
-PR_MOTHER=#1562
+RECEIPT_OWNER=repository
+RUNTIME_RECEIPT_PATH=
+REPOSITORY_RECEIPT_STATUS=PENDING|VERSIONED_READBACK
+LEGACY_PR_MOTHER_REF=#1562,#1757
 NEXT_CURSOR=
 
 ## Fingerprint
@@ -218,3 +226,6 @@ só podem rodar quando:
 
 Receipt ocorre **antes** do cleanup final. Handoff só ocorre com scratch limpo.
 
+## Conciliação CURRENT — PR-mãe aposentada (11/10/2026)
+
+Owner: `docs/CONSCIENCIA/LEDGER-SURFACE-ANCHOR.md` (`PR_MOTHER_ROLE=RETIRED`). #1562/#1757 permanecem somente como proveniência. O script `scripts/vps/main-pinned-microdeploy.sh` já escreve receipt **local** em `logs/receipts/`, mas **não o comita automaticamente**. Para selo global, publicar receipt versionado no repositório com readback de SHA; se pendente, classificar PARTIAL. Nenhum passo mutante, lock, permissão ou comando de reset é alterado por este delta documental.

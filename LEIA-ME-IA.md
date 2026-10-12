@@ -675,7 +675,7 @@ Exemplos canônicos:
 
 ```text
 ERRADO: "sensor VPS caiu"
-CERTO:  "Remote Desktop Commander perdeu acesso ao dispositivo vmi3256920; isso não prova que a VPS caiu."
+CERTO:  "Remote Desktop Commander perdeu acesso ao dispositivo medido; isso não prova que o alvo caiu."
 
 ERRADO: "sensor MCP falhou"
 CERTO:  "O endpoint /health do MCP não respondeu no alvo medido."

@@ -64,9 +64,19 @@ ROUTE_FAILURE
 
 UNSCOPED_SHELL_FALLBACK_FORBIDDEN=true
 AUTHORIZED_ALTERNATE_ROUTE_ALLOWED=true
+
+## Seleção causal da rota de execução — Hermes VPS / MCP
+
+Quando o alvo pertence à VPS e existe Hermes autorizado no runtime, preferir a rota executora já registrada no catálogo (HERMES_SHELL) para executar o escopo autorizado. O MCP continua sendo catálogo/transporte e mantém suas confirmações próprias: CONFIRMACAO_ADMIN_NECESSARIA bloqueia apenas a chamada MCP que a exige; **não** autoriza contornar o dispatcher por shell genérico, herdar permissões novas nem declarar que uma segunda rota está viva sem teste.
+
+Antes da ação, medir o serviço Hermes real, a identidade/escopo e os comandos permitidos pelo owner existente. Se a rota direta não estiver comprovada/autorizada, manter BLOCKED apenas para a mutação dependente. Não alterar política MCP nem executar como root só para escapar de confirmação. Uma autorização de missão cobre apenas ações dentro do escopo concedido; confirmação explícita para ações novas, destrutivas ou fora do escopo permanece obrigatória.
+
+Receita de diagnóstico da VPS (read-only): conferir systemctl is-active hermes-gateway.service, systemctl show hermes-gateway.service -p ExecStart -p User -p FragmentPath, listeners locais e git status sem limpar worktree. Registrar ROUTE, OWNER, AUTH_SCOPE, RUNTIME_HEALTH, EFFECT_READBACK, NEXT_CURSOR; serviço ativo não prova chamada funcional e commit não prova deploy.
 ```
 
 Para ferramentas de sistema, prefira capabilities pequenas e explícitas (`status`, `read`, `restart`, `write` no owner autorizado) a uma função genérica irrestrita de execução. Capacidade ampla só existe quando o owner e o escopo realmente exigirem.
+
+**Casa → VPS, seleção de rota antes do probe:** quando o alvo for a VPS e a origem for a Casa `SEGREDO` pelo Remote Desktop Commander, ler primeiro o binding já provado em `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md` e seu owner `docs/CONSCIENCIA/05-SSH-VPS.md`. Reutilizar **o cliente Git OpenSSH da Casa**, o alias **`Segredo-VPS`** e a identidade já configurada (sem ler ou expor a chave privada). Para readback SSH usar `BatchMode=yes`, `ConnectTimeout=8`, `StrictHostKeyChecking=yes`, `IdentitiesOnly=yes` e o comando remoto inofensivo `hostname; id -un`; exigir `SSH_EXIT=0` antes de declarar autenticação `PASS`. **Não substituir silenciosamente** essa receita por `ssh root@IP`, por `ssh.exe` nativo do Windows ou por SSH originado de outro dispositivo `CENTRALDARK-OS` sem comprovar que cliente, origem e identidade são equivalentes. `MCP_PONG` comprova transporte MCP; `TCP_22_OPEN` comprova porta; `Permission denied (publickey)` por rota improvisada reprova **somente aquela tentativa**, não revoga o acesso Casa→VPS provado por outra rota. Prova histórica não vira estado atual automaticamente: remedir na rota correta e preservar `UNKNOWN` apenas para os demais claims (deploy, serviço, Hermes, HUD). Se ela falhar, registrar camada exata e reutilizar somente o próximo braço autorizado, sem inventar credencial, configuração ou owner.
 
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
@@ -113,6 +123,49 @@ Qualquer agente/superfície que entra pelo GitHub deve primeiro medir `main`, la
 
 Regra de prova: GitHub real medido ganha de print, memória de chat, texto colado ou UI truncada. Skill, botão, aba, workflow ou serviço listado não é PASS até haver owner + consumer + readback aplicável.
 
+## 🔒 HUD único — entrada canônica obrigatória (CHEFE 09/10)
+
+Owner de conteúdo: `docs/HUD/HUD.html` em `ServerVpss/CentralDark@main`. Owner de boot: `scripts/trigger-fabric/centraldark_full_trigger_boot.py`. Owner de materialização: `.github/workflows/vps-exec-selfhosted.yml`. Esta é uma obrigação **causal de confiança do control plane**, não um veto de saúde auxiliar nem um segundo painel.
+
+```text
+GLOBAL_HUD_FIRST_MAIN_VPS_FAIL_CLOSED=true
+CANONICAL_HUD=docs/HUD/HUD.html@main
+VPS_HUD_PROJECTION=/root/.centraldark/HUD.html
+READ_HUD_BEFORE_CENTRALDARK_GOAL=true
+MAIN_LIVE_HEAD_REQUIRED=true
+MATERIALIZED_BYTES_SHA256_MUST_MATCH_MAIN=true
+MISSING_OR_MISMATCHED_HUD=FAIL_CLOSED_FOR_NEW_CANONICAL_EXECUTION
+UNKNOWN_NEVER_PASS=true
+SCREENPIPE_KYLIN_OPTIONAL_FAILURE=PLACA_NO_HUD_AND_CONTINUE_UNAFFECTED
+OLD_HEALTHY_PROCESSES_NOT_KILLED_BY_GATE=true
+```
+
+**Ordem:** ler o `HUD.html` do commit remoto vivo de `main`; confrontar o hash e o corpo HTML com o HUD materializado na VPS; só com readback `PASS` permitir **novo** boot, Goal de execução e promoção de deploy. Não tratar um `HTTP 200`, um `git HEAD` igual ou um arquivo existente como prova substituta. Gate reprovado não concede acesso administrativo, não autoriza sobrescrever checkout dirty, não mata serviços já vivos e não impede investigação/leitura para repará-lo. Com fonte íntegra, erros opcionais exibem **placa própria com motivo, prova, owner, receita e NEXT_CURSOR**, aproveitando a seção existente `Missões — clica, copia, cola onde for resolver`; não criam nova arquitetura. Uma superfície não ligada a esse gate permanece `UNKNOWN` — nunca declarar aplicação global comprovada só pelo documento.
+
+<!-- CENTRALDARK_HUD_FERIDA_PLACA_MVP_V1 -->
+## 🩹 HUD único — ferida, placa, receita e continuidade
+
+**Owner existente:** docs/HUD/HUD.html. Regra operacional de todas as superfícies e agentes que leem/escrevem status no HUD, sem criar outro HUD, serviço, gate ou contrato paralelo.
+
+```text
+YELLOW_OR_FAIL_OR_UNKNOWN_OR_PENDING -> VER_PENDENCIA_REQUIRED
+PLACA -> ESTADO + ROTA + OWNER + ARQUIVO + LINHA + ERRO + PROVA + NEXT_CURSOR
+NO_MEASURED_LINE_OR_ROUTE -> UNKNOWN
+CLICK_VER_PENDENCIA -> SHOW_CAUSE_AND_LOCATION
+PLACA_OPEN -> ACEITAR_MISSAO_COPIAR_RECEITA
+RECIPE -> INTENCAO + CURRENT + OWNER + FALHA + PROVA + MENOR_DELTA + TESTE + READBACK + NEXT_CURSOR
+APP_FALHOU != SISTEMA_INTEIRO_FALHOU
+OPERATIONAL_GATE_FAIL -> LOCAL_PLAQUE + CONTINUE_INDEPENDENT_ROUTES
+NO_DUPLICATE_PANEL=true
+NO_DUPLICATE_CAPTURE=true
+SECURITY_AND_AUTHORIZATION_STILL_REQUIRED=true
+UNKNOWN != PASS
+MERGED != DEPLOYED
+```
+
+Não inventar rota, linha ou causa. Se uma operação dependente não pode prosseguir, ela recebe placa específica; outras capacidades seguem. A opção de copiar missão jamais executa mudanças automaticamente nem dá autorização nova. Antes de adicionar controle, reutilizar o botão, o owner, a lista Missões e os fluxos já existentes. Contraprova em navegador e readback são a evidência de UI, não saúde global.
+<!-- /CENTRALDARK_HUD_FERIDA_PLACA_MVP_V1 -->
+
 ## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
 
 Isto não cria uma lei nova. Faz o contrário: remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação que não seja dependência causal real do objetivo.
@@ -149,6 +202,8 @@ CANONICAL_CONSUMPTION_GATE_PATH=scripts/centraldark/canonical-consumption-gate.m
 CANONICAL_LEARNING_BOOT_MODE=PERTINENT_ONLY
 ALL_NUMBERED_LEARNINGS_AVAILABLE_ON_DEMAND=SIM
 CANONICAL_SEARCH_MISS_FALLBACK=docs/CONSCIENCIA/APRENDIZADOS.md
+FILE_EXISTENCE_CLAIM_REQUIRES_DIRECT_PATH_READ=true
+CONTENT_SEARCH_ZERO_RESULTS_DOES_NOT_PROVE_FILE_ABSENT=true
 POINTER_MUST_OPEN_SOURCE_BEFORE_RESPONSE=SIM
 TOOL_AVAILABLE_REQUIRES_ATTEMPT_BEFORE_UNKNOWN=SIM
 UNKNOWN_WITH_MEASUREMENT_ROUTE=TARGET_ONLY_CONTINUE
@@ -1599,6 +1654,8 @@ PAPEL_HERMES=EXECUTOR_PRESERVACAO_CONTINUIDADE
 PIVETE_ROLE=RETIRED
 
 RAIZ_LOCAL=E:\CentralDark\Pivete\CentralDark
+# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. RAIZ_LOCAL acima descreve checkout legado; NAO usar como destino implicito do Obsidian nem reescrever paths de executores ate smoke test/receipts. C: pessoal intocavel. Movimento ainda nao comprovado concluido.
+
 CASA_PRIMEIRO=SIM
 VPS_POR_ULTIMO=SIM
 

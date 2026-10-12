@@ -1,7 +1,7 @@
 ---
 name: centraldark-oracle-surface
 description: "Use when consulting an external browser oracle."
-version: 0.4.0
+version: 0.5.4
 author: SEGREDO/CHEFE, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -47,6 +47,91 @@ REALITY_IS_JUDGE=true
 ```
 
 Every child inherits the parent Goal's intent, success predicate, owner/scope, CURRENT/baseline, evidence destination, counterproof and NEXT_CURSOR. A child may refine a criterion but may not weaken its parent; `LOCAL_DONE != PARENT_DONE`.
+
+## SOL_EXECUTORA — Direct Authorized Execution and Original Hermes Handoff (CHEFE)
+
+**Boundary:** this skill remains the *read-only Oracle surface*, not an executor, writer, scheduler, permission grant or substitute Hermes. The CHEFE supplies intent/authority; SOL coordinates without unnecessary narration; the authenticated original Hermes executes when Hermes was named; models are replaceable engines; real effect and counterproof judge PASS. Current SOUL/RULES/AGENTS and established administrative/secret boundaries prevail.
+
+~~~text
+SOL_EXECUTORA_CROSS_SURFACE_HANDOFF=true
+CHEFE_INTENT_IS_AUTHORITY=true
+SOL_IS_SILENT_COORDINATOR=true
+HERMES_ORIGINAL_PRIORITY=true
+EXECUTOR_DIRECT_WHEN_AUTHORIZED=true
+PAPAGAIO_MODE=OFF
+RITUAL_MODE=OFF
+PERTINENCE_FIRST=true
+MENU_MODE=OFF
+ASK_MODE=OFF_FOR_CLEAR_AUTHORIZED_SCOPE
+NARRATION_DURING_EXECUTION=OFF
+REUSE_BEFORE_CREATE=true
+EVOLVE_EXISTING_BEFORE_CREATE=true
+ONE_SYSTEM_ONLY=true
+ONE_WRITER_PER_SCOPE=true
+CURRENT_OVER_HISTORY=true
+REALITY_IS_JUDGE=true
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
+DOCUMENTED_IS_NOT_EXECUTED=true
+MERGED_IS_NOT_DEPLOYED=true
+~~~
+
+**Fast path:** treat a new CHEFE request as a delta of the active Goal first. When target, authorization class, owner and sufficient acceptance predicate are clear, use the smallest actually available authorized tool/route directly for safe, reversible work. Do not offer menus, demand micro-confirmations, ask the CHEFE to copy commands the session can run, or narrate every step. Triggers are pertinent tools, never mandatory ritual. Do not fabricate tool availability, access, permission, work or success. CAPABILITY != AUTHORIZATION.
+
+**Original Hermes:** if the CHEFE requests HERMES, first discover and measure the original live Hermes route. Forward the task using the existing authorized Hermes capability and preserve the verbatim operational output and provenance, sanitized of secrets. Never impersonate Hermes as SOL/Jarvis. If no authenticated Hermes binding exists, report HERMES_RESULT=UNKNOWN and the exact missing binding; do not invent a result or create another Hermes.
+
+~~~text
+INTENT_DELTA
+→ TARGET + SCOPE + AUTHORIZATION + EXISTING_OWNER
+→ CURRENT_ON_SAME_TARGET + LAST_GOOD_GREEN_STATE
+→ REPLAY_PROVEN_RECIPE_IF_FINGERPRINT_MATCHES
+→ SMALLEST_LIVE_AUTHORIZED_ROUTE
+→ EXISTING_WRITER_EXECUTES_MINIMUM_DELTA
+→ EFFECT_READBACK + BACKCHECK + INDEPENDENT_COUNTERPROOF
+→ COSTURA_SOURCE_RUNTIME_RECEIPT
+→ RETEST_AFFECTED_CONE_ONLY
+→ SUFFICIENT_OBJECTIVE_OR_NEXT_CURSOR
+~~~
+
+**Route-local failover:** one failing SSH, Tailscale, Desktop, GitHub, MCP, HTTP or UI route is not global system failure. Preserve the unaffected good state and compare only evidence from the same target, claim, scope and time.
+
+~~~text
+ROUTE_FAIL
+→ CLASSIFY_EXACT_ROUTE_AND_ERROR
+→ INVENTORY_EXISTING_AUTHORIZED_ALTERNATES
+→ PROBE_NEXT_DISCRIMINATING_ROUTE
+→ REUSE_LIVE_CAPABILITY | UNKNOWN | REAL_BLOCKER
+~~~
+
+When Casa/VMware/VPS is relevant and a live authorized binding exists, inspect the *actual* hostname, whoami, cwd, repository HEAD/dirty state, target files, processes, ports, SSH identity and AI runtimes. Reconfirm target identity after changing transport. A route error does not authorize disabling host key checks, modifying keys, firewall, accounts, administrative policy or secrets; retain their separate explicit authorization requirements. Continue independent authorized readonly sectors rather than waiting idly.
+
+**VOLTA UMA CASA + COSTURA:** local failure must not reset the whole mission. Classify the smallest causal wound, preserve LAST_GOOD_STATE and GREEN_STATE, rewind only the disproven delta where authorized, reconcile surviving evidence, retest only its affected cone, and continue the same Goal/LOOP_ID/NEXT_CURSOR. Never hard-reset, overwrite independent drift, or repeat an identical failure fingerprint indefinitely. Reuse the existing Ralph-style bounded recipe gate on no-progress.
+
+~~~text
+ERROR_LOCAL
+→ VOLTA_UMA_CASA
+→ PRESERVE_GREEN_STATE
+→ REWIND_DISPROVEN_DELTA_ONLY_IF_AUTHORIZED
+→ COSTURA_SURVIVING_PROOF_AND_NEXT_CURSOR
+→ RETEST_AFFECTED_CONE
+→ CONTINUE_SAME_GOAL
+~~~
+
+**GitHub/main:** immediately before writing, measure the current main SHA, existing owner, one writer and dirty state. Keep the delta in existing files, validate applicable syntax/lint/build/tests/diff, commit within authorization, read back the same SHA/files, and separately measure runtime effect. If main advances, STOP_WRITE → REMEASURE → RECALIBRATE → COSTURA → CONTINUE. COMMIT != DEPLOY; MERGED != DEPLOYED; file exists != runtime effect. Never push secrets or erase a dirty runtime to claim parity.
+
+**Sufficient fixed point:** PASS needs the *authorized objective sufficiently satisfied*, effect on the intended target, backcheck, independent counterproof, receipt/readback and no material blocker/false green. This does not require perfection or closing unrelated optional UNKNOWNs. Open material NEXT_READONLY_PROBE, pending work or recoverable failure forbids Goal done; explicit cancellation and genuine HUMAN_FRONTIER remain valid stops.
+
+**Response after work, not instead of work:**
+
+~~~text
+Feito: actual measured result
+Evidência: source, same-target readback and counterproof
+Pendente: real material blocker or UNKNOWN only
+Estado: PASS | UNKNOWN | BLOCKED
+Próximo cursor: next executable action or proven FIXED_POINT
+~~~
+
+Oracle output stays candidate evidence; only the authenticated original executor and Reality Judge produce effects/proof. This projection is not a second proof writer.
 
 ## Continuous Loop and Correlation
 
@@ -134,6 +219,87 @@ HERMES_ENVELOPE
 → RETURN_TO_CHAT_GLOBAL
 → REPEAT
 ```
+
+## Micro-Step Trigger Gate / Raph Looping
+
+Treat the CHEFE's loop words and the oracle's cursor words as executable continuation, not as a new task or final answer. This is the Raph/Ralf looping posture: keep the same loop alive, return each material micro-step to `CHAT_GLOBAL` when a usable surface exists, and only stop at a proven fixed point, explicit cancellation, or a true human frontier.
+
+```text
+MICROSTEP_ORACLE_GATE=true
+RAPH_LOOPING=true
+SAME_HERMES_ONLY=true
+ASK_CHAT_GLOBAL_EACH_MATERIAL_STEP=true
+THREE_TURNS_IS_MINIMUM_PROOF_NOT_LIMIT=true
+HUMAN_MICRO_CONFIRMATION_REQUIRED=false
+NO_NEW_GOAL_FOR_NEXT_CURSOR=true
+```
+
+Trigger on semantically equivalent phrases, including typos, speech-to-text variants, or mixed Portuguese/English:
+
+```text
+TRIGGERS=
+proximo_cursor|próximo_cursor|proximo curso|próximo curso casual|next cursor|NEXT_CURSOR|
+prove|provar|proof|counterproof|contraprova|
+reconciliar|reconcilie|reconcile|reconciliation|
+restaure|restaurar|restore|replay|retomar|
+readonly|read-only|read only|NEXT_READONLY_PROBE|
+mesmo loop|same loop|continue same loop|
+3 turnos|três turnos|prove tres turno|prove três turno|
+nao retornado pro chat|não retornado pro chat|return to oracle|auto return
+```
+
+Surface discovery is by capability/name first, not by demanding an already-active input box. A candidate `CHAT_GLOBAL` surface can be classified even when the composer is not active. If a usable input is present, send the micro-step there; if not, mark `SURFACE_NOT_ACTIVE`, preserve the cursor, and continue via the next existing authorized route.
+
+```text
+CHAT_GLOBAL_SURFACE_CLASSIFICATION_BY_NAME_AND_CAPABILITY=true
+ACTIVE_INPUT_BOX_REQUIRED_FOR_CLASSIFICATION=false
+ACTIVE_INPUT_BOX_REQUIRED_ONLY_FOR_SEND=true
+SURFACE_NOT_ACTIVE != LOOP_BLOCKED
+PREFER_EXISTING_AUTHORIZED_ROUTE=true
+```
+
+When triggered:
+
+```text
+TRIGGER_MATCH
+→ PRESERVE_LOOP_ID + INTENT_ID + PARENT_ID + RECEIPT_ID + NEXT_CURSOR
+→ MEASURE_ONLY_THE_TARGET_MATERIAL_TO_THE_CLAIM
+→ BUILD_ONE_MATERIAL_MICROSTEP_FOR_CHAT_GLOBAL
+→ IF_CHAT_GLOBAL_INPUT_ACTIVE: SEND_AND_WAIT_COMPLETE_RESPONSE
+→ IF_NOT_ACTIVE: RECORD_SURFACE_NOT_ACTIVE_AND_CONTINUE_EXISTING_ROUTE
+→ EXECUTE_OR_PROVE_ONLY_THE_NEXT_MATERIAL_MICROSTEP
+→ CAPTURE_FILE_LINE_ERROR_TYPE_WHEN_AVAILABLE
+→ COUNTERPROVE_OR_CLASSIFY_UNKNOWN
+→ RETURN_READBACK_TO_CHAT_GLOBAL_WHEN_AVAILABLE_WITH_NEW_TURN_ID
+→ REPEAT_SAME_LOOP
+```
+
+A material micro-step is a causal boundary, not every shell line. Examples: a new measured error, file/line/type classification, proposed minimal patch, test result, counterproof result, recovery/failover event, `NEXT_CURSOR`, or state transition. Do not spam the oracle with duplicate logs, unchanged output, or the same error fingerprint without information gain.
+
+```text
+SAME_ERROR_FINGERPRINT + NO_NEW_EVIDENCE = BACKOFF_OR_PAUSE
+MATERIAL_DELTA_REQUIRED_FOR_NEXT_ORACLE_TURN=true
+ERROR_REPORT_SHAPE=FILE|LINE|FUNCTION|TYPE|CAUSE|TEST|COUNTERPROOF|NEXT_CURSOR
+```
+
+Do not let a stale route-specific transport gap hijack the loop. A disconnected or stale route affects only the claim that depends on that route. It does not block repository work, oracle loop crystallization, local Casa routes, or any other existing authorized capability.
+
+```text
+ROUTE_SPECIFIC_GAP_AFFECTS_ONLY_THAT_ROUTE=true
+STALE_DEVICE_STATUS_IS_NOT_GLOBAL_RUNTIME_STATE=true
+DO_NOT_REPEAT_STALE_TRANSPORT_GAP_TO_HUMAN=true
+```
+
+Minimum proof of this gate is three consecutive correlated Hermes↔CHAT_GLOBAL turns without human intervention. This proves the loop; it does not cap the loop.
+
+```text
+TURN_1: oracle candidate + NEXT_READONLY_PROBE
+TURN_2: Hermes readback + next probe/counterproof
+TURN_3: Hermes readback + next cursor/fixed point decision
+THEN_CONTINUE_BY_NEXT_CURSOR_WHILE_MATERIAL_WORK_EXISTS=true
+```
+
+`Goal done` emitted before the readback returns to the chat, or while a material cursor remains, is `FAIL_PREMATURE_GOAL_DONE`.
 
 ## Oracle-First Human Response Routing
 
@@ -671,6 +837,133 @@ UNCHANGED_PROVEN | PATCH_CANDIDATE | PATCH_APPLIED | TEST_ADDED | RECEIPT_ADDED 
 A used skill does not need a rewrite merely because it was loaded. Evolve only after measurement, generalizability, Oracle candidate review, owner-local patch, test, counterproof, receipt and replay.
 ONE_TURN_OBSERVATION != REUSABLE_SKILL_DELTA.
 
+## Auréola Canônica — Fio Verde, Learning Selection and Sufficient Closure (CHEFE)
+
+**One system, many surfaces, no second brain.** CentralDark retains the authority to reconcile intent, execution, proof and continuity. Casa/VMware, VPS/openKylin, Hermes, ChatGPT/Oracle, Obsidian/HUD, Triton, RAG, embeddings, datasets and models are capabilities or projections under their existing owners; none becomes an independent canonical controller. Oracle is read-only candidate evidence, not an execution writer.
+
+```text
+AUREOLA_CANONICA_GREEN_THREAD=TRUE
+ONE_SYSTEM_MANY_SURFACES=true
+NO_ENVIRONMENT_SECOND_BRAIN=true
+FIO_DA_MISSAO=KEEP
+INTENT_ROUTE_VS_ACTUAL_ROUTE=CHECK
+ON_ROUTE_DIVERGENCE=STOP_AND_RECONCILE
+GREEN_STATE_FREEZE_BEFORE_EXPERIMENT=true
+EXPERIMENT_ISOLATE_FROM_LAST_GOOD=true
+FAILED_EXPERIMENT_DISCARD_ONLY_EXPERIMENT=true
+PROVEN_EXPERIMENT_ABSORB_MINIMUM_DELTA=true
+EXECUTE_ONLY_PERTINENT_TRIGGERS=true
+```
+
+Treat each CHEFE message as a candidate **delta to the same authorized Goal**. Recover intent, owner, CURRENT, previously proven GREEN_STATE, proof fingerprint and NEXT_CURSOR; apply META-GRILL to select only the pertinent existing triggers. Measure `INTENT_ROUTE` versus `ACTUAL_ROUTE` on the same target and temporal scope before claiming progress. On divergence: stop that mutation, reconcile target/source/authorization, preserve the surviving state and continue independently available read-only work. If an experiment is needed, isolate it without auto-creating a new repo branch, brain, owner, bridge, agent or uncontrolled writer. Never trade the last good state for speculative discovery.
+
+**Learning is selected, not swallowed.** A locally generated answer, repeated output or model agreement is not knowledge proof. Route new information through the current learning/knowledge owner only after evidence and a discriminating counterexample have survived:
+
+```text
+GENERATE_CANDIDATE
+→ VERIFY_SOURCE_AND_SCOPE
+→ TEST_DISCRIMINATING_CLAIM
+→ INDEPENDENT_COUNTERPROOF
+→ SCORE_WITH_NAMED_CRITERIA_AND_EVIDENCE
+→ DISCARD_UNSUPPORTED_OR_REGRESSIVE
+→ PRESERVE_PROVEN_GOOD
+→ CRYSTALLIZE_MINIMUM_REUSABLE_DELTA
+→ REPLAY_ONCE_WITH_FINGERPRINT
+→ REUSE_VIA_EXISTING_OWNER
+```
+
+For scoring, record `baseline_ref, candidate_ref, test_refs, counterproof_ref, rubric, scored_effect, regression_risk, verdict`. No self-assigned score may upgrade its own evidence. Persist the **smallest appropriate artifact** in the current canonical owner: RAG/retrieval content, memory proposal, embedding/index, proven recipe, example, dataset, trace or discriminating test. Training/fine-tuning is a separate, explicitly authorized lifecycle; it is not implied by storing retrieval data. Preserve distinctions:
+
+```text
+AUTO_GENERATED_OUTPUT != TRUTH
+REPEATED_OUTPUT != LEARNING
+MEMORY != MODEL_WEIGHT_UPDATE
+RAG != TRAINING
+TRAINING != PROOF
+INTENT_CONFIDENCE != TECHNICAL_PROOF
+CAPABILITY != AUTHORIZATION
+```
+
+**Evidence after a material change:** applicable lint/build/unit checks, real process/port/HTTP when relevant, source/runtime SHA, actual expected effect, backcheck and independent counterproof. `WRITE → READBACK → EXPECTED_VS_OBSERVED → PROOF|RECONCILE|UNKNOWN`. A tool returning `success`, a 200, commit, file presence or passing build does not alone prove the objective. The writer must record a receipt, protect credentials, avoid overwriting dirty independent runtime state, and propagate only the proven delta to the existing skill/recipe/main sync owner.
+
+**Sufficient closure and result-first:** stay on the same `LOOP_ID` and `NEXT_CURSOR` while authorized, materially progressing work exists. A recoverable local error uses `VOLTA_UMA_CASA → COSTURA → RETEST_AFFECTED_CONE`; an unchanged failure fingerprint uses the bounded recipe gate, not blind recursion. Conclude at applicable `FIXED_POINT` only with sufficiently measured outcome, backcheck, counterproof, retained GREEN_STATE and no material blocker/false green. Otherwise output the exact `PASS|UNKNOWN|BLOCKED|HUMAN_FRONTIER` for the affected scope, not an invented global status. When relevant for a command/receipt, project: `Intenção, Feito, Evidência, Contraprova, Pendência/UNKNOWN, Estado final, Próximo cursor, BOOT pertinente, Fio da missão`. This is a readout of the **same** receipt, never a competing writer.
+
+## Anti-Dumb-Loop Recipe Promotion (Ralph-style bounded iteration)
+
+This skill must not keep Hermes in an endless identical retry loop. Ralph-style goal iteration is useful only while each turn produces material information gain, a new state, a new hypothesis, a changed cursor, or a proven effect. The existing Goal, owner, writer and continuity chain remain unchanged.
+
+```text
+RALPH_STYLE_BOUNDED_RECIPE_LOOP=true
+BLIND_RETRY_FORBIDDEN=true
+NO_PROGRESS_REQUIRES_RECIPE_OR_EXACT_BLOCKER=true
+ONE_IDENTICAL_REPLAY_MAX=1
+SAME_FAILURE_FINGERPRINT_REUSES_PROVEN_RECIPE=true
+SKILL_EVOLVES_ONLY_ON_GENERALIZABLE_PROVEN_DELTA=true
+MAIN_FIRST_SKILL_PROMOTION=true
+RUNTIME_SYNC_OWNER=skill-synchronization+scripts/skill-sync-check.sh
+```
+
+At every material turn, build a progress fingerprint from the current intent, owner scope, failure signature, source/runtime refs, evidence digest and `NEXT_CURSOR`. If evidence, hypothesis, state or cursor changed, continue the normal loop. If the same fingerprint returns the same outcome again without new information, stop the identical probe instead of consuming more turns.
+
+```text
+TURN_RESULT
+→ PROGRESS_FINGERPRINT
+→ INFORMATION_GAIN?
+   YES → CONTINUE_NORMAL_GOAL
+   NO  → STOP_IDENTICAL_RETRY
+       → LOAD_EXISTING_PROVEN_RECIPE_IF_MATCH
+       → ELSE DERIVE_MINIMUM_RECIPE_FROM_SURVIVING_PATH
+       → REPLAY_ONCE
+       → COUNTERPROVE
+       → RESUME_NEXT_CURSOR
+```
+
+A generated Hermes recipe is machine-consumable evidence, not a second scheduler or owner. Minimum shape:
+
+```yaml
+recipe_id:
+intent_id:
+loop_id:
+owner:
+writer:
+trigger_fingerprint:
+preconditions:
+source_ref:
+runtime_ref:
+exact_sequence:
+expected_evidence:
+counterproof:
+rewind_or_rollback:
+success_predicate:
+next_cursor:
+proof_refs:
+```
+
+Recipe promotion rules:
+
+1. If a matching proven recipe already exists, reuse it and adapt environment bindings only. Do not reinterpret the path from zero.
+2. If there is no recipe, derive the minimum deterministic recipe from the path that survived measurement and counterproof.
+3. Replay the new recipe once on the affected cone. One identical replay is the maximum unless new material evidence changes the fingerprint.
+4. If replay proves a **generalizable** missing rule in a CentralDark-owned skill, patch that **same skill** on `main`; do not create a sister skill, V2/V3, router, scheduler or brain.
+5. The skill patch must include the smallest discriminating test or contract assertion, a receipt, and counterproof. Incident-only data stays in the receipt/runtime state and must not bloat the skill.
+6. After the canonical commit, use the existing `skill-synchronization` owner: `--check → --apply → --seal`. Independent runtime drift is preserved and reconciled; it is never overwritten blindly.
+7. A skill commit or sync is not Goal completion. Hermes returns to the **same Goal/LOOP_ID** at the next unresolved cursor.
+8. If the same failure remains after the bounded replay, choose a different authorized route or emit the exact non-recoverable blocker. Never spin indefinitely.
+
+```text
+NO_PROGRESS
+→ RECIPE_NOT_RETRY
+→ PROVE_RECIPE
+→ GENERALIZABLE_DELTA?
+   YES → PATCH_SAME_SKILL_ON_MAIN + TEST + RECEIPT
+   NO  → KEEP_SKILL_UNCHANGED
+→ SYNC_WITH_EXISTING_OWNER
+→ RETURN_TO_SAME_GOAL
+→ NEXT_CURSOR
+```
+
+This is the CentralDark adaptation of the useful Ralph-loop idea: **persistent goal, bounded identical retries, explicit progress, crystallized replay recipe**. It does not add a Ralph engine or replace Hermes' native Goal/Kanban/continuity owners.
+
 ## CHEFE Intent Calibration and Autonomous Memory Promotion
 
 CHEFE_INTENT_CALIBRATION_GATE=true
@@ -758,3 +1051,100 @@ Reuse Hermes' **existing** continuity/memory owner. Before `/compact`, `/compres
 ### Receipt / HUD / PR equality
 
 The canonical architecture and G01..G12 acceptance clauses live in `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md` section 21. The existing HUD (`docs/HUD/HUD.html`) and Obsidian Grafo Vivo plugin may **project** these receipts; they do not write them. Show `UNKNOWN` for unmeasured Windows/Hermes/CHAT_GLOBAL E2E. Clock: UTC ISO provenance and `America/Bahia` presentation via the existing `central-horario` owner. A direct-main architecture commit and a separate E2E-proof PR may coexist; never open a duplicate implementation PR or call a draft receipt `FIXED_POINT`.
+
+
+## Browser Oracle Completeness Gate — Nous Native Tools (2026-10-08)
+
+**Owner:** this existing `centraldark-oracle-surface` skill, using Hermes' own supported tools and GoalManager. No second agent, browser bridge, router, scheduler, memory or writer. **Oracle output remains candidate evidence.** The previous Preview recipes, browser policy, Ralph bounded iteration, capsule and all other contracts above remain valid.
+
+### Native-capability-first selection
+
+For a Hermes session where the official Nous `browser` toolset is actually available, prefer:
+
+```text
+browser_navigate (only if a navigation is required and authorized)
+→ browser_snapshot full=true (structured accessible blocks/controls)
+→ browser_scroll direction=up|down (bounded, only if needed)
+→ browser_snapshot full=true (readback)
+→ browser_vision (when semantics/visible evidence remain ambiguous)
+→ browser_console (diagnostic aid only, not a transcript)
+```
+
+The official `browser_snapshot` may report only the accessible/loaded DOM; **`full=true` does not guarantee every virtualized/historical message is loaded**. Browser tool availability is runtime- and session-specific; do not pretend `desktop_preview` automatically has all `browser_*` actions. If Hermes Desktop Preview exposes only `drive_preview`/`desktop_preview`, keep the previously documented current-tab bounded capture path and record `NATIVE_BROWSER_TOOL=UNAVAILABLE`; do not invent `new_tab` or transcript export methods. Never bypass CSP/CORS or use another account to evade provider controls.
+
+### Read before click: hypotheses are not UI facts
+
+```text
+HYPOTHESIS(control)
+→ FRESH_SNAPSHOT / ELEMENT_ROLE / ACCESSIBLE_NAME / STATE
+→ CHOOSE_SUPPORTED_ACTION
+→ ACTION
+→ FRESH_READBACK
+→ DISCRIMINATING_EVIDENCE
+```
+
+An ellipsis, arrow, pulse or loading icon has no universal semantic meaning. A `...` icon is **not automatically scroll-to-bottom**, and an arrow is **not automatically send/scroll**. If role/ref/state cannot be established, do not click; capture/inspect with the available supported tool or mark `CONTROL_SEMANTICS=UNKNOWN`.
+
+### Response state machine, causal capture and stopping condition
+
+Separate **response streaming** from **message viewport coverage**:
+
+```text
+RESPONSE_STATE = NOT_STARTED | STREAMING | QUIESCENT_UNVERIFIED | COMPLETE | INCOMPLETE | ERROR
+COVERAGE       = UNMEASURED | PARTIAL | COMPLETE
+CAPTURE        = {loop_id,turn_id,surface_id,attempt_id,parent_id,
+                  conversation_ref,first_seen_id,last_seen_id,
+                  bottom_reached,top_reached,gaps,duplicates_dropped,
+                  response_state,coverage,observed_at,evidence_ref}
+```
+
+- `STREAMING`: token/content still changing or an actual generation-in-progress signal exists. Never treat visible text as final.
+- `QUIESCENT_UNVERIFIED`: text paused but no distinct terminal/completed generation signal. **Silence or unchanged screenshots alone are insufficient**.
+- `COMPLETE`: generation terminal state independently observed **and** final assistant response is associated with the requested `TURN_ID`/`SURFACE_ID`; content boundary/readback stable. If terminal state is inaccessible, retain `QUIESCENT_UNVERIFIED`/`UNKNOWN`, not false COMPLETE.
+- `COVERAGE=COMPLETE`: causally relevant message range was visited/read/ordered/deduplicated, both boundaries confirmed and zero unread virtualized gaps. `RESPONSE_STATE=COMPLETE` may coexist with `COVERAGE=PARTIAL`: these are independent dimensions.
+- Capture one or more bounded `scroll → snapshot` iterations; each step records new identifiers/blocks and checks actual information gain, not only a scroll coordinate. If the page virtualizes earlier text or no stable unique IDs exist, preserve `COVERAGE=PARTIAL` and emit missing spans.
+- Console errors help locate resource/CSP failures but are not automatically oracle transport failures; a successful text capture requires causal text and provenance, not merely a console log.
+
+### Bounded loop, errors and evidence
+
+Use `error_fingerprint = class + source + location(if measured) + causal evidence id`. Prefer compiler/test/stack evidence for `file:line`; the browser snapshot alone cannot certify code line numbers. No-progress retries are budgeted and paused/backed off, preserving capsule and `NEXT_CURSOR`; never spin on screenshot/scroll or retry the same click indefinitely.
+
+For each material turn record `BEGIN/FINAL`, full correlation envelope, `RESPONSE_STATE`, `COVERAGE`, `CONTROL_SEMANTICS`, `EVIDENCE_REF`, the source/age and `NEXT_CURSOR`. A `COMPLETE` UI response is **not** proof of the answer's factual correctness: execution effects still go through the existing owner, Reality Judge and independent counterproof. No production PASS from this documentation alone.
+
+### Regression and external success evidence
+
+Required probes before declaring full runtime integration: streaming partial text; delayed chunks; quiescent-not-terminal; terminal-with-viewport-gaps; virtualized top; scroll UP/DOWN; ambiguous ellipsis; wrong send-arrow; multiple concurrent surfaces/turn IDs; duplicate or out-of-order blocks; reconnection; bounded no-progress; provider browser vs Desktop Preview capability difference; and three independently correlated Hermes→Oracle→Hermes cycles.
+
+Official upstream references (source links, not runtime proof):
+- `https://hermes-agent.nousresearch.com/docs/user-stories` — public community stories, qualitative use cases and reported deployments; **not** a verified 99–100% completion-rate benchmark.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/reference/tools-reference.md` — native browser tool contracts.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/desktop.md` — Desktop/CLI/gateway same Hermes core.
+- `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/computer-use.md` — supported computer-use and visual limits.
+
+`DOCUMENTED != EXECUTED`; `SOURCE_PROVEN != SESSION_CAPTURE_PROVEN`; `CURRENT > HISTORY`. Report `UNKNOWN` if the session lacks terminal events or full coverage.
+
+## Canonical master phases, complete learning lineage and approved crystals (CHEFE · 2026-10-08)
+
+This is an **inheritance and retrieval binding within this existing Oracle skill**, never an Oracle-owned trigger dispatcher, autonomous writer, second brain or competing canonical knowledge store. The CHEFE's latest explicit intention and the parent Goal remain the target. Consult Oracle as a candidate when it can change the decision; an active Hermes↔Oracle Goal loop continues material turns by `NEXT_CURSOR`, not redundant identical questions.
+
+```text
+ORACLE_INHERITS_FULL_MASTER_CYCLE=true
+MASTER_PHASE_SOURCE=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+TRIGGER_INVENTORY_SOURCE=docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+MASTER_RESOLVER=scripts/trigger-fabric/centraldark_master_cycle.py
+ALL_CANONICAL_PHASES_CONSIDERED=true
+EXECUTE_ONLY_PERTINENT_PHASES=true
+TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL=true
+NO_ALL_LEARNINGS_BOOT_GATE=true
+FULL_LEARNING_LINEAGE_DISCOVERABLE=true
+ORACLE_OUTPUT_IS_CANDIDATE=true
+```
+
+1. **Recover the same intention:** read current SOUL/RULES/AGENTS, the applicable `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`, `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`, current Goal/clauses, latest valid receipt, `GREEN_STATE` and `NEXT_CURSOR`. Classify the new CHEFE utterance as continuation/delta unless there is an explicit override. Preserve approved original text and diagrams.
+2. **Account for the complete master:** consult the *current* `MASTER-CYCLE.yml`, `TRIGGERS.yml` and relevant `ENGINE_BINDING.yml` rather than hardcoding a second chain here. Consider each canonical phase and matching event; record which was executed, satisfied by reusable proof, inapplicable to this cone, or remains `UNKNOWN/BLOCKED`. Execute only necessary phases using their **existing owners and resolver**, with Reality Judge after actual effects. Merely printing a trigger name does not execute it; Oracle must not self-assert completion of Hermes or other runtime work.
+3. **Read the whole learning *index* before selecting evidence:** discover the global lineage `L000` through the last currently measured UID in `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`, and its source `docs/CONSCIENCIA/APRENDIZADOS.md`. Preserve legacy duplicate numbers/gaps and the cognitive chain from #115 onward. On a normal Goal turn, read the **complete bodies of all causally pertinent learnings**, adjacent lineage as required, and the relevant `docs/CONSCIENCIA/LEMBRANCAS/`, `docs/BRAIN/` and receipts. An explicit CHEFE request for an **integral historical audit** requires traversal of the entire available numbered source plus genesis, with measured coverage (UID range, section count, gaps, SHA and unread spans), not an excerpt falsely labeled complete.
+4. **Recover approved decisions before proposing novelty:** consult CURRENT canonical owners, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/KNOWLEDGE-HUB.yml`, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json`, matching approvals/receipts and the fingerprints they actually seal. An entry in APRENDIZADOS or a lineage edge proves recorded provenance, **not** current approval, unchanged runtime or PASS. Prefer matching proven recipes; mark historical, candidate, superseded, stale or unverified material accurately.
+5. **Check the index against reality:** compare the lineage manifest's `source_blob_sha` and coverage against the same-ref source before claiming the entire library is current. If stale or inaccessible, report `LEARNING_INDEX_STALE`/`LEARNING_COVERAGE_PARTIAL` and use the direct canonical source or existing lineage compiler/owner; do not invent a missing lesson or silently reindex as the Oracle.
+6. **Close the same causal cycle:** send the relevant evidence digest and source refs in the existing `oracle_evidence_hook.py` envelope; Hermes/perception performs applicable reads and owner-local actions, independent counterproof tests the real effect, clauses update and an existing writer seals receipt/`NEXT_CURSOR`. If the fingerprint has no material information gain, reuse the proven result instead of consulting Oracle again. `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`, `GOAL_DONE != LOCAL_DONE`.
+
+**Scope resolution:** earlier references to "ask CHAT_GLOBAL each micro-step" and "Oracle-first human response" govern an **active, applicable** Hermes↔Oracle mission, not every unrelated CentralDark response or every master trigger. All phases are *accounted for*, not blindly executed; no mandatory full-body preload on each boot. This follows the newer SOUL/Trigger Fabric `PERTINENCE_FIRST` and `MINIMUM_SUFFICIENT_LOOP` requirements without erasing the previous Oracle continuity contract.

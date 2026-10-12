@@ -7,6 +7,13 @@ status: "proposto"
 
 # Obsidian Casa — edição viva e sincronização
 
+## Rota física atual — migração 11/10/2026
+
+**Destino do vault em consolidação:** `K:\CentralDark` (SSD Kingston). Foram observados `.obsidian/` e `HUD.html` neste caminho durante a transferência `F:` → `K:`. **A transferência ainda não foi comprovada em 100%**, portanto esta nota não afirma que o sincronizador já usa `K:` nem que as origens foram eliminadas.
+
+O diagrama com `E:\CentralDark\Pivete\CASA-VAULT` abaixo é **histórico/proposta anterior**, não a rota CURRENT de leitura do cofre. O par com `docs/BRAIN` expressa a intenção de sync por hashes, não uma montagem física ou bidirecionalidade comprovada. Confirmar o novo caminho no owner `scripts/casa/sync-hermes-obsidian.ps1` e no runtime antes de mudar execução. `C:` pessoal preservado.
+
+
 O modelo novo substitui a regra antiga de Obsidian somente leitura.
 
 ```text

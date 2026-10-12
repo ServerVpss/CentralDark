@@ -163,3 +163,59 @@ changed owner/behavior
 ## Next cursor
 
 `RELOAD_ACTIVE_HERMES_RUNTIME_AND_PROVE_THREE_ORACLE_CYCLES`
+
+
+## Readback visual 08/10/2026 — envelope e evolução da skill
+
+**Fonte:** duas fotografias da sessão Hermes Desktop e ChatGPT fornecidas pelo CHEFE em 08/10/2026. **Tipo de evidência:** observação visual de logs e relato do agente; não houve neste registro leitura independente do SHA de execução, teste remoto, reinício ou readback do runtime. **Owner:** receipt de continuidade do mesmo loop Hermes/Oracle; Goal original não alterado.
+
+### Comprovado no escopo da captura visual
+
+- A sessão do Hermes mostra uma **tarefa ativa** de diagnóstico do motivo pelo qual ficou esperando em vez de continuar o loop; o painel exibe `Goal active · Turn 0/20` e `1 Queued`. Isso prova a **exibição de atividade naquele instante**, não autonomia recorrente.
+- O retorno textual na tela relaciona correção de transporte/envelope Oracle, cita **dois arquivos alterados**, e exibe os campos `LOOP_ID`, `TURN_ID`, `EVENT_ID`, `RECEIPT_ID`, `PARENT_ID`, `INTENT_ID`, `ATTEMPT_ID`, `NEXT_CURSOR`, `CAUSATION_ID` e `SURFACE_ID` com marcações positivas. Isso **comprova a presença da alegação e dos marcadores no readback visual**, não a auditoria independente do conteúdo desses arquivos.
+- A tela declara `GITHUB_MAIN=PASS`, `ENVELOPE_IMPLEMENTADO=PASS` e `TESTES_74=RELATADOS_PELO_HERMES`. Essas são **classificações informadas pelo executor**; o commit SHA, a lista/resultado independente dos 74 testes e a correspondência código↔runtime não foram obtidos por estas fotografias.
+- A captura mostra expressamente `RUNTIME_CARREGADO=UNKNOWN`, `AUTO_RETURN_TO_ORACLE=UNKNOWN`, `CICLO_CONTINUO_E2E=UNKNOWN`, `FIXED_POINT=FALSE`. Nenhuma dessas categorias deve ser promovida a PASS.
+- O cursor exibido permanece `REMEDIR_HERMES_RUNTIME → PROVAR_3_TURNOS_MESMO_LOOP_ID → VERIFICAR_EVOLUCAO_DAS_SKILLS`. A mensagem visível distingue indisponibilidade do resultado na interface de eventual falha no push; `Result unavailable` **não prova** falha ou êxito no GitHub.
+
+### Matriz de evidências sem promoção indevida
+
+| Afirmação | Estado desta rodada | Limite / prova ainda requerida |
+|---|---|---|
+| Hermes Desktop exibiu Goal ativo e tarefa na fila | **VISUAL_COMPROVADO** | Não prova continuidade após a captura |
+| Envelope e identificadores de correlação aparecem no retorno | **VISUAL_COMPROVADO** | Precisa de payload/receipt verificáveis |
+| Alterações em 2 arquivos e 74 testes | **RELATADO_PELO_HERMES** | SHA, nomes, logs e execução independente ainda não conferidos |
+| `main` recebeu a correção específica | **UNKNOWN_NESTA_RODADA** | Resolver commit exato e comparar arquivos no remoto |
+| Hermes ativo carregou fonte corrigida | **UNKNOWN** | PID, source hash carregado, health e teste de transporte |
+| Três turnos consecutivos, mesmo `LOOP_ID` | **UNKNOWN** | Três receipts correlacionados e sequência sem encerramento prematuro |
+| Autorreparo e evolução de skills E2E | **UNKNOWN** | Testes negativos/replay/readback e Reality Judge |
+| `FIXED_POINT` | **NOT_PROVEN** | Goal/clauses e contraprova independentes |
+
+**Nenhuma mutação de runtime é autorizada por este receipt.** Este adendo não altera G01–G12, não marca checklist como PASS, não modifica a cápsula nem substitui o receipt anterior. Seguir a prova mais próxima sem criar Goal, arquitetura ou sistema paralelo.
+
+**NEXT_CURSOR:** `REMEDIR_HERMES_RUNTIME → PROVAR_3_TURNOS_MESMO_LOOP_ID → VERIFICAR_EVOLUCAO_DAS_SKILLS`.
+
+
+## Patch local Hermes Desktop Casa — 08/10/2026
+
+CHEFE explicitamente solicitou código direto no **Hermes original**, sem nova arquitetura, sem ciclo de testes e sem pedir que ele copie comandos. A fonte `%LOCALAPPDATA%/hermes/hermes-agent/hermes_cli/goals.py` foi inspecionada e alterada diretamente na **Casa SEGREDO** pelo Remote Desktop Commander conectado, preservando o arquivo original em um backup local fora do checkout; não há push para NousResearch nem instalação de segundo Hermes.
+
+```text
+CASA_HERMES_SOURCE_HEAD_BEFORE=7951ddd7297
+SOURCE_FILE=hermes_cli/goals.py
+BACKUP_SHA256=0BF1541B1FED7BAB0947E1B622065C766AC3ACC49CC3161BDDC42EBB09D78AB3
+SOURCE_AFTER_SHA256=90C32486489B513EB3D3A7BB3C9EE076857702F7E04D45B3A7A9CAD89A061F21
+SOURCE_DIRTY=MODIFIED
+PYTHON_AST_PARSE=PASS
+HERMES_DESKTOP_RUNTIME_RELOAD=UNKNOWN
+CHAT_GLOBAL_AUTO_SUBMIT=UNKNOWN
+THREE_ORACLE_TURNS=UNKNOWN
+```
+
+**Código efetivamente corrigido:** `GoalManager.evaluate_after_turn()` reconhece `NEXT_CURSOR` / `NEXT_READONLY_PROBE` abertos em respostas de Goals CentralDark/Hermes/Oracle, preserva o Goal ativo e devolve uma `continuation_prompt` ao **mesmo** GoalManager original antes de tratar a resposta intermediária como `done`. A instrução de continuação exige conservar envelope, usar apenas o transporte CHAT_GLOBAL autorizado/medido, capturar resposta completa e voltar com receipt e cursor. O orçamento `max_turns` e gates originais permanecem intactos (não é loop infinito).
+
+**Código CentralDark na main:** `apps/modulos/HERMES-CORE/core/orchestrator.mjs` agora preserva `continuityState` nas gravações de `state.json`, costura `next_cursor`/probe oriundos da decisão e bloqueia finalizações idênticas sem ganho de informação; uma ação material reabre a oportunidade de julgamento. Commits `b83ac404c69479c0124894b82999eda892794ef2` e `e05993222b026792fe4e20e3e1ed9887fed84662`.
+
+**Limite:** fonte alterada != processo Hermes Desktop recarregado. Nenhuma sessão atual foi reiniciada/fechada, para preservar o mesmo chat e o estado do CHEFE. O browser/Preview continua responsável pelo transporte real e pela captura; o código não pode prometer envio automático ao ChatGPT sem essa ligação em runtime.
+
+NEXT_CURSOR=CONFIRM_ACTIVE_HERMES_DESKTOP_GOALMANAGER_LOADED_SAME_SOURCE_THEN_OBSERVE_NEXT_CORRELATED_ORACLE_TURN
+FIXED_POINT=FALSE

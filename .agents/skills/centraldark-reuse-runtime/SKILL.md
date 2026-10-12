@@ -67,4 +67,9 @@ OWNER
 PROOF_KEY
 EVIDENCE
 NEXT_CURSOR
+FIXED_POINT
 ```
+
+## Canonical fixed-point funnel
+
+Pass material reuse decisions through `software-development/centraldark-evidence-reconciliation/references/fixed-point-funnel.md`: CURRENT → owner/writer/scope → minimum delta → test → counterproof → exact readback → receipt. `UNKNOWN != PASS`; `FIXED_POINT=true` only when the reused binding and affected consumer are remeasured with no material gap.

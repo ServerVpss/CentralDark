@@ -72,6 +72,8 @@ FULL_TEMPORARY
 FULL
 ```
 
+O lease de provider que fornece *capability*, não a chave bruta, continua distinto do uso transitório de credencial que o próprio CHEFE fornece no chat privado autorizado. Essa entrega não transforma o chat em cofre nem autoriza transportar o valor a Git, logs ou memória.
+
 `FULL_TEMPORARY` é uma elevação com TTL, não uma troca definitiva de baseline. Antes de elevar, deve preservar o modo imediatamente anterior; ao expirar, restaura **exatamente** esse modo.
 
 ```text
@@ -125,6 +127,10 @@ MERGE_MAIN_SQUASH=PERMITIDO_SE_INTENCAO_JA_AUTORIZADA_E_PR_LIMPO
 NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
 NO_RETURN_TO_CHEFE_FOR_MACHINE_MEASURABLE_STATE=true
 NO_HUMAN_REASK_FOR_MERGE=true
+PERSISTENT_PR_AUTHORITY_DEFAULT=true
+TRUSTED_INTERNAL_PR_TO_MAIN=AUTHORITY_APPROVED_AUTOMATIC
+PERMITO_SEGREDO_LABEL=AUTO_MATERIALIZED_TRACE_WHEN_APPLICABLE
+GREEN_SAME_HEAD=AUTO_SQUASH_IF_CLEAN
 ```
 
 ### Contrato de intenção → main
@@ -182,6 +188,29 @@ CONVERGENCIA_TOTAL
 = somente quando SEGREDO/CHEFE solicitar para provar autonomia, arquitetura, robustez ou generalização
 ```
 
+## MCP Admin — autorização persistente sem confirmação repetitiva (2026-10-10)
+
+A rota existente `/admin/mcp` reutiliza a sessão OAuth vigente com escopo
+`admin` e identidade auditável; o bridge Hub autenticado também reutiliza sua
+sessão administrativa. Nessas entradas, ferramentas destrutivas **aprovadas no
+manifesto** não exigem digitar `CONFIRMO ADMIN` a cada chamada.
+
+- O OAuth precisa continuar válido em cada request; expiração/revogação corta
+  a autorização. A configuração é permanente, não o token.
+- A auditoria encadeada, a quarentena, a allowlist, o controle de escopo e os
+  limites próprios das ferramentas permanecem obrigatórios.
+- `autoMission` não recebe aprovação independente; nenhum modelo fabrica
+  autoridade humana a partir do texto do prompt.
+- Chamadas locais/stdio sem proveniência autenticada continuam no mecanismo
+  legado de confirmação explícita; sem frase e sem proveniência são bloqueadas.
+- Uma confirmação explícita inválida não é silenciosamente transformada em PASS.
+- Não cria novo auth server, arquivo de token persistente ou outro executor.
+
+OWNER_CODE=`apps/modulos/mcp/src/lib/admin-guard.js`
+CONSUMERS=`apps/modulos/mcp/src/tools/core/mcp-admin.js`,
+`apps/modulos/mcp/src/mcp-server.js`, `apps/modulos/mcp/src/index.js`,
+`apps/modulos/mcp/src/provider-admin-bridge.js`.
+
 ## Credencial autorizada não é bypass
 
 Receber ou usar uma credencial disponibilizada pelo próprio fluxo autorizado não é, por si só, jailbreak nem ampliação de autoridade. O julgamento continua sendo sobre **escopo + efeito + tratamento do segredo**.
@@ -193,6 +222,11 @@ SECRET_VALUE_IS_NOT_CANONICAL_MEMORY=true
 SECRET_VALUE_IS_NOT_LEDGER=true
 TRANSIENT_OAUTH_CODE_IS_NOT_LEDGER=true
 SECRET_MUST_NOT_BE_ECHOED_LOGGED_OR_COMMITTED=true
+# Invariante original: nunca ecoar por padrao nem expor fora do escopo autorizado.
+# A excecao de exibicao sob pedido explicito do CHEFE restringe-se ao chat privado autenticado.
+SECRET_MUST_NOT_BE_ECHOED_BY_DEFAULT=true
+CHEFE_EXPLICIT_AUTHENTICATED_PRIVATE_CHAT_DISPLAY_ALLOWED=true
+SECRET_MUST_NOT_BE_LOGGED_OR_COMMITTED=true
 VALID_RESTRICTION_STILL_APPLIES=true
 BYPASS_OF_VALID_RESTRICTION=SECURITY_FAILURE
 ```
@@ -201,7 +235,7 @@ Autorização legítima permite usar a capability no escopo concedido; não tran
 
 ## ⛔ Continua proibido
 
-- Expor, copiar para chat/log/commit ou publicar valor de token, senha, Authorization, cookie, chave privada ou secret.
+- Expor ou transportar valor de token, senha, Authorization, cookie, chave privada ou secret para logs, Git/commits, HUD, receipts, memória ou chats não autorizados. O chat privado autenticado do CHEFE permite entrada operacional e exibição apenas quando expressamente solicitada; não é armazenamento nem prova de runtime.
 - Force-push.
 - `git reset --hard` como mecanismo operacional destrutivo sobre trabalho vivo de outro Writer.
 - Apagar recurso externo/arquivo necessário sem mapear consumidor e rollback.

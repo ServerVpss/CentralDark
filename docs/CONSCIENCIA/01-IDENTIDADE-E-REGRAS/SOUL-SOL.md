@@ -1011,6 +1011,42 @@ CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
 CENTRALDARK_AI_BOOT.yaml=fb17afb089eeb31682c79baa52d51cdaea4fc827
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=00d02387cde287ac1ee3447337f85bcea0c243cc
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-07T06:45:03.463Z
+Revisao 2026-10-09 — SOUL_SOURCE_ANCHOR_CAUSAL_RECONCILIATION: o gate do deploy
+do HUD em main (run 37870486761, job 113627195153) falhou
+SOUL_SYNC_CURRENT_FOR_FIXED_POINT por ancora `LEIA-ME-IA.md` obsoleta.
+A versao ancorada `a55dc6215c6367c17e8adcb373a7255d0cd5596b` foi
+comparada diretamente com o blob CURRENT `e34eb841e6784285563ba065a9205679d98466b5`:
+unico delta semanticamente observado e a generalizacao de UM exemplo de
+mensagem Remote Desktop Commander, trocando identificacao concreta de host
+por "dispositivo medido". A lei de diagnostico causal com alvo e estado
+medidos ja esta coberta pelo proprio §2.4/lei de prova; nenhum novo poder,
+permissao, owner ou regra e absorvido aqui. Apenas reconciliacao da ancora
+de entrada, com historico preservado. MAIN_PATCH != VPS_DEPLOY; a prova da
+VPS exige novo gate, HEAD/arquivo em checkout e readback do HUD.
+
+```text
+Revisao 2026-10-09 — HUD_FIRST_CANONICAL_AND_NONBLOCKING_PLAQUE:
+os donos AGENTS.md e CENTRALDARK_AI_BOOT.yaml foram relidos e confrontados
+com as ancoras anteriores. O delta material vigente obriga a entrada
+canonizada a ler o unico docs/HUD/HUD.html do HEAD vivo de main, confrontar
+SHA/bytes com a projecao na VPS antes de novo boot, Goal ou promocao.
+Falta de prova dessa origem bloqueia somente NOVA execucao canonica, nao
+derruba processos saudaveis em curso. Falhas auxiliares (Screenpipe, Kylin,
+interface ou CLI) sao localizadas no mesmo HUD: placa de estado, rota, owner,
+arquivo/linha quando medidos, evidencia e proximo cursor; a receita
+ACEITAR MISSAO (COPIAR) nao executa mutacao nem amplia autorizacao.
+REUSE_BEFORE_CREATE e UNKNOWN != PASS continuam obrigatorios.
+A medicao atual comprovou HEAD=main e SHA identico no HUD da VPS;
+essa prova operacional nao autoriza reclassificar os demais servicos.
+Nao nasce segundo HUD, gate de saude opcional ou outro owner.
+
+SOUL_SYNC_ANCHOR_BEGIN
+AGENTS.md=81dfdcf682486ccb7a508ff6dc06fb42e8342fc7
+LEIA-ME-IA.md=e34eb841e6784285563ba065a9205679d98466b5
+CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
+CENTRALDARK_AI_BOOT.yaml=5e54e602590486f3b70b8b41bafaac660b54fc81
+docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-07
 SOUL_SYNC_ANCHOR_END
 ```
 

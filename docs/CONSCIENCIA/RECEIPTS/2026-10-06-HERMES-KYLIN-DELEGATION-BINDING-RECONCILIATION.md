@@ -159,3 +159,35 @@ FIXED_POINT=false
 ## NEXT_CURSOR
 
 KYLIN_INIT_10_ROOT_CAUSE -> CURRENT_MODEL_BINDING_SURVIVES -> NATIVE_ONCE_PASS -> BRIDGE_COMPLETION_PASS -> TEN_SUBAGENTS -> FIND_C893A949 -> SAME_RECIPE_KYLIN_REPLAY -> COMPARE_EFFECT
+
+
+---
+
+## 🪬 ADENDO COMPASSO — 09/10/2026 · menor delta no owner Kylin
+
+**Intenção preservada:** o COMPASSO da Lei de Cooperação já cristalizada em
+\`docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md\` foi aplicado à falha
+\`KYLIN_CHAT=502\` / \`INIT_FAILED:10\`, sem outro bridge, outro agente ou alteração do modelo selecionado.
+
+**CURRENT (no momento da primeira medição desta rodada):**
+- GitHub main \`43dbebe2fdc302bbccc61bed80e4c6e67e56ce35\`; VPS HEAD \`11e01749e677866a094994f84c5c9352ad19f7fb\`. A main avançara depois do estado alinhado informado pelo CHEFE.
+- Triton mostra ASR, TTS e embeddings \`READY\` (não equivale a chat NLP pronto).
+- Owner \`scripts/vps/kylin-openai-bridge.py\`: chamada \`genai_text_init_session\` ocorria ANTES de \`genai_text_set_model_config\`. No SDK oficial openKylin, a configuração é vinculada antes da inicialização. Fonte: https://www.openkylin.top/public/pdf/openKylin_AI_SDK.pdf (seção 4.4.8.2).
+- SDK JS oficial mapeia código 10 para \`AISDK_MODEL_NOT_FOUND\`; significado no binário C instalado na VPS ainda precisa de confirmação direta. Fonte: https://www.npmjs.com/package/@openkylin/kysdk-ai.
+
+**Delta:** commit \`bdf2f09ad3437231c0c288e8d2c4ca985209fe1f\`:
+1. Mover \`genai_text_init_session(sess)\` após \`genai_text_set_model_config(sess,cfg)\`, preservando \`resolve_current_model()\` e o tratamento de erros.
+2. Adicionar regressões fake-SDK com e sem erro 10 em \`scripts/vps/test_kylin_bridge_sdk_order.py\`, sem depender da lib nativa na Casa.
+
+**Prova na bancada isolada:** \`E:\\CentralDark\\_cache\\kylin-sdk-order-20261009\`,
+mesmo commit \`bdf2f09ad3437231c0c288e8d2c4ca985209fe1f\`:
+- \`python -m py_compile\` dos dois arquivos: PASS.
+- \`python scripts/vps/test_kylin_bridge_sdk_order.py -v\`: 2/2 PASS, incluindo sequência \`set_name → set_model_config → init_session → chat\` e limpeza de config/session quando \`init_session\` devolve erro 10.
+- HEAD e diff do commit em GitHub: verificados.
+- **Limite:** testes fake-SDK NÃO provam que o modelo NLP real está instalado ou que \`/v1/chat/completions\` responde no runtime atual.
+- Dois artefatos untracked VPS preservados: \`apps/modulos/HERMES-CORE/missions/\` e \`apps/modulos/mcp/src/agents/agents-main.zip\`.
+
+**Sem executar:** restart do owner Kylin, alteração GSettings, reset da VPS, sobrescrita de worktree, login e replay de 10 subagentes.
+
+**Prova pendente:** \`DEPLOY_SAME_SHA → SDK_C_ERROR_MEANING_READBACK → CURRENT_MODEL_AVAILABLE → NATIVE_ONCE → /v1/chat/completions → TEN_SUBAGENTS\`.
+\`SOURCE_PATCH_PASS != VPS_RUNTIME_CHAT_PASS\`; \`UNKNOWN != PASS\`.

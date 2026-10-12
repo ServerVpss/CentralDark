@@ -1,0 +1,508 @@
+{
+  "schema": "centraldark.workflow-families.v2",
+  "status": "CANONICO_BINDING_SUBORDINADO",
+  "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
+  "clock_owner": ".github/workflows/trigger-fabric-package.yml",
+  "dispatcher": "scripts/trigger-fabric/workflow-family-dispatcher.mjs",
+  "authority_owner": "scripts/lupa/authority-approval.mjs",
+  "promotion_owner": ".github/workflows/autonomia-promocao.yml",
+  "invariants": {
+    "ONE_CLOCK": true,
+    "ONE_DISPATCHER": true,
+    "FAMILY_COUNT": 7,
+    "WORKFLOW_COUNT_BASELINE": 71,
+    "SCHEDULE_OUTSIDE_CLOCK": "FORBIDDEN",
+    "UNREGISTERED_WORKFLOW": "FAIL",
+    "CAPABILITY_LOSS_ALLOWED": false,
+    "WORKFLOW_IS_BINDING_NOT_OWNER": true,
+    "CURRENT_FILESET_MUST_MATCH_REGISTRY": true,
+    "ARM_ROUTER": true,
+    "FALLBACK_BEFORE_NEW_CAPABILITY": true,
+    "ARM_FAILURE_IS_CAPABILITY_FAILURE": false,
+    "TRANSPORT_FAILURE_IS_CAPABILITY_FAILURE": false,
+    "ALL_ARMS_FAILED": "UNKNOWN_OR_BLOCKED_RECEIPT_NEXT_CURSOR"
+  },
+  "families": {
+    "GATE_VALIDACAO": {
+      "count": 16,
+      "workflows": [
+        ".github/workflows/arsenal-adapter-tests.yml",
+        ".github/workflows/bot-server-validate.yml",
+        ".github/workflows/centraldark-execution-contract.yml",
+        ".github/workflows/centraldark-fixed-point-fabric.yml",
+        ".github/workflows/centraldark-run-all.yml",
+        ".github/workflows/centraldark-validate.yml",
+        ".github/workflows/codeql.yml",
+        ".github/workflows/copilot-setup-steps.yml",
+        ".github/workflows/cors-validator.yml",
+        ".github/workflows/lupa-conformance.yml",
+        ".github/workflows/nivel-7-tests.yml",
+        ".github/workflows/node24-lockfile-candidate.yml",
+        ".github/workflows/painel-validacao.yml",
+        ".github/workflows/porta-de-entrada.yml",
+        ".github/workflows/trigger-fabric-package.yml",
+        ".github/workflows/test.yml"
+      ]
+    },
+    "PR_GITHUB": {
+      "count": 11,
+      "workflows": [
+        ".github/workflows/autonomia-promocao.yml",
+        ".github/workflows/bots-labels-seed.yml",
+        ".github/workflows/dependabot-auto-merge.yml",
+        ".github/workflows/dispatcher-bots.yml",
+        ".github/workflows/farm-co-author.yml",
+        ".github/workflows/github-bot-controller.yml",
+        ".github/workflows/pr-agent.yml",
+        ".github/workflows/pr-auto-review.yml",
+        ".github/workflows/pr-title-contract.yml",
+        ".github/workflows/pr-update-branch-deterministic.yml",
+        ".github/workflows/varredura-branches-orfas.yml"
+      ]
+    },
+    "DEPLOY": {
+      "count": 7,
+      "workflows": [
+        ".github/workflows/auto-cf-origin-cert.yml",
+        ".github/workflows/auto-pr-and-deploy.yml",
+        ".github/workflows/caddy-telepainel-v2.yml",
+        ".github/workflows/centraldark-reinstall.yml",
+        ".github/workflows/install-cf-origin-cert.yml",
+        ".github/workflows/painel-auto-update.yml",
+        ".github/workflows/setup-telepainel-caddy.yml"
+      ]
+    },
+    "CASA_DESKTOP": {
+      "count": 6,
+      "workflows": [
+        ".github/workflows/centraldark-desktop-windows-installer.yml",
+        ".github/workflows/installer-deterministic.yml",
+        ".github/workflows/inventario-casa.yml",
+        ".github/workflows/remote-desktop-multi-account-hosted-deploy.yml",
+        ".github/workflows/remote-desktop-multi-account-live-reconcile.yml",
+        ".github/workflows/tauri-sign.yml"
+      ]
+    },
+    "INFRA_VPS": {
+      "count": 11,
+      "workflows": [
+        ".github/workflows/debug-vps-secrets.yml",
+        ".github/workflows/sol-apply-tailscale-mcp-candidate.yml",
+        ".github/workflows/test-ssh-root.yml",
+        ".github/workflows/test-vps-ssh-ip.yml",
+        ".github/workflows/test-vps-ssh.yml",
+        ".github/workflows/vps-check.yml",
+        ".github/workflows/vps-exec-selfhosted.yml",
+        ".github/workflows/vps-healthcheck.yml",
+        ".github/workflows/vps-reboot-forensic.yml",
+        ".github/workflows/vps-ssh-exec.yml",
+        ".github/workflows/vps-wake-hosted-ssh.yml"
+      ]
+    },
+    "SENTINELA_OBSERVABILIDADE": {
+      "count": 11,
+      "workflows": [
+        ".github/workflows/capsula-observavel.yml",
+        ".github/workflows/hermes-core-signal-watch.yml",
+        ".github/workflows/lupa-drift-guard.yml",
+        ".github/workflows/painel-vivo.yml",
+        ".github/workflows/pipeline-notify.yml",
+        ".github/workflows/pr-hud-live-remeasure.yml",
+        ".github/workflows/sentinela-divergencias.yml",
+        ".github/workflows/sentinela-stale.yml",
+        ".github/workflows/status-badge-fabric.yml",
+        ".github/workflows/workflow-dedupe-radar.yml",
+        ".github/workflows/wuzapi-sessions-monitor.yml"
+      ]
+    },
+    "CONHECIMENTO_MEMORIA": {
+      "count": 9,
+      "workflows": [
+        ".github/workflows/estado-retomada.yml",
+        ".github/workflows/grafo-vivo-markdown.yml",
+        ".github/workflows/notion-sync.yml",
+        ".github/workflows/obsidian-index.yml",
+        ".github/workflows/obsidian-plugin-release.yml",
+        ".github/workflows/pr-learning-artifact.yml",
+        ".github/workflows/pr-mother-pulse.yml",
+        ".github/workflows/recibo-telegram-gabarito.yml",
+        ".github/workflows/selo-fabric.yml"
+      ]
+    }
+  },
+  "schedule_bindings": [
+    {
+      "cron": "17 9 * * 1",
+      "workflow": ".github/workflows/codeql.yml",
+      "family": "GATE_VALIDACAO",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "CODEQL",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "17 6 * * *",
+      "workflow": ".github/workflows/cors-validator.yml",
+      "family": "GATE_VALIDACAO",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "CORS_VALIDATOR",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "23 6 * * *",
+      "workflow": ".github/workflows/estado-retomada.yml",
+      "family": "CONHECIMENTO_MEMORIA",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "ESTADO_RETOMADA",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "0 12 * * *",
+      "workflow": ".github/workflows/sentinela-stale.yml",
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "SENTINELA_STALE",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "15 8 * * *",
+      "workflow": ".github/workflows/painel-validacao.yml",
+      "family": "GATE_VALIDACAO",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "PAINEL_VALIDACAO",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "17 9 * * *",
+      "workflow": ".github/workflows/github-bot-controller.yml",
+      "family": "PR_GITHUB",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "GITHUB_BOT_CONTROLLER",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "23 3 * * *",
+      "workflow": ".github/workflows/workflow-dedupe-radar.yml",
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "WORKFLOW_DEDUPE_RADAR",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        },
+        {
+          "arm": "VPS_LOCAL_COMMAND",
+          "idempotent_same_target": true,
+          "commands": [
+            [
+              "python3",
+              "scripts/ci/workflow_dedupe_radar.py",
+              "--self-test"
+            ],
+            [
+              "python3",
+              "scripts/ci/workflow_dedupe_radar.py",
+              "--root",
+              ".",
+              "--json-out",
+              "${RUNNER_TEMP}/workflow-dedupe-arm-router.json",
+              "--markdown-out",
+              "${RUNNER_TEMP}/workflow-dedupe-arm-router.md",
+              "--fail-on-visual-canon"
+            ]
+          ],
+          "evidence_files": [
+            "${RUNNER_TEMP}/workflow-dedupe-arm-router.json",
+            "${RUNNER_TEMP}/workflow-dedupe-arm-router.md"
+          ]
+        }
+      ]
+    },
+    {
+      "cron": "23 */6 * * *",
+      "workflow": ".github/workflows/status-badge-fabric.yml",
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "STATUS_BADGE_FABRIC",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "0 */6 * * *",
+      "workflow": ".github/workflows/sentinela-divergencias.yml",
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "SENTINELA_DIVERGENCIAS",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        },
+        {
+          "arm": "GITHUB_REPOSITORY_DISPATCH",
+          "event_type": "centraldark_sentinel_route",
+          "idempotent_same_target": true
+        }
+      ]
+    },
+    {
+      "cron": "17 * * * *",
+      "workflow": ".github/workflows/pr-title-contract.yml",
+      "family": "PR_GITHUB",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "PR_TITLE_CONTRACT",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "0 */6 * * *",
+      "workflow": ".github/workflows/vps-healthcheck.yml",
+      "family": "INFRA_VPS",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "VPS_HEALTHCHECK",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "47 */12 * * *",
+      "workflow": ".github/workflows/selo-fabric.yml",
+      "family": "CONHECIMENTO_MEMORIA",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "SELO_FABRIC",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "*/30 * * * *",
+      "workflow": ".github/workflows/pr-hud-live-remeasure.yml",
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "PR_HUD_LIVE_REMEASURE",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "0 6 1 * *",
+      "workflow": ".github/workflows/bots-labels-seed.yml",
+      "family": "PR_GITHUB",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "BOTS_LABELS_SEED",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "0 9 * * 1",
+      "workflow": ".github/workflows/varredura-branches-orfas.yml",
+      "family": "PR_GITHUB",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "VARREDURA_BRANCHES_ORFAS",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "17,47 * * * *",
+      "workflow": ".github/workflows/autonomia-promocao.yml",
+      "family": "PR_GITHUB",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "AUTONOMIA_PROMOCAO",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "17,47 * * * *",
+      "workflow": ".github/workflows/dependabot-auto-merge.yml",
+      "family": "PR_GITHUB",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "DEPENDABOT_AUTO_MERGE",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "17 7 * * *",
+      "workflow": ".github/workflows/hermes-core-signal-watch.yml",
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "HERMES_CORE_SIGNAL_WATCH",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        }
+      ]
+    },
+    {
+      "cron": "11,41 * * * *",
+      "workflow": ".github/workflows/pr-update-branch-deterministic.yml",
+      "family": "PR_GITHUB",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "PR_UPDATE_BRANCH_DETERMINISTIC",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
+        },
+        {
+          "arm": "GITHUB_REPOSITORY_DISPATCH",
+          "event_type": "centraldark_update_branch_reconcile",
+          "idempotent_same_target": true
+        }
+      ]
+    }
+  ],
+  "arm_router": {
+    "owner": "scripts/trigger-fabric/workflow-family-dispatcher.mjs",
+    "model": "CAPABILITY -> ARM_ROUTER -> ELIGIBLE_ARM -> SAME_TARGET -> EVIDENCE -> FALLBACK",
+    "invariants": {
+      "REUSE_BEFORE_CREATE": true,
+      "FALLBACK_BEFORE_NEW_CAPABILITY": true,
+      "ARM_FAILURE_IS_CAPABILITY_FAILURE": false,
+      "TRANSPORT_FAILURE_IS_CAPABILITY_FAILURE": false,
+      "UNKNOWN_IS_NOT_PASS": true,
+      "CURRENT_OVER_HISTORY": true
+    },
+    "arms": {
+      "GITHUB_WORKFLOW_DISPATCH": {
+        "owner": "scripts/trigger-fabric/workflow-family-dispatcher.mjs",
+        "route": "GITHUB_ACTIONS_WORKFLOW_DISPATCH",
+        "evidence_required": [
+          "HTTP_204_ACCEPTED",
+          "WORKFLOW_PATH",
+          "REF",
+          "TARGET_FINGERPRINT"
+        ],
+        "failure_class": "TRANSPORT_ROUTE_FAILURE",
+        "fallback_order": 10,
+        "same_target_remeasurement": "WORKFLOW_PATH+REF+TARGET_FINGERPRINT",
+        "eligible": true
+      },
+      "GITHUB_REPOSITORY_DISPATCH": {
+        "owner": "scripts/trigger-fabric/workflow-family-dispatcher.mjs",
+        "route": "GITHUB_REPOSITORY_DISPATCH",
+        "evidence_required": [
+          "HTTP_204_ACCEPTED",
+          "EVENT_TYPE",
+          "TARGET_FINGERPRINT"
+        ],
+        "failure_class": "TRANSPORT_ROUTE_FAILURE",
+        "fallback_order": 20,
+        "same_target_remeasurement": "EVENT_TYPE+CAPABILITY_ID+TARGET_FINGERPRINT",
+        "eligible": true
+      },
+      "VPS_LOCAL_COMMAND": {
+        "owner": "SELF_HOSTED_VPS_EXISTING_RUNNER",
+        "route": "LOCAL_COMMAND_EXISTING_OWNER",
+        "evidence_required": [
+          "COMMAND",
+          "EXIT_CODE",
+          "STDOUT_STDERR",
+          "WORKTREE_HEAD",
+          "TARGET_FINGERPRINT"
+        ],
+        "failure_class": "LOCAL_EXECUTION_RESULT",
+        "fallback_order": 30,
+        "same_target_remeasurement": "COMMAND_FINGERPRINT+WORKTREE_HEAD+TARGET_FINGERPRINT",
+        "eligible": true
+      },
+      "HERMES_MISSION_QUEUE": {
+        "owner": "apps/modulos/HERMES-CORE/core/orchestrator.mjs",
+        "route": "apps/modulos/HERMES-CORE/missions/pendente",
+        "evidence_required": [
+          "MISSION_FILE",
+          "ORCHESTRATOR_PICKUP",
+          "FINALIZATION_RECEIPT",
+          "TARGET_FINGERPRINT"
+        ],
+        "failure_class": "VPS_AUTONOMOUS_ROUTE",
+        "fallback_order": 40,
+        "same_target_remeasurement": "REQUIRED_BEFORE_ELIGIBLE",
+        "eligible": false,
+        "reason": "RUNTIME_QUEUE_PROVEN_BUT_CAPABILITY_SAME_TARGET_MAPPING_NOT_PROVEN"
+      }
+    }
+  }
+}

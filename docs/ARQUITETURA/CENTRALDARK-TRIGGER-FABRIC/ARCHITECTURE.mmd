@@ -356,5 +356,121 @@ CD_REG_X8_A["HERMES_MISSION_TEXT"] -->|"CALL"| CD_REG_X8_B["CONTINUITY_CONTRACT_
 CD_REG_X9_A["CONTINUITY_STATE_NORMALIZED"] -->|"CALL"| CD_REG_X9_B["HERMES_FINALIZATION_PROBLEMS_LIST"]
 %% CD_FLOW:hermes-core.agents.critic.Critic
 CD_REG_X10_A["HERMES_ORCHESTRATOR_STEP"] -->|"CALL"| CD_REG_X10_B["HERMES_FINALIZATION_RECEIPT"]
+%% CD_FLOW:trigger.learning.ORACLE_QUERY_SUBMITTED
+CD_REG_81_A["LEARNING_EVENT_BUS"] -->|"ORACLE_QUERY_SUBMITTED"| CD_REG_81_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + supabase/functions/_shared/evidence-envelope.mjs"]
+%% CD_FLOW:trigger.learning.ORACLE_RESPONSE_CAPTURED
+CD_REG_82_A["LEARNING_EVENT_BUS"] -->|"ORACLE_RESPONSE_CAPTURED"| CD_REG_82_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + apps/modulos/HERMES-CORE/core/perception-orchestra.mjs + supabase/functions/_shared/evidence-envelope.mjs"]
+%% CD_FLOW:trigger.learning.ORACLE_SEND_FAILED
+CD_REG_83_A["LEARNING_EVENT_BUS"] -->|"ORACLE_SEND_FAILED"| CD_REG_83_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md"]
+%% CD_FLOW:trigger.learning.ORACLE_PROVEN_NEW_PATH
+CD_REG_84_A["LEARNING_EVENT_BUS"] -->|"ORACLE_PROVEN_NEW_PATH"| CD_REG_84_B[".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/memory-linker/"]
+%% CD_FLOW:gate.diagram-route.stripQuoted
+CD_REG_85_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_85_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.normalizeOp
+CD_REG_86_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_86_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.labelOf
+CD_REG_87_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_87_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.parseMermaid
+CD_REG_88_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_88_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.extractMermaidSource
+CD_REG_89_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_89_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.compareMermaid
+CD_REG_90_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_90_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.authorizedMermaidItems
+CD_REG_91_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_91_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.applyMermaidAuthorization
+CD_REG_92_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_92_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.readEventApproval
+CD_REG_93_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_93_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.showAt
+CD_REG_94_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_94_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:gate.diagram-route.validateMermaidPreservation
+CD_REG_95_A["PORTA_DE_ENTRADA"] -->|"CALL"| CD_REG_95_B["DIAGRAM_ROUTE_GATE"]
+%% CD_FLOW:instinto.AdminCofreSeguranca.RotuloEstado
+CD_REG_96_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_96_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.AdminCofreSeguranca.ItemCofre
+CD_REG_97_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_97_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.AdminCofreSeguranca.HubSeguranca
+CD_REG_98_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_98_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.AdminCofreSeguranca.CofreAdministrativo
+CD_REG_99_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_99_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.peleValida
+CD_REG_100_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_100_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.usePeleCockpit
+CD_REG_101_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_101_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.sincronizar
+CD_REG_102_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_102_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.selecionar
+CD_REG_103_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_103_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.DesignCenter
+CD_REG_104_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_104_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.storage
+CD_REG_105_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_105_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.InfraestruturaSistema.Lista
+CD_REG_106_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_106_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.InfraestruturaSistema.Cofre
+CD_REG_107_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_107_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.InfraestruturaSistema.Cristal
+CD_REG_108_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_108_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.InfraestruturaSistema.Biblioteca
+CD_REG_109_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_109_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.InfraestruturaSistema.PainelHistorico
+CD_REG_110_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_110_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.InfraestruturaSistema.InfraestruturaSistema
+CD_REG_111_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_111_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.Ledger.Ledger
+CD_REG_112_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_112_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.MapaOwners.MapaOwners
+CD_REG_113_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_113_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.PainelAdminCentralDark.PainelAdminCentralDark
+CD_REG_114_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_114_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.RuntimeSistema.Barra
+CD_REG_115_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_115_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.RuntimeSistema.RuntimeSistema
+CD_REG_116_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_116_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.cockpit.apiBase
+CD_REG_117_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_117_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.maquina.ehObjeto
+CD_REG_118_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_118_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.maquina.sondar
+CD_REG_119_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_119_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.maquina.achar
+CD_REG_120_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_120_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.maquina.percentual
+CD_REG_121_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_121_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.CockpitShell.botao-01
+CD_REG_122_A["CHEFE"] -->|"CLICK"| CD_REG_122_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.CockpitShell.botao-02
+CD_REG_123_A["CHEFE"] -->|"CLICK"| CD_REG_123_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.CockpitShell.botao-03
+CD_REG_124_A["CHEFE"] -->|"CLICK"| CD_REG_124_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.CockpitShell.botao-04
+CD_REG_125_A["CHEFE"] -->|"CLICK"| CD_REG_125_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.CockpitShell.botao-05
+CD_REG_126_A["CHEFE"] -->|"CLICK"| CD_REG_126_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.CockpitShell.botao-06
+CD_REG_127_A["CHEFE"] -->|"CLICK"| CD_REG_127_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.botao-01
+CD_REG_128_A["CHEFE"] -->|"CLICK"| CD_REG_128_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.botao-02
+CD_REG_129_A["CHEFE"] -->|"CLICK"| CD_REG_129_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.botao-03
+CD_REG_130_A["CHEFE"] -->|"CLICK"| CD_REG_130_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.botao-04
+CD_REG_131_A["CHEFE"] -->|"CLICK"| CD_REG_131_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.botao-05
+CD_REG_132_A["CHEFE"] -->|"CLICK"| CD_REG_132_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.botao-06
+CD_REG_133_A["CHEFE"] -->|"CLICK"| CD_REG_133_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.botao-07
+CD_REG_134_A["CHEFE"] -->|"CLICK"| CD_REG_134_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.DesignCenter.botao-08
+CD_REG_135_A["CHEFE"] -->|"CLICK"| CD_REG_135_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:instinto.roteador.modelo-local.ver-pendencia
+CD_REG_KYLIN_OFFLINE_BUTTON_A["CHEFE"] -->|"CLICK / VER PENDENCIA"| CD_REG_KYLIN_OFFLINE_BUTTON_B["INSTINTO_SUPERIOR_COCKPIT"]
+%% CD_FLOW:heart.operational-telemetry.gitSyncFront
+CD_REG_136_A["AUTO_SYNC_MAIN"] -->|"CALL"| CD_REG_136_B["ONE_HEART_F1_GIT"]
+%% CD_FLOW:heart.operational-telemetry.dist.gitSyncFront
+CD_REG_137_A["AUTO_SYNC_MAIN"] -->|"CALL"| CD_REG_137_B["ONE_HEART_F1_GIT"]
 end
 %% CD_REGISTRY_PROJECTION_END

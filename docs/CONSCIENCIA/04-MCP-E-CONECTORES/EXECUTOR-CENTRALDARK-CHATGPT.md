@@ -263,7 +263,7 @@ OBJETIVO_ATUAL_SUFICIENTE
 
 ## 🧾 Proveniência do cristal
 
-Este contrato cristaliza o método provado na sessão em que ChatGPT, por Remote Desktop Commander, entrou no dispositivo `SEGREDO`, preservou um caminho local já existente, fez clone separado seguro, instalou dependências, subiu `public/central-dark-instinct-2`, mediu `HTTP 200` e abriu o localhost na Casa.
+Este contrato cristaliza o método provado na sessão em que ChatGPT, por Remote Desktop Commander, entrou no dispositivo `SEGREDO`, preservou um caminho local já existente, fez clone separado seguro, instalou dependências, subiu `apps/instinto-superior`, mediu `HTTP 200` e abriu o localhost na Casa.
 
 A experiência desejada fica:
 

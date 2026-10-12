@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "b4fbaab825e0226a26466990a5395e73ae9cb578",
+  "source_blob_sha": "355fbd8582d9d08e8b75bd061650fb209c3bac06",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 166,
-    "highest_legacy_learning_number": 167,
+    "learning_sections": 169,
+    "highest_legacy_learning_number": 170,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 167
+      "end": 170
     }
   },
   "nodes": [
@@ -1911,6 +1911,39 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L166",
+      "next_uid": "L168"
+    },
+    {
+      "uid": "L168",
+      "legacy_learning_number": 168,
+      "legacy_occurrence": 1,
+      "title": "Catálogo MCP unificado de capabilities e rotas (2026-10-06)",
+      "document_order": 167,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L167",
+      "next_uid": "L169"
+    },
+    {
+      "uid": "L169",
+      "legacy_learning_number": 169,
+      "legacy_occurrence": 1,
+      "title": "Hermes delegado + Screenpipe CLI entram no catálogo metabólico (2026-10-06)",
+      "document_order": 168,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L168",
+      "next_uid": "L170"
+    },
+    {
+      "uid": "L170",
+      "legacy_learning_number": 170,
+      "legacy_occurrence": 1,
+      "title": "Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit",
+      "document_order": 169,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L169",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

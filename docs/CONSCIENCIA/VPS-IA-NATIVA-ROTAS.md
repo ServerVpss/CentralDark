@@ -233,3 +233,33 @@ CURRENT_OVER_HISTORY=true
 
 Owner de evidência: `docs/CONSCIENCIA/RECEIPTS/2026-10-04-kylin-native-hermes-routes-session.md`.
 PR-mãe receipt: `#1562 / 5975848027`.
+
+
+## Selo de rota CURRENT — Casa SEGREDO → VPS por SSH do Git — 11/10/2026
+
+<!-- CENTRALDARK_SSH_GIT_CLIENT_PASS_20261011 -->
+
+Medição independente da sessão **2026-10-11T20:38:03Z**, executada por Remote Desktop Commander na Casa **SEGREDO**, PowerShell 7, sem alteração de configuração nem de arquivos da VPS. Este selo atualiza **somente o binding SSH da Casa para a VPS**; não promove deploy, sincronização do HUD, A2A ou estado global.
+
+| Item | Resultado medido |
+|---|---|
+| Origem | Windows Casa SEGREDO, `C:\\Users\\Administrador` |
+| Perfil SSH | `Segredo-VPS` — alias presente em `C:\\Users\\Administrador\\.ssh\\config` (também existe `segredo-vpss`) |
+| Destino | `89.117.78.124:22`, usuário `root` |
+| Chave | `C:\\Users\\Administrador\\.ssh\\segredo_vps_ed25519` (arquivo presente; **sem expor seu conteúdo**) |
+| Binário comprovado | `C:\\Program Files\\Git\\usr\\bin\\ssh.exe` — OpenSSH_10.3p1 |
+| SSH nativo do Windows | `C:\\Windows\\System32\\OpenSSH\\ssh.exe`: `-V` e `-G` retornaram **255** sem diagnóstico útil nesta sessão; causa interna ainda **UNKNOWN** |
+| Rede Casa → VPS | TCP `89.117.78.124:22` **OPEN** no teste da Casa |
+| Comando de prova remoto | `hostname; id -un` via `Segredo-VPS`, com `BatchMode=yes`, `ConnectTimeout=8`, `StrictHostKeyChecking=yes` e `IdentitiesOnly=yes` |
+| Readback remoto | `CENTRALDARK-OS` / `root` |
+| Resultado | `SSH_EXIT=0`, `SSH_STDERR_LINE_COUNT=0` |
+
+Para acesso interativo no PowerShell da Casa, reutilizar:
+
+```powershell
+& "C:\\Program Files\\Git\\usr\\bin\\ssh.exe" Segredo-VPS
+```
+
+**Veredito por escopo:** `CASA_TO_VPS_SSH_GIT=PASS`; `WINDOWS_NATIVE_SSH_BINARY=FAIL_OBSERVED`; `HERMES_A2A_ROUNDTRIP=UNKNOWN`; `VPS_HUD_CHECKOUT_SYNC=UNKNOWN`. Uma rota SSH que passou **não** comprova nenhum outro serviço.
+
+**NEXT_CURSOR:** reutilizar a rota SSH do Git para medições autorizadas Casa→VPS; preservar o worktree sujo e as modificações locais antes de qualquer reconciliação Git. Não criar segundo Hermes ou segundo owner por causa deste transporte.

@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
-          TARGET_SHA="$GITHUB_SHA" REPO_DIR=/root/CentralDark BRANCH=main \
+          TARGET_SHA="$GITHUB_SHA" REPO_DIR="$GITHUB_WORKSPACE" BRANCH=main \
             bash scripts/vps/deploy-guards-dispatcher.sh --gate-only
           echo "CANONICAL_DEPLOY_GATE=PASS TARGET_SHA=$GITHUB_SHA"
 
@@ -43,7 +43,7 @@ jobs:
           flock -w 90 9 || { echo "SITE_DEPLOY_LOCK_TIMEOUT"; exit 21; }
 
           echo "TARGET_SHA=${GITHUB_SHA}"
-          SOURCE_HEAD="$GITHUB_SHA" bash scripts/setup-centraldark-portal.sh
+          DEPLOY_GATE_REPO_DIR="$GITHUB_WORKSPACE" SOURCE_HEAD="$GITHUB_SHA" bash scripts/setup-centraldark-portal.sh
 
           CF=/etc/caddy/Caddyfile
           SNIPPET=/root/CentralDark/infra/caddy/portal.Caddyfile

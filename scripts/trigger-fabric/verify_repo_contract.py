@@ -1600,6 +1600,31 @@ check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism
  'CATALOG_EXPECTED_ROUTES=13',
 ], classification='HERMES_SCREENPIPE_METABOLISM_RECEIPT')
 
+
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
+ 'CENTRALDARK_WORKFLOW_FAMILY_COMPRESSION_V1',
+ 'schedule_outside_clock: FORBIDDEN',
+ 'future_workflow_requires_family_binding: true',
+ 'CENTRALDARK_ARM_ROUTER_V1',
+ 'fallback_before_new_capability: true',
+ 'arm_failure_is_capability_failure: false',
+ 'all_arms_failed: UNKNOWN_OR_BLOCKED_RECEIPT_NEXT_CURSOR',
+], classification='WORKFLOW_FAMILY_COMPRESSION_GLOBAL_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/WORKFLOW-FAMILIES.json',[
+ '"ONE_CLOCK": true',
+ '"ONE_DISPATCHER": true',
+ '"FAMILY_COUNT": 7',
+ '"WORKFLOW_COUNT_BASELINE": 71',
+ '"ARM_ROUTER": true',
+ '"FALLBACK_BEFORE_NEW_CAPABILITY": true',
+ '"ARM_FAILURE_IS_CAPABILITY_FAILURE": false',
+], classification='WORKFLOW_FAMILY_BINDING_REGISTRY')
+check_command(
+ 'scripts/trigger-fabric/workflow-family-dispatcher.mjs --verify',
+ ['node', str(ROOT/'scripts/trigger-fabric/workflow-family-dispatcher.mjs'), '--verify'],
+ classification='WORKFLOW_FAMILY_SINGLE_CLOCK_EXECUTABLE_GATE',
+)
+
 try:
     tracked=subprocess.check_output(['git','ls-files'],cwd=ROOT,text=True).splitlines()
 except Exception as exc:

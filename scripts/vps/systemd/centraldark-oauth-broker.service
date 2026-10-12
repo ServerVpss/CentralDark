@@ -1,0 +1,34 @@
+[Unit]
+Description=CentralDark existing OAuth Broker (persistent localhost:8098)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/centraldark/oauth-broker.env
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/root/CentralDark/apps/modulos/oauth-broker
+Environment=NODE_ENV=production
+Environment=PORT=8098
+EnvironmentFile=/etc/centraldark/oauth-broker.env
+ExecCondition=/usr/local/bin/node /root/CentralDark/apps/modulos/oauth-broker/check-config.mjs
+ExecStart=/usr/local/bin/node /root/CentralDark/apps/modulos/oauth-broker/server.mjs
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectKernelTunables=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
