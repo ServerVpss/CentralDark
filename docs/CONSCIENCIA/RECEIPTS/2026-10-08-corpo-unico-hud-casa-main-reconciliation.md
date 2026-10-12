@@ -214,3 +214,113 @@ O workflow de deploy do site ainda aparecia QUEUED na última medição. O `depl
 MUTATIONS_THIS_SCOPE=CASA_HUD_ATOMIC_SYNC_WITH_BACKUP; DOC_RECEIPT_APPEND_ONLY.
 NO_KYLIN_RESTART=true; NO_NEW_SERVICE=true; NO_CAPTURE_ACTIVATION=true; NO_SECRET_ACCESS=true.
 NEXT_CURSOR=SITE_DEPLOY_SAME_SHA_AND_PUBLIC_PLAQUE_READBACK -> ADMIN_ROUTE_OWNER -> OAUTH_ROUTE_READBACK -> OPTIONAL_RUNTIME_WARNINGS; manter site e API operantes.
+
+## Adendo — 2026-10-11 — Corpo Unico: perfis Desktop Commander e codigo efemero
+
+**INTENCAO:** manter o mesmo monitor WinForms da Casa, o owner `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` e as abas de logs; recuperar codigos temporarios de autorizacao dos dois perfis sem incluir segredos no codigo ou em receipts.
+
+**Readback T1 (Casa, 2026-10-11 ~19:30 BRT):**
+- GUI WinForms `CENTRALDARK | CORPO UNICO | HUD FIXO + LOGS AO VIVO`: **1 instancia observada**, 5 botoes presentes; 10 cards e abas preservados.
+- `Conta 2`: clique Win32 recebido; o log `Corpo-Unico-HUD-Logs.txt` confirmou `Autorizacao conta2: pagina oficial com codigo temporario preenchido`. Inspecao das 100 linhas mais recentes: **nenhum codigo de dispositivo 4+4 exposto**. A autenticacao humana posterior segue `LOGIN_PENDING` na ultima contraprova, portanto nao marcar como READY.
+- `Conta 1`: `desktop-commander-remote.service` ativo, autenticacao `UNKNOWN`; preservado sem restart.
+- `Conta 2`: `centraldark-desktop-commander-conta2.service` ativo e isolado; a verificacao pega codigo recente do journal da unidade escolhida, monta **em memoria** URL do provedor `/verify-device?verify_device=true&user_code=<CODIGO_TEMPORARIO>`, abre navegador para confirmacao humana. Codigo **nao entra em commit, HUD nem log**; expira. Falta confirmacao por readback do provedor para selar AUTH_PASS.
+- SSH `Segredo-VPS` via Git OpenSSH da Casa: BatchMode/command PASS. VPS `127.0.0.1:9100/health` e `/heartbeat`: HTTP 200 naquele instante; isso nao comprova `heartbeat.self=alive` nem `FIXED_POINT`.
+- Screenpipe Casa `/health` HTTP 200 no HUD; capturas e audio continuam separados. VPS `:3030/health` respondeu HTTP 404 na leitura do HUD.
+- Codigo fonte do BAT no mesmo owner subiu a `main` no commit `53a34a76f22a614eef203768f0b707aba7599044` (blob `ea4826c3cad9ba084c8ec53d89eed425906b823a`). Readback posterior: **conteudo main == Casa**, comparando LF normalizado.
+- SHA-256 fisico do BAT na Casa: `6037F1D093983C2819F8F7C3A6F3E874659F90AD18EEFD7C63CBDEC6061A0741`; backup anterior preservado em `CRISTAL LOGICA/scripts/_backups`.
+- VPS checkout `5344bd87074c` tinha 42 itens dirty/untracked, nao foi ressetado; `MAIN_COMMIT != VPS_DEPLOY`. O HUD HTML permanece no owner `docs/HUD/HUD.html`, com superficie azul local e dourada web distintas, sem um segundo writer. PR-mãe `#1793` permaneceu aberto/mergeable=false na consulta.
+  
+**Veredito escopado:** `LOCAL_HUD_GUI=PASS`; `BUTTON_CONTA2_OPEN_AUTH_URL=PASS`; `CODE_NOT_LOGGED_LAST100=PASS`; `SOURCE_MAIN_CASA_CONTENT=PASS`; `CONTA1_AUTH=UNKNOWN`; `CONTA2_AUTH=LOGIN_PENDING`; `VPS_DEPLOY=NOT_PROVEN`; `HUD_HTML_SYNC=NOT_PROVEN`; `FIXED_POINT_GLOBAL=FALSE`.
+
+**NEXT_CURSOR:** usuario confirma login das contas no provedor → clicar `Conferir` → readback de autenticao e processo de cada unidade → reconciliar checkout dirty da VPS pelo owner existente sem reset → confrontar `docs/HUD/HUD.html` e vault Obsidian com hashes/readback antes de atualizar cadeados do escopo correto. Manter expansoes AionUi-first / Loop Vivo como possibilidades do PR #1785, nao bloqueios desta prova.
+
+### T2 — 2026-10-11 19:37 BRT — Conta 2 Online
+
+Contraprova posterior ao clique com codigo efemero (sem expor codigo no registro):
+
+- `desktop-commander-remote.service` e `centraldark-desktop-commander-conta2.service`: ambos `active` no systemd.
+- `centraldark-desktop-commander-conta2.service`: ultimo evento relevante do journal = `Device marked as online` / `Presence tracked` (identificador de dispositivo omitido).
+- Conector Remote Desktop Commander: dispositivos `CENTRALDARK-OS` e `SEGREDO` listados **Online** na leitura T2. Isto comprova presenca dos dispositivos no escopo do conector, **nao** duas identidades provedor distintas.
+- Botao `Conferir` do mesmo HUD clicado na Casa, receipt local `19:37:45 [DESKTOP] [PASS] CONTA 2 | service=loaded | process=active | autorizacao=READY_LOG`; `CONTA 1 | autorizacao=UNKNOWN`. A GUI permaneceu uma janela.
+- `CONTA2_DEVICE_ONLINE=PASS` com prova dupla log do servico + dispositivo Online; `CONTA2_PROVIDER_ACCOUNT_IDENTITY=UNKNOWN`; `CONTA1_AUTH=UNKNOWN`; `TWO_DISTINCT_PROVIDER_ACCOUNTS_AUTHENTICATED=UNKNOWN`. Nenhuma alegacao de FIXED_POINT global.
+
+Nao reabrir prova de `BUTTON_CONTA2_OPEN_AUTH_URL` ja registrada; pendencia apenas comparar qual conta efetivamente possui cada dispositivo por autentificacao legitima no provedor, sem revelar tokens.
+
+**NEXT_CURSOR_T2:** reconciliar ownership das contas com readback autenticado do provedor → se duas contas realmente diferentes, selar so essa clausula → VPS dirty checkout separado → alinhar HTML dourado por seu writer atual e provar hash do mirror Casa/VPS.
+
+### T3 — 2026-10-11 — Mudança física para F:\scripts com mesmo HUD
+
+**Intenção:** preservar o recorte executado pelo CHEFE, sem deslocar novamente OneShot/Remote-Tray/UnifiedRuntime, sem recriar painel e sem alterar credenciais.
+
+**READBACK FÍSICO CASA:**
+- `F:\scripts`: 12 scripts na raiz (incluindo `CENTRALDARK-ABRIR-TUDO.bat` e `CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`) e diretório `_backups`. O caminho `C:\Users\Administrador\Downloads\CRISTAL LOGICA\scripts` não existe mais.
+- Launcher `F:\scripts\CENTRALDARK-ABRIR-TUDO.bat` chama HUD relativo ao próprio diretório (`%~dp0`); `CD_MONITOR_SOURCE` transmite o mesmo caminho ao payload, sem dependência do antigo Downloads.
+- **Único delta de código necessário:** substituição da mensagem literal do catálogo por diretório medido via `$script:ScriptRoot`. `PARSE_ERRORS=0`; commit `6a3b30e9df48fa514112a2eda4a95d35942fca62` no owner `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`. Readback do owner: **conteúdo main == F:\scripts** após normalizar CRLF.
+- GUI anterior encerrada **somente para aplicar essa mudança visual**; mesma GUI reaberta via `F:\scripts\CENTRALDARK-ABRIR-TUDO.bat`; 1 instância ativa e título original.
+- Contraprova do log central: `[19:52:14] [SCRIPTS] [INFO] Catalogo: 12 arquivo(s) em F:\scripts; fonte != executado`.
+- `F:\UnifiedRuntime`, `F:\OneShot`, `F:\Remote-Tray` e `F:\Bridge` preservados nos locais anteriores. Os quatro scripts de LogCollector foram **copiados** anteriormente com SHA-256 para subárvore própria de `CRISTAL LOGICA\scripts` na ocasião; após o recorte a referência a essa cópia deve ser remapeada **somente se necessária**, sem inferir que os coletores foram executados.
+- `F:\UnifiedRuntime\profiles.json` possui ids Segredo/Fulano e active=`Fulanoo`; `F:\UnifiedRuntime\profiles\Fulanoo` **existe** com `bridgemind/binding.json`. Portanto, não renomear `Fulanoo` para `Fulano` às cegas: vínculo runtime versus cadastro ainda precisa readback discriminante.
+- Conta 2 já possuía `ONLINE_LOG` na T2. Mudança de pasta **não equivale a confirmação de duas identidades do provedor**; preservar `TWO_DISTINCT_PROVIDER_ACCOUNTS_AUTHENTICATED=UNKNOWN`.
+
+**SELO ESCOPO:** `F_SCRIPTS=PASS`; `LAUNCHER_F_TO_GUI=PASS`; `SCRIPTS_LOG_REAL_PATH=PASS`; `SOURCE_MAIN_F_SAME_CONTENT=PASS`; `PROFILE_IDENTITY_MAPPING=UNKNOWN`; `FIXED_POINT_GLOBAL=FALSE`.
+
+**NEXT_CURSOR:** sem duplicar entrada nem mover runtime; mapear consumo efetivo do perfil Fulanoo e validar vínculo de e-mail no provedor autenticado antes de qualquer alteração na identidade. Preservar Main != VPS deploy.
+
+### T4 — 2026-10-11 — Reconciliação de 7 missões com README e discos da Casa
+
+- **OBJETIVO:** substituir premissas antigas em `docs/HUD/HUD.html` pelo CURRENT documentado, mantendo 7 cartas, layout, cores, botões e runtime como owners separados. Não confundir atualização do texto das missões com sua execução.
+- **Fonte GitHub:** `README.md` na `main` já apresenta Instinto Superior como Admin VPS publicado (rotas HTTP 200; login E2E UNKNOWN), e TelePainel como módulo do Portal; motor `centraldark.exe` Tauri/Electron continua escolha humana se for materialmente necessário.
+- **Fonte docs:** `docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md` contém a decisão de cofre separado com sync canônico por hash. A antiga carta do HUD dizia que a decisão estava em aberto; foi atualizada para missão de contraprova E2E, ainda não PASS.
+- **Fonte Casa:** `F:\scripts` 12 scripts, launcher existente PASS conforme T3; `E:\CentralDark\_MAPA_CASA` inexistente no caminho testado; `F:\_MAPA_CASA` contém `chefe-gabinete`, sem `GARIMPO-CHEFE` naquela listagem. `F:\UnifiedRuntime` conserva perfis Segredo/Fulano/Fulanoo, sem migração Windows provada.
+- **Sinais de drift HUD:** no instante de leitura, `main` tinha blob `196a0bab3e6af2add003864aa49071e5931f6ea5`; VPS tinha blob dirty `274ce5bdb9a3c84a4559b1fb8facf4877384e3ea`, HEAD `5344bd87074c` e 42 entradas locais. Casa Obsidian `HUD.html` SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`.
+- **RESULTADO DOCUMENTAL:** atualizar somente as 7 entradas `missions[]` do owner único, sem novo HUD, sem forçar sync Casa/VPS, sem atribuir novo PASS E2E. Missões de autenticação Lovable, motor EXE, Garimpo, Grok, TelePainel/Multizap e perfis continuam por seus próximos testes. Os estados de decisão documentada e prova operacional ficaram separados.
+- **NEXT_CURSOR:** confrontar hash/diff `main ↔ VPS dirty ↔ Casa Obsidian` via writer existente; preservar cada delta exclusivo; só depois materializar e selar `HUD_SYNC_SAME_CONTENT`; manter os sete botões até fechamento por efeito ou decisão humana.
+
+
+### T5 — 2026-10-12 — Desktop Commander OAuth + device E2E, sem confundir identidade das contas
+
+- **Intenção:** reconciliar comprovante visual ChatGPT/Remote MCP com o mesmo HUD CORPO ÚNICO; nenhum segundo HUD ou broker.
+- **Provedor:** a UI do usuário informa Desktop Commander conectado ao ChatGPT por OAuth em 11/10/2026 (conector v1.0.0); o portal mostra CENTRALDARK-OS online e 'You're connected'. Login OAuth do conector não demonstra por si só o serviço do device ou a identidade de cada conta.
+- **VPS READBACK 2026-10-12T02:12:09Z:** serviço centraldark-desktop-commander-conta2.service ACTIVE/RUNNING. No journal dele: Authorization successful! às 02:09:16Z; Device marked as online e Device ready às 02:09:17Z. O device ID atribuído corresponde exatamente ao target MCP ca0cc3ad-3435-428f-87ee-ee102c2cf3b8, que recebeu e respondeu uma chamada real start_process às 02:12:08Z.
+- **Casa READBACK:** o monitor único (K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat) estava com uma janela, PID 32748, e registrou Conta 2 READY_LOG às 23:10:06 BRT (11/10). A Conta 1 permaneceu UNKNOWN no painel nesse ciclo. Os dispositivos SEGREDO e CENTRALDARK-OS responderam ONLINE à listagem remota do conector.
+- **Serviço principal:** desktop-commander-remote.service estava ACTIVE/RUNNING e teve evento Device marked as online às 2026-10-11T23:44:25Z. O vínculo atual 'identidade Google -> serviço principal -> device ID' não foi comprovado independentemente. Dois serviços ativos e um OAuth não constituem prova de dois e-mails pareados.
+- **Drift de visualização identificado:** CD_DC (sonda automática do BAT) só lê systemd active e continua emitindo avisos 'conta autenticada nao comprovada', enquanto o probe manual CD_PROFILE lê READY_LOG em janela de 15 minutos. Leitura por janela pode tornar o selo antigo invisível, sem contradizer o receipt E2E recém-provado. A correção do leitor visual ainda carece de edição/teste separados.
+- **Escopo:** não foram reiniciados serviços VPS nem transportados cookies, tokens, códigos ou segredos. Emails privados omitidos no recibo público. Main documentada != deploy VPS.
+
+    DESKTOP_COMMANDER_CONNECTOR_OAUTH=OBSERVED_IN_UI
+    VPS_ACCOUNT2_SYSTEMD=PASS
+    VPS_ACCOUNT2_AUTHORIZATION=PASS
+    VPS_ACCOUNT2_REMOTE_TOOL_CALL=PASS
+    CASA_AND_VPS_DEVICE_ONLINE=PASS
+    ACCOUNT1_PROVIDER_IDENTITY=UNKNOWN
+    TWO_DISTINCT_GOOGLE_ACCOUNTS_AUTHENTICATED=UNKNOWN
+    HUD_CD_DC_CLASSIFICATION=INCOMPLETE
+    FIXED_POINT_GLOBAL=FALSE
+    NEXT_CURSOR=RECONCILE_CD_DC_BY_OWNER_DEVICE_ID_AND_EVENT_TIME_WITHOUT_RESTART
+
+**POMBO_CHECKSUM:** selo Conta 2 por efeito real e readback do mesmo serviço; nenhuma promoção global e nenhuma inferência do e-mail da Conta 1.
+
+
+### T6 — 2026-10-12 — Corrigir falso amarelo Desktop Commander sem reiniciar os owners
+
+- **Goal / owner:** corrigir somente o classificador do CORPO ÚNICO e registrar no receipt existente; sem abrir outro monitor. Owner de código da main: `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; runtime da Casa: `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`.
+- **Causa observada:** o sensor automático antigo `CD_DC` emitia WARN para cada unit systemd ativa, independentemente dos eventos de autorização; a janela de 15 minutos do sensor manual deixava eventos antigos invisíveis. O envio do here-string Windows CRLF para `bash -s` também causava `ssh exit 2` (`syntax error ... do\r`), embora SSH já estivesse autenticado.
+- **Delta mínimo:** preservar CD_DC como estado do serviço (INFO ao mudar), acrescentar CD_DC_DEVICE por serviço (último evento DEVICE online/offline/ready da ativação systemd corrente, lido via journal; sem token nem código), deduplicar logs por fingerprint, converter o payload inteiro para LF antes do SSH, não reiniciar serviços, não mudar identidade Google nem OAuth.
+- **Casa / readback WinForms:** script PowerShell passou no parser, backup local com SHA-256 idêntico ao código alterado antes do reinício da GUI; uma única janela reiniciada. O log físico em `%LOCALAPPDATA%\CentralDark\Corpo-Unico-HUD-Logs.txt` mostrou às 23:28:28 BRT em 11/10/2026 `CONTA 1 | device=ONLINE_LOG | systemd=active` e `CONTA 2 | device=ONLINE_LOG | systemd=active`, ambos no escopo de **dispositivo**, com `EMAIL_AUTH=UNKNOWN`; SSH voltou a PASS e Goal continuou `todo`.
+- **Contraprova VPS:** `desktop-commander-remote.service` `active` com PID 17384 e `centraldark-desktop-commander-conta2.service` `active` com PID 893594. Os PIDs eram os mesmos antes/depois; nenhum serviço VPS reiniciado nesta ação.
+- **Main:** patch equivalente aplicado sobre o próprio owner da main, sem sobrescrever o HUD privado da Casa nem publicar identidades Google: commit `697c8a4d2b4a533c09098a1e49754a2d2558f09e` (blob `4a42f66df6cdc5723230d7e2a8a9baa4b62af37c`); readback do blob confirmou conteúdo igual ao estágio. O candidato isolado passou no parser e gerou `CD_SSH=PASS`, duas linhas `CD_DC_DEVICE` online.
+- **Limites:** `ONLINE_LOG` é sinal do último evento emitido pela unit em execução, **não** confirmação do e-mail Google. Conta 2 tem recibo E2E de tool call separado em T5; não deduzir duas identidades só por ambos terem sinal online. A codebase `main` não foi implantada automaticamente na VPS e não equivale ao artefato físico completo do SSD K:.
+
+    CASA_HUD_SINGLE_INSTANCE=PASS
+    SSH_TRANSPORT_LF_NORMALIZATION=PASS
+    DC_ACCOUNT1_DEVICE_EVENT_ONLINE=PASS
+    DC_ACCOUNT2_DEVICE_EVENT_ONLINE=PASS
+    DC_ACCOUNT2_E2E_TOOL_CALL=PASS (T5 scope)
+    DC_GOOGLE_ACCOUNT1_IDENTITY=UNKNOWN
+    DC_GOOGLE_ACCOUNT2_IDENTITY_MAP=UNKNOWN
+    VPS_SERVICES_RESTARTED=NO
+    MAIN_SOURCE_READBACK=PASS
+    GLOBAL_FIXED_POINT=FALSE
+    NEXT_CURSOR=VERIFY_INDEPENDENT_PROVIDER_IDENTITY_AND_KEEP_HUD_LOGS_DEDUPED
+
+**🕊️ POMBO_CHECKSUM:** só o dispositivo e o leitor recebem selo; histórico, identity mapping, OAuth, goal e deploy continuam com provas próprias.

@@ -779,6 +779,9 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **Estado:** inspeção read-only e comparativo comprovados; exclusão local não executada nem confirmada. `ARCHIVE_DELETED=UNKNOWN`.
 - **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md` — entrada Hakai de pacote redundante.
 
+- **Contraprova complementar (11/10; transferência de scripts):** o CHEFE moveu os 12 scripts para `F:\scripts` mesmo após alerta hipotético de quebra. Leitura física, launcher WinForms, instância única e catálogo real no log passaram; apenas o texto estático do caminho exigiu correção. **Decisão aprendida:** risco anunciado é hipótese a medir, não impedimento autônomo; `RISCO_POSSIVEL != FALHA_COMPROVADA`. Preservar o que funciona, agir sobre o delta observado e reconhecer a contraprova que invalida a previsão anterior.
+- **Linhas de prova:** `docs/CONSCIENCIA/APRENDIZADOS.md` (mesma regra Hakai, enriquecida, sem criar número); `docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md#t3--2026-10-11--mudança-física-para-fscripts-com-mesmo-hud`; `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`. `MAIN_SOURCE_SYNC=PASS` e `F_SCRIPTS_GUI_LOG=PASS` no escopo; outras dependências `UNKNOWN` até medi-las.
+
 
 ### [2026-10-10] Aprendizado autonomo com qualidade e fechamento integral
 - Owner canonico: docs/CONSCIENCIA/APRENDIZADOS.md, contrato AUTO_LEARNING_QUALITY_GATE_20261010.

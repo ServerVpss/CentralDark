@@ -35,7 +35,7 @@
     "wait_readiness",
     "measure_runtime",
     "compare_expected_effect",
-    "receipt_pr_1562"
+    "receipt_local_then_reconcile_repository"
   ],
   "bindings": [
     "SOURCE_SHA",
@@ -67,7 +67,10 @@
     "ROLLBACK_TARGET",
     "SECRET_EXPOSED",
     "RESULT",
-    "PR_MOTHER",
+    "RECEIPT_OWNER",
+    "RUNTIME_RECEIPT_PATH",
+    "REPOSITORY_RECEIPT_STATUS",
+    "LEGACY_PR_MOTHER_REF",
     "NEXT_CURSOR"
   ],
   "consumers": {
@@ -121,5 +124,18 @@
       "assert_clean",
       "release_lock"
     ]
+  },
+  "receipt_policy": {
+    "authority": "docs/CONSCIENCIA/LEDGER-SURFACE-ANCHOR.md",
+    "canonical_owner": "repository",
+    "legacy_pr_mothers": [
+      "#1562",
+      "#1757"
+    ],
+    "runtime_receipt_file": "logs/receipts/main-pinned-<OWNER>-<STAMP>.json",
+    "runtime_receipt_is_versioned_proof": false,
+    "repository_promotion_requires_readback": true,
+    "local_receipt_without_repository_receipt": "PARTIAL_NOT_GLOBAL_SEAL",
+    "no_new_pr_mother": true
   }
 }

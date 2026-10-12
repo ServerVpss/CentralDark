@@ -12,7 +12,7 @@ test('API loop: fila original + dedupe + Critic + receipt imutavel (isolado)',as
   mkdirSync(join(root,'logs'),{recursive:true});
   mkdirSync(join(root,'apps/modulos/HERMES-CORE/missions/pendente'),{recursive:true});
   execFileSync('git',['init','-q'],{cwd:root});
-  execFileSync('git',['-c','user.name=fixture','-c','user.email=fixture@example.invalid','commit','--allow-empty','-qm','fixture'],{cwd:root});
+  execFileSync('git',['-c','user.name=fixture','-c','user.email=<contato>','commit','--allow-empty','-qm','fixture'],{cwd:root});
   const initHead=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   execFileSync('git',['update-ref','refs/remotes/origin/main',initHead],{cwd:root});
   writeFileSync(join(root,'logs/auto-sync-status.json'),JSON.stringify({t:new Date().toISOString(),result:'PASS',head:initHead,origin_main:initHead}));
@@ -41,8 +41,17 @@ test('API loop: fila original + dedupe + Critic + receipt imutavel (isolado)',as
   assert.ok(existsSync(join(root,'logs/events')));
   const stale=runIntentCycle({...query,intent:query.intent+' + uma etapa nova'},{dispatch:false});
   assert.equal(stale.fixedPoint,false);assert.equal(stale.executionProven,false);
-  execFileSync('git',['-c','user.name=fixture','-c','user.email=fixture@example.invalid','commit','--allow-empty','-qm','local-drift'],{cwd:root});
+  execFileSync('git',['-c','user.name=fixture','-c','user.email=<contato>','commit','--allow-empty','-qm','local-drift'],{cwd:root});
   const diverged=runIntentCycle({...query,intent:query.intent+' com drift nova'},{dispatch:false});
   assert.equal(diverged.fixedPoint,false);
   assert.equal(diverged.criteria.find(c=>c.id==='SOURCE_CURRENT').status,'STALE');
+  // Teste negativo: status publico nunca promove receipt vencido nem SHA antigo.
+  const forged={...readIntentState(), observedAt:'2020-01-01T00:00:00Z',
+    state:'SEALED',fixedPoint:true,currentHead:initHead,
+    criteria:[{id:'SOURCE_CURRENT',status:'PASS'}]};
+  writeFileSync(join(root,'logs/intent-loop-state.json'),JSON.stringify(forged));
+  const expired=publicIntentStatus();
+  assert.equal(expired.fixedPoint,false);
+  assert.equal(expired.state,'STALE');
+  assert.equal(expired.criteria[0].status,'STALE');
 });

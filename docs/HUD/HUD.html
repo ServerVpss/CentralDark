@@ -1450,6 +1450,7 @@ body {
   <button class="tab-btn ativa" data-tab="hud">HUD</button>
   <button class="tab-btn" data-tab="mapa">MAPA</button>
   <button class="tab-btn" data-tab="forja">FORJA</button>
+  <button class="tab-btn" data-tab="operacao">OPERAÇÃO</button>
 </div>
 
 <!-- ================================================================
@@ -1919,7 +1920,7 @@ PROXIMO: procurar binding/modelo disponível; continuar site/API/MCP sem travar.
           <span class="cadeado-status pass">SELADO</span>
         </div>
         <div class="cadeado-meta">Alias Segredo-VPS em ~/.ssh/config. Key segredo_vps_ed25519. Acesso root direto.</div>
-        <div class="cadeado-prova">IP: 89.117.78.124 &middot; provado em multiplas sessoes</div>
+        <div class="cadeado-prova">IP: 89.117.78.124 &middot; provado em multiplas sessoes &middot; <strong>READBACK 11/10/2026 20:38:03Z:</strong> <code>Git OpenSSH_10.3p1</code> (Casa SEGREDO) → <code>Segredo-VPS</code> → <code>root@89.117.78.124:22</code>; <code>hostname=CENTRALDARK-OS</code>, <code>id -un=root</code>, <code>SSH_EXIT=0</code>, stderr 0. OWNER: <code>docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md</code>; ESCOPO: transporte SSH Casa→VPS; PROOF_KEY: <code>CASA_TO_VPS_SSH_GIT</code>; SOURCE_SHA: <code>5d7196b894a3</code>; RECEIPT: <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md" target="_blank" rel="noopener">rota canônica</a>; NEXT_CURSOR: sincronizar checkout VPS sujo somente após reconciliação. <strong>Sem prova de deploy nem A2A roundtrip.</strong></div>
       </div>
       <div class="cadeado-card selado">
         <div class="cadeado-header">
@@ -2345,6 +2346,43 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <!-- /CD_GENESIS_REPLAY_V1 -->
+<!-- CD_HUD_CONTROL_CENSUS_V1: observer only; not proof of server-side action -->
+<section class="section" id="cd-hud-control-census" data-owner="docs/HUD/HUD.html" style="margin-top:16px">
+ <div class="section-header"><h2 class="section-title">🧿 Auditoria determinística · Botões × Gênesis</h2><span class="section-count" id="cd-control-verdict">MEDINDO</span></div>
+ <div class="cadeado-meta">Inventário do mesmo HTML, sem novo executor: DOM presente ≠ evento recebido ≠ efeito no runtime. Nenhum elo recebe PASS operacional por clique ou replay documental.</div>
+ <div class="hud-grid" style="margin-top:12px">
+  <div class="hud-card"><h3>Botões presentes</h3><div class="val" id="cd-control-count">MEDINDO</div><div class="meta">Somente elementos button visíveis no documento, incluindo diálogos</div></div>
+  <div class="hud-card"><h3>Destinos das abas</h3><div class="val" id="cd-control-tabs">MEDINDO</div><div class="meta">data-tab → id tab-…; sem rota inventada</div></div>
+  <div class="hud-card"><h3>Gênesis documental</h3><div class="val" id="cd-control-genesis">MEDINDO</div><div class="meta">Replay histórico ≠ 169 execuções</div></div>
+  <div class="hud-card"><h3>Execução E2E</h3><div class="val warn" id="cd-control-runtime">UNKNOWN</div><div class="meta">Requer receipt atual do executor canônico</div></div>
+ </div>
+ <p id="cd-control-gaps" class="cadeado-meta" role="status">AGUARDANDO INVENTÁRIO</p>
+</section>
+<script>
+(function(){
+ 'use strict';
+ function audit(){
+  var buttons=Array.from(document.querySelectorAll('button'));
+  var tabs=buttons.filter(function(b){return b.hasAttribute('data-tab')});
+  var missing=tabs.map(function(b){return b.getAttribute('data-tab')}).filter(function(id){return !document.getElementById('tab-'+id)});
+  var ids=buttons.map(function(b){return b.id}).filter(Boolean);
+  var duplicateIds=ids.filter(function(id,i){return ids.indexOf(id)!==i});
+  var genesis=document.getElementById('cd-genesis-replay');
+  var genesisOK=Boolean(genesis && document.getElementById('cdr-run') && document.getElementById('cdr-step') && document.getElementById('cdr-reset') && document.getElementById('cdr-operator-send'));
+  function set(id,value){var el=document.getElementById(id);if(el)el.textContent=value}
+  set('cd-control-count',String(buttons.length));
+  set('cd-control-tabs',(tabs.length-missing.length)+'/'+tabs.length+' destinos');
+  set('cd-control-genesis',genesisOK?'169 elos · replay':'CONTRATO AUSENTE');
+  set('cd-control-runtime','UNKNOWN · sem receipt');
+  var errors=missing.map(function(x){return 'ABA_SEM_ALVO='+x}).concat(duplicateIds.map(function(x){return 'BUTTON_ID_DUPLICADO='+x}));
+  if(!genesisOK)errors.push('GENESIS_UI_INCOMPLETA');
+  set('cd-control-verdict',errors.length?'DOM_BLOCKED':'DOM_STRUCTURE_PASS');
+  set('cd-control-gaps',errors.length?errors.join(' | '):'Estrutura local consistente; handlers, chamadas remotas e efeitos exigem prova própria.');
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',audit,{once:true});else audit();
+})();
+</script>
+
 <!-- CENTRALDARK_INTENT_API_LOOP_V1 -->
 <section class="section" id="cd-intent-api-loop" data-status="UNKNOWN" aria-label="Intenção tipada e progresso real da API">
 <h2 class="section-title">🧠 Instinto Superior · Intenção → Realidade → Δ → Fixed Point</h2>
@@ -2464,7 +2502,12 @@ setInterval(refresh,30000); // mesmo sensor existente; não executa missões
       <div class="hud-card" data-proof-binding="TAILSCALE_ADMIN_API_UNKNOWN"><h3>Tailscale / API administrativa MCP</h3><div class="val warn">BLOQUEADO · PROVIDER HTTP 401</div><div class="meta">READBACK 09/10/2026 20:25Z: tailscale_status configured=true mas PROVIDER_HTTP_401; provider_read devices.list confirmou mensagem API token invalid; tailscale_bridge_status=fetch failed (oauth-broker:/api/tailscale/status). Credencial PRESENTE != VALIDA. Remediacao no owner de credenciais existente: substituir/autorizar chave valida fora do HUD, testar API status/devices e bridge; nao copiar segredo no HTML e nao alterar a malha privada. PONG da malha = TRANSPORTE PASS, API ADMIN = BLOCKED.</div></div>
       <div class="hud-card" data-proof-binding="VPS_TO_CASA_TCP_HISTORICAL"><h3>VPS &#8594; Casa / Tailscale TCP</h3><div class="val ok">PASS · PONG + TCP + HTTP 200</div><div class="meta">Teste inverso via alias SSH Segredo-VPS: VPS 100.90.199.124 &#8594; SEGREDO 100.123.93.25, Tailscale PONG; portas 445, 5985 e 3030 OPEN; Screenpipe HTTP 200. Readback desta sessao 09/10: PONG 196ms anterior; revalidado 20:27Z com PONG 100ms, TCP 445/5985/3030 OPEN, Screenpipe HTTP 200. Porta aberta nao confirma login WinRM/SMB.</div></div>
       <div class="hud-card" data-proof-binding="GIT_SSH_SEGREDO_VPS"><h3>SSH / Segredo-VPS</h3><div class="val ok">PASS · SSH AUTH + EXEC</div><div class="meta">Da Casa, cliente Git OpenSSH autenticou em BatchMode usando alias existente e retornou hostname CENTRALDARK-OS. Readback 09/10 20:27Z: SSH_EXIT=0, hostname=CENTRALDARK-OS, comandos remotos e /health 9100 HTTP 200. Nao prova deploy ou heartbeat ALIVE.</div></div>
-      <div class="hud-card" data-proof-binding="DESKTOP_REMOTE_SEGREDO"><h3>Desktop Commander / SEGREDO</h3><div class="val ok">PASS · SEGREDO ONLINE</div><div class="meta">A rota remota executou hostname e retornou SEGREDO (sessao 09/10). Nova listagem 09/10 retornou SEGREDO Online, app 0.2.52; revalidado na sessao com PowerShell remoto para medir SSH e malha. A disponibilidade futura exige nova consulta.</div></div>
+      <div class="hud-card" data-proof-binding="DESKTOP_REMOTE_SEGREDO"><h3>Desktop Commander / SEGREDO</h3><div class="val ok">PASS · SEGREDO ONLINE</div><div class="meta">A rota remota executou hostname e retornou SEGREDO (sessao 09/10). Nova listagem 09/10 retornou SEGREDO Online, app 0.2.52; revalidado na sessao com PowerShell remoto para medir SSH e malha. A disponibilidade futura exige nova consulta.</div>
+        <div class="meta" id="cd-dc-account-identities-20261012" data-proof-time="2026-10-12T03:02:34Z" data-proof-owner="REMOTE_DESKTOP_COMMANDER_WHO_AM_I" style="margin-top:8px">
+          <strong>Conta 1:</strong> <code>sonasmarcas@gmail.com</code> &middot; <span class="warn">perfil observado; identidade no provedor UNKNOWN</span> &middot; dispositivo ONLINE_LOG no servico principal.<br>
+          <strong>Conta 2:</strong> <code>contacobra3467@gmail.com</code> &middot; <span class="ok">email verificado no OAuth do Desktop Commander</span> &middot; device READY/ONLINE e readback de execucao.<br>
+          <span>FONTE: <code>who_am_i</code> autenticado do Remote MCP, leitura 12/10/2026 03:02 UTC; 2 dispositivos no mesmo conector nao provam duas identidades autenticadas. SNAPSHOT DATADO &ne; CURRENT. Mudanca de login exige nova leitura autenticada. Sem cookies, tokens ou codigo temporario.</span>
+        </div></div>
       <div class="hud-card" data-proof-binding="AIONUI_WEBUI_CASA"><h3>AionUi / Instinto Superior</h3><div class="val ok">PASS · HTTP 200 + PROCESSOS CASA</div><div class="meta">http://89.117.78.124:25808/ retornou HTTP 200 e titulo AionUi; Casa nesta sessao: AionUi.exe x5 e aioncore.exe x1. Novo teste Casa 09/10 20:27Z: HTTP 200 confirmado; processos locais observados anteriormente. Integracao total CentralDark, login e runtime 24/7 permanecem UNKNOWN.</div></div>
       <div class="hud-card" data-proof-binding="SUPABASE_PLUGIN_CASABRIDGE"><h3>Supabase / plugin CentralDark</h3><div class="val warn">PASS DE PROJETO · E2E UNKNOWN</div><div class="meta">Projeto CentralDark sa-east-1 e bridge responderam em leitura anterior; 5 agents e 3 missions no snapshot, nao E2E. Conexao HUD &#8596; Obsidian &#8596; Supabase e status atual necessitam readback; sem criar tabela ou bridge.</div></div>
     </div>
@@ -2666,6 +2709,39 @@ setInterval(refresh,30000); // mesmo sensor existente; não executa missões
         <h2 class="section-title">BRAIN &middot; Mapa do Sistema</h2>
         <span class="section-count">19 notas</span>
       </div>
+      <!-- BRAIN_STUDY_OWNER_VIEW_20261011: visualizacao no HUD existente, nao segundo owner nem prova runtime -->
+      <details class="cadeado-prova" id="cd-brain-biblioteca-agents-canonical-20261011" data-busca="biblioteca cognitiva agentes especialistas sala professores brain caracol pdf gate one heart prova contrato">
+        <summary>🧠 BRAIN + 📚 Biblioteca + 🤖 Agents Library &mdash; mapa e provas / VER PENDÊNCIA</summary>
+        <div class="hud-card">
+          <h3>🪬 Um sistema, três funções; memória derivada não vira autoridade</h3>
+          <div class="meta"><strong>🟢 SOURCE CONFIRMADO:</strong> BRAIN é navegação humana/Obsidian, não runtime ou cérebro concorrente. Owner: <code>docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md</code>. Fonte estrutural GitHub main; saúde física e sync da Casa requerem readback próprio.</div>
+          <div class="meta"><strong>🟢 BIBLIOTECA:</strong> <code>docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md</code> organiza estudos por proveniência, hash quando material ingerido, índice semântico e Knowledge Compiler; fonte externa é candidata, não lei da CentralDark.</div>
+          <div class="meta"><strong>🟢 AGENTS LIBRARY:</strong> <code>docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/01-INDICES/00-AGENTS-INDEX.md</code> indexa especialistas. Biblioteca fornece conhecimento; especialistas oferecem capacidades; Hermes continua executor e CHEFE continua autoridade.</div>
+          <div class="meta"><strong>📚 ANATOMIA DO VAULT:</strong> <code>00-MAPA-SISTEMA</code> mapas; <code>01-CONCEITOS</code> conceitos; <code>02-ENTRADA</code> candidatos; <code>03-DOCUMENTACAO</code> biblioteca/agentes/guias; <code>04-DECISOES</code> escolhas e proveniência; <code>05-DEVEDORES-CONTATOS</code> setor próprio; <code>06-REUNIOES-NOTAS</code> notas; <code>07-APRENDIZADOS-MEMORIAS</code> memória derivada; <code>08-ARTEFATOS-VISUAIS</code> mapas e cartazes. <code>09-RASCUNHO</code> citado em relato, mas não confirmado no índice BRAIN consultado.</div>
+          <div class="meta"><strong>🟡 CARACOL / PR #1574:</strong> padrões estáveis foram extraídos, mas a implementação/runtime da Casa/VPS não foi promovida segundo <code>.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/PADROES-PR/DELTA-PR-1570-1574.md</code>. <strong>NÃO SELAR VERDE RUNTIME.</strong></div>
+          <div class="meta"><strong>🔴 GATES / 11-10-2026:</strong> amostra da CI no SHA <code>659d7aac</code> mostrou falhas em <code>lupa-conformance</code>, <code>porta-de-entrada</code> e <code>VPS Deploy</code>. Causa da Lupa: guard esperado <code>05b8664f</code> versus skill <code>d6b55fc2</code>. <strong>Correção aplicada no commit <code>6c32da6</code> e validador executado com PASS na VPS; CI no novo HEAD continua exigindo novo run do mesmo SHA.</strong></div>
+          <div class="meta"><strong>🟢 PDF_GATE / VPS 11-10-2026:</strong> executado <code>node scripts/lupa/pdf-conformance-cc2003.mjs --gate</code>, exit 0, <code>pdfGatePromoted=true</code>, fonte SHA-256 <code>b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1</code>, cinco testes PASS e adulteração rejeitada. <strong>Prova do gate neste escopo; NÃO é aprovação da CI inteira nem fixed point global.</strong></div>
+                    <!-- CENTRALDARK_HUD_CI_SUBGOAL_READBACK_20261011: SOMENTE delta de prova; BRAIN/Biblioteca/Agents ja estavam no mesmo HUD. -->
+          <div class="meta" data-observed-at="2026-10-11T20:01:59Z"><strong>🧿 RELEITURA CI / 11-10-2026 · SNAPSHOT, NÃO STATUS PERPÉTUO:</strong>
+          GitHub <code>main=16bc9655ce59</code>; VPS <code>5344bd870</code> com <code>174 commits</code> de diferença e worktree modificado, inclusive <code>docs/HUD/HUD.html</code> local. <strong>Não executar reset, checkout cego ou declarar deploy sincronizado.</strong>
+          Na amostra <code>86eff234</code>: <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38165874073" target="_blank" rel="noopener">lupa-conformance=SUCCESS</a>,
+          <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38165874067" target="_blank" rel="noopener">porta-de-entrada=FAIL</a> e
+          <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38165874105" target="_blank" rel="noopener">VPS Deploy=FAIL</a> (<code>REPO_CONTRACT_VERIFY=FAIL</code>, etapas de deploy SKIPPED).
+          No SHA <code>16bc9655ce59</code>:
+          <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38169168020" target="_blank" rel="noopener">Trigger Fabric=SUCCESS</a>;
+          <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38169178714" target="_blank" rel="noopener">PR Update Branch=FAIL</a> (<code>REALITY_JUDGE=FAIL</code>, <code>BLOCKED=2</code>, <code>CHECKS_FAILED=0</code>);
+          <a href="https://github.com/ServerVpss/CentralDark/actions/runs/38166111295" target="_blank" rel="noopener">Autonomia promoção=BLOCKED/FAIL</a> (upload de artefato: GitHub Actions storage quota excedida).
+          <strong>MESMO HEAD sem conjunto completo de gates aprovados; PDF_GATE local histórico não promove CI ou runtime global a PASS.</strong>
+          Próximo cursor: reconciliar CI por SHA/owner; proteger o HUD modificado na VPS; remedir efeito antes de selar fixed point.</div>
+          <!-- CENTRALDARK_HUD_SSH_ROUTE_READBACK_20261011_203803Z | single-existing HUD; readback scoped to SSH -->
+          <div class="meta" data-observed-at="2026-10-11T20:38:03Z"><strong>🔐 CASA → VPS SSH / PASS (prova restrita ao transporte, 11/10/2026):</strong>
+          origem Casa <code>SEGREDO</code>, destino <code>89.117.78.124:22</code>, alias <code>Segredo-VPS</code>, usuário <code>root</code>, cliente <code>C:\Program Files\Git\usr\bin\ssh.exe</code> (OpenSSH_10.3p1); verificação remota <code>hostname; id -un</code> retornou <code>CENTRALDARK-OS</code> / <code>root</code>, <code>SSH_EXIT=0</code>, <code>stderr=0</code>, reconfirmado em <code>2026-10-11T20:38:03Z</code>. Chave existente; nenhum conteúdo secreto exposto.
+          Cliente nativo <code>Windows\System32\OpenSSH\ssh.exe</code> falhou <code>255</code> mesmo com <code>-V</code> (causa interna desconhecida). <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md" target="_blank" rel="noopener">Receipt canônico da rota</a>, commit <code>5d7196b894a3</code>.
+          <strong>ESTADO DAS CÓPIAS:</strong> este HUD na GitHub <code>main</code> mantém BRAIN + contraprovas CI; o HUD do Obsidian na Casa tinha <code>301047 bytes</code>, modificado às <code>2026-10-11T02:07:39</code>, sem os blocos BRAIN/CI atuais; checkout VPS <code>5344bd870</code> com <code>docs/HUD/HUD.html</code> modificado. <strong>CASA_HUD_SYNC=PENDING · VPS_HUD_SYNC=PENDING · A2A_ROUNDTRIP=UNKNOWN · FIXED_POINT_GLOBAL=UNKNOWN</strong>. Não sobrescrever HUD local nem efetuar reset/pull cego; primeiro comparar diffs, preservar cópias e selar hashes após conciliação.</div>
+          <div class="val warn">⚖️ FIXED_POINT GLOBAL: NÃO COMPROVADO · HUD = PROJEÇÃO · CURRENT &gt; HISTORY</div>
+          <div class="meta">📍 RECEITA: intenção → owner existente → evidência no mesmo HEAD/ambiente → teste/contraprova → receipt versionado → HUD atualizado. Uma visão visual de “Sala de Estudos/Professores” pode reutilizar Biblioteca + Agents Library + Knowledge Compiler: <strong>sem nova pasta, processo, skill-mãe, bridge ou segundo HUD</strong>.</div>
+        </div>
+      </details>
       <div class="link-columns">
         <div class="link-list">
           <div class="link-item"><span class="link-dot green"></span><div><div class="link-nome">INDEX.md</div><div class="link-desc">Indice master do BRAIN &mdash; todas as secoes</div><div class="link-path">docs/BRAIN/00-MAPA-SISTEMA/INDEX.md</div></div></div>
@@ -3480,13 +3556,13 @@ window.addEventListener('centraldark:sector-touch',function(e){if(e.detail&&e.de
 var VAULT = '\uD83E\uDEAC Centraldark -HUD\uD83E\uDEAC';
 
 var missions = [
-  {tag:'chefe', label:'Confirmar cockpit pro Lovable', text:'Liberar pro Lovable os enderecos (publico + logado) do cockpit real da CentralDark, pra Hermes poder andar nos 3 lugares.'},
-  {tag:'chefe', label:'Motor do app: Tauri ou Electron', text:'Decisao: motor do centraldark.exe - Tauri (leve, Rust) ou Electron (mais pronto, mais pesado). Bater o martelo.'},
-  {tag:'chefe', label:'Memoria dentro do Obsidian?', text:'Decidir se a memoria da Casa/VPS fica embutida dentro do vault Obsidian da CentralDark (bidirecional) ou separada.'},
-  {tag:'agente', label:'Filtrar Garimpo-Chefe', text:'#acordar - Na pasta E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE, separar as imagens reais (Screenshots, PASTA CHEFE, raiz - ~800) do ruido (.gradle, .codex, pastas _files) e trazer o resultado organizado.'},
-  {tag:'agente', label:'Confirmar equipe do Grok', text:'#acordar - Confirmar por captura de tela a equipe de agentes nomeados na conta Grok do Chefe antes de tratar como fato.'},
-  {tag:'agente', label:'Separar telepainel/CRM/Multizap/bot', text:'#acordar - Assim que o Chefe mostrar o codigo, separar e documentar a distincao entre telepainel, CRM, Multizap e o robo do WhatsApp.'},
-  {tag:'chefe', label:'Hermes: consolidar perfil', text:'Hermes roda em 2 perfis Windows. Decidir: traz o danda pro Administrador ou leva o Administrador pro danda (herda 849 skills). Pendente confirmar acesso ao E:\\CentralDark.'},
+  {tag:'chefe', label:'Cockpit Lovable: autorizar acesso real', text:'O Instinto Superior ja tem Admin na VPS: admin.centralldark.com (/, /auth, /cockpit, /sala-controle HTTP 200 na ultima medicao do README). Falta login autenticado e decidir o acesso autorizado do Lovable, sem copiar sessao nem criar segundo Admin.'},
+  {tag:'chefe', label:'Motor do centraldark.exe (se necessario)', text:'Instinto Superior web ja possui owner apps/instinto-superior; Bolt/Electron e One Shot/Tray sao capacidades/donors existentes. A escolha Tauri x Electron para novo .exe segue decisao do CHEFE, sem concluir que outro aplicativo seja obrigatorio.'},
+  {tag:'agente', label:'Obsidian: provar sync da decisao existente', text:'Decisao ja documentada em docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md: cofre privado separado; 00-CANONICO ligado a docs/BRAIN via sync por hashes, sem sobrescrever conflitos. Agente deve provar caminho fisico atual e E2E; documentado != sincronizado.'},
+  {tag:'agente', label:'Localizar Garimpo-Chefe antes de filtrar', text:'Fato Casa 11/10: E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE nao existe no caminho testado; F:\\_MAPA_CASA existe com chefe-gabinete, mas GARIMPO-CHEFE nao foi localizado em F. Localizar origem real e so entao separar imagens do ruido. Contrato: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GARIMPO-CHEFE.md.'},
+  {tag:'agente', label:'Confirmar equipe do Grok', text:'#acordar - Confirmar por captura autenticada a equipe de agentes nomeados na conta Grok do CHEFE. Sem print e readback, nomes/perfis permanecem UNKNOWN.'},
+  {tag:'agente', label:'TelePainel/CRM/Multizap/bot: provar divisao', text:'README ja diferencia: TelePainel = modulo do Portal; CRM e WhatsApp = produtos; bots/Hermes = owners internos. Confrontar codigo e rotas reais de Multizap e robo antes de declarar separacao operacional ou deploy. Nao retirar servico/OAuth ao alterar UI.'},
+  {tag:'chefe', label:'Hermes: consolidacao de perfis so se util', text:'Casa 11/10: F:\\UnifiedRuntime possui perfis Segredo e Fulano, pasta Fulanoo e bridges; F:\\scripts tem 12 scripts e launcher funcional. Isso nao equivale a migracao dos perfis Windows danda/Administrador nem comprova as 849 skills atuais. Preservar sessoes e decidir consolidacao somente se houver dependencia real.'},
 ];
 
 var missionsEl = document.getElementById('hud-missions');
@@ -3858,22 +3934,24 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
   });
 })();
 </script>
+<div class="tab-painel" id="tab-operacao">
 <!-- CENTRALDARK_ZENDRIVER_OPERATION_HUD_20261010: evidence is a snapshot, not live telemetry -->
-<section id="cd-zendriver-forensic-20261010" aria-labelledby="cd-zd-title" style="max-width:1440px;margin:28px auto;padding:22px;border:1px solid #4a6573;border-radius:18px;background:linear-gradient(140deg,#101e2b,#102b32);color:#ecf5fa;font:15px/1.55 system-ui,sans-serif;">
+<section id="cd-zendriver-forensic-20261010" aria-labelledby="cd-zd-title">
   <style>
+  #cd-zendriver-forensic-20261010{box-sizing:border-box;max-width:1440px;margin:28px auto;padding:22px;border:1px solid var(--border);border-radius:var(--radius, 12px);background:var(--surface);color:var(--text);font:15px/1.55 var(--corpo)}
   #cd-zendriver-forensic-20261010 *{box-sizing:border-box}
-  #cd-zendriver-forensic-20261010 h2{font-size:1.48rem;color:#baf7dc;margin:0 0 6px}
-  #cd-zendriver-forensic-20261010 h3{font-size:1.08rem;color:#c7edfa;margin:0 0 12px}
-  #cd-zendriver-forensic-20261010 .zd-muted{color:#b4c5d3;font-size:.9rem}
+  #cd-zendriver-forensic-20261010 h2{font:700 1.48rem var(--disp);color:var(--titulo-cor);margin:0 0 6px}
+  #cd-zendriver-forensic-20261010 h3{font:600 1.08rem var(--disp);color:var(--text);margin:0 0 12px}
+  #cd-zendriver-forensic-20261010 .zd-muted{color:var(--text-dim);font-size:.9rem}
   #cd-zendriver-forensic-20261010 .zd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-top:14px}
-  #cd-zendriver-forensic-20261010 .zd-card{border:1px solid #47606d;border-radius:12px;padding:16px;background:#132735}
-  #cd-zendriver-forensic-20261010 code{color:#c9f3e7;font-size:.85rem;overflow-wrap:anywhere}
+  #cd-zendriver-forensic-20261010 .zd-card{border:1px solid var(--border);border-radius:12px;padding:16px;background:var(--card)}
+  #cd-zendriver-forensic-20261010 code{color:var(--accent-soft);font-size:.85rem;overflow-wrap:anywhere}
   #cd-zendriver-forensic-20261010 ul{padding-left:20px;margin:8px 0}
   #cd-zendriver-forensic-20261010 li{margin:7px 0}
-  #cd-zendriver-forensic-20261010 .zd-good{color:#90f6c1}
-  #cd-zendriver-forensic-20261010 .zd-warn{color:#ffd88a}
-  #cd-zendriver-forensic-20261010 a{color:#9cddff;text-decoration:underline}
-  #cd-zendriver-forensic-20261010 .zd-next{border-left:3px solid #ffd88a;padding-left:12px;margin-top:16px}
+  #cd-zendriver-forensic-20261010 .zd-good{color:var(--green)}
+  #cd-zendriver-forensic-20261010 .zd-warn{color:var(--amber)}
+  #cd-zendriver-forensic-20261010 a{color:var(--accent-soft);text-decoration:underline}
+  #cd-zendriver-forensic-20261010 .zd-next{border-left:3px solid var(--amber);padding-left:12px;margin-top:16px}
   </style>
   <h2 id="cd-zd-title">🧿 Operação Zendriver / Chromium — mapa de prova e recuperação</h2>
   <p class="zd-muted">Snapshot de investigação · 2026-10-10 (horário da sessão) · Fonte: consultas MCP VPS, Desktop Commander Casa e GitHub · NÃO É MONITORAMENTO EM TEMPO REAL · MAIN ≠ VPS DEPLOYED</p>
@@ -3927,6 +4005,7 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
     <p><strong>PLACAR:</strong> <span class="zd-good">Código do gateway: PRESENTE</span> · <span class="zd-good">Atividade Chromium histórica: PROVADA</span> · <span class="zd-warn">Zendriver em execução agora: NÃO DETECTADO</span> · <span class="zd-warn">Build customizado: UNKNOWN</span> · <span class="zd-warn">Restabelecimento funcional: PENDENTE</span>.</p>
   </div>
 </section>
+</div>
 
 </body>
 </html>

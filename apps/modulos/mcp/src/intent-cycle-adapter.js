@@ -3,11 +3,12 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync, renameSync, unlinkSync, openSync, closeSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
+import { homedir } from 'node:os';
 import { compileIntent, reconcileIntent } from './intent-cycle.js';
 import { getOperationalSnapshot } from './operational-telemetry.js';
 import { appendCentralEvent } from './log-funnel.js';
 
-const ROOT = process.env.CENTRALDARK_ROOT || '/root/CentralDark';
+const ROOT = process.env.CENTRALDARK_ROOT || join(homedir(), 'CentralDark');
 const STATE_PATH = join(ROOT, 'logs', 'intent-loop-state.json');
 const INBOX = join(ROOT, 'apps/modulos/HERMES-CORE/missions/pendente');
 const SHA = /^[0-9a-f]{40}$/i;
@@ -65,7 +66,7 @@ export function measureIntentWorld() {
   const lineageOk = linksOk && manifest?.source_blob_sha === gitBlob(learn);
   e.NEUROLINK = evidence(lineageOk ? 'PASS' : 'UNKNOWN', 'neuro:manifest+git-blob+prev-next', at, head);
   // Prova do HUD fisico, nao da copia obsoleta do checkout.
-  const deployedHud = process.env.CENTRALDARK_HUD_PATH || '/root/.centraldark/HUD.html';
+  const deployedHud = process.env.CENTRALDARK_HUD_PATH || join(homedir(), '.centraldark', 'HUD.html');
   let mainHudBlob = null;
   try {
     mainHudBlob = execFileSync('git',['rev-parse','refs/remotes/origin/main:docs/HUD/HUD.html'],{
@@ -198,7 +199,32 @@ export function runIntentCycle(payload, { dispatch = false } = {}) {
   return { ...result, logReceipt: logged.ok ? logged.event_id : null };
 }
 export function publicIntentStatus() {
-  const r=readIntentState();
+  const r = readIntentState();
   if (!r) return {schema:'centraldark.intent.fixed-point.v1',state:'UNKNOWN',fixedPoint:false,observedAt:null,nextCursor:'NO_RECEIPT',mode:null,criteria:[]};
-  return {schema:r.schema,state:r.state,fixedPoint:r.fixedPoint===true,observedAt:r.observedAt,mode:r.mode,nextCursor:r.nextCursor,currentHead:r.currentHead,queued:r.queued===true,executionProven:r.executionProven===true,criteria:(r.criteria||[]).map(c=>({id:c.id,status:c.status}))};
+  // GET publico nao repete um selo antigo quando expirou ou o CURRENT mudou.
+  const timestamp = Date.parse(r.observedAt || '');
+  const age = Date.now() - timestamp;
+  const fresh = Number.isFinite(age) && age >= -5000 && age <= 15 * 60_000;
+  const sameHead = Boolean(r.currentHead) && measuredHead() === r.currentHead;
+  let live = null;
+  if (fresh && sameHead) {
+    try { live = measureIntentWorld(); } catch { /* fail closed */ }
+  }
+  const criteria = (r.criteria || []).map(c => {
+    let status = c.status;
+    if ((!fresh || !sameHead || !live) && status === 'PASS') status = 'STALE';
+    else if (status === 'PASS' && live.evidence?.[c.id]?.status && live.evidence[c.id].status !== 'PASS')
+      status = live.evidence[c.id].status;
+    return { id:c.id, status };
+  });
+  const fixedPoint = r.fixedPoint === true && fresh && sameHead && Boolean(live)
+    && criteria.length > 0 && criteria.every(c => c.status === 'PASS');
+  const pending = criteria.find(c => c.status !== 'PASS');
+  const state = fixedPoint ? 'SEALED'
+    : (!fresh || !sameHead || !live || criteria.some(c => c.status === 'STALE')) ? 'STALE'
+    : r.state === 'SEALED' ? 'NEXT_CURSOR' : r.state;
+  const nextCursor = fixedPoint ? 'FIXED_POINT'
+    : pending ? 'VERIFY_' + pending.id : 'REMEASURE_RECEIPT';
+  return {schema:r.schema,state,fixedPoint,observedAt:r.observedAt,mode:r.mode,nextCursor,currentHead:r.currentHead,
+    queued:r.queued === true,executionProven:fixedPoint && r.executionProven === true,criteria};
 }

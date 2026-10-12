@@ -64,9 +64,19 @@ ROUTE_FAILURE
 
 UNSCOPED_SHELL_FALLBACK_FORBIDDEN=true
 AUTHORIZED_ALTERNATE_ROUTE_ALLOWED=true
+
+## Seleção causal da rota de execução — Hermes VPS / MCP
+
+Quando o alvo pertence à VPS e existe Hermes autorizado no runtime, preferir a rota executora já registrada no catálogo (HERMES_SHELL) para executar o escopo autorizado. O MCP continua sendo catálogo/transporte e mantém suas confirmações próprias: CONFIRMACAO_ADMIN_NECESSARIA bloqueia apenas a chamada MCP que a exige; **não** autoriza contornar o dispatcher por shell genérico, herdar permissões novas nem declarar que uma segunda rota está viva sem teste.
+
+Antes da ação, medir o serviço Hermes real, a identidade/escopo e os comandos permitidos pelo owner existente. Se a rota direta não estiver comprovada/autorizada, manter BLOCKED apenas para a mutação dependente. Não alterar política MCP nem executar como root só para escapar de confirmação. Uma autorização de missão cobre apenas ações dentro do escopo concedido; confirmação explícita para ações novas, destrutivas ou fora do escopo permanece obrigatória.
+
+Receita de diagnóstico da VPS (read-only): conferir systemctl is-active hermes-gateway.service, systemctl show hermes-gateway.service -p ExecStart -p User -p FragmentPath, listeners locais e git status sem limpar worktree. Registrar ROUTE, OWNER, AUTH_SCOPE, RUNTIME_HEALTH, EFFECT_READBACK, NEXT_CURSOR; serviço ativo não prova chamada funcional e commit não prova deploy.
 ```
 
 Para ferramentas de sistema, prefira capabilities pequenas e explícitas (`status`, `read`, `restart`, `write` no owner autorizado) a uma função genérica irrestrita de execução. Capacidade ampla só existe quando o owner e o escopo realmente exigirem.
+
+**Casa → VPS, seleção de rota antes do probe:** quando o alvo for a VPS e a origem for a Casa `SEGREDO` pelo Remote Desktop Commander, ler primeiro o binding já provado em `docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md` e seu owner `docs/CONSCIENCIA/05-SSH-VPS.md`. Reutilizar **o cliente Git OpenSSH da Casa**, o alias **`Segredo-VPS`** e a identidade já configurada (sem ler ou expor a chave privada). Para readback SSH usar `BatchMode=yes`, `ConnectTimeout=8`, `StrictHostKeyChecking=yes`, `IdentitiesOnly=yes` e o comando remoto inofensivo `hostname; id -un`; exigir `SSH_EXIT=0` antes de declarar autenticação `PASS`. **Não substituir silenciosamente** essa receita por `ssh root@IP`, por `ssh.exe` nativo do Windows ou por SSH originado de outro dispositivo `CENTRALDARK-OS` sem comprovar que cliente, origem e identidade são equivalentes. `MCP_PONG` comprova transporte MCP; `TCP_22_OPEN` comprova porta; `Permission denied (publickey)` por rota improvisada reprova **somente aquela tentativa**, não revoga o acesso Casa→VPS provado por outra rota. Prova histórica não vira estado atual automaticamente: remedir na rota correta e preservar `UNKNOWN` apenas para os demais claims (deploy, serviço, Hermes, HUD). Se ela falhar, registrar camada exata e reutilizar somente o próximo braço autorizado, sem inventar credencial, configuração ou owner.
 
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
@@ -1644,6 +1654,8 @@ PAPEL_HERMES=EXECUTOR_PRESERVACAO_CONTINUIDADE
 PIVETE_ROLE=RETIRED
 
 RAIZ_LOCAL=E:\CentralDark\Pivete\CentralDark
+# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. RAIZ_LOCAL acima descreve checkout legado; NAO usar como destino implicito do Obsidian nem reescrever paths de executores ate smoke test/receipts. C: pessoal intocavel. Movimento ainda nao comprovado concluido.
+
 CASA_PRIMEIRO=SIM
 VPS_POR_ULTIMO=SIM
 

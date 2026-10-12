@@ -178,23 +178,58 @@ async function executarMissao(arquivoPendente) {
   const nome = arquivoPendente.split('/').pop().replace('.md', '');
   const slug = slugify(nome);
   const dir = join(ANDAMENTO, slug);
-  await mkdir(dir, { recursive: true });
 
   const missao = (await readFile(arquivoPendente, 'utf8')).trim();
   const sidecar = arquivoPendente + '.state.json';
+  if (!existsSync(sidecar)) {
+    await registrarRetomadaBloqueada({
+      mission: nome, source: sidecar,
+      receiptPath: `${arquivoPendente}.blocked.json`,
+      validation: validateContinuityState(null),
+    });
+    return; // manter a missao pendente intacta ate chegar seu sidecar
+  }
   let continuityState = {};
   if (existsSync(sidecar)) {
-    continuityState = JSON.parse(await readFile(sidecar, 'utf8'));
+    try { continuityState = JSON.parse(await readFile(sidecar, 'utf8')); }
+    catch {
+      await registrarRetomadaBloqueada({
+        mission: nome, source: sidecar,
+        receiptPath: `${arquivoPendente}.blocked.json`,
+        validation: { head_sha: null, reasons: ['INVALID_STATE_JSON'] },
+      });
+      return;
+    }
     const validation = validateContinuityState(continuityState);
     if (!validation.ok) {
-      throw new Error('continuity sidecar inválido: ' + validation.reasons.join(','));
+      await registrarRetomadaBloqueada({
+        mission: nome, source: sidecar,
+        receiptPath: `${arquivoPendente}.blocked.json`, validation,
+      });
+      return;
     }
   }
 
-  { const rr = await renameComRetry(arquivoPendente, join(dir, 'missao.md'), 'pend->and'); if (!rr.ok) throw new Error('mover pendente falhou: ' + rr.error); }
-  if (existsSync(sidecar)) {
-    const rrState = await renameComRetry(sidecar, join(dir, 'state.json'), 'pend-state->and');
+  await mkdir(dir, { recursive: true });
+  const movingMission = join(dir, 'missao.md');
+  const movingState = join(dir, 'state.json');
+  if (existsSync(movingMission) || existsSync(movingState)) {
+    throw new Error('BLOCKED: destino de missao ja existe; preservar estado anterior');
+  }
+  const rr = await renameComRetry(arquivoPendente, movingMission, 'pend->and');
+  if (!rr.ok) throw new Error('mover pendente falhou: ' + rr.error);
+  try {
+    const rrState = await renameComRetry(sidecar, movingState, 'pend-state->and');
     if (!rrState.ok) throw new Error('mover continuity sidecar falhou: ' + rrState.error);
+  } catch (error) {
+    // Rollback estritamente local e somente quando origem ausente.
+    if (!existsSync(arquivoPendente) && existsSync(movingMission)) {
+      try { await renameComRetry(movingMission, arquivoPendente, 'rollback-pend'); }
+      catch (rollbackError) {
+        throw new AggregateError([error, rollbackError], 'MOVE_SIDECAR_AND_ROLLBACK_FAILED');
+      }
+    }
+    throw error;
   }
 
   await notificar(
@@ -210,7 +245,7 @@ async function executarMissao(arquivoPendente) {
 // === renameComRetry: rename À PROVA DE BALAS (lógica em utils/fs-safe.mjs, testável isolada) ===
 // Wrapper fino que injeta o logger do Core + o contador de ENOTEMPTY do /health.
 function renameComRetry(src, dst, tag) {
-  return renameComRetryUtil(src, dst, tag || '', { log, onEnotempty: registrarEnotempty });
+  return renameComRetryUtil(src, dst, {}, { log, onEnotempty: registrarEnotempty, tag });
 }
 
 async function registrarRetomadaBloqueada({ mission, source, receiptPath, validation }) {
@@ -366,7 +401,7 @@ async function rodarMissao(dir, slug, missao, historico = [], retomadas = 0, con
     resetWatchdog(); // missão em andamento é loop VIVO — não deixar o watchdog matar durante trabalho legítimo
     let decisao;
     try {
-      decisao = await decidir(missao, historico);
+      decisao = await decidir(missao, historico, continuityState);
       await lg(`etapa ${etapa} decisão: ${JSON.stringify(decisao).slice(0, 300)}`);
     } catch (e) {
       await lg(`❌ decisor falhou: ${e.message}`);
