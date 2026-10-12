@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): reconcile unified surface v0.1.3 with main v0.1.4 and account binding evidence",
+    "lastCommit": "🧪 DOCS(OPERATIONAL-METHOD): PERSISTIR DELEGAÇÃO ECONÔMICA COM PROVA (#1799)",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,38 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T05:26:02.336Z",
+      "titulo": "Push na main · dd1dcbfea120cf084d7c094ff28ee74bd91b93d9",
+      "detalhe": "🧪 DOCS(OPERATIONAL-METHOD): PERSISTIR DELEGAÇÃO ECONÔMICA COM PROVA (#1799)",
+      "area": "Repositório",
+      "sha": "dd1dcbf",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-12T05:13:07.614Z",
+      "titulo": "Push na main · d08b8feb2a22b6285607b2f374640f5334d3528b",
+      "detalhe": "fix(hud): surface VPS OOM pressure in Casa",
+      "area": "Repositório",
+      "sha": "d08b8fe",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-12T05:10:00.568Z",
+      "titulo": "Push na main · a07b01f141f5870ba62325bdccb3f4bd09dc7e97",
+      "detalhe": "Comunicação humana canônica: SOL, Hermes, bot, Claude, voz e gatilhos (#1796)",
+      "area": "Repositório",
+      "sha": "a07b01f",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-12T04:58:15.912Z",
+      "titulo": "Push na main · ffca4a3a5bf096c93b395ffa281f87396e72dc21",
+      "detalhe": "fix(hud): show green lock only for fresh Afterburner MMF proof",
+      "area": "Repositório",
+      "sha": "ffca4a3",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T03:52:24.670Z",
       "titulo": "Push na main · 81a5b241fe5ac1c081cd4342fd1aadaa5edc9033",
@@ -377,41 +409,37 @@
       "area": "Repositório",
       "sha": "589e049",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T10:37:54.565Z",
-      "titulo": "Push na main · 2f02e6b20abebe18862e6fa2740211a89aee6e0d",
-      "detalhe": "docs(receipt): seal four-file VPS readback, Casa/VPS probes and runner-counter counterproof",
-      "area": "Repositório",
-      "sha": "2f02e6b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T10:27:28.919Z",
-      "titulo": "Push na main · 171bdf8a864e0b6ca5482dfe8d9233a66f4167b2",
-      "detalhe": "fix(contract): retire legacy PR-mother receipts in microdeploy recipe; preserve local/versioned proof boundary",
-      "area": "Repositório",
-      "sha": "171bdf8",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T10:17:51.408Z",
-      "titulo": "Push na main · 659d7aac06abc3cb36afb85c507226bb95996a33",
-      "detalhe": "🧿 FIX(SENTINEL): PRESERVE HEALTHY OBSERVATIONS (#1792)",
-      "area": "Repositório",
-      "sha": "659d7aa",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T10:03:17.452Z",
-      "titulo": "Push na main · daf32998d30d21dc4bfea34908493963e4f48f1b",
-      "detalhe": "test(meta-lupa): compare interpretation against real route decisions, preserve unknown impact",
-      "area": "Repositório",
-      "sha": "daf3299",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T05:26:02.336Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · dd1dcbfea120cf084d7c094ff28ee74bd91b93d9 (dd1dcbf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-12T05:13:07.614Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d08b8feb2a22b6285607b2f374640f5334d3528b (d08b8fe)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-12T05:10:00.568Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a07b01f141f5870ba62325bdccb3f4bd09dc7e97 (a07b01f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-12T04:58:15.912Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ffca4a3a5bf096c93b395ffa281f87396e72dc21 (ffca4a3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T03:52:24.670Z",
       "ia": "@segredounlock",
@@ -733,34 +761,6 @@
       "action": "📌 Push na main · 589e04924cc460f03dcb131016a02451a885b400 (589e049)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T10:37:54.565Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2f02e6b20abebe18862e6fa2740211a89aee6e0d (2f02e6b)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T10:27:28.919Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 171bdf8a864e0b6ca5482dfe8d9233a66f4167b2 (171bdf8)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T10:17:51.408Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 659d7aac06abc3cb36afb85c507226bb95996a33 (659d7aa)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T10:03:17.452Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · daf32998d30d21dc4bfea34908493963e4f48f1b (daf3299)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T03:52:24.670Z",
-  "updatedAtBR": "12/10/2026, 00:52:24 BRT"
+  "updatedAt": "2026-10-12T05:26:02.336Z",
+  "updatedAtBR": "12/10/2026, 02:26:02 BRT"
 }
