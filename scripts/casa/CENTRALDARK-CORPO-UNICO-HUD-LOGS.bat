@@ -454,7 +454,7 @@ $script:RemoteScript = {
   $sshPath=Join-Path $env:ProgramFiles 'Git\usr\bin\ssh.exe'
   if(-not (Test-Path -LiteralPath $sshPath -PathType Leaf)){return 'CD_SSH=UNKNOWN|Git SSH nao encontrado'}
   $exe=$sshPath
-  $remote='echo CD_SSH=PASS; printf "CD_HEART="; curl -fsS --max-time 3 http://127.0.0.1:9100/heartbeat 2>/dev/null; echo; echo CD_RUNTIME; uptime; ps -eo comm= | grep -E "(node|pm2|screenpipe|llama|hermes)" | sort -u | head -8; echo CD_VPS_SENSORS; for unit in desktop-commander-remote.service centraldark-desktop-commander-conta2.service; do state=$(systemctl is-active "$unit" 2>/dev/null || true); echo "CD_DC=$unit,${state:-UNKNOWN}"; done; sc=$(curl --noproxy "*" -s -o /dev/null -w "%{http_code}" --connect-timeout 2 --max-time 3 http://127.0.0.1:3030/health 2>/dev/null || true); echo "CD_SCREENPIPE_VPS=${sc:-000}"; if [ -f /root/CentralDark/apps/modulos/elite-gateway/test-local/local_send_dump.py ]; then echo CD_ZENDRIVE=CODE_PRESENT_RUNTIME_UNKNOWN; else echo CD_ZENDRIVE=CODE_NOT_FOUND_RUNTIME_UNKNOWN; fi; echo CD_VPS_LOG; journalctl -n 8 -p warning --no-pager --output=short-iso 2>/dev/null | tail -8'
+  $remote='echo CD_SSH=PASS; printf "CD_HEART="; curl -fsS --max-time 3 http://127.0.0.1:9100/heartbeat 2>/dev/null; echo; printf "CD_CPU=CPU%% SEM LEITURA|cpus=%s|loadavg=%s|observed_at=%s\n" "$(nproc 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || printf UNKNOWN)" "$(cut -d" " -f1-3 /proc/loadavg 2>/dev/null || printf UNKNOWN)" "$(date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ 2>/dev/null || printf UNKNOWN)"; echo CD_RUNTIME; uptime; ps -eo comm= | grep -E "(node|pm2|screenpipe|llama|hermes)" | sort -u | head -8; echo CD_VPS_SENSORS; for unit in desktop-commander-remote.service centraldark-desktop-commander-conta2.service; do state=$(systemctl is-active "$unit" 2>/dev/null || true); echo "CD_DC=$unit,${state:-UNKNOWN}"; done; sc=$(curl --noproxy "*" -s -o /dev/null -w "%{http_code}" --connect-timeout 2 --max-time 3 http://127.0.0.1:3030/health 2>/dev/null || true); echo "CD_SCREENPIPE_VPS=${sc:-000}"; if [ -f /root/CentralDark/apps/modulos/elite-gateway/test-local/local_send_dump.py ]; then echo CD_ZENDRIVE=CODE_PRESENT_RUNTIME_UNKNOWN; else echo CD_ZENDRIVE=CODE_NOT_FOUND_RUNTIME_UNKNOWN; fi; echo CD_VPS_LOG; journalctl -n 8 -p warning --no-pager --output=short-iso 2>/dev/null | tail -8'
   # Read-only device sensor per systemd unit since current service activation.
   # This reports a device event, not proof of the user's Google account.
   $remote += [Environment]::NewLine + @'
@@ -531,6 +531,17 @@ function Poll-Remote {
         }
         if($line -match '^CD_ZENDRIVE=(.+)$'){
           Add-Log 'SCRIPTS' 'UNKNOWN' ('VPS Zendrive: '+$Matches[1]+' (arquivo nao prova sessao)')
+          continue
+        }
+        if($line -match '(?i)(out of memory|oom-kill|oom killer|total swap\s*=\s*0kb)'){
+          Set-Card 'HERMES / SSH' 'WARN' 'VPS sob pressao de memoria; OOM detectado nos logs'
+          Set-Card 'VPS / CORACAO' 'WARN' 'OOM detectado; heartbeat vivo nao significa estabilidade'
+          Add-Log 'VPS' 'WARN' ('MEMORY_PRESSURE: '+$line.Trim())
+          continue
+        }
+        if($line -match '^CD_CPU=(.+)$'){
+          Add-Log 'VPS' 'WARN' ('CPU VPS: '+$Matches[1]+' | loadavg nao e uso %')
+          Set-Card 'VPS / CORACAO' 'WARN' ('CPU VPS sem uso %; '+$Matches[1])
           continue
         }
         if($line -match '^CD_HEART='){Add-Log 'VPS' 'LOG' 'Heartbeat consultado; detalhes tecnicos disponiveis no SSH';continue}
