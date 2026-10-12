@@ -324,3 +324,31 @@ Nao reabrir prova de `BUTTON_CONTA2_OPEN_AUTH_URL` ja registrada; pendencia apen
     NEXT_CURSOR=VERIFY_INDEPENDENT_PROVIDER_IDENTITY_AND_KEEP_HUD_LOGS_DEDUPED
 
 **🕊️ POMBO_CHECKSUM:** só o dispositivo e o leitor recebem selo; histórico, identity mapping, OAuth, goal e deploy continuam com provas próprias.
+
+
+### T7 — 2026-10-12 — Afterburner MMF → CORPO ÚNICO → HUD original → main
+
+- **INTENÇÃO:** incluir os 51 sensores da Casa no HUD que já existe, com GPU/CPU ao vivo e sem novo serviço, novo painel, API paralela ou alteração de parâmetros da GPU.
+- **Owners existentes:** `docs/HUD/HUD.html` (renderização) e `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` (coleta no ciclo WinForms de 10 s). **Runtime físico:** `K:\CentralDark\HUD.html` e `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`. O derivado `K:\CentralDark\CENTRALDARK-AFTERBURNER-LIVE.js` guarda apenas telemetria sanitizada para o mesmo HTML local; não é um executor, endpoint HTTP ou owner independente.
+- **Origem medida, read-only na Casa:** processos existentes MSI Afterburner e RivaTuner encontrados ativos. `MAHMSharedMemory` foi aberto por API do Windows com FILE_MAP_READ=4. Header `MHAM`, versão 131072, header 32 bytes, 51 entradas de 1324 bytes; 51 sensores utilizáveis (GPU temp/uso/memória/fan/power, CPU temp/uso/clock, RAM etc.). `RTSSSharedMemoryV2` também pôde ser aberto, mas não foi usado para inferir carga dos processos.
+- **Contraprova de dados reais:** leitura em dois instantes em 12/10/2026 04:09:14Z e 04:09:16Z mostrou GPU 40%→6%, CPU 33,07%→19,63%, RAM 18.313→18.380 MB. Outro teste validou geração de dados `51/51`, timestamp de origem fresco, arquivo local JS em UTF-8 e parser PowerShell sem erros.
+- **Bug corrigido no ciclo:** `File.Replace(temp,dest,null)` falhou porque o caminho do backup não pode ficar vazio no runtime Windows medido. Mesmo BAT passou a usar caminho explícito para o backup transitório e excluí-lo após troca. Nova contraprova de arquivo gerado: `SOURCE_FRESH` e `51/51`; nada alterado em clocks/tensão/fan.
+- **E2E browser:** Edge headless, aberto sobre o **mesmo** `file:///K:/CentralDark/HUD.html`, executou carga dinâmica `./CENTRALDARK-AFTERBURNER-LIVE.js` e renderizou CPU `57,1%`, GPU `44 °C`, `MMF FRESCO · 51/51 sensores`; após reinício apenas da GUI do CORPO ÚNICO, novo readback mostrou CPU `35,6%`, GPU `46 °C`, 51/51 sensores, DOM sem STALE e arquivo renovado havia `3,4s`.
+- **Persistência na Casa:** a única janela do CORPO ÚNICO permaneceu ativa em nova sessão (`PID 29816` no primeiro readback). Ciclo de 10 s renovou o arquivo JS, e o log já existente `%LOCALAPPDATA%\CentralDark\Corpo-Unico-HUD-Logs.txt` apresentou leituras `RUNTIME PASS AFTERBURNER MMF READ_ONLY | 51/51 sensores | SOURCE_FRESH | HUD_FEED_LOCAL` repetidas ao longo de múltiplos minutos.
+- **GitHub:** alterações nos **dois owners originais** em um único commit na main `45dcf83b2ada2fa8447f5d8deff0c4e4307d649a`. Blob do HTML `cade858b2f480f62b6b8fd867462581c80f7d8ef`, blob do BAT `ab2d6a203b64e9bc4879294b2650dc36eb816a85`; readback do conteúdo e das árvores de origem PASS. Trechos de código `Poll-Afterburner`, cartão GPU e seção de sensores comparados entre main e Casa: igualdade exata do escopo. **Arquivos completos local/main não são byte a byte iguais**, pois a Casa conserva customizações anteriores.
+- **Fail-closed:** timestamp de MMF e navegador exigem frescor; se a leitura parar, o HUD retorna `STALE/UNKNOWN`, sem manter verde permanente. Arquivo JSON/JS não inclui cookies, senhas, dados de tela ou credenciais. A main contém o código; só a Casa com MSI Afterburner ativo produz o feed; `COMMITTED != VPS_DEPLOYED`.
+
+    AFTERBURNER_MMF_READONLY=PASS
+    AFTERBURNER_51_SENSORS=PASS
+    GUI_SINGLE_INSTANCE=PASS
+    LOCAL_FEED_PERIODIC_RENEWAL=PASS
+    HUD_BROWSER_DOM_LIVE_CPU_GPU=PASS
+    MAIN_TWO_OWNERS_ONE_COMMIT=PASS
+    MAIN_AND_CASA_SCOPE_FRAGMENT_EQUAL=PASS
+    FULL_LOCAL_FILES_EQUAL_MAIN=NO (CUSTOMIZATIONS_PRESERVED)
+    GPU_AI_INFERENCE_OR_ACCELERATION=NOT_PROVEN
+    VPS_AFTERBURNER_SENSOR=NOT_IN_SCOPE
+    GLOBAL_FIXED_POINT=NOT_ASSERTED
+    NEXT_CURSOR=MONITOR_HUD_SOURCE_STALENESS_WITH_EXISTING_LOOP
+
+**🕊️ POMBO_CHECKSUM:** telemetria no HUD e renovação automática SELADOS no escopo Casa; health de IA, deploy VPS e identidade externa não foram promovidos por inferência.
