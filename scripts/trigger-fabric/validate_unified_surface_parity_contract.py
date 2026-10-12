@@ -9,6 +9,7 @@ minimum invariants required by the CHEFE/SOL/HERMES operating law.
 from __future__ import annotations
 
 import re
+import json
 import sys
 from pathlib import Path
 
@@ -200,7 +201,7 @@ REQUIRED_MARKERS = {
 REQUIRED_MARKERS.update({
     PLUGIN_MANIFEST: [
         '\"name\": \"centraldark-unified-surface-parity\"',
-        '\"version\": \"0.1.0\"',
+        '\"version\": \"0.1.1\"',
         '\"repository\": \"https://github.com/ServerVpss/CentralDark\"',
         '\"displayName\": \"CentralDark Unified Surface\"',
         '\"capabilities\": [\"Read\", \"Write\"]',
@@ -222,7 +223,7 @@ REQUIRED_MARKERS.update({
     PLUGIN_SOURCE: [
         '\"canonical_owner\": \"CENTRALDARK_UNIFIED_SURFACE_PARITY_01\"',
         '\"published_plugin_id\": \"plugins_6ab87b459ff08191a69311acd4c77d83\"',
-        '\"published_release_id\": \"pluginrel_6ab87b470c048191b7ed42e9be8761b6\"',
+        '\"published_release_id\": \"pluginrel_6acc490241fc81918c7c9834b413e404\"',
         '\"published_scope\": \"USER\"',
         '\"published_discoverability\": \"PRIVATE\"',
         '\"generated_artifact_is_owner\": false',
@@ -453,6 +454,12 @@ def affirmative_occurrence(text: str, marker: str) -> bool:
 def validate_file(path: Path) -> list[str]:
     errors: list[str] = []
     text = read_text(path)
+    if path in (PLUGIN_MANIFEST, PLUGIN_SOURCE):
+        # Compare JSON markers semantically, not against whitespace layout.
+        try:
+            text = json.dumps(json.loads(text), ensure_ascii=False)
+        except (ValueError, TypeError) as exc:
+            return [f"INVALID_PLUGIN_JSON {path}: {exc}"]
 
     for marker in REQUIRED_MARKERS.get(path, []):
         if marker not in text:

@@ -1017,7 +1017,7 @@ essa prova operacional nao autoriza reclassificar os demais servicos.
 Nao nasce segundo HUD, gate de saude opcional ou outro owner.
 
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=81dfdcf682486ccb7a508ff6dc06fb42e8342fc7
+AGENTS.md=8b7d781e08e0f3d1e6b1b3745f09bc56315a6fff
 LEIA-ME-IA.md=e34eb841e6784285563ba065a9205679d98466b5
 CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
 CENTRALDARK_AI_BOOT.yaml=5e54e602590486f3b70b8b41bafaac660b54fc81
