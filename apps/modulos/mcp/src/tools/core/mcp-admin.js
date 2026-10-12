@@ -50,6 +50,7 @@ function invalidInputResponse(input, parsed, destructive) {
     return ok({
         ok: false,
         status: "INPUT_INVALIDO",
+        diagnostico: diagnoseMcpBlock("INPUT_INVALIDO"),
         tool: input.tool,
         destructive: destructive === true,
         erros: parsed.error.issues.map((issue) => ({
@@ -123,7 +124,37 @@ const ROUTE_LAWS = Object.freeze({
     routeDocumentedIsNotRuntimeProof: true,
     capabilitySystem: "UNION_OF_MEASURED_AUTHORIZED_ROUTE_CAPABILITIES",
     realityIsJudge: true,
+    clientSafetyGateIsOutsideMcp: true,
+    repeatBlockedCallWithoutNewEvidence: false,
+    ownerRebuilderOnlyAfterMeasuredFailure: true,
 });
+
+// Aprendizado das tentativas reais: erro de politica != falha da VPS.
+// A fronteira OpenAI/cliente nao e visivel por este MCP: nao simular observacao.
+export const MCP_BLOCK_RECONCILIATION = Object.freeze({
+    INPUT_INVALIDO: ["ARGUMENTOS", "corrigir_schema", false],
+    TOOL_NAO_ENCONTRADA: ["CATALOGO", "consultar_mcp_admin_catalog", false],
+    INDEPENDENT_APPROVAL_REQUIRED: ["AUTORIDADE", "aguardar_autorizacao_independente", false],
+    ESCOPO_ADMIN_NECESSARIO: ["AUTORIDADE", "solicitar_escopo_admin", false],
+    CONTEXTO_ADMIN_INCOMPLETO: ["IDENTIDADE", "reconciliar_identidade_auditoria", false],
+    AUDITORIA_STARTUP_INDISPONIVEL: ["AUDITORIA", "medir_cadeia_e_catalogo", false],
+    AUDITORIA_INDISPONIVEL: ["AUDITORIA", "reparar_owner_auditoria_com_prova", false],
+    DESTRUTIVA_EM_QUARENTENA: ["CATALOGO", "revisar_manifesto_em_pr", false],
+    APROVADA_AUSENTE_NO_RUNTIME: ["RUNTIME", "verificar_versao_runtime", false],
+    CONFIRMACAO_ADMIN_NECESSARIA: ["CONFIRMACAO", "exigir_confirmacao_literal_do_usuario", false],
+});
+export function diagnoseMcpBlock(status) {
+    const [classe, nextCursor, retrySameCall] = MCP_BLOCK_RECONCILIATION[status]
+        || ["DESCONHECIDO", "medir_owner_e_erro_sem_promover_pass", false];
+    return {
+        classe, status, nextCursor, retrySameCall,
+        createdNewRoute: false,
+        clientSafetyGateObserved: false,
+        protectedPathMustRemainProtected: true,
+        errorIsNotExecutionProof: true,
+        documentedRouteIsNotAvailabilityProof: true,
+    };
+}
 
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
 function safeToolInfo(tool) {
@@ -252,6 +283,7 @@ export const mcpAdminTools = [
                 return ok({
                     ok: false,
                     status: !hasAdminContext ? "ESCOPO_ADMIN_NECESSARIO" : "CONTEXTO_ADMIN_INCOMPLETO",
+                    diagnostico: diagnoseMcpBlock(!hasAdminContext ? "ESCOPO_ADMIN_NECESSARIO" : "CONTEXTO_ADMIN_INCOMPLETO"),
                     executionStatus: "blocked",
                     tool: input.tool,
                     auditSeq: denied.audit?.seq ?? null,
@@ -262,6 +294,7 @@ export const mcpAdminTools = [
             if (!tool) {
                 return ok({
                     ok: false, status: "TOOL_NAO_ENCONTRADA",
+                    diagnostico: diagnoseMcpBlock("TOOL_NAO_ENCONTRADA"),
                     requested: input.tool,
                     sugestao: "Use mcp_admin_catalog para listar as tools disponíveis.",
                 });
@@ -276,6 +309,7 @@ export const mcpAdminTools = [
                 return ok({
                     ok: false,
                     status: "INDEPENDENT_APPROVAL_REQUIRED",
+                    diagnostico: diagnoseMcpBlock("INDEPENDENT_APPROVAL_REQUIRED"),
                     executionStatus: "blocked",
                     tool: input.tool,
                     destructive: true,
@@ -292,6 +326,7 @@ export const mcpAdminTools = [
                 return ok({
                     ok: false,
                     status: "AUDITORIA_STARTUP_INDISPONIVEL",
+                    diagnostico: diagnoseMcpBlock("AUDITORIA_STARTUP_INDISPONIVEL"),
                     executionStatus: "blocked",
                     tool: input.tool,
                 });
@@ -314,6 +349,7 @@ export const mcpAdminTools = [
             if (!decision.allow) {
                 return ok({
                     ok: false, status: decision.status,
+                    diagnostico: diagnoseMcpBlock(decision.status),
                     executionStatus: decision.executionStatus,
                     tool: input.tool, destructive: true,
                     requiredConfirmAdmin: ADMIN_CONFIRM,
