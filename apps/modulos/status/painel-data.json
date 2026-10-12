@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): seal read-only Desktop Commander HUD classification counterproof",
+    "lastCommit": "fix(plugin): herdar roteamento MCP e contraprova da voz na distribuição canônica",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T02:41:04.257Z",
+      "titulo": "Push na main · deaa5ac6cdbacaf61de0ed0b191003b7ac64b327",
+      "detalhe": "fix(plugin): herdar roteamento MCP e contraprova da voz na distribuição canônica",
+      "area": "Repositório",
+      "sha": "deaa5ac",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T02:36:32.918Z",
       "titulo": "Push na main · dcb99eafa67af3bb3709c4d8dbd860a50e828c5f",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "9630900",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T03:01:43.316Z",
-      "titulo": "Push na main · 2b636425550e6d48e346cea32722b905ca00f2f2",
-      "detalhe": "fix(neurolink): rebuild canonical manifest from current APRENDIZADOS",
-      "area": "Repositório",
-      "sha": "2b63642",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T02:41:04.257Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · deaa5ac6cdbacaf61de0ed0b191003b7ac64b327 (deaa5ac)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T02:36:32.918Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 9630900d260b5a9ae23837dc0bbe0dd81a3aca19 (9630900)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T03:01:43.316Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2b636425550e6d48e346cea32722b905ca00f2f2 (2b63642)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T02:36:32.918Z",
-  "updatedAtBR": "11/10/2026, 23:36:32 BRT"
+  "updatedAt": "2026-10-12T02:41:04.257Z",
+  "updatedAtBR": "11/10/2026, 23:41:04 BRT"
 }
