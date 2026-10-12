@@ -2681,3 +2681,8 @@ Invariantes:
 Não remover worktree quando existir commit apenas local, arquivo modificado/untracked com delta único, receipt pendente, prova ainda não promovida ou classificação UNKNOWN. Worktree pode ser deletado após o delta útil estar promovido/preservado e a trilha de proveniência estar registrada. A limpeza deve deixar rastro suficiente para responder: qual missão criou a bancada, qual HEAD/base usou, qual delta sobreviveu, onde foi promovido e quando a bancada foi removida.
 
 Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode compartilhar leitura; mutação paralela usa isolamento quando necessário; cada escopo mantém um único writer.
+
+
+### 27. Delegação econômica com prova — continuidade canônica
+
+Para coordenar subagentes sem multiplicar custo, reutilizar a receita existente em [`references/delegacao-economica-com-prova.md`](references/delegacao-economica-com-prova.md). Primeiro procurar trabalho/prova existentes; para tarefas mecânicas usar scripts e sondas baratos; delegar apenas subtarefas independentes e com um writer por escopo; exigir resumos curtos com evidência; SOL julga resultado, testa e confere `main`/runtime antes de registrar receipt. Delegação não é conclusão. Não criar agentes, skills, HUDs ou watchers duplicados para aplicar esta regra.
