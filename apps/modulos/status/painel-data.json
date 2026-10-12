@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): registrar consolidacao CentralDark 0.1.1 e limite da voz",
+    "lastCommit": "feat(plugin): convergir wrappers legados na skill de distribuicao canônica v0.1.2",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T02:51:47.991Z",
+      "titulo": "Push na main · 1e479f1924315e1679354655b9b9539dbc0058a8",
+      "detalhe": "feat(plugin): convergir wrappers legados na skill de distribuicao canônica v0.1.2",
+      "area": "Repositório",
+      "sha": "1e479f1",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T02:47:17.300Z",
       "titulo": "Push na main · 3f950565df5b1a7c47c1317b03b9054a7b7bbebe",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "aef665c",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T04:15:19.047Z",
-      "titulo": "Push na main · 33001f6ae133cc024a4ffcd5315dee2a8cca8d06",
-      "detalhe": "fix(hud): refresh existing MCP intent probe and flag stale evidence",
-      "area": "Repositório",
-      "sha": "33001f6",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T02:51:47.991Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1e479f1924315e1679354655b9b9539dbc0058a8 (1e479f1)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T02:47:17.300Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · aef665cb9b030628352a0412efe022f7d25d4d04 (aef665c)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T04:15:19.047Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 33001f6ae133cc024a4ffcd5315dee2a8cca8d06 (33001f6)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T02:47:17.300Z",
-  "updatedAtBR": "11/10/2026, 23:47:17 BRT"
+  "updatedAt": "2026-10-12T02:51:47.991Z",
+  "updatedAtBR": "11/10/2026, 23:51:48 BRT"
 }
