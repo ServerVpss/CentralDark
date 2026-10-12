@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs: ligar entrada simples ao mapa canônico existente",
+    "lastCommit": "fix(mcp): classificar bloqueios e preservar fronteira de segurança, sem repetição cega",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T23:27:33.764Z",
+      "titulo": "Push na main · 9f516fbe7842aa56b2be93a7f5021208cfc06b16",
+      "detalhe": "fix(mcp): classificar bloqueios e preservar fronteira de segurança, sem repetição cega",
+      "area": "Repositório",
+      "sha": "9f516fb",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T23:20:23.188Z",
       "titulo": "Push na main · 57f30e9f63deab6f9af901b86ba7aac2eb982c38",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "cd9cf78",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T22:54:18.777Z",
-      "titulo": "Push na main · fba012db4a0b0e924b3bc912cfbc54413ac690cf",
-      "detalhe": "docs(receipt): readback HUD transferido para F:\\scripts sem reset de perfis",
-      "area": "Repositório",
-      "sha": "fba012d",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T23:27:33.764Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9f516fbe7842aa56b2be93a7f5021208cfc06b16 (9f516fb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T23:20:23.188Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · cd9cf78306ffbef2f4598b7826880ffd3495cb9b (cd9cf78)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T22:54:18.777Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · fba012db4a0b0e924b3bc912cfbc54413ac690cf (fba012d)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T23:20:23.188Z",
-  "updatedAtBR": "12/10/2026, 20:20:23 BRT"
+  "updatedAt": "2026-10-12T23:27:33.764Z",
+  "updatedAtBR": "12/10/2026, 20:27:33 BRT"
 }
