@@ -204,6 +204,33 @@ Ao evoluir esta arquitetura:
 7. remedir T0 → T1;
 8. não declarar deploy/produção sem prova no runtime correspondente.
 
+## Continuidade por setor — Hub de Contas + preflight cruzado (2026-10-12)
+
+**INTENÇÃO do SEGREDO/CHEFE:** não confundir falha de uma conta, conector ou caminho com falha do organismo inteiro. A CentralDark trabalha com as fontes que realmente responderam, declara exatamente o setor inacessível e mantém o fluxo. Este delta estende o **Hub único existente**, o monitor canônico e a gramática de resposta; não cria segundo monitor, broker, cérebro, cron, writer ou permissão.
+
+**Owners existentes:** `apps/modulos/hub/` (contas/capabilities), `apps/modulos/oauth-broker/server.mjs` (autorizações do Hub), `apps/bot-telegram/services/account-hub.cjs` (projeção Telegram), `.agents/skills/centraldark-operational-method/SKILL.md` (método), monitor já existente **Núcleo canônico CentralDark** (somente leitura, horário). Credenciais da conta Gmail conectada ao ChatGPT **não** provam automaticamente autorização no broker da VPS; cada rota exige leitura real e proveniência.
+
+### Política operacional: `FALHA_LOCAL_NAO_E_COLAPSO_GLOBAL=true`
+
+```text
+INTENCAO_VIGENTE
+→ HUB/CONTAS: quais identidades, providers e rotas JÁ EXISTEM?
+→ TENTAR FONTES PERTINENTES (em paralelo quando possível):
+     GMAIL (separar cada conta) | GITHUB MAIN/PRS/COMMITS | VPS/RUNTIME | DOCS/OWNERS
+→ PARA CADA SETOR: ACESSO_OK | SEM_ACESSO | FALHA_LEITURA | INCONCLUSIVO | NAO_PERTINENTE
+→ CROSS-CHECK COM FONTE DISPONÍVEL + TIMESTAMP + SHA QUANDO APLICÁVEL
+→ CONTINUAR NAS FRENTES QUE RESPONDERAM
+→ RESPOSTA: O QUE FUNCIONOU + O QUE NÃO TEM ACESSO + EFEITO / PRÓXIMO CURSOR
+→ DELTA MATERIAL AUTORIZADO: CHECAR SOMENTE PROVAS NECESSÁRIAS ÀQUELE ESCOPO
+→ REGISTRAR RECIBO E CONTRAPROVA; NÃO PROMOVER UNKNOWN A PASS
+```
+
+**Exemplo correto:** `Gmail CONTACOBRA = SEM_ACESSO; Gmail SONASMARCAS = ACESSO_OK; GitHub PR #... = PASS_LEITURA (não significa checks PASS); VPS = ACESSO_OK; DOCS = ACESSO_OK; CRUZAMENTO = PARCIAL`. A falta do primeiro Gmail não impede ler o segundo, o GitHub, a VPS e os docs. Se **GitHub** não responder, não afirmar SHA ou checks atuais a partir de um alerta antigo de e-mail; continuar com VPS/docs e informar `GitHub = SEM_ACESSO`. Se **VPS** não responder, não afirmar runtime atual a partir do código da main; continuar com GitHub/Gmail/docs. Uma indisponibilidade bloqueia **somente** a afirmação ou ação dependente da fonte ausente, nunca a atividade independente.
+
+**Falha técnica versus falta de autorização:** sessão expirou, token ausente, conexão recusada, falha de leitura e acesso não concedido precisam de motivos separados quando conhecidos; não inferir autenticação sem prova do provedor. Não contornar proteção de acesso, não revelar segredos, não marcar `OFFLINE` todos os serviços porque um único conector falhou.
+
+**Critério de FIXED POINT local:** estado de cada setor discriminado, fontes disponíveis efetivamente consultadas, correlação de alertas Gmail com PR/commit atual quando possível, claims restritos à evidência, nenhuma duplicação de owners e `NEXT_CURSOR` explícito para o setor indisponível. Monitor periódico é somente leitura e não autoriza merge/deploy/mutação. Registro documental e monitor configurado **não provam** execução do método em todos os agentes; isso requer readback do runtime pertinente.
+
 ## Interface humana
 
 O CHEFE vê função e direção; detalhe interno só sobe quando muda decisão.
