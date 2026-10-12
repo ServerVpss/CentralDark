@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "chore(plugin): publicar manifesto canônico de distribuição v0.1.1",
+    "lastCommit": "docs(plugin): readback release 0.1.1 mantendo prova de Voice UNKNOWN",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T02:43:56.272Z",
+      "titulo": "Push na main · 5f6737c012ce6cd06d08ef0934de0ddd8e45a21e",
+      "detalhe": "docs(plugin): readback release 0.1.1 mantendo prova de Voice UNKNOWN",
+      "area": "Repositório",
+      "sha": "5f6737c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T02:43:09.316Z",
       "titulo": "Push na main · d98299510424f1cf177be49bc3fd68404866445d",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "11f81d2",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T03:33:55.038Z",
-      "titulo": "Push na main · 4434b8f692956a38c033334b9d275d337d4ac9c4",
-      "detalhe": "fix(deploy): feed Hermes event SHA and skip unchanged guards owner",
-      "area": "Repositório",
-      "sha": "4434b8f",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T02:43:56.272Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5f6737c012ce6cd06d08ef0934de0ddd8e45a21e (5f6737c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T02:43:09.316Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 11f81d2b607f3748142bd9002d6ce35b2154e6cc (11f81d2)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T03:33:55.038Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4434b8f692956a38c033334b9d275d337d4ac9c4 (4434b8f)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T02:43:09.316Z",
-  "updatedAtBR": "11/10/2026, 23:43:09 BRT"
+  "updatedAt": "2026-10-12T02:43:56.272Z",
+  "updatedAtBR": "11/10/2026, 23:43:56 BRT"
 }
