@@ -533,6 +533,12 @@ function Poll-Remote {
           Add-Log 'SCRIPTS' 'UNKNOWN' ('VPS Zendrive: '+$Matches[1]+' (arquivo nao prova sessao)')
           continue
         }
+        if($line -match '(?i)(out of memory|oom-kill|oom killer|total swap\s*=\s*0kb)'){
+          Set-Card 'HERMES / SSH' 'WARN' 'VPS sob pressao de memoria; OOM detectado nos logs'
+          Set-Card 'VPS / CORACAO' 'WARN' 'OOM detectado; heartbeat vivo nao significa estabilidade'
+          Add-Log 'VPS' 'WARN' ('MEMORY_PRESSURE: '+$line.Trim())
+          continue
+        }
         if($line -match '^CD_CPU=(.+)$'){
           Add-Log 'VPS' 'WARN' ('CPU VPS: '+$Matches[1]+' | loadavg nao e uso %')
           Set-Card 'VPS / CORACAO' 'WARN' ('CPU VPS sem uso %; '+$Matches[1])
