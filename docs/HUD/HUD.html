@@ -1442,6 +1442,7 @@ body {
  <div class="cd-top-sensor"><strong>🖥️ CPU · CASA</strong><span class="cd-top-value" id="cd-casa-cpu">🟡 SEM LEITURA</span><small id="cd-casa-cpu-proof">segredo / 100.123.93.25 · Desktop remoto OFFLINE no T0. CPU% não comprovada.</small></div>
  <div class="cd-top-sensor"><strong>🖧 CPU · VPS</strong><span class="cd-top-value" id="cd-vps-cpu">🟡 CPU% SEM LEITURA</span><small id="cd-vps-cpu-proof">Carga observada: 17.74 em 8 CPUs no T0 10/10 18:59Z. Loadavg ≠ uso %.</small></div>
  <div class="cd-top-sensor"><strong>🧠 HERMES · RUNTIME</strong><span class="cd-top-value" id="cd-live-runtime">🟡 MEDINDO</span><small id="cd-live-runtime-proof">Fonte existente: /health. Serviço vivo ≠ inferência testada.</small></div>
+ <div class="cd-top-sensor" id="cd-ab-gpu-top"><strong>🎮 GPU · CASA / AFTERBURNER</strong><span class="cd-top-value" id="cd-ab-gpu">🟡 SEM LEITURA</span><small id="cd-ab-gpu-proof">Sensor MMF local: aguarda fonte real do Windows.</small></div>
  <button type="button" id="cd-cpu-measure-import" title="Importa JSON sanitizado de medição do sensor existente: só nesta aba">📥 CPU T1</button><input type="file" accept=".json,application/json" id="cd-cpu-measure-file" hidden>
 </div>
 
@@ -1460,6 +1461,81 @@ body {
 <div class="page">
 <!-- Ultimo delta, sem novo owner -->
 <div class="section" style="margin-top:16px" id="cd-last-update"><div class="section-header"><div class="section-icon">&#128197;</div><h2 class="section-title">Ultima atualizacao do HUD</h2><span class="section-count">09/10/2026, 20:27 UTC - rotas medidas; Tailscale API 401 / Heart STALE</span></div><div class="cadeado-meta">FONTE OBSERVADA: GitHub main <code>75115cfe063f</code> e API publica <code>api.centralldark.com/health</code>. Este quadro separa CURRENT de historico: API health confirma Hermes Core vivo, mas nao prova inferencia, deploy ou disponibilidade de modelo local. Owner: docs/HUD/HUD.html. READBACK 09/10/2026 20:27 UTC: catalogo MCP 141 ferramentas/13 rotas/20 operacoes; SSH/Tailscale PONG bidirecional, portas 445/5985/3030 e Screenpipe HTTP 200, AionUi HTTP 200. API administrativa Tailscale = HTTP 401 (API token invalid), broker = fetch failed; One Heart HTTP 200 mas self=stale (lag_ms=133427). PASS_GLOBAL = NAO COMPROVADO. Nenhuma credencial, processo ou conexao alterada.</div></div>
+
+<!-- CD_AFTERBURNER_MMF_V1: evidence-only view of the existing WinForms collector, same HUD -->
+<section class="section" id="cd-afterburner-live" data-owner="docs/HUD/HUD.html" data-source="MAHMSharedMemory" style="margin-top:16px">
+ <div class="section-header"><div class="section-icon">🎮</div><h2 class="section-title">Casa · MSI Afterburner · 51 sensores</h2><span class="section-count" id="cd-ab-badge">🟡 SENSOR LOCAL SEM LEITURA</span></div>
+ <p class="cadeado-meta" id="cd-ab-proof">Fonte: memória compartilhada MAHMSharedMemory lida no ciclo de 10 s do CORPO ÚNICO da Casa. Dados são somente leitura; arquivo local de telemetria é gerado ao lado deste HTML. MAIN/CÓDIGO ≠ SENSOR ONLINE. Nunca altera tensão, clocks ou ventoinha.</p>
+ <div class="hud-grid" id="cd-ab-summary">
+  <div class="hud-card"><h3>🖥️ CPU Casa</h3><div class="val warn" id="cd-ab-cpu-use">UNKNOWN</div><div class="meta" id="cd-ab-cpu-temp">Temperatura: UNKNOWN</div></div>
+  <div class="hud-card"><h3>🎮 GPU RX 580</h3><div class="val warn" id="cd-ab-gpu-use">UNKNOWN</div><div class="meta" id="cd-ab-gpu-temp">Temperatura: UNKNOWN</div></div>
+  <div class="hud-card"><h3>💾 RAM</h3><div class="val warn" id="cd-ab-ram">UNKNOWN</div><div class="meta" id="cd-ab-fan">Ventoinha: UNKNOWN</div></div>
+ </div>
+ <details style="margin-top:12px"><summary>🧿 Ver todos os sensores reais do Afterburner (somente leitura)</summary><div class="hud-grid" id="cd-ab-all-sensors" style="margin-top:12px"><div class="hud-card">Nenhuma leitura recente</div></div></details>
+</section>
+<script>
+/* CD_AFTERBURNER_MMF_V1. Same HUD, same Casa collector. file:// script load E2E tested in Edge.
+   External file is local sanitized data, not executable commands or secret material. */
+(function(){
+'use strict';
+var installed=false,loading=false,lastFresh=false;
+function put(id,v){var e=document.getElementById(id);if(e)e.textContent=String(v);}
+function css(id,ok){var e=document.getElementById(id);if(e){e.classList.toggle('ok',!!ok);e.classList.toggle('warn',!ok);}}
+function showUnknown(reason){
+ if(lastFresh){
+   put('cd-casa-cpu','🟡 SEM LEITURA ATUAL');put('cd-ab-gpu','🟡 SEM LEITURA ATUAL');
+   put('cd-casa-cpu-proof','Afterburner: última prova venceu; CPU atual UNKNOWN.');
+   put('cd-ab-gpu-proof','Afterburner: última prova venceu; GPU atual UNKNOWN.');
+ }
+ lastFresh=false;
+ put('cd-ab-badge','🟡 '+reason);
+ ['cd-ab-cpu-use','cd-ab-cpu-temp','cd-ab-gpu-use','cd-ab-gpu-temp','cd-ab-ram','cd-ab-fan'].forEach(function(x){put(x,'UNKNOWN');css(x,false);});
+}
+function value(items,name){var x=items.find(function(i){return i.name===name;});return x&&typeof x.value==='number'&&Number.isFinite(x.value)?x:null;}
+function reading(x,digits){return x?x.value.toLocaleString('pt-BR',{maximumFractionDigits:digits===undefined?1:digits})+' '+x.unit:'UNKNOWN';}
+function render(data){
+ var utc=data&&Date.parse(data.sourceUpdatedAt||'');
+ var age=Date.now()-utc;
+ if(!data||data.schema!=='centraldark.afterburner.v1'||data.origin!=='CASA_SEGREDO'||!Array.isArray(data.sensors)||data.sensors.length<1||data.sensors.length>128||!Number.isFinite(age)||age < -15000||age>30000){showUnknown('STALE / FONTE NÃO COMPROVADA');return;}
+ var items=data.sensors, cpu=value(items,'CPU usage'),ct=value(items,'CPU temperature'), gpu=value(items,'GPU usage'),gt=value(items,'GPU temperature'),ram=value(items,'RAM usage'),fan=value(items,'Fan speed'),rpm=value(items,'Fan tachometer');
+ if(!cpu||!gpu){showUnknown('SENSORES PRINCIPAIS INDISPONÍVEIS');return;}
+ lastFresh=true;
+ put('cd-ab-badge','🟢 MMF FRESCO · '+items.length+'/'+data.announcedCount+' sensores');
+ put('cd-ab-proof','MMF MAHMSharedMemory → CORPO ÚNICO (ciclo 10 s) → telemetria local → HUD. Fonte '+new Date(utc).toLocaleString('pt-BR')+' · idade '+Math.round(age/1000)+' s. Somente leitura; interpretação do Hermes é prova separada.');
+ put('cd-casa-cpu','🟢 '+reading(cpu,1));put('cd-casa-cpu-proof','CPU Casa · Afterburner MMF · '+(ct?reading(ct,0):'temperatura UNKNOWN')+' · leitura fresca');
+ put('cd-ab-gpu','🟢 '+reading(gt,0));put('cd-ab-gpu-proof','GPU RX 580 · uso '+reading(gpu,1)+' · Afterburner MMF');
+ put('cd-ab-cpu-use',reading(cpu,1));css('cd-ab-cpu-use',true);
+ put('cd-ab-cpu-temp','Temperatura '+reading(ct,0));
+ put('cd-ab-gpu-use',reading(gpu,1));css('cd-ab-gpu-use',true);
+ put('cd-ab-gpu-temp','Temperatura '+reading(gt,0));
+ put('cd-ab-ram',reading(ram,0));css('cd-ab-ram',true);
+ put('cd-ab-fan','Ventoinha '+reading(fan,0)+(rpm?' · '+reading(rpm,0):''));
+ var list=document.getElementById('cd-ab-all-sensors');
+ if(!list)return;
+ var fragment=document.createDocumentFragment();
+ items.forEach(function(item){
+   if(!item||typeof item.name!=='string'||typeof item.value!=='number'||!Number.isFinite(item.value))return;
+   var card=document.createElement('div');card.className='hud-card';
+   var name=document.createElement('h3');name.textContent=item.name;
+   var number=document.createElement('div');number.className='val ok';number.textContent=reading(item,2);
+   card.appendChild(name);card.appendChild(number);fragment.appendChild(card);
+ });
+ list.replaceChildren(fragment);
+}
+function load(){
+ if(loading)return;loading=true;
+ var script=document.createElement('script');
+ script.async=true;
+ script.src='./CENTRALDARK-AFTERBURNER-LIVE.js?read='+Date.now();
+ script.onload=function(){loading=false;render(window.CENTRALDARK_AFTERBURNER_LIVE);script.remove();};
+ script.onerror=function(){loading=false;showUnknown('SENSOR LOCAL INDISPONÍVEL');script.remove();};
+ document.head.appendChild(script);
+}
+function init(){if(installed)return;installed=true;load();setInterval(load,5000);}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+<!-- /CD_AFTERBURNER_MMF_V1 -->
 
 <!-- CENTRALDARK_DEPLOY_OPERATION_CURRENT_20261011: append-only evidence snapshot; no runtime-green by inference -->
 <section class="section" id="cd-deploy-operation-current-20261011" data-observed-at="2026-10-11T04:06:58Z" aria-labelledby="cd-deploy-operation-title" style="margin-top:16px">
