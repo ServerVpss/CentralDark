@@ -119,7 +119,11 @@ if (registry) {
   const patterns = Array.isArray(registry.patterns) ? registry.patterns : [];
   if (patterns.length === 0) errors.push("INTERLIGADOS_PATTERNS_EMPTY");
   if (registry.refresh?.pattern_count !== patterns.length) errors.push(`INTERLIGADOS_PATTERN_COUNT_DRIFT:declared=${registry.refresh?.pattern_count ?? "missing"}:actual=${patterns.length}`);
-  if (!Array.isArray(registry.refresh?.latest_prs_reconciled) || !registry.refresh.latest_prs_reconciled.includes(1633)) errors.push("INTERLIGADOS_LATEST_SWEEP_DOES_NOT_REACH_PR1633");
+  // The recent-N window rolls forward. Preserve historical PR #1633 by
+  // checking pattern provenance, not by falsifying the current recent sweep.
+  if (!patterns.some((pattern) => Array.isArray(pattern?.pr_refs) && pattern.pr_refs.includes(1633))) {
+    errors.push("INTERLIGADOS_PR1633_PROVENANCE_MISSING");
+  }
 
   const ids = new Set();
   for (const pattern of patterns) {
