@@ -1,28 +1,33 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "centraldark-unified-surface-parity",
-  "version": "0.1.1",
-  "description": "CentralDark unified MCP distribution and routing, with real tool discovery, receipt/counterproof and Text/Voice/Work/Desktop capability parity.",
+  "version": "0.1.2",
+  "description": "CentralDark: a single MCP distribution adapter for the canonical Hermes/SOL/Reality capability fabric, with Text/Voice/Work/Desktop binding and evidence-first dispatch.",
   "author": {
     "name": "CentralDark"
   },
-  "repository": "https://github.com/ServerVpss/CentralDark",
   "keywords": [
+    "aionui",
+    "canonical",
     "centraldark",
-    "mcp",
-    "voice",
-    "intent",
-    "tools",
-    "parity",
+    "consolidation",
+    "desktop",
+    "github",
     "hermes",
-    "desktop"
+    "intent",
+    "mcp",
+    "parity",
+    "screenpipe",
+    "tools",
+    "voice"
   ],
+  "repository": "https://github.com/ServerVpss/CentralDark",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "CentralDark Unified Surface",
-        "shortDescription": "One canonical CentralDark MCP adapter; evidence-first tools across supported surfaces.",
-        "longDescription": "Adapter to ServerVpss/CentralDark and its existing MCP Admin/Hermes/Casa/VPS routes. Recovers authorized tools, preserves provenance and receipts, and distinguishes voice tool exposure from connection health. No parallel runtime or simulated execution.",
+        "shortDescription": "One CentralDark MCP; existing tools, runtime evidence and continuity.",
+        "longDescription": "A single CentralDark distribution plugin for the existing canonical ServerVpss/CentralDark runtime: CHEFE intent, SOL routing, Hermes execution, MCP Admin, Casa, VPS, GitHub, Tailscale, Obsidian, AionUi and Screenpipe. Tools are discovered and authorized at runtime; no parallel brain or blanket tool-access claim. Voice access requires live tool-call proof.",
         "developerName": "CentralDark",
         "category": "Developer Tools",
         "capabilities": [
