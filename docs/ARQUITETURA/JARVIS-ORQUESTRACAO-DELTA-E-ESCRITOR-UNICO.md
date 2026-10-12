@@ -149,6 +149,34 @@ Não perguntar “lembra?” quando a máquina pode recuperar.
 
 Gíria/metáfora/digitação rápida entram como sinais. A IA corrige a própria interpretação quando necessário.
 
+### 6.0 Continuidade entre janelas, contas e executores — LOOP ÚNICO (2026-10-12)
+
+**Intenção vigente:** todas as abas (VS Code/Core/Cockpit/Sandbox/Logs), contas ChatGPT (Segredo/Cobra), Codex, Hermes, Casa, VPS e GitHub participam da **mesma CentralDark**, sem compartilhamento mágico de memória ou ferramentas. GitHub/owners são rendezvous canônico; cada janela mede capacidade local. Este protocolo complementa, não substitui, a precedência da seção 1 e a regra 5.3.
+
+```text
+CHEFE (INTENT_ID / GOAL / AUTORIZAÇÃO)
+ → #ACORDAR: SOUL + RULES + AGENTS + LEIA-ME-IA + OWNER
+ → CURRENT: main HEAD + PR HEAD + runtime observado + inventário tools
+ → ENVELOPE ÚNICO: INTENT_ID | GOAL | OWNER | MAIN_SHA | PR_HEAD
+                   | ACTIVE_WRITER | STATUS | RECEIPT | NEXT_CURSOR
+ → N JANELAS/CÓDICES/CONTAS INVESTIGAM (READ-ONLY POR PADRÃO)
+ → ONE_WRITER_PER_SCOPE: um executor autorizado aplica MENOR DELTA
+ → TESTE REAL → CONTRAPROVA → CI DO MESMO SHA
+ → MERGE COM HEAD EXPECTED (SE GATES OBRIGATÓRIOS PASS)
+ → READBACK MAIN (MERGED != DEPLOYED) → RUNTIME SE APLICÁVEL
+ → HUD/INSTINTO SUPERIOR: exibe observações, não inventa PASS
+ → KAIZEN + RECIBO + APRENDIZADO COM PROVENIÊNCIA
+ → NEXT_CURSOR → #ACORDAR E CONTINUAR A MESMA INTENÇÃO
+```
+
+**Handoff obrigatório entre abas/contas:** transportar o envelope mínimo acima e evidência verificável (caminho, SHA, horário, resultado, código de saída). Se não houver canal automático entre contas, recuperar pelo repositório e pelo recibo existente; não declarar que duas conversas compartilham sessão. Mudou HEAD? Reconciliar antes de escrever; outra caneta ativa no mesmo owner? Somente leitura. Ausência de prova significa UNKNOWN, nunca PASS. Novo erro: agrupar por causa raiz, não repetir 250 correções independentes. Bloqueio de uma rota não invalida canais saudáveis.
+
+**Caminho das artes:** toda arte nova segue o owner `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`: arquivo → fonte/hash → candidato → manifesto/validador → promoção → espelho Casa com readback. Arte no chat ou Library não prova arte no Git. **Não criar outra biblioteca.**
+
+**Papel das janelas:** Instinto Superior = cockpit e observabilidade; Core/VS Code = bancada; Sandbox = experimento isolado; Artefatos = pacotes derivados; Docs = memória canônica; Runtime/VPS = execução e logs. Janela não vira owner; Codex opera no papel autorizado de Hermes, sem criar coordenador concorrente.
+
+**Critério de saída:** FIXED_POINT só com objetivo cumprido e gates requeridos provados; se ainda há trabalho, registrar o próximo discriminante no NEXT_CURSOR e prosseguir quando houver executor disponível. Se nada mudou: NOOP. Não prometer loop em segundo plano sem job/schedule real.
+
 ## 6. Fluxo padrão — intenção curta, organismo desdobra
 
 ```text
