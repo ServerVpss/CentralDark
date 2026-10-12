@@ -449,3 +449,26 @@ visualmente que o renderer/painel de Tool Calls voltou a aparecer. A confirmaç�
 **CONTRAPROVA:** plugin/skill não controla o renderer nativo fechado do ChatGPT Windows. `PLUGIN_UPDATE=PASS`; `EDGE_TAB_OPEN=PASS`; `NATIVE_RENDERER_RESTORED=UNPROVEN`; `IN_CHAT_ECHO_EFFECTIVE_IN_CURRENT_DESKTOP_SESSION=UNPROVEN`; `SINGLE_CANONICAL_DISTRIBUTION_PRESERVED=PASS` (identidade de distribuição única, sem excluir adapters legados).
 
 **NEXT_CURSOR:** na primeira tool call efetivamente apresentada na sessão desktop, observar se o renderer nativo está `full_list`, `inline_only` ou `none`; se parcial/ausente, emitir `TOOL_CALL_VISIBLE_RECEIPT` com input/resposta observados. O usuário não precisa repetir a evidência móvel existente. Não confundir sucesso do fallback textual com correção da interface do ChatGPT.
+---
+
+## 2026-10-12 — Reconciliacao do ZIP 0.1.3 com main 0.1.4 e acesso do Plugin Creator
+
+**Intencao:** continuar o NEXT_CURSOR sem criar plugin, owner ou arquitetura paralela. **Surface:** ChatGPT texto nesta conta; Voice nao testado nesta rodada.
+
+**PROVA ZIP:** artefato recebido `CentralDark_Unified_Surface_v0.1.3.zip` integra oito arquivos e possui SHA-256 `62000559c527a451ea4ff7689eb614c5966f564871c16d7d51d35b7e1c604327`. Hash coincide com o recibo de publicacao historica v0.1.3 nesta mesma pagina. O `plugin_version=0.1.2` contido no `references/SOURCE.json` do artefato nao e evidencia de versao corrente nem motivo para falsificar metadado historico.
+
+**CURRENT MAIN observado:** `7b9042c18dc02eca524e77e093aa7f6aa5cedafd`, com `.agents/plugins/centraldark-unified-surface-parity/plugin.json` declarando `0.1.4`. `SOURCE.json` da main registra `published_version=0.1.4` e `published_release_id=pluginrel_6acc564ddd4881918f5a732c0816ea23`. Isso e prova documental da main; nao e novo readback do backend de publicacao desta conta.
+
+**PROVA DE IDENTIDADE / FRONTEIRA DE CONTA:**
+- `mcp__Plugin_Creator__list_owned_personal_plugins`: nesta conta listou apenas 3 plugins pessoais App-backed (`plugin_asdk_app_6ac72e44d1808191abe016c60df4e557`, `plugin_asdk_app_6a55fc9a84c48191bd7142b843f4b266`, `plugin_asdk_app_6a55efc311a48191923579bf3bff8e48`), sem o ID canônico de distribuicao;
+- `mcp__Plugin_Creator__get_plugin_metadata` para `plugins_6ab87b459ff08191a69311acd4c77d83`: `NOT_FOUND 404` nesta conta. Nao equivale a plugin ausente em outra conta ou workspace; `CANONICAL_PLUGIN_BACKEND_READBACK_CURRENT_ACCOUNT=BLOCKED_NOT_FOUND`;
+- `mcp__Plugin_Creator__get_plugin_metadata` para `plugin_asdk_app_6ac72e44d1808191abe016c60df4e557`: sucesso, `version=1.0.0`, `scope=USER`, `discoverability=PRIVATE`. Este ID e um App-backed distinto, nao autoriza associar seus tool calls ao ID de distribuicao unificada.
+
+**PROVA DE EXECUCAO nesta superficie:**
+- `mcp__CentralDark__mcp_status({})`: `SUCCESS`, `ok=true`, `runtimeTools=141`, `routeCount=13`, `correlation_id=38ccc20c-cbcd-47e2-aed9-26ee032dd81b`;
+- `mcp__CentralDark__mcp_admin_catalog({includeDestructive:false})`: `SUCCESS`, `ok=true`, `totalRuntimeTools=141`, `returned=121`, `routeCount=13`, `correlation_id=03319a88-7d99-44eb-9e48-3cdb13e892ab`;
+- `MCP_TOOL_EXECUTION_CURRENT_TEXT=PASS`; `CANONICAL_DISTRIBUTION_INSTALLATION_CURRENT_ACCOUNT=UNKNOWN`; `LIVE_VOICE_BINDING_CURRENT_ACCOUNT=UNKNOWN`.
+
+**Contraprova:** callback MCP funcionando nao prova qual `plugin_id` forneceu o binding; inventario do Plugin Creator e scoped ao usuario corrente; publicacao 0.1.4 registrada na main nao equivale a instalacao/voz nesta conta. Nenhum wrapper desinstalado, nenhuma credencial copiada, nenhum plugin novo criado.
+
+**NEXT_CURSOR:** obter acesso ao plugin de distribuicao pelo proprio owner/conta de publicacao, reler `plugin_id/current_release_id/version` e so entao medir vinculacao de Text e Voice por `mcp_status` e `mcp_admin_catalog` com receipts do host. Nao rebaixar/republish o ZIP historico 0.1.3; nao confundir app-wrapper acessivel com a distribuicao 0.1.4.
