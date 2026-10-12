@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🪬 voice: cristaliza recuperacao multicon­ta no owner existente v0.1.3",
+    "lastCommit": "🧾 receipt: browser Windows e fallback JSON da PR #1708 v0.1.4",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,30 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T03:43:38.977Z",
+      "titulo": "Push na main · 3b720b674e347ec5dd17fce1904e32fea828b16d",
+      "detalhe": "🧾 receipt: browser Windows e fallback JSON da PR #1708 v0.1.4",
+      "area": "Repositório",
+      "sha": "3b720b6",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-12T03:42:05.271Z",
+      "titulo": "Push na main · a94a6676ee43a50fbcef43df0ad6321be3b39878",
+      "detalhe": "🧿 fix(tool-trace): cristaliza release v0.1.4 e limite do renderer",
+      "area": "Repositório",
+      "sha": "a94a667",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-12T03:41:30.023Z",
+      "titulo": "Push na main · 3a80e1f668a02cbdc773c8f7e38e2f500a51d018",
+      "detalhe": "🧿 fix(tool-trace): expor receipt JSON seguro no plugin canônico (#1708)",
+      "area": "Repositório",
+      "sha": "3a80e1f",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T03:32:43.913Z",
       "titulo": "Push na main · 049c6c0ae40fbfb5d04d69a9484f169fe00a7086",
@@ -385,33 +409,30 @@
       "area": "Repositório",
       "sha": "038b09d",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T09:09:14.253Z",
-      "titulo": "Push na main · 7f25ad2a6479d6de80858e345c878bb38b70b0d0",
-      "detalhe": "fix(instinto-superior): reproducible node SSR build preserves CSRF and resolves chunk cycle",
-      "area": "Repositório",
-      "sha": "7f25ad2",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T07:26:20.566Z",
-      "titulo": "Push na main · 930f6693ba42522a04293a280d9fcb9ca64cc682",
-      "detalhe": "fix(hermes-core): reconcile mission continuity, retry and decision state",
-      "area": "Repositório",
-      "sha": "930f669",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T05:08:11.434Z",
-      "titulo": "Push na main · fe5096af0d1d90480a85a962ba9256b757f124d5",
-      "detalhe": "feat(hud): add deterministic button and Genesis structural audit without false runtime PASS",
-      "area": "Repositório",
-      "sha": "fe5096a",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T03:43:38.977Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3b720b674e347ec5dd17fce1904e32fea828b16d (3b720b6)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-12T03:42:05.271Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a94a6676ee43a50fbcef43df0ad6321be3b39878 (a94a667)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-12T03:41:30.023Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 3a80e1f668a02cbdc773c8f7e38e2f500a51d018 (3a80e1f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T03:32:43.913Z",
       "ia": "@segredounlock",
@@ -740,27 +761,6 @@
       "action": "📌 Push na main · 038b09d290da6d76e5487f40576d846b36b408c9 (038b09d)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T09:09:14.253Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 7f25ad2a6479d6de80858e345c878bb38b70b0d0 (7f25ad2)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T07:26:20.566Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 930f6693ba42522a04293a280d9fcb9ca64cc682 (930f669)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T05:08:11.434Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · fe5096af0d1d90480a85a962ba9256b757f124d5 (fe5096a)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T03:32:43.913Z",
-  "updatedAtBR": "12/10/2026, 00:32:43 BRT"
+  "updatedAt": "2026-10-12T03:43:38.977Z",
+  "updatedAtBR": "12/10/2026, 00:43:38 BRT"
 }

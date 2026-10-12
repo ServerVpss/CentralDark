@@ -434,3 +434,18 @@ visualmente que o renderer/painel de Tool Calls voltou a aparecer. A confirmaç�
 **Contra-prova:** `VOICE_FUNCTIONAL_ACCOUNT_MCP_STATUS=USER_SUPPLIED_STRUCTURED_EVIDENCE`; `VOICE_CURRENT_ACCOUNT_HOST_BINDING=UNKNOWN`; `VOICE_CURRENT_ACCOUNT_FIXED=NOT_PROVED`. Não vender patch documental/skill como correção de runtime Voice.
 
 **NEXT_CURSOR:** descobrir binding efetivamente exposto nesta conta pela rota existente, sem pedir nova gravação da conta funcional; se o host não disponibiliza tool, classificação específica `PLATFORM_UNAVAILABLE`.
+
+
+## 2026-10-12 — Visibilidade Tool Call Desktop / PR #1708 / v0.1.4
+
+**INTENÇÃO:** restaurar a auditoria visual de chamadas `Solicitar → Resposta → JSON` no computador, como observado pelo CHEFE no iPhone, preservando o ChatGPT Windows, as sessões e os owners.
+
+**OWNER:** `docs/ARQUITETURA/CENTRALDARK-TOOL-CALL-VISIBLE-RECEIPT-ECHO-01.md` (PR #1708, merge `aaac83ce9d20a17c8530b55bd52131fcce2f3cc9`). **Reuso:** skill da distribuição única `.agents/plugins/centraldark-unified-surface-parity/skills/centraldark-unified-surface-parity/SKILL.md`.
+
+**MEDIÇÃO CASA:** Desktop Commander `mcp__CENTRALDARK__list_devices` enumerou `SEGREDO` online (`db22d900-db4f-449a-b775-016ae15deefb`). PowerShell no mesmo dispositivo encontrou processo `ChatGPT.exe`, pacote `OpenAI.Codex 26.1007.2314.0`, janela `ChatGPT` (PID `13404`); Microsoft Edge com janela ativa. Foi executado `Start-Process ... msedge.exe --new-tab https://chatgpt.com` sem encerrar tabs ou app. **READBACK:** Edge `ChatGPT e mais 22 páginas` (`msedge PID 20504`). `WINDOWS_BROWSER_CHATGPT_TAB=OPENED`; `USER_LOGGED_IN=UNKNOWN`; `NATIVE_TOOL_CARD_VISIBLE=UNKNOWN`.
+
+**DELTA PUBLISHED:** o mesmo plugin `plugins_6ab87b459ff08191a69311acd4c77d83` foi atualizado para `v0.1.4`, release `pluginrel_6acc564ddd4881918f5a732c0816ea23`. ZIP de 8 arquivos SHA256 `f335b82ae1d6ef252e648b81d49e7d08fcdd386feede501fb6cfca21cd5acc53`; MCP URL e configurações MCP preservados byte a byte. Acrescido ao **owner distribuído existente** o `CENTRALDARK_VISIBLE_RECEIPT_ECHO` da PR #1708 para imprimir, quando necessário, um bloco **por tool call real**: ferramenta, input JSON sanitizado, status, resposta segura/resumo fiel, evidência, contraprova, NEXT_CURSOR. Não inventar tool call, JSON/trace/usage, nem despejar dados sensíveis.
+
+**CONTRAPROVA:** plugin/skill não controla o renderer nativo fechado do ChatGPT Windows. `PLUGIN_UPDATE=PASS`; `EDGE_TAB_OPEN=PASS`; `NATIVE_RENDERER_RESTORED=UNPROVEN`; `IN_CHAT_ECHO_EFFECTIVE_IN_CURRENT_DESKTOP_SESSION=UNPROVEN`; `SINGLE_CANONICAL_DISTRIBUTION_PRESERVED=PASS` (identidade de distribuição única, sem excluir adapters legados).
+
+**NEXT_CURSOR:** na primeira tool call efetivamente apresentada na sessão desktop, observar se o renderer nativo está `full_list`, `inline_only` ou `none`; se parcial/ausente, emitir `TOOL_CALL_VISIBLE_RECEIPT` com input/resposta observados. O usuário não precisa repetir a evidência móvel existente. Não confundir sucesso do fallback textual com correção da interface do ChatGPT.

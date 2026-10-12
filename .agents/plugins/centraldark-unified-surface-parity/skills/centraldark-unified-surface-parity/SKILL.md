@@ -88,6 +88,29 @@ Renderer states are:
 Never infer that a tool did not execute only because the sidebar/JSON renderer is absent.
 Never claim renderer visibility only because a tool returned a result.
 
+### Auditoria JSON visível — reutiliza a PR #1708
+
+**Owner:** `docs/ARQUITETURA/CENTRALDARK-TOOL-CALL-VISIBLE-RECEIPT-ECHO-01.md`. Reutilizar `CENTRALDARK_VISIBLE_RECEIPT_ECHO` existente; não criar painel, viewer, trace, agente nem serviço independente. A interface de ChatGPT no iPhone pode exibir `Resposta do aplicativo recebida → Solicitar/Resposta`, enquanto a versão Windows/Desktop pode exibir somente resumo (`inline_only`) ou nenhum cartão (`none`). Os estados são observações específicas da superfície, não provas sobre execução.
+
+Quando o CHEFE solicitar ver o trajeto das ferramentas ou JSON e o renderer detalhado nativo não estiver visível, emitir **no próprio chat**, imediatamente após a conclusão das chamadas da missão, um recibo legível por **cada tool call realmente observada**. O recibo deve incluir nome real, argumentos seguros, status, trecho/resumo fiel da resposta da aplicação, referência da prova, contraprova e NEXT_CURSOR. Para não perder rotas em uma resposta combinada, ordenar recibos na sequência observada. Não inventar chamadas intermediárias, ferramentas ocultas, trace IDs, tokens, outputs ou efeitos. Informar quando algum campo não for exposto.
+
+Formato mínimo (usar dados medidos, nunca copiar placeholders para simular execução):
+
+```text
+TOOL_CALL_VISIBLE_RECEIPT
+SURFACE: web|desktop|mobile|voice|work|unknown
+NATIVE_RENDERER_STATE: none|inline_only|full_list|unknown
+TOOL: <nome exato da ferramenta invocada>
+INPUT_SAFE_JSON: <argumentos observados sanitizados, sem credenciais/PII>
+STATUS: success|error|blocked|unknown
+APP_RESPONSE_SAFE_JSON_OR_SUMMARY: <resposta observada segura ou resumo fiel>
+EVIDENCE: <correlation_id|receipt_id|commit_sha|mensagem do host, se existir>
+COUNTERPROOF: <o que esse retorno nao prova>
+NEXT_CURSOR: <proximo ponto de continuidade>
+```
+
+Limites: nunca imprimir secrets, email/conta, tokens OAuth, headers Authorization, caminhos com dados pessoais nem payloads sensíveis; sanitizar antes de exibir e comprimir respostas longas com indicação explícita de corte. `TOOL_CALL_EXECUTED != NATIVE_RENDERER_VISIBLE`; texto visível **não reativa** o renderer fechado da plataforma. Se a lista nativa estiver funcionando, preservar o uso normal sem duplicar saída volumosa, salvo pedido explícito. `DOCUMENTED != EXECUTED`; `PLUGIN_UPDATED != WINDOWS_RENDERER_FIXED`.
+
 ## Crystal replay
 
 A proven crystal is replay-first. Identify its SHA/hash/fingerprint/receipt, locate the existing owner, plug only the missing delta, and prove only the new integration.
