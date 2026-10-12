@@ -9,6 +9,58 @@ INICIO=$(date +%s)
 DATA_BR=$(date '+%d/%m/%Y %H:%M')
 LOG_PROPRIO="/var/log/limpeza-autonoma.log"
 MINUTO=$(date +%M)
+MODE="cron"
+SELECTED=""
+
+usage() {
+  cat <<'EOF'
+Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz>]
+
+  --map-disk                 somente mede o disco; não limpa nem notifica
+  --clean-selected LIST      limpa somente categorias explícitas: journal,gz
+  --help                     mostra esta ajuda
+
+Sem argumentos, preserva o modo periódico existente.
+EOF
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --map-disk)
+      MODE="map"
+      shift
+      ;;
+    --clean-selected)
+      MODE="selected"
+      SELECTED="${2:-}"
+      shift 2
+      ;;
+    --clean-selected=*)
+      MODE="selected"
+      SELECTED="${1#*=}"
+      shift
+      ;;
+    --help|-h)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Argumento desconhecido: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [ "$MODE" = "map" ]; then
+  echo "MODE=MAP_DISK"
+  df -B1 -P /
+  echo "JOURNAL_DISK_USAGE"
+  journalctl --disk-usage 2>&1 || true
+  echo "LOG_TREE_BYTES"
+  du -x -B1 -d 2 /var/log 2>/dev/null | sort -n | tail -30 || true
+  exit 0
+fi
 
 # --- Telegram ---
 _COFRE="/root/CentralDark/secrets/mcp.env"
@@ -37,10 +89,54 @@ PM2_ANTES=$(du -sh /root/.pm2/logs 2>/dev/null | cut -f1 || echo "N/A")
 
 ACOES=""
 
+if [ "$MODE" = "selected" ]; then
+  IFS=',' read -r -a CATEGORIES <<< "$SELECTED"
+  if [ "${#CATEGORIES[@]}" -eq 0 ] || [ -z "${CATEGORIES[0]:-}" ]; then
+    echo "Nenhuma categoria válida. Use journal,gz." >&2
+    exit 2
+  fi
+  for CATEGORY in "${CATEGORIES[@]}"; do
+    case "$CATEGORY" in
+      journal|gz) : ;;
+      *)
+        echo "Categoria inválida: $CATEGORY. Use journal,gz." >&2
+        exit 2
+        ;;
+    esac
+  done
+
+  DISCO_LIVRE_ANTES=$(df -B1 -P / | awk 'NR==2{print $4}')
+  JOURNAL_ANTES=$(journalctl --disk-usage 2>/dev/null | awk '/take up/{print $7}' | head -1 || echo "?")
+  JOURNAL_DEPOIS="$JOURNAL_ANTES"
+  REMOVIDOS=0
+
+  case ",${SELECTED}," in
+    *,journal,*)
+      journalctl --vacuum-size=400M --vacuum-time=14d >/dev/null 2>&1 || true
+      JOURNAL_DEPOIS=$(journalctl --disk-usage 2>/dev/null | awk '/take up/{print $7}' | head -1 || echo "?")
+      ;;
+  esac
+
+  case ",${SELECTED}," in
+    *,gz,*)
+      REMOVIDOS=$(find /var/log -name "*.gz" -mtime +7 -type f 2>/dev/null | wc -l || echo 0)
+      if [ "$REMOVIDOS" -gt 0 ]; then
+        find /var/log -name "*.gz" -mtime +7 -type f -delete 2>/dev/null || true
+      fi
+      ;;
+  esac
+
+  DISCO_LIVRE_DEPOIS=$(df -B1 -P / | awk 'NR==2{print $4}')
+  RELIEF_BYTES=$((DISCO_LIVRE_DEPOIS - DISCO_LIVRE_ANTES))
+  printf 'MODE=CLEAN_SELECTED\nSELECTED=%s\nJOURNAL=%s -> %s\nGZ_REMOVED=%s\nDISK_RELIEF_BYTES=%s\n' \
+    "$SELECTED" "$JOURNAL_ANTES" "$JOURNAL_DEPOIS" "$REMOVIDOS" "$RELIEF_BYTES"
+  exit 0
+fi
+
 # --- 1. Vacuum journald (limite 400MB / 14 dias) ---
-JOURNAL_ANTES=$(journalctl --disk-usage 2>/dev/null | awk '{print $5, $6}' | head -1 || echo "?")
+JOURNAL_ANTES=$(journalctl --disk-usage 2>/dev/null | awk '/take up/{print $7}' | head -1 || echo "?")
 journalctl --vacuum-size=400M --vacuum-time=14d >/dev/null 2>&1 || true
-JOURNAL_DEPOIS=$(journalctl --disk-usage 2>/dev/null | awk '{print $5, $6}' | head -1 || echo "?")
+JOURNAL_DEPOIS=$(journalctl --disk-usage 2>/dev/null | awk '/take up/{print $7}' | head -1 || echo "?")
 if [ "$JOURNAL_ANTES" != "$JOURNAL_DEPOIS" ]; then
   ACOES="${ACOES}• Journal: ${JOURNAL_ANTES} → ${JOURNAL_DEPOIS}\n"
 fi
