@@ -201,7 +201,6 @@ REQUIRED_MARKERS = {
 REQUIRED_MARKERS.update({
     PLUGIN_MANIFEST: [
         '\"name\": \"centraldark-unified-surface-parity\"',
-        '\"version\": \"0.1.1\"',
         '\"repository\": \"https://github.com/ServerVpss/CentralDark\"',
         '\"displayName\": \"CentralDark Unified Surface\"',
         '\"capabilities\": [\"Read\", \"Write\"]',
@@ -223,7 +222,6 @@ REQUIRED_MARKERS.update({
     PLUGIN_SOURCE: [
         '\"canonical_owner\": \"CENTRALDARK_UNIFIED_SURFACE_PARITY_01\"',
         '\"published_plugin_id\": \"plugins_6ab87b459ff08191a69311acd4c77d83\"',
-        '\"published_release_id\": \"pluginrel_6acc490241fc81918c7c9834b413e404\"',
         '\"published_scope\": \"USER\"',
         '\"published_discoverability\": \"PRIVATE\"',
         '\"generated_artifact_is_owner\": false',
@@ -464,6 +462,24 @@ def validate_file(path: Path) -> list[str]:
     for marker in REQUIRED_MARKERS.get(path, []):
         if marker not in text:
             errors.append(f"MISSING_MARKER {path}: {marker}")
+
+    # Publication rotates release IDs; validate the CURRENT canonical JSON contract
+    # instead of pinning a historic release to the source validator.
+    if path == PLUGIN_MANIFEST:
+        data = json.loads(text)
+        source = json.loads(read_text(PLUGIN_SOURCE))
+        version = data.get("version")
+        if not isinstance(version, str) or re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version) is None:
+            errors.append(f"PLUGIN_VERSION_INVALID {path}: {version!r}")
+        if source.get("published_version") != version:
+            errors.append(f"PLUGIN_VERSION_MISMATCH {path}: manifest={version!r} source={source.get('published_version')!r}")
+        caps = data.get("extensions", {}).get("com.openai", {}).get("interface", {}).get("capabilities")
+        if caps != ["Read", "Write"]:
+            errors.append(f"PLUGIN_CAPABILITIES_MISMATCH {path}: {caps!r}")
+    if path == PLUGIN_SOURCE:
+        release = json.loads(text).get("published_release_id")
+        if not isinstance(release, str) or re.fullmatch(r"pluginrel_[0-9a-f]{32}", release) is None:
+            errors.append(f"PLUGIN_RELEASE_ID_INVALID {path}: {release!r}")
 
     for marker in FORBIDDEN_MARKERS.get(path, []):
         if affirmative_occurrence(text, marker):
