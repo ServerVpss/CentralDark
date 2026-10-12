@@ -5,7 +5,8 @@
 - `K:\CentralDark` = destino **em migração** do vault Obsidian da Casa (observados `.obsidian` e `HUD.html` no SSD). `K:\CentralDark` não é automaticamente o checkout Git.
 - `F:\` = fonte/legado do movimento em curso; endereços históricos `E:\CentralDark\...` não devem ser promovidos a rotas atuais.
 - `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` continuam owners versionados de memória; `docs/BRAIN` é camada canônica de conhecimento para sync com contraprova. Notas privadas permanecem locais.
-- Estado: `K_VAULT_FILES=OBSERVED`, `F_TO_K_COMPLETE=UNKNOWN`, `SYNC_K_MAIN=UNKNOWN`, `VPS_DEPLOY=UNKNOWN`. A substituição dos caminhos usados pelos executores exige medição depois da cópia.
+- Readback funcional do HUD (11/10/2026, 22:17:44 BRT): `K:\CentralDark\HUD.html` (SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`) localizado; `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` corrigido, parser passou, GUI única reiniciada, log `[HUD] PASS` + `[PROVA / ARQUIVO] PASS`. **Escopo = Casa / lookup WinForms**. Não é prova de sync Obsidian→GitHub nem deploy na VPS. Owner documental: `docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md`; fonte Git: `docs/HUD/HUD.html` continua independente da cópia física.
+- Estado: `K_VAULT_FILES=OBSERVED`, `F_TO_K_COMPLETE=UNKNOWN`, `SYNC_K_MAIN=UNKNOWN`, `VPS_DEPLOY=UNKNOWN`. Outros executores e a sincronização da biblioteca ainda exigem medição independente.
 
 Este índice não é uma segunda SOUL nem inventário de runtime. Ele roteia somente memória compatível com o contrato atual.
 
