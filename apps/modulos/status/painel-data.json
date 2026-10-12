@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(telepanel): mover manual legado para owner apps/bot-telegram",
+    "lastCommit": "docs(telepanel): concluir mudança do README para seu owner",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T23:18:08.184Z",
+      "titulo": "Push na main · d6b61fe21b0114b9c210470abef5e49173a770b3",
+      "detalhe": "docs(telepanel): concluir mudança do README para seu owner",
+      "area": "Repositório",
+      "sha": "d6b61fe",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T23:16:52.010Z",
       "titulo": "Push na main · 3d600720964fe738f6613551763040b628d28280",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "6a3b30e",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T22:38:50.913Z",
-      "titulo": "Push na main · 3e091bbdcda1dc74d29ea833b49415d12811a79a",
-      "detalhe": "docs(receipt): contraprova Conta 2 online sem inferir duas identidades autenticadas",
-      "area": "Repositório",
-      "sha": "3e091bb",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T23:18:08.184Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d6b61fe21b0114b9c210470abef5e49173a770b3 (d6b61fe)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T23:16:52.010Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 6a3b30e9df48fa514112a2eda4a95d35942fca62 (6a3b30e)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T22:38:50.913Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3e091bbdcda1dc74d29ea833b49415d12811a79a (3e091bb)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T23:16:52.010Z",
-  "updatedAtBR": "12/10/2026, 20:16:52 BRT"
+  "updatedAt": "2026-10-12T23:18:08.184Z",
+  "updatedAtBR": "12/10/2026, 20:18:08 BRT"
 }
