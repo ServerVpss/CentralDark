@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(pendencias): atribuir 65G a objetos Git dos quatro runners sem limpeza cega",
+    "lastCommit": "docs(hub): continuar por setor quando conta ou fonte ficar sem acesso",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,22 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T16:45:11.988Z",
+      "titulo": "Push na main · 9a771d45e5749973783213a47513cf6a5b29bcf8",
+      "detalhe": "docs(hub): continuar por setor quando conta ou fonte ficar sem acesso",
+      "area": "Repositório",
+      "sha": "9a771d4",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-12T15:57:51.219Z",
+      "titulo": "Push na main · ed27d69527d57dd81322060ca151c0878b287082",
+      "detalhe": "🧹 OPS: MAPEAR DISCO E LIMPAR LOGS SELECIONADOS COM SEGURANÇA (#1801)",
+      "area": "Repositório",
+      "sha": "ed27d69",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T15:35:23.494Z",
       "titulo": "Push na main · a94dd328b595589fc08d5fb126deb422b15c9c39",
@@ -393,25 +409,23 @@
       "area": "Repositório",
       "sha": "647be27",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T11:09:24.435Z",
-      "titulo": "Push na main · d03d911d4b17ae7238de31056fdc3624dbed2dda",
-      "detalhe": "fix(ci): isolate semantic-core numpy/safetensors under RUNNER_TEMP, preserve PEP 668",
-      "area": "Repositório",
-      "sha": "d03d911",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T11:05:42.354Z",
-      "titulo": "Push na main · 36f5d36300a9e3c8cec9b4ef3985c3016fbde08c",
-      "detalhe": "fix(adapter): restore Claude autoload canonical core inheritance markers",
-      "area": "Repositório",
-      "sha": "36f5d36",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T16:45:11.988Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9a771d45e5749973783213a47513cf6a5b29bcf8 (9a771d4)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-12T15:57:51.219Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ed27d69527d57dd81322060ca151c0878b287082 (ed27d69)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T15:35:23.494Z",
       "ia": "@segredounlock",
@@ -747,20 +761,6 @@
       "action": "📌 Push na main · 647be27fb60f2c3a04e2c9218409852afcf3cc68 (647be27)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T11:09:24.435Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d03d911d4b17ae7238de31056fdc3624dbed2dda (d03d911)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T11:05:42.354Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 36f5d36300a9e3c8cec9b4ef3985c3016fbde08c (36f5d36)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T15:35:23.494Z",
-  "updatedAtBR": "12/10/2026, 12:35:23 BRT"
+  "updatedAt": "2026-10-12T16:45:11.988Z",
+  "updatedAtBR": "12/10/2026, 13:45:11 BRT"
 }
