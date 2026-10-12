@@ -78,3 +78,20 @@ node --test tests/canonical-posters.test.mjs tests/bolt-theme-contract.test.mjs
 ```
 
 Se um byte do cartaz mudar, um elo sumir, um owner deixar de existir ou surgir um quinto cartaz canônico sem contrato, o portão fecha.
+
+
+## Entrada obrigatória de novas artes
+
+Toda arte criada no contexto CentralDark (por ChatGPT/SOL, Codex, Hermes ou outras superfícies) deve ter um registro neste acervo canônico, sem criar biblioteca, owner ou HUD paralelo. Não presumir que imagem gerada em chat foi fisicamente enviada ao Git.
+
+**Fluxo:** criar arte → preservar arquivo original e fonte/origem → medir dimensões e SHA-256 → depositar cópia na pasta canônica sob `CANDIDATAS/` enquanto o contrato não permite promoção → registrar proveniência, intenção e estado → promover ao `manifest.json` somente depois de adicionar o arquivo Git, preencher hashes/relações e passar `validate-canonical-posters.mjs` e testes do mesmo SHA. Jamais marcar PROVED apenas por existir imagem ou caminho na Library.
+
+Os quatro cartazes existentes mantêm identidades e hashes. Um quinto cartaz canônico exige atualização do validador e testes do owner `.agents/skills/visual-design-method`, não alteração oportunista dos quatro originais. Se a ferramenta não puder transferir o binário para o GitHub, preservar no acervo persistente e marcar `GIT_ASSET=PENDING`, informando o caminho exato. O espelho Obsidian só é PASS com readback da Casa.
+
+### Entrada registrada em 2026-10-12
+
+- Arte: **CentralDark — Nosso modo de trabalhar / fluxo operacional unificado**.
+- Origem: imagem gerada na conversa ChatGPT/SOL em 2026-10-12; arquivo original disponível como anexo gerado.
+- Estado: `LIBRARY_SAVED=PASS; GIT_ASSET=PENDING; MANIFEST_PROMOTION=NOT_PROVEN; CASA_MIRROR=UNKNOWN`.
+- Acervo persistente (Library): `/CENTRALDARK/docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/CANDIDATAS/2026-10-12-centraldark-modo-de-trabalhar.png`.
+- Não chamar esta entrada de quinto cartaz canônico até que o binário esteja fisicamente no Git e os gates passem.
