@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(hud): surface VPS OOM pressure in Casa",
+    "lastCommit": "🧪 DOCS(OPERATIONAL-METHOD): PERSISTIR DELEGAÇÃO ECONÔMICA COM PROVA (#1799)",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T05:26:02.336Z",
+      "titulo": "Push na main · dd1dcbfea120cf084d7c094ff28ee74bd91b93d9",
+      "detalhe": "🧪 DOCS(OPERATIONAL-METHOD): PERSISTIR DELEGAÇÃO ECONÔMICA COM PROVA (#1799)",
+      "area": "Repositório",
+      "sha": "dd1dcbf",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T05:13:07.614Z",
       "titulo": "Push na main · d08b8feb2a22b6285607b2f374640f5334d3528b",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "589e049",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T10:37:54.565Z",
-      "titulo": "Push na main · 2f02e6b20abebe18862e6fa2740211a89aee6e0d",
-      "detalhe": "docs(receipt): seal four-file VPS readback, Casa/VPS probes and runner-counter counterproof",
-      "area": "Repositório",
-      "sha": "2f02e6b",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T05:26:02.336Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · dd1dcbfea120cf084d7c094ff28ee74bd91b93d9 (dd1dcbf)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T05:13:07.614Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 589e04924cc460f03dcb131016a02451a885b400 (589e049)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T10:37:54.565Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2f02e6b20abebe18862e6fa2740211a89aee6e0d (2f02e6b)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T05:13:07.614Z",
-  "updatedAtBR": "12/10/2026, 02:13:07 BRT"
+  "updatedAt": "2026-10-12T05:26:02.336Z",
+  "updatedAtBR": "12/10/2026, 02:26:02 BRT"
 }
