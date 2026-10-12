@@ -299,3 +299,28 @@ Nao reabrir prova de `BUTTON_CONTA2_OPEN_AUTH_URL` ja registrada; pendencia apen
     NEXT_CURSOR=RECONCILE_CD_DC_BY_OWNER_DEVICE_ID_AND_EVENT_TIME_WITHOUT_RESTART
 
 **POMBO_CHECKSUM:** selo Conta 2 por efeito real e readback do mesmo serviço; nenhuma promoção global e nenhuma inferência do e-mail da Conta 1.
+
+
+### T6 — 2026-10-12 — Corrigir falso amarelo Desktop Commander sem reiniciar os owners
+
+- **Goal / owner:** corrigir somente o classificador do CORPO ÚNICO e registrar no receipt existente; sem abrir outro monitor. Owner de código da main: `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; runtime da Casa: `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`.
+- **Causa observada:** o sensor automático antigo `CD_DC` emitia WARN para cada unit systemd ativa, independentemente dos eventos de autorização; a janela de 15 minutos do sensor manual deixava eventos antigos invisíveis. O envio do here-string Windows CRLF para `bash -s` também causava `ssh exit 2` (`syntax error ... do\r`), embora SSH já estivesse autenticado.
+- **Delta mínimo:** preservar CD_DC como estado do serviço (INFO ao mudar), acrescentar CD_DC_DEVICE por serviço (último evento DEVICE online/offline/ready da ativação systemd corrente, lido via journal; sem token nem código), deduplicar logs por fingerprint, converter o payload inteiro para LF antes do SSH, não reiniciar serviços, não mudar identidade Google nem OAuth.
+- **Casa / readback WinForms:** script PowerShell passou no parser, backup local com SHA-256 idêntico ao código alterado antes do reinício da GUI; uma única janela reiniciada. O log físico em `%LOCALAPPDATA%\CentralDark\Corpo-Unico-HUD-Logs.txt` mostrou às 23:28:28 BRT em 11/10/2026 `CONTA 1 | device=ONLINE_LOG | systemd=active` e `CONTA 2 | device=ONLINE_LOG | systemd=active`, ambos no escopo de **dispositivo**, com `EMAIL_AUTH=UNKNOWN`; SSH voltou a PASS e Goal continuou `todo`.
+- **Contraprova VPS:** `desktop-commander-remote.service` `active` com PID 17384 e `centraldark-desktop-commander-conta2.service` `active` com PID 893594. Os PIDs eram os mesmos antes/depois; nenhum serviço VPS reiniciado nesta ação.
+- **Main:** patch equivalente aplicado sobre o próprio owner da main, sem sobrescrever o HUD privado da Casa nem publicar identidades Google: commit `697c8a4d2b4a533c09098a1e49754a2d2558f09e` (blob `4a42f66df6cdc5723230d7e2a8a9baa4b62af37c`); readback do blob confirmou conteúdo igual ao estágio. O candidato isolado passou no parser e gerou `CD_SSH=PASS`, duas linhas `CD_DC_DEVICE` online.
+- **Limites:** `ONLINE_LOG` é sinal do último evento emitido pela unit em execução, **não** confirmação do e-mail Google. Conta 2 tem recibo E2E de tool call separado em T5; não deduzir duas identidades só por ambos terem sinal online. A codebase `main` não foi implantada automaticamente na VPS e não equivale ao artefato físico completo do SSD K:.
+
+    CASA_HUD_SINGLE_INSTANCE=PASS
+    SSH_TRANSPORT_LF_NORMALIZATION=PASS
+    DC_ACCOUNT1_DEVICE_EVENT_ONLINE=PASS
+    DC_ACCOUNT2_DEVICE_EVENT_ONLINE=PASS
+    DC_ACCOUNT2_E2E_TOOL_CALL=PASS (T5 scope)
+    DC_GOOGLE_ACCOUNT1_IDENTITY=UNKNOWN
+    DC_GOOGLE_ACCOUNT2_IDENTITY_MAP=UNKNOWN
+    VPS_SERVICES_RESTARTED=NO
+    MAIN_SOURCE_READBACK=PASS
+    GLOBAL_FIXED_POINT=FALSE
+    NEXT_CURSOR=VERIFY_INDEPENDENT_PROVIDER_IDENTITY_AND_KEEP_HUD_LOGS_DEDUPED
+
+**🕊️ POMBO_CHECKSUM:** só o dispositivo e o leitor recebem selo; histórico, identity mapping, OAuth, goal e deploy continuam com provas próprias.
