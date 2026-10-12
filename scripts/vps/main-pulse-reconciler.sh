@@ -125,7 +125,13 @@ deploy_owner() {
 deploy_owner hermes "${HERMES_FILES[@]}"
 deploy_owner mcp "${MCP_FILES[@]}"
 deploy_owner hub_bot "${HUB_FILES[@]}"
-deploy_owner oauth_broker "${OAUTH_FILES[@]}"
+if [[ "${#OAUTH_FILES[@]}" -gt 0 ]]; then
+  if systemctl is-active --quiet centraldark-oauth-broker.service; then
+    deploy_owner oauth_broker "${OAUTH_FILES[@]}"
+  else
+    log "OAUTH_BROKER_DEPLOY_SKIPPED=1 reason=RUNTIME_NOT_ACTIVE human_frontier=VAULT_KEY_OR_CONFIG_PENDING changed_files=${#OAUTH_FILES[@]} main=$MAIN_SHA"
+  fi
+fi
 
 if [[ "${#UNHANDLED[@]}" -gt 0 ]]; then
   # HERMES-CORE exige o contrato de continuidade antes de retomar uma missão.
