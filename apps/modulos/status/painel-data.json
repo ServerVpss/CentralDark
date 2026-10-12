@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): medir ligação Voice e evitar marketplace paralelo no CentralDark",
+    "lastCommit": "docs(hud): seal authenticated Desktop Commander identity with dated device proof",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T03:07:27.716Z",
+      "titulo": "Push na main · ce9ba7a0605649838679c4c465bc90e52ed2eecb",
+      "detalhe": "docs(hud): seal authenticated Desktop Commander identity with dated device proof",
+      "area": "Repositório",
+      "sha": "ce9ba7a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T03:04:04.016Z",
       "titulo": "Push na main · 69acf771ee186916544673833ecd2bcefc2b8e99",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "e73c95c",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T04:48:54.280Z",
-      "titulo": "Push na main · d2d4078cbc9b41319f68e61c118a067ffd3aed8a",
-      "detalhe": "fix(hud): make Zendriver operation inherit canonical three-skin tokens",
-      "area": "Repositório",
-      "sha": "d2d4078",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T03:07:27.716Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ce9ba7a0605649838679c4c465bc90e52ed2eecb (ce9ba7a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T03:04:04.016Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · e73c95c914e9decd0da49d2ac702cfab0e5bf633 (e73c95c)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T04:48:54.280Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d2d4078cbc9b41319f68e61c118a067ffd3aed8a (d2d4078)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T03:04:04.016Z",
-  "updatedAtBR": "12/10/2026, 00:04:04 BRT"
+  "updatedAt": "2026-10-12T03:07:27.716Z",
+  "updatedAtBR": "12/10/2026, 00:07:27 BRT"
 }
