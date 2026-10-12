@@ -2,10 +2,10 @@
   "repository": "ServerVpss/CentralDark",
   "canonical_owner": "CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
   "published_plugin_id": "plugins_6ab87b459ff08191a69311acd4c77d83",
-  "published_release_id": "pluginrel_6acc490241fc81918c7c9834b413e404",
+  "published_release_id": "pluginrel_6acc4a7cd5f08191887eec9fac0136a1",
   "published_scope": "USER",
   "published_discoverability": "PRIVATE",
-  "published_version": "0.1.1",
+  "published_version": "0.1.2",
   "canonical_contract": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml",
   "invocation_grammar": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md",
   "intent_router": ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
@@ -15,5 +15,16 @@
   "voice_binding_status": "UNKNOWN_UNTIL_MEASURED",
   "distribution_catalog_owner": "mcp_admin_catalog",
   "duplicate_plugins_uninstalled": false,
-  "package_sha256": "e895e6175012e6f55da77bfb930858d4c1421f0b2409464fb1152034b5cc656c"
+  "package_sha256": "dcba6ef7861ea1a9e21e9b91ddf352130e936b909b40faa82013d645b3801b83",
+  "consolidation_inventory": ".agents/plugins/centraldark-unified-surface-parity/CONSOLIDATION.md",
+  "legacy_zip_count": 4,
+  "distinct_legacy_app_binding_count": 3,
+  "legacy_duplicate_pairs": [
+    [
+      "plugin(1).zip",
+      "plugin (3).zip"
+    ]
+  ],
+  "legacy_wrappers_removed": false,
+  "single_active_plugin_parity": "UNKNOWN_UNTIL_CAPABILITY_COUNTERPROOF"
 }
