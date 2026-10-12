@@ -371,11 +371,34 @@ $script:RemoteScript = {
   if(-not (Test-Path -LiteralPath $sshPath -PathType Leaf)){return 'CD_SSH=UNKNOWN|Git SSH nao encontrado'}
   $exe=$sshPath
   $remote='echo CD_SSH=PASS; printf "CD_HEART="; curl -fsS --max-time 3 http://127.0.0.1:9100/heartbeat 2>/dev/null; echo; echo CD_RUNTIME; uptime; ps -eo comm= | grep -E "(node|pm2|screenpipe|llama|hermes)" | sort -u | head -8; echo CD_VPS_SENSORS; for unit in desktop-commander-remote.service centraldark-desktop-commander-conta2.service; do state=$(systemctl is-active "$unit" 2>/dev/null || true); echo "CD_DC=$unit,${state:-UNKNOWN}"; done; sc=$(curl --noproxy "*" -s -o /dev/null -w "%{http_code}" --connect-timeout 2 --max-time 3 http://127.0.0.1:3030/health 2>/dev/null || true); echo "CD_SCREENPIPE_VPS=${sc:-000}"; if [ -f /root/CentralDark/apps/modulos/elite-gateway/test-local/local_send_dump.py ]; then echo CD_ZENDRIVE=CODE_PRESENT_RUNTIME_UNKNOWN; else echo CD_ZENDRIVE=CODE_NOT_FOUND_RUNTIME_UNKNOWN; fi; echo CD_VPS_LOG; journalctl -n 8 -p warning --no-pager --output=short-iso 2>/dev/null | tail -8'
+  # Read-only device sensor per systemd unit since current service activation.
+  # This reports a device event, not proof of the user's Google account.
+  $remote += [Environment]::NewLine + @'
+for entry in principal:desktop-commander-remote.service conta2:centraldark-desktop-commander-conta2.service; do
+  name="${entry%%:*}"; unit="${entry#*:}"
+  state="$(systemctl is-active "$unit" 2>/dev/null || true)"
+  boot="$(systemctl show "$unit" -p ActiveEnterTimestamp --value 2>/dev/null)"
+  device=UNKNOWN
+  if [ "$state" = active ] && [ -n "$boot" ] && [ "$boot" != n/a ]; then
+    event="$(journalctl -u "$unit" --since "$boot" --no-pager -o cat 2>/dev/null | grep -E '^[[:space:]]*(🔌[[:space:]]+Device marked as (offline|online)|✅[[:space:]]+(Device ready:|Authorization successful!))' | tail -1)"
+    case "$event" in
+      *'Device marked as offline'*) device=OFFLINE_LOG ;;
+      *'Device marked as online'*|*'Device ready:'*) device=ONLINE_LOG ;;
+      *'Authorization successful!'*) device=AUTHORIZED_LOG ;;
+    esac
+  fi
+  printf 'CD_DC_DEVICE|%s|%s|%s\n' "$name" "$state" "$device"
+done
+'@
+  # Windows CRLF in here-strings must be normalized before SSH pipes to bash -s.
+  $remote=$remote.Replace(([string][char]13+[char]10),([string][char]10))
   $encoded=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($remote))
   $out=$encoded | & $exe -T -o BatchMode=yes -o ConnectTimeout=5 -o ConnectionAttempts=1 -o StrictHostKeyChecking=yes Segredo-VPS 'base64 -d | bash -s' 2>&1 | Out-String
   if($LASTEXITCODE -ne 0){return ('CD_SSH=UNKNOWN|ssh exit '+$LASTEXITCODE)}
   return $out
 }
+$script:LastDCServiceSignals=@{}
+$script:LastDCDeviceSignals=@{}
 function Poll-Remote {
   if($script:RemoteJob -and $script:RemoteJob.State -ne 'Running'){
     $out=Receive-Job $script:RemoteJob -ErrorAction SilentlyContinue | Out-String
@@ -397,8 +420,23 @@ function Poll-Remote {
         if($line -match '^CD_VPS_SENSORS'){$sect='RUNTIME';continue}
         if($line -match '^CD_VPS_LOG'){$sect='VPS';continue}
         if($line -match '^CD_DC=(.+)$'){
-          $state=$Matches[1];$level=if($state -match ',active$'){'WARN'}else{'UNKNOWN'}
-          Add-Log 'DESKTOP' $level ('VPS Desktop Commander '+$state+'; conta autenticada nao comprovada')
+          $serviceState=[string]$Matches[1]
+          $unit=($serviceState -split ',')[0]
+          if($script:LastDCServiceSignals[$unit] -ne $serviceState){
+            $script:LastDCServiceSignals[$unit]=$serviceState
+            Add-Log 'DESKTOP' 'INFO' ('VPS systemd: '+$serviceState+'; identidade Google exige prova separada')
+          }
+          continue
+        }
+        if($line -match '^CD_DC_DEVICE\|(principal|conta2)\|([a-z]+)\|(ONLINE_LOG|AUTHORIZED_LOG|OFFLINE_LOG|UNKNOWN)$'){
+          $profile=[string]$Matches[1];$svcState=[string]$Matches[2];$deviceEvent=[string]$Matches[3]
+          $label=if($profile -eq 'principal'){'CONTA 1'}else{'CONTA 2'}
+          $signal=$svcState+'|'+$deviceEvent
+          if($script:LastDCDeviceSignals[$profile] -ne $signal){
+            $script:LastDCDeviceSignals[$profile]=$signal
+            $level=if($svcState -eq 'active' -and $deviceEvent -eq 'ONLINE_LOG'){'PASS'}elseif($deviceEvent -eq 'OFFLINE_LOG'){'WARN'}else{'UNKNOWN'}
+            Add-Log 'DESKTOP' $level ($label+' | device='+$deviceEvent+' | systemd='+$svcState+' | fonte=journal da ativacao atual; EMAIL_AUTH=UNKNOWN')
+          }
           continue
         }
         if($line -match '^CD_SCREENPIPE_VPS=(\d+)$'){
