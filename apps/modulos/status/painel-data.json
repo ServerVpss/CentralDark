@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(telepanel): concluir mudança do README para seu owner",
+    "lastCommit": "docs: ligar entrada simples ao mapa canônico existente",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T23:20:23.188Z",
+      "titulo": "Push na main · 57f30e9f63deab6f9af901b86ba7aac2eb982c38",
+      "detalhe": "docs: ligar entrada simples ao mapa canônico existente",
+      "area": "Repositório",
+      "sha": "57f30e9",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T23:18:08.184Z",
       "titulo": "Push na main · d6b61fe21b0114b9c210470abef5e49173a770b3",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "fba012d",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T22:53:37.851Z",
-      "titulo": "Push na main · 6a3b30e9df48fa514112a2eda4a95d35942fca62",
-      "detalhe": "fix(hud): refletir diretorio real dos scripts apos mudanca para F",
-      "area": "Repositório",
-      "sha": "6a3b30e",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T23:20:23.188Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 57f30e9f63deab6f9af901b86ba7aac2eb982c38 (57f30e9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T23:18:08.184Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · fba012db4a0b0e924b3bc912cfbc54413ac690cf (fba012d)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T22:53:37.851Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6a3b30e9df48fa514112a2eda4a95d35942fca62 (6a3b30e)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T23:18:08.184Z",
-  "updatedAtBR": "12/10/2026, 20:18:08 BRT"
+  "updatedAt": "2026-10-12T23:20:23.188Z",
+  "updatedAtBR": "12/10/2026, 20:20:23 BRT"
 }
