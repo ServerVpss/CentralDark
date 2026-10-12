@@ -374,6 +374,8 @@ v['pulse']=old.get('pulse') or {'status':'UNKNOWN'}
 changes={k:{'old':old.get(k),'new':v.get(k)} for k in ('sources','owners') if old.get(k)!=v.get(k)}
 def atomic(p,payload):
  temp=p.with_suffix('.tmp');temp.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n');temp.replace(p)
+if old.get('duplicates',{}).get('fingerprint')!=v['duplicates']['fingerprint']:
+ changes['duplicates']={'old_fingerprint':old.get('duplicates',{}).get('fingerprint'),'new_fingerprint':v['duplicates']['fingerprint']}
 v['delta']={'at':v['utc'],'changed':bool(changes),'sections':changes}
 atomic(latest,v)
 print('INTENTION=ONE_ENTRY_INCREMENTAL_INVENTORY')
@@ -385,5 +387,6 @@ print('♻️ MESMOS_BYTES='+str(v['duplicates']['exact_bytes_count'])+' NORMALI
 for k,x in s.items():print('SECTOR='+k+' STATUS='+x.get('status','MIXED'))
 print('OWNER_SCRIPTS_DISCOVERED='+str(sum(x['status']=='EXISTS' for x in v['owners'].values())))
 print('RECEIPT='+str(latest))
-print('NO_MUTATION=TRUE; NO_NEW_GH=TRUE; NO_AUTO_CREDENTIAL_SEARCH=TRUE')
+print('🟡 SCAN_PARTIAL='+str(v['duplicates']['partial']).upper()+' SKIPPED='+json.dumps(v['duplicates']['skipped'],sort_keys=True))
+print('NO_RUNTIME_REPAIR=TRUE; RECEIPT_UPDATED=TRUE; NO_NEW_GH=TRUE; NO_AUTO_CREDENTIAL_SEARCH=TRUE')
 PY
