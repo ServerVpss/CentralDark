@@ -1,3 +1,8 @@
+/* CENTRALDARK_COMUNICACAO_HUMANA_20261012
+ * Bot inherits RULES.md/AGENTS.md human style; no independent persona.
+ * Explicit !CENTRALDARK invokes existing trigger fabric. Voice/plain text resolves intent.
+ * Never promote unverified changes to PASS.
+ */
 /**
  * CentralDark — Bot Unificado @srver1bot  v2 — Cockpit Operacional
  *
