@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(boot): load existing single-intent continuity contract across windows",
+    "lastCommit": "🪬 docs: promover prova proporcional e contrato fixo à main",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T21:15:51.509Z",
+      "titulo": "Push na main · 6025de12efa348c6293953df5a168b9ac61b3244",
+      "detalhe": "🪬 docs: promover prova proporcional e contrato fixo à main",
+      "area": "Repositório",
+      "sha": "6025de1",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T20:42:58.640Z",
       "titulo": "Push na main · 4a5a20a97d30a2e8270acb4da29325e36267a065",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "0e06a58",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T22:34:27.104Z",
-      "titulo": "Push na main · 53a34a76f22a614eef203768f0b707aba7599044",
-      "detalhe": "fix(casa-hud): preservar corpo unico e integrar perfis, leitura de logs e autorizacao efemera",
-      "area": "Repositório",
-      "sha": "53a34a7",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T21:15:51.509Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6025de12efa348c6293953df5a168b9ac61b3244 (6025de1)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T20:42:58.640Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 0e06a5862a21f531d7e4fe6d4a5ed0f6ce044628 (0e06a58)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T22:34:27.104Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 53a34a76f22a614eef203768f0b707aba7599044 (53a34a7)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T20:42:58.640Z",
-  "updatedAtBR": "12/10/2026, 17:42:58 BRT"
+  "updatedAt": "2026-10-12T21:15:51.509Z",
+  "updatedAtBR": "12/10/2026, 18:15:51 BRT"
 }
