@@ -31,7 +31,7 @@ import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { ADMIN_CONFIRMATIONS, CATALOG_VERSION, guardDestructive, auditStartupSnapshot, getCanonicalExpectation, } from "../../lib/admin-guard.js";
-const ADMIN_CONFIRM = "CONFIRMO ADMIN";
+const ADMIN_CONFIRM = "CONFIRMO ADMIN"; // apenas compatibilidade com chamadas legadas sem sessão admin autenticada
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
@@ -186,7 +186,8 @@ export const mcpAdminTools = [
                 catalogScope: "centraldark_unified_capability_catalog",
                 catalogVersion: CATALOG_VERSION,
                 catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
-                confirmForDestructive: ADMIN_CONFIRM,
+                confirmForDestructive: "LEGACY_ONLY_WITHOUT_VERIFIED_ADMIN_SESSION",
+                authenticatedAdminPolicy: "OAUTH_OR_HUB_ADMIN_SESSION_REUSED",
                 acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
                 routeCatalogScope: "centraldark_unified_capability_catalog",
                 routeCount: AUTHORIZED_ROUTE_CATALOG.length,
@@ -216,7 +217,7 @@ export const mcpAdminTools = [
     },
     {
         name: "mcp_admin_call",
-        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmação admin no caminho interativo canônico; o auto-consumer de missões nunca sintetiza essa aprovação.",
+        description: "Dispatcher fixo do MCP. Reutiliza OAuth/Hub admin autenticado para destrutivas aprovadas sem frase repetitiva; chamadas legadas exigem confirmAdmin e missões automáticas não ganham aprovação.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Chamada admin MCP" },
         inputSchema: z.object({
             tool: z.string().min(1),
@@ -284,9 +285,14 @@ export const mcpAdminTools = [
                     tool: input.tool,
                 });
             }
+            const persistentAdminAuthorization = hasAdminContext && hasAuditIdentity
+                && ctx?.autoMission !== true
+                && (ctx?.authProvenance === "verified_oauth_admin"
+                    || ctx?.authProvenance === "verified_hub_admin");
             const decision = await guardDestructive({
                 toolName: input.tool,
                 confirmAdmin: input.confirmAdmin,
+                persistentAdminAuthorization,
                 runtimeTools,
                 expectation: getCanonicalExpectation(),
                 inputPayload: parsed.data,
