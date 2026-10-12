@@ -11,6 +11,14 @@
   "milestones": [],
   "events": [
     {
+      "time": "2026-10-12T03:32:43.913Z",
+      "titulo": "Push na main · 049c6c0ae40fbfb5d04d69a9484f169fe00a7086",
+      "detalhe": "🪬 voice: cristaliza recuperacao multicon­ta no owner existente v0.1.3",
+      "area": "Repositório",
+      "sha": "049c6c0",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-10-12T03:31:12.947Z",
       "titulo": "Push na main · f814d0796fa8ace59f919493d1b4fc7df1f6dad0",
       "detalhe": "🪬 voice: cristaliza recuperacao multicon­ta no owner existente v0.1.3",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "fe5096a",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T05:01:38.679Z",
-      "titulo": "Push na main · e5d9591517539f7c0ea336ffdb348b49b47db36a",
-      "detalhe": "feat(api): expose bounded read-only local route health for canonical HUD",
-      "area": "Repositório",
-      "sha": "e5d9591",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T03:32:43.913Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 049c6c0ae40fbfb5d04d69a9484f169fe00a7086 (049c6c0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T03:31:12.947Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · fe5096af0d1d90480a85a962ba9256b757f124d5 (fe5096a)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T05:01:38.679Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e5d9591517539f7c0ea336ffdb348b49b47db36a (e5d9591)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T03:31:12.947Z",
-  "updatedAtBR": "12/10/2026, 00:31:12 BRT"
+  "updatedAt": "2026-10-12T03:32:43.913Z",
+  "updatedAtBR": "12/10/2026, 00:32:43 BRT"
 }
