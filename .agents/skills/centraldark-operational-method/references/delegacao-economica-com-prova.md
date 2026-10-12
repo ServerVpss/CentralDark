@@ -26,3 +26,20 @@ SCRIPT_BEFORE_MODEL_WHEN_MECHANICAL=true
 ```
 
 O resultado do agente só vira a intenção seguinte depois de teste, readback na `main`/runtime quando aplicável e contraprova. Capacidade de contexto não é consumo de tokens; não usar o número de contexto do modelo como medição de custo.
+
+## Cadeado persistente de consulta à main
+
+Toda rodada, inclusive quando houver subagentes, começa pela `origin/main` atual. O coordenador registra o SHA, compara o trabalho contra ele e repete o readback imediatamente antes de qualquer commit, push, PR, deploy ou selo de runtime. Branch local, PR, receipt antigo, memória e resposta de agente são candidatos; não substituem a main atual.
+
+```text
+MAIN_FIRST_PRECHECK=MANDATORY
+FETCH_ORIGIN_BEFORE_WORK=true
+REMEASURE_MAIN_BEFORE_MUTATION=true
+ONE_WRITER_PER_SCOPE=true
+DIRTY_OR_BEHIND_MAIN= PRESERVE_AND_CLASSIFY
+NO_BLIND_OVERWRITE=true
+RUNTIME_SEAL_BINDS_TO_MAIN_SHA=true
+DELEGATION_IS_NOT_MAIN_READBACK=true
+```
+
+O coordenador deve devolver `MAIN_SHA`, `OWNER`, `WRITER`, `SCOPE`, `BASELINE`, `RESULT`, `READBACK` e `NEXT_CURSOR`. Se a main mudar, o lote volta para comparação; não se promove o resultado antigo.
