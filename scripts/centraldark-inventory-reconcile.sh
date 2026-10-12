@@ -345,7 +345,7 @@ for base in roots:
     src=data.decode('utf-8','replace')
    except OSError:excluded['file_error']+=1;continue
    sha=hashlib.sha256(data).hexdigest()
-    clean=re.sub(r'\s+', '', re.sub(r'(?m)^\s*(?:#|//).*' + chr(36), '', src)).lower()
+   clean=re.sub(r'\s+', '', re.sub(r'(?m)^\s*(?:#|//).*' + chr(36), '', src)).lower()
    normalized=hashlib.sha256(clean.encode()).hexdigest()
    discovered.append((str(file),sha,normalized))
 same=collections.defaultdict(list);norm=collections.defaultdict(list);names=collections.defaultdict(list)
