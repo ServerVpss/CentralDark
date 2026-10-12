@@ -11,6 +11,34 @@ oracle_review_on_change: true
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
 
+## 🔒 Main-first lock — obrigatório em toda rodada
+
+Antes de qualquer leitura conclusiva, delegação, edição, teste que possa orientar mutação ou declaração de estado, consultar a `origin/main` atual e registrar o SHA observado. Esta consulta é um preflight persistente; não pode ser substituída por memória, receipt histórico, branch local, PR, comentário de agente ou estado de runtime.
+
+```text
+MAIN_FIRST_PRECHECK=MANDATORY
+MAIN_CURRENT_IS_CANONICAL=true
+FETCH_ORIGIN_BEFORE_WORK=true
+REMEASURE_MAIN_BEFORE_MUTATION=true
+DIRTY_OR_BEHIND_MAIN= PRESERVE_AND_CLASSIFY
+HISTORY_OR_PR_IS_NOT_CURRENT=true
+RUNTIME_MIRROR_REQUIRES_MAIN_SHA=true
+COGNITIVE_LOCK=MAIN_SHA+OWNER+WRITER+SCOPE
+```
+
+Mínimo verificável:
+
+```text
+git fetch origin --prune
+→ git rev-parse origin/main
+→ git status --short --branch
+→ fixar OWNER/WRITER/SCOPE
+→ comparar o delta contra esse SHA
+→ re-fetch + readback do SHA antes de commit/push/deploy
+```
+
+Se `origin/main` se mover, repetir a comparação. Se o checkout estiver dirty, atrás, divergente ou com worktrees concorrentes, preservar e classificar; não resetar, limpar, sobrescrever ou integrar cegamente. `MAIN_FIRST_PRECHECK=PASS` prova apenas que a consulta ocorreu, não que a tarefa está concluída.
+
 ## Contrato de precisão de resposta — reutiliza o método existente
 
 ## Anti-fricção CURRENT
@@ -2681,3 +2709,8 @@ Invariantes:
 Não remover worktree quando existir commit apenas local, arquivo modificado/untracked com delta único, receipt pendente, prova ainda não promovida ou classificação UNKNOWN. Worktree pode ser deletado após o delta útil estar promovido/preservado e a trilha de proveniência estar registrada. A limpeza deve deixar rastro suficiente para responder: qual missão criou a bancada, qual HEAD/base usou, qual delta sobreviveu, onde foi promovido e quando a bancada foi removida.
 
 Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode compartilhar leitura; mutação paralela usa isolamento quando necessário; cada escopo mantém um único writer.
+
+
+### 27. Delegação econômica com prova — continuidade canônica
+
+Para coordenar subagentes sem multiplicar custo, reutilizar a receita existente em [`references/delegacao-economica-com-prova.md`](references/delegacao-economica-com-prova.md). Primeiro procurar trabalho/prova existentes; para tarefas mecânicas usar scripts e sondas baratos; delegar apenas subtarefas independentes e com um writer por escopo; exigir resumos curtos com evidência; SOL julga resultado, testa e confere `main`/runtime antes de registrar receipt. Delegação não é conclusão. Não criar agentes, skills, HUDs ou watchers duplicados para aplicar esta regra.

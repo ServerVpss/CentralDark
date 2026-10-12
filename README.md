@@ -67,6 +67,23 @@ ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 
 **Owners:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml`, `MASTER-CYCLE.yml`, `AUREOLA-BAHIA-BIBLICA.yml`, `HERMES-AUTOCONFIG-RUNTIME.yml`, `apps/modulos/HERMES-CORE/`. A Auréola mostra a rota e os versos como orientação humana, **não substitui logs, HEAD, gates nem runtime medido**. O Hermes é o executor existente; `NEXT_CURSOR` preserva continuidade, sem inventar outro executor.
 
+
+### 🧿 Casa e missões do HUD — atualização de evidências (11/10/2026)
+
+> **Rota CURRENT aferida na Casa (11/10/2026, 22:17 BRT):** o vault está em `K:\CentralDark` no SSD, com `K:\CentralDark\.obsidian` presente e `K:\CentralDark\HUD.html` lido diretamente (309.368 bytes; SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`). O leitor do **CORPO ÚNICO** em `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` foi corrigido para esse caminho e a GUI confirmou `[HUD] PASS` + `[PROVA / ARQUIVO] PASS` no log local. **Isso comprova a rota e o monitor da Casa, não o término integral da migração `F:` → `K:`, o sync do GitHub/Obsidian, nem deploy na VPS.** Endereços antigos `C:\Users\Administrador\Documents\Obsidian Vault`, `F:` e `E:` são legados, não a rota de leitura do HUD. `C:` pessoal preservado.
+> **Contraprova técnica:** backup do BAT anterior em `K:\CentralDark\scripts\_backups\CENTRALDARK-CORPO-UNICO-HUD-LOGS.before-k-hud-route-20261012.bat`; leitura física do arquivo, parser PowerShell e reinício de uma única janela PASS; log 11/10 22:17:44 BRT. Código local ainda **não** equivale a checkout `main` sincronizado. Este registro na `main` documenta a correção, não transfere o BAT nem sobrescreve o HUD dourado `docs/HUD/HUD.html`.
+
+A seção **Missões — clica, copia, cola** do único owner [docs/HUD/HUD.html](docs/HUD/HUD.html) foi reconciliada com o README e a leitura física da Casa. **As sete missões continuam abertas por suas cláusulas finais**, mas fatos já comprovados não devem reaparecer como decisões em branco.
+
+- **Casa, scripts e HUD físico:** `K:\CentralDark\scripts\` é a pasta corrente do launcher `CENTRALDARK-ABRIR-TUDO.bat` e do monitor `CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; a GUI única agora resolve `K:\CentralDark\HUD.html` e loga esse caminho. O antigo `F:\scripts` e `Downloads\CRISTAL LOGICA\scripts` não devem ser usados como rota corrente. O receipt Corpo Único T3 permanece **histórico**: [receipt Corpo Único — T3](docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md).
+- **Casa, perfis e garimpo:** `F:\UnifiedRuntime` preserva perfis Segredo/Fulano, com `Fulanoo` físico observado; nenhum perfil foi migrado automaticamente. `E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE` não foi encontrado no caminho testado. `F:\_MAPA_CASA` existe, com `chefe-gabinete`, mas a coleção Garimpo precisa de localização própria; não inferir realocação só pelo nome do disco.
+- **Obsidian:** a decisão já está no owner [HERMES-CASA-OBSIDIAN-SYNC.md](docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md): cofre privado separado + espelho canônico `docs/BRAIN` por hashes e preservação de conflitos. Implementação no caminho físico/current e sincronização E2E continuam provas independentes.
+- **Admin versus produtos:** os endereços e responsabilidades já constam deste README; a missão restante não é redescobrir cockpit, mas **comprovar login/autorização Lovable**. Identidade visual e escolha futura de `centraldark.exe` não são requisito automático para o Admin web funcionar; TelePainel/CRM/Multizap/bot exigem comparação funcional por owner.
+
+**Não promover deploy por esta atualização:** o HUD `/root/CentralDark/docs/HUD/HUD.html` da VPS estava **modificado** (`git hash-object=274ce5bdb9a3c84a4559b1fb8facf4877384e3ea`), checkout `5344bd87074c` com 42 entradas dirty/untracked; o HUD anterior da `main` era blob `196a0bab3e6af2add003864aa49071e5931f6ea5`. O `HUD.html` físico do cofre do Windows tinha SHA-256 `960f6f23eb07f386e3cabd02dbb696f71777e90a0e087d5157aa1aa802979a5e`. **São três superfícies a reconciliar por diff e writer único**, sem reset, overwrite ou alegar mirror já concluído.
+
+`MISION_SOURCE_UPDATED=MAIN_ONLY`; `VPS_HUD_DEPLOY=UNKNOWN`; `CASA_OBSIDIAN_HUD_SYNC=UNKNOWN`; `MISSIONS_GLOBAL_DONE=FALSE`.
+
 **Próximas comprovações:** `AUTHENTICATED_SALA_CONTROLE_SMOKE`; `RESTORE_EXISTING_PORTAL_AND_TELEPAINEL_DEPLOY`; `RECOVER_EXISTING_OMNI_PM2_OWNER`. `UNKNOWN != PASS`; falha local não é falha de toda a CentralDark.
 
 ## 🧪 Workflows e badges — sinais, não provas globais

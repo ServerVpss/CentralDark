@@ -2,13 +2,37 @@
   "repository": "ServerVpss/CentralDark",
   "canonical_owner": "CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
   "published_plugin_id": "plugins_6ab87b459ff08191a69311acd4c77d83",
-  "published_release_id": "pluginrel_6ab87b470c048191b7ed42e9be8761b6",
+  "published_release_id": "pluginrel_6acc564ddd4881918f5a732c0816ea23",
   "published_scope": "USER",
   "published_discoverability": "PRIVATE",
-  "published_version": "0.1.0",
+  "published_version": "0.1.4",
   "canonical_contract": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml",
   "invocation_grammar": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md",
   "intent_router": ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
   "voice_classifier": ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
-  "generated_artifact_is_owner": false
+  "generated_artifact_is_owner": false,
+  "plugin_url": "https://chatgpt.com/plugins/plugins_6ab87b459ff08191a69311acd4c77d83",
+  "voice_binding_status": "UNKNOWN_UNTIL_MEASURED",
+  "distribution_catalog_owner": "mcp_admin_catalog",
+  "duplicate_plugins_uninstalled": false,
+  "package_sha256": "f335b82ae1d6ef252e648b81d49e7d08fcdd386feede501fb6cfca21cd5acc53",
+  "consolidation_inventory": ".agents/plugins/centraldark-unified-surface-parity/CONSOLIDATION.md",
+  "legacy_zip_count": 4,
+  "distinct_legacy_app_binding_count": 3,
+  "legacy_duplicate_pairs": [
+    [
+      "plugin(1).zip",
+      "plugin (3).zip"
+    ]
+  ],
+  "legacy_wrappers_removed": false,
+  "single_active_plugin_parity": "UNKNOWN_UNTIL_CAPABILITY_COUNTERPROOF",
+  "version": "0.1.4",
+  "release_id": "pluginrel_6acc564ddd4881918f5a732c0816ea23",
+  "archive_sha256": "f335b82ae1d6ef252e648b81d49e7d08fcdd386feede501fb6cfca21cd5acc53",
+  "voice_binding_current_account": "UNKNOWN",
+  "voice_functional_account_evidence": "2026-10-12T03:16:54.647Z mcp_status runtimeTools=141 routeCount=13",
+  "desktop_tool_call_visible_receipt_owner": "docs/ARQUITETURA/CENTRALDARK-TOOL-CALL-VISIBLE-RECEIPT-ECHO-01.md",
+  "desktop_native_renderer_fixed": "UNPROVEN_PLATFORM_OWNED",
+  "desktop_web_tab_opened": "USER_HOME_SEGREDO_EDGE_CURRENT_SESSION"
 }

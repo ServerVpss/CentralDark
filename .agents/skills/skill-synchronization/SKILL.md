@@ -27,6 +27,10 @@ ONE_WRITER_PER_SCOPE=true
 NO_BLIND_OVERWRITE=true
 ORACLE_REVIEW_ON_MATERIAL_SKILL_CHANGE=true
 MAIN_RUNTIME_HASH_SEAL=true
+MAIN_FIRST_PRECHECK=MANDATORY
+FETCH_ORIGIN_BEFORE_WORK=true
+REMEASURE_MAIN_BEFORE_MUTATION=true
+RUNTIME_SEAL_BINDS_TO_MAIN_SHA=true
 
 Only skills with centraldark_autosync: true are in automatic scope. This avoids bulk-enabling unrelated third-party/security skills.
 
@@ -35,6 +39,8 @@ Only skills with centraldark_autosync: true are in automatic scope. This avoids 
 At every CentralDark Eternal Self-Heal wake and after a canonical autonomous-skill mutation:
 
 bash scripts/skill-sync-check.sh --apply
+
+The preflight is mandatory before any reconciliation work, not only before `--apply`: fetch `origin`, record the exact `origin/main` SHA, classify dirty/divergent state, and re-fetch immediately before mutation or runtime sealing. A PR, local branch, cached receipt, or worker result never substitutes for the current main readback.
 
 The existing script must:
 1. fetch exact origin/main and record SHA;

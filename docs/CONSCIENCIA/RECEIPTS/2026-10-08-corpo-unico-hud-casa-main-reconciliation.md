@@ -247,3 +247,108 @@ Contraprova posterior ao clique com codigo efemero (sem expor codigo no registro
 Nao reabrir prova de `BUTTON_CONTA2_OPEN_AUTH_URL` ja registrada; pendencia apenas comparar qual conta efetivamente possui cada dispositivo por autentificacao legitima no provedor, sem revelar tokens.
 
 **NEXT_CURSOR_T2:** reconciliar ownership das contas com readback autenticado do provedor → se duas contas realmente diferentes, selar so essa clausula → VPS dirty checkout separado → alinhar HTML dourado por seu writer atual e provar hash do mirror Casa/VPS.
+
+### T3 — 2026-10-11 — Mudança física para F:\scripts com mesmo HUD
+
+**Intenção:** preservar o recorte executado pelo CHEFE, sem deslocar novamente OneShot/Remote-Tray/UnifiedRuntime, sem recriar painel e sem alterar credenciais.
+
+**READBACK FÍSICO CASA:**
+- `F:\scripts`: 12 scripts na raiz (incluindo `CENTRALDARK-ABRIR-TUDO.bat` e `CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`) e diretório `_backups`. O caminho `C:\Users\Administrador\Downloads\CRISTAL LOGICA\scripts` não existe mais.
+- Launcher `F:\scripts\CENTRALDARK-ABRIR-TUDO.bat` chama HUD relativo ao próprio diretório (`%~dp0`); `CD_MONITOR_SOURCE` transmite o mesmo caminho ao payload, sem dependência do antigo Downloads.
+- **Único delta de código necessário:** substituição da mensagem literal do catálogo por diretório medido via `$script:ScriptRoot`. `PARSE_ERRORS=0`; commit `6a3b30e9df48fa514112a2eda4a95d35942fca62` no owner `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`. Readback do owner: **conteúdo main == F:\scripts** após normalizar CRLF.
+- GUI anterior encerrada **somente para aplicar essa mudança visual**; mesma GUI reaberta via `F:\scripts\CENTRALDARK-ABRIR-TUDO.bat`; 1 instância ativa e título original.
+- Contraprova do log central: `[19:52:14] [SCRIPTS] [INFO] Catalogo: 12 arquivo(s) em F:\scripts; fonte != executado`.
+- `F:\UnifiedRuntime`, `F:\OneShot`, `F:\Remote-Tray` e `F:\Bridge` preservados nos locais anteriores. Os quatro scripts de LogCollector foram **copiados** anteriormente com SHA-256 para subárvore própria de `CRISTAL LOGICA\scripts` na ocasião; após o recorte a referência a essa cópia deve ser remapeada **somente se necessária**, sem inferir que os coletores foram executados.
+- `F:\UnifiedRuntime\profiles.json` possui ids Segredo/Fulano e active=`Fulanoo`; `F:\UnifiedRuntime\profiles\Fulanoo` **existe** com `bridgemind/binding.json`. Portanto, não renomear `Fulanoo` para `Fulano` às cegas: vínculo runtime versus cadastro ainda precisa readback discriminante.
+- Conta 2 já possuía `ONLINE_LOG` na T2. Mudança de pasta **não equivale a confirmação de duas identidades do provedor**; preservar `TWO_DISTINCT_PROVIDER_ACCOUNTS_AUTHENTICATED=UNKNOWN`.
+
+**SELO ESCOPO:** `F_SCRIPTS=PASS`; `LAUNCHER_F_TO_GUI=PASS`; `SCRIPTS_LOG_REAL_PATH=PASS`; `SOURCE_MAIN_F_SAME_CONTENT=PASS`; `PROFILE_IDENTITY_MAPPING=UNKNOWN`; `FIXED_POINT_GLOBAL=FALSE`.
+
+**NEXT_CURSOR:** sem duplicar entrada nem mover runtime; mapear consumo efetivo do perfil Fulanoo e validar vínculo de e-mail no provedor autenticado antes de qualquer alteração na identidade. Preservar Main != VPS deploy.
+
+### T4 — 2026-10-11 — Reconciliação de 7 missões com README e discos da Casa
+
+- **OBJETIVO:** substituir premissas antigas em `docs/HUD/HUD.html` pelo CURRENT documentado, mantendo 7 cartas, layout, cores, botões e runtime como owners separados. Não confundir atualização do texto das missões com sua execução.
+- **Fonte GitHub:** `README.md` na `main` já apresenta Instinto Superior como Admin VPS publicado (rotas HTTP 200; login E2E UNKNOWN), e TelePainel como módulo do Portal; motor `centraldark.exe` Tauri/Electron continua escolha humana se for materialmente necessário.
+- **Fonte docs:** `docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md` contém a decisão de cofre separado com sync canônico por hash. A antiga carta do HUD dizia que a decisão estava em aberto; foi atualizada para missão de contraprova E2E, ainda não PASS.
+- **Fonte Casa:** `F:\scripts` 12 scripts, launcher existente PASS conforme T3; `E:\CentralDark\_MAPA_CASA` inexistente no caminho testado; `F:\_MAPA_CASA` contém `chefe-gabinete`, sem `GARIMPO-CHEFE` naquela listagem. `F:\UnifiedRuntime` conserva perfis Segredo/Fulano/Fulanoo, sem migração Windows provada.
+- **Sinais de drift HUD:** no instante de leitura, `main` tinha blob `196a0bab3e6af2add003864aa49071e5931f6ea5`; VPS tinha blob dirty `274ce5bdb9a3c84a4559b1fb8facf4877384e3ea`, HEAD `5344bd87074c` e 42 entradas locais. Casa Obsidian `HUD.html` SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`.
+- **RESULTADO DOCUMENTAL:** atualizar somente as 7 entradas `missions[]` do owner único, sem novo HUD, sem forçar sync Casa/VPS, sem atribuir novo PASS E2E. Missões de autenticação Lovable, motor EXE, Garimpo, Grok, TelePainel/Multizap e perfis continuam por seus próximos testes. Os estados de decisão documentada e prova operacional ficaram separados.
+- **NEXT_CURSOR:** confrontar hash/diff `main ↔ VPS dirty ↔ Casa Obsidian` via writer existente; preservar cada delta exclusivo; só depois materializar e selar `HUD_SYNC_SAME_CONTENT`; manter os sete botões até fechamento por efeito ou decisão humana.
+
+
+### T5 — 2026-10-12 — Desktop Commander OAuth + device E2E, sem confundir identidade das contas
+
+- **Intenção:** reconciliar comprovante visual ChatGPT/Remote MCP com o mesmo HUD CORPO ÚNICO; nenhum segundo HUD ou broker.
+- **Provedor:** a UI do usuário informa Desktop Commander conectado ao ChatGPT por OAuth em 11/10/2026 (conector v1.0.0); o portal mostra CENTRALDARK-OS online e 'You're connected'. Login OAuth do conector não demonstra por si só o serviço do device ou a identidade de cada conta.
+- **VPS READBACK 2026-10-12T02:12:09Z:** serviço centraldark-desktop-commander-conta2.service ACTIVE/RUNNING. No journal dele: Authorization successful! às 02:09:16Z; Device marked as online e Device ready às 02:09:17Z. O device ID atribuído corresponde exatamente ao target MCP ca0cc3ad-3435-428f-87ee-ee102c2cf3b8, que recebeu e respondeu uma chamada real start_process às 02:12:08Z.
+- **Casa READBACK:** o monitor único (K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat) estava com uma janela, PID 32748, e registrou Conta 2 READY_LOG às 23:10:06 BRT (11/10). A Conta 1 permaneceu UNKNOWN no painel nesse ciclo. Os dispositivos SEGREDO e CENTRALDARK-OS responderam ONLINE à listagem remota do conector.
+- **Serviço principal:** desktop-commander-remote.service estava ACTIVE/RUNNING e teve evento Device marked as online às 2026-10-11T23:44:25Z. O vínculo atual 'identidade Google -> serviço principal -> device ID' não foi comprovado independentemente. Dois serviços ativos e um OAuth não constituem prova de dois e-mails pareados.
+- **Drift de visualização identificado:** CD_DC (sonda automática do BAT) só lê systemd active e continua emitindo avisos 'conta autenticada nao comprovada', enquanto o probe manual CD_PROFILE lê READY_LOG em janela de 15 minutos. Leitura por janela pode tornar o selo antigo invisível, sem contradizer o receipt E2E recém-provado. A correção do leitor visual ainda carece de edição/teste separados.
+- **Escopo:** não foram reiniciados serviços VPS nem transportados cookies, tokens, códigos ou segredos. Emails privados omitidos no recibo público. Main documentada != deploy VPS.
+
+    DESKTOP_COMMANDER_CONNECTOR_OAUTH=OBSERVED_IN_UI
+    VPS_ACCOUNT2_SYSTEMD=PASS
+    VPS_ACCOUNT2_AUTHORIZATION=PASS
+    VPS_ACCOUNT2_REMOTE_TOOL_CALL=PASS
+    CASA_AND_VPS_DEVICE_ONLINE=PASS
+    ACCOUNT1_PROVIDER_IDENTITY=UNKNOWN
+    TWO_DISTINCT_GOOGLE_ACCOUNTS_AUTHENTICATED=UNKNOWN
+    HUD_CD_DC_CLASSIFICATION=INCOMPLETE
+    FIXED_POINT_GLOBAL=FALSE
+    NEXT_CURSOR=RECONCILE_CD_DC_BY_OWNER_DEVICE_ID_AND_EVENT_TIME_WITHOUT_RESTART
+
+**POMBO_CHECKSUM:** selo Conta 2 por efeito real e readback do mesmo serviço; nenhuma promoção global e nenhuma inferência do e-mail da Conta 1.
+
+
+### T6 — 2026-10-12 — Corrigir falso amarelo Desktop Commander sem reiniciar os owners
+
+- **Goal / owner:** corrigir somente o classificador do CORPO ÚNICO e registrar no receipt existente; sem abrir outro monitor. Owner de código da main: `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; runtime da Casa: `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`.
+- **Causa observada:** o sensor automático antigo `CD_DC` emitia WARN para cada unit systemd ativa, independentemente dos eventos de autorização; a janela de 15 minutos do sensor manual deixava eventos antigos invisíveis. O envio do here-string Windows CRLF para `bash -s` também causava `ssh exit 2` (`syntax error ... do\r`), embora SSH já estivesse autenticado.
+- **Delta mínimo:** preservar CD_DC como estado do serviço (INFO ao mudar), acrescentar CD_DC_DEVICE por serviço (último evento DEVICE online/offline/ready da ativação systemd corrente, lido via journal; sem token nem código), deduplicar logs por fingerprint, converter o payload inteiro para LF antes do SSH, não reiniciar serviços, não mudar identidade Google nem OAuth.
+- **Casa / readback WinForms:** script PowerShell passou no parser, backup local com SHA-256 idêntico ao código alterado antes do reinício da GUI; uma única janela reiniciada. O log físico em `%LOCALAPPDATA%\CentralDark\Corpo-Unico-HUD-Logs.txt` mostrou às 23:28:28 BRT em 11/10/2026 `CONTA 1 | device=ONLINE_LOG | systemd=active` e `CONTA 2 | device=ONLINE_LOG | systemd=active`, ambos no escopo de **dispositivo**, com `EMAIL_AUTH=UNKNOWN`; SSH voltou a PASS e Goal continuou `todo`.
+- **Contraprova VPS:** `desktop-commander-remote.service` `active` com PID 17384 e `centraldark-desktop-commander-conta2.service` `active` com PID 893594. Os PIDs eram os mesmos antes/depois; nenhum serviço VPS reiniciado nesta ação.
+- **Main:** patch equivalente aplicado sobre o próprio owner da main, sem sobrescrever o HUD privado da Casa nem publicar identidades Google: commit `697c8a4d2b4a533c09098a1e49754a2d2558f09e` (blob `4a42f66df6cdc5723230d7e2a8a9baa4b62af37c`); readback do blob confirmou conteúdo igual ao estágio. O candidato isolado passou no parser e gerou `CD_SSH=PASS`, duas linhas `CD_DC_DEVICE` online.
+- **Limites:** `ONLINE_LOG` é sinal do último evento emitido pela unit em execução, **não** confirmação do e-mail Google. Conta 2 tem recibo E2E de tool call separado em T5; não deduzir duas identidades só por ambos terem sinal online. A codebase `main` não foi implantada automaticamente na VPS e não equivale ao artefato físico completo do SSD K:.
+
+    CASA_HUD_SINGLE_INSTANCE=PASS
+    SSH_TRANSPORT_LF_NORMALIZATION=PASS
+    DC_ACCOUNT1_DEVICE_EVENT_ONLINE=PASS
+    DC_ACCOUNT2_DEVICE_EVENT_ONLINE=PASS
+    DC_ACCOUNT2_E2E_TOOL_CALL=PASS (T5 scope)
+    DC_GOOGLE_ACCOUNT1_IDENTITY=UNKNOWN
+    DC_GOOGLE_ACCOUNT2_IDENTITY_MAP=UNKNOWN
+    VPS_SERVICES_RESTARTED=NO
+    MAIN_SOURCE_READBACK=PASS
+    GLOBAL_FIXED_POINT=FALSE
+    NEXT_CURSOR=VERIFY_INDEPENDENT_PROVIDER_IDENTITY_AND_KEEP_HUD_LOGS_DEDUPED
+
+**🕊️ POMBO_CHECKSUM:** só o dispositivo e o leitor recebem selo; histórico, identity mapping, OAuth, goal e deploy continuam com provas próprias.
+
+
+### T7 — 2026-10-12 — Afterburner MMF → CORPO ÚNICO → HUD original → main
+
+- **INTENÇÃO:** incluir os 51 sensores da Casa no HUD que já existe, com GPU/CPU ao vivo e sem novo serviço, novo painel, API paralela ou alteração de parâmetros da GPU.
+- **Owners existentes:** `docs/HUD/HUD.html` (renderização) e `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` (coleta no ciclo WinForms de 10 s). **Runtime físico:** `K:\CentralDark\HUD.html` e `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`. O derivado `K:\CentralDark\CENTRALDARK-AFTERBURNER-LIVE.js` guarda apenas telemetria sanitizada para o mesmo HTML local; não é um executor, endpoint HTTP ou owner independente.
+- **Origem medida, read-only na Casa:** processos existentes MSI Afterburner e RivaTuner encontrados ativos. `MAHMSharedMemory` foi aberto por API do Windows com FILE_MAP_READ=4. Header `MHAM`, versão 131072, header 32 bytes, 51 entradas de 1324 bytes; 51 sensores utilizáveis (GPU temp/uso/memória/fan/power, CPU temp/uso/clock, RAM etc.). `RTSSSharedMemoryV2` também pôde ser aberto, mas não foi usado para inferir carga dos processos.
+- **Contraprova de dados reais:** leitura em dois instantes em 12/10/2026 04:09:14Z e 04:09:16Z mostrou GPU 40%→6%, CPU 33,07%→19,63%, RAM 18.313→18.380 MB. Outro teste validou geração de dados `51/51`, timestamp de origem fresco, arquivo local JS em UTF-8 e parser PowerShell sem erros.
+- **Bug corrigido no ciclo:** `File.Replace(temp,dest,null)` falhou porque o caminho do backup não pode ficar vazio no runtime Windows medido. Mesmo BAT passou a usar caminho explícito para o backup transitório e excluí-lo após troca. Nova contraprova de arquivo gerado: `SOURCE_FRESH` e `51/51`; nada alterado em clocks/tensão/fan.
+- **E2E browser:** Edge headless, aberto sobre o **mesmo** `file:///K:/CentralDark/HUD.html`, executou carga dinâmica `./CENTRALDARK-AFTERBURNER-LIVE.js` e renderizou CPU `57,1%`, GPU `44 °C`, `MMF FRESCO · 51/51 sensores`; após reinício apenas da GUI do CORPO ÚNICO, novo readback mostrou CPU `35,6%`, GPU `46 °C`, 51/51 sensores, DOM sem STALE e arquivo renovado havia `3,4s`.
+- **Persistência na Casa:** a única janela do CORPO ÚNICO permaneceu ativa em nova sessão (`PID 29816` no primeiro readback). Ciclo de 10 s renovou o arquivo JS, e o log já existente `%LOCALAPPDATA%\CentralDark\Corpo-Unico-HUD-Logs.txt` apresentou leituras `RUNTIME PASS AFTERBURNER MMF READ_ONLY | 51/51 sensores | SOURCE_FRESH | HUD_FEED_LOCAL` repetidas ao longo de múltiplos minutos.
+- **GitHub:** alterações nos **dois owners originais** em um único commit na main `45dcf83b2ada2fa8447f5d8deff0c4e4307d649a`. Blob do HTML `cade858b2f480f62b6b8fd867462581c80f7d8ef`, blob do BAT `ab2d6a203b64e9bc4879294b2650dc36eb816a85`; readback do conteúdo e das árvores de origem PASS. Trechos de código `Poll-Afterburner`, cartão GPU e seção de sensores comparados entre main e Casa: igualdade exata do escopo. **Arquivos completos local/main não são byte a byte iguais**, pois a Casa conserva customizações anteriores.
+- **Fail-closed:** timestamp de MMF e navegador exigem frescor; se a leitura parar, o HUD retorna `STALE/UNKNOWN`, sem manter verde permanente. Arquivo JSON/JS não inclui cookies, senhas, dados de tela ou credenciais. A main contém o código; só a Casa com MSI Afterburner ativo produz o feed; `COMMITTED != VPS_DEPLOYED`.
+
+    AFTERBURNER_MMF_READONLY=PASS
+    AFTERBURNER_51_SENSORS=PASS
+    GUI_SINGLE_INSTANCE=PASS
+    LOCAL_FEED_PERIODIC_RENEWAL=PASS
+    HUD_BROWSER_DOM_LIVE_CPU_GPU=PASS
+    MAIN_TWO_OWNERS_ONE_COMMIT=PASS
+    MAIN_AND_CASA_SCOPE_FRAGMENT_EQUAL=PASS
+    FULL_LOCAL_FILES_EQUAL_MAIN=NO (CUSTOMIZATIONS_PRESERVED)
+    GPU_AI_INFERENCE_OR_ACCELERATION=NOT_PROVEN
+    VPS_AFTERBURNER_SENSOR=NOT_IN_SCOPE
+    GLOBAL_FIXED_POINT=NOT_ASSERTED
+    NEXT_CURSOR=MONITOR_HUD_SOURCE_STALENESS_WITH_EXISTING_LOOP
+
+**🕊️ POMBO_CHECKSUM:** telemetria no HUD e renovação automática SELADOS no escopo Casa; health de IA, deploy VPS e identidade externa não foram promovidos por inferência.

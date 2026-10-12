@@ -203,7 +203,7 @@ function Refresh-Scripts {
     if (-not $script:ScriptPollOnce) { Add-Log 'SCRIPTS' 'UNKNOWN' 'Pasta de scripts indisponivel' }
   }
   if (-not $script:ScriptPollOnce) {
-    Add-Log 'SCRIPTS' 'INFO' ("Catalogo: {0} arquivo(s) em CRISTAL LOGICA\scripts; fonte != executado" -f $sources.Count)
+    Add-Log 'SCRIPTS' 'INFO' ("Catalogo: {0} arquivo(s) em {1}; fonte != executado" -f $sources.Count,$script:ScriptRoot)
     Add-Log 'SCRIPTS' 'INFO' 'tail de logs autorizados: scripts\logs\*.log + bridge preexistente. Nunca le .env.'
   }
   foreach($f in $sources) {
@@ -249,6 +249,90 @@ function Refresh-Scripts {
     }
   }
   $script:ScriptPollOnce=$true
+}
+# AFTERBURNER_MMF_LIVE_V1: reuse the existing 10s WinForms cycle, read-only MMF.
+# Derived same-directory script is data only; never opens a network port or changes GPU controls.
+$script:ABHudFile = 'K:\CentralDark\HUD.html'
+$script:ABFeedFile = Join-Path (Split-Path -Parent $script:ABHudFile) 'CENTRALDARK-AFTERBURNER-LIVE.js'
+$script:ABLastStatus = 'UNKNOWN'
+$script:ABLastLog = [datetime]::MinValue
+function Poll-Afterburner {
+  $mapHandle=[IntPtr]::Zero
+  $mapView=[IntPtr]::Zero
+  try {
+    if(-not (Test-Path -LiteralPath $script:ABHudFile -PathType Leaf)){throw 'HUD_LOCAL_ABSENT'}
+    if(-not ('CentralDarkAfterburnerMmf' -as [type])) {
+      Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+public static class CentralDarkAfterburnerMmf {
+ [DllImport("kernel32.dll",SetLastError=true,CharSet=CharSet.Unicode)] public static extern IntPtr OpenFileMapping(uint access,bool inherit,string name);
+ [DllImport("kernel32.dll",SetLastError=true)] public static extern IntPtr MapViewOfFile(IntPtr handle,uint access,uint high,uint low,UIntPtr size);
+ [DllImport("kernel32.dll")] public static extern bool UnmapViewOfFile(IntPtr address);
+ [DllImport("kernel32.dll")] public static extern bool CloseHandle(IntPtr handle);
+}
+'@ -ErrorAction Stop
+    }
+    $mapHandle=[CentralDarkAfterburnerMmf]::OpenFileMapping(4,$false,'MAHMSharedMemory')
+    if($mapHandle -eq [IntPtr]::Zero){throw 'AFTERBURNER_MMF_NOT_RUNNING'}
+    $mapView=[CentralDarkAfterburnerMmf]::MapViewOfFile($mapHandle,4,0,0,[UIntPtr]::new(32))
+    if($mapView -eq [IntPtr]::Zero){throw 'MMF_HEADER_ACCESS_DENIED'}
+    $header=New-Object byte[] 32
+    [Runtime.InteropServices.Marshal]::Copy($mapView,$header,0,32)
+    [void][CentralDarkAfterburnerMmf]::UnmapViewOfFile($mapView);$mapView=[IntPtr]::Zero
+    $signature=[Text.Encoding]::ASCII.GetString($header,0,4)
+    $version=[BitConverter]::ToUInt32($header,4)
+    $headerSize=[BitConverter]::ToUInt32($header,8)
+    $count=[BitConverter]::ToUInt32($header,12)
+    $entrySize=[BitConverter]::ToUInt32($header,16)
+    $sourceEpoch=[BitConverter]::ToUInt32($header,20)
+    if($signature -ne 'MHAM' -or $version -ne 131072 -or $headerSize -ne 32 -or $entrySize -ne 1324 -or $count -lt 1 -or $count -gt 128){throw 'MMF_VERSION_OR_LAYOUT_UNSUPPORTED'}
+    $sourceUtc=[DateTimeOffset]::FromUnixTimeSeconds([int64]$sourceEpoch).UtcDateTime
+    if([math]::Abs(([datetime]::UtcNow-$sourceUtc).TotalSeconds) -gt 30){throw 'MMF_SOURCE_TIMESTAMP_STALE'}
+    $total=[int]($headerSize+$count*$entrySize)
+    $mapView=[CentralDarkAfterburnerMmf]::MapViewOfFile($mapHandle,4,0,0,[UIntPtr]::new($total))
+    if($mapView -eq [IntPtr]::Zero){throw 'MMF_ENTRIES_ACCESS_DENIED'}
+    $data=New-Object byte[] $total
+    [Runtime.InteropServices.Marshal]::Copy($mapView,$data,0,$total)
+    [void][CentralDarkAfterburnerMmf]::UnmapViewOfFile($mapView);$mapView=[IntPtr]::Zero
+    $units=[Text.Encoding]::GetEncoding(1252)
+    $items=New-Object 'System.Collections.Generic.List[object]'
+    for($i=0;$i -lt [int]$count;$i++){
+      $offset=[int]($headerSize+$i*$entrySize)
+      $name=([Text.Encoding]::ASCII.GetString($data,$offset,260)).Split([char]0)[0].Trim()
+      if([string]::IsNullOrWhiteSpace($name)){continue}
+      $unit=($units.GetString($data,$offset+260,260)).Split([char]0)[0].Trim()
+      $v=[BitConverter]::ToSingle($data,$offset+1300)
+      if([Single]::IsNaN($v) -or [Single]::IsInfinity($v) -or [math]::Abs([double]$v) -gt 100000000){continue}
+      $items.Add([ordered]@{index=$i;name=$name;unit=$unit;value=[math]::Round([double]$v,2)})
+    }
+    if($items.Count -lt 1){throw 'MMF_VALID_SENSOR_COUNT_ZERO'}
+    $snapshot=[ordered]@{schema='centraldark.afterburner.v1';origin='CASA_SEGREDO';source='MAHMSharedMemory';observedAt=[datetime]::UtcNow.ToString('o');sourceUpdatedAt=$sourceUtc.ToString('o');announcedCount=[int]$count;sensors=@($items.ToArray())}
+    $json=ConvertTo-Json -InputObject $snapshot -Compress -Depth 5 -ErrorAction Stop
+    $feed='window.CENTRALDARK_AFTERBURNER_LIVE='+$json+';'
+    $temp=$script:ABFeedFile+'.tmp'
+    [IO.File]::WriteAllText($temp,$feed,(New-Object Text.UTF8Encoding($false)))
+    if(Test-Path -LiteralPath $script:ABFeedFile){
+      $previous=$script:ABFeedFile+'.lastgood.bak'
+      [IO.File]::Replace($temp,$script:ABFeedFile,$previous)
+      if(Test-Path -LiteralPath $previous){Remove-Item -LiteralPath $previous -Force -ErrorAction SilentlyContinue}
+    }
+    else{[IO.File]::Move($temp,$script:ABFeedFile)}
+    $now=Get-Date
+    if($script:ABLastStatus -ne 'PASS' -or ($now-$script:ABLastLog).TotalSeconds -ge 60){
+      $script:ABLastLog=$now
+      Add-Log 'RUNTIME' 'PASS' ('AFTERBURNER MMF READ_ONLY | '+$items.Count+'/'+$count+' sensores | SOURCE_FRESH | HUD_FEED_LOCAL')
+    }
+    $script:ABLastStatus='PASS'
+  } catch {
+    $cause=[string]$_.Exception.Message
+    if($cause -notmatch '^[A-Z0-9_]+$'){$cause='MMF_READ_OR_FILE_WRITE_FAILED'}
+    if($script:ABLastStatus -ne $cause){ Add-Log 'RUNTIME' 'UNKNOWN' ('AFTERBURNER '+$cause+' | dado anterior pode ficar STALE') }
+    $script:ABLastStatus=$cause
+  } finally {
+    if($mapView -ne [IntPtr]::Zero){[void][CentralDarkAfterburnerMmf]::UnmapViewOfFile($mapView)}
+    if($mapHandle -ne [IntPtr]::Zero){[void][CentralDarkAfterburnerMmf]::CloseHandle($mapHandle)}
+  }
 }
 function Port-Open([int]$Port){
   try {return (@(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction Stop).Count -gt 0)} catch { return $false }
@@ -370,12 +454,35 @@ $script:RemoteScript = {
   $sshPath=Join-Path $env:ProgramFiles 'Git\usr\bin\ssh.exe'
   if(-not (Test-Path -LiteralPath $sshPath -PathType Leaf)){return 'CD_SSH=UNKNOWN|Git SSH nao encontrado'}
   $exe=$sshPath
-  $remote='echo CD_SSH=PASS; printf "CD_HEART="; curl -fsS --max-time 3 http://127.0.0.1:9100/heartbeat 2>/dev/null; echo; echo CD_RUNTIME; uptime; ps -eo comm= | grep -E "(node|pm2|screenpipe|llama|hermes)" | sort -u | head -8; echo CD_VPS_SENSORS; for unit in desktop-commander-remote.service centraldark-desktop-commander-conta2.service; do state=$(systemctl is-active "$unit" 2>/dev/null || true); echo "CD_DC=$unit,${state:-UNKNOWN}"; done; sc=$(curl --noproxy "*" -s -o /dev/null -w "%{http_code}" --connect-timeout 2 --max-time 3 http://127.0.0.1:3030/health 2>/dev/null || true); echo "CD_SCREENPIPE_VPS=${sc:-000}"; if [ -f /root/CentralDark/apps/modulos/elite-gateway/test-local/local_send_dump.py ]; then echo CD_ZENDRIVE=CODE_PRESENT_RUNTIME_UNKNOWN; else echo CD_ZENDRIVE=CODE_NOT_FOUND_RUNTIME_UNKNOWN; fi; echo CD_VPS_LOG; journalctl -n 8 -p warning --no-pager --output=short-iso 2>/dev/null | tail -8'
+  $remote='echo CD_SSH=PASS; printf "CD_HEART="; curl -fsS --max-time 3 http://127.0.0.1:9100/heartbeat 2>/dev/null; echo; printf "CD_CPU=CPU%% SEM LEITURA|cpus=%s|loadavg=%s|observed_at=%s\n" "$(nproc 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || printf UNKNOWN)" "$(cut -d" " -f1-3 /proc/loadavg 2>/dev/null || printf UNKNOWN)" "$(date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ 2>/dev/null || printf UNKNOWN)"; echo CD_RUNTIME; uptime; ps -eo comm= | grep -E "(node|pm2|screenpipe|llama|hermes)" | sort -u | head -8; echo CD_VPS_SENSORS; for unit in desktop-commander-remote.service centraldark-desktop-commander-conta2.service; do state=$(systemctl is-active "$unit" 2>/dev/null || true); echo "CD_DC=$unit,${state:-UNKNOWN}"; done; sc=$(curl --noproxy "*" -s -o /dev/null -w "%{http_code}" --connect-timeout 2 --max-time 3 http://127.0.0.1:3030/health 2>/dev/null || true); echo "CD_SCREENPIPE_VPS=${sc:-000}"; if [ -f /root/CentralDark/apps/modulos/elite-gateway/test-local/local_send_dump.py ]; then echo CD_ZENDRIVE=CODE_PRESENT_RUNTIME_UNKNOWN; else echo CD_ZENDRIVE=CODE_NOT_FOUND_RUNTIME_UNKNOWN; fi; echo CD_VPS_LOG; journalctl -n 8 -p warning --no-pager --output=short-iso 2>/dev/null | tail -8'
+  # Read-only device sensor per systemd unit since current service activation.
+  # This reports a device event, not proof of the user's Google account.
+  $remote += [Environment]::NewLine + @'
+for entry in principal:desktop-commander-remote.service conta2:centraldark-desktop-commander-conta2.service; do
+  name="${entry%%:*}"; unit="${entry#*:}"
+  state="$(systemctl is-active "$unit" 2>/dev/null || true)"
+  boot="$(systemctl show "$unit" -p ActiveEnterTimestamp --value 2>/dev/null)"
+  device=UNKNOWN
+  if [ "$state" = active ] && [ -n "$boot" ] && [ "$boot" != n/a ]; then
+    event="$(journalctl -u "$unit" --since "$boot" --no-pager -o cat 2>/dev/null | grep -E '^[[:space:]]*(🔌[[:space:]]+Device marked as (offline|online)|✅[[:space:]]+(Device ready:|Authorization successful!))' | tail -1)"
+    case "$event" in
+      *'Device marked as offline'*) device=OFFLINE_LOG ;;
+      *'Device marked as online'*|*'Device ready:'*) device=ONLINE_LOG ;;
+      *'Authorization successful!'*) device=AUTHORIZED_LOG ;;
+    esac
+  fi
+  printf 'CD_DC_DEVICE|%s|%s|%s\n' "$name" "$state" "$device"
+done
+'@
+  # Windows CRLF in here-strings must be normalized before SSH pipes to bash -s.
+  $remote=$remote.Replace(([string][char]13+[char]10),([string][char]10))
   $encoded=[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($remote))
   $out=$encoded | & $exe -T -o BatchMode=yes -o ConnectTimeout=5 -o ConnectionAttempts=1 -o StrictHostKeyChecking=yes Segredo-VPS 'base64 -d | bash -s' 2>&1 | Out-String
   if($LASTEXITCODE -ne 0){return ('CD_SSH=UNKNOWN|ssh exit '+$LASTEXITCODE)}
   return $out
 }
+$script:LastDCServiceSignals=@{}
+$script:LastDCDeviceSignals=@{}
 function Poll-Remote {
   if($script:RemoteJob -and $script:RemoteJob.State -ne 'Running'){
     $out=Receive-Job $script:RemoteJob -ErrorAction SilentlyContinue | Out-String
@@ -397,8 +504,23 @@ function Poll-Remote {
         if($line -match '^CD_VPS_SENSORS'){$sect='RUNTIME';continue}
         if($line -match '^CD_VPS_LOG'){$sect='VPS';continue}
         if($line -match '^CD_DC=(.+)$'){
-          $state=$Matches[1];$level=if($state -match ',active$'){'WARN'}else{'UNKNOWN'}
-          Add-Log 'DESKTOP' $level ('VPS Desktop Commander '+$state+'; conta autenticada nao comprovada')
+          $serviceState=[string]$Matches[1]
+          $unit=($serviceState -split ',')[0]
+          if($script:LastDCServiceSignals[$unit] -ne $serviceState){
+            $script:LastDCServiceSignals[$unit]=$serviceState
+            Add-Log 'DESKTOP' 'INFO' ('VPS systemd: '+$serviceState+'; identidade Google exige prova separada')
+          }
+          continue
+        }
+        if($line -match '^CD_DC_DEVICE\|(principal|conta2)\|([a-z]+)\|(ONLINE_LOG|AUTHORIZED_LOG|OFFLINE_LOG|UNKNOWN)$'){
+          $profile=[string]$Matches[1];$svcState=[string]$Matches[2];$deviceEvent=[string]$Matches[3]
+          $label=if($profile -eq 'principal'){'CONTA 1'}else{'CONTA 2'}
+          $signal=$svcState+'|'+$deviceEvent
+          if($script:LastDCDeviceSignals[$profile] -ne $signal){
+            $script:LastDCDeviceSignals[$profile]=$signal
+            $level=if($svcState -eq 'active' -and $deviceEvent -eq 'ONLINE_LOG'){'PASS'}elseif($deviceEvent -eq 'OFFLINE_LOG'){'WARN'}else{'UNKNOWN'}
+            Add-Log 'DESKTOP' $level ($label+' | device='+$deviceEvent+' | systemd='+$svcState+' | fonte=journal da ativacao atual; EMAIL_AUTH=UNKNOWN')
+          }
           continue
         }
         if($line -match '^CD_SCREENPIPE_VPS=(\d+)$'){
@@ -409,6 +531,17 @@ function Poll-Remote {
         }
         if($line -match '^CD_ZENDRIVE=(.+)$'){
           Add-Log 'SCRIPTS' 'UNKNOWN' ('VPS Zendrive: '+$Matches[1]+' (arquivo nao prova sessao)')
+          continue
+        }
+        if($line -match '(?i)(out of memory|oom-kill|oom killer|total swap\s*=\s*0kb)'){
+          Set-Card 'HERMES / SSH' 'WARN' 'VPS sob pressao de memoria; OOM detectado nos logs'
+          Set-Card 'VPS / CORACAO' 'WARN' 'OOM detectado; heartbeat vivo nao significa estabilidade'
+          Add-Log 'VPS' 'WARN' ('MEMORY_PRESSURE: '+$line.Trim())
+          continue
+        }
+        if($line -match '^CD_CPU=(.+)$'){
+          Add-Log 'VPS' 'WARN' ('CPU VPS: '+$Matches[1]+' | loadavg nao e uso %')
+          Set-Card 'VPS / CORACAO' 'WARN' ('CPU VPS sem uso %; '+$Matches[1])
           continue
         }
         if($line -match '^CD_HEART='){Add-Log 'VPS' 'LOG' 'Heartbeat consultado; detalhes tecnicos disponiveis no SSH';continue}
@@ -564,12 +697,12 @@ $timer.Interval=10000
 $timer.Add_Tick({
   if($script:Loading){return}
   $script:Loading=$true
-  try{Local-Refresh;Poll-Remote;Refresh-Scripts;Poll-AccountProbe}catch{Add-Log 'RUNTIME' 'WARN' ('Erro na leitura: '+$_.Exception.Message)}finally{$script:Loading=$false}
+  try{Local-Refresh;Poll-Afterburner;Poll-Remote;Refresh-Scripts;Poll-AccountProbe}catch{Add-Log 'RUNTIME' 'WARN' ('Erro na leitura: '+$_.Exception.Message)}finally{$script:Loading=$false}
 })
 $form.Add_Shown({
   try{$split.SplitterDistance=[int][Math]::Max(340,$split.Height*0.52)}catch{}
   Add-Log 'RUNTIME' 'INFO' 'Terminal incorporado nos logs deste HUD; processo PowerShell oculto; nenhum painel/bridge paralelo.'
-  try{Local-Refresh;Poll-Remote;Refresh-Scripts}catch{Add-Log 'RUNTIME' 'WARN' $_.Exception.Message}
+  try{Local-Refresh;Poll-Afterburner;Poll-Remote;Refresh-Scripts}catch{Add-Log 'RUNTIME' 'WARN' $_.Exception.Message}
   $timer.Start()
 })
 $form.Add_FormClosing({
