@@ -398,3 +398,26 @@ visualmente que o renderer/painel de Tool Calls voltou a aparecer. A confirmaç�
 **LIMITES:** `UPDATE_IN_PLACE=PASS`; `FILE_LEVEL_MERGE=PASS`; `VOICE_BINDING=UNKNOWN`; `SINGLE_ACTIVE_INSTALLED_PLUGIN=UNKNOWN`; `LEGACY_WRAPPERS_REMOVED=NO`. A existência de `mcp_admin_catalog` não prova que todas as tools do server são expostas no mesmo cliente ou na voz.
 
 **NEXT_CURSOR:** instalar/conectar a distribuição existente quando necessário; testar `mcp_status` + `mcp_admin_catalog` e uma execução autorizada com receipt em Text e Voice; contraprovar a equivalência e só então autorizar desinstalação de wrappers específicos. Não reinstalar runtime, não mudar credenciais, não criar plugin paralelo.
+
+---
+
+## Medição 2026-10-12 — Voz não selada, catálogo presente, marketplace paralelo dispensável
+
+**INTENÇÃO:** verificar se os erros de reconhecimento de ferramentas pela superfície ChatGPT Voice foram corrigidos e decidir se a simplificação exige marketplace próprio.
+
+**OWNER:** `docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml` e `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-14-CRISTAL-HERMES-HARNESS.md`; receipt acrescido neste arquivo existente, sem criar outro owner.
+
+**CURRENT observado:**
+- `MAIN_AT_MEASUREMENT=3316951ec39cac715cf9801e86715bd880652cc3` (commit observado antes deste registro; não equivale a paridade de VPS).
+- `centraldark-unified-surface-parity`: Plugin Creator `0.1.2`, `pluginrel_6acc4a7cd5f08191887eec9fac0136a1`, `PRIVATE/USER`, publicado. Publicado `!=` instalado `!=` exposed in Voice.
+- `mcp_status`: `state=SUCCESS`, `error_code=NONE`, `correlation_id=dcf0e295-2d72-4aec-a85e-0943d1c7206c`. Esse resultado comprova **somente** a chamada na superfície atual.
+- `mcp_admin_catalog`: `ok=true`, `totalRuntimeTools=141`, `totalDispatchableTools=141`, `routeCount=13`, `catalogFingerprint=80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7`. Catálogo não prova exposição da Voice.
+- `deploy_validate_mcp_catalog`: `ok=false`; `health.ok=true`, `publicToolCount=153`, `runtimeToolCount=86`, `catalogMatchesRuntime=true`, `expectedMissingPublic=[vps_limpar_pasta_projeto,vps_listar_pastas_limpaveis]`. São contagens e checks de domínios diferentes; não afirmar falha total do MCP.
+- `get_app_permissions` consultado pelos **três IDs pessoais** retornou `status=not_installed`; a captura atual do CHEFE exibe duas entradas visuais `CENTRALDARK` instaladas. A identidade entre as entradas da UI e esses IDs ainda não está comprovada: `UI_APP_BINDING=UNKNOWN`, não declarar que a conta está sem CentralDark.
+- **Prova da voz nesta medição:** nenhuma chamada produzida **dentro da sessão de voz** foi apresentada. `VOICE_TOOL_EXPOSURE=UNKNOWN`, `VOICE_BINDING_FIXED=UNPROVEN`. A ferramenta funcionar em Text não sela Voice, e a UI “Sempre perguntar” sozinha não explica tool discovery.
+
+**Decisão canônica para simplificação:** owner `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-14-CRISTAL-HERMES-HARNESS.md` já determina `ONE_GATEWAY=true`, `ONE_TOOL_CATALOG=true`, `NO_PARALLEL_MARKETPLACE=true`. Reutilizar `mcp_admin_catalog → mcp_admin_call` e a única distribuição `centraldark-unified-surface-parity` sem construir marketplace operacional paralelo. Ideia `M.22 Marketplace de agentes` em `docs/CONSCIENCIA/DESEJOS-FUTUROS-MEGA-PACOTAO.md` permanece desejo futuro separado, não owner da correção Voice.
+
+**CONTRAPROVA:** `PLUGIN_PUBLISHED=PASS`; `MCP_TEXT_TOOL_CALL=PASS`; `PUBLIC_CATALOG_VALIDATION=FAIL_OBSERVED`; `VOICE_TOOL_BINDING=UNKNOWN`; `SINGLE_INSTALLED_PLUGIN=UNPROVEN`. Não mudar permissões, instalar versões repetidas nem remover wrappers até esclarecer a identidade/Voice.
+
+**NEXT_CURSOR:** pedir chamada real `mcp_status` ou `mcp_admin_catalog` **na própria Voice** e preservar `SURFACE_ID`, `TOOL_CALL_ID`, erro literal ou receipt; identificar na UI os IDs efetivos das duas entradas antigas e provar o binding com o ID do plugin unificado. Se a Voice não expuser tools, registrar exatamente `PLATFORM_UNAVAILABLE` só para essa superfície.
