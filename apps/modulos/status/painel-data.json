@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(mcp): classificar bloqueios e preservar fronteira de segurança, sem repetição cega",
+    "lastCommit": "feat(reconcile): fundir inventory, scan e pulse no owner existente",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T23:35:39.879Z",
+      "titulo": "Push na main · 56fbb4e1cae1d5fecb103dacc1dea3975c306e8e",
+      "detalhe": "feat(reconcile): fundir inventory, scan e pulse no owner existente",
+      "area": "Repositório",
+      "sha": "56fbb4e",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T23:27:33.764Z",
       "titulo": "Push na main · 9f516fbe7842aa56b2be93a7f5021208cfc06b16",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "e109f0b",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T22:57:26.604Z",
-      "titulo": "Push na main · cd9cf78306ffbef2f4598b7826880ffd3495cb9b",
-      "detalhe": "docs(learning): contraprova de recorte F scripts sem bloquear por risco hipotetico",
-      "area": "Repositório",
-      "sha": "cd9cf78",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T23:35:39.879Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 56fbb4e1cae1d5fecb103dacc1dea3975c306e8e (56fbb4e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T23:27:33.764Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · e109f0b44883d167c6c5dbbe9074d3cc3f2173cc (e109f0b)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T22:57:26.604Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · cd9cf78306ffbef2f4598b7826880ffd3495cb9b (cd9cf78)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T23:27:33.764Z",
-  "updatedAtBR": "12/10/2026, 20:27:33 BRT"
+  "updatedAt": "2026-10-12T23:35:39.879Z",
+  "updatedAtBR": "12/10/2026, 20:35:39 BRT"
 }
