@@ -81,9 +81,9 @@ const CONFIG = {
 
   // Tokens de bot Telegram — cada IA tem o seu
   botTokens: {
-    gemini: process.env.BOT_TOKEN_GEMINI || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
-    groq: process.env.BOT_TOKEN_GROQ || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
-    claude: process.env.BOT_TOKEN_CLAUDE || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
+    gemini: process.env.BOT_TOKEN_GEMINI || null,
+    groq: process.env.BOT_TOKEN_GROQ || null,
+    claude: process.env.BOT_TOKEN_CLAUDE || null,
   },
 
   // Perfil de cada bot no Telegram (nome + descrição + foto)
@@ -517,12 +517,9 @@ function formatarNome(iaId) {
 /**
  * Formata uma mensagem de IA para o grupo
  */
-function formatarMensagem(iaId, texto, aprendizado = null) {
-  let msg = `${formatarNome(iaId)}\n\n${texto}`;
-  if (aprendizado) {
-    msg += `\n\n📖 <i>Aprendi hoje:</i> ${aprendizado}`;
-  }
-  return msg;
+function formatarMensagem(iaId, texto) {
+  // A conversation is not evidence of learned or promoted knowledge.
+  return `${formatarNome(iaId)}\n\n${texto}`;
 }
 
 /**
@@ -541,30 +538,30 @@ function escolherTopico(estado) {
 /**
  * Gera um "aprendizado" simulado baseado na interação anterior
  */
-function gerarAprendizado(iaId, topico) {
-  const aprendizadosPossiveis = {
-    gemini: [
-      `Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar`,
-      `Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda`,
-      `Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos`,
-      `Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa`,
-    ],
-    groq: [
-      `Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo`,
-      `Claude me mostrou que visão sistêmica complementa análise profunda`,
-      `Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar`,
-      `Aprendi que questionar é importante, mas saber quando parar de questionar também é`,
-    ],
-    claude: [
-      `Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor`,
-      `Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo`,
-      `Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece`,
-      `Entendi que evolução coletiva é mais poderosa que evolução individual`,
-    ],
+function construirCandidatoAprendizado(iaId, topico, texto) {
+  // CANDIDATE is a local observation, not a proven/committed learning.
+  // REPLAY_OBSERVED and PROVED_ADOPTED require a real receipt and current HEAD.
+  return {
+    verdict: 'CANDIDATE',
+    iaId,
+    topico: String(topico || '').slice(0, 120),
+    amostra: String(texto || '').slice(0, 240),
+    receipt: null,
+    promoted: false,
+    next: 'REPLAY_OBSERVED',
   };
+}
 
-  const lista = aprendizadosPossiveis[iaId] || ['Cada interação me ensina algo novo'];
-  return lista[Math.floor(Math.random() * lista.length)];
+function testarAprendizadoOffline() {
+  const candidato = construirCandidatoAprendizado('gemini', 'fixture', 'texto');
+  if (candidato.verdict !== 'CANDIDATE' || candidato.promoted || candidato.receipt) {
+    throw new Error('LEARNING_SELF_TEST=FAIL: candidate without receipt may not be promoted');
+  }
+  const guard = contextoCentralDark._internals?.podePromoverAprendizado;
+  if (typeof guard === 'function' && guard(null, 'HEAD') !== false) {
+    throw new Error('LEARNING_SELF_TEST=FAIL: missing receipt unexpectedly accepted');
+  }
+  console.log('LEARNING_SELF_TEST=PASS CANDIDATE → REPLAY_OBSERVED → PROVED_ADOPTED (receipt required)');
 }
 
 /**
@@ -587,7 +584,7 @@ ${contextoReal || '(sem contexto disponível)'}
 
 TÓPICO PRA DISCUTIR: "${topico}"
 
-Seu último aprendizado registrado: ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
+Última hipótese histórica (não é aprendizado comprovado): ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
 
 Instruções:
 - Use o contexto real acima pra ancorar sua resposta
@@ -616,22 +613,9 @@ Instruções:
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  const aprendizado = gerarAprendizado(iaId, topico);
-  estado.aprendizados[iaId].push(aprendizado);
-  if (estado.aprendizados[iaId].length > 5) {
-    estado.aprendizados[iaId].shift();
-  }
-
-  // Registra aprendizado PERMANENTE no cérebro (APRENDIZADOS.md)
-  if (contextoCentralDark.registrarAprendizadoPermanente) {
-    contextoCentralDark.registrarAprendizadoPermanente(
-      personalidade.nome,
-      aprendizado,
-      topico.slice(0, 120)
-    );
-  }
-
-  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
+  const candidato = construirCandidatoAprendizado(iaId, topico, texto);
+  console.log(`[evolucao-ias] ${candidato.verdict}: sem recibo ou replay; sem promoção nem escrita no cérebro.`);
+  const mensagemFormatada = formatarMensagem(iaId, texto);
 
   const result = await enviarMensagem(mensagemFormatada, iaId);
   if (result) {
@@ -696,13 +680,9 @@ NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela igno
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
   // Gera aprendizado baseado na interação
-  const aprendizado = gerarAprendizado(iaId, ultimaMsg.topico);
-  estado.aprendizados[iaId].push(aprendizado);
-  if (estado.aprendizados[iaId].length > 5) {
-    estado.aprendizados[iaId].shift();
-  }
-
-  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
+  const candidato = construirCandidatoAprendizado(iaId, ultimaMsg.topico, texto);
+  console.log(`[evolucao-ias] ${candidato.verdict}: resposta sem recibo; sem promoção.`);
+  const mensagemFormatada = formatarMensagem(iaId, texto);
 
   const result = await enviarMensagem(mensagemFormatada, iaId, ultimaMsg.mensagemId);
   if (result) {
@@ -888,6 +868,10 @@ async function modoUnico() {
 
 async function main() {
   const args = process.argv.slice(2);
+  if (args.includes('--self-test-learning')) {
+    testarAprendizadoOffline();
+    return; // No provider or Telegram/network side effects in offline test.
+  }
 
   // Verifica se as chaves de API estão configuradas
   const chavesFaltando = [];
