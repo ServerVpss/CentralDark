@@ -136,6 +136,14 @@ function contratoOperacionalCanonico() {
     const i = linha.indexOf('=');
     return i > 0 && chaves.has(linha.slice(0, i).trim());
   });
+  // This is documented authority, not runtime/deployment proof.
+  if (raw.includes('Merge-Policy: AUTO_SQUASH_IF_CLEAN')) linhas.push('AUTO_SQUASH_IF_CLEAN=PROVEN');
+  if (raw.includes('NO_HUMAN_REASK_FOR_MERGE=true')) linhas.push('NO_HUMAN_REASK_FOR_MERGE=PROVEN');
+  if (raw.includes('MERGED != DEPLOYED')) linhas.push('MERGED != DEPLOYED');
+  if (raw.includes('REALITY_JUDGE_APOS_EFEITO') && raw.includes('FIXED_POINT')) {
+    linhas.push('REALITY_JUDGE → CONTRAPROVA → FIXED_POINT');
+  }
+  linhas.push('CONTRACT_PROVENANCE=DOCUMENTED_POLICY_ONLY; RUNTIME_PASS=UNKNOWN');
   return linhas.length ? linhas.join('\n') : null;
 }
 
@@ -148,7 +156,7 @@ function montarContexto() {
 
   const contrato = contratoOperacionalCanonico();
   if (contrato) {
-    partes.push(`🧿 CONTRATO OPERACIONAL CANÔNICO:\n${contrato}`);
+    partes.push(`🧿 CONTRATO OPERACIONAL CANONICO (CANÔNICO):\n${contrato}`);
   }
 
   const commits = ultimosCommits(5);
@@ -345,6 +353,7 @@ module.exports = {
   registrarAprendizadoPermanente,
   // exports pra testes
   _internals: {
+    contratoOperacionalCanonico,
     podePromoverAprendizado,
     canonicalJson,
     assinarReceiptAprendizado,
