@@ -421,3 +421,16 @@ visualmente que o renderer/painel de Tool Calls voltou a aparecer. A confirmaç�
 **CONTRAPROVA:** `PLUGIN_PUBLISHED=PASS`; `MCP_TEXT_TOOL_CALL=PASS`; `PUBLIC_CATALOG_VALIDATION=FAIL_OBSERVED`; `VOICE_TOOL_BINDING=UNKNOWN`; `SINGLE_INSTALLED_PLUGIN=UNPROVEN`. Não mudar permissões, instalar versões repetidas nem remover wrappers até esclarecer a identidade/Voice.
 
 **NEXT_CURSOR:** pedir chamada real `mcp_status` ou `mcp_admin_catalog` **na própria Voice** e preservar `SURFACE_ID`, `TOOL_CALL_ID`, erro literal ou receipt; identificar na UI os IDs efetivos das duas entradas antigas e provar o binding com o ID do plugin unificado. Se a Voice não expuser tools, registrar exatamente `PLATFORM_UNAVAILABLE` só para essa superfície.
+
+
+## 2026-10-12 — Cristal da rota Voice multi-conta (v0.1.3)
+
+**Intenção vigente:** corrigir e consolidar diagnóstico sem novo plugin ou owner. **Prova histórica:** PRs #1611 (merge 18236674046c17adada4fde2c4e78986ea81b3f9), #1616 (583838336e571955eb39604a78c20c2597e320e8), #1725 (33ff2b6f0007da40a4bd0eaba2bea0472e79e560), #1740 (18bfc7b7375affd4ca1fdbed91ca5adf92694a59) confirmadas mergeadas. Na conta de voz funcional, captura do CHEFE mostrou ferramenta `mcp_status` e JSON `ok=true`, 141 tools, 13 rotas, catálogo `v1-f8ff6720fec3`, timestamp `2026-10-12T03:16:54.647Z`. Isso encerra a necessidade de repetir prova dessa conta.
+
+**Correção cristalizada:** reforçar no owner existente o caminho `VOICE_MISSING_TOOL→TOOL_DISCOVERY→REAL_ALIAS/RECIPIENT→AUTHORIZED_ACCOUNT_LINK→mcp_status→mcp_admin_catalog→CAPABILITY→READBACK→RECEIPT`. A skill não altera exposição de tools pelo host. `INVALID_RECIPIENT != MCP_UNAVAILABLE`; `UI_LABEL != PLUGIN_ID`; `PUBLISHED != INSTALLED != VOICE_EXPOSED`.
+
+**Plugin Creator:** mesmo `plugin_id=plugins_6ab87b459ff08191a69311acd4c77d83` atualizado para `0.1.3`, `release=pluginrel_6acc542884bc8191b86f5c5641d7d401`, arquivo SHA-256 `62000559c527a451ea4ff7689eb614c5966f564871c16d7d51d35b7e1c604327`; MCP endpoint preservado, nenhum wrapper desinstalado.
+
+**Contra-prova:** `VOICE_FUNCTIONAL_ACCOUNT_MCP_STATUS=USER_SUPPLIED_STRUCTURED_EVIDENCE`; `VOICE_CURRENT_ACCOUNT_HOST_BINDING=UNKNOWN`; `VOICE_CURRENT_ACCOUNT_FIXED=NOT_PROVED`. Não vender patch documental/skill como correção de runtime Voice.
+
+**NEXT_CURSOR:** descobrir binding efetivamente exposto nesta conta pela rota existente, sem pedir nova gravação da conta funcional; se o host não disponibiliza tool, classificação específica `PLATFORM_UNAVAILABLE`.
