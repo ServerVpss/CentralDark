@@ -257,6 +257,15 @@ Antes de responder ou agir, use somente o contexto pertinente ao objetivo atual:
 
 Não existe checklist global de 13 arquivos antes de responder. Não existe consumo obrigatório de todos os aprendizados. Método serve à missão; não governa o CHEFE.
 
+### 👑🪬 REGISTRA — cinco fontes interligadas por intenção (12/10/2026)
+
+**Preferência operacional explícita do CHEFE:** em toda missão técnica CentralDark cruzar, nesta ordem de conferência, **📨 Gmail → 🗄️ Supabase → 🏠 Casa → 🏛️ GitHub/main → 🖥️ VPS**, usando as conexões autorizadas disponíveis. A sequência é do **mesmo Loop Mestre**, não um checklist burocrático, outro cérebro ou um veto à execução. Se uma superfície não estiver disponível, indicar `AUTH_REQUIRED/UNKNOWN`; se não for material, `NOT_APPLICABLE/NO_RELEVANT_SIGNAL` com motivo, prosseguindo pelas demais. Provas já fechadas e ainda válidas são reutilizadas.
+
+`CROSS_SOURCE_PREFLIGHT_OWNER=docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`
+
+Saída: `INTENÇÃO / OWNER / DELTA / PROVA` → cinco fontes com escopo → teste/contraprova → `REALITY_JUDGE` → recibo no owner existente → `NEXT_CURSOR`. Não inventar login comprovado, XP, rotina automatizada, autorização, deploy ou PASS. Aplicar o gate GitHub/HUD e a política de segredos já existentes quando o escopo exigir.
+
+
 ## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
 
 Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
