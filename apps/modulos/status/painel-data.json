@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(reconcile): corrigir scanner e cursor PID no arquivo unico",
+    "lastCommit": "fix(reconcile): reparar indentacao Python do scanner",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T23:42:02.627Z",
+      "titulo": "Push na main · 68b3fb235e6ba1ba9c801982439a1782fd606b21",
+      "detalhe": "fix(reconcile): reparar indentacao Python do scanner",
+      "area": "Repositório",
+      "sha": "68b3fb2",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T23:38:53.309Z",
       "titulo": "Push na main · faa3a20f8338d8924469aa102191b89483ece6c1",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "dc10001",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T23:06:32.017Z",
-      "titulo": "Push na main · ea387384109e8d1afa1dcd038e29d1611973d80f",
-      "detalhe": "docs(hud): corrigir formatacao Markdown do receipt e README",
-      "area": "Repositório",
-      "sha": "ea38738",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T23:42:02.627Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 68b3fb235e6ba1ba9c801982439a1782fd606b21 (68b3fb2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T23:38:53.309Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · dc10001c92f11c2494bfd5d09db15abb898ba636 (dc10001)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T23:06:32.017Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ea387384109e8d1afa1dcd038e29d1611973d80f (ea38738)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T23:38:53.309Z",
-  "updatedAtBR": "12/10/2026, 20:38:53 BRT"
+  "updatedAt": "2026-10-12T23:42:02.627Z",
+  "updatedAtBR": "12/10/2026, 20:42:02 BRT"
 }
