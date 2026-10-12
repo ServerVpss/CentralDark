@@ -29,6 +29,13 @@ Texto legado conflitante perde para o owner canônico.
 
 # LEIA-ME-IA — comece por aqui
 
+<!-- CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
+### 🪬 Continuidade entre todas as janelas e contas
+
+Ao abrir ChatGPT (qualquer conta), Codex, Hermes, VS Code, Casa, VPS ou Instinto Superior para uma missão CentralDark: recuperar a intenção vigente e o ponto de continuidade pelo owner já existente `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0, LOOP ÚNICO). Compartilhar `INTENT_ID | GOAL | OWNER | MAIN_SHA | PR_HEAD | ACTIVE_WRITER | STATUS | RECEIPT | NEXT_CURSOR`. As contas não compartilham memória automaticamente; conferir CURRENT e ferramentas da superfície. Uma única caneta por escopo, sem recomeçar a tarefa nem simular PASS. NOVA ARTE: acervo `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; apenas arte com binário, hash, manifesto, teste e readback recebe selo canônico.
+<!-- /CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
+
+
 ## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
 
 Isto não cria uma lei nova. Remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação sem dependência causal real.
