@@ -364,3 +364,19 @@ TOOL_CALL_VISIBILITY=UNKNOWN
 Nesta rodada, o CentralDark MCP executou uma Tool Call real nesta superfície; o CHEFE confirmou
 visualmente que o renderer/painel de Tool Calls voltou a aparecer. A confirmação visual do CHEFE
 é registrada como USER_CONFIRMED_VISIBILITY, sem ser confundida com prova do backend.
+
+---
+
+## Selo 2026-10-11 — consolidação de distribuição MCP e lacuna Voice
+
+- **Intenção:** manter apenas um plugin de distribuição canônico, sem apagar capacidades ou criar outro runtime, e corrigir falhas observadas de descoberta e roteamento na voz.
+- **Owner reutilizado:** `.agents/plugins/centraldark-unified-surface-parity/`; contrato `CENTRALDARK_UNIFIED_SURFACE_PARITY_01`; repositório `ServerVpss/CentralDark`.
+- **Inventário Plugin Creator (somente USER, não inclui todos os eventuais plugins do workspace):** 3 existentes: `plugin_asdk_app_6acc3b567e608191a9a0830b59d86569`, `plugin_asdk_app_6ab822a97c688191948648c0c40009d5`, `plugins_6ab87b459ff08191a69311acd4c77d83`. Os dois primeiros são wrappers App-backed distintos; **não** foram desinstalados, para preservar rotas até paridade real.
+- **Prova visual do CHEFE:** a ficha de outro CentralDark mostrava `asdk_app_6ac72e44d1808191abe016c60df4e557` como “Este aplicativo não está disponível”. Este App ID não coincide com os três IDs de plugin retornados; causa backend `UNKNOWN`, não prova de falha geral do MCP.
+- **Catálogo medido:** `mcp_admin_catalog` retornou `ok=true`, `totalRuntimeTools=141` e `routeCount=13`; `mcp_status` retornou `SUCCESS`. A validação pública consultada retornou `health.ok=true`, `publicToolCount=153` e `ok=false` pelo conjunto esperado de duas ferramentas, sem equiparar catálogo público e exposição Voice.
+- **Correção no owner:** SKILL canônica ganhou delta `mcp_status→mcp_admin_catalog→mcp_admin_call`, preflight Voice, diferença entre `INVALID_RECIPIENT`/`VOICE_TOOL_ROUTING_ERROR`/`TOOL_NOT_EXPOSED` e `PLATFORM_UNAVAILABLE`, trilha por escopo e política de não duplicar.
+- **Commits de preparação:** `deaa5ac6cdbacaf61de0ed0b191003b7ac64b327` (SKILL), `d98299510424f1cf177be49bc3fd68404866445d` (manifest versão 0.1.1).
+- **Release atualizado in place, Plugin Creator:** `plugins_6ab87b459ff08191a69311acd4c77d83` → versão `0.1.1`, `pluginrel_6acc490241fc81918c7c9834b413e404`, `status=updated`. Readback confirmou manifests versão 0.1.1, SKILL ampliada e endpoint MCP existente `https://mcp.centralldark.com/mcp`.
+- **Artefato entregue:** `CentralDark_Unified_Surface_v0.1.1.zip`, SHA-256 `e895e6175012e6f55da77bfb930858d4c1421f0b2409464fb1152034b5cc656c`; sete entradas, JSON validado, sem `.app.json` e sem tokens.
+- **Contraprova:** `PLUGIN_UPDATE=PASS`; `VOICE_RUNTIME_TOOL_EXPOSURE=UNKNOWN`; `SINGLE_INSTALLED_CENTRALDARK=NOT_YET`; `FULL_PUBLIC_CATALOG_VALIDATION=FAIL_OBSERVED`. Não declarar 141 ferramentas expostas na voz, nem a consolidação final antes do teste real de equivalência.
+- **NEXT_CURSOR:** medir a mesma chamada real pela nova distribuição em Texto e Voz, com receipt do host; só então retirar os wrappers antigos explicitamente escolhidos pelo CHEFE, preservando os IDs e releases históricos. Não instalar outro plugin nem criar segunda interface.
