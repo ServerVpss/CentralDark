@@ -139,3 +139,27 @@ Alias de conta preserva continuidade; link/device são bindings temporais descob
 7. **Separar objetivos:** `mcp_status=SUCCESS` prova só chamada MCP; catálogo exposto não prova Hermes, CI, deploy ou Loop Mestre ponta a ponta. Reutilizar `NEXT_CURSOR` e recibo por escopo, nunca pintar falso-verde nem repetir mesma consulta sem novo discriminante.
 
 A publicação deste plugin **não pode habilitar por si só** os tool calls do ChatGPT Voice quando a plataforma não os expõe. Medir no próprio modo Voz usando chamada real e receipt, ou manter `VOICE_BINDING=UNKNOWN`.
+
+## Consolidação dos adapters legados sem segundo owner (2026-10-11)
+
+O CHEFE autorizou que **a distribuição** CentralDark evolua em uma única identidade de plugin. A semântica, a gramática, o runtime Hermes, o MCP Admin, Casa, VPS, GitHub e Reality Judge **permanecem nos owners existentes do repositório**. Um plugin de distribuição não é um novo executor universal nem transfere credenciais de plugins terceiros.
+
+### Contraprova de pacotes recebidos
+
+- Quatro ZIPs App-backed foram inventariados; `plugin(1).zip` e `plugin (3).zip` são duplicatas byte a byte (mesmo SHA-256), três conteúdos distintos e três IDs App-backed.
+- Todos contêm exclusivamente `.app.json` e `.codex-plugin/plugin.json`. Declaram `interface.capabilities=[]`, sem servidor MCP nem SKILL próprios; possuem **manifestos de apresentação**, não quatro catálogos diferentes de ferramentas.
+- Conteúdo válido herdado: `CentralDark` como porta única, intenções do CHEFE, SOL como oráculo/roteador sem segundo cérebro, Hermes como executor via ferramentas autorizadas, MCP Admin OAuth, Tailscale, Casa/Windows, VPS, GitHub main, Obsidian/Grafo Vivo, AionUi, Screenpipe, provas e continuidade. Estas capacidades só são usadas quando o owner real e a rota medida as expõem.
+- Os IDs e hashes dos ZIPs estão no registro de distribuição `references/CONSOLIDATION.md` (proveniência; **não** arquivo de configuração ativa). **Nunca** copiar `.app.json` do wrapper indisponível para o plugin MCP; referências App-backed não equivalem a ações MCP reais.
+- Manter aliases históricos `CENTRAlDARK` e `CENTRALDARK` somente para descoberta e compatibilidade; um **nome legível único** `CentralDark Unified Surface`, um `plugin_id` canônico, um endpoint MCP existente, catálogo lazy via `mcp_admin_catalog`.
+
+### Verificação antes da retirada dos wrappers
+
+`SINGLE_CANONICAL_PLUGIN_DISTRIBUTION=true` expressa a **decisão de destino**, não o número atual de plugins instalados. Para promover `SINGLE_ACTIVE_PLUGIN=PASS`:
+
+1. `plugin_id`/release/manifest e endpoint MCP fazem readback idêntico após `update_plugin`; nenhum segundo plugin criado.
+2. `mcp_status` e `mcp_admin_catalog` respondem pelo plugin canônico na conta de destino, com descoberta de ferramentas reais; comparar pelo **capability set**, não por contagem fixa nem nome gráfico.
+3. No modo Voz, solicitar ferramenta exposta e observar o próprio `TOOL_CALL_ID`/receipt se a plataforma o fornecer; falha de exposição de plataforma continua `UNKNOWN` ou `PLATFORM_UNAVAILABLE`, não se corrige copiando mais aplicativos.
+4. Correlacionar intent→tool→effect→counterproof→receipt para 1 fluxo de leitura e 1 fluxo de execução autorizado em cada rota materialmente distinta. Não presumir que atualização publicou, instalou ou migrou credenciais de wrappers.
+5. **Só desinstalar wrappers específicos** quando seu dono comprovar a mesma capacidade no novo plugin e autorizar a retirada. Não revogar tokens, apagar histórico, reiniciar runtime nem substituir `asdk_app_*` silenciosamente.
+
+`APP_BINDING_MISMATCH` é rótulo descritivo de hipótese, não erro oficial da plataforma. `TOOL_NOT_EXPOSED` é condição; `PLATFORM_UNAVAILABLE` é a classificação canônica quando a superfície comprovadamente não a expõe. `VOICE_BINDING=UNKNOWN` até prova de execução na voz.
