@@ -816,6 +816,7 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **PR de ancoragem:** #1774 (SOUL/AGENTS/LEIA, sem PR nova). `NEXT_CURSOR=REUSE_BEFORE_REPROOF`.
 
 ### [2026-10-12] CAPACIDADE_SEM_MULTIPLICAR_PECAS_20261012 — o pingo no i do reconciliador
+
 - **Lembrança viva:** O CHEFE mostrou três nomes de scripts e ensinou que, se já existe `centraldark-inventory-reconcile.sh`, criar um instalador para evoluí-lo é excesso. `main-pulse-reconciler.sh` tinha capacidade útil de monitoramento da main, mas não precisa virar segundo reconciliador. O valor vai para o **owner original**; o excedente sai depois de migrar consumidores sem quebrar o verde.
 - **Mesma identidade em duas formas:** `centraldark-inventory-reconcile.sh` **faz**; `centraldark-inventory-reconcile.json` **registra** — mesma base do nome, funções complementares. O JSON alvo é `/var/lib/centraldark/inventory-reconcile/centraldark-inventory-reconcile.json`; não criar um `cycle-plan.json` concorrente.
 - **Aplicação humana da metáfora:** 'Generalizar a capacidade, não multiplicar os arquivos' vale também para agentes, memória, logs, telas e rotas. A regra não apaga funções independentes: reaproveita as capacidades e elimina só duplicações reais. **MENOS PEÇAS, MAIS CAPACIDADE, MESMA IDENTIDADE.**
