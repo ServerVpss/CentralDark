@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(instinto): receipt minimal VPS SSR auth environment correction",
+    "lastCommit": "docs(loop-mestre): registrar preflight cruzado Gmail Supabase Casa GitHub VPS do CHEFE",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T17:43:20.378Z",
+      "titulo": "Push na main · a8361637de659441a4b5d42581c78e0009322472",
+      "detalhe": "docs(loop-mestre): registrar preflight cruzado Gmail Supabase Casa GitHub VPS do CHEFE",
+      "area": "Repositório",
+      "sha": "a836163",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T17:31:46.939Z",
       "titulo": "Push na main · fb897c9de2aa73c658e6ffdb3de2cd91109ff695",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "86eff23",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T18:48:28.391Z",
-      "titulo": "Push na main · 97e5c410f4243fef8002ff8064f081187afdc3fb",
-      "detalhe": "fix(intent): derive runtime paths from HOME instead of masked transport strings",
-      "area": "Repositório",
-      "sha": "97e5c41",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T17:43:20.378Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a8361637de659441a4b5d42581c78e0009322472 (a836163)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T17:31:46.939Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 86eff23426177f18f00cbb7908c09bd43f5b09e4 (86eff23)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T18:48:28.391Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 97e5c410f4243fef8002ff8064f081187afdc3fb (97e5c41)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T17:31:46.939Z",
-  "updatedAtBR": "12/10/2026, 14:31:46 BRT"
+  "updatedAt": "2026-10-12T17:43:20.378Z",
+  "updatedAtBR": "12/10/2026, 14:43:20 BRT"
 }
