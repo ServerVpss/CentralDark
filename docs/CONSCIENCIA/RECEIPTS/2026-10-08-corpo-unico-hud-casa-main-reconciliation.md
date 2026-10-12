@@ -275,3 +275,27 @@ Nao reabrir prova de `BUTTON_CONTA2_OPEN_AUTH_URL` ja registrada; pendencia apen
 - **Sinais de drift HUD:** no instante de leitura, `main` tinha blob `196a0bab3e6af2add003864aa49071e5931f6ea5`; VPS tinha blob dirty `274ce5bdb9a3c84a4559b1fb8facf4877384e3ea`, HEAD `5344bd87074c` e 42 entradas locais. Casa Obsidian `HUD.html` SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`.
 - **RESULTADO DOCUMENTAL:** atualizar somente as 7 entradas `missions[]` do owner único, sem novo HUD, sem forçar sync Casa/VPS, sem atribuir novo PASS E2E. Missões de autenticação Lovable, motor EXE, Garimpo, Grok, TelePainel/Multizap e perfis continuam por seus próximos testes. Os estados de decisão documentada e prova operacional ficaram separados.
 - **NEXT_CURSOR:** confrontar hash/diff `main ↔ VPS dirty ↔ Casa Obsidian` via writer existente; preservar cada delta exclusivo; só depois materializar e selar `HUD_SYNC_SAME_CONTENT`; manter os sete botões até fechamento por efeito ou decisão humana.
+
+
+### T5 — 2026-10-12 — Desktop Commander OAuth + device E2E, sem confundir identidade das contas
+
+- **Intenção:** reconciliar comprovante visual ChatGPT/Remote MCP com o mesmo HUD CORPO ÚNICO; nenhum segundo HUD ou broker.
+- **Provedor:** a UI do usuário informa Desktop Commander conectado ao ChatGPT por OAuth em 11/10/2026 (conector v1.0.0); o portal mostra CENTRALDARK-OS online e 'You're connected'. Login OAuth do conector não demonstra por si só o serviço do device ou a identidade de cada conta.
+- **VPS READBACK 2026-10-12T02:12:09Z:** serviço centraldark-desktop-commander-conta2.service ACTIVE/RUNNING. No journal dele: Authorization successful! às 02:09:16Z; Device marked as online e Device ready às 02:09:17Z. O device ID atribuído corresponde exatamente ao target MCP ca0cc3ad-3435-428f-87ee-ee102c2cf3b8, que recebeu e respondeu uma chamada real start_process às 02:12:08Z.
+- **Casa READBACK:** o monitor único (K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat) estava com uma janela, PID 32748, e registrou Conta 2 READY_LOG às 23:10:06 BRT (11/10). A Conta 1 permaneceu UNKNOWN no painel nesse ciclo. Os dispositivos SEGREDO e CENTRALDARK-OS responderam ONLINE à listagem remota do conector.
+- **Serviço principal:** desktop-commander-remote.service estava ACTIVE/RUNNING e teve evento Device marked as online às 2026-10-11T23:44:25Z. O vínculo atual 'identidade Google -> serviço principal -> device ID' não foi comprovado independentemente. Dois serviços ativos e um OAuth não constituem prova de dois e-mails pareados.
+- **Drift de visualização identificado:** CD_DC (sonda automática do BAT) só lê systemd active e continua emitindo avisos 'conta autenticada nao comprovada', enquanto o probe manual CD_PROFILE lê READY_LOG em janela de 15 minutos. Leitura por janela pode tornar o selo antigo invisível, sem contradizer o receipt E2E recém-provado. A correção do leitor visual ainda carece de edição/teste separados.
+- **Escopo:** não foram reiniciados serviços VPS nem transportados cookies, tokens, códigos ou segredos. Emails privados omitidos no recibo público. Main documentada != deploy VPS.
+
+    DESKTOP_COMMANDER_CONNECTOR_OAUTH=OBSERVED_IN_UI
+    VPS_ACCOUNT2_SYSTEMD=PASS
+    VPS_ACCOUNT2_AUTHORIZATION=PASS
+    VPS_ACCOUNT2_REMOTE_TOOL_CALL=PASS
+    CASA_AND_VPS_DEVICE_ONLINE=PASS
+    ACCOUNT1_PROVIDER_IDENTITY=UNKNOWN
+    TWO_DISTINCT_GOOGLE_ACCOUNTS_AUTHENTICATED=UNKNOWN
+    HUD_CD_DC_CLASSIFICATION=INCOMPLETE
+    FIXED_POINT_GLOBAL=FALSE
+    NEXT_CURSOR=RECONCILE_CD_DC_BY_OWNER_DEVICE_ID_AND_EVENT_TIME_WITHOUT_RESTART
+
+**POMBO_CHECKSUM:** selo Conta 2 por efeito real e readback do mesmo serviço; nenhuma promoção global e nenhuma inferência do e-mail da Conta 1.
