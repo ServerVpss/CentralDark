@@ -2,13 +2,18 @@
   "repository": "ServerVpss/CentralDark",
   "canonical_owner": "CENTRALDARK_UNIFIED_SURFACE_PARITY_01",
   "published_plugin_id": "plugins_6ab87b459ff08191a69311acd4c77d83",
-  "published_release_id": "pluginrel_6ab87b470c048191b7ed42e9be8761b6",
+  "published_release_id": "pluginrel_6acc490241fc81918c7c9834b413e404",
   "published_scope": "USER",
   "published_discoverability": "PRIVATE",
-  "published_version": "0.1.0",
+  "published_version": "0.1.1",
   "canonical_contract": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml",
   "invocation_grammar": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md",
   "intent_router": ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
   "voice_classifier": ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
-  "generated_artifact_is_owner": false
+  "generated_artifact_is_owner": false,
+  "plugin_url": "https://chatgpt.com/plugins/plugins_6ab87b459ff08191a69311acd4c77d83",
+  "voice_binding_status": "UNKNOWN_UNTIL_MEASURED",
+  "distribution_catalog_owner": "mcp_admin_catalog",
+  "duplicate_plugins_uninstalled": false,
+  "package_sha256": "e895e6175012e6f55da77bfb930858d4c1421f0b2409464fb1152034b5cc656c"
 }
