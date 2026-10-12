@@ -48,7 +48,7 @@ case "$OWNER" in
     EXPECTED_EXEC="$TARGET_ROOT/apps/modulos/HERMES-CORE/core/orchestrator.mjs"
     HEALTH="http://127.0.0.1:8899/health"
     ;;
-  oauth_broker) PREFIXES=("apps/modulos/oauth-broker/"); APPS=("CentralDark-OAuthBroker"); HEALTH="http://127.0.0.1:8098/health" ;;
+  oauth_broker) PREFIXES=("apps/modulos/oauth-broker/"); SYSTEMD_SERVICE="centraldark-oauth-broker.service"; EXPECTED_EXEC="$TARGET_ROOT/apps/modulos/oauth-broker/server.mjs"; HEALTH="http://127.0.0.1:8098/health" ;;
   *) echo "OWNER_UNKNOWN"; exit 4 ;;
 esac
 
