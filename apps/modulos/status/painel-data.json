@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(pendencias): medir disco VPS 99% e CI HealthCheck sem falso verde",
+    "lastCommit": "docs(pendencias): atribuir 65G a objetos Git dos quatro runners sem limpeza cega",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T15:35:23.494Z",
+      "titulo": "Push na main · a94dd328b595589fc08d5fb126deb422b15c9c39",
+      "detalhe": "docs(pendencias): atribuir 65G a objetos Git dos quatro runners sem limpeza cega",
+      "area": "Repositório",
+      "sha": "a94dd32",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T15:27:41.507Z",
       "titulo": "Push na main · aefd169db279f8eccbe97eeb6bece0506c7801d9",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "36f5d36",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T11:04:19.956Z",
-      "titulo": "Push na main · 8c8e7d25e1d07437082f441d69fc9f7c18243c97",
-      "detalhe": "docs(hud): seal actual CC2003 gate PASS and Meta-Lupa local hash proof",
-      "area": "Repositório",
-      "sha": "8c8e7d2",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T15:35:23.494Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a94dd328b595589fc08d5fb126deb422b15c9c39 (a94dd32)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T15:27:41.507Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 36f5d36300a9e3c8cec9b4ef3985c3016fbde08c (36f5d36)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T11:04:19.956Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8c8e7d25e1d07437082f441d69fc9f7c18243c97 (8c8e7d2)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T15:27:41.507Z",
-  "updatedAtBR": "12/10/2026, 12:27:41 BRT"
+  "updatedAt": "2026-10-12T15:35:23.494Z",
+  "updatedAtBR": "12/10/2026, 12:35:23 BRT"
 }
