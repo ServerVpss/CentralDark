@@ -1500,7 +1500,7 @@ function render(data){
  var items=data.sensors, cpu=value(items,'CPU usage'),ct=value(items,'CPU temperature'), gpu=value(items,'GPU usage'),gt=value(items,'GPU temperature'),ram=value(items,'RAM usage'),fan=value(items,'Fan speed'),rpm=value(items,'Fan tachometer');
  if(!cpu||!gpu){showUnknown('SENSORES PRINCIPAIS INDISPONÍVEIS');return;}
  lastFresh=true;
- put('cd-ab-badge','🟢 MMF FRESCO · '+items.length+'/'+data.announcedCount+' sensores');
+ put('cd-ab-badge','🔒🟢 MMF FRESCO · '+items.length+'/'+data.announcedCount+' sensores');
  put('cd-ab-proof','MMF MAHMSharedMemory → CORPO ÚNICO (ciclo 10 s) → telemetria local → HUD. Fonte '+new Date(utc).toLocaleString('pt-BR')+' · idade '+Math.round(age/1000)+' s. Somente leitura; interpretação do Hermes é prova separada.');
  put('cd-casa-cpu','🟢 '+reading(cpu,1));put('cd-casa-cpu-proof','CPU Casa · Afterburner MMF · '+(ct?reading(ct,0):'temperatura UNKNOWN')+' · leitura fresca');
  put('cd-ab-gpu','🟢 '+reading(gt,0));put('cd-ab-gpu-proof','GPU RX 580 · uso '+reading(gpu,1)+' · Afterburner MMF');
