@@ -119,7 +119,9 @@ if (registry) {
   const patterns = Array.isArray(registry.patterns) ? registry.patterns : [];
   if (patterns.length === 0) errors.push("INTERLIGADOS_PATTERNS_EMPTY");
   if (registry.refresh?.pattern_count !== patterns.length) errors.push(`INTERLIGADOS_PATTERN_COUNT_DRIFT:declared=${registry.refresh?.pattern_count ?? "missing"}:actual=${patterns.length}`);
-  if (!Array.isArray(registry.refresh?.latest_prs_reconciled) || !registry.refresh.latest_prs_reconciled.includes(1633)) errors.push("INTERLIGADOS_LATEST_SWEEP_DOES_NOT_REACH_PR1633");
+  // Janela "recent-50" desliza; o piso de frescor é alcançar ao menos o PR 1633 (não contê-lo literalmente).
+  const reconciled = Array.isArray(registry.refresh?.latest_prs_reconciled) ? registry.refresh.latest_prs_reconciled.filter(Number.isInteger) : [];
+  if (reconciled.length === 0 || Math.max(...reconciled) < 1633) errors.push("INTERLIGADOS_LATEST_SWEEP_DOES_NOT_REACH_PR1633");
 
   const ids = new Set();
   for (const pattern of patterns) {

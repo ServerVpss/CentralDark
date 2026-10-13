@@ -185,16 +185,17 @@ Os erros de antes da compactação estão em §4 (conselho não pedido) e §5; o
 | 21 | chamei `{{FILE:/tmp/pr316/aprendizados.md}}` de "resto quebrado"; é `ANCHOR` de `rebuild_learning_lineage.py` | sessão 13/10 | eu, lendo os consumidores antes de apagar | alarme retirado; âncora preservada; defeito real (2.777 linhas apagadas pelo #316) restaurado em `docs/CONSCIENCIA/APRENDIZADOS/2026-07-25-restauro-aprendizados-pre-pr316.md` | READ_CONSUMERS_BEFORE_CALLING_DEBRIS |
 | 22 | rodei `grafo-vivo-markdown-conformance --changed-from` com o arquivo novo ainda fora do commit → PASS falso; no PR deu 394 achados | PR #1805, `c6c4489` | CI self-hosted (GATE_GRAFO_VIVO_MARKDOWN) | formato corrigido sem mudar palavras (50.710 iguais) | GATE_RUNS_ON_COMMITTED_TREE_SAME_BASE_AS_PR |
 | 23 | enviei texto histórico restaurado sem rodar `scripts/lupa/pr_secret_scan.py` antes; scanner barrou (falso positivo: nome de variável após Bearer) | PR #1805, `fc85f86` | CI (Bloquear segredo suspeito) | nome escrito como `$VAR`; scan local `secret_suspect=false` antes do push | RESTORED_HISTORY_RUNS_SECRET_SCAN_BEFORE_PUSH |
+| 24 | rodei `git checkout origin/main -- .` para comparar com a main com edição não commitada → conserto do INTERLIGADOS apagado | sessão 13/10, antes do commit de `scripts/lupa/validar-interligados-pr-padroes.mjs` | eu, no `git status` vazio | edição refeita e validada antes do commit | NO_TREE_WIDE_CHECKOUT_WITH_UNCOMMITTED_WORK |
 
-**Lei universal:** pau que bate em Claude bate em qualquer motor (Claude, GPT/Codex, Gemini, Grok, Hermes, CI). As regras 12–23 valem para todos e estão em `AGENTS.md` (`UNIVERSAL_PROOF_LAW_ALL_ENGINES`).
+**Lei universal:** pau que bate em Claude bate em qualquer motor (Claude, GPT/Codex, Gemini, Grok, Hermes, CI). As regras 12–24 valem para todos e estão em `AGENTS.md` (`UNIVERSAL_PROOF_LAW_ALL_ENGINES`).
 
 ```text
-CLAUDE_ERROS_REGISTRADOS=23 (+ §1/§4 antes da compactação; 12–16 em 29/09; 17–23 em 13/10)
+CLAUDE_ERROS_REGISTRADOS=24 (+ §1/§4 antes da compactação; 12–16 em 29/09; 17–24 em 13/10)
 CLAUDE_ERROS_REGISTRADOS_ANTES_DE_29_09=11
 CLAUDE_ERROS_PEGOS_PELO_PROPRIO_CLAUDE_ANTES_DE_DANO=4 (5,6,7 e 1 na rodada seguinte)
 CLAUDE_ERROS_QUE_CHEGARAM_NA_MAIN=3 (1, 2, 4) — todos corrigidos com SHA
 ECO: AGENTS.md (todos os motores) · CLAUDE.md (ponte do Claude) · este aprendizado · #1562
-FISCAL: verify_repo_contract exige as 15 regras (8 originais + 17–23) com valor true em AGENTS.md e CLAUDE.md
+FISCAL: verify_repo_contract exige as 16 regras (8 originais + 17–24) com valor true em AGENTS.md e CLAUDE.md
 ```
 
 ## 9. Fechamento da sessão 26→27/09 (chave de ouro)
@@ -211,7 +212,7 @@ PLACAR_ANTIGO_SEM_METODO=UNKNOWN (não repetir)
 ABERTO_PARA_O_CHEFE: PR #1700 (ACORDAR falado) · ACTIVE_CHILD=#1649 no cartão do #1562
 ```
 
-Próximo Claude, ao acordar: carregar `CLAUDE.md` → ler as 15 regras de erro próprio → rodar o `replay_command` do portão antes de qualquer envio → medir a main ao vivo (cartão do #1562 é histórico) → continuar do NEXT_CURSOR, sem refazer o que está selado.
+Próximo Claude, ao acordar: carregar `CLAUDE.md` → ler as 16 regras de erro próprio → rodar o `replay_command` do portão antes de qualquer envio → medir a main ao vivo (cartão do #1562 é histórico) → continuar do NEXT_CURSOR, sem refazer o que está selado.
 
 ```text
 APRENDER_COM_O_ERRO=true
