@@ -36,7 +36,7 @@ function baseUrl() {
   return url.origin;
 }
 
-async function requestOwner(path: "/health" | "/status" | "/start" | "/confirm" | "/logout",
+async function requestOwner(path: "/health" | "/status" | "/start" | "/confirm" | "/logout" | "/qr/start" | "/qr/status" | "/qr/password" | "/qr/cancel",
   body?: Record<string, string>) {
   const response = await fetch(baseUrl() + path, {
     method: body ? "POST" : "GET",
@@ -118,5 +118,72 @@ export const operarVinculoTelegram = createServerFn({method:"POST"})
     } catch {
       return {ok:false,estado:"OWNER_UNREACHABLE",needsPassword:false,
         detalhe:"Não foi possível confirmar a operação. Consulte o estado antes de repetir."};
+    }
+  });
+
+
+// QR is an alternative of the existing Telegram user login, never a second owner.
+// Telegram login tokens are short-lived; the browser receives only a PNG for display.
+const qrSchema = z.discriminatedUnion("action", [
+  z.object({action:z.literal("qrStart")}),
+  z.object({action:z.literal("qrStatus"),id:z.string().uuid()}),
+  z.object({action:z.literal("qrPassword"),id:z.string().uuid(),password:z.string().min(1).max(256)}),
+  z.object({action:z.literal("qrCancel"),id:z.string().uuid()}),
+]);
+
+export type VinculoQrTelegram = {
+  ok: boolean;
+  estado: "QR_PENDING" | "STARTING" | "NEEDS_2FA" | "VERIFYING_2FA" |
+    "CONNECTED" | "CANCELLED" | "FAILED" | "QR_NOT_FOUND" | "QR_EXPIRED" |
+    "CONFIG_BLOCKED" | "UNREACHABLE" | "ACTION_FAILED";
+  id: string | null;
+  image: string | null;
+  expiresAt: number | null;
+  detalhe: string;
+};
+
+export const gerenciarQrTelegram = createServerFn({method:"POST"})
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input)=>qrSchema.parse(input))
+  .handler(async ({context,data}):Promise<VinculoQrTelegram> => {
+    await requireAdmin(context);
+    if (data.action === "qrStart") {
+      const current = await state();
+      if (current.estado !== "READY") return {ok:false,estado:current.estado==="CONFIG_BLOCKED"?
+        "CONFIG_BLOCKED":"ACTION_FAILED",id:null,image:null,expiresAt:null,detalhe:current.detalhe};
+    }
+    try {
+      const endpoint = data.action === "qrStart" ? "/qr/start" :
+        data.action === "qrStatus" ? "/qr/status" :
+        data.action === "qrPassword" ? "/qr/password" : "/qr/cancel";
+      const input = data.action === "qrStart" ? {} :
+        data.action === "qrPassword" ? {id:data.id,password:data.password} : {id:data.id};
+      const {http,payload} = await requestOwner(endpoint,input);
+      const stateName = String((payload as Payload & {status?:string}).status || "ACTION_FAILED");
+      const allowedStates = ["QR_PENDING","STARTING","NEEDS_2FA","VERIFYING_2FA",
+        "CONNECTED","CANCELLED","FAILED","QR_NOT_FOUND","QR_EXPIRED"];
+      const estado = (allowedStates.includes(stateName) ? stateName : "ACTION_FAILED") as VinculoQrTelegram["estado"];
+      const candidateImage = (payload as Payload & {qrDataUrl?:string}).qrDataUrl;
+      const expires = (payload as Payload & {expiresAt?:number}).expiresAt;
+      const id = (payload as Payload & {id?:string}).id;
+      // No raw tg:// URI or session string crosses the Admin ServerFn.
+      const image = http===200 && estado==="QR_PENDING" && typeof candidateImage==="string" &&
+        /^data:image\/png;base64,[a-zA-Z0-9+/=]+$/.test(candidateImage) &&
+        candidateImage.length < 180000 ? candidateImage : null;
+      return {ok:http===200 && payload.ok===true, estado,
+        id:typeof id==="string" && /^[a-f0-9-]{36}$/i.test(id)?id:null,
+        image,expiresAt:typeof expires==="number" && Number.isFinite(expires)?expires:null,
+        detalhe:estado==="QR_PENDING"?"Escaneie o QR com seu Telegram autenticado.":
+          estado==="CONNECTED"?"Sessão MTProto salva no owner existente.":
+          estado==="NEEDS_2FA"?"Digite a senha de duas etapas do Telegram.":
+          estado==="VERIFYING_2FA"?"Validando senha no Telegram.":
+          estado==="CANCELLED"?"QR cancelado; nenhuma conta foi desconectada.":
+          estado==="QR_EXPIRED"?"O QR expirou; inicie novamente.":
+          estado==="FAILED"?"Telegram não concluiu a autenticação. Tente novamente.":
+          estado==="STARTING"?"Aguardando o primeiro QR do Telegram.":
+          "QR não está disponível neste momento; nenhuma sessão foi alterada."};
+    } catch {
+      return {ok:false,estado:"UNREACHABLE",id:null,image:null,expiresAt:null,
+        detalhe:"Owner MTProto não respondeu; a sessão existente foi preservada."};
     }
   });

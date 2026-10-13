@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+const QRCode = require('qrcode');
 const { TelegramClient } = require('telegram');
 const { StringSession } = require('telegram/sessions');
 const { Api } = require('telegram');
@@ -19,7 +21,7 @@ const CONFIGURED = !!(API_ID && API_HASH);
 if (!CONFIGURED) {
   console.warn('TELEGRAM_APP_API_ID / TELEGRAM_APP_API_HASH ausentes — MTProto sobe em modo CONFIG_BLOCKED');
 }
-fs.mkdirSync(DATA_DIR, { recursive: true });
+fs.mkdirSync(DATA_DIR, { recursive: true, mode: 0o700 });
 
 function requireConfigured(res) {
   if (CONFIGURED) return true;
@@ -67,6 +69,163 @@ app.get('/status', async (_req, res) => {
   }
 });
 
+
+// QR login reuse of this single MTProto owner. Only the authenticated Admin ServerFn
+// is allowed to expose the *ephemeral* QR image; never log/store QR tokens.
+const QR_LIFETIME_MS = 180000;
+let qrAttempt = null;
+
+function qrIsCurrent(attempt) {
+  return qrAttempt === attempt && !attempt.cancelled && Date.now() < attempt.deadline;
+}
+
+function qrSnapshot(attempt) {
+  return {
+    ok: true, id: attempt.id, status: attempt.status,
+    ...(attempt.status === 'QR_PENDING'
+      ? { qrDataUrl: attempt.qrDataUrl, expiresAt: attempt.expiresAt } : {}),
+    ...(attempt.status === 'NEEDS_2FA' ? { needsPassword: true } : {}),
+  };
+}
+
+async function qrCancel(attempt) {
+  if (!attempt || attempt.cancelled) return;
+  attempt.cancelled = true;
+  attempt.status = 'CANCELLED';
+  attempt.qrDataUrl = null;
+  if (attempt.rejectPassword) attempt.rejectPassword(new Error('QR_CANCELLED'));
+  if (attempt.firstQr) attempt.firstQr();
+  clearTimeout(attempt.watchdog);
+  if (qrAttempt === attempt) qrAttempt = null;
+  try { await attempt.client.disconnect(); } catch (_) { /* already closed */ }
+}
+
+function qrFinish(attempt, error) {
+  if (!qrIsCurrent(attempt)) return;
+  attempt.qrDataUrl = null;
+  attempt.status = error ? 'FAILED' : 'CONNECTED';
+  attempt.failure = error ? String(error.errorMessage || error.message || 'QR_ERROR')
+    .replace(/[^A-Z_]/g, '').slice(0, 48) : null;
+  clearTimeout(attempt.watchdog);
+  attempt.firstQr?.();
+  attempt.firstQr = null;
+}
+
+app.post('/qr/start', async (_req, res) => {
+  if (!requireConfigured(res)) return;
+  // Never replace a saved account (including a session not currently reachable).
+  if (fs.existsSync(SESSION_FILE))
+    return res.status(409).json({ok:false,status:'SESSION_PRESENT'});
+  if (pending.size)
+    return res.status(409).json({ok:false,status:'PHONE_LOGIN_PENDING'});
+  if (qrAttempt && qrIsCurrent(qrAttempt) &&
+      ['STARTING','QR_PENDING','NEEDS_2FA','VERIFYING_2FA'].includes(qrAttempt.status))
+    return res.status(409).json({ok:false,status:'QR_ALREADY_PENDING'});
+  if (qrAttempt) await qrCancel(qrAttempt);
+  let client;
+  try {
+    client = await newClient('');
+    const attempt = {
+      id: crypto.randomUUID(), client, status: 'STARTING', qrDataUrl: null,
+      expiresAt: null, deadline: Date.now() + QR_LIFETIME_MS,
+      cancelled: false, resolvePassword: null, rejectPassword: null,
+      firstQr: null, watchdog: null,
+    };
+    qrAttempt = attempt;
+    const firstQr = new Promise(resolve => { attempt.firstQr = resolve; });
+    attempt.watchdog = setTimeout(() => { void qrCancel(attempt); }, QR_LIFETIME_MS);
+    // GramJS owns token rotation, updateLoginToken, DC migration, and 2FA.
+    void client.signInUserWithQrCode({apiId: API_ID, apiHash: API_HASH}, {
+      qrCode: async ({token, expires}) => {
+        if (!qrIsCurrent(attempt)) throw Error('QR_CANCELLED');
+        const qrUrl = 'tg://login?token=' + token.toString('base64url');
+        const image = await QRCode.toDataURL(qrUrl, {errorCorrectionLevel:'M', margin:2, width:288});
+        if (!qrIsCurrent(attempt)) throw Error('QR_CANCELLED');
+        attempt.qrDataUrl = image;
+        attempt.expiresAt = expires * 1000;
+        attempt.status = 'QR_PENDING';
+        attempt.firstQr?.();
+        attempt.firstQr = null;
+      },
+      password: async () => {
+        if (!qrIsCurrent(attempt)) throw Error('QR_CANCELLED');
+        attempt.status = 'NEEDS_2FA';
+        attempt.qrDataUrl = null;
+        return await new Promise((resolve,reject) => {
+          attempt.resolvePassword = resolve;
+          attempt.rejectPassword = reject;
+        });
+      },
+      onError: () => true,
+    }).then(async () => {
+      if (!qrIsCurrent(attempt)) return;
+      if (fs.existsSync(SESSION_FILE)) throw Error('SESSION_PRESENT');
+      if (!(await client.isUserAuthorized())) throw Error('NOT_AUTHORIZED');
+      if (!qrIsCurrent(attempt)) return;
+      const sessionString = client.session.save();
+      // Exclusive creation forbids overwriting an account that appeared mid-scan.
+      fs.writeFileSync(SESSION_FILE, sessionString, {encoding:'utf8',mode:0o600,flag:'wx'});
+      qrFinish(attempt, null);
+    }).catch(err => {
+      qrFinish(attempt, err);
+    }).finally(() => {
+      if (attempt.firstQr) {attempt.firstQr(); attempt.firstQr = null;}
+      if (attempt.rejectPassword) {attempt.rejectPassword(new Error('QR_ENDED')); attempt.rejectPassword=null;}
+      void client.disconnect().catch(() => {});
+    });
+    let firstTimer;
+    try {
+      await Promise.race([firstQr, new Promise(resolve=>{firstTimer=setTimeout(resolve,14000);})]);
+    } finally {clearTimeout(firstTimer);}
+    if (!qrIsCurrent(attempt) || attempt.status !== 'QR_PENDING') {
+      if (attempt.status !== 'CONNECTED') await qrCancel(attempt);
+      return res.status(503).json({ok:false,status:'QR_NOT_READY'});
+    }
+    return res.json(qrSnapshot(attempt));
+  } catch (_) {
+    if (qrAttempt && qrAttempt.client === client) await qrCancel(qrAttempt);
+    else if (client) try {await client.disconnect();}catch(_){}
+    return res.status(503).json({ok:false,status:'QR_START_FAILED'});
+  }
+});
+
+app.post('/qr/status', (req, res) => {
+  const attempt=qrAttempt;
+  if (!attempt || attempt.id !== req.body?.id)
+    return res.status(404).json({ok:false,status:'QR_NOT_FOUND'});
+  if (Date.now() >= attempt.deadline && attempt.status !== 'CONNECTED') {
+    void qrCancel(attempt);
+    return res.status(410).json({ok:false,status:'QR_EXPIRED'});
+  }
+  return res.json(qrSnapshot(attempt));
+});
+
+app.post('/qr/password', (req, res) => {
+  const attempt=qrAttempt;
+  if (!attempt || attempt.id !== req.body?.id || !qrIsCurrent(attempt)
+      || attempt.status !== 'NEEDS_2FA' || !attempt.resolvePassword)
+    return res.status(409).json({ok:false,status:'QR_2FA_NOT_PENDING'});
+  const password=req.body?.password;
+  if (typeof password !== 'string' || !password || password.length>256)
+    return res.status(400).json({ok:false,status:'INVALID_2FA_INPUT'});
+  const resolve=attempt.resolvePassword;
+  attempt.resolvePassword=null;
+  attempt.rejectPassword=null;
+  attempt.status='VERIFYING_2FA';
+  resolve(password);
+  return res.json({ok:true,id:attempt.id,status:'VERIFYING_2FA'});
+});
+
+app.post('/qr/cancel', async (req, res) => {
+  const attempt=qrAttempt;
+  if (!attempt || attempt.id !== req.body?.id)
+    return res.status(404).json({ok:false,status:'QR_NOT_FOUND'});
+  if (attempt.status === 'CONNECTED')
+    return res.status(409).json({ok:false,status:'ALREADY_CONNECTED'});
+  await qrCancel(attempt);
+  return res.json({ok:true,status:'CANCELLED'});
+});
+
 app.post('/start', async (req, res) => {
   try {
     if (!requireConfigured(res)) return;
@@ -76,6 +235,8 @@ app.post('/start', async (req, res) => {
       try { await pending.get(phone).client.disconnect(); } catch (_) {}
       pending.delete(phone);
     }
+    if (qrAttempt && qrIsCurrent(qrAttempt)) return res.status(409).json({ok:false,status:'QR_ALREADY_PENDING'});
+    if (fs.existsSync(SESSION_FILE)) return res.status(409).json({ok:false,status:'SESSION_PRESENT'});
     const client = await newClient('');
     const result = await client.sendCode({ apiId: API_ID, apiHash: API_HASH }, phone);
     pending.set(phone, { client, phoneCodeHash: result.phoneCodeHash });

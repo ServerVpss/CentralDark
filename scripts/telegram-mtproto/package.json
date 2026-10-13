@@ -5,6 +5,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.2.1",
+    "qrcode": "^1.5.4",
     "telegram": "^2.26.16"
   }
 }
