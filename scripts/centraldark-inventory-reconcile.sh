@@ -371,6 +371,10 @@ except (OSError,ValueError):
  try:old=json.loads((state/'latest.json').read_text())
  except (OSError,ValueError):old={}
 v['pulse']=old.get('pulse') or {'status':'UNKNOWN'}
+# The replay state-machine shares this JSON. Inventory must never erase events.
+# Preserve accumulated experience byte-for-byte as a JSON value, not a summary.
+if isinstance(old.get('replay'), dict):
+ v['replay']=old['replay']
 changes={k:{'old':old.get(k),'new':v.get(k)} for k in ('sources','owners') if old.get(k)!=v.get(k)}
 def atomic(p,payload):
  temp=p.with_suffix('.tmp');temp.write_text(json.dumps(payload,indent=2,ensure_ascii=False)+'\n');temp.replace(p)
