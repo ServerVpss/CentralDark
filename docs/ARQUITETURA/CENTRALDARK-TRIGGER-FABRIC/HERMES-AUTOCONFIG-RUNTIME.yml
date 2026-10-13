@@ -27,6 +27,7 @@ reuses:
   - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml
   - docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md
   - apps/modulos/HERMES-CORE/prompts/hermes-core.md
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-TYPED-CORE-SCRIPT-FIRST.yml
 invariants:
   ONE_SYSTEM_ONLY: true
   REUSE_BEFORE_CREATE: true
@@ -865,4 +866,28 @@ proven_path_replay:
     - COUNTERPROOF
     - REALITY_JUDGE
     - RECEIPT
+
+typed_core_script_first:
+  status: BOUND_TO_EXISTING_RUNTIME_OWNER
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-TYPED-CORE-SCRIPT-FIRST.yml
+  creates_new_runtime: false
+  creates_new_router: false
+  creates_new_brain: false
+  default_mode: HERMES_TYPED_CORE
+  intelligence_mode: ON_DEMAND_ONLY
+  model_is_capability_not_whole_brain: true
+  deterministic_core_first: true
+  known_recipe_runs_without_model: true
+  memory_supplied_by_library_recipes_and_receipts: true
+  surfaces_are_transport_not_brain:
+    - Telegram
+    - WhatsApp
+    - CLI
+    - HUD
+    - GitHub webhook
+  routing_formula:
+    - PROVEN_RECIPE -> HERMES_TYPED_CORE
+    - MACHINE_RESOLVABLE_AMBIGUITY -> MEASURE_AND_CONTINUE_WITH_TYPED_CORE
+    - NEW_REASONING_REQUIRED -> HERMES_INTELLIGENCE_MODE
+    - LIVE_ORGAN_MUTATION -> OWNER_GATE_READBACK_RECEIPT
 

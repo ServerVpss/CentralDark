@@ -27,3 +27,38 @@ export function applyRoutingStrategy(models, strategy = 'priority') {
   // priority: keep order
   return copy.map(({ _i, ...rest }) => rest);
 }
+
+/**
+ * Resolve o modo Hermes para o contrato model-agnostic da PR #1804.
+ * Reutiliza o roteador existente: receita provada roda no typed core; IA
+ * entra somente sob demanda quando regra determinística não cobre o evento.
+ */
+export function resolveHermesExecutionMode(event = {}) {
+  const input = event && typeof event === 'object' ? event : {};
+  const alias = String(input.command || input.alias || '').trim().toLowerCase();
+  const intelligenceAliases = new Set(['/intelligence', '/oraculo', '/sol', '/analisa', '/decide', '/meta', '/contraprova']);
+  const hasProvenRecipe = input.proven_recipe === true || input.recipe_status === 'PROVEN' || input.recipe_status === 'PASS';
+  const machineResolvable = input.machine_resolvable === true || input.ambiguity === 'MACHINE_RESOLVABLE';
+  const reasoningRequired = input.reasoning_required === true || input.recipe_status === 'MISSING' || input.recipe_status === 'UNKNOWN' || intelligenceAliases.has(alias);
+  const liveOrgan = input.live_organ_mutation === true;
+
+  if (reasoningRequired && !hasProvenRecipe && !machineResolvable) {
+    return {
+      mode: 'HERMES_INTELLIGENCE_MODE',
+      requires_ai: true,
+      action: 'CALL_ORACLE_OR_LOCAL_MODEL',
+      gate_required: liveOrgan,
+      owner_required: liveOrgan,
+      receipt_required: true,
+    };
+  }
+
+  return {
+    mode: 'HERMES_TYPED_CORE',
+    requires_ai: false,
+    action: machineResolvable && !hasProvenRecipe ? 'MEASURE_AND_CONTINUE' : 'RUN_PROVEN_RECIPE',
+    gate_required: liveOrgan,
+    owner_required: liveOrgan,
+    receipt_required: true,
+  };
+}

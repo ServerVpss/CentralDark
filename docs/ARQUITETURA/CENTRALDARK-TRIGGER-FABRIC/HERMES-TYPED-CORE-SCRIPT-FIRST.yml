@@ -206,3 +206,17 @@ next_cursor:
     - add pointer from HERMES-AUTOCONFIG-RUNTIME.yml reuses/contracts list
     - add prompt invariant to apps/modulos/HERMES-CORE/prompts/hermes-core.md
     - add deterministic self-test for routing rule if code path already exists
+
+implementation_progress:
+  pr: 1804
+  cockpit_role: IMPLEMENTATION_TRACKER
+  updated_at: 2026-10-13
+  fronts:
+    contract_crystal: { percent: 100, status: PASS, color: green }
+    pr_cockpit: { percent: 100, status: PASS, color: green }
+    hud_tracker: { percent: 100, status: PASS, color: green }
+    hermes_autoconfig_consumer: { percent: 100, status: PASS, color: green }
+    hermes_prompt_invariant: { percent: 100, status: PASS, color: green }
+    deterministic_router_selftest: { percent: 100, status: PASS, color: green }
+    telegram_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
+    whatsapp_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
