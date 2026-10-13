@@ -85,7 +85,7 @@ type ModuloPortalLinha = {
 };
 
 type ProfileLinha = {
-  user_id: unknown;
+  id: unknown;
   full_name?: unknown;
 };
 
@@ -105,7 +105,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
           .from("modulos_portal")
           .select("id, slug, nome, icone, href, status, ordem")
           .order("ordem", { ascending: true }),
-        banco.from("profiles").select("user_id, full_name"),
+        banco.from("profiles").select("id, full_name"),
         banco.from("user_roles").select("user_id, role"),
       ]);
 
@@ -129,7 +129,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
       );
       setUsuarios(
         (p.data ?? []).map((item: ProfileLinha) => ({
-          user_id: String(item.user_id),
+          user_id: String(item.id),
           full_name: item.full_name ? String(item.full_name) : null,
           papel: papeis.get(String(item.user_id)) ?? "user",
         })),
