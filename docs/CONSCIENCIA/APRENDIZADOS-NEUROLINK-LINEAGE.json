@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "8aae39c69945cf961aff45c1ea1129f4db5d6e72",
+  "source_blob_sha": "c9c27a8a8096edf76c81cfd7d976591f8823e107",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 173,
-    "highest_legacy_learning_number": 174,
+    "learning_sections": 174,
+    "highest_legacy_learning_number": 175,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 174
+      "end": 175
     }
   },
   "nodes": [
@@ -1988,6 +1988,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L173",
+      "next_uid": "L175"
+    },
+    {
+      "uid": "L175",
+      "legacy_learning_number": 175,
+      "legacy_occurrence": 1,
+      "title": "Prova herdada, busca temporal, falha local e Papagaio discreto — memória viva sem falso verde",
+      "document_order": 174,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L174",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
