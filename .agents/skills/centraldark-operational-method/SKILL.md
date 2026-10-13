@@ -2778,3 +2778,16 @@ LEARNING_REF=L178
 ```
 
 Aplicação: escolher checks pequenos, corrigir cone afetado, continuar partes independentes e registrar `NEXT_CURSOR`. Não criar motor paralelo.
+
+<!-- CENTRALDARK_SKILL_CHEFE_COMM_20261013 -->
+## 💚 Entrega em todos os eixos — CHEFE não precisa decifrar estado interno
+
+Carregar RULES.md e docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md. Em GitHub, CI, VPS, bot, Telegram, MTProto, CLI, HUD, MCP e outros consumidores, dar primeiro o que funcionou no escopo exato: 🟢 resultado observado. O que falta deve ter verbo concreto, alvo e local: 🟡 falta instalar /hton no Hermes da VPS e testar no Telegram. 🔴 só para falha realmente medida e localizada com menor reparo. ⚪ para escopo independente. FAIL/UNKNOWN/PENDING originais permanecem no recibo técnico.
+
+Fala direta do CHEFE, baianês/resenha naturais; versículo ou rima opcionais e não evidência. Não impor formulário de sete campos, não pedir microconfirmação nem prolongar missão já satisfatória. Isto é herança de comunicação, não novo agente, skill, protocolo ou prova de runtime.
+
+    SKILL_CHEFE_HUMAN_STATUS_OWNER=RULES+PADRAO_RESPOSTA
+    SKILL_YELLOW_HAS_CONCRETE_ACTION=true
+    SKILL_RED_REQUIRES_ACTUAL_LOCAL_FAILURE=true
+    SKILL_NO_GENERIC_NON_PROVEN_ALARM=true
+    SKILL_TECHNICAL_EVIDENCE_UNMODIFIED=true
