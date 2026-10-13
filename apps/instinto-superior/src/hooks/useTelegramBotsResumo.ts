@@ -29,13 +29,19 @@ export function useTelegramBotsResumo() {
     setLoading(true);
     setErro(null);
     try {
-      // `telegram_bots` não está no Database gerado localmente (tabela existe no banco
-      // real, mas o types.ts deste projeto não foi regenerado); cast pontual e documentado.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data, error } = await (supabase as unknown as { from: (t: string) => any })
-        .from("telegram_bots")
-        .select("id, name, bot_username, is_active, health_status")
-        .order("created_at", { ascending: false });
+      // Projeta apenas o resumo autorizado pela RPC administrativa do owner.
+      // A tabela sensível não é consultada diretamente pelo navegador.
+      const acesso = supabase as unknown as {
+        schema: (nome: string) => {
+          rpc: (nome: string) => Promise<{
+            data: BotResumo[] | null;
+            error: { message: string } | null;
+          }>;
+        };
+      };
+      const { data, error } = await acesso
+        .schema("public")
+        .rpc("centraldark_telegram_bots_resumo");
       if (error) throw error;
       setBots((data ?? []) as unknown as BotResumo[]);
     } catch (e) {
