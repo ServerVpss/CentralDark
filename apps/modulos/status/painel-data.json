@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(consciencia): cristalizar sessao operacional e retomar fio sem duplicar gratidao #189",
+    "lastCommit": "docs(consciencia): recibo da sessao Casa K/F, Olho, faxina, filosofia e next cursor",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T08:17:48.801Z",
+      "titulo": "Push na main · 57a046392ed90669339939d26b60b8bf15c3c391",
+      "detalhe": "docs(consciencia): recibo da sessao Casa K/F, Olho, faxina, filosofia e next cursor",
+      "area": "Repositório",
+      "sha": "57a0463",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T08:08:34.631Z",
       "titulo": "Push na main · 401015c726b357bbf2815b0c4054fdc1068fd017",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "aefd169",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T15:21:20.310Z",
-      "titulo": "Push na main · 5ffc3dbfbaead8097cade10cc090a2be9c8ad492",
-      "detalhe": "🧿 AUTO PR: FEAT/CENTRALDARK-DELEGACAO-ECONOMICA-PERSISTENTE-20261012 (#1800)",
-      "area": "Repositório",
-      "sha": "5ffc3db",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T08:17:48.801Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 57a046392ed90669339939d26b60b8bf15c3c391 (57a0463)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T08:08:34.631Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · aefd169db279f8eccbe97eeb6bece0506c7801d9 (aefd169)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T15:21:20.310Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 5ffc3dbfbaead8097cade10cc090a2be9c8ad492 (5ffc3db)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T08:08:34.631Z",
-  "updatedAtBR": "13/10/2026, 05:08:34 BRT"
+  "updatedAt": "2026-10-13T08:17:48.801Z",
+  "updatedAtBR": "13/10/2026, 05:17:48 BRT"
 }
