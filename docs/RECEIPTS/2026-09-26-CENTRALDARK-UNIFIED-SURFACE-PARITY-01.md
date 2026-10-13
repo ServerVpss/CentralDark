@@ -284,16 +284,19 @@ PLUGIN_DIRECTORY_MISS_NEQ_NOT_PUBLISHED=true
 
 PLUGIN_PUBLICATION_STATUS=PASS
 PLUGIN_ID=plugins_6ab87b459ff08191a69311acd4c77d83
-PLUGIN_RELEASE_ID=pluginrel_6ab87b470c048191b7ed42e9be8761b6
+PLUGIN_RELEASE_ID=pluginrel_6acc564ddd4881918f5a732c0816ea23
 PLUGIN_URL=https://chatgpt.com/plugins/plugins_6ab87b459ff08191a69311acd4c77d83
 PLUGIN_SCOPE=USER
-PLUGIN_RELEASE_READBACK=pluginrel_6ab87b470c048191b7ed42e9be8761b6|is_current=true|version=0.1.0
+PLUGIN_RELEASE_READBACK=pluginrel_6acc564ddd4881918f5a732c0816ea23|is_current=true|version=0.1.4
+PLUGIN_RELEASE_READBACK_SOURCE=.agents/plugins/centraldark-unified-surface-parity/SOURCE.json (cristalizado em 44b54e2/a94a667, 2026-10-12)
+PREVIOUS_PLUGIN_RELEASE=pluginrel_6ab87b470c048191b7ed42e9be8761b6|version=0.1.0 (histórico, superado)
 PLUGIN_DISCOVERABILITY=PRIVATE
 PLUGIN_SOURCE_ROOT=.agents/plugins/centraldark-unified-surface-parity/
-PLUGIN_ARCHIVE_SHA256=6561371aa73d7e2fc9e0642286fed474dee87331dee17ac39d3ce69a07f41e6c
+PLUGIN_ARCHIVE_SHA256=f335b82ae1d6ef252e648b81d49e7d08fcdd386feede501fb6cfca21cd5acc53
+PREVIOUS_PLUGIN_ARCHIVE_SHA256=6561371aa73d7e2fc9e0642286fed474dee87331dee17ac39d3ce69a07f41e6c
 
 Readback do backend:
-- metadata retornou o mesmo `plugin_id`, versão `0.1.0`, scope `USER` e `current_release_id`;
+- (readback histórico da v0.1.0) metadata retornou o mesmo `plugin_id`, versão `0.1.0`, scope `USER` e `current_release_id`;
 - listagem de releases retornou o mesmo release como `is_current=true`;
 - arquivos `plugin.json`, `mcp.json` e `skills/centraldark-unified-surface-parity/SKILL.md` foram relidos do release atual;
 - o backend adicionou compatibilidade `.codex-plugin/plugin.json` e `.mcp.json` ao release sem alterar o owner canônico no repo.

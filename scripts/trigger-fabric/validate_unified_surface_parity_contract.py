@@ -8,6 +8,7 @@ minimum invariants required by the CHEFE/SOL/HERMES operating law.
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -378,6 +379,22 @@ def validate_plugin_publication_receipt(path: Path, text: str) -> list[str]:
         url = required.get("PLUGIN_URL")
         if url not in {None, "", "UNKNOWN", "NONE", "null"} and not str(url).startswith("https://"):
             errors.append(f"PLUGIN_PUBLICATION_URL_INVALID {path}: {url!r}")
+        # Recibo PASS precisa declarar o MESMO release/versão que SOURCE.json e plugin.json.
+        try:
+            source = json.loads(PLUGIN_SOURCE.read_text(encoding="utf-8"))
+            manifest = json.loads(PLUGIN_MANIFEST.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            errors.append(f"PLUGIN_PUBLICATION_SOURCE_UNREADABLE {path}: {exc}")
+            return errors
+        expected_release = source.get("published_release_id") or source.get("release_id")
+        expected_version = manifest.get("version")
+        if required["PLUGIN_ID"] != source.get("published_plugin_id"):
+            errors.append(f"PLUGIN_PUBLICATION_ID_DRIFT {path}: {required['PLUGIN_ID']!r} != {source.get('published_plugin_id')!r}")
+        if required["PLUGIN_RELEASE_ID"] != expected_release:
+            errors.append(f"PLUGIN_PUBLICATION_RELEASE_DRIFT {path}: {required['PLUGIN_RELEASE_ID']!r} != {expected_release!r}")
+        readback = str(required["PLUGIN_RELEASE_READBACK"] or "")
+        if not readback.startswith(f"{expected_release}|") or f"version={expected_version}" not in readback.split("|"):
+            errors.append(f"PLUGIN_PUBLICATION_READBACK_DRIFT {path}: {readback!r} != {expected_release}|...|version={expected_version}")
     return errors
 
 

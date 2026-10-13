@@ -119,8 +119,17 @@ if (registry) {
   const patterns = Array.isArray(registry.patterns) ? registry.patterns : [];
   if (patterns.length === 0) errors.push("INTERLIGADOS_PATTERNS_EMPTY");
   if (registry.refresh?.pattern_count !== patterns.length) errors.push(`INTERLIGADOS_PATTERN_COUNT_DRIFT:declared=${registry.refresh?.pattern_count ?? "missing"}:actual=${patterns.length}`);
-  // Janela "recent-50" desliza; o piso de frescor é alcançar ao menos o PR 1633 (não contê-lo literalmente).
-  const reconciled = Array.isArray(registry.refresh?.latest_prs_reconciled) ? registry.refresh.latest_prs_reconciled.filter(Number.isInteger) : [];
+  // Janela "recent-50" desliza: exige o denominador inteiro (50 PRs inteiros únicos), coerente com
+  // latest_window, e piso de frescor >= PR 1633 (não contê-lo literalmente).
+  const rawReconciled = Array.isArray(registry.refresh?.latest_prs_reconciled) ? registry.refresh.latest_prs_reconciled : [];
+  const reconciled = [...new Set(rawReconciled.filter(Number.isInteger))];
+  if (reconciled.length !== rawReconciled.length || reconciled.length !== 50) {
+    errors.push(`INTERLIGADOS_RECENT_50_WINDOW_INCOMPLETE:unique_integers=${reconciled.length}:raw=${rawReconciled.length}`);
+  }
+  const windowMatch = String(registry.refresh?.latest_window ?? "").match(/^RECENT_50_PRS_(\d+)_TO_(\d+)$/);
+  if (!windowMatch || reconciled.length === 0 || Number(windowMatch[1]) !== Math.min(...reconciled) || Number(windowMatch[2]) !== Math.max(...reconciled)) {
+    errors.push(`INTERLIGADOS_RECENT_50_WINDOW_DRIFT:${registry.refresh?.latest_window ?? "missing"}`);
+  }
   if (reconciled.length === 0 || Math.max(...reconciled) < 1633) errors.push("INTERLIGADOS_LATEST_SWEEP_DOES_NOT_REACH_PR1633");
 
   const ids = new Set();
