@@ -850,3 +850,32 @@ papagaio_on_loop_receipts:
       3. Depois merge/deploy/readback
 
       MERGED=false. DEPLOYED=false.
+
+# Comunicação humana herdada da main: RULES → AGENTS → PADRAO-RESPOSTA-SEGREDO-CHEFE.
+# PR é implementação candidata; não cria nova personalidade nem altera status técnicos.
+chefe_human_communication_binding_20261013:
+  status: "CONTRACT_BOUND_TO_EXISTING_OWNERS"
+  intent: "CHEFE quer clareza, resenha natural e ação concreta, não alarmismo de cor ou metodologia genérica."
+  owners:
+    - "RULES.md#comunicacao-com-o-chefe"
+    - "AGENTS.md#comunicacao-herdada"
+    - "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+  related_learnings: ["L176", "L178"]
+  consumers:
+    - "Hermes native Telegram plugin /hton /htoff"
+    - "Instinto Superior Admin / Telegram MTProto"
+    - "HERMES Typed Core / Intelligence Mode"
+    - "HUD / GitHub PR / CI / receipts / notifications"
+  human_feedback:
+    green: "componente e resultado especifico provado"
+    yellow: "falta verbo + componente + local + teste"
+    red: "falha real e medida apenas no cone afetado"
+    gray: "futuro ou fora do desejo atual"
+  concrete_example:
+    done: "🟢 /hton e /htoff registrados na PR #1804."
+    remaining_bot: "🟡 Falta carregar o plugin no Hermes da VPS e testar os comandos no Telegram."
+    remaining_account: "🟡 Falta compilar a interface e autenticar a conta MTProto pelo Admin HTTPS."
+  technical_logs_keep_exact_pass_fail_unknown: true
+  human_unknown_alone_as_alarm: false
+  no_second_bot_or_router_or_communication_owner: true
+  model_and_runtime_application_requires_readback: true
