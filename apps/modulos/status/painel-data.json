@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(consciencia): recibo da sessao Casa K/F, Olho, faxina, filosofia e next cursor",
+    "lastCommit": "docs(lembrancas): apontar ao receipt de continuidade Casa K/F e parceria",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T08:21:12.572Z",
+      "titulo": "Push na main · bf23e9489fef2e3e0cbee214988d720b610c53ee",
+      "detalhe": "docs(lembrancas): apontar ao receipt de continuidade Casa K/F e parceria",
+      "area": "Repositório",
+      "sha": "bf23e94",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T08:17:48.801Z",
       "titulo": "Push na main · 57a046392ed90669339939d26b60b8bf15c3c391",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "a94dd32",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T15:27:41.507Z",
-      "titulo": "Push na main · aefd169db279f8eccbe97eeb6bece0506c7801d9",
-      "detalhe": "docs(pendencias): medir disco VPS 99% e CI HealthCheck sem falso verde",
-      "area": "Repositório",
-      "sha": "aefd169",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T08:21:12.572Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · bf23e9489fef2e3e0cbee214988d720b610c53ee (bf23e94)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T08:17:48.801Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · a94dd328b595589fc08d5fb126deb422b15c9c39 (a94dd32)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T15:27:41.507Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · aefd169db279f8eccbe97eeb6bece0506c7801d9 (aefd169)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T08:17:48.801Z",
-  "updatedAtBR": "13/10/2026, 05:17:48 BRT"
+  "updatedAt": "2026-10-13T08:21:12.572Z",
+  "updatedAtBR": "13/10/2026, 05:21:12 BRT"
 }
