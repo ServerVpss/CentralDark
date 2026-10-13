@@ -1,0 +1,143 @@
+schema: centraldark.hermes-typed-core-script-first.v1
+status: CANONICAL_CANDIDATE_CRYSTAL
+authority: SEGREDO/CHEFE
+promoted_by_chat: SOL
+promoted_at: 2026-10-13
+intent_id: HERMES_TYPED_CORE_SCRIPT_FIRST_INTELLIGENCE_ON_DEMAND
+main_measured_sha: 0f79bf4c1078fbe2ac63fbd0431afdcac816e931
+
+owner_chain:
+  soul: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+  rules: RULES.md
+  agents: AGENTS.md
+  runtime_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
+  executor_owner: apps/modulos/HERMES-CORE/
+  prompt_owner: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+
+measurement:
+  result: POSSIBLE_WITH_EXISTING_OWNERS
+  no_new_runtime_required: true
+  no_new_brain_required: true
+  no_new_router_required: true
+  no_new_script_required_for_contract: true
+  reason:
+    - SOUL already binds SOL as coordinator and HERMES as executor.
+    - RULES already defines model as replaceable motor and Hermes as executor continuity.
+    - AGENTS already prefers small explicit capabilities over generic unrestricted execution.
+    - HERMES-AUTOCONFIG-RUNTIME already includes SCRIPT_EXECUTORS and structural-events-only logging.
+    - hermes-core prompt already carries REUSE_BEFORE_CREATE, ONE_SYSTEM_ONLY and executor selection by capability/scope.
+
+canonical_delta:
+  default_mode: HERMES_TYPED_CORE
+  intelligence_mode: ON_DEMAND_ONLY
+  default_requires_ai: false
+  ai_is_module_not_motor: true
+  script_state_machine_is_default: true
+  template_response_allowed_without_ai: true
+  deterministic_command_router_first: true
+  existing_proven_recipe_first: true
+
+modes:
+  HERMES_TYPED_CORE:
+    description: Bot/script/state-machine executor for already proven CentralDark recipes.
+    enabled_by_default: true
+    may:
+      - match command or event to proven recipe
+      - measure real state
+      - classify by fixed rule
+      - execute allowed deterministic action
+      - emit typed receipt
+      - answer by template without model inference
+    must_not:
+      - invent new architecture
+      - override CHEFE intent
+      - claim PASS without readback
+      - mutate live organ outside owner/gate
+      - use AI when deterministic recipe already covers the task
+
+  HERMES_INTELLIGENCE_MODE:
+    description: Model-assisted reasoning only when explicitly triggered or when fixed rules are insufficient.
+    enabled_by_default: false
+    activation_aliases:
+      - /intelligence
+      - /oraculo
+      - /sol
+      - /analisa
+      - /decide
+      - /meta
+      - /contraprova
+    enters_when:
+      - CHEFE explicitly requests intelligence/oracle/reasoning
+      - ambiguity cannot be resolved by machine measurement
+      - no proven recipe covers the event
+      - counterproof requires interpretation beyond fixed templates
+    exits_to:
+      - HERMES_TYPED_CORE
+      - EXACT_BLOCKER_RECEIPT
+      - FIXED_POINT
+
+routing_rule:
+  formula: >-
+    If proven recipe exists, run deterministic typed core.
+    If ambiguity is machine-resolvable, measure and continue.
+    If new reasoning is required, enter intelligence mode.
+    If live organ is affected, require owner, gate, proof and receipt.
+  pseudo_flow:
+    - EVENT_OR_COMMAND
+    - INTENT_CLASSIFY
+    - LOOKUP_PROVEN_RECIPE
+    - MEASURE_CURRENT
+    - IF_RECIPE_MATCH_THEN_TYPED_EXECUTE
+    - IF_AMBIGUOUS_AND_MACHINE_RESOLVABLE_THEN_MEASURE
+    - IF_REASONING_REQUIRED_THEN_INTELLIGENCE_MODE
+    - EFFECT_READBACK
+    - RECEIPT
+
+interface_targets:
+  allowed_surfaces:
+    - Telegram
+    - WhatsApp
+    - Discord
+    - Web cockpit
+    - CLI
+    - HUD
+    - GitHub webhook
+    - Terminal Casa
+  rule: Surface is transport, not brain. Same typed core, same owners, same receipts.
+
+receipt_contract:
+  required_fields:
+    - INTENT_ID
+    - MODE
+    - COMMAND_OR_EVENT
+    - OWNER
+    - MAIN_SHA_OR_RUNTIME_SHA
+    - CURRENT
+    - ACTION
+    - EFFECT_READBACK
+    - STATUS
+    - NEXT_CURSOR
+  statuses:
+    - PASS
+    - UNKNOWN
+    - BLOCKED
+    - NOOP
+
+risk_controls:
+  UNKNOWN_IS_NOT_PASS: true
+  DOCUMENTED_IS_NOT_EXECUTED: true
+  REGISTERED_IS_NOT_CONSUMED: true
+  MERGED_IS_NOT_DEPLOYED: true
+  ONE_SYSTEM_ONLY: true
+  REUSE_BEFORE_CREATE: true
+  ONE_WRITER_PER_SCOPE: true
+  NO_PARALLEL_BRAIN: true
+  NO_PARALLEL_ROUTER: true
+  AI_DOES_NOT_SELF_AUTHORIZE: true
+
+next_cursor:
+  goal: Bind this crystal into the existing HERMES-AUTOCONFIG/HERMES-CORE consumer path without creating parallel runtime.
+  minimum_delta:
+    - add pointer from HERMES-AUTOCONFIG-RUNTIME.yml reuses/contracts list
+    - add prompt invariant to apps/modulos/HERMES-CORE/prompts/hermes-core.md
+    - add deterministic self-test for routing rule if code path already exists
