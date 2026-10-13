@@ -1,7 +1,7 @@
 ---
 title: "Restauro — Aprendizados pré-PR #316"
 status: HISTORICAL
-source_rule: "GIT_HISTORY_VERBATIM -> PROVENANCE_ONLY; HISTORICAL != CURRENT_CANONICAL_GUIDANCE"
+source_rule: "GIT_HISTORY_NORMALIZED_COPY (formato ajustado para gates; mesmas palavras) -> VERBATIM_SOURCE=git show d8d4535:docs/CONSCIENCIA/APRENDIZADOS.md; HISTORICAL != CURRENT_CANONICAL_GUIDANCE"
 date: 2026-10-13
 updated: 2026-10-13T17:20:00-03:00
 tags: ["consciencia", "aprendizados", "restauro", "proveniencia"]
@@ -12,7 +12,7 @@ source_class: TOOL_MEASURED
 owner: "docs/CONSCIENCIA/APRENDIZADOS.md"
 ---
 
-# 🧬 Restauro — aprendizados apagados pelo PR #316
+# 🧬 Restauro — aprendizados apagados pelo PR #316 (cópia normalizada)
 
 > **O que aconteceu:** o PR #316 (`531c4cca6f`, 2026-07-25) substituiu as 2.777 linhas de `docs/CONSCIENCIA/APRENDIZADOS.md` pela linha-modelo `{{FILE:/tmp/pr316/aprendizados.md}}`, que nunca foi expandida. Os títulos sobreviveram só nos relatórios `docs/RELATORIOS/notion-sync/consistencia-*`; o conteúdo existia apenas no histórico do git.
 > **Fonte exata:** `docs/CONSCIENCIA/APRENDIZADOS.md` no commit `d8d45355ba3be78261047a329b169cc4a19c8717` (pai do #316), texto abaixo com o mesmo conteúdo; só o frontmatter foi trocado e houve ajuste de formato exigido pelo `GATE_GRAFO_VIVO_MARKDOWN` (linhas em branco, espaços finais, 10 títulos repetidos com sufixo "(ocorrência N)", uma lista `1.`→`1)`, nome de variável `WEBUI_LOVABLE_KEY` escrito como `$WEBUI_LOVABLE_KEY` para o scanner de segredos). Original byte a byte: `git show d8d4535:docs/CONSCIENCIA/APRENDIZADOS.md`.
