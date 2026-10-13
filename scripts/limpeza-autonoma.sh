@@ -18,6 +18,10 @@ Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,rota
 
   --map-disk                 somente mede o disco; não limpa nem notifica
   --clean-selected LIST      limpa somente categorias explícitas: journal,gz,rotated,pip-cache,npm-cache
+Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,rotated>]
+
+  --map-disk                 somente mede o disco; não limpa nem notifica
+  --clean-selected LIST      limpa somente categorias explícitas: journal,gz,rotated
   --help                     mostra esta ajuda
 
 Sem argumentos, preserva o modo periódico existente.
@@ -178,6 +182,9 @@ if [ "$MODE" = "selected" ]; then
       journal|gz|rotated|pip-cache|npm-cache) : ;;
       *)
         echo "Categoria inválida: $CATEGORY. Use journal,gz,rotated,pip-cache,npm-cache." >&2
+      journal|gz|rotated) : ;;
+      *)
+        echo "Categoria inválida: $CATEGORY. Use journal,gz,rotated." >&2
         exit 2
         ;;
     esac
