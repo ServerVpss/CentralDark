@@ -65,21 +65,36 @@ jobs:
           printf 'LOCAL_EXECUTION_CLASS=%s\n' "$LOCAL_EXECUTION_CLASS"
 
       - name: 🐍 Preparar PR-Agent isolado
+        shell: bash
         run: |
           set -Eeuo pipefail
-          if python3 -m venv .venv-pr-agent; then
-            env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/python -m pip install --upgrade pip --quiet
-            env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/pip install 'pr-agent==0.46.0' --quiet
-            printf 'PR_AGENT_RUNTIME=venv\n' >> "$GITHUB_ENV"
-            env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/python -c 'import openai,sys; print("OPENAI_VERSION="+openai.__version__); print("OPENAI_PATH="+openai.__file__)'
-          else
-            rm -rf .venv-pr-agent .pr-agent-site
-            mkdir -p .pr-agent-site
-            env -u PYTHONPATH -u PYTHONHOME python3 -m pip install --target .pr-agent-site 'pr-agent==0.46.0' --quiet
-            printf 'PR_AGENT_RUNTIME=target\n' >> "$GITHUB_ENV"
-            env -u PYTHONPATH -u PYTHONHOME PYTHONPATH="$PWD/.pr-agent-site" python3 -c 'import openai,sys; print("OPENAI_VERSION="+openai.__version__); print("OPENAI_PATH="+openai.__file__)'
+          : "${RUNNER_TEMP:?RUNNER_TEMP is required}"
+          : "${GITHUB_ENV:?GITHUB_ENV is required}"
+          free_kib="$(df -Pk "$RUNNER_TEMP" | awk 'END {print $4}')"
+          printf 'DISK_AVAILABLE_MIB=%s\n' "$((free_kib / 1024))"
+          if (( free_kib < 1048576 )); then
+            echo 'PR_AGENT_DISK_BLOCKED: less than 1 GiB available for isolated dependencies'
+            exit 1
           fi
-
+          # O runner nao possui ensurepip; aproveitar pip sem mudar Python global.
+          # setuptools local completo permite compilar html2text e giteapy legados.
+          PR_AGENT_ROOT="$(mktemp -d "$RUNNER_TEMP/centraldark-pr-agent.XXXXXXXX")"
+          PR_AGENT_BOOTSTRAP="$PR_AGENT_ROOT/bootstrap"
+          PR_AGENT_SITE="$PR_AGENT_ROOT/site"
+          mkdir -p "$PR_AGENT_BOOTSTRAP" "$PR_AGENT_SITE"
+          env -u PYTHONPATH -u PYTHONHOME python3 -m pip install \
+            --disable-pip-version-check --no-cache-dir --target "$PR_AGENT_BOOTSTRAP" \
+            'setuptools==78.1.1' 'wheel==0.46.3' --quiet
+          env -u PYTHONHOME PYTHONPATH="$PR_AGENT_BOOTSTRAP" python3 -c \
+            'import setuptools.build_meta,wheel; print("BUILD_BACKEND=PASS")'
+          env -u PYTHONHOME PYTHONPATH="$PR_AGENT_BOOTSTRAP" python3 -m pip install \
+            --disable-pip-version-check --no-cache-dir --no-build-isolation \
+            --target "$PR_AGENT_SITE" 'pr-agent==0.46.0' --quiet
+          env -u PYTHONHOME PYTHONPATH="$PR_AGENT_SITE:$PR_AGENT_BOOTSTRAP" python3 -c \
+            'import pr_agent,openai,setuptools.build_meta; print("PR_AGENT_IMPORT=PASS"); print("OPENAI_PATH="+openai.__file__)'
+          printf 'PR_AGENT_RUNTIME=target\n' >> "$GITHUB_ENV"
+          printf 'PR_AGENT_SITE=%s\n' "$PR_AGENT_SITE" >> "$GITHUB_ENV"
+          printf 'PR_AGENT_BOOTSTRAP=%s\n' "$PR_AGENT_BOOTSTRAP" >> "$GITHUB_ENV"
 
       - name: 🤖 Review pelo modelo local CURRENT
         env:
@@ -100,11 +115,7 @@ jobs:
           echo "LOCAL_EXECUTION_CLASS=$LOCAL_EXECUTION_CLASS"
           echo "PR_URL=$PR_URL"
           echo "🤖 CentralDark Local AI — $LOCAL_MODEL iniciando review..."
-          if [ "${PR_AGENT_RUNTIME}" = "venv" ]; then
-            env -u PYTHONPATH -u PYTHONHOME .venv-pr-agent/bin/python -m pr_agent.cli \
-              --pr_url="$PR_URL" review
-          else
-            env -u PYTHONPATH -u PYTHONHOME PYTHONPATH="$PWD/.pr-agent-site" python3 -m pr_agent.cli \
-              --pr_url="$PR_URL" review
-          fi
-          fi
+          : "${PR_AGENT_SITE:?PR-Agent site must be installed}"
+          : "${PR_AGENT_BOOTSTRAP:?PR-Agent build backend must be installed}"
+          env -u PYTHONHOME PYTHONPATH="$PR_AGENT_SITE:$PR_AGENT_BOOTSTRAP" \
+            python3 -m pr_agent.cli --pr_url="$PR_URL" review
