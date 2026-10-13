@@ -34,6 +34,7 @@ app.use(cors({ origin: true, credentials: false }));
 app.use(express.json({ limit: '1mb' }));
 
 const pending = new Map();
+let bridge = null; // Optional capability of the SAME GramJS service; never a second daemon.
 
 async function newClient(sessionString = '') {
   const session = new StringSession(sessionString);
@@ -293,6 +294,7 @@ app.post('/confirm', async (req, res) => {
 
 app.post('/logout', async (_req, res) => {
   try {
+    if (bridge) await bridge.stop(); // Do not keep a user-account bridge alive after logout.
     if (fs.existsSync(SESSION_FILE)) fs.unlinkSync(SESSION_FILE);
     for (const [_, v] of pending) { try { await v.client.disconnect(); } catch (_) {} }
     pending.clear();
@@ -305,3 +307,29 @@ app.post('/logout', async (_req, res) => {
 app.listen(PORT, '127.0.0.1', () => {
   console.log('telegram-mtproto ouvindo em 127.0.0.1:' + PORT);
 });
+
+// Opt-in ingress: only NEW Saved Messages starting with !CENTRALDARK.
+// Reuses the existing @srver1bot Telegram conversation and the existing Hermes.
+// API credentials/session never cross the loopback/admin boundary.
+const BRIDGE_ENABLED = process.env.MTPROTO_HERMES_BRIDGE === '1';
+const BRIDGE_BOT = (process.env.MTPROTO_HERMES_BOT_USERNAME || '').replace(/^@/, '');
+app.get('/bridge/status', (_req, res) => {
+  res.json({ ok: true, bridge: bridge ? bridge.snapshot() : { enabled: false, status: 'DISABLED' } });
+});
+if (BRIDGE_ENABLED && CONFIGURED && /^[a-zA-Z0-9_]{5,32}$/.test(BRIDGE_BOT)) {
+  const { createHermesBridge } = require('./hermes-bridge.cjs');
+  const { NewMessage } = require('telegram/events');
+  bridge = createHermesBridge({
+    newClient, sessionFile: SESSION_FILE, dataDir: DATA_DIR,
+    botUsername: BRIDGE_BOT, NewMessage,
+  });
+  setImmediate(() => { void bridge.start(); });
+  // Login via QR/phone can complete after boot; retry only when not connected.
+  const watcher = setInterval(() => {
+    if (!bridge.snapshot().connected) void bridge.start();
+  }, 60 * 1000);
+  watcher.unref();
+  process.on('SIGTERM', () => { void bridge.stop().finally(() => process.exit(0)); });
+} else if (BRIDGE_ENABLED) {
+  console.warn('mtproto-bridge CONFIG_BLOCKED (invalid existing bot username or missing API config)');
+}
