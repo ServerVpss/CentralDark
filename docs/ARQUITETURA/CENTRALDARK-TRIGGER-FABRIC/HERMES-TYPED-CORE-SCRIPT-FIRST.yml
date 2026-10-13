@@ -465,6 +465,65 @@ cumulative_engineering_whole_docs:
     subsequent mission reuse. No parallel compiler, workflow, writer or brain.
 
 
+
+# Ligacao do kit da Casa com VPS e superficies: somente a capacidade provada,
+# no mesmo Hermes/Typed Core, pode virar resposta/acao automatica em transporte conectado.
+house_vps_telegram_whatsapp_proof_boundary:
+  source: CHEFE_CONFIRMED_INTENT_IN_CHAT
+  status: CONTRACT_RECORDED_NO_RUNTIME_E2E_PROOF
+  original_intent: >-
+    Casa prepara as fontes e pacotes; quando forem instalados e comprovados
+    na VPS pelo mesmo Hermes, as receitas validas podem ser reaproveitadas
+    pelo Papagaio Fiel Tipado e expostas no Telegram/WhatsApp depois de cada
+    canal passar na propria prova ponta a ponta.
+  house_source_example: 'C:\CentralDark\CENTRALDARK-EXECUCAO-INTEGRAL-20261012'
+  authority_and_owner:
+    CHEFE: chooses goal authorization and accepted scope
+    CENTRALDARK: keeps verified experiences owners and receipts
+    HERMES_TYPED_CORE: executes prevalidated recipes without model call
+    PAPAGAIO_FIEL: restores verified versioned recipe not blind narration
+    TELEGRAM_WHATSAPP: transport only through already authorized existing bridge
+    REALITY_JUDGE: measures real effect
+  requirements:
+    SAVED_AT_HOME_IS_NOT_UPLOADED_TO_VPS: true
+    UPLOADED_TO_VPS_IS_NOT_DEPLOYED: true
+    DEPLOYED_IS_NOT_VALIDATED: true
+    VPS_RECIPE_PASS_IS_NOT_TELEGRAM_OR_WHATSAPP_E2E_PASS: true
+    PROVEN_RECIPE_NEEDS_CURRENT_PRECONDITION_OWNER_AUTH_AND_FINGERPRINT: true
+    TELEGRAM_AND_WHATSAPP_MUST_REUSE_SAME_TYPED_CORE: true
+    NO_PARALLEL_BOT_BRAIN_OR_WRITER: true
+    NO_LIVE_SECRETS_IN_REPO_OR_RECEIPT: true
+    MODEL_NOT_CALLED_FOR_PROVEN_DETERMINISTIC_RECIPE: true
+    NOVEL_UNKNOWN_EVENT_MUST_REMEASURE_OR_ESCALATE_BY_AUTHORIZED_MODE: true
+    REPLY_CAN_ONLY_CLAIM_MEASURED_CAPABILITY: true
+  transfer_sequence:
+    - CASA_SOURCE_AND_CHECKSUM
+    - EXISTING_AUTHORIZED_VPS_TRANSFER_PATH
+    - VPS_DEPLOY_AND_READBACK_SAME_SHA
+    - PROVE_RECIPE_EXECUTION_AND_RECEIPT
+    - VERIFY_EXISTING_TELEGRAM_WHATSAPP_BRIDGE_AUTHORIZATION
+    - TEST_MESSAGE_INBOUND_AND_REPLY_OUTBOUND_PER_SURFACE
+    - REGISTER_CHANNEL_SPECIFIC_E2E_RECEIPT
+    - REUSE_MATCHING_PROVEN_RECIPE_ONLY_WITHIN_PROVED_BOUNDARY
+  speech_reuse:
+    source: docs/CONSCIENCIA/BAIANES-E-RESENHA-REGIONAL.md
+    soul: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+    human_view: Oxe, Casa prepara; VPS prova; Papagaio lembra; Hermes executa; o bot responde ate onde passou.
+    mode: NATURAL_BAIANES_WITH_CONTEXTUAL_BIBLICAL_IMAGE_NOT_A_TECHNICAL_CLAIM
+    biblical_cue: 1Ts_5_21_EXAMINAR_E_RETER_O_QUE_E_BOM
+    notes: Uai so can appear as CHEFE requested informal blend; avoid forced accent.
+  evidence_status:
+    casa_local_package_existence: SCREENSHOT_ONLY
+    vps_installed_current_package: UNKNOWN
+    vps_full_end_to_end_proof: UNKNOWN
+    telegram_e2e: UNKNOWN
+    whatsapp_e2e: UNKNOWN
+    live_consumer_loaded_this_contract: UNKNOWN
+  next_cursor: >-
+    After Casa finishes and a trusted VPS receipt is available, read back exact
+    package and runtime SHAs, verify recipe effects and existing transport
+    integrations independently, then promote only measured claims.
+
 papagaio_on_loop_receipts:
   - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
     mode: PAPAGAIO_ON_FIEL
