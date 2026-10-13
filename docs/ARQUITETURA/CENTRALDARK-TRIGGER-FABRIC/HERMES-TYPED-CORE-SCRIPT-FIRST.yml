@@ -229,6 +229,9 @@ implementation_progress:
     papagaio_fiel_runtime_replay: { percent: 0, status: UNKNOWN, color: gray }
     telegram_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
     whatsapp_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
+    unigram_source_audit: { percent: 0, status: UNKNOWN, color: gray }
+    unigram_native_build: { percent: 0, status: UNKNOWN, color: gray }
+    unigram_hermes_multimodal_integration: { percent: 0, status: UNKNOWN, color: gray }
 
 
 # PAPAGAIO FIEL TIPADO: comportamento do mesmo Hermes, nao um novo bot ou modo de inferencia.
@@ -523,6 +526,100 @@ house_vps_telegram_whatsapp_proof_boundary:
     After Casa finishes and a trusted VPS receipt is available, read back exact
     package and runtime SHAs, verify recipe effects and existing transport
     integrations independently, then promote only measured claims.
+
+
+# Candidato Unigram: extensão da superfície Windows, NAO segundo backend, motor ou bot.
+unigram_native_multimodal_cockpit:
+  intent_id: CHEFE_UNIGRAM_HERMES_NATIVE_MULTIMODAL_COCKPIT_20261013
+  status: CONTRACT_IN_PR_SOURCE_BUILD_RUNTIME_NOT_YET_PROVEN
+  authority: SEGREDO_CHEFE
+  user_local_candidate: 'C:\Users\Administrador\Downloads\Unigram-13.0.1\Unigram-13.0.1'
+  user_local_candidate_verified: false
+  project_reference: https://github.com/UnigramDev/Unigram
+  upstream_build_reference: https://github.com/UnigramDev/Unigram/blob/develop/Documentation/Build-instructions.md
+  upstream_license_reference: https://github.com/UnigramDev/Unigram/blob/develop/LICENSE
+  user_goal: >-
+    Evoluir o codigo-fonte do Unigram em uma superficie Windows multimodal que
+    mantenha Telegram normal e exiba o cockpit da mesma CentralDark,
+    enviando somente comandos autorizados pelo canal API/MCP existente.
+    O bot Telegram continua funcionando independentemente da compilacao do app.
+  architecture:
+    CHEFE: defines intention and grants allowed scope
+    UNIGRAM_CLIENT: telegram_ui_plus_authentic_hermes_cockpit
+    TELEGRAM_BOT: independent_existing_bot_api_surface
+    CENTRALDARK_MCP_API: authenticated_transport_of_authorized_capabilities
+    HERMES_TYPED_CORE: default_verified_script_and_state_machine_executor
+    PAPAGAIO_FIEL: retrieval_of_proven_versioned_recipe
+    INTELLIGENCE_MODE: only_if_explicit_or_required_for_novel_case
+    REALITY_JUDGE: counterproof_with_actual_effect_readback
+    KAIZEN: proof_based_learning_using_existing_documents
+  required_reused_owners:
+    repo_governance: AGENTS.md
+    telegram_user_transport: scripts/telegram-mtproto/server.js
+    telegram_user_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/2026-09-24-MTPROTO-BIDIRECIONAL-RUNTIME.md
+    hermes_runtime: apps/modulos/HERMES-CORE/
+    hermes_routing: apps/modulos/HERMES-CORE/core/routing-strategy.mjs
+    existing_runtime_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml
+    current_hud: docs/HUD/HUD.html
+    whole_docs_memory: docs/CONSCIENCIA/APRENDIZADOS.md
+  telegram_transport_invariants:
+    bot_api_and_personal_mtproto_are_distinct: true
+    bot_api_default: TELEGRAM_BOT_API_DIRECT_LONG_POLLING_ONLY
+    user_mtproto_default: TELEGRAM_MTPROTO_DIRECT
+    forbid_new_telegram_transport_route: true
+    unirgram_app_login_not_shared_with_bot: true
+    no_duplicate_hermes_or_telegram_bot: true
+    installed_unigram_not_required_for_bot_runtime: true
+  functional_targets_to_measure_individually:
+    - existing_native_telegram_chat_and_media_preserved
+    - integrated_hermes_panel_inside_existing_windows_client
+    - typed_text_commands_and_proven_recipe_replay
+    - read_only_hud_progress_and_receipts
+    - voice_message_transcription_and_typed_intent_when_supported
+    - image_processing_through_authorized_vision_capability
+    - file_processing_through_authorized_format_specific_capability
+    - video_processing_through_authorized_multimodal_capability
+    - opt_in_intelligence_mode_for_new_reasoning
+    - independent_existing_telegram_bot_continues_working
+    - whatsapp_and_other_surfaces_share_same_backend_without_duplicate_executor
+    - separate_authenticated_user_scopes_for_optional_future_distribution
+  client_and_build_contract:
+    - inspect_local_source_tree_readme_license_revision_and_submodule_manifest_first
+    - pin_exact_unigram_13_0_1_revision_and_sha_when_locally_verified
+    - follow_matching_revision_build_instructions_not_blind_develop_documentation
+    - check_visual_studio_windows_sdk_cpp_dotnet_dependencies_and_project_targets
+    - use_existing_solution_and_build_scripts_without_new_build_pipeline
+    - preserve_original_telegram_features_user_sessions_and_runtime_behavior
+    - if_windows_msix_activation_fails_with_0x80073CF6_classify_packaging_separately
+    - compile_validate_locally_and_capture_exit_code_artifact_hash_architecture
+    - test_unmodified_baseline_before_integrated_modified_build_where_feasible
+    - implement_authenticated_mcp_cockpit_as_ui_adapter_not_new_command_writer
+    - validate_centraldark_path_per_capability_with_matching_runtime_receipts
+  security_and_isolation:
+    no_admin_vps_credentials_in_client_binary: true
+    no_user_telegram_session_committed_to_git: true
+    no_api_hash_embedded_in_public_distribution_without_review: true
+    capability_allowlist_and_user_authz_per_account: true
+    no_automatic_admin_access_for_third_party_users: true
+    immutable_core_governance_and_same_owner_gates: true
+    never_claim_telegram_native_calls_are_supported_without_specific_proof: true
+    downstream_distribution_must_respect_upstream_license_and_telegram_terms: true
+  evidence:
+    upstream_source_and_build_docs: PUBLIC_REFERENCE_READ
+    local_unigram_13_0_1_contents_and_dependencies: UNKNOWN
+    local_source_compilation: UNKNOWN
+    windows_msix_registration_on_target_pc: UNKNOWN
+    unigram_integrated_mcp_authenticated_api: UNKNOWN
+    voice_image_video_files_hermes_e2e: UNKNOWN
+    existing_bot_operational_e2e_now: UNKNOWN
+    telegram_bot_and_unigram_shared_hermes_core_e2e: UNKNOWN
+    github_pr_contract_and_hud_state: REQUIRES_COMMIT_READBACK
+  next_cursor: >-
+    CHEFE builds local Unigram 13.0.1 after inspecting its actual source,
+    matching-revision instructions and Windows SDK. Capture compiler result,
+    application launch and SHA; then integrate with existing authorized
+    CentralDark API/MCP/Hermes owners and test each typed/media path E2E.
+    Telegram Bot API operation is independent and must have its own receipt.
 
 papagaio_on_loop_receipts:
   - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
