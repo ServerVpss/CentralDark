@@ -1,0 +1,6 @@
+name: centraldark-hermes-typed-telegram
+version: 1.0.0
+description: "Menu nativo Hermes Telegram: /hton e /htoff por conversa, fallback intacto."
+author: CentralDark
+provides_hooks:
+  - pre_llm_call
