@@ -62,8 +62,10 @@ export function TelegramContaCentralDark() {
         <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px]">{estado?.estado || "MEDINDO"}</span>
       </div>
       <p className="text-sm text-muted-foreground">
-        Usa uma conta Telegram de usuário, separada do bot. Sessão protegida no owner da VPS;
-        nenhuma senha, código ou token do bot é salvo pelo card.
+        Pode acessar esta tela pela internet via HTTPS, com sua conta de administrador da CentralDark.
+        Usa uma conta Telegram de usuário, separada do bot. O login passa pela função
+        autenticada do Instinto Superior e a sessão fica no serviço MTProto da VPS,
+        sem guardar código, senha ou token do bot em armazenamento do navegador.
       </p>
       {estado && <p role="status" className="text-xs text-muted-foreground">{estado.detalhe}</p>}
       {estado?.connected ? (

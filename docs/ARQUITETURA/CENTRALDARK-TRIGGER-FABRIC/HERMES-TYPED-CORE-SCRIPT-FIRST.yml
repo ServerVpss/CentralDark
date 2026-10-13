@@ -741,8 +741,12 @@ instinto_superior_mtproto_account_linking:
     - NEVER_OVERWRITE_CONNECTED_SESSION_BY_BLIND_START
   api_boundary:
     admin_server_fn: ONLY_SUPABASE_AUTHENTICATED_ADMIN
+    public_internet_https_login_surface: ALLOWED_BY_CHEFE
+    public_admin_page: INSTINTO_SUPERIOR_ADMIN_CONTAS_CONEXOES
+    authenticated_public_server_functions: REQUIRED_ADMIN_ROLE
     service_destination: HTTP_LOOPBACK_PORT_8790_ON_SAME_VPS_HOST
-    no_public_direct_login_proxy: true
+    raw_mtproto_service_unauthenticated_public_exposure: FORBIDDEN
+    do_not_confuse_public_https_page_with_raw_local_gramjs_port: true
     do_not_log_phone_code_password_or_session: true
     bot_api_token_not_equal_to_mtproto_user_session: true
     existing_bot_remains_independent: true
@@ -762,6 +766,8 @@ instinto_superior_mtproto_account_linking:
   tests_required:
     - BUILD_THE_INSTINTO_SUPERIOR_MAIN_OWNER_AND_CHECK_ADMIN_ROUTE
     - CHECK_SERVERFN_REJECTS_UNAUTHENTICATED_AND_NON_ADMIN
+    - VERIFY_PUBLIC_HTTPS_ADMIN_PAGE_USES_AUTHORIZED_SERVER_FUNCTIONS
+    - VERIFY_PUBLIC_NON_ADMIN_AND_ANONYMOUS_REQUESTS_CANNOT_SEND_LOGIN_CODES
     - CHECK_LOOPBACK_ONLY_AND_NO_CREDENTIALS_RETURNED
     - VERIFY_HEALTH_STATUS_START_CONFIRM_AND_2FA_WITH_AUTHORIZED_ACCOUNT
     - VERIFY_SESSION_READBACK_AND_RECONNECT_WITHOUT_SECOND_ACCOUNT_OVERWRITE
@@ -770,7 +776,9 @@ instinto_superior_mtproto_account_linking:
   next_cursor: >-
     Measure actual Instinto Superior hosting topology: the server function must
     reach the existing GramJS bridge via loopback on same authorized VPS host;
-    if not colocated, reconcile existing private ingress without public exposure.
+    if not colocated, reuse the authorized authenticated HTTPS control plane
+    reachable by the Internet-facing Instinto Superior without exposing the raw
+    MTProto service as an unauthenticated endpoint. Public HTTPS login is allowed.
     Confirm API ID/hash from current secret owner (never commit), build and deploy
     the existing Instinto Superior surface through its gates, authenticate one
     dedicated Telegram user account with human-entered code/2FA, then verify
