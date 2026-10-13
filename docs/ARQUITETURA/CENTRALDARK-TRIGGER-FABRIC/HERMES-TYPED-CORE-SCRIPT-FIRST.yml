@@ -302,6 +302,66 @@ papagaio_fiel_typed_replay:
     - missing_recipe_escalates_only_when_needed
     - receipt_and_next_mission_transfer_counterproof
 
+
+# Sintese arquitetural descoberta pelo CHEFE: memoria procedural + executor + IA sob demanda.
+# Mnemônico fiel, nao uma nova maquina, engine, writer ou evidencia de runtime.
+architectural_synthesis_papagaio_hermes_kaizen:
+  intent_id: CHEFE_PAPAGAIO_FIEL_ARQUITETURA_INTEGRADA_20261013
+  status: DOCUMENTED_CANDIDATE_RUNTIME_NOT_PROVEN
+  authority: SEGREDO/CHEFE
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-TYPED-CORE-SCRIPT-FIRST.yml
+  reuses:
+    - papagaio_fiel_typed_replay
+    - HERMES_TYPED_CORE
+    - HERMES_INTELLIGENCE_MODE
+    - existing_memory_and_recipes
+    - existing_reality_judge_and_receipts
+    - existing_kaizen_learning_owner
+  architecture_class: SYNTHESIS_OF_EXISTING_CAPABILITIES_NOT_NEW_BRAINS
+  named_roles:
+    CHEFE: define a intencao, escopo e autorizacao
+    CENTRALDARK: organiza memorias, ferramentas, estados e continuidade
+    PAPAGAIO_FIEL: recupera experiencias comprovadas, com versao, prova e proveniencia
+    HERMES_TYPED_CORE: executa receita autorizada e compativel sem IA
+    INTELLIGENCE_MODE: complementa quando existe novidade nao coberta ou comando explicito
+    REALIDADE_CONTRAPROVA: verifica efeitos, nao aceita narrativa como prova
+    KAIZEN: promove aprendizado reusavel depois de teste e consumo comprovados
+  mnemonic_verse: |-
+    🦜 PAPAGAIO PRA LEMBRAR.
+    ⚙️ HERMES PRA EXECUTAR.
+    🧠 IA PRA COMPLEMENTAR.
+    🧿 REALIDADE PRA JULGAR.
+    💗 KAIZEN PRA APRIMORAR!
+  remembered_principle: "MENOS PEÇAS, MAIS CAPACIDADE, MESMA CENTRALDARK!"
+  operational_sequence:
+    - CHEFE_INTENT
+    - CENTRALDARK_RECONCILE_CONTEXT_AND_OWNERS
+    - PAPAGAIO_FIEL_FIND_VERIFIED_RECIPE
+    - VERIFY_VERSION_PROVENANCE_PRECONDITIONS
+    - IF_KNOWN_AND_AUTHORIZED_THEN_HERMES_TYPED_CORE_NO_AI
+    - IF_MEASURABLE_UNCERTAINTY_THEN_MEASURE_AND_RECONCILE
+    - IF_NOVEL_OR_CHEFE_ACTIVATES_THEN_INTELLIGENCE_MODE
+    - EXECUTE_ONLY_THROUGH_EXISTING_WRITER_AND_GATES
+    - REALITY_COUNTERPROOF_AND_EFFECT_READBACK
+    - RECEIPT_SHA_AND_NEXT_CURSOR
+    - KAIZEN_TESTED_LEARNING_TO_EXISTING_OWNER
+    - NEXT_MISSION_RETRIEVES_AND_REUSES_OR_RETURNS_UNKNOWN
+  proof_boundaries:
+    semantic_synthesis_recorded: true
+    mnemonic_is_runtime_proof: false
+    papagaio_mode_off_remains: true
+    recorded_recipe_is_not_consumed_recipe: true
+    replay_requires_live_precondition_revalidation: true
+    runtime_recipe_reuse_without_model_call: UNKNOWN
+    runtime_replay_without_duplicate_effects: UNKNOWN
+    kaizen_later_mission_learning_transfer: UNKNOWN
+    merge_and_deploy: NOT_CLAIMED
+  next_cursor: >-
+    Reuse the existing recipe/receipt consumer in Hermes; measure a known recipe
+    replay without model calls, changed-precondition refusal, idempotent effects,
+    counterproof and Kaizen transfer to the next mission. Keep UNKNOWN until live
+    readback and gate approval.
+
 papagaio_on_loop_receipts:
   - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
     mode: PAPAGAIO_ON_FIEL
