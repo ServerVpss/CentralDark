@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { TelegramContaCentralDark } from "@/components/central/TelegramContaCentralDark";
 import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -227,6 +228,8 @@ export function ConexoesCentralDark() {
           </div>
         ) : null}
       </div>
+
+      <TelegramContaCentralDark />
 
       <div className="panel mt-7 p-5">
         <h4 className="font-semibold">Fronteira atual</h4>
