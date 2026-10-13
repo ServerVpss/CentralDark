@@ -1302,3 +1302,10 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Anti-atrito:** evitar microaprovação, backcheck sem delta, auditoria ritual, menu em vez de execução e busca por verde estético. Manter autorização, integridade, privacidade, writer único e prova proporcional.
 - **Owners:** `docs/CONSCIENCIA/APRENDIZADOS.md#176`, `AGENTS.md#Método adaptativo`, `.agents/skills/centraldark-operational-method/SKILL.md#HEREDITARY_CRITERION_DNA`, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#adaptive_backcheck_contract`.
 - **Teste futuro:** próxima execução deve citar `learning_ref=L176`, escolher critérios mínimos, resolver sem burocracia redundante e devolver somente resultado, prova e `NEXT_CURSOR`.
+
+### [2026-10-13] Aprendizado #178 — modo operacional CentralDark
+- **Classe:** lembrança operacional e ponte para o aprendizado numerado. Norma viva nos owners de comportamento.
+- **Registro:** CHEFE consolidou o padrão: o agente deve transformar desejo humano em critérios próprios mínimos, executar em lote seguro, provar o delta certo e parar quando satisfizer o interesse do CHEFE.
+- **Frase de uso:** “Faça com seus próprios critérios mínimos, desde que carreguem meu desejo; execute sem microburocracia; prove o delta; preserve segurança; entregue NEXT_CURSOR.”
+- **Owners:** `APRENDIZADOS.md#178`, `AGENTS.md`, `.agents/skills/centraldark-operational-method/SKILL.md`, `MASTER-CYCLE.yml` e `PADRAO-RESPOSTA-SEGREDO-CHEFE.md`.
+- **Não esquecer:** `10/10 PASS` pode satisfazer o CHEFE; não desqualificar critério interno eficiente. Cautela excedente sai; segurança real fica.

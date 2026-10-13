@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "8a34ef9dbbba340e2ccc3aa8100516d8033b2245",
+  "source_blob_sha": "3606210f84cc2f41cc0f37d7ccfdd016ab5022f4",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 176,
-    "highest_legacy_learning_number": 177,
+    "learning_sections": 177,
+    "highest_legacy_learning_number": 178,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 177
+      "end": 178
     }
   },
   "nodes": [
@@ -2021,6 +2021,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L176",
+      "next_uid": "L178"
+    },
+    {
+      "uid": "L178",
+      "legacy_learning_number": 178,
+      "legacy_occurrence": 1,
+      "title": "Modo operacional CentralDark — critérios autodefinidos carregando o desejo do CHEFE",
+      "document_order": 177,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L177",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
