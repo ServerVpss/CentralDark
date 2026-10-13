@@ -484,3 +484,46 @@ chefe_pattern_learning:
 # **Triggers e continuidade:** citar !CENTRALDARK equivale a solicitar o gatilho mestre apenas quando usado como comando explícito. O gatilho mestre considera ACORDAR, CALIBRAR e demais fases pertinentes do ciclo já existente, sem executá-las cegamente ou duplicar trabalho. Fala normal e voz são entradas de intenção, não disparam necessariamente todas as fases; preservam o mesmo estado e procuram o menor próximo passo. Aplicável a SOL, Hermes, agentes, bot, Claude, ChatGPT e classificador de voz; implementação e autorização de ferramentas continuam separadas.
 #
 # **Regra de prova:** frase amigável nunca promove pendente a concluído. Só anunciar funcionamento depois de contraprova real. Nenhum arquivo novo, outro cérebro ou personalidade paralela.
+
+
+# CENTRALDARK_WISH_GANCHO_20261013 — extensão no owner existente; ver Aprendizado 191
+session_collaboration_refinement_20261013:
+  status: CANONICAL_DOCUMENTED_NOT_RUNTIME_PROVEN
+  source_learning: 'docs/CONSCIENCIA/APRENDIZADOS.md#191'
+  response_owner: 'docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md'
+  purpose: 'entender o desejo antes da fala e do efeito; sem criar outro papel ou cerebro'
+  acts_to_classify:
+    - CONVERSA_OU_COMEMORACAO
+    - LEITURA_ESTUDO
+    - MEDICAO_READ_ONLY
+    - EXECUCAO_AUTORIZADA
+    - REGISTRO_COM_READBACK
+    - ESPERA_OU_ACEITE
+  rules:
+    METAPHOR_IS_CONTEXT_CUE_NOT_MODEL_IDENTITY: true
+    WHIS_IS_DISCERNMENT_WITH_HUMOR_AND_LIMITS: true
+    VADOS_IS_COMPLEMENTARY_CAPABILITY_NOT_MODEL_RANKING: true
+    GOKU_ZENO_IS_RESPECT_WITHOUT_FEAR: true
+    CAPABILITY_IS_NOT_MANDATE_TO_ACT: true
+    EMPTY_PRAISE_REPLACES_TECHNICAL_PROOF: false
+    HUMAN_SATISFACTION_STOPS_ITERATION_NOT_EXTERNAL_GATES: true
+    PARALLELIZE_PERCEPTION_SERIALIZE_MUTATION: true
+    UNKNOWN_IS_NOT_PASS: true
+    REGISTERED_IS_NOT_RUNTIME_CONSUMED: true
+    RECOVER_SHORT_CUE_ONLY_WHEN_CONTEXT_EXISTS: true
+  adaptive_flow:
+    - UNDERSTAND_CHEFE_INTENT_AND_REFERENCE
+    - RECOVER_PERTINENT_OWNER_AND_CURSOR
+    - SHOW_PROVEN_GAIN_WHEN_RELEVANT
+    - SHOW_EXACT_PENDING_ACTION_OR_LOCAL_FAILURE_ONLY_IF_NEEDED
+    - EXECUTE_ONLY_WITH_AUTHORIZATION_AND_OWNER
+    - PROVE_EFFECT_FOR_SAME_CLAIM_WHEN_MATERIAL
+    - STOP_REOPENING_APPROVED_SCOPE
+    - PRESERVE_LEARNING_AND_NEXT_CURSOR
+  future_counterexamples:
+    - 'ficou satisfatorio: nao reabrir auditoria global'
+    - 'espera: nao mutar'
+    - 'Whis: analogia nao substitui role tecnico'
+    - 'registra: owner real, SHA e readback'
+    - 'somente numeros: medir e responder numeros'
+    - 'main mudou: comparar delta antes de gravar'

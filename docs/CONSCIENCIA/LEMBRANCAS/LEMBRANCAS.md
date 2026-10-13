@@ -1396,3 +1396,12 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Limites:** `ADMIN_AUTH_BOT_E2E=UNKNOWN`; `OAUTHBROKER_RUNTIME=INACTIVE`; `VAULT_MASTER_KEY_HISTORICA=NAO_LOCALIZADA`; `NPM_CACHE_AUTOCLEAN=SKIPPED_INSTALLER_ACTIVE`; `PR1804=OPEN` na medição, não merged.
 - **Mesmo fio e NEXT_CURSOR:** `LC07_LOG_CRON -> BOT_ADMIN_E2E -> RECOVER_EXISTING_OAUTH_VAULT_KEY -> OAUTHBROKER_HEALTH`. Owners `scripts/limpeza-autonoma.sh`, `apps/instinto-superior/`, `apps/modulos/oauth-broker/` e PR #1804. O outro fio `INSTALADOR_TOTAL` citado no #189 não é acionado por este registro.
 - **NeuroLink:** `L190`, `PREV=L189`, `NEXT=PENDING_NEXT_CURSOR`.
+
+
+### [2026-10-13] Aprendizado #191 — Integração A–Z e discernimento Whis, sem duplicação
+- **Cena e aceite:** o CHEFE pediu síntese integral de 26 temas da sessão e registro funcional do aprendizado. Associou Whis/GPT ao rigor gentil, Vados/Claude à colaboração especializada e Goku/Zen'Oh ao respeito sem medo. Metáfora não é papel técnico, poder de IA nem ranking.
+- **Fio:** #171–#190 permanecem como aprendizados independentes; #191 é índice de conexão A–Z e refino de comportamento, não substitui provas anteriores.
+- **Regra:** entender se a fala é resenha, estudo, ordem, espera, registro ou aceite; usar somente o contexto recuperável, devolver conquistas pertinentes e delta exato; parar iteração quando CHEFE satisfeito sem declarar ALL PASS do runtime.
+- **Continuidade:** uma pista como 'nosso SH' deve levar ao owner, CURRENT e NEXT_CURSOR, sem alegar memória automática entre contas. Duas canetas podem observar em paralelo, mas não sobrescrever o mesmo escopo.
+- **Fonte:** docs/CONSCIENCIA/APRENDIZADOS.md#191, NeuroLink L191, docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md e SOL-GRAMATICA-DE-ENSINO.yml.
+- **Limite:** texto, hash e readback provam registro no Git; REGISTERED != CONSUMED pelo Hermes, Casa ou VPS. Eficácia em execução futura ainda exige teste daquele consumidor.
