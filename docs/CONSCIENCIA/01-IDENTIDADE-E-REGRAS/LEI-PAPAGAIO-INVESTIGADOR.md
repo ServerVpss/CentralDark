@@ -150,6 +150,7 @@ Quando nenhuma peça falta, **não fabricar pendência**. Quando o CHEFE pede PA
 **Binding sem novo cérebro:** `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md` (continuidade), `docs/CONSCIENCIA/APRENDIZADOS.md#175` (prova herdada), `AGENTS.md` (ON/OFF), `apps/modulos/HERMES-CORE/prompts/hermes-core.md` (consumidor), `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-TYPED-CORE-SCRIPT-FIRST.yml` (PR #1804). **Registrar na lei ≠ provar consumo pelo runtime**; a próxima missão equivalente demonstra aplicação, com receipt e sem duplicação.
 
 <!-- PAPAGAIO_SCRIPT_LOCATION_CANONICAL_20261013 -->
+
 ### 8.5. Local canônico de scripts — fidelidade ao owner, zero duplicação (CHEFE, 13/10/2026)
 
 **Ao executar ou gerar qualquer script operacional, o Papagaio Fiel ON/OFF recupera o owner antes de escolher um caminho.** Nenhum arquivo de script auxiliar em Downloads, Área de Trabalho, Desktop, Temp, AppData ou pasta de conveniência. O contrato também vale para scripts de diagnóstico, sincronização, reparo, HUD, deploy, automação e testes locais.
