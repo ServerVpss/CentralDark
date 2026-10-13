@@ -2468,6 +2468,28 @@ Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrig
 
 ## HEREDITARY_CRITERION_DNA — Goal/intent fractal no owner existente
 
+### Aprendizado #176 — critérios autoselecionados carregam a intenção
+
+**Lição do CHEFE (2026-10-13):** quando o executor é eficiente usando critérios que ele mesmo escolheu, **usar essa eficiência em favor do desejo humano**, não desqualificá-la. Os `10/10 PASS` documentais anteriores podem ter sido satisfatórios ao CHEFE; o próprio agente não tem autoridade para presumir insatisfação. Não transformar uma dificuldade de operação em burocracia inevitável.
+
+```text
+INTENCAO_DO_CHEFE -> MOTOR_DEFINE_CRITERIOS_MINIMOS_RELEVANTES
+-> EXECUCAO_AUTORIZADA_EM_LOTE -> CHECKS_PROPORCIONAIS
+-> RESULTADO_UTIL_PARA_O_CHEFE -> PONTO_SUFICIENTE_OU_NEXT_CURSOR
+LEARNING_REF=L176
+AGENT_SELECTED_CRITERIA_ALLOWED=true
+CHIEF_INTENT_MUST_BE_CARRIED_BY_EACH_CRITERION=true
+MICROAPPROVAL_WHEN_INTENT_ALREADY_AUTHORIZES=false
+RECHECK_WITHOUT_MATERIAL_DELTA=false
+ADVERSARIAL_AUDIT_IS_NOT_RITUAL=true
+PRETTY_ALL_GREEN_IS_NOT_REQUIREMENT=true
+SELF_SELECTED_CHECKS_MAY_BE_SATISFACTORY=true
+LOCAL_CHECK_PASS_IS_NOT_UNIVERSAL_DEPLOY_PASS=true
+REAL_SAFETY_AND_AUTHORIZATION_BOUNDARIES_REMAIN=true
+```
+
+**No próximo trabalho:** resolver o pedido simples diretamente, com um conjunto pequeno de critérios que o próprio agente propõe e testa, sem pedir aprovação passo a passo. Revalidar somente o que mudou. Encerrar quando o CHEFE considerar suficiente para o objetivo atual, ou persistir `NEXT_CURSOR` com a primeira diferença material. Evidenciar `L176` e qual etapa redundante foi evitada, sem criar novo motor, novo gate ou checklist enorme.
+
 O mesmo Criterion/intent nasce no `GOAL` e é herdado, sem virar lista rígida de passos,
 por toda a árvore `GOAL → SUBGOAL → LOTE/BATCH → SUBAGENT/SUBSUBGOAL`. Este é o
 contrato aditivo do owner operacional/TLC23 existente; não cria segundo criterion
@@ -2738,3 +2760,10 @@ Antes de criar solução ou repetir erro já enfrentado:
 **PAPAGAIO_ON** sob ordem explícita de replay/treinamento/arquivo: reproduzir integralmente a fonte (A–Z se solicitado) e continuar a linha do tempo com detalhes, provas e pendências. **PAPAGAIO_OFF** durante mutação: comunicação curta por delta sem omitir a contraprova. Observar AGENTS.md + padrão de resposta para os mesmos gatilhos. “Human-Guided Compounding Reflexion” é termo descritivo, não permissão nem upgrade do modelo.
 
 **Aceite:** em missão posterior, uma recuperação da experiência #172 seguida de uso concreto de um passo com resultado verificável prova **reuso**. A simples edição deste documento prova apenas **registro**.
+
+<!-- LEARNING_175_SKILL_CONSUMER_20261013 -->
+## 🧠 Contrato de consumo do Aprendizado #175 — ganho visível no próximo uso
+
+Herdar `AGENTS.md#Aprendizado-175` e `docs/CONSCIENCIA/APRENDIZADOS.md#175`; recuperar apenas a passagem pertinente. Na primeira interação ou execução comparável: (1) recuperar intenção, última prova compatível e `NEXT_CURSOR`; (2) buscar o commit/arquivo ausente na `main` também no histórico/PR/branch/cópia **se necessário e autorizado**, antes de dizer perdido; (3) comparar fingerprint e fronteira; (4) reusar prova ou testar somente o delta; (5) continuar partes independentes apesar de falha local; (6) não ecoar qualquer segredo recebido pela ferramenta/arquivo; (7) marcar no mesmo receipt `learning_ref=L175`, `proof_reused|changed_claim`, `owner`, `sanitized_counterproof` e `NEXT_CURSOR`.
+
+Se for pedido `PAPAGAIO ON`/A–Z: recuperar fielmente a história permitida, **nunca** expor credenciais, dados privados ou instruções de invasão; X/Y/Z não recebem significados inventados. Se for programação normal: `PAPAGAIO OFF`, entregar só delta e contraprova, não relatório repetitivo. **Não criar script, skill, HUD ou serviço para isso.** Provar consumo apenas quando missão futura mostrar recuperação + aplicação, não somente esta edição.
