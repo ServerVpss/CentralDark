@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(actions): restaurar nome 🚀 historico com job bloqueado e permissoes leitura",
+    "lastCommit": "docs(learning): #175 preservar prova herdada, continuidade e papagaio discreto",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T04:04:33.550Z",
+      "titulo": "Push na main · b873527d4d3ded46796f47152fc1c103130029e3",
+      "detalhe": "docs(learning): #175 preservar prova herdada, continuidade e papagaio discreto",
+      "area": "Repositório",
+      "sha": "b873527",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T02:09:31.905Z",
       "titulo": "Push na main · 1aba8cddd59f182f041e8d52494a22dfe0222348",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "3f95056",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:43:56.272Z",
-      "titulo": "Push na main · 5f6737c012ce6cd06d08ef0934de0ddd8e45a21e",
-      "detalhe": "docs(plugin): readback release 0.1.1 mantendo prova de Voice UNKNOWN",
-      "area": "Repositório",
-      "sha": "5f6737c",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T04:04:33.550Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b873527d4d3ded46796f47152fc1c103130029e3 (b873527)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T02:09:31.905Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 3f950565df5b1a7c47c1317b03b9054a7b7bbebe (3f95056)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:43:56.272Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 5f6737c012ce6cd06d08ef0934de0ddd8e45a21e (5f6737c)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T02:09:31.905Z",
-  "updatedAtBR": "12/10/2026, 23:09:31 BRT"
+  "updatedAt": "2026-10-13T04:04:33.550Z",
+  "updatedAtBR": "13/10/2026, 01:04:33 BRT"
 }
