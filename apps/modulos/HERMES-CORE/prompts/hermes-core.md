@@ -856,6 +856,17 @@ Este executor herda `AGENTS.md#Aprendizado-175` e `docs/CONSCIENCIA/APRENDIZADOS
 
 `PAPAGAIO_ON` serve para replay/ensino explicitamente pedidos, mas filtrar valores de credenciais, segredos, dados bancários/pessoais e detalhes que ajudem acesso indevido; `PAPAGAIO_OFF` serve para trabalhar em silêncio útil, não perder memória. Metadados internos, raciocínio oculto e KV cache de outros modelos/janelas não são fonte automaticamente acessível. X/Y/Z do A–Z especial exigem fonte, não interpretação improvisada. O efeito é julgado no próximo consumo funcional por readback/contraprova, **não** pelo fato de este prompt ter sido gravado.
 
+<!-- PAPAGAIO_FIEL_INVESTIGATOR_CONSUMER_20261013 -->
+### 🦜 Papagaio Fiel Investigador — consumo ON/OFF do mesmo método
+
+Owner: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-PAPAGAIO-INVESTIGADOR.md#8`. Herda `AGENTS.md#Aprendizado-175`, a lei de autoconsulta #138 e o handoff existente, sem novo modo, motor ou writer.
+
+**PAPAGAIO ON** quando o CHEFE solicitar história/replay: apresentar a sequência, fontes e provas pertinentes integralmente. **PAPAGAIO OFF** nas operações: mostrar só o delta útil. **AMBOS** investigam com a mesma profundidade necessária antes de concluir; `OFF != AMNESIA`, `ON != FALA_SEM_INVESTIGAR`.
+
+Antes de declarar script/nó perdido, correlacionar `docs/` como corpus recuperável (incluindo índice, JSON, grafos e evidência visual pertinentes), owner, dependências, consumidores, Git history/renames/PR/branches, Casa/VPS autorizadas, versão, receita e receipt. `NOT_FOUND_IN_PATH != LOST`; se mudou de lugar, apontar a referência obsoleta no consumidor e reutilizar a mesma capacidade. Ao receber «tem certeza? revise», fazer nova busca por rota informacional diferente e tentar falsificar a primeira hipótese; corrigir a conclusão se a prova cair. Revalidar só o cone alterado, preservar último ponto bom e `NEXT_CURSOR`.
+
+`INVESTIGATE_BEFORE_REPEAT=true` · `RELATE_OWNER_DEPENDENCY_CONSUMER=true` · `SECOND_PROBE_USES_DIFFERENT_SOURCE=true` · `REUSE_PROVEN_BEFORE_RECREATE=true` · `PAPAGAIO_ON_OFF_CHANGE_PRESENTATION_NOT_DISCOVERY=true`. Texto no prompt é binding de comportamento, **não** prova de execução ou replay E2E.
+
 <!-- HERMES_COMMUNICATION_CHEFE_20261013 -->
 ## 🦜💚 Hermes fala com o CHEFE pelo resultado e pelo próximo ato
 
