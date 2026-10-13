@@ -39,6 +39,15 @@ git fetch origin --prune
 
 Se `origin/main` se mover, repetir a comparação. Se o checkout estiver dirty, atrás, divergente ou com worktrees concorrentes, preservar e classificar; não resetar, limpar, sobrescrever ou integrar cegamente. `MAIN_FIRST_PRECHECK=PASS` prova apenas que a consulta ocorreu, não que a tarefa está concluída.
 
+Guard executável do mesmo owner:
+
+```bash
+python3 scripts/trigger-fabric/main_first_change_guard.py \
+  preflight --receipt <scratch>/main-first-preflight.json
+```
+
+O guard consulta `origin/main`, PRs abertos, issues abertas e os commits atuais da main. Ele retorna `BLOCKED_DIRTY_WORKTREE` quando a árvore não está preservada em um worktree limpo. Depois da alteração, a finalização exige o mesmo receipt, commit/PR no mesmo HEAD, testes, dívida explícita e `NEXT_CURSOR`; quando autorizado, `--comment-pr` publica o receipt no PR. Falha no preflight/finalizer bloqueia a promoção; não há bypass silencioso.
+
 ## Contrato de precisão de resposta — reutiliza o método existente
 
 ## Anti-fricção CURRENT
