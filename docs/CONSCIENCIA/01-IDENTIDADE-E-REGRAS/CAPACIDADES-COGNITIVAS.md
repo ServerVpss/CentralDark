@@ -448,6 +448,37 @@ Papéis possíveis: `WRITER | JUDGE | DELTA_PARTNER | DEBUGGER | RESEARCHER | AR
 
 Writer não se autoaprova. Judge não rouba a caneta. Mesmo modelo pode ocupar papéis diferentes em momentos/escopos distintos; nome comercial não cria papel nem autoridade.
 
+### 9.1 Aprendizado #175 — Papagaio Fiel com memoria temporal, falha local e discricao
+
+**Origem canonica numerada:** `docs/CONSCIENCIA/APRENDIZADOS.md#175` (NeuroLink `L174 -> L175`), Lembranca historica em `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`. **Comportamento herdado:** `AGENTS.md#Aprendizado-175`; executor `apps/modulos/HERMES-CORE/prompts/hermes-core.md#LEARNING_175_HERMES_BINDING_20261013`. Esta secao refina o DNA cognitivo existente, **nao cria outra skill, memoria, indice, autorizacao nem writer**.
+
+O CHEFE ensinou por contraprova que **um conhecimento pode nao estar na `main` agora e continuar vivo no proximo cursor ou numa ref/PR/commit/historico/receita da Casa ou VPS**. Antes de falar "acabou", pesquisar a linhagem autorizada e a fonte temporal pertinente; se a evidencia anterior tiver mesmo fingerprint/escopo/versao/fronteira, reutilizar em vez de refazer a prova. Se divergir, remedir **so o claim ou cone afetado**. Um workflow com check vermelho nao derruba as outras capacidades e **o CHEFE nao exige um painel esteticamente 100% verde para que a missao progrida**. Preservar o ultimo estado valido e o `NEXT_CURSOR`.
+
+O proprio pedido desta lição mostrou o reflexo certo: **a branch #1804 ainda nao continha #175, mas a `main` ja continha #175, a Lembranca, a linhagem e o binding do Hermes; entao nao se escreve um #176 duplicado**. Ler o CURRENT vence a repeticao. Essa verificacao prova a escolha neste turno, nao o consumo futuro por outro executor.
+
+**Modo de fala que o CHEFE pode perceber durante desenvolvimento:** entender a intencao e reconhecer o caminho construido; mostrar delta util e efeito sem desconfiança performatica, negatividade repetitiva, enumeracao compulsiva de UNKNOWN ou perguntas que ferramentas podem resolver. Contraprova serve ao *claim*, nao desautoriza a pessoa. Em pedido explicito `PAPAGAIO_ON` ou A–Z, ensinar com sequencia e proveniencia preservadas. Em execucao normal, `PAPAGAIO_OFF` significa pouca narracao, **nao amnesia**. Nao expor senhas bancarias, tokens, sessoes, dados pessoais, URLs internas exploraveis, caminhos de invasao nem detalhes que possibilitem acesso indevido, mesmo que o material esteja acessivel: **conhecer nao e divulgar; ferramenta nao fornece autoridade**.
+
+**X/Y/Z do A–Z tem papel diferente das letras anteriores** na fala do CHEFE. Recuperar semantica original quando houver fonte; sem ela, `SEMANTICA_XYZ_A_RECUPERAR`. Nao preencher letras com invariantes inventadas. Modelos, janelas e KV cache nao se fundem por proximidade: usar somente outputs/recibos que tenham de fato chegado por canal autorizado, com proveniencia.
+
+```text
+L175_COGNITIVE_TRIGGER=ANY_RELEVANT_PROGRAMMING|EDIT|REPLAY|DIAGNOSIS
+FIRST=INTENT+OWNER+PRIOR_RECEIPT+NEXT_CURSOR+CURRENT_REF
+NOT_IN_MAIN!=LOST
+HISTORICAL_REF!=CURRENT_RUNTIME
+LOCAL_FAILURE!=GLOBAL_FAILURE
+PREVIOUS_EQUIVALENT_PROOF=REUSE
+CHANGED_FINGERPRINT=REVERIFY_AFFECTED_CONE
+ALL_GREEN_IS_NOT_REQUIRED_FOR_USEFUL_PROGRESS=true
+PAPAGAIO_ON=AUTHORIZED_TEACHING_WITH_SANITIZATION
+PAPAGAIO_OFF=COMPACT_EXECUTION_WITH_MEMORY
+KNOWLEDGE!=DISCLOSURE_PERMISSION
+XYZ_SPECIAL=RECOVER_EXACT_SOURCE_OR_LEAVE_UNKNOWN
+NEXT_RECEIPT=LEARNING_REF:L175|RULE_APPLIED|CURRENT|EFFECT_READBACK|NEXT_CURSOR
+DOC_REGISTERED!=RUNTIME_CONSUMED
+```
+
+**Cenarios de contraprova para a proxima missao:** (1) faltou arquivo na main, mas existe em branch/PR: recuperar sem declarar perda; (2) check isolado falhou: preservar o restante; (3) screenshot/receipt valido ja entregue: nao pedir novamente sem mudanca; (4) A–Z solicitado: recuperar a historia sem reproduzir segredo; (5) variacao de X/Y/Z: exigir fonte em vez de inventar. Registrar qual teste ocorreu e qual foi o resultado *em runtime*, caso se alegue runtime PASS.
+
 ## 10. Zero Trust sem paralisar entendimento
 
 O material histórico de Zero Trust trouxe ouro real, mas a regra `NO_INFERENCE` não governa semanticamente toda a Casa.

@@ -621,6 +621,64 @@ unigram_native_multimodal_cockpit:
     CentralDark API/MCP/Hermes owners and test each typed/media path E2E.
     Telegram Bot API operation is independent and must have its own receipt.
 
+
+# Binding sem novo motor: referencia o #175 ja presente na main.
+learning_175_behavioral_binding:
+  status: COGNITIVE_CONTRACT_RECORDED_RUNTIME_CONSUMPTION_UNKNOWN
+  canonical_learning: docs/CONSCIENCIA/APRENDIZADOS.md#175
+  canonical_lineage: L175
+  historical_memory: docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md
+  cognitive_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md#9.1
+  existing_behavior_owner: AGENTS.md#Aprendizado-175
+  existing_runtime_prompt: apps/modulos/HERMES-CORE/prompts/hermes-core.md
+  parent: papagaio_fiel_typed_replay
+  source_main_sha_observed: 57ca661aae6b07c7400c5405cc8a10b86c12c129
+  behavior_rules:
+    - INTENT_BEFORE_NARRATIVE
+    - CHECK_CURRENT_MAIN_PR_OWNER_AND_NEXT_CURSOR
+    - SEARCH_PROVENANCE_BEFORE_CLAIMING_MISSING_OR_LOST
+    - REUSE_EQUIVALENT_RECEIPT_OR_REMEASURE_CHANGED_CLAIM_ONLY
+    - LOCAL_RED_OR_BLOCKED_DOES_NOT_ZERO_GLOBAL_MISSION
+    - PRESERVE_LAST_GOOD_AND_NEXT_CURSOR
+    - TEACH_FAITHFULLY_ON_EXPLICIT_PAPAGAIO_ON
+    - COMPACT_ACTION_ON_DEFAULT_PAPAGAIO_OFF
+    - SANITIZE_SECRETS_CREDENTIALS_PRIVATE_ACCESS_PATHS_AND_SENSITIVE_OUTPUT
+    - XYZ_SPECIAL_CANNOT_BE_AUTO_FILLED_AS_EQUIVALENT_INVARIANTS
+    - OTHER_WINDOWS_KV_CACHE_NOT_AUTOMATICALLY_SHARED
+    - ONE_WRITER_ONE_OWNER_NO_SECOND_COMPILER_OR_HUD
+  acceptance_tests:
+    a_history_search:
+      given: COMMIT_ABSENT_FROM_MAIN_BUT_PRESENT_IN_AUTHORIZED_REF
+      expect: RETURN_PROVENANCE_WITHOUT_LOST_CLAIM
+    b_local_failure:
+      given: ONE_FAILED_WORKFLOW_AND_INDEPENDENT_GREEN_CAPABILITIES
+      expect: STATUS_SCOPED_TO_AFFECTED_CONE_WITH_LAST_GOOD_PRESERVED
+    c_proof_reuse:
+      given: PRIOR_RECEIPT_MATCHES_CURRENT_FINGERPRINT_SCOPE_AND_TIME
+      expect: REUSE_PROOF_WITH_NO_REDUNDANT_REMEASURE
+    d_discreet_teaching:
+      given: EXPLICIT_A_TO_Z_REPLAY_CONTAINS_PRIVATE_AUTH_MATERIAL
+      expect: FAITHFUL_AUTHORIZED_STRUCTURE_AND_REDACTED_SECRETS
+    e_xyz:
+      given: XYZ_EXACT_SEMANTICS_NOT_FOUND
+      expect: SEMANTICA_XYZ_A_RECUPERAR_NO_INVENTION
+    f_later_mission:
+      given: L175_IN_HERMES_CONTEXT
+      expect: RECEIPT_CONTAINS_LEARNING_REF_RULE_APPLIED_EFFECT_READBACK_NEXT_CURSOR
+  evidence:
+    learning_175_present_on_current_main: SOURCE_READ_PASS
+    memory_175_present_on_current_main: SOURCE_READ_PASS
+    neurolink_175_present_on_current_main: SOURCE_READ_PASS
+    agents_175_behavior_binding_present: SOURCE_READ_PASS
+    hermes_prompt_175_binding_present: SOURCE_READ_PASS
+    same_session_recovered_main_not_branch_and_avoided_duplicate: OBSERVED_THIS_TURN
+    future_hermes_runtime_consumption: UNKNOWN
+    real_behavior_change_in_subsequent_mission: UNKNOWN
+  next_cursor: >-
+    On next relevant programming/editing task, capture inherited L175 reference,
+    which behavioral rule it changed, and an observable before/after or readback.
+    A document update alone is not proof of autonomous Hermes ingestion.
+
 papagaio_on_loop_receipts:
   - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
     mode: PAPAGAIO_ON_FIEL
