@@ -220,3 +220,69 @@ implementation_progress:
     deterministic_router_selftest: { percent: 100, status: PASS, color: green }
     telegram_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
     whatsapp_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
+
+papagaio_on_loop_receipts:
+  - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
+    mode: PAPAGAIO_ON_FIEL
+    source: SOL_RESPONSE_TO_CHEFE_LOOP_CONTINUATION
+    recorded_at: 2026-10-13
+    commit_intent: "Registrar fielmente o receipt operacional entregue ao CHEFE apos voltar ao loop da PR #1804."
+    receipt: |-
+      🪬 INTENÇÃO
+      Voltei pro loop e continuei o NEXT_CURSOR da PR #1804.
+
+      🧠 OWNER
+      HERMES-AUTOCONFIG-RUNTIME.yml + HERMES-CORE + HUD único.
+
+      🔍 CURRENT
+      PR #1804 segue open, mergeable=true, não merged, head agora em:
+
+      92a8ea6ed6b13673546b0804112aa16a816704cf
+
+      🔧 DELTA FEITO
+      Liguei o cristal no runtime real:
+
+      HERMES-AUTOCONFIG-RUNTIME.yml → consome o cristal
+      hermes-core.md → invariant model-agnostic
+      routing-strategy.mjs → resolveHermesExecutionMode
+      routing-strategy.test.mjs → self-test determinístico
+      HUD.html → bolinhas atualizadas
+
+      O placar da PR agora está assim:
+
+      🟢 Cristal 100%
+      🟢 PR cockpit 100%
+      🟢 HUD topo 100%
+      🟢 Consumer HERMES-AUTOCONFIG 100%
+      🟢 Prompt/runtime Hermes 100%
+      🟢 Router/self-test determinístico 100%
+      ⚪ Telegram 0%
+      ⚪ Zap/WhatsApp 0%
+
+      ⚙️ EXECUÇÃO
+      Rodei o teste direto:
+
+      node apps/modulos/HERMES-CORE/core/routing-strategy.test.mjs
+
+      Resultado: PASS.
+
+      🎯 PROVA
+      PR agora tem 4 commits, 6 arquivos alterados, +356 / -1.
+      Também coloquei labels: centraldark, hermes, runtime, hud.
+
+      💗 APRENDIZADO
+      Agora não é mais só cristal/documento. Já entrou no caminho consumidor:
+
+      evento conhecido → HERMES_TYPED_CORE
+      ambiguidade medível → mede e continua
+      /intelligence ou falta real de regra → HERMES_INTELLIGENCE_MODE
+      órgão vivo → owner + gate + receipt
+
+      ➡️ NEXT_CURSOR
+      Faltam só as superfícies externas:
+
+      1. Telegram conectado ao mesmo typed core
+      2. Zap/WhatsApp conectado ao mesmo typed core
+      3. Depois merge/deploy/readback
+
+      MERGED=false. DEPLOYED=false.
