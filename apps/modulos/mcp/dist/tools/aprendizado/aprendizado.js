@@ -217,7 +217,17 @@ export const aprendizadoTools = [
                 ``,
             ].join("\n");
             // NeuroLink cognitivo: o anterior deixa de ser o último (verify_repo_contract NEUROLINK_NUMERIC_CONTINUITY).
-            const baseEncadeada = base.replace(`\`NEXT_LEARNING_REF=PENDING_NEXT_CURSOR\``, `\`NEXT_LEARNING_REF=${proximo}\``);
+            // Só a seção de maior número (o antecessor real) tem o cursor fechado; prosa em outras seções não é tocada.
+            const cabecalhos = [...base.matchAll(/^###\s+(\d+)\./gm)];
+            const ultimo = cabecalhos.find((m) => parseInt(m[1], 10) === proximo - 1);
+            let baseEncadeada = base;
+            if (ultimo) {
+                const ini = ultimo.index;
+                const prox = cabecalhos.find((m) => m.index > ini);
+                const fim = prox ? prox.index : base.length;
+                const secao = base.slice(ini, fim).replace(`\`NEXT_LEARNING_REF=PENDING_NEXT_CURSOR\``, `\`NEXT_LEARNING_REF=${proximo}\``);
+                baseEncadeada = base.slice(0, ini) + secao + base.slice(fim);
+            }
             const novoConteudo = baseEncadeada.trimEnd() + "\n" + bloco;
             const r = await escreverArquivo(ctx.token, APRENDIZADOS_PATH, novoConteudo, `aprendizado(#${proximo}): ${limpo.titulo}`);
             return textBlock(JSON.stringify({ ok: true, numero: proximo, categoria, commit: r, arquivo: APRENDIZADOS_PATH }, null, 2));
