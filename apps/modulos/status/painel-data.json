@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(reconcile): incluir delta das duplicatas e sinalizar varredura parcial",
+    "lastCommit": "docs(centraldark): anexar fontes completas das duas frentes ao pacote de replay",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-12T23:59:59.580Z",
+      "titulo": "Push na main · 42bf15d37efdfbf8c3182dad04b2b9e639d7a0fe",
+      "detalhe": "docs(centraldark): anexar fontes completas das duas frentes ao pacote de replay",
+      "area": "Repositório",
+      "sha": "42bf15d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-12T23:47:45.604Z",
       "titulo": "Push na main · 9277a9ff41c7b341411fe6465186231554116904",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "06da8aa",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T23:14:52.017Z",
-      "titulo": "Push na main · 95fa4e2a3e30290ef191edfafb90d61a0efd4b1c",
-      "detalhe": "docs(memory): apontar vault Casa K em migracao no owner docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/OBSIDIAN-CASA-SINCRONIZACAO.md",
-      "area": "Repositório",
-      "sha": "95fa4e2",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-12T23:59:59.580Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 42bf15d37efdfbf8c3182dad04b2b9e639d7a0fe (42bf15d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-12T23:47:45.604Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 06da8aad878f624d2717661a2ceb9d4901dffe5b (06da8aa)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T23:14:52.017Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 95fa4e2a3e30290ef191edfafb90d61a0efd4b1c (95fa4e2)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-12T23:47:45.604Z",
-  "updatedAtBR": "12/10/2026, 20:47:45 BRT"
+  "updatedAt": "2026-10-12T23:59:59.580Z",
+  "updatedAtBR": "12/10/2026, 20:59:59 BRT"
 }
