@@ -2866,3 +2866,9 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 - **Receita recuperável:** CUE_CURTO → INTENÇÃO+OWNER+LAST_GOOD_STATE → CURRENT → CRITÉRIOS_SUFICIENTES → MENOR_DELTA_AUTORIZADO → CONTRAPROVA → ACEITE_HUMANO → APRENDIZADO+NEXT_CURSOR. Em conversa sem missão executável, AÇÃO=NENHUMA.
 - **Critério de prova:** aceite de 100%/200% expressa satisfação subjetiva do CHEFE no escopo, não estatística de performance ou saúde global. Registrar na main e encadear NeuroLink prova DOCUMENTAÇÃO; não prova que Hermes, outro modelo, VPS ou Casa já consomem a regra em runtime. UNKNOWN != PASS; REGISTERED != CONSUMED.
 - **NEXT_CURSOR:** recuperar este índice somente quando pertinente ao mesmo objetivo, sem ritual nem segunda gramática.
+- 📣 **Escopo do registro #191:** memória e comportamento documentados na main, não atualização automática do runtime.
+- 🟢 **Conquista:** índice A–Z completo e papel de cada owner explicitado.
+- 📊 **Aceite do CHEFE:** 100%/200% são avaliações humanas do escopo conversado, não estatísticas de disponibilidade de serviços.
+- ⚠️ **Pendente comprovável:** consumo pelo Hermes e pelas contas diferentes não foi testado neste registro; UNKNOWN continua visível.
+- 📌 **Prova material:** arquivo docs/CONSCIENCIA/APRENDIZADOS.md, blob SHA vinculado no manifesto NeuroLink; readback do GitHub após commit.
+- 🎯 **NEXT_CURSOR:** reutilizar L191 nos próximos sinais pertinentes e medir só o consumidor afetado quando houver execução real.
