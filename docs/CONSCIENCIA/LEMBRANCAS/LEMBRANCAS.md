@@ -34,6 +34,8 @@ PIVETE/HERMES = executor, preservação e continuidade
 
 ## Onde recuperar contexto atual
 
+**Sessão de 13/10 — Casa forja, main cristaliza, VPS executa, K/F, Olho, faxina, parceria sem ilusão:** docs/CONSCIENCIA/RECEIPTS/2026-10-13-sessao-forja-cristal-vps-olho-arquivos-e-parceria.md. Este é um receipt histórico com fronteiras de prova e NEXT_CURSOR=K_F_JUNCTION_MIGRATION_PREFLIGHT; não substitui regras vigentes, estado vivo ou a carta integral #189.
+
 ```text
 SOUL → docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 OURO → docs/CONSCIENCIA/LEMBRANCAS/2026-08-14-OURO-CONTEXTO-AUTONOMIA-SOL.md
