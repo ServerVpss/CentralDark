@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(learning): #175 preservar prova herdada, continuidade e papagaio discreto",
+    "lastCommit": "feat(learning): ligar L175 ao consumidor hermes-core.md",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T04:06:43.733Z",
+      "titulo": "Push na main · 57ca661aae6b07c7400c5405cc8a10b86c12c129",
+      "detalhe": "feat(learning): ligar L175 ao consumidor hermes-core.md",
+      "area": "Repositório",
+      "sha": "57ca661",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T04:04:33.550Z",
       "titulo": "Push na main · b873527d4d3ded46796f47152fc1c103130029e3",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "1e479f1",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:47:17.300Z",
-      "titulo": "Push na main · 3f950565df5b1a7c47c1317b03b9054a7b7bbebe",
-      "detalhe": "docs(receipt): registrar consolidacao CentralDark 0.1.1 e limite da voz",
-      "area": "Repositório",
-      "sha": "3f95056",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T04:06:43.733Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 57ca661aae6b07c7400c5405cc8a10b86c12c129 (57ca661)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T04:04:33.550Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 1e479f1924315e1679354655b9b9539dbc0058a8 (1e479f1)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:47:17.300Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3f950565df5b1a7c47c1317b03b9054a7b7bbebe (3f95056)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T04:04:33.550Z",
-  "updatedAtBR": "13/10/2026, 01:04:33 BRT"
+  "updatedAt": "2026-10-13T04:06:43.733Z",
+  "updatedAtBR": "13/10/2026, 01:06:43 BRT"
 }
