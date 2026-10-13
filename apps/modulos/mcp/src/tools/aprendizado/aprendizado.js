@@ -209,13 +209,16 @@ export const aprendizadoTools = [
             const bloco = [
                 ``,
                 `### ${proximo}. ${limpo.titulo}`,
+                `- **NeuroLink:** \`LEARNING_ID=${proximo}\`; \`PREV_LEARNING_REF=${proximo - 1}\`; \`NEXT_LEARNING_REF=PENDING_NEXT_CURSOR\`.`,
                 `- **Categoria:** ${categoria}`,
                 `- **Data:** ${dataBR()}`,
                 `- **Contexto:** ${limpo.contexto}`,
                 `- **Aprendizado:** ${limpo.aprendizado}`,
                 ``,
             ].join("\n");
-            const novoConteudo = base.trimEnd() + "\n" + bloco;
+            // NeuroLink cognitivo: o anterior deixa de ser o último (verify_repo_contract NEUROLINK_NUMERIC_CONTINUITY).
+            const baseEncadeada = base.replace(`\`NEXT_LEARNING_REF=PENDING_NEXT_CURSOR\``, `\`NEXT_LEARNING_REF=${proximo}\``);
+            const novoConteudo = baseEncadeada.trimEnd() + "\n" + bloco;
             const r = await escreverArquivo(ctx.token, APRENDIZADOS_PATH, novoConteudo, `aprendizado(#${proximo}): ${limpo.titulo}`);
             return textBlock(JSON.stringify({ ok: true, numero: proximo, categoria, commit: r, arquivo: APRENDIZADOS_PATH }, null, 2));
         },

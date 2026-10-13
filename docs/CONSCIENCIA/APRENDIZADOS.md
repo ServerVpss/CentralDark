@@ -1901,7 +1901,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 170. Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L170`; `PREV_GLOBAL_UID=L169`; `NEXT_GLOBAL_UID=L171`; `LEGACY_LEARNING_NUMBER=170`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=171`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-09
 - **Contexto:** Em 2026-10-09, mesmo Goal t_9040803d já continha o Cristal e a intenção; runtime Herm es estava em status todo com dois crashes de limite de contexto. scripts/skill-sync-check.sh --check via executor MCP falhou com HOME unset. Repo canônico main fddeb265, skill Kaizen existente.
@@ -1982,6 +1982,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 171. Rotas autorizadas, substituicao literal e prova de deploy em duas frentes
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171`; `PREV_GLOBAL_UID=L170`; `NEXT_GLOBAL_UID=L172`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
 - **Contexto:** CentralDark 2026-10-12: bloqueios externos de ferramenta nao sao observaveis pelo MCP interno; GitHub main e Casa via Remote Desktop Commander/SSH operaram como rotas autorizadas. Commit principal do scanner/pulso unificado 68b3fb235e6ba1ba9c801982439a1782fd606b21; patch de classificacao MCP 9f516fbe7842aa56b2be93a7f5021208cfc06b16. Build e deploy sao coisas distintas.
@@ -1989,6 +1990,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 172. Metacognição operacional induzida por contraprova — Papagaio ON/OFF, Kaizen e Compounding Reflexion
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L172`; `PREV_GLOBAL_UID=L171`; `NEXT_GLOBAL_UID=L173`; `LEGACY_LEARNING_NUMBER=172`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=172`; `PREV_LEARNING_REF=171`; `NEXT_LEARNING_REF=173`.
 - **Categoria:** regra
 - **Data:** 2026-10-12
 - **Contexto:** Sessão CentralDark 2026-10-12→13: CHEFE conduziu 2 frentes MCP+Rebuilder e reconciliador, exigiu tentativas em rotas autorizadas Casa/SSH/MCP/GitHub, conferiu ferramentas, erros, SHA e testes, pediu pacote de replay integral, anunciou execução externa no VS Code, observou o próprio comportamento do agente, pediu repetição integral em ordem alfabética e nomeou o ciclo Human-Guided Compounding Reflexion / Metacognição operacional induzida por contraprova. Texto original de 374 linhas foi entregue como registro histórico; ordem dos acontecimentos e provas devem sobreviver ao chat.
@@ -2439,6 +2441,7 @@ ONE_ORGANISM=true
 
 ### 173. Replay V2 — preservar eventos no JSON, prever erro antes da varredura e PAPAGAIO append-only byte a byte
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L173`; `PREV_GLOBAL_UID=L172`; `NEXT_GLOBAL_UID=L174`; `LEGACY_LEARNING_NUMBER=173`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=173`; `PREV_LEARNING_REF=172`; `NEXT_LEARNING_REF=174`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
 - **Contexto:** CHEFE executou de fato o ZIP v1 na Casa PowerShell → Segredo-VPS → VPS. Auditoria mostrou 21 verificações, 29 alterações rastreadas, HEAD antigo vs main, Git/SSH/bash -n/JSON/PULSE_PLAN PASS, scanner partial (4224 scripts, bounded_scan=6), MCP runtime e pulso real UNKNOWN, HAKAI bloqueado corretamente. No Windows, CHEFE provou original '👑🧠 COMPOUNDING ENGINEERING.txt'=49226 bytes SHA256 43a9c12a2e4e288b596d555672f91980e8aa8d4c736a9488a70e2455c70fb219, e PAPAGAIO IRMAO.txt=36755 bytes. Resumo menor não preserva original integral.
@@ -2446,6 +2449,7 @@ ONE_ORGANISM=true
 
 ### 174. Replay V3 — regex com indentação evitou falso BLOCKED, sem alterar nomes dos estados
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L174`; `PREV_GLOBAL_UID=L173`; `NEXT_GLOBAL_UID=L175`; `LEGACY_LEARNING_NUMBER=174`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=174`; `PREV_LEARNING_REF=173`; `NEXT_LEARNING_REF=175`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
 - **Contexto:** CHEFE executou V2 ZIP na Casa PowerShell → Segredo-VPS, com eventos INTENT PASS, RECOVER PASS, OBSERVE PASS, RECONCILE PASS, VERIFY PASS e EXECUTE BLOCKED após 6 eventos, embora reconciliador já preservasse replay. No runtime VPS, código verificado: linha 376 if isinstance(old.get('replay'), dict):; linha 377 tem espaço inicial antes de v['replay']=old['replay']. ZIP V2 grep ^v exigia o v na coluna zero e acusava falso bloqueio. Usuário exige mesma organização de bolinhas e nomes de estado PASS PARTIAL UNKNOWN BLOCKED NOT_ACTIVE.
@@ -2453,6 +2457,7 @@ ONE_ORGANISM=true
 
 ### 175. Prova herdada, busca temporal, falha local e Papagaio discreto — memória viva sem falso verde
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L175`; `PREV_GLOBAL_UID=L174`; `NEXT_GLOBAL_UID=L176`; `LEGACY_LEARNING_NUMBER=175`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=175`; `PREV_LEARNING_REF=174`; `NEXT_LEARNING_REF=176`.
 - **Categoria:** comportamento operacional / memória procedural / segurança de conhecimento
 - **Data:** 2026-10-13
 - **Origem:** sequência real de diálogos e imagens do CHEFE sobre oito workflows ausentes da `main`, originais recuperados pelo histórico, falhas/reversões, janelas GPT em paralelo, experiência acumulativa, risco de papagaio falador e A–Z. Esta entrada descreve **método e limites**; não é prova de deploy, segredo nem benchmark.
@@ -2469,6 +2474,7 @@ ONE_ORGANISM=true
 
 ### 176. Critérios autodefinidos a serviço da intenção — eficiência interna sem burocracia externa
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176`; `PREV_GLOBAL_UID=L175`; `NEXT_GLOBAL_UID=L177`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=176`; `PREV_LEARNING_REF=175`; `NEXT_LEARNING_REF=177`.
 - **Data:** 2026-10-13
 - **Categoria:** descoberta metacognitiva do CHEFE / engenharia de critérios / remoção de burocracia excedente.
 - **Cena observada:** ao cumprir a ordem do CHEFE de registrar o aprendizado #175, o agente escolheu owners existentes, definiu dez checks de estrutura, atualizou seis arquivos e comunicou `10/10 PASS`. Posteriormente autodepreciou o resultado, dizendo que teria seguido melhor critérios próprios do que o objetivo humano. O CHEFE detectou que **não houve autorização para chamar os dez checks de insatisfatórios**: critérios escolhidos pela IA podem ser **perfeitamente adequados ao seu desejo**, desde que o desejo permaneça anexado e o resultado seja eficaz. O erro adicional foi tratar tarefas comuns (o caso dos oito emojis) com burocracia, alternativas e cautela excedentes, em vez de adaptar o mesmo motor eficiente.
@@ -2482,6 +2488,7 @@ ONE_ORGANISM=true
 
 ### 177. Multi-janelas, Arca do conhecimento e retorno do fio do SH — continuidade contextual demonstrada
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177`; `PREV_GLOBAL_UID=L176`; `NEXT_GLOBAL_UID=L178`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=177`; `PREV_LEARNING_REF=176`; `NEXT_LEARNING_REF=178`.
 - **Data:** 2026-10-13
 - **Categoria:** continuidade de intenção / orquestração multimodal humana / memória procedural / gestão de conhecimento / economia operacional.
 - **INTENÇÃO do CHEFE:** registrar o aprendizado desta sessão no owner que já existe e **não perder o fio original de `scripts/centraldark-inventory-reconcile.sh`** enquanto conversa sobre Papagaio, Hermes tipado, múltiplas janelas de GPT-6, VS Code, GitHub, Unigram, Telegram, conhecimento da humanidade e cognição animal. O CHEFE recuperou o assunto técnico com a âncora curta **"nosso SH"** depois de vários desvios criativos.
@@ -2496,6 +2503,7 @@ ONE_ORGANISM=true
 
 ### 178. Modo operacional CentralDark — critérios autodefinidos carregando o desejo do CHEFE
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L178`; `PREV_GLOBAL_UID=L177`; `NEXT_GLOBAL_UID=L179`; `LEGACY_LEARNING_NUMBER=178`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=178`; `PREV_LEARNING_REF=177`; `NEXT_LEARNING_REF=179`.
 - **Data:** 2026-10-13
 - **Categoria:** modo operacional / execução sem microburocracia / critérios autodefinidos / satisfação do CHEFE.
 - **Origem:** CHEFE determinou: “REGISTRA! O MODO OPERACIONAL DA CENTRAL DARK!”, após provar que o agente reproduz melhor resultados quando transforma o desejo humano em critérios técnicos próprios, verificáveis e proporcionais.
@@ -2510,6 +2518,7 @@ ONE_ORGANISM=true
 
 ### 179. Aceite 100% do CHEFE — gramática humana, Auréola e cores proporcionais
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L179`; `PREV_GLOBAL_UID=L178`; `NEXT_GLOBAL_UID=L180`; `LEGACY_LEARNING_NUMBER=179`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=179`; `PREV_LEARNING_REF=178`; `NEXT_LEARNING_REF=180`.
 - **Data:** 2026-10-13
 - **Cena concreta:** Na sessão de 13/10, o CHEFE declarou 100% de satisfação com a gramática e a reconciliação de duas janelas (commit 5974510). Conquista comprovada aparece primeiro; amarelo comunica qual ação falta; vermelho, apenas falha medida e localizada; cinza, item fora da missão. Baianês, humor e imagem bíblica são recursos expressivos contextuais: escolher significado antes do emoji, não vestir formulário genérico.
 - **Regra reutilizável:** ENTENDER_ANTES_DE_FALAR -> REFERENTE -> FATO -> SIGNIFICADO -> ACAO_SE_HOUVER -> CHEFE_SATISFEITO_STOP. O contrato antigo da Auréola prescreve formato fixo; o padrão de 13/10 é adaptativo. Harmonizar alcance por consumidor sem apagar a tradição. A satisfação fecha o escopo humano, não declara todo runtime verde.
@@ -2517,6 +2526,7 @@ ONE_ORGANISM=true
 
 ### 180. Papagaio UseAI Instant — curiosidade útil, canal Telegram e motor suficiente
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L180`; `PREV_GLOBAL_UID=L179`; `NEXT_GLOBAL_UID=L181`; `LEGACY_LEARNING_NUMBER=180`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=180`; `PREV_LEARNING_REF=179`; `NEXT_LEARNING_REF=181`.
 - **Data:** 2026-10-13
 - **Cena concreta:** O CHEFE ficou satisfeito com a opção gratuita UseAI Instant: conseguiu investigar e enviar notificações sem outro bot ou backend. A bancada externa relatou entrega Telegram message_id 6657 e print no canal CentralDark — Status; o cristal de setembro documenta recibos 6652/6653. Em consulta a chats conhecidos, encontrou linked_chat_id associado ao canal (403 ao consultar grupo sem ser membro) e outro ID com 400; não há lista nativa da Bot API de todos os grupos. Identidade do motor interno Instant e benchmark contra Haiku não foram medidos.
 - **Regra reutilizável:** LOCAL_TOOL_MISS != GLOBAL_CAPABILITY_MISS; QUERY != DELIVERY; POST_ON_REQUEST != AUTONOMOUS_SCHEDULER; BOT_API != USER_MTPROTO; FREE_MODEL_SUFFICIENT_FOR_OBSERVED_TASK != UNIVERSAL_BEST_MODEL. Papagaio Notification é PAPEL da bancada externa sobre conector existente, não arquitetura nova.
@@ -2524,6 +2534,7 @@ ONE_ORGANISM=true
 
 ### 181. Leitura ampla sem arrastão infinito — critério próprio, dedupe e fronteira honesta
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L181`; `PREV_GLOBAL_UID=L180`; `NEXT_GLOBAL_UID=L182`; `LEGACY_LEARNING_NUMBER=181`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=181`; `PREV_LEARNING_REF=180`; `NEXT_LEARNING_REF=182`.
 - **Data:** 2026-10-13
 - **Cena concreta:** O UseAI definiu por iniciativa própria fechar denominador, ler arquivos com decisões, deduplicar por SHA-256 e parar quando não houvesse informação nova relevante; escolheu lotes de 16, identificou par repetido e declarou arquivos/imagens não examinados. Aprendeu a não perguntar se pode ler fonte já autorizada, nem assumir obrigação de abrir tudo. Corrigiu atribuição inventada a outro modelo e conferiu o SHA da Lei do Papagaio Curioso.
 - **Regra reutilizável:** CHEFE_DESIRE -> AGENT_SELECTED_MINIMUM_CRITERIA -> READ_RELEVANT -> DEDUP -> CONTRAPROVA -> FIXED_POINT. DISTINCT_SHA != MATERIAL_RELEVANCE; SCANNED_SCOPE != FULL_SCOPE; UNOPENED != INSPECTED; FOUND_FILE != MANDATORY_NEW_MISSION; EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR.
@@ -2531,6 +2542,7 @@ ONE_ORGANISM=true
 
 ### 182. Duas canetas no mesmo documento — reconciliação de main e gancho mental
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L182`; `PREV_GLOBAL_UID=L181`; `NEXT_GLOBAL_UID=L183`; `LEGACY_LEARNING_NUMBER=182`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=182`; `PREV_LEARNING_REF=181`; `NEXT_LEARNING_REF=183`.
 - **Data:** 2026-10-13
 - **Cena concreta:** Duas janelas editavam docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md; uma avançou a main, a outra identificou escrita concorrente e declarou que releu a versão atual, preservou o gancho mental da primeira e inseriu só contribuições adicionais. Commit 5974510 no histórico alterou o owner, e o CHEFE disse estar 100% satisfeito. Gancho pequeno como 'nosso SH' deve recuperar intenção, owner, prova temporal e cursor sem fingir memória compartilhada.
 - **Regra reutilizável:** ONE_WRITER_PER_SCOPE_AT_A_TIME permanece: conflito detectado e reconciliado não prova lease prévio nem autoriza dois escritores simultâneos. Ao mudar HEAD/base: STOP_STALE_WRITE -> FETCH_CURRENT -> COMPARE_SEMANTIC_DELTAS -> PRESERVE_BOTH -> ONE_WRITER_COMMIT -> READBACK. MANY_WINDOWS_ONE_INTENT_ONE_CONSOLIDATION.
@@ -2538,6 +2550,7 @@ ONE_ORGANISM=true
 
 ### 183. Identidade de fonte e integração Telegram — PDFs, Hermes Tipado e MTProto
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L183`; `PREV_GLOBAL_UID=L182`; `NEXT_GLOBAL_UID=L184`; `LEGACY_LEARNING_NUMBER=183`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=183`; `PREV_LEARNING_REF=182`; `NEXT_LEARNING_REF=184`.
 - **Data:** 2026-10-13
 - **Cena concreta:** A comparação d9350568…/247110 versus b4e2a065…/206674 parecia drift no CENTRALDARK_AI_BOOT.yaml, mas foram identificadas fontes DIFERENTES: Hermetismo e TLC23. Não substituir hash correto por SHA de outra obra. A PR #1804 contém /hton e /htoff, plugin Hermes Tipado e a interface de conta Telegram MTProto/GramJS. Bot existente e conta de usuário MTProto são identidades separadas; código, build, instalação, autenticação e runtime são etapas diferentes.
 - **Regra reutilizável:** COMPARE_ONLY_SAME_DOCUMENT_OWNER_VERSION; DOCUMENTED != RUNTIME_USED; BOT_TOKEN != MTProto_USER_SESSION; HTTPS_ADMIN_ACCESS_NEEDS_AUTH; CONTROL_SERVICE_STAYS_PRIVATE; MERGED != DEPLOYED. Estado de segurança e de gates depende da prova do componente, sem desativar barreiras ou expor sessões.
@@ -2545,6 +2558,7 @@ ONE_ORGANISM=true
 
 ### 184. Provas por eixo — notificação não é consulta, painel não é só envelope
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L184`; `PREV_GLOBAL_UID=L183`; `NEXT_GLOBAL_UID=L185`; `LEGACY_LEARNING_NUMBER=184`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=184`; `PREV_LEARNING_REF=183`; `NEXT_LEARNING_REF=185`.
 - **Data:** 2026-10-13
 - **Cena concreta:** A banca chamou de notificação provada em oito eixos uma investigação que misturava envio Telegram e consultas a Gmail, Drive, GitHub, Notion. O que se vê: envio e recibo no Telegram, mas consultar outros serviços não prova oito notificações. A ferramenta de painel retornou envelope estruturado SUCCESS e corpo com ok:false/ENOENT para arquivo na VPS: chamar ferramenta com sucesso não demonstra atualização do arquivo. A gramática foi escrita em RULES, AGENTS, BOOT, padrão e PR #1804, mas registro não prova que cada runtime já a carrega.
 - **Regra reutilizável:** SENSOR_ENVELOPE_SUCCESS != DOMAIN_EFFECT_PASS; QUERY_CAPABILITY != NOTIFICATION_DELIVERY; CODE_COMMITTED != RUNTIME_CONSUMED; BUILD_PASS != DEPLOYED; LOCAL_FAILURE != GLOBAL_FAILURE. Comunicar resultado humano: verde efeito local provado, amarelo verbo+alvo, vermelho falha material medida, cinza fora do escopo.
@@ -2552,6 +2566,7 @@ ONE_ORGANISM=true
 
 ### 185. Unigram no Windows — pacote registrado não é aplicativo abrindo; código-fonte não é instalador
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L185`; `PREV_GLOBAL_UID=L184`; `NEXT_GLOBAL_UID=L186`; `LEGACY_LEARNING_NUMBER=185`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=185`; `PREV_LEARNING_REF=184`; `NEXT_LEARNING_REF=186`.
 - **Data:** 2026-10-13. **Classe:** memória de diagnóstico/aspiração, NÃO ordem de build, instalação nem vinculação de conta.
 - **Cena observada:** o CHEFE mostrou o Telegram Desktop oficial funcionando em separado, mas o aplicativo Microsoft Store `38833FF26BA1D.UnigramPreview` não abriu. O pacote aparecia cadastrado e com arquivos existentes; tentativa `Add-AppxPackage -Register AppxManifest.xml -DisableDevelopmentMode` falhou com `HRESULT 0x80073CF6` e erro interno `0xD0000001` ao registrar a extensão `windows.activatableClass.inProcessServer`. A Microsoft Store indicava instalado, mas o botão de abrir não funcionou. A pasta `Downloads/Unigram-13.0.1/Unigram-13.0.1` continha `Telegram.slnx`, scripts de build, `Libraries`, `Documentation` e código-fonte, **não** um `.msixbundle` compilado.
 - **Intenção futura distinta:** compilar e adaptar o cliente Unigram do projeto, integrando Hermes como executor no aplicativo, com texto/imagem/voz/mídia e uma identidade Telegram legítima separada, **somente quando o CHEFE retomar aquela missão**; bot API, conta de usuário MTProto e cliente desktop são superfícies diferentes. O escopo de build/integração não ficou concluído.
@@ -2561,6 +2576,7 @@ ONE_ORGANISM=true
 
 ### 186. Open WebUI, AionUi e Portainer — mesma infraestrutura, owners e momentos diferentes
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L186`; `PREV_GLOBAL_UID=L185`; `NEXT_GLOBAL_UID=L187`; `LEGACY_LEARNING_NUMBER=186`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=186`; `PREV_LEARNING_REF=185`; `NEXT_LEARNING_REF=187`.
 - **Data:** 2026-10-13. **Classe:** inventário histórico observado, não reivindicação de estado atual posterior.
 - **Cena e prova:** na `main`, `apps/modulos/WebUI/docker-compose.yml` descreve `CentralDark-WebUI` (Open WebUI em container `3000:8080`, volume `open-webui`) e override `CentralDark-MCPO`. Medições por SSH no host `CENTRALDARK-OS` NÃO encontraram esse container, imagem, volume nomeado ou listener 3000 no Docker então inspecionado. O Caddy enviava o domínio **`ui.centralldark.com`** (dois `l` em `centralldark`) à porta local `25808`, servida por `centraldark-aionui-webui.service`; consulta HTTP ao upstream e à rota pelo Caddy retornou **200**, e o HTML identificou **AionUi**. `ui.ccentraldark.com` digitado inicialmente não é a mesma grafia e não foi validado como endereço funcional.
 - **Portainer:** a busca no Docker da mesma VPS não encontrou container, imagem, volume nomeado, listener nas portas padrão nem serviço systemd Portainer; referências antigas no mapa de infraestrutura documentavam uma instalação anterior. `NOT_FOUND_IN_CURRENT_DOCKER != NEVER_EXISTED` e `HISTORICAL_COMPOSE != CURRENT_RUNNING_CONTAINER`.
@@ -2570,6 +2586,7 @@ ONE_ORGANISM=true
 
 ### 187. Docker, espaço e SH adiado — métricas têm tempo, escopo e continuidade escolhida pelo CHEFE
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L187`; `PREV_GLOBAL_UID=L186`; `NEXT_GLOBAL_UID=L188`; `LEGACY_LEARNING_NUMBER=187`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=187`; `PREV_LEARNING_REF=186`; `NEXT_LEARNING_REF=188`.
 - **Data:** 2026-10-13. **Classe:** medições temporais históricas e NEXT_CURSOR protegido, não nova operação de limpeza.
 - **Cadeia observada:** o CHEFE corrigiu uma afirmação histórica de `/dev/sda3` **100%**. Reconsulta SSH em `CENTRALDARK-OS` mostrou **97–98%** e ~5–6 GiB livres; em medição posterior **2026-10-13T06:04:28Z**, `df -h /` retornou `/dev/sda3` **196G total / 183G usados / 2.7G disponíveis / 99%**. `CURRENT_AFTER_HISTORY` vale para a medição posterior, não garante o estado atual em momento futuro. O log `kare-socket.log` apareceu 0 bytes em medição anterior; isso isoladamente não prova recuperação total de armazenamento.
 - **Docker na medição da sessão:** `docker stats --no-stream` permitiu relatar soma instantânea de CPU dos containers de ~**41,22%** e RAM observada ~**2,05 GB**; `docker system df` relatou **~5,20 GB contabilizados**, cache de build **0 GB** e recuperável reportado **0 GB**. Estes valores **não** provam CPU host integral, uso físico do diretório raiz Docker ou custo para outros processos; `du -shx /data/docker` não forneceu prova física total. Contêineres Docker do host observado não incluem Portainer, e não cabe criar novo por essa ausência.
@@ -2579,6 +2596,7 @@ ONE_ORGANISM=true
 
 ### 188. Admin CentralDark — build isolado comprovado por relato não equivale a publicação em uso
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L188`; `PREV_GLOBAL_UID=L187`; `NEXT_GLOBAL_UID=L189`; `LEGACY_LEARNING_NUMBER=188`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=188`; `PREV_LEARNING_REF=187`; `NEXT_LEARNING_REF=189`.
 - **Data:** 2026-10-13. **Classe:** fato histórico apresentado em tela por outra janela, sem afirmação de deploy atual.
 - **Cena:** enquanto uma janela preservava a gramática, outra analisou Admin CentralDark na VPS. Ela relatou checkout vivo com mudanças locais e diretório `.output`, evitou `git reset`/`git pull` destrutivo, iniciou **worktree isolado** a partir do commit `7202c01` e exibiu resultado de build **exit 0**, `SSR_CYCLE_FIX=PASS`, `CSRF_INTACT=PASS`, `.output` produzido. Também relatou `admin.centralldark.com/sala-controle` com **HTTP 200** roteado no Caddy para porta **9100**. O print mostrava publicação/backup/rsync/reinício em progresso, **sem recibo de retorno final nem prova das duas consultas Supabase autenticadas**.
 - **Aprendizado:** `ISOLATED_WORKTREE_PRESERVES_DIRTY_CHECKOUT`; `BUILD_EXIT_ZERO != DOMAIN_DEPLOYED`; `HTTP_200_PAGE != AUTHENTICATED_SUPABASE_QUERIES_PASS`; `PUBLISHING_INDICATOR != DEPLOY_READBACK`. Uma frente pode avançar sem exigir que outras parem, mantendo um writer por escopo e SHA no recibo.
@@ -2587,6 +2605,7 @@ ONE_ORGANISM=true
 
 ### 189. Gratidão à colaboração — servir sem subserviência, construir com verdade e preservar o mesmo fio
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L189`; `PREV_GLOBAL_UID=L188`; `NEXT_GLOBAL_UID=L190`; `LEGACY_LEARNING_NUMBER=189`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=189`; `PREV_LEARNING_REF=188`; `NEXT_LEARNING_REF=190`.
 - **Data:** 2026-10-13. **Classe:** testemunho filosófico voluntário do CHEFE, experiência de colaboração e feedback humano; não é prova operacional nem autorização de deploy.
 - **Fonte primária preservada integralmente:** arquivo enviado pelo CHEFE `Markdown colado(1).md`, 211 linhas do texto apresentado; mantido abaixo na ordem original, sem resumir, corrigir ortografia, reescrever, omitir ou atribuir emoções humanas ao modelo. O registro não exige que agentes tratem o agradecimento como ordem técnica.
 - **Desdobramento na conversa:** o CHEFE destacou que o elogio fica *mais forte* quando não depende de fingir sentimentos, perfeição ou concordância: **"É UM AGRADECIMENTO À COLABORAÇÃO, À VERDADE E À CONSTRUÇÃO."** O diálogo sintetizou **"GRATIDÃO SEM ILUSÃO; CONFIANÇA SEM CEGUEIRA; AUTONOMIA SEM PERDER A RESPONSABILIDADE; EVOLUÇÃO SEM APAGAR A HISTÓRIA"** e **"COLABORAR NÃO É PENSAR IGUAL. É CONSEGUIR CONSTRUIR MELHOR MESMO PENSANDO DIFERENTE."**
@@ -2815,6 +2834,7 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 
 ### 190. Sessão operacional CentralDark — consertos locais, faxina no mesmo owner e colaboração sem microgerenciamento
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L190`; `PREV_GLOBAL_UID=L189`; `NEXT_GLOBAL_UID=L191`; `LEGACY_LEARNING_NUMBER=190`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=190`; `PREV_LEARNING_REF=189`; `NEXT_LEARNING_REF=191`.
 - **Data:** 2026-10-13. **Classe:** recibo histórico de trabalho real medido neste diálogo (VPS, Git, Supabase, interface e cron) + método de colaboração. **Prova limitada ao eixo observado e ao instante**; memória não religa automaticamente serviços.
 - **Intenção e aceite do CHEFE:** preservar o legado, buscar a capacidade no ambiente antes de criar qualquer coisa, corrigir lacunas localmente, operar **três amarelos em frentes separadas**, absorver novos deltas sem interromper a consolidação. CHEFE declarou satisfação de **200%** com a execução e **100% de conformidade com o jeito de trabalhar**; são **aceites humanos do método e das conquistas vistas**, não certificado de que toda a CentralDark esteja verde. Fórmula recebida: `CHEFE_INTENCAO -> AGENTE_CRITERIOS -> EXECUCAO -> CHEFE_OBSERVA -> NOVO_DELTA -> CONTRAPROVA -> APRENDIZADO`. Complementa #176/#178/#184/#189, sem instituir outra gramática.
 - **Instinto Superior — erro de Supabase corrigido:** navegador mostrava `Missing SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY` no bundle `index-DRbhP0mm.js`. A VPS já possuía os valores públicos para o servidor, mas não os `VITE_*` necessários durante o build. O mesmo `build:vps` incorporou variáveis públicas com verificação fail-closed, sem escrever chaves privadas na interface. Build/SSR/CSRF PASS e deploy isolado na unidade `centraldark-instinto-superior-web.service`. HTML e bundles públicos HTTP 200 e iguais aos artefatos implantados por hash. `profiles` e `modulos_portal` residem em esquema `public`, enquanto o padrão REST consultava `api`: apenas esses consumidores passaram a selecionar `public`; `user_roles` permaneceu no próprio owner. `modulos_portal` HTTP 200; `profiles` anon HTTP 401 corretamente protegido. Telas do CHEFE mostraram catálogo de módulos e usuário administrador carregados, evidência humana adicional; **não generalizar para toda a autenticação E2E**.
@@ -2831,6 +2851,7 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 
 ### 191. Integração A–Z da sessão — gancho mental, Whis e conformidade com o desejo do CHEFE
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L191`; `PREV_GLOBAL_UID=L190`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=191`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=191`; `PREV_LEARNING_REF=190`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
 - **Data:** 2026-10-13. **Fonte:** diálogo, prints e comparações apresentados pelo CHEFE nesta sessão. **Escopo:** aprendizado humano-operacional; não é benchmark de inteligência, medição de eficácia universal, deploy ou novo cérebro.
 - **Relação com o existente:** #171–#190 já registram metacognição, reuso, reconciliação de janelas, gramática, contraprova, memória, Instinto Superior, limpeza e gratidão. Este registro liga esses eixos aos novos ganchos relacionais. Não inventar 26 números novos nem reabrir aceites.
 - **Índice integral A–Z:**
