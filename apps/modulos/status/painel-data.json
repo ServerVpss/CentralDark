@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(consciencia): registrar arca multi-IA e retorno ao SH; costurar L175-L177",
+    "lastCommit": "fix(learning): concluir #176 sem burocracia redundante",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T04:29:20.949Z",
+      "titulo": "Push na main · 6dd555d129874d31e0ff289898fa5c92cf2f8190",
+      "detalhe": "fix(learning): concluir #176 sem burocracia redundante",
+      "area": "Repositório",
+      "sha": "6dd555d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T04:23:27.478Z",
       "titulo": "Push na main · 8b5391e799d4031f129bd0f8079cc5056960e07b",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "ce9ba7a",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T03:04:04.016Z",
-      "titulo": "Push na main · 69acf771ee186916544673833ecd2bcefc2b8e99",
-      "detalhe": "docs(receipt): medir ligação Voice e evitar marketplace paralelo no CentralDark",
-      "area": "Repositório",
-      "sha": "69acf77",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T04:29:20.949Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6dd555d129874d31e0ff289898fa5c92cf2f8190 (6dd555d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T04:23:27.478Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · ce9ba7a0605649838679c4c465bc90e52ed2eecb (ce9ba7a)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T03:04:04.016Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 69acf771ee186916544673833ecd2bcefc2b8e99 (69acf77)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T04:23:27.478Z",
-  "updatedAtBR": "13/10/2026, 01:23:27 BRT"
+  "updatedAt": "2026-10-13T04:29:20.949Z",
+  "updatedAtBR": "13/10/2026, 01:29:20 BRT"
 }
