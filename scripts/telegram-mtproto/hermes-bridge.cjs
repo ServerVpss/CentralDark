@@ -15,6 +15,7 @@ function createHermesBridge({ newClient, sessionFile, dataDir, botUsername, NewM
   let client = null;
   let handler = null;
   let startPromise = null;
+  let syncPromise = null;
   let selfId = '';
   let botId = '';
   let botEntity = null;
@@ -115,6 +116,35 @@ function createHermesBridge({ newClient, sessionFile, dataDir, botUsername, NewM
       logger.warn?.('[mtproto-bridge] event failed (message content omitted)');
     }
   }
+  // Telegram can omit live self-chat updates on other authorized sessions.
+  // Reconcile ONLY Saved Messages, through this SAME owner and cursor. No new daemon.
+  async function sync() {
+    if (state !== 'WATCHING' || !client) return snapshot();
+    if (syncPromise) return syncPromise;
+    syncPromise = (async () => {
+      prunePending();
+      const recent = await client.getMessages('me', { limit: 25 });
+      const ordered = Array.isArray(recent) ? recent.slice().sort((a, b) => Number(a.id) - Number(b.id)) : [];
+      for (const msg of ordered) {
+        if (Number(msg?.id) > lastSavedId) await onEvent({ message: msg });
+      }
+      // Read ONLY the already verified Hermes bot dialog, and only during an outstanding request.
+      if (pending.size) {
+        const fromBot = await client.getMessages(botEntity, { limit: 25 });
+        for (const msg of (Array.isArray(fromBot) ? fromBot : [])) {
+          if (msg && isHermesReply(msg)) await onEvent({ message: msg });
+        }
+      }
+      return snapshot();
+    })();
+    try { return await syncPromise; }
+    catch (e) {
+      counters.failures++;
+      lastError = String(e?.code || e?.name || 'SYNC_ERROR').slice(0, 70);
+      logger.warn?.('[mtproto-bridge] bounded sync failed (message content omitted)');
+      return snapshot();
+    } finally { syncPromise = null; }
+  }
   async function start() {
     if (startPromise) return startPromise;
     if (state === 'WATCHING') return snapshot();
@@ -175,6 +205,6 @@ function createHermesBridge({ newClient, sessionFile, dataDir, botUsername, NewM
     state = 'STOPPED';
     return snapshot();
   }
-  return { start, stop, snapshot, onEvent };
+  return { start, stop, sync, snapshot, onEvent };
 }
 module.exports = { createHermesBridge, TRIGGER };

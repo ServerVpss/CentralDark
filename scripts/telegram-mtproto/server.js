@@ -329,6 +329,11 @@ if (BRIDGE_ENABLED && CONFIGURED && /^[a-zA-Z0-9_]{5,32}$/.test(BRIDGE_BOT)) {
     if (!bridge.snapshot().connected) void bridge.start();
   }, 60 * 1000);
   watcher.unref();
+  // One bounded reconciliation arm inside this owner; events remain the primary path.
+  const savedSync = setInterval(() => {
+    if (bridge.snapshot().connected) void bridge.sync();
+  }, 8 * 1000);
+  savedSync.unref();
   process.on('SIGTERM', () => { void bridge.stop().finally(() => process.exit(0)); });
 } else if (BRIDGE_ENABLED) {
   console.warn('mtproto-bridge CONFIG_BLOCKED (invalid existing bot username or missing API config)');

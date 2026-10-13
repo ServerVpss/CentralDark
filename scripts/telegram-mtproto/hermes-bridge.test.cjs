@@ -12,6 +12,8 @@ function harness(opts = {}) {
   const sessionFile = path.join(dir, 'session.txt');
   if (!opts.noSession) fs.writeFileSync(sessionFile, 'FICTIONAL_SESSION', { mode: 0o600 });
   let client;
+  const savedQueue = [];
+  const botQueue = [];
   let now = 1000000;
   function fakeClient() {
     client = {
@@ -23,7 +25,10 @@ function harness(opts = {}) {
         if (u !== '@srver1bot') throw Error('WRONG_TARGET');
         return { id: 123n, username: opts.badBot ? 'differentbot' : 'srver1bot', bot: true };
       },
-      async getMessages() { return [{ id: 10 }]; },
+      async getMessages(peer, options) {
+        if (peer === 'me') return options.limit === 1 ? [{ id: 10 }] : savedQueue.slice(-options.limit);
+        return botQueue.slice(-options.limit);
+      },
       addEventHandler(fn) { this.handler = fn; },
       removeEventHandler(fn) { this.handlerRemoved = fn === this.handler; },
       async sendMessage(to, options) {
@@ -40,6 +45,8 @@ function harness(opts = {}) {
   });
   return {
     bridge, dir, get client() { return client; },
+    enqueueSaved(message) { savedQueue.push(message.message); },
+    enqueueReply(message) { botQueue.push(message.message); },
     setTime(v) { now = v; },
     saved(id, text, user = 99n) { return { message: { id, out: false, peerId: { userId: user }, senderId: user, message: text } }; },
     reply(id, replyTo, text, user = 123n) { return { message: { id, out: false, peerId: { userId: user }, senderId: user, replyTo: { replyToMsgId: replyTo }, message: text } }; },
@@ -107,6 +114,28 @@ test('oversized messages do not forward, nor can they be retried via duplicate i
     await h.bridge.onEvent(h.saved(11, '!CENTRALDARK ' + 'x'.repeat(3900)));
     await h.bridge.onEvent(h.saved(11, '!CENTRALDARK small'));
     assert.equal(h.client.outgoing.length, 0);
+    await h.bridge.stop();
+  } finally { h.close(); }
+});
+
+test('bounded recovery fetches only new Saved Messages and correlated bot replies', async () => {
+  const h = harness();
+  try {
+    await h.bridge.start();
+    h.enqueueSaved(h.saved(10, '!CENTRALDARK historical — must not replay'));
+    h.enqueueSaved(h.saved(11, 'ordinary personal note'));
+    h.enqueueSaved(h.saved(12, '!CENTRALDARK conversa autorizada'));
+    await h.bridge.sync();
+    assert.equal(h.client.outgoing.length, 1);
+    assert.equal(h.client.outgoing[0].to.username, 'srver1bot');
+    h.enqueueReply(h.reply(800, 401, 'resposta de outro pedido'));
+    h.enqueueReply(h.reply(801, 401, 'Hermes confirmou integração'));
+    await h.bridge.sync();
+    assert.equal(h.client.outgoing.length, 2);
+    assert.equal(h.client.outgoing[1].to, 'me');
+    assert.equal(h.bridge.snapshot().replies, 1);
+    await h.bridge.sync();
+    assert.equal(h.client.outgoing.length, 2);
     await h.bridge.stop();
   } finally { h.close(); }
 });
