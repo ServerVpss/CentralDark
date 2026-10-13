@@ -148,3 +148,20 @@ Quando nenhuma peça falta, **não fabricar pendência**. Quando o CHEFE pede PA
 5. **PAPAGAIO ON ou OFF:** mudar somente profundidade da **saída**; busca correlacional e segurança permanecem as mesmas.
 
 **Binding sem novo cérebro:** `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md` (continuidade), `docs/CONSCIENCIA/APRENDIZADOS.md#175` (prova herdada), `AGENTS.md` (ON/OFF), `apps/modulos/HERMES-CORE/prompts/hermes-core.md` (consumidor), `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-TYPED-CORE-SCRIPT-FIRST.yml` (PR #1804). **Registrar na lei ≠ provar consumo pelo runtime**; a próxima missão equivalente demonstra aplicação, com receipt e sem duplicação.
+
+<!-- PAPAGAIO_SCRIPT_LOCATION_CANONICAL_20261013 -->
+### 8.5. Local canônico de scripts — fidelidade ao owner, zero duplicação (CHEFE, 13/10/2026)
+
+**Ao executar ou gerar qualquer script operacional, o Papagaio Fiel ON/OFF recupera o owner antes de escolher um caminho.** Nenhum arquivo de script auxiliar em Downloads, Área de Trabalho, Desktop, Temp, AppData ou pasta de conveniência. O contrato também vale para scripts de diagnóstico, sincronização, reparo, HUD, deploy, automação e testes locais.
+
+- **Casa Windows SEGREDO:** scripts operacionais locais exclusivamente em `K:\scripts\`. A raiz `K:\` é o checkout CentralDark; o script `CENTRALDARK-SYNC-DOIS-AMARELOS.ps1` tem um único caminho válido: `K:\scripts\CENTRALDARK-SYNC-DOIS-AMARELOS.ps1`. Não distribuir cópias por outras unidades.
+- **VPS:** usar o owner versionado `/root/CentralDark/scripts/`; se o script canônico existente pertencer a `/root/scripts/` ou a **outro owner já existente e comprovado**, **esse owner prevalece**. Não mover script vivo por conveniência, não criar segundo executor em caminho concorrente.
+- **Primeira investigação, nunca primeiro arquivo:** procurar nome, aliases, Git history, links/consumidores, SHA e receitas existentes. Se o script já resolve o caso, **editar o mesmo arquivo**, estendendo opções úteis (`-Status`, `-Sync`, `-Plan`, `-Check`, `-Help` etc., conforme o consumidor) e preservando suas chamadas e provas.
+- **Sem proliferação de nomes:** proibir variantes artificiais de mesmo script por sufixos `v1`, `v2`, `v3`, `novo`, `final`, `fixed`, `copy`; evolução acontece em **mesmo path, mesmo owner, Git commit/receita/receipt**. Versionamento pertence ao histórico Git, não a cópias executáveis.
+- **Script antigo fora do owner permitido:** primeiro conferir se é a mesma peça e se há consumidores; mover **com hash de origem/destino + readback**, retirar somente a cópia redundante identificada, corrigir referências antigas, sem deletar scripts de outros owners.
+- **Trilha de implantação:** Casa `K:\scripts\` pode **consultar/delegar** via rotas SSH/MCP já existentes, mas execução remota ocorre pelo script/serviço **do owner da VPS**; nunca instalar um segundo script local como substituto. Nenhuma promoção de PR não mergeada, sem gates do mesmo SHA ou passando por cima de trabalho local.
+- **Saída Papagaio Fiel:** responder `SCRIPT_CANONICAL_PATH`, `CONSUMER`, `SOURCE_SHA`, `DUPLICATE_FOUND`, `LAST_PROVEN_RECIPE`, `DELTA_ONLY`, `RECEIPT` e `NEXT_CURSOR`; não fabricar novo script quando o owner anterior é recuperável.
+
+**Regra:** `REUSE_EXISTING_SCRIPT_OWNER=true` · `LOCAL_SCRIPT_HOME=K:\scripts` · `VPS_SCRIPT_HOME=/root/CentralDark/scripts|/root/scripts|OWNER_EXISTENTE` · `DUPLICATE_SCRIPT_PATH=FORBIDDEN` · `ARTIFICIAL_VERSION_SUFFIX=FORBIDDEN` · `MOVE_WITH_HASH_AND_CONSUMER_READBACK=true`.
+
+**Aprendizado da ocorrência:** um script de sincronização foi inicialmente gerado em `C:\Users\Administrador\Downloads\` e precisou ser movido para `K:\scripts\`. O problema foi a escolha do destino, não a necessidade de outro script. A correção é **na lei e no mesmo script**, não numa nova arquitetura.
