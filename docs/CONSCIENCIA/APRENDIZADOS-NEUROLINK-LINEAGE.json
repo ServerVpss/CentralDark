@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "b6c2ef5b5325330a412bfe522aabed527ef7c618",
+  "source_blob_sha": "8aae39c69945cf961aff45c1ea1129f4db5d6e72",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 172,
-    "highest_legacy_learning_number": 173,
+    "learning_sections": 173,
+    "highest_legacy_learning_number": 174,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 173
+      "end": 174
     }
   },
   "nodes": [
@@ -1977,6 +1977,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L172",
+      "next_uid": "L174"
+    },
+    {
+      "uid": "L174",
+      "legacy_learning_number": 174,
+      "legacy_occurrence": 1,
+      "title": "Replay V3 — regex com indentação evitou falso BLOCKED, sem alterar nomes dos estados",
+      "document_order": 173,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L173",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
