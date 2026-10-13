@@ -2229,3 +2229,38 @@ INFALIBILIDADE_PROGRESSIVA=INCAPAZ_DE_DECLARAR_INFALIVEL_O_NAO_PROVADO
 ```
 
 Não é nunca errar. É nunca precisar fingir, esquecer o que aprendeu ou destruir o que já funciona para continuar evoluindo.
+
+## 🪬 13/10/2026 — Circuito de múltiplos olhos no MESMO Hermes
+
+**Intenção do CHEFE:** preservar o desenho integral do Cristal (Yuji/Sukuna → Gojo → Whis/Bills → Goku/Vegeta → Vegetto/Gogeta → Realidade/Kaizen), as 7+7 batidas, as 28 peças, C01–C20/A01–A20 e o mesmo Hermes PET; acrescentar somente a identificação do operador real por personagem e o circuito consultivo GPT/Codex ↔ Hermes ↔ Claude/SOL. Não há novo agente, segunda caneta, roteador, HUD nem cópia do aprendizado.
+
+**Owners reutilizados:** visual `apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx` (landing + cockpit, incluindo `/sala-controle`); coordenação `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0); execução candidata `apps/modulos/HERMES-CORE/` e `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-TYPED-CORE-SCRIPT-FIRST.yml` (PR #1804); intenção `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`.
+
+**Quem exerce cada papel (não são novos agentes):**
+
+- **CHEFE:** humano, objetivo, critérios e autorização; Bills é metáfora de decisão/transformação sem autorizar ações destrutivas.
+- **Instinto Superior:** identidade/cockpit do mesmo organismo; **Yuji** simboliza a SOUL e a memória preservadas; **Sukuna** simboliza potência dos modelos substituíveis, nunca autoridade.
+- **Gojo/Seis Olhos:** investigação e confronto de evidências pelas capacidades consultivas existentes (**GPT/Codex e Claude/SOL**); não executam nem afirmam PASS por opinião.
+- **Whis:** **Claude/SOL**, consulta de coerência, ensino, antecipação e teste discriminante; não usurpa decisão do CHEFE.
+- **Goku/Vegeta:** duas faces simbólicas do **mesmo Hermes PET/executor** (instinto preciso e recuperação/resiliência), não dois executores.
+- **Vegetto/Gogeta:** integração e sincronização dos conselhos com a execução sob um Goal e escritor; não criam runtime.
+- **Realidade/Reality Judge:** testes, gates no mesmo SHA, logs e readback após efeito; **Kaizen:** mesma receita evolui com histórico e proveniência preservados.
+
+**Fluxo consultivo proposto (E2E não comprovado):**
+
+```text
+CHEFE_INTENT + GOAL + AUTORIZAÇÃO
+→ GPT/CODEX: análise técnica somente leitura → CANDIDATE
+→ HERMES: mede CURRENT, dedupe, owner e precondições
+→ CLAUDE/SOL: revisão crítica e proposta de contraprova → CANDIDATE
+→ HERMES: escolhe teste discriminante; aplica menor delta pelo writer autorizado
+→ OBSERVE + TESTES + GATES DO MESMO SHA + EFFECT_READBACK + RECEIPT
+→ GPT/CODEX e CLAUDE: revisam somente quando surge nova evidência útil
+→ REALIDADE decide: FIXED_POINT | NEXT_CURSOR | BLOCKED
+→ KAIZEN: acrescenta versão/proveniência/teste à receita existente
+→ PRÓXIMO EVENTO: prova replay e transferência do aprendizado
+```
+
+**Cadeados:** `GPT_CODEX_READ_ONLY=true`; `CLAUDE_SOL_READ_ONLY=true`; `HERMES_ONE_WRITER_PER_SCOPE=true`; `ORACLE_OUTPUT_IS_CANDIDATE=true`; `MODEL_VOTE_IS_NOT_PROOF=true`; `RECIPE_HISTORY_PRESERVED=true`; `STale/UNKNOWN != PASS`. No código visual estes são **contratos/descrições**, não uma alegação de ACL ou integração implantada. Cada conexão de IA, autorização real e replay tipado precisa de contraprova no consumidor existente. Não abrir outro PR de runtime concorrendo com a #1804.
+
+**NEXT_CURSOR:** testar o componente no mesmo SHA; quando elegível, promover pela via Git existente; comprovar publicação visual autenticada no `/sala-controle`; reconciliar o consumidor cognitivo da #1804 pelo seu writer atual e só declarar E2E quando o Hermes realmente executar e devolver receipts para as superfícies consultivas.
