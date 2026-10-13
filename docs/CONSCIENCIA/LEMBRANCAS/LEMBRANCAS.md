@@ -1351,3 +1351,31 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Regra:** SENSOR_ENVELOPE_SUCCESS != DOMAIN_EFFECT_PASS; QUERY_CAPABILITY != NOTIFICATION_DELIVERY; CODE_COMMITTED != RUNTIME_CONSUMED; BUILD_PASS != DEPLOYED; LOCAL_FAILURE != GLOBAL_FAILURE. Comunicar resultado humano: verde efeito local provado, amarelo verbo+alvo, vermelho falha material medida, cinza fora do escopo.
 - **Prova e owner:** Owner: log/receipts da ferramenta de painel, PR #1804 e owners de comunicação. Falta medir o arquivo da VPS antes de declarar painel atualizado; testar cada consumidor real somente quando houver missão dessa integração, sem reabrir a gramática já aceita.
 - **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#184` · NeuroLink `L184`.
+
+### [2026-10-13] Aprendizado #185 — Unigram no Windows — pacote registrado não é aplicativo abrindo; código-fonte não é instalador
+- **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
+- **Cena e critério:** Unigram Store presente mas incapaz de abrir (`0x80073CF6`, `0xD0000001`); ZIP v13.0.1 era código-fonte, não instalador. Telegram original separado e funcionando. Ideia de cliente Hermes+multimodal é intenção futura, não build concluído.
+- **Regra:** APPX_PRESENT != APP_LAUNCH; SOURCE_ARCHIVE != SIGNED_INSTALLER; BOT_API != USER_MTPROTO.
+- **Owners e NEXT_CURSOR:** Aprendizado #185; MTProto/PR #1804 só se esta frente for retomada.
+- **NeuroLink:** `L185`.
+
+### [2026-10-13] Aprendizado #186 — Open WebUI, AionUi e Portainer — mesma infraestrutura, owners e momentos diferentes
+- **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
+- **Cena e critério:** Configuração histórica `CentralDark-WebUI`/Portainer não coincide com Docker atual; AionUi é quem respondia HTTP 200 no domínio `ui.centralldark.com` pelo Caddy:25808. Dados históricos do Open WebUI não localizados, não inferir apagamento.
+- **Regra:** HISTORY != CURRENT_RUNTIME; HTTP_200 != APPLICATION_E2E; HISTORICAL_VOLUME_NOT_FOUND != DELETED.
+- **Owners e NEXT_CURSOR:** Aprendizado #186; `apps/modulos/WebUI/` e `docs/CONSCIENCIA/INFRA-MAP.md` sem mutação de infraestrutura.
+- **NeuroLink:** `L186`.
+
+### [2026-10-13] Aprendizado #187 — Docker, espaço e SH adiado — métricas têm tempo, escopo e continuidade escolhida pelo CHEFE
+- **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
+- **Cena e critério:** Medições da VPS variaram 100% (histórico) → 97–98% → 99% às 06:04Z de 13/10, com 2.7G livres; Docker ~41,22% CPU instantânea dos containers, ~2,05 GB RAM, ~5,20 GB inventário lógico e 0 GB cache de build. Não converter para uso físico/host total.
+- **Regra:** TIMESTAMP_ON_PROOF; DOCKER_STATS != HOST_BENCHMARK; CHEFE_SATISFIED_WITH_SH_RECOVERY != SH_FINISHED; USER_DEFERRED_SH.
+- **Owners e NEXT_CURSOR:** Aprendizado #187; `scripts/centraldark-inventory-reconcile.sh` e `/var/lib/centraldark/inventory-reconcile/centraldark-inventory-reconcile.json`; retomar **somente quando CHEFE voltar e liberar VSCode**. Registro de aprovação `nota dez` refere-se ao gancho/continuidade, não ao runtime.
+- **NeuroLink:** `L187`.
+
+### [2026-10-13] Aprendizado #188 — Admin CentralDark — build isolado comprovado por relato não equivale a publicação em uso
+- **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
+- **Cena e critério:** O outro executor relatou build isolado `7202c01` com exit 0, SSR/CSRF PASS, mas status de publicação e duas consultas Supabase não foram demonstrados pela tela; HTTP 200 não prova funcionalidade completa.
+- **Regra:** BUILD_PASS != DEPLOYED; ISOLATED_WORKTREE_PROTECTS_DIRTY_CHECKOUT; PUBLISH_PROGRESS != CONSUMER_PASS.
+- **Owners e NEXT_CURSOR:** Aprendizado #188; Owners existentes do Admin e Aprendizado #184, com prova de publicação por leitura de volta quando solicitado.
+- **NeuroLink:** `L188`.
