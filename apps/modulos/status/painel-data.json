@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(neurolink): encadear L179-L184 e source blob da aprendizagem",
+    "lastCommit": "docs(consciencia): historico #185-188 Unigram WebUI Docker Admin; preservar SH adiado",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T06:21:35.710Z",
+      "titulo": "Push na main · 5342779b28281769299dd9140844ccc4fc06fee3",
+      "detalhe": "docs(consciencia): historico #185-188 Unigram WebUI Docker Admin; preservar SH adiado",
+      "area": "Repositório",
+      "sha": "5342779",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T06:14:44.027Z",
       "titulo": "Push na main · 3901a0ef7dd303444d90b3fafc4b64e467d38b54",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "a07b01f",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T04:58:15.912Z",
-      "titulo": "Push na main · ffca4a3a5bf096c93b395ffa281f87396e72dc21",
-      "detalhe": "fix(hud): show green lock only for fresh Afterburner MMF proof",
-      "area": "Repositório",
-      "sha": "ffca4a3",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T06:21:35.710Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5342779b28281769299dd9140844ccc4fc06fee3 (5342779)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T06:14:44.027Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · a07b01f141f5870ba62325bdccb3f4bd09dc7e97 (a07b01f)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T04:58:15.912Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ffca4a3a5bf096c93b395ffa281f87396e72dc21 (ffca4a3)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T06:14:44.027Z",
-  "updatedAtBR": "13/10/2026, 03:14:44 BRT"
+  "updatedAt": "2026-10-13T06:21:35.710Z",
+  "updatedAtBR": "13/10/2026, 03:21:35 BRT"
 }
