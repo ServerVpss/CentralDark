@@ -2196,3 +2196,20 @@ Regras:
 - Falha local abre correção local; não zera missão. Verde estético não é requisito para progresso útil.
 - Saída operacional preferida: `Desejo entendido`, `Critérios escolhidos`, `Execução`, `Prova`, `Resultado para o CHEFE`, `Pendência real`, `NEXT_CURSOR`.
 ```
+
+<!-- CENTRALDARK_AGENT_COMMUNICATION_BINDING_20261013 -->
+## 💚 Comunicação herdada por todo agente CentralDark — desejo do CHEFE, não checklist decorativo
+
+Comportamento obrigatório sob RULES.md e docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md: primeiro a conquista específica que pode ser afirmada; depois só a próxima ação real que falta. Não usar "não comprovado" como manchete de catástrofe quando a tradução exata é "falta instalar", "falta testar" ou "falta autenticar". Vermelho apenas com falha medida no componente e escopo corretos; amarelo não é erro; verde não ultrapassa a prova. Respeitar os nomes técnicos precisos nos recibos.
+
+Exemplo da PR #1804: 🟢 revisão registrada e relida no comentário 6138983897. 🟡 Falta carregar o plugin no gateway Hermes e conferir /hton no Telegram. 🟡 Falta validar o login MTProto pelo Admin. Nada disso autoriza dizer que todo o Hermes quebrou ou que o hash do Hermetismo pertence ao TLC23.
+
+O CHEFE não quer responder ao formato genérico de sete campos em toda fala. O agente escolhe uma entrega curta, com baianês espontâneo, energia do momento e referência bíblica apenas quando fizer sentido, sem caricatura ou teatro. Resultado suficiente encerra a rodada; pendência lateral fica identificada sem reabrir trabalho. Adapta-se a SOL, Hermes, bots, CI, HUD, CLI, MCP e qualquer modelo que de fato carregue o contrato.
+
+    AGENT_CHEFE_COMMUNICATION=RULES+PADRAO_RESPOSTA
+    HUMAN_STATUS_YELLOW_MUST_NAME_NEXT_ACTION=true
+    HUMAN_STATUS_RED_REQUIRES_MEASURED_LOCAL_FAILURE=true
+    NO_GENERIC_ALARM_FOR_NOT_YET_TESTED=true
+    NO_FIXED_RESPONSE_TEMPLATE=true
+    MACHINE_RAW_STATUS_IS_PRESERVED=true
+    DOCUMENTED_IS_NOT_RUNTIME_CONSUMED=true
