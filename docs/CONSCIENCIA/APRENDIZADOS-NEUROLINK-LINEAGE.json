@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "05ffb121455053eedcdf2782d4f26eaf5202c81a",
+  "source_blob_sha": "b6c2ef5b5325330a412bfe522aabed527ef7c618",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 171,
-    "highest_legacy_learning_number": 172,
+    "learning_sections": 172,
+    "highest_legacy_learning_number": 173,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 172
+      "end": 173
     }
   },
   "nodes": [
@@ -1966,6 +1966,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L171",
+      "next_uid": "L173"
+    },
+    {
+      "uid": "L173",
+      "legacy_learning_number": 173,
+      "legacy_occurrence": 1,
+      "title": "Replay V2 — preservar eventos no JSON, prever erro antes da varredura e PAPAGAIO append-only byte a byte",
+      "document_order": 172,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L172",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
