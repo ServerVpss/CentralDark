@@ -1,0 +1,25 @@
+name: 🔌 CENTRALDARK CONNECTOR DEMAND ROUTER
+
+# Historical workflow: retained for UI identity only; all jobs permanently disabled.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  connector-demand-router:
+     if: ${{ false }}
+   runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Test connector demand router
+        run: node --test scripts/ci/centraldark-connector-demand-router.test.mjs
