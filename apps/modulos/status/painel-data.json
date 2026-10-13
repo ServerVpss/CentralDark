@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(actions): restaurar nome 📦 historico com job bloqueado e permissoes leitura",
+    "lastCommit": "fix(actions): restaurar nome 🚀 historico com job bloqueado e permissoes leitura",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T02:09:31.905Z",
+      "titulo": "Push na main · 1aba8cddd59f182f041e8d52494a22dfe0222348",
+      "detalhe": "fix(actions): restaurar nome 🚀 historico com job bloqueado e permissoes leitura",
+      "area": "Repositório",
+      "sha": "1aba8cd",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T02:03:54.130Z",
       "titulo": "Push na main · 736f18bae5441ef82dc9c4715b4189b7117c84d8",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "5f6737c",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:43:09.316Z",
-      "titulo": "Push na main · d98299510424f1cf177be49bc3fd68404866445d",
-      "detalhe": "chore(plugin): publicar manifesto canônico de distribuição v0.1.1",
-      "area": "Repositório",
-      "sha": "d982995",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T02:09:31.905Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1aba8cddd59f182f041e8d52494a22dfe0222348 (1aba8cd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T02:03:54.130Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 5f6737c012ce6cd06d08ef0934de0ddd8e45a21e (5f6737c)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:43:09.316Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d98299510424f1cf177be49bc3fd68404866445d (d982995)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T02:03:54.130Z",
-  "updatedAtBR": "12/10/2026, 23:03:54 BRT"
+  "updatedAt": "2026-10-13T02:09:31.905Z",
+  "updatedAtBR": "12/10/2026, 23:09:31 BRT"
 }
