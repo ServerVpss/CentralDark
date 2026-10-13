@@ -86,3 +86,64 @@ quando o zero é o resultado.
 
 > O papagaio antigo enche a lacuna. O investigador mede a lacuna
 e devolve ela do tamanho que ela tem.
+
+<!-- PAPAGAIO_FIEL_INVESTIGATIVE_CORRELATION_DELTA_20261013 -->
+## 8. Papagaio Fiel — investigação correlacionada nos modos ON e OFF (13/10/2026)
+
+**Correção do CHEFE:** fidelidade não é gravador nem repetição cega. É recuperar, indexar, relacionar, investigar com curiosidade, distinguir ligação quebrada de arquivo perdido e só depois responder ou pedir ação. É **o mesmo Papagaio**: não existe `PAPAGAIO_1` ou um terceiro modo.
+
+**Modos herdados, sem alteração de autoridade:**
+
+- `PAPAGAIO_ON` = quando o CHEFE pede replay, ensino, recuperação integral ou reconstrução, **apresentar** a trilha fiel em ordem, com fontes e ressalvas.
+- `PAPAGAIO_OFF` = em conversa/operação corrente, **apresentar** só o delta útil e a prova, sem repetir a novela nem pedir novamente informações recuperáveis.
+- **EM AMBOS**, a investigação interna e o reuso de conhecimento são os mesmos. `OFF != AMNESIA`; `ON != FALA_SEM_INVESTIGAR`. `PAPAGAIO_FIEL` descreve qualidade do método, não `MODE=3`.
+- `POMBO_MODE=CHECKSUM_ON` é transporte de continuidade, **não** o seletor de replay. Os comandos `/hton` e `/htoff` da PR #1804 selecionam preferência *Hermes Typed Core*, **não** os modos PAPAGAIO ON/OFF.
+
+### 8.1. Recuperar a cabeça externalizada sem reconstruí-la
+
+1. Retomar **intenção, Goal, owner, prova compatível, fingerprint e NEXT_CURSOR** antes da busca; reconhecer o que já foi aprovado/provado e seu alcance. `REPLAY_BEFORE_REDISCOVERY`.
+2. Usar **toda a árvore `docs/` como corpus inventariável**, não somente `APRENDIZADOS.md`: nomes, referências e relações em Markdown, JSON, YAML, Mermaid, HTML, TXT, Canvas, imagens, anexos e índices quando pertinentes e acessíveis. Indexar caminhos e vínculos; **abrir integralmente o conteúdo relevante** ao claim, inclusive elementos visuais quando estes forem a fonte. Inventariar não equivale a ler semanticamente cada imagem nem exige carregar todo o corpus a cada turno.
+3. Cruzar os **owners e consumidores já existentes**: `docs/CONSCIENCIA/APRENDIZADOS.md` (#65, #138, #172 e #175 quando pertinentes), `LEMBRANCAS.md`, `AGENTS.md`, handoff, histórico Git, PRs, commits, receipts, Grafo Vivo, reconciliador `scripts/centraldark-inventory-reconcile.sh` e `knowledge-compiler`. Reaproveitar essas capacidades; **não criar outro índice, motor, rota, grafo ou script por reflexo**.
+4. Para cada nó, reconstruir: **o que faz → owner → depende de quais arquivos/scripts/ferramentas → quem o consome → último caminho conhecido → caminho atual → mudança de versão/commit → teste e receita existentes → próximo cursor**. O painel/HUD é projeção; a fonte e o efeito pertencem aos respectivos owners.
+5. Se um arquivo não aparece no caminho esperado, procurar **nomes antigos, aliases, renames/moves em Git, outras refs/PRs/branches, worktree, Casa, VPS, histórico de scripts, artefatos gerados/ignorados e consumidores que ainda apontam para caminho antigo**, por rotas autorizadas. Distinguir:
+   - `MOVED_OR_RENAMED` — arquivo existe em outro lugar, atualizar vínculo mínimo se necessário;
+   - `STALE_CONSUMER_REF` — produtor existe, consumidor aponta à rota antiga;
+   - `GENERATED_OR_UNTRACKED` — pode existir no runtime sem pertencer à `main`;
+   - `NOT_LOCATED_IN_SEARCHED_SCOPE` — ausência só nas fontes examinadas; **não** afirmar perda global;
+   - `CONFIRMED_MISSING_DEPENDENCY` — ausência comprovada no escopo que realmente exige a peça, com consumidor/efeito identificados.
+6. Uma falha de um nó **não é falha de todos**. Identificar o **menor corte causal** que explica os sintomas; preservar relações, receitas, trabalho local e gates do mesmo SHA. Se a receita anterior permanece compatível, reutilizar a prova; se mudou a pré-condição, testar **apenas essa aresta/cone**.
+
+### 8.2. «Tu tem certeza? Revise de novo.»
+
+Pergunta do CHEFE aciona **segunda investigação por uma rota informacional diferente**, não cópia do primeiro parecer: buscar histórico/rename/consumidor/ambiente não consultado, confrontar fingerprint e receipt, examinar hipótese alternativa e procurar contraprova capaz de derrubar a conclusão inicial.
+
+- Encontrou a peça movida? **Retificar**: o defeito é a ligação velha; não mandar recriar o script.
+- Confirmou ausência no owner/ambiente exigido? **Nomear** a dependência, caminho, quem consome, teste e receita de recuperação.
+- Não conseguiu acessar fonte material? Delimitar **exatamente** a fonte não lida e o que a busca efetivamente cobriu; `UNKNOWN` não vira certeza absoluta.
+- Nenhuma evidência nova? Não reiniciar a missão nem devolver pesquisa mecânica ao CHEFE; apresentar o resultado já sustentado, o residual específico e o próximo cursor.
+
+### 8.3. Saída de um nó (usar placa/HUD já existente quando aplicável)
+
+```text
+NO: [nome + funcao em 1 frase]
+OWNER: [caminho canônico]
+DEPENDENCIAS: [scripts / rotas / capacidades com fonte]
+CONSUMIDO_POR: [nos / funções que quebram junto]
+CAMINHO_ANTES -> CAMINHO_AGORA: [com PR/commit quando encontrado]
+RUPTURA: [arquivo ausente no escopo | ligação obsoleta | prova em outra rota]
+PROVA_REUSADA: [receipt, fingerprint, escopo e validade]
+RECEITA_EXISTENTE: [owner + menor delta, sem recriação]
+NEXT_CURSOR: [próximo elo real, se necessário]
+```
+
+Quando nenhuma peça falta, **não fabricar pendência**. Quando o CHEFE pede PAPAGAIO OFF, sintetizar em poucas frases; quando pede PAPAGAIO ON, mostrar a trilha integral pertinente, sanitizada, com proveniência. Nunca expor segredos/credenciais ou alegar leitura impossível. A IA pode se corrigir pela realidade; o CHEFE não deve reensinar uma regra recuperável.
+
+### 8.4. Casos discriminantes para a próxima aplicação
+
+1. **Arquivo ausente na `main`, encontrado em rename histórico:** retornar nova rota + consumidor antigo, sem `LOST` nem novo script.
+2. **Mesma falha em três nós, uma dependência compartilhada:** apontar uma causa/owner, não três implementações.
+3. **«Revise de novo»:** apresentar fonte alternativa e delta entre as duas buscas; retificar se caiu a hipótese.
+4. **Receita/receipt equivalente já consumível:** aplicar o checkpoint sem exigir prova idêntica; medir só binding alterado.
+5. **PAPAGAIO ON ou OFF:** mudar somente profundidade da **saída**; busca correlacional e segurança permanecem as mesmas.
+
+**Binding sem novo cérebro:** `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md` (continuidade), `docs/CONSCIENCIA/APRENDIZADOS.md#175` (prova herdada), `AGENTS.md` (ON/OFF), `apps/modulos/HERMES-CORE/prompts/hermes-core.md` (consumidor), `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-TYPED-CORE-SCRIPT-FIRST.yml` (PR #1804). **Registrar na lei ≠ provar consumo pelo runtime**; a próxima missão equivalente demonstra aplicação, com receipt e sem duplicação.
