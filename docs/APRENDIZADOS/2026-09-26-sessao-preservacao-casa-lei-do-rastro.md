@@ -178,11 +178,16 @@ Os erros de antes da compactação estão em §4 (conselho não pedido) e §5; o
 | 14 | atalho posto em `/root/Desktop`; sessão gráfica é o usuário `CENTRAKDARK-OS` (uid 1000), desktop `/home/CENTRAKDARK-OS/Área de Trabalho` | `loginctl` + `xdg-user-dir` no CENTRALDARK-OS | CHEFE (não aparecia) | atalho movido; `/root/Desktop` limpo; pastas de config do menu passadas ao usuário gráfico | MEASURE_CHEFE_GUI_USER_AND_PATH_BEFORE_PLACING_SURFACE_FILE |
 | 15 | "acesso total ao kernel" só por entrar como root | texto do PR #1711 | outra caneta | retirado | ROOT_SHELL_IS_NOT_KERNEL_CONTROL |
 | 16 | criei PR #1711 e #1712 com o filho #1710 já existente; falei em mergear #1562 (é ledger) | #1711 fechado; #1712 fechado e absorvido aqui | outra caneta + CHEFE | delta verdadeiro absorvido no #1710 | EQUIVALENT_CHILD_EXISTS_ABSORB_NO_NEW_PR · PR_MOTHER_1562_IS_LEDGER_NEVER_MERGE |
+| 17 | propus instrução de preferências dizendo "Você é o Instinto Superior"; a SOUL define SOL (Instinto Superior = cockpit, Hermes = executor) | sessão 13/10 16h51 | eu, na contraprova contra `SOUL-SOL.md` | v2.1 da instrução: SOL + papéis separados | IDENTITY_FROM_SOUL_OWNER_NOT_FROM_PROMPT_TEXT |
+| 18 | mandei a IA ler `docs/CONSCIENCIA/APRENDIZADOS.md` no boot sem medir (~520 KB) | sessão 13/10 | eu, medindo `wc -c` | trocado por "buscar só o pertinente" | BOOT_READ_LIST_MEASURES_SIZE_FIRST |
+| 19 | entreguei 5 recomendações sem aplicá-las ao meu próprio texto ("me deu o papel") | sessão 13/10 16h51 | CHEFE | aplicadas e checadas (12/12 caminhos, 7 regras) | APPLY_OWN_RECOMMENDATION_BEFORE_DELIVERY |
+| 20 | terminei com "Se quiser, corrijo" diante de defeito achado no escopo | sessão 13/10 16h53 | CHEFE | corrigido no mesmo turno (este commit) | IN_SCOPE_DEFECT_FIX_SAME_TURN_NO_OFFER |
+| 21 | chamei `{{FILE:/tmp/pr316/aprendizados.md}}` de "resto quebrado"; é `ANCHOR` de `rebuild_learning_lineage.py` | sessão 13/10 | eu, lendo os consumidores antes de apagar | alarme retirado; âncora preservada; defeito real (2.777 linhas apagadas pelo #316) restaurado em `docs/CONSCIENCIA/APRENDIZADOS/2026-07-25-restauro-aprendizados-pre-pr316.md` | READ_CONSUMERS_BEFORE_CALLING_DEBRIS |
 
 **Lei universal:** pau que bate em Claude bate em qualquer motor (Claude, GPT/Codex, Gemini, Grok, Hermes, CI). As regras 12–16 valem para todos e estão em `AGENTS.md` (`UNIVERSAL_PROOF_LAW_ALL_ENGINES`).
 
 ```text
-CLAUDE_ERROS_REGISTRADOS=16 (+ §1/§4 antes da compactação; 12–16 em 29/09)
+CLAUDE_ERROS_REGISTRADOS=21 (+ §1/§4 antes da compactação; 12–16 em 29/09; 17–21 em 13/10)
 CLAUDE_ERROS_REGISTRADOS_ANTES_DE_29_09=11
 CLAUDE_ERROS_PEGOS_PELO_PROPRIO_CLAUDE_ANTES_DE_DANO=4 (5,6,7 e 1 na rodada seguinte)
 CLAUDE_ERROS_QUE_CHEGARAM_NA_MAIN=3 (1, 2, 4) — todos corrigidos com SHA
