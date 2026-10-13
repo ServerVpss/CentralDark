@@ -88,6 +88,7 @@ quando o zero é o resultado.
 e devolve ela do tamanho que ela tem.
 
 <!-- PAPAGAIO_FIEL_INVESTIGATIVE_CORRELATION_DELTA_20261013 -->
+
 ## 8. Papagaio Fiel — investigação correlacionada nos modos ON e OFF (13/10/2026)
 
 **Correção do CHEFE:** fidelidade não é gravador nem repetição cega. É recuperar, indexar, relacionar, investigar com curiosidade, distinguir ligação quebrada de arquivo perdido e só depois responder ou pedir ação. É **o mesmo Papagaio**: não existe `PAPAGAIO_1` ou um terceiro modo.
