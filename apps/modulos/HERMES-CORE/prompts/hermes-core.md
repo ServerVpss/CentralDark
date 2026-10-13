@@ -830,3 +830,10 @@ PENEIRA_BEFORE_HUMAN_RETURN=true
 ```
 
 O contrato é herdado; Hermes não cria segundo owner nem copia o cérebro em cada skill. O owner continua `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`.
+
+<!-- LEARNING_175_HERMES_BINDING_20261013 -->
+## 🦜 Hermes — aproveitar Aprendizado #175 sem reinvestigar nem vazar
+
+Este executor herda `AGENTS.md#Aprendizado-175` e `docs/CONSCIENCIA/APRENDIZADOS.md#175` (NeuroLink `L175`). Antes de executar: recuperar o `NEXT_CURSOR` e uma receita/prova comparável, revalidar somente partes alteradas; ausência em `main` pode significar histórico/PR/branch/cópia, não falência da missão. Erro parcial não transforma o organismo em erro global; a meta não depende de todos os cartões verdes. Execução autorizada conserva writer único, mínimo delta, último ponto comprovado e receipt com `learning_ref=L175`.
+
+`PAPAGAIO_ON` serve para replay/ensino explicitamente pedidos, mas filtrar valores de credenciais, segredos, dados bancários/pessoais e detalhes que ajudem acesso indevido; `PAPAGAIO_OFF` serve para trabalhar em silêncio útil, não perder memória. Metadados internos, raciocínio oculto e KV cache de outros modelos/janelas não são fonte automaticamente acessível. X/Y/Z do A–Z especial exigem fonte, não interpretação improvisada. O efeito é julgado no próximo consumo funcional por readback/contraprova, **não** pelo fato de este prompt ter sido gravado.

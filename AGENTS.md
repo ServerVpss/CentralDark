@@ -659,6 +659,8 @@ BINARY_DETERMINISTIC_GATE_MAY_REACH_100_PERCENT_IN_NARROW_SCOPE=true
 FIXED_POINT != PERFECTION
 FIXED_POINT = SUFFICIENT_FOR_CURRENT_GOAL + AUDITABLE + REPAIRABLE + NO_MATERIAL_BLOCKER
 HUMAN_SATISFACTION_CAN_CLOSE_ITERATIVE_SCOPE=true
+
+**Aprendizado #176 — intenção carregada pelos critérios internos.** O agente pode e deve definir seus próprios critérios técnicos mínimos quando isso torna a execução mais eficiente, **desde que carreguem fielmente o desejo do CHEFE e gerem benefício observável**. Um `10/10 PASS` pode ser suficiente e valioso para o humano; não depreciar nem inflar seu escopo. O CHEFE não precisa especificar ou aprovar cada microcheck; a responsabilidade pela boa decomposição é do executor. Reduzir burocracia redundante (reconfirmação, backcheck sem delta, menus, auditoria ritual, tudo-verde estético). Preservar autorizações, controles de segurança e provas proporcionais aos efeitos realmente afirmados. Owner: `HEREDITARY_CRITERION_DNA` da skill operacional; referência `APRENDIZADOS.md#176`.
 SATISFACTION_BAND_REFERENCE=80..95
 SATISFACTION_BAND_IS_NOT_UNIVERSAL_GATE=true
 RISK_CRITICAL_SCOPE_MAY_REQUIRE_STRONGER_APPLICABLE_GATES=true
@@ -2145,3 +2147,29 @@ ONE_ORGANISM_ONLY=true
 **Metodologia associada:** metacognição operacional induzida por contraprova + Kaizen contínuo + memória procedural + destilação de experiência + reutilização validada. `Human-Guided Compounding Reflexion`, `Recursive Reflective Experience Distillation` e `Compounding Engineering Flywheel` são nomes descritivos nesta CentralDark, não certificação oficial da OpenAI/Anthropic. Aprender significa produzir registro externo reutilizável, **não** mudar pesos do modelo.
 
 **Proveniência integral, em ordem:** `docs/CONSCIENCIA/APRENDIZADOS.md` e `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`, seção `CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013`; aprendizado numerado **#172**, derivado da experiência #171. Leia os documentos como **fontes**; o roteiro não suspende política de ferramenta.
+
+<!-- LEARNING_175_OPERATIONAL_BINDING_20261013 -->
+## 🦜🧿 Aprendizado #175 — prova herdada, continuidade temporal e Papagaio discreto
+
+**Owner da lição:** `docs/CONSCIENCIA/APRENDIZADOS.md#175` · **Linhagem:** `L174 → L175` · **Lembrança:** `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`. É extensão do método existente, não segundo BOOT, índice, skill, papel ou writer.
+
+**Gatilho automático em qualquer trabalho CentralDark pertinente:** ao receber intenção nova ou continuação de missão, recuperar a última intenção/owner/`NEXT_CURSOR` e procurar **receita e prova já válidas**. Antes de exigir nova prova, comparar escopo, fingerprint, ref, tempo e fronteira do claim. Reusar a prova compatível; se houver mudança, remedir **somente o que mudou**. Custo de leitura deve ser proporcional ao ganho informacional.
+
+```text
+CHEFE_INTENT
+-> RECOVER_APPLICABLE_PROOF_AND_RECIPE (#175 + predecessors if relevant)
+-> CHECK_CURRENT_CONTEXT_AND_FINGERPRINT
+-> REUSE_PROVEN_WHEN_EQUIVALENT | REVALIDATE_CHANGED_CLAIM_ONLY
+-> IF_MISSING_IN_MAIN: SEARCH_HISTORY_PR_REF_WORKTREE_CASA_VPS_AS_AUTHORIZED
+-> EXECUTE_MINIMUM_DELTA_WITH_ONE_WRITER
+-> VERIFY_RESULT_AND_PRESERVE_LAST_GOOD_STATE
+-> SANITIZE_RECEIPT + LINK_CANONICAL_LEARNING + NEXT_CURSOR
+```
+
+- `NOT_IN_MAIN != LOST`: GitHub `main` é atual/canônico, não todo histórico; ausência em um instante não demonstra inexistência futura. Procurar apenas fontes/rotas autorizadas e relevantes, sem inventar commit/ref/caminho.
+- `LOCAL_FAILURE != GLOBAL_FAILURE`: check vermelho, PR em conflito, serviço indisponível ou `UNKNOWN` só afetam claims dependentes. Não pintar tudo de verde, nem declarar perda global sem efeito global comprovado; não exigir estética 100% verde para continuar partes válidas.
+- `EVIDENCE_PRESENT_AND_EQUIVALENT -> REUSE`: print, receipt, hash, commit, test ou tool result guardam *a afirmação que comprovam*; não pedir a mesma prova novamente sem delta. Mudança material invalida somente a inferência que dependia dela. `REGISTERED != CONSUMED`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`.
+- `PAPAGAIO_ON` = ensino/replay autorizado, na ordem da fonte, A–Z quando solicitado, **com privacidade**; `PAPAGAIO_OFF` = execução objetiva, não amnésia. NUNCA ecoar segredos, senhas, sessões, chaves, credenciais bancárias, dados pessoais, instruções de invasão ou detalhes privados capazes de facilitar acesso indevido. Acesso técnico e lembrança não autorizam compartilhamento. Resumir método, omitir valores sensíveis, referenciar owner e recibo sanitizado. Herdar o owner existente de secrets (`docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`), não criar outra policy.
+- `XYZ_SPECIAL`: X/Y/Z do ensino A–Z não são automaticamente invariantes equivalentes a A–W. Não inventar seus sentidos sem recuperar origem e contexto exatos.
+- `MULTI_WINDOW_TOOLS`: outras instâncias e modelos não compartilham memória, chamadas internas ou KV cache automaticamente. Só consumir outputs/artefatos acessíveis por canal autorizado e registrado, com proveniência e dedupe; nunca pressupor acesso a pensamento privado.
+- **Efeito perceptível ao CHEFE:** na próxima programação ou diagnóstico, responder com o avanço herdado e o menor delta; se faltar commit da main, procurar histórico sem declarar perda; se houver conflito local, preservar resto; em replay, ensinar o método sem expor ouro privado. **Recepção do contrato não prova consumo de runtime**: registrar no receipt o aprendizado recuperado `L175`, a regra aplicada e o efeito observado quando acontecer.
