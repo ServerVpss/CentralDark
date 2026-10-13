@@ -1,7 +1,7 @@
 #!/bin/bash
 # ============================================================
 # limpeza-autonoma.sh — Limpeza de logs + relatório Telegram
-# Cron: */30 * * * *
+# Cron real: */15 * * * *; cache incremental é limitado a uma vez por dia
 # ============================================================
 set -uo pipefail   # sem -e: evita abort em checks condicionais
 
@@ -14,10 +14,10 @@ SELECTED=""
 
 usage() {
   cat <<'EOF'
-Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz>]
+Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,pip-cache,npm-cache>]
 
   --map-disk                 somente mede o disco; não limpa nem notifica
-  --clean-selected LIST      limpa somente categorias explícitas: journal,gz
+  --clean-selected LIST      limpa somente categorias explícitas: journal,gz,pip-cache,npm-cache
   --help                     mostra esta ajuda
 
 Sem argumentos, preserva o modo periódico existente.
@@ -57,6 +57,8 @@ if [ "$MODE" = "map" ]; then
   df -B1 -P /
   echo "JOURNAL_DISK_USAGE"
   journalctl --disk-usage 2>&1 || true
+  echo "PIP_CACHE_KB"; du -sk /root/.cache/pip 2>/dev/null || true
+  echo "NPM_CACHE_KB"; du -sk /root/.npm/_cacache 2>/dev/null || true
   echo "LOG_TREE_BYTES"
   du -x -B1 -d 2 /var/log 2>/dev/null | sort -n | tail -30 || true
   exit 0
@@ -89,17 +91,83 @@ PM2_ANTES=$(du -sh /root/.pm2/logs 2>/dev/null | cut -f1 || echo "N/A")
 
 ACOES=""
 
+# Mesma limpeza-autonoma, categorias recuperáveis e prova local antes/depois.
+# Nunca node_modules, _npx, backups, sessões, cofre ou logs operacionais.
+# Cron 15 min existente + selo de 24 horas por categoria (sem novo agendador).
+clean_incremental_cache() {
+  local cat="$1" cache="" stamp="" min_kb=0 app="" now=0 last=0 used=0 kb=0 before=0 after=0
+  case "$cat" in
+    pip-cache) cache=/root/.cache/pip; stamp=/var/lib/centraldark/limpeza-pip-cache.stamp; min_kb=131072; app=pip ;;
+    npm-cache) cache=/root/.npm/_cacache; stamp=/var/lib/centraldark/limpeza-npm-cache.stamp; min_kb=524288; app=npm ;;
+    *) echo "CACHE_UNKNOWN=$cat"; return 2 ;;
+  esac
+  if [ "$(id -u)" -ne 0 ] || [ -L "$cache" ]; then
+    echo "CACHE_$cat=SKIP_OWNER_OR_SYMLINK"; return 0
+  fi
+  now=$(date +%s)
+  if [ -e "$stamp" ]; then
+    last=$(stat -c %Y "$stamp" 2>/dev/null || echo 0)
+    if [ "$((now-last))" -lt 86400 ]; then
+      echo "CACHE_$cat=SKIP_24H"; return 0
+    fi
+  fi
+  used=$(df -P / | awk 'NR==2 {gsub("%","",$5);print $5}')
+  if [ "$used" -lt 90 ]; then
+    echo "CACHE_$cat=SKIP_SPACE_OK"; return 0
+  fi
+  if [ "$app" = npm ]; then
+    if ps -eo comm= | grep -Eq '^[[:space:]]*(npm|npx|pnpm|yarn)([[:space:]]|$)'; then
+      echo "CACHE_$cat=SKIP_INSTALLER_ACTIVE"; return 0
+    fi
+  else
+    if ps -eo comm= | grep -Eq '^[[:space:]]*(pip|pip3|uv)([[:space:]]|$)' ||
+       ps -eo args= | grep -Eq '^(/usr/bin/|/usr/local/bin/)?python(3(\.[0-9]+)?)? -m pip '; then
+      echo "CACHE_$cat=SKIP_INSTALLER_ACTIVE"; return 0
+    fi
+  fi
+  if [ ! -d "$cache" ]; then
+    echo "CACHE_$cat=SKIP_ABSENT"; return 0
+  fi
+  kb=$(du -sk "$cache" 2>/dev/null | awk 'NR==1{print $1}')
+  kb=$(printf '%s' "$kb" | tr -cd '0-9')
+  if [ -z "$kb" ]; then
+    echo "CACHE_$cat=SKIP_SIZE_UNKNOWN"; return 0
+  fi
+  if [ "$kb" -lt "$min_kb" ]; then
+    install -d -m 0700 /var/lib/centraldark
+    touch "$stamp"
+    chmod 0600 "$stamp"
+    echo "CACHE_$cat=SKIP_BELOW_THRESHOLD"; return 0
+  fi
+  before=$(df -B1 -P / | awk 'NR==2{print $4}')
+  if [ "$app" = npm ]; then
+    if ! command -v npm >/dev/null 2>&1 || ! npm cache clean --force >/dev/null 2>&1; then
+      echo "CACHE_$cat=FAILED"; return 1
+    fi
+  else
+    if ! python3 -m pip cache purge >/dev/null 2>&1; then
+      echo "CACHE_$cat=FAILED"; return 1
+    fi
+  fi
+  after=$(df -B1 -P / | awk 'NR==2{print $4}')
+  install -d -m 0700 /var/lib/centraldark
+  touch "$stamp"
+  chmod 0600 "$stamp"
+  echo "CACHE_$cat=CLEANED"
+  echo "CACHE_$cat_RELIEF_BYTES=$((after-before))"
+}
+
 if [ "$MODE" = "selected" ]; then
   IFS=',' read -r -a CATEGORIES <<< "$SELECTED"
   if [ "${#CATEGORIES[@]}" -eq 0 ] || [ -z "${CATEGORIES[0]:-}" ]; then
-    echo "Nenhuma categoria válida. Use journal,gz." >&2
+    echo "Nenhuma categoria válida. Use journal,gz,pip-cache,npm-cache." >&2
     exit 2
   fi
   for CATEGORY in "${CATEGORIES[@]}"; do
     case "$CATEGORY" in
-      journal|gz) : ;;
+      journal|gz|pip-cache|npm-cache) : ;;
       *)
-        echo "Categoria inválida: $CATEGORY. Use journal,gz." >&2
+        echo "Categoria inválida: $CATEGORY. Use journal,gz,pip-cache,npm-cache." >&2
         exit 2
         ;;
     esac
@@ -126,10 +194,19 @@ if [ "$MODE" = "selected" ]; then
       ;;
   esac
 
+  CACHE_FAIL=0
+  case ",$SELECTED," in
+    *,pip-cache,*) clean_incremental_cache pip-cache || CACHE_FAIL=1 ;;
+  esac
+  case ",$SELECTED," in
+    *,npm-cache,*) clean_incremental_cache npm-cache || CACHE_FAIL=1 ;;
+  esac
+
   DISCO_LIVRE_DEPOIS=$(df -B1 -P / | awk 'NR==2{print $4}')
   RELIEF_BYTES=$((DISCO_LIVRE_DEPOIS - DISCO_LIVRE_ANTES))
   printf 'MODE=CLEAN_SELECTED\nSELECTED=%s\nJOURNAL=%s -> %s\nGZ_REMOVED=%s\nDISK_RELIEF_BYTES=%s\n' \
     "$SELECTED" "$JOURNAL_ANTES" "$JOURNAL_DEPOIS" "$REMOVIDOS" "$RELIEF_BYTES"
+  [ "$CACHE_FAIL" -eq 0 ] || exit 1
   exit 0
 fi
 
