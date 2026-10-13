@@ -183,11 +183,12 @@ Os erros de antes da compactação estão em §4 (conselho não pedido) e §5; o
 | 19 | entreguei 5 recomendações sem aplicá-las ao meu próprio texto ("me deu o papel") | sessão 13/10 16h51 | CHEFE | aplicadas e checadas (12/12 caminhos, 7 regras) | APPLY_OWN_RECOMMENDATION_BEFORE_DELIVERY |
 | 20 | terminei com "Se quiser, corrijo" diante de defeito achado no escopo | sessão 13/10 16h53 | CHEFE | corrigido no mesmo turno (este commit) | IN_SCOPE_DEFECT_FIX_SAME_TURN_NO_OFFER |
 | 21 | chamei `{{FILE:/tmp/pr316/aprendizados.md}}` de "resto quebrado"; é `ANCHOR` de `rebuild_learning_lineage.py` | sessão 13/10 | eu, lendo os consumidores antes de apagar | alarme retirado; âncora preservada; defeito real (2.777 linhas apagadas pelo #316) restaurado em `docs/CONSCIENCIA/APRENDIZADOS/2026-07-25-restauro-aprendizados-pre-pr316.md` | READ_CONSUMERS_BEFORE_CALLING_DEBRIS |
+| 22 | rodei `grafo-vivo-markdown-conformance --changed-from` com o arquivo novo ainda fora do commit → PASS falso; no PR deu 394 achados | PR #1805, `c6c4489` | CI self-hosted (GATE_GRAFO_VIVO_MARKDOWN) | formato corrigido sem mudar palavras (50.710 iguais) | GATE_RUNS_ON_COMMITTED_TREE_SAME_BASE_AS_PR |
 
 **Lei universal:** pau que bate em Claude bate em qualquer motor (Claude, GPT/Codex, Gemini, Grok, Hermes, CI). As regras 12–16 valem para todos e estão em `AGENTS.md` (`UNIVERSAL_PROOF_LAW_ALL_ENGINES`).
 
 ```text
-CLAUDE_ERROS_REGISTRADOS=21 (+ §1/§4 antes da compactação; 12–16 em 29/09; 17–21 em 13/10)
+CLAUDE_ERROS_REGISTRADOS=22 (+ §1/§4 antes da compactação; 12–16 em 29/09; 17–22 em 13/10)
 CLAUDE_ERROS_REGISTRADOS_ANTES_DE_29_09=11
 CLAUDE_ERROS_PEGOS_PELO_PROPRIO_CLAUDE_ANTES_DE_DANO=4 (5,6,7 e 1 na rodada seguinte)
 CLAUDE_ERROS_QUE_CHEGARAM_NA_MAIN=3 (1, 2, 4) — todos corrigidos com SHA
