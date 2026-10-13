@@ -420,5 +420,65 @@ CD_REG_KYLIN_OFFLINE_BUTTON_A["CHEFE"] -->|"CLICK / VER PENDENCIA"| CD_REG_KYLIN
 CD_REG_136_A["AUTO_SYNC_MAIN"] -->|"CALL"| CD_REG_136_B["ONE_HEART_F1_GIT"]
 %% CD_FLOW:heart.operational-telemetry.dist.gitSyncFront
 CD_REG_137_A["AUTO_SYNC_MAIN"] -->|"CALL"| CD_REG_137_B["ONE_HEART_F1_GIT"]
+%% CD_FLOW:mcp.dist.admin.show
+CD_REG_138_A["NOC_INTENT_PANEL"] -->|"CALL"| CD_REG_138_B["INTENT_CYCLE_ADAPTER"]
+%% CD_FLOW:mcp.dist.admin.payload
+CD_REG_139_A["NOC_INTENT_PANEL"] -->|"CALL"| CD_REG_139_B["INTENT_CYCLE_ADAPTER"]
+%% CD_FLOW:mcp.dist.admin.request
+CD_REG_140_A["NOC_INTENT_PANEL"] -->|"CALL"| CD_REG_140_B["INTENT_CYCLE_ADAPTER"]
+%% CD_FLOW:mcp.dist.admin.adminIntentGet
+CD_REG_141_A["NOC_INTENT_PANEL"] -->|"CALL"| CD_REG_141_B["INTENT_CYCLE_ADAPTER"]
+%% CD_FLOW:mcp.dist.admin.adminIntentRun
+CD_REG_142_A["NOC_INTENT_PANEL"] -->|"CALL"| CD_REG_142_B["INTENT_CYCLE_ADAPTER"]
+%% CD_FLOW:mcp.dist.admin.intentPublicStatus
+CD_REG_143_A["NOC_INTENT_PANEL"] -->|"CALL"| CD_REG_143_B["INTENT_CYCLE_ADAPTER"]
+%% CD_FLOW:mcp.dist.index.GET-health-routes
+CD_REG_144_A["PUBLIC_HEALTH_PROBE"] -->|"HTTP_GET"| CD_REG_144_B["LOCAL_ROUTE_PROBES"]
+%% CD_FLOW:mcp.dist.index.GET-intent-status
+CD_REG_145_A["PUBLIC_STATUS_READ"] -->|"HTTP_GET"| CD_REG_145_B["INTENT_STATE_SANITIZED"]
+%% CD_FLOW:mcp.dist.index.GET-admin-api-intent
+CD_REG_146_A["ADMIN_SESSION"] -->|"HTTP_GET"| CD_REG_146_B["INTENT_RECONCILE"]
+%% CD_FLOW:mcp.dist.index.POST-admin-api-intent
+CD_REG_147_A["ADMIN_SESSION_SAME_ORIGIN"] -->|"HTTP_POST"| CD_REG_147_B["HERMES_QUEUE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.sealed
+CD_REG_148_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_148_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.sha
+CD_REG_149_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_149_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.measuredHead
+CD_REG_150_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_150_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.gitBlob
+CD_REG_151_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_151_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.evidence
+CD_REG_152_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_152_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.measureIntentWorld
+CD_REG_153_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_153_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.hermesFinalizedEffect
+CD_REG_154_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_154_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.readIntentState
+CD_REG_155_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_155_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.atomicRecord
+CD_REG_156_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_156_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.enqueueOriginalHermes
+CD_REG_157_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_157_B["HERMES_QUEUE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.runIntentCycle
+CD_REG_158_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_158_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle-adapter.publicIntentStatus
+CD_REG_159_A["INTENT_CYCLE"] -->|"CALL"| CD_REG_159_B["INTENT_STATE"]
+%% CD_FLOW:mcp.dist.intent-cycle.normalizedText
+CD_REG_160_A["INTENT_CYCLE_ADAPTER"] -->|"CALL"| CD_REG_160_B["INTENT_COMPILER"]
+%% CD_FLOW:mcp.dist.intent-cycle.compileIntent
+CD_REG_161_A["INTENT_CYCLE_ADAPTER"] -->|"CALL"| CD_REG_161_B["INTENT_COMPILER"]
+%% CD_FLOW:mcp.dist.intent-cycle.evidenceIsValid
+CD_REG_162_A["INTENT_CYCLE_ADAPTER"] -->|"CALL"| CD_REG_162_B["INTENT_COMPILER"]
+%% CD_FLOW:mcp.dist.intent-cycle.assessCriteria
+CD_REG_163_A["INTENT_CYCLE_ADAPTER"] -->|"CALL"| CD_REG_163_B["INTENT_COMPILER"]
+%% CD_FLOW:mcp.dist.intent-cycle.reconcileIntent
+CD_REG_164_A["INTENT_CYCLE_ADAPTER"] -->|"CALL"| CD_REG_164_B["INTENT_COMPILER"]
+%% CD_FLOW:mcp.dist.lib.admin-guard.guardDestructive
+CD_REG_165_A["MCP_ADMIN_TOOL_CALL"] -->|"CALL"| CD_REG_165_B["ADMIN_GUARD_DECISION"]
+%% CD_FLOW:mcp.dist.modes.admin.tools.admin-shell.readOnlyUser
+CD_REG_166_A["ADMIN_SHELL"] -->|"CALL"| CD_REG_166_B["NON_ROOT_USER"]
+%% CD_FLOW:mcp.dist.tools.core.mcp-admin.diagnoseMcpBlock
+CD_REG_167_A["ADMIN_GUARD_BLOCK"] -->|"CALL"| CD_REG_167_B["BLOCK_DIAGNOSTICO"]
 end
 %% CD_REGISTRY_PROJECTION_END

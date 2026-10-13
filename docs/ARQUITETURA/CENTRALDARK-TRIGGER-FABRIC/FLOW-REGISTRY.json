@@ -2406,6 +2406,606 @@
       "status": "ACTIVE_EXISTING_ROUTE",
       "evidence_ref": "apps/modulos/mcp/tests/operational-telemetry.test.mjs",
       "reuse_of": "heart.operational-telemetry.gitSyncFront"
+    },
+    {
+      "id": "mcp.dist.admin.show",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "show",
+      "activation": "CALL",
+      "from": "NOC_INTENT_PANEL",
+      "to": "INTENT_CYCLE_ADAPTER",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.admin.payload",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "payload",
+      "activation": "CALL",
+      "from": "NOC_INTENT_PANEL",
+      "to": "INTENT_CYCLE_ADAPTER",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.admin.request",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "request",
+      "activation": "CALL",
+      "from": "NOC_INTENT_PANEL",
+      "to": "INTENT_CYCLE_ADAPTER",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.admin.adminIntentGet",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "adminIntentGet",
+      "activation": "CALL",
+      "from": "NOC_INTENT_PANEL",
+      "to": "INTENT_CYCLE_ADAPTER",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.admin.adminIntentRun",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "adminIntentRun",
+      "activation": "CALL",
+      "from": "NOC_INTENT_PANEL",
+      "to": "INTENT_CYCLE_ADAPTER",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.admin.intentPublicStatus",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "intentPublicStatus",
+      "activation": "CALL",
+      "from": "NOC_INTENT_PANEL",
+      "to": "INTENT_CYCLE_ADAPTER",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.index.GET-health-routes",
+      "kind": "ROUTE",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/index.js",
+      "symbol": "GET /health/routes",
+      "activation": "HTTP_GET",
+      "from": "PUBLIC_HEALTH_PROBE",
+      "to": "LOCAL_ROUTE_PROBES",
+      "owner": "apps/modulos/mcp/src/index.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.index.GET-intent-status",
+      "kind": "ROUTE",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/index.js",
+      "symbol": "GET /intent/status",
+      "activation": "HTTP_GET",
+      "from": "PUBLIC_STATUS_READ",
+      "to": "INTENT_STATE_SANITIZED",
+      "owner": "apps/modulos/mcp/src/index.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.index.GET-admin-api-intent",
+      "kind": "ROUTE",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/index.js",
+      "symbol": "GET /admin/api/intent",
+      "activation": "HTTP_GET",
+      "from": "ADMIN_SESSION",
+      "to": "INTENT_RECONCILE",
+      "owner": "apps/modulos/mcp/src/index.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.index.POST-admin-api-intent",
+      "kind": "ROUTE",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/index.js",
+      "symbol": "POST /admin/api/intent",
+      "activation": "HTTP_POST",
+      "from": "ADMIN_SESSION_SAME_ORIGIN",
+      "to": "HERMES_QUEUE",
+      "owner": "apps/modulos/mcp/src/index.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.sealed",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "sealed",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.sha",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "sha",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.measuredHead",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "measuredHead",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.gitBlob",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "gitBlob",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.evidence",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "evidence",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.measureIntentWorld",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "measureIntentWorld",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.hermesFinalizedEffect",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "hermesFinalizedEffect",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.readIntentState",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "readIntentState",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.atomicRecord",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "atomicRecord",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.enqueueOriginalHermes",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "enqueueOriginalHermes",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "HERMES_QUEUE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.runIntentCycle",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "runIntentCycle",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle-adapter.publicIntentStatus",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle-adapter.js",
+      "symbol": "publicIntentStatus",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE",
+      "to": "INTENT_STATE",
+      "owner": "apps/modulos/mcp/src/intent-cycle-adapter.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle.normalizedText",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle.js",
+      "symbol": "normalizedText",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE_ADAPTER",
+      "to": "INTENT_COMPILER",
+      "owner": "apps/modulos/mcp/src/intent-cycle.ts",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle.compileIntent",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle.js",
+      "symbol": "compileIntent",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE_ADAPTER",
+      "to": "INTENT_COMPILER",
+      "owner": "apps/modulos/mcp/src/intent-cycle.ts",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle.evidenceIsValid",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle.js",
+      "symbol": "evidenceIsValid",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE_ADAPTER",
+      "to": "INTENT_COMPILER",
+      "owner": "apps/modulos/mcp/src/intent-cycle.ts",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle.assessCriteria",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle.js",
+      "symbol": "assessCriteria",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE_ADAPTER",
+      "to": "INTENT_COMPILER",
+      "owner": "apps/modulos/mcp/src/intent-cycle.ts",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.intent-cycle.reconcileIntent",
+      "kind": "FUNCTION",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/intent-cycle.js",
+      "symbol": "reconcileIntent",
+      "activation": "CALL",
+      "from": "INTENT_CYCLE_ADAPTER",
+      "to": "INTENT_COMPILER",
+      "owner": "apps/modulos/mcp/src/intent-cycle.ts",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/intent-cycle.ts",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_INTENT_CYCLE em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.lib.admin-guard.guardDestructive",
+      "kind": "FUNCTION",
+      "capability": "MCP_ADMIN_GUARDED_CALL",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/lib/admin-guard.js",
+      "symbol": "guardDestructive",
+      "activation": "CALL",
+      "from": "MCP_ADMIN_TOOL_CALL",
+      "to": "ADMIN_GUARD_DECISION",
+      "owner": "apps/modulos/mcp/src/lib/admin-guard.js",
+      "canonical_route": "mcp-admin-guarded-call",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/admin-guard.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_ADMIN_GUARDED_CALL em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.modes.admin.tools.admin-shell.readOnlyUser",
+      "kind": "FUNCTION",
+      "capability": "MCP_ADMIN_GUARDED_CALL",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/modes/admin/tools/admin-shell.js",
+      "symbol": "readOnlyUser",
+      "activation": "CALL",
+      "from": "ADMIN_SHELL",
+      "to": "NON_ROOT_USER",
+      "owner": "apps/modulos/mcp/src/modes/admin/tools/admin-shell.js",
+      "canonical_route": "mcp-admin-guarded-call",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/admin-guard-core.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_ADMIN_GUARDED_CALL em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.dist.tools.core.mcp-admin.diagnoseMcpBlock",
+      "kind": "FUNCTION",
+      "capability": "MCP_ADMIN_GUARDED_CALL",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/core/mcp-admin.js",
+      "symbol": "diagnoseMcpBlock",
+      "activation": "CALL",
+      "from": "ADMIN_GUARD_BLOCK",
+      "to": "BLOCK_DIAGNOSTICO",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "canonical_route": "mcp-admin-guarded-call",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/tests/admin-guard.test.mjs",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_ADMIN_GUARDED_CALL em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
     }
   ]
 }
