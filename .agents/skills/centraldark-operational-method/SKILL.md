@@ -2729,3 +2729,10 @@ Antes de criar solução ou repetir erro já enfrentado:
 **PAPAGAIO_ON** sob ordem explícita de replay/treinamento/arquivo: reproduzir integralmente a fonte (A–Z se solicitado) e continuar a linha do tempo com detalhes, provas e pendências. **PAPAGAIO_OFF** durante mutação: comunicação curta por delta sem omitir a contraprova. Observar AGENTS.md + padrão de resposta para os mesmos gatilhos. “Human-Guided Compounding Reflexion” é termo descritivo, não permissão nem upgrade do modelo.
 
 **Aceite:** em missão posterior, uma recuperação da experiência #172 seguida de uso concreto de um passo com resultado verificável prova **reuso**. A simples edição deste documento prova apenas **registro**.
+
+<!-- LEARNING_175_SKILL_CONSUMER_20261013 -->
+## 🧠 Contrato de consumo do Aprendizado #175 — ganho visível no próximo uso
+
+Herdar `AGENTS.md#Aprendizado-175` e `docs/CONSCIENCIA/APRENDIZADOS.md#175`; recuperar apenas a passagem pertinente. Na primeira interação ou execução comparável: (1) recuperar intenção, última prova compatível e `NEXT_CURSOR`; (2) buscar o commit/arquivo ausente na `main` também no histórico/PR/branch/cópia **se necessário e autorizado**, antes de dizer perdido; (3) comparar fingerprint e fronteira; (4) reusar prova ou testar somente o delta; (5) continuar partes independentes apesar de falha local; (6) não ecoar qualquer segredo recebido pela ferramenta/arquivo; (7) marcar no mesmo receipt `learning_ref=L175`, `proof_reused|changed_claim`, `owner`, `sanitized_counterproof` e `NEXT_CURSOR`.
+
+Se for pedido `PAPAGAIO ON`/A–Z: recuperar fielmente a história permitida, **nunca** expor credenciais, dados privados ou instruções de invasão; X/Y/Z não recebem significados inventados. Se for programação normal: `PAPAGAIO OFF`, entregar só delta e contraprova, não relatório repetitivo. **Não criar script, skill, HUD ou serviço para isso.** Provar consumo apenas quando missão futura mostrar recuperação + aplicação, não somente esta edição.
