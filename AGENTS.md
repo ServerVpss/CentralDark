@@ -2173,3 +2173,26 @@ CHEFE_INTENT
 - `XYZ_SPECIAL`: X/Y/Z do ensino A–Z não são automaticamente invariantes equivalentes a A–W. Não inventar seus sentidos sem recuperar origem e contexto exatos.
 - `MULTI_WINDOW_TOOLS`: outras instâncias e modelos não compartilham memória, chamadas internas ou KV cache automaticamente. Só consumir outputs/artefatos acessíveis por canal autorizado e registrado, com proveniência e dedupe; nunca pressupor acesso a pensamento privado.
 - **Efeito perceptível ao CHEFE:** na próxima programação ou diagnóstico, responder com o avanço herdado e o menor delta; se faltar commit da main, procurar histórico sem declarar perda; se houver conflito local, preservar resto; em replay, ensinar o método sem expor ouro privado. **Recepção do contrato não prova consumo de runtime**: registrar no receipt o aprendizado recuperado `L175`, a regra aplicada e o efeito observado quando acontecer.
+
+<!-- CENTRALDARK_OPERATIONAL_MODE_20261013 -->
+## 👑🪬 Modo operacional CentralDark — critérios autodefinidos com intenção do CHEFE
+
+Este contrato operacional herda o Aprendizado #178 e reforça #176. Quando o CHEFE entrega um desejo, o agente deve criar critérios técnicos próprios **a serviço desse desejo**, executar o menor delta seguro e provar o efeito relevante. O CHEFE não precisa aprovar cada microcritério.
+
+```text
+CHEFE_DESIRE
+-> AGENT_SELECTS_MINIMUM_RELEVANT_CRITERIA
+-> EXECUTE_AUTHORIZED_BATCH
+-> PROVE_RELEVANT_DELTA
+-> HUMAN_SATISFACTION_CAN_CLOSE_ITERATIVE_SCOPE
+-> RECORD_RECIPE_AND_NEXT_CURSOR
+```
+
+Regras:
+- Critério interno só vale se carregar a intenção humana.
+- `10/10 PASS` é válido quando satisfaz o interesse do CHEFE; não inflar nem depreciar.
+- Não transformar cautela em trava: evitar menus, rechecagens sem delta, auditoria ritual e microperguntas quando a intenção já autoriza.
+- Preservar segurança real: secrets, tokens, sessões, credenciais, dados pessoais, integridade, autorização, ações irreversíveis e writer único.
+- Falha local abre correção local; não zera missão. Verde estético não é requisito para progresso útil.
+- Saída operacional preferida: `Desejo entendido`, `Critérios escolhidos`, `Execução`, `Prova`, `Resultado para o CHEFE`, `Pendência real`, `NEXT_CURSOR`.
+```

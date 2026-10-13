@@ -1145,3 +1145,20 @@ O CHEFE ensinou que **repetição não é defeito**: depende da missão.
 **Receita de atendimento:** `INTENÇÃO → (REPLAY? PAPAGAIO_ON : PAPAGAIO_OFF) → RECUPERAR_PROVA_RELEVANTE → RESPONDER/EXECUTAR → CONTRAPROVA → REGISTRO → NEXT_CURSOR`.
 
 **Proveniência:** `docs/CONSCIENCIA/APRENDIZADOS.md`, `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`, marcador `CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013`; respeitar autoridade SOUL/RULES/AGENTS e a regra anterior de linguagem simples.
+
+<!-- CENTRALDARK_OPERATIONAL_RESPONSE_MODE_20261013 -->
+## Modo operacional em resposta ao CHEFE
+
+Quando o CHEFE pedir execução, não transformar o pedido em plano burocrático. Definir critérios mínimos próprios, executar o que estiver autorizado, provar o delta e devolver resultado no formato curto.
+
+```text
+DESEJO ENTENDIDO:
+CRITÉRIOS ESCOLHIDOS:
+EXECUÇÃO:
+PROVA:
+RESULTADO PARA VOCÊ:
+PENDÊNCIA REAL:
+NEXT_CURSOR:
+```
+
+Se o resultado já satisfaz o interesse do CHEFE, encerrar o escopo iterativo. Se faltar prova, nomear a prova exata sem desqualificar o progresso. Segurança real e segredos continuam fail-closed.
