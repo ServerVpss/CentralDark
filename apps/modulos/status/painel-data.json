@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "aprendizado(#174): Replay V3 — regex com indentação evitou falso BLOCKED, sem alterar nomes dos estados",
+    "lastCommit": "docs(neurolink): preservar linhagem L173→L174 correção replay V3",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T01:13:12.041Z",
+      "titulo": "Push na main · 58366e9908013711292e169bb2b4f123d11bd9b6",
+      "detalhe": "docs(neurolink): preservar linhagem L173→L174 correção replay V3",
+      "area": "Repositório",
+      "sha": "58366e9",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T01:10:53.514Z",
       "titulo": "Push na main · 437e6818163ae9cfdda52472f18a82563fda2a79",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "dcb99ea",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:32:55.233Z",
-      "titulo": "Push na main · 697c8a4d2b4a533c09098a1e49754a2d2558f09e",
-      "detalhe": "fix(hud): classify Desktop Commander per-service online evidence and normalize SSH Bash LF",
-      "area": "Repositório",
-      "sha": "697c8a4",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T01:13:12.041Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 58366e9908013711292e169bb2b4f123d11bd9b6 (58366e9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T01:10:53.514Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · dcb99eafa67af3bb3709c4d8dbd860a50e828c5f (dcb99ea)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:32:55.233Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 697c8a4d2b4a533c09098a1e49754a2d2558f09e (697c8a4)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T01:10:53.514Z",
-  "updatedAtBR": "12/10/2026, 22:10:53 BRT"
+  "updatedAt": "2026-10-13T01:13:12.041Z",
+  "updatedAtBR": "12/10/2026, 22:13:12 BRT"
 }
