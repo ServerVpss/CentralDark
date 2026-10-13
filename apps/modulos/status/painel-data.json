@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(comunicacao): reconciliar ganchos concorrentes sem perder gramática nem criar owner",
+    "lastCommit": "docs(learning): registrar aprendizados 179-184 em ordem numerica",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T06:13:51.818Z",
+      "titulo": "Push na main · c186c6e3e96150c907a7ad31c1155ccb208cd574",
+      "detalhe": "docs(learning): registrar aprendizados 179-184 em ordem numerica",
+      "area": "Repositório",
+      "sha": "c186c6e",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T05:58:08.465Z",
       "titulo": "Push na main · 5974510df1f3e2d4679c82227897a0b8865ec85e",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "81a5b24",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T03:43:38.977Z",
-      "titulo": "Push na main · 3b720b674e347ec5dd17fce1904e32fea828b16d",
-      "detalhe": "🧾 receipt: browser Windows e fallback JSON da PR #1708 v0.1.4",
-      "area": "Repositório",
-      "sha": "3b720b6",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T06:13:51.818Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c186c6e3e96150c907a7ad31c1155ccb208cd574 (c186c6e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T05:58:08.465Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 81a5b241fe5ac1c081cd4342fd1aadaa5edc9033 (81a5b24)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T03:43:38.977Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3b720b674e347ec5dd17fce1904e32fea828b16d (3b720b6)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T05:58:08.465Z",
-  "updatedAtBR": "13/10/2026, 02:58:08 BRT"
+  "updatedAt": "2026-10-13T06:13:51.818Z",
+  "updatedAtBR": "13/10/2026, 03:13:51 BRT"
 }
