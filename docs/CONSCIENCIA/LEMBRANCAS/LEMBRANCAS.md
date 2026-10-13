@@ -1286,14 +1286,6 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Owner de aprendizagem:** `docs/CONSCIENCIA/APRENDIZADOS.md#175`, NeuroLink `L174 -> L175`; referências precedentes #171 (rotas autorizadas), #172 (Papagaio ON/OFF), #173 (replay append-only), #174 (falso bloqueio por indentação).
 - **Próximo cursor:** próxima sessão/execução deve *consumir* a receita #175, localizar primeiro provas anteriores pertinentes, distinguir histórico/current, corrigir apenas delta, preservar segredos e emitir recibo mostrando qual cláusula foi aplicada. `DOC_REGISTERED!=RUNTIME_CONSUMED`.
 
-### [2026-10-13] Aprendizado #177 — Arca, múltiplas IAs e retorno do fio do reconciliador
-- **Classe:** lembrança histórica com `NEXT_CURSOR` operacional, sem atribuir status de runtime vivo ao histórico.
-- **Cena vivida:** o CHEFE exibiu janelas GPT-6/VS Code/monitores/terminais em paralelo, comparou análises da própria organização, chamou a atenção para assinatura versus cobrança por API, lembrou a Biblioteca da humanidade e a proposta histórica de cognição animal e perguntou novamente pelo **"nosso SH"**. O contexto desta interação permitiu retomar o mesmo `scripts/centraldark-inventory-reconcile.sh` depois dos desvios Telegram/Unigram/Papagaio.
-- **Aprendizado:** um fragmento pequeno pode funcionar como ponteiro para `INTENT + OWNER + PROVA VÁLIDA + NEXT_CURSOR`, sem manter todos os detalhes na frente. Instâncias não compartilham memória automaticamente; consenso entre janelas que trocaram respostas não é avaliação cega. Assinatura não implica acesso ilimitado nem direito de coletar cache interno do provedor.
-- **Arca e corpus:** metáfora de conhecimento humano/animal/operacional recuperável; owners reais `PORTA-HUB-RUBY-CEREBRO.md`, `BRAIN-ARTIFACT-CAPTURE-20260924.md` e árvore semântica `04-HUMANIDADE`. `BIO_COGNITIVE_LIBRARY`/`BIO-COGNITIVE ATLAS` são nomes lembrados como ideias/candidatos, sem implementação homônima comprovada na `main` nesta leitura.
-- **Último estado relatado do SH (histórico, não leitura atual):** scanner/replay parcialmente comprovados; `MCP_RUNTIME` e `PULSE_LIVE` inconclusivos; HAKAI condicionado a consumidores; disco VPS apareceu 100% em saída anterior, e o antigo log `kare-socket.log` estava 0 B no caminho visto. O estado de `/dev/sda3` precisa ser medido de novo.
-- **Próximo cursor:** medir filesystem/capacidade atual sem apagar no escuro → remediar somente peso classificado e sem consumidor vivo → reler receipt do `centraldark-inventory-reconcile.sh` → retomar `--scan`/replay/plan → provar `MCP_RUNTIME` e `PULSE_LIVE` → avaliar HAKAI apenas após prova. Memória do aprendizado em `docs/CONSCIENCIA/APRENDIZADOS.md#177`, NeuroLink `L175→L176→L177`. `REGISTERED != RUNTIME_CONSUMED`.
-
 ### [2026-10-13] Aprendizado #176 — critérios próprios carregando o desejo do CHEFE
 - **Classe:** memória histórica/proveniência; a regra vigente fica nos owners operacionais.
 - **Data:** 2026-10-13
@@ -1303,9 +1295,87 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Owners:** `docs/CONSCIENCIA/APRENDIZADOS.md#176`, `AGENTS.md#Método adaptativo`, `.agents/skills/centraldark-operational-method/SKILL.md#HEREDITARY_CRITERION_DNA`, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#adaptive_backcheck_contract`.
 - **Teste futuro:** próxima execução deve citar `learning_ref=L176`, escolher critérios mínimos, resolver sem burocracia redundante e devolver somente resultado, prova e `NEXT_CURSOR`.
 
+### [2026-10-13] Aprendizado #177 — Arca, múltiplas IAs e retorno do fio do reconciliador
+- **Classe:** lembrança histórica com `NEXT_CURSOR` operacional, sem atribuir status de runtime vivo ao histórico.
+- **Cena vivida:** o CHEFE exibiu janelas GPT-6/VS Code/monitores/terminais em paralelo, comparou análises da própria organização, chamou a atenção para assinatura versus cobrança por API, lembrou a Biblioteca da humanidade e a proposta histórica de cognição animal e perguntou novamente pelo **"nosso SH"**. O contexto desta interação permitiu retomar o mesmo `scripts/centraldark-inventory-reconcile.sh` depois dos desvios Telegram/Unigram/Papagaio.
+- **Aprendizado:** um fragmento pequeno pode funcionar como ponteiro para `INTENT + OWNER + PROVA VÁLIDA + NEXT_CURSOR`, sem manter todos os detalhes na frente. Instâncias não compartilham memória automaticamente; consenso entre janelas que trocaram respostas não é avaliação cega. Assinatura não implica acesso ilimitado nem direito de coletar cache interno do provedor.
+- **Arca e corpus:** metáfora de conhecimento humano/animal/operacional recuperável; owners reais `PORTA-HUB-RUBY-CEREBRO.md`, `BRAIN-ARTIFACT-CAPTURE-20260924.md` e árvore semântica `04-HUMANIDADE`. `BIO_COGNITIVE_LIBRARY`/`BIO-COGNITIVE ATLAS` são nomes lembrados como ideias/candidatos, sem implementação homônima comprovada na `main` nesta leitura.
+- **Último estado relatado do SH (histórico, não leitura atual):** scanner/replay parcialmente comprovados; `MCP_RUNTIME` e `PULSE_LIVE` inconclusivos; HAKAI condicionado a consumidores; disco VPS apareceu 100% em saída anterior, e o antigo log `kare-socket.log` estava 0 B no caminho visto. O estado de `/dev/sda3` precisa ser medido de novo.
+- **Próximo cursor:** medir filesystem/capacidade atual sem apagar no escuro → remediar somente peso classificado e sem consumidor vivo → reler receipt do `centraldark-inventory-reconcile.sh` → retomar `--scan`/replay/plan → provar `MCP_RUNTIME` e `PULSE_LIVE` → avaliar HAKAI apenas após prova. Memória do aprendizado em `docs/CONSCIENCIA/APRENDIZADOS.md#177`, NeuroLink `L175→L176→L177`. `REGISTERED != RUNTIME_CONSUMED`.
+
 ### [2026-10-13] Aprendizado #178 — modo operacional CentralDark
 - **Classe:** lembrança operacional e ponte para o aprendizado numerado. Norma viva nos owners de comportamento.
 - **Registro:** CHEFE consolidou o padrão: o agente deve transformar desejo humano em critérios próprios mínimos, executar em lote seguro, provar o delta certo e parar quando satisfizer o interesse do CHEFE.
 - **Frase de uso:** “Faça com seus próprios critérios mínimos, desde que carreguem meu desejo; execute sem microburocracia; prove o delta; preserve segurança; entregue NEXT_CURSOR.”
 - **Owners:** `APRENDIZADOS.md#178`, `AGENTS.md`, `.agents/skills/centraldark-operational-method/SKILL.md`, `MASTER-CYCLE.yml` e `PADRAO-RESPOSTA-SEGREDO-CHEFE.md`.
 - **Não esquecer:** `10/10 PASS` pode satisfazer o CHEFE; não desqualificar critério interno eficiente. Cautela excedente sai; segurança real fica.
+
+### [2026-10-13] Aprendizado #179 — Aceite 100% do CHEFE — gramática humana, Auréola e cores proporcionais
+- **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
+- **Cena:** Na sessão de 13/10, o CHEFE declarou 100% de satisfação com a gramática e a reconciliação de duas janelas (commit 5974510). Conquista comprovada aparece primeiro; amarelo comunica qual ação falta; vermelho, apenas falha medida e localizada; cinza, item fora da missão. Baianês, humor e imagem bíblica são recursos expressivos contextuais: escolher significado antes do emoji, não vestir formulário genérico.
+- **Regra:** ENTENDER_ANTES_DE_FALAR -> REFERENTE -> FATO -> SIGNIFICADO -> ACAO_SE_HOUVER -> CHEFE_SATISFEITO_STOP. O contrato antigo da Auréola prescreve formato fixo; o padrão de 13/10 é adaptativo. Harmonizar alcance por consumidor sem apagar a tradição. A satisfação fecha o escopo humano, não declara todo runtime verde.
+- **Prova e owner:** Owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md, RULES.md e AGENTS.md. Commit 5974510 consta no histórico da main; aceite 100% foi explicitamente pronunciado pelo CHEFE no fio. Falta verificar efeito em consumidores que ainda não leram o contrato.
+- **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#179` · NeuroLink `L179`.
+
+### [2026-10-13] Aprendizado #180 — Papagaio UseAI Instant — curiosidade útil, canal Telegram e motor suficiente
+- **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
+- **Cena:** O CHEFE ficou satisfeito com a opção gratuita UseAI Instant: conseguiu investigar e enviar notificações sem outro bot ou backend. A bancada externa relatou entrega Telegram message_id 6657 e print no canal CentralDark — Status; o cristal de setembro documenta recibos 6652/6653. Em consulta a chats conhecidos, encontrou linked_chat_id associado ao canal (403 ao consultar grupo sem ser membro) e outro ID com 400; não há lista nativa da Bot API de todos os grupos. Identidade do motor interno Instant e benchmark contra Haiku não foram medidos.
+- **Regra:** LOCAL_TOOL_MISS != GLOBAL_CAPABILITY_MISS; QUERY != DELIVERY; POST_ON_REQUEST != AUTONOMOUS_SCHEDULER; BOT_API != USER_MTPROTO; FREE_MODEL_SUFFICIENT_FOR_OBSERVED_TASK != UNIVERSAL_BEST_MODEL. Papagaio Notification é PAPEL da bancada externa sobre conector existente, não arquitetura nova.
+- **Prova e owner:** Owners: docs/CONSCIENCIA/05-CANAIS/CRISTAL-CANAL-STATUS-INTEGRACAO.md; LEI-PAPAGAIO-INVESTIGADOR.md. 6657 é relato/print desta sessão; o registro não é nova consulta ao Telegram. Falta provar notificação automática de aprendizagens/lembranças se esse recurso for reivindicado.
+- **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#180` · NeuroLink `L180`.
+
+### [2026-10-13] Aprendizado #181 — Leitura ampla sem arrastão infinito — critério próprio, dedupe e fronteira honesta
+- **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
+- **Cena:** O UseAI definiu por iniciativa própria fechar denominador, ler arquivos com decisões, deduplicar por SHA-256 e parar quando não houvesse informação nova relevante; escolheu lotes de 16, identificou par repetido e declarou arquivos/imagens não examinados. Aprendeu a não perguntar se pode ler fonte já autorizada, nem assumir obrigação de abrir tudo. Corrigiu atribuição inventada a outro modelo e conferiu o SHA da Lei do Papagaio Curioso.
+- **Regra:** CHEFE_DESIRE -> AGENT_SELECTED_MINIMUM_CRITERIA -> READ_RELEVANT -> DEDUP -> CONTRAPROVA -> FIXED_POINT. DISTINCT_SHA != MATERIAL_RELEVANCE; SCANNED_SCOPE != FULL_SCOPE; UNOPENED != INSPECTED; FOUND_FILE != MANDATORY_NEW_MISSION; EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR.
+- **Prova e owner:** Aprendizados #176 e #178 já dão a regra; esta entrada conserva a cena concreta de outro modelo aplicando-a. Contagens, hashes e conclusão foram apresentados pelo UseAI ao CHEFE; não equivalem a nova varredura independente.
+- **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#181` · NeuroLink `L181`.
+
+### [2026-10-13] Aprendizado #182 — Duas canetas no mesmo documento — reconciliação de main e gancho mental
+- **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
+- **Cena:** Duas janelas editavam docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md; uma avançou a main, a outra identificou escrita concorrente e declarou que releu a versão atual, preservou o gancho mental da primeira e inseriu só contribuições adicionais. Commit 5974510 no histórico alterou o owner, e o CHEFE disse estar 100% satisfeito. Gancho pequeno como 'nosso SH' deve recuperar intenção, owner, prova temporal e cursor sem fingir memória compartilhada.
+- **Regra:** ONE_WRITER_PER_SCOPE_AT_A_TIME permanece: conflito detectado e reconciliado não prova lease prévio nem autoriza dois escritores simultâneos. Ao mudar HEAD/base: STOP_STALE_WRITE -> FETCH_CURRENT -> COMPARE_SEMANTIC_DELTAS -> PRESERVE_BOTH -> ONE_WRITER_COMMIT -> READBACK. MANY_WINDOWS_ONE_INTENT_ONE_CONSOLIDATION.
+- **Prova e owner:** Owners: mesmo padrão de resposta; docs/CONSCIENCIA/APRENDIZADOS/2026-09-07-multi-canetas-juiz-final-convergencia.md; #177. Git registra commit 5974510; relatos de reconciliação vieram dos prints do CHEFE. Não presumir sincronização oculta entre chats.
+- **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#182` · NeuroLink `L182`.
+
+### [2026-10-13] Aprendizado #183 — Identidade de fonte e integração Telegram — PDFs, Hermes Tipado e MTProto
+- **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
+- **Cena:** A comparação d9350568…/247110 versus b4e2a065…/206674 parecia drift no CENTRALDARK_AI_BOOT.yaml, mas foram identificadas fontes DIFERENTES: Hermetismo e TLC23. Não substituir hash correto por SHA de outra obra. A PR #1804 contém /hton e /htoff, plugin Hermes Tipado e a interface de conta Telegram MTProto/GramJS. Bot existente e conta de usuário MTProto são identidades separadas; código, build, instalação, autenticação e runtime são etapas diferentes.
+- **Regra:** COMPARE_ONLY_SAME_DOCUMENT_OWNER_VERSION; DOCUMENTED != RUNTIME_USED; BOT_TOKEN != MTProto_USER_SESSION; HTTPS_ADMIN_ACCESS_NEEDS_AUTH; CONTROL_SERVICE_STAYS_PRIVATE; MERGED != DEPLOYED. Estado de segurança e de gates depende da prova do componente, sem desativar barreiras ou expor sessões.
+- **Prova e owner:** Owner: PR #1804, comentário 6138983897 e contratos BOOT/HERMES existentes. Revisão salva e relida, não deploy. Falta testar gateway /hton, consumidor sem IA, build/admin e autenticação MTProto no caminho existente quando a missão de runtime for retomada.
+- **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#183` · NeuroLink `L183`.
+
+### [2026-10-13] Aprendizado #184 — Provas por eixo — notificação não é consulta, painel não é só envelope
+- **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
+- **Cena:** A banca chamou de notificação provada em oito eixos uma investigação que misturava envio Telegram e consultas a Gmail, Drive, GitHub, Notion. O que se vê: envio e recibo no Telegram, mas consultar outros serviços não prova oito notificações. A ferramenta de painel retornou envelope estruturado SUCCESS e corpo com ok:false/ENOENT para arquivo na VPS: chamar ferramenta com sucesso não demonstra atualização do arquivo. A gramática foi escrita em RULES, AGENTS, BOOT, padrão e PR #1804, mas registro não prova que cada runtime já a carrega.
+- **Regra:** SENSOR_ENVELOPE_SUCCESS != DOMAIN_EFFECT_PASS; QUERY_CAPABILITY != NOTIFICATION_DELIVERY; CODE_COMMITTED != RUNTIME_CONSUMED; BUILD_PASS != DEPLOYED; LOCAL_FAILURE != GLOBAL_FAILURE. Comunicar resultado humano: verde efeito local provado, amarelo verbo+alvo, vermelho falha material medida, cinza fora do escopo.
+- **Prova e owner:** Owner: log/receipts da ferramenta de painel, PR #1804 e owners de comunicação. Falta medir o arquivo da VPS antes de declarar painel atualizado; testar cada consumidor real somente quando houver missão dessa integração, sem reabrir a gramática já aceita.
+- **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#184` · NeuroLink `L184`.
+
+### [2026-10-13] Aprendizado #185 — Unigram no Windows — pacote registrado não é aplicativo abrindo; código-fonte não é instalador
+- **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
+- **Cena e critério:** Unigram Store presente mas incapaz de abrir (`0x80073CF6`, `0xD0000001`); ZIP v13.0.1 era código-fonte, não instalador. Telegram original separado e funcionando. Ideia de cliente Hermes+multimodal é intenção futura, não build concluído.
+- **Regra:** APPX_PRESENT != APP_LAUNCH; SOURCE_ARCHIVE != SIGNED_INSTALLER; BOT_API != USER_MTPROTO.
+- **Owners e NEXT_CURSOR:** Aprendizado #185; MTProto/PR #1804 só se esta frente for retomada.
+- **NeuroLink:** `L185`.
+
+### [2026-10-13] Aprendizado #186 — Open WebUI, AionUi e Portainer — mesma infraestrutura, owners e momentos diferentes
+- **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
+- **Cena e critério:** Configuração histórica `CentralDark-WebUI`/Portainer não coincide com Docker atual; AionUi é quem respondia HTTP 200 no domínio `ui.centralldark.com` pelo Caddy:25808. Dados históricos do Open WebUI não localizados, não inferir apagamento.
+- **Regra:** HISTORY != CURRENT_RUNTIME; HTTP_200 != APPLICATION_E2E; HISTORICAL_VOLUME_NOT_FOUND != DELETED.
+- **Owners e NEXT_CURSOR:** Aprendizado #186; `apps/modulos/WebUI/` e `docs/CONSCIENCIA/INFRA-MAP.md` sem mutação de infraestrutura.
+- **NeuroLink:** `L186`.
+
+### [2026-10-13] Aprendizado #187 — Docker, espaço e SH adiado — métricas têm tempo, escopo e continuidade escolhida pelo CHEFE
+- **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
+- **Cena e critério:** Medições da VPS variaram 100% (histórico) → 97–98% → 99% às 06:04Z de 13/10, com 2.7G livres; Docker ~41,22% CPU instantânea dos containers, ~2,05 GB RAM, ~5,20 GB inventário lógico e 0 GB cache de build. Não converter para uso físico/host total.
+- **Regra:** TIMESTAMP_ON_PROOF; DOCKER_STATS != HOST_BENCHMARK; CHEFE_SATISFIED_WITH_SH_RECOVERY != SH_FINISHED; USER_DEFERRED_SH.
+- **Owners e NEXT_CURSOR:** Aprendizado #187; `scripts/centraldark-inventory-reconcile.sh` e `/var/lib/centraldark/inventory-reconcile/centraldark-inventory-reconcile.json`; retomar **somente quando CHEFE voltar e liberar VSCode**. Registro de aprovação `nota dez` refere-se ao gancho/continuidade, não ao runtime.
+- **NeuroLink:** `L187`.
+
+### [2026-10-13] Aprendizado #188 — Admin CentralDark — build isolado comprovado por relato não equivale a publicação em uso
+- **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
+- **Cena e critério:** O outro executor relatou build isolado `7202c01` com exit 0, SSR/CSRF PASS, mas status de publicação e duas consultas Supabase não foram demonstrados pela tela; HTTP 200 não prova funcionalidade completa.
+- **Regra:** BUILD_PASS != DEPLOYED; ISOLATED_WORKTREE_PROTECTS_DIRTY_CHECKOUT; PUBLISH_PROGRESS != CONSUMER_PASS.
+- **Owners e NEXT_CURSOR:** Aprendizado #188; Owners existentes do Admin e Aprendizado #184, com prova de publicação por leitura de volta quando solicitado.
+- **NeuroLink:** `L188`.
