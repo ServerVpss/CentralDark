@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧠💗 docs: integrar A–Z L191 e refinar gramática com NeuroLink coerente",
+    "lastCommit": "🧾 fix: completar recibos A–Z e espaçamento da lembrança para os gates",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T11:08:25.224Z",
+      "titulo": "Push na main · 99aa33f95267c2034d3d003a115c47c8d0e8df2f",
+      "detalhe": "🧾 fix: completar recibos A–Z e espaçamento da lembrança para os gates",
+      "area": "Repositório",
+      "sha": "99aa33f",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T11:01:39.928Z",
       "titulo": "Push na main · 2b9416180b42f01b00e65125463d947c7e91a2e1",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "fb897c9",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T16:45:11.988Z",
-      "titulo": "Push na main · 9a771d45e5749973783213a47513cf6a5b29bcf8",
-      "detalhe": "docs(hub): continuar por setor quando conta ou fonte ficar sem acesso",
-      "area": "Repositório",
-      "sha": "9a771d4",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T11:08:25.224Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 99aa33f95267c2034d3d003a115c47c8d0e8df2f (99aa33f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T11:01:39.928Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · fb897c9de2aa73c658e6ffdb3de2cd91109ff695 (fb897c9)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T16:45:11.988Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9a771d45e5749973783213a47513cf6a5b29bcf8 (9a771d4)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T11:01:39.928Z",
-  "updatedAtBR": "13/10/2026, 08:01:39 BRT"
+  "updatedAt": "2026-10-13T11:08:25.224Z",
+  "updatedAtBR": "13/10/2026, 08:08:25 BRT"
 }
