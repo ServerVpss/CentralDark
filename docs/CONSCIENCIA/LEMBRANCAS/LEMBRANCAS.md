@@ -1263,3 +1263,13 @@ ONE_ORGANISM=true
 ```
 
 <!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_END -->
+
+### [2026-10-12T21:52] Replay V2: antecipar perda do próprio checkpoint e preservar PAPAGAIO integral
+- **Data:** 2026-10-12
+- **Tags:** centraldark, papagaio-on-off, kaizen, metacognicao, replay-v2, append-only, sha256, one-json, one-owner, aprendizado-173, bounded-scanner
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-11
+- **Promovida:** sim
+
+Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no PowerShell Casa→SSH Segredo-VPS, mostrando audit de 21 checks com Git/SSH/integridade/sintaxe/JSON PASS mas scanner partial (bounded_scan), MCP_RUNTIME e PULSE_LIVE UNKNOWN e HAKAI bloqueado. CHEFE já tinha corrigido antes a perda da reprodução: original COMP0UNDING ENGINEERING 49226 bytes SHA256 43a9c12a2e4e288b596d555672f91980e8aa8d4c736a9488a70e2455c70fb219 vs PAPAGAIO IRMAO 36755 bytes = RESUMO NÃO PRESERVA ORIGINAL. Corrigi causalmente a perda de checkpoint no mesmo reconciliador (old.replay preservado no JSON) commit eaab55ffdf6cd928947a2967b8fd449c89bf7910; VPS instalação com backup 20261013T004958Z-v2, SHA novo ead45fcfae0417038542f1bc7a7d4f93651bfd5e0dd0d730db29053e82d46a10, bash -n, pulse plan e --scan exit0; parcial 4117 pastas, 6469 scripts, SHA iguais 1375, candidatos 279. ZIP V2 mesma receita 12 arquivos: --replay/--resume/--repair-known, append-only byte hash, estados no MESMO JSON, replay finito/blocked sem HAKAI, 34 testes locais + replay/resume no simulador. NÃO afirmar pacote V2 já executado ao vivo (script core sim, executor novo ainda não). Aprendizado #173 gravado e NeuroLink L173 atualizado. Não criar outro núcleo. A máquina de estados conhece correções ANTES do erro, mas seu efeito só é PASS quando executado de verdade; scanner partial, MCP runtime e pulso real seguem pendentes. PAPAGAIO ON preserva byte a byte original + delta; OFF executa mínimo útil.
