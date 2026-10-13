@@ -6,6 +6,53 @@
 type Polo = { nome: string; significado: string };
 /** Projeção estática dos owners existentes; não cria motor de Goal nem de PET. */
 const NOMES_INTEGRAIS = [{"nome":"👑 CHEFE","text":"Intenção humana, soberania e direção; decide o objetivo."},{"nome":"🪬 Instinto Superior","text":"Identidade CentralDark e continuidade SOUL → RULES → AGENTS; SOL interpreta, Hermes executa."},{"nome":"🫀 Yuji","text":"Memória, vontade e identidade preservadas diante de poder extraordinário."},{"nome":"🔥 Sukuna","text":"Potência do motor substituível; força não significa permissão."},{"nome":"👁️ Gojo","text":"Inventário/observação, Infinito, Azul, Vermelho, Roxo, RCT e Domínio na skill Oracle existente."},{"nome":"🪽 Whis","text":"Mestre inclusive de Bills: observa, aconselha, orienta, treina, antecipa consequências e pode intervir; não usurpa decisão."},{"nome":"🐈 Bills","text":"Deus da Destruição: autoridade, transformação, equilíbrio com criação, força e discernimento falível; não licencia apagar dados."},{"nome":"♾️ Goku","text":"Instinto Superior: perceber, adaptar, agir com precisão; face instinto do PET Hermes."},{"nome":"💜 Vegeta","text":"Ego Superior: resistência, confronto e evolução pelo caminho de Bills; face ego/ascensão violeta."},{"nome":"💎 Vegetto","text":"Fusão Potara: capacidades convergem no metabolismo cognitivo e funcional."},{"nome":"💎 Gogeta","text":"Fusão sincronizada: mesmo organismo, mesma intenção, nenhuma segunda arquitetura."},{"nome":"🧿 Realidade","text":"Testes/readback/contraprova após o efeito; Reality Judge não é porteiro."},{"nome":"🫀 Kaizen","text":"Receita, aprendizado, replay, NeuroLink e NEXT_CURSOR que alimentam a próxima batida."}] as const;
+/** Vínculo operacional aditivo: personagens seguem metáforas, nunca identidades de novos agentes. */
+const PAPEIS_OPERACIONAIS = {
+  "👑 CHEFE": "CHEFE humano: define intenção, critérios e autorização; nenhum modelo assume sua autoridade.",
+  "🪬 Instinto Superior": "Cockpit da CentralDark: mostra o mesmo estado; SOL coordena e Hermes executa.",
+  "🫀 Yuji": "SOUL e memória canônica: conservam identidade, intenção e histórico independentemente do modelo.",
+  "🔥 Sukuna": "Potência dos modelos substituíveis (GPT/Codex, Claude ou IA local), sem autorização para executar.",
+  "👁️ Gojo": "GPT/Codex e Claude/SOL observam, confrontam hipóteses e usam a skill Oracle existente; não escrevem.",
+  "🪽 Whis": "Claude/SOL no papel consultivo: questiona premissas, orienta e propõe contraprova ao Hermes.",
+  "🐈 Bills": "Decisão continua com o CHEFE; Hermes só transforma o escopo autorizado. Destruição é metáfora, não permissão.",
+  "♾️ Goku": "Hermes PET, face Instinto: executa com precisão a receita já comprovada no mesmo núcleo.",
+  "💜 Vegeta": "O mesmo Hermes PET, face Ego: resiste à falha, retesta e recupera o último estado provado.",
+  "💎 Vegetto": "Integração do pensamento consultivo com o corpo Hermes: um Goal e uma autoridade de escrita.",
+  "💎 Gogeta": "Sincronização GPT/Codex → Hermes → Claude/SOL → Hermes no mesmo fluxo, sem duplicar executor.",
+  "🧿 Realidade": "Testes, gates do mesmo SHA, logs e readback arbitram hipóteses; pareceres de IA não são PASS.",
+  "🫀 Kaizen": "Owner de receita e NeuroLink preserva versões anteriores; só promove delta comprovado e reuso posterior.",
+} as const satisfies Record<(typeof NOMES_INTEGRAIS)[number]["nome"], string>;
+
+const CIRCUITO_COGNITIVO = [
+  {
+    nome: "🧠 GPT / Codex",
+    papel: "Leitor e revisor de contratos, código, testes, SHA, CI e hipóteses técnicas.",
+    limite: "Somente candidato e contraprova proposta; não usa ferramenta de mutação.",
+    metafora: "👁️ Gojo — Seis Olhos e observação",
+  },
+  {
+    nome: "⚙️ 🪬 Hermes",
+    papel: "Único executor: roteia capacidade existente, mede, executa script autorizado, testa e emite recibo.",
+    limite: "Uma caneta por escopo; conserva autorização, precondições e gates.",
+    metafora: "♾️ Goku + 💜 Vegeta — duas faces do mesmo PET",
+  },
+  {
+    nome: "🔍 Claude / SOL",
+    papel: "Revisor consultivo da intenção, premissas, coerência, lacunas e critérios de aceite.",
+    limite: "Não executa nem promove parecer a verdade; devolve hipóteses ao Hermes.",
+    metafora: "🪽 Whis — orientação e contraprova",
+  },
+] as const;
+
+const BATIDAS_DO_CIRCUITO = [
+  "CHEFE define Goal, limites e autorização; recuperar CURRENT, owner e receita existente.",
+  "GPT/Codex examina código e evidências; entrega hipótese técnica consultiva ao Hermes.",
+  "Hermes reconcilia o candidato com as precondições e pede análise de Claude/SOL quando houver ganho.",
+  "Claude/SOL contesta premissas e sugere teste discriminante; devolve candidato ao MESMO Hermes.",
+  "Hermes escolhe uma caneta autorizada, executa o menor delta, testa, lê efeito e devolve receipt aos revisores.",
+  "Reality Judge contraprova; Kaizen evolui a MESMA receita versionada, preservando a anterior; FIXED_POINT ou NEXT_CURSOR.",
+] as const;
+
 const PODERES_INTEGRAIS = [{"name":"SIX_EYES","text":"inventário de skills, tools, owners, evidências, falhas e NEXT_CURSOR"},{"name":"INFINITY","text":"não promover prova ausente nem output externo a verdade"},{"name":"BLUE","text":"atrair só evidência causal relevante"},{"name":"RED","text":"rejeitar duplicação, falso verde, stale e arquitetura paralela"},{"name":"PURPLE","text":"reconciliar menor delta no owner existente"},{"name":"RCT","text":"transformar falha comprovada em teste/receita/receipt"},{"name":"DOMAIN","text":"preservar LOOP_ID, TURN_ID, PARENT_ID, OWNER_SCOPE e NEXT_CURSOR"}] as const;
 const BATIDAS_OP = [{"n":1,"text":"Vive e experimenta"},{"n":2,"text":"Descobre"},{"n":3,"text":"Melhora"},{"n":4,"text":"Comprova e deixa sua marca"},{"n":5,"text":"Aprende"},{"n":6,"text":"Reutiliza e alimenta a próxima batida"},{"n":7,"text":"Continua evoluindo"}] as const;
 const BATIDAS_POEMA = [{"n":1,"text":"🫀 Receber"},{"n":2,"text":"👀 Perceber"},{"n":3,"text":"🧠 Compreender"},{"n":4,"text":"🔧 Transformar"},{"n":5,"text":"🪬 Conectar"},{"n":6,"text":"♻️ Aprender"},{"n":7,"text":"🚀 Continuar"}] as const;
@@ -143,10 +190,51 @@ export function MapaMetabolicoCristal({ compacto = false }: { compacto?: boolean
             </div>
           </div>
           <p className="text-center text-xs text-muted-foreground">👑 CHEFE → SOL coordena → Hermes executa → 🧿 realidade verifica o efeito → 🫀 Kaizen aprende. Nenhum segundo cérebro, PET executor ou writer.</p>
+          {/* Complemento do MESMO mapa/metabolismo; projeção conceitual, nunca painel/serviço novo. */}
+          <div className="rounded-xl border border-gold/30 bg-background/40 p-4 sm:p-5" data-cd-cristal="conselho-hermes">
+            <h4 className="text-center text-base font-semibold text-foreground">
+              ♾️ Uma intenção · múltiplos olhos · uma caneta · aprendizado comprovado
+            </h4>
+            <p className="mt-2 text-center text-xs leading-relaxed text-muted-foreground">
+              Circuito consultivo: GPT/Codex pensa → Hermes mede e executa → Claude/SOL contrapõe
+              → Hermes reconcilia → GPT/Codex revisa. Não são três executores nem um novo cérebro.
+            </p>
+            <div className="mt-4 grid gap-3 lg:grid-cols-3" aria-label="Responsabilidades do ciclo GPT, Hermes e Claude">
+              {CIRCUITO_COGNITIVO.map((ator, indice) => (
+                <div key={ator.nome} className={`rounded-lg border p-3 ${indice === 1 ? "border-gold/40 bg-gold/5" : "border-border bg-surface/60"}`}>
+                  <p className="text-sm font-semibold text-foreground">{ator.nome}</p>
+                  <p className="mt-1 text-[10px] font-mono tracking-wider text-gold">
+                    {indice === 1 ? "EXECUTOR ÚNICO" : "PENSAMENTO CONSULTIVO"}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{ator.papel}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground"><span className="font-semibold">Limite:</span> {ator.limite}</p>
+                  <p className="mt-2 text-[11px] text-neon-blue">{ator.metafora}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 text-center font-mono text-[11px] text-gold">
+              GPT/Codex → Hermes → Claude/SOL → Hermes → GPT/Codex ↻
+            </p>
+            <ol className="mt-4 grid gap-2 text-xs leading-relaxed text-muted-foreground sm:grid-cols-2">
+              {BATIDAS_DO_CIRCUITO.map((batida, indice) => (
+                <li key={batida} className="rounded-md border border-border/70 p-3">
+                  <span className="font-mono font-semibold text-neon-blue">{String(indice + 1).padStart(2, "0")}.</span> {batida}
+                </li>
+              ))}
+            </ol>
+            <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+              🫀 Receita conhecida: Hermes reutiliza primeiro, sem chamada de IA desnecessária.
+              Novidade: revisores enviam somente candidatos; divergência vira teste, não votação.
+              Kaizen acrescenta proveniência, versão e teste à mesma receita sem apagar a anterior.
+            </p>
+            <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+              VISUALIZAÇÃO DE CONTRATO · REVISÃO CRUZADA E2E AINDA UNKNOWN · MERGED ≠ DEPLOYED · UNKNOWN ≠ PASS
+            </p>
+          </div>
           <div className="rounded-lg border border-border p-4">
             <h4 className="text-sm font-semibold text-foreground">🧬 Nome, função, vínculo, limite</h4>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              {NOMES_INTEGRAIS.map((n) => <div key={n.nome} className="rounded-md bg-background/40 p-3"><p className="text-xs font-semibold text-foreground">{n.nome}</p><p className="mt-1 text-xs text-muted-foreground">{n.text}</p></div>)}
+              {NOMES_INTEGRAIS.map((n) => <div key={n.nome} className="rounded-md bg-background/40 p-3"><p className="text-xs font-semibold text-foreground">{n.nome}</p><p className="mt-1 text-xs text-muted-foreground">{n.text}</p><p className="mt-2 border-t border-border/60 pt-2 text-[11px] leading-relaxed text-neon-blue"><span className="font-semibold">No circuito: </span>{PAPEIS_OPERACIONAIS[n.nome]}</p></div>)}
             </div>
           </div>
           <div className="rounded-lg border border-border p-4">
