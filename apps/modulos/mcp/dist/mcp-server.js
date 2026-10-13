@@ -294,6 +294,9 @@ export function buildServer(options) {
                 callerUser: options.callerUser ?? null,
                 oauthScope: String(options.oauthScope || ""),
                 correlationId: options.cid ?? null,
+                // Only the authenticated HTTP admin endpoint can provide this provenance.
+                authProvenance: options.authProvenance === "verified_oauth_admin"
+                    ? "verified_oauth_admin" : null,
             });
             const raw = await tool.handler(parsed.data, toolContext);
             const result = decorateToolResult(sanitizeOutgoingDeep(raw), {
