@@ -1,6 +1,6 @@
 name: 📦 Build CentralDark Architecture Package
 
-# Historical workflow: retained for UI identity only; all jobs permanently disabled.
+# Historical workflow retained for reference; job execution disabled.
 on:
   workflow_dispatch:
 
@@ -9,8 +9,8 @@ permissions:
 
 jobs:
   build-package:
-     if: ${{ false }}
-   runs-on: [self-hosted, Linux]
+    if: ${{ false }}
+    runs-on: [self-hosted, Linux]
     timeout-minutes: 15
     steps:
       - name: Checkout exact candidate
