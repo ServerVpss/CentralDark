@@ -1,8 +1,15 @@
 ---
 title: "Restauro — Aprendizados pré-PR #316"
+status: HISTORICAL
+source_rule: "GIT_HISTORY_VERBATIM -> PROVENANCE_ONLY; HISTORICAL != CURRENT_CANONICAL_GUIDANCE"
 date: 2026-10-13
+updated: 2026-10-13T17:20:00-03:00
 tags: ["consciencia", "aprendizados", "restauro", "proveniencia"]
-updated: 2026-10-13
+category: "A-Aprendizado-Historico"
+sensitivity: INTERNAL
+source: "git show d8d45355ba3be78261047a329b169cc4a19c8717:docs/CONSCIENCIA/APRENDIZADOS.md"
+source_class: TOOL_MEASURED
+owner: "docs/CONSCIENCIA/APRENDIZADOS.md"
 ---
 
 # 🧬 Restauro — aprendizados apagados pelo PR #316
