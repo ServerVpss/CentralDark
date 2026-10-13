@@ -229,6 +229,8 @@ implementation_progress:
     papagaio_fiel_runtime_replay: { percent: 0, status: UNKNOWN, color: gray }
     telegram_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
     whatsapp_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
+    hermes_telegram_ht_plugin_source: { percent: 100, status: PASS_SOURCE, color: green }
+    hermes_telegram_ht_menu_runtime: { percent: 0, status: UNKNOWN, color: gray }
     unigram_source_audit: { percent: 0, status: UNKNOWN, color: gray }
     unigram_native_build: { percent: 0, status: UNKNOWN, color: gray }
     unigram_hermes_multimodal_integration: { percent: 0, status: UNKNOWN, color: gray }
@@ -678,6 +680,41 @@ learning_175_behavioral_binding:
     On next relevant programming/editing task, capture inherited L175 reference,
     which behavioral rule it changed, and an observable before/after or readback.
     A document update alone is not proof of autonomous Hermes ingestion.
+
+
+# Adapter de menu no gateway Hermes nativo; nao cria novo bot, token ou polling.
+telegram_native_hton_htoff_menu:
+  intent_id: CHEFE_HERMES_TYPED_CORE_TOGGLE_NATIVE_TELEGRAM_20261013
+  status: CODE_REGISTERED_LOCAL_UNIT_PASS_RUNTIME_INSTALL_UNKNOWN
+  owner: apps/modulos/HERMES-CORE/
+  adapter: apps/modulos/HERMES-CORE/plugins/typed-core-telegram/__init__.py
+  manifest: apps/modulos/HERMES-CORE/plugins/typed-core-telegram/plugin.yaml
+  test: apps/modulos/HERMES-CORE/plugins/test_typed_core_telegram.py
+  token_reuse: EXISTING_NATIVE_HERMES_PROFILE_NO_COPY_OR_RENEWAL
+  slash_commands:
+    hton: Ativar preferencia Hermes Typed Core
+    htoff: Voltar ao Hermes atual (fallback)
+  telegram_menu_names_lowercase: true
+  native_discovery: HERMES_PLUGIN_REGISTER_COMMAND_AND_SETMYCOMMANDS
+  default_mode: EXISTING_HERMES_UNCHANGED
+  persisted_scope: PROFILE_AND_CHAT_AND_AUTHENTICATED_USER
+  htoff_preserves_current_model_and_cron: true
+  no_second_gateway_bot_or_writer: true
+  pre_llm_hook_is_only_routing_preference: true
+  cannot_claim_model_bypass_without_real_typed_consumer: true
+  evidence:
+    plugin_committed_to_pr: PASS_SOURCE
+    local_toggle_and_isolation_tests: PASS_5
+    installed_on_live_vps_gateway: UNKNOWN
+    menu_present_in_live_telegram: UNKNOWN
+    next_message_uses_deterministic_typed_consumer: UNKNOWN
+    fallback_live_e2e: UNKNOWN
+  next_cursor: >-
+    Resolve owning native Hermes profile and existing Telegram gateway on VPS.
+    Install plugin through existing owner without starting another bot, copying
+    token or blind restart. Check menu names and PT-BR legends in setMyCommands,
+    exercise /hton then /htoff with Telegram receipts. For no-LLM typed PASS,
+    wire actual deterministic ingress consumer and prove same-SHA output.
 
 papagaio_on_loop_receipts:
   - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
