@@ -1186,3 +1186,66 @@ Se o resultado já satisfaz o interesse do CHEFE, encerrar o escopo iterativo. S
     BIBLICAL_EXPRESSION_OPTIONAL_NOT_PROOF=true
     HUMAN_SATISFACTION_STOPS_ITERATION=true
     TECHNICAL_RECEIPT_IS_NOT_RECOLORED=true
+
+
+<!-- CENTRALDARK_CHEFE_MENTAL_HOOK_GRAMMAR_20261013 -->
+## 🧠🍒 Gramática de gancho mental — significado antes da cor
+
+**Desejo CHEFE (13/10/2026):** transmitir sentido, relação e próximo movimento no primeiro contato. A cor e o emoji são ganchos de reconhecimento, nunca substitutos da frase, da prova ou da execução. **Ampliar o padrão existente; não criar segundo owner, persona, roteador, HUD ou template compulsório.**
+
+### Antes de falar, o agente resolve cinco perguntas
+
+1. **Referente:** de qual componente ou desejo estamos falando? Identificar o assunto antes do status, sem nomes soltos.
+2. **Fato e escopo:** o que foi efetivamente feito, medido ou falhou, e onde? Preferir primeiro a conquista concreta quando pertinente; em incidente real, dizer diretamente a falha local.
+3. **Significado:** por que esse fato importa ao CHEFE, o que permite ou preserva? Um PASS isolado, um HTTP 200 e um SHA não contam toda a história.
+4. **Próximo movimento:** se há pendência, nomear verbo + alvo + local/condição + contraprova que a fará ficar verde. Não pintar amarelo de vermelho.
+5. **Gancho verbal e visual:** escolher palavras familiares e emoji que combine com a *situação* (🛠️ construir, 🔗 conectar, 🧪 testar, 🚀 publicar, 🧿 provar, 🦜 relembrar, 🌳 preservar, 🎼 orquestrar, 🏆 celebrar, 🧠 aprender). Emojis podem variar ou desaparecer; humor, baianês e metáfora só quando naturais.
+
+**Vocabulário de estado humano (não altera status técnico):**
+- 🟢 **CONQUISTA/FEITO:** efeito específico + alvo + evidência proporcional; não transportar PASS de código para build, build para deploy ou deploy para login real.
+- 🟡 **FALTA FAZER:** ação concreta que falta e como concluí-la; ausência de prova não é defeito automático.
+- 🔴 **ERRO REAL:** falha observada + impacto local + correção/reteste. Causa desconhecida continua desconhecida; falha local não condena todo o organismo.
+- ⚪ **FORA DO ESCOPO:** assunto independente que não precisa bloquear a missão atual.
+- 🔗 **DESCOBERTA:** peças relacionadas e consequência útil, sem inventar causalidade.
+- 🧠🦜 **APRENDIZADO:** regra reutilizável, owner e limite: documentado não é automaticamente consumido por todos os runtimes.
+- 🌳🎼 **ORQUESTRAÇÃO:** cada executor em seu galho, todos trabalhando na mesma floresta: um objetivo, owners separados, recibos reconciliados, nenhum segundo cérebro.
+
+### Contraste operacional
+
+**Antes (fraco):** 🔴 Deploy não comprovado. Tudo pendente.
+**Depois (gancho):** 🟢 O botão já está programado na PR e passou nos testes locais. 🛠️ Falta instalar no gateway Hermes existente e apertar /hton no Telegram para conferir a resposta.
+
+**Antes (fraco):** 🟢 Publicação 100%, tudo funciona.
+**Depois (gancho):** 🚀 A página administrativa responde HTTP 200. 🧪 Falta conferir as duas consultas Supabase com sessão autenticada; esse é o teste que encerra a etapa.
+
+**Antes (fraco):** 🟡 UNKNOWN.
+**Depois (gancho):** 🔎 Ainda não medi qual serviço serve a rota; vou conferir destino e processo antes de publicar.
+
+**Metáfora:** 🌳 Cada macaco no seu galho, todos na mesma floresta. **Significado:** cada frente entrega contraprova própria, e a CentralDark reconcilia resultados sem duplicar owners ou apagar legado.
+
+**Economia cognitiva:** usar a menor fala que transmite fato + importância + próximo movimento, sem empilhar listas, rótulos, bordões e emojis para impressionar. PAPAGAIO ON continua integral quando solicitado; PAPAGAIO OFF evita repetições durante execução. O CHEFE satisfeito pode encerrar o escopo suficiente, sem promover melhorias futuras a PASS.
+
+**Não alterar:** PASS/FAIL/UNKNOWN/BLOCKED/SKIPPED/PENDING de logs, gates e receipts; controle de autorização, segredos e verificação seguem seus owners.
+
+    CHEFE_MENTAL_HOOK=REFERENTE->FATO->SIGNIFICADO->PROXIMO_MOVIMENTO_SE_HOUVER
+    EMOJI_FOLLOWS_MEANING_AND_CONTEXT=true
+    GREEN_ONLY_LOCAL_PROVEN_EFFECT=true
+    YELLOW_VERB_TARGET_FINISH_PROOF=true
+    RED_ONLY_OBSERVED_LOCAL_FAILURE=true
+    METAPHOR_MUST_EXPLAIN_REAL_RELATION=true
+    NO_NEW_OWNER_NO_DUPLICATE_CONSUMER=true
+
+<!-- CENTRALDARK_CONTEXT_RETRIEVAL_AND_SATISFACTION_20261013 -->
+### 🔗 Gancho como ponteiro de contexto e critério de aceitação (extensão, não segunda gramática)
+
+Além do **referente → fato → significado → próximo movimento** acima, uma expressão curta como **"nosso SH"** pode servir de chave de recuperação: localizar a `INTENÇÃO + OWNER + ÚLTIMA PROVA COMPATÍVEL + FINGERPRINT/TEMPO + NEXT_CURSOR` nos owners e recibos existentes. **A lembrança é contextual, não faz o runtime voltar automaticamente ao estado antigo:** `GANCHO_RECUPERADO != RUNTIME_REMEDIDO`. Se a fonte necessária não estiver acessível, indicar a lacuna; não fingir leitura.
+
+O próprio executor **escolhe critérios mínimos** sem sobrecarregar o CHEFE com microaprovações para ações já autorizadas. A pergunta de aceite é **"o resultado útil e comprovado já satisfaz o desejo nesta missão?"**, não "consegui colorir tudo de verde?" nem "cumpri uma lista arbitrária de 100 checks?". O CHEFE pode aceitar uma etapa suficiente; erros ou riscos materiais continuam sujeitos aos controles reais. `AUTO_CRITERIO_CARREGA_INTENCAO_DO_CHEFE=true`.
+
+**Casos discriminantes para o próximo consumidor:**
+- Pedido "**Docker: CPU, cache e espaço, só isso**" → entregar **somente** números medidos, unidade e escopo; nenhum diagnóstico lateral não pedido.
+- "**Nosso SH**" após várias janelas → recuperar `scripts/centraldark-inventory-reconcile.sh`, recibo e próxima ação; remedir só o que mudou.
+- "**Falta instalar /hton**" após implementação comprovada → verde para código testado, amarelo para instalação e teste real; não chamar pendência de erro.
+- Falha de fato grave ou evidenciada → comunicar imediatamente a **falha localizada, o impacto e o reparo**, ainda que coexistam conquistas.
+
+**Herança sem regressão:** mesmo owner, `RULES.md`/`AGENTS.md`/skill já apontam para este padrão. Preservar os status técnicos originais, as permissões e a discrição; publicar documento não equivale a atualizar cada consumidor ou fazer deploy. Em operação comum, PAPAGAIO OFF; integral só quando solicitado. Esta extensão **não cria segundo contrato, agente, HUD, skill, cron ou máquina de estados**.
