@@ -1,7 +1,7 @@
 #!/bin/bash
 # ============================================================
 # limpeza-autonoma.sh — Limpeza de logs + relatório Telegram
-# Cron real: */15 * * * *; cache incremental é limitado a uma vez por dia
+# Cron real: */15 * * * *; caches limitados a um ciclo diário
 # ============================================================
 set -uo pipefail   # sem -e: evita abort em checks condicionais
 
@@ -14,10 +14,10 @@ SELECTED=""
 
 usage() {
   cat <<'EOF'
-Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,pip-cache,npm-cache>]
+Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,rotated,pip-cache,npm-cache>]
 
   --map-disk                 somente mede o disco; não limpa nem notifica
-  --clean-selected LIST      limpa somente categorias explícitas: journal,gz,pip-cache,npm-cache
+  --clean-selected LIST      limpa somente categorias explícitas: journal,gz,rotated,pip-cache,npm-cache
   --help                     mostra esta ajuda
 
 Sem argumentos, preserva o modo periódico existente.
@@ -61,6 +61,16 @@ if [ "$MODE" = "map" ]; then
   echo "NPM_CACHE_KB"; du -sk /root/.npm/_cacache 2>/dev/null || true
   echo "LOG_TREE_BYTES"
   du -x -B1 -d 2 /var/log 2>/dev/null | sort -n | tail -30 || true
+  echo "KARE_CANDIDATE"
+  if [ -f /var/log/kare/kare-socket.log ]; then
+    stat -c 'size=%s mtime=%y path=%n' /var/log/kare/kare-socket.log 2>/dev/null || true
+    sha256sum /var/log/kare/kare-socket.log 2>/dev/null || true
+    if command -v lsof >/dev/null 2>&1; then
+      lsof -- /var/log/kare/kare-socket.log 2>/dev/null || true
+    fi
+  else
+    echo "absent=/var/log/kare/kare-socket.log"
+  fi
   exit 0
 fi
 
@@ -160,14 +170,14 @@ clean_incremental_cache() {
 if [ "$MODE" = "selected" ]; then
   IFS=',' read -r -a CATEGORIES <<< "$SELECTED"
   if [ "${#CATEGORIES[@]}" -eq 0 ] || [ -z "${CATEGORIES[0]:-}" ]; then
-    echo "Nenhuma categoria válida. Use journal,gz,pip-cache,npm-cache." >&2
+    echo "Nenhuma categoria válida. Use journal,gz,rotated,pip-cache,npm-cache." >&2
     exit 2
   fi
   for CATEGORY in "${CATEGORIES[@]}"; do
     case "$CATEGORY" in
-      journal|gz|pip-cache|npm-cache) : ;;
+      journal|gz|rotated|pip-cache|npm-cache) : ;;
       *)
-        echo "Categoria inválida: $CATEGORY. Use journal,gz,pip-cache,npm-cache." >&2
+        echo "Categoria inválida: $CATEGORY. Use journal,gz,rotated,pip-cache,npm-cache." >&2
         exit 2
         ;;
     esac
@@ -177,10 +187,17 @@ if [ "$MODE" = "selected" ]; then
   JOURNAL_ANTES=$(journalctl --disk-usage 2>/dev/null | awk '/take up/{print $7}' | head -1 || echo "?")
   JOURNAL_DEPOIS="$JOURNAL_ANTES"
   REMOVIDOS=0
+  ROTATED_CANDIDATES=0
+  ROTATED_REMOVED=0
+  ROTATED_BYTES=0
+  ROTATED_SKIPPED=0
+  CLEAN_ERRORS=0
 
   case ",${SELECTED}," in
     *,journal,*)
-      journalctl --vacuum-size=400M --vacuum-time=14d >/dev/null 2>&1 || true
+      if ! journalctl --vacuum-size=400M --vacuum-time=14d >/dev/null 2>&1; then
+        CLEAN_ERRORS=$((CLEAN_ERRORS + 1))
+      fi
       JOURNAL_DEPOIS=$(journalctl --disk-usage 2>/dev/null | awk '/take up/{print $7}' | head -1 || echo "?")
       ;;
   esac
@@ -189,24 +206,66 @@ if [ "$MODE" = "selected" ]; then
     *,gz,*)
       REMOVIDOS=$(find /var/log -name "*.gz" -mtime +7 -type f 2>/dev/null | wc -l || echo 0)
       if [ "$REMOVIDOS" -gt 0 ]; then
-        find /var/log -name "*.gz" -mtime +7 -type f -delete 2>/dev/null || true
+        if ! find /var/log -name "*.gz" -mtime +7 -type f -delete 2>/dev/null; then
+          CLEAN_ERRORS=$((CLEAN_ERRORS + 1))
+        fi
       fi
       ;;
   esac
 
-  CACHE_FAIL=0
-  case ",$SELECTED," in
-    *,pip-cache,*) clean_incremental_cache pip-cache || CACHE_FAIL=1 ;;
+  case ",${SELECTED}," in
+    *,rotated,*)
+      if ! command -v lsof >/dev/null 2>&1; then
+        CLEAN_ERRORS=$((CLEAN_ERRORS + 1))
+      else
+        while IFS= read -r -d '' LOG_FILE; do
+          ROTATED_CANDIDATES=$((ROTATED_CANDIDATES + 1))
+          LOWER_FILE=$(printf '%s' "$LOG_FILE" | tr '[:upper:]' '[:lower:]')
+          case "$LOWER_FILE" in
+            *auth*|*secure*|*audit*|*incident*|*recovery*|*hermes*|*session*|*checkpoint*|*backup*)
+              ROTATED_SKIPPED=$((ROTATED_SKIPPED + 1))
+              continue
+              ;;
+          esac
+          if lsof -t -- "$LOG_FILE" >/dev/null 2>&1; then
+            ROTATED_SKIPPED=$((ROTATED_SKIPPED + 1))
+            continue
+          fi
+          LOG_SIZE=$(stat -c%s -- "$LOG_FILE" 2>/dev/null || echo 0)
+          if rm -f -- "$LOG_FILE"; then
+            ROTATED_REMOVED=$((ROTATED_REMOVED + 1))
+            ROTATED_BYTES=$((ROTATED_BYTES + LOG_SIZE))
+          else
+            CLEAN_ERRORS=$((CLEAN_ERRORS + 1))
+          fi
+        done < <(
+          find /var/log /root/.hermes/logs -xdev -type f -mmin +2880 \
+            \( -name '*.gz' -o -name '*.old' -o -name '*.log.[0-9]*' -o -name '*.log-??????' \) \
+            -print0 2>/dev/null
+        )
+      fi
+      ;;
   esac
-  case ",$SELECTED," in
-    *,npm-cache,*) clean_incremental_cache npm-cache || CACHE_FAIL=1 ;;
+
+  # O mesmo owner aplica caches seguros depois das regras de retenção/rotated.
+  # Falhas incrementam ERRORS já previsto no recibo da main.
+  case ",${SELECTED}," in
+    *,pip-cache,*) clean_incremental_cache pip-cache || CLEAN_ERRORS=$((CLEAN_ERRORS + 1)) ;;
+  esac
+  case ",${SELECTED}," in
+    *,npm-cache,*) clean_incremental_cache npm-cache || CLEAN_ERRORS=$((CLEAN_ERRORS + 1)) ;;
   esac
 
   DISCO_LIVRE_DEPOIS=$(df -B1 -P / | awk 'NR==2{print $4}')
   RELIEF_BYTES=$((DISCO_LIVRE_DEPOIS - DISCO_LIVRE_ANTES))
-  printf 'MODE=CLEAN_SELECTED\nSELECTED=%s\nJOURNAL=%s -> %s\nGZ_REMOVED=%s\nDISK_RELIEF_BYTES=%s\n' \
-    "$SELECTED" "$JOURNAL_ANTES" "$JOURNAL_DEPOIS" "$REMOVIDOS" "$RELIEF_BYTES"
-  [ "$CACHE_FAIL" -eq 0 ] || exit 1
+  printf '%s mode=selected selected=%s journal_before=%s journal_after=%s gz_removed=%s rotated_candidates=%s rotated_removed=%s rotated_bytes=%s rotated_skipped=%s free_before=%s free_after=%s relief_bytes=%s errors=%s\n' \
+    "$(date -Is)" "$SELECTED" "$JOURNAL_ANTES" "$JOURNAL_DEPOIS" "$REMOVIDOS" \
+    "$ROTATED_CANDIDATES" "$ROTATED_REMOVED" "$ROTATED_BYTES" "$ROTATED_SKIPPED" \
+    "$DISCO_LIVRE_ANTES" "$DISCO_LIVRE_DEPOIS" "$RELIEF_BYTES" "$CLEAN_ERRORS" \
+    >> "$LOG_PROPRIO" 2>/dev/null || true
+  printf 'MODE=CLEAN_SELECTED\nSELECTED=%s\nJOURNAL=%s -> %s\nGZ_REMOVED=%s\nROTATED_CANDIDATES=%s\nROTATED_REMOVED=%s\nROTATED_BYTES=%s\nROTATED_SKIPPED=%s\nDISK_RELIEF_BYTES=%s\nERRORS=%s\n' \
+    "$SELECTED" "$JOURNAL_ANTES" "$JOURNAL_DEPOIS" "$REMOVIDOS" "$ROTATED_CANDIDATES" \
+    "$ROTATED_REMOVED" "$ROTATED_BYTES" "$ROTATED_SKIPPED" "$RELIEF_BYTES" "$CLEAN_ERRORS"
   exit 0
 fi
 
