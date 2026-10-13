@@ -752,7 +752,6 @@ CURRENT_OVER_HISTORY = true
 
 Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve terminar com selo/receipt explícito. O selo deve preservar MEASURED, UNKNOWN e BLOCKED; não pode converter sensor falho em PASS. Nesta medição, o selo no painel falhou por ENOENT na rota VPS, portanto permanece pendente de readback.
 
-
 ### [2026-10-10] Recuperação Hydra na Casa: força operacional com contraprova
 - Intenção: recuperar janela preta do Hydra Launcher na Casa SEGREDO.
 - Execução: encerramento forçado somente de processos Hydra e reinício do aplicativo instalado; novos processos confirmados responsivos.
@@ -760,7 +759,6 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - Aprendizado: ordem explícita de reinício forçado autoriza o menor ajuste direto, sem destruir dados; processo responsivo não comprova interface renderizada; logs de rede não comprovam causa raiz.
 - Continuidade: Codex Casa e revisão Codex GitHub App atingiram limites de uso específicos. Dependabot/COSTURA e CodeRabbit permanecem owners distintos; workflow Dependabot estava manualmente pausado nesta medição.
 - Estado: RESTART_PASS, VISUAL_PASS, ROOT_CAUSE_UNKNOWN. Detalhes em `docs/CONSCIENCIA/APRENDIZADOS.md`, entrada de 2026-10-10.
-
 
 ### [2026-10-10] Cópia histórica E: sem pendência artificial
 - **Lembrança do CHEFE:** `E:\centraldark-main.tar.gz` era snapshot da revisão `799c339` da CentralDark; leitura local provou o conteúdo e consulta GitHub mostrou `main` 862 commits à frente e zero atrás. O usuário pontuou que pode baixar a mesma revisão diretamente no GitHub quando quiser.
@@ -771,7 +769,6 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **Contraprova complementar (11/10; transferência de scripts):** o CHEFE moveu os 12 scripts para `F:\scripts` mesmo após alerta hipotético de quebra. Leitura física, launcher WinForms, instância única e catálogo real no log passaram; apenas o texto estático do caminho exigiu correção. **Decisão aprendida:** risco anunciado é hipótese a medir, não impedimento autônomo; `RISCO_POSSIVEL != FALHA_COMPROVADA`. Preservar o que funciona, agir sobre o delta observado e reconhecer a contraprova que invalida a previsão anterior.
 - **Linhas de prova:** `docs/CONSCIENCIA/APRENDIZADOS.md` (mesma regra Hakai, enriquecida, sem criar número); `docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md#t3--2026-10-11--mudança-física-para-fscripts-com-mesmo-hud`; `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`. `MAIN_SOURCE_SYNC=PASS` e `F_SCRIPTS_GUI_LOG=PASS` no escopo; outras dependências `UNKNOWN` até medi-las.
 
-
 ### [2026-10-10] Aprendizado autonomo com qualidade e fechamento integral
 - Owner canonico: docs/CONSCIENCIA/APRENDIZADOS.md, contrato AUTO_LEARNING_QUALITY_GATE_20261010.
 - Decisao do CHEFE: reconhecer, comparar, validar, enriquecer e registrar autonomamente aprendizados materiais, sem entradas vazias ou duplicadas.
@@ -779,7 +776,6 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - Correcao de procedimento: uma falha na segunda gravacao nao deve gerar divida paralela ou declaracao falsa de ALL DONE. Consolidar no owner canonico, realizar readback em todos os destinos pertinentes e explicitar qualquer lacuna residual.
 - Contraprova: registro da licao completo no owner de Aprendizados; esta Lembranca aponta ao mesmo owner sem criar novo sistema.
 - Leis: ROUTE_FAILURE != GOAL_FAILURE; PARTIAL_WRITE != DONE; EMPTY_LEARNING=REJECT; AUTHORIZED_FALLBACK_ONLY; READBACK_REQUIRED.
-
 
 ### [2026-10-10] RECONCILIACAO_12_OCORRENCIAS_20261010 — resolucao por owner existente
 - **Origem e criterio:** amostra de 12 episodios identificados entre sessao atual (8) e outros chats recuperados (4); nao representa todos os erros historicos.
@@ -814,3 +810,13 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **Resposta correta:** identificar antes de explicar; aceitar a prova existente dentro de seu escopo, responder curto ao pedido, só medir novamente se surgir uma dúvida material diferente. `PROOF_SCOPE_MATCHES_CLAIM`; `SUFFICIENT_EVIDENCE_STOPS_RECHECK`; `SAME_CONTRACT != SAME_ANSWER`; `DOCUMENTED != CONSUMED`.
 - **Owner de aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md#2026-10-12-prova_proporcional_contrato_fixo_duas_contas_20261012`; contrato de resposta existente em `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`. Registro não prova consumo em outro chat ou sincronização de memória.
 - **PR de ancoragem:** #1774 (SOUL/AGENTS/LEIA, sem PR nova). `NEXT_CURSOR=REUSE_BEFORE_REPROOF`.
+
+### [2026-10-12T21:22] Papagaio ON/OFF + metacognição operacional por contraprova (2026-10-12/13)
+- **Data:** 2026-10-12
+- **Tags:** centraldark, metacognicao, kaizen, papagaio-on-off, contraprova, memoria-procedural, experience-distillation, compounding-reflexion, replay, aprendizado-172
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-11
+- **Promovida:** sim
+
+Conteúdo: CHEFE ordenou: registrar INTEGRALMENTE e NA MESMA ORDEM o caminho vivido na sessão em APRENDIZADOS e LEMBRANÇAS, não ficar só em chat/terminal; mudar o comportamento dos agentes. Regras: PAPAGAIO ON sob pedido explícito de ensino, reprodução fiel e arquivo completo da experiência; PAPAGAIO OFF durante execução operacional (delta curto, sem repetição inútil). O ciclo é HUMAN-GUIDED COMPOUNDING REFLEXION / metacognição operacional induzida por contraprova com Kaizen e memória procedural: CHEFE → CURRENT+owner → executar por rotas autorizadas → prova → receita completa → aprendizado → reuso validado. Um organismo, menor delta, sem duplicar motor, HAKAI só com teste real. Nomes em inglês são termos descritivos e referências conceituais, não contrato oficial dos fabricantes. Sessão: 2 frentes MCP+Rebuilder (patch main, runtime NÃO comprovado, bloqueio MCP_NATIVE_FILESET_NOT_APPROVED) e inventário+pulso (sha VPS/main b56706f..., --scan exit 0 parcial 4224 arquivos/1375 grupos SHA; --pulse real e HAKAI pendentes). Error JS String.replace $' / $$, erro Python indentação e fonte parcial ensinaram teste funcional, sem falso PASS. ZIP de replay 12 arquivos e ZIP fontes main commit 42bf15d...; anúncio de rodar no VS Code gerou validação por executabilidade/efeito de responsabilização, não prova de execução. Fonte original de 374 linhas fornecida pelo CHEFE deve ficar intacta como proveniência nos owners, mais continuação cronológica. APRENDIZADO #172 registrado na main commit 2a03fb9a8030aad1287010d7d899196430a70efe. REGISTRADO!=CONSUMIDO, documento não prova deploy. Aprender para futuros turnos/execuções e nunca alegar atualização dos pesos do modelo.
