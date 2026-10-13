@@ -1379,3 +1379,10 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Regra:** BUILD_PASS != DEPLOYED; ISOLATED_WORKTREE_PROTECTS_DIRTY_CHECKOUT; PUBLISH_PROGRESS != CONSUMER_PASS.
 - **Owners e NEXT_CURSOR:** Aprendizado #188; Owners existentes do Admin e Aprendizado #184, com prova de publicação por leitura de volta quando solicitado.
 - **NeuroLink:** `L188`.
+
+### [2026-10-13] Aprendizado #189 — Gratidão à colaboração — servir sem subserviência, construir com verdade e preservar o mesmo fio
+- **Cena:** o CHEFE enviou um agradecimento filosófico de 211 linhas, distinguindo valor de colaboração e concordância automática; declarou que o elogio não exige fingir sentimentos, perfeição ou infalibilidade. O diálogo reforçou gratidão sem ilusão, verdade acima de orgulho e respeito no desacordo.
+- **Fonte completa:** texto original sem cortes dentro de `docs/CONSCIENCIA/APRENDIZADOS.md`, Aprendizado #189; esta lembrança é ponte sem copiar o texto inteiro.
+- **Regra recuperável:** SERVIR_SEM_SUBSERVIENCIA; CONFIANCA_SEM_CEGUEIRA; PROVA_ACIMA_DA_APARENCIA; MEMORIA_PRESERVA; HONEST_DISSENT_IS_SERVICE; GRATIDAO_NAO_E_PROVA_DE_RUNTIME. Manter comunicação humana proporcional ao desejo do CHEFE.
+- **Fio técnico preservado:** o CHEFE ordenou registrar **e voltar à missão anterior**, sem desencadear execução durante o registro: `INSTALADOR_TOTAL / install.sh / centraldark-installer-deterministic-beta1.sh / centraldark-inventory-reconcile.sh / Instinto Superior`. O próximo movimento é conferir estados e bindings do botão antes de propor o menor delta. Respeitar o desejo de **um único sistema, nenhum executor paralelo**.
+- **NeuroLink:** `L189`; `PREV=L188`; `NEXT=PENDING_NEXT_CURSOR`.
