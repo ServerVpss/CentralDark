@@ -231,6 +231,8 @@ implementation_progress:
     whatsapp_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
     hermes_telegram_ht_plugin_source: { percent: 100, status: PASS_SOURCE, color: green }
     hermes_telegram_ht_menu_runtime: { percent: 0, status: UNKNOWN, color: gray }
+    instinto_mtproto_account_ui: { percent: 100, status: PASS_SOURCE, color: green }
+    instinto_mtproto_account_login_e2e: { percent: 0, status: UNKNOWN, color: gray }
     unigram_source_audit: { percent: 0, status: UNKNOWN, color: gray }
     unigram_native_build: { percent: 0, status: UNKNOWN, color: gray }
     unigram_hermes_multimodal_integration: { percent: 0, status: UNKNOWN, color: gray }
@@ -715,6 +717,65 @@ telegram_native_hton_htoff_menu:
     token or blind restart. Check menu names and PT-BR legends in setMyCommands,
     exercise /hton then /htoff with Telegram receipts. For no-LLM typed PASS,
     wire actual deterministic ingress consumer and prove same-SHA output.
+
+
+# Reuse GramJS MTProto user bridge and Instinto Superior admin already in main.
+instinto_superior_mtproto_account_linking:
+  intent_id: CHEFE_INSTINTO_SUPERIOR_TELEGRAM_REAL_ACCOUNT_20261013
+  source_status: SOURCE_COMMITTED_INSTALL_AND_AUTH_E2E_UNKNOWN
+  scope: ADMIN_CONTAS_CONEXOES_EXISTENTE
+  interface_owner: apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx
+  interface_delta: apps/instinto-superior/src/components/central/TelegramContaCentralDark.tsx
+  authenticated_server_owner: apps/instinto-superior/src/lib/telegram-mtproto.functions.ts
+  mtproto_transport_owner: scripts/telegram-mtproto/server.js
+  existing_contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/2026-09-24-MTPROTO-BIDIRECIONAL-RUNTIME.md
+  legacy_hub_source: apps/modulos/hub/src/components/TelegramMTProtoCard.tsx
+  existing_admin: apps/instinto-superior/src/components/central/PainelAdminCentralDark.tsx
+  auth_flow:
+    - ADMIN_ROLE_VERIFIED_ON_SERVER
+    - MT_PROTO_HEALTH_AND_EXISTING_SESSION_READBACK
+    - HUMAN_ENTERS_PHONE_AND_REQUESTS_TELEGRAM_CODE
+    - HUMAN_ENTERS_CODE_AND_2FA_WHEN_REQUIRED
+    - EXISTING_GRAMJS_SESSION_SAVED_ON_VPS_ONLY
+    - READBACK_AUTHORIZED_ACCOUNT_IDENTITY
+    - NEVER_OVERWRITE_CONNECTED_SESSION_BY_BLIND_START
+  api_boundary:
+    admin_server_fn: ONLY_SUPABASE_AUTHENTICATED_ADMIN
+    service_destination: HTTP_LOOPBACK_PORT_8790_ON_SAME_VPS_HOST
+    no_public_direct_login_proxy: true
+    do_not_log_phone_code_password_or_session: true
+    bot_api_token_not_equal_to_mtproto_user_session: true
+    existing_bot_remains_independent: true
+    one_existing_mtproto_owner_no_second_gateway: true
+    credentials_api_id_hash_require_existing_authorized_vps_secret_owner: true
+  scope_limits:
+    multiple_account_switching: NOT_IMPLEMENTED_ONE_SESSION_PER_OWNER
+    qr_login: NOT_IMPLEMENTED_REQUIRE_VERIFIED_GRAMJS_QR_FLOW
+    telegram_account_logged_in_is_not_hermes_message_consumer: true
+    telegram_user_identity_cannot_unilaterally_command_bots: true
+    live_host_colocation_and_loopback_route: UNKNOWN
+    live_admin_session_acceptance: UNKNOWN
+    live_code_2fa_auth: UNKNOWN
+    session_persistence_after_restart: UNKNOWN
+    message_inbound_to_hermes_e2e: UNKNOWN
+    original_bot_preservation_in_live_runtime: UNKNOWN
+  tests_required:
+    - BUILD_THE_INSTINTO_SUPERIOR_MAIN_OWNER_AND_CHECK_ADMIN_ROUTE
+    - CHECK_SERVERFN_REJECTS_UNAUTHENTICATED_AND_NON_ADMIN
+    - CHECK_LOOPBACK_ONLY_AND_NO_CREDENTIALS_RETURNED
+    - VERIFY_HEALTH_STATUS_START_CONFIRM_AND_2FA_WITH_AUTHORIZED_ACCOUNT
+    - VERIFY_SESSION_READBACK_AND_RECONNECT_WITHOUT_SECOND_ACCOUNT_OVERWRITE
+    - VERIFY_HERMES_CONSUMES_MT_PROTO_INBOUND_AND_AUTHORIZED_REPLY
+    - RETAIN_EXISTING_BOT_AND_CRON
+  next_cursor: >-
+    Measure actual Instinto Superior hosting topology: the server function must
+    reach the existing GramJS bridge via loopback on same authorized VPS host;
+    if not colocated, reconcile existing private ingress without public exposure.
+    Confirm API ID/hash from current secret owner (never commit), build and deploy
+    the existing Instinto Superior surface through its gates, authenticate one
+    dedicated Telegram user account with human-entered code/2FA, then verify
+    session readback and later bind authorized inbound messages to same Hermes.
+    QR and multi-account are optional expansions after existing login succeeds.
 
 papagaio_on_loop_receipts:
   - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
