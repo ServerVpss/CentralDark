@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "3606210f84cc2f41cc0f37d7ccfdd016ab5022f4",
+  "source_blob_sha": "2ea9bc2825c6c4c6b3572f3d138b7b01f48735a6",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 177,
-    "highest_legacy_learning_number": 178,
+    "learning_sections": 183,
+    "highest_legacy_learning_number": 184,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 178
+      "end": 184
     }
   },
   "nodes": [
@@ -2032,6 +2032,72 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L177",
+      "next_uid": "L179"
+    },
+    {
+      "uid": "L179",
+      "legacy_learning_number": 179,
+      "legacy_occurrence": 1,
+      "title": "Aceite 100% do CHEFE — gramática humana, Auréola e cores proporcionais",
+      "document_order": 178,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L178",
+      "next_uid": "L180"
+    },
+    {
+      "uid": "L180",
+      "legacy_learning_number": 180,
+      "legacy_occurrence": 1,
+      "title": "Papagaio UseAI Instant — curiosidade útil, canal Telegram e motor suficiente",
+      "document_order": 179,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L179",
+      "next_uid": "L181"
+    },
+    {
+      "uid": "L181",
+      "legacy_learning_number": 181,
+      "legacy_occurrence": 1,
+      "title": "Leitura ampla sem arrastão infinito — critério próprio, dedupe e fronteira honesta",
+      "document_order": 180,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L180",
+      "next_uid": "L182"
+    },
+    {
+      "uid": "L182",
+      "legacy_learning_number": 182,
+      "legacy_occurrence": 1,
+      "title": "Duas canetas no mesmo documento — reconciliação de main e gancho mental",
+      "document_order": 181,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L181",
+      "next_uid": "L183"
+    },
+    {
+      "uid": "L183",
+      "legacy_learning_number": 183,
+      "legacy_occurrence": 1,
+      "title": "Identidade de fonte e integração Telegram — PDFs, Hermes Tipado e MTProto",
+      "document_order": 182,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L182",
+      "next_uid": "L184"
+    },
+    {
+      "uid": "L184",
+      "legacy_learning_number": 184,
+      "legacy_occurrence": 1,
+      "title": "Provas por eixo — notificação não é consulta, painel não é só envelope",
+      "document_order": 183,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L183",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
