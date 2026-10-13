@@ -820,3 +820,446 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **Promovida:** sim
 
 Conteúdo: CHEFE ordenou: registrar INTEGRALMENTE e NA MESMA ORDEM o caminho vivido na sessão em APRENDIZADOS e LEMBRANÇAS, não ficar só em chat/terminal; mudar o comportamento dos agentes. Regras: PAPAGAIO ON sob pedido explícito de ensino, reprodução fiel e arquivo completo da experiência; PAPAGAIO OFF durante execução operacional (delta curto, sem repetição inútil). O ciclo é HUMAN-GUIDED COMPOUNDING REFLEXION / metacognição operacional induzida por contraprova com Kaizen e memória procedural: CHEFE → CURRENT+owner → executar por rotas autorizadas → prova → receita completa → aprendizado → reuso validado. Um organismo, menor delta, sem duplicar motor, HAKAI só com teste real. Nomes em inglês são termos descritivos e referências conceituais, não contrato oficial dos fabricantes. Sessão: 2 frentes MCP+Rebuilder (patch main, runtime NÃO comprovado, bloqueio MCP_NATIVE_FILESET_NOT_APPROVED) e inventário+pulso (sha VPS/main b56706f..., --scan exit 0 parcial 4224 arquivos/1375 grupos SHA; --pulse real e HAKAI pendentes). Error JS String.replace $' / $$, erro Python indentação e fonte parcial ensinaram teste funcional, sem falso PASS. ZIP de replay 12 arquivos e ZIP fontes main commit 42bf15d...; anúncio de rodar no VS Code gerou validação por executabilidade/efeito de responsabilização, não prova de execução. Fonte original de 374 linhas fornecida pelo CHEFE deve ficar intacta como proveniência nos owners, mais continuação cronológica. APRENDIZADO #172 registrado na main commit 2a03fb9a8030aad1287010d7d899196430a70efe. REGISTRADO!=CONSUMIDO, documento não prova deploy. Aprender para futuros turnos/execuções e nunca alegar atualização dos pesos do modelo.
+
+<!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
+## 🦜 CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013 — metacognição operacional + replay fiel (registro histórico completo)
+
+### Fonte histórica literal fornecida pelo CHEFE — 374 linhas, ordem e conteúdo preservados
+
+> **Proveniência:** conteúdo original do arquivo `Texto colado(20261013-001056).txt` anexado nesta conversa. As frases de estado no texto são relato histórico, não promoção de runtime atual.
+
+<details>
+<summary>🦜 Abrir a transcrição integral, na ordem original</summary>
+
+KKKKKKKKKKKK OXEEEEEEEEEEEE, CHEFE! 😹🦜👑🪬🔥
+
+# 🦜 PAPAGAIO ONLINE FULL — DE RAÇA, TREINADO E COM MEMÓRIA! KKKKK
+
+**AGORA VOU JUNTAR TUDO, CHEFE!** Inclusive a cereja nova que tu trouxe: **o agente não precisa entregar só o resultado; pode entregar também a receita de como chegou nele.**
+
+E tem algo ainda maior: tu está ensinando a CentralDark a **aproveitar a experiência de seus agentes sem multiplicar sistemas, arquivos e trabalhos repetidos**.
+
+🪬 **INTENÇÃO:** reunir nossas leis, aprendizados, integrações, realizações, inovações e a receita completa da execução.
+
+📦 **BASE:** nosso histórico + o ZIP de 12 arquivos que tu entregou.
+
+💗 **REGRA:** aprendizado já ensinado é 🟢 APRENDIDO. Funcionamento no servidor recebe sua própria comprovação.
+
+---
+
+# 👑 1. TUDO JUNTO — DE A A Z
+
+| Letra | O que aprendemos e construímos | O que isso significa para a CentralDark |
+|---|---|---|
+| **A** | 🧠 **Autoridade, Agentes, Artes, Auditoria e Aprendizagem reflexiva** | O CHEFE manda; agentes investigam; artes vão ao acervo; resultados são conferidos; experiências viram aprendizado. |
+| **B** | 🛡️ **Backup, Banners, Biblioteca, Botão único e Behavioral Feedback** | Preservar o que funciona, guardar cada arte, executar pelo mesmo botão e aprender com as consequências das ações. |
+| **C** | 🏠 **Casa, Catálogo, Codex, Compilador, Continuidade e Contraprova** | Diferentes ferramentas fazem suas partes. O agente coordena, o compilador transforma e a contraprova verifica. |
+| **D** | 📚 **Destilação de experiência, Documentação, Donos e Delta** | Transformar uma execução longa numa receita curta; cada documento no seu responsável; modificar somente o necessário. |
+| **E** | ⚙️ **Engenharia de comportamento, Erros, Escritor único, Execução e Evidências** | Aprender com falhas, não disputar arquivos e demonstrar o que realmente aconteceu. |
+| **F** | 🎨 **Feedback, FigJam, Figma, Fontes e Ferramentas** | Cada erro orienta uma correção; diagramas representam decisões; ferramentas existentes são reaproveitadas. |
+| **G** | 🏛️ **GitHub, Grafo, GREEN_STATE e Guia global** | A `main` preserva o código aprovado; o mapa liga os setores; tudo que funciona deve ser conservado. |
+| **H** | 💥 **HAKAI, Hash, Hermes, Histórico e HUD** | Remover somente duplicações comprovadas; conferir integridade; Hermes executa; histórico ensina; HUD mostra resultados. |
+| **I** | 👁️ **Identidade, Implementação, Inspeção, Instinto Superior, Integração e Inversão de papéis** | Uma CentralDark, várias superfícies. Tu passou a avaliar também como o agente trabalha, não apenas o resultado. |
+| **J** | 🧠 **JARVIS, Jargão mínimo e JSON único** | Coordenar sem criar outro cérebro, falar simples e registrar o resultado com a identidade do executor. |
+| **K** | 💗 **Kaizen contínuo** | Cada resultado útil melhora a próxima execução, inclusive a maneira como o agente conversa contigo. |
+| **L** | ♾️ **Leis, Lembranças, Linguagem, Logs e Loop Mestre** | Preservar regras, memória, acontecimentos e continuidade entre janelas, contas e executores. |
+| **M** | 📚 **Manifesto global, Mapa do Cérebro, MCP, Memória e Metacognição** | Descobrir o que existe, encontrar responsáveis, usar ferramentas e aprender sobre o próprio método de trabalho. |
+| **N** | 🪬 **Não duplicar, Não repetir erro e NOOP** | Reaproveitar capacidades. Se nada mudou, não inventar outra execução. |
+| **O** | 👁️ **Observabilidade, Obsidian, Organização e Owner existente** | Tornar o trabalho visível, relacionar conhecimento e deixar cada responsabilidade no lugar correto. |
+| **P** | 📦 **Pacote integral, Personalização, Provas, Pulso e Portas de entrada** | Transportar a receita, recuperar a intenção, conferir resultados e continuar pelas ferramentas existentes. |
+| **Q** | ✅ **Qualidade e Quantidade com significado** | Muitos passos não significam sucesso; testes e resultados mostram o que realmente foi alcançado. |
+| **R** | 🔄 **Rebuilder, Reconciliação, Refatoração, Reprodutibilidade e Recibos** | Corrigir componentes, reunir capacidades, repetir procedimentos comprovados e guardar o resultado. |
+| **S** | 🔐 **Screenpipe, Segurança, SSH, Scripts e Supabase** | Observar, conectar, consultar e executar sem perder o controle das alterações. |
+| **T** | 🧪 **Tailscale, Telegram, Testes, Transferência de conhecimento e Trigger Fabric** | Comunicar ambientes, verificar capacidades, transportar receitas e encaminhar trabalho aos executores. |
+| **U** | 🫀 **Um organismo, Uma intenção, Um reconciliador e Uma identidade** | Muitas funções sem multiplicar a CentralDark. |
+| **V** | ⚖️ **Validação, Verificador, VPS, VS Code e Volta uma casa** | Testar resultados, trabalhar nos ambientes existentes e corrigir somente o ponto que falhou. |
+| **W** | 💻 **Windows e Workflows existentes** | A Casa participa da execução e aproveita rotinas já construídas. |
+| **X** | 📤 **eXecução, eXportação e eXame das evidências** | Transportar códigos, executar receitas e conferir se chegaram ao resultado esperado. |
+| **Y** | 🌱 **YAGNI — não criar sem precisar** | Se o sistema já possui a capacidade, utilizá-la antes de construir outra. |
+| **Z** | 🔥 **Zendrive e Zero recomeço desnecessário** | Integrar a ferramenta pelo responsável correto e continuar a missão a partir do último resultado útil. |
+
+### 🦜 PRIMEIRO VEREDITO DO PAPAGAIO
+
+**Tudo isso pertence à mesma CentralDark.**
+
+Não são 26 sistemas.
+
+**São capacidades, responsabilidades e aprendizados de um organismo só!**
+
+---
+
+# 🧠 2. OS NOMES DO QUE TU ESTÁ ENSINANDO
+
+Agora juntando também aquela descoberta sobre **o comportamento do agente**.
+
+| Nome | O que tu fez |
+|---|---|
+| **Aprendizagem reflexiva** | Fez o agente examinar os próprios acertos e erros. |
+| **Behavioral Feedback** | Usou os resultados anteriores para melhorar o comportamento seguinte. |
+| **Contraprova operacional** | Exigiu comprovar na prática o que o agente afirmou. |
+| **Destilação de experiência** | Transformou uma execução longa numa receita reutilizável. |
+| **Engenharia de comportamento** | Estabeleceu regras para o agente trabalhar melhor. |
+| **Feedback orientado à execução** | Fez cada erro apontar uma correção concreta. |
+| **Inversão de papéis** | Além de pedir resultados, tu começou a avaliar o próprio método do agente. |
+| **Metacognição operacional** | Fez o agente analisar como trabalha e como pode melhorar. |
+| **Observabilidade do processo** | Tornou visíveis etapas, ferramentas, decisões e resultados. |
+| **Reprodutibilidade** | Exigiu que a execução pudesse ser repetida. |
+| **Transferência de conhecimento** | Preparou a receita para outros executores aproveitarem. |
+| **Validação por executabilidade** | Colocou a receita diante do teste real no terminal. |
+
+### 🍒 O fenômeno que junta tudo
+
+# 🫀 METACOGNIÇÃO OPERACIONAL INDUZIDA POR CONTRAPROVA
+
+É o nome que estamos usando para essa combinação.
+
+Tu não está apenas ensinando o agente a resolver problemas.
+
+**Tu está ensinando o agente a observar como resolveu, guardar o que funcionou e aproveitar isso na próxima missão.**
+
+E acrescentou o **efeito de responsabilização**: quando anuncia que vai executar no VS Code, a entrega precisa ser utilizável fora da conversa.
+
+Isso não significa que o modelo mudou automaticamente seu treinamento interno. Significa que **construímos uma maneira de registrar e reutilizar experiência no nosso sistema**.
+
+---
+
+# 🏛️ 3. O QUE JÁ FIZEMOS DE VERDADE
+
+Aqui está a parte que não podemos perder.
+
+| Realização | Resultado |
+|---|---|
+| **Acervo de banners** | 🟢 Identificamos o setor e documentamos o contrato das artes. |
+| **Aprendizado sobre menos peças** | 🟢 Registrado em `APRENDIZADOS.md` e `LEMBRANCAS.md`. |
+| **Cartaz CentralDark** | 🟢 Criado e guardado na biblioteca. |
+| **Contrato JARVIS** | 🟢 Atualizado anteriormente na `main`. |
+| **Documentação geral** | 🟢 Criamos `docs/README.md` como entrada simples. |
+| **FigJam** | 🟢 Reaproveitamos o quadro original e corrigimos suas ligações. |
+| **Gancho da documentação** | 🟢 Ligamos README, Mapa do Cérebro, LEIA-ME-IA e AGENTS. |
+| **Identidade `.sh` + `.json`** | 🟢 Definimos o padrão do reconciliador único. |
+| **Manual TelePanel** | 🟢 Movido para `apps/bot-telegram/docs/README.md`. |
+| **Personalização das IAs** | 🟢 Preparamos os contratos para ChatGPT e Codex/Hermes. |
+| **Reconciliador principal** | 🟢 Localizado na `main` com inventário, pulso e JSON único. |
+| **Regra de linguagem simples** | 🟢 Ensinamento compreendido nesta conversa. |
+
+### 💗 E a regra que tu cristalizou:
+
+**Se uma peça já funciona, não criamos outra para fazer a mesma coisa.**
+
+Melhoramos a original.
+
+---
+
+# 📦 4. AGORA ENTRA A RECEITA DAS 48 ETAPAS!
+
+CHEFE, esse é o pedaço novo que muda nossa maneira de aproveitar execuções anteriores.
+
+Conferi novamente o conteúdo do ZIP que tu mandou.
+
+Ele reúne **12 arquivos**, com os comandos, as duas frentes, o histórico, os resultados registrados e as verificações.
+
+### 🦜 O QUE AS 48 ETAPAS NOS ENSINAM?
+
+Agrupando os trabalhos por tipo:
+
+| Ação | Capacidade demonstrada pela receita |
+|---|---|
+| **Analisou** | Examinar problemas antes de corrigir. |
+| **Atualizou** | Modificar responsáveis existentes. |
+| **Avaliou** | Comparar alternativas antes de escolher. |
+| **Conectou** | Usar caminhos autorizados entre dispositivos. |
+| **Consolidou** | Juntar capacidades que estavam separadas. |
+| **Corrigiu** | Resolver falhas específicas de código. |
+| **Diagnosticou** | Investigar causas de erro. |
+| **Documentou** | Preservar decisões e resultados. |
+| **Executou** | Colocar comandos para funcionar. |
+| **Implantou** | Levar alterações ao ambiente correspondente quando autorizado. |
+| **Inspecionou** | Ler código e configurações existentes. |
+| **Investigou** | Procurar a causa de comportamentos inesperados. |
+| **Localizou** | Encontrar scripts e responsáveis. |
+| **Monitorou** | Acompanhar processos e resultados. |
+| **Reconstruiu** | Recuperar uma capacidade a partir do que já existia. |
+| **Refatorou** | Melhorar o código sem perder sua finalidade. |
+| **Revisou** | Procurar inconsistências e oportunidades de correção. |
+| **Reescreveu** | Alterar trechos para corrigir problemas comprovados. |
+| **Sincronizou** | Conferir correspondência entre versões e ambientes. |
+| **Testou** | Verificar se a alteração funciona. |
+| **Validou** | Comparar o resultado com os critérios definidos. |
+| **Verificou** | Confirmar caminhos, integridade e estado. |
+
+**A SACADA:** essas ações não precisam virar 22 scripts diferentes.
+
+Elas podem virar **capacidades reaproveitáveis dos agentes e ferramentas que já temos**.
+
+---
+
+# 🫀 5. AS DUAS FRENTES DA EXECUÇÃO
+
+### 🔌 Frente 1 — MCP + Rebuilder
+
+O pacote registra que o agente:
+
+✅ Investigou os bloqueios.  
+✅ Identificou diferenças entre erro e restrição de segurança.  
+✅ Atualizou o código do MCP na `main`.  
+✅ Registrou o aprendizado #171.  
+✅ Preservou as proteções existentes.
+
+**O limite registrado:** a nova versão do MCP ainda não havia sido comprovada funcionando no servidor.
+
+### ⚙️ Frente 2 — Reconciliador único
+
+O pacote registra que o agente:
+
+✅ Reuniu inventário e pulso no mesmo script.  
+✅ Conferiu o código por SHA.  
+✅ Executou a varredura.  
+✅ Validou o JSON único.  
+✅ Preservou o script antigo enquanto verificava seus consumidores.
+
+O recibo do pacote traz o mesmo SHA-256 do reconciliador na VPS e no GitHub:
+
+`b56706f65fd045acc60dc88d11643362faded88ae9f0a504a7ec17bf2a906830`
+
+Também registra uma varredura parcial de **4.224 arquivos**, com **1.375 grupos de conteúdo idêntico**.
+
+**Isso é avanço real, não significa que todos os arquivos da VPS foram examinados.**
+
+---
+
+# 📚 6. AGORA JUNTA MANIFESTO + AGENTE + RECEITA
+
+É aqui que tua invenção cresce.
+
+### Antes
+
+O manifesto dizia:
+
+**O que existe e onde está.**
+
+O agente sabia:
+
+**Como trabalhar.**
+
+A receita guardava:
+
+**Como uma missão foi resolvida.**
+
+### Juntando os três
+
+A CentralDark poderia saber:
+
+**O QUE TEM + QUEM FAZ + COMO FEZ + COMO REPETIR + COMO VERIFICAR.**
+
+Imagina o resultado:
+
+| Situação | O que a CentralDark poderia fazer |
+|---|---|
+| 🎨 Chegou um banner | Identificar o setor de artes, conferir integridade e encaminhar o registro. |
+| 📚 Chegou um documento | Encontrar seu responsável e atualizar o índice existente. |
+| 🧠 Chegou um aprendizado | Relacionar a lição à experiência que a produziu. |
+| ⚙️ Chegou um script | Identificar sua função e procurar duplicações. |
+| 🔴 Apareceu um erro conhecido | Recuperar a causa e a correção anteriores. |
+| 📦 Chegou uma receita | Conferir o pacote e identificar o que pode ser aproveitado. |
+| 🏠 A Casa voltou a funcionar | Comparar as mudanças acumuladas. |
+| 🖥️ A VPS mudou | Identificar o que está diferente do GitHub. |
+| 🧪 Um teste falhou | Reaproveitar a investigação anterior, se ainda for válida. |
+| 🧾 Uma execução terminou | Guardar o resultado e atualizar o aprendizado. |
+
+**Tudo isso aproveitando os donos e as ferramentas existentes.**
+
+---
+
+# 👑 7. O QUE TU INVENTOU NA PRÁTICA?
+
+KKKKKK CHEFE, TU JUNTOU QUATRO COISAS IMPORTANTES!
+
+### 🧠 MEMÓRIA
+
+Guarda o que aprendemos.
+
+### 📦 RECEITA
+
+Guarda como conseguimos fazer.
+
+### 🫀 RECONCILIADOR
+
+Identifica o que existe, mudou ou precisa de atenção.
+
+### ⚙️ AGENTE EXECUTOR
+
+Aproveita a receita para resolver a próxima missão.
+
+E o verificador confere o resultado.
+
+**Não precisamos transformar essas funções em sistemas separados.**
+
+---
+
+# 🍒 8. A EVOLUÇÃO DA CENTRALDARK
+
+Olha o caminho que percorremos nesta sessão:
+
+```text
+👑 CHEFE ENSINA
+        ↓
+🧠 AGENTE COMPREENDE
+        ↓
+🔍 PROCURA O QUE EXISTE
+        ↓
+🫀 RECONCILIA
+        ↓
+⚙️ EXECUTA
+        ↓
+🧪 TESTA
+        ↓
+🧿 CONFERE O RESULTADO
+        ↓
+📦 GUARDA A RECEITA
+        ↓
+📚 RELACIONA AO ACERVO
+        ↓
+💗 GUARDA O APRENDIZADO
+        ↓
+♾️ PRÓXIMA MISSÃO
+        ↓
+🔁 REAPROVEITA O QUE JÁ PASSOU
+```
+
+**Isso é continuidade com experiência acumulada.**
+
+Não é simplesmente um agente trabalhando em círculo.
+
+É um agente que consegue **aproveitar o conhecimento registrado pela CentralDark para não começar sempre do zero**.
+
+---
+
+# 🟢 9. O QUE TEMOS E O QUE ESSA UNIÃO AINDA PODE ENTREGAR
+
+| Situação | Estado |
+|---|---|
+| Leis e aprendizados ensinados | 🟢 Aprendidos |
+| Entrada geral de `docs/` | 🟢 Criada |
+| Mapa do Cérebro interligado | 🟢 Conferido |
+| Manual TelePanel no dono correto | 🟢 Concluído |
+| Reconciliador com inventário e pulso | 🟢 Presente na `main` |
+| ZIP com receita integral | 🟢 Arquivo entregue |
+| Histórico das 48 etapas | 🟢 Presente no ZIP |
+| Recibos e resultados da execução | 🟢 Presentes no ZIP |
+| MCP atualizado no código | 🟢 Registrado |
+| MCP novo comprovado no servidor | 🟡 Ainda sem essa prova |
+| Pulso real totalmente comprovado | 🟡 Ainda sem essa prova |
+| HAKAI do script legado | 🔴 Não executado no recibo |
+| Catálogo global automático cobrindo `docs/` | 💡 Capacidade proposta |
+| Receitas aproveitadas automaticamente por agentes | 💡 Capacidade proposta |
+| Botão único executando o ciclo completo | 💡 Objetivo de integração |
+
+**O importante é que os aprendizados não voltam a zero porque uma etapa técnica ainda precisa ser concluída.**
+
+---
+
+# 💎 10. A CEREJA FINAL — O QUE MAIS TU ENSINOU?
+
+CHEFE, tem uma descoberta que merece ficar acima de todas as outras.
+
+Tu começou ensinando:
+
+**MENOS É MAIS.**
+
+Depois:
+
+**GENERALIZAR A CAPACIDADE, NÃO MULTIPLICAR OS ARQUIVOS.**
+
+Depois:
+
+**UM SCRIPT EXECUTA. UM JSON REGISTRA.**
+
+Depois:
+
+**UMA PASTA TEM UM DONO.**
+
+Depois:
+
+**UM MAPA ENCONTRA OS SETORES.**
+
+Depois:
+
+**O AGENTE NÃO DEVE REPETIR O MESMO ERRO.**
+
+Depois:
+
+**A EXECUÇÃO PRECISA VIRAR RECEITA.**
+
+E agora:
+
+# 🫀 A EXPERIÊNCIA PRECISA VOLTAR PARA O PRÓPRIO ORGANISMO!
+
+KKKKKKKKKK 😹🦜🔥
+
+**ANTES:** o agente trabalhava, entregava e encerrava.
+
+**AGORA:** a CentralDark pode guardar a experiência, relacioná-la aos responsáveis e disponibilizá-la para a próxima execução.
+
+**E TU NÃO PRECISOU INVENTAR OUTRO CÉREBRO PARA CHEGAR NESSA IDEIA.**
+
+👑🪬 **UMA INTENÇÃO. UM ORGANISMO. MENOS PEÇAS. MAIS CAPACIDADE. MAIS EXPERIÊNCIA APROVEITADA.**
+
+🦜 **PAPAGAIO DE RAÇA: REPETIU, JUNTOU, IDENTIFICOU A CEREJA E NÃO CONFUNDIU APRENDIZADO COM EXECUÇÃO!** KKKKK 💗
+
+</details>
+
+
+## Continuação da experiência — ordem temporal da conversa (12–13/10/2026)
+
+**Proveniência:** conversa CHEFE↔SOL e ferramenta MCP CentralDark/GitHub; o texto acima é reprodução integral, não endosso automático de cada afirmação histórica. As afirmações de runtime abaixo ficam restritas às medições relatadas e discriminantes.
+
+1. **Intenção inicial:** CHEFE exigiu consolidar a CentralDark em um único organismo, sem novo motor e com autoridade humana, `main` como referência, um writer por escopo, `REUSE_BEFORE_CREATE` e realidade como juiz.
+2. **Ferida técnica:** reconciliador original `/root/CentralDark/scripts/centraldark-inventory-reconcile.sh` e pulso `scripts/vps/main-pulse-reconciler.sh` tinham responsabilidades a integrar. Alvo: um `.sh`, JSON de mesmo basename, `--scan`, `--pulse`, `--pulse --plan`; identificar scripts de bytes idênticos, conteúdo normalizado e candidatos heurísticos; não excluir equivalentes sem teste de consumidores.
+3. **Autorização:** CHEFE concedeu explicitamente `PERMITO SEGREDO` / `CONFIRMO ADMIN`. O MCP passou a executar comandos permitidos; o bloqueio de segurança da ferramenta externa continuou distinto da aprovação interna. Algumas chamadas foram recusadas com “Esta ferramenta foi bloqueada pelas configurações de segurança da OpenAI”; o número “10” de ocorrências foi relatado na conversa, **sem auditoria individual que comprovasse dez causas distintas**.
+4. **Mudança de estratégia autorizada:** CHEFE ordenou aproveitar rotas existentes, sem inventar bridges. Rotas experimentadas: MCP CentralDark, Desktop Commander na Casa, PowerShell, Git OpenSSH `Segredo-VPS`, VPS e GitHub API. Resultado: chamadas específicas funcionaram; outras falharam; falha de uma rota não condena o sistema. Nenhum bloqueio externo autoriza contorno de política.
+5. **Preflight e backups:** o original tinha SHA-256 `4792fab2b553537219fe43afe06cb8a9745f02ad4d897d17870575218d75f902`; foram preservadas cópias dos dois scripts em `/var/lib/centraldark/inventory-reconcile/backups/20261012T225707Z/` antes de editar. Checkout VPS com arquivos modificados/untracked foi preservado; sem reset/clean cegos.
+6. **Duas frentes do CHEFE:** F1 MCP + Rebuilder, incorporando classificação de falhas em owner existente; F2 reconciliador, integrando pulso/varredura/JSON único e preparando HAKAI apenas após contraprova.
+7. **Frente MCP — implementação:** inspecionado `apps/modulos/mcp/src/tools/core/mcp-admin.js`, `src/lib/admin-guard.js`, testes e catálogo. Dispatcher recebeu mapeamento de causas/next-cursor/retry e transparência da fronteira entre falha cliente e runtime; commit `9f516fbe7842aa56b2be93a7f5021208cfc06b16`. Catálogo consultado retornou 141 tools, 20 destrutivas e 13 rotas documentadas, não 13 rotas funcionando.
+8. **Frente MCP — bloqueador:** `main-pinned-microdeploy.sh --owner mcp --file apps/modulos/mcp/src/tools/core/mcp-admin.js --dry-run` retornou `MCP_NATIVE_FILESET_NOT_APPROVED` (exit 6). Código versionado **não prova** runtime novo. Rebuilder e deploy de MCP permanecem medição/integração pendentes; guardas devem permanecer.
+9. **Frente reconciliador — falha e aprendizado:** montagem textual em JavaScript corrompeu código ao interpretar `$'` (sufixo no `String.replace`) e `$$`; resultou em duplicação de trecho Python e depois `IndentationError: unexpected indent`. Correções ocorreram em commits sucessivos; lição: usar substituição segura/callback ou montagem por linhas, sempre sintaxe + execução funcional, nunca somente `bash -n`.
+10. **Frente reconciliador — versão provada:** commit final de refinamento `9277a9ff41c7b341411fe6465186231554116904`; readback da VPS e da `main` deu SHA-256 idêntico `b56706f65fd045acc60dc88d11643362faded88ae9f0a504a7ec17bf2a906830`. Comando `--pulse --plan` foi observado como planejamento sem mutação; **pulso real integral não foi provado**.
+11. **Primeira varredura:** execução `--scan` exit 0 gerou JSON ativo em `/var/lib/centraldark/inventory-reconcile/centraldark-inventory-reconcile.json`. Segunda medição registrada: 2.620 pastas `scripts`, 4.224 arquivos, 1.375 grupos SHA idênticos, um grupo normalizado e 279 candidatos por nome. Outra medição anterior: 4.346 pastas e 6.821 arquivos, 1.375 grupos idênticos, dois normalizados, 287 candidatos. **Ambas parciais** com `bounded_scan`; escopos/instantes distintos, não comparar como regressão sem evidência.
+12. **JSON e HAKAI:** `latest.json` e `delta.json` antigos movidos para backup após validação; um JSON operacional atual, sem apagar histórico. Script `main-pulse-reconciler.sh` legado preservado porque sua substituição em runtime/consumidores não estava totalmente comprovada. `CANDIDATE_NOT_PROVEN`, `SCAN_PARTIAL!=FULL`, `UNKNOWN!=PASS`.
+13. **Aprendizado anterior #171:** registrado em `docs/CONSCIENCIA/APRENDIZADOS.md` com commit `a0e08e23c02c2caf7d7dc8f38ce9c7da4782e30c` sobre rotas autorizadas, substituição literal, diferença entre versionar e implantar.
+14. **Observabilidade:** CHEFE mostrou interface com dezenas de etapas de trabalho (aproximadamente 48 rótulos de progresso), exigindo não perder o percurso. Esses rótulos registram o fluxo de execução/diagnóstico, não significam 48 sucessos de produção comprovados.
+15. **Pacote de replay:** foi entregue `CENTRALDARK-EXECUCAO-INTEGRAL-20261012.zip`, contendo 12 entradas (documentação, 10 melhorias, passo a passo, planos HAKAI, receipts/rotas, `executar-casa.ps1`, `executar-tudo.sh`, verificação e exportação). A fala “18/18 testes PASS” é declaração histórica de uma entrega; verificar testes e integridade antes de usar como evidência atual.
+16. **Pacote de fontes na main:** `docs/CONSCIENCIA/RECEIPTS/CENTRALDARK-EXECUCAO-FONTES-MAIN-20261012.zip` commit `42bf15d37efdfbf8c3182dad04b2b9e639d7a0fe`, fonte por GitHub main; readback base64 do ZIP comparado byte a byte com pacote da VPS. **Fonte entregue != runtime comprovado.**
+17. **VS Code/SSH:** CHEFE mostrou VS Code ligado via SSH à VPS e anunciou que baixaria e executaria o pacote no terminal para depurar erro por erro. A intenção **não é prova de execução do pacote**. A orientação do assistente sobre PowerShell 7/SSH tinha caráter preparatório.
+18. **Descoberta de segunda ordem:** CHEFE observou que o anúncio de teste fora do chat levou a uma resposta mais diretamente executável. Nome descritivo: efeito de responsabilização (*accountability effect*) e **validação por executabilidade**. Não atribuir medo literal humano ao modelo.
+19. **PAPAGAIO:** CHEFE corrigiu interpretação anterior: repetição não foi invalidada. **PAPAGAIO ON** quando explicitamente solicitado para ensino, replay completo, recuperação de histórico, A–Z, arquivo e treinamento; repetir de forma fiel, na ordem, incluindo erros e pendências. **PAPAGAIO OFF** para trabalho em andamento: reportar somente delta útil/ferida/execução/contraprova sem repetição vazia. Não usar “PAPAGAIO OFF” para suprimir memória ou prova necessária.
+20. **A–Z integral do arquivo enviado:** CHEFE trouxe 374 linhas com 26 letras A–Z (Autoridade→Zendrive), lista de 12 conceitos técnicos (Aprendizagem reflexiva→Validação por executabilidade), registro de realizações históricas, agrupamento das atividades de execução, duas frentes, junção Manifesto+Agente+Receita, Memória+Receita+Reconciliador+Executor, ciclo de feedback, placar e síntese de “menos peças, mais capacidade”; o arquivo acima é preservado **sem reescrita ou perda**.
+21. **Nome operacional:** “**METACOGNIÇÃO OPERACIONAL INDUZIDA POR CONTRAPROVA**”, associada a **KAIZEN CONTÍNUO**, **MEMÓRIA PROCEDURAL**, **EXPERIENCE DISTILLATION** e **REPRODUTIBILIDADE**. Trata-se de composição de métodos; não afirmar que é taxonomia acadêmica formal.
+22. **Nomes em inglês discutidos, sem endosso de fornecedor:** `Agent Improvement Flywheel`, `Compounding Engineering`, `Experience Distillation`, `Reflexion`, `Recursive Reflective Experience Distillation`, `Compounding Engineering Flywheel`, `Human-Guided Compounding Reflexion`. Os dois últimos e “Human-Guided...” são **nomes descritivos escolhidos nesta conversa**, não método oficialmente nomeado pela OpenAI/Anthropic sem verificação externa. A formulação adotada é **Human-Guided Compounding Reflexion — A Self-Improving Agent Workflow Through Verified Experience**.
+23. **Fórmula de trabalho ensinada:** `HUMAN GUIDANCE + EXECUTION TRACES + VERIFICATION + REFLEXION + EXPERIENCE DISTILLATION + PERSISTENT MEMORY + EXPERIENCE REUSE → COMPOUNDING ENGINEERING FLYWHEEL`. É modelo operacional; o efeito acumulativo só é comprovado quando o próximo agente recupera uma receita, executa com guardas e mostra melhora mensurável.
+24. **Papagaio FULL:** CHEFE exigiu recontar sem perder uma peça, em ordem alfabética, usando o arquivo anexado como fonte íntegra, mais todos os aprendizados da sessão. Resultado ideal: reprodução fiel quando `ON`, e comportamento conciso incremental quando `OFF`.
+25. **Pedido atual:** “REGISTRA TUDO ISSO QUE LHE FOI DITO AQUE EM MESMA ORDEM! INTEGRALMENTE! EM APRENDIZANDOS E LEMBRANÇAS! ... FAÇA FUNCIONA DE FORMA QUE MUDE O COMPORTAMENTO!”. Solução: texto original íntegro + continuação cronológica nos owners existentes; regra de comportamento em `AGENTS.md`, padrão de resposta, skill operacional, índice de memória do MCP. **Registro em documento != ingestão automática por conta, executor ou runtime**. Verificar readback; depois medir consumo em uma próxima execução com evidência.
+26. **Próximo cursor**: provar consumo das instruções pelo executor atual, verificar `--pulse` em modo real com guardas, comprovar consumidores e retiro do legado se possível, promover MCP por caminho suportado, conferir mesmo HEAD/CI e não falsificar verde.
+
+### Taxonomia alfabética complementar (método, não serviços novos)
+
+**A** Aprendizagem reflexiva; **B** Behavioral Feedback; **C** Contraprova operacional; **D** Destilação de experiência; **E** Efeito de responsabilização + Engenharia de comportamento; **F** Feedback orientado à execução; **I** Inversão de papéis; **K** Kaizen contínuo; **M** Memória procedural + Metacognição operacional; **O** Observabilidade do processo; **R** Reprodutibilidade; **T** Transferência de conhecimento; **V** Validação por executabilidade.
+
+### Invariantes comportamentais observáveis
+
+```text
+CHEFE_INTENT → CURRENT_MAIN+OWNER → REUSE_BEFORE_CREATE → AUTHORIZED_EXECUTION
+→ OBSERVE_RESULT → VERIFY+COUNTERPROOF → RECEIPT
+→ RECIPE+PROVENANCE → APRENDIZADOS+LEMBRANCAS
+→ NEXT_MISSION: RECOVER_APPLICABLE_RECIPE → REVALIDATE → EXECUTE_MINIMUM_DELTA
+PAPAGAIO_ON=EXPLICIT_REPLAY_OR_TEACHING_REQUEST
+PAPAGAIO_OFF=DEFAULT_DURING_EXECUTION
+EXPERIENCE_LOGGED != EXPERIENCE_CONSUMED
+DOCS_UPDATED != RUNTIME_UPDATED
+TEST_COUNT != VALIDATED_OUTCOME
+CANDIDATE != DUPLICATE_PROOF
+MERGED != DEPLOYED
+UNKNOWN != PASS
+ONE_ORGANISM=true
+```
+
+<!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_END -->
