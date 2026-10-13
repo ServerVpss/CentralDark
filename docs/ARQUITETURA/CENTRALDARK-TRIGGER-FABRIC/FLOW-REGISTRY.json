@@ -2540,7 +2540,7 @@
       "owner": "apps/modulos/mcp/src/index.js",
       "canonical_route": "intent-cycle-hermes-dispatch",
       "status": "ACTIVE_EXISTING_ROUTE",
-      "evidence_ref": "apps/modulos/mcp/tests/health-deep-owner.test.mjs",
+      "evidence_ref": "apps/modulos/mcp/src/index.js#GET /health/routes",
       "new_route_proof": {
         "searched_existing_routes": true,
         "counterproof_no_match": true,
@@ -3005,6 +3005,66 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow com capability MCP_ADMIN_GUARDED_CALL em apps/modulos/mcp; src correspondente já na main (dist gerado por tsc)"
+      }
+    },
+    {
+      "id": "mcp.admin.intent.botao-avaliar",
+      "kind": "BUTTON",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "mcp.admin.intent.botao-avaliar",
+      "activation": "CLICK",
+      "from": "CHEFE_NOC_ADMIN",
+      "to": "INTENT_RECONCILE",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/admin.js#GET /admin/api/intent",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow MCP_INTENT_CYCLE; botão do painel NOC chama GET /admin/api/intent"
+      }
+    },
+    {
+      "id": "mcp.admin.intent.botao-executar-hermes",
+      "kind": "BUTTON",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "mcp.admin.intent.botao-executar-hermes",
+      "activation": "CLICK",
+      "from": "CHEFE_NOC_ADMIN",
+      "to": "HERMES_QUEUE",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/admin.js#POST /admin/api/intent dispatch=true",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow MCP_INTENT_CYCLE; botão do painel NOC chama POST /admin/api/intent dispatch=true"
+      }
+    },
+    {
+      "id": "mcp.admin.intent.botao-ler-recibo",
+      "kind": "BUTTON",
+      "capability": "MCP_INTENT_CYCLE",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/admin.js",
+      "symbol": "mcp.admin.intent.botao-ler-recibo",
+      "activation": "CLICK",
+      "from": "CHEFE_NOC_ADMIN",
+      "to": "INTENT_STATE_SANITIZED",
+      "owner": "apps/modulos/mcp/src/admin.js",
+      "canonical_route": "intent-cycle-hermes-dispatch",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/admin.js#GET /admin/api/intent",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow MCP_INTENT_CYCLE; botão do painel NOC chama GET /admin/api/intent"
       }
     }
   ]

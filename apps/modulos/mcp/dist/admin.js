@@ -1096,7 +1096,7 @@ const INTENT_CONTROLS = `
 <label for="cd-intent-goal">Goal já existente</label><input id="cd-intent-goal" value="t_9040803d" maxlength="80"/>
 <label for="cd-intent-mode">Modo</label><select id="cd-intent-mode"><option value="COM_CRITERIOS">🧿 Com critérios</option><option value="AUTOMATICO">⚙️ Automático determinístico</option><option value="AUTONOMO">🫀 Autônomo via Hermes</option></select></div>
 </div>
-<div><button type="button" id="cd-intent-evaluate">🔎 Avaliar, medir e selar o estado</button><button type="button" id="cd-intent-dispatch">⚡ Executar no Hermes original</button><button type="button" id="cd-intent-read">📖 Ler último receipt</button></div>
+<div><button type="button" id="cd-intent-evaluate" data-cd-flow="mcp.admin.intent.botao-avaliar">🔎 Avaliar, medir e selar o estado</button><button type="button" id="cd-intent-dispatch" data-cd-flow="mcp.admin.intent.botao-executar-hermes">⚡ Executar no Hermes original</button><button type="button" id="cd-intent-read" data-cd-flow="mcp.admin.intent.botao-ler-recibo">📖 Ler último receipt</button></div>
 <div id="cd-intent-label" role="status">AGUARDANDO_MEDICAO · UNKNOWN</div>
 <pre id="cd-intent-result" aria-live="polite">Nenhuma conclusão fabricada. Somente registros medidos.</pre>
 </section>

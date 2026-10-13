@@ -480,5 +480,11 @@ CD_REG_165_A["MCP_ADMIN_TOOL_CALL"] -->|"CALL"| CD_REG_165_B["ADMIN_GUARD_DECISI
 CD_REG_166_A["ADMIN_SHELL"] -->|"CALL"| CD_REG_166_B["NON_ROOT_USER"]
 %% CD_FLOW:mcp.dist.tools.core.mcp-admin.diagnoseMcpBlock
 CD_REG_167_A["ADMIN_GUARD_BLOCK"] -->|"CALL"| CD_REG_167_B["BLOCK_DIAGNOSTICO"]
+%% CD_FLOW:mcp.admin.intent.botao-avaliar
+CD_REG_168_A["CHEFE_NOC_ADMIN"] -->|"CLICK"| CD_REG_168_B["INTENT_RECONCILE"]
+%% CD_FLOW:mcp.admin.intent.botao-executar-hermes
+CD_REG_169_A["CHEFE_NOC_ADMIN"] -->|"CLICK"| CD_REG_169_B["HERMES_QUEUE"]
+%% CD_FLOW:mcp.admin.intent.botao-ler-recibo
+CD_REG_170_A["CHEFE_NOC_ADMIN"] -->|"CLICK"| CD_REG_170_B["INTENT_STATE_SANITIZED"]
 end
 %% CD_REGISTRY_PROJECTION_END
