@@ -41,7 +41,7 @@ function harness(opts = {}) {
   return {
     bridge, dir, get client() { return client; },
     setTime(v) { now = v; },
-    saved(id, text, user = 99n) { return { message: { id, out: true, peerId: { userId: user }, senderId: user, message: text } }; },
+    saved(id, text, user = 99n) { return { message: { id, out: false, peerId: { userId: user }, senderId: user, message: text } }; },
     reply(id, replyTo, text, user = 123n) { return { message: { id, out: false, peerId: { userId: user }, senderId: user, replyTo: { replyToMsgId: replyTo }, message: text } }; },
     close() { fs.rmSync(dir, { recursive: true, force: true }); },
   };

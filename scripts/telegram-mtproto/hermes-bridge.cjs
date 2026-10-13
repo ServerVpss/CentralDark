@@ -63,7 +63,9 @@ function createHermesBridge({ newClient, sessionFile, dataDir, botUsername, NewM
     while (deliveredBotMessageIds.size > 120) deliveredBotMessageIds.delete(deliveredBotMessageIds.values().next().value);
   }
   function isSavedMessage(msg) {
-    return msg && msg.out === true && sameId(msg.peerId?.userId, selfId) &&
+    // Telegram Saved Messages can be marked out=false even when sent by self.
+    // Use the verified peer AND sender identity, never the ambiguous out flag.
+    return msg && sameId(msg.peerId?.userId, selfId) &&
       sameId(msg.senderId, selfId);
   }
   function isHermesReply(msg) {
