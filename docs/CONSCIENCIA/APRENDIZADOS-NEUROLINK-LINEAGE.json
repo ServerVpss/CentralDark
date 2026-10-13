@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "2ea9bc2825c6c4c6b3572f3d138b7b01f48735a6",
+  "source_blob_sha": "a41c2892b4f3624baa97c3c374f4dce408601fbb",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 183,
-    "highest_legacy_learning_number": 184,
+    "learning_sections": 187,
+    "highest_legacy_learning_number": 188,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 184
+      "end": 188
     }
   },
   "nodes": [
@@ -2098,6 +2098,50 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L183",
+      "next_uid": "L185"
+    },
+    {
+      "uid": "L185",
+      "legacy_learning_number": 185,
+      "legacy_occurrence": 1,
+      "title": "Unigram no Windows — pacote registrado não é aplicativo abrindo; código-fonte não é instalador",
+      "document_order": 184,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L184",
+      "next_uid": "L186"
+    },
+    {
+      "uid": "L186",
+      "legacy_learning_number": 186,
+      "legacy_occurrence": 1,
+      "title": "Open WebUI, AionUi e Portainer — mesma infraestrutura, owners e momentos diferentes",
+      "document_order": 185,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L185",
+      "next_uid": "L187"
+    },
+    {
+      "uid": "L187",
+      "legacy_learning_number": 187,
+      "legacy_occurrence": 1,
+      "title": "Docker, espaço e SH adiado — métricas têm tempo, escopo e continuidade escolhida pelo CHEFE",
+      "document_order": 186,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L186",
+      "next_uid": "L188"
+    },
+    {
+      "uid": "L188",
+      "legacy_learning_number": 188,
+      "legacy_occurrence": 1,
+      "title": "Admin CentralDark — build isolado comprovado por relato não equivale a publicação em uso",
+      "document_order": 187,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L187",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
