@@ -362,6 +362,109 @@ architectural_synthesis_papagaio_hermes_kaizen:
     counterproof and Kaizen transfer to the next mission. Keep UNKNOWN until live
     readback and gate approval.
 
+
+# DELTA: fonte de ensino e memoria e a arvore docs/ INTEIRA da main,
+# nao somente aprendizado 173 ou a narrativa de uma unica sessao.
+cumulative_engineering_whole_docs:
+  capability: ENGENHARIA_AUTONOMA_ACUMULATIVA_COM_CONTRAPROVA
+  status: CANONICAL_CANDIDATE_RUNTIME_E2E_UNKNOWN
+  intent_authority: SEGREDO_CHEFE
+  goal: >-
+    Dado destino e clausulas de aceite pelo CHEFE, recuperar o que a CentralDark
+    ja provou, compor capacidades existentes, executar minimo delta, testar,
+    contraprovar, preservar checkpoints e continuar somente ate FIXED_POINT
+    valido ou bloqueio exato. Nunca declarar ALL_PASS so por estatistica.
+  measured_source:
+    repository: ServerVpss/CentralDark
+    main_sha_at_audit: 0f79bf4c1078fbe2ac63fbd0431afdcac816e931
+    scope: docs/
+    git_blobs_scanned: 2466
+    total_blob_bytes_scanned: 254302407
+    scan_semantics: ALL_BLOBS_READ_MACHINE_INDEXED_NOT_HUMAN_VERIFIED_LINE_BY_LINE
+    matching_keyword_files: 998
+    numbered_learnings_source: docs/CONSCIENCIA/APRENDIZADOS.md
+    numbered_learnings_observed: "1..174 (173 headings; duplicate numbers and historical gaps)"
+    numbering_gaps_not_automatically_missing_knowledge: true
+    learning_scope_is_not_only_173: true
+  owner_map_reuse:
+    global_governance: AGENTS.md
+    soul: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+    jarvis_one_writer: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+    loop_master_c01_c20_a01_a20: docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md
+    live_kaizen_program: docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md
+    full_learning_chain: docs/CONSCIENCIA/APRENDIZADOS.md
+    global_learning_lineage: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json
+    contextual_memories: docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md
+    supporting_architecture: docs/ARQUITETURA/
+    supporting_brain: docs/BRAIN/
+    supporting_learning_files: docs/APRENDIZADOS/
+    existing_inventory_reconciler: scripts/centraldark-inventory-reconcile.sh
+    existing_portable_crystal_compiler: .agents/skills/knowledge-compiler/
+    existing_hermes: apps/modulos/HERMES-CORE/
+    existing_hud: docs/HUD/HUD.html
+  proven_predecessor_learning_references:
+    - "64 COSTURA: resolver conhecido e amarelar desconhecido"
+    - "65 Papagaio Investigador: medir antes de repetir"
+    - "80 ponteiro nao substitui leitura da fonte"
+    - "97 Reality Judge comprova efeito, nao autoriza"
+    - "98 memoria pertence a CentralDark, nao ao modelo"
+    - "104 receita CI replayable"
+    - "119 NeuroLink exige cadeia de cristais"
+    - "120 determinismo herdavel por artefato executavel"
+    - "133 sincronizar aprendizado, lembranca, indice e owner"
+    - "138 autoconsulta docs-first antes de perguntar"
+    - "143 erro estruturado determina delta no cone afetado"
+    - "147 Peneira Completa: registrado nao e consumido"
+    - "150 preflight global em qualquer superficie"
+    - "156 Knowledge Compiler JA EXISTE; nao criar segundo compilador"
+    - "163 main para VPS usa replay por delta com prova"
+    - "170 Kaizen exige selo e Goal vivo"
+    - "172 Papagaio ON ensino e replay fiel; OFF execucao concisa"
+    - "173 mesmo JSON preserva replay, testes V2 offline 34/34"
+    - "174 V3 evita falso BLOCKED por indentacao, 47 testes offline; VPS E2E UNKNOWN"
+  temporal_principle:
+    HISTORY_IS_PROVENANCE_NOT_CURRENT: true
+    CURRENT_MAIN_MUST_BE_REMEASURED_BEFORE_MATERIAL_MUTATION: true
+    ALL_DOCS_ARE_DISCOVERY_CORPUS_NOT_UNIFORM_AUTHORITY: true
+    SELECT_ONLY_PERTINENT_OWNERS_AFTER_WHOLE_CORPUS_INVENTORY: true
+    PREVIOUS_CHECKPOINT_REUSED_IF_FINGERPRINT_AND_GATES_MATCH: true
+    NEVER_RECOMPILE_ENTIRE_EXPERIENCE_TO_FIX_LOCAL_DELTA: true
+    NEVER_RESET_OR_ERASE_REPLAY_HISTORY: true
+  deterministic_flywheel:
+    - CHEFE_GOAL_AND_EXACT_ACCEPTANCE
+    - CONTEXT_RETRIEVAL_FROM_ENTIRE_DOCS_AND_LEARNING_LINEAGE
+    - CURRENT_MAIN_RUNTIME_OWNER_AND_RECIPE_FINGERPRINT
+    - REUSE_PREVIOUS_PROVEN_CHECKPOINT_OR_MINIMUM_AFFECTED_CONE
+    - IF_KNOWN_THEN_HERMES_TYPED_REPLAY_WITHOUT_AI
+    - IF_MEASURABLE_DOUBT_THEN_TYPED_OBSERVATION_AND_RECONCILIATION
+    - IF_NOVEL_DOUBT_THEN_INTELLIGENCE_MODE_ON_DEMAND
+    - EXISTING_COMPILER_OR_EXECUTOR_APPLIES_ONLY_AUTHORIZED_DELTA
+    - VALIDATE_TESTS_AND_COUNTERPROOF_BY_SAME_SHA
+    - ON_ERROR_RETURN_ONE_STEP_AND_RETEST_ONLY_AFFECTED_CONE
+    - APPEND_EVENT_WITH_HASH_AND_KEEP_PRIOR_HISTORY_IN_SAME_JSON
+    - HUD_SNAPSHOT_WITH_REAL_SOURCE_STATUS_AND_PROGRESS
+    - KAIZEN_CRYSTAL_ONLY_PROVEN_DELTA_WITH_OWNER
+    - GOAL_COMPLETE_ONLY_IF_ALL_APPLICABLE_CLAUSES_PASS
+    - CONTINUE_OR_EXACT_BLOCKER_RECEIPT_AND_NEXT_CURSOR
+  tested_vs_unproven:
+    existing_inventory_preserves_replay_object_in_source: PASS_SOURCE_READ
+    existing_knowledge_compiler_documented: PASS_SOURCE_READ
+    recorded_v2_offline_tests: HISTORICAL_RECORDED_34
+    recorded_v3_offline_tests: HISTORICAL_RECORDED_47
+    full_runtime_replay_validation: UNKNOWN
+    snapshot_stream_consumed_in_live_hud: UNKNOWN
+    no_duplicate_effects_after_interruption: UNKNOWN
+    next_mission_learning_transfer: UNKNOWN
+    all_goal_clauses_proven: UNKNOWN
+    merged_and_deployed: false
+  next_cursor: >-
+    Reconcile latest main and linked docs owners, then prove in existing
+    Hermes/reconciler/compiler a same-goal incremental replay using prior
+    checkpoint, no loss of the append-only JSON, typed doubt->observation,
+    affected-cone re-test, same-SHA counterproof, real HUD snapshot and
+    subsequent mission reuse. No parallel compiler, workflow, writer or brain.
+
+
 papagaio_on_loop_receipts:
   - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
     mode: PAPAGAIO_ON_FIEL
