@@ -1417,9 +1417,50 @@ body {
 .cd-health-event span{color:var(--text);white-space:pre-wrap}
 @media(max-width:700px){.cd-health-event{grid-template-columns:1fr}.cd-top-sensor{flex-basis:125px;min-width:120px}}
 </style>
+<style id="cd-pr1804-hermes-typed-core-style">
+/* CD-PR1804-HERMES-TYPED-CORE-HUD-V1: top tracker, same HUD owner, no second panel/runtime */
+.cd-pr1804-panel{margin:10px 13px 0;border:1px solid var(--border-strong);border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--surface) 92%,transparent),color-mix(in srgb,var(--surface-2) 80%,transparent));box-shadow:var(--shadow-neon);overflow:hidden}
+.cd-pr1804-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--border);background:color-mix(in srgb,var(--ground) 70%,var(--surface))}
+.cd-pr1804-title{font-family:var(--disp);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--titulo-cor)}
+.cd-pr1804-meta{font:10px var(--mono);color:var(--text-dim);overflow-wrap:anywhere}
+.cd-pr1804-grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:8px;padding:10px}
+.cd-pr1804-card{border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:10px;min-height:92px;position:relative;overflow:hidden}
+.cd-pr1804-row{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.cd-pr1804-dot{width:12px;height:12px;border-radius:999px;display:inline-block;box-shadow:0 0 10px currentColor;flex:0 0 12px}
+.cd-pr1804-dot.pass{background:var(--green);color:var(--green)}
+.cd-pr1804-dot.warn{background:var(--amber);color:var(--amber)}
+.cd-pr1804-dot.fail{background:var(--red);color:var(--red)}
+.cd-pr1804-dot.block{background:#050505;color:#050505;border:1px solid var(--text-dim)}
+.cd-pr1804-dot.wait{background:#8b8f98;color:#8b8f98}
+.cd-pr1804-name{font:700 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--link-nome)}
+.cd-pr1804-percent{font:800 21px var(--disp);color:var(--titulo-cor);line-height:1.05}
+.cd-pr1804-desc{font:10.5px var(--mono);color:var(--text-dim);line-height:1.45;margin-top:5px}
+.cd-pr1804-legend{display:flex;gap:9px;flex-wrap:wrap;padding:0 10px 11px;font:9.5px var(--mono);color:var(--text-dim)}
+.cd-pr1804-legend span{display:inline-flex;align-items:center;gap:4px}
+@media(max-width:900px){.cd-pr1804-grid{grid-template-columns:repeat(2,minmax(130px,1fr))}}
+@media(max-width:520px){.cd-pr1804-grid{grid-template-columns:1fr}.cd-pr1804-head{align-items:flex-start}}
+</style>
 </head>
 <body>
 
+<!-- CD-PR1804-HERMES-TYPED-CORE-HUD-V1: PR #1804 cockpit tracker, no new HUD -->
+<section class="cd-pr1804-panel" id="cd-pr1804-hermes-typed-core" data-owner="docs/HUD/HUD.html" data-pr="1804" data-branch="crystal/hermes-typed-core-script-first-20261013">
+  <div class="cd-pr1804-head">
+    <div class="cd-pr1804-title">🧠 PR #1804 · Hermes Typed Core · script-first</div>
+    <div class="cd-pr1804-meta">Owner: HERMES-AUTOCONFIG + HERMES-CORE · IA só no modo Intelligence · porcentagens mudam por readback/receipt</div>
+  </div>
+  <div class="cd-pr1804-grid" aria-label="Progresso do PR 1804">
+    <div class="cd-pr1804-card" data-status="pass" data-percent="100"><div class="cd-pr1804-row"><span class="cd-pr1804-dot pass"></span><span class="cd-pr1804-name">Cristal</span></div><div class="cd-pr1804-percent">100%</div><div class="cd-pr1804-desc">YAML do contrato criado e lido na branch.</div></div>
+    <div class="cd-pr1804-card" data-status="pass" data-percent="100"><div class="cd-pr1804-row"><span class="cd-pr1804-dot pass"></span><span class="cd-pr1804-name">PR fixada</span></div><div class="cd-pr1804-percent">100%</div><div class="cd-pr1804-desc">#1804 virou cockpit de implementação.</div></div>
+    <div class="cd-pr1804-card" data-status="pass" data-percent="100"><div class="cd-pr1804-row"><span class="cd-pr1804-dot pass"></span><span class="cd-pr1804-name">HUD topo</span></div><div class="cd-pr1804-percent">100%</div><div class="cd-pr1804-desc">Placar visual no topo do HUD único.</div></div>
+    <div class="cd-pr1804-card" data-status="warn" data-percent="40"><div class="cd-pr1804-row"><span class="cd-pr1804-dot warn"></span><span class="cd-pr1804-name">Consumer</span></div><div class="cd-pr1804-percent">40%</div><div class="cd-pr1804-desc">Falta ligar no HERMES-AUTOCONFIG existente.</div></div>
+    <div class="cd-pr1804-card" data-status="warn" data-percent="40"><div class="cd-pr1804-row"><span class="cd-pr1804-dot warn"></span><span class="cd-pr1804-name">Prompt Hermes</span></div><div class="cd-pr1804-percent">40%</div><div class="cd-pr1804-desc">Falta invariant no prompt/runtime do Hermes.</div></div>
+    <div class="cd-pr1804-card" data-status="fail" data-percent="20"><div class="cd-pr1804-row"><span class="cd-pr1804-dot fail"></span><span class="cd-pr1804-name">Router teste</span></div><div class="cd-pr1804-percent">20%</div><div class="cd-pr1804-desc">Falta self-test determinístico do modo.</div></div>
+    <div class="cd-pr1804-card" data-status="wait" data-percent="0"><div class="cd-pr1804-row"><span class="cd-pr1804-dot wait"></span><span class="cd-pr1804-name">Telegram</span></div><div class="cd-pr1804-percent">0%</div><div class="cd-pr1804-desc">Aguarda conexão do CHEFE como superfície.</div></div>
+    <div class="cd-pr1804-card" data-status="wait" data-percent="0"><div class="cd-pr1804-row"><span class="cd-pr1804-dot wait"></span><span class="cd-pr1804-name">Zap</span></div><div class="cd-pr1804-percent">0%</div><div class="cd-pr1804-desc">Aguarda bridge autorizada; não é cérebro paralelo.</div></div>
+  </div>
+  <div class="cd-pr1804-legend"><span><i class="cd-pr1804-dot pass"></i>verde/PASS</span><span><i class="cd-pr1804-dot warn"></i>amarelo/delta</span><span><i class="cd-pr1804-dot fail"></i>vermelho/falta</span><span><i class="cd-pr1804-dot block"></i>preto/bloqueio</span><span><i class="cd-pr1804-dot wait"></i>cinza/aguarda</span></div>
+</section>
 <!-- BARRA TOPO -->
 <div class="barra">
   <div class="barra-titulo">&#9672; CENTRALDARK &middot; INDEX + HUD</div>
@@ -3985,3 +4026,4 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') fecha
 
 </body>
 </html>
+
