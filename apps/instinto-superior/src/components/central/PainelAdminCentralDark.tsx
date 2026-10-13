@@ -72,6 +72,9 @@ const banco = supabase as unknown as {
   // Database gerado ainda não conhece profiles/modulos_portal; owner continua o mesmo client.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   from: (tabela: string) => any;
+  // Explicit schema only where tables are in public; the user_roles API route stays unchanged.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  schema: (nome: string) => { from: (tabela: string) => any };
 };
 
 type ModuloPortalLinha = {
@@ -102,10 +105,10 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
     try {
       const [m, p, r] = await Promise.all([
         banco
-          .from("modulos_portal")
+          .schema("public").from("modulos_portal")
           .select("id, slug, nome, icone, href, status, ordem")
           .order("ordem", { ascending: true }),
-        banco.from("profiles").select("id, full_name"),
+        banco.schema("public").from("profiles").select("id, full_name"),
         banco.from("user_roles").select("user_id, role"),
       ]);
 
@@ -131,7 +134,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         (p.data ?? []).map((item: ProfileLinha) => ({
           user_id: String(item.id),
           full_name: item.full_name ? String(item.full_name) : null,
-          papel: papeis.get(String(item.user_id)) ?? "user",
+          papel: papeis.get(String(item.id)) ?? "user",
         })),
       );
     } catch (e) {
@@ -184,8 +187,8 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         ordem: modulo.ordem,
       };
       const resultado = modulo.id.startsWith("novo-")
-        ? await banco.from("modulos_portal").insert(payload)
-        : await banco.from("modulos_portal").update(payload).eq("id", modulo.id);
+        ? await banco.schema("public").from("modulos_portal").insert(payload)
+        : await banco.schema("public").from("modulos_portal").update(payload).eq("id", modulo.id);
 
       if (resultado.error) throw resultado.error;
       setMensagem(`Módulo "${payload.nome}" salvo.`);
@@ -205,7 +208,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
     if (!window.confirm(`Remover o módulo "${modulo.nome}"?`)) return;
 
     setErro(null);
-    const { error } = await banco.from("modulos_portal").delete().eq("id", modulo.id);
+    const { error } = await banco.schema("public").from("modulos_portal").delete().eq("id", modulo.id);
     if (error) {
       setErro(mensagemErro(error));
       return;
