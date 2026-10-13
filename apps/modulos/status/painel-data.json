@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "lembranca: Papagaio ON/OFF + metacognição operacional por contraprova (2026-10-12/13)",
+    "lastCommit": "fix(memory): reconciliar NeuroLink L170→L171→L172 com aprendizados registrados",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T00:29:25.821Z",
+      "titulo": "Push na main · 71397f8b7f90ff58dbbf7316f1433be76e7ede38",
+      "detalhe": "fix(memory): reconciliar NeuroLink L170→L171→L172 com aprendizados registrados",
+      "area": "Repositório",
+      "sha": "71397f8",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T00:27:05.757Z",
       "titulo": "Push na main · 1ff58a74b2df109356cb1456a37e60574cae343f",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "0b28200",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T00:13:50.477Z",
-      "titulo": "Push na main · 0bd81280fabd28fe9b0089e6c3d970273c200b25",
-      "detalhe": "docs(receipt): OAuth Broker systemd habilitado, cofre historico localizado, restauracao bloqueada",
-      "area": "Repositório",
-      "sha": "0bd8128",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T00:29:25.821Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 71397f8b7f90ff58dbbf7316f1433be76e7ede38 (71397f8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T00:27:05.757Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 0b28200125edeeca32296ac8f9e7509df788a8f2 (0b28200)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T00:13:50.477Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0bd81280fabd28fe9b0089e6c3d970273c200b25 (0bd8128)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T00:27:05.757Z",
-  "updatedAtBR": "12/10/2026, 21:27:05 BRT"
+  "updatedAt": "2026-10-13T00:29:25.821Z",
+  "updatedAtBR": "12/10/2026, 21:29:25 BRT"
 }
