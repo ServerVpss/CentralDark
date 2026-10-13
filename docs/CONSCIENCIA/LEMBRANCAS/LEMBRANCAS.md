@@ -1,7 +1,7 @@
 ---
 title: "LEMBRANÇAS — índice histórico"
 status: "HISTORICAL_REDIRECT"
-updated: 2026-10-01
+updated: 2026-10-13
 tags:
   - lembrancas
   - historico
@@ -1285,3 +1285,11 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **A–Z preservado:** A autonomia, B biblioteca, C continuidade, D delta, E evidência, F fonte, G Git, H Hermes, I intenção, J julgamento, K Kaizen, L lembranças, M memória, N não duplicar, O organização, P papagaio com limites, Q qualidade não estética, R reconciliação, S segurança, T temporalidade, U unidade, V verdade, W writer, **X/Y/Z não são invariantes intercambiáveis**; recuperar semântica original antes de defini-los. Reprodução detalhada e receita ficam no **Aprendizado #175**, sem uma cópia paralela.
 - **Owner de aprendizagem:** `docs/CONSCIENCIA/APRENDIZADOS.md#175`, NeuroLink `L174 -> L175`; referências precedentes #171 (rotas autorizadas), #172 (Papagaio ON/OFF), #173 (replay append-only), #174 (falso bloqueio por indentação).
 - **Próximo cursor:** próxima sessão/execução deve *consumir* a receita #175, localizar primeiro provas anteriores pertinentes, distinguir histórico/current, corrigir apenas delta, preservar segredos e emitir recibo mostrando qual cláusula foi aplicada. `DOC_REGISTERED!=RUNTIME_CONSUMED`.
+
+### [2026-10-13] Aprendizado #177 — Arca, múltiplas IAs e retorno do fio do reconciliador
+- **Classe:** lembrança histórica com `NEXT_CURSOR` operacional, sem atribuir status de runtime vivo ao histórico.
+- **Cena vivida:** o CHEFE exibiu janelas GPT-6/VS Code/monitores/terminais em paralelo, comparou análises da própria organização, chamou a atenção para assinatura versus cobrança por API, lembrou a Biblioteca da humanidade e a proposta histórica de cognição animal e perguntou novamente pelo **"nosso SH"**. O contexto desta interação permitiu retomar o mesmo `scripts/centraldark-inventory-reconcile.sh` depois dos desvios Telegram/Unigram/Papagaio.
+- **Aprendizado:** um fragmento pequeno pode funcionar como ponteiro para `INTENT + OWNER + PROVA VÁLIDA + NEXT_CURSOR`, sem manter todos os detalhes na frente. Instâncias não compartilham memória automaticamente; consenso entre janelas que trocaram respostas não é avaliação cega. Assinatura não implica acesso ilimitado nem direito de coletar cache interno do provedor.
+- **Arca e corpus:** metáfora de conhecimento humano/animal/operacional recuperável; owners reais `PORTA-HUB-RUBY-CEREBRO.md`, `BRAIN-ARTIFACT-CAPTURE-20260924.md` e árvore semântica `04-HUMANIDADE`. `BIO_COGNITIVE_LIBRARY`/`BIO-COGNITIVE ATLAS` são nomes lembrados como ideias/candidatos, sem implementação homônima comprovada na `main` nesta leitura.
+- **Último estado relatado do SH (histórico, não leitura atual):** scanner/replay parcialmente comprovados; `MCP_RUNTIME` e `PULSE_LIVE` inconclusivos; HAKAI condicionado a consumidores; disco VPS apareceu 100% em saída anterior, e o antigo log `kare-socket.log` estava 0 B no caminho visto. O estado de `/dev/sda3` precisa ser medido de novo.
+- **Próximo cursor:** medir filesystem/capacidade atual sem apagar no escuro → remediar somente peso classificado e sem consumidor vivo → reler receipt do `centraldark-inventory-reconcile.sh` → retomar `--scan`/replay/plan → provar `MCP_RUNTIME` e `PULSE_LIVE` → avaliar HAKAI apenas após prova. Memória do aprendizado em `docs/CONSCIENCIA/APRENDIZADOS.md#177`, NeuroLink `L175→L176→L177`. `REGISTERED != RUNTIME_CONSUMED`.
