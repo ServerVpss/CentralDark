@@ -758,6 +758,15 @@ semantic_memory_links:
 adaptive_backcheck_contract:
   owner: "AGENTS.md#metodo-adaptativo-mesma-regua-avanco--backcheck-ponto-suficiente"
   creates_new_method: false
+  learning_ref: L176
+  carry_chief_intent_into_agent_selected_criteria: true
+  agent_selects_smallest_useful_criteria: true
+  agent_self_chosen_checks_may_satisfy_human: true
+  user_satisfaction_may_accept_current_scope: true
+  remove_redundant_microapprovals_for_authorized_work: true
+  recheck_only_material_delta: true
+  local_failure_does_not_stop_independent_work: true
+  real_authorization_and_security_boundaries_stay: true
   reuse_existing_live_editing: true
   reuse_existing_agent_call: true
   forward_window_default: 20
