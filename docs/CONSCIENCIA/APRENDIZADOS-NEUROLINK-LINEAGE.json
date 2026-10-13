@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "c96875c92b3da1c50c39c58ad38f60ee3e24012b",
+  "source_blob_sha": "28802e62e3954411c462fbd1321450d2f74a2f3d",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 189,
-    "highest_legacy_learning_number": 190,
+    "learning_sections": 190,
+    "highest_legacy_learning_number": 191,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 190
+      "end": 191
     }
   },
   "nodes": [
@@ -2164,6 +2164,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L189",
+      "next_uid": "L191"
+    },
+    {
+      "uid": "L191",
+      "legacy_learning_number": 191,
+      "legacy_occurrence": 1,
+      "title": "Integração A–Z da sessão — gancho mental, Whis e conformidade com o desejo do CHEFE",
+      "document_order": 190,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L190",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
