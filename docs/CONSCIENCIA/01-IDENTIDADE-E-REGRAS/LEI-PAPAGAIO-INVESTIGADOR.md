@@ -1,7 +1,7 @@
 ---
 title: "Lei do Papagaio Curioso — Investigador Funcional"
 status: "CANONICAL_GLOBAL_RULE"
-updated: 2026-09-27
+updated: 2026-10-13
 owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/"
 authority: "SEGREDO/CHEFE"
 truth_rule: "SEARCHED != VERIFIED"
