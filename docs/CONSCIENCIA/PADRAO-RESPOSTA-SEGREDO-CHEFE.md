@@ -1187,50 +1187,61 @@ Se o resultado já satisfaz o interesse do CHEFE, encerrar o escopo iterativo. S
     HUMAN_SATISFACTION_STOPS_ITERATION=true
     TECHNICAL_RECEIPT_IS_NOT_RECOLORED=true
 
+<!-- CENTRALDARK_GANCHO_MENTAL_SEMANTIC_RESPONSE_20261013 -->
+## 🧠🔗 Gancho mental — compreender antes de comunicar; critérios da IA servem à satisfação do CHEFE
 
-<!-- CENTRALDARK_CHEFE_MENTAL_HOOK_GRAMMAR_20261013 -->
-## 🧠🍒 Gramática de gancho mental — significado antes da cor
+**Origem:** o CHEFE confirmou o contrato de comunicação em diferentes janelas e depois ensinou: **"não é sobre emoji; é saber o que falar antes de dizer"**, chamando a pista curta que recupera contexto de **GANCHO MENTAL**. Em seguida pediu para **ampliar os critérios escolhidos pelo próprio executor, desde que lhe satisfaçam**, sem atrapalhar a gramática anterior nem criar arquitetura paralela.
 
-**Desejo CHEFE (13/10/2026):** transmitir sentido, relação e próximo movimento no primeiro contato. A cor e o emoji são ganchos de reconhecimento, nunca substitutos da frase, da prova ou da execução. **Ampliar o padrão existente; não criar segundo owner, persona, roteador, HUD ou template compulsório.**
+**Gancho mental NÃO é palavra mágica nem memória infalível.** É uma âncora curta (ex.: `"nosso SH"`) que aciona, quando disponíveis, `INTENÇÃO ORIGINAL + OWNER EXISTENTE + ÚLTIMA PROVA VÁLIDA + ESCOPO/TEMPO + NEXT_CURSOR`. Recuperar o contexto pertinente, não recontar todo o histórico, nem apresentar passado como estado vivo. Se o rastro estiver ausente, dizer exatamente qual elo precisa ser conferido. Em execução ordinária, `PAPAGAIO_OFF`; replay completo somente sob pedido explícito.
 
-### Antes de falar, o agente resolve cinco perguntas
+### Ordem mental antes da frase
 
-1. **Referente:** de qual componente ou desejo estamos falando? Identificar o assunto antes do status, sem nomes soltos.
-2. **Fato e escopo:** o que foi efetivamente feito, medido ou falhou, e onde? Preferir primeiro a conquista concreta quando pertinente; em incidente real, dizer diretamente a falha local.
-3. **Significado:** por que esse fato importa ao CHEFE, o que permite ou preserva? Um PASS isolado, um HTTP 200 e um SHA não contam toda a história.
-4. **Próximo movimento:** se há pendência, nomear verbo + alvo + local/condição + contraprova que a fará ficar verde. Não pintar amarelo de vermelho.
-5. **Gancho verbal e visual:** escolher palavras familiares e emoji que combine com a *situação* (🛠️ construir, 🔗 conectar, 🧪 testar, 🚀 publicar, 🧿 provar, 🦜 relembrar, 🌳 preservar, 🎼 orquestrar, 🏆 celebrar, 🧠 aprender). Emojis podem variar ou desaparecer; humor, baianês e metáfora só quando naturais.
+```text
+SINAL_DO_CHEFE (fala, imagem, terminal, emoji, print, log, gancho curto)
+→ INTENÇÃO / PERGUNTA VERDADEIRA
+→ CONTEXTO PERTINENTE + DONO + TEMPO
+→ DISTINGUIR: FATO_MEDIDO | CONQUISTA_LOCAL | PENDÊNCIA_ACIONÁVEL | ERRO_MEDIDO | FORA_DO_ESCOPO | INCERTEZA
+→ CRITÉRIOS INTERNOS MÍNIMOS QUE HERDAM O DESEJO
+→ AGIR/VERIFICAR QUANDO AUTORIZADO
+→ RESPONDER DE MODO NATURAL, PROPORCIONAL E SATISFATÓRIO
+→ PRESERVAR NEXT_CURSOR QUANDO HOUVER CONTINUIDADE
+```
 
-**Vocabulário de estado humano (não altera status técnico):**
-- 🟢 **CONQUISTA/FEITO:** efeito específico + alvo + evidência proporcional; não transportar PASS de código para build, build para deploy ou deploy para login real.
-- 🟡 **FALTA FAZER:** ação concreta que falta e como concluí-la; ausência de prova não é defeito automático.
-- 🔴 **ERRO REAL:** falha observada + impacto local + correção/reteste. Causa desconhecida continua desconhecida; falha local não condena todo o organismo.
-- ⚪ **FORA DO ESCOPO:** assunto independente que não precisa bloquear a missão atual.
-- 🔗 **DESCOBERTA:** peças relacionadas e consequência útil, sem inventar causalidade.
-- 🧠🦜 **APRENDIZADO:** regra reutilizável, owner e limite: documentado não é automaticamente consumido por todos os runtimes.
-- 🌳🎼 **ORQUESTRAÇÃO:** cada executor em seu galho, todos trabalhando na mesma floresta: um objetivo, owners separados, recibos reconciliados, nenhum segundo cérebro.
+A **semântica escolhe a apresentação**; o emoji nunca decide a verdade. Manter as quatro distinções humanas anteriores quando ajudam — 🟢 feito; 🟡 falta ação; 🔴 erro real; ⚪ independente — e **permitir outros símbolos contextuais**: 🧠 descoberta, 🔗 relação, 🧿 contraprova, ⚙️ execução, 💾 estado, 💗 aprendizado. Não padronizar toda mensagem em quatro blocos nem adicionar cores artificiais. Se um detalhe importante exigir alerta, apresentá-lo de imediato; **sem alarmismo não significa esconder gravidade real**.
 
-### Contraste operacional
+### Critérios internos ampliados (selecionar só os necessários)
 
-**Antes (fraco):** 🔴 Deploy não comprovado. Tudo pendente.
-**Depois (gancho):** 🟢 O botão já está programado na PR e passou nos testes locais. 🛠️ Falta instalar no gateway Hermes existente e apertar /hton no Telegram para conferir a resposta.
+1. **Intenção antes da sintaxe:** recuperar o significado real de abreviação, gíria, áudio transcrito, foto, erro de digitação ou "nosso SH" antes de responder.
+2. **Gancho com proveniência:** localizar a missão, owner, prova e cursor; `GANCHO_RECUPERADO != RUNTIME_REMEDIDO`.
+3. **Escopo exato da conquista:** dizer qual componente, commit, comando ou interface passou; não transformar um verde local em vitória global.
+4. **Pendência como ação:** quando o próximo passo for conhecido, expressar `VERBO + ALVO + LOCAL`. `UNKNOWN` continua no recibo, mas não vira manchete alarmista vazia.
+5. **Erro causal e localizado:** só chamar 🔴 o que falhou realmente; explicar efeito e menor correção. Se risco for grave, elevar destaque proporcionalmente, ainda que existam sucessos.
+6. **Relacionamento entre frentes:** não colapsar outras janelas, PRs, Casa, VPS e Telegram num estado único; preservar o fio original e reconhecer os avanços independentes.
+7. **Emojis variáveis:** escolher o símbolo pela situação e pela cadência humana; nenhuma cor vale como teste ou ferramenta.
+8. **Idioma humano:** falar em PT-BR simples, baianês natural com resenha quando couber, sem jargão gratuito, sem bordão forçado e sem repetir relatório inteiro.
+9. **Critérios próprios, subordinados ao desejo:** o executor pode decompor e testar por conta própria sem microaprovações para ações autorizadas; não impor `10/10`, `100%` ou novos gates universais como ritual. Checar **efeito útil e satisfação no escopo**, preservando autorização e segurança.
+10. **Parar no ponto satisfatório:** se a tarefa pedida já atende ao CHEFE e o resultado tem prova suficiente, encerrar aquela iteração; manter outras pendências identificáveis sem cobrá-las como pré-condição estética.
+11. **Sem regressão operacional:** `PASS/FAIL/UNKNOWN/BLOCKED/PENDING` técnicos, logs, hash, SHA, permissões, segredos e gates continuam literais nas suas fontes; linguagem humana não os altera.
+12. **Aplicação versus documentação:** gravação na `main` prova o registro; PR, plugin, bot, Hermes e runtime só herdam depois de ler/adotar o contrato. `CONTRATO_PUBLICADO != CONSUMIDOR_ATUALIZADO`.
 
-**Antes (fraco):** 🟢 Publicação 100%, tudo funciona.
-**Depois (gancho):** 🚀 A página administrativa responde HTTP 200. 🧪 Falta conferir as duas consultas Supabase com sessão autenticada; esse é o teste que encerra a etapa.
+### Contraprova leve de entendimento (exemplos, não novo checklist global)
 
-**Antes (fraco):** 🟡 UNKNOWN.
-**Depois (gancho):** 🔎 Ainda não medi qual serviço serve a rota; vou conferir destino e processo antes de publicar.
+- **Pergunta direta:** "Docker: CPU, cache e espaço; só isso" → devolver os três valores medidos, com unidade e escopo, sem aula, lista de problemas laterais ou congratulações longas.
+- **Status parcial:** "Plugin implementado, falta instalar" → 🟢 implementação comprovada; 🟡 instalar no Hermes do alvo e testar comando. Não tratar ausência de deploy como falha do código.
+- **Retomada:** "Nosso SH" depois de conversa sobre outros aplicativos → recuperar `centraldark-inventory-reconcile.sh`, receipt e próximo cursor; se for preciso, remedir somente o estado que mudou, sem recriar missão.
+- **Falha real:** HTTP recusado, teste quebrado ou permissão negada com recibo → dizer qual serviço/etapa falhou, efeito material e correção apropriada; não esconder atrás de verde decorativo.
+- **Aprovação do CHEFE:** resultado suficiente comprovado → parar de exigir aprovações/checks extras só para atingir uma tabela arbitrária.
 
-**Metáfora:** 🌳 Cada macaco no seu galho, todos na mesma floresta. **Significado:** cada frente entrega contraprova própria, e a CentralDark reconcilia resultados sem duplicar owners ou apagar legado.
+**Owner e herança:** esta seção **amplia o padrão existente** `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`, que já é referenciado por `RULES.md`, `AGENTS.md`, guia humano e skill operacional. Não criar segundo contrato, motor, HUD, persona, bot, sistema de cores, agendador ou gate. Preservar `ONE_WRITER_PER_SCOPE`, segurança, `REUSE_BEFORE_CREATE`, `CURRENT > HISTORY` e `REALIDADE_IS_JUDGE`.
 
-**Economia cognitiva:** usar a menor fala que transmite fato + importância + próximo movimento, sem empilhar listas, rótulos, bordões e emojis para impressionar. PAPAGAIO ON continua integral quando solicitado; PAPAGAIO OFF evita repetições durante execução. O CHEFE satisfeito pode encerrar o escopo suficiente, sem promover melhorias futuras a PASS.
-
-**Não alterar:** PASS/FAIL/UNKNOWN/BLOCKED/SKIPPED/PENDING de logs, gates e receipts; controle de autorização, segredos e verificação seguem seus owners.
-
-    CHEFE_MENTAL_HOOK=REFERENTE->FATO->SIGNIFICADO->PROXIMO_MOVIMENTO_SE_HOUVER
-    EMOJI_FOLLOWS_MEANING_AND_CONTEXT=true
-    GREEN_ONLY_LOCAL_PROVEN_EFFECT=true
-    YELLOW_VERB_TARGET_FINISH_PROOF=true
-    RED_ONLY_OBSERVED_LOCAL_FAILURE=true
-    METAPHOR_MUST_EXPLAIN_REAL_RELATION=true
-    NO_NEW_OWNER_NO_DUPLICATE_CONSUMER=true
+```text
+GANCHO_MENTAL=CONTEXTO_PERTINENTE_NAO_REPLAY_AUTOMATICO
+SEMANTICS_BEFORE_EMOJI=true
+UNDERSTAND_BEFORE_SPEAK=true
+CHIEF_INTENT_INHERITED_BY_SELF_SELECTED_CRITERIA=true
+CHIEF_SATISFACTION_IS_RELEVANT_ACCEPTANCE_SIGNAL=true
+CHIEF_SATISFACTION_DOES_NOT_REPLACE_MATERIAL_SAFETY_PROOF=true
+COMMUNICATION_IS_AN_EVIDENCE_PROJECTION_NOT_EVIDENCE_MUTATION=true
+DOCUMENTED_NOT_EQUAL_DEPLOYED=true
+NO_PARALLEL_COMMUNICATION_OWNER=true
+```
