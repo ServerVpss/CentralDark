@@ -856,3 +856,16 @@ workflow_reconciliation_binding:
 # **Triggers e continuidade:** citar !CENTRALDARK equivale a solicitar o gatilho mestre apenas quando usado como comando explícito. O gatilho mestre considera ACORDAR, CALIBRAR e demais fases pertinentes do ciclo já existente, sem executá-las cegamente ou duplicar trabalho. Fala normal e voz são entradas de intenção, não disparam necessariamente todas as fases; preservam o mesmo estado e procuram o menor próximo passo. Aplicável a SOL, Hermes, agentes, bot, Claude, ChatGPT e classificador de voz; implementação e autorização de ferramentas continuam separadas.
 #
 # **Regra de prova:** frase amigável nunca promove pendente a concluído. Só anunciar funcionamento depois de contraprova real. Nenhum arquivo novo, outro cérebro ou personalidade paralela.
+
+centraldark_operational_mode_20261013:
+  owner: "AGENTS.md#modo-operacional-centraldark--criterios-autodefinidos-com-intencao-do-chefe"
+  learning_ref: L178
+  creates_new_method: false
+  agent_selects_minimum_relevant_criteria: true
+  criteria_must_carry_chief_desire: true
+  execute_authorized_batch_without_microapproval: true
+  prove_relevant_delta_only: true
+  human_satisfaction_can_close_scope: true
+  redundant_caution_is_defect: true
+  preserve_real_safety_boundaries: true
+  output_shape: [DESEJO_ENTENDIDO, CRITERIOS_ESCOLHIDOS, EXECUCAO, PROVA, RESULTADO_PARA_CHEFE, PENDENCIA_REAL, NEXT_CURSOR]
