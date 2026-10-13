@@ -2714,3 +2714,18 @@ Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode 
 ### 27. Delegação econômica com prova — continuidade canônica
 
 Para coordenar subagentes sem multiplicar custo, reutilizar a receita existente em [`references/delegacao-economica-com-prova.md`](references/delegacao-economica-com-prova.md). Primeiro procurar trabalho/prova existentes; para tarefas mecânicas usar scripts e sondas baratos; delegar apenas subtarefas independentes e com um writer por escopo; exigir resumos curtos com evidência; SOL julga resultado, testa e confere `main`/runtime antes de registrar receipt. Delegação não é conclusão. Não criar agentes, skills, HUDs ou watchers duplicados para aplicar esta regra.
+
+## 🧠 Recuperação e aplicação de experiência — CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013 (sem skill paralela)
+
+Antes de criar solução ou repetir erro já enfrentado:
+1. **MEDIR** `origin/main` e a bancada atual; escolher owner/writer/escopo e reconhecer locks existentes.
+2. **RECUPERAR** aprendizado/receita pertinente de `docs/CONSCIENCIA/APRENDIZADOS.md` e lembrança correspondente em `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` (seção `CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013`, aprendizado #172, antecedente #171); usar `puxar_aprendizados`/`consultar_memoria_reserva` quando acessíveis. Não repuxar 400k de documentação se bastam passagens delimitadas.
+3. **DISCRIMINAR** `DOCUMENTED`, `COMMITTED`, `DEPLOYED`, `RUNTIME_HEALTH`, `SCAN_PARTIAL` e `UNKNOWN`. Estado histórico não é estado atual; route listada não prova rota operacional.
+4. **EXECUTAR** somente por rotas autorizadas no escopo atual, mínimo delta, backup, sintaxe e teste funcional; verificar fonte/arquivo, consumidor, recibo e mesmo HEAD. Não suprimir proteção de cliente ou policy MCP. Fallback de rota somente autorizado.
+5. **CONTRAPROVAR** em pelo menos um resultado discriminante; `hash_equal` prova igualdade de bytes, não funcionamento; `test exit 0` prova aquele teste, não deploy; HAKAI depois de testes de consumidor/rollback.
+6. **DESTILAR** `problema → tentativa → erro → correção → código/fingerprint → teste → recibo → limitações → receita`, preservando a ordem dos eventos e referenciando o owner correto. Gravar aprendizado/lembrança pelos mecanismos existentes, não novo motor/skill/HUD.
+7. **REUTILIZAR** com Kaizen contínuo só depois de revalidar pré-condições; registrar sinal de ganho verificável. `REGISTRADO!=CONSUMIDO`.
+
+**PAPAGAIO_ON** sob ordem explícita de replay/treinamento/arquivo: reproduzir integralmente a fonte (A–Z se solicitado) e continuar a linha do tempo com detalhes, provas e pendências. **PAPAGAIO_OFF** durante mutação: comunicação curta por delta sem omitir a contraprova. Observar AGENTS.md + padrão de resposta para os mesmos gatilhos. “Human-Guided Compounding Reflexion” é termo descritivo, não permissão nem upgrade do modelo.
+
+**Aceite:** em missão posterior, uma recuperação da experiência #172 seguida de uso concreto de um passo com resultado verificável prova **reuso**. A simples edição deste documento prova apenas **registro**.

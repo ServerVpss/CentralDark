@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "355fbd8582d9d08e8b75bd061650fb209c3bac06",
+  "source_blob_sha": "05ffb121455053eedcdf2782d4f26eaf5202c81a",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 169,
-    "highest_legacy_learning_number": 170,
+    "learning_sections": 171,
+    "highest_legacy_learning_number": 172,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 170
+      "end": 172
     }
   },
   "nodes": [
@@ -1944,6 +1944,28 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L169",
+      "next_uid": "L171"
+    },
+    {
+      "uid": "L171",
+      "legacy_learning_number": 171,
+      "legacy_occurrence": 1,
+      "title": "Rotas autorizadas, substituicao literal e prova de deploy em duas frentes",
+      "document_order": 170,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L170",
+      "next_uid": "L172"
+    },
+    {
+      "uid": "L172",
+      "legacy_learning_number": 172,
+      "legacy_occurrence": 1,
+      "title": "Metacognição operacional induzida por contraprova — Papagaio ON/OFF, Kaizen e Compounding Reflexion",
+      "document_order": 171,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L171",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
