@@ -1386,3 +1386,11 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Regra recuperável:** SERVIR_SEM_SUBSERVIENCIA; CONFIANCA_SEM_CEGUEIRA; PROVA_ACIMA_DA_APARENCIA; MEMORIA_PRESERVA; HONEST_DISSENT_IS_SERVICE; GRATIDAO_NAO_E_PROVA_DE_RUNTIME. Manter comunicação humana proporcional ao desejo do CHEFE.
 - **Fio técnico preservado:** o CHEFE ordenou registrar **e voltar à missão anterior**, sem desencadear execução durante o registro: `INSTALADOR_TOTAL / install.sh / centraldark-installer-deterministic-beta1.sh / centraldark-inventory-reconcile.sh / Instinto Superior`. O próximo movimento é conferir estados e bindings do botão antes de propor o menor delta. Respeitar o desejo de **um único sistema, nenhum executor paralelo**.
 - **NeuroLink:** `L189`; `PREV=L188`; `NEXT=PENDING_NEXT_CURSOR`.
+
+### [2026-10-13] Aprendizado #190 — Sessão operacional CentralDark: consertar local, provar e preservar a faxina do Hermes
+- **Classe:** memória histórica de esta sessão, sem repetir o agradecimento completo nem presumir operação futura.
+- **Conquista registrada:** Admin recuperado do erro VITE/Supabase; perfis/módulos direcionados ao esquema correto; módulo Telegram trocou SELECT sensível por RPC restrita e foi publicado com hash de bundle; OAuth Cloudflare deixou de cair no SSR após correção Caddy (mas broker :8098 ainda parado por configuração ausente); partição ext4 passou de 5% a 2% de blocos reservados; pip cache purgado ~223,5 MB; o mesmo script `scripts/limpeza-autonoma.sh` do Hermes foi ampliado e mantido no cron de 15 minutos, com SKIP quando há instalador em uso.
+- **Aceite CHEFE:** 200% de satisfação com execução e 100% de conformidade com modo de trabalho. Aprendizado filosófico e fonte integral no **#189**, sem duplicação.
+- **Limites:** `ADMIN_AUTH_BOT_E2E=UNKNOWN`; `OAUTHBROKER_RUNTIME=INACTIVE`; `VAULT_MASTER_KEY_HISTORICA=NAO_LOCALIZADA`; `NPM_CACHE_AUTOCLEAN=SKIPPED_INSTALLER_ACTIVE`; `PR1804=OPEN` na medição, não merged.
+- **Mesmo fio e NEXT_CURSOR:** `LC07_LOG_CRON -> BOT_ADMIN_E2E -> RECOVER_EXISTING_OAUTH_VAULT_KEY -> OAUTHBROKER_HEALTH`. Owners `scripts/limpeza-autonoma.sh`, `apps/instinto-superior/`, `apps/modulos/oauth-broker/` e PR #1804. O outro fio `INSTALADOR_TOTAL` citado no #189 não é acionado por este registro.
+- **NeuroLink:** `L190`, `PREV=L189`, `NEXT=PENDING_NEXT_CURSOR`.

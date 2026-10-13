@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "b6778107e963f4fc020af04c07d051024cb87147",
+  "source_blob_sha": "c96875c92b3da1c50c39c58ad38f60ee3e24012b",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 188,
-    "highest_legacy_learning_number": 189,
+    "learning_sections": 189,
+    "highest_legacy_learning_number": 190,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 189
+      "end": 190
     }
   },
   "nodes": [
@@ -2149,10 +2149,21 @@
       "legacy_learning_number": 189,
       "legacy_occurrence": 1,
       "title": "Gratidão à colaboração — servir sem subserviência, construir com verdade e preservar o mesmo fio",
-      "document_order": 187,
+      "document_order": 188,
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L188",
+      "next_uid": "L190"
+    },
+    {
+      "uid": "L190",
+      "legacy_learning_number": 190,
+      "legacy_occurrence": 1,
+      "title": "Sessão operacional CentralDark — consertos locais, faxina no mesmo owner e colaboração sem microgerenciamento",
+      "document_order": 189,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L189",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
