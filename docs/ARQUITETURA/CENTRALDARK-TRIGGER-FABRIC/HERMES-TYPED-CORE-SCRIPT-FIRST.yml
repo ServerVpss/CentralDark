@@ -6,6 +6,71 @@ promoted_at: 2026-10-13
 intent_id: HERMES_TYPED_CORE_SCRIPT_FIRST_INTELLIGENCE_ON_DEMAND
 main_measured_sha: 0f79bf4c1078fbe2ac63fbd0431afdcac816e931
 
+architecture_name:
+  canonical: MODEL_AGNOSTIC_AGENTIC_SYSTEM
+  subtitle: DETERMINISTIC_CORE_PLUS_ON_DEMAND_INTELLIGENCE
+  short_ptbr: Sistema agentico independente do modelo, com nucleo deterministico e inteligencia sob demanda.
+  core_claim: >-
+    A CentralDark nao precisa caber dentro de uma IA. As IAs entram dentro da CentralDark
+    como capacidades substituiveis do organismo, acionadas quando o nucleo deterministico
+    nao cobre a situacao.
+  chef_formula:
+    - CHEFE_DEFINE_INTENCAO
+    - CENTRALDARK_PRESERVA_CONHECIMENTO
+    - HERMES_EXECUTA_O_QUE_JA_SABE
+    - IA_LOCAL_OU_EXTERNA_COMPLEMENTA_O_QUE_FALTA
+    - REALIDADE_COMPROVA
+
+model_positioning:
+  model_is_not_whole_brain: true
+  model_is_capability_inside_organism: true
+  centraldark_runs_without_model_for_known_recipes: true
+  local_or_external_ai_can_be_swapped: true
+  memory_is_not_model_weights: true
+  memory_is_supplied_by_library_recipes_and_receipts: true
+  no_need_to_rebuild_organism_when_model_changes: true
+  scripts_and_state_machines_are_not_self_learning_ai: true
+  scripts_and_state_machines_are_operational_base_for_agentic_system: true
+
+organism_map:
+  CHEFE:
+    role: INTENCAO_E_AUTORIDADE
+  CENTRALDARK:
+    role: SISTEMA_INTELIGENTE_MODEL_AGNOSTIC
+    parts:
+      HERMES_TYPED_CORE:
+        - Scripts
+        - State machines
+        - Proven recipes
+        - Deterministic execution
+      MEMORIA:
+        - Aprendizados
+        - Lembrancas
+        - Experiencia acumulada
+        - Receipts
+      FERRAMENTAS:
+        - MCP
+        - GitHub
+        - Telegram
+        - WhatsApp
+        - Casa
+        - VPS
+      INTELLIGENCE_MODE:
+        - IA local
+        - IA externa
+        - SOL / Oraculo
+        - Contraprova interpretativa
+  REALIDADE:
+    role: JUDGE
+
+work_split:
+  receita_conhecida: HERMES_PLUS_SCRIPT
+  verificar_estados: RECONCILIADOR
+  recuperar_conhecimento: MEMORIA
+  interpretar_situacao_nova: IA_LOCAL_OU_SOL
+  problema_complexo: IA_ESPECIALIZADA
+  comprovar_resultado: TESTES_PLUS_REALIDADE
+
 owner_chain:
   soul: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
   rules: RULES.md
