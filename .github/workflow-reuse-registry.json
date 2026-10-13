@@ -95,5 +95,111 @@
       "owner": "UNRESOLVED",
       "next": "measure exact semantic equivalence before extraction"
     }
-  ]
+  ],
+  "historical_workflows_20261012": {
+    "purpose": "Eight GitHub Actions entries remain listed by historical workflow ID while their original YAML is absent from main. Preserve audited name, emoji and original run SHA; do not restore retired workflows solely for cosmetics.",
+    "status": "HISTORICAL_NOT_IN_MAIN",
+    "display_limit": "GitHub Actions historical workflow labels cannot be renamed by editing this registry; changing the historical UI name would require returning a YAML to a branch where GitHub recognizes it.",
+    "auto_restore": false,
+    "records": [
+      {
+        "id": 351642235,
+        "emoji": "📦",
+        "name": "Build CentralDark Architecture Package",
+        "path": ".github/workflows/build-centraldark-architecture-package.yml",
+        "source_run_sha": "c871fcad7b9782d5015ea11096261ca012703f3a",
+        "permissions": "contents: read",
+        "current_related": [
+          ".github/workflows/trigger-fabric-package.yml"
+        ],
+        "equivalence": "UNVERIFIED"
+      },
+      {
+        "id": 353204482,
+        "emoji": "🔌",
+        "name": "CENTRALDARK CONNECTOR DEMAND ROUTER",
+        "path": ".github/workflows/centraldark-connector-demand-router.yml",
+        "source_run_sha": "de99afa0701a9633d82254785538002d7aae5d8c",
+        "permissions": "contents: read",
+        "current_related": [
+          ".github/workflows/porta-de-entrada.yml"
+        ],
+        "equivalence": "UNVERIFIED"
+      },
+      {
+        "id": 353203679,
+        "emoji": "🚪",
+        "name": "CENTRALDARK HORN LINE GATE",
+        "path": ".github/workflows/centraldark-horn-line-gate.yml",
+        "source_run_sha": "de99afa0701a9633d82254785538002d7aae5d8c",
+        "permissions": "contents: read",
+        "current_related": [
+          ".github/workflows/porta-de-entrada.yml"
+        ],
+        "equivalence": "UNVERIFIED"
+      },
+      {
+        "id": 353211709,
+        "emoji": "🏷️",
+        "name": "CENTRALDARK LABEL GATE",
+        "path": ".github/workflows/centraldark-label-gate.yml",
+        "source_run_sha": "de99afa0701a9633d82254785538002d7aae5d8c",
+        "permissions": "contents: read",
+        "current_related": [
+          ".github/workflows/bots-labels-seed.yml",
+          ".github/workflows/porta-de-entrada.yml"
+        ],
+        "equivalence": "UNVERIFIED"
+      },
+      {
+        "id": 353223089,
+        "emoji": "🛤️",
+        "name": "CENTRALDARK PR TRILHO CONTRACT",
+        "path": ".github/workflows/centraldark-pr-trilho-contract.yml",
+        "source_run_sha": "de99afa0701a9633d82254785538002d7aae5d8c",
+        "permissions": "contents: read / pull-requests: read",
+        "current_related": [
+          ".github/workflows/pr-title-contract.yml",
+          ".github/workflows/lupa-conformance.yml"
+        ],
+        "equivalence": "UNVERIFIED"
+      },
+      {
+        "id": 328569003,
+        "emoji": "🧾",
+        "name": "Materializar evidência completa da sessão",
+        "path": ".github/workflows/materialize-session-evidence.yml",
+        "source_run_sha": "cb6baf089992bb4bd8ca042dbc26bd8b909ba4c0",
+        "permissions": "contents: write",
+        "current_related": [
+          ".github/workflows/pr-learning-artifact.yml"
+        ],
+        "equivalence": "UNVERIFIED"
+      },
+      {
+        "id": 326987644,
+        "emoji": "🔧",
+        "name": "MetaLupa Bundle Apply Temporário",
+        "path": ".github/workflows/meta-lupa-bundle-apply.yml",
+        "source_run_sha": "96448fe0305beccc138080ad71994f860528129b",
+        "permissions": "contents: write",
+        "current_related": [
+          ".github/workflows/lupa-drift-guard.yml"
+        ],
+        "equivalence": "UNVERIFIED"
+      },
+      {
+        "id": 326989820,
+        "emoji": "🚀",
+        "name": "MetaLupa Bundle Promoter Temporário",
+        "path": ".github/workflows/meta-lupa-bundle-promoter.yml",
+        "source_run_sha": "480ae4252b13cc9204e8b704a3d975e6b54ec645",
+        "permissions": "contents: write",
+        "current_related": [
+          ".github/workflows/lupa-drift-guard.yml"
+        ],
+        "equivalence": "UNVERIFIED"
+      }
+    ]
+  }
 }

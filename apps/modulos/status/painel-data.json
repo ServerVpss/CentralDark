@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(neurolink): preservar linhagem L173→L174 correção replay V3",
+    "lastCommit": "fix(actions): restaurar nome 📦 historico com job bloqueado e permissoes leitura",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,22 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-13T02:03:54.130Z",
+      "titulo": "Push na main · 736f18bae5441ef82dc9c4715b4189b7117c84d8",
+      "detalhe": "fix(actions): restaurar nome 📦 historico com job bloqueado e permissoes leitura",
+      "area": "Repositório",
+      "sha": "736f18b",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-13T02:02:08.955Z",
+      "titulo": "Push na main · b600e1afbee8a0a50b1742a6b2c0a6b8c8ca3d79",
+      "detalhe": "docs(actions): reconciliar oito registros historicos de workflows com emojis sem reativar automacoes",
+      "area": "Repositório",
+      "sha": "b600e1a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-13T01:13:12.041Z",
       "titulo": "Push na main · 58366e9908013711292e169bb2b4f123d11bd9b6",
@@ -393,25 +409,23 @@
       "area": "Repositório",
       "sha": "d982995",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:41:04.257Z",
-      "titulo": "Push na main · deaa5ac6cdbacaf61de0ed0b191003b7ac64b327",
-      "detalhe": "fix(plugin): herdar roteamento MCP e contraprova da voz na distribuição canônica",
-      "area": "Repositório",
-      "sha": "deaa5ac",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:36:32.918Z",
-      "titulo": "Push na main · dcb99eafa67af3bb3709c4d8dbd860a50e828c5f",
-      "detalhe": "docs(receipt): seal read-only Desktop Commander HUD classification counterproof",
-      "area": "Repositório",
-      "sha": "dcb99ea",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-13T02:03:54.130Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 736f18bae5441ef82dc9c4715b4189b7117c84d8 (736f18b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-13T02:02:08.955Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b600e1afbee8a0a50b1742a6b2c0a6b8c8ca3d79 (b600e1a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-13T01:13:12.041Z",
       "ia": "@segredounlock",
@@ -747,20 +761,6 @@
       "action": "📌 Push na main · d98299510424f1cf177be49bc3fd68404866445d (d982995)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:41:04.257Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · deaa5ac6cdbacaf61de0ed0b191003b7ac64b327 (deaa5ac)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:36:32.918Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · dcb99eafa67af3bb3709c4d8dbd860a50e828c5f (dcb99ea)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-13T01:13:12.041Z",
-  "updatedAtBR": "12/10/2026, 22:13:12 BRT"
+  "updatedAt": "2026-10-13T02:03:54.130Z",
+  "updatedAtBR": "12/10/2026, 23:03:54 BRT"
 }
