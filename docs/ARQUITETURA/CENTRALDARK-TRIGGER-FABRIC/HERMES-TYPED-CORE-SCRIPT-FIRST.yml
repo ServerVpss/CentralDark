@@ -201,11 +201,18 @@ risk_controls:
   AI_DOES_NOT_SELF_AUTHORIZE: true
 
 next_cursor:
-  goal: Bind this crystal into the existing HERMES-AUTOCONFIG/HERMES-CORE consumer path without creating parallel runtime.
+  goal: Prove verified procedural recipe retrieval/replay on the existing Hermes runtime before claiming operational Papagaio Fiel.
+  previously_completed_in_pr:
+    - HERMES-AUTOCONFIG pointer
+    - Hermes prompt typed-core invariant
+    - Deterministic routing self-test
   minimum_delta:
-    - add pointer from HERMES-AUTOCONFIG-RUNTIME.yml reuses/contracts list
-    - add prompt invariant to apps/modulos/HERMES-CORE/prompts/hermes-core.md
-    - add deterministic self-test for routing rule if code path already exists
+    - identify existing recipe retrieval and receipt consumer
+    - test same-recipe match without any model call
+    - test stale recipe and changed preconditions are blocked
+    - test effect idempotency and interrupted replay
+    - prove Kaizen transfer on a later mission
+    - then validate Telegram and WhatsApp as surfaces using the same core
 
 implementation_progress:
   pr: 1804
@@ -218,8 +225,82 @@ implementation_progress:
     hermes_autoconfig_consumer: { percent: 100, status: PASS, color: green }
     hermes_prompt_invariant: { percent: 100, status: PASS, color: green }
     deterministic_router_selftest: { percent: 100, status: PASS, color: green }
+    papagaio_fiel_contract: { percent: 100, status: PASS, color: green }
+    papagaio_fiel_runtime_replay: { percent: 0, status: UNKNOWN, color: gray }
     telegram_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
     whatsapp_surface: { percent: 0, status: WAITING_CONNECTION, color: gray }
+
+
+# PAPAGAIO FIEL TIPADO: comportamento do mesmo Hermes, nao um novo bot ou modo de inferencia.
+papagaio_fiel_typed_replay:
+  status: CONTRACT_RECORDED_RUNTIME_E2E_UNKNOWN
+  capability: VERIFIED_PROCEDURAL_EXPERIENCE_REUSE
+  execution_owner: apps/modulos/HERMES-CORE/
+  canonical_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-TYPED-CORE-SCRIPT-FIRST.yml
+  inherited_owners:
+    anti_papagaio: docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-fluxo-operacional-papagaio-off-pombo-on.md
+    investigator: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-PAPAGAIO-INVESTIGADOR.md
+    continuity: docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md
+  separation_of_duties:
+    PAPAGAIO_FIEL: retrieve matching proven procedure and its provenance
+    HERMES_TYPED_CORE: measure and execute authorized verified recipe deterministically
+    INTELLIGENCE_MODE: reason only on uncovered novelty or explicit CHEFE request
+    REALITY_JUDGE: counterprove resulting effects
+    KAIZEN: promote tested reusable delta to existing owner
+  meaning:
+    PAPAGAIO_MODE_OFF: forbid empty repetition invented proof and returning mechanical work to CHEFE
+    PAPAGAIO_FIEL: faithful typed reuse of verified experience not blind repetition
+    PAPAGAIO_ON_LOOP_RECEIPTS: historical testimony only not proof of runtime replay
+  procedure:
+    - CHEFE_INTENT
+    - LOOKUP_EXISTING_LEARNING_AND_RECIPE
+    - CHECK_RECIPE_SIGNATURE_VERSION_OWNER_PROVENANCE
+    - MEASURE_CURRENT_AND_MATCH_PRECONDITIONS
+    - IF_PROVEN_MATCH_THEN_HERMES_TYPED_CORE_WITHOUT_AI
+    - IF_MACHINE_RESOLVABLE_THEN_REMEASURE_AND_RECONCILE
+    - IF_NOVEL_OR_EXPLICIT_REQUEST_THEN_INTELLIGENCE_MODE
+    - APPLY_EXISTING_AUTHORIZATION_SCOPE_AND_WRITER_GATE
+    - EXECUTE_ONCE_WITH_IDEMPOTENCY_OR_EFFECT_DEDUPLICATION
+    - READBACK_AND_COUNTERPROOF
+    - RECEIPT_WITH_SHA_AND_NEXT_CURSOR
+    - KAIZEN_REUSE_ONLY_AFTER_TESTED_TRANSFER
+  replay_invariants:
+    SAME_INTENT_IS_NOT_SAME_CURRENT_STATE: true
+    RECIPE_MUST_HAVE_PROVENANCE_AND_OWNER: true
+    RECIPE_VERSION_AND_ENVIRONMENT_MUST_MATCH: true
+    REVALIDATE_LIVE_PRECONDITIONS_BEFORE_EFFECTS: true
+    REPLAY_CANNOT_BYPASS_CHEFE_AUTHORIZATION: true
+    REPLAY_CANNOT_BYPASS_EXISTING_GATES: true
+    REPLAY_MUST_NOT_REPEAT_APPLIED_SIDE_EFFECTS: true
+    UNKNOWN_OR_STALE_RECIPE_MUST_NOT_AUTO_EXECUTE: true
+    FAILED_PRECONDITION_RETURNS_MEASURE_OR_BLOCKED_RECEIPT: true
+    OUTPUT_TEXT_IS_NOT_EXECUTION_PROOF: true
+    KAIZEN_LEARNING_TRANSFER_REQUIRES_NEXT_EVENT_COUNTERPROOF: true
+  required_receipt:
+    - INTENT_ID
+    - RECIPE_REF_AND_VERSION
+    - OWNER
+    - SOURCE_EVIDENCE_AND_PROVENANCE
+    - CURRENT_FINGERPRINT
+    - MODE
+    - GATE_AND_AUTHORIZATION
+    - ACTION_AND_IDEMPOTENCY_KEY
+    - EFFECT_READBACK_AND_COUNTERPROOF
+    - STATUS
+    - NEXT_CURSOR
+  proof_scope:
+    contract: DOCUMENTED_IN_PR_1804
+    consumer_prompt_pointer: REQUIRES_READBACK
+    deterministic_router_existing_test: PASS_RECORDED_FOR_PRIOR_ROUTING_SCOPE
+    actual_recipe_retrieval_and_replay_e2e: UNKNOWN
+    interruption_recovery_no_duplicate_effect: UNKNOWN
+    next_mission_kaizen_transfer: UNKNOWN
+  next_runtime_probe:
+    - existing_recipe_retrieval_without_model_call
+    - changed_preconditions_block_replay
+    - repeat_event_does_not_duplicate_side_effect
+    - missing_recipe_escalates_only_when_needed
+    - receipt_and_next_mission_transfer_counterproof
 
 papagaio_on_loop_receipts:
   - id: PAPAGAIO_ON_LOOP_RECEIPT_20261013_PR1804
