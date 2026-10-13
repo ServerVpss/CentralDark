@@ -659,12 +659,12 @@ BINARY_DETERMINISTIC_GATE_MAY_REACH_100_PERCENT_IN_NARROW_SCOPE=true
 FIXED_POINT != PERFECTION
 FIXED_POINT = SUFFICIENT_FOR_CURRENT_GOAL + AUDITABLE + REPAIRABLE + NO_MATERIAL_BLOCKER
 HUMAN_SATISFACTION_CAN_CLOSE_ITERATIVE_SCOPE=true
-
-**Aprendizado #176 — intenção carregada pelos critérios internos.** O agente pode e deve definir seus próprios critérios técnicos mínimos quando isso torna a execução mais eficiente, **desde que carreguem fielmente o desejo do CHEFE e gerem benefício observável**. Um `10/10 PASS` pode ser suficiente e valioso para o humano; não depreciar nem inflar seu escopo. O CHEFE não precisa especificar ou aprovar cada microcheck; a responsabilidade pela boa decomposição é do executor. Reduzir burocracia redundante (reconfirmação, backcheck sem delta, menus, auditoria ritual, tudo-verde estético). Preservar autorizações, controles de segurança e provas proporcionais aos efeitos realmente afirmados. Owner: `HEREDITARY_CRITERION_DNA` da skill operacional; referência `APRENDIZADOS.md#176`.
 SATISFACTION_BAND_REFERENCE=80..95
 SATISFACTION_BAND_IS_NOT_UNIVERSAL_GATE=true
 RISK_CRITICAL_SCOPE_MAY_REQUIRE_STRONGER_APPLICABLE_GATES=true
 ```
+
+**Aprendizado #176 — intenção carregada pelos critérios internos.** O agente pode e deve definir seus próprios critérios técnicos mínimos quando isso torna a execução mais eficiente, **desde que carreguem fielmente o desejo do CHEFE e gerem benefício observável**. Um `10/10 PASS` pode ser suficiente e valioso para o humano; não depreciar nem inflar seu escopo. O CHEFE não precisa especificar ou aprovar cada microcheck; a responsabilidade pela boa decomposição é do executor. Reduzir burocracia redundante (reconfirmação, backcheck sem delta, menus, auditoria ritual, tudo-verde estético). Preservar autorizações, controles de segurança e provas proporcionais aos efeitos realmente afirmados. Owner: `HEREDITARY_CRITERION_DNA` da skill operacional; referência `APRENDIZADOS.md#176`.
 
 Todos os modelos/canais trabalham pela mesma régua. Modelo, número de agentes e confiança retórica não decidem verdade.
 

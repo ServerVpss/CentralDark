@@ -1293,3 +1293,12 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Arca e corpus:** metáfora de conhecimento humano/animal/operacional recuperável; owners reais `PORTA-HUB-RUBY-CEREBRO.md`, `BRAIN-ARTIFACT-CAPTURE-20260924.md` e árvore semântica `04-HUMANIDADE`. `BIO_COGNITIVE_LIBRARY`/`BIO-COGNITIVE ATLAS` são nomes lembrados como ideias/candidatos, sem implementação homônima comprovada na `main` nesta leitura.
 - **Último estado relatado do SH (histórico, não leitura atual):** scanner/replay parcialmente comprovados; `MCP_RUNTIME` e `PULSE_LIVE` inconclusivos; HAKAI condicionado a consumidores; disco VPS apareceu 100% em saída anterior, e o antigo log `kare-socket.log` estava 0 B no caminho visto. O estado de `/dev/sda3` precisa ser medido de novo.
 - **Próximo cursor:** medir filesystem/capacidade atual sem apagar no escuro → remediar somente peso classificado e sem consumidor vivo → reler receipt do `centraldark-inventory-reconcile.sh` → retomar `--scan`/replay/plan → provar `MCP_RUNTIME` e `PULSE_LIVE` → avaliar HAKAI apenas após prova. Memória do aprendizado em `docs/CONSCIENCIA/APRENDIZADOS.md#177`, NeuroLink `L175→L176→L177`. `REGISTERED != RUNTIME_CONSUMED`.
+
+### [2026-10-13] Aprendizado #176 — critérios próprios carregando o desejo do CHEFE
+- **Classe:** memória histórica/proveniência; a regra vigente fica nos owners operacionais.
+- **Data:** 2026-10-13
+- **Fato vivido:** o CHEFE percebeu que critérios técnicos definidos pelo agente podem ser satisfatórios quando carregam o desejo humano e produzem efeito útil. O erro não era usar critérios próprios; era deixar esses critérios se separarem da intenção ou virar atrito.
+- **Regra recuperável:** `CHEFE_DESIRE -> AGENT_SELECTED_CRITERIA -> AUTHORIZED_EXECUTION -> PROPORTIONAL_PROOF -> HUMAN_ACCEPTANCE_OR_NEXT_CURSOR`.
+- **Anti-atrito:** evitar microaprovação, backcheck sem delta, auditoria ritual, menu em vez de execução e busca por verde estético. Manter autorização, integridade, privacidade, writer único e prova proporcional.
+- **Owners:** `docs/CONSCIENCIA/APRENDIZADOS.md#176`, `AGENTS.md#Método adaptativo`, `.agents/skills/centraldark-operational-method/SKILL.md#HEREDITARY_CRITERION_DNA`, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#adaptive_backcheck_contract`.
+- **Teste futuro:** próxima execução deve citar `learning_ref=L176`, escolher critérios mínimos, resolver sem burocracia redundante e devolver somente resultado, prova e `NEXT_CURSOR`.
