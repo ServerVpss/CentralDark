@@ -1,0 +1,134 @@
+name: 🔧 MetaLupa Bundle Apply Temporário
+
+# Historical workflow: retained for UI identity only; all jobs permanently disabled.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: meta-lupa-bundle-apply-20260804
+  cancel-in-progress: false
+
+jobs:
+  apply:
+     if: ${{ false }}
+   runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: feat/meta-lupa-gate-final-adversarial-20260804
+      EXPECTED_PARENT: 9ddc6f6faa9b03417bb470b5db3e5b9972e252fa
+      BUNDLE_SHA256: 6537702da2f1eb2ce4f328e739d39de11f2b81098a61c75556bc5bd2ba47787f
+      PART_DIR: source/.tmp/meta-lupa-final-bundle
+    steps:
+      - name: Checkout imutável do transporte
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          path: source
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Reconstruir e provar o bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '12310293a51bd5990596cd1307919315888efdb32ba35fc3cfafd461f3123156  source/.tmp/meta-lupa-final-bundle/part00' | sha256sum -c -
+          echo 'cbd0195d188f3e1e9398451170e58b58233a6cb86a2f194141512328f631bdf0  source/.tmp/meta-lupa-final-bundle/part01' | sha256sum -c -
+          echo '5781bc5432a097286bad2ca755c8f144cb57dac2597bc0cdff91bde78a036734  source/.tmp/meta-lupa-final-bundle/part02' | sha256sum -c -
+          echo 'dc3aa8381fc380dc65c8619426b3d348c00e67d953533ba5d1cd19fa8955078e  source/.tmp/meta-lupa-final-bundle/part03' | sha256sum -c -
+          echo '0321dc07aa38350094c931b7b9b6eea91a0e871fdef6aca61b68af5fe8334b18  source/.tmp/meta-lupa-final-bundle/part04' | sha256sum -c -
+          echo '793f307c3fd494835859981b03f53ba1ed7a3920db300693e91986d2e84cd414  source/.tmp/meta-lupa-final-bundle/part05' | sha256sum -c -
+          cat "$PART_DIR"/part{00..05} > "$RUNNER_TEMP/meta-lupa-final-bundle.b64"
+          base64 --decode "$RUNNER_TEMP/meta-lupa-final-bundle.b64" > "$RUNNER_TEMP/meta-lupa-final-bundle.zip"
+          echo "$BUNDLE_SHA256  $RUNNER_TEMP/meta-lupa-final-bundle.zip" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/bundle"
+          unzip -q "$RUNNER_TEMP/meta-lupa-final-bundle.zip" -d "$RUNNER_TEMP/bundle"
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'bundle'
+          manifest = json.loads((root / 'MANIFEST.json').read_text(encoding='utf-8'))
+          expected = {
+              '.agents/skills/meta-lupa/SKILL.md',
+              '.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA',
+              '.agents/skills/meta-lupa/scripts/meta_lupa.py',
+              '.agents/skills/meta-lupa/testes/test_lupa.py',
+              '.github/workflows/lupa-conformance.yml',
+          }
+          if set(manifest) != expected:
+              raise SystemExit(f'MANIFEST_SCOPE_MISMATCH={sorted(set(manifest) ^ expected)}')
+          for rel, meta in manifest.items():
+              path = root / rel
+              data = path.read_bytes()
+              if len(data) != meta['size']:
+                  raise SystemExit(f'SIZE_MISMATCH={rel}')
+              if hashlib.sha256(data).hexdigest() != meta['sha256']:
+                  raise SystemExit(f'SHA256_MISMATCH={rel}')
+          print('BUNDLE_MANIFEST=PASS')
+          PY
+
+      - name: Checkout do candidato exato
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ env.TARGET_BRANCH }}
+          path: target
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Aplicar cinco arquivos e publicar sem force
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C target rev-parse HEAD)" = "$EXPECTED_PARENT"
+          test "$(git -C target branch --show-current)" = "$TARGET_BRANCH"
+
+          mapfile -t files < <(python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'bundle'
+          for rel in sorted(json.loads((root / 'MANIFEST.json').read_text(encoding='utf-8'))):
+              print(rel)
+          PY
+          )
+
+          for rel in "${files[@]}"; do
+            mkdir -p "target/$(dirname "$rel")"
+            cp -- "$RUNNER_TEMP/bundle/$rel" "target/$rel"
+          done
+
+          cd target
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "${files[@]}"
+          git diff --cached --check
+
+          expected=$(printf '%s\n' "${files[@]}" | sort)
+          actual=$(git diff --cached --name-only | sort)
+          test "$actual" = "$expected"
+          test -n "$actual"
+          test ! -e .tmp/meta-lupa-final-bundle
+
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          repo = Path('.')
+          bundle = Path(os.environ['RUNNER_TEMP']) / 'bundle'
+          manifest = json.loads((bundle / 'MANIFEST.json').read_text(encoding='utf-8'))
+          for rel, meta in manifest.items():
+              data = (repo / rel).read_bytes()
+              if len(data) != meta['size'] or hashlib.sha256(data).hexdigest() != meta['sha256']:
+                  raise SystemExit(f'TARGET_MANIFEST_MISMATCH={rel}')
+          print('TARGET_MANIFEST=PASS')
+          PY
+
+          git commit -m 'fix(meta-lupa): fechar gate adversarial com prova medida' \
+            -m 'Lupa-Used: true' \
+            -m 'Lupa-Usage-ID: META-LUPA-GATE-FINAL-ADVERSARIAL-20260804' \
+            -m 'Lupa-Skill-Path: .agents/skills/meta-lupa/SKILL.md'
+          NEW_HEAD=$(git rev-parse HEAD)
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          echo "TARGET_PARENT=$EXPECTED_PARENT"
+          echo "TARGET_HEAD=$NEW_HEAD"
+          echo 'FORCE_PUSH=NAO'
+          echo 'FILES_APPLIED=5'
