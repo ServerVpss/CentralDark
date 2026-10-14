@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "652a9df3c829ee813569f9c5bcd2e1de0e32826f",
+  "source_blob_sha": "481c5ef502d7edf11adff3f20f11a74ff8b66558",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 190,
-    "highest_legacy_learning_number": 191,
+    "learning_sections": 191,
+    "highest_legacy_learning_number": 192,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -83,7 +83,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 191
+      "end": 192
     }
   },
   "nodes": [
@@ -2175,6 +2175,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L190",
+      "next_uid": "L192"
+    },
+    {
+      "uid": "L192",
+      "legacy_learning_number": 192,
+      "legacy_occurrence": 1,
+      "title": "Fixed point semântico confirmado; workspace integrado ainda exige leitura",
+      "document_order": 191,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L191",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
