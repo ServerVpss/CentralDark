@@ -476,6 +476,38 @@ def test_evolution_xp_and_deduplication():
     )
 
 
+def test_evolution_xp_nao_repete_conquista_com_evidencia_reescrita():
+    """Nova evidência do mesmo evento não duplica XP; conquista nova soma só o delta."""
+    req = dict(
+        mission_id="XP-REAL", head_sha="f" * 40,
+        root_cause="falha de transporte", test="teste_transport",
+        evidence="prova:a", achievements=["causa_raiz_provada"],
+        penalties=[],
+    )
+    inicial = calculate_evolution([], **req)
+    assert inicial["xp_gained"] == 10
+    registro = {
+        "event": "FINAL", **inicial,
+        "mission_id": req["mission_id"], "head_sha": req["head_sha"],
+        "root_cause": req["root_cause"], "test_created": req["test"],
+        "achievements": req["achievements"],
+    }
+    segundo = calculate_evolution([registro], **{**req, "evidence": "prova:b"})
+    assert segundo["xp_gained"] == 0
+    assert segundo["no_xp_reason"] == "EVENTO_JA_REGISTRADO"
+    terceira = calculate_evolution(
+        [registro],
+        **{**req, "evidence": "prova:c", "achievements": [
+            "causa_raiz_provada", "teste_negativo_criado"
+        ]},
+    )
+    assert terceira["xp_gained"] == 15  # somente a conquista inédita
+    outra_missao = calculate_evolution(
+        [registro], **{**req, "mission_id": "XP-OUTRA", "evidence": "prova:d"}
+    )
+    assert outra_missao["xp_gained"] == 10
+
+
 def test_evolution_penalties_and_floor_zero():
     result = calculate_evolution(
         [],

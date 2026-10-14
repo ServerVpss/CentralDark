@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(self-evolution): contrato da pontuação, XP canônico e limites de prova",
+    "lastCommit": "aprendizado(#178): Self-Evolution + XP auditável: ranking conservador, incremental e antirrepetição",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,46 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T18:30:41.497Z",
+      "titulo": "Push na main · de5244fc67be97bf114406a5a7ef61d3d19b8525",
+      "detalhe": "aprendizado(#178): Self-Evolution + XP auditável: ranking conservador, incremental e antirrepetição",
+      "area": "Repositório",
+      "sha": "de5244f",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-14T18:26:17.243Z",
+      "titulo": "Push na main · 7e0842e8dd73a6f036b1b37488f788dd3b69caaa",
+      "detalhe": "fix(meta-lupa): exigir evidência só para XP e preservar encerramento legado",
+      "area": "Repositório",
+      "sha": "7e0842e",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-14T18:23:00.936Z",
+      "titulo": "Push na main · d60bf0373236d1c7a2b849c55fb68a5395dd8d29",
+      "detalhe": "fix(meta-lupa): impedir XP duplicado ao variar evidência do mesmo evento",
+      "area": "Repositório",
+      "sha": "d60bf03",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-14T18:21:52.288Z",
+      "titulo": "Push na main · e0dec3b360a3702a480e046785c806d1148614d7",
+      "detalhe": "docs(meta-lupa): integrar reflexão externa e XP por prova sem motor paralelo",
+      "area": "Repositório",
+      "sha": "e0dec3b",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-14T18:20:46.283Z",
+      "titulo": "Push na main · 78e642f6b03c1f71d438bb0d1da55ef4c45a9682",
+      "detalhe": "test(self-evolution): regressões de confiança, ranking e XP sem falso verde",
+      "area": "Repositório",
+      "sha": "78e642f",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T18:19:40.106Z",
       "titulo": "Push na main · 4905a0cda3feceea9e145ab6be23c438a2ad993a",
@@ -369,49 +409,44 @@
       "area": "Reposit├│rio",
       "sha": "121fdbe",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T01:19:50.974Z",
-      "titulo": "Push na main ┬À d6ac80bfa3dc7f99204ae406b4172be1e906c715",
-      "detalhe": "docs(casa): register proven K: Obsidian HUD route and WinForms readback",
-      "area": "Reposit├│rio",
-      "sha": "d6ac80b",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T00:45:28.704Z",
-      "titulo": "Push na main ┬À 0b28200125edeeca32296ac8f9e7509df788a8f2",
-      "detalhe": "fix(agents): recuperar rota SSH can├┤nica CasaÔåÆVPS antes de diagnosticar acesso",
-      "area": "Reposit├│rio",
-      "sha": "0b28200",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T00:13:50.477Z",
-      "titulo": "Push na main ┬À 0bd81280fabd28fe9b0089e6c3d970273c200b25",
-      "detalhe": "docs(receipt): OAuth Broker systemd habilitado, cofre historico localizado, restauracao bloqueada",
-      "area": "Reposit├│rio",
-      "sha": "0bd8128",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T00:04:40.118Z",
-      "titulo": "Push na main ┬À dadfb95a627501f477b32bffee563e76f20d3a74",
-      "detalhe": "fix(oauth): persistir Broker no systemd e travar dependencias com guardas de cofre",
-      "area": "Reposit├│rio",
-      "sha": "dadfb95",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T23:15:30.751Z",
-      "titulo": "Push na main ┬À 06da8aad878f624d2717661a2ceb9d4901dffe5b",
-      "detalhe": "docs(memory): apontar vault Casa K em migracao no owner mem/index.md",
-      "area": "Reposit├│rio",
-      "sha": "06da8aa",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T18:30:41.497Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · de5244fc67be97bf114406a5a7ef61d3d19b8525 (de5244f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-14T18:26:17.243Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7e0842e8dd73a6f036b1b37488f788dd3b69caaa (7e0842e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-14T18:23:00.936Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d60bf0373236d1c7a2b849c55fb68a5395dd8d29 (d60bf03)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-14T18:21:52.288Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e0dec3b360a3702a480e046785c806d1148614d7 (e0dec3b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-14T18:20:46.283Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 78e642f6b03c1f71d438bb0d1da55ef4c45a9682 (78e642f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T18:19:40.106Z",
       "ia": "@segredounlock",
@@ -726,41 +761,6 @@
       "action": "­ƒôî Push na main ┬À 121fdbe2be34513b9b1dcd0bcb06a22a10760f5e (121fdbe)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T01:19:50.974Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À d6ac80bfa3dc7f99204ae406b4172be1e906c715 (d6ac80b)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T00:45:28.704Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 0b28200125edeeca32296ac8f9e7509df788a8f2 (0b28200)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T00:13:50.477Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 0bd81280fabd28fe9b0089e6c3d970273c200b25 (0bd8128)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T00:04:40.118Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À dadfb95a627501f477b32bffee563e76f20d3a74 (dadfb95)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T23:15:30.751Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 06da8aad878f624d2717661a2ceb9d4901dffe5b (06da8aa)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T18:19:40.106Z",
-  "updatedAtBR": "14/10/2026, 15:19:40 BRT"
+  "updatedAt": "2026-10-14T18:30:41.497Z",
+  "updatedAtBR": "14/10/2026, 15:30:41 BRT"
 }

@@ -86,7 +86,7 @@ def test_xp_preflight_bloqueia_selo_sem_autolupa_e_sem_prova():
     assert _validate_achievements(args) == []
 
     args.evidence = []
-    assert "POINT_FIXED_REQUIRES_EVIDENCE" in _validate_achievements(args)
+    assert "XP_REQUIRES_EVIDENCE" in _validate_achievements(args)
 
     args.achievement = []
     args.autolupa = "nao"

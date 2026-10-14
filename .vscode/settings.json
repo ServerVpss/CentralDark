@@ -55,5 +55,8 @@
     "CentralDark",
     "segredo",
     "pivote"
-  ]
+  ],
+  "terminal.integrated.tabs.enabled": true,
+  "terminal.integrated.tabs.location": "left",
+  "terminal.integrated.defaultLocation": "view"
 }
