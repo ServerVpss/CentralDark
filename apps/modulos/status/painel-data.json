@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): lock evidence-before-seal completion contract",
+    "lastCommit": "test(meta-lupa): cover missing and delivered trace seal cases",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T22:12:00.273Z",
+      "titulo": "Push na main · 01149aeebea2af8eeb97f79dbdcb0a6d48476353",
+      "detalhe": "test(meta-lupa): cover missing and delivered trace seal cases",
+      "area": "Repositório",
+      "sha": "01149ae",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T22:11:37.587Z",
       "titulo": "Push na main · 220f548e6cb2ff9164152fc3d98fbf919920222e",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "ce9ba7a",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T03:04:04.016Z",
-      "titulo": "Push na main ┬À 69acf771ee186916544673833ecd2bcefc2b8e99",
-      "detalhe": "docs(receipt): medir liga├º├úo Voice e evitar marketplace paralelo no CentralDark",
-      "area": "Reposit├│rio",
-      "sha": "69acf77",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T22:12:00.273Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 01149aeebea2af8eeb97f79dbdcb0a6d48476353 (01149ae)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T22:11:37.587Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À ce9ba7a0605649838679c4c465bc90e52ed2eecb (ce9ba7a)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T03:04:04.016Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 69acf771ee186916544673833ecd2bcefc2b8e99 (69acf77)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T22:11:37.587Z",
-  "updatedAtBR": "14/10/2026, 19:11:37 BRT"
+  "updatedAt": "2026-10-14T22:12:00.273Z",
+  "updatedAtBR": "14/10/2026, 19:12:00 BRT"
 }
