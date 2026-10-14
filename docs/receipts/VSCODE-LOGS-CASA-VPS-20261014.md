@@ -26,8 +26,8 @@
 | MCP ativo | PASS antes e após tentativa | /health em 127.0.0.1:9100 respondeu HTTP 200. |
 | Fachada API no código da branch | SOURCE_ONLY | index.js, admin.js, vscode-log-route.js na branch; não confundir com runtime. |
 | Tentativa protegida de aplicar dist | ROLLED_BACK | --check READY; --apply abortou após systemctl restart exceder 30 segundos. Backup feito em /root/centraldark-backups/vscode-log-route-20261014, fontes originais restauradas. |
-| Rota HTTP autenticada | NÃO PROVADA | Sem cookie retornou HTTP 404 após rollback (alvo seria HTTP 401 sem login e 200 com login). |
-| Systemd após rollback | PENDENTE | Medição mostrou unit deactivating/stop-sigterm e job restart 8150169 ainda em execução; aguardar conclusão, não reiniciar em paralelo. |
+| Rota HTTP autenticada | PASS local VPS | Depois do segundo deploy, /health 200, 401 sem login e GET 200 com cookie efêmero formado no próprio processo; segredo nunca foi impresso. |
+| Systemd após rollback | RESOLVIDO + PATCH PASS | Primeiro restart excedeu 30 s e acionou rollback. O job antigo terminou com active/running; segundo deploy usou restart --no-block, esperou PID novo e provou 200+401. |
 
 ## Contraprova e próximos critérios
 
@@ -42,3 +42,13 @@
 CURRENT>HISTORY; UNKNOWN != PASS; DOCUMENTED != EXECUTED; GITHUB != RUNTIME; MERGED != DEPLOYED.
 ONE_PATH_FAILURE_IS_NOT_SYSTEM_FAILURE; PRIVATE_FIRST_WITH_SSH_DIRECT_FALLBACK; RAW_LOG_CASA_ONLY; ONE_CANONICAL_FUNNEL.
 Somente eventos estruturados/sanitizados são enviados. Não publicar prompts, tokens, sessões, logs brutos ou dados de conta.
+
+## Segunda conferência — API autenticada no runtime
+
+- Script de aplicação: `scripts/vps/apply-vscode-log-api.mjs` com backup e rollback em `/root/centraldark-backups/vscode-log-route-20261014`.
+- Retorno do deploy: `state=ROUTE_GUARDED`, `/health=200`, GET sem login `401`, `compiled_runtime_changed=true`, PID substituído.
+- Probe local: `scripts/vps/probe-vscode-log-api.mjs`; usa credencial do processo apenas em memória dentro da VPS, nunca a exibe.
+- Retorno do probe: `ok=true`, `code=200`, `route=tailscale`, `event_count=10` (limite solicitado), `privacy_ok=true`, `filters_ok=true`, filtro `level=warn&component=copilot` HTTP 200 e 1 evento.
+- O estado retornado foi `ATTENTION` amarelo por fonte parada/sem atualização recente; não representa falha da rota Tailscale, que estava funcional.
+- Isso prova o endpoint **local da VPS**, não prova exposição pelo domínio público, cobertura de todas as fontes ou sincronização com a main.
+- A branch `feat/vscode-log-funnel-casa-20261014` está no PR #1820 (draft); merge/deploy do código canônico em `main` segue pendente.
