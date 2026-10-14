@@ -88,14 +88,39 @@ class ParityValidatorCounterproof(unittest.TestCase):
 
     UNKNOWN_PLUGIN = dict(PLUGIN_PUBLICATION_STATUS="UNKNOWN", PLUGIN_ID="UNKNOWN", PLUGIN_RELEASE_ID="UNKNOWN",
                           PLUGIN_URL="UNKNOWN", PLUGIN_SCOPE="UNKNOWN", PLUGIN_RELEASE_READBACK="UNKNOWN")
-    FULL_PLUGIN = dict(PLUGIN_PUBLICATION_STATUS="PASS", PLUGIN_ID="plg_x", PLUGIN_RELEASE_ID="rel_1",
+    _SRC = __import__("json").loads((ROOT / ".agents/plugins/centraldark-unified-surface-parity/SOURCE.json").read_text(encoding="utf-8"))
+    _MAN = __import__("json").loads((ROOT / ".agents/plugins/centraldark-unified-surface-parity/plugin.json").read_text(encoding="utf-8"))
+    FULL_PLUGIN = dict(PLUGIN_PUBLICATION_STATUS="PASS", PLUGIN_ID=_SRC["published_plugin_id"],
+                       PLUGIN_RELEASE_ID=_SRC["published_release_id"],
                        PLUGIN_URL="https://example.invalid/p", PLUGIN_SCOPE="USER",
-                       PLUGIN_RELEASE_READBACK="rel_1|is_current=true")
+                       PLUGIN_RELEASE_READBACK=f"{_SRC['published_release_id']}|is_current=true|version={_MAN['version']}")
 
     def assert_fail(self, marker: str) -> None:
         code, out = self.run_validator()
         self.assertNotEqual(code, 0, out)
         self.assertIn(marker, out)
+
+    def test_plugin_metadata_drift_fails(self) -> None:
+        self.mutate(
+            Path(".agents/plugins/centraldark-unified-surface-parity/plugin.json"),
+            '"version": "0.1.4"', '"version": "9.9.9"',
+        )
+        self.assert_fail("PLUGIN_VERSION_MISMATCH")
+
+    def test_plugin_capabilities_drift_fails(self) -> None:
+        self.mutate(
+            Path(".agents/plugins/centraldark-unified-surface-parity/plugin.json"),
+            '"Write"', '"NotWrite"',
+        )
+        self.assert_fail("PLUGIN_CAPABILITIES_INVALID")
+
+    def test_plugin_release_identity_drift_fails(self) -> None:
+        self.mutate(
+            Path(".agents/plugins/centraldark-unified-surface-parity/SOURCE.json"),
+            '"release_id": "pluginrel_6acc564ddd4881918f5a732c0816ea23"',
+            '"release_id": "pluginrel_counterproof"',
+        )
+        self.assert_fail("PLUGIN_RELEASE_MISMATCH")
 
     def test_clean_set_passes(self) -> None:
         code, out = self.run_validator()
@@ -201,6 +226,15 @@ class ParityValidatorCounterproof(unittest.TestCase):
     def test_plugin_pass_without_release_readback_fails(self) -> None:
         self.set_plugin_fields(**{**self.FULL_PLUGIN, "PLUGIN_RELEASE_READBACK": "UNKNOWN"})
         self.assert_fail("PLUGIN_RELEASE_READBACK")
+
+    def test_plugin_pass_with_stale_release_fails(self) -> None:
+        self.set_plugin_fields(**{**self.FULL_PLUGIN, "PLUGIN_RELEASE_ID": "pluginrel_stale",
+                                  "PLUGIN_RELEASE_READBACK": "pluginrel_stale|is_current=true|version=0.1.0"})
+        self.assert_fail("PLUGIN_PUBLICATION_RELEASE_DRIFT")
+
+    def test_plugin_pass_with_stale_readback_version_fails(self) -> None:
+        self.set_plugin_fields(**{**self.FULL_PLUGIN, "PLUGIN_RELEASE_READBACK": self.FULL_PLUGIN["PLUGIN_RELEASE_ID"] + "|is_current=true|version=0.1.0"})
+        self.assert_fail("PLUGIN_PUBLICATION_READBACK_DRIFT")
 
     def test_plugin_pass_with_full_identity_and_readback_passes(self) -> None:
         self.set_plugin_fields(**self.FULL_PLUGIN)
