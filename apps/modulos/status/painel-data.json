@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "aprendizado(#174): JARVIS voz: execução contínua, fala baiana e contraprova do áudio",
+    "lastCommit": "🪬 fix(index): align learning gate with pertinent advisory runtime",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T17:14:11.330Z",
+      "titulo": "Push na main · 349b7ebb3fd37a7824884f80c0f875cdbd81a5f1",
+      "detalhe": "🪬 fix(index): align learning gate with pertinent advisory runtime",
+      "area": "Repositório",
+      "sha": "349b7eb",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T16:59:20.360Z",
       "titulo": "Push na main · 8e66122b72ea13ceefedf9aec07f932ca94ad990",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "86eff23",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T18:48:28.391Z",
-      "titulo": "Push na main ┬À 97e5c410f4243fef8002ff8064f081187afdc3fb",
-      "detalhe": "fix(intent): derive runtime paths from HOME instead of masked transport strings",
-      "area": "Reposit├│rio",
-      "sha": "97e5c41",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T17:14:11.330Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 349b7ebb3fd37a7824884f80c0f875cdbd81a5f1 (349b7eb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T16:59:20.360Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 86eff23426177f18f00cbb7908c09bd43f5b09e4 (86eff23)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T18:48:28.391Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 97e5c410f4243fef8002ff8064f081187afdc3fb (97e5c41)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T16:59:20.360Z",
-  "updatedAtBR": "14/10/2026, 13:59:20 BRT"
+  "updatedAt": "2026-10-14T17:14:11.330Z",
+  "updatedAtBR": "14/10/2026, 14:14:11 BRT"
 }
