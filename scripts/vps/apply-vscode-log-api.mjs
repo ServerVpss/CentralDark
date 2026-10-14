@@ -79,15 +79,19 @@ try {
     fs.renameSync(tmp, destination);
     changed = true;
   }
-  call("systemctl", ["restart", unit], 30000);
-  let health = "000", route = "000";
-  for (let attempt = 0; attempt < 12; attempt++) {
+  const previousPid = call("systemctl", ["show", "-p", "MainPID", "--value", unit], 10000);
+  call("systemctl", ["restart", "--no-block", unit], 10000);
+  let health = "000", route = "000", newPid = previousPid;
+  for (let attempt = 0; attempt < 135; attempt++) {
+    newPid = call("systemctl", ["show", "-p", "MainPID", "--value", unit], 10000);
     health = httpCode(healthUrl);
     route = httpCode(targetUrl);
-    if (health === "200" && route === "401") break;
+    if (newPid !== previousPid && newPid !== "0" && health === "200" && route === "401") break;
     call("sleep", ["1"], 2000);
   }
-  if (health !== "200" || route !== "401") throw Error("post_deploy_health_or_auth");
+  if (newPid === previousPid || newPid === "0" || health !== "200" || route !== "401") {
+    throw Error("post_deploy_pid_health_or_auth");
+  }
   print({ ok: true, state: "ROUTE_GUARDED", health_code: health, unauthenticated_code: route,
     route: "/admin/api/logs/LOGS-VS-CODE.log", backup,
     authorized_data_read: "NOT_YET_MEASURED", compiled_runtime_changed: true });
@@ -96,7 +100,7 @@ try {
     fs.copyFileSync(path.join(backup, "admin.js.before"), adminPath);
     fs.copyFileSync(path.join(backup, "index.js.before"), indexPath);
     if (fs.existsSync(routePath)) fs.unlinkSync(routePath);
-    try { call("systemctl", ["restart", unit], 30000); } catch {}
+    try { call("systemctl", ["restart", "--no-block", unit], 10000); } catch {}
   }
   print({ ok: false, state: "ROLLED_BACK", reason: String(error.message).slice(0, 160),
     health_after_rollback: httpCode(healthUrl), backup });
