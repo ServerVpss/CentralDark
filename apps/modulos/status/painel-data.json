@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧾 docs(receipt): seal pertinent-learning index delta with proof and next cursor",
+    "lastCommit": "aprendizado(#175): Voz JARVIS: leitura longa sequencial e HTTP 4xx preservado no proxy TTS",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T17:19:30.601Z",
+      "titulo": "Push na main · 7910f75e98e6d10f250bd2d45d91808ef851e2c4",
+      "detalhe": "aprendizado(#175): Voz JARVIS: leitura longa sequencial e HTTP 4xx preservado no proxy TTS",
+      "area": "Repositório",
+      "sha": "7910f75",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T17:17:35.404Z",
       "titulo": "Push na main · fad3ca925eaad834ac939fb5e46c377b33866437",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "71eccc7",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T20:39:06.634Z",
-      "titulo": "Push na main ┬À 5d7196b894a3aa90113914ba8eac0aeba8024bf2",
-      "detalhe": "docs(rotas): selar SSH CasaÔåÆVPS pelo Git OpenSSH com readback e escopo",
-      "area": "Reposit├│rio",
-      "sha": "5d7196b",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T17:19:30.601Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 7910f75e98e6d10f250bd2d45d91808ef851e2c4 (7910f75)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T17:17:35.404Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 71eccc75bf41d324f2065f9068808bb2cbeef393 (71eccc7)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T20:39:06.634Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 5d7196b894a3aa90113914ba8eac0aeba8024bf2 (5d7196b)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T17:17:35.404Z",
-  "updatedAtBR": "14/10/2026, 14:17:35 BRT"
+  "updatedAt": "2026-10-14T17:19:30.601Z",
+  "updatedAtBR": "14/10/2026, 14:19:30 BRT"
 }
