@@ -143,6 +143,3 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
     console.warn("[CentralDark Voice] Perfil de voz depende de configuração local.");
   }
 });
-
-
-[executed on device: CENTRALDARK-OS (809020f9-c77d-4bef-bb06-da5b467ac9b7)]
