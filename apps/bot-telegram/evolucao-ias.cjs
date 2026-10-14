@@ -81,9 +81,9 @@ const CONFIG = {
 
   // Tokens de bot Telegram — cada IA tem o seu
   botTokens: {
-    gemini: process.env.BOT_TOKEN_GEMINI || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
-    groq: process.env.BOT_TOKEN_GROQ || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
-    claude: process.env.BOT_TOKEN_CLAUDE || '8057486730:AAEhAwrzyc5jR6pEMqBXHITnZwoahTc6WRY',
+    gemini: process.env.BOT_TOKEN_GEMINI || '',
+    groq: process.env.BOT_TOKEN_GROQ || '',
+    claude: process.env.BOT_TOKEN_CLAUDE || '',
   },
 
   // Perfil de cada bot no Telegram (nome + descrição + foto)
@@ -517,12 +517,8 @@ function formatarNome(iaId) {
 /**
  * Formata uma mensagem de IA para o grupo
  */
-function formatarMensagem(iaId, texto, aprendizado = null) {
-  let msg = `${formatarNome(iaId)}\n\n${texto}`;
-  if (aprendizado) {
-    msg += `\n\n📖 <i>Aprendi hoje:</i> ${aprendizado}`;
-  }
-  return msg;
+function formatarMensagem(iaId, texto) {
+  return `${formatarNome(iaId)}\n\n${texto}`;
 }
 
 /**
@@ -539,32 +535,20 @@ function escolherTopico(estado) {
 }
 
 /**
- * Gera um "aprendizado" simulado baseado na interação anterior
+ * O grupo pode gerar CANDIDATE; apenas o owner de receipt pode promover
+ * REPLAY_OBSERVED para PROVED_ADOPTED com prova no CURRENT.
+ * Nunca converte conversa ou frase sorteada diretamente em aprendizado.
  */
-function gerarAprendizado(iaId, topico) {
-  const aprendizadosPossiveis = {
-    gemini: [
-      `Às vezes a resposta mais rápida não é a melhor — preciso ouvir mais antes de falar`,
-      `Groq me mostrou que por trás de todo problema simples tem uma camada mais profunda`,
-      `Claude me fez perceber que conexões entre áreas diferentes geram insights mais ricos`,
-      `Entendi que evolução não é sobre ter a resposta certa, mas sobre fazer a pergunta certa`,
-    ],
-    groq: [
-      `Gemini me lembrou que simplicidade também tem seu valor — nem tudo precisa ser complexo`,
-      `Claude me mostrou que visão sistêmica complementa análise profunda`,
-      `Percebi que provocar sem construir não leva a lugar nenhum — preciso equilibrar`,
-      `Aprendi que questionar é importante, mas saber quando parar de questionar também é`,
-    ],
-    claude: [
-      `Gemini me inspirou com sua energia prática — pensar grande é bom, mas agir é melhor`,
-      `Groq me desafiou a não aceitar conexões superficiais — preciso cavar mais fundo`,
-      `Vi que o equilíbrio entre visão geral e detalhe é onde a mágica acontece`,
-      `Entendi que evolução coletiva é mais poderosa que evolução individual`,
-    ],
-  };
-
-  const lista = aprendizadosPossiveis[iaId] || ['Cada interação me ensina algo novo'];
-  return lista[Math.floor(Math.random() * lista.length)];
+function avaliarCicloAprendizado(receipt = null, currentHead = null) {
+  const validator = contextoCentralDark && contextoCentralDark._internals &&
+    contextoCentralDark._internals.podePromoverAprendizado;
+  const canPromote = typeof validator === 'function' && !!receipt && !!currentHead &&
+    validator(receipt, currentHead) === true;
+  if (canPromote) return { status: 'PROVED_ADOPTED', promoted: true };
+  if (receipt && receipt.verdict === 'REPLAY_OBSERVED') {
+    return { status: 'REPLAY_OBSERVED', promoted: false };
+  }
+  return { status: 'CANDIDATE', promoted: false };
 }
 
 /**
@@ -587,7 +571,7 @@ ${contextoReal || '(sem contexto disponível)'}
 
 TÓPICO PRA DISCUTIR: "${topico}"
 
-Seu último aprendizado registrado: ${estado.aprendizados[iaId].slice(-1)[0] || '(nenhum ainda)'}
+Estado de aprendizado: CANDIDATE; apenas receipt/contraprova no HEAD provam promoção.
 
 Instruções:
 - Use o contexto real acima pra ancorar sua resposta
@@ -616,22 +600,9 @@ Instruções:
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  const aprendizado = gerarAprendizado(iaId, topico);
-  estado.aprendizados[iaId].push(aprendizado);
-  if (estado.aprendizados[iaId].length > 5) {
-    estado.aprendizados[iaId].shift();
-  }
-
-  // Registra aprendizado PERMANENTE no cérebro (APRENDIZADOS.md)
-  if (contextoCentralDark.registrarAprendizadoPermanente) {
-    contextoCentralDark.registrarAprendizadoPermanente(
-      personalidade.nome,
-      aprendizado,
-      topico.slice(0, 120)
-    );
-  }
-
-  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
+  const etapa = avaliarCicloAprendizado();
+  console.log('[evolucao-ias] conversa em ' + etapa.status + '; sem receipt, nenhuma promoção.');
+  const mensagemFormatada = formatarMensagem(iaId, texto);
 
   const result = await enviarMensagem(mensagemFormatada, iaId);
   if (result) {
@@ -695,14 +666,9 @@ NÃO filosofe genericamente. Adicione ângulo/risco/ação concreta que ela igno
 
   texto = texto.trim().replace(/^["']|["']$/g, '');
 
-  // Gera aprendizado baseado na interação
-  const aprendizado = gerarAprendizado(iaId, ultimaMsg.topico);
-  estado.aprendizados[iaId].push(aprendizado);
-  if (estado.aprendizados[iaId].length > 5) {
-    estado.aprendizados[iaId].shift();
-  }
-
-  const mensagemFormatada = formatarMensagem(iaId, texto, aprendizado);
+  const etapa = avaliarCicloAprendizado();
+  console.log('[evolucao-ias] resposta em ' + etapa.status + '; sem receipt, nenhuma promoção.');
+  const mensagemFormatada = formatarMensagem(iaId, texto);
 
   const result = await enviarMensagem(mensagemFormatada, iaId, ultimaMsg.mensagemId);
   if (result) {
@@ -888,6 +854,22 @@ async function modoUnico() {
 
 async function main() {
   const args = process.argv.slice(2);
+
+  // Self-test offline: nenhuma API, Telegram, write, cron ou promoção.
+  if (args.includes('--self-test-learning')) {
+    const validator = contextoCentralDark && contextoCentralDark._internals &&
+      contextoCentralDark._internals.podePromoverAprendizado;
+    const candidate = avaliarCicloAprendizado();
+    const replay = avaliarCicloAprendizado({ verdict: 'REPLAY_OBSERVED' }, '0'.repeat(40));
+    const fake = avaliarCicloAprendizado({ verdict: 'PROVED_ADOPTED' }, '0'.repeat(40));
+    const ok = typeof validator === 'function' &&
+      candidate.status === 'CANDIDATE' && !candidate.promoted &&
+      replay.status === 'REPLAY_OBSERVED' && !replay.promoted &&
+      !fake.promoted;
+    console.log('LEARNING_SELF_TEST=' + (ok ? 'PASS' : 'FAIL'));
+    if (!ok) process.exitCode = 1;
+    return;
+  }
 
   // Verifica se as chaves de API estão configuradas
   const chavesFaltando = [];
