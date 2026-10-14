@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(voice): autorizar host da API TTS oficial no manifesto",
+    "lastCommit": "aprendizado(#174): JARVIS voz: execução contínua, fala baiana e contraprova do áudio",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T16:59:20.360Z",
+      "titulo": "Push na main · 8e66122b72ea13ceefedf9aec07f932ca94ad990",
+      "detalhe": "aprendizado(#174): JARVIS voz: execução contínua, fala baiana e contraprova do áudio",
+      "area": "Repositório",
+      "sha": "8e66122",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T16:58:36.418Z",
       "titulo": "Push na main · 7817c9ad9a995d7669052f2cd5a6015bd1909d53",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "97e5c41",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T18:45:19.293Z",
-      "titulo": "Push na main ┬À 647be27fb60f2c3a04e2c9218409852afcf3cc68",
-      "detalhe": "fix(intent): invalidate stale public status on HEAD or evidence drift",
-      "area": "Reposit├│rio",
-      "sha": "647be27",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T16:59:20.360Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 8e66122b72ea13ceefedf9aec07f932ca94ad990 (8e66122)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T16:58:36.418Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 97e5c410f4243fef8002ff8064f081187afdc3fb (97e5c41)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T18:45:19.293Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 647be27fb60f2c3a04e2c9218409852afcf3cc68 (647be27)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T16:58:36.418Z",
-  "updatedAtBR": "14/10/2026, 13:58:36 BRT"
+  "updatedAt": "2026-10-14T16:59:20.360Z",
+  "updatedAtBR": "14/10/2026, 13:59:20 BRT"
 }
