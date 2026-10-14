@@ -584,7 +584,7 @@ async function omniJson(url, opts){
   const r = await fetch(url, Object.assign({cache:'no-store'}, opts || {}));
   const text = await r.text();
   let body = text;
-  try { body = JSON.parse(text); } catch {}
+  try { body = JSON.parse(text); } catch (error) { console.debug('[omniJson] resposta nao JSON preservada', { status: r.status, cause: error && error.name }); }
   return { ok:r.ok, status:r.status, data:body };
 }
 function omniPretty(value){
@@ -1534,7 +1534,7 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         try {
             code = new URL(authz.location, "http://127.0.0.1").searchParams.get("code");
         }
-        catch { }
+        catch (error) { console.warn('[PKCE] redirect OAuth invalido', error && error.name); }
     }
     etapas.push({
         nome: "/authorize (PKCE+senha admin)",
