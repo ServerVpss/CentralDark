@@ -2215,6 +2215,7 @@ O CHEFE não quer responder ao formato genérico de sete campos em toda fala. O 
     DOCUMENTED_IS_NOT_RUNTIME_CONSUMED=true
 
 <!-- CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+<!-- PAPAGAIO FIEL · ÁRVORE VIVA: modos vinculados ao mesmo owner -->
 ## 🦜 Papagaio determinístico — extensão do Papagaio ON/OFF existente
 
 A identidade permanece em `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`; este bloco só estende o contrato de comunicação já existente. Não cria agente, owner, memória, runtime, cron nem HUD concorrente.
