@@ -279,6 +279,21 @@ A experiência desejada fica:
 A ferramenta pode desaparecer da frente do CHEFE; a prova não.
 
 
+## 🧭 Descoberta de duas conexões Desktop Commander — 14/10/2026
+
+**Prova CURRENT nesta sessão:** o catálogo da conexão `CENTRALDARK` retornou `SEGREDO` online, com ping `pong`, e o comando remoto PowerShell leu `hostname=SEGREDO`, `whoami=segredo\\administrador` e processo VS Code com janela `CentralDark (Workspace)`. A conexão `Remote Desktop Commander` consultada separadamente retornou `CENTRALDARK-OS` online e permitiu terminal Linux/GitHub autenticado.
+
+**Rota de descoberta obrigatória (voz e texto):** quando a primeira conexão só mostrar VPS, tentar também a conexão CentralDark autorizada, chamar `list_devices`, selecionar o ID do dispositivo exato, validar `ping` e `start_process` no próprio destino. Catálogos e `deviceId` são específicos de cada conexão: não transferir IDs entre conectores nem inferir que a Casa está offline por estar ausente de um único catálogo. Não exibir IDs, credenciais ou dados privados no catálogo público.
+
+**Capacidade no MCP CentralDark:** reutilizar `remote_desktop_bridge_status` e `centraldark_hybrid_inventory` já presentes em `apps/modulos/mcp/src/tools/observability/hybrid-observability.js` para projetar **metadados sanitizados** de dispositivos, rotas e provas atuais. Consumo operacional da ferramenta de execução depende do conector externo autorizado; o catálogo de capacidades NÃO equivale a um proxy de comando remoto ou a acesso herdado. Não criar segunda ferramenta, segundo coração ou duplicar o Remote Desktop Commander.
+
+`HOUSE_ROUTE_CENTRALDARK_SEGREDO=PROVEN_2026_10_14`
+`VPS_ROUTE_REMOTE_DESKTOP_COMMANDER=PROVEN_2026_10_14`
+`DEVICE_BINDINGS_ARE_CONNECTOR_SCOPED=true`
+`MCP_CAPABILITY_REUSE_EXISTING_OWNERS=true`
+`VOICE_TEXT_SAME_DISCOVERY_METHOD=true`
+`HISTORY_IS_NOT_LIVE_HEALTH=true`
+
 ## 🔗 Continuidade com a COSTURA
 
 O modo executor e a COSTURA são capacidades do mesmo organismo, não sistemas paralelos:
