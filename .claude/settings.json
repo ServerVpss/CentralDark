@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /root/CentralDark/scripts/notify-claude/notify-telegram.sh '🤖' 'Claude Code — CentralDark' 'Resposta concluída. Aguardando próxima instrução do Pivete.'"
+            "command": "bash \"${CLAUDE_PROJECT_DIR:-.}/scripts/notify-claude/notify-telegram.sh\" '🤖' 'Claude Code — CentralDark' 'Resposta concluída. Aguardando próxima instrução do Pivete.'"
           }
         ]
       }
