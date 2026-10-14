@@ -1,7 +1,8 @@
 #!/bin/bash
 # ============================================================
 # limpeza-autonoma.sh — Limpeza de logs + relatório Telegram
-# Cron: */30 * * * *
+# Cron real: */15 * * * *; caches limitados a um ciclo diário
+# Linha canônica (VPS): flock -n /run/lock/limpeza-autonoma.lock ... --clean-selected journal,gz,pip-cache,npm-cache,runner-work
 # ============================================================
 set -uo pipefail   # sem -e: evita abort em checks condicionais
 
@@ -14,10 +15,10 @@ SELECTED=""
 
 usage() {
   cat <<'EOF'
-Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,rotated>]
+Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,rotated,pip-cache,npm-cache,runner-work>]
 
   --map-disk                 somente mede o disco; não limpa nem notifica
-  --clean-selected LIST      limpa somente categorias explícitas: journal,gz,rotated
+  --clean-selected LIST      limpa somente categorias explícitas: journal,gz,rotated,pip-cache,npm-cache,runner-work
   --help                     mostra esta ajuda
 
 Sem argumentos, preserva o modo periódico existente.
@@ -57,6 +58,9 @@ if [ "$MODE" = "map" ]; then
   df -B1 -P /
   echo "JOURNAL_DISK_USAGE"
   journalctl --disk-usage 2>&1 || true
+  echo "PIP_CACHE_KB"; du -sk /root/.cache/pip 2>/dev/null || true
+  echo "NPM_CACHE_KB"; du -sk /root/.npm/_cacache 2>/dev/null || true
+  echo "RUNNER_WORK_KB"; du -sk "${RUNNER_ROOT:-/root/actions-runners}"/*/_work 2>/dev/null || true
   echo "LOG_TREE_BYTES"
   du -x -B1 -d 2 /var/log 2>/dev/null | sort -n | tail -30 || true
   echo "KARE_CANDIDATE"
@@ -99,17 +103,125 @@ PM2_ANTES=$(du -sh /root/.pm2/logs 2>/dev/null | cut -f1 || echo "N/A")
 
 ACOES=""
 
+# Mesma limpeza-autonoma, categorias recuperáveis e prova local antes/depois.
+# Nunca node_modules, _npx, backups, sessões, cofre ou logs operacionais.
+# Cron 15 min existente + selo de 24 horas por categoria (sem novo agendador).
+clean_incremental_cache() {
+  local cat="$1" cache="" stamp="" min_kb=0 app="" now=0 last=0 used=0 kb=0 before=0 after=0
+  case "$cat" in
+    pip-cache) cache=/root/.cache/pip; stamp=/var/lib/centraldark/limpeza-pip-cache.stamp; min_kb=131072; app=pip ;;
+    npm-cache) cache=/root/.npm/_cacache; stamp=/var/lib/centraldark/limpeza-npm-cache.stamp; min_kb=524288; app=npm ;;
+    *) echo "CACHE_UNKNOWN=$cat"; return 2 ;;
+  esac
+  if [ "$(id -u)" -ne 0 ] || [ -L "$cache" ]; then
+    echo "CACHE_$cat=SKIP_OWNER_OR_SYMLINK"; return 0
+  fi
+  now=$(date +%s)
+  if [ -e "$stamp" ]; then
+    last=$(stat -c %Y "$stamp" 2>/dev/null || echo 0)
+    if [ "$((now-last))" -lt 86400 ]; then
+      echo "CACHE_$cat=SKIP_24H"; return 0
+    fi
+  fi
+  used=$(df -P / | awk 'NR==2 {gsub("%","",$5);print $5}')
+  if [ "$used" -lt 90 ]; then
+    echo "CACHE_$cat=SKIP_SPACE_OK"; return 0
+  fi
+  if [ "$app" = npm ]; then
+    if ps -eo comm= | grep -Eq '^[[:space:]]*(npm|npx|pnpm|yarn)([[:space:]]|$)'; then
+      echo "CACHE_$cat=SKIP_INSTALLER_ACTIVE"; return 0
+    fi
+  else
+    if ps -eo comm= | grep -Eq '^[[:space:]]*(pip|pip3|uv)([[:space:]]|$)' ||
+       ps -eo args= | grep -Eq '^(/usr/bin/|/usr/local/bin/)?python(3(\.[0-9]+)?)? -m pip '; then
+      echo "CACHE_$cat=SKIP_INSTALLER_ACTIVE"; return 0
+    fi
+  fi
+  if [ ! -d "$cache" ]; then
+    echo "CACHE_$cat=SKIP_ABSENT"; return 0
+  fi
+  kb=$(du -sk "$cache" 2>/dev/null | awk 'NR==1{print $1}')
+  kb=$(printf '%s' "$kb" | tr -cd '0-9')
+  if [ -z "$kb" ]; then
+    echo "CACHE_$cat=SKIP_SIZE_UNKNOWN"; return 0
+  fi
+  if [ "$kb" -lt "$min_kb" ]; then
+    install -d -m 0700 /var/lib/centraldark
+    touch "$stamp"
+    chmod 0600 "$stamp"
+    echo "CACHE_$cat=SKIP_BELOW_THRESHOLD"; return 0
+  fi
+  before=$(df -B1 -P / | awk 'NR==2{print $4}')
+  if [ "$app" = npm ]; then
+    if ! command -v npm >/dev/null 2>&1 || ! npm cache clean --force >/dev/null 2>&1; then
+      echo "CACHE_$cat=FAILED"; return 1
+    fi
+  else
+    if ! python3 -m pip cache purge >/dev/null 2>&1; then
+      echo "CACHE_$cat=FAILED"; return 1
+    fi
+  fi
+  after=$(df -B1 -P / | awk 'NR==2{print $4}')
+  install -d -m 0700 /var/lib/centraldark
+  touch "$stamp"
+  chmod 0600 "$stamp"
+  echo "CACHE_$cat=CLEANED"
+  echo "CACHE_${cat}_RELIEF_BYTES=$((after-before))"
+}
+
+# Checkouts dos runners self-hosted (_work/<repo>/<repo>) crescem até 24–27 GB e lotaram o disco
+# em 13/10/2026. Só limpa runner OCIOSO (sem Runner.Worker), e só sob pressão (uso >= limite) ou
+# checkout acima do teto. Renomeia antes de apagar (janela mínima); o próximo job reclona.
+clean_runner_work() {
+  local root="${RUNNER_ROOT:-/root/actions-runners}" min_pct="${RUNNER_WORK_MIN_USE_PCT:-70}"
+  local max_kb="${RUNNER_WORK_MAX_KB:-10485760}" diag_days="${RUNNER_DIAG_KEEP_DAYS:-7}"
+  local used=0 rdir="" name="" ckout="" kb=0 trash="" cleaned=0 busy=0 kept=0
+  if [ "$(id -u)" -ne 0 ] || [ ! -d "$root" ] || [ -L "$root" ]; then
+    echo "RUNNER_WORK=SKIP_OWNER_OR_ABSENT"; return 0
+  fi
+  used=$(df -P / | awk 'NR==2 {gsub("%","",$5);print $5}')
+  for rdir in "$root"/*/; do
+    rdir="${rdir%/}"; name="$(basename -- "$rdir")"
+    [ -x "$rdir/bin/Runner.Listener" ] || [ -e "$rdir/bin/Runner.Worker" ] || continue
+    if pgrep -f -- "$rdir/bin/Runner.Worker" >/dev/null 2>&1; then
+      echo "RUNNER_WORK_${name}=SKIP_JOB_ACTIVE"; busy=$((busy + 1)); continue
+    fi
+    find "$rdir/_diag" -maxdepth 1 -type f -name '*.log' -mtime +"$diag_days" -delete 2>/dev/null || true
+    for ckout in "$rdir"/_work/*/*; do
+      [ -d "$ckout" ] && [ ! -L "$ckout" ] || continue
+      case "$(basename -- "$(dirname -- "$ckout")")" in _temp|_actions|_tool|_PipelineMapping|_update|.trash-*) continue ;; esac
+      case "$ckout" in "$rdir"/_work/*/*) : ;; *) continue ;; esac
+      kb=$(du -sk -- "$ckout" 2>/dev/null | awk 'NR==1{print $1}'); kb=$(printf '%s' "$kb" | tr -cd '0-9'); kb=${kb:-0}
+      if [ "$used" -lt "$min_pct" ] && [ "$kb" -lt "$max_kb" ]; then
+        echo "RUNNER_WORK_${name}=KEEP_SPACE_OK kb=$kb"; kept=$((kept + 1)); continue
+      fi
+      # Revalida ociosidade imediatamente antes do rename atômico.
+      if pgrep -f -- "$rdir/bin/Runner.Worker" >/dev/null 2>&1; then
+        echo "RUNNER_WORK_${name}=SKIP_JOB_STARTED"; busy=$((busy + 1)); break
+      fi
+      trash="$rdir/_work/.trash-$(date +%s)-$$"
+      if mv -- "$ckout" "$trash" 2>/dev/null; then
+        rm -rf -- "$trash"
+        echo "RUNNER_WORK_${name}=CLEANED kb=$kb"; cleaned=$((cleaned + 1))
+      else
+        echo "RUNNER_WORK_${name}=FAILED"; return 1
+      fi
+    done
+  done
+  echo "RUNNER_WORK_SUMMARY cleaned=$cleaned busy=$busy kept=$kept use_pct=$used"
+}
+
 if [ "$MODE" = "selected" ]; then
   IFS=',' read -r -a CATEGORIES <<< "$SELECTED"
   if [ "${#CATEGORIES[@]}" -eq 0 ] || [ -z "${CATEGORIES[0]:-}" ]; then
-    echo "Nenhuma categoria válida. Use journal,gz." >&2
+    echo "Nenhuma categoria válida. Use journal,gz,rotated,pip-cache,npm-cache,runner-work." >&2
     exit 2
   fi
   for CATEGORY in "${CATEGORIES[@]}"; do
     case "$CATEGORY" in
-      journal|gz|rotated) : ;;
+      journal|gz|rotated|pip-cache|npm-cache|runner-work) : ;;
       *)
-        echo "Categoria inválida: $CATEGORY. Use journal,gz,rotated." >&2
+        echo "Categoria inválida: $CATEGORY. Use journal,gz,rotated,pip-cache,npm-cache,runner-work." >&2
         exit 2
         ;;
     esac
@@ -177,6 +289,18 @@ if [ "$MODE" = "selected" ]; then
         )
       fi
       ;;
+  esac
+
+  # O mesmo owner aplica caches seguros depois das regras de retenção/rotated.
+  # Falhas incrementam ERRORS já previsto no recibo da main.
+  case ",${SELECTED}," in
+    *,pip-cache,*) clean_incremental_cache pip-cache || CLEAN_ERRORS=$((CLEAN_ERRORS + 1)) ;;
+  esac
+  case ",${SELECTED}," in
+    *,npm-cache,*) clean_incremental_cache npm-cache || CLEAN_ERRORS=$((CLEAN_ERRORS + 1)) ;;
+  esac
+  case ",${SELECTED}," in
+    *,runner-work,*) clean_runner_work || CLEAN_ERRORS=$((CLEAN_ERRORS + 1)) ;;
   esac
 
   DISCO_LIVRE_DEPOIS=$(df -B1 -P / | awk 'NR==2{print $4}')
