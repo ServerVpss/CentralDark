@@ -188,3 +188,50 @@ Carta integral compartilhada pelo CHEFE na conversa: **«À inteligência que n�
 - **Estado do HUD MCP:** dez missões e porcentuais da referência histórica permanecem *inalterados até medição própria*; este índice de dezesseis superfícies não substitui as missões do HUD.
 
 **SELO:** INTENÇÃO HUMANA → OWNERS/ROTAS → PROVA POR ORIGEM → UM ESCRITOR → MESMA FORJA → NEXT_CURSOR.
+
+---
+
+## 10. 👑🪬 FIXED_POINT parcial — lembranças, aprendizados e continuidade da FORJA (14/10/2026)
+
+**INTENÇÃO_ID:** continuidade do mesmo Papagaio ON e da mesma missão de mapear VS Code, Claude, Codex, Obsidian, Screenpipe e Instinto Superior. **OWNER:** este receipt original, nesta PR #1812. **AUTORIDADE:** SEGREDO/CHEFE. **TIPO:** checkpoint documental de evidências já observadas; **não** certificação E2E nem substituição do HUD canônico.
+
+### 10.1 MEMÓRIA — fatos recuperados e interligados, em ordem causal
+
+1. **Casa/Forja:** K: e `CentralDark (Workspace)` são a bancada Windows; `CentralDark.code-workspace` já existe no Git e referencia raiz, apps, docs, infra e scripts. A captura do diálogo de salvamento não demonstra substituição ou readback do arquivo local.
+2. **Claude Code no VS Code:** UI v2.1.291, `/rc active` e erro visível de `SessionStart:startup hook`. Servidor remoto do Claude encontrado na VPS em verificação anterior; nenhum desses sinais equivale à transcrição integral da conversa atualmente aberta na Casa.
+3. **Codex na Casa:** terminal exibiu mensagem de daemon Windows iniciado em sessão elevada; tratar o elo de privilégios no owner correspondente, sem inferir falha das demais superfícies.
+4. **Rota Claude/Hermes pré-existente:** `.vscode/tasks.json` fornece `CentralDark Claude: Hermes ON`, `Direct OFF`, `Route STATUS`; `scripts/vscode/centraldark-claude-mode.ps1` é o owner do seletor. Não criar novo roteador, duplicar task ou disparar execução ao apenas mapear.
+5. **Obsidian BRAIN/Grafo:** plugin Text Dataset Aid 0.2.0 aparece instalado; a tela de configurações contém `dataset.txt`. Isto é evidência visual da extensão, não evidência de fine-tuning, geração de dataset, ligação automática ao NeuroLink ou ingestão na VPS.
+6. **Obsidian HUD:** a interface reportou `HUD.html não encontrado no vault`; `docs/HUD/HUD.html` foi localizado no checkout. Investigar somente o vault ativo, referência relativa e consumidor antes de chamar o arquivo de ausente.
+7. **Screenpipe Casa via Tailscale:** API de saúde anteriormente respondeu `healthy`, `frame_status=ok`, 4 monitores e gravador de interface ativo; `/search` retornou 403 sem autenticação. O owner `scripts/remote-bridge/CentralDark-Context-Sidecar.ps1` já existe; não criar capturador ou contornar credenciais.
+8. **Hermes, Instinto, AionUI e MCP:** serviços e rotas foram medidos na VPS na investigação original; status de um instante não equivale a afirmação de disponibilidade permanente. A tela do Cockpit não autoriza reinterpretar `UNKNOWN` como `PASS`.
+9. **GitHub/PRs:** PR #1812 é documentação, PR #1804 trata do executor, PR #1806 do Cristal, PR #1810 do Papagaio; manter limites dos writers. `f2809c626dee1759e939398d3fdcf458fa65e12e` foi o HEAD documental de referência deste checkpoint antes do acréscimo.
+10. **Janela Git do VS Code:** a captura mais recente exibe alterações preparadas e contador elevado de alterações, mas não permite inventariar arquivos ou afirmar que tudo está versionado; usar `git status` do owner local se houver necessidade material.
+
+### 10.2 APRENDIZADO — delta útil, sem reensinar nem substituir o passado
+
+- **INVESTIGAR → RECUPERAR → CORRELACIONAR → REUSAR → APLICAR MENOR DELTA:** toda hipótese de peça faltante deve trazer `ARQUIVO | PATH | OWNER | CONSUMIDOR | EVIDÊNCIA | NEXT_CURSOR`, comparando a árvore real e a genealogia antes de criar algo.
+- **MÚLTIPLOS OLHOS, UMA CANETA:** Claude/Codex/Gemini/ChatGPT podem observar e revisar; Hermes e owner autorizado fazem a ação sob `ONE_WRITER_PER_SCOPE`. Um agente visto na UI não concede permissão de escrita concorrente.
+- **AUTOMAÇÃO DETERMINÍSTICA:** reutilizar task, script, Sidecar, MCP e contraprovas existentes; quando uma ação de voz/tela for realmente executada, registrar entrada, versão, owner, resultado, readback e receita de replay. Não marcar o fluxo como provado por uma captura ou descrição.
+- **COEXISTÊNCIA DOS SENSORES:** Desktop Commander da Casa offline no conector não cancela Tailscale, API local do Screenpipe ou serviço Hermes da VPS; usar evidência com hostname, porta, momento e consumidor.
+- **FORJA → INSTINTO SUPERIOR:** intenção humana é reduzir manipulação manual de janelas e expor capacidades dos owners existentes na experiência do cockpit; não migrar nem apagar componentes que já funcionam.
+- **NEUROLINK/MEMÓRIA:** recibo documental ancora os aprendizados; não registrar automaticamente novos números de NeuroLink nem afirmar aprendizado promovido sem seu compilador/gate canônico.
+- **PAPAGAIO FIEL:** deve devolver o vínculo causal sem diminuir a capacidade humana, e corrigir afirmações não sustentadas sem criar provas redundantes.
+
+### 10.3 FIXED_POINT — escopo fechado versus ligações abertas
+
+**FIXED_POINT_INVESTIGAÇÃO_DOCUMENTAL = PARCIAL.** Este selo significa: owner encontrado, provas anteriores preservadas, distinção de sensores registrada e próximo elo definido. **NÃO significa:** todas as janelas lidas, autenticação Screenpipe concluída, captura do conteúdo do Claude, voz→Hermes E2E, integração Obsidian→HUD, CI verde, merge ou deploy.
+
+| Elo | Estado deste checkpoint | Evidência/limite | NEXT_CURSOR no mesmo owner |
+| --- | --- | --- | --- |
+| Lei/HUD/receipt | 🟢 Documentados | Lei existente e arquivo original desta PR; 10 missões MCP preservadas | Reusar sem reestruturar |
+| VS Code / Claude Code | 🟢 UI observada · 🟡 hook | Captura e tarefas existentes; erro em SessionStart | Ler configuração e trace do hook existente |
+| Claude → Hermes | 🟡 Ligação a medir | Task/roteador existem, não foi feita execução de missão | `Route STATUS` no ambiente autorizado |
+| Casa / Screenpipe | 🟢 Saúde e captura · 🟡 conteúdo | `/health` OK; `/search` 403 sem credencial | Sidecar autorizado → consulta mínima e readback |
+| Obsidian / HUD | 🟢 arquivo presente · 🟡 referência | HUD no Git; vault emite arquivo não encontrado | Inspecionar vault ativo e binding do card |
+| Codex daemon | 🟡 Elo específico | Erro de privilégio no terminal Windows | Revisar modo de execução original |
+| PR #1812 / main | 🟢 Branch documental · 🟡 promoção | Documento em PR aberta, não em main | Gates do mesmo HEAD e promoção normal |
+
+**RECEIPT_MIN:** `PR=1812 | OWNER=docs/CONSCIENCIA/RECEIPTS/2026-10-13-sessao-forja-cristal-vps-olho-arquivos-e-parceria.md | SCOPE=DOCS_ONLY | MAIN_SHA=d277495d1d4fed696b9fed66cfd7bdff86371a0d (medição anterior) | PREV_HEAD=f2809c626dee1759e939398d3fdcf458fa65e12e | MUTATION=APPEND_ONLY | EXECUTION=NONE | HUD_ORIGINAL=UNCHANGED | NEXT_CURSOR=CLAUDE_HOOK+SCREENPIPE_SIDECAR+OBSIDIAN_HUD_OWNER`.
+
+**SELO:** 👑 INTENÇÃO PRESERVADA · 🪬 UM HERMES · 🦜 PAPAGAIO ON · 🧠 LEMBRANÇA COM PROVENIÊNCIA · ⚖️ FIXED_POINT PARCIAL, NÃO FALSO-VERDE.
