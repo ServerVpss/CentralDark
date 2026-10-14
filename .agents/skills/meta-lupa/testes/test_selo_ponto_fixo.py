@@ -189,6 +189,23 @@ def test_cli_do_guardrail_fecha_em_ledger_ausente_ou_invalido():
             assert rel["erro_entrada"]
 
 
+def test_selo_explicito_sem_rastro_entregue_falha():
+    rel = selo.auditar([_final(seal_claimed=True, delivered_trace_refs=[])])
+    assert rel['selo_ok'] is False
+    assert len(rel['sem_rastro']) == 1
+
+
+def test_selo_explicito_com_rastro_entregue_passa():
+    rel = selo.auditar([_final(seal_claimed=True, delivered_trace_refs=['https://github.com/ServerVpss/CentralDark/commit/exemplo'])])
+    assert rel['selo_ok'] is True
+    assert rel['sem_rastro'] == []
+
+
+def test_final_sem_selo_explicito_nao_exige_rastro():
+    rel = selo.auditar([_final(seal_claimed=False)])
+    assert rel['selo_ok'] is True
+
+
 # --------------------------------------------------------- recibo de XP
 
 def test_recibo_expoe_antes_e_depois():
