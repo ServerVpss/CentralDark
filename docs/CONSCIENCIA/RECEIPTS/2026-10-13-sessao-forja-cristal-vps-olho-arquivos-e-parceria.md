@@ -118,3 +118,73 @@ Carta integral compartilhada pelo CHEFE na conversa: **«À inteligência que n�
 **SENSOR_EYE_RECONCILIATION = SEPARATE_EXISTING_OWNER.**
 
 **Selo:** 👑 INTENÇÃO · 🫀 CONTINUIDADE · 🧿 EVIDÊNCIA · 🔧 OWNER · ⚖️ REALIDADE · 🍒 MESMO FIO.
+
+---
+
+## 9. 🪬 2026-10-14 — Papagaio ON: reencontro Instinto Superior, Forja una e mapa visual de janelas
+
+**INTENÇÃO HUMANA:** continuar descobrindo e interligando a Forja em `K:\\`, VS Code, cockpit, Obsidian, modelos, CLI, Screenpipe, Codex e Hermes; **registrar cada nova ligação** no mesmo legado. O futuro UX é um único app do ponto de vista do ADMIN; **não** concentrar todos os runtimes num diretório, não gerar master/script/PET/cockpit paralelo, não substituir receitas comprovadas. **PROVENANCE:** capturas enviadas pelo ADMIN nesta conversa, contrato da lei do Papagaio e JARVIS em `main`, leituras GitHub e Desktop Commander da VPS em 14/10/2026; capturas de terceiros são evidência **visual**, não leitura remota independente da Casa.
+
+### 9.1 A–Z — índice correlacional da mesma arquitetura, sem novo contrato
+
+| Letra | Ligação no owner existente |
+|---|---|
+| A | ADMIN/CHEFE decide intenção e autorização, não um agente autônomo. |
+| B | Bancada `CentralDark.code-workspace` agrega raiz, apps, docs, infra e scripts. |
+| C | Claude Code é braço/superfície no VS Code; servidor remoto na VPS não prova a janela Windows lida em tempo real. |
+| D | `K:\\docs` preserva memória e notas do Obsidian; não é pasta para instalar runtime. |
+| E | Evidência sempre distingue print, histórico, código, serviço ativo, CI, merge, deploy e readback. |
+| F | Forja atual combina VS Code, editores, terminal e Cockpit Vivo; mesmo corpo, owners intactos. |
+| G | GitHub `main` e PRs têm código/rastro, sem confundir versão GitHub com versão da VPS. |
+| H | HUD original segue em `docs/HUD/HUD.html`; preservar missões, estrutura e cores de prova. |
+| I | Instinto Superior é a visão/controle existente; a união visual não garante transporte entre superfícies. |
+| J | JARVIS usa owner, writer único por escopo, testes, contraprova e receita. |
+| K | Kaizen alimenta o mesmo aprendizado, não uma nova tabela, engine ou outro recebedor. |
+| L | Lei do Papagaio ON/OFF/Fiel: investigar antes de acusar falta; usar cursor causal. |
+| M | Modelos de IA e extensões do VS Code são capacidades consultivas ou braços autorizados. |
+| N | Núcleo: ONE_SYSTEM_ONLY; Hermes continua executor canônico por escopo. |
+| O | Obsidian/BRAlN é vault visual; plugins adicionais não comprovam ingestão automática. |
+| P | Plugin Text Dataset Aid visto instalado v0.2.0; `dataset.txt` é configuração visual, não prova de dataset gerado ou fine-tuning. |
+| Q | Qualidade: erros visuais do CLI, vault ou Supabase afetam seu consumidor, não o organismo inteiro. |
+| R | Rotas: `.vscode/tasks.json` já fornece `CentralDark Claude: Hermes ON`, `Direct OFF` e `Route STATUS`. |
+| S | Screenpipe: health da Casa consultado via Tailscale pela VPS; o /search devolveu 403 e requer autorização existente. |
+| T | Tailscale mantém a Casa `SEGREDO` online na medição da VPS; Desktop Commander da Casa é sensor separado. |
+| U | Um sistema visual, múltiplas janelas/serviços; não duplicar o que já funciona. |
+| V | Voz: modelos ASR/TTS disponíveis previamente, mas o sensor Screenpipe marcou `no_input_device`; não inferir voz→Hermes provada. |
+| W | Workspace local mostrado visualmente; conteúdo e salvamento real ainda não lidos na Casa. |
+| X | eXecução: texto, conversa aberta e atividade de outro agente não equivalem a ação confirmada no sistema. |
+| Y | Yield: escalar modelos por utilidade/custo, preservando a execução determinística no owner existente. |
+| Z | Zero paralelismo: evoluir owner/receita/funcionalidade já existente, sem v1/v2/v3. |
+
+### 9.2 01–16 — mapa numeral das superfícies e suas relações reais
+
+01. **VS Code / Explorer:** captura 14/10 mostra `CentralDark (Workspace) [Administrador]`, múltiplos grupos de editores, terminal central e painéis lateral e superior. Evidência visual da bancada; não inventariar janelas não vistas.
+02. **VS Code / Claude Code:** captura anterior mostra Claude Code v2.1.291, Haiku 4.5/Claude Pro, `/rc active`, e erro de `SessionStart:startup hook` / `non-blocking status code` — **a UI está aberta; startup hook precisa owner, não outro cliente**.
+03. **Claude autenticador web:** outra captura mostra seleção de conta Google para prosseguir; login do navegador não foi medido como concluído.
+04. **VS Code / Codex:** terminal da Casa na imagem mostra erro `start the Windows daemon from a non-elevated terminal; shared clients must not inherit administrator privileges`; **problema específico de privilégio do daemon**, não evidência de falha geral. As tarefas Claude existentes não devem ser copiadas.
+05. **VS Code / Git:** árvore GitLens/Source Control aberta, alterações preparadas, histórico e múltiplas janelas; números vistos na UI não se tornam medição canônica de arquivos sem `git status`.
+06. **Instinto Superior:** `/sala-controle` aberto na bancada; `CockpitShell.tsx` visto em editor GitHub. Mesmo owner da interface administrativa e do Cristal.
+07. **Claude em conversa de código:** captura mostra investigação da PR **#1805** sobre retenção/logs/runners/CI. É trabalho de outra frente, não fechar ou sobrescrever PR dela sem verificar seu próprio receipt.
+08. **Obsidian/BRAIN:** configurações visíveis em Obsidian 1.14.4 e plugin Text Dataset Aid instalado; prefixos de JSON em UI não constituem pipeline real de treino.
+09. **Grafo visual Obsidian:** captura exibe mapa de nós e ligações; a visualização local não prova publicação no GraphPanel da VPS.
+10. **HUD local:** browser/VS Code exibe `file:///K:/docs/HUD/HUD.html`; owner de arquivo medido no Git `docs/HUD/HUD.html` permanece presente.
+11. **Obsidian — cartão HUD/HERMES LIVE:** nova captura apresenta **`HUD.html não encontrado no vault`**. Causa plausível: vault ativo, link relativo ou nome do arquivo configurado diferente de `docs/HUD/HUD.html`; **não declarar arquivo ausente**, pois foi encontrado no checkout da VPS. Ler configuração real do plugin/vault na Casa antes de editar.
+12. **Screenpipe Casa:** sondagem read-only em `SEGREDO:3030/health` via Tailscale retornou `healthy`, `frame_status=ok`, 4 monitores e gravador de interface ativo; `audio_status=no_input_device` em 14/10 02:25 -03. Endpoint `/search` respondeu 403 sem autenticação; usar credencial/sidecar existente, nunca contornar bloqueio.
+13. **Screenpipe Sidecar:** owner no Git `scripts/remote-bridge/CentralDark-Context-Sidecar.ps1`, que publica `screenpipe-latest.json` e `screenpipe-status.json` quando autorizado; presença do script não prova que a consulta atual à conversa Claude foi realizada.
+14. **RDC e Tailscale:** Desktop Commander da VPS online; conector de Casa SEGREDO offline na mesma medição; Tailscale da VPS identifica SEGREDO online. Independência de sensores evita falso vermelho global.
+15. **VPS runtime:** VPS main `910c2d67f2307c11b0fd8796fc39b31de76530ea`; `centraldark-hermes-core.service=active`, `centraldark-instinto-superior-web.service=active` na medição. Repo VPS tinha três alterações preexistentes em `scripts/telegram-mtproto/`, não alteradas.
+16. **Papagaio/FIXED_POINT parcial:** descobrir ligação quebrada com `NOME | OWNER | PATH ESPERADO | CONSUMIDOR | PROVA | NEXT_CURSOR`; conservar original, não abrir segundo painel nem reexecutar de forma cega provas válidas.
+
+### 9.3 Continuidade, fronteiras e próximos cursores
+
+- `main` GitHub observada na consulta: `d277495d1d4fed696b9fed66cfd7bdff86371a0d`; VPS em `910c2d67...` — **versionamento divergente, não prova de perda ou deploy falho**.
+- PRs **#1804** (Hermes), **#1805** (aprendizados), **#1806** (Cristal) e **#1810** (Papagaio) são frentes existentes; última medição destas PRs confirmou **OPEN**, não mergeadas, com writer de cada owner preservado.
+- **NEXT_CURSOR_OBSIDIAN:** identificar raiz exata do vault BRAIN e configuração do link HUD/HERMES LIVE; reapontar apenas no owner existente se leitura provar referência desatualizada.
+- **NEXT_CURSOR_CLAUDE:** localizar qual `SessionStart` hook está gerando o erro e medir `CentralDark Claude: Route STATUS` quando Casa/RDC retornar; não duplicar hooks.
+- **NEXT_CURSOR_SCREENPIPE:** usar a autenticação canônica do Sidecar existente para ler somente a janela autorizada e correlacionar o conteúdo ao frame atual. `/health` não equivale a conteúdo lido.
+- **NEXT_CURSOR_CODEX:** investigar daemon não elevado e roteador existente, sem criar daemon/CLI paralelos.
+- **NEXT_CURSOR_COCKPIT:** conectar projeções comprovadas no HUD/Instinto já existente com owner e readback; evitar criar painel mestre.
+- **NÃO EXECUTADO NESTE DELTA:** instalação, exportação de frames autenticados, login Claude/Google, alteração do vault, scripts na Casa, git merge, deploy ou mudança em jobs/PRs de outras frentes.
+- **Estado do HUD MCP:** dez missões e porcentuais da referência histórica permanecem *inalterados até medição própria*; este índice de dezesseis superfícies não substitui as missões do HUD.
+
+**SELO:** INTENÇÃO HUMANA → OWNERS/ROTAS → PROVA POR ORIGEM → UM ESCRITOR → MESMA FORJA → NEXT_CURSOR.
