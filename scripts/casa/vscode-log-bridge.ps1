@@ -26,12 +26,19 @@ if (!(Test-Path -LiteralPath $Source -PathType Leaf)) {
   exit 3
 }
 $info = Get-Item -LiteralPath $Source
-$epoch = $info.CreationTimeUtc.ToString("o", [Globalization.CultureInfo]::InvariantCulture)
+$creationEpoch = $info.CreationTimeUtc.ToString("o", [Globalization.CultureInfo]::InvariantCulture)
 $state = $null
 if (Test-Path -LiteralPath $StatePath) {
   try { $state = Get-Content -LiteralPath $StatePath -Raw -Encoding UTF8 | ConvertFrom-Json }
   catch { $state = $null }
 }
+# A mesma criacao pode sobreviver a uma truncagem. Nova geracao invalida o cursor remoto.
+$generation = 0
+if ($state -and ($state.epoch -eq $creationEpoch -or $state.epoch -like ($creationEpoch + '-g*'))) {
+  if ($null -ne $state.generation) { $generation = [Math]::Max(0, [int]$state.generation) }
+  if ([long]$state.offset -gt $info.Length) { $generation++ }
+}
+$epoch = if ($generation -gt 0) { $creationEpoch + '-g' + $generation } else { $creationEpoch }
 $reset = !$state -or $state.epoch -ne $epoch -or [long]$state.offset -gt $info.Length
 $offset = if ($reset) { [Math]::Max(0L, [long]$info.Length - [long]$MaxBytes) } else { [long]$state.offset }
 $skipFirstPartial = $reset -and $offset -gt 0
@@ -107,7 +114,7 @@ if ($null -eq $receipt) {
 $dir = Split-Path -Parent $StatePath
 New-Item -ItemType Directory -Force -Path $dir | Out-Null
 $temp = "$StatePath.$PID.tmp"
-@{ epoch = $epoch; offset = [long]$next; route = $receipt.route; updated_at_utc = [DateTime]::UtcNow.ToString("o") } |
+@{ epoch = $epoch; generation = $generation; offset = [long]$next; route = $receipt.route; updated_at_utc = [DateTime]::UtcNow.ToString("o") } |
   ConvertTo-Json -Compress | Set-Content -LiteralPath $temp -Encoding UTF8
 Move-Item -LiteralPath $temp -Destination $StatePath -Force
 Write-Output ($receipt | ConvertTo-Json -Compress)
