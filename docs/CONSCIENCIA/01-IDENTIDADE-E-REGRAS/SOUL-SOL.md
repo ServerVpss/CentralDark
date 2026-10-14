@@ -1054,11 +1054,20 @@ owner ou autoridade nova nasce aqui; e reconciliacao de ancora, nao
 absorcao de material inedito. `CLAUDE.md` e `CONTRACT.yml` nao mudaram
 desde a ancora anterior.
 
+Revisao 2026-10-14 (2) — novo merge com main trouxe `canonical_consumption_gate`
+reconciliado (commit e855feb8f7a0: `required_learning` ALL→PERTINENT,
+`learning_mode` ALL_NUMBERED_LEARNINGS→PERTINENT_ONLY, `failure_policy`
+FAIL_CLOSED→NON_BLOCKING_ADVISORY) e conteudo adicional ja documentado nos
+proprios APRENDIZADOS/LEMBRANCAS (Papagaio ON/OFF, cinco fontes
+interligadas, criterios autodefinidos #176) absorvido sem lei/owner novo;
+apenas repondo a ancora para os blobs atuais. `LEIA-ME-IA.md`, `CLAUDE.md`
+e `CONTRACT.yml` nao mudaram desde a revisao anterior.
+
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=f89368251803b9dedd6992ae9697d47f09656c75
+AGENTS.md=b00b0800f4e1723ad37724428b6106e81f6c6eac
 LEIA-ME-IA.md=c60cd87286a8746df84f1680f8b65fb7186fa263
 CLAUDE.md=42019585442ecc395324d3716f2e071124b2feca
-CENTRALDARK_AI_BOOT.yaml=cb72b4d65c12cac9cb39093add4e343f2372f500
+CENTRALDARK_AI_BOOT.yaml=151150229091ad3a14b45e1bacf756f90f558ab8
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
 CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-14
 SOUL_SYNC_ANCHOR_END
