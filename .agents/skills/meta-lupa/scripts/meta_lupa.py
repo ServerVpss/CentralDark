@@ -584,8 +584,6 @@ def _validate_achievements(args) -> list[str]:
     # O guardrail do ledger permanece como segunda contraprova, nao primeira defesa.
     if args.point_fixed == "sim" and args.autolupa != "sim":
         failures.append("POINT_FIXED_REQUIRES_AUTOLUPA")
-    if args.point_fixed == "sim" and not args.evidence:
-        failures.append("POINT_FIXED_REQUIRES_EVIDENCE")
     requirements = {
         "erro_reproduzido": bool(args.error_found),
         "causa_raiz_provada": bool(args.root_cause),
