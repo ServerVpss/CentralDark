@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(claude): resolve Telegram Stop hook from project directory",
+    "lastCommit": "fix(build): remove legacy imports and fix pnpm lockfile for CentralDark Desktop",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,30 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T10:56:40.882Z",
+      "titulo": "Push na main · 673f5d01436ff6a3974d8af26f5686c783a506e2",
+      "detalhe": "fix(build): remove legacy imports and fix pnpm lockfile for CentralDark Desktop",
+      "area": "Repositório",
+      "sha": "673f5d0",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-14T10:53:57.252Z",
+      "titulo": "Push na main · 9064a34e7685b928e0c4341955f8a5ab736ce6a0",
+      "detalhe": "🧹 FIX(LIMPEZA-AUTONOMA): CRON MORTO DESDE 12/10 + RUNNER-WORK LIMPA CHECKOUTS OCIOSOS (#1807)",
+      "area": "Repositório",
+      "sha": "9064a34",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-14T10:36:17.069Z",
+      "titulo": "Push na main · af76625b2dd5db9554ec8b06c0dde09e5cc1c899",
+      "detalhe": "🦶 AI ANDARILHO · TRAVESSIA DA FORJA VIA CAPACIDADES EXISTENTES, UM HERMES (#1813)",
+      "area": "Repositório",
+      "sha": "af76625",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T09:04:43.037Z",
       "titulo": "Push na main · 310bf62a0ea4e90a12ec70836adc24b15c62b453",
@@ -385,33 +409,30 @@
       "area": "Repositório",
       "sha": "d6b61fe",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T23:16:52.010Z",
-      "titulo": "Push na main · 3d600720964fe738f6613551763040b628d28280",
-      "detalhe": "docs(telepanel): mover manual legado para owner apps/bot-telegram",
-      "area": "Repositório",
-      "sha": "3d60072",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T21:15:51.509Z",
-      "titulo": "Push na main · 6025de12efa348c6293953df5a168b9ac61b3244",
-      "detalhe": "🪬 docs: promover prova proporcional e contrato fixo à main",
-      "area": "Repositório",
-      "sha": "6025de1",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T20:42:58.640Z",
-      "titulo": "Push na main · 4a5a20a97d30a2e8270acb4da29325e36267a065",
-      "detalhe": "docs(boot): load existing single-intent continuity contract across windows",
-      "area": "Repositório",
-      "sha": "4a5a20a",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T10:56:40.882Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 673f5d01436ff6a3974d8af26f5686c783a506e2 (673f5d0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-14T10:53:57.252Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9064a34e7685b928e0c4341955f8a5ab736ce6a0 (9064a34)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-14T10:36:17.069Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · af76625b2dd5db9554ec8b06c0dde09e5cc1c899 (af76625)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T09:04:43.037Z",
       "ia": "@segredounlock",
@@ -740,27 +761,6 @@
       "action": "📌 Push na main · d6b61fe21b0114b9c210470abef5e49173a770b3 (d6b61fe)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T23:16:52.010Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 3d600720964fe738f6613551763040b628d28280 (3d60072)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T21:15:51.509Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6025de12efa348c6293953df5a168b9ac61b3244 (6025de1)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T20:42:58.640Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4a5a20a97d30a2e8270acb4da29325e36267a065 (4a5a20a)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T09:04:43.037Z",
-  "updatedAtBR": "14/10/2026, 06:04:43 BRT"
+  "updatedAt": "2026-10-14T10:56:40.882Z",
+  "updatedAtBR": "14/10/2026, 07:56:40 BRT"
 }
