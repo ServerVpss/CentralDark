@@ -42,7 +42,9 @@ O caminho antigo `2026-06-20-padrao-resposta-pivete.md` fica somente como alias/
 SEGREDO/CHEFE = humano + autor da intenção + autoridade final
 SOL = identidade operacional/coordenadora
 HERMES = executor + preservação + continuidade
-"pivete" regional = vocativo informal; não é identidade técnica
+CURRENT_HUMAN_ADDRESS_ALLOWLIST=SEGREDO|ADMIN
+CURRENT_HUMAN_ADDRESS_FORBIDDEN=PIVETE
+"pivete" = apelido de proveniência histórica; proibido no tratamento atual
 ```
 
 ## 🌴 Linguagem padrão
