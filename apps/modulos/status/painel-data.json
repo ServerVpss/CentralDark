@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🎼 feat(vscode): executar orquestra Hermes em 4 terminais com contraprova real",
+    "lastCommit": "🧾 receipt(vscode): selar orquestra 4 vozes e manter runtime Windows UNKNOWN",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T17:59:13.806Z",
+      "titulo": "Push na main · 61c9b53e4a33d16441d0a832d7538a8574fa0ec5",
+      "detalhe": "🧾 receipt(vscode): selar orquestra 4 vozes e manter runtime Windows UNKNOWN",
+      "area": "Repositório",
+      "sha": "61c9b53",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T17:58:28.322Z",
       "titulo": "Push na main · 5ee8ee1e27660ddb1302133aa0220c59e31ddd85",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "cd9cf78",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T22:54:18.777Z",
-      "titulo": "Push na main ┬À fba012db4a0b0e924b3bc912cfbc54413ac690cf",
-      "detalhe": "docs(receipt): readback HUD transferido para F:\\scripts sem reset de perfis",
-      "area": "Reposit├│rio",
-      "sha": "fba012d",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T17:59:13.806Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 61c9b53e4a33d16441d0a832d7538a8574fa0ec5 (61c9b53)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T17:58:28.322Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À cd9cf78306ffbef2f4598b7826880ffd3495cb9b (cd9cf78)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T22:54:18.777Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À fba012db4a0b0e924b3bc912cfbc54413ac690cf (fba012d)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T17:58:28.322Z",
-  "updatedAtBR": "14/10/2026, 14:58:28 BRT"
+  "updatedAt": "2026-10-14T17:59:13.806Z",
+  "updatedAtBR": "14/10/2026, 14:59:13 BRT"
 }
