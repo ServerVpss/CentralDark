@@ -1018,9 +1018,20 @@ A medicao atual comprovou HEAD=main e SHA identico no HUD da VPS;
 essa prova operacional nao autoriza reclassificar os demais servicos.
 Nao nasce segundo HUD, gate de saude opcional ou outro owner.
 
+Revisão 2026-10-14 — CURRENT_REANCHOR_PAPAGAIO_FIEL_E_VPS:
+Comparação dos blobs canônicos da branch com as âncoras anteriores: AGENTS.md
+acrescentou somente a gramática Papagaio ON/OFF/FIEL, HUD fixo da missão
+existente e contraprova sem segundo owner; LEIA-ME-IA.md acrescentou três
+marcadores identificando VPS/Linux/Ponte Casa e a máquina antiga removida.
+São detalhes de execução e localização subordinados à identidade da SOUL,
+ao Reality Judge e à herança de owners já aqui definidas: não transferem
+poder de escrita, não inventam runtime e não comprovam deploy. Reancorar
+somente os dois blobs novos observados no PR_HEAD; CLAUDE/BOOT/CONTRACT
+permanecem inalterados e devem continuar medidos por seu hash.
+
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=bbe8c15951c5d492e07074e1892a2e8d1ce360ce
-LEIA-ME-IA.md=21bc649036ad59706d31c844fda5d4b6784fd117
+AGENTS.md=134c3422e686e2f0ad4daed5037aab96fdfb6cef
+LEIA-ME-IA.md=200349b7bee5e80a0d1fcd0ea46783541d9713ac
 CLAUDE.md=a9681b000e6a1c9172f00a3083615af6ce52bea8
 CENTRALDARK_AI_BOOT.yaml=b64ad7647dcbfd286a70ac03c549aad77b3bc7a8
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
