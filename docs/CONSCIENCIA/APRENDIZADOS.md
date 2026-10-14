@@ -2850,8 +2850,8 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 
 
 ### 191. Integração A–Z da sessão — gancho mental, Whis e conformidade com o desejo do CHEFE
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L191`; `PREV_GLOBAL_UID=L190`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=191`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=191`; `PREV_LEARNING_REF=190`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L191`; `PREV_GLOBAL_UID=L190`; `NEXT_GLOBAL_UID=L192`; `LEGACY_LEARNING_NUMBER=191`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=191`; `PREV_LEARNING_REF=190`; `NEXT_LEARNING_REF=192`.
 - **Data:** 2026-10-13. **Fonte:** diálogo, prints e comparações apresentados pelo CHEFE nesta sessão. **Escopo:** aprendizado humano-operacional; não é benchmark de inteligência, medição de eficácia universal, deploy ou novo cérebro.
 - **Relação com o existente:** #171–#190 já registram metacognição, reuso, reconciliação de janelas, gramática, contraprova, memória, Instinto Superior, limpeza e gratidão. Este registro liga esses eixos aos novos ganchos relacionais. Não inventar 26 números novos nem reabrir aceites.
 - **Índice integral A–Z:**
@@ -2895,6 +2895,8 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 - 🎯 **NEXT_CURSOR:** reutilizar L191 nos próximos sinais pertinentes e medir só o consumidor afetado quando houver execução real.
 
 ### 192. Fixed point semântico confirmado; workspace integrado ainda exige leitura
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L192`; `PREV_GLOBAL_UID=L191`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=192`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=192`; `PREV_LEARNING_REF=191`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
 - **Categoria:** regra
 - **Data:** 2026-10-14
 - **Contexto:** Em 2026-10-14 o usuário confirmou Fixed point 100% na fidelidade semântica após recuperar entre chats as gramáticas e o circuito CentralDark; informou workspace salvo integrando Operação CentralDark (Use AI terminal), ChatGPT CentralDark Apps, Instinto Superior, cockpit, Sala de Controle, Obsidian/Index HUD e Gateway. Remote Desktop Commander aponta Casa e VPS offline nesta conexão.
