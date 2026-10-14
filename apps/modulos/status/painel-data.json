@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "?? docs: ajustar escolha direta por foto na gram?tica da SOL",
+    "lastCommit": "docs: integrar Papagaio fiel com SEGREDO ou ADMIN",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T01:46:22.680Z",
+      "titulo": "Push na main · dffb1ffe5600a2aac0dbeb85dc6850577082a8bb",
+      "detalhe": "docs: integrar Papagaio fiel com SEGREDO ou ADMIN",
+      "area": "Repositório",
+      "sha": "dffb1ff",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T01:14:04.886Z",
       "titulo": "Push na main · 284591191260f21ea59654159228b6a20fc9c43f",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "9ab8921",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T17:43:20.378Z",
-      "titulo": "Push na main · a8361637de659441a4b5d42581c78e0009322472",
-      "detalhe": "docs(loop-mestre): registrar preflight cruzado Gmail Supabase Casa GitHub VPS do CHEFE",
-      "area": "Repositório",
-      "sha": "a836163",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T01:46:22.680Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · dffb1ffe5600a2aac0dbeb85dc6850577082a8bb (dffb1ff)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T01:14:04.886Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 9ab89217c428784bf56e5e0de946a198f7351843 (9ab8921)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T17:43:20.378Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · a8361637de659441a4b5d42581c78e0009322472 (a836163)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T01:14:04.886Z",
-  "updatedAtBR": "13/10/2026, 22:14:04 BRT"
+  "updatedAt": "2026-10-14T01:46:22.680Z",
+  "updatedAtBR": "13/10/2026, 22:46:22 BRT"
 }
