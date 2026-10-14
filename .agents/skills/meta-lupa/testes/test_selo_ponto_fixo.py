@@ -29,7 +29,8 @@ TESTES = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(TESTES)
 sys.path.insert(0, SKILL)
 
-from scripts.meta_lupa import _final_receipt_line  # noqa: E402
+from scripts.meta_lupa import _final_receipt_line, _validate_achievements  # noqa: E402
+from types import SimpleNamespace
 
 _spec = importlib.util.spec_from_file_location(
     "validar_selo_ponto_fixo",
@@ -68,6 +69,32 @@ def _ledger_tmp(recs):
 
 
 # --------------------------------------------------------------- selo
+
+def test_xp_preflight_bloqueia_selo_sem_autolupa_e_sem_prova():
+    """Conquista só nasce após AutoLupa e evidência, não por declaração."""
+    args = SimpleNamespace(
+        achievement=["ponto_fixo_atingido"],
+        evidence=["sha256:prova-do-teste"],
+        error_found="", root_cause="", counter_evidence="",
+        false_green_blocked=False, test_created="", regression_created="",
+        guardrail_added="", rollback_proven=False,
+        risk=[], improvements=[], point_fixed="sim", autolupa="nao",
+    )
+    assert "POINT_FIXED_REQUIRES_AUTOLUPA" in _validate_achievements(args)
+
+    args.autolupa = "sim"
+    assert _validate_achievements(args) == []
+
+    args.evidence = []
+    assert "POINT_FIXED_REQUIRES_EVIDENCE" in _validate_achievements(args)
+
+    args.achievement = []
+    args.autolupa = "nao"
+    assert "POINT_FIXED_REQUIRES_AUTOLUPA" in _validate_achievements(args)
+
+    args.point_fixed = "nao"
+    assert _validate_achievements(args) == []
+
 
 def test_selo_bloqueia_point_fixed_sem_autolupa():
     rel = selo.auditar([_final(autolupa_executed=False, point_fixed_evidential=True)])
