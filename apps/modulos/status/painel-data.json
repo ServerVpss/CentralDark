@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🎼 chore(vscode): empacotar skill nativa sem snapshots locais nem dependencias",
+    "lastCommit": "🧾 docs(vscode): registrar build instalado e limites do readback UI",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T19:12:49.571Z",
+      "titulo": "Push na main · cf020fd3e58be9e92915036fe1ae45a4b77a1c5b",
+      "detalhe": "🧾 docs(vscode): registrar build instalado e limites do readback UI",
+      "area": "Repositório",
+      "sha": "cf020fd",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T19:11:56.006Z",
       "titulo": "Push na main · 01d4f00618dce97ef2b5d9e773f64c4b43efac5f",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "d982995",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:41:04.257Z",
-      "titulo": "Push na main ┬À deaa5ac6cdbacaf61de0ed0b191003b7ac64b327",
-      "detalhe": "fix(plugin): herdar roteamento MCP e contraprova da voz na distribui├º├úo can├┤nica",
-      "area": "Reposit├│rio",
-      "sha": "deaa5ac",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T19:12:49.571Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cf020fd3e58be9e92915036fe1ae45a4b77a1c5b (cf020fd)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T19:11:56.006Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À d98299510424f1cf177be49bc3fd68404866445d (d982995)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:41:04.257Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À deaa5ac6cdbacaf61de0ed0b191003b7ac64b327 (deaa5ac)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T19:11:56.006Z",
-  "updatedAtBR": "14/10/2026, 16:11:56 BRT"
+  "updatedAt": "2026-10-14T19:12:49.571Z",
+  "updatedAtBR": "14/10/2026, 16:12:49 BRT"
 }
