@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧿 AUTO PR: FEAT/PAPAGAIO-DETERMINISTICO-FIEL-HUD-20261014 (#1810)",
+    "lastCommit": "fix(claude): resolve Telegram Stop hook from project directory",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T09:04:43.037Z",
+      "titulo": "Push na main · 310bf62a0ea4e90a12ec70836adc24b15c62b453",
+      "detalhe": "fix(claude): resolve Telegram Stop hook from project directory",
+      "area": "Repositório",
+      "sha": "310bf62",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T08:09:39.419Z",
       "titulo": "Push na main · cfff7c3cd120f32eb1670e87559573033615950c",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "4a5a20a",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T20:41:13.111Z",
-      "titulo": "Push na main · f707334127bab4291bfedfa2c090c9f5dc49d649",
-      "detalhe": "docs(visual): register new art intake in canonical poster owner and preserve pending Git asset",
-      "area": "Repositório",
-      "sha": "f707334",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T09:04:43.037Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 310bf62a0ea4e90a12ec70836adc24b15c62b453 (310bf62)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T08:09:39.419Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 4a5a20a97d30a2e8270acb4da29325e36267a065 (4a5a20a)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T20:41:13.111Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f707334127bab4291bfedfa2c090c9f5dc49d649 (f707334)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T08:09:39.419Z",
-  "updatedAtBR": "14/10/2026, 05:09:39 BRT"
+  "updatedAt": "2026-10-14T09:04:43.037Z",
+  "updatedAtBR": "14/10/2026, 06:04:43 BRT"
 }
