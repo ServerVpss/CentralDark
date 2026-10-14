@@ -289,3 +289,37 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PapagaioDeterministicoFielContractTest(unittest.TestCase):
+    """Regression on the existing canonical owners and the real Hermes prompt consumer."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.repo = Path(__file__).resolve().parents[4]
+        cls.agent = (cls.repo / "AGENTS.md").read_text(encoding="utf-8")
+        cls.response = (cls.repo / "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md").read_text(encoding="utf-8")
+        cls.prompt = (cls.repo / "apps/modulos/HERMES-CORE/prompts/hermes-core.md").read_text(encoding="utf-8")
+        cls.loader = (cls.repo / "apps/modulos/HERMES-CORE/core/decisor.mjs").read_text(encoding="utf-8")
+
+    def test_papagaio_modes_fixed_hud_and_single_owner_propagate(self):
+        for name, content in (("AGENTS", self.agent), ("response", self.response), ("Hermes runtime prompt", self.prompt)):
+            with self.subTest(owner=name):
+                self.assertIn("CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014", content)
+                for marker in ("PAPAGAIO_ON", "PAPAGAIO_OFF", "PAPAGAIO FIEL", "ÁRVORE VIVA"):
+                    self.assertIn(marker, content.upper())
+                self.assertIn("SOUL-SOL.md", content)
+                self.assertIn("10", content)
+        self.assertIn("PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true", self.prompt)
+        self.assertIn("PAPAGAIO_NO_UNMEASURED_PROGRESS=true", self.agent)
+        self.assertIn("PAPAGAIO_NO_EXTRA_MISSIONS_OR_SECTIONS=true", self.agent)
+        self.assertIn("PAPAGAIO_SINGLE_WRITER_PER_SCOPE=true", self.agent)
+
+    def test_existing_real_prompt_loader_reads_hermes_core_file(self):
+        self.assertIn("HERMES_PROMPT_PATH", self.loader)
+        self.assertIn("readFileSync(HERMES_PROMPT_PATH, 'utf8')", self.loader)
+        self.assertIn("promptSha256:", self.loader)
+
+    def test_missing_or_mutated_hud_contract_fails(self):
+        self.assertNotIn("PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true", self.prompt.replace("PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true", ""))
+        self.assertEqual(self.prompt.count("CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014"), 2)
