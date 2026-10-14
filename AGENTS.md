@@ -2213,3 +2213,32 @@ O CHEFE não quer responder ao formato genérico de sete campos em toda fala. O 
     NO_FIXED_RESPONSE_TEMPLATE=true
     MACHINE_RAW_STATUS_IS_PRESERVED=true
     DOCUMENTED_IS_NOT_RUNTIME_CONSUMED=true
+
+<!-- CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+## 🦜 Papagaio determinístico — extensão do Papagaio ON/OFF existente
+
+A identidade permanece em `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`; este bloco só estende o contrato de comunicação já existente. Não cria agente, owner, memória, runtime, cron nem HUD concorrente.
+
+```text
+PAPAGAIO_DETERMINISTICO=true
+PAPAGAIO_ON=EXPLICIT_REPLAY_TEACHING_FULL_TREE_WITH_OWNERS_PROVENANCE
+PAPAGAIO_OFF=DEFAULT_EXECUTION_ONLY_CURRENT_ROUTE_DELTA_PROOF_NEXT_CURSOR
+PAPAGAIO_FIEL=HUD_FULL_ORIGINAL_BEFORE_ANY_UPDATE_PROSE
+PAPAGAIO_FIXED_HUD_STRUCTURE=true
+PAPAGAIO_FIXED_MISSION_COUNT=10
+PAPAGAIO_NO_EXTRA_MISSIONS_OR_SECTIONS=true
+PAPAGAIO_NO_UNMEASURED_PROGRESS=true
+PAPAGAIO_NO_OLD_MEASUREMENT_AS_LIVE=true
+PAPAGAIO_TREE_LIVE=EXISTING_PATHS_FILES_SERVICES_OWNERS_VERIFIED
+PAPAGAIO_SINGLE_WRITER_PER_SCOPE=true
+PAPAGAIO_DOCUMENTED_NOT_RUNTIME_PROVEN=true
+```
+
+- **ON:** quando pedido explícito de árvore, replay, ensino ou histórico: mostrar as rotas interligadas e os owners reais, extensões dos arquivos e proveniência, em ordem pedida; não inventar arestas entre serviços apenas por coexistirem.
+- **OFF:** durante execução rotineira: só a rota relevante, o resultado, sua prova e o próximo delta útil. Não repetir novela.
+- **FIEL:** se a missão já estabeleceu um HUD fixo, toda **atualização ou medição da missão** começa pelo HUD **inteiro** na mesma estrutura, com a mesma identidade, dez missões originais e ordem original. Só atualizar cores, percentuais, estados, evidências e horário quando comprovados; nenhuma medição = não inventar novos números. ON/OFF não desliga esta obrigação.
+- **ÁRVORE VIVA:** preservar caminhos, donos, scripts, configurações e serviços efetivamente presentes, com marcação de link observado versus relação pretendida/UNKNOWN. Antes de referenciar caminho técnico como ativo, ler o owner e a ligação real com processo/serviço. Casa participa da forja quando acessível; não é pré-requisito para execução VPS.
+- **CONTRAPROVA:** Casa ↔ GitHub ↔ VPS representa comparação bidirecional; promoção mutante mantém owner/writer único. Comprovar o efeito no consumidor, não apenas a existência da regra. A imagem/selo de 100% é material de proposta, nunca receipt de runtime.
+
+A instância específica `CENTRALDARK · MISSÃO MCP` usa dez missões e o HUD exato fornecido pelo CHEFE; reutilizar o painel da missão, **não** gerar HUD genérico. Revalidar a prova de cada marco antes de trocar cor/percentual; conclusão = dez marcos provados, não 99,9% decorativo.
+<!-- /CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
