@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧾 receipt(vscode): selar orquestra 4 vozes e manter runtime Windows UNKNOWN",
+    "lastCommit": "fix(self-evolution): confidence-bound ranking, bounded log e aprendizado sem XP fictício",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T18:11:35.312Z",
+      "titulo": "Push na main · 25e512c4431355890fcb9503bf934ba3fd89b351",
+      "detalhe": "fix(self-evolution): confidence-bound ranking, bounded log e aprendizado sem XP fictício",
+      "area": "Repositório",
+      "sha": "25e512c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T17:59:13.806Z",
       "titulo": "Push na main · 61c9b53e4a33d16441d0a832d7538a8574fa0ec5",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "e109f0b",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T22:57:26.604Z",
-      "titulo": "Push na main ┬À cd9cf78306ffbef2f4598b7826880ffd3495cb9b",
-      "detalhe": "docs(learning): contraprova de recorte F scripts sem bloquear por risco hipotetico",
-      "area": "Reposit├│rio",
-      "sha": "cd9cf78",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T18:11:35.312Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 25e512c4431355890fcb9503bf934ba3fd89b351 (25e512c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T17:59:13.806Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À e109f0b44883d167c6c5dbbe9074d3cc3f2173cc (e109f0b)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T22:57:26.604Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À cd9cf78306ffbef2f4598b7826880ffd3495cb9b (cd9cf78)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T17:59:13.806Z",
-  "updatedAtBR": "14/10/2026, 14:59:13 BRT"
+  "updatedAt": "2026-10-14T18:11:35.312Z",
+  "updatedAtBR": "14/10/2026, 15:11:35 BRT"
 }
