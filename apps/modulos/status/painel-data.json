@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "chore(voice): v1.2.1 após integração e testes do worker MV3",
+    "lastCommit": "aprendizado(#177): Voz CentralDark v1.2.1: CORS MV3, execução contínua, writer único e contraprova",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T17:26:55.442Z",
+      "titulo": "Push na main · a13f856775bafc1e70daaf9dc92a86f2a028832f",
+      "detalhe": "aprendizado(#177): Voz CentralDark v1.2.1: CORS MV3, execução contínua, writer único e contraprova",
+      "area": "Repositório",
+      "sha": "a13f856",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T17:23:51.700Z",
       "titulo": "Push na main · f2d0b1091033f7b64c2b4c82e3aeee6bde345109",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "0e06a58",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T22:34:27.104Z",
-      "titulo": "Push na main ┬À 53a34a76f22a614eef203768f0b707aba7599044",
-      "detalhe": "fix(casa-hud): preservar corpo unico e integrar perfis, leitura de logs e autorizacao efemera",
-      "area": "Reposit├│rio",
-      "sha": "53a34a7",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T17:26:55.442Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a13f856775bafc1e70daaf9dc92a86f2a028832f (a13f856)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T17:23:51.700Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 0e06a5862a21f531d7e4fe6d4a5ed0f6ce044628 (0e06a58)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T22:34:27.104Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 53a34a76f22a614eef203768f0b707aba7599044 (53a34a7)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T17:23:51.700Z",
-  "updatedAtBR": "14/10/2026, 14:23:51 BRT"
+  "updatedAt": "2026-10-14T17:26:55.442Z",
+  "updatedAtBR": "14/10/2026, 14:26:55 BRT"
 }
