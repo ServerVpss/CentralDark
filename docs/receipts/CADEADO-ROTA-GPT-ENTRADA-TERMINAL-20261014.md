@@ -31,3 +31,34 @@ TECHNICAL_ACL_LOCK=NOT_APPLIED
 ## Ledger
 Repositório `ServerVpss/CentralDark` · `main` · PR-mãe #1562 somente como âncora, não mergear. 
 Método: observar → registrar evidência → entregar rastro → selar somente o escopo comprovado.
+
+## Delta de prova — 2026-10-14: voz → Terminal 6 → mensagem `Oi Hermes`
+
+**Intenção específica:** CHEFE ditou `Oi Hermes` por voz; executar o Enter **na mesma sessão já aberta** do VS Code, sem criar outro Hermes nem reescrever a entrada. A confirmação de recebimento veio do próprio CHEFE após a ação. Esta etapa é distinta do `GPT` observado na fotografia original.
+
+**Rastro de execução observado nesta conversa:**
+- Origem: Casa `SEGREDO`, via Desktop Commander autorizado; destino da ação: janela `HERMES-WIRITER - Visual Studio Code [Administrador]`, processo Windows `Code` PID `26296` (PID volátil).
+- O teste discriminante anterior mostrou erro de foco: janela `ChatGPT`/`Terminal input`, portanto **não** foi contado como Enter no VS Code.
+- Na tentativa válida houve `APPACTIVATE=True`, janela ativa `HERMES-WIRITER` e foco UIAutomation `Terminal 6, HERMES-WIRITER`, classe `xterm-helper-textarea`, PID `26296`. O programa de envio retornou `ENTER_DISPATCHED_TO_CONFIRMED_TERMINAL_6` e completou.
+- Texto já presente antes do Enter: `Oi Hermes`, conforme confirmação visual e correção do CHEFE. **Não houve nova digitação no envio válido.**
+- Contraprova humana imediata do CHEFE: **“O Enter já foi enviado, você já mandô e já acabou de chegá. Sela.”** A recepção é classificada como **confirmada pelo CHEFE**; não como leitura automatizada da resposta do Hermes.
+
+**Skill / owner reutilizado:** `skills/vs-code-restore/SKILL.md` e `skills/vs-code-restore/tools/map-vscode-ui.ps1` foram lidos na `main`; orientam identificação de janela/controle antes de agir e contraprova após a ação. A execução usou **Windows UIAutomation + Desktop Commander**, sensor complementar previsto na skill. **Não** se invocou `CentralDark: Restaurar bancada` nem `centraldark.restoreWorkspace`, pois isso criaria terminais novos. A extensão nativa instalada/ativa continua sujeita à prova própria; este receipt não a promove a runtime PASS.
+
+```text
+CASA_DEVICE_ROUTE=OBSERVED_ONLINE
+TARGET_WINDOW_REIDENTIFIED=PASS
+TARGET_TERMINAL_6_FOCUS=PASS
+ENTER_DISPATCH_TO_TERMINAL_6=PASS
+MESSAGE_DELIVERY=CHEFE_CONFIRMED
+HERMES_RESPONSE_PAYLOAD_READBACK=NOT_MEASURED
+VOICE_TO_UI_THIS_MESSAGE=RECEIVED_USER_CONFIRMATION
+JARVIS_VOICE_GENERAL_AUTOMATION=NOT_PROVEN
+GPT_COMMAND_EXECUTION=NOT_PROVEN
+TECHNICAL_ACL_LOCK=NOT_APPLIED
+SEAL_SCOPE=THIS_MESSAGE_DELIVERY_ONLY
+```
+
+**🔒 Cadeado documental:** selo para **esta entrega de mensagem** com ação local comprovada e recepção confirmada pelo CHEFE. Não selar autonomamente a CLI `GPT`, um modelo, todas as sessões Hermes, o circuito inteiro ou um mecanismo técnico de bloqueio contra escrita.
+
+**NEXT_CURSOR:** reutilizar a mesma janela/terminal e a sequência de foco comprovada; obter readback da resposta do Hermes e só depois promover um contrato determinístico de ida e volta. Sem duplicar skill, terminal ou arquitetura.
