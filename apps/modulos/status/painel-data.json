@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "test(meta-lupa): regressão permanente do XP ponto fixo com AutoLupa obrigatória",
+    "lastCommit": "🪬 fix(boot): reconcile pertinent advisory learning consumption with executor",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T18:15:57.033Z",
+      "titulo": "Push na main · e855feb8f7a0fb3a74cc3d3bca655f66c9bd3940",
+      "detalhe": "🪬 fix(boot): reconcile pertinent advisory learning consumption with executor",
+      "area": "Repositório",
+      "sha": "e855feb",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T18:15:05.698Z",
       "titulo": "Push na main · 1cceaa8c7f1cbf1a8105ca963fce5668f6710f1b",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "ef8b420",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T23:12:14.973Z",
-      "titulo": "Push na main ┬À dc10001c92f11c2494bfd5d09db15abb898ba636",
-      "detalhe": "docs(obsidian): apontar K CentralDark como destino da migracao e qualificar rotas legadas",
-      "area": "Reposit├│rio",
-      "sha": "dc10001",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T18:15:57.033Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e855feb8f7a0fb3a74cc3d3bca655f66c9bd3940 (e855feb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T18:15:05.698Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À ef8b420b5f03911f2c928ef069c33b74a3acc64b (ef8b420)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T23:12:14.973Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À dc10001c92f11c2494bfd5d09db15abb898ba636 (dc10001)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T18:15:05.698Z",
-  "updatedAtBR": "14/10/2026, 15:15:05 BRT"
+  "updatedAt": "2026-10-14T18:15:57.033Z",
+  "updatedAtBR": "14/10/2026, 15:15:57 BRT"
 }
