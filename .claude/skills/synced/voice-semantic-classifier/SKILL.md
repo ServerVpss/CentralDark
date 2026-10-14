@@ -518,6 +518,11 @@ VOICE_REPLAY_BEFORE_REDISCOVERY=true
 VOICE_TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN=true
 VOICE_UNKNOWN_WITH_MEASUREMENT_ROUTE=FAIL_CLOSED
 VOICE_NO_PAPAGAIO_FALLBACK=true
+
+VOICE_DIRECT_KNOWN_FACT=true
+VOICE_NO_STATUS_PREFACE_FOR_KNOWN_FACT=true
+VOICE_PATH_COMMAND_SHA_OUTPUT=EXACT_FIRST
+VOICE_LIVE_READ_ONLY_WHEN=TEMPORAL_STATE|UNREAD_SOURCE|EXPLICIT_SEARCH|HIGH_RISK
 ```
 
 Ordem mínima quando a Voz entra em sessão operacional:
@@ -795,6 +800,16 @@ VOICE_ROUTE_SEMANTICS_RECOVERED != LIVE_ROUTE_EXPOSED
 ```
 
 Regra operacional: ao responder por voz sobre `HEAD`, `SHA`, `CURRENT`, `drift` ou `next cursor`, primeiro expandir o cue semântico e depois remedir a fonte viva correspondente antes de emitir claim temporal.
+
+## Resposta direta de voz — 2026-10-14
+
+Quando o CHEFE pede um nome, caminho, comando, SHA, número, posição ou fato estável já presente no contexto ou no owner lido, a Voz responde primeiro o valor exato. Não anteceder com "vou checar", "um segundo", "vou confirmar" ou status equivalente.
+
+KNOWN_STABLE_FACT => RESPOSTA_EXATA
+CURRENT_OR_UNREAD_OR_EXPLICIT_SEARCH_OR_HIGH_RISK => MEDIR => RESPOSTA
+PATH_OR_SCRIPT_REQUEST => CAMINHO_COMPLETO_PRIMEIRO
+
+Consulta adicional não é prova de rigor quando a prova já foi lida; ela só ocorre se o pedido depender de tempo, estado externo, fonte ainda não lida, busca explícita ou risco material.
 
 ## Comunicação humana canônica — 2026-10-12
 
