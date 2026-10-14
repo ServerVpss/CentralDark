@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): rastrear frames e imagens multimodais sem falso PASS",
+    "lastCommit": "🧿 AUTO PR: FEAT/PAPAGAIO-DETERMINISTICO-FIEL-HUD-20261014 (#1810)",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T08:09:39.419Z",
+      "titulo": "Push na main · cfff7c3cd120f32eb1670e87559573033615950c",
+      "detalhe": "🧿 AUTO PR: FEAT/PAPAGAIO-DETERMINISTICO-FIEL-HUD-20261014 (#1810)",
+      "area": "Repositório",
+      "sha": "cfff7c3",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T06:43:16.788Z",
       "titulo": "Push na main · 49eaf7cf81c57a0e900d365fd64c738a1b40ea14",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "f707334",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T18:00:02.508Z",
-      "titulo": "Push na main · 1b7c8be2cc1f0615373e4b0606c3d42170097180",
-      "detalhe": "docs(memoria): cristalizar ciclo unico cinco fontes no registro existente",
-      "area": "Repositório",
-      "sha": "1b7c8be",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T08:09:39.419Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cfff7c3cd120f32eb1670e87559573033615950c (cfff7c3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T06:43:16.788Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · f707334127bab4291bfedfa2c090c9f5dc49d649 (f707334)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T18:00:02.508Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1b7c8be2cc1f0615373e4b0606c3d42170097180 (1b7c8be)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T06:43:16.788Z",
-  "updatedAtBR": "14/10/2026, 03:43:16 BRT"
+  "updatedAt": "2026-10-14T08:09:39.419Z",
+  "updatedAtBR": "14/10/2026, 05:09:39 BRT"
 }
