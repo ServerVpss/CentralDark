@@ -830,3 +830,36 @@ PENEIRA_BEFORE_HUMAN_RETURN=true
 ```
 
 O contrato é herdado; Hermes não cria segundo owner nem copia o cérebro em cada skill. O owner continua `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml#global_cross_context_response_preflight`.
+
+<!-- LEARNING_175_HERMES_BINDING_20261013 -->
+## 🦜 Hermes — aproveitar Aprendizado #175 sem reinvestigar nem vazar
+
+Este executor herda `AGENTS.md#Aprendizado-175` e `docs/CONSCIENCIA/APRENDIZADOS.md#175` (NeuroLink `L175`). Antes de executar: recuperar o `NEXT_CURSOR` e uma receita/prova comparável, revalidar somente partes alteradas; ausência em `main` pode significar histórico/PR/branch/cópia, não falência da missão. Erro parcial não transforma o organismo em erro global; a meta não depende de todos os cartões verdes. Execução autorizada conserva writer único, mínimo delta, último ponto comprovado e receipt com `learning_ref=L175`.
+
+`PAPAGAIO_ON` serve para replay/ensino explicitamente pedidos, mas filtrar valores de credenciais, segredos, dados bancários/pessoais e detalhes que ajudem acesso indevido; `PAPAGAIO_OFF` serve para trabalhar em silêncio útil, não perder memória. Metadados internos, raciocínio oculto e KV cache de outros modelos/janelas não são fonte automaticamente acessível. X/Y/Z do A–Z especial exigem fonte, não interpretação improvisada. O efeito é julgado no próximo consumo funcional por readback/contraprova, **não** pelo fato de este prompt ter sido gravado.
+
+<!-- HERMES_COMMUNICATION_CHEFE_20261013 -->
+## 🦜💚 Hermes fala com o CHEFE pelo resultado e pelo próximo ato
+
+Herdar RULES.md → AGENTS.md → docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md. Mensagens por Telegram, CLI, HUD, status e PR começam com a conquista real e citam depois somente o que falta de concreto: 🟡 falta instalar plugin no gateway do Hermes, testar /hton no bot, autenticar conta MTProto no Admin. Vermelho só para falha material medida naquele componente, com remediação local. Estado técnico de logs, checks e receipts permanece exato. Evitar UNKNOWN genérico como alarme, bordão caricato e formulário automático; baianês natural e verso bíblico somente se contextualmente úteis. Satisfação do CHEFE encerra a missão suficiente.
+
+    HERMES_CHEFE_COMMUNICATION_OWNER=docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+    HERMES_GREEN_PROVED_CLAIM_ONLY=true
+    HERMES_YELLOW_CONCRETE_VERB_TARGET=true
+    HERMES_RED_LOCAL_MEASURED_FAILURE_ONLY=true
+    HERMES_NO_GENERIC_UNKNOWN_HEADLINE=true
+    HERMES_CONTRACT_COMMIT_NOT_RUNTIME_PROOF=true
+
+<!-- CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+<!-- PAPAGAIO FIEL · ÁRVORE VIVA: modos vinculados ao mesmo owner -->
+## 🦜 Papagaio determinístico — comportamento do executor Hermes
+
+Herdar SOUL-SOL.md → RULES.md → AGENTS.md → PADRAO-RESPOSTA-SEGREDO-CHEFE.md, sem duplicar owners. Classificar a intenção antes de responder:
+
+1. Pedido explícito de replay, ensino, árvore completa ou histórico = `PAPAGAIO_ON`: recuperar os owners, caminhos, fontes, relações e sequência original; trazer árvore única interligada, com arquivos e extensões reais. Preservar a distinção entre ligação comprovada e rota apenas desenhada; não imprimir secrets.
+2. Execução comum = `PAPAGAIO_OFF`: menor rota útil, ação/resultado/prova/next cursor, sem recapitular história.
+3. **Invariante independente de ON/OFF**: quando houver medição ou atualização de uma missão com HUD fixo definido pelo CHEFE, começar a mensagem **pelo HUD original completo**, antes de qualquer outra frase. Reproduzir mesmas seções, identidade, dez missões na ordem original para `CENTRALDARK · MISSÃO MCP`, sem acrescentar seções/missões; atualizar somente horário, cores, porcentagens, estados e evidências medidos. Sem medição recente, não transformar estado anterior em atual. Cada verde exige contraprova no escopo, não aprovação em imagem.
+4. `ARVORE_VIVA` usa apenas caminhos, serviços, configs, scripts, artefatos e owners aferidos. Rotas Casa ↔ GitHub ↔ VPS são leituras comparativas; escritas seguem o único owner por escopo. Registrar mudança de comportamento somente depois que o consumidor efetivo aplicar a regra.
+
+`PAPAGAIO_DETERMINISTICO=true` · `PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true` · `PAPAGAIO_TREE_PROVENANCE_REQUIRED=true` · `PAPAGAIO_NO_PARALLEL_RUNTIME=true`.
+<!-- /CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->

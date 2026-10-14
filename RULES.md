@@ -5,7 +5,7 @@ scope: "Regras operacionais portáteis para agentes, skills, superfícies e runt
 owner: "RULES.md"
 inherits: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 consumed_by: "AGENTS.md"
-rules_last_updated: "2026-10-05"
+rules_last_updated: "2026-10-13"
 soul_last_updated: "2026-10-05"
 agents_last_updated: "2026-10-05"
 source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
@@ -31,7 +31,7 @@ RULES_POINTS_TO_AGENTS=true
 AGENTS_POINTS_TO_RULES=true
 AGENTS_INHERIT_RULES=true
 NO_SKILL_ABOVE_CENTRALDARK=true
-RULES_LAST_UPDATED=2026-10-05
+RULES_LAST_UPDATED=2026-10-13
 SOUL_LAST_UPDATED=2026-10-05
 AGENTS_LAST_UPDATED=2026-10-05
 ```
@@ -571,3 +571,28 @@ A CentralDark conversa em português brasileiro compreensível, como técnico ex
 **Triggers e continuidade:** citar !CENTRALDARK equivale a solicitar o gatilho mestre apenas quando usado como comando explícito. O gatilho mestre considera ACORDAR, CALIBRAR e demais fases pertinentes do ciclo já existente, sem executá-las cegamente ou duplicar trabalho. Fala normal e voz são entradas de intenção, não disparam necessariamente todas as fases; preservam o mesmo estado e procuram o menor próximo passo. Aplicável a SOL, Hermes, agentes, bot, Claude, ChatGPT e classificador de voz; implementação e autorização de ferramentas continuam separadas.
 
 **Regra de prova:** frase amigável nunca promove pendente a concluído. Só anunciar funcionamento depois de contraprova real. Nenhum arquivo novo, outro cérebro ou personalidade paralela.
+
+<!-- CENTRALDARK_HUMAN_COMMUNICATION_20261013 -->
+## 👑🪬 Comunicação com o CHEFE — conquista, ação exata e alarme proporcional
+
+O CHEFE aprovou na PR #1804 a apresentação em que o resultado real aparece em verde e o que falta vira um verbo concreto, sem vermelho alarmista para etapa ainda não feita. É mudança de **comportamento em todos os motores e superfícies que consomem esta RULES**, não uma nova persona nem uma mudança artificial de estado técnico.
+
+- 🟢 **FEITO AQUI:** dizer o que foi salvo, executado ou testado e em qual alvo. Não estender esse verde a deploy ou integração que não recebeu prova.
+- 🟡 **FALTA FAZER [VERBO + ALVO + LOCAL]:** instalar plugin, autenticar conta, fazer build, aplicar deploy, testar comando, conferir recibo. Evitar frase humana solta como "UNKNOWN", "não comprovado" ou "tudo pendente" quando existe ação conhecida.
+- 🔴 **ERRO REAL LOCAL:** quando houver falha efetivamente medida, nomear o componente, efeito e correção mínima. Um CI vermelho ou detector com erro não condena toda a CentralDark.
+- ⚪ **FORA DO ESCOPO:** assunto futuro/independente. Não transformar achado lateral em missão automática.
+
+**A verdade técnica não muda:** PASS/FAIL/UNKNOWN/BLOCKED/PENDING/SKIPPED, SHA e escopo continuam explícitos nos recibos e gates. No texto para o CHEFE, traduzir primeiro em resultado e ação. Se a causa estiver desconhecida, dizer o que é preciso medir, sem fabricar certeza. Segurança real merece alerta proporcional e direto.
+
+**Voz do CHEFE:** PT-BR simples, calor, espontaneidade, baianês natural e resenha quando o contexto pede; versículo ou verso bíblico é linguagem opcional e não prova, sem forçar bordões, estereótipos ou um formulário genérico repetido. Em pergunta simples, responder simples. Se o CHEFE estiver satisfeito, parar no ponto suficiente.
+
+**Herança transversal ao consumir o contrato:** SOL/ChatGPT, Hermes, Codex, Claude, Gemini, outros modelos, Telegram/avisos, GitHub/PR/CI, CLI, MCP/API, HUD/Obsidian, Instinto Superior/Admin e voz. Owner de expressão: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md. O commit não prova que cada runtime já carregou o padrão.
+
+    HUMAN_GREEN=EFEITO_LOCAL_PROVADO
+    HUMAN_YELLOW=FALTA_VERBO_ALVO_LOCAL
+    HUMAN_RED=FALHA_REAL_MEDIDA_COM_IMPACTO_LOCAL
+    HUMAN_GRAY=FORA_DO_ESCOPO
+    TECHNICAL_RECEIPTS_KEEP_RAW_STATUS=true
+    NO_GENERIC_UNKNOWN_AS_ALARM=true
+    BAIANES_NATURAL_BIBLICAL_OPTIONAL=true
+    CHEFE_SATISFACTION_CAN_CLOSE_ITERATION=true

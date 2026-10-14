@@ -10,6 +10,7 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.soul = (cls.repo / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md").read_text(encoding="utf-8")
         cls.response = (cls.repo / "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md").read_text(encoding="utf-8")
         cls.grammar = (cls.repo / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml").read_text(encoding="utf-8")
+        cls.papagaio = (cls.repo / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-PAPAGAIO-INVESTIGADOR.md").read_text(encoding="utf-8")
         cls.boot = (cls.repo / "LEIA-ME-IA.md").read_text(encoding="utf-8")
         cls.voice = (cls.repo / ".claude/skills/synced/voice-semantic-classifier/SKILL.md").read_text(encoding="utf-8")
         cls.method = (cls.repo / ".agents/skills/centraldark-operational-method/SKILL.md").read_text(encoding="utf-8")
@@ -17,6 +18,105 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.map = (cls.repo / "docs/CONSCIENCIA/MAPA-DO-CEREBRO.md").read_text(encoding="utf-8")
         cls.entry_boot = (cls.repo / "CENTRALDARK_AI_BOOT.yaml").read_text(encoding="utf-8")
         cls.metacognition = (cls.repo / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md").read_text(encoding="utf-8")
+
+    # Existing CentralDark test runner is invoked by verify_repo_contract.py
+    # and CI. These checks make Papagaio presentation drift a failing contract.
+    @staticmethod
+    def canonical_mcp_hud_missions():
+        return [
+            "Sincronizar GitHub → VPS",
+            "Cron automático",
+            "Hermes Core ativo",
+            "MCP original saudável",
+            "Inventariar divergências",
+            "Reconciliar 12 arquivos",
+            "Validar preservação do legado",
+            "Testar integração completa",
+            "Microdeploy MCP aprovado",
+            "Contraprova final",
+        ]
+
+    def assert_papagaio_contract(self, grammar, papagaio, soul, response):
+        self.assertIn("papagaio_deterministico:", grammar)
+        self.assertIn("PAPAGAIO DETERMINÍSTICO:", papagaio)
+        self.assertIn("PAPAGAIO ON:", papagaio)
+        self.assertIn("PAPAGAIO OFF:", papagaio)
+        self.assertIn("PAPAGAIO FIEL:", papagaio)
+        self.assertIn("ÁRVORE VIVA:", papagaio)
+        self.assertIn("MEMÓRIA DETERMINÍSTICA:", papagaio)
+        self.assertIn("CONTRAPROVA BIDIRECIONAL:", papagaio)
+        self.assertIn("INTENÇÃO → OWNER → ROTA EXISTENTE → EXECUÇÃO → CONTRAPROVA → RECEIPT → HUD", papagaio)
+        self.assertIn("um Hermes, um núcleo, um HUD por missão", papagaio)
+
+        rules = grammar.split("papagaio_deterministico:", 1)[1].split("\nscreen_choice_fast_path:", 1)[0]
+        for marker in (
+            "current_human_address_allowlist: [SEGREDO, ADMIN]",
+            "current_human_address_forbidden: PIVETE",
+            'default_mode: "OFF"',
+            '    "ON":',
+            '    "OFF":',
+            "EXPLICIT_REQUEST_TO_DISPLAY_FULL_REAL_TREE_OR_HISTORY",
+            "RELEVANT_REAL_PATH, RESULT, MATERIAL_PROOF, NEXT_USEFUL_ACTION",
+            "fresh_measurement_hud_full_first: true",
+            "old_state_ne_current: true",
+            "no_percentage_without_proven_denominator: true",
+            "one_hermes: true",
+            "one_core: true",
+            "one_hud_per_mission: true",
+            "runtime_proof: UNKNOWN_UNTIL_OBSERVED_IN_HERMES",
+        ):
+            self.assertIn(marker, rules, f"Papagaio missing contract: {marker}")
+
+        yaml_missions = re.findall(
+            r'(?m)^      - "([^"\n]+)"$',
+            rules.split("identity_missions:", 1)[1].split("reference_snapshot:", 1)[0]
+        )
+        law_hud = papagaio.split("### 8.2", 1)[1].split("### 8.3", 1)[0]
+        law_missions = re.findall(r"(?m)^(\d{2}) \| ([^\n]+)$", law_hud)
+        self.assertEqual(yaml_missions, self.canonical_mcp_hud_missions())
+        self.assertEqual([int(n) for n, _ in law_missions], list(range(1, 11)))
+        self.assertEqual([s for _, s in law_missions], self.canonical_mcp_hud_missions())
+        self.assertIn("HISTORICAL_USER_PROVIDED_NOT_LIVE", rules)
+        self.assertIn("promotion_to_current: REQUIRES_FRESH_PROOF", rules)
+
+        self.assertIn("CURRENT_HUMAN_ADDRESS_ALLOWLIST=SEGREDO|ADMIN", soul)
+        self.assertIn("CURRENT_HUMAN_ADDRESS_FORBIDDEN=PIVETE", soul)
+        self.assertIn("PIVETE_VOCATIVE → FORBIDDEN_CURRENT", soul)
+        self.assertIn("PIVETE=HISTORICAL_ONLY", soul)
+        self.assertIn("CURRENT_HUMAN_ADDRESS_ALLOWLIST=SEGREDO|ADMIN", response)
+        self.assertIn("CURRENT_HUMAN_ADDRESS_FORBIDDEN=PIVETE", response)
+        self.assertNotIn("HERMES_PIVETE_EXECUTION", grammar)
+        self.assertNotIn("HERMES_PIVETE:", grammar)
+        self.assertIn('"☿": HERMES_EXECUTION', grammar)
+        self.assertIn("HERMES: EXECUTION_AND_CONTINUITY", grammar)
+
+    def test_papagaio_is_bound_to_existing_boot_and_ci_owner(self):
+        self.assert_papagaio_contract(self.grammar, self.papagaio, self.soul, self.response)
+        self.assertIn("LOAD_TEACHING_GRAMMAR", self.entry_boot)
+        self.assertIn(
+            "contract_test_owner: apps/modulos/fixed-point-fabric/tests/test_sol_teaching_grammar.py",
+            self.grammar,
+        )
+
+    def test_papagaio_counterproof_rejects_wrong_hud_name_order_or_old_as_current(self):
+        faulty = [
+            (self.grammar.replace('      - "Cron automático"', '      - "Cron inventado"', 1),
+             self.papagaio, self.soul, self.response),
+            (self.grammar, self.papagaio.replace("06 | Reconciliar 12 arquivos", "06 | Outro caminho", 1),
+             self.soul, self.response),
+            (self.grammar.replace("old_state_ne_current: true", "old_state_ne_current: false", 1),
+             self.papagaio, self.soul, self.response),
+            (self.grammar.replace("current_human_address_allowlist: [SEGREDO, ADMIN]",
+                                  "current_human_address_allowlist: [SEGREDO, PIVETE]", 1),
+             self.papagaio, self.soul, self.response),
+            (self.grammar, self.papagaio,
+             self.soul.replace("PIVETE_VOCATIVE → FORBIDDEN_CURRENT",
+                               "PIVETE_VOCATIVE → ALLOWED", 1),
+             self.response),
+        ]
+        for index, scenario in enumerate(faulty):
+            with self.subTest(invalid_case=index), self.assertRaises(AssertionError):
+                self.assert_papagaio_contract(*scenario)
 
     # Parse only this owner block with exact indentation, without adding a YAML
     # dependency to the existing stdlib test runner. Full YAML parse is separate.
@@ -289,3 +389,37 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PapagaioDeterministicoFielContractTest(unittest.TestCase):
+    """Regression on the existing canonical owners and the real Hermes prompt consumer."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.repo = Path(__file__).resolve().parents[4]
+        cls.agent = (cls.repo / "AGENTS.md").read_text(encoding="utf-8")
+        cls.response = (cls.repo / "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md").read_text(encoding="utf-8")
+        cls.prompt = (cls.repo / "apps/modulos/HERMES-CORE/prompts/hermes-core.md").read_text(encoding="utf-8")
+        cls.loader = (cls.repo / "apps/modulos/HERMES-CORE/core/decisor.mjs").read_text(encoding="utf-8")
+
+    def test_papagaio_modes_fixed_hud_and_single_owner_propagate(self):
+        for name, content in (("AGENTS", self.agent), ("response", self.response), ("Hermes runtime prompt", self.prompt)):
+            with self.subTest(owner=name):
+                self.assertIn("CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014", content)
+                for marker in ("PAPAGAIO_ON", "PAPAGAIO_OFF", "PAPAGAIO FIEL", "ÁRVORE VIVA"):
+                    self.assertIn(marker, content.upper())
+                self.assertIn("SOUL-SOL.md", content)
+                self.assertIn("10", content)
+        self.assertIn("PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true", self.prompt)
+        self.assertIn("PAPAGAIO_NO_UNMEASURED_PROGRESS=true", self.agent)
+        self.assertIn("PAPAGAIO_NO_EXTRA_MISSIONS_OR_SECTIONS=true", self.agent)
+        self.assertIn("PAPAGAIO_SINGLE_WRITER_PER_SCOPE=true", self.agent)
+
+    def test_existing_real_prompt_loader_reads_hermes_core_file(self):
+        self.assertIn("HERMES_PROMPT_PATH", self.loader)
+        self.assertIn("readFileSync(HERMES_PROMPT_PATH, 'utf8')", self.loader)
+        self.assertIn("promptSha256:", self.loader)
+
+    def test_missing_or_mutated_hud_contract_fails(self):
+        self.assertNotIn("PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true", self.prompt.replace("PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true", ""))
+        self.assertEqual(self.prompt.count("CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014"), 2)
