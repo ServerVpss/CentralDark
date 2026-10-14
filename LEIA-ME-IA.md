@@ -509,6 +509,9 @@ O recibo prova carregamento do contrato; não inventa permissão/tool nem substi
 ```text
 #ACORDAR = RECUPERAR O ESTADO REAL ANTES DE CONTINUAR
 !CALIBRAR = ALINHAR INTERPRETACAO + PAPEL + ESCOPO + TOOLS + PROVA
+CENTRALDARK_OS = VPS_CANONICA + LINUX_EXECUTOR + PONTE_CASA
+CENTRALDARK_OS_TAG = CENTRALDARK|ACORDAR|CALIBRAR
+VMI3256920 = REMOVIDA_DA_TAILNET; NAO_E_VPS_CENTRALDARK
 ```
 
 `#ACORDAR` e `!CALIBRAR` usam o mesmo organismo e podem abrir **frentes paralelas de percepção/reconciliação**. Dez é teto de potência, não quota: uma tarefa simples usa a menor quantidade suficiente; missão ampla, incerta ou crítica pode usar todas as frentes aplicáveis.

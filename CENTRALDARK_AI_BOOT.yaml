@@ -12,6 +12,18 @@ CENTRALDARK_AI_BOOT:
   unified_surface_parity_contract: LOADED
   unified_surface_parity_skill: LOADED
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
+  human_communication_bridge:
+    owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+    inherits: ["RULES.md", "AGENTS.md"]
+    consumers: ["SOL", "HERMES", "CODEX", "CLAUDE", "GEMINI", "TELEGRAM", "NOTIFICATIONS", "GITHUB_CI", "MCP_API", "CLI", "HUD", "OBSIDIAN", "INSTINTO_SUPERIOR", "VOICE"]
+    green: "EFEITO_LOCAL_PROVADO"
+    yellow: "FALTA_ACAO_EXATA_VERBO_ALVO_LOCAL"
+    red: "FALHA_MATERIAL_MEDIDA_LOCALIZADA"
+    gray: "FORA_DO_ESCOPO"
+    raw_technical_status_is_preserved: true
+    generic_unknown_alarm_forbidden: true
+    baianes_natural_biblical_reference_optional: true
+    recorded_is_not_runtime_consumed: true
   model: LIVING_CANON
   persistent_canon: ServerVpss/CentralDark
   live_state: MEASURED_RUNTIME
