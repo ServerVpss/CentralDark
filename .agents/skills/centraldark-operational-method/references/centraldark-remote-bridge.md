@@ -38,9 +38,9 @@ Padrão de autenticação e conexão do `@wonderwhy-er/desktop-commander` ao MCP
 2. Redireciona para https://mcp.centralldark.com/oauth/authorize
 3. AUTHORIZE=PASS → usuário autoriza
 4. CODE_CAPTURED=true → authorization code capturado
-5. Token trocado → Bearer token válido (EXPIRES_IN=3599s)
-6. MCPP_AUTHENTICATED_E2E=PASS → autenticação confirmada
-7. Conexão MCP estabelecida com 103+ ferramentas
+5. Token trocado pelo owner seguro → sessão autenticada, sem expor o valor
+6. `MCP_AUTHENTICATED_E2E=PASS` somente após chamada real e readback
+7. Conexão MCP estabelecida somente após ferramenta descoberta e chamada de leitura
 ```
 
 ## Client ID
@@ -58,20 +58,9 @@ O `secrets/mcp-state.json` contém:
 - `refreshTokens[]` — tokens de refresh por client_id
 - `authCodes[]` — codes autorizados
 
-### Token de administrador (válido nesta sessão)
+### Estado de autenticação
 
-Não registrar valores de access token ou refresh token em Git, skill, memória ou receipt.
-Registrar apenas metadados sanitizados:
-
-```text
-client_id: <client_id observado>
-expires_in: 3599s
-scope: admin
-gh_scope: owner-admin
-store: secrets/mcp-state.json ou DPAPI_CURRENT_USER
-```
-
-Para validar sessão, consultar presença/expiração no cofre local sem imprimir valores.
+A autenticação pertence ao cofre/owner seguro. Não registrar tokens, códigos, expiração ou material Bearer nesta skill. Validar apenas por chamada real e readback sanitizado.
 
 ## Remote Bridge Script
 
@@ -100,23 +89,55 @@ curl -H "Authorization: Bearer <TOKEN>" https://mcp.centralldark.com/admin/mcp
 
 ## Pitfalls
 
-1. **Token expira em ~1h** — o access token tem `EXPIRES_IN=3599s`. O refresh token (`rt_1434e...`) dura ~30 dias. Renovar antes de expirar.
-2. **mcp-tunnel.json tem "active: false"** — o tunnel local aponta para `localhost:9100/mcp` mas o remote bridge funciona via `mcp.centralldark.com`. Não confundir os dois endpoints.
-3. **O MCP local exige Bearer token** — `curl localhost:9100/mcp` sem header retorna "Authorization Bearer ausente".
-4. **O admin MCP exige NDJSON** — `Content-Type: application/x-ndjson` é obrigatório. `application/json` retorna 415. O formato JSON-RPC sobre NDJSON com `\n` no final.
-5. **Workdir é Windows** — o workdir `E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE` é do PC do usuário, não da VPS. A bridge conecta os dois mundos.
-6. **device_label = SEGREDO** — o label do dispositivo no config é `SEGREDO`, que é o identificador do CHEFE. Não mudar sem autorização.
+1. **Sessão autenticada** — validade é medida pelo owner seguro e por chamada real; não inferir por histórico.
+2. **`mcp-tunnel.json`** — estado/configuração deve ser lido no owner atual; não promover `active` histórico.
+3. **MCP local** — exigir autenticação configurada pelo owner; não imprimir headers.
+4. **Admin MCP** — usar o transporte e Content-Type declarados pelo owner atual; não adivinhar formato.
+5. **Workdir é Windows** — `K:\\_worktrees\\bolt-desktop` é o workspace atualmente confirmado; não reutilizar `E:` ou caminhos históricos.
+6. **device_label = SEGREDO** — revalidar no `tailscale status`; não inferir identidade por IP antigo.
+
+## Rota CURRENT Casa ↔ VPS (replay comprovado em 2026-10-14)
+
+Use esta rota antes de criar túnel, plugin, segundo conector ou novo executor:
+
+```text
+CASA_ONLINE
+→ TAILSCALE_PEER=100.123.93.25 (device label: segredo)
+→ REMOTE_BRIDGE_OWNER=scripts/remote-bridge/CentralDark-Remote-Bridge.ps1
+→ DESKTOP_COMMANDER_REMOTE (executado na Casa)
+→ readback do device/terminal
+```
+
+A porta `100.123.93.25:54650` responde HTTP, mas é a página do dispositivo Tailscale; ela não é o terminal remoto. Não promovê-la como Desktop Commander ou shell.
+
+### Critério de prova
+
+```text
+TAILSCALE_PEER_ONLINE = PASS somente com tailscale status/readback
+REMOTE_BRIDGE = PASS somente com processo/saída "Device ready" e Device ID/Name
+REMOTE_TERMINAL = PASS somente com comando executado na Casa e readback
+PREVIEW = PASS somente com dev-server/Electron/DOM ou screenshot no alvo correto
+```
+
+O script da bridge deve ser iniciado na Casa, preservando o owner existente:
+
+```powershell
+cd K:\_worktrees\bolt-desktop
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\remote-bridge\CentralDark-Remote-Bridge.ps1
+```
+
+A rota não usa `127.0.0.1` da VPS para alcançar a Casa. Endereços localhost são locais a cada máquina. Revalidar `tailscale status`, dispositivo, processo da bridge e readback após qualquer reconexão.
 
 ## Verificação de Passagem
 
-Quando o usuário pergunta "tenho passagem para casa/vps/tunel/cas segredo":
+A passagem só pode ser declarada depois do readback da rota CURRENT acima. Registros antigos de OAuth, contagem de ferramentas, tokens, workdir `E:` ou `localhost:9100` são contexto histórico e não provam a sessão atual.
 
 ```text
-✅ CASA/VPS: localhost:9100 online (mcp-centraldark v0.4.0, 114 tools)
-✅ TUNEL: @wonderwhy-er/desktop-commander autenticado via OAuth
-✅ CAS SEGREDO: SEGREDO/CHEFE é a autoridade — fluxo OAuth admin confirmado
-✅ BRIDGE: workdir E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE conectado
+PASS = peer online + bridge executada na Casa + Device ready/ID/Name + comando/readback no alvo
+UNKNOWN = qualquer elo sem readback
 ```
+
+Nunca registrar valores de access token, refresh token, authorization code ou credenciais nesta referência, em skill, memória, log, PR ou receipt.
 
 ## Referência
 
