@@ -107,9 +107,10 @@ def avaliar() -> dict:
         taxa_ok = valores["ok"] / total
         inferior = _wilson_inferior(valores["ok"], total)
         apto = total >= MIN_AMOSTRAS and cobertura >= COBERTURA_LATENCIA_MINIMA
-        motivo = ("PROVADO" if apto else
+        motivo = ("TRANSPORTE_AMOSTRADO" if apto else
                   "AMOSTRA_INSUFICIENTE" if total < MIN_AMOSTRAS else
                   "LATENCIA_SEM_PROVA")
+        # Taxa HTTP + latência não atestam qualidade, intenção ou skill do modelo.
         # Não recompensar 1 chamada isolada, latência ausente nem sucesso declarado sem contraprova.
         score = inferior * (1000 / max(p90_ms, 100)) if apto else 0.0
         ranking.append({
