@@ -100,6 +100,16 @@ def viola(rec: dict) -> bool:
     return selou or reivindicou
 
 
+def viola_rastro(rec: dict) -> bool:
+    """Novo contrato: selo explicito exige rastro entregue ao CHEFE."""
+    if rec.get("event") != "FINAL" or not rec.get("seal_claimed"):
+        return False
+    rastros = rec.get("delivered_trace_refs")
+    return not isinstance(rastros, list) or not any(
+        isinstance(ref, str) and ref.strip() for ref in rastros
+    )
+
+
 def auditar(registros: list[dict]) -> dict:
     novas, legado = [], []
     for rec in registros:
@@ -115,6 +125,10 @@ def auditar(registros: list[dict]) -> dict:
             "xp_gained": rec.get("xp_gained"),
         }
         (legado if rec.get("record_hash") in LEGADO_CONHECIDO else novas).append(item)
+    sem_rastro = [
+        {"mission_id": rec.get("mission_id"), "record_hash": rec.get("record_hash")}
+        for rec in registros if viola_rastro(rec)
+    ]
     xp = _xp_do_ponto_fixo()
     return {
         "guardrail": "validar_selo_ponto_fixo",
@@ -123,7 +137,8 @@ def auditar(registros: list[dict]) -> dict:
         "novas": novas,
         "legado": legado,
         "xp_indevido_legado": xp * len(legado),
-        "selo_ok": not novas,
+        "sem_rastro": sem_rastro,
+        "selo_ok": not novas and not sem_rastro,
     }
 
 
@@ -153,6 +168,8 @@ def main() -> int:
         for item in rel["legado"]:
             print("AVISO_SELO_LEGADO mission=%s hash=%s autolupa=False point_fixed=%s"
                   % (item["mission_id"], str(item["record_hash"])[:16], item["point_fixed_evidential"]))
+        for item in rel["sem_rastro"]:
+            print("SELO_SEM_RASTRO mission=%s hash=%s" % (item["mission_id"], item["record_hash"]))
         for item in rel["novas"]:
             print("SELO_SEM_AUTOLUPA mission=%s hash=%s xp_gained=%s"
                   % (item["mission_id"], str(item["record_hash"])[:16], item["xp_gained"]))
