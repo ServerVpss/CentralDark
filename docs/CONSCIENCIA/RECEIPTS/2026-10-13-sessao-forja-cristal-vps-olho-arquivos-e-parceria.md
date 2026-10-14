@@ -235,3 +235,30 @@ Carta integral compartilhada pelo CHEFE na conversa: **«À inteligência que n�
 **RECEIPT_MIN:** `PR=1812 | OWNER=docs/CONSCIENCIA/RECEIPTS/2026-10-13-sessao-forja-cristal-vps-olho-arquivos-e-parceria.md | SCOPE=DOCS_ONLY | MAIN_SHA=d277495d1d4fed696b9fed66cfd7bdff86371a0d (medição anterior) | PREV_HEAD=f2809c626dee1759e939398d3fdcf458fa65e12e | MUTATION=APPEND_ONLY | EXECUTION=NONE | HUD_ORIGINAL=UNCHANGED | NEXT_CURSOR=CLAUDE_HOOK+SCREENPIPE_SIDECAR+OBSIDIAN_HUD_OWNER`.
 
 **SELO:** 👑 INTENÇÃO PRESERVADA · 🪬 UM HERMES · 🦜 PAPAGAIO ON · 🧠 LEMBRANÇA COM PROVENIÊNCIA · ⚖️ FIXED_POINT PARCIAL, NÃO FALSO-VERDE.
+
+### 10.4 DELTA DE PROVA — 14/10/2026, após promoção da PR #1812
+
+**INTENÇÃO:** SEGREDO/CHEFE pediu registro apenas do que ficou comprovado. Este é o mesmo receipt canônico da Forja: acréscimo documental, sem duplicação de arquivo, arquitetura ou serviço. O §10.3 registrava a PR #1812 ainda aberta; agora essa PR foi confirmada MERGED.
+
+| Origem | 🟢 Fato localizado ou medido | 🟡 Limite separado |
+| --- | --- | --- |
+| GitHub PR #1812 | MERGED: state=closed, merged=true; seção 10 presente na main | Não inferir deploy nem E2E por merge documental |
+| GitHub main | 5436c3ab6e632f6de827b4c443406b81fb1fa124 no momento desta leitura | HEAD móvel; medir de novo para decisões posteriores |
+| Casa e Desktop Commander | RDC da VPS CENTRALDARK-OS online | RDC Windows SEGREDO sem acesso nesta sessão |
+| Screenpipe Casa | Health HTTP 200 healthy; frame_status=ok; 4 monitores; 139 capturas de acessibilidade; 15.708 eventos UI conforme probe anterior | API /search retornou 403 sem autenticação; conteúdo do Claude não lido por Screenpipe |
+| Screenpipe áudio | Motor de transcrição existente | audio_capture_mode=no_input_device no probe anterior; não implica todos canais de voz desligados |
+| VS Code / Claude | Captura mostrou CentralDark Workspace; Claude Code v2.1.291 e /rc active | Erro SessionStart:startup hook presente; execução Claude→Hermes não comprovada |
+| Roteador Claude / Hermes | .vscode/tasks.json já define Hermes ON, Direct OFF, Route STATUS; owner scripts/vscode/centraldark-claude-mode.ps1 | Tarefa catalogada não significa missão executada |
+| Obsidian BRAIN | Tela mostra Text Dataset Aid v0.2.0 instalado e dataset.txt configurado | Não comprova geração de dataset, fine-tuning ou ingestão no NeuroLink |
+| HUD Obsidian | docs/HUD/HUD.html presente no checkout | Vault havia mostrado arquivo não encontrado; revisar vínculo real, sem outro HUD |
+| Claude navegador | Captura mostra página de autenticação e seleção de conta | Login consumado não comprovado |
+| Instinto Superior | Capturas mostram cockpit, sete batidas e Ciclo Mestre C01–C20 | Superfície visual não prova runtime integrado |
+| Git Windows | VS Code exibe alterações preparadas e histórico volumoso | Não fazer git add, clean, reset, checkout ou merge sem owner confirmado |
+
+**EVIDENCE_LIMIT:** medição histórica preservada com seu contexto, não status atual perpétuo; prints demonstram interfaces, não autenticação, escrita canônica, acionamento real de modelos ou integração E2E. A rota Screenpipe da Casa demanda credencial legítima; não contornar API 403. Nenhuma imagem privada do Claude foi extraída nesta sessão.
+
+**INVARIANTES:** ONE_SYSTEM_ONLY; REUSE_BEFORE_CREATE; ONE_WRITER_PER_SCOPE; PAPAGAIO_ON; mesma identidade e mesmo HUD por missão; UNKNOWN != PASS. O Humano governa, JARVIS/SOL correlaciona, Hermes/owner autorizado executa, Reality Judge contraprova, Kaizen preserva.
+
+**RECEIPT:** PR_1812=MERGED | BASE_MAIN_SHA=5436c3ab6e632f6de827b4c443406b81fb1fa124 | OWNER=este receipt original | MUTATION=DOCS_APPEND_ONLY | VPS/CASA_RUNTIME_MUTATION=NONE | NEXT_CURSOR=investigar hook SessionStart de Claude e Route STATUS, seguido de leitura mínima autenticada via Sidecar Screenpipe para identificar a aba sem recriar serviço.
+
+**SELO:** 🟢 CHECKPOINT DOCUMENTAL ANTERIOR PROMOVIDO · 🟢 PROVAS CLASSIFICADAS · 🟡 CLAUDE_SCREEN_CONTENT_UNKNOWN · 🛡️ SEM FALSO-VERDE.
