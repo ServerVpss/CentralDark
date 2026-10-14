@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "test(meta-lupa): cover missing and delivered trace seal cases",
+    "lastCommit": "docs(receipt): lock Tailscale checkpoint and explicit permission boundary",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T22:13:35.964Z",
+      "titulo": "Push na main · ead26762fb38d5914e93943b2151ad67258e1b24",
+      "detalhe": "docs(receipt): lock Tailscale checkpoint and explicit permission boundary",
+      "area": "Repositório",
+      "sha": "ead2676",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T22:12:00.273Z",
       "titulo": "Push na main · 01149aeebea2af8eeb97f79dbdcb0a6d48476353",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "f814d07",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T03:07:27.716Z",
-      "titulo": "Push na main ┬À ce9ba7a0605649838679c4c465bc90e52ed2eecb",
-      "detalhe": "docs(hud): seal authenticated Desktop Commander identity with dated device proof",
-      "area": "Reposit├│rio",
-      "sha": "ce9ba7a",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T22:13:35.964Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ead26762fb38d5914e93943b2151ad67258e1b24 (ead2676)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T22:12:00.273Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À f814d0796fa8ace59f919493d1b4fc7df1f6dad0 (f814d07)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T03:07:27.716Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À ce9ba7a0605649838679c4c465bc90e52ed2eecb (ce9ba7a)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T22:12:00.273Z",
-  "updatedAtBR": "14/10/2026, 19:12:00 BRT"
+  "updatedAt": "2026-10-14T22:13:35.964Z",
+  "updatedAtBR": "14/10/2026, 19:13:35 BRT"
 }
