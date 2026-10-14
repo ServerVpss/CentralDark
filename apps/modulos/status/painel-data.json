@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): seal verified Casa-VPS SSH route and explicit change authority",
+    "lastCommit": "docs(learning): record verified Casa-VPS SSH lock and explicit authority",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T22:09:38.141Z",
+      "titulo": "Push na main · 567753cd04d9f09a5c5c42252fb806db771e6333",
+      "detalhe": "docs(learning): record verified Casa-VPS SSH lock and explicit authority",
+      "area": "Repositório",
+      "sha": "567753c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T22:07:52.599Z",
       "titulo": "Push na main · e48c0cb0108cfd00652f394a09c9d9cf5cc5c4d1",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "45a9da0",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:51:47.991Z",
-      "titulo": "Push na main ┬À 1e479f1924315e1679354655b9b9539dbc0058a8",
-      "detalhe": "feat(plugin): convergir wrappers legados na skill de distribuicao can├┤nica v0.1.2",
-      "area": "Reposit├│rio",
-      "sha": "1e479f1",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T22:09:38.141Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 567753cd04d9f09a5c5c42252fb806db771e6333 (567753c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T22:07:52.599Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 45a9da00fac922fe897d6a3905f92e775caf8bbc (45a9da0)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:51:47.991Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 1e479f1924315e1679354655b9b9539dbc0058a8 (1e479f1)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T22:07:52.599Z",
-  "updatedAtBR": "14/10/2026, 19:07:52 BRT"
+  "updatedAt": "2026-10-14T22:09:38.141Z",
+  "updatedAtBR": "14/10/2026, 19:09:38 BRT"
 }
