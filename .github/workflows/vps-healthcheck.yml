@@ -9,8 +9,11 @@ on:
         description: 'Rodar diagnóstico extra somente leitura (Hermes/API 503/portas 9900-8644-9119-3030); default não roda'
         type: boolean
         default: false
-  schedule:
-    - cron: '0 */6 * * *'
+  # A execução periódica (cron '0 */6 * * *') é despachada pelo clock owner único
+  # (.github/workflows/trigger-fabric-package.yml) via workflow_dispatch, conforme
+  # schedule_bindings em docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/WORKFLOW-FAMILIES.json.
+  # Um segundo gatilho `schedule:` aqui duplicaria o clock e viola
+  # WORKFLOW_FAMILY_SINGLE_CLOCK_EXECUTABLE_GATE.
 
 permissions:
   contents: read

@@ -1042,13 +1042,25 @@ A medicao atual comprovou HEAD=main e SHA identico no HUD da VPS;
 essa prova operacional nao autoriza reclassificar os demais servicos.
 Nao nasce segundo HUD, gate de saude opcional ou outro owner.
 
+Revisao 2026-10-14 — PR #1774 (reconciliacao do bloco CURRENT herdado):
+AGENTS.md, LEIA-ME-IA.md e CENTRALDARK_AI_BOOT.yaml foram relidos apos o
+merge com a main vigente (5436c3a e commits subsequentes) antes de repor a
+ancora. O delta e so o alinhamento dos tres donos ao dono governante (SOUL
+§3.1.1/§2.4): `TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION`
+passa de `99.9%` para `ADAPTIVE_NOT_GATE` e `META_GRILL_BEFORE_MATERIAL_RESPONSE`/
+`META_GRILL_BEFORE_MUTATION` passam de `true` para `false`, removendo a
+contradicao interna que esses dois donos ainda carregavam. Nenhuma lei,
+owner ou autoridade nova nasce aqui; e reconciliacao de ancora, nao
+absorcao de material inedito. `CLAUDE.md` e `CONTRACT.yml` nao mudaram
+desde a ancora anterior.
+
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=81dfdcf682486ccb7a508ff6dc06fb42e8342fc7
-LEIA-ME-IA.md=e34eb841e6784285563ba065a9205679d98466b5
-CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
-CENTRALDARK_AI_BOOT.yaml=5e54e602590486f3b70b8b41bafaac660b54fc81
+AGENTS.md=f89368251803b9dedd6992ae9697d47f09656c75
+LEIA-ME-IA.md=c60cd87286a8746df84f1680f8b65fb7186fa263
+CLAUDE.md=42019585442ecc395324d3716f2e071124b2feca
+CENTRALDARK_AI_BOOT.yaml=cb72b4d65c12cac9cb39093add4e343f2372f500
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-07
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-14
 SOUL_SYNC_ANCHOR_END
 ```
 
