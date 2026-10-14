@@ -1,6 +1,6 @@
 ---
 id: centraldark-fluxo-mestre-41-etapas-20261014
-status: CANDIDATE_PRESERVED
+status: CANDIDATE_IN_PR_1793_NOT_MERGED
 owner_candidate: docs/BRAIN/Excalidraw
 semantic_owner: scripts/trigger-fabric/centraldark_master_cycle.py
 intent_owner: ADMIN
@@ -41,12 +41,12 @@ O PDF representa **as nove fases de alto nível e as mesmas 41 etapas sequenciai
 
 ## Estado e protocolo
 
-- **PRESERVED_IN_CHATGPT_LIBRARY:** verificar readback após arquivamento na Biblioteca.
+- **PRESERVED_IN_CHATGPT_LIBRARY:** `PASS` — PDF, PNG e notas conferidos na Biblioteca persistente da CENTRALDARK.
 - **EXCALIDRAW_EDITABLE_SOURCE:** `NOT_ATTACHED`. Não substituir o fonte por um desenho redesenhado.
 - **BOARD_FIGJAM:** link fornecido; não houve readback do board nesta operação.
 - **CASA_OBSIDIAN_PATH:** `K:\docs\BRAIN\Excalidraw` é o destino coerente com a pasta existente no repo; presença dos novos três arquivos no Windows **não comprovada**.
-- **CANONICAL_GIT:** `PENDING`: não foi realizado commit, merge nem upload no GitHub por esta nota.
+- **GIT_PR_1793:** `PASS` para os quatro arquivos inseridos no ramo existente, sem merge. PDF Git blob `86a3ae1728fa15ee7fd1c6b4e7615253dfaefa2f`; PNG Git blob `91dffc890ad8f307a9d590cfeb8367cc8e53f9aa`; commit dos binários `b7096ad60b7eb489ef4c59656984da7d5af7d5a1`. `MAIN_MERGED=FALSE`; readback físico da Casa/Obsidian continua `UNKNOWN`.
 - **GRAFO_VIVO / HUD / INSTINTO_SUPERIOR:** links e visualizações são consumidores; não ganham autoridade textual.
-- **NEXT_CURSOR:** `LOCALIZAR_EXCALIDRAW_ORIGINAL → VALIDAR_OWNER → ESPELHAR_PDF_PNG_NOTA_PELA_ROTA_EXISTENTE → READBACK_SHA_CASA → LINKAR_GRAFO/HUD → RECEIPT`.
+- **NEXT_CURSOR:** `LOCALIZAR_EXCALIDRAW_ORIGINAL → PR_1793_CHECKS_SAME_SHA → PROMOÇÃO_AUTORIZADA → ESPELHO_CASA_SHA → ABERTURA_OBSIDIAN/GRAFO → RECEIPT`.
 
 **Lei:** `UM_FIGJAM + UM_FLUXO_MESTRE + UM_WRITER_POR_ESCOPO + NENHUM_HUD_PARALELO`. Os 41 passos e a ordem do material recebido são intocáveis sem deliberação e prova.
