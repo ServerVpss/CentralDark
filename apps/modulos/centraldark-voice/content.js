@@ -2,6 +2,7 @@
 // O worker MV3 existente opera TTS cross-origin; este script apenas controla a UI.
 (() => {
   const LOG = "[CentralDark Voice]";
+  const LIMITE_TRECHO = 3800;
   let ativo = true;
   let audioAtual = null;
   let urlAtual = null;
@@ -22,6 +23,11 @@
 
   function pararAtual() {
     rodada += 1;
+    if (resolverFimAtual) {
+      const resolver = resolverFimAtual;
+      resolverFimAtual = null;
+      resolver("cancel");
+    }
     if (requisicaoAtual) {
       chrome.runtime.sendMessage({
         type: "CD_VOICE_CANCEL", requestId: requisicaoAtual,
@@ -42,6 +48,34 @@
     }
   }
 
+  // Quebra mensagens longas sem truncar respostas nem criar outro motor de voz.
+  function separarTrechos(texto) {
+    let restante = String(texto || "").trim();
+    const partes = [];
+    while (restante.length > LIMITE_TRECHO) {
+      let corte = -1;
+      for (const fim of ["\n", ". ", "! ", "? ", "; ", ", ", " "]) {
+        const pos = restante.lastIndexOf(fim, LIMITE_TRECHO);
+        if (pos >= Math.floor(LIMITE_TRECHO / 2)) {
+          corte = pos + (fim.length === 2 ? 1 : 0);
+          break;
+        }
+      }
+      if (corte < 1) corte = LIMITE_TRECHO;
+      // Não separe pares substitutos UTF-16 (emoji/símbolos).
+      const anterior = restante.charCodeAt(corte - 1);
+      const proximo = restante.charCodeAt(corte);
+      if (anterior >= 0xD800 && anterior <= 0xDBFF &&
+          proximo >= 0xDC00 && proximo <= 0xDFFF) corte -= 1;
+      partes.push(restante.slice(0, corte).trim());
+      restante = restante.slice(corte).trimStart();
+    }
+    if (restante) partes.push(restante);
+    return partes;
+  }
+
+  let resolverFimAtual = null;
+
   function decodificarAudio(base64) {
     const texto = atob(base64);
     const bytes = new Uint8Array(texto.length);
@@ -51,36 +85,63 @@
 
   async function tocarNaCasa(texto, botao) {
     if (!ativo || !texto || !texto.trim()) return false;
+    const trechos = separarTrechos(texto);
+    if (!trechos.length) return false;
     pararAtual();
     const minhaRodada = rodada;
-    const requestId = String(Date.now()) + "-" + String(minhaRodada);
-    requisicaoAtual = requestId;
     botaoAtual = botao || null;
     if (botao) botao.setAttribute("data-cd-tocando", "1");
 
     try {
-      const resposta = await chrome.runtime.sendMessage({
-        type: "CD_VOICE_SPEAK", requestId, texto: texto.slice(0, 4000),
-      });
-      if (minhaRodada !== rodada || !ativo) return null;
-      if (!resposta?.ok) {
-        if (resposta?.error === "VOICE_KEY_MISSING") {
-          alert("CentralDark Voice: configure a chave de entrada no popup da extensão.");
+      for (let indice = 0; indice < trechos.length; indice += 1) {
+        if (minhaRodada !== rodada || !ativo) return null;
+        const requestId = String(Date.now()) + "-" + String(minhaRodada) + "-" + String(indice + 1);
+        requisicaoAtual = requestId;
+        const resposta = await chrome.runtime.sendMessage({
+          type: "CD_VOICE_SPEAK", requestId, texto: trechos[indice],
+        });
+        if (minhaRodada !== rodada || !ativo) return null;
+        if (!resposta?.ok) {
+          if (resposta?.error === "VOICE_KEY_MISSING") {
+            alert("CentralDark Voice: configure a chave de entrada no popup da extensão.");
+          }
+          throw new Error(resposta?.error || "TTS_WORKER_UNAVAILABLE");
         }
-        throw new Error(resposta?.error || "TTS_WORKER_UNAVAILABLE");
+
+        requisicaoAtual = null;
+        urlAtual = URL.createObjectURL(decodificarAudio(resposta.base64));
+        const audio = new Audio(urlAtual);
+        audioAtual = audio;
+        const fim = new Promise((resolve) => {
+          const terminar = (tipo) => {
+            if (resolverFimAtual === terminar) resolverFimAtual = null;
+            resolve(tipo);
+          };
+          resolverFimAtual = terminar;
+          audio.addEventListener("ended", () => terminar("ended"), { once: true });
+          audio.addEventListener("error", () => terminar("error"), { once: true });
+        });
+
+        await audio.play();
+        if (minhaRodada !== rodada || !ativo) return null;
+        console.log(LOG, "tocando", {
+          route: resposta.route, trecho: indice + 1, total: trechos.length,
+        });
+
+        if (indice === trechos.length - 1) {
+          fim.then((estado) => {
+            if (minhaRodada === rodada && estado !== "cancel") pararAtual();
+          });
+          return true;
+        }
+
+        const estado = await fim;
+        if (minhaRodada !== rodada || !ativo) return null;
+        if (estado !== "ended") throw new Error("TTS_PLAYBACK_ERROR");
+        audioAtual = null;
+        URL.revokeObjectURL(urlAtual);
+        urlAtual = null;
       }
-      requisicaoAtual = null;
-      urlAtual = URL.createObjectURL(decodificarAudio(resposta.base64));
-      audioAtual = new Audio(urlAtual);
-      audioAtual.addEventListener("ended", () => {
-        if (minhaRodada === rodada) pararAtual();
-      });
-      audioAtual.addEventListener("error", () => {
-        if (minhaRodada === rodada) pararAtual();
-      });
-      await audioAtual.play();
-      if (minhaRodada !== rodada) return null;
-      console.log(LOG, "tocando", { route: resposta.route });
       return true;
     } catch (erro) {
       if (minhaRodada !== rodada || !ativo) return null;
@@ -129,6 +190,3 @@
 
   console.log(LOG, "content script ativo em", location.host);
 })();
-
-
-[executed on device: CENTRALDARK-OS (809020f9-c77d-4bef-bb06-da5b467ac9b7)]
