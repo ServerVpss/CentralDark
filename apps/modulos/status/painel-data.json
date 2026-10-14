@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧾 receipt(vscode): registrar Hermes interativo auto-open, prova e limite Windows",
+    "lastCommit": "🧿 docs(sol): contraprovar fonte ZIP historicamente truncada sem destruir POC",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T18:54:03.369Z",
+      "titulo": "Push na main · 0c6bb47037141ca19c3ed65065be4859d7c71306",
+      "detalhe": "🧿 docs(sol): contraprovar fonte ZIP historicamente truncada sem destruir POC",
+      "area": "Repositório",
+      "sha": "0c6bb47",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T18:39:13.398Z",
       "titulo": "Push na main · 450c95224c6cf899b8019b16f05af89780ef012f",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "697c8a4",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:18:22.633Z",
-      "titulo": "Push na main ┬À 9f8f9f64c0a8956ae43557b16b58031cdc4a0a5e",
-      "detalhe": "docs(receipt): seal Desktop Commander account2 authorization and E2E tool call",
-      "area": "Reposit├│rio",
-      "sha": "9f8f9f6",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T18:54:03.369Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0c6bb47037141ca19c3ed65065be4859d7c71306 (0c6bb47)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T18:39:13.398Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 697c8a4d2b4a533c09098a1e49754a2d2558f09e (697c8a4)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:18:22.633Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 9f8f9f64c0a8956ae43557b16b58031cdc4a0a5e (9f8f9f6)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T18:39:13.398Z",
-  "updatedAtBR": "14/10/2026, 15:39:13 BRT"
+  "updatedAt": "2026-10-14T18:54:03.369Z",
+  "updatedAtBR": "14/10/2026, 15:54:03 BRT"
 }
