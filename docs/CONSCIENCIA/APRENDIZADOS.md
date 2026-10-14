@@ -2893,3 +2893,9 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 - ⚠️ **Pendente comprovável:** consumo pelo Hermes e pelas contas diferentes não foi testado neste registro; UNKNOWN continua visível.
 - 📌 **Prova material:** arquivo docs/CONSCIENCIA/APRENDIZADOS.md, blob SHA vinculado no manifesto NeuroLink; readback do GitHub após commit.
 - 🎯 **NEXT_CURSOR:** reutilizar L191 nos próximos sinais pertinentes e medir só o consumidor afetado quando houver execução real.
+
+### 192. Fixed point semântico confirmado; workspace integrado ainda exige leitura
+- **Categoria:** regra
+- **Data:** 2026-10-14
+- **Contexto:** Em 2026-10-14 o usuário confirmou Fixed point 100% na fidelidade semântica após recuperar entre chats as gramáticas e o circuito CentralDark; informou workspace salvo integrando Operação CentralDark (Use AI terminal), ChatGPT CentralDark Apps, Instinto Superior, cockpit, Sala de Controle, Obsidian/Index HUD e Gateway. Remote Desktop Commander aponta Casa e VPS offline nesta conexão.
+- **Aprendizado:** Reaproveitar o owner e o fio existente; distinguir confirmação do usuário de prova técnica. PAPAGAIO_ON preserva ensino fiel; OFF evita repetição. Não afirmar leitura do workspace, sync Obsidian, uptime, ou deploy sem readback. Quando houver acesso, inspecionar arquivo .code-workspace atual e conciliar os owners; não construir outro HUD/cockpit.
