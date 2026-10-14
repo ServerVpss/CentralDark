@@ -136,6 +136,21 @@ function contratoOperacionalCanonico() {
     const i = linha.indexOf('=');
     return i > 0 && chaves.has(linha.slice(0, i).trim());
   });
+  // Política provada pela fonte versionada; efeito real ainda exige Reality Judge.
+  const agents = lerArquivoSeguro('AGENTS.md', Number.POSITIVE_INFINITY) || '';
+  const workflow = lerArquivoSeguro('.github/workflows/autonomia-promocao.yml', Number.POSITIVE_INFINITY) || '';
+  const soul = lerArquivoSeguro('docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md', Number.POSITIVE_INFINITY) || '';
+  const squashPolicy = raw.includes('AUTO_SQUASH_IF_CLEAN') &&
+    agents.includes('AUTO_SQUASH_IF_CLEAN') && workflow.includes('AUTO_SQUASH_IF_CLEAN');
+  const noReaskPolicy = raw.includes('NO_HUMAN_REASK_FOR_MERGE=true') &&
+    agents.includes('NO_HUMAN_REASK_FOR_MERGE=true');
+  linhas.push('AUTO_SQUASH_IF_CLEAN=' + (squashPolicy ? 'PROVEN' : 'UNKNOWN'));
+  linhas.push('NO_HUMAN_REASK_FOR_MERGE=' + (noReaskPolicy ? 'PROVEN' : 'UNKNOWN'));
+  if (raw.includes('MERGED != DEPLOYED')) linhas.push('MERGED != DEPLOYED');
+  if (soul.includes('REALITY_JUDGE') && soul.includes('FIXED_POINT')) {
+    linhas.push('REALITY_JUDGE + observacao/contraprova -> FIXED_POINT ou NEXT_CURSOR');
+  }
+  linhas.push('POLICY_PROOF_SCOPE=REPOSITORY_SOURCE_ONLY; RUNTIME_READBACK_REQUIRED=true');
   return linhas.length ? linhas.join('\n') : null;
 }
 
@@ -148,7 +163,7 @@ function montarContexto() {
 
   const contrato = contratoOperacionalCanonico();
   if (contrato) {
-    partes.push(`🧿 CONTRATO OPERACIONAL CANÔNICO:\n${contrato}`);
+    partes.push(`🧿 CONTRATO OPERACIONAL CANONICO (CANÔNICO):\n${contrato}`);
   }
 
   const commits = ultimosCommits(5);
@@ -345,6 +360,7 @@ module.exports = {
   registrarAprendizadoPermanente,
   // exports pra testes
   _internals: {
+    contratoOperacionalCanonico,
     podePromoverAprendizado,
     canonicalJson,
     assinarReceiptAprendizado,
