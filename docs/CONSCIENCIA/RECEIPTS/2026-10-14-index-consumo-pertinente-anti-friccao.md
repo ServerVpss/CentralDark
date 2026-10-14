@@ -12,6 +12,7 @@ CHANGE_BLOB=f8194b559c9a6b001777714c1147fefc1f168d81
 STATE=INCREMENTAL_DELTA_PROVED; GLOBAL_FIXED_POINT_NOT_CLAIMED
 
 ## GOLD preservado
+
 - Script existente `scripts/centraldark/canonical-consumption-gate.mjs`, sem modificação.
 - A leitura completa com `--learning ALL` continua disponível sob demanda.
 - Índice completo, keys e owners fora do bloco `pre_response_gate` preservados.
@@ -19,6 +20,7 @@ STATE=INCREMENTAL_DELTA_PROVED; GLOBAL_FIXED_POINT_NOT_CLAIMED
 - PRs existentes, gates, runners, segurança e proteção de merge intocados.
 
 ## FRICTION removida
+
 - Metadados antigos divergiam da implementação canônica e exigiam ALL_NUMBERED_LEARNINGS e fail_closed no preflight universal.
 - Apenas em `.agents/library-index.json#pre_response_gate`:
   - fail_closed: true -> false;
@@ -28,6 +30,7 @@ STATE=INCREMENTAL_DELTA_PROVED; GLOBAL_FIXED_POINT_NOT_CLAIMED
 - Alinhado ao comportamento não bloqueante do script e ao modo pertinente de RULES/AGENTS/LEIA-ME-IA.
 
 ## Contraprova e fronteira
+
 - JSON.parse(updated): PASS.
 - Comparação estrutural profunda, permitindo somente as quatro propriedades citadas: PASS.
 - GitHub Contents readback do commit: conteúdo byte-a-byte equivalente à escrita: PASS.
@@ -37,6 +40,7 @@ STATE=INCREMENTAL_DELTA_PROVED; GLOBAL_FIXED_POINT_NOT_CLAIMED
 - Nenhum duplicate/dead removido sem medida de referência e uso.
 
 ## Ledger e rota
+
 - #1562: CLOSED, MERGED=false, legado/proveniência preservado, DO_NOT_MERGE.
 - #1757: CLOSED, aposentado e substituído pelo HUD como projeção.
 - Receipts primários no repositório, conforme `docs/CONSCIENCIA/LEDGER-SURFACE-ANCHOR.md`; não escrever comentários como ledger.
