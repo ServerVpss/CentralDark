@@ -69,7 +69,7 @@ async function sintetizar(cfg, input, signal) {
   } catch (erro) {
     if (signal.aborted || erro?.name === "AbortError") throw erro;
     // Erros da requisição não são justificativa para reenviar chaves a outro host.
-    if (erro.status && ![404, 408, 500, 502, 503, 504].includes(erro.status)) throw erro;
+    if (erro.status && erro.status < 500) throw erro;
     return { base64: await pedirAudio(LEGACY_BRIDGE, cfg, input, signal), route: "LEGACY_BRIDGE_FALLBACK" };
   }
 }
@@ -109,6 +109,11 @@ chrome.runtime.onMessage.addListener((mensagem, sender, sendResponse) => {
     sendResponse(resultado);
   };
   PENDENTES.set(escopo, { id: requestId, controller, responder });
+  // MV3 encerra requisições lentas; responder antes do limite do service worker.
+  const prazo = setTimeout(() => {
+    controller.abort();
+    responder({ ok: false, error: "TTS_TIMEOUT" });
+  }, 25000);
 
   (async () => {
     try {
@@ -126,6 +131,7 @@ chrome.runtime.onMessage.addListener((mensagem, sender, sendResponse) => {
         responder({ ok: false, error: erro?.message || "TTS_ERROR" });
       }
     } finally {
+      clearTimeout(prazo);
       if (PENDENTES.get(escopo)?.id === requestId) PENDENTES.delete(escopo);
     }
   })();
