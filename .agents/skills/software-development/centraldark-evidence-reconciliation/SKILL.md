@@ -22,6 +22,8 @@ Use this as the canonical fixed-point funnel for CentralDark missions that cross
 
 Use for reconciliation, deploy/readback, PR receipts, runtime diagnosis, skill self-upgrade, and cross-surface proof. Do not use a commit, health response, skill load, or oracle answer as global PASS without target readback.
 
+Quando o alvo incluir Casa, Tailscale, Desktop Commander ou a bridge remota, carregar tambem o owner existente `.agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md`. O funil desta skill permanece o coordenador; a referencia fornece a rota e os limites de prova. Nao criar receipt, bridge ou reconciliador paralelo.
+
 ## Non-negotiable contract
 
 ```text
