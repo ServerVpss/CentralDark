@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(tailscale): selo de prova SSH Casa-VPS e limite ACL sem mutação",
+    "lastCommit": "🧾 receipt(ssh): provar Casa→VPS via Tailscale e manter auto-sync fail-closed",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T22:44:22.527Z",
+      "titulo": "Push na main · 1c28b8a12e7ec4f07cde6a6ea3e3769629c8a727",
+      "detalhe": "🧾 receipt(ssh): provar Casa→VPS via Tailscale e manter auto-sync fail-closed",
+      "area": "Repositório",
+      "sha": "1c28b8a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T22:43:56.003Z",
       "titulo": "Push na main · e4af04433309e1d3095d9f6ca199c4d1b4f8fd5e",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "81a5b24",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T03:43:38.977Z",
-      "titulo": "Push na main ┬À 3b720b674e347ec5dd17fce1904e32fea828b16d",
-      "detalhe": "­ƒº¥ receipt: browser Windows e fallback JSON da PR #1708 v0.1.4",
-      "area": "Reposit├│rio",
-      "sha": "3b720b6",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T22:44:22.527Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1c28b8a12e7ec4f07cde6a6ea3e3769629c8a727 (1c28b8a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T22:43:56.003Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 81a5b241fe5ac1c081cd4342fd1aadaa5edc9033 (81a5b24)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T03:43:38.977Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 3b720b674e347ec5dd17fce1904e32fea828b16d (3b720b6)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T22:43:56.003Z",
-  "updatedAtBR": "14/10/2026, 19:43:56 BRT"
+  "updatedAt": "2026-10-14T22:44:22.527Z",
+  "updatedAtBR": "14/10/2026, 19:44:22 BRT"
 }
