@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(receipt): selo restrito da entrada GPT observada no terminal",
+    "lastCommit": "docs(aprendizados): teia deterministica, mesma fonte e selo por fio comprovado",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T23:01:54.861Z",
+      "titulo": "Push na main · b0eb7ca52fd6931ad35597280cb4ad3d46748f77",
+      "detalhe": "docs(aprendizados): teia deterministica, mesma fonte e selo por fio comprovado",
+      "area": "Repositório",
+      "sha": "b0eb7ca",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T22:59:13.926Z",
       "titulo": "Push na main · 17406f3f8b2b855b6be9147e39c3cb10503fcc32",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "a07b01f",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T04:58:15.912Z",
-      "titulo": "Push na main ┬À ffca4a3a5bf096c93b395ffa281f87396e72dc21",
-      "detalhe": "fix(hud): show green lock only for fresh Afterburner MMF proof",
-      "area": "Reposit├│rio",
-      "sha": "ffca4a3",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T23:01:54.861Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b0eb7ca52fd6931ad35597280cb4ad3d46748f77 (b0eb7ca)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T22:59:13.926Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À a07b01f141f5870ba62325bdccb3f4bd09dc7e97 (a07b01f)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T04:58:15.912Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À ffca4a3a5bf096c93b395ffa281f87396e72dc21 (ffca4a3)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T22:59:13.926Z",
-  "updatedAtBR": "14/10/2026, 19:59:13 BRT"
+  "updatedAt": "2026-10-14T23:01:54.861Z",
+  "updatedAtBR": "14/10/2026, 20:01:54 BRT"
 }
