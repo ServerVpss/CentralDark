@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(centraldark): distingue integração GitHub e execução Casa/Hermes",
+    "lastCommit": "🧿 fix(parity): reuse proven PR1805 identity checks and reconcile release receipt",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T21:19:27.809Z",
+      "titulo": "Push na main · 447f6623502592901620ed3def6f67364e439008",
+      "detalhe": "🧿 fix(parity): reuse proven PR1805 identity checks and reconcile release receipt",
+      "area": "Repositório",
+      "sha": "447f662",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T21:01:54.408Z",
       "titulo": "Push na main · c73537346ac8d7f88d4346dd287a71c95ce1f0ac",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "3f95056",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:43:56.272Z",
-      "titulo": "Push na main ┬À 5f6737c012ce6cd06d08ef0934de0ddd8e45a21e",
-      "detalhe": "docs(plugin): readback release 0.1.1 mantendo prova de Voice UNKNOWN",
-      "area": "Reposit├│rio",
-      "sha": "5f6737c",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T21:19:27.809Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 447f6623502592901620ed3def6f67364e439008 (447f662)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T21:01:54.408Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 3f950565df5b1a7c47c1317b03b9054a7b7bbebe (3f95056)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:43:56.272Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 5f6737c012ce6cd06d08ef0934de0ddd8e45a21e (5f6737c)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T21:01:54.408Z",
-  "updatedAtBR": "14/10/2026, 18:01:54 BRT"
+  "updatedAt": "2026-10-14T21:19:27.809Z",
+  "updatedAtBR": "14/10/2026, 18:19:27 BRT"
 }
