@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(self-evolution): contrato da pontuação, XP canônico e limites de prova",
+    "lastCommit": "test(self-evolution): regressões de confiança, ranking e XP sem falso verde",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T18:20:46.283Z",
+      "titulo": "Push na main · 78e642f6b03c1f71d438bb0d1da55ef4c45a9682",
+      "detalhe": "test(self-evolution): regressões de confiança, ranking e XP sem falso verde",
+      "area": "Repositório",
+      "sha": "78e642f",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T18:19:40.106Z",
       "titulo": "Push na main · 4905a0cda3feceea9e145ab6be23c438a2ad993a",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "dadfb95",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T23:15:30.751Z",
-      "titulo": "Push na main ┬À 06da8aad878f624d2717661a2ceb9d4901dffe5b",
-      "detalhe": "docs(memory): apontar vault Casa K em migracao no owner mem/index.md",
-      "area": "Reposit├│rio",
-      "sha": "06da8aa",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T18:20:46.283Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 78e642f6b03c1f71d438bb0d1da55ef4c45a9682 (78e642f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T18:19:40.106Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À dadfb95a627501f477b32bffee563e76f20d3a74 (dadfb95)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T23:15:30.751Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 06da8aad878f624d2717661a2ceb9d4901dffe5b (06da8aa)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T18:19:40.106Z",
-  "updatedAtBR": "14/10/2026, 15:19:40 BRT"
+  "updatedAt": "2026-10-14T18:20:46.283Z",
+  "updatedAtBR": "14/10/2026, 15:20:46 BRT"
 }
