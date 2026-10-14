@@ -1,8 +1,6 @@
 # 🔊 CentralDark Voice — extensão do botão "Ler em voz alta"
 
-Substitui a voz robótica do botão nativo **"Ler em voz alta"** do Claude
-(Claude.ai / Claude Desktop) pela voz **premium em português brasileiro
-nativo** do bridge CentralDark.
+Amplia o botão **"Ler em voz alta"** do Claude (Claude.ai / Claude Desktop) com TTS em português brasileiro pela **API oficial CentralDark**, usando o bridge anterior somente como fallback de rota.
 
 ## Como funciona
 
@@ -11,7 +9,7 @@ nativo** do bridge CentralDark.
 3. Manda primeiro para `api.centralldark.com/v1/audio/speech`. Se a rota ficar indisponível, o código tenta o bridge legado; não faz fallback após cancelamento nem erro de autorização (401/403).
 4. Reproduz cada trecho de até 3.800 caracteres na ordem, sem descartar o restante da resposta; cancelar interrompe a fila e o áudio vigente.
 
-Há cancelamento de áudio: se a pessoa parar, desativar ou iniciar outra leitura, respostas atrasadas não podem começar a tocar. O gancho de `speechSynthesis` é de compatibilidade e melhor esforço: scripts isolados de extensão podem não interceptar a página; o botão mapeado é a rota suportada.
+Há cancelamento de áudio: se a pessoa parar, desativar ou iniciar outra leitura, respostas atrasadas não podem começar a tocar. O **script de conteúdo** controla o botão e a reprodução; o **worker MV3 existente** executa o transporte TTS autorizado, mantendo a chave fora do script da página. Não depende de interceptar globalmente `speechSynthesis`.
 
 ## Instalar em 4 cliques (Chrome / Edge / Brave)
 
@@ -54,8 +52,7 @@ padrão do Claude (voz do sistema operacional).
 
 ## Debug
 
-Abre o DevTools do Claude (F12) → aba Console → filtra por `CentralDark
-Voice`. Logs mostram cada interceptação, config carregada e erros.
+Abre o DevTools do Claude (F12) → Console → filtra por `CentralDark Voice`. Para verificar o transporte, inspeciona também o **service worker** da extensão em `chrome://extensions` → CentralDark Voice → *Inspecionar service worker*. Não exibir tokens, cabeçalhos de autenticação ou áudio privado em recibos.
 
 ## Evolução contínua — voz JARVIS em português brasileiro
 
@@ -71,4 +68,10 @@ A extensão evolui **o mesmo `content.js`**, sem serviço ou executor novos. Tex
 
 Falhas HTTP de cliente (4xx, inclusive 429) **não** disparam encaminhamento da chave para o bridge legado; erros de rede/servidor podem ativar a rota de compatibilidade. Valores de credenciais não aparecem nas mensagens de erro do `content.js`.
 
-**Prova disponível em 2026-10-14:** `node --check` e teste de execução mock com botões, Web Audio e `fetch` simulados, cobrindo reprodução curta, cancelamento, áudio atrasado, três partes em ordem, interrupção da fila e HTTP 429/503. **Prova ainda pendente:** navegador real, extensão recarregada e saída audível na Casa. O `popup.js` ainda usa instruções anteriores; não afirmar atualização do perfil visual até confirmar sua escrita.
+**Prova disponível em 2026-10-14:** `node --check` e teste de execução mock com botões, Web Audio e `fetch` simulados, cobrindo reprodução curta, cancelamento, áudio atrasado, três partes em ordem, interrupção da fila e HTTP 429/503. **Prova ainda pendente:** navegador real, extensão recarregada e saída audível na Casa. O `popup.js` ainda apresenta o texto anterior como valor padrão visual; porém o worker atual converte o texto legado em instruções JARVIS durante a síntese e na instalação/atualização, preservando configurações personalizadas. Não afirmar mudança da aparência do popup.
+
+## Integração MV3 — readback de 2026-10-14
+
+O contrato vivo utiliza `content.js` para interface e fila de reprodução e `background.js` (worker MV3 existente) para `chrome.runtime.sendMessage`, seleção de rota e `fetch` autenticado. O worker aceita somente origem Claude da própria extensão e cancela requisições pelo ID. O script de conteúdo não recebe a chave de API.
+
+**Contraprova independente em Node/VM:** simulação conjunta de `content.js` e `background.js` confirmou TTS pela API oficial, três trechos em série, cancelamento durante fetch, nenhuma reprodução atrasada após cancelar, HTTP 401 sem fallback, HTTP 503 com bridge e recusa de origem de mensagem não autorizada. A simulação não substitui teste de extensão instalada nem prova deploy do proxy.
