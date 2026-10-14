@@ -108,7 +108,7 @@
 
     try {
       const { blob, route } = await obterAudio(texto, controlador.signal);
-      if (controlador.signal.aborted || minhaRodada !== rodada) return false;
+      if (controlador.signal.aborted || minhaRodada !== rodada) return null;
       controleAtual = null;
       urlAtual = URL.createObjectURL(blob);
       audioAtual = new Audio(urlAtual);
@@ -123,7 +123,7 @@
       console.log(LOG, "tocando", { voz: CFG.voz, route });
       return true;
     } catch (e) {
-      if (controlador.signal.aborted || minhaRodada !== rodada) return false;
+      if (controlador.signal.aborted || minhaRodada !== rodada) return null;
       console.error(LOG, "🔴 TTS_ALL_ROUTES_FAILED", { status: e?.status || "NETWORK_OR_PLAYBACK" });
       pararAtual();
       return false;
@@ -188,7 +188,8 @@
         if (!texto.trim()) return original(utter);
         console.log(LOG, "speechSynthesis.speak interceptado");
         tocarNaCasa(texto, null).then((ok) => {
-          if (!ok) original(utter);
+          // Cancelamento intencional nunca reativa a voz nativa.
+          if (ok === false) original(utter);
         });
       };
       console.log(LOG, "speechSynthesis patched");
