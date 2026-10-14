@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "CentralDark Voice — Ler em voz alta premium",
-  "version": "1.1.0",
-  "description": "Leitura em voz alta PT-BR no Claude via API oficial CentralDark; cancelamento de áudio atrasado.",
+  "version": "1.2.0",
+  "description": "Leitura de mensagens longas em voz PT-BR pelo Claude, com fila cancelável e fallback protegido.",
   "permissions": [
     "storage"
   ],
