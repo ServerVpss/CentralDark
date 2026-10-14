@@ -8,6 +8,7 @@ minimum invariants required by the CHEFE/SOL/HERMES operating law.
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -200,10 +201,8 @@ REQUIRED_MARKERS = {
 REQUIRED_MARKERS.update({
     PLUGIN_MANIFEST: [
         '\"name\": \"centraldark-unified-surface-parity\"',
-        '\"version\": \"0.1.0\"',
         '\"repository\": \"https://github.com/ServerVpss/CentralDark\"',
         '\"displayName\": \"CentralDark Unified Surface\"',
-        '\"capabilities\": [\"Read\", \"Write\"]',
     ],
     PLUGIN_MCP: [
         '\"mcpServers\": {',
@@ -222,7 +221,6 @@ REQUIRED_MARKERS.update({
     PLUGIN_SOURCE: [
         '\"canonical_owner\": \"CENTRALDARK_UNIFIED_SURFACE_PARITY_01\"',
         '\"published_plugin_id\": \"plugins_6ab87b459ff08191a69311acd4c77d83\"',
-        '\"published_release_id\": \"pluginrel_6ab87b470c048191b7ed42e9be8761b6\"',
         '\"published_scope\": \"USER\"',
         '\"published_discoverability\": \"PRIVATE\"',
         '\"generated_artifact_is_owner\": false',
@@ -473,11 +471,66 @@ def validate_file(path: Path) -> list[str]:
     return errors
 
 
+
+def validate_plugin_metadata() -> list[str]:
+    """Validate current plugin identity without pinning a stale release.
+
+    Source metadata consistency is not proof of live publication or Voice access.
+    """
+    errors: list[str] = []
+    try:
+        manifest = json.loads(PLUGIN_MANIFEST.read_text(encoding="utf-8"))
+        source = json.loads(PLUGIN_SOURCE.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return [f"PLUGIN_METADATA_UNREADABLE: {exc}"]
+    if not isinstance(manifest, dict) or not isinstance(source, dict):
+        return ["PLUGIN_METADATA_INVALID_OBJECT"]
+
+    if manifest.get("name") != "centraldark-unified-surface-parity":
+        errors.append("PLUGIN_NAME_MISMATCH")
+    if manifest.get("repository") != "https://github.com/ServerVpss/CentralDark":
+        errors.append("PLUGIN_REPOSITORY_MISMATCH")
+    version = manifest.get("version")
+    if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+\.\d+(?:[-+][A-Za-z0-9.-]+)?", version):
+        errors.append(f"PLUGIN_VERSION_INVALID: {version!r}")
+    if version != source.get("published_version") or version != source.get("version"):
+        errors.append("PLUGIN_VERSION_MISMATCH")
+
+    extensions = manifest.get("extensions", {})
+    openai = extensions.get("com.openai", {}) if isinstance(extensions, dict) else {}
+    interface = openai.get("interface", {}) if isinstance(openai, dict) else {}
+    interface = interface if isinstance(interface, dict) else {}
+    capabilities = interface.get("capabilities")
+    if not isinstance(capabilities, list) or len(capabilities) != 2 or set(capabilities) != {"Read", "Write"}:
+        errors.append(f"PLUGIN_CAPABILITIES_INVALID: {capabilities!r}")
+    if interface.get("displayName") != "CentralDark Unified Surface":
+        errors.append("PLUGIN_DISPLAY_NAME_MISMATCH")
+
+    plugin_id = source.get("published_plugin_id")
+    release_id = source.get("published_release_id")
+    if not isinstance(plugin_id, str) or not re.fullmatch(r"plugins_[a-zA-Z0-9]+", plugin_id):
+        errors.append("PLUGIN_ID_INVALID")
+    if not isinstance(release_id, str) or not re.fullmatch(r"pluginrel_[a-zA-Z0-9]+", release_id):
+        errors.append("PLUGIN_RELEASE_ID_INVALID")
+    if release_id != source.get("release_id"):
+        errors.append("PLUGIN_RELEASE_MISMATCH")
+    if source.get("plugin_url") != f"https://chatgpt.com/plugins/{plugin_id}":
+        errors.append("PLUGIN_URL_ID_MISMATCH")
+    if source.get("canonical_owner") != "CENTRALDARK_UNIFIED_SURFACE_PARITY_01":
+        errors.append("PLUGIN_CANONICAL_OWNER_MISMATCH")
+    if source.get("published_scope") != "USER" or source.get("published_discoverability") != "PRIVATE":
+        errors.append("PLUGIN_SCOPE_MISMATCH")
+    if source.get("generated_artifact_is_owner") is not False:
+        errors.append("PLUGIN_GENERATED_OWNER_INVALID")
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
 
     for path in REQUIRED_FILES:
         errors.extend(validate_file(path))
+    errors.extend(validate_plugin_metadata())
 
     if errors:
         print("UNIFIED_SURFACE_PARITY_CONTRACT=FAIL")
