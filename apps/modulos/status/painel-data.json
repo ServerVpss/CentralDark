@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "aprendizado(#172): Contrato JARVIS Hermes Kaizen e linguagem regional",
+    "lastCommit": "aprendizado(#173): Voz JARVIS e Hermes — melhorias candidatas de turn-taking",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T16:46:49.398Z",
+      "titulo": "Push na main · 59b27c2074e03071936f77981e94d8fab0fb21bf",
+      "detalhe": "aprendizado(#173): Voz JARVIS e Hermes — melhorias candidatas de turn-taking",
+      "area": "Repositório",
+      "sha": "59b27c2",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T16:43:06.982Z",
       "titulo": "Push na main · 0d3b718933d8c4c86c4d1c45cd6cd7a84d7d0862",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "36f5d36",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T11:04:19.956Z",
-      "titulo": "Push na main ┬À 8c8e7d25e1d07437082f441d69fc9f7c18243c97",
-      "detalhe": "docs(hud): seal actual CC2003 gate PASS and Meta-Lupa local hash proof",
-      "area": "Reposit├│rio",
-      "sha": "8c8e7d2",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T16:46:49.398Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 59b27c2074e03071936f77981e94d8fab0fb21bf (59b27c2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T16:43:06.982Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 36f5d36300a9e3c8cec9b4ef3985c3016fbde08c (36f5d36)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T11:04:19.956Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 8c8e7d25e1d07437082f441d69fc9f7c18243c97 (8c8e7d2)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T16:43:06.982Z",
-  "updatedAtBR": "14/10/2026, 13:43:06 BRT"
+  "updatedAt": "2026-10-14T16:46:49.398Z",
+  "updatedAtBR": "14/10/2026, 13:46:49 BRT"
 }
