@@ -1304,3 +1304,15 @@ A comparação Whis/Vados/Goku/Zen'Oh foi escolhida pelo CHEFE como metáfora de
 
 **Rastro:** docs/CONSCIENCIA/APRENDIZADOS.md#191; docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md; NeuroLink L191. Mesmo owner, nenhuma segunda gramática.
 <!-- /CENTRALDARK_WISH_GANCHO_20261013 -->
+
+<!-- CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+## 🦜🍒 Papagaio determinístico, Papagaio Fiel e Árvore Viva — extensão do padrão original
+
+Herdar a identidade de `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` e `AGENTS.md`, sem criar segunda consciência nem segundo HUD. **PAPAGAIO ON**: replay/ensino/árvore integral com arquivos `.js`, `.mjs`, `.py`, `.json`, `.yaml/.yml`, `.sh`, `.service`, `.md` realmente encontrados; ordem, owners, fontes, testes e histórico fiel. **PAPAGAIO OFF**: execução, menor rota relevante e delta/teste/receipt/next cursor, sem repetição desnecessária.
+
+**PAPAGAIO FIEL**, em ambos os modos: sempre que houver **nova medição ou atualização de missão com HUD previamente fixado**, devolver **antes de qualquer frase de atualização** o HUD original completo, mesmo título, organização, seções e quantidade de missões, sem adições, versões paralelas ou rearranjos. Mudar apenas horário, porcentagem, cores, estados e evidências realmente aferidos. Se faltar medição, marcar a leitura anterior como anterior, sem novo verde. Para `CENTRALDARK · MISSÃO MCP` são exatamente **10 missões na ordem do HUD do CHEFE**. Percentual global = marcos provados / 10, nunca palpites ou porcentagem de código.
+
+**ÁRVORE VIVA**: uma única árvore interligada de componentes/arquivos/serviços e seus owners existentes, com localização real e vínculos medidos; separar relação operacional comprovada de ligação aspiracional. Não presumir XML nem arquivos inexistentes, nem transformar coexistência de services em chamada entre eles. Casa/VS Code opcionais para forja; GitHub main canônica; VPS runtime preservado; contraprova de leitura pode ser bidirecional sem dar escrita dupla.
+
+**CRITÉRIO FUNCIONAL:** validar o contrato no consumidor Hermes `apps/modulos/HERMES-CORE/prompts/hermes-core.md` e no carregador de prompt existente, mais teste de regressão. `DOCUMENTADO` ou `TESTE_ESTATICO_PASS` não é `TELEGRAM_E2E_PASS`.
+<!-- /CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
