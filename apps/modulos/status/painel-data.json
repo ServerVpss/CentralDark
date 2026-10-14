@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧿 fix(parity): reuse proven PR1805 identity checks and reconcile release receipt",
+    "lastCommit": "docs(receipt): seal verified Casa-VPS SSH route and explicit change authority",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T22:07:52.599Z",
+      "titulo": "Push na main · e48c0cb0108cfd00652f394a09c9d9cf5cc5c4d1",
+      "detalhe": "docs(receipt): seal verified Casa-VPS SSH route and explicit change authority",
+      "area": "Repositório",
+      "sha": "e48c0cb",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T21:19:27.809Z",
       "titulo": "Push na main · 447f6623502592901620ed3def6f67364e439008",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "1e479f1",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:47:17.300Z",
-      "titulo": "Push na main ┬À 3f950565df5b1a7c47c1317b03b9054a7b7bbebe",
-      "detalhe": "docs(receipt): registrar consolidacao CentralDark 0.1.1 e limite da voz",
-      "area": "Reposit├│rio",
-      "sha": "3f95056",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T22:07:52.599Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e48c0cb0108cfd00652f394a09c9d9cf5cc5c4d1 (e48c0cb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T21:19:27.809Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 1e479f1924315e1679354655b9b9539dbc0058a8 (1e479f1)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:47:17.300Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 3f950565df5b1a7c47c1317b03b9054a7b7bbebe (3f95056)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T21:19:27.809Z",
-  "updatedAtBR": "14/10/2026, 18:19:27 BRT"
+  "updatedAt": "2026-10-14T22:07:52.599Z",
+  "updatedAtBR": "14/10/2026, 19:07:52 BRT"
 }
