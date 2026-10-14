@@ -2,12 +2,12 @@
 name: vs-code-restore
 description: Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa salvo, sem depender do Claude. Use ao abrir o workspace CentralDark ou quando quiser reconstruir a bancada.
 version: 0.1.0
-metadata: {"status":"em_construcao","mapa":"workspace-map-20261014.json","compilado":false,"testado_no_vscode":false}
+metadata: {"status":"build_instalado_runtime_pending","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa":true,"comando_nativo_testado":false}
 ---
 
 # VS Code Restore: CentralDark
 
-Plugin local do VS Code que reconstroi a bancada do workspace CentralDark quando voce abre o programa. Roda sozinho, sem Claude.
+Extensao nativa do VS Code: mapeia a interface sob comando e preserva a capacidade de restaurar a bancada manualmente. A restauracao automatica e o disparo de agentes ficam desligados por padrao para nao duplicar os owners existentes.
 
 ## O que restaura
 
@@ -49,8 +49,10 @@ Para instalar localmente, gerar o pacote com `npx @vscode/vsce package` e depois
 ## Estado atual (medido)
 
 - Mapa: **parcial**. Capturadas 17 entradas em Editores Abertos. Faltam: rolar a lista, Saida, Debug e Extensoes, e as URLs reais das abas web.
-- Plugin: codigo escrito, **nao compilado e nao testado** dentro do VS Code.
-- Git: arquivos criados so na Casa, **sem commit e sem push**.
+- Extensao: TypeScript compilado (`TSC_EXIT=0`), VSIX de 14.224 bytes empacotado, `code --install-extension` retornou `INSTALL_EXIT=0` e `code --list-extensions` mostrou `centraldark.centraldark-vscode-restore@0.1.0`. Ativacao/invocacao do comando pela UI: **UNKNOWN** ate readback no Extension Host.
+- UIAutomation: 3 janelas e 319 controles acessiveis deduplicados catalogados. Sao observacoes, nao 319 cliques comprovados.
+- GitHub: publicacao no MESMO owner em main `9aca9ff8a651b73d196e9931305a86b950d4e09a`; `.vscodeignore` em `01d4f00618dce97ef2b5d9e773f64c4b43efac5f`. Readback da fonte PASS.
+- Casa K: o diretorio local continua sem tracking do Git; ha 6 arquivos de OUTRO escopo preparados no indice. Nao realizar pull/reset/commit sobre esse trabalho ate reconciliar as arvores com o SHA remoto.
 
 ## Manutencao
 
