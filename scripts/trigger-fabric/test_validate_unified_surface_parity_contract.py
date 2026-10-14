@@ -100,6 +100,28 @@ class ParityValidatorCounterproof(unittest.TestCase):
         self.assertNotEqual(code, 0, out)
         self.assertIn(marker, out)
 
+    def test_plugin_metadata_drift_fails(self) -> None:
+        self.mutate(
+            Path(".agents/plugins/centraldark-unified-surface-parity/plugin.json"),
+            '"version": "0.1.4"', '"version": "9.9.9"',
+        )
+        self.assert_fail("PLUGIN_VERSION_MISMATCH")
+
+    def test_plugin_capabilities_drift_fails(self) -> None:
+        self.mutate(
+            Path(".agents/plugins/centraldark-unified-surface-parity/plugin.json"),
+            '"Write"', '"NotWrite"',
+        )
+        self.assert_fail("PLUGIN_CAPABILITIES_INVALID")
+
+    def test_plugin_release_identity_drift_fails(self) -> None:
+        self.mutate(
+            Path(".agents/plugins/centraldark-unified-surface-parity/SOURCE.json"),
+            '"release_id": "pluginrel_6acc564ddd4881918f5a732c0816ea23"',
+            '"release_id": "pluginrel_counterproof"',
+        )
+        self.assert_fail("PLUGIN_RELEASE_MISMATCH")
+
     def test_clean_set_passes(self) -> None:
         code, out = self.run_validator()
         self.assertEqual(code, 0, out)
