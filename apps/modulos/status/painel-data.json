@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧾 docs(receipt): append BOOT anti-friction delta and proof boundaries",
+    "lastCommit": "docs(self-evolution): contrato da pontuação, XP canônico e limites de prova",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T18:19:40.106Z",
+      "titulo": "Push na main · 4905a0cda3feceea9e145ab6be23c438a2ad993a",
+      "detalhe": "docs(self-evolution): contrato da pontuação, XP canônico e limites de prova",
+      "area": "Repositório",
+      "sha": "4905a0c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T18:18:47.613Z",
       "titulo": "Push na main · 2dcba42ef3c7f561db7b996dd332b9a3bcfb174f",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "06da8aa",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T23:14:52.017Z",
-      "titulo": "Push na main ┬À 95fa4e2a3e30290ef191edfafb90d61a0efd4b1c",
-      "detalhe": "docs(memory): apontar vault Casa K em migracao no owner docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/OBSIDIAN-CASA-SINCRONIZACAO.md",
-      "area": "Reposit├│rio",
-      "sha": "95fa4e2",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T18:19:40.106Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4905a0cda3feceea9e145ab6be23c438a2ad993a (4905a0c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T18:18:47.613Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 06da8aad878f624d2717661a2ceb9d4901dffe5b (06da8aa)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T23:14:52.017Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 95fa4e2a3e30290ef191edfafb90d61a0efd4b1c (95fa4e2)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T18:18:47.613Z",
-  "updatedAtBR": "14/10/2026, 15:18:47 BRT"
+  "updatedAt": "2026-10-14T18:19:40.106Z",
+  "updatedAtBR": "14/10/2026, 15:19:40 BRT"
 }
