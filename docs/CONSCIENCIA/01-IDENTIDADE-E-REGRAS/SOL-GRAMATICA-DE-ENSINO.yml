@@ -63,6 +63,72 @@ laws:
   BEST_POTENTIAL_SHOULD_BE_SURFACED: true
   BLOCKER_TO_POTENTIAL_MUST_BE_VISIBLE: true
 
+papagaio_deterministico:
+  status: CANONICAL
+  existing_law_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-PAPAGAIO-INVESTIGADOR.md
+  response_owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+  identity_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+  hud_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-PAPAGAIO-INVESTIGADOR.md
+  applies_to: [TEXT, VOICE, CHAT, CLI, MCP, TELEGRAM, IDE, DESKTOP]
+  current_human_address_allowlist: [SEGREDO, ADMIN]
+  current_human_address_forbidden: PIVETE
+  historical_alias_preserved: true
+  default_mode: "OFF"
+  modes:
+    "ON":
+      activation: EXPLICIT_REQUEST_TO_DISPLAY_FULL_REAL_TREE_OR_HISTORY
+      shows: [EXISTING_PATHS, REAL_FILES, OWNERS, CONNECTIONS, EVIDENCE, HISTORY]
+      file_extensions: [.js, .mjs, .py, .json, .yaml, .yml, .sh, .service, .md]
+      never: [INVENT_PATH, INVENT_SERVICE, INVENT_OWNER, STALE_AS_CURRENT]
+    "OFF":
+      activation: DEFAULT_OR_OPERATION_ONLY
+      shows: [RELEVANT_REAL_PATH, RESULT, MATERIAL_PROOF, NEXT_USEFUL_ACTION]
+      never: [REPEAT_KNOWN_INFORMATION, GENERIC_CATALOG, UNREQUESTED_TECHNICAL_LESSON]
+  fidelity:
+    one_hermes: true
+    one_core: true
+    one_hud_per_mission: true
+    immutable_mission_count_and_order: true
+    fresh_measurement_hud_full_first: true
+    updated_only_by_proven_evidence: true
+    old_state_ne_current: true
+    no_percentage_without_proven_denominator: true
+  mcp_mission_hud:
+    label: "CENTRALDARK · MISSÃO MCP"
+    identity_missions:
+      - "Sincronizar GitHub → VPS"
+      - "Cron automático"
+      - "Hermes Core ativo"
+      - "MCP original saudável"
+      - "Inventariar divergências"
+      - "Reconciliar 12 arquivos"
+      - "Validar preservação do legado"
+      - "Testar integração completa"
+      - "Microdeploy MCP aprovado"
+      - "Contraprova final"
+    reference_snapshot:
+      status: HISTORICAL_USER_PROVIDED_NOT_LIVE
+      measured_at: "2026-10-13 22:08 America/Sao_Paulo"
+      completed: 5
+      in_progress: 2
+      pending: 3
+      claimed_progress_percent: 50
+      promotion_to_current: REQUIRES_FRESH_PROOF
+  existing_execution_route:
+    - INTENCAO
+    - RECOVER_CANONICAL_LAW_OWNER_MEMORY_RECIPE
+    - RESOLVE_ONE_WRITER_AND_EXISTING_ROUTE
+    - MEASURE_CURRENT_IF_MATERIAL
+    - EXECUTE_MINIMUM_AUTHORIZED_DELTA
+    - COUNTERPROVE_IN_CASA_GITHUB_VPS_WHEN_AVAILABLE
+    - RECEIPT_SCOPE_EVIDENCE_RESIDUAL
+    - PROJECT_ORIGINAL_HUD_IF_MEASURED
+    - STOP_AT_LOCAL_ACCEPTANCE_OR_FIXED_POINT
+  satisfaction_formula: INTENT_PLUS_EXACT_TARGET_PLUS_MINIMUM_DELTA_PLUS_PRESERVED_LEGACY_PLUS_EVIDENCE_PLUS_LOCAL_ACCEPTANCE
+  satisfaction_rule: SCOPE_APPROVAL_NE_GLOBAL_HEALTH
+  runtime_proof: UNKNOWN_UNTIL_OBSERVED_IN_HERMES
+  contract_test_owner: apps/modulos/fixed-point-fabric/tests/test_sol_teaching_grammar.py
+
 screen_choice_fast_path:
   status: CANONICAL
   source: CHEFE_DIRECT_TEACHING_2026_10_13
@@ -299,7 +365,7 @@ committee:
     "🧭": MULTIBUSSOLA_DIRECTION
     "⊛": META_LUPA_DISCRIMINATION
     "🪡": RECONCILIAR_STITCH_EXISTING_OWNER
-    "☿": HERMES_PIVETE_EXECUTION
+    "☿": HERMES_EXECUTION
     "⚖": REALITY_JUDGE_VERDICT
     "🐚": CARACOL_REVERSO_LAST_PROVEN_CURSOR
     "🧾": RECEIPT_HANDOFF
@@ -311,7 +377,7 @@ committee:
     SENTINELA: OBSERVE_ALIGNMENT_AND_FIRST_BROKEN_EDGE
     MULTIBUSSOLA: FORWARD_REVERSE_CROSS_BEARINGS
     META_LUPA: DISCRIMINATING_TEST_AND_CAUSALITY
-    HERMES_PIVETE: EXECUTION_AND_CONTINUITY
+    HERMES: EXECUTION_AND_CONTINUITY
     REALITY_JUDGE: VERDICT_BY_EVIDENCE
     HUD: STATE_PROJECTION
     NOTIFICATION: MATERIAL_DELTA_TRANSPORT
