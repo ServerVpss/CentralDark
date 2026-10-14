@@ -1,0 +1,204 @@
+{
+  "versao": "2026-10-14",
+  "workspace": "CentralDark (Workspace)",
+  "pasta_raiz": "K:\\",
+  "monitor_vscode": "DELL S2421HN",
+  "completude": "parcial: 17 editores; URLs candidatas para 3 abas (sem vinculo confirmado); target segue null ate confirmacao",
+  "terminais": [
+    {
+      "name": "Hermes 1",
+      "shell": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "cwd": "K:\\",
+      "command": "hermes chat",
+      "pid_capturado": 23992
+    },
+    {
+      "name": "Hermes 2",
+      "shell": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "cwd": "K:\\",
+      "command": "hermes chat",
+      "pid_capturado": 38164
+    },
+    {
+      "name": "Claude Code",
+      "shell": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "cwd": "K:\\",
+      "command": "claude",
+      "pid_capturado": 19136
+    },
+    {
+      "name": "Terminal vazio",
+      "shell": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "cwd": "K:\\",
+      "command": null,
+      "pid_capturado": 15612
+    }
+  ],
+  "editores": [
+    {
+      "label": "Diagnostico da trava (chatgpt.com)",
+      "kind": "web",
+      "target": null,
+      "janela": 2,
+      "url_candidatas": [
+        "https://chatgpt.com/c/6acd3000-e104-83e8-b8c8-5fef15b53675",
+        "https://chatgpt.com/c/6acdeb4d-bf44-83e9-8ebf-f39a7d190c7f"
+      ]
+    },
+    {
+      "label": "Branch · Branch · OXENTE…",
+      "kind": "web",
+      "target": null,
+      "janela": 2
+    },
+    {
+      "label": "AionUI - Entrar",
+      "kind": "web",
+      "target": null,
+      "janela": 2
+    },
+    {
+      "label": "CentralDark Index + HUD (1)",
+      "kind": "web",
+      "target": null,
+      "janela": 2
+    },
+    {
+      "label": "CentralDark Index + HUD (2)",
+      "kind": "web",
+      "target": null,
+      "janela": 2
+    },
+    {
+      "label": "HERMES_WRITER_EXECUTOR",
+      "kind": "terminal_em_editor",
+      "target": null,
+      "janela": 2
+    },
+    {
+      "label": "Extensao: Obsidian MD for VSCode",
+      "kind": "extensao",
+      "target": null,
+      "janela": 2
+    },
+    {
+      "label": "GitLens Settings",
+      "kind": "settings",
+      "target": null,
+      "janela": 2
+    },
+    {
+      "label": "CentralDark Index + HUD (3)",
+      "kind": "web",
+      "target": null,
+      "janela": 3
+    },
+    {
+      "label": "CentralDark Index + HUD (4)",
+      "kind": "web",
+      "target": null,
+      "janela": 3
+    },
+    {
+      "label": "Cockpit CentralDark — Sala de…",
+      "kind": "web",
+      "target": null,
+      "janela": 4,
+      "fixada": true,
+      "url_candidatas": [
+        "https://admin.centralldark.com/sala-controle"
+      ]
+    },
+    {
+      "label": "CentralDark/apps/instinto-supe…",
+      "kind": "web",
+      "target": null,
+      "janela": 4
+    },
+    {
+      "label": "Melhorar arquivo com ChatGPT e…",
+      "kind": "web",
+      "target": null,
+      "janela": 4
+    },
+    {
+      "label": "clickup - Pesquisar",
+      "kind": "web",
+      "target": null,
+      "janela": 4
+    },
+    {
+      "label": "Overview | Espaco da equipe",
+      "kind": "web",
+      "target": null,
+      "janela": 4
+    },
+    {
+      "label": "Operacoes CentralDark | Use AI h…",
+      "kind": "web",
+      "target": null,
+      "janela": 4,
+      "ativo": true,
+      "url_candidatas": [
+        "https://chatgpt.com/g/g-p-6a594048d0588191a3c3e092358c588e-centraldark/c/6ace14d0-0c00-83e9-81f1-0af67f23a925"
+      ]
+    },
+    {
+      "label": "JARVIS_Memoria_…",
+      "kind": "web",
+      "target": null,
+      "janela": 5
+    }
+  ],
+  "extensoes_instaladas": [
+    "anthropic.claude-code",
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "google.gemini-cli-vscode-ide-companion",
+    "google.geminicodeassist",
+    "google.google-antigravity",
+    "ms-ceintl.vscode-language-pack-pt-br",
+    "ms-python.debugpy",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.vscode-python-envs",
+    "ms-vscode.remote-explorer",
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-ssh-edit",
+    "openai.chatgpt",
+    "openai.codex-audio",
+    "sixth.sixth-ai",
+    "yuanzhixiang.claude-code-yolo"
+  ],
+  "pendente": [
+    "confirmar o vinculo aba-URL (candidatas ainda nao confirmadas)",
+    "URL do ClickUp nao encontrada nos logs/state",
+    "lista de extensoes ativas (barra lateral) nao capturada",
+    "terminal CODEX docs sem PID"
+  ],
+  "paineis": {
+    "saida": {
+      "canal_ativo": "Claude VSCode",
+      "conteudo": "vazio na captura de 04:23"
+    },
+    "console_depuracao": {
+      "conteudo": "vazio na captura de 04:23"
+    },
+    "portas": {
+      "conteudo": "nenhuma porta encaminhada"
+    },
+    "problemas": {
+      "status": "nao capturado"
+    },
+    "terminal": {
+      "ativo": "hermes chat",
+      "grupo_direita": [
+        "CODEX docs",
+        "Claude Code"
+      ]
+    }
+  },
+  "fontes_urls": "storage e state.vscdb do workspace 5db01d8a97c437ddf4a7d80c4a519ea3; nenhuma URL do ClickUp encontrada nos logs; caminho K:\\\\CentralDark\\\\apps\\\\instinto-superior NAO existe"
+}
