@@ -410,22 +410,22 @@ CENTRALDARK_AI_BOOT:
 
 
   canonical_consumption_gate:
-    status: "REQUIRED_BEFORE_FIRST_AGENT_ROUTING"
-    position: "BEFORE_FIRST_AGENT_ROUTING"
+    status: "ADVISORY_ON_DEMAND"
+    position: "BEFORE_RELEVANT_AGENT_ROUTING_IF_NEEDED"
     owner: "scripts/centraldark/canonical-consumption-gate.mjs"
     runtime_consumer: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
     canonical_source: "docs/CONSCIENCIA/APRENDIZADOS.md"
-    required_learning: "ALL"
-    learning_mode: "ALL_NUMBERED_LEARNINGS"
-    consume_all_numbered_learnings: true
+    required_learning: "PERTINENT"
+    learning_mode: "PERTINENT_ONLY"
+    consume_all_numbered_learnings: false
     consultar_canonico_antecede_investigar: true
     replay_before_rediscovery: true
     pointer_text_is_not_source: true
     search_miss_is_not_stop_condition: true
     search_miss_fallback: "DIRECT_CANONICAL_PATH_READ"
     tool_available_must_be_attempted_before_unknown: true
-    unknown_with_measurement_route: "FAIL_CLOSED"
-    failure_policy: "FAIL_CLOSED"
+    unknown_with_measurement_route: "CONTINUE_TARGETED_MEASUREMENT"
+    failure_policy: "NON_BLOCKING_ADVISORY"
 
   initial_bootstrap_gate:
     marker: "CENTRALDARK_TLC23_PDF_BOOT_GATE_REQUIRED"
