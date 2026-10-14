@@ -48,3 +48,21 @@ STATE=INCREMENTAL_DELTA_PROVED; GLOBAL_FIXED_POINT_NOT_CLAIMED
 NEXT_CURSOR=RECONCILE_BOOT_YAML_OLD_ALL_LEARNINGS_WITH_EXISTING_ACTIVE_WRITER_THEN_RUNTIME_SURFACES
 PENDING=.agents/INTENT-DEPLOY-BINDING.json and CENTRALDARK_AI_BOOT.yaml contain historical descriptions requiring context-specific owner review.
 UNKNOWN=full repo-wide runtime inventory, PR ownership handoff, CI same-SHA, production deployment.
+
+## DELTA 2 — BOOT alinhado ao executor existente
+
+BOOT_FIX_COMMIT=e855feb8f7a0fb3a74cc3d3bca655f66c9bd3940
+BOOT_PATH=CENTRALDARK_AI_BOOT.yaml
+BOOT_OLD_BLOB=5e54e602590486f3b70b8b41bafaac660b54fc81
+BOOT_NEW_BLOB=2b79555cccc5882f0d13db90040574fab4fb12f2
+BOOT_SCOPE=canonical_consumption_gate_ONLY
+
+- GOLD preservado: `scripts/centraldark/canonical-consumption-gate.mjs`, `scripts/trigger-fabric/centraldark_full_trigger_boot.py`, e leitura de todos os aprendizados por `--learning ALL` sob demanda.
+- FRICTION removida: sete valores documentais ajustados para consumo pertinente, consultivo e não bloqueante.
+- PROVA: diff limitado a um bloco e GitHub readback byte a byte do commit.
+- CI_SAME_HEAD: PENDING no momento da escrita; nenhum resultado pendente equivale a PASS.
+- OWNER CONCORRENTE: PR #1774 ainda possui versão antiga do BOOT; qualquer integração posterior exige reconciliar para não reintroduzir fricção.
+- NÃO ALTERADO: outros FAIL_CLOSED de segurança e integridade, runtime VPS, Casa, HUD, runners e PRs.
+- UNKNOWN: eficácia E2E, produção, gates globais e fixed point repo-wide.
+
+NEXT_CURSOR=CI_SAME_SHA_BOOT_E855FEB8_THEN_PR1774_PREVENT_REINTRODUCTION_AND_RUNTIME_BACKCHECK
