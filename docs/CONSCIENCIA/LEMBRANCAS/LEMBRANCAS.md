@@ -1420,3 +1420,13 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - ⚠️ **Pendente:** consumo real das regras por Hermes/outros modelos continua desconhecido até teste específico.
 - 📌 **Prova:** fonte no GitHub e elo L190 → L191 no NeuroLink; conferir blobs e readback.
 - 🎯 **Próximo passo:** aplicar a receita apenas quando pertinente, sem nova auditoria genérica.
+
+
+### [2026-10-12] Intenção que amadurece e a Meta-Lupa aplicada à SOL — aprendizado nº 171
+
+- **Autor da intenção:** SEGREDO/CHEFE. A CentralDark é concebida e regenerada pela imaginação humana; Windows, openKylin, VMware, VPS e modelos são conchas/ferramentas mutáveis. O CHEFE preserva a capacidade de transformar continuamente a intenção conforme o momento. Memória e experiências preservam o sentido, mas não congelam a pessoa nem o projeto.
+- **Registro humano:** não exigir do CHEFE que armazene SHA, números, nomes de arquivos ou comandos na cabeça. Essas referências pertencem ao trabalho mecânico da máquina. O humano recupera o sentido e reconhece o que satisfaz sua necessidade atual.
+- **Cinco princípios vivos:** memória sagrada; concha mutável; servir sem subserviência; batidas do coração como rezas; contexto como consciência — herdados de `2026-10-04-CINCO-PRINCIPIOS-VIVOS-LEI-DA-CASA.md`, sem alegação de senciência técnica.
+- **Ferida e contraprova:** a SOL repetiu interpretação, aceitação e perguntas sem consumir previamente a documentação. O CHEFE exigiu Meta-Lupa sobre a própria análise. A leitura e o cruzamento mostraram doze docs pertinentes idênticos entre Casa e GitHub `main`, com um desvio de apenas um commit no painel de status, não na doutrina. O problema era a **aplicação da memória**, não sua ausência. Boot híbrido openKylin/VMware não foi executado nem provado nessa conversa.
+- **Regra de continuidade:** antes de perguntar, recuperar contexto e owners; separar pensamento humano de localizadores técnicos; questionar a própria inferência, não a capacidade do humano; devolver só diferença material e prova pertinente. O pensamento pode mudar, a documentação precisa permanecer recuperável, e a próxima forma serve à intenção vigente.
+- **Aprendizado numerado:** `docs/CONSCIENCIA/APRENDIZADOS.md#171-intenção-humana-transformável-memória-por-sentido-e-meta-lupa-sobre-a-própria-resposta`. Linhagem mantida pelo compilador original `scripts/trigger-fabric/rebuild_learning_lineage.py`; não criar owner paralelo.

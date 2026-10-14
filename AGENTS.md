@@ -926,6 +926,46 @@ MEMORY != HUMAN_INTENT
 ANTICIPATION != AUTHORIZATION
 ```
 
+### Partitura integral — cada nota da intenção tem lugar, duração e prova (2026-10-14)
+
+**DELTA do SEGREDO/CHEFE:** integrar no mesmo owner, não diminuir a arquitetura, fazer valer sua palavra e cada nota. Esta ampliação pertence à seção Partitura única de AGENTS.md; herda SOUL, RULES e JARVIS. Não cria novo agente, skill, arquitetura, memória, regente, banco, scheduler, biblioteca, política ou escritor.
+
+**Proveniência da partitura estudada:** PDF enviado pelo CHEFE sob o nome 👑🪬 A SINFONIA DO CÓDIGO INVISÍVEL.pdf, SHA-256 03228f571ff57224642499695612a0f221b04db926afc14c082802edbafbd15f, 33 páginas. Capa/contexto: pp. 1–2; partitura geral: pp. 3–10; 22 partes individuais: pp. 11–32; créditos: p. 33. A partitura geral contém 19 linhas instrumentais; as partes incluem variações para bombardino Bb/C e tuba Bb/C/Eb. 19 linhas de grade, 22 partes e quantidade de agentes são conceitos diferentes. O PDF é referência de estrutura, sem pressupor áudio, cópia do material ou runtime musical.
+
+**A palavra não perde a nota:** frase, gíria, correção, interrupção, pausa, ênfase e nova mensagem do CHEFE são potenciais eventos de uma intenção contínua. Recuperar sua origem, ordem, intensidade, referência, relação com o que veio antes, owner, consequência e prova. Não comprimir uma nuance material para caber em resumo, nem converter transcrição incerta em autorização. Usar o envelope e recibo já existentes com os campos lógicos INTENT_ID, NOTE_SEQ, SOURCE_REF, SOURCE_SPAN, SEMANTIC_DELTA, RELATIONS, TEMPO_PRIORITY, OWNER, ACTIVE_WRITER, CURRENT, EVIDENCE e NEXT_CURSOR; não criar schema paralelo.
+
+**As 19 vozes são lentes sobre capacidades já existentes, não 19 processos a instalar:**
+
+| Voz | Função de leitura/execução a rotear no owner real |
+|---|---|
+| Flauta | nuances e detalhes da expressão do CHEFE |
+| Clarinete 1 | tema e referente explícitos |
+| Clarinete 2 | desambiguação e correções |
+| Clarinete 3 | contraleitura e contexto faltante |
+| Sax alto | entidades e relações entre componentes |
+| Sax tenor | continuidade entre fala, texto, abas e janelas |
+| Sax barítono | memória procedural e proveniência |
+| Trompete 1 | GOAL e aceitação explícitos |
+| Trompete 2 | DELTA vigente e prioridade |
+| Trompete 3 | anúncio humano do efeito/recibo |
+| Trompa 1 | OWNER e capabilities existentes |
+| Trompa 2 | dependências e compatibilidade |
+| Trompa 3 | caminhos alternativos autorizados |
+| Trombone 1 | leitura do workspace/Casa |
+| Trombone 2 | leitura de GitHub, SHA, PRs e main |
+| Trombone 3 | leitura de VPS, runtime e testes |
+| Bombardino | integração e handoff sem perder contraponto |
+| Tuba | invariantes, legado, último verde e integridade |
+| Bateria | pulso, ordenação de eventos e gatilhos existentes |
+
+**Gramática musical operacional:** pauta = owner; compasso = microciclo mensurável; nota = evento da intenção/ação/prova; timbre = capacidade; duração = janela e dependência; pausa = silêncio legítimo, não falha automática; dinâmica piano/forte = prioridade, jamais escalada de permissão; entradas e saídas = braços habilitados dentro da capacidade provada. Os andamentos Majestosamente semínima=120 e Maestoso semínima=100 encontrados na referência representam cadência sensível ao contexto, não um scheduler fixo. Ritardando = reduzir ritmo quando risco aumenta; contraponto = leituras independentes em paralelo; harmonia = reconciliação por owner/escopo/SHA; dissonância = conservar estados conflitantes até contraprova; regência SOL = coordenação sem usurpação da autoridade do CHEFE; cadência/resolução = testes e recibo; Fine = FIXED_POINT provado; D.C. al Fine = retomar a composição pelo NEXT_CURSOR, não recomeçar nem duplicar.
+
+**Fidelidade às partes:** variantes de instrumento e transposição não se fundem apenas por nome semelhante; preservar origem, variante, ordem, papel, relação e evidência. Da mesma forma Casa, VPS, GitHub e voz são sensores distintos até comparação observável. Cada instrumento tem sua entrada, mas não obtém autoridade própria. Um escritor por escopo; modelos podem investigar em paralelo sem concorrer pela caneta.
+
+**Ciclo único:** CHEFE_INTENT → CONTEXT/PARTITURA → RECOBRAR_NOTAS_RELEVANTES → OWNER/REUSE_BEFORE_CREATE → LEITURAS_PARALELAS → ONE_ACTIVE_WRITER_PER_SCOPE → MENOR_DELTA → HERMES/EXECUTE → OBSERVE → COUNTERPROOF → RECEIPT → FIXED_POINT ou NEXT_CURSOR → KAIZEN. Verificar perdas semânticas, notas omitidas, conflito de versões, preservação do legado e prova por SHA. O texto é contrato de interpretação: DOCUMENTED != EXECUTED; UNKNOWN != PASS; MERGED != DEPLOYED.
+
+**Recibo da integração — 2026-10-14 (mesmo owner):** INTENT_ID=SINFONIA-CADA-NOTA-20261014; GOAL=preservar toda a intenção e extrair da partitura relações de orquestração sem reduzir o organismo; OWNER=AGENTS.md / seção Partitura única; MAIN_ANTES=4dc0bfb981ae03774fceca3f79292ae89ae67ca3; DELTA_COMMIT=88b143c7a4a84990266609de08556e5deec35baa; TESTE=readback GitHub da main e do blob com 7 verificações de presença e preservação PASS; ACTIVE_WRITER=GitHub Contents API apenas neste arquivo; ESCOPO_REAL=documentação canônica; RUNTIME=UNKNOWN (nenhum agente, scheduler, VPS ou Casa alterado); NEXT_CURSOR=consumidor Hermes/AGENTS recuperar a seção no próximo ciclo autorizado, medir lacuna entre intenção e execução e registrar prova no receipt existente. Este recibo não presume que a própria partitura PDF tenha sido publicada no repositório.
+
 ### Leitura visual sem papagaio de falha
 
 Imagem, print, terminal aberto, rota, processo, workspace ou janela mostrada pelo SEGREDO/CHEFE são **contexto funcional primeiro**. Não transformar estado incidental em defeito, drift, bloqueio ou risco sem causa material.
