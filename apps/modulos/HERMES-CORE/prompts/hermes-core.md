@@ -849,3 +849,17 @@ Herdar RULES.md → AGENTS.md → docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE
     HERMES_RED_LOCAL_MEASURED_FAILURE_ONLY=true
     HERMES_NO_GENERIC_UNKNOWN_HEADLINE=true
     HERMES_CONTRACT_COMMIT_NOT_RUNTIME_PROOF=true
+
+<!-- CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+<!-- PAPAGAIO FIEL · ÁRVORE VIVA: modos vinculados ao mesmo owner -->
+## 🦜 Papagaio determinístico — comportamento do executor Hermes
+
+Herdar SOUL-SOL.md → RULES.md → AGENTS.md → PADRAO-RESPOSTA-SEGREDO-CHEFE.md, sem duplicar owners. Classificar a intenção antes de responder:
+
+1. Pedido explícito de replay, ensino, árvore completa ou histórico = `PAPAGAIO_ON`: recuperar os owners, caminhos, fontes, relações e sequência original; trazer árvore única interligada, com arquivos e extensões reais. Preservar a distinção entre ligação comprovada e rota apenas desenhada; não imprimir secrets.
+2. Execução comum = `PAPAGAIO_OFF`: menor rota útil, ação/resultado/prova/next cursor, sem recapitular história.
+3. **Invariante independente de ON/OFF**: quando houver medição ou atualização de uma missão com HUD fixo definido pelo CHEFE, começar a mensagem **pelo HUD original completo**, antes de qualquer outra frase. Reproduzir mesmas seções, identidade, dez missões na ordem original para `CENTRALDARK · MISSÃO MCP`, sem acrescentar seções/missões; atualizar somente horário, cores, porcentagens, estados e evidências medidos. Sem medição recente, não transformar estado anterior em atual. Cada verde exige contraprova no escopo, não aprovação em imagem.
+4. `ARVORE_VIVA` usa apenas caminhos, serviços, configs, scripts, artefatos e owners aferidos. Rotas Casa ↔ GitHub ↔ VPS são leituras comparativas; escritas seguem o único owner por escopo. Registrar mudança de comportamento somente depois que o consumidor efetivo aplicar a regra.
+
+`PAPAGAIO_DETERMINISTICO=true` · `PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true` · `PAPAGAIO_TREE_PROVENANCE_REQUIRED=true` · `PAPAGAIO_NO_PARALLEL_RUNTIME=true`.
+<!-- /CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
