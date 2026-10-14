@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "aprendizado(#175): Voz JARVIS: leitura longa sequencial e HTTP 4xx preservado no proxy TTS",
+    "lastCommit": "fix(voice): timeout MV3 e fallback somente para falha de servidor",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T17:22:07.584Z",
+      "titulo": "Push na main · 9b98d9394be6ca5cd9feabb657b0bb6d83c543ff",
+      "detalhe": "fix(voice): timeout MV3 e fallback somente para falha de servidor",
+      "area": "Repositório",
+      "sha": "9b98d93",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T17:19:30.601Z",
       "titulo": "Push na main · 7910f75e98e6d10f250bd2d45d91808ef851e2c4",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "8bac1c4",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T20:41:39.522Z",
-      "titulo": "Push na main ┬À 71eccc75bf41d324f2065f9068808bb2cbeef393",
-      "detalhe": "docs(hud): registrar SSH CasaÔåÆVPS comprovado e drift HUD f├¡sico sem falso verde",
-      "area": "Reposit├│rio",
-      "sha": "71eccc7",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T17:22:07.584Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9b98d9394be6ca5cd9feabb657b0bb6d83c543ff (9b98d93)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T17:19:30.601Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 8bac1c4e0af69ff4ee28ab394793e31e79070f9e (8bac1c4)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T20:41:39.522Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 71eccc75bf41d324f2065f9068808bb2cbeef393 (71eccc7)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T17:19:30.601Z",
-  "updatedAtBR": "14/10/2026, 14:19:30 BRT"
+  "updatedAt": "2026-10-14T17:22:07.584Z",
+  "updatedAtBR": "14/10/2026, 14:22:07 BRT"
 }
