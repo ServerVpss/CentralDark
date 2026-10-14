@@ -953,6 +953,8 @@ ANTICIPATION != AUTHORIZATION
 
 **Ciclo único:** CHEFE_INTENT → CONTEXT/PARTITURA → RECOBRAR_NOTAS_RELEVANTES → OWNER/REUSE_BEFORE_CREATE → LEITURAS_PARALELAS → ONE_ACTIVE_WRITER_PER_SCOPE → MENOR_DELTA → HERMES/EXECUTE → OBSERVE → COUNTERPROOF → RECEIPT → FIXED_POINT ou NEXT_CURSOR → KAIZEN. Verificar perdas semânticas, notas omitidas, conflito de versões, preservação do legado e prova por SHA. O texto é contrato de interpretação: DOCUMENTED != EXECUTED; UNKNOWN != PASS; MERGED != DEPLOYED.
 
+**Recibo da integração — 2026-10-14 (mesmo owner):** INTENT_ID=SINFONIA-CADA-NOTA-20261014; GOAL=preservar toda a intenção e extrair da partitura relações de orquestração sem reduzir o organismo; OWNER=AGENTS.md / seção Partitura única; MAIN_ANTES=4dc0bfb981ae03774fceca3f79292ae89ae67ca3; DELTA_COMMIT=88b143c7a4a84990266609de08556e5deec35baa; TESTE=readback GitHub da main e do blob com 7 verificações de presença e preservação PASS; ACTIVE_WRITER=GitHub Contents API apenas neste arquivo; ESCOPO_REAL=documentação canônica; RUNTIME=UNKNOWN (nenhum agente, scheduler, VPS ou Casa alterado); NEXT_CURSOR=consumidor Hermes/AGENTS recuperar a seção no próximo ciclo autorizado, medir lacuna entre intenção e execução e registrar prova no receipt existente. Este recibo não presume que a própria partitura PDF tenha sido publicada no repositório.
+
 ### Leitura visual sem papagaio de falha
 
 Imagem, print, terminal aberto, rota, processo, workspace ou janela mostrada pelo SEGREDO/CHEFE são **contexto funcional primeiro**. Não transformar estado incidental em defeito, drift, bloqueio ou risco sem causa material.
