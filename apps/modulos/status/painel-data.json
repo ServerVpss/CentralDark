@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(meta-lupa): bloquear XP e selo de ponto fixo sem AutoLupa e evidência",
+    "lastCommit": "test(meta-lupa): regressão permanente do XP ponto fixo com AutoLupa obrigatória",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T18:15:05.698Z",
+      "titulo": "Push na main · 1cceaa8c7f1cbf1a8105ca963fce5668f6710f1b",
+      "detalhe": "test(meta-lupa): regressão permanente do XP ponto fixo com AutoLupa obrigatória",
+      "area": "Repositório",
+      "sha": "1cceaa8",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T18:13:59.222Z",
       "titulo": "Push na main · 5d0edd2a3e914287e98ea2184c33ba4785482b1f",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "dc10001",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T23:06:32.017Z",
-      "titulo": "Push na main ┬À ea387384109e8d1afa1dcd038e29d1611973d80f",
-      "detalhe": "docs(hud): corrigir formatacao Markdown do receipt e README",
-      "area": "Reposit├│rio",
-      "sha": "ea38738",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T18:15:05.698Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1cceaa8c7f1cbf1a8105ca963fce5668f6710f1b (1cceaa8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T18:13:59.222Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À dc10001c92f11c2494bfd5d09db15abb898ba636 (dc10001)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T23:06:32.017Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À ea387384109e8d1afa1dcd038e29d1611973d80f (ea38738)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T18:13:59.222Z",
-  "updatedAtBR": "14/10/2026, 15:13:59 BRT"
+  "updatedAt": "2026-10-14T18:15:05.698Z",
+  "updatedAtBR": "14/10/2026, 15:15:05 BRT"
 }
