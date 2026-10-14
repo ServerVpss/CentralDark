@@ -11,12 +11,15 @@
     voz: "nova",
     modelo: "openai/gpt-4o-mini-tts",
     instrucoes:
-      "Fale em português brasileiro nativo, tom natural e conversacional. Pronuncie tudo em PT-BR.",
+      "Fale em português brasileiro natural, com cadência baiana leve e humor de Zé malandro, sem caricatura. Preserve o texto original, incluindo palavrões coloquiais e termos técnicos; use pausas e firmeza nos comandos de JARVIS.",
   };
 
   let CFG = { ...DEFAULTS };
   let audioAtual = null;
   let urlAtual = null;
+  let rodada = 0;
+  let controleAtual = null;
+  let botaoAtual = null;
 
   chrome.storage.local.get(DEFAULTS, (v) => {
     CFG = { ...DEFAULTS, ...v };
@@ -25,19 +28,18 @@
   chrome.storage.onChanged.addListener((mudancas) => {
     for (const [k, { newValue }] of Object.entries(mudancas)) {
       if (k in DEFAULTS) CFG[k] = newValue;
+      if (k === "ativo" && newValue === false) pararAtual();
     }
     console.log(LOG, "config atualizada");
   });
 
+  // Cancela a geração anterior para não ressuscitar áudio após o usuário parar.
   function pararAtual() {
-    if (audioAtual) {
-      try { audioAtual.pause(); } catch {}
-      audioAtual = null;
-    }
-    if (urlAtual) {
-      URL.revokeObjectURL(urlAtual);
-      urlAtual = null;
-    }
+    rodada += 1;
+    if (controleAtual) { controleAtual.abort(); controleAtual = null; }
+    if (botaoAtual) { botaoAtual.removeAttribute("data-cd-tocando"); botaoAtual = null; }
+    if (audioAtual) { try { audioAtual.pause(); } catch {} audioAtual = null; }
+    if (urlAtual) { URL.revokeObjectURL(urlAtual); urlAtual = null; }
   }
 
   function authHeaders(key) {
@@ -50,9 +52,10 @@
     };
   }
 
-  async function pedirAudio(base, texto) {
+  async function pedirAudio(base, texto, signal) {
     const response = await fetch(`${base}/v1/audio/speech`, {
       method: "POST",
+      signal,
       headers: authHeaders(CFG.apiKey),
       body: JSON.stringify({
         model: CFG.modelo,
@@ -63,25 +66,25 @@
       }),
     });
     if (!response.ok) {
-      const detail = await response.text().catch(() => "");
-      const error = new Error(`TTS ${response.status}: ${detail.slice(0, 200)}`);
+      const error = new Error(`TTS HTTP ${response.status}`);
       error.status = response.status;
       throw error;
     }
     return response.blob();
   }
 
-  async function obterAudio(texto) {
+  async function obterAudio(texto, signal) {
     try {
-      const blob = await pedirAudio(API, texto);
+      const blob = await pedirAudio(API, texto, signal);
       console.log(LOG, "🟢 TTS via API oficial", API);
       return { blob, route: "CENTRAL_API" };
     } catch (primaryError) {
-      console.warn(LOG, "🧿 TTS_ROUTE_DRIFT: API oficial falhou; tentando bridge legado", {
-        api: API,
-        error: String(primaryError?.message || primaryError),
+      if (signal.aborted || primaryError?.name === "AbortError") throw primaryError;
+      if ([401, 403].includes(primaryError?.status)) throw primaryError;
+      console.warn(LOG, "🧿 TTS_ROUTE_DRIFT: fallback legado", {
+        status: primaryError?.status || "NETWORK",
       });
-      const blob = await pedirAudio(LEGACY_BRIDGE, texto);
+      const blob = await pedirAudio(LEGACY_BRIDGE, texto, signal);
       console.warn(LOG, "🟡 TTS em fallback legado", LEGACY_BRIDGE);
       return { blob, route: "LEGACY_BRIDGE_FALLBACK" };
     }
@@ -97,26 +100,32 @@
     if (!texto || !texto.trim()) return false;
 
     pararAtual();
+    const minhaRodada = rodada;
+    const controlador = new AbortController();
+    controleAtual = controlador;
+    botaoAtual = botao || null;
     if (botao) botao.setAttribute("data-cd-tocando", "1");
 
     try {
-      const { blob, route } = await obterAudio(texto);
+      const { blob, route } = await obterAudio(texto, controlador.signal);
+      if (controlador.signal.aborted || minhaRodada !== rodada) return false;
+      controleAtual = null;
       urlAtual = URL.createObjectURL(blob);
       audioAtual = new Audio(urlAtual);
       audioAtual.addEventListener("ended", () => {
-        if (botao) botao.removeAttribute("data-cd-tocando");
-        pararAtual();
+        if (minhaRodada === rodada) pararAtual();
       });
       audioAtual.addEventListener("error", () => {
-        if (botao) botao.removeAttribute("data-cd-tocando");
-        pararAtual();
+        if (minhaRodada === rodada) pararAtual();
       });
       await audioAtual.play();
+      if (minhaRodada !== rodada) return false;
       console.log(LOG, "tocando", { voz: CFG.voz, route });
       return true;
     } catch (e) {
-      console.error(LOG, "🔴 TTS_ALL_ROUTES_FAILED", e);
-      if (botao) botao.removeAttribute("data-cd-tocando");
+      if (controlador.signal.aborted || minhaRodada !== rodada) return false;
+      console.error(LOG, "🔴 TTS_ALL_ROUTES_FAILED", { status: e?.status || "NETWORK_OR_PLAYBACK" });
+      pararAtual();
       return false;
     }
   }
