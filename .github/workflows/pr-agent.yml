@@ -75,7 +75,10 @@ jobs:
           else
             rm -rf .venv-pr-agent .pr-agent-site
             mkdir -p .pr-agent-site
-            env -u PYTHONPATH -u PYTHONHOME python3 -m pip install --target .pr-agent-site 'pr-agent==0.46.0' --quiet
+            # O runner pode não ter ensurepip/venv; não depender do setuptools do sistema.
+            env -u PYTHONPATH -u PYTHONHOME python3 -m pip install --target .pr-agent-site --upgrade --ignore-installed --no-deps 'setuptools>=70' 'wheel>=0.40' --quiet
+            env -u PYTHONHOME PYTHONPATH="$PWD/.pr-agent-site" python3 -c 'from setuptools import setup; print("SETUPTOOLS_ISOLATED=PASS")'
+            env -u PYTHONHOME PYTHONPATH="$PWD/.pr-agent-site" python3 -m pip install --target .pr-agent-site --no-build-isolation 'pr-agent==0.46.0' --quiet
             printf 'PR_AGENT_RUNTIME=target\n' >> "$GITHUB_ENV"
             env -u PYTHONPATH -u PYTHONHOME PYTHONPATH="$PWD/.pr-agent-site" python3 -c 'import openai,sys; print("OPENAI_VERSION="+openai.__version__); print("OPENAI_PATH="+openai.__file__)'
           fi
