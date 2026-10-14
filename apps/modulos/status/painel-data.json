@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(voice): ler respostas longas sem truncar com fila cancelável de trechos",
+    "lastCommit": "🧾 docs(receipt): seal pertinent-learning index delta with proof and next cursor",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T17:17:35.404Z",
+      "titulo": "Push na main · fad3ca925eaad834ac939fb5e46c377b33866437",
+      "detalhe": "🧾 docs(receipt): seal pertinent-learning index delta with proof and next cursor",
+      "area": "Repositório",
+      "sha": "fad3ca9",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T17:15:32.009Z",
       "titulo": "Push na main · d2726c830731a3af9682198503f1d07cbea0993e",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "5d7196b",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-11T20:03:46.208Z",
-      "titulo": "Push na main ┬À 141782a81bdf19c619b8f250ebc3a1a9a734a161",
-      "detalhe": "docs(hud): selar subgoal BRAIN e contraprovas CI por SHA sem falso verde",
-      "area": "Reposit├│rio",
-      "sha": "141782a",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T17:17:35.404Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · fad3ca925eaad834ac939fb5e46c377b33866437 (fad3ca9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T17:15:32.009Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À 5d7196b894a3aa90113914ba8eac0aeba8024bf2 (5d7196b)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-11T20:03:46.208Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 141782a81bdf19c619b8f250ebc3a1a9a734a161 (141782a)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T17:15:32.009Z",
-  "updatedAtBR": "14/10/2026, 14:15:32 BRT"
+  "updatedAt": "2026-10-14T17:17:35.404Z",
+  "updatedAtBR": "14/10/2026, 14:17:35 BRT"
 }
