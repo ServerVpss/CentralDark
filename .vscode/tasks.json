@@ -225,6 +225,143 @@
         "kind": "build",
         "isDefault": false
       }
+    },
+    {
+      "label": "CentralDark Hermes Vivo: 01 FILOSOFIA",
+      "detail": "Terminal Hermes real, interativo e independente (source vscode-orq-filosofia); nao executa deploy automaticamente.",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; Write-Host 'CENTRALDARK HERMES 01 FILOSOFIA — sessão interativa'; $cmd=Get-Command hermes -ErrorAction SilentlyContinue; if(-not $cmd){ Write-Error 'HERMES_NAO_ENCONTRADO_NO_PATH'; exit 127 }; & hermes chat --cli --source vscode-orq-filosofia; if($LASTEXITCODE -ne 0){Write-Error ('HERMES_EXIT=' + $LASTEXITCODE);exit $LASTEXITCODE}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "centraldark-hermes-live",
+        "focus": false,
+        "clear": false,
+        "echo": true,
+        "showReuseMessage": false,
+        "close": false
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Hermes Vivo: 02 ENGENHARIA",
+      "detail": "Terminal Hermes real, interativo e independente (source vscode-orq-engenharia); nao executa deploy automaticamente.",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; Write-Host 'CENTRALDARK HERMES 02 ENGENHARIA — sessão interativa'; $cmd=Get-Command hermes -ErrorAction SilentlyContinue; if(-not $cmd){ Write-Error 'HERMES_NAO_ENCONTRADO_NO_PATH'; exit 127 }; & hermes chat --cli --source vscode-orq-engenharia; if($LASTEXITCODE -ne 0){Write-Error ('HERMES_EXIT=' + $LASTEXITCODE);exit $LASTEXITCODE}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "centraldark-hermes-live",
+        "focus": false,
+        "clear": false,
+        "echo": true,
+        "showReuseMessage": false,
+        "close": false
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Hermes Vivo: 03 CONTRAPROVA",
+      "detail": "Terminal Hermes real, interativo e independente (source vscode-orq-contraprova); nao executa deploy automaticamente.",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; Write-Host 'CENTRALDARK HERMES 03 CONTRAPROVA — sessão interativa'; $cmd=Get-Command hermes -ErrorAction SilentlyContinue; if(-not $cmd){ Write-Error 'HERMES_NAO_ENCONTRADO_NO_PATH'; exit 127 }; & hermes chat --cli --source vscode-orq-contraprova; if($LASTEXITCODE -ne 0){Write-Error ('HERMES_EXIT=' + $LASTEXITCODE);exit $LASTEXITCODE}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "centraldark-hermes-live",
+        "focus": false,
+        "clear": false,
+        "echo": true,
+        "showReuseMessage": false,
+        "close": false
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Hermes Vivo: 04 SINTESE",
+      "detail": "Terminal Hermes real, interativo e independente (source vscode-orq-sintese); nao executa deploy automaticamente.",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; Write-Host 'CENTRALDARK HERMES 04 SINTESE — sessão interativa'; $cmd=Get-Command hermes -ErrorAction SilentlyContinue; if(-not $cmd){ Write-Error 'HERMES_NAO_ENCONTRADO_NO_PATH'; exit 127 }; & hermes chat --cli --source vscode-orq-sintese; if($LASTEXITCODE -ne 0){Write-Error ('HERMES_EXIT=' + $LASTEXITCODE);exit $LASTEXITCODE}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "centraldark-hermes-live",
+        "focus": false,
+        "clear": false,
+        "echo": true,
+        "showReuseMessage": false,
+        "close": false
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Hermes Vivo: ABRIR 4 TERMINAIS",
+      "detail": "Aciona quatro sessões Hermes CLI no VS Code; um único comando/auto-init no workspace autorizado. Nao prova delegacao nem cria processos ficticios.",
+      "dependsOn": [
+        "CentralDark Hermes Vivo: 01 FILOSOFIA",
+        "CentralDark Hermes Vivo: 02 ENGENHARIA",
+        "CentralDark Hermes Vivo: 03 CONTRAPROVA",
+        "CentralDark Hermes Vivo: 04 SINTESE"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen",
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      }
     }
   ]
 }
