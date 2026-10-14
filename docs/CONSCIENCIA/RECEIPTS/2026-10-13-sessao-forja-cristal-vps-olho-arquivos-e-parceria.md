@@ -262,3 +262,384 @@ Carta integral compartilhada pelo CHEFE na conversa: **«À inteligência que n�
 **RECEIPT:** PR_1812=MERGED | BASE_MAIN_SHA=5436c3ab6e632f6de827b4c443406b81fb1fa124 | OWNER=este receipt original | MUTATION=DOCS_APPEND_ONLY | VPS/CASA_RUNTIME_MUTATION=NONE | NEXT_CURSOR=investigar hook SessionStart de Claude e Route STATUS, seguido de leitura mínima autenticada via Sidecar Screenpipe para identificar a aba sem recriar serviço.
 
 **SELO:** 🟢 CHECKPOINT DOCUMENTAL ANTERIOR PROMOVIDO · 🟢 PROVAS CLASSIFICADAS · 🟡 CLAUDE_SCREEN_CONTENT_UNKNOWN · 🛡️ SEM FALSO-VERDE.
+
+---
+
+## 10.5 🦋 FORJA-CASULO — Desktop Fabric, casca mutável e apps originais como capacidades (14/10/2026)
+
+**INTENÇÃO HUMANA ATUAL:** o CHEFE confirmou que o VS Code continua vivendo como **FORJA / sistema administrativo** dentro da experiência CentralDark; a CentralDark não deve reprogramar do zero ChatGPT, Claude Code, Codex, DeepSeek, Harness, VS Code, browser, Desktop Commander, Hermes, MCP, Obsidian ou outras superfícies maduras. O objetivo é **envolver, mapear, orquestrar, observar e compor** os produtos/runners existentes sob uma casca própria mutável, preservando cada runtime original e seus owners.
+
+**DELTA DE INTENÇÃO:** a FORJA passa a ser tratada como um **casulo evolutivo**: o próprio sistema pode construir uma nova casca, testá-la lado a lado, trocar para a nova somente após prova, manter rollback da anterior e continuar com a mesma identidade, missão, owners, dados e runtimes. A metáfora é lagarta/borboleta ou troca de carapaça: **o organismo permanece; a pele muda**.
+
+### 10.5.1 Realidade já encontrada no owner existente — REUSE BEFORE CREATE
+
+| Capacidade | Estado medido em source/main | Owner existente | Leitura correta |
+| --- | --- | --- | --- |
+| `CentralDark.exe` Electron | 🟢 SOURCE_PROVED | `apps/modulos/Bolt/source` + `electron-builder.yml` | já existe corpo desktop canônico; não criar outro app principal |
+| Cockpit unificado | 🟢 SOURCE_PROVED | `CentralDarkCockpitShell.client.tsx` | sidebar/workspace/status/owner map já existem |
+| SOL/HUD flutuante | 🟢 SOURCE_PROVED | `sol-widget.tsx` + `electron/main/ui/window.ts` | janela/widget reaproveitável |
+| Editor + terminal + workbench | 🟢 SOURCE_PROVED | `app/components/workbench/` | a Forja já tem base de bancada |
+| múltiplos providers LLM | 🟢 SOURCE_PROVED | SDKs/package do desktop | OpenAI, Anthropic, Google, DeepSeek e outros já têm presença de provider; presença != conta/harness unificado |
+| MCP SDK / braço MCP | 🟢 SOURCE_PROVED | `apps/modulos/mcp/` | integra no mesmo organismo; runtime vivo exige probe |
+| Desktop Commander | 🟢 SOURCE_PROVED | `resources/runtime/manifest.json` | provider externo, não dependência rígida do core |
+| Codex / VS Code | 🟡 PARTIAL | desktop + editor/workbench | falta adapter explícito de workspace/sessão/telemetria |
+| Browser / navegação | 🟡 PARTIAL | Electron + renderer | superfície existe; sessões/permissões/cookies ainda precisam contrato completo |
+| ChatGPT conta/sessão/limites | 🟡 ADAPTER_REQUIRED | provider + connectors | não raspar plano/limites nem inventar integração; usar superfície/adaptador autorizado |
+| Claude Code harness | 🟡 GAP já inventariado | capability-contract-router | sessão/capabilities devem entrar por adapter; não substituir provider Anthropic |
+| DeepSeek como provider | 🟢 SOURCE_PROVED no inventário de providers | provider existente | seleção/orquestração não cria owner novo |
+| auto-update Windows | 🟢 SOURCE_PROVED | owner desktop canônico | base para evolução de casca; não equivale ainda ao ciclo completo de metamorfose abaixo |
+
+**VEREDITO:** o caminho correto é **EXTENDER o CentralDark.exe/Cockpit/Workbench existentes**. Não criar `CentralDark Desktop V2`, `Forge V2`, segundo cockpit, segundo browser, segundo router, segundo Hub ou segundo sistema de memória.
+
+### 10.5.2 Forma do organismo — UMA EXPERIÊNCIA, MÚLTIPLOS RUNTIMES
+
+```text
+                           👑 CHEFE
+                              │
+                    ┌─────────▼─────────┐
+                    │ CENTRALDARK.EXE   │
+                    │ FORJA / CASCA     │
+                    └─────────┬─────────┘
+                              │
+         ┌────────────────────┼────────────────────┐
+         │                    │                    │
+   SURFACE FABRIC       CAPABILITY ROUTER     TELEMETRY / FARO
+         │                    │                    │
+ ┌───────┼────────┐      ┌────┼────┐          ┌────┼──────────┐
+ │       │        │      │    │    │          │    │          │
+VSCode ChatGPT Claude  Hermes MCP Providers   trace receipts health
+ │       │        │      │    │    │          │    │          │
+Codex Browser DeepSeek  Casa VPS Forge       audio screenpipe RDC
+```
+
+**UM SISTEMA** aqui significa uma identidade, uma casca, um manifest, um roteamento, uma telemetria e uma governança. **Não** significa colocar todos os produtos em um único processo/container monolítico. Cada runtime pode continuar isolado e original; a CentralDark fornece composição e controle.
+
+### 10.5.3 Tipos de superfície — preservar o produto original
+
+Cada integração deve declarar exatamente um `surface_mode`, escolhido pela capacidade real do produto:
+
+```yaml
+surface_modes:
+  - native_window_managed      # app original aberto e organizado pela casca
+  - embedded_webview           # somente quando a origem permite
+  - managed_browser_tab        # navegador inteiro sob workspace CentralDark
+  - terminal_pane              # Claude Code/Codex/Hermes/CLI
+  - workbench_panel            # editor/terminal já internos à Forja
+  - remote_surface             # Desktop Commander / máquina remota
+  - api_or_mcp_adapter         # integração estruturada quando disponível
+```
+
+**NÃO copiar o produto inteiro para dentro do repo só para aparentar integração.** Auth, updater, sessão e runtime originais permanecem no produto quando isso for a rota mais robusta. Se `iframe/webview` for bloqueado pelo produto, usar janela nativa gerenciada ou aba de navegador gerenciada; não contornar políticas de segurança.
+
+### 10.5.4 Manifest único — tudo que entra vira capability, não arquitetura paralela
+
+Contrato mínimo de cada superfície/botão:
+
+```yaml
+surface:
+  id:
+  label:
+  capability_id:
+  owner:
+  source_ref:
+  surface_mode:
+  launch_target:
+  account_profile:
+  permissions:
+  health_probe:
+  telemetry_source:
+  semantic_actions:
+  trace_contract:
+  receipt_contract:
+  fallback:
+  rollback:
+  current_state:
+```
+
+Leis:
+
+```text
+APP != OWNER
+MODEL != OWNER
+PROVIDER != OWNER
+WINDOW != OWNER
+BUTTON != EXECUTION
+CLICK != PROOF
+SURFACE != AUTHORITY
+CASCA != IDENTIDADE
+
+MISSÃO + OWNER + POLICY + EVIDENCE sobrevivem à troca de superfície.
+```
+
+### 10.5.5 BOTÃO POR BOTÃO — mapa funcional da casca canônica
+
+| Botão / superfície | Ação semântica | Runtime/adapter esperado | Owner/rota já conhecida | Telemetria mínima | Estado agora |
+| --- | --- | --- | --- | --- | --- |
+| 🏠 Cockpit | voltar ao painel unificado | workbench/cockpit | `CentralDarkCockpitShell.client.tsx` | mode, runtime, readiness, next_cursor | 🟢 SOURCE_PROVED |
+| 🔨 FORJA / VS Code | abrir bancada de edição, terminal, Git e workbench | `workbench_panel` ou janela VS Code gerenciada | `apps/modulos/Bolt/source` + workspace existente | cwd, workspace, git head, terminal/session | 🟡 integração VS Code externo ainda a provar |
+| 💬 ChatGPT | abrir sessão ChatGPT original e/ou adapter autorizado | native/managed-browser/API conforme disponível | provider + connectors existentes | session state, capability, auth-state sem secret, trace | 🟡 ADAPTER_REQUIRED |
+| 🧠 Claude Code | abrir/selecionar harness Claude Code | terminal/native harness | `capability-contract-router` + tasks/roteador existentes | session, model, route, exit/status, trace | 🟡 GAP inventariado |
+| ⌨️ Codex / VS Code | abrir harness Codex no workspace | terminal/workbench | desktop + editor/workbench | daemon state, session, route, current task | 🟡 PARTIAL |
+| 🐋 DeepSeek | selecionar provider para leitura/inferência quando aplicável | provider adapter | provider já presente | provider health, model, latency, capacity | 🟢 source provider / 🟡 orchestration binding |
+| 🎛️ ORQUESTRADOR | escolher `ChatGPT / Claude / DeepSeek / Auto / outro compatível` | capability router | router existente | selected executor, reason code, health, fallback | 🟡 UI/contract a completar |
+| 🦾 Hermes | abrir executor/estado Hermes | MCP/sidecar/terminal | Hermes existente | health, pid/service, current mission, queue, receipts | 🟡 runtime depende de probe fresco |
+| 🔌 MCP | abrir catálogo/health/tools | MCP adapter | `apps/modulos/mcp` | version, toolCount, health, auth-state | 🟢 source / runtime probe separado |
+| 🖥 Desktop Commander | abrir perfil/dispositivo autorizado | remote surface / MCP provider | runtime manifest | device, profile, ping, last action, result | 🟢 SOURCE_PROVED; sessão viva variável |
+| 👁 Olho de Deus · WORLD | projeção geográfica/planetária quando há coordenada real | visual layer | owners de grafo/percepção existentes | source, observed_at, trace, entity health | 🟡 integração visual runtime a provar |
+| 🕸 Olho de Deus · GRAPH | grafo causal/proveniência | graph projection | Grafo Vivo + evidence/tracing existentes | nodes, edges, provenance, confidence | 🟡 projeção derivada; não autoridade |
+| 🎯 Olho de Deus · FOCUS | foco radial na missão/trace/fonte selecionada | graph focus | mesmo owner do Olho | causal parents/children, receipts, next_cursor | 🟡 design/integração |
+| 🧠 Memory Linker | abrir ingest/dream/pattern status | memory-linker | `scripts/memory-linker/` | queue counts, blocked secret risk, latest report | 🟢 runtime já provado na sessão; estado deve ser fresco |
+| 📦 Capability Registry | listar capacidades/owners/adapters | inventory/router | `centraldark-hub-inventory.ts` + capability router | state, owner, permissions, health | 🟢 source inventory |
+| 🧾 Receipts | navegar provas e rastro | receipt projection | receipts/brain-memory | receipt_id, mission_id, trace_id, status | 🟡 stream HUD inventariado como GAP |
+| ❤️ Health | visão de saúde sem falso-verde | health adapters | owners por capability | probe time, source, status, latency | 🟡 composição a completar |
+| 🚀 Deploy | acionar owner de deploy existente | existing deploy route | owner existente; não criar segundo pipeline | target, head, gate, result, rollback | 🟡 somente após gate |
+| ↩ Rollback | restaurar último estado bom | owner de deploy/runtime | existing rollback contract | last_good_state, target, result | 🟡 exige prova por owner |
+| 🎙 Voz | mostrar/capturar canal de áudio autorizado | audio provider | voz/SOL/provider existente | input device, capture, transcript ref | 🟡 `no_input_device` foi observado em um probe; não generalizar |
+| 👀 Screenpipe | contexto visual/acessibilidade da Casa | local sensor/sidecar | remote-bridge Sidecar | health, frame/accessibility status, auth-state | 🟢 health histórico / conteúdo autenticado pendente |
+| 🐙 GitHub | PRs, commits, CI, main | GitHub adapter | GitHub owner existente | repo, branch, SHA, PR, checks | 🟢 integration/source |
+| 🗂 Obsidian / Grafo | memória visual e navegação | native/managed surface | BRAIN/vault/plugins existentes | vault, file ref, plugin state, graph projection | 🟡 bindings específicos ainda a reconciliar |
+| 🏠 Casa | foco na máquina SEGREDO | remote surface + telemetry | RDC/Tailscale/Sidecar existentes | online, routes, sensors, last proof | 🟡 canal varia; medir ao vivo |
+| ☁️ VPS | foco runtime produção | MCP/Hermes/SSH owners autorizados | `/root/CentralDark` e serviços existentes | head/runtime version, service health, receipts | 🟡 medir ao vivo |
+| 🧩 Unigran / outro app do CHEFE | cadastrar somente após descobrir alvo real | surface adapter apropriado | owner **UNKNOWN até medir** | executable/url, version, health, permissions | ⚪ UNKNOWN; não inventar |
+
+### 10.5.6 FORGE COMMAND DECK — composição de runners existentes
+
+A lateral da Forja pode oferecer seleção de estratégia sem transferir autoridade ao modelo:
+
+```text
+ORQUESTRADOR: [ChatGPT] [Claude] [DeepSeek] [Auto]
+
+EXECUTORES:   [Hermes] [Claude Code] [Codex] [VS Code] [Desktop Commander]
+
+PRESETS:
+  PESQUISA     = múltiplos readers + 1 writer
+  BUILD        = editor/workbench + runner + testes
+  REVIEW       = readers/critics + writer bloqueado
+  FORJA TOTAL  = panes compostos + trace comum
+  DEPLOY       = owner de deploy + gates + rollback
+```
+
+Trocar o orquestrador **não reinicia a missão**. Preservar obrigatoriamente `mission_id`, `owner`, `current_state`, `evidence`, `receipt` e `next_cursor`.
+
+### 10.5.7 Layouts compostos — um clique abre várias superfícies já existentes
+
+```yaml
+workspaces:
+  forja_total:
+    panes: [vscode, chatgpt, claude_code, hermes, telemetry]
+  pesquisa:
+    panes: [chatgpt, deepseek, browser, olho_graph, receipts]
+  build:
+    panes: [vscode, codex, terminal, tests, git]
+  deploy:
+    panes: [git, ci, hermes, vps, health, receipts]
+  casa:
+    panes: [desktop_commander, screenpipe, vscode, telemetry]
+```
+
+Esses layouts são **composição visual**, não duplicação dos runtimes. Fechar um pane não mata o organismo; perder um provider degrada somente a capability dependente.
+
+### 10.5.8 Clique semântico e hit-map — evitar automação frágil por pixel
+
+Cada botão deve apontar para uma ação semântica versionada:
+
+```yaml
+button:
+  id: forge.claude_code.open
+  capability: CLAUDE_CODE_HARNESS
+  intent: OPEN_OR_FOCUS_EXISTING_SESSION
+  adapter: capability-contract-router
+  target: discovered_at_runtime
+  permission: L1_OR_HIGHER_AS_APPLICABLE
+  expected_state: SURFACE_VISIBLE
+  telemetry: [launch_result, session_ref, health]
+  receipt: true
+  fallback: OPEN_MANAGED_TERMINAL_PANE
+```
+
+**Pixel click é fallback de superfície, não contrato de arquitetura.** Preferir DOM/API/MCP/IPC/CLI/Win32 target semântico conforme a aplicação permitir. Desktop Commander pode operar UI autorizada, mas a CentralDark deve registrar o alvo semântico e o resultado observado.
+
+### 10.5.9 Telemetria/Faro — tudo passa pelo mesmo envelope observável
+
+```yaml
+telemetry_event:
+  event_id:
+  ts:
+  mission_id:
+  trace_id:
+  parent_span_id:
+  source:
+  surface_id:
+  capability_id:
+  owner:
+  action:
+  status: PASS|PARTIAL|BLOCKED|UNKNOWN|QUARANTINED
+  payload_summary:
+  evidence_refs:
+  next_cursor:
+```
+
+Fontes mínimas: CentralDark.exe/Electron, VS Code/workbench, ChatGPT/Claude/DeepSeek adapters, Hermes, MCP, Desktop Commander, Screenpipe, áudio, GitHub/CI, Casa, VPS, Memory Linker, Olho, Forge, deploy/rollback. Segredo/credencial nunca entra no envelope em claro.
+
+### 10.5.10 🦋 Metamorfose da casca — o sistema builda a próxima pele sem matar a atual
+
+```text
+SHELL_CURRENT
+   ↓
+BUILD_CANDIDATE
+   ↓
+SIDE_BY_SIDE_INSTALL
+   ↓
+SELFTEST + HEALTHCHECK
+   ↓
+COUNTERPROOF / VISUAL_REGRESSION
+   ↓
+READY_CANDIDATE
+   ↓
+ATOMIC_OR_CONTROLLED_SWITCH
+   ↓
+READBACK
+   ↓
+OLD_SHELL_RETIREABLE
+```
+
+Regras de metamorfose:
+
+```text
+NEW_SHELL != NEW_CENTRALDARK
+THEME_CHANGE != ARCHITECTURE_CHANGE
+BUILD_SUCCESS != READY
+READY != SWITCHED
+SWITCHED != VERIFIED
+OLD_SHELL_NOT_DELETED_BEFORE_READBACK=true
+LAST_GOOD_SHELL_REQUIRED=true
+ROLLBACK_REQUIRED=true
+MANIFEST_VERSION_REQUIRED=true
+VISUAL_REGRESSION_REQUIRED_FOR_CANONICAL_SKIN=true
+```
+
+**Estado:** auto-update/build desktop já existe em source; este ciclo completo de casulo/metamorfose é **CONTRATO/DELTA DESEJADO**, não deve ser pintado como runtime implementado até selftest, troca e rollback serem provados.
+
+### 10.5.11 Fábrica de subapps dentro da Forja — sem virar gerador de arquitetura paralela
+
+A própria Forja pode criar uma nova ferramenta/subapp **somente quando o Capability Router provar gap material**. A saída mínima de qualquer subapp novo deve conter:
+
+```text
+CAPABILITY_ID
+OWNER
+MANIFEST
+PERMISSIONS
+UI_SURFACE
+HEALTHCHECK
+TELEMETRY
+TRACE
+TEST
+COUNTERPROOF
+ROLLBACK
+RECEIPT
+```
+
+Se um produto existente já resolve a capability, criar um clone é regressão arquitetural. A preferência é: `REUSE → ADAPT → COMPOSE → CREATE_ONLY_IF_PROVEN_GAP`.
+
+### 10.5.12 Olho de Deus dentro da mesma casca
+
+O Olho continua uma **projeção derivada**, nunca autoridade. Na mesma aplicação:
+
+```text
+👁 OLHO
+├── WORLD  → mundo/entidades com coordenada real
+├── GRAPH  → proveniência, causalidade, owners, traces
+├── FOCUS  → missão/trace/fonte em foco radial
+└── TIME   → histórico/snapshot/current sem confundir passado com presente
+```
+
+Seleção no Olho deve poder levar ao pane correspondente da Forja: clicar num serviço → abrir health/log/owner; clicar num commit → GitHub; clicar numa máquina → Casa/VPS; clicar num agente → sessão/trace; clicar numa evidence → receipt. O caminho reverso deve existir: `RESPOSTA → DECISÃO → EVIDÊNCIA → FONTE → TRACE → MISSÃO → INTENÇÃO`.
+
+### 10.5.13 Critérios de aceitação — não chamar de pronto antes disso
+
+1. **Shell única:** CentralDark.exe continua owner; nenhum segundo app principal criado.
+2. **VS Code/Forja preservado:** workbench existente continua funcional; integração externa não remove editor/terminal atuais.
+3. **Surface Registry:** cada app/sessão tem manifest, owner, modo de superfície e health.
+4. **Botão semântico:** todo botão tem `capability_id + action + expected_state + evidence + fallback`.
+5. **Sem secret no renderer/telemetria:** credenciais permanecem nos owners seguros.
+6. **Multi-pane:** pelo menos um workspace composto restaura layout sem clonar processos desnecessariamente.
+7. **Router:** troca de modelo/executor preserva missão/owner/current_state/next_cursor.
+8. **Telemetry Bus:** eventos de surface/action chegam com trace e origem distinguível.
+9. **Receipt:** ação material gera recibo ou referência reproduzível.
+10. **UNKNOWN preservado:** surface source-proved não aparece como runtime verde sem probe fresco.
+11. **Olho derivado:** visual não ganha autoridade de escrita.
+12. **Metamorfose segura:** nova casca instala/testa em paralelo e consegue rollback antes de aposentar a anterior.
+13. **Zero regressão:** ChatGPT/Claude/VS Code/etc. continuam utilizáveis em suas formas originais.
+14. **One writer:** múltiplos agentes podem ler/revisar; mutação por owner continua serializada.
+15. **App factory governada:** nova ferramenta só nasce após gap proof e já nasce com manifest/test/telemetry/rollback.
+
+### 10.5.14 Matriz CURRENT → TARGET → prova necessária
+
+| Item | CURRENT medido | TARGET desta intenção | Gate para promoção |
+| --- | --- | --- | --- |
+| CentralDark.exe | 🟢 existe | mesma aplicação como Desktop Fabric | preservar testes desktop + build |
+| Cockpit | 🟢 existe | shell unificada de superfícies | regressão visual + source/runtime contracts |
+| Workbench | 🟢 existe | VS Code/Forja administrativa composta | provar adapter/launch/focus sem quebrar editor atual |
+| ChatGPT | 🟢 provider/source; 🟡 conta/harness | superfície completa registrada | auth legítima + session/health + semantic action |
+| Claude Code | 🟡 gap harness | pane/harness governado | session + route + receipt |
+| Codex/VS Code | 🟡 partial | pane/harness governado | daemon/session + workspace telemetry |
+| DeepSeek | 🟢 provider source | executor selecionável | health/model route + fallback |
+| Desktop Commander | 🟢 source provider | surface de Casa/remote control | ping/session/action receipt fresco |
+| Olho | 🟡 owners/componentes dispersos | WORLD+GRAPH+FOCUS na mesma shell | provenance/trace + no second authority |
+| Telemetry/Faro | 🟡 peças existentes | envelope único observável | source separation + trace + secret redaction |
+| Casca auto-evolutiva | 🟡 updater/build base | build→test→switch→rollback | side-by-side proof + last-good-state |
+| Subapps | capacidade de build existente | factory governada | gap proof + manifest + owner + tests |
+
+### 10.5.15 Decisões externalizadas deste delta
+
+- **VS Code continua vivo na CentralDark** como Forja/bancada; a CentralDark não tenta apagar a ferramenta que já resolve edição/terminal/Git.
+- **A casca é descartável; identidade e contratos não são.** Temas, layout, panes e renderer podem trocar sem criar nova CentralDark.
+- **Produtos maduros são capabilities.** Reutilizar o original é padrão; fork/cópia só quando houver razão técnica e licença compatível.
+- **Um clique pode compor vários produtos/runners.** O clique seleciona uma missão/estratégia; os adapters executam/focam as superfícies aplicáveis.
+- **Orquestrador é função intercambiável.** ChatGPT, Claude, DeepSeek ou outro compatível podem coordenar; nenhum deles vira owner global.
+- **A experiência pode parecer um único grande desktop/container**, mas por baixo os runtimes permanecem isolados para atualização, segurança e rollback.
+- **Faro/telemetria/trace são o sistema nervoso da casca.** Toda superfície deve ser observável sem confundir observação com prova.
+- **O próprio sistema pode construir sua próxima pele**, porém nunca substitui a pele atual antes de selftest, contraprova, readback e rollback comprovados.
+- **Nada de PWA obrigatória.** Web/PWA pode existir como superfície; o owner desktop Electron atual é a base encontrada e deve ser reutilizado até prova de necessidade diferente.
+
+### 10.5.16 Estado e NEXT_CURSOR
+
+```text
+ARCHITECTURE_INTENT_CRYSTALLIZED=YES
+OWNER_REUSE_DECISION=CentralDark.exe/Cockpit/Workbench EXISTENTES
+NEW_PARALLEL_APP=NO
+NEW_ROUTER=NO
+NEW_HUB=NO
+NEW_MEMORY=NO
+
+SOURCE_PROVED:
+  CentralDark.exe
+  Cockpit
+  Workbench/editor/terminal
+  provider inventory
+  MCP source
+  Desktop Commander manifest
+  auto-update desktop
+
+PARTIAL_OR_GAP:
+  VS Code external surface adapter
+  ChatGPT session/account adapter
+  Claude Code harness
+  Codex harness
+  unified telemetry envelope
+  Olho WORLD/GRAPH/FOCUS integration
+  self-build shell metamorphosis E2E
+
+NEXT_CURSOR:
+  reconciliar esta matriz com centraldark-hub-inventory.ts + resources/runtime/manifest.json
+  → estender somente os adapters ausentes
+  → contract tests botão→capability→surface→telemetry→receipt
+  → mock/sandbox multi-pane
+  → runtime probe
+  → visual regression
+  → Reality Judge
+```
+
+**FIXED_POINT DESTE DELTA:** intenção e arquitetura **CRISTALIZADAS COMO CONTRATO**, implementação E2E **AINDA NÃO**. `DOCUMENTED != EXECUTED`; `SOURCE_PROVED != RUNTIME_PROVED`; `BUILD != SWITCH`; `CASCA_MUTÁVEL != SEGUNDO_SISTEMA`.
+
+**SELO:** 👑 CHEFE → 🔨 FORJA/VS CODE → 🧩 SURFACE FABRIC → 🧠 ROUTER → 🦾 HERMES → 👁 OLHO → 📡 FARO/TELEMETRIA → 🧾 RECEIPT → ⚖️ REALIDADE → 🦋 NOVA CASCA, MESMO ORGANISMO.
