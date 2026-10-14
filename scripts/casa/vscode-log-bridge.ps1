@@ -29,7 +29,7 @@ $info = Get-Item -LiteralPath $Source
 $creationEpoch = $info.CreationTimeUtc.ToString("o", [Globalization.CultureInfo]::InvariantCulture)
 $state = $null
 if (Test-Path -LiteralPath $StatePath) {
-  try { $state = Get-Content -LiteralPath $StatePath -Raw -Encoding UTF8 | ConvertFrom-Json }
+  try { $state = Get-Content -LiteralPath $StatePath -Raw -Encoding UTF8 | ConvertFrom-Json -DateKind String }
   catch { $state = $null }
 }
 # A mesma criacao pode sobreviver a uma truncagem. Nova geracao invalida o cursor remoto.
