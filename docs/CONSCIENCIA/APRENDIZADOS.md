@@ -1971,6 +1971,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Criterio:** `PROGRESSO_PROVEN != GLOBAL_DONE`; `PARTIAL_PASS != FAILURE`; `NEXT_CURSOR=7_ORACLE_DRIFTS`; `NO_BLIND_OVERWRITE`; `DONT_REDO_PROVEN_WORK`.
 
 ### [2026-10-12] PROVA_PROPORCIONAL_CONTRATO_FIXO_DUAS_CONTAS_20261012 — a prova que basta para a afirmação
+
 - **Origem:** correção expressa do SEGREDO/CHEFE em conversa entre duas contas/superfícies ChatGPT, após o agente pedir reiteradas conferências sobre a mesma personalização.
 - **Erro observado:** o agente reconheceu a confirmação de salvamento, mas transformou a reprodução do mesmo arquivo de personalização em exigência de reler configurações, comparar respostas idênticas e revalidar o que já estava resolvido na conversa. Repetiu verificações não solicitadas, confundindo o escopo da evidência com afirmações sobre execução.
 - **Aprendizado do CHEFE:** rigor não é multiplicar provas; é identificar **qual evidência é suficiente para o claim específico**. Se o CHEFE informa que copiou integralmente o mesmo arquivo para ambas as contas, reconhecer **mesmo conteúdo/mesmo contrato**; Chrome, navegador interno do VS Code, conta e modelo são superfícies mutáveis. Respostas podem diferir sem que o contrato textual deixe de ser o mesmo. Não impor igualdade de respostas como teste do contrato nem transferir microverificações ao CHEFE quando não trazem informação nova.
@@ -1998,6 +1999,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Separação dos estados:** `LESSON_UNDERSTOOD=TRUE`; `CODE_MIGRATION=SEPARATE_WORK`; `SCRIPT_DELETION_NOT_CLAIMED`; `BUTTON_E2E_NOT_CLAIMED`; `NEXT_CURSOR=APLICAR_NO_OWNER_EXISTENTE_COM_PROVA_SEM_REFAZER_O_ENSINAMENTO`.
 
 ### 171. Rotas autorizadas, substituicao literal e prova de deploy em duas frentes
+
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171A`; `PREV_GLOBAL_UID=L170`; `NEXT_GLOBAL_UID=L172A`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
@@ -2005,13 +2007,16 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **Aprendizado:** Em JS String.replace(substituicao_string) interpreta $' como sufixo do original e $$ como um unico $, corrompendo codigo gerado; usar callback ou montagem por linhas e rodar bash -n + teste funcional antes da gravacao. O reconciliador unico foi instalado na VPS com backup e sha de origem verificados; --pulse --plan deu 0 e --scan deu exit 0 com recibo JSON. Scanner: 4346 pastas scripts, 6821 scripts, 1375 grupos SHA iguais, 2 normalizados, 287 candidatos; partial=true (bounded_scan=6), portanto auditoria nao exaustiva e candidato != prova. latest.json e delta.json antigos foram movidos ao backup, deixando um JSON ativo. Front MCP commitado na main mas NAO deployado: microdeploy bloqueia src/tools/core/mcp-admin.js com MCP_NATIVE_FILESET_NOT_APPROVED; preservar gate em vez de contornar. Script legado de pulso deve ser aposentado somente apos teste funcional real e callers conhecidos. UNKNOWN != PASS; MERGED != DEPLOYED.
 
 ### 172. Metacognição operacional induzida por contraprova — Papagaio ON/OFF, Kaizen e Compounding Reflexion
+
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L172A`; `PREV_GLOBAL_UID=L171A`; `NEXT_GLOBAL_UID=L173A`; `LEGACY_LEARNING_NUMBER=172`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** regra
 - **Data:** 2026-10-12
 - **Contexto:** Sessão CentralDark 2026-10-12→13: CHEFE conduziu 2 frentes MCP+Rebuilder e reconciliador, exigiu tentativas em rotas autorizadas Casa/SSH/MCP/GitHub, conferiu ferramentas, erros, SHA e testes, pediu pacote de replay integral, anunciou execução externa no VS Code, observou o próprio comportamento do agente, pediu repetição integral em ordem alfabética e nomeou o ciclo Human-Guided Compounding Reflexion / Metacognição operacional induzida por contraprova. Texto original de 374 linhas foi entregue como registro histórico; ordem dos acontecimentos e provas devem sobreviver ao chat.
+
 - **Aprendizado:** ENSINO: PAPAGAIO_ON só quando o CHEFE pedir replay/ensino/auditoria/registro, reproduzindo integralmente fonte e ordem, com proveniência; PAPAGAIO_OFF na execução, relatando apenas delta e erros úteis. RECUPERAÇÃO: antes da próxima missão, ler owner APRENDIZADOS e memória/receita pertinentes; REUSE_BEFORE_CREATE, uma intenção, um owner, um writer. CICLO: intenção → inspeção de CURRENT/main → rotas autorizadas → menor delta → teste → contraprova → receipt → receita → aprendizado → reutilização com revalidação. CONTRAPROVA: DOCUMENTED!=EXECUTED, MERGED!=DEPLOYED, UNKNOWN!=PASS; código Bash pode ter Python embutido com falha de indentação; substituição JS com $' e $$ exige callback ou edição exata e teste funcional. MCP atualizado na main não foi provado no runtime (MCP_NATIVE_FILESET_NOT_APPROVED). Reconciliador instalado e --scan exit 0; scan parcial; pulso real e HAKAI permanecem pendentes. TERMOS: Reflexion, Experience Distillation, Compounding Engineering, Agent Improvement Flywheel são conceitos associados; 'Human-Guided Compounding Reflexion' e 'Recursive Reflective Experience Distillation' são nomes descritivos nossos, não endosso oficial da OpenAI/Anthropic. REGISTRADO!=CONSUMIDO; demonstrar consumo do comportamento em agente/runtimes com prova separada.
 
 <!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
+
 ## 🦜 CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013 — metacognição operacional + replay fiel (registro histórico completo)
 
 ### Fonte histórica literal fornecida pelo CHEFE — 374 linhas, ordem e conteúdo preservados
@@ -2189,10 +2194,10 @@ Elas podem virar **capacidades reaproveitáveis dos agentes e ferramentas que j�
 
 O pacote registra que o agente:
 
-✅ Investigou os bloqueios.  
-✅ Identificou diferenças entre erro e restrição de segurança.  
-✅ Atualizou o código do MCP na `main`.  
-✅ Registrou o aprendizado #171.  
+✅ Investigou os bloqueios.
+✅ Identificou diferenças entre erro e restrição de segurança.
+✅ Atualizou o código do MCP na `main`.
+✅ Registrou o aprendizado #171.
 ✅ Preservou as proteções existentes.
 
 **O limite registrado:** a nova versão do MCP ainda não havia sido comprovada funcionando no servidor.
@@ -2201,10 +2206,10 @@ O pacote registra que o agente:
 
 O pacote registra que o agente:
 
-✅ Reuniu inventário e pulso no mesmo script.  
-✅ Conferiu o código por SHA.  
-✅ Executou a varredura.  
-✅ Validou o JSON único.  
+✅ Reuniu inventário e pulso no mesmo script.
+✅ Conferiu o código por SHA.
+✅ Executou a varredura.
+✅ Validou o JSON único.
 ✅ Preservou o script antigo enquanto verificava seus consumidores.
 
 O recibo do pacote traz o mesmo SHA-256 do reconciliador na VPS e no GitHub:
@@ -2455,6 +2460,7 @@ ONE_ORGANISM=true
 <!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_END -->
 
 ### 173. Replay V2 — preservar eventos no JSON, prever erro antes da varredura e PAPAGAIO append-only byte a byte
+
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L173A`; `PREV_GLOBAL_UID=L172A`; `NEXT_GLOBAL_UID=L174A`; `LEGACY_LEARNING_NUMBER=173`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
@@ -2462,6 +2468,7 @@ ONE_ORGANISM=true
 - **Aprendizado:** Antes de construir replay event-sourcing, medir o script que escreve o JSON: scripts/centraldark-inventory-reconcile.sh descartava campos desconhecidos ao regravar o JSON e apagaria a própria trilha replay. Apliquei menor delta no MESMO owner: manter 'replay' pré-existente se dict, commit eaab55ffdf6cd928947a2967b8fd449c89bf7910; SHA256 novo ead45fcfae0417038542f1bc7a7d4f93651bfd5e0dd0d730db29053e82d46a10. SSH Casa→VPS backup em /var/lib/centraldark/inventory-reconcile/backups/20261013T004958Z-v2/centraldark-inventory-reconcile.sh; editado com SHA de origem b56706f..., git pin, backup+rollback; bash -n, --pulse --plan e --scan exit 0; resultou 4117 pastas, 6469 scripts, 1375 grupos SHA, 1 normalizado, 279 candidatos; partial=true bounded_scan=6. O ZIP V2 reutiliza mesmos 12 arquivos e .sh, acrescenta --replay/--resume/--repair-known e verificação APPEND_ONLY, checkpoints no MESMO JSON e event history integral. Testes offline 34/34 + simulação replay→resume→replay preservando 10→20→30 eventos; cenário scanner sem preservação HALT/BLOCKED antes de destruir JSON. Não executar HAKAI/deploy MCP indevido. Próximo agente deve distinguir testes offline da prova de runtime, validar consumo real e completar MCP/pulso. SAME_SCRIPT + ONE_JSON + NO_LOSS + REPLAY_FIRST + PAPER_ORIGINAL_PRESERVED.
 
 ### 174. Replay V3 — regex com indentação evitou falso BLOCKED, sem alterar nomes dos estados
+
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L174A`; `PREV_GLOBAL_UID=L173A`; `NEXT_GLOBAL_UID=L175A`; `LEGACY_LEARNING_NUMBER=174`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
@@ -2469,6 +2476,7 @@ ONE_ORGANISM=true
 - **Aprendizado:** No MESMO executor do pacote (12 entradas originais), centralizar scanner_preserves_replay() e aceitar indentação segura com regex ^[[:space:]]*v\['replay'\][[:space:]]*=[[:space:]]*old\['replay'\][[:space:]]*$ mais prova da guarda isinstance(dict). Não ignorar qualquer scanner sem preservação, falha deve continuar BLOCKED. Na V3 readback via MCP execute_command na VPS retornou REPLAY_PRESERVATION_GUARD=PASS. Replay V2 abortava em EXECUTE antes de --scan: falso bloqueio eliminado na V3 offline; execução integral V3 na VPS AINDA NAO COMPROVADA. Melhorou --resume: não pular scanner sem EXECUTE PASS com fingerprint do scan, SHA script e cached main iguais, invalidar após FAIL/BLOCKED posterior. Padrão visual preservado: 🟢 [PASS], 🟡 [PARTIAL], 🟡 [UNKNOWN], 🔴 [BLOCKED], 🟡 [NOT_ACTIVE]; não renomear rótulos existentes. ZIP V3 contém mesmas 12 entradas, 47 testes offline PASS, sha256 e manifest conferir. MCP runtime/PULSE LIVE/HAKAI não promovidos. ERRO -> PROVA -> DELTA MINIMO -> TESTE -> REGISTRO, UNKNOWN != PASS, DOCUMENTED != EXECUTED.
 
 ### 175. Prova herdada, busca temporal, falha local e Papagaio discreto — memória viva sem falso verde
+
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L175A`; `PREV_GLOBAL_UID=L174A`; `NEXT_GLOBAL_UID=L176A`; `LEGACY_LEARNING_NUMBER=175`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** comportamento operacional / memória procedural / segurança de conhecimento
 - **Data:** 2026-10-13
@@ -2485,6 +2493,7 @@ ONE_ORGANISM=true
 - **Critério de satisfação futuro:** observar execução posterior aplicando **ao menos um** desses exemplos com provenance e readback. `REGISTERED != CONSUMED`; `COMMIT != DEPLOY`; `MULTI_WINDOW_CONSENSUS != INDEPENDENT_BENCHMARK`. Estado atual desta lição: registro e binding de comportamento **a provar separadamente no consumidor**.
 
 ### 176. Critérios autodefinidos a serviço da intenção — eficiência interna sem burocracia externa
+
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176A`; `PREV_GLOBAL_UID=L175A`; `NEXT_GLOBAL_UID=L177A`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Data:** 2026-10-13
 - **Categoria:** descoberta metacognitiva do CHEFE / engenharia de critérios / remoção de burocracia excedente.
@@ -2498,6 +2507,7 @@ ONE_ORGANISM=true
 - **Owner reaproveitado:** `.agents/skills/centraldark-operational-method/SKILL.md#HEREDITARY_CRITERION_DNA`; `AGENTS.md#Método-adaptativo`; `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#adaptive_backcheck_contract`. Nada de novo Criterion Engine, agente, gate global, HUD ou workflow.
 
 ### 177. Multi-janelas, Arca do conhecimento e retorno do fio do SH — continuidade contextual demonstrada
+
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177A`; `PREV_GLOBAL_UID=L176A`; `NEXT_GLOBAL_UID=L178`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Data:** 2026-10-13
 - **Categoria:** continuidade de intenção / orquestração multimodal humana / memória procedural / gestão de conhecimento / economia operacional.

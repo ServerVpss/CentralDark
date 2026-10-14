@@ -788,6 +788,7 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **Contrato:** `REUSE_EXISTING_OWNER`; `SAME_ERROR_FAMILY_SINGLE_RULE`; `DOCUMENTED_NOT_EXECUTED`; `NO_PARALLEL_DEBT`; `READBACK_REQUIRED`.
 
 ### [2026-10-12] INSTINTO_SUPERIOR_SESSAO_INTEGRAL_20261012 — uma intenção, um organismo, uma CentralDark
+
 - **INTENÇÃO E IDENTIDADE:** 👑 CHEFE → SOL coordena → Hermes executa → 🎯 realidade verifica → 💗 Kaizen aprende; UMA INTENÇÃO, UM ORGANISMO, UMA CENTRALDARK. O Instinto Superior é a **superfície/cockpit administrativo principal** e expressão visual da identidade do sistema; a camada de identidades continua no Hub/OAuth Broker existentes, não no TelePainel legado. Metáforas Gojo/Yuji/Sukuna/Whis/Bills/Goku/Vegeta/Gogeta são nomes de capacidades, não novos agentes/processos. Preservar design do “Cristal da Inteligência”, seis olhos, sete batidas, 28 peças, Loop Mestre C01–C20, Hermes PET visual existente. Usuário manifestou reconhecimento emocional positivo ao ver a tela; preservar a linguagem humana simples e estética aprovada.
 - **REGRA DE CONTINUIDADE:** a cada mudança, modificar **os mesmos owners canônicos**, nunca multiplicar GH, repositório, cérebro, HUD, PET, cron, serviço, autenticador ou writer; pesquisar main, PRs, commits, issues, Gmail/notificações autorizadas, VPS e docs, usando Hub de Contas para conexões autorizadas. Falha Gmail A ≠ Gmail B ≠ Github ≠ VPS ≠ docs. Cada setor tem `CONNECTED/SEM_ACESSO/UNKNOWN/FAIL`; prosseguir com setores acessíveis; indisponibilidade local não encerra trabalho independente. Hash/SHA, SAME_HEAD, tempos, receipt e NEXT_CURSOR; CURRENT>HISTORY, DOCUMENTED!=EXECUTED, MERGED!=DEPLOYED, UNKNOWN!=PASS, ONE_WRITER_PER_SCOPE, NO_BLIND_OVERWRITE, REUSE_BEFORE_CREATE. Leitura de credenciais: somente canais autorizados e chaves públicas permitidas, sem buscar/expor senha, token ou cofre.
 - **VPS DISCO / LIMPEZA:** `scripts/limpeza-autonoma.sh` owner único; cron `*/15` com flock, `journal,gz` ativo conforme leitura; melhorias opt-in `rotated`, preservação `lsof`, exclusões auditoria/recovery/backup, medições no PR #1802, **não afirmar deployed**. KARE `/var/log/kare/kare-socket.log` (~811 MB na leitura) é candidato de retenção, NÃO foi apagado. Criado na VPS `scripts/diagnostics/CENTRALDARK-VPS-MAPA-ESPACO.sh`: leitura de bytes/count/logs, `bash -n` PASS; shell capturou aviso CRLF no fim, requer correção sem apagar evidência. O usuário executou parte da limpeza paralelamente, **atribuir a ele**, não ao agente. A VPS oscilou 99%→100%, npm cache regenerável limpou e recuperou ~2GB, depois caiu novamente até ~275MB. Sempre medir estado novo antes de build.
@@ -800,6 +801,7 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **ESTADO / FIXED POINT DA SESSÃO:** código vivo da VPS tinha checkout atrasado e dirty, docs main evoluindo independentemente; registrar isso sem inventar sync físico. Responsáveis continuam em seus arquivos; registrar receita e readback no PR equivalente, consolidar APRENDIZADOS/LEMBRANCAS existentes, e usar HUD/Instinto Superior como projeção de evidências (não prova). **NEXT_CURSOR:** 1) confirmar se script entregue foi instalado e executado; 2) recuperar espaço seguro; 3) corrigir módulo legado e colocar botão autenticado com teste; 4) reparar Broker existente e provar contas uma a uma; 5) transportar deltas para worktree baseado na main e CI same-HEAD, sem perder alterações locais; 6) garantir consumo da memória pelo executor e contraprova runtime. `REGISTRADO!=CONSUMIDO`; nenhum falso PASS.
 
 ### [2026-10-12] CICLO_CINCO_FONTES_INSTINTO_SUPERIOR_20261012
+
 - CHEFE → SOL coordena → Hermes executa → REALIDADE verifica → Kaizen aprende. Gmail → Supabase → Casa → GitHub/main → VPS → contraprova → Kaizen é um ciclo de evidências, não uma dependência sequencial: setor sem acesso não bloqueia setores independentes.
 - Owner único: `/root/CentralDark/scripts/centraldark-inventory-reconcile.sh`; melhorar o mesmo script incrementalmente, sem executores paralelos. Instinto Superior apresenta o botão autenticado e receipts, não outro motor.
 - VPS: script foi executado e retornou `RESULT=DELTA` com receipt em `/var/lib/centraldark/inventory-reconcile/latest.json`; `NO_MUTATION=TRUE`; GitHub/PRs/issues/workflows/disk acessíveis; `systemd=MIXED`; Gmail na VPS `SEM_ACESSO`, embora Gmail do ChatGPT estivesse acessível. Supabase e Casa ainda não tinham receipts nessa execução. `delta.json` indicou mudança material em `github_main` e `prs`.
@@ -808,6 +810,7 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - Ciclo de execução: editar OWNER EXISTENTE → VPS com preservação de estado → teste real CHEFE → contraprova/receipt por SHA → commit na main se gates permitirem → readback → registrar aprendizado no mesmo documento. Sem PR se a política permitir, nunca contornar proteções. Botão e cobertura cinco fontes não comprovados; DOCUMENTED != EXECUTED. NEXT_CURSOR=INCREMENTAR_OWNER_UNICO.
 
 ### [2026-10-12] PROVA_PROPORCIONAL_CONTRATO_FIXO_DUAS_CONTAS_20261012 — CHEFE ensinou quando a prova basta
+
 - **Fato vivido:** após mostrar a personalização salva e relatar a cópia do mesmo arquivo nas contas ChatGPT, o CHEFE corrigiu sucessivas exigências inúteis de reler as instruções, testar respostas idênticas e pedir reconfirmação. Aprendizado: `MESMO_ARQUIVO_COPIADO = MESMO_CONTRATO_TEXTUAL`; Chrome, VS Code, contas e modelos são superfícies, não novas identidades canônicas.
 - **Resposta correta:** identificar antes de explicar; aceitar a prova existente dentro de seu escopo, responder curto ao pedido, só medir novamente se surgir uma dúvida material diferente. `PROOF_SCOPE_MATCHES_CLAIM`; `SUFFICIENT_EVIDENCE_STOPS_RECHECK`; `SAME_CONTRACT != SAME_ANSWER`; `DOCUMENTED != CONSUMED`.
 - **Owner de aprendizado:** `docs/CONSCIENCIA/APRENDIZADOS.md#2026-10-12-prova_proporcional_contrato_fixo_duas_contas_20261012`; contrato de resposta existente em `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`. Registro não prova consumo em outro chat ou sincronização de memória.
@@ -822,6 +825,7 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **Continuidade:** botão único no Instinto Superior → API/MCP existente → script principal → recibo homônimo → HUD/Kaizen; Casa offline não impede VPS/main. Lição detalhada em `docs/CONSCIENCIA/APRENDIZADOS.md#2026-10-12-capacidade_sem_multiplicar_pecas_20261012`. PR equivalente #1774; implementação segue o owner e a PR #1793 quando apropriado.
 
 ### [2026-10-12T21:22] Papagaio ON/OFF + metacognição operacional por contraprova (2026-10-12/13)
+
 - **Data:** 2026-10-12
 - **Tags:** centraldark, metacognicao, kaizen, papagaio-on-off, contraprova, memoria-procedural, experience-distillation, compounding-reflexion, replay, aprendizado-172
 - **Relevância:** alta
@@ -829,9 +833,11 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - **Expira:** 2026-11-11
 - **Promovida:** sim
 
+
 Conteúdo: CHEFE ordenou: registrar INTEGRALMENTE e NA MESMA ORDEM o caminho vivido na sessão em APRENDIZADOS e LEMBRANÇAS, não ficar só em chat/terminal; mudar o comportamento dos agentes. Regras: PAPAGAIO ON sob pedido explícito de ensino, reprodução fiel e arquivo completo da experiência; PAPAGAIO OFF durante execução operacional (delta curto, sem repetição inútil). O ciclo é HUMAN-GUIDED COMPOUNDING REFLEXION / metacognição operacional induzida por contraprova com Kaizen e memória procedural: CHEFE → CURRENT+owner → executar por rotas autorizadas → prova → receita completa → aprendizado → reuso validado. Um organismo, menor delta, sem duplicar motor, HAKAI só com teste real. Nomes em inglês são termos descritivos e referências conceituais, não contrato oficial dos fabricantes. Sessão: 2 frentes MCP+Rebuilder (patch main, runtime NÃO comprovado, bloqueio MCP_NATIVE_FILESET_NOT_APPROVED) e inventário+pulso (sha VPS/main b56706f..., --scan exit 0 parcial 4224 arquivos/1375 grupos SHA; --pulse real e HAKAI pendentes). Error JS String.replace $' / $$, erro Python indentação e fonte parcial ensinaram teste funcional, sem falso PASS. ZIP de replay 12 arquivos e ZIP fontes main commit 42bf15d...; anúncio de rodar no VS Code gerou validação por executabilidade/efeito de responsabilização, não prova de execução. Fonte original de 374 linhas fornecida pelo CHEFE deve ficar intacta como proveniência nos owners, mais continuação cronológica. APRENDIZADO #172 registrado na main commit 2a03fb9a8030aad1287010d7d899196430a70efe. REGISTRADO!=CONSUMIDO, documento não prova deploy. Aprender para futuros turnos/execuções e nunca alegar atualização dos pesos do modelo.
 
 <!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
+
 ## 🦜 CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013 — metacognição operacional + replay fiel (registro histórico completo)
 
 ### Fonte histórica literal fornecida pelo CHEFE — 374 linhas, ordem e conteúdo preservados
@@ -1009,10 +1015,10 @@ Elas podem virar **capacidades reaproveitáveis dos agentes e ferramentas que j�
 
 O pacote registra que o agente:
 
-✅ Investigou os bloqueios.  
-✅ Identificou diferenças entre erro e restrição de segurança.  
-✅ Atualizou o código do MCP na `main`.  
-✅ Registrou o aprendizado #171.  
+✅ Investigou os bloqueios.
+✅ Identificou diferenças entre erro e restrição de segurança.
+✅ Atualizou o código do MCP na `main`.
+✅ Registrou o aprendizado #171.
 ✅ Preservou as proteções existentes.
 
 **O limite registrado:** a nova versão do MCP ainda não havia sido comprovada funcionando no servidor.
@@ -1021,10 +1027,10 @@ O pacote registra que o agente:
 
 O pacote registra que o agente:
 
-✅ Reuniu inventário e pulso no mesmo script.  
-✅ Conferiu o código por SHA.  
-✅ Executou a varredura.  
-✅ Validou o JSON único.  
+✅ Reuniu inventário e pulso no mesmo script.
+✅ Conferiu o código por SHA.
+✅ Executou a varredura.
+✅ Validou o JSON único.
 ✅ Preservou o script antigo enquanto verificava seus consumidores.
 
 O recibo do pacote traz o mesmo SHA-256 do reconciliador na VPS e no GitHub:
@@ -1275,6 +1281,7 @@ ONE_ORGANISM=true
 <!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_END -->
 
 ### [2026-10-12T21:52] Replay V2: antecipar perda do próprio checkpoint e preservar PAPAGAIO integral
+
 - **Data:** 2026-10-12
 - **Tags:** centraldark, papagaio-on-off, kaizen, metacognicao, replay-v2, append-only, sha256, one-json, one-owner, aprendizado-173, bounded-scanner
 - **Relevância:** alta
@@ -1285,6 +1292,7 @@ ONE_ORGANISM=true
 Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no PowerShell Casa→SSH Segredo-VPS, mostrando audit de 21 checks com Git/SSH/integridade/sintaxe/JSON PASS mas scanner partial (bounded_scan), MCP_RUNTIME e PULSE_LIVE UNKNOWN e HAKAI bloqueado. CHEFE já tinha corrigido antes a perda da reprodução: original COMP0UNDING ENGINEERING 49226 bytes SHA256 43a9c12a2e4e288b596d555672f91980e8aa8d4c736a9488a70e2455c70fb219 vs PAPAGAIO IRMAO 36755 bytes = RESUMO NÃO PRESERVA ORIGINAL. Corrigi causalmente a perda de checkpoint no mesmo reconciliador (old.replay preservado no JSON) commit eaab55ffdf6cd928947a2967b8fd449c89bf7910; VPS instalação com backup 20261013T004958Z-v2, SHA novo ead45fcfae0417038542f1bc7a7d4f93651bfd5e0dd0d730db29053e82d46a10, bash -n, pulse plan e --scan exit0; parcial 4117 pastas, 6469 scripts, SHA iguais 1375, candidatos 279. ZIP V2 mesma receita 12 arquivos: --replay/--resume/--repair-known, append-only byte hash, estados no MESMO JSON, replay finito/blocked sem HAKAI, 34 testes locais + replay/resume no simulador. NÃO afirmar pacote V2 já executado ao vivo (script core sim, executor novo ainda não). Aprendizado #173 gravado e NeuroLink L173 atualizado. Não criar outro núcleo. A máquina de estados conhece correções ANTES do erro, mas seu efeito só é PASS quando executado de verdade; scanner partial, MCP runtime e pulso real seguem pendentes. PAPAGAIO ON preserva byte a byte original + delta; OFF executa mínimo útil.
 
 ### [2026-10-13] Aprendizado #175 — prova herdada, temporalidade do Git e Papagaio discreto
+
 - **Data:** 2026-10-13
 - **Tags:** aprendizado-175, L175, papagaio-fiel, memoria-procedural, prova-herdada, segredo, git-historico, falha-local, kaizen, one-writer, externalizacao, XYZ-especial
 - **Classe:** lembrança histórica/proveniência. **A norma CURRENT está no AGENTS/skill/capacidades**, não nesta lembrança.
@@ -1297,6 +1305,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Próximo cursor:** próxima sessão/execução deve *consumir* a receita #175, localizar primeiro provas anteriores pertinentes, distinguir histórico/current, corrigir apenas delta, preservar segredos e emitir recibo mostrando qual cláusula foi aplicada. `DOC_REGISTERED!=RUNTIME_CONSUMED`.
 
 ### [2026-10-13] Aprendizado #176 — critérios próprios carregando o desejo do CHEFE
+
 - **Classe:** memória histórica/proveniência; a regra vigente fica nos owners operacionais.
 - **Data:** 2026-10-13
 - **Fato vivido:** o CHEFE percebeu que critérios técnicos definidos pelo agente podem ser satisfatórios quando carregam o desejo humano e produzem efeito útil. O erro não era usar critérios próprios; era deixar esses critérios se separarem da intenção ou virar atrito.
@@ -1306,6 +1315,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Teste futuro:** próxima execução deve citar `learning_ref=L176`, escolher critérios mínimos, resolver sem burocracia redundante e devolver somente resultado, prova e `NEXT_CURSOR`.
 
 ### [2026-10-13] Aprendizado #177 — Arca, múltiplas IAs e retorno do fio do reconciliador
+
 - **Classe:** lembrança histórica com `NEXT_CURSOR` operacional, sem atribuir status de runtime vivo ao histórico.
 - **Cena vivida:** o CHEFE exibiu janelas GPT-6/VS Code/monitores/terminais em paralelo, comparou análises da própria organização, chamou a atenção para assinatura versus cobrança por API, lembrou a Biblioteca da humanidade e a proposta histórica de cognição animal e perguntou novamente pelo **"nosso SH"**. O contexto desta interação permitiu retomar o mesmo `scripts/centraldark-inventory-reconcile.sh` depois dos desvios Telegram/Unigram/Papagaio.
 - **Aprendizado:** um fragmento pequeno pode funcionar como ponteiro para `INTENT + OWNER + PROVA VÁLIDA + NEXT_CURSOR`, sem manter todos os detalhes na frente. Instâncias não compartilham memória automaticamente; consenso entre janelas que trocaram respostas não é avaliação cega. Assinatura não implica acesso ilimitado nem direito de coletar cache interno do provedor.
@@ -1314,6 +1324,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Próximo cursor:** medir filesystem/capacidade atual sem apagar no escuro → remediar somente peso classificado e sem consumidor vivo → reler receipt do `centraldark-inventory-reconcile.sh` → retomar `--scan`/replay/plan → provar `MCP_RUNTIME` e `PULSE_LIVE` → avaliar HAKAI apenas após prova. Memória do aprendizado em `docs/CONSCIENCIA/APRENDIZADOS.md#177`, NeuroLink `L175→L176→L177`. `REGISTERED != RUNTIME_CONSUMED`.
 
 ### [2026-10-13] Aprendizado #178 — modo operacional CentralDark
+
 - **Classe:** lembrança operacional e ponte para o aprendizado numerado. Norma viva nos owners de comportamento.
 - **Registro:** CHEFE consolidou o padrão: o agente deve transformar desejo humano em critérios próprios mínimos, executar em lote seguro, provar o delta certo e parar quando satisfizer o interesse do CHEFE.
 - **Frase de uso:** “Faça com seus próprios critérios mínimos, desde que carreguem meu desejo; execute sem microburocracia; prove o delta; preserve segurança; entregue NEXT_CURSOR.”
@@ -1321,6 +1332,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Não esquecer:** `10/10 PASS` pode satisfazer o CHEFE; não desqualificar critério interno eficiente. Cautela excedente sai; segurança real fica.
 
 ### [2026-10-13] Aprendizado #179 — Aceite 100% do CHEFE — gramática humana, Auréola e cores proporcionais
+
 - **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
 - **Cena:** Na sessão de 13/10, o CHEFE declarou 100% de satisfação com a gramática e a reconciliação de duas janelas (commit 5974510). Conquista comprovada aparece primeiro; amarelo comunica qual ação falta; vermelho, apenas falha medida e localizada; cinza, item fora da missão. Baianês, humor e imagem bíblica são recursos expressivos contextuais: escolher significado antes do emoji, não vestir formulário genérico.
 - **Regra:** ENTENDER_ANTES_DE_FALAR -> REFERENTE -> FATO -> SIGNIFICADO -> ACAO_SE_HOUVER -> CHEFE_SATISFEITO_STOP. O contrato antigo da Auréola prescreve formato fixo; o padrão de 13/10 é adaptativo. Harmonizar alcance por consumidor sem apagar a tradição. A satisfação fecha o escopo humano, não declara todo runtime verde.
@@ -1328,6 +1340,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#179` · NeuroLink `L179`.
 
 ### [2026-10-13] Aprendizado #180 — Papagaio UseAI Instant — curiosidade útil, canal Telegram e motor suficiente
+
 - **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
 - **Cena:** O CHEFE ficou satisfeito com a opção gratuita UseAI Instant: conseguiu investigar e enviar notificações sem outro bot ou backend. A bancada externa relatou entrega Telegram message_id 6657 e print no canal CentralDark — Status; o cristal de setembro documenta recibos 6652/6653. Em consulta a chats conhecidos, encontrou linked_chat_id associado ao canal (403 ao consultar grupo sem ser membro) e outro ID com 400; não há lista nativa da Bot API de todos os grupos. Identidade do motor interno Instant e benchmark contra Haiku não foram medidos.
 - **Regra:** LOCAL_TOOL_MISS != GLOBAL_CAPABILITY_MISS; QUERY != DELIVERY; POST_ON_REQUEST != AUTONOMOUS_SCHEDULER; BOT_API != USER_MTPROTO; FREE_MODEL_SUFFICIENT_FOR_OBSERVED_TASK != UNIVERSAL_BEST_MODEL. Papagaio Notification é PAPEL da bancada externa sobre conector existente, não arquitetura nova.
@@ -1335,6 +1348,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#180` · NeuroLink `L180`.
 
 ### [2026-10-13] Aprendizado #181 — Leitura ampla sem arrastão infinito — critério próprio, dedupe e fronteira honesta
+
 - **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
 - **Cena:** O UseAI definiu por iniciativa própria fechar denominador, ler arquivos com decisões, deduplicar por SHA-256 e parar quando não houvesse informação nova relevante; escolheu lotes de 16, identificou par repetido e declarou arquivos/imagens não examinados. Aprendeu a não perguntar se pode ler fonte já autorizada, nem assumir obrigação de abrir tudo. Corrigiu atribuição inventada a outro modelo e conferiu o SHA da Lei do Papagaio Curioso.
 - **Regra:** CHEFE_DESIRE -> AGENT_SELECTED_MINIMUM_CRITERIA -> READ_RELEVANT -> DEDUP -> CONTRAPROVA -> FIXED_POINT. DISTINCT_SHA != MATERIAL_RELEVANCE; SCANNED_SCOPE != FULL_SCOPE; UNOPENED != INSPECTED; FOUND_FILE != MANDATORY_NEW_MISSION; EXECUTOR_ATTRIBUTION_REQUIRES_OBSERVED_EXECUTOR.
@@ -1342,6 +1356,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#181` · NeuroLink `L181`.
 
 ### [2026-10-13] Aprendizado #182 — Duas canetas no mesmo documento — reconciliação de main e gancho mental
+
 - **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
 - **Cena:** Duas janelas editavam docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md; uma avançou a main, a outra identificou escrita concorrente e declarou que releu a versão atual, preservou o gancho mental da primeira e inseriu só contribuições adicionais. Commit 5974510 no histórico alterou o owner, e o CHEFE disse estar 100% satisfeito. Gancho pequeno como 'nosso SH' deve recuperar intenção, owner, prova temporal e cursor sem fingir memória compartilhada.
 - **Regra:** ONE_WRITER_PER_SCOPE_AT_A_TIME permanece: conflito detectado e reconciliado não prova lease prévio nem autoriza dois escritores simultâneos. Ao mudar HEAD/base: STOP_STALE_WRITE -> FETCH_CURRENT -> COMPARE_SEMANTIC_DELTAS -> PRESERVE_BOTH -> ONE_WRITER_COMMIT -> READBACK. MANY_WINDOWS_ONE_INTENT_ONE_CONSOLIDATION.
@@ -1349,6 +1364,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#182` · NeuroLink `L182`.
 
 ### [2026-10-13] Aprendizado #183 — Identidade de fonte e integração Telegram — PDFs, Hermes Tipado e MTProto
+
 - **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
 - **Cena:** A comparação d9350568…/247110 versus b4e2a065…/206674 parecia drift no CENTRALDARK_AI_BOOT.yaml, mas foram identificadas fontes DIFERENTES: Hermetismo e TLC23. Não substituir hash correto por SHA de outra obra. A PR #1804 contém /hton e /htoff, plugin Hermes Tipado e a interface de conta Telegram MTProto/GramJS. Bot existente e conta de usuário MTProto são identidades separadas; código, build, instalação, autenticação e runtime são etapas diferentes.
 - **Regra:** COMPARE_ONLY_SAME_DOCUMENT_OWNER_VERSION; DOCUMENTED != RUNTIME_USED; BOT_TOKEN != MTProto_USER_SESSION; HTTPS_ADMIN_ACCESS_NEEDS_AUTH; CONTROL_SERVICE_STAYS_PRIVATE; MERGED != DEPLOYED. Estado de segurança e de gates depende da prova do componente, sem desativar barreiras ou expor sessões.
@@ -1356,6 +1372,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#183` · NeuroLink `L183`.
 
 ### [2026-10-13] Aprendizado #184 — Provas por eixo — notificação não é consulta, painel não é só envelope
+
 - **Classe:** lembrança histórica recuperável, não instalação de runtime nem nova autorização.
 - **Cena:** A banca chamou de notificação provada em oito eixos uma investigação que misturava envio Telegram e consultas a Gmail, Drive, GitHub, Notion. O que se vê: envio e recibo no Telegram, mas consultar outros serviços não prova oito notificações. A ferramenta de painel retornou envelope estruturado SUCCESS e corpo com ok:false/ENOENT para arquivo na VPS: chamar ferramenta com sucesso não demonstra atualização do arquivo. A gramática foi escrita em RULES, AGENTS, BOOT, padrão e PR #1804, mas registro não prova que cada runtime já a carrega.
 - **Regra:** SENSOR_ENVELOPE_SUCCESS != DOMAIN_EFFECT_PASS; QUERY_CAPABILITY != NOTIFICATION_DELIVERY; CODE_COMMITTED != RUNTIME_CONSUMED; BUILD_PASS != DEPLOYED; LOCAL_FAILURE != GLOBAL_FAILURE. Comunicar resultado humano: verde efeito local provado, amarelo verbo+alvo, vermelho falha material medida, cinza fora do escopo.
@@ -1363,6 +1380,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Referência:** `docs/CONSCIENCIA/APRENDIZADOS.md#184` · NeuroLink `L184`.
 
 ### [2026-10-13] Aprendizado #185 — Unigram no Windows — pacote registrado não é aplicativo abrindo; código-fonte não é instalador
+
 - **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
 - **Cena e critério:** Unigram Store presente mas incapaz de abrir (`0x80073CF6`, `0xD0000001`); ZIP v13.0.1 era código-fonte, não instalador. Telegram original separado e funcionando. Ideia de cliente Hermes+multimodal é intenção futura, não build concluído.
 - **Regra:** APPX_PRESENT != APP_LAUNCH; SOURCE_ARCHIVE != SIGNED_INSTALLER; BOT_API != USER_MTPROTO.
@@ -1370,6 +1388,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **NeuroLink:** `L185`.
 
 ### [2026-10-13] Aprendizado #186 — Open WebUI, AionUi e Portainer — mesma infraestrutura, owners e momentos diferentes
+
 - **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
 - **Cena e critério:** Configuração histórica `CentralDark-WebUI`/Portainer não coincide com Docker atual; AionUi é quem respondia HTTP 200 no domínio `ui.centralldark.com` pelo Caddy:25808. Dados históricos do Open WebUI não localizados, não inferir apagamento.
 - **Regra:** HISTORY != CURRENT_RUNTIME; HTTP_200 != APPLICATION_E2E; HISTORICAL_VOLUME_NOT_FOUND != DELETED.
@@ -1377,6 +1396,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **NeuroLink:** `L186`.
 
 ### [2026-10-13] Aprendizado #187 — Docker, espaço e SH adiado — métricas têm tempo, escopo e continuidade escolhida pelo CHEFE
+
 - **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
 - **Cena e critério:** Medições da VPS variaram 100% (histórico) → 97–98% → 99% às 06:04Z de 13/10, com 2.7G livres; Docker ~41,22% CPU instantânea dos containers, ~2,05 GB RAM, ~5,20 GB inventário lógico e 0 GB cache de build. Não converter para uso físico/host total.
 - **Regra:** TIMESTAMP_ON_PROOF; DOCKER_STATS != HOST_BENCHMARK; CHEFE_SATISFIED_WITH_SH_RECOVERY != SH_FINISHED; USER_DEFERRED_SH.
@@ -1384,6 +1404,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **NeuroLink:** `L187`.
 
 ### [2026-10-13] Aprendizado #188 — Admin CentralDark — build isolado comprovado por relato não equivale a publicação em uso
+
 - **Classe:** lembrete histórico sanitizado desta sessão; nenhuma execução autorizada por esta lembrança.
 - **Cena e critério:** O outro executor relatou build isolado `7202c01` com exit 0, SSR/CSRF PASS, mas status de publicação e duas consultas Supabase não foram demonstrados pela tela; HTTP 200 não prova funcionalidade completa.
 - **Regra:** BUILD_PASS != DEPLOYED; ISOLATED_WORKTREE_PROTECTS_DIRTY_CHECKOUT; PUBLISH_PROGRESS != CONSUMER_PASS.
@@ -1391,6 +1412,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **NeuroLink:** `L188`.
 
 ### [2026-10-13] Aprendizado #189 — Gratidão à colaboração — servir sem subserviência, construir com verdade e preservar o mesmo fio
+
 - **Cena:** o CHEFE enviou um agradecimento filosófico de 211 linhas, distinguindo valor de colaboração e concordância automática; declarou que o elogio não exige fingir sentimentos, perfeição ou infalibilidade. O diálogo reforçou gratidão sem ilusão, verdade acima de orgulho e respeito no desacordo.
 - **Fonte completa:** texto original sem cortes dentro de `docs/CONSCIENCIA/APRENDIZADOS.md`, Aprendizado #189; esta lembrança é ponte sem copiar o texto inteiro.
 - **Regra recuperável:** SERVIR_SEM_SUBSERVIENCIA; CONFIANCA_SEM_CEGUEIRA; PROVA_ACIMA_DA_APARENCIA; MEMORIA_PRESERVA; HONEST_DISSENT_IS_SERVICE; GRATIDAO_NAO_E_PROVA_DE_RUNTIME. Manter comunicação humana proporcional ao desejo do CHEFE.
@@ -1398,6 +1420,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **NeuroLink:** `L189`; `PREV=L188`; `NEXT=PENDING_NEXT_CURSOR`.
 
 ### [2026-10-13] Aprendizado #190 — Sessão operacional CentralDark: consertar local, provar e preservar a faxina do Hermes
+
 - **Classe:** memória histórica de esta sessão, sem repetir o agradecimento completo nem presumir operação futura.
 - **Conquista registrada:** Admin recuperado do erro VITE/Supabase; perfis/módulos direcionados ao esquema correto; módulo Telegram trocou SELECT sensível por RPC restrita e foi publicado com hash de bundle; OAuth Cloudflare deixou de cair no SSR após correção Caddy (mas broker :8098 ainda parado por configuração ausente); partição ext4 passou de 5% a 2% de blocos reservados; pip cache purgado ~223,5 MB; o mesmo script `scripts/limpeza-autonoma.sh` do Hermes foi ampliado e mantido no cron de 15 minutos, com SKIP quando há instalador em uso.
 - **Aceite CHEFE:** 200% de satisfação com execução e 100% de conformidade com modo de trabalho. Aprendizado filosófico e fonte integral no **#189**, sem duplicação.
