@@ -737,6 +737,17 @@ Quando a ferramenta autorizada da Casa estiver disponível, o modo prefere execu
 
 Quando a ferramenta não estiver disponível, a IA pode entender o método e preservar a intenção, mas não pode alegar execução física.
 
+### Obrigação operacional compartilhada — voz e texto
+
+Quem recebe a intenção do CHEFE exerce a **função de porta de entrada** naquele turno (ChatGPT/SOL, Hermes ou outro agente autorizado), sem ganhar autoridade adicional nem criar outro cérebro, sistema, V1/V2/V3, writer ou fluxo paralelo. Voz e texto compartilham o mesmo contrato e a intenção vigente.
+
+1. **Recuperar antes de agir:** medir CURRENT/main e owner ativo; escolher a menor rota já autorizada e provada. Remote Desktop Commander pode executar no dispositivo efetivamente conectado; VPS alcançável não equivale a terminal Windows autenticado. Tailscale/SSH/GH exigem readback por camada, sem reutilizar PASS histórico como prova atual.
+2. **Trace durante a execução:** manter no chat INTENÇÃO, OWNER, CURRENT, DELTA, PROVA e NEXT_CURSOR, vinculando ferramenta, destino, status e SHA quando houver. Na voz, comunicar os mesmos marcos materiais em linguagem curta. Aproveitar o histórico nativo das ferramentas sem alegar sincronização automática entre superfícies; nunca exibir credenciais ou raciocínio privado.
+3. **Limpar e sincronizar após cada mutação:** remover apenas resíduos temporários comprovadamente produzidos pela própria operação e dispensáveis. Preservar arquivos untracked, branches, backups, alterações locais e trabalho de outros writers até haver owner e contraprova para qualquer limpeza. Sincronizar prontamente pelo canal Git/PR existente, respeitando active writer, gates e SHA do mesmo escopo; conflito conserva ambos, não força push/merge.
+4. **Fechar por prova:** verificar commit e blob SHA no remoto, readback do path e do diff, atualizar o receipt no owner existente e retornar FIXED_POINT ou NEXT_CURSOR. Sem commit remoto, indicar SYNC_PENDING; sem gate aprovado, não declarar promoção, merge ou deploy. A comunicação de voz e texto deve apontar para o mesmo receipt.
+
+`PORTA_IS_FUNCTION=true · VOICE_TEXT_SAME_INTENT=true · TRACE_USER_VISIBLE=true · SAFE_CLEAN_AFTER_MUTATION=true · SYNC_AFTER_CHANGE_REQUIRED=true · REMOTE_READBACK_REQUIRED=true · UNKNOWN_NOT_PASS=true`
+
 ## 4. Reconciliação antes de criar
 
 ```text
