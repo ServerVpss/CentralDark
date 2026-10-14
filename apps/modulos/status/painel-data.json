@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(voice): add immersive response profile",
+    "lastCommit": "🧿 FIX(AI-ANDARILHO): BIND CASA TRAVERSAL TO REMOTE BRIDGE (#1816)",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T14:30:58.975Z",
+      "titulo": "Push na main · c50daf76e61b03d09708eb2d4d5579f34db66235",
+      "detalhe": "🧿 FIX(AI-ANDARILHO): BIND CASA TRAVERSAL TO REMOTE BRIDGE (#1816)",
+      "area": "Repositório",
+      "sha": "c50daf7",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T12:29:40.617Z",
       "titulo": "Push na main · af539b315631b2c20225c0c04a83e43168abc8ce",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "68b3fb2",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T23:38:53.309Z",
-      "titulo": "Push na main · faa3a20f8338d8924469aa102191b89483ece6c1",
-      "detalhe": "fix(reconcile): corrigir scanner e cursor PID no arquivo unico",
-      "area": "Repositório",
-      "sha": "faa3a20",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T14:30:58.975Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c50daf76e61b03d09708eb2d4d5579f34db66235 (c50daf7)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T12:29:40.617Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 68b3fb235e6ba1ba9c801982439a1782fd606b21 (68b3fb2)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T23:38:53.309Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · faa3a20f8338d8924469aa102191b89483ece6c1 (faa3a20)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T12:29:40.617Z",
-  "updatedAtBR": "14/10/2026, 09:29:40 BRT"
+  "updatedAt": "2026-10-14T14:30:58.975Z",
+  "updatedAtBR": "14/10/2026, 11:30:58 BRT"
 }
