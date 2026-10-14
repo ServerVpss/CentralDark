@@ -56,7 +56,7 @@ const stage = [
   [routePath, routeCandidate, "vscode-log-route.js"],
 ];
 for (const [destination, body, name] of stage) {
-  const staged = path.join(backup, name + ".candidate");
+  const staged = path.join(backup, name + ".candidate.mjs");
   fs.writeFileSync(staged, body, { mode: 0o600 });
   try { call("node", ["--check", staged]); }
   catch { fail("syntax:" + name); }
