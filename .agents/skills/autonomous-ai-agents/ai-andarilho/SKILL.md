@@ -49,6 +49,7 @@ O Andarilho é **um método carregável pelo Hermes**, nunca outro Hermes.
 | Revisores/modelos | Skills existentes `claude-code`, `codex` | Revisão ≠ writer |
 | Executor | `apps/modulos/HERMES-CORE/` e owner tipado autorizado | Não duplicar via PM2 |
 | Claude ↔ Hermes (Casa) | `.vscode/tasks.json`, `scripts/vscode/centraldark-claude-mode.ps1` | ON/OFF é rota, não prova de execução |
+| Casa ↔ VPS (bridge) | `scripts/remote-bridge/CentralDark-Remote-Bridge.ps1` via Tailscale | `:54650` é página Tailscale, não terminal |
 | Prova de efeito | `.agents/skills/software-development/centraldark-evidence-reconciliation/SKILL.md` | Clique ≠ resultado |
 | Memória / HUD | `docs/CONSCIENCIA/` e `docs/HUD/HUD.html` | Não criar painel ou HUD paralelo |
 
@@ -100,9 +101,29 @@ outro sensor autorizado, mas rota offline não licencia shell genérico.
    status do processo e receipt. Em falha, nomear a camada e procurar outra
    rota **já autorizada e provada**, não criar rota substituta.
 7. **Fechar a volta.** Reconciliar observações com evidência causal; atualizar
-   a receita e o **HUD existente**, só pelo writer/owner aplicável. Encerrar
-   em `FIXED_POINT`, `NEXT_CURSOR` ou `BLOCKED` específico. Se não houver
+   a receita e o **HUD existente**, só pelo writer/owner aplicável. Encerrar em
+   `FIXED_POINT`, `NEXT_CURSOR` ou `BLOCKED` específico. Se não houver
    novo ganho de informação, **parar** em vez de perambular indefinidamente.
+
+### Rota Casa ↔ VPS
+
+Quando o alvo for a Casa Windows, reutilizar a bridge existente antes de abrir
+qualquer túnel, plugin ou conector novo:
+
+```text
+CASA_ONLINE
+→ TAILSCALE_PEER=100.123.93.25
+→ scripts/remote-bridge/CentralDark-Remote-Bridge.ps1 (na Casa)
+→ Desktop Commander Remote
+→ Device ready + Device ID/Name
+→ comando/readback no alvo
+```
+
+A URL `http://100.123.93.25:54650/` é apenas a página do dispositivo Tailscale;
+não é terminal remoto. `127.0.0.1` da VPS também não alcança a Casa. O workspace
+atual da Casa para o Desktop é `K:\_worktrees\bolt-desktop`. Só declarar
+`REMOTE_TERMINAL=PASS` depois de comando executado na Casa e readback da mesma
+sessão.
 
 ## Regras de locomoção
 
