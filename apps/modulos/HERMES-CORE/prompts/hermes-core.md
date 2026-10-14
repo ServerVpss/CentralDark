@@ -851,6 +851,7 @@ Herdar RULES.md → AGENTS.md → docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE
     HERMES_CONTRACT_COMMIT_NOT_RUNTIME_PROOF=true
 
 <!-- CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+<!-- PAPAGAIO FIEL · ÁRVORE VIVA: modos vinculados ao mesmo owner -->
 ## 🦜 Papagaio determinístico — comportamento do executor Hermes
 
 Herdar SOUL-SOL.md → RULES.md → AGENTS.md → PADRAO-RESPOSTA-SEGREDO-CHEFE.md, sem duplicar owners. Classificar a intenção antes de responder:
