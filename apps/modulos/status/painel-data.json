@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧿 docs(sol): contraprovar fonte ZIP historicamente truncada sem destruir POC",
+    "lastCommit": "🎼 feat(vscode): preservar skill nativa e mapeamento UI comprovavel no mesmo owner",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-14T19:07:16.450Z",
+      "titulo": "Push na main · 9aca9ff8a651b73d196e9931305a86b950d4e09a",
+      "detalhe": "🎼 feat(vscode): preservar skill nativa e mapeamento UI comprovavel no mesmo owner",
+      "area": "Repositório",
+      "sha": "9aca9ff",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T18:54:03.369Z",
       "titulo": "Push na main · 0c6bb47037141ca19c3ed65065be4859d7c71306",
@@ -401,17 +409,16 @@
       "area": "Reposit├│rio",
       "sha": "dcb99ea",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T02:32:55.233Z",
-      "titulo": "Push na main ┬À 697c8a4d2b4a533c09098a1e49754a2d2558f09e",
-      "detalhe": "fix(hud): classify Desktop Commander per-service online evidence and normalize SSH Bash LF",
-      "area": "Reposit├│rio",
-      "sha": "697c8a4",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-14T19:07:16.450Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9aca9ff8a651b73d196e9931305a86b950d4e09a (9aca9ff)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T18:54:03.369Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "­ƒôî Push na main ┬À dcb99eafa67af3bb3709c4d8dbd860a50e828c5f (dcb99ea)",
       "area": "Reposit├│rio",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T02:32:55.233Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 697c8a4d2b4a533c09098a1e49754a2d2558f09e (697c8a4)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T18:54:03.369Z",
-  "updatedAtBR": "14/10/2026, 15:54:03 BRT"
+  "updatedAt": "2026-10-14T19:07:16.450Z",
+  "updatedAtBR": "14/10/2026, 16:07:16 BRT"
 }

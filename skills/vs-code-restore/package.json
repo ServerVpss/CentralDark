@@ -1,0 +1,42 @@
+{
+  "name": "centraldark-vscode-restore",
+  "displayName": "CentralDark VS Code Restore",
+  "description": "Restaura a bancada do workspace CentralDark (terminais, abas e extensoes) a partir do mapa salvo.",
+  "version": "0.1.0",
+  "publisher": "centraldark",
+  "private": true,
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["Other"],
+  "main": "./out/extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "commands": [
+      { "command": "centraldark.restoreWorkspace", "title": "CentralDark: Restaurar bancada" },
+      { "command": "centraldark.mapWorkspace", "title": "CentralDark: Mapear interface (read-only)" }
+    ],
+    "configuration": {
+      "title": "CentralDark Restore",
+      "properties": {
+        "centraldark.restore.onOpen": {
+          "type": "boolean",
+          "default": false,
+          "description": "Restaura a bancada automaticamente ao abrir o VS Code."
+        },
+        "centraldark.restore.startAgents": {
+          "type": "boolean",
+          "default": false,
+          "description": "Executa os comandos dos terminais (hermes chat, claude) ao restaurar."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.6.0"
+  }
+}
