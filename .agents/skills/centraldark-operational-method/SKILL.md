@@ -2921,3 +2921,23 @@ Fala direta do CHEFE, baianês/resenha naturais; versículo ou rima opcionais e 
 ### VS Code Windows Casa — descoberta Desktop Commander (2026-10-15)
 
 Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
+
+
+<!-- CENTRALDARK_RECOVERY_COMMANDS_HUD_TO_INSTINTO_20261015 -->
+## 🪬 #acordar · !calibrar · !centraldark — recuperação de contexto com baixa latência
+
+**INTENT_ID:** CENTRALDARK-HUD-INSTINTO-RECOVERY-20261015. **CHEFE_INTENT:** interromper raciocínio ocioso; recuperar rapidamente a máquina de estados e continuar a migração integral de `docs/HUD/HUD.html` para o **zone já existente** do Instinto Superior. Esses gatilhos são **aliases da receita operacional existente**, não comandos shell, um segundo motor, scheduler, outro Hermes ou autorização para ações irreversíveis.
+
+| Gatilho recebido | Operação fiel e curta | Saída obrigatória |
+|---|---|---|
+| `#acordar` | Restaurar a intenção ativa, branch/PR/owner e último receipt; consultar fontes atuais apenas no escopo afetado. | `CURRENT + PROOF + NEXT_CURSOR`; retomar a etapa independente que já estava autorizada. |
+| `!calibrar` | Contrastar estado declarado com GitHub, Casa, VPS, extensão, funil e testes relevantes; marcar `SOURCE/BUILD/INSTALLED/ACTIVE/UI` separadamente. | `PASS` só com readback; `UNKNOWN` e impedimentos exatos sem presumir falha global. |
+| `!centraldark` ou `!CENTRALDARK` | Invocar método canônico: intenção → owner existente → recuperar recibo → execução no escritor autorizado → contraprova → registro. | Recibo operacional e próxima ação, sem pedir microaprovações desnecessárias. |
+
+**Receita de retomada para a missão atual:** `docs/HUD/HUD.html` (fonte histórica com selos, cadeados, Gênesis, API e Hermes) → `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json` (UIDs canônicos) → `apps/instinto-superior/src/components/central/CockpitShell.tsx` (zone existente) → `apps/instinto-superior/src/components/central/HudDeterministico.tsx` na branch `feat/instinto-hud-genesis-selos-zone-20261015` → teste `apps/instinto-superior/scripts/verify-hud-zone.mjs` → receipts → gates → consumidor do cockpit. O contador do manifesto atual tem 198 nós mais `L000`, diferente do replay HTML histórico com 169 elos; preserve UIDs e não declare migração integral por um único componente. `docs/HUD/HUD.html` permanece preservado até paridade e readback completos.
+
+**Padrão de comunicação solicitado:** sempre que descobrir ganho novo, anunciar exatamente **🍒🎰🎲 Outra melhoria antecipada**, explicar **o que faz / por que melhorou / prova / próximo cursor**, e continuar o bloco autorizado. Atualização no chat é relatório, não log de execução fabricado. Nunca reproduzir credenciais ou logs brutos privados.
+
+**Cura para ocioso:** não repetir investigações inteiras quando `receipt+SHA+owner` ainda servem; revalidar apenas estado volátil. Se teste/rota falhar, preservar writer e trabalhar outra parte independente no mesmo escopo; só parar diante de bloqueio real. Usar caminhos no disco `K:` vinculado ao VS Code para staging quando disponível, sem sobrescrever projetos ocupados nem recriar pacotes/skills.
+
+**FIXED_POINT:** aceitação de satisfação do CHEFE é distinta de conformidade operacional mensurada; selos exigem efeito e contraprova. `NEXT_CURSOR` sempre recuperável. Executar apenas ferramentas autorizadas e não transformar `#acordar` em autostart destrutivo.
