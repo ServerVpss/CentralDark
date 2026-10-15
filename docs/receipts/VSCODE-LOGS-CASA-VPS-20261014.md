@@ -73,3 +73,10 @@ Somente eventos estruturados/sanitizados são enviados. Não publicar prompts, t
 - VPS: `logs/sectors/vscode/2026-10-15.jsonl` contém `kind=vscode_log_signal`, `key=vscode:terminal`, `end_offset=3028022`; heartbeat `accepted=1 duplicate=0`, próximo heartbeat `accepted=0`. **Pipeline real PASS para o marcador controlado; shell integration live ainda UNKNOWN**.
 - Medição paralela: `hermes-gateway.service=active`, `centraldark-native-mcp-http.service=active`, `127.0.0.1:9100/health=200`; `127.0.0.1:8099/health=000` na VPS e `127.0.0.1:9222=CLOSED` na Casa. Provider `zendrive-chatgpt-local` é alias de código/simulação histórica, não API ChatGPT autenticada live.
 - Não abrir segundo coletor, segundo Hermes, segundo HUD nem copiar cookies/credenciais. Tarefa continua a cada minuto; não chamar de streaming instantâneo. O PR #1820 e seu deploy/main continuam separados.
+
+
+## 15/10 — readback real do comando ZENDRIVE CLI
+
+A extensão `centraldark.centraldark-vscode-restore@0.1.1` instalada na Casa mostrou o comando `CentralDark: ZENDRIVE CLI (terminal existente)` na paleta VS Code. `InvokePattern.Invoke()` acionou o comando; o foco retornou a `xterm-helper-textarea` (Bash existente). O log `K:\TEMP\logs\LOGS-VS-CODE.log` passou de `3028022` a `3028123` bytes com `event=cli_focus exit=unknown` **emitido pela extensão real**, não por script de teste. VPS: `vscode_log_signal key=vscode:terminal end_offset=3028123` e heartbeat `accepted=1 duplicate=0 route=tailscale`; depois `accepted=0`.
+
+A tentativa de `echo ZENDRIVE_CLI_PING_1015` no Bash remoto teve foco e Enter enviados, mas `shell_start/shell_end` não apareceu no arquivo; integração de shell remota/captura de stdout continuam NOT_PROVEN. Não promover `CLI_FOCUS_PIPELINE_PASS` a `ALL_TERMINAL_TELEMETRY_PASS`. O coletor segue com cadência de 1 minuto. Sem segundo núcleo e sem materializar logs brutos na VPS.
