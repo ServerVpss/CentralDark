@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(centraldark): selar recuperacao Casa-VPS e contrato de observabilidade pos-boot",
+    "lastCommit": "feat(vscode): comando da paleta com nome acessivel para voz",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,38 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T14:07:34.400Z",
+      "titulo": "Push na main · d5b5d5b54d30e728b260853733a212cf7f61078c",
+      "detalhe": "feat(vscode): comando da paleta com nome acessivel para voz",
+      "area": "Repositório",
+      "sha": "d5b5d5b",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-15T14:05:52.211Z",
+      "titulo": "Push na main · a606714a23c8ac22ed9b06c3eaa693287461b192",
+      "detalhe": "docs(vscode-restore): alinhar acessibilidade por voz ao foco e skills existentes",
+      "area": "Repositório",
+      "sha": "a606714",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-15T14:04:47.341Z",
+      "titulo": "Push na main · 06c77b893bfcb86921843b9f635372ceed18b824",
+      "detalhe": "fix(voice): corrigir 5S para VS Code e desambiguar skills na rota do funil",
+      "area": "Repositório",
+      "sha": "06c77b8",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-15T14:02:35.667Z",
+      "titulo": "Push na main · 404ede09a0363886a13b74ce68dad66c7b349342",
+      "detalhe": "docs(vscode-log-bridge): cristalizar leitura 5S e rotas Casa VSCode VPS com contraprova",
+      "area": "Repositório",
+      "sha": "404ede0",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T13:53:34.971Z",
       "titulo": "Push na main · 31e267634be32aa2e1ec16a6813b60d475e7504d",
@@ -377,41 +409,37 @@
       "area": "Repositório",
       "sha": "cf020fd",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T19:11:56.006Z",
-      "titulo": "Push na main · 01d4f00618dce97ef2b5d9e773f64c4b43efac5f",
-      "detalhe": "🎼 chore(vscode): empacotar skill nativa sem snapshots locais nem dependencias",
-      "area": "Repositório",
-      "sha": "01d4f00",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T19:07:16.450Z",
-      "titulo": "Push na main · 9aca9ff8a651b73d196e9931305a86b950d4e09a",
-      "detalhe": "🎼 feat(vscode): preservar skill nativa e mapeamento UI comprovavel no mesmo owner",
-      "area": "Repositório",
-      "sha": "9aca9ff",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T18:54:03.369Z",
-      "titulo": "Push na main · 0c6bb47037141ca19c3ed65065be4859d7c71306",
-      "detalhe": "🧿 docs(sol): contraprovar fonte ZIP historicamente truncada sem destruir POC",
-      "area": "Repositório",
-      "sha": "0c6bb47",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T18:39:13.398Z",
-      "titulo": "Push na main · 450c95224c6cf899b8019b16f05af89780ef012f",
-      "detalhe": "🧾 receipt(vscode): registrar Hermes interativo auto-open, prova e limite Windows",
-      "area": "Repositório",
-      "sha": "450c952",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T14:07:34.400Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d5b5d5b54d30e728b260853733a212cf7f61078c (d5b5d5b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-15T14:05:52.211Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a606714a23c8ac22ed9b06c3eaa693287461b192 (a606714)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-15T14:04:47.341Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 06c77b893bfcb86921843b9f635372ceed18b824 (06c77b8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-15T14:02:35.667Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 404ede09a0363886a13b74ce68dad66c7b349342 (404ede0)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T13:53:34.971Z",
       "ia": "@segredounlock",
@@ -733,34 +761,6 @@
       "action": "📌 Push na main · cf020fd3e58be9e92915036fe1ae45a4b77a1c5b (cf020fd)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T19:11:56.006Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 01d4f00618dce97ef2b5d9e773f64c4b43efac5f (01d4f00)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T19:07:16.450Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9aca9ff8a651b73d196e9931305a86b950d4e09a (9aca9ff)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T18:54:03.369Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0c6bb47037141ca19c3ed65065be4859d7c71306 (0c6bb47)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T18:39:13.398Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 450c95224c6cf899b8019b16f05af89780ef012f (450c952)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T13:53:34.971Z",
-  "updatedAtBR": "15/10/2026, 10:53:34 BRT"
+  "updatedAt": "2026-10-15T14:07:34.400Z",
+  "updatedAtBR": "15/10/2026, 11:07:34 BRT"
 }

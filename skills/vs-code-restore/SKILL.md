@@ -172,3 +172,17 @@ O ponto fixo atual é **rota de envio demonstrada e documentação reutilizável
 Depois da leitura imediata do teste Bash, o arquivo Casa recebeu **dois eventos nativos adicionais** do listener da extensão: `shell_start exit=unknown` em `2026-10-15T01:37:05.779Z` e `shell_end exit=ok` em `2026-10-15T01:37:05.792Z`. A fonte avançou `3028123 → 3028322`. O funil VPS registrou dois `vscode_log_signal key=vscode:terminal` com offsets `3028226` e `3028322`; heartbeat `accepted=2 duplicate=0 route=tailscale`, seguintes `accepted=0`.
 
 **SELO EXATO:** a extensão observou e entregou pelo menos um par de início/fim de execução; **não** é possível atribuí-lo com segurança ao `echo` anterior ou a um terminal específico, porque o evento deliberadamente não transporta comando, saída nem identidade do terminal. Captura universal e correlação por terminal seguem pendentes; não extrapolar.
+
+
+## 🎙️ Acessibilidade e correção de ASR — intenção VS Code (15/10/2026)
+
+**Decisão do CHEFE:** quando o ditado da conversa disser `5S` durante uma missão de janela, foco, PID, terminal ou extensão, o objeto correto é **VS Code**, não a metodologia 5S. `esquilos`, `skil` e variantes podem significar **skills** no contexto de registrar/incorporar a receita. Não reescrever as palavras originais do usuário nem aplicar substituição global: interpretar **por intenção e escopo**.
+
+**Comportamento da extensão e dos operadores:**
+- Manter os comandos já implementados (`centraldark.zendriveCli`, `centraldark.mapVscodeUi`, `centraldark.showTrace` quando instalado); aliases fonéticos são formas de **localizar** o mesmo comando, não novas implementações, nem executores.
+- Frente ao pedido “foca o VS Code”: inventariar janelas frescas, confirmar PID/HWND, focar a sessão comprovada e observar retorno; não selecionar PID antigo nem criar terminal adicional.
+- Frente a “esquilos/skills”: buscar a skill de owner antes de criar qualquer outra; reusar `skills/vs-code-restore` para UI e `.agents/skills/centraldark-vscode-log-bridge` somente para eventos.
+- Se a interpretação puder executar comandos, alterar arquivos ou afetar permissões, pedir confirmação **somente se houver ambiguidade material**; execução autorizada mantém writer único por escopo.
+- Para acessibilidade da interface, preferir rótulos e descrições inequívocos na paleta (`VS Code`, `Terminal existente`, `CentralDark Trace`) e status legíveis. **Não** fazer captura oculta de áudio ou transcrição de conversas; a extensão não escuta o microfone.
+
+**Casos de teste semântico**: “5S, foca a janela” ⇒ foco VS Code, “esquilos, salva receita” ⇒ registrar skill, “abrir Hermes” ⇒ capacidade Hermes existente; palavra realmente desconhecida com duas ações possíveis ⇒ perguntar antes de agir. `ASR_CONFLICT != OPERATOR_COMMAND`.
