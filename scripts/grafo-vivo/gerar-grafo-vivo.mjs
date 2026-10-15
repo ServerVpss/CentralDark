@@ -3,10 +3,31 @@
  * Gerador do Grafo Vivo — "quem chama quem" com estado REAL em tempo real.
  * A topologia curada continua sendo a base. O grafo projeta a Banda; não vira autoridade.
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, renameSync, unlinkSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+/**
+ * Escrita atômica: grava em arquivo temporário no MESMO diretório (mesmo
+ * filesystem, exigido para renameSync ser atômico) e só substitui o
+ * destino depois que o payload estiver 100% escrito. Se a escrita do
+ * temporário falhar (crash, kill, queda de energia etc.), o arquivo
+ * oficial nunca é tocado — o último grafo íntegro permanece válido.
+ * Não garante durabilidade contra falha de SO/energia durante o próprio
+ * write do temporário; apenas elimina a janela de leitura/estado
+ * truncado no arquivo de destino.
+ */
+function writeAtomic(path, data) {
+  const tmp = `${path}.tmp.${process.pid}.${Date.now()}`;
+  try {
+    writeFileSync(tmp, data);
+    renameSync(tmp, path);
+  } catch (e) {
+    try { unlinkSync(tmp); } catch { /* tmp pode não ter sido criado */ }
+    throw e;
+  }
+}
 
 const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const GRAPH = `${ROOT}/apps/modulos/status/graph-data.json`;
@@ -161,8 +182,8 @@ function main() {
     return;
   }
   const payload = JSON.stringify(g, null, 2);
-  writeFileSync(GRAPH, payload);
-  try { writeFileSync(GRAPH_PANEL_MIRROR, payload); }
+  writeAtomic(GRAPH, payload);
+  try { writeAtomic(GRAPH_PANEL_MIRROR, payload); }
   catch (e) { console.error('[grafo-vivo] ⚠️ espelho graph-panel falhou: ' + String(e.message || e).slice(0, 120)); }
   console.log('[grafo-vivo] ✅ ' + resumo);
 }

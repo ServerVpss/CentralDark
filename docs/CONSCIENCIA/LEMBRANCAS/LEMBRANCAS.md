@@ -1466,3 +1466,17 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - 🟢 **Conquista:** 5 merges reais provados com SHA, zero regressão nova introduzida.
 - 📌 **Prova:** PRs #1822, #1821, #1820, #1808, #1774 todos com `state=MERGED` e `mergeCommit` confirmados via `gh pr view --json`.
 - 🎯 **Próximo passo:** destravar os 9 PRs CONFLICTING um por um (rebase + resolução + CI real).
+
+
+### [2026-10-15] Aprendizado #194 — Grafo Vivo quebrado 32h por escrita não atômica; causa raiz corrigida (tmp+renameSync)
+
+- **Cena e aceite:** `/health` mostrava `grafo.ok: false` com `wound_count` crescendo. Investigação real (não achismo) achou `graph-data.json` zerado desde 2026-10-13 20:53 UTC, causado por `writeFileSync` direto sem tmp+rename — o processo foi interrompido no meio da escrita e todo ciclo de regeneração seguinte quebrava tentando reabrir o próprio arquivo truncado.
+- **Fio:** hotfix de runtime primeiro (restaurado do espelho `graph-panel/data/graph.json` íntegro), depois causa raiz no código via PR #1828: `writeAtomic()` escreve em tmp no mesmo diretório e só troca o destino com `renameSync` após o payload completo.
+- **Regra:** escrita de arquivo canônico consumido por processo periódico/concorrente deve ser sempre tmp+rename no mesmo filesystem, nunca escrita direta no caminho final. `renameSync` protege contra leitura de estado parcial, não contra crash de SO/perda de energia durante o write do próprio temporário.
+- **Continuidade:** branch `fix/grafo-vivo-atomic-write` mergeada squash em `a766d77e46313212ab4f0082a9a899e81c3a519d`, branch deletada. Testes antes do merge: `--check`, `--dry`, execução real, e teste isolado da função simulando falha antes do rename (4/4 critérios OK).
+- **Fonte:** docs/CONSCIENCIA/APRENDIZADOS.md#194.
+- **Limite:** autoaprovação de PR pelo autor é bloqueada pelo GitHub; review formal ficou registrado como comentário, não como approval — merge seguiu porque o conteúdo já estava pré-aprovado pelo CHEFE em linguagem natural antes de abrir o PR.
+- 📣 **Escopo da lembrança #194:** registrar a ferida do Grafo Vivo e o fix atômico; não cobre outras escritas não atômicas que possam existir em outros scripts da Casa.
+- 🟢 **Conquista:** causa raiz corrigida no código (não só documentada), merge real provado via `gh pr view --json state,mergedAt,mergeCommit`.
+- 📌 **Prova:** PR #1828, commit `a766d77e46313212ab4f0082a9a899e81c3a519d`, `state=MERGED`.
+- 🎯 **Próximo passo:** auditar outros scripts da Casa que escrevem arquivo canônico/consumido por cron e aplicar o mesmo padrão tmp+rename onde pertinente.
