@@ -2964,3 +2964,27 @@ Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remot
 **Pacote plug-and-play:** `build:plugplay` usa dependência JSZip já declarada pelo app; arquivo `apps/instinto-superior/scripts/build-plugplay.mjs` é **implementação de build**, não outra receita/skill. ZIP contém somente output compilado filtrado, contratos obrigatórios, manifest com SHA por arquivo e SHA do ZIP; recusa fontes locais modificadas, links simbólicos e arquivos sensíveis. Não automatiza instalar, deploy, restart ou apagar históricos. Se dependências, destino, build ou CI estiverem ausentes, `BLOCKED/UNKNOWN` localizado, sem reconfigurar infraestrutura à força.
 
 **Critérios de selo:** aceitação humana 100% do método e prova operacional são categorias diferentes. Código e teste em branch #1832 não equivalem a UI publicada; todos os indicadores de conformidade devem apresentar denominador e evidência. Se o runtime de alguma capacidade ainda for `UNKNOWN`, preservar o FIXED_POINT do estágio anterior e o NEXT_CURSOR, sem falso selo.
+
+
+## 🔧 DEPENDENCY_FIX_FAST_PATH — correção direta com promoção comprovada (2026-10-15)
+
+**INTENÇÃO DO CHEFE:** quando houver erro de dependência com causa e versão corrigida comprovadas, o agente principal **já owner do escopo** corrige imediatamente e promove à produção pela esteira existente **sem solicitar confirmação redundante**, se todas as condições técnicas e de governança forem satisfeitas. Não criar agente, PR, worktree ou executor paralelos por ritual; reutilizar a branch, os locks e os gates vigentes.
+
+```text
+DETECT_DEPENDENCY_VIOLATION
+→ VERIFY_ROOT_CAUSE_AND_FIXED_VERSION (upstream changelog/advisory + compatibility)
+→ IDENTIFY_MAIN_AGENT_AND_ONE_WRITER_PER_SCOPE
+→ LOCK + SNAPSHOT_CURRENT_SHA_AND_LOCKFILE
+→ PATCH_MINIMUM_DEPENDENCY_AND_LOCKFILE_IN_SAME_OWNER
+→ INSTALL_REPRODUCIBLY + TEST_AFFECTED_CONE + BUILD + REGRESSION
+→ COUNTERPROOF (no API/ABI break, security regression, unexpected diff)
+→ RECEIPT (old/new version, SHA, tests, rollback, owner)
+→ PROMOTE_VIA_EXISTING_MAIN_GATES (no bypass, no force-push)
+→ DEPLOY_VIA_EXISTING_AUTHORIZED_PIPELINE_IF_GREEN
+→ HEALTH_READBACK + FUNCTIONAL_RUNTIME_READBACK
+→ FIXED_POINT; IF_FAILED ROLLBACK_OR_KEEP_PREVIOUS_HEALTHY_VERSION + NEXT_CURSOR
+```
+
+**AUTO_PROMOTE_IF_ALL_GREEN:** somente se a versão for verificada, impacto limitado, testes aplicáveis PASS, branch protection/approvals atendidos, CI e política de deploy satisfeitos, rollout/rollback conhecidos e não houver trabalho alheio em risco. **Nunca** tratar `npm install`, versão semver ou commit como prova de produção. Mudança major incompatível, lockfile divergente, API removida, build quebrado, gate pendente, autorização insuficiente ou ausência de contraprova => `BLOCKED/UNKNOWN`, preservar runtime e reportar a menor causa; não publicar quebrado. Se a produção exigir aprovação humana ou uma etapa que não possa ser executada pela rota disponível, parar nesse gate e relatar precisamente o bloqueio. `PROD_PASS` exige SHA implantado, health e efeito funcional lidos do runtime. 
+
+**Precedência:** owner e receita de dependências já existentes continuam autoridade; esta seção apenas define a **decisão rápida e a sequência de evidência**. Aplicar o mínimo delta e o mesmo checklist CURRENT; 🧹 só depois de preservação e readback.
