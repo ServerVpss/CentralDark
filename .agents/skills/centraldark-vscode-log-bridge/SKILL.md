@@ -60,3 +60,12 @@ skill = COMO / scripts Casa = COLETA / script VPS = INGERE / log-funnel = DONO /
 - PR #1820 continua `OPEN`, `MERGEABLE`, `isDraft=false` no HEAD `fdb2a1a32c5ea5f656126ff16817228b7d9ee507` no momento da leitura; checks same-HEAD, merge em main e deploy não foram promovidos a PASS. Preservar PR-mãe #1562 como ledger.
 
 `FOCUS_PROVADO → ENVIO → READBACK → METADADO_SANITIZADO → FUNIL_EXISTENTE → RECIBO → FIXED_POINT`.
+
+
+## Prova do circuito ZENDRIVE CLI 0.1.1 (15/10/2026)
+
+- **UI owner** `skills/vs-code-restore` evoluído na `main` (fonte `a716b583`, manifesto `441919de`, receita `d4f1c097`); versão `centraldark.centraldark-vscode-restore@0.1.1` instalada na Casa. Comando `centraldark.zendriveCli` apenas foca terminal existente; não cria segundo Hermes nem sessão ChatGPT.
+- A extensão observa eventos de shell integrado (`shell_start`, `shell_end`, `shell_integration`) e emite **somente metadados** no `K:\TEMP\logs\LOGS-VS-CODE.log` já existente, quando ativada no host UI Windows; saída e comandos não são lidos. O Task Scheduler já faz o transporte por SSH/Tailscale para este owner.
+- **Contraprova de ponta a ponta (marcador controlado):** a fonte passou de `3027886` a `3028022` bytes, cursor `3028022`, rota `tailscale`; VPS materializou `vscode_log_signal key=vscode:terminal end_offset=3028022`, heartbeat `accepted=1 duplicate=0`, seguida de heartbeat `accepted=0`. Prova a ponte, não o evento nativo da extensão.
+- Teste de código isolado: comando registrado, terminal reutilizado, 0 terminais novos, quatro eventos sanitizados e classes de exit `ok/nonzero` — PASS. **Pendente:** ativação da nova extensão na janela já aberta, emissão de `shell_start/shell_end` de comando real, captura automática de stdout (não implementada), e provider Zendrive real (Omni VPS 8099 não respondeu; CDP Casa 9222 fechado).
+- Preservar `SOURCE_COMMITTED != RUNTIME_ACTIVATED`; não promover provider `zendrive-chatgpt-local` de simulação para live nem copiar cookies. Nenhum serviço paralelo ou segundo log-funnel.
