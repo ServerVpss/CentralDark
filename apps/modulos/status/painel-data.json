@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(agents): vincular ZENDRIVE CLI mental ao VS Code, Hermes e funil único",
+    "lastCommit": "docs: contraprova real do comando ZENDRIVE CLI e funil Casa-VPS",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T01:39:21.526Z",
+      "titulo": "Push na main · c61acdcca6c3de43b708e9e6eac3d8c9e4672f62",
+      "detalhe": "docs: contraprova real do comando ZENDRIVE CLI e funil Casa-VPS",
+      "area": "Repositório",
+      "sha": "c61acdc",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T01:34:41.516Z",
       "titulo": "Push na main · f5c1fe38981a93f313dbfe1673401786697746f2",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "9b98d93",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T17:19:30.601Z",
-      "titulo": "Push na main · 7910f75e98e6d10f250bd2d45d91808ef851e2c4",
-      "detalhe": "aprendizado(#175): Voz JARVIS: leitura longa sequencial e HTTP 4xx preservado no proxy TTS",
-      "area": "Repositório",
-      "sha": "7910f75",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T01:39:21.526Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c61acdcca6c3de43b708e9e6eac3d8c9e4672f62 (c61acdc)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T01:34:41.516Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 9b98d9394be6ca5cd9feabb657b0bb6d83c543ff (9b98d93)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T17:19:30.601Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 7910f75e98e6d10f250bd2d45d91808ef851e2c4 (7910f75)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T01:34:41.516Z",
-  "updatedAtBR": "14/10/2026, 22:34:41 BRT"
+  "updatedAt": "2026-10-15T01:39:21.526Z",
+  "updatedAtBR": "14/10/2026, 22:39:21 BRT"
 }
