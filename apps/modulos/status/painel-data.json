@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(vscode): comando da paleta com nome acessivel para voz",
+    "lastCommit": "fix(vscode-restore): bump 0.1.2 para alias acessivel do terminal",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T14:11:52.183Z",
+      "titulo": "Push na main · a9efb8096096d4cfb5a63cad1fa7539a3d66f803",
+      "detalhe": "fix(vscode-restore): bump 0.1.2 para alias acessivel do terminal",
+      "area": "Repositório",
+      "sha": "a9efb80",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T14:07:34.400Z",
       "titulo": "Push na main · d5b5d5b54d30e728b260853733a212cf7f61078c",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "c735373",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T19:12:49.571Z",
-      "titulo": "Push na main · cf020fd3e58be9e92915036fe1ae45a4b77a1c5b",
-      "detalhe": "🧾 docs(vscode): registrar build instalado e limites do readback UI",
-      "area": "Repositório",
-      "sha": "cf020fd",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T14:11:52.183Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a9efb8096096d4cfb5a63cad1fa7539a3d66f803 (a9efb80)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T14:07:34.400Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · c73537346ac8d7f88d4346dd287a71c95ce1f0ac (c735373)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T19:12:49.571Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · cf020fd3e58be9e92915036fe1ae45a4b77a1c5b (cf020fd)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T14:07:34.400Z",
-  "updatedAtBR": "15/10/2026, 11:07:34 BRT"
+  "updatedAt": "2026-10-15T14:11:52.183Z",
+  "updatedAtBR": "15/10/2026, 11:11:52 BRT"
 }
