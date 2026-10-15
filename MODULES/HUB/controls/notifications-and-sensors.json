@@ -51,6 +51,43 @@
       "owner_lookup_before_action": true,
       "self_echo_guard": true,
       "dedupe_marker": "CENTRALDARK_SELO_FABRIC"
+    },
+    "pr_conflict_gmail_hub_projection": {
+      "enabled": true,
+      "mode": "existing_owner_event_projection_only",
+      "source_events": [
+        "pull_request",
+        "check_suite",
+        "workflow_run"
+      ],
+      "source_owner": ".github/workflows/selo-fabric.yml",
+      "conflict_owner": ".agents/skills/git-conflict-resolve-house-standard/SKILL.md",
+      "conflict_adapter": ".agents/skills/centraldark-autonomous-conflict-costura/SKILL.md",
+      "conflict_engine": "scripts/dependabot/resolve-conflicts.sh",
+      "notification_owner": "src/lib/notifications-events.ts",
+      "notification_ledger": "notifications_log",
+      "hub_owner": "apps/modulos/hub",
+      "cockpit_projection": "apps/instinto-superior/src/components/central/CockpitShell.tsx",
+      "account_channel": "gmail_notifications",
+      "dedupe_key": "repository:pr_number:head_sha:event_type",
+      "statuses": [
+        "CONFLICT_DETECTED",
+        "OWNER_ASSIGNED",
+        "RESOLUTION_IN_PROGRESS",
+        "RESOLVED_PENDING_GATES",
+        "GATES_FAILED",
+        "GATES_PASSED",
+        "DEPLOY_PROVEN",
+        "UNKNOWN"
+      ],
+      "require_github_readback": true,
+      "require_receipt_before_pass": true,
+      "never_auto_merge_from_gmail": true,
+      "never_promote_notification_to_pass": true,
+      "allow_duplicate_resolver": false,
+      "requires_runtime_adapter_validation": true,
+      "proof_state": "CONFIGURED_NOT_RUNTIME_PROVEN",
+      "notes": "Roteamento declarativo: o Hub de Contas projeta o evento; Gmail e canal de aviso, nao owner de resolucao. Preserva AutoSync e workflows existentes. Implementacao de runtime e teste E2E pendentes."
     }
   },
   "channels": {
@@ -135,76 +172,123 @@
     "selo_workflow": ".github/workflows/selo-fabric.yml",
     "groups": {
       "pr": {
-        "events": ["pull_request", "pull_request_target", "pull_request_review", "pull_request_review_comment"],
+        "events": [
+          "pull_request",
+          "pull_request_target",
+          "pull_request_review",
+          "pull_request_review_comment"
+        ],
         "class": "PR_LIFECYCLE",
         "selo": true,
         "pulse_pr_mae": true,
         "existing_workflow": ".github/workflows/pr-mother-pulse.yml"
       },
       "ci": {
-        "events": ["check_run", "check_suite", "workflow_run", "status"],
+        "events": [
+          "check_run",
+          "check_suite",
+          "workflow_run",
+          "status"
+        ],
         "class": "CI_EVIDENCE",
         "selo": true,
         "pulse_pr_mae": true,
         "pass_requires_receipt": true
       },
       "code": {
-        "events": ["push", "create", "delete"],
+        "events": [
+          "push",
+          "create",
+          "delete"
+        ],
         "class": "CODE_MUTATION",
         "selo": true,
         "pulse_pr_mae": true
       },
       "issue": {
-        "events": ["issues", "issue_comment"],
+        "events": [
+          "issues",
+          "issue_comment"
+        ],
         "class": "ISSUE_TRACKER",
         "selo": true,
         "pulse_pr_mae": true
       },
       "deploy": {
-        "events": ["deployment", "deployment_status"],
+        "events": [
+          "deployment",
+          "deployment_status"
+        ],
         "class": "DEPLOY_EVIDENCE",
         "selo": true,
         "pulse_pr_mae": true,
         "pass_requires_runtime_proof": true
       },
       "release": {
-        "events": ["release"],
+        "events": [
+          "release"
+        ],
         "class": "RELEASE_LIFECYCLE",
         "selo": true,
         "pulse_pr_mae": true
       },
       "trigger": {
-        "events": ["workflow_dispatch", "repository_dispatch", "schedule"],
+        "events": [
+          "workflow_dispatch",
+          "repository_dispatch",
+          "schedule"
+        ],
         "class": "DETERMINISTIC_TRIGGER",
         "selo": true,
         "pulse_pr_mae": false
       },
       "repo_admin": {
-        "events": ["branch_protection_rule", "member", "public", "fork"],
+        "events": [
+          "branch_protection_rule",
+          "member",
+          "public",
+          "fork"
+        ],
         "class": "REPO_ADMIN_EVENT",
         "selo": false,
         "pulse_pr_mae": false
       },
       "project": {
-        "events": ["project", "project_card", "project_column", "milestone", "label"],
+        "events": [
+          "project",
+          "project_card",
+          "project_column",
+          "milestone",
+          "label"
+        ],
         "class": "PROJECT_MANAGEMENT",
         "selo": false,
         "pulse_pr_mae": false
       },
       "content": {
-        "events": ["discussion", "discussion_comment", "wiki", "page_build"],
+        "events": [
+          "discussion",
+          "discussion_comment",
+          "wiki",
+          "page_build"
+        ],
         "class": "CONTENT_EVENT",
         "selo": false,
         "pulse_pr_mae": false
       },
       "registry": {
-        "events": ["registry_package"],
+        "events": [
+          "registry_package"
+        ],
         "class": "PACKAGE_EVENT",
         "selo": true,
         "pulse_pr_mae": false
       },
       "watch": {
-        "events": ["watch", "star"],
+        "events": [
+          "watch",
+          "star"
+        ],
         "class": "VANITY_METRIC",
         "selo": false,
         "pulse_pr_mae": false
