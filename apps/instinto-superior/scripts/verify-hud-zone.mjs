@@ -26,8 +26,8 @@ test("zone existente reutilizado com autenticacao", () => {
   assert.match(cockpit, /import \{ HudDeterministico \}/);
   assert.match(cockpit, /TabsTrigger value="hud-legado"/);
   assert.match(cockpit, /autenticado \? \(/);
-  assert.ok(cockpit.includes('HudDeterministico estado={dado} />'));
-  assert.equal(cockpit.split('HudDeterministico estado={dado} />').length - 1, 1);
+  assert.ok(cockpit.includes('HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />'));
+  assert.equal(cockpit.split('HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />').length - 1, 1);
 });
 
 test("replay documental nao inventa execucao nem novos selos", () => {
@@ -97,4 +97,47 @@ test("🧹 faxina contextual do mesmo HUD nunca elimina trabalho sem receipt", (
   assert.ok(existingSkill.includes("SCRATCH_SAFE"));
   assert.ok(!zone.includes("git clean -fdx"));
   assert.ok(!zone.includes("rmSync("));
+});
+
+
+test("gaveta canonica cataloga 999 skills e plugins sem fingir execucao", () => {
+  const vault = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
+  const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
+  const sourceSha = vault.source.sha;
+  assert.match(sourceSha, /^[a-f0-9]{40}$/);
+  assert.equal(vault.skills.length, vault.counts.total_skills);
+  assert.equal(vault.counts.skill_md_agents, 996);
+  assert.equal(vault.counts.skill_md_agents_active, 992);
+  assert.equal(vault.counts.skill_md_agents_archive, 4);
+  assert.equal(vault.counts.skill_md_root, 3);
+  assert.equal(vault.counts.total_skills, 999);
+  assert.equal(vault.plugins.length, 3);
+  assert.equal(vault.gavetas.length, 6);
+  assert.equal(vault.legacy.names.length, 10);
+  assert.equal(new Set(vault.skills.map(s => s.id)).size, 999);
+  assert.ok(vault.skills.every(s => s.estado === "SOURCE_ONLY"));
+  assert.ok(infra.includes("export function GavetaForja()"));
+  assert.ok(infra.includes('TabsTrigger value="gavetas"'));
+  assert.ok(infra.includes("GavetaForja />"));
+  assert.ok(zone.includes("<GavetaForja />"));
+  assert.ok(infra.includes("MAIN_SYNCED ≠ RUNTIME_LOADED"));
+});
+
+test("inventario do HUD cobre quatro abas e preserva fonte legada integral", () => {
+  const inventario = JSON.parse(read("apps/instinto-superior/src/data/hud-migration.snapshot.json"));
+  assert.equal(inventario.counts.sections, inventario.sections.length);
+  assert.equal(inventario.counts.controls, inventario.controls.length);
+  assert.equal(inventario.counts.sections, 189);
+  assert.equal(inventario.counts.controls, 33);
+  assert.equal(inventario.counts.tabs, 4);
+  assert.equal(inventario.source.path, "docs/HUD/HUD.html");
+  assert.equal(inventario.source.full_migration_proven, false);
+  assert.ok(inventario.sections.some(s => s.titulo.includes("Afterburner")));
+  assert.ok(inventario.sections.some(s => s.titulo.includes("Skill Auto-Sync")));
+  assert.ok(inventario.controls.some(s => s.id === "cd-intent-refresh"));
+  assert.ok(inventario.controls.some(s => s.id === "cdr-operator-send"));
+  assert.ok(zone.includes('hudMigrationSnapshot.counts.sections'));
+  assert.ok(zone.includes("Atualizar estado do cockpit"));
+  assert.ok(cockpit.includes("atualizar={() => void estado.refetch()}"));
+  assert.ok(!zone.includes("sendText("));
 });
