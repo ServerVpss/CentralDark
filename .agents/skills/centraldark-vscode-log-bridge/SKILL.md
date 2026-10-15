@@ -49,3 +49,14 @@ skill = COMO / scripts Casa = COLETA / script VPS = INGERE / log-funnel = DONO /
 - A flag `Settings.Hidden` do Task Scheduler oculta o item na interface do agendador; ela **não oculta janela do PowerShell**. O launcher é o que evita o piscar.
 - A automação continua no usuário da Casa (LogonType Interactive) para preservar acesso a K:\TEMP e à chave SSH local; não migrar para SYSTEM às cegas.
 - Testar execução e `LastTaskResult=0` com mesmo cursor/SSH antes de declarar PASS. Não afirmar observação direta da tela sem captura.
+
+
+## Integração com operação direta no terminal VS Code (15/10/2026)
+
+- A receita de foco/digitação/contraprova da interface pertence a `skills/vs-code-restore/SKILL.md` na `main` (commit `6eab96cc7cacc6ff374888911b835f0c8c2d0353`); este owner cuida **somente da telemetria**, sem copiar o mecanismo de UI ou abrir outro coletor.
+- A foto do CHEFE provou `echo PONG_CENTRALDARK_1015` executado em Bash `root@CENTRALDARK-OS` dentro do VS Code; um lote posterior de 8 comandos foi enviado pela automação, porém sua saída individual não foi capturada. `SEND_OK != OUTPUT_PASS`.
+- Estado live da Casa medido: `LOGS-VS-CODE.log` 3.027.886 bytes; tarefa `CentralDark-VSCode-LogBridge` `Ready`, `LastTaskResult=0`, ação `wscript.exe`; dry-run `signals=0 offset=3027886->3027886`. O arquivo **não contém evidência nova** do pingue-pongue só por ter sido testado; não declarar cobertura de terminal sem prova.
+- Para integrar ações do terminal: reutilizar `scripts/casa/vscode-log-bridge.ps1` → `scripts/vps/ingest-vscode-log.mjs` → `apps/modulos/mcp/src/log-funnel.js`. Primeiro medir origem e campos já aceitos; somente metadados não sensíveis (tipo de operação, owner, horário, resultado, fingerprint, next_cursor), jamais comandos brutos, stdout, tokens, sessões, prompts ou conversas. Evitar alterar contrato do coletor sem teste de idempotência, privacidade e API autenticada.
+- PR #1820 continua `OPEN`, `MERGEABLE`, `isDraft=false` no HEAD `fdb2a1a32c5ea5f656126ff16817228b7d9ee507` no momento da leitura; checks same-HEAD, merge em main e deploy não foram promovidos a PASS. Preservar PR-mãe #1562 como ledger.
+
+`FOCUS_PROVADO → ENVIO → READBACK → METADADO_SANITIZADO → FUNIL_EXISTENTE → RECIBO → FIXED_POINT`.
