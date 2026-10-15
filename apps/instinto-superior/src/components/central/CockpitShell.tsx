@@ -27,6 +27,7 @@ import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
 import { AutoSyncButton } from "@/components/central/AutoSyncButton";
 import { StatusPanel } from "@/components/central/StatusPanel";
+import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
@@ -153,10 +154,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
 
       <section className="px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          {/* Auto Sync + Micro-Deploy + Status Lights */}
+          {/* Auto Sync + Micro-Deploy + Status Lights + Daily Review */}
           <AutoSyncButton />
-          <div className="mt-4">
+          <div className="mt-4 space-y-4">
             <StatusPanel />
+            <DailyReviewPanel />
           </div>
 
           <div className="mt-8 flex items-center gap-3">
