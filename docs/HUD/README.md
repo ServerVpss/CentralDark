@@ -49,3 +49,20 @@ A tabela é **inventário por domínio**, não prova de censo individual de todo
 Build/CI da PR isolada → corrigir apenas falhas reais do owner → readback em zone autenticado → migrar em lotes de capacidades (sensores, contratos, temas, controle/aceite, Hermes Gateway) com prova de paridade → só então reduzir o legado a manifesto/template, nunca quebrar links/owners históricos.
 
 **Conformidade por escopo:** fonte/inventário parcial documentados; `100%` de satisfação declarado pelo CHEFE não equivale a conformidade técnica integral. `RUNTIME_HUD_MIGRATED=NOT_PROVEN`.
+
+
+## Retomada operativa — 15/10/2026 11h50 BRT
+
+**Gatilhos falados no chat:** `#acordar → !calibrar → !CENTRALDARK`. Mesmo owner em `.agents/skills/centraldark-operational-method/SKILL.md` da `main`. Não são comandos shell nem prova de execução automática. Cada mensagem de nova descoberta deve começar por **🍒🎰🎲 Outra melhoria antecipada**, indicando ganho, motivo, prova e cursor.
+
+**Prova de runtime lida nesta rodada:** Casa `SEGREDO` e VPS `CENTRALDARK-OS` responderam por conectores independentes; VS Code `Code.exe` PID **22468**, HWND **67400**, `foreground=true` (valores efêmeros); `Hermes.exe` com três processos encontrados. VPS `tailscaled`, `hermes-gateway`, `centraldark-native-mcp-http` ativos; quatro runners GitHub. O funil MCP canônico respondeu `ingest=OK` com **0 novos eventos naquele ciclo**; job Hermes recorrente com 2 sinais em 90 minutos; **nenhuma delegação viva nova comprovada**. `LOG_FUNNEL_PRESENT != RAW_TERMINAL_STREAMING`.
+
+**Checklist diário:** owner histórico já existe em `docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md`. O zone `HudDeterministico` agora recebe a **mesma prop de estado** de `CockpitShell` e apresenta GitHub, API, VPS/deploy, Screenpipe, Hermes e recibos sob um único componente. O owner de saúde continua `ObservabilidadeCentralDark`; não há segundo coletor. Se Hermes/Unigram/CentralDark.exe estiver fechado por escolha, não classificar como falha.
+
+**Faxina/Forja:** foi localizada a skill `.agents/skills/main-pinned-runtime-fast-path/SKILL.md` e o scratch canônico `/root/CentralDark/_worktrees/main-pinned-runtime-fastpath` com lock, guard de realpath e receipt antes de cleanup. VPS checkout principal apresenta **seis arquivos rastreados modificados**; Casa tem worktrees ativos. **Não limpar nenhum deles.** `SCRATCH_RESET != MAIN_RESET`.
+
+**Deliberação Hermes pelo terminal:** a janela do VS Code estava em primeiro plano, porém a operação de consulta ao CLI Hermes foi bloqueada pela ferramenta. **Nenhum comando foi digitado no terminal existente, nenhuma tarefa nova foi delegada e nenhum acompanhamento contínuo foi iniciado por essa rota.** Operação posterior deve confirmar foco do terminal-alvo, executor único, permissão e readback, sem tentar contornar bloqueios.
+
+**Dívida identificada:** a suíte `apps/instinto-superior/scripts/verify-hud-zone.mjs` ainda verifica a sintaxe anterior `<HudDeterministico />` enquanto o cockpit já usa `<HudDeterministico estado={dado} />`. Tentativa de atualizar o teste foi bloqueada pela ferramenta. Assim, `TEST_CONTRACT=STALE`, `BUILD=UNKNOWN` e `UI_PROVEN=NO`. Atualizar a mesma suíte quando possível, sem abrir outra PR nem declarar PASS.
+
+**NEXT_CURSOR:** atualizar contrato de teste → executar teste + build em clone/worktree isolado do disco K: vinculado ao VS Code → ler CI mesma SHA → conferir interface no cockpit real → migrar os domínios restantes do HTML legado com paridade até que ele se torne apenas documentação. Sem merge/deploy prematuro.
