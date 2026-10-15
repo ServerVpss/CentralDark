@@ -23,12 +23,26 @@ interface WorkspaceMap {
 }
 
 let restoredThisSession = false;
+let traceOutput: vscode.OutputChannel | undefined;
+
+// VS Code > Saida > CentralDark Trace. Only fixed, sanitized metadata.
+function emitTrace(event: string, state: 'OBSERVED' | 'PASS' | 'ATTENTION' | 'UNKNOWN' = 'OBSERVED'): void {
+  if (!/^(activate|cli_focus|shell_start|shell_end|shell_integration|workspace_map|restore|show_trace)$/.test(event)) { return; }
+  traceOutput?.appendLine(`${new Date().toISOString()} event=${event} state=${state}`);
+}
 
 export function activate(context: vscode.ExtensionContext): void {
+  traceOutput = vscode.window.createOutputChannel('CentralDark Trace');
+  context.subscriptions.push(traceOutput);
+  emitTrace('activate', 'PASS');
   context.subscriptions.push(
     vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)),
     vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)),
-    vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal)
+    vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
+    vscode.commands.registerCommand('centraldark.showTrace', () => {
+      emitTrace('show_trace', 'PASS');
+      traceOutput?.show(true);
+    })
   );
   registerTerminalTelemetry(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
@@ -49,6 +63,7 @@ type TerminalEvent = 'cli_focus' | 'shell_start' | 'shell_end' | 'shell_integrat
 
 function emitTerminalMetadata(event: TerminalEvent, exitCode?: number): void {
   if (process.platform !== 'win32') { return; }
+  emitTrace(event, typeof exitCode === 'number' ? (exitCode === 0 ? 'PASS' : 'ATTENTION') : 'UNKNOWN');
   const enabled = vscode.workspace.getConfiguration('centraldark.restore')
     .get<boolean>('terminalTelemetry', true);
   if (!enabled || !fs.existsSync(terminalLogPath)) { return; }
@@ -98,6 +113,7 @@ function loadMap(context: vscode.ExtensionContext): WorkspaceMap | undefined {
 }
 
 async function restore(context: vscode.ExtensionContext, manual: boolean): Promise<void> {
+  emitTrace('restore', 'OBSERVED');
   if (restoredThisSession && !manual) {
     return;
   }
@@ -149,6 +165,7 @@ async function restore(context: vscode.ExtensionContext, manual: boolean): Promi
   }
 
   const resumo = 'CentralDark: bancada restaurada (mapa ' + map.versao + ').';
+  emitTrace('restore', problems.length > 0 ? 'ATTENTION' : 'PASS');
   if (problems.length > 0) {
     void vscode.window.showWarningMessage(resumo + '\n' + problems.join('\n'));
   } else {
@@ -206,11 +223,13 @@ async function mapNativeWorkspace(context: vscode.ExtensionContext): Promise<voi
     await vscode.workspace.fs.writeFile(target, Buffer.from(JSON.stringify(snapshot, null, 2), 'utf8'));
     const document = await vscode.workspace.openTextDocument(target);
     await vscode.window.showTextDocument(document, { preview: false, preserveFocus: false });
+    emitTrace('workspace_map', 'PASS');
     void vscode.window.showInformationMessage(
       'CentralDark: mapa salvo — ' + commands.length + ' comandos, ' +
       terminals.length + ' terminais, ' + extensions.length + ' extensoes.'
     );
   } catch (error) {
+    emitTrace('workspace_map', 'ATTENTION');
     void vscode.window.showErrorMessage('CentralDark: mapa nao persistido: ' + String(error));
     throw error;
   }
