@@ -11,9 +11,12 @@ param(
 )
 $ErrorActionPreference = "Stop"
 if ($InstallTask) {
-  $pwsh = (Get-Command pwsh -ErrorAction Stop).Source
-  $quotedFile = [char]34 + $PSCommandPath + [char]34
-  $action = New-ScheduledTaskAction -Execute $pwsh -Argument ("-NoProfile -NonInteractive -File " + $quotedFile)
+  # A janela antiga piscava porque pwsh.exe era executado em sessao Interactive.
+  # wscript.exe chama o mesmo coletor com janela oculta e devolve o exit code.
+  $runner = Join-Path (Split-Path -Parent $PSCommandPath) "vscode-log-bridge-hidden.vbs"
+  if (!(Test-Path -LiteralPath $runner -PathType Leaf)) { throw "Launcher oculto ausente: $runner" }
+  $wscript = Join-Path $env:WINDIR "System32\wscript.exe"
+  $action = New-ScheduledTaskAction -Execute $wscript -Argument ("//B //Nologo " + [char]34 + $runner + [char]34)
   $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes 1)
   $account = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
   $principal = New-ScheduledTaskPrincipal -UserId $account -LogonType Interactive -RunLevel Limited
