@@ -40,3 +40,12 @@ Git commit não é deploy, e existência de script não prova agendamento; só r
 ## Organização
 
 skill = COMO / scripts Casa = COLETA / script VPS = INGERE / log-funnel = DONO / API = CONSULTA / TEMP = DADO VOLÁTIL / receipt = PROVA SEM SEGREDO
+
+## Execução invisível na Casa (sem janela piscando)
+
+- O Task Scheduler executa `C:\Windows\System32\wscript.exe //B //Nologo "K:\scripts\casa\vscode-log-bridge-hidden.vbs"`, e não `pwsh.exe` diretamente.
+- O `vscode-log-bridge-hidden.vbs` chama o MESMO `vscode-log-bridge.ps1` com `WScript.Shell.Run(command, 0, True)` (janela oculta, exit code preservado).
+- O `-InstallTask` já usa esse launcher; é preciso materializar os dois arquivos em `K:\scripts\casa` antes do agendamento.
+- A flag `Settings.Hidden` do Task Scheduler oculta o item na interface do agendador; ela **não oculta janela do PowerShell**. O launcher é o que evita o piscar.
+- A automação continua no usuário da Casa (LogonType Interactive) para preservar acesso a K:\TEMP e à chave SSH local; não migrar para SYSTEM às cegas.
+- Testar execução e `LastTaskResult=0` com mesmo cursor/SSH antes de declarar PASS. Não afirmar observação direta da tela sem captura.
