@@ -2,7 +2,7 @@
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark VS Code Restore",
   "description": "Restaura a bancada e reutiliza o terminal existente como entrada ZENDRIVE CLI, com telemetria sanitizada.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "centraldark",
   "private": true,
   "engines": {
