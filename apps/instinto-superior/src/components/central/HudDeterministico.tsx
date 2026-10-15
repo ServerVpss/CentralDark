@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import lineageJson from "../../../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json";
+import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 
 type Node = {
   uid: string;
@@ -26,7 +27,7 @@ const historicalSeals = [
 ] as const;
 
 /** Reaproveita o zone do Instinto Superior; não cria outro HUD ou executor. */
-export function HudDeterministico() {
+export function HudDeterministico({ estado }: { estado?: EstadoCentralDark }) {
   const [cursor, setCursor] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -131,6 +132,41 @@ export function HudDeterministico() {
           Novo selo só é permitido com: {required.join(" · ")}.
           Selar não dispara nova execução e não renumera Gênesis.
         </p>
+      </section>
+      <section className="panel p-6" aria-labelledby="cd-daily-title">
+        <h3 id="cd-daily-title" className="text-lg font-semibold">
+          📋 Check-list diário · projeção do owner existente
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Sinais do mesmo estado do cockpit, sem outro coletor. O histórico canônico está em
+          docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md; nenhum item é selado ao abrir a tela.
+        </p>
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+          {([
+            ["GitHub main", estado?.github, estado?.mainSha?.slice(0, 12)],
+            ["API CentralDark", estado?.apiHealth, estado?.apiHealthHttp],
+            ["VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12)],
+            ["Screenpipe Casa", estado?.screenpipe, estado?.screenpipeHttp],
+            ["Hermes Desktop", estado?.desktop, "Se fechado por escolha: NOT_REQUIRED"],
+            ["Receipts", estado?.receipts, estado?.receiptsHttp],
+          ] as const).map(([nome, resultado, detalhe]) => (
+            <div key={nome} className="rounded-md border border-border px-3 py-3">
+              <dt className="text-sm font-semibold">{nome}</dt>
+              <dd className="mt-1 font-mono text-xs text-muted-foreground">
+                {resultado ?? "UNKNOWN"} · {detalhe ?? "Sem contraprova nesta consulta"}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-3 text-xs text-muted-foreground">
+          API HTTP 200, presença de processo ou tarefa fechada por escolha não comprovam
+          o funcionamento de todo o sistema. Integridade e selagem exigem recibo individual.
+        </p>
+        <a className="mt-3 inline-block text-sm text-neon-blue underline" target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/ServerVpss/CentralDark/blob/main/docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md">
+          Abrir checklist diário canônico · histórico e receitas
+        </a>
       </section>
       <p className="text-xs text-muted-foreground">
         Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
