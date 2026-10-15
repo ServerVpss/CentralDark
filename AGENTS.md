@@ -2303,3 +2303,13 @@ O comando `centraldark.zendriveCli` da extensão 0.1.1 foi **executado na janela
 ## Shell start/end ZENDRIVE CLI — complemento de prova (15/10/2026)
 
 Além de `cli_focus`, o listener da extensão 0.1.1 produziu `shell_start exit=unknown` e `shell_end exit=ok`, sem comando/saída. O coletor único transmitiu dois sinais ao `log-funnel` VPS: offsets `3028226` e `3028322`, heartbeat `accepted=2 duplicate=0 route=tailscale`. Isto comprova **pelo menos um par de eventos nativos de execução**, mas não identifica qual comando ou terminal os originou. Não declarar captura universal ou modelo ChatGPT conectado.
+
+
+<!-- FORJA_VIVA_EMOJI_ALIASES_RUNTIME_OWNER_20261015 -->
+## 🎲🎰🍒 Forja Viva — atalhos visuais do mesmo organismo
+
+Quando o CHEFE usar `#acordar`, `!calibrar` ou `!CENTRALDARK`, recuperar **intenção vigente → owner → SHA atual → receipt → NEXT_CURSOR** pela skill existente `.agents/skills/centraldark-operational-method/SKILL.md`. Não iniciar execução adicional apenas por ler o comando no chat.
+
+Os emojis 🔧 🛠️ 👨🏻‍🔧 👀 👁️ 🪡 🎄 🌞 🌟 ✨ ☄️ 🔥 🪛 ⚒️ são **aliases visuais de capacidades existentes**, cujo significado canônico está em `docs/CONSCIENCIA/PADRAO-EMOJIS.md`; mapa da Forja em `docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/VISUAL-NAMING-REGISTRY.yml`. O consumidor no cockpit é a aba HUD da PR #1832, não um HUD novo. A receita de build plug-and-play é `npm run build:plugplay` em `apps/instinto-superior`, sempre com validação/autorizações e ambiente limpo. **Nunca interpretar um emoji como autorização automática para executar shell, delegar Hermes, apagar worktree, instalar ou fazer deploy.**
+
+Ao encontrar ganho verificável, dizer **🍒🎰🎲 Outra melhoria antecipada** e informar `O QUE / POR QUÊ / PROVA / NEXT_CURSOR`, preferencialmente no mesmo bloco contínuo. Um evento descrito no chat não equivale a evento ingestido no funil. `SOURCE != BUILD != PACKAGE != INSTALLED != UI_PROVEN`, e FIXED_POINT anterior não deve ser reaberto por um delta ainda não provado.
