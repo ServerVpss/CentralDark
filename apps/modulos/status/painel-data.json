@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(vscode): registrar leitura UIA de 5 terminais e prompt Claude sem despacho",
+    "lastCommit": "🔄 Integrar Auto Sync ao pipeline Hermes — VS Code Orquestra on-line",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T16:46:46.039Z",
+      "titulo": "Push na main · 5077aab99feff023e17cee064c9b7d8308d2bcd0",
+      "detalhe": "🔄 Integrar Auto Sync ao pipeline Hermes — VS Code Orquestra on-line",
+      "area": "Repositório",
+      "sha": "5077aab",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T16:41:50.669Z",
       "titulo": "Push na main · 05ad27ea9b4cc653f18deb536611388a373e78e4",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "b0eb7ca",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T22:59:13.926Z",
-      "titulo": "Push na main · 17406f3f8b2b855b6be9147e39c3cb10503fcc32",
-      "detalhe": "docs(receipt): selo restrito da entrada GPT observada no terminal",
-      "area": "Repositório",
-      "sha": "17406f3",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T16:46:46.039Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 5077aab99feff023e17cee064c9b7d8308d2bcd0 (5077aab)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T16:41:50.669Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · b0eb7ca52fd6931ad35597280cb4ad3d46748f77 (b0eb7ca)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T22:59:13.926Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 17406f3f8b2b855b6be9147e39c3cb10503fcc32 (17406f3)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T16:41:50.669Z",
-  "updatedAtBR": "15/10/2026, 13:41:50 BRT"
+  "updatedAt": "2026-10-15T16:46:46.039Z",
+  "updatedAtBR": "15/10/2026, 13:46:46 BRT"
 }
