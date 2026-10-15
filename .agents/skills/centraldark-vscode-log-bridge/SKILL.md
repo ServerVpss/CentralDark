@@ -76,3 +76,8 @@ skill = COMO / scripts Casa = COLETA / script VPS = INGERE / log-funnel = DONO /
 - Comando da extensão VS Code 0.1.1 foi invocado na janela real; retornou foco a `xterm-helper-textarea`. Listener `centraldark.zendriveCli` escreveu evento **real** `cli_focus` na fonte Casa (`3028022 → 3028123` bytes), sem texto de comando ou stdout.
 - Coletor Task Scheduler existente enviou via `tailscale`; VPS confirmou `vscode_log_signal key=vscode:terminal end_offset=3028123`, heartbeat `accepted=1 duplicate=0` e depois `accepted=0`. Não é marcador sintético: é evento do comando da extensão.
 - Bash remoto testado com `echo ZENDRIVE_CLI_PING_1015`; sem evento `shell_start/shell_end` observado. Captura universal de comandos/saída continua NOT_PROVEN; sem shell integration não criar novo coletor. `CLI_FOCUS_PIPELINE=PASS` somente.
+
+
+## Eventos shell nativos — entrega no funil (15/10/2026)
+
+Após `cli_focus`, a extensão 0.1.1 escreveu `shell_start exit=unknown` e `shell_end exit=ok` (timestamps `01:37:05.779Z` e `01:37:05.792Z`) na fonte Casa, sem conteúdo sensível. O cursor avançou de `3028123` para `3028322`. VPS materializou `vscode_log_signal key=vscode:terminal` nos offsets `3028226` e `3028322`, heartbeat `accepted=2 duplicate=0 route=tailscale` e seguinte `accepted=0`. A correlação com o comando Bash específico não é provada; metadados não incluem terminal ou comando. Sem segunda arquitetura.
