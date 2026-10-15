@@ -58,6 +58,9 @@ test("Forja Viva mapeia emojis para receitas existentes sem execucao automatica"
   assert.ok(!zone.includes("execSync("));
   assert.ok(!zone.includes("spawn("));
   assert.ok(!zone.includes("shell.openExternal("));
+  assert.ok(!zone.includes(".catch(() => {})"));
+  assert.ok(zone.includes('setGenesisCopy("FAILED")'));
+  assert.ok(zone.includes("Falha ao copiar; receita continua visível"));
 });
 test("plug-play valida antes de compilar e exige artefato com integridade", () => {
   const pkg = JSON.parse(read("apps/instinto-superior/package.json"));
