@@ -25,7 +25,6 @@ const hash = bytes => createHash("sha256").update(bytes).digest("hex");
 function git(...args) {
   return execFileSync("git", args, { cwd: repoDir, encoding: "utf8" }).trim();
 }
-function yamlText(value) { return JSON.stringify(String(value)); }
 
 async function main() {
   const packageJson = JSON.parse(await readFile(path.join(appDir, "package.json"), "utf8"));
@@ -42,6 +41,8 @@ async function main() {
   const outputName = SOURCE_DIRS.find(name => existsSync(path.join(appDir, name)));
   if (!outputName) throw Error("BUILD_OUTPUT_MISSING: execute npm run build antes do pacote");
   const outputRoot = path.join(appDir, outputName);
+  const rootInfo = await lstat(outputRoot);
+  if (!rootInfo.isDirectory() || rootInfo.isSymbolicLink()) throw Error("SYMLINK_OUTPUT_ROOT_REJECTED");
   const files = [];
   async function visit(current) {
     for (const entry of (await readdir(current, { withFileTypes: true })).sort((a,b)=>a.name.localeCompare(b.name))) {
