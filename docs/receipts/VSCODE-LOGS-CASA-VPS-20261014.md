@@ -80,3 +80,8 @@ Somente eventos estruturados/sanitizados são enviados. Não publicar prompts, t
 A extensão `centraldark.centraldark-vscode-restore@0.1.1` instalada na Casa mostrou o comando `CentralDark: ZENDRIVE CLI (terminal existente)` na paleta VS Code. `InvokePattern.Invoke()` acionou o comando; o foco retornou a `xterm-helper-textarea` (Bash existente). O log `K:\TEMP\logs\LOGS-VS-CODE.log` passou de `3028022` a `3028123` bytes com `event=cli_focus exit=unknown` **emitido pela extensão real**, não por script de teste. VPS: `vscode_log_signal key=vscode:terminal end_offset=3028123` e heartbeat `accepted=1 duplicate=0 route=tailscale`; depois `accepted=0`.
 
 A tentativa de `echo ZENDRIVE_CLI_PING_1015` no Bash remoto teve foco e Enter enviados, mas `shell_start/shell_end` não apareceu no arquivo; integração de shell remota/captura de stdout continuam NOT_PROVEN. Não promover `CLI_FOCUS_PIPELINE_PASS` a `ALL_TERMINAL_TELEMETRY_PASS`. O coletor segue com cadência de 1 minuto. Sem segundo núcleo e sem materializar logs brutos na VPS.
+
+
+## 15/10 — shell_start/shell_end nativos no funil
+
+A fonte `K:\TEMP\logs\LOGS-VS-CODE.log` recebeu mais dois eventos reais da extensão 0.1.1: `shell_start exit=unknown` (01:37:05.779Z) e `shell_end exit=ok` (01:37:05.792Z). Bytes `3028123 → 3028322`. Na VPS, `logs/sectors/vscode/2026-10-15.jsonl` registrou dois `vscode_log_signal key=vscode:terminal`, offsets `3028226` e `3028322`, heartbeat `accepted=2 duplicate=0 route=tailscale`; depois `accepted=0`. Isso comprova **pelo menos um ciclo shell_start/end capturado e ingerido**. O readback imediato após `echo` não havia mostrado evento; não vincular os dois eventos posteriores àquele comando sem correlação própria. Sem stdout nem comando em logs. 
