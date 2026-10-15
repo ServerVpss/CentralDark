@@ -34,6 +34,12 @@ export function ForjaExecutor() {
 
   const [selectedMode, setSelectedMode] = useState<"sync" | "deploy" | "monitor">("sync");
   const [selectedSetor, setSelectedSetor] = useState("all");
+  const [modoHarness, setModoHarness] = useState<"individual" | "paralelo">("individual");
+  const [perguntaHarness, setPerguntaHarness] = useState("");
+  const [harnesses, setHarnesses] = useState(["deepseek"]);
+  const [avisoHarness, setAvisoHarness] = useState<string | null>(null);
+  const ambienteLocal =
+    typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname);
 
   useEffect(() => {
     if (!status.running) return;
@@ -61,7 +67,9 @@ export function ForjaExecutor() {
           <span className="text-4xl">🔧</span>
           <div>
             <h1 className="text-2xl font-bold">FORJA EXECUTOR — PowerShell 7</h1>
-            <p className="text-sm text-muted-foreground">Orquestrador paralelo em background • Casa ↔ Forja ↔ GitHub ↔ VPS</p>
+            <p className="text-sm text-muted-foreground">
+              Orquestrador paralelo em background • Casa ↔ Forja ↔ GitHub ↔ VPS
+            </p>
           </div>
         </div>
       </div>
@@ -71,7 +79,9 @@ export function ForjaExecutor() {
         <div className="grid grid-cols-4 gap-4">
           <div className="text-center">
             <div className="text-xs text-muted-foreground mb-1">Status</div>
-            <div className={`text-2xl font-bold ${status.running ? "text-green-600" : "text-gray-500"}`}>
+            <div
+              className={`text-2xl font-bold ${status.running ? "text-green-600" : "text-gray-500"}`}
+            >
               {status.running ? "🟢 ONLINE" : "🔴 OFFLINE"}
             </div>
           </div>
@@ -85,7 +95,9 @@ export function ForjaExecutor() {
           </div>
           <div className="text-center">
             <div className="text-xs text-muted-foreground mb-1">Modo</div>
-            <div className="text-lg font-semibold text-orange-600">{selectedMode.toUpperCase()}</div>
+            <div className="text-lg font-semibold text-orange-600">
+              {selectedMode.toUpperCase()}
+            </div>
           </div>
         </div>
       </Card>
@@ -176,6 +188,144 @@ export function ForjaExecutor() {
             <div className="font-semibold text-sm">Todos</div>
           </button>
         </div>
+      </Card>
+
+      {/* CentralDark HUB: mesmos owners; catálogo+intenção, não inventa dispatcher funcional. */}
+      <Card className="border border-border p-6" aria-label="Hub de Harnesses">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold">🪬 Hub de Harnesses · Forja</h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              Um GOAL, vários motores. Cada produto mantém processo, porta e identidade próprios; o
+              despacho real pertence ao HUB/MCP já existente.
+            </p>
+          </div>
+          <span className="rounded border border-amber-500/40 px-3 py-1 text-xs text-amber-500">
+            UI conectada · FAN-OUT NÃO PROVADO
+          </span>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {[
+            {
+              id: "deepseek",
+              title: "🧠 DeepSeek Harness",
+              detail: "Original MIT em apps/modulos/deepseek-harness · Web UI :3080",
+            },
+            {
+              id: "hermes",
+              title: "⚙️ Hermes",
+              detail: "Gateway original; execução pela rota e política existentes",
+            },
+            {
+              id: "claude",
+              title: "🤖 Claude Code",
+              detail: "CLI original; integração requer adapter autorizado",
+            },
+          ].map((h) => (
+            <label key={h.id} className="rounded-lg border border-border/70 p-3 text-sm">
+              <span className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={harnesses.includes(h.id)}
+                  onChange={(e) =>
+                    setHarnesses((v) =>
+                      e.target.checked ? [...v, h.id] : v.filter((id) => id !== h.id),
+                    )
+                  }
+                  aria-label={`Selecionar ${h.title}`}
+                />
+                <strong>{h.title}</strong>
+              </span>
+              <p className="mt-2 text-xs text-muted-foreground">{h.detail}</p>
+              <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+                Integração de mensagens: UNKNOWN
+              </p>
+            </label>
+          ))}
+        </div>
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+          <span className="font-semibold">Modo de consulta:</span>
+          <label className="flex items-center gap-1">
+            <input
+              type="radio"
+              name="forja-harness-mode"
+              checked={modoHarness === "individual"}
+              onChange={() => setModoHarness("individual")}
+            />{" "}
+            Individual
+          </label>
+          <label className="flex items-center gap-1">
+            <input
+              type="radio"
+              name="forja-harness-mode"
+              checked={modoHarness === "paralelo"}
+              onChange={() => setModoHarness("paralelo")}
+            />{" "}
+            Paralelo
+          </label>
+        </div>
+        <label className="mt-4 block text-sm font-semibold" htmlFor="centraldark-harness-goal">
+          GOAL / pergunta comum
+        </label>
+        <textarea
+          id="centraldark-harness-goal"
+          value={perguntaHarness}
+          onChange={(e) => setPerguntaHarness(e.target.value)}
+          rows={3}
+          className="mt-2 w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-sm"
+          placeholder="Descreva o objetivo; o HUB manterá respostas separadas por motor quando os adapters estiverem conectados."
+        />
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            className="rounded-md border border-border px-3 py-2 text-sm"
+            onClick={() => {
+              const request = {
+                schema: "centraldark.hub-harness.draft.v1",
+                status: "DRAFT_NOT_DISPATCHED",
+                mode: modoHarness,
+                targets: harnesses,
+                goal: perguntaHarness,
+                requires_authorized_hub_adapter: true,
+              };
+              void navigator.clipboard
+                .writeText(JSON.stringify(request, null, 2))
+                .then(() => setAvisoHarness("GOAL copiado; não foi despachado."))
+                .catch(() => setAvisoHarness("Não foi possível copiar. Nenhum envio realizado."));
+            }}
+            disabled={!harnesses.length || !perguntaHarness.trim()}
+          >
+            📋 Copiar GOAL do HUB
+          </button>
+          {ambienteLocal ? (
+            <a
+              className="rounded-md border border-border px-3 py-2 text-sm hover:bg-muted"
+              href="http://127.0.0.1:3080/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ↗ Abrir DeepSeek :3080
+            </a>
+          ) : (
+            <span className="text-xs text-muted-foreground">
+              DeepSeek local exige sessão na Casa; nunca encaminhar localhost de cliente remoto.
+            </span>
+          )}
+          <span className="text-xs text-muted-foreground">
+            O produto só responde quando o serviço :3080 e seu provedor estiverem configurados.
+          </span>
+        </div>
+        {avisoHarness ? (
+          <p className="mt-3 text-sm text-muted-foreground" role="status">
+            {avisoHarness}
+          </p>
+        ) : null}
+        <p className="mt-3 text-xs text-muted-foreground">
+          O modo paralelo prepara a intenção; não envia comandos simultâneos sem adapters e
+          aprovações. Respostas não são misturadas: cada executor deve gerar seu receipt e evidência
+          próprios. Incorporação iframe permanece desligada até acesso autenticado e proteção
+          anti-clickjacking.
+        </p>
       </Card>
 
       {/* Status de Sincronização */}
