@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🚀 Auto Sync + Micro-Deploy Cockpit — 5 botões paralelos + deploy ao vivo",
+    "lastCommit": "feat(hub): mapear conflitos PR ao canal Gmail existente sem novo resolvedor",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T17:03:38.273Z",
+      "titulo": "Push na main · 12fd6742433645879c69e8c4f310e54dd1be1c9c",
+      "detalhe": "feat(hub): mapear conflitos PR ao canal Gmail existente sem novo resolvedor",
+      "area": "Repositório",
+      "sha": "12fd674",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T16:54:31.754Z",
       "titulo": "Push na main · dd2a30a0e39dac094a0f9383f0931681d1818c9f",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "bb92c9f",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T23:24:32.227Z",
-      "titulo": "Push na main · e86f78240a704ede97c5189a7e4d27a3cb85f553",
-      "detalhe": "🗣️ gramática: falar de volta e executar sem micro-passos",
-      "area": "Repositório",
-      "sha": "e86f782",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T17:03:38.273Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 12fd6742433645879c69e8c4f310e54dd1be1c9c (12fd674)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T16:54:31.754Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · bb92c9fb256febd1796e6d493a81ececf7830d7d (bb92c9f)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T23:24:32.227Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e86f78240a704ede97c5189a7e4d27a3cb85f553 (e86f782)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T16:54:31.754Z",
-  "updatedAtBR": "15/10/2026, 13:54:31 BRT"
+  "updatedAt": "2026-10-15T17:03:38.273Z",
+  "updatedAtBR": "15/10/2026, 14:03:38 BRT"
 }
