@@ -1,8 +1,8 @@
 ---
 name: vs-code-restore
 description: Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa salvo, sem depender do Claude. Use ao abrir o workspace CentralDark ou quando quiser reconstruir a bancada.
-version: 0.1.0
-metadata: {"status":"build_instalado_runtime_pending","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa":true,"comando_nativo_testado":false}
+version: 0.1.1
+metadata: {"status":"v0.1.1_instalada_comando_ui_pending","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa":true,"comando_nativo_testado":false,"telemetria_probe":true}
 ---
 
 # VS Code Restore: CentralDark
@@ -142,3 +142,17 @@ OWNER desta interação: a MESMA skill `skills/vs-code-restore`, extensão exist
 `TARGET_WINDOW → TARGET_TERMINAL → FOCUS_READBACK → SEND_ONCE → READBACK → CONTRAPROVA → RECEIPT_SANITIZADO → NEXT_CURSOR`.
 
 O ponto fixo atual é **rota de envio demonstrada e documentação reutilizável**, não automação de saída/observabilidade universal. Evoluir só os owners existentes; só promover PASS para o escopo efetivamente observado.
+
+
+## 🪬 ZENDRIVE CLI no VS Code — v0.1.1, circuito de telemetria (15/10/2026)
+
+- **Comando instalado:** `CentralDark: ZENDRIVE CLI (terminal existente)` (`centraldark.zendriveCli`), na mesma extensão `centraldark.centraldark-vscode-restore@0.1.1`. Reutiliza `vscode.window.activeTerminal` ou um terminal existente reconhecido; chama `terminal.show(false)`; **não cria nem inicia outro Hermes**. É um comando de foco, não uma nova API/modelo ChatGPT.
+- **Observação de shell:** `onDidStartTerminalShellExecution`, `onDidEndTerminalShellExecution`, `onDidChangeTerminalShellIntegration` do VS Code. Só quando a integração de shell estiver disponível. O listener roda no host de UI Windows e emite linhas sintéticas **sanitizadas** na fonte preexistente `K:\TEMP\logs\LOGS-VS-CODE.log`, sem criar arquivo, coletor, scheduler ou serviço novo. Campo `centraldark.restore.terminalTelemetry=true` por padrão, desativável.
+- **Privacidade:** evento `cli_focus|shell_start|shell_end|shell_integration`, classe `exit=ok|nonzero|unknown` e timestamp UTC. Não lê nem escreve texto de comando, stdout/stderr, chat, chave, cookie ou conta. Falha do log não impede uso do terminal.
+- **Prova do código:** `npm run compile` compilou, `npx @vscode/vsce package --offline` gerou `centraldark-vscode-restore-0.1.1.vsix` (17.168 bytes); `code --install-extension --force` retornou 0 e `code --list-extensions --show-versions` mostrou `centraldark.centraldark-vscode-restore@0.1.1`. Teste Node com API VS Code simulada: comando registrado, foco no terminal existente, zero terminais novos, 4 eventos sem conteúdo sensível e classes de exit testadas — PASS.
+- **Prova real do funil (evento CONTROLADO, não shell nativo):** um marcador `event=integration_probe source=controlled_test` elevou a fonte de 3.027.886 para 3.028.022 bytes; agendador existente processou e avançou cursor para 3.028.022 pela rota `tailscale`. VPS materializou `kind=vscode_log_signal`, `key=vscode:terminal`, `end_offset=3028022`; heartbeat `accepted=1,duplicate=0` e heartbeat seguinte `accepted=0`. Isso prova **fonte → agendador → SSH → log-funnel**, não que o listener da extensão tenha disparado em uma janela já aberta.
+- **Pendência exata:** reinicialização/ativação da extensão na janela do VS Code já aberta e readback de evento `shell_start/shell_end` produzido por comando real. Não reiniciar a bancada sem preservar as sessões. Não declarar captura de saída do terminal. Frequência atual do coletor: **1 minuto**, não streaming instantâneo.
+- **Provider Zendrive:** alias `zendrive-chatgpt-local` já pertence a `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`; testes de source e simulação históricos. Medição nesta sessão: Hermes Gateway VPS `active`, MCP VPS `active` e HTTP 9100 `200`; Omni 8099 `000` na VPS, CDP 9222 `CLOSED` na Casa. **Não há sessão ChatGPT Premium/API conectada por este comando**; não copiar cookies ou presumir créditos de API.
+- **Receita universal para ChatGPT/SOL, Hermes e outros executores autorizados:** localizar janela e terminal corretos → focar → enviar uma intenção → conferir retorno → registrar apenas metadados no mesmo funil → contraprova → recibo → próximo cursor. `SEND_OK != EXECUTION_PASS`; `SOURCE_COMMITTED != RUNTIME_ACTIVATED`.
+
+**Owners sem duplicação:** `skills/vs-code-restore` (UI/CLI); `.agents/skills/centraldark-vscode-log-bridge` (telemetria/receita); `apps/modulos/mcp/src/log-funnel.js` (ingestão); `apps/modulos/HERMES-CORE` (executor); `apps/modulos/elite-gateway` (provider Zendrive). PR de logs #1820 continua independente de merge/deploy.
