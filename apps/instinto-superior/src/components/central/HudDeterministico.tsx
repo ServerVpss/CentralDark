@@ -460,7 +460,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           Fixed Point e autorização dos formulários privados. Manter uma função por owner.
         </p>
       </section>
-      <GavetaForja />
+      <GavetaForja mainShaAtual={estado?.mainSha} />
       <p className="text-xs text-muted-foreground">
         Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
         source SHA {lineage.source_blob_sha.slice(0, 12)}.
