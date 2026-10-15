@@ -93,6 +93,15 @@ const forgeAliases: readonly ForgeAlias[] = [
     proof: "Exit 0 de teste/build, ZIP validado e SHA; instalação/deploy exigem prova separada.",
     readonly: false,
   },
+  {
+    id: "WORKTREE_CLEANUP", symbols: "🧹", name: "Faxina segura da Forja",
+    owner: ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
+    invocation: "Consulte o owner main-pinned-runtime-fast-path → Worktree Teardown; não execute reset/clean diretamente",
+    effect: "Inventariar o scratch reutilizável, comprovar preservação do trabalho e só então liberar a bancada temporária.",
+    improvement: "Mantém a Forja organizada, sem apagar worktrees ativas, commits locais ou arquivos que ainda não chegaram à main.",
+    proof: "Classificação do path, lock, source SHA, testes, receipt, main readback quando aplicável e efeito visual Casa quando solicitado.",
+    readonly: true,
+  },
 ] as const;
 
 /** Reaproveita o zone do Instinto Superior; não cria outro HUD ou executor. */
@@ -245,7 +254,7 @@ export function HudDeterministico({ estado }: { estado?: EstadoCentralDark }) {
       <section className="panel p-6" aria-labelledby="cd-forge-aliases-title">
         <p className="font-mono text-[10px] text-neon-blue">FIXED_POINT preservado · atalhos por capacidade</p>
         <h3 id="cd-forge-aliases-title" className="mt-2 text-lg font-semibold">
-          🔧🛠️👨🏻‍🔧 👀👁️🪡🎄🌞🌟✨☄️🔥🪛⚒️ Forja Viva
+          🔧🛠️👨🏻‍🔧 👀👁️🪡🎄🌞🌟✨☄️🔥🪛⚒️🧹 Forja Viva
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
           Escolha um símbolo para consultar a receita do owner. Selecionar ou copiar
@@ -268,6 +277,28 @@ export function HudDeterministico({ estado }: { estado?: EstadoCentralDark }) {
             </Button>
           ))}
         </div>
+        {chosenForge?.id === "WORKTREE_CLEANUP" && (
+          <div className="mt-4 rounded-lg border border-border p-4" role="region"
+            aria-label="Checklist seguro da faxina de worktree">
+            <h4 className="text-sm font-semibold">🧹 CHECKLIST · receita do owner existente</h4>
+            <ol className="mt-2 list-inside list-decimal space-y-1 text-xs text-muted-foreground">
+              <li>Classificar OWNER, escopo, worktree, lock e realpath. Worktree ativa permanece.</li>
+              <li>Inventariar staged, unstaged, arquivos untracked e commits só locais.</li>
+              <li>Concluir teste, contraprová-lo e registrar receipt com SHA e arquivos.</li>
+              <li>Confirmar publicação na main e readback do efeito quando aplicável.</li>
+              <li>Quando o CHEFE quiser ver: build e prova visual na Casa existente.</li>
+              <li>Atualizar o checklist diário CURRENT do HUD com provas, sem duplicar histórico.</li>
+              <li>Somente com tudo preservado: limpar o scratch descartável sob lock e verificar novamente.</li>
+            </ol>
+            <p className="mt-3 text-xs" role="status">
+              Estado de limpeza desta interface: UNKNOWN · nenhuma faxina foi executada por este botão.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Um scratch por escopo quando adequado; escritores independentes mantêm isolamento.
+              Ausência de receipt, arquivo único ou dúvida = KEEP_ACTIVE.
+            </p>
+          </div>
+        )}
         {chosenForge && (
           <div className="mt-5 space-y-3 rounded-lg border border-border p-4" role="region"
             aria-label={"Receita selecionada: " + chosenForge.name}>
