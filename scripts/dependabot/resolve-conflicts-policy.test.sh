@@ -6,6 +6,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 RESOLVER="$REPO_ROOT/scripts/dependabot/resolve-conflicts.sh"
+# Os repositórios fixture não contêm os helpers. O motor canônico deve ser chamado por caminhos absolutos.
+export SEMANTIC_ALL_HELPER="${SEMANTIC_ALL_HELPER:-$REPO_ROOT/scripts/dependabot/semantic-all-resolver.mjs}"
+export CONFLICT_CLASSIFIER="${CONFLICT_CLASSIFIER:-$REPO_ROOT/scripts/dependabot/classify-conflict.mjs}"
+export STRUCTURED_CONFLICT_HELPER="${STRUCTURED_CONFLICT_HELPER:-$REPO_ROOT/scripts/dependabot/structured-conflict-resolver.mjs}"
 TMP_ROOT="$(mktemp -d)"
 
 cleanup() {
@@ -60,8 +64,8 @@ git checkout -q FETCH_HEAD
 grep -F '"version":"1.0.1"' package.json >/dev/null
 grep -F -x 'main-change' CENTRALDARK_AI_BOOT.yaml >/dev/null
 grep -F -x 'gateway-main-change' docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md >/dev/null
-grep -F 'KNOWN_CONFLICT_PATH=true path=CENTRALDARK_AI_BOOT.yaml actual=CENTRALDARK_AI_BOOT.yaml' "$TMP_ROOT/resolver.log" >/dev/null
-grep -F 'KNOWN_CONFLICT_PATH=true path=docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md actual=docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md' "$TMP_ROOT/resolver.log" >/dev/null
+grep -F 'CONFLICT_DECISION path=CENTRALDARK_AI_BOOT.yaml action=INCOMING reason=KNOWN_POLICY_USE_MAIN_SIDE conflict_id=BOOT_CENTRALDARK_AI' "$TMP_ROOT/resolver.log" >/dev/null
+grep -F 'CONFLICT_DECISION path=docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md action=INCOMING reason=KNOWN_POLICY_USE_MAIN_SIDE conflict_id=REMOTE_MCP_GATEWAY_ARCHITECTURE' "$TMP_ROOT/resolver.log" >/dev/null
 
 UNKNOWN_REMOTE="$TMP_ROOT/unknown-remote.git"
 UNKNOWN_SOURCE="$TMP_ROOT/unknown-source"
@@ -92,18 +96,27 @@ printf 'unknown-main\n' > docs/unknown-conflict.md
 git commit -am "unknown conflict from main" >/dev/null
 git push origin main >/dev/null 2>&1
 
+# Política desconhecida deve falhar fechada: saída 20, sem push da branch do PR.
+set +e
 PR_HEAD_REF='dependabot/unknown-conflict' \
 REPO_DIR="$UNKNOWN_SOURCE" \
 CENTRALDARK_DEPENDABOT_WORKTREES="$UNKNOWN_WORKTREES" \
 KNOWN_CONFLICTS_FILE='scripts/dependabot/known-conflict-patterns.json' \
 bash "$RESOLVER" 2 > "$TMP_ROOT/unknown-resolver.log" 2>&1
-
+UNKNOWN_EXIT=$?
+set -e
+test "$UNKNOWN_EXIT" -eq 20
+grep -F 'CONFLICT_DECISION path=docs/unknown-conflict.md action=YELLOW reason=UNREGISTERED_CONFLICT_REQUIRES_PROVEN_PATTERN' "$TMP_ROOT/unknown-resolver.log" >/dev/null
+grep -F 'NO_PUSH_ON_YELLOW=1' "$TMP_ROOT/unknown-resolver.log" >/dev/null
+grep -F '"state":"YELLOW_NO_PUSH"' "$TMP_ROOT/unknown-resolver.log" >/dev/null
 git fetch origin dependabot/unknown-conflict >/dev/null 2>&1
 git checkout -q FETCH_HEAD
 grep -F -x 'unknown-pr' docs/unknown-conflict.md >/dev/null
-grep -F -x 'unknown-main' docs/unknown-conflict.md >/dev/null
-grep -F 'UNKNOWN_CONFLICT_PATH path=docs/unknown-conflict.md action=AUTO_REVIEW_TEXT_BOTH' "$TMP_ROOT/unknown-resolver.log" >/dev/null
-grep -F 'AUTO_REVIEW_COUNTERPROOF=PASS' "$TMP_ROOT/unknown-resolver.log" >/dev/null
+if grep -F -x 'unknown-main' docs/unknown-conflict.md >/dev/null; then
+  echo 'BLOCKED_UNKNOWN_CONFLICT_WAS_PUSHED' >&2
+  exit 1
+fi
+echo "UNREGISTERED_CONFLICT_FAIL_CLOSED=PASS"
 
 # Contraprova estruturada: CONFLICT_ID (catálogo canônico) e id (legado) são aliases.
 echo ""
