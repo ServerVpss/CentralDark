@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs: Instinto Superior build completo (136MB) — ready for validation",
+    "lastCommit": "docs(centraldark): selar recuperacao Casa-VPS e contrato de observabilidade pos-boot",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T13:53:34.971Z",
+      "titulo": "Push na main · 31e267634be32aa2e1ec16a6813b60d475e7504d",
+      "detalhe": "docs(centraldark): selar recuperacao Casa-VPS e contrato de observabilidade pos-boot",
+      "area": "Repositório",
+      "sha": "31e2676",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T06:37:39.838Z",
       "titulo": "Push na main · b992c13cdd5954feac2ed96acbd3638acd529355",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "450c952",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T18:30:41.497Z",
-      "titulo": "Push na main · de5244fc67be97bf114406a5a7ef61d3d19b8525",
-      "detalhe": "aprendizado(#178): Self-Evolution + XP auditável: ranking conservador, incremental e antirrepetição",
-      "area": "Repositório",
-      "sha": "de5244f",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T13:53:34.971Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 31e267634be32aa2e1ec16a6813b60d475e7504d (31e2676)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T06:37:39.838Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 450c95224c6cf899b8019b16f05af89780ef012f (450c952)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T18:30:41.497Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · de5244fc67be97bf114406a5a7ef61d3d19b8525 (de5244f)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T06:37:39.838Z",
-  "updatedAtBR": "15/10/2026, 03:37:39 BRT"
+  "updatedAt": "2026-10-15T13:53:34.971Z",
+  "updatedAtBR": "15/10/2026, 10:53:34 BRT"
 }
