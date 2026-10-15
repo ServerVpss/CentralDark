@@ -192,8 +192,30 @@ export function GavetaForja() {
   const [pagina, setPagina] = useState(1);
   const [gavetaAberta, setGavetaAberta] = useState<string | null>(null);
   const [automacaoAberta, setAutomacaoAberta] = useState<string | null>(null);
+  const [receitaBusca, setReceitaBusca] = useState("");
   const [automacaoCopia, setAutomacaoCopia] = useState<"IDLE" | "COPIED" | "FAILED">("IDLE");
   const automacaoAtual = gavetaCatalogo.automation_owners.find(x => x.id === automacaoAberta);
+  // Catálogo alfabético derivado dos NOVE owners já cadastrados: não cria segunda receita.
+  const receitasAlfabeticas = useMemo(
+    () => [...gavetaCatalogo.automation_owners].sort((a, b) =>
+      a.nome.localeCompare(b.nome, "pt-BR", { sensitivity: "base" })),
+    [],
+  );
+  const receitasFiltradas = useMemo(() => {
+    const termo = receitaBusca.trim().toLocaleLowerCase("pt-BR");
+    return receitasAlfabeticas.filter(registro => !termo ||
+      [registro.nome, registro.id, registro.owner, registro.receita, registro.modo]
+        .some(valor => valor.toLocaleLowerCase("pt-BR").includes(termo)));
+  }, [receitaBusca, receitasAlfabeticas]);
+  const fonteAtual = gavetaCatalogo.source.sha;
+  const terminalRota = {
+    nome: "Terminal integrado VS Code → RDC CentralDark",
+    owner: "skills/vs-code-restore/SKILL.md",
+    codigoFonte: ".agents/skills/centraldark-vscode-log-bridge/SKILL.md",
+    registroMcp: "RDC_DESKTOP_COMMANDER",
+    estado: "UIA_IDENTIFICADA_SESSAO_NAO_VINCULADA",
+  } as const;
+
   const buscaNormalizada = busca.trim().toLocaleLowerCase("pt-BR");
   const filtradas = useMemo(() => gavetaCatalogo.skills.filter(item => {
     if (categoria !== "Todas" && item.gaveta !== categoria) return false;
@@ -220,7 +242,7 @@ export function GavetaForja() {
           Inventário completo dos documentos SKILL.md rastreados na main medida.
           Catálogo é fonte documental: não significa skill instalada, carregada ou executada.
         </p>
-        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
           <div className="rounded-md border border-border p-3">
             <strong className="text-lg">{TOTAL_SKILLS_GAVETA}</strong>
             <p className="text-xs text-muted-foreground">SKILL.md na fonte</p>
@@ -236,6 +258,10 @@ export function GavetaForja() {
           <div className="rounded-md border border-border p-3">
             <strong className="text-lg">{gavetaCatalogo.gavetas.length}</strong>
             <p className="text-xs text-muted-foreground">Gavetas de aprendizado</p>
+          </div>
+          <div className="rounded-md border border-border p-3">
+            <strong className="text-lg">{receitasAlfabeticas.length}</strong>
+            <p className="text-xs text-muted-foreground">Receitas tipadas catalogadas</p>
           </div>
         </div>
         <p className="mt-3 break-all font-mono text-xs text-muted-foreground">
@@ -372,21 +398,42 @@ export function GavetaForja() {
           🎰🫀🧠 Automações · owners e receitas do harness
         </h5>
         <p className="mt-2 text-xs text-muted-foreground">
-          {gavetaCatalogo.automation_owners.length} pontes para capacidades existentes, sem outro scheduler.
-          Selecionar uma ponte exibe a receita e seu estado; copiar não significa enviar à sessão
-          de Hermes ou Claude Code. Ações de escrita/build exigem executor autorizado e readback.
+          {receitasAlfabeticas.length} receitas tipadas dos owners existentes, ordenadas alfabeticamente e
+          numeradas de 01 a {String(receitasAlfabeticas.length).padStart(2, "0")}. É uma contagem desta
+          coleção de automações, não das 999 skills. Copiar não envia à sessão do Hermes ou Claude Code.
+          Escrita e build exigem executor autorizado e readback.
+        </p>
+        <label htmlFor="forja-receitas-busca" className="mt-3 block text-xs text-muted-foreground">
+          Buscar receita, owner, ação ou identificador
+          <input id="forja-receitas-busca" type="search" value={receitaBusca}
+            onChange={e => setReceitaBusca(e.target.value)}
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+            placeholder="MCP, terminal, Hermes, sync, build, gaveta..." />
+        </label>
+        <p role="status" className="mt-2 text-xs text-muted-foreground">
+          {receitasFiltradas.length} de {receitasAlfabeticas.length} receitas · ordem alfabética (pt-BR) · origem main@{fonteAtual.slice(0, 12)}.
         </p>
         <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {gavetaCatalogo.automation_owners.map(capacidade => (
-            <button key={capacidade.id} type="button"
-              aria-pressed={automacaoAberta === capacidade.id}
-              onClick={() => { setAutomacaoAberta(capacidade.id); setAutomacaoCopia("IDLE"); }}
-              className="rounded-md border border-border p-3 text-left text-sm hover:bg-muted/30">
-              <span>{capacidade.icone} {capacidade.nome}</span>
-              <p className="mt-1 text-xs text-muted-foreground">{capacidade.modo} · {capacidade.estado}</p>
-            </button>
-          ))}
+          {receitasFiltradas.map(capacidade => {
+            const posicao = receitasAlfabeticas.findIndex(item => item.id === capacidade.id) + 1;
+            return (
+              <button key={capacidade.id} type="button"
+                aria-pressed={automacaoAberta === capacidade.id}
+                onClick={() => { setAutomacaoAberta(capacidade.id); setAutomacaoCopia("IDLE"); }}
+                className="rounded-md border border-border p-3 text-left text-sm hover:bg-muted/30">
+                <span className="font-mono text-[11px] text-neon-blue">
+                  {String(posicao).padStart(2, "0")}/{String(receitasAlfabeticas.length).padStart(2, "0")}
+                  {" · "}
+                </span>
+                <span>{capacidade.icone} {capacidade.nome}</span>
+                <p className="mt-1 text-xs text-muted-foreground">{capacidade.modo} · {capacidade.estado}</p>
+              </button>
+            );
+          })}
         </div>
+        {receitasFiltradas.length === 0 && (
+          <p className="mt-3 text-sm text-muted-foreground">Nenhuma receita cadastrada corresponde ao filtro.</p>
+        )}
         {automacaoAtual && (
           <div className="mt-4 space-y-2 rounded-lg border border-border p-4"
             role="region" aria-label={"Receita da automação " + automacaoAtual.nome}>
@@ -418,6 +465,47 @@ export function GavetaForja() {
             </p>
           </div>
         )}
+      </section>
+
+      <section className="panel p-5" aria-labelledby="forja-terminal-mcp-owner">
+        <p className="font-mono text-[10px] text-neon-blue">🔌👀🪡 ROTA REAL · NÃO NOVO GATEWAY</p>
+        <h5 id="forja-terminal-mcp-owner" className="mt-2 font-semibold">
+          {terminalRota.nome}
+        </h5>
+        <p className="mt-2 text-sm text-muted-foreground">
+          O conector CentralDark já cataloga {terminalRota.registroMcp} (Remote Desktop Commander).
+          A janela VS Code da Casa foi identificada via Windows UIAutomation com terminal
+          xterm-helper-textarea. Isso comprova descoberta visual, <strong>não</strong> uma sessão MCP
+          anexada, nem autoriza enviar texto ao Claude/Hermes em andamento.
+        </p>
+        <dl className="mt-3 grid gap-2 sm:grid-cols-2">
+          <div className="rounded border border-border p-3 text-xs">
+            <dt className="font-semibold">Owner da interface e do foco</dt>
+            <dd className="mt-1 break-all font-mono">{terminalRota.owner}</dd>
+          </div>
+          <div className="rounded border border-border p-3 text-xs">
+            <dt className="font-semibold">Owner da telemetria e readback</dt>
+            <dd className="mt-1 break-all font-mono">{terminalRota.codigoFonte}</dd>
+          </div>
+          <div className="rounded border border-border p-3 text-xs">
+            <dt className="font-semibold">Vínculo interativo</dt>
+            <dd className="mt-1 font-mono">UIA_DISCOVERED · DC_SESSION_NONE · INTERACTIVE_ATTACH_UNKNOWN</dd>
+          </div>
+          <div className="rounded border border-border p-3 text-xs">
+            <dt className="font-semibold">Última prova da Casa</dt>
+            <dd className="mt-1 font-mono">2026-10-15 13:28 -03:00 · VSCode PID 22468 · HWND 67400 (histórico)</dd>
+          </div>
+        </dl>
+        <p role="status" className="mt-3 text-xs text-muted-foreground">
+          ESTADO: {terminalRota.estado}. Receitas podem ser copiadas;
+          nenhuma mensagem foi despachada para esta sessão por este componente.
+          Próximo gate: identificar sessão/PID/owner no momento de envio,
+          focar somente a sessão ociosa, enviar uma vez e ler ACK sanitizado via MCP.
+        </p>
+        <a className="mt-3 inline-block text-sm text-neon-blue underline" target="_blank"
+          rel="noopener noreferrer" href={linkFonte(terminalRota.owner)}>
+          Abrir receita existente do terminal VS Code
+        </a>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2" aria-label="Catálogos e plugins da Forja">
