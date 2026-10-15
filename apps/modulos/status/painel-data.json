@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(voice): corrigir 5S para VS Code e desambiguar skills na rota do funil",
+    "lastCommit": "docs(vscode-restore): alinhar acessibilidade por voz ao foco e skills existentes",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T14:05:52.211Z",
+      "titulo": "Push na main · a606714a23c8ac22ed9b06c3eaa693287461b192",
+      "detalhe": "docs(vscode-restore): alinhar acessibilidade por voz ao foco e skills existentes",
+      "area": "Repositório",
+      "sha": "a606714",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T14:04:47.341Z",
       "titulo": "Push na main · 06c77b893bfcb86921843b9f635372ceed18b824",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "01d4f00",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T19:07:16.450Z",
-      "titulo": "Push na main · 9aca9ff8a651b73d196e9931305a86b950d4e09a",
-      "detalhe": "🎼 feat(vscode): preservar skill nativa e mapeamento UI comprovavel no mesmo owner",
-      "area": "Repositório",
-      "sha": "9aca9ff",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T14:05:52.211Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a606714a23c8ac22ed9b06c3eaa693287461b192 (a606714)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T14:04:47.341Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 01d4f00618dce97ef2b5d9e773f64c4b43efac5f (01d4f00)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T19:07:16.450Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9aca9ff8a651b73d196e9931305a86b950d4e09a (9aca9ff)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T14:04:47.341Z",
-  "updatedAtBR": "15/10/2026, 11:04:47 BRT"
+  "updatedAt": "2026-10-15T14:05:52.211Z",
+  "updatedAtBR": "15/10/2026, 11:05:52 BRT"
 }
