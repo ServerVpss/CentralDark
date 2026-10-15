@@ -58,10 +58,16 @@ entries:
       linhagem: ["🪡", "🎄"]
       retomada: ["🌞", "🌟", "✨"]
       forja: ["☄️", "🔥", "⚒️"]
+      faxina_segura: ["🧹"]
     command_map_is_allowlisted: true
     string_or_emoji_is_shell_command: false
     command_execute_on_click: false
     visual_cannot_grant_permission: true
+    cleanup_owner_reused: ".agents/skills/main-pinned-runtime-fast-path/SKILL.md"
+    cleanup_requires_receipt_and_owner_lock: true
+    cleanup_after_main_readback_when_applicable: true
+    cleanup_without_visual_test_only_if_no_ui_claim: true
+    cleanup_may_touch_active_worktrees: false
     runtime_proof_required: true
     source_state: SOURCE_DEFINED
     status: NOT_PROVEN_ON_RUNTIME
