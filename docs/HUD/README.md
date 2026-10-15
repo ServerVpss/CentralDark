@@ -89,3 +89,30 @@ Build/CI da PR isolada → corrigir apenas falhas reais do owner → readback em
 **Prova medida neste DELTA:** GitHub releitura mesma branch: **14/14 invariantes estáticos** coerentes (significado emojis nos dois owners e UI, test/cockpit, manifesto, paths, lineage e bloqueio autoexec). Receita do teste anteriormente desatualizada foi corrigida no SHA `eca0bea46`. A tentativa de criar staging na Casa via Desktop Commander foi bloqueada pela ferramenta; **Node test executado = UNKNOWN**, **Vite build = UNKNOWN**, **ZIP produzido = NÃO**, **UI em runtime = NÃO COMPROVADA**. Não contornar o bloqueio via outra rota; aguardar o pipeline autorizado.
 
 **NEXT_CURSOR:** CI da PR #1832 no HEAD exato → executar testes em runner limpo/autorizado → compilar → validar ZIP e hash → readback do cockpit no runtime → migrar demais sensores/ações do HUD e provar paridade antes de reduzir docs/HUD/HUD.html a template. Retomar pelo `#acordar / !calibrar / !CENTRALDARK`; não repetir mapeamento completo nem limpar worktree ativa.
+
+
+## 🧹 Forja Viva — resultado desta rodada e checklist de worktree (15/10/2026)
+
+**Intenção vigente:** continuar trabalhando ao lado do CHEFE no chat, sempre iniciando ganho verificado com **🍒🎰🎲 Outra melhoria antecipada**, sem supor que texto no chat equivale a comando enviado ao terminal. `#acordar → !calibrar → !CENTRALDARK` recupera contexto, owner, source SHA, prova, pendências e NEXT_CURSOR.
+
+**Owners evoluídos, sem criar skill:** semântica 🧹 registrada em `docs/CONSCIENCIA/PADRAO-EMOJIS.md` na `main`; ciclo de limpeza e checkout em `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`; ponte de comportamento no `AGENTS.md` e na `.agents/skills/centraldark-operational-method/SKILL.md`. Na branch da **PR #1832**, `VISUAL-NAMING-REGISTRY.yml` recebeu grupo `faxina_segura`; `HudDeterministico.tsx` exibe o sétimo alias `WORKTREE_CLEANUP`, com checklist, owner, prova e estado `UNKNOWN`; `verify-hud-zone.mjs` recebeu teste dedicado.
+
+**Classificação ao vivo (snapshot, NÃO número configurado):**
+- Casa `K:\` com **33 mudanças tracked** e **ao menos 95 entradas untracked**. `CASA_MAIN=KEEP_ACTIVE`; não usar `git clean/reset`, não copiar/alterar arquivos de outro writer.
+- VPS `/root/CentralDark` com **6 mudanças tracked**. `VPS_MAIN=KEEP_ACTIVE`.
+- Scratch VPS canônico `/root/CentralDark/_worktrees/main-pinned-runtime-fastpath` presente; `git status --porcelain=v1 --untracked-files=normal` retornou **0 entradas**. `VPS_SCRATCH=READONLY_SAFE_CANDIDATE`; falta provar locks/owners/recibos/commit exclusivo para **autorizar** qualquer descarte. Nenhuma faxina foi executada nesta rodada.
+
+**Checklist do CURRENT — sem preencher verdes falsos:**
+- [x] 🟢 Fonte visual canônica atualizada na `main`, commit `6874a55087c32fd5aac9bd35d1a60ceab19495ec`.
+- [x] 🟢 Skill de faxina existente evoluída na `main`, commit `b9ae142aeec967f1a38b23448c842470a83ef483`.
+- [x] 🟢 `AGENTS.md` e método operacional atualizados na `main`, commits `8c0298824a9c4ed5b3d2f9bf0c5bb3a3d6c8995b` e `ef1fb274abc031dadef5d5d3fe29037b3db73e7a`.
+- [x] 🟢 Atalho 🧹 escrito no HUD existente na branch da PR, sem novo executor; teste de contrato registrado.
+- [x] 🟢 Casa e VPS inventariadas por leitura remota independente, sem executar limpeza.
+- [ ] 🟡 `node --test` no mesmo SHA da PR + build Vite no runner adequado.
+- [ ] 🟡 Readback da interface e screenshot na Casa quando o CHEFE pedir build visual.
+- [ ] 🟡 Publicação do delta de UI na `main` somente após checks/readback, sem sobrescrever alterações dos writers.
+- [ ] 🟡 Limpeza de scratch sob lock **somente após** prova de dispensabilidade, histórico/recibo íntegros e destino readback. Não limpar worktree ativa.
+
+**Fechamento/FIXED_POINT:** a conformidade aceita pelo CHEFE é a do estágio anterior. `SOURCE_DEFINED=PASS`; `MAIN_DOCS=PASS`; `UI_SOURCE_BRANCH=PASS`; `NODE_TEST=UNKNOWN`; `BUILD=UNKNOWN`; `INSTALLED=UNKNOWN`; `WORKTREE_CLEANUP_EXECUTED=NO`. O checklist CURRENT será renderizado pelo owner já existente do HUD; este trecho é **receipt documental** e não cria um checklist concorrente.
+
+**NEXT_CURSOR:** gates da PR #1832 com HEAD atual → teste/build se possível → decisão de promoção → readback real do cockpit → quando autorizado e seguro, limpar somente scratch descartável e registrar prova posterior.
