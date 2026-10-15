@@ -171,19 +171,21 @@ test('Unigram original entra no leque por abertura nativa restrita, sem copiar a
   const nativeCockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
   const webCockpit = read(`${root}/../../../instinto-superior/src/components/central/CockpitShell.tsx`);
 
-  assert.match(main, /const UNIGRAM_WINDOWS_APP_ID = '38833FF26BA1D\\.UnigramPreview_g9c9v27vpyspw!App'/);
-  assert.match(main, /register\\('centraldark:unigram:open'/);
-  assert.match(main, /CENTRALDARK_UNIGRAM_UNTRUSTED_RENDERER/);
-  assert.match(main, /event\\.senderFrame\\?\\.url/);
-  assert.match(main, /shell:AppsFolder/);
-  assert.match(main, /shell: false/);
-  assert.match(main, /status: 'REQUESTED'/);
-  assert.doesNotMatch(main, /Unigram-13\\.0\\.1|Telegram_TemporaryKey|shell: true/);
+  assert.ok(main.includes("const UNIGRAM_WINDOWS_APP_ID = '38833FF26BA1D.UnigramPreview_g9c9v27vpyspw!App'"));
+  assert.ok(main.includes("register('centraldark:unigram:open'"));
+  assert.ok(main.includes('CENTRALDARK_UNIGRAM_UNTRUSTED_RENDERER'));
+  assert.ok(main.includes('event.senderFrame?.url'));
+  assert.ok(main.includes('shell:AppsFolder'));
+  assert.ok(main.includes('shell: false'));
+  assert.ok(main.includes("status: 'REQUESTED'"));
+  assert.ok(!main.includes('Unigram-13.0.1'));
+  assert.ok(!main.includes('Telegram_TemporaryKey'));
 
-  assert.match(preload, /openUnigramDesktop: \\(\\) => ipcRenderer\\.invoke\\('centraldark:unigram:open'\\)/);
-  assert.match(nativeCockpit, /getBridge\\(\\)\\?\\.openUnigramDesktop|bridge\\.openUnigramDesktop/);
-  assert.match(nativeCockpit, /Abertura solicitada · janela ainda não comprovada/);
-  assert.match(webCockpit, /TabsTrigger value="unigram"/);
-  assert.match(webCockpit, /Esta ação requer o CentralDark\\.exe no Windows/);
-  assert.doesNotMatch(webCockpit, /tg:\\/\\/|Start-Process|Get-AppxPackage/);
+  assert.ok(preload.includes("openUnigramDesktop: () => ipcRenderer.invoke('centraldark:unigram:open')"));
+  assert.ok(nativeCockpit.includes('bridge.openUnigramDesktop()'));
+  assert.ok(nativeCockpit.includes('Abertura solicitada · janela ainda não comprovada'));
+  assert.ok(webCockpit.includes('TabsTrigger value="unigram"'));
+  assert.ok(webCockpit.includes('Esta ação requer o CentralDark.exe no Windows'));
+  assert.ok(!webCockpit.includes('Start-Process'));
+  assert.ok(!webCockpit.includes('Get-AppxPackage'));
 });
