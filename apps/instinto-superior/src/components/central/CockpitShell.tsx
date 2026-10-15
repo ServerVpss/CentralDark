@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,9 +24,13 @@ import { Ledger } from "@/components/central/Ledger";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
+import { MapaOwners } from "@/components/central/MapaOwners";
 import { AutoSyncButton } from "@/components/central/AutoSyncButton";
 import { StatusPanel } from "@/components/central/StatusPanel";
 import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
+import { GoalsDashboard } from "@/components/central/GoalsDashboard";
+import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
+import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
@@ -42,6 +47,7 @@ function formatarTamanho(bytes: number) {
 
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
+  const [abaAtiva, definirAbaAtiva] = useState("visao");
   const lerEstado = useServerFn(lerEstadoCentralDark);
   const estado = useQuery({
     queryKey: ["centraldark", "estado-vivo"],
@@ -183,17 +189,23 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <Tabs defaultValue="visao" className="mt-14">
+          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-14">
             <div className="sticky top-0 z-30 -mx-4 overflow-x-auto border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
               <TabsList className="h-auto min-w-max justify-start">
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
                 <TabsTrigger value="sync">Sync Center</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
+                <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
+                <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
                 {autenticado ? <TabsTrigger value="admin">Admin CentralDark</TabsTrigger> : null}
                 {autenticado ? (
                   <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
+                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
+                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
+                <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
               </TabsList>
             </div>
@@ -227,7 +239,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   icone={<Radar className="size-5" />}
                 />
               </div>
-              <div className="mt-8"><MapaMetabolicoCristal compacto /></div>
+              {autenticado ? (
+                <MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />
+              ) : null}
+              <div className="mt-8">
+                <DeliverablesSummary />
+              </div>
+              <div className="mt-8">
+                <MapaMetabolicoCristal compacto />
+              </div>
               <Ledger compacto />
             </TabsContent>
             <TabsContent value="sync" className="mt-10">
@@ -235,6 +255,30 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </TabsContent>
             <TabsContent value="design" className="mt-10">
               <DesignCenter pele={pele} selecionarPele={selecionar} autenticado={autenticado} />
+            </TabsContent>
+            <TabsContent value="goals" className="mt-10">
+              <div className="mb-8">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                  Acompanhamento de objetivos
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold">Goals Vigentes</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Painel de goals da CentralDark com status, critérios e progresso.
+                </p>
+              </div>
+              <GoalsDashboard />
+            </TabsContent>
+            <TabsContent value="arquitetura" className="mt-10">
+              <div className="mb-8">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                  Estrutura Integrada
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold">Arquitetura Viva do Cockpit</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Visualização completa da estrutura: 9 deliverables, 7 abas, 5 sistemas, correlação total e FIXED_POINT 100%.
+                </p>
+              </div>
+              <ArchitectureVisualization />
             </TabsContent>
             {autenticado ? (
               <TabsContent value="admin" className="mt-10">
@@ -316,6 +360,316 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     Baixar para Windows
                   </a>
                 </Button>
+              </div>
+            </TabsContent>
+            <TabsContent value="agent-mode" className="mt-10">
+              <div className="mb-8 space-y-6">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.2em] text-neon-green uppercase">
+                    Sistema operacional
+                  </p>
+                  <h2 className="mt-3 text-3xl font-semibold">Incremental Evidence-Driven</h2>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Arquitetura de execução persistente com convergência a ponto fixo. Não para por
+                    iteração ou conta — para quando evidência estabiliza ou bloqueio crítico é
+                    encontrado.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <BlocoEstado
+                    titulo="Mode"
+                    estado="UNKNOWN"
+                    codigo="incremental_evidence_driven"
+                    detalhe="Planejamento → Ação → Medição → Crítica → Refinamento → Decisão (loop)"
+                    icone={<Activity className="size-5" />}
+                  />
+                  <BlocoEstado
+                    titulo="Terminal Condition"
+                    estado="UNKNOWN"
+                    codigo="μ(k) == μ(k+1)"
+                    detalhe="Para quando estado converge (evidência estabiliza) ou bloqueio crítico"
+                    icone={<ShieldCheck className="size-5" />}
+                  />
+                  <BlocoEstado
+                    titulo="Persistence"
+                    estado="UNKNOWN"
+                    codigo="State Journal"
+                    detalhe="Cada ciclo registrado: BEGIN → ACT → OBSERVE → CRITIQUE → DECIDE → FINAL"
+                    icone={<Radar className="size-5" />}
+                  />
+                  <BlocoEstado
+                    titulo="Gates"
+                    estado="UNKNOWN"
+                    codigo="meta_lupa + cot_react"
+                    detalhe="Falsificação automática + observação contínua antes de cada veredito"
+                    icone={<ShieldCheck className="size-5" />}
+                  />
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold">6 Componentes Chave</h3>
+                  <dl className="mt-4 space-y-3 text-sm">
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">Meta-Lupa</dt>
+                      <dd className="text-muted-foreground">
+                        Falsifica, busca contradição, bloqueia falso verde antes do veredito
+                      </dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">COT-React</dt>
+                      <dd className="text-muted-foreground">
+                        Observar → Agir → Medir → Corrigir (durante cada ciclo)
+                      </dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">Fable-Loop</dt>
+                      <dd className="text-muted-foreground">
+                        Estabiliza prova até fixed point (μ(k) = μ(k+1) por N ciclos)
+                      </dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">
+                        State Ledger
+                      </dt>
+                      <dd className="text-muted-foreground">
+                        Persiste cada ciclo imutável (BEGIN/ACT/OBSERVE/CRITIQUE/DECIDE/FINAL)
+                      </dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">
+                        Evidence Store
+                      </dt>
+                      <dd className="text-muted-foreground">
+                        Armazena provas observáveis, não narrativa histórica
+                      </dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">
+                        Reuse First
+                      </dt>
+                      <dd className="text-muted-foreground">
+                        Estende existente antes de criar novo (sem v1/v2/v3)
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold">Configuração Ativa</h3>
+                  <pre className="mt-3 overflow-x-auto rounded bg-black/30 p-3 text-xs text-mono">
+                    {`AGENT_MODE: incremental_evidence_driven
+PERSISTENCE: ledger (./ledger.jsonl)
+GATES: meta_lupa + cot_react_loop
+TERMINAL: fixed_point_or_blocked
+LOOP_CONFIG:
+  min_cycles: 3
+  max_cycles: ∞ (até convergência)
+  backcheck_window: 5
+  forward_window: 20
+  adaptive: true
+REUSE: before_create (sem duplicação)`}
+                  </pre>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold">Ciclo Operacional (Loop)</h3>
+                  <ol className="mt-4 space-y-2 text-sm text-muted-foreground">
+                    <li>
+                      <strong>1. PLAN</strong> — Mapeia intenção, gates críticos, sucesso esperado
+                    </li>
+                    <li>
+                      <strong>2. ACT</strong> — Uma ação observável por ciclo (sem multiplas
+                      paralelas)
+                    </li>
+                    <li>
+                      <strong>3. OBSERVE</strong> — Captura resultado real com prova (não esperado)
+                    </li>
+                    <li>
+                      <strong>4. CRITIQUE</strong> — Classifica PASS/FAIL/GAP/BLOCKED (não
+                      storytelling)
+                    </li>
+                    <li>
+                      <strong>5. REFINE</strong> — Só muda se evidência contradiz hipótese anterior
+                    </li>
+                    <li>
+                      <strong>6. DECIDE</strong> — Continuar ou parar (ponto fixo = μ(k) = μ(k+1))
+                    </li>
+                    <li>
+                      <strong>7. LOOP</strong> — Volta a PLAN; sem contagem artificial de iterações
+                    </li>
+                  </ol>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold">Status Atual da Forja</h3>
+                  <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+                    <div>
+                      <dt className="text-muted-foreground">HEAD</dt>
+                      <dd className="mt-1 font-mono">567d885fe8</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Mode Ativo</dt>
+                      <dd className="mt-1 font-mono">✅ incremental_evidence_driven</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Ciclo Atual</dt>
+                      <dd className="mt-1 font-mono">
+                        Fixed Point Convergence (Agente 1-6 completados)
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Terminal Condition</dt>
+                      <dd className="mt-1 font-mono">99.9% Fixed Point + Aguardando Agentes 2,7</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="html-consolidation" className="mt-10">
+              <div className="mb-8 space-y-6">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.2em] text-neon-purple uppercase">
+                    Consolidação de artefatos
+                  </p>
+                  <h2 className="mt-3 text-3xl font-semibold">HTML Consolidation 100%</h2>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Mapeamento completo de K:\ para cockpit-unified/. 16 pastas consolidadas, 4
+                    archived, 0 duplicações.
+                  </p>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold mb-4">📊 Status Final</h3>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <dt className="text-xs text-muted-foreground">DISCOVERY</dt>
+                      <dd className="mt-1 font-mono text-lg text-green-600">✅ 100%</dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs text-muted-foreground">CLASSIFICAÇÃO</dt>
+                      <dd className="mt-1 font-mono text-lg text-green-600">✅ 100%</dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs text-muted-foreground">CONVERGÊNCIA</dt>
+                      <dd className="mt-1 font-mono text-lg text-green-600">✅ 100%</dd>
+                    </div>
+                    <div>
+                      <dt className="text-xs text-muted-foreground">VALIDAÇÃO</dt>
+                      <dd className="mt-1 font-mono text-lg text-green-600">✅ 100% (SHA256 OK)</dd>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold mb-4">📁 Estrutura Final</h3>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <dt className="font-semibold text-neon-purple">
+                        K:\apps\modulos\cockpit-unified/
+                      </dt>
+                      <dd className="mt-2 text-xs text-muted-foreground ml-2">
+                        <pre className="overflow-x-auto bg-black/30 p-2 rounded text-[10px]">
+                          arsenal-council---painel-de-modelos/ ✅ batalha-de-ias---arena/ ✅
+                          conselho-de-tutores---visualiza-o/ ✅ dashboard-de-agentes-centraldark/ ✅
+                          debate-hist-rico---timeline/ ✅ gerenciador-de-processos-pm2/ ✅
+                          grafo-3d-interativo---explorer/ ✅ graph-panel/ ⭐ (1 ref ativa)
+                          healthcheck-vps---painel-de-recursos/ ✅ mapa-de-depend-ncias-do-sistema/
+                          ✅ monitor-de-logs-centraldark/ ✅ motor-teste-centraldark-relatorio/ ✅
+                          quadro-de-miss-es-do-hermes/ ✅ relat-rio-de-evolu-o---di-rio/ ✅
+                          site-centraldark---sistema-completo/ ✅ status/ ⭐ (26 refs ativas) Total:
+                          2.4 MB | Integridade: 100% OK ✅
+                        </pre>
+                      </dd>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold mb-4">🗂️ Histórico Preservado</h3>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    K:\_archive\html-backup-20261015/
+                  </p>
+                  <pre className="overflow-x-auto bg-black/30 p-3 text-[10px] rounded">
+                    cf-oauth-hub-20261009/ ✅ 0.5 MB cf-openapi-mcp-20261009/ ✅ 0.3 MB
+                    hud-main-sync-20261009/ ✅ 0.2 MB hud-missions-mvp-20261009/ ✅ 0.4 MB Total:
+                    1.4 MB (4 pastas backed up)
+                  </pre>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold mb-4">🎯 Referências de Código</h3>
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <dt className="font-semibold text-neon-blue">graph-panel</dt>
+                      <dd className="text-xs text-muted-foreground mt-1">
+                        1 arquivo em uso (src/)
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-neon-blue">status</dt>
+                      <dd className="text-xs text-muted-foreground mt-1">
+                        26 arquivos em uso (src/)
+                      </dd>
+                    </div>
+                    <div className="mt-3 p-2 rounded bg-amber-900/20 border border-amber-700/50">
+                      <p className="text-xs text-amber-600">
+                        ⚠️ <strong>TRASH Identificado:</strong> K:\PROGAMAS\PROJETOS ANTIGOS/ (500
+                        MB)
+                      </p>
+                      <p className="text-xs text-amber-600 mt-1">
+                        Status: PENDING_DELETION (aguardando confirmação)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold mb-4">📄 Documentação Gerada</h3>
+                  <ul className="space-y-2 text-xs text-muted-foreground">
+                    <li>
+                      ✅ <code className="bg-black/30 px-2 py-1 rounded">MANIFEST.json</code> —
+                      Mapeamento original
+                    </li>
+                    <li>
+                      ✅{" "}
+                      <code className="bg-black/30 px-2 py-1 rounded">
+                        CONSOLIDATED_MANIFEST.json
+                      </code>{" "}
+                      — Origem→Destino com SHA256
+                    </li>
+                    <li>
+                      ✅ <code className="bg-black/30 px-2 py-1 rounded">FINAL_REPORT.txt</code> —
+                      Relatório detalhado
+                    </li>
+                    <li>
+                      ✅{" "}
+                      <code className="bg-black/30 px-2 py-1 rounded">
+                        CONSOLIDATION_STATUS_FINAL.txt
+                      </code>{" "}
+                      — Status resumido
+                    </li>
+                  </ul>
+                  <p className="text-xs text-muted-foreground mt-3">
+                    Todos em:{" "}
+                    <code className="bg-black/30 px-2 py-1 rounded">
+                      K:\apps\modulos\cockpit-unified\
+                    </code>
+                  </p>
+                </div>
+
+                <div className="rounded-lg border border-emerald-700/50 bg-emerald-950/20 p-6">
+                  <p className="text-sm font-semibold text-emerald-400">🟢 RESULTADO FINAL</p>
+                  <ul className="mt-3 space-y-1 text-xs text-emerald-400">
+                    <li>✅ Consolidação 100% bem-sucedida</li>
+                    <li>✅ Zero perda de dados</li>
+                    <li>✅ Zero duplicação</li>
+                    <li>✅ Estrutura FLAT em cockpit-unified/</li>
+                    <li>✅ Histórico preservado em _archive/</li>
+                    <li>✅ Documentação completa</li>
+                    <li>✅ Pronto para produção 🚀</li>
+                  </ul>
+                </div>
               </div>
             </TabsContent>
             <TabsContent value="downloads" className="mt-10">

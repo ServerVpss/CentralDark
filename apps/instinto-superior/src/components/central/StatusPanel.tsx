@@ -92,7 +92,7 @@ export function StatusPanel() {
         </div>
         <div className="flex items-center gap-3">
           <span className="font-mono text-[10px] text-muted-foreground">POLÍTICA 15S</span>
-          <Button size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
+          <Button data-cd-flow="instinto.StatusPanel.botao-01" size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
             <RefreshCw className={`size-4 ${q.isFetching ? "animate-spin" : ""}`} /> Medir agora
           </Button>
         </div>

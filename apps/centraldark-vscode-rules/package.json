@@ -1,0 +1,80 @@
+{
+  "name": "centraldark-vscode-rules",
+  "displayName": "CentralDark Rules Validator",
+  "description": "Syntax highlight, linter e validator para regras invioláveis do CentralDark",
+  "version": "1.0.0",
+  "publisher": "centraldark-local",
+  "private": true,
+  "engines": { "vscode": "^1.95.0" },
+  "categories": ["Linters", "Other"],
+  "keywords": ["centraldark", "rules", "linter", "validator", "invioláveis"],
+  "main": "./extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "commands": [
+      {
+        "command": "centraldark.loadRules",
+        "title": "CentralDark: Load Rules",
+        "description": "Carrega e valida as regras invioláveis do CentralDark"
+      },
+      {
+        "command": "centraldark.validateFile",
+        "title": "CentralDark: Validate Current File",
+        "description": "Valida o arquivo atual contra as regras"
+      },
+      {
+        "command": "centraldark.showRulesPanel",
+        "title": "CentralDark: Show Rules Panel",
+        "description": "Abre o painel com documentação das regras"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "centraldark.loadRules",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r",
+        "when": "editorTextFocus"
+      }
+    ],
+    "languages": [
+      {
+        "id": "centraldark-rules",
+        "aliases": ["CentralDark Rules", "centraldark-rules"],
+        "extensions": [".rules", ".centraldark-rules"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "centraldark-rules",
+        "scopeName": "text.centraldark-rules",
+        "path": "./syntaxes/centraldark-rules.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "CentralDark Rules",
+      "properties": {
+        "centraldark.rules.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Habilita validação de regras invioláveis"
+        },
+        "centraldark.rules.strictMode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ativa modo estrito (bloqueia violações críticas)"
+        },
+        "centraldark.rules.autoValidate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Valida automaticamente ao salvar arquivo"
+        },
+        "centraldark.rules.rulesPath": {
+          "type": "string",
+          "default": "./centraldark-rules.md",
+          "description": "Caminho para arquivo de regras"
+        }
+      }
+    }
+  }
+}
