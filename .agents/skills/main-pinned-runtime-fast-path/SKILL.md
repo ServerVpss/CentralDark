@@ -69,6 +69,39 @@ Leia primeiro:
 SAME_FINGERPRINT → REPLAY_BEFORE_REDISCOVERY.
 CHANGED_FINGERPRINT → REVALIDATE_AFFECTED_CONE_ONLY.
 
+## 🧹 Forja Viva — limpeza com receipt e reutilização do scratch
+
+**CHEFE_INTENT 2026-10-15:** vincular **🧹** à faxina de worktrees na máquina viva, usando **esta skill**, o `WORKTREE TEARDOWN` já existente na skill operacional e o checklist CURRENT do HUD. Não instalar outra faxina, monitor, runner ou segunda receita.
+
+**Condição de invocação:** o emoji seleciona o owner e apresenta o status; **não dispara** `git reset`, `git clean`, `git worktree remove/prune` ou exclusão ao aparecer no chat/cockpit. A ação real exige identidade do executor, escopo, lock e classificação do alvo. Um scratch reutilizável por setor/escritor quando adequado; **não** impor `ONE_WORKTREE_ONLY` global, porque writers em escopos independentes devem permanecer isolados.
+
+### Receita reproduzível de bancada
+
+```text
+#ACORDAR → !CALIBRAR → !CENTRALDARK
+OWNER + CURRENT_SHA + WORKTREE_LIST + NEXT_CURSOR
+→ WORKTREE_CLASSIFY {OWNER_ACTIVE|SCRATCH_SAFE|UNKNOWN}
+→ INSPECT_REALPATH_AND_GIT_TOP + CHECK_LOCK_AND_PROCESS_OWNER
+→ INVENTORY {TRACKED,UNTRACKED,STAGED,UNPUSHED_COMMITS,UNIQUE_DELTA}
+→ EDIT_ONE_OWNER_AND_SCOPE → TEST_CI → COUNTERPROOF
+→ SOURCE_RECEIPT_WITH_SHA_AND_FILESET
+→ PUBLISH_TO_MAIN_ONLY_WITH_REQUIRED_GATES → MAIN_SHA_READBACK
+→ BUILD/DEPLOY_OWNER_IF_APPLICABLE → RUNTIME_EFFECT_READBACK
+→ CASA_VISUAL_READBACK_WHEN_CHEFE_REQUESTS_BUILD_VIEW
+→ PROJECT_IN_EXISTING_DAILY_HUD_CHECKLIST (PASS/UNKNOWN/BLOCKED)
+→ PROVE_DELTA_PRESERVED_AND_ALL_RECEIPTS_LINKED
+→ CLEAN_ONLY_PROVED_DISPOSABLE_SCRATCH (same realpath+lock)
+→ VERIFY_CLEAN_SCRATCH + RELEASE_LOCK → FIXED_POINT + NEXT_CURSOR
+```
+
+**Barreiras de faxina:** worktree com processo ativo, owner diverso, arquivo untracked não classificado, commit local não promovido, stash/delta único, SHA divergente, mudanças staged/unstaged, arquivo protegido, receipt não gravado, teste falhando ou estado `UNKNOWN` ⇒ `KEEP_ACTIVE`; **NÃO** limpar. Scratch vazio por si só não autoriza `git worktree remove`. `git worktree prune` é operação de metadados posterior à remoção comprovada, não procedimento genérico de higiene.
+
+**Limites de sincronização:** `SOURCE_COMMITTED != MAIN_PROMOTED != DEPLOYED != UI_PROVEN`. Um CI verde e receipt não autorizam substituir trabalho local alheio; se a publicação na `main` conflitar, registrar e aguardar reconciliação no mesmo owner. Caso o CHEFE peça para **ver o build**, usar a Casa/VS Code já abertos, sem declarar imagem visual se não houve screenshot/readback real; quando não pedir, não inventar requisito de UI para descarte de scratch puramente documental. Teste visual só se aplica à capacidade com interface e ao runtime escolhido.
+
+**Leitura medida nesta atualização (instantânea, não configuração):** Casa `K:\` = 33 alterações tracked e pelo menos 95 entradas untracked; VPS `/root/CentralDark` = 6 arquivos tracked modificados; VPS scratch `/root/CentralDark/_worktrees/main-pinned-runtime-fastpath` = 0 entradas `git status --porcelain`. Portanto **CASA_MAIN=KEEP_ACTIVE**, **VPS_MAIN=KEEP_ACTIVE**, **VPS_SCRATCH=READONLY_SAFE_CANDIDATE**, não houve reset, prune, deploy nem exclusão.
+
+**Checklist diário:** `docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md` é histórico/proveniência; o **CURRENT** é a projeção existente do HUD, sem PR ou arquivo diário novo. Marcar concluído somente com source SHA, teste/contraprova, receipt e efeito aplicável; limpezas propostas mas não executadas ficam `PENDING`/ `UNKNOWN`. Se necessário, o receipt vive no owner já existente da missão.
+
 ## Finalização
 
 Registrar SOURCE_SHA/delta, OWNER, FILESET_CAUSAL, testes, restart/reload se houve, health, efeito, rollback target, RESULT e NEXT_CURSOR no #1562 ou filho equivalente. Nunca registrar valor secreto.
