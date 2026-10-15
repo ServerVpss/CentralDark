@@ -48,6 +48,20 @@ export function CardConectarIA({ onChaveCriada }: Props) {
         <BotaoOAuth provider="openai" />
       </div>
 
+      <section aria-label="Instalação GitHub App" className="rounded-lg border border-border p-3 space-y-2" data-testid="github-app-install-status">
+        <h3 className="text-sm font-medium">GitHub App · instalação por repositório</h3>
+        <p className="text-xs text-muted-foreground">
+          Diferente do OAuth (Client ID), esta rota usa o App ID e permite selecionar
+          repositórios e revisar permissões durante a instalação no GitHub.
+        </p>
+        <Button variant="outline" size="sm" disabled aria-disabled="true">
+          Instalar GitHub App · aguardando App ID
+        </Button>
+        <p role="status" className="text-xs text-amber-700 dark:text-amber-400">
+          NÃO CONFIGURADO · instalação não iniciada · nenhuma autenticação comprovada.
+        </p>
+      </section>
+
       {resultado?.ok && resultado.chave_plena && (
         <div className="mt-2 rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/30 p-4 space-y-3">
           <div className="flex items-center gap-3">
