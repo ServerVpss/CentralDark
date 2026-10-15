@@ -91,12 +91,10 @@ if (['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].include
   }
 }
 
-if (action === 'YELLOW') {
-  const textExt = new Set(['.md', '.txt', '.mmd', '.jsonl', '.csv', '.rst', '.adoc']);
-  if (textExt.has(ext)) {
-    action = 'BOTH';
-    reason = 'UNKNOWN_TEXT_PRESERVE_BOTH_THEN_VALIDATE';
-  }
+// UNKNOWN textual conflicts are not automatically semantically compatible.
+// Preserve YELLOW until a proven pattern is added to the canonical registry.
+if (action === 'YELLOW' && reason === 'UNKNOWN_CODE_OR_CONFIG_REQUIRES_DISCRIMINANT') {
+  reason = 'UNREGISTERED_CONFLICT_REQUIRES_PROVEN_PATTERN';
 }
 
 console.log(JSON.stringify({
