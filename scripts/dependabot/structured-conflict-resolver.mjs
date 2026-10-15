@@ -35,8 +35,9 @@ function mergeJsonPatternsByIdMainFirst() {
   const merged = [];
   const seen = new Set();
   for (const item of [...(theirs.patterns || []), ...(ours.patterns || [])]) {
-    const key = item && typeof item === 'object' && 'id' in item
-      ? String(item.id)
+    const key = item && typeof item === 'object' && item !== null
+      ? (item.CONFLICT_ID != null ? 'conflict:' + String(item.CONFLICT_ID)
+        : item.id != null ? 'id:' + String(item.id) : JSON.stringify(item))
       : JSON.stringify(item);
     if (seen.has(key)) continue;
     seen.add(key);
