@@ -323,3 +323,20 @@ DELTA_EXECUTADO | PROVA | CONTRAPROVA | STATUS | NEXT_CURSOR`. Ao transferir
 para outra janela/Haiku, enviar exatamente esse recibo e o endereço desta skill,
 não uma suposta memória sincronizada. O novo executor relê e remede; sem `MAIN_SHA`
 e provas correntes, classifica `UNKNOWN`.
+
+
+## 🍒 Convergência da extensão 0.1.3 — fonte, VSIX e Casa
+
+**INTENT_ID:** CENTRALDARK-VSCODE-EXTENSION-CONSOLIDATE-20261015. **CHEFE_INTENT:** antecipar melhorias úteis, sem esperar que os testes de voz estejam disponíveis. Não criar outra skill: o owner continua `skills/vs-code-restore`; o funil continua exclusivamente em `.agents/skills/centraldark-vscode-log-bridge`.
+
+**Convergência de código na MESMA PR #1830:** esta branch preserva o comando `centraldark.zendriveCli` e adiciona `centraldark.focusExistingTerminal` como **alias da mesma função**, além de `centraldark.showTrace` e `OutputChannel("CentralDark Trace")`; `extension.ts` e `package.json` foram reconciliados para **0.1.3**. Não habilitar `restore.onOpen` nem `startAgents` automaticamente; ambos permanecem `false`.
+
+**Contrato de evolução antecipada:** preparar e testar separadamente (a) acessibilidade de nomes da paleta, (b) visibilidade de eventos sanitizados na aba `Saída`, (c) sensor PID/HWND e captura no script existente, (d) fluxo único de logs Casa→VPS, (e) recibos para o cockpit. `SOURCE`, `VSIX_BUILT`, `VSIX_INSTALLED`, `ACTIVATED`, `FUNNEL_RECEIVED` e `UI_PROVEN` são estados distintos. A extensão não captura áudio, conversa, credenciais, comandos, stdout nem telas para o funil.
+
+**Receita real comprovada na Casa, 15/10:** Desktop Commander `SEGREDO` Windows → preparar diretório de teste `K:\TEMP\work\centraldark-vscode-restore-next-20261015` separado da skill ativa → copiar somente fontes/manifesto da branch e configs públicas reutilizáveis → aproveitar `node_modules` já existente via junction → `node .../typescript/bin/tsc -p <STAGE>` (`TSC_RC=0`) → `npx.cmd --offline --yes @vscode/vsce package --no-dependencies --allow-missing-repository -o <STAGE>/centraldark-vscode-restore-0.1.3.vsix` (`VSCE_RC=0`) → conferir ZIP/VSIX com `System.IO.Compression.FileSystem` e comandos compilados → `code.cmd --install-extension <VSIX> --force` (`INSTALL_EXIT=0`) → `code.cmd --list-extensions --show-versions` confirma `centraldark.centraldark-vscode-restore@0.1.3`. VSIX: 12.479 bytes, SHA-256 `E035CE1F3E3B89713FAF32764BF198E3A073D6A578BFE18BE99636D4F6F5A64D`. VS Code permaneceu aberto (20 processos observados), sem reload/kill, sem novo terminal ou Hermes.
+
+**Nota sobre instalador:** VSCE mostrou aviso de licença ausente na pasta temporária; empacotamento foi aprovado (`DONE`). Node emitiu aviso `DEP0169 url.parse()` durante instalação, mas processo retornou 0. Avisos não são equivalentes a regressões provadas. Evitar materializar dados privados do `ui-accessibility-20261014.json` no VSIX e não alterar login/tokens.
+
+**Limite presente:** `VERSION_0.1.3_INSTALLED=PASS`; `OUTPUT_CHANNEL_ACTIVATED=NOT_PROVEN`, `COMMAND_UI_E2E=NOT_PROVEN`, `VOICE_ASR_E2E=DEFERRED_BY_CHEFE`; nenhum reload de sessão foi feito. GitHub `main` ainda mantém a linha estável 0.1.2 até gates/merge da PR #1830; a versão 0.1.3 é build da **branch** devidamente identificada. A futura operação deve comparar SHA, arquivo instalado e status dos checks antes de promover à main.
+
+**NEXT_CURSOR:** validar o novo comando e o `CentralDark Trace` depois de um reload **natural/autorizado**, obter evento `show_trace` sanitizado e corresponder ao funnel existente; revisar gates CI da PR #1830 antes de merge. **Nada de nova receita, novo agente ou coletor.**
