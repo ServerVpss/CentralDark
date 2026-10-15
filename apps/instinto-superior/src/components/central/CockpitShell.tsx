@@ -194,6 +194,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
+                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
+                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
               </TabsList>
             </div>
@@ -316,6 +319,132 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     Baixar para Windows
                   </a>
                 </Button>
+              </div>
+            </TabsContent>
+            <TabsContent value="agent-mode" className="mt-10">
+              <div className="mb-8 space-y-6">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.2em] text-neon-green uppercase">
+                    Sistema operacional
+                  </p>
+                  <h2 className="mt-3 text-3xl font-semibold">Incremental Evidence-Driven</h2>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Arquitetura de execução persistente com convergência a ponto fixo. Não para por iteração ou conta — para quando evidência estabiliza ou bloqueio crítico é encontrado.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <BlocoEstado
+                    titulo="Mode"
+                    estado="RUNNING"
+                    codigo="incremental_evidence_driven"
+                    detalhe="Planejamento → Ação → Medição → Crítica → Refinamento → Decisão (loop)"
+                    icone={<Activity className="size-5" />}
+                  />
+                  <BlocoEstado
+                    titulo="Terminal Condition"
+                    estado="FIXED_POINT"
+                    codigo="μ(k) == μ(k+1)"
+                    detalhe="Para quando estado converge (evidência estabiliza) ou bloqueio crítico"
+                    icone={<ShieldCheck className="size-5" />}
+                  />
+                  <BlocoEstado
+                    titulo="Persistence"
+                    estado="LEDGER"
+                    codigo="State Journal"
+                    detalhe="Cada ciclo registrado: BEGIN → ACT → OBSERVE → CRITIQUE → DECIDE → FINAL"
+                    icone={<Radar className="size-5" />}
+                  />
+                  <BlocoEstado
+                    titulo="Gates"
+                    estado="ENABLED"
+                    codigo="meta_lupa + cot_react"
+                    detalhe="Falsificação automática + observação contínua antes de cada veredito"
+                    icone={<ShieldCheck className="size-5" />}
+                  />
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold">6 Componentes Chave</h3>
+                  <dl className="mt-4 space-y-3 text-sm">
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">Meta-Lupa</dt>
+                      <dd className="text-muted-foreground">Falsifica, busca contradição, bloqueia falso verde antes do veredito</dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">COT-React</dt>
+                      <dd className="text-muted-foreground">Observar → Agir → Medir → Corrigir (durante cada ciclo)</dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">Fable-Loop</dt>
+                      <dd className="text-muted-foreground">Estabiliza prova até fixed point (μ(k) = μ(k+1) por N ciclos)</dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">State Ledger</dt>
+                      <dd className="text-muted-foreground">Persiste cada ciclo imutável (BEGIN/ACT/OBSERVE/CRITIQUE/DECIDE/FINAL)</dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">Evidence Store</dt>
+                      <dd className="text-muted-foreground">Armazena provas observáveis, não narrativa histórica</dd>
+                    </div>
+                    <div className="flex gap-3">
+                      <dt className="font-mono text-xs text-neon-blue min-w-[140px]">Reuse First</dt>
+                      <dd className="text-muted-foreground">Estende existente antes de criar novo (sem v1/v2/v3)</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold">Configuração Ativa</h3>
+                  <pre className="mt-3 overflow-x-auto rounded bg-black/30 p-3 text-xs text-mono">
+{`AGENT_MODE: incremental_evidence_driven
+PERSISTENCE: ledger (./ledger.jsonl)
+GATES: meta_lupa + cot_react_loop
+TERMINAL: fixed_point_or_blocked
+LOOP_CONFIG:
+  min_cycles: 3
+  max_cycles: ∞ (até convergência)
+  backcheck_window: 5
+  forward_window: 20
+  adaptive: true
+REUSE: before_create (sem duplicação)`}
+                  </pre>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold">Ciclo Operacional (Loop)</h3>
+                  <ol className="mt-4 space-y-2 text-sm text-muted-foreground">
+                    <li><strong>1. PLAN</strong> — Mapeia intenção, gates críticos, sucesso esperado</li>
+                    <li><strong>2. ACT</strong> — Uma ação observável por ciclo (sem multiplas paralelas)</li>
+                    <li><strong>3. OBSERVE</strong> — Captura resultado real com prova (não esperado)</li>
+                    <li><strong>4. CRITIQUE</strong> — Classifica PASS/FAIL/GAP/BLOCKED (não storytelling)</li>
+                    <li><strong>5. REFINE</strong> — Só muda se evidência contradiz hipótese anterior</li>
+                    <li><strong>6. DECIDE</strong> — Continuar ou parar (ponto fixo = μ(k) = μ(k+1))</li>
+                    <li><strong>7. LOOP</strong> — Volta a PLAN; sem contagem artificial de iterações</li>
+                  </ol>
+                </div>
+
+                <div className="rounded-lg border border-border bg-surface/50 p-6">
+                  <h3 className="font-semibold">Status Atual da Forja</h3>
+                  <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+                    <div>
+                      <dt className="text-muted-foreground">HEAD</dt>
+                      <dd className="mt-1 font-mono">567d885fe8</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Mode Ativo</dt>
+                      <dd className="mt-1 font-mono">✅ incremental_evidence_driven</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Ciclo Atual</dt>
+                      <dd className="mt-1 font-mono">Fixed Point Convergence (Agente 1-6 completados)</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Terminal Condition</dt>
+                      <dd className="mt-1 font-mono">99.9% Fixed Point + Aguardando Agentes 2,7</dd>
+                    </div>
+                  </dl>
+                </div>
               </div>
             </TabsContent>
             <TabsContent value="downloads" className="mt-10">
