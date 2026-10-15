@@ -111,6 +111,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
   const [cursor, setCursor] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
+  const [genesisCopy, setGenesisCopy] = useState<"IDLE" | "COPIED" | "FAILED">("IDLE");
   const [forgeSelected, setForgeSelected] = useState<string | null>(null);
   const [legadoBusca, setLegadoBusca] = useState("");
   const [legadoAba, setLegadoAba] = useState("todos");
@@ -198,7 +199,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           <Button variant="outline" disabled={!integrity || done} onClick={() => { setPlaying(false); setCursor(i => Math.min(i + 1, nodes.length - 1)); }}>Uma batida</Button>
           <Button variant="outline" onClick={() => setPlaying(false)}>Pausar</Button>
           <Button variant="outline" onClick={() => { setPlaying(false); setCursor(0); setSelected(null); }}>Voltar à Gênese</Button>
-          <Button variant="outline" onClick={() => setSelected(item.uid)}>Receita do UID</Button>
+          <Button variant="outline" onClick={() => { setSelected(item.uid); setGenesisCopy("IDLE"); }}>Receita do UID</Button>
         </div>
         {selectedNode && (
           <div className="mt-5 rounded-lg border border-border p-4">
@@ -210,9 +211,16 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             </p>
             <Button className="mt-3" variant="outline" onClick={() => {
               if (typeof navigator !== "undefined" && navigator.clipboard) {
-                void navigator.clipboard.writeText(recipe).catch(() => {});
+                void navigator.clipboard.writeText(recipe)
+                  .then(() => setGenesisCopy("COPIED"))
+                  .catch(() => setGenesisCopy("FAILED"));
               }
             }}>Copiar missão tipada</Button>
+            <p className="mt-2 text-xs text-muted-foreground" aria-live="polite">
+              {genesisCopy === "COPIED" ? "Missão copiada; nada foi enviado ao Hermes."
+                : genesisCopy === "FAILED" ? "Falha ao copiar; receita continua visível, sem despacho."
+                : "Cópia pendente de clique; sessão Hermes não vinculada nesta interface."}
+            </p>
           </div>
         )}
       </section>
