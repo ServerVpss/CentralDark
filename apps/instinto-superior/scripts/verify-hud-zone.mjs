@@ -167,3 +167,24 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
   assert.ok(!infra.includes("execSync("));
   assert.ok(!infra.includes("fetch("));
 });
+
+
+test("gaveta cataloga receitas A-Z e mostra estado do terminal sem autoexec", () => {
+  const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
+  const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
+  assert.equal(catalogo.automation_owners.length, 9);
+  assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 9);
+  assert.ok(catalogo.automation_owners.every(r => r.owner && r.receita && r.nome));
+  assert.ok(infra.includes("receitasAlfabeticas"));
+  assert.ok(infra.includes('localeCompare(b.nome, "pt-BR"'));
+  assert.ok(infra.includes("receitasFiltradas"));
+  assert.ok(infra.includes("forja-receitas-busca"));
+  assert.ok(infra.includes("String(posicao).padStart(2"));
+  assert.ok(infra.includes("Receitas tipadas catalogadas"));
+  assert.ok(infra.includes("RDC_DESKTOP_COMMANDER"));
+  assert.ok(infra.includes("INTERACTIVE_ATTACH_UNKNOWN"));
+  assert.ok(infra.includes("DC_SESSION_NONE"));
+  assert.ok(infra.includes("nenhuma mensagem foi despachada"));
+  assert.ok(!infra.includes("execSync("));
+  assert.ok(!infra.includes("child_process"));
+});
