@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(vscode-log-bridge): cristalizar leitura 5S e rotas Casa VSCode VPS com contraprova",
+    "lastCommit": "fix(voice): corrigir 5S para VS Code e desambiguar skills na rota do funil",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T14:04:47.341Z",
+      "titulo": "Push na main · 06c77b893bfcb86921843b9f635372ceed18b824",
+      "detalhe": "fix(voice): corrigir 5S para VS Code e desambiguar skills na rota do funil",
+      "area": "Repositório",
+      "sha": "06c77b8",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T14:02:35.667Z",
       "titulo": "Push na main · 404ede09a0363886a13b74ce68dad66c7b349342",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "9aca9ff",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T18:54:03.369Z",
-      "titulo": "Push na main · 0c6bb47037141ca19c3ed65065be4859d7c71306",
-      "detalhe": "🧿 docs(sol): contraprovar fonte ZIP historicamente truncada sem destruir POC",
-      "area": "Repositório",
-      "sha": "0c6bb47",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T14:04:47.341Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 06c77b893bfcb86921843b9f635372ceed18b824 (06c77b8)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T14:02:35.667Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 9aca9ff8a651b73d196e9931305a86b950d4e09a (9aca9ff)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T18:54:03.369Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0c6bb47037141ca19c3ed65065be4859d7c71306 (0c6bb47)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T14:02:35.667Z",
-  "updatedAtBR": "15/10/2026, 11:02:35 BRT"
+  "updatedAt": "2026-10-15T14:04:47.341Z",
+  "updatedAtBR": "15/10/2026, 11:04:47 BRT"
 }
