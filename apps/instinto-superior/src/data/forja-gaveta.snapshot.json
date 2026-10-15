@@ -8129,5 +8129,88 @@
       ],
       "status": "MCP_CALL_READBACK_NOT_UI_BUILD_PROOF"
     }
-  }
+  },
+  "automation_owners": [
+    {
+      "id": "LEITURA_SKILLS",
+      "icone": "🛠️",
+      "nome": "Pesquisar skills · Skill Workshop",
+      "owner": ".agents/skills/skill-workshop/SKILL.md",
+      "receita": "node .agents/skills/skill-workshop/scripts/workshop.mjs sources",
+      "modo": "SOMENTE_LEITURA",
+      "estado": "OWNER_SOURCE_ONLY"
+    },
+    {
+      "id": "GAVETA_MEMORIA",
+      "icone": "🗄️",
+      "nome": "Gaveta de padrões · Memory Linker",
+      "owner": "scripts/memory-linker/pattern-library.mjs",
+      "receita": "CONSULTAR_OWNER=scripts/memory-linker/pattern-library.mjs; MODO=LEITURA; STATUS=SEM_RUNTIME_READBACK",
+      "modo": "SOMENTE_LEITURA",
+      "estado": "OWNER_SOURCE_ONLY"
+    },
+    {
+      "id": "SKILL_SYNC",
+      "icone": "🔄",
+      "nome": "Checar espelho das skills",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "receita": "bash scripts/skill-sync-check.sh --check",
+      "modo": "SOMENTE_LEITURA",
+      "estado": "EXECUCAO_NAO_DISPARADA"
+    },
+    {
+      "id": "HUD_PROVA",
+      "icone": "👁️",
+      "nome": "Teste de paridade do HUD",
+      "owner": "apps/instinto-superior/scripts/verify-hud-zone.mjs",
+      "receita": "cd apps/instinto-superior && npm run verify:hud",
+      "modo": "TESTE_SOB_DEMANDA",
+      "estado": "CI_RUNTIME_NAO_COMPROVADO"
+    },
+    {
+      "id": "POMBO64_BUILD",
+      "icone": "☄️",
+      "nome": "Forja de pacote POMBO64",
+      "owner": "apps/instinto-superior/package.json",
+      "receita": "cd apps/instinto-superior && npm run build:plugplay",
+      "modo": "BUILD_SOB_DEMANDA",
+      "estado": "BUILD_NAO_EXECUTADO"
+    },
+    {
+      "id": "OLHO_ESTADO",
+      "icone": "👀",
+      "nome": "Estado vivo do cockpit",
+      "owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "receita": "UI: Clique em Atualizar estado do cockpit, reaproveitando a query existente.",
+      "modo": "ACAO_UI_EXISTENTE",
+      "estado": "READBACK_UI_PENDENTE"
+    },
+    {
+      "id": "HERMES",
+      "icone": "🫀",
+      "nome": "Handoff Hermes · missão tipada",
+      "owner": "apps/modulos/HERMES-CORE",
+      "receita": "INTENCAO=CONVERGENCIA_FORJA_INSTINTO; ESCOPO=OWNER_EXISTENTE; PROVA=READBACK_RECEIPT; STATUS=SOLICITACAO_NAO_ENVIADA",
+      "modo": "COPY_ONLY",
+      "estado": "SESSAO_NAO_VINCULADA"
+    },
+    {
+      "id": "CLAUDE_CODE",
+      "icone": "🧠",
+      "nome": "Claude Code · terminal atual do VS Code",
+      "owner": "skills/vs-code-restore/SKILL.md",
+      "receita": "#acordar → !calibrar → !CENTRALDARK; MISSAO=EVOLUIR_INSTINTO_SUPERIOR_GAVETA_HUD; FONTE=ServerVpss/CentralDark PR#1832; REUTILIZAR_OWNERS=true; PRESERVAR_WORKTREE=true; TESTAR_RECEIPT=true; ENVIAR_SOMENTE_SE_TERMINAL_IDENTIFICADO",
+      "modo": "COPY_ONLY",
+      "estado": "CLAUDE_RUNNING_TERMINAL_UNBOUND"
+    },
+    {
+      "id": "FAXINA",
+      "icone": "🧹",
+      "nome": "Faxina de scratch seguro",
+      "owner": ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
+      "receita": "CONSULTAR_RECEIPT_E_WORKTREE_STATUS; NAO_EXECUTAR_CLEAN_SEM_LOCK_E_CONTRAPROVA",
+      "modo": "SOMENTE_LEITURA",
+      "estado": "NENHUMA_LIMPEZA_EXECUTADA"
+    }
+  ]
 }
