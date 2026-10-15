@@ -2283,3 +2283,23 @@ PAPAGAIO_DOCUMENTED_NOT_RUNTIME_PROVEN=true
 
 A instância específica `CENTRALDARK · MISSÃO MCP` usa dez missões e o HUD exato fornecido pelo CHEFE; reutilizar o painel da missão, **não** gerar HUD genérico. Revalidar a prova de cada marco antes de trocar cor/percentual; conclusão = dez marcos provados, não 99,9% decorativo.
 <!-- /CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+
+## 🪬 ZENDRIVE CLI — interface mental SOL ↔ Hermes ↔ VS Code (15/10/2026)
+
+**É um modo de operação dos owners existentes, não outro modelo, app, cérebro, gateway ou permissão.** Quando o CHEFE pedir `ZENDRIVE CLI` ou interação direta com terminal, SOL/ChatGPT organiza a intenção como uma sessão CLI: identifica alvo, envia um comando por vez no terminal autorizado, lê retorno real, reconcilia e segue. Hermes continua executor/contraprovador na rota oficial; nunca presumir que uma conversa ChatGPT web é uma sessão API autenticada.
+
+**Owners para qualquer agente/Hermes consultar:** `skills/vs-code-restore/SKILL.md` (comando `centraldark.zendriveCli` na extensão `centraldark.centraldark-vscode-restore@0.1.1`, foco no terminal existente e eventos de shell sanitizados); `.agents/skills/centraldark-vscode-log-bridge/SKILL.md` no PR #1820 (coleta Casa); `apps/modulos/mcp/src/log-funnel.js` (um único funil); `apps/modulos/HERMES-CORE` (execução); `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py` (alias Zendrive `zendrive-chatgpt-local`, historicamente simulado).
+
+**Fluxo fixo:** `INTENÇÃO → JANELA/TERMINAL EXISTENTE → FOCO CONFIRMADO → COMANDO AUTORIZADO → READBACK → METADADO SANITIZADO → FUNIL ÚNICO → CONTRAPROVA → RECEIPT/NEXT_CURSOR`. Não criar outro Hermes/terminal automaticamente; não registrar comando, stdout, prompt, conversa, token ou cookie; não fingir execução se só houve envio. Se shell integration não estiver ativa, `UNKNOWN` só para essa captura; a Casa continua operável. Coletor atual é periódico (1 min), não streaming instantâneo.
+
+**Prova em 15/10:** extensão 0.1.1 instalada na Casa e testes isolados de foco/telemetria PASS; marcador de integração controlado `K:\TEMP\logs\LOGS-VS-CODE.log` → Tailscale/SSH → `vscode_log_signal key=vscode:terminal` na VPS PASS. Evento real do listener em janela já aberta ainda requer ativação/readback. Hermes/MCP ativos na VPS; Omni 8099 e Zendrive CDP Casa 9222 não responderam. `ZENDRIVE_PROVIDER_LIVE=NOT_PROVEN`; assinatura ChatGPT não substitui credencial de API. Não confundir commit com deploy.
+
+
+## Prova viva da entrada ZENDRIVE CLI no VS Code — 15/10/2026
+
+O comando `centraldark.zendriveCli` da extensão 0.1.1 foi **executado na janela VS Code da Casa** pela paleta de comandos, com foco retornando ao Bash existente. Evento real `cli_focus` foi gravado em `LOGS-VS-CODE.log` e aceito pelo funil VPS: `vscode_log_signal key=vscode:terminal end_offset=3028123`, `route=tailscale accepted=1 duplicate=0`. O evento seguinte foi idempotente (`accepted=0`). **Apenas este trecho está selado.** O teste de echo no Bash remoto não produziu `shell_start/shell_end` na fonte; não presumir telemetria de todos os comandos nem saída capturada. Provider Zendrive/ChatGPT autenticado permanece não provado. Hermes na VPS só consumirá esta regra global quando sua cópia canônica for reconciliada; commit em `main` não prova leitura pelo processo vivo.
+
+
+## Shell start/end ZENDRIVE CLI — complemento de prova (15/10/2026)
+
+Além de `cli_focus`, o listener da extensão 0.1.1 produziu `shell_start exit=unknown` e `shell_end exit=ok`, sem comando/saída. O coletor único transmitiu dois sinais ao `log-funnel` VPS: offsets `3028226` e `3028322`, heartbeat `accepted=2 duplicate=0 route=tailscale`. Isto comprova **pelo menos um par de eventos nativos de execução**, mas não identifica qual comando ou terminal os originou. Não declarar captura universal ou modelo ChatGPT conectado.

@@ -224,7 +224,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               {dado ? <SyncCenter estado={dado} /> : <SyncCenter />}
             </TabsContent>
             <TabsContent value="design" className="mt-10">
-              <DesignCenter pele={pele} selecionarPele={selecionar} />
+              <DesignCenter pele={pele} selecionarPele={selecionar} autenticado={autenticado} />
             </TabsContent>
             {autenticado ? (
               <TabsContent value="admin" className="mt-10">

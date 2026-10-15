@@ -27,8 +27,10 @@ let restoredThisSession = false;
 export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)),
-    vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context))
+    vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)),
+    vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal)
   );
+  registerTerminalTelemetry(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
   if (onOpen) {
     void restore(context, false);
@@ -36,6 +38,55 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate(): void {}
+
+/**
+ * Entrada ZENDRIVE CLI = foco no terminal JA existente, nunca um segundo Hermes.
+ * ChatGPT/SOL e uma superficie de coordenacao; nao inventar autenticacao/API.
+ * Telemetria so de ciclo/resultado, sem ler comando, saida ou conversas.
+ */
+const terminalLogPath = 'K:\\TEMP\\logs\\LOGS-VS-CODE.log';
+type TerminalEvent = 'cli_focus' | 'shell_start' | 'shell_end' | 'shell_integration';
+
+function emitTerminalMetadata(event: TerminalEvent, exitCode?: number): void {
+  if (process.platform !== 'win32') { return; }
+  const enabled = vscode.workspace.getConfiguration('centraldark.restore')
+    .get<boolean>('terminalTelemetry', true);
+  if (!enabled || !fs.existsSync(terminalLogPath)) { return; }
+  const exit = typeof exitCode === 'number' ? (exitCode === 0 ? 'ok' : 'nonzero') : 'unknown';
+  const line = `[INFO] [terminal] centraldark.zendrive_cli event=${event} exit=${exit} utc=${new Date().toISOString()}\n`;
+  try {
+    fs.appendFileSync(terminalLogPath, line, { encoding: 'utf8', flag: 'a' });
+  } catch {
+    // Telemetria opcional nunca bloqueia a bancada nem altera o terminal.
+  }
+}
+
+function registerTerminalTelemetry(context: vscode.ExtensionContext): void {
+  context.subscriptions.push(
+    vscode.window.onDidStartTerminalShellExecution(() => emitTerminalMetadata('shell_start')),
+    vscode.window.onDidEndTerminalShellExecution(event =>
+      emitTerminalMetadata('shell_end', event.exitCode)),
+    vscode.window.onDidChangeTerminalShellIntegration(() =>
+      emitTerminalMetadata('shell_integration'))
+  );
+}
+
+function focusExistingCliTerminal(): void {
+  const terminals = vscode.window.terminals;
+  const terminal = vscode.window.activeTerminal ??
+    terminals.find(item => /hermes|bash|pwsh|powershell/i.test(item.name));
+  if (!terminal) {
+    void vscode.window.showWarningMessage(
+      'ZENDRIVE CLI: nenhum terminal existente. Nao foi criado outro Hermes.');
+    return;
+  }
+  terminal.show(false);
+  emitTerminalMetadata('cli_focus');
+  void vscode.window.showInformationMessage(
+    'ZENDRIVE CLI: terminal existente em foco. SOL coordena; Hermes executa. ' +
+    'A sessao ChatGPT/API nao e criada por este comando.');
+}
+
 
 function loadMap(context: vscode.ExtensionContext): WorkspaceMap | undefined {
   const mapPath = path.join(context.extensionPath, 'workspace-map-20261014.json');
