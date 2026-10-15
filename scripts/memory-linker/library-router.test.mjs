@@ -84,7 +84,7 @@ const repoSource = ({
 });
 
 test('catálogo válido aceita PDF + EPUB + JWPUB sem fingir que conteúdo já foi ingerido', () => {
-  assert.deepEqual(validateCatalog(catalog), { status: 'PASS', sources: 1, entries: 4 });
+  assert.deepEqual(validateCatalog(catalog), { status: 'PASS', sources: 1, entries: 4, horn_sector_gate: 'PROVEN_FOR_ALL_ENTRIES' });
 });
 
 test('Google Drive entra como referência com proveniência explícita, sem fingir INGESTED', () => {
@@ -97,7 +97,7 @@ test('Google Drive entra como referência com proveniência explícita, sem fing
     classification: 'STUDY_CANDIDATE',
     provenance: { provider: 'google-drive', external_id: 'arquivo-123' },
   });
-  assert.deepEqual(validateCatalog(drive), { status: 'PASS', sources: 2, entries: 4 });
+  assert.deepEqual(validateCatalog(drive), { status: 'PASS', sources: 2, entries: 4, horn_sector_gate: 'PROVEN_FOR_ALL_ENTRIES' });
 });
 
 test('fonte Google Drive sem proveniência falha fechado', () => {

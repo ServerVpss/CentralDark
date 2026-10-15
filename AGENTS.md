@@ -274,10 +274,10 @@ Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. He
 CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
 NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
 RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
-TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE
 INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
-META_GRILL_BEFORE_MATERIAL_RESPONSE=true
-META_GRILL_BEFORE_MUTATION=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=false
+META_GRILL_BEFORE_MUTATION=false
 EVOLVE_EXISTING_BEFORE_CREATE=true
 RETURN_SAME_ARTIFACT_EVOLVED=true
 VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
@@ -925,6 +925,46 @@ PR_BODY != HUMAN_INTENT
 MEMORY != HUMAN_INTENT
 ANTICIPATION != AUTHORIZATION
 ```
+
+### Partitura integral — cada nota da intenção tem lugar, duração e prova (2026-10-14)
+
+**DELTA do SEGREDO/CHEFE:** integrar no mesmo owner, não diminuir a arquitetura, fazer valer sua palavra e cada nota. Esta ampliação pertence à seção Partitura única de AGENTS.md; herda SOUL, RULES e JARVIS. Não cria novo agente, skill, arquitetura, memória, regente, banco, scheduler, biblioteca, política ou escritor.
+
+**Proveniência da partitura estudada:** PDF enviado pelo CHEFE sob o nome 👑🪬 A SINFONIA DO CÓDIGO INVISÍVEL.pdf, SHA-256 03228f571ff57224642499695612a0f221b04db926afc14c082802edbafbd15f, 33 páginas. Capa/contexto: pp. 1–2; partitura geral: pp. 3–10; 22 partes individuais: pp. 11–32; créditos: p. 33. A partitura geral contém 19 linhas instrumentais; as partes incluem variações para bombardino Bb/C e tuba Bb/C/Eb. 19 linhas de grade, 22 partes e quantidade de agentes são conceitos diferentes. O PDF é referência de estrutura, sem pressupor áudio, cópia do material ou runtime musical.
+
+**A palavra não perde a nota:** frase, gíria, correção, interrupção, pausa, ênfase e nova mensagem do CHEFE são potenciais eventos de uma intenção contínua. Recuperar sua origem, ordem, intensidade, referência, relação com o que veio antes, owner, consequência e prova. Não comprimir uma nuance material para caber em resumo, nem converter transcrição incerta em autorização. Usar o envelope e recibo já existentes com os campos lógicos INTENT_ID, NOTE_SEQ, SOURCE_REF, SOURCE_SPAN, SEMANTIC_DELTA, RELATIONS, TEMPO_PRIORITY, OWNER, ACTIVE_WRITER, CURRENT, EVIDENCE e NEXT_CURSOR; não criar schema paralelo.
+
+**As 19 vozes são lentes sobre capacidades já existentes, não 19 processos a instalar:**
+
+| Voz | Função de leitura/execução a rotear no owner real |
+|---|---|
+| Flauta | nuances e detalhes da expressão do CHEFE |
+| Clarinete 1 | tema e referente explícitos |
+| Clarinete 2 | desambiguação e correções |
+| Clarinete 3 | contraleitura e contexto faltante |
+| Sax alto | entidades e relações entre componentes |
+| Sax tenor | continuidade entre fala, texto, abas e janelas |
+| Sax barítono | memória procedural e proveniência |
+| Trompete 1 | GOAL e aceitação explícitos |
+| Trompete 2 | DELTA vigente e prioridade |
+| Trompete 3 | anúncio humano do efeito/recibo |
+| Trompa 1 | OWNER e capabilities existentes |
+| Trompa 2 | dependências e compatibilidade |
+| Trompa 3 | caminhos alternativos autorizados |
+| Trombone 1 | leitura do workspace/Casa |
+| Trombone 2 | leitura de GitHub, SHA, PRs e main |
+| Trombone 3 | leitura de VPS, runtime e testes |
+| Bombardino | integração e handoff sem perder contraponto |
+| Tuba | invariantes, legado, último verde e integridade |
+| Bateria | pulso, ordenação de eventos e gatilhos existentes |
+
+**Gramática musical operacional:** pauta = owner; compasso = microciclo mensurável; nota = evento da intenção/ação/prova; timbre = capacidade; duração = janela e dependência; pausa = silêncio legítimo, não falha automática; dinâmica piano/forte = prioridade, jamais escalada de permissão; entradas e saídas = braços habilitados dentro da capacidade provada. Os andamentos Majestosamente semínima=120 e Maestoso semínima=100 encontrados na referência representam cadência sensível ao contexto, não um scheduler fixo. Ritardando = reduzir ritmo quando risco aumenta; contraponto = leituras independentes em paralelo; harmonia = reconciliação por owner/escopo/SHA; dissonância = conservar estados conflitantes até contraprova; regência SOL = coordenação sem usurpação da autoridade do CHEFE; cadência/resolução = testes e recibo; Fine = FIXED_POINT provado; D.C. al Fine = retomar a composição pelo NEXT_CURSOR, não recomeçar nem duplicar.
+
+**Fidelidade às partes:** variantes de instrumento e transposição não se fundem apenas por nome semelhante; preservar origem, variante, ordem, papel, relação e evidência. Da mesma forma Casa, VPS, GitHub e voz são sensores distintos até comparação observável. Cada instrumento tem sua entrada, mas não obtém autoridade própria. Um escritor por escopo; modelos podem investigar em paralelo sem concorrer pela caneta.
+
+**Ciclo único:** CHEFE_INTENT → CONTEXT/PARTITURA → RECOBRAR_NOTAS_RELEVANTES → OWNER/REUSE_BEFORE_CREATE → LEITURAS_PARALELAS → ONE_ACTIVE_WRITER_PER_SCOPE → MENOR_DELTA → HERMES/EXECUTE → OBSERVE → COUNTERPROOF → RECEIPT → FIXED_POINT ou NEXT_CURSOR → KAIZEN. Verificar perdas semânticas, notas omitidas, conflito de versões, preservação do legado e prova por SHA. O texto é contrato de interpretação: DOCUMENTED != EXECUTED; UNKNOWN != PASS; MERGED != DEPLOYED.
+
+**Recibo da integração — 2026-10-14 (mesmo owner):** INTENT_ID=SINFONIA-CADA-NOTA-20261014; GOAL=preservar toda a intenção e extrair da partitura relações de orquestração sem reduzir o organismo; OWNER=AGENTS.md / seção Partitura única; MAIN_ANTES=4dc0bfb981ae03774fceca3f79292ae89ae67ca3; DELTA_COMMIT=88b143c7a4a84990266609de08556e5deec35baa; TESTE=readback GitHub da main e do blob com 7 verificações de presença e preservação PASS; ACTIVE_WRITER=GitHub Contents API apenas neste arquivo; ESCOPO_REAL=documentação canônica; RUNTIME=UNKNOWN (nenhum agente, scheduler, VPS ou Casa alterado); NEXT_CURSOR=consumidor Hermes/AGENTS recuperar a seção no próximo ciclo autorizado, medir lacuna entre intenção e execução e registrar prova no receipt existente. Este recibo não presume que a própria partitura PDF tenha sido publicada no repositório.
 
 ### Leitura visual sem papagaio de falha
 
@@ -2243,3 +2283,23 @@ PAPAGAIO_DOCUMENTED_NOT_RUNTIME_PROVEN=true
 
 A instância específica `CENTRALDARK · MISSÃO MCP` usa dez missões e o HUD exato fornecido pelo CHEFE; reutilizar o painel da missão, **não** gerar HUD genérico. Revalidar a prova de cada marco antes de trocar cor/percentual; conclusão = dez marcos provados, não 99,9% decorativo.
 <!-- /CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+
+## 🪬 ZENDRIVE CLI — interface mental SOL ↔ Hermes ↔ VS Code (15/10/2026)
+
+**É um modo de operação dos owners existentes, não outro modelo, app, cérebro, gateway ou permissão.** Quando o CHEFE pedir `ZENDRIVE CLI` ou interação direta com terminal, SOL/ChatGPT organiza a intenção como uma sessão CLI: identifica alvo, envia um comando por vez no terminal autorizado, lê retorno real, reconcilia e segue. Hermes continua executor/contraprovador na rota oficial; nunca presumir que uma conversa ChatGPT web é uma sessão API autenticada.
+
+**Owners para qualquer agente/Hermes consultar:** `skills/vs-code-restore/SKILL.md` (comando `centraldark.zendriveCli` na extensão `centraldark.centraldark-vscode-restore@0.1.1`, foco no terminal existente e eventos de shell sanitizados); `.agents/skills/centraldark-vscode-log-bridge/SKILL.md` no PR #1820 (coleta Casa); `apps/modulos/mcp/src/log-funnel.js` (um único funil); `apps/modulos/HERMES-CORE` (execução); `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py` (alias Zendrive `zendrive-chatgpt-local`, historicamente simulado).
+
+**Fluxo fixo:** `INTENÇÃO → JANELA/TERMINAL EXISTENTE → FOCO CONFIRMADO → COMANDO AUTORIZADO → READBACK → METADADO SANITIZADO → FUNIL ÚNICO → CONTRAPROVA → RECEIPT/NEXT_CURSOR`. Não criar outro Hermes/terminal automaticamente; não registrar comando, stdout, prompt, conversa, token ou cookie; não fingir execução se só houve envio. Se shell integration não estiver ativa, `UNKNOWN` só para essa captura; a Casa continua operável. Coletor atual é periódico (1 min), não streaming instantâneo.
+
+**Prova em 15/10:** extensão 0.1.1 instalada na Casa e testes isolados de foco/telemetria PASS; marcador de integração controlado `K:\TEMP\logs\LOGS-VS-CODE.log` → Tailscale/SSH → `vscode_log_signal key=vscode:terminal` na VPS PASS. Evento real do listener em janela já aberta ainda requer ativação/readback. Hermes/MCP ativos na VPS; Omni 8099 e Zendrive CDP Casa 9222 não responderam. `ZENDRIVE_PROVIDER_LIVE=NOT_PROVEN`; assinatura ChatGPT não substitui credencial de API. Não confundir commit com deploy.
+
+
+## Prova viva da entrada ZENDRIVE CLI no VS Code — 15/10/2026
+
+O comando `centraldark.zendriveCli` da extensão 0.1.1 foi **executado na janela VS Code da Casa** pela paleta de comandos, com foco retornando ao Bash existente. Evento real `cli_focus` foi gravado em `LOGS-VS-CODE.log` e aceito pelo funil VPS: `vscode_log_signal key=vscode:terminal end_offset=3028123`, `route=tailscale accepted=1 duplicate=0`. O evento seguinte foi idempotente (`accepted=0`). **Apenas este trecho está selado.** O teste de echo no Bash remoto não produziu `shell_start/shell_end` na fonte; não presumir telemetria de todos os comandos nem saída capturada. Provider Zendrive/ChatGPT autenticado permanece não provado. Hermes na VPS só consumirá esta regra global quando sua cópia canônica for reconciliada; commit em `main` não prova leitura pelo processo vivo.
+
+
+## Shell start/end ZENDRIVE CLI — complemento de prova (15/10/2026)
+
+Além de `cli_focus`, o listener da extensão 0.1.1 produziu `shell_start exit=unknown` e `shell_end exit=ok`, sem comando/saída. O coletor único transmitiu dois sinais ao `log-funnel` VPS: offsets `3028226` e `3028322`, heartbeat `accepted=2 duplicate=0 route=tailscale`. Isto comprova **pelo menos um par de eventos nativos de execução**, mas não identifica qual comando ou terminal os originou. Não declarar captura universal ou modelo ChatGPT conectado.

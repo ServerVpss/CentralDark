@@ -5,34 +5,363 @@
       "label": "CentralDark: Bootstrap",
       "type": "process",
       "command": "python",
-      "args": ["scripts/trigger-fabric/centraldark_master_cycle.py","--text","#ACORDAR !CENTRALDARK","--chefe-source","--telemetry"],
-      "options": {"cwd": "${workspaceFolder}"},
+      "args": [
+        "scripts/trigger-fabric/centraldark_master_cycle.py",
+        "--text",
+        "#ACORDAR !CENTRALDARK",
+        "--chefe-source",
+        "--telemetry"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": [],
-      "presentation": {"reveal":"always","panel":"shared","clear":false,"focus":false}
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false,
+        "focus": false
+      }
     },
     {
       "label": "CentralDark Claude: Hermes ON",
       "type": "process",
       "command": "powershell.exe",
-      "args": ["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1","ON"],
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1",
+        "ON"
+      ],
       "problemMatcher": [],
-      "presentation": {"reveal":"always","panel":"shared","clear":false,"focus":false}
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false,
+        "focus": false
+      }
     },
     {
       "label": "CentralDark Claude: Direct OFF",
       "type": "process",
       "command": "powershell.exe",
-      "args": ["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1","OFF"],
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1",
+        "OFF"
+      ],
       "problemMatcher": [],
-      "presentation": {"reveal":"always","panel":"shared","clear":false,"focus":false}
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false,
+        "focus": false
+      }
     },
     {
       "label": "CentralDark Claude: Route STATUS",
       "type": "process",
       "command": "powershell.exe",
-      "args": ["-NoProfile","-ExecutionPolicy","Bypass","-File","${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1","STATUS"],
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\scripts\\vscode\\centraldark-claude-mode.ps1",
+        "STATUS"
+      ],
       "problemMatcher": [],
-      "presentation": {"reveal":"always","panel":"shared","clear":false,"focus":false}
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false,
+        "focus": false
+      }
+    },
+    {
+      "label": "CentralDark Orquestra: PREPARAR",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference='Stop'; $dir=Join-Path $env:TEMP 'CentralDark-Orquestra'; New-Item -ItemType Directory -Force -Path $dir | Out-Null; Get-ChildItem -LiteralPath $dir -Force -ErrorAction SilentlyContinue | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue; $run=[guid]::NewGuid().ToString('N'); Set-Content -LiteralPath (Join-Path $dir 'run.id') -Value $run -Encoding ascii -NoNewline; Write-Host ('ORQUESTRA_RUN_ID=' + $run)"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "dedicated",
+        "clear": true,
+        "focus": false,
+        "echo": false
+      }
+    },
+    {
+      "label": "CentralDark Orquestra: 01 FILOSOFIA",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference='Stop' $dir=Join-Path $env:TEMP 'CentralDark-Orquestra' $runFile=Join-Path $dir 'run.id' if(-not (Test-Path -LiteralPath $runFile)){ throw 'ORQUESTRA_NOT_PREPARED: execute CentralDark Orquestra: RUN 4 VOZES' } $run=(Get-Content -LiteralPath $runFile -Raw).Trim() $out=Join-Path $dir ($run + '.filosofia.txt') $status=Join-Path $dir ($run + '.filosofia.status') $done=Join-Path $dir ($run + '.filosofia.done') Remove-Item -LiteralPath $out,$status,$done -Force -ErrorAction SilentlyContinue $rc=0 try {   $null=Get-Command hermes -ErrorAction Stop   $q='PAPEL=FILOSOFIA. Trabalhe READ-ONLY. Leia LEIA-ME-IA.md, AGENTS.md, docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md e somente o contexto pertinente. Interprete a intencao vigente sem inventar autoridade, sem editar arquivos, sem commit, sem deploy. Entregue no maximo 1600 caracteres nos campos ROLE, INTENT, MEANING, RELEVANT_RULES, EVIDENCE, UNKNOWN, HANDOFF.'   & hermes chat -Q --max-turns 5 --source vscode-orq-filosofia -q $q 2>&1 | ForEach-Object { $_; $_ | Out-File -LiteralPath $out -Encoding utf8 -Append }   $rc=$LASTEXITCODE   if($rc -ne 0){ throw ('HERMES_EXIT=' + $rc) }   Set-Content -LiteralPath $status -Value 'PASS' -Encoding ascii -NoNewline } catch {   if($rc -eq 0){ $rc=1 }   ('ROLE_FAIL: ' + $_.Exception.Message) | Tee-Object -FilePath $out -Append | Write-Host   Set-Content -LiteralPath $status -Value 'FAIL' -Encoding ascii -NoNewline } finally {   Set-Content -LiteralPath $done -Value 'DONE' -Encoding ascii -NoNewline } if($rc -ne 0){ exit $rc }"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "focus": false,
+        "echo": true,
+        "group": "centraldark-orquestra"
+      }
+    },
+    {
+      "label": "CentralDark Orquestra: 02 ENGENHARIA",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference='Stop' $dir=Join-Path $env:TEMP 'CentralDark-Orquestra' $runFile=Join-Path $dir 'run.id' if(-not (Test-Path -LiteralPath $runFile)){ throw 'ORQUESTRA_NOT_PREPARED: execute CentralDark Orquestra: RUN 4 VOZES' } $run=(Get-Content -LiteralPath $runFile -Raw).Trim() $out=Join-Path $dir ($run + '.engenharia.txt') $status=Join-Path $dir ($run + '.engenharia.status') $done=Join-Path $dir ($run + '.engenharia.done') Remove-Item -LiteralPath $out,$status,$done -Force -ErrorAction SilentlyContinue $rc=0 try {   $null=Get-Command hermes -ErrorAction Stop   $q='PAPEL=ENGENHARIA. Trabalhe READ-ONLY. Meça o repo atual e mapeie owner, capability, dependencias e executor real para a intencao vigente. Reuse before create. Nao edite arquivo, nao commit, nao deploy. Use ferramentas reais quando necessario e preserve exit codes. Entregue no maximo 1600 caracteres nos campos ROLE, CURRENT_HEAD, OWNER, EXISTING_ROUTE, DEPENDENCIES, EXECUTABLE_NEXT_DELTA, EVIDENCE, UNKNOWN, HANDOFF.'   & hermes chat -Q --max-turns 5 --source vscode-orq-engenharia -q $q 2>&1 | ForEach-Object { $_; $_ | Out-File -LiteralPath $out -Encoding utf8 -Append }   $rc=$LASTEXITCODE   if($rc -ne 0){ throw ('HERMES_EXIT=' + $rc) }   Set-Content -LiteralPath $status -Value 'PASS' -Encoding ascii -NoNewline } catch {   if($rc -eq 0){ $rc=1 }   ('ROLE_FAIL: ' + $_.Exception.Message) | Tee-Object -FilePath $out -Append | Write-Host   Set-Content -LiteralPath $status -Value 'FAIL' -Encoding ascii -NoNewline } finally {   Set-Content -LiteralPath $done -Value 'DONE' -Encoding ascii -NoNewline } if($rc -ne 0){ exit $rc }"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "focus": false,
+        "echo": true,
+        "group": "centraldark-orquestra"
+      }
+    },
+    {
+      "label": "CentralDark Orquestra: 03 CONTRAPROVA",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference='Stop' $dir=Join-Path $env:TEMP 'CentralDark-Orquestra' $runFile=Join-Path $dir 'run.id' if(-not (Test-Path -LiteralPath $runFile)){ throw 'ORQUESTRA_NOT_PREPARED: execute CentralDark Orquestra: RUN 4 VOZES' } $run=(Get-Content -LiteralPath $runFile -Raw).Trim() $out=Join-Path $dir ($run + '.contraprova.txt') $status=Join-Path $dir ($run + '.contraprova.status') $done=Join-Path $dir ($run + '.contraprova.done') Remove-Item -LiteralPath $out,$status,$done -Force -ErrorAction SilentlyContinue $rc=0 try {   $null=Get-Command hermes -ErrorAction Stop   $q='PAPEL=CONTRAPROVA. Trabalhe READ-ONLY e de forma independente. Verifique git HEAD/status e as afirmacoes materiais que puder medir; quando pertinente rode apenas testes/validadores read-only existentes. Qualquer comando com returncode diferente de zero, timeout, SKIPPED ou evidencia ausente deve virar FAIL ou UNKNOWN, nunca PASS. Nao edite arquivo, nao commit, nao deploy. Entregue no maximo 1600 caracteres nos campos ROLE, CHECKS, RAW_EVIDENCE, FAIL, UNKNOWN, VERDICT, HANDOFF.'   & hermes chat -Q --max-turns 5 --source vscode-orq-contraprova -q $q 2>&1 | ForEach-Object { $_; $_ | Out-File -LiteralPath $out -Encoding utf8 -Append }   $rc=$LASTEXITCODE   if($rc -ne 0){ throw ('HERMES_EXIT=' + $rc) }   Set-Content -LiteralPath $status -Value 'PASS' -Encoding ascii -NoNewline } catch {   if($rc -eq 0){ $rc=1 }   ('ROLE_FAIL: ' + $_.Exception.Message) | Tee-Object -FilePath $out -Append | Write-Host   Set-Content -LiteralPath $status -Value 'FAIL' -Encoding ascii -NoNewline } finally {   Set-Content -LiteralPath $done -Value 'DONE' -Encoding ascii -NoNewline } if($rc -ne 0){ exit $rc }"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "focus": false,
+        "echo": true,
+        "group": "centraldark-orquestra"
+      }
+    },
+    {
+      "label": "CentralDark Orquestra: 04 SINTESE",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference='Stop' $dir=Join-Path $env:TEMP 'CentralDark-Orquestra' $runFile=Join-Path $dir 'run.id' if(-not (Test-Path -LiteralPath $runFile)){ throw 'ORQUESTRA_NOT_PREPARED' } $run=(Get-Content -LiteralPath $runFile -Raw).Trim() $roles=@('filosofia','engenharia','contraprova') $deadline=(Get-Date).AddMinutes(10) do {   $missing=@($roles | Where-Object { -not (Test-Path -LiteralPath (Join-Path $dir ($run + '.' + $_ + '.done'))) })   if($missing.Count -eq 0){ break }   Write-Host ('SINTESE_AGUARDANDO=' + ($missing -join ','))   Start-Sleep -Seconds 2 } while((Get-Date) -lt $deadline) if($missing.Count -ne 0){ Write-Error ('ORQUESTRA_TIMEOUT=' + ($missing -join ',')); exit 2 } $blocks=@() $inputFail=$false foreach($role in $roles){   $statusPath=Join-Path $dir ($run + '.' + $role + '.status')   $outPath=Join-Path $dir ($run + '.' + $role + '.txt')   $st=if(Test-Path -LiteralPath $statusPath){(Get-Content -LiteralPath $statusPath -Raw).Trim()}else{'UNKNOWN'}   if($st -ne 'PASS'){ $inputFail=$true }   $body=if(Test-Path -LiteralPath $outPath){Get-Content -LiteralPath $outPath -Raw}else{'NO_OUTPUT'}   if($body.Length -gt 5000){$body=$body.Substring($body.Length-5000)}   $blocks += ('--- ' + $role.ToUpper() + ' STATUS=' + $st + \" ---`n\" + $body) } $prompt=\"PAPEL=SINTESE. Voce nao e a autoridade humana; SEGREDO/CHEFE continua sendo a autoridade. Trabalhe READ-ONLY. Convirja as tres observacoes abaixo sem votar a verdade. Se qualquer entrada estiver FAIL/UNKNOWN ou as evidencias divergirem, STATUS deve ser UNKNOWN/RECONCILE, nunca PASS. Nao edite, nao commit, nao deploy. Entregue: INTENCAO, OWNER, CURRENT, DELTA_MINIMO, PROVA, STATUS, NEXT_CURSOR. Fontes:`n\" + ($blocks -join \"`n\") $out=Join-Path $dir ($run + '.sintese.txt') & hermes chat -Q --max-turns 4 --source vscode-orq-sintese -q $prompt 2>&1 | ForEach-Object { $_; $_ | Out-File -LiteralPath $out -Encoding utf8 -Append } $rc=$LASTEXITCODE if($rc -ne 0){ exit $rc } if($inputFail){ Write-Error 'ORQUESTRA_INPUT_FAIL_OR_UNKNOWN'; exit 2 }"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true,
+        "focus": false,
+        "echo": true,
+        "group": "centraldark-orquestra"
+      }
+    },
+    {
+      "label": "CentralDark Orquestra: PARALELO",
+      "dependsOn": [
+        "CentralDark Orquestra: 01 FILOSOFIA",
+        "CentralDark Orquestra: 02 ENGENHARIA",
+        "CentralDark Orquestra: 03 CONTRAPROVA",
+        "CentralDark Orquestra: 04 SINTESE"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Orquestra: RUN 4 VOZES",
+      "dependsOn": [
+        "CentralDark Orquestra: PREPARAR",
+        "CentralDark Orquestra: PARALELO"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "CentralDark Hermes Vivo: 01 FILOSOFIA",
+      "detail": "Terminal Hermes real, interativo e independente (source vscode-orq-filosofia); nao executa deploy automaticamente.",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; Write-Host 'CENTRALDARK HERMES 01 FILOSOFIA — sessão interativa'; $cmd=Get-Command hermes -ErrorAction SilentlyContinue; if(-not $cmd){ Write-Error 'HERMES_NAO_ENCONTRADO_NO_PATH'; exit 127 }; & hermes chat --cli --source vscode-orq-filosofia; if($LASTEXITCODE -ne 0){Write-Error ('HERMES_EXIT=' + $LASTEXITCODE);exit $LASTEXITCODE}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "centraldark-hermes-live",
+        "focus": false,
+        "clear": false,
+        "echo": true,
+        "showReuseMessage": false,
+        "close": false
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Hermes Vivo: 02 ENGENHARIA",
+      "detail": "Terminal Hermes real, interativo e independente (source vscode-orq-engenharia); nao executa deploy automaticamente.",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; Write-Host 'CENTRALDARK HERMES 02 ENGENHARIA — sessão interativa'; $cmd=Get-Command hermes -ErrorAction SilentlyContinue; if(-not $cmd){ Write-Error 'HERMES_NAO_ENCONTRADO_NO_PATH'; exit 127 }; & hermes chat --cli --source vscode-orq-engenharia; if($LASTEXITCODE -ne 0){Write-Error ('HERMES_EXIT=' + $LASTEXITCODE);exit $LASTEXITCODE}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "centraldark-hermes-live",
+        "focus": false,
+        "clear": false,
+        "echo": true,
+        "showReuseMessage": false,
+        "close": false
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Hermes Vivo: 03 CONTRAPROVA",
+      "detail": "Terminal Hermes real, interativo e independente (source vscode-orq-contraprova); nao executa deploy automaticamente.",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; Write-Host 'CENTRALDARK HERMES 03 CONTRAPROVA — sessão interativa'; $cmd=Get-Command hermes -ErrorAction SilentlyContinue; if(-not $cmd){ Write-Error 'HERMES_NAO_ENCONTRADO_NO_PATH'; exit 127 }; & hermes chat --cli --source vscode-orq-contraprova; if($LASTEXITCODE -ne 0){Write-Error ('HERMES_EXIT=' + $LASTEXITCODE);exit $LASTEXITCODE}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "centraldark-hermes-live",
+        "focus": false,
+        "clear": false,
+        "echo": true,
+        "showReuseMessage": false,
+        "close": false
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Hermes Vivo: 04 SINTESE",
+      "detail": "Terminal Hermes real, interativo e independente (source vscode-orq-sintese); nao executa deploy automaticamente.",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoLogo",
+        "-NoProfile",
+        "-Command",
+        "$ErrorActionPreference='Stop'; Write-Host 'CENTRALDARK HERMES 04 SINTESE — sessão interativa'; $cmd=Get-Command hermes -ErrorAction SilentlyContinue; if(-not $cmd){ Write-Error 'HERMES_NAO_ENCONTRADO_NO_PATH'; exit 127 }; & hermes chat --cli --source vscode-orq-sintese; if($LASTEXITCODE -ne 0){Write-Error ('HERMES_EXIT=' + $LASTEXITCODE);exit $LASTEXITCODE}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "centraldark-hermes-live",
+        "focus": false,
+        "clear": false,
+        "echo": true,
+        "showReuseMessage": false,
+        "close": false
+      },
+      "runOptions": {
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CentralDark Hermes Vivo: ABRIR 4 TERMINAIS",
+      "detail": "Aciona quatro sessões Hermes CLI no VS Code; um único comando/auto-init no workspace autorizado. Nao prova delegacao nem cria processos ficticios.",
+      "dependsOn": [
+        "CentralDark Hermes Vivo: 01 FILOSOFIA",
+        "CentralDark Hermes Vivo: 02 ENGENHARIA",
+        "CentralDark Hermes Vivo: 03 CONTRAPROVA",
+        "CentralDark Hermes Vivo: 04 SINTESE"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen",
+        "instanceLimit": 1,
+        "instancePolicy": "warn"
+      }
     }
   ]
 }

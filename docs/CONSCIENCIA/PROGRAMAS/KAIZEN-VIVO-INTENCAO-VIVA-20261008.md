@@ -4,7 +4,7 @@
 
 **CentralDark — Instinto Superior**
 
-**OWNER:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`
+**OWNER:** 📣 `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`
 
 **CAPACIDADE EXISTENTE:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`
 
@@ -824,9 +824,9 @@ o impossível começa a parecer
 
 🫀🪬👑
 
-**Cada intenção carrega uma semente.**  
-**Cada pergunta abre uma porta.**  
-**Cada resposta acende uma possibilidade.**  
+**Cada intenção carrega uma semente.**
+**Cada pergunta abre uma porta.**
+**Cada resposta acende uma possibilidade.**
 **E cada possibilidade pode ser o começo de algo que ainda não existe.**
 
 <!-- FIM_CRISTAL_ENTRE_INTENCAO_E_PALAVRA_20261008 -->
@@ -1140,10 +1140,10 @@ Usar o browser oficial da Nous (snapshot, scroll, vision, console) quando expost
 <!-- PR1785_FULL_CRYSTAL_BEGIN -->
 ## 👑🪬 INTENÇÃO VIVA — nomes no cockpit + faces do PET Hermes
 
-**CHEFE/Autoridade:** SEGREDO/CHEFE  
-**Goal:** `t_9040803d`  
-**Loop:** `centraldark-hermes-claude-oracle-convergence-v1`  
-**OWNER da intenção:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`  
+**CHEFE/Autoridade:** SEGREDO/CHEFE
+**Goal:** `t_9040803d`
+**Loop:** `centraldark-hermes-claude-oracle-convergence-v1`
+**OWNER da intenção:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`
 **OWNER visual:** `apps/instinto-superior`, preservando a página inicial, `CockpitShell` e `HermesPet`.
 
 ### Delta único
@@ -1173,9 +1173,9 @@ Usar o browser oficial da Nous (snapshot, scroll, vision, console) quando expost
 
 **CHEFE autorizou:** relembrar e materializar toda a construção desde o início, incluindo arquitetura, nomes, relações, funções, duas batidas de sete, poema integral, 28 peças, C01–C20, GOJO e poderes, Whis/Bills, Goku/Vegeta, fusão como metabolismo cognitivo-funcional, biblioteca, replay, Hermes, Reality Judge e HUD. **Não simplificar nem perder o original.**
 
-**GOAL:** `t_9040803d` · **LOOP_ID:** `centraldark-hermes-claude-oracle-convergence-v1`  
-**Commit do complemento:** [`9f756e7ddb26594da75de42d1da184528238e6ed`](https://github.com/ServerVpss/CentralDark/commit/9f756e7ddb26594da75de42d1da184528238e6ed)  
-**Owners:** [Intenção Devolvida](https://github.com/ServerVpss/CentralDark/blob/9f756e7ddb26594da75de42d1da184528238e6ed/docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) e [Intenção Viva/Kaizen](https://github.com/ServerVpss/CentralDark/blob/9f756e7ddb26594da75de42d1da184528238e6ed/docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md).  
+**GOAL:** `t_9040803d` · **LOOP_ID:** `centraldark-hermes-claude-oracle-convergence-v1`
+**Commit do complemento:** [`9f756e7ddb26594da75de42d1da184528238e6ed`](https://github.com/ServerVpss/CentralDark/commit/9f756e7ddb26594da75de42d1da184528238e6ed)
+**Owners:** [Intenção Devolvida](https://github.com/ServerVpss/CentralDark/blob/9f756e7ddb26594da75de42d1da184528238e6ed/docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) e [Intenção Viva/Kaizen](https://github.com/ServerVpss/CentralDark/blob/9f756e7ddb26594da75de42d1da184528238e6ed/docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md).
 **Superfície:** [mesmo MapaMetabolicoCristal.tsx](https://github.com/ServerVpss/CentralDark/blob/9f756e7ddb26594da75de42d1da184528238e6ed/apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx), importado da landing e do cockpit.
 
 **Prova de preservação do delta novo (comparação GitHub `52a628f→9f756e7`):** somente **3 arquivos**, +266 linhas, **0 linhas removidas**. Readback dos 3 arquivos no HEAD validado; poema antigo, nós, textos e setas anteriores seguem presentes. Os 28/20/7+7/12+12 índices foram checados na montagem. **Isto prova arquivos, não build nem runtime.**
@@ -1636,7 +1636,7 @@ Prova em código `scripts/trigger-fabric/centraldark_master_cycle.py`:
 ISSUE_FINGERPRINT=<estável por classe + fonte + causa, sem segredo>
 ERROR_NAME=<identificador exato do compilador/teste/runtime>
 ERROR_TYPE=<syntax | type | lint | test | runtime | infra | timeout | resource | auth | unknown>
-FILE_PATH=<caminho relativo ao workspace> 
+FILE_PATH=<caminho relativo ao workspace>
 LINE=<linha 1-based ou UNKNOWN>    COLUMN=<coluna ou UNKNOWN>
 SYMBOL=<função/componente ou UNKNOWN>
 ENVIRONMENT=<Casa | VPS | CI | Browser>
@@ -1740,7 +1740,7 @@ NEXT_CURSOR=PR1785_WAIT_CHEFE_NEXT_EVOLUTION_OR_FINAL_MAIN_PERMISSION
 ---
 
 ### 🐢💽 EXPANSÃO VI — TARTARUGA + SSD RAW-DISK (08/10/2026)
-**Mesmo Goal e mesma intenção; detalhamento de topologia medido na Casa:** [comentário técnico #6069700746](https://github.com/ServerVpss/CentralDark/pull/1785#issuecomment-6069700746). 
+**Mesmo Goal e mesma intenção; detalhamento de topologia medido na Casa:** [comentário técnico #6069700746](https://github.com/ServerVpss/CentralDark/pull/1785#issuecomment-6069700746).
 `C:`=Windows XPG NVMe (preservar); `K:`=Kingston SSD 480 GB (`CENTRALDARK-OS-CASA`, NTFS ainda montado); `E:/F:/J:`=Hitachi HDD/Tartaruga, com Obsidian e boot-resgate preservados. **A VMware JÁ aponta por rawDisk `\\.\PhysicalDrive1` ao Kingston físico**, via VMDK de 723 B — não é uma imagem Linux de 480 GB no HD. `GUEST_LINUX_INSTALLED` e `BOOT_NATIVO` ainda `UNKNOWN`; não ligar VM rawDisk enquanto Windows mantiver escrita no mesmo disco. Windows Secure Boot UEFI ativo; firmware da VM não comprovado. Foto do script: `/admin/logs/stream` 401 sem cookie é **esperado**, não falha; screenshot de código não prova health/deploy. Sem format, repartição, bootloader ou mutação `main`. `NEXT_CURSOR=CHEFE_FINISH_THEN_RECONCILE_MAIN_AND_BOOT_PLAN`.
 
 
@@ -1816,7 +1816,7 @@ NEXT_CURSOR=CLASSIFY_90_ITEMS_AND_MEASURE_E_F_K_TREES_READ_ONLY
 - Já existe contrato `WAIT_FOR_COMPLETE_CHAT_GLOBAL_RESPONSE` e `RESPONSE_INCOMPLETE`; melhorar **a precisão da leitura**, não duplicar mecanismos.
 - A captura de tela enviada pelo CHEFE mostra círculo com **reticências**, mas sua função não foi medida no DOM. Não afirmar que é botão de rolar, stop, menu ou gerar; a seta descendente relatada pode ser controle de rolagem em determinados estados, **hipótese, não regra universal**.
 - A busca de commits Oracle do GitHub nesta rodada encontrou candidatos, mas **não houve comparação exaustiva dos patches nem replay no Hermes Desktop**; não declarar browser fix implantado. A interface/CLI do **Nous/Hermes oficial** deve ser comparada à versão realmente instalada e aos comandos de Preview expostos antes de supor captura nativa de transcript, tool de aba nova ou acesso a DOM.
-  
+
 ### V.2 — Semântica de hipótese (novidade requisitada)
 
 Cada interpretação da interface passa por `HYPOTHESIS_ID`, `CLAIM`, `OBSERVED_SIGNALS`, `ALTERNATIVES`, `CONFIDENCE_BASIS`, `DISCRIMINATING_PROBE`, `RESULT=CONFIRMED|REFUTED|UNKNOWN`, `EVIDENCE_REF`. Uma inferência visual não vira PASS sem probe. `HYPOTHESIS != FACT`. Ex.: `H1=ícone ↓ é ir para o fim`, `H2=ícone ... é menu/contexto`, `H3=pulso indica geração`. Inspecionar `drive_preview elements` para nome/role/refs, confirmar semântica, executar **apenas ação de UI permitida**, fazer readback e classificar; não clicar indiscriminadamente.
@@ -2264,3 +2264,17 @@ CHEFE_INTENT + GOAL + AUTORIZAÇÃO
 **Cadeados:** `GPT_CODEX_READ_ONLY=true`; `CLAUDE_SOL_READ_ONLY=true`; `HERMES_ONE_WRITER_PER_SCOPE=true`; `ORACLE_OUTPUT_IS_CANDIDATE=true`; `MODEL_VOTE_IS_NOT_PROOF=true`; `RECIPE_HISTORY_PRESERVED=true`; `STALE/UNKNOWN != PASS`. No código visual estes são **contratos/descrições**, não uma alegação de ACL ou integração implantada. Cada conexão de IA, autorização real e replay tipado precisa de contraprova no consumidor existente. Não abrir outro PR de runtime concorrendo com a #1804.
 
 **NEXT_CURSOR:** testar o componente no mesmo SHA; quando elegível, promover pela via Git existente; comprovar publicação visual autenticada no `/sala-controle`; reconciliar o consumidor cognitivo da #1804 pelo seu writer atual e só declarar E2E quando o Hermes realmente executar e devolver receipts para as superfícies consultivas.
+
+**NEXT_CURSOR:** ⚠️ testar o componente no mesmo SHA; quando elegível, promover pela via Git existente; comprovar publicação visual autenticada no `/sala-controle`; reconciliar o consumidor cognitivo da #1804 pelo seu writer atual e só declarar E2E quando o Hermes realmente executar e devolver receipts para as superfícies consultivas.
+
+---
+
+## 📌 Proof Anchor & Receipt
+
+| Item | Status | Link |
+|------|--------|------|
+| Owner | Reference | `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md` |
+| Canonical | Linked | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0) |
+| This Session | Recorded | `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md` (2026-10-08) |
+| Skill | Candidate | `.agents/skills/kaizen-sistema-um/SKILL.md` |
+| Proof | Awaiting | Runtime test in #1804 (Hermes consumer) |

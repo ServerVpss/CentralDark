@@ -1086,4 +1086,3 @@ O CHEFE autorizou a promoção **documental integral** do PR #1785. A transcriç
 **Exemplo discriminante que motivou o registro:** cadastro repetido no Supabase, Gmail sem confirmação recém-recebida, Casa/GitHub com contexto e VPS com middleware SSR sem variáveis — cinco sinais reconciliados levaram ao **menor ajuste de ambiente** do cockpit, sem alterar autorização administrativa. Registro de execução específico já fica em `apps/instinto-superior/README.md` (12/10/2026). Não promover `ADMIN_LOGIN_E2E` até teste da sessão no navegador.
 
 **PROVA deste item:** somente documentação versionada + readback GitHub do SHA deste registro; aplicação automática a todos os agentes e cinco conectores vivos em execução futura permanece `UNKNOWN` até contraprova. `NEXT_CURSOR=CONSUMIR_O_PREFLIGHT_PERTINENTE_NA_PROXIMA_MISSAO_SEM_REDESCOBRIR_CONTRATOS`.
-

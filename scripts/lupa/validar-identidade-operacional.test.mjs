@@ -756,6 +756,17 @@ test("segunda camada exige Action e container imutáveis", () => {
   );
 });
 
+test("badge de workflow do próprio repositório não é embed externo novo; imagem de outro host continua bloqueada", () => {
+  const own = "| `x.yml` | [![x.yml](https://github.com/ServerVpss/CentralDark/actions/workflows/x.yml/badge.svg)](https://github.com/ServerVpss/CentralDark/actions/workflows/x.yml) |";
+  const foreign = "![x](https://example.invalid/badge.svg)";
+  const otherRepo = "![x](https://github.com/Outro/Repo/actions/workflows/x.yml/badge.svg)";
+  const embed = (text) => validateGenericAddedText(text, "docs/STATUS-BADGES.md", 22)
+    .some((finding) => finding.code === "EXTERNAL_DELTA_REMOTE_EMBED");
+  assert.equal(embed(own), false);
+  assert.equal(embed(foreign), true);
+  assert.equal(embed(otherRepo), true);
+});
+
 test("segunda camada bloqueia dependência, embed e busca Git externos", () => {
   const remoteEmbed = ["<scr", "ipt src=\"https://example.invalid/x.js\"></script>"].join("");
   const remoteGit = ["git cl", "one https://example.invalid/outside.git"].join("");
@@ -860,9 +871,11 @@ test("fronteira limpa permanece verde e integra o gate canônico", () => {
 test("bot injeta contrato operacional canonico de merge/deploy/fixed-point", () => {
   const { montarContexto, _internals } = require("../../apps/bot-telegram/contexto-centraldark.cjs");
   const contrato = _internals.contratoOperacionalCanonico();
-  assert.match(contrato, /AUTO_SQUASH_IF_CLEAN=PROVEN/);
-  assert.match(contrato, /NO_HUMAN_REASK_FOR_MERGE=PROVEN/);
+  // Forma vigente na LEIA-ME-IA.md (o bot lê do owner; não existe mais o sufixo "=PROVEN").
+  assert.match(contrato, /Merge-Policy: AUTO_SQUASH_IF_CLEAN/);
+  assert.match(contrato, /NO_HUMAN_REASK_FOR_MERGE=true/);
   assert.match(contrato, /MERGED != DEPLOYED/);
-  assert.match(contrato, /REALITY_JUDGE .* FIXED_POINT/);
-  assert.match(montarContexto(), /CONTRATO OPERACIONAL CANONICO/);
+  assert.match(contrato, /REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true/);
+  assert.match(contrato, /FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE=true/);
+  assert.match(montarContexto(), /CONTRATO OPERACIONAL CAN[OÔ]NICO/);
 });

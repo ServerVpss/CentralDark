@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: 🔍 Select changed receipt-like markdown files
         id: changed
@@ -30,7 +30,10 @@ jobs:
           set -euo pipefail
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             BASE="origin/${{ github.base_ref }}"
-            git fetch origin "${{ github.base_ref }}" --depth=1
+            # fetch-depth:0 no checkout já traz o histórico completo; um fetch raso aqui
+            # reintroduziria "no merge base" quando o HEAD é um commit de merge (branch
+            # com merges periódicos de main), caso real medido em 2026-10-07.
+            git fetch origin "${{ github.base_ref }}"
             git diff --name-only "$BASE"...HEAD > /tmp/changed.txt
           else
             git diff --name-only HEAD~1 HEAD > /tmp/changed.txt

@@ -107,7 +107,7 @@ echo ""
 # 7. Salvar resumo
 say "=== Gerando resumo ===" > "$REVISAO_DIR/resumo.md"
 echo "# Run-Once 012: Sincronizar Contatos e Mensagens" >> "$REVISAO_DIR/resumo.md"
-echo "Data: $(date '+%Y-%m-%d %H:%M:%S')" >> "$REVISAO_DIR/resumo.md"
+echo "Data: $(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')" >> "$REVISAO_DIR/resumo.md"
 echo "" >> "$REVISAO_DIR/resumo.md"
 echo "## Resultado" >> "$REVISAO_DIR/resumo.md"
 echo "- Conexão: ${CONN_ID}" >> "$REVISAO_DIR/resumo.md"

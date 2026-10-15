@@ -115,7 +115,9 @@ function statusPM2() {
         const nomes = [...raw.matchAll(/"name"\s*:\s*"([^"]+)"/g)].map(m => m[1]);
         if (nomes.length) return { total: nomes.length, exemplos: nomes.slice(0, 5) };
       }
-    } catch (_) {}
+    } catch (erro) {
+      console.warn('[contexto-centraldark] leitura de config PM2 falhou:', erro && erro.message);
+    }
   }
   return null;
 }
@@ -131,12 +133,18 @@ function contratoOperacionalCanonico() {
     'CURRENT_REALITY_REQUIRES_RECONCILIATION',
     'DIVERGENT_READERS_REQUIRE_RENDEZVOUS',
     'SENSOR_FAILURE_IS_WORLD_FAILURE',
+    // merge/deploy/fixed-point: o bot lê da LEIA-ME-IA.md vigente, não de cópia.
+    'NO_HUMAN_REASK_FOR_MERGE',
+    'REALITY_VERIFIES_EFFECT_NOT_PERMISSION',
+    'FIXED_POINT_IS_VERIFICATION_CHECKPOINT_NOT_LEARNING_GATE',
   ]);
   const linhas = raw.split('\n').filter((linha) => {
+    const t = linha.trim();
+    if (t === 'MERGED != DEPLOYED' || t.startsWith('Merge-Policy:')) return true;
     const i = linha.indexOf('=');
     return i > 0 && chaves.has(linha.slice(0, i).trim());
   });
-  return linhas.length ? linhas.join('\n') : null;
+  return linhas.length ? [...new Set(linhas.map((l) => l.trim()))].join('\n') : null;
 }
 
 // =========================================================================
@@ -345,6 +353,7 @@ module.exports = {
   registrarAprendizadoPermanente,
   // exports pra testes
   _internals: {
+    contratoOperacionalCanonico,
     podePromoverAprendizado,
     canonicalJson,
     assinarReceiptAprendizado,

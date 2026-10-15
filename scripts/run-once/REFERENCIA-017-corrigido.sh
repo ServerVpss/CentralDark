@@ -20,7 +20,7 @@ GATEWAY_SRC="$CLONE_DECK/apps/crm/atendimento-whatsapp-gateway-deploy/gateway"
 GATEWAY_DST="/root/Multizap/gateway"
 PUBLIC_ROOT="/var/www/multizap"
 REV="/root/Multizap/revisoes/$(date +%Y%m%d-%H%M%S)/sync-vps-seguro"
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+TIMESTAMP=$(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')
 LOG_PREFIX="[ref-017]"
 STATUS_FINAL="ok"  # muda para "falha" se algo crítico quebrar
 

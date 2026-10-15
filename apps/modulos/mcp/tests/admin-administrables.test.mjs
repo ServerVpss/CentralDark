@@ -23,7 +23,7 @@ async function declaredAdministrableCommands() {
   const commands = new Set();
   for (const file of tracked) {
     const text = await readFile(join(repoRoot, file), 'utf8');
-    const canonical = file === 'LEIA-ME-IA.md' || /^status:\s*["']?CAN[OÔ]NICO["']?/im.test(text.slice(0, 900));
+    const canonical = file === 'LEIA-ME-IA.md' || /^status:\s*["']?(?:CAN[OÔ]NICO|CANONICAL)["']?/im.test(text.slice(0, 900));
     if (!canonical) continue;
     for (const match of text.matchAll(MARKER)) commands.add(match[1]);
   }

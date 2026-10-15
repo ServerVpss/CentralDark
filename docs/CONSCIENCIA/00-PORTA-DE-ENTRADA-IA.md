@@ -527,6 +527,9 @@ Regras:
 | Parceiro de Delta + Judge | `docs/ARQUITETURA/PADRAO-PARCEIRO-DELTA-JUDGE.md` |
 | Promoção canônica | `.github/workflows/autonomia-promocao.yml` |
 | Pendências | `docs/PENDENCIAS.md` |
+| Biblioteca cognitiva (fontes, skills, grafo) | `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md` |
+| História do CHEFE (mapa vivo de evolução) | `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/HISTORIA-CHEFE.md` |
+| Pontos & níveis do CHEFE (progressão simbólica) | `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md` |
 | Estado curto | `LEIA-ME-IA.md` + este arquivo |
 
 ## Autoridade e ações sensíveis

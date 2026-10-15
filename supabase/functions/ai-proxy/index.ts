@@ -446,6 +446,7 @@ async function proxyAudioSpeech(req: Request, lovableKey: string) {
   const voice = typeof body?.voice === "string" && body.voice ? body.voice : "alloy";
   const input = typeof body?.input === "string" ? body.input : "";
   if (!input.trim()) return json({ error: "campo 'input' obrigatório" }, 400);
+  if (input.length > 4096) return json({ error: "input_too_long", max_chars: 4096 }, 400);
 
   const upstream = await fetch(`${GATEWAY_BASE}/audio/speech`, {
     method: "POST",
@@ -460,7 +461,7 @@ async function proxyAudioSpeech(req: Request, lovableKey: string) {
   if (upstream.status === 402) return json({ error: "sem_creditos" }, 402);
   if (!upstream.ok) {
     const t = await upstream.text();
-    return json({ error: "gateway_error", status: upstream.status, detail: t.slice(0, 500) }, 502);
+    return json({ error: "gateway_error", status: upstream.status, detail: t.slice(0, 500) }, upstream.status >= 500 ? 502 : upstream.status);
   }
 
   const contentType = upstream.headers.get("Content-Type") ?? "audio/mpeg";

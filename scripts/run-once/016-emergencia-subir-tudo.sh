@@ -7,7 +7,7 @@ set -uo pipefail
 CLONE_DECK="/root/Multizap/apps/clone-deck"
 LOG="/var/log/clone-deck-post-deploy.log"
 
-log() { echo "[$(date '+%H:%M:%S')] $*" | tee -a "$LOG"; }
+log() { echo "[$(TZ=America/Sao_Paulo date '+%H:%M:%S')] $*" | tee -a "$LOG"; }
 
 log "=== 016: EMERGENCIA - Subir tudo ==="
 

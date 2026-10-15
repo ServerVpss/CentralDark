@@ -8,7 +8,7 @@ mkdir -p "$REV/logs"
 {
   echo "# Diagnóstico Telegram / Guarda"
   echo
-  echo "Data: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "Data: $(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')"
   echo
   echo "## Objetivo"
   echo "Verificar por que o bot Telegram ainda responde com fluxo antigo e não mostra o botão Guarda."

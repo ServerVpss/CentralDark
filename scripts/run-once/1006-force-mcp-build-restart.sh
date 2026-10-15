@@ -11,7 +11,7 @@ log() { echo "$*" | tee -a "$OUT/resumo.txt"; }
 log "════════════════════════════════════════════════════════"
 log "== FORCE MCP BUILD + RESTART (run-once seguro v3) =="
 log "Relatório: $OUT"
-log "Data: $(date '+%Y-%m-%d %H:%M:%S')"
+log "Data: $(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')"
 log "Branch: $(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'unknown')"
 log "Commit HEAD: $(git rev-parse --short HEAD 2>/dev/null || echo 'unknown')"
 log "════════════════════════════════════════════════════════"
