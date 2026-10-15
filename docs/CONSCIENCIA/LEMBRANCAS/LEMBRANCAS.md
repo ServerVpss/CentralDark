@@ -1471,3 +1471,11 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - 🟢 **Conquista:** 5 merges reais provados com SHA, zero regressão nova introduzida.
 - 📌 **Prova:** PRs #1822, #1821, #1820, #1808, #1774 todos com `state=MERGED` e `mergeCommit` confirmados via `gh pr view --json`.
 - 🎯 **Próximo passo:** destravar os 9 PRs CONFLICTING um por um (rebase + resolução + CI real).
+
+
+### Continuidade de memória — 2026-10-15 — PR #1793 e resolvedor único
+- O CHEFE mandou continuar a resolução autônoma dos conflitos e registrar tanto os Aprendizados quanto as Lembranças, preservando as origens.
+- Em execução observada na PR #1793: oito conflitos, cinco `BOTH` e três `YELLOW`; resultado exit 20, sem push de resolução; recibo GitHub `6184580363`.
+- O próprio arquivo `LEMBRANCAS.md` teve vinte e cinco blocos avaliados (cinco diferentes preservados, vinte idênticos); `APRENDIZADOS.md` teve quinze (quatorze diferentes preservados, um idêntico). Resultado local transitório, não fixação de merge.
+- Reutilizar motor `scripts/dependabot/resolve-conflicts.sh`, classificador e registry, com escritor único por escopo. Conflitos JSON/YAML desconhecidos exigem decisão semântica e contraprova antes de push.
+- **NEXT_CURSOR:** resolver os três arquivos estruturados da PR, preservar Aprendizados/Lembranças e comprovar gates e readback no SHA final. Não criar resolvedor paralelo.
