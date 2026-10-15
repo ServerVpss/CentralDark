@@ -146,7 +146,25 @@ run_pulse() {
 branch=$(git symbolic-ref --quiet --short HEAD) || blocked "detached HEAD; no checkout mutation"
 before=$(git rev-parse --verify HEAD) || blocked "HEAD unavailable"
 # Tracked edits belong to another writer and remain fail-closed.
-[[ "$branch" == "main" ]] || blocked "branch=$branch is not main; reconcile with owner; HEAD=$before"
+# Source-only bridge for active Forge branches. Fetches ONLY Git refs/objects; it
+# does not check out, merge, stage, deploy, restart or run the main-pulse microdeploy.
+# The canonical scratch worktree belongs exclusively to main-pinned-microdeploy
+# (which resets/cleans it) and must never become a persistent sync checkout.
+if [[ "$branch" != "main" ]]; then
+  tracked_count="$(git status --porcelain=v1 --untracked-files=no | wc -l | tr -d '[:space:]')"
+  if ! git fetch --quiet origin main; then
+    blocked "SOURCE_FETCH_FAILED; branch=$branch preserved; HEAD=$before"
+  fi
+  remote="$(git rev-parse --verify refs/remotes/origin/main)" ||
+    blocked "SOURCE_REF_UNKNOWN; branch=$branch preserved; HEAD=$before"
+  [[ "$remote" =~ ^[0-9a-f]{40}$ ]] ||
+    blocked "SOURCE_REF_INVALID; branch=$branch preserved; HEAD=$before"
+  [[ "$(git rev-parse --verify HEAD)" == "$before" ]] ||
+    blocked "ACTIVE_HEAD_MOVED_DURING_SOURCE_FETCH; no checkout mutation"
+  log "SOURCE_ONLY" "REMOTE_MAIN_FETCH_PASS sha=$remote; branch=$branch head=$before tracked_count=$tracked_count; CHECKOUT_PRESERVED=YES; RUNTIME_DEPLOY=UNKNOWN"
+  status "PARTIAL" "SOURCE_REF_SYNC_PASS; ACTIVE_BRANCH_PRESERVED=$branch; CHECKOUT_SYNC=BLOCKED; RUNTIME_DEPLOY=UNKNOWN"
+  exit 0
+fi
 [[ -z "$(git status --porcelain --untracked-files=no)" ]] || blocked "tracked changes owned elsewhere; HEAD=$before"
 
 # Untracked runtime scopes are preserved automatically so they cannot stall the
