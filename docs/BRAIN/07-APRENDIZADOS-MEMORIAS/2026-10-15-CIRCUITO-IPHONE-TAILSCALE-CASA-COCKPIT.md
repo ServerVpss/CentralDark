@@ -67,7 +67,7 @@ A rota não tem `funnel` público. O navegador do iPhone deve ter Tailscale cone
 
 ## Equivalentes canônicos, sem segunda memória
 
-- Arquitetura física e sync: [Hermes Casa + Obsidian](../../../ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md).
+- Arquitetura física e sync: [Hermes Casa + Obsidian](../../ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md).
 - Mapa Obsidian/BRAIN: [Mapa Obsidian — BRAIN](../00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md).
 - Ledger/GOAL e continuidade: [PR #1832](https://github.com/ServerVpss/CentralDark/pull/1832).
 - Não criar outro bot, proxy, API, vault ou HUD. Memória é arquivo Markdown indexado no vault BRAIN; contrato do sincronizador atual continua prevalecendo.
