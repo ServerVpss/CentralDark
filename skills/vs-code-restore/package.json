@@ -1,7 +1,7 @@
 {
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark VS Code Restore",
-  "description": "Restaura a bancada e reutiliza o terminal existente como entrada ZENDRIVE CLI, com telemetria sanitizada.",
+  "description": "Restaura bancada, reutiliza terminal existente e exibe trace sanitizado no VS Code Saída.",
   "version": "0.1.1",
   "publisher": "centraldark",
   "private": true,
@@ -28,6 +28,10 @@
       {
         "command": "centraldark.zendriveCli",
         "title": "CentralDark: ZENDRIVE CLI (terminal existente)"
+      },
+      {
+        "command": "centraldark.showTrace",
+        "title": "CentralDark: Mostrar Trace (Saída)"
       }
     ],
     "configuration": {
