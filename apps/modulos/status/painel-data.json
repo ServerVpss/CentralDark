@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(vscode-restore): alinhar acessibilidade por voz ao foco e skills existentes",
+    "lastCommit": "feat(vscode): comando da paleta com nome acessivel para voz",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T14:07:34.400Z",
+      "titulo": "Push na main · d5b5d5b54d30e728b260853733a212cf7f61078c",
+      "detalhe": "feat(vscode): comando da paleta com nome acessivel para voz",
+      "area": "Repositório",
+      "sha": "d5b5d5b",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T14:05:52.211Z",
       "titulo": "Push na main · a606714a23c8ac22ed9b06c3eaa693287461b192",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "cf020fd",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T19:11:56.006Z",
-      "titulo": "Push na main · 01d4f00618dce97ef2b5d9e773f64c4b43efac5f",
-      "detalhe": "🎼 chore(vscode): empacotar skill nativa sem snapshots locais nem dependencias",
-      "area": "Repositório",
-      "sha": "01d4f00",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T14:07:34.400Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · d5b5d5b54d30e728b260853733a212cf7f61078c (d5b5d5b)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T14:05:52.211Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · cf020fd3e58be9e92915036fe1ae45a4b77a1c5b (cf020fd)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T19:11:56.006Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 01d4f00618dce97ef2b5d9e773f64c4b43efac5f (01d4f00)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T14:05:52.211Z",
-  "updatedAtBR": "15/10/2026, 11:05:52 BRT"
+  "updatedAt": "2026-10-15T14:07:34.400Z",
+  "updatedAtBR": "15/10/2026, 11:07:34 BRT"
 }
