@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(trigger-fabric): restaurar JSON dos 166 fluxos sem remover provas canônicas",
+    "lastCommit": "fix(porta): distinguir owner tipado de caminho e runtime externo ao Git",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T17:25:41.129Z",
+      "titulo": "Push na main · 6752f4a592e761b0be892ba89dc272d56c7c15cd",
+      "detalhe": "fix(porta): distinguir owner tipado de caminho e runtime externo ao Git",
+      "area": "Repositório",
+      "sha": "6752f4a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T17:22:44.225Z",
       "titulo": "Push na main · 1d967a1bd9e2756dd39d38173aa9b45af8332509",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "fd11de7",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T01:11:48.446Z",
-      "titulo": "Push na main · c3e81cbeb528f111509ff6035f148d248cc8b33a",
-      "detalhe": "docs(comunicacao): diferenciar contexto de ordem antes de executar",
-      "area": "Repositório",
-      "sha": "c3e81cb",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T17:25:41.129Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6752f4a592e761b0be892ba89dc272d56c7c15cd (6752f4a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T17:22:44.225Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · fd11de747a6b3bfb26894718abbc485035e598d7 (fd11de7)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T01:11:48.446Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · c3e81cbeb528f111509ff6035f148d248cc8b33a (c3e81cb)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T17:22:44.225Z",
-  "updatedAtBR": "15/10/2026, 14:22:44 BRT"
+  "updatedAt": "2026-10-15T17:25:41.129Z",
+  "updatedAtBR": "15/10/2026, 14:25:41 BRT"
 }
