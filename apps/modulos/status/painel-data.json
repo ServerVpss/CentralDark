@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧿 FIX(LUPA-CONFORMANCE): RECONCILIAR GUARD HASH DO META-LUPA/SKILL.MD (#1822)",
+    "lastCommit": "🪬 MAIN PULSE: MEDIR COBERTURA DE TODOS OS PARTICIPANTES E IMPEDIR FALSO VERDE (#1821)",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T03:46:21.299Z",
+      "titulo": "Push na main · 04448784a575ab820dc6b75e6c2c4a0832de777c",
+      "detalhe": "🪬 MAIN PULSE: MEDIR COBERTURA DE TODOS OS PARTICIPANTES E IMPEDIR FALSO VERDE (#1821)",
+      "area": "Repositório",
+      "sha": "0444878",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T03:32:56.390Z",
       "titulo": "Push na main · e39a092d6ab174da5ca0da677358cd16e3500ace",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "25e512c",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T17:59:13.806Z",
-      "titulo": "Push na main · 61c9b53e4a33d16441d0a832d7538a8574fa0ec5",
-      "detalhe": "🧾 receipt(vscode): selar orquestra 4 vozes e manter runtime Windows UNKNOWN",
-      "area": "Repositório",
-      "sha": "61c9b53",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T03:46:21.299Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 04448784a575ab820dc6b75e6c2c4a0832de777c (0444878)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T03:32:56.390Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 25e512c4431355890fcb9503bf934ba3fd89b351 (25e512c)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T17:59:13.806Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 61c9b53e4a33d16441d0a832d7538a8574fa0ec5 (61c9b53)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T03:32:56.390Z",
-  "updatedAtBR": "15/10/2026, 00:32:56 BRT"
+  "updatedAt": "2026-10-15T03:46:21.299Z",
+  "updatedAtBR": "15/10/2026, 00:46:21 BRT"
 }
