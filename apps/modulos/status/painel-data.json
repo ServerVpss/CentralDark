@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🪬 INSTINTO SUPERIOR · CRISTAL DOS PAPÉIS + CIRCUITO GPT/CODEX ↔ HERMES ↔ CLAUDE (#1806)",
+    "lastCommit": "docs: checklist de validação — Instinto Superior no CentralDark.exe",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,22 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T06:31:12.169Z",
+      "titulo": "Push na main · cfd6ee661a6b8885938ed73c1d02a76f83abb687",
+      "detalhe": "docs: checklist de validação — Instinto Superior no CentralDark.exe",
+      "area": "Repositório",
+      "sha": "cfd6ee6",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-15T06:27:16.965Z",
+      "titulo": "Push na main · fdc418e889990237ba9bf3fe2599fd00988debeb",
+      "detalhe": "docs: mapa de feridas de escopo — HUD, Cockpit, Hermes (reconciliação pré-integração Instinto)",
+      "area": "Repositório",
+      "sha": "fdc418e",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T06:20:08.060Z",
       "titulo": "Push na main · 18b89e95c47a97edce2c03572c4f5ff395ceecbc",
@@ -393,25 +409,23 @@
       "area": "Repositório",
       "sha": "7e0842e",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T18:23:00.936Z",
-      "titulo": "Push na main · d60bf0373236d1c7a2b849c55fb68a5395dd8d29",
-      "detalhe": "fix(meta-lupa): impedir XP duplicado ao variar evidência do mesmo evento",
-      "area": "Repositório",
-      "sha": "d60bf03",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T18:21:52.288Z",
-      "titulo": "Push na main · e0dec3b360a3702a480e046785c806d1148614d7",
-      "detalhe": "docs(meta-lupa): integrar reflexão externa e XP por prova sem motor paralelo",
-      "area": "Repositório",
-      "sha": "e0dec3b",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T06:31:12.169Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · cfd6ee661a6b8885938ed73c1d02a76f83abb687 (cfd6ee6)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-15T06:27:16.965Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · fdc418e889990237ba9bf3fe2599fd00988debeb (fdc418e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T06:20:08.060Z",
       "ia": "@segredounlock",
@@ -747,20 +761,6 @@
       "action": "📌 Push na main · 7e0842e8dd73a6f036b1b37488f788dd3b69caaa (7e0842e)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T18:23:00.936Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d60bf0373236d1c7a2b849c55fb68a5395dd8d29 (d60bf03)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T18:21:52.288Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e0dec3b360a3702a480e046785c806d1148614d7 (e0dec3b)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T06:20:08.060Z",
-  "updatedAtBR": "15/10/2026, 03:20:08 BRT"
+  "updatedAt": "2026-10-15T06:31:12.169Z",
+  "updatedAtBR": "15/10/2026, 03:31:12 BRT"
 }
