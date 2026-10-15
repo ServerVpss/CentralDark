@@ -1474,7 +1474,6 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml#ORACLE_QUERY_SUBMITTED"
-        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     },
     {
@@ -1496,7 +1495,6 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml#ORACLE_RESPONSE_CAPTURED"
-        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     },
     {
@@ -1518,7 +1516,6 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml#ORACLE_SEND_FAILED"
-        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     },
     {
@@ -1980,8 +1977,6 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs"
-      }
-        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     },
     {
