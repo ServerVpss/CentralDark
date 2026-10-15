@@ -1,0 +1,142 @@
+import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import lineageJson from "../../../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json";
+
+type Node = {
+  uid: string;
+  title: string;
+  prev_uid: string | null;
+  next_uid: string | null;
+  legacy_learning_number: number;
+};
+type Lineage = {
+  genesis: Node;
+  nodes: Node[];
+  source_blob_sha: string;
+  audit: { learning_sections: number; missing_legacy_numbers: number[] };
+};
+const lineage = lineageJson as Lineage;
+const nodes = [lineage.genesis, ...lineage.nodes];
+const required = ["owner", "scope", "proof-key", "source-sha", "receipt", "readback", "observed-at", "next-cursor"] as const;
+const historicalSeals = [
+  "VPS Auto-Sync", "gh CLI VPS", "SSH Casa → VPS", "GitHub Fonte Canônica",
+  "Tailscale Mesh", "SHARED.zip Vault", "AionUI VPS", "CAS Cloud VPS",
+  "Hermes Desktop → Cockpit", "Screenpipe Casa", "HUD Corpo Único",
+  "One Heart VPS", "Runtime / Modelo VPS", "Hermes WebUI", "MCP CentralDark",
+] as const;
+
+/** Reaproveita o zone do Instinto Superior; não cria outro HUD ou executor. */
+export function HudDeterministico() {
+  const [cursor, setCursor] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
+  const integrity = useMemo(() => nodes.every((n, i) =>
+    i === 0 ? n.uid === "L000" && n.prev_uid == null :
+    n.prev_uid === nodes[i - 1].uid && nodes[i - 1].next_uid === n.uid
+  ) && nodes.at(-1)?.next_uid === "PENDING_NEXT_CURSOR", []);
+  useEffect(() => {
+    if (!playing || !integrity) return;
+    const id = window.setInterval(() => {
+      setCursor(previous => {
+        if (previous >= nodes.length - 1) { setPlaying(false); return previous; }
+        return previous + 1;
+      });
+    }, 180);
+    return () => window.clearInterval(id);
+  }, [playing, integrity]);
+  const item = nodes[cursor];
+  const done = integrity && cursor === nodes.length - 1;
+  const selectedNode = nodes.find(node => node.uid === selected);
+  const recipe = selectedNode ? [
+    "INTENCAO=NEUROLINK_OPERACIONAL",
+    "UID=" + selectedNode.uid,
+    "PREV=" + (selectedNode.prev_uid ?? "GENESIS"),
+    "NEXT=" + (selectedNode.next_uid ?? "PENDING_NEXT_CURSOR"),
+    "OWNER=HERMES_EXISTENTE",
+    "ESTADO=SOLICITACAO_NAO_ENVIADA",
+    "CRITERIO=READBACK_RECEIPT_CONTRAPROVA"
+  ].join("; ") : "";
+  return (
+    <section className="space-y-6" aria-label="HUD histórico integrado, selos e Gênesis">
+      <header className="panel p-6">
+        <p className="text-xs text-neon-blue">HUD CANÔNICO → ZONE EXISTENTE</p>
+        <h2 className="mt-2 text-2xl font-semibold">Selos · Cadeados · Gênesis</h2>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Capacidades documentais transferidas ao Instinto Superior. O arquivo docs/HUD/HUD.html
+          permanece como referência. Replay documental não é execução, deploy ou selo operacional.
+        </p>
+        <p className="mt-3 text-xs text-muted-foreground" role="status">
+          PARIDADE PARCIAL · Fonte NeuroLink: {lineage.audit.learning_sections} aprendizados
+          e Gênese L000. Migração de todos os sensores do HUD: em andamento.
+        </p>
+      </header>
+      <section className="panel p-6" aria-labelledby="cd-genesis-title">
+        <div className="flex flex-wrap justify-between gap-3">
+          <h3 id="cd-genesis-title" className="text-lg font-semibold">🪬 Gênesis → Fixed Point</h3>
+          <span className="text-xs text-muted-foreground" role="status">
+            {integrity ? (done ? "REPLAY DOCUMENTAL PASS" : "CONTINUIDADE DOCUMENTAL") : "BLOCKED_UID_INTEGRITY"}
+          </span>
+        </div>
+        <p className="mt-3 font-mono text-3xl text-gold" aria-live="polite">{item.uid}</p>
+        <p className="mt-2 text-sm">{item.title}</p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {item.prev_uid ?? "GÊNESE"} → {item.uid} → {item.next_uid}
+        </p>
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted" role="progressbar"
+          aria-label="Continuidade documental NeuroLink" aria-valuemin={0}
+          aria-valuemax={nodes.length - 1} aria-valuenow={cursor}>
+          <div className="h-full bg-neon-green" style={{ width: ((cursor / Math.max(1, nodes.length - 1)) * 100) + "%" }} />
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {cursor} / {nodes.length - 1} elos · UIDs preservados, inclusive duplicatas e lacunas históricas.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Button disabled={!integrity || done} onClick={() => setPlaying(true)}>▶ Reproduzir</Button>
+          <Button variant="outline" disabled={!integrity || done} onClick={() => { setPlaying(false); setCursor(i => Math.min(i + 1, nodes.length - 1)); }}>Uma batida</Button>
+          <Button variant="outline" onClick={() => setPlaying(false)}>Pausar</Button>
+          <Button variant="outline" onClick={() => { setPlaying(false); setCursor(0); setSelected(null); }}>Voltar à Gênese</Button>
+          <Button variant="outline" onClick={() => setSelected(item.uid)}>Receita do UID</Button>
+        </div>
+        {selectedNode && (
+          <div className="mt-5 rounded-lg border border-border p-4">
+            <p className="text-sm font-semibold">Hermes tipado · missão preparada</p>
+            <code className="mt-2 block break-all text-xs">{recipe}</code>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Somente prévia determinística, disponível sem IA. Nenhuma tarefa foi enviada
+              ou executada. O despacho real deve utilizar o Hermes Gateway autorizado.
+            </p>
+            <Button className="mt-3" variant="outline" onClick={() => {
+              if (typeof navigator !== "undefined" && navigator.clipboard) {
+                void navigator.clipboard.writeText(recipe).catch(() => {});
+              }
+            }}>Copiar missão tipada</Button>
+          </div>
+        )}
+      </section>
+      <section className="panel p-6" aria-labelledby="cd-seals-title">
+        <h3 id="cd-seals-title" className="text-lg font-semibold">🔒 Cadeados históricos · sem duplicação</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {historicalSeals.length} nomes recuperados do HUD legado. São registros históricos,
+          não selos de runtime promovidos automaticamente.
+        </p>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {historicalSeals.map(name => (
+            <div key={name} className="rounded-md border border-border px-3 py-2 text-sm">
+              <strong>{name}</strong>
+              <p className="text-xs text-muted-foreground">HISTÓRICO · CURRENT exige readback</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground">
+          Novo selo só é permitido com: {required.join(" · ")}.
+          Selar não dispara nova execução e não renumera Gênesis.
+        </p>
+      </section>
+      <p className="text-xs text-muted-foreground">
+        Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
+        source SHA {lineage.source_blob_sha.slice(0, 12)}.
+        Restante do HUD: sensores, API, telemetria e temas exigem correspondência e readback individual.
+      </p>
+    </section>
+  );
+}
