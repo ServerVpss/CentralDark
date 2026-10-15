@@ -215,7 +215,7 @@ Quando o PR apontado pelo HUD fechar, for concluído ou esgotar comentários, ca
 ### 2026-10-15 — iPhone SEGREDO / Tailscale / Cockpit (T1 do aparelho)
 
 - **Selo delimitado:** iPhone `Connected` à Casa por Tailscale e Safari exibindo a página CentralDark Instinto Superior; `C01–C05 = 5/5` dentro do escopo de abertura móvel.
-- **Receipt canônico:** [Circuito iPhone → Tailscale → Casa → Cockpit](../../BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md).
+- **Receipt canônico:** [Circuito iPhone → Tailscale → Casa → Cockpit](../BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md).
 - **Não provado:** role Admin/logon no Safari, sync de vault iOS, persistência após reboot. Nunca inferir autorização pelo IP.
 - **Owners preservados:** Vite `apps/instinto-superior/vite.config.ts`, Tailscale Serve da Casa; Vault visualizador fica loopback 5174, sem exposição do BRAIN.
 <!-- /CENTRALDARK_IPHONE_TAILSCALE_MOBILE_T1_20261015 -->
