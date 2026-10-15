@@ -106,3 +106,20 @@ Exemplo de acionamento:
 “Corrige esta soma Python” → trabalho de código normal; nenhuma das duas funções é obrigatória.
 
 Proveniência: função destilada da skill Skill Creator observada no ChatGPT Work em 2026-09-11, subordinada à governança da Casa.
+
+
+## 🎰🪡 Gaveta Forja do Instinto Superior — receitas numeradas e deduplicadas
+
+**Decisão CHEFE 2026-10-15:** no cockpit Instinto Superior, exibir **quantas skills/receitas/plugins/gavetas existem, suas origens e o estado medido**, com pesquisa e ordenação alfabética. Owner de execução permanece no Hermes/MCP; o catálogo é **visão de metadados do Skill Workshop, não novo servidor**.
+
+**Fonte canônica do Skill Workshop:** `.agents/skills/skill-workshop/sources.json` e `scripts/workshop.mjs` (6 fontes externas pinadas no inventário de 15/10), sem executar scripts externos em descoberta. Skill local = `.agents/skills/**/SKILL.md` e `skills/**/SKILL.md`; presença no Git **não prova skill carregada**. Gavetas derivadas da memória = `scripts/memory-linker/pattern-library.mjs`, seis categorias; conteúdo bruto privado não vai para o bundle web.
+
+**Projeção do Instinto:** `apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx` (GavetaForja reaproveitada em Infraestrutura e HUD) consome `apps/instinto-superior/src/data/forja-gaveta.snapshot.json` com `source.sha` explícito e rotula `SOURCE_ONLY`. No snapshot medido `0f2b35f390a8`, **999 SKILL.md** (incluindo 4 arquivo histórico), **3 fontes plugin no Git**, **6 gavetas**, **9 automações com campo receita**. **Receitas numeradas no cockpit = 9 receitas tipadas dessa coleção de automações, não a contagem total de procedimentos internos a cada skill.** Não somar categorias com denominadores diferentes.
+
+**Regra de evolução da receita após cada missão:** `EXECUTION_EVIDENCE → SAME_OWNER? → COMPARE_EXISTING_RECIPE → NO_NEW_INFORMATION_DROP_DUPLICATE | STITCH_ONLY_PROVEN_DELTA → TEST → RECEIPT → UPDATE_EXISTING_RECIPE_RECORD`. Execução sem prova gera `CANDIDATE`/ `UNKNOWN`; não gerar uma nova skill ou receita para cada comando, log ou descrição em chat. Reutilizar `automation_owners.id` como identidade estável para a receita tipada daquela capacidade e, quando uma nova capacidade for realmente distinta, estender o catálogo medido pela mesma geração/owner, com SHA novo e prova do incremento.
+
+**A-Z e números:** ordenar por `nome.localeCompare(nome, "pt-BR", {sensitivity: "base"})`, exibir `01/09` até `09/09`, campo de busca por nome/owner/receita/ID. O número é apenas índice **derivado da ordenação**, não ID, versão, permissão ou prova de runtime. Expor `snapshot_source_sha`; se `main` mudar, a contagem anterior permanece um snapshot histórico e deve ser remensurada antes de afirmar `CURRENT`.
+
+**Terminal VS Code/MCP:** catálogo mostra `RDC_DESKTOP_COMMANDER` e link para `skills/vs-code-restore/SKILL.md`, porém **não** deve afirmar `CLAUDE_SESSION_BOUND` ou `HERMES_RECEIVED` sem identificação do terminal, envio único e ACK. Não incluir output bruto de terminal/Screenpipe no frontend. A rota de sessão pertence ao owner atual, não a novo plugin.
+
+**FIXED_POINT:** demonstrar `SOURCE_COMMITTED` por commit/sha, depois `CI_PASS`, `BUILD_PASS`, `RUNTIME_UI_READBACK` e `SKILL_SYNC/LOADED` quando aplicável. Migrar o HUD histórico por mapeamento causal, sem apagar `docs/HUD/HUD.html` antes de paridade integral.
