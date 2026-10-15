@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(forge): 🧹 vassoura aponta para limpeza segura do worktree reutilizavel",
+    "lastCommit": "docs(operational): 🧹 incluir faxina de worktree no método existente",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,22 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T15:51:53.489Z",
+      "titulo": "Push na main · ef1fb274abc031dadef5d5d3fe29037b3db73e7a",
+      "detalhe": "docs(operational): 🧹 incluir faxina de worktree no método existente",
+      "area": "Repositório",
+      "sha": "ef1fb27",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-15T15:44:33.440Z",
+      "titulo": "Push na main · b9ae142aeec967f1a38b23448c842470a83ef483",
+      "detalhe": "docs(forge): 🧹 costurar faxina segura, checklist e readback ao scratch unico",
+      "area": "Repositório",
+      "sha": "b9ae142",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T15:38:53.061Z",
       "titulo": "Push na main · 6874a55087c32fd5aac9bd35d1a60ceab19495ec",
@@ -393,25 +409,23 @@
       "area": "Repositório",
       "sha": "19aa95b",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T22:13:35.964Z",
-      "titulo": "Push na main · ead26762fb38d5914e93943b2151ad67258e1b24",
-      "detalhe": "docs(receipt): lock Tailscale checkpoint and explicit permission boundary",
-      "area": "Repositório",
-      "sha": "ead2676",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T22:12:00.273Z",
-      "titulo": "Push na main · 01149aeebea2af8eeb97f79dbdcb0a6d48476353",
-      "detalhe": "test(meta-lupa): cover missing and delivered trace seal cases",
-      "area": "Repositório",
-      "sha": "01149ae",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T15:51:53.489Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · ef1fb274abc031dadef5d5d3fe29037b3db73e7a (ef1fb27)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-15T15:44:33.440Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b9ae142aeec967f1a38b23448c842470a83ef483 (b9ae142)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T15:38:53.061Z",
       "ia": "@segredounlock",
@@ -747,20 +761,6 @@
       "action": "📌 Push na main · 19aa95b474f562d08f902d63f21febe94e9e73c4 (19aa95b)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T22:13:35.964Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ead26762fb38d5914e93943b2151ad67258e1b24 (ead2676)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T22:12:00.273Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 01149aeebea2af8eeb97f79dbdcb0a6d48476353 (01149ae)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T15:38:53.061Z",
-  "updatedAtBR": "15/10/2026, 12:38:53 BRT"
+  "updatedAt": "2026-10-15T15:51:53.489Z",
+  "updatedAtBR": "15/10/2026, 12:51:53 BRT"
 }

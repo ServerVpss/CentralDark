@@ -2944,7 +2944,7 @@ Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remot
 
 
 <!-- FORJA_VIVA_EMOJI_ALIAS_DELTA_FIXED_POINT_20261015 -->
-## 🔧 🛠️ 👨🏻‍🔧 👀 👁️ 🪡 🎄 🌞 🌟 ✨ ☄️ 🔥 🪛 ⚒️ — Forja Viva, aliases sob demanda
+## 🔧 🛠️ 👨🏻‍🔧 👀 👁️ 🪡 🎄 🌞 🌟 ✨ ☄️ 🔥 🪛 ⚒️ 🧹 — Forja Viva, aliases sob demanda
 
 **FIXED_POINT do CHEFE:** estágio corrente e satisfação aceitos; só abrir cadeado para DELTA útil provado. O estado antigo permanece histórico, não deve ser reconstruído a cada retomada. `#acordar → !calibrar → !CENTRALDARK` continua a forma curta de recuperar owner + SHA + última prova + NEXT_CURSOR.
 
@@ -2957,6 +2957,7 @@ Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remot
 - 🪡🎄 → preservar UIDs e aprendizagem; não renumerar Gênesis nem duplicar selos.
 - 🌞🌟✨ → retomar contexto e anunciar **🍒🎰🎲 Outra melhoria antecipada**, explicando ganho, uso, fonte/prova e cursor.
 - ☄️🔥⚒️ → compilar e preparar ZIP POMBO64 com manifesto/hash por comando **explícito** `npm run build:plugplay`, em ambiente de build autorizado e preferivelmente no volume K: vinculado à Forja; **nenhum emoji executa esse comando automaticamente**.
+- 🧹 → consultar o owner **já existente** `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`, inventariar alterações e confirmar receipt, efeito/main quando aplicável; limpar somente o **scratch descartável comprovado** com lock e realpath. Visual na Casa quando o CHEFE pedir. No checkout em trabalho: `KEEP_ACTIVE`.
 
 **Loop de código vivo, mas governado:** `DISCOVER_EXISTING_OWNER → READ_COMPATIBLE_RECIPE → DELTA_WITHIN_CAUSAL_CONE → TEST → COUNTERPROOF → RECEIPT → FIXED_POINT`. Quando houver outra melhoria independente, continuar só se não violar writer único, escopo/autorização e gates. `SOURCE_COMMITTED ≠ BUILD_PASS ≠ ZIP_PROVEN ≠ RUNTIME_DEPLOYED`. Comando visível em chat ≠ texto enviado ao terminal; `SEND_OK ≠ EXIT_0`. Nunca limpar worktree em uso.
 
