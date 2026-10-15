@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(porta): distinguir owner tipado de caminho e runtime externo ao Git",
+    "lastCommit": "☀️🪬 SOL_EXECUTORA: integrar contrato direto no owner e ponte Claude sem duplicar governança",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T18:52:11.039Z",
+      "titulo": "Push na main · a3417201f95b41f75eee702bcd6c45e85df61990",
+      "detalhe": "☀️🪬 SOL_EXECUTORA: integrar contrato direto no owner e ponte Claude sem duplicar governança",
+      "area": "Repositório",
+      "sha": "a341720",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T17:25:41.129Z",
       "titulo": "Push na main · 6752f4a592e761b0be892ba89dc272d56c7c15cd",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "6eab96c",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T01:15:25.697Z",
-      "titulo": "Push na main · fd11de747a6b3bfb26894718abbc485035e598d7",
-      "detalhe": "docs(operational-method): costurar feridas e selar metabolismo runtime sem novos owners",
-      "area": "Repositório",
-      "sha": "fd11de7",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T18:52:11.039Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a3417201f95b41f75eee702bcd6c45e85df61990 (a341720)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T17:25:41.129Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 6eab96cc7cacc6ff374888911b835f0c8c2d0353 (6eab96c)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T01:15:25.697Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · fd11de747a6b3bfb26894718abbc485035e598d7 (fd11de7)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T17:25:41.129Z",
-  "updatedAtBR": "15/10/2026, 14:25:41 BRT"
+  "updatedAt": "2026-10-15T18:52:11.039Z",
+  "updatedAtBR": "15/10/2026, 15:52:11 BRT"
 }

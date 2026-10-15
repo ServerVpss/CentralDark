@@ -40,6 +40,14 @@ MAIN_PINNED_FAST_PATH = docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-P
 HUB_CREDENTIAL_CONTROL_PLANE = MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md
 ```
 
+<!-- CENTRALDARK_SOL_EXECUTORA_DIRECT_20261015_BEGIN -->
+## ☀️🪬 Ponte SOL_EXECUTORA — consumo, não contrato paralelo
+
+`CANONICAL_DIRECT_EXECUTOR_BEHAVIOR=AGENTS.md#️sol_executora`
+
+O modo de execução direta, delta contínuo, backcheck, contraprova, rota alternativa autorizada e FIXED_POINT é regido pela seção **“SOL_EXECUTORA — contrato de comportamento direto e verificável”** no `AGENTS.md`, herdada de `RULES.md` e da SOUL. Claude Code e subagentes carregam o owner pertinente e seguem o mesmo contrato; não duplicar leis ou definir autonomia extra neste adapter. `REPO_UPDATED != VPS_SYNCED != PROMPT_LOADED != RUNTIME_PROVEN`. As demais interfaces somente herdam após vínculo/consumo efetivamente testados.
+<!-- CENTRALDARK_SOL_EXECUTORA_DIRECT_20261015_END -->
+
 Antes de agir:
 
 1. Recuperar a intenção vigente.
