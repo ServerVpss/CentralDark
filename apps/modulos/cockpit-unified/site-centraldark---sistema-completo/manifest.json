@@ -1,0 +1,15 @@
+{
+  "nome": "Site CentralDark - Sistema Completo",
+  "tipo": "react-spa",
+  "slug": "site-centraldark---sistema-completo",
+  "tema": "dark",
+  "criado": "2026-07-05T00:50:11.213Z",
+  "rotas": [
+    "/",
+    "/arsenal",
+    "/grafo",
+    "/missoes",
+    "/status"
+  ],
+  "descricao": "Site completo do ecossistema CentralDark com dashboard de agentes, status dos módulos PM2, grafo vivo, arsenal council, e painel de controle. Interface escura com tema neon verde, responsiva, com nave"
+}

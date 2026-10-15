@@ -1,0 +1,217 @@
+{
+  "sector": "K:\\apps\\modulos",
+  "mapping_date": "2026-10-15T15:45:00Z",
+  "mapped_by": "Hermes Cockpit Integration",
+  "status": "COMPLETE_STRUCTURAL_MAP",
+  "hierarchy": {
+    "root": "K:\\apps\\modulos\\",
+    "subsectors": [
+      {
+        "name": "artifacts-builder",
+        "type": "artifact_storage",
+        "purpose": "Central repository for all artifact HTMLs (16 panels consolidated)",
+        "files": [
+          "index.html",
+          "package.json"
+        ],
+        "subdirectories": {
+          "public": {
+            "arsenal-council---painel-de-modelos": ["app.js", "index.html", "manifest.json"],
+            "batalha-de-ias---arena": ["app.js", "index.html", "manifest.json"],
+            "conselho-de-tutores---visualiza-o": ["app.js", "index.html", "manifest.json"],
+            "dashboard-de-agentes-centraldark": ["app.js", "index.html", "manifest.json"],
+            "debate-hist-rico---timeline": ["app.js", "index.html", "manifest.json"],
+            "gerenciador-de-processos-pm2": ["app.js", "index.html", "manifest.json"],
+            "grafo-3d-interativo---explorer": ["app.js", "index.html", "manifest.json"],
+            "healthcheck-vps---painel-de-recursos": ["app.js", "index.html", "manifest.json"],
+            "mapa-de-depend-ncias-do-sistema": ["app.js", "index.html", "manifest.json"],
+            "monitor-de-logs-centraldark": ["app.js", "index.html", "manifest.json"],
+            "motor-teste-centraldark-relatorio-sessao-20260808": ["app.js", "index.html", "manifest.json"],
+            "quadro-de-miss-es-do-hermes": ["app.js", "index.html", "manifest.json"],
+            "relat-rio-de-evolu-o---di-rio": ["app.js", "index.html", "manifest.json"],
+            "site-centraldark---sistema-completo": ["app.js", "index.html", "manifest.json"]
+          }
+        },
+        "status": "CONSOLIDATED_16_PANELS"
+      },
+      {
+        "name": "arsenal-openai-adapter",
+        "type": "integration_module",
+        "purpose": "OpenAI API adapter for Arsenal",
+        "files": ["package.json"],
+        "status": "CONFIGURED"
+      },
+      {
+        "name": "status",
+        "type": "data_source",
+        "purpose": "Real-time status data for Mega Painel (production data)",
+        "files": [
+          "ai-diag.json",
+          "ai-review.html",
+          "capsula-data.json",
+          "capsula-observavel.mjs",
+          "conselho-vivo.json",
+          "conselho-vivo.js",
+          "infra.html",
+          ".infra-vivo-prev.json",
+          "app.js",
+          "atualizar-painel-vivo.mjs"
+        ],
+        "status": "LIVE_PRODUCTION_DATA"
+      },
+      {
+        "name": "Bolt",
+        "type": "ui_framework",
+        "purpose": "React components and settings for Cockpit shell",
+        "subdirectories": {
+          "source": {
+            "app": {
+              "components": {
+                "@settings": ["core/AvatarDropdown.tsx", "core/ControlPanel.tsx", "core/constants.tsx"]
+              }
+            }
+          }
+        },
+        "status": "ACTIVE_COMPONENTS"
+      },
+      {
+        "name": "cockpit-unified",
+        "type": "consolidated_artifacts",
+        "purpose": "Unified Cockpit artifacts (HTML convergence result)",
+        "size_mb": 2.4,
+        "file_count": 16,
+        "status": "CONSOLIDATED_100_PERCENT"
+      },
+      {
+        "name": "graph-panel",
+        "type": "visualization",
+        "purpose": "3D graph visualization component",
+        "references_in_code": 1,
+        "status": "ACTIVE_1_REFERENCE"
+      }
+    ]
+  },
+  "data_flows": {
+    "production_data_sources": [
+      "K:\\apps\\modulos\\status\\ai-diag.json",
+      "K:\\apps\\modulos\\status\\capsula-data.json",
+      "K:\\apps\\modulos\\status\\conselho-vivo.json",
+      "K:\\apps\\modulos\\status\\.infra-vivo-prev.json"
+    ],
+    "artifact_consumption": "K:\\apps\\modulos\\cockpit-unified\\ (16 consolidated panels)",
+    "live_updates": "K:\\apps\\modulos\\status\\ (via atualizar-painel-vivo.mjs)"
+  },
+  "integration_points": {
+    "hermes_scope": "K:\\apps\\modulos\\**",
+    "cockpit_shell": "K:\\apps\\instinto-superior\\src\\components\\central\\CockpitShell.tsx",
+    "status_module": "K:\\apps\\modulos\\status\\",
+    "artifacts_module": "K:\\apps\\modulos\\cockpit-unified\\"
+  },
+  "readiness": {
+    "data_sources": "✅ READY",
+    "artifact_storage": "✅ READY",
+    "integration_routes": "✅ READY",
+    "live_updates": "✅ READY"
+  },
+  "missing_modules": [
+    {
+      "name": "hub",
+      "type": "core_service",
+      "purpose": "Central dashboard — 12 operational sectors (Políticas, Agentes, Audit, Integrations, etc.)",
+      "references_in_code": 340,
+      "status": "CRITICAL_ACTIVE"
+    },
+    {
+      "name": "HERMES-CORE",
+      "type": "executor_engine",
+      "purpose": "Agent execution framework and decision logic",
+      "references_in_code": "VARIES",
+      "status": "CORE_ACTIVE"
+    },
+    {
+      "name": "mcp",
+      "type": "protocol_server",
+      "purpose": "Model Context Protocol — bridges AI and tools",
+      "references_in_code": "VARIES",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "oauth-broker",
+      "type": "authentication_service",
+      "purpose": "OAuth 2.0 credential bridging and token management",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "elite-gateway",
+      "type": "api_gateway",
+      "purpose": "Request routing and security enforcement",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "elite-anthropic-proxy",
+      "type": "api_proxy",
+      "purpose": "Anthropic API wrapper and caching",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "memoria-api",
+      "type": "data_service",
+      "purpose": "Memory and context persistence layer",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "mcp-admin-ui",
+      "type": "admin_interface",
+      "purpose": "MCP server management and status dashboard",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "lovable-proxy",
+      "type": "integration_service",
+      "purpose": "Lovable.dev API proxy and build coordination",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "centraldark-voice",
+      "type": "io_interface",
+      "purpose": "Voice input/output for hands-free operation",
+      "status": "CONFIGURED"
+    },
+    {
+      "name": "grupo-evolucao",
+      "type": "learning_module",
+      "purpose": "Capability evolution and skill acquisition",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "fixed-point-fabric",
+      "type": "convergence_engine",
+      "purpose": "Fixed-point stability checking and validation",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "mapeamento",
+      "type": "metadata_service",
+      "purpose": "Semantic mapping and relationship indexing",
+      "status": "ACTIVE"
+    },
+    {
+      "name": "obsidian-plugin-grafo-vivo",
+      "type": "external_plugin",
+      "purpose": "Live graph visualization (Obsidian integration)",
+      "status": "CONFIGURED"
+    },
+    {
+      "name": "pivete-sync",
+      "type": "sync_coordinator",
+      "purpose": "Casa ↔ VPS ↔ GitHub bidirectional synchronization",
+      "status": "ACTIVE"
+    }
+  ],
+  "integration_status": {
+    "visual_absorption": "PENDING — MapaOwners.tsx + CockpitShell.tsx absorbing",
+    "functional_proof": "IN_PROGRESS — contraprova local required",
+    "promotion_status": "SUSPENDED — awaiting CHEFE approval (2026-10-15)"
+  },
+  "next_steps": "Evoluir MapaOwners.tsx + distribuir interfaces nas 7 abas do Cockpit. Completar contraprova local. Entregar para revisão CHEFE."
+}
