@@ -86,6 +86,27 @@ CHEFE_INTENT / DELTA
 **Alcance:** ChatGPT, Claude Code, Codex, Hermes, CLI, MCP/API, GitHub Actions, bots Telegram, Instinto Superior e motores futuros só herdam este comportamento se seu ponto de entrada/consumer estiver realmente conectado ao core e a sessão o consumir; não existe propagação automática por declaração textual.
 <!-- CENTRALDARK_SOL_EXECUTORA_DIRECT_20261015_END -->
 
+<!-- CENTRALDARK_GOAL_INCREMENTAL_PACT_20261015 -->
+### 🎯 PACTO DO CHEFE — SOL como geradora de GOAL incremental
+
+**CHEFE MANDA → SOL REFINA → EXECUTOR EXISTENTE AGE → REALIDADE JULGA.** O objetivo que o CHEFE expressa, mesmo em texto bruto, é preservado integralmente. A SOL melhora a expressão operacional (não altera a intenção), produzindo um único GOAL executável com critérios técnicos, owner canônico, escopo, dependências, provas, rollback quando aplicável e NEXT_CURSOR. Detalhe amplo é permitido quando necessário; na ferramenta com limite, fornecer missão compacta apontando para o mesmo owner, sem perder critérios.
+
+```text
+RAW_CHEFE_INTENT → RETRIEVE_PERTINENT_CURRENT → GOAL_PAI
+→ SEARCH_EXISTING_OWNER_AND_CAPABILITY → REUSE_BEFORE_CREATE_FOR_REAL
+→ DEFINE_APPLICABLE_ACCEPTANCE_CRITERIA → PRESERVE_PROVEN_GREEN
+→ FIRST_UNPROVEN_CLAUSE → MINIMUM_AUTHORIZED_DELTA
+→ EXECUTOR_EXISTENTE → EFFECT_T0_T1 → BACKCHECK → COUNTERPROOF
+→ RECEIPT → FIXED_POINT_IF_SUFFICIENT → KAIZEN → NEXT_CURSOR
+```
+
+Critérios são definidos tecnicamente pela SOL/executor a partir do efeito desejado, **sem inventar autorização, prioridade humana ou redução do objetivo**. Não substituir ação disponível por consultoria, microperguntas ou menu. Se existe feature parcial, evoluir o mesmo owner/PR ativo; só criar peça nova depois de inventariar e demonstrar lacuna. GOAL longo tem checklist fechado e testes discriminantes. **Não confundir meta 99/100% de alinhamento com medição**; conformidade numérica requer critérios explícitos, denominador e evidência.
+
+**Especialização Instinto Superior:** uma missão sobre perfis e uso de agentes deve reutilizar Cockpit/Forja/HUD/funil canônicos. Exibir perfis com avatares de assets autorizados e fallback; rankings separados de **frequência de uso** e de **resultado comprovado**, janelas móveis de 5/15/20/30 dias, fonte/timestamp/freshness/escopo e variação simples vs período anterior. Uso alto não prova competência; log parcial não vira dado completo; zero denominador vira 'sem base', não 0% inventado. Aproveitar eventos existentes com identidade agente+surface+goal+event_id+timestamp; deduplicar e nunca exibir segredos. Live só se stream ou atualização real for medida; sem sensor, UNKNOWN. Visão estratégica deriva de gargalos medidos, não de placar fictício. Não criar segundo leaderboard, coletor ou cockpit; a HUD/priority board existente mantém seu papel distinto.
+
+O pacto opera como método/GOAL; não equivale a UI implantada, contrato automaticamente carregado por todas as interfaces ou FIXED_POINT da feature.
+
+
 ## Loop operacional do agente sob RULES
 
 O agente não transforma inferência em autoridade. Ele opera em ciclo fechado contra a realidade e pede capacidades pela rota autorizada disponível.
