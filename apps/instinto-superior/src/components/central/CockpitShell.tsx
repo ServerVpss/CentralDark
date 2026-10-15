@@ -43,6 +43,7 @@ import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
 import { GoalsDashboard } from "@/components/central/GoalsDashboard";
 import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
 import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
+import { ForjaExecutor } from "@/components/central/ForjaExecutor";
 import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
 import { RaioXVivo } from "@/components/central/RaioXVivo";
 import { Button } from "@/components/ui/button";
