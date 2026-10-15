@@ -191,6 +191,9 @@ export function GavetaForja() {
   const [categoria, setCategoria] = useState<(typeof CATEGORIAS_GAVETA)[number]>("Todas");
   const [pagina, setPagina] = useState(1);
   const [gavetaAberta, setGavetaAberta] = useState<string | null>(null);
+  const [automacaoAberta, setAutomacaoAberta] = useState<string | null>(null);
+  const [automacaoCopia, setAutomacaoCopia] = useState<"IDLE" | "COPIED" | "FAILED">("IDLE");
+  const automacaoAtual = gavetaCatalogo.automation_owners.find(x => x.id === automacaoAberta);
   const buscaNormalizada = busca.trim().toLocaleLowerCase("pt-BR");
   const filtradas = useMemo(() => gavetaCatalogo.skills.filter(item => {
     if (categoria !== "Todas" && item.gaveta !== categoria) return false;
@@ -361,6 +364,60 @@ export function GavetaForja() {
             Próxima →
           </button>
         </div>
+      </section>
+
+
+      <section className="panel p-5" aria-labelledby="forja-automation-owners">
+        <h5 id="forja-automation-owners" className="font-semibold">
+          🎰🫀🧠 Automações · owners e receitas do harness
+        </h5>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {gavetaCatalogo.automation_owners.length} pontes para capacidades existentes, sem outro scheduler.
+          Selecionar uma ponte exibe a receita e seu estado; copiar não significa enviar à sessão
+          de Hermes ou Claude Code. Ações de escrita/build exigem executor autorizado e readback.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {gavetaCatalogo.automation_owners.map(capacidade => (
+            <button key={capacidade.id} type="button"
+              aria-pressed={automacaoAberta === capacidade.id}
+              onClick={() => { setAutomacaoAberta(capacidade.id); setAutomacaoCopia("IDLE"); }}
+              className="rounded-md border border-border p-3 text-left text-sm hover:bg-muted/30">
+              <span>{capacidade.icone} {capacidade.nome}</span>
+              <p className="mt-1 text-xs text-muted-foreground">{capacidade.modo} · {capacidade.estado}</p>
+            </button>
+          ))}
+        </div>
+        {automacaoAtual && (
+          <div className="mt-4 space-y-2 rounded-lg border border-border p-4"
+            role="region" aria-label={"Receita da automação " + automacaoAtual.nome}>
+            <p className="font-semibold">{automacaoAtual.icone} {automacaoAtual.nome}</p>
+            <p className="break-all font-mono text-xs">OWNER: {automacaoAtual.owner}</p>
+            <p className="break-all font-mono text-xs">{automacaoAtual.receita}</p>
+            <p className="text-xs text-muted-foreground">
+              {automacaoAtual.estado} · {automacaoAtual.modo} · sem despacho automático
+            </p>
+            <a href={linkFonte(automacaoAtual.owner)}
+              className="text-xs text-neon-blue underline" target="_blank"
+              rel="noopener noreferrer">Consultar implementação original</a>
+            <div>
+              <button type="button" className="rounded-md border border-border px-3 py-2 text-xs"
+                onClick={() => {
+                  if (typeof navigator === "undefined" || !navigator.clipboard) {
+                    setAutomacaoCopia("FAILED");
+                    return;
+                  }
+                  void navigator.clipboard.writeText(automacaoAtual.receita)
+                    .then(() => setAutomacaoCopia("COPIED"))
+                    .catch(() => setAutomacaoCopia("FAILED"));
+                }}>📋 Copiar receita · não executar</button>
+            </div>
+            <p aria-live="polite" className="text-xs text-muted-foreground">
+              {automacaoCopia === "COPIED" ? "Copiada; terminal não recebeu a mensagem."
+                : automacaoCopia === "FAILED" ? "Cópia indisponível; receita continua visível."
+                : "Apenas seleção; requer despacho na rota real e receipt."}
+            </p>
+          </div>
+        )}
       </section>
 
       <section className="grid gap-4 md:grid-cols-2" aria-label="Catálogos e plugins da Forja">
