@@ -62,6 +62,7 @@ export function ObservabilidadeCentralDark() {
     retry: false,
   });
   const d = q.data;
+  const medidoEm = q.dataUpdatedAt > 0 ? new Date(q.dataUpdatedAt).toLocaleTimeString("pt-BR") : null;
   const unknown: Estado = "UNKNOWN";
   const sinais = [
     {
@@ -137,6 +138,9 @@ export function ObservabilidadeCentralDark() {
       icon: Monitor,
     },
   ];
+  const leituraFresca = Boolean(medidoEm) && Date.now() - q.dataUpdatedAt <= 45_000 && !q.isError;
+  const confirmados = leituraFresca ? sinais.filter((s) => s.estado === "PASS").length : 0;
+  const naoConfirmados = sinais.length - confirmados;
 
   return (
     <section aria-labelledby="observabilidade-centraldark-title">
@@ -156,6 +160,23 @@ export function ObservabilidadeCentralDark() {
         <Button variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
           <RefreshCw className={q.isFetching ? "animate-spin" : ""} /> Atualizar
         </Button>
+      </div>
+
+      <div className="mt-6 rounded-xl border border-neon-blue/30 bg-neon-blue/5 p-4" aria-live="polite">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <strong className="text-sm">🫀 Pulso atual · Instinto Superior</strong>
+          <span className="font-mono text-xs text-muted-foreground">
+            {leituraFresca ? `Consulta concluída às ${medidoEm}` : "STALE / SEM MEDIÇÃO FRESCA"}
+          </span>
+        </div>
+        <p className="mt-2 text-sm">
+          {leituraFresca ? `${confirmados}/${sinais.length} sinais PASS medidos` : "Nenhum PASS promovido sem leitura atual"}
+          {` · ${naoConfirmados} sinais sem PASS nesta leitura`}
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Consulta dos owners existentes a cada 15 segundos. Somente estado atual: sem copiar histórico do HUD,
+          sem transformar dado antigo em verde e sem segundo monitor.
+        </p>
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
