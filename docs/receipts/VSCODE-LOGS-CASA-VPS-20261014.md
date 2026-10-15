@@ -85,3 +85,40 @@ A tentativa de `echo ZENDRIVE_CLI_PING_1015` no Bash remoto teve foco e Enter en
 ## 15/10 — shell_start/shell_end nativos no funil
 
 A fonte `K:\TEMP\logs\LOGS-VS-CODE.log` recebeu mais dois eventos reais da extensão 0.1.1: `shell_start exit=unknown` (01:37:05.779Z) e `shell_end exit=ok` (01:37:05.792Z). Bytes `3028123 → 3028322`. Na VPS, `logs/sectors/vscode/2026-10-15.jsonl` registrou dois `vscode_log_signal key=vscode:terminal`, offsets `3028226` e `3028322`, heartbeat `accepted=2 duplicate=0 route=tailscale`; depois `accepted=0`. Isso comprova **pelo menos um ciclo shell_start/end capturado e ingerido**. O readback imediato após `echo` não havia mostrado evento; não vincular os dois eventos posteriores àquele comando sem correlação própria. Sem stdout nem comando em logs. 
+
+
+## FIXED_POINT — recuperação automática pós-boot, 15/10/2026 10h35–10h50 BRT
+
+**Intenção CHEFE:** preservar o que já funciona; programas fechados por escolha operacional não são falhas. Reusar esta prova no cockpit e na retomada, sem percorrer novamente toda a descoberta. Esta seção é um **receipt e contrato de observação**, não um novo coletor, daemon, serviço, HUD ou deploy.
+
+**Owners canônicos:** Casa \`SEGREDO\` → \`scripts/casa/vscode-log-bridge.ps1\` e tarefa \`CentralDark-VSCode-LogBridge\`; VPS → \`scripts/vps/ingest-vscode-log.mjs\` e \`apps/modulos/mcp/src/log-funnel.js\`; leitura pelo cockpit existente via API admin autenticada \`GET /admin/api/logs/LOGS-VS-CODE.log\`. A skill \`.agents/skills/centraldark-vscode-log-bridge/SKILL.md\` permanece na Forja, não se copia para a VPS.
+
+### Observação/contraprova direta
+
+- Boot Windows Casa: **2026-10-15 10:35:43.500 -03:00**. Desktop Commander \`SEGREDO\` primeiro OFFLINE e depois ONLINE, com reconexão medida. VPS \`CENTRALDARK-OS\` ONLINE por sua conexão Remote Desktop Commander.
+- Casa: \`explorer.exe=1\`, \`dwm.exe=1\`, \`Code=20\`, \`hermes=3\`, \`Windhawk=2\`, \`tailscaled=2\`; \`screenpipe-app.exe\` PID **30536** escutava na porta **3030**. PIDs e contagens são efêmeros, nunca usar como constantes de configuração.
+- \`CentralDark.exe=0\` e \`Telegram.exe=0\` na medição: **fechados por estado da sessão, NÃO falhas**. Não fazer auto-start ou alertar sem política/expectativa explícita de execução. Unigram pode ter nome de processo diferente; não inferir estado completo pelo nome Telegram.
+- Tailscale Casa inicialmente \`BackendState=NoState, Self.Online=false\`; após recuperação \`BackendState=Running, Self.Online=true\`. VPS \`tailscaled=active/enabled\`, \`BackendState=Running\`. Recuperação **medida**, sem reinício manual.
+- Fonte privada Casa \`K:\TEMP\logs\LOGS-VS-CODE.log\`: **3.033.370 bytes**; cursor VPS \`/root/CentralDark/logs/agent-patterns/vscode-casa-cursor.json\`: **3.033.370**. Igualdade do offset confirmou ingestão até EOF naquele instante; não prova entrega de futuros eventos.
+- VPS heartbeat de **2026-10-15T13:37:32.991Z**: \`route=ssh-direct,state=ATTENTION,accepted=1,offset=3032086\`. Em **13:47:59.969Z** e **13:48:37.863Z**: \`route=tailscale,state=OK,offset=3033370,accepted=0\`. Fallback direto manteve a trilha enquanto a Casa iniciava; retorno posterior ao caminho preferido. \`ATTENTION\` do fallback não equivale a indisponibilidade total.
+- Tarefa agendada Casa \`CentralDark-VSCode-LogBridge\` medida como \`Running\` durante execução; depois \`LastTaskResult=0\` e \`NextRunTime=2026-10-15T10:50:21-03:00\`. Preservar lançador invisível \`wscript.exe\`, usuário interativo e cadência existente; **não reinstalar** a tarefa no boot nem criar uma segunda.
+- VPS \`hermes-gateway.service=active\`; 4 serviços de runner GitHub Actions \`centraldark-vps-1..4\` ativos. \`buildkite-agent\` ausente não é falha dos runners GitHub. Não reiniciar processos Hermes apenas porque a UI não está aberta.
+- DNS da VPS para \`admin.centraldark.com\` retornou \`Could not resolve host\` nesta medição; a disponibilidade pública e o renderer Electron **NÃO foram comprovados**. Não promover \`SOURCE\` a \`UI_PROVEN\`.
+
+### Configuração selada para cockpit e retomadas futuras
+
+**Caminho único (não criar novo):** \`LOGS-VS-CODE.log\` Casa → tarefa agendada invisível → SSH sobre Tailscale preferencial, SSH direto aprovado como fallback → ingestão idempotente VPS → \`log-funnel.js\` → endpoint admin autenticado → seção de observabilidade do **cockpit existente**. Apenas metadados sanitizados; nunca publicar log bruto, tokens, sessões, prompts ou stdout.
+
+**Ordem curta de leitura pós-boot (somente se necessária):**
+1. Ler estado Desktop Commander Casa/VPS; \`OFFLINE\` transitório durante boot não é incidente sem janela de tolerância/contraprova.
+2. Conferir \`Tailscale BackendState/Self.Online\` na Casa e \`tailscaled\` na VPS. Uma rota indisponível não significa funil perdido; consultar \`route\` do heartbeat.
+3. Conferir \`LastTaskResult\` da tarefa existente e comparar **tamanho atual** da fonte privada Casa com **offset** do cursor VPS. Se houver atraso, considerar cadência de um minuto e revalidar antes de alarmar.
+4. Consultar heartbeat mais recente em \`logs/services/vscode/YYYY-MM-DD.jsonl\` e, quando disponível, a API admin autenticada; \`OK\` + cursor atualizado = **PASS do transporte naquele instante**, não PASS global do cockpit.
+5. Se necessário, consultar processos do VS Code/Hermes/Screenpipe por presença, sem abrir aplicativos voluntariamente fechados.
+6. Antes de sincronizar Git, preservar alterações locais: Casa \`main@951e241a50\`, **13 commits à frente / 179 atrás** de \`origin/main@0352b01278\`, **33 arquivos rastreados modificados** (6 staged, 27 unstaged); VPS \`fix/ai-andarilho-casa-bridge@c77e50195\`, **143 commits atrás / 0 à frente** da mesma \`main\`, **6 arquivos modificados**. Números são instantâneo, não valores fixos. Sem \`pull/reset/checkout\` sobre worktrees ativas sem reconciliação e owner único.
+
+**Contrato visual do cockpit (sobre o owner já existente):** apresentar \`Casa\`, \`VPS\`, \`Tailscale\`, \`Funil\`, \`Hermes\`, \`Screenpipe\`, \`Último ACK\`, \`Rota ativa\`, \`Offset\` e \`Freshness\` a partir das fontes autorizadas. Estado \`CLOSED_BY_CHOICE\` / \`NOT_REQUIRED\` para aplicativos não exigidos pela sessão, nunca vermelho automático. Se a API admin estiver indisponível, usar \`UNKNOWN\` e manter a UI intacta; **não simular conectividade**. Não é implementação de renderer: apenas especificação para o owner do cockpit.
+
+**Critério de conformidade:** objetivo **99,9%** é meta, não medição. Exige janela de observação definida, amostras reais, testes de recuperação, idempotência, privacidade, API admin autenticada e UI nativa comprovada; sem essas provas, \`CONFORMITY=NOT_MEASURED\`. \`FIXED_POINT=PARTIAL\` para o circuito Casa↔VPS; \`NEXT_CURSOR\`: cockpit owner integra a leitura ao HUD existente e comprova o runtime sem modificar a cadeia de coleta.
+
+**Restrições:** nenhum restart, autostart de apps opcionais, segundo funil, duplicação de Hermes, reconfiguração de Tailscale, publicação de dados brutos ou merge de PRs instáveis. \`OBSERVED != ASSUMED\`; \`MAIN_COMMITTED != DEPLOYED != UI_PROVEN\`.
