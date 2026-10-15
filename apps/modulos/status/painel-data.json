@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🧾 receipt(auto-sync): provar Direção 1 source-only sem deslocar Forja",
+    "lastCommit": "🧾 receipt(auto-sync): provar cron das 00:45 source-only sem deploy",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T00:47:53.752Z",
+      "titulo": "Push na main · 749e7578a79b89ff300a83868652661ec2ce0a2f",
+      "detalhe": "🧾 receipt(auto-sync): provar cron das 00:45 source-only sem deploy",
+      "area": "Repositório",
+      "sha": "749e757",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T00:45:52.153Z",
       "titulo": "Push na main · 48db33b154bdb08f9118a779dbebea403d714cde",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "31c16a7",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T16:46:49.398Z",
-      "titulo": "Push na main · 59b27c2074e03071936f77981e94d8fab0fb21bf",
-      "detalhe": "aprendizado(#173): Voz JARVIS e Hermes — melhorias candidatas de turn-taking",
-      "area": "Repositório",
-      "sha": "59b27c2",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T00:47:53.752Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 749e7578a79b89ff300a83868652661ec2ce0a2f (749e757)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T00:45:52.153Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 31c16a7d6bf421ae6c4f2676b2daa28a500348de (31c16a7)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T16:46:49.398Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 59b27c2074e03071936f77981e94d8fab0fb21bf (59b27c2)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T00:45:52.153Z",
-  "updatedAtBR": "14/10/2026, 21:45:52 BRT"
+  "updatedAt": "2026-10-15T00:47:53.752Z",
+  "updatedAtBR": "14/10/2026, 21:47:53 BRT"
 }
