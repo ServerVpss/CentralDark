@@ -92,7 +92,6 @@ UNKNOWN != PASS
 
 Quando houver conflito entre este arquivo e o registry, o registry vence para gatilhos. Este arquivo explica o uso visual humano.
 
-
 ## 🔧 Forja Viva — aliases visuais das capacidades existentes (2026-10-15)
 
 **FIXED_POINT:** o CHEFE aceitou a conformidade do estágio corrente. Melhorias posteriores não reabrem um cadeado selado sem um DELTA verificável. Este é o owner canônico de **significado visual**, não de execução. O registry de gatilhos `docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json` permanece a autoridade para comandos operacionais; emojis **não** concedem permissões, não são shell e não podem acionar processos automaticamente.
