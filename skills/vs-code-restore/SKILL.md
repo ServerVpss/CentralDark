@@ -156,3 +156,12 @@ O ponto fixo atual é **rota de envio demonstrada e documentação reutilizável
 - **Receita universal para ChatGPT/SOL, Hermes e outros executores autorizados:** localizar janela e terminal corretos → focar → enviar uma intenção → conferir retorno → registrar apenas metadados no mesmo funil → contraprova → recibo → próximo cursor. `SEND_OK != EXECUTION_PASS`; `SOURCE_COMMITTED != RUNTIME_ACTIVATED`.
 
 **Owners sem duplicação:** `skills/vs-code-restore` (UI/CLI); `.agents/skills/centraldark-vscode-log-bridge` (telemetria/receita); `apps/modulos/mcp/src/log-funnel.js` (ingestão); `apps/modulos/HERMES-CORE` (executor); `apps/modulos/elite-gateway` (provider Zendrive). PR de logs #1820 continua independente de merge/deploy.
+
+
+## Contraprova nativa da extensao na janela aberta — 15/10/2026
+
+- VS Code Casa PID volátil `26296`: Command Palette exibiu `CentralDark: ZENDRIVE CLI (terminal existente)`; `InvokePattern.Invoke()` do item de menu retornou sem erro. A interface voltou a focar `xterm-helper-textarea` (Terminal 9 Bash); nenhum novo terminal foi solicitado pelo comando.
+- **Readback direto do listener instalado:** `LOGS-VS-CODE.log` cresceu de `3028022` para `3028123` bytes com linha `[INFO] [terminal] centraldark.zendrive_cli event=cli_focus exit=unknown utc=...`. Conteúdo de comando/chat não foi registrado.
+- **Readback na VPS:** `logs/sectors/vscode/2026-10-15.jsonl` materializou `kind=vscode_log_signal key=vscode:terminal end_offset=3028123`; heartbeat `route=tailscale accepted=1 duplicate=0`; heartbeat seguinte `accepted=0`. **FOCO + EMISSAO NATIVA + INGESTAO NO FUNIL = PASS**, apenas para `cli_focus`.
+- Teste de `echo ZENDRIVE_CLI_PING_1015` enviado no Bash remoto teve foco/Enter enviados, porém **não** aumentou a fonte e **não** produziu `shell_start/shell_end`; provável ausência de integração de shell nesse terminal, mas a causa exata não foi provada. **CAPTURA UNIVERSAL DE COMANDOS = NOT_PROVEN**; saída do echo não foi capturada automaticamente.
+- A função de coordenação ChatGPT/SOL continua nesta conversa, não vira automaticamente API ChatGPT Premium. Hermes permanece executor oficial. Não duplicar Hermes nem criar leitor de stdout bruto.
