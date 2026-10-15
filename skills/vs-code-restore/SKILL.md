@@ -114,3 +114,31 @@ PASS|FAIL|UNKNOWN → RECEIPT → NEXT_CURSOR.
 - TypeScript da extensão: npm run compile, TSC_EXIT=0.
 - Comando instalado e todos os botões testados: UNKNOWN.
 - Não apagar artefatos locais existentes nem lançar outros executores.
+
+
+## 🪬 Operação direta do terminal integrado — prova e reutilização (15/10/2026)
+
+OWNER desta interação: a MESMA skill `skills/vs-code-restore`, extensão existente e Desktop Commander autorizado da Casa. Não criar segundo plugin, novo executor ou nova arquitetura. Hermes, ChatGPT e outros executores que tenham permissão para operar a Casa seguem esta receita; acesso autorizado continua obrigatório.
+
+### Rota demonstrada (Windows → VS Code → Bash da VPS)
+
+1. Identificar o processo `Code.exe` com `MainWindowHandle != 0`; não presumir janela ou terminal pelo índice histórico.
+2. Via Windows UIAutomation, inspecionar a árvore de `AutomationElement.FromHandle(MainWindowHandle)`; identificar o terminal ativo por `ClassName=xterm-helper-textarea` e `Name` iniciando com `Terminal N`. Na sessão observada foi `Terminal 9`, **não fixar esse número**.
+3. `SetFocus()` no elemento do terminal e ler `AutomationElement.FocusedElement` imediatamente antes de escrever; exigir `ClassName=xterm-helper-textarea` e nome correspondente. Se o foco estiver em `ProseMirror`, `Pergunte ao ChatGPT`, editor ou outro campo, **não enviar**.
+4. Digitar um comando por vez com `WScript.Shell.SendKeys`, seguido de `{ENTER}`; conferir foco entre comandos. Testar com `echo PING_...` e `echo PONG_...` antes de consultas read-only. Comandos que contenham `+`, `^`, `%`, `~`, `(`, `)`, `{`, `}`, `[` ou `]` exigem escaping adequado de SendKeys; para blocos complexos preferir arquivo/script aprovado e execução pelo terminal. **Não usar SendKeys como transporte fiel de scripts arbitrários sem contraprova**.
+5. Na sessão 15/10, foram enviados oito comandos de leitura ao terminal da VPS: hostname, pwd, date -u, systemctl is-active, ls, journalctl e delimitadores. O processo de envio concluiu sem erro; a saída individual desses oito comandos no terminal **não foi capturada automaticamente**. Foto fornecida pelo CHEFE anteriormente comprova execução visível de `echo PONG_CENTRALDARK_1015` no Bash `root@CENTRALDARK-OS`; também evidencia que `>`/`>>` sofreram fragmentação em uma tentativa.
+6. Se houver necessidade de provar resposta e desempenho, fazer readback por terminal/SSH autorizado e capturar recibo sanitizado, distinguindo explicitamente o caminho de observação. `SEND_OK != EXECUTION_PASS`; screenshot histórico != runtime atual. Não alterar prompt, sessões de IA ou diretórios do usuário por engano.
+
+### Log e recibo: encaixar no funil existente
+
+- Fonte bruta Casa: `K:\\TEMP\\logs\\LOGS-VS-CODE.log` (junção para `F:\\TEMP\\CentralDark`). Coletor existente `scripts/casa/vscode-log-bridge.ps1`, agendador `CentralDark-VSCode-LogBridge`, launcher invisível `scripts/casa/vscode-log-bridge-hidden.vbs`.
+- PR existente **#1820**, branch `feat/vscode-log-funnel-casa-20261014`, skill canônica `.agents/skills/centraldark-vscode-log-bridge/SKILL.md`; ingestão `scripts/vps/ingest-vscode-log.mjs` → owner `apps/modulos/mcp/src/log-funnel.js` → `events`, `sectors/vscode`, `services/vscode` → API admin autenticada.
+- Não assumir que os comandos do terminal já entram automaticamente no `LOGS-VS-CODE.log`: cobertura dessa fonte **UNKNOWN**. Não registrar comandos, chats, tokens, chaves, stdout bruto ou prompts. Registrar somente metadados sanitizados (tipo de ação, resultado, timestamp, owner, fingerprint, origem e próximo cursor), pelo mesmo funil quando a integração estiver comprovada.
+- Prova da Casa em 15/10: log de origem com 3.027.886 bytes, tarefa `Ready`/`LastTaskResult=0`/`wscript.exe`; dry-run `signals=0 offset=3027886->3027886`. Isso prova ausência de novos sinais **nessa fonte**, não captura das ações da sessão.
+- PR #1820 medido `OPEN`, `MERGEABLE`, `isDraft=false` no HEAD `fdb2a1a32c5ea5f656126ff16817228b7d9ee507`; merge/main, CI same-HEAD e implantação são provas separadas. Não mergear automaticamente. A árvore local `K:\\` tinha alterações pré-existentes e divergência de main; não fazer `git pull/reset` nem sobrescrever.
+
+### Fixed point
+
+`TARGET_WINDOW → TARGET_TERMINAL → FOCUS_READBACK → SEND_ONCE → READBACK → CONTRAPROVA → RECEIPT_SANITIZADO → NEXT_CURSOR`.
+
+O ponto fixo atual é **rota de envio demonstrada e documentação reutilizável**, não automação de saída/observabilidade universal. Evoluir só os owners existentes; só promover PASS para o escopo efetivamente observado.

@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(operational-method): costurar feridas e selar metabolismo runtime sem novos owners",
+    "lastCommit": "docs(vscode): cristalizar rota direta UIAutomation terminal e vincular funil #1820",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T01:23:04.953Z",
+      "titulo": "Push na main · 6eab96cc7cacc6ff374888911b835f0c8c2d0353",
+      "detalhe": "docs(vscode): cristalizar rota direta UIAutomation terminal e vincular funil #1820",
+      "area": "Repositório",
+      "sha": "6eab96c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T01:15:25.697Z",
       "titulo": "Push na main · fd11de747a6b3bfb26894718abbc485035e598d7",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "349b7eb",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T16:59:20.360Z",
-      "titulo": "Push na main · 8e66122b72ea13ceefedf9aec07f932ca94ad990",
-      "detalhe": "aprendizado(#174): JARVIS voz: execução contínua, fala baiana e contraprova do áudio",
-      "area": "Repositório",
-      "sha": "8e66122",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T01:23:04.953Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6eab96cc7cacc6ff374888911b835f0c8c2d0353 (6eab96c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T01:15:25.697Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 349b7ebb3fd37a7824884f80c0f875cdbd81a5f1 (349b7eb)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T16:59:20.360Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 8e66122b72ea13ceefedf9aec07f932ca94ad990 (8e66122)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T01:15:25.697Z",
-  "updatedAtBR": "14/10/2026, 22:15:25 BRT"
+  "updatedAt": "2026-10-15T01:23:04.953Z",
+  "updatedAtBR": "14/10/2026, 22:23:04 BRT"
 }
