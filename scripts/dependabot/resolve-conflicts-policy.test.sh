@@ -105,4 +105,40 @@ grep -F -x 'unknown-main' docs/unknown-conflict.md >/dev/null
 grep -F 'UNKNOWN_CONFLICT_PATH path=docs/unknown-conflict.md action=AUTO_REVIEW_TEXT_BOTH' "$TMP_ROOT/unknown-resolver.log" >/dev/null
 grep -F 'AUTO_REVIEW_COUNTERPROOF=PASS' "$TMP_ROOT/unknown-resolver.log" >/dev/null
 
+# Contraprova estruturada: CONFLICT_ID (catálogo canônico) e id (legado) são aliases.
+echo ""
+echo "🧪 Política 4.3: deduplicação CONFLICT_ID/id com precedência da main"
+STRUCTURED_FIXTURE="$TMP_ROOT/structured-patterns"
+mkdir -p "$STRUCTURED_FIXTURE"
+(
+  cd "$STRUCTURED_FIXTURE"
+  git init -q
+  cat > pr.json <<'JSON'
+{"schema":"v1","owner":"pr","patterns":[{"id":"SAME","value":"PR"},{"CONFLICT_ID":"PR_ONLY","value":"pr-exclusive"},{"unkeyed":true}]}
+JSON
+  cat > main.json <<'JSON'
+{"schema":"v1","owner":"main","refresh":{"pattern_count":0},"patterns":[{"CONFLICT_ID":"SAME","value":"MAIN"},{"id":"MAIN_ONLY","value":"main-exclusive"},{"unkeyed":true}]}
+JSON
+  pr_blob="$(git hash-object -w pr.json)"
+  main_blob="$(git hash-object -w main.json)"
+  printf '100644 %s 2\tregistry.json\n100644 %s 3\tregistry.json\n' "$pr_blob" "$main_blob" | git update-index --index-info
+  node --check "$REPO_ROOT/scripts/dependabot/structured-conflict-resolver.mjs"
+  node "$REPO_ROOT/scripts/dependabot/structured-conflict-resolver.mjs" registry.json MERGE_JSON_PATTERNS_BY_ID_MAIN_FIRST
+  node --input-type=module <<'NODE'
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const d = JSON.parse(fs.readFileSync('registry.json', 'utf8'));
+assert.equal(d.owner, 'main', 'metadados main preservados');
+assert.equal(d.patterns.length, 4, 'CONFLICT_ID/id equivalentes não duplicam');
+assert.equal(d.refresh.pattern_count, 4, 'contador consistente');
+assert.equal(d.patterns.find(p => (p.CONFLICT_ID ?? p.id) === 'SAME').value, 'MAIN', 'main vence padrão duplicado');
+assert.ok(d.patterns.some(p => p.CONFLICT_ID === 'PR_ONLY'), 'padrão exclusivo PR preservado');
+assert.ok(d.patterns.some(p => p.id === 'MAIN_ONLY'), 'padrão exclusivo main preservado');
+assert.equal(d.patterns.filter(p => p.unkeyed === true).length, 1, 'fallback estrutural sem duplicação');
+console.log('REGRESSION_CONFLICT_ID_ALIAS=PASS');
+console.log('REGRESSION_MAIN_PRECEDENCE=PASS');
+console.log('REGRESSION_COUNTER_AND_EXCLUSIVES=PASS');
+NODE
+)
+
 echo "RESOLVE_CONFLICTS_POLICY_TEST=PASS"
