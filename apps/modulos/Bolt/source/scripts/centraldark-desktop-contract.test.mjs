@@ -163,3 +163,27 @@ test('HUD unificado reusa o cockpit, move, redimensiona e nao inventa quota', ()
   assert.match(inventory, /ADAPTER_REQUIRED/);
   assert.match(inventory, /id: 'CHATGPT'[\s\S]*?quota: 'ADAPTER_REQUIRED'/);
 });
+
+
+test('Unigram original entra no leque por abertura nativa restrita, sem copiar aplicativo ou conta', () => {
+  const main = read(`${root}/electron/main/index.ts`);
+  const preload = read(`${root}/electron/preload/index.ts`);
+  const nativeCockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
+  const webCockpit = read(`${root}/../../../instinto-superior/src/components/central/CockpitShell.tsx`);
+
+  assert.match(main, /const UNIGRAM_WINDOWS_APP_ID = '38833FF26BA1D\\.UnigramPreview_g9c9v27vpyspw!App'/);
+  assert.match(main, /register\\('centraldark:unigram:open'/);
+  assert.match(main, /CENTRALDARK_UNIGRAM_UNTRUSTED_RENDERER/);
+  assert.match(main, /event\\.senderFrame\\?\\.url/);
+  assert.match(main, /shell:AppsFolder/);
+  assert.match(main, /shell: false/);
+  assert.match(main, /status: 'REQUESTED'/);
+  assert.doesNotMatch(main, /Unigram-13\\.0\\.1|Telegram_TemporaryKey|shell: true/);
+
+  assert.match(preload, /openUnigramDesktop: \\(\\) => ipcRenderer\\.invoke\\('centraldark:unigram:open'\\)/);
+  assert.match(nativeCockpit, /getBridge\\(\\)\\?\\.openUnigramDesktop|bridge\\.openUnigramDesktop/);
+  assert.match(nativeCockpit, /Abertura solicitada · janela ainda não comprovada/);
+  assert.match(webCockpit, /TabsTrigger value="unigram"/);
+  assert.match(webCockpit, /Esta ação requer o CentralDark\\.exe no Windows/);
+  assert.doesNotMatch(webCockpit, /tg:\\/\\/|Start-Process|Get-AppxPackage/);
+});
