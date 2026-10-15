@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(vscode): cristalizar rota direta UIAutomation terminal e vincular funil #1820",
+    "lastCommit": "feat(vscode): reuse ZENDRIVE CLI terminal and emit sanitized shell events",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T01:32:11.064Z",
+      "titulo": "Push na main · a716b5833fa17ad2d0bf8359751aa118f634e8e0",
+      "detalhe": "feat(vscode): reuse ZENDRIVE CLI terminal and emit sanitized shell events",
+      "area": "Repositório",
+      "sha": "a716b58",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T01:23:04.953Z",
       "titulo": "Push na main · 6eab96cc7cacc6ff374888911b835f0c8c2d0353",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "d2726c8",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T17:14:11.330Z",
-      "titulo": "Push na main · 349b7ebb3fd37a7824884f80c0f875cdbd81a5f1",
-      "detalhe": "🪬 fix(index): align learning gate with pertinent advisory runtime",
-      "area": "Repositório",
-      "sha": "349b7eb",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T01:32:11.064Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a716b5833fa17ad2d0bf8359751aa118f634e8e0 (a716b58)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T01:23:04.953Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · d2726c830731a3af9682198503f1d07cbea0993e (d2726c8)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T17:14:11.330Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 349b7ebb3fd37a7824884f80c0f875cdbd81a5f1 (349b7eb)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T01:23:04.953Z",
-  "updatedAtBR": "14/10/2026, 22:23:04 BRT"
+  "updatedAt": "2026-10-15T01:32:11.064Z",
+  "updatedAtBR": "14/10/2026, 22:32:11 BRT"
 }
