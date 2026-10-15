@@ -43,6 +43,8 @@ import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
 import { GoalsDashboard } from "@/components/central/GoalsDashboard";
 import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
 import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
+import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
+import { ForjaExecutor } from "@/components/central/ForjaExecutor";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
