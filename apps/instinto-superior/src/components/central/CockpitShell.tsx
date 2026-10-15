@@ -46,6 +46,7 @@ import { ArchitectureVisualization } from "@/components/central/ArchitectureVisu
 import { RaioXVivo } from "@/components/central/RaioXVivo";
 import { ClaudeNotificationsHub } from "@/components/central/ClaudeNotificationsHub";
 import { DreamReviewer } from "@/components/central/DreamReviewer";
+import { GramPermissions } from "@/components/central/GramPermissions";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
@@ -405,6 +406,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
                 <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
                 <TabsTrigger value="forja">🔧 Forja</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
                 {autenticado ? <TabsTrigger value="admin">Admin CentralDark</TabsTrigger> : null}
                 {autenticado ? (
                   <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
@@ -541,6 +543,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               </div>
               <ForjaExecutor />
             </TabsContent>
+            {autenticado ? (
+              <TabsContent value="gram-permissions" className="mt-10">
+                <GramPermissions />
+              </TabsContent>
+            ) : null}
             {autenticado ? (
               <TabsContent value="admin" className="mt-10">
                 <PainelAdminCentralDark estado={dado} />
