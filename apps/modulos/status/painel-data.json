@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(instinto): registrar botao, funcoes e setas no flow registry canônico",
+    "lastCommit": "feat(instinto-superior): preservar evolucoes locais — GoalsDashboard, SyncCenter, MapaOwners, auto-sync",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T20:27:16.610Z",
+      "titulo": "Push na main · e744e2c9fe3665ea10853902e72e6ff77d4ee0b1",
+      "detalhe": "feat(instinto-superior): preservar evolucoes locais — GoalsDashboard, SyncCenter, MapaOwners, auto-sync",
+      "area": "Repositório",
+      "sha": "e744e2c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T20:24:51.076Z",
       "titulo": "Push na main · 6b69fc43f1745f1099ee86347192e398d2b912f3",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "35165b5",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T01:49:50.411Z",
-      "titulo": "Push na main · 57003d905ac889601c34899c2784d7e0abc3fe28",
-      "detalhe": "docs: selar shell_start/end reais no funil único sem atribuição indevida",
-      "area": "Repositório",
-      "sha": "57003d9",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T20:27:16.610Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e744e2c9fe3665ea10853902e72e6ff77d4ee0b1 (e744e2c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T20:24:51.076Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 35165b57d4b0a72761fe8b171450248718ba5eba (35165b5)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T01:49:50.411Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 57003d905ac889601c34899c2784d7e0abc3fe28 (57003d9)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T20:24:51.076Z",
-  "updatedAtBR": "15/10/2026, 17:24:51 BRT"
+  "updatedAt": "2026-10-15T20:27:16.610Z",
+  "updatedAtBR": "15/10/2026, 17:27:16 BRT"
 }
