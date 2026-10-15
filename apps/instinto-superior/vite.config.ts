@@ -7,6 +7,13 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  // Acesso privado ao Cockpit pelo Tailscale Serve. Host EXATO; nunca allowedHosts:true.
+  // Admin continua exigindo login e permissões no backend.
+  vite: {
+    server: {
+      allowedHosts: ["windows-casa.tail6d7aa4.ts.net"],
+    },
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
