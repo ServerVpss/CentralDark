@@ -39,6 +39,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)),
     vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)),
     vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
+    // Alias acessível: mesmo foco e terminal existente, sem criar um segundo executor.
+    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
       traceOutput?.show(true);
