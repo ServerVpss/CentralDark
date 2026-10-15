@@ -12,14 +12,92 @@ HERMES_ANDAMENTO="${CENTRALDARK_HERMES_ANDAMENTO:-/root/CentralDark/apps/modulos
 HERMES_CONCLUIDAS="${CENTRALDARK_HERMES_CONCLUIDAS:-/root/CentralDark/apps/modulos/HERMES-CORE/missions/concluidas}"
 SOURCE=""
 TRIGGER="timer"
+AUDIT_COVERAGE=0
+AUDIT_FROM=""
+AUDIT_TO=""
+
+# A única régua de roteamento serve tanto ao pulso vivo quanto à auditoria
+# offline. Nenhum arquivo desaparece por não pertencer aos quatro owners
+# conhecidos: nesses casos o owner é classificação read-only do Hermes.
+route_owner() {
+  case "$1" in
+    apps/modulos/mcp/*) printf 'mcp' ;;
+    apps/bot-telegram/*) printf 'hub_bot' ;;
+    apps/modulos/HERMES-CORE/*|docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/*|.agents/skills/centraldark-operational-method/*) printf 'hermes' ;;
+    apps/modulos/oauth-broker/*) printf 'oauth_broker' ;;
+    *) printf 'unhandled' ;;
+  esac
+}
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --source) SOURCE="${2:-}"; shift 2 ;;
-    --trigger) TRIGGER="${2:-timer}"; shift 2 ;;
+    --source) [[ $# -ge 2 ]] || { echo 'ARG_MISSING=--source'; exit 2; }; SOURCE="$2"; shift 2 ;;
+    --trigger) [[ $# -ge 2 ]] || { echo 'ARG_MISSING=--trigger'; exit 2; }; TRIGGER="$2"; shift 2 ;;
+    --audit-coverage) AUDIT_COVERAGE=1; shift ;;
+    --from) [[ $# -ge 2 ]] || { echo 'ARG_MISSING=--from'; exit 2; }; AUDIT_FROM="$2"; shift 2 ;;
+    --to) [[ $# -ge 2 ]] || { echo 'ARG_MISSING=--to'; exit 2; }; AUDIT_TO="$2"; shift 2 ;;
     *) echo "ARG_UNKNOWN=$1"; exit 2 ;;
   esac
 done
+
+# Modo de prova ANTES do lock, do git fetch e de qualquer escrita em disco.
+# Útil na VPS e na Casa, inclusive quando o checkout vivo está dirty/branch.
+# --from/--to aceitam APENAS commits concretos, não referências ambíguas.
+if [[ "$AUDIT_COVERAGE" == 1 ]]; then
+  [[ -d "$REPO" ]] && git -C "$REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
+    echo 'COVERAGE_GATE=BLOCKED_REPO_NOT_FOUND'; exit 20;
+  }
+  [[ -n "$AUDIT_FROM" ]] || {
+    [[ -s "$STATE_FILE" ]] && AUDIT_FROM="$(tr -d '[:space:]' < "$STATE_FILE")";
+  }
+  [[ -n "$AUDIT_TO" ]] || AUDIT_TO="$(git -C "$REPO" rev-parse refs/remotes/origin/main 2>/dev/null || true)"
+  for sha in "$AUDIT_FROM" "$AUDIT_TO"; do
+    [[ "$sha" =~ ^[0-9a-f]{40}$ ]] && git -C "$REPO" cat-file -e "$sha^{commit}" 2>/dev/null || {
+      echo 'COVERAGE_GATE=BLOCKED_SHA_NOT_MATERIALIZED'; exit 21;
+    }
+  done
+  git -C "$REPO" merge-base --is-ancestor "$AUDIT_FROM" "$AUDIT_TO" || {
+    echo 'COVERAGE_GATE=BLOCKED_NON_FAST_FORWARD'; exit 22;
+  }
+  declare -A counted=([mcp]=0 [hub_bot]=0 [hermes]=0 [oauth_broker]=0 [unhandled]=0)
+  total=0
+  echo "COVERAGE_FROM=$AUDIT_FROM"
+  echo "COVERAGE_TO=$AUDIT_TO"
+  while IFS= read -r -d '' rel; do
+    owner="$(route_owner "$rel")"
+    counted[$owner]=$(( counted[$owner] + 1 ))
+    total=$(( total + 1 ))
+    if [[ "$owner" == unhandled ]]; then
+      echo "COVERAGE_FILE owner=HERMES_CLASSIFY_ONLY status=UNPROVEN path=$rel"
+    else
+      echo "COVERAGE_FILE owner=$owner status=ROUTED_NOT_RUNTIME_PROVEN path=$rel"
+    fi
+  done < <(git -C "$REPO" diff --name-only -z "$AUDIT_FROM" "$AUDIT_TO")
+  routed=0
+  for owner in hermes mcp hub_bot oauth_broker unhandled; do
+    echo "COVERAGE_OWNER=$owner count=${counted[$owner]}"
+    routed=$(( routed + counted[$owner] ))
+  done
+  echo "COVERAGE_EXPECTED=$total"
+  echo "COVERAGE_ACCOUNTED=$routed"
+  echo "COVERAGE_UNHANDLED=${counted[unhandled]}"
+  echo 'RUNTIME_E2E=UNPROVEN'
+  if (( routed != total )); then
+    echo 'COVERAGE_GATE=BLOCKED_ACCOUNTING_MISMATCH'
+    exit 23
+  fi
+  if (( counted[unhandled] > 0 )); then
+    echo 'COVERAGE_GATE=PARTIAL_CLASSIFICATION_PENDING'
+    echo 'NEXT_CURSOR=Classificar no Hermes os arquivos UNPROVEN e confirmar seus consumidores; depois comprovar cada owner no runtime.'
+  else
+    echo 'COVERAGE_GATE=ROUTING_COMPLETE_RUNTIME_UNPROVEN'
+    echo 'NEXT_CURSOR=Conferir recibos por owner, runtime e consumidor no mesmo SHA. Roteamento nao equivale a deploy.'
+  fi
+  exit 0
+fi
+[[ -z "$AUDIT_FROM" && -z "$AUDIT_TO" ]] || {
+  echo 'ARG_INVALID=--from/--to requerem --audit-coverage'; exit 2;
+}
 
 mkdir -p "$STATE_DIR"
 touch "$LOG_FILE"
@@ -99,14 +177,21 @@ fi
 
 declare -a MCP_FILES=() HUB_FILES=() HERMES_FILES=() OAUTH_FILES=() UNHANDLED=()
 for rel in "${CHANGED[@]}"; do
-  case "$rel" in
-    apps/modulos/mcp/*) MCP_FILES+=("$rel") ;;
-    apps/bot-telegram/*) HUB_FILES+=("$rel") ;;
-    apps/modulos/HERMES-CORE/*|docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/*|.agents/skills/centraldark-operational-method/*) HERMES_FILES+=("$rel") ;;
-    apps/modulos/oauth-broker/*) OAUTH_FILES+=("$rel") ;;
-    *) UNHANDLED+=("$rel") ;;
+  case "$(route_owner "$rel")" in
+    mcp) MCP_FILES+=("$rel") ;;
+    hub_bot) HUB_FILES+=("$rel") ;;
+    hermes) HERMES_FILES+=("$rel") ;;
+    oauth_broker) OAUTH_FILES+=("$rel") ;;
+    unhandled) UNHANDLED+=("$rel") ;;
+    *) log "PULSE_FAIL=ROUTE_UNKNOWN file=$rel"; exit 17 ;;
   esac
 done
+ROUTED_COUNT=$(( ${#MCP_FILES[@]} + ${#HUB_FILES[@]} + ${#HERMES_FILES[@]} + ${#OAUTH_FILES[@]} + ${#UNHANDLED[@]} ))
+log "PULSE_COVERAGE expected=${#CHANGED[@]} accounted=$ROUTED_COUNT known=$(( ROUTED_COUNT - ${#UNHANDLED[@]} )) pending_classification=${#UNHANDLED[@]} runtime_e2e=UNPROVEN"
+[[ "$ROUTED_COUNT" -eq "${#CHANGED[@]}" ]] || {
+  log 'PULSE_FAIL=COVERAGE_MISMATCH'
+  exit 18
+}
 
 deploy_owner() {
   local owner="$1"; shift
@@ -125,10 +210,12 @@ deploy_owner() {
 deploy_owner hermes "${HERMES_FILES[@]}"
 deploy_owner mcp "${MCP_FILES[@]}"
 deploy_owner hub_bot "${HUB_FILES[@]}"
+OAUTH_SKIPPED=0
 if [[ "${#OAUTH_FILES[@]}" -gt 0 ]]; then
   if systemctl is-active --quiet centraldark-oauth-broker.service; then
     deploy_owner oauth_broker "${OAUTH_FILES[@]}"
   else
+    OAUTH_SKIPPED=1
     log "OAUTH_BROKER_DEPLOY_SKIPPED=1 reason=RUNTIME_NOT_ACTIVE human_frontier=VAULT_KEY_OR_CONFIG_PENDING changed_files=${#OAUTH_FILES[@]} main=$MAIN_SHA"
   fi
 fi
@@ -215,4 +302,10 @@ TMP="$STATE_FILE.tmp.$$"
 printf '%s\n' "$MAIN_SHA" > "$TMP"
 chmod 600 "$TMP"
 mv "$TMP" "$STATE_FILE"
-log "PULSE_PASS from=$LAST_SHA to=$MAIN_SHA changed=${#CHANGED[@]} mcp=${#MCP_FILES[@]} hub=${#HUB_FILES[@]} hermes=${#HERMES_FILES[@]} oauth=${#OAUTH_FILES[@]} unhandled=${#UNHANDLED[@]} trigger=$TRIGGER"
+if [[ "${#UNHANDLED[@]}" -gt 0 || "$OAUTH_SKIPPED" -eq 1 ]]; then
+  # O cursor é de ROTEAMENTO para impedir replay de deploy, não um selo de
+  # execução. Classificação enfileirada != consumida; owner pulado != PASS.
+  log "PULSE_PARTIAL from=$LAST_SHA to=$MAIN_SHA changed=${#CHANGED[@]} accounted=$ROUTED_COUNT mcp=${#MCP_FILES[@]} hub=${#HUB_FILES[@]} hermes=${#HERMES_FILES[@]} oauth=${#OAUTH_FILES[@]} oauth_skipped=$OAUTH_SKIPPED unhandled=${#UNHANDLED[@]} runtime_e2e=UNPROVEN checkpoint=ROUTING_ONLY trigger=$TRIGGER"
+else
+  log "PULSE_ROUTING_COMPLETE from=$LAST_SHA to=$MAIN_SHA changed=${#CHANGED[@]} accounted=$ROUTED_COUNT runtime_e2e=UNPROVEN checkpoint=ROUTING_ONLY trigger=$TRIGGER"
+fi
