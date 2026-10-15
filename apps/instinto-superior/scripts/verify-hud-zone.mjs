@@ -141,3 +141,26 @@ test("inventario do HUD cobre quatro abas e preserva fonte legada integral", () 
   assert.ok(cockpit.includes("atualizar={() => void estado.refetch()}"));
   assert.ok(!zone.includes("sendText("));
 });
+
+
+test("inventario fisico e ponte de automacoes ficam no harness sem duplicar executor", () => {
+  const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
+  const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
+  assert.equal(catalogo.runtime_snapshots.casa.vscode_extension_folders, 26);
+  assert.equal(catalogo.runtime_snapshots.casa.obsidian_k_docs_plugin_folders, 5);
+  assert.equal(catalogo.runtime_snapshots.vps.hermes_skill_files, 95);
+  assert.equal(catalogo.runtime_snapshots.vps.hermes_plugin_directories, 3);
+  assert.equal(catalogo.runtime_snapshots.mcp.catalog_tools, 141);
+  assert.equal(catalogo.runtime_snapshots.mcp.catalog_routes, 13);
+  assert.equal(catalogo.runtime_snapshots.mcp.skill_listar_entries, 3);
+  assert.equal(catalogo.automation_owners.length, 9);
+  assert.ok(catalogo.automation_owners.some(x => x.id === "CLAUDE_CODE" &&
+    x.estado === "CLAUDE_RUNNING_TERMINAL_UNBOUND" && x.modo === "COPY_ONLY"));
+  assert.ok(catalogo.automation_owners.some(x => x.id === "HERMES" &&
+    x.estado === "SESSAO_NAO_VINCULADA"));
+  assert.ok(infra.includes("automacaoAtual.receita"));
+  assert.ok(infra.includes("Copiar receita · não executar"));
+  assert.ok(infra.includes("terminal não recebeu a mensagem"));
+  assert.ok(!infra.includes("execSync("));
+  assert.ok(!infra.includes("fetch("));
+});
