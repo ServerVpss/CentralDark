@@ -28,7 +28,9 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)),
     vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)),
-    vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal)
+    vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
+    // Acessibilidade: rótulo literal VS Code para ditado/ASR; mesma implementação, nenhum novo executor.
+    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal)
   );
   registerTerminalTelemetry(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
