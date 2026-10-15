@@ -219,7 +219,8 @@ export function HudDeterministico({ estado }: { estado?: EstadoCentralDark }) {
             ["API CentralDark", estado?.apiHealth, estado?.apiHealthHttp],
             ["VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12)],
             ["Screenpipe Casa", estado?.screenpipe, estado?.screenpipeHttp],
-            ["Hermes Desktop", estado?.desktop, "Se fechado por escolha: NOT_REQUIRED"],
+            ["Desktop Commander Casa", estado?.desktop, "Conector remoto · não é o Hermes Desktop"],
+            ["Hermes Desktop", "UNKNOWN", "Sem sensor Hermes nesta consulta; fechado por escolha = NOT_REQUIRED"],
             ["Receipts", estado?.receipts, estado?.receiptsHttp],
           ] as const).map(([nome, resultado, detalhe]) => (
             <div key={nome} className="rounded-md border border-border px-3 py-3">
