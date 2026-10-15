@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "☀️🪬 SOL_EXECUTORA: integrar contrato direto no owner e ponte Claude sem duplicar governança",
+    "lastCommit": "fix(sol-executora): corrigir ponte CLAUDE para owner AGENTS sem âncora inválida",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T19:01:29.463Z",
+      "titulo": "Push na main · 4550d50b45ea3aeada932c04650967a40a16e6a2",
+      "detalhe": "fix(sol-executora): corrigir ponte CLAUDE para owner AGENTS sem âncora inválida",
+      "area": "Repositório",
+      "sha": "4550d50",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T18:52:11.039Z",
       "titulo": "Push na main · a3417201f95b41f75eee702bcd6c45e85df61990",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "a716b58",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T01:23:04.953Z",
-      "titulo": "Push na main · 6eab96cc7cacc6ff374888911b835f0c8c2d0353",
-      "detalhe": "docs(vscode): cristalizar rota direta UIAutomation terminal e vincular funil #1820",
-      "area": "Repositório",
-      "sha": "6eab96c",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T19:01:29.463Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 4550d50b45ea3aeada932c04650967a40a16e6a2 (4550d50)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T18:52:11.039Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · a716b5833fa17ad2d0bf8359751aa118f634e8e0 (a716b58)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T01:23:04.953Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6eab96cc7cacc6ff374888911b835f0c8c2d0353 (6eab96c)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T18:52:11.039Z",
-  "updatedAtBR": "15/10/2026, 15:52:11 BRT"
+  "updatedAt": "2026-10-15T19:01:29.463Z",
+  "updatedAtBR": "15/10/2026, 16:01:29 BRT"
 }
