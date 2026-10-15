@@ -140,3 +140,13 @@ Build/CI da PR isolada → corrigir apenas falhas reais do owner → readback em
 **Teste e estados deste DELTA:** suite `verify-hud-zone.mjs` evoluída para **10 testes definidos**, cobrindo contagem, proveniência, labels, inventário 189/33, single owner, ausência de despacho e a nova prop `atualizar`. `CODE_COMMITTED_IN_PR=true`; `NODE_TEST_RUN=UNKNOWN`; `VITE_BUILD=UNKNOWN`; `ZIP_POMBO64=NOT_BUILT`; `DEPLOY_PROD=NOT_PROVEN`; `VISUAL_CASA=NOT_PROVEN`. Não confundir os checks estruturais feitos por leitura com CI PASS.
 
 **NEXT_CURSOR:** validar CI/Node/Vite no HEAD exato da PR #1832; resolver somente feridas causais; provar interface do catálogo/HUD no runtime; reconciliar owners dos controles sensíveis e sensores MMF Casa (read-only) pelo MCP existente; descobrir terminal VS Code com sessão controlável para handoff real ao Claude/Hermes, exigir ACK/receipt; só então considerar promoção da paridade e faxina 🧹. Manter arquivo legado como template/histórico até substituição integral demonstrada.
+
+
+## 🪛 CI do harness — contraprova real no HEAD da gaveta
+
+**Inspeção por job logs oficiais no HEAD `5088569527b1f233c11a1c247ff6ba9415431b6d` (antes do hotfix de clipboard):**
+- `guard`, workflow run 38768407685: `NO_SILENT_ERROR_RATCHET=FAIL new_findings=1` aponta **`HudDeterministico.tsx` erro silencioso `.catch(() => {})`** na cópia da missão Gênesis. **Delta causal reparado** no mesmo owner, commit `df7556b02149fa43765c8c70bb949b5072f1d774`: mostra `FAILED` ou `COPIED` ao usuário sem despacho. O teste existente foi reforçado no commit `6b8f04d89d9c2b82cf8f21e4d1936180835a7fbb`.
+- `Provar pacote, funil e contraprova`, run 38768407871: `REPO_CONTRACT_VERIFY=FAIL failed=3`. Fatos distinguíveis nos logs: `GLOBAL_LEARNING_LINEAGE=FAIL` com `APRENDIZADOS_GLOBAL_LINEAGE_PROJECTION_DRIFT` e `LINEAGE_MANIFEST_DRIFT`; `docs/CONSCIENCIA/APRENDIZADOS.md` sequência numérica (esperado 171/172 e inconsistências); `SOUL_STALE` após mudança em `AGENTS.md`. São **outras dependências/owners**, não corrigir fazendo renumeração cega do Gênesis nem forçando SOUL sem sua contraprova. Seguem `YELLOW/BLOCKED` até correção no owner.
+- `Porta, identidade e governança`, runs 38768620793 e 38768400760, jobs finais com falha, requerem reconciliação no respectivo gate (sem confundir com sucesso de testes locais).
+
+**Estado honesto:** os logs acima pertencem ao SHA `5088569`, **não** ao HEAD após hotfix. Nova execução de CI é exigida para provar a correção de clipboard. Não houve `node --test` local, compilação Vite, pacote POMBO64, sessão Claude vinculada, merge nem deploy neste ciclo.
