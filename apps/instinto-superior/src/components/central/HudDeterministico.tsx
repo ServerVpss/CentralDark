@@ -26,11 +26,83 @@ const historicalSeals = [
   "One Heart VPS", "Runtime / Modelo VPS", "Hermes WebUI", "MCP CentralDark",
 ] as const;
 
+
+type ForgeAlias = Readonly<{
+  id: string;
+  symbols: string;
+  name: string;
+  owner: string;
+  invocation: string;
+  effect: string;
+  improvement: string;
+  proof: string;
+  readonly: boolean;
+}>;
+const forgeAliases: readonly ForgeAlias[] = [
+  {
+    id: "DIAGNOSTICAR", symbols: "🔧 🪛", name: "Diagnóstico sem mutação",
+    owner: "skills/vs-code-restore/SKILL.md",
+    invocation: "CentralDark: Mostrar Trace (Saída)",
+    effect: "Focar a trilha sanitizada já existente e identificar sinal, origem e bloqueio.",
+    improvement: "Reutiliza a extensão/saída original, sem novo log bruto ou coletor.",
+    proof: "Evento nativo e ACK no funil; comando da paleta instalado não implica ativação.",
+    readonly: true,
+  },
+  {
+    id: "MANUTENCAO", symbols: "🛠️ 👨🏻‍🔧", name: "Manutenção com owner único",
+    owner: ".agents/skills/centraldark-operational-method/SKILL.md",
+    invocation: "!CENTRALDARK",
+    effect: "Recuperar missão, owner, testes, bloqueios e próximo cursor antes de intervir.",
+    improvement: "Evita consertar duas vezes e não altera checkout com trabalho em andamento.",
+    proof: "Receipt com causa, teste, readback e NEXT_CURSOR.",
+    readonly: true,
+  },
+  {
+    id: "OLHO", symbols: "👀 👁️", name: "Olho e contraprova",
+    owner: "apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx",
+    invocation: "!calibrar",
+    effect: "Comparar fontes Casa/VPS/CI e separar SOURCE, BUILD, INSTALLED e UI.",
+    improvement: "O mesmo painel de observabilidade sustenta os selos, sem sinais inventados.",
+    proof: "Resposta autorizada com horário, origem e contraprova real.",
+    readonly: true,
+  },
+  {
+    id: "LINHAGEM", symbols: "🪡 🎄", name: "Aprendizado e costura de UID",
+    owner: "docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json",
+    invocation: "#acordar",
+    effect: "Retomar Gênesis, aprendizagem, selos e recibos pelo UID original.",
+    improvement: "Preserva IDs históricos e evita duplicar cadeados e receitas já seladas.",
+    proof: "Prev/next íntegros e receita canônica; replay documental não é execução.",
+    readonly: true,
+  },
+  {
+    id: "ANTECIPACAO", symbols: "🌞 🌟 ✨", name: "Outra melhoria antecipada",
+    owner: ".agents/skills/centraldark-operational-method/SKILL.md",
+    invocation: "#acordar → !calibrar → !CENTRALDARK",
+    effect: "Recuperar contexto, identificar delta útil e continuar o owner autorizado.",
+    improvement: "Reduz redescoberta após boot/chat sem criar executor independente.",
+    proof: "Comparar a última prova ao CURRENT e registrar só a novidade verificável.",
+    readonly: true,
+  },
+  {
+    id: "FORJA_PACOTE", symbols: "☄️ 🔥 ⚒️", name: "Forja e plug-and-play",
+    owner: "apps/instinto-superior/package.json",
+    invocation: "npm run build:plugplay",
+    effect: "Rodar teste de paridade, build existente e empacotar saída filtrada com manifesto e SHA256.",
+    improvement: "Uma identidade de pacote e receita compilável, sem publicar nem limpar checkout vivo.",
+    proof: "Exit 0 de teste/build, ZIP validado e SHA; instalação/deploy exigem prova separada.",
+    readonly: false,
+  },
+] as const;
+
 /** Reaproveita o zone do Instinto Superior; não cria outro HUD ou executor. */
 export function HudDeterministico({ estado }: { estado?: EstadoCentralDark }) {
   const [cursor, setCursor] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
+  const [forgeSelected, setForgeSelected] = useState<string | null>(null);
+  const [forgeCopy, setForgeCopy] = useState<"IDLE" | "COPIED_NOT_EXECUTED" | "COPY_FAILED">("IDLE");
+  const chosenForge = forgeAliases.find(action => action.id === forgeSelected);
   const integrity = useMemo(() => nodes.every((n, i) =>
     i === 0 ? n.uid === "L000" && n.prev_uid == null :
     n.prev_uid === nodes[i - 1].uid && nodes[i - 1].next_uid === n.uid
@@ -167,6 +239,60 @@ export function HudDeterministico({ estado }: { estado?: EstadoCentralDark }) {
           href="https://github.com/ServerVpss/CentralDark/blob/main/docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md">
           Abrir checklist diário canônico · histórico e receitas
         </a>
+      </section>
+
+      <section className="panel p-6" aria-labelledby="cd-forge-aliases-title">
+        <p className="font-mono text-[10px] text-neon-blue">FIXED_POINT preservado · atalhos por capacidade</p>
+        <h3 id="cd-forge-aliases-title" className="mt-2 text-lg font-semibold">
+          🔧🛠️👨🏻‍🔧 👀👁️🪡🎄🌞🌟✨☄️🔥🪛⚒️ Forja Viva
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Escolha um símbolo para consultar a receita do owner. Selecionar ou copiar
+          não dispara shell, tarefas, merges, instalações ou deploys. Zoom usa os controles
+          nativos existentes do VS Code e do navegador.
+        </p>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {forgeAliases.map(action => (
+            <Button
+              key={action.id}
+              type="button"
+              variant={forgeSelected === action.id ? "default" : "outline"}
+              onClick={() => { setForgeSelected(action.id); setForgeCopy("IDLE"); }}
+              aria-pressed={forgeSelected === action.id}
+              className="h-auto justify-start whitespace-normal text-left"
+              title={action.name}
+            >
+              <span aria-hidden>{action.symbols}</span>
+              <span>{action.name}</span>
+            </Button>
+          ))}
+        </div>
+        {chosenForge && (
+          <div className="mt-5 space-y-3 rounded-lg border border-border p-4" role="region"
+            aria-label={"Receita selecionada: " + chosenForge.name}>
+            <h4 className="text-base font-semibold">{chosenForge.symbols} {chosenForge.name}</h4>
+            <p className="text-sm"><strong>O que faz:</strong> {chosenForge.effect}</p>
+            <p className="text-sm"><strong>Por que melhora:</strong> {chosenForge.improvement}</p>
+            <p className="break-all font-mono text-xs">OWNER: {chosenForge.owner}</p>
+            <p className="break-all font-mono text-xs">RECEITA: {chosenForge.invocation}</p>
+            <p className="text-xs text-muted-foreground"><strong>Prova exigida:</strong> {chosenForge.proof}</p>
+            <p className="text-xs text-muted-foreground" role="status">
+              {chosenForge.readonly ? "RECEITA SOMENTE LEITURA" : "EXECUÇÃO PENDENTE DE OPERADOR"}
+              {" · "}SOURCE_DEFINED · RUNTIME_NOT_PROVEN
+            </p>
+            <Button type="button" variant="outline" onClick={() => {
+              if (!navigator.clipboard) { setForgeCopy("COPY_FAILED"); return; }
+              void navigator.clipboard.writeText(chosenForge.invocation)
+                .then(() => setForgeCopy("COPIED_NOT_EXECUTED"))
+                .catch(() => setForgeCopy("COPY_FAILED"));
+            }}>Copiar receita · não executar</Button>
+            <p className="text-xs text-muted-foreground" aria-live="polite">
+              {forgeCopy === "COPIED_NOT_EXECUTED" ? "Copiado; nada foi executado."
+                : forgeCopy === "COPY_FAILED" ? "Cópia não disponível; texto acima continua visível."
+                : "Copiar é opcional. Execução requer autorização, owner e contraprova."}
+            </p>
+          </div>
+        )}
       </section>
       <p className="text-xs text-muted-foreground">
         Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
