@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(cockpit): CentralDark Gram MTProto + ajustes admin e vscode",
+    "lastCommit": "fix(cockpit): rota arquitetural sync corrigida — createServerFn + imports ReceiptsDashboard/ForjaExecutor",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T21:12:03.469Z",
+      "titulo": "Push na main · 0118ad66892e7dc0d868d2ef83f5c3a8b094024f",
+      "detalhe": "fix(cockpit): rota arquitetural sync corrigida — createServerFn + imports ReceiptsDashboard/ForjaExecutor",
+      "area": "Repositório",
+      "sha": "0118ad6",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T21:04:33.612Z",
       "titulo": "Push na main · a1af7644192d79e9cead2db190899a845763402f",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "e39a092",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T01:58:09.667Z",
-      "titulo": "Push na main · 2ac0472ae863beb5011fd463038c2ba30ffe4d70",
-      "detalhe": "docs(instinto): recibo da galeria ZENDRIVE CLI no Design Center autenticado",
-      "area": "Repositório",
-      "sha": "2ac0472",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T21:12:03.469Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0118ad66892e7dc0d868d2ef83f5c3a8b094024f (0118ad6)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T21:04:33.612Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · e39a092d6ab174da5ca0da677358cd16e3500ace (e39a092)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T01:58:09.667Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 2ac0472ae863beb5011fd463038c2ba30ffe4d70 (2ac0472)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T21:04:33.612Z",
-  "updatedAtBR": "15/10/2026, 18:04:33 BRT"
+  "updatedAt": "2026-10-15T21:12:03.469Z",
+  "updatedAtBR": "15/10/2026, 18:12:03 BRT"
 }
