@@ -4,7 +4,7 @@
 
 **CentralDark — Instinto Superior**
 
-**OWNER:** 📣 `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`
+**OWNER:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`
 
 **CAPACIDADE EXISTENTE:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`
 
@@ -2263,16 +2263,4 @@ CHEFE_INTENT + GOAL + AUTORIZAÇÃO
 
 **Cadeados:** `GPT_CODEX_READ_ONLY=true`; `CLAUDE_SOL_READ_ONLY=true`; `HERMES_ONE_WRITER_PER_SCOPE=true`; `ORACLE_OUTPUT_IS_CANDIDATE=true`; `MODEL_VOTE_IS_NOT_PROOF=true`; `RECIPE_HISTORY_PRESERVED=true`; `STALE/UNKNOWN != PASS`. No código visual estes são **contratos/descrições**, não uma alegação de ACL ou integração implantada. Cada conexão de IA, autorização real e replay tipado precisa de contraprova no consumidor existente. Não abrir outro PR de runtime concorrendo com a #1804.
 
-**NEXT_CURSOR:** ⚠️ testar o componente no mesmo SHA; quando elegível, promover pela via Git existente; comprovar publicação visual autenticada no `/sala-controle`; reconciliar o consumidor cognitivo da #1804 pelo seu writer atual e só declarar E2E quando o Hermes realmente executar e devolver receipts para as superfícies consultivas.
-
----
-
-## 📌 Proof Anchor & Receipt
-
-| Item | Status | Link |
-|------|--------|------|
-| Owner | Reference | `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md` |
-| Canonical | Linked | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0) |
-| This Session | Recorded | `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md` (2026-10-08) |
-| Skill | Candidate | `.agents/skills/kaizen-sistema-um/SKILL.md` |
-| Proof | Awaiting | Runtime test in #1804 (Hermes consumer) |
+**NEXT_CURSOR:** testar o componente no mesmo SHA; quando elegível, promover pela via Git existente; comprovar publicação visual autenticada no `/sala-controle`; reconciliar o consumidor cognitivo da #1804 pelo seu writer atual e só declarar E2E quando o Hermes realmente executar e devolver receipts para as superfícies consultivas.
