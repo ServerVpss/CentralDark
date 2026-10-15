@@ -26,8 +26,8 @@ test("zone existente reutilizado com autenticacao", () => {
   assert.match(cockpit, /import \{ HudDeterministico \}/);
   assert.match(cockpit, /TabsTrigger value="hud-legado"/);
   assert.match(cockpit, /autenticado \? \(/);
-  assert.match(cockpit, /<HudDeterministico \/>/);
-  assert.equal((cockpit.match(/<HudDeterministico \/>/g) || []).length, 1);
+  assert.ok(cockpit.includes('HudDeterministico estado={dado} />'));
+  assert.equal(cockpit.split('HudDeterministico estado={dado} />').length - 1, 1);
 });
 
 test("replay documental nao inventa execucao nem novos selos", () => {
