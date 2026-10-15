@@ -63,3 +63,13 @@ Somente eventos estruturados/sanitizados são enviados. Não publicar prompts, t
 - Contraprova de execução: lançador invisível manual exit code `0`; Task Scheduler registrado como `wscript.exe`, `LogonType=Interactive`, trigger `PT1M`, estado `Ready`; disparo da tarefa mudou `LastRunTime` de `21:07:43` para `21:08:42` (BRT), `LastTaskResult=0`.
 - Isso comprova configuração e execução invisível por contrato de sistema, mas não substitui captura visual do desktop caso a janela vista venha de **outra tarefa**. Se persistir, medir novo PID/janela no momento da ocorrência.
 - O coletor de sinais, log bruto, SSH/Tailscale e API permanecem com seus donos; a skill continua exclusivamente na Forja, não na VPS.
+
+
+## 15/10 — ZENDRIVE CLI usa o mesmo log-funnel (prova controlada)
+
+- A extensão existente `skills/vs-code-restore` evoluiu para v0.1.1: comando `CentralDark: ZENDRIVE CLI (terminal existente)`, foco sem duplicar terminal, eventos de shell integrado sanitizados (`shell_start/shell_end`, classe de saída, timestamp), nunca texto do comando nem saída. Owner `skills/vs-code-restore` na `main`: commits `a716b583` (fonte), `441919de` (manifesto), `d4f1c097` (skill).
+- Casa: VSIX empacotado e instalado, `code --list-extensions` confirmou `centraldark.centraldark-vscode-restore@0.1.1`; teste Node isolado de foco/eventos passou. **Não houve reload de janela nem readback de evento real da nova extensão**.
+- Evento controlado de integração: linha `[INFO] [terminal] ... event=integration_probe source=controlled_test` adicionada sem segredos na fonte já existente; bytes `3027886 -> 3028022`. Agendador `CentralDark-VSCode-LogBridge` disparado; cursor atualizado para `3028022` pela rota `tailscale`.
+- VPS: `logs/sectors/vscode/2026-10-15.jsonl` contém `kind=vscode_log_signal`, `key=vscode:terminal`, `end_offset=3028022`; heartbeat `accepted=1 duplicate=0`, próximo heartbeat `accepted=0`. **Pipeline real PASS para o marcador controlado; shell integration live ainda UNKNOWN**.
+- Medição paralela: `hermes-gateway.service=active`, `centraldark-native-mcp-http.service=active`, `127.0.0.1:9100/health=200`; `127.0.0.1:8099/health=000` na VPS e `127.0.0.1:9222=CLOSED` na Casa. Provider `zendrive-chatgpt-local` é alias de código/simulação histórica, não API ChatGPT autenticada live.
+- Não abrir segundo coletor, segundo Hermes, segundo HUD nem copiar cookies/credenciais. Tarefa continua a cada minuto; não chamar de streaming instantâneo. O PR #1820 e seu deploy/main continuam separados.
