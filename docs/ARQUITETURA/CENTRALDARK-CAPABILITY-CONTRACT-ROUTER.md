@@ -317,3 +317,30 @@ INTENT
 ```
 
 Nenhum elemento de Tibia vira autoridade, engine ou identidade da Casa. As páginas são matéria de extração de padrão; o canônico continua CentralDark.
+
+---
+
+## [REFERÊNCIA ATUALIZADA 2026-10-14]
+
+Este documento descreve o **CAPABILITY_CONTRACT_ROUTER**, um dos pilares da arquitetura CentralDark.
+
+A hierarquia completa foi refatorada e documentada em:
+
+- **HIERARQUIA.md** — As três camadas semânticas (Instinto Superior / SOL / HERMES)
+- **ARQUITETURA-CAPACIDADES.md** — Como apps/ implementa Vertical Slice + Domain-Oriented
+- **API-ROTAS-PUBLICAS.md** — Catálogo de capacidades públicas com proteção
+- **00-INDICE-HIERARQUIA-CAPACIDADES.md** — Índice de navegação
+
+O CAPABILITY_CONTRACT_ROUTER é o mecanismo pelo qual **Instinto Superior** (corpo primário) publica capacidades e recebe delegações de SOL/HERMES, mantendo um contrato mensurável sem confundir papel com identidade.
+
+**Invariantes que este documento preserva:**
+
+```text
+PAPEL != IDENTIDADE
+MODELO != IDENTIDADE
+INSTRUMENTO != AGENTE
+CAPABILITY_BEFORE_MODEL=true
+REALITY_IS_JUDGE=true
+```
+
+Recomenda-se ler **HIERARQUIA.md** antes de retornar a este documento para contexto completo da Casa.
