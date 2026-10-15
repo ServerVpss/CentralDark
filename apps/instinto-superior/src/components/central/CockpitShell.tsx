@@ -23,6 +23,7 @@ import { Ledger } from "@/components/central/Ledger";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
+import { AutoSyncButton } from "@/components/central/AutoSyncButton";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
@@ -125,7 +126,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
 
       <section className="px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          <div className="flex items-center gap-3">
+          <AutoSyncButton />
+
+          <div className="mt-8 flex items-center gap-3">
             <Radar className="size-5 text-neon-blue" />
             <h2 className="text-2xl font-semibold">HUD de estado</h2>
             <span className="ml-auto font-mono text-[10px] text-muted-foreground">
