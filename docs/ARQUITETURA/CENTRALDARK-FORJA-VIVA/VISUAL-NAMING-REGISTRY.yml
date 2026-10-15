@@ -44,3 +44,24 @@ entries:
     kind: VISUAL_SKIN
     aliases: ["emerald"]
     status: DEFINED_NOT_GLOBAL_PASS
+
+  - id: FORJA_OPERATOR_EMOJI_ALIASES
+    canonical_name: "Forja Viva — atalhos por capacidade no HUD"
+    kind: EXISTING_CAPABILITY_VISUAL_ALIASES
+    semantic_role: "símbolos acionam somente seleção de receita visível; execução é posterior e autorizada"
+    owner_reused: "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+    cockpit_consumer: "apps/instinto-superior/src/components/central/HudDeterministico.tsx"
+    groups:
+      diagnostico: ["🔧", "🪛"]
+      manutencao: ["🛠️", "👨🏻‍🔧"]
+      observacao: ["👀", "👁️"]
+      linhagem: ["🪡", "🎄"]
+      retomada: ["🌞", "🌟", "✨"]
+      forja: ["☄️", "🔥", "⚒️"]
+    command_map_is_allowlisted: true
+    string_or_emoji_is_shell_command: false
+    command_execute_on_click: false
+    visual_cannot_grant_permission: true
+    runtime_proof_required: true
+    source_state: SOURCE_DEFINED
+    status: NOT_PROVEN_ON_RUNTIME
