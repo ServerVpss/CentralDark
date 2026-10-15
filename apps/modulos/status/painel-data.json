@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "👑 Forja Viva Resiliente — Arquitetura Correta (Expandir, Não Duplicar)",
+    "lastCommit": "fix(trigger-fabric): restaurar JSON dos 166 fluxos sem remover provas canônicas",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T17:22:44.225Z",
+      "titulo": "Push na main · 1d967a1bd9e2756dd39d38173aa9b45af8332509",
+      "detalhe": "fix(trigger-fabric): restaurar JSON dos 166 fluxos sem remover provas canônicas",
+      "area": "Repositório",
+      "sha": "1d967a1",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T17:09:10.789Z",
       "titulo": "Push na main · 567d885fe8e4d83c47f9e3233fa7f51ca80298d6",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "c3e81cb",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T00:47:53.752Z",
-      "titulo": "Push na main · 749e7578a79b89ff300a83868652661ec2ce0a2f",
-      "detalhe": "🧾 receipt(auto-sync): provar cron das 00:45 source-only sem deploy",
-      "area": "Repositório",
-      "sha": "749e757",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T17:22:44.225Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 1d967a1bd9e2756dd39d38173aa9b45af8332509 (1d967a1)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T17:09:10.789Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · c3e81cbeb528f111509ff6035f148d248cc8b33a (c3e81cb)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T00:47:53.752Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 749e7578a79b89ff300a83868652661ec2ce0a2f (749e757)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T17:09:10.789Z",
-  "updatedAtBR": "15/10/2026, 14:09:10 BRT"
+  "updatedAt": "2026-10-15T17:22:44.225Z",
+  "updatedAtBR": "15/10/2026, 14:22:44 BRT"
 }
