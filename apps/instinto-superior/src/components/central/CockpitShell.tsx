@@ -43,8 +43,7 @@ import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
 import { GoalsDashboard } from "@/components/central/GoalsDashboard";
 import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
 import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
-import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
-import { ForjaExecutor } from "@/components/central/ForjaExecutor";
+import { RaioXVivo } from "@/components/central/RaioXVivo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
@@ -399,6 +398,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="design">Design Center</TabsTrigger>
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
                 <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
+                <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
                 <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
                 <TabsTrigger value="forja">🔧 Forja</TabsTrigger>
                 {autenticado ? <TabsTrigger value="admin">Admin CentralDark</TabsTrigger> : null}
@@ -484,6 +484,19 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </p>
               </div>
               <ArchitectureVisualization />
+            </TabsContent>
+            <TabsContent value="raioxvivo" className="mt-10">
+              <div className="mb-8">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                  Ponta a Ponta — SEM Verde Pintado
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold">Raio-X Vivo</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Rastreamento de conexões reais: VS Code → Hermes → PowerShell → Casa → GitHub → VPS → Cockpit.
+                  Apenas verde o que foi medido AGORA. Lacunas bloqueadores em vermelho.
+                </p>
+              </div>
+              <RaioXVivo />
             </TabsContent>
             <TabsContent value="recibos" className="mt-10">
               <ReceiptsDashboard />
