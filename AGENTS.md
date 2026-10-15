@@ -2154,3 +2154,8 @@ A CentralDark conversa em português brasileiro compreensível, como técnico ex
 ## Prova viva da entrada ZENDRIVE CLI no VS Code — 15/10/2026
 
 O comando `centraldark.zendriveCli` da extensão 0.1.1 foi **executado na janela VS Code da Casa** pela paleta de comandos, com foco retornando ao Bash existente. Evento real `cli_focus` foi gravado em `LOGS-VS-CODE.log` e aceito pelo funil VPS: `vscode_log_signal key=vscode:terminal end_offset=3028123`, `route=tailscale accepted=1 duplicate=0`. O evento seguinte foi idempotente (`accepted=0`). **Apenas este trecho está selado.** O teste de echo no Bash remoto não produziu `shell_start/shell_end` na fonte; não presumir telemetria de todos os comandos nem saída capturada. Provider Zendrive/ChatGPT autenticado permanece não provado. Hermes na VPS só consumirá esta regra global quando sua cópia canônica for reconciliada; commit em `main` não prova leitura pelo processo vivo.
+
+
+## Shell start/end ZENDRIVE CLI — complemento de prova (15/10/2026)
+
+Além de `cli_focus`, o listener da extensão 0.1.1 produziu `shell_start exit=unknown` e `shell_end exit=ok`, sem comando/saída. O coletor único transmitiu dois sinais ao `log-funnel` VPS: offsets `3028226` e `3028322`, heartbeat `accepted=2 duplicate=0 route=tailscale`. Isto comprova **pelo menos um par de eventos nativos de execução**, mas não identifica qual comando ou terminal os originou. Não declarar captura universal ou modelo ChatGPT conectado.
