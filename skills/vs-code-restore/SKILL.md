@@ -243,3 +243,28 @@ Nunca adivinhar deviceId, PID, HWND nem aba de terminal com base em fotografia a
 - Speed path: `DEVICE → INVENTORY(JSON) → FOCUS_READBACK → CAPTURE → TRACE_OPT_IN
   → INSPECIONAR → (AUTORIZAR CLI) → EXECUTAR UMA VEZ → COMPARAR → RECEIPT`.
   `UNKNOWN != PASS`; Output UI não é log bruto do terminal.
+
+
+### Readback adicional — trace real na Casa, 15/10
+
+- Script atualizado `K:\skills\vs-code-restore\tools\focus-vscode-window.ps1` carregado
+  por `powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...`.
+- `-Mode Inventory -EmitTrace`: `EXIT=0`, duas janelas encontradas, origem
+  `K:\TEMP\logs\LOGS-VS-CODE.log` avançou `3030328 → 3030578` bytes,
+  incluindo `event=window_inventory state=observed` e
+  `event=window_focus state=fail` (falha por ambiguidade: nenhuma janela VS Code
+  era `foreground`, exigiu `-WindowHandle`).
+- `-Mode FocusCapture -TargetPid 12268 -WindowHandle 657456 -EmitTrace`
+  foi tentado em seguida; `FOCUS_RC=1`, pois Windows não concedeu
+  `SetForegroundWindow` com readback válido naquele momento.
+  Origem avançou `3030578 → 3030708` com `window_focus state=fail`.
+  A rotina recusou captura, clique e comando. **Falha segura comprovada.**
+- A execução anterior, enquanto VS Code estava em primeiro plano,
+  havia passado `FOCUS_READBACK_PASS` com screenshot. Foco é estado volátil.
+  Não usar PASS histórico como prova de foco atual; repetir medição e
+  escolher `-Mode Capture -TargetPid ... -WindowHandle ...` se foco estiver
+  bloqueado (a captura pode incluir oclusões, classificar como `UNKNOWN`).
+- **Atenção:** origem escrita `!=` evento ingerido na VPS; a transferência
+  agendada, o readback no `log-funnel` e o comando `CentralDark: Mostrar Trace`
+  ainda precisam de prova pós-ativação da extensão. Não publicar IP, títulos,
+  command-line, cookies, payloads ou imagem em receipt.
