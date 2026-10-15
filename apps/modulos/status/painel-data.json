@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🚀 Auto Sync + Micro-Deploy Cockpit — 5 botões paralelos + deploy ao vivo",
+    "lastCommit": "📋 Sistema Integrado: Depo + Briefing + Gaveta + StatusPanel",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,30 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T17:05:55.940Z",
+      "titulo": "Push na main · a620cf258f89b651dccce286a35396d241522549",
+      "detalhe": "📋 Sistema Integrado: Depo + Briefing + Gaveta + StatusPanel",
+      "area": "Repositório",
+      "sha": "a620cf2",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-15T17:04:07.343Z",
+      "titulo": "Push na main · c856112dcb13e88cff3352d71de293283663aec2",
+      "detalhe": "docs(hub): cristalizar rota de conflitos, Gmail e Hub de Contas com gates",
+      "area": "Repositório",
+      "sha": "c856112",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-15T17:03:38.273Z",
+      "titulo": "Push na main · 12fd6742433645879c69e8c4f310e54dd1be1c9c",
+      "detalhe": "feat(hub): mapear conflitos PR ao canal Gmail existente sem novo resolvedor",
+      "area": "Repositório",
+      "sha": "12fd674",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T16:54:31.754Z",
       "titulo": "Push na main · dd2a30a0e39dac094a0f9383f0931681d1818c9f",
@@ -385,33 +409,30 @@
       "area": "Repositório",
       "sha": "48db33b",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T00:44:53.973Z",
-      "titulo": "Push na main · 0c377e6d2dfe57006febde63b07de1f9c76d4c51",
-      "detalhe": "🔒 fix(auto-sync): source-only main fetch with active Forge branch preserved",
-      "area": "Repositório",
-      "sha": "0c377e6",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T23:25:58.950Z",
-      "titulo": "Push na main · bb92c9fb256febd1796e6d493a81ececf7830d7d",
-      "detalhe": "🗣️ gramática: narrar apenas leitura real de banco, arquivo e pasta",
-      "area": "Repositório",
-      "sha": "bb92c9f",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T23:24:32.227Z",
-      "titulo": "Push na main · e86f78240a704ede97c5189a7e4d27a3cb85f553",
-      "detalhe": "🗣️ gramática: falar de volta e executar sem micro-passos",
-      "area": "Repositório",
-      "sha": "e86f782",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T17:05:55.940Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a620cf258f89b651dccce286a35396d241522549 (a620cf2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-15T17:04:07.343Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c856112dcb13e88cff3352d71de293283663aec2 (c856112)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-15T17:03:38.273Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 12fd6742433645879c69e8c4f310e54dd1be1c9c (12fd674)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T16:54:31.754Z",
       "ia": "@segredounlock",
@@ -740,27 +761,6 @@
       "action": "📌 Push na main · 48db33b154bdb08f9118a779dbebea403d714cde (48db33b)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T00:44:53.973Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 0c377e6d2dfe57006febde63b07de1f9c76d4c51 (0c377e6)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T23:25:58.950Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · bb92c9fb256febd1796e6d493a81ececf7830d7d (bb92c9f)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T23:24:32.227Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · e86f78240a704ede97c5189a7e4d27a3cb85f553 (e86f782)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T16:54:31.754Z",
-  "updatedAtBR": "15/10/2026, 13:54:31 BRT"
+  "updatedAt": "2026-10-15T17:05:55.940Z",
+  "updatedAtBR": "15/10/2026, 14:05:55 BRT"
 }
