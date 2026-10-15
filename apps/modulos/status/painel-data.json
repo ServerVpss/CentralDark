@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(vault): restringir visualizador Obsidian local ao loopback; acesso móvel só via Admin autenticado",
+    "lastCommit": "docs(brain): selar circuito iPhone Tailscale Casa Cockpit com prova T1 e limites Admin",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T23:20:11.049Z",
+      "titulo": "Push na main · 2331349e438554dd47cb7e224e1391e28fb273d8",
+      "detalhe": "docs(brain): selar circuito iPhone Tailscale Casa Cockpit com prova T1 e limites Admin",
+      "area": "Repositório",
+      "sha": "2331349",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T23:14:51.795Z",
       "titulo": "Push na main · 0e6c45c74ce21c4e24b48aea31a9f613c0114ad0",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "a766d77",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T05:15:53.694Z",
-      "titulo": "Push na main · 25404bb7e53a3458302a9e5a6bb8671056a12f02",
-      "detalhe": "docs(skill): document proven Desktop Commander Windows VS Code route",
-      "area": "Repositório",
-      "sha": "25404bb",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T23:20:11.049Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 2331349e438554dd47cb7e224e1391e28fb273d8 (2331349)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T23:14:51.795Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · a766d77e46313212ab4f0082a9a899e81c3a519d (a766d77)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T05:15:53.694Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 25404bb7e53a3458302a9e5a6bb8671056a12f02 (25404bb)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T23:14:51.795Z",
-  "updatedAtBR": "15/10/2026, 20:14:51 BRT"
+  "updatedAt": "2026-10-15T23:20:11.049Z",
+  "updatedAtBR": "15/10/2026, 20:20:11 BRT"
 }
