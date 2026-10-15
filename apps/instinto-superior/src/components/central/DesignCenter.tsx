@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Check, Eye, Monitor, RotateCcw, Smartphone, TriangleAlert } from "lucide-react";
+import { Check, ExternalLink, Eye, Monitor, Puzzle, RotateCcw, Smartphone, TerminalSquare, TriangleAlert } from "lucide-react";
 
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
 import { Button } from "@/components/ui/button";
@@ -100,9 +100,11 @@ function MiniSuperficie({ tipo }: { tipo: "publica" | "entrada" | "controle" }) 
 export function DesignCenter({
   pele = "default",
   selecionarPele,
+  autenticado = false,
 }: {
   pele?: PeleCockpit;
   selecionarPele?: (valor: string) => void;
+  autenticado?: boolean;
 }) {
   const [comparacao, definirComparacao] = useState<"canonico" | "teste">("canonico");
 
@@ -162,6 +164,7 @@ export function DesignCenter({
         <TabsList className="h-auto max-w-full flex-wrap justify-start">
           <TabsTrigger value="tokens">Tokens</TabsTrigger>
           <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger>
+          {autenticado ? <TabsTrigger value="extensoes">Galeria de extensões</TabsTrigger> : null}
           <TabsTrigger value="superficies">Superfícies</TabsTrigger>
           <TabsTrigger value="auditoria">Auditoria</TabsTrigger>
         </TabsList>
@@ -234,6 +237,96 @@ export function DesignCenter({
             </article>
           </div>
         </TabsContent>
+
+        {autenticado ? (
+          <TabsContent value="extensoes" className="mt-6">
+            <section id="galeria-extensoes" aria-labelledby="galeria-extensoes-titulo">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                    Builder · biblioteca existente
+                  </p>
+                  <h3 id="galeria-extensoes-titulo" className="mt-2 text-xl font-semibold">
+                    Galeria de extensões
+                  </h3>
+                  <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                    Capacidades vinculadas ao código canônico, sem reinstalar serviços ou criar
+                    outra galeria. Os estados abaixo são a última prova registrada, não uma
+                    consulta ao vivo ao computador.
+                  </p>
+                </div>
+                <SeloEstado estado="UNKNOWN" />
+              </div>
+
+              <article className="panel mt-6 p-6" data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    <span className="rounded-md border border-neon-blue/40 p-2 text-neon-blue">
+                      <TerminalSquare className="size-6" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-wide text-neon-blue">
+                        CentralDark VS Code Restore · extensão existente
+                      </p>
+                      <h4 className="mt-1 text-lg font-semibold">🪬 ZENDRIVE CLI</h4>
+                      <p className="mt-1 font-mono text-xs text-muted-foreground">
+                        centraldark.centraldark-vscode-restore@0.1.1
+                      </p>
+                    </div>
+                  </div>
+                  <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
+                    Casa: instalada em 15/10/2026
+                  </span>
+                </div>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  Volta ao terminal já aberto no VS Code sem criar outra sessão Hermes.
+                  Registra apenas foco, início e fim de execuções no mesmo funil de logs:
+                  Casa → Tailscale → MCP CentralDark.
+                </p>
+
+                <dl className="mt-5 grid gap-4 border-y border-border py-4 text-xs sm:grid-cols-2">
+                  <div>
+                    <dt className="text-muted-foreground">Comando da extensão</dt>
+                    <dd className="mt-1 font-mono">CentralDark: ZENDRIVE CLI (terminal existente)</dd>
+                  </div>
+                  <div>
+                    <dt className="text-muted-foreground">Última prova de telemetria</dt>
+                    <dd className="mt-1 font-mono">3 eventos na VPS · offset 3028322 · 15/10/2026</dd>
+                  </div>
+                  <div>
+                    <dt className="text-muted-foreground">Integração de logs</dt>
+                    <dd className="mt-1">
+                      PR #1820 · fonte local protegida · coletor e log-funnel reutilizados
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-muted-foreground">Limite atual</dt>
+                    <dd className="mt-1">
+                      Provider ChatGPT/Zendrive não provado ao vivo; ativação neste cockpit não medida.
+                    </dd>
+                  </div>
+                </dl>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-fonte">
+                    <a href="https://github.com/ServerVpss/CentralDark/tree/main/skills/vs-code-restore" target="_blank" rel="noopener noreferrer">
+                      <Puzzle /> Código e receita <ExternalLink />
+                    </a>
+                  </Button>
+                  <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-logs">
+                    <a href="https://github.com/ServerVpss/CentralDark/pull/1820" target="_blank" rel="noopener noreferrer">
+                      Ver integração de logs <ExternalLink />
+                    </a>
+                  </Button>
+                </div>
+                <p className="mt-4 text-xs text-muted-foreground">
+                  Esta ficha cataloga a extensão existente: não instala VSIX no dispositivo do visitante,
+                  não inicia Hermes e não concede acesso remoto. Build e deploy do cockpit são provas separadas.
+                </p>
+              </article>
+            </section>
+          </TabsContent>
+        ) : null}
 
         <TabsContent value="superficies" className="mt-6">
           <div className="grid gap-5 lg:grid-cols-3">

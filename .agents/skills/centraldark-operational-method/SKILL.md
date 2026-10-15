@@ -186,6 +186,49 @@ FIXED_POINT = objetivo terminal satisfeito + continuidade preservada + cadeado c
 
 Distinguir `PRESERVADO` (não regrediu), `REPARADO` (falha corrigida), `MELHORADO` (benefício adicional provado), `PARCIAL` (há efeito mas falta critério material), `REABERTO` (regressão medida) e `BLOCKED/UNKNOWN` (sem prova suficiente). Se o arquivo documental foi alterado mas a runtime não consumiu, o selo é **DOCUMENTED_ONLY**: não inventar deploy, automação, vigilância contínua ou cura global. O cadeado fecha a ferida **somente** no nível comprovado; se a causa voltar, reabre o mesmo fio e costura o cone afetado.
 
+
+### 👩‍🚀 Self-Realigning + Auto-Healing + Magic Space — órbita segura do mesmo organismo
+
+`MAGIC_SPACE` é metáfora operacional para **navegação por dependências e recuperação com prova**. Não é novo subsistema, agente, IA, scheduler, watcher, logger ou plano de controle. Esta seção aprofunda o **metabolismo + ferida/costura/cristal/cadeado** anteriores; instrução documentada não equivale a autocura ativa.
+
+```text
+PULSO (probe existente sob demanda ou consumer vivo comprovado)
+→ CURRENT (host/processo/fonte/instante/HEAD/config/efeito)
+→ SELF_REALIGNING: comparar contrato + fingerprint + último verde
+→ CLASSIFICAR: drift esperado | drift causal | falha de sensor | incidente | UNKNOWN
+→ CORRELACIONAR: WOUND_ID + setor + owner + mudança causadora
+→ CANDIDATO_AUTOHEAL = causa conhecida + receita provada + autorização + rollback
+→ SE APTO: adquirir writer/lock do setor → replay idempotente do menor delta
+→ VALIDAR: health + efeito esperado + contraprova negativa + regressões adjacentes
+→ PASS: receipt + cristal no owner + selo + NEXT_CURSOR
+→ FAIL: VOLTA_UMA_CASA no cone afetado + nova evidência discriminante
+→ SEM ROTA SEGURA: degradar só capacidade afetada; BLOCKED/UNKNOWN documentado
+→ PULSO SEGUINTE: verificar freshness; selo histórico não prova CURRENT
+```
+
+**Self-Realigning:** drift não autoriza `pull`, `reset`, `clean`, force-push, sobrescrita de dirty/untracked, restart amplo nem convergência forçada entre Casa, VPS e main. Esses são **sensores independentes**. Identificar qual binding mudou e se a divergência é legítima. Reconciliar **somente** a configuração, o blob ou a rota cuja causalidade foi provada pelo owner e cuja receita é segura. `BLOB_SYNC != CONSUMER_RUNNING_NEW_BLOB`.
+
+**Auto-Healing:** executar sem microconfirmação redundante **somente dentro da intenção/autorização real** e da capacidade da ferramenta. Requer `KNOWN_CAUSE + OWNER + SCOPE + REPLAYABLE_RECIPE + EXCLUSIVE_WRITER + LAST_KNOWN_GOOD + ROLLBACK + HEALTH_PROBE`. Reusar Hermes e os executores, logs/receipts, roteador de setores e gates existentes; skill não concede credenciais, autorização ou scheduler. Diagnosticar primeiro: reinício repetido sem causa provada não é autocura.
+
+**Magic Space / órbita de segurança:** cada setor mantém sua própria órbita (fonte → owner → executor → sensor → efeito → aprendizado) e se realinha sem colidir com os demais. Não transformar a metáfora em produto ou diretório.
+- **Idempotência:** mesmo `WOUND_ID + fingerprint` não recebe a mesma mutação sem evidência nova; deduplicar no rastro existente e usar lock do writer, sem segunda fila.
+- **Fusível anti-loop:** após erro repetido ou falta de progresso, suspender apenas a mesma tentativa no escopo afetado (`REQUIRES_NEW_DISCRIMINATING_EVIDENCE`); timeout/backoff/retry seguem limites reais do executor, nunca números arbitrários.
+- **Ferida criada pela autocura:** voltar uma casa; restaurar a capacidade anterior comprovada se seguro e autorizado, sem apagar a mudança útil de outro setor.
+- **Contraprova de consumo:** medir consumidor em execução, não apenas arquivo no disco, porta aberta, processo vivo ou painel verde.
+- **Cadeado reabrível:** `REMEDIATED + NEGATIVE_PROBE_PASS + BACKCHECK_PASS + EFFECT_READBACK + RECEIPT_REF`. Recorrência reabre a ferida anterior, registra novo fingerprint e invalida somente as provas afetadas.
+
+```text
+SELF_REALIGNING = PROVEN | PARTIAL | UNKNOWN | BLOCKED
+AUTO_HEALING = PROVEN | PARTIAL | UNKNOWN | BLOCKED
+ORBITAL_MAP = docs/CONSCIENCIA/MAPA-DO-CEREBRO.md (roteador existente)
+LOG_FUNNEL = apps/modulos/mcp/src/log-funnel.js (sensor, não executor)
+AUTO_HEALING_PROVEN somente se consumer vivo + trigger + reparo + efeito + contraprova
+DOCUMENTED_ONLY != AUTONOMOUS_HEALING
+NO_PARALLEL_MAGIC_SPACE=true
+```
+
+**Cristal reutilizável:** `INTENT → SECTOR → OWNER → WOUND_ID → FINGERPRINT → SIGNAL → CAUSE → SAFE_DELTA → BACKOUT → EFFECT → COUNTERPROOF → RECEIPT → NEXT_CURSOR`. Guardar no owner/ledger existente; HUD é projeção, não fonte da cura. Benefício, reparo e saúde global são claims distintos e exigem provas distintas.
+
 ## 🔏 Lei do Rastro
 
 ```text
