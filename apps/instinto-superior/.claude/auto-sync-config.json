@@ -1,0 +1,33 @@
+{
+  "auto_sync_incremental": {
+    "enabled": true,
+    "mode": "PARALLEL_BACKGROUND",
+    "description": "Sincronização contínua — cada mudança = novo commit para main",
+    "behavior": {
+      "monitor_interval_seconds": 30,
+      "auto_stage": true,
+      "auto_commit": true,
+      "auto_push": true,
+      "target_branch": "main"
+    },
+    "commit_strategy": {
+      "message_format": "🔄 Incremental: {files_changed} [{timestamp}]",
+      "group_by_folder": false,
+      "max_files_per_commit": "all"
+    },
+    "push_strategy": {
+      "on_success": "continue",
+      "on_failure": "rebase_and_retry",
+      "force_push": false,
+      "retry_count": 3,
+      "retry_delay_seconds": 5
+    },
+    "logging": {
+      "enabled": true,
+      "file": ".claude-logs/auto-sync-incremental.log",
+      "level": "INFO"
+    },
+    "activation": "automatic_on_session_start",
+    "notes": "Ativado em 2026-10-15. Substitui confirmações manuais. Tudo que é alterado em K:\\ vai direto para main incrementalmente."
+  }
+}

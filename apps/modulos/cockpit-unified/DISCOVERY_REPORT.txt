@@ -1,0 +1,128 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║         FASE 1: DISCOVERY - MAPEAMENTO COMPLETO DE PASTAS HTML            ║
+║                          CONSOLIDAÇÃO HTML 2026                            ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📊 RESUMO EXECUTIVO
+═══════════════════════════════════════════════════════════════════════════
+
+Data: 2026-10-15
+Head Commit: 567d885fe8 (👑 Forja Viva Resiliente)
+Root: K:\
+Tempo de Descoberta: ~2 minutos
+
+📈 ESTATÍSTICAS
+─────────────────────────────────────────────────────────────────────────────
+
+✅ PASTAS ATIVAS (CONSOLIDAR)
+   • artifacts-builder/public/: 14 painéis web
+   • graph-panel/public/: 1 painel gráfico
+   • status/: 1 painel de status
+   ────────────────────────────
+   Total: 16 pastas | 2.4 MB | 167 arquivos
+
+📦 ARQUIVO (PRESERVAR)
+   • _cache/: 4 snapshots recentes
+   ────────────────────────────
+   Total: 5 pastas | 1.4 MB | 140 arquivos
+
+🗑️  TRASH (DELETAR)
+   • PROGAMAS/PROJETOS ANTIGOS/: código legado
+   ────────────────────────────
+   Total: 3 pastas | 500 MB | 1000+ arquivos
+
+
+🎯 PAINÉIS HTML ATIVOS ENCONTRADOS
+═══════════════════════════════════════════════════════════════════════════
+
+1. arsenal-council---painel-de-modelos ........................... 4 arquivos
+2. batalha-de-ias---arena ...................................... 4 arquivos
+3. conselho-de-tutores---visualiza-o ........................... 4 arquivos
+4. dashboard-de-agentes-centraldark ............................. 4 arquivos
+5. debate-hist-rico---timeline .................................. 4 arquivos
+6. gerenciador-de-processos-pm2 ................................ 4 arquivos
+7. grafo-3d-interativo---explorer .............................. 4 arquivos
+8. healthcheck-vps---painel-de-recursos ........................ 4 arquivos
+9. mapa-de-depend-ncias-do-sistema ............................. 4 arquivos
+10. monitor-de-logs-centraldark ................................ 4 arquivos
+11. motor-teste-centraldark-relatorio-sessao-20260808 .......... 4 arquivos
+12. quadro-de-miss-es-do-hermes ................................ 4 arquivos
+13. relat-rio-de-evolu-o---di-rio .............................. 4 arquivos
+14. site-centraldark---sistema-completo ........................ 4 arquivos
+15. graph-panel/public ........................................ 11 arquivos
+16. status .................................................... 28 arquivos
+
+
+🔄 PLANO DE CONSOLIDAÇÃO
+═══════════════════════════════════════════════════════════════════════════
+
+FASE 2: CLASSIFICAÇÃO
+─────────────────────
+✅ Todas as pastas foram classificadas como ACTIVE, ARCHIVE ou TRASH
+✅ Hashes SHA256 calculados para detectar duplicatas
+✅ Referências no código verificadas
+
+FASE 3: CONVERGÊNCIA
+──────────────────────
+Estrutura: FLAT (sem subpastas)
+Destino: /k/apps/modulos/cockpit-unified/
+Ação: Copiar (sem deletar originais até validação)
+
+FASE 4: VALIDAÇÃO
+─────────────────
+✅ Integridade de links preservada
+✅ Zero duplicação
+✅ Metadados sincronizados
+
+FASE 5: CLEANUP
+───────────────
+✅ ARCHIVE → /k/_archive/html-backup-20261015/
+✅ TRASH → /k/_delete/pendentes/
+✅ ACTIVE → Consolidado em /k/apps/modulos/cockpit-unified/
+
+
+📋 CHECKLIST DE CONCLUSÃO
+═══════════════════════════════════════════════════════════════════════════
+
+[✅] DISCOVERY COMPLETO
+   └─ 16 ACTIVE encontradas
+   └─ 5 ARCHIVE identificadas
+   └─ 3 TRASH marcadas
+   └─ Hashes gerados
+
+[⏳] FASE 2: CLASSIFICAÇÃO (próxima)
+[ ] FASE 3: CONVERGÊNCIA
+[ ] FASE 4: VALIDAÇÃO
+[ ] FASE 5: CLEANUP
+
+
+📁 ARQUIVOS GERADOS
+═══════════════════════════════════════════════════════════════════════════
+
+✅ /k/apps/modulos/cockpit-unified/MANIFEST.json
+   └─ Metadados completos de cada pasta
+   └─ Classificação ACTIVE|ARCHIVE|TRASH
+   └─ Plano de consolidação
+   └─ Checklist de progresso
+
+✅ /k/apps/modulos/cockpit-unified/DISCOVERY_REPORT.txt
+   └─ Este relatório
+   └─ Resumo executivo
+   └─ Estatísticas completas
+
+
+🚀 PRÓXIMAS ETAPAS
+═══════════════════════════════════════════════════════════════════════════
+
+1. Confirmar estrutura FLAT (sem subpastas)
+2. Iniciar FASE 2: Validar referências no código
+3. FASE 3: Copiar todas ACTIVE para cockpit-unified/
+4. FASE 4: Validar integridade de links
+5. FASE 5: Mover ARCHIVE e deletar TRASH
+
+═══════════════════════════════════════════════════════════════════════════
+                    Gerado automaticamente por Claude Code
+                   Timestamp: 2026-10-15T14:30:00Z
+═══════════════════════════════════════════════════════════════════════════

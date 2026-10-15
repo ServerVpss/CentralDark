@@ -11,6 +11,8 @@ import {
   SlidersHorizontal,
   PanelRightOpen,
   Cpu,
+  Terminal,
+  Fingerprint,
 } from "lucide-react";
 import {
   Sheet,
@@ -110,6 +112,52 @@ const COR_PROVA: Record<ProvaRota, string> = {
   ROTA_FALHOU: "text-red-400 border-red-500/30",
 };
 const SNAPSHOT_FLUXO = "15/10/2026 · 16:47 BRT";
+const GOAL_ORIGEM_SNAPSHOT = "15/10/2026 · Casa SEGREDO · sessão Claude b1f3689c";
+const GOAL_ETAPAS = [
+  {
+    nome: "👑 CHEFE → Claude Code CLI",
+    estado: "PROVADO",
+    detalhe: "Mensagem humana recebida na sessão Claude Code; evento user com isMeta=false.",
+    evidencia: "Sessão b1f3689c · linha JSONL 3157 · Claude CLI PID 30564 → PowerShell → VS Code.",
+  },
+  {
+    nome: "🔁 Stop hook → Claude Code",
+    estado: "PROVADO",
+    detalhe:
+      "Continuação automática entrou como Stop hook feedback, isMeta=true; o emissor específico desse feedback ainda não foi isolado.",
+    evidencia:
+      "JSONL linhas 2557, 2569, 2879 · hooks globais e locais encontrados, sem recibo que atribua a origem exata.",
+  },
+  {
+    nome: "🛠️ Claude CLI → Bash / Edit / Write / Agent",
+    estado: "PROVADO",
+    detalhe: "Chamadas reais de ferramentas na sessão, não necessariamente do mesmo GOAL.",
+    evidencia:
+      "Histórico JSONL contém 116 Bash, 48 Edit, 31 Write e 10 Agent; contagens da sessão inteira.",
+  },
+  {
+    nome: "🎯 GoalsDashboard → registry local",
+    estado: "PARCIAL",
+    detalhe:
+      "Interface criada e ligada ao cockpit; persistência no localStorage, não é fila de execução.",
+    evidencia: "src/components/central/GoalsDashboard.tsx → src/data/goals-registry.ts.",
+  },
+  {
+    nome: "⚙️ Registry → Hermes CLI",
+    estado: "UNKNOWN",
+    detalhe:
+      "Hermes chat/acp existe em terminais separados, mas a entrega de GOAL com run_id/ACK não foi comprovada.",
+    evidencia:
+      "Não encontrado despacho no goals-registry.ts nem recibo de aceitação pelo processo Hermes.",
+  },
+  {
+    nome: "🧿 Hermes CLI → HUD / receipt",
+    estado: "UNKNOWN",
+    detalhe: "Sem prova de evento de execução vinculado ao mesmo goal_id retornando ao HUD.",
+    evidencia:
+      "Faltam goal_id, session_id, run_id, timestamp, owner e recibo de contraprova do mesmo evento.",
+  },
+] as const;
 const ROTAS_FLUXO = {
   github: ["casa-github", "github-vps", "vps-casa"],
   vps: ["casa-vps", "vps-github", "github-casa"],
@@ -118,7 +166,9 @@ const ROTAS_FLUXO = {
 function DominioDoLoop() {
   const [percurso, selecionarPercurso] = useState<"github" | "vps">("github");
   const [duasVias, definirDuasVias] = useState(true);
-  const [visao, selecionarVisao] = useState<"circuito" | "comparacao" | "provas">("circuito");
+  const [visao, selecionarVisao] = useState<"circuito" | "comparacao" | "provas" | "origem">(
+    "circuito",
+  );
   const [gavetaAberta, definirGavetaAberta] = useState<"fluxo" | "rota" | "modelos" | null>(null);
   const [rotaSelecionada, definirRotaSelecionada] = useState<string | null>(null);
   const rotaDetalhe = rotaSelecionada ? PROVAS_FLUXO[rotaSelecionada] : null;
@@ -204,7 +254,7 @@ function DominioDoLoop() {
         </label>
       </div>
       <div className="mt-4 flex flex-wrap gap-2" role="tablist" aria-label="Visões do loop">
-        {(["circuito", "comparacao", "provas"] as const).map((aba) => (
+        {(["circuito", "comparacao", "provas", "origem"] as const).map((aba) => (
           <button
             role="tab"
             aria-selected={visao === aba}
@@ -217,7 +267,9 @@ function DominioDoLoop() {
               ? "Ganhos × perdas"
               : aba === "provas"
                 ? "Contraprova"
-                : "Circuito"}
+                : aba === "origem"
+                  ? "🎯 Quem envia GOAL?"
+                  : "Circuito"}
           </button>
         ))}
       </div>
@@ -346,6 +398,86 @@ function DominioDoLoop() {
               GOAL → RUN → EVIDÊNCIA → BUILD → SHA MAIN → SHA DEPLOY: UNKNOWN
             </p>
           </div>
+        </div>
+      ) : null}
+      {visao === "origem" ? (
+        <div
+          className="mt-4 space-y-4"
+          role="tabpanel"
+          aria-label="Rastro de origem do GOAL no CLI"
+        >
+          <div className="rounded-md border border-border bg-background/40 p-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <Terminal className="size-5 text-neon-blue" aria-hidden="true" />
+              <h4 className="font-semibold">Quem está mandando GOAL para o terminal?</h4>
+              <span className="ml-auto rounded border border-amber-500/30 px-2 py-1 text-xs text-amber-500">
+                Loop parcial
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {GOAL_ORIGEM_SNAPSHOT}. A sessão CLI foi iniciada pelo terminal VS Code. Eventos do
+              CHEFE e feedback automático do Stop hook aparecem separadamente no histórico.
+            </p>
+            <p className="mt-2 rounded-md border border-border p-3 font-mono text-xs">
+              CHEFE → Claude Code CLI → ferramentas → arquivos do Cockpit
+              <span className="block text-amber-500">
+                Goals Registry → Hermes CLI → HUD: SEM RECIBO DE TRANSPORTE
+              </span>
+            </p>
+          </div>
+          <div className="grid gap-2">
+            {GOAL_ETAPAS.map((etapa, indice) => (
+              <article
+                key={etapa.nome}
+                className="rounded-md border border-border bg-background/30 p-3"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h5 className="font-medium text-sm">
+                    {indice + 1}. {etapa.nome}
+                  </h5>
+                  <span
+                    className={
+                      etapa.estado === "PROVADO"
+                        ? "rounded border border-emerald-500/40 px-2 py-0.5 text-[10px] text-emerald-500"
+                        : "rounded border border-amber-500/40 px-2 py-0.5 text-[10px] text-amber-500"
+                    }
+                  >
+                    {etapa.estado}
+                  </span>
+                </div>
+                <p className="mt-2 text-xs">{etapa.detalhe}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">{etapa.evidencia}</p>
+              </article>
+            ))}
+          </div>
+          <div className="rounded-md border border-border p-4">
+            <h5 className="flex items-center gap-2 font-semibold text-sm">
+              <Fingerprint className="size-4" aria-hidden="true" /> Rota fixa configurada na Casa
+            </h5>
+            <p className="mt-2 break-all font-mono text-xs">
+              .vscode/settings.json → K:\\scripts\\vscode\\centraldark-claude-wrapper.cmd
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Wrapper testado com exit 0, fail-closed sem gateway com exit 3. Modo Hermes: OFF. A
+              sessão Claude existente não foi reiniciada; novo lançamento pelo wrapper ainda requer
+              readback.
+            </p>
+            <p className="mt-2 text-xs text-amber-500">
+              FIXED_POINT ainda não atingido: falta comprovante com goal_id + session_id + run_id +
+              ACK + resultado.
+            </p>
+          </div>
+          <p className="text-[11px] text-muted-foreground">
+            Este é um snapshot auditado, não telemetria ao vivo. Não transformar eventos
+            independentes em percentual de conclusão.
+          </p>
+          <button
+            type="button"
+            className="rounded border border-border px-3 py-2 text-xs hover:bg-muted"
+            onClick={() => selecionarVisao("circuito")}
+          >
+            Voltar ao circuito
+          </button>
         </div>
       ) : null}
       <div className="mt-4 rounded-md border border-border bg-background/40 p-4">
