@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
@@ -12,6 +13,7 @@ import {
   Mail,
   PackageCheck,
   Radar,
+  Send,
   Server,
   ShieldCheck,
 } from "lucide-react";
@@ -37,6 +39,15 @@ function formatarTamanho(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(1).replace(".", ",")} MB`;
 }
 
+type UnigramLaunchStatus = "IDLE" | "PENDING" | "REQUESTED" | "UNAVAILABLE" | "ERROR";
+type NativeUnigramBridge = {
+  openUnigramDesktop?: () => Promise<{ status: "REQUESTED" | "UNAVAILABLE"; capability: "UNIGRAM" }>;
+};
+function nativeUnigramBridge(): NativeUnigramBridge | undefined {
+  if (typeof window === "undefined") return undefined;
+  return (window as Window & { centraldark?: NativeUnigramBridge }).centraldark;
+}
+
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const lerEstado = useServerFn(lerEstadoCentralDark);
@@ -48,6 +59,21 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const dado = estado.data;
   const queryClient = useQueryClient();
   const navegar = useNavigate();
+  const [unigramLaunch, setUnigramLaunch] = useState<UnigramLaunchStatus>("IDLE");
+  async function abrirUnigram() {
+    const bridge = nativeUnigramBridge();
+    if (!bridge?.openUnigramDesktop) {
+      setUnigramLaunch("UNAVAILABLE");
+      return;
+    }
+    setUnigramLaunch("PENDING");
+    try {
+      const result = await bridge.openUnigramDesktop();
+      setUnigramLaunch(result.status === "REQUESTED" ? "REQUESTED" : "UNAVAILABLE");
+    } catch {
+      setUnigramLaunch("ERROR");
+    }
+  }
   async function sair() {
     await queryClient.cancelQueries();
     queryClient.clear();
@@ -184,6 +210,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="unigram">Unigram</TabsTrigger>
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
               </TabsList>
             </div>
@@ -307,6 +334,44 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   </a>
                 </Button>
               </div>
+            </TabsContent>
+            <TabsContent value="unigram" className="mt-10">
+              <section className="panel p-6" aria-label="Unigram original como capacidade da CentralDark">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                  Capacidade externa · mesma Casa
+                </p>
+                <h2 className="mt-3 flex items-center gap-3 text-3xl font-semibold">
+                  <Send className="size-6" aria-hidden /> Unigram
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
+                  Abre a interface original do Unigram instalado no Windows, lado a lado com
+                  o Instinto Superior. Preserva mensagens, sessão, atualizações e recursos
+                  do próprio aplicativo. Não copia código nem usa uma conta Telegram
+                  por API sem autorização específica.
+                </p>
+                <div className="mt-6 flex flex-wrap items-center gap-4">
+                  <Button
+                    type="button"
+                    onClick={() => void abrirUnigram()}
+                    disabled={unigramLaunch === "PENDING"}
+                    data-cd-flow="instinto.CockpitShell.unigram-abrir"
+                  >
+                    <Send className="size-4" aria-hidden /> Abrir Unigram original
+                  </Button>
+                  <span role="status" aria-live="polite" className="text-xs text-muted-foreground">
+                    {unigramLaunch === "IDLE" ? "Disponibilidade do aplicativo: UNKNOWN"
+                      : unigramLaunch === "PENDING" ? "Solicitando abertura…"
+                      : unigramLaunch === "REQUESTED" ? "Solicitação enviada ao Windows · janela não comprovada"
+                      : unigramLaunch === "UNAVAILABLE" ? "Esta ação requer o CentralDark.exe no Windows; navegador não abre apps locais"
+                      : "Falha ao solicitar abertura · consultar log nativo"}
+                  </span>
+                </div>
+                <p className="mt-5 text-xs text-muted-foreground">
+                  Este botão usa a ponte existente do CentralDark Desktop. A edição web
+                  não tenta executar aplicativos na máquina do visitante. Unigram e Hermes
+                  continuam processos independentes, governados pelos contratos existentes.
+                </p>
+              </section>
             </TabsContent>
             <TabsContent value="downloads" className="mt-10">
               <section id="download-center" className="scroll-mt-24">
