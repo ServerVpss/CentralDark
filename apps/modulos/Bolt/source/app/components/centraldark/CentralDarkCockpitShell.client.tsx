@@ -4,6 +4,7 @@ import './centraldark-cockpit.scss';
 
 type HouseMode = 'OPERAR' | 'PLANEJAR' | 'TAREFA' | 'DELEGAR';
 type LiveState = 'ONLINE' | 'OFFLINE' | 'UNKNOWN';
+type UnigramLaunchState = 'IDLE' | 'PENDING' | 'REQUESTED' | 'UNAVAILABLE' | 'ERROR';
 
 type RuntimeSnapshot = {
   app_name?: string;
@@ -32,6 +33,11 @@ type CentralDarkBridge = {
   getHermesHealth?: () => Promise<HealthSnapshot>;
   getScreenpipeHealth?: () => Promise<HealthSnapshot>;
   toggleWidget?: () => Promise<unknown>;
+  openUnigramDesktop?: () => Promise<{
+    status: 'REQUESTED' | 'UNAVAILABLE';
+    capability: 'UNIGRAM';
+    reason?: string;
+  }>;
 };
 
 const modes: Array<{ id: HouseMode; label: string; explanation: string }> = [
@@ -190,6 +196,22 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
   const [hermes, setHermes] = useState<HealthSnapshot>({ status: 'UNKNOWN' });
   const [screenpipe, setScreenpipe] = useState<HealthSnapshot>({ status: 'UNKNOWN' });
   const [linear, setLinear] = useState<LinearStatusSnapshot>({ status: 'UNKNOWN' });
+  const [unigramLaunch, setUnigramLaunch] = useState<UnigramLaunchState>('IDLE');
+
+  async function openUnigram() {
+    const bridge = getBridge();
+    if (!bridge?.openUnigramDesktop) {
+      setUnigramLaunch('UNAVAILABLE');
+      return;
+    }
+    setUnigramLaunch('PENDING');
+    try {
+      const result = await bridge.openUnigramDesktop();
+      setUnigramLaunch(result.status === 'REQUESTED' ? 'REQUESTED' : 'UNAVAILABLE');
+    } catch {
+      setUnigramLaunch('ERROR');
+    }
+  }
 
   useEffect(() => {
     const api = getBridge();
@@ -287,6 +309,23 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
             <button type="button" className="cd-button" onClick={() => getBridge()?.toggleWidget?.()}>
               <span className="i-ph:waveform" /> SOL
             </button>
+            <button
+              type="button"
+              className="cd-button"
+              onClick={() => void openUnigram()}
+              disabled={unigramLaunch === 'PENDING'}
+              title="Abre o Unigram original do Windows; não copia mensagens nem cria outro runtime"
+            >
+              <span className="i-ph:paper-plane-tilt" /> Unigram
+            </button>
+            {unigramLaunch !== 'IDLE' ? (
+              <span className="cd-chip" role="status" aria-live="polite">
+                {unigramLaunch === 'PENDING' ? 'Solicitando ao Windows…'
+                  : unigramLaunch === 'REQUESTED' ? 'Abertura solicitada · janela ainda não comprovada'
+                  : unigramLaunch === 'UNAVAILABLE' ? 'Requer CentralDark.exe no Windows'
+                  : 'Abertura falhou · verificar logs do desktop'}
+              </span>
+            ) : null}
             <button type="button" className="cd-button cd-button--primary" disabled title="Interface reservada; criação de sessão ainda não ligada ao backend">
               <span className="i-ph:plus" /> Nova sessão
             </button>
