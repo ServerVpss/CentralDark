@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs: contraprova real do comando ZENDRIVE CLI e funil Casa-VPS",
+    "lastCommit": "docs: selar shell_start/end reais no funil único sem atribuição indevida",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T01:49:50.411Z",
+      "titulo": "Push na main · 57003d905ac889601c34899c2784d7e0abc3fe28",
+      "detalhe": "docs: selar shell_start/end reais no funil único sem atribuição indevida",
+      "area": "Repositório",
+      "sha": "57003d9",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T01:45:58.210Z",
       "titulo": "Push na main · 6a8d3cae993261c807f9a9376a723d1a40ed608d",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "a13f856",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T17:23:51.700Z",
-      "titulo": "Push na main · f2d0b1091033f7b64c2b4c82e3aeee6bde345109",
-      "detalhe": "chore(voice): v1.2.1 após integração e testes do worker MV3",
-      "area": "Repositório",
-      "sha": "f2d0b10",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T01:49:50.411Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 57003d905ac889601c34899c2784d7e0abc3fe28 (57003d9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T01:45:58.210Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · a13f856775bafc1e70daaf9dc92a86f2a028832f (a13f856)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T17:23:51.700Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f2d0b1091033f7b64c2b4c82e3aeee6bde345109 (f2d0b10)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T01:45:58.210Z",
-  "updatedAtBR": "14/10/2026, 22:45:58 BRT"
+  "updatedAt": "2026-10-15T01:49:50.411Z",
+  "updatedAtBR": "14/10/2026, 22:49:50 BRT"
 }
