@@ -165,3 +165,10 @@ O ponto fixo atual é **rota de envio demonstrada e documentação reutilizável
 - **Readback na VPS:** `logs/sectors/vscode/2026-10-15.jsonl` materializou `kind=vscode_log_signal key=vscode:terminal end_offset=3028123`; heartbeat `route=tailscale accepted=1 duplicate=0`; heartbeat seguinte `accepted=0`. **FOCO + EMISSAO NATIVA + INGESTAO NO FUNIL = PASS**, apenas para `cli_focus`.
 - Teste de `echo ZENDRIVE_CLI_PING_1015` enviado no Bash remoto teve foco/Enter enviados, porém **não** aumentou a fonte e **não** produziu `shell_start/shell_end`; provável ausência de integração de shell nesse terminal, mas a causa exata não foi provada. **CAPTURA UNIVERSAL DE COMANDOS = NOT_PROVEN**; saída do echo não foi capturada automaticamente.
 - A função de coordenação ChatGPT/SOL continua nesta conversa, não vira automaticamente API ChatGPT Premium. Hermes permanece executor oficial. Não duplicar Hermes nem criar leitor de stdout bruto.
+
+
+## Shell start/end — prova posterior (15/10/2026)
+
+Depois da leitura imediata do teste Bash, o arquivo Casa recebeu **dois eventos nativos adicionais** do listener da extensão: `shell_start exit=unknown` em `2026-10-15T01:37:05.779Z` e `shell_end exit=ok` em `2026-10-15T01:37:05.792Z`. A fonte avançou `3028123 → 3028322`. O funil VPS registrou dois `vscode_log_signal key=vscode:terminal` com offsets `3028226` e `3028322`; heartbeat `accepted=2 duplicate=0 route=tailscale`, seguintes `accepted=0`.
+
+**SELO EXATO:** a extensão observou e entregou pelo menos um par de início/fim de execução; **não** é possível atribuí-lo com segurança ao `echo` anterior ou a um terminal específico, porque o evento deliberadamente não transporta comando, saída nem identidade do terminal. Captura universal e correlação por terminal seguem pendentes; não extrapolar.
