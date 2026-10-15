@@ -22,6 +22,7 @@ const centraldark = Object.freeze({
   openIntent: (intent: string) => ipcRenderer.invoke('centraldark:intent:open', intent),
   showMain: () => ipcRenderer.invoke('centraldark:main:show'),
   toggleWidget: () => ipcRenderer.invoke('centraldark:widget:toggle'),
+  openUnigramDesktop: () => ipcRenderer.invoke('centraldark:unigram:open'),
   hideWidget: () => ipcRenderer.invoke('centraldark:widget:hide'),
 });
 
