@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(operational): 🧹 incluir faxina de worktree no método existente",
+    "lastCommit": "docs(operational): fast path de dependencia corrigida com promocao segura",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T15:54:36.503Z",
+      "titulo": "Push na main · 488a03f9343f5ce01f47f964b86e1e72b56ea02f",
+      "detalhe": "docs(operational): fast path de dependencia corrigida com promocao segura",
+      "area": "Repositório",
+      "sha": "488a03f",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T15:51:53.489Z",
       "titulo": "Push na main · ef1fb274abc031dadef5d5d3fe29037b3db73e7a",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "bc748f2",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T22:14:57.269Z",
-      "titulo": "Push na main · 19aa95b474f562d08f902d63f21febe94e9e73c4",
-      "detalhe": "docs(receipt): capture Tailscale API read-only 401 and bridge failure",
-      "area": "Repositório",
-      "sha": "19aa95b",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T15:54:36.503Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 488a03f9343f5ce01f47f964b86e1e72b56ea02f (488a03f)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T15:51:53.489Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · bc748f2a0140137f52d7981b8c55fc27d14cfc8f (bc748f2)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T22:14:57.269Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 19aa95b474f562d08f902d63f21febe94e9e73c4 (19aa95b)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T15:51:53.489Z",
-  "updatedAtBR": "15/10/2026, 12:51:53 BRT"
+  "updatedAt": "2026-10-15T15:54:36.503Z",
+  "updatedAtBR": "15/10/2026, 12:54:36 BRT"
 }
