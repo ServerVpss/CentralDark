@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(cockpit): permitir host Tailscale privado da Casa no Vite sem abrir Admin público",
+    "lastCommit": "fix(vault): restringir visualizador Obsidian local ao loopback; acesso móvel só via Admin autenticado",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T23:14:51.795Z",
+      "titulo": "Push na main · 0e6c45c74ce21c4e24b48aea31a9f613c0114ad0",
+      "detalhe": "fix(vault): restringir visualizador Obsidian local ao loopback; acesso móvel só via Admin autenticado",
+      "area": "Repositório",
+      "sha": "0e6c45c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T23:12:39.907Z",
       "titulo": "Push na main · f4a3026b5a36389f26d53859396b5bb274aba0db",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "25404bb",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T04:27:50.151Z",
-      "titulo": "Push na main · d4fe98be361c70bf8428e1748d37d2379704471f",
-      "detalhe": "feat(instinto): distinguish GitHub OAuth and GitHub App installation as pending",
-      "area": "Repositório",
-      "sha": "d4fe98b",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T23:14:51.795Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0e6c45c74ce21c4e24b48aea31a9f613c0114ad0 (0e6c45c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T23:12:39.907Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 25404bb7e53a3458302a9e5a6bb8671056a12f02 (25404bb)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T04:27:50.151Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · d4fe98be361c70bf8428e1748d37d2379704471f (d4fe98b)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T23:12:39.907Z",
-  "updatedAtBR": "15/10/2026, 20:12:39 BRT"
+  "updatedAt": "2026-10-15T23:14:51.795Z",
+  "updatedAtBR": "15/10/2026, 20:14:51 BRT"
 }
