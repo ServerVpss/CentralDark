@@ -41,10 +41,11 @@ import { AutoSyncButton } from "@/components/central/AutoSyncButton";
 import { StatusPanel } from "@/components/central/StatusPanel";
 import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
 import { GoalsDashboard } from "@/components/central/GoalsDashboard";
-import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
 import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
 import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
 import { RaioXVivo } from "@/components/central/RaioXVivo";
+import { ClaudeNotificationsHub } from "@/components/central/ClaudeNotificationsHub";
+import { DreamReviewer } from "@/components/central/DreamReviewer";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
@@ -398,6 +399,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="sync">Sync Center</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
+                <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
+                <TabsTrigger value="dream-reviewer">😴 Dream</TabsTrigger>
                 <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
                 <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
                 <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
@@ -473,6 +476,30 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </p>
               </div>
               <GoalsDashboard />
+            </TabsContent>
+            <TabsContent value="claude-notifications" className="mt-10">
+              <div className="mb-8">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                  Notificações em Tempo Real
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold">🔔 Claude Notifications Hub</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Tudo que sai do Claude Code, PowerShell, Hermes e observabilidade • Modo ao vivo/pausado/rolagem • Destacável
+                </p>
+              </div>
+              <ClaudeNotificationsHub />
+            </TabsContent>
+            <TabsContent value="dream-reviewer" className="mt-10">
+              <div className="mb-8">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                  Aprendizado Offline
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold">😴 Dream Reviewer</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Hermes aprendendo enquanto você dorme • Padrões detectados • Recomendações • Somente leitura
+                </p>
+              </div>
+              <DreamReviewer />
             </TabsContent>
             <TabsContent value="arquitetura" className="mt-10">
               <div className="mb-8">
