@@ -171,10 +171,21 @@ echo "BUTTON_BOTH_COUNT=$BOTH_COUNT"
 echo "BUTTON_STRUCTURED_COUNT=$STRUCTURED_COUNT"
 echo "BUTTON_YELLOW_COUNT=$YELLOW_COUNT"
 
+# Receipt estruturado no log do workflow existente: auditavel e contabilizavel.
+# Nao promove padroes novos sem contraprova nem modifica registry sozinho.
+emit_costura_metrics() {
+  local state="$1"
+  node -e 'const [pr, headRef, state, current, incoming, both, structured, yellow] = process.argv.slice(1); console.log("COSTURA_METRICS_JSON=" + JSON.stringify({schema:"centraldark.costura.metrics.v1",pr:Number(pr),head_ref:headRef,state,counts:{current:Number(current),incoming:Number(incoming),both:Number(both),structured:Number(structured),yellow:Number(yellow)},recorded_at:new Date().toISOString(),pattern_promotion:"REQUIRES_REPLAY_AND_SAME_HEAD"}))' \
+    "$PR_NUM" "$PR_HEAD_REF" "$state" "$CURRENT_COUNT" "$INCOMING_COUNT" "$BOTH_COUNT" "$STRUCTURED_COUNT" "$YELLOW_COUNT"
+}
+
+emit_costura_metrics "CLASSIFIED"
+
 if [ "$YELLOW_COUNT" -gt 0 ]; then
   echo "🟡 CONFLICT_RESOLUTION_YELLOW count=$YELLOW_COUNT"
   echo "🟡 YELLOW_IS_PROGRESS_BOUNDARY=1"
   echo "NO_PUSH_ON_YELLOW=1"
+  emit_costura_metrics "YELLOW_NO_PUSH"
   git merge --abort 2>/dev/null || true
   exit 20
 fi
@@ -223,6 +234,7 @@ git -c user.name='CentralDark COSTURA Resolver' \
 NEW_HEAD="$(git rev-parse HEAD)"
 git "${GIT_AUTH[@]}" push origin "HEAD:refs/heads/${PR_HEAD_REF}"
 
+emit_costura_metrics "PUSHED_AWAITING_SAME_HEAD_CI"
 echo "RESOLVED_AND_PUSHED pr=${PR_NUM} head_ref=${PR_HEAD_REF} head=${NEW_HEAD}"
 echo "DIRECT_MAIN_WRITE=0"
 echo "CASA_WORKTREE_MUTATED=0"
