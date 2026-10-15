@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(mapa): vincular linhas de código, Source Maps, GOALs e rastro real ao cockpit existente",
+    "lastCommit": "feat(instinto): sinais vivos Screenpipe e Desktop Commander no cockpit sem falso verde",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T20:18:02.096Z",
+      "titulo": "Push na main · e79b7e331d4525e79c760bee3bc91d05845b33bc",
+      "detalhe": "feat(instinto): sinais vivos Screenpipe e Desktop Commander no cockpit sem falso verde",
+      "area": "Repositório",
+      "sha": "e79b7e3",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T19:33:25.330Z",
       "titulo": "Push na main · bb67572714657f85beb91e920e09bb5265c29dc3",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "c61acdc",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T01:34:41.516Z",
-      "titulo": "Push na main · f5c1fe38981a93f313dbfe1673401786697746f2",
-      "detalhe": "docs(agents): vincular ZENDRIVE CLI mental ao VS Code, Hermes e funil único",
-      "area": "Repositório",
-      "sha": "f5c1fe3",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T20:18:02.096Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · e79b7e331d4525e79c760bee3bc91d05845b33bc (e79b7e3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T19:33:25.330Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · c61acdcca6c3de43b708e9e6eac3d8c9e4672f62 (c61acdc)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T01:34:41.516Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f5c1fe38981a93f313dbfe1673401786697746f2 (f5c1fe3)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T19:33:25.330Z",
-  "updatedAtBR": "15/10/2026, 16:33:25 BRT"
+  "updatedAt": "2026-10-15T20:18:02.096Z",
+  "updatedAtBR": "15/10/2026, 17:18:02 BRT"
 }

@@ -71,6 +71,8 @@ export type EstadoCentralDark = {
   casaSiteHttp: number | null;
   screenpipeHttp: number | null;
   screenpipeDetail: string | null;
+  screenpipeFonte: string;
+  screenpipeEvents: string[];
   actionsFonte: string;
   actionsErro: string | null;
   gmailFonte: string;
@@ -210,6 +212,30 @@ async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
   } finally {
     clearTimeout(timeout);
   }
+}
+
+// Saída operacional do próprio /health, com campos permitidos; não publica captura,
+ // caminhos do host, stdout bruto, OCR, áudio ou informações pessoais.
+function screenpipeIdentificado(sonda: Probe): Probe {
+  if (sonda.estado === "UNKNOWN") return sonda;
+  const dependencias = objetoJson(sonda.dados?.["dependencies"]) ? sonda.dados["dependencies"] : null;
+  if (!dependencias || !objetoJson(dependencias["ffmpeg"])) {
+    return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_SCREENPIPE" };
+  }
+  const status = texto(sonda.dados?.["status"])?.toLowerCase();
+  return { ...sonda, estado: sonda.httpStatus === 200 && status === "healthy" ? "PASS" : "FAIL" };
+}
+
+function saidaScreenpipe(sonda: Probe): string[] {
+  const saida = [`GET /health → HTTP ${sonda.httpStatus ?? "sem resposta"} · ${sonda.estado}`];
+  if (sonda.erro) saida.push(`SENSOR: ${sonda.erro.slice(0, 96)}`);
+  const deps = objetoJson(sonda.dados?.["dependencies"]) ? sonda.dados["dependencies"] : null;
+  if (deps) for (const [nome, valor] of Object.entries(deps).slice(0, 10)) {
+    if (!/^[a-zA-Z0-9_-]{1,32}$/.test(nome) || !objetoJson(valor)) continue;
+    const estado = texto(valor["status"]);
+    if (estado && /^[a-zA-Z0-9 _-]{1,32}$/.test(estado)) saida.push(`${nome}: ${estado}`);
+  }
+  return saida;
 }
 
 type ActionsUsageItem = {
@@ -403,9 +429,10 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:4175/", true),
-      medirReachable("http://127.0.0.1:3030/health", true),
+      medirReachable("http://127.0.0.1:3030/health"),
       medirActions(),
     ]);
+    const screenpipeMedido = screenpipeIdentificado(screenpipe);
     const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
     const heartbeat: Probe =
       heartbeatSelf === "stale"
@@ -440,7 +467,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModels: omniModels.estado,
       receipts: receipts.estado,
       casaSite: casaSite.estado,
-      screenpipe: screenpipe.estado,
+      screenpipe: screenpipeMedido.estado,
       actions: actions.estado,
       actionsLinuxMinutes: actions.linux,
       actionsWindowsMinutes: actions.windows,
@@ -467,8 +494,10 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
-      screenpipeHttp: screenpipe.httpStatus,
-      screenpipeDetail: texto(screenpipe.dados?.["status"]),
+      screenpipeHttp: screenpipeMedido.httpStatus,
+      screenpipeDetail: texto(screenpipeMedido.dados?.["status"]),
+      screenpipeFonte: process.platform === "win32" ? "host Windows deste servidor · 127.0.0.1:3030" : "host do servidor · 127.0.0.1:3030 (não é prova da Casa)",
+      screenpipeEvents: saidaScreenpipe(screenpipeMedido),
       actionsFonte: actions.fonte,
       actionsErro: actions.erro,
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
