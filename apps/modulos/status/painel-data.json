@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(vscode): recipe de terminal integrado via RDC/MCP com target+ACK e bloqueio seguro",
+    "lastCommit": "docs(vscode): registrar leitura UIA de 5 terminais e prompt Claude sem despacho",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T16:41:50.669Z",
+      "titulo": "Push na main · 05ad27ea9b4cc653f18deb536611388a373e78e4",
+      "detalhe": "docs(vscode): registrar leitura UIA de 5 terminais e prompt Claude sem despacho",
+      "area": "Repositório",
+      "sha": "05ad27e",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T16:37:33.950Z",
       "titulo": "Push na main · 04c8f8d082ae5e56a0260b7b6a5e26e98f66ba9a",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "17406f3",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T22:44:22.527Z",
-      "titulo": "Push na main · 1c28b8a12e7ec4f07cde6a6ea3e3769629c8a727",
-      "detalhe": "🧾 receipt(ssh): provar Casa→VPS via Tailscale e manter auto-sync fail-closed",
-      "area": "Repositório",
-      "sha": "1c28b8a",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T16:41:50.669Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 05ad27ea9b4cc653f18deb536611388a373e78e4 (05ad27e)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T16:37:33.950Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 17406f3f8b2b855b6be9147e39c3cb10503fcc32 (17406f3)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T22:44:22.527Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 1c28b8a12e7ec4f07cde6a6ea3e3769629c8a727 (1c28b8a)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T16:37:33.950Z",
-  "updatedAtBR": "15/10/2026, 13:37:33 BRT"
+  "updatedAt": "2026-10-15T16:41:50.669Z",
+  "updatedAtBR": "15/10/2026, 13:41:50 BRT"
 }
