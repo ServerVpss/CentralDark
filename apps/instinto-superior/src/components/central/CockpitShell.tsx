@@ -244,7 +244,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             ) : null}
             {autenticado ? (
               <TabsContent value="hud-legado" className="mt-10">
-                <HudDeterministico estado={dado} />
+                <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />
               </TabsContent>
             ) : null}
             <TabsContent value="hermes" className="mt-10">
