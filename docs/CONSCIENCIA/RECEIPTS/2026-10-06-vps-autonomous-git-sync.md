@@ -69,3 +69,15 @@
 
 **NEXT_CURSOR:** provar o primeiro ciclo de cron após o delta; reconciliar separadamente os commits/arquivos pendentes da Casa com owners e gates da PR, sem auto-stage de `K:\`; classificar/validar fileset MCP antes de retomar `main-pulse`; só então medir deploy e readback do runtime. A Forja continua na branch de trabalho enquanto o Git acompanha a fonte `origin/main` em modo observador.
 
+
+### Contraprova do cron real — 2026-10-14 21:45 BRT
+
+O cron não precisou ser reiniciado nem editado. Na rodada seguinte à instalação do delta, `2026-10-15T00:45:03Z`, registrou automaticamente:
+```text
+[SOURCE_ONLY] REMOTE_MAIN_FETCH_PASS sha=48db33b154bdb08f9118a779dbebea403d714cde
+branch=fix/ai-andarilho-casa-bridge
+head=c77e50195fcd270cb2d7c5dbfdb16612d2ecaf82
+tracked_count=2; CHECKOUT_PRESERVED=YES; RUNTIME_DEPLOY=UNKNOWN
+```
+Readback `logs/auto-sync-status.json` às `00:45:04Z`: `result=PARTIAL`, `SOURCE_REF_SYNC_PASS`, `CHECKOUT_SYNC=BLOCKED`, `RUNTIME_DEPLOY=UNKNOWN`. `CRON_SOURCE_ONLY_PASS=PASS`. O SHA do owner runtime permanece `7b44b03f24463de4091121053320af9c65aa2e94`; branch/HEAD da Forja permanecem inalterados. **O circuito de atualização da referência foi provado também no agendamento; a promoção de checkout/runtime continua bloqueada pelos gates existentes.**
+
