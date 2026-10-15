@@ -268,3 +268,58 @@ Nunca adivinhar deviceId, PID, HWND nem aba de terminal com base em fotografia a
   agendada, o readback no `log-funnel` e o comando `CentralDark: Mostrar Trace`
   ainda precisam de prova pós-ativação da extensão. Não publicar IP, títulos,
   command-line, cookies, payloads ou imagem em receipt.
+
+
+## 🦜 Semântica Papagaio Fiel — repetição correta da skill
+
+**Regra do CHEFE:** a capacidade comprovada deve ser **incorporada no owner** e reaplicada
+em qualquer janela/sessão com a mesma semântica, não por copiar o PID, a saída antiga
+ou o texto de uma resposta. **Fiel = reproduzir o método e seus limites, não repetir
+um PASS histórico.** Este contrato rege o uso desta mesma `vs-code-restore`.
+
+### Máquina de estados de cada repetição
+
+| Etapa | Pré-condição | Saída observável | Se falhar |
+|---|---|---|---|
+| 0. INTENT | Nova fala do CHEFE = delta; distinguir pergunta, observação e ordem | INTENT_ID + escopo + autorização | Sem supor autorização |
+| 1. OWNER | Consultar `skills/vs-code-restore` e telemetria existente; comparar fonte e versão instalada | OWNER + git SHA + runtime-version + escritor atual | UNKNOWN, nenhuma skill duplicada |
+| 2. DEVICE | `list_devices` e selecionar **Casa Windows SEGREDO online** (não a VPS Linux) | device ID atual e estado online | OFFLINE → registrar NEXT_CURSOR, sem inventar leitura |
+| 3. MAP | `Inventory` no mesmo script de PID/HWND | JSON atual: janelas, PID, handle, foreground, retângulo | AMBIGUOUS → pedir/derivar alvo atual; jamais usar ID de outra rodada |
+| 4. FOCUS | `Focus -TargetPid ... -WindowHandle ...` somente no alvo confirmado | readback GetForegroundWindow com mesmo HWND | FAIL → não enviar teclado/clique |
+| 5. CAPTURE | `FocusCapture` ou `Capture` com ressalva de oclusão | arquivo JPG real + tamanho + timestamp | UNKNOWN, nunca fabricar screenshot |
+| 6. CLI (se autorizado) | terminal correto identificado via API nativa/ZENDRIVE ou UIAutomation, writer único, escopo permitido | comando + resultado e exit code pelo processo **quando observáveis** | SEND_OK ≠ EXECUTION_PASS; sem eco imaginário |
+| 7. TRACE | `-EmitTrace` opt-in; reutilizar `LOGS-VS-CODE.log` | novos bytes + evento sanitizado + offset local | ausência de evento = UNKNOWN; sem coletor extra |
+| 8. PIPELINE | scheduler existente → vscode-log-bridge → SSH/Tailscale → ingest-vscode-log → log-funnel | ACK remoto do mesmo offset, accepted/deduplicated + evento recente | local PASS / VPS UNKNOWN ou ATTENTION |
+| 9. RECEIPT | Critic/readback independente no **mesmo SHA** | INTENT_ID, OWNER, MAIN_SHA, ACTIVE_WRITER, ROUTE, OBSERVATION, PROOF, COUNTERPROOF, STATUS, NEXT_CURSOR | nunca GREEN sem readback |
+
+### Semântica obrigatória (para que outro ChatGPT, janela ou executor repita fielmente)
+
+- **OBSERVADO:** somente o que a ferramenta retornou nesta execução; separar `USER_SCREENSHOT`,
+  `LIVE_TOOL`, `SOURCE_COMMITTED`, `RUNTIME_ACTIVATED`, `E2E_PROVEN`.
+  `Screenshot != runtime comprovado`; `source != deployed`.
+- **REUSAR ANTES DE CRIAR:** primeiro extensão `centraldark-vscode-restore`, comando
+  `centraldark.zendriveCli`, script `focus-vscode-window.ps1`, log da Casa,
+  tarefa `CentralDark-VSCode-LogBridge` e `log-funnel`. Não criar clones.
+- **REPETIR COMO ALGORITMO:** reconsultar dispositivos, PID, HWND, estado do terminal
+  e offsets **sempre**. Nunca reproduzir ids, coordenadas, caminhos temporários,
+  resultados ou promessas como se fossem dados atuais.
+- **MODO OBSERVAR por padrão:** inventário, leitura e foto não enviam comandos;
+  foco explícito só no destino conferido. **MODO EXECUTAR** exige autorização
+  do CHEFE, espaço sem escritor concorrente e contraprova do resultado. Não
+  sequestrar terminal Hermes/Haiku ocupado nem usar SendKeys arbitrário.
+- **FALHA FIEL:** `OFFLINE`, `AMBIGUOUS`, `FOCUS_READBACK_FAILED`,
+  `TRACE_SINK_UNAVAILABLE` e `ACK_MISSING` são recibos úteis, não fracassos
+  a ocultar. Repetir somente quando houver sensor/hipótese nova; não loopar.
+- **LINHAGEM E PRIVACIDADE:** salvar aprendizados **nesta skill e no owner do funil
+  já existente**; trace carrega só evento, estado, PID/handle efêmeros e UTC.
+  Nunca enviar comando, stdout, chat, tela capturada, token ou cookie ao funnel.
+- **INSTALAÇÃO NÃO IMPLÍCITA:** commit/PR não ativa extensão, atualização no
+  computador depende de pacote efetivamente instalado + reload controlado +
+  comando `CentralDark: Mostrar Trace (Saída)` provado ao vivo, respeitando
+  sessão de trabalho existente.
+
+**Esquema mínimo de retorno:** `INTENÇÃO | OWNER | CURRENT (fonte e horário) |
+DELTA_EXECUTADO | PROVA | CONTRAPROVA | STATUS | NEXT_CURSOR`. Ao transferir
+para outra janela/Haiku, enviar exatamente esse recibo e o endereço desta skill,
+não uma suposta memória sincronizada. O novo executor relê e remede; sem `MAIN_SHA`
+e provas correntes, classifica `UNKNOWN`.
