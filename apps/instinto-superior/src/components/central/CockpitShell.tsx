@@ -48,6 +48,7 @@ import { ForjaExecutor } from "@/components/central/ForjaExecutor";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
+import { lerStatusGramMTProto } from "@/lib/admin.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
@@ -79,6 +80,19 @@ const HARNESS_DESTINOS = [
 // do Cofre Administrativo. Não copia Unigram nem simula mensagens entregues.
 function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; abrirSync: () => void }) {
   const consulta = useTelegramBotsResumo();
+  const lerMTProto = useServerFn(lerStatusGramMTProto);
+  const mtproto = useQuery({
+    queryKey: ["centraldark", "gram", "mtproto-status"],
+    queryFn: async () => {
+      const { data, error } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+      if (error || !token) throw new Error("Sessão administrativa não disponível.");
+      return lerMTProto({ headers: { Authorization: `Bearer ${token}` } });
+    },
+    retry: false,
+    refetchInterval: 60_000,
+    staleTime: 30_000,
+  });
   const [filtro, definirFiltro] = useState("");
   const [selecionadoId, definirSelecionadoId] = useState<string | null>(null);
   const encontrados = consulta.bots.filter((bot) =>
@@ -92,14 +106,24 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
         <div>
           <p className="font-mono text-[10px] uppercase tracking-widest text-neon-blue">✉️ CentralDark Gram · Interface integrada</p>
           <h2 className="mt-1 text-2xl font-semibold">Mensagens, bots e canais</h2>
-          <p className="mt-1 text-xs text-muted-foreground">Experiência visual própria, ligada ao inventário de bots existente. Telegram/MTProto ainda sem conexão de mensagens comprovada.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Interface própria ligada ao cadastro existente e ao serviço MTProto da VPS. Leitura do status protegida pelo servidor; envio de mensagens ainda não integrado.</p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" size="sm" onClick={() => void mtproto.refetch()} disabled={mtproto.isFetching}>
+            <RefreshCcw className={mtproto.isFetching ? "size-4 animate-spin" : "size-4"} /> Medir MTProto
+          </Button>
           <Button type="button" variant="outline" size="sm" onClick={() => void consulta.refresh()} disabled={consulta.loading}>
             <RefreshCcw className={consulta.loading ? "size-4 animate-spin" : "size-4"} /> Atualizar bots
           </Button>
           <Button type="button" variant="outline" size="sm" onClick={abrirAdmin}>Admin dos bots</Button>
         </div>
+      </div>
+      <div className="grid gap-2 border-b border-border bg-muted/10 px-5 py-3 text-xs sm:grid-cols-4" aria-label="Estado MTProto autenticado no servidor">
+        <div><span className="text-muted-foreground">Gateway VPS</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.gateway ?? "UNKNOWN"}</p></div>
+        <div><span className="text-muted-foreground">Configurado</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.configurado === true ? "SIM" : mtproto.data?.configurado === false ? "NÃO" : "UNKNOWN"}</p></div>
+        <div><span className="text-muted-foreground">Sessão MTProto</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.sessaoPresente === true ? "PRESENTE" : mtproto.data?.sessaoPresente === false ? "AUSENTE" : "UNKNOWN"}</p></div>
+        <div><span className="text-muted-foreground">Telegram autorizado</span><p className={mtproto.data?.autorizado === true ? "mt-1 font-mono font-semibold text-emerald-500" : "mt-1 font-mono font-semibold text-amber-500"}>{mtproto.data?.autorizado === true ? "CONFIRMADO" : mtproto.data?.autorizado === false ? "NÃO AUTORIZADO" : "UNKNOWN"}</p></div>
+        <p className="text-muted-foreground sm:col-span-4">Fonte: centraldark-telegram-mtproto.service · VPS 127.0.0.1:8790 · {mtproto.data?.consultaEm ? "Consultado em " + new Date(mtproto.data.consultaEm).toLocaleString("pt-BR") : "Sem consulta autenticada"}{mtproto.isError ? " · AUTH_REQUIRED ou conexão indisponível" : ""}{mtproto.data?.motivo ? " · " + mtproto.data.motivo : ""}. Consulta não comprova entrega de mensagens.</p>
       </div>
       <div className="grid min-h-[28rem] md:grid-cols-[minmax(13rem,0.38fr)_minmax(0,1fr)]">
         <aside className="border-b border-border md:border-b-0 md:border-r" aria-label="Lista de conversas e bots">
@@ -142,7 +166,7 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
             <div className="min-w-0">
               <h3 className="font-semibold">{selecionado?.name ?? "CentralDark Gram"}</h3>
               <p className="text-xs text-muted-foreground">
-                {selecionado ? "Cadastro: " + (selecionado.is_active ? "ativo" : "inativo") + " · Saúde: " + (selecionado.health_status ?? "UNKNOWN") : "Selecione um bot; nenhuma sessão de mensagens foi autenticada."}
+                {selecionado ? "Cadastro: " + (selecionado.is_active ? "ativo" : "inativo") + " · Saúde: " + (selecionado.health_status ?? "UNKNOWN") : "Selecione um bot. O estado MTProto da VPS aparece acima; conversas ainda não integradas."}
               </p>
             </div>
             <span className="ml-auto rounded border border-amber-500/40 px-2 py-1 text-xs text-amber-500">Mensageria: UNKNOWN</span>
@@ -151,8 +175,8 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
             <MessagesSquare className="size-10 text-muted-foreground" aria-hidden="true" />
             <p className="max-w-md font-semibold">Tua interface Gram está dentro do mesmo cockpit.</p>
             <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
-              A busca, a seleção de bots, a atualização e a navegação para o Admin já funcionam sobre o owner de cadastro.
-              Conversas, mídia, envio e autenticação MTProto ficam bloqueados até existir serviço autorizado e testado.
+              Busca, seleção e atualização de bots usam o owner de cadastro. O status da sessão MTProto vem diretamente do servidor autenticado na VPS.
+              Este serviço existente oferece /health, /status, /start, /confirm e /logout; ainda não oferece endpoints de conversas, mídia ou envio. Essas ações ficam desativadas.
             </p>
             <Button type="button" variant="outline" onClick={abrirSync}>Abrir contraprova no Sync Center</Button>
           </div>
@@ -164,7 +188,7 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
         </div>
       </div>
       <p className="border-t border-border p-3 text-[11px] text-muted-foreground">
-        Fonte: useTelegramBotsResumo → Supabase telegram_bots. Interface própria, sem copiar Unigram. Nenhuma chave ou conversa privada é exposta.
+        Fontes: useTelegramBotsResumo → Supabase telegram_bots; lerStatusGramMTProto (admin autenticado) → VPS loopback 8790. Nenhum token, sessão, telefone ou conversa privada é exposto.
       </p>
     </section>
   );
