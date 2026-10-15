@@ -95,7 +95,9 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+// Proteção básica: o Vault não tem autenticação própria; servir APENAS no loopback.
+// Nunca publicar diretamente em Tailscale/LAN sem gateway Admin autenticado.
+server.listen(PORT, '127.0.0.1', () => {
   console.log(`🟢 Vault CentralDark rodando em http://localhost:${PORT}`);
   console.log(`📂 Servindo: ${VAULT_DIR}`);
 });
