@@ -1,4 +1,6 @@
+import { useMemo, useState } from "react";
 import { BookOpen, Boxes, Gem, Lock } from "lucide-react";
+import gavetaCatalogo from "@/data/forja-gaveta.snapshot.json";
 
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -174,6 +176,206 @@ function PainelHistorico() {
   );
 }
 
+
+const ITENS_POR_PAGINA = 36;
+const CATEGORIAS_GAVETA = ["Todas", "Skills canônicas", "Skills MCP/Utilitários", "Arquivo histórico"] as const;
+const TOTAL_SKILLS_GAVETA = gavetaCatalogo.skills.length;
+
+/**
+ * Gaveta da Forja no componente de Infraestrutura que já pertence ao Instinto.
+ * Fonte: GitHub tree @SHA exato, apenas nomes e owners. Sem nova API, plugin,
+ * executor, armazenamento de sessões ou coleta de credenciais.
+ */
+export function GavetaForja() {
+  const [busca, setBusca] = useState("");
+  const [categoria, setCategoria] = useState<(typeof CATEGORIAS_GAVETA)[number]>("Todas");
+  const [pagina, setPagina] = useState(1);
+  const [gavetaAberta, setGavetaAberta] = useState<string | null>(null);
+  const buscaNormalizada = busca.trim().toLocaleLowerCase("pt-BR");
+  const filtradas = useMemo(() => gavetaCatalogo.skills.filter(item => {
+    if (categoria !== "Todas" && item.gaveta !== categoria) return false;
+    return !buscaNormalizada ||
+      [item.nome, item.id, item.categoria].some(parte =>
+        parte.toLocaleLowerCase("pt-BR").includes(buscaNormalizada));
+  }), [buscaNormalizada, categoria]);
+  const totalPaginas = Math.max(1, Math.ceil(filtradas.length / ITENS_POR_PAGINA));
+  const paginaSegura = Math.min(pagina, totalPaginas);
+  const paginaItens = filtradas.slice((paginaSegura - 1) * ITENS_POR_PAGINA,
+    paginaSegura * ITENS_POR_PAGINA);
+  const linkFonte = (caminho: string) =>
+    "https://github.com/ServerVpss/CentralDark/blob/" + gavetaCatalogo.source.sha + "/" +
+    caminho.split("/").map(encodeURIComponent).join("/");
+
+  return (
+    <section aria-labelledby="gaveta-forja-titulo" className="space-y-5">
+      <header className="panel p-5">
+        <p className="font-mono text-[10px] text-neon-blue">🎰🪡🫀🎲🫆🧠🛠️ · FORJA VIVA / ARSENAL</p>
+        <h4 id="gaveta-forja-titulo" className="mt-2 text-xl font-semibold">
+          Gaveta histórica · Skills · Plugins · Automações
+        </h4>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Inventário completo dos documentos SKILL.md rastreados na main medida.
+          Catálogo é fonte documental: não significa skill instalada, carregada ou executada.
+        </p>
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div className="rounded-md border border-border p-3">
+            <strong className="text-lg">{TOTAL_SKILLS_GAVETA}</strong>
+            <p className="text-xs text-muted-foreground">SKILL.md na fonte</p>
+          </div>
+          <div className="rounded-md border border-border p-3">
+            <strong className="text-lg">{gavetaCatalogo.counts.skill_md_agents_active}</strong>
+            <p className="text-xs text-muted-foreground">Fora do arquivo histórico em .agents</p>
+          </div>
+          <div className="rounded-md border border-border p-3">
+            <strong className="text-lg">{gavetaCatalogo.plugins.length}</strong>
+            <p className="text-xs text-muted-foreground">Plugins registrados no Git</p>
+          </div>
+          <div className="rounded-md border border-border p-3">
+            <strong className="text-lg">{gavetaCatalogo.gavetas.length}</strong>
+            <p className="text-xs text-muted-foreground">Gavetas de aprendizado</p>
+          </div>
+        </div>
+        <p className="mt-3 break-all font-mono text-xs text-muted-foreground">
+          MEDIÇÃO DE FONTE: main@{gavetaCatalogo.source.sha.slice(0, 12)} ·
+          {gavetaCatalogo.source.measurement} · SOURCE_ONLY
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Quando a main avançar, o snapshot anterior continua histórico até a
+          atualização pelo owner da Forja. MAIN_SYNCED ≠ RUNTIME_LOADED.
+        </p>
+      </header>
+
+      <section className="panel p-5" aria-label="Pesquisar o catálogo de skills">
+        <h5 className="font-semibold">🛠️ Catálogo pesquisável das skills</h5>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <label className="text-xs text-muted-foreground" htmlFor="gaveta-forja-busca">
+            Nome, categoria ou caminho
+            <input id="gaveta-forja-busca" type="search" value={busca}
+              onChange={event => { setBusca(event.target.value); setPagina(1); }}
+              placeholder="Ex.: Hermes, MCP, memória, worktree..."
+              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground" />
+          </label>
+          <label className="text-xs text-muted-foreground" htmlFor="gaveta-forja-categoria">
+            Filtrar coleção
+            <select id="gaveta-forja-categoria" value={categoria}
+              onChange={event => {
+                setCategoria(event.target.value as (typeof CATEGORIAS_GAVETA)[number]);
+                setPagina(1);
+              }}
+              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground">
+              {CATEGORIAS_GAVETA.map(opcao => <option key={opcao} value={opcao}>{opcao}</option>)}
+            </select>
+          </label>
+        </div>
+        <p role="status" className="mt-3 text-xs text-muted-foreground">
+          {filtradas.length} resultados · página {paginaSegura} / {totalPaginas}.
+          Nenhum resultado implica falha de conexão.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {paginaItens.map(skill => (
+            <article key={skill.id} className="rounded-md border border-border p-3">
+              <a className="break-all text-sm font-semibold text-neon-blue underline"
+                href={linkFonte(skill.id)} target="_blank" rel="noopener noreferrer">
+                {skill.historico ? "🗄️" : "🛠️"} {skill.nome}
+              </a>
+              <p className="mt-1 break-all font-mono text-[10px] text-muted-foreground">{skill.id}</p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {skill.gaveta} · {skill.estado}
+              </p>
+            </article>
+          ))}
+        </div>
+        {filtradas.length === 0 && (
+          <p className="mt-4 text-sm text-muted-foreground">Nenhuma skill com esse filtro no SHA inventariado.</p>
+        )}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button type="button" className="rounded-md border border-border px-4 py-2 text-sm"
+            disabled={paginaSegura <= 1} onClick={() => setPagina(p => Math.max(1, p - 1))}>
+            ← Anterior
+          </button>
+          <button type="button" className="rounded-md border border-border px-4 py-2 text-sm"
+            disabled={paginaSegura >= totalPaginas}
+            onClick={() => setPagina(p => Math.min(totalPaginas, p + 1))}>
+            Próxima →
+          </button>
+        </div>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2" aria-label="Catálogos e plugins da Forja">
+        <article className="panel p-5">
+          <h5 className="font-semibold">🔌 Plugins existentes · origem comprovada</h5>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {gavetaCatalogo.plugins.length} fontes versionadas. Plugin no Git não significa instalado no Hermes,
+            Obsidian ou VS Code. Extensões da Casa dependem de outra medição.
+          </p>
+          <ul className="mt-3 space-y-3">
+            {gavetaCatalogo.plugins.map(plugin => (
+              <li key={plugin.id} className="rounded-md border border-border p-3 text-sm">
+                <a className="text-neon-blue underline" target="_blank" rel="noopener noreferrer"
+                  href={linkFonte(plugin.id)}>{plugin.nome}</a>
+                <p className="text-xs text-muted-foreground">{plugin.classe} · {plugin.estado}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">
+            📡 Catálogo MCP medido separadamente: 141 tools / 13 rotas;
+            skill_listar do MCP: 3 utilitários. Contagens não são somáveis.
+          </p>
+          <a target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-xs text-neon-blue underline"
+            href="https://github.com/ServerVpss/CentralDark/blob/main/apps/modulos/mcp/src/tools/core/mcp-admin.js">
+            Owner do catálogo MCP
+          </a>
+        </article>
+        <article className="panel p-5">
+          <h5 className="font-semibold">🗄️ Gavetas derivadas do Memory Linker</h5>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Seis gavetas históricas de aprendizado. A quantidade de padrões vivos requer
+            a leitura do owner em runtime: não é inferida da quantidade de skills.
+          </p>
+          <div className="mt-3 space-y-2">
+            {gavetaCatalogo.gavetas.map(gaveta => (
+              <div key={gaveta.nome} className="rounded-md border border-border p-3 text-sm">
+                <button type="button" className="w-full text-left font-semibold"
+                  aria-expanded={gavetaAberta === gaveta.nome}
+                  onClick={() => setGavetaAberta(nome => nome === gaveta.nome ? null : gaveta.nome)}>
+                  {gavetaAberta === gaveta.nome ? "▾" : "▸"} {gaveta.nome}
+                </button>
+                {gavetaAberta === gaveta.nome && (
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    <p>OWNER: {gaveta.owner}</p>
+                    <p>STATUS: {gaveta.status} · padrões CURRENT não consultados nesta tela.</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <a target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-xs text-neon-blue underline"
+            href={linkFonte("scripts/memory-linker/pattern-library.mjs")}>
+            Abrir o owner das gavetas
+          </a>
+        </article>
+      </section>
+
+      <article className="panel p-5">
+        <h5 className="font-semibold">📜 Arsenal histórico · 10 cards recuperados</h5>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Referência de 29/06/2026 do TelePainel antigo, preservada como legado.
+          Não somar estes cards aos documentos SKILL.md nem chamá-los de execução ativa.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {gavetaCatalogo.legacy.names.map(nome => (
+            <span key={nome} className="rounded-md border border-border px-2 py-1 font-mono text-xs">{nome}</span>
+          ))}
+        </div>
+        <a className="mt-3 inline-block text-xs text-neon-blue underline" target="_blank"
+          rel="noopener noreferrer" href={linkFonte(gavetaCatalogo.legacy.source)}>
+          Ver origem dos 10 cards históricos
+        </a>
+      </article>
+    </section>
+  );
+}
+
 export function InfraestruturaSistema() {
   return (
     <section aria-labelledby="infra-titulo">
@@ -187,8 +389,11 @@ export function InfraestruturaSistema() {
         Tudo que foi reunido num só lugar: vault Obsidian, Cristal e biblioteca de documentos.
         Inventário não é prova de execução.
       </p>
-      <Tabs defaultValue="obsidian" className="mt-7">
+      <Tabs defaultValue="gavetas" className="mt-7">
         <TabsList className="h-auto flex-wrap justify-start">
+          <TabsTrigger value="gavetas">
+            <Boxes /> Gaveta · Skills · Plugins
+          </TabsTrigger>
           <TabsTrigger value="obsidian">
             <Lock /> Cofre Obsidian
           </TabsTrigger>
@@ -205,6 +410,9 @@ export function InfraestruturaSistema() {
             <Boxes /> Repositórios
           </TabsTrigger>
         </TabsList>
+        <TabsContent value="gavetas" className="mt-6">
+          <GavetaForja />
+        </TabsContent>
         <TabsContent value="obsidian" className="mt-6">
           <Cofre />
         </TabsContent>
