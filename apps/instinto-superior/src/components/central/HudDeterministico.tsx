@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import lineageJson from "../../../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
+import { GavetaForja } from "@/components/central/InfraestruturaSistema";
+import hudMigrationSnapshot from "@/data/hud-migration.snapshot.json";
 
 type Node = {
   uid: string;
@@ -105,11 +107,30 @@ const forgeAliases: readonly ForgeAlias[] = [
 ] as const;
 
 /** Reaproveita o zone do Instinto Superior; não cria outro HUD ou executor. */
-export function HudDeterministico({ estado }: { estado?: EstadoCentralDark }) {
+export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentralDark; atualizar?: () => void }) {
   const [cursor, setCursor] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [forgeSelected, setForgeSelected] = useState<string | null>(null);
+  const [legadoBusca, setLegadoBusca] = useState("");
+  const [legadoAba, setLegadoAba] = useState("todos");
+  const [legadoTipo, setLegadoTipo] = useState("controles");
+  const [legadoPagina, setLegadoPagina] = useState(1);
+  const [legadoSelecionado, setLegadoSelecionado] = useState<string | null>(null);
+  const legadoRegistros = useMemo(() => (legadoTipo === "controles"
+    ? hudMigrationSnapshot.controls : hudMigrationSnapshot.sections)
+    .filter(registro =>
+      (legadoAba === "todos" || registro.aba === legadoAba) &&
+      (!legadoBusca.trim() || [registro.titulo, registro.id, registro.owner]
+        .some(campo => campo.toLocaleLowerCase("pt-BR")
+          .includes(legadoBusca.trim().toLocaleLowerCase("pt-BR"))))), [
+    legadoAba, legadoBusca, legadoTipo,
+  ]);
+  const legadoTotalPaginas = Math.max(1, Math.ceil(legadoRegistros.length / 20));
+  const legadoPaginaAtual = Math.min(legadoPagina, legadoTotalPaginas);
+  const legadoVisiveis = legadoRegistros.slice((legadoPaginaAtual - 1) * 20, legadoPaginaAtual * 20);
+  const legadoAtual = legadoRegistros.find(registro => registro.id === legadoSelecionado);
+
   const [forgeCopy, setForgeCopy] = useState<"IDLE" | "COPIED_NOT_EXECUTED" | "COPY_FAILED">("IDLE");
   const chosenForge = forgeAliases.find(action => action.id === forgeSelected);
   const integrity = useMemo(() => nodes.every((n, i) =>
@@ -326,6 +347,112 @@ export function HudDeterministico({ estado }: { estado?: EstadoCentralDark }) {
           </div>
         )}
       </section>
+
+      <section className="panel p-6" aria-labelledby="cd-hud-legacy-owner-inventory">
+        <p className="font-mono text-[10px] text-neon-blue">🪡🫀 MAPA DE ABSORÇÃO · SEM OUTRO HUD</p>
+        <h3 id="cd-hud-legacy-owner-inventory" className="mt-2 text-lg font-semibold">
+          Inventário integral do HUD original por owner
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          O arquivo legado foi varrido por estrutura: {hudMigrationSnapshot.counts.sections} títulos,
+          {" "}{hudMigrationSnapshot.counts.controls} controles identificados com seletores e
+          {" "}{hudMigrationSnapshot.counts.tabs} abas. O inventário não afirma que tudo já foi migrado.
+          Cada registro mostra sua origem e o owner que precisa fornecer a ação real.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button variant="outline" type="button" disabled={!atualizar} onClick={atualizar}>
+            👀 Atualizar estado do cockpit
+          </Button>
+          <a className="self-center text-xs text-neon-blue underline" target="_blank"
+            rel="noopener noreferrer"
+            href={"https://github.com/ServerVpss/CentralDark/blob/" +
+              hudMigrationSnapshot.source.main_sha + "/docs/HUD/HUD.html"}>
+            Fonte original · {hudMigrationSnapshot.source.blob_sha.slice(0, 12)}
+          </a>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <label className="text-xs text-muted-foreground" htmlFor="hud-legado-busca">
+            Buscar capacidade ou owner
+            <input id="hud-legado-busca" type="search" value={legadoBusca}
+              onChange={e => { setLegadoBusca(e.target.value); setLegadoPagina(1); setLegadoSelecionado(null); }}
+              placeholder="MCP, Tailscale, Afterburner..."
+              className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground" />
+          </label>
+          <label className="text-xs text-muted-foreground" htmlFor="hud-legado-tipo">
+            Tipo de inventário
+            <select id="hud-legado-tipo" value={legadoTipo}
+              onChange={e => { setLegadoTipo(e.target.value); setLegadoPagina(1); setLegadoSelecionado(null); }}
+              className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground">
+              <option value="controles">Botões / controles</option>
+              <option value="secoes">Seções e funcionalidades</option>
+            </select>
+          </label>
+          <label className="text-xs text-muted-foreground" htmlFor="hud-legado-aba">
+            Aba de origem
+            <select id="hud-legado-aba" value={legadoAba}
+              onChange={e => { setLegadoAba(e.target.value); setLegadoPagina(1); setLegadoSelecionado(null); }}
+              className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground">
+              {["todos", "global", "hud", "mapa", "forja", "operacao"].map(x =>
+                <option key={x} value={x}>{x.toUpperCase()}</option>)}
+            </select>
+          </label>
+        </div>
+        <p role="status" className="mt-3 text-xs text-muted-foreground">
+          {legadoRegistros.length} itens neste filtro · página {legadoPaginaAtual}/{legadoTotalPaginas}
+          {" · "}PARIDADE TOTAL NÃO COMPROVADA.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {legadoVisiveis.map(entry => (
+            <Button key={entry.tipo + entry.id} type="button" variant="outline"
+              className="h-auto justify-start whitespace-normal text-left"
+              aria-pressed={legadoSelecionado === entry.id}
+              onClick={() => setLegadoSelecionado(entry.id)}>
+              <span className="min-w-0 break-words text-xs">
+                {entry.titulo} <span className="text-muted-foreground">
+                  ({entry.aba} · {entry.estado})
+                </span>
+              </span>
+            </Button>
+          ))}
+        </div>
+        {legadoRegistros.length === 0 && (
+          <p className="mt-3 text-sm text-muted-foreground">Nenhum registro nesse filtro.</p>
+        )}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button type="button" variant="outline" disabled={legadoPaginaAtual <= 1}
+            onClick={() => { setLegadoPagina(p => Math.max(1, p - 1)); setLegadoSelecionado(null); }}>
+            ← Anterior
+          </Button>
+          <Button type="button" variant="outline" disabled={legadoPaginaAtual >= legadoTotalPaginas}
+            onClick={() => { setLegadoPagina(p => Math.min(legadoTotalPaginas, p + 1)); setLegadoSelecionado(null); }}>
+            Próxima →
+          </Button>
+        </div>
+        {legadoAtual && (
+          <div className="mt-4 space-y-2 rounded-lg border border-border p-4" role="region"
+            aria-label={"Owner do controle: " + legadoAtual.titulo}>
+            <h4 className="font-semibold">{legadoAtual.titulo}</h4>
+            <p className="break-all font-mono text-xs">OWNER: {legadoAtual.owner}</p>
+            <p className="text-xs text-muted-foreground">
+              SOURCE: docs/HUD/HUD.html · linha {legadoAtual.line}
+              {" · "}STATUS: {legadoAtual.estado}.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Verificar a função e o readback do owner antes de ativar.
+              Botão listado não equivale a execução ou paridade demonstrada.
+            </p>
+            <a href={"https://github.com/ServerVpss/CentralDark/blob/" +
+              hudMigrationSnapshot.source.main_sha + "/docs/HUD/HUD.html#L" + legadoAtual.line}
+              target="_blank" rel="noopener noreferrer"
+              className="text-xs text-neon-blue underline">Inspecionar controle original</a>
+          </div>
+        )}
+        <p className="mt-3 text-xs text-muted-foreground">
+          Próximos deltas causais: sensores Afterburner, skill-sync E01–E10,
+          Fixed Point e autorização dos formulários privados. Manter uma função por owner.
+        </p>
+      </section>
+      <GavetaForja />
       <p className="text-xs text-muted-foreground">
         Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
         source SHA {lineage.source_blob_sha.slice(0, 12)}.
