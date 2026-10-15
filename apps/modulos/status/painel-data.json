@@ -11,6 +11,14 @@
   "milestones": [],
   "events": [
     {
+      "time": "2026-10-15T01:45:58.210Z",
+      "titulo": "Push na main · 6a8d3cae993261c807f9a9376a723d1a40ed608d",
+      "detalhe": "docs: contraprova real do comando ZENDRIVE CLI e funil Casa-VPS",
+      "area": "Repositório",
+      "sha": "6a8d3ca",
+      "actor": "segredounlock"
+    },
+    {
       "time": "2026-10-15T01:39:21.526Z",
       "titulo": "Push na main · c61acdcca6c3de43b708e9e6eac3d8c9e4672f62",
       "detalhe": "docs: contraprova real do comando ZENDRIVE CLI e funil Casa-VPS",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "f2d0b10",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T17:22:07.584Z",
-      "titulo": "Push na main · 9b98d9394be6ca5cd9feabb657b0bb6d83c543ff",
-      "detalhe": "fix(voice): timeout MV3 e fallback somente para falha de servidor",
-      "area": "Repositório",
-      "sha": "9b98d93",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T01:45:58.210Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 6a8d3cae993261c807f9a9376a723d1a40ed608d (6a8d3ca)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T01:39:21.526Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · f2d0b1091033f7b64c2b4c82e3aeee6bde345109 (f2d0b10)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T17:22:07.584Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 9b98d9394be6ca5cd9feabb657b0bb6d83c543ff (9b98d93)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T01:39:21.526Z",
-  "updatedAtBR": "14/10/2026, 22:39:21 BRT"
+  "updatedAt": "2026-10-15T01:45:58.210Z",
+  "updatedAtBR": "14/10/2026, 22:45:58 BRT"
 }
