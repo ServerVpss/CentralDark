@@ -15,6 +15,74 @@ const SETORES_FORJA = [
   { id: "casa", label: "Casa", emoji: "🏠", path: "K:\\apps\\instinto-superior\\src" },
 ] as const;
 
+/**
+ * Inventário medido na Casa em 2026-10-15. Checkbox verde = prova identificada
+ * naquela leitura, NUNCA heartbeat live nem permissão para escrever no vault.
+ * Próximas fases só viram PASS depois de evidência real e readback.
+ */
+const OBSIDIAN_CRITERIOS = [
+  {
+    id: "O01",
+    titulo: "Aplicativo instalado e protocolo obsidian:// presente",
+    prova: "Casa: Obsidian.exe + processo + protocolo registrados",
+    comprovado: true,
+  },
+  {
+    id: "O02",
+    titulo: "Vault BRAIN identificado sem mover ou duplicar notas",
+    prova: "Obsidian config: K:/docs/BRAIN existente",
+    comprovado: true,
+  },
+  {
+    id: "O03",
+    titulo: "Plugin Grafo Vivo reaproveitado em módulos",
+    prova: "apps/modulos/obsidian-plugin-grafo-vivo + plugin no vault",
+    comprovado: true,
+  },
+  {
+    id: "O04",
+    titulo: "Script de sincronização já inventariado",
+    prova: "scripts/casa/sync-hermes-obsidian.ps1 existe; execução ainda não testada",
+    comprovado: true,
+  },
+  {
+    id: "O05",
+    titulo: "Botão nativo abre o BRAIN na Casa",
+    prova: "Pendente: clique real na interface e abertura do vault",
+    comprovado: false,
+  },
+  {
+    id: "O06",
+    titulo: "Sincronização com hash, conflito e readback",
+    prova: "Pendente: status/sync seguro e receipt atual",
+    comprovado: false,
+  },
+  {
+    id: "O07",
+    titulo: "Memória acessível no HUB autenticado",
+    prova: "Pendente: consulta real por owner, com privacidade",
+    comprovado: false,
+  },
+  {
+    id: "O08",
+    titulo: "Checklist reage a recibos atuais, não a snapshots",
+    prova: "Pendente: conectar critérios ao intent-cycle/receipts já existentes",
+    comprovado: false,
+  },
+  {
+    id: "O09",
+    titulo: "Provar isolamento de notas privadas",
+    prova: "Pendente: teste de autorização, negação e ausência de vazamento",
+    comprovado: false,
+  },
+  {
+    id: "O10",
+    titulo: "Comprovar UI, build e runtime no SHA correto",
+    prova: "Pendente: navegação real, build aplicável, PR/HEAD e smoke test",
+    comprovado: false,
+  },
+] as const;
+
 interface ExecutorStatus {
   mode: string;
   setor: string;
@@ -326,6 +394,95 @@ export function ForjaExecutor() {
           próprios. Incorporação iframe permanece desligada até acesso autenticado e proteção
           anti-clickjacking.
         </p>
+      </Card>
+
+      {/* Obsidian já existe no projeto e na Casa: acoplar, NÃO clonar binário proprietário. */}
+      <Card className="border border-border p-6" aria-label="Obsidian e Memória Persistente">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold">💎 Obsidian · Memória Persistente da Forja</h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              Vault BRAIN já existente na Casa. Notas Markdown + plugin CentralDark Grafo Vivo
+              complementam os bancos de dados e receipts; não substituem o banco transacional.
+            </p>
+          </div>
+          <span className="rounded border border-amber-500/40 px-3 py-1 text-xs text-amber-500">
+            SNAPSHOT CASA · NÃO É STATUS AO VIVO
+          </span>
+        </div>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {ambienteLocal ? (
+            <a
+              href="obsidian://open?vault=BRAIN"
+              className="inline-flex min-h-10 items-center rounded-md border border-border px-4 text-sm font-semibold hover:bg-muted"
+            >
+              💎 Abrir Obsidian · BRAIN
+            </a>
+          ) : (
+            <span className="rounded-md border border-border px-4 py-2 text-xs text-muted-foreground">
+              Abrir no computador da Casa; link nativo indisponível em cliente remoto.
+            </span>
+          )}
+          <a
+            href="https://github.com/ServerVpss/CentralDark/tree/main/apps/modulos/obsidian-plugin-grafo-vivo"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-10 items-center rounded-md border border-border px-4 text-sm hover:bg-muted"
+          >
+            🕸️ Ver módulo Grafo Vivo
+          </a>
+          <span className="text-xs text-muted-foreground">
+            Obsidian usa seu aplicativo nativo, sem segunda instalação e sem serviço público.
+          </span>
+        </div>
+        <div className="mt-5 rounded-lg border border-border bg-background/40 p-4">
+          <h3 className="font-semibold text-sm">☑️ Critérios da integração · prova por etapa</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Verde = leitura comprovada em 15/10/2026 (pode envelhecer). Cinza = pendente. As caixas
+            são somente leitura; marcar sem teste não vira PASS.
+          </p>
+          <div className="mt-3 space-y-2">
+            {OBSIDIAN_CRITERIOS.map((criterio) => (
+              <label
+                key={criterio.id}
+                className="flex items-start gap-3 rounded-md border border-border/60 p-3 text-sm"
+              >
+                <input
+                  type="checkbox"
+                  className="mt-1 size-4 accent-green-600"
+                  readOnly
+                  checked={criterio.comprovado}
+                  aria-label={criterio.titulo}
+                />
+                <span className="flex-1">
+                  <span
+                    className={
+                      criterio.comprovado
+                        ? "font-semibold text-green-600"
+                        : "font-semibold text-muted-foreground"
+                    }
+                  >
+                    {criterio.id} · {criterio.titulo}
+                  </span>
+                  <span className="mt-1 block text-xs text-muted-foreground">{criterio.prova}</span>
+                </span>
+                <span
+                  className={
+                    criterio.comprovado
+                      ? "text-xs font-semibold text-green-600"
+                      : "text-xs text-muted-foreground"
+                  }
+                >
+                  {criterio.comprovado ? "✓ PROVADO" : "○ PENDENTE"}
+                </span>
+              </label>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Cada atualização futura deve carregar evidência/receipt real do mesmo owner e do GOAL na
+            PR #1832. Nunca exportar notas privadas, tokens ou o vault inteiro para a main.
+          </p>
+        </div>
       </Card>
 
       {/* Status de Sincronização */}
