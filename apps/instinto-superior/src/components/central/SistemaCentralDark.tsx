@@ -148,6 +148,49 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
       )}
 
       <div className="mt-6 overflow-hidden rounded-md border border-border">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-muted/40 px-4 py-3">
+          <div>
+            <h4 className="text-sm font-semibold">Logs no Instinto Superior · fonte existente</h4>
+            <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+              notifications_log · Supabase com RLS admin · atualizações em tempo real · não equivale ao funil MCP completo
+            </p>
+          </div>
+          <Button variant="outline" size="sm" onClick={() => void notificacoes.refresh()} disabled={notificacoes.loading}>
+            <Activity className={notificacoes.loading ? "animate-spin" : ""} /> Conferir logs
+          </Button>
+        </div>
+        {notificacoes.erro ? (
+          <p className="px-4 py-4 text-sm text-destructive">LOGS: BLOCKED · {notificacoes.erro}</p>
+        ) : notificacoes.loading && !notificacoes.items.length ? (
+          <p className="px-4 py-5 text-sm text-muted-foreground">Consultando a fonte de logs autorizada…</p>
+        ) : notificacoes.items.length ? (
+          <ol aria-label="Eventos da CentralDark" className="max-h-[32rem] divide-y divide-border overflow-y-auto">
+            {notificacoes.items.map((evento) => (
+              <li key={evento.id} className="grid gap-2 px-4 py-3 sm:grid-cols-[8.5rem_6rem_1fr]">
+                <time className="font-mono text-[10px] text-muted-foreground">
+                  {Number.isFinite(Date.parse(evento.created_at))
+                    ? new Date(evento.created_at).toLocaleString("pt-BR")
+                    : "Horário UNKNOWN"}
+                </time>
+                <span className="font-mono text-[10px] uppercase text-gold">{evento.tipo}</span>
+                <div className="min-w-0 break-words text-xs">
+                  <span className="font-semibold">{evento.titulo}</span>
+                  <span className="ml-2 text-muted-foreground">[{evento.origem}] {evento.mensagem}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="px-4 py-5 text-sm text-muted-foreground">
+            Nenhum evento retornado no período. Vazio não é prova de saúde.
+          </p>
+        )}
+        <p className="border-t border-border px-4 py-2 font-mono text-[10px] text-muted-foreground">
+          MCP log-funnel → API protegida: consumidor E2E ainda pendente de autenticação/receipt; não publicar logs brutos.
+        </p>
+      </div>
+
+      <div className="mt-6 overflow-hidden rounded-md border border-border">
         <div className="border-b border-border bg-muted/40 px-4 py-3 font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
           Atividade recente comprovada
         </div>
