@@ -115,6 +115,45 @@ export function ConexoesCentralDark() {
         </div>
       </div>
 
+      <div className="mt-6 grid gap-4 lg:grid-cols-2" aria-label="Modos de conexão GitHub">
+        <article className="panel p-5">
+          <p className="font-mono text-[10px] uppercase text-neon-blue">GitHub · OAuth App</p>
+          <h4 className="mt-2 font-semibold">Autorizar conta</h4>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Usa Client ID e autorização do usuário. A conexão só será considerada ativa após
+            retorno e validação pelo broker existente.
+          </p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Estado: {dados?.connections.some((c) => c.provider_id === "github" && c.status === "active")
+              ? "ATIVA NO REGISTRO DO BROKER · VALIDAR SESSÃO"
+              : "NÃO COMPROVADA"}
+          </p>
+          <Button
+            className="mt-4"
+            variant="outline"
+            disabled={!dados?.userId || dados?.estado !== "PASS"}
+            onClick={() => void conectar("github")}
+          >
+            <Link2 /> Autorizar via OAuth
+          </Button>
+        </article>
+        <article className="panel p-5">
+          <p className="font-mono text-[10px] uppercase text-gold">GitHub App · Instalação</p>
+          <h4 className="mt-2 font-semibold">Selecionar repositórios</h4>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Usa App ID para identificar a aplicação. A instalação é autorizada pelo GitHub,
+            com seleção de todos ou apenas repositórios específicos e permissões declaradas
+            pela própria aplicação.
+          </p>
+          <p className="mt-3 text-xs text-gold">
+            AGUARDANDO APP ID · instalação não iniciada · permissões não concedidas
+          </p>
+          <Button className="mt-4" variant="outline" disabled>
+            <KeyRound /> Instalar GitHub App · pendente
+          </Button>
+        </article>
+      </div>
+
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <article className="panel p-5">
           <KeyRound className="size-5 text-gold" />
