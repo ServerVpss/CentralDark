@@ -2941,3 +2941,25 @@ Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remot
 **Cura para ocioso:** não repetir investigações inteiras quando `receipt+SHA+owner` ainda servem; revalidar apenas estado volátil. Se teste/rota falhar, preservar writer e trabalhar outra parte independente no mesmo escopo; só parar diante de bloqueio real. Usar caminhos no disco `K:` vinculado ao VS Code para staging quando disponível, sem sobrescrever projetos ocupados nem recriar pacotes/skills.
 
 **FIXED_POINT:** aceitação de satisfação do CHEFE é distinta de conformidade operacional mensurada; selos exigem efeito e contraprova. `NEXT_CURSOR` sempre recuperável. Executar apenas ferramentas autorizadas e não transformar `#acordar` em autostart destrutivo.
+
+
+<!-- FORJA_VIVA_EMOJI_ALIAS_DELTA_FIXED_POINT_20261015 -->
+## 🔧 🛠️ 👨🏻‍🔧 👀 👁️ 🪡 🎄 🌞 🌟 ✨ ☄️ 🔥 🪛 ⚒️ — Forja Viva, aliases sob demanda
+
+**FIXED_POINT do CHEFE:** estágio corrente e satisfação aceitos; só abrir cadeado para DELTA útil provado. O estado antigo permanece histórico, não deve ser reconstruído a cada retomada. `#acordar → !calibrar → !CENTRALDARK` continua a forma curta de recuperar owner + SHA + última prova + NEXT_CURSOR.
+
+**Fonte visual canônica:** `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. **Owner da casca:** `apps/instinto-superior/src/components/central/HudDeterministico.tsx` na PR #1832. **Build/empacotamento:** `apps/instinto-superior/package.json` invoca `npm run verify:hud && npm run build && node scripts/build-plugplay.mjs`. **Contrato de identidade:** `docs/ARQUITETURA/CENTRALDARK-CRYSTALLIZED-PLUG-PLAY.yml`. **Forja visual:** `docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/VISUAL-NAMING-REGISTRY.yml`. Nenhum novo motor, skill, coleta ou roteador.
+
+**Como utilizar:**
+- 🔧🪛 → inspecionar + diagnosticar via extensão VS Code Restore e funil único, sem captar prompts/segredos.
+- 🛠️👨🏻‍🔧 → manter o mesmo owner e a mesma receita, após evidência de causa e autorização.
+- 👀👁️ → observar/contraprovar no painel existente, com `UNKNOWN` quando faltarem dados.
+- 🪡🎄 → preservar UIDs e aprendizagem; não renumerar Gênesis nem duplicar selos.
+- 🌞🌟✨ → retomar contexto e anunciar **🍒🎰🎲 Outra melhoria antecipada**, explicando ganho, uso, fonte/prova e cursor.
+- ☄️🔥⚒️ → compilar e preparar ZIP POMBO64 com manifesto/hash por comando **explícito** `npm run build:plugplay`, em ambiente de build autorizado e preferivelmente no volume K: vinculado à Forja; **nenhum emoji executa esse comando automaticamente**.
+
+**Loop de código vivo, mas governado:** `DISCOVER_EXISTING_OWNER → READ_COMPATIBLE_RECIPE → DELTA_WITHIN_CAUSAL_CONE → TEST → COUNTERPROOF → RECEIPT → FIXED_POINT`. Quando houver outra melhoria independente, continuar só se não violar writer único, escopo/autorização e gates. `SOURCE_COMMITTED ≠ BUILD_PASS ≠ ZIP_PROVEN ≠ RUNTIME_DEPLOYED`. Comando visível em chat ≠ texto enviado ao terminal; `SEND_OK ≠ EXIT_0`. Nunca limpar worktree em uso.
+
+**Pacote plug-and-play:** `build:plugplay` usa dependência JSZip já declarada pelo app; arquivo `apps/instinto-superior/scripts/build-plugplay.mjs` é **implementação de build**, não outra receita/skill. ZIP contém somente output compilado filtrado, contratos obrigatórios, manifest com SHA por arquivo e SHA do ZIP; recusa fontes locais modificadas, links simbólicos e arquivos sensíveis. Não automatiza instalar, deploy, restart ou apagar históricos. Se dependências, destino, build ou CI estiverem ausentes, `BLOCKED/UNKNOWN` localizado, sem reconfigurar infraestrutura à força.
+
+**Critérios de selo:** aceitação humana 100% do método e prova operacional são categorias diferentes. Código e teste em branch #1832 não equivalem a UI publicada; todos os indicadores de conformidade devem apresentar denominador e evidência. Se o runtime de alguma capacidade ainda for `UNKNOWN`, preservar o FIXED_POINT do estágio anterior e o NEXT_CURSOR, sem falso selo.
