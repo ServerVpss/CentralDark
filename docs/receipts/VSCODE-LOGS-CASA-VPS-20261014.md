@@ -52,3 +52,14 @@ Somente eventos estruturados/sanitizados são enviados. Não publicar prompts, t
 - O estado retornado foi `ATTENTION` amarelo por fonte parada/sem atualização recente; não representa falha da rota Tailscale, que estava funcional.
 - Isso prova o endpoint **local da VPS**, não prova exposição pelo domínio público, cobertura de todas as fontes ou sincronização com a main.
 - A branch `feat/vscode-log-funnel-casa-20261014` está no PR #1820 (draft); merge/deploy do código canônico em `main` segue pendente.
+
+## Correção da janela piscando — Casa, 14/10/2026
+
+- Sinal do CHEFE: uma janela aparecia e sumia no desktop. A tarefa `CentralDark-VSCode-LogBridge` havia sido instalada com ação direta `C:\Program Files\PowerShell\7\pwsh.exe`, conta `Interactive`, repetição `PT1M`, `Settings.Hidden=False`, `LastTaskResult=0`.
+- Causa causal: execução interativa do PowerShell a cada minuto abre janela rapidamente, mesmo que o script não escreva conteúdo visível.
+- Delta mínimo: adicionar apenas `scripts/casa/vscode-log-bridge-hidden.vbs`; alterar a ação da tarefa para `C:\Windows\System32\wscript.exe //B //Nologo "K:\scripts\casa\vscode-log-bridge-hidden.vbs"`, com `WScript.Shell.Run(command,0,True)`; script principal e rota SSH preservados.
+- Backups locais antes da troca: `K:\TEMP\work\vscode-hidden-fix\vscode-log-bridge.before-hidden.ps1` e `K:\TEMP\work\vscode-hidden-fix\task-before-hidden.xml`.
+- Conferência de origem: `git hash-object` do script anterior `6f5a973684f32c1ca2fb50cf1f582daedf5d6b2e`, novo script `4baa51d10d4dd86243de0f0aef77fbf7daaa6e43`, launcher `446ba556be11c37f5b8d46494635bb8bd28e77f0`; a cópia foi extraída do objeto Git exato.
+- Contraprova de execução: lançador invisível manual exit code `0`; Task Scheduler registrado como `wscript.exe`, `LogonType=Interactive`, trigger `PT1M`, estado `Ready`; disparo da tarefa mudou `LastRunTime` de `21:07:43` para `21:08:42` (BRT), `LastTaskResult=0`.
+- Isso comprova configuração e execução invisível por contrato de sistema, mas não substitui captura visual do desktop caso a janela vista venha de **outra tarefa**. Se persistir, medir novo PID/janela no momento da ocorrência.
+- O coletor de sinais, log bruto, SSH/Tailscale e API permanecem com seus donos; a skill continua exclusivamente na Forja, não na VPS.
