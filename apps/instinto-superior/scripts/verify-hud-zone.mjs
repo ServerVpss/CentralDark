@@ -44,12 +44,12 @@ test("replay documental nao inventa execucao nem novos selos", () => {
 
 test("Forja Viva mapeia emojis para receitas existentes sem execucao automatica", () => {
   const symbols = ["🔧", "🛠️", "👨🏻‍🔧", "👀", "👁️", "🪡", "🎄",
-    "🌞", "🌟", "✨", "☄️", "🔥", "🪛", "⚒️"];
+    "🌞", "🌟", "✨", "☄️", "🔥", "🪛", "⚒️", "🧹"];
   for (const symbol of symbols) {
     assert.ok(zone.includes(symbol), "simbolo ausente: " + symbol);
   }
   for (const capability of ["DIAGNOSTICAR", "MANUTENCAO", "OLHO",
-    "LINHAGEM", "ANTECIPACAO", "FORJA_PACOTE"]) {
+    "LINHAGEM", "ANTECIPACAO", "FORJA_PACOTE", "WORKTREE_CLEANUP"]) {
     assert.ok(zone.includes('id: "' + capability + '"'));
   }
   assert.ok(zone.includes("Copiar receita · não executar"));
@@ -78,4 +78,23 @@ test("o checklist usa a mesma consulta do pai e não vira novo coletor", () => {
   assert.ok(zone.includes("estado?.screenpipe"));
   assert.ok(zone.includes("CHECK-LIST-DIARIO.md"));
   assert.ok(!zone.includes("new WebSocket("));
+});
+
+
+test("🧹 faxina contextual do mesmo HUD nunca elimina trabalho sem receipt", () => {
+  const standard = read("docs/CONSCIENCIA/PADRAO-EMOJIS.md");
+  const registry = read("docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/VISUAL-NAMING-REGISTRY.yml");
+  const existingSkill = read(".agents/skills/main-pinned-runtime-fast-path/SKILL.md");
+  assert.ok(zone.includes('id: "WORKTREE_CLEANUP"'));
+  assert.ok(zone.includes('chosenForge?.id === "WORKTREE_CLEANUP"'));
+  assert.ok(zone.includes('Estado de limpeza desta interface: UNKNOWN'));
+  assert.ok(zone.includes("KEEP_ACTIVE"));
+  assert.ok(zone.includes("Quando o CHEFE quiser ver: build e prova visual na Casa existente."));
+  assert.ok(zone.includes("Confirmar publicação na main"));
+  assert.ok(standard.includes("Lei da vassoura 🧹"));
+  assert.ok(registry.includes('faxina_segura: ["🧹"]'));
+  assert.ok(existingSkill.includes("RECEIPT_BEFORE_CLEANUP"));
+  assert.ok(existingSkill.includes("SCRATCH_SAFE"));
+  assert.ok(!zone.includes("git clean -fdx"));
+  assert.ok(!zone.includes("rmSync("));
 });
