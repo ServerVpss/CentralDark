@@ -245,6 +245,68 @@ export function GavetaForja() {
         </p>
       </header>
 
+      <section className="panel p-5" aria-labelledby="gaveta-inventario-fisico">
+        <h5 id="gaveta-inventario-fisico" className="font-semibold">
+          👁️ Inventário físico · Casa / VPS / MCP
+        </h5>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Leituras feitas nas rotas autorizadas. Pasta presente não prova extensão habilitada,
+          skill carregada, canal conectado ou automação em execução.
+        </p>
+        <div className="mt-3 grid gap-3 md:grid-cols-3">
+          <article className="rounded-lg border border-border p-3 text-sm">
+            <strong>🏠 Casa SEGREDO</strong>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {gavetaCatalogo.runtime_snapshots.casa.vscode_extension_folders} pastas de extensões VS Code;
+              {" "}{gavetaCatalogo.runtime_snapshots.casa.obsidian_k_docs_plugin_folders} plugins do Obsidian em K:.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Plugins Obsidian: {gavetaCatalogo.runtime_snapshots.casa.obsidian_k_docs_plugin_names.join(" · ")}.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Restore VS Code com versões em disco: {gavetaCatalogo.runtime_snapshots.casa.vscode_restore_version_folders.join(" / ")}.
+              Não somar versões da mesma extensão como capacidades novas.
+            </p>
+            <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+              {gavetaCatalogo.runtime_snapshots.casa.observed_at} · PRESENT_ON_DISK
+            </p>
+          </article>
+          <article className="rounded-lg border border-border p-3 text-sm">
+            <strong>🖥️ VPS · Hermes</strong>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {gavetaCatalogo.runtime_snapshots.vps.hermes_skill_files} SKILL.md no espelho Hermes;
+              {" "}{gavetaCatalogo.runtime_snapshots.vps.hermes_plugin_directories} diretórios de plugins.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Plugins: {gavetaCatalogo.runtime_snapshots.vps.hermes_plugin_names.join(" · ")}.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Sincronizado não implica carregado. Quantidade distinta de skills versionadas na main.
+            </p>
+            <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+              {gavetaCatalogo.runtime_snapshots.vps.observed_at} · RUNTIME_LOAD_UNKNOWN
+            </p>
+          </article>
+          <article className="rounded-lg border border-border p-3 text-sm">
+            <strong>🔌 MCP CentralDark</strong>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {gavetaCatalogo.runtime_snapshots.mcp.catalog_tools} ferramentas no catálogo;
+              {" "}{gavetaCatalogo.runtime_snapshots.mcp.catalog_routes} rotas;
+              {" "}{gavetaCatalogo.runtime_snapshots.mcp.skill_listar_entries} skills utilitárias no skill_listar.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Expostas por skill_listar: {gavetaCatalogo.runtime_snapshots.mcp.skill_listar_names.join(" · ")}.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Catálogo MCP, documentos de skills e plugins físicos têm denominadores diferentes.
+            </p>
+            <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+              {gavetaCatalogo.runtime_snapshots.mcp.observed_at} · MCP_READBACK
+            </p>
+          </article>
+        </div>
+      </section>
+
       <section className="panel p-5" aria-label="Pesquisar o catálogo de skills">
         <h5 className="font-semibold">🛠️ Catálogo pesquisável das skills</h5>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
