@@ -2916,3 +2916,8 @@ Fala direta do CHEFE, baianês/resenha naturais; versículo ou rima opcionais e 
     SKILL_RED_REQUIRES_ACTUAL_LOCAL_FAILURE=true
     SKILL_NO_GENERIC_NON_PROVEN_ALARM=true
     SKILL_TECHNICAL_EVIDENCE_UNMODIFIED=true
+
+
+### VS Code Windows Casa — descoberta Desktop Commander (2026-10-15)
+
+Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
