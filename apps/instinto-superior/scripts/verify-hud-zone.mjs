@@ -58,7 +58,7 @@ test("Forja Viva mapeia emojis para receitas existentes sem execucao automatica"
   assert.ok(!zone.includes("execSync("));
   assert.ok(!zone.includes("spawn("));
   assert.ok(!zone.includes("shell.openExternal("));
-  assert.ok(!zone.includes(".catch(() => {})"));
+  assert.doesNotMatch(zone, /\.catch\(\s*\(\)\s*=>\s*\{\s*\}\s*\)/);
   assert.ok(zone.includes('setGenesisCopy("FAILED")'));
   assert.ok(zone.includes("Falha ao copiar; receita continua visível"));
 });
