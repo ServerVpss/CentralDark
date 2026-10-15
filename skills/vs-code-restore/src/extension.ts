@@ -27,7 +27,7 @@ let traceOutput: vscode.OutputChannel | undefined;
 
 // VS Code > Saida > CentralDark Trace. Only fixed, sanitized metadata.
 function emitTrace(event: string, state: 'OBSERVED' | 'PASS' | 'ATTENTION' | 'UNKNOWN' = 'OBSERVED'): void {
-  if (!/^(activate|cli_focus|shell_start|shell_end|shell_integration|workspace_map|restore|show_trace)$/.test(event)) { return; }
+  if (!/^(activate|cli_focus|shell_start|shell_end|shell_integration|workspace_map|restore|show_trace|help|diagnostic|command_preview)$/.test(event)) { return; }
   traceOutput?.appendLine(`${new Date().toISOString()} event=${event} state=${state}`);
 }
 
@@ -41,6 +41,9 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
     // Alias acessível: mesmo foco e terminal existente, sem criar um segundo executor.
     vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal),
+    vscode.commands.registerCommand('centraldark.help', operationalHelp),
+    vscode.commands.registerCommand('centraldark.connectionDiagnostics', connectionDiagnostics),
+    vscode.commands.registerCommand('centraldark.prepareVisibleCommand', prepareVisibleCommand),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
       traceOutput?.show(true);
