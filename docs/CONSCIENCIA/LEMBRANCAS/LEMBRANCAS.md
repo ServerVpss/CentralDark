@@ -1453,3 +1453,16 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Ferida e contraprova:** a SOL repetiu interpretação, aceitação e perguntas sem consumir previamente a documentação. O CHEFE exigiu Meta-Lupa sobre a própria análise. A leitura e o cruzamento mostraram doze docs pertinentes idênticos entre Casa e GitHub `main`, com um desvio de apenas um commit no painel de status, não na doutrina. O problema era a **aplicação da memória**, não sua ausência. Boot híbrido openKylin/VMware não foi executado nem provado nessa conversa.
 - **Regra de continuidade:** antes de perguntar, recuperar contexto e owners; separar pensamento humano de localizadores técnicos; questionar a própria inferência, não a capacidade do humano; devolver só diferença material e prova pertinente. O pensamento pode mudar, a documentação precisa permanecer recuperável, e a próxima forma serve à intenção vigente.
 - **Aprendizado numerado:** `docs/CONSCIENCIA/APRENDIZADOS.md#171-intenção-humana-transformável-memória-por-sentido-e-meta-lupa-sobre-a-própria-resposta`. Linhagem mantida pelo compilador original `scripts/trigger-fabric/rebuild_learning_lineage.py`; não criar owner paralelo.
+
+### [2026-10-15] Aprendizado #193 — PRs travados por aprovação de workflow, não por bug; 5 merges em sequência com baseline cruzado
+
+- **Cena e aceite:** CHEFE pediu para mergear PRs "verdes". Medição real mostrou 3 deles sem nenhum check de CI real disparado — não era CI verde, era CI nunca executado, retido por `action_required` (política de aprovação do GitHub Actions, não falha de teste).
+- **Fio:** aprovar os runs represados (`gh api .../actions/runs/{id}/approve`) destravou a execução real; os fails que apareceram depois foram cruzados contra PRs independentes antes de mergear, confirmando baseline pré-existente em todos os casos.
+- **Regra:** nunca confundir "sem check visível"/"action_required" com "travado por bug"; sempre medir o `conclusion` real do run antes de diagnosticar. Nunca mergear PR com fail visível sem cruzar o nome exato da falha contra pelo menos um PR/commit independente.
+- **Continuidade:** sequência #1822→#1821→#1820→#1808→#1774 mergeada com squash+delete-branch; main avançou `a356b18a`→`88f49b8b`; receipt real via `mergedAt`/`mergeCommit` pós-merge em cada um, não suposição de "parece verde".
+- **Fonte:** docs/CONSCIENCIA/APRENDIZADOS.md#193.
+- **Limite:** 9 PRs CONFLICTING continuam pendentes (precisam rebase); não cobertos por este registro.
+- 📣 **Escopo da lembrança #193:** registrar o padrão de destravamento + disciplina de merge em lote; não assumir que todo PR represado está quebrado.
+- 🟢 **Conquista:** 5 merges reais provados com SHA, zero regressão nova introduzida.
+- 📌 **Prova:** PRs #1822, #1821, #1820, #1808, #1774 todos com `state=MERGED` e `mergeCommit` confirmados via `gh pr view --json`.
+- 🎯 **Próximo passo:** destravar os 9 PRs CONFLICTING um por um (rebase + resolução + CI real).
