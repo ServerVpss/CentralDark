@@ -122,8 +122,12 @@ test("gaveta canonica cataloga 999 skills e plugins sem fingir execucao", () => 
   assert.ok(infra.includes("export function GavetaForja()"));
   assert.ok(infra.includes('TabsTrigger value="gavetas"'));
   assert.ok(infra.includes("GavetaForja />"));
-  assert.ok(zone.includes("<GavetaForja />"));
+  assert.ok(zone.includes("<GavetaForja mainShaAtual={estado?.mainSha} />"));
   assert.ok(infra.includes("MAIN_SYNCED ≠ RUNTIME_LOADED"));
+  assert.ok(infra.includes("MAIN_AVANCOU"));
+  assert.ok(infra.includes("CURRENT_MAIN_SHA_UNKNOWN_NESTA_ABA"));
+  assert.ok(infra.includes("SHA_MAIN_COINCIDE"));
+
 });
 
 test("inventario do HUD cobre quatro abas e preserva fonte legada integral", () => {
