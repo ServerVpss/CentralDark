@@ -172,3 +172,74 @@ O ponto fixo atual é **rota de envio demonstrada e documentação reutilizável
 Depois da leitura imediata do teste Bash, o arquivo Casa recebeu **dois eventos nativos adicionais** do listener da extensão: `shell_start exit=unknown` em `2026-10-15T01:37:05.779Z` e `shell_end exit=ok` em `2026-10-15T01:37:05.792Z`. A fonte avançou `3028123 → 3028322`. O funil VPS registrou dois `vscode_log_signal key=vscode:terminal` com offsets `3028226` e `3028322`; heartbeat `accepted=2 duplicate=0 route=tailscale`, seguintes `accepted=0`.
 
 **SELO EXATO:** a extensão observou e entregou pelo menos um par de início/fim de execução; **não** é possível atribuí-lo com segurança ao `echo` anterior ou a um terminal específico, porque o evento deliberadamente não transporta comando, saída nem identidade do terminal. Captura universal e correlação por terminal seguem pendentes; não extrapolar.
+
+
+## 🍒 Sensor rápido PID/HWND + Saída/Trace — 15/10/2026
+
+**INTENT_ID:** CENTRALDARK-VSCODE-FOCUS-TRACE-20261015 · **OWNER:** esta mesma skill
+(`skills/vs-code-restore`), sem extensão, executor, monitor ou coletor paralelo.
+O ChatGPT/SOL usa a rota Desktop Commander **SEGREDO Windows**;
+o conector Remote Desktop Commander de outra conta pode listar **CENTRALDARK-OS Linux**.
+Nunca adivinhar deviceId, PID, HWND nem aba de terminal com base em fotografia antiga.
+
+### Receita reproduzível (rápida, sem disputa com Hermes)
+
+1. `list_devices` nos conectores disponíveis; escolher a Casa Windows online.
+2. **Sensor em uma única chamada** (Windows PowerShell, só inventário):
+   `powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'K:\skills\vs-code-restore\tools\focus-vscode-window.ps1' -Mode Inventory`.
+   Retorna JSON compacto: quantidade de janelas Code, PID, HWND, título truncado,
+   retângulo e `foreground`. PID e HWND são voláteis; remedir antes de cada ação.
+3. **Foco sem digitar:** repetir o script com
+   `-Mode Focus -TargetPid <PID> -WindowHandle <HWND>`.
+   A rotina reidentifica processo `Code`, janela `Visual Studio Code` e workspace
+   `CentralDark`, chama `SetForegroundWindow` e exige readback `GetForegroundWindow`.
+4. **Foco + foto:** `-Mode FocusCapture -TargetPid <PID> -WindowHandle <HWND>`.
+   Faz `GetWindowRect` e `CopyFromScreen`, redimensiona a foto para até 1440px,
+   devolve caminho local e tamanho. A imagem fica no `%TEMP%` da Casa, não no Git.
+   Para vê-la neste chat, usar `read_file` do conector Casa: resultado traz image
+   part base64. `Capture` sem foco pode fotografar janelas sobrepostas.
+5. **Trace opt-in:** acrescentar `-EmitTrace` em `Inventory`, `Focus` ou
+   `FocusCapture`. Só escreve `window_inventory|window_focus|window_capture`,
+   status `observed|pass|fail`, PID, HWND e timestamp no
+   **mesmo** `K:\TEMP\logs\LOGS-VS-CODE.log`, se ele já existir.
+   Reusa o agendador `CentralDark-VSCode-LogBridge` →
+   `scripts/casa/vscode-log-bridge.ps1` → SSH/Tailscale →
+   `scripts/vps/ingest-vscode-log.mjs` → `log-funnel.js`.
+   Não grava comando, texto de chat, stdout, título, imagem, cookie nem segredo.
+6. **Saída nativa:** após compilar/instalar a fonte atualizada da extensão,
+   paleta `CentralDark: Mostrar Trace (Saída)` ou
+   menu `Exibir → Saída → CentralDark Trace`. Este `OutputChannel` interno
+   mostra somente `activate|show_trace|cli_focus|shell_start|shell_end|
+   shell_integration|workspace_map|restore` com estados.
+   Ele **não lê a Saída de outras extensões**, **não captura stdout do Hermes**,
+   nem prova automaticamente que o servidor remoto executou um comando.
+7. **CLI de verdade (modo com escrita, separado):** somente após identificar
+   controle `xterm-helper-textarea` do terminal existente, confirmar foco
+   por UIAutomation e autorização do escopo; preferir API nativa
+   `centraldark.zendriveCli` para focar a sessão já ativa. Enviar **um**
+   comando de teste inofensivo, validar retorno com screenshot novo e,
+   quando aplicável, logs do próprio processo/SSH. Não usar SendKeys para
+   scripts arbitrários, nem emitir comandos na sessão Haiku enquanto ele
+   escreve/compila. `SEND_OK != COMMAND_EXIT_0 != E2E_PASS`.
+
+### Guardas e provas
+
+- Nenhum `-Restore`, auto-agente, terminal novo, `git pull/reset`, `npm install`,
+  merge, deploy ou reinício de VS Code durante medição.
+- `CURRENT` de 15/10: `Code.exe` PID **12268**, handle **657456**
+  (são observações históricas, não IDs estáveis). O script foi executado
+  em `Inventory` e `FocusCapture` na Casa: **2 janelas**, `status=OBSERVED`,
+  foco `FOCUS_READBACK_PASS`, screenshot JPG 196.498 bytes,
+  `no_terminal_input=true`. Testou-se depois do foco uma captura real do VS Code.
+- **Atenção à fonte:** o script novo com `-EmitTrace` e a alteração
+  `CentralDark Trace` foram escritos no GitHub em branch isolada; **não são
+  prova de extensão ativada/reinstalada no VS Code**. O teste anterior provou
+  somente `Inventory/FocusCapture`; o evento trace novo no funil e a aba
+  Saída precisam de teste do runtime após instalar o pacote.
+- A política PowerShell do processo inicial bloqueou execução de `.ps1`;
+  a rota já prevista nesta skill
+  `powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...`
+  funcionou **somente naquele processo** e não modifica a política global.
+- Speed path: `DEVICE → INVENTORY(JSON) → FOCUS_READBACK → CAPTURE → TRACE_OPT_IN
+  → INSPECIONAR → (AUTORIZAR CLI) → EXECUTAR UMA VEZ → COMPARAR → RECEIPT`.
+  `UNKNOWN != PASS`; Output UI não é log bruto do terminal.
