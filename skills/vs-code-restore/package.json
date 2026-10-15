@@ -28,6 +28,10 @@
       {
         "command": "centraldark.zendriveCli",
         "title": "CentralDark: ZENDRIVE CLI (terminal existente)"
+      },
+      {
+        "command": "centraldark.focusExistingTerminal",
+        "title": "CentralDark: VS Code — focar terminal existente"
       }
     ],
     "configuration": {

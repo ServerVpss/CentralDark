@@ -83,16 +83,16 @@ skill = COMO / scripts Casa = COLETA / script VPS = INGERE / log-funnel = DONO /
 Após `cli_focus`, a extensão 0.1.1 escreveu `shell_start exit=unknown` e `shell_end exit=ok` (timestamps `01:37:05.779Z` e `01:37:05.792Z`) na fonte Casa, sem conteúdo sensível. O cursor avançou de `3028123` para `3028322`. VPS materializou `vscode_log_signal key=vscode:terminal` nos offsets `3028226` e `3028322`, heartbeat `accepted=2 duplicate=0 route=tailscale` e seguinte `accepted=0`. A correlação com o comando Bash específico não é provada; metadados não incluem terminal ou comando. Sem segunda arquitetura.
 
 
-## 5S / Papagaio Fiel — leitura remota e funil (15/10/2026, 11h BRT)
+## VS Code / Papagaio Fiel — leitura remota e funil (15/10/2026, 11h BRT)
 
 **CHEFE_INTENT:** toda leitura deste funil deve começar pela skill existente, pela rota Desktop Commander da Casa e, quando necessário, do Desktop Commander da VPS. Focar o VS Code aberto sem abrir outro editor ou terminal. Esta é extensão do mesmo owner, não novo agente/coletor/daemon.
 
-**5S operacional:**
-1. **Seiri — distinguir:** `list_devices` em cada conta, Casa `SEGREDO` Windows versus VPS `CENTRALDARK-OS` Linux; PID/HWND de observação não provam terminal interativo controlável. Processos fechados por opção do CHEFE são `NOT_REQUIRED`, não FAIL.
-2. **Seiton — situar:** mapear `Code.exe` + janela atual + processos-filhos de `Code.exe`; obter PID, PPID, SessionId, HWND e foreground no sensor `skills/vs-code-restore/tools/focus-vscode-window.ps1`. Focar por handle fresco e exigir `GetForegroundWindow` igual; se focus denied, não digitar.
-3. **Seiso — limpar ruído:** comparar fonte privada `K:\TEMP\logs\LOGS-VS-CODE.log` e cursor local com offset remoto; checar `CentralDark-VSCode-LogBridge` por `LastTaskResult` e último run, sem recriar tarefa. Segredo/STDOUT/prints/telas ficam fora do funil.
-4. **Seiketsu — padronizar:** preferir Tailscale+SSH, usar `ssh-direct` existente apenas como fallback com `ATTENTION`. VPS `logs/agent-patterns/vscode-casa-cursor.json`, `logs/services/vscode/YYYY-MM-DD.jsonl`, ingestor existente e API admin autenticada. Um cursor sincronizado e heartbeat `state=OK` = PASS para transporte naquele instante, não para todo o cockpit.
-5. **Shitsuke — sustentar:** cada leitura retorna `INTENT | OWNER | CURRENT | PROOF | COUNTERPROOF | NEXT_CURSOR`; revalida estado volátil em nova sessão, conserva o owner GitHub, evita `pull/reset` sobre trabalho sujo e não interrompe writer ativo do Hermes.
+**Rota operacional do VS Code (correção de transcrição: “5S” foi reconhecimento de voz incorreto):**
+1. **VS Code · identificar:** `list_devices` em cada conta, Casa `SEGREDO` Windows versus VPS `CENTRALDARK-OS` Linux; PID/HWND de observação não provam terminal interativo controlável. Processos fechados por opção do CHEFE são `NOT_REQUIRED`, não FAIL.
+2. **VS Code · focar:** mapear `Code.exe` + janela atual + processos-filhos de `Code.exe`; obter PID, PPID, SessionId, HWND e foreground no sensor `skills/vs-code-restore/tools/focus-vscode-window.ps1`. Focar por handle fresco e exigir `GetForegroundWindow` igual; se focus denied, não digitar.
+3. **VS Code · ler saída:** comparar fonte privada `K:\TEMP\logs\LOGS-VS-CODE.log` e cursor local com offset remoto; checar `CentralDark-VSCode-LogBridge` por `LastTaskResult` e último run, sem recriar tarefa. Segredo/STDOUT/prints/telas ficam fora do funil.
+4. **VS Code · rastrear funil:** preferir Tailscale+SSH, usar `ssh-direct` existente apenas como fallback com `ATTENTION`. VPS `logs/agent-patterns/vscode-casa-cursor.json`, `logs/services/vscode/YYYY-MM-DD.jsonl`, ingestor existente e API admin autenticada. Um cursor sincronizado e heartbeat `state=OK` = PASS para transporte naquele instante, não para todo o cockpit.
+5. **VS Code · comprovar:** cada leitura retorna `INTENT | OWNER | CURRENT | PROOF | COUNTERPROOF | NEXT_CURSOR`; revalida estado volátil em nova sessão, conserva o owner GitHub, evita `pull/reset` sobre trabalho sujo e não interrompe writer ativo do Hermes.
 
 **Readback real (instantâneo, NÃO configuração permanente):** Casa boot 15/10 10:35:43 BRT. Às 10:58, PIDs **11432** e **7216** eram `pwsh.exe`, filhos de `Code.exe` PID **23328**. Janela de cockpit VS Code estava em `Code.exe` PID **22468**, HWND **67400** e não foreground. Sensor existente `Inventory` retornou `status=OBSERVED`. Estes IDs mudam após reboot. Nenhum comando foi digitado nesses terminais e nenhuma foto provou foco nesta rodada. VPS PID **861082** era `bash` (PPID 860716), `/proc/861082/cwd=/root`, FD0 um `/dev/pts/*`. O comando remoto avisou sobre o CWD do shell de controle, não é prova de falha do PID 861082.
 
@@ -101,3 +101,18 @@ Após `cli_focus`, a extensão 0.1.1 escreveu `shell_start exit=unknown` e `shel
 **Cockpit:** exibir `Casa/VPS/Conexão/Route/Cursor/Freshness/RunResult/Estado da sessão` reutilizando a API admin existente. `SOURCE_COMMITTED != BUILT != DEPLOYED != UI_PROVEN`. Código deste recibo NÃO significa HUD/renderer implementado. Meta 99,9% só quando houver janela de teste e métrica real, não por intenção.
 
 **CLI (se posteriormente autorizado):** usar sessão já existente de VS Code, confirmar foco da `xterm-helper-textarea`, não enviar nada ao terminal Hermes ocupado, exigir retorno atual correlacionado por job/PID e exit code; `SEND_OK != EXIT_0`. Dados de chat privados e tokens nunca entram no trace.
+
+
+## 🎙️ Acessibilidade — intenção falada antes de token literal (15/10/2026)
+
+**Correção expressa do CHEFE:** `5S` nesta missão era **VS Code**, não a metodologia japonesa. Não ativar 5S como protocolo por erro de ASR. A fala também pode trazer `esquilos`, `esquilos/skills`, `skill`, `skil`, `VSCODE`, `SCODE` e `VS` como referências **contextuais** a **skills** ou **VS Code**, respectivamente. Isso é uma **hipótese de desambiguação**, não substituição global de todo texto.
+
+**Algoritmo fiel, voz e texto:**
+1. Recuperar intenção ativa, último owner e objetos mencionados (`VS Code`, extensão Restore, janela, terminal, PID, Casa, VPS, funil, skill).
+2. Quando o termo transcrito for homófono ou próximo foneticamente, comparar com vocabulário de capacidades já existentes, intenção vigente e consequência operacional. `5S` + `terminal / foco / extensão` ⇒ interpretar como **VS Code**; `esquilos` + `registrar / incorporar / receita` ⇒ interpretar como **skills**.
+3. Corrigir **interpretação semântica** para a próxima ação e registrar `heard_term → intended_entity` na mesma skill, sem alterar o texto literal do CHEFE nem forjar o áudio original.
+4. Se duas interpretações causariam ações diferentes, destrutivas ou sensíveis, não escolher por semelhança: confirmar com uma pergunta curta antes de escrever/executar.
+5. Só executar após comprovar dispositivo, janela, PID/HWND atual, owner e autorização. Voz ambígua não concede permissão de alterar settings, terminal, repositório, dados ou segredos.
+6. A extensão `skills/vs-code-restore` continua sendo o owner de foco e acessibilidade no VS Code; esta skill é owner **somente do funil**. Novos aliases da paleta devem apontar aos **mesmos comandos existentes**, sem novos executores ou monitores.
+
+**Teste de regressão semântica:** transcrição `“segue pelo 5S e foca o terminal”` com contexto da CentralDark deve resultar em `VS Code → identificar janela → focar terminal`, não metodologia 5S. Transcrição `“salva nos esquilos”` no contexto técnico deve resultar em **skill existente**, nunca criar uma estrutura chamada `esquilos`. `UNKNOWN != PASS` e `INTENT != TRANSCRIPT_LITERAL`.
