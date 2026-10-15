@@ -15,6 +15,7 @@ import { injectPatternAdmin } from "./admin-patterns-ui.js";
 import { getBuildkiteStatus } from "./buildkite-integration.js";
 import { getGrokControlDashboard, setGrokControlSelection } from "./grok-control.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -1077,6 +1078,84 @@ setInterval(carregarLinear, 30000);
 conectarLogs();
 </script>
 </body></html>`;
+const INTENT_CONTROLS = `
+<style>
+#cd-intent-controls{max-width:1200px;margin:18px auto;padding:18px;border:1px solid #137a6e;border-radius:14px;background:#0a3d38;color:#e6fff8;font:14px system-ui}
+#cd-intent-controls input,#cd-intent-controls select,#cd-intent-controls textarea{color:#e6fff8;background:#031f1d;border:1px solid #137a6e;border-radius:8px;padding:10px;width:100%;font:inherit}
+#cd-intent-controls label{display:block;margin-top:8px;margin-bottom:4px;font-weight:600}
+#cd-intent-controls button{border:1px solid #34d399;background:#065f46;color:#fff;border-radius:8px;padding:10px 14px;cursor:pointer;margin:8px 8px 8px 0}
+#cd-intent-controls .cd-intent-grid{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+#cd-intent-controls pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#031f1d;padding:12px;border-radius:8px;max-height:300px;overflow:auto}
+</style>
+<section id="cd-intent-controls" aria-label="Gênesis até Fixed Point — execução original">
+<h2>🪬 Gênesis → Fixed Point · Intenção tipada e execução original</h2>
+<p>Compilador TypeScript → realidade → diferença → prova → receipt → mesmo Hermes. O botão apenas envia ao Hermes original quando autorizado e comprovadamente enfileirado. Fila não é execução concluída.</p>
+<div class="cd-intent-grid">
+<div><label for="cd-intent-text">Intenção do CHEFE</label><textarea id="cd-intent-text" rows="3" maxlength="4000" placeholder="Ex.: Corrigir o CI e provar o HUD sem repetir receitas seladas"></textarea></div>
+<div><label for="cd-intent-owner">Owner existente</label><input id="cd-intent-owner" value="docs/HUD/HUD.html" maxlength="240"/>
+<label for="cd-intent-goal">Goal já existente</label><input id="cd-intent-goal" value="t_9040803d" maxlength="80"/>
+<label for="cd-intent-mode">Modo</label><select id="cd-intent-mode"><option value="COM_CRITERIOS">🧿 Com critérios</option><option value="AUTOMATICO">⚙️ Automático determinístico</option><option value="AUTONOMO">🫀 Autônomo via Hermes</option></select></div>
+</div>
+<div><button type="button" id="cd-intent-evaluate">🔎 Avaliar, medir e selar o estado</button><button type="button" id="cd-intent-dispatch">⚡ Executar no Hermes original</button><button type="button" id="cd-intent-read">📖 Ler último receipt</button></div>
+<div id="cd-intent-label" role="status">AGUARDANDO_MEDICAO · UNKNOWN</div>
+<pre id="cd-intent-result" aria-live="polite">Nenhuma conclusão fabricada. Somente registros medidos.</pre>
+</section>
+<script>
+(function(){
+'use strict';
+var base='/admin/api/intent';
+var out=document.getElementById('cd-intent-result'),status=document.getElementById('cd-intent-label');
+function show(x){status.textContent=String(x.state||x.error||'UNKNOWN')+' · '+String(x.nextCursor||x.queueReason||'');out.textContent=JSON.stringify({state:x.state,fixedPoint:x.fixedPoint,mode:x.mode,queued:x.queued,queueReason:x.queueReason,currentHead:x.currentHead,criteria:x.criteria,nextCursor:x.nextCursor,observedAt:x.observedAt,executionProven:x.executionProven,proofBoundary:x.proofBoundary},null,2);}
+function payload(){return {intent:document.getElementById('cd-intent-text').value,owner:document.getElementById('cd-intent-owner').value,mode:document.getElementById('cd-intent-mode').value,goalId:document.getElementById('cd-intent-goal').value};}
+async function request(run){status.textContent='RECONCILIANDO...';try{var res=await fetch(base,{method:run?'POST':'GET',credentials:'same-origin',headers:run?{'Content-Type':'application/json'}:{},body:run?JSON.stringify(run):undefined,cache:'no-store'});var x=await res.json();show(x);if(!res.ok)status.textContent='BLOCKED · HTTP_'+res.status+' · '+(x.error||'INVALID_REQUEST');}catch(e){show({state:'UNKNOWN',error:String(e)});}}
+document.getElementById('cd-intent-evaluate').onclick=function(){request(Object.assign(payload(),{dispatch:false}));};
+document.getElementById('cd-intent-dispatch').onclick=function(){if(document.getElementById('cd-intent-mode').value!=='AUTONOMO'){status.textContent='BLOCKED · selecione AUTÔNOMO';return;}request(Object.assign(payload(),{dispatch:true}));};
+document.getElementById('cd-intent-read').onclick=function(){request(null);};
+request(null);
+})();
+</script>
+`;
+export function adminIntentGet(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false, error: 'AUTH_REQUIRED' });
+        return;
+    }
+    res.setHeader('Cache-Control', 'no-store');
+    res.json(readIntentState() || { schema: 'centraldark.intent.fixed-point.v1', state: 'UNKNOWN', fixedPoint: false, nextCursor: 'NO_RECEIPT', criteria: [] });
+}
+export function adminIntentRun(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false, error: 'AUTH_REQUIRED' });
+        return;
+    }
+    // Cookie admin nunca autoriza escrita cross-site.
+    try {
+        const origin = new URL(String(req.headers.origin || ''));
+        const host = String(req.headers.host || '').toLowerCase();
+        if (origin.protocol !== 'https:' || origin.host.toLowerCase() !== host) {
+            res.status(403).json({ ok: false, error: 'SAME_ORIGIN_REQUIRED' });
+            return;
+        }
+    }
+    catch {
+        res.status(403).json({ ok: false, error: 'ORIGIN_REQUIRED' });
+        return;
+    }
+    try {
+        const result = runIntentCycle(req.body, { dispatch: req.body?.dispatch === true });
+        pushAdminLog('info', 'intent_cycle_receipt', { cid: req.cid, fingerprint: result.fingerprint, state: result.state, nextCursor: result.nextCursor, queued: result.queued === true });
+        res.setHeader('Cache-Control', 'no-store');
+        res.json(result);
+    }
+    catch (error) {
+        const code = /^(INTENT_|MODE_|OWNER_|CRITERIA_|GOAL_|ITERATION_)/.test(String(error?.message)) ? 400 : 409;
+        res.status(code).json({ ok: false, state: 'BLOCKED', error: String(error?.message || error).slice(0, 160) });
+    }
+}
+export function intentPublicStatus(_req, res) {
+    res.setHeader('Cache-Control', 'no-store');
+    res.json(publicIntentStatus());
+}
 // ─── Rotas ────────────────────────────────────────────────────────────
 export function adminGet(req, res) {
     if (!isAdmin(req)) {
@@ -1094,7 +1173,7 @@ export function adminGet(req, res) {
         res.status(200).type("text/html").send(LOGIN_HTML.replace("__ERR__", ""));
         return;
     }
-    res.type("text/html").send(injectPatternAdmin(NOC_HTML));
+    res.type("text/html").send(injectPatternAdmin(NOC_HTML).replace("</body></html>", INTENT_CONTROLS + "</body></html>"));
 }
 export async function adminGraphProxy(req, res) {
     if (!isAdmin(req)) {

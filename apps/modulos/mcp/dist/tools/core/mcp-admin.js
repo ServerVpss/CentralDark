@@ -31,7 +31,7 @@ import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { ADMIN_CONFIRMATIONS, CATALOG_VERSION, guardDestructive, auditStartupSnapshot, getCanonicalExpectation, } from "../../lib/admin-guard.js";
-const ADMIN_CONFIRM = "CONFIRMO ADMIN";
+const ADMIN_CONFIRM = "CONFIRMO ADMIN"; // apenas compatibilidade com chamadas legadas sem sessão admin autenticada
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
@@ -42,6 +42,7 @@ function invalidInputResponse(input, parsed, destructive) {
     return ok({
         ok: false,
         status: "INPUT_INVALIDO",
+        diagnostico: diagnoseMcpBlock("INPUT_INVALIDO"),
         tool: input.tool,
         destructive: destructive === true,
         erros: parsed.error.issues.map((issue) => ({
@@ -115,7 +116,36 @@ const ROUTE_LAWS = Object.freeze({
     routeDocumentedIsNotRuntimeProof: true,
     capabilitySystem: "UNION_OF_MEASURED_AUTHORIZED_ROUTE_CAPABILITIES",
     realityIsJudge: true,
+    clientSafetyGateIsOutsideMcp: true,
+    repeatBlockedCallWithoutNewEvidence: false,
+    ownerRebuilderOnlyAfterMeasuredFailure: true,
 });
+// Aprendizado das tentativas reais: erro de politica != falha da VPS.
+// A fronteira OpenAI/cliente nao e visivel por este MCP: nao simular observacao.
+export const MCP_BLOCK_RECONCILIATION = Object.freeze({
+    INPUT_INVALIDO: ["ARGUMENTOS", "corrigir_schema", false],
+    TOOL_NAO_ENCONTRADA: ["CATALOGO", "consultar_mcp_admin_catalog", false],
+    INDEPENDENT_APPROVAL_REQUIRED: ["AUTORIDADE", "aguardar_autorizacao_independente", false],
+    ESCOPO_ADMIN_NECESSARIO: ["AUTORIDADE", "solicitar_escopo_admin", false],
+    CONTEXTO_ADMIN_INCOMPLETO: ["IDENTIDADE", "reconciliar_identidade_auditoria", false],
+    AUDITORIA_STARTUP_INDISPONIVEL: ["AUDITORIA", "medir_cadeia_e_catalogo", false],
+    AUDITORIA_INDISPONIVEL: ["AUDITORIA", "reparar_owner_auditoria_com_prova", false],
+    DESTRUTIVA_EM_QUARENTENA: ["CATALOGO", "revisar_manifesto_em_pr", false],
+    APROVADA_AUSENTE_NO_RUNTIME: ["RUNTIME", "verificar_versao_runtime", false],
+    CONFIRMACAO_ADMIN_NECESSARIA: ["CONFIRMACAO", "exigir_confirmacao_literal_do_usuario", false],
+});
+export function diagnoseMcpBlock(status) {
+    const [classe, nextCursor, retrySameCall] = MCP_BLOCK_RECONCILIATION[status]
+        || ["DESCONHECIDO", "medir_owner_e_erro_sem_promover_pass", false];
+    return {
+        classe, status, nextCursor, retrySameCall,
+        createdNewRoute: false,
+        clientSafetyGateObserved: false,
+        protectedPathMustRemainProtected: true,
+        errorIsNotExecutionProof: true,
+        documentedRouteIsNotAvailabilityProof: true,
+    };
+}
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
 function safeToolInfo(tool) {
     return {
@@ -186,7 +216,8 @@ export const mcpAdminTools = [
                 catalogScope: "centraldark_unified_capability_catalog",
                 catalogVersion: CATALOG_VERSION,
                 catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
-                confirmForDestructive: ADMIN_CONFIRM,
+                confirmForDestructive: "LEGACY_ONLY_WITHOUT_VERIFIED_ADMIN_SESSION",
+                authenticatedAdminPolicy: "OAUTH_OR_HUB_ADMIN_SESSION_REUSED",
                 acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
                 routeCatalogScope: "centraldark_unified_capability_catalog",
                 routeCount: AUTHORIZED_ROUTE_CATALOG.length,
@@ -216,7 +247,7 @@ export const mcpAdminTools = [
     },
     {
         name: "mcp_admin_call",
-        description: "Dispatcher fixo do MCP. Chama tool interna pelo nome, sem reconectar. Tools destrutivas exigem confirmação admin no caminho interativo canônico; o auto-consumer de missões nunca sintetiza essa aprovação.",
+        description: "Dispatcher fixo do MCP. Reutiliza OAuth/Hub admin autenticado para destrutivas aprovadas sem frase repetitiva; chamadas legadas exigem confirmAdmin e missões automáticas não ganham aprovação.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Chamada admin MCP" },
         inputSchema: z.object({
             tool: z.string().min(1),
@@ -241,6 +272,7 @@ export const mcpAdminTools = [
                 return ok({
                     ok: false,
                     status: !hasAdminContext ? "ESCOPO_ADMIN_NECESSARIO" : "CONTEXTO_ADMIN_INCOMPLETO",
+                    diagnostico: diagnoseMcpBlock(!hasAdminContext ? "ESCOPO_ADMIN_NECESSARIO" : "CONTEXTO_ADMIN_INCOMPLETO"),
                     executionStatus: "blocked",
                     tool: input.tool,
                     auditSeq: denied.audit?.seq ?? null,
@@ -251,6 +283,7 @@ export const mcpAdminTools = [
             if (!tool) {
                 return ok({
                     ok: false, status: "TOOL_NAO_ENCONTRADA",
+                    diagnostico: diagnoseMcpBlock("TOOL_NAO_ENCONTRADA"),
                     requested: input.tool,
                     sugestao: "Use mcp_admin_catalog para listar as tools disponíveis.",
                 });
@@ -265,6 +298,7 @@ export const mcpAdminTools = [
                 return ok({
                     ok: false,
                     status: "INDEPENDENT_APPROVAL_REQUIRED",
+                    diagnostico: diagnoseMcpBlock("INDEPENDENT_APPROVAL_REQUIRED"),
                     executionStatus: "blocked",
                     tool: input.tool,
                     destructive: true,
@@ -280,13 +314,19 @@ export const mcpAdminTools = [
                 return ok({
                     ok: false,
                     status: "AUDITORIA_STARTUP_INDISPONIVEL",
+                    diagnostico: diagnoseMcpBlock("AUDITORIA_STARTUP_INDISPONIVEL"),
                     executionStatus: "blocked",
                     tool: input.tool,
                 });
             }
+            const persistentAdminAuthorization = hasAdminContext && hasAuditIdentity
+                && ctx?.autoMission !== true
+                && (ctx?.authProvenance === "verified_oauth_admin"
+                    || ctx?.authProvenance === "verified_hub_admin");
             const decision = await guardDestructive({
                 toolName: input.tool,
                 confirmAdmin: input.confirmAdmin,
+                persistentAdminAuthorization,
                 runtimeTools,
                 expectation: getCanonicalExpectation(),
                 inputPayload: parsed.data,
@@ -297,6 +337,7 @@ export const mcpAdminTools = [
             if (!decision.allow) {
                 return ok({
                     ok: false, status: decision.status,
+                    diagnostico: diagnoseMcpBlock(decision.status),
                     executionStatus: decision.executionStatus,
                     tool: input.tool, destructive: true,
                     requiredConfirmAdmin: ADMIN_CONFIRM,

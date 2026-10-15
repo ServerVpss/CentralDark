@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 const LOG_ROOT = process.env.CENTRALDARK_LOG_ROOT || "/root/CentralDark/logs";
 const EVENTS_DIR = path.join(LOG_ROOT, "events");
 const SECTORS_DIR = path.join(LOG_ROOT, "sectors");
+const SERVICES_DIR = path.join(LOG_ROOT, "services");
 const SCHEMA = "centraldark.event.v1";
 function safeSegment(value, fallback = "system") {
     const normalized = String(value || "")
@@ -50,6 +51,7 @@ export function getCentralLogLayout() {
         root: LOG_ROOT,
         unified: EVENTS_DIR,
         sectors: SECTORS_DIR,
+        services: SERVICES_DIR,
         schema: SCHEMA,
     };
 }
@@ -58,15 +60,22 @@ export function appendCentralEvent(input = {}) {
         const timestamp = input.timestamp || new Date().toISOString();
         const day = timestamp.slice(0, 10);
         const sector = safeSegment(input.sector);
+        // A mesma evidência é pesquisável no stream global, por setor e por serviço.
+        // Fonte explícita identifica o serviço; não criar outro logger ou servidor.
+        const service = safeSegment(input.service || input.source || sector);
         const sectorDir = path.join(SECTORS_DIR, sector);
+        const serviceDir = path.join(SERVICES_DIR, service);
         ensureDir(EVENTS_DIR);
         ensureDir(SECTORS_DIR);
         ensureDir(sectorDir);
+        ensureDir(SERVICES_DIR);
+        ensureDir(serviceDir);
         const event = {
             schema: SCHEMA,
             timestamp,
             event_id: input.event_id || randomUUID(),
             sector,
+            service,
             source: String(input.source || "unknown").slice(0, 160),
             actor: input.actor == null ? null : String(input.actor).slice(0, 160),
             kind: String(input.kind || "event").slice(0, 120),
@@ -85,9 +94,11 @@ export function appendCentralEvent(input = {}) {
         const line = JSON.stringify(event) + "\n";
         const unifiedFile = path.join(EVENTS_DIR, `${day}.jsonl`);
         const sectorFile = path.join(sectorDir, `${day}.jsonl`);
+        const serviceFile = path.join(serviceDir, `${day}.jsonl`);
         appendSecure(unifiedFile, line);
         appendSecure(sectorFile, line);
-        return { ok: true, event_id: event.event_id, unifiedFile, sectorFile };
+        appendSecure(serviceFile, line);
+        return { ok: true, event_id: event.event_id, unifiedFile, sectorFile, serviceFile };
     }
     catch {
         return { ok: false };

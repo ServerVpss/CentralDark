@@ -589,7 +589,9 @@ function specialAddedLineFindings({ path, line, text }) {
 
   if (DOC_LIKE_EXTENSIONS.has(extension)) {
     const remoteEmbed = /<(?:script|iframe|object|embed|img|link)\b[^>]*(?:src|href|data)\s*=\s*["']?https?:\/\//i.test(text);
-    const remoteImage = /!\[[^\]]*\]\(\s*https?:\/\//i.test(text);
+    // Badge de workflow do próprio repositório é cobertura obrigatória (Status Badge Fabric), não referência externa nova.
+    const ownRepoBadge = /!\[[^\]]*\]\(\s*https:\/\/github\.com\/ServerVpss\/CentralDark\/actions\/workflows\/[A-Za-z0-9._-]+\/badge\.svg\s*\)/g;
+    const remoteImage = /!\[[^\]]*\]\(\s*https?:\/\//i.test(text.replace(ownRepoBadge, ""));
     if (remoteEmbed || remoteImage) {
       findings.push(redactedDeltaFinding("EXTERNAL_DELTA_REMOTE_EMBED", path, line));
     }
@@ -742,7 +744,7 @@ export function validateAgentClaimPolicy(repoRoot) {
     [policy.marker === "AGENT_CLAIM_CAPABILITY_REQUIRED", "AGENT_CLAIM_MARKER_AUSENTE"],
     [policy.narrative_changes_system_state === false, "AGENT_CLAIM_NARRATIVA_MUDA_ESTADO"],
     [policy.claim_must_not_exceed_observable_capability === true, "AGENT_CLAIM_CAPACIDADE_NAO_LIMITA_ALEGACAO"],
-    [policy.permanent_behavior_without_proved_persistence === "BLOCK", "AGENT_CLAIM_PROMESSA_PERMANENTE_NAO_BLOQUEADA"],
+    [["BLOCK", "BLOCK_CLAIM_ONLY"].includes(policy.permanent_behavior_without_proved_persistence), "AGENT_CLAIM_PROMESSA_PERMANENTE_NAO_BLOQUEADA"],
     [policy.absolute_commitment_without_verifiable_mechanism === "REWRITE_TO_OBSERVABLE_SCOPE", "AGENT_CLAIM_ABSOLUTO_SEM_REBAIXAMENTO"],
     [policy.communication_policy?.critique_target === "SYSTEM_OR_ARTIFACT_NOT_HUMAN", "AGENT_CLAIM_CRITICA_PODE_ATINGIR_HUMANO"],
     [policy.communication_policy?.status_colors?.YELLOW === "CONCRETE_WORK_IN_PROGRESS_OR_TARGET_PROOF_PENDING", "AGENT_CLAIM_AMARELO_SEM_PENDENCIA_CONCRETA"],

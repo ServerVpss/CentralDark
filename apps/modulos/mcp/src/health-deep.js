@@ -22,6 +22,63 @@ function checkSecret(name) {
     return { name, present: Boolean(v && v.trim() && !v.startsWith("__MISSING_")) };
 }
 
+const TELEGRAM_TOKEN_KEYS = ["SRVER1_BOT_TOKEN", "TELEGRAM_BOT_TOKEN", "GUARDA_TELEGRAM_BOT_TOKEN"];
+
+function hasConfiguredSecretInFile(file, names) {
+    try {
+        const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
+        for (const line of lines) {
+            const match = line.trim().match(/^([A-Z0-9_]+)\s*=\s*(.*)$/);
+            if (!match || !names.includes(match[1])) continue;
+            const value = match[2].trim().replace(/^["']|["']$/g, "");
+            if (value && !value.startsWith("__MISSING_")) return true;
+        }
+    } catch {
+        return false;
+    }
+    return false;
+}
+
+function pm2ProcessAlive(name, pm2Home) {
+    try {
+        const dir = `${pm2Home}/pids`;
+        for (const file of fs.readdirSync(dir)) {
+            if (!file.startsWith(`${name}-`) || !file.endsWith(".pid")) continue;
+            const pid = Number(fs.readFileSync(`${dir}/${file}`, "utf8").trim());
+            if (!Number.isInteger(pid) || pid <= 0) continue;
+            try {
+                process.kill(pid, 0);
+                return true;
+            } catch {
+                // pid file obsoleto; continua procurando o mesmo owner canônico
+            }
+        }
+    } catch {
+        return false;
+    }
+    return false;
+}
+
+// Telegram é observado no owner real (HubBot): token configurado E processo vivo.
+// Token sem processo, ou placeholder __MISSING_*, nunca produz verde. Sem copiar secret.
+export function checkTelegramOwner({
+    repoRoot = config.vps?.repoPath || "/root/CentralDark",
+    pm2Home = process.env.PM2_HOME || "/root/.pm2",
+} = {}) {
+    const tokenConfigured = [
+        `${repoRoot}/secrets/telegram-alerts.env`,
+        `${repoRoot}/secrets/.env`,
+        `${repoRoot}/apps/bot-telegram/.env`,
+    ].some((file) => hasConfiguredSecretInFile(file, TELEGRAM_TOKEN_KEYS));
+    const processAlive = pm2ProcessAlive("CentralDark-HubBot", pm2Home);
+    return {
+        ok: tokenConfigured && processAlive,
+        owner: "CentralDark-HubBot",
+        tokenConfigured,
+        processAlive,
+    };
+}
+
 function checkDisk(dir) {
     try {
         fs.accessSync(dir, fs.constants.W_OK);
@@ -65,12 +122,17 @@ async function checkTelegramSubsystem() {
             },
         };
     } catch {
+        // Bot inalcançável: só fica verde se o owner HubBot está vivo E com token (sem falso verde por token solto).
+        const owner = checkTelegramOwner();
         return {
-            ok: tokenPresent,
+            ok: owner.ok,
             detalhe: {
                 endpoint: "http://127.0.0.1:9500/bot/health",
                 reachable: false,
-                mode: tokenPresent ? "local-token-fallback" : null,
+                mode: owner.ok ? "owner-hubbot-fallback" : null,
+                owner: owner.owner,
+                processAlive: owner.processAlive,
+                tokenConfigured: owner.tokenConfigured,
                 localTokenPresent: tokenPresent,
             },
         };

@@ -1582,6 +1582,18 @@ check('apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml',[
 check('package.json',[
  '"verify:centraldark-contract": "python3 scripts/trigger-fabric/verify_repo_contract.py"',
 ], classification='GLOBAL_CROSS_CONTEXT_PREFLIGHT_PACKAGE_ENTRY')
+check('scripts/trigger-fabric/main_first_change_guard.py',[
+ 'MAIN_FIRST_PREFLIGHT',
+ 'open_prs',
+ 'open_issues',
+ 'main_commits',
+ 'MAIN_FIRST_FINALIZE',
+], classification='MAIN_FIRST_CHANGE_GUARD_OWNER')
+check_command(
+ 'scripts/trigger-fabric/main_first_change_guard.py --compile',
+ ['python3', '-m', 'py_compile', str(ROOT/'scripts/trigger-fabric/main_first_change_guard.py')],
+ classification='MAIN_FIRST_CHANGE_GUARD_SYNTAX',
+)
 
 
 check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[

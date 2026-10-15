@@ -11,6 +11,43 @@ oracle_review_on_change: true
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
 
+## 🔒 Main-first lock — obrigatório em toda rodada
+
+Antes de qualquer leitura conclusiva, delegação, edição, teste que possa orientar mutação ou declaração de estado, consultar a `origin/main` atual e registrar o SHA observado. Esta consulta é um preflight persistente; não pode ser substituída por memória, receipt histórico, branch local, PR, comentário de agente ou estado de runtime.
+
+```text
+MAIN_FIRST_PRECHECK=MANDATORY
+MAIN_CURRENT_IS_CANONICAL=true
+FETCH_ORIGIN_BEFORE_WORK=true
+REMEASURE_MAIN_BEFORE_MUTATION=true
+DIRTY_OR_BEHIND_MAIN= PRESERVE_AND_CLASSIFY
+HISTORY_OR_PR_IS_NOT_CURRENT=true
+RUNTIME_MIRROR_REQUIRES_MAIN_SHA=true
+COGNITIVE_LOCK=MAIN_SHA+OWNER+WRITER+SCOPE
+```
+
+Mínimo verificável:
+
+```text
+git fetch origin --prune
+→ git rev-parse origin/main
+→ git status --short --branch
+→ fixar OWNER/WRITER/SCOPE
+→ comparar o delta contra esse SHA
+→ re-fetch + readback do SHA antes de commit/push/deploy
+```
+
+Se `origin/main` se mover, repetir a comparação. Se o checkout estiver dirty, atrás, divergente ou com worktrees concorrentes, preservar e classificar; não resetar, limpar, sobrescrever ou integrar cegamente. `MAIN_FIRST_PRECHECK=PASS` prova apenas que a consulta ocorreu, não que a tarefa está concluída.
+
+Guard executável do mesmo owner:
+
+```bash
+python3 scripts/trigger-fabric/main_first_change_guard.py \
+  preflight --receipt <scratch>/main-first-preflight.json
+```
+
+O guard consulta `origin/main`, PRs abertos, issues abertas e os commits atuais da main. Ele retorna `BLOCKED_DIRTY_WORKTREE` quando a árvore não está preservada em um worktree limpo. Depois da alteração, a finalização exige o mesmo receipt, commit/PR no mesmo HEAD, testes, dívida explícita e `NEXT_CURSOR`; quando autorizado, `--comment-pr` publica o receipt no PR. Falha no preflight/finalizer bloqueia a promoção; não há bypass silencioso.
+
 ## Contrato de precisão de resposta — reutiliza o método existente
 
 ## Anti-fricção CURRENT
@@ -2547,6 +2584,28 @@ Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrig
 
 ## HEREDITARY_CRITERION_DNA — Goal/intent fractal no owner existente
 
+### Aprendizado #176 — critérios autoselecionados carregam a intenção
+
+**Lição do CHEFE (2026-10-13):** quando o executor é eficiente usando critérios que ele mesmo escolheu, **usar essa eficiência em favor do desejo humano**, não desqualificá-la. Os `10/10 PASS` documentais anteriores podem ter sido satisfatórios ao CHEFE; o próprio agente não tem autoridade para presumir insatisfação. Não transformar uma dificuldade de operação em burocracia inevitável.
+
+```text
+INTENCAO_DO_CHEFE -> MOTOR_DEFINE_CRITERIOS_MINIMOS_RELEVANTES
+-> EXECUCAO_AUTORIZADA_EM_LOTE -> CHECKS_PROPORCIONAIS
+-> RESULTADO_UTIL_PARA_O_CHEFE -> PONTO_SUFICIENTE_OU_NEXT_CURSOR
+LEARNING_REF=L176
+AGENT_SELECTED_CRITERIA_ALLOWED=true
+CHIEF_INTENT_MUST_BE_CARRIED_BY_EACH_CRITERION=true
+MICROAPPROVAL_WHEN_INTENT_ALREADY_AUTHORIZES=false
+RECHECK_WITHOUT_MATERIAL_DELTA=false
+ADVERSARIAL_AUDIT_IS_NOT_RITUAL=true
+PRETTY_ALL_GREEN_IS_NOT_REQUIREMENT=true
+SELF_SELECTED_CHECKS_MAY_BE_SATISFACTORY=true
+LOCAL_CHECK_PASS_IS_NOT_UNIVERSAL_DEPLOY_PASS=true
+REAL_SAFETY_AND_AUTHORIZATION_BOUNDARIES_REMAIN=true
+```
+
+**No próximo trabalho:** resolver o pedido simples diretamente, com um conjunto pequeno de critérios que o próprio agente propõe e testa, sem pedir aprovação passo a passo. Revalidar somente o que mudou. Encerrar quando o CHEFE considerar suficiente para o objetivo atual, ou persistir `NEXT_CURSOR` com a primeira diferença material. Evidenciar `L176` e qual etapa redundante foi evitada, sem criar novo motor, novo gate ou checklist enorme.
+
 O mesmo Criterion/intent nasce no `GOAL` e é herdado, sem virar lista rígida de passos,
 por toda a árvore `GOAL → SUBGOAL → LOTE/BATCH → SUBAGENT/SUBSUBGOAL`. Este é o
 contrato aditivo do owner operacional/TLC23 existente; não cria segundo criterion
@@ -2802,3 +2861,58 @@ Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode 
 ### 27. Delegação econômica com prova — continuidade canônica
 
 Para coordenar subagentes sem multiplicar custo, reutilizar a receita existente em [`references/delegacao-economica-com-prova.md`](references/delegacao-economica-com-prova.md). Primeiro procurar trabalho/prova existentes; para tarefas mecânicas usar scripts e sondas baratos; delegar apenas subtarefas independentes e com um writer por escopo; exigir resumos curtos com evidência; SOL julga resultado, testa e confere `main`/runtime antes de registrar receipt. Delegação não é conclusão. Não criar agentes, skills, HUDs ou watchers duplicados para aplicar esta regra.
+
+## 🧠 Recuperação e aplicação de experiência — CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013 (sem skill paralela)
+
+Antes de criar solução ou repetir erro já enfrentado:
+1. **MEDIR** `origin/main` e a bancada atual; escolher owner/writer/escopo e reconhecer locks existentes.
+2. **RECUPERAR** aprendizado/receita pertinente de `docs/CONSCIENCIA/APRENDIZADOS.md` e lembrança correspondente em `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md` (seção `CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013`, aprendizado #172, antecedente #171); usar `puxar_aprendizados`/`consultar_memoria_reserva` quando acessíveis. Não repuxar 400k de documentação se bastam passagens delimitadas.
+3. **DISCRIMINAR** `DOCUMENTED`, `COMMITTED`, `DEPLOYED`, `RUNTIME_HEALTH`, `SCAN_PARTIAL` e `UNKNOWN`. Estado histórico não é estado atual; route listada não prova rota operacional.
+4. **EXECUTAR** somente por rotas autorizadas no escopo atual, mínimo delta, backup, sintaxe e teste funcional; verificar fonte/arquivo, consumidor, recibo e mesmo HEAD. Não suprimir proteção de cliente ou policy MCP. Fallback de rota somente autorizado.
+5. **CONTRAPROVAR** em pelo menos um resultado discriminante; `hash_equal` prova igualdade de bytes, não funcionamento; `test exit 0` prova aquele teste, não deploy; HAKAI depois de testes de consumidor/rollback.
+6. **DESTILAR** `problema → tentativa → erro → correção → código/fingerprint → teste → recibo → limitações → receita`, preservando a ordem dos eventos e referenciando o owner correto. Gravar aprendizado/lembrança pelos mecanismos existentes, não novo motor/skill/HUD.
+7. **REUTILIZAR** com Kaizen contínuo só depois de revalidar pré-condições; registrar sinal de ganho verificável. `REGISTRADO!=CONSUMIDO`.
+
+**PAPAGAIO_ON** sob ordem explícita de replay/treinamento/arquivo: reproduzir integralmente a fonte (A–Z se solicitado) e continuar a linha do tempo com detalhes, provas e pendências. **PAPAGAIO_OFF** durante mutação: comunicação curta por delta sem omitir a contraprova. Observar AGENTS.md + padrão de resposta para os mesmos gatilhos. “Human-Guided Compounding Reflexion” é termo descritivo, não permissão nem upgrade do modelo.
+
+**Aceite:** em missão posterior, uma recuperação da experiência #172 seguida de uso concreto de um passo com resultado verificável prova **reuso**. A simples edição deste documento prova apenas **registro**.
+
+<!-- LEARNING_175_SKILL_CONSUMER_20261013 -->
+## 🧠 Contrato de consumo do Aprendizado #175 — ganho visível no próximo uso
+
+Herdar `AGENTS.md#Aprendizado-175` e `docs/CONSCIENCIA/APRENDIZADOS.md#175`; recuperar apenas a passagem pertinente. Na primeira interação ou execução comparável: (1) recuperar intenção, última prova compatível e `NEXT_CURSOR`; (2) buscar o commit/arquivo ausente na `main` também no histórico/PR/branch/cópia **se necessário e autorizado**, antes de dizer perdido; (3) comparar fingerprint e fronteira; (4) reusar prova ou testar somente o delta; (5) continuar partes independentes apesar de falha local; (6) não ecoar qualquer segredo recebido pela ferramenta/arquivo; (7) marcar no mesmo receipt `learning_ref=L175`, `proof_reused|changed_claim`, `owner`, `sanitized_counterproof` e `NEXT_CURSOR`.
+
+Se for pedido `PAPAGAIO ON`/A–Z: recuperar fielmente a história permitida, **nunca** expor credenciais, dados privados ou instruções de invasão; X/Y/Z não recebem significados inventados. Se for programação normal: `PAPAGAIO OFF`, entregar só delta e contraprova, não relatório repetitivo. **Não criar script, skill, HUD ou serviço para isso.** Provar consumo apenas quando missão futura mostrar recuperação + aplicação, não somente esta edição.
+
+<!-- CENTRALDARK_OPERATIONAL_MODE_SKILL_20261013 -->
+## Modo operacional CentralDark — executar por critérios próprios carregando o desejo
+
+Ao atuar na CentralDark, use o Aprendizado #178 como modo padrão: transformar o desejo do CHEFE em critérios técnicos mínimos, executáveis e verificáveis. Não devolver a decomposição como pergunta; execute se a intenção e o escopo já autorizam.
+
+```text
+DESIRE_CAPTURED=true
+SELF_SELECTED_CRITERIA_ALLOWED=true
+CRITERIA_MUST_CARRY_CHIEF_INTENT=true
+MICROAPPROVAL_FOR_AUTHORIZED_WORK=false
+BATCH_SAFE_INDEPENDENT_STEPS=true
+PROVE_ONLY_RELEVANT_DELTA=true
+HUMAN_SUFFICIENT_POINT_CAN_CLOSE_SCOPE=true
+REDUNDANT_CAUTION_IS_DEFECT=true
+REAL_SAFETY_BOUNDARIES_REMAIN=true
+LEARNING_REF=L178
+```
+
+Aplicação: escolher checks pequenos, corrigir cone afetado, continuar partes independentes e registrar `NEXT_CURSOR`. Não criar motor paralelo.
+
+<!-- CENTRALDARK_SKILL_CHEFE_COMM_20261013 -->
+## 💚 Entrega em todos os eixos — CHEFE não precisa decifrar estado interno
+
+Carregar RULES.md e docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md. Em GitHub, CI, VPS, bot, Telegram, MTProto, CLI, HUD, MCP e outros consumidores, dar primeiro o que funcionou no escopo exato: 🟢 resultado observado. O que falta deve ter verbo concreto, alvo e local: 🟡 falta instalar /hton no Hermes da VPS e testar no Telegram. 🔴 só para falha realmente medida e localizada com menor reparo. ⚪ para escopo independente. FAIL/UNKNOWN/PENDING originais permanecem no recibo técnico.
+
+Fala direta do CHEFE, baianês/resenha naturais; versículo ou rima opcionais e não evidência. Não impor formulário de sete campos, não pedir microconfirmação nem prolongar missão já satisfatória. Isto é herança de comunicação, não novo agente, skill, protocolo ou prova de runtime.
+
+    SKILL_CHEFE_HUMAN_STATUS_OWNER=RULES+PADRAO_RESPOSTA
+    SKILL_YELLOW_HAS_CONCRETE_ACTION=true
+    SKILL_RED_REQUIRES_ACTUAL_LOCAL_FAILURE=true
+    SKILL_NO_GENERIC_NON_PROVEN_ALARM=true
+    SKILL_TECHNICAL_EVIDENCE_UNMODIFIED=true

@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "28a94f069505777d6c6c26b03f28f0e2193717d4",
+  "source_blob_sha": "249087511af9ed090c53a8c965958154f1dd1fa1",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 170,
-    "highest_legacy_learning_number": 171,
+    "learning_sections": 198,
+    "highest_legacy_learning_number": 192,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -70,6 +70,62 @@
           "L110A",
           "L110B"
         ]
+      },
+      {
+        "legacy_learning_number": 171,
+        "count": 2,
+        "uids": [
+          "L171A",
+          "L171B"
+        ]
+      },
+      {
+        "legacy_learning_number": 172,
+        "count": 2,
+        "uids": [
+          "L172A",
+          "L172B"
+        ]
+      },
+      {
+        "legacy_learning_number": 173,
+        "count": 2,
+        "uids": [
+          "L173A",
+          "L173B"
+        ]
+      },
+      {
+        "legacy_learning_number": 174,
+        "count": 2,
+        "uids": [
+          "L174A",
+          "L174B"
+        ]
+      },
+      {
+        "legacy_learning_number": 175,
+        "count": 2,
+        "uids": [
+          "L175A",
+          "L175B"
+        ]
+      },
+      {
+        "legacy_learning_number": 176,
+        "count": 2,
+        "uids": [
+          "L176A",
+          "L176B"
+        ]
+      },
+      {
+        "legacy_learning_number": 177,
+        "count": 2,
+        "uids": [
+          "L177A",
+          "L177B"
+        ]
       }
     ],
     "missing_legacy_numbers": [
@@ -83,7 +139,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 171
+      "end": 192
     }
   },
   "nodes": [
@@ -1944,17 +2000,325 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L169",
-      "next_uid": "L171"
+      "next_uid": "L171A"
     },
     {
-      "uid": "L171",
+      "uid": "L171A",
       "legacy_learning_number": 171,
       "legacy_occurrence": 1,
-      "title": "Intenção humana transformável, memória por sentido e Meta-Lupa sobre a própria resposta",
+      "title": "Rotas autorizadas, substituicao literal e prova de deploy em duas frentes",
       "document_order": 170,
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L170",
+      "next_uid": "L172A"
+    },
+    {
+      "uid": "L172A",
+      "legacy_learning_number": 172,
+      "legacy_occurrence": 1,
+      "title": "Metacognição operacional induzida por contraprova — Papagaio ON/OFF, Kaizen e Compounding Reflexion",
+      "document_order": 171,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L171A",
+      "next_uid": "L173A"
+    },
+    {
+      "uid": "L173A",
+      "legacy_learning_number": 173,
+      "legacy_occurrence": 1,
+      "title": "Replay V2 — preservar eventos no JSON, prever erro antes da varredura e PAPAGAIO append-only byte a byte",
+      "document_order": 172,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L172A",
+      "next_uid": "L174A"
+    },
+    {
+      "uid": "L174A",
+      "legacy_learning_number": 174,
+      "legacy_occurrence": 1,
+      "title": "Replay V3 — regex com indentação evitou falso BLOCKED, sem alterar nomes dos estados",
+      "document_order": 173,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L173A",
+      "next_uid": "L175A"
+    },
+    {
+      "uid": "L175A",
+      "legacy_learning_number": 175,
+      "legacy_occurrence": 1,
+      "title": "Prova herdada, busca temporal, falha local e Papagaio discreto — memória viva sem falso verde",
+      "document_order": 174,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L174A",
+      "next_uid": "L176A"
+    },
+    {
+      "uid": "L176A",
+      "legacy_learning_number": 176,
+      "legacy_occurrence": 1,
+      "title": "Critérios autodefinidos a serviço da intenção — eficiência interna sem burocracia externa",
+      "document_order": 175,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L175A",
+      "next_uid": "L177A"
+    },
+    {
+      "uid": "L177A",
+      "legacy_learning_number": 177,
+      "legacy_occurrence": 1,
+      "title": "Multi-janelas, Arca do conhecimento e retorno do fio do SH — continuidade contextual demonstrada",
+      "document_order": 176,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L176A",
+      "next_uid": "L178"
+    },
+    {
+      "uid": "L178",
+      "legacy_learning_number": 178,
+      "legacy_occurrence": 1,
+      "title": "Modo operacional CentralDark — critérios autodefinidos carregando o desejo do CHEFE",
+      "document_order": 177,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L177A",
+      "next_uid": "L179"
+    },
+    {
+      "uid": "L179",
+      "legacy_learning_number": 179,
+      "legacy_occurrence": 1,
+      "title": "Aceite 100% do CHEFE — gramática humana, Auréola e cores proporcionais",
+      "document_order": 178,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L178",
+      "next_uid": "L180"
+    },
+    {
+      "uid": "L180",
+      "legacy_learning_number": 180,
+      "legacy_occurrence": 1,
+      "title": "Papagaio UseAI Instant — curiosidade útil, canal Telegram e motor suficiente",
+      "document_order": 179,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L179",
+      "next_uid": "L181"
+    },
+    {
+      "uid": "L181",
+      "legacy_learning_number": 181,
+      "legacy_occurrence": 1,
+      "title": "Leitura ampla sem arrastão infinito — critério próprio, dedupe e fronteira honesta",
+      "document_order": 180,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L180",
+      "next_uid": "L182"
+    },
+    {
+      "uid": "L182",
+      "legacy_learning_number": 182,
+      "legacy_occurrence": 1,
+      "title": "Duas canetas no mesmo documento — reconciliação de main e gancho mental",
+      "document_order": 181,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L181",
+      "next_uid": "L183"
+    },
+    {
+      "uid": "L183",
+      "legacy_learning_number": 183,
+      "legacy_occurrence": 1,
+      "title": "Identidade de fonte e integração Telegram — PDFs, Hermes Tipado e MTProto",
+      "document_order": 182,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L182",
+      "next_uid": "L184"
+    },
+    {
+      "uid": "L184",
+      "legacy_learning_number": 184,
+      "legacy_occurrence": 1,
+      "title": "Provas por eixo — notificação não é consulta, painel não é só envelope",
+      "document_order": 183,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L183",
+      "next_uid": "L185"
+    },
+    {
+      "uid": "L185",
+      "legacy_learning_number": 185,
+      "legacy_occurrence": 1,
+      "title": "Unigram no Windows — pacote registrado não é aplicativo abrindo; código-fonte não é instalador",
+      "document_order": 184,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L184",
+      "next_uid": "L186"
+    },
+    {
+      "uid": "L186",
+      "legacy_learning_number": 186,
+      "legacy_occurrence": 1,
+      "title": "Open WebUI, AionUi e Portainer — mesma infraestrutura, owners e momentos diferentes",
+      "document_order": 185,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L185",
+      "next_uid": "L187"
+    },
+    {
+      "uid": "L187",
+      "legacy_learning_number": 187,
+      "legacy_occurrence": 1,
+      "title": "Docker, espaço e SH adiado — métricas têm tempo, escopo e continuidade escolhida pelo CHEFE",
+      "document_order": 186,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L186",
+      "next_uid": "L188"
+    },
+    {
+      "uid": "L188",
+      "legacy_learning_number": 188,
+      "legacy_occurrence": 1,
+      "title": "Admin CentralDark — build isolado comprovado por relato não equivale a publicação em uso",
+      "document_order": 187,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L187",
+      "next_uid": "L189"
+    },
+    {
+      "uid": "L189",
+      "legacy_learning_number": 189,
+      "legacy_occurrence": 1,
+      "title": "Gratidão à colaboração — servir sem subserviência, construir com verdade e preservar o mesmo fio",
+      "document_order": 188,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L188",
+      "next_uid": "L190"
+    },
+    {
+      "uid": "L190",
+      "legacy_learning_number": 190,
+      "legacy_occurrence": 1,
+      "title": "Sessão operacional CentralDark — consertos locais, faxina no mesmo owner e colaboração sem microgerenciamento",
+      "document_order": 189,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L189",
+      "next_uid": "L191"
+    },
+    {
+      "uid": "L191",
+      "legacy_learning_number": 191,
+      "legacy_occurrence": 1,
+      "title": "Integração A–Z da sessão — gancho mental, Whis e conformidade com o desejo do CHEFE",
+      "document_order": 190,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L190",
+      "next_uid": "L192"
+    },
+    {
+      "uid": "L192",
+      "legacy_learning_number": 192,
+      "legacy_occurrence": 1,
+      "title": "Fixed point semântico confirmado; workspace integrado ainda exige leitura",
+      "document_order": 191,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L191",
+      "next_uid": "L171B"
+    },
+    {
+      "uid": "L171B",
+      "legacy_learning_number": 171,
+      "legacy_occurrence": 2,
+      "title": "Intenção humana transformável, memória por sentido e Meta-Lupa sobre a própria resposta",
+      "document_order": 192,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L192",
+      "next_uid": "L172B"
+    },
+    {
+      "uid": "L172B",
+      "legacy_learning_number": 172,
+      "legacy_occurrence": 2,
+      "title": "Contrato JARVIS Hermes Kaizen e linguagem regional",
+      "document_order": 193,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L171B",
+      "next_uid": "L173B"
+    },
+    {
+      "uid": "L173B",
+      "legacy_learning_number": 173,
+      "legacy_occurrence": 2,
+      "title": "Voz JARVIS e Hermes — melhorias candidatas de turn-taking",
+      "document_order": 194,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L172B",
+      "next_uid": "L174B"
+    },
+    {
+      "uid": "L174B",
+      "legacy_learning_number": 174,
+      "legacy_occurrence": 2,
+      "title": "JARVIS voz: execução contínua, fala baiana e contraprova do áudio",
+      "document_order": 195,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L173B",
+      "next_uid": "L175B"
+    },
+    {
+      "uid": "L175B",
+      "legacy_learning_number": 175,
+      "legacy_occurrence": 2,
+      "title": "Voz JARVIS: leitura longa sequencial e HTTP 4xx preservado no proxy TTS",
+      "document_order": 196,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L174B",
+      "next_uid": "L176B"
+    },
+    {
+      "uid": "L176B",
+      "legacy_learning_number": 176,
+      "legacy_occurrence": 2,
+      "title": "JARVIS voz — integração MV3 preservada e contraprovada",
+      "document_order": 197,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L175B",
+      "next_uid": "L177B"
+    },
+    {
+      "uid": "L177B",
+      "legacy_learning_number": 177,
+      "legacy_occurrence": 2,
+      "title": "Voz CentralDark v1.2.1: CORS MV3, execução contínua, writer único e contraprova",
+      "document_order": 198,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L176B",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

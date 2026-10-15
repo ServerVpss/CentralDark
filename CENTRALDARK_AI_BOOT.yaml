@@ -12,6 +12,18 @@ CENTRALDARK_AI_BOOT:
   unified_surface_parity_contract: LOADED
   unified_surface_parity_skill: LOADED
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
+  human_communication_bridge:
+    owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+    inherits: ["RULES.md", "AGENTS.md"]
+    consumers: ["SOL", "HERMES", "CODEX", "CLAUDE", "GEMINI", "TELEGRAM", "NOTIFICATIONS", "GITHUB_CI", "MCP_API", "CLI", "HUD", "OBSIDIAN", "INSTINTO_SUPERIOR", "VOICE"]
+    green: "EFEITO_LOCAL_PROVADO"
+    yellow: "FALTA_ACAO_EXATA_VERBO_ALVO_LOCAL"
+    red: "FALHA_MATERIAL_MEDIDA_LOCALIZADA"
+    gray: "FORA_DO_ESCOPO"
+    raw_technical_status_is_preserved: true
+    generic_unknown_alarm_forbidden: true
+    baianes_natural_biblical_reference_optional: true
+    recorded_is_not_runtime_consumed: true
   model: LIVING_CANON
   persistent_canon: ServerVpss/CentralDark
   live_state: MEASURED_RUNTIME
@@ -385,7 +397,7 @@ CENTRALDARK_AI_BOOT:
     recalculate_intent_alignment_each_material_turn: true
     target_intent_alignment_confidence_for_material_mutation: "ADAPTIVE_NOT_GATE"
     intent_confidence_is_technical_proof: false
-    meta_grill_before_material_response: true
+    meta_grill_before_material_response: false
     canonical_docs_before_question_or_contradiction: true
     falsify_chefe_intuition_against_canon_and_current_before_countering: true
     generic_model_prior_must_not_override_canonical_method: true
@@ -393,7 +405,7 @@ CENTRALDARK_AI_BOOT:
     docs_are_externalized_method_not_mind_reading: true
     visible_operational_narration: "BAIANES_BIBLICO"
     biblical_reference_is_semantic_cue_not_technical_proof: true
-    meta_grill_before_mutation: true
+    meta_grill_before_mutation: false
     evolve_existing_before_create: true
     return_same_artifact_evolved: true
     volta_uma_casa_on_local_error: true

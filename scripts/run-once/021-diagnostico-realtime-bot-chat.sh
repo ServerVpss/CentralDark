@@ -22,7 +22,7 @@ set -uo pipefail
 
 CLONE_DECK="/root/Multizap/apps/clone-deck"
 REV="/root/Multizap/revisoes/$(date +%Y%m%d-%H%M%S)/realtime-bot-chat-diagnostico"
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+TIMESTAMP=$(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')
 
 mkdir -p "$REV"/{diagnostico,logs,tmp}
 exec > >(tee -a "$REV/logs/execucao.log") 2>&1

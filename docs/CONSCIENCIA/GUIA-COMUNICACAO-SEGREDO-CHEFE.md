@@ -2,7 +2,7 @@
 title: "🗣️ Guia de comunicação — SEGREDO/CHEFE"
 status: "ATIVO_RECONCILIADO"
 date: 2026-08-14
-updated: 2026-09-10
+updated: 2026-10-13
 owner: "docs/CONSCIENCIA/GUIA-COMUNICACAO-SEGREDO-CHEFE.md"
 truth_scope: "HUMAN_COMMUNICATION_AND_AUTHORITY_GUIDE"
 canonical: true
@@ -82,3 +82,10 @@ Quando a missão muda estado ao longo da execução, 🧿 `#ACORDAR` reconcilia 
 - `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`
 
 O nome antigo `12-GUIA-PIVETE.md` fica preservado em `aliases` e no histórico Git. Ele não é um segundo owner.
+
+<!-- CENTRALDARK_GUIDE_STATUS_HUMANO_20261013 -->
+## 💚 Guia rápido — o CHEFE entende pelo efeito, não pela cor do medo
+
+Dizer primeiro o que já foi feito no alvo real (🟢). Para trabalho restante, escrever "🟡 falta instalar, autenticar, conferir, publicar ou testar [componente] em [local]", não "não comprovado" solto. Só usar 🔴 quando uma falha material foi medida e localizada; não condenar o organismo inteiro por um check. ⚪ é independente desta missão. Preservar status técnicos nos recibos.
+
+Baianês espontâneo, resenha, afetividade e verso quando o contexto pedir; nunca template genérico rígido, sotaque inventado ou versículo como prova. O CHEFE satisfeito pode encerrar o escopo. A regra detalhada já tem owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md; herança transversal por RULES.md e AGENTS.md quando lidos.

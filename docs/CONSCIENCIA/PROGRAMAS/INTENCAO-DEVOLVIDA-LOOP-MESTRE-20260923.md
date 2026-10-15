@@ -1062,3 +1062,27 @@ O CHEFE autorizou a promoção **documental integral** do PR #1785. A transcriç
 **Discriminante para promover a hipótese a efeito (ainda não executado):** mostrar o Hermes recuperar automaticamente uma receita canônica **antes da decisão**, carregar `learning_ref` e `proof_key` para o mesmo Goal e, em teste controlado, (a) não repetir um efeito já comprovado no mesmo alvo e versão, (b) retestar só o cone quando o fingerprint divergir, (c) produzir receipt, contraprova e readback. `KNOWLEDGE_ALREADY_RECORDED=PASS_CODE_READ`; `PREDICISION_AUTOCONSUMPTION=UNKNOWN`; `RUNTIME_OWNER_BINDING=UNKNOWN`; `GLOBAL_FIXED_POINT=NOT_PROVEN`.
 
 **NEXT_CURSOR:** no owner original do Hermes, conferir decisor→recuperação pertinente→prova→efeito; corrigir somente o ponto de encaixe que a medição demonstrar, sem repetir Gênesis nem reiniciar missão.
+
+### 2026-10-12 — REGISTRA: preflight cruzado das cinco fontes do CHEFE
+
+**Intenção explícita do CHEFE:** em cada missão operacional CentralDark, conferir e reconciliar a sequência **Gmail → Supabase → Casa → GitHub/main → VPS**. Cruzar o que já existe antes de decidir, evoluir somente o delta útil, preservar o funcional e devolver o resultado em linguagem simples. Isso é **expansão de consumo de fontes do Loop Mestre existente**, não segundo sistema, segundo cérebro, novo gate, cron ou agente.
+
+**Ciclo operacional do mesmo organismo:** `CHEFE_INTENT → RECUPERAR_FIO → GMAIL → SUPABASE → CASA → GITHUB_MAIN → VPS → CRUZAR_OWNER/EVIDENCIA → TLC23/META_LUPA_QUANDO_MATERIAL → MENOR_DELTA → HERMES/EXECUTOR_EXISTENTE → READBACK/CONTRAPROVA → REALITY_JUDGE → RECIBO NO OWNER EXISTENTE → HUD/KAIZEN → NEXT_CURSOR/FIXED_POINT`.
+
+**Contrato executável na prática, sem burocracia artificial:**
+
+1. **Gmail:** procurar a mensagem, confirmação ou alerta que influencia a intenção, sem divulgar dados privados; se não houver sinal material, `NO_RELEVANT_SIGNAL`, não omitir a fonte. Gmail comprova recebimento/conteúdo, **não** execução da VPS.
+2. **Supabase:** confrontar projeto, tabelas, Auth, RLS e logs quando se aplicarem. `POST /signup 200` ou aviso visual **não** prova envio de e-mail nem criação de conta: comparar `auth.users`, audit log e estado real.
+3. **Casa:** confrontar dispositivo autorizado, runtime, caminhos, worktree, HUD e logs; preservar alterações locais e não substituir caminhos históricos por atuais sem medir.
+4. **GitHub/main:** fixar HEAD/owner/PR/CI necessários à missão, reutilizar contrato e receipt existente; commit e merge **não** provam deploy. Respeitar o gate de entrada GitHub/HUD quando aplicável.
+5. **VPS:** conferir serviço, ambiente, rota, processo, disco e efeito real do delta; `exists != running`, `HTTP 200 != admin logado`, `tool listado != tool ativo`.
+
+**Convergência:** as cinco são **sensores independentes**. Reportar para cada fonte `PASS / FAIL / UNKNOWN / AUTH_REQUIRED / NOT_APPLICABLE / NO_RELEVANT_SIGNAL`, com escopo e instante se medido. Fonte ausente ou irrelevante não paralisa as demais; registrar a razão e continuar pelas capacidades já autorizadas. A ordem serve ao cruzamento e à devolutiva; ela não concede autorização extra nem impede o diagnóstico causal seguro. Reutilizar prova fresca e fechada: **não repetir varredura sem causa**.
+
+**Saída fixa e simples:** `🪬 INTENÇÃO · OWNER · DELTA · PROVA`, seguidos pelo mini-placar `📨 Gmail | 🗄️ Supabase | 🏠 Casa | 🏛️ GitHub/main | 🖥️ VPS`, ferida exata, efeito, `⚖️ REALITY_JUDGE` e `🧭 NEXT_CURSOR`. HUD gamificado é projeção; **XP só com recibo**, nunca pontuação imaginada. `UNKNOWN != PASS`, `ACTION != PROOF`, `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`.
+
+**Continuidade do Instinto Superior:** a experiência visual celebrada pelo CHEFE em 12/10/2026 reforça a convergência **uma intenção, um organismo, uma CentralDark**. Yuji/Sukuna, Gojo, Whis/Bills, Goku/Vegeta, sete batidas e 28 peças já são representações **do mesmo organismo**, conforme `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md`; não constituem novos executores, segundo writer ou prova de saúde. Preservar o que já ganhou forma na tela; resolver apenas erro material restante com readback. Celebração e evidência de experiência humana **não são** PASS técnico global.
+
+**Exemplo discriminante que motivou o registro:** cadastro repetido no Supabase, Gmail sem confirmação recém-recebida, Casa/GitHub com contexto e VPS com middleware SSR sem variáveis — cinco sinais reconciliados levaram ao **menor ajuste de ambiente** do cockpit, sem alterar autorização administrativa. Registro de execução específico já fica em `apps/instinto-superior/README.md` (12/10/2026). Não promover `ADMIN_LOGIN_E2E` até teste da sessão no navegador.
+
+**PROVA deste item:** somente documentação versionada + readback GitHub do SHA deste registro; aplicação automática a todos os agentes e cinco conectores vivos em execução futura permanece `UNKNOWN` até contraprova. `NEXT_CURSOR=CONSUMIR_O_PREFLIGHT_PERTINENTE_NA_PROXIMA_MISSAO_SEM_REDESCOBRIR_CONTRATOS`.

@@ -29,6 +29,13 @@ Texto legado conflitante perde para o owner canônico.
 
 # LEIA-ME-IA — comece por aqui
 
+<!-- CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
+### 🪬 Continuidade entre todas as janelas e contas
+
+Ao abrir ChatGPT (qualquer conta), Codex, Hermes, VS Code, Casa, VPS ou Instinto Superior para uma missão CentralDark: recuperar a intenção vigente e o ponto de continuidade pelo owner já existente `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0, LOOP ÚNICO). Compartilhar `INTENT_ID | GOAL | OWNER | MAIN_SHA | PR_HEAD | ACTIVE_WRITER | STATUS | RECEIPT | NEXT_CURSOR`. As contas não compartilham memória automaticamente; conferir CURRENT e ferramentas da superfície. Uma única caneta por escopo, sem recomeçar a tarefa nem simular PASS. NOVA ARTE: acervo `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; apenas arte com binário, hash, manifesto, teste e readback recebe selo canônico.
+<!-- /CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
+
+
 ## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
 
 Isto não cria uma lei nova. Remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação sem dependência causal real.
@@ -502,6 +509,9 @@ O recibo prova carregamento do contrato; não inventa permissão/tool nem substi
 ```text
 #ACORDAR = RECUPERAR O ESTADO REAL ANTES DE CONTINUAR
 !CALIBRAR = ALINHAR INTERPRETACAO + PAPEL + ESCOPO + TOOLS + PROVA
+CENTRALDARK_OS = VPS_CANONICA + LINUX_EXECUTOR + PONTE_CASA
+CENTRALDARK_OS_TAG = CENTRALDARK|ACORDAR|CALIBRAR
+VMI3256920 = REMOVIDA_DA_TAILNET; NAO_E_VPS_CENTRALDARK
 ```
 
 `#ACORDAR` e `!CALIBRAR` usam o mesmo organismo e podem abrir **frentes paralelas de percepção/reconciliação**. Dez é teto de potência, não quota: uma tarefa simples usa a menor quantidade suficiente; missão ampla, incerta ou crítica pode usar todas as frentes aplicáveis.
@@ -1131,10 +1141,10 @@ Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. He
 CANONICAL_CONTINUOUS_CONTRACT=docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md#311-contrato-contínuo--intenção--meta-grill--sol-executora--fio-verde-chefe-2026-09-28
 NEW_CHEFE_MATERIAL=DELTA_TO_ACTIVE_INTENT_FIRST
 RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN=true
-TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=99.9%
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE
 INTENT_CONFIDENCE_IS_NOT_TECHNICAL_PROOF=true
-META_GRILL_BEFORE_MATERIAL_RESPONSE=true
-META_GRILL_BEFORE_MUTATION=true
+META_GRILL_BEFORE_MATERIAL_RESPONSE=false
+META_GRILL_BEFORE_MUTATION=false
 EVOLVE_EXISTING_BEFORE_CREATE=true
 RETURN_SAME_ARTIFACT_EVOLVED=true
 VOLTA_UMA_CASA_ON_LOCAL_ERROR=true
