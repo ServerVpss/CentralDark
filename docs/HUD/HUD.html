@@ -2568,6 +2568,7 @@ setInterval(refresh,30000); // mesmo sensor existente; não executa missões
       <div class="hud-card"><h3>Windows / portas</h3><div class="val ok">PASS · TCP 445, 5985 E 3030</div><div class="meta">VPS &#8594; SEGREDO: 445 SMB, 5985 WinRM e 3030 Screenpipe OPEN em 09/10. RDP 3389 local = evidencia historica distinta. PORTA ABERTA != LOGIN AUTENTICADO.</div></div>
       <div class="hud-card"><h3>Screenpipe / Casa</h3><div class="val warn" id="cd-route-screenpipe">PASS /health HTTP 200 · DADOS/AUDIO PENDENTES</div><div class="meta">Readback 09/10: Casa 127.0.0.1:3030/health HTTP 200; VPS para Casa 100.123.93.25:3030/health HTTP 200. /search, captura e audio continuam por provas distintas; CORS nao revoga selo HTTP.</div><div class="meta" id="cd-screenpipe-auth-wound" role="status" style="margin-top:8px;color:var(--amber)">🪧 AUTORIZACAO T4: Screenpipe API :3030/health HTTP 200; /activity-summary HTTP 403; /search HTTP 403. CLI screenpipe.exe PID 48020 possui listener :3030, screenpipe-app.exe PID 42552 permanece aberto. Chave SCREENPIPE_LOCAL_API_KEY nao observada na sessao da consulta. NAO inventar chave, nao desativar autenticacao, nao ler capturas para provar o porteiro. Proximo cursor: conferir configuracao e sessao autorizada por metadados; consulta com permissao legitima; alternativa autorizada ou PLACA. AUTH_REQUIRED != CAPTURE_STOPPED.</div><div class="meta" id="cd-screenpipe-audio-wound" role="status" style="margin-top:8px;color:var(--amber)">🩹 AUDIO / PLACA: SEM DISPOSITIVO DE SAIDA DETECTADO — Windows 11 Pro; Audiosrv=RUNNING; AudioEndpointBuilder=RUNNING; PnP AudioEndpoint PRESENT=0/6 e MEDIA PRESENT=0/3 (medicao Casa, 08/10/2026). SCREENPIPE LOG: No default output device found. GRAVACAO AUDIO=NAO PROVADA. DRIVER DANIFICADO=UNKNOWN; FORMATACAO=NAO INDICADA PELA PROVA. CLI record + app presentes; duplicidade de captura=UNKNOWN. VER PENDENCIA mostra local, causa, evidencia e receita copiavel. Tela/HTTP seguem por provas separadas. Fonte: consulta Windows read-only e log Screenpipe fornecido.</div></div>
       <div class="hud-card"><h3>One Heart / VPS</h3><div class="val warn" id="cd-route-heart">AGUARDANDO</div><div class="meta">Mesmo owner MCP 127.0.0.1:9100/heartbeat. READBACK 09/10/2026 20:27:09Z: HTTP 200, ok=true, heart=one, self=stale, lag_ms=133427. Endpoint vivo nao prova heartbeat fresco; exibir STALE e manter restante do sistema monitorando. Atualizacao ao vivo depende do endpoint e CORS.</div></div>
+      <div class="hud-card" data-source-owner="apps/modulos/mcp/src/github-deploy-webhook.js"><h3>CI · passo que falhou</h3><div class="val warn" id="cd-ci-failed">AGUARDANDO</div><div class="meta" id="cd-ci-failed-meta">Mesmo coração: /heartbeat → ci (funil de logs, setor ci, 24h). Webhook workflow_job grava job, passo e runner; sem passo = suspeita de runner/infra. Sem leitura viva = UNKNOWN.</div></div>
       <div class="hud-card"><h3>Hermes WebUI</h3><div class="val warn">HTTP 302 / HISTORICO</div><div class="meta">VPS 127.0.0.1:9119 respondeu 302; 8788 fechada. UI autenticada nao provada pelo 302.</div></div>
       <div class="hud-card"><h3>Runtime / modelo</h3><div class="val warn">HTTP 200 / HISTORICO</div><div class="meta">VPS 18435/health respondeu 200; portas 8000, 8001, 8002 e 9100 escutando na medicao. Sem inferencia comprovada.</div></div>
 
@@ -3304,6 +3305,21 @@ function refreshCentralDarkLive() {
         liveSet('live-heart-chat', 'UNKNOWN', false);
         liveSet('live-heart-provider', 'provider: ' + (orchestrator.provider || 'UNKNOWN'));
         liveSet('live-heart-remote', 'Remote Desktop: ' + ((remoteLane || {}).state || 'UNKNOWN'));
+        // CI no mesmo coração: últimos jobs que falharam e o passo exato (sem passo = runner/infra).
+        var ci = heartbeat.ci || null;
+        var ciNode = document.getElementById('cd-ci-failed');
+        var ciMeta = document.getElementById('cd-ci-failed-meta');
+        if (ciNode) {
+          if (!ci || typeof ci.failures !== 'number') { ciNode.textContent = 'UNKNOWN'; ciNode.className = 'val warn'; }
+          else if (ci.failures === 0) { ciNode.textContent = 'LIVE · 0 FALHAS EM 24H'; ciNode.className = 'val ok'; }
+          else {
+            ciNode.textContent = 'LIVE · ' + ci.failures + ' FALHA(S) · ' + (ci.infra || 0) + ' INFRA';
+            ciNode.className = 'val warn';
+            if (ciMeta) ciMeta.textContent = (ci.recent || []).slice(0, 4).map(function(x) {
+              return (x.workflow || '?') + ' › ' + (x.job || '?') + ' › ' + (x.step || 'SEM PASSO (runner/infra)') + ' · ' + (x.runner || '?') + (x.sha ? ' · ' + x.sha : '');
+            }).join(' | ');
+          }
+        }
 
         var source = document.getElementById('live-heart-source');
         if (source) source.textContent = 'fonte: ' + ep.name + ' \u00B7 ' + ep.heartbeat;

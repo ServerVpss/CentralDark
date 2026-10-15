@@ -3066,6 +3066,78 @@
         "counterproof_no_match": true,
         "evidence_ref": "FLOW-REGISTRY base 910c2d6: nenhum flow MCP_INTENT_CYCLE; botão do painel NOC chama GET /admin/api/intent"
       }
+    },
+    {
+      "id": "mcp.ci-one-heart.recordWorkflowJob",
+      "kind": "FUNCTION",
+      "capability": "CI_FAILURE_ONE_HEART",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/github-deploy-webhook.js",
+      "symbol": "recordWorkflowJob",
+      "activation": "CALL",
+      "from": "GITHUB_WEBHOOK_WORKFLOW_JOB",
+      "to": "FUNIL_LOGS_SETOR_CI",
+      "owner": "apps/modulos/mcp/src/github-deploy-webhook.js",
+      "canonical_route": "one-heart-heartbeat-ci",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/github-deploy-webhook-ci.test.js",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base: nenhum flow com capability CI_FAILURE_ONE_HEART; webhook só tratava push"
+      }
+    },
+    {
+      "id": "mcp.ci-one-heart.getCiFailureSummary",
+      "kind": "FUNCTION",
+      "capability": "CI_FAILURE_ONE_HEART",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/github-deploy-webhook.js",
+      "symbol": "getCiFailureSummary",
+      "activation": "CALL",
+      "from": "FUNIL_LOGS_SETOR_CI",
+      "to": "ONE_HEART_HEARTBEAT_CI",
+      "owner": "apps/modulos/mcp/src/github-deploy-webhook.js",
+      "canonical_route": "one-heart-heartbeat-ci",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/github-deploy-webhook-ci.test.js",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY base: nenhum flow com capability CI_FAILURE_ONE_HEART; webhook só tratava push"
+      }
+    },
+    {
+      "id": "mcp.dist.ci-one-heart.recordWorkflowJob",
+      "kind": "FUNCTION",
+      "capability": "CI_FAILURE_ONE_HEART",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/github-deploy-webhook.js",
+      "symbol": "recordWorkflowJob",
+      "activation": "CALL",
+      "from": "GITHUB_WEBHOOK_WORKFLOW_JOB",
+      "to": "FUNIL_LOGS_SETOR_CI",
+      "owner": "apps/modulos/mcp/src/github-deploy-webhook.js",
+      "canonical_route": "one-heart-heartbeat-ci",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/github-deploy-webhook-ci.test.js",
+      "reuse_of": "mcp.ci-one-heart.recordWorkflowJob"
+    },
+    {
+      "id": "mcp.dist.ci-one-heart.getCiFailureSummary",
+      "kind": "FUNCTION",
+      "capability": "CI_FAILURE_ONE_HEART",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/github-deploy-webhook.js",
+      "symbol": "getCiFailureSummary",
+      "activation": "CALL",
+      "from": "FUNIL_LOGS_SETOR_CI",
+      "to": "ONE_HEART_HEARTBEAT_CI",
+      "owner": "apps/modulos/mcp/src/github-deploy-webhook.js",
+      "canonical_route": "one-heart-heartbeat-ci",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/modulos/mcp/src/github-deploy-webhook-ci.test.js",
+      "reuse_of": "mcp.ci-one-heart.getCiFailureSummary"
     }
   ]
 }
