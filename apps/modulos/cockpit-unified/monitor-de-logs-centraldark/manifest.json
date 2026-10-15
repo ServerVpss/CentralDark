@@ -1,0 +1,11 @@
+{
+  "nome": "Monitor de Logs CentralDark",
+  "tipo": "react-spa",
+  "slug": "monitor-de-logs-centraldark",
+  "tema": "dark",
+  "criado": "2026-07-05T00:59:21.621Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Visualizador de logs em tempo real de todos os módulos PM2. Tail -f no browser com filtro por módulo, nível (info/warn/error), e busca full-text."
+}

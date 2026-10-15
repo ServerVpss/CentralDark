@@ -1,0 +1,60 @@
+{
+  "gerado_em": "2026-09-12T02:54:00.559Z",
+  "gerado_em_br": "11/09/2026, 23:54:00",
+  "versao_tick": "2.0",
+  "ambiente": {
+    "tem_chave_lovable": true,
+    "proxy_ativo": {
+      "nome": "CentralDark-LovableProxy",
+      "url": "http://127.0.0.1:3102"
+    },
+    "proxies_conhecidos": [
+      {
+        "nome": "CentralDark-LovableProxy",
+        "status": "online"
+      },
+      {
+        "nome": "CentralDark-ArsenalProxy",
+        "status": "online"
+      }
+    ]
+  },
+  "testes": {
+    "proxy": {
+      "label": "proxy /health (local)",
+      "ok": true,
+      "ms": 118,
+      "proxy": "CentralDark-LovableProxy",
+      "url": "http://127.0.0.1:3102",
+      "status": 200,
+      "corpo": {
+        "ok": true,
+        "service": "lovable-proxy"
+      }
+    },
+    "gateway": {
+      "label": "gateway publico (ping)",
+      "ok": true,
+      "ms": 202,
+      "status": 404,
+      "alcancavel": true
+    },
+    "chat": {
+      "label": "chat completion end-to-end",
+      "ok": false,
+      "ms": 166,
+      "erro": "HTTP 401: {\"status\":401,\"type\":\"unauthorized\",\"title\":\"Invalid API key. The key could not be decrypted.\",\"message\":\"Invalid API key. The key could not be decrypted.\",\"details\":\"\",\"request_id\":\"c504a9d5b684b2c2a"
+    },
+    "erros_recentes": {
+      "label": "logs de erro (CentralDark-LovableProxy)",
+      "existe": true,
+      "arquivo": "/root/.pm2/logs/CentralDark-LovableProxy-error.log",
+      "linhas": []
+    }
+  },
+  "placar": {
+    "ok": 2,
+    "total": 3,
+    "saude": "degradado"
+  }
+}
