@@ -20,6 +20,7 @@ import { handleBuildkiteWebhook } from "./buildkite-integration.js";
 import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
 import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
+import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
@@ -281,6 +282,7 @@ app.get("/admin/logout", adminLogout);
 app.get("/admin/api/rotas", adminRotas);
 app.get("/admin/api/tools", adminTools);
 app.get("/admin/api/logs", adminBuscarLogs);
+app.get("/admin/api/logs/LOGS-VS-CODE.log", adminVsCodeLog);
 app.get("/admin/api/metricas", adminMetricas);
 app.get("/admin/api/grok/control", adminGrokControlGet);
 app.post("/admin/api/grok/control", adminGrokControlPost);

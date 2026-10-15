@@ -1,0 +1,66 @@
+{
+  "name": "centraldark-vscode-restore",
+  "displayName": "CentralDark VS Code Restore",
+  "description": "Restaura a bancada e reutiliza o terminal existente como entrada ZENDRIVE CLI, com telemetria sanitizada.",
+  "version": "0.1.1",
+  "publisher": "centraldark",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "centraldark.restoreWorkspace",
+        "title": "CentralDark: Restaurar bancada"
+      },
+      {
+        "command": "centraldark.mapWorkspace",
+        "title": "CentralDark: Mapear interface (read-only)"
+      },
+      {
+        "command": "centraldark.zendriveCli",
+        "title": "CentralDark: ZENDRIVE CLI (terminal existente)"
+      }
+    ],
+    "configuration": {
+      "title": "CentralDark Restore",
+      "properties": {
+        "centraldark.restore.onOpen": {
+          "type": "boolean",
+          "default": false,
+          "description": "Restaura a bancada automaticamente ao abrir o VS Code."
+        },
+        "centraldark.restore.startAgents": {
+          "type": "boolean",
+          "default": false,
+          "description": "Executa os comandos dos terminais (hermes chat, claude) ao restaurar."
+        },
+        "centraldark.restore.terminalTelemetry": {
+          "type": "boolean",
+          "default": true,
+          "description": "Registra somente inicio/fim/resultado de shell integrado no LOGS-VS-CODE.log da Casa; nunca grava comandos ou saidas."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.6.0"
+  },
+  "extensionKind": [
+    "ui"
+  ]
+}

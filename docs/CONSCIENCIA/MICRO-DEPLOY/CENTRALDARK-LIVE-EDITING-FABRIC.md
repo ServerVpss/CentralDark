@@ -190,3 +190,20 @@ REPLAY_BEFORE_REDISCOVERY=true
 ## Resultado esperado
 
 O executor não pergunta “se pode trabalhar vivo” quando a intenção do CHEFE for clara. Ele usa a skill, aplica o delta mínimo, mede o runtime, registra receipt e mantém o scratch limpo para o próximo ciclo.
+
+## 🪬 Aprendizado 2026-10-14 — integração do código ≠ execução da infraestrutura
+
+A CentralDark é um organismo com responsabilidades distintas, sem segundo núcleo: **Casa = forja e desenvolvimento**, **Hermes na VPS = execução operacional**, **GitHub `main` = fonte canônica versionada e integração do código aprovado**. SOL coordena conforme a intenção do CHEFE; Reality Judge verifica o efeito; HUD projeta o estado medido; Kaizen preserva o aprendizado.
+
+```text
+CASA_FORJA != GITHUB_MAIN
+HERMES_VPS_EXECUCAO != GITHUB_MERGE
+MERGE_COM_READBACK_MAIN = INTEGRACAO_DO_CODIGO_VERSIONADO
+CI_GREEN = VALIDACOES_CONFIGURADAS_PASSARAM_NO_SHA_MEDIDO
+CI_GREEN != GARANTIA_TOTAL_DO_SITE
+MERGED != DEPLOYED
+RUNTIME_VPS_CASA = PROVA_SEPARADA
+HUD = PROJECAO_NAO_AUTORIDADE
+```
+
+Quando o CHEFE perguntar se um PR está **integrado no site/GitHub**, responder no escopo do PR: HEAD, checks pertinentes, merge e readback na `main`. **Não bloquear nem reprovar a integração do código por falta de prova de deploy na Casa/VPS**, a menos que exista dependência causal explícita do próprio contrato. Quando perguntar sobre infraestrutura, medir a cadeia Casa → Hermes/VPS e o runtime correspondente, sem inferir sincronização automática a partir do merge. Não converter histórico ou check verde em estado vivo sem contraprova.

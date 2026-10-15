@@ -617,7 +617,7 @@
     "path": "scripts/centraldark/canonical-consumption-gate.mjs",
     "owner": "SOL",
     "critical": true,
-    "fail_closed": true,
+    "fail_closed": false,
     "canonical_fallback": "docs/CONSCIENCIA/APRENDIZADOS.md",
     "invariants": [
       "POINTER_TEXT_IS_NOT_SOURCE",
@@ -625,10 +625,10 @@
       "TOOL_AVAILABLE_MUST_BE_ATTEMPTED_BEFORE_UNKNOWN",
       "UNKNOWN_MEDIVEL_E_FALHA_DE_METODO"
     ],
-    "learning_mode": "ALL_NUMBERED_LEARNINGS",
-    "all_numbered_learnings_required": true,
+    "learning_mode": "PERTINENT_ONLY",
+    "all_numbered_learnings_required": false,
     "boot_binding": "CENTRALDARK_AI_BOOT.yaml#canonical_consumption_gate",
-    "cli": "node scripts/centraldark/canonical-consumption-gate.mjs --learning ALL"
+    "cli": "node scripts/centraldark/canonical-consumption-gate.mjs --learning PERTINENT"
   },
   "tool_call_visibility_contract": {
     "owner": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml",

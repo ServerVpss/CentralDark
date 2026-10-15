@@ -8,7 +8,7 @@ CLONE_DECK="/root/Multizap/apps/clone-deck"
 PUBLIC_ROOT="/var/www/multizap"
 LOG="/var/log/clone-deck-post-deploy.log"
 
-log() { echo "[$(date '+%H:%M:%S')] $*" >> "$LOG" 2>/dev/null; echo "$*"; }
+log() { echo "[$(TZ=America/Sao_Paulo date '+%H:%M:%S')] $*" >> "$LOG" 2>/dev/null; echo "$*"; }
 
 log "=== 014: Forcar landing page ==="
 

@@ -989,6 +989,30 @@ CURRENT>history e nenhuma arquitetura paralela. #159 prova capability/runtime e
 nao altera autoridade humana. A migracao dos runners para VPS e binding operacional,
 nao nova identidade/autoridade. As ancoras abaixo so mudam depois desta revisao.
 
+Revisão 2026-10-07T06:45:03.463Z — reconciliação de donos (SOUL × RULES × AGENTS × LEIA-ME × BOOT × bridges × regras do bot): a âncora estava CURRENT, mas a revisão achou
+contradição interna no bloco "Contrato CURRENT herdado". SOUL §3.1.1 e CLAUDE.md já estavam na forma vigente desde 2026-10-03 (remoção de fricção ritual:
+`META_GRILL_BEFORE_MATERIAL_RESPONSE=false`, `META_GRILL_BEFORE_MUTATION=false`, `TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE`),
+mas AGENTS.md e LEIA-ME-IA.md carregavam cópia antiga (`=true`, `99.9%`) e o BOOT ainda tinha `meta_grill_before_*: true` ao lado de `ADAPTIVE_NOT_GATE`.
+Medido: nenhum fiscal/teste/workflow exige o valor antigo (o fiscal só exige `META_GRILL=ON_DEMAND`); diff dos blocos CLAUDE×AGENTS e CLAUDE×LEIA = exatamente 3 linhas cada.
+Os três donos foram alinhados ao dono governante (SOUL), sem criar regra nova. As regras do bot (`apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml`) já apontam PR-mãe #1757
+e não carregam META-GRILL; nenhuma mudança. #1562 permanece apenas como legado protegido (`LEGACY_PR_MOTHERS=#1562,#1757`), sem reabrir.
+
+```text
+SOUL_BRIDGE_BLOCKS_MUST_MATCH_GOVERNING_OWNER=true
+INHERITED_CONTRACT_BLOCK_DRIFT_ACROSS_BRIDGES=RECONCILE_TO_SOUL_NOT_TO_MAJORITY
+META_GRILL_BEFORE_MATERIAL_RESPONSE=false (ON_DEMAND) · META_GRILL_BEFORE_MUTATION=false (ON_DEMAND)
+TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION=ADAPTIVE_NOT_GATE
+ANCHOR_UPDATE_AFTER_REVIEW_ONLY=true
+```
+
+```text
+SOUL_SYNC_ANCHOR_BEGIN
+AGENTS.md=71451ce29c0da11fafed4612ce4ee23f83d75d8f
+LEIA-ME-IA.md=a1fcacd3b41c48a40dcb46d5eaeb8a9b1501f961
+CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
+CENTRALDARK_AI_BOOT.yaml=fb17afb089eeb31682c79baa52d51cdaea4fc827
+docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=00d02387cde287ac1ee3447337f85bcea0c243cc
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-07T06:45:03.463Z
 Revisao 2026-10-09 — SOUL_SOURCE_ANCHOR_CAUSAL_RECONCILIATION: o gate do deploy
 do HUD em main (run 37870486761, job 113627195153) falhou
 SOUL_SYNC_CURRENT_FOR_FIXED_POINT por ancora `LEIA-ME-IA.md` obsoleta.
@@ -1018,13 +1042,34 @@ A medicao atual comprovou HEAD=main e SHA identico no HUD da VPS;
 essa prova operacional nao autoriza reclassificar os demais servicos.
 Nao nasce segundo HUD, gate de saude opcional ou outro owner.
 
+Revisao 2026-10-14 — PR #1774 (reconciliacao do bloco CURRENT herdado):
+AGENTS.md, LEIA-ME-IA.md e CENTRALDARK_AI_BOOT.yaml foram relidos apos o
+merge com a main vigente (5436c3a e commits subsequentes) antes de repor a
+ancora. O delta e so o alinhamento dos tres donos ao dono governante (SOUL
+§3.1.1/§2.4): `TARGET_INTENT_ALIGNMENT_CONFIDENCE_FOR_MATERIAL_MUTATION`
+passa de `99.9%` para `ADAPTIVE_NOT_GATE` e `META_GRILL_BEFORE_MATERIAL_RESPONSE`/
+`META_GRILL_BEFORE_MUTATION` passam de `true` para `false`, removendo a
+contradicao interna que esses dois donos ainda carregavam. Nenhuma lei,
+owner ou autoridade nova nasce aqui; e reconciliacao de ancora, nao
+absorcao de material inedito. `CLAUDE.md` e `CONTRACT.yml` nao mudaram
+desde a ancora anterior.
+
+Revisao 2026-10-14 (2) — novo merge com main trouxe `canonical_consumption_gate`
+reconciliado (commit e855feb8f7a0: `required_learning` ALL→PERTINENT,
+`learning_mode` ALL_NUMBERED_LEARNINGS→PERTINENT_ONLY, `failure_policy`
+FAIL_CLOSED→NON_BLOCKING_ADVISORY) e conteudo adicional ja documentado nos
+proprios APRENDIZADOS/LEMBRANCAS (Papagaio ON/OFF, cinco fontes
+interligadas, criterios autodefinidos #176) absorvido sem lei/owner novo;
+apenas repondo a ancora para os blobs atuais. `LEIA-ME-IA.md`, `CLAUDE.md`
+e `CONTRACT.yml` nao mudaram desde a revisao anterior.
+
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=81dfdcf682486ccb7a508ff6dc06fb42e8342fc7
-LEIA-ME-IA.md=e34eb841e6784285563ba065a9205679d98466b5
-CLAUDE.md=3ead855324b8ee25a5af3abbd1f2ba2a94715518
-CENTRALDARK_AI_BOOT.yaml=5e54e602590486f3b70b8b41bafaac660b54fc81
+AGENTS.md=b00b0800f4e1723ad37724428b6106e81f6c6eac
+LEIA-ME-IA.md=c60cd87286a8746df84f1680f8b65fb7186fa263
+CLAUDE.md=42019585442ecc395324d3716f2e071124b2feca
+CENTRALDARK_AI_BOOT.yaml=151150229091ad3a14b45e1bacf756f90f558ab8
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-07
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-14
 SOUL_SYNC_ANCHOR_END
 ```
 

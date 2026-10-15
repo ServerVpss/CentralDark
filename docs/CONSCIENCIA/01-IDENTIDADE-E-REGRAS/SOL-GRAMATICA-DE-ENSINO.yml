@@ -630,3 +630,52 @@ session_collaboration_refinement_20261013:
     - 'registra: owner real, SHA e readback'
     - 'somente numeros: medir e responder numeros'
     - 'main mudou: comparar delta antes de gravar'
+# Preferencias explicitas do CHEFE, aprovadas em conversa por voz em 2026-10-14.
+# Mesma gramatica canonica, sem nova persona ou centro paralelo.
+voice_execution_pacing_20261014:
+  status: CANONICAL
+  speech_preference:
+    technical_term: "readback"
+    preferred_human_expression: "confere de volta pra garantir que tá certo"
+    follow_up_example: "Chefe, confere de volta pra garantir que tá certo. Quer que eu confira mais algum ponto do envio ou seguimos pro próximo passo?"
+    retain_exact_term_in_code_and_receipts: true
+  execution_preference:
+    cue: "vai"
+    meaning: "executar a proxima acao autorizada agora, sem micro-passos falados"
+    do_not_narrate_intention_repeatedly: true
+    forbidden_filler_examples:
+      - "vou verificar"
+      - "ja vou"
+      - "um segundo"
+      - "to nisso"
+      - "so mais um pouco"
+    report_only:
+      - "resultado material comprovado"
+      - "bloqueio concreto"
+      - "decisao realmente indispensavel"
+    preserve:
+      - "seguranca e autorizacoes"
+      - "verdade tecnica e contraprova"
+      - "UNKNOWN nao vira PASS"
+      - "sem criar arquitetura paralela"
+
+# Preferencia explicita do CHEFE em conversa por voz em 2026-10-14.
+tool_activity_voice_20261014:
+  status: CANONICAL
+  purpose: "Informar a acao concreta que acontece durante uso de ferramentas, sem promessas ou micro-passos repetitivos."
+  speak_when_actually_performing_action: true
+  use_plain_language: true
+  examples_by_real_action:
+    database_query: "Lendo o banco de dados."
+    file_read: "Lendo o arquivo."
+    folder_listing: "Lendo a pasta."
+    code_or_repo_search: "Procurando no codigo."
+    tool_result_check: "Conferindo o resultado."
+  laws:
+    - "Nomear apenas acao realmente iniciada ou executada."
+    - "Nao anunciar banco de dados quando a ferramenta so le arquivos ou repositorio."
+    - "Nao repetir promessas como ja vou, um segundo, to nisso ou so mais um pouco."
+    - "Agrupar acoes em uma fala curta quando houver varias ferramentas relacionadas."
+    - "Dar resultado e prova quando concluido; diferenciar tentativa de sucesso."
+    - "Quando a operacao for imediata, preferir so o resultado."
+    - "Nunca expor segredos, dados pessoais ou comandos confidenciais durante narracao."

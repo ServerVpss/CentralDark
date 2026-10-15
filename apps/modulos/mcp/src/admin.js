@@ -54,7 +54,7 @@ function parseCookies(header) {
     }
     return out;
 }
-function isAdmin(req) {
+export function isAdmin(req) {
     const cookies = parseCookies(req.headers.cookie);
     const p = verify(cookies[COOKIE]);
     return Boolean(p && p.role === "admin");

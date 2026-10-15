@@ -29,7 +29,8 @@ TESTES = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(TESTES)
 sys.path.insert(0, SKILL)
 
-from scripts.meta_lupa import _final_receipt_line  # noqa: E402
+from scripts.meta_lupa import _final_receipt_line, _validate_achievements  # noqa: E402
+from types import SimpleNamespace
 
 _spec = importlib.util.spec_from_file_location(
     "validar_selo_ponto_fixo",
@@ -68,6 +69,32 @@ def _ledger_tmp(recs):
 
 
 # --------------------------------------------------------------- selo
+
+def test_xp_preflight_bloqueia_selo_sem_autolupa_e_sem_prova():
+    """Conquista só nasce após AutoLupa e evidência, não por declaração."""
+    args = SimpleNamespace(
+        achievement=["ponto_fixo_atingido"],
+        evidence=["sha256:prova-do-teste"],
+        error_found="", root_cause="", counter_evidence="",
+        false_green_blocked=False, test_created="", regression_created="",
+        guardrail_added="", rollback_proven=False,
+        risk=[], improvements=[], point_fixed="sim", autolupa="nao",
+    )
+    assert "POINT_FIXED_REQUIRES_AUTOLUPA" in _validate_achievements(args)
+
+    args.autolupa = "sim"
+    assert _validate_achievements(args) == []
+
+    args.evidence = []
+    assert "XP_REQUIRES_EVIDENCE" in _validate_achievements(args)
+
+    args.achievement = []
+    args.autolupa = "nao"
+    assert "POINT_FIXED_REQUIRES_AUTOLUPA" in _validate_achievements(args)
+
+    args.point_fixed = "nao"
+    assert _validate_achievements(args) == []
+
 
 def test_selo_bloqueia_point_fixed_sem_autolupa():
     rel = selo.auditar([_final(autolupa_executed=False, point_fixed_evidential=True)])
@@ -160,6 +187,23 @@ def test_cli_do_guardrail_fecha_em_ledger_ausente_ou_invalido():
             assert r.returncode == 2
             assert rel["selo_ok"] is False
             assert rel["erro_entrada"]
+
+
+def test_selo_explicito_sem_rastro_entregue_falha():
+    rel = selo.auditar([_final(seal_claimed=True, delivered_trace_refs=[])])
+    assert rel['selo_ok'] is False
+    assert len(rel['sem_rastro']) == 1
+
+
+def test_selo_explicito_com_rastro_entregue_passa():
+    rel = selo.auditar([_final(seal_claimed=True, delivered_trace_refs=['https://github.com/ServerVpss/CentralDark/commit/exemplo'])])
+    assert rel['selo_ok'] is True
+    assert rel['sem_rastro'] == []
+
+
+def test_final_sem_selo_explicito_nao_exige_rastro():
+    rel = selo.auditar([_final(seal_claimed=False)])
+    assert rel['selo_ok'] is True
 
 
 # --------------------------------------------------------- recibo de XP

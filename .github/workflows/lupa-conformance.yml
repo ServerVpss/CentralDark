@@ -315,6 +315,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Python gerenciado (PEP 668) recusa pip no sistema e o runner não tem python3-venv:
+          # instala as dependências em diretório isolado (--target) e expõe por PYTHONPATH.
+          DEPS_DIR="$RUNNER_TEMP/semantic-core-deps"
+          python3 -m pip install --disable-pip-version-check --upgrade --target "$DEPS_DIR" "numpy>=1.26" "safetensors>=0.4.5"
+          PYTHONPATH="$DEPS_DIR${PYTHONPATH:+:$PYTHONPATH}" python3 -m unittest discover -s infra/mcp/tests -v
           # Reutiliza o isolamento --target ja comprovado para pytest neste workflow.
           # PEP 668: nunca instalar no Python global do runner persistente.
           SEMANTIC_TARGET="${RUNNER_TEMP}/centraldark-semantic-${GITHUB_RUN_ID}"

@@ -184,7 +184,7 @@ say ""
 say "=== 5) Resumo ==="
 cat > "$REVISAO_DIR/resumo.md" <<MD
 # Run-Once 011 (v2) — Configurar Webhook WuzAPI
-Data: $(date '+%Y-%m-%d %H:%M:%S')
+Data: $(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')
 
 ## O que foi feito
 - Testou endpoints reais do WuzAPI (não mais "/").

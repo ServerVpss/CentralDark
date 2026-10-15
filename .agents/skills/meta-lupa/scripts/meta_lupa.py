@@ -515,10 +515,25 @@ def calculate_evolution(
         rec.get("event") == "FINAL" and rec.get("evolution_fingerprint") == fingerprint
         for rec in records
     )
+    # O mesmo problema nao rende XP de novo so porque mudou o texto de evidencia.
+    # Premiar somente conquistas NOVAS no mesmo escopo tecnico e preservar legado.
+    previously_awarded = set()
+    for rec in records:
+        if (
+            rec.get("event") == "FINAL"
+            and rec.get("mission_id") == mission_id
+            and rec.get("head_sha") == head_sha
+            and rec.get("root_cause") == root_cause
+            and rec.get("test_created") == test
+        ):
+            previously_awarded.update(
+                item for item in (rec.get("achievements") or []) if item in XP_AWARDS
+            )
+    new_awards = set(achievements) - previously_awarded
     before = _ledger_total_xp(records)
     level_before, _, _ = level_from_xp(before)
     tier_before = tier_for_level(level_before)
-    gained = 0 if duplicate else sum(XP_AWARDS[item] for item in set(achievements))
+    gained = 0 if duplicate else sum(XP_AWARDS[item] for item in new_awards)
     gained += sum(XP_PENALTIES[item] for item in set(penalties))
     after = max(0, before + gained)
     level_after, progress, next_cost = level_from_xp(after)
@@ -533,7 +548,7 @@ def calculate_evolution(
         "tier_after": tier_for_level(level_after),
         "level_up": level_after > level_before,
         "next_level_xp": next_cost - progress,
-        "no_xp_reason": "EVENTO_JA_REGISTRADO" if duplicate else "",
+        "no_xp_reason": ("EVENTO_JA_REGISTRADO" if (duplicate or (achievements and not new_awards)) else ""),
     }
 
 
@@ -565,6 +580,10 @@ def _validate_achievements(args) -> list[str]:
     failures = []
     if achievements and not args.evidence:
         failures.append("XP_REQUIRES_EVIDENCE")
+    # Proibir ganho de XP e selo de ponto fixo sem a AutoLupa realmente executada.
+    # O guardrail do ledger permanece como segunda contraprova, nao primeira defesa.
+    if args.point_fixed == "sim" and args.autolupa != "sim":
+        failures.append("POINT_FIXED_REQUIRES_AUTOLUPA")
     requirements = {
         "erro_reproduzido": bool(args.error_found),
         "causa_raiz_provada": bool(args.root_cause),

@@ -32,3 +32,17 @@ Data da medição: 2026-09-24
 - Paleta, tipografia, desenho, cores, aura e cajado do Hermes Instinto Superior.
 - Nove ações canônicas e sete posturas adicionais, todas com 16 quadros.
 - Três peles de memória: Forja, Celestial e Ascensão.
+
+## 15/10/2026 — Galeria ZENDRIVE CLI (delta no mesmo Design Center)
+
+**Intenção do CHEFE:** guardar o ZENDRIVE CLI na galeria de extensões do Instinto Superior, dentro do cockpit/builder, sem criar outro produto, extensão ou runtime.
+
+**Owners reutilizados:** UI `apps/instinto-superior/src/components/central/DesignCenter.tsx`; entrada autenticada `CockpitShell.tsx` → `/_authenticated/sala-controle`; extensão `skills/vs-code-restore`; telemetria `.agents/skills/centraldark-vscode-log-bridge` (PR #1820); coletor `apps/modulos/mcp/src/log-funnel.js`.
+
+**Implementação em source:** nova aba `Galeria de extensões` no Design Center existente, visível **somente com `autenticado=true`**. Ficha `ZENDRIVE CLI`, versão `centraldark.centraldark-vscode-restore@0.1.1`, comando `CentralDark: ZENDRIVE CLI (terminal existente)`, informação do escopo medido, indicador de estado geral UNKNOWN e links verificáveis para fonte e PR. Não há botão simulado de instalar ou executar remoto. `DesignCenter` recebe `autenticado` de `CockpitShell`, cuja flag vem da sala `/_authenticated/sala-controle` após gate de administrador já existente.
+
+**Commits:** `a743b66c3f21eff887c85a0a0acfb6c5d4abf9eb` (ficha da galeria) e `35165b57d4b0a72761fe8b171450248718ba5eba` (passagem do gate). Artefato de extensão instalado na Casa, mas **não distribuído como instalador no cockpit**.
+
+**Provas separadas:** instalação Casa VS Code 0.1.1 e eventos reais `cli_focus`, `shell_start`, `shell_end exit=ok` entregues ao log-funnel via Tailscale/VPS até offset `3028322`: PASS na sessão medida. Disponibilidade da ficha **no source do cockpit**: PASS; build/typecheck com o novo delta, login humano no cockpit, deploy web e apresentação visual em navegador: **NOT_MEASURED**. Provider ChatGPT Zendrive ao vivo: **NOT_PROVEN** (Omni 8099 e CDP Casa 9222 ausentes na medição).
+
+**Fixed point escopado:** galeria persistida em `main`, vinculada aos owners existentes. `SOURCE_COMMITTED != BUILT != DEPLOYED != UI_PROVEN`. Não promover todos a verde por transição de source.

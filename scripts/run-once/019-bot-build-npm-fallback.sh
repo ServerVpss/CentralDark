@@ -19,7 +19,7 @@ CLONE_DECK="/root/Multizap/apps/clone-deck"
 BOT_DIR="$CLONE_DECK/apps/bot"
 PUBLIC_BOT="/var/www/multizap/bot"
 REV="/root/Multizap/revisoes/$(date +%Y%m%d-%H%M%S)/bot-build-npm-fallback"
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+TIMESTAMP=$(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')
 
 mkdir -p "$REV"/{logs,backup}
 exec > >(tee -a "$REV/logs/execucao.log") 2>&1
@@ -150,7 +150,10 @@ if [ $ERRO_FINAL -eq 0 ]; then
   echo "Arquivos temporários: $TMP_FILES"
 
   if [ "$TMP_FILES" -gt 0 ]; then
-    # Substitui o diretório público
+    # Substitui o diretório público.
+    # RECIBO dos rm -rf deste bloco: só alvos que este próprio script cria (backup "$PUBLIC_BOT.old"
+    # gerado pelo mv logo abaixo; "$PUBLIC_BOT" parcial, restaurado de "$REV/backup/bot-antes").
+    # Nenhum caminho vem de classificação externa; o backup anterior é a prova de reversão.
     rm -rf "$PUBLIC_BOT.old" 2>/dev/null || true
     [ -d "$PUBLIC_BOT" ] && mv "$PUBLIC_BOT" "$PUBLIC_BOT.old"
     mkdir -p "$PUBLIC_BOT"

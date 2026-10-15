@@ -25,7 +25,7 @@ set -uo pipefail
 CLONE_DECK="/root/Multizap/apps/clone-deck"
 CRM_DIR="$CLONE_DECK/apps/crm"
 REV="/root/Multizap/revisoes/$(date +%Y%m%d-%H%M%S)/crm-ssr-diagnostico"
-TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+TIMESTAMP=$(TZ=America/Sao_Paulo date '+%Y-%m-%d %H:%M:%S')
 DIAG="$REV/diagnostico"
 LOGS="$REV/logs"
 

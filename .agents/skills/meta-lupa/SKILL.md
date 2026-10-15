@@ -68,6 +68,18 @@ Saída mínima: `MODO=QUENTE`, contratos, observadores, testes, rollback, regist
 
 Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recorrência ou promoção escala para QUENTE; ponto fixo resfria e encerra.
 
+## ♻️ Self-Evolution e XP comprovado — integração no mesmo organismo (2026-10-14)
+
+As técnicas externas de otimização **GEPA/DSPy** (feedback textual de falhas e rastros), **Reflexion** (memória episódica de correções) e **EvoAgentX** (avaliação repetível de workflows) são absorvidas como **método de observação e contraprova**, não como dependências obrigatórias, novos agentes ou novo orquestrador. Referências técnicas: `https://dspy.ai/3.1.0/api/optimizers/GEPA/overview/`, `https://arxiv.org/abs/2303.11366`, `https://github.com/ANative-Lab/EvoAgentX`.
+
+No mesmo ciclo: **medir o baseline → executar delta no owner existente → coletar feedback sanitizado → reproduzir falha → comparar teste antes/depois → contraprova negativa → preservar green state → atualizar aprendizagem/ledger sem duplicação → continuar**. Se não há mudança material demonstrada, não há promoção nem registro ruidoso.
+
+O ranking de `apps/modulos/proxy/self_evolve.py` mede sucesso de transporte e latência sob amostragem, não demonstra qualidade de resposta, aderência à intenção ou XP. Modelos não são promovidos por um único resultado rápido nem por HTTP 200. A saída declarada `TRANSPORTE_AMOSTRADO` preserva essa fronteira de prova.
+
+**XP único e auditável** permanece em `scripts/meta_lupa.py`, `references/uso-ledger.jsonl` e guardrail de ponto fixo existentes. Toda declaração de ponto fixo exige `--autolupa sim`; para **ganhar XP** com `ponto_fixo_atingido`, a evidência também é obrigatória antes do `FINAL`. Encerramentos legados sem reivindicação de XP continuam compatíveis; o guardrail do ledger permanece como segunda contraprova. O progresso demonstrável usa `xp_before`, `xp_gained`, `xp_after`, `level_before/after`, `tier_before/after`, fingerprint e receipt. Não gerar XP por tentativas, respostas longas, estimativas, aparências verdes, ranking de proxy ou repetição do mesmo evento. Reescrever apenas o texto da evidência não concede de novo conquistas já registradas na mesma missão, HEAD, causa e teste; conquista inédita recebe somente seu delta.
+
+**Regressão:** `testes/test_selo_ponto_fixo.py` contém teste de preflight. `apps/modulos/proxy/test_self_evolve.py` cobre ranking conservador, logs inválidos, latência sem prova, registro sem duplicação e ausência de XP fictício. Esses testes validam código em ambiente isolado; não comprovam deploy da VPS ou ativação do proxy.
+
 ## Princípios inegociáveis
 
 1. Separar fato, inferência, suposição e desconhecido.

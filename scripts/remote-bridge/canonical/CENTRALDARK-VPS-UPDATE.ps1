@@ -1,5 +1,6 @@
-param(
-  [string[]]$Targets = @("segredo-vpss", "root@100.121.152.119")
+﻿param(
+  [string[]]$Targets = @("segredo-vpss"),
+  [switch]$ProbeOnly
 )
 
 $ErrorActionPreference = "Stop"
@@ -9,20 +10,34 @@ Write-Host "║ CENTRALDARK · CANONICAL HYBRID SSH GATE    ║"
 Write-Host "╚══════════════════════════════════════════════╝"
 Write-Host ""
 
+# SSH same identity, Tailscale preferred, public fallback, host key pinned.
+$Candidates = @(
+    @{ Label = "TAILSCALE"; Options = @("-o", "HostName=100.90.199.124", "-o", "HostKeyAlias=89.117.78.124", "-o", "StrictHostKeyChecking=yes") },
+    @{ Label = "PUBLIC_FALLBACK"; Options = @("-o", "StrictHostKeyChecking=yes") }
+)
 $Selected = $null
-foreach ($Target in $Targets) {
-    Write-Host "[TEST] $Target"
-    & ssh -o ConnectTimeout=6 -o BatchMode=yes $Target "printf 'CENTRALDARK_SSH_PASS\n'; hostname" 2>$null
-    if ($LASTEXITCODE -eq 0) {
-        $Selected = $Target
-        Write-Host "[PASS] ROTA=$Selected"
-        break
+$SelectedArgs = @()
+foreach ($Candidate in $Candidates) {
+    foreach ($Target in $Targets) {
+        $Opts = @("-o", "ConnectTimeout=6", "-o", "BatchMode=yes") + @($Candidate.Options)
+        Write-Host "[TEST] $($Candidate.Label) via $Target"
+        & ssh @Opts $Target "printf 'CENTRALDARK_SSH_PASS\n'; hostname" 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            $Selected = $Candidate.Label
+            $SelectedArgs = @($Opts) + @($Target)
+            Write-Host "[PASS] ROTA=$Selected host_alias=$Target"
+            break
+        }
+        Write-Host "[WAIT] Rota indisponivel: $($Candidate.Label) via $Target"
     }
-    Write-Host "[WAIT] Rota indisponível: $Target"
+    if ($Selected) { break }
 }
-
 if (-not $Selected) {
-    throw "CENTRALDARK_SSH_GATE=BLOCKED — nenhuma rota SSH canônica respondeu"
+    throw "CENTRALDARK_SSH_GATE=BLOCKED - nenhuma rota SSH canonica respondeu"
+}
+if ($ProbeOnly) {
+    Write-Host "[PASS] CENTRALDARK_SSH_PROBE_ONLY=true ROUTE=$Selected DEPLOY=false"
+    return
 }
 
 $Remote = @'
@@ -66,7 +81,10 @@ echo "CENTRALDARK_VPS_UPDATE=COMPLETE"
 '@
 
 Write-Host "[EXEC] Atualização canônica via $Selected"
-& ssh $Selected "bash -lc '$($Remote.Replace("'", "'\"'\"'"))'"
+# Remote payload base64 preserves UTF-8 and avoids nested quoting.
+$Payload = $Remote.Replace("`r`n", "`n")
+$Encoded = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($Payload))
+& ssh @SelectedArgs "printf %s $Encoded | base64 --decode | bash"
 if ($LASTEXITCODE -ne 0) {
     throw "CENTRALDARK_VPS_UPDATE=FAILED exit=$LASTEXITCODE route=$Selected"
 }
