@@ -23,6 +23,7 @@ import { Ledger } from "@/components/central/Ledger";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
+import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
@@ -183,6 +184,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 {autenticado ? (
                   <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
+                {autenticado ? <TabsTrigger value="hud-legado">HUD · Selos · Gênesis</TabsTrigger> : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
               </TabsList>
@@ -238,6 +240,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   atualizando={estado.isFetching}
                   atualizar={() => void estado.refetch()}
                 />
+              </TabsContent>
+            ) : null}
+            {autenticado ? (
+              <TabsContent value="hud-legado" className="mt-10">
+                <HudDeterministico />
               </TabsContent>
             ) : null}
             <TabsContent value="hermes" className="mt-10">
