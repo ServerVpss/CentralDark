@@ -186,7 +186,7 @@ const TOTAL_SKILLS_GAVETA = gavetaCatalogo.skills.length;
  * Fonte: GitHub tree @SHA exato, apenas nomes e owners. Sem nova API, plugin,
  * executor, armazenamento de sessões ou coleta de credenciais.
  */
-export function GavetaForja() {
+export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } = {}) {
   const [busca, setBusca] = useState("");
   const [categoria, setCategoria] = useState<(typeof CATEGORIAS_GAVETA)[number]>("Todas");
   const [pagina, setPagina] = useState(1);
@@ -208,6 +208,8 @@ export function GavetaForja() {
         .some(valor => valor.toLocaleLowerCase("pt-BR").includes(termo)));
   }, [receitaBusca, receitasAlfabeticas]);
   const fonteAtual = gavetaCatalogo.source.sha;
+  const mainAvancou = Boolean(mainShaAtual && mainShaAtual !== fonteAtual);
+  const mainCoincide = Boolean(mainShaAtual && mainShaAtual === fonteAtual);
   const terminalRota = {
     nome: "Terminal integrado VS Code → RDC CentralDark",
     owner: "skills/vs-code-restore/SKILL.md",
@@ -269,8 +271,12 @@ export function GavetaForja() {
           {gavetaCatalogo.source.measurement} · SOURCE_ONLY
         </p>
         <p className="mt-2 text-xs text-muted-foreground">
-          Quando a main avançar, o snapshot anterior continua histórico até a
-          atualização pelo owner da Forja. MAIN_SYNCED ≠ RUNTIME_LOADED.
+          {mainAvancou
+            ? "🟡 MAIN_AVANCOU · contagens acima são snapshot histórico, não inventário CURRENT."
+            : mainCoincide
+              ? "SHA_MAIN_COINCIDE · presença no Git ainda não comprova runtime carregado."
+              : "CURRENT_MAIN_SHA_UNKNOWN_NESTA_ABA · contagens são snapshot histórico, não medição atual."}
+          {" "}MAIN_SYNCED ≠ RUNTIME_LOADED.
         </p>
       </header>
 
