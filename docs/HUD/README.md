@@ -66,3 +66,26 @@ Build/CI da PR isolada → corrigir apenas falhas reais do owner → readback em
 **Dívida identificada:** a suíte `apps/instinto-superior/scripts/verify-hud-zone.mjs` ainda verifica a sintaxe anterior `<HudDeterministico />` enquanto o cockpit já usa `<HudDeterministico estado={dado} />`. Tentativa de atualizar o teste foi bloqueada pela ferramenta. Assim, `TEST_CONTRACT=STALE`, `BUILD=UNKNOWN` e `UI_PROVEN=NO`. Atualizar a mesma suíte quando possível, sem abrir outra PR nem declarar PASS.
 
 **NEXT_CURSOR:** atualizar contrato de teste → executar teste + build em clone/worktree isolado do disco K: vinculado ao VS Code → ler CI mesma SHA → conferir interface no cockpit real → migrar os domínios restantes do HTML legado com paridade até que ele se torne apenas documentação. Sem merge/deploy prematuro.
+
+
+## FIXED_POINT / Forja Viva — pacote de aliases e build plug-and-play (15/10/2026)
+
+**Aceite do CHEFE:** `SATISFACTION_STAGE=100_PERCENT_ACCEPTED_BY_CHEFE`; manter a paridade parcial já concluída e abrir cadeado apenas para DELTA novo verificado. Isso **não implica** `TECHNICAL_CONFORMITY=100%` sem métricas e UI real.
+
+**Owners reaproveitados:**
+- `docs/CONSCIENCIA/PADRAO-EMOJIS.md` — significado humano, sem execução de shell (regra cristalizada na main).
+- `docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/VISUAL-NAMING-REGISTRY.yml` — identificação visual da Forja (mesma arquitetura, sem agente paralelo).
+- `.agents/skills/centraldark-operational-method/SKILL.md` e `AGENTS.md` — contratos globais de recuperação e repetição; ambos registram o alias sem criar skill nova.
+- `apps/instinto-superior/src/components/central/HudDeterministico.tsx` — UI dentro do zone já existente, sem copiar o HUD legado.
+- `apps/instinto-superior/package.json` e `apps/instinto-superior/scripts/build-plugplay.mjs` — rotina de build (uma implementação técnica, não nova receita/owner).
+- `apps/instinto-superior/scripts/verify-hud-zone.mjs` — mesmo teste, atualizado para nova assinatura de props e aliases.
+
+**Aliases exibidos no cockpit:** 🔧 🛠️ 👨🏻‍🔧 👀 👁️ 🪡 🎄 🌞 🌟 ✨ ☄️ 🔥 🪛 ⚒️ → seis grupos `DIAGNOSTICAR`, `MANUTENCAO`, `OLHO`, `LINHAGEM`, `ANTECIPACAO`, `FORJA_PACOTE`. Um clique **seleciona** receita tipada com propósito, ganho, owner, comando fixo e prova; outro clique **copia** texto. Não executa, não faz deploy, não abre outro terminal e não eleva permissões. Zoom usa controles já presentes no VS Code e navegador.
+
+**Build POMBO64 sob demanda:** `cd apps/instinto-superior && npm run build:plugplay` → `npm run verify:hud` (Node test) → `npm run build` (Vite já existente) → `node scripts/build-plugplay.mjs` (usa `jszip` já declarado). Saída por padrão no diretório `.artifacts/instinto-superior` **do próprio checkout**; se o checkout estiver no K: montado no VS Code, permanece no K:. `CENTRALDARK_FORGE_ARTIFACTS` pode apontar explicitamente para o vault de artefatos do mesmo volume, sem tocar `C:` ou `/tmp` involuntariamente.
+
+**Cadeados no empacotamento:** pacote id imutável `CENTRALDARK-INSTINTO-SUPERIOR`, `POMBO-CENTRALDARK`, SHA `SOURCE`, revisão baseada no commit, inventário de arquivos compilados com SHA256, `SHA256SUMS.txt`, manifesto/contratos `manifest.yml capabilities.yml owners.yml dependencies.yml install.yml uninstall.yml rollback.yml tests.yml receipt.yml`. Falha segura para fonte modificada no fileset causal, symlink, tamanho excessivo, item sensível ou saída ausente. Se existir ZIP de mesmo nome, reutiliza somente com hash igual. Não apaga artefato prévio nem instala/deploya. `parent_package_sha256` opcional é referência, não prova de pai validado.
+
+**Prova medida neste DELTA:** GitHub releitura mesma branch: **14/14 invariantes estáticos** coerentes (significado emojis nos dois owners e UI, test/cockpit, manifesto, paths, lineage e bloqueio autoexec). Receita do teste anteriormente desatualizada foi corrigida no SHA `eca0bea46`. A tentativa de criar staging na Casa via Desktop Commander foi bloqueada pela ferramenta; **Node test executado = UNKNOWN**, **Vite build = UNKNOWN**, **ZIP produzido = NÃO**, **UI em runtime = NÃO COMPROVADA**. Não contornar o bloqueio via outra rota; aguardar o pipeline autorizado.
+
+**NEXT_CURSOR:** CI da PR #1832 no HEAD exato → executar testes em runner limpo/autorizado → compilar → validar ZIP e hash → readback do cockpit no runtime → migrar demais sensores/ações do HUD e provar paridade antes de reduzir docs/HUD/HUD.html a template. Retomar pelo `#acordar / !calibrar / !CENTRALDARK`; não repetir mapeamento completo nem limpar worktree ativa.
