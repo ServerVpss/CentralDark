@@ -40,3 +40,42 @@ test("replay documental nao inventa execucao nem novos selos", () => {
   assert.doesNotMatch(zone, /fetch\(/);
   assert.doesNotMatch(zone, /sendText\(/);
 });
+
+
+test("Forja Viva mapeia emojis para receitas existentes sem execucao automatica", () => {
+  const symbols = ["🔧", "🛠️", "👨🏻‍🔧", "👀", "👁️", "🪡", "🎄",
+    "🌞", "🌟", "✨", "☄️", "🔥", "🪛", "⚒️"];
+  for (const symbol of symbols) {
+    assert.ok(zone.includes(symbol), "simbolo ausente: " + symbol);
+  }
+  for (const capability of ["DIAGNOSTICAR", "MANUTENCAO", "OLHO",
+    "LINHAGEM", "ANTECIPACAO", "FORJA_PACOTE"]) {
+    assert.ok(zone.includes('id: "' + capability + '"'));
+  }
+  assert.ok(zone.includes("Copiar receita · não executar"));
+  assert.ok(zone.includes('selectedForge') || zone.includes('forgeSelected'));
+  assert.ok(zone.includes("SOURCE_DEFINED · RUNTIME_NOT_PROVEN"));
+  assert.ok(!zone.includes("execSync("));
+  assert.ok(!zone.includes("spawn("));
+  assert.ok(!zone.includes("shell.openExternal("));
+});
+test("plug-play valida antes de compilar e exige artefato com integridade", () => {
+  const pkg = JSON.parse(read("apps/instinto-superior/package.json"));
+  const packager = read("apps/instinto-superior/scripts/build-plugplay.mjs");
+  assert.ok(pkg.scripts["verify:hud"].includes("verify-hud-zone.mjs"));
+  assert.equal(pkg.scripts["build:plugplay"],
+    "npm run verify:hud && npm run build && node scripts/build-plugplay.mjs");
+  for (const field of ["SOURCE_FILES_DIRTY_STOP_AND_RECONCILE", "SYMLINK_REJECTED",
+    "POMBO-CENTRALDARK", "SHA256SUMS.txt", "REQUIRES_AUTHORIZED_INSTALL_AND_RUNTIME_READBACK"]) {
+    assert.ok(packager.includes(field), "packager missing " + field);
+  }
+  assert.ok(packager.includes("CENTRALDARK_FORGE_ARTIFACTS"));
+  assert.ok(!packager.includes("rmSync("));
+});
+test("o checklist usa a mesma consulta do pai e não vira novo coletor", () => {
+  assert.ok(zone.includes("estado?: EstadoCentralDark"));
+  assert.ok(zone.includes("estado?.apiHealth"));
+  assert.ok(zone.includes("estado?.screenpipe"));
+  assert.ok(zone.includes("CHECK-LIST-DIARIO.md"));
+  assert.ok(!zone.includes("new WebSocket("));
+});
