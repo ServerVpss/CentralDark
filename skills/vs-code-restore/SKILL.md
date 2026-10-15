@@ -186,3 +186,32 @@ Depois da leitura imediata do teste Bash, o arquivo Casa recebeu **dois eventos 
 - Para acessibilidade da interface, preferir rótulos e descrições inequívocos na paleta (`VS Code`, `Terminal existente`, `CentralDark Trace`) e status legíveis. **Não** fazer captura oculta de áudio ou transcrição de conversas; a extensão não escuta o microfone.
 
 **Casos de teste semântico**: “5S, foca a janela” ⇒ foco VS Code, “esquilos, salva receita” ⇒ registrar skill, “abrir Hermes” ⇒ capacidade Hermes existente; palavra realmente desconhecida com duas ações possíveis ⇒ perguntar antes de agir. `ASR_CONFLICT != OPERATOR_COMMAND`.
+
+
+## 🔌 Terminal interativo VS Code ↔ MCP CentralDark — descoberta e prova de sessão (2026-10-15)
+
+**DELTA do CHEFE:** expor **uma sessão real do terminal integrado VS Code** aos consumidores autorizados do MCP CentralDark e do cockpit Instinto Superior, preservando Hermes e Claude Code que já executam trabalho. Esta é uma evolução de `skills/vs-code-restore` (UI + foco) e da skill existente `centraldark-vscode-log-bridge` (telemetria). **Não criar outro MCP, agente, terminal extra, listener público, capturador de prompt ou segunda janela.**
+
+**Probe comprovada por Remote Desktop Commander Casa:** em 15/10/2026 às 13:28:57 -03:00, janela VS Code `PID=22468 HWND=67400` com `xterm-helper-textarea` em árvore UIAutomation. Em 13:26, `mcp__CENTRALDARK__list_sessions` reportou `No active sessions`. Isso confirma **GUI_PRESENT**, não `MCP_INTERACTIVE_SESSION_BOUND`, nem prova que a mesma `xterm-helper-textarea` pertença a Hermes ou Claude Code. Não selecionar por PID fixo de sessão anterior.
+
+**Catálogo MCP read-only:** `mcp_admin_catalog(filter="remote_desktop")` retornou a rota canônica `RDC_DESKTOP_COMMANDER` para `SEGREDO|mcp.desktopcommander.app/mcp`; `mcp_admin_catalog(filter="terminal")` retornou **0 tools/rotas próprias de terminal**. Portanto `UIA_DISCOVERED=true` e `ATTACH_AND_SEND=UNKNOWN`: a rota do conector alcança a Casa, **mas não fornece attach nativo comprovado ao PTY do VS Code**.
+
+**Receita do mesmo owner, em ordem (somente quando a sessão alvo estiver disponível):**
+
+```text
+1) DISCOVER_DEVICE → LIVE_CASA_ID + UTC/TIMESTAMP
+2) UIA_FRESH_WINDOW → PID/HWND/title VS Code real + extension owner
+3) TERMINAL_ENUM → same window xterm-helper-textarea + nome/shell/parent/owner da sessão
+4) CHECK_AGENT_IDLE_OR_AUTHORIZED_INPUT_CHANNEL (Hermes ≠ Claude Code ≠ Bash)
+5) FOCUS_TARGET → verify FocusedElement == selected terminal in same window
+6) SEND_EXACTLY_ONCE (somente payload inofensivo / missão tipada autorizada)
+7) OBSERVE_SHELL_EXIT_OR_AGENT_ACK + CORRELATION_ID + receipt sanitizado
+8) MCP_CATALOG_SURFACE → role, provenance, consent, status, not raw terminal scrollback
+9) IF_NO_IDENTIFIABLE_SESSION → FAIL_CLOSED + copy-only + NEXT_CURSOR
+```
+
+**Não** capturar segredos, comandos completos ou stdout bruto nos logs. `focus()` ≠ `writeText()` ≠ `agent_received()` ≠ `command_pass()`. Nunca enviar `git reset/clean/rebase/push` a uma sessão ocupada. Os comandos de leitura executados pelo **Desktop Commander** criam sessão sob seu próprio gerenciador, não se tornam automaticamente sessões VS Code. Enquanto `list_sessions` estiver vazio ou o target shell/agent não puder ser provado, **não enviar mensagem ao terminal via GUI**.
+
+**Contraprova de concorrência 15/10 13:33 -03:00:** Casa `K:\` HEAD `677fccd4b2`, stash/fetch vivos, `git clean` não observado no instante, sem `index.lock`, `git ls-files --others --exclude-standard` retornou **85.980 untracked**. `WORKTREE_CLEAN_ALLOWED=false`; não disputar alterações do Claude/Hermes, não limpar a Casa principal.
+
+**Projeção no Instinto Superior (sem novo owner):** `apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx` → `GavetaForja` lista `RDC_DESKTOP_COMMANDER`, owner desta skill e `UIA_IDENTIFICADA_SESSAO_NAO_VINCULADA`. A interface é catálogo de disponibilidade, não botão de execução. `NEXT_CURSOR`: implementar binding de sessão **privado e autenticado** no caminho de ferramentas existente, validar ida/ACK do agente em sessão alvo ociosa e somente depois marcar `CONNECTED`.
