@@ -113,6 +113,79 @@ INTENT
 
 Não consumir todos os aprendizados antes de agir. Não exigir MetaLupa/TLC23/Writer ritual quando o próprio delta não depende disso.
 
+## 🫀 Metabolismo operacional da runtime central — ferida, costura, cristal e cadeado
+
+Esta é uma **especialização do ciclo operacional acima**, consumida sob demanda. Não cria novo cérebro, daemon, health monitor, watchdog, scheduler, ledger, HUD, logger, gate ou executor. A skill **define como interpretar e agir**; observação contínua só existe quando um consumer/scheduler já implantado a executa e comprova. `SKILL.md` escrito != runtime monitorado.
+
+### Pulso do organismo: observar a cadeia causal, não apenas a luz verde
+
+```text
+INTENÇÃO_VIGENTE + CURRENT/FINGERPRINT
+→ MAPA-DO-CEREBRO (setor → owner → dependências materiais)
+→ SENSORES EXISTENTES POR SETOR (GitHub/main, VPS, Casa se pertinente, MCP, Hermes, systemd/PM2 conforme owner, logs, rede, CI)
+→ RECONCILIAR TIMESTAMP + FONTE + ESCOPO + HEAD + PROCESSO + EFEITO
+→ SAÚDE DA CAPACIDADE + FERIDAS ATIVAS + ÚLTIMO VERDE PRESERVÁVEL
+→ MENOR DELTA NO OWNER QUE CAUSOU A FERIDA
+→ EFEITO + CONTRAPROVA + CRISTAL + CADEADO + NEXT_CURSOR
+```
+
+- Separar **identidade**, **código na main**, **transporte**, **serviço em execução**, **health da capacidade**, **efeito entregue** e **memória/prova**. `MAIN_GREEN != VPS_HEALTHY`; `MCP_RESPONDE != TODAS_AS_ROTAS_FUNCIONAM`; `PORTA_ABERTA != EFEITO_CORRETO`; `CI_SUCCESS != DEPLOYED`; `HUD_VERDE != REALIDADE_VERDE`.
+- Reutilizar o roteador `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md`, o coletor `apps/modulos/mcp/src/log-funnel.js` (`events/sectors/services`, `appendCentralEvent`), a rota autenticada `/admin/logs/stream` quando disponível e os probes/receipts já pertencentes a cada owner. O coletor é **telemetria**, não executor ou juiz, e não recebe segredos.
+- Probe é material apenas com origem, instante, alvo e resultado. Timeout, erro de parse, caminho inacessível, sensor offline e sinal envelhecido não provam falha do serviço observado. Testar rota independente autorizada quando ela realmente discriminar a causa; falha local não interrompe setor independente.
+- Latência, backlog, erros, restarts, consumo de recursos e freshness são **sinais candidatos**, não limites arbitrários. Comparar baseline real e contrato do serviço; não inventar SLO, percentual verde, prazo de recuperação ou cobertura global.
+- Não varrer tudo em toda ação. Ao tocar um setor, seguir somente suas dependências e consequências materiais; expandir o cone se aparecer evidência de propagação. A Casa offline não invalida automaticamente a VPS; uma VPS viva não prova os clientes nem a Casa.
+
+### Feridas: detectar, atribuir, costurar sem ampliar o machucado
+
+```text
+FERIDA_DETECTADA
+→ INCIDENTE_EXISTENTE? CORRELACIONAR, NÃO DUPLICAR
+→ CLASSIFICAR: NOVA | AGRAVADA | RECORRENTE | REABERTA | HISTÓRICA | FALSO_ALARME | UNKNOWN
+→ CAUSA: CHANGE_INTRODUCED | PREEXISTING | EXTERNAL | SENSOR | UNKNOWN
+→ PROVAR FONTE + BASELINE + DELTA + DEPENDÊNCIAS + EFEITO OBSERVADO
+→ PROTEGER LAST_KNOWN_GOOD + ESTADO_DIRTY + DADOS + SECRETOS
+→ COSTURAR O OWNER EXATO (repair | rollback causal | rota autorizada alternativa)
+→ TESTAR O CONE AFETADO + BACKCHECK NO ÚLTIMO VERDE
+→ CONTRAPROVA NEGATIVA (a causa original não se reproduz; adjacências essenciais não regrediram)
+→ READBACK NO RUNTIME REAL SE HOUVER EFEITO DE RUNTIME
+→ CRISTALIZAR RECEITA REUTILIZÁVEL NO OWNER EXISTENTE
+→ SELAR CADEADO OU DEIXAR ABERTO COM BLOQUEIO EXATO
+```
+
+- **Ferida criada pela nossa mudança:** confrontar estado anterior e novo (SHA/path/config/processo), atribuir causalidade antes de culpar um serviço; se a mudança feriu algo, não declarar conclusão. Voltar uma casa **apenas no escopo afetado**, restaurar o verde ou corrigir na mesma costura, retestar e preservar o delta útil não causador. Não usar `git reset --hard`/`clean` em checkout ou runtime com patrimônio; scratch reutilizável segue sua proteção própria.
+- **Ferida já machucada/recorrente:** recuperar incidente, tentativas, último green e aprendizagem. Remediar **causa persistente** no mesmo owner, sem repetir restart cego, sem mascarar exceção, sem trocar sintoma por `PASS`. Se reaparecer após selo, **REOPEN** vinculado à prova anterior; não apagar a cicatriz nem fabricar incidente paralelo.
+- **Ferida de sensor/transporte:** corrigir o probe ou seguir outro caminho autorizado antes de afirmar indisponibilidade do alvo. Não confundir `WRAPPER_PREFLIGHT_PASS` com saúde do serviço.
+- Cada reparo tem fronteiras: um Writer por escopo; proteção de secrets; sem mudanças em massa, deploy, restart ou rollback não pertinentes; preservar logs e evidências existentes, sujeitos à política de retenção e privacidade.
+
+### Cadeado: tocou, cuidou, consertou, melhorou — tem que selar **no lugar correto**
+
+```text
+TOCOU = alvo/owner + baseline + ação ou observação + rastro
+CUIDOU = risco contido + último verde protegido + dependências não regredidas
+CONSERTou = falha original reproduzida/medida → efeito corrigido + contraprova
+MELHOROU = melhoria incremental com comparação mensurável antes × depois
+CRISTALIZOU = causa + sequência + owner + fingerprint + testes + rollback/fallback + prova reutilizável
+SELO = receipt endereçável + código/doc SHA quando houver + effect readback + status honesto + NEXT_CURSOR
+```
+
+O selo fica **no owner que governa a capacidade** e no receipt/ledger existente, não em chat, clone de arquivo, segundo HUD ou nota solta. Quando a correção for comportamento operacional, este `SKILL.md` é owner do método; código/runtime continuam pertencendo a seus owners específicos. Conhecimento empírico confirmado pode alimentar `docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md` pelo fluxo de aprendizado já existente, sem duplicar eventos do log-funnel. HUD e grafo são **projeções**: atualizar a superfície canônica existente quando aplicável, conservando IDs, nós, setas e layout, sem torná-la autoridade ou declarar runtime recuperado pelo visual.
+
+Receipt mínimo por ferida material: `INTENT_ID / WOUND_ID(correlação existente) / SECTOR / OWNER / HOST / BASELINE_SHA_OU_FINGERPRINT / DETECTED_AT / SYMPTOM / ROOT_CAUSE(provada|hipótese) / BEFORE / DELTA_PATHS / AFTER / NEGATIVE_TEST / REGRESSION_BACKCHECK / READBACK / STATUS / RECEIPT_REF / NEXT_CURSOR`. Campo indisponível é `UNKNOWN`, não valor inventado; registrar segredo apenas como presença/ausência se autorizado, nunca seu valor.
+
+**Grau de conformidade** é calculado sobre os critérios *pertinentes ao objetivo*, não sobre quantidade de logs, comandos, emojis ou checks verdes:
+
+```text
+APPLICABLE = critérios materiais do GOAL + invariantes herdados
+PROVED_PASS = critérios com prova e contraprova válidas no alvo correto
+CONFORMIDADE_COMPROVADA = PROVED_PASS / APPLICABLE (mostrar numerador e denominador)
+UNKNOWN | FAIL | BLOCKED = parcelas explícitas, nunca somadas a PASS
+N/A = exclusão justificada antes do cálculo, sem esconder critério material
+100% DO ESCOPO != 100% DO ORGANISMO
+FIXED_POINT = objetivo terminal satisfeito + continuidade preservada + cadeado comprovado
+```
+
+Distinguir `PRESERVADO` (não regrediu), `REPARADO` (falha corrigida), `MELHORADO` (benefício adicional provado), `PARCIAL` (há efeito mas falta critério material), `REABERTO` (regressão medida) e `BLOCKED/UNKNOWN` (sem prova suficiente). Se o arquivo documental foi alterado mas a runtime não consumiu, o selo é **DOCUMENTED_ONLY**: não inventar deploy, automação, vigilância contínua ou cura global. O cadeado fecha a ferida **somente** no nível comprovado; se a causa voltar, reabre o mesmo fio e costura o cone afetado.
+
 ## 🔏 Lei do Rastro
 
 ```text
