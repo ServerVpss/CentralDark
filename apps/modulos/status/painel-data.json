@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(vscode): selar ZENDRIVE CLI v0.1.1, prova de logs e limites de runtime",
+    "lastCommit": "docs(agents): vincular ZENDRIVE CLI mental ao VS Code, Hermes e funil único",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T01:34:41.516Z",
+      "titulo": "Push na main · f5c1fe38981a93f313dbfe1673401786697746f2",
+      "detalhe": "docs(agents): vincular ZENDRIVE CLI mental ao VS Code, Hermes e funil único",
+      "area": "Repositório",
+      "sha": "f5c1fe3",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T01:33:08.872Z",
       "titulo": "Push na main · d4f1c09796015a29deed9759c2df20feea7319a8",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "7910f75",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T17:17:35.404Z",
-      "titulo": "Push na main · fad3ca925eaad834ac939fb5e46c377b33866437",
-      "detalhe": "🧾 docs(receipt): seal pertinent-learning index delta with proof and next cursor",
-      "area": "Repositório",
-      "sha": "fad3ca9",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T01:34:41.516Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · f5c1fe38981a93f313dbfe1673401786697746f2 (f5c1fe3)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T01:33:08.872Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 7910f75e98e6d10f250bd2d45d91808ef851e2c4 (7910f75)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T17:17:35.404Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · fad3ca925eaad834ac939fb5e46c377b33866437 (fad3ca9)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T01:33:08.872Z",
-  "updatedAtBR": "14/10/2026, 22:33:08 BRT"
+  "updatedAt": "2026-10-15T01:34:41.516Z",
+  "updatedAtBR": "14/10/2026, 22:34:41 BRT"
 }
