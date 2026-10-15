@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🗣️ gramática: narrar apenas leitura real de banco, arquivo e pasta",
+    "lastCommit": "🔒 fix(auto-sync): source-only main fetch with active Forge branch preserved",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T00:44:53.973Z",
+      "titulo": "Push na main · 0c377e6d2dfe57006febde63b07de1f9c76d4c51",
+      "detalhe": "🔒 fix(auto-sync): source-only main fetch with active Forge branch preserved",
+      "area": "Repositório",
+      "sha": "0c377e6",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-14T23:25:58.950Z",
       "titulo": "Push na main · bb92c9fb256febd1796e6d493a81ececf7830d7d",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "0d3b718",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T15:44:58.545Z",
-      "titulo": "Push na main ┬À 523d3ec0f43c5f727ca7c0c2a1b1f9f952070062",
-      "detalhe": "­ƒ½Ç Cristalizar: Cora├º├úo da Rota integrado ao HUD.html",
-      "area": "Reposit├│rio",
-      "sha": "523d3ec",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T00:44:53.973Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 0c377e6d2dfe57006febde63b07de1f9c76d4c51 (0c377e6)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-14T23:25:58.950Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 0d3b718933d8c4c86c4d1c45cd6cd7a84d7d0862 (0d3b718)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T15:44:58.545Z",
-      "ia": "@segredounlock",
-      "action": "­ƒôî Push na main ┬À 523d3ec0f43c5f727ca7c0c2a1b1f9f952070062 (523d3ec)",
-      "area": "Reposit├│rio",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-14T23:25:58.950Z",
-  "updatedAtBR": "14/10/2026, 20:25:58 BRT"
+  "updatedAt": "2026-10-15T00:44:53.973Z",
+  "updatedAtBR": "14/10/2026, 21:44:53 BRT"
 }
