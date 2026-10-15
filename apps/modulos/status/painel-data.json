@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "🤝 Auto Conflict-Resolver — aceita conflitos sem humano (estratégia ours)",
+    "lastCommit": "🚀 Auto Sync + Micro-Deploy Cockpit — 5 botões paralelos + deploy ao vivo",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T16:54:31.754Z",
+      "titulo": "Push na main · dd2a30a0e39dac094a0f9383f0931681d1818c9f",
+      "detalhe": "🚀 Auto Sync + Micro-Deploy Cockpit — 5 botões paralelos + deploy ao vivo",
+      "area": "Repositório",
+      "sha": "dd2a30a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T16:51:29.401Z",
       "titulo": "Push na main · a19bda8178fcb1ae11b53246a8f301420c1c1cd7",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "e86f782",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-14T23:13:20.549Z",
-      "titulo": "Push na main · f57c452d726cfd71a6a6ec568d4a444da10967ef",
-      "detalhe": "docs(receipts): seal CHEFE-confirmed Oi Hermes Terminal 6 delivery",
-      "area": "Repositório",
-      "sha": "f57c452",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T16:54:31.754Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · dd2a30a0e39dac094a0f9383f0931681d1818c9f (dd2a30a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T16:51:29.401Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · e86f78240a704ede97c5189a7e4d27a3cb85f553 (e86f782)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-14T23:13:20.549Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · f57c452d726cfd71a6a6ec568d4a444da10967ef (f57c452)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T16:51:29.401Z",
-  "updatedAtBR": "15/10/2026, 13:51:29 BRT"
+  "updatedAt": "2026-10-15T16:54:31.754Z",
+  "updatedAtBR": "15/10/2026, 13:54:31 BRT"
 }
