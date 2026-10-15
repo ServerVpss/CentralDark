@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(instinto-superior): preservar evolucoes locais — GoalsDashboard, SyncCenter, MapaOwners, auto-sync",
+    "lastCommit": "feat(instinto): painel seguro de solicitacoes de permissoes na aba Admin existente",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-15T20:33:10.192Z",
+      "titulo": "Push na main · 291db5d1c2fa4fb2e4b6af3c8d1e33330da04bef",
+      "detalhe": "feat(instinto): painel seguro de solicitacoes de permissoes na aba Admin existente",
+      "area": "Repositório",
+      "sha": "291db5d",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-15T20:27:16.610Z",
       "titulo": "Push na main · e744e2c9fe3665ea10853902e72e6ff77d4ee0b1",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "4834296",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T01:52:34.201Z",
-      "titulo": "Push na main · 35165b57d4b0a72761fe8b171450248718ba5eba",
-      "detalhe": "fix(cockpit): exibir galeria do Design Center apenas em sessão autenticada",
-      "area": "Repositório",
-      "sha": "35165b5",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-15T20:33:10.192Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 291db5d1c2fa4fb2e4b6af3c8d1e33330da04bef (291db5d)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-15T20:27:16.610Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 48342967c77aa974446b535f89e39a8079d29352 (4834296)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T01:52:34.201Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 35165b57d4b0a72761fe8b171450248718ba5eba (35165b5)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-15T20:27:16.610Z",
-  "updatedAtBR": "15/10/2026, 17:27:16 BRT"
+  "updatedAt": "2026-10-15T20:33:10.192Z",
+  "updatedAtBR": "15/10/2026, 17:33:10 BRT"
 }
