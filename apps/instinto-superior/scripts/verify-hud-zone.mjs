@@ -75,6 +75,29 @@ test("plug-play valida antes de compilar e exige artefato com integridade", () =
   assert.ok(packager.includes("CENTRALDARK_FORGE_ARTIFACTS"));
   assert.ok(!packager.includes("rmSync("));
 });
+test("centro de integridade exibe owners e estados sem falsa prova", () => {
+  assert.ok(zone.includes('id="cd-integridade-estado"'));
+  for (const campo of [
+    "estado?.github", "estado?.mainSha", "estado?.deploy", "estado?.vpsSha",
+    "estado?.apiHealth", "estado?.casaSite", "estado?.screenpipe",
+    "estado?.receipts", "estado?.nextCursor", "estado?.fonte", "estado?.atualizadoEm",
+  ]) {
+    assert.ok(zone.includes(campo), "projeção sem fonte: " + campo);
+  }
+  for (const marca of [
+    "Central de Integridade · Compasso Único", "!CENTRALDARK", "#ACORDAR",
+    "!CALIBRAR", "#CRISTALIZAR", "LOCK_ENFORCEMENT = UNKNOWN",
+    "CI_EXACT_HEAD = UNKNOWN", "não envia comandos",
+    "apps/instinto-superior/src/lib/cockpit.functions.ts",
+  ]) {
+    assert.ok(zone.includes(marca), "rótulo/limite ausente: " + marca);
+  }
+  assert.ok(zone.includes("SEM READBACK NESTA CONSULTA"));
+  assert.ok(zone.includes('situacao === "PASS"'));
+  assert.ok(zone.includes('situacao === "FAIL" || situacao === "BLOCKED"'));
+  assert.doesNotMatch(zone, /\bspawn\s*\(|\bexecSync\s*\(/);
+});
+
 test("o checklist usa a mesma consulta do pai e não vira novo coletor", () => {
   assert.ok(zone.includes("estado?: EstadoCentralDark"));
   assert.ok(zone.includes("estado?.apiHealth"));
