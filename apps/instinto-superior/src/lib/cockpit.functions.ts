@@ -167,6 +167,19 @@ async function medirApi(path: string): Promise<Probe> {
   }
 }
 
+// O /health do Hermes-Core não usa o campo genérico `ok`; sua assinatura
+// operacional é status=ok + servico=hermes-core. Sem essa identificação,
+// HTTP 200 prova apenas transporte e o HUD mantém UNKNOWN/RUNNING.
+function apiHealthIdentificada(sonda: Probe): Probe {
+  if (sonda.estado === "UNKNOWN" || sonda.estado === "FAIL") return sonda;
+  const status = texto(sonda.dados?.["status"])?.toLowerCase();
+  const servico = texto(sonda.dados?.["servico"])?.toLowerCase();
+  if (sonda.httpStatus === 200 && status === "ok" && servico === "hermes-core") {
+    return { ...sonda, estado: "PASS", erro: null };
+  }
+  return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_HERMES_CORE" };
+}
+
 async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
   if (casaOnly && process.platform !== "win32") {
     return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_ONLY_WINDOWS", dados: null };
@@ -433,6 +446,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirActions(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
+    const apiHealthMedido = apiHealthIdentificada(apiHealth);
     const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
     const heartbeat: Probe =
       heartbeatSelf === "stale"
@@ -462,7 +476,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       liveFabric: liveFabric.estado,
       grafoVivo: grafoVivo.estado,
       omniRouter: omniRouter.estado,
-      apiHealth: apiHealth.estado,
+      apiHealth: apiHealthMedido.estado,
       heartbeat: heartbeat.estado,
       omniModels: omniModels.estado,
       receipts: receipts.estado,
@@ -488,7 +502,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniHttp: omniRouter.httpStatus,
       nextCursor: texto(liveFabric.dados?.["next_cursor"]),
       erroLiveFabric: liveFabric.erro,
-      apiHealthHttp: apiHealth.httpStatus,
+      apiHealthHttp: apiHealthMedido.httpStatus,
       heartbeatHttp: heartbeat.httpStatus,
       heartbeatSelf,
       omniModelsHttp: omniModels.httpStatus,
