@@ -5,6 +5,7 @@ import {
   Gauge,
   GitBranch,
   House,
+  KeyRound,
   Mail,
   Monitor,
   Radio,
@@ -14,44 +15,11 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
-
-function tone(estado: Estado) {
-  if (estado === "PASS") return "border-neon-green/30 bg-neon-green/5 text-neon-green";
-  if (estado === "RUNNING") return "border-neon-blue/30 bg-neon-blue/5 text-neon-blue";
-  if (estado === "FAIL" || estado === "BLOCKED")
-    return "border-destructive/40 bg-destructive/10 text-destructive";
-  if (estado === "AUTH_REQUIRED") return "border-gold/30 bg-gold/5 text-gold";
-  return "border-border bg-muted/40 text-muted-foreground";
-}
-
-function Signal({
-  label,
-  estado,
-  detail,
-  icon: Icon,
-}: {
-  label: string;
-  estado: Estado;
-  detail: string;
-  icon: typeof Activity;
-}) {
-  return (
-    <article className="panel p-4">
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-sm font-semibold">{label}</span>
-        <Icon className="size-4 text-muted-foreground" />
-      </div>
-      <span
-        className={`mt-3 inline-flex rounded-full border px-2 py-1 font-mono text-[10px] ${tone(estado)}`}
-      >
-        {estado}
-      </span>
-      <p className="mt-3 break-words font-mono text-[10px] leading-relaxed text-muted-foreground">
-        {detail}
-      </p>
-    </article>
-  );
-}
+import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
+import {
+  CartaoResponsabilidade,
+  type ContratoCartaoResponsabilidade,
+} from "@/components/central/CartaoResponsabilidade";
 
 export function ObservabilidadeCentralDark() {
   const ler = useServerFn(lerEstadoCentralDark);
@@ -61,7 +29,24 @@ export function ObservabilidadeCentralDark() {
     refetchInterval: 15_000,
     retry: false,
   });
+  const consultarConexoes = useServerFn(lerConexoesCentralDark);
+  const conexoes = useQuery({
+    queryKey: ["centraldark", "contas-conexoes"],
+    queryFn: () => consultarConexoes(),
+    refetchInterval: 60_000,
+    retry: false,
+  });
+  const consultaCatalogoFresca =
+    conexoes.dataUpdatedAt > 0 &&
+    Date.now() - conexoes.dataUpdatedAt <= 90_000 &&
+    !conexoes.isError;
+  // PASS atesta apenas a resposta do catálogo do Hub, não o processo em :8098.
+  const estadoCatalogo: Estado = consultaCatalogoFresca
+    ? (conexoes.data?.estado ?? "UNKNOWN")
+    : "UNKNOWN";
   const d = q.data;
+  const medidoEm =
+    q.dataUpdatedAt > 0 ? new Date(q.dataUpdatedAt).toLocaleTimeString("pt-BR") : null;
   const unknown: Estado = "UNKNOWN";
   const sinais = [
     {
@@ -136,7 +121,140 @@ export function ObservabilidadeCentralDark() {
       detail: d?.desktopFonte ?? "UNKNOWN",
       icon: Monitor,
     },
-  ];
+  ] as const;
+  const leituraFresca = Boolean(medidoEm) && Date.now() - q.dataUpdatedAt <= 45_000 && !q.isError;
+  // Contrato obrigatório para cada sinal deste owner: todos os nomes têm dono e tarefa.
+  type Metadados = Pick<
+    ContratoCartaoResponsabilidade,
+    | "nomeHumano"
+    | "paraQueServe"
+    | "responsabilidade"
+    | "ownerTecnico"
+    | "fonteDaProva"
+    | "escopoEstado"
+    | "limiteDaProva"
+  >;
+  const metadados: Record<(typeof sinais)[number]["label"], Metadados> = {
+    "API CentralDark": {
+      nomeHumano: "🩺 Porta de saúde da API",
+      paraQueServe: "É a porta que responde se a API CentralDark está acessível.",
+      responsabilidade: "Responder à verificação de saúde da API.",
+      ownerTecnico: "API CentralDark · GET /health",
+      fonteDaProva: "API CentralDark · /health",
+      escopoEstado: "da rota /health",
+      limiteDaProva: "A porta responder não prova que todos os serviços internos funcionem.",
+    },
+    Heartbeat: {
+      nomeHumano: "🫀 Batimento do sistema",
+      paraQueServe: "É o sinal de vida informado pelo serviço.",
+      responsabilidade: "Expor o estado do pulso consultado.",
+      ownerTecnico: "API CentralDark · GET /heartbeat",
+      fonteDaProva: "API CentralDark · /heartbeat",
+      escopoEstado: "do pulso consultado",
+      limiteDaProva: "Uma resposta antiga não comprova funcionamento atual.",
+    },
+    "Omni Router": {
+      nomeHumano: "🌀 Caminho dos modelos",
+      paraQueServe: "Mostra se a porta de encaminhamento do Omni responde.",
+      responsabilidade: "Informar o estado da rota de orquestração.",
+      ownerTecnico: "Omni Router · GET /api/omni/status",
+      fonteDaProva: "API CentralDark · /api/omni/status",
+      escopoEstado: "da rota Omni",
+      limiteDaProva: "Não prova que cada modelo consiga concluir uma tarefa.",
+    },
+    "Omni Models": {
+      nomeHumano: "🧠 Lista de motores",
+      paraQueServe: "Consulta os modelos anunciados pela infraestrutura Omni.",
+      responsabilidade: "Expor a consulta ao catálogo de motores.",
+      ownerTecnico: "Omni Router · GET /api/omni/models",
+      fonteDaProva: "API CentralDark · /api/omni/models",
+      escopoEstado: "da consulta aos modelos",
+      limiteDaProva: "Modelo listado não significa modelo disponível ou testado.",
+    },
+    Receipts: {
+      nomeHumano: "🧾 Comprovantes do trabalho",
+      paraQueServe: "É a gaveta em que procuramos recibos de operações.",
+      responsabilidade: "Servir o índice de evidências de microdeploy.",
+      ownerTecnico: "Microdeploy · GET /api/microdeploy/receipts/index.json",
+      fonteDaProva: "API CentralDark · receipts/index.json",
+      escopoEstado: "do índice de recibos",
+      limiteDaProva: "Acesso ao índice não comprova cada operação registrada.",
+    },
+    "Live Fabric": {
+      nomeHumano: "⚙️ Esteira de execução",
+      paraQueServe: "Mostra o estado que a esteira de execução reporta.",
+      responsabilidade: "Expor o status do Live Fabric.",
+      ownerTecnico: "Live Fabric · GET /api/live-fabric/status",
+      fonteDaProva: "API CentralDark · /api/live-fabric/status",
+      escopoEstado: "do status da esteira",
+      limiteDaProva: "O endpoint responder não prova que uma tarefa foi concluída.",
+    },
+    "Grafo Vivo": {
+      nomeHumano: "🕸️ Mapa das ligações",
+      paraQueServe: "É o mapa consultável das conexões e dependências.",
+      responsabilidade: "Expor o grafo da infraestrutura viva.",
+      ownerTecnico: "Live Fabric · GET /api/live-fabric/graph",
+      fonteDaProva: "API CentralDark · /api/live-fabric/graph",
+      escopoEstado: "da rota do grafo",
+      limiteDaProva: "Grafo acessível não garante que cada nó esteja ativo.",
+    },
+    "Casa / Instinto": {
+      nomeHumano: "🏠 Página local",
+      paraQueServe: "Verifica se a página do host consultado responde.",
+      responsabilidade: "Medir o acesso à interface local do servidor.",
+      ownerTecnico: "Servidor do Cockpit · 127.0.0.1:4175",
+      fonteDaProva: "Host do servidor · HTTP 127.0.0.1:4175",
+      escopoEstado: "da página local",
+      limiteDaProva: "Loopback mede o host do servidor, não necessariamente a Casa Windows.",
+    },
+    "Screenpipe Casa": {
+      nomeHumano: "👀 Sensor de atividade",
+      paraQueServe: "Consulta a saúde do sensor de atividade disponível no host.",
+      responsabilidade: "Expor o status do serviço Screenpipe.",
+      ownerTecnico: "Screenpipe · 127.0.0.1:3030/health",
+      fonteDaProva: "Host do servidor · HTTP 127.0.0.1:3030/health",
+      escopoEstado: "do sensor consultado",
+      limiteDaProva: "Loopback não comprova o sensor físico da Casa sem rota até ela.",
+    },
+    "GitHub main": {
+      nomeHumano: "📦 Fonte do código",
+      paraQueServe: "Mostra qual versão o repositório principal apresenta.",
+      responsabilidade: "Consultar o HEAD da branch main.",
+      ownerTecnico: "GitHub · ServerVpss/CentralDark@main",
+      fonteDaProva: "GitHub API / conector autorizado",
+      escopoEstado: "da consulta ao GitHub",
+      limiteDaProva: "Commit publicado não é a mesma coisa que deploy executado.",
+    },
+    "Gmail sensor": {
+      nomeHumano: "✉️ Correio conectado",
+      paraQueServe: "Indica se há autorização comprovada para consultar mensagens.",
+      responsabilidade: "Projetar a capacidade de acesso ao Gmail.",
+      ownerTecnico: "Sensor externo Gmail / ChatGPT",
+      fonteDaProva: "Estado de autorização do sensor externo",
+      escopoEstado: "da autorização Gmail",
+      limiteDaProva: "Sem adapter autenticado neste app, permanece AUTH_REQUIRED/UNKNOWN.",
+    },
+    "Desktop Commander": {
+      nomeHumano: "🖥️ Ponte com o computador",
+      paraQueServe: "É a rota usada para observar um computador autorizado.",
+      responsabilidade: "Projetar o estado da integração de desktop remoto.",
+      ownerTecnico: "Remote Desktop Commander · conector externo",
+      fonteDaProva: "Estado externo do Remote Desktop Commander",
+      escopoEstado: "da rota externa",
+      limiteDaProva: "A existência do conector não comprova sessão ativa neste app.",
+    },
+  };
+  const sinaisComResponsabilidade: ContratoCartaoResponsabilidade[] = sinais.map((s) => ({
+    ...metadados[s.label],
+    nomeTecnico: s.label,
+    estado: leituraFresca ? s.estado : "STALE/UNKNOWN",
+    detalheTecnico: s.detail,
+    icone: s.icon,
+    consultaEm: d?.atualizadoEm ?? null,
+  }));
+
+  const confirmados = leituraFresca ? sinais.filter((s) => s.estado === "PASS").length : 0;
+  const naoConfirmados = sinais.length - confirmados;
 
   return (
     <section aria-labelledby="observabilidade-centraldark-title">
@@ -158,9 +276,50 @@ export function ObservabilidadeCentralDark() {
         </Button>
       </div>
 
+      <div
+        className="mt-6 rounded-xl border border-neon-blue/30 bg-neon-blue/5 p-4"
+        aria-live="polite"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <strong className="text-sm">🫀 Pulso atual · Instinto Superior</strong>
+          <span className="font-mono text-xs text-muted-foreground">
+            {leituraFresca ? `Consulta concluída às ${medidoEm}` : "STALE / SEM MEDIÇÃO FRESCA"}
+          </span>
+        </div>
+        <p className="mt-2 text-sm">
+          {leituraFresca
+            ? `${confirmados}/${sinais.length} sinais PASS medidos`
+            : "Nenhum PASS promovido sem leitura atual"}
+          {` · ${naoConfirmados} sinais sem PASS nesta leitura`}
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Consulta dos owners existentes a cada 15 segundos. Somente estado atual: sem copiar
+          histórico do HUD, sem transformar dado antigo em verde e sem segundo monitor.
+        </p>
+      </div>
+
+      <div className="mt-6">
+        <CartaoResponsabilidade
+          id="oauth-broker-title"
+          icone={KeyRound}
+          nomeHumano="🔐 Porteiro das conexões"
+          nomeTecnico="OAuth Broker"
+          paraQueServe="É o porteiro da CentralDark: quando você conecta uma conta, ele organiza a autorização e guarda o acesso no cofre. As ferramentas conseguem conversar com o serviço certo sem espalhar senhas pela tela."
+          responsabilidade="Gerenciar as autorizações de contas conectadas e proteger o cofre de acesso."
+          ownerTecnico="apps/modulos/oauth-broker/server.mjs"
+          estado={consultaCatalogoFresca ? estadoCatalogo : "STALE/UNKNOWN"}
+          escopoEstado="do catálogo de contas"
+          fonteDaProva={conexoes.data?.fonte ?? "Hub CentralDark · não confirmado"}
+          consultaEm={conexoes.data?.medidoEm ?? null}
+          detalheTecnico="OAuth, retornos de autorização e cofre cifrado; consulta administrativa via GET /api/welcome-kit."
+          limiteDaProva="O estado do catálogo não comprova que o processo em 127.0.0.1:8098 esteja ativo, nem valida a API administrativa Tailscale."
+          tecnicoAberto
+        />
+      </div>
+
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {sinais.map((s) => (
-          <Signal key={s.label} {...s} />
+        {sinaisComResponsabilidade.map((s) => (
+          <CartaoResponsabilidade key={s.nomeTecnico} {...s} />
         ))}
       </div>
 

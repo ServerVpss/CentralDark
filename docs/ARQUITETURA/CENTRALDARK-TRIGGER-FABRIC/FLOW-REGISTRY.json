@@ -1474,7 +1474,6 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml#ORACLE_QUERY_SUBMITTED"
-        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     },
     {
@@ -1496,7 +1495,6 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml#ORACLE_RESPONSE_CAPTURED"
-        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     },
     {
@@ -1518,7 +1516,6 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml#ORACLE_SEND_FAILED"
-        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     },
     {
@@ -1980,8 +1977,6 @@
         "searched_existing_routes": true,
         "counterproof_no_match": true,
         "evidence_ref": "apps/modulos/HERMES-CORE/agents/Critic/finalization-gate.test.mjs"
-      }
-        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
       }
     },
     {
@@ -2855,6 +2850,134 @@
       "status": "ACTIVE_EXISTING_ROUTE",
       "evidence_ref": "apps/modulos/mcp/tests/operational-telemetry.test.mjs",
       "reuse_of": "heart.operational-telemetry.gitSyncFront"
+    },
+    {
+      "id": "instinto.StatusPanel.luz",
+      "kind": "FUNCTION",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "symbol": "luz",
+      "activation": "CALL",
+      "from": "INSTINTO_SUPERIOR_UI",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
+    },
+    {
+      "id": "instinto.StatusPanel.etiqueta",
+      "kind": "FUNCTION",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "symbol": "etiqueta",
+      "activation": "CALL",
+      "from": "INSTINTO_SUPERIOR_UI",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
+    },
+    {
+      "id": "instinto.StatusPanel.LuzViva",
+      "kind": "FUNCTION",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "symbol": "LuzViva",
+      "activation": "CALL",
+      "from": "INSTINTO_SUPERIOR_UI",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
+    },
+    {
+      "id": "instinto.StatusPanel.DataHora",
+      "kind": "FUNCTION",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "symbol": "DataHora",
+      "activation": "CALL",
+      "from": "INSTINTO_SUPERIOR_UI",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
+    },
+    {
+      "id": "instinto.StatusPanel.StatusPanel",
+      "kind": "FUNCTION",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "symbol": "StatusPanel",
+      "activation": "CALL",
+      "from": "INSTINTO_SUPERIOR_UI",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
+    },
+    {
+      "id": "instinto.StatusPanel.botao-01",
+      "kind": "BUTTON",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "symbol": "instinto.StatusPanel.botao-01",
+      "activation": "CLICK",
+      "from": "CHEFE",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "reuse_of": "instinto.CockpitShell.botao-01"
+    },
+    {
+      "id": "instinto.cockpit.screenpipeIdentificado",
+      "kind": "FUNCTION",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "symbol": "screenpipeIdentificado",
+      "activation": "CALL",
+      "from": "INSTINTO_SUPERIOR_UI",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
+    },
+    {
+      "id": "instinto.cockpit.saidaScreenpipe",
+      "kind": "FUNCTION",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "symbol": "saidaScreenpipe",
+      "activation": "CALL",
+      "from": "INSTINTO_SUPERIOR_UI",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
+      "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
     }
   ]
 }

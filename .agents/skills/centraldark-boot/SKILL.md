@@ -44,3 +44,13 @@ Pitfalls:
 
 References:
 - See `references/example-boot-output.md` for a sample JSON payload and how to extract the HUD.
+
+## 🔧🛠️ Forja Viva no boot — política transversal, não bot específico (2026-10-15)
+
+**Owner preservado:** este boot é o ponto de entrada **read-only** de contexto e contratos; não cria executor, serviço, scheduler ou gatilho novo. A política transversal é a skill `.agents/skills/centraldark-operational-method/SKILL.md`; o catálogo de aliases visuais é `docs/CONSCIENCIA/PADRAO-EMOJIS.md`; o espelho para Hermes é `.agents/skills/skill-synchronization/SKILL.md`. Telegram, MCP, VS Code, Claude/Hermes e cockpit **consomem** a mesma política conforme suas capacidades; não copiar regras divergentes em cada bot.
+
+**BOOT_READBACK / anexos opcionais ao receipt existente:** registrar a referência de `MAIN_SHA` e owner da política, versão/sha do catálogo visual, `SKILL_SYNC` (`UNKNOWN|SYNCED`), `ACTIVE_SESSION_LOAD` (`UNKNOWN|PROVEN`), `OWNER_LOCK`, `NEXT_CURSOR`. Ausência desses campos no JSON do loader **não** autoriza inventar resultado; o boot antigo permanece compatível e um futuro adapter deve evoluir o owner do schema existente com teste. `SYNCED != LOADED != EXECUTED`.
+
+**🍒🎰🎲 Outra melhoria antecipada:** propor o menor delta útil, reaproveitar owner e comprovar antes de promover. **🧹:** consultar receita de faxina em `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`; classificar `KEEP_ACTIVE` em checkout dirty/divergente e nunca disparar limpeza pelo boot. **🔧🛠️👨🏻‍🔧👀👁️🪡🎄🌞🌟✨☄️🔥🪛⚒️🎰🎲🫀🫆🧠:** aliases são interface para selecionar receitas, **não shell commands**, e exigem resolução de owner + permissões + dry-run/prova. O boot nunca faz merge/deploy, nunca interrompe escritor ativo e não assume controle de terminal por detectar uma janela.
+
+**Critério de integração em Telegram ou qualquer porta:** carregar política/catálogo por versão canônica ou cache local verificado; apresentar o mesmo estado no cockpit; ações são delegadas apenas ao executor autenticado e com escopo. Offline: continuar com snapshot local comprovado, registrar receipt pendente e reconciliar sem sobrescrever mudanças divergentes quando reconectar.

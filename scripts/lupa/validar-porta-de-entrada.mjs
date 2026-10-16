@@ -133,6 +133,10 @@ function caminhosCitados(texto) {
     let match;
     while ((match = pattern.exec(texto)) !== null) {
       let candidate = match[1].trim().replace(/^\.\//, "").replace(/[.,;:]+$/, "");
+      // Home do Hermes e outros paths externos não são arquivos do checkout.
+      if (candidate.startsWith("~/")) continue;
+      // Tokens tipados `OWNER=docs/...` referenciam o valor, não o token inteiro.
+      candidate = candidate.replace(/^[A-Z_][A-Z0-9_]*=(?=(?:docs|scripts|apps|infra|conexao-ia|\.agents|\.github|\.claude|\.cursor)\/)/, "");
       if (!candidate || candidate.startsWith("http") || candidate.startsWith("#")) continue;
       if (!candidate.includes("/") && !ENTRADAS.includes(candidate)) continue;
       candidate = posix.normalize(candidate);

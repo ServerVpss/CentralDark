@@ -2921,3 +2921,70 @@ Fala direta do CHEFE, baianês/resenha naturais; versículo ou rima opcionais e 
 ### VS Code Windows Casa — descoberta Desktop Commander (2026-10-15)
 
 Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
+
+
+<!-- CENTRALDARK_RECOVERY_COMMANDS_HUD_TO_INSTINTO_20261015 -->
+## 🪬 #acordar · !calibrar · !centraldark — recuperação de contexto com baixa latência
+
+**INTENT_ID:** CENTRALDARK-HUD-INSTINTO-RECOVERY-20261015. **CHEFE_INTENT:** interromper raciocínio ocioso; recuperar rapidamente a máquina de estados e continuar a migração integral de `docs/HUD/HUD.html` para o **zone já existente** do Instinto Superior. Esses gatilhos são **aliases da receita operacional existente**, não comandos shell, um segundo motor, scheduler, outro Hermes ou autorização para ações irreversíveis.
+
+| Gatilho recebido | Operação fiel e curta | Saída obrigatória |
+|---|---|---|
+| `#acordar` | Restaurar a intenção ativa, branch/PR/owner e último receipt; consultar fontes atuais apenas no escopo afetado. | `CURRENT + PROOF + NEXT_CURSOR`; retomar a etapa independente que já estava autorizada. |
+| `!calibrar` | Contrastar estado declarado com GitHub, Casa, VPS, extensão, funil e testes relevantes; marcar `SOURCE/BUILD/INSTALLED/ACTIVE/UI` separadamente. | `PASS` só com readback; `UNKNOWN` e impedimentos exatos sem presumir falha global. |
+| `!centraldark` ou `!CENTRALDARK` | Invocar método canônico: intenção → owner existente → recuperar recibo → execução no escritor autorizado → contraprova → registro. | Recibo operacional e próxima ação, sem pedir microaprovações desnecessárias. |
+
+**Receita de retomada para a missão atual:** `docs/HUD/HUD.html` (fonte histórica com selos, cadeados, Gênesis, API e Hermes) → `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json` (UIDs canônicos) → `apps/instinto-superior/src/components/central/CockpitShell.tsx` (zone existente) → `apps/instinto-superior/src/components/central/HudDeterministico.tsx` na branch `feat/instinto-hud-genesis-selos-zone-20261015` → teste `apps/instinto-superior/scripts/verify-hud-zone.mjs` → receipts → gates → consumidor do cockpit. O contador do manifesto atual tem 198 nós mais `L000`, diferente do replay HTML histórico com 169 elos; preserve UIDs e não declare migração integral por um único componente. `docs/HUD/HUD.html` permanece preservado até paridade e readback completos.
+
+**Padrão de comunicação solicitado:** sempre que descobrir ganho novo, anunciar exatamente **🍒🎰🎲 Outra melhoria antecipada**, explicar **o que faz / por que melhorou / prova / próximo cursor**, e continuar o bloco autorizado. Atualização no chat é relatório, não log de execução fabricado. Nunca reproduzir credenciais ou logs brutos privados.
+
+**Cura para ocioso:** não repetir investigações inteiras quando `receipt+SHA+owner` ainda servem; revalidar apenas estado volátil. Se teste/rota falhar, preservar writer e trabalhar outra parte independente no mesmo escopo; só parar diante de bloqueio real. Usar caminhos no disco `K:` vinculado ao VS Code para staging quando disponível, sem sobrescrever projetos ocupados nem recriar pacotes/skills.
+
+**FIXED_POINT:** aceitação de satisfação do CHEFE é distinta de conformidade operacional mensurada; selos exigem efeito e contraprova. `NEXT_CURSOR` sempre recuperável. Executar apenas ferramentas autorizadas e não transformar `#acordar` em autostart destrutivo.
+
+
+<!-- FORJA_VIVA_EMOJI_ALIAS_DELTA_FIXED_POINT_20261015 -->
+## 🔧 🛠️ 👨🏻‍🔧 👀 👁️ 🪡 🎄 🌞 🌟 ✨ ☄️ 🔥 🪛 ⚒️ 🧹 — Forja Viva, aliases sob demanda
+
+**FIXED_POINT do CHEFE:** estágio corrente e satisfação aceitos; só abrir cadeado para DELTA útil provado. O estado antigo permanece histórico, não deve ser reconstruído a cada retomada. `#acordar → !calibrar → !CENTRALDARK` continua a forma curta de recuperar owner + SHA + última prova + NEXT_CURSOR.
+
+**Fonte visual canônica:** `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. **Owner da casca:** `apps/instinto-superior/src/components/central/HudDeterministico.tsx` na PR #1832. **Build/empacotamento:** `apps/instinto-superior/package.json` invoca `npm run verify:hud && npm run build && node scripts/build-plugplay.mjs`. **Contrato de identidade:** `docs/ARQUITETURA/CENTRALDARK-CRYSTALLIZED-PLUG-PLAY.yml`. **Forja visual:** `docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/VISUAL-NAMING-REGISTRY.yml`. Nenhum novo motor, skill, coleta ou roteador.
+
+**Como utilizar:**
+- 🔧🪛 → inspecionar + diagnosticar via extensão VS Code Restore e funil único, sem captar prompts/segredos.
+- 🛠️👨🏻‍🔧 → manter o mesmo owner e a mesma receita, após evidência de causa e autorização.
+- 👀👁️ → observar/contraprovar no painel existente, com `UNKNOWN` quando faltarem dados.
+- 🪡🎄 → preservar UIDs e aprendizagem; não renumerar Gênesis nem duplicar selos.
+- 🌞🌟✨ → retomar contexto e anunciar **🍒🎰🎲 Outra melhoria antecipada**, explicando ganho, uso, fonte/prova e cursor.
+- ☄️🔥⚒️ → compilar e preparar ZIP POMBO64 com manifesto/hash por comando **explícito** `npm run build:plugplay`, em ambiente de build autorizado e preferivelmente no volume K: vinculado à Forja; **nenhum emoji executa esse comando automaticamente**.
+- 🧹 → consultar o owner **já existente** `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`, inventariar alterações e confirmar receipt, efeito/main quando aplicável; limpar somente o **scratch descartável comprovado** com lock e realpath. Visual na Casa quando o CHEFE pedir. No checkout em trabalho: `KEEP_ACTIVE`.
+
+**Loop de código vivo, mas governado:** `DISCOVER_EXISTING_OWNER → READ_COMPATIBLE_RECIPE → DELTA_WITHIN_CAUSAL_CONE → TEST → COUNTERPROOF → RECEIPT → FIXED_POINT`. Quando houver outra melhoria independente, continuar só se não violar writer único, escopo/autorização e gates. `SOURCE_COMMITTED ≠ BUILD_PASS ≠ ZIP_PROVEN ≠ RUNTIME_DEPLOYED`. Comando visível em chat ≠ texto enviado ao terminal; `SEND_OK ≠ EXIT_0`. Nunca limpar worktree em uso.
+
+**Pacote plug-and-play:** `build:plugplay` usa dependência JSZip já declarada pelo app; arquivo `apps/instinto-superior/scripts/build-plugplay.mjs` é **implementação de build**, não outra receita/skill. ZIP contém somente output compilado filtrado, contratos obrigatórios, manifest com SHA por arquivo e SHA do ZIP; recusa fontes locais modificadas, links simbólicos e arquivos sensíveis. Não automatiza instalar, deploy, restart ou apagar históricos. Se dependências, destino, build ou CI estiverem ausentes, `BLOCKED/UNKNOWN` localizado, sem reconfigurar infraestrutura à força.
+
+**Critérios de selo:** aceitação humana 100% do método e prova operacional são categorias diferentes. Código e teste em branch #1832 não equivalem a UI publicada; todos os indicadores de conformidade devem apresentar denominador e evidência. Se o runtime de alguma capacidade ainda for `UNKNOWN`, preservar o FIXED_POINT do estágio anterior e o NEXT_CURSOR, sem falso selo.
+
+
+## 🔧 DEPENDENCY_FIX_FAST_PATH — correção direta com promoção comprovada (2026-10-15)
+
+**INTENÇÃO DO CHEFE:** quando houver erro de dependência com causa e versão corrigida comprovadas, o agente principal **já owner do escopo** corrige imediatamente e promove à produção pela esteira existente **sem solicitar confirmação redundante**, se todas as condições técnicas e de governança forem satisfeitas. Não criar agente, PR, worktree ou executor paralelos por ritual; reutilizar a branch, os locks e os gates vigentes.
+
+```text
+DETECT_DEPENDENCY_VIOLATION
+→ VERIFY_ROOT_CAUSE_AND_FIXED_VERSION (upstream changelog/advisory + compatibility)
+→ IDENTIFY_MAIN_AGENT_AND_ONE_WRITER_PER_SCOPE
+→ LOCK + SNAPSHOT_CURRENT_SHA_AND_LOCKFILE
+→ PATCH_MINIMUM_DEPENDENCY_AND_LOCKFILE_IN_SAME_OWNER
+→ INSTALL_REPRODUCIBLY + TEST_AFFECTED_CONE + BUILD + REGRESSION
+→ COUNTERPROOF (no API/ABI break, security regression, unexpected diff)
+→ RECEIPT (old/new version, SHA, tests, rollback, owner)
+→ PROMOTE_VIA_EXISTING_MAIN_GATES (no bypass, no force-push)
+→ DEPLOY_VIA_EXISTING_AUTHORIZED_PIPELINE_IF_GREEN
+→ HEALTH_READBACK + FUNCTIONAL_RUNTIME_READBACK
+→ FIXED_POINT; IF_FAILED ROLLBACK_OR_KEEP_PREVIOUS_HEALTHY_VERSION + NEXT_CURSOR
+```
+
+**AUTO_PROMOTE_IF_ALL_GREEN:** somente se a versão for verificada, impacto limitado, testes aplicáveis PASS, branch protection/approvals atendidos, CI e política de deploy satisfeitos, rollout/rollback conhecidos e não houver trabalho alheio em risco. **Nunca** tratar `npm install`, versão semver ou commit como prova de produção. Mudança major incompatível, lockfile divergente, API removida, build quebrado, gate pendente, autorização insuficiente ou ausência de contraprova => `BLOCKED/UNKNOWN`, preservar runtime e reportar a menor causa; não publicar quebrado. Se a produção exigir aprovação humana ou uma etapa que não possa ser executada pela rota disponível, parar nesse gate e relatar precisamente o bloqueio. `PROD_PASS` exige SHA implantado, health e efeito funcional lidos do runtime. 
+
+**Precedência:** owner e receita de dependências já existentes continuam autoridade; esta seção apenas define a **decisão rápida e a sequência de evidência**. Aplicar o mínimo delta e o mesmo checklist CURRENT; 🧹 só depois de preservação e readback.

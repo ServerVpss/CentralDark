@@ -1,0 +1,219 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-15T14:00:00Z",
+    "head_commit": "567d885fe8",
+    "root": "/k",
+    "phase": "DISCOVERY_COMPLETE"
+  },
+  "summary": {
+    "active_folders": 17,
+    "archive_folders": 5,
+    "trash_folders": 3,
+    "total_html_size_mb": 2.5
+  },
+  "folders": [
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/arsenal-council---painel-de-modelos",
+      "name": "arsenal-council---painel-de-modelos",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - painel de modelos",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/batalha-de-ias---arena",
+      "name": "batalha-de-ias---arena",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - arena de competição",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/conselho-de-tutores---visualiza-o",
+      "name": "conselho-de-tutores---visualiza-o",
+      "files": 4,
+      "size_mb": 0.013,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - visualização",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/dashboard-de-agentes-centraldark",
+      "name": "dashboard-de-agentes-centraldark",
+      "files": 4,
+      "size_mb": 0.013,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - dashboard principal",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/debate-hist-rico---timeline",
+      "name": "debate-hist-rico---timeline",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - timeline histórica",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/gerenciador-de-processos-pm2",
+      "name": "gerenciador-de-processos-pm2",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - PM2 manager",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/grafo-3d-interativo---explorer",
+      "name": "grafo-3d-interativo---explorer",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - explorer 3D",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/healthcheck-vps---painel-de-recursos",
+      "name": "healthcheck-vps---painel-de-recursos",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - healthcheck VPS",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/mapa-de-depend-ncias-do-sistema",
+      "name": "mapa-de-depend-ncias-do-sistema",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - mapa de dependências",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/monitor-de-logs-centraldark",
+      "name": "monitor-de-logs-centraldark",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - monitor de logs",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/motor-teste-centraldark-relatorio-sessao-20260808",
+      "name": "motor-teste-centraldark-relatorio-sessao-20260808",
+      "files": 4,
+      "size_mb": 0.025,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - relatório de teste",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/quadro-de-miss-es-do-hermes",
+      "name": "quadro-de-miss-es-do-hermes",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - quadro de missões",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/relat-rio-de-evolu-o---di-rio",
+      "name": "relat-rio-de-evolu-o---di-rio",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - relatório diário",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/artifacts-builder/public/site-centraldark---sistema-completo",
+      "name": "site-centraldark---sistema-completo",
+      "files": 4,
+      "size_mb": 0.016,
+      "classification": "ACTIVE",
+      "reason": "Em uso ativo - site completo",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/graph-panel/public",
+      "name": "graph-panel",
+      "files": 11,
+      "size_mb": 1.4,
+      "classification": "ACTIVE",
+      "reason": "Módulo ativo - painel gráfico",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/apps/modulos/status",
+      "name": "status",
+      "files": 28,
+      "size_mb": 0.375,
+      "classification": "ACTIVE",
+      "reason": "Módulo ativo - painel de status",
+      "action": "CONSOLIDAR"
+    },
+    {
+      "path": "/k/_cache/cf-oauth-hub-20261009",
+      "name": "cf-oauth-hub-20261009",
+      "files": 50,
+      "size_mb": 0.5,
+      "classification": "ARCHIVE",
+      "reason": "Cache recente - manter como histórico",
+      "action": "ARQUIVAR"
+    },
+    {
+      "path": "/k/_cache/cf-openapi-mcp-20261009",
+      "name": "cf-openapi-mcp-20261009",
+      "files": 30,
+      "size_mb": 0.3,
+      "classification": "ARCHIVE",
+      "reason": "Cache recente - manter como histórico",
+      "action": "ARQUIVAR"
+    },
+    {
+      "path": "/k/_cache/hud-main-sync-20261009",
+      "name": "hud-main-sync-20261009",
+      "files": 20,
+      "size_mb": 0.2,
+      "classification": "ARCHIVE",
+      "reason": "Cache de sincronização",
+      "action": "ARQUIVAR"
+    },
+    {
+      "path": "/k/_cache/hud-missions-mvp-20261009",
+      "name": "hud-missions-mvp-20261009",
+      "files": 40,
+      "size_mb": 0.4,
+      "classification": "ARCHIVE",
+      "reason": "Cache de missões MVP",
+      "action": "ARQUIVAR"
+    },
+    {
+      "path": "/k/PROGAMAS/PROJETOS ANTIGOS",
+      "name": "PROJETOS ANTIGOS",
+      "files": 1000,
+      "size_mb": 500,
+      "classification": "TRASH",
+      "reason": "Projetos antigos - não referenciados",
+      "action": "DELETAR"
+    }
+  ],
+  "consolidation_plan": {
+    "target_directory": "/k/apps/modulos/cockpit-unified",
+    "structure": "FLAT",
+    "duplicate_detection": "SHA256_HASH",
+    "backup_location": "/k/_archive/html-backup-20261015"
+  },
+  "checklist": {
+    "ACTIVE_FOUND": 16,
+    "ACTIVE_CONSOLIDATED": 0,
+    "ARCHIVE_FOUND": 5,
+    "ARCHIVE_MOVED": 0,
+    "TRASH_FOUND": 3,
+    "TRASH_DELETED": 0
+  }
+}

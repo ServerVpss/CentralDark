@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CentralDark · Grafo Celestial 2026</title>
+<style>
+*{box-sizing:border-box}
+html,body,#g{margin:0;width:100%;height:100%;overflow:hidden;
+background:radial-gradient(circle at 50% 42%,#0b0f24 0,#05060f 46%,#000 100%);
+font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#dfe6ff}
+.hud{position:fixed;z-index:10;pointer-events:none;text-shadow:0 0 10px rgba(150,170,255,.5)}
+#top{left:16px;top:14px;right:16px;display:flex;gap:14px;align-items:center;font-size:12px;letter-spacing:.12em}
+.brand{font-weight:800;color:#fff}
+.dim{opacity:.65}
+#st{margin-left:auto;opacity:.8}
+a.sw{position:fixed;right:16px;bottom:14px;z-index:11;color:#9fb0ff;font-size:11px;letter-spacing:.1em;text-decoration:none;opacity:.7}
+a.sw:hover{opacity:1}
+.tip{background:rgba(6,8,20,.92);border:1px solid rgba(160,170,255,.35);border-radius:8px;padding:6px 10px;font-size:12px;color:#ffe9d6}
+.tip span{display:block;font-size:10px;color:#9fb0ff;letter-spacing:.15em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="hud" id="top"><span class="brand">GRAFO CENTRALDARK</span><span class="dim">· MODO CELESTIAL</span><span id="st"></span></div>
+<a class="sw" href="index.html">↩ modo clássico</a>
+<div id="g"></div>
+<script src="three-umd.js"></script>
+<script src="3d-force-graph.min.js"></script>
+<script src="three-spritetext.min.js"></script>
+<script>
+const qs=new URLSearchParams(location.search);
+const SRC=qs.get('src')||'/api/graph';
+const PAL={raiz:'#fff1e6',ts:'#ff9500',tsx:'#ff2d55',md:'#ffcc00',pasta:'#ff5e3a',js:'#ffd60a',json:'#c644fc',py:'#5ac8fa',sh:'#ff6b81'};
+function glowTexture(){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
+const gr=x.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(255,255,255,1)');
+gr.addColorStop(0.3,'rgba(255,255,255,0.55)');gr.addColorStop(1,'rgba(255,255,255,0)');
+x.fillStyle=gr;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c);}
+fetch(SRC).then(r=>r.json()).then(raw=>{
+const nodes=(raw.nodes||[]).map(n=>({...n}));
+const links=(raw.links||raw.edges||[]).map(l=>({source:l.source??l.from,target:l.target??l.to}));
+nodes.forEach(n=>{if(n.group==='raiz'){n.fx=0;n.fy=0;n.fz=0;}});
+const TEX=glowTexture();
+const Graph=ForceGraph3D()(document.getElementById('g'))
+ .graphData({nodes,links})
+ .backgroundColor('rgba(0,0,0,0)')
+ .showNavInfo(false)
+ .nodeLabel(n=>`<div class="tip">${n.label||n.id}<span>${n.group||''}</span></div>`)
+ .nodeThreeObject(n=>{
+   const grp=new THREE.Group();
+   const cor=PAL[n.group]||'#ff7a59';
+   const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:TEX,color:cor,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+   const sz=(n.group==='raiz')?90:8+(n.size||4)*1.6;
+   spr.scale.set(sz,sz,1);grp.add(spr);
+   if((n.size||0)>=14||n.group==='raiz'){
+     const t=new SpriteText(n.label||n.id,4.5,'#ffe9d6');
+     t.position.y=sz*0.55+4;t.material.transparent=true;t.material.opacity=0.85;grp.add(t);
+   }
+   return grp;})
+ .linkColor(()=>'#ff4d5e').linkOpacity(0.32).linkWidth(0.4).linkCurvature(0.22)
+ .linkDirectionalParticles(1).linkDirectionalParticleWidth(1.4)
+ .linkDirectionalParticleSpeed(0.004).linkDirectionalParticleColor(()=>'#ffb35c');
+const scene=Graph.scene();
+const R=1150;
+scene.add(new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.SphereGeometry(R,28,18)),new THREE.LineBasicMaterial({color:0x8fa8ff,transparent:true,opacity:0.08})));
+const eq=new THREE.Mesh(new THREE.TorusGeometry(R,1.4,8,160),new THREE.MeshBasicMaterial({color:0xcfd8ff,transparent:true,opacity:0.28}));
+eq.rotation.x=Math.PI/2;scene.add(eq);
+const pos=[];for(let i=0;i<800;i++){const v=new THREE.Vector3().randomDirection().multiplyScalar(R*(0.25+Math.random()*0.72));pos.push(v.x,v.y,v.z);}
+const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0xdfe8ff,size:1.6,transparent:true,opacity:0.55,depthWrite:false})));
+const core=new THREE.Sprite(new THREE.SpriteMaterial({map:TEX,color:0xffc2a8,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
+core.scale.set(300,300,1);scene.add(core);
+const ico=new THREE.Mesh(new THREE.IcosahedronGeometry(24,1),new THREE.MeshBasicMaterial({color:0xffe6d9}));
+scene.add(ico);
+const yr=new SpriteText('2 0 2 6',30,'#dfe6ff');
+yr.position.set(0,R+70,0);yr.material.transparent=true;yr.material.opacity=0.75;scene.add(yr);
+Graph.controls().autoRotate=true;Graph.controls().autoRotateSpeed=0.45;
+Graph.cameraPosition({x:0,y:R*0.35,z:R*1.9});
+(function pulse(t){requestAnimationFrame(pulse);const k=1+Math.sin((t||0)/900)*0.08;core.scale.set(300*k,300*k,1);ico.rotation.y+=0.004;})();
+document.getElementById('st').textContent='nós '+nodes.length+' · links '+links.length;
+}).catch(e=>{document.getElementById('st').textContent='erro ao carregar feed: '+e.message;});
+</script>
+</body>
+</html>

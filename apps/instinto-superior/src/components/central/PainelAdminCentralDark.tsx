@@ -15,6 +15,7 @@ import {
 import { CofreAdministrativo, HubSeguranca } from "@/components/central/AdminCofreSeguranca";
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
 import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
+import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
@@ -66,10 +67,11 @@ function mensagemErro(valor: unknown) {
   return String(valor ?? "erro desconhecido");
 }
 
-// O Database gerado do Instinto ainda não contém profiles/modulos_portal.
-// Acesso pontual mantém o owner Supabase existente sem duplicar cliente.
+// O tipo gerado da app ainda nao contem modules/profiles.
+// Reusar o cliente existente; a leitura segue os nomes REAIS do Supabase.
+// Escritas continuam indisponiveis ate existir rota admin autorizada.
 const banco = supabase as unknown as {
-  // Database gerado ainda não conhece profiles/modulos_portal; owner continua o mesmo client.
+  // Tipos ainda nao refletem modules/profiles; owner continua o mesmo client.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   from: (tabela: string) => any;
 };
@@ -77,19 +79,19 @@ const banco = supabase as unknown as {
 type ModuloPortalLinha = {
   id: unknown;
   slug?: unknown;
-  nome?: unknown;
-  icone?: unknown;
-  href?: unknown;
-  status?: unknown;
-  ordem?: unknown;
+  name?: unknown;
+  icon?: unknown;
+  url?: unknown;
+  is_active?: unknown;
+  display_order?: unknown;
 };
 
 type ProfileLinha = {
-  user_id: unknown;
+  id: unknown;
   full_name?: unknown;
 };
 
-export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark | undefined }) {
+export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estado?: EstadoCentralDark | undefined; abaInicial?: "visao" | "notificacoes" }) {
   const [modulos, setModulos] = useState<ModuloPortal[]>([]);
   const [usuarios, setUsuarios] = useState<UsuarioLinha[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,10 +104,10 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
     try {
       const [m, p, r] = await Promise.all([
         banco
-          .from("modulos_portal")
-          .select("id, slug, nome, icone, href, status, ordem")
-          .order("ordem", { ascending: true }),
-        banco.from("profiles").select("user_id, full_name"),
+          .from("modules")
+          .select("id, slug, name, icon, url, is_active, display_order")
+          .order("display_order", { ascending: true }),
+        banco.from("profiles").select("id, full_name"),
         banco.from("user_roles").select("user_id, role"),
       ]);
 
@@ -120,18 +122,18 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         (m.data ?? []).map((item: ModuloPortalLinha) => ({
           id: String(item.id),
           slug: String(item.slug ?? ""),
-          nome: String(item.nome ?? ""),
-          icone: String(item.icone ?? ""),
-          href: String(item.href ?? "/"),
-          status: item.status === "ativo" ? "ativo" : "em processo",
-          ordem: Number(item.ordem ?? 0),
+          nome: String(item.name ?? ""),
+          icone: String(item.icon ?? ""),
+          href: String(item.url ?? "/"),
+          status: item.is_active === true ? "ativo" : "em processo",
+          ordem: Number(item.display_order ?? 0),
         })),
       );
       setUsuarios(
         (p.data ?? []).map((item: ProfileLinha) => ({
-          user_id: String(item.user_id),
+          user_id: String(item.id),
           full_name: item.full_name ? String(item.full_name) : null,
-          papel: papeis.get(String(item.user_id)) ?? "user",
+          papel: papeis.get(String(item.id)) ?? "user",
         })),
       );
     } catch (e) {
@@ -218,7 +220,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
     { label: "Módulos totais", valor: resumo.total, icon: Package },
     { label: "Módulos ativos", valor: resumo.ativos, icon: CheckCircle2 },
     { label: "Em processo", valor: resumo.processo, icon: Clock3 },
-    { label: "Usuários", valor: resumo.usuarios, icon: Users },
+    { label: "Perfis visíveis", valor: resumo.usuarios, icon: Users },
   ];
 
   return (
@@ -249,7 +251,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         </div>
       ) : null}
 
-      <Tabs defaultValue="visao" className="mt-8">
+      <Tabs key={abaInicial} defaultValue={abaInicial} className="mt-8">
         <TabsList className="h-auto flex-wrap justify-start">
           <TabsTrigger value="visao">Visão geral</TabsTrigger>
           <TabsTrigger value="modulos">Módulos</TabsTrigger>
@@ -257,6 +259,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
           <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
           <TabsTrigger value="hub-inventario">Integração HUB (12)</TabsTrigger>
           <TabsTrigger value="observabilidade">Observabilidade</TabsTrigger>
+          <TabsTrigger value="notificacoes">🔔 Notificações</TabsTrigger>
           <TabsTrigger value="cofre">Cofre / Credenciais</TabsTrigger>
           <TabsTrigger value="seguranca">Segurança / Permissões</TabsTrigger>
         </TabsList>
@@ -295,10 +298,10 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
             <div>
               <h3 className="text-xl font-semibold">Catálogo de módulos</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                Fonte viva: tabela <code>modulos_portal</code>.
+                Fonte viva: <code>modules</code>. Leitura disponível; escrita aguarda permissão administrativa no servidor.
               </p>
             </div>
-            <Button onClick={novoModulo}>
+            <Button onClick={novoModulo} disabled title="Escrita administrativa ainda não autorizada no Supabase">
               <Plus /> Novo módulo
             </Button>
           </div>
@@ -310,6 +313,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
                   <Campo label="Nome">
                     <input
                       value={modulo.nome}
+                      disabled
                       onChange={(e) => atualizarModulo(modulo.id, { nome: e.target.value })}
                       className="h-10 rounded-md border border-border bg-background px-3 text-sm"
                     />
@@ -317,6 +321,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
                   <Campo label="Slug">
                     <input
                       value={modulo.slug}
+                      disabled
                       onChange={(e) => atualizarModulo(modulo.id, { slug: e.target.value })}
                       className="h-10 rounded-md border border-border bg-background px-3 font-mono text-xs"
                     />
@@ -324,6 +329,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
                   <Campo label="Link">
                     <input
                       value={modulo.href}
+                      disabled
                       onChange={(e) => atualizarModulo(modulo.id, { href: e.target.value })}
                       className="h-10 rounded-md border border-border bg-background px-3 font-mono text-xs"
                     />
@@ -331,6 +337,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
                   <Campo label="Ícone">
                     <input
                       value={modulo.icone}
+                      disabled
                       onChange={(e) => atualizarModulo(modulo.id, { icone: e.target.value })}
                       className="h-10 rounded-md border border-border bg-background px-3 text-sm"
                     />
@@ -338,6 +345,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
                   <Campo label="Status">
                     <select
                       value={modulo.status}
+                      disabled
                       onChange={(e) =>
                         atualizarModulo(modulo.id, { status: e.target.value as StatusModulo })
                       }
@@ -351,6 +359,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
                     <input
                       type="number"
                       value={modulo.ordem}
+                      disabled
                       onChange={(e) =>
                         atualizarModulo(modulo.id, { ordem: Number(e.target.value || 0) })
                       }
@@ -362,13 +371,15 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
                   <Button
                     variant="outline"
                     onClick={() => void removerModulo(modulo)}
-                    disabled={salvandoId === modulo.id}
+                    disabled
+                    title="Remoção bloqueada até existir rota admin autorizada"
                   >
                     <Trash2 /> Remover
                   </Button>
                   <Button
                     onClick={() => void salvarModulo(modulo)}
-                    disabled={salvandoId === modulo.id}
+                    disabled
+                    title="Gravação bloqueada até existir rota admin autorizada"
                   >
                     {salvandoId === modulo.id ? <Loader2 className="animate-spin" /> : <Save />}
                     Salvar
@@ -417,6 +428,9 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         </TabsContent>
         <TabsContent value="observabilidade" className="mt-6">
           <ObservabilidadeCentralDark />
+        </TabsContent>
+        <TabsContent value="notificacoes" className="mt-6">
+          <CentralNotificacoes modo="painel" />
         </TabsContent>
         <TabsContent value="cofre" className="mt-6">
           <CofreAdministrativo estado={estado} />

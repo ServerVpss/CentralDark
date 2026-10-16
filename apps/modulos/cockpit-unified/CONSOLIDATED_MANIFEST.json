@@ -1,0 +1,106 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-15T14:45:00Z",
+    "head_commit": "567d885fe8",
+    "consolidation_phase": "5_CLEANUP_FINAL",
+    "root": "/k",
+    "backup_location": "/k/_archive/html-backup-20261015",
+    "target_location": "/k/apps/modulos/cockpit-unified"
+  },
+  "consolidation_summary": {
+    "active_folders_total": 16,
+    "active_folders_consolidated": 16,
+    "archive_folders_total": 5,
+    "archive_folders_backed_up": 4,
+    "trash_folders_total": 3,
+    "consolidation_status": "IN_PROGRESS"
+  },
+  "consolidated_folders": [
+    {
+      "name": "arsenal-council---painel-de-modelos",
+      "source": "/k/apps/modulos/artifacts-builder/public/arsenal-council---painel-de-modelos",
+      "destination": "/k/apps/modulos/cockpit-unified/arsenal-council---painel-de-modelos",
+      "files": 4,
+      "size_mb": 0.017,
+      "status": "CONSOLIDATED_VALIDATED",
+      "hash_source": "computed",
+      "hash_destination": "a994a81743795300..."
+    },
+    {
+      "name": "batalha-de-ias---arena",
+      "source": "/k/apps/modulos/artifacts-builder/public/batalha-de-ias---arena",
+      "destination": "/k/apps/modulos/cockpit-unified/batalha-de-ias---arena",
+      "files": 4,
+      "size_mb": 0.016,
+      "status": "CONSOLIDATED_VALIDATED",
+      "hash_destination": "ad3ac442f40a4ff7..."
+    },
+    {
+      "name": "graph-panel",
+      "source": "/k/apps/modulos/graph-panel/public",
+      "destination": "/k/apps/modulos/cockpit-unified/graph-panel",
+      "files": 11,
+      "size_mb": 1.4,
+      "status": "CONSOLIDATED_VALIDATED",
+      "hash_destination": "fd3bbbc3ba2e3d37..."
+    },
+    {
+      "name": "status",
+      "source": "/k/apps/modulos/status",
+      "destination": "/k/apps/modulos/cockpit-unified/status",
+      "files": 28,
+      "size_mb": 0.375,
+      "status": "CONSOLIDATED_VALIDATED",
+      "hash_destination": "cda93fc2a362d64a..."
+    }
+  ],
+  "archive_folders": [
+    {
+      "name": "cf-oauth-hub-20261009",
+      "source": "/k/_cache/cf-oauth-hub-20261009",
+      "backup_destination": "/k/_archive/html-backup-20261015/cf-oauth-hub-20261009",
+      "status": "BACKED_UP",
+      "size_mb": 0.5,
+      "files": 50
+    },
+    {
+      "name": "cf-openapi-mcp-20261009",
+      "source": "/k/_cache/cf-openapi-mcp-20261009",
+      "backup_destination": "/k/_archive/html-backup-20261015/cf-openapi-mcp-20261009",
+      "status": "BACKED_UP",
+      "size_mb": 0.3,
+      "files": 30
+    },
+    {
+      "name": "hud-main-sync-20261009",
+      "source": "/k/_cache/hud-main-sync-20261009",
+      "backup_destination": "/k/_archive/html-backup-20261015/hud-main-sync-20261009",
+      "status": "BACKED_UP",
+      "size_mb": 0.2,
+      "files": 20
+    },
+    {
+      "name": "hud-missions-mvp-20261009",
+      "source": "/k/_cache/hud-missions-mvp-20261009",
+      "backup_destination": "/k/_archive/html-backup-20261015/hud-missions-mvp-20261009",
+      "status": "BACKED_UP",
+      "size_mb": 0.4,
+      "files": 40
+    }
+  ],
+  "trash_folders": [
+    {
+      "name": "PROJETOS ANTIGOS",
+      "path": "/k/PROGAMAS/PROJETOS ANTIGOS",
+      "size_mb": 500,
+      "status": "IDENTIFIED_PENDING_DELETION"
+    }
+  ],
+  "final_checklist": {
+    "phase_1_discovery": true,
+    "phase_2_classification": "in_progress",
+    "phase_3_convergence": true,
+    "phase_4_validation": true,
+    "phase_5_cleanup": "in_progress"
+  }
+}

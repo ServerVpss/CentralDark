@@ -1,0 +1,97 @@
+{
+  "atualizadoEm": "2026-09-12T02:50:02.195Z",
+  "slots": {},
+  "timeouts": {
+    "router_s": 30,
+    "parallel_s": 90,
+    "debate_s": 180
+  },
+  "stats": {
+    "totalDebates": 8,
+    "totalEvolucoes": 8
+  },
+  "ultimosDebates": [
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-48-55-971Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 48 55 971Z Router Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-47-920Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 49 47 920Z Router Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-52-260Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 49 52 260Z Router Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-54-457Z-parallel-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 49 54 457Z Parallel Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-49-56-730Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 49 56 730Z Router Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-02-556Z-parallel-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 50 02 556Z Parallel Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-07-049Z-router-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 50 07 049Z Router Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/DEBATES/2026-08-04T18-50-08-801Z-parallel-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 50 08 801Z Parallel Webui Oi\" · date: 2026-08-26"
+    }
+  ],
+  "ultimasEvolucoes": [
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-29/2026-07-29T09-59-03-710Z-hermes-webui-responda-ok.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 07 29T09 59 03 710Z Hermes Webui Responda Ok\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-08-04/2026-08-04T18-50-40-644Z-hermes-webui-oi.md",
+      "quando": "2026-08-28T10:53:57.513Z",
+      "preview": "--- · title: \"2026 08 04T18 50 40 644Z Hermes Webui Oi\" · date: 2026-08-26"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-02/hermes--14-n-cleo-vivo-de-ensinamentos-p-s-hub.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Hermes  14 N Cleo Vivo De Ensinamentos P S Hub\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-elite-gateway.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Aula Elite Gateway\" · date: 2026-07-05"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-grafo-vivo.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Aula Grafo Vivo\" · date: 2026-07-05"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes-2.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Aula Tutor Hermes 2\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aula-tutor-hermes.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Aula Tutor Hermes\" · date: 2026-07-03"
+    },
+    {
+      "arquivo": "docs/CONSCIENCIA/ARSENAL/EVOLUCAO/2026-07-03/aulas-avancadas-gateway.md",
+      "quando": "2026-08-26T01:15:10.578Z",
+      "preview": "--- · title: \"Aulas Avancadas Gateway\" · date: 2026-07-05"
+    }
+  ]
+}

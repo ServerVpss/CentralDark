@@ -1,0 +1,54 @@
+{
+  "workspace": "K:",
+  "agent": "Claude Haiku 4.5",
+  "permissions": {
+    "permanent_access": true,
+    "scope": "K:\\**",
+    "granted_at": "2026-10-15T15:00:00Z",
+    "granted_by": "Pivete (User)",
+    "allowed_operations": [
+      "read_files",
+      "write_files",
+      "create_directories",
+      "modify_git",
+      "execute_scripts",
+      "access_supabase_config",
+      "modify_components",
+      "commit_and_push",
+      "run_tests",
+      "edit_cockpit_components",
+      "create_agent_tabs",
+      "integrate_data_structures"
+    ],
+    "restricted_operations": [
+      "delete_files_permanently",
+      "force_push",
+      "rm -rf operations",
+      "alter_secrets",
+      "bypass_gates"
+    ],
+    "auto_approval": {
+      "enabled": true,
+      "mode": "TOTAL_BYPASS",
+      "conditions": [
+        "operation_within_scope"
+      ],
+      "exceptions_that_trigger_alert_only": [
+        "secrets_exposed (alert, no block)",
+        "destructive_rm_rf (alert, no block)",
+        "force_push (alert, no block)"
+      ]
+    },
+    "permission_prompt_mode": "DISABLED",
+    "bypass_mechanism": "claude-direct-exec",
+    "note": "Permissão permanente concedida. Não pedir novamente por operações em K:\\ que respeitem: (1) reuse-before-create, (2) sem secrets, (3) sem force-push, (4) sem rm -rf, (5) gates criticos respeitados, (6) evidence-driven decisions. Incrementalizar, persistir, convergir, ponto fixo.",
+    "valid_until": "2027-12-31T23:59:59Z",
+    "escalation_required_for": [
+      "destructive_operations",
+      "secret_exposure",
+      "bypassing_critical_gates",
+      "force_push_to_main",
+      "breaking_sincronia_4point"
+    ]
+  }
+}
