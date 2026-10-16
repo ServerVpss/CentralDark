@@ -107,4 +107,3 @@ jobs:
             env -u PYTHONPATH -u PYTHONHOME PYTHONPATH="$PWD/.pr-agent-site" python3 -m pr_agent.cli \
               --pr_url="$PR_URL" review
           fi
-          fi
