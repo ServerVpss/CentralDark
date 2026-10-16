@@ -215,8 +215,11 @@ test("OAuth Broker traduzido para humano antes do detalhe técnico, com fonte e 
   assert.ok(obs.includes('id="oauth-broker-title"'));
   assert.ok(obs.includes("Porteiro das conexões"));
   assert.ok(obs.includes("É o porteiro da CentralDark"));
-  assert.ok(obs.includes("Por baixo do capô · detalhes técnicos"));
-  assert.ok(obs.indexOf("É o porteiro da CentralDark") < obs.indexOf("Por baixo do capô · detalhes técnicos"));
+  assert.ok(obs.includes('responsabilidade="Gerenciar as autorizações'));
+  const cartao = read("apps/instinto-superior/src/components/central/CartaoResponsabilidade.tsx");
+  assert.ok(cartao.includes("Por baixo do capô · detalhes técnicos"));
+  assert.ok(cartao.includes("Responsabilidade:"));
+  assert.ok(cartao.includes("Fonte da prova:"));
   assert.ok(obs.includes('useServerFn(lerConexoesCentralDark)'));
   assert.ok(obs.includes('queryKey: ["centraldark", "contas-conexoes"]'));
   assert.ok(obs.includes("90_000"));
@@ -224,4 +227,29 @@ test("OAuth Broker traduzido para humano antes do detalhe técnico, com fonte e 
   assert.ok(conex.includes('requireSupabaseAuth'));
   assert.ok(conex.includes('.eq("role", "admin")'));
   assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY|\bfetch\s*\(/);
+});
+test("contrato único de cartões exige função humana, owner, responsabilidade e fonte", () => {
+  const grammar = read("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml");
+  const card = read("apps/instinto-superior/src/components/central/CartaoResponsabilidade.tsx");
+  const obs = read("apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx");
+  assert.ok(grammar.includes("schema: centraldark.cockpit.responsabilidade.v1"));
+  for (const field of [
+    "nomeHumano", "nomeTecnico", "paraQueServe", "responsabilidade",
+    "ownerTecnico", "estado", "escopoEstado", "fonteDaProva",
+    "consultaEm", "detalheTecnico", "limiteDaProva"
+  ]) {
+    assert.match(card, new RegExp("^  " + field + ":", "m"), "campo obrigatório: " + field);
+    assert.ok(grammar.includes("    - " + field), "gramática: " + field);
+  }
+  assert.ok(card.includes('data-card-contract="centraldark.cockpit.responsabilidade.v1"'));
+  assert.ok(card.indexOf("{paraQueServe}") < card.indexOf("Por baixo do capô"));
+  assert.ok(card.includes("Responsabilidade:"));
+  assert.ok(card.includes("Fonte da prova:"));
+  assert.ok(card.includes("Limite da prova:"));
+  assert.ok(obs.includes('Record<(typeof sinais)[number]["label"], Metadados>'));
+  assert.ok(obs.includes("sinaisComResponsabilidade.map"));
+  assert.ok(obs.includes('<CartaoResponsabilidade key={s.nomeTecnico} {...s} />'));
+  assert.ok(obs.includes("STALE/UNKNOWN"));
+  assert.ok(obs.includes("CATALOG_PASS") === false);
+  assert.doesNotMatch(card, /fetch\s*\(|localStorage|sessionStorage|process\.env/);
 });
