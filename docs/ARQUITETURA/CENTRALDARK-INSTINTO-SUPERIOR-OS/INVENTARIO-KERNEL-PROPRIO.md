@@ -1200,3 +1200,18 @@ REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
 ```
 
 Isso é o comportamento do **núcleo lógico/operacional da CentralDark-OS** hoje. O kernel nativo de baixo nível (bootloader, scheduler, drivers etc.) continua sendo outra camada, ainda futura, conforme o inventário deste mesmo owner.
+
+
+## 🪬 Galeria de extensões do Instinto — readback Casa 16/10/2026
+
+Owner visual REUSE: `apps/instinto-superior/src/components/central/DesignCenter.tsx` com aba `Galeria de extensões` restrita ao `autenticado=true`, catálogo inicial `ZENDRIVE CLI 0.1.1`, comando reutilizado `centraldark.zendriveCli` e links para skill existente e PR #1820. O `CockpitShell.tsx` passa `autenticado` ao Design Center. Fonte na `main` persistida pelos commits `a743b66c` (galeria) e `35165b57` (binding de autenticação). Readback 16/10: `DesignCenter.tsx` Casa e `main` hash idêntico `014f62afce11a358cf6abadf22ee80ace9c04314`. `CockpitShell.tsx` Casa contém trabalho não publicado nesta medição; preservar sem sobrescrever.
+
+**Verificação de build local:** `npm run build:vps` não executa literalmente no Windows por sintaxe Unix de `NITRO_PRESET=node-server`; usando `$env:NITRO_PRESET='node-server'; npm run build`, Vite/Nitro gerou `.output` com `VITE_EXIT=0`. O postbuild canônico `scripts/fix-node-ssr-cycle.mjs` retornou `SSR_CYCLE_FIX_BLOCKED: expected one circular bridge, found 0`; portanto `FULL_BUILD_GATE=FAIL`.
+
+**Smoke de runtime na Casa:** servidor Node gerado respondeu **HTTP 500** em `/`, `/cockpit` e `/auth`; stack `TypeError: createServerFn is not a function` em `.output/server/_ssr/server-Co-puXBn.mjs:157`. Isso impede declarar SSR pronto para deploy e está fora do delta da galeria. Não alterar o guard de SSR só para silenciar o erro; medir o ciclo e manter CSRF/auth.
+
+**Estática:** TypeScript parser `DesignCenter.tsx` e `CockpitShell.tsx` = **0 parse diagnostics**; ESLint só nesses arquivos com `prettier/prettier` desativado = **0 errors, 1 warning pré-existente** (`react-refresh/only-export-components` no DesignCenter). ESLint estrito = FAIL por abundantes avisos de formatação/CRLF; `tsc --noEmit` global = FAIL por erros também em outros arquivos (DailyReviewPanel, GoalsDashboard, libs Supabase etc.). Não declarar full lint/typecheck PASS.
+
+**Publicação:** VPS acessada por SSH/Tailscale, Caddy ativo no readback, mas o HEAD do checkout na VPS difere da fonte `main` usada na galeria. **Nenhum deploy deste delta foi aplicado.** Não inferir que a galeria está visível no site público; validar somente depois de resolver SSR sem regressão e provar o endpoint autenticado. `SOURCE_ON_MAIN=PASS; LOCAL_UI_SOURCE=PASS; TARGET_PARSE=PASS; TARGET_LINT_WITHOUT_STYLE=PASS; VITE_OUTPUT=PASS; FULL_BUILD=FAIL; LOCAL_SSR_SMOKE=FAIL; VPS_DEPLOY=NOT_EXECUTED; AUTH_UI_VISUAL=UNKNOWN`.
+
+**NEXT_CURSOR:** encontrar menor correção causal no owner `scripts/fix-node-ssr-cycle.mjs` ou na geração Nitro, preservar CSRF; rodar novamente SSR smoke 200/3xx correto; checar TypeScript/lint globais sem varrer trabalho alheio; depois executar esteira de deploy autorizada com rollback e captura da aba autenticada. Sem galeria alternativa nem segundo Zendrive.
