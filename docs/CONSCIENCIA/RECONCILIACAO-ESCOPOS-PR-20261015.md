@@ -124,7 +124,7 @@ Hermes Executor | ? (POSSÍVEL) | VERIFICAR   | Reconciliar PRs
 @owner: docs/CONSCIENCIA/RECONCILIACAO-ESCOPOS-PR-20261015.md
 @code_ref: apps/instinto-superior/src/components/central/CockpitShell.tsx
 @code_ref: apps/instinto-superior/src/components/central/PapagaioHudMcp.tsx
-@last_updated: 2026-10-16T12:19:56.233Z
+@last_updated: 2026-10-16T12:22:15.662Z
 @estado: SOURCE_IN_PR; CI_BUILD_RUNTIME_NOT_YET_VERIFIED
 @next_cursor: medir frontend e recibos MCP antes de promover main.
 -->
@@ -135,7 +135,7 @@ Hermes Executor | ? (POSSÍVEL) | VERIFICAR   | Reconciliar PRs
 
 **Invariantes do GIF aprovado:** 01 Placar Geral → 02 Mapa das Missões na ordem original (10) → 03 Raio-X → 04 Chefões → 05 Radar de Provas → 06 Próxima Jogada → 07 Vitória. Ref imagem: `CENTRALDARK-PAPAGAIO-ON-HUD-FIXO-20261016.png` exibida na conversa (não é caminho publicado em produção).
 
-**Melhoria concreta:** leitura histórica 50% (5 concluídas, 2 em andamento, 3 pendentes, datada de 13/10) marcada explicitamente `HISTORICAL`, nunca como CURRENT. Todos os estados de missão são `SEM READBACK` até existirem receipts por missão. O componente usa dados do hook existente `lerEstadoCentralDark` e somente aceita sensores frescos (até 90 segundos, sem erro); falha/stale vira UNKNOWN. PRs e status CI aqui são referência datada de 16/10 com links, **não** APIs de checks em tempo real. Não confundir billing de GitHub Actions com estado das gates.
+**Correção de falso verde visual:** o placar histórico e os PASS de CI histórico aparecem em tons neutros, nunca no verde reservado a dado recente de sensor; o rótulo VPS indica SHA, não deploy efetivo.\n\n**Melhoria concreta:** leitura histórica 50% (5 concluídas, 2 em andamento, 3 pendentes, datada de 13/10) marcada explicitamente `HISTORICAL`, nunca como CURRENT. Todos os estados de missão são `SEM READBACK` até existirem receipts por missão. O componente usa dados do hook existente `lerEstadoCentralDark` e somente aceita sensores frescos (até 90 segundos, sem erro); falha/stale vira UNKNOWN. PRs e status CI aqui são referência datada de 16/10 com links, **não** APIs de checks em tempo real. Não confundir billing de GitHub Actions com estado das gates.
 
 **Rastro e cadeado:** `TOCOU→#OBSERVACOES#+DOC→TESTE→CONTRAPROVA→RECEIPT→SELO`. Novos estados e percentuais apenas mediante prova; skin Esmeralda continua regida pelo `usePeleCockpit` existente. Responsividade, contraste e navegação via `<details>` do HTML sem criar outro mecanismo.
 
