@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { summarizeHarnessWeekRows } from "../src/agent-observability.js";
+import { summarizeHarnessWeekRows } from "../src/harness-weekly-stats.js";
 
 const now = Date.parse("2026-10-16T15:00:00.000Z");
 const event = (event_id, kind, data, timestamp="2026-10-16T12:00:00.000Z", actor="hermes") =>
