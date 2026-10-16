@@ -169,27 +169,62 @@
   --gradient-gold: linear-gradient(120deg, #bfe6f2, #00eaff 45%, #1e4550);
 }
 
-/* HUD canônico: Esmeralda */
+/* HUD canônico: Esmeralda — Visual DNA metálico (evolução in-place).
+ * Não cria pele, DOM, provider ou runtime paralelo. Mantém o identificador
+ * "esmeralda" e as cores de assinatura; só altera tokens e acabamento.
+ * Os componentes vivos e seus handlers continuam no CockpitShell.
+ */
 .cockpit-pele[data-pele-cockpit="esmeralda"] {
-  --background: #040d08;
-  --foreground: #b8e8cc;
-  --surface: #0a1a10;
-  --surface-2: #112a18;
-  --card: #0a1a10;
-  --card-foreground: #b8e8cc;
-  --popover: #0a1a10;
-  --popover-foreground: #b8e8cc;
+  --background: #05090b;
+  --foreground: #d7eadf;
+  --surface: #0b1416;
+  --surface-2: #152126;
+  --card: #0e181b;
+  --card-foreground: #d7eadf;
+  --popover: #101b1e;
+  --popover-foreground: #d7eadf;
   --primary: #00ff88;
   --accent: #00ff88;
   --gold: #00ff88;
   --gold-soft: #80ffb8;
   --neon-green: #00ff88;
   --destructive: #ff4455;
-  --muted: #112a18;
-  --muted-foreground: #4a7a5a;
-  --border: rgba(0, 255, 136, 0.15);
-  --input: rgba(0, 255, 136, 0.22);
-  --gradient-gold: linear-gradient(120deg, #90ffcc, #00ff88 45%, #0a4020);
+  --muted: #182428;
+  --muted-foreground: #92aba2;
+  --border: rgba(136, 223, 176, 0.24);
+  --input: rgba(136, 223, 176, 0.28);
+  --ring: rgba(0, 255, 136, 0.54);
+  --gradient-gold: linear-gradient(120deg, #b6ffe0, #00ff88 45%, #114633);
+  --gradient-surface: linear-gradient(
+    155deg,
+    rgba(38, 53, 55, 0.96) 0%,
+    rgba(15, 25, 28, 0.98) 36%,
+    rgba(7, 13, 16, 0.99) 100%
+  );
+  --shadow-deep: 0 24px 65px -34px rgba(0, 0, 0, 0.92),
+    inset 0 1px 0 rgba(218, 245, 228, 0.08);
+  --shadow-neon: 0 0 0 1px rgba(0, 255, 136, 0.22),
+    0 18px 55px -28px rgba(0, 255, 136, 0.24);
+
+  background-color: var(--background);
+  background-image:
+    radial-gradient(55rem 34rem at 85% 0%, rgba(0, 255, 136, 0.07), transparent 70%),
+    linear-gradient(150deg, #10191d 0%, #05090b 52%, #080f11 100%);
+  background-repeat: no-repeat;
+}
+
+/* O relevo fica dentro da Esmeralda, sem interferir nas outras peles. */
+.cockpit-pele[data-pele-cockpit="esmeralda"] .panel {
+  border-color: var(--border);
+  box-shadow:
+    inset 0 1px 0 rgba(218, 245, 228, 0.13),
+    inset 1px 0 0 rgba(170, 213, 195, 0.04),
+    0 24px 70px -36px rgba(0, 0, 0, 0.92);
+}
+
+.cockpit-pele[data-pele-cockpit="esmeralda"] :is(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 @layer base {
