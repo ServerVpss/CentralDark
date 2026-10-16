@@ -12,17 +12,42 @@ async function readCanonicalTree(token) {
     if (!token) throw new Error("GITHUB_AUTH_REQUIRED");
     const owner = encodeURIComponent(config.github.owner);
     const repo = encodeURIComponent(config.github.repo);
-    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/main?recursive=1`, {
-        headers: {
-            Accept: "application/vnd.github+json",
-            Authorization: `Bearer ${token}`,
-            "X-GitHub-Api-Version": "2022-11-28",
-            "User-Agent": "MCP-CentralDark/skills",
-        },
-    });
-    if (!res.ok) throw new Error(`SKILL_TREE_GITHUB_HTTP_${res.status}`);
-    const document = await res.json();
-    return { tree_sha: document.sha || null, entries: indexSkillTree(document) };
+    async function githubTree(ref, recursive) {
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${encodeURIComponent(ref)}${recursive ? "?recursive=1" : ""}`, {
+            headers: {
+                Accept: "application/vnd.github+json",
+                Authorization: `Bearer ${token}`,
+                "X-GitHub-Api-Version": "2022-11-28",
+                "User-Agent": "MCP-CentralDark/skills",
+            },
+        });
+        if (!res.ok) throw new Error(`SKILL_TREE_GITHUB_HTTP_${res.status}`);
+        return res.json();
+    }
+    let doc = await githubTree("main", true);
+    if (doc.truncated === true) {
+        // GitHub limita respostas de arvore extensa; buscar apenas as duas subarvores proprietarias.
+        const root = await githubTree("main", false);
+        const skills = root.tree?.find((e) => e.type === "tree" && e.path === "skills");
+        const agents = root.tree?.find((e) => e.type === "tree" && e.path === ".agents");
+        if (!skills || !agents) throw new Error("SKILL_ROOT_MISSING");
+        const agentsRoot = await githubTree(agents.sha, false);
+        const agentSkills = agentsRoot.tree?.find((e) => e.type === "tree" && e.path === "skills");
+        if (!agentSkills) throw new Error("AGENT_SKILL_ROOT_MISSING");
+        const [publicTree, internalTree] = await Promise.all([
+            githubTree(skills.sha, true), githubTree(agentSkills.sha, true),
+        ]);
+        if (publicTree.truncated || internalTree.truncated) throw new Error("SKILL_SUBTREE_TRUNCATED");
+        doc = {
+            sha: root.sha,
+            truncated: false,
+            tree: [
+                ...publicTree.tree.map((e) => ({ ...e, path: `skills/${e.path}` })),
+                ...internalTree.tree.map((e) => ({ ...e, path: `.agents/skills/${e.path}` })),
+            ],
+        };
+    }
+    return { tree_sha: doc.sha || null, entries: indexSkillTree(doc) };
 }
 async function readCatalog(ctx) {
     try { return { ok: true, ...(await readCanonicalTree(ctx.token)) }; }
