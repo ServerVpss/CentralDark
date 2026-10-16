@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(forja): adicionar componente de perfis comportamentais e validacao de templates",
+    "lastCommit": "fix(soul): revisar owners e atualizar ancora current da Forja Viva",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-16T00:48:49.301Z",
+      "titulo": "Push na main · b33d00c4340a7a17cde2376b2dc08527a4d64cb0",
+      "detalhe": "fix(soul): revisar owners e atualizar ancora current da Forja Viva",
+      "area": "Repositório",
+      "sha": "b33d00c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-16T00:34:29.007Z",
       "titulo": "Push na main · 48db5cb0ebffc481d1b5103e791fbfe916ee9285",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "fdc418e",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T06:20:08.060Z",
-      "titulo": "Push na main · 18b89e95c47a97edce2c03572c4f5ff395ceecbc",
-      "detalhe": "🪬 INSTINTO SUPERIOR · CRISTAL DOS PAPÉIS + CIRCUITO GPT/CODEX ↔ HERMES ↔ CLAUDE (#1806)",
-      "area": "Repositório",
-      "sha": "18b89e9",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-16T00:48:49.301Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · b33d00c4340a7a17cde2376b2dc08527a4d64cb0 (b33d00c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-16T00:34:29.007Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · fdc418e889990237ba9bf3fe2599fd00988debeb (fdc418e)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T06:20:08.060Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 18b89e95c47a97edce2c03572c4f5ff395ceecbc (18b89e9)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-16T00:34:29.007Z",
-  "updatedAtBR": "15/10/2026, 21:34:29 BRT"
+  "updatedAt": "2026-10-16T00:48:49.301Z",
+  "updatedAtBR": "15/10/2026, 21:48:49 BRT"
 }
