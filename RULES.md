@@ -5,7 +5,7 @@ scope: "Regras operacionais portáteis para agentes, skills, superfícies e runt
 owner: "RULES.md"
 inherits: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 consumed_by: "AGENTS.md"
-rules_last_updated: "2026-10-13"
+rules_last_updated: "2026-10-16"
 soul_last_updated: "2026-10-05"
 agents_last_updated: "2026-10-05"
 source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
@@ -31,7 +31,7 @@ RULES_POINTS_TO_AGENTS=true
 AGENTS_POINTS_TO_RULES=true
 AGENTS_INHERIT_RULES=true
 NO_SKILL_ABOVE_CENTRALDARK=true
-RULES_LAST_UPDATED=2026-10-13
+RULES_LAST_UPDATED=2026-10-16
 SOUL_LAST_UPDATED=2026-10-05
 AGENTS_LAST_UPDATED=2026-10-05
 ```
@@ -65,6 +65,15 @@ CHEFE_INTENT
 ```
 
 ---
+
+<!-- CENTRALDARK_INLINE_DOC_SYNC_20261016 -->
+## 🧬 Rastro semântico obrigatório — código e documentação juntos
+
+Toda pessoa, IA, executor ou automação que **altera código** deve atualizar o mesmo owner, o rastro correspondente e a documentação ligada **no mesmo delta de Git**, registrando a data/hora da alteração em UTC ISO 8601 com milissegundos (exemplo: `2026-10-16T10:00:00.000Z`). A data nunca é simulada. `CODE_CHANGE -> INLINE_TRACE_UPDATED + DOC_CHANGE + DOC_TIMESTAMP + CODE_REF + TEST/RECEIPT`.
+
+Usar em arquivos comentáveis a marca existente `#OBSERVACOES#`, com `@owner`, `@doc_ref`, `@last_updated` e, quando pertinente, `@escopo`, `@implementado`, `@pendente`, `@estado`, `@next_cursor`, sem narrar informação redundante em cada linha. Documentos ligados têm `@code_ref`, `@last_updated` e descrevem a mudança material. Arquivos sem suporte a comentário (JSON) guardam rastro **no documento proprietário**, sem invalidar o formato. Exclusões registram `@removed: true`. Preserve a intenção e a prova, não altere retroativamente datas históricas.
+
+**Enforcement incremental:** apenas arquivos alterados daqui para frente; reutilizar o gate `scripts/lupa/diagram-route-gate.mjs` chamado pela `porta-de-entrada.yml`. O gate verifica acoplamento estrutural e timestamps; revisão/teste humano ou agente independente confirma semântica. Não afirmar que um commit altera automaticamente todas as máquinas/contas ou que todos os arquivos legados foram atualizados.
 
 ## Bem-vindo, agente
 
