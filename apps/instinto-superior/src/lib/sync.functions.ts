@@ -12,8 +12,19 @@ interface SyncStatus {
 }
 
 /* ── caminhos ── */
-const SCRIPT_PATH = path.join(process.cwd(), "scripts", "auto-sync", "AUTO-SYNC-MASTER.py");
-const STATUS_FILE = path.join(process.cwd(), ".auto-sync", "status.json");
+function centralDarkRoot(): string {
+  let dir = process.cwd();
+  for (;;) {
+    const candidate = path.join(dir, "scripts", "auto-sync", "AUTO-SYNC-MASTER.py");
+    if (fs.existsSync(candidate)) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return process.cwd();
+    dir = parent;
+  }
+}
+const CENTRALDARK_ROOT = centralDarkRoot();
+const SCRIPT_PATH = path.join(CENTRALDARK_ROOT, "scripts", "auto-sync", "AUTO-SYNC-MASTER.py");
+const STATUS_FILE = path.join(CENTRALDARK_ROOT, ".auto-sync", "status.json");
 
 function ensureStatusDir() {
   const dir = path.dirname(STATUS_FILE);
