@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
+  BarChart3,
   Gauge,
   GitBranch,
   House,
@@ -50,6 +51,139 @@ function Signal({
         {detail}
       </p>
     </article>
+  );
+}
+
+
+type SemanaHarness = {
+  schema: string;
+  window: string;
+  observedAt: string;
+  coverage: "PARTIAL_CAPPED" | "PARTIAL_INSTRUMENTED";
+  capped: boolean;
+  totalObserved: number;
+  pass: number;
+  fail: number;
+  unknown: number;
+  successPctOfDecided: number | null;
+  failurePctOfDecided: number | null;
+  unknownPctOfObserved: number | null;
+  avgDurationMs: number | null;
+  daily: Array<{ day: string; calls: number; pass: number; fail: number; unknown: number }>;
+  bySource: Array<{ name: string; calls: number; pass: number; fail: number; unknown: number }>;
+  topTools: Array<{ name: string; calls: number; pass: number; fail: number; unknown: number }>;
+};
+
+/**
+ * Projeção de observabilidade, não nova coleta. A autenticação continua com
+ * o MCP Admin; não transportamos tokens nem cookies em estado do cockpit.
+ */
+function RastroSemanalMcp() {
+  const base = "https://api.centralldark.com";
+  const rota = base + "/admin/api/metricas";
+  const q = useQuery({
+    queryKey: ["centraldark", "harness-weekly-admin"],
+    queryFn: async (): Promise<SemanaHarness> => {
+      const response = await fetch(rota, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (response.status === 401 || response.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!response.ok) throw new Error("API_UNAVAILABLE");
+      const json = await response.json() as { harnessWeek?: SemanaHarness };
+      if (json.harnessWeek?.schema !== "centraldark.harness.weekly.v1")
+        throw new Error("WEEKLY_NOT_DEPLOYED");
+      return json.harnessWeek;
+    },
+    refetchInterval: 60_000,
+    retry: false,
+  });
+  const d = q.data;
+  const status = d ? d.coverage : q.isPending ? "PENDING" :
+    q.error instanceof Error ? q.error.message : "UNKNOWN";
+  const pct = (value: number | null | undefined) => value == null ? "UNKNOWN" : value.toFixed(1) + "%";
+  const max = Math.max(1, ...((d?.daily ?? []).map(day => day.calls)));
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-surface-1/80 p-4 sm:p-5"
+      aria-labelledby="harness-weekly-title">
+      <header className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="size-5 text-neon-green" aria-hidden="true" />
+          <h3 id="harness-weekly-title" className="font-semibold">Rastro de ferramentas · últimos 7 dias</h3>
+        </div>
+        <Button size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
+          <RefreshCw className={q.isFetching ? "size-4 animate-spin" : "size-4"} aria-hidden="true" />
+          Atualizar
+        </Button>
+      </header>
+      <p className="mt-2 text-xs text-muted-foreground">
+        API MCP existente /admin/api/metricas · amostra de eventos instrumentados.
+        Não inclui automaticamente chamadas internas do ChatGPT nem todas as ferramentas do desktop.
+      </p>
+      <p className="mt-3 font-mono text-xs" role="status" aria-live="polite">
+        {status}{d?.capped ? " · LIMITE DA AMOSTRA ATINGIDO" : ""}
+        {d ? " · observado " + new Date(d.observedAt).toLocaleString("pt-BR") : ""}
+      </p>
+      {d ? (
+        <>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {[
+              ["Chamadas observadas", String(d.totalObserved), "Eventos deduplicados"],
+              ["Acertos", pct(d.successPctOfDecided), d.pass + " PASS / resultados conhecidos"],
+              ["Erros", pct(d.failurePctOfDecided), d.fail + " FAIL / resultados conhecidos"],
+              ["Sem veredito", pct(d.unknownPctOfObserved), d.unknown + " UNKNOWN / observados"],
+            ].map(([label, value, detail]) => (
+              <div key={label} className="rounded-lg border border-border bg-background/50 p-3">
+                <p className="text-[11px] text-muted-foreground">{label}</p>
+                <strong className="mt-1 block font-mono text-xl">{value}</strong>
+                <small className="text-[10px] text-muted-foreground">{detail}</small>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Duração média das amostras medidas: {d.avgDurationMs == null ? "UNKNOWN" : d.avgDurationMs + " ms"}.
+            Cobertura: {d.coverage}. Sem inferir 100% do harness.
+          </p>
+          <div className="mt-4 grid grid-cols-7 gap-1" role="list" aria-label="Chamadas observadas por dia, UTC">
+            {d.daily.map(day => (
+              <div key={day.day} role="listitem" className="min-w-0 text-center">
+                <div className="flex h-20 items-end justify-center rounded border border-border bg-background/30 p-1">
+                  <div className="w-full rounded-sm bg-neon-green/70"
+                    style={{ height: (day.calls ? Math.max(8, (day.calls / max) * 100) : 0) + "%" }} />
+                </div>
+                <span className="mt-1 block font-mono text-[10px]">{day.day.slice(5)}</span>
+                <span className="block font-mono text-[10px] text-muted-foreground">{day.calls}</span>
+              </div>
+            ))}
+          </div>
+          <details className="mt-4 rounded-lg border border-border p-3">
+            <summary className="cursor-pointer font-semibold">Ferramentas e fontes · detalhar</summary>
+            <div className="mt-3 overflow-x-auto">
+              <table className="w-full min-w-[340px] text-left text-xs">
+                <thead><tr><th>Origem / ferramenta</th><th>Chamadas</th><th>PASS</th><th>FAIL</th><th>UNKNOWN</th></tr></thead>
+                <tbody>
+                  {[...d.bySource, ...d.topTools].map((row, i) => (
+                    <tr key={i} className="border-t border-border">
+                      <td className="max-w-56 truncate py-1" title={row.name}>{row.name}</td>
+                      <td>{row.calls}</td><td>{row.pass}</td><td>{row.fail}</td><td>{row.unknown}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </>
+      ) : (
+        <div className="mt-4 rounded-lg border border-dashed border-amber-500/40 p-4 text-sm">
+          Dados semanais indisponíveis nesta sessão. Sem números fictícios e sem marcar PASS.
+          <a className="mt-2 block underline" href={base + "/admin"} target="_blank" rel="noreferrer">
+            Abrir administração MCP e verificar autenticação / rastro
+          </a>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -178,6 +312,8 @@ export function ObservabilidadeCentralDark() {
           sem transformar dado antigo em verde e sem segundo monitor.
         </p>
       </div>
+
+      <RastroSemanalMcp />
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {sinais.map((s) => (
