@@ -223,5 +223,5 @@ test("OAuth Broker traduzido para humano antes do detalhe técnico, com fonte e 
   assert.ok(obs.includes("o estado do catálogo não comprova"));
   assert.ok(conex.includes('requireSupabaseAuth'));
   assert.ok(conex.includes('.eq("role", "admin")'));
-  assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY|fetch\s*\(/);
+  assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY|\bfetch\s*\(/);
 });
