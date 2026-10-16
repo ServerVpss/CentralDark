@@ -119,3 +119,24 @@ Hermes Executor | ? (POSSÍVEL) | VERIFICAR   | Reconciliar PRs
 **Por:** SOL / COORDENAÇÃO  
 **Referência:** `docs/CONSCIENCIA/RECONCILIACAO-ESCOPOS-PR-20261015.md`  
 **Status:** FERIDAS MAPEADAS — AGUARDANDO BUILD + VERIFICAÇÃO RUNTIME
+
+<!-- #OBSERVACOES# | CENTRALDARK.HUD.PAPAGAIO_ON
+@owner: docs/CONSCIENCIA/RECONCILIACAO-ESCOPOS-PR-20261015.md
+@code_ref: apps/instinto-superior/src/components/central/CockpitShell.tsx
+@code_ref: apps/instinto-superior/src/components/central/PapagaioHudMcp.tsx
+@last_updated: 2026-10-16T12:19:56.233Z
+@estado: SOURCE_IN_PR; CI_BUILD_RUNTIME_NOT_YET_VERIFIED
+@next_cursor: medir frontend e recibos MCP antes de promover main.
+-->
+
+## 🦜 PAPAGAIO ON · 10 missões e 7 seções dentro do HUD existente (16/10/2026)
+
+**Owner** `CockpitShell.tsx`; componente exclusivamente visual `PapagaioHudMcp.tsx`. Mesma consulta `lerEstadoCentralDark`, mesmos tokens/peles, sem novo app/serviço/sensor/cache ou segunda autoridade. Não confundir este componente com uma segunda implementação de HUD: é a **seção adicional dentro do HUD de estado** existente.
+
+**Invariantes do GIF aprovado:** 01 Placar Geral → 02 Mapa das Missões na ordem original (10) → 03 Raio-X → 04 Chefões → 05 Radar de Provas → 06 Próxima Jogada → 07 Vitória. Ref imagem: `CENTRALDARK-PAPAGAIO-ON-HUD-FIXO-20261016.png` exibida na conversa (não é caminho publicado em produção).
+
+**Melhoria concreta:** leitura histórica 50% (5 concluídas, 2 em andamento, 3 pendentes, datada de 13/10) marcada explicitamente `HISTORICAL`, nunca como CURRENT. Todos os estados de missão são `SEM READBACK` até existirem receipts por missão. O componente usa dados do hook existente `lerEstadoCentralDark` e somente aceita sensores frescos (até 90 segundos, sem erro); falha/stale vira UNKNOWN. PRs e status CI aqui são referência datada de 16/10 com links, **não** APIs de checks em tempo real. Não confundir billing de GitHub Actions com estado das gates.
+
+**Rastro e cadeado:** `TOCOU→#OBSERVACOES#+DOC→TESTE→CONTRAPROVA→RECEIPT→SELO`. Novos estados e percentuais apenas mediante prova; skin Esmeralda continua regida pelo `usePeleCockpit` existente. Responsividade, contraste e navegação via `<details>` do HTML sem criar outro mecanismo.
+
+**Pendente:** build real de frontend e render mobile/desktop nas quatro peles, readback do cockpit publicado, owner MCP para 10 recibos individuais, atualização live por PR se já existir API no cockpit, PR CI e integração main; não reivindicar instalação ou selo.
