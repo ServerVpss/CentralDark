@@ -21,7 +21,7 @@ export function summarizeHarnessWeekRows(rows, { now = Date.now(), capped = fals
     const duration = Number(payload.durationMs ?? payload.duration_ms);
     const toolName = String(payload.toolName ?? payload.tool_name ?? (row.key?.startsWith("tool:") ? row.key.slice(5) : "unknown")).slice(0, 96);
     const source = row.kind === "mcp_tool_call" ? "MCP" : (row.actor || "agents").slice(0, 60);
-    unique.set(key, { outcome, duration: Number.isFinite(duration) && duration >= 0 ? duration : null,
+    unique.set(key, { traced: Boolean(payload.trace_id || payload.correlation_id || row.correlation_id), outcome, duration: Number.isFinite(duration) && duration >= 0 ? duration : null,
       toolName, source, day: new Date(ms).toISOString().slice(0, 10) });
   }
   const items = [...unique.values()];
@@ -29,6 +29,7 @@ export function summarizeHarnessWeekRows(rows, { now = Date.now(), capped = fals
   const fail = items.filter(x => x.outcome === "fail").length;
   const unknown = items.length - pass - fail;
   const decided = pass + fail;
+  const traced = items.filter(x => x.traced).length;
   const pct = n => decided ? Math.round(n / decided * 1000) / 10 : null;
   const counts = new Map();
   const sourceCounts = new Map();
@@ -52,7 +53,8 @@ export function summarizeHarnessWeekRows(rows, { now = Date.now(), capped = fals
     schema: "centraldark.harness.weekly.v1", window: "rolling_7_days", timezone: "UTC",
     observedAt: new Date(now).toISOString(), since: new Date(since).toISOString(),
     coverage: capped ? "PARTIAL_CAPPED" : "PARTIAL_INSTRUMENTED", capped: Boolean(capped),
-    totalObserved: items.length, pass, fail, unknown,
+    totalObserved: items.length, pass, fail, unknown, traced,
+    tracePctOfObserved: items.length ? Math.round(traced / items.length * 1000) / 10 : null,
     successPctOfDecided: pct(pass), failurePctOfDecided: pct(fail),
     unknownPctOfObserved: items.length ? Math.round(unknown / items.length * 1000) / 10 : null,
     avgDurationMs: durations.length ? Math.round(durations.reduce((a,b)=>a+b,0)/durations.length) : null,
