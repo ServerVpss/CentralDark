@@ -5,8 +5,14 @@ on:
     types: [opened, reopened, ready_for_review, synchronize]
     branches: [main]
   pull_request_target:
-    types: [opened, reopened, ready_for_review, synchronize]
+    types: [opened, reopened, ready_for_review, synchronize, closed]
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      numero_pr:
+        description: 'Numero do PR ja mergeado a auditar sem reabrir'
+        required: true
+        type: number
 
 permissions:
   contents: read
@@ -540,3 +546,134 @@ jobs:
             echo "CAUSE=UNKNOWN_STATUS_${JOB_STATUS}"
           fi
           # UNKNOWN/SKIPPED/empty never promoted as PASS by this receipt alone
+
+
+  post_merge_counterproof:
+    name: 🔎 Contraprova pós-merge e vínculos de PR
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request_target' &&
+       github.event.action == 'closed' &&
+       github.event.pull_request.merged == true)
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      checks: read
+      pull-requests: read
+      issues: write
+    steps:
+      - name: 🔹 Auditar evidência real sem executar código do PR
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const {owner,repo}=context.repo;
+            const marker='<!-- centraldark-post-merge-proof-review -->';
+            const unknown=[];
+            const read=async (name,fn)=>{
+              try{return await fn();}
+              catch(e){unknown.push(name+': HTTP '+(e.status||'UNKNOWN'));return null;}
+            };
+            let pr=context.payload.pull_request;
+            if(context.eventName==='workflow_dispatch'){
+              const number=Number(context.payload.inputs?.numero_pr);
+              if(!Number.isInteger(number)||number<1)throw Error('NUMERO_PR_INVALIDO');
+              const response=await github.rest.pulls.get({owner,repo,pull_number:number});
+              pr=response.data;
+            }
+            if(!pr?.merged){
+              core.notice('PR nao mergeado: nenhuma conclusao pos-merge permitida.');
+              return;
+            }
+            const prNum=pr.number;
+            const head=pr.head?.sha||null;
+            const merge=pr.merge_commit_sha||null;
+            const main=await read('MAIN',async ()=>(await github.rest.repos.getBranch({owner,repo,branch:'main'})).data.commit.sha);
+            const checks=async sha=>sha?read('CHECKS_'+sha,()=>github.paginate(github.rest.checks.listForRef,{owner,repo,ref:sha,per_page:100})):null;
+            const headChecks=await checks(head);
+            const mergeChecks=await checks(merge);
+            const latest=(runs)=>{
+              if(!runs)return null;
+              const byName=new Map();
+              for(const run of runs){
+                const k=(run.app?.slug||'')+'/'+run.name;
+                const previous=byName.get(k);
+                if(!previous||Number(run.id)>Number(previous.id))byName.set(k,run);
+              }
+              return [...byName.values()];
+            };
+            const classify=(runs)=>{
+              if(!runs)return {total:0,ok:0,failed:[],uncertain:['API indisponivel']};
+              const current=latest(runs);
+              const fail=current.filter(r=>['failure','timed_out','action_required','startup_failure'].includes(r.conclusion));
+              const pending=current.filter(r=>r.status!=='completed'||!r.conclusion||['skipped','neutral','cancelled','stale'].includes(r.conclusion));
+              return {total:current.length,ok:current.filter(r=>r.status==='completed'&&r.conclusion==='success').length,
+                failed:fail.map(r=>r.name),uncertain:pending.map(r=>r.name)};
+            };
+            const headEvidence=classify(headChecks);
+            const mergeEvidence=classify(mergeChecks);
+            const claim=/(?:100\s*%\s*verde|todos?\s+os\s+gates?\s+verdes?|all.ci.success|ci.green|gates.passed\s*=\s*true|fixed.point\s*=\s*pass)/i.test(pr.body||'');
+            const gaps=[];
+            if(headEvidence.failed.length)gaps.push('HEAD: checks com falha real no ref auditado.');
+            if(headEvidence.total===0)gaps.push('HEAD: sem checks verificaveis; UNKNOWN, nao PASS.');
+            if(headEvidence.uncertain.length)gaps.push('HEAD: checks nao-success; confirmar quais eram obrigatorios.');
+            if(mergeEvidence.total===0)gaps.push('MERGE SHA: sem checks verificaveis; CI na main nao provado.');
+            if(mergeEvidence.failed.length)gaps.push('MERGE SHA: checks com falha observada.');
+            if(mergeEvidence.uncertain.length)gaps.push('MERGE SHA: checks pendentes/skipped/neutros/cancelados.');
+            if(claim&&(headEvidence.total===0||headEvidence.failed.length||headEvidence.uncertain.length))gaps.push('Declaracao de 100% verde nao sustentada pelo snapshot do HEAD.');
+            if(!merge)gaps.push('SHA de integracao indisponivel.');
+            const files=await read('PR_FILES',()=>github.paginate(github.rest.pulls.listFiles,{owner,repo,pull_number:prNum,per_page:100}));
+            const paths=new Set((files||[]).map(f=>f.filename));
+            const recent=await read('RECENT_PRS',async ()=>(await github.rest.pulls.list({owner,repo,state:'all',sort:'updated',direction:'desc',per_page:20})).data);
+            const related=[];
+            let scanned=0;
+            for(const other of (recent||[])){
+              if(other.number===prNum||scanned>=12)continue;
+              scanned++;
+              const otherFiles=await read('PR_'+other.number+'_FILES',()=>github.paginate(github.rest.pulls.listFiles,{owner,repo,pull_number:other.number,per_page:100}));
+              if(!otherFiles)continue;
+              const overlap=otherFiles.map(f=>f.filename).filter(p=>paths.has(p));
+              if(overlap.length){
+                related.push({number:other.number,overlap:overlap.slice(0,3).map(p=>p.replace(/[^a-zA-Z0-9./_-]/g,'?').slice(0,100)),count:overlap.length});
+              }
+            }
+            const list=(items)=>items.length?items.slice(0,12).map(n=>'- '+n.replace(/[\r\n]/g,' ').slice(0,130)).join('\n'):'- Nenhum detectado na amostra';
+            const body=[
+              marker,
+              '## 🔎 Contraprova de PR — pós-merge (somente leitura)',
+              '',
+              'PR original: #'+prNum+' | HEAD: '+(head||'UNKNOWN'),
+              'SHA da integracao: '+(merge||'UNKNOWN'),
+              'Main observada AGORA: '+(main||'UNKNOWN'),
+              'Main atual diferente do merge SHA nao invalida a integracao historica.',
+              '',
+              '### Gates observados (ultimo run de cada check/nome)',
+              '- HEAD: '+headEvidence.ok+'/'+headEvidence.total+' success',
+              '- MERGE SHA: '+mergeEvidence.ok+'/'+mergeEvidence.total+' success',
+              '- Checks com falha no HEAD: '+headEvidence.failed.length,
+              '- Checks indefinidos no HEAD: '+headEvidence.uncertain.length,
+              '- Checks com falha no merge SHA: '+mergeEvidence.failed.length,
+              '- Checks indefinidos no merge SHA: '+mergeEvidence.uncertain.length,
+              '',
+              '### Lacunas e contradicoes (NAO significam regressao automaticamente)',
+              list(gaps),
+              '',
+              '### PRs relacionados por arquivos comuns (NAO equivalencia causal)',
+              ...(related.length?related.map(p=>'- #'+p.number+' ('+p.count+' paths comuns): '+p.overlap.join(', ')):['- Nenhum comprovado na janela consultada']),
+              '',
+              'Cobertura: '+scanned+' PRs recentes comparados, nao o historico inteiro. Ausentes = UNKNOWN.',
+              'Permissoes de branch protection, checks obrigatorios e deploy/runtime nao sao comprovados por este snapshot.',
+              'VEREDITO: '+(gaps.length?'REVIEW_REQUIRED':'OBSERVADO_EM_ESCOPO')+' (nunca auto-approval).',
+              'NEXT_CURSOR: verificar gate requerido e log/annotation no SHA exato; reconciliar com PRs ligados por diff; registrar receipt no repo.',
+              '',
+              '> MERGED != DEPLOYED; CHECK_SUCCESS != COVERAGE_TOTAL; UNKNOWN != PASS; JUDGE nao muta.'
+            ].join('\n').slice(0,12000);
+            await core.summary.addRaw(body).write();
+            if(gaps.length||related.length){
+              const comments=await read('COMMENTS',()=>github.paginate(github.rest.issues.listComments,{owner,repo,issue_number:prNum,per_page:100}));
+              if(!comments){core.warning('Comentario nao publicado: leitura indisponivel, sem duplicar');return;}
+              const old=comments.find(x=>x.body?.includes(marker));
+              if(old?.body===body)return;
+              if(old)await github.rest.issues.updateComment({owner,repo,comment_id:old.id,body});
+              else await github.rest.issues.createComment({owner,repo,issue_number:prNum,body});
+            }
