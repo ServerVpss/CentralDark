@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "fix(soul): revisar owners e atualizar ancora current da Forja Viva",
+    "lastCommit": "docs(vscode): registrar fallback nativo quando politica bloquear script UIAutomation",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,22 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-16T01:21:59.532Z",
+      "titulo": "Push na main · 134f8eb7d99546c19f4a62004f83ed39c7c06ca3",
+      "detalhe": "docs(vscode): registrar fallback nativo quando politica bloquear script UIAutomation",
+      "area": "Repositório",
+      "sha": "134f8eb",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-16T01:21:00.255Z",
+      "titulo": "Push na main · 68a7ceb011f4b2e06c6624433f4e62b2fada9ca8",
+      "detalhe": "feat(vscode): versionar rota de foco e envio terminal com readback seguro",
+      "area": "Repositório",
+      "sha": "68a7ceb",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-16T00:48:49.301Z",
       "titulo": "Push na main · b33d00c4340a7a17cde2376b2dc08527a4d64cb0",
@@ -393,25 +409,23 @@
       "area": "Repositório",
       "sha": "b992c13",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T06:31:12.169Z",
-      "titulo": "Push na main · cfd6ee661a6b8885938ed73c1d02a76f83abb687",
-      "detalhe": "docs: checklist de validação — Instinto Superior no CentralDark.exe",
-      "area": "Repositório",
-      "sha": "cfd6ee6",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T06:27:16.965Z",
-      "titulo": "Push na main · fdc418e889990237ba9bf3fe2599fd00988debeb",
-      "detalhe": "docs: mapa de feridas de escopo — HUD, Cockpit, Hermes (reconciliação pré-integração Instinto)",
-      "area": "Repositório",
-      "sha": "fdc418e",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-16T01:21:59.532Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 134f8eb7d99546c19f4a62004f83ed39c7c06ca3 (134f8eb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-16T01:21:00.255Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 68a7ceb011f4b2e06c6624433f4e62b2fada9ca8 (68a7ceb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-16T00:48:49.301Z",
       "ia": "@segredounlock",
@@ -747,20 +761,6 @@
       "action": "📌 Push na main · b992c13cdd5954feac2ed96acbd3638acd529355 (b992c13)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T06:31:12.169Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · cfd6ee661a6b8885938ed73c1d02a76f83abb687 (cfd6ee6)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T06:27:16.965Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · fdc418e889990237ba9bf3fe2599fd00988debeb (fdc418e)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-16T00:48:49.301Z",
-  "updatedAtBR": "15/10/2026, 21:48:49 BRT"
+  "updatedAt": "2026-10-16T01:21:59.532Z",
+  "updatedAtBR": "15/10/2026, 22:21:59 BRT"
 }
