@@ -68,3 +68,59 @@ HERMES_DISPATCHED != HERMES_COMPLETED
 - `NEXT_CURSOR=SOURCE_READBACK → LOCAL_SYNTAX_TEST → SAME_SHA_CI → PR_REVIEW → MAIN_PROMOTION → RUNTIME_RELOAD_READBACK → CROSS_AGENT_ACK → OBSIDIAN_E2E`.
 
 Nunca promover `UNKNOWN` a `PASS` por documento, código fonte, retorno de ferramenta ou tentativa de execução.
+
+
+## DELTA 2026-10-16 — OAuth da conta GitHub + Hermes tipado
+
+**Nova fala do CHEFE:** reusar o GitHub App/OAuth App já instalado no Instinto Superior, autenticar a conta uma única vez por consentimento real e manter a experiência persistente via renovação segura; integrar os métodos da conversa como capacidades permanentes do Hermes. Isso **não** autoriza transformar credenciais em texto, desligar gates nem presumir credenciais vitalícias.
+
+### Fontes canônicas medidas
+
+- `apps/instinto-superior/src/routes/auth.tsx`: login primário usa Supabase/Google; não equivale à concessão de acesso GitHub para o catálogo.
+- `apps/modulos/hub/src/components/connectors/OAuthConnectors.tsx`: provedor GitHub já oferecido como OAuth pela interface HUB.
+- `apps/modulos/oauth-broker/server.mjs`: GitHub OAuth e persistência cifrada em `oauth_connections`, com armazenamento de `access_token_enc` e `refresh_token_enc` quando presente; autorização de usuário, renovação e permissão real não foram validadas E2E.
+- `apps/modulos/mcp/src/oauth.js`: OAuth cliente MCP distinto e `/oauth/callback` GitHub legada retorna HTTP 410; não utilizar como prova de GitHub user grant.
+- `supabase/functions/ponte-mcp-oauth-github/index.ts`: fluxo anterior usa `read:user` e cria chave da Ponte MCP; isso não prova `Contents: read` no repositório privado.
+- `apps/modulos/mcp/src/tools/skills/skill.js`: catálogo autenticado do PR #1837 usa token do contexto MCP; ainda exige ponte explícita da identidade/consentimento do HUB, sem fallback silencioso a token administrativo.
+- GitHub Docs: `https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/refreshing-user-access-tokens` e `https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation` — token expira; renovação e permissions devem ser observados.
+
+### DELTA persistido no owner Hermes
+
+- `.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json`: **12 procedimentos tipados** com entrada, saída, owner, condição e prova; um arquivo de referência dentro do owner existente, não 12 skills paralelas.
+- `.agents/skills/autonomous-ai-agents/hermes-agent/SKILL.md`: aponta para o contrato e explica os três tipos de persistência (Git, Hermes, grant OAuth).
+- `skills/centraldark-delegacao/SKILL.md`: adiciona condição de autenticação segura do privado e reuso da mesma receita em qualquer agente conectado.
+- `.agents/skills/skill-workshop/SKILL.md`: integra contratos ao catálogo do owner e preserva distinção OAuth cliente/conta.
+- `apps/modulos/mcp/tests/centraldark-hermes-delegacao-contract.test.mjs`: asserções do contrato JSON (a rodar em CI).
+- Releitura estrutural in-process sobre conteúdo exato do GitHub: **6 verificações PASS / 0 FAIL** (12 IDs únicos tipados, links, separação OAuth, sem segredo, lacunas com NOT_PROVEN). Isto **não substitui** o teste Node no mesmo HEAD nem runtime Hermes.
+
+### Delegação real ao Hermes
+
+`TASK_ID=t_add08d40` · `ASSIGNEE=default` · `WORKSPACE=dir:K:\\` · `RUN_ID=37`.
+
+- `hermes kanban list` não tinha missão equivalente dedicada ao OAuth GitHub privado.
+- `hermes kanban create` com idempotency key `CENTRALDARK-GITHUB-AUTH-SKILL-PRIVATE-BINDING-20261016`: **CREATED**.
+- `hermes kanban dispatch --dry-run`: selecionou essa tarefa.
+- `hermes kanban dispatch --max 1`: retornou **SPAWNED** para `t_add08d40`.
+- `hermes kanban show t_add08d40`: **RUNNING**, `run #37`, PID informado pelo Kanban; confirmação do processo, não do objetivo.
+- `t_790c940d` (Obsidian) guardada por `active_pr`; não fez spawn concorrente.
+
+Contrato de execução: modificar somente owner OAuth livre e autorizado; não tocar PR #1837 ou UI da PR #1832 enquanto houver writer ativo. Endpoints de catálogo privado devem validar identidade e recurso; 401/403 e revogação são gates, não erros a contornar. Segredos jamais transitam via ChatGPT/browser.
+
+### Semáforo exato
+
+```text
+GITHUB_OAUTH_OWNER_LOCATED=PASS
+HERMES_TYPED_SOURCE_COMMITTED=PASS
+TYPED_STATIC_CHECKS=6/6_PASS
+TASK_T_ADD08D40_SPAWNED=PASS
+TASK_T_ADD08D40_RUNNING=PASS_AT_READBACK
+GITHUB_APP_VS_OAUTH_APP_RUNTIME_TYPE=UNKNOWN
+GITHUB_LOGIN_CONSENT_BY_CHEFE=NOT_DONE
+GITHUB_GRANT_TO_PRIVATE_MCP_SKILLS=NOT_PROVEN
+OAUTH_REFRESH_ROTATION_RUNTIME=NOT_PROVEN
+CI_SAME_SHA=NOT_PROVEN
+HERMES_SKILL_INSTALLED_AND_LOADED=NOT_PROVEN
+MCP_RUNTIME_DEPLOY=NOT_PROVEN
+```
+
+**NEXT_CURSOR:** `HERMES_TASK_t_add08d40_RECEIPT → REVIEW_AUTH_IDENTITY_BINDING → GITHUB_CONSENT_BY_USER → EXPLICIT_PERMISSION_READBACK → SECURE_SKILL_LOOKUP → SAME_SHA_CI → MAIN_PROMOTION → HERMES_RUNTIME_LOAD_ACK`.
