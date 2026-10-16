@@ -256,3 +256,34 @@ test("contrato único de cartões exige função humana, owner, responsabilidade
   assert.ok(obs.includes("CATALOG_PASS") === false);
   assert.doesNotMatch(card, /fetch\s*\(|localStorage|sessionStorage|process\.env/);
 });
+test("catálogo único de provedores e sininho mantêm limites de prova", () => {
+  const src = read("apps/modulos/mcp/src/tools/core/mcp-admin.js");
+  const dist = read("apps/modulos/mcp/dist/tools/core/mcp-admin.js");
+  const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
+  const admin = read("apps/instinto-superior/src/components/central/PainelAdminCentralDark.tsx");
+  const bell = read("apps/instinto-superior/src/components/central/CentralNotificacoes.tsx");
+  const hook = read("apps/instinto-superior/src/hooks/useNotificationsLog.ts");
+  const config = JSON.parse(read("MODULES/HUB/controls/notifications-and-sensors.json"));
+  for (const name of ["CentralDark", "Cloudflare", "Figma", "Gmail",
+    "Google Drive", "Lovable", "Notion", "PostHog",
+    "Remote Desktop Commander", "Supabase", "Writing Style"]) {
+    assert.ok(src.includes('label: "' + name + '"'));
+    assert.ok(dist.includes('label: "' + name + '"'));
+  }
+  const block = (code) => code.slice(code.indexOf("const DELEGATED_PROVIDER_CAPABILITIES"), code.indexOf("const ROUTE_LAWS"));
+  assert.equal(block(src), block(dist));
+  assert.ok(src.includes("providerCapabilitiesReturned"));
+  assert.ok(src.includes("CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED"));
+  assert.ok(cockpit.includes('autenticado ? <CentralNotificacoes modo="sininho"'));
+  assert.ok(admin.includes('<TabsTrigger value="notificacoes">'));
+  assert.ok(admin.includes('<CentralNotificacoes modo="painel" />'));
+  assert.ok(bell.includes("useNotificationsLog(periodo)"));
+  assert.ok(hook.includes('.from("notifications_log")'));
+  assert.ok(hook.includes('"postgres_changes"'));
+  assert.ok(hook.includes("setRealtimeStatus"));
+  assert.ok(config.dispatch.delivery_modes.includes("single"));
+  assert.ok(config.dispatch.delivery_modes.includes("parallel"));
+  assert.equal(config.dispatch.targets.harness_specialist.status, "ADAPTER_REQUIRED");
+  assert.equal(config.dispatch.notifications_are_not_execution, true);
+  assert.doesNotMatch(bell, /localStorage|sessionStorage|\/notify-telegram/);
+});
