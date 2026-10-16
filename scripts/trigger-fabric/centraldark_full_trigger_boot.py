@@ -2,7 +2,7 @@
 # #OBSERVACOES# | CENTRALDARK.CLAIM.SEAL.GAIN
 # @owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
 # @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
-# @last_updated: 2026-10-16T10:42:57.361Z
+# @last_updated: 2026-10-16T10:44:52.397Z
 # @escopo: RESEAL_AFTER_MEASURED_GAIN; experimentation remains freely reversible.
 # @pendente: verify same-HEAD CI and actual target; self-attested CLI numbers != runtime proof.
 # @next_cursor: cross-validate gain reference and regression receipt before main promotion.
@@ -1132,7 +1132,7 @@ def cmd_reseal_fingerprint(args: argparse.Namespace) -> int:
         "lock_key": expected_key,
         "old_dependency_fingerprint": old_fp,
         "new_dependency_fingerprint": new_fp,
-        "verified_comparison_claim": {"metric": metric, "before": before, "after": after, "direction": direction},
+        "declared_comparison_not_independent_verification": {"metric": metric, "before": before, "after": after, "direction": direction},
         "reopen_scope": "AFFECTED_CONE_ONLY",
         "reinterpret_from_zero": False,
     }, indent=2, ensure_ascii=False))
