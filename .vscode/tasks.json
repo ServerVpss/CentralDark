@@ -362,6 +362,51 @@
         "instanceLimit": 1,
         "instancePolicy": "warn"
       }
+    },
+    {
+      "label": "CentralDark Auto Sync: Run All (via Hermes)",
+      "detail": "Sincronização bidirecional contínua — Windows ↔ Main ↔ VPS via Hermes executor",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "scripts/auto-sync/AUTO-SYNC-MASTER.py",
+        "--target",
+        "all"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false,
+        "focus": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      }
+    },
+    {
+      "label": "CentralDark Auto Sync: Status",
+      "detail": "Verifica status atual da sincronização (última execução, timestamp)",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "scripts/auto-sync/AUTO-SYNC-MASTER.py",
+        "--status"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false,
+        "focus": false
+      }
     }
   ]
 }

@@ -161,3 +161,7 @@ _DIAGNOSTICS/
 apps/modulos/status/painel-data.json
 apps/modulos/status/graph-data.json
 apps/modulos/graph-panel/data/graph.json
+.pnpm-store/
+$RECYCLE.BIN/
+.screenpipe/
+.auto-sync/

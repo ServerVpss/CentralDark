@@ -1,0 +1,11 @@
+{
+  "nome": "Dashboard de Agentes CentralDark",
+  "tipo": "react-spa",
+  "slug": "dashboard-de-agentes-centraldark",
+  "tema": "dark",
+  "criado": "2026-07-05T00:51:01.319Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Dashboard em tempo real mostrando todos os 24 agentes PM2 do ecossistema CentralDark com status online/offline, uptime, CPU, memória. Cards com cores por categoria (IA=roxo, Bot=azul, MCP=ciano, Infra"
+}

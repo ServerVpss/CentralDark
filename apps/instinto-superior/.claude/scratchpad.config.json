@@ -1,0 +1,31 @@
+{
+  "scratchpad_configuration": {
+    "enabled": true,
+    "custom_root": "K:\\TEMP",
+    "description": "Redireciona all Claude Code temporary files para K:\\TEMP em vez de AppData\\Local\\Temp",
+    "subdirectories": {
+      "work": "K:\\TEMP\\claude-work",
+      "cache": "K:\\TEMP\\.claude-cache",
+      "ledger": "K:\\TEMP\\.claude-ledger",
+      "state": "K:\\TEMP\\.claude-state",
+      "uploads": "K:\\TEMP\\.uploads",
+      "downloads": "K:\\TEMP\\.downloads"
+    },
+    "auto_cleanup": {
+      "enabled": true,
+      "delete_after_days": 3,
+      "preserve_patterns": [
+        "*.ledger.jsonl",
+        "meta_lupa*",
+        "evidence*",
+        "gates*"
+      ]
+    },
+    "performance": {
+      "use_symlinks": false,
+      "sync_interval_ms": 1000,
+      "max_file_size_mb": 500
+    },
+    "notes": "Configuração aplicada a partir de 2026-10-15. Todas as operações de Claude Code usarão K:\\TEMP como raiz de trabalho."
+  }
+}

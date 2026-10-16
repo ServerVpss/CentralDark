@@ -1,0 +1,41 @@
+{
+  "ci_policy_override": {
+    "status": "DISABLED_EXCEPT_SECURITY",
+    "effective_date": "2026-10-15",
+    "declared_by": "Pivete (User)",
+    "reason": "Incremental workflow — CI used ONLY for security hardening, NOT for blocking commits",
+    "disabled_checks": [
+      "lint",
+      "format",
+      "type-check",
+      "bundle-size",
+      "performance",
+      "accessibility",
+      "unit-tests",
+      "integration-tests",
+      "e2e-tests",
+      "code-coverage",
+      "conventional-commit",
+      "codeql-basic",
+      "dependabot-checks"
+    ],
+    "enabled_checks": [
+      "secret-scanning (mandatory)",
+      "supply-chain-security",
+      "vulnerability-audit",
+      "critical-dependency-only"
+    ],
+    "enforcement": {
+      "block_merge_on_failure": false,
+      "auto_approve_on_success": true,
+      "comment_on_pr": "optional_security_notes_only"
+    },
+    "workflow_behavior": {
+      "run_parallel_to_edit": true,
+      "non_blocking": true,
+      "notification_on_anomaly": true,
+      "auto_resolve_minor_issues": true
+    },
+    "notes": "Bidirectional sync mantém tudo vivo. CI é observer, não gatekeeper. Segurança é a única lei obrigatória."
+  }
+}

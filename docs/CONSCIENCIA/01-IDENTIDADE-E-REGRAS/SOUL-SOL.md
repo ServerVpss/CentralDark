@@ -1064,13 +1064,23 @@ apenas repondo a ancora para os blobs atuais. `LEIA-ME-IA.md`, `CLAUDE.md`
 e `CONTRACT.yml` nao mudaram desde a revisao anterior.
 
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=b00b0800f4e1723ad37724428b6106e81f6c6eac
+AGENTS.md=9fb33c95bd22e2db2485a2dfc5f8464d5f699d25
 LEIA-ME-IA.md=c60cd87286a8746df84f1680f8b65fb7186fa263
-CLAUDE.md=42019585442ecc395324d3716f2e071124b2feca
+CLAUDE.md=961fe6ada8aa90c676ab8997e24f5e33d8100259
 CENTRALDARK_AI_BOOT.yaml=151150229091ad3a14b45e1bacf756f90f558ab8
 docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-14
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-15T21:46:00-03:00
 SOUL_SYNC_ANCHOR_END
+
+Revisão 2026-10-15T21:46-03:00 — FORJA_VIVA_HARNESS_OWNER_REVIEW: relidos os owners
+que mudaram desde a última impressão. `AGENTS.md` recebeu aliases visuais da Forja,
+faxina de worktree com preservação/receipt e fast-path de dependência condicionado
+a gates existentes; `CLAUDE.md` mantém Claude/subagentes como adapters subordinados
+à mesma SOUL/Reality Judge e reforça scratch, rastreabilidade e deduplicação.
+Nenhuma dessas mudanças cria identidade, cérebro, autoridade ou owner constitucional
+paralelo. Portanto, o conteúdo constitucional vigente permanece válido e esta revisão
+atualiza somente a impressão dos cinco owners CURRENT após leitura causal.
+
 ```
 
 

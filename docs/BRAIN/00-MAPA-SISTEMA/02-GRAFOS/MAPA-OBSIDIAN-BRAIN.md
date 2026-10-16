@@ -239,3 +239,10 @@ Mermaid acima = HISTÓRICO (01 Pendências…). Disco atual = 00-MAPA … 08-ART
 
 ---
 🔗 [[BRAIN]] · [[00-MAPA]] · [[GRAFO-VIVO]] · [[BIBLIOTECA]] · [[INDEX]]
+
+<!-- CENTRALDARK_IPHONE_TAILSCALE_MOBILE_T1_20261015 -->
+## 🪬 Circuitos móveis validados (T1 — não equivale a autenticação Admin)
+
+- [[2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT]] — iPhone SEGREDO → tailnet → Casa → Instinto Superior no Safari, C01–C05 comprovados (5/5 do escopo móvel).
+- Continuidade do circuito: `/auth` e `/sala-controle` exigem sessão e papel `admin` verificados; prova ainda UNKNOWN. Obsidian iOS e sincronização de notas seguem escopos separados.
+<!-- /CENTRALDARK_IPHONE_TAILSCALE_MOBILE_T1_20261015 -->

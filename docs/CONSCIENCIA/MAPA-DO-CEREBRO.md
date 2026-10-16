@@ -811,3 +811,43 @@ SEGREDO/CHEFE (intenção/autoridade)
 4. **PROMOTE:** delta de fonte validado retorna ao `main` pelo owner autorizado, respeitando conflitos e checks; no histórico da PR-mãe constam vínculos, nunca PASS fictício. `MERGED!=DEPLOYED`.
 
 **Próximo gap discriminante:** recuperar **fonte/artefato original da capacidade Tray do One Shot**, localizar o owner da casca desktop Instinto Superior e demonstrar **minimizar/restaurar o aplicativo INTEIRO, mesmo PID e single-instance**, preservando perfis, OAuth e supervisão. O Tray vira **capacidade interna**, não outra entrada. Sem readback Windows, `TRAY_INTEGRATED=UNKNOWN`; nenhuma mutação de runtime é pressuposta por este mapeamento.
+
+
+<!-- CENTRALDARK_SEMANTIC_SOURCE_TRACE_MAP_20261015 -->
+## 🪬 Rastro semântico por linha — código, F12, Goal e Cockpit (DELTA CHEFE 2026-10-15)
+
+**Intenção:** a IA gera um GOAL incremental a partir da ideia bruta do CHEFE e deixa a execução rastreável por função/linha de origem, owner, mapa do sistema, evento, executor e contraprova. **Não criar** segundo mapa, logger, agente, cockpit ou skill: esta seção apenas amplia o MOC existente; implementação no mesmo `skills/vs-code-restore`, funil `apps/modulos/mcp/src/log-funnel.js` e `apps/instinto-superior`, pelas PRs compatíveis. `SITEMAP.XML` é índice de URLs públicas para buscadores, não índice de linhas de código. `*.js.map` (Source Map V3) mapeia bundle compilado para arquivo/posição TSX original no F12. Este MOC é o índice semântico de owners; não substituir por `map.xml` concorrente.
+
+### Chave de navegação e anotação
+
+```text
+SOURCE_OWNER = repo/path  (estável no módulo)
+SEMANTIC_ID = owner+symbol+responsibility   (estável no conceito; sem número de linha)
+SOURCE_POSITION = file:line:column + source_sha (localizador por versão)
+GOAL_ID = objetivo atual + escopo do delta
+TRACE_ID = execução observada, gerado pelo owner do funil quando houver
+EVENT_ID = identidade do evento real, com timestamp
+PROVENANCE = executor identificado por receipt/telemetria, nunca atribuição inferida do Git
+STATUS = PASS | FAIL | BLOCKED | UNKNOWN | RUNNING | ATTENTION
+```
+
+**Legenda por linha funcional:** em edições produzidas para a CentralDark, cada bloco/linha funcional significativa deve trazer explicação próxima que diga **o que faz, por que existe, owner, relação com função/GOAL, efeito esperado e teste aplicável**. Em arquivos grandes, um mapa AST + CodeLens/Hover na mesma extensão VS Code pode renderizar essa legenda sem sujar o código ou quebrar formatter; linhas vazias/importações mecânicas não exigem comentários redundantes. `file:line` muda após edição e nunca substitui `SEMANTIC_ID`. A legenda não cria prova de runtime nem identidade do autor. Não anotar segredo/valor de configuração sensível.
+
+**Rota reutilizável:**
+
+```text
+IDEIA_DO_CHEFE → SOL_GOAL_INCREMENTAL → AGENTS/SOUL/RULES → OWNER_PERTINENTE
+→ CODE_SYMBOL/SEMANTIC_ID → SOURCE_POSITION@SHA → SOURCEMAP_DEVTOOLS
+→ EXECUTOR_AUTORIZADO → EVENT/TRACE_NO_FUNIL_EXISTENTE → CONTRAPROVA
+→ HUD/COCKPIT_AUTENTICADO (estado + origem + freshness) → MESMO_NEXT_CURSOR
+```
+
+**VS Code:** a extensão já existente em `skills/vs-code-restore/src/extension.ts` é dona de funcionalidades adicionais de observação, quando autorizadas e realmente instaladas. Implementar `CodeLens`/`Hover` sob demanda (custo proporcional), com comando para ligar/desligar a legenda e abrir o MOC; evitar decorar 1000 linhas automaticamente a cada tecla. Reutilizar `skills/vs-code-restore/SKILL.md` e `.agents/skills/centraldark-vscode-log-bridge/SKILL.md`. Extensão instalada != extensão ativa != editor testado.
+
+**Painel:** `apps/instinto-superior/src/components/central/CockpitShell.tsx` e área Admin/Observabilidade existentes devem mostrar modelo/motor + capacidade + GOAL + último evento medido. 🟢 pulsante = RUNNING com batida fresca; 🟡 atenção = atraso/STALE; 🔴 = FAIL/BLOCKED realmente medidos; ⚪ = UNKNOWN/NÃO OBSERVADO; sem heartbeat não pintar verde. Animações respeitam preferência de movimento reduzido. Modelo selecionável só entre providers/bindings efetivamente disponíveis e autorizados; troca do modelo não troca owner/identidade.
+
+**Loop de GOALs:** o agente pode derivar micro-GOALs do GOAL pai, priorizar por capacidade/risco/benefício medido, executar e continuar *até fixed point ou limite autorizado*. Nunca circuito infinito até consumir franquia. Guardas: `GOAL_PARENT_PRESERVED`, `ONE_WRITER_PER_SCOPE`, `MAX_STEPS`, `MAX_DURATION`, `BUDGET_LIMIT`, `HUMAN_FRONTIER_STOP`, `NO_GAIN_STOP`, `ERROR_BACKCHECK`, `NO_FAKE_PASS`. Sem budget real conhecido, não inventar consumo.
+
+**Aceite incremental:** SOURCE_LINK_PROVEN + STABLE_SYMBOL_ID + LEGEND_AVAILABLE + F12_POSITION_PROVEN + EVENT_TRACE_DEDUPED + UI_AUTHORIZED + LIVE_HEARTBEAT_PROVEN + FAILURE_NEGATIVE_TEST + SHA_READBACK. Critérios sem prova permanecem UNKNOWN, sem paralisar outros cones. Sem gravação no runtime/VS Code, este registro é somente `DOCUMENTED`.
+
+**NEXT_CURSOR:** na PR/owner `skills/vs-code-restore`, conferir writer/HEAD, implementar anotação por função/linha + link para `MAPA-DO-CEREBRO.md`; build da extensão e readback de uma linha demonstrativa no VS Code; na PR visual `#1832`, integrar estados reais ao Cockpit, sem converter mock em sensor.

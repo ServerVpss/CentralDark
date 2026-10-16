@@ -1,0 +1,99 @@
+{
+  "name": "CentralDark Rules",
+  "scopeName": "text.centraldark-rules",
+  "patterns": [
+    {
+      "name": "comment.line.markdown",
+      "match": "^\\s*//.*$"
+    },
+    {
+      "name": "comment.block.markdown",
+      "begin": "/\\*",
+      "end": "\\*/"
+    },
+    {
+      "name": "markup.heading.critical",
+      "match": "^##\\s+🛑.*$",
+      "captures": {
+        "0": { "name": "markup.heading.critical" }
+      }
+    },
+    {
+      "name": "markup.heading.warning",
+      "match": "^##\\s+🟡.*$",
+      "captures": {
+        "0": { "name": "markup.heading.warning" }
+      }
+    },
+    {
+      "name": "markup.heading.info",
+      "match": "^##\\s+🟢.*$",
+      "captures": {
+        "0": { "name": "markup.heading.info" }
+      }
+    },
+    {
+      "name": "markup.heading.level3",
+      "match": "^###\\s+[0-9]+\\..*$"
+    },
+    {
+      "name": "string.quoted.critical",
+      "match": "'Rule #[1-8].*?'|\"Rule #[1-8].*?\""
+    },
+    {
+      "name": "string.quoted.warning",
+      "match": "'Rule #([9-9]|1[0-2]).*?'|\"Rule #([9-9]|1[0-2]).*?\""
+    },
+    {
+      "name": "markup.bold",
+      "begin": "\\*\\*",
+      "end": "\\*\\*"
+    },
+    {
+      "name": "markup.italic",
+      "begin": "\\*(?!\\*)",
+      "end": "\\*"
+    },
+    {
+      "name": "markup.inline.raw",
+      "match": "`[^`]+`"
+    },
+    {
+      "name": "keyword.control.critical",
+      "match": "\\b(nunca|never|never)\\s+(expor|expose|exibir|display|executar|run|alterar|modify|change|editar|edit)\\b",
+      "captures": {
+        "1": { "name": "keyword.control" },
+        "2": { "name": "keyword.control" }
+      }
+    },
+    {
+      "name": "constant.other.placeholder",
+      "match": "\\$\\{[^}]+\\}|\\$[A-Z_]+"
+    },
+    {
+      "name": "constant.language.boolean",
+      "match": "\\b(true|false|sim|não|yes|no)\\b"
+    },
+    {
+      "name": "string.regexp",
+      "match": "(service_role_key|pm2\\s+restart\\s+all|/root/whatsapp-server|@srver1bot|@SEGREDOPUXADASBOT|Lovable|GitHub|VPS)"
+    },
+    {
+      "name": "entity.name.tag",
+      "match": "^\\-\\s+.*$"
+    }
+  ],
+  "repository": {
+    "string": {
+      "name": "string.quoted.double",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape",
+          "match": "\\\\."
+        }
+      ]
+    }
+  }
+}

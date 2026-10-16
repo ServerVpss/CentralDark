@@ -115,3 +115,16 @@ Fio da missão:
 4. Alimentar XP/posterior só com receipt validado + feedback do CHEFE.
 5. Quando o CHEFE disser EXPANSÃO DE DOMÍNIO, continuar pelo próximo setor com micro-delta + CI/receipt.
 ```
+
+
+## 🪡🍒 Convergência PR → resolvedor → notificações Gmail → Hub de Contas (2026-10-15)
+
+**CURRENT:** O controle existente `MODULES/HUB/controls/notifications-and-sensors.json` ganhou `triggers.pr_conflict_gmail_hub_projection`. Isto é **mapeamento declarativo**, não execução comprovada. Preservar o Auto Sync e as alterações paralelas do Claude Code; não criar FastAPI, fila ou resolvedor alternativo sem inventário do owner.
+
+**Fluxo e donos únicos:** evento GitHub (`.github/workflows/selo-fabric.yml`) → classificação do conflito pelo owner `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` e adaptador `.agents/skills/centraldark-autonomous-conflict-costura/SKILL.md` → motor `scripts/dependabot/resolve-conflicts.sh` → envelope do owner `src/lib/notifications-events.ts` / ledger `notifications_log` → Hub runtime `apps/modulos/hub` → Instinto Superior `CockpitShell.tsx` e canal `gmail_notifications`. Gmail é **canal de aviso** e não autoridade de merge. Identidade/deduplicação: `repository:pr_number:head_sha:event_type`; nunca incluir credenciais ou dados sensíveis no payload.
+
+**Estados projetáveis:** `CONFLICT_DETECTED`, `OWNER_ASSIGNED`, `RESOLUTION_IN_PROGRESS`, `RESOLVED_PENDING_GATES`, `GATES_FAILED`, `GATES_PASSED`, `DEPLOY_PROVEN`, `UNKNOWN`. O status da PR deve ser consultado novamente no GitHub para provar gates, e `DEPLOY_PROVEN` exige readback do runtime. `EMAIL_DELIVERED != PR_MERGED != DEPLOY_PROVEN`.
+
+**PENDENTE:** ligar o consumidor do controle no runtime existente do Hub, verificar a conta Gmail conectada/autorizações, testar deduplicação e idempotência, observar evento real em `notifications_log`, verificar a projeção visual no Hub de Contas do Instinto Superior e produzir recibo E2E. Sem esses testes, `proof_state=CONFIGURED_NOT_RUNTIME_PROVEN`. Não prometer email enviado ou resolução automática nesta fase.
+
+**NEXT_CURSOR:** leitura do código atual de `apps/modulos/hub` + owner do Hub de Contas no Instinto → menor adaptador de consumo, sem disputar a branch do Auto Sync → testes → receipt → promoção conforme gates.
