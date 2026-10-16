@@ -1,3 +1,4 @@
+import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -46,7 +47,6 @@ import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
 import { ForjaExecutor } from "@/components/central/ForjaExecutor";
 import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
 import { RaioXVivo } from "@/components/central/RaioXVivo";
-import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
