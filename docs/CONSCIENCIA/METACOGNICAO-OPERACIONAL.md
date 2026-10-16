@@ -2,6 +2,7 @@
 title: "Metacognição operacional e coevolução humano–sistema"
 status: "CANÔNICO"
 date: "2026-08-14"
+updated_at: "2026-10-16T10:26:03.177Z"
 authority: "SEGREDO/CHEFE"
 scope: "Aprendizado do scaffold operacional; não altera autoridade humana nem prova AGI"
 ---
@@ -76,7 +77,7 @@ GENERAL_RETURNS_LEARNING_TO_CENTRALDARK_OS=true
 ```
 
 <!-- #OBSERVACOES# | CENTRALDARK.CODE.DOC.SYNC
-@last_updated: 2026-10-16T10:24:39.554Z
+@last_updated: 2026-10-16T10:26:03.177Z
 @code_ref: scripts/lupa/diagram-route-gate.mjs
 @code_ref: scripts/lupa/diagram-route-gate.test.mjs
 @owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
