@@ -1097,3 +1097,70 @@ cognitive_incremental_reversible_shells_2026_10_16:
     - NO_SECRET_IN_TRACE
     - NO_MODEL_BEHAVIOR_AS_RUNTIME_PROOF
   next_cursor: VERIFY_REAL_CONSUMER_AND_HERMES_OFFLINE_SELF_TEST_BEFORE_RUNTIME_PASS
+
+# Intent CHEFE (2026-10-16): SOL is this conversation's ingress, not another owner.
+# SOURCE_COMMITTED != CONSUMER_LOADED != COCKPIT_LIVE.
+sol_chat_entrypoint_handoff_2026_10_16:
+  status: CONTRACT_RECORDED_RUNTIME_BINDING_PENDING
+  authority: SEGREDO/CHEFE
+  entrypoint_this_session: SOL_JARVIS_CHATGPT
+  change_kind: INCREMENTAL_EXTENSION_OF_UNIVERSAL_ENGINE_METHOD
+  canonical_pr_reference: 1832
+  pr_state_observed: MERGED
+  pr_merge_sha_observed: c95d9cb55c447fd928c2ee8ed240827e8e00d9c0
+  canonical_runtime_owner: apps/modulos/HERMES-CORE/
+  existing_cockpit_owner: apps/instinto-superior/src/components/central/CockpitShell.tsx
+  existing_hud_owner: apps/instinto-superior/src/components/central/HudDeterministico.tsx
+  hierarchy:
+    human_authority: SEGREDO_CHEFE
+    ingress_coordinator: SOL_JARVIS_THIS_CONVERSATION
+    writer: EXISTING_SCOPE_WRITER_ONLY
+    executors: [HERMES_WHEN_ROUTE_PROVEN, CLAUDE_CODE_WHEN_SESSION_PROVEN]
+    judge: REALITY_READBACK
+  policy:
+    every_new_chefe_utterance_is_mission_delta: true
+    no_restarting_live_mission_without_material_cause: true
+    absorb_parallel_writes_before_new_mutation: true
+    do_not_claim_claude_ack_without_interactive_proof: true
+    do_not_claim_hermes_execution_without_tool_receipt: true
+    existing_owners_unmodified: true
+    one_writer_per_scope: true
+    proven_recipe_replayed_on_same_fingerprint: true
+    environment_bindings_only_adaptation: true
+    changed_fingerprint_revalidates_affected_cone_only: true
+    merged_not_deployed: true
+    public_site_and_cockpit_skins_remain_same_product: true
+  operational_sequence:
+    - RECEIVE_CHEFE_INTENT_AS_DELTA
+    - FETCH_CURRENT_MAIN_AND_PR1832_MERGE_STATE
+    - MEASURE_CURRENT_ACTIVE_WRITER_AND_CONSUMER
+    - LOAD_EXISTING_OWNER_AND_PROVEN_RECIPE
+    - SELECT_FIRST_UNMATERIALIZED_DELTA
+    - DELEGATE_ONLY_VIA_PROVEN_ROUTE_AND_EXISTING_WRITER
+    - EXECUTE_AND_COLLECT_SAME_HEAD_READBACK
+    - TEST_BUILD_RUNTIME_AND_COUNTERPROOF_WHEN_APPLICABLE
+    - WRITE_TRACE_DATE_TIMESTAMP_HASH_RECEIPT
+    - PROJECT_LIVE_STATE_IN_EXISTING_INSTINTO_SUPERIOR
+    - CONTINUE_NEXT_CURSOR
+  cockpit_projection:
+    required_fields_alphabetical:
+      - ACTIVE_EXECUTOR
+      - ACTIVE_INTENT
+      - ACTIVE_OWNER
+      - ACTIVE_RECIPE
+      - ACTIVE_WRITER
+      - EVIDENCE_LAST
+      - INGRESS
+      - NEXT_CURSOR
+    ingress_label: SOL_JARVIS_THIS_CONVERSATION
+    value_source: EXISTING_MEASURED_STATE_OR_RECEIPT
+    fixed_label_without_measured_state_is_not_live_proof: true
+    implementation_state: NOT_IMPLEMENTED_BY_THIS_CONTRACT_CHANGE
+  observed_current:
+    github_pr1832: MERGED
+    github_source_contract: AVAILABLE
+    hermes_runtime_consumer: UNKNOWN
+    claude_vscode_interactive_ack: UNKNOWN
+    vite_build_for_this_delta: NOT_RUN
+    deployed_cockpit_ingress_card: NOT_PROVEN
+  next_cursor: PROVE_RUNTIME_CONSUMER_AND_ADD_LIVE_INGRESS_FIELDS_TO_EXISTING_HUD_WITH_OWNER_WRITER_LOCK
