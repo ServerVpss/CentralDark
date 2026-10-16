@@ -27,6 +27,17 @@ A skill é uma receita portátil, **não** um novo executor, agente, scheduler, 
 7. **Teste + contraprova**: exigir efeito observado no alvo, checks do mesmo SHA, hash/readback, regressão e receipt vinculado ao owner/PR. `RUNNING != PASS`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`.
 8. **Continuidade**: atualizar o mesmo Goal/receita no Skill Workshop quando um novo caminho for comprovado; preservar falha e `NEXT_CURSOR` quando houver bloqueio real. Não criar skill por tentativa.
 
+## Autenticação persistente para biblioteca privada
+
+No Instinto Superior, o login administrativo da pessoa (Supabase) e a conexão de provedor GitHub (OAuth Broker existente) são relações distintas. O MCP remoto ainda tem sua autorização OAuth de cliente própria. **Não transportar o token GitHub para o ChatGPT, para outros agentes, para o SKILL.md ou para o cockpit.**
+
+Quando o CHEFE autenticar o GitHub App/OAuth App existente, o backend deverá validar identidade/consentimento/permissão `Contents: read` ou equivalente para `ServerVpss/CentralDark`; guardar grant cifrado no owner `oauth_connections`, renovar por mecanismo oficial se disponível e retornar somente conteúdo selecionado + SHA via API protegida. Nome do aplicativo, callback, owner, tipo de token e scopes devem ser confrontados no runtime: configuração no Git não prova consentimento.
+
+**Estados separados:** `AUTH_CONNECTED` apenas após GitHub API readback do grant da sessão; `SKILL_DISCOVERED` é um estado diferente de `SKILL_LOADED` e de `HERMES_EXECUTED`. `UNAUTHORIZED` não permite fallback automático para token administrativo global. Não assumir que um login da conta autoriza todos os agentes e usuários.
+
+**Contrato tipado do Hermes:** `.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json`. Os procedimentos `IDENTIFY_INTENT`, `REMEASURE_MAIN`, `FIND_CAPABILITIES`, `RESOLVE_IDENTITY`, `VALIDATE_GITHUB_PERMISSION`, `REFRESH_OR_REAUTHORIZE`, `RESOLVE_SKILL`, `RESOLVE_ROUTE`, `DEDUP_KANBAN`, `DISPATCH_SAFE`, `OBSERVE_AND_COUNTERPROVE` e `RECEIPT_AND_REPLAY` devem ser reutilizados no mesmo owner, sem fabricar 12 skills independentes.
+
+
 ## Rotas e limites
 A skill deve funcionar em ChatGPT, Claude, Codex, Hermes e outros agentes **somente quando a respectiva superfície possuir ferramentas e autorizações reais**. Chat sem shell pode usar MCP autorizado ou GitHub para handoff, mas não afirma ter executado na Casa. Instalar `SKILL.md` fornece instruções consultivas e não garante que o cliente carregou a skill; isso exige medição separada. Em qualquer superfície, pedidos de instalação dependem das regras desse cliente.
 
