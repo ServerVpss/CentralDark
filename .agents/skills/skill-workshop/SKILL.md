@@ -123,3 +123,38 @@ Proveniência: função destilada da skill Skill Creator observada no ChatGPT Wo
 **Terminal VS Code/MCP:** catálogo mostra `RDC_DESKTOP_COMMANDER` e link para `skills/vs-code-restore/SKILL.md`, porém **não** deve afirmar `CLAUDE_SESSION_BOUND` ou `HERMES_RECEIVED` sem identificação do terminal, envio único e ACK. Não incluir output bruto de terminal/Screenpipe no frontend. A rota de sessão pertence ao owner atual, não a novo plugin.
 
 **FIXED_POINT:** demonstrar `SOURCE_COMMITTED` por commit/sha, depois `CI_PASS`, `BUILD_PASS`, `RUNTIME_UI_READBACK` e `SKILL_SYNC/LOADED` quando aplicável. Migrar o HUD histórico por mapeamento causal, sem apagar `docs/HUD/HUD.html` antes de paridade integral.
+
+
+## Delegação transversal e MCP unificado — 2026-10-16
+
+**INTENT_ID:** `CENTRALDARK-UNIFIED-DELEGATION-CATALOG-20261016`.
+**Owner do catálogo:** esta skill + `scripts/workshop.mjs` para fontes externas pinadas.
+**Owner MCP autenticado:** `apps/modulos/mcp/src/tools/skills/skill.js` + `catalog-index.js`, usando `ServerVpss/CentralDark@main` como fonte técnica.
+**Owner de execução:** Hermes Kanban já existente, não o índice de skills.
+**Skill portátil:** `skills/centraldark-delegacao/SKILL.md`, receita curta de coordenação sem fila própria.
+
+O catálogo agrega **metadados sob autorização**, sem copiar corpos inteiros ou transformar bibliotecas em segundo owner:
+
+| Camada | Fonte | Exposição | Critério |
+| --- | --- | --- | --- |
+| Skill portátil | `skills/**/SKILL.md` | curada/publicável quando espelhada e aprovada | descoberta não prova instalação |
+| Skills internas | `.agents/skills/**/SKILL.md` | MCP autenticado somente | SHA + path; nome ambíguo exige escolha exata |
+| Histórico interno | `.agents/skills/**/.archive/**` | pesquisa opt-in autenticada | jamais carregar por nome sem validação |
+| Fontes externas | `skill-workshop/sources.json` | metadados de proveniência | pinado != material incorporado |
+| Tools/rotas | `mcp_admin_catalog` | catálogo de autorização vigente | rota declarada != rota saudável |
+| Receitas/instalação ChatGPT | owner do cliente + `centraldark-delegacao` | sob demanda | conteúdo carregado != instrução de sistema |
+
+**Contrato de estados:** `DISCOVERED → LOADABLE → LOADED → EXECUTABLE → EXECUTED → VERIFIED`. Cada transição requer evidência própria. Nunca inferir `VERIFIED` de `skill_listar`, `skill_instalar`, comentário, commit, screenshot ou `SPAWNED`.
+
+**Unificação de API:** `skill_listar({busca,limit,offset})`, `skill_buscar({busca})`, `skill_instalar({nome|path})`, `skill_status`, `skill_atualizar` continuam sob MCP autenticado. A árvore GitHub é consultada no momento da chamada, com fallback para subárvores se o endpoint truncar a árvore completa. Se ambas forem truncadas, resposta `UNAVAILABLE`, sem falso número. Nome repetido retorna `AMBIGUOUS`, nunca escolhe por acaso.
+
+**Separação público/privado:** `apps/modulos/mcp/src/skills-public.js` continua a distribuir somente `skills/` via espelho público `segredounlock/clone-deck`. Não oferecer `.agents/skills` em URL sem autenticação e não afirmar que nova skill está no espelho público até readback e promoção verificados.
+
+**Lacunas observadas (recibo obrigatório):**
+- 🟢 Fonte `skill_listar` anterior limitada a `skills/`: causa determinada.
+- 🟡 Integração fonte + dist + teste em branch: validar CI no mesmo HEAD e confirmar publicação.
+- 🟡 Main/runtime MCP: `MERGED != DEPLOYED`; validar `skill_buscar` e quantidade real após deploy.
+- 🟡 Em ChatGPT/Claude/Codex: provar `MCP_TOOL_AVAILABLE → SKILL_RESOLVED → AGENT_CONSUMED` por superfície; não presumir memória cruzada.
+- 🟡 O diagrama do Obsidian da missão `t_790c940d`: fonte e handoff comprovados; cópia, renderização e sync dependem de recibo separado do Hermes.
+
+**NEXT_CURSOR:** `CATALOG_TESTS → SAME_SHA_CI → PR_REVIEW → MAIN_PROMOTION → MCP_RUNTIME_READBACK → CROSS_AGENT_DISCOVERY → HERMES_RECEIPT_OBSIDIAN`.
