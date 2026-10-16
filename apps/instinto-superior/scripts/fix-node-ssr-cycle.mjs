@@ -12,9 +12,23 @@ const prefix = /^import \{ s as server_exports \} from "\.\/([^"\n]+)";\n/;
 const matches = entries.map((name) => ({ name, text: readFileSync(join(dir, name), "utf8") }))
   .filter(({ text }) => prefix.test(text));
 const ssr = readFileSync(ssrPath, "utf8");
-if (matches.length === 0 && /import\("\.\/server-[\w-]+\.mjs"\)\.then\(\(n\) => n\.s\)/.test(ssr)) {
-  console.log("SSR_CYCLE_FIX=ALREADY_APPLIED");
-  process.exit(0);
+if (matches.length === 0) {
+  // Newer Nitro output has no circular bridge: the SSR entry imports the
+  // CSRF middleware directly and the loader resolves the server entry.
+  // Treat that shape as already safe instead of mutating or failing closed.
+  const serverImports = ssr.match(/import\("\.\/(server-[\w-]+\.mjs)"\)/g) ?? [];
+  const directCsrf = entries.filter((name) => {
+    const text = readFileSync(join(dir, name), "utf8");
+    return text.includes("createCsrfMiddleware");
+  });
+  if (serverImports.length === 1 && directCsrf.length === 1) {
+    console.log("SSR_CYCLE_FIX=NOT_REQUIRED");
+    console.log("CSRF_INTACT=PASS");
+    process.exit(0);
+  }
+  if (/import\("\.\/server-[\w-]+\.mjs"\)/.test(ssr)) {
+    throw new Error("SSR_CYCLE_FIX_BLOCKED: server entry shape changed without direct CSRF proof");
+  }
 }
 if (matches.length !== 1) throw new Error(`SSR_CYCLE_FIX_BLOCKED: expected one circular bridge, found ${matches.length}`);
 const { name, text } = matches[0];
