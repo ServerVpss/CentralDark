@@ -476,3 +476,15 @@ SCREENPIPE_VIDEO_EXPORT
 ```
 
 Qualquer ator autorizado pode requisitar uma dessas capacidades. O router seleciona Screenpipe somente quando medido disponível e necessário ao menor conjunto suficiente.
+
+<!-- CENTRALDARK_SCREENPIPE_CONTINUITY_20261016 -->
+## Continuidade do Browser Bridge na Casa — sem novo gravador
+
+- Contraprova do CHEFE em 16/10: porta 3030 LISTEN e /health HTTP 200; imagem da autorização do Browser Bridge. WebSocket/heartbeat após reinício seguem UNKNOWN até medição.
+- Owner de recuperação: Screenpipe Desktop existente da Casa; olhar primeiro o watchdog Hermes `%USERPROFILE%\.hermes\scripts\cadeia-free-watchdog.ps1` e tarefas já instaladas.
+- Script versionado `scripts/casa/screenpipe-continuity.ps1` faz `Status` (read-only), `Install` (somente se não houver outro owner), `Tick` (idempotente) e `Uninstall` (somente sua tarefa).
+- `Install` não duplica um watchdog conhecido; `Tick` não inicia outro `screenpipe record`, não mata PID e só relança `screenpipe-app.exe` existente quando `/health` falhou e 3030 está desocupada.
+- Saúde local != Browser WebSocket autenticado != contexto entregue ao Hermes. Browser `403` requer evidência discriminante; tokens/cookies/códigos de pareamento não entram em source, log ou recibo. Nova aprovação sempre cabe ao usuário.
+- Consumidores: ZenDrive usa sua sessão Chrome autorizada; `skills/vs-code-restore` apenas foca o terminal e coleta telemetria sanitizada via `.agents/skills/centraldark-vscode-log-bridge`. Não modificar os outros owners para vigiar Screenpipe.
+- Recibo e gates de persistência: `docs/CONSCIENCIA/RECEIPTS/2026-10-16-screenpipe-bridge-continuity.md`. Código versionado NÃO prova task instalada, reboot ou ligação E2E.
+<!-- /CENTRALDARK_SCREENPIPE_CONTINUITY_20261016 -->
