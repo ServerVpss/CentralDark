@@ -1,3 +1,9 @@
+# #OBSERVACOES# | CENTRALDARK.PROVEN.LOCK.GAIN
+# @owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+# @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+# @last_updated: 2026-10-16T10:42:57.361Z
+# @escopo: same claim+owner; prototype free, promotion proof-required.
+# @next_cursor: ensure CI same HEAD and independently checked T0/T1 evidence.
 schema: centraldark.proven-deterministic-lock.v1
 status: CANDIDATE_UNTIL_SAME_HEAD_GATES
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC
@@ -57,6 +63,30 @@ reopen_requires_all:
   - MATERIAL_IMPROVEMENT
   - COUNTERPROOF_PLAN
   - CURRENT_TARGET_REMEASURED
+
+touch_trace_seal_gain_binding:
+  origin_method: .agents/skills/centraldark-operational-method/SKILL.md
+  code_doc_gate: scripts/lupa/diagram-route-gate.mjs
+  reuse_existing_lock: true
+  seal_mechanism: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  stages:
+    - TOUCH_OWNER_AND_BASELINE
+    - INLINE_OBSERVATIONS_AND_DOC_SAME_DIFF
+    - REPLAY_OLD_PROOF_AND_MEASURE_T0
+    - IMPLEMENT_SMALL_REVERSIBLE_DELTA
+    - MEASURE_T1_AND_COMPUTE_MATERIAL_GAIN
+    - INDEPENDENT_REGRESSION_COUNTERPROOF
+    - SAME_HEAD_RECEIPT
+    - RESEAL_SAME_CLAIM_AND_OWNER
+  exploration: FREE_IN_ISOLATED_SCOPE
+  code_change: ALLOWED_WITH_OWNER_AND_TRACE
+  reopened_claim: REQUIRES_SAME_LOCK_AND_CAUSAL_DELTA
+  seal_promotion: REQUIRES_POSITIVE_MEASURED_GAIN_AND_COUNTERPROOF
+  gain: NUMERIC_T0_T1_OR_BINARY_CAPABILITY_0_TO_1
+  no_gain: KEEP_PRIOR_SEAL_NO_PROMOTION
+  style_only: MAY_EVOLVE_VISUAL_OWNER_WITH_VISUAL_PROOF_NOT_FUNCTIONAL_GAIN
+  regressions: REFUSE_RESEAL_AND_PRESERVE_LAST_GREEN
+  no_second_registrar_or_lock: true
 
 reopen_denied_when:
   - DIFFERENT_LOCK_KEY
