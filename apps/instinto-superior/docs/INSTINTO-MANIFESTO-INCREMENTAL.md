@@ -57,6 +57,18 @@ No snapshot versionado `forja-gaveta.snapshot.json` (fonte Git SHA `0f2b35f390a8
 - **NEXT_CURSOR:** verificar readback deste manifesto → ligar sua projeção no setor de receitas existente, sem duplicar catálogo → testar build e runtime com writer do cockpit → inventariar gaps HUD por owner → comprovar sessão MCP.
 - **FIXED_POINT:** progresso anterior preservado; nenhuma exclusão, rebase, force-push ou deploy por este documento.
 
+### D002 — 2026-10-16 · Identidade PWA mínima e fallback resiliente do mesmo Instinto
+
+- **Intenção preservada:** a Forja Viva continua no mesmo cockpit/harness, com a identidade web instalável como uma projeção adicional, não um aplicativo concorrente. Acesso pelo iPhone no Tailscale foi mostrado em capturas anteriores; screenshot não comprova download, registro SW, instalação standalone ou operação offline.
+- **Prova de descoberta:** no HEAD da `main` consultado, `src/routes/__root.tsx` já era dono de `head()` e `public/favicon.ico` já era o ícone oficial publicado. Ainda não havia `public/manifest.webmanifest` nem `public/sw.js`; manter identidade visual existente como âncora e pedir o frame oficial Figma para PNG de 192, 512 e `apple-touch-icon`.
+- **Delta no mesmo owner, isolado para CI:** `public/manifest.webmanifest` declara nome, `id`, `start_url`, `scope` e apresentação standalone. `src/routes/__root.tsx` acrescenta o link do manifesto, metadados Apple e registro seguro de `/sw.js`. `public/offline.html` fornece apenas mensagem de reconexão. `public/sw.js` guarda **somente a página estática offline** e serve fallback somente à navegação pública `/`, sem persistir respostas de login, `/auth`, `/cockpit`, `/sala-controle`, `/api`, HUD privado, tokens ou sessões.
+- **Receita/teste existente evoluído:** `npm run verify:hud` já aponta a `scripts/verify-hud-zone.mjs`; a suite ganhou um contrato PWA sem novo roteador, skill ou executor. `npm run build` continua usando o Vite/TanStack existente; não alterar `build:plugplay` com comportamento incerto.
+- **Limite da cereja:** `manifest` referencia `/favicon.ico` já presente, mas **não** há PNGs `192×192`, `512×512` ou `apple-touch-icon` de origem Figma validados; `IOS_INSTALL_PROVEN=NO`. `OFFLINE_PUBLIC_FALLBACK_SOURCE_DEFINED` não significa `OFFLINE_AUTHENTICATED_HARNESS`. O usuário não terá operações com Hermes/Claude/MCP sem conexão. A tela offline explicita que sensores não estão frescos.
+- **Critérios para selar:** teste Node no SHA exato → Vite build → manifesto/worker servidos no mesmo origin HTTPS → evento de instalação do SW → desligar internet no iPhone e abrir via Tela de Início → provar fallback → voltar online e validar login/rotas sem cache privado → PNG oficiais e `apple-touch-icon` validados → receipt/screenshot/rollback. Nenhuma entrega é considerada publicada apenas por commit.
+- **Writer:** alteração somente em arquivos de PWA e teste do app canônico, sem mexer nos fluxos do `AutoSyncButton`, `CockpitShell`, boot Hermes, Figma sem frame conhecido, catálogo, worktrees da Casa/VPS ou `docs/HUD/HUD.html`.
+- **NEXT_CURSOR:** validação estática + abrir PR de PWA isolada para gates → paridade/build no SHA → obter asset Figma oficial por URL de frame → publicar pelo owner autorizado → readback iPhone e comportamento offline.
+- **FIXED_POINT:** merge da PR #1832 e catálogo atual preservados; nenhum deploy ou limpeza foi executado por este delta.
+
 ## Regra de evolução
 
 Para cada nova descoberta, **acrescentar D00N** com `SOURCE_SHA`, owner, delta, testes, contraprova, recibo e `NEXT_CURSOR`. Corrigir referências antigas por âncora/redirect em vez de apagar proveniência. Não promover um estado para verde sem prova. **🍒🎰🎲 Outra melhoria antecipada** deve explicar ganho, razão, evidência e próximo avanço.
