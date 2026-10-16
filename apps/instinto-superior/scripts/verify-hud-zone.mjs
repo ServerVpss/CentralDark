@@ -209,3 +209,19 @@ test("Escola contextual herda gramática e não cria runtime de ensino", () => {
   assert.ok(cockpit.includes('<EstudoPorCriterios contexto="forja" />'));
   assert.equal(cockpit.split('import { EstudoPorCriterios }').length - 1, 1);
 });
+test("OAuth Broker traduzido para humano antes do detalhe técnico, com fonte e status limitados", () => {
+  const obs = read("apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx");
+  const conex = read("apps/instinto-superior/src/lib/conexoes.functions.ts");
+  assert.ok(obs.includes('id="oauth-broker-title"'));
+  assert.ok(obs.includes("Porteiro das conexões"));
+  assert.ok(obs.includes("É o porteiro da CentralDark"));
+  assert.ok(obs.includes("Por baixo do capô · detalhes técnicos"));
+  assert.ok(obs.indexOf("É o porteiro da CentralDark") < obs.indexOf("Por baixo do capô · detalhes técnicos"));
+  assert.ok(obs.includes('useServerFn(lerConexoesCentralDark)'));
+  assert.ok(obs.includes('queryKey: ["centraldark", "contas-conexoes"]'));
+  assert.ok(obs.includes("90_000"));
+  assert.ok(obs.includes("o estado do catálogo não comprova"));
+  assert.ok(conex.includes('requireSupabaseAuth'));
+  assert.ok(conex.includes('.eq("role", "admin")'));
+  assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY|fetch\s*\(/);
+});

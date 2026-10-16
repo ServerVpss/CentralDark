@@ -5,6 +5,7 @@ import {
   Gauge,
   GitBranch,
   House,
+  KeyRound,
   Mail,
   Monitor,
   Radio,
@@ -14,6 +15,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
+import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
 
 function tone(estado: Estado) {
   if (estado === "PASS") return "border-neon-green/30 bg-neon-green/5 text-neon-green";
@@ -61,6 +63,21 @@ export function ObservabilidadeCentralDark() {
     refetchInterval: 15_000,
     retry: false,
   });
+  const consultarConexoes = useServerFn(lerConexoesCentralDark);
+  const conexoes = useQuery({
+    queryKey: ["centraldark", "contas-conexoes"],
+    queryFn: () => consultarConexoes(),
+    refetchInterval: 60_000,
+    retry: false,
+  });
+  const consultaCatalogoFresca =
+    conexoes.dataUpdatedAt > 0 &&
+    Date.now() - conexoes.dataUpdatedAt <= 90_000 &&
+    !conexoes.isError;
+  // PASS atesta apenas a resposta do catálogo do Hub, não o processo em :8098.
+  const estadoCatalogo: Estado = consultaCatalogoFresca
+    ? (conexoes.data?.estado ?? "UNKNOWN")
+    : "UNKNOWN";
   const d = q.data;
   const medidoEm = q.dataUpdatedAt > 0 ? new Date(q.dataUpdatedAt).toLocaleTimeString("pt-BR") : null;
   const unknown: Estado = "UNKNOWN";
@@ -178,6 +195,42 @@ export function ObservabilidadeCentralDark() {
           sem transformar dado antigo em verde e sem segundo monitor.
         </p>
       </div>
+
+      <article aria-labelledby="oauth-broker-title" className="mt-6 rounded-xl border border-border bg-muted/20 p-4 sm:p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <KeyRound className="size-5 text-neon-blue" aria-hidden="true" />
+            <div>
+              <p className="text-xs text-muted-foreground">🔐 Porteiro das conexões</p>
+              <h4 id="oauth-broker-title" className="text-lg font-semibold">OAuth Broker</h4>
+            </div>
+          </div>
+          <span className={`rounded-full border px-2 py-1 font-mono text-[10px] ${tone(estadoCatalogo)}`}>
+            Catálogo: {estadoCatalogo}
+          </span>
+        </div>
+        <p className="mt-3 text-sm leading-relaxed">
+          É o porteiro da CentralDark: quando você conecta uma conta, ele organiza a autorização
+          e guarda o acesso no cofre. As ferramentas conseguem conversar com o serviço certo sem
+          espalhar senhas pela tela.
+        </p>
+        <div className="mt-4 space-y-2 rounded-lg border border-border/70 bg-background/50 p-3 text-xs text-muted-foreground">
+          <p className="font-semibold text-foreground">Por baixo do capô · detalhes técnicos</p>
+          <p><strong>Responsável:</strong> <code>apps/modulos/oauth-broker/server.mjs</code> · OAuth, retornos de autorização e cofre cifrado.</p>
+          <p>
+            <strong>Prova exibida:</strong> consulta administrativa a <code>GET /api/welcome-kit</code>,
+            via owner de contas existente. {consultaCatalogoFresca && conexoes.data
+              ? `Medida às ${new Date(conexoes.data.medidoEm).toLocaleTimeString("pt-BR")}.`
+              : "Sem consulta fresca confirmada."}
+          </p>
+          <p><strong>Fonte:</strong> {conexoes.data?.fonte ?? "Hub CentralDark · não confirmado"}</p>
+          <p>
+            <strong>Limite da prova:</strong> o estado do catálogo não comprova que o processo
+            <code> 127.0.0.1:8098 </code> esteja ativo, nem valida a API administrativa Tailscale.
+            Cada serviço tem sua própria medição.
+          </p>
+        </div>
+      </article>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {sinais.map((s) => (
