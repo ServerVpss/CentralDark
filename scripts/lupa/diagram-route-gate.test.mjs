@@ -1,3 +1,11 @@
+/*
+ * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC_TESTS
+ * @owner: scripts/lupa/diagram-route-gate.test.mjs
+ * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+ * @last_updated: 2026-10-16T10:18:38.112Z
+ * @status: NEGATIVE_AND_POSITIVE_TESTS_ADDED; CI_PENDING
+ * @next_cursor: node --test scripts/lupa/diagram-route-gate.test.mjs
+ */
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
@@ -254,4 +262,61 @@ test("liberação é item a item: o que não foi declarado continua bloqueado", 
 test("label 👑 PERMITO-SEGREDO (autoridade humana) libera o delta", () => {
   const errors = compareMermaid(MAPA, ANTES_2A6A74A, DEPOIS_BB60B2D);
   assert.deepEqual(applyMermaidAuthorization(errors, { humanApproved: true }), []);
+});
+
+/* #OBSERVACOES# | Protecao de sincronismo codigo↔documento. */
+test("codigo tocado exige rastro inline e documento atualizado no mesmo delta", () => {
+  const code = "apps/instinto-superior/src/feature.ts";
+  const doc = "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md";
+  const stamp = "2026-10-16T10:00:00.000Z";
+  const source = `// #OBSERVACOES# 
+// @owner: ${code}
+// @doc_ref: ${doc}
+// @last_updated: ${stamp}
+export const label = "novo";`;
+  const docText = `<!-- #OBSERVACOES# 
+@last_updated: ${stamp}
+@code_ref: ${code}
+-->
+Documentacao real atualizada.`;
+  const lookup = {
+    head: { [code]: source, [doc]: docText },
+    base: { [code]: 'export const label = "antigo";', [doc]: "" }
+  };
+  const changes = [{ status: "M", path: code }, { status: "M", path: doc }];
+  const readAt = (ref, file) => lookup[ref][file] ?? null;
+  assert.deepEqual(validateDiffCoverage({ flows: [] }, [], { changes, readAt }), []);
+  assert.match(validateDiffCoverage({ flows: [] }, [], {
+    changes: changes.slice(0, 1), readAt
+  }).join("\n"), /CODE_DOC_NOT_UPDATED_IN_SAME_DIFF/);
+  assert.match(validateDiffCoverage({ flows: [] }, [], {
+    changes, readAt: (ref, file) => ref === "head" && file === code
+      ? "export const label = 'untracked';" : readAt(ref, file)
+  }).join("\n"), /CODE_TRACE_MISSING/);
+});
+
+test("alteracao exige timestamp NOVO em codigo e doc + mudanca material no documento", () => {
+  const code = "apps/ui/index.css", doc = "docs/ui.md";
+  const oldStamp = "2026-10-15T10:00:00.000Z";
+  const header = (date) => `/* #OBSERVACOES# @owner: ${code} @doc_ref: ${doc} @last_updated: ${date} */\nbody { color: red; }`;
+  const docs = (date, text) => `<!-- #OBSERVACOES# @last_updated: ${date} @code_ref: ${code} -->\n${text}`;
+  const readAt = (ref, path) => {
+    if (path === code) return header(oldStamp);
+    if (path === doc) return docs(oldStamp, ref === "head" ? "Mudou o texto" : "Texto antigo");
+  };
+  const errors = validateDiffCoverage({ flows: [] }, [], {
+    changes: [{ status: "M", path: code }, { status: "M", path: doc }], readAt
+  });
+  assert.match(errors.join("\n"), /CODE_TIMESTAMP_NOT_UPDATED/);
+  assert.match(errors.join("\n"), /DOC_TIMESTAMP_NOT_UPDATED/);
+});
+
+test("JSON exige rastro no documento, sem inserir comentarios invalidos no JSON", () => {
+  const source = "apps/x/config.json", doc = "docs/config.md";
+  const newDate = "2026-10-16T10:00:00.000Z";
+  const changes = [{ status: "M", path: source }, { status: "M", path: doc }];
+  const readAt = (ref, path) => path === source ? '{"enabled":true}' :
+    ref === "head" ? `<!-- @code_ref: ${source} @last_updated: ${newDate} -->\nConfig nova` :
+    "<!-- @code_ref: apps/x/config.json @last_updated: 2026-10-15T10:00:00.000Z -->\nConfig velha";
+  assert.deepEqual(validateDiffCoverage({ flows: [] }, [], { changes, readAt }), []);
 });
