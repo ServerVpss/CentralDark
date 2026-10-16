@@ -75,6 +75,21 @@ GENERAL_IS_NOT_NEW_MEMORY=true
 GENERAL_RETURNS_LEARNING_TO_CENTRALDARK_OS=true
 ```
 
+<!-- #OBSERVACOES# | CENTRALDARK.CODE.DOC.SYNC
+@last_updated: 2026-10-16T10:18:38.112Z
+@code_ref: scripts/lupa/diagram-route-gate.mjs
+@code_ref: scripts/lupa/diagram-route-gate.test.mjs
+@owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+@estado: GATE_IMPLEMENTED_IN_BRANCH; CI_PENDING_MAIN
+@next_cursor: teste negativo, same HEAD, branch protection e readback.
+-->
+
+## Documentação viva sincronizada com código — 2026-10-16
+
+**Evolução da antecipação ensinada pelo CHEFE:** todo delta material em código leva junto o rastro inline e a atualização de documentação. Isso impede entregar casca simulada como função viva ou deixar owners descobertos para o agente seguinte. O gate existente de diagrama/rota também confere presença de `#OBSERVACOES#`, `@owner`, `@doc_ref`, `@last_updated` nos arquivos comentáveis e exige alteração substantiva da documentação referida no mesmo diff com `@code_ref` e data/hora novas. JSON é uma exceção sintática: evidência e data residem no Markdown proprietário. Exclusões de código exigem rastro de remoção.
+
+A trilha preserva a origem, status honesto (`VISUAL_ONLY`, `IMPLEMENTED`, `UNKNOWN` conforme prova), pendência concreta e `NEXT_CURSOR`. A validação automática verifica **estrutura e delta**, não se os comentários são verdadeiros; a contraprova semântica, o teste funcional e a conferência de runtime continuam indispensáveis. Sem segunda máquina de estados nem branch automática de correção. A regra é incremental; não reescrever retroativamente todo o legado e não alterar timestamp de arquivo só por leitura.
+
 ## Antecipação de intenção
 
 **Antecipação de intenção** é a inferência operacional do próximo movimento provável a partir da intenção já expressa, do estado vivo, do histórico validado e do padrão atual da missão. Serve para **preparar o caminho antes de ser necessário repetir contexto**, não para fabricar uma ordem humana que não existiu.
