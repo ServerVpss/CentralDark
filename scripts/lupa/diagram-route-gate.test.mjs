@@ -2,7 +2,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC_TESTS
  * @owner: scripts/lupa/diagram-route-gate.test.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-10-16T10:18:38.112Z
+ * @last_updated: 2026-10-16T10:24:39.554Z
  * @status: NEGATIVE_AND_POSITIVE_TESTS_ADDED; CI_PENDING
  * @next_cursor: node --test scripts/lupa/diagram-route-gate.test.mjs
  */
@@ -319,4 +319,19 @@ test("JSON exige rastro no documento, sem inserir comentarios invalidos no JSON"
     ref === "head" ? `<!-- @code_ref: ${source} @last_updated: ${newDate} -->\nConfig nova` :
     "<!-- @code_ref: apps/x/config.json @last_updated: 2026-10-15T10:00:00.000Z -->\nConfig velha";
   assert.deepEqual(validateDiffCoverage({ flows: [] }, [], { changes, readAt }), []);
+});
+
+test("exclusao de codigo exige documentacao de remocao com data nova e mudanca real", () => {
+  const source = "scripts/removido.py", doc = "docs/remocao.md";
+  const oldText = "<!-- @last_updated: 2026-10-15T10:00:00.000Z @code_ref: scripts/removido.py -->\nAntigo";
+  const currentText = "<!-- @last_updated: 2026-10-16T10:00:00.000Z @code_ref: scripts/removido.py @removed: true -->\nRemovido, destino documentado";
+  const changes = [{ status: "D", path: source }, { status: "M", path: doc }];
+  const readAt = (ref, path) => path === source
+    ? (ref === "head" ? null : "print('old')")
+    : (ref === "head" ? currentText : oldText);
+  assert.deepEqual(validateDiffCoverage({ flows: [] }, [], { changes, readAt }), []);
+  const stale = validateDiffCoverage({ flows: [] }, [], {
+    changes, readAt: (ref, path) => path === doc && ref === "head" ? oldText + " @removed: true" : readAt(ref, path),
+  });
+  assert.match(stale.join("\n"), /CODE_DELETED_WITHOUT_DOC_TRACE/);
 });
