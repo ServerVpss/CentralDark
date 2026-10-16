@@ -205,6 +205,12 @@ CRISTALIZOU = causa + sequência + owner + fingerprint + testes + rollback/fallb
 SELO = receipt endereçável + código/doc SHA quando houver + effect readback + status honesto + NEXT_CURSOR
 ```
 
+<!-- #OBSERVACOES# | TOCOU-RAS<->SELO<->GANHO | @last_updated: 2026-10-16T10:42:57.361Z -->
+**Vínculo obrigatório com documentação e cadeado (CHEFE, 2026-10-16):**
+`TOCOU_OWNER → #OBSERVACOES# + @last_updated → DOC_DO_MESMO_OWNER_COM @code_ref → TESTE_T0_T1 → CONTRAPROVA_INDEPENDENTE → RECEIPT → SELO`.
+Vincular o rastro do arquivo ao owner de documentação sem criar um novo registro ou outro HUD: gate `scripts/lupa/diagram-route-gate.mjs`; lock `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml`; executor de lock `scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_reseal_fingerprint`.
+**Experimentação e implementação são livres dentro de escopo isolado autorizado**, sem desfazer o último verde. Para **substituir/re-selar** solução comprovada, exigir ganho real mensurado `T0→T1` (inclusive capacidade binária `0→1`), critério e instrumento, evidência endereçável, contraprova de regressão independente, mesmo `CLAIM_KEY+OWNER` e causa explícita. Falta de ganho → não promover o novo como melhor, preservar selo anterior e registrar aprendizado do experimento. `VISUAL_ONLY` é melhoria de apresentação, não prova de capacidade de runtime. **Os valores enviados pelo próprio executor continuam alegações até a realidade/CI confirmá-los.**
+
 O selo fica **no owner que governa a capacidade** e no receipt/ledger existente, não em chat, clone de arquivo, segundo HUD ou nota solta. Quando a correção for comportamento operacional, este `SKILL.md` é owner do método; código/runtime continuam pertencendo a seus owners específicos. Conhecimento empírico confirmado pode alimentar `docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md` pelo fluxo de aprendizado já existente, sem duplicar eventos do log-funnel. HUD e grafo são **projeções**: atualizar a superfície canônica existente quando aplicável, conservando IDs, nós, setas e layout, sem torná-la autoridade ou declarar runtime recuperado pelo visual.
 
 Receipt mínimo por ferida material: `INTENT_ID / WOUND_ID(correlação existente) / SECTOR / OWNER / HOST / BASELINE_SHA_OU_FINGERPRINT / DETECTED_AT / SYMPTOM / ROOT_CAUSE(provada|hipótese) / BEFORE / DELTA_PATHS / AFTER / NEGATIVE_TEST / REGRESSION_BACKCHECK / READBACK / STATUS / RECEIPT_REF / NEXT_CURSOR`. Campo indisponível é `UNKNOWN`, não valor inventado; registrar segredo apenas como presença/ausência se autorizado, nunca seu valor.
