@@ -62,6 +62,8 @@ type SemanaHarness = {
   coverage: "PARTIAL_CAPPED" | "PARTIAL_INSTRUMENTED";
   capped: boolean;
   totalObserved: number;
+  traced: number;
+  tracePctOfObserved: number | null;
   pass: number;
   fail: number;
   unknown: number;
@@ -128,12 +130,13 @@ function RastroSemanalMcp() {
       </p>
       {d ? (
         <>
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
             {[
               ["Chamadas observadas", String(d.totalObserved), "Eventos deduplicados"],
               ["Acertos", pct(d.successPctOfDecided), d.pass + " PASS / resultados conhecidos"],
               ["Erros", pct(d.failurePctOfDecided), d.fail + " FAIL / resultados conhecidos"],
               ["Sem veredito", pct(d.unknownPctOfObserved), d.unknown + " UNKNOWN / observados"],
+              ["CARACOL · rastreável", pct(d.tracePctOfObserved), d.traced + " IDs de correlação / observados"],
             ].map(([label, value, detail]) => (
               <div key={label} className="rounded-lg border border-border bg-background/50 p-3">
                 <p className="text-[11px] text-muted-foreground">{label}</p>
@@ -144,7 +147,7 @@ function RastroSemanalMcp() {
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
             Duração média das amostras medidas: {d.avgDurationMs == null ? "UNKNOWN" : d.avgDurationMs + " ms"}.
-            Cobertura: {d.coverage}. Sem inferir 100% do harness.
+            Cobertura: {d.coverage}. ID de correlação não equivale a prova causal. Sem inferir 100% do harness.
           </p>
           <div className="mt-4 grid grid-cols-7 gap-1" role="list" aria-label="Chamadas observadas por dia, UTC">
             {d.daily.map(day => (
