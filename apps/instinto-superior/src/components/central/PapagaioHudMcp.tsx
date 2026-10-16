@@ -1,7 +1,7 @@
 /* #OBSERVACOES# | CENTRALDARK.HUD.PAPAGAIO_ON.MCP
  * @owner: apps/instinto-superior/src/components/central/PapagaioHudMcp.tsx
  * @doc_ref: docs/CONSCIENCIA/RECONCILIACAO-ESCOPOS-PR-20261015.md
- * @last_updated: 2026-10-16T12:19:56.233Z
+ * @last_updated: 2026-10-16T12:22:15.662Z
  * @scope: componente apresentacional do CockpitShell existente, sem novo runtime.
  * @implementado: 7 secoes e 10 missoes em ordem; dado vivo somente de lerEstadoCentralDark.
  * @pendente: per-mission receipts do owner MCP; CI/main/deploy nao comprovados por este componente.
@@ -27,7 +27,7 @@ const MISSOES = [
 export function PapagaioHudMcp({ medicao }: { medicao: EstadoCentralDark | null }) {
   return (
     <section aria-label="PAPAGAIO ON — HUD fixo Missão MCP" data-hud-identity="CENTRALDARK-MISSAO-MCP-10"
-      className="panel mt-6 overflow-hidden border border-border bg-surface/80 p-3 shadow-deep sm:p-6">
+      className="panel mt-6 overflow-hidden border border-border bg-background/80 p-3 shadow-deep sm:p-6">
       <details open className="group">
         <summary className="cursor-pointer list-none rounded-lg border-b border-border p-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon-green">
           <span className="block font-mono text-xs uppercase tracking-widest text-neon-green">🦜 PAPAGAIO ON · HUD FIXO / FIEL</span>
@@ -42,11 +42,11 @@ export function PapagaioHudMcp({ medicao }: { medicao: EstadoCentralDark | null 
           <section aria-labelledby="mcp-placar" className="rounded-xl border border-border/70 bg-background/65 p-4">
             <h4 id="mcp-placar" className="font-semibold">01 · PLACAR GERAL</h4>
             <div className="mt-2 flex flex-wrap items-baseline gap-3">
-              <strong className="text-4xl text-neon-green">50%</strong>
+              <strong className="text-4xl text-muted-foreground">50%</strong>
               <span className="text-xs text-muted-foreground">Referência histórica · 13/10/2026 · NÃO é o progresso atual</span>
             </div>
             <div role="img" aria-label="Progresso histórico: cinco de dez missões" className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
-              <div className="h-full w-1/2 bg-neon-green/70" />
+              <div className="h-full w-1/2 bg-muted-foreground/50" />
             </div>
             <p className="mt-2 text-xs text-muted-foreground">5 concluídas · 2 em andamento · 3 pendentes (histórico). MCP atual: <b className="text-foreground">UNKNOWN</b>.</p>
           </section>
@@ -73,7 +73,7 @@ export function PapagaioHudMcp({ medicao }: { medicao: EstadoCentralDark | null 
             <p className="mt-2 text-xs text-muted-foreground">PRs abertas na medição de 16/10. Abra os links para conferir a situação atual.</p>
             <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
               <span>GitHub main <SeloEstado estado={medicao?.github ?? "UNKNOWN"} /></span>
-              <span>VPS/deploy <SeloEstado estado={medicao?.deploy ?? "UNKNOWN"} /></span>
+              <span>VPS · SHA <SeloEstado estado={medicao?.deploy ?? "UNKNOWN"} /></span>
               <span>API <SeloEstado estado={medicao?.apiHealth ?? "UNKNOWN"} /></span>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">Sinais vivos: Cockpit existente / lerEstadoCentralDark. PRs: referências históricas, sem polling por PR.</p>
@@ -88,7 +88,7 @@ export function PapagaioHudMcp({ medicao }: { medicao: EstadoCentralDark | null 
 
           <section aria-labelledby="mcp-provas" className="rounded-xl border border-border/70 bg-background/65 p-4">
             <h4 id="mcp-provas" className="font-semibold">05 · RADAR DE PROVAS</h4>
-            <p className="mt-2 flex flex-wrap justify-between gap-2 text-sm"><span>lupa-conformance · #1835 / #1836</span><span className="text-neon-green">PASS · histórico</span></p>
+            <p className="mt-2 flex flex-wrap justify-between gap-2 text-sm"><span>lupa-conformance · #1835 / #1836</span><span className="text-muted-foreground">PASS · histórico</span></p>
             <p className="mt-2 flex flex-wrap justify-between gap-2 text-sm"><span>PR Title Contract · #1835 / #1836</span><span className="text-neon-green">PASS · histórico</span></p>
             <p className="mt-2 flex flex-wrap items-center justify-between gap-2 text-sm"><span>Grafo Vivo · sensor atual</span><SeloEstado estado={medicao?.grafoVivo ?? "UNKNOWN"} /></p>
             <p className="mt-2 text-xs text-muted-foreground">Luz verde de CI histórico não equivale a entrega MCP nem deploy.</p>
