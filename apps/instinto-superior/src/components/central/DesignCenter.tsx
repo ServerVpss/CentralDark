@@ -270,12 +270,12 @@ export function DesignCenter({
                       </p>
                       <h4 className="mt-1 text-lg font-semibold">🪬 ZENDRIVE CLI</h4>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        centraldark.centraldark-vscode-restore@0.1.1
+                        centraldark.centraldark-vscode-restore · fonte 0.1.2
                       </p>
                     </div>
                   </div>
                   <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
-                    Casa: instalada em 15/10/2026
+                    Casa: 0.1.1 medida em 15/10 · 0.1.2 não verificada
                   </span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
