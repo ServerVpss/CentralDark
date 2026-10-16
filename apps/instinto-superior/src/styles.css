@@ -2,6 +2,16 @@
 @source "../src";
 @import "tw-animate-css";
 
+/*
+ * #OBSERVACOES# | CENTRALDARK.STYLES.COCKPIT
+ * @owner: apps/instinto-superior/src/styles.css
+ * @doc_ref: docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md
+ * @last_updated: 2026-10-16T10:23:11.582Z
+ * @scope: CSS do Cockpit; alterações visuais, sem trocar os handlers React.
+ * @estado: STYLES_IN_PR; RUNTIME_RENDER_NOT_MEASURED
+ * @next_cursor: build + captura desktop/mobile + regressão das peles.
+ */
+
 @custom-variant dark (&:is(.dark *));
 
 /*
@@ -171,6 +181,7 @@
 
 /* #OBSERVACOES# | CENTRALDARK.VISUAL.ESMERALDA | TRILHA NO PR #1835
  * @intencao: evoluir a casca Esmeralda atual, sem criar uma quinta pele.
+ * @last_updated: 2026-10-16T10:23:11.582Z
  * @owner_visual: apps/instinto-superior/src/styles.css
  * @owner_seletor: apps/instinto-superior/src/components/central/DesignCenter.tsx
  * @consumer_vivo: apps/instinto-superior/src/components/central/CockpitShell.tsx
