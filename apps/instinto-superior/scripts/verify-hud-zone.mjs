@@ -312,3 +312,32 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.equal(config.dispatch.notifications_are_not_execution, true);
   assert.doesNotMatch(bell, /localStorage|sessionStorage|\/notify-telegram/);
 });
+
+
+test("PWA da Forja tem fallback publico sem cache de dados privados", () => {
+  const manifest = JSON.parse(read("apps/instinto-superior/public/manifest.webmanifest"));
+  const worker = read("apps/instinto-superior/public/sw.js");
+  const offline = read("apps/instinto-superior/public/offline.html");
+  const rootRoute = read("apps/instinto-superior/src/routes/__root.tsx");
+  assert.equal(manifest.name, "CentralDark — Instinto Superior");
+  assert.equal(manifest.start_url, "/");
+  assert.equal(manifest.scope, "/");
+  assert.equal(manifest.display, "standalone");
+  assert.equal(manifest.icons[0].src, "/favicon.ico"); // owner anterior; PNG iOS ainda pendente
+  assert.ok(rootRoute.includes('rel: "manifest"'));
+  assert.ok(rootRoute.includes('apple-mobile-web-app-title'));
+  assert.ok(rootRoute.includes('navigator.serviceWorker.register("/sw.js"'));
+  assert.ok(worker.includes('url.pathname !== "/"'));
+  assert.ok(worker.includes('request.mode !== "navigate"'));
+  assert.ok(worker.includes('const OFFLINE_PAGE = "/offline.html"'));
+  assert.ok(worker.includes('cache.add(new Request(OFFLINE_PAGE'));
+  assert.ok(worker.includes("fetch(request).catch(async () =>"));
+  assert.ok(worker.includes("// /auth, /cockpit, /sala-controle, /api"));
+  assert.ok(!worker.includes("skipWaiting("));
+  assert.ok(!worker.includes("cache.put("));
+  assert.ok(!worker.includes("localStorage"));
+  assert.ok(!worker.includes("sessionStorage"));
+  assert.ok(offline.includes("RUNTIME_ATUAL_DESCONHECIDO"));
+  assert.ok(offline.includes("Content-Security-Policy"));
+  assert.ok(!offline.includes("<script"));
+});
