@@ -2,7 +2,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC_TESTS
  * @owner: scripts/lupa/diagram-route-gate.test.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-10-16T10:24:39.554Z
+ * @last_updated: 2026-10-16T10:26:40.796Z
  * @status: NEGATIVE_AND_POSITIVE_TESTS_ADDED; CI_PENDING
  * @next_cursor: node --test scripts/lupa/diagram-route-gate.test.mjs
  */
@@ -334,4 +334,20 @@ test("exclusao de codigo exige documentacao de remocao com data nova e mudanca r
     changes, readAt: (ref, path) => path === doc && ref === "head" ? oldText + " @removed: true" : readAt(ref, path),
   });
   assert.match(stale.join("\n"), /CODE_DELETED_WITHOUT_DOC_TRACE/);
+});
+
+test("skill atualiza documentacao do proprio owner, sem criar doc paralelo", () => {
+  const source = ".agents/skills/demo/scripts/main.py";
+  const doc = ".agents/skills/demo/SKILL.md";
+  const now = "2026-10-16T10:00:00.000Z";
+  const head = `# #OBSERVACOES#
+# @owner: ${source}
+# @doc_ref: ${doc}
+# @last_updated: ${now}
+print("ola")`;
+  const updatedDoc = `<!-- @last_updated: ${now} @code_ref: ${source} -->\nComportamento mudou.`;
+  const changes = [{ status: "M", path: source }, { status: "M", path: doc }];
+  const readAt = (ref, path) => path === source ? (ref === "head" ? head : "print('old')") :
+    ref === "head" ? updatedDoc : "<!-- @last_updated: 2026-10-15T10:00:00.000Z -->\nAntigo";
+  assert.deepEqual(validateDiffCoverage({ flows: [] }, [], { changes, readAt }), []);
 });
