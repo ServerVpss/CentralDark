@@ -139,6 +139,15 @@ mesmo `ThemeId` e o mesmo conjunto de tokens semânticos. Enquanto isso não
 estiver provado (build + render real de cada superfície nos 3 temas), tratar
 como `PARTIAL_COVERAGE`, nunca como concluído.
 
+### Esmeralda metálica no Cockpit — evolução visual, sem tema extra (2026-10-16)
+
+A opção já existente `esmeralda` em `apps/instinto-superior/src/components/central/DesignCenter.tsx` continua com **o mesmo identificador e a mesma persistência** (`centraldark.cockpit.pele`). O owner `CockpitShell.tsx` continua aplicando `data-pele-cockpit={pele}` no **mesmo componente principal**: não reconstruir Hermes, Hub, Forge, Goals, Recibos ou handlers a partir do HTML demonstrativo.
+
+O acabamento em `apps/instinto-superior/src/styles.css` evolui apenas a regra escopada `.cockpit-pele[data-pele-cockpit="esmeralda"]`: grafite metálico, vidro escuro, relevo sutil, iluminação esmeralda, acessibilidade de foco e o verde de assinatura `#00ff88`. `default`, `ouro` e `ops` não são alterados. O HTML Visual DNA é **referência de aparência**, não novo runtime ou fonte de dados.
+
+**Gate de promoção:** build no mesmo SHA, seleção em tempo real, persistência após reload, preservação de aba/formulário/sessão, teste de navegação autenticada, capturas desktop/mobile e comparação de regressão das outras peles. `STATIC_CHECK_PASS != BUILD_PASS != LIVE_RUNTIME_PASS`. Aplicação global em Hub, Bolt e Open WebUI continua **não comprovada** até reconciliar os respectivos owners de tema.
+
+
 
 ## Cartazes canônicos e memória visual
 
