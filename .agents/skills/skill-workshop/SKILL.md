@@ -125,6 +125,15 @@ Proveniência: função destilada da skill Skill Creator observada no ChatGPT Wo
 **FIXED_POINT:** demonstrar `SOURCE_COMMITTED` por commit/sha, depois `CI_PASS`, `BUILD_PASS`, `RUNTIME_UI_READBACK` e `SKILL_SYNC/LOADED` quando aplicável. Migrar o HUD histórico por mapeamento causal, sem apagar `docs/HUD/HUD.html` antes de paridade integral.
 
 
+## GitHub App/OAuth: identidade persistente sem publicar skills privadas
+
+A biblioteca técnica permanece privada em `ServerVpss/CentralDark`. A interface do Instinto Superior usa autenticação de usuário, mas o grant GitHub vive em **`apps/modulos/oauth-broker/server.mjs` + `oauth_connections`** (cifrado). O OAuth cliente de `apps/modulos/mcp/src/oauth.js` é outra relação, não uma permissão GitHub herdada.
+
+**Princípio de acesso:** `SIGNED_IN != GITHUB_GRANTED != REPO_PERMITTED != SKILL_LOADED`. Não revelar token ou SKILL.md privado via URL pública. A conexão de GitHub App exige app instalado/usuário autorizado/permissão do repositório; OAuth App tem outro contrato de scopes. Resolver modo real antes de adaptar. Refresh é renovação de sessão, não credencial eterna; ao revogar ou expirar, `LOGIN_REQUIRED` ou `REFRESH_REQUIRED`, não PASS.
+
+**Método persistente do Hermes:** `.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json` tipa 12 procedimentos do mesmo ciclo, com input/output/owner/prova. Skills/receitas são fonte versionada; capacidade ativa requer carregamento numa sessão do executor e readback. A PR #1837 só implementa índice/contrato, não prova OAuth Broker → MCP nem login do CHEFE.
+
+
 ## Delegação transversal e MCP unificado — 2026-10-16
 
 **INTENT_ID:** `CENTRALDARK-UNIFIED-DELEGATION-CATALOG-20261016`.
