@@ -25,6 +25,7 @@ const PERIODO_MS: Record<PeriodoFiltro, number> = {
 };
 
 const MAX_FEED = 200;
+export type RealtimeEstado = "CONNECTING" | "LIVE" | "DISCONNECTED";
 
 function extrairMensagemErro(e: unknown): string {
   if (e instanceof Error) return e.message;
@@ -45,6 +46,7 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
   const [lastEventAt, setLastEventAt] = useState<Date | null>(null);
+  const [realtimeStatus, setRealtimeStatus] = useState<RealtimeEstado>("CONNECTING");
 
   const sinceIso = useMemo(
     () => new Date(Date.now() - PERIODO_MS[periodo]).toISOString(),
@@ -91,7 +93,9 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
           setLastEventAt(new Date(linha.created_at));
         },
       )
-      .subscribe();
+      .subscribe((status) => {
+        setRealtimeStatus(status === "SUBSCRIBED" ? "LIVE" : status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED" ? "DISCONNECTED" : "CONNECTING");
+      });
     return () => {
       supabase.removeChannel(canal);
     };
@@ -115,5 +119,5 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
     return { porTipo, total, sucessoPct: total > 0 ? Math.round((totalOk / total) * 100) : 0 };
   }, [items, erro]);
 
-  return { items, loading, erro, stats, lastEventAt, refresh: buscar };
+  return { items, loading, erro, stats, lastEventAt, realtimeStatus, refresh: buscar };
 }

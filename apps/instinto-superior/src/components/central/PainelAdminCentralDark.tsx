@@ -15,6 +15,7 @@ import {
 import { CofreAdministrativo, HubSeguranca } from "@/components/central/AdminCofreSeguranca";
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
 import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
+import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
@@ -258,6 +259,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
           <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
           <TabsTrigger value="hub-inventario">Integração HUB (12)</TabsTrigger>
           <TabsTrigger value="observabilidade">Observabilidade</TabsTrigger>
+          <TabsTrigger value="notificacoes">🔔 Notificações</TabsTrigger>
           <TabsTrigger value="cofre">Cofre / Credenciais</TabsTrigger>
           <TabsTrigger value="seguranca">Segurança / Permissões</TabsTrigger>
         </TabsList>
@@ -426,6 +428,9 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         </TabsContent>
         <TabsContent value="observabilidade" className="mt-6">
           <ObservabilidadeCentralDark />
+        </TabsContent>
+        <TabsContent value="notificacoes" className="mt-6">
+          <CentralNotificacoes modo="painel" />
         </TabsContent>
         <TabsContent value="cofre" className="mt-6">
           <CofreAdministrativo estado={estado} />
