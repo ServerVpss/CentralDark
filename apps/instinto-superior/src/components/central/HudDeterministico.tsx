@@ -252,7 +252,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           </span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          O CHEFE decide · Hermes executa · a Lupa contraprovа. Tudo deriva da consulta já usada
+          O CHEFE decide · Hermes executa · a Lupa faz a contraprova. Tudo deriva da consulta já usada
           pelo cockpit: sem segundo sensor, sem nova arquitetura e sem verde por aparência.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
