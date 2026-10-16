@@ -16,7 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
 import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
-import { CartaoResponsabilidade, type ContratoCartaoResponsabilidade } from "@/components/central/CartaoResponsabilidade";
+import {
+  CartaoResponsabilidade,
+  type ContratoCartaoResponsabilidade,
+} from "@/components/central/CartaoResponsabilidade";
 
 export function ObservabilidadeCentralDark() {
   const ler = useServerFn(lerEstadoCentralDark);
@@ -118,13 +121,18 @@ export function ObservabilidadeCentralDark() {
       detail: d?.desktopFonte ?? "UNKNOWN",
       icon: Monitor,
     },
-  ];
+  ] as const;
   const leituraFresca = Boolean(medidoEm) && Date.now() - q.dataUpdatedAt <= 45_000 && !q.isError;
   // Contrato obrigatório para cada sinal deste owner: todos os nomes têm dono e tarefa.
   type Metadados = Pick<
     ContratoCartaoResponsabilidade,
-    "nomeHumano" | "paraQueServe" | "responsabilidade" | "ownerTecnico" |
-    "fonteDaProva" | "escopoEstado" | "limiteDaProva"
+    | "nomeHumano"
+    | "paraQueServe"
+    | "responsabilidade"
+    | "ownerTecnico"
+    | "fonteDaProva"
+    | "escopoEstado"
+    | "limiteDaProva"
   >;
   const metadados: Record<(typeof sinais)[number]["label"], Metadados> = {
     "API CentralDark": {
@@ -242,7 +250,7 @@ export function ObservabilidadeCentralDark() {
     estado: leituraFresca ? s.estado : "STALE/UNKNOWN",
     detalheTecnico: s.detail,
     icone: s.icon,
-    consultaEm: leituraFresca ? (d?.atualizadoEm ?? null) : null,
+    consultaEm: d?.atualizadoEm ?? null,
   }));
 
   const confirmados = leituraFresca ? sinais.filter((s) => s.estado === "PASS").length : 0;
@@ -302,7 +310,7 @@ export function ObservabilidadeCentralDark() {
           estado={consultaCatalogoFresca ? estadoCatalogo : "STALE/UNKNOWN"}
           escopoEstado="do catálogo de contas"
           fonteDaProva={conexoes.data?.fonte ?? "Hub CentralDark · não confirmado"}
-          consultaEm={consultaCatalogoFresca ? (conexoes.data?.medidoEm ?? null) : null}
+          consultaEm={conexoes.data?.medidoEm ?? null}
           detalheTecnico="OAuth, retornos de autorização e cofre cifrado; consulta administrativa via GET /api/welcome-kit."
           limiteDaProva="O estado do catálogo não comprova que o processo em 127.0.0.1:8098 esteja ativo, nem valida a API administrativa Tailscale."
           tecnicoAberto

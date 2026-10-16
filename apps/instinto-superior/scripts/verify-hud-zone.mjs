@@ -223,7 +223,7 @@ test("OAuth Broker traduzido para humano antes do detalhe técnico, com fonte e 
   assert.ok(obs.includes('useServerFn(lerConexoesCentralDark)'));
   assert.ok(obs.includes('queryKey: ["centraldark", "contas-conexoes"]'));
   assert.ok(obs.includes("90_000"));
-  assert.ok(obs.includes("o estado do catálogo não comprova"));
+  assert.ok(obs.includes("O estado do catálogo não comprova"));
   assert.ok(conex.includes('requireSupabaseAuth'));
   assert.ok(conex.includes('.eq("role", "admin")'));
   assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY|\bfetch\s*\(/);
@@ -247,9 +247,12 @@ test("contrato único de cartões exige função humana, owner, responsabilidade
   assert.ok(card.includes("Fonte da prova:"));
   assert.ok(card.includes("Limite da prova:"));
   assert.ok(obs.includes('Record<(typeof sinais)[number]["label"], Metadados>'));
+  assert.ok(obs.includes("] as const;"));
   assert.ok(obs.includes("sinaisComResponsabilidade.map"));
   assert.ok(obs.includes('<CartaoResponsabilidade key={s.nomeTecnico} {...s} />'));
   assert.ok(obs.includes("STALE/UNKNOWN"));
+  assert.ok(obs.includes("consultaEm: d?.atualizadoEm ?? null"));
+  assert.ok(obs.includes("consultaEm={conexoes.data?.medidoEm ?? null}"));
   assert.ok(obs.includes("CATALOG_PASS") === false);
   assert.doesNotMatch(card, /fetch\s*\(|localStorage|sessionStorage|process\.env/);
 });

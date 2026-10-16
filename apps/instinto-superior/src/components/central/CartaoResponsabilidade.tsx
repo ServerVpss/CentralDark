@@ -53,11 +53,16 @@ export function CartaoResponsabilidade({
   const dataConsulta = consultaEm ? new Date(consultaEm) : null;
   const consultaValida = dataConsulta && Number.isFinite(dataConsulta.getTime());
   return (
-    <article className="panel rounded-xl p-4 sm:p-5" data-card-contract="centraldark.cockpit.responsabilidade.v1">
+    <article
+      className="panel rounded-xl p-4 sm:p-5"
+      data-card-contract="centraldark.cockpit.responsabilidade.v1"
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs font-medium text-muted-foreground">{nomeHumano}</p>
-          <h4 id={id} className="mt-1 text-base font-semibold">{nomeTecnico}</h4>
+          <h4 id={id} className="mt-1 text-base font-semibold">
+            {nomeTecnico}
+          </h4>
         </div>
         <Icone className="mt-1 size-5 shrink-0 text-neon-blue" aria-hidden="true" />
       </div>
@@ -66,7 +71,9 @@ export function CartaoResponsabilidade({
         <strong>Responsabilidade:</strong> {responsabilidade}
       </p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span className={`inline-flex rounded-full border px-2 py-1 font-mono text-[10px] ${tom(estado)}`}>
+        <span
+          className={`inline-flex rounded-full border px-2 py-1 font-mono text-[10px] ${tom(estado)}`}
+        >
           Estado {escopoEstado}: {estado}
         </span>
       </div>
@@ -76,12 +83,23 @@ export function CartaoResponsabilidade({
         <strong>Consulta:</strong>{" "}
         {consultaValida ? dataConsulta.toLocaleString("pt-BR") : "SEM MEDIÇÃO CONFIRMADA"}
       </p>
-      <details open={tecnicoAberto} className="mt-3 rounded-lg border border-border/70 bg-muted/20 p-3">
-        <summary className="cursor-pointer text-xs font-medium">⚙️ Por baixo do capô · detalhes técnicos</summary>
+      <details
+        open={tecnicoAberto}
+        className="mt-3 rounded-lg border border-border/70 bg-muted/20 p-3"
+      >
+        <summary className="cursor-pointer text-xs font-medium">
+          ⚙️ Por baixo do capô · detalhes técnicos
+        </summary>
         <div className="mt-3 space-y-2 break-words text-xs text-muted-foreground">
-          <p><strong>Dono técnico:</strong> <code>{ownerTecnico}</code></p>
-          <p><strong>Como funciona:</strong> {detalheTecnico}</p>
-          <p><strong>Limite da prova:</strong> {limiteDaProva}</p>
+          <p>
+            <strong>Dono técnico:</strong> <code>{ownerTecnico}</code>
+          </p>
+          <p>
+            <strong>Como funciona:</strong> {detalheTecnico}
+          </p>
+          <p>
+            <strong>Limite da prova:</strong> {limiteDaProva}
+          </p>
         </div>
       </details>
     </article>
