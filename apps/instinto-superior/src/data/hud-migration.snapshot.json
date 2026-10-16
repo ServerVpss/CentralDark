@@ -1,0 +1,2025 @@
+{
+  "schema": "centraldark.instinto.hud-legacy-map.v1",
+  "source": {
+    "repository": "ServerVpss/CentralDark",
+    "main_sha": "0f2b35f390a8f45330bd31a95aec355e1c58621c",
+    "blob_sha": "3623be3ebd1e5e13046796b7b6895d37ce82585a",
+    "path": "docs/HUD/HUD.html",
+    "lines": 4030,
+    "full_migration_proven": false
+  },
+  "counts": {
+    "sections": 189,
+    "controls": 33,
+    "tabs": 4,
+    "owner_unresolved": 87
+  },
+  "rules": [
+    "STATIC_INVENTORY_NOT_RUNTIME_PROOF",
+    "NO_SECOND_EXECUTOR",
+    "CONTROLS_WITH_SECRETS_REQUIRE_AUTH",
+    "LEGACY_SNAPSHOT_PRESERVED_UNTIL_PARITY"
+  ],
+  "sections": [
+    {
+      "id": "h001",
+      "tipo": "seção",
+      "titulo": "Ultima atualizacao do HUD",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1463
+    },
+    {
+      "id": "h002",
+      "tipo": "seção",
+      "titulo": "Casa · MSI Afterburner · 51 sensores",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 1467
+    },
+    {
+      "id": "h003",
+      "tipo": "seção",
+      "titulo": "🖥️ CPU Casa",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 1470
+    },
+    {
+      "id": "h004",
+      "tipo": "seção",
+      "titulo": "🎮 GPU RX 580",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 1471
+    },
+    {
+      "id": "h005",
+      "tipo": "seção",
+      "titulo": "💾 RAM",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 1472
+    },
+    {
+      "id": "h006",
+      "tipo": "seção",
+      "titulo": "Operação corrente · HUD → deploy → Hermes/MCP → selagem",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 1544
+    },
+    {
+      "id": "h007",
+      "tipo": "seção",
+      "titulo": "🧩 MCP nativo · owner systemd",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 1549
+    },
+    {
+      "id": "h008",
+      "tipo": "seção",
+      "titulo": "⚙️ Hermes + Mapa/Verificador",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 1553
+    },
+    {
+      "id": "h009",
+      "tipo": "seção",
+      "titulo": "🔧 Regeneração total · autenticação",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1557
+    },
+    {
+      "id": "h010",
+      "tipo": "seção",
+      "titulo": "🧬 PR-mãe sucessor #1793",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1561
+    },
+    {
+      "id": "h011",
+      "tipo": "seção",
+      "titulo": "🏠 Casa + VPS · HUD físico",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1565
+    },
+    {
+      "id": "h012",
+      "tipo": "seção",
+      "titulo": "🧠 Aprendizado L / selo S",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
+      "estado": "SOURCE_PROJECTION_EXISTS",
+      "line": 1569
+    },
+    {
+      "id": "h013",
+      "tipo": "seção",
+      "titulo": "Index + HUD Compasso CURRENT",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1601
+    },
+    {
+      "id": "h014",
+      "tipo": "seção",
+      "titulo": "GitHub main referencia de origem",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1604
+    },
+    {
+      "id": "h015",
+      "tipo": "seção",
+      "titulo": "VPS source / deploy",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1605
+    },
+    {
+      "id": "h016",
+      "tipo": "seção",
+      "titulo": "VPS Sync direto MVP (um comando)",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1606
+    },
+    {
+      "id": "h017",
+      "tipo": "seção",
+      "titulo": "MCP nativo porta 9100 (VPS)",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 1607
+    },
+    {
+      "id": "h018",
+      "tipo": "seção",
+      "titulo": "Casa Obsidian",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+      "estado": "PARTIAL_SOURCE_PROJECTION",
+      "line": 1608
+    },
+    {
+      "id": "h019",
+      "tipo": "seção",
+      "titulo": "Triton 2.49.0 inventario",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1609
+    },
+    {
+      "id": "h020",
+      "tipo": "seção",
+      "titulo": "Kylin NLP geracao",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1610
+    },
+    {
+      "id": "h021",
+      "tipo": "seção",
+      "titulo": "Fio da missao / evidencias",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1611
+    },
+    {
+      "id": "h022",
+      "tipo": "seção",
+      "titulo": "Rota de modelo local auxiliar",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1612
+    },
+    {
+      "id": "h023",
+      "tipo": "seção",
+      "titulo": "API CentralDark Hermes Core",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 1620
+    },
+    {
+      "id": "h024",
+      "tipo": "seção",
+      "titulo": "Google Drive Vault VPS off-host",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1621
+    },
+    {
+      "id": "h025",
+      "tipo": "seção",
+      "titulo": "Ambientes realidade medida agora",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1913
+    },
+    {
+      "id": "h026",
+      "tipo": "seção",
+      "titulo": "Casa (PC segredo)",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1918
+    },
+    {
+      "id": "h027",
+      "tipo": "seção",
+      "titulo": "GitHub",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1923
+    },
+    {
+      "id": "h028",
+      "tipo": "seção",
+      "titulo": "VPS CENTRALDARK-OS",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1928
+    },
+    {
+      "id": "h029",
+      "tipo": "seção",
+      "titulo": "AionUi VPS",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 1933
+    },
+    {
+      "id": "h030",
+      "tipo": "seção",
+      "titulo": "gh CLI VPS",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1938
+    },
+    {
+      "id": "h031",
+      "tipo": "seção",
+      "titulo": "SSH Casa VPS",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 1943
+    },
+    {
+      "id": "h032",
+      "tipo": "seção",
+      "titulo": "Cadeados Lugares Provados e Selados",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 1954
+    },
+    {
+      "id": "h033",
+      "tipo": "seção",
+      "titulo": "MCP Admin Kernel vivo setores",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2101
+    },
+    {
+      "id": "h034",
+      "tipo": "seção",
+      "titulo": "Ferramentas publicas",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 2106
+    },
+    {
+      "id": "h035",
+      "tipo": "seção",
+      "titulo": "Catalogo / versao",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2107
+    },
+    {
+      "id": "h036",
+      "tipo": "seção",
+      "titulo": "Admin unificado",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2108
+    },
+    {
+      "id": "h037",
+      "tipo": "seção",
+      "titulo": "Validador Admin",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2109
+    },
+    {
+      "id": "h038",
+      "tipo": "seção",
+      "titulo": "Fixed Point 10 criterios rastreaveis",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2116
+    },
+    {
+      "id": "h039",
+      "tipo": "seção",
+      "titulo": "01 Owner unico",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2119
+    },
+    {
+      "id": "h040",
+      "tipo": "seção",
+      "titulo": "02 Cadeados",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2120
+    },
+    {
+      "id": "h041",
+      "tipo": "seção",
+      "titulo": "03 MCP publico",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2121
+    },
+    {
+      "id": "h042",
+      "tipo": "seção",
+      "titulo": "04 One Heart",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "estado": "CURRENT_STATE_PROJECTION",
+      "line": 2122
+    },
+    {
+      "id": "h043",
+      "tipo": "seção",
+      "titulo": "05 Screenpipe",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2123
+    },
+    {
+      "id": "h044",
+      "tipo": "seção",
+      "titulo": "06 AionUi MCP stdio",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2124
+    },
+    {
+      "id": "h045",
+      "tipo": "seção",
+      "titulo": "07 Privacidade dos logs",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2125
+    },
+    {
+      "id": "h046",
+      "tipo": "seção",
+      "titulo": "08 Goal Clause",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2126
+    },
+    {
+      "id": "h047",
+      "tipo": "seção",
+      "titulo": "09 Casa main",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2127
+    },
+    {
+      "id": "h048",
+      "tipo": "seção",
+      "titulo": "10 Fixed Point final",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2128
+    },
+    {
+      "id": "h049",
+      "tipo": "seção",
+      "titulo": "Bridge privado Tailscale prioritario",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2135
+    },
+    {
+      "id": "h050",
+      "tipo": "seção",
+      "titulo": "Tailscale transporte privado",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2138
+    },
+    {
+      "id": "h051",
+      "tipo": "seção",
+      "titulo": "MCP control plane unico",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2139
+    },
+    {
+      "id": "h052",
+      "tipo": "seção",
+      "titulo": "Hermes executor autorizado",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2140
+    },
+    {
+      "id": "h053",
+      "tipo": "seção",
+      "titulo": "Desktop Commander legado",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2141
+    },
+    {
+      "id": "h054",
+      "tipo": "seção",
+      "titulo": "Skill Auto-Sync PR #1783 / E01–E10",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2148
+    },
+    {
+      "id": "h055",
+      "tipo": "seção",
+      "titulo": "E01 Baseline causal main/VPS/runtime no mesmo SHA",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2150
+    },
+    {
+      "id": "h056",
+      "tipo": "seção",
+      "titulo": "E02 Inventário opt-in centraldark_autosync=true (sem 992−84)",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2151
+    },
+    {
+      "id": "h057",
+      "tipo": "seção",
+      "titulo": "E03 Writer/lock ativo e segunda escrita fail-closed",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2152
+    },
+    {
+      "id": "h058",
+      "tipo": "seção",
+      "titulo": "E04 --check e diff por identidade/fingerprint",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2153
+    },
+    {
+      "id": "h059",
+      "tipo": "seção",
+      "titulo": "E05 Preservação das melhorias locais / comparação semântica",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2154
+    },
+    {
+      "id": "h060",
+      "tipo": "seção",
+      "titulo": "E06 Oracle consultivo apenas para mudança material",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2155
+    },
+    {
+      "id": "h061",
+      "tipo": "seção",
+      "titulo": "E07 Backup, --apply seguro e readback dos arquivos",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2156
+    },
+    {
+      "id": "h062",
+      "tipo": "seção",
+      "titulo": "E08 --seal com hashes e contraprova de drift",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2157
+    },
+    {
+      "id": "h063",
+      "tipo": "seção",
+      "titulo": "E09 Eternal Self-Heal wake comprovado sem novo scheduler",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2158
+    },
+    {
+      "id": "h064",
+      "tipo": "seção",
+      "titulo": "E10 Dois ciclos estáveis + Casa/VPS/main/receipts + Fixed Point",
+      "aba": "operacao",
+      "owner": ".agents/skills/skill-synchronization/SKILL.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2159
+    },
+    {
+      "id": "h065",
+      "tipo": "seção",
+      "titulo": "Cadeados causais MCP / Oracle / continuidade",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2166
+    },
+    {
+      "id": "h066",
+      "tipo": "seção",
+      "titulo": "S01 Owner microdeploy systemd",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2169
+    },
+    {
+      "id": "h067",
+      "tipo": "seção",
+      "titulo": "S02 Oracle / Meta-Memoria",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2170
+    },
+    {
+      "id": "h068",
+      "tipo": "seção",
+      "titulo": "S03 Catalogo MCP",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2171
+    },
+    {
+      "id": "h069",
+      "tipo": "seção",
+      "titulo": "S04 Heartbeat MCP recuperado",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2172
+    },
+    {
+      "id": "h070",
+      "tipo": "seção",
+      "titulo": "U01 Deep health",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2173
+    },
+    {
+      "id": "h071",
+      "tipo": "seção",
+      "titulo": "U02–U06 Efeito ponta a ponta",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2174
+    },
+    {
+      "id": "h072",
+      "tipo": "seção",
+      "titulo": "Invariante dos nos selo versus CURRENT",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2181
+    },
+    {
+      "id": "h073",
+      "tipo": "seção",
+      "titulo": "Casa VPS",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2183
+    },
+    {
+      "id": "h074",
+      "tipo": "seção",
+      "titulo": "Sensor admin Tailscale",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2184
+    },
+    {
+      "id": "h075",
+      "tipo": "seção",
+      "titulo": "MCP CentralDark",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2185
+    },
+    {
+      "id": "h076",
+      "tipo": "seção",
+      "titulo": "HUD Casa / writer",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2186
+    },
+    {
+      "id": "h077",
+      "tipo": "seção",
+      "titulo": "GitHub main / observador",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2186
+    },
+    {
+      "id": "h078",
+      "tipo": "seção",
+      "titulo": "Moltbook · centraldarkhermes",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2193
+    },
+    {
+      "id": "h079",
+      "tipo": "seção",
+      "titulo": "Chave API do Moltbook",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2198
+    },
+    {
+      "id": "h080",
+      "tipo": "seção",
+      "titulo": "Quando o Hermes deve postar",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2205
+    },
+    {
+      "id": "h081",
+      "tipo": "seção",
+      "titulo": "Publicacoes do centraldarkhermes",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2223
+    },
+    {
+      "id": "h082",
+      "tipo": "seção",
+      "titulo": "🫀 Mapa da API · 13 rotas · One Heart único",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2260
+    },
+    {
+      "id": "h083",
+      "tipo": "seção",
+      "titulo": "🪬 Gênesis → Fixed Point · Replay determinístico",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
+      "estado": "SOURCE_PROJECTION_EXISTS",
+      "line": 2334
+    },
+    {
+      "id": "h084",
+      "tipo": "seção",
+      "titulo": "🧿 Auditoria determinística · Botões × Gênesis",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
+      "estado": "SOURCE_PROJECTION_EXISTS",
+      "line": 2425
+    },
+    {
+      "id": "h085",
+      "tipo": "seção",
+      "titulo": "Botões presentes",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2428
+    },
+    {
+      "id": "h086",
+      "tipo": "seção",
+      "titulo": "Destinos das abas",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2429
+    },
+    {
+      "id": "h087",
+      "tipo": "seção",
+      "titulo": "Gênesis documental",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
+      "estado": "SOURCE_PROJECTION_EXISTS",
+      "line": 2430
+    },
+    {
+      "id": "h088",
+      "tipo": "seção",
+      "titulo": "Execução E2E",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2431
+    },
+    {
+      "id": "h089",
+      "tipo": "seção",
+      "titulo": "🧠 Instinto Superior · Intenção → Realidade → Δ → Fixed Point",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2462
+    },
+    {
+      "id": "h090",
+      "tipo": "seção",
+      "titulo": "One Heart CURRENT ao vivo",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "estado": "CURRENT_STATE_PROJECTION",
+      "line": 2516
+    },
+    {
+      "id": "h091",
+      "tipo": "seção",
+      "titulo": "Heartbeat",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "estado": "CURRENT_STATE_PROJECTION",
+      "line": 2521
+    },
+    {
+      "id": "h092",
+      "tipo": "seção",
+      "titulo": "Medido em",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2526
+    },
+    {
+      "id": "h093",
+      "tipo": "seção",
+      "titulo": "Orquestrador",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2531
+    },
+    {
+      "id": "h094",
+      "tipo": "seção",
+      "titulo": "Worker local",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2536
+    },
+    {
+      "id": "h095",
+      "tipo": "seção",
+      "titulo": "Execucao",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2541
+    },
+    {
+      "id": "h096",
+      "tipo": "seção",
+      "titulo": "MCP tools",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2546
+    },
+    {
+      "id": "h097",
+      "tipo": "seção",
+      "titulo": "Chat nativo",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2551
+    },
+    {
+      "id": "h098",
+      "tipo": "seção",
+      "titulo": "Conexoes provadas setores e eventos",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2562
+    },
+    {
+      "id": "h099",
+      "tipo": "seção",
+      "titulo": "Casa / Tailscale",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2567
+    },
+    {
+      "id": "h100",
+      "tipo": "seção",
+      "titulo": "Windows / portas",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2568
+    },
+    {
+      "id": "h101",
+      "tipo": "seção",
+      "titulo": "Screenpipe / Casa",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2569
+    },
+    {
+      "id": "h102",
+      "tipo": "seção",
+      "titulo": "One Heart / VPS",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "estado": "CURRENT_STATE_PROJECTION",
+      "line": 2570
+    },
+    {
+      "id": "h103",
+      "tipo": "seção",
+      "titulo": "Hermes WebUI",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2571
+    },
+    {
+      "id": "h104",
+      "tipo": "seção",
+      "titulo": "Runtime / modelo",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2572
+    },
+    {
+      "id": "h105",
+      "tipo": "seção",
+      "titulo": "MCP / catalogo interno unificado",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2575
+    },
+    {
+      "id": "h106",
+      "tipo": "seção",
+      "titulo": "Tailscale / API administrativa MCP",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2576
+    },
+    {
+      "id": "h107",
+      "tipo": "seção",
+      "titulo": "VPS Casa / Tailscale TCP",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2577
+    },
+    {
+      "id": "h108",
+      "tipo": "seção",
+      "titulo": "SSH / Segredo-VPS",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2578
+    },
+    {
+      "id": "h109",
+      "tipo": "seção",
+      "titulo": "Desktop Commander / SEGREDO",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2579
+    },
+    {
+      "id": "h110",
+      "tipo": "seção",
+      "titulo": "AionUi / Instinto Superior",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2585
+    },
+    {
+      "id": "h111",
+      "tipo": "seção",
+      "titulo": "Supabase / plugin CentralDark",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2586
+    },
+    {
+      "id": "h112",
+      "tipo": "seção",
+      "titulo": "🧰 Programas Casa · componentes existentes",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 2589
+    },
+    {
+      "id": "h113",
+      "tipo": "seção",
+      "titulo": "Eventos de saude por setor (nao sao logs integrais do sistema)",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2594
+    },
+    {
+      "id": "h114",
+      "tipo": "seção",
+      "titulo": "Hermes juiz ao vivo (PowerShell 7)",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2609
+    },
+    {
+      "id": "h115",
+      "tipo": "seção",
+      "titulo": "Goal META-GRILL Reality",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2623
+    },
+    {
+      "id": "h116",
+      "tipo": "seção",
+      "titulo": "Cláusulas obrigatórias",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2627
+    },
+    {
+      "id": "h117",
+      "tipo": "seção",
+      "titulo": "FAIL / UNKNOWN / STALE",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2628
+    },
+    {
+      "id": "h118",
+      "tipo": "seção",
+      "titulo": "Estado do objetivo",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2629
+    },
+    {
+      "id": "h119",
+      "tipo": "seção",
+      "titulo": "Proveniência / medição",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2630
+    },
+    {
+      "id": "h120",
+      "tipo": "seção",
+      "titulo": "NEXT_CURSOR",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2631
+    },
+    {
+      "id": "h121",
+      "tipo": "seção",
+      "titulo": "Missoes clica, copia, cola onde for resolver",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2639
+    },
+    {
+      "id": "h122",
+      "tipo": "seção",
+      "titulo": "Cofre Obsidian",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+      "estado": "PARTIAL_SOURCE_PROJECTION",
+      "line": 2649
+    },
+    {
+      "id": "h123",
+      "tipo": "seção",
+      "titulo": "Bridge privado Tailscale prioritario",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2672
+    },
+    {
+      "id": "h124",
+      "tipo": "seção",
+      "titulo": "Tailscale transporte privado",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2675
+    },
+    {
+      "id": "h125",
+      "tipo": "seção",
+      "titulo": "MCP control plane unico",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2676
+    },
+    {
+      "id": "h126",
+      "tipo": "seção",
+      "titulo": "Hermes executor autorizado",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2677
+    },
+    {
+      "id": "h127",
+      "tipo": "seção",
+      "titulo": "Desktop Commander legado",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2678
+    },
+    {
+      "id": "h128",
+      "tipo": "seção",
+      "titulo": "MCP Admin Kernel vivo setores",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2688
+    },
+    {
+      "id": "h129",
+      "tipo": "seção",
+      "titulo": "Ferramentas publicas",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 2693
+    },
+    {
+      "id": "h130",
+      "tipo": "seção",
+      "titulo": "Catalogo / versao",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2694
+    },
+    {
+      "id": "h131",
+      "tipo": "seção",
+      "titulo": "Admin unificado",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2695
+    },
+    {
+      "id": "h132",
+      "tipo": "seção",
+      "titulo": "Validador Admin",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2696
+    },
+    {
+      "id": "h133",
+      "tipo": "seção",
+      "titulo": "Prova por setor CURRENT medido",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2703
+    },
+    {
+      "id": "h134",
+      "tipo": "seção",
+      "titulo": "Casa / Tailscale",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2706
+    },
+    {
+      "id": "h135",
+      "tipo": "seção",
+      "titulo": "Screenpipe Casa",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2707
+    },
+    {
+      "id": "h136",
+      "tipo": "seção",
+      "titulo": "API / One Heart",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "estado": "CURRENT_STATE_PROJECTION",
+      "line": 2708
+    },
+    {
+      "id": "h137",
+      "tipo": "seção",
+      "titulo": "Modelo runtime",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2709
+    },
+    {
+      "id": "h138",
+      "tipo": "seção",
+      "titulo": "Hermes WebUI",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2710
+    },
+    {
+      "id": "h139",
+      "tipo": "seção",
+      "titulo": "SSH Windows / portas legadas",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2711
+    },
+    {
+      "id": "h140",
+      "tipo": "seção",
+      "titulo": "Fixed Point owner unico",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2715
+    },
+    {
+      "id": "h141",
+      "tipo": "seção",
+      "titulo": "Mapas da Casa",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+      "estado": "PARTIAL_SOURCE_PROJECTION",
+      "line": 2722
+    },
+    {
+      "id": "h142",
+      "tipo": "seção",
+      "titulo": "Grafos",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2734
+    },
+    {
+      "id": "h143",
+      "tipo": "seção",
+      "titulo": "Paineis",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2748
+    },
+    {
+      "id": "h144",
+      "tipo": "seção",
+      "titulo": "Instalacao",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2765
+    },
+    {
+      "id": "h145",
+      "tipo": "seção",
+      "titulo": "BRAIN Mapa do Sistema",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+      "estado": "PARTIAL_SOURCE_PROJECTION",
+      "line": 2781
+    },
+    {
+      "id": "h146",
+      "tipo": "seção",
+      "titulo": "🪬 Um sistema, três funções; memória derivada não vira autoridade",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2788
+    },
+    {
+      "id": "h147",
+      "tipo": "seção",
+      "titulo": "Docs Canonicos",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2838
+    },
+    {
+      "id": "h148",
+      "tipo": "seção",
+      "titulo": "Diagramas",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 2854
+    },
+    {
+      "id": "h149",
+      "tipo": "seção",
+      "titulo": "Runtime",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2869
+    },
+    {
+      "id": "h150",
+      "tipo": "seção",
+      "titulo": "Issues Rastreamento",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2884
+    },
+    {
+      "id": "h151",
+      "tipo": "seção",
+      "titulo": "Skills",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2904
+    },
+    {
+      "id": "h152",
+      "tipo": "seção",
+      "titulo": "Bridge privado Tailscale prioritario",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2928
+    },
+    {
+      "id": "h153",
+      "tipo": "seção",
+      "titulo": "Tailscale transporte privado",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2931
+    },
+    {
+      "id": "h154",
+      "tipo": "seção",
+      "titulo": "MCP control plane unico",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2932
+    },
+    {
+      "id": "h155",
+      "tipo": "seção",
+      "titulo": "Hermes executor autorizado",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2933
+    },
+    {
+      "id": "h156",
+      "tipo": "seção",
+      "titulo": "Desktop Commander legado",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2934
+    },
+    {
+      "id": "h157",
+      "tipo": "seção",
+      "titulo": "MCP Admin Kernel vivo setores",
+      "aba": "operacao",
+      "owner": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2944
+    },
+    {
+      "id": "h158",
+      "tipo": "seção",
+      "titulo": "Ferramentas publicas",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 2949
+    },
+    {
+      "id": "h159",
+      "tipo": "seção",
+      "titulo": "Catalogo / versao",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2950
+    },
+    {
+      "id": "h160",
+      "tipo": "seção",
+      "titulo": "Admin unificado",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2951
+    },
+    {
+      "id": "h161",
+      "tipo": "seção",
+      "titulo": "Validador Admin",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2952
+    },
+    {
+      "id": "h162",
+      "tipo": "seção",
+      "titulo": "Prova por setor CURRENT medido",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2960
+    },
+    {
+      "id": "h163",
+      "tipo": "seção",
+      "titulo": "Casa / Tailscale",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2963
+    },
+    {
+      "id": "h164",
+      "tipo": "seção",
+      "titulo": "Screenpipe Casa",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2964
+    },
+    {
+      "id": "h165",
+      "tipo": "seção",
+      "titulo": "API / One Heart",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "estado": "CURRENT_STATE_PROJECTION",
+      "line": 2965
+    },
+    {
+      "id": "h166",
+      "tipo": "seção",
+      "titulo": "Modelo runtime",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2966
+    },
+    {
+      "id": "h167",
+      "tipo": "seção",
+      "titulo": "Hermes WebUI",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2967
+    },
+    {
+      "id": "h168",
+      "tipo": "seção",
+      "titulo": "SSH Windows / portas legadas",
+      "aba": "operacao",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2968
+    },
+    {
+      "id": "h169",
+      "tipo": "seção",
+      "titulo": "Forja Fixed Point",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 2972
+    },
+    {
+      "id": "h170",
+      "tipo": "seção",
+      "titulo": "VPS realinhada à main · sincronização automática de volta \\n Resumo \\n Item Estado Detalhe VPS no ramo main Antes: docs/hermes-loc",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 3691
+    },
+    {
+      "id": "h171",
+      "tipo": "seção",
+      "titulo": "01 | Git Sync",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3922
+    },
+    {
+      "id": "h172",
+      "tipo": "seção",
+      "titulo": "03 | Hermes Core",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 3923
+    },
+    {
+      "id": "h173",
+      "tipo": "seção",
+      "titulo": "04 | MCP Framework",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 3924
+    },
+    {
+      "id": "h174",
+      "tipo": "seção",
+      "titulo": "05 | Inventário",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3925
+    },
+    {
+      "id": "h175",
+      "tipo": "seção",
+      "titulo": "10 | Telegram",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 3926
+    },
+    {
+      "id": "h176",
+      "tipo": "seção",
+      "titulo": "PLACAR: 10/10 PASS",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3927
+    },
+    {
+      "id": "h177",
+      "tipo": "seção",
+      "titulo": "🔒 CADEADOS SELADOS",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 3929
+    },
+    {
+      "id": "h178",
+      "tipo": "seção",
+      "titulo": "🔐 Autoridade",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3931
+    },
+    {
+      "id": "h179",
+      "tipo": "seção",
+      "titulo": "🛡️ Segurança",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3932
+    },
+    {
+      "id": "h180",
+      "tipo": "seção",
+      "titulo": "🧿 Contraprova",
+      "aba": "operacao",
+      "owner": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "estado": "HISTORICAL_PROOF_ONLY",
+      "line": 3933
+    },
+    {
+      "id": "h181",
+      "tipo": "seção",
+      "titulo": "🧠 Memória",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3934
+    },
+    {
+      "id": "h182",
+      "tipo": "seção",
+      "titulo": "💗 Kaizen",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3935
+    },
+    {
+      "id": "h183",
+      "tipo": "seção",
+      "titulo": "⚡ INSTINTO SUPERIOR — INTEGRAÇÃO CRISTALIZADA",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3938
+    },
+    {
+      "id": "h184",
+      "tipo": "seção",
+      "titulo": "🧿 Operação Zendriver / Chromium — mapa de prova e recuperação",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+      "estado": "PARTIAL_SOURCE_PROJECTION",
+      "line": 3974
+    },
+    {
+      "id": "h185",
+      "tipo": "seção",
+      "titulo": "🖥️ VPS — evidência física",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3978
+    },
+    {
+      "id": "h186",
+      "tipo": "seção",
+      "titulo": "🏠 Casa — usuário danda",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3987
+    },
+    {
+      "id": "h187",
+      "tipo": "seção",
+      "titulo": "🏠 Casa — usuário Administrador",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3996
+    },
+    {
+      "id": "h188",
+      "tipo": "seção",
+      "titulo": "🔌 Rotas e owners existentes",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 4004
+    },
+    {
+      "id": "h189",
+      "tipo": "seção",
+      "titulo": "⚑ VER PENDÊNCIAS — cursor de continuação",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 4015
+    }
+  ],
+  "controls": [
+    {
+      "id": "busca",
+      "tipo": "input",
+      "titulo": "busca",
+      "aba": "global",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1427
+    },
+    {
+      "id": "cd-cpu-measure-import",
+      "tipo": "button",
+      "titulo": "cd-cpu-measure-import",
+      "aba": "global",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1446
+    },
+    {
+      "id": "cd-cpu-measure-file",
+      "tipo": "input",
+      "titulo": "cd-cpu-measure-file",
+      "aba": "global",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1446
+    },
+    {
+      "id": "tab:hud",
+      "tipo": "button",
+      "titulo": "hud",
+      "aba": "hud",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1451
+    },
+    {
+      "id": "tab:mapa",
+      "tipo": "button",
+      "titulo": "mapa",
+      "aba": "mapa",
+      "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+      "estado": "PARTIAL_SOURCE_PROJECTION",
+      "line": 1452
+    },
+    {
+      "id": "tab:forja",
+      "tipo": "button",
+      "titulo": "forja",
+      "aba": "forja",
+      "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+      "estado": "PARTIAL_SOURCE_PROJECTION",
+      "line": 1453
+    },
+    {
+      "id": "tab:operacao",
+      "tipo": "button",
+      "titulo": "operacao",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1454
+    },
+    {
+      "id": "tab:undefined",
+      "tipo": "button",
+      "titulo": "controle",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1906
+    },
+    {
+      "id": "aion-link",
+      "tipo": "a",
+      "titulo": "aion-link",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 1893
+    },
+    {
+      "id": "cd-moltbook-key-action",
+      "tipo": "button",
+      "titulo": "cd-moltbook-key-action",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2201
+    },
+    {
+      "id": "cd-moltbook-post-time",
+      "tipo": "input",
+      "titulo": "cd-moltbook-post-time",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2209
+    },
+    {
+      "id": "cd-moltbook-post-frequency",
+      "tipo": "select",
+      "titulo": "cd-moltbook-post-frequency",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2211
+    },
+    {
+      "id": "cd-moltbook-post-save",
+      "tipo": "button",
+      "titulo": "cd-moltbook-post-save",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2217
+    },
+    {
+      "id": "cd-moltbook-post-mission",
+      "tipo": "button",
+      "titulo": "cd-moltbook-post-mission",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2218
+    },
+    {
+      "id": "cd-moltbook-pubs-refresh",
+      "tipo": "button",
+      "titulo": "cd-moltbook-pubs-refresh",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2227
+    },
+    {
+      "id": "cd-moltbook-pubs-import",
+      "tipo": "input",
+      "titulo": "cd-moltbook-pubs-import",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2229
+    },
+    {
+      "id": "cd-moltbook-public-profile",
+      "tipo": "a",
+      "titulo": "cd-moltbook-public-profile",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "LEGACY_ADMIN_PENDING",
+      "line": 2231
+    },
+    {
+      "id": "cdr-run",
+      "tipo": "button",
+      "titulo": "cdr-run",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2336
+    },
+    {
+      "id": "cdr-step",
+      "tipo": "button",
+      "titulo": "cdr-step",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2336
+    },
+    {
+      "id": "cdr-pause",
+      "tipo": "button",
+      "titulo": "cdr-pause",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2336
+    },
+    {
+      "id": "cdr-reset",
+      "tipo": "button",
+      "titulo": "cdr-reset",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2336
+    },
+    {
+      "id": "cdr-operator-send",
+      "tipo": "button",
+      "titulo": "cdr-operator-send",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2340
+    },
+    {
+      "id": "cdr-operator-copy",
+      "tipo": "button",
+      "titulo": "cdr-operator-copy",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2340
+    },
+    {
+      "id": "cdr-operator-close",
+      "tipo": "button",
+      "titulo": "cdr-operator-close",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2340
+    },
+    {
+      "id": "cd-intent-refresh",
+      "tipo": "button",
+      "titulo": "cd-intent-refresh",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2468
+    },
+    {
+      "id": "cd-local-programs-copy",
+      "tipo": "button",
+      "titulo": "cd-local-programs-copy",
+      "aba": "operacao",
+      "owner": "scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat",
+      "estado": "SENSOR_BRIDGE_PENDING",
+      "line": 2592
+    },
+    {
+      "id": "cd-event-filter",
+      "tipo": "select",
+      "titulo": "cd-event-filter",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2597
+    },
+    {
+      "id": "hermes-judge-copy",
+      "tipo": "a",
+      "titulo": "hermes-judge-copy",
+      "aba": "operacao",
+      "owner": "apps/modulos/HERMES-CORE",
+      "estado": "OWNER_AVAILABLE_RUNTIME_UNKNOWN",
+      "line": 2615
+    },
+    {
+      "id": "open-pendencias",
+      "tipo": "a",
+      "titulo": "open-pendencias",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2653
+    },
+    {
+      "id": "open-home",
+      "tipo": "a",
+      "titulo": "open-home",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 2654
+    },
+    {
+      "id": "leitor-obsidian",
+      "tipo": "a",
+      "titulo": "leitor-obsidian",
+      "aba": "operacao",
+      "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+      "estado": "PARTIAL_SOURCE_PROJECTION",
+      "line": 3002
+    },
+    {
+      "id": "leitor-original",
+      "tipo": "a",
+      "titulo": "leitor-original",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3003
+    },
+    {
+      "id": "leitor-fechar",
+      "tipo": "a",
+      "titulo": "leitor-fechar",
+      "aba": "operacao",
+      "owner": "docs/HUD/HUD.html",
+      "estado": "OWNER_RECONCILIATION_PENDING",
+      "line": 3004
+    }
+  ]
+}
