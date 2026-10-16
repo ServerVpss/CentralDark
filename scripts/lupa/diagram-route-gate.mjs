@@ -3,7 +3,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-10-16T10:18:38.112Z
+ * @last_updated: 2026-10-16T10:24:39.554Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
  * @status: CODE_GATE_IMPLEMENTED; GLOBAL_ENFORCEMENT_PENDING_MAIN_AND_CI
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
@@ -396,10 +396,16 @@ export function validateDiffCoverage(registry, units, codeDocContext = null) {
         // Arquivo excluido ainda exige documentar a retirada com proveniencia.
         const docUpdated = changes.some((entry) => {
           const docPath = normalizePath(entry.path);
-          return /^docs\/.*\.md$/i.test(docPath) &&
-            !String(entry.status).startsWith("D") &&
-            String(readAt("head", docPath) || "").includes("@code_ref: " + source) &&
-            String(readAt("head", docPath) || "").includes("@removed: true");
+          if (!/^docs\/.*\.md$/i.test(docPath) || String(entry.status).startsWith("D")) return false;
+          const currentDoc = String(readAt("head", docPath) || "");
+          const previousDoc = String(readAt("base", docPath) || "");
+          const newStamp = currentDoc.match(stamp)?.[1];
+          const oldStamp = previousDoc.match(stamp)?.[1];
+          return currentDoc.includes("@code_ref: " + source) &&
+            currentDoc.includes("@removed: true") &&
+            Boolean(newStamp) && newStamp !== oldStamp &&
+            currentDoc.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]") !==
+              previousDoc.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]");
         });
         if (!docUpdated) errors.push("CODE_DELETED_WITHOUT_DOC_TRACE:" + source);
         continue;
