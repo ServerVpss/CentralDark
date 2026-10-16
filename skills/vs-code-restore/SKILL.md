@@ -229,3 +229,25 @@ O arquivo `skills/vs-code-restore/tools/focus-vscode-window.ps1` passou a existi
 Fallback dentro do mesmo owner: preferir o comando nativo já instalado `CentralDark: ZENDRIVE CLI (terminal existente)` / `centraldark.zendriveCli`, que usa a API do VS Code e não depende da execução externa de `.ps1`. Se a extensão não estiver ativa, classificar `UNKNOWN` e solicitar/realizar somente o reload autorizado com preservação das sessões. O script permanece útil em máquinas cuja política permita sua execução assinada/confiável.
 
 **Receita atualizada:** `EXTENSION_NATIVE_FIRST → UIAUTOMATION_SCRIPT_IF_POLICY_ALLOWS → FOCUS_READBACK → SEND_ONCE → SEPARATE_EXECUTION_READBACK → RECEIPT_SANITIZADO`. `POLICY_BLOCKED != ROUTE_UNAVAILABLE`.
+
+## MCP CentralDark — sessão interativa vinculada ao VS Code (2026-10-15)
+
+**Objetivo:** reutilizar o Desktop Commander/MCP CentralDark e esta skill como owner da rota visível de foco/digitação, sem criar terminal-bridge concorrente.
+
+```text
+LIST_DEVICES
+→ LIST_SESSIONS(device=SEGREDO)
+→ CLASSIFY_PID_READONLY
+→ READ_PROCESS_OUTPUT(pid)
+→ ONLY_IF_SHELL_OWNER_KNOWN: SEND_HARMLESS_PROBE
+→ READBACK_REQUIRED
+→ SEND_ACCEPTED + NO_OUTPUT = SEND_ACCEPTED_READBACK_UNKNOWN
+→ SEND + MATCHING_OUTPUT = INTERACTIVE_SESSION_PROVEN
+→ THEN typed task may be sent only inside authorized owner/scope
+```
+
+**Cadeados:** não usar PID por posição histórica; não escrever em Vite, builder, watcher ou processo desconhecido; não usar comandos destrutivos, deploy ou segredo como sonda. Antes de mensagem real para Claude/Hermes, provar qual sessão é shell/REPL e capturar readback correspondente. Texto no chat ou `Input executed` sem saída não comprova que o comando foi consumido pelo terminal visível.
+
+**Medição 2026-10-15:** o MCP CentralDark expôs cinco sessões PowerShell na Casa. A sessão `PID 34080` aceitou a entrada inofensiva `Write-Output '__CENTRALDARK_INTERACTIVE_PROBE__'`, porém não produziu saída nem em leitura posterior; portanto `SEND_ACCEPTED_READBACK_UNKNOWN`, não `INTERACTIVE_SESSION_PROVEN`. Outras sessões observadas incluíram Vite/Instinto e Artifacts Builder; não foram reutilizadas como terminal de comando.
+
+**NEXT_CURSOR:** mapear PID ↔ terminal visível do VS Code/Claude/Hermes por evidência não destrutiva; só então usar `interact_with_process` para comando real e registrar `SEND/OUTPUT/EXIT_OR_PROMPT` no receipt existente.
