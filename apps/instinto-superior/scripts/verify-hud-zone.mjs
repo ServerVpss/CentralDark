@@ -277,6 +277,8 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.ok(cockpit.includes('autenticado ? <CentralNotificacoes modo="sininho"'));
   assert.ok(admin.includes('<TabsTrigger value="notificacoes">'));
   assert.ok(admin.includes('<CentralNotificacoes modo="painel" />'));
+  assert.ok(cockpit.includes('abaInicial={abaAdminInicial}'));
+  assert.ok(admin.includes('defaultValue={abaInicial}'));
   assert.ok(bell.includes("useNotificationsLog(periodo)"));
   assert.ok(hook.includes('.from("notifications_log")'));
   assert.ok(hook.includes('"postgres_changes"'));

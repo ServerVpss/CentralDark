@@ -91,7 +91,7 @@ type ProfileLinha = {
   full_name?: unknown;
 };
 
-export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark | undefined }) {
+export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estado?: EstadoCentralDark | undefined; abaInicial?: "visao" | "notificacoes" }) {
   const [modulos, setModulos] = useState<ModuloPortal[]>([]);
   const [usuarios, setUsuarios] = useState<UsuarioLinha[]>([]);
   const [loading, setLoading] = useState(true);
@@ -251,7 +251,7 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         </div>
       ) : null}
 
-      <Tabs defaultValue="visao" className="mt-8">
+      <Tabs key={abaInicial} defaultValue={abaInicial} className="mt-8">
         <TabsList className="h-auto flex-wrap justify-start">
           <TabsTrigger value="visao">Visão geral</TabsTrigger>
           <TabsTrigger value="modulos">Módulos</TabsTrigger>

@@ -203,6 +203,8 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [abaAdminInicial, definirAbaAdminInicial] = useState<"visao" | "notificacoes">("visao");
+  const [versaoAdmin, definirVersaoAdmin] = useState(0);
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
   const [harnessVisivel, definirHarnessVisivel] = useState(true);
@@ -247,7 +249,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       {harnessVisivel ? (
         <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
-          {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => abrirDestino("admin")} /> : null}
+          {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
+            definirAbaAdminInicial("notificacoes");
+            definirVersaoAdmin((n) => n + 1);
+            abrirDestino("admin");
+          }} /> : null}
           <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("top")}><Layers3 className="size-4" /></Button>
         </nav>
       ) : null}
@@ -528,7 +534,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </TabsContent>
             {autenticado ? (
               <TabsContent value="admin" className="mt-10">
-                <PainelAdminCentralDark estado={dado} />
+                <PainelAdminCentralDark key={versaoAdmin} estado={dado} abaInicial={abaAdminInicial} />
               </TabsContent>
             ) : null}
             {autenticado ? (
