@@ -433,8 +433,10 @@ export function validateDiffCoverage(registry, units, codeDocContext = null) {
       const docStamp = currentDoc.match(stamp)?.[1];
       if (!docStamp || !Number.isFinite(Date.parse(docStamp))) errors.push("DOC_TIMESTAMP_INVALID:" + docPath);
       else if (docStamp === priorDoc.match(stamp)?.[1]) errors.push("DOC_TIMESTAMP_NOT_UPDATED:" + docPath);
-      const withoutStamp = (t) => t.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]");
-      if (withoutStamp(currentDoc) === withoutStamp(priorDoc)) errors.push("DOC_CONTENT_NOT_UPDATED:" + docPath);
+      if (currentDoc.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]") ===
+          priorDoc.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]")) {
+        errors.push("DOC_CONTENT_NOT_UPDATED:" + docPath);
+      }
     }
   }
   return errors;
