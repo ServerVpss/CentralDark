@@ -61,3 +61,24 @@ O modelo `MULTI_ACCOUNT_ISOLATED_HOME` tem **principal** e **conta2** como perfi
 `PROFILE_IDENTITY=PROVEN; HISTORIC_ACCOUNT2_DEVICE_LINK=PROVEN; NEW_DEVICE_ONLINE=PROVEN; DEVICE_SUCCESSION=UNKNOWN; PROVIDER_EMAIL_BINDING=NOT_ESTABLISHED_HERE`.
 
 **NEXT_CURSOR:** `KEEP_BOTH_PROFILES → DISCOVER_EACH_NAMESPACE → PROBE_CURRENT_PROFILE → MAP_CONSUMERS → ANCHOR_ALIASES_PER_ACCOUNT → TEST_NO_CROSS_ACCOUNT_REDIRECT`.
+
+
+### 🍒 Lei da Auréola aplicada à migração: observar tudo e reter o bem
+
+**Não criar outra lei:** o owner canônico já é `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml`, com implementação no `MASTER-CYCLE.yml`, `AGENTS.md` e gate de prova em `.agents/skills/meta-lupa/SKILL.md`. A âncora aqui apenas **consome essa capacidade existente**.
+
+**Auréola:** “Examinai tudo. Retende o bem.” (1Ts 5:21).
+
+Aplicação operacional quando qualquer conta, endereço, arquivo, rota ou serviço mudar:
+1. **OBSERVAR:** medir origem e destino, consumidores, funcionalidade, owner, status e versão real. Não inferir identidade por nome semelhante.
+2. **EXAMINAR E COMPARAR:** classificar `BEM_PROVADO`, `FALHA`, `HIPOTESE`, `DESCONHECIDO`; confrontar o comportamento antigo com o novo, inclusive por teste negativo.
+3. **RETER O BEM:** preservar o estado verde, os recursos úteis, a origem e a rastreabilidade, mesmo quando o invólucro antigo for descontinuado. Referenciar o *owner canônico* existente; não duplicar conteúdo ou sessão.
+4. **CORRIGIR SEM REGRESSÃO:** só migrar capacidades se `PROOF + COUNTERPROOF` demonstrarem que o destino preserva o valor. Não transportar erros, segredos ou cadastros de contas diferentes como se fossem uma mesma identidade.
+5. **ANCORAR E VERIFICAR:** `OLD_REF → OLD_OWNER → CANONICAL_CAPABILITY → CURRENT_REF → TEST_READBACK → RECEIPT → NEXT_CURSOR`. Enquanto houver consumidores do antigo, manter rota compatível autorizada; não revogar por dedução.
+6. **KAIZEN:** cada observação real atualiza o mesmo Goal e o mesmo owner. A próxima iteração retém o que passou, corrige apenas o delta e preserva `UNKNOWN` sem falso verde.
+
+**CASO CONCRETO:** Conta 2 foi comprovada como perfil independente, logo **o bem a reter** é a separação `MULTI_ACCOUNT_ISOLATED_HOME`, as sessões individuais, o histórico dos IDs e a habilidade de chegar à VPS por rotas distintas. O estado OFFLINE de um ID não é autorização para apagá-lo, e o PONG do outro não prova sucessão. A leitura do serviço antigo e a conexão atual são sensores complementares.
+
+`AUREOLA_OWNER_REUSED=YES; HISTORY_PRESERVED=YES; CROSS_ACCOUNT_REDIRECT=FORBIDDEN_UNTIL_PROVEN; RUNTIME_MIGRATION=NOT_EXECUTED; GLOBAL_FIXED_POINT=NO`.
+
+**NEXT_CURSOR:** `OBSERVE_BOTH_ACCOUNT_ROUTES → COMPARE_CAPABILITIES → RETAIN_PROVEN_GOOD → MAP_CONSUMERS → TEST_COMPATIBILITY → ANCHOR_ONLY_PROVEN_MOVES → RECEIPT`.
