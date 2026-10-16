@@ -1,0 +1,24 @@
+{
+  "schema": "centraldark.harness.module-registry.v1",
+  "owner": "apps/instinto-superior",
+  "surface": "CockpitShell",
+  "runtime_owner": "CentralDark Harness",
+  "single_system": true,
+  "reuse_before_create": true,
+  "modules": [
+    {"id":"deepseek","owner":"apps/modulos/deepseek-harness","transport":"existing-owner","runtime_status":"PROVEN"},
+    {"id":"hermes","owner":"apps/modulos/HERMES-CORE","transport":"MCP/RDC","runtime_status":"PROVEN"},
+    {"id":"claude-code","owner":"external-vscode-owner","transport":"VS Code/SSH","runtime_status":"UNKNOWN"},
+    {"id":"chatgpt-cowork","owner":"external-work-owner","transport":"Work/browser","runtime_status":"UNKNOWN"},
+    {"id":"vscode","owner":"apps/modulos/HERMES-CORE/extensions/hermes-vscode-router-provider","transport":"VS Code Remote","runtime_status":"PROVEN"},
+    {"id":"figma","owner":"Figma connector","transport":"MCP","runtime_status":"PROVEN"},
+    {"id":"obsidian","owner":"apps/modulos/obsidian-plugin-grafo-vivo","transport":"Grafo Vivo","runtime_status":"UNKNOWN"}
+  ],
+  "loop": ["intent","owner_resolution","transport_resolution","execution","readback","receipt","ci"],
+  "invariants": ["original_owners_alive","no_parallel_runtime","unknown_not_pass","page_file_inventory_required"],
+  "notes": [
+    "A registry descreve módulos; não copia credenciais, processos ou motores.",
+    "Botão de runtime só pode ser habilitado quando a rota viva for medida.",
+    "A integração completa exige readback por arquivo/página e prova de CI; catálogo sozinho não é prova."
+  ]
+}
