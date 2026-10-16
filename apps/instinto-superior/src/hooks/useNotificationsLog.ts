@@ -69,7 +69,7 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
       if (error) throw error;
       const linhas = (data ?? []) as unknown as NotificationLog[];
       setItems(linhas);
-      if (linhas[0]) setLastEventAt(new Date(linhas[0].created_at));
+      setLastEventAt(linhas[0] ? new Date(linhas[0].created_at) : null);
     } catch (e) {
       setErro(extrairMensagemErro(e));
     } finally {
@@ -94,7 +94,13 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
         },
       )
       .subscribe((status) => {
-        setRealtimeStatus(status === "SUBSCRIBED" ? "LIVE" : status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED" ? "DISCONNECTED" : "CONNECTING");
+        setRealtimeStatus(
+          status === "SUBSCRIBED"
+            ? "LIVE"
+            : status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED"
+              ? "DISCONNECTED"
+              : "CONNECTING",
+        );
       });
     return () => {
       supabase.removeChannel(canal);
