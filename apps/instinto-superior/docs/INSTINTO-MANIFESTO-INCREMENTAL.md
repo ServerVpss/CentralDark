@@ -60,3 +60,23 @@ No snapshot versionado `forja-gaveta.snapshot.json` (fonte Git SHA `0f2b35f390a8
 ## Regra de evolução
 
 Para cada nova descoberta, **acrescentar D00N** com `SOURCE_SHA`, owner, delta, testes, contraprova, recibo e `NEXT_CURSOR`. Corrigir referências antigas por âncora/redirect em vez de apagar proveniência. Não promover um estado para verde sem prova. **🍒🎰🎲 Outra melhoria antecipada** deve explicar ganho, razão, evidência e próximo avanço.
+
+
+### D002 — 2026-10-16 · VS Code multiagente + Instinto:3000/Tailscale observado
+
+- **SOURCE_MAIN_SHA na medição:** `3e800e7dd9440ba4ee2dc9455aeaa1e57295dcdc`.
+- **Intenção:** mapear a “outra porta” e a bancada VS Code sem disputar o writer que trabalha no Auto Sync.
+- **Instinto Superior vivo na Casa:** processo `node.exe` foi observado executando `apps/instinto-superior/.../vite.js dev --host 127.0.0.1 --port 3000 --strictPort`; `tailscaled.exe` apresentou listeners no mesmo `:3000` na interface tailnet. Isto reconfirma a rota já cristalizada em `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md`; não nasce nova receita.
+- **VS Code vivo:** janela `Code.exe` observada com título apontando para `code-server (...preview.emergentagent.com)`. A árvore do mesmo processo contém terminais integrados e ferramentas multiagente.
+- **Hermes:** terminal integrado observado com `hermes.cmd acp` e outro com `hermes.cmd chat`. Processo observado ≠ GOAL entregue; ACK tipado continua necessário.
+- **Claude Code:** processo CLI observado como filho de terminal PowerShell do VS Code; a árvore contém MCPs e uma sessão SSH para a VPS. Isso prova presença/sessão ativa, não prova que o MCP CentralDark consegue anexar-se à sessão arbitrária.
+- **Cloud Code:** dois processos `cloudcode_cli.exe duet -trace -logtostderr` observados no extension host do VS Code.
+- **Codex:** `codex.exe ... app-server` observado dentro da árvore do VS Code.
+- **Antigravity:** hub `agy.exe --hub` observado no extension host; porta do hub é runtime volátil e não deve virar endpoint canônico sem owner/readback.
+- **Screenpipe:** processo `screenpipe-mcp` observado na árvore; catálogo/processo ≠ sensor material até readback do owner.
+- **SSH Casa→VPS:** sessões `ssh.exe` para alias `segredo-vpss` observadas dentro da árvore do VS Code/Claude, coerentes com receitas já existentes.
+- **Receita reutilizada:** `skills/vs-code-restore/SKILL.md` já contém `TARGET_WINDOW → TARGET_TERMINAL → FOCUS_READBACK → SEND_ONCE → READBACK → CONTRAPROVA → RECEIPT` e a seção MCP CentralDark. **Nenhuma nova skill de terminal foi criada.**
+- **Fronteira:** `mcp__CENTRALDARK__list_sessions` lista sessões criadas/geridas pelo conector, mas os PIDs dos terminais integrados acima não apareceram como sessão anexável. Portanto `VSCODE_TREE_PROVEN=PASS`, `MCP_ARBITRARY_SESSION_ATTACH=UNKNOWN`, `INTERACTIVE_ROUNDTRIP=NOT_PROVEN`.
+- **PR #1832:** readback atual confirmou `state=closed`, `merged=true`, merge `c95d9cb55c447fd928c2ee8ed240827e8e00d9c0`. Resumos antigos que diziam `dirty/open` são históricos, não CURRENT.
+- **NEXT_CURSOR:** projetar estes módulos no registry do harness → manter estados parciais honestos → provar uma sessão terminal por identidade + input autorizado + ACK/readback correlacionado → então habilitar ação interativa no cockpit.
+- **FIXED_POINT:** nenhum reset, clean, rebase, restart, envio de texto ou interrupção foi executado neste delta; apenas leitura e cristalização do mapa vivo.
