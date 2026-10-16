@@ -3,7 +3,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-10-16T10:24:39.554Z
+ * @last_updated: 2026-10-16T10:26:40.796Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
  * @status: CODE_GATE_IMPLEMENTED; GLOBAL_ENFORCEMENT_PENDING_MAIN_AND_CI
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
@@ -384,6 +384,7 @@ export function validateDiffCoverage(registry, units, codeDocContext = null) {
     const modified = new Set(changes.filter((item) => !String(item.status).startsWith("D")).map((item) => normalizePath(item.path)));
     const executable = /\.(?:js|jsx|mjs|cjs|ts|tsx|css|scss|html|py|sh|bash|go|rs|java|sql|yml|yaml|toml|json)$/i;
     const noInlineComments = /\.json$/i;
+    const canonicalDoc = /^(?:docs\/.*\.md|\.agents\/skills\/[^/]+\/(?:SKILL|README)\.md|(?:apps|src|scripts)\/.*\/README\.md|README\.md)$/i;
     const stamp = /@last_updated:\s*(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)/;
     const scopes = /^(?:apps\/|src\/|scripts\/|\.github\/(?:workflows|actions)\/|\.agents\/skills\/|[^/]+\.(?:mjs|js|ts|py|sh|json|yml|yaml)$)/;
     const generated = /(?:^|\/)(?:node_modules|dist|build|coverage|vendor|\.next|\.turbo|generated)(?:\/|$)/;
@@ -396,7 +397,7 @@ export function validateDiffCoverage(registry, units, codeDocContext = null) {
         // Arquivo excluido ainda exige documentar a retirada com proveniencia.
         const docUpdated = changes.some((entry) => {
           const docPath = normalizePath(entry.path);
-          if (!/^docs\/.*\.md$/i.test(docPath) || String(entry.status).startsWith("D")) return false;
+          if (!canonicalDoc.test(docPath) || String(entry.status).startsWith("D")) return false;
           const currentDoc = String(readAt("head", docPath) || "");
           const previousDoc = String(readAt("base", docPath) || "");
           const newStamp = currentDoc.match(stamp)?.[1];
@@ -417,14 +418,14 @@ export function validateDiffCoverage(registry, units, codeDocContext = null) {
         if (!/@owner:\s*\S+/.test(header)) errors.push("CODE_OWNER_MISSING:" + source);
         const ref = header.match(/@doc_ref:\s*([^\s*]+)/);
         docPath = normalizePath(ref?.[1] || "");
-        if (!docPath || !/^docs\/.*\.md$/i.test(docPath)) errors.push("CODE_DOC_REF_MISSING:" + source);
+        if (!docPath || !canonicalDoc.test(docPath)) errors.push("CODE_DOC_REF_MISSING:" + source);
         const currentStamp = header.match(stamp)?.[1];
         const previousStamp = String(old).slice(0, 5500).match(stamp)?.[1];
         if (!currentStamp || !Number.isFinite(Date.parse(currentStamp))) errors.push("CODE_TIMESTAMP_INVALID:" + source);
         else if (currentStamp === previousStamp) errors.push("CODE_TIMESTAMP_NOT_UPDATED:" + source);
       } else {
         // Formato JSON sem comentarios: encontrar documento canônico que mapeia o codigo.
-        docPath = [...modified].filter((p) => /^docs\/.*\.md$/i.test(p)).find((p) =>
+        docPath = [...modified].filter((p) => canonicalDoc.test(p)).find((p) =>
           String(readAt("head", p) || "").includes("@code_ref: " + source)
         ) || "";
         if (!docPath) errors.push("JSON_CODE_TRACE_DOC_MISSING:" + source);
