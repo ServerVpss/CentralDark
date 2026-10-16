@@ -412,10 +412,50 @@ app.get("/api/welcome-kit", async (req,res)=>{
 });
 
 const stateCache = new Map();
+const OAUTH_STATE_TTL_MS = 10 * 60 * 1000;
+const GITHUB_PRIVATE_REPO = "ServerVpss/CentralDark";
+const GITHUB_AUTH_MODE = process.env.GITHUB_AUTH_MODE || "oauth_app";
+const ALLOWED_RETURN_ORIGINS = new Set(
+  String(process.env.OAUTH_ALLOWED_RETURN_ORIGINS || PUBLIC_BASE)
+    .split(",").map((v)=>v.trim()).filter(Boolean),
+);
+function parseCookies(header) {
+  return Object.fromEntries(String(header || "").split(";").map((part)=>part.trim().split("="))
+    .filter(([k,v])=>k && v !== undefined).map(([k,...v])=>[k,decodeURIComponent(v.join("="))]));
+}
+function setHttpOnlyCookie(res,name,value,maxAge=OAUTH_STATE_TTL_MS) {
+  res.setHeader("Set-Cookie", `${name}=${encodeURIComponent(value)}; Max-Age=${Math.floor(maxAge/1000)}; Path=/oauth/github; HttpOnly; Secure; SameSite=Lax`);
+}
+function clearHttpOnlyCookie(res,name) {
+  res.setHeader("Set-Cookie", `${name}=; Max-Age=0; Path=/oauth/github; HttpOnly; Secure; SameSite=Lax`);
+}
+function allowedReturnTo(value) {
+  try {
+    const u = new URL(String(value || PUBLIC_BASE));
+    return u.origin && ALLOWED_RETURN_ORIGINS.has(u.origin) && !u.username && !u.password ? u.toString() : null;
+  } catch { return null; }
+}
+function bearerFrom(req) { return /^Bearer\\s+(\\S+)$/i.exec(String(req.headers.authorization || ""))?.[1] || null; }
+async function requireSupabaseIdentity(req, requestedUserId) {
+  const bearer = bearerFrom(req);
+  if (!bearer) return { status:401, body:{ok:false,status:"AUTH_REQUIRED"} };
+  const {data,error} = await sb.auth.getUser(bearer);
+  const actual = data?.user?.id;
+  if (error || !actual) return { status:401, body:{ok:false,status:"AUTH_INVALID"} };
+  if (requestedUserId && actual !== requestedUserId) return { status:403, body:{ok:false,status:"IDENTITY_MISMATCH"} };
+  return { user:data.user };
+}
+async function githubPrivateRepoAccess(token) {
+  const r = await fetch(`https://api.github.com/repos/${GITHUB_PRIVATE_REPO}/contents/.agents/skills`, {
+    headers:{Authorization:`Bearer ${token}`,Accept:"application/vnd.github+json","User-Agent":"CentralDark-HUB"},
+    signal:AbortSignal.timeout(10000),
+  });
+  return { ok:r.ok, status:r.status };
+}
 setInterval(()=>{const n=Date.now(); for(const[k,v] of stateCache)if(v.exp<n)stateCache.delete(k);},60000);
 
 const OAUTH_CFG = {
-  github:{ ok:!!(GITHUB_CLIENT_ID&&GITHUB_CLIENT_SECRET), authorize:"https://github.com/login/oauth/authorize", token:"https://github.com/login/oauth/access_token",
+  github:{ ok:!!(GITHUB_CLIENT_ID&&GITHUB_CLIENT_SECRET), auth_type:"oauth_app", authorize:"https://github.com/login/oauth/authorize", token:"https://github.com/login/oauth/access_token",
     scope:"repo read:user user:email", client_id:GITHUB_CLIENT_ID, client_secret:GITHUB_CLIENT_SECRET,
     userinfo: async(t)=>{const r=await fetch("https://api.github.com/user",{headers:{Authorization:`Bearer ${t}`,"User-Agent":"CentralDark-HUB"}});const j=await r.json();return j.login||"github";} },
   notion:{ ok:!!(NOTION_CLIENT_ID&&NOTION_CLIENT_SECRET), authorize:"https://api.notion.com/v1/oauth/authorize", token:"https://api.notion.com/v1/oauth/token",
@@ -520,46 +560,101 @@ app.get("/oauth/cloudflare/callback", async (req,res) => {
 app.get("/oauth/:provider/start", async (req,res)=>{
   const p=req.params.provider; const cfg=OAUTH_CFG[p];
   if(!cfg) return res.status(404).send(`Provider ${p} sem OAuth.`);
-  if(!cfg.ok){
-    return res.status(503).send(`<!doctype html><meta charset="utf-8"><title>OAuth ${p}</title>
-      <body style="font-family:system-ui;background:#052e2b;color:#e4f5f0;padding:40px;max-width:720px;margin:auto">
-      <h1 style="color:#34d399">🛠️ Falta cadastrar OAuth do ${p.toUpperCase()}</h1>
-      <p>Callback: <code>${PUBLIC_BASE}/oauth/${p}/callback</code></p>
-      <p><a href="javascript:history.back()" style="color:#34d399">← voltar</a></p>
-      </body>`);
+  if(!cfg.ok) return res.status(503).json({ok:false,status:"OAUTH_NOT_CONFIGURED",provider:p});
+
+  // GitHub is the private-catalog trust boundary. Never accept identity or return URL from the browser.
+  let uid = null;
+  if(p === "github") {
+    const requested = String(req.query.user_id || "");
+    if(!requested) return res.status(401).json({ok:false,status:"IDENTITY_REQUIRED"});
+    const identity = await requireSupabaseIdentity(req, requested).catch(()=>({status:503,body:{ok:false,status:"IDENTITY_CHECK_UNAVAILABLE"}}));
+    if(identity.status) return res.status(identity.status).json(identity.body);
+    uid = identity.user.id;
+    if(GITHUB_AUTH_MODE !== "oauth_app" && GITHUB_AUTH_MODE !== "github_app")
+      return res.status(503).json({ok:false,status:"GITHUB_AUTH_MODE_INVALID"});
+    if(GITHUB_AUTH_MODE === "github_app")
+      return res.status(503).json({ok:false,status:"BLOCKED_NOT_VERIFIED",detail:"GitHub App installation is not verified by this broker"});
+  } else {
+    uid = toUuid(req.query.user_id || "dev-pivete");
   }
-  const uid=toUuid(req.query.user_id||"dev-pivete"); const rt=req.query.redirect_to||PUBLIC_BASE;
-  const state=crypto.randomBytes(16).toString("hex");
-  stateCache.set(state,{provider:p,user_id:uid,redirect_to:rt,exp:Date.now()+600000});
+  const rt = p === "github" ? allowedReturnTo(req.query.redirect_to) : String(req.query.redirect_to || PUBLIC_BASE);
+  if(!rt) return res.status(400).json({ok:false,status:"RETURN_ORIGIN_NOT_ALLOWED"});
+  const state=crypto.randomBytes(32).toString("hex");
+  stateCache.set(state,{provider:p,user_id:uid,redirect_to:rt,exp:Date.now()+OAUTH_STATE_TTL_MS,
+    csrf:crypto.randomBytes(32).toString("hex"),auth_type:cfg.auth_type||"oauth_app"});
+  if(p === "github") setHttpOnlyCookie(res,"cd_github_oauth_state",state);
   const params=new URLSearchParams({client_id:cfg.client_id,redirect_uri:`${PUBLIC_BASE}/oauth/${p}/callback`,state,...(cfg.scope?{scope:cfg.scope}:{}),...(cfg.extraAuth||{})});
   if(!params.get("response_type")) params.set("response_type","code");
-  res.redirect(`${cfg.authorize}?${params.toString()}`);
+  return res.redirect(`${cfg.authorize}?${params.toString()}`);
 });
 
 app.get("/oauth/:provider/callback", async (req,res)=>{
   const p=req.params.provider; const cfg=OAUTH_CFG[p]; const {code,state,error}=req.query;
-  if(error) return res.status(400).send(`OAuth erro: ${error}`);
-  const s=stateCache.get(state); if(!s||s.provider!==p) return res.status(400).send("state inválido");
-  stateCache.delete(state);
+  if(!cfg) return res.status(404).json({ok:false,status:"OAUTH_PROVIDER_UNKNOWN"});
+  if(error) return res.status(400).json({ok:false,status:"OAUTH_NOT_AUTHORIZED"});
+  const s=stateCache.get(String(state));
+  const cookies=parseCookies(req.headers.cookie);
+  if(!s || s.provider!==p || s.exp<Date.now() || (p === "github" && cookies.cd_github_oauth_state !== String(state))) {
+    if(p === "github") clearHttpOnlyCookie(res,"cd_github_oauth_state");
+    return res.status(400).json({ok:false,status:"OAUTH_STATE_INVALID"});
+  }
+  stateCache.delete(String(state));
+  if(p === "github") clearHttpOnlyCookie(res,"cd_github_oauth_state");
+  if(!code) return res.status(400).json({ok:false,status:"OAUTH_CODE_MISSING"});
   try{
-    const bodyForm=new URLSearchParams({grant_type:"authorization_code",code,client_id:cfg.client_id,client_secret:cfg.client_secret,redirect_uri:`${PUBLIC_BASE}/oauth/${p}/callback`});
+    const bodyForm=new URLSearchParams({grant_type:"authorization_code",code:String(code),client_id:cfg.client_id,client_secret:cfg.client_secret,redirect_uri:`${PUBLIC_BASE}/oauth/${p}/callback`});
     const r=await fetch(cfg.token,{method:"POST",
       headers:{"Content-Type":"application/x-www-form-urlencoded",Accept:"application/json",
         ...(p==="notion"?{Authorization:`Basic ${Buffer.from(`${cfg.client_id}:${cfg.client_secret}`).toString("base64")}`}:{})},
-      body: p==="notion"?JSON.stringify({grant_type:"authorization_code",code,redirect_uri:`${PUBLIC_BASE}/oauth/${p}/callback`}):bodyForm });
-    const tj=await r.json(); if(!tj.access_token) throw new Error("sem access_token: "+JSON.stringify(tj).slice(0,200));
-    const label=await cfg.userinfo(tj.access_token,tj).catch(()=>`${p}-conta`);
-    const enc=encrypt(tj.access_token); const refEnc=tj.refresh_token?encrypt(tj.refresh_token):null;
+      body: p==="notion"?JSON.stringify({grant_type:"authorization_code",code:String(code),redirect_uri:`${PUBLIC_BASE}/oauth/${p}/callback`}):bodyForm });
+    const tj=await r.json().catch(()=>({}));
+    if(!r.ok || !tj.access_token) throw new Error("TOKEN_EXCHANGE_FAILED");
+    const token=String(tj.access_token);
+    if(p === "github") {
+      const access = await githubPrivateRepoAccess(token).catch(()=>({ok:false,status:0}));
+      if(!access.ok) {
+        logAction({kind:"oauth_denied",provider:"github",status:"PRIVATE_REPO_ACCESS_DENIED",http:access.status});
+        return res.status(access.status===401||access.status===403?403:502).json({ok:false,status:"PRIVATE_REPO_ACCESS_DENIED",repo:GITHUB_PRIVATE_REPO});
+      }
+    }
+    const label=await cfg.userinfo(token,tj).catch(()=>`${p}-conta`);
+    const enc=encrypt(token); const refEnc=tj.refresh_token?encrypt(tj.refresh_token):null;
     const expAt=new Date(Date.now()+(tj.expires_in?tj.expires_in*1000:30*24*3600*1000)).toISOString();
     const {error:dbe}=await sb.from("oauth_connections").upsert({
       user_id:s.user_id,provider_id:p,access_token_enc:enc,refresh_token_enc:refEnc,
-      scopes_granted:tj.scope||cfg.scope||"oauth",expires_at:expAt,consent_at:new Date().toISOString(),
+      scopes_granted:`${tj.scope||cfg.scope||"oauth"};repo=${GITHUB_PRIVATE_REPO};path=.agents/skills;permission=contents:read`,expires_at:expAt,consent_at:new Date().toISOString(),
       status:"active",account_label:String(label).slice(0,60),
     },{onConflict:"user_id,provider_id,account_label"});
-    if(dbe) throw dbe;
-    logAction({kind:"oauth_success",provider:p,user_id:s.user_id,label});
-    res.redirect(`${s.redirect_to}${s.redirect_to.includes("?")?"&":"?"}oauth_ok=${p}&label=${encodeURIComponent(label)}`);
-  }catch(e){ logAction({kind:"oauth_error",provider:p,err:e.message}); res.status(500).send(`Erro callback ${p}: ${e.message}`); }
+    if(dbe) throw new Error("VAULT_WRITE_FAILED");
+    logAction({kind:"oauth_success",provider:p,user_id:s.user_id,label,status:p==="github"?"private_repo_verified":"stored_in_existing_vault"});
+    const back=new URL(s.redirect_to);back.searchParams.set("oauth_ok",p);back.searchParams.set("label",String(label).slice(0,60));
+    return res.redirect(302,back.toString());
+  }catch(e){ logAction({kind:"oauth_error",provider:p,status:e.message==="VAULT_WRITE_FAILED"?"vault_write_failed":"exchange_or_storage_failed"}); return res.status(502).json({ok:false,status:"OAUTH_NOT_COMPLETED"}); }
+});
+
+// Private catalog authorization is revalidated per material read; a stored grant alone is insufficient.
+app.get("/api/github/private-catalog/status", async (req,res)=>{
+  const identity = await requireSupabaseIdentity(req, null).catch(()=>({status:503,body:{ok:false,status:"IDENTITY_CHECK_UNAVAILABLE"}}));
+  if(identity.status) return res.status(identity.status).json(identity.body);
+  const uid=identity.user.id;
+  const {data:conn,error}=await sb.from("oauth_connections")
+    .select("id,access_token_enc,scopes_granted,status,expires_at")
+    .eq("user_id",uid).eq("provider_id","github").eq("status","active")
+    .order("consent_at",{ascending:false}).limit(1).maybeSingle();
+  if(error || !conn || (conn.expires_at && new Date(conn.expires_at).getTime() <= Date.now()))
+    return res.status(403).json({ok:false,status:"GITHUB_GRANT_UNAVAILABLE"});
+  const scope=String(conn.scopes_granted||"");
+  if(!scope.includes(`repo=${GITHUB_PRIVATE_REPO}`) || !scope.includes("path=.agents/skills") || !scope.includes("permission=contents:read"))
+    return res.status(403).json({ok:false,status:"PRIVATE_CATALOG_BINDING_MISSING"});
+  let token;
+  try { token=decrypt(conn.access_token_enc); } catch { return res.status(403).json({ok:false,status:"GITHUB_GRANT_INVALID"}); }
+  const access=await githubPrivateRepoAccess(token).catch(()=>({ok:false,status:0}));
+  if(!access.ok) {
+    await sb.from("oauth_connections").update({status:"error",last_test_at:new Date().toISOString(),last_test_status:"private_repo_denied"}).eq("id",conn.id);
+    return res.status(access.status===401||access.status===403?403:502).json({ok:false,status:"PRIVATE_REPO_ACCESS_DENIED"});
+  }
+  await sb.from("oauth_connections").update({last_test_at:new Date().toISOString(),last_test_status:"private_repo_ok"}).eq("id",conn.id);
+  return res.json({ok:true,provider:"github",repo:GITHUB_PRIVATE_REPO,path:".agents/skills",permission:"contents:read",verified_at:new Date().toISOString()});
 });
 
 app.get("/api/logs/tail",(_q,res)=>{
