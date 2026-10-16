@@ -7,7 +7,7 @@ inherits: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 consumed_by: "AGENTS.md"
 rules_last_updated: "2026-10-16"
 soul_last_updated: "2026-10-05"
-agents_last_updated: "2026-10-05"
+agents_last_updated: "2026-10-16"
 source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 ---
 
@@ -33,7 +33,7 @@ AGENTS_INHERIT_RULES=true
 NO_SKILL_ABOVE_CENTRALDARK=true
 RULES_LAST_UPDATED=2026-10-16
 SOUL_LAST_UPDATED=2026-10-05
-AGENTS_LAST_UPDATED=2026-10-05
+AGENTS_LAST_UPDATED=2026-10-16
 ```
 
 Hierarquia canônica:
