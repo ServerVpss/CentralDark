@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { useEffect } from "react";
 import { ShieldAlert } from "lucide-react";
 import { CockpitShell } from "@/components/central/CockpitShell";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,14 @@ function SalaControle() {
     retry: false,
   });
 
+  useEffect(() => {
+    if (!q.isError) return;
+    const timer = window.setTimeout(() => {
+      window.location.replace("/auth?renovar=1");
+    }, 1800);
+    return () => window.clearTimeout(timer);
+  }, [q.isError]);
+
   if (q.isPending)
     return (
       <main className="grid min-h-dvh place-items-center">
@@ -56,8 +65,11 @@ function SalaControle() {
           <p className="mt-3 text-sm text-muted-foreground">
             Entre novamente para renovar a sessão e repetir a verificação server-side.
           </p>
+          <p role="status" className="mt-3 text-xs text-muted-foreground">
+            Redirecionando automaticamente para renovar o acesso…
+          </p>
           <Button asChild variant="outline" className="mt-6">
-            <Link to="/auth">Voltar ao acesso</Link>
+            <Link to="/auth" search={{ renovar: "1" }}>Voltar ao acesso</Link>
           </Button>
         </section>
       </main>

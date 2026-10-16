@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/auth")({
+  ssr: false,
   component: PaginaAcesso,
   head: () => ({
     meta: [
@@ -31,8 +32,16 @@ function PaginaAcesso() {
 
   // Callback OAuth / confirmação de e-mail: quando a sessão existir, segue para a sala.
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) void navegar({ to: "/sala-controle" });
+    const renovar = new URLSearchParams(window.location.search).get("renovar") === "1";
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (!data.session) return;
+      // A sala pode ter rejeitado a sessão server-side. Em modo de renovação,
+      // encerra apenas a sessão local para impedir o loop /sala-controle → /auth.
+      if (renovar) {
+        await supabase.auth.signOut({ scope: "local" });
+        return;
+      }
+      void navegar({ to: "/sala-controle" });
     });
     const { data } = supabase.auth.onAuthStateChange((evento, sessao) => {
       if (evento === "SIGNED_IN" && sessao) void navegar({ to: "/sala-controle" });
