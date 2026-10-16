@@ -1215,3 +1215,20 @@ Owner visual REUSE: `apps/instinto-superior/src/components/central/DesignCenter.
 **Publicação:** VPS acessada por SSH/Tailscale, Caddy ativo no readback, mas o HEAD do checkout na VPS difere da fonte `main` usada na galeria. **Nenhum deploy deste delta foi aplicado.** Não inferir que a galeria está visível no site público; validar somente depois de resolver SSR sem regressão e provar o endpoint autenticado. `SOURCE_ON_MAIN=PASS; LOCAL_UI_SOURCE=PASS; TARGET_PARSE=PASS; TARGET_LINT_WITHOUT_STYLE=PASS; VITE_OUTPUT=PASS; FULL_BUILD=FAIL; LOCAL_SSR_SMOKE=FAIL; VPS_DEPLOY=NOT_EXECUTED; AUTH_UI_VISUAL=UNKNOWN`.
 
 **NEXT_CURSOR:** encontrar menor correção causal no owner `scripts/fix-node-ssr-cycle.mjs` ou na geração Nitro, preservar CSRF; rodar novamente SSR smoke 200/3xx correto; checar TypeScript/lint globais sem varrer trabalho alheio; depois executar esteira de deploy autorizada com rollback e captura da aba autenticada. Sem galeria alternativa nem segundo Zendrive.
+
+
+## 🪬 Diagnóstico incremental 16/10 — ENOSPC impede prova da API do Builder
+
+**Rota medida:** ChatGPT/SOL → Desktop Commander Casa SEGREDO → SSH/Tailscale `segredo-vpss` (`100.90.199.124`) → VPS CENTRALDARK-OS. Casa online, extensão `centraldark.centraldark-vscode-restore@0.1.3` instalada. A árvore local `K:\` está na HEAD `80c906a131`, com `apps/instinto-superior/src/components/central/CockpitShell.tsx` modificada; **não sobrescrever nem fazer reset/pull à força**. VPS checkout `/root/CentralDark` HEAD `84e1d03de`, diferente da `main` do GitHub.
+
+**Prova do problema, 16/10 aproximadamente 19:36 UTC:**
+- `/dev/sda3` (ext4, raiz `/`) 196G usados de 196G, `Avail=0`, `Use%=100%`; inodes só 34% — esgotamento de **bytes**, não inodes.
+- `centraldark-native-mcp-http.service` esteve em `activating/auto-restart`, `Result=exit-code`, `status=1`. O `journalctl` reportou `file-stream-rotator ... ENOSPC syscall=write`. Nova leitura pontual mostrou `systemctl is-active=active`, **mas `GET http://127.0.0.1:9100/health` permaneceu HTTP `000`**. `active` não promove API a PASS.
+- `hermes-gateway.service=active` pelo systemd (não prova chamada Hermes). `127.0.0.1:3000/` também HTTP `000` na medição.
+- Ocupações read-only: `/root/CentralDark=6.5G`, `/root/CentralDark_MCP_RUNTIME=520M`, `/root/.centraldark=6.5M`, `/root/.npm=2.0G`, `/root/.cache=3.9G`, `/var/log=360M`, `/tmp=0`, `journalctl --disk-usage=234.9M`, Docker imagens 4.995G com `RECLAIMABLE=0`. Estes números **não explicam sozinhos os 196G**. Investigar o restante sem apagar arquivos de trabalho, memória, backups ou logs brutos.
+- A galeria existe na fonte `apps/instinto-superior/src/components/central/DesignCenter.tsx` (aba autenticada) e `CockpitShell.tsx` passa `autenticado`. Card corrente distingue extensão instalada na Casa `0.1.3` da fonte `main 0.1.2` (commit `a2a553f`).
+- Gate de aplicação não deve herdar `PASS` de `npm run build` isolado: receipt anterior nesta seção provou `SSR_CYCLE_FIX_BLOCKED` e erro `TypeError: createServerFn is not a function`, smoke HTTP 500; full build/SSR/deploy desta galeria permanecem sem PASS novo. O serviço de API em `ENOSPC` é um bloqueio **independente** de SSR.
+
+**Execução desta medição:** somente diagnóstico/readback remoto e atualização documental na fonte GitHub. Nenhum `rm`, `prune`, truncamento de logs, restart de serviço, pull/reset da Casa ou deploy foi executado.
+
+**NEXT_CURSOR:** (1) localizar crescimento real da raiz, identificar cache descartável por owner com contraprova e recuperar espaço de forma não destrutiva; (2) exigir `df` com espaço disponível + `MCP /health=200` estável; (3) corrigir o SSR no owner existente, executar build completo/CSRF/auth/smoke; (4) usar esteira normal de deploy e provar a aba da galeria apenas com login. `NO_DISK_SPACE != ALL_SYSTEM_DOWN`; `SOURCE != DEPLOY != UI_PROVEN`.
