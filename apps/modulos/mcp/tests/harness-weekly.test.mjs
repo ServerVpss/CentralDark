@@ -8,7 +8,7 @@ const event = (event_id, kind, data, timestamp="2026-10-16T12:00:00.000Z", actor
     actor, key: "tool:github_read", data });
 test("weekly trace separates PASS FAIL UNKNOWN, deduplicates calls, and computes known denominator", () => {
   const rows = [
-    event("a", "mcp_tool_call", {call_id:"call1",ok:true,toolName:"github_read",durationMs:20}),
+    event("a", "mcp_tool_call", {call_id:"call1",ok:true,toolName:"github_read",durationMs:20,trace_id:"test-trace"}),
     event("a-copy", "mcp_tool_call", {call_id:"call1",ok:true,toolName:"github_read",durationMs:20}),
     event("b", "mcp_tool_call", {call_id:"call2",ok:false,toolName:"git_write",durationMs:40}),
     event("c", "grok_tool_started", {tool_name:"shell"}),
@@ -22,6 +22,8 @@ test("weekly trace separates PASS FAIL UNKNOWN, deduplicates calls, and computes
   assert.equal(result.successPctOfDecided,50);
   assert.equal(result.failurePctOfDecided,50);
   assert.equal(result.unknownPctOfObserved,33.3);
+  assert.equal(result.traced,1);
+  assert.equal(result.tracePctOfObserved,33.3);
   assert.equal(result.avgDurationMs,30);
   assert.equal(result.daily.reduce((sum, d)=>sum+d.calls,0),3);
   assert.equal(result.coverage,"PARTIAL_INSTRUMENTED");
