@@ -17,11 +17,12 @@ if (matches.length === 0) {
   // CSRF middleware directly and the loader resolves the server entry.
   // Treat that shape as already safe instead of mutating or failing closed.
   const serverImports = ssr.match(/import\("\.\/(server-[\w-]+\.mjs)"\)/g) ?? [];
-  const directCsrf = entries.filter((name) => {
-    const text = readFileSync(join(dir, name), "utf8");
-    return text.includes("createCsrfMiddleware");
-  });
-  if (serverImports.length === 1 && directCsrf.length === 1) {
+  const serverMatch = ssr.match(/import\("\.\/(server-[\w-]+\.mjs)"\)/);
+  const serverEntry = serverMatch?.[1];
+  const directCsrf = serverEntry
+    ? readFileSync(join(dir, serverEntry), "utf8").includes("createCsrfMiddleware")
+    : false;
+  if (serverImports.length === 1 && directCsrf) {
     console.log("SSR_CYCLE_FIX=NOT_REQUIRED");
     console.log("CSRF_INTACT=PASS");
     process.exit(0);
