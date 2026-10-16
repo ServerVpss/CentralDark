@@ -18,3 +18,34 @@ Dois conectores Desktop Commander podem pertencer a contas distintas: `mcp__Remo
 Sem nova arquitetura; preservar sessões abertas; um escritor por escopo. UNKNOWN != PASS. Separar `DEVICE_ONLINE`, `OS_VERIFIED`, `PROCESS_FOUND`, `INTERACTIVE_INPUT_PROVEN`, `STATUS_OUTPUT_PROVEN`.
 
 NEXT_CURSOR: demonstrar envio interativo ao Hermes do VS Code existente, sem iniciar sessão paralela.
+
+
+## Lei de ancoragem evolutiva — endereço velho aponta para o owner novo (2026-10-16)
+
+**INTENT_ID:** `CENTRALDARK-EVOLUTIVE-ANCHOR-OLD-TO-NEW-20261016`.
+
+A mudança de dispositivo, rota, pasta, owner, tool ou conhecimento **não apaga o passado nem cria segundo cérebro**. O identificador antigo permanece como **alias histórico** apontando para o registro canônico atual, com evidência, vigência e NEXT_CURSOR. Consumidores consultam o alias, resolvem a rota atual, validam identidade/permissão no destino e só então operam. Nunca executar no ID antigo por suposição.
+
+**Caso comprovado — Desktop Commander VPS:**
+
+| Campo | Valor |
+| --- | --- |
+| Identidade lógica estável | `CENTRALDARK-OS` (VPS Linux) |
+| Cadastro legado | Conector `mcp__CENTRALDARK__` / device `ca0cc3ad-3435-428f-87ee-ee102c2cf3b8` |
+| Cadastro atual | Conector `mcp__Remote_Desktop_Commander__` / device `809020f9-c77d-4bef-bb06-da5b467ac9b7` |
+| Estado na observação | legado `OFFLINE` (última vista há ~95h); atual `ONLINE` |
+| Alias de navegação | `LEGACY_CENTRALDARK_OS → logical:VPS_CENTRALDARK_OS → discover_online_device_by_namespace` |
+| Redirecionamento real na conta Desktop Commander | **NOT_PROVEN** — não existe evidência de recurso para editar cadastro remoto ou configurar redirecionamento automático pelo conector |
+| Prova de identidade | hostname `CENTRALDARK-OS`, Linux, HEAD Git lido na conexão atual; exigir readback fresco sempre que mudar |
+| Autoridade para executar | connector+device_id válidos, permissões e estado `ONLINE` no instante da ação; alias não amplia acesso |
+
+**Regra para toda migração:** `LEGACY_ID / OLD_PATH / OLD_OWNER → CANONICAL_LOGICAL_ID → CURRENT_REF → PROOF → NEXT_CURSOR`.
+1. **Descobrir** referências antigas e dependentes (chats, GitHub, Obsidian, skill, scripts, favoritos, aliases MCP).
+2. **Ancorar** a entrada antiga com `moved_to`, `superseded_by`, data/razão, owner, prova de readback e caminho canônico; nunca copiar tokens, IDs secretos ou estado volátil.
+3. **Compatibilidade:** se houver consumidor legado, manter alias **somente de leitura ou resolução** até validar o novo caminho; proibir execução cega no alvo antigo.
+4. **Contraprovar:** medir por origem e destino; `ALIAS_DOCUMENTED != REDIRECT_INSTALLED != NEW_RUNTIME_HEALTHY`. Diferenciar ID de dispositivo ligado à conta, hostname e endereços de rede.
+5. **Descontinuar sem perder histórico:** após inventário de consumidores, prova de zero dependências e janela de retenção, marcar `RETIRED`; preservar genealogia mínima, recibos e links de referência.
+
+**Nunca:** apagar dispositivos/revogar acesso pelo nome sem comprovar owner e consumidores; atribuir ao conector uma função de redirecionamento não observada; fixar IDs de dispositivos como roteadores eternos. Os IDs neste recibo servem como **identificação histórica para descoberta**, não como regra executável.
+
+**NEXT_CURSOR:** `DISCOVER_LEGACY_CONSUMERS → CANONICAL_ALIAS_READBACK → REGISTER_REDIRECT_IF_PROVIDER_SUPPORTS → TEST_OLD_LINK_TO_CURRENT → VERIFY_NO_ACTIVE_LEGACY → RETIRE_WITH_RECEIPT`.
