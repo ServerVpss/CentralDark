@@ -55,6 +55,7 @@ import { lerStatusGramMTProto } from "@/lib/admin.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
 import { HarnessModuleRegistry } from "@/components/central/HarnessModuleRegistry";
+import { CoordinatorDesk } from "@/components/central/CoordinatorDesk";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -267,6 +268,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               {destinosHarness.map((destino) => <Button key={destino.id} variant={abaAtiva === destino.id ? "default" : "outline"} className="h-auto min-h-12 justify-start whitespace-normal text-left" onClick={() => abrirDestino(destino.id)}>{destino.icone} {destino.titulo}</Button>)}
             </div>
             <HarnessModuleRegistry />
+            <CoordinatorDesk />
             <div className="rounded-lg border border-border p-3 text-xs text-muted-foreground">
               <p className="font-semibold text-foreground">Estado da moldura: LOCAL</p>
               <p className="mt-1">Navegação interna funcional. VPS, Telegram MTProto e GitHub exigem contraprovas independentes; nenhuma luz verde é inferida.</p>
