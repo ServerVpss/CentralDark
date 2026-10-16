@@ -175,6 +175,7 @@ jobs:
     name: 🧠 Projeção consultiva da máquina de estado VPS
     if: >-
       github.event_name == 'pull_request_target' &&
+      github.event.action != 'closed' &&
       github.repository == 'ServerVpss/CentralDark' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       !github.event.pull_request.draft
