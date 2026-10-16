@@ -4,6 +4,13 @@ AI_UNIVERSAL_ENTRYPOINT=LEIA-ME-IA.md
 AI_UNIVERSAL_ENTRYPOINT_CONTRACT=docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
 CENTRALDARK_AI_BOOT=CENTRALDARK_AI_BOOT.yaml
 
+<!-- CENTRALDARK_INLINE_DOC_SYNC_20261016 -->
+## 🧬 Obrigacao de quem escreve codigo — rastreabilidade incremental
+
+**CHEFE 2026-10-16:** qualquer agente humano ou IA que altere um arquivo material de codigo registra e atualiza o rastro `#OBSERVACOES#` no mesmo arquivo (quando o formato permitir): `@owner`, `@doc_ref`, `@last_updated` com dia/mês/ano e hora real em ISO 8601 UTC; declarar apenas fatos `@implementado`, `@pendente`, `@estado` e `@next_cursor` relevantes. **Obrigatorio** alterar também o documento canônico vinculado, com `@code_ref`, `@last_updated` e explicacao substantiva. Arquivo apenas visual explicita `VISUAL_ONLY`; nao chama render de integracao viva. Diferenciar gate estatico, CI e runtime. Sem documento atualizado, nao promover. Para JSON, que nao admite comentarios, o metadado reside no documento proprietario.
+
+**Checagem automatica existente:** `scripts/lupa/diagram-route-gate.mjs#validateDiffCoverage` na `porta-de-entrada.yml`. Prova de consumo por executores remotos so apos remedir; autorizar o mesmo writer, não criar registrador novo. Não comentar toda linha ou produzir carimbo vazio.
+
 ## 🪬 Contrato de comportamento — AGENTS sob RULES
 
 ```text
@@ -16,8 +23,8 @@ AGENTS_POINTS_TO_RULES=true
 RULES_POINTS_TO_AGENTS=true
 RULES_INHERIT_SOUL=true
 NO_SKILL_ABOVE_CENTRALDARK=true
-AGENTS_LAST_UPDATED=2026-10-05
-RULES_LAST_UPDATED=2026-10-05
+AGENTS_LAST_UPDATED=2026-10-16
+RULES_LAST_UPDATED=2026-10-16
 SOUL_LAST_UPDATED=2026-10-05
 ```
 
