@@ -243,6 +243,79 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           Selar não dispara nova execução e não renumera Gênesis.
         </p>
       </section>
+      <section className="panel p-6" aria-labelledby="cd-integridade-estado">
+        <p className="font-mono text-[10px] text-neon-blue">👁️🪡 CURRENT REALITY · PROJEÇÃO DO OWNER</p>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+          <h3 id="cd-integridade-estado" className="text-lg font-semibold">🫀 Central de Integridade · Compasso Único</h3>
+          <span className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground" role="status">
+            {estado?.atualizadoEm ? "Medido: " + estado.atualizadoEm : "MEDIÇÃO NÃO DISPONÍVEL"}
+          </span>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          O CHEFE decide · Hermes executa · a Lupa contraprovа. Tudo deriva da consulta já usada
+          pelo cockpit: sem segundo sensor, sem nova arquitetura e sem verde por aparência.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {([
+            ["🐙 GitHub / main", estado?.github, estado?.mainSha?.slice(0, 12), "Referência do HEAD medido; CI do mesmo HEAD ainda exige prova."],
+            ["🖥️ VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12), "Deploy e alinhamento com main exigem readback próprio."],
+            ["🔌 API CentralDark", estado?.apiHealth, estado?.apiHealthHttp, "Saúde da rota não equivale à saúde de todo o sistema."],
+            ["🏠 Site local", estado?.casaSite, estado?.casaSiteHttp, "Disponibilidade HTTP não comprova o deploy visual."],
+            ["👁️ Screenpipe Casa", estado?.screenpipe, estado?.screenpipeHttp, "Sensor de observação; não tem autoridade de escrita."],
+            ["🧾 Receipts", estado?.receipts, estado?.receiptsHttp, "Endpoint acessível não comprova receipt por artefato."],
+          ] as const).map(([nome, situacao, detalhe, limite]) => (
+            <div key={nome} className="min-w-0 rounded-lg border border-border bg-muted/20 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold">{nome}</h4>
+                <span className={"rounded-full border px-2 py-1 font-mono text-xs " +
+                  (situacao === "PASS" ? "border-emerald-500/50 text-emerald-600 dark:text-emerald-400" :
+                    situacao === "FAIL" || situacao === "BLOCKED" ? "border-red-500/50 text-red-600 dark:text-red-400" :
+                    "border-amber-500/50 text-amber-700 dark:text-amber-400")}
+                  aria-label={"Estado de " + nome + ": " + (situacao ?? "UNKNOWN")}>
+                  {situacao ?? "UNKNOWN"}
+                </span>
+              </div>
+              <p className="mt-2 break-all font-mono text-xs text-foreground">
+                {detalhe ?? "SEM READBACK NESTA CONSULTA"}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">{limite}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          <div className="rounded-lg border border-border p-4">
+            <h4 className="text-sm font-semibold">🧭 Gatilhos · mesma intenção, mesmo owner</h4>
+            <p className="mt-2 text-xs text-muted-foreground">
+              !CENTRALDARK → retomar missão · #ACORDAR → recuperar contexto ·
+              !CALIBRAR → confrontar evidências · #CRISTALIZAR → registrar delta útil.
+              São receitas de governança; este painel não envia comandos.
+            </p>
+            <p className="mt-3 break-all font-mono text-xs">
+              OWNER: apps/instinto-superior/src/lib/cockpit.functions.ts
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              FONTE: {estado?.fonte ?? "UNKNOWN"} · valor observado no mesmo snapshot do cockpit.
+            </p>
+          </div>
+          <div className="rounded-lg border border-border p-4">
+            <h4 className="text-sm font-semibold">🔒 Cadeado de conclusão · não presumido</h4>
+            <p className="mt-2 font-mono text-xs text-amber-700 dark:text-amber-400" role="status">
+              LOCK_ENFORCEMENT = UNKNOWN · CI_EXACT_HEAD = UNKNOWN
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Um arquivo aprovado só fica protegido de edição quando houver gate de escrita
+              comprovado, SHA do objeto, testes, contraprova e receipt. Selos documentais,
+              botão verde ou main medida não concedem proteção real.
+            </p>
+            <p className="mt-3 text-xs">
+              <strong>NEXT_CURSOR:</strong>{" "}
+              <span className="break-words text-muted-foreground">
+                {estado?.nextCursor ?? "UNKNOWN · nenhuma continuação publicada por esta consulta"}
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
       <section className="panel p-6" aria-labelledby="cd-daily-title">
         <h3 id="cd-daily-title" className="text-lg font-semibold">
           📋 Check-list diário · projeção do owner existente
