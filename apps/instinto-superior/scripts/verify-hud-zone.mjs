@@ -192,3 +192,20 @@ test("gaveta cataloga receitas A-Z e mostra estado do terminal sem autoexec", ()
   assert.ok(!infra.includes("execSync("));
   assert.ok(!infra.includes("child_process"));
 });
+
+test("Escola contextual herda gramática e não cria runtime de ensino", () => {
+  const grammar = read("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml");
+  const escola = read("docs/CONSCIENCIA/ESCOLA-HERMES-CASA.md");
+  const estudo = read("apps/instinto-superior/src/components/central/EstudoPorCriterios.tsx");
+  assert.match(grammar, /TEACHING_MUST_FOLLOW_CURRENT_INTENT: true/);
+  assert.match(escola, /A Escola não é um segundo sistema/);
+  for (const estado of ['id: "STALE"', 'id: "FAIL"', 'id: "MERGED"']) assert.ok(estudo.includes(estado));
+  assert.ok(estudo.includes('id: "nao-sei"'));
+  assert.ok(estudo.includes('aria-live="polite"'));
+  assert.ok(estudo.includes("exemplo didático, não uma medição real"));
+  assert.ok(estudo.includes("não registra respostas"));
+  assert.doesNotMatch(estudo, /\blocalStorage\b|\bfetch\s*\(|\bexecSync\s*\(|\bsendText\s*\(/);
+  assert.ok(cockpit.includes('<EstudoPorCriterios contexto="visao" />'));
+  assert.ok(cockpit.includes('<EstudoPorCriterios contexto="forja" />'));
+  assert.equal(cockpit.split('import { EstudoPorCriterios }').length - 1, 1);
+});

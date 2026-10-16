@@ -1,4 +1,5 @@
 import { HudDeterministico } from "@/components/central/HudDeterministico";
+import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -458,6 +459,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <MapaMetabolicoCristal compacto />
               </div>
               <Ledger compacto />
+              <EstudoPorCriterios contexto="visao" />
             </TabsContent>
             <TabsContent value="sync" className="mt-10">
               {dado ? <SyncCenter estado={dado} /> : <SyncCenter />}
@@ -516,6 +518,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </p>
               </div>
               <ForjaExecutor />
+              <EstudoPorCriterios contexto="forja" />
             </TabsContent>
             {autenticado ? (
               <TabsContent value="admin" className="mt-10">
