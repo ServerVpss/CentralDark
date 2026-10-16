@@ -120,6 +120,21 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "FIGMA_CENTRALDARK_FIGJAM", transport: "FIGJAM_MCP", binding: "file:H0xMJXAKrLxvXx3G1BlVYu|node:0:1", capability: "CENTRALDARK_DIAGRAM_READ", source: "Figma FigJam fluxo mestre", runtimeState: "PASS_READ_ONLY_MEASURED" },
     { id: "RDC_VPS_CENTRALDARK_OS", transport: "REMOTE_DESKTOP_COMMANDER", binding: "device:809020f9-c77d-4bef-bb06-da5b467ac9b7", capability: "VPS_SHELL_FILES_PROCESS_CONTROL", source: "Remote Desktop Commander list_devices", runtimeState: "ONLINE_MEASURED" },
 ]);
+// Capacidades externas delegáveis do mesmo MCP. Descoberta não é autorização,
+// token importado, rota executável nem prova de disponibilidade da VPS.
+const DELEGATED_PROVIDER_CAPABILITIES = Object.freeze([
+    { id: "CENTRALDARK_CORE", label: "CentralDark", responsibility: "Ferramentas e orquestrador canônico", provider: "MCP CentralDark", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "CLOUDFLARE", label: "Cloudflare", responsibility: "Rede, DNS e serviços Cloudflare", provider: "Cloudflare", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "FIGMA", label: "Figma", responsibility: "Arquivos de design e componentes visuais", provider: "Figma", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "GMAIL", label: "Gmail", responsibility: "Mensagens e operações de email autorizadas", provider: "Gmail", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "GOOGLE_DRIVE", label: "Google Drive", responsibility: "Documentos, pastas e arquivos autorizados", provider: "Google Drive", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "LOVABLE", label: "Lovable", responsibility: "Aplicações e interfaces geradas", provider: "Lovable", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "NOTION", label: "Notion", responsibility: "Páginas e bases de conhecimento", provider: "Notion", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "POSTHOG", label: "PostHog", responsibility: "Eventos de produto e erros observados", provider: "PostHog", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "REMOTE_DESKTOP_COMMANDER", label: "Remote Desktop Commander", responsibility: "Computadores e sessões remotas autorizados", provider: "Remote Desktop Commander", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "SUPABASE", label: "Supabase", responsibility: "Banco de dados, auth e serviços Supabase", provider: "Supabase", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "WRITING_STYLE", label: "Writing Style", responsibility: "Exemplos autorizados de estilo de escrita", provider: "Writing Style", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+]);
 const ROUTE_LAWS = Object.freeze({
     oneRouteFailedIsNotSystemFailed: true,
     alternateAuthorizedRouteBeforeHumanBlocker: true,
@@ -222,6 +237,9 @@ export const mcpAdminTools = [
                 .filter((route) => !filter ||
                     Object.values(route).some((value) => String(value || "").toLowerCase().includes(filter)))
                 .sort((a, b) => a.id.localeCompare(b.id));
+            const providerCapabilities = DELEGATED_PROVIDER_CAPABILITIES
+                .filter((cap) => !filter || Object.values(cap).some((value) => String(value || "").toLowerCase().includes(filter)))
+                .sort((a, b) => a.label.localeCompare(b.label));
             return ok({
                 ok: true, dispatcher: "mcp_admin_call",
                 totalRuntimeTools: runtimeTools.length,
@@ -238,6 +256,10 @@ export const mcpAdminTools = [
                 routeReturned: routes.length,
                 routeLaws: ROUTE_LAWS,
                 routes,
+                providerCapabilities,
+                providerCapabilityCount: DELEGATED_PROVIDER_CAPABILITIES.length,
+                providerCapabilitiesReturned: providerCapabilities.length,
+                providerBoundary: "CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED",
                 tools,
             });
         },

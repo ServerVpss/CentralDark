@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(vscode): registrar receita MCP de sessão interativa com readback obrigatório",
+    "lastCommit": "🪬 INSTINTO SUPERIOR · HARNESS FORJA VIVA 🎰🪡 · GAVETA SKILLS/PLUGINS · HUD (#1832)",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-16T13:54:58.473Z",
+      "titulo": "Push na main · c95d9cb55c447fd928c2ee8ed240827e8e00d9c0",
+      "detalhe": "🪬 INSTINTO SUPERIOR · HARNESS FORJA VIVA 🎰🪡 · GAVETA SKILLS/PLUGINS · HUD (#1832)",
+      "area": "Repositório",
+      "sha": "c95d9cb",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-16T02:51:22.069Z",
       "titulo": "Push na main · 1f7aac13848921c25b2ee74951e245089bd5d383",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "a606714",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T14:04:47.341Z",
-      "titulo": "Push na main · 06c77b893bfcb86921843b9f635372ceed18b824",
-      "detalhe": "fix(voice): corrigir 5S para VS Code e desambiguar skills na rota do funil",
-      "area": "Repositório",
-      "sha": "06c77b8",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-16T13:54:58.473Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · c95d9cb55c447fd928c2ee8ed240827e8e00d9c0 (c95d9cb)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-16T02:51:22.069Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · a606714a23c8ac22ed9b06c3eaa693287461b192 (a606714)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T14:04:47.341Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 06c77b893bfcb86921843b9f635372ceed18b824 (06c77b8)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-16T02:51:22.069Z",
-  "updatedAtBR": "15/10/2026, 23:51:22 BRT"
+  "updatedAt": "2026-10-16T13:54:58.473Z",
+  "updatedAtBR": "16/10/2026, 10:54:58 BRT"
 }
