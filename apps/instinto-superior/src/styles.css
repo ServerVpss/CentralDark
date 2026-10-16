@@ -169,10 +169,24 @@
   --gradient-gold: linear-gradient(120deg, #bfe6f2, #00eaff 45%, #1e4550);
 }
 
-/* HUD canônico: Esmeralda — Visual DNA metálico (evolução in-place).
- * Não cria pele, DOM, provider ou runtime paralelo. Mantém o identificador
- * "esmeralda" e as cores de assinatura; só altera tokens e acabamento.
- * Os componentes vivos e seus handlers continuam no CockpitShell.
+/* #OBSERVACOES# | CENTRALDARK.VISUAL.ESMERALDA | TRILHA NO PR #1835
+ * @intencao: evoluir a casca Esmeralda atual, sem criar uma quinta pele.
+ * @owner_visual: apps/instinto-superior/src/styles.css
+ * @owner_seletor: apps/instinto-superior/src/components/central/DesignCenter.tsx
+ * @consumer_vivo: apps/instinto-superior/src/components/central/CockpitShell.tsx
+ * @ligacao_semantica: instinto.DesignCenter.usePeleCockpit
+ * @gatilho_existente: data-pele-cockpit="esmeralda"
+ * @fonte_de_fluxos: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/FLOW-REGISTRY.json
+ * @escopo: APRESENTACAO_SOMENTE; mantem mesmos componentes, handlers, rotas e estado.
+ * @implementado: tokens, textura metalica/vidro, relevo do .panel, foco acessivel.
+ * @nao_implementado_aqui: backends, Hermes, Hub, MCP, workflow, deploy, integracao AionUI.
+ * @prova: PR #1835; checagem estatica de diff (nao equivale a render ou runtime).
+ * @pendente: build CSS, screenshot desktop/mobile, quatro peles, tarefa em andamento,
+ *   persistencia da selecao, navegacao autenticada e readback de deploy.
+ * @estado: CODE_STYLING_PRESENT; CI_AND_LIVE_RUNTIME_UNKNOWN.
+ * @next_cursor: rodar os gates visuais no mesmo SHA e promover pelo owner existente.
+ * //- |\\| INTENCAO -> OWNER -> CSS ESCOPO -> COMPONENTE VIVO -> TESTE -> RECEIPT.
+ * O comentario e navegacao humana; fatos de runtime exigem recibo atual.
  */
 .cockpit-pele[data-pele-cockpit="esmeralda"] {
   --background: #05090b;
