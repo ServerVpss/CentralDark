@@ -127,21 +127,12 @@ type GenesisRegressionReceipt = {
   reason: string;
 };
 
+type GenesisWorkflowRun = { id: number; head_sha: string; html_url: string; status: string; conclusion: string | null };
+
 const GENESIS_WORKFLOW_API =
   "https://api.github.com/repos/ServerVpss/CentralDark/actions/workflows/test.yml";
 
-async function genesisAdmin(context: {
-  supabase: {
-    from: (table: string) => any;
-  };
-  userId: string;
-}) {
-  const { data, error } = await context.supabase.from("user_roles")
-    .select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
-  if (error || !data) throw new Response("Proibido", { status: 403 });
-}
-
-function genesisHeaders(): HeadersInit | null {
+function genesisHeaders(): Record<string, string> | null {
   const token = process.env["GITHUB_TOKEN"] || process.env["GH_TOKEN"];
   if (!token) return null;
   return {
@@ -151,7 +142,7 @@ function genesisHeaders(): HeadersInit | null {
   };
 }
 
-async function genesisGithub(path: string, headers: HeadersInit, init: RequestInit = {}) {
+async function genesisGithub(path: string, headers: Record<string, string>, init: RequestInit = {}) {
   return fetch(path, {
     ...init,
     headers: { ...headers, ...(init.headers || {}) },
@@ -177,7 +168,9 @@ function genesisReceipt(
 export const consultarRegressaoGenesis = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<GenesisRegressionReceipt> => {
-    await genesisAdmin(context);
+    const { data: role, error: roleError } = await context.supabase.from("user_roles")
+      .select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (roleError || !role) throw new Response("Proibido", { status: 403 });
     const headers = genesisHeaders();
     if (!headers) return genesisReceipt("AUTH_REQUIRED", "GITHUB_TOKEN_NOT_CONFIGURED");
     try {
@@ -189,7 +182,7 @@ export const consultarRegressaoGenesis = createServerFn({ method: "GET" })
       const runsResponse = await genesisGithub(GENESIS_WORKFLOW_API +
         "/runs?branch=main&per_page=10", headers);
       if (!runsResponse.ok) return genesisReceipt("UNKNOWN", "WORKFLOW_READ_UNAVAILABLE", mainSha);
-      const runs: any[] = (await runsResponse.json())?.workflow_runs || [];
+      const runs: GenesisWorkflowRun[] = (await runsResponse.json())?.workflow_runs || [];
       const run = runs.find((item) => item.head_sha === mainSha);
       if (!run) return genesisReceipt("UNKNOWN", "NO_SAME_SHA_RUN", mainSha);
       const id = typeof run.id === "number" ? run.id : null;
@@ -210,7 +203,9 @@ export const consultarRegressaoGenesis = createServerFn({ method: "GET" })
 export const dispararRegressaoGenesis = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<GenesisRegressionReceipt> => {
-    await genesisAdmin(context);
+    const { data: role, error: roleError } = await context.supabase.from("user_roles")
+      .select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (roleError || !role) throw new Response("Proibido", { status: 403 });
     const headers = genesisHeaders();
     if (!headers) return genesisReceipt("AUTH_REQUIRED", "GITHUB_TOKEN_NOT_CONFIGURED");
     try {
@@ -222,7 +217,7 @@ export const dispararRegressaoGenesis = createServerFn({ method: "POST" })
       const activeResponse = await genesisGithub(
         GENESIS_WORKFLOW_API + "/runs?branch=main&per_page=10", headers);
       if (!activeResponse.ok) return genesisReceipt("BLOCKED", "WORKFLOW_STATUS_UNAVAILABLE", sha);
-      const active: any[] = (await activeResponse.json())?.workflow_runs || [];
+      const active: GenesisWorkflowRun[] = (await activeResponse.json())?.workflow_runs || [];
       const existing = active.find((r) => r.head_sha === sha &&
         ["queued", "waiting", "in_progress"].includes(r.status));
       if (existing) return genesisReceipt("QUEUED", "SAME_SHA_JOB_ALREADY_ACTIVE",
