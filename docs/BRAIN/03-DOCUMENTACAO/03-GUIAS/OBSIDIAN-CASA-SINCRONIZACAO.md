@@ -42,3 +42,11 @@ Uma nota em `00-CANONICO` muda a memória do projeto depois de sincronizada. Reg
 Quando GitHub e Obsidian modificarem a mesma nota de formas diferentes, o sincronizador não escolhe escondido: guarda as duas versões em `90-CONFLITOS` e para para reconciliação.
 
 Relacionado: [[TUTORIAL-OBSIDIAN]] | [[BRAIN]] | [[Memoria-Longa]]
+
+## Diagramas do Harness, MCP e cerejas
+
+A arquitetura visual da memória persistente, das capacidades do Instinto Superior, dos harnesses e do MCP está no **mesmo owner derivado**: [[DIAGRAMAS-CENTRALDARK]].
+
+Abra `[[DIAGRAMAS-CENTRALDARK#10. Obsidian, Harness e MCP — convergência da casca e da memória]]` em modo de leitura para renderizar o Mermaid nativo e consultar cerejas/selos com proveniência. O diagrama é `DERIVED_VIEW`: `MERGED != DEPLOYED`, `NOTE != RUNTIME`, `UNKNOWN != PASS`.
+
+**Pendente de readback na Casa:** validar que o arquivo chegou ao vault físico atual, que o plugin Grafo Vivo está carregado e que o cockpit pode abrir a capacidade. Não executar sincronização com paths históricos sem medição.

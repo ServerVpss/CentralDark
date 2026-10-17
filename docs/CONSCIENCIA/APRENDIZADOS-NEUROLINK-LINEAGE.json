@@ -3,6 +3,7 @@
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
   "source_blob_sha": "36af15d7c1218c73924e0d9021fe32b8905f1f2f",
+  "source_blob_sha": "cc02236038d1baedafa9b8465d67276a6d09453b",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -132,6 +133,7 @@
         "count": 2,
         "uids": [
           "L178A",
+          "L178",
           "L178B"
         ]
       }

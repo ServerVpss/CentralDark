@@ -164,7 +164,7 @@ export function DesignCenter({
         <TabsList className="h-auto max-w-full flex-wrap justify-start">
           <TabsTrigger value="tokens">Tokens</TabsTrigger>
           <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger>
-          {autenticado ? <TabsTrigger value="extensoes">Galeria de extensões</TabsTrigger> : null}
+          {autenticado ? <TabsTrigger value="extensoes">Marketplace</TabsTrigger> : null}
           <TabsTrigger value="superficies">Superfícies</TabsTrigger>
           <TabsTrigger value="auditoria">Auditoria</TabsTrigger>
         </TabsList>
@@ -247,16 +247,28 @@ export function DesignCenter({
                     Builder · biblioteca existente
                   </p>
                   <h3 id="galeria-extensoes-titulo" className="mt-2 text-xl font-semibold">
-                    Galeria de extensões
+                    Marketplace de capacidades
                   </h3>
                   <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-                    Capacidades vinculadas ao código canônico, sem reinstalar serviços ou criar
-                    outra galeria. Os estados abaixo são a última prova registrada, não uma
-                    consulta ao vivo ao computador.
+                    Um catálogo para extensões, skills, agentes, ferramentas MCP e conectores.
+                    Cada capacidade mantém seu próprio owner e suas permissões. Estados
+                    registrados não substituem medições ao vivo.
                   </p>
                 </div>
                 <SeloEstado estado="UNKNOWN" />
               </div>
+
+              <div className="mt-5 flex flex-wrap gap-2" aria-label="Tipos de capacidade">
+                {(["Extensões", "Skills", "Agentes", "Ferramentas MCP", "Conectores"] as const).map((tipo) => (
+                  <span key={tipo} className="rounded-md border border-border px-3 py-2 text-xs text-muted-foreground">
+                    {tipo}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Inventário inicial: ZENDRIVE CLI. Demais capacidades ainda exigem
+                inventário e contraprova; não foram migradas nem reinstaladas.
+              </p>
 
               <article className="panel mt-6 p-6" data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli">
                 <div className="flex flex-wrap items-start justify-between gap-4">
@@ -270,12 +282,12 @@ export function DesignCenter({
                       </p>
                       <h4 className="mt-1 text-lg font-semibold">🪬 ZENDRIVE CLI</h4>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        centraldark.centraldark-vscode-restore@0.1.1
+                        centraldark.centraldark-vscode-restore · fonte 0.1.2
                       </p>
                     </div>
                   </div>
                   <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
-                    Casa: instalada em 15/10/2026
+                    Casa: 0.1.3 instalada em 16/10 · fonte main 0.1.2
                   </span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
