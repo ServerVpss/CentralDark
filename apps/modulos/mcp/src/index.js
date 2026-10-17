@@ -308,6 +308,25 @@ app.get("/admin/api/operational-snapshot", adminOperationalSnapshot);
 app.get("/admin/api/linear", adminLinear);
 app.get("/admin/api/tailscale", adminTailscale);
 app.get("/intent/status", intentPublicStatus); // projeção pública sanitizada, sem mutação
+// Manifesto público: apenas mensagem de produto, sem SSH, logs, contas ou chaves.
+// Rota de LEITURA; a automação continua no MCP autenticado existente.
+app.get("/intent/manifesto", (_req, res) => {
+    res.setHeader("Cache-Control", "public, max-age=60");
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.json({
+        schema: "centraldark.intent.public.v1",
+        produto: "CentralDark — Instinto Superior",
+        visibilidade: "PUBLICO_SOMENTE_LEITURA",
+        intencao: "Reunir ferramentas, agentes e conhecimento em um unico cockpit, com aprendizagem a partir de evidencias.",
+        principios: [
+            "Uma casca mutavel, um unico sistema",
+            "Reutilizar antes de criar",
+            "Evoluir por pequenos incrementos",
+            "A realidade valida os resultados"
+        ],
+        controle_remoto: "NAO_EXPOSTO"
+    });
+});
 app.get("/admin/api/intent", adminIntentGet);
 app.post("/admin/api/intent", adminIntentRun);
 app.post("/admin/api/e2e", adminE2E);
