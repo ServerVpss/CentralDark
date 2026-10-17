@@ -49,3 +49,34 @@ jobs:
           echo "MICHELIN_STAR_2=CI_CONCLUSION_AND_INTEGRATION_RECEIPTS_REQUIRED"
           echo "MICHELIN_STAR_3=DEPLOY_VISUAL_CASA_VPS_RECEIPTS_REQUIRED"
           echo "RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB"
+
+      - name: 🧿 Puppeteer visual Michelin — preview real, sem selo runtime
+        working-directory: apps/instinto-superior
+        shell: bash
+        env:
+          CENTRALDARK_VISUAL_URL: http://127.0.0.1:4179/
+          CENTRALDARK_VISUAL_ARTIFACTS: ${{ runner.temp }}/centraldark-visual-michelin
+        run: |
+          set -euo pipefail
+          # Pacote temporario CI; reutiliza Chrome for Testing do runner, sem download do navegador.
+          npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund puppeteer-core@24.20.0
+          PORT=4179 HOST=127.0.0.1 node .output/server/index.mjs > "$RUNNER_TEMP/centraldark-preview.log" 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..15}; do
+            if curl -fsS --max-time 3 "$CENTRALDARK_VISUAL_URL" >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS --max-time 5 "$CENTRALDARK_VISUAL_URL" >/dev/null
+          node scripts/puppeteer-michelin-smoke.mjs
+          echo "MICHELIN_PUPPETEER_VISUAL=PASS SCOPE=PUBLIC_PREVIEW SAME_SHA=$GITHUB_SHA STARS_CERTIFIED=0"
+          echo "MICHELIN_STAR_3=REQUIRES_AUTH_CASA_VPS_AND_INDEPENDENT_RECEIPTS"
+
+      - name: 🧾 Preservar recibo visual público (sem sessão/cookies)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: centraldark-michelin-puppeteer-${{ github.run_id }}
+          path: ${{ runner.temp }}/centraldark-visual-michelin/
+          retention-days: 7
+          if-no-files-found: warn
