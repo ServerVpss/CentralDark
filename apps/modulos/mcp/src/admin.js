@@ -1124,6 +1124,8 @@ const forja4Intent = [
   '6 provar botões, fluxo real e regressão pós-instalação no mesmo SHA e salvar receipt;',
   '7 STOP em FAIL, UNKNOWN, build ruim, conflito, review/CI ausente ou falta de permissão;',
   '8 main e VPS: NO_MERGE_NO_DEPLOY sem aprovação separada do CHEFE.',
+  'Runner canonico da Casa: skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1; executar uma unica vez no terminal Hermes autorizado, depois ler o JSON gerado em TEMP/CentralDark-Forja-Lens.',
+  'Converter para forja-4x-receipt.json somente com antirregressao/testes reais, artefato e instalacao medidos, SSH autenticado e E2E do Tool Call Lens com call_id.',
   'Reusar apps/modulos/mcp/src/intent-cycle-adapter.js, tools existentes e CI.',
   'Devolver para Tool Call Lens: goalId/fingerprint/SHA, stage, source, timestamp, status e nextCursor.',
   'Nao marcar install/connect/prove PASS por apenas fila, fonte ou documento.'
