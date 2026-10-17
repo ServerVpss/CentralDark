@@ -127,3 +127,20 @@ test("Forja Tool Call Lens preserva quatro gates e nao faz merge/deploy", () => 
   assert.ok(script.includes("exit 3"));
   assert.doesNotMatch(script, /git\s+(?:reset|merge|push|clean)|systemctl\s+restart|force.push/i);
 });
+
+
+test("Forja 4x chama apenas o intent-cycle do proprio MCP e pede recibos", () => {
+  const src = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
+  assert.match(src, /id="forja4Btn"/);
+  assert.match(src, /function forja4Iniciar\(/);
+  assert.match(src, /function forja4Verificar\(/);
+  assert.match(src, /origin \+ '\/admin\/api\/intent'/);
+  assert.match(src, /mode: 'AUTONOMO'/);
+  assert.match(src, /dispatch: true/);
+  assert.match(src, /NO_MERGE_NO_DEPLOY/);
+  assert.match(src, /forja4x\?\.stages/);
+  assert.ok(src.includes("ANTIRREGRESSAO"));
+  assert.ok(src.includes("INSTALAR"));
+  assert.ok(src.includes("CONECTAR"));
+  assert.ok(src.includes("PROVAR"));
+});
