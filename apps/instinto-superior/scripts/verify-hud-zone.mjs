@@ -411,3 +411,41 @@ test("regressao do Marketplace ZENDRIVE — construir, instalar, conectar e prov
   assert.equal(privateTab.test(design), true);
   assert.equal(privateTab.test(design.replace('{autenticado ? <TabsTrigger value="extensoes">', '<TabsTrigger value="extensoes">')), false);
 });
+
+
+test("Gênesis aciona regressão via Admin e nunca confunde workflow com deploy", () => {
+  const zone = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+  const admin = read("apps/instinto-superior/src/lib/admin.functions.ts");
+  const workflow = read(".github/workflows/test.yml");
+
+  assert.match(zone, /id="cd-genesis-regressoes"/);
+  assert.match(zone, /Rodar regressões/);
+  assert.match(zone, /useServerFn\(dispararRegressaoGenesis\)/);
+  assert.match(zone, /useServerFn\(consultarRegressaoGenesis\)/);
+  assert.match(zone, /supabase\.auth\.getSession/);
+  assert.match(zone, /SOURCE_PASS ≠ BUILD_PASS ≠ INSTALLED ≠ CONNECTED ≠ EFFECT_PROVED/);
+  for (const state of ["CONSTRUIR", "INSTALAR", "CONECTAR", "PROVAR", "UNPROVEN"]) {
+    assert.ok(zone.includes(state), "four-stage status: " + state);
+  }
+  assert.match(admin, /dispararRegressaoGenesis = createServerFn\(\{ method: "POST" \}\)/);
+  assert.match(admin, /consultarRegressaoGenesis = createServerFn\(\{ method: "GET" \}\)/);
+  assert.match(admin, /requireSupabaseAuth/);
+  assert.match(admin, /user_roles/);
+  assert.match(admin, /\.eq\("role", "admin"\)/);
+  assert.match(admin, /GITHUB_TOKEN_NOT_CONFIGURED/);
+  assert.match(admin, /"DISPATCH_ACCEPTED_NOT_EXECUTED"/);
+  assert.match(admin, /"SAME_SHA_WORKFLOW"/);
+  assert.match(admin, /install: "UNPROVEN", connect: "UNPROVEN", prove: "UNPROVEN"/);
+  assert.ok(!zone.includes("execSync("));
+  assert.ok(!zone.includes("spawn("));
+  assert.ok(!zone.includes("localStorage.setItem('gh"));
+  assert.match(workflow, /workflow_dispatch/);
+  assert.match(workflow, /SOURCE_REGRESSION=PASS SAME_SHA/);
+  assert.match(workflow, /RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB/);
+
+  // Discriminant: a regressão deve falhar se alguém trocar UNKNOWN por PASS.
+  const noFakePass = (source) =>
+    source.includes('install: "UNPROVEN", connect: "UNPROVEN", prove: "UNPROVEN"');
+  assert.equal(noFakePass(admin), true);
+  assert.equal(noFakePass(admin.replace('install: "UNPROVEN"', 'install: "PASS"')), false);
+});
