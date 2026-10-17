@@ -1148,7 +1148,7 @@ function forja4Pintar(resp) {
     finalProven ? 'PASS' : 'PENDENTE · auth/SSH/MCP',
     finalProven ? 'PASS' : 'PENDENTE · E2E/critico'
   ];
-  el.textContent = forja4Stages.map((title,i)=>title + '\n     ' + stageStates[i]).join('\n');
+  el.textContent = forja4Stages.map((title,i)=>title + '\\n     ' + stageStates[i]).join('\\n');
   forja4Mostrar(finalProven ? '🟢 FIXED_POINT' :
     queued ? '🟡 GOAL ENFILEIRADO NO HERMES' : '🟡 NÃO DESPACHADO / BLOQUEADO',
     String(resp?.queueReason || resp?.nextCursor || 'aguardando') +
