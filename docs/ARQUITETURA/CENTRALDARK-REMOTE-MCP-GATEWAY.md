@@ -249,3 +249,60 @@ API key ou SSH da Casa; as duas falhas seguem evidentes.
 **Status nesta etapa:** delta de código em PR isolado;
 instalação da extensão e recarga MCP na Casa/VPS seguem ações distintas.
 Nenhuma publicação automática. Não criar gateway paralelo.
+
+
+
+## 2026-10-17 — Desktop Commander: cascas, tool-call e visualização no Instinto Superior
+
+**Garimpo factual, sem substituir owners:**
+
+| Camada | Artefato canônico | Responsabilidade |
+|---|---|---|
+| Máquina VPS | `/root/CentralDark` | Checkout da CentralDark que contém scripts e unidades declarativas |
+| Entrada de unidade | `/etc/systemd/system/centraldark-desktop-commander*.service` | Destino definido pelo instalador; arquivo instalado efetivo exige inspeção do host |
+| Executável de perfil | `/usr/local/sbin/centraldark-desktop-commander-profile.sh` | Destino de instalação do runner existente |
+| Perfil principal | `/root` | HOME do perfil principal |
+| Perfil segunda conta | `/root/.desktop-commander-profiles/conta2` | HOME isolada, sem compartilhar refresh token |
+| Locks | `/run/centraldark-desktop-commander-<profile>.lock` | Impede múltiplas instâncias no mesmo perfil |
+| Health/watchdog | `infra/systemd/centraldark-desktop-commander-watchdog.sh` | Verifica systemd/PIDs/cgroup/logs; não altera owner do remoto |
+| Logs de watchdog | `/var/log/centraldark-desktop-commander-watchdog.log` | Histórico do watchdog no host |
+| Pacote usado pela VPS | `@wonderwhy-er/desktop-commander@0.2.48 remote` | Processo do pacote público local em modo remoto |
+| Serviço remoto de terceiro | `https://mcp.desktopcommander.app/mcp` | OAuth e encaminhamento ao device agent; implementação hospedada é fechada |
+| Captura das calls da própria CentralDark | `apps/modulos/mcp/src/audit-logger.js` | Evento sanitizado `mcp_tool_execution`, com call/correlation/duration/ok |
+| Admin/MCP NOC existente | `apps/modulos/mcp/src/admin.js` | `/admin/logs/stream`, `/admin/api/logs` e Tool Call Lens no MESMO painel protegido |
+| Projeção no Cockpit | `apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx` | Consome apenas a consulta autenticada /admin/api/logs no owner Admin existente |
+
+**Fonte externa pública** (revisada em 2026-10-17):
+- DesktopCommanderMCP (implementação local): `https://github.com/wonderwhy-er/DesktopCommanderMCP/blob/main/src/server.ts`
+- Remote Desktop Commander (docs e manifests públicos, implementação cloud privada): `https://github.com/desktop-commander/remote-desktop-commander`
+
+### Fluxo de processo que queremos acompanhar
+
+```text
+CLIENTE AUTORIZADO → REMOTE MCP OAuth → DEVICE AGENT
+  ├─ start_process → PID de processo FILHO + leitura inicial
+  ├─ read_process_output(pid) → offset/novas linhas + exit code
+  ├─ interact_with_process → input autenticado sob escopo do dono
+  └─ process completed → encerramento e recibo
+        ↓ (se atravesar MCP CentralDark, fluxo auditado)
+    auditToolExecution → subscribeAuditEvents
+        ↓ metadata whitelisted (nunca input/output bruto)
+    pushAdminLog(mcp_tool_call) → /admin/logs/stream /admin/api/logs
+        ↓ mesma autenticacao do MCP Admin
+    Tool Call Lens · Admin + Observabilidade do Instinto Superior
+```
+
+Na captura CHEFE:
+- `start_process` mostrou PID `16424` para PowerShell local do device conectado;
+- `read_process_output` para PID `16424` devolveu `NODE_MODULES=True`, `LOCAL_GALLERY=True`, `LOCAL_AUTH=True`, `VPS_ONLINE`, `DEPS_YES`, `active`, `exit code 0`, `runtime 3.83s`;
+- `transport=broadcast_v1` e `dispatch_device_status=online` pertencem ao caminho do conector externo, **não** ao protocolo público do MCP CentralDark.
+
+**Limite preciso:** a assinatura `subscribeAuditEvents` registra somente chamadas que atravessam o MCP CentralDark. A call do Remote Desktop Commander feita diretamente pelo ChatGPT/Codex é visível no próprio cliente, mas não cruza automaticamente o MCP CentralDark. Logo, não afirmar que o Tool Call Lens já vê todos os dispositivos ou todas as execuções externas. Para absorção integral, deverá existir adaptador autorizado de eventos do cliente, com `source=REMOTE_DESKTOP_COMMANDER_CLIENT`, `client_call_id`, `device_id` e `receipt_ref` correlacionados. Não extrair stdout completo sem contrato privado/autorização.
+
+**Estado do delta de UI e telemetria:**
+- PR #1842 — `admin.js`: subscrição em audit-logger; metadados permitidos; pausa/revisão visual em SSE/Admin; `index.js`: CORS de **somente GET** para origins autorizadas nos endpoints autenticados de logs/metricas.
+- PR #1838 — `ObservabilidadeCentralDark.tsx`: seção Tool Call Lens reutilizando owner Observabilidade/mesma API Admin. Polling 5s, pausa, revisão, filtro e correlação.
+- `isAdmin(req)` continua exigido; autenticação administrativa não foi substituída por CORS.
+- Código em PR != serviço publicado. Instinto Superior deve recarregar o componente e MCP deve recarregar o código após promoção aprovada.
+
+**NEXT_CURSOR:** CI same HEAD #1842 e #1838 → deployment de cada owner na ordem causal (MCP antes do Cockpit) → cookie/admin readback (401/200) → registrar chamadas em `/admin/api/logs` → observar widget ao vivo → correlação opcional REMOTE_MCP_CLIENT ≠ MCP_NATIVO. Não promover `UI_OBSERVED` a `EXECUTION_PROVEN`.
