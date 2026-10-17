@@ -544,3 +544,39 @@ test("🧬 Michelin aparece no HUD único sem autocertificação ou workflow par
   assert.ok(agents.includes("MERGED != DEPLOYED"));
   assert.ok(!hud.includes("MICHELIN_AUTO_3_STARS=PASS"));
 });
+
+test("🪬 quatro cartões com flip metálico separam CURRENT, offline e verde histórico", () => {
+  const panel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  const keys = ["casa", "main", "vps", "api"];
+  assert.match(panel, /type ChaveSinal = "casa" \| "main" \| "vps" \| "api"/);
+  for (const key of keys) {
+    assert.ok(panel.includes('chave: "' + key + '"'), "sinal sem face: " + key);
+    assert.ok(panel.includes('flip-" + sinal.chave'), "controle de virar ausente");
+  }
+  assert.match(panel, /rotateY\(180deg\)/);
+  assert.match(panel, /backfaceVisibility: "hidden"/);
+  assert.match(panel, /motion-safe:transition-transform/);
+  assert.match(panel, /aria-pressed=\{virado\}/);
+  assert.match(panel, /aria-hidden=\{virado\}/);
+  assert.match(panel, /aria-hidden=\{!virado\}/);
+  assert.match(panel, /HISTÓRICO · NÃO É ESTADO ATUAL/);
+  assert.match(panel, /localStorage\.setItem\(HISTORICO_LOCAL_KEY/);
+  assert.match(panel, /q\.dataUpdatedAt < 45_000/);
+  assert.match(panel, /d\.casaPeerOnline === false/);
+  assert.match(panel, /OFFLINE NA MALHA/);
+  assert.match(panel, /TAILSCALE · não comprova site local/);
+  assert.match(panel, /SHA COINCIDE/);
+  assert.match(panel, /SHA NÃO COMPARADO/);
+  assert.match(panel, /AUTORIZAÇÃO DO SENSOR/);
+  assert.match(panel, /HTTP 200 não atesta tudo/);
+  assert.doesNotMatch(panel, /localStorage\.getItem\([^)]*\)\s*\?\s*"PASS"/);
+  assert.match(sensor, /async function medirPeerCasa\(/);
+  assert.match(sensor, /execFile\)\("tailscale", \["status", "--json"\]/);
+  assert.match(sensor, /host === "segredo"/);
+  assert.match(sensor, /typeof casa\["Online"\] !== "boolean"/);
+  assert.match(sensor, /casaPeerOnline: casaPeer\.online/);
+  assert.match(sensor, /casaPeerMedidoEm: casaPeer\.medidoEm/);
+  assert.match(sensor, /casaOnly && resposta.status === 200/);
+  assert.match(sensor, /não prova de processo desligado/);
+});
