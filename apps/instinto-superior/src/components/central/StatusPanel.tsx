@@ -125,7 +125,7 @@ function novasProvasVerdes(d: EstadoCentralDark, iso: string): HistoricoSinais {
 type SinalVisivel = {
   chave: ChaveSinal;
   nome: string; estado: Estado; rotulo: string; detalhe: string;
-  origem: string; offline: boolean; icon: typeof House;
+  origem: string; gatilho: string; offline: boolean; icon: typeof House;
 };
 
 function CartaoDuplaFace({
@@ -216,10 +216,10 @@ function CartaoDuplaFace({
             </span>
           )}
           <span className="flex items-center justify-between gap-2 text-[10px]">
-            <span className={sinal.offline ? "text-slate-300" : "text-muted-foreground"}>
-              AGORA: {sinal.rotulo}
+            <span className="min-w-0 truncate text-muted-foreground">
+              🧠 {sinal.gatilho}
             </span>
-            <span className="text-gold">Voltar ↺</span>
+            <span className="shrink-0 text-gold">Voltar ↺</span>
           </span>
         </span>
       </button>
@@ -296,6 +296,7 @@ export function StatusPanel() {
         : d?.casaPeerOnline === true ? "Malha conectada; página local exige sonda própria"
         : "Sem medição autorizada da Casa neste host",
       origem: d?.casaPeerFonte ?? "Sensor Casa não consultado",
+      gatilho: "Offline agora não apaga o passado."
     },
     {
       chave: "main", nome: "Main GitHub", icon: Github,
@@ -305,6 +306,7 @@ export function StatusPanel() {
         : d?.github === "FAIL" ? "CONSULTA FALHOU" : "HEAD NÃO MEDIDO",
       detalhe: d?.mainSha ? "Commit " + d.mainSha.slice(0, 12) : "SHA não medido nesta consulta",
       origem: d?.fonte ?? "GitHub API",
+      gatilho: "SHA identifica o commit, não o deploy."
     },
     {
       chave: "vps", nome: "VPS · comparação SHA", icon: Server,
@@ -315,6 +317,7 @@ export function StatusPanel() {
         ? "VPS " + d.vpsSha.slice(0, 12) + " · Main " + d.mainSha.slice(0, 12)
         : "SHA = versão do código; comparação não prova serviço",
       origem: "GitHub main + Live Fabric VPS",
+      gatilho: "Mesmo SHA não prova serviço."
     },
     {
       chave: "api", nome: "API CentralDark", icon: Activity,
@@ -323,6 +326,7 @@ export function StatusPanel() {
         : d?.apiHealth === "FAIL" ? "HEALTH FALHOU" : "HEALTH NÃO COMPROVADO",
       detalhe: "HTTP " + (d?.apiHealthHttp ?? "?") + " · /health · não atesta tudo",
       origem: d?.apiHealthFonte ?? "API CentralDark",
+      gatilho: "HTTP 200 não atesta tudo."
     },
   ];
 
