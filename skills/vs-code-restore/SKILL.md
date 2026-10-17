@@ -409,3 +409,16 @@ mover a auditoria DOM para lá ou criar segundo coletor.
 duplicidades de ID e referências ARIA, largura scroll e botões cobertos.
 `ZERO_ACHADOS` não significa acessibilidade perfeita nem resolução de todos
 os conflitos de CSS. Nunca marcar reparado sem teste de tela.
+
+## 🧬 Fast Path autônomo — instalar/conectar/provar/antirregressão
+
+A extensão ZENDRIVE não conclui missão quando o código foi commitado. O ciclo do CHEFE é:
+**CONSTRUIR → INSTALAR → CONECTAR → PROVAR → ANTIRREGRESSÃO**, no mesmo owner.
+
+- Construir: TypeScript, lint/testes relevantes, versão e artefato VSIX com SHA.
+- Instalar: no VS Code já aberto e autorizado da Casa, reler versão da extensão instalada; preservar sessão atual.
+- Conectar: usar SSH existente/terminal existente; identidade e handshake medidos, sem importar segredo.
+- Provar: observar a ferramenta nativa, PID e saída/exit de comando diagnóstico; correlacionar recibo com o MCP quando a chamada realmente atravessar o MCP.
+- Antirregressão: repetir comando ZENDRIVE CLI, localizar VS Code por PID, rota SSH, abas e UI existente, erros de console.
+
+Automação de desenvolvimento permitida onde houver execução autorizada; merge em main, produção VPS e modificação de credenciais precisam do gate de promoção do CHEFE. Falhou uma fase: parar e guardar error_code, sha, owner e next_cursor. Documento canônico: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md.
