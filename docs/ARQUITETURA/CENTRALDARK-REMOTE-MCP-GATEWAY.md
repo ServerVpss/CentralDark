@@ -378,6 +378,16 @@ Formato de referência (campos entre sinais angulares são EXEMPLOS, não result
 
 Cada etapa exige mesmo fingerprint/SHA, timestamp plausível de até 7 dias, exitCode 0, antiregression PASS e recibo. FAIL interrompe, SHA divergente volta a UNKNOWN. É um contrato de evidência; só os hashes e o readback real de cada artefato estabelecem instalação e conexão.
 
+### Runner canônico da Casa (reuso, sem segundo executor)
+
+O script já presente no PR #1842 é:
+
+    skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1
+
+Ele contém gates 01_CONSTRUIR (incluindo testes prebuild), 02_INSTALAR (VSIX local e readback de versão), 03_CONECTAR (SSH + Cockpit local) e 04_PROVAR (E2E autenticado). Grava recibo no TEMP/CentralDark-Forja-Lens; retorna código de saída 3 diante de bloqueio.
+
+O botão agora exige que Hermes use **esse runner**, não um roteiro novo: ler receipt do PS1, complementar a antirregressão pós-instalação, validar E2E autenticado com call_id do Tool Call Lens e produzir o receipt tipado forja-4x-receipt.json na pasta da mesma missão. Quando falta prova E2E, o script bloqueia a conclusão em vez de inventá-la. A publicação main/VPS continua independente.
+
 ### Operação do botão existente
 
 No Admin MCP autenticado: Auditoria → 🧬 Construir → Instalar → Conectar → Provar. POST same-origin /admin/api/intent com mode AUTONOMO encaminha um único GOAL, deduplicado por fingerprint. O botão Relê recibo usa GET na mesma rota e exibe as cinco fases via forja4x.stages. Não repete ferramentas ao rever; registra somente observação. O Cockpit aponta para a aba Admin já autenticada; a autenticação, o worker e o Tool Call Lens permanecem os existentes.
