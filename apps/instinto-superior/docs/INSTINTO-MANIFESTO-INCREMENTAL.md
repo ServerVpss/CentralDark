@@ -80,3 +80,15 @@ Para cada nova descoberta, **acrescentar D00N** com `SOURCE_SHA`, owner, delta, 
 - **PR #1832:** readback atual confirmou `state=closed`, `merged=true`, merge `c95d9cb55c447fd928c2ee8ed240827e8e00d9c0`. Resumos antigos que diziam `dirty/open` são históricos, não CURRENT.
 - **NEXT_CURSOR:** projetar estes módulos no registry do harness → manter estados parciais honestos → provar uma sessão terminal por identidade + input autorizado + ACK/readback correlacionado → então habilitar ação interativa no cockpit.
 - **FIXED_POINT:** nenhum reset, clean, rebase, restart, envio de texto ou interrupção foi executado neste delta; apenas leitura e cristalização do mapa vivo.
+
+### D003 — 2026-10-17 · CentralDark Commander Tailscale + recuperacao SSR VPS
+
+- **SOURCE_MAIN_SHA:** `380253366019287cd9c0b731fd34a535888c9ec7` (readback VPS = GitHub main).
+- **GOAL:** reutilizar Desktop Commander MIT `0.2.48` como motor local e o MCP CentralDark como control plane; usar Tailscale privado e o Cockpit existente, sem criar servidor paralelo.
+- **OWNERS:** `apps/modulos/mcp/src/admin.js`, `apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx`, `apps/instinto-superior/INICIAR-COCKPIT-LOCAL.bat`, `apps/instinto-superior/scripts/fix-node-ssr-cycle.mjs` e artefatos compilados MCP.
+- **FRONTE VPS:** Caddy apontava `admin.centralldark.com` a SSR `127.0.0.1:25812` parada (HTTP 502). Reativada, gerava `createServerFn is not a function` (HTTP 500). Corrigido no pos-build existente, sem alterar autenticacao nem CSRF; novo `npm run build:vps` retornou HTTP 200 na rota SSR.
+- **FRONTE CASA:** peer SEGREDO online via Tailscale; WinRM TCP 5985 OPEN, Screenpipe TCP 3030 OPEN, SSH TCP 22 TIMEOUT. Porta 3000 HTTP 404; HTTPS privado `windows-casa.tail6d7aa4.ts.net` HTTP 502. Runners GitHub Casa offline; sem sessao Windows autenticada.
+- **DELTA:** launcher existente fixado em Vite `127.0.0.1:3000 --strictPort`. Admin MCP protegido mede Casa e porta 3000. Cockpit projeta CentralDark Commander e link para o owner administrativo.
+- **PROVA:** `node --check`, ESLint componente, `npm run build` MCP, `npm run build:vps` Instinto e fixture de pos-build com comparacao byte a byte PASS. VPS HTTP 200 em `/`, `/sala-controle`, MCP `/health` e `/intent/manifesto`; `/admin/api/tailscale` sem sessao retorna 401.
+- **LIMITE:** `CODE_IN_MAIN=PASS`, `VPS_SSR_DEPLOY=PASS`, `MCP_HEALTH=PASS`, `CASA_DEV_PORT_3000=HTTP_404`, `CASA_TAILSCALE_HTTPS=HTTP_502`, `CASA_POWERSHELL_EXECUTION=UNPROVEN`, `NATIVE_START_PROCESS=NOT_IMPLEMENTED`. Disco raiz VPS em 100% de uso: nao apagar dados funcionais em operacao de outro escopo.
+- **NEXT_CURSOR:** sincronizar main na Casa e executar launcher existente pelo Windows autenticado; provar `localhost:3000 HTTP 200`, Tailscale Serve HTTPS 200 e login admin; so depois adicionar acao remota autenticada ao owner preexistente.
