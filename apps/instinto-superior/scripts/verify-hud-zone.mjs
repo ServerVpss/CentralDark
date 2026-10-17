@@ -348,3 +348,66 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
   assert.ok(design.includes("Build e deploy do cockpit são provas separadas"));
   assert.ok(!design.includes("ChatGPT API conectada e autenticada"));
 });
+
+
+// Anti-regressão do Marketplace dentro da esteira existente (npm prebuild/prebuild:vps).
+// Isto prova contratos SOURCE, não instalação remota nem resposta HTTP do cockpit.
+test("regressao do Marketplace ZENDRIVE — construir, instalar, conectar e provar sem falso verde", () => {
+  const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
+  const shell = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
+  const admin = read("apps/instinto-superior/src/routes/_authenticated/sala-controle.tsx");
+  const extManifest = JSON.parse(read("skills/vs-code-restore/package.json"));
+  const extension = read("skills/vs-code-restore/src/extension.ts");
+  const bridge = read("scripts/casa/vscode-log-bridge.ps1");
+  const ingest = read("scripts/vps/ingest-vscode-log.mjs");
+  const funnel = read("apps/modulos/mcp/src/log-funnel.js");
+  const pkg = JSON.parse(read("apps/instinto-superior/package.json"));
+
+  // 1. CONSTRUIR: mesma árvore visual, entrada privada e único registro.
+  assert.match(design, /\{autenticado\s*\?\s*<TabsTrigger value="extensoes">/);
+  assert.match(design, /\{autenticado\s*\?\s*\(\s*<TabsContent value="extensoes"/);
+  assert.equal(design.split('data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli"').length - 1, 1);
+  assert.match(shell, /<DesignCenter[^>]*autenticado=\{autenticado\}/);
+  assert.match(admin, /verificarAdmin/);
+  assert.match(admin, /if \(!q\.data\?\.admin\)/);
+  assert.match(admin, /return <CockpitShell autenticado \/>/);
+
+  // 2. INSTALAR: contrato do pacote existente, não confundir manifesto com instalação.
+  assert.equal(extManifest.name, "centraldark-vscode-restore");
+  assert.ok(extManifest.contributes.commands.some(c => c.command === "centraldark.zendriveCli"));
+  assert.match(extension, /registerCommand\('centraldark\.zendriveCli', focusExistingCliTerminal\)/);
+  assert.match(extension, /terminal\.show\(false\)/);
+  const focusSource = extension.split("function focusExistingCliTerminal(): void {")[1]
+    ?.split("\nfunction ")[0] ?? "";
+  assert.ok(focusSource.length > 0);
+  assert.doesNotMatch(focusSource, /createTerminal\(|sendText\(|spawn\(|execSync\(/);
+  assert.ok(design.includes("fonte " + extManifest.version), "ficha usa versão incompatível com manifesto da main");
+
+  // 3. CONECTAR: canal único e metadados; nenhuma sessão/cookie/chat ao funil.
+  assert.match(extension, /onDidStartTerminalShellExecution/);
+  assert.match(extension, /onDidEndTerminalShellExecution/);
+  assert.match(extension, /terminalLogPath/);
+  assert.match(extension, /LOGS-VS-CODE\.log/);
+  assert.match(bridge, /ingest-vscode-log\.mjs/);
+  assert.match(bridge, /StrictHostKeyChecking=yes/);
+  assert.match(ingest, /log-funnel/);
+  assert.match(funnel, /event|log/i);
+  const telemetry = extension.split("function emitTerminalMetadata(")[1]
+    ?.split("\nfunction ")[0] ?? "";
+  assert.ok(telemetry.length > 0);
+  assert.doesNotMatch(telemetry, /commandLine|readFileSync|readText|cookie|session\.access_token/);
+
+  // 4. PROVAR: a interface não pode promover source para runtime/deploy.
+  assert.match(design, /<SeloEstado estado="UNKNOWN" \/>/);
+  assert.match(design, /não provado ao vivo/);
+  assert.match(design, /Build e deploy do cockpit são provas separadas/);
+  assert.ok(design.includes("/pull/1820"));
+  assert.ok(!design.includes("Instalar em todos os computadores"));
+  assert.equal(pkg.scripts.prebuild, "npm run verify:hud");
+  assert.equal(pkg.scripts["prebuild:vps"], "npm run verify:hud");
+
+  // Contraprova: se a aba deixar de ser privada, o teste discriminante reprova.
+  const privateTab = /\{autenticado\s*\?\s*<TabsTrigger value="extensoes">/;
+  assert.equal(privateTab.test(design), true);
+  assert.equal(privateTab.test(design.replace('{autenticado ? <TabsTrigger value="extensoes">', '<TabsTrigger value="extensoes">')), false);
+});
