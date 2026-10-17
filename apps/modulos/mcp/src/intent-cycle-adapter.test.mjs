@@ -55,3 +55,18 @@ test('API loop: fila original + dedupe + Critic + receipt imutavel (isolado)',as
   assert.equal(expired.state,'STALE');
   assert.equal(expired.criteria[0].status,'STALE');
 });
+
+
+test('rota publica do manifesto nao concede acesso de administracao', () => {
+  const source = readFileSync(new URL('./index.js', import.meta.url), 'utf8');
+  const start = source.indexOf('app.get("/intent/manifesto",');
+  assert.ok(start > -1);
+  const end = source.indexOf('\n});', start);
+  assert.ok(end > start);
+  const route = source.slice(start, end);
+  assert.match(route, /PUBLICO_SOMENTE_LEITURA/);
+  assert.match(route, /res\.json\(/);
+  assert.match(route, /Cache-Control/);
+  assert.doesNotMatch(route, /process\.env|req\.body|execFile|spawn|child_process|writeFile/);
+  assert.ok(source.includes('app.get("/intent/status", intentPublicStatus);'));
+});
