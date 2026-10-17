@@ -101,10 +101,12 @@ export function DesignCenter({
   pele = "default",
   selecionarPele,
   autenticado = false,
+  abaInicial = "tokens",
 }: {
   pele?: PeleCockpit;
   selecionarPele?: (valor: string) => void;
   autenticado?: boolean;
+  abaInicial?: "tokens" | "extensoes";
 }) {
   const [comparacao, definirComparacao] = useState<"canonico" | "teste">("canonico");
 
@@ -160,7 +162,7 @@ export function DesignCenter({
         </div>
       ) : null}
 
-      <Tabs defaultValue="tokens" className="mt-8">
+      <Tabs defaultValue={autenticado ? abaInicial : "tokens"} className="mt-8">
         <TabsList className="h-auto max-w-full flex-wrap justify-start">
           <TabsTrigger value="tokens">Tokens</TabsTrigger>
           <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger>
@@ -308,7 +310,7 @@ export function DesignCenter({
                   <div>
                     <dt className="text-muted-foreground">Integração de logs</dt>
                     <dd className="mt-1">
-                      PR #1820 MERGED · fonte local protegida · coletor e log-funnel reutilizados
+                      PR #1820 · consultar estado no GitHub · coletor e log-funnel reutilizados
                     </dd>
                   </div>
                   <div>
