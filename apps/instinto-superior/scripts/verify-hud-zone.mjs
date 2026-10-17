@@ -565,7 +565,7 @@ test("🪬 quatro cartões com flip metálico separam CURRENT, offline e verde h
   assert.match(panel, /HISTÓRICO · NÃO É ESTADO ATUAL/);
   assert.match(panel, /localStorage\.setItem\(HISTORICO_LOCAL_KEY/);
   assert.match(panel, /q\.dataUpdatedAt < 45_000/);
-  assert.match(panel, /d\.casaPeerOnline === false/);
+  assert.match(panel, /d\?\.casaPeerOnline === false/);
   assert.match(panel, /OFFLINE NA MALHA/);
   assert.match(panel, /TAILSCALE · não comprova site local/);
   assert.match(panel, /SHA COINCIDE/);
