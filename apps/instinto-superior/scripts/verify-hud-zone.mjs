@@ -497,3 +497,27 @@ test("🧬 padrão Michelin 3 estrelas: mesmo SHA, regressão e runtime sem fals
   // Sem recibos operacionais no CI: nunca anunciar três estrelas por este teste isolado.
   console.log("MICHELIN_3_ESTRELAS=CRITERIOS_TESTADOS; CERTIFICACAO_RUNTIME=NAO_EMITIDA");
 });
+
+
+test("🧬 Michelin aparece no HUD único sem autocertificação ou workflow paralelo", () => {
+  const hud = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+  const workflow = read(".github/workflows/test.yml");
+  const agents = read("AGENTS.md");
+  assert.equal(hud.split('id="cd-michelin-3-estrelas"').length - 1, 1);
+  for (const label of ["☆ 1 · Construir", "☆☆ 2 · Integrar", "☆☆☆ 3 · Provar",
+    "ESTRELA NÃO ATESTADA", "SEM CERTIFICAÇÃO RUNTIME NESTA CONSULTA",
+    "NEXT_CURSOR", "mesmo SHA"]) {
+    assert.ok(hud.includes(label), "HUD Michelin sem critério: " + label);
+  }
+  assert.ok(hud.includes("estado?.build"));
+  assert.ok(hud.includes("estado?.actions"));
+  assert.ok(hud.includes("estado?.deploy"));
+  assert.ok(workflow.includes('MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=$GITHUB_SHA'));
+  assert.ok(workflow.includes("MICHELIN_STAR_2=CI_CONCLUSION_AND_INTEGRATION_RECEIPTS_REQUIRED"));
+  assert.ok(workflow.includes("MICHELIN_STAR_3=DEPLOY_VISUAL_CASA_VPS_RECEIPTS_REQUIRED"));
+  assert.ok(workflow.indexOf("npm run build:vps") < workflow.indexOf("MICHELIN_STAR_1="));
+  assert.ok(agents.includes("Michelin — três estrelas de qualidade comprovada"));
+  assert.ok(agents.includes("MERGED != DEPLOYED") || agents.includes("MERGED != DEPLOYED"));
+  assert.doesNotMatch(hud.slice(hud.indexOf('id="cd-michelin-3-estrelas"'),
+    hud.indexOf('id="cd-integridade-estado"') < 0 ? undefined : undefined), /ACESSO_GLOBAL_LIBERADO/);
+});
