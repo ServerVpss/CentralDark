@@ -229,3 +229,23 @@ REPLAY_TRIGGER=NEED_TO_RECHECK_CURRENT_REACHABILITY
 INVALIDATION=PEER_IP|ONLINE_STATE|TAILNET_AUTH|TRANSPORT_PATH|DEVICE_STATE_CHANGED
 NEXT_CURSOR=REMEASURE_iphone_route_only_when_needed; keep screen/control as UNKNOWN
 ```
+
+
+## Delta ZENDRIVE / MCP nativo — 2026-10-17
+
+O controle canônico permanece **CentralDark MCP** e a extensão VS Code
+`skills/vs-code-restore` expõe agora:
+`centraldark.probeVpsSsh` (sonda read-only com SSH Tailscale → público)
+e `centraldark.connectVpsSsh` (picker do Remote-SSH já existente).
+O comando de foco `centraldark.zendriveCli` permanece inalterado.
+O alias e a identidade SSH da Casa continuam sob o owner humano original.
+
+No mesmo owner `apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js`,
+`tailscale_bridge_status` agora possui fallback LOCAL `tailscale status --json`
+somente quando o Broker HTTP falha. O fallback retorna disponibilidade
+do Tailscale da VPS, não valida controle administrativo, OAuth,
+API key ou SSH da Casa; as duas falhas seguem evidentes.
+
+**Status nesta etapa:** delta de código em PR isolado;
+instalação da extensão e recarga MCP na Casa/VPS seguem ações distintas.
+Nenhuma publicação automática. Não criar gateway paralelo.
