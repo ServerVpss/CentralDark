@@ -350,6 +350,19 @@ __PATTERN_ADMIN_STYLE__
 
   <div class="pane" id="p-audit">
     <div class="card">
+      <h2>🪬 Tool Call Lens <span class="badge">MCP próprio · mesma sessão Admin</span></h2>
+      <p style="font-size:12px;color:var(--muted)">Chamada → conclusão, duração e correlação. Logs privados e argumentos não aparecem neste placar. O Desktop Commander remoto precisa de adapter próprio se não passar por este MCP.</p>
+      <div class="filters" style="margin-top:10px">
+        <button class="btn" type="button" id="toolLensToggle" onclick="toolLensAlternar()">⏸ Pausar visão</button>
+        <button class="btn ghost" type="button" onclick="toolLensRever()">↩ Rever últimos</button>
+        <label for="toolLensFilter">Resultado</label>
+        <select id="toolLensFilter" onchange="toolLensRender()"><option value="all">Todos</option><option value="PASS">PASS</option><option value="FAIL">FAIL</option></select>
+      </div>
+      <div id="toolLensStatus" style="margin:10px 0;font-size:12px">Aguardando tool calls do MCP CentralDark.</div>
+      <div id="toolLensRows" class="log-box" role="log" aria-label="Tool calls MCP" style="height:210px"></div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
       <h2>Buscar logs <span class="badge">/admin/api/logs</span></h2>
       <div class="filters">
         <input id="fRota" placeholder="rota (ex: /health)"/>
@@ -1022,12 +1035,73 @@ async function carregarLinear(){
   }
 }
 
+// Projecao UI do mesmo SSE e do mesmo login administrativo.
+// No replay, apenas reexibe eventos recebidos; NUNCA reexecuta ferramentas.
+const toolLensEventos = [];
+let toolLensAoVivo = true;
+function toolLensAlternar() {
+  toolLensAoVivo = !toolLensAoVivo;
+  const button = $('toolLensToggle');
+  if (button) button.textContent = toolLensAoVivo ? '⏸ Pausar visão' : '▶ Retomar visão';
+  toolLensRender();
+}
+function toolLensRever() {
+  toolLensAoVivo = false;
+  const button = $('toolLensToggle');
+  if (button) button.textContent = '▶ Retomar visão';
+  toolLensRender();
+}
+function toolLensRegistrar(d) {
+  if (!d || d.msg !== 'mcp_tool_call' || d.meta?.source !== 'MCP_AUDIT') return;
+  const m = d.meta;
+  // Somente chaves permitidas no evento sanitizado pelo backend.
+  const item = {
+    t: String(d.t || ''), name: String(m.toolName || 'UNKNOWN'),
+    status: m.status === 'PASS' ? 'PASS' : 'FAIL',
+    duration: typeof m.durationMs === 'number' ? m.durationMs : null,
+    callId: String(m.call_id || ''),
+    correlation: String(m.correlation_id || ''),
+    mission: String(m.mission_id || ''),
+    hostPid: typeof m.mcp_host_pid === 'number' ? m.mcp_host_pid : null,
+    exitCode: typeof m.exitCode === 'number' ? m.exitCode : null
+  };
+  if (item.callId && toolLensEventos.some(x => x.callId === item.callId)) return;
+  toolLensEventos.unshift(item);
+  if (toolLensEventos.length > 200) toolLensEventos.length = 200;
+  if (toolLensAoVivo) toolLensRender();
+}
+function toolLensRender() {
+  const rows = $('toolLensRows');
+  const status = $('toolLensStatus');
+  if (!rows || !status) return;
+  const filtro = $('toolLensFilter')?.value || 'all';
+  const items = toolLensEventos.filter(x => filtro === 'all' || x.status === filtro);
+  rows.replaceChildren();
+  for (const item of items.slice(0, 60)) {
+    const row = document.createElement('div');
+    row.className = item.status === 'PASS' ? 'info' : 'error';
+    row.style.cssText = 'border-bottom:1px solid #263044;padding:7px 2px;white-space:pre-wrap;word-break:break-word';
+    const state = item.status === 'PASS' ? '🟢' : '🔴';
+    row.textContent = state + ' ' + item.name + ' · ' + item.status +
+      ' · ' + (item.duration == null ? 'tempo desconhecido' : item.duration + ' ms') +
+      '\n' + item.t + ' · cid=' + (item.correlation || '-') +
+      ' · toolCall=' + (item.callId || '-') +
+      ' · PID do host MCP=' + (item.hostPid == null ? '-' : item.hostPid) +
+      (item.exitCode == null ? '' : ' · exit=' + item.exitCode);
+    rows.appendChild(row);
+  }
+  if (!items.length) rows.textContent = 'Nenhuma chamada do MCP próprio recebida nesta sessão.';
+  status.textContent = (toolLensAoVivo ? '👁 AO VIVO' : '⏸ PAUSADO / REVISÃO') +
+    ' · ' + toolLensEventos.length + ' calls no buffer · fonte MCP_AUDIT';
+}
+
 function conectarLogs(){
   const es = new EventSource('/admin/logs/stream');
   const box = $('log'); box.innerHTML = '';
   es.onmessage = (ev) => {
     const d = JSON.parse(ev.data);
     registrarDeltaUtil(d);
+    toolLensRegistrar(d);
     const el = document.createElement('div');
     el.className = d.level;
     el.textContent = '['+horaBr(d.t)+'] ['+d.level.toUpperCase()+'] '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');
