@@ -360,6 +360,16 @@ __PATTERN_ADMIN_STYLE__
       </div>
       <div id="toolLensStatus" style="margin:10px 0;font-size:12px">Aguardando tool calls do MCP CentralDark.</div>
       <div id="toolLensRows" class="log-box" role="log" aria-label="Tool calls MCP" style="height:210px"></div>
+      <div class="card" style="margin-top:14px;padding:12px">
+        <h3>🧬 Forja Autônoma <span class="badge">Harness existente → Hermes original</span></h3>
+        <p style="font-size:12px;color:var(--muted)">Uma intenção: regressão → construir → instalar na Casa → conectar → provar. Interrompe na primeira falha; publicar na main/VPS exige autorização de promoção independente.</p>
+        <div class="filters" style="margin-top:10px">
+          <button class="btn" type="button" id="forja4Btn" onclick="forja4Iniciar()">🧬 Construir → Instalar → Conectar → Provar</button>
+          <button class="btn ghost" type="button" onclick="forja4Verificar()">🧿 Relê recibo</button>
+        </div>
+        <div id="forja4Status" role="status" aria-live="polite" style="margin:10px 0;font-size:12px">AGUARDANDO · Sem GOAL da Forja nesta sessão</div>
+        <div id="forja4Stages" class="log-box" style="height:140px;white-space:pre-wrap" aria-label="Etapas da Forja Autônoma"></div>
+      </div>
     </div>
     <div style="height:14px"></div>
     <div class="card">
@@ -1093,6 +1103,107 @@ function toolLensRender() {
   if (!items.length) rows.textContent = 'Nenhuma chamada do MCP próprio recebida nesta sessão.';
   status.textContent = (toolLensAoVivo ? '👁 AO VIVO' : '⏸ PAUSADO / REVISÃO') +
     ' · ' + toolLensEventos.length + ' calls no buffer · fonte MCP_AUDIT';
+}
+
+
+const forja4Stages = [
+  '01 · ANTIRREGRESSÃO: baseline, testes, tipos, lint, CI SHA',
+  '02 · CONSTRUIR: build local com hash e exit code',
+  '03 · INSTALAR: instalar somente no ambiente Casa autorizado',
+  '04 · CONECTAR: VS Code/ZENDRIVE → MCP/SSH → Hermes, leitura autenticada',
+  '05 · PROVAR: E2E + recibo do mesmo SHA, sem regressão'
+];
+const forja4Intent = [
+  'FORJA_4X_EXISTENTE: executar na Casa sob owner atual, one writer, mesma missão.',
+  'ANTIRREGRESSAO_OBRIGATORIA antes e depois de cada mudança:',
+  '1 inventariar working tree + HEAD + diff e NÃO sobrescrever edições concorrentes;',
+  '2 rodar testes pertinentes, typecheck, lint e build no owner existente;',
+  '3 construir artefato com exit code, hash, hora e recibo;',
+  '4 instalar somente no escopo Casa/local autorizado, preservar app anterior e rollback;',
+  '5 conectar extensão ZENDRIVE e MCP/SSH existentes; testar identidade, latência e heartbeat;',
+  '6 provar botões, fluxo real e regressão pós-instalação no mesmo SHA e salvar receipt;',
+  '7 STOP em FAIL, UNKNOWN, build ruim, conflito, review/CI ausente ou falta de permissão;',
+  '8 main e VPS: NO_MERGE_NO_DEPLOY sem aprovação separada do CHEFE.',
+  'Reusar apps/modulos/mcp/src/intent-cycle-adapter.js, tools existentes e CI.',
+  'Devolver para Tool Call Lens: goalId/fingerprint/SHA, stage, source, timestamp, status e nextCursor.',
+  'Nao marcar install/connect/prove PASS por apenas fila, fonte ou documento.'
+].join(' ');
+let forja4Fingerprint = null;
+let forja4Busy = false;
+function forja4Mostrar(status, detail) {
+  const el = $('forja4Status'); if (el) el.textContent = status + (detail ? ' · ' + detail : '');
+}
+function forja4Pintar(resp) {
+  const el = $('forja4Stages'); if (!el) return;
+  const entries = resp?.criteria || [];
+  const lookup = id => entries.find(c => c.id === id)?.status || 'UNKNOWN';
+  const finalProven = resp?.executionProven === true && resp?.fixedPoint === true;
+  const source = lookup('SOURCE_CURRENT');
+  const ci = lookup('CI_SAME_SHA');
+  const queued = resp?.queued === true;
+  const stageStates = [
+    source === 'PASS' && ci === 'PASS' ? 'GATE PASS' : 'PENDENTE · fonte/CI',
+    finalProven ? 'PASS' : 'PENDENTE · build receipt',
+    finalProven ? 'PASS' : 'PENDENTE · install receipt',
+    finalProven ? 'PASS' : 'PENDENTE · auth/SSH/MCP',
+    finalProven ? 'PASS' : 'PENDENTE · E2E/critico'
+  ];
+  el.textContent = forja4Stages.map((title,i)=>title + '\n     ' + stageStates[i]).join('\n');
+  forja4Mostrar(finalProven ? '🟢 FIXED_POINT' :
+    queued ? '🟡 GOAL ENFILEIRADO NO HERMES' : '🟡 NÃO DESPACHADO / BLOQUEADO',
+    String(resp?.queueReason || resp?.nextCursor || 'aguardando') +
+      (resp?.currentHead ? ' · HEAD=' + String(resp.currentHead).slice(0,12) : ''));
+}
+async function forja4Request(dispatch) {
+  const origin = location.origin;
+  const r = await fetch(origin + '/admin/api/intent', {
+    method: dispatch ? 'POST' : 'GET',
+    credentials: 'same-origin',
+    cache: 'no-store',
+    headers: dispatch ? {'Content-Type':'application/json'} : {},
+    body: dispatch ? JSON.stringify({
+      intent: forja4Intent, owner: 'apps/instinto-superior',
+      mode: 'AUTONOMO', criteria: [
+        'SOURCE_CURRENT','MCP_HEALTH','ONE_HEART','CI_SAME_SHA',
+        'HERMES_RUNTIME','OBJECTIVE_EFFECT','RECEIPT'
+      ], maxIterations: 8, dispatch: true
+    }) : undefined
+  });
+  const result = await r.json();
+  if (!r.ok) throw new Error('HTTP_' + r.status + ' ' + String(result.error||''));
+  return result;
+}
+async function forja4Iniciar() {
+  if (forja4Busy) return;
+  forja4Busy = true;
+  const button = $('forja4Btn'); if (button) button.disabled = true;
+  forja4Mostrar('🟡 ENTREGANDO GOAL', 'aguardando ACK da fila Hermes');
+  try {
+    const receipt = await forja4Request(true);
+    forja4Fingerprint = receipt.fingerprint || null;
+    forja4Pintar(receipt);
+  } catch (error) {
+    forja4Mostrar('🔴 BLOCKED', String(error).slice(0,180));
+  } finally {
+    forja4Busy = false;
+    if (button) button.disabled = false;
+  }
+}
+async function forja4Verificar() {
+  try {
+    const result = await forja4Request(false);
+    if (forja4Fingerprint && result.fingerprint !== forja4Fingerprint) {
+      forja4Mostrar('🟡 RECIBO DE OUTRA MISSÃO', 'Fingerprint do GOAL atual não coincide');
+      return;
+    }
+    if (!forja4Fingerprint && !String(result.intent||'').includes('FORJA_4X_EXISTENTE')) {
+      forja4Mostrar('UNKNOWN', 'Último receipt é de outra intenção');
+      return;
+    }
+    forja4Pintar(result);
+  } catch (error) {
+    forja4Mostrar('🔴 READBACK FALHOU', String(error).slice(0,180));
+  }
 }
 
 function conectarLogs(){
