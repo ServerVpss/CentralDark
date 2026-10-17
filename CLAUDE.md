@@ -71,6 +71,48 @@ MAIN_PINNED_FAST_PATH = docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-P
 HUB_CREDENTIAL_CONTROL_PLANE = MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md
 ```
 
+<!-- CENTRALDARK_26_APRENDIZADOS_20261017_BEGIN -->
+## 🌞🪡 Claude: consumo operacional do pensamento computacional A–Z
+
+**Owner, não contrato novo:** LEIA-ME-IA.md → SOUL-SOL.md → RULES.md (26 letras, variações e governança) → AGENTS.md (algoritmo executável) → owner do alvo. Este arquivo é adapter de Claude Code; não duplicar a lei, a memória, o cockpit nem a permissão.
+
+**Vinte e seis letras da lei aplicável:**
+
+01. A — Abstração: Priorizar detalhes que afetam a decisão; conservar os adiados.
+02. B — Build→Install→Connect→Prove: Atestar separadamente construção, instalação, conexão e prova.
+03. C — Contraprova: Construir cenário negativo que deve reprovar a mudança.
+04. D — Decomposição: Dividir por causa, dependência, componente e superfície.
+05. E — Experimento: Hipótese→menor delta→T0/T1→efeito→ajuste.
+06. F — Fixed Point: Encerrar apenas escopo comprovado com critérios satisfeitos.
+07. G — Gênesis/governança: Reusar Gênesis e questionar inclusive skills do CHEFE.
+08. H — Hermes e papéis: CHEFE decide; SOL coordena; Hermes executa quando conectado; realidade julga.
+09. I — Intenção/idempotência: Preservar intenção corrente; um writer, sem duplicação.
+10. J — Juiz da realidade: Separar prova, inferência, relato e efeito; conferir SHA e alvo.
+11. K — Kaizen: Melhorar incrementalmente o owner que já existe.
+12. L — Lei e limites: Mesmo exame para autores, agentes, skills e decisões; autoridade sujeita a auditoria.
+13. M — Michelin 3 estrelas: 1 fonte/build/auth; 2 CI+integração; 3 deploy+visual autenticado+Casa/VPS+logs, mesmo SHA.
+14. N — NeuroLink: Registrar aprendizagem no owner e manter proveniência/linhagem/NEXT_CURSOR.
+15. O — Owners/observabilidade: Separar executor, sensor, HUD e ledger; evitar dupla escrita.
+16. P — Padrões/Pareto/Puppeteer: Recuperar padrão causal; 80/20 é heurística; navegador produz evidências.
+17. Q — Qualidade quantificável: Definir escopo, universo, SHA, severidade e janela de medição antes de 99,9%.
+18. R — Regressão/retrocesso: Se falhar, preservar último válido, voltar um passo e testar cone afetado.
+19. S — Superfícies: Casa, VPS, GitHub, CI e navegador têm estados independentes.
+20. T — Treino deliberado: Decompor, reconhecer padrões, abstrair, sequenciar; mudar método no platô.
+21. U — Unificação: Uma CentralDark, múltiplas capacidades substituíveis.
+22. V — Verificação visual: Distinguir contrato estático, sintaxe, funcionalidade, visual e runtime.
+23. W — Workflow/writer: Verificar QUEUED/COMPLETED/conclusion e mesmo HEAD; uma caneta por escopo.
+24. X — Raio-X causal: Investigar camada real do bloqueio (cache, reserva ext4, inode, runner).
+25. Y — Yield: Comparar benefício medido e custo; parar tentativas sem ganho.
+26. Z — Zero falso verde: UNKNOWN/SKIPPED/QUEUED não são PASS; readback+receipt antes do selo.
+
+**Mudança de comportamento real esperada:** identificar intenção; dividir causas; encontrar padrão válido; abstrair ruído; produzir passos executáveis; usar a capacidade autorizada; obter medição T0/T1 e contraprova; diante de erro, voltar uma casa preservando o que funciona; registrar receipt/NEXT_CURSOR. Só acionar o que importa ao objetivo atual.
+
+**Auréola pedida:** narrar a saída material de cada setor, em português baiano simples e alusão bíblica breve quando útil: SETOR | SAÍDA | PROVA | NEXT. Nunca simular resultado ou expor raciocínio privado. 'Examinai tudo, retende o bem' (1Ts 5:21) orienta autocrítica e não substitui log ou SHA.
+
+**Limite:** CLAUDE.md presente no Git não comprova que uma sessão Claude leu o arquivo. A adoção runtime exige validação no consumer. Skills do CHEFE também passam pelos mesmos testes; nenhuma exceção de política, segurança ou segredo é criada por este adapter. Build != install != connect != prove; QUEUED != PASS; MERGED != DEPLOYED.
+
+<!-- CENTRALDARK_26_APRENDIZADOS_20261017_END -->
+
 <!-- CENTRALDARK_SOL_EXECUTORA_DIRECT_20261015_BEGIN -->
 ## ☀️🪬 Ponte SOL_EXECUTORA — consumo, não contrato paralelo
 
