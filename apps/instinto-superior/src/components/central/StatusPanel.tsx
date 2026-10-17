@@ -21,12 +21,12 @@ function etiqueta(estado: Estado) {
   if (estado === "FAIL" || estado === "BLOCKED") return "INDISPONÍVEL";
   return estado === "AUTH_REQUIRED" ? "AUTORIZAÇÃO" : "NÃO COMPROVADO";
 }
-function LuzViva({ estado, nome }: { estado: Estado; nome: string }) {
+function LuzViva({ estado, nome, rotulo }: { estado: Estado; nome: string; rotulo?: string }) {
   const cor = luz(estado);
   return (
-    <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${etiqueta(estado)}`}>
+    <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${rotulo ?? etiqueta(estado)}`}>
       <span className={`size-3 shrink-0 rounded-full animate-pulse motion-reduce:animate-none ${CORES[cor]}`} aria-hidden="true" />
-      <span className="font-mono text-[10px]">{etiqueta(estado)}</span>
+      <span className="font-mono text-[10px]">{rotulo ?? etiqueta(estado)}</span>
     </span>
   );
 }
@@ -60,6 +60,7 @@ export function StatusPanel() {
   const unknown: Estado = "UNKNOWN";
   const screen: Estado = d?.screenpipe ?? unknown;
   const remote: Estado = d?.desktop ?? unknown;
+  const semSensorCasa = d?.screenpipeFonte?.includes("sensor remoto sem ponte") === true;
   const medidoEm = d?.atualizadoEm;
   const sinais = [
     { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: `HTTP ${d?.casaSiteHttp ?? "?"} · testado apenas no Windows`, icon: House },
@@ -70,20 +71,23 @@ export function StatusPanel() {
 
   const modulos = [
     {
-      nome: "Screenpipe", estado: screen, icon: Eye, subtitulo: "Saída local do /health do Screenpipe",
+      nome: "Screenpipe", estado: screen, icon: Eye,
+      subtitulo: "Saúde da Casa · medição no próprio host Windows",
       origem: d?.screenpipeFonte ?? "Sensor não carregado",
       linhas: d?.screenpipeEvents ?? ["Aguardando leitura real do servidor"],
-      nota: "Linhas sanitizadas de saúde e dependências. Capturas/OCR e stream bruto não são publicados.",
+      nota: semSensorCasa
+        ? "O teste local da Casa não é invalidado por outra máquina. Falta transportar o recibo de saúde da Casa pelo owner remoto autenticado."
+        : "Assinatura real do Screenpipe; capturas/OCR e stream bruto não são publicados.",
     },
     {
       nome: "Desktop Commander", estado: remote, icon: Monitor, subtitulo: "Ponte remota · Casa SEGREDO / VPS",
-      origem: d?.desktopFonte ?? "Adapter da sessão não conectado ao site",
+      origem: d?.desktopFonte ?? "Recibo remoto ainda não consumido por este servidor",
       linhas: [
-        `STATUS: ${remote}`,
-        "MCP do ChatGPT ≠ conexão comprovada do servidor do cockpit",
-        "Sem stream remoto autenticado neste runtime — não inferir ONLINE",
+        `STATUS DO ADAPTER DO COCKPIT: ${remote}`,
+        "Casa: Device ready / Channel subscribed foram vistos em recibo externo.",
+        "A conexão do Desktop Commander continua separada do consumidor do Cockpit.",
       ],
-      nota: "O plugin conectado nesta conversa não expõe automaticamente seus logs ao site. Exige ponte autorizada existente.",
+      nota: "A prova no terminal da Casa é preservada. O status ONLINE automático depende de ler esse recibo pelo MCP existente.",
     },
   ];
 
@@ -126,7 +130,10 @@ export function StatusPanel() {
             <article key={m.nome} className="rounded-xl border border-border bg-background/60 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2"><Icon className="size-6 text-neon-blue" /><div><h4 className="font-semibold">{m.nome}</h4><p className="text-[11px] text-muted-foreground">{m.subtitulo}</p></div></div>
-                <LuzViva estado={m.estado} nome={m.nome} />
+                <LuzViva estado={m.estado} nome={m.nome}
+                  rotulo={m.nome === "Screenpipe" && semSensorCasa ? "CASA NÃO CONSULTADA"
+                    : m.nome === "Desktop Commander" && m.estado === "UNKNOWN" ? "ADAPTER PENDENTE"
+                    : undefined} />
               </div>
               <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">Fonte: {m.origem}</p>
               <div className="mt-3 rounded-md border border-border/70 bg-black/50 p-3" aria-label={`Saída do sensor ${m.nome}`}>
