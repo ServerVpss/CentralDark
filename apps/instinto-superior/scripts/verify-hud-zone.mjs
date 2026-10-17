@@ -312,3 +312,39 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.equal(config.dispatch.notifications_are_not_execution, true);
   assert.doesNotMatch(bell, /localStorage|sessionStorage|\/notify-telegram/);
 });
+
+
+test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
+  const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
+  const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
+  const manifest = JSON.parse(read("skills/vs-code-restore/package.json"));
+  const extension = read("skills/vs-code-restore/src/extension.ts");
+
+  // CONSTRUIR: o cockpit e a extensao sao os owners existentes.
+  assert.equal((design.match(/id="galeria-extensoes"/g) || []).length, 1);
+  assert.ok(design.includes('id="galeria-extensoes"'));
+  assert.ok(design.includes("Marketplace de capacidades"));
+  assert.ok(design.includes('data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli"'));
+  assert.ok(design.includes("fonte " + manifest.version));
+  assert.ok(manifest.contributes.commands.some(c => c.command === "centraldark.zendriveCli"));
+  assert.ok(extension.includes("registerCommand('centraldark.zendriveCli'"));
+
+  // CONECTAR: acesso autenticado e mesmo terminal / funil, sem outro executor.
+  assert.ok(design.includes('{autenticado ? <TabsTrigger value="extensoes">'));
+  assert.ok(design.includes('autenticado ? (\n          <TabsContent value="extensoes"'));
+  assert.ok(cockpit.includes('autenticado={autenticado}'));
+  assert.ok(extension.includes("terminal.show(false)"));
+  const focus = extension.slice(extension.indexOf("function focusExistingCliTerminal"),
+    extension.indexOf("function loadMap"));
+  assert.ok(!focus.includes("createTerminal("));
+  for (const name of ["onDidStartTerminalShellExecution", "onDidEndTerminalShellExecution",
+    "LOGS-VS-CODE.log"]) assert.ok(extension.includes(name), "evento/funil: " + name);
+  assert.ok(!focus.includes("process.env.OPENAI_API_KEY"));
+
+  // PROVAR: recibos reais sao escopados; UI nunca pode declarar provider live.
+  assert.ok(design.includes("/tree/main/skills/vs-code-restore"));
+  assert.ok(design.includes("/pull/1820"));
+  assert.ok(design.includes("não provado ao vivo"));
+  assert.ok(design.includes("Build e deploy do cockpit são provas separadas"));
+  assert.ok(!design.includes("ChatGPT API conectada e autenticada"));
+});
