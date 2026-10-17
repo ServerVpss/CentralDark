@@ -312,3 +312,22 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.equal(config.dispatch.notifications_are_not_execution, true);
   assert.doesNotMatch(bell, /localStorage|sessionStorage|\/notify-telegram/);
 });
+
+test("microdeploy visivel no owner existente e fail-closed sem prova de runtime", () => {
+  const ui = read("apps/instinto-superior/src/components/central/SistemaCentralDark.tsx");
+  const backend = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  const script = read("scripts/micro_deploy.sh");
+  const contrato = read("docs/CONSCIENCIA/MICRO-DEPLOY/README.md");
+  assert.ok(ui.includes("function MicroDeployReadiness("));
+  assert.ok(ui.includes("<MicroDeployReadiness estado={estado} atualizando={atualizando} atualizar={atualizar} />"));
+  assert.ok(ui.includes("STALE/UNKNOWN"));
+  assert.ok(ui.includes("const deployAllowed = false;"));
+  assert.ok(ui.includes("Worktrees e runners"));
+  assert.ok(ui.includes("Rollback pronto"));
+  assert.ok(ui.includes("Remedir sinais"));
+  assert.ok(backend.includes('const deploy: Estado = "UNKNOWN";'));
+  assert.ok(backend.includes('medirApi("/api/microdeploy/receipts/index.json")'));
+  assert.ok(script.includes('blocked "REAL_MODE_REQUIRES_COMPONENT_ADAPTER"'));
+  assert.ok(contrato.includes("Micro-deploy é por escopo afetado"));
+  assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
+});
