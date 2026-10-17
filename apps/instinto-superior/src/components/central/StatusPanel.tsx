@@ -21,7 +21,7 @@ function etiqueta(estado: Estado) {
   if (estado === "FAIL" || estado === "BLOCKED") return "INDISPONÍVEL";
   return estado === "AUTH_REQUIRED" ? "AUTORIZAÇÃO" : "NÃO COMPROVADO";
 }
-function LuzViva({ estado, nome, rotulo }: { estado: Estado; nome: string; rotulo?: string }) {
+function LuzViva({ estado, nome, rotulo }: { estado: Estado; nome: string; rotulo?: string | undefined }) {
   const cor = luz(estado);
   return (
     <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${rotulo ?? etiqueta(estado)}`}>
@@ -65,14 +65,14 @@ function lerHistoricoLocal(): HistoricoSinais {
       const r = mapa[chave];
       if (!r || typeof r !== "object" || Array.isArray(r)) continue;
       const dado = r as Record<string, unknown>;
-      if (typeof dado.at !== "string" || !Number.isFinite(Date.parse(dado.at)) ||
-          Date.parse(dado.at) > Date.now() + 60_000 ||
-          typeof dado.detalhe !== "string" || dado.detalhe.length > 140 ||
-          typeof dado.escopo !== "string" || dado.escopo.length > 90 ||
-          typeof dado.origem !== "string" || dado.origem.length > 120) continue;
+      if (typeof dado["at"] !== "string" || !Number.isFinite(Date.parse(dado["at"] as string)) ||
+          Date.parse(dado["at"] as string) > Date.now() + 60_000 ||
+          typeof dado["detalhe"] !== "string" || (dado["detalhe"] as string).length > 140 ||
+          typeof dado["escopo"] !== "string" || (dado["escopo"] as string).length > 90 ||
+          typeof dado["origem"] !== "string" || (dado["origem"] as string).length > 120) continue;
       out[chave] = {
-        at: dado.at, detalhe: dado.detalhe,
-        escopo: dado.escopo, origem: dado.origem,
+        at: dado["at"] as string, detalhe: dado["detalhe"] as string,
+        escopo: dado["escopo"] as string, origem: dado["origem"] as string,
       };
     }
     return out;
@@ -113,7 +113,7 @@ function novasProvasVerdes(d: EstadoCentralDark, iso: string): HistoricoSinais {
   }
   if (d.apiHealth === "PASS" && d.apiHealthHttp === 200) {
     proven.api = {
-      at: d.apiHealthMedidoEm || iso,
+      at: iso,
       detalhe: "GET /health → HTTP 200 + resposta identificada",
       escopo: "APENAS ROTA /health · não comprova todas as funções",
       origem: "Sensor API CentralDark do servidor",
@@ -132,7 +132,7 @@ function CartaoDuplaFace({
   sinal, anterior, virado, alternar,
 }: {
   sinal: SinalVisivel;
-  anterior?: RegistroVerde;
+  anterior?: RegistroVerde | undefined;
   virado: boolean;
   alternar: () => void;
 }) {
@@ -325,7 +325,7 @@ export function StatusPanel() {
       rotulo: d?.apiHealth === "PASS" ? "ROTA /HEALTH OK"
         : d?.apiHealth === "FAIL" ? "HEALTH FALHOU" : "HEALTH NÃO COMPROVADO",
       detalhe: "HTTP " + (d?.apiHealthHttp ?? "?") + " · /health · não atesta tudo",
-      origem: d?.apiHealthFonte ?? "API CentralDark",
+      origem: "API CentralDark · /health",
       gatilho: "HTTP 200 não atesta tudo."
     },
   ];
