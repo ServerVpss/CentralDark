@@ -1232,3 +1232,38 @@ Owner visual REUSE: `apps/instinto-superior/src/components/central/DesignCenter.
 **Execução desta medição:** somente diagnóstico/readback remoto e atualização documental na fonte GitHub. Nenhum `rm`, `prune`, truncamento de logs, restart de serviço, pull/reset da Casa ou deploy foi executado.
 
 **NEXT_CURSOR:** (1) localizar crescimento real da raiz, identificar cache descartável por owner com contraprova e recuperar espaço de forma não destrutiva; (2) exigir `df` com espaço disponível + `MCP /health=200` estável; (3) corrigir o SSR no owner existente, executar build completo/CSRF/auth/smoke; (4) usar esteira normal de deploy e provar a aba da galeria apenas com login. `NO_DISK_SPACE != ALL_SYSTEM_DOWN`; `SOURCE != DEPLOY != UI_PROVEN`.
+
+
+## 🪬 REGISTRA persistente — ZENDRIVE CLI, Marketplace/Builder e funil único (17/10/2026)
+
+**Intenção vigente:** qualquer agente autorizado (SOL/ChatGPT, Hermes, Codex, outros) deve recuperar a mesma capacidade e seus donos, sem refazer extensão, outro CLI, outro builder/galeria ou duplicar captura; usar o circuito existente e continuar do ponto testado. Chefe solicita que isso permaneça na biblioteca/Builder → **Instinto Superior → Cockpit autenticado → Design Center → Marketplace**, com recibos e limites explícitos.
+
+### OWNERS CANÔNICOS / localização
+
+| Papel | Owner real (fonte GitHub) | Estado comprovado |
+| --- | --- | --- |
+| Extensão VS Code / comando nativo de foco | `skills/vs-code-restore/{src/extension.ts,package.json,SKILL.md}` | versão **0.1.1** na `main` neste readback; comando `centraldark.zendriveCli` registrado, testes históricos de foco/telemetria e instalação local Casa do 15/10 |
+| Evolução extensão e CentralDark Trace | **PR #1830** (v0.1.3 em branch) | PR OPEN em 17/10; VSIX 0.1.3 instalada na Casa segundo receipt do PR, **activation/output/readback não provados**; não confundir v0.1.1 main com v0.1.3 branch/runtime |
+| Catálogo de capacidades na UI | `apps/instinto-superior/src/components/central/DesignCenter.tsx` + `CockpitShell.tsx` | `Design Center → Marketplace`, restrito a `autenticado`, mostra ficha ZENDRIVE CLI, versão/prova histórica, links para owner e PR logs; estado por dispositivo não é medição ao vivo |
+| Builder e capacidades reutilizáveis | `apps/modulos/artifacts-builder` + skill/harness Forja existente; UI pertence ao DesignCenter | reusar, não introduzir segundo Builder nem marketplace paralelo; PRs #1832/#1837 tratam gaveta/catálogo e devem ser reconciliadas antes de alterar consumidores |
+| Telemetria e logs | `K:\TEMP\logs\LOGS-VS-CODE.log` → `scripts/casa/vscode-log-bridge.ps1` → `scripts/vps/ingest-vscode-log.mjs` → `apps/modulos/mcp/src/log-funnel.js` | evento controlado + nativos `cli_focus`, `shell_start`, `shell_end exit=ok` foram recebidos na VPS no 15/10, último offset comprovado `3028322`, sem comandos/saída brutos |
+| Handoff Hermes e provider local | `apps/modulos/HERMES-CORE`, `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py` | Hermes/MCP VPS estavam ativos no último teste; provider `zendrive-chatgpt-local` real e captura ChatGPT autenticada **não provados**; evitar cookies, sessões e confusão Plus/API |
+| Regra global para todos | `AGENTS.md` + `skills/vs-code-restore/SKILL.md` | contrato de intenção → alvo/terminal → foco → comando → readback → receipt → next cursor já publicado na `main` |
+
+### Distinção construir / instalar / conectar / provar
+
+1. **BUILT/SOURCE:** código de galeria e extensão presente na `main`; CLI 0.1.3 mais nova na branch #1830; PR log #1820 encontrada **CLOSED** na pesquisa 17/10 (não inferir MERGED sem merge readback).
+2. **INSTALLED:** 0.1.1 confirmada em 15/10; 0.1.3 confirmada pela execução registrada no PR #1830, sem readback da ativação do Extension Host. Instalação de VSIX na Casa não instala VSIX nos outros computadores nem publica o site.
+3. **CONNECTED:** tubo de metadados Casa → SSH/Tailscale → log-funnel VPS foi confirmado pelos hashes/offsets da fonte e projeções `vscode` no 15/10. Comandos CLI completos e ChatGPT premium como provider API não estão conectados/provados por isso.
+4. **PROVED:** evento de terminal e `exit=ok` chegou; saída/identidade do comando não foi capturada. Interatividade universal, permissão, botões remotos e status atual por dispositivo continuam dependentes de readback próprio.
+5. **REGRESSION:** o contrato global em `AGENTS.md` prevê `apps/instinto-superior/scripts/verify-hud-zone.mjs` e `npm run verify:hud` antes do build. Registro de teste estático/CI não equivale a render/login/SSR vivo.
+
+### BLOQUEADORES medidos e preservação
+
+- Último recibo do cockpit em 16/10 registrou `VITE_EXIT=0` para compilação parcial na Casa, porém `SSR_CYCLE_FIX_BLOCKED: expected one circular bridge, found 0` e HTTP **500** em `/`, `/cockpit`, `/auth`, erro `createServerFn is not a function`. **FULL_BUILD_GATE=FAIL**, não declarar site/galeria publicada ou login E2E.
+- Inventário posterior de VPS informou pressão/ausência de espaço na raiz como bloqueio de testes/deploy; requer nova medição antes de mutação. Sem `rm/prune/reset` automático.
+- Em 17/10, Desktop Commander respondeu **monthly usage reached**, operação pausada; não insistir nem dizer que Casa/VPS estão offline. Apenas essa ferramenta está sem leitura fresca. Fontes/PRs do GitHub continuam acessíveis.
+- Fotos de terminal Bash e evento `PONG_CENTRALDARK_1015` provam envio/execução naquela sessão, não endpoint de provider ao vivo nem estado futuro de cada terminal.
+- Nenhuma atualização documental substitui build, instalação, conexão e contraprova de runtime; manter a mesma galeria, o mesmo funil, as mesmas skills e um escritor por escopo.
+
+**NEXT_CURSOR:** resolver SSR e espaço na VPS sem perda de dados → rodar teste/verifier/build same-HEAD → confirmar auth/CSRF e a aba Marketplace em sessão autenticada → remedir versão/ativação do VSIX e `CentralDark Trace` por extensão instalada → provar handoff real CLI/Hermes e ingestão sem conteúdo sensível → receipt no owner, promoção controlada; `SOURCE != BUILD != INSTALL != CONNECT != PROVE != DEPLOY`.
