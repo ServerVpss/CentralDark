@@ -219,8 +219,7 @@ async function locateVsCodeByPid(): Promise<void> {
   // PID decimal segue separado em argumento do PowerShell.
   const script = [
     '$ErrorActionPreference="Stop"',
-    '$wanted=0',
-    '[void][int]::TryParse($args[0], [ref]$wanted)',
+    '$wanted=' + (pidText ? Number(pidText) : 0),
     '$all=@(Get-CimInstance Win32_Process -ErrorAction Stop)',
     '$index=@{}',
     'foreach($p in $all){$index[[int]$p.ProcessId]=$p}',
@@ -237,7 +236,7 @@ async function locateVsCodeByPid(): Promise<void> {
     '[pscustomobject]@{requestedPid=$wanted;codeProcessCount=$codeCount;windows=$window;parentChain=$chain} | ConvertTo-Json -Depth 6 -Compress'
   ].join('; ');
   await new Promise<void>(resolve => {
-    execFile('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', script, pidText || '0'], {
+    execFile('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', script], {
       timeout: 10000, maxBuffer: 65536, windowsHide: true
     }, (error, stdout) => {
       if (error) {
