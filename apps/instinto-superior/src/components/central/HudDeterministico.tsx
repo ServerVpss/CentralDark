@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useServerFn } from "@tanstack/react-start";
+import { supabase } from "@/integrations/supabase/client";
+import { consultarRegressaoGenesis, dispararRegressaoGenesis } from "@/lib/admin.functions";
 import lineageJson from "../../../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { GavetaForja } from "@/components/central/InfraestruturaSistema";
@@ -112,6 +115,40 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [genesisCopy, setGenesisCopy] = useState<"IDLE" | "COPIED" | "FAILED">("IDLE");
+
+  const lerRegressao = useServerFn(consultarRegressaoGenesis);
+  const dispararRegressao = useServerFn(dispararRegressaoGenesis);
+  const [regressaoBusy, setRegressaoBusy] = useState(false);
+  const [regressaoErro, setRegressaoErro] = useState<string | null>(null);
+  const [regressao, setRegressao] = useState<{
+    state: string; reason: string; mainSha: string | null;
+    workflowSha: string | null; runUrl: string | null;
+    build: string; install: string; connect: string; prove: string;
+    observedAt: string;
+  } | null>(null);
+
+  async function executarRegressaoGenesis(acao: "consultar" | "disparar") {
+    setRegressaoBusy(true);
+    setRegressaoErro(null);
+    try {
+      const { data, error } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+      if (error || !token) {
+        setRegressaoErro("AUTH_REQUIRED · entre como administrador.");
+        return;
+      }
+      const request = { headers: { Authorization: "Bearer " + token } };
+      const receipt = acao === "disparar"
+        ? await dispararRegressao(request)
+        : await lerRegressao(request);
+      setRegressao(receipt);
+    } catch {
+      setRegressaoErro("UNKNOWN · execução ou consulta não comprovada. Verifique o GitHub Actions.");
+    } finally {
+      setRegressaoBusy(false);
+    }
+  }
+
   const [forgeSelected, setForgeSelected] = useState<string | null>(null);
   const [legadoBusca, setLegadoBusca] = useState("");
   const [legadoAba, setLegadoAba] = useState("todos");
@@ -559,6 +596,53 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         <p className="mt-3 text-xs text-muted-foreground">
           Próximos deltas causais: sensores Afterburner, skill-sync E01–E10,
           Fixed Point e autorização dos formulários privados. Manter uma função por owner.
+        </p>
+      </section>
+      <section className="panel p-6" aria-labelledby="cd-genesis-regressoes" data-cd-owner="genesis-regressao">
+        <h3 id="cd-genesis-regressoes" className="text-lg font-semibold">🧪 Gênesis · regressões antes da produção</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Uma suíte canônica no GitHub: verifica owner, notas, nós, build e vizinhos.
+          Puppeteer e Playwright são motores locais distintos; cache instalado não prova browser E2E.
+          Cada falha corrigida exige teste discriminante antes da promoção.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Button type="button" disabled={regressaoBusy} onClick={() => void executarRegressaoGenesis("disparar")}>
+            {regressaoBusy ? "Consultando…" : "▶ Rodar regressões"}
+          </Button>
+          <Button type="button" variant="outline" disabled={regressaoBusy}
+            onClick={() => void executarRegressaoGenesis("consultar")}>Atualizar recibo</Button>
+          <a className="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm text-foreground"
+            href="https://github.com/ServerVpss/CentralDark/actions/workflows/test.yml"
+            target="_blank" rel="noopener noreferrer">Workflow canônico ↗</a>
+        </div>
+        <p role="status" aria-live="polite" className="mt-3 text-xs text-muted-foreground">
+          {regressao ? regressao.state + " · " + regressao.reason : "UNKNOWN · nenhum teste desta sessão consultado"}
+          {regressao ? " · main " + (regressao.mainSha?.slice(0, 12) ?? "?") : ""}
+          {regressao ? " · medido " + regressao.observedAt : ""}
+        </p>
+        {regressaoErro ? <p role="alert" className="mt-2 text-xs text-destructive">{regressaoErro}</p> : null}
+        <dl className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {([
+            ["CONSTRUIR", regressao?.build ?? "UNKNOWN"],
+            ["INSTALAR", regressao?.install ?? "UNPROVEN"],
+            ["CONECTAR", regressao?.connect ?? "UNPROVEN"],
+            ["PROVAR", regressao?.prove ?? "UNPROVEN"],
+          ] as const).map(([titulo, situacao]) => (
+            <div key={titulo} className="rounded-md border border-border bg-card p-3">
+              <dt className="font-mono text-xs text-muted-foreground">{titulo}</dt>
+              <dd className={situacao === "PASS" ? "mt-2 font-mono text-neon-green" :
+                "mt-2 font-mono text-gold"}>{situacao}</dd>
+            </div>
+          ))}
+        </dl>
+        {regressao?.runUrl ? <a href={regressao.runUrl} target="_blank"
+          rel="noopener noreferrer" className="mt-3 inline-block text-xs text-neon-blue underline">
+          Abrir recibo do run
+        </a> : null}
+        <p className="mt-3 text-xs text-muted-foreground">
+          SOURCE_PASS ≠ BUILD_PASS ≠ INSTALLED ≠ CONNECTED ≠ EFFECT_PROVED.
+          Workflow em fila não é PASS. Só Casa e VPS no mesmo SHA com readback
+          autorizam o selo operacional final.
         </p>
       </section>
       <GavetaForja mainShaAtual={estado?.mainSha} />
