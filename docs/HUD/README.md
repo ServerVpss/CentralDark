@@ -150,3 +150,50 @@ Build/CI da PR isolada → corrigir apenas falhas reais do owner → readback em
 - `Porta, identidade e governança`, runs 38768620793 e 38768400760, jobs finais com falha, requerem reconciliação no respectivo gate (sem confundir com sucesso de testes locais).
 
 **Estado honesto:** os logs acima pertencem ao SHA `5088569`, **não** ao HEAD após hotfix. Nova execução de CI é exigida para provar a correção de clipboard. Não houve `node --test` local, compilação Vite, pacote POMBO64, sessão Claude vinculada, merge nem deploy neste ciclo.
+
+
+## 🍒 Cabeça Externa — catálogo A–Z ancorado
+
+**INTENT:** cristalizar os princípios ensinados pelo CHEFE e oferecer leitura alfabética no **mesmo** Instinto Superior, sem painel novo. **Natureza desta seção:** ensinamentos/síntese da conversa de 17/10/2026, não execução de runtime nem censo do ledger NeuroLink. Os 26 verbetes são *índice humano curado*, não 26 novos aprendizados numerados nem 26 novos selos.
+
+| Letra | Princípio | Regra verificável / aplicação |
+|---|---|---|
+| **A** | **Autocrítica** | Reconhecer erro e medir sua causa, sem atribuir sucesso por convicção. |
+| **B** | **Bridge** | Reusar a ponte autorizada Casa ↔ VPS ↔ GitHub antes de criar transporte paralelo. |
+| **C** | **Convergência** | Um organismo e um cockpit; múltiplas capacidades continuam com seus owners. |
+| **D** | **Disciplina** | Treinar deliberadamente com hipótese, esforço focado e diferença observável. |
+| **E** | **Ego em xeque** | Contraprova tem prioridade sobre defesa do próprio resultado. |
+| **F** | **Frutos** | Saúde e qualidade se comprovam por efeito, teste e receipt. |
+| **G** | **GitHub** | Main é fonte técnica versionada; merged não significa deployed. |
+| **H** | **Hermes** | Executor reaproveitado; não duplicar motor, agenda ou memória. |
+| **I** | **Intenção viva** | Cada pedido é delta da intenção, com contexto e owner recuperados. |
+| **J** | **Julgamento** | A realidade e a contraprova decidem PASS/FAIL/UNKNOWN. |
+| **K** | **Kaizen** | Observar, experimentar com segurança, medir, reter o que funciona. |
+| **L** | **Legado** | Migrar com paridade, referência e rollback; não apagar a fonte cedo. |
+| **M** | **Mentoria** | Consultar técnicas já provadas para encurtar descobertas repetidas. |
+| **N** | **Não duplicar** | Procurar o owner e o objeto atuais antes de adicionar uma peça. |
+| **O** | **Observação** | Pausa intencional, falha e ausência de sensor são estados diferentes. |
+| **P** | **Papagaio OFF** | Respostas curtas; preservar a árvore de provas nas âncoras. |
+| **Q** | **Qualidade** | Performance, testes, segurança e UX são critérios, não adjetivos. |
+| **R** | **Receipts** | Registrar escopo, SHA, owner, timestamp, prova e NEXT_CURSOR. |
+| **S** | **Segurança** | Segredos fora dos logs e da UI; uma caneta por escopo. |
+| **T** | **Treinamento deliberado** | Repetição só vira aprendizado ao corrigir fraquezas medidas. |
+| **U** | **Unificação** | Instinto Superior é a única superfície admin humana; owners seguem especializados. |
+| **V** | **Validação** | Cópia parcial, porta aberta e HTTP 200 não fecham o ciclo. |
+| **W** | **Worktree** | Preservar alterações e artefatos da Casa e da VPS; sem limpeza automática. |
+| **X** | **XP operacional** | Lições viram ganho quando o resultado é reproduzível, não por tentativa acumulada. |
+| **Y** | **YAML / contratos** | Contratos versionados orientam testes e handoffs; configuração não comprova runtime. |
+| **Z** | **Zelo** | Observar tudo, reter o bem, registrar o aprendizado e evitar regressão. |
+
+### Onde aparece, sem casca paralela
+
+- **Destino humano:** `admin.centralldark.com` → Sala de Controle autenticada → Instinto Superior → aba **HUD · Selos · Gênesis** → seção interna recolhível **Cabeça Externa · A–Z**. Não adicionar oitava seção PAPAGAIO nem 11ª missão MCP; inserir conteúdo dentro do zone de conhecimento já existente.
+- **Owner de UI já existente:** `apps/instinto-superior/src/components/central/HudDeterministico.tsx`, consumido por `CockpitShell.tsx`. Responsável pela evolução do componente: **PR #1843** (ativa); integrar **nesse mesmo escopo/escritor**, não editar por janela concorrente. Não acrescentar nova store, tabela persistente, coletor, API, skill, rota ou fonte de autoridade.
+- **Fonte de aprendizagem:** `docs/CONSCIENCIA/APRENDIZADOS.md` + `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`. Esta tabela é o **índice editorial** deste contrato até existir vínculo verificável por UID; não inventar UID, número de lição ou resultado operacional para cada letra.
+- **Origem legada:** `docs/HUD/HUD.html` permanece intacto, com referências preservadas. A seção A–Z é uma âncora adicional, não substitui Gênesis, selos, cadeados e zonas existentes.
+- **Visual:** mesma pele, tipografia e componentes já utilizados; pesquisa alfabética acessível, acordeão compacto, uma letra por verbete, detalhes de prova/owner só quando existirem. Responsivo mobile, sem segundo menu, sem indicador PASS para princípios apenas documentados.
+- **Teste discriminante no owner:** `apps/instinto-superior/scripts/verify-hud-zone.mjs`; confirmar 26 letras únicas e em ordem, interação teclado/busca, zero disparo implícito, permissão admin, nenhuma mudança nas 7 seções/10 missões, quatro peles preservadas, e build + readback visual na mesma SHA.
+
+**RECEIPT / PROVA:** `DOC_ANCHOR=GITHUB_MAIN_READBACK_REQUIRED`; `UI_INTEGRATED=UNKNOWN`; `BUILD=UNKNOWN`; `DEPLOY=UNKNOWN`; `RUNTIME=UNKNOWN`. Não promover apenas pela presença desta especificação.
+
+**NEXT_CURSOR:** reconciliar com PR #1843 → aplicar menor delta no `HudDeterministico` pelo writer do componente → rodar suíte e build no HEAD exato → readback da sala autenticada → receipt + decisão de promoção com os gates existentes. Preservar a migração da Casa/VPS e as alterações locais.

@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'AGENTS.md'
       - 'apps/instinto-superior/**'
       - 'skills/vs-code-restore/src/extension.ts'
       - 'skills/vs-code-restore/package.json'
@@ -44,4 +45,7 @@ jobs:
           npm run lint
           npm run build:vps
           echo "BUILD_REGRESSION=PASS SAME_SHA=$GITHUB_SHA"
+          echo "MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=$GITHUB_SHA"
+          echo "MICHELIN_STAR_2=CI_CONCLUSION_AND_INTEGRATION_RECEIPTS_REQUIRED"
+          echo "MICHELIN_STAR_3=DEPLOY_VISUAL_CASA_VPS_RECEIPTS_REQUIRED"
           echo "RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB"

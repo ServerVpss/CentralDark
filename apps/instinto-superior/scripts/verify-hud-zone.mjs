@@ -448,4 +448,110 @@ test("Gênesis aciona regressão via Admin e nunca confunde workflow com deploy"
     source.includes('install: "UNPROVEN", connect: "UNPROVEN", prove: "UNPROVEN"');
   assert.equal(noFakePass(admin), true);
   assert.equal(noFakePass(admin.replace('install: "UNPROVEN", connect: "UNPROVEN"', 'install: "PASS", connect: "UNPROVEN"')), false);
+/**
+ * 🧬 Michelin (metáfora de qualidade, sem afiliação com o guia):
+ * 1 estrela = fonte/build íntegros; 2 = CI + integração no MESMO SHA;
+ * 3 = runtime autenticado, Casa↔VPS e contraprova VISUAL no mesmo SHA.
+ * Evidência não recebida NÃO é sucesso. O teste local só valida o contrato.
+ */
+function avaliarTresEstrelasMichelin(prova, head, agora) {
+  const shaValido = s => typeof s === "string" && /^[a-f0-9]{40}$/.test(s);
+  if (!shaValido(head)) return { estrelas: 0, pendencias: ["MAIN_SHA_NAO_MEDIDO"] };
+  const mesmaVersao = item => item?.head_sha === head;
+  const passou = item => mesmaVersao(item) && item?.state === "PASS";
+  const recente = item => {
+    const ts = Date.parse(item?.measured_at ?? "");
+    return Number.isFinite(ts) && ts <= agora && agora - ts <= 3_600_000;
+  };
+  const pendencias = [];
+  let estrelas = 0;
+
+  if (!(passou(prova?.source) &&
+    prova.source?.unit_tests === "PASS" &&
+    prova.source?.lint === "PASS" &&
+    prova.source?.build === "PASS" &&
+    prova.source?.authenticated_boundary === "PASS")) {
+    pendencias.push("ESTRELA_1_SOURCE_BUILD_AUTH");
+    return { estrelas, pendencias };
+  }
+  estrelas = 1;
+
+  if (!(mesmaVersao(prova?.ci) &&
+    prova.ci?.status === "completed" &&
+    prova.ci?.conclusion === "success" &&
+    passou(prova?.integration) &&
+    prova.integration?.idempotency === "PASS" &&
+    prova.integration?.no_duplicate_owner === true)) {
+    pendencias.push("ESTRELA_2_CI_INTEGRATION_SAME_SHA");
+    return { estrelas, pendencias };
+  }
+  estrelas = 2;
+
+  if (!(passou(prova?.deploy) && recente(prova.deploy) &&
+    passou(prova?.visual) && recente(prova.visual) &&
+    prova.visual?.authenticated === true &&
+    passou(prova?.casa_vps) && recente(prova.casa_vps) &&
+    passou(prova?.vscode_logs) && recente(prova.vscode_logs) &&
+    typeof prova?.visual?.receipt_id === "string" && !!prova.visual.receipt_id &&
+    typeof prova?.casa_vps?.receipt_id === "string" && !!prova.casa_vps.receipt_id &&
+    typeof prova?.vscode_logs?.receipt_id === "string" && !!prova.vscode_logs.receipt_id)) {
+    pendencias.push("ESTRELA_3_DEPLOY_VISUAL_CASA_VPS_RECEIPTS");
+    return { estrelas, pendencias };
+  }
+  return { estrelas: 3, pendencias };
+}
+
+test("🧬 padrão Michelin 3 estrelas: mesmo SHA, regressão e runtime sem falso PASS", () => {
+  const head = "a".repeat(40);
+  const agora = Date.parse("2026-10-17T05:00:00Z");
+  const medir = p => avaliarTresEstrelasMichelin(p, head, agora);
+  const fonte = { head_sha: head, state: "PASS", unit_tests: "PASS",
+    lint: "PASS", build: "PASS", authenticated_boundary: "PASS" };
+  const ci = { head_sha: head, status: "completed", conclusion: "success" };
+  const integration = { head_sha: head, state: "PASS",
+    idempotency: "PASS", no_duplicate_owner: true };
+  const evento = { head_sha: head, state: "PASS",
+    measured_at: "2026-10-17T04:45:00Z", receipt_id: "receipt-test" };
+  const completa = { source: fonte, ci, integration,
+    deploy: evento, casa_vps: evento, vscode_logs: evento,
+    visual: { ...evento, authenticated: true } };
+  assert.equal(medir({}).estrelas, 0);
+  assert.equal(avaliarTresEstrelasMichelin(completa, null, agora).estrelas, 0);
+  assert.equal(medir({ source: fonte }).estrelas, 1);
+  assert.equal(medir({ source: fonte, ci: { ...ci, conclusion: "cancelled" }, integration }).estrelas, 1);
+  assert.equal(medir({ source: fonte, ci: { ...ci, head_sha: "b".repeat(40) }, integration }).estrelas, 1);
+  assert.equal(medir({ source: fonte, ci, integration }).estrelas, 2);
+  assert.equal(medir(completa).estrelas, 3);
+  assert.equal(medir({ ...completa, deploy: { ...evento, measured_at: "2026-10-15T04:00:00Z" } }).estrelas, 2);
+  assert.equal(medir({ ...completa, visual: { ...evento, authenticated: false } }).estrelas, 2);
+  assert.equal(medir({ ...completa, vscode_logs: { ...evento, state: "UNKNOWN" } }).estrelas, 2);
+  assert.equal(medir({ ...completa, casa_vps: { ...evento, head_sha: "b".repeat(40) } }).estrelas, 2);
+  assert.equal(medir({ ...completa, visual: { ...evento, authenticated: true, receipt_id: "" } }).estrelas, 2);
+  assert.equal(medir({ ...completa, source: { ...fonte, build: "UNKNOWN" } }).estrelas, 0);
+  assert.equal(medir({ ...completa, ci: { ...ci, status: "queued" } }).estrelas, 1);
+  // Sem recibos operacionais no CI: nunca anunciar três estrelas por este teste isolado.
+  console.log("MICHELIN_3_ESTRELAS=CRITERIOS_TESTADOS; CERTIFICACAO_RUNTIME=NAO_EMITIDA");
+});
+
+
+test("🧬 Michelin aparece no HUD único sem autocertificação ou workflow paralelo", () => {
+  const hud = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+  const workflow = read(".github/workflows/test.yml");
+  const agents = read("AGENTS.md");
+  assert.equal(hud.split('id="cd-michelin-3-estrelas"').length - 1, 1);
+  for (const label of ["☆ 1 · Construir", "☆☆ 2 · Integrar", "☆☆☆ 3 · Provar",
+    "ESTRELA NÃO ATESTADA", "SEM CERTIFICAÇÃO RUNTIME NESTA CONSULTA",
+    "NEXT_CURSOR", "mesmo SHA"]) {
+    assert.ok(hud.includes(label), "HUD Michelin sem critério: " + label);
+  }
+  assert.ok(hud.includes("estado?.build"));
+  assert.ok(hud.includes("estado?.actions"));
+  assert.ok(hud.includes("estado?.deploy"));
+  assert.ok(workflow.includes('MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=$GITHUB_SHA'));
+  assert.ok(workflow.includes("MICHELIN_STAR_2=CI_CONCLUSION_AND_INTEGRATION_RECEIPTS_REQUIRED"));
+  assert.ok(workflow.includes("MICHELIN_STAR_3=DEPLOY_VISUAL_CASA_VPS_RECEIPTS_REQUIRED"));
+  assert.ok(workflow.indexOf("npm run build:vps") < workflow.indexOf("MICHELIN_STAR_1="));
+  assert.ok(agents.includes("Michelin — três estrelas de qualidade comprovada"));
+  assert.ok(agents.includes("MERGED != DEPLOYED"));
+  assert.ok(!hud.includes("MICHELIN_AUTO_3_STARS=PASS"));
 });

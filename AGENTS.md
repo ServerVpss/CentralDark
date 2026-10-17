@@ -2413,3 +2413,18 @@ Ao encontrar ganho verificável, dizer **🍒🎰🎲 Outra melhoria antecipada*
 **Automação causal:** no Instinto Superior usar `apps/instinto-superior/scripts/verify-hud-zone.mjs` (testes de Marketplace/ZENDRIVE, ownership e autorização), `npm run verify:hud` automaticamente antes de `npm run build`, `build:dev` e `build:vps`, e o workflow já existente `.github/workflows/test.yml` para prova de regressão de source e build. Teste estático/CI não comprova instalação de VSIX na Casa nem sessão web autenticada. Fazer readback real desses destinos pelo runtime autorizado antes de selar o circuito. **Falha de acesso/quota da Casa bloqueia somente `CASA_INSTALL/CONNECT/PROVE`, nunca inventar status verde ou duplicar coletor.**
 
 **Recibo mínimo:** `OWNER|SOURCE_SHA|BUILD_SHA|INSTALLED_VERSION|CONNECTED_ROUTE|READBACK|REGRESSION_RESULT|OBSERVED_AT|NEXT_CURSOR`. Uma fonte com estado não medido deve permanecer `UNKNOWN` e não virar lançamento, badge verde nem indicador agregado. Integrar ao HUD/log-funnel existentes sem novo sistema de observabilidade.
+
+
+## 🧬 Michelin — três estrelas de qualidade comprovada
+
+**Metáfora de excelência técnica, sem afiliação ou selo oficial do Guia Michelin.** O CHEFE pede a CentralDark para avaliar rigor de qualidade, não distribuir estrelas por aparência. É **camada de critérios** aplicada ao contrato já existente `BUILD → INSTALL → CONNECT → PROVE`, não motor, serviço, workflow, skill ou HUD novo. Owner do teste: `apps/instinto-superior/scripts/verify-hud-zone.mjs`; owner visual: a Central de Integridade do mesmo `HudDeterministico.tsx`; CI: `.github/workflows/test.yml`; provas materiais seguem os owners e o log-funnel existentes.
+
+- **⭐ 1 estrela — construção excelente:** testes, lint, build, perímetro autenticado e owner existentes em `PASS`, todos no SHA exato e em receipt da etapa. `SOURCE_TEST_PASSED` isolado **não** equivale a estrela da instalação.
+- **⭐⭐ 2 estrelas — conexão reproduzível:** primeira estrela + CI da revisão exata `status=completed, conclusion=success`, integração de fato provada, idempotência e não duplicação do executor/coletor. `cancelled`, `queued`, `skipped` e `mergeable` jamais valem sucesso.
+- **⭐⭐⭐ 3 estrelas — experiência comprovada:** duas estrelas + deploy no mesmo SHA, tela autenticada comprovada visualmente, ponte Casa ↔ VPS e logs recebidos no destino com recibos distintos, verificações recentes (janela de referência de até 1 h) e estado `PASS` **em cada escopo**. `HTTP 200`, instalação local histórica e texto de relatório não substituem recibos.
+
+**Previsão conservadora:** sem `MAIN_SHA` ou sem prova de uma etapa, o placar de **estrelas certificadas nessa medição** permanece abaixo da etapa; falha de quota remota bloqueia apenas a dependência da Casa. Nunca exibir três estrelas como obtidas apenas por passar testes unitários sobre cenários simulados. O teste de critérios e sua própria execução são provas diferentes; o projeto não é autorizado a autocertificar o runtime.
+
+**Aplicação automática:** `npm run verify:hud` e `.github/workflows/test.yml` devem reprovar contratos inseguros e emitir recibo `MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=...` **somente após** testes, lint e build reais. O workflow não tem autoridade para emitir estrelas 2/3 sozinho: exigir consulta a CI concluída e readbacks vivos externos. Explicar claramente o estado, o escopo do impedimento e `NEXT_CURSOR` na Central de Integridade.
+
+A contagem de estrelas é **por entrega e janela de evidência**, nunca atributo permanente de todo o organismo CentralDark.
