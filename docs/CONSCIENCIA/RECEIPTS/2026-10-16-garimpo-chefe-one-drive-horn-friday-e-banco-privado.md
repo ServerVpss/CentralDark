@@ -65,3 +65,17 @@ GLOBAL_FIXED_POINT=NOT_CLAIMED
 **NEXT_CURSOR:** próximas fontes do CHEFE devem ser comparadas por hash/owner/source/consumer; quando trouxerem informação nova, anotar o menor delta no mesmo contrato, sem copiar dados privados nem converter argumento teórico em PASS de runtime. Se o CHEFE pedir ingestão privada de chats/vault, exigir primeiro rota autorizada e contrato de privacidade, sem colocar o SQLite no GitHub.
 
 **Relações:** PR #1838 = owner do HUD (somente projeção); PR #1837 = workshop/catálogo de skills (não owner deste corpus); nenhum PR existente aberto foi encontrado para esse garimpo documental, por isso registro neste escopo separado apenas para revisão, sem merge/deploy.
+
+
+## 5. Continuidade — materiais anteriores recebidos nesta mesma investigação
+
+Este recibo dá continuidade ao garimpo já feito na conversa. As fontes abaixo NÃO foram anexadas ao commit e NÃO foram reabertas byte a byte nesta operação. São vínculos de inventário anteriores, sujeitos a reconciliação quando os arquivos retornarem como fonte montada:
+
+| Material anterior | Relação com a main já levantada | Próximo tratamento |
+|---|---|---|
+| `github-app(1).yml` / `github-app.yml` antigo | Declarações de SOUL/memória/orquestração; `SOUL-SOL.md`, `RULES.md`, `AGENTS.md` permanecem owners. Não tratar YAML antigo como app GitHub instalado. | Comparar apenas cláusulas que mudam efeito; sem nova SOUL. |
+| `secret-map-redacted.json` e `.txt` | Inventário de nomes de variáveis e origens; não prova autorização/validade de provedores. Os dois formatos foram apontados como representação de levantamento anterior. | **PRIVATE_METADATA**: nunca publicar valores, tokens, caminhos completos de segredos nem copiá-los ao Cockpit. |
+| `Desktop(1).zip` | Garimpo prévio apontou artefatos repetidos, snapshots de interface/VS Code e relatórios históricos de túnel MCP; são candidatos a teste no `computer-use`/bridge existentes, não novos runtimes. | Revisar somente deltas e fingerprints necessários, sem importar arquivos `.claude.json`, sessões ou tokens. |
+| Capturas de Screenpipe/Casa/Sync Center | Histórico de HTTP 200 na porta local 3030 e gaps de identidade de health, autorização, DUAL CONTA e UI; owners de sensor/HUD já existem. | Fonte nova de console pode provar escopo específico; nunca extrapolar para deploy global. |
+
+**Separação:** histórico do chat e relatórios anteriores != releitura presente do binário. Os cinco hashes da seção 1 foram medidos dos arquivos desta remessa. O resultado desta PR continua limitado a documentação sanitizada.
