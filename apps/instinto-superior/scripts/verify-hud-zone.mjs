@@ -532,7 +532,7 @@ test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
     'screenpipe: screenpipeCasa.estado', 'screenpipeVps: screenpipeVps.estado',
     'screenpipeCasaMedidoEm:', 'screenpipeVpsMedidoEm:',
     'screenpipeFonte: screenpipeCasaFonte', 'screenpipeVpsFonte,',
-    'screenpipeIdentificado(screenpipe)', 'dependencies["ffmpeg"]',
+    'screenpipeIdentificado(screenpipe)', 'dependencias["ffmpeg"]',
     'apiHealthFonte:', 'apiHealthServico:', 'apiHealthMedidoEm:',
     'desktopVps: "UNKNOWN"',
   ]) {
