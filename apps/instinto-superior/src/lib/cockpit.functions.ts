@@ -218,7 +218,11 @@ async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
         ? "FAIL"
         : dados?.["ok"] === true || status === "healthy"
           ? "PASS"
-          : "RUNNING";
+          : casaOnly && resposta.status === 200 &&
+            resposta.headers.get("content-type")?.includes("text/html")
+            // O HTML 200 comprova APENAS a página acessível, não login ou backend.
+            ? "PASS"
+            : "RUNNING";
     return { estado, httpStatus: resposta.status, erro: null, dados };
   } catch (erro) {
     return {
