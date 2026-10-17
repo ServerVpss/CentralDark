@@ -1,7 +1,7 @@
 ---
 title: "Diagramas do Sistema CentralDark"
 date: 2026-06-29
-updated: 2026-10-06
+updated: 2026-10-16
 status: "DERIVED_VIEW"
 tags: ["diagrama", "arquitetura", "fluxo", "mermaid", "sistema"]
 category: M-Mapa-Sistema
@@ -582,4 +582,71 @@ flowchart TD
 Owner da regra visual: `docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md`.
 Herança operacional para agentes: `AGENTS.md#preservação-visual-do-padrão-manifesto-do-chefe`.
 
+---
 
+## 10. Obsidian, Harness e MCP — convergência da casca e da memória
+
+> DELTA documental de 2026-10-16. Este bloco pertence ao mesmo **DIAGRAMAS-CENTRALDARK.md**, dentro de `docs/BRAIN`: visualização derivada para Obsidian/Grafo Vivo, não segundo cérebro, segundo cockpit, segundo MCP, nem autorização automática de execução.
+> Proveniência: `docs/ARQUITETURA/INSTINTO-SUPERIOR-HARNESS-MODULOS.md` (PR #1832), `apps/instinto-superior/config/harness-module-registry.json` (PR #1832), `apps/modulos/obsidian-plugin-grafo-vivo/src/main.ts`, `apps/modulos/mcp/src/tools/core/mcp-admin.js`, `scripts/memory-linker/README.md`, `docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md` e `scripts/casa/sync-hermes-obsidian.ps1`.
+
+### 10.1 Um coração, casca mutável, memória contínua
+
+```mermaid
+flowchart TD
+    CHEFE["CHEFE — intenção, limites e autorização"] --> SOL["SOL/JARVIS — coordenação e reconciliação"]
+    SOL --> COCKPIT["Instinto Superior — CockpitShell / casca visual"]
+    COCKPIT --> REG["HarnessModuleRegistry — catálogo de capacidades"]
+    REG --> HERMES["Hermes existente — executor e continuidade"]
+    REG --> ENGINES["Harnesses e motores existentes — Claude, VS Code, DeepSeek, ChatGPT, Figma"]
+    REG --> OBS["Obsidian — Grafo Vivo 2D/3D + notas do vault"]
+    REG --> MCP["MCP CentralDark — dispatcher e políticas do owner"]
+    MCP --> CLIENTS["Clientes/adapters MCP autorizados — descoberta de capacidades"]
+    CLIENTS --> SERVERS["MCPs existentes — tools, resources e prompts"]
+    OBS --> VAULT["Vault físico da Casa — memória privada + notas canônicas projetadas"]
+    VAULT --> BRIDGE["Sincronização com hash/guards — somente quando comprovada"]
+    BRIDGE --> BRAIN["docs/BRAIN — memória técnica versionada no Git"]
+    BRAIN --> PROOF["Teste, contraprova, receipt, HEAD e leitura de volta"]
+    HERMES --> PROOF
+    ENGINES --> PROOF
+    SERVERS --> PROOF
+    PROOF --> CURRENT["Estado real — API/runtime; UNKNOWN não é PASS"]
+    CURRENT --> COCKPIT
+    CURRENT --> SOL
+```
+
+**Semântica:** o Harness orquestra outros harnesses pela resolução de `owner → transporte → sessão → capacidade → execução → readback`, sem copiar motores. A camada MCP central pode **rotear para** outros servidores MCP **somente quando** houver cliente/adaptador compatível, autorização e readback comprovados. No protocolo MCP, o host coordena clientes e cada cliente mantém conexão com seu servidor; não confundir anúncio em catálogo com orquestração funcional.
+
+**Obsidian:** é interface e cofre da memória persistente, com Grafo Vivo; não revoga a autoridade do GitHub/owners canônicos. Informação privada permanece local. Uma nota não executa comandos nem promove verdade. O Memory Linker, seus fingerprints e a MetaLupa continuam responsáveis pelo ciclo de descoberta/contraprova; não criar mecanismo concorrente.
+
+**Metamorfose da casca:** preservar a capacidade original antes de substituir motores emprestados: `inventário → adapter/owner existente → selftest → side-by-side → contraprova → switch condicionado → readback → recibo → rollback last-good`. `CASCA_PRÓPRIA` é objetivo incremental, **não** prova atual de independência dos motores.
+
+### 10.2 Cerejas localizadas e selos que ainda faltam
+
+| Capacidade / cereja | Evidência localizada | Estado da afirmação |
+|---|---|---|
+| Obsidian Grafo Vivo 2D/3D e hooks de nota | `apps/modulos/obsidian-plugin-grafo-vivo/src/main.ts` e `README.md` | **SOURCE_PROVED** no Git; plugin atualmente carregado no vault **UNKNOWN** |
+| Obsidian como capacidade no cockpit | `apps/instinto-superior/config/harness-module-registry.json` + `HarnessModuleRegistry.tsx` da PR #1832 | **BRANCH_PROVED**; build/deploy, botão funcional e sessão **UNKNOWN** |
+| Cockpit Instinto Superior / quatro peles / migração HUD | `CockpitShell.tsx`, `DesignCenter`, `HudDeterministico.tsx`, PR #1832 | **PARCIAL**; paridade integral do HUD e quatro peles no runtime não comprovadas nesta medição |
+| Hermes, VS Code, DeepSeek, Figma | owners nomeados no registro Harness da PR #1832 | **CATALOG_PROVED**; disponibilidade simultânea e readback de cada módulo exigem prova própria |
+| MCP como dispatcher único | `apps/modulos/mcp/src/tools/core/mcp-admin.js` | **SOURCE_PROVED**; agregação real de outros servidores MCP **UNKNOWN** |
+| Memory Linker, reconhecimento de padrões e aprendizado | `scripts/memory-linker/README.md` | **SOURCE_PROVED**; promoção autônoma sem gates não autorizada |
+| Resolvedor autônomo de PR | `scripts/dependabot/resolve-conflicts.sh` e seus helpers | **SOURCE_PROVED**; resolução E2E dos conflitos 1793/1805 **UNKNOWN** aqui |
+| Desktop Commander, Tailscale, CentralDark.exe e Forja da Casa | owners/documentos históricos e inventários anteriores | **HISTÓRICO**; canal Casa/Windows e estado vivo individual ainda exigem readback |
+| Vault e sincronização Obsidian ↔ docs/BRAIN ↔ GitHub | `docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md` e `scripts/casa/sync-hermes-obsidian.ps1` | **CONTRATO_PROVED**; sync bidirecional físico em 2026-10-16 **UNKNOWN** |
+
+**Observação física histórica:** `K:\CentralDark\.obsidian` e `K:\CentralDark\HUD.html` foram observados na Casa em 11/10/2026, segundo o owner. A migração de `F:`/`E:` para `K:` e a instalação atual **não** foram revalidadas. O script `sync-hermes-obsidian.ps1` exige `RepoRoot` e `VaultRoot` comprovados e bloqueia worktree suja; não usar rota legada nem forçar propagação.
+
+### 10.3 Navegação nativa do Obsidian e condição de selo
+
+Esta própria nota usa blocos `mermaid`, renderizáveis em Markdown no Obsidian. Navegação pelo link `[[DIAGRAMAS-CENTRALDARK]]`; a presença no Git/PR **não** é prova de que a nota já foi aberta/sincronizada no vault Windows.
+
+```text
+DIAGRAMA_COMMITADO_NO_GIT != NOTA_PRESENTE_NO_VAULT
+NOTA_ABERTA_NO_OBSIDIAN != MCP_ROTEANDO_OUTROS_SERVIDORES
+HARNESS_CATALOGADO != HARNESS_FUNCIONAL
+HISTORICO != CURRENT
+DESCOBERTA != SELO
+ONE_WRITER_PER_SCOPE=true
+ONE_SYSTEM_ONLY=true
+NEXT_CURSOR=ler notas/manifest no vault da Casa, checar plugin e diagramas no Obsidian, testar rotas MCP/harness e registrar receipt com HEAD + readback
+```
