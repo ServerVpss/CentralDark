@@ -504,11 +504,29 @@ function loadSecretFromFiles(envKeys, files) {
   return "";
 }
 
+// A fonte canonica do Tailscale e o vault da VPS. Um env antigo no processo
+// nao pode sobrepor silenciosamente a credencial atual desse arquivo.
+function chooseTailscaleKey({ vault = {}, mcp = {}, env = {} } = {}) {
+  for (const source of [vault, mcp, env]) {
+    for (const key of ["TAILSCALE_API_KEY", "TS_API_KEY"]) {
+      const value = source[key];
+      if (typeof value === "string" && value.trim()) return value.trim();
+    }
+  }
+  return "";
+}
+
 function loadTailscaleKey() {
-  return loadSecretFromFiles(
-    ["TAILSCALE_API_KEY", "TS_API_KEY"],
-    ["/root/CentralDark/secrets/tailscale.env", "/root/CentralDark/apps/modulos/mcp/.env"],
-  );
+  return chooseTailscaleKey({
+    vault: parseEnvFile("/root/CentralDark/secrets/tailscale.env"),
+    mcp: parseEnvFile("/root/CentralDark/apps/modulos/mcp/.env"),
+    env: process.env,
+  });
+}
+
+function tailscaleKeyKind(token) {
+  if (/^tskey-(auth|client|webhook|scim)-/i.test(token)) return "NOT_API_ACCESS_TOKEN";
+  return /^tskey-api-/i.test(token) ? "API_ACCESS_TOKEN" : "UNKNOWN_FORMAT";
 }
 
 function loadBuildkiteToken() {
@@ -530,6 +548,10 @@ async function providerHeaders(provider, requestId = randomUUID()) {
   if (provider === "tailscale") {
     const token = loadTailscaleKey();
     if (!token) throw new Error("TAILSCALE_CREDENTIALS_MISSING");
+    if (tailscaleKeyKind(token) === "NOT_API_ACCESS_TOKEN") {
+      throw new Error("TAILSCALE_WRONG_CREDENTIAL_KIND");
+    }
+    // Bearer e suportado oficialmente para API access tokens (tskey-api-*).
     return { Authorization: `Bearer ${token}`, Accept: "application/json" };
   }
   if (provider === "buildkite") {
@@ -1159,4 +1181,6 @@ export const __test = Object.freeze({
   actorFingerprint,
   sanitizeError,
   summarizeLocalTailnet,
+  chooseTailscaleKey,
+  tailscaleKeyKind,
 });
