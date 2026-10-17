@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
 test("agent observability ingere Grok/Hermes e extrai delegacao comprovada", async () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-agentobs-"));
@@ -193,4 +195,38 @@ test("agent observability ingere Grok/Hermes e extrai delegacao comprovada", asy
   const allText = fs.readFileSync(path.join(logs, "events", `${day}.jsonl`), "utf8");
   assert.doesNotMatch(allText, /abcdefghijklmnopqrstuvwxyz0123456789/);
   assert.match(allText, /Bearer \[REDACTED\]/);
+});
+
+
+test("Playwright Casa metadata travels through the existing SSH log funnel", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-browser-probe-"));
+  try {
+    const payload = {
+      source: "LOGS-VS-CODE.log", epoch: "2026-10-17T04:00:00",
+      route: "tailscale", from_offset: 0, to_offset: 0, signals: [],
+      playwright: { cache_state: "FILES_PRESENT", revision: "1228",
+        runtime_state: "PROCESS_OBSERVED", process_count: 1, extra: "DROP_ME" },
+    };
+    const run = (data) => spawnSync(process.execPath,
+      ["scripts/vps/ingest-vscode-log.mjs"], {
+        cwd: path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../.."),
+        env: { ...process.env, CENTRALDARK_LOG_ROOT: root },
+        input: JSON.stringify(data), encoding: "utf8",
+      });
+    const accepted = run(payload);
+    assert.equal(accepted.status, 0, accepted.stderr);
+    const folder = path.join(root, "events");
+    const rows = fs.readFileSync(path.join(folder, fs.readdirSync(folder)[0]), "utf8")
+      .trim().split("\n").map(JSON.parse);
+    const observed = rows.at(-1).data.playwright;
+    assert.equal(observed.revision, "1228");
+    assert.equal(observed.process_count, 1);
+    assert.equal(observed.automation_roundtrip, "UNPROVEN");
+    assert.equal(Object.hasOwn(observed, "extra"), false);
+    const invalid = run({ ...payload, playwright: { ...payload.playwright, process_count: -1 } });
+    assert.notEqual(invalid.status, 0);
+    assert.match(invalid.stderr, /invalid_playwright_probe/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
 });

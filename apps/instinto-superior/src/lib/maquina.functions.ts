@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { statfs } from "node:fs/promises";
+import { hostname, platform } from "node:os";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { apiBase, type Estado } from "@/lib/cockpit.functions";
 
@@ -29,6 +31,20 @@ export type MaquinaViva = {
   cpu: { percentual: number | null; chave: string | null };
   memoria: { percentual: number | null; chave: string | null };
   carga: number[] | null;
+  discoServidor: {
+    estado: Estado;
+    host: string | null;
+    hostVpsConfirmado: boolean;
+    pontoMontagem: "/";
+    totalBytes: number | null;
+    usadoBytes: number | null;
+    disponivelBytes: number | null;
+    reservadoBytes: number | null;
+    percentualUsado: number | null;
+    medidoEm: string;
+    erro: string | null;
+    fonte: string;
+  };
   frescor: { idadeSeg: number | null; fresco: boolean | null; medidoPeloOwner: string | null };
 };
 
@@ -105,6 +121,50 @@ function percentual(a: { valor: number; chave: string } | null) {
   return { percentual: Math.max(0, Math.min(100, Math.round(p * 10) / 10)), chave: a.chave };
 }
 
+// Disco medido no MESMO processo servidor autenticado do cockpit.
+// Não tratar um host SSR remoto/container como a VPS sem identidade comprovada.
+// Nenhuma varredura, limpeza ou escrita no filesystem.
+async function medirDiscoServidor(): Promise<MaquinaViva["discoServidor"]> {
+  const medidoEm = new Date().toISOString();
+  const base = {
+    estado: "UNKNOWN" as Estado,
+    host: null as string | null,
+    hostVpsConfirmado: false,
+    pontoMontagem: "/" as const,
+    totalBytes: null as number | null,
+    usadoBytes: null as number | null,
+    disponivelBytes: null as number | null,
+    reservadoBytes: null as number | null,
+    percentualUsado: null as number | null,
+    medidoEm,
+    erro: null as string | null,
+    fonte: "statfs('/') · processo SSR autenticado",
+  };
+  if (platform() !== "linux") return { ...base, erro: "Servidor não é Linux" };
+  try {
+    const host = hostname();
+    const hostVpsConfirmado = /^(centraldark-os|vmi3256920)(?:[.].*)?$/i.test(host);
+    const disco = await statfs("/", { bigint: true });
+    const total = Number(disco.blocks * disco.bsize);
+    const livreFisico = Number(disco.bfree * disco.bsize);
+    const disponivel = Number(disco.bavail * disco.bsize);
+    if (![total, livreFisico, disponivel].every(Number.isSafeInteger) ||
+        total <= 0 || livreFisico < 0 || disponivel < 0 ||
+        livreFisico > total || disponivel > livreFisico) {
+      return { ...base, host, hostVpsConfirmado, erro: "Contadores statfs inválidos" };
+    }
+    const usado = total - livreFisico;
+    return {
+      ...base, estado: "PASS", host, hostVpsConfirmado,
+      totalBytes: total, usadoBytes: usado, disponivelBytes: disponivel,
+      reservadoBytes: livreFisico - disponivel,
+      percentualUsado: Math.round((usado / total) * 1000) / 10,
+    };
+  } catch {
+    return { ...base, erro: "statfs indisponível neste runtime" };
+  }
+}
+
 export const lerMaquinaViva = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<MaquinaViva> => {
@@ -116,7 +176,7 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
       .maybeSingle();
     if (!data) throw new Response("Proibido", { status: 403 });
 
-    const [heartbeat, health] = await Promise.all([sondar("/heartbeat"), sondar("/health")]);
+    const [heartbeat, health, discoServidor] = await Promise.all([sondar("/heartbeat"), sondar("/health"), medirDiscoServidor()]);
     const fontes = [heartbeat.dados, health.dados];
     const primeiro = <T>(fn: (d: unknown) => T | null) => {
       for (const f of fontes) {
@@ -166,6 +226,7 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
       cpu,
       memoria,
       carga,
+      discoServidor,
       frescor: {
         idadeSeg,
         fresco: idadeSeg == null ? null : idadeSeg <= LIMITE_FRESCOR_SEG,

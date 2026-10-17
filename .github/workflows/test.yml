@@ -1,10 +1,51 @@
-name: ⚙️ Test Workflow
+name: ⚙️ Test Workflow — regressão Instinto Superior
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - 'AGENTS.md'
+      - 'apps/instinto-superior/**'
+      - 'skills/vs-code-restore/src/extension.ts'
+      - 'skills/vs-code-restore/package.json'
+      - '.github/workflows/test.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: centraldark-instinto-regression-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  test:
+  instinto-regression:
+    name: 🧬 Construir e testar sem fingir instalação
     runs-on: [self-hosted, Linux]
+    timeout-minutes: 25
     steps:
-      - run: echo "Hello, World!"
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Provar HEAD e executar testes de fonte
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          node --version
+          node --test apps/instinto-superior/scripts/verify-hud-zone.mjs
+          echo "SOURCE_REGRESSION=PASS SAME_SHA=$GITHUB_SHA"
+      - name: Instalar dependências, validar lint e compilar Instinto
+        working-directory: apps/instinto-superior
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run lint
+          npm run build:vps
+          echo "BUILD_REGRESSION=PASS SAME_SHA=$GITHUB_SHA"
+          echo "MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=$GITHUB_SHA"
+          echo "MICHELIN_STAR_2=CI_CONCLUSION_AND_INTEGRATION_RECEIPTS_REQUIRED"
+          echo "MICHELIN_STAR_3=DEPLOY_VISUAL_CASA_VPS_RECEIPTS_REQUIRED"
+          echo "RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB"
