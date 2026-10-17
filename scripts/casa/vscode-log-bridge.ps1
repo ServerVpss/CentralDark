@@ -80,10 +80,41 @@ if ($size -gt 0) {
     }
   }
 }
+# Same Casa writer, same SSH receipt. Browser cache is only an installed-file signal.
+# No credentials, profile files, command line, or absolute user path leave Windows.
+function Get-PlaywrightProbe {
+  $unknown = @{ cache_state='UNKNOWN'; revision=$null; runtime_state='UNPROVEN'; process_count=0 }
+  $localAppData = [Environment]::GetFolderPath('LocalApplicationData')
+  if ([string]::IsNullOrWhiteSpace($localAppData)) { return $unknown }
+  $cache = Join-Path $localAppData 'ms-playwright'
+  if (!(Test-Path -LiteralPath $cache -PathType Container)) {
+    return @{ cache_state='ABSENT'; revision=$null; runtime_state='NOT_RUNNING'; process_count=0 }
+  }
+  $revisions = @(Get-ChildItem -LiteralPath $cache -Directory -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -match '^chromium-([0-9]+)$' } |
+    ForEach-Object { [int]($_.Name -replace '^chromium-', '') } | Sort-Object -Descending)
+  foreach ($revision in $revisions) {
+    $headed = Join-Path $cache ("chromium-{0}\chrome-win64\chrome.exe" -f $revision)
+    $headless = Join-Path $cache ("chromium_headless_shell-{0}\chrome-headless-shell-win64\chrome-headless-shell.exe" -f $revision)
+    if ((Test-Path -LiteralPath $headed -PathType Leaf) -and (Test-Path -LiteralPath $headless -PathType Leaf)) {
+      $n = 0
+      try {
+        $n = @(Get-CimInstance Win32_Process -Filter "Name='chrome-headless-shell.exe' OR Name='chrome.exe'" -ErrorAction Stop |
+          Where-Object { $_.ExecutablePath -and (
+            [string]::Equals($_.ExecutablePath, $headless, [StringComparison]::OrdinalIgnoreCase) -or
+            [string]::Equals($_.ExecutablePath, $headed, [StringComparison]::OrdinalIgnoreCase)) }).Count
+      } catch { return @{ cache_state='FILES_PRESENT'; revision=[string]$revision; runtime_state='UNKNOWN'; process_count=0 } }
+      return @{ cache_state='FILES_PRESENT'; revision=[string]$revision; runtime_state=$(if($n -gt 0){'PROCESS_OBSERVED'}else{'NOT_RUNNING'}); process_count=[Math]::Min($n,100) }
+    }
+  }
+  return @{ cache_state='INCOMPLETE'; revision=$null; runtime_state='UNPROVEN'; process_count=0 }
+}
+
 $batch = @{
   source = "LOGS-VS-CODE.log"; epoch = $epoch; from_offset = [long]$offset
   to_offset = [long]$next; source_last_write_utc = $info.LastWriteTimeUtc.ToString("o")
   signals = @($signals)
+  playwright = Get-PlaywrightProbe
 }
 if ($DryRun) {
   Write-Output ("DRY_RUN source=LOGS-VS-CODE.log signals={0} offset={1}->{2} bytes={3}" -f $signals.Count, $offset, $next, $info.Length)

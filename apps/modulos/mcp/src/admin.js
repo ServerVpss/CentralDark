@@ -599,11 +599,16 @@ async function loadTailscalePanel(){
     if(home) home.textContent=(j.home?.host||'SEGREDO')+' '+(j.home?.ip||'');
     if(rdp){rdp.textContent=j.home?.rdp_3389||'UNKNOWN'; rdp.className='val '+(j.home?.rdp_3389==='OPEN'?'ok':'warn');}
     if(ssh){ssh.textContent=j.home?.ssh_22||'UNKNOWN'; ssh.className='val '+(j.home?.ssh_22==='OPEN'?'ok':'warn');}
+    let browser={cache_state:'UNKNOWN',revision:null,runtime_state:'UNPROVEN'};
+    try { const br=await fetch('/admin/api/logs/LOGS-VS-CODE.log?limit=1',{cache:'no-store'}); if(br.ok) browser=(await br.json()).playwright||browser; } catch {}
     const cmd=$('cdCommander');
     if(cmd) cmd.innerHTML=[
       ['Motor original',j.commander?.engine||'UNKNOWN'],
       ['Licença',j.commander?.license||'UNKNOWN'],
       ['Cockpit Casa :3000',j.home?.cockpit_3000?.httpStatus == null ? 'UNKNOWN' : 'HTTP '+j.home.cockpit_3000.httpStatus],
+      ['Playwright Casa',browser.cache_state+' / '+(browser.revision||'?')],
+      ['Chromium ativo',browser.runtime_state||'UNPROVEN'],
+      ['Automação E2E','UNPROVEN'],
       ['WinRM Casa',j.home?.winrm_5985||'UNKNOWN'],
       ['Screenpipe Casa',j.home?.screenpipe_3030||'UNKNOWN'],
       ['Sessão PowerShell',j.commander?.commandExecution||'UNKNOWN'],
