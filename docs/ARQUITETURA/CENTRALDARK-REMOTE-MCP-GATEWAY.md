@@ -339,3 +339,51 @@ Cada fase avança SOMENTE após readback PASS. Erro para a sequência, registra 
 7. Persistir recibo detalhado por fase no PR e projetar o resultado no HUD; parar no primeiro bloqueio.
 
 Regra do placar: SOURCE_WIRED, BUILD_PASS, INSTALLED, CONNECTED, RUNTIME_PROVEN e ANTI_REGRESSION_PASS são dimensões distintas. LOCAL_FIXED_POINT somente com provas das fases 1-5; não implica MAIN ou VPS_DEPLOYED.
+
+
+## 🧬 Forja Autônoma — botão e receita (17/10/2026)
+
+**REUSE_BEFORE_CREATE:** botão no Admin MCP existente, aba Auditoria → Tool Call Lens; entrada no Cockpit existente, área Observabilidade; dispatcher existente /admin/api/intent → intent-cycle-adapter.js → fila original HERMES-CORE. Sem segundo executor, segundo gateway ou nova fila.
+
+### Uma intenção → cinco etapas sequenciais
+
+1. ANTIRREGRESSÃO. Antes de editar: coletar HEAD, origin/main, worktree, writer atual, testes do owner; sem reset, clean, force-push, nem sobrescrever trabalho concorrente. Casa: npm run verify:hud, npm run lint em apps/instinto-superior; MCP: node --test apps/modulos/mcp/tests/intent-cycle-adapter.test.mjs e node --test apps/modulos/mcp/tests/tool-call-observability.test.mjs. Exigir exit code, timestamp e fonte.
+2. CONSTRUIR. Sob mesmo writer, npm run build no cockpit e npm run compile em skills/vs-code-restore quando aplicável. Gravar hash do artefato, HEAD e comprovante de build. Build concluído não é instalação.
+3. INSTALAR. Atualizar somente o artefato local autorizado na Casa, preservando a versão anterior, possibilidade de rollback e arquivo de prova. Não instalar nem deployar na VPS apenas por apertar o botão.
+4. CONECTAR. Testar a rota existente VS Code ZENDRIVE → SSH/Remote-SSH → VPS e MCP CentralDark → Hermes, usando identidades atuais. Distinguir HEAD da Casa, identidade SSH, Tailscale CLI, API OAuth e servidor MCP. Gravar readback sem segredos.
+5. PROVAR. Repetir antirregressão após instalar; testar UI e comandos relevantes; comparar hash do instalado e compilado; registrar estado real, exit codes, duração, objetivo/GOAL e Critic do Hermes. UNKNOWN/FAIL = parar; PASS por fase somente com recibo tipado do mesmo SHA.
+
+### Contrato do recibo do Hermes
+
+Na missão concluída original criar o arquivo forja-4x-receipt.json ao lado de missao.md, state.json e finalization-receipt.json. Caminho relativo:
+
+    apps/modulos/HERMES-CORE/missions/concluidas/YYYY-MM-DD/centraldark-intent-<fingerprint24>/forja-4x-receipt.json
+
+Formato de referência (campos entre sinais angulares são EXEMPLOS, não resultados):
+
+~~~json
+{
+  "schema": "centraldark.forja.4x.receipt.v1",
+  "fingerprint": "<fingerprint SHA256 da missão>",
+  "sourceHead": "<HEAD Git de 40 caracteres>",
+  "stages": [
+    {"id":"ANTIRREGRESSAO","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<teste e log>"},
+    {"id":"CONSTRUIR","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<build e hash>"},
+    {"id":"INSTALAR","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<instalação local>"},
+    {"id":"CONECTAR","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<SSH/MCP readback>"},
+    {"id":"PROVAR","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<teste E2E/Critic>"}
+  ]
+}
+~~~
+
+Cada etapa exige mesmo fingerprint/SHA, timestamp plausível de até 7 dias, exitCode 0, antiregression PASS e recibo. FAIL interrompe, SHA divergente volta a UNKNOWN. É um contrato de evidência; só os hashes e o readback real de cada artefato estabelecem instalação e conexão.
+
+### Operação do botão existente
+
+No Admin MCP autenticado: Auditoria → 🧬 Construir → Instalar → Conectar → Provar. POST same-origin /admin/api/intent com mode AUTONOMO encaminha um único GOAL, deduplicado por fingerprint. O botão Relê recibo usa GET na mesma rota e exibe as cinco fases via forja4x.stages. Não repete ferramentas ao rever; registra somente observação. O Cockpit aponta para a aba Admin já autenticada; a autenticação, o worker e o Tool Call Lens permanecem os existentes.
+
+Gates globais: SOURCE_CURRENT, MCP_HEALTH, ONE_HEART, CI_SAME_SHA, HERMES_RUNTIME, OBJECTIVE_EFFECT, RECEIPT. O estado ENFILEIRADO não é EXECUTADO; FIXED_POINT exige etapas válidas, Critic, mesmos SHAs e critérios completos. Promoção para main/VPS exige autorização separada do CHEFE, revisão de PR e receipt de deploy. MERGED != DEPLOYED.
+
+Código da missão/receipts: apps/modulos/mcp/src/intent-cycle-adapter.js. UI Admin: apps/modulos/mcp/src/admin.js. UI Cockpit: apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx. Tests: intent-cycle-adapter.test.mjs; tool-call-observability.test.mjs. PR MCP/ZENDRIVE #1842 e PR UI/HUD #1838.
+
+NEXT_CURSOR: instalar a branch no runtime autorizado, clicar uma vez, medir ACK da fila, acompanhar o Hermes original, reler cada etapa, executar testes localizados; somente depois avaliar promoção separada.
