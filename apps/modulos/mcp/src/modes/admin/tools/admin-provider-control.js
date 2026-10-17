@@ -1,4 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { existsSync, readFileSync } from "node:fs";
 import { z } from "zod";
 import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "./cloudflare-openapi-catalog.js";
@@ -687,35 +689,81 @@ export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limi
   };
 }
 
-async function readTailscaleBridgeStatus() {
-  const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
-    headers: { accept: "application/json" },
-    signal: AbortSignal.timeout(7_000),
-  });
-  const text = await response.text();
-  let parsed;
-  try { parsed = text ? JSON.parse(text) : null; } catch { parsed = { text: text.slice(0, 2_000) }; }
-  const data = deepRedact(parsed);
-  if (!response.ok) {
+const execFileAsync = promisify(execFile);
+
+// Reduce o resultado da CLI local a métricas agregadas: não expor peers,
+// endereços, usuário, hostnames, autenticação nem payload JSON inteiro.
+function summarizeLocalTailnet(payload) {
+  const self = payload?.Self && typeof payload.Self === "object" ? payload.Self : {};
+  const peers = payload?.Peer && typeof payload.Peer === "object"
+    ? Object.values(payload.Peer).filter(item => item && typeof item === "object")
+    : [];
+  return {
+    selfOnline: self.Online === true,
+    peerCount: peers.length,
+    onlinePeers: peers.filter(item => item.Online === true).length,
+    privateIpAssigned: Array.isArray(self.TailscaleIPs) && self.TailscaleIPs.length > 0,
+  };
+}
+
+async function localTailnetFallback() {
+  try {
+    const { stdout } = await execFileAsync("tailscale", ["status", "--json"], {
+      timeout: 5500,
+      maxBuffer: 1024 * 1024,
+      windowsHide: true,
+    });
     return {
-      ok: false,
-      status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+      source: "tailscale-cli:status-json",
+      observed: true,
+      ...summarizeLocalTailnet(JSON.parse(stdout)),
+    };
+  } catch {
+    return { source: "tailscale-cli:status-json", observed: false };
+  }
+}
+
+async function readTailscaleBridgeStatus() {
+  try {
+    const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
+      headers: { accept: "application/json" },
+      signal: AbortSignal.timeout(7_000),
+    });
+    const text = await response.text();
+    let parsed;
+    try { parsed = text ? JSON.parse(text) : null; } catch { parsed = { text: text.slice(0, 2_000) }; }
+    const data = deepRedact(parsed);
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+        provider: "tailscale",
+        capability: "bridge.status",
+        httpStatus: response.status,
+        source: "oauth-broker:/api/tailscale/status",
+        data,
+        localFallback: await localTailnetFallback(),
+      };
+    }
+    return {
+      ok: true,
+      status: "PASS",
       provider: "tailscale",
       capability: "bridge.status",
       httpStatus: response.status,
       source: "oauth-broker:/api/tailscale/status",
       data,
     };
+  } catch {
+    return {
+      ok: false,
+      status: "TAILSCALE_OAUTH_BROKER_UNREACHABLE",
+      provider: "tailscale",
+      capability: "bridge.status",
+      source: "oauth-broker:/api/tailscale/status",
+      localFallback: await localTailnetFallback(),
+    };
   }
-  return {
-    ok: true,
-    status: "PASS",
-    provider: "tailscale",
-    capability: "bridge.status",
-    httpStatus: response.status,
-    source: "oauth-broker:/api/tailscale/status",
-    data,
-  };
 }
 
 function operationFingerprint(input) {
@@ -1110,4 +1158,5 @@ export const __test = Object.freeze({
   operationFingerprint,
   actorFingerprint,
   sanitizeError,
+  summarizeLocalTailnet,
 });
