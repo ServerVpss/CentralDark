@@ -182,3 +182,70 @@ Conferir resultado do TypeScript/build e exibição no viewport do Cockpit; test
 - PR de frontend: https://github.com/ServerVpss/CentralDark/pull/1838
 
 **Contrato congelado:** `DESKTOP_COMMANDER_EXTERNAL != MCP_NATIVE_AUDIT`. O Cockpit é projeção da CentralDark. O histórico é memória. O recibo e o readback são o juiz.
+
+
+## 8. 🧬 GAVETA DO INSTINTO — Forja em quatro fases (17/10/2026)
+
+**O CHEFE pediu que a receita ficasse numa gaveta do próprio Instinto Superior,
+não em outro executor.** Em PR **#1838**, o owner
+`apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx`
+já implementava `GavetaForja`: busca alfabética, seleção de receita,
+owner, copiar receita e seis gavetas de memória. Reutilizamos a mesma
+`automation_owners` no catálogo `forja-gaveta.snapshot.json`
+(com um novo registro, `TOOL_CALL_LENS`, décima receita) e mantivemos
+as 999 skills originais e os seis setores. Não criar uma página/serviço
+paralelo.
+
+**Onde abrir:** Instinto Superior → Infraestrutura / HUD → GavetaForja →
+Automações → buscar **Tool Call Lens**. Ao selecionar, mostra quatro
+cartões com owner, gate, estado e critério. O botão existente
+**Copiar receita · não executar** continua o handoff ao Hermes/terminal.
+
+**Receita real no owner ZENDRIVE** (PR #1842):
+
+```powershell
+pwsh -NoProfile -File 'K:\skills\vs-code-restore\tools\forja-tool-call-lens-4-fases.ps1'
+```
+
+Executa, em sequência, apenas na Casa, quando o CHEFE/operador invocar:
+1. **CONSTRUIR:** bloqueia se arquivos/versões da receita dos PRs
+   #1838/#1842 não estiverem presentes no K; verifica Node/MCP
+   (`node --check`, `node --test`), compila ZENDRIVE, empacota VSIX,
+   verifica HUD e faz build do Cockpit.
+2. **INSTALAR:** instala VSIX **local** no VS Code existente via
+   `code --install-extension`, confirma `@0.1.4` por readback.
+   `-NoInstall` permite rodar somente a primeira etapa sem instalar.
+3. **CONECTAR:** valida SSH pelo alias existente `segredo-vpss`
+   (`BatchMode`, host key strict) e GET local `127.0.0.1:3000`.
+   **Não** altera SSH/Tailscale, VPS, ACL nem faz microdeploy.
+4. **PROVAR:** o script exige `call_id` real do mesmo fluxo em
+   MCP Admin e Cockpit. Sem sessão de browser autenticada/adapter de
+   origem externa, fecha o gate com `E2E_TOOL_CALL_NOT_MEASURED`;
+   **não inventa verde**. O operador usa o painel existente para
+   conferir o call_id; a automação local foi até o limite de acesso.
+
+**Recibo determinístico:** arquivo JSON isolado em
+`%TEMP%\CentralDark-Forja-Lens\toolcall-lens-AAAAMMDD-HHMMSS.json`,
+com timestamps UTC, nomes de fases, estado PASS/BLOCKED, motivo e
+`published=false`. Não sobrescreve o HUD ou o histórico. O script
+retorna **exit 3** se não fechar todas as fases; nenhuma ação
+de GitHub merge/VPS deploy incluída.
+
+**Contratos antirregressão:** o teste do HUD verifica `TOOL_CALL_LENS`,
+os quatro IDs das etapas, owner de auditoria, botão e o total de dez
+receitas; o teste MCP verifica que a assinatura do audit subscriber
+conserva apenas metadados de ferramentas. Checks do GitHub precisam
+ser do HEAD corrente do PR; jobs skipped/pending não viram PASS.
+Documentação GitHub: https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks.
+Empacotamento VSIX oficial: https://code.visualstudio.com/api/working-with-extensions/publishing-extension.
+
+**Snapshot x runtime:** catálogo `forja-gaveta.snapshot.json` mantém
+`source.sha` da árvore original; o novo registro é rotulado
+`SOURCE_PR_1842_E_1838`, pois ainda não foi medido no runtime
+publicado. Cabem na mesma gaveta sem forçar contagem histórica
+atualizada dos arquivos de skills.
+
+**NEXT:** rodar CI exato dos dois HEADs; atualizar source nas worktrees
+da Casa com owner/um writer; disparar a receita na Casa; observar
+`call_id` no mesmo HUD; fechar critério E2E; só então avaliar
+microdeploy/promoção autorizada. 
