@@ -116,6 +116,9 @@ test("Forja Tool Call Lens preserva quatro gates e nao faz merge/deploy", () => 
     "../../../../skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1",
     import.meta.url,
   ), "utf8");
+  assert.ok(script.includes("00_ANTIRREGRESSAO"));
+  assert.ok(script.includes("postInstallRegression"));
+  assert.ok(script.includes("DIRTY_WORKTREE_OTHER_WRITER"));
   for (const phase of ["01_CONSTRUIR", "02_INSTALAR", "03_CONECTAR", "04_PROVAR"]) {
     assert.ok(script.includes(phase), "fase obrigatoria ausente: " + phase);
   }
