@@ -366,3 +366,46 @@ somente na Casa com extensão instalada.
 
 **NEXT_CURSOR:** build tsc, VSIX 0.1.4, invoke commands, validar PID
 de shell ativo e terminal; depois medir bridge remoto independente.
+
+
+## 🧿 DOM VIVO — inspeção da própria aba do Cockpit (2026-10-17)
+
+**Goal do CHEFE:** localizar conflitos de DOM da página que está aberta no
+Chromium ZENDRIVE sem exigir outro navegador, serviço, executor, painel paralelo
+ou concessão implícita de acesso às abas.
+
+**Owner de interface:** `apps/instinto-superior/src/components/central/DesignCenter.tsx`
+(aba **Design Center → DOM Vivo**, somente para sessão autenticada).
+
+**Fast Path:**
+1. Abrir o Cockpit atual no Chromium; Design Center → DOM Vivo.
+2. Clicar **Medir agora** ou **Ao vivo · 3s**. A inspeção roda no contexto da
+   página renderizada, sem rede, sem mexer no DOM e sem solicitar credenciais.
+3. Ler métricas de elementos/viewport/documento e a lista de candidatos
+   `ID_DUPLICADO`, `ARIA_ALVO_AUSENTE`, `TRANSBORDO_HORIZONTAL`,
+   `CONTROLE_ENCOBERTO`. Cada linha apresenta o alvo e o motivo;
+   sobreposição por popover/modal pode ser intencional.
+4. **Copiar recibo DOM** para correlacionar com o owner React/CSS,
+   corrigir no mesmo componente e repetir a medição.
+5. A aba mostra leitura **somente do seu próprio `document`**,
+   não inspeciona iframes cross-origin, outras abas nem processos Windows;
+   a amostra limita o processamento aos primeiros 6.000 elementos e
+   180 controles na viewport.
+
+**Fronteira de autorização:** no contexto deste chat, o conector Browser
+`list_tabs` respondeu `Browser access requires the originating browser context`.
+Esse erro **não** significa que o Chromium ZENDRIVE esteja offline:
+significa que esta conversa não herdou acesso à instância de origem.
+O código DOM Vivo resolve a observação **dentro do próprio Cockpit**;
+não promete controle da aba externa por ChatGPT.
+
+**Situação:** código commitado em branch/PR #1842. Build e atualização do
+preview `localhost:3000` dependem da promoção do delta para o checkout
+da Casa pelo único writer autorizado. PR #1838 mantém
+`ObservabilidadeCentralDark.tsx` como owner do Tool Call Lens; não
+mover a auditoria DOM para lá ou criar segundo coletor.
+
+**Readback discriminante:** conferir 4 peles, mobile/desktop,
+duplicidades de ID e referências ARIA, largura scroll e botões cobertos.
+`ZERO_ACHADOS` não significa acessibilidade perfeita nem resolução de todos
+os conflitos de CSS. Nunca marcar reparado sem teste de tela.
