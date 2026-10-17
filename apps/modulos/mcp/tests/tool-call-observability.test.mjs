@@ -96,3 +96,16 @@ test("Tool Call Lens reutiliza SSE admin e exporta so metadados de auditoria", (
   assert.ok(observer.includes("durationMs"));
   assert.ok(observer.includes("correlation_id"));
 });
+
+
+test("CORS admin fica restrito a GET de logs/metricas e origem do cockpit", () => {
+  const src = fs.readFileSync(new URL("../src/index.js", import.meta.url), "utf8");
+  assert.ok(src.includes('https://admin.centralldark.com'));
+  assert.ok(src.includes('CENTRALDARK_COCKPIT_ADMIN_READ_ORIGINS'));
+  assert.ok(src.includes('req.method === "GET"'));
+  assert.ok(src.includes('path === "/admin/api/logs"'));
+  assert.ok(src.includes('path === "/admin/api/metricas"'));
+  assert.ok(src.includes('cockpitAdminReadOrigins.has(origin)'));
+  assert.ok(src.includes('res.setHeader("Access-Control-Allow-Credentials", "true")'));
+  assert.ok(src.includes('res.vary("Origin")'));
+});
