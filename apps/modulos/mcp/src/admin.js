@@ -17,6 +17,7 @@ import { getGrokControlDashboard, setGrokControlSelection } from "./grok-control
 import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
+import { subscribeAuditEvents } from "./audit-logger.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -105,6 +106,29 @@ export function pushAdminLog(level, msg, meta) {
         try { send(line); } catch { /* silencioso */ }
     }
 }
+
+// Projecao somente dos metadados do proprio MCP CentralDark.
+// Eventos do Desktop Commander remoto (fora deste MCP) nao surgem aqui
+// automaticamente; precisam de adaptador do cliente/recibo com autorizacao.
+subscribeAuditEvents((evento) => {
+    if (evento?.schema !== "centraldark.mcp.tool-call.v1") return;
+    const safe = (value, length = 120) =>
+        typeof value === "string" ? value.slice(0, length) : null;
+    pushAdminLog(evento.ok === true ? "info" : "error", "mcp_tool_call", {
+        source: "MCP_AUDIT",
+        toolName: safe(evento.toolName),
+        call_id: safe(evento.call_id),
+        correlation_id: safe(evento.correlation_id),
+        mission_id: safe(evento.mission_id),
+        // PID do host MCP. PID do processo filho nao foi extraido nem presumido.
+        mcp_host_pid: Number.isSafeInteger(evento.pid) ? evento.pid : null,
+        exitCode: Number.isSafeInteger(evento.exitCode) ? evento.exitCode : null,
+        durationMs: Number.isFinite(evento.durationMs) ? evento.durationMs : null,
+        status: evento.ok === true ? "PASS" : "FAIL",
+        ended_at: safe(evento.ended_at),
+        // Nunca transportar args, stdout, stderr, paths ou credenciais ao painel.
+    });
+});
 
 function extrairRota(linha) {
     const p = linha.meta?.path;
