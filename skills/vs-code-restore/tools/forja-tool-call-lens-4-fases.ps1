@@ -129,7 +129,7 @@ if ($installed) {
 if ($connected) {
   $null = Phase '04_PROVAR' {
     # Regra espelhada: testar o mesmo owner depois da instalação, antes do E2E.
-    ExecChecked 'node' @('--test','tests/intent-cycle-adapter.test.mjs') $mcpDir
+    ExecChecked 'node' @('--test','src/intent-cycle-adapter.test.mjs') $mcpDir
     ExecChecked 'node' @('--test','tests/tool-call-observability.test.mjs') $mcpDir
     ExecChecked 'npm.cmd' @('run','verify:hud') $uiDir
     $receipt.postInstallRegression = 'PASS'
@@ -164,7 +164,7 @@ exit 0
   if ($LASTEXITCODE -ne 0) { throw 'GIT_STATUS_UNAVAILABLE' }
   if ($dirtyTracked.Count -gt 0) { throw 'DIRTY_WORKTREE_OTHER_WRITER' }
   $script:receipt.sourceHead = $gitHead
-  ExecChecked 'node' @('--test','tests/intent-cycle-adapter.test.mjs') $mcpDir
+  ExecChecked 'node' @('--test','src/intent-cycle-adapter.test.mjs') $mcpDir
   ExecChecked 'node' @('--test','tests/tool-call-observability.test.mjs') $mcpDir
   'HEAD=' + $gitHead.Substring(0,12) + '; tests=PASS; working_tree=clean'
 }
