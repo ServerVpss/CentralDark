@@ -228,6 +228,15 @@ function ToolCallLensMcp() {
           <Button type="button" size="sm" variant="outline" onClick={() => definirDetalhes(!detalhes)}>
             {detalhes ? "Recolher" : "Expandir"}
           </Button>
+          <a
+            className="inline-flex items-center rounded border border-amber-500/50 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/20"
+            href="https://api.centralldark.com/admin?tab=audit"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Abrir o botão de execução autenticada da Forja no mesmo Admin MCP"
+          >
+            🧬 Forja Autônoma · Construir → Instalar → Conectar → Provar
+          </a>
         </div>
       </div>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
