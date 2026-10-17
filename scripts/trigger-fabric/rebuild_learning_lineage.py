@@ -47,15 +47,50 @@ def strip_projection(text: str) -> str:
     return text
 
 def assign_nodes(text: str):
+    """Preserve existing UIDs when new headings duplicate old legacy numbers."""
     matches = list(HEADING_RE.finditer(text))
     totals = Counter(int(m.group(1)) for m in matches)
+    prior = {}
+    if MANIFEST.exists():
+        stored = json.loads(MANIFEST.read_text(encoding="utf-8"))
+        if stored.get("schema") != "centraldark.learning-neurolink-lineage.v2":
+            raise RuntimeError("PRIOR_LINEAGE_SCHEMA_UNSUPPORTED")
+        reserved = set()
+        for entry in stored.get("nodes", []):
+            key = (
+                entry["legacy_learning_number"],
+                entry["legacy_occurrence"],
+                entry["title"],
+            )
+            uid = entry["uid"]
+            if key in prior or uid in reserved:
+                raise RuntimeError("PRIOR_LINEAGE_UID_DUPLICATE")
+            prior[key] = uid
+            reserved.add(uid)
+    reserved = set(prior.values())
     seen = defaultdict(int)
+    used = set()
+    found = set()
     nodes = []
     for order, m in enumerate(matches, start=1):
         n = int(m.group(1))
         seen[n] += 1
-        suffix = chr(64 + seen[n]) if totals[n] > 1 else ""
-        uid = f"L{n:03d}{suffix}"
+        key = (n, seen[n], m.group(2))
+        uid = prior.get(key)
+        if uid is not None:
+            found.add(key)
+        else:
+            suffix = chr(64 + seen[n]) if totals[n] > 1 else ""
+            uid = f"L{n:03d}{suffix}"
+            attempt = max(2, seen[n])
+            while uid in reserved or uid in used:
+                if attempt > 26:
+                    raise RuntimeError("LINEAGE_UID_SUFFIX_EXHAUSTED")
+                uid = f"L{n:03d}{chr(64 + attempt)}"
+                attempt += 1
+        if uid in used:
+            raise RuntimeError("LINEAGE_UID_COLLISION")
+        used.add(uid)
         nodes.append(
             {
                 "uid": uid,
@@ -67,12 +102,16 @@ def assign_nodes(text: str):
                 "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
             }
         )
+    if set(prior) - found:
+        raise RuntimeError("PRIOR_LINEAGE_UID_MISSING_OR_REORDERED")
     for i, node in enumerate(nodes):
         node["prev_uid"] = "L000" if i == 0 else nodes[i - 1]["uid"]
         node["next_uid"] = (
             "PENDING_NEXT_CURSOR" if i == len(nodes) - 1 else nodes[i + 1]["uid"]
         )
     return matches, nodes, totals
+
+
 
 def projection_block() -> str:
     return f"""
