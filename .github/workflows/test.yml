@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'AGENTS.md'
       - 'apps/instinto-superior/**'
       - 'skills/vs-code-restore/src/extension.ts'
       - 'skills/vs-code-restore/package.json'
