@@ -306,3 +306,36 @@ Na captura CHEFE:
 - Código em PR != serviço publicado. Instinto Superior deve recarregar o componente e MCP deve recarregar o código após promoção aprovada.
 
 **NEXT_CURSOR:** CI same HEAD #1842 e #1838 → deployment de cada owner na ordem causal (MCP antes do Cockpit) → cookie/admin readback (401/200) → registrar chamadas em `/admin/api/logs` → observar widget ao vivo → correlação opcional REMOTE_MCP_CLIENT ≠ MCP_NATIVO. Não promover `UI_OBSERVED` a `EXECUTION_PROVEN`.
+
+## 🧬 Contrato autônomo: construir → instalar → conectar → provar → antirregressão
+
+Contrato de entrega do CHEFE — 2026-10-17. Reutilizar owners: ZENDRIVE VS Code, MCP CentralDark, SSE Admin e Observabilidade do Cockpit. Não criar gateway nem executor paralelo.
+
+| Fase | Ação | Evidência para avançar | Falha |
+|---|---|---|---|
+| 01 CONSTRUIR | Fixar HEAD, compilar e testar | build exit=0; artefato identificado pelo SHA | BUILD_BLOCKED |
+| 02 INSTALAR | Instalar artefato validado na Casa autorizada | versão instalada e timestamp do ambiente de destino | INSTALL_BLOCKED |
+| 03 CONECTAR | Reusar SSH/MCP/SSE e sessão existente | handshake autenticado, rota, PID e endpoint real | CONNECT_BLOCKED |
+| 04 PROVAR | Executar diagnóstico inofensivo e colher PID, read_process_output e exit code | recibo correlacionado (CID, fonte, PID e duração), saída sanitizada | PROOF_BLOCKED |
+| 05 ANTIRREGRESSÃO | Testar owners afetados e comparar antes/depois | VS Code aberto, temas, ferramentas, login, HUD, SSE sem regressão | REGRESSION_BLOCKED |
+
+Cada fase avança SOMENTE após readback PASS. Erro para a sequência, registra owner, sha, observed_at e next_cursor. Desconhecido não vira verde.
+
+### Execução autônoma no escopo aprovado
+
+- Inventário read-only, edição incremental em branch isolada, build, testes, empacotamento e validação local de desenvolvimento são automáticos quando a ferramenta de execução estiver disponível.
+- Mudanças em main, VPS de produção, contas, segredos, ACL, publicação e limpeza destrutiva preservam a aprovação explícita de promoção estabelecida pelo CHEFE.
+- Desktop Commander externo e MCP próprio não são equivalentes: o Tool Call Lens atual só vê auditoria do MCP que atravessa esse owner.
+- O Browser conectado ao ChatGPT não é uma ponte automática de execução em Code.exe.
+
+### Receita determinística de aceite
+
+1. Medir o HEAD e a árvore de alterações; um writer por owner; não sobrescrever trabalho de outro agente.
+2. Build/test/empacotamento; guardar sha e recibos.
+3. Instalar a versão do artefato na Casa e reler a versão efetiva, sem abrir outro VS Code.
+4. Conectar por sessão autenticada já existente; provar o handshake e as rotas.
+5. Rodar comando inofensivo; correlacionar start_process, PID, leitura de saída incremental, fim e exit code.
+6. Rodar antirregressão: ZENDRIVE CLI, SSH/PID, Tool Call Lens (ao vivo/pausa/rever), Cockpit, quatro peles, autenticação e HUD.
+7. Persistir recibo detalhado por fase no PR e projetar o resultado no HUD; parar no primeiro bloqueio.
+
+Regra do placar: SOURCE_WIRED, BUILD_PASS, INSTALLED, CONNECTED, RUNTIME_PROVEN e ANTI_REGRESSION_PASS são dimensões distintas. LOCAL_FIXED_POINT somente com provas das fases 1-5; não implica MAIN ou VPS_DEPLOYED.
