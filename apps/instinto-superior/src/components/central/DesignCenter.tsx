@@ -282,12 +282,12 @@ export function DesignCenter({
                       </p>
                       <h4 className="mt-1 text-lg font-semibold">🪬 ZENDRIVE CLI</h4>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        centraldark.centraldark-vscode-restore · fonte 0.1.2
+                        centraldark.centraldark-vscode-restore · fonte 0.1.4 no PR #1842
                       </p>
                     </div>
                   </div>
                   <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
-                    Casa: 0.1.3 instalada em 16/10 · fonte main 0.1.2
+                    Casa: versão instalada exige leitura do VS Code · pacote 0.1.4 em preparação
                   </span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -325,6 +325,16 @@ export function DesignCenter({
                       <Puzzle /> Código e receita <ExternalLink />
                     </a>
                   </Button>
+                  <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-pr">
+                    <a href="https://github.com/ServerVpss/CentralDark/pull/1842" target="_blank" rel="noopener noreferrer">
+                      Versão 0.1.4 · PR / atualizar <ExternalLink />
+                    </a>
+                  </Button>
+                  <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-vsix-instructions">
+                    <a href="https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_install-from-a-vsix" target="_blank" rel="noopener noreferrer">
+                      Instalar VSIX no VS Code <ExternalLink />
+                    </a>
+                  </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-logs">
                     <a href="https://github.com/ServerVpss/CentralDark/pull/1820" target="_blank" rel="noopener noreferrer">
                       Ver integração de logs <ExternalLink />
@@ -332,8 +342,8 @@ export function DesignCenter({
                   </Button>
                 </div>
                 <p className="mt-4 text-xs text-muted-foreground">
-                  Esta ficha cataloga a extensão existente: não instala VSIX no dispositivo do visitante,
-                  não inicia Hermes e não concede acesso remoto. Build e deploy do cockpit são provas separadas.
+                  Atualização nativa do VS Code não distribui versões novas de uma extensão privada instalada por VSIX. Use o pacote VSIX da versão publicada ou gere o VSIX a partir da fonte; a ficha do Marketplace não atualiza o PC remotamente.
+                  Não inicia Hermes nem concede acesso remoto.
                 </p>
               </article>
             </section>
