@@ -338,4 +338,209 @@ test("Screenpipe da Casa: o HUD preserva a prova local sem expor captura bruta",
   assert.match(sensor, /for \(const campo of \["status", "capture_status", "frame_status", "audio_status"\]\)/);
   assert.match(sensor, /SENSOR: /);
   assert.doesNotMatch(sensor, /fetch\([^)]*\/frames\//);
+test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
+  const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
+  const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
+  const manifest = JSON.parse(read("skills/vs-code-restore/package.json"));
+  const extension = read("skills/vs-code-restore/src/extension.ts");
+
+  // CONSTRUIR: o cockpit e a extensao sao os owners existentes.
+  assert.equal((design.match(/id="galeria-extensoes"/g) || []).length, 1);
+  assert.ok(design.includes('id="galeria-extensoes"'));
+  assert.ok(design.includes("Marketplace de capacidades"));
+  assert.ok(design.includes('data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli"'));
+  assert.ok(design.includes("fonte " + manifest.version));
+  assert.ok(manifest.contributes.commands.some(c => c.command === "centraldark.zendriveCli"));
+  assert.ok(extension.includes("registerCommand('centraldark.zendriveCli'"));
+
+  // CONECTAR: acesso autenticado e mesmo terminal / funil, sem outro executor.
+  assert.ok(design.includes('{autenticado ? <TabsTrigger value="extensoes">'));
+  assert.ok(design.includes('autenticado ? (\n          <TabsContent value="extensoes"'));
+  assert.ok(cockpit.includes('autenticado={autenticado}'));
+  assert.ok(extension.includes("terminal.show(false)"));
+  const focus = extension.slice(extension.indexOf("function focusExistingCliTerminal"),
+    extension.indexOf("function loadMap"));
+  assert.ok(!focus.includes("createTerminal("));
+  for (const name of ["onDidStartTerminalShellExecution", "onDidEndTerminalShellExecution",
+    "LOGS-VS-CODE.log"]) assert.ok(extension.includes(name), "evento/funil: " + name);
+  assert.ok(!focus.includes("process.env.OPENAI_API_KEY"));
+
+  // PROVAR: recibos reais sao escopados; UI nunca pode declarar provider live.
+  assert.ok(design.includes("/tree/main/skills/vs-code-restore"));
+  assert.ok(design.includes("/pull/1820"));
+  assert.ok(design.includes("não provado ao vivo"));
+  assert.ok(design.includes("Build e deploy do cockpit são provas separadas"));
+  assert.ok(!design.includes("ChatGPT API conectada e autenticada"));
+});
+
+
+// Anti-regressão do Marketplace dentro da esteira existente (npm prebuild/prebuild:vps).
+// Isto prova contratos SOURCE, não instalação remota nem resposta HTTP do cockpit.
+test("regressao do Marketplace ZENDRIVE — construir, instalar, conectar e provar sem falso verde", () => {
+  const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
+  const shell = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
+  const admin = read("apps/instinto-superior/src/routes/_authenticated/sala-controle.tsx");
+  const extManifest = JSON.parse(read("skills/vs-code-restore/package.json"));
+  const extension = read("skills/vs-code-restore/src/extension.ts");
+  const bridge = read("scripts/casa/vscode-log-bridge.ps1");
+  const ingest = read("scripts/vps/ingest-vscode-log.mjs");
+  const funnel = read("apps/modulos/mcp/src/log-funnel.js");
+  const pkg = JSON.parse(read("apps/instinto-superior/package.json"));
+
+  // 1. CONSTRUIR: mesma árvore visual, entrada privada e único registro.
+  assert.match(design, /\{autenticado\s*\?\s*<TabsTrigger value="extensoes">/);
+  assert.match(design, /\{autenticado\s*\?\s*\(\s*<TabsContent value="extensoes"/);
+  assert.equal(design.split('data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli"').length - 1, 1);
+  assert.match(shell, /<DesignCenter[^>]*autenticado=\{autenticado\}/);
+  assert.match(admin, /verificarAdmin/);
+  assert.match(admin, /if \(!q\.data\?\.admin\)/);
+  assert.match(admin, /return <CockpitShell autenticado \/>/);
+
+  // 2. INSTALAR: contrato do pacote existente, não confundir manifesto com instalação.
+  assert.equal(extManifest.name, "centraldark-vscode-restore");
+  assert.ok(extManifest.contributes.commands.some(c => c.command === "centraldark.zendriveCli"));
+  assert.match(extension, /registerCommand\('centraldark\.zendriveCli', focusExistingCliTerminal\)/);
+  assert.match(extension, /terminal\.show\(false\)/);
+  const focusSource = extension.split("function focusExistingCliTerminal(): void {")[1]
+    ?.split("\nfunction ")[0] ?? "";
+  assert.ok(focusSource.length > 0);
+  assert.doesNotMatch(focusSource, /createTerminal\(|sendText\(|spawn\(|execSync\(/);
+  assert.ok(design.includes("fonte " + extManifest.version), "ficha usa versão incompatível com manifesto da main");
+
+  // 3. CONECTAR: canal único e metadados; nenhuma sessão/cookie/chat ao funil.
+  assert.match(extension, /onDidStartTerminalShellExecution/);
+  assert.match(extension, /onDidEndTerminalShellExecution/);
+  assert.match(extension, /terminalLogPath/);
+  assert.match(extension, /LOGS-VS-CODE\.log/);
+  assert.match(bridge, /ingest-vscode-log\.mjs/);
+  assert.match(bridge, /StrictHostKeyChecking=yes/);
+  assert.match(ingest, /log-funnel/);
+  assert.match(funnel, /event|log/i);
+  const telemetry = extension.split("function emitTerminalMetadata(")[1]
+    ?.split("\nfunction ")[0] ?? "";
+  assert.ok(telemetry.length > 0);
+  assert.doesNotMatch(telemetry, /commandLine|readFileSync|readText|cookie|session\.access_token/);
+
+  // 4. PROVAR: a interface não pode promover source para runtime/deploy.
+  assert.match(design, /<SeloEstado estado="UNKNOWN" \/>/);
+  assert.match(design, /não provado ao vivo/);
+  assert.match(design, /Build e deploy do cockpit são provas separadas/);
+  assert.ok(design.includes("/pull/1820"));
+  assert.ok(!design.includes("Instalar em todos os computadores"));
+  assert.equal(pkg.scripts.prebuild, "npm run verify:hud");
+  assert.equal(pkg.scripts["prebuild:vps"], "npm run verify:hud");
+
+  // Contraprova: se a aba deixar de ser privada, o teste discriminante reprova.
+  const privateTab = /\{autenticado\s*\?\s*<TabsTrigger value="extensoes">/;
+  assert.equal(privateTab.test(design), true);
+  assert.equal(privateTab.test(design.replace('{autenticado ? <TabsTrigger value="extensoes">', '<TabsTrigger value="extensoes">')), false);
+});
+
+
+/**
+ * 🧬 Michelin (metáfora de qualidade, sem afiliação com o guia):
+ * 1 estrela = fonte/build íntegros; 2 = CI + integração no MESMO SHA;
+ * 3 = runtime autenticado, Casa↔VPS e contraprova VISUAL no mesmo SHA.
+ * Evidência não recebida NÃO é sucesso. O teste local só valida o contrato.
+ */
+function avaliarTresEstrelasMichelin(prova, head, agora) {
+  const shaValido = s => typeof s === "string" && /^[a-f0-9]{40}$/.test(s);
+  if (!shaValido(head)) return { estrelas: 0, pendencias: ["MAIN_SHA_NAO_MEDIDO"] };
+  const mesmaVersao = item => item?.head_sha === head;
+  const passou = item => mesmaVersao(item) && item?.state === "PASS";
+  const recente = item => {
+    const ts = Date.parse(item?.measured_at ?? "");
+    return Number.isFinite(ts) && ts <= agora && agora - ts <= 3_600_000;
+  };
+  const pendencias = [];
+  let estrelas = 0;
+
+  if (!(passou(prova?.source) &&
+    prova.source?.unit_tests === "PASS" &&
+    prova.source?.lint === "PASS" &&
+    prova.source?.build === "PASS" &&
+    prova.source?.authenticated_boundary === "PASS")) {
+    pendencias.push("ESTRELA_1_SOURCE_BUILD_AUTH");
+    return { estrelas, pendencias };
+  }
+  estrelas = 1;
+
+  if (!(mesmaVersao(prova?.ci) &&
+    prova.ci?.status === "completed" &&
+    prova.ci?.conclusion === "success" &&
+    passou(prova?.integration) &&
+    prova.integration?.idempotency === "PASS" &&
+    prova.integration?.no_duplicate_owner === true)) {
+    pendencias.push("ESTRELA_2_CI_INTEGRATION_SAME_SHA");
+    return { estrelas, pendencias };
+  }
+  estrelas = 2;
+
+  if (!(passou(prova?.deploy) && recente(prova.deploy) &&
+    passou(prova?.visual) && recente(prova.visual) &&
+    prova.visual?.authenticated === true &&
+    passou(prova?.casa_vps) && recente(prova.casa_vps) &&
+    passou(prova?.vscode_logs) && recente(prova.vscode_logs) &&
+    typeof prova?.visual?.receipt_id === "string" && !!prova.visual.receipt_id &&
+    typeof prova?.casa_vps?.receipt_id === "string" && !!prova.casa_vps.receipt_id &&
+    typeof prova?.vscode_logs?.receipt_id === "string" && !!prova.vscode_logs.receipt_id)) {
+    pendencias.push("ESTRELA_3_DEPLOY_VISUAL_CASA_VPS_RECEIPTS");
+    return { estrelas, pendencias };
+  }
+  return { estrelas: 3, pendencias };
+}
+
+test("🧬 padrão Michelin 3 estrelas: mesmo SHA, regressão e runtime sem falso PASS", () => {
+  const head = "a".repeat(40);
+  const agora = Date.parse("2026-10-17T05:00:00Z");
+  const medir = p => avaliarTresEstrelasMichelin(p, head, agora);
+  const fonte = { head_sha: head, state: "PASS", unit_tests: "PASS",
+    lint: "PASS", build: "PASS", authenticated_boundary: "PASS" };
+  const ci = { head_sha: head, status: "completed", conclusion: "success" };
+  const integration = { head_sha: head, state: "PASS",
+    idempotency: "PASS", no_duplicate_owner: true };
+  const evento = { head_sha: head, state: "PASS",
+    measured_at: "2026-10-17T04:45:00Z", receipt_id: "receipt-test" };
+  const completa = { source: fonte, ci, integration,
+    deploy: evento, casa_vps: evento, vscode_logs: evento,
+    visual: { ...evento, authenticated: true } };
+  assert.equal(medir({}).estrelas, 0);
+  assert.equal(avaliarTresEstrelasMichelin(completa, null, agora).estrelas, 0);
+  assert.equal(medir({ source: fonte }).estrelas, 1);
+  assert.equal(medir({ source: fonte, ci: { ...ci, conclusion: "cancelled" }, integration }).estrelas, 1);
+  assert.equal(medir({ source: fonte, ci: { ...ci, head_sha: "b".repeat(40) }, integration }).estrelas, 1);
+  assert.equal(medir({ source: fonte, ci, integration }).estrelas, 2);
+  assert.equal(medir(completa).estrelas, 3);
+  assert.equal(medir({ ...completa, deploy: { ...evento, measured_at: "2026-10-15T04:00:00Z" } }).estrelas, 2);
+  assert.equal(medir({ ...completa, visual: { ...evento, authenticated: false } }).estrelas, 2);
+  assert.equal(medir({ ...completa, vscode_logs: { ...evento, state: "UNKNOWN" } }).estrelas, 2);
+  assert.equal(medir({ ...completa, casa_vps: { ...evento, head_sha: "b".repeat(40) } }).estrelas, 2);
+  assert.equal(medir({ ...completa, visual: { ...evento, authenticated: true, receipt_id: "" } }).estrelas, 2);
+  assert.equal(medir({ ...completa, source: { ...fonte, build: "UNKNOWN" } }).estrelas, 0);
+  assert.equal(medir({ ...completa, ci: { ...ci, status: "queued" } }).estrelas, 1);
+  // Sem recibos operacionais no CI: nunca anunciar três estrelas por este teste isolado.
+  console.log("MICHELIN_3_ESTRELAS=CRITERIOS_TESTADOS; CERTIFICACAO_RUNTIME=NAO_EMITIDA");
+});
+
+
+test("🧬 Michelin aparece no HUD único sem autocertificação ou workflow paralelo", () => {
+  const hud = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+  const workflow = read(".github/workflows/test.yml");
+  const agents = read("AGENTS.md");
+  assert.equal(hud.split('id="cd-michelin-3-estrelas"').length - 1, 1);
+  for (const label of ["☆ 1 · Construir", "☆☆ 2 · Integrar", "☆☆☆ 3 · Provar",
+    "ESTRELA NÃO ATESTADA", "SEM CERTIFICAÇÃO RUNTIME NESTA CONSULTA",
+    "NEXT_CURSOR", "mesmo SHA"]) {
+    assert.ok(hud.includes(label), "HUD Michelin sem critério: " + label);
+  }
+  assert.ok(hud.includes("estado?.build"));
+  assert.ok(hud.includes("estado?.actions"));
+  assert.ok(hud.includes("estado?.deploy"));
+  assert.ok(workflow.includes('MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=$GITHUB_SHA'));
+  assert.ok(workflow.includes("MICHELIN_STAR_2=CI_CONCLUSION_AND_INTEGRATION_RECEIPTS_REQUIRED"));
+  assert.ok(workflow.includes("MICHELIN_STAR_3=DEPLOY_VISUAL_CASA_VPS_RECEIPTS_REQUIRED"));
+  assert.ok(workflow.indexOf("npm run build:vps") < workflow.indexOf("MICHELIN_STAR_1="));
+  assert.ok(agents.includes("Michelin — três estrelas de qualidade comprovada"));
+  assert.ok(agents.includes("MERGED != DEPLOYED"));
+  assert.ok(!hud.includes("MICHELIN_AUTO_3_STARS=PASS"));
 });

@@ -12,7 +12,10 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "verify:hud": "node --test scripts/verify-hud-zone.mjs",
-    "build:plugplay": "npm run verify:hud && npm run build && node scripts/build-plugplay.mjs"
+    "build:plugplay": "npm run verify:hud && npm run build && node scripts/build-plugplay.mjs",
+    "prebuild": "npm run verify:hud",
+    "prebuild:vps": "npm run verify:hud",
+    "prebuild:dev": "npm run verify:hud"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
