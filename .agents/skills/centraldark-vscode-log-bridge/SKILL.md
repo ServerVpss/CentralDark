@@ -57,7 +57,7 @@ skill = COMO / scripts Casa = COLETA / script VPS = INGERE / log-funnel = DONO /
 - A foto do CHEFE provou `echo PONG_CENTRALDARK_1015` executado em Bash `root@CENTRALDARK-OS` dentro do VS Code; um lote posterior de 8 comandos foi enviado pela automação, porém sua saída individual não foi capturada. `SEND_OK != OUTPUT_PASS`.
 - Estado live da Casa medido: `LOGS-VS-CODE.log` 3.027.886 bytes; tarefa `CentralDark-VSCode-LogBridge` `Ready`, `LastTaskResult=0`, ação `wscript.exe`; dry-run `signals=0 offset=3027886->3027886`. O arquivo **não contém evidência nova** do pingue-pongue só por ter sido testado; não declarar cobertura de terminal sem prova.
 - Para integrar ações do terminal: reutilizar `scripts/casa/vscode-log-bridge.ps1` → `scripts/vps/ingest-vscode-log.mjs` → `apps/modulos/mcp/src/log-funnel.js`. Primeiro medir origem e campos já aceitos; somente metadados não sensíveis (tipo de operação, owner, horário, resultado, fingerprint, next_cursor), jamais comandos brutos, stdout, tokens, sessões, prompts ou conversas. Evitar alterar contrato do coletor sem teste de idempotência, privacidade e API autenticada.
-- PR #1820 continua `OPEN`, `MERGEABLE`, `isDraft=false` no HEAD `fdb2a1a32c5ea5f656126ff16817228b7d9ee507` no momento da leitura; checks same-HEAD, merge em main e deploy não foram promovidos a PASS. Preservar PR-mãe #1562 como ledger.
+- CURRENT corrigido em 17/10: PR #1820 está `MERGED`, `draft=false`, com `merged_at=2026-10-15T03:44:31Z` e merge commit `872b555028914f79748d6be65a1f909d1019fe91`. A lane não fica aberta como pendência; deploy/runtime continuam claims separados. Preservar PR-mãe #1562 apenas como ledger histórico.
 
 `FOCUS_PROVADO → ENVIO → READBACK → METADADO_SANITIZADO → FUNIL_EXISTENTE → RECIBO → FIXED_POINT`.
 

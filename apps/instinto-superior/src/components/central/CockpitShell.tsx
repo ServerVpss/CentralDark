@@ -85,6 +85,7 @@ const HARNESS_DESTINOS = [
   { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
+  { id: "marketplace", titulo: "Marketplace de extensões", icone: "🧩", privado: true },
   { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
   { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
   { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
@@ -425,6 +426,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
                 <TabsTrigger value="sync">Sync Center</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
+                {autenticado ? <TabsTrigger value="marketplace">🧩 Marketplace</TabsTrigger> : null}
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
                 <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
                 <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
@@ -492,6 +494,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <TabsContent value="design" className="mt-10">
               <DesignCenter pele={pele} selecionarPele={selecionar} autenticado={autenticado} />
             </TabsContent>
+            {autenticado ? (
+              <TabsContent value="marketplace" className="mt-10">
+                <DesignCenter pele={pele} selecionarPele={selecionar} autenticado abaInicial="extensoes" />
+              </TabsContent>
+            ) : null}
             <TabsContent value="goals" className="mt-10">
               <div className="mb-8">
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
