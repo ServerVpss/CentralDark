@@ -150,3 +150,68 @@ Build/CI da PR isolada → corrigir apenas falhas reais do owner → readback em
 - `Porta, identidade e governança`, runs 38768620793 e 38768400760, jobs finais com falha, requerem reconciliação no respectivo gate (sem confundir com sucesso de testes locais).
 
 **Estado honesto:** os logs acima pertencem ao SHA `5088569`, **não** ao HEAD após hotfix. Nova execução de CI é exigida para provar a correção de clipboard. Não houve `node --test` local, compilação Vite, pacote POMBO64, sessão Claude vinculada, merge nem deploy neste ciclo.
+
+
+## 🍒 Cabeça Externa — catálogo A–Z ancorado
+
+**INTENT:** cristalizar os princípios ensinados pelo CHEFE e oferecer leitura alfabética no **mesmo** Instinto Superior, sem painel novo. **Natureza desta seção:** ensinamentos/síntese da conversa de 17/10/2026, não execução de runtime nem censo do ledger NeuroLink. Os 26 verbetes são *índice humano curado*, não 26 novos aprendizados numerados nem 26 novos selos.
+
+| Letra | Princípio | Regra verificável / aplicação |
+|---|---|---|
+| **A** | **Autocrítica** | Reconhecer erro e medir sua causa, sem atribuir sucesso por convicção. |
+| **B** | **Bridge** | Reusar a ponte autorizada Casa ↔ VPS ↔ GitHub antes de criar transporte paralelo. |
+| **C** | **Convergência** | Um organismo e um cockpit; múltiplas capacidades continuam com seus owners. |
+| **D** | **Disciplina** | Treinar deliberadamente com hipótese, esforço focado e diferença observável. |
+| **E** | **Ego em xeque** | Contraprova tem prioridade sobre defesa do próprio resultado. |
+| **F** | **Frutos** | Saúde e qualidade se comprovam por efeito, teste e receipt. |
+| **G** | **GitHub** | Main é fonte técnica versionada; merged não significa deployed. |
+| **H** | **Hermes** | Executor reaproveitado; não duplicar motor, agenda ou memória. |
+| **I** | **Intenção viva** | Cada pedido é delta da intenção, com contexto e owner recuperados. |
+| **J** | **Julgamento** | A realidade e a contraprova decidem PASS/FAIL/UNKNOWN. |
+| **K** | **Kaizen** | Observar, experimentar com segurança, medir, reter o que funciona. |
+| **L** | **Legado** | Migrar com paridade, referência e rollback; não apagar a fonte cedo. |
+| **M** | **Mentoria** | Consultar técnicas já provadas para encurtar descobertas repetidas. |
+| **N** | **Não duplicar** | Procurar o owner e o objeto atuais antes de adicionar uma peça. |
+| **O** | **Observação** | Pausa intencional, falha e ausência de sensor são estados diferentes. |
+| **P** | **Papagaio OFF** | Respostas curtas; preservar a árvore de provas nas âncoras. |
+| **Q** | **Qualidade** | Performance, testes, segurança e UX são critérios, não adjetivos. |
+| **R** | **Receipts** | Registrar escopo, SHA, owner, timestamp, prova e NEXT_CURSOR. |
+| **S** | **Segurança** | Segredos fora dos logs e da UI; uma caneta por escopo. |
+| **T** | **Treinamento deliberado** | Repetição só vira aprendizado ao corrigir fraquezas medidas. |
+| **U** | **Unificação** | Instinto Superior é a única superfície admin humana; owners seguem especializados. |
+| **V** | **Validação** | Cópia parcial, porta aberta e HTTP 200 não fecham o ciclo. |
+| **W** | **Worktree** | Preservar alterações e artefatos da Casa e da VPS; sem limpeza automática. |
+| **X** | **XP operacional** | Lições viram ganho quando o resultado é reproduzível, não por tentativa acumulada. |
+| **Y** | **YAML / contratos** | Contratos versionados orientam testes e handoffs; configuração não comprova runtime. |
+| **Z** | **Zelo** | Observar tudo, reter o bem, registrar o aprendizado e evitar regressão. |
+
+### Onde aparece, sem casca paralela
+
+- **Destino humano:** `admin.centralldark.com` → Sala de Controle autenticada → Instinto Superior → aba **HUD · Selos · Gênesis** → seção interna recolhível **Cabeça Externa · A–Z**. Não adicionar oitava seção PAPAGAIO nem 11ª missão MCP; inserir conteúdo dentro do zone de conhecimento já existente.
+- **Owner de UI já existente:** `apps/instinto-superior/src/components/central/HudDeterministico.tsx`, consumido por `CockpitShell.tsx`. Responsável pela evolução do componente: **PR #1843** (ativa); integrar **nesse mesmo escopo/escritor**, não editar por janela concorrente. Não acrescentar nova store, tabela persistente, coletor, API, skill, rota ou fonte de autoridade.
+- **Fonte de aprendizagem:** `docs/CONSCIENCIA/APRENDIZADOS.md` + `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`. Esta tabela é o **índice editorial** deste contrato até existir vínculo verificável por UID; não inventar UID, número de lição ou resultado operacional para cada letra.
+- **Origem legada:** `docs/HUD/HUD.html` permanece intacto, com referências preservadas. A seção A–Z é uma âncora adicional, não substitui Gênesis, selos, cadeados e zonas existentes.
+- **Visual:** mesma pele, tipografia e componentes já utilizados; pesquisa alfabética acessível, acordeão compacto, uma letra por verbete, detalhes de prova/owner só quando existirem. Responsivo mobile, sem segundo menu, sem indicador PASS para princípios apenas documentados.
+- **Teste discriminante no owner:** `apps/instinto-superior/scripts/verify-hud-zone.mjs`; confirmar 26 letras únicas e em ordem, interação teclado/busca, zero disparo implícito, permissão admin, nenhuma mudança nas 7 seções/10 missões, quatro peles preservadas, e build + readback visual na mesma SHA.
+
+**RECEIPT / PROVA:** `DOC_ANCHOR=GITHUB_MAIN_READBACK_REQUIRED`; `UI_INTEGRATED=UNKNOWN`; `BUILD=UNKNOWN`; `DEPLOY=UNKNOWN`; `RUNTIME=UNKNOWN`. Não promover apenas pela presença desta especificação.
+
+**NEXT_CURSOR:** reconciliar com PR #1843 → aplicar menor delta no `HudDeterministico` pelo writer do componente → rodar suíte e build no HEAD exato → readback da sala autenticada → receipt + decisão de promoção com os gates existentes. Preservar a migração da Casa/VPS e as alterações locais.
+
+
+<!-- CENTRALDARK_BROWSERS_VSCODE_20261017 -->
+## 🍒 Conexão Casa · Chrome for Testing · VS Code — evidência de 17/10/2026
+
+**INTENT_ID:** CENTRALDARK-CHROME-VSCODE-OBSERVABILIDADE-MICRODEPLOY-20261017. **OWNER DE UI:** `apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx`, em edição na PR #1838; **não editar por segunda caneta**. Consumidor: `PainelAdminCentralDark` / Sala de Controle do Instinto Superior. Este bloco documenta o delta, não afirma instalação nem deploy.
+
+**Prova visual enviada pelo CHEFE:** duas janelas **Chrome for Testing v155.0.8059.39** (perfis **Default** e **Profile 1**, associados ao cache Puppeteer nas telas) e uma janela **Chrome oficial v155.0.8059.85** (Profile 14 na captura). `chrome://version` identifica executável/perfil do navegador mostrado; capturas não atribuem processo/PID de terminal, não comprovam sessão Zendriver/CDP, Puppeteer conectado, Playwright em execução ou perfil de automação apto para testes. Preservar perfis, cookies, histórico, login e sessões; **não copiar dados do perfil**.
+
+**Erro visível:** VS Code exibiu `A janela terminou inesperadamente (motivo: oom, código: -536870904)`. Isso confirma encerramento por falta de memória no processo/janela, **não identifica a extensão, Chrome ou PID responsável**. Sem amostra de CPU/RAM/pagefile simultânea não atribuir causalidade. Não reiniciar nem matar processos durante a migração sem coordenação do CHEFE.
+
+**Prova de ponte independente (consulta MCP, 17/10/2026 08:59:26 UTC):** `sector=vscode`, `kind=vscode_bridge_status`, `route=tailscale`, `state=OK`, `source_last_write_utc=2026-10-17T08:50:12.6276681Z`, `offset=3068781`, `playwright=null`. A fonte voltou a avançar após 08:05 UTC; heartbeat não prova conexão interativa ao PTY ou leitura de PID. A função `Get-PlaywrightProbe` já existe em `scripts/casa/vscode-log-bridge.ps1`, enquanto `apps/modulos/mcp/src/vscode-log-route.js` interpreta `playwright`; `null` exige `UNKNOWN`, não `NOT_RUNNING` ou `PASS`.
+
+**Projeção mínima no cockpit existente:** no cartão/zona de Observabilidade já pertencente à PR #1838, apresentar separadamente `CHROME_TESTING_OBSERVADO_EM_IMAGEM`, `CHROME_NORMAL_OBSERVADO_EM_IMAGEM`, `VSCODE_OOM_OBSERVADO_EM_IMAGEM`, `VSCODE_LOG_BRIDGE_LAST_HEARTBEAT`, `PLAYWRIGHT_RUNTIME=UNKNOWN`, `CHROME_PID=UNKNOWN` e `PTY_MCP_INTERACTIVE=NOT_PROVEN`, com origem, timestamp e limite de prova. **Não** tornar a foto estado online permanente. Sem nova API, coletor, store, tela, rota ou executor. Quatro peles e controles do HUD permanecem.
+
+**Gates para microdeploy:** PR #1838 no HEAD exato + dependências das PRs #1842/#1843 conforme owner → suíte `apps/instinto-superior/scripts/verify-hud-zone.mjs` + build → CI no mesmo SHA → readback autenticado do cockpit e das quatro peles → deploy seletivo com prova de SHA e rollback → receipt. Os workflows atuais usam runners self-hosted que podem estar intencionalmente pausados pela migração; `QUEUED` não é `DEPLOYED`. O fallback MAIN-PINNED existente lista owners `mcp/hub_bot/hermes/oauth_broker`, **não autoriza usar owner falso para publicar Instinto Superior**.
+
+**CURRENT:** `DOCUMENTED_MAIN=PASS_AFTER_READBACK` (quando o commit for comprovado); `UI_SOURCE_PR1838=NEEDS_WRITER`; `CI=UNKNOWN`; `MICRODEPLOY=NOT_PROVEN`; `RUNTIME_VISUAL=UNKNOWN`. **NEXT_CURSOR:** responsável pela PR #1838 consome este índice, implementa menor delta e prova build/deploy na rota aprovada após o runner voltar, preservando trabalhos locais e a cópia VPS 4.
