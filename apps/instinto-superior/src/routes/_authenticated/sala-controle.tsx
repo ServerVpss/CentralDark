@@ -32,7 +32,7 @@ function SalaControle() {
     queryFn: async () => {
       const { data, error } = await supabase.auth.getSession();
       const token = data.session?.access_token;
-      if (error || !token) throw new Error("Sessão Supabase ausente ou expirada.");
+      if (error || !token) throw new Error("SESSION_MISSING_OR_EXPIRED");
       return verificar({ headers: { Authorization: `Bearer ${token}` } });
     },
     retry: false,
@@ -54,11 +54,18 @@ function SalaControle() {
           </p>
           <h1 className="mt-3 text-2xl font-semibold">Não foi possível validar a sessão</h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            Entre novamente para renovar a sessão e repetir a verificação server-side.
+            {q.error instanceof Error && q.error.message === "SESSION_MISSING_OR_EXPIRED"
+              ? "Sessão ausente ou expirada. Volte ao acesso para renovar."
+              : "A consulta do papel administrativo falhou. Isto não significa que a conta perdeu o acesso."}
           </p>
-          <Button asChild variant="outline" className="mt-6">
-            <Link to="/auth">Voltar ao acesso</Link>
-          </Button>
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
+            <Button type="button" onClick={() => void q.refetch()} disabled={q.isFetching}>
+              {q.isFetching ? "Consultando…" : "↻ Verificar novamente"}
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/auth">Voltar ao acesso</Link>
+            </Button>
+          </div>
         </section>
       </main>
     );
