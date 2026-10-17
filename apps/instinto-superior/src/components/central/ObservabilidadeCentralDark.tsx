@@ -317,6 +317,26 @@ export function ObservabilidadeCentralDark() {
         />
       </div>
 
+      <div className="mt-6 rounded-xl border border-border bg-card p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h4 className="font-semibold">🪬 CentralDark Commander · Casa / VPS</h4>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Motor local Desktop Commander MIT 0.2.48, Tailscale privado e control plane MCP
+              CentralDark. A presença da Casa não comprova uma sessão PowerShell autorizada.
+            </p>
+          </div>
+          <a
+            className="rounded-md border px-3 py-2 text-sm hover:bg-accent"
+            href="https://mcp.centralldark.com/admin?tab=tailscale"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ver sondas e porta 3000 no Admin MCP
+          </a>
+        </div>
+      </div>
+
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {sinaisComResponsabilidade.map((s) => (
           <CartaoResponsabilidade key={s.nomeTecnico} {...s} />
