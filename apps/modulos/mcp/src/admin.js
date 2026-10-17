@@ -1137,17 +1137,16 @@ function forja4Pintar(resp) {
   const el = $('forja4Stages'); if (!el) return;
   const entries = resp?.criteria || [];
   const lookup = id => entries.find(c => c.id === id)?.status || 'UNKNOWN';
-  const finalProven = resp?.executionProven === true && resp?.fixedPoint === true;
-  const source = lookup('SOURCE_CURRENT');
-  const ci = lookup('CI_SAME_SHA');
+  const finalProven = resp?.executionProven === true && resp?.fixedPoint === true
+    && resp?.forja4x?.fixedPoint === true;
   const queued = resp?.queued === true;
-  const stageStates = [
-    source === 'PASS' && ci === 'PASS' ? 'GATE PASS' : 'PENDENTE · fonte/CI',
-    finalProven ? 'PASS' : 'PENDENTE · build receipt',
-    finalProven ? 'PASS' : 'PENDENTE · install receipt',
-    finalProven ? 'PASS' : 'PENDENTE · auth/SSH/MCP',
-    finalProven ? 'PASS' : 'PENDENTE · E2E/critico'
-  ];
+  const provas = Array.isArray(resp?.forja4x?.stages) ? resp.forja4x.stages : [];
+  const fase = id => provas.find(item => item.id === id)?.status || 'UNKNOWN';
+  const stageStates = ['ANTIRREGRESSAO','CONSTRUIR','INSTALAR','CONECTAR','PROVAR']
+    .map(id => fase(id) === 'PASS' ? '🟢 PASS · receipt do mesmo SHA'
+      : fase(id) === 'FAIL' ? '🔴 FAIL · PARADA OBRIGATÓRIA'
+      : '🟡 UNKNOWN · aguardando receipt tipado');
+
   el.textContent = forja4Stages.map((title,i)=>title + '\\n     ' + stageStates[i]).join('\\n');
   forja4Mostrar(finalProven ? '🟢 FIXED_POINT' :
     queued ? '🟡 GOAL ENFILEIRADO NO HERMES' : '🟡 NÃO DESPACHADO / BLOQUEADO',
