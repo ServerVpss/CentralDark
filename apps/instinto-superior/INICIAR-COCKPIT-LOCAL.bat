@@ -12,6 +12,6 @@ echo.
 echo Porta: http://localhost:3000
 echo.
 
-npm run dev
+npm run dev -- --host 127.0.0.1 --port 3000 --strictPort
 
 pause

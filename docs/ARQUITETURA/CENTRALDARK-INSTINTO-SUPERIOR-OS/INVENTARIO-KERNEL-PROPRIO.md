@@ -1200,3 +1200,95 @@ REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
 ```
 
 Isso é o comportamento do **núcleo lógico/operacional da CentralDark-OS** hoje. O kernel nativo de baixo nível (bootloader, scheduler, drivers etc.) continua sendo outra camada, ainda futura, conforme o inventário deste mesmo owner.
+
+
+## 🪬 Galeria de extensões do Instinto — readback Casa 16/10/2026
+
+Owner visual REUSE: `apps/instinto-superior/src/components/central/DesignCenter.tsx` com aba `Galeria de extensões` restrita ao `autenticado=true`, catálogo inicial `ZENDRIVE CLI 0.1.1`, comando reutilizado `centraldark.zendriveCli` e links para skill existente e PR #1820. O `CockpitShell.tsx` passa `autenticado` ao Design Center. Fonte na `main` persistida pelos commits `a743b66c` (galeria) e `35165b57` (binding de autenticação). Readback 16/10: `DesignCenter.tsx` Casa e `main` hash idêntico `014f62afce11a358cf6abadf22ee80ace9c04314`. `CockpitShell.tsx` Casa contém trabalho não publicado nesta medição; preservar sem sobrescrever.
+
+**Verificação de build local:** `npm run build:vps` não executa literalmente no Windows por sintaxe Unix de `NITRO_PRESET=node-server`; usando `$env:NITRO_PRESET='node-server'; npm run build`, Vite/Nitro gerou `.output` com `VITE_EXIT=0`. O postbuild canônico `scripts/fix-node-ssr-cycle.mjs` retornou `SSR_CYCLE_FIX_BLOCKED: expected one circular bridge, found 0`; portanto `FULL_BUILD_GATE=FAIL`.
+
+**Smoke de runtime na Casa:** servidor Node gerado respondeu **HTTP 500** em `/`, `/cockpit` e `/auth`; stack `TypeError: createServerFn is not a function` em `.output/server/_ssr/server-Co-puXBn.mjs:157`. Isso impede declarar SSR pronto para deploy e está fora do delta da galeria. Não alterar o guard de SSR só para silenciar o erro; medir o ciclo e manter CSRF/auth.
+
+**Estática:** TypeScript parser `DesignCenter.tsx` e `CockpitShell.tsx` = **0 parse diagnostics**; ESLint só nesses arquivos com `prettier/prettier` desativado = **0 errors, 1 warning pré-existente** (`react-refresh/only-export-components` no DesignCenter). ESLint estrito = FAIL por abundantes avisos de formatação/CRLF; `tsc --noEmit` global = FAIL por erros também em outros arquivos (DailyReviewPanel, GoalsDashboard, libs Supabase etc.). Não declarar full lint/typecheck PASS.
+
+**Publicação:** VPS acessada por SSH/Tailscale, Caddy ativo no readback, mas o HEAD do checkout na VPS difere da fonte `main` usada na galeria. **Nenhum deploy deste delta foi aplicado.** Não inferir que a galeria está visível no site público; validar somente depois de resolver SSR sem regressão e provar o endpoint autenticado. `SOURCE_ON_MAIN=PASS; LOCAL_UI_SOURCE=PASS; TARGET_PARSE=PASS; TARGET_LINT_WITHOUT_STYLE=PASS; VITE_OUTPUT=PASS; FULL_BUILD=FAIL; LOCAL_SSR_SMOKE=FAIL; VPS_DEPLOY=NOT_EXECUTED; AUTH_UI_VISUAL=UNKNOWN`.
+
+**NEXT_CURSOR:** encontrar menor correção causal no owner `scripts/fix-node-ssr-cycle.mjs` ou na geração Nitro, preservar CSRF; rodar novamente SSR smoke 200/3xx correto; checar TypeScript/lint globais sem varrer trabalho alheio; depois executar esteira de deploy autorizada com rollback e captura da aba autenticada. Sem galeria alternativa nem segundo Zendrive.
+
+
+## 🪬 Diagnóstico incremental 16/10 — ENOSPC impede prova da API do Builder
+
+**Rota medida:** ChatGPT/SOL → Desktop Commander Casa SEGREDO → SSH/Tailscale `segredo-vpss` (`100.90.199.124`) → VPS CENTRALDARK-OS. Casa online, extensão `centraldark.centraldark-vscode-restore@0.1.3` instalada. A árvore local `K:\` está na HEAD `80c906a131`, com `apps/instinto-superior/src/components/central/CockpitShell.tsx` modificada; **não sobrescrever nem fazer reset/pull à força**. VPS checkout `/root/CentralDark` HEAD `84e1d03de`, diferente da `main` do GitHub.
+
+**Prova do problema, 16/10 aproximadamente 19:36 UTC:**
+- `/dev/sda3` (ext4, raiz `/`) 196G usados de 196G, `Avail=0`, `Use%=100%`; inodes só 34% — esgotamento de **bytes**, não inodes.
+- `centraldark-native-mcp-http.service` esteve em `activating/auto-restart`, `Result=exit-code`, `status=1`. O `journalctl` reportou `file-stream-rotator ... ENOSPC syscall=write`. Nova leitura pontual mostrou `systemctl is-active=active`, **mas `GET http://127.0.0.1:9100/health` permaneceu HTTP `000`**. `active` não promove API a PASS.
+- `hermes-gateway.service=active` pelo systemd (não prova chamada Hermes). `127.0.0.1:3000/` também HTTP `000` na medição.
+- Ocupações read-only: `/root/CentralDark=6.5G`, `/root/CentralDark_MCP_RUNTIME=520M`, `/root/.centraldark=6.5M`, `/root/.npm=2.0G`, `/root/.cache=3.9G`, `/var/log=360M`, `/tmp=0`, `journalctl --disk-usage=234.9M`, Docker imagens 4.995G com `RECLAIMABLE=0`. Estes números **não explicam sozinhos os 196G**. Investigar o restante sem apagar arquivos de trabalho, memória, backups ou logs brutos.
+- A galeria existe na fonte `apps/instinto-superior/src/components/central/DesignCenter.tsx` (aba autenticada) e `CockpitShell.tsx` passa `autenticado`. Card corrente distingue extensão instalada na Casa `0.1.3` da fonte `main 0.1.2` (commit `a2a553f`).
+- Gate de aplicação não deve herdar `PASS` de `npm run build` isolado: receipt anterior nesta seção provou `SSR_CYCLE_FIX_BLOCKED` e erro `TypeError: createServerFn is not a function`, smoke HTTP 500; full build/SSR/deploy desta galeria permanecem sem PASS novo. O serviço de API em `ENOSPC` é um bloqueio **independente** de SSR.
+
+**Execução desta medição:** somente diagnóstico/readback remoto e atualização documental na fonte GitHub. Nenhum `rm`, `prune`, truncamento de logs, restart de serviço, pull/reset da Casa ou deploy foi executado.
+
+**NEXT_CURSOR:** (1) localizar crescimento real da raiz, identificar cache descartável por owner com contraprova e recuperar espaço de forma não destrutiva; (2) exigir `df` com espaço disponível + `MCP /health=200` estável; (3) corrigir o SSR no owner existente, executar build completo/CSRF/auth/smoke; (4) usar esteira normal de deploy e provar a aba da galeria apenas com login. `NO_DISK_SPACE != ALL_SYSTEM_DOWN`; `SOURCE != DEPLOY != UI_PROVEN`.
+
+
+## 🪬 REGISTRA persistente — ZENDRIVE CLI, Marketplace/Builder e funil único (17/10/2026)
+
+**Intenção vigente:** qualquer agente autorizado (SOL/ChatGPT, Hermes, Codex, outros) deve recuperar a mesma capacidade e seus donos, sem refazer extensão, outro CLI, outro builder/galeria ou duplicar captura; usar o circuito existente e continuar do ponto testado. Chefe solicita que isso permaneça na biblioteca/Builder → **Instinto Superior → Cockpit autenticado → Design Center → Marketplace**, com recibos e limites explícitos.
+
+### OWNERS CANÔNICOS / localização
+
+| Papel | Owner real (fonte GitHub) | Estado comprovado |
+| --- | --- | --- |
+| Extensão VS Code / comando nativo de foco | `skills/vs-code-restore/{src/extension.ts,package.json,SKILL.md}` | versão **0.1.1** na `main` neste readback; comando `centraldark.zendriveCli` registrado, testes históricos de foco/telemetria e instalação local Casa do 15/10 |
+| Evolução extensão e CentralDark Trace | **PR #1830** (v0.1.3 em branch) | PR OPEN em 17/10; VSIX 0.1.3 instalada na Casa segundo receipt do PR, **activation/output/readback não provados**; não confundir v0.1.1 main com v0.1.3 branch/runtime |
+| Catálogo de capacidades na UI | `apps/instinto-superior/src/components/central/DesignCenter.tsx` + `CockpitShell.tsx` | `Design Center → Marketplace`, restrito a `autenticado`, mostra ficha ZENDRIVE CLI, versão/prova histórica, links para owner e PR logs; estado por dispositivo não é medição ao vivo |
+| Builder e capacidades reutilizáveis | `apps/modulos/artifacts-builder` + skill/harness Forja existente; UI pertence ao DesignCenter | reusar, não introduzir segundo Builder nem marketplace paralelo; PRs #1832/#1837 tratam gaveta/catálogo e devem ser reconciliadas antes de alterar consumidores |
+| Telemetria e logs | `K:\TEMP\logs\LOGS-VS-CODE.log` → `scripts/casa/vscode-log-bridge.ps1` → `scripts/vps/ingest-vscode-log.mjs` → `apps/modulos/mcp/src/log-funnel.js` | evento controlado + nativos `cli_focus`, `shell_start`, `shell_end exit=ok` foram recebidos na VPS no 15/10, último offset comprovado `3028322`, sem comandos/saída brutos |
+| Handoff Hermes e provider local | `apps/modulos/HERMES-CORE`, `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py` | Hermes/MCP VPS estavam ativos no último teste; provider `zendrive-chatgpt-local` real e captura ChatGPT autenticada **não provados**; evitar cookies, sessões e confusão Plus/API |
+| Regra global para todos | `AGENTS.md` + `skills/vs-code-restore/SKILL.md` | contrato de intenção → alvo/terminal → foco → comando → readback → receipt → next cursor já publicado na `main` |
+
+### Distinção construir / instalar / conectar / provar
+
+1. **BUILT/SOURCE:** código de galeria e extensão presente na `main`; CLI 0.1.3 mais nova na branch #1830; PR log #1820 encontrada **CLOSED** na pesquisa 17/10 (não inferir MERGED sem merge readback).
+2. **INSTALLED:** 0.1.1 confirmada em 15/10; 0.1.3 confirmada pela execução registrada no PR #1830, sem readback da ativação do Extension Host. Instalação de VSIX na Casa não instala VSIX nos outros computadores nem publica o site.
+3. **CONNECTED:** tubo de metadados Casa → SSH/Tailscale → log-funnel VPS foi confirmado pelos hashes/offsets da fonte e projeções `vscode` no 15/10. Comandos CLI completos e ChatGPT premium como provider API não estão conectados/provados por isso.
+4. **PROVED:** evento de terminal e `exit=ok` chegou; saída/identidade do comando não foi capturada. Interatividade universal, permissão, botões remotos e status atual por dispositivo continuam dependentes de readback próprio.
+5. **REGRESSION:** o contrato global em `AGENTS.md` prevê `apps/instinto-superior/scripts/verify-hud-zone.mjs` e `npm run verify:hud` antes do build. Registro de teste estático/CI não equivale a render/login/SSR vivo.
+
+### BLOQUEADORES medidos e preservação
+
+- Último recibo do cockpit em 16/10 registrou `VITE_EXIT=0` para compilação parcial na Casa, porém `SSR_CYCLE_FIX_BLOCKED: expected one circular bridge, found 0` e HTTP **500** em `/`, `/cockpit`, `/auth`, erro `createServerFn is not a function`. **FULL_BUILD_GATE=FAIL**, não declarar site/galeria publicada ou login E2E.
+- Inventário posterior de VPS informou pressão/ausência de espaço na raiz como bloqueio de testes/deploy; requer nova medição antes de mutação. Sem `rm/prune/reset` automático.
+- Em 17/10, Desktop Commander respondeu **monthly usage reached**, operação pausada; não insistir nem dizer que Casa/VPS estão offline. Apenas essa ferramenta está sem leitura fresca. Fontes/PRs do GitHub continuam acessíveis.
+- Fotos de terminal Bash e evento `PONG_CENTRALDARK_1015` provam envio/execução naquela sessão, não endpoint de provider ao vivo nem estado futuro de cada terminal.
+- Nenhuma atualização documental substitui build, instalação, conexão e contraprova de runtime; manter a mesma galeria, o mesmo funil, as mesmas skills e um escritor por escopo.
+
+**NEXT_CURSOR:** resolver SSR e espaço na VPS sem perda de dados → rodar teste/verifier/build same-HEAD → confirmar auth/CSRF e a aba Marketplace em sessão autenticada → remedir versão/ativação do VSIX e `CentralDark Trace` por extensão instalada → provar handoff real CLI/Hermes e ingestão sem conteúdo sensível → receipt no owner, promoção controlada; `SOURCE != BUILD != INSTALL != CONNECT != PROVE != DEPLOY`.
+
+
+## 🪬 Escopo adicional — admin confirmado pelo CHEFE e evidência visual (17/10/2026)
+
+**Origem:** CHEFE confirmou em conversa o escopo **Admin CentralDark / Cockpit / Builder / Marketplace** e forneceu uma composição visual do desktop/terminal (17/10, manhã BRT). A foto **não** foi publicada no GitHub nem copiada para logs: conservar somente observações sanitizadas e a proveniência verbal. Autorização humana para investigar o escopo **não é** evidência de sessão autenticada, token, acesso admin ativo ou capacidade de deploy; respeitar autenticação e controles existentes.
+
+### O que se observa na imagem (sem inventar causa)
+
+- **Painel/rota-alvo:** ambiente de administração `admin.centralldark.com/sala-controle` aberto no navegador da conversa; CHEFE confirma Admin como escopo. Tela em plano de fundo tem aparência de painel CentralDark. **LOGIN_ADMIN_E2E=UNKNOWN** até readback da aplicação autenticada; URL/visual não confirmam sessão nem permissões.
+- **VS Code e terminal:** bancada Windows com workspace CentralDark, PowerShell integrado aberto em `PS K:\scripts>`, painel lateral de interação com ChatGPT e múltiplas janelas. Preservar sessões e arquivos em andamento; identificar foco/host/terminal antes de digitar.
+- **Chromium:** janela de primeira escolha de perfil aparece com opções de perfis já existentes. Isso indica **seleção de perfil pendente naquela janela**, não prova que o usuário esteja autenticado no browser, no Zendrive ou no Admin. Não escolher perfil, exportar cookie, iniciar CDP, reconfigurar login ou acoplar sessão sem ação específica autorizada e contraprova.
+- **PowerShell externo:** console mostra `ParserError / UnexpectedToken` associado a trechos com pontuação/fechamento de expressão; outro console mostra `CommandNotFoundException` para token `T2` (ou semelhante). A foto não permite identificar o arquivo/comando de origem nem concluir que seja falha do VS Code, SSH, browser ou galeria. Priorizar a **captura do comando exato e origem** antes de qualquer reparo. Não colar JSX/HTML/DIL/JSON cru no prompt PowerShell.
+- **Regressão anterior preservada:** source Marketplace na `main` não elimina os gates SSR já falhos (`SSR_CYCLE_FIX_BLOCKED`, `createServerFn is not a function`, HTTP 500) nem o histórico ENOSPC/HTTP 000 da VPS. Novos estados exigem remedição, não reutilizar print antigo como saúde atual.
+
+### Reuso e escopo de trabalho do próximo executor
+
+- **Owner visual:** `apps/instinto-superior/src/components/central/CockpitShell.tsx` contém navegação privada `Marketplace de extensões`; `DesignCenter.tsx` tem `TabsTrigger value="extensoes"` sob `autenticado` e registro inicial ZENDRIVE CLI. **Não criar outra galeria, Builder, shell ou cockpit.**
+- **Owners executores:** `skills/vs-code-restore` (extensão/terminal); `apps/modulos/artifacts-builder` (Builder); `apps/modulos/HERMES-CORE` (Hermes); `apps/modulos/mcp/src/log-funnel.js` (logs). PRs concorrentes relacionados `#1832` (Harness/galeria), `#1837` (Skill Workshop/catálogo), `#1838` (HUD) e `#1842` (rota SSH/ZENDRIVE) devem ser lidos para evitar writer duplicado.
+- **Permissão do CHEFE:** prosseguir no diagnóstico de Admin e preparação de menor delta; não equivale a solicitação para escolher perfil pessoal, trocar credenciais, limpar disco, reinstalar, reiniciar gateway, alterar política de acesso, aplicar merge/deploy ou subir imagem privada.
+- **Plano de contraprova em ordem:** (1) readback do HEAD/PR/owner vigente e diferenciar `source`/branch/runtime; (2) conferir sessão admin autenticada e rota/CSRF **sem expor credenciais**; (3) reproduzir o ParserError no comando/arquivo responsável sem colar código incorreto no shell; (4) checar estado real dos serviços, disco e SSR de forma read-only, sem confundir uma falha local com todo o sistema; (5) corrigir apenas o owner causal, com backup/rollback, `verify:hud`, parse/typecheck, build e smoke auth/Marketplace same-HEAD; (6) medir render e links no cockpit, caminho terminal/VSCODE e recibo no funil canônico. Promover `PASS` somente com readback.
+- **Gate ambiental:** dispositivo SEGREDO apareceu como `Online` no inventário do Desktop Commander da consulta de 17/10; documento anterior relatou limite mensal da ferramenta. `DEVICE_ONLINE != TOOL_CALL_AUTHORIZED_OR_SUCCEEDED` e `MONTHLY_LIMIT != DEVICE_OFFLINE`. Usar outras rotas **já autorizadas** somente após prova, sem bypass de confirmação nem declarar nova disponibilidade presumida.
+
+`NEXT_CURSOR=RECONCILIAR_OWNER_HEAD_PR → ADMIN_AUTH_READBACK → CAPTURAR_ERRO_EXATO_POWERSHELL → MEDIR_SSR_ENOSPC_MCP → MENOR_DELTA → TESTE_BUILD_AUTH_MARKETPLACE → RUNTIME_RECEIPT`
+
+**Estado deste registro:** `SCOPE_RECORDED=YES`; `ADMIN_CONFIRMED_BY_CHEFE=YES`; `ADMIN_SESSION_PROVEN=UNKNOWN`; `SCREENSHOT_SOURCE=CONVERSA_NAO_VERSIONADA`; `NEW_BUILD_OR_DEPLOY=NOT_EXECUTED`. `DOCUMENTED != EXECUTED`.

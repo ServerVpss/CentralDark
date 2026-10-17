@@ -6,6 +6,8 @@
 //   • /admin/api/e2e/publico     — versão pública leve (só liveness, sem senha admin)
 //   • activeSseSubscribers()     — exportado pro /health/deep contar conexões SSE
 import crypto from "node:crypto";
+import { execFile } from "node:child_process";
+import { Socket } from "node:net";
 import { performance } from "node:perf_hooks";
 import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { log } from "./log.js";
@@ -534,6 +536,9 @@ auth: bearer &lt;TOKEN&gt;  (opcional)</pre>
     </div>
     <div class="grid">
       <div class="card"><h2>Espinha permanente <span class="badge">VPS ↔ Tailscale ↔ Casa</span></h2><div id="tsMeta"></div><div class="diag-actions" style="margin-top:14px"><button class="btn" onclick="loadTailscalePanel()">🔎 Remedir</button><a class="btn ghost" href="https://hub.centralldark.com/?provider=tailscale" target="_blank" rel="noopener" style="text-decoration:none">🔐 Hub de Contas</a></div></div>
+      <div class="card"><h2>🪬 CentralDark Commander <span class="badge">MIT · Tailscale privado</span></h2>
+        <p style="color:var(--muted);font-size:13px">Motor Desktop Commander original mantido como pacote MIT; o control plane é o MCP CentralDark. Sem relay hospedado para medir a Casa. Nenhum comando é liberado sem sessão autenticada comprovada.</p>
+        <div id="cdCommander" aria-live="polite">Aguardando medição local...</div></div>
       <div class="card"><h2>Login humano <span class="badge">GitHub dentro do Tailscale</span></h2><p style="color:var(--muted);font-size:13px">Se a rota já estiver conectada, o login não reinicia. Se cair, o Hub abre o consentimento oficial do Tailscale.</p><div class="diag-actions"><a class="btn" href="https://hub.centralldark.com/oauth/tailscale/start?redirect_to=https%3A%2F%2Fadmin.centralldark.com%2Fadmin%3Ftab%3Dtailscale" style="text-decoration:none">🌐 Entrar / reconciliar Tailscale</a></div></div>
     </div>
   </div>
@@ -595,6 +600,21 @@ async function loadTailscalePanel(){
     if(home) home.textContent=(j.home?.host||'SEGREDO')+' '+(j.home?.ip||'');
     if(rdp){rdp.textContent=j.home?.rdp_3389||'UNKNOWN'; rdp.className='val '+(j.home?.rdp_3389==='OPEN'?'ok':'warn');}
     if(ssh){ssh.textContent=j.home?.ssh_22||'UNKNOWN'; ssh.className='val '+(j.home?.ssh_22==='OPEN'?'ok':'warn');}
+    let browser={cache_state:'UNKNOWN',revision:null,runtime_state:'UNPROVEN'};
+    try { const br=await fetch('/admin/api/logs/LOGS-VS-CODE.log?limit=1',{cache:'no-store'}); if(br.ok) browser=(await br.json()).playwright||browser; } catch {}
+    const cmd=$('cdCommander');
+    if(cmd) cmd.innerHTML=[
+      ['Motor original',j.commander?.engine||'UNKNOWN'],
+      ['Licença',j.commander?.license||'UNKNOWN'],
+      ['Cockpit Casa :3000',j.home?.cockpit_3000?.httpStatus == null ? 'UNKNOWN' : 'HTTP '+j.home.cockpit_3000.httpStatus],
+      ['Playwright Casa',browser.cache_state+' / '+(browser.revision||'?')],
+      ['Chromium ativo',browser.runtime_state||'UNPROVEN'],
+      ['Automação E2E','UNPROVEN'],
+      ['WinRM Casa',j.home?.winrm_5985||'UNKNOWN'],
+      ['Screenpipe Casa',j.home?.screenpipe_3030||'UNKNOWN'],
+      ['Sessão PowerShell',j.commander?.commandExecution||'UNKNOWN'],
+      ['Origem da prova',j.source||'BROKER/UNKNOWN']
+    ].map(([a,b])=>'<div class="row"><span>'+esc(a)+'</span><span>'+esc(b)+'</span></div>').join('');
     if(meta) meta.innerHTML=[
       ['Backend',j.backend_state||'UNKNOWN'],['Tailnet',j.tailnet||'UNKNOWN'],['MagicDNS',j.magic_dns||'UNKNOWN'],['Rota-base',j.route_base||'TAILSCALE'],['Login necessário',String(Boolean(j.login_required))]
     ].map(([a,b])=>'<div class="row"><span>'+esc(a)+'</span><span>'+esc(b)+'</span></div>').join('');
@@ -1297,23 +1317,83 @@ export async function adminLinear(req, res) {
     res.status(snapshot.ok ? 200 : 503).json(snapshot);
 }
 
+// CentralDark Commander: reutiliza o owner administrativo e a tailnet privada.
+// A sondagem NAO executa comando no Windows nem utiliza o relay pago externo.
+function probeCommanderTcp(host, port) {
+    return new Promise((resolve) => {
+        const socket = new Socket();
+        let done = false;
+        const finish = (value) => {
+            if (done) return;
+            done = true;
+            socket.destroy();
+            resolve(value);
+        };
+        socket.setTimeout(1200);
+        socket.once("connect", () => finish("OPEN"));
+        socket.once("timeout", () => finish("TIMEOUT"));
+        socket.once("error", () => finish("CLOSED"));
+        socket.connect(port, host);
+    });
+}
+async function probeCommanderHttp(host) {
+    try {
+        const response = await fetch("http://" + host + ":3000/", {
+            cache: "no-store", redirect: "manual", signal: AbortSignal.timeout(2300),
+        });
+        return { httpStatus: response.status, state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX" };
+    } catch {
+        return { httpStatus: null, state: "NOT_REACHABLE" };
+    }
+}
+export async function measureNativeCommander() {
+    let snapshot;
+    try {
+        const raw = await new Promise((resolve, reject) => {
+            execFile("tailscale", ["status", "--json"], { timeout: 4000, maxBuffer: 1048576 },
+                (error, stdout) => error ? reject(error) : resolve(stdout));
+        });
+        snapshot = JSON.parse(raw);
+    } catch {
+        return { ok: false, backend_state: "UNKNOWN", route_base: "TAILSCALE_NATIVE",
+            commander: { engine: "@wonderwhy-er/desktop-commander@0.2.48", license: "MIT",
+                transport: "TAILSCALE_PRIVATE", commandExecution: "UNPROVEN" } };
+    }
+    const home = Object.values(snapshot.Peer || {}).find(
+        (peer) => ["SEGREDO", "WINDOWS-CASA"].includes(String(peer.HostName || "").trim().toUpperCase()));
+    const ip = home?.TailscaleIPs?.[0] || null;
+    const [ssh, winrm, screenpipe, rdp] = ip && home?.Online
+        ? await Promise.all([22, 5985, 3030, 3389].map((port) => probeCommanderTcp(ip, port)))
+        : ["UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN"];
+    const cockpit = ip && home?.Online ? await probeCommanderHttp(ip) : { httpStatus: null, state: "UNKNOWN" };
+    return {
+        ok: snapshot.BackendState === "Running", backend_state: snapshot.BackendState || "UNKNOWN",
+        route_base: "TAILSCALE_NATIVE", source: "VPS_TAILSCALE_LOCAL",
+        measured_at: new Date().toISOString(),
+        self: { online: snapshot.BackendState === "Running", host: "VPS",
+            ips: snapshot.Self?.TailscaleIPs || [] },
+        home: { host: home?.HostName || "SEGREDO", ip, online: home?.Online === true,
+            ssh_22: ssh, winrm_5985: winrm, screenpipe_3030: screenpipe,
+            cockpit_3000: cockpit, rdp_3389: rdp },
+        commander: { engine: "@wonderwhy-er/desktop-commander@0.2.48", license: "MIT",
+            controlPlane: "MCP_CENTRALDARK", transport: "TAILSCALE_PRIVATE",
+            commandExecution: "UNPROVEN", authenticatedWindowsSession: false,
+            externalRelayRequiredForStatus: false }
+    };
+}
 export async function adminTailscale(req, res) {
     if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
     res.setHeader("Cache-Control", "no-store");
+    const native = await measureNativeCommander();
+    if (native.ok) { res.json(native); return; }
     try {
         const upstream = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
-            headers: { accept: "application/json" },
-            signal: AbortSignal.timeout(7000),
+            headers: { accept: "application/json" }, signal: AbortSignal.timeout(2500),
         });
-        const body = await upstream.text();
-        res.status(upstream.status).type("application/json").send(body);
-    } catch (error) {
-        res.status(503).json({
-            ok: false,
-            backend_state: "UNKNOWN",
-            route_base: "TAILSCALE",
-            error: "tailscale_status_unavailable",
-        });
+        if (!upstream.ok) throw new Error("broker_unavailable");
+        res.status(upstream.status).type("application/json").send(await upstream.text());
+    } catch {
+        res.status(503).json(native);
     }
 }
 

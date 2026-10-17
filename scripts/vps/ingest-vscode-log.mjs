@@ -31,6 +31,20 @@ if (batch?.source !== source || !Array.isArray(batch.signals) ||
     !["tailscale", "ssh-direct"].includes(batch.route) ||
     !validOffset(batch.from_offset) || !validOffset(batch.to_offset)) fail("invalid_envelope");
 
+const playwrightProbe = batch.playwright;
+const cacheStates = new Set(["UNKNOWN", "ABSENT", "FILES_PRESENT", "INCOMPLETE"]);
+const runtimeStates = new Set(["UNPROVEN", "UNKNOWN", "NOT_RUNNING", "PROCESS_OBSERVED"]);
+if (playwrightProbe != null && (
+  typeof playwrightProbe !== "object" || Array.isArray(playwrightProbe) ||
+  !cacheStates.has(playwrightProbe.cache_state) ||
+  !runtimeStates.has(playwrightProbe.runtime_state) ||
+  !(playwrightProbe.revision == null || /^[0-9]{1,6}$/.test(String(playwrightProbe.revision))) ||
+  !Number.isInteger(playwrightProbe.process_count) ||
+  playwrightProbe.process_count < 0 || playwrightProbe.process_count > 100 ||
+  (playwrightProbe.runtime_state === "PROCESS_OBSERVED" &&
+    (playwrightProbe.process_count === 0 || playwrightProbe.cache_state !== "FILES_PRESENT")) ||
+  (playwrightProbe.cache_state === "FILES_PRESENT" && playwrightProbe.revision == null)
+)) fail("invalid_playwright_probe");
 const allowedComponents = new Set(["vscode", "git", "copilot", "extension-host", "terminal", "mcp", "remote-ssh"]);
 const allowedLevels = new Set(["debug", "info", "warn", "error"]);
 let state = cursor();
@@ -66,6 +80,13 @@ const status = appendCentralEvent({
     state: linkState, route: batch.route, accepted, duplicate,
     source_epoch: batch.epoch, source_last_write_utc: typeof batch.source_last_write_utc === "string" ? batch.source_last_write_utc.slice(0, 40) : null,
     offset: last,
+    playwright: playwrightProbe == null ? null : {
+      cache_state: playwrightProbe.cache_state,
+      revision: playwrightProbe.revision == null ? null : String(playwrightProbe.revision),
+      runtime_state: playwrightProbe.runtime_state,
+      process_count: playwrightProbe.process_count,
+      automation_roundtrip: "UNPROVEN",
+    },
   },
 });
 if (!status.ok) fail("status_append_failed");
