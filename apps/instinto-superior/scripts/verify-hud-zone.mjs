@@ -538,6 +538,7 @@ test("🪬 Puppeteer Michelin: Chromium real é smoke, nunca três estrelas", as
     [{ ...normal, sourceSha: null }, "BLOCKED"],
     [{ ...normal, executableFound: false }, "BLOCKED"],
     [{ ...normal, libraryLoaded: false }, "BLOCKED"],
+    [{ ...normal, runtimeError: "SCREENSHOT_FAILED" }, "BLOCKED"],
     [{ ...normal, viewports: [viewport] }, "BLOCKED"],
     [{ ...normal, viewports: [{ ...viewport, httpStatus: null }, viewport] }, "BLOCKED"],
     [{ ...normal, viewports: [{ ...viewport, httpStatus: 502 }, viewport] }, "FAIL"],
