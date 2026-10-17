@@ -331,3 +331,26 @@ ESTADO DA MENSAGEM (CURRENT/HISTÓRICO/SNAPSHOT)
 ```
 
 `UNKNOWN` de capability declarativa não vira `SUPPORT_REQUIRED` sozinho. Só `NAO` explícito para uma capability realmente requerida pode solicitar suporte automático.
+
+## Despacho MCP unificado do Instinto Superior
+
+**Um catálogo:** `apps/modulos/mcp/src/tools/core/mcp-admin.js`,
+em paridade com `dist/tools/core/mcp-admin.js`. A lista de
+`providerCapabilities` dá nome humano, responsabilidade, provedor,
+autorização necessária e `runtimeState: UNKNOWN` para capacidades externas.
+**CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED**. Conectar um plugin
+nesta conversa não transmite uma credencial à Casa ou à VPS.
+
+**Uma central:** `notifications_log` é o ledger, `notification_routes`
+o roteador de destinos Telegram já existente, e
+`useNotificationsLog` projeta o feed autorizado no sininho e na aba
+Admin → Notificações do Cockpit. O Realtime só recebe LIVE após
+SUBSCRIBED. Sem leitura válida: UNKNOWN, não zero eventos comprovados.
+
+**Despacho:** modos `single` e `parallel` são decisões do orquestrador,
+com destinatários definidos por owner, permissão e recibo individual.
+Telegram tem rota existente; envio para setores, especialistas e Hermes
+requer adapters autorizados e confirmação de entrega/execução.
+O registro do evento **nunca executa sozinho** uma skill, um modelo ou
+um Harness. Contrato declarativo no arquivo existente
+`MODULES/HUB/controls/notifications-and-sensors.json`.

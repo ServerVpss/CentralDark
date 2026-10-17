@@ -458,6 +458,47 @@ teaching_frame:
     Nem toda resposta precisa exibir os seis campos como títulos. A obrigação é semântica:
     o humano deve conseguir reconstruir a peça sem precisar pedir uma segunda explicação do termo novo.
 
+cockpit_card_contract:
+  schema: centraldark.cockpit.responsabilidade.v1
+  status: CANONICAL_FOR_NEW_CARDS
+  applies_to: NEW_COCKPIT_CARDS_AND_INCREMENTAL_LEGACY_MIGRATION
+  authority: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml
+  ui_owner: apps/instinto-superior/src/components/central/CartaoResponsabilidade.tsx
+  rendering_order:
+    - NOME_HUMANO
+    - NOME_TECNICO
+    - PARA_QUE_SERVE
+    - RESPONSABILIDADE_EXPLICITA
+    - ESTADO_REAL_COM_ESCOPO
+    - FONTE_DA_PROVA_E_HORARIO
+    - DETALHES_TECNICOS_E_OWNER
+    - LIMITE_DA_PROVA
+  required:
+    - nomeHumano
+    - nomeTecnico
+    - paraQueServe
+    - responsabilidade
+    - ownerTecnico
+    - estado
+    - escopoEstado
+    - fonteDaProva
+    - consultaEm
+    - detalheTecnico
+    - limiteDaProva
+  rules:
+    HUMANO_PRIMEIRO_TECNICO_EMBAIXO: true
+    RESPONSABILIDADE_NUNCA_IMPLICITA: true
+    STATUS_SEMPRE_COM_ESCOPO: true
+    SOURCE_TIMESTAMP_NE_STATUS: true
+    STATUS_STALE_OR_UNKNOWN_WITHOUT_FRESH_PROOF: true
+    CATALOG_PASS_NE_DAEMON_PASS: true
+    LINK_NE_RUNTIME: true
+    MERGED_NE_DEPLOYED: true
+    NO_SECOND_COCKPIT_OR_SENSOR: true
+    REUSE_BEFORE_CREATE: true
+    NO_SECRET_IN_CARD: true
+    LEGACY_CARDS_MIGRATED_BY_OWNER: true
+
 translation_order:
   preferred:
     - PODER_PRATICO_NO_JEITO_DO_CHEFE

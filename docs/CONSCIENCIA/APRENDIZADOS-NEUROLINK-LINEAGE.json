@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "249087511af9ed090c53a8c965958154f1dd1fa1",
+  "source_blob_sha": "cc02236038d1baedafa9b8465d67276a6d09453b",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 198,
-    "highest_legacy_learning_number": 192,
+    "learning_sections": 201,
+    "highest_legacy_learning_number": 194,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -126,6 +126,14 @@
           "L177A",
           "L177B"
         ]
+      },
+      {
+        "legacy_learning_number": 178,
+        "count": 2,
+        "uids": [
+          "L178",
+          "L178B"
+        ]
       }
     ],
     "missing_legacy_numbers": [
@@ -139,7 +147,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 192
+      "end": 194
     }
   },
   "nodes": [
@@ -2319,6 +2327,39 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L176B",
+      "next_uid": "L178B"
+    },
+    {
+      "uid": "L178B",
+      "legacy_learning_number": 178,
+      "legacy_occurrence": 2,
+      "title": "Self-Evolution + XP auditável: ranking conservador, incremental e antirrepetição",
+      "document_order": 199,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L177B",
+      "next_uid": "L193"
+    },
+    {
+      "uid": "L193",
+      "legacy_learning_number": 193,
+      "legacy_occurrence": 1,
+      "title": "Fila de PRs destravada por aprovação de workflow (action_required != falha de código) e merge em lote com baseline cross-PR",
+      "document_order": 200,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L178B",
+      "next_uid": "L194"
+    },
+    {
+      "uid": "L194",
+      "legacy_learning_number": 194,
+      "legacy_occurrence": 1,
+      "title": "Grafo Vivo quebrado 32h por escrita não atômica — causa raiz corrigida com tmp+renameSync",
+      "document_order": 201,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L193",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

@@ -750,3 +750,52 @@ screenpipe_cli_recorder_path_2026_10_06:
   command_form: 'cd "$(mktemp -d)" && ${SCREENPIPE_CLI:-bun x screenpipe@latest} <command>'
   recorder_default: service_install
   runtime_pass_requires_status_json: true
+
+papagaio_1_incremental_code_trace_2026_10_16:
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  authority: SEGREDO_CHEFE
+  status: POLICY_REGISTERED_RUNTIME_ENFORCEMENT_NOT_CLAIMED
+  timezone: America/Bahia
+  observed_local_time: "2026-10-16T10:41:00-03:00"
+  intent: TOUCHED_CODE_MUST_LEAVE_VERIFIABLE_INCREMENTAL_TRACE
+  alphabetic_fields:
+    A_AUTOR: actual_executor_identity
+    B_BINDINGS: environment_binding_delta_or_NONE
+    C_CODIGO: canonical_file_and_component
+    D_DATA: ISO_8601_local_date
+    E_EFEITO: before_after_expected_behavior
+    F_FINGERPRINT: dependency_fingerprint_algorithm_and_value
+    G_GIT: actual_branch_and_commit_ref_after_commit
+    H_HASH: artifact_blob_sha_and_commit_sha_when_available
+    I_INCREMENTO: exact_change_summary
+    J_JUDGE: proof_counterproof_verdict_and_receipt
+    L_LAST_UPDATE: last_confirmed_update_timestamp
+    O_OWNER: existing_canonical_owner
+    P_PROVA: test_command_result_and_evidence_ref
+    R_RECEITA: sealed_replay_recipe_reference
+    T_TIMESTAMP: ISO_8601_with_timezone
+    V_VERSAO: incremental_history_without_parallel_copies
+  laws:
+    code_change_requires_trace: true
+    trace_may_be_in_code_or_canonical_linked_receipt: true
+    do_not_inject_comments_into_generated_binary_or_format_sensitive_files: true
+    record_before_and_after_effect: true
+    append_or_reconcile_existing_history_without_duplication: true
+    last_update_must_be_measured_not_guessed: true
+    hash_must_be_computed_from_actual_bytes: true
+    commit_sha_is_only_known_after_commit: true
+    avoid_self_referential_hash_in_same_hashed_file: true
+    no_secrets_in_trace: true
+    no_new_owner_or_parallel_ledger: true
+    same_fingerprint_reuse_existing_recipe: true
+    divergence_reopens_only_affected_cone: true
+    trace_documentation_does_not_prove_runtime_enforcement: true
+  trace_flow:
+    - MEASURE_EXISTING_OWNER_AND_LAST_UPDATE
+    - COMPARE_BASELINE_AND_DELTA
+    - RECORD_ALPHABETIC_TRACE
+    - RUN_TEST_AND_COUNTERPROOF
+    - COMMIT
+    - CAPTURE_REAL_COMMIT_SHA_AND_BLOB_SHA_IN_LINKED_RECEIPT
+    - READ_BACK
+    - REUSE_SEALED_RECIPE_ON_SAME_FINGERPRINT
