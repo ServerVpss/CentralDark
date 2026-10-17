@@ -190,6 +190,7 @@ export function DesignCenter({
   const [comparacao, definirComparacao] = useState<"canonico" | "teste">("canonico");
   const [domAtivo, definirDomAtivo] = useState(false);
   const [domMedido, definirDomMedido] = useState<LeituraDom | null>(null);
+  const [copiaDom, definirCopiaDom] = useState<"idle" | "ok" | "fail">("idle");
   useEffect(() => {
     if (!autenticado || !domAtivo) return;
     const medir = () => { if (!document.hidden) definirDomMedido(inspecionarDomAtual()); };
@@ -530,8 +531,18 @@ export function DesignCenter({
                     )}
                   </div>
                   <Button type="button" variant="outline" size="sm" onClick={() => {
-                    void navigator.clipboard.writeText(JSON.stringify(domMedido, null, 2));
+                    if (!navigator.clipboard?.writeText) {
+                      definirCopiaDom("fail");
+                      return;
+                    }
+                    void navigator.clipboard.writeText(JSON.stringify(domMedido, null, 2))
+                      .then(() => definirCopiaDom("ok"))
+                      .catch(() => definirCopiaDom("fail"));
                   }}>Copiar recibo DOM</Button>
+                  <span className="text-xs" role="status">
+                    {copiaDom === "ok" ? "Recibo copiado" :
+                      copiaDom === "fail" ? "Falha ao copiar: use ambiente seguro (HTTPS/localhost)" : ""}
+                  </span>
                 </>
               ) : null}
               <p className="text-[10px] text-muted-foreground">
