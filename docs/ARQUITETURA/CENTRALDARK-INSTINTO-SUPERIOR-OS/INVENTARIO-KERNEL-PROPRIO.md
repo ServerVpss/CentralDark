@@ -1267,3 +1267,28 @@ Owner visual REUSE: `apps/instinto-superior/src/components/central/DesignCenter.
 - Nenhuma atualização documental substitui build, instalação, conexão e contraprova de runtime; manter a mesma galeria, o mesmo funil, as mesmas skills e um escritor por escopo.
 
 **NEXT_CURSOR:** resolver SSR e espaço na VPS sem perda de dados → rodar teste/verifier/build same-HEAD → confirmar auth/CSRF e a aba Marketplace em sessão autenticada → remedir versão/ativação do VSIX e `CentralDark Trace` por extensão instalada → provar handoff real CLI/Hermes e ingestão sem conteúdo sensível → receipt no owner, promoção controlada; `SOURCE != BUILD != INSTALL != CONNECT != PROVE != DEPLOY`.
+
+
+## 🪬 Escopo adicional — admin confirmado pelo CHEFE e evidência visual (17/10/2026)
+
+**Origem:** CHEFE confirmou em conversa o escopo **Admin CentralDark / Cockpit / Builder / Marketplace** e forneceu uma composição visual do desktop/terminal (17/10, manhã BRT). A foto **não** foi publicada no GitHub nem copiada para logs: conservar somente observações sanitizadas e a proveniência verbal. Autorização humana para investigar o escopo **não é** evidência de sessão autenticada, token, acesso admin ativo ou capacidade de deploy; respeitar autenticação e controles existentes.
+
+### O que se observa na imagem (sem inventar causa)
+
+- **Painel/rota-alvo:** ambiente de administração `admin.centralldark.com/sala-controle` aberto no navegador da conversa; CHEFE confirma Admin como escopo. Tela em plano de fundo tem aparência de painel CentralDark. **LOGIN_ADMIN_E2E=UNKNOWN** até readback da aplicação autenticada; URL/visual não confirmam sessão nem permissões.
+- **VS Code e terminal:** bancada Windows com workspace CentralDark, PowerShell integrado aberto em `PS K:\scripts>`, painel lateral de interação com ChatGPT e múltiplas janelas. Preservar sessões e arquivos em andamento; identificar foco/host/terminal antes de digitar.
+- **Chromium:** janela de primeira escolha de perfil aparece com opções de perfis já existentes. Isso indica **seleção de perfil pendente naquela janela**, não prova que o usuário esteja autenticado no browser, no Zendrive ou no Admin. Não escolher perfil, exportar cookie, iniciar CDP, reconfigurar login ou acoplar sessão sem ação específica autorizada e contraprova.
+- **PowerShell externo:** console mostra `ParserError / UnexpectedToken` associado a trechos com pontuação/fechamento de expressão; outro console mostra `CommandNotFoundException` para token `T2` (ou semelhante). A foto não permite identificar o arquivo/comando de origem nem concluir que seja falha do VS Code, SSH, browser ou galeria. Priorizar a **captura do comando exato e origem** antes de qualquer reparo. Não colar JSX/HTML/DIL/JSON cru no prompt PowerShell.
+- **Regressão anterior preservada:** source Marketplace na `main` não elimina os gates SSR já falhos (`SSR_CYCLE_FIX_BLOCKED`, `createServerFn is not a function`, HTTP 500) nem o histórico ENOSPC/HTTP 000 da VPS. Novos estados exigem remedição, não reutilizar print antigo como saúde atual.
+
+### Reuso e escopo de trabalho do próximo executor
+
+- **Owner visual:** `apps/instinto-superior/src/components/central/CockpitShell.tsx` contém navegação privada `Marketplace de extensões`; `DesignCenter.tsx` tem `TabsTrigger value="extensoes"` sob `autenticado` e registro inicial ZENDRIVE CLI. **Não criar outra galeria, Builder, shell ou cockpit.**
+- **Owners executores:** `skills/vs-code-restore` (extensão/terminal); `apps/modulos/artifacts-builder` (Builder); `apps/modulos/HERMES-CORE` (Hermes); `apps/modulos/mcp/src/log-funnel.js` (logs). PRs concorrentes relacionados `#1832` (Harness/galeria), `#1837` (Skill Workshop/catálogo), `#1838` (HUD) e `#1842` (rota SSH/ZENDRIVE) devem ser lidos para evitar writer duplicado.
+- **Permissão do CHEFE:** prosseguir no diagnóstico de Admin e preparação de menor delta; não equivale a solicitação para escolher perfil pessoal, trocar credenciais, limpar disco, reinstalar, reiniciar gateway, alterar política de acesso, aplicar merge/deploy ou subir imagem privada.
+- **Plano de contraprova em ordem:** (1) readback do HEAD/PR/owner vigente e diferenciar `source`/branch/runtime; (2) conferir sessão admin autenticada e rota/CSRF **sem expor credenciais**; (3) reproduzir o ParserError no comando/arquivo responsável sem colar código incorreto no shell; (4) checar estado real dos serviços, disco e SSR de forma read-only, sem confundir uma falha local com todo o sistema; (5) corrigir apenas o owner causal, com backup/rollback, `verify:hud`, parse/typecheck, build e smoke auth/Marketplace same-HEAD; (6) medir render e links no cockpit, caminho terminal/VSCODE e recibo no funil canônico. Promover `PASS` somente com readback.
+- **Gate ambiental:** dispositivo SEGREDO apareceu como `Online` no inventário do Desktop Commander da consulta de 17/10; documento anterior relatou limite mensal da ferramenta. `DEVICE_ONLINE != TOOL_CALL_AUTHORIZED_OR_SUCCEEDED` e `MONTHLY_LIMIT != DEVICE_OFFLINE`. Usar outras rotas **já autorizadas** somente após prova, sem bypass de confirmação nem declarar nova disponibilidade presumida.
+
+`NEXT_CURSOR=RECONCILIAR_OWNER_HEAD_PR → ADMIN_AUTH_READBACK → CAPTURAR_ERRO_EXATO_POWERSHELL → MEDIR_SSR_ENOSPC_MCP → MENOR_DELTA → TESTE_BUILD_AUTH_MARKETPLACE → RUNTIME_RECEIPT`
+
+**Estado deste registro:** `SCOPE_RECORDED=YES`; `ADMIN_CONFIRMED_BY_CHEFE=YES`; `ADMIN_SESSION_PROVEN=UNKNOWN`; `SCREENSHOT_SOURCE=CONVERSA_NAO_VERSIONADA`; `NEW_BUILD_OR_DEPLOY=NOT_EXECUTED`. `DOCUMENTED != EXECUTED`.
