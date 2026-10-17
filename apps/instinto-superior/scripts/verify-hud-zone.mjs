@@ -520,3 +520,53 @@ test("🧬 Michelin aparece no HUD único sem autocertificação ou workflow par
   assert.ok(agents.includes("MERGED != DEPLOYED"));
   assert.ok(!hud.includes("MICHELIN_AUTO_3_STARS=PASS"));
 });
+
+
+test("🪬 Puppeteer Michelin: Chromium real é smoke, nunca três estrelas", async () => {
+  const { classifyVisualEvidence, validateVisualTarget, MICHELIN_SCOPE } =
+    await import("./puppeteer-michelin-smoke.mjs");
+  const sha = "a".repeat(40);
+  const viewport = { httpStatus: 200, ready: true, hasContent: true,
+    horizontalOverflow: false, originMatched: true, pageErrors: 0 };
+  const normal = { sourceSha: sha, executableFound: true, libraryLoaded: true,
+    viewports: [{ ...viewport, name: "desktop" }, { ...viewport, name: "mobile" }] };
+  const ok = classifyVisualEvidence(normal);
+  assert.equal(ok.state, "PASS");
+  assert.equal(ok.scope, MICHELIN_SCOPE);
+  assert.equal(ok.certifiesStars, 0);
+  const cases = [
+    [{ ...normal, sourceSha: null }, "BLOCKED"],
+    [{ ...normal, executableFound: false }, "BLOCKED"],
+    [{ ...normal, libraryLoaded: false }, "BLOCKED"],
+    [{ ...normal, viewports: [viewport] }, "BLOCKED"],
+    [{ ...normal, viewports: [{ ...viewport, httpStatus: null }, viewport] }, "BLOCKED"],
+    [{ ...normal, viewports: [{ ...viewport, httpStatus: 502 }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, originMatched: false }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, ready: false }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, hasContent: false }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, horizontalOverflow: true }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, pageErrors: 1 }, viewport] }, "FAIL"],
+  ];
+  for (const [probe, expected] of cases) {
+    const verdict = classifyVisualEvidence(probe);
+    assert.equal(verdict.state, expected);
+    assert.equal(verdict.certifiesStars, 0);
+  }
+  assert.ok(validateVisualTarget("http://127.0.0.1:4179/"));
+  assert.ok(validateVisualTarget("https://admin.centralldark.com/"));
+  for (const unsafe of ["https://evil.example/", "http://admin.centralldark.com/",
+    "https://admin.centralldark.com.evil.example/", "file:///etc/passwd",
+    "http://127.0.0.1.evil.example/", "http://localhost:4179/?token=example"]) {
+    assert.equal(validateVisualTarget(unsafe), null);
+  }
+  const source = read("apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs");
+  const workflow = read(".github/workflows/test.yml");
+  assert.match(source, /puppeteer-core/);
+  assert.match(source, /puppeteer-public-/);
+  assert.match(source, /certifiesStars: 0/);
+  assert.doesNotMatch(source, /--no-sandbox|userDataDir:|page\.setCookie/);
+  assert.match(workflow, /puppeteer-michelin-smoke\.mjs/);
+  assert.match(workflow, /MICHELIN_PUPPETEER_VISUAL=PASS/);
+  assert.match(workflow, /RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB/);
+  assert.doesNotMatch(workflow, /MICHELIN_STAR_3=PASS/);
+});
