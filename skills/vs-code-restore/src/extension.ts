@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import { execFile } from 'child_process';
 
 interface TerminalSpec {
   name: string;
@@ -30,7 +31,9 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)),
     vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
     // Acessibilidade: rótulo literal VS Code para ditado/ASR; mesma implementação, nenhum novo executor.
-    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal)
+    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal),
+    vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)),
+    vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true))
   );
   registerTerminalTelemetry(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
@@ -87,6 +90,96 @@ function focusExistingCliTerminal(): void {
   void vscode.window.showInformationMessage(
     'ZENDRIVE CLI: terminal existente em foco. SOL coordena; Hermes executa. ' +
     'A sessao ChatGPT/API nao e criada por este comando.');
+}
+
+
+
+/**
+ * Rota propria ZENDRIVE (sem Desktop Commander):
+ * mesma identidade SSH configurada na Casa, Tailscale primeiro e fallback
+ * publico apenas se o privado falhar. Sem escrita, chave copiada ou daemon novo.
+ * "Conectar" usa o picker oficial da extensao VS Code Remote-SSH.
+ */
+const VPS_SSH_ALIAS = 'segredo-vpss';
+const VPS_ROUTES = [
+  {
+    name: 'TAILSCALE',
+    options: ['-o', 'HostName=100.90.199.124', '-o', 'HostKeyAlias=89.117.78.124']
+  },
+  { name: 'PUBLIC_FALLBACK', options: [] }
+] as const;
+
+function sshExecutable(): string {
+  if (process.platform === 'win32') {
+    const gitSsh = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Git', 'usr', 'bin', 'ssh.exe');
+    if (fs.existsSync(gitSsh)) { return gitSsh; }
+  }
+  return 'ssh';
+}
+
+function checkSshRoute(binary: string, options: readonly string[]): Promise<{ ok: boolean; status: string; host?: string }> {
+  const args = [
+    '-o', 'BatchMode=yes',
+    '-o', 'StrictHostKeyChecking=yes',
+    '-o', 'ConnectTimeout=6',
+    '-o', 'NumberOfPasswordPrompts=0',
+    ...options,
+    VPS_SSH_ALIAS,
+    "printf 'CENTRALDARK_SSH_PASS\\n'; hostname"
+  ];
+  return new Promise(resolve => {
+    execFile(binary, args, { timeout: 12000, windowsHide: true, maxBuffer: 8192 }, (error, stdout) => {
+      if (error) {
+        const code = (error as NodeJS.ErrnoException).code || 'SSH_FAILED';
+        resolve({ ok: false, status: String(code).slice(0, 50) });
+        return;
+      }
+      const lines = stdout.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      const marker = lines.indexOf('CENTRALDARK_SSH_PASS');
+      const host = marker >= 0 ? lines[marker + 1] : undefined;
+      if (host && /^[a-zA-Z0-9.-]{1,100}$/.test(host)) {
+        resolve({ ok: true, status: 'SSH_AUTHENTICATED', host });
+      } else {
+        resolve({ ok: false, status: 'SSH_READBACK_MISSING' });
+      }
+    });
+  });
+}
+
+async function probeVpsSsh(connectAfter: boolean): Promise<void> {
+  const output = vscode.window.createOutputChannel('CentralDark — SSH Casa/VPS');
+  output.appendLine('[INFO] ZENDRIVE SSH: teste de leitura, sem Desktop Commander.');
+  output.appendLine('[INFO] Alias existente: segredo-vpss; host key estrita; nenhuma configuracao alterada.');
+  const binary = sshExecutable();
+  let succeeded: string | null = null;
+  for (const route of VPS_ROUTES) {
+    output.appendLine('[TESTE] ' + route.name);
+    const result = await checkSshRoute(binary, route.options);
+    output.appendLine(result.ok
+      ? '[OK] ' + route.name + ' | host=' + result.host
+      : '[AVISO] ' + route.name + ' | ' + result.status);
+    if (result.ok) {
+      succeeded = route.name;
+      break;
+    }
+  }
+  output.show(true);
+  if (!succeeded) {
+    void vscode.window.showWarningMessage('CentralDark: SSH indisponivel nas rotas atuais. Veja a saida CentralDark — SSH Casa/VPS.');
+    return;
+  }
+  if (!connectAfter) {
+    void vscode.window.showInformationMessage('CentralDark: teste SSH PASS pela rota ' + succeeded + '.');
+    return;
+  }
+  const commands = await vscode.commands.getCommands(true);
+  if (!commands.includes('remote-ssh.connectToHost')) {
+    void vscode.window.showWarningMessage('CentralDark: instale/ative a extensao oficial Remote - SSH e use o alias segredo-vpss.');
+    return;
+  }
+  // O picker respeita o alias SSH do usuario. O teste Tailscale nao reescreve
+  // o config SSH e nao altera implicitamente a rota usada pelo Remote-SSH.
+  await vscode.commands.executeCommand('remote-ssh.connectToHost');
 }
 
 
