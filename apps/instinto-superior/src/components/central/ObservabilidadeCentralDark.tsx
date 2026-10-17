@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -154,6 +155,128 @@ function RastroSemanalMcp() {
           </a>
         </div>
       )}
+    </section>
+  );
+}
+
+
+type LensEvento = {
+  t: string;
+  level: string;
+  msg: string;
+  meta?: {
+    source?: string;
+    toolName?: string;
+    call_id?: string;
+    correlation_id?: string;
+    mission_id?: string;
+    mcp_host_pid?: number | null;
+    durationMs?: number | null;
+    exitCode?: number | null;
+    status?: "PASS" | "FAIL";
+  };
+};
+
+function ToolCallLensMcp() {
+  const [modo, definirModo] = useState<"ao-vivo" | "pausado">("ao-vivo");
+  const [filtro, definirFiltro] = useState<"todos" | "PASS" | "FAIL">("todos");
+  const [detalhes, definirDetalhes] = useState(true);
+  // A mesma origem autenticada do RastroSemanalMcp, sem tokens no cliente.
+  // Endpoint protegido por cookie do MCP Admin; fetch cross-origin requer
+  // a configuracao CORS/autenticacao existente no ambiente publicado.
+  const url = "https://api.centralldark.com/admin/api/logs?q=mcp_tool_call&limit=100";
+  const q = useQuery({
+    queryKey: ["centraldark", "tool-call-lens", "mcp-audit"],
+    queryFn: async (): Promise<LensEvento[]> => {
+      const response = await fetch(url, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (response.status === 401 || response.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!response.ok) throw new Error("MCP_LOG_STREAM_UNAVAILABLE");
+      const payload = await response.json() as { logs?: LensEvento[] };
+      if (!Array.isArray(payload.logs)) throw new Error("MCP_LOG_SCHEMA_UNKNOWN");
+      return payload.logs.filter(evento => evento.msg === "mcp_tool_call" && evento.meta?.source === "MCP_AUDIT");
+    },
+    refetchInterval: modo === "ao-vivo" ? 5000 : false,
+    retry: false,
+  });
+  const eventos = (q.data ?? []).filter(evento =>
+    filtro === "todos" || evento.meta?.status === filtro,
+  );
+  const erro = q.error instanceof Error ? q.error.message : "SEM FONTE";
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-surface-1/80 p-4 sm:p-5"
+      aria-labelledby="tool-call-lens-title">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 id="tool-call-lens-title" className="font-semibold">🪬 Tool Call Lens · MCP CentralDark</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Chamadas do MCP próprio por auditoria; a origem externa Desktop Commander só aparece após correlação autorizada.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" size="sm" variant="outline"
+            onClick={() => definirModo(modo === "ao-vivo" ? "pausado" : "ao-vivo")}>
+            {modo === "ao-vivo" ? "⏸ Pausar" : "▶ Ao vivo"}
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
+            <RefreshCw className={q.isFetching ? "animate-spin" : ""} aria-hidden="true" /> Rever / Atualizar
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => definirDetalhes(!detalhes)}>
+            {detalhes ? "Recolher" : "Expandir"}
+          </Button>
+        </div>
+      </div>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+        <p className="font-mono text-xs" role="status">
+          {q.isError ? erro : q.isPending ? "CONSULTANDO" : modo === "ao-vivo" ? "ATUALIZAÇÃO A CADA 5S" : "PAUSADO"}
+          {" · "} {q.data?.length ?? 0} eventos de tool call no intervalo consultado
+          {q.dataUpdatedAt > 0 ? " · " + new Date(q.dataUpdatedAt).toLocaleTimeString("pt-BR") : ""}
+        </p>
+        <label htmlFor="toolcall-lens-resultado" className="text-xs">
+          Resultado{" "}
+          <select id="toolcall-lens-resultado" className="rounded border border-border bg-background p-1"
+            value={filtro} onChange={event => definirFiltro(event.target.value as typeof filtro)}>
+            <option value="todos">Todos</option>
+            <option value="PASS">PASS</option>
+            <option value="FAIL">FAIL</option>
+          </select>
+        </label>
+      </div>
+      {q.isError ? (
+        <p role="alert" className="mt-3 text-xs text-amber-400">
+          Leitura não autorizada ou indisponível neste navegador. Verifica a sessão do MCP Admin e a configuração da rota, sem copiar tokens.
+        </p>
+      ) : null}
+      {detalhes ? (
+        <div className="mt-4 max-h-80 overflow-y-auto rounded-lg border border-border p-2" role="log"
+          aria-label="Recibos recentes de chamadas MCP">
+          {!eventos.length ? <p className="p-2 text-xs text-muted-foreground">Sem chamadas auditadas disponíveis nesta sessão.</p> : null}
+          {eventos.map((evento, i) => {
+            const m = evento.meta ?? {};
+            return (
+              <div className="border-b border-border/50 p-2 text-xs" key={m.call_id ?? String(i)}>
+                <p className="font-semibold">
+                  {m.status === "PASS" ? "🟢" : "🔴"} {m.toolName ?? "UNKNOWN"} · {m.status ?? "UNKNOWN"}
+                  {" · "}{m.durationMs == null ? "Duração desconhecida" : m.durationMs + " ms"}
+                </p>
+                <p className="mt-1 break-all font-mono text-[10px] text-muted-foreground">
+                  {evento.t} · CID {m.correlation_id ?? "-"} · Call {m.call_id ?? "-"}
+                  {" · "}PID do host MCP {m.mcp_host_pid ?? "-"}
+                  {m.exitCode == null ? "" : " · Exit " + m.exitCode}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+      <p className="mt-2 text-[10px] text-muted-foreground">
+        Fonte: audit-logger.js → Admin /admin/api/logs. Pausar congela a leitura da UI;
+        rever atualiza eventos registrados, sem reexecutar comandos.
+      </p>
     </section>
   );
 }
@@ -436,6 +559,7 @@ export function ObservabilidadeCentralDark() {
       </div>
 
       <RastroSemanalMcp />
+      <ToolCallLensMcp />
       <div className="mt-6">
         <CartaoResponsabilidade
           id="oauth-broker-title"
