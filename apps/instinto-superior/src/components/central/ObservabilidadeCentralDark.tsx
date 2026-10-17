@@ -52,7 +52,7 @@ export function ObservabilidadeCentralDark() {
     {
       label: "API CentralDark",
       estado: d?.apiHealth ?? unknown,
-      detail: `HTTP ${d?.apiHealthHttp ?? "UNKNOWN"} · ${d?.liveFabricFonte ?? "UNKNOWN"}/health`,
+      detail: `HTTP ${d?.apiHealthHttp ?? "UNKNOWN"} · ${d?.apiHealthFonte ?? "origem não medida"} · serviço=${d?.apiHealthServico ?? "UNKNOWN"} · consulta=${d?.apiHealthMedidoEm ?? "UNKNOWN"} · HTTP ≠ integração`,
       icon: Server,
     },
     {
@@ -100,8 +100,14 @@ export function ObservabilidadeCentralDark() {
     {
       label: "Screenpipe Casa",
       estado: d?.screenpipe ?? unknown,
-      detail: `HTTP ${d?.screenpipeHttp ?? "UNKNOWN"} · status=${d?.screenpipeDetail ?? "UNKNOWN"} · 127.0.0.1:3030`,
+      detail: `HTTP ${d?.screenpipeHttp ?? "não medido"} · ${d?.screenpipeFonte ?? "Casa não consultada"} · ${d?.screenpipeCasaMedidoEm ?? "sem leitura da Casa"}`,
       icon: Monitor,
+    },
+    {
+      label: "Screenpipe VPS",
+      estado: d?.screenpipeVps ?? unknown,
+      detail: `HTTP ${d?.screenpipeVpsHttp ?? "não medido"} · ${d?.screenpipeVpsFonte ?? "VPS não consultada"} · ${d?.screenpipeVpsMedidoEm ?? "sem leitura da VPS"}`,
+      icon: Server,
     },
     {
       label: "GitHub main",
@@ -116,10 +122,16 @@ export function ObservabilidadeCentralDark() {
       icon: Mail,
     },
     {
-      label: "Desktop Commander",
+      label: "Desktop Commander Casa",
       estado: d?.desktop ?? unknown,
       detail: d?.desktopFonte ?? "UNKNOWN",
       icon: Monitor,
+    },
+    {
+      label: "Desktop Commander VPS",
+      estado: d?.desktopVps ?? unknown,
+      detail: d?.desktopVpsFonte ?? "UNKNOWN",
+      icon: Server,
     },
   ] as const;
   const leituraFresca = Boolean(medidoEm) && Date.now() - q.dataUpdatedAt <= 45_000 && !q.isError;
@@ -140,9 +152,9 @@ export function ObservabilidadeCentralDark() {
       paraQueServe: "É a porta que responde se a API CentralDark está acessível.",
       responsabilidade: "Responder à verificação de saúde da API.",
       ownerTecnico: "API CentralDark · GET /health",
-      fonteDaProva: "API CentralDark · /health",
-      escopoEstado: "da rota /health",
-      limiteDaProva: "A porta responder não prova que todos os serviços internos funcionem.",
+      fonteDaProva: "Servidor do cockpit → CENTRALDARK_API_BASE_URL (ou padrão) · /health",
+      escopoEstado: "do endpoint /health no host de origem registrado",
+      limiteDaProva: "HTTP 200 e JSON healthy não comprovam serviços dependentes ou integração completa.",
     },
     Heartbeat: {
       nomeHumano: "🫀 Batimento do sistema",
@@ -208,13 +220,22 @@ export function ObservabilidadeCentralDark() {
       limiteDaProva: "Loopback mede o host do servidor, não necessariamente a Casa Windows.",
     },
     "Screenpipe Casa": {
-      nomeHumano: "👀 Sensor de atividade",
-      paraQueServe: "Consulta a saúde do sensor de atividade disponível no host.",
-      responsabilidade: "Expor o status do serviço Screenpipe.",
-      ownerTecnico: "Screenpipe · 127.0.0.1:3030/health",
-      fonteDaProva: "Host do servidor · HTTP 127.0.0.1:3030/health",
-      escopoEstado: "do sensor consultado",
-      limiteDaProva: "Loopback não comprova o sensor físico da Casa sem rota até ela.",
+      nomeHumano: "👀 Sensor da Casa",
+      paraQueServe: "Mostra somente a medição do próprio Windows Casa, nunca um localhost da VPS.",
+      responsabilidade: "Identificar e medir a assinatura de saúde Screenpipe na Casa.",
+      ownerTecnico: "Screenpipe Casa · Windows 127.0.0.1:3030/health",
+      fonteDaProva: "Sensor executado no host Windows Casa; inexistente no servidor VPS sem bridge autenticada",
+      escopoEstado: "da saúde do Screenpipe Windows Casa",
+      limiteDaProva: "Conector Desktop Commander online ou cota esgotada não determina saúde do Screenpipe Casa.",
+    },
+    "Screenpipe VPS": {
+      nomeHumano: "👁️ Sensor da VPS",
+      paraQueServe: "Identifica a saúde Screenpipe somente quando o probe executou na VPS.",
+      responsabilidade: "Diferenciar Screenpipe do Graph Panel ou serviço terceiro na porta 3030.",
+      ownerTecnico: "Screenpipe VPS · VPS 127.0.0.1:3030/health",
+      fonteDaProva: "Sensor executado no host CENTRALDARK-OS com verificação da assinatura Screenpipe",
+      escopoEstado: "do serviço Screenpipe VPS identificado",
+      limiteDaProva: "HTTP 200 de Graph Panel ou porta 3030 ocupada não provam Screenpipe VPS.",
     },
     "GitHub main": {
       nomeHumano: "📦 Fonte do código",
@@ -234,14 +255,23 @@ export function ObservabilidadeCentralDark() {
       escopoEstado: "da autorização Gmail",
       limiteDaProva: "Sem adapter autenticado neste app, permanece AUTH_REQUIRED/UNKNOWN.",
     },
-    "Desktop Commander": {
-      nomeHumano: "🖥️ Ponte com o computador",
-      paraQueServe: "É a rota usada para observar um computador autorizado.",
-      responsabilidade: "Projetar o estado da integração de desktop remoto.",
-      ownerTecnico: "Remote Desktop Commander · conector externo",
-      fonteDaProva: "Estado externo do Remote Desktop Commander",
-      escopoEstado: "da rota externa",
-      limiteDaProva: "A existência do conector não comprova sessão ativa neste app.",
+    "Desktop Commander Casa": {
+      nomeHumano: "🖥️ Ponte Casa",
+      paraQueServe: "Exibe a situação do conector externo da Casa, sem inferir saúde de serviços.",
+      responsabilidade: "Projetar telemetria do conector autorizado somente se sensor específico estiver disponível.",
+      ownerTecnico: "Remote Desktop Commander · dispositivo Casa",
+      fonteDaProva: "Adapter externo do conector Casa (não conectado nesta consulta)",
+      escopoEstado: "da conexão do Desktop Commander Casa",
+      limiteDaProva: "Online não garante execução: cota esgotada bloqueia a ferramenta, não Screenpipe.",
+    },
+    "Desktop Commander VPS": {
+      nomeHumano: "🖥️ Ponte VPS",
+      paraQueServe: "Exibe a situação do conector externo VPS separada da Casa.",
+      responsabilidade: "Não inferir saúde VPS a partir de status de acesso remoto.",
+      ownerTecnico: "Remote Desktop Commander · dispositivo VPS",
+      fonteDaProva: "Adapter externo do conector VPS (não conectado nesta consulta)",
+      escopoEstado: "da conexão do Desktop Commander VPS",
+      limiteDaProva: "Offline do conector não comprova desligamento de VPS ou dos serviços.",
     },
   };
   const sinaisComResponsabilidade: ContratoCartaoResponsabilidade[] = sinais.map((s) => ({
