@@ -447,5 +447,5 @@ test("Gênesis aciona regressão via Admin e nunca confunde workflow com deploy"
   const noFakePass = (source) =>
     source.includes('install: "UNPROVEN", connect: "UNPROVEN", prove: "UNPROVEN"');
   assert.equal(noFakePass(admin), true);
-  assert.equal(noFakePass(admin.replace('install: "UNPROVEN"', 'install: "PASS"')), false);
+  assert.equal(noFakePass(admin.replace('install: "UNPROVEN", connect: "UNPROVEN"', 'install: "PASS", connect: "UNPROVEN"')), false);
 });
