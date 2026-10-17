@@ -578,5 +578,5 @@ test("🪬 quatro cartões com flip metálico separam CURRENT, offline e verde h
   assert.match(sensor, /casaPeerOnline: casaPeer\.online/);
   assert.match(sensor, /casaPeerMedidoEm: casaPeer\.medidoEm/);
   assert.match(sensor, /casaOnly && resposta.status === 200/);
-  assert.match(sensor, /não prova de processo desligado/);
+  assert.match(sensor, /peer offline != prova de processo desligado/);
 });
