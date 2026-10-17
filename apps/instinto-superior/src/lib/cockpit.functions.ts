@@ -230,18 +230,35 @@ async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
 // Saída operacional do próprio /health, com campos permitidos; não publica captura,
  // caminhos do host, stdout bruto, OCR, áudio ou informações pessoais.
 function screenpipeIdentificado(sonda: Probe): Probe {
+  // ffmpeg/dependencies nao e obrigatorio nas varias versoes do Screenpipe.
+  // HTTP 200 por si so nao identifica o aplicativo nem o dispositivo.
   if (sonda.estado === "UNKNOWN") return sonda;
-  const dependencias = objetoJson(sonda.dados?.["dependencies"]) ? sonda.dados["dependencies"] : null;
-  if (!dependencias || !objetoJson(dependencias["ffmpeg"])) {
-    return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_SCREENPIPE" };
+  if (sonda.httpStatus !== 200) {
+    return { ...sonda, estado: "UNKNOWN", erro: "SCREENPIPE_HEALTH_NAO_IDENTIFICADO_NESTE_HOST" };
   }
   const status = texto(sonda.dados?.["status"])?.toLowerCase();
-  return { ...sonda, estado: sonda.httpStatus === 200 && status === "healthy" ? "PASS" : "FAIL" };
+  const assinatura = [
+    "frame_status", "audio_status", "capture_status", "last_frame_timestamp",
+    "device_status_details", "ui_recorder",
+  ].some(campo => sonda.dados?.[campo] != null)
+    || objetoJson(sonda.dados?.["dependencies"]);
+  if (!assinatura || !["healthy", "unhealthy", "error"].includes(status ?? "")) {
+    return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_SCREENPIPE" };
+  }
+  return {
+    ...sonda,
+    estado: status === "healthy" ? "PASS" : "FAIL",
+    erro: status === "healthy" ? null : "SCREENPIPE_REPORTOU_" + status!.toUpperCase(),
+  };
 }
 
 function saidaScreenpipe(sonda: Probe): string[] {
   const saida = [`GET /health → HTTP ${sonda.httpStatus ?? "sem resposta"} · ${sonda.estado}`];
   if (sonda.erro) saida.push(`SENSOR: ${sonda.erro.slice(0, 96)}`);
+  for (const campo of ["status", "capture_status", "frame_status", "audio_status"]) {
+    const valor = texto(sonda.dados?.[campo]);
+    if (valor && /^[a-zA-Z0-9 _-]{1,32}$/.test(valor)) saida.push(`${campo}: ${valor}`);
+  }
   const deps = objetoJson(sonda.dados?.["dependencies"]) ? sonda.dados["dependencies"] : null;
   if (deps) for (const [nome, valor] of Object.entries(deps).slice(0, 10)) {
     if (!/^[a-zA-Z0-9_-]{1,32}$/.test(nome) || !objetoJson(valor)) continue;
@@ -442,7 +459,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:4175/", true),
-      medirReachable("http://127.0.0.1:3030/health"),
+      // VPS localhost nao representa Casa SEGREDO; somente Windows local.
+      medirReachable("http://127.0.0.1:3030/health", true),
       medirActions(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
@@ -510,7 +528,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaSiteHttp: casaSite.httpStatus,
       screenpipeHttp: screenpipeMedido.httpStatus,
       screenpipeDetail: texto(screenpipeMedido.dados?.["status"]),
-      screenpipeFonte: process.platform === "win32" ? "host Windows deste servidor · 127.0.0.1:3030" : "host do servidor · 127.0.0.1:3030 (não é prova da Casa)",
+      screenpipeFonte: process.platform === "win32"
+         ? "host Windows do Cockpit · 127.0.0.1:3030 (medição local)"
+         : "Casa SEGREDO · sensor remoto sem ponte neste runtime; localhost VPS não consultado",
       screenpipeEvents: saidaScreenpipe(screenpipeMedido),
       actionsFonte: actions.fonte,
       actionsErro: actions.erro,
