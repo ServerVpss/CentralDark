@@ -306,3 +306,63 @@ não mudar o alias se o usuário tiver um workspace aberto.
 **NEXT_CURSOR:** comparar source/branch com o checkout `K:\` sujo
 antes de atualizar o VSIX; medir `TSC_EXIT`, `REMOTE_SSH_PICKER_OPEN`,
 `SSH_READBACK` e `MCP_LOCAL_FALLBACK` de maneira independente.
+
+
+## 🦀 ZENDRIVE 0.1.4 — navegador conectado + PID → VS Code (17/10/2026)
+
+**Capacidade observada via plugin Browser da sessão ChatGPT:** `list_tabs`
+enumera abas da sessão de navegador conectada e `get_tab_context`
+lê o contexto disponível daquela aba. Esta observação acontece no
+**cliente ChatGPT**; não transfere permissão, login, DOM completo,
+controle de clique nem stdout ao runtime VPS/VS Code. A marca
+`Interacted with Browser` descreve uso de ferramenta do browser,
+não significa acesso universal a todos os botões ou manipulação da página.
+
+**Mesma extensão ZENDRIVE, novos comandos no `Ctrl+Shift+P`:**
+
+- `CentralDark: Localizar VS Code por PID (PowerShell / terminal)`
+  (`centraldark.locateVsCodeByPid`): aceita PID decimal opcional.
+  Sem PID, observa processos `Code.exe` com janela visível; com PID,
+  segue `Win32_Process.ParentProcessId` até 20 níveis ou até
+  `Code.exe`. Cruza terminal nativo `terminal.processId`,
+  `process.pid` do Extension Host, nomes dos workspaces e
+  `vscode.env.remoteName`. Mostra relatório no painel Saída
+  `CentralDark — Rastreio PID/VS Code`. **Não abre outro Code, não
+  altera foco, não escreve arquivo e não lê mensagens.**
+- `CentralDark: Catálogo de abas e capacidades Browser/ZENDRIVE`
+  (`centraldark.browserSurfacesCatalog`): expõe os limites
+  reais da API VS Code e do Browser da sessão ChatGPT na
+  saída `CentralDark — Catalogo Browser/ZENDRIVE`.
+  **Catálogo não equivale a conexão local entre plugins.**
+
+**MCP canônico, owner preservado:** em
+`apps/modulos/mcp/src/tools/core/mcp-admin.js`,
+`DELEGATED_PROVIDER_CAPABILITIES` inclui
+`CHATGPT_BROWSER_TABS_CONTEXT` com estado
+`OBSERVED_CLIENT_SIDE_ONLY` e
+`ZENDRIVE_VSCODE_PID` com
+`SOURCE_ONLY_UNTIL_VSIX_INSTALLED`. O catálogo não oferece
+método de executar comandos no cliente ChatGPT; os plugins têm
+escopos/autorização próprios. Nenhum segundo gateway/MCP criado.
+
+**Exemplo do CHEFE:** PIDs `21172` e `40756` apareceram como
+PowerShell lançado por ferramenta. A correlação com `Code.exe`
+só pode ser afirmada se o PID ainda existir e a cadeia ancestral for
+observada nessa mesma sessão Windows; um PID de processo encerrado
+não constitui vínculo permanente. PID `12268` de VS Code foi um
+snapshot histórico, não assumir atual.
+
+**Readback após compilar/instalar VSIX 0.1.4 na Casa:**
+`Ctrl+Shift+P` → localizador → informar PID atual ou deixar vazio →
+confirmar saída `Processos Code.exe`, `Janela VS Code: PID`,
+`Cadeia: PID=... pai=... exe=...`. Em seguida abrir
+`Catálogo de abas e capacidades Browser/ZENDRIVE`.
+Status compilação/VSIX instalado permanece separado de código em PR.
+
+**Fast Path:** CLI já existente → PID → Code.exe/window →
+workspace atual → terminal existente → Hermes → feedback.
+Sem Remote Desktop Commander; usa API nativa e observação Win32
+somente na Casa com extensão instalada.
+
+**NEXT_CURSOR:** build tsc, VSIX 0.1.4, invoke commands, validar PID
+de shell ativo e terminal; depois medir bridge remoto independente.
