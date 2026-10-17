@@ -25,6 +25,7 @@ export function classifyVisualEvidence(probe) {
   if (!/^[0-9a-f]{40}$/.test(probe?.sourceSha || "")) return block("SOURCE_SHA_UNPROVEN");
   if (!probe?.executableFound) return block("PUPPETEER_CHROME_NOT_FOUND");
   if (!probe?.libraryLoaded) return block("PUPPETEER_LIBRARY_NOT_AVAILABLE");
+  if (probe?.runtimeError) return block("BROWSER_RUNTIME_OR_SCREENSHOT_ERROR");
   if (!Array.isArray(probe?.viewports) || probe.viewports.length !== 2)
     return block("TWO_VIEWPORT_RECEIPTS_REQUIRED");
   if (probe.viewports.some((item) => item?.httpStatus == null))
