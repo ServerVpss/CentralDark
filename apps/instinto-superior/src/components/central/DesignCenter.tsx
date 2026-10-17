@@ -67,6 +67,87 @@ const cores = [
 
 const estados = ["PASS", "RUNNING", "BLOCKED", "AUTH_REQUIRED", "UNKNOWN", "FAIL"] as const;
 
+
+type AchadoDom = { tipo: "ID_DUPLICADO" | "ARIA_ALVO_AUSENTE" | "TRANSBORDO_HORIZONTAL" | "CONTROLE_ENCOBERTO"; alvo: string; detalhe: string };
+type LeituraDom = {
+  url: string; em: string; elementos: number; amostraLimitada: boolean;
+  larguraViewport: number; larguraDocumento: number; achados: AchadoDom[];
+};
+
+/** Apenas o DOM da aba que renderiza este Design Center; sem coleta externa. */
+function inspecionarDomAtual(): LeituraDom {
+  const nodes = Array.from(document.querySelectorAll<HTMLElement>("*"));
+  const sample = nodes.slice(0, 6000);
+  const achados: AchadoDom[] = [];
+  const nomes = new Map<string, number>();
+  for (const el of sample) {
+    if (el.id) nomes.set(el.id, (nomes.get(el.id) ?? 0) + 1);
+  }
+  for (const [id, count] of nomes) {
+    if (count > 1) achados.push({ tipo: "ID_DUPLICADO", alvo: "#" + id, detalhe: String(count) + " elementos com o mesmo ID." });
+  }
+  for (const el of sample) {
+    for (const attribute of ["aria-labelledby", "aria-describedby", "aria-controls"]) {
+      const value = el.getAttribute(attribute);
+      if (!value) continue;
+      for (const id of value.trim().split(/\s+/)) {
+        if (!document.getElementById(id)) {
+          achados.push({
+            tipo: "ARIA_ALVO_AUSENTE",
+            alvo: el.tagName.toLowerCase() + (el.id ? "#" + el.id : ""),
+            detalhe: attribute + " aponta para #" + id + " não presente no DOM renderizado.",
+          });
+        }
+      }
+    }
+  }
+  const larguraViewport = document.documentElement.clientWidth;
+  const larguraDocumento = document.documentElement.scrollWidth;
+  if (larguraDocumento > larguraViewport + 2) {
+    achados.push({
+      tipo: "TRANSBORDO_HORIZONTAL",
+      alvo: "document.documentElement",
+      detalhe: "Documento " + larguraDocumento + "px, viewport " + larguraViewport + "px.",
+    });
+  }
+  // Sondar APENAS controles visíveis. Elemento sobreposto é uma suspeita,
+  // porque popovers/modais podem obstruir intencionalmente outros botões.
+  const controles = sample.filter(el => el.matches("button, a[href], input, select, textarea, [role='button']"));
+  let vistos = 0;
+  for (const el of controles) {
+    if (vistos >= 180) break;
+    const r = el.getBoundingClientRect();
+    if (r.width < 5 || r.height < 5 || r.bottom <= 0 || r.right <= 0 ||
+        r.top >= window.innerHeight || r.left >= window.innerWidth) continue;
+    const style = window.getComputedStyle(el);
+    if (style.visibility !== "visible" || style.display === "none" || style.pointerEvents === "none") continue;
+    const x = Math.max(1, Math.min(window.innerWidth - 2, r.left + Math.min(r.width / 2, r.width - 2)));
+    const y = Math.max(1, Math.min(window.innerHeight - 2, r.top + Math.min(r.height / 2, r.height - 2)));
+    if (x < r.left || x >= r.right || y < r.top || y >= r.bottom) continue;
+    vistos++;
+    const sobreposto = document.elementFromPoint(x, y);
+    if (sobreposto && !el.contains(sobreposto) && !sobreposto.contains(el)) {
+      const tag = el.tagName.toLowerCase();
+      achados.push({
+        tipo: "CONTROLE_ENCOBERTO",
+        alvo: tag + (el.id ? "#" + el.id : ""),
+        detalhe: "Possível sobreposição no centro do controle. Inspecionar visualmente; modais podem ser intencionais.",
+      });
+    }
+    if (achados.length >= 75) break;
+  }
+  return {
+    url: location.pathname + location.search,
+    em: new Date().toISOString(),
+    elementos: nodes.length,
+    amostraLimitada: nodes.length > 6000,
+    larguraViewport,
+    larguraDocumento,
+    achados: achados.slice(0, 75),
+  };
+}
+
+
 function MiniSuperficie({ tipo }: { tipo: "publica" | "entrada" | "controle" }) {
   const titulos = {
     publica: "CentralDark — Instinto Superior",
@@ -107,6 +188,16 @@ export function DesignCenter({
   autenticado?: boolean;
 }) {
   const [comparacao, definirComparacao] = useState<"canonico" | "teste">("canonico");
+  const [domAtivo, definirDomAtivo] = useState(false);
+  const [domMedido, definirDomMedido] = useState<LeituraDom | null>(null);
+  useEffect(() => {
+    if (!autenticado || !domAtivo) return;
+    const medir = () => { if (!document.hidden) definirDomMedido(inspecionarDomAtual()); };
+    medir();
+    const timer = window.setInterval(medir, 3000);
+    window.addEventListener("resize", medir);
+    return () => { window.clearInterval(timer); window.removeEventListener("resize", medir); };
+  }, [autenticado, domAtivo]);
 
   return (
     <section id="design-center" className="scroll-mt-24">
@@ -167,6 +258,7 @@ export function DesignCenter({
           {autenticado ? <TabsTrigger value="extensoes">Marketplace</TabsTrigger> : null}
           <TabsTrigger value="superficies">Superfícies</TabsTrigger>
           <TabsTrigger value="auditoria">Auditoria</TabsTrigger>
+          {autenticado ? <TabsTrigger value="dom-vivo">DOM Vivo</TabsTrigger> : null}
         </TabsList>
 
         <TabsContent value="tokens" className="mt-6">
@@ -385,6 +477,70 @@ export function DesignCenter({
             </div>
           </div>
         </TabsContent>
+
+        {autenticado ? (
+          <TabsContent value="dom-vivo" className="mt-6">
+            <div className="panel space-y-4 p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h3 className="font-semibold">🧿 Escavador DOM · aba do Cockpit</h3>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Inspeciona o DOM renderizado nesta aba (ID, referências ARIA, transbordo e controles encobertos).
+                    Não abre outro navegador, não envia dados e não modifica componentes.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" variant="outline" size="sm" onClick={() => definirDomMedido(inspecionarDomAtual())}>
+                    <RotateCcw /> Medir agora
+                  </Button>
+                  <Button type="button" size="sm" variant={domAtivo ? "default" : "outline"}
+                    aria-pressed={domAtivo} onClick={() => definirDomAtivo(!domAtivo)}>
+                    {domAtivo ? "⏸ Pausar" : "▶ Ao vivo · 3s"}
+                  </Button>
+                </div>
+              </div>
+              <p className="font-mono text-xs" role="status">
+                {domMedido
+                  ? "LIDO " + new Date(domMedido.em).toLocaleString("pt-BR") +
+                    " · elementos " + domMedido.elementos +
+                    " · achados " + domMedido.achados.length +
+                    (domMedido.amostraLimitada ? " · AMOSTRA LIMITADA" : "")
+                  : "AGUARDANDO LEITURA NESTA ABA"}
+              </p>
+              {domMedido ? (
+                <>
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    <p className="rounded border border-border bg-background/40 p-3 text-xs">Viewport <b>{domMedido.larguraViewport}px</b></p>
+                    <p className="rounded border border-border bg-background/40 p-3 text-xs">Documento <b>{domMedido.larguraDocumento}px</b></p>
+                    <p className="rounded border border-border bg-background/40 p-3 text-xs">
+                      Conflitos candidatos <b>{domMedido.achados.length}</b>
+                    </p>
+                  </div>
+                  <div className="max-h-80 space-y-2 overflow-auto" role="log" aria-label="Divergências DOM medidas">
+                    {domMedido.achados.length ? domMedido.achados.map((item, i) => (
+                      <div className="rounded border border-amber-500/40 p-3 text-xs" key={item.tipo + item.alvo + i}>
+                        <strong className="font-mono">{item.tipo} · {item.alvo}</strong>
+                        <p className="mt-1 text-muted-foreground">{item.detalhe}</p>
+                      </div>
+                    )) : (
+                      <p className="rounded border border-border p-3 text-xs text-muted-foreground">
+                        Nenhuma divergência encontrada nas verificações implementadas nesta amostra.
+                        Isso não substitui inspeção de estilos, eventos e árvore de acessibilidade.
+                      </p>
+                    )}
+                  </div>
+                  <Button type="button" variant="outline" size="sm" onClick={() => {
+                    void navigator.clipboard.writeText(JSON.stringify(domMedido, null, 2));
+                  }}>Copiar recibo DOM</Button>
+                </>
+              ) : null}
+              <p className="text-[10px] text-muted-foreground">
+                Sem acesso ao DOM de iframes cross-origin nem abas de outros aplicativos.
+                Conflito candidato não é falha até ser confirmado; nenhum ajuste é aplicado automaticamente.
+              </p>
+            </div>
+          </TabsContent>
+        ) : null}
 
         <TabsContent value="auditoria" className="mt-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
