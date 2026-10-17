@@ -75,8 +75,25 @@ function setCorsHeaders(res) {
     res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,Mcp-Session-Id,MCP-Protocol-Version,X-MCP-Session,X-Correlation-Id,X-Request-Id");
     res.setHeader("Access-Control-Expose-Headers", "WWW-Authenticate,Mcp-Session-Id,X-Correlation-Id,X-Request-Id");
 }
-app.use((_req, res, next) => {
+// Cross-origin apenas para LEITURAS admin autenticadas no cockpit confiavel.
+// O login admin do MCP ainda e validado por isAdmin() no endpoint; escrita
+// administrativa permanece same-origin (nunca liberar POST por este caminho).
+const cockpitAdminReadOrigins = new Set([
+    "https://admin.centralldark.com",
+    ...String(process.env.CENTRALDARK_COCKPIT_ADMIN_READ_ORIGINS || "")
+        .split(",").map(x => x.trim()).filter(Boolean),
+]);
+app.use((req, res, next) => {
     setCorsHeaders(res);
+    const origin = String(req.headers.origin || "");
+    const path = String(req.path || "");
+    if (req.method === "GET"
+        && (path === "/admin/api/logs" || path === "/admin/api/metricas")
+        && cockpitAdminReadOrigins.has(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+        res.vary("Origin");
+    }
     next();
 });
 app.options(/.*/, (_req, res) => {
