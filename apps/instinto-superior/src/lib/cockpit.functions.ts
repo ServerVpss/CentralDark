@@ -424,8 +424,9 @@ function origemLocalScreenpipe(): HostScreenpipe {
   const origemDeclarada = process.env["CENTRALDARK_COCKPIT_HOST_ROLE"]?.toUpperCase();
   if (origemDeclarada === "CASA" && process.platform === "win32") return "CASA";
   if (origemDeclarada === "VPS" && process.platform !== "win32") return "VPS";
-  if (process.platform === "win32") return "CASA";
-  return hostname().toUpperCase() === "CENTRALDARK-OS" ? "VPS" : "UNKNOWN";
+  const host = hostname().toUpperCase();
+  if (process.platform === "win32" && (host === "SEGREDO" || host === "WINDOWS-CASA")) return "CASA";
+  return process.platform !== "win32" && host === "CENTRALDARK-OS" ? "VPS" : "UNKNOWN";
 }
 
 const SONDA_NAO_EXECUTADA: Probe = {
@@ -551,7 +552,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipeVpsEvents: hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeVps) : ["NÃO MEDIDO · exige sensor na VPS"],
       screenpipeCasaMedidoEm: hostScreenpipe === "CASA" ? consultaEm : null,
       screenpipeVpsMedidoEm: hostScreenpipe === "VPS" ? consultaEm : null,
-      apiHealthFonte: `${origemHttp}/health · chamada feita pelo servidor do cockpit`,
+      apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side`,
       apiHealthServico: apiServico.slice(0, 100),
       apiHealthMedidoEm: consultaEm,
       desktopVpsFonte: "Remote Desktop Commander VPS · sensor externo não consultado neste servidor; offline do conector não prova VPS parada",
