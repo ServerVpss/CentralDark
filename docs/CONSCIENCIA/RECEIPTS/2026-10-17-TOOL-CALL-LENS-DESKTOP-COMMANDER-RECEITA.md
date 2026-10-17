@@ -249,3 +249,66 @@ atualizada dos arquivos de skills.
 da Casa com owner/um writer; disparar a receita na Casa; observar
 `call_id` no mesmo HUD; fechar critério E2E; só então avaliar
 microdeploy/promoção autorizada. 
+
+
+## 9. REGISTRA — FIX POINT de documentação / recibo da escavação (17/10/2026)
+
+**Missão do CHEFE:** registrar todo o fio público e privado da exploração do Desktop Commander, com recibo reproduzível e owners, sem criar segundo executor, sem perder a organização do Cockpit.
+
+### Linha de observação e atribuição
+
+| Sinal / achado | Fonte exata | Classificação |
+|---|---|---|
+| Ferramentas `start_process`, `read_process_output`, `interact_with_process` e `list_sessions` | Projeto público `wonderwhy-er/DesktopCommanderMCP`, `src/server.ts`; documentação de skills pública | PROTOCOLO_DOCUMENTADO |
+| `start_process` cria sessão/retorna PID, podendo entregar saída inicial | Descrição pública da tool e captura fornecida pelo CHEFE | DOCUMENTADO + CAPTURA_EXTERNA |
+| `read_process_output` recebe PID, `offset`, `length` e timeout; permite leitura incremental/últimas linhas | `src/server.ts` oficial e exemplos públicos da skill | PROTOCOLO_DOCUMENTADO |
+| Screenshot: PID 16424, `NODE_MODULES=True`, `LOCAL_GALLERY=True`, `LOCAL_AUTH=True`, `PACKAGE=True`, `VPS_ONLINE`, `DEPS_YES`, `active`, exit 0 | Saída de ferramenta compartilhada na conversa pelo CHEFE | EVIDENCIA_DA_SESSAO_EXTERNA; não importada automaticamente no MCP |
+| Diretório Git da VPS: `/root/CentralDark` | `vps_list_dir_safe(root=project)`, leitura atual de `infra/systemd` e GitHub | SOURCE_INSPECTED |
+| Principal: `centraldark-desktop-commander.service`, `User=root`, `WorkingDirectory=/root/CentralDark` | `infra/systemd/centraldark-desktop-commander.service` | OWNER_SOURCE |
+| Conta 2: `centraldark-desktop-commander-conta2.service`, HOME separado | `infra/systemd/centraldark-desktop-commander-conta2.service` | OWNER_SOURCE |
+| Script `centraldark-desktop-commander-profile.sh` roda pacote `@wonderwhy-er/desktop-commander@0.2.48` em modo `remote`; `flock` por perfil | `infra/systemd/centraldark-desktop-commander-profile.sh` | OWNER_SOURCE |
+| Watchdog monitora `MainPID`, cgroup, log e autorização; diferencia `AUTH_PENDING`, `UNHEALTHY`, `READY` | `infra/systemd/centraldark-desktop-commander-watchdog.sh` | OWNER_SOURCE |
+| `auditToolExecution` emite envelope `centraldark.mcp.tool-call.v1` com `call_id`, `correlation_id`, tempo e resultado | `apps/modulos/mcp/src/audit-logger.js` | OWNER_SOURCE |
+| `subscribeAuditEvents` alimenta `pushAdminLog` com whitelist de metadados | PR #1842, `apps/modulos/mcp/src/admin.js` | SOURCE_COMMITTED |
+| Admin SSE `/admin/logs/stream`: controles **Ao vivo**, **Pausar visão**, **Rever últimos**, **PASS/FAIL** | PR #1842, mesmo arquivo `admin.js` | SOURCE_COMMITTED |
+| Cockpit → Admin → Observabilidade → Tool Call Lens | PR #1838, `apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx` | SOURCE_COMMITTED |
+| GavetaForja, receita `TOOL_CALL_LENS` em quatro gates | PR #1838, `InfraestruturaSistema.tsx`, `forja-gaveta.snapshot.json` | SOURCE_COMMITTED |
+| Script local e teste de regressão | PR #1842, `skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1`, `apps/modulos/mcp/tests/tool-call-observability.test.mjs` | SOURCE_COMMITTED |
+| VPS checkout observado `main`, HEAD `6b1105bce` e arquivos untracked | `vps_git_status` retornado durante a escavação | SNAPSHOT_DA_LEITURA; não inferir runtime dos PRs |
+
+### Exatamente o que projetar no Cockpit
+
+```text
+[HERMES / CODEX / CHATGPT]
+     └── tools/call ao MCP CentralDark
+           └── auditToolExecution (owner do fato)
+                ├── call_id / correlation_id / mission_id
+                ├── toolName / status / durationMs
+                └── exitCode / mcp_host_pid
+                     └── subscribeAuditEvents
+                          └── Admin LOG_BUFFER (SSE autenticado)
+                               ├── Admin /admin → Tool Call Lens
+                               └── Instinto Superior → Observabilidade
+
+[DESKTOP COMMANDER REMOTO externo]
+     └── start_process → PID de sessão
+          └── read_process_output → linhas/estado/exit
+               └── ADAPTADOR DE CAPTURA DO CLIENTE AINDA PENDENTE
+                    └── somente após vínculo por recibo,
+                         disponibilizar no mesmo Lens
+```
+
+**Contrato de limites:** `mcp_host_pid` não é PID de PowerShell remoto. Uma chamada `start_process` mostrada na UI do ChatGPT não atravessa necessariamente o MCP CentralDark. O botão **Pausar visão** não interrompe processo; **Rever** não reexecuta comandos. A janela Admin SSE tem buffer rotativo em memória, não arquivo infinito de stdout; para replay permanente usar trilha de auditoria protegida com owner e autorização existentes.
+
+**Não duplicar:** reutilizar `audit-logger.js`, `admin.js`, `/admin/logs/stream`, `ObservabilidadeCentralDark.tsx`, `GavetaForja`, shell/skill da ZENDRIVE, serviços systemd de perfis e watchdog. Evitar segundo gateway, segunda fonte da verdade, novo executor ou scraper de UI tratado como recibo.
+
+### Próximo cursor verificável
+
+1. Medir os checks exatos do HEAD atual dos PRs #1842 e #1838.
+2. Rodar `node --check`, teste MCP e `npm run verify:hud && npm run build` na worktree/Forja autorizada, sem sobrescrever alterações concorrentes.
+3. Rodar a receita de quatro gates no `K:\` e registrar JSON da execução.
+4. Correlacionar um `call_id` real no Admin e no Cockpit autenticados.
+5. Para capturar o Desktop Commander remoto **fora** do MCP CentralDark, primeiro definir adapter do lado do cliente autorizado que preserve `device`, `session`, `pid`, `call_id`, `offset`, `exitCode` e timestamp sem expor payload sensível. Nenhum adapter externo novo foi inferido.
+6. Preservar PRs separados por escopo; só promover após aceite do CHEFE.
+
+**RESULTADO DESTA RODADA:** `RECEITA_REGISTRADA_NO_PR`. Isso é um FIX POINT **documental**; gates de runtime são discriminados no §5, sem substituir seus readbacks.
