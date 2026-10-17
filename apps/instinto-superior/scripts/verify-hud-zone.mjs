@@ -183,7 +183,7 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
   assert.equal(catalogo.runtime_snapshots.mcp.catalog_tools, 141);
   assert.equal(catalogo.runtime_snapshots.mcp.catalog_routes, 13);
   assert.equal(catalogo.runtime_snapshots.mcp.skill_listar_entries, 3);
-  assert.equal(catalogo.automation_owners.length, 9);
+  assert.equal(catalogo.automation_owners.length, 10);
   assert.ok(catalogo.automation_owners.some(x => x.id === "CLAUDE_CODE" &&
     x.estado === "CLAUDE_RUNNING_TERMINAL_UNBOUND" && x.modo === "COPY_ONLY"));
   assert.ok(catalogo.automation_owners.some(x => x.id === "HERMES" &&
@@ -196,10 +196,27 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
 });
 
 
+test("Tool Call Lens cadastrado na gaveta reaproveita os owners com 4 gates", () => {
+  const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
+  const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
+  const receita = catalogo.automation_owners.find(x => x.id === "TOOL_CALL_LENS");
+  assert.ok(receita, "receita TOOL_CALL_LENS nao encontrada na gaveta");
+  assert.equal(receita.owner, "apps/modulos/mcp/src/audit-logger.js");
+  assert.equal(receita.fases.length, 4);
+  assert.deepEqual(receita.fases.map(x => x.id), ["CONSTRUIR", "INSTALAR", "CONECTAR", "PROVAR"]);
+  assert.ok(receita.fases.every(x => x.owner && x.comprovar && x.estado));
+  assert.ok(receita.receita.includes("forja-tool-call-lens-4-fases.ps1"));
+  assert.ok(receita.recibo.includes("TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md"));
+  assert.ok(infra.includes('aria-label="Quatro etapas da Forja"'));
+  assert.ok(infra.includes("automacaoAtual.fases.map"));
+  assert.ok(infra.includes("Tool Call Lens"));
+  assert.ok(infra.includes("Copiar receita · não executar"));
+});
+
 test("gaveta cataloga receitas A-Z e mostra estado do terminal sem autoexec", () => {
   const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
   const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
-  assert.equal(catalogo.automation_owners.length, 9);
+  assert.equal(catalogo.automation_owners.length, 10);
   assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 9);
   assert.ok(catalogo.automation_owners.every(r => r.owner && r.receita && r.nome));
   assert.ok(infra.includes("receitasAlfabeticas"));
