@@ -251,3 +251,58 @@ LIST_DEVICES
 **Medição 2026-10-15:** o MCP CentralDark expôs cinco sessões PowerShell na Casa. A sessão `PID 34080` aceitou a entrada inofensiva `Write-Output '__CENTRALDARK_INTERACTIVE_PROBE__'`, porém não produziu saída nem em leitura posterior; portanto `SEND_ACCEPTED_READBACK_UNKNOWN`, não `INTERACTIVE_SESSION_PROVEN`. Outras sessões observadas incluíram Vite/Instinto e Artifacts Builder; não foram reutilizadas como terminal de comando.
 
 **NEXT_CURSOR:** mapear PID ↔ terminal visível do VS Code/Claude/Hermes por evidência não destrutiva; só então usar `interact_with_process` para comando real e registrar `SEND/OUTPUT/EXIT_OR_PROMPT` no receipt existente.
+
+
+## 🪬 ZENDRIVE CLI — acesso SSH Casa → VPS sem Desktop Commander (17/10/2026)
+
+**Mesma extensão/owner:** `skills/vs-code-restore` v0.1.3. Não instala daemon,
+não duplica Hermes, não exige Desktop Commander, não modifica
+`C:\Users\Administrador\.ssh\config` nem transporta chave.
+
+No VS Code (`Ctrl+Shift+P`), a extensão oferece:
+
+- **CentralDark: Testar rota SSH Casa → VPS (Tailscale / pública)**:
+  executa um probe de leitura com o `ssh.exe` já existente, priorizando
+  `100.90.199.124` e usando a rota pública somente como fallback.
+  O comando testa a identidade SSH existente `segredo-vpss`, exige
+  `BatchMode=yes` e `StrictHostKeyChecking=yes`, e registra apenas
+  rota, estado e hostname lido na saída `CentralDark — SSH Casa/VPS`.
+- **CentralDark: Conectar VPS via Remote SSH (mesma identidade)**:
+  realiza o probe e, se responder, abre o **seletor oficial**
+  `remote-ssh.connectToHost` do VS Code, caso instalado. O usuário
+  escolhe ali o alias já configurado. A extensão não cria conexão
+  ou identidade SSH paralela.
+
+**Distinção:** o probe Tailscale aplica um override efêmero de `HostName`
+com `HostKeyAlias` já fixado; o seletor Remote-SSH respeita o **arquivo
+SSH configurado pelo usuário**, normalmente o alias público. O botão NÃO
+muda silenciosamente o `Remote-SSH` para Tailscale, não reescreve host
+config e não assume que a extensão Microsoft Remote-SSH esteja instalada.
+
+**Control plane complementar:** `apps/modulos/mcp` continua sendo o
+MCP oficial da CentralDark. A consulta `tailscale_bridge_status`
+agora pode consultar `tailscale status --json` LOCALMENTE na VPS se
+o OAuth Broker da porta 8098 falhar, expondo somente contagens e booleanos.
+`BROKER_DOWN` e `TAILSCALE_LOCAL_ONLINE` são estados diferentes;
+nenhum deles sozinho prova acesso SSH Casa↔VPS ou Tailscale API autenticada.
+
+**Instalação:** a mudança é código-fonte de branch/PR e precisa ser
+compilada/instalada como atualização da extensão da Casa, preservando o
+VS Code e o workspace existentes. Nunca inferir instalação local pelo
+commit. O runtime MCP precisa carregar o código atualizado para refletir
+o fallback.
+
+**Fronteira:** nenhum push automático, reset, limpeza da Casa, abertura
+pública de porta, edição do cofre, rotação de credenciais, deploy ou
+alteração na `main` por estes comandos. Probe e navegação apenas.
+
+**Teste discriminante na Casa após instalar:** terminal VS Code
+`Ctrl+Shift+P` → `CentralDark: Testar rota SSH Casa → VPS` →
+procurar `[OK] TAILSCALE` ou `[OK] PUBLIC_FALLBACK` na saída;
+`Conectar VPS via Remote SSH` deve abrir o seletor nativo e permitir
+selecionar `segredo-vpss`. Capturar rota e readback do SSH remoto;
+não mudar o alias se o usuário tiver um workspace aberto.
+
+**NEXT_CURSOR:** comparar source/branch com o checkout `K:\` sujo
+antes de atualizar o VSIX; medir `TSC_EXIT`, `REMOTE_SSH_PICKER_OPEN`,
+`SSH_READBACK` e `MCP_LOCAL_FALLBACK` de maneira independente.
