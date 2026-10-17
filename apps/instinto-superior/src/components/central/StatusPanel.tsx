@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Activity, Eye, Github, House, Monitor, RefreshCw, Server } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,7 @@ function LuzViva({ estado, nome }: { estado: Estado; nome: string }) {
 function DataHora({ iso }: { iso: string | null | undefined }) {
   if (!iso) return <>SEM MEDIÇÃO</>;
   const n = Date.parse(iso);
-  return <>{Number.isFinite(n) ? new Date(n).toLocaleString("pt-BR") : "DATA INVÁLIDA"}</>;
+  return <>{Number.isFinite(n) ? new Date(n).toLocaleString("pt-BR", { timeZone: "America/Bahia" }) : "DATA INVÁLIDA"}</>;
 }
 
 /**
@@ -41,6 +42,11 @@ function DataHora({ iso }: { iso: string | null | undefined }) {
  * deixam de contar como prova, inclusive após erro de transporte.
  */
 export function StatusPanel() {
+  // 2026-10-16: SSR hydration guard. Date.now() and cache freshness must not
+  // influence the server render vs the browser's first hydration render.
+  // This is an incremental, fail-closed fix; post-mount reads stay measured.
+  const [hidratado, definirHidratado] = useState(false);
+  useEffect(() => { definirHidratado(true); }, []);
   const ler = useServerFn(lerEstadoCentralDark);
   const q = useQuery({
     queryKey: ["centraldark", "estado-vivo"],
@@ -49,7 +55,7 @@ export function StatusPanel() {
     retry: false,
     refetchOnWindowFocus: true,
   });
-  const fresco = Boolean(q.data) && !q.isError && (Date.now() - q.dataUpdatedAt < 45_000);
+  const fresco = hidratado && Boolean(q.data) && !q.isError && (Date.now() - q.dataUpdatedAt < 45_000);
   const d = fresco ? q.data : null;
   const unknown: Estado = "UNKNOWN";
   const screen: Estado = d?.screenpipe ?? unknown;
@@ -92,7 +98,7 @@ export function StatusPanel() {
         </div>
         <div className="flex items-center gap-3">
           <span className="font-mono text-[10px] text-muted-foreground">POLÍTICA 15S</span>
-          <Button size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
+          <Button data-cd-flow="instinto.StatusPanel.botao-01" size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
             <RefreshCw className={`size-4 ${q.isFetching ? "animate-spin" : ""}`} /> Medir agora
           </Button>
         </div>

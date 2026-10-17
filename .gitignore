@@ -161,3 +161,20 @@ _DIAGNOSTICS/
 apps/modulos/status/painel-data.json
 apps/modulos/status/graph-data.json
 apps/modulos/graph-panel/data/graph.json
+.pnpm-store/
+$RECYCLE.BIN/
+.screenpipe/
+.auto-sync/
+
+# CentralDark Forja raw worker storage — runtime only, NEVER curated Git source
+# K:\_WORKER is a Windows junction to F:\_WORKER; ignore its *children* too.
+/_WORKER/
+# TEMP is a junction to a heavy storage volume; support other agents/hosts as well.
+/TEMP/
+/tmp/
+# Self-hosted CI clones, archives and VM runner workspaces stay outside source control.
+/actions-runners/
+/actions-runner-vmware/
+**/_work/
+# Hermes Core mission inbox/outbox are mutable runtime state, not code or receipts.
+/apps/modulos/HERMES-CORE/missions/

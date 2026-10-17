@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grafo CentralDark · 2D</title>
+    <meta name="description" content="Painel 2D do grafo CentralDark." />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/force-graph@1.43.5/dist/force-graph.min.js" defer></script>
+    <script src="/graph.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div><p class="eyebrow">CentralDark</p><h1>Grafo de módulos</h1></div>
+      <div class="actions">
+        <button id="refresh" type="button">Atualizar</button>
+        <button id="runLovable" type="button">Run Lovable</button>
+        <button id="runGraphifyy" type="button">Run graphifyy</button>
+        <a href="/">[3D]</a>
+      </div>
+    </header>
+    <main class="dashboard">
+      <section class="card" id="graph-section">
+        <div id="graph" style="width:100%;height:65vh;background:#000308;border-radius:8px;overflow:hidden"></div>
+      </section>
+      <aside class="sidebar">
+        <section class="card"><h2>Resumo</h2><p>Nós: <strong id="nodes">0</strong><br>Arestas: <strong id="edges">0</strong><br>Comunidades: <strong id="communities">0</strong></p><p>Última atualização: <span id="updated">—</span></p></section>
+        <section class="card"><h2>Relatório</h2><div id="report"><p>Carregando...</p></div></section>
+        <section class="card"><h2>Auditoria</h2><div id="audit"><p>Carregando...</p></div></section>
+        <section class="card"><h2>Histórico</h2><ol id="history"><li>Carregando...</li></ol></section>
+        <section class="card"><h2>Status VPS</h2><div id="live-status"><p>Carregando...</p></div></section>
+      </aside>
+    </main>
+  </body>
+</html>

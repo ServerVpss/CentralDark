@@ -1,0 +1,11 @@
+{
+  "nome": "Quadro de Missões do Hermes",
+  "tipo": "react-spa",
+  "slug": "quadro-de-miss-es-do-hermes",
+  "tema": "dark",
+  "criado": "2026-07-05T00:59:31.637Z",
+  "rotas": [
+    "/"
+  ],
+  "descricao": "Kanban board das missões do Hermes: Pendente → Em Andamento → Concluída. Cada card mostra prioridade, tempo, e detalhes da execução."
+}

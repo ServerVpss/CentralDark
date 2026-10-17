@@ -1,0 +1,368 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://centralldark.com/schemas/capsula-event.schema.json",
+  "title": "CentralDark Capsule Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "capsule_id",
+    "run_id",
+    "mission_id",
+    "iteration",
+    "timestamp_utc",
+    "phase",
+    "candidate_ref",
+    "candidate_digest",
+    "baseline_ref",
+    "fixture_ref",
+    "evaluator_ref",
+    "writer",
+    "event_actor",
+    "action",
+    "status",
+    "reason",
+    "chief_decision",
+    "chief_receipt_ref",
+    "chief_receipt_hash",
+    "tests",
+    "evidence_hash",
+    "failure_observed",
+    "failure_fingerprint",
+    "new_failure_class",
+    "correction_verified",
+    "retained_after_retest",
+    "false_green_found",
+    "regression_found"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "capsule_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mission_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "iteration": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "phase": {
+      "enum": [
+        "PLAN",
+        "ACT",
+        "OBSERVE",
+        "CRITIQUE",
+        "REFINE",
+        "DECIDE"
+      ]
+    },
+    "candidate_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_digest": {
+      "type": "string",
+      "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+    },
+    "baseline_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fixture_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evaluator_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "writer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_actor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "ANOMALY",
+        "ACHADO_PENDENTE",
+        "BLOCKED"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    },
+    "chief_decision": {
+      "enum": [
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
+    "chief_receipt_ref": {
+      "type": "string"
+    },
+    "chief_receipt_hash": {
+      "type": "string"
+    },
+    "seal_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "seal_id": {
+      "type": "string",
+      "pattern": "^S[0-9]{6}$"
+    },
+    "seal_proof_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "next_cursor": {
+      "type": "string",
+      "pattern": "^S[0-9]{6}$"
+    },
+    "tests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "pass",
+        "fail",
+        "skipped"
+      ],
+      "$comment": "A igualdade total = pass + fail + skipped é reforçada por validateEvent e testada no CI.",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pass": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fail": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "skipped": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "evidence_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "failure_observed": {
+      "type": "boolean"
+    },
+    "failure_fingerprint": {
+      "type": "string"
+    },
+    "new_failure_class": {
+      "type": "boolean"
+    },
+    "correction_verified": {
+      "type": "boolean"
+    },
+    "retained_after_retest": {
+      "type": "boolean"
+    },
+    "false_green_found": {
+      "type": "boolean"
+    },
+    "regression_found": {
+      "type": "boolean"
+    },
+    "active_capabilities": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 32,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80,
+        "pattern": "^[A-Z0-9_:-]+$"
+      }
+    },
+    "generalization": {
+      "$ref": "#/$defs/ratio"
+    },
+    "retention": {
+      "$ref": "#/$defs/ratio"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "BLOCKED"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "reason": {
+            "enum": [
+              "CAPTURE_DEGRADED",
+              "SECRET_EXPOSURE",
+              "SANITIZE_FAILED",
+              "SKIPPED",
+              "GATE_FAILED",
+              "AUTH_MISSING",
+              "NO_EVENTS",
+              "INVALID_EVENT",
+              "CANDIDATE_DRIFT",
+              "EVALUATOR_NOT_INDEPENDENT"
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "reason": {
+            "const": ""
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "chief_decision": {
+            "enum": [
+              "APPROVED",
+              "REJECTED"
+            ]
+          }
+        },
+        "required": [
+          "chief_decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "phase": {
+            "const": "DECIDE"
+          },
+          "event_actor": {
+            "const": "SEGREDO/CHEFE"
+          },
+          "chief_receipt_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chief_receipt_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "chief_receipt_ref": {
+            "const": ""
+          },
+          "chief_receipt_hash": {
+            "const": ""
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "chief_decision": {
+            "const": "APPROVED"
+          }
+        },
+        "required": [
+          "chief_decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "status": {
+            "const": "PASS"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "PASS"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "tests": {
+            "properties": {
+              "total": {
+                "minimum": 1
+              },
+              "fail": {
+                "const": 0
+              },
+              "skipped": {
+                "const": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "ratio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pass",
+        "total"
+      ],
+      "properties": {
+        "pass": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}
