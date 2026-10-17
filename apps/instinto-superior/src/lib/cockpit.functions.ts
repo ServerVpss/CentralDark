@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 const GATEWAY = "https://connector-gateway.lovable.dev/github";
 const GITHUB_API = "https://api.github.com";
@@ -42,6 +44,9 @@ export type EstadoCentralDark = {
   omniModels: Estado;
   receipts: Estado;
   casaSite: Estado;
+  casaPeerOnline: boolean | null;
+  casaPeerFonte: string;
+  casaPeerMedidoEm: string | null;
   screenpipe: Estado;
   actions: Estado;
   actionsLinuxMinutes: number | null;
@@ -434,6 +439,45 @@ async function medirDelta(vpsSha: string | null, mainSha: string | null) {
   }
 }
 
+
+// #OBSERVACOES# @owner=apps/instinto-superior/src/lib/cockpit.functions.ts
+// @doc_ref=apps/instinto-superior/README.md
+// @last_updated=2026-10-17 · Fonte CURRENT/ HISTORICO separadas.
+// Diagnostica APENAS a presença da Casa na malha Tailscale do host servidor.
+// Tailscale peer offline != prova de processo desligado ou de site/serviço caído.
+// Não lê chave, token, IP de peer, shell interativo ou estado da conta do usuário.
+async function medirPeerCasa(): Promise<{
+  online: boolean | null; fonte: string; medidoEm: string | null;
+}> {
+  if (process.platform === "win32") {
+    return { online: null, fonte: "Host Windows · status da malha remota não consultado", medidoEm: null };
+  }
+  try {
+    const { stdout } = await promisify(execFile)("tailscale", ["status", "--json"], {
+      timeout: 2_500, maxBuffer: 512_000, windowsHide: true,
+    });
+    const dados: unknown = JSON.parse(stdout);
+    if (!objetoJson(dados) || !objetoJson(dados["Peer"])) {
+      return { online: null, fonte: "Tailscale · sem lista válida de peers", medidoEm: null };
+    }
+    const casa = Object.values(dados["Peer"]).find((peer) => {
+      if (!objetoJson(peer)) return false;
+      const host = texto(peer["HostName"])?.toLowerCase() ?? "";
+      return host === "segredo";
+    });
+    if (!objetoJson(casa) || typeof casa["Online"] !== "boolean") {
+      return { online: null, fonte: "Tailscale · Casa não identificada neste host", medidoEm: null };
+    }
+    return {
+      online: casa["Online"],
+      fonte: "Tailscale local · peer Casa · disponibilidade na malha, não site",
+      medidoEm: new Date().toISOString(),
+    };
+  } catch {
+    return { online: null, fonte: "Tailscale indisponível neste servidor · sem conclusão", medidoEm: null };
+  }
+}
+
 // Único owner do HUD vivo: agrega GitHub + API CentralDark e nunca promove ausência de prova.
 export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
@@ -447,6 +491,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModels,
       receipts,
       casaSite,
+      casaPeer,
       screenpipe,
       actions,
     ] = await Promise.all([
@@ -459,6 +504,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:4175/", true),
+      medirPeerCasa(),
       // VPS localhost nao representa Casa SEGREDO; somente Windows local.
       medirReachable("http://127.0.0.1:3030/health", true),
       medirActions(),
@@ -499,6 +545,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModels: omniModels.estado,
       receipts: receipts.estado,
       casaSite: casaSite.estado,
+      casaPeerOnline: casaPeer.online,
+      casaPeerFonte: casaPeer.fonte,
+      casaPeerMedidoEm: casaPeer.medidoEm,
       screenpipe: screenpipeMedido.estado,
       actions: actions.estado,
       actionsLinuxMinutes: actions.linux,
