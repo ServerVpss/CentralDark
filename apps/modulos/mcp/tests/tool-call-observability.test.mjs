@@ -109,3 +109,21 @@ test("CORS admin fica restrito a GET de logs/metricas e origem do cockpit", () =
   assert.ok(src.includes('res.setHeader("Access-Control-Allow-Credentials", "true")'));
   assert.ok(src.includes('res.vary("Origin")'));
 });
+
+
+test("Forja Tool Call Lens preserva quatro gates e nao faz merge/deploy", () => {
+  const script = fs.readFileSync(new URL(
+    "../../../../skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1",
+    import.meta.url,
+  ), "utf8");
+  for (const phase of ["01_CONSTRUIR", "02_INSTALAR", "03_CONECTAR", "04_PROVAR"]) {
+    assert.ok(script.includes(phase), "fase obrigatoria ausente: " + phase);
+  }
+  assert.ok(script.includes("ExitCode") || script.includes("LASTEXITCODE"));
+  assert.ok(script.includes("CENTRALDARK_SSH_READBACK_OK"));
+  assert.ok(script.includes("VSIX_VERSION_READBACK_MISSING"));
+  assert.ok(script.includes("E2E_TOOL_CALL_NOT_MEASURED"));
+  assert.ok(script.includes("published = $false"));
+  assert.ok(script.includes("exit 3"));
+  assert.doesNotMatch(script, /git\s+(?:reset|merge|push|clean)|systemctl\s+restart|force.push/i);
+});
