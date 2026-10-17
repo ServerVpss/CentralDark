@@ -81,17 +81,17 @@ test("audit event crosses existing log layer used by admin SSE", () => {
 
 test("Tool Call Lens reutiliza SSE admin e exporta so metadados de auditoria", () => {
   const src = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
-  assert.match(src, /subscribeAuditEvents\\(\\(evento\\) =>/);
+  assert.match(src, /subscribeAuditEvents\(\(evento\) =>/);
   assert.match(src, /mcp_tool_call/);
   assert.match(src, /id="toolLensRows"/);
-  assert.match(src, /function toolLensAlternar\\(/);
-  assert.match(src, /function toolLensRever\\(/);
-  assert.match(src, /toolLensRegistrar\\(d\\)/);
+  assert.match(src, /function toolLensAlternar\(/);
+  assert.match(src, /function toolLensRever\(/);
+  assert.match(src, /toolLensRegistrar\(d\)/);
   const begin = src.indexOf("subscribeAuditEvents((evento) =>");
   const end = src.indexOf("function extrairRota(", begin);
   const observer = src.slice(begin, end);
   assert.ok(begin >= 0 && end > begin);
-  assert.doesNotMatch(observer, /evento\\.(?:input|result|error)/);
+  assert.doesNotMatch(observer, /evento\.(?:input|result|error)/);
   assert.ok(observer.includes("mcp_host_pid"));
   assert.ok(observer.includes("durationMs"));
   assert.ok(observer.includes("correlation_id"));
