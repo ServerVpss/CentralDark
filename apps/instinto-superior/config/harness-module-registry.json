@@ -20,5 +20,106 @@
     "A registry descreve módulos; não copia credenciais, processos ou motores.",
     "Botão de runtime só pode ser habilitado quando a rota viva for medida.",
     "A integração completa exige readback por arquivo/página e prova de CI; catálogo sozinho não é prova."
+    {
+      "id": "deepseek",
+      "owner": "apps/modulos/deepseek-harness",
+      "transport": "existing-owner",
+      "runtime_status": "PROVEN"
+    },
+    {
+      "id": "hermes",
+      "owner": "apps/modulos/HERMES-CORE",
+      "transport": "MCP/RDC",
+      "runtime_status": "PROVEN"
+    },
+    {
+      "id": "claude-code",
+      "owner": "external-vscode-owner",
+      "transport": "VS Code/SSH",
+      "runtime_status": "PROCESS_SESSION_OBSERVED",
+      "evidence_owner": "apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002"
+    },
+    {
+      "id": "chatgpt-cowork",
+      "owner": "external-work-owner",
+      "transport": "Work/browser",
+      "runtime_status": "UNKNOWN"
+    },
+    {
+      "id": "vscode",
+      "owner": "apps/modulos/HERMES-CORE/extensions/hermes-vscode-router-provider",
+      "transport": "VS Code Remote",
+      "runtime_status": "PROVEN"
+    },
+    {
+      "id": "figma",
+      "owner": "Figma connector",
+      "transport": "MCP",
+      "runtime_status": "PROVEN"
+    },
+    {
+      "id": "obsidian",
+      "owner": "apps/modulos/obsidian-plugin-grafo-vivo",
+      "transport": "Grafo Vivo",
+      "runtime_status": "UNKNOWN"
+    },
+    {
+      "id": "cloud-code",
+      "owner": "VS Code Cloud Code extension",
+      "transport": "VS Code extension host",
+      "runtime_status": "PROCESS_OBSERVED",
+      "evidence_owner": "apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002"
+    },
+    {
+      "id": "codex-app-server",
+      "owner": "OpenAI ChatGPT VS Code extension",
+      "transport": "VS Code app-server",
+      "runtime_status": "PROCESS_OBSERVED",
+      "evidence_owner": "apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002"
+    },
+    {
+      "id": "antigravity-hub",
+      "owner": "VS Code Antigravity extension",
+      "transport": "VS Code extension host",
+      "runtime_status": "PROCESS_OBSERVED",
+      "evidence_owner": "apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002"
+    },
+    {
+      "id": "screenpipe-mcp",
+      "owner": ".agents/skills/screenpipe-live-observer",
+      "transport": "MCP/VS Code",
+      "runtime_status": "PROCESS_OBSERVED",
+      "evidence_owner": "apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002"
+    },
+    {
+      "id": "instinto-casa-port-3000",
+      "owner": "apps/instinto-superior",
+      "transport": "Vite localhost → Tailscale private serve",
+      "runtime_status": "PORT_PROCESS_PROVEN",
+      "evidence_owner": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md"
+    }
+  ],
+  "loop": [
+    "intent",
+    "owner_resolution",
+    "transport_resolution",
+    "execution",
+    "readback",
+    "receipt",
+    "ci"
+  ],
+  "invariants": [
+    "original_owners_alive",
+    "no_parallel_runtime",
+    "unknown_not_pass",
+    "page_file_inventory_required",
+    "process_observed_not_equal_interactive_roundtrip",
+    "volatile_pid_or_port_not_identity"
+  ],
+  "notes": [
+    "A registry descreve módulos; não copia credenciais, processos ou motores.",
+    "Botão de runtime só pode ser habilitado quando a rota viva for medida.",
+    "A integração completa exige readback por arquivo/página e prova de CI; catálogo sozinho não é prova.",
+    "D002 mapeia processos vivos do VS Code; ação interativa continua bloqueada até identidade de sessão + ACK/readback correlacionado."
   ]
 }

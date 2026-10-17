@@ -174,6 +174,34 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           e Gênese L000. Migração de todos os sensores do HUD: em andamento.
         </p>
       </header>
+      {/* Incremento 2026-10-16: ingress observável, sem atribuir sessão por adivinhação.
+          Contrato: UNIVERSAL-ENGINE-METHOD.yml#sol_chat_entrypoint_handoff_2026_10_16
+          O chat é entrada nesta missão; a interface só exibe fatos do snapshot real. */}
+      <section className="panel p-6" aria-labelledby="cd-ingress-live">
+        <h3 id="cd-ingress-live" className="text-lg font-semibold">🪬 Porta de entrada · coordenação e execução</h3>
+        <p className="mt-2 text-xs text-muted-foreground">
+          SOL/JARVIS coordena esta missão por meio do chat. A sessão ativa,
+          o writer e o executor somente podem ser declarados pelo owner em runtime.
+        </p>
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {([
+            ["Entrada desta missão", "SOL/JARVIS · contrato", "Não é sessão autenticada do cockpit"],
+            ["Intenção atual", "UNKNOWN", "Nenhum campo de intenção fornecido pelo snapshot"],
+            ["Owner de observação", "cockpit.functions.ts", "Snapshot do mesmo cockpit"],
+            ["Writer ativo", "UNKNOWN", "A leitura não informa lease de escrita"],
+            ["Executor ativo", "UNKNOWN", "Não presumir Hermes/Claude sem recibo"],
+            ["Receita em uso", "UNKNOWN", "Contrato não prova execução"],
+            ["Última evidência", estado?.atualizadoEm ?? "UNKNOWN", "Timestamp do snapshot, não do executor"],
+            ["NEXT_CURSOR", estado?.nextCursor ?? "UNKNOWN", "Continuação conforme owner medido"],
+          ] as const).map(([rotulo, valor, ressalva]) => (
+            <div key={rotulo} className="rounded-md border border-border p-3">
+              <dt className="text-xs font-semibold">{rotulo}</dt>
+              <dd className="mt-1 break-words font-mono text-xs">{valor}</dd>
+              <dd className="mt-1 text-xs text-muted-foreground">{ressalva}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
       <section className="panel p-6" aria-labelledby="cd-genesis-title">
         <div className="flex flex-wrap justify-between gap-3">
           <h3 id="cd-genesis-title" className="text-lg font-semibold">🪬 Gênesis → Fixed Point</h3>
