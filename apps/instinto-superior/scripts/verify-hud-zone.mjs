@@ -313,3 +313,29 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.equal(config.dispatch.notifications_are_not_execution, true);
   assert.doesNotMatch(bell, /localStorage|sessionStorage|\/notify-telegram/);
 });
+
+
+test("Screenpipe da Casa: origem real e assinatura flexivel sem falso 404 da VPS", () => {
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  const panel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const from = sensor.indexOf("function screenpipeIdentificado(");
+  const until = sensor.indexOf("function saidaScreenpipe(", from);
+  assert.ok(from >= 0 && until > from, "assinatura deve permanecer no owner");
+  const probe = sensor.slice(from, until);
+  assert.match(probe, /"frame_status", "audio_status", "capture_status"/);
+  assert.match(probe, /status === "healthy" \? "PASS" : "FAIL"/);
+  assert.match(probe, /"HEALTH_SEM_ASSINATURA_SCREENPIPE"/);
+  assert.doesNotMatch(probe, /dependencias\["ffmpeg"\]/);
+  assert.match(sensor, /medirReachable\("http:\/\/127\.0\.0\.1:3030\/health", true\)/);
+  assert.match(sensor, /localhost VPS não consultado/);
+  assert.match(panel, /CASA NÃO CONSULTADA/);
+  assert.match(panel, /ADAPTER PENDENTE/);
+  assert.match(sensor, /desktop: "UNKNOWN"/);
+});
+
+test("Screenpipe da Casa: o HUD preserva a prova local sem expor captura bruta", () => {
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  assert.match(sensor, /for \(const campo of \["status", "capture_status", "frame_status", "audio_status"\]\)/);
+  assert.match(sensor, /SENSOR: /);
+  assert.doesNotMatch(sensor, /fetch\([^)]*\/frames\//);
+});
