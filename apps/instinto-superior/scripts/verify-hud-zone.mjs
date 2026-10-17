@@ -338,6 +338,8 @@ test("Screenpipe da Casa: o HUD preserva a prova local sem expor captura bruta",
   assert.match(sensor, /for \(const campo of \["status", "capture_status", "frame_status", "audio_status"\]\)/);
   assert.match(sensor, /SENSOR: /);
   assert.doesNotMatch(sensor, /fetch\([^)]*\/frames\//);
+});
+
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
   const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
