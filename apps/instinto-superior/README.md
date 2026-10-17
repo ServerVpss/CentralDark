@@ -46,6 +46,50 @@ Veja `docs/CONVERGENCIA-CAPACIDADES-2026-09-25.md` para a matriz de reaproveitam
 - **Reality Judge:** `RUNTIME_ENV=PASS`, `SSR_ROUTES=PASS`, `SESSION_SERVER_FN=UNKNOWN`, `ADMIN_LOGIN_E2E=UNKNOWN`, `EXTENSION_ERROR=SEPARATE`, `GLOBAL_FIXED_POINT=FALSE`.
 
 
+
+## 🪬 Quatro cartões de estado · frente CURRENT / verso histórico (2026-10-17)
+
+**Owner único:** `src/components/central/StatusPanel.tsx`, com coleta no owner
+`src/lib/cockpit.functions.ts`; regressão no `scripts/verify-hud-zone.mjs`.
+Nenhuma nova aba, executor, backend de memória ou novo contrato de autenticidade.
+
+Os cartões **Casa / Site local**, **Main GitHub**, **VPS · comparação SHA** e
+**API CentralDark** viram ao clicar/tocar (acessível também pelo teclado).
+A frente exibe o estado atual medido com política de 15 s, o verso exibe
+**a última medição positiva persistida neste navegador** em `localStorage`
+(apenas estado/timestamp/SHA truncado/escopo fixo, sem cookies ou secrets).
+Histórico é memória de UI, não recibo canônico; dados de outro navegador/antigas
+conversas não são magicamente disponibilizados. Sem registro válido, o verso
+declara essa ausência; jamais pinta um PASS inventado.
+
+- **Casa desligada:** o servidor VPS consulta `tailscale status --json` em
+  operação de leitura e identifica somente o peer exato `SEGREDO`. Se o peer
+  informa `Online=false`, a face corrente exibe **OFFLINE NA MALHA**, sem
+  declarar que PC, site e processo morreram. Se o binário Tailscale ou peer
+  não existir, fica **CASA NÃO MEDIDA**, não offline inferido. `127.0.0.1:4175`
+  só é testado como Casa quando o servidor efetivamente roda no Windows;
+  HTML HTTP 200 confirma apenas que a **página local respondeu**.
+- **Main:** PASS apenas quando a API GitHub fornece HEAD válido. Ausência de
+  credencial é **AUTORIZAÇÃO DO SENSOR**, não reprovação de commit aprovado.
+- **VPS:** SHA é identificador da versão do código. `SHA COINCIDE` apenas se
+  HEAD Main e HEAD do Live Fabric forem iguais; **não certifica deploy,
+  processo, autenticação nem serviço ativo**.
+- **API:** `/health` identificado e HTTP 200 prova apenas essa rota, não
+  todos os módulos nem três estrelas Michelin.
+
+Estética: a casca metálica usa os tokens do cockpit existente;
+`rotateY(180deg)`, indicador sem piscada falsa de estado desconhecido,
+controle de teclado, `aria-pressed` e `prefers-reduced-motion`.
+No verso também aparece o estado atual e um gatilho cognitivo curto,
+por exemplo **“Mesmo SHA não prova serviço”**.
+
+**Regressão:** `npm run verify:hud` verifica distinção CURRENT/histórico,
+proibição de falso verde, offline da malha e quatro controles. O teste não
+prova navegador real, login, deploy ou aceitação visual.
+**NEXT_CURSOR:** concluir merge sem perder mudanças concorrentes, CI no
+HEAD exato, deploy autorizado da VPS e contraprova visual no cockpit,
+preservando Casa offline e o histórico sem promover STATUS por memória.
+
 ## 🪬 Manifesto incremental do harness privado
 
 O contrato evolutivo, os owners, o catálogo da Forja Viva, a gaveta histórica, a migração do HUD e o NEXT_CURSOR ficam em [INSTINTO-MANIFESTO-INCREMENTAL.md](docs/INSTINTO-MANIFESTO-INCREMENTAL.md). Acrescentar deltas nesse mesmo documento; não criar manifesto paralelo. Os snapshots de inventário não provam runtime ou deploy.
