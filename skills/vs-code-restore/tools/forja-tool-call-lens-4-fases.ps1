@@ -100,7 +100,7 @@ if ($baseline) { $ready = Phase '01_CONSTRUIR' {
   ExecChecked 'npm.cmd' @('run','build') $uiDir
   if (-not (Test-Path -LiteralPath $vsix)) { throw 'VSIX_MISSING' }
   'NODE_MCP_TEST + TSC + VSIX + HUD_TEST + COCKPIT_BUILD'
-}
+} }
 $installed = $false
 if ($ready) {
   if ($NoInstall) {
@@ -138,13 +138,22 @@ if ($installed) {
 }
 if ($connected) {
   $null = Phase '04_PROVAR' {
+    # Antirregressão pós-instalação, antes do readback de ferramenta autenticada.
+    ExecChecked 'node' @('--test','src/intent-cycle-adapter.test.mjs') $mcpDir
+    ExecChecked 'node' @('--test','tests/tool-call-observability.test.mjs') $mcpDir
+    ExecChecked 'npm.cmd' @('run','verify:hud') $uiDir
+    $receipt.postInstallRegression = 'PASS'
     # Instalação local + SSH + HTTP não equivalem a RECEIPT de tools/call.
     # E2E autenticado depende do contexto autorizado do Cockpit/MCP.
     $receipt.e2e = 'AWAITING_AUTHORIZED_CALL_ID_AND_COCKPIT_UI_READBACK'
     throw 'E2E_TOOL_CALL_NOT_MEASURED: verificar call_id real no Admin e no Cockpit'
   }
 }
-if (-not $ready) {
+if (-not $baseline) {
+  foreach ($name in @('01_CONSTRUIR','02_INSTALAR','03_CONECTAR','04_PROVAR')) {
+    $receipt.phases += [pscustomobject]@{phase=$name;state='BLOCKED';detail='ANTIREGRESSION_GATE_BLOCKED';measuredAt=(Get-Date).ToUniversalTime().ToString('o')}
+  }
+} elseif (-not $ready) {
   foreach ($name in @('02_INSTALAR','03_CONECTAR','04_PROVAR')) {
     $receipt.phases += [pscustomobject]@{phase=$name;state='BLOCKED';detail='PREVIOUS_GATE_BLOCKED';measuredAt=(Get-Date).ToUniversalTime().ToString('o')}
   }
