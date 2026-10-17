@@ -570,4 +570,33 @@ test("🪬 Puppeteer Michelin: Chromium real é smoke, nunca três estrelas", as
   assert.match(workflow, /MICHELIN_PUPPETEER_VISUAL=PASS/);
   assert.match(workflow, /RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB/);
   assert.doesNotMatch(workflow, /MICHELIN_STAR_3=PASS/);
+test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
+  const collector = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  const obs = read("apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx");
+  const hud = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+  for (const contract of [
+    "origemLocalScreenpipe()", 'hostScreenpipe === "CASA"',
+    'hostScreenpipe === "VPS"', "SONDA_NAO_EXECUTADA",
+    'screenpipe: screenpipeCasa.estado', 'screenpipeVps: screenpipeVps.estado',
+    'screenpipeCasaMedidoEm:', 'screenpipeVpsMedidoEm:',
+    'screenpipeFonte: screenpipeCasaFonte', 'screenpipeVpsFonte,',
+    'screenpipeIdentificado(screenpipe)', 'dependencias["ffmpeg"]',
+    'apiHealthFonte:', 'apiHealthServico:', 'apiHealthMedidoEm:',
+    'desktopVps: "UNKNOWN"',
+  ]) {
+    assert.ok(collector.includes(contract), "ausente em cockpit.functions: " + contract);
+  }
+  assert.ok(!collector.includes("screenpipe: screenpipeMedido.estado"),
+    "VPS loopback nunca pode aparecer como Screenpipe Casa");
+  for (const label of [
+    'label: "Screenpipe Casa"', 'label: "Screenpipe VPS"',
+    'label: "Desktop Commander Casa"', 'label: "Desktop Commander VPS"',
+    'd?.apiHealthFonte', 'd?.apiHealthServico', 'd?.apiHealthMedidoEm',
+    'd?.screenpipeFonte', 'd?.screenpipeVpsFonte',
+  ]) {
+    assert.ok(obs.includes(label), "falta no painel: " + label);
+  }
+  assert.ok(hud.includes('["Screenpipe VPS", estado?.screenpipeVps'));
+  assert.ok(hud.includes('["Desktop Commander VPS", estado?.desktopVps'));
+  assert.ok(hud.includes('["👁️ Screenpipe VPS", estado?.screenpipeVps'));
 });

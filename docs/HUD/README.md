@@ -197,3 +197,21 @@ Build/CI da PR isolada → corrigir apenas falhas reais do owner → readback em
 **RECEIPT / PROVA:** `DOC_ANCHOR=GITHUB_MAIN_READBACK_REQUIRED`; `UI_INTEGRATED=UNKNOWN`; `BUILD=UNKNOWN`; `DEPLOY=UNKNOWN`; `RUNTIME=UNKNOWN`. Não promover apenas pela presença desta especificação.
 
 **NEXT_CURSOR:** reconciliar com PR #1843 → aplicar menor delta no `HudDeterministico` pelo writer do componente → rodar suíte e build no HEAD exato → readback da sala autenticada → receipt + decisão de promoção com os gates existentes. Preservar a migração da Casa/VPS e as alterações locais.
+
+
+<!-- CENTRALDARK_BROWSERS_VSCODE_20261017 -->
+## 🍒 Conexão Casa · Chrome for Testing · VS Code — evidência de 17/10/2026
+
+**INTENT_ID:** CENTRALDARK-CHROME-VSCODE-OBSERVABILIDADE-MICRODEPLOY-20261017. **OWNER DE UI:** `apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx`, em edição na PR #1838; **não editar por segunda caneta**. Consumidor: `PainelAdminCentralDark` / Sala de Controle do Instinto Superior. Este bloco documenta o delta, não afirma instalação nem deploy.
+
+**Prova visual enviada pelo CHEFE:** duas janelas **Chrome for Testing v155.0.8059.39** (perfis **Default** e **Profile 1**, associados ao cache Puppeteer nas telas) e uma janela **Chrome oficial v155.0.8059.85** (Profile 14 na captura). `chrome://version` identifica executável/perfil do navegador mostrado; capturas não atribuem processo/PID de terminal, não comprovam sessão Zendriver/CDP, Puppeteer conectado, Playwright em execução ou perfil de automação apto para testes. Preservar perfis, cookies, histórico, login e sessões; **não copiar dados do perfil**.
+
+**Erro visível:** VS Code exibiu `A janela terminou inesperadamente (motivo: oom, código: -536870904)`. Isso confirma encerramento por falta de memória no processo/janela, **não identifica a extensão, Chrome ou PID responsável**. Sem amostra de CPU/RAM/pagefile simultânea não atribuir causalidade. Não reiniciar nem matar processos durante a migração sem coordenação do CHEFE.
+
+**Prova de ponte independente (consulta MCP, 17/10/2026 08:59:26 UTC):** `sector=vscode`, `kind=vscode_bridge_status`, `route=tailscale`, `state=OK`, `source_last_write_utc=2026-10-17T08:50:12.6276681Z`, `offset=3068781`, `playwright=null`. A fonte voltou a avançar após 08:05 UTC; heartbeat não prova conexão interativa ao PTY ou leitura de PID. A função `Get-PlaywrightProbe` já existe em `scripts/casa/vscode-log-bridge.ps1`, enquanto `apps/modulos/mcp/src/vscode-log-route.js` interpreta `playwright`; `null` exige `UNKNOWN`, não `NOT_RUNNING` ou `PASS`.
+
+**Projeção mínima no cockpit existente:** no cartão/zona de Observabilidade já pertencente à PR #1838, apresentar separadamente `CHROME_TESTING_OBSERVADO_EM_IMAGEM`, `CHROME_NORMAL_OBSERVADO_EM_IMAGEM`, `VSCODE_OOM_OBSERVADO_EM_IMAGEM`, `VSCODE_LOG_BRIDGE_LAST_HEARTBEAT`, `PLAYWRIGHT_RUNTIME=UNKNOWN`, `CHROME_PID=UNKNOWN` e `PTY_MCP_INTERACTIVE=NOT_PROVEN`, com origem, timestamp e limite de prova. **Não** tornar a foto estado online permanente. Sem nova API, coletor, store, tela, rota ou executor. Quatro peles e controles do HUD permanecem.
+
+**Gates para microdeploy:** PR #1838 no HEAD exato + dependências das PRs #1842/#1843 conforme owner → suíte `apps/instinto-superior/scripts/verify-hud-zone.mjs` + build → CI no mesmo SHA → readback autenticado do cockpit e das quatro peles → deploy seletivo com prova de SHA e rollback → receipt. Os workflows atuais usam runners self-hosted que podem estar intencionalmente pausados pela migração; `QUEUED` não é `DEPLOYED`. O fallback MAIN-PINNED existente lista owners `mcp/hub_bot/hermes/oauth_broker`, **não autoriza usar owner falso para publicar Instinto Superior**.
+
+**CURRENT:** `DOCUMENTED_MAIN=PASS_AFTER_READBACK` (quando o commit for comprovado); `UI_SOURCE_PR1838=NEEDS_WRITER`; `CI=UNKNOWN`; `MICRODEPLOY=NOT_PROVEN`; `RUNTIME_VISUAL=UNKNOWN`. **NEXT_CURSOR:** responsável pela PR #1838 consome este índice, implementa menor delta e prova build/deploy na rota aprovada após o runner voltar, preservando trabalhos locais e a cópia VPS 4.
