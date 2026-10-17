@@ -54,6 +54,49 @@ test('API loop: fila original + dedupe + Critic + receipt imutavel (isolado)',as
   assert.equal(expired.fixedPoint,false);
   assert.equal(expired.state,'STALE');
   assert.equal(expired.criteria[0].status,'STALE');
+
+  // FORJA 4X: cada etapa so muda para PASS com receipt real do mesmo HEAD.
+  const buildGoal=runIntentCycle({
+    intent:'FORJA_4X_EXISTENTE executar build instalar conectar e provar com regressao',
+    mode:'AUTONOMO',owner:'apps/instinto-superior', criteria:[
+      'SOURCE_CURRENT','CI_SAME_SHA','OBJECTIVE_EFFECT'
+    ]
+  },{dispatch:false});
+  assert.equal(buildGoal.forja4x.fixedPoint,false);
+  assert.ok(buildGoal.forja4x.stages.every(x=>x.status==='UNKNOWN'));
+  const proofDir=join(root,'apps/modulos/HERMES-CORE/missions/concluidas/2026-10-17',
+    'centraldark-intent-'+buildGoal.fingerprint.slice(0,24));
+  mkdirSync(proofDir,{recursive:true});
+  writeFileSync(join(proofDir,'missao.md'),
+    'RECEIPT_FINGERPRINT: '+buildGoal.fingerprint+'\nSOURCE_LOCAL_SHA: '+buildGoal.currentHead+'\n');
+  const stages=['ANTIRREGRESSAO','CONSTRUIR','INSTALAR','CONECTAR','PROVAR'].map(id=>({
+    id,status:'PASS',sourceHead:buildGoal.currentHead,exitCode:0,
+    observedAt:new Date().toISOString(),antiregression:'PASS',receipt:'receipt-'+id
+  }));
+  writeFileSync(join(proofDir,'forja-4x-receipt.json'),JSON.stringify({
+    schema:'centraldark.forja.4x.receipt.v1',fingerprint:buildGoal.fingerprint,
+    sourceHead:buildGoal.currentHead,stages
+  }));
+  let reread=readIntentState();
+  assert.equal(reread.forja4x.fixedPoint,true);
+  assert.ok(reread.forja4x.stages.every(x=>x.status==='PASS'));
+  stages[2].exitCode=1;
+  writeFileSync(join(proofDir,'forja-4x-receipt.json'),JSON.stringify({
+    schema:'centraldark.forja.4x.receipt.v1',fingerprint:buildGoal.fingerprint,
+    sourceHead:buildGoal.currentHead,stages
+  }));
+  reread=readIntentState();
+  assert.equal(reread.forja4x.fixedPoint,false);
+  assert.equal(reread.forja4x.stages[2].status,'FAIL');
+  stages[2].exitCode=0;
+  stages[3].sourceHead='0'.repeat(40);
+  writeFileSync(join(proofDir,'forja-4x-receipt.json'),JSON.stringify({
+    schema:'centraldark.forja.4x.receipt.v1',fingerprint:buildGoal.fingerprint,
+    sourceHead:buildGoal.currentHead,stages
+  }));
+  reread=readIntentState();
+  assert.equal(reread.forja4x.stages[3].status,'UNKNOWN');
+  assert.equal(reread.forja4x.fixedPoint,false);
 });
 
 
