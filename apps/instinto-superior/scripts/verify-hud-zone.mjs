@@ -517,7 +517,6 @@ test("🧬 Michelin aparece no HUD único sem autocertificação ou workflow par
   assert.ok(workflow.includes("MICHELIN_STAR_3=DEPLOY_VISUAL_CASA_VPS_RECEIPTS_REQUIRED"));
   assert.ok(workflow.indexOf("npm run build:vps") < workflow.indexOf("MICHELIN_STAR_1="));
   assert.ok(agents.includes("Michelin — três estrelas de qualidade comprovada"));
-  assert.ok(agents.includes("MERGED != DEPLOYED") || agents.includes("MERGED != DEPLOYED"));
-  assert.doesNotMatch(hud.slice(hud.indexOf('id="cd-michelin-3-estrelas"'),
-    hud.indexOf('id="cd-integridade-estado"') < 0 ? undefined : undefined), /ACESSO_GLOBAL_LIBERADO/);
+  assert.ok(agents.includes("MERGED != DEPLOYED"));
+  assert.ok(!hud.includes("MICHELIN_AUTO_3_STARS=PASS"));
 });
