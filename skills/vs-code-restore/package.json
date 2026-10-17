@@ -3,6 +3,8 @@
   "displayName": "CentralDark VS Code Restore",
   "description": "Restaura a bancada e reutiliza terminal ZENDRIVE CLI; mapeia PID/janelas VS Code e rotas SSH sem criar outro executor.",
   "version": "0.1.4",
+  "description": "Restaura bancada, reutiliza o terminal existente como ZENDRIVE CLI e exibe trace sanitizado no VS Code Saída.",
+  "version": "0.1.3",
   "publisher": "centraldark",
   "private": true,
   "engines": {
@@ -28,6 +30,10 @@
       {
         "command": "centraldark.zendriveCli",
         "title": "CentralDark: ZENDRIVE CLI (terminal existente)"
+      },
+      {
+        "command": "centraldark.showTrace",
+        "title": "CentralDark: Mostrar Trace (Saída)"
       },
       {
         "command": "centraldark.focusExistingTerminal",

@@ -129,6 +129,11 @@ app.post("/integrations/buildkite/webhook", (req, res) => {
 app.get("/deploy/health", githubDeployHealth);
 app.post("/webhook", githubDeployWebhook);
 // ─────────────────────────────── Health ──────────────────────────────────
+// Public read-only declaration; no administrative capabilities.
+app.get("/intent/manifesto", (_req, res) => {
+    res.setHeader("Cache-Control", "public, max-age=60");
+    res.json({ schema: "centraldark.intent.public.v1", produto: "CentralDark - Instinto Superior", visibilidade: "PUBLICO_SOMENTE_LEITURA", intencao: "Reunir ferramentas, agentes e conhecimento em um unico cockpit, com aprendizagem a partir de evidencias.", controle_remoto: "NAO_EXPOSTO" });
+});
 app.get("/health", (_req, res) => {
     res.json({
         ok: true,

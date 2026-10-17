@@ -3,6 +3,8 @@ name: vs-code-restore
 description: Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa salvo, sem depender do Claude. Use ao abrir o workspace CentralDark ou quando quiser reconstruir a bancada.
 version: 0.1.4
 metadata: {"status":"v0.1.4_source_in_pr_install_pending","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.4","candidate_compilado":false,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
+version: 0.1.3
+metadata: {"status":"v0.1.3_source_main_trace_integrated_runtime_readback_separate","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa_historico":"0.1.3","comando_nativo_testado":true,"telemetria_probe":true}
 ---
 
 # VS Code Restore: CentralDark
@@ -132,10 +134,10 @@ OWNER desta interação: a MESMA skill `skills/vs-code-restore`, extensão exist
 ### Log e recibo: encaixar no funil existente
 
 - Fonte bruta Casa: `K:\\TEMP\\logs\\LOGS-VS-CODE.log` (junção para `F:\\TEMP\\CentralDark`). Coletor existente `scripts/casa/vscode-log-bridge.ps1`, agendador `CentralDark-VSCode-LogBridge`, launcher invisível `scripts/casa/vscode-log-bridge-hidden.vbs`.
-- PR existente **#1820**, branch `feat/vscode-log-funnel-casa-20261014`, skill canônica `.agents/skills/centraldark-vscode-log-bridge/SKILL.md`; ingestão `scripts/vps/ingest-vscode-log.mjs` → owner `apps/modulos/mcp/src/log-funnel.js` → `events`, `sectors/vscode`, `services/vscode` → API admin autenticada.
+- PR **#1820** foi **MERGED em 15/10/2026 03:44:31Z** (merge commit `872b555028914f79748d6be65a1f909d1019fe91`); a skill canônica agora vive na `main` em `.agents/skills/centraldark-vscode-log-bridge/SKILL.md`. Ingestão: `scripts/vps/ingest-vscode-log.mjs` → `apps/modulos/mcp/src/log-funnel.js` → `events`, `sectors/vscode`, `services/vscode` → API admin autenticada.
 - Não assumir que os comandos do terminal já entram automaticamente no `LOGS-VS-CODE.log`: cobertura dessa fonte **UNKNOWN**. Não registrar comandos, chats, tokens, chaves, stdout bruto ou prompts. Registrar somente metadados sanitizados (tipo de ação, resultado, timestamp, owner, fingerprint, origem e próximo cursor), pelo mesmo funil quando a integração estiver comprovada.
 - Prova da Casa em 15/10: log de origem com 3.027.886 bytes, tarefa `Ready`/`LastTaskResult=0`/`wscript.exe`; dry-run `signals=0 offset=3027886->3027886`. Isso prova ausência de novos sinais **nessa fonte**, não captura das ações da sessão.
-- PR #1820 medido `OPEN`, `MERGEABLE`, `isDraft=false` no HEAD `fdb2a1a32c5ea5f656126ff16817228b7d9ee507`; merge/main, CI same-HEAD e implantação são provas separadas. Não mergear automaticamente. A árvore local `K:\\` tinha alterações pré-existentes e divergência de main; não fazer `git pull/reset` nem sobrescrever.
+- Estado CURRENT do PR #1820: `MERGED`, `draft=false`; não existe mais pendência de merge para essa lane. Deploy/runtime continuam provas separadas. A árvore local `K:\\` pode conter alterações pré-existentes; não fazer `git pull/reset` destrutivo nem sobrescrever writer ativo.
 
 ### Fixed point
 

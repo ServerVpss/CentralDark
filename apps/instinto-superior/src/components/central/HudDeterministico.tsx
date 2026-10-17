@@ -283,6 +283,39 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           O CHEFE decide · Hermes executa · a Lupa faz a contraprova. Tudo deriva da consulta já usada
           pelo cockpit: sem segundo sensor, sem nova arquitetura e sem verde por aparência.
         </p>
+        <div className="mt-4 rounded-lg border border-border bg-muted/10 p-4" id="cd-michelin-3-estrelas">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h4 className="font-semibold">🧬 Michelin · três estrelas de qualidade</h4>
+            <span className="rounded-full border border-amber-500/40 px-2 py-1 font-mono text-xs text-amber-700 dark:text-amber-400">
+              SEM CERTIFICAÇÃO RUNTIME NESTA CONSULTA
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Metáfora de rigor técnico, sem vínculo com o guia gastronômico. As estrelas pertencem
+            a uma entrega no mesmo SHA, não à CentralDark inteira. Estado de source não substitui
+            checks concluídos, instalação, foto autenticada e recibos vivos.
+          </p>
+          <div className="mt-3 grid gap-3 md:grid-cols-3">
+            {([
+              ["☆ 1 · Construir", "Testes, lint, build e autenticação no mesmo SHA.", estado?.build],
+              ["☆☆ 2 · Integrar", "CI concluída com sucesso no mesmo SHA, ponte e não duplicação.", estado?.actions],
+              ["☆☆☆ 3 · Provar", "Deploy, visual autenticado, Casa ↔ VPS e logs com recibos recentes.", estado?.deploy],
+            ] as const).map(([nome, requisito, sinal]) => (
+              <div key={nome} className="rounded-md border border-border p-3">
+                <p className="text-sm font-semibold">{nome}</p>
+                <p className="mt-2 text-xs text-muted-foreground">{requisito}</p>
+                <p className="mt-2 font-mono text-xs text-muted-foreground">
+                  Sinal auxiliar do owner: {sinal ?? "UNKNOWN"} · ESTRELA NÃO ATESTADA
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground" role="status">
+            NEXT_CURSOR: confrontar CI do SHA {estado?.mainSha?.slice(0, 12) ?? "UNKNOWN"}
+            {" "}e receipts de build, deploy e runtime. Uma medição HTTP, um commit ou este quadro
+            não concedem estrelas automaticamente. O teste de critérios existe na esteira atual.
+          </p>
+        </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {([
             ["🐙 GitHub / main", estado?.github, estado?.mainSha?.slice(0, 12), "Referência do HEAD medido; CI do mesmo HEAD ainda exige prova."],
