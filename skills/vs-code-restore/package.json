@@ -1,8 +1,8 @@
 {
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark VS Code Restore",
-  "description": "Restaura a bancada e reutiliza o terminal existente como entrada ZENDRIVE CLI, com telemetria sanitizada.",
-  "version": "0.1.3",
+  "description": "Restaura a bancada e reutiliza terminal ZENDRIVE CLI; mapeia PID/janelas VS Code e rotas SSH sem criar outro executor.",
+  "version": "0.1.4",
   "publisher": "centraldark",
   "private": true,
   "engines": {
@@ -40,6 +40,14 @@
       {
         "command": "centraldark.connectVpsSsh",
         "title": "CentralDark: Conectar VPS via Remote SSH (mesma identidade)"
+      },
+      {
+        "command": "centraldark.locateVsCodeByPid",
+        "title": "CentralDark: Localizar VS Code por PID (PowerShell / terminal)"
+      },
+      {
+        "command": "centraldark.browserSurfacesCatalog",
+        "title": "CentralDark: Catálogo de abas e capacidades Browser/ZENDRIVE"
       }
     ],
     "configuration": {
