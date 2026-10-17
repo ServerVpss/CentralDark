@@ -33,7 +33,9 @@ export function activate(context: vscode.ExtensionContext): void {
     // Acessibilidade: rótulo literal VS Code para ditado/ASR; mesma implementação, nenhum novo executor.
     vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal),
     vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)),
-    vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true))
+    vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)),
+    vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
+    vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog)
   );
   registerTerminalTelemetry(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
@@ -180,6 +182,104 @@ async function probeVpsSsh(connectAfter: boolean): Promise<void> {
   // O picker respeita o alias SSH do usuario. O teste Tailscale nao reescreve
   // o config SSH e nao altera implicitamente a rota usada pelo Remote-SSH.
   await vscode.commands.executeCommand('remote-ssh.connectToHost');
+}
+
+
+
+/**
+ * Localizacao read-only de VS Code existente a partir de PID de PowerShell,
+ * extension host ou processo do proprio Code.exe. No Windows mostra a arvore
+ * de pais e janelas, nao inicia/focaliza outro VS Code e nao le arquivos.
+ */
+async function locateVsCodeByPid(): Promise<void> {
+  const pidText = await vscode.window.showInputBox({
+    title: 'CentralDark — localizar VS Code por PID',
+    prompt: 'PID opcional (PowerShell/terminal/Code.exe). Deixe vazio para listar janelas abertas.',
+    placeHolder: 'Ex.: 21172',
+    validateInput: value => (!value || /^[1-9][0-9]{0,9}$/.test(value))
+      ? undefined : 'Informe apenas um PID decimal ou deixe vazio.'
+  });
+  if (pidText === undefined) { return; }
+  const output = vscode.window.createOutputChannel('CentralDark — Rastreio PID/VS Code');
+  output.clear();
+  output.appendLine('ZENDRIVE | VS Code observado via Extension API + Windows');
+  output.appendLine('Capturado UTC: ' + new Date().toISOString());
+  output.appendLine('ExtensionHost PID: ' + process.pid);
+  output.appendLine('VS Code remoteName: ' + (vscode.env.remoteName || 'local'));
+  output.appendLine('Workspace(s): ' + (vscode.workspace.workspaceFolders ?? []).map(x => x.name).join(', '));
+  for (const t of vscode.window.terminals) {
+    output.appendLine('Terminal: ' + t.name + ' | PID=' + (await t.processId ?? 'UNKNOWN'));
+  }
+  if (process.platform !== 'win32') {
+    output.appendLine('[SEM CONSULTA WIN32] O inventario nativo acima continua disponivel.');
+    output.show(true);
+    return;
+  }
+  // Codigo literal fixo, sem interpolacao de entrada de shell:
+  // PID decimal segue separado em argumento do PowerShell.
+  const script = [
+    '$ErrorActionPreference="Stop"',
+    '$wanted=0',
+    '[void][int]::TryParse($args[0], [ref]$wanted)',
+    '$all=@(Get-CimInstance Win32_Process -ErrorAction Stop)',
+    '$index=@{}',
+    'foreach($p in $all){$index[[int]$p.ProcessId]=$p}',
+    '$window=@(Get-Process Code -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 } | ForEach-Object { [pscustomobject]@{pid=$_.Id;process="Code.exe";windowPresent=$true} })',
+    '$chain=@()',
+    'if($wanted -gt 0){ $cursor=$wanted; $seen=@{}; for($i=0;$i -lt 20;$i++){',
+    'if($seen.ContainsKey($cursor) -or -not $index.ContainsKey($cursor)){break}',
+    '$seen[$cursor]=$true; $p=$index[$cursor]',
+    '$chain+= [pscustomobject]@{pid=[int]$p.ProcessId;parentPid=[int]$p.ParentProcessId;process=$p.Name}',
+    'if($p.Name -ieq "Code.exe"){break}',
+    '$cursor=[int]$p.ParentProcessId',
+    '}}',
+    '$codeCount=@($all | Where-Object {$_.Name -ieq "Code.exe"}).Count',
+    '[pscustomobject]@{requestedPid=$wanted;codeProcessCount=$codeCount;windows=$window;parentChain=$chain} | ConvertTo-Json -Depth 6 -Compress'
+  ].join('; ');
+  await new Promise<void>(resolve => {
+    execFile('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', script, pidText || '0'], {
+      timeout: 10000, maxBuffer: 65536, windowsHide: true
+    }, (error, stdout) => {
+      if (error) {
+        output.appendLine('[ERRO] Localizacao Win32 indisponivel: ' + String((error as NodeJS.ErrnoException).code ?? 'QUERY_FAILED'));
+        output.show(true);
+        resolve();
+        return;
+      }
+      try {
+        const data = JSON.parse(stdout);
+        output.appendLine('Processos Code.exe: ' + Number(data.codeProcessCount || 0));
+        for (const w of (Array.isArray(data.windows) ? data.windows : data.windows ? [data.windows] : [])) {
+          output.appendLine('Janela VS Code: PID=' + w.pid + ' | windowPresent=' + Boolean(w.windowPresent));
+        }
+        for (const p of (Array.isArray(data.parentChain) ? data.parentChain : data.parentChain ? [data.parentChain] : [])) {
+          output.appendLine('Cadeia: PID=' + p.pid + ' | pai=' + p.parentPid + ' | exe=' + p.process);
+        }
+        const chain = Array.isArray(data.parentChain) ? data.parentChain : data.parentChain ? [data.parentChain] : [];
+        output.appendLine(chain.some((p: {process: string}) => p.process?.toLowerCase() === 'code.exe')
+          ? '[VINCULO] PID tem ancestral Code.exe.' : '[VINCULO] Sem Code.exe ancestral demonstrado para esse PID.');
+      } catch {
+        output.appendLine('[ERRO] O Windows nao retornou JSON valido. Nenhum PID foi presumido.');
+      }
+      output.show(true);
+      resolve();
+    });
+  });
+}
+
+/** Catalogo da ponte do navegador, sem confundir plugin ChatGPT com API da extensao. */
+function browserSurfacesCatalog(): void {
+  const out = vscode.window.createOutputChannel('CentralDark — Catalogo Browser/ZENDRIVE');
+  out.clear();
+  out.appendLine('CAPACIDADES EXISTENTES, sem criar novo conector');
+  out.appendLine('VS Code API: tabs, terminais, comandos, extension host e workspace (local).');
+  out.appendLine('ZENDRIVE: terminal existente, SSH e localizador PID/VS Code.');
+  out.appendLine('ChatGPT Browser conectado: list_tabs + get_tab_context (leitura no cliente autorizado).');
+  out.appendLine('CONTROLE de aba/clique pelo plugin nesta sessao: NAO EXPOSTO.');
+  out.appendLine('Ponte ChatGPT Browser -> extensao VS Code: AINDA NAO IMPLEMENTADA.');
+  out.appendLine('Owner MCP: apps/modulos/mcp/src/tools/core/mcp-admin.js');
+  out.appendLine('Owner VS Code: skills/vs-code-restore/src/extension.ts');
+  out.show(true);
 }
 
 
