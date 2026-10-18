@@ -242,3 +242,15 @@ cot-react-loop/
 **Version**: 1.0.0
 **License**: MIT
 **Status**: READY_TO_USE
+
+## Goal por cláusulas — TIK-TAK (18/10/2026)
+
+**Objetivo:** não encerrar a missão só porque UMA etapa ficou verde. O executor existente em `scripts/cot_react_loop.py` tem o modo opt-in `goal_clauses`; a autoridade continua com o CHEFE, o executor continua Hermes, e o critério final continua com o avaliador independente do Goal canônico (`scripts/lupa/horn-reuse-fixed-point.mjs`).
+
+**Contrato de entrada em Python:** `CotReactExecutor(max_iter=N).run_loop(brief, steps)`, onde `brief["goal_clauses"]` é uma lista de `{"id": "G01", "expected_stdout_contains": "marcador_observavel"}`. Uma etapa de verificação precisa usar `{"verification_only": true, "verifies": "G01"}` e conter o marcador no `stdout` com execução bem-sucedida. Um `exit_code=0` de tarefa normal não sela uma cláusula. `invalidates: ["G01"]` revoga a prova dependente quando o alvo muda.
+
+**Estados observáveis:** se houver cláusulas faltantes, `decide=CONTINUE` com `pending_clauses`; ao acabar o orçamento, `BLOCKED_INCOMPLETE` com `NEXT_CURSOR`. Quando todas as verificações locais passarem, `FIXED_POINT_CANDIDATE`, **não** `FIXED_POINT` global; ainda exige contraprova independente e receipt. Limitar passos/tempo/custos e não repetir ação sem informação nova.
+
+**Limite CURRENT (PR #1862, draft):** há sete testes Python positivos na VPS sobre uma cópia isolada do HEAD do PR, mas NÃO há instalação nem ativação comprovada no Hermes da Casa. A entrada da CLI `--brief`/`--steps` ainda não carrega os arquivos; não divulgar como funcional. O rastreamento antigo de argumentos/saída exige sanitização antes de uso autônomo com dados reais. O teste do Edge com `oi` e Enter humano não prova automação remota do ChatGPT; a interface web não é um provedor de API. Não enviar mensagens a esta conversa em auto-loop.
+
+**Validação:** `python -m py_compile .agents/skills/hermes/cot-react-loop/scripts/cot_react_loop.py` e `python -m unittest discover -s .agents/skills/hermes/cot-react-loop/scripts -p test_cot_react_loop_goal.py -v` no MESMO SHA; depois testar Hermes autorizado e avaliador independente, sem confundir `SOURCE_COMMITTED` com `RUNTIME_PROVEN`.
