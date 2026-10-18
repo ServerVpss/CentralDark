@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { lerMcpRuntimeAoVivo } from "@/lib/cockpit.functions";
 import { BookOpen, Boxes, Gem, Lock } from "lucide-react";
 import gavetaCatalogo from "@/data/forja-gaveta.snapshot.json";
+import moduloCatalogo from "../../../config/harness-module-registry.json";
 
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -132,8 +133,77 @@ function Cristal() {
 }
 
 function Biblioteca() {
+  const [buscaCognitiva, setBuscaCognitiva] = useState("");
+  const vocabulario = moduloCatalogo.cognitive_lexicon;
+  const pesquisa = buscaCognitiva.trim().toLocaleLowerCase("pt-BR");
+  const termos = vocabulario.a_to_z.filter((item) =>
+    !pesquisa || [item.name, item.kind, item.description, item.owner]
+      .some((value) => value.toLocaleLowerCase("pt-BR").includes(pesquisa)));
+
   return (
     <div className="grid gap-4 md:grid-cols-2">
+      <section className="panel p-5 md:col-span-2" aria-labelledby="centraldark-cognicao-titulo">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-neon-green">
+          🪬 BIBLIOTECA EXISTENTE · COGNIÇÃO / LINGUAGEM
+        </p>
+        <h4 id="centraldark-cognicao-titulo" className="mt-2 text-lg font-semibold">
+          Modo Michelin 3 Estrelas · linguagem observável
+        </h4>
+        <p className="mt-2 max-w-3xl text-xs text-muted-foreground">
+          O motor pode variar a estratégia; o harness coordena; o trace registra os eventos;
+          o HUD traduz; a realidade valida. Este é um catálogo de termos, NÃO telemetria ao vivo.
+          Uma palavra como “Cozinhando” não comprova técnica interna nem execução.
+        </p>
+        <ul className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4" aria-label="Oito estados visuais Michelin">
+          {vocabulario.michelin_stages.map((etapa) => (
+            <li key={etapa.name} data-cd-michelin-stage
+              className="group flex min-w-0 gap-3 rounded-lg border border-border bg-background/45 p-3">
+              <span aria-hidden="true" className="cd-michelin-icon shrink-0 text-xl">{etapa.icon}</span>
+              <span className="min-w-0">
+                <strong className="block text-sm">{etapa.name}</strong>
+                <span className="block text-xs text-muted-foreground">{etapa.meaning}</span>
+                <span className="mt-1 block font-mono text-[10px] text-muted-foreground">
+                  {etapa.proof === "PROCESS_INDICATOR" ? "SINAL · não é contraprova"
+                    : etapa.proof === "RECEIPT_REQUIRED" ? "RECIBO NECESSÁRIO"
+                    : "EVENTO NECESSÁRIO"}
+                </span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <details className="mt-4 rounded-lg border border-border p-3">
+          <summary className="cursor-pointer font-semibold">
+            📚 Dicionário A–Z · {vocabulario.a_to_z.length} conceitos inventariados (abrir / pesquisar)
+          </summary>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Fonte única: config/harness-module-registry.json. Um termo inventariado não significa
+            serviço instalado, modelo treinado, motor ligado ou PASS.
+          </p>
+          <label className="mt-3 block text-xs font-semibold" htmlFor="busca-cognitiva-centraldark">
+            Buscar conceito, tipo, função ou owner
+          </label>
+          <input id="busca-cognitiva-centraldark" type="search" value={buscaCognitiva}
+            onChange={(evento) => setBuscaCognitiva(evento.target.value)}
+            placeholder="Ex.: memória, CARACOL, crítica..."
+            className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon-green" />
+          <p role="status" className="mt-2 text-xs text-muted-foreground">
+            {termos.length} de {vocabulario.a_to_z.length} conceitos encontrados.
+          </p>
+          <dl className="mt-3 grid gap-2 lg:grid-cols-2">
+            {termos.map((item) => (
+              <div key={item.name} className="rounded-md border border-border/70 p-3">
+                <dt className="text-sm font-semibold">{item.name} <span className="font-normal text-muted-foreground">· {item.kind}</span></dt>
+                <dd className="mt-1 text-xs text-muted-foreground">{item.description}</dd>
+                <dd className="mt-1 break-all font-mono text-[10px] text-muted-foreground">OWNER · {item.owner}</dd>
+              </div>
+            ))}
+          </dl>
+          {termos.length === 0 ? <p className="mt-3 text-xs">Nenhum conceito encontrado.</p> : null}
+        </details>
+        <p className="mt-3 font-mono text-[10px] text-amber-400">
+          DOCUMENTED != EXECUTED · MODEL_IS_REPLACEABLE · UNKNOWN != PASS
+        </p>
+      </section>
       {BIBLIOTECA.map((g) => (
         <article key={g.grupo} className="panel p-5">
           <h4 className="font-semibold">{g.grupo}</h4>
