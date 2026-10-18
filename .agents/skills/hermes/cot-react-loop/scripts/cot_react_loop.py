@@ -152,7 +152,7 @@ class CotReactExecutor:
             "details": details
         }
     
-    def run_iteration(self, think: str, act_tool: str, act_args: Dict) -> IterationRecord:
+    def run_iteration(self, think: str, act_tool: str, act_args: Dict, persist: bool = True) -> IterationRecord:
         """Execute one iteration of the loop."""
         self.iteration += 1
         
@@ -210,7 +210,8 @@ class CotReactExecutor:
         )
         
         self.records.append(record)
-        self._save_record(record)
+        if persist:
+            self._save_record(record)
         
         return record
     
@@ -219,36 +220,92 @@ class CotReactExecutor:
         with open(self.log_file, 'a', encoding='utf-8') as f:
             f.write(json.dumps(asdict(record), ensure_ascii=False) + '\n')
     
-    def run_loop(self, brief: Dict[str, str], steps: List[Dict]) -> List[IterationRecord]:
-        """Run the full loop with given steps."""
-        print(f"=== CoT-ReAct Loop Started ===")
+    def run_loop(self, brief: Dict[str, Any], steps: List[Dict]) -> List[IterationRecord]:
+        """Run bounded steps. In goal mode, never stop at the first green step.
+
+        goal_clauses is an opt-in, immutable acceptance contract. A clause
+        needs a separate verifier step with an expected observed stdout marker.
+        Missing verification is UNKNOWN, not PASS. This is NOT an LLM planner.
+        """
+        clauses = brief.get("goal_clauses", [])
+        if not isinstance(clauses, list):
+            raise ValueError("GOAL_CLAUSES_NOT_A_LIST")
+        expected = {}
+        for clause in clauses:
+            if not isinstance(clause, dict) or not isinstance(clause.get("id"), str):
+                raise ValueError("GOAL_CLAUSE_INVALID")
+            clause_id = clause["id"].strip()
+            marker = clause.get("expected_stdout_contains")
+            if (not clause_id or clause_id in expected or not isinstance(marker, str)
+                    or not marker.strip()):
+                raise ValueError("GOAL_CLAUSE_MISSING_ID_OR_EXPECTATION")
+            expected[clause_id] = marker
+        verified = set()
+        self.goal_status = "CONTINUE" if expected else "LEGACY_SINGLE_STEP"
+        self.pending_clauses = sorted(expected)
+
+        print("=== CoT-ReAct Loop Started ===")
         print(f"Brief: {brief.get('success_predicate', 'N/A')}")
         print(f"Max iterations: {self.max_iter}")
+        print(f"Required clauses: {sorted(expected)}")
         print(f"Log: {self.log_file}")
-        
-        for i, step in enumerate(steps[:self.max_iter]):
-            print(f"\n--- ITER {i+1} ---")
-            print(f"THINK: {step.get('think', 'N/A')}")
-            print(f"ACT: {step.get('tool', 'N/A')} {step.get('args', {})}")
-            
+
+        # Bounded budget: never self-trigger the ChatGPT browser, create another
+        # Hermes, or silently acquire a new writer's authority.
+        bounded_steps = steps[:max(0, self.max_iter)]
+        for i, step in enumerate(bounded_steps):
+            print(f"\\n--- ITER {i+1} ---")
+            print(f"ACT: {step.get('tool', 'N/A')}")
             record = self.run_iteration(
-                think=step.get('think', ''),
-                act_tool=step.get('tool', 'terminal'),
-                act_args=step.get('args', {})
+                think=step.get("think", ""),
+                act_tool=step.get("tool", "terminal"),
+                act_args=step.get("args", {}),
+                persist=False,
             )
-            
-            print(f"OBSERVE: success={record.observe.get('success')}, stdout_len={len(record.observe.get('stdout', ''))}")
-            print(f"CRITIC: {record.critic['verdict']} - {record.critic['detail'][:80]}")
+
+            if expected:
+                # Only explicitly designated verification steps can seal clauses.
+                # An execution step's exit 0 never, by itself, proves the goal.
+                claim = step.get("verifies")
+                if claim in expected and step.get("verification_only") is True:
+                    output = str(record.observe.get("stdout", ""))
+                    if (record.critic["verdict"] == "PASS"
+                            and record.observe.get("success") is True
+                            and record.observe.get("evidence")
+                            and expected[claim] in output):
+                        verified.add(claim)
+                # Changing a dependency invalidates just the affected proof.
+                for affected in step.get("invalidates", []):
+                    verified.discard(affected)
+                pending = sorted(set(expected) - verified)
+                self.pending_clauses = pending
+                record.critic["verified_clauses"] = sorted(verified)
+                record.critic["pending_clauses"] = pending
+                if not pending:
+                    self.goal_status = "FIXED_POINT_CANDIDATE"
+                    record.decide = "STOP"
+                elif i == len(bounded_steps) - 1:
+                    self.goal_status = "BLOCKED_INCOMPLETE"
+                    record.decide = "BLOCK"
+                    record.refine = "NEXT_CURSOR: " + ",".join(pending)
+                else:
+                    record.decide = "CONTINUE"
+                    record.refine = "NEXT_CURSOR: " + ",".join(pending)
+
+            # Record the final decision, not the pre-goal step verdict.
+            self._save_record(record)
+            print(f"OBSERVE: success={record.observe.get('success')}")
+            print(f"CRITIC: {record.critic['verdict']}")
             print(f"DECIDE: {record.decide}")
-            
             if record.decide in ("STOP", "BLOCK", "PONTO_FIXO"):
-                print(f"Loop ended: {record.decide}")
                 break
-        
-        print(f"\n=== Loop Complete ===")
+
+        if expected and not self.records:
+            self.goal_status = "BLOCKED_NO_STEPS"
+        print(f"Goal status: {self.goal_status}")
+        print(f"Pending clauses: {self.pending_clauses}")
         print(f"Total iterations: {len(self.records)}")
         print(f"Log saved: {self.log_file}")
-        
         return self.records
 
 
