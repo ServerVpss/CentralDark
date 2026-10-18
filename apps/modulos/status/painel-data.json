@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(instinto): integrar prova MCP no cockpit existente",
+    "lastCommit": "docs(receipt): !CENTRALDARK live cockpit, verified checkpoint, Kanban idempotency and pending E2E",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,22 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-18T22:07:11.886Z",
+      "titulo": "Push na main · 009bd1a411c9c98d36f49d88e2ab452078472bc3",
+      "detalhe": "docs(receipt): !CENTRALDARK live cockpit, verified checkpoint, Kanban idempotency and pending E2E",
+      "area": "Repositório",
+      "sha": "009bd1a",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-18T18:48:24.428Z",
+      "titulo": "Push na main · dfef59900739ce614d5adbb6d143422e38d7f334",
+      "detalhe": "feat(vps): install scoped runner post-job cleanup owner",
+      "area": "Repositório",
+      "sha": "dfef599",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-18T16:36:48.394Z",
       "titulo": "Push na main · b55172537c2f3d46267fbaa1ad29468186452d64",
@@ -393,25 +409,23 @@
       "area": "Repositório",
       "sha": "6874a55",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T15:24:35.139Z",
-      "titulo": "Push na main · ab134150041c865c58341332e9c768d9f8ccc004",
-      "detalhe": "docs(agents): apontar Forja Viva e aliases para owners existentes",
-      "area": "Repositório",
-      "sha": "ab13415",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T15:14:26.446Z",
-      "titulo": "Push na main · 4ec0a42f81eee2a3443fcd4410ebb1a3865dbd65",
-      "detalhe": "docs(forge): selar semantica dos emojis da Forja Viva na fonte main",
-      "area": "Repositório",
-      "sha": "4ec0a42",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-18T22:07:11.886Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 009bd1a411c9c98d36f49d88e2ab452078472bc3 (009bd1a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-18T18:48:24.428Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · dfef59900739ce614d5adbb6d143422e38d7f334 (dfef599)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-18T16:36:48.394Z",
       "ia": "@segredounlock",
@@ -747,20 +761,6 @@
       "action": "📌 Push na main · 6874a55087c32fd5aac9bd35d1a60ceab19495ec (6874a55)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T15:24:35.139Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ab134150041c865c58341332e9c768d9f8ccc004 (ab13415)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T15:14:26.446Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4ec0a42f81eee2a3443fcd4410ebb1a3865dbd65 (4ec0a42)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-18T16:36:48.394Z",
-  "updatedAtBR": "18/10/2026, 13:36:48 BRT"
+  "updatedAt": "2026-10-18T22:07:11.886Z",
+  "updatedAtBR": "18/10/2026, 19:07:11 BRT"
 }

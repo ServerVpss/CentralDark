@@ -1,20 +1,9 @@
-/* #OBSERVACOES# | CENTRALDARK.COCKPIT.HUD.PAPAGAIO_ON
- * @owner: apps/instinto-superior/src/components/central/CockpitShell.tsx
- * @doc_ref: docs/CONSCIENCIA/RECONCILIACAO-ESCOPOS-PR-20261015.md
- * @last_updated: 2026-10-16T12:19:56.233Z
- * @escopo: registrar HUD como PROJECAO; um cockpit, um runtime, uma casca.
- * @pendente: build e readback do layout no alvo vivo; 10 receipts MCP individuais.
- * @next_cursor: CI, regressao skins, readback VPS/Casa e selo.
- */
-import { HudDeterministico } from "@/components/central/HudDeterministico";
-import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
-import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
@@ -52,21 +41,20 @@ import { AutoSyncButton } from "@/components/central/AutoSyncButton";
 import { StatusPanel } from "@/components/central/StatusPanel";
 import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
 import { GoalsDashboard } from "@/components/central/GoalsDashboard";
-import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
 import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
-import { ForjaExecutor } from "@/components/central/ForjaExecutor";
 import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
 import { RaioXVivo } from "@/components/central/RaioXVivo";
-import { PapagaioHudMcp } from "@/components/central/PapagaioHudMcp";
+import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
+import { ForjaExecutor } from "@/components/central/ForjaExecutor";
+import { ClaudeNotificationsHub } from "@/components/central/ClaudeNotificationsHub";
+import { DreamReviewer } from "@/components/central/DreamReviewer";
+import { GramPermissions } from "@/components/central/GramPermissions";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { lerStatusGramMTProto } from "@/lib/admin.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
-import { HarnessModuleRegistry } from "@/components/central/HarnessModuleRegistry";
-import { CoordinatorDesk } from "@/components/central/CoordinatorDesk";
-import { CheckpointCentralDark } from "@/components/central/CheckpointCentralDark";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -86,7 +74,6 @@ const HARNESS_DESTINOS = [
   { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
-  { id: "marketplace", titulo: "Marketplace de extensões", icone: "🧩", privado: true },
   { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
   { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
   { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
@@ -214,8 +201,6 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
-  const [abaAdminInicial, definirAbaAdminInicial] = useState<"visao" | "notificacoes">("visao");
-  const [versaoAdmin, definirVersaoAdmin] = useState(0);
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
   const [harnessVisivel, definirHarnessVisivel] = useState(true);
@@ -228,9 +213,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     refetchInterval: 60_000,
   });
   const dado = estado.data;
-  // Uma consulta geral não comprova missões: sensores stale/erro ficam UNKNOWN.
-  const hudMedido = dado && !estado.isError && !estado.isPending && Date.now() - estado.dataUpdatedAt < 90_000
-    ? dado : null;
   const queryClient = useQueryClient();
   const navegar = useNavigate();
   async function sair() {
@@ -263,12 +245,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       {harnessVisivel ? (
         <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
-           <Button size="sm" variant="outline" onClick={() => abrirDestino("hermes")}>🪬 !CENTRALDARK</Button>
-          {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
-            definirAbaAdminInicial("notificacoes");
-            definirVersaoAdmin((n) => n + 1);
-            abrirDestino("admin");
-          }} /> : null}
           <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("top")}><Layers3 className="size-4" /></Button>
         </nav>
       ) : null}
@@ -290,8 +266,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <div className="grid gap-2 sm:grid-cols-2">
               {destinosHarness.map((destino) => <Button key={destino.id} variant={abaAtiva === destino.id ? "default" : "outline"} className="h-auto min-h-12 justify-start whitespace-normal text-left" onClick={() => abrirDestino(destino.id)}>{destino.icone} {destino.titulo}</Button>)}
             </div>
-            <HarnessModuleRegistry />
-            <CoordinatorDesk />
             <div className="rounded-lg border border-border p-3 text-xs text-muted-foreground">
               <p className="font-semibold text-foreground">Estado da moldura: LOCAL</p>
               <p className="mt-1">Navegação interna funcional. VPS, Telegram MTProto e GitHub exigem contraprovas independentes; nenhuma luz verde é inferida.</p>
@@ -379,7 +353,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               ATUALIZAÇÃO 60S
             </span>
           </div>
-          <PapagaioHudMcp medicao={hudMedido} />
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <BlocoEstado
               titulo="Main oficial"
@@ -428,17 +401,18 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
                 <TabsTrigger value="sync">Sync Center</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
-                {autenticado ? <TabsTrigger value="marketplace">🧩 Marketplace</TabsTrigger> : null}
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
+                <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
+                <TabsTrigger value="dream-reviewer">😴 Dream</TabsTrigger>
                 <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
                 <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
                 <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
                 <TabsTrigger value="forja">🔧 Forja</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
                 {autenticado ? <TabsTrigger value="admin">Admin CentralDark</TabsTrigger> : null}
                 {autenticado ? (
                   <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
-                {autenticado ? <TabsTrigger value="hud-legado">HUD · Selos · Gênesis</TabsTrigger> : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
                 <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
@@ -488,7 +462,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <MapaMetabolicoCristal compacto />
               </div>
               <Ledger compacto />
-              <EstudoPorCriterios contexto="visao" />
             </TabsContent>
             <TabsContent value="sync" className="mt-10">
               {dado ? <SyncCenter estado={dado} /> : <SyncCenter />}
@@ -496,11 +469,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <TabsContent value="design" className="mt-10">
               <DesignCenter pele={pele} selecionarPele={selecionar} autenticado={autenticado} />
             </TabsContent>
-            {autenticado ? (
-              <TabsContent value="marketplace" className="mt-10">
-                <DesignCenter pele={pele} selecionarPele={selecionar} autenticado abaInicial="extensoes" />
-              </TabsContent>
-            ) : null}
             <TabsContent value="goals" className="mt-10">
               <div className="mb-8">
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
@@ -512,6 +480,30 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </p>
               </div>
               <GoalsDashboard />
+            </TabsContent>
+            <TabsContent value="claude-notifications" className="mt-10">
+              <div className="mb-8">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                  Notificações em Tempo Real
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold">🔔 Claude Notifications Hub</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Tudo que sai do Claude Code, PowerShell, Hermes e observabilidade • Modo ao vivo/pausado/rolagem • Destacável
+                </p>
+              </div>
+              <ClaudeNotificationsHub />
+            </TabsContent>
+            <TabsContent value="dream-reviewer" className="mt-10">
+              <div className="mb-8">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                  Aprendizado Offline
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold">😴 Dream Reviewer</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Hermes aprendendo enquanto você dorme • Padrões detectados • Recomendações • Somente leitura
+                </p>
+              </div>
+              <DreamReviewer />
             </TabsContent>
             <TabsContent value="arquitetura" className="mt-10">
               <div className="mb-8">
@@ -552,11 +544,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </p>
               </div>
               <ForjaExecutor />
-              <EstudoPorCriterios contexto="forja" />
             </TabsContent>
             {autenticado ? (
+              <TabsContent value="gram-permissions" className="mt-10">
+                <GramPermissions />
+              </TabsContent>
+            ) : null}
+            {autenticado ? (
               <TabsContent value="admin" className="mt-10">
-                <PainelAdminCentralDark key={versaoAdmin} estado={dado} abaInicial={abaAdminInicial} />
+                <PainelAdminCentralDark estado={dado} />
               </TabsContent>
             ) : null}
             {autenticado ? (
@@ -566,11 +562,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   atualizando={estado.isFetching}
                   atualizar={() => void estado.refetch()}
                 />
-              </TabsContent>
-            ) : null}
-            {autenticado ? (
-              <TabsContent value="hud-legado" className="mt-10">
-                <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />
               </TabsContent>
             ) : null}
             <TabsContent value="hermes" className="mt-10">
@@ -598,7 +589,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   icone={<PackageCheck className="size-5" />}
                 />
               </div>
-              <CheckpointCentralDark autenticado={autenticado} />
               <PainelHermes compacto />
               <div className="mt-6 border-y border-border py-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
