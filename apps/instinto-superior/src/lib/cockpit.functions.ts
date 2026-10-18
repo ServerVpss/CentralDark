@@ -450,6 +450,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       receipts,
       casaSite,
       screenpipe,
+      screenpipeRemotoCasa,
       actions,
     ] = await Promise.all([
       medirGithub(),
@@ -464,14 +465,19 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),
+      hostScreenpipe === "VPS"
+        ? medirReachable(`http://${process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25"}:3030/health`)
+        : Promise.resolve(SONDA_NAO_EXECUTADA),
       medirActions(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
-    const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
+    const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasaFonte = hostScreenpipe === "CASA"
       ? "Casa Windows · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória"
-      : "Casa Windows · sem adapter/medição remota neste servidor";
+      : hostScreenpipe === "VPS"
+        ? "Casa Windows · Tailscale privado · porta 3030/health · medição remota com assinatura"
+        : "Casa Windows · sem adapter/medição remota neste servidor";
     const screenpipeVpsFonte = hostScreenpipe === "VPS"
       ? "VPS CENTRALDARK-OS · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória (porta pode ser Graph Panel)"
       : "VPS CENTRALDARK-OS · sem adapter/medição remota neste servidor";
@@ -545,12 +551,12 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
       screenpipeFonte: screenpipeCasaFonte,
-      screenpipeEvents: hostScreenpipe === "CASA" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
+      screenpipeEvents: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
       screenpipeVpsHttp: screenpipeVps.httpStatus,
       screenpipeVpsDetail: texto(screenpipeVps.dados?.["status"]),
       screenpipeVpsFonte,
       screenpipeVpsEvents: hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeVps) : ["NÃO MEDIDO · exige sensor na VPS"],
-      screenpipeCasaMedidoEm: hostScreenpipe === "CASA" ? consultaEm : null,
+      screenpipeCasaMedidoEm: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? consultaEm : null,
       screenpipeVpsMedidoEm: hostScreenpipe === "VPS" ? consultaEm : null,
       apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side`,
       apiHealthServico: apiServico.slice(0, 100),
