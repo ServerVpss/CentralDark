@@ -407,6 +407,28 @@
         "clear": false,
         "focus": false
       }
+    },
+    {
+      "label": "CentralDark Screenpipe: STATUS (Sidecar existente)",
+      "detail": "Somente leitura: mede health, frame, audio e frescor dos recibos do Sidecar existente; nao inicia gravador, nao consulta conteudo da tela nem acessa credenciais.",
+      "type": "process",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-File",
+        "${workspaceFolder}\\scripts\\remote-bridge\\CentralDark-Context-Sidecar.ps1",
+        "-Status"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": false,
+        "focus": false
+      }
     }
   ]
 }
