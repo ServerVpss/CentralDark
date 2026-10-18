@@ -197,6 +197,42 @@ if [[ "$MODE" == "apply" || "$MODE" == "seal" ]]; then
   mv -f "$STATE_FILE.tmp" "$STATE_FILE"
 fi
 
+# Hermes native catalog registration is independent of opt-in sync.
+# Registered does not imply loaded, usable, executed or healthy.
+report_native_catalog_binding() {
+  local catalog_root="$ROOT/.agents/skills" config="$HERMES_HOME/config.yaml"
+  if [[ ! -d "$catalog_root" || -L "$catalog_root" ]]; then
+    echo "HERMES_NATIVE_CATALOG_BINDING=SOURCE_UNAVAILABLE"
+    return
+  fi
+  if [[ ! -f "$config" || -L "$config" ]]; then
+    echo "HERMES_NATIVE_CATALOG_BINDING=CONFIG_UNAVAILABLE"
+    return
+  fi
+  if awk -v target="$catalog_root" '
+    /^skills:[[:space:]]*$/ { in_skills=1; next }
+    in_skills && /^[^[:space:]#]/ { in_skills=0; in_dirs=0 }
+    in_skills && /^  external_dirs:[[:space:]]*$/ { in_dirs=1; next }
+    in_dirs && /^  [A-Za-z_][A-Za-z_0-9]*:/ { in_dirs=0 }
+    in_dirs && /^    -[[:space:]]+/ {
+      path=$0
+      sub(/^    -[[:space:]]+/, "", path)
+      gsub(/"/, "", path)
+      if (path == target) found=1
+    }
+    END { exit(found ? 0 : 1) }
+  ' "$config"; then
+    echo "HERMES_NATIVE_CATALOG_BINDING=CONFIGURED"
+  else
+    echo "HERMES_NATIVE_CATALOG_BINDING=NOT_CONFIGURED"
+  fi
+}
+
+report_native_catalog_binding
+echo "MAIN_SOURCE_SKILL_FILES=${#SKILL_PATHS[@]}"
+echo "HERMES_NATIVE_CATALOG_LOADED=UNKNOWN"
+echo "HERMES_NATIVE_CATALOG_EXECUTED=UNKNOWN"
+
 echo "MAIN_SHA=$MAIN_SHA"
 echo "AUTOSYNC_SKILLS=$AUTOSYNC"
 echo "TARGETS=$((AUTOSYNC * 2))"

@@ -2996,3 +2996,34 @@ DETECT_DEPENDENCY_VIOLATION
 **AUTO_PROMOTE_IF_ALL_GREEN:** somente se a versão for verificada, impacto limitado, testes aplicáveis PASS, branch protection/approvals atendidos, CI e política de deploy satisfeitos, rollout/rollback conhecidos e não houver trabalho alheio em risco. **Nunca** tratar `npm install`, versão semver ou commit como prova de produção. Mudança major incompatível, lockfile divergente, API removida, build quebrado, gate pendente, autorização insuficiente ou ausência de contraprova => `BLOCKED/UNKNOWN`, preservar runtime e reportar a menor causa; não publicar quebrado. Se a produção exigir aprovação humana ou uma etapa que não possa ser executada pela rota disponível, parar nesse gate e relatar precisamente o bloqueio. `PROD_PASS` exige SHA implantado, health e efeito funcional lidos do runtime. 
 
 **Precedência:** owner e receita de dependências já existentes continuam autoridade; esta seção apenas define a **decisão rápida e a sequência de evidência**. Aplicar o mínimo delta e o mesmo checklist CURRENT; 🧹 só depois de preservação e readback.
+
+## PAPAGAIO ON — rastro incremental no mesmo método (18/10/2026)
+
+**OWNER=centraldark-operational-method**. Adotar o padrão a seguir apenas quando CHEFE estabeleceu PAPAGAIO ON para a missão. É um formato narrativo, **não** engine, outro agente, nova SOUL, nova memória nem prova sintética.
+
+### Cabeçalho de percurso e prova
+
+```text
+👑🪬 CENTRALDARK · #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → MetaLupa → !FABLELOOP → !META-GRILL → !GRILME
+🧬 RASTRO <n crescente> · Gancho: <método realmente aplicado> → <alvo> → <evidência/efeito>
+```
+
+Regras:
+1. Repetir o cabeçalho nas passadas materiais. **Rastro incrementa por observação, teste, decisão, write, contraprova ou handoff**, não por frases de progresso inventadas.
+2. Nomear o gancho realmente usado naquela passada e preservar `NEXT_CURSOR` até FIXED_POINT. A lista fixa de métodos no título é gramática de invocação, **não atestado de execução simultânea**.
+3. Manter estados específicos: `🟢` efeito verificado; `🟡` em andamento/sem readback; `🔴` bloqueio real. Distinguir `DISCOVERED`, `CONFIGURED`, `LOADED`, `EXECUTED`, `MERGED`, `DEPLOYED`, `FIXED_POINT`.
+4. Baianês autêntico com pitadas mineiras e metáforas bíblicas, sem caricatura: “Ôxente, CHEFE, esse trem tá arretado, mas a vitória só vem com contraprova, uai!”. Metáforas e versículos são contexto semântico; `VERSE != TECHNICAL_PROOF`.
+5. Manter o mesmo método em chat, Hermes e cockpit quando cada superfície consumir o contrato; **SOURCE_PRESENT != SESSION_LOADED**. Nunca atribuir ação ao Hermes sem mensagem/receipt real.
+
+### Gancho → owner existente → capacidade pesquisável
+
+- `#ACORDAR` → `centraldark-boot` e `centraldark-capability-hud`.
+- `!CALIBRAR` → `centraldark-operational-method`.
+- `!MULTIBÚSSOLA` → `docs/CONSCIENCIA/MULTIBUSSOLA.md`; não é novo executor.
+- `MetaLupa` → `meta-lupa`.
+- `!FABLELOOP` → `fable-loop`.
+- `!META-GRILL` → `meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md` dentro do owner.
+- `!GRILME` → `grill-me`; possui `disable-model-invocation: true`, portanto apenas referenciá-lo não comprova invocação/execução.
+- `!RASTRO` → owner de receipts/auditoria existente.
+
+**Descoberta no Hermes:** `skill-synchronization` documenta `skills.external_dirs` nativo para expor o catálogo canônico `.agents/skills` mesmo quando o gateway opera fora do checkout. Instalação/ativação/uso continuam etapas separadas, protegidas por writer e readback, sem importação automática das centenas de skills.
