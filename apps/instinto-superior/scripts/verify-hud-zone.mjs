@@ -142,7 +142,7 @@ test("gaveta canonica cataloga 999 skills e plugins sem fingir execucao", () => 
   assert.equal(vault.legacy.names.length, 10);
   assert.equal(new Set(vault.skills.map(s => s.id)).size, 999);
   assert.ok(vault.skills.every(s => s.estado === "SOURCE_ONLY"));
-  assert.ok(infra.includes("export function GavetaForja()"));
+  // Props opcionais fazem parte da API real; a assinatura exportada e o uso sao verificados abaixo.
   assert.match(infra, /export function GavetaForja\s*\(/);
   assert.ok(infra.includes('TabsTrigger value="gavetas"'));
   assert.ok(infra.includes("GavetaForja />"));
