@@ -97,3 +97,30 @@ ORACLE_REQUIRED=0
 MAIN_RUNTIME_LOCK=PASS
 
 SYNCED != EXECUTED.
+
+## Hermes: catalogo nativo completo, sem instalacao massiva
+
+O mesmo owner `scripts/skill-sync-check.sh` preserva **dois universos distintos**:
+
+- **Sincronizacao autorizada:** somente `SKILL.md` da `main` com `centraldark_autosync: true` via `--check|--apply|--seal`, writer unico, lock, backup e contraprova SHA.
+- **Descoberta ampliada:** Hermes possui `skills.external_dirs` nativo. Registre `/root/CentralDark/.agents/skills` nessa configuracao do perfil Hermes para que ele descubra o catalogo do projeto sem copiar todos os arquivos para `~/.hermes/skills`, preservando as skills locais e precedencia original.
+
+**Causa observada em 18/10/2026:** `hermes serve` tinha cwd `/root/.hermes/hermes-agent`; gateway cwd `/root/.hermes`. Apesar de `/root/CentralDark` figurar em `skills.trusted_project_dirs`, o descobridor de skills de projeto nao examina o repo quando o cwd da sessao fica fora dele.
+
+Contrato do perfil local (o cofre/config nao vai para GitHub):
+
+```yaml
+skills:
+  external_dirs:
+    - /root/CentralDark/.agents/skills
+```
+
+Nao substituir outros caminhos preexistentes; adicionar com backup privado e permissao `0600`, sem ler segredos em logs. A funcao de readback do script informa `HERMES_NATIVE_CATALOG_BINDING=CONFIGURED|NOT_CONFIGURED|CONFIG_UNAVAILABLE|SOURCE_UNAVAILABLE`. O estado `CONFIGURED` comprova apenas o cadastro do caminho, nao prova uma skill individual disponivel nem uma sessao atualizada.
+
+**Contraprova em processo isolado na VPS:** catalogo Hermes antes: **89** skills visiveis; apos configurar a fonte, **995** visiveis, com `grill-me`, `meta-lupa`, `fable-loop` e `skill-workshop` localizados. `MAIN_SOURCE_SKILL_FILES` vem de `main` (inclui arquivo historico, por isso nao deve ser comparado diretamente a itens visiveis). O MCP `skill_listar` mede somente outra raiz `skills/`: nao confundir suas tres entradas com a descoberta nativa Hermes.
+
+Ha drift entre `hermes-agent` e `systematic-debugging` do projeto e do runtime; preservar deltas e submeter ao owner de reconciliacao antes de qualquer overwrite.
+
+**Estados independentes:** `CONFIGURED != VISIBLE != SESSION_LOADED != EXECUTED != EFFECT_PROVED`. `--check` nao altera config. O sincronizador de skills opt-in continua sem copiar a biblioteca inteira ou criar outro catalogo/cron.
+
+**NEXT_CURSOR:** comprovar uma consulta da sessao Hermes viva, avaliar limite de indexacao/token, reconciliar drift com Oracle e preservar Windows Casa como fonte independente.
