@@ -3,6 +3,9 @@
 import contextlib
 import hashlib
 import io
+import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -91,6 +94,66 @@ class GoalLoopTests(unittest.TestCase):
         self.assertEqual(len(records), 1)
         self.assertEqual(records[-1].decide, "STOP")
         self.assertEqual(executor.goal_status, "LEGACY_SINGLE_STEP")
+
+    def test_goal_receipt_excludes_raw_execution_text(self):
+        secret = "NOT_FOR_JSONL_SENSITIVE_MARKER"
+        executor, records = self.run_goal(
+            [{"id": "G01", "expected_stdout_contains": "EXPECTED_OTHER_VALUE"}],
+            [{"tool": "terminal", "args": {"command": "echo " + secret}}],
+        )
+        self.assertEqual(records[-1].decide, "BLOCK")
+        raw = executor.log_file.read_text(encoding="utf-8")
+        self.assertNotIn(secret, raw)
+        self.assertNotIn("command", raw)
+        self.assertNotIn("stdout\":", raw)
+        self.assertIn("stdout_sha256", raw)
+        self.assertIn("G01", raw)
+
+    def test_cli_reads_brief_and_steps_from_json(self):
+        brief_file = self.root / "goal.json"
+        steps_file = self.root / "steps.json"
+        output_dir = self.root / "cli-receipts"
+        brief_file.write_text(json.dumps({
+            "success_predicate": "two proofs",
+            "goal_clauses": [self.clause(self.one, "G01"), self.clause(self.two, "G02")],
+        }), encoding="utf-8")
+        steps_file.write_text(json.dumps([
+            self.proof(self.one, "G01"), self.proof(self.two, "G02")
+        ]), encoding="utf-8")
+        program = Path(__file__).with_name("cot_react_loop.py")
+        child = subprocess.run([
+            sys.executable, str(program), "--brief", str(brief_file),
+            "--steps", str(steps_file), "--max-iter", "3",
+            "--output-dir", str(output_dir),
+        ], capture_output=True, text=True, timeout=15)
+        self.assertEqual(child.returncode, 0, child.stderr)
+        self.assertIn("Goal status: FIXED_POINT_CANDIDATE", child.stdout)
+        self.assertIn("Total iterations: 2", child.stdout)
+        receipts = list(output_dir.glob("*.jsonl"))
+        self.assertEqual(len(receipts), 1)
+        events = [json.loads(line) for line in receipts[0].read_text().splitlines()]
+        self.assertEqual(len(events), 2)
+        self.assertEqual(events[-1]["verified_clauses"], ["G01", "G02"])
+        self.assertEqual(events[-1]["pending_clauses"], [])
+        self.assertNotIn("act", events[-1])
+
+    def test_cli_rejects_missing_steps(self):
+        program = Path(__file__).with_name("cot_react_loop.py")
+        child = subprocess.run(
+            [sys.executable, str(program), "--brief", "not_a_file.json"],
+            capture_output=True, text=True, timeout=12,
+        )
+        self.assertNotEqual(child.returncode, 0)
+        self.assertIn("required together", child.stderr)
+
+    def test_cli_rejects_unbounded_iterations(self):
+        program = Path(__file__).with_name("cot_react_loop.py")
+        child = subprocess.run(
+            [sys.executable, str(program), "--max-iter", "99999"],
+            capture_output=True, text=True, timeout=12,
+        )
+        self.assertNotEqual(child.returncode, 0)
+        self.assertIn("1..50", child.stderr)
 
     def test_duplicate_clause_fails_before_execution(self):
         with self.assertRaisesRegex(ValueError, "GOAL_CLAUSE_MISSING_ID_OR_EXPECTATION"):
