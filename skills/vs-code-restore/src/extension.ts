@@ -46,9 +46,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)),
     vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)),
     vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
-    vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog)
-    // Acessibilidade: mesma implementação; nenhum novo executor ou terminal.
-    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal),
+    vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
       traceOutput?.show(true);
@@ -120,13 +118,9 @@ function focusExistingCliTerminal(): void {
  * publico apenas se o privado falhar. Sem escrita, chave copiada ou daemon novo.
  * "Conectar" usa o picker oficial da extensao VS Code Remote-SSH.
  */
-const VPS_SSH_ALIAS = 'segredo-vpss';
 const VPS_ROUTES = [
-  {
-    name: 'TAILSCALE',
-    options: ['-o', 'HostName=100.90.199.124', '-o', 'HostKeyAlias=89.117.78.124']
-  },
-  { name: 'PUBLIC_FALLBACK', options: [] }
+  { name: 'TAILSCALE', alias: 'Segredo-VPS', options: [] },
+  { name: 'PUBLIC_FALLBACK', alias: 'segredo-vpss', options: [] }
 ] as const;
 
 function sshExecutable(): string {
@@ -137,14 +131,14 @@ function sshExecutable(): string {
   return 'ssh';
 }
 
-function checkSshRoute(binary: string, options: readonly string[]): Promise<{ ok: boolean; status: string; host?: string }> {
+function checkSshRoute(binary: string, alias: string, options: readonly string[]): Promise<{ ok: boolean; status: string; host?: string }> {
   const args = [
     '-o', 'BatchMode=yes',
     '-o', 'StrictHostKeyChecking=yes',
     '-o', 'ConnectTimeout=6',
     '-o', 'NumberOfPasswordPrompts=0',
     ...options,
-    VPS_SSH_ALIAS,
+    alias,
     "printf 'CENTRALDARK_SSH_PASS\\n'; hostname"
   ];
   return new Promise(resolve => {
@@ -169,12 +163,12 @@ function checkSshRoute(binary: string, options: readonly string[]): Promise<{ ok
 async function probeVpsSsh(connectAfter: boolean): Promise<void> {
   const output = vscode.window.createOutputChannel('CentralDark — SSH Casa/VPS');
   output.appendLine('[INFO] ZENDRIVE SSH: teste de leitura, sem Desktop Commander.');
-  output.appendLine('[INFO] Alias existente: segredo-vpss; host key estrita; nenhuma configuracao alterada.');
+  output.appendLine('[INFO] Primeiro Segredo-VPS pela VPN; fallback segredo-vpss publico. Host key estrita; config inalterado.');
   const binary = sshExecutable();
   let succeeded: string | null = null;
   for (const route of VPS_ROUTES) {
     output.appendLine('[TESTE] ' + route.name);
-    const result = await checkSshRoute(binary, route.options);
+    const result = await checkSshRoute(binary, route.alias, route.options);
     output.appendLine(result.ok
       ? '[OK] ' + route.name + ' | host=' + result.host
       : '[AVISO] ' + route.name + ' | ' + result.status);
@@ -199,7 +193,8 @@ async function probeVpsSsh(connectAfter: boolean): Promise<void> {
   }
   // O picker respeita o alias SSH do usuario. O teste Tailscale nao reescreve
   // o config SSH e nao altera implicitamente a rota usada pelo Remote-SSH.
-  await vscode.commands.executeCommand('remote-ssh.connectToHost');
+  await vscode.commands.executeCommand('remote-ssh.connectToHost',
+    succeeded === 'TAILSCALE' ? 'Segredo-VPS' : 'segredo-vpss');
 }
 
 
