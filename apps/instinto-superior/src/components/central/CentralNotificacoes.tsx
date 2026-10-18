@@ -20,9 +20,15 @@ function receitaCompleta(evento: NotificationLog): string {
     : typeof meta["command"] === "string" ? meta["command"] : "";
   const cursor = typeof meta["next_cursor"] === "string" ? meta["next_cursor"] : "";
   const owner = typeof meta["owner"] === "string" ? meta["owner"] : evento.origem;
+  const estadoProva = typeof meta["proof_state"] === "string" ? meta["proof_state"] : "UNKNOWN";
+  const publicacao = typeof meta["publication_mode"] === "string" ? meta["publication_mode"] : "NOT_ATTESTED";
+  const fonte = typeof meta["source_surface"] === "string" ? meta["source_surface"] : "NOT_ATTESTED";
   return [
     `MISSÃO: ${evento.titulo}`, `OWNER: ${owner}`, `EVENTO: ${evento.id}`,
-    `DATA: ${evento.created_at}`, evento.mensagem,
+    `DATA: ${evento.created_at}`,
+    `ESTADO DA PROVA: ${estadoProva}`,
+    `PUBLICAÇÃO: ${publicacao} · FONTE: ${fonte}`,
+    evento.mensagem,
     cursor ? `PRÓXIMO: ${cursor}` : "",
     cmd ? `COMANDO COMPLETO: ${cmd}` : "",
     "Execução depende de aprovação, gate e recibo.",
@@ -44,6 +50,12 @@ function Eventos({ items, limite }: { items: NotificationLog[]; limite: number }
                 : "🧿"}{" "}
             {evento.titulo}
           </p>
+          {typeof evento.metadata?.["proof_state"] === "string" ? (
+            <p className="mt-1 text-xs text-muted-foreground">
+              PROVA: {String(evento.metadata["proof_state"]).slice(0, 24)}
+              {" · "}{String(evento.metadata["publication_mode"] ?? "FONTE NÃO COMPROVADA").slice(0, 60)}
+            </p>
+          ) : null}
           <details className="mt-2">
             <summary className="cursor-pointer text-xs text-gold">
               Ver receita completa e próximo passo
@@ -90,8 +102,8 @@ export function CentralNotificacoes(props: Props) {
     : loading
       ? "CONSULTANDO"
       : realtimeStatus === "LIVE"
-        ? "RECEBENDO AO VIVO"
-        : "REALTIME NÃO COMPROVADO";
+        ? "CANAL REALTIME CONECTADO · ENTREGA AINDA DEPENDE DE EVENTO"
+        : "REALTIME NÃO COMPROVADO · CONSULTA DE RECUPERAÇÃO ATIVA";
   const prova = lastEventAt
     ? lastEventAt.toLocaleString("pt-BR")
     : "Sem evento confirmado na janela";
