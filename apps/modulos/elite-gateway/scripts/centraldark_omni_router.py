@@ -1606,6 +1606,24 @@ def responses(
     return responses_response(result)
 
 
+def _zendrive_offline_refuses_simulation() -> bool:
+    """Deterministic regression: the real inference route must never fake 'oi'."""
+    from unittest.mock import patch
+
+    with patch.dict(os.environ, {
+        "ZENDRIVE_PROVIDER_LIVE_ENABLED": "false",
+        "ZENDRIVE_WORKER_URL": "",
+        "ZENDRIVE_PROVIDER_SIMULATION_ENABLED": "true",
+    }):
+        if provider_configured(ZENDRIVE_MODEL_ALIAS):
+            return False
+        try:
+            run_zendrive_provider([ChatMessage(role="user", content="oi")], ZENDRIVE_MODEL_ALIAS)
+        except HTTPException as exc:
+            return exc.status_code == 503 and exc.detail == "zendrive_inference_live_worker_not_configured"
+        return False
+
+
 def self_test() -> int:
     event = build_model_touch_event(
         {"x-mission-id": "mission-test", "x-trace-id": "trace-test"},
@@ -1628,6 +1646,7 @@ def self_test() -> int:
         "route_zendrive_alias": route_model(ZENDRIVE_MODEL_ALIAS) == (ZENDRIVE_MODEL_ALIAS, ""),
         "zendrive_selected_no_fallback": candidate_routes("zendrive") == [(ZENDRIVE_MODEL_ALIAS, "")],
         "zendrive_inference_requires_live_worker": provider_configured(ZENDRIVE_MODEL_ALIAS) == zendrive_live_configured(),
+        "zendrive_offline_refuses_simulated_oi": _zendrive_offline_refuses_simulation(),
         "responses_input": "oi" in flatten_messages(responses_messages(response_request)),
         "fallback_event": event["context"].get("fallback_used") is True and event["context"].get("attempt") == 2,
         "action_not_proof": event["context"].get("action_is_proof") is False,
