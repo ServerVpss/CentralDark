@@ -613,3 +613,24 @@ test("TelePainel permanece produto próprio; matriz Admin ocupa o mesmo HUD sem 
   assert.ok(zone.includes("telepainelAdminCapabilities.map"));
   assert.ok(!zone.includes("git reset --hard"));
 });
+
+
+test("Casa canonical K and four-stage collector receipt", () => {
+  const launcher = read("apps/instinto-superior/INICIAR-COCKPIT-LOCAL.bat");
+  const bridge = read("scripts/casa/vscode-log-bridge.ps1");
+  const ingest = read("scripts/vps/ingest-vscode-log.mjs");
+  for (const field of ["EXPECTED_ROOT=K:", "BLOCKED_LEGACY_OR_NONCANONICAL_PATH",
+    "BLOCKED_NOT_GIT_CHECKOUT", "npm ci", "--port 3000 --strictPort"]) {
+    assert.ok(launcher.includes(field), field);
+  }
+  assert.ok(!launcher.includes('cd /d "E:'));
+  for (const stage of ["[switch]$Bootstrap", "BUILD=PASS_SOURCE_PARSE_AND_GIT_ROOT_K",
+    "INSTALL=PASS_EXISTING_SCHEDULED_TASK", "CONNECT=PASS_",
+    "PROVE=PASS_COLLECTOR_METADATA_", "BROWSER_AUTOMATION_E2E=UNPROVEN",
+    "FIXED_POINT=COLLECTOR_ONLY"]) assert.ok(bridge.includes(stage), stage);
+  assert.ok(bridge.includes("chromium(_headless_shell)?-"));
+  assert.ok(bridge.includes("$parsed.playwright.revision -eq"));
+  assert.ok(ingest.includes("const playwrightReceipt = playwrightProbe == null"));
+  assert.ok(ingest.includes("playwright: playwrightReceipt"));
+  assert.ok(!ingest.includes("playwright: playwrightProbe,"));
+});
