@@ -397,3 +397,73 @@ Gates globais: SOURCE_CURRENT, MCP_HEALTH, ONE_HEART, CI_SAME_SHA, HERMES_RUNTIM
 Código da missão/receipts: apps/modulos/mcp/src/intent-cycle-adapter.js. UI Admin: apps/modulos/mcp/src/admin.js. UI Cockpit: apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx. Tests: intent-cycle-adapter.test.mjs; tool-call-observability.test.mjs. PR MCP/ZENDRIVE #1842 e PR UI/HUD #1838.
 
 NEXT_CURSOR: instalar a branch no runtime autorizado, clicar uma vez, medir ACK da fila, acompanhar o Hermes original, reler cada etapa, executar testes localizados; somente depois avaliar promoção separada.
+
+## 🪬 INVENTARIO-ZENDRIVE-20261018 — Casa ↔ Tailscale ↔ VPS ↔ MCP
+
+Owner preservado: este documento; catalogo existente em apps/modulos/mcp/src/tools/core/mcp-admin.js;
+extensao existente skills/vs-code-restore; executor original Hermes. Este inventario e um snapshot
+observado em 2026-10-18 UTC, nao um daemon, um novo MCP ou um sensor continuamente atualizado.
+Origem: sessoes remotas autorizadas Windows SEGREDO e VPS, screenshots do CHEFE, extensoes VS Code,
+GitHub e catalogo MCP. Nao promover SOURCE a RUNTIME, HTTP200 a funcao, nem porta a autenticacao.
+
+### Matriz de superficies e limites
+
+| Superficie | Evidencia da rodada | Limite da prova |
+|---|---|---|
+| Casa Windows | SEGREDO online pelo Remote Desktop Commander e Code.exe PID 19800 | Nao prova que o MCP ja controla a GUI |
+| VPN | Tailscale Running; peer privado Casa/VPS observado | VPN por si nao autentica comando admin |
+| Remote SSH | Alias Segredo-VPS por IP privado, retorno CENTRALDARK-OS e exit=0; alias segredo-vpss publico preservado | Prova apenas Casa → VPS autenticado |
+| VS Code | Remote-SSH 0.128.0; extensao CentralDark 0.1.4 instalada localmente e comandos no manifest | VSIX instalada nao prova que seus comandos foram executados |
+| Terminal VS Code | Janela VS Code identificada, paleta acionada pela sessao interativa | Nova aba ou comando de terminal sem receipt tipado continua UNKNOWN |
+| Navegadores | Janela Chrome do Cockpit e Edge observadas na Casa | Conector Browser nao conseguiu listar abas neste contexto (originating browser context ausente) |
+| Screenpipe Casa | localhost:3030/health HTTP200, status=degraded, status_code=503, frame_status=ok | CAPTURE_HEALTH nao e PASS; nao extrair dados de tela sem sensor valido |
+| Forja/discos | C E F J K; K:_WORKER como junction, LAB-DESKTOP em K e E:CentralDark existentes | Nao implica mount nem ACL de Casa disponivel na VPS/MCP |
+| SSH server Casa | sshd no Windows instalado, Stopped/Manual | VPS → Casa shell nao autenticado/provado |
+| MCP central | mcp.centralldark.com/health valido, servidor 153 tools; dispatcher 141 tools e 13 rotas no runtime antes deste patch | Catalogos de escopos diferentes; fonte GitHub com 14 rotas ainda nao publicada |
+| Hermes | Orquestrador existente, receita intent-cycle e logs operacionais | Delegacao deste objetivo requer ACK novo + receipt do Hermes |
+| Remote Desktop Commander | Casa e VPS online, executor capaz de comandos na Casa | Fallback autorizado preservado ate paridade end-to-end |
+
+### Substituicao progressiva sem um segundo agente
+
+| Funcao hoje pelo Desktop Commander | Rota existente alternativa | Gate real para dispensar RDC |
+|---|---|---|
+| Terminal na VPS | VS Code Remote-SSH via Tailscale | Comando + exit code + host + receipt no mesmo SHA |
+| Arquivo na VPS | SFTP/SSH na mesma conexao autenticada | Hash lido de volta e writer unico |
+| PID/processos VPS | ps por SSH | PID medido no alvo certo |
+| Terminal integrado VS Code | Extensao centraldark.focusExistingTerminal/VS Code API | terminal.processId e comando com marcador/resultado sem perturbar Hermes |
+| Arquivos e processos da Casa | Adapter Casa autorizado ou executor Hermes original | Chamada da VPS recebida na Casa com autenticação, ACK e receipt |
+| Abas/DOM/tela Casa | Browser conectado no cliente + Screenpipe com consentimento e assinatura valida | Prova da pagina/aba consultada, nao so titulo de janela |
+| Delegar Hermes | MCP Admin existente e intent-cycle adapter | Fingerprint, ACK, missao unica, receipt verificado |
+| Inventario MCP | mcp_admin_catalog no owner ja existente | CI SHA + source em main + microdeploy autorizado + readback do catalogo vivo |
+
+### Recibo de provas e nao provas
+
+```text
+OBSERVED_AT_UTC=2026-10-18
+SSH_CASA_VPS_PELA_VPN=PASS
+VSCODE_REMOTE_SSH_EXTENSION_INSTALLED=0.128.0
+VSCODE_CENTRALDARK_VSIX_INSTALLED=0.1.4
+CASA_WORKER_JUNCTION_PRESENT=PASS_LOCAL_METADATA
+RDC_FALLBACK_PRESERVADO=true
+SHELL_VPS_CASA=UNKNOWN
+TERMINAL_INTEGRADO_EXEC_RECEIPT=UNKNOWN
+BROWSER_TABS_CONTEXT=BLOCKED_ORIGIN
+SCREENPIPE_CASA=DEGRADED
+HERMES_DELEGATION_ACK=UNKNOWN
+MCP_CATALOG_RUNTIME_UPDATED=NOT_UNTIL_DEPLOY
+```
+
+### Critérios de conclusão e continuidade
+
+1. G1 IDENTIDADE: local, VPS, versões e owner com hora, origem e escopo real.
+2. G2 TRANSPORTE: autenticar SSH pela VPN, preservar chave conhecida e fallback publico.
+3. G3 CONTROLE: executar no terminal correto, correlacionar PID/processId e devolver recibo.
+4. G4 CASA: receber comando na Casa por executor autorizado, com ACK e readback; abrir SSH server Windows so em revisao de seguranca separada.
+5. G5 UI: contexto de aba e Screenpipe somente com sessao/assinatura valida, sem burlar antivirus nem privacidade.
+6. G6 CATALOGO: reutilizar mcp_admin_catalog, manter UNKNOWN quando nao ha prova e testar negativas.
+7. G7 DEPLOY: promover somente codigo de owner aprovado, depois CI same SHA, backup, rollback e health; nao usar checkout dirty e runners pausados como prova.
+8. G8 REMOVER DEPENDENCIA: so apos E2E de shell, arquivos, processos e UI com recibos Casa/VPS, manter fallback ate entao.
+
+FIXED_POINT_PARCIAL=SSH_PRIVADO_CASA_VPS_E_INVENTARIO_EM_PR_1842
+NEXT_CURSOR=CI_DO_HEAD_DESTA_PR -> MERGE_AUTORIZADO_COM_SHA -> MICRODEPLOY_DO_MCP -> READBACK_CATALOGO -> EXECUTOR_CASA_ACK -> UI_RECIBO -> REAVALIAR_RDC
+CURRENT_NE_LEGACY=true; ROUTE_REGISTERED_NE_EXECUTABLE=true; UNKNOWN_NE_PASS=true.
