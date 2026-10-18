@@ -438,3 +438,36 @@ NEXT_CURSOR=WAIT_EXACT_SHA_CI_THEN_DEPLOY_AUTHORIZED_CAUSAL_APP_AND_PROVE_BROWSE
 
 A projeção e o receipt ficam no owner já existente. Novos fatos materiais devem atualizar o status, sem repetir diagnósticos selados e sem criar outra central.
 <!-- /CENTRALDARK_NOTIFY_T2_RUNNER_RECOVERY_20261018 -->
+
+
+<!-- CENTRALDARK_CROSS_SURFACE_IMAGES_CURRENT_20261018 -->
+### T3 · 2026-10-18 — fotos de operação simultânea cruzadas com realidade Supabase/Cloudflare/MCP
+
+**Entrada observacional:** screenshots do usuário mostram operação paralela de ferramentas, arquivos de configuração MCP no navegador, e outra sessão com Casa/VPS/GitHub divergentes, preservação de alterações locais, investigação de Screenpipe e relato histórico de disco raiz 100%. Capturas não são readback de execução deste turno; revalidar apenas fatos voláteis.
+
+**Readback corrente (mesmo escopo, sem criar arquitetura):**
+
+- VPS \`CENTRALDARK-OS\` via MCP oficial: \`/\` em \`/dev/sda3\` ext4, **75%** uso, **50 GiB** livres aprox., inodes **33%**. Logo, o relato fotográfico de 100% não é CURRENT para este corpo/instante. \`main\` local VPS em \`fb7a00a60\`, com **4 tracked** alterados: não executar checkout/reset/clean/pull/stash para sincronizar por cima de owners concorrentes.
+- GitHub \`ServerVpss/CentralDark@main\` em \`7edba7d692c445e2edf47d7a09f15bc03c313991\` durante a medição, divergente do checkout VPS. Runner \`centraldark-vps-1\` **active**. Interface local de cockpit \`127.0.0.1:4175\` retornou \`000\` (indisponível); não afirmar deploy visual.
+- Supabase \`lyoigsqluyktoclwdaft\`: \`notifications_log\` preserva eventos existentes \`hermes_kanban\` \`FAIL\` (UUID \`17681f3a-4fdf-438e-930a-f1b4dc7ddc55\`) e \`github_actions\` \`PASS\` restrito ao runner (UUID \`bce44029-e2ad-4c74-8e65-b8d82c3d14c9\`); ambos publicados **manualmente** após readback, não por producer Hermes automático. Nada observado neste turno demonstra terceiro evento automático.
+- Supabase advisories SECURITY retornam achados inclusive \`rls_enabled_no_policy\` e \`security_definer_view\`. São itens de **revisão pelo owner de segurança**, não autorização para abrir policies nem mexer em \`SECURITY DEFINER\` por tentativa. [Documentação do linter](https://supabase.com/docs/guides/database/database-linter?lint=0010_security_definer_view).
+- Cloudflare connector do usuário: zona \`centralldark.com\` **active**, não pausada. DNS A proxied para \`centralldark.com\`, \`api.centralldark.com\`, \`mcp.centralldark.com\` e \`www.centralldark.com\`, todos apontando ao IP canônico VPS \`89.117.78.124\`; \`https://centralldark.com/\` e \`https://api.centralldark.com/\` responderam **HTTP 200** no corpo VPS, \`https://mcp.centralldark.com/\` respondeu **HTTP 404** *na raiz apenas*. \`MCP_AUTHENTICATED_ENDPOINT=NOT_MEASURED\`; não interpretar \`/\` 404 como prova de indisponibilidade do MCP.
+- Os arquivos \`mcp-tunnel-edited.json\`, \`mcp-active-edited.json\`, \`mcp-public-oauth-edited.json\` e \`mcp-server-screenpipe.log\` aparecem como nomes no screenshot, mas **conteúdo, owner físico, SHA e validade da rota não foram lidos**. Não afirmar que foram publicados nem substituir configs reais.
+
+\`\`\`text
+CURRENT_ROOT_DISK=75_PERCENT_USED
+CONCURRENT_LOCAL_WORK_PRESERVED=true
+SUPABASE_RECEIPT_LEDGER=PASS_EXISTING_2
+CLOUDFLARE_ZONE_DNS=PASS
+SITE_ROOT_HTTPS_200=PASS
+API_ROOT_HTTPS_200=PASS
+MCP_ROOT_HTTPS_404_NOT_A_PROTOCOL_PROOF
+MCP_AUTH_ROUTE=UNKNOWN
+HERMES_AUTOMATIC_SUPABASE_PRODUCER=UNKNOWN
+COCKPIT_FRONTEND_PORT_4175=UNAVAILABLE
+BROWSER_RECEIPT_E2E=UNKNOWN
+NEXT_CURSOR=RECONCILE_OWNER_FILES_AND_CI_WITHOUT_DIRTY_RESET_THEN_VERIFY_MCP_AUTH_AND_BROWSER_DELIVERY
+\`\`\`
+
+**Regra:** não modificar zonas DNS que já estão corretas; não ativar nenhuma permissão destrutiva em quarentena; não acrescentar custos de modelo quando receipt/recipe determinísticos bastarem. Um status já provado deve ser reutilizado até existir nova mudança causal material.
+<!-- /CENTRALDARK_CROSS_SURFACE_IMAGES_CURRENT_20261018 -->
