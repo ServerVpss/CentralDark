@@ -111,6 +111,31 @@
       "evidence_owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
       "last_evidence_status": "DEGRADED_AUDIO_STALE",
       "integration": "visão e gravação de UI podem estar ativas mesmo com áudio degradado; somente sondas atuais certificam estado"
+    },
+    {
+      "id": "casa-vps-ssh",
+      "owner": "scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1",
+      "transport": "Casa SEGREDO → Tailscale 100.90.199.124:22 → VPS; fallback público existente com host key estrita",
+      "runtime_status": "HISTORICAL_TRANSPORT_PROVEN_CURRENT_UNKNOWN",
+      "evidence_owner": "docs/receipts/SSH-CASA-VPS-LOCK-20261014.md",
+      "paired_capability": "VS Code Remote-SSH",
+      "guard": "SSH_CONFIG_LOCKED_NO_NEW_KEYS"
+    },
+    {
+      "id": "vscode-restore",
+      "owner": "VS Code extension CentralDark VS Code Restore 0.1.4 (Casa SEGREDO)",
+      "transport": "VS Code extension host",
+      "runtime_status": "HISTORICAL_INSTALL_PROVEN_CURRENT_UNKNOWN",
+      "evidence_owner": "capturas da sessão do Windows fornecidas pelo CHEFE 2026-10-17",
+      "paired_capability": "VS Code Remote-SSH"
+    },
+    {
+      "id": "vscode-remote-ssh",
+      "owner": "Microsoft VS Code Remote-SSH 0.128.0 (Casa SEGREDO)",
+      "transport": "Casa SSH → VPS",
+      "runtime_status": "HISTORICAL_INSTALL_AND_TRANSPORT_PROVEN_CURRENT_UNKNOWN",
+      "evidence_owner": "docs/receipts/SSH-CASA-VPS-LOCK-20261014.md",
+      "paired_capability": "scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1"
     }
   ],
   "loop": [
@@ -136,6 +161,8 @@
     "A integração completa exige readback por arquivo/página e prova de CI; catálogo sozinho não é prova.",
     "D002 mapeia processos vivos do VS Code; ação interativa continua bloqueada até identidade de sessão + ACK/readback correlacionado.",
     "Família skill/plugin/extensão/conector/owner é catálogo de capacidades reutilizadas; não cria tool nem permissão.",
-    "Notificação breve abre a receita; envio direto depende de broker autenticado; voz capturada não comprova transcrição nem áudio healthy."
+    "Notificação breve abre a receita; envio direto depende de broker autenticado; voz capturada não comprova transcrição nem áudio healthy.",
+    "Prova de 14/10 e screenshots 17/10 é HISTORICAL, não CURRENT. Na última consulta 17/10, dispositivos RDC SEGREDO e CENTRALDARK-OS offline; isso não revoga SSH Tailscale previamente provado.",
+    "Status do sensor só pode piscar verde com timestamp fresco e verificação de sessão/ACK do owner, não com texto estático do catálogo."
   ]
 }
