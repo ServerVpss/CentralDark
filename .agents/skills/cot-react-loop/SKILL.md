@@ -902,3 +902,11 @@ DECIDIR → EXECUTAR/MEDIR/CORRIGIR → FALSIFICAR/SELAR
 Não é pensar muito, repetir ferramenta, escrever logs bonitos ou autoaprovar.
 É objetivo verificável, ação real, observação real, crítica honesta, correção
 limitada, teste comparável, parada correta e prova.
+
+## TIK-TAK — integração com Goal por cláusulas (18/10/2026)
+
+- Owner deste método transversal: `.agents/skills/cot-react-loop/SKILL.md` (ANTES/DURANTE/DEPOIS). Implementação Python do perfil Hermes: `.agents/skills/hermes/cot-react-loop/scripts/cot_react_loop.py`. Não instalar motor paralelo.
+- Ao receber missão com `goal_clauses` obrigatórias, **PASS de uma ferramenta não encerra o Goal**. Somente verificação explícita por cláusula altera `verified_clauses`; as demais permanecem em `pending_clauses` e definem `NEXT_CURSOR`. O budget finito de iterações termina em bloqueio parcial, nunca em verde forçado.
+- `FIXED_POINT_CANDIDATE` vindo do script Hermes não é `STOP_SUCCESS`: o avaliador canônico `scripts/lupa/horn-reuse-fixed-point.mjs` e contraprova independente precisam confirmar o conjunto completo. Preservar one writer/escopo e autorizações; não criar conversa autorrecursiva via navegador.
+- Prova datada: branch do PR #1862 contém o modo de cláusulas e sete testes de regressão executados em VPS isolada. O PR está em draft; entrada CLI `--brief` e `--steps` e sanitização do log ainda pendentes. Não alegar runtime ativo/skill instalada na Casa ou chat autopilot.
+- OWNER/NEXT_CURSOR: `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`; `!TIK-TAK` aproveita a rota existente acima do Hermes. `NO_CHANGE` é resultado legítimo; sem ganho material, parar e selar o bloqueio com recibo.
