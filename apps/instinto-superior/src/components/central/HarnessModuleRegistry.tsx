@@ -18,6 +18,9 @@ const MODULES: HarnessModule[] = [
   { id: "vscode", label: "VS Code", owner: "apps/modulos/HERMES-CORE/extensions/hermes-vscode-router-provider", transport: "VS Code Remote", status: "PROVEN" },
   { id: "figma", label: "Figma", owner: "Figma connector", transport: "MCP", status: "PROVEN" },
   { id: "obsidian", label: "Obsidian", owner: "apps/modulos/obsidian-plugin-grafo-vivo", transport: "Grafo Vivo", status: "UNKNOWN" },
+  { id: "notifications-recipe", label: "Notificações e receitas", owner: "apps/instinto-superior/src/components/central/CentralNotificacoes.tsx", transport: "Supabase/RLS · comando ao abrir · broker pendente", status: "UNKNOWN" },
+  { id: "voice-semantic", label: "Classificador de voz", owner: ".claude/skills/synced/voice-semantic-classifier/SKILL.md", transport: "Fala → intenção → agente autorizado", status: "UNKNOWN" },
+  { id: "screenpipe-audio-casa", label: "Screenpipe · áudio da Casa", owner: ".agents/skills/screenpipe-live-observer/SKILL.md", transport: "Tailscale/Screenpipe · áudio degradado na última medição", status: "UNKNOWN" },
 ];
 
 export function HarnessModuleRegistry() {
