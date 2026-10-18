@@ -8,7 +8,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $ctxDir = Join-Path $Workdir 'context'
 $latest = Join-Path $ctxDir 'screenpipe-latest.json'
-$status = Join-Path $ctxDir 'screenpipe-status.json'
+$statusPath = Join-Path $ctxDir 'screenpipe-status.json'
 $base = if ($env:SCREENPIPE_LOCAL_API_URL) { $env:SCREENPIPE_LOCAL_API_URL.TrimEnd('/') } else { 'http://127.0.0.1:3030' }
 
 # Same existing Sidecar owner. -Status is non-mutating and does not request/copy
@@ -31,7 +31,7 @@ if ($Status) {
     exit 2
   }
   foreach ($item in @(
-    @{ Label = 'SIDECAR_STATUS'; Path = $status },
+    @{ Label = 'SIDECAR_STATUS'; Path = $statusPath },
     @{ Label = 'SIDECAR_LATEST'; Path = $latest }
   )) {
     if (Test-Path -LiteralPath $item.Path -PathType Leaf) {
@@ -81,9 +81,9 @@ while ($true) {
     $tmp = "$latest.tmp"
     $payload | ConvertTo-Json -Depth 30 | Set-Content -Encoding UTF8 $tmp
     Move-Item -Force $tmp $latest
-    [ordered]@{ generated_at=$now; ok=$true; mode=$mode; latest=$latest; remote_mcp='https://mcp.desktopcommander.app/mcp' } | ConvertTo-Json | Set-Content -Encoding UTF8 $status
+    [ordered]@{ generated_at=$now; ok=$true; mode=$mode; latest=$latest; remote_mcp='https://mcp.desktopcommander.app/mcp' } | ConvertTo-Json | Set-Content -Encoding UTF8 $statusPath
   } catch {
-    [ordered]@{ generated_at=$now; ok=$false; error=$_.Exception.Message; remote_mcp='https://mcp.desktopcommander.app/mcp' } | ConvertTo-Json | Set-Content -Encoding UTF8 $status
+    [ordered]@{ generated_at=$now; ok=$false; error=$_.Exception.Message; remote_mcp='https://mcp.desktopcommander.app/mcp' } | ConvertTo-Json | Set-Content -Encoding UTF8 $statusPath
   }
   Start-Sleep -Seconds ([Math]::Max($IntervalSec,5))
 }
