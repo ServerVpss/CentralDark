@@ -596,8 +596,8 @@ export const lerMcpRuntimeAoVivo = createServerFn({ method: "GET" })
       .from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
     if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
     const consultaEm = new Date().toISOString();
-    const fonte = "MCP GET /heartbeat · server-side";
-    const leitura = await medirApi("/heartbeat");
+    const fonte = "MCP GET http://127.0.0.1:9100/heartbeat · server-side";
+    const leitura = await medirReachable("http://127.0.0.1:9100/heartbeat");
     const heartbeat = leitura.dados;
     const operational = objetoJson(heartbeat?.["operational"]) ? heartbeat["operational"] : null;
     const runtime = objetoJson(operational?.["runtime"]) ? operational["runtime"] : null;
