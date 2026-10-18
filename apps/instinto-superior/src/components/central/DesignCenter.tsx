@@ -411,7 +411,7 @@ export function DesignCenter({
                   <div>
                     <dt className="text-muted-foreground">Limite atual</dt>
                     <dd className="mt-1">
-                      Provider ChatGPT/Zendrive não provado ao vivo; ativação neste cockpit não medida.
+                      Provider ChatGPT/Zendrive não provado ao vivo; ativação neste cockpit não medida. Build e deploy do cockpit são provas separadas.
                     </dd>
                   </div>
                 </dl>
