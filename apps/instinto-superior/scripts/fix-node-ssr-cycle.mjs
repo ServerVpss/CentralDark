@@ -80,3 +80,44 @@ for (const entry of entries) {
   renameSync(tmp, file);
   console.log("SSR_SERVERFN_ORDER=FIXED:" + entry);
 }
+
+// Repair Nitro's flattened single-chunk variant without changing handler/CSRF logic.
+// 2026-10-18 observed: lerCerebroVivo_createServerFn_handler runs before the
+// createServerFn AND createServerRpc initializers in createServerRpc-*.mjs.
+for (const entry of readdirSync(dir).filter((name) => /^createServerRpc-[\w-]+\.mjs$/.test(name))) {
+  const file = join(dir, entry);
+  const source = readFileSync(file, "utf8");
+  const start = source.indexOf("var lerCerebroVivo_createServerFn_handler = createServerRpc(");
+  if (start < 0) continue;
+  const createFn = source.indexOf("var createServerFn = (options, __opts) => {");
+  const createRpc = source.indexOf("var createServerRpc = (serverFnMeta, splitImportFn) => {");
+  if (createFn < 0 || createRpc < 0) throw new Error("SSR_FLATTENED_ORDER_BLOCKED: factories missing");
+  if (start > createRpc && start > createFn) {
+    console.log("SSR_FLATTENED_ORDER=ALREADY_VALID:" + entry);
+    continue;
+  }
+  if (!(start < createFn && createFn < createRpc))
+    throw new Error("SSR_FLATTENED_ORDER_BLOCKED: unexpected ordering");
+  const end = source.indexOf("//#endregion", start);
+  if (end < 0 || end >= createFn) throw new Error("SSR_FLATTENED_ORDER_BLOCKED: invalid declaration scope");
+  const declaration = source.slice(start, end);
+  if (!declaration.includes("var lerCerebroVivo = createServerFn(") ||
+      source.split("var lerCerebroVivo_createServerFn_handler = createServerRpc(").length !== 2)
+    throw new Error("SSR_FLATTENED_ORDER_BLOCKED: unexpected block");
+  let updated = source.slice(0, start) + source.slice(end);
+  const rpcPos = updated.indexOf("var createServerRpc = (serverFnMeta, splitImportFn) => {");
+  const marker = updated.indexOf("//#endregion", rpcPos);
+  if (marker < 0) throw new Error("SSR_FLATTENED_ORDER_BLOCKED: factory marker missing");
+  const afterFactory = marker + "//#endregion".length;
+  updated = updated.slice(0, afterFactory) + "\n" + declaration + updated.slice(afterFactory);
+  if (updated.indexOf(declaration) <= updated.indexOf("var createServerRpc = (serverFnMeta, splitImportFn) => {") ||
+      updated.indexOf(declaration) <= updated.indexOf("var createServerFn = (options, __opts) => {"))
+    throw new Error("SSR_FLATTENED_ORDER_BLOCKED: declaration still premature");
+  const backupDir = join(app, ".output/.cyclefix-backup");
+  mkdirSync(backupDir, { recursive: true });
+  copyFileSync(file, join(backupDir, basename(file)));
+  const tmp = file + ".flattened-order-tmp";
+  writeFileSync(tmp, updated);
+  renameSync(tmp, file);
+  console.log("SSR_FLATTENED_ORDER=FIXED:" + entry);
+}

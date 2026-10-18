@@ -1,5 +1,8 @@
 # Gemini — adaptador fino CentralDark
 
+**Gatilho:** `!CENTRALDARK`/`!Centraldark` requer ler o último checkpoint de execução verificado pelo `scripts/hermes/centraldark-entry.py`, conforme `LEIA-ME-IA.md`, retomando o `NEXT_CURSOR` por rota real em vez de iniciar investigação nova.
+
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
