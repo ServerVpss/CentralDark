@@ -14,6 +14,7 @@ export interface NotificationLog {
   tipo: NotifyTipo;
   titulo: string;
   mensagem: string;
+  metadata?: Record<string, unknown> | null;
 }
 
 export type PeriodoFiltro = "1h" | "24h" | "7d";
@@ -62,7 +63,7 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data, error } = await (supabase as unknown as { from: (t: string) => any })
         .from("notifications_log")
-        .select("id, created_at, origem, tipo, titulo, mensagem")
+        .select("id, created_at, origem, tipo, titulo, mensagem, metadata")
         .gte("created_at", sinceIso)
         .order("created_at", { ascending: false })
         .limit(MAX_FEED);
