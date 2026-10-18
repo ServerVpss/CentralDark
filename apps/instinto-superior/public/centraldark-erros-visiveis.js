@@ -118,7 +118,7 @@
       '.bt{position:fixed;right:16px;bottom:16px;z-index:2147483646;border:1px solid var(--bad,#ff4d6d);background:rgba(10,8,24,.92);color:#fff;border-radius:999px;padding:9px 14px;font-size:14px;cursor:pointer;box-shadow:0 0 18px color-mix(in srgb,var(--bad,#ff4d6d) 45%,transparent)}' +
       '.bt.ok{border-color:var(--ok,#39e58c);box-shadow:none;opacity:.55;padding:6px 10px;font-size:12px}' +
       '.gaveta{position:fixed;right:12px;bottom:64px;z-index:2147483647;width:min(440px,calc(100vw - 24px));max-height:70vh;overflow:auto;background:rgba(12,10,30,.97);color:#eef0ff;border:1px solid var(--line,#3a2f7a);border-radius:14px;padding:12px}' +
-      'h3{margin:0 0 4px;font-size:15px;color:var(--a1,#ffcc4d)}.sub{color:#9aa0c8;font-size:12px;margin-bottom:8px}' +
+      'h2{margin:0 0 4px;font-size:15px;color:var(--a1,#ffcc4d)}.sub{color:#9aa0c8;font-size:12px;margin-bottom:8px}' +
       '.it{border:1px solid var(--line,#3a2f7a);border-left:4px solid var(--bad,#ff4d6d);border-radius:10px;padding:8px 10px;margin-bottom:8px}' +
       '.s{font-size:14px;font-weight:600}.m{color:#9aa0c8;font-size:12px;margin-top:3px}' +
       'details{margin-top:4px}summary{color:#9aa0c8;font-size:12px;cursor:pointer}pre{white-space:pre-wrap;font:11px/1.4 ui-monospace,Consolas,monospace;color:#c9cdf0;max-height:140px;overflow:auto;margin:4px 0}' +
@@ -146,7 +146,7 @@
     bt.textContent = lista.length ? '🧿 ' + lista.length + (lista.length === 1 ? ' erro' : ' erros') : '🧿';
     gv.hidden = !aberto;
     if (!aberto) return;
-    gv.innerHTML = '<h3>🧿 Erros vistos nesta página</h3><div class="sub">' +
+    gv.innerHTML = '<h2>🧿 Erros vistos nesta página</h2><div class="sub">' +
       (lista.length ? lista.length + ' tipos · ' + total + ' ocorrências. Copie e mande pro Instinto corrigir só aquela parte.' : 'Nenhum erro visto até agora. Silêncio aqui não é prova de que está tudo certo: é só o que esta tela enxergou.') + '</div>' +
       lista.map(function (x) {
         return '<div class="it"><div class="s">' + esc(x.simples) + (x.vezes > 1 ? ' ×' + x.vezes : '') + '</div>' +
