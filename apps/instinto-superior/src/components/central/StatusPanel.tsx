@@ -119,6 +119,13 @@ export function StatusPanel() {
         {fresco ? <>Consulta: <DataHora iso={medidoEm} /> · atualização periódica ativa</> : "SEM MEDIÇÃO FRESCA · não promover último verde"}
         {q.isError ? " · falha de transporte no servidor" : ""}
       </p>
+      {fresco && rotasComProblema.some((rota) => rota.estado === "FAIL" || rota.estado === "BLOCKED") ? (
+        <div role="alert" className="rounded-md border border-destructive/45 bg-destructive/10 p-3 text-xs">
+          🔴 Conexão com falha confirmada ·{" "}
+          {rotasComProblema.filter((rota) => rota.estado === "FAIL" || rota.estado === "BLOCKED").map((rota) => rota.id).join(", ")}
+          {" "}— abra “Rotas e alertas” para identificar o owner e a fonte.
+        </div>
+      ) : null}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {sinais.map((s) => {
           const Icon = s.icon;
