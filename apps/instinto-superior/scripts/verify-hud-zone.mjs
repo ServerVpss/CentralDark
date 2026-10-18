@@ -684,3 +684,26 @@ test("Casa canonical K and four-stage collector receipt", () => {
   assert.ok(ingest.includes("playwright: playwrightReceipt"));
   assert.ok(!ingest.includes("playwright: playwrightProbe,"));
 });
+
+
+test("MCP PID ao vivo exige Supabase admin, heartbeat fresco e fail-closed", () => {
+  const backend = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
+  assert.ok(backend.includes("export const lerMcpRuntimeAoVivo = createServerFn"));
+  assert.ok(backend.includes(".middleware([requireSupabaseAuth])"));
+  assert.ok(backend.includes('.eq("role", "admin")'));
+  assert.ok(backend.includes('medirApi("/heartbeat")'));
+  assert.ok(backend.includes('"centraldark.execution-topology.v1"'));
+  assert.ok(backend.includes('"mcp-centraldark"'));
+  assert.ok(backend.includes('idadeMs <= 30_000'));
+  assert.ok(backend.includes('pid: recente ? pid as number : null'));
+  assert.ok(backend.includes('processos: McpRuntimeAoVivo["processos"] = recente'));
+  assert.ok(infra.includes('queryKey: ["centraldark", "mcp-runtime-ao-vivo"]'));
+  assert.ok(infra.includes('refetchInterval: 10_000'));
+  assert.ok(infra.includes('mcpAtual.isError'));
+  assert.ok(infra.includes('PID_ANTIGO_OCULTADO'));
+  assert.ok(infra.includes('Presença de PID não prova conexão TCP'));
+  assert.doesNotMatch(infra, /PID 1515631|PID 1355684/);
+  assert.equal(backend.replace('.eq("role", "admin")', '.eq("role", "viewer")')
+    .includes('.eq("role", "admin")'), false);
+});
