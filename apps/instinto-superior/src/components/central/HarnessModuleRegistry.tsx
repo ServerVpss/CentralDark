@@ -9,7 +9,7 @@ type HarnessModule = {
   status: "PROVEN" | "UNKNOWN";
   runtimeUrl?: string;
   evidence?: string;
-  current?: "UNKNOWN" | "OFFLINE";
+  lastObserved?: "OFFLINE_2026_10_17";
 };
 
 const MODULES: HarnessModule[] = [
@@ -23,9 +23,9 @@ const MODULES: HarnessModule[] = [
   { id: "notifications-recipe", label: "Notificações e receitas", owner: "apps/instinto-superior/src/components/central/CentralNotificacoes.tsx", transport: "Supabase/RLS · comando ao abrir · broker pendente", status: "UNKNOWN" },
   { id: "voice-semantic", label: "Classificador de voz", owner: ".claude/skills/synced/voice-semantic-classifier/SKILL.md", transport: "Fala → intenção → agente autorizado", status: "UNKNOWN" },
   { id: "screenpipe-audio-casa", label: "Screenpipe · áudio da Casa", owner: ".agents/skills/screenpipe-live-observer/SKILL.md", transport: "Tailscale/Screenpipe · áudio degradado na última medição", status: "UNKNOWN" },
-  { id: "casa-vps-ssh", label: "Casa → VPS · Tailscale SSH", owner: "scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1", transport: "100.90.199.124:22 · host key estrita · fallback público existente", status: "PROVEN", current: "OFFLINE", evidence: "docs/receipts/SSH-CASA-VPS-LOCK-20261014.md" },
-  { id: "vscode-restore", label: "CentralDark VS Code Restore 0.1.4", owner: "VS Code · Casa SEGREDO", transport: "Extensão instalada · prova em sessão histórica", status: "PROVEN", current: "OFFLINE", evidence: "Captura de sessão Windows/VS Code fornecida pelo CHEFE em 17/10" },
-  { id: "vscode-remote-ssh", label: "VS Code Remote-SSH 0.128.0", owner: "VS Code · Casa SEGREDO", transport: "Remote-SSH oficial · transporte Casa → VPS", status: "PROVEN", current: "OFFLINE", evidence: "Captura de sessão Windows/VS Code fornecida pelo CHEFE em 17/10" },
+  { id: "casa-vps-ssh", label: "Casa → VPS · Tailscale SSH", owner: "scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1", transport: "100.90.199.124:22 · host key estrita · fallback público existente", status: "PROVEN", lastObserved: "OFFLINE_2026_10_17", evidence: "docs/receipts/SSH-CASA-VPS-LOCK-20261014.md" },
+  { id: "vscode-restore", label: "CentralDark VS Code Restore 0.1.4", owner: "VS Code · Casa SEGREDO", transport: "Extensão instalada · prova em sessão histórica", status: "PROVEN", lastObserved: "OFFLINE_2026_10_17", evidence: "Captura de sessão Windows/VS Code fornecida pelo CHEFE em 17/10" },
+  { id: "vscode-remote-ssh", label: "VS Code Remote-SSH 0.128.0", owner: "VS Code · Casa SEGREDO", transport: "Remote-SSH oficial · transporte Casa → VPS", status: "PROVEN", lastObserved: "OFFLINE_2026_10_17", evidence: "Captura de sessão Windows/VS Code fornecida pelo CHEFE em 17/10" },
 ];
 
 export function HarnessModuleRegistry() {
@@ -54,7 +54,7 @@ export function HarnessModuleRegistry() {
             <p className="mt-1 text-xs text-muted-foreground">TRANSPORTE · {modulo.transport}</p>
             {modulo.evidence ? <p className="mt-1 break-all text-[10px] text-muted-foreground">RECIBO · {modulo.evidence}</p> : null}
             <p className="mt-1 text-[10px] text-muted-foreground">
-              SESSÃO AGORA · {modulo.current === "OFFLINE" ? "OFFLINE NO CONECTOR REMOTO" : "NÃO MEDIDA NESTA TELA"}
+              SESSÃO AO VIVO · NÃO MEDIDA NESTA TELA{modulo.lastObserved ? " · ÚLTIMA CONSULTA 17/10: CONECTOR OFFLINE" : ""}
             </p>
             {modulo.runtimeUrl ? (
               <Button asChild size="sm" variant="outline" className="mt-2">
