@@ -6,7 +6,7 @@
  * #OBSERVACOES# | CENTRALDARK.STYLES.COCKPIT
  * @owner: apps/instinto-superior/src/styles.css
  * @doc_ref: docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md
- * @last_updated: 2026-10-16T10:23:11.582Z
+ * @last_updated: 2026-10-18
  * @scope: CSS do Cockpit; alterações visuais, sem trocar os handlers React.
  * @estado: STYLES_IN_PR; RUNTIME_RENDER_NOT_MEASURED
  * @next_cursor: build + captura desktop/mobile + regressão das peles.
@@ -250,6 +250,33 @@
 .cockpit-pele[data-pele-cockpit="esmeralda"] :is(button, a, input, select, textarea):focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+/* #OBSERVACOES# | CENTRALDARK.ICON_MICROMOTION.MICHELIN
+ * @owner: apps/instinto-superior/src/styles.css
+ * @doc_ref: docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md
+ * @last_updated: 2026-10-18
+ * @scope: movimento leve, apenas pele Esmeralda e ícones; sem novo tema,
+ * sem loops de animação, sem alterar handlers ou semáforos de prova.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .cockpit-pele[data-pele-cockpit="esmeralda"] [data-cd-michelin-stage] .cd-michelin-icon {
+    display: inline-block;
+    transform-origin: center;
+    transition: transform 180ms ease-out, filter 180ms ease-out;
+  }
+  .cockpit-pele[data-pele-cockpit="esmeralda"] [data-cd-michelin-stage]:hover .cd-michelin-icon {
+    transform: translateY(-2px) scale(1.06);
+    filter: drop-shadow(0 0 5px rgba(0, 255, 136, 0.2));
+  }
+  .cockpit-pele[data-pele-cockpit="esmeralda"] :is(button, a, [role="tab"]):not(:disabled):not([aria-disabled="true"]) > svg:not(.animate-spin) {
+    transition: transform 180ms ease-out, filter 180ms ease-out;
+    transform-origin: center;
+  }
+  .cockpit-pele[data-pele-cockpit="esmeralda"] :is(button, a, [role="tab"]):not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible) > svg:not(.animate-spin) {
+    transform: translateY(-1px) scale(1.045);
+    filter: drop-shadow(0 0 4px rgba(0, 255, 136, 0.16));
+  }
 }
 
 @layer base {
