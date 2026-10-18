@@ -66,6 +66,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
 import { HarnessModuleRegistry } from "@/components/central/HarnessModuleRegistry";
 import { CoordinatorDesk } from "@/components/central/CoordinatorDesk";
+import { CheckpointCentralDark } from "@/components/central/CheckpointCentralDark";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -262,6 +263,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       {harnessVisivel ? (
         <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
+           <Button size="sm" variant="outline" onClick={() => abrirDestino("hermes")}>🪬 !CENTRALDARK</Button>
           {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
             definirAbaAdminInicial("notificacoes");
             definirVersaoAdmin((n) => n + 1);
@@ -596,6 +598,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   icone={<PackageCheck className="size-5" />}
                 />
               </div>
+              <CheckpointCentralDark autenticado={autenticado} />
               <PainelHermes compacto />
               <div className="mt-6 border-y border-border py-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">

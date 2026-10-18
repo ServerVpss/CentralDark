@@ -13,6 +13,7 @@ type CheckpointView = {
   events?: number;
   at?: string;
   plan_ready?: boolean;
+  dispatch_ready?: boolean;
   owner?: string;
 };
 
@@ -66,15 +67,16 @@ export const continuarUltimaMissaoCentralDark = createServerFn({ method: "POST" 
   .handler(async ({ context }): Promise<CheckpointView> => {
     await authorized(context);
     const snapshot = await checkpointCLI(["--status"]);
-    if (!snapshot.ok || !snapshot.payload.plan_ready) {
+    if (!snapshot.ok || !(snapshot.payload.plan_ready || snapshot.payload.dispatch_ready)) {
       return {
         ...snapshot.payload,
-        state: snapshot.ok ? "WAITING_FOR_PROVEN_EXECUTION_PLAN" : snapshot.payload.state,
+        state: snapshot.ok ? "WAITING_FOR_EXECUTABLE_PLAN_OR_HERMES_DISPATCH" : snapshot.payload.state,
       };
     }
     const { spawn } = await import("node:child_process");
-    // Sem entrada arbitrária do navegador: executa exclusivamente o último plano
-    // privado, previamente validado e idempotente pelo checkpoint owner.
+    // Sem entrada arbitrária do navegador: executa o plano privado validado
+    // OU despacha a mesma missão ao Kanban Hermes nativo com idempotência.
+    // Enfileirar não representa execução comprovada.
     return await new Promise<CheckpointView>((resolve) => {
       const child = spawn("python3", ["/root/.hermes/centraldark/bin/centraldark-entry.py", "--continue"], {
         cwd: "/root", detached: true, stdio: "ignore",
