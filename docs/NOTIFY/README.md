@@ -413,3 +413,28 @@ NEXT_CURSOR=REPAIR_AUTHORIZED_HERMES_PRODUCER_AND_DEPLOY_RUNNER_THEN_BROWSER_REA
 
 **Não mudar estes estados até haver nova contraprova material**. O HUD é projeção, o Supabase preserva o recibo, o executor real é Hermes e a realidade do deploy exige verificação independente.
 <!-- /CENTRALDARK_HERMES_SUPABASE_COCKPIT_REALTIME_20261018 -->
+
+
+<!-- CENTRALDARK_NOTIFY_T2_RUNNER_RECOVERY_20261018 -->
+### T2 · 2026-10-18 — reconciliação física do runner e segunda notificação
+
+- Análise real do GitHub Actions: \`centraldark-vps-1\` a \`centraldark-vps-4\` eram \`offline\`; o \`centraldark-vps-1\` tinha unidade \`actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service\` carregada, \`inactive/dead\` e \`disabled\`, sem processo Runner.Listener.
+- O owner já existente \`.github/workflows/vps-wake-hosted-ssh.yml\` foi corrigido no commit \`0bfc5b95bf0f4b6ec922d7bc86c6859f68d4e4de\` para não exigir runner self-hosted para acordar a VPS e apontar somente à unidade medida. GitHub recebeu o dispatch, mas o run \`39098844493\` encerrou \`FAIL\` **antes da execução de etapas**, sem runner atribuído (runner_name vazio); não afirmar SSH fail nem deploy por ele.
+- **Rota autorizada efetiva:** MCP CentralDark \`mcp_admin_call → execute_command\` operou diretamente no mesmo corpo VPS, \`systemctl start\` **apenas** na unidade \`centraldark-vps-1\`; readback \`inactive → active/running\`, API GitHub \`offline → online/busy\`; depois \`systemctl enable\` apenas nessa unidade, readback \`disabled → enabled\`, serviço permaneceu \`active\`. Nenhum dos outros runners foi alterado.
+- O \`journalctl\` provou \`Listening for Jobs\` e execução concreta de jobs (incluindo sucessos e um job GATE_GRAFO_VIVO_MARKDOWN com falha). Isso é prova do runner real, **não** da aprovação de build/deploy do cockpit.
+- Segunda projeção factual para o Supabase \`notifications_log\`: UUID \`bce44029-e2ad-4c74-8e65-b8d82c3d14c9\`, \`proof_id=github-runner:centraldark-vps-1:restored-20261018\`, \`proof_state=PASS\`, \`publication_mode=MANUAL_MEASURED_PROJECTION\`. A primeira projeção de falha Hermes continua \`17681f3a-4fdf-438e-930a-f1b4dc7ddc55\`; **nenhuma** é falsa execução de pipeline automático.
+- CI no SHA do componente \`f1e8af4ff616952581ad74c4b323086b5ed0ae67\`: \`test.yml run 39098390824=queued\` na última medição; deploy canônico run \`39098832906=pending\` sobre \`0bfc5b95\`; porta local do app \`127.0.0.1:4175\` indisponível (\`HTTP 000\`). Portanto, \`COCKPIT_DEPLOYED=UNKNOWN/BLOCKED\`; não alegar visualização de recibo em navegador.
+- **Importante:** microdeploy \`centraldark_deploy_micro_fallback\` continua em \`destrutivasEmRevisao\`; recuperar o runner oficial **não** aprova essa ferramenta nem pula a matriz dos nove gates. A VPS mantém trabalho local do checkout de produção, preservado.
+
+\`\`\`text
+PROVED=GITHUB_RUNNER_VPS1_SYSTEMD_ACTIVE_AND_ENABLED
+PROVED=GITHUB_RUNNER_VPS1_ONLINE_AFTER_START
+PROVED=SECOND_NOTIFICATIONS_LOG_RECEIPT_INSERTED
+UNPROVEN=AUTOMATIC_HERMES_TO_SUPABASE_PUBLISHER
+UNPROVEN=ADMIN_BROWSER_WS_RECEIPT_DELIVERY
+UNPROVEN=COCKPIT_BUILD_DEPLOY_AND_PORT_4175
+NEXT_CURSOR=WAIT_EXACT_SHA_CI_THEN_DEPLOY_AUTHORIZED_CAUSAL_APP_AND_PROVE_BROWSER_EVENT
+\`\`\`
+
+A projeção e o receipt ficam no owner já existente. Novos fatos materiais devem atualizar o status, sem repetir diagnósticos selados e sem criar outra central.
+<!-- /CENTRALDARK_NOTIFY_T2_RUNNER_RECOVERY_20261018 -->
