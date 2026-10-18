@@ -197,8 +197,8 @@ if [[ "$MODE" == "apply" || "$MODE" == "seal" ]]; then
   mv -f "$STATE_FILE.tmp" "$STATE_FILE"
 fi
 
-# Hermes native catalog is separate from the opt-in hash seal.
-# Registration does NOT imply that a skill was loaded or executed.
+# Hermes native catalog registration is independent of opt-in sync.
+# Registered does not imply loaded, usable, executed or healthy.
 report_native_catalog_binding() {
   local catalog_root="$ROOT/.agents/skills" config="$HERMES_HOME/config.yaml"
   if [[ ! -d "$catalog_root" || -L "$catalog_root" ]]; then
@@ -229,25 +229,7 @@ report_native_catalog_binding() {
 }
 
 report_native_catalog_binding
-echo "MAIN_SOURCE_SKILL_FILES=$(git ls-tree -r --name-only "$MAIN_SHA" .agents/skills | grep -c '/SKILL\.md
-echo "AUTOSYNC_SKILLS=$AUTOSYNC"
-echo "TARGETS=$((AUTOSYNC * 2))"
-echo "SYNCED=$SYNCED"
-echo "INSTALLED=$INSTALLED"
-echo "UPDATED=$UPDATED"
-echo "ORACLE_REQUIRED=$ORACLE_REQUIRED"
-echo "UNKNOWN=$UNKNOWN"
-
-if [[ "$ORACLE_REQUIRED" -eq 0 && "$UNKNOWN" -eq 0 ]]; then
-  echo "MAIN_RUNTIME_LOCK=PASS"
-else
-  echo "MAIN_RUNTIME_LOCK=PARTIAL"
-fi
-
-if [[ "$MODE" == "seal" && "$ORACLE_REQUIRED" -ne 0 ]]; then
-  exit 20
-fi
-)"
+echo "MAIN_SOURCE_SKILL_FILES=${#SKILL_PATHS[@]}"
 echo "HERMES_NATIVE_CATALOG_LOADED=UNKNOWN"
 echo "HERMES_NATIVE_CATALOG_EXECUTED=UNKNOWN"
 
