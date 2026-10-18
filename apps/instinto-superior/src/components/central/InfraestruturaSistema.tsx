@@ -1,4 +1,7 @@
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { lerMcpRuntimeAoVivo } from "@/lib/cockpit.functions";
 import { BookOpen, Boxes, Gem, Lock } from "lucide-react";
 import gavetaCatalogo from "@/data/forja-gaveta.snapshot.json";
 
@@ -187,6 +190,23 @@ const TOTAL_SKILLS_GAVETA = gavetaCatalogo.skills.length;
  * executor, armazenamento de sessões ou coleta de credenciais.
  */
 export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } = {}) {
+
+  // #OBSERVACOES# @owner=InfraestruturaSistema/GavetaForja
+  // @doc_ref=docs/CONSCIENCIA/MICRO-DEPLOY/README.md @last_updated=2026-10-18T15:22:26.725Z
+  // @implementado: PIDs exibidos apenas se amostra autenticada e fresca; polling independente.
+  // @pendente: deploy e readback visual no servico ativo.
+  const consultarMcpRuntime = useServerFn(lerMcpRuntimeAoVivo);
+  const mcpAtual = useQuery({
+    queryKey: ["centraldark", "mcp-runtime-ao-vivo"],
+    queryFn: () => consultarMcpRuntime(),
+    refetchInterval: 10_000,
+    retry: false,
+  });
+  const amostra = mcpAtual.data;
+  const idadeAmostra = amostra ? Date.now() - Date.parse(amostra.consultaEm) : Number.NaN;
+  const mcpObservado = !mcpAtual.isError && amostra?.estado === "OBSERVED"
+    && Number.isFinite(idadeAmostra) && idadeAmostra >= -5_000 && idadeAmostra <= 30_000;
+
   const [busca, setBusca] = useState("");
   const [categoria, setCategoria] = useState<(typeof CATEGORIAS_GAVETA)[number]>("Todas");
   const [pagina, setPagina] = useState(1);
@@ -324,15 +344,35 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
           </article>
           <article className="rounded-lg border border-border p-3 text-sm">
             <strong>🔌 MCP CentralDark</strong>
-            <div className="mt-3 rounded-md border border-border p-3 text-xs" aria-label="Última prova observada do runtime MCP">
-              <p className="font-semibold">Última prova observada · 18/10/2026 · VPS</p>
+            <div className="mt-3 rounded-md border border-border p-3 text-xs" aria-label="Leitura atual do processo MCP na VPS" role="status" aria-live="polite">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="font-semibold">PID MCP · {mcpObservado ? "OBSERVADO" : "UNKNOWN / SEM PROVA ATUAL"}</p>
+                <button type="button" className="rounded border border-border px-2 py-1"
+                  onClick={() => void mcpAtual.refetch()} disabled={mcpAtual.isFetching}>
+                  {mcpAtual.isFetching ? "Consultando…" : "Remedir agora"}
+                </button>
+              </div>
               <p className="mt-2 text-muted-foreground">
-                Node.js PID 1515631 · 127.0.0.1:9100 · health HTTP 200.
-                Caddy PID 1355684 · conexões TCP estabelecidas com o MCP.
+                Processo Node.js na VPS: {mcpObservado ? (amostra?.pid ?? "—") : "—"} · MCP 127.0.0.1:9100
               </p>
+              <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+                {mcpObservado ? (amostra?.observadoEm ?? "SEM_TIMESTAMP") : "PID_ANTIGO_OCULTADO"}
+                {" · "}atividade de ferramentas: {mcpObservado ? amostra?.atividadeMcp : "UNKNOWN"}
+              </p>
+              {mcpObservado && amostra?.processos.map(processo => (
+                <p key={processo.id} className="mt-1 text-muted-foreground">
+                  {processo.nome}: {processo.quantidade} processo(s) · PIDs {processo.pids.length ? processo.pids.join(", ") : "não identificados"}
+                </p>
+              ))}
+              {!mcpObservado ? (
+                <p className="mt-2 text-amber-400">
+                  {mcpAtual.isError ? "CONSULTA_NAO_AUTORIZADA_OU_INDISPONIVEL" : amostra?.erro ?? "AGUARDANDO_LEITURA"}
+                  {" · "}Sem novo dado não há selo verde.
+                </p>
+              ) : null}
               <p className="mt-2 font-mono text-[10px] text-muted-foreground">
-                SNAPSHOT_OBSERVADO · NÃO É TELEMETRIA AO VIVO · estado atual requer nova medição.
-                Processo, conectividade e disponibilidade de ferramentas são provas distintas.
+                {amostra?.fonte ?? "MCP /heartbeat"} · polling 10s · somente leitura.
+                Presença de PID não prova conexão TCP ou execução de ferramenta.
               </p>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
