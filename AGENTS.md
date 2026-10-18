@@ -2404,6 +2404,16 @@ Ao encontrar ganho verificável, dizer **🍒🎰🎲 Outra melhoria antecipada*
 **Correção direta de dependências (CHEFE, 2026-10-15):** se uma incompatibilidade estiver comprovada e houver versão corrigida compatível, o **agente principal/owner existente** deve aplicar o delta mínimo no manifesto + lockfile, testar instalação reproduzível, build e regressões, registrar SHA/receipt e promover pela **esteira autorizada** de main e produção sem pedir decisões redundantes. Referência canônica: seção `DEPENDENCY_FIX_FAST_PATH` de `.agents/skills/centraldark-operational-method/SKILL.md`. A promoção **não** contorna checks, aprovações, locks, permissões ou proteção da branch; `UNKNOWN/BLOCKED` preserva produção e requer relato de causa e NEXT_CURSOR. `COMMITTED != MAIN != DEPLOYED != PROD_PASS`; confirmar health e efeito funcional, rollback quando necessário, e 🧹 somente depois de preservação.
 
 
+<!-- ONE_HOUSE_AUREOLA_20261017_AGENTS -->
+## 🎰 Casca única, motores soberanos, agente deliberado
+
+Herdar SOUL → RULES → AGENTS; não criar owner paralelo. Na Forja do Instinto Superior, GPT/Codex, Claude, DeepSeek, Hermes, VS Code e navegador são capacidades de proveniência e autorização distintas. Não copiar pesos, processos, credenciais, cookies ou controles dos produtos. O seletor da Forja em CockpitShell.tsx/ForjaExecutor.tsx não garante iframe compatível; se bloqueado, abrir interface oficial, sem burlar CSP/autenticação. GOAL copiado, processo visível, botão ou catálogo não demonstram despacho; exigir sessão identificada, rota autorizada, ACK, readback e receipt.
+
+Rotina material: recuperar intenção e critérios → medir CURRENT pertinente → identificar gargalo mais limitante → consultar Gênesis, padrões e anti-receitas → hipótese refutável/teste discriminante → delta mínimo no owner com writer único → BUILD/INSTALL/CONNECT/PROVE onde aplicável → contraprova e backcheck → receipt/ganho medido → próximo elo ou ponto suficiente. Repetir mesmo método sem nova informação exige STOP_BLIND_RETRY e mudança de hipótese/bloqueio exato; não forçar 26 verificações A–Z em cada tarefa. Gênesis conserva fracasso e solução, Recibos exibem evidência, Forja opera.
+
+Aplicar régua Michelin **existente logo abaixo**, sem segundo certificador: ⭐ build/testes/lint/perímetro no SHA; ⭐⭐ CI concluída e integração idempotente; ⭐⭐⭐ deploy, UI autenticada, Casa↔VPS e receipts atuais. Falha crítica impede estrela; 99,9% só após numerador/denominador e gates críticos. HYPOTHESIS != PROOF; DOCUMENTED != INSTALLED; SELECTED_ENGINE != CONNECTED_SESSION. Informar OWNER → DELTA → PROVA → NEXT_CURSOR, com linguagem simples; versos ou metáforas não são recibos.
+<!-- /ONE_HOUSE_AUREOLA_20261017_AGENTS -->
+
 ## 🧬 Ciclo obrigatório de antirregressão — BUILD → INSTALL → CONNECT → PROVE (17/10/2026)
 
 **Regra para qualquer delta material na CentralDark:** construir a capacidade no owner existente; instalar/promover o artefato correto no alvo autorizado; conectá-la ao consumidor/serviço atual; provar o efeito por readback no mesmo alvo e no mesmo SHA; só então declarar `PASS` e executar testes de regressão dos vizinhos afetados. Repetir autonomamente o menor delta até `FIXED_POINT` ou bloqueio exato. `SOURCE_PASS != BUILD_PASS != INSTALLED != CONNECTED != EFFECT_PROVED` e `MERGED != DEPLOYED`.

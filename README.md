@@ -262,3 +262,4 @@ Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Dis
 
 
 > **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.
+<!-- Temporary commit from Hermes at 2026-10-17T22:25:36.847708 -->

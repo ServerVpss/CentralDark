@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Bell, RefreshCw } from "lucide-react";
+import { Bell, Copy, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +12,22 @@ import {
   type PeriodoFiltro,
 } from "@/hooks/useNotificationsLog";
 
+/** Notificação é ponte para a próxima intenção, nunca execução automática. */
+function receitaCompleta(evento: NotificationLog): string {
+  const meta = evento.metadata && typeof evento.metadata === "object" && !Array.isArray(evento.metadata)
+    ? evento.metadata : {};
+  const cmd = typeof meta["full_command"] === "string" ? meta["full_command"]
+    : typeof meta["command"] === "string" ? meta["command"] : "";
+  const cursor = typeof meta["next_cursor"] === "string" ? meta["next_cursor"] : "";
+  const owner = typeof meta["owner"] === "string" ? meta["owner"] : evento.origem;
+  return [
+    `MISSÃO: ${evento.titulo}`, `OWNER: ${owner}`, `EVENTO: ${evento.id}`,
+    `DATA: ${evento.created_at}`, evento.mensagem,
+    cursor ? `PRÓXIMO: ${cursor}` : "",
+    cmd ? `COMANDO COMPLETO: ${cmd}` : "",
+    "Execução depende de aprovação, gate e recibo.",
+  ].filter(Boolean).join("\n").slice(0, 12000);
+}
 /** Mesmo ledger e auth da CentralDark. Aviso NÃO executa agentes, nem prova o runtime. */
 function Eventos({ items, limite }: { items: NotificationLog[]; limite: number }) {
   if (!items.length)
@@ -28,7 +44,26 @@ function Eventos({ items, limite }: { items: NotificationLog[]; limite: number }
                 : "🧿"}{" "}
             {evento.titulo}
           </p>
-          <p className="mt-1 break-words text-xs">{evento.mensagem}</p>
+          <details className="mt-2">
+            <summary className="cursor-pointer text-xs text-gold">
+              Ver receita completa e próximo passo
+            </summary>
+            <pre className="mt-2 max-h-60 overflow-auto whitespace-pre-wrap break-words rounded-md bg-background/70 p-2 font-mono text-[11px]">
+              {receitaCompleta(evento)}
+            </pre>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="mt-2"
+              onClick={() => { void navigator.clipboard.writeText(receitaCompleta(evento)); }}
+            >
+              <Copy className="mr-1 size-3" /> Copiar missão para encaminhar
+            </Button>
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              Envio direto exige o broker do setor autorizado. Copiar não executa.
+            </p>
+          </details>
           <p className="mt-2 text-[11px] text-muted-foreground">
             Origem: {evento.origem} · {new Date(evento.created_at).toLocaleString("pt-BR")}
           </p>

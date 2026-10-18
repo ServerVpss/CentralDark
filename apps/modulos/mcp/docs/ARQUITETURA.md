@@ -196,3 +196,10 @@ Isso **não cria um segundo cérebro, dispatcher ou barramento**. Reutiliza `aud
 `audit-logger.js`, o stream administrativo já existente e as superfícies visuais existentes.
 Qualquer evolução deve preservar `REUSE_BEFORE_CREATE`, `ONE_SYSTEM_ONLY`, sanitização,
 autorização e a regra de que representação visual não substitui realidade medida.
+
+
+## Receita e readback — 2026-10-17
+
+O mapeamento integral Desktop Commander → auditoria MCP → Tool Call Lens → Cockpit, com os dois perfis systemd, a matriz de owners, a fronteira entre chamada externa e audit interno, testes, botões, PID/CID, gates e rollback, está registrado em [`2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md`](../../../../docs/CONSCIENCIA/RECEIPTS/2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md).
+
+SOURCE_COMMITTED nos PRs #1842 e #1838 não é prova de runtime instalado.
