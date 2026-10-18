@@ -1,15 +1,56 @@
 param(
   [string]$Workdir = 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE',
   [int]$IntervalSec = 15,
-  [int]$WindowMinutes = 15
+  [int]$WindowMinutes = 15,
+  [switch]$Status
 )
 
 $ErrorActionPreference = 'Stop'
 $ctxDir = Join-Path $Workdir 'context'
-New-Item -ItemType Directory -Force -Path $ctxDir | Out-Null
 $latest = Join-Path $ctxDir 'screenpipe-latest.json'
 $status = Join-Path $ctxDir 'screenpipe-status.json'
 $base = if ($env:SCREENPIPE_LOCAL_API_URL) { $env:SCREENPIPE_LOCAL_API_URL.TrimEnd('/') } else { 'http://127.0.0.1:3030' }
+
+# Same existing Sidecar owner. -Status is non-mutating and does not request/copy
+# screen content, accessibility text, tokens, sessions or privileged credentials.
+if ($Status) {
+  Write-Output 'CENTRALDARK_SCREENPIPE_MODE=READ_ONLY'
+  Write-Output "SCREENPIPE_SENSOR=$base"
+  try {
+    $health = Invoke-RestMethod -Method Get -Uri "$base/health" -TimeoutSec 5
+    Write-Output 'SCREENPIPE_HEALTH_HTTP=PASS'
+    Write-Output "SCREENPIPE_HEALTH_STATE=$($health.status)"
+    Write-Output "SCREENPIPE_FRAME_STATUS=$($health.frame_status)"
+    Write-Output "SCREENPIPE_AUDIO_STATUS=$($health.audio_status)"
+    if ($health.last_frame_timestamp) {
+      Write-Output "SCREENPIPE_LAST_FRAME=$($health.last_frame_timestamp)"
+    }
+  } catch {
+    Write-Output 'SCREENPIPE_HEALTH_HTTP=UNKNOWN'
+    Write-Output 'NEXT_CURSOR=Verify existing Screenpipe service on the Casa, without creating a second recorder'
+    exit 2
+  }
+  foreach ($item in @(
+    @{ Label = 'SIDECAR_STATUS'; Path = $status },
+    @{ Label = 'SIDECAR_LATEST'; Path = $latest }
+  )) {
+    if (Test-Path -LiteralPath $item.Path -PathType Leaf) {
+      $info = Get-Item -LiteralPath $item.Path
+      $ageMinutes = [math]::Round(((Get-Date) - $info.LastWriteTime).TotalMinutes, 1)
+      $state = if ($ageMinutes -le 2) { 'RECENT' } else { 'STALE' }
+      Write-Output "$($item.Label)=$state"
+      Write-Output "$($item.Label)_AGE_MINUTES=$ageMinutes"
+    } else {
+      Write-Output "$($item.Label)=NOT_FOUND_AT_CONFIGURED_WORKDIR"
+    }
+  }
+  Write-Output 'SIDECAR_RUNNING=NOT_ATTESTED_BY_THIS_CHECK'
+  Write-Output 'CLAUDE_WINDOW_CONTENT=NOT_READ'
+  Write-Output 'UNKNOWN_IS_NOT_PASS=true'
+  exit 0
+}
+
+New-Item -ItemType Directory -Force -Path $ctxDir | Out-Null
 
 function Get-ScreenpipeToken {
   if ($env:SCREENPIPE_LOCAL_API_KEY) { return $env:SCREENPIPE_LOCAL_API_KEY.Trim() }
