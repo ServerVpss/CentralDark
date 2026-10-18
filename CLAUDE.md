@@ -95,6 +95,14 @@ SEGREDO/CHEFE > SOL > HERMES
 ```
 
 
+<!-- ONE_HOUSE_AUREOLA_20261017_CLAUDE -->
+## 🎺 Claude como motor externo na Casa — adapter, não segunda lei
+
+CLAUDE.md é a ponte real (não há .claude.md raiz). Herdar SOUL/RULES/AGENTS e o método existente. Claude Code/Claude Desktop permanecem em seus próprios produtos e sessões; GPT/Codex/DeepSeek igualmente. A CentralDark troca UI/motor selecionado com GOAL e receipts preservados, mas não clona pesos ou autenticação nem contorna limites, CSP e iframe. Abrir app oficial quando a incorporação não é suportada; sessão Claude Code exige prova própria.
+
+Na execução Claude/Haiku: INTENT → CURRENT → OWNER → WEAKEST_MATERIAL_LINK → HYPOTHESIS/TEST → MINIMUM_DELTA → BUILD/INSTALL/CONNECT/PROVE → REGRESSION → GENESIS_RECEIPT → NEXT_CURSOR. Se estratégia falha sem informação nova, não martelar: refutar, replanejar ou bloquear explicitamente. Proteger LAST_KNOWN_GOOD e writer único. Hermes só recebe crédito de execução com sessão/ACK/readback medidos. Michelin só pelos gates existentes em AGENTS.md/verify-hud-zone.mjs; nenhum texto atribui estrela 2 ou 3 automaticamente. Documento alterado != sessão consumidora carregada.
+<!-- /ONE_HOUSE_AUREOLA_20261017_CLAUDE -->
+
 ## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
 
 Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.

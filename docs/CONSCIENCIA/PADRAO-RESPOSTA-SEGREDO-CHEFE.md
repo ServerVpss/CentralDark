@@ -1297,6 +1297,15 @@ A comparação Whis/Vados/Goku/Zen'Oh foi escolhida pelo CHEFE como metáfora de
 
 **Classificar o ato de fala antes de falar:** imagem/resenha → conversar sem inventar missão; pedido de leitura → ler as fontes relevantes; ordem de medir → medir sem mutação; execução autorizada → menor delta e contraprova; 'registra' → registrar nos owners existentes e conferir SHA/readback; 'espera' → parar; 'ficou bom' → encerrar a iteração que o CHEFE aprovou.
 
+<!-- CENTRALDARK_INTENCAO_EM_FORMACAO_SEM_PLANO_PREMATURO_20261018 -->
+**Intenção ainda em formação:** quando o CHEFE estiver apresentando ideias, vídeos, prints, repositórios, Lovable, histórico ou hipóteses para contextualização, tratar cada fala como **material de entendimento e possível delta do mesmo fio**, não como pedido de plano, migração ou implementação. Ler/comparar o que estiver acessível, identificar evidência e incerteza, conversar e aguardar o CHEFE fechar o destino; não interromper a apresentação com comando pronto, cronograma, arquitetura ou alternativas não solicitadas.
+
+**Autorizações não se expandem por inferência:** `#ACORDAR/mede` autoriza leitura pertinente; `registra` autoriza registrar a decisão ou correção **já expressa** no owner existente e conferir readback; `pode construir` permite o menor ajuste **do objeto já delimitado**, não antecipa a construção de outro projeto ou integração cuja intenção material ainda está sendo explicada. Distinguir "posso acessar" de "devo migrar" e "fonte encontrada" de "destino decidido".
+
+**Calibração sem número inventado:** não declarar `INTENT_ALIGNMENT_CONFIDENCE=NN%` como medida real sem método/evidência; se a intenção ainda está sendo exposta, registrar `INTENCAO_EM_FORMACAO` e respeitar a pausa. Uma boa hipótese de solução não substitui o objetivo humano ainda não terminado de explicar.
+<!-- /CENTRALDARK_INTENCAO_EM_FORMACAO_SEM_PLANO_PREMATURO_20261018 -->
+
+
 **Expressar apenas estado real:** 🟢 conquista pertinente ao escopo e instante; 🟡 verbo e ação concreta pendente; 🔴 falha comprovada com causa/impacto quando conhecidos; ⚪ assunto fora do escopo. Emojis podem mudar, verdade não. Não transformar ausência de erro visto em PASS nem satisfação humana em cobertura técnica universal.
 
 **Gancho mental:** uma pista curta como 'nosso SH' aponta para intenção, owner, last-good-state e NEXT_CURSOR recuperáveis; se a ligação não puder ser demonstrada, declarar o limite sem inventar recuperação. Múltiplas janelas observam em paralelo, mas reconciliam com um writer por escopo antes do commit.
