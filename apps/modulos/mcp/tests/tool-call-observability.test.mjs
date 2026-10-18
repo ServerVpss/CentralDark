@@ -147,3 +147,37 @@ test("Forja 4x chama apenas o intent-cycle do proprio MCP e pede recibos", () =>
   assert.ok(src.includes("CONECTAR"));
   assert.ok(src.includes("PROVAR"));
 });
+
+
+test("Inventario ZENDRIVE 20261018 nao transforma rota em falso verde", () => {
+  const source = fs.readFileSync(new URL("../src/tools/core/mcp-admin.js", import.meta.url), "utf8");
+  const routes = source.split("const AUTHORIZED_ROUTE_CATALOG = Object.freeze([")[1]?.split("]);")[0];
+  assert.ok(routes, "owner do catalogo existe");
+  const ids = [...routes.matchAll(/\{\s*id:\s*"([A-Z0-9_]+)"/g)].map(m => m[1]);
+  assert.equal(new Set(ids).size, ids.length, "rotas unicas");
+  for (const id of [
+    "SSH_VPS_DIRECT", "ZENDRIVE_VSCODE_REMOTE_SSH", "TAILSCALE_PRIVATE_ROUTE",
+    "RDC_DESKTOP_COMMANDER", "MCP_VPS_NATIVE_HTTP", "HERMES_SHELL"
+  ]) assert.ok(ids.includes(id), "rota nao catalogada: " + id);
+  const zendrive = routes.split("\n").find(line => line.includes('id: "ZENDRIVE_VSCODE_REMOTE_SSH"'));
+  assert.ok(zendrive);
+  assert.match(zendrive, /runtimeState: "MEASURE_AT_RUNTIME"/);
+  assert.doesNotMatch(zendrive, /runtimeState: "PASS"/);
+  assert.match(routes, /Segredo-VPS\(VPN\)\|segredo-vpss\(fallback-publico\)/);
+  for (const id of [
+    "ZENDRIVE_SSH_VPN", "VSCODE_INTEGRATED_TERMINAL", "CASA_FORJA_DRIVES",
+    "CASA_BROWSER_WINDOWS"
+  ]) assert.ok(source.includes('id: "' + id + '"'), "capacidade ausente: " + id);
+  assert.match(source, /GUI_TERMINAL_RECEIPT_PENDING/);
+  assert.match(source, /WINDOW_TITLE_ONLY_BROWSER_PLUGIN_CONTEXT_UNAVAILABLE/);
+});
+
+test("Inventario ZENDRIVE 20261018 tem provas e limites no documento canonico", () => {
+  const doc = fs.readFileSync(new URL("../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", import.meta.url), "utf8");
+  for (const marker of [
+    "INVENTARIO-ZENDRIVE-20261018", "SSH_CASA_VPS_PELA_VPN=PASS",
+    "SHELL_VPS_CASA=UNKNOWN", "TERMINAL_INTEGRADO_EXEC_RECEIPT=UNKNOWN",
+    "BROWSER_TABS_CONTEXT=BLOCKED_ORIGIN", "SCREENPIPE_CASA=DEGRADED",
+    "RDC_FALLBACK_PRESERVADO=true"
+  ]) assert.ok(doc.includes(marker), "contraprova faltando: " + marker);
+});
