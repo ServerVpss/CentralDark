@@ -318,6 +318,10 @@ def main():
     parser.add_argument("--max-iter", type=int, default=5)
     parser.add_argument("--output-dir", help="Output directory")
     args = parser.parse_args()
+    if not 1 <= args.max_iter <= 50:
+        parser.error("--max-iter must be 1..50")
+    if bool(args.brief) != bool(args.steps):
+        parser.error("--brief and --steps are required together")
     
     # Demo brief and steps
     brief = {
@@ -346,6 +350,14 @@ def main():
         }
     ]
     
+    if args.brief and args.steps:
+        with open(args.brief, "r", encoding="utf-8") as fp:
+            brief = json.load(fp)
+        with open(args.steps, "r", encoding="utf-8") as fp:
+            steps = json.load(fp)
+        if not isinstance(brief, dict) or not isinstance(steps, list):
+            parser.error("brief must be a JSON object and steps must be a JSON array")
+
     executor = CotReactExecutor(max_iter=args.max_iter, output_dir=args.output_dir)
     records = executor.run_loop(brief, steps)
     
