@@ -7,6 +7,7 @@ import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
 import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
 import { adminMainWriterTools } from "../../modes/admin/tools/admin-main-writer.js";
 import { adminProviderControlTools, tailscaleTools } from "../../modes/admin/tools/admin-provider-control.js";
+import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "../../modes/admin/tools/cloudflare-openapi-catalog.js";
 
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
@@ -117,6 +118,9 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "GITHUB_RUNTIME", transport: "GITHUB", binding: "ServerVpss/CentralDark", capability: "CANONICAL_RECORD_AND_MICRODEPLOY_ROUTE", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "AIONUI_MCP_STDIO", transport: "MCP_STDIO", binding: "AionUi->CentralDark", capability: "MCP_CATALOG_AND_NATIVE_BINDINGS", source: "scripts/vps/aionui-native-integrate.py", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "CAS_CLOUD_RELAY", transport: "WEBSOCKET_RELAY", binding: "Casa<->CAS Cloud VPS", capability: "REMOTE_AGENT_ORCHESTRATION", source: "docs/ARQUITETURA/CENTRALDARK-CAS-CLOUD-VPS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "FIGMA_MCP_ACCOUNT", transport: "FIGMA_MCP", binding: "handle:SegredoiDEV|team:1676254220442096258", capability: "FIGMA_READ_ONLY_MCP", source: "Figma MCP whoami", runtimeState: "PASS_WHOAMI_READ_ONLY" },
+    { id: "FIGMA_CENTRALDARK_FIGJAM", transport: "FIGJAM_MCP", binding: "file:H0xMJXAKrLxvXx3G1BlVYu|node:0:1", capability: "CENTRALDARK_DIAGRAM_READ", source: "Figma FigJam fluxo mestre", runtimeState: "PASS_READ_ONLY_MEASURED" },
+    { id: "RDC_VPS_CENTRALDARK_OS", transport: "REMOTE_DESKTOP_COMMANDER", binding: "device:809020f9-c77d-4bef-bb06-da5b467ac9b7", capability: "VPS_SHELL_FILES_PROCESS_CONTROL", source: "Remote Desktop Commander list_devices", runtimeState: "ONLINE_MEASURED" },
 ]);
 const RDC_EQUIVALENCE_MATRIX = Object.freeze([
     {"tool":"list_devices","route":"TAILSCALE_PRIVATE_ROUTE","scope":"DEVICE_DISCOVERY","proof":"PROVED_TAILNET_ONLY"},
@@ -246,7 +250,7 @@ export const mcpAdminTools = [
             runtimeTools: runtimeTools.length,
             destructiveTools: runtimeTools.filter((tool) => tool.annotations?.destructiveHint === true).length,
             catalogVersion: CATALOG_VERSION,
-            catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
+            catalogFingerprint: "b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa",
             routeCount: AUTHORIZED_ROUTE_CATALOG.length,
             auditStartupReady: startupAuditState?.ready === true,
             catalogScope: "centraldark_unified_capability_catalog",
@@ -260,10 +264,36 @@ export const mcpAdminTools = [
         inputSchema: z.object({
             filter: z.string().optional(),
             includeDestructive: z.boolean().optional(),
+            provider: z.enum(["cloudflare"]).optional(),
+            providerView: z.enum(["openapi"]).optional(),
+            cloudflareMethod: z.enum(["GET", "POST", "PUT", "PATCH", "DELETE"]).optional(),
+            cloudflareTag: z.string().max(160).optional(),
+            cloudflareOffset: z.number().int().min(0).optional(),
+            cloudflareLimit: z.number().int().min(1).max(100).optional(),
         }),
         handler: async (input) => {
             const filter = (input.filter ?? "").toString().toLowerCase().trim();
             const includeDestructive = input.includeDestructive ?? true;
+            // Metabolismo lazy: o snapshot OpenAPI existente fica no mesmo catalogo,
+            // sem anunciar milhares de tools ao cliente nem transferir autoridade.
+            const cloudflareRequested = input.provider === "cloudflare" || input.providerView === "openapi";
+            const cloudflareTag = String(input.cloudflareTag ?? "").trim().toLowerCase();
+            const cloudflareOperations = cloudflareRequested
+                ? CLOUDFLARE_OPENAPI_OPERATIONS.filter((op) =>
+                    (!input.cloudflareMethod || op.method === input.cloudflareMethod) &&
+                    (!cloudflareTag || op.tags.some((tag) => tag.toLowerCase() === cloudflareTag)) &&
+                    (!filter || [op.method, op.path, op.summary, ...op.tags].some((value) => value.toLowerCase().includes(filter)))
+                ) : null;
+            const cloudflareOffset = input.cloudflareOffset ?? 0;
+            const cloudflareLimit = input.cloudflareLimit ?? 40;
+            const cloudflarePage = cloudflareOperations === null ? null : {
+                provider: "cloudflare", status: "INVENTORY_ONLY",
+                totalMatched: cloudflareOperations.length,
+                offset: cloudflareOffset, limit: cloudflareLimit,
+                nextOffset: cloudflareOffset + cloudflareLimit < cloudflareOperations.length
+                    ? cloudflareOffset + cloudflareLimit : null,
+                items: cloudflareOperations.slice(cloudflareOffset, cloudflareOffset + cloudflareLimit),
+            };
             const tools = runtimeTools
                 .map(safeToolInfo)
                 .filter((tool) => includeDestructive || !tool.destructive)
@@ -288,7 +318,7 @@ export const mcpAdminTools = [
                 returned: tools.length,
                 catalogScope: "centraldark_unified_capability_catalog",
                 catalogVersion: CATALOG_VERSION,
-                catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
+                catalogFingerprint: "b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa",
                 confirmForDestructive: "LEGACY_ONLY_WITHOUT_VERIFIED_ADMIN_SESSION",
                 authenticatedAdminPolicy: "OAUTH_OR_HUB_ADMIN_SESSION_REUSED",
                 acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
@@ -305,6 +335,21 @@ export const mcpAdminTools = [
                 desktopCommanderEquivalences: remoteEquivalences,
                 desktopCommanderParity: "PARTIAL_ROUTE_CAPABILITIES_ONLY_NO_CASA_REVERSE_EXEC_PROOF",
                 providerBoundary: "CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED",
+                cloudflareOpenApiCatalog: CLOUDFLARE_OPENAPI_META,
+                cloudflareOperations: cloudflarePage,
+                providerDispatch: {
+                    discover: "mcp_admin_catalog",
+                    curatedDiscovery: "mcp_admin_call(tool=provider_capabilities)",
+                    credentialsProbe: "mcp_admin_call(tool=provider_credentials_status)",
+                    authorizedRead: "mcp_admin_call(tool=provider_read)",
+                    authorizedMutation: "mcp_admin_call(tool=provider_mutate)",
+                    conflictResolverEvent: "centraldark_dependabot_reconcile",
+                    resolverOwner: "scripts/dependabot/resolve-conflicts.sh",
+                    executor: "HERMES_SHELL",
+                    privilegedAuthorization: "VERIFIED_OAUTH_OR_HUB_ADMIN_SCOPE_AND_AUDIT",
+                    remoteMcpBridge: "MCP_REMOTE_OAUTH",
+                    executionBoundary: "OPENAPI_INVENTORY_ONLY_UNLESS_ALLOWLISTED_AND_AUTHORIZED",
+                },
                 tools,
             });
         },
@@ -319,7 +364,7 @@ export const mcpAdminTools = [
             runtimeTools: runtimeTools.length,
             destructiveTools: runtimeTools.filter((tool) => tool.annotations?.destructiveHint === true).length,
             catalogVersion: CATALOG_VERSION,
-            catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
+            catalogFingerprint: "b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa",
             routeCount: AUTHORIZED_ROUTE_CATALOG.length,
             auditStartupReady: startupAuditState?.ready === true,
             catalogScope: "centraldark_unified_capability_catalog",

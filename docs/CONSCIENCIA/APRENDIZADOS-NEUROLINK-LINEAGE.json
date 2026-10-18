@@ -2,6 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+  "source_blob_sha": "36af15d7c1218c73924e0d9021fe32b8905f1f2f",
   "source_blob_sha": "cc02236038d1baedafa9b8465d67276a6d09453b",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
@@ -131,6 +132,7 @@
         "legacy_learning_number": 178,
         "count": 2,
         "uids": [
+          "L178A",
           "L178",
           "L178B"
         ]
@@ -2085,10 +2087,10 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L176A",
-      "next_uid": "L178"
+      "next_uid": "L178A"
     },
     {
-      "uid": "L178",
+      "uid": "L178A",
       "legacy_learning_number": 178,
       "legacy_occurrence": 1,
       "title": "Modo operacional CentralDark — critérios autodefinidos carregando o desejo do CHEFE",
@@ -2106,7 +2108,7 @@
       "document_order": 178,
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
-      "prev_uid": "L178",
+      "prev_uid": "L178A",
       "next_uid": "L180"
     },
     {

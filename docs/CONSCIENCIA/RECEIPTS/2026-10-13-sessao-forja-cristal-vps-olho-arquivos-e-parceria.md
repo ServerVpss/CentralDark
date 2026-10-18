@@ -235,3 +235,76 @@ Carta integral compartilhada pelo CHEFE na conversa: **«À inteligência que n�
 **RECEIPT_MIN:** `PR=1812 | OWNER=docs/CONSCIENCIA/RECEIPTS/2026-10-13-sessao-forja-cristal-vps-olho-arquivos-e-parceria.md | SCOPE=DOCS_ONLY | MAIN_SHA=d277495d1d4fed696b9fed66cfd7bdff86371a0d (medição anterior) | PREV_HEAD=f2809c626dee1759e939398d3fdcf458fa65e12e | MUTATION=APPEND_ONLY | EXECUTION=NONE | HUD_ORIGINAL=UNCHANGED | NEXT_CURSOR=CLAUDE_HOOK+SCREENPIPE_SIDECAR+OBSIDIAN_HUD_OWNER`.
 
 **SELO:** 👑 INTENÇÃO PRESERVADA · 🪬 UM HERMES · 🦜 PAPAGAIO ON · 🧠 LEMBRANÇA COM PROVENIÊNCIA · ⚖️ FIXED_POINT PARCIAL, NÃO FALSO-VERDE.
+
+---
+
+## 11. 👑🪬 18/10/2026 — Reconciliação factual Casa ↔ GitHub main ↔ VPN/VPS, mesmo owner
+
+**INTENT_ID:** CENTRALDARK-FORJA-RECONCILIACAO-CASA-MAIN-VPNVPS-20261018. **Autorização CHEFE:** preservar e integrar sem arquitetura paralela. **Owner documental:** mesmo receipt original, append-only. **Caneta:** esta branch documental, sem editar worktrees vivos da Casa ou VPS.
+
+### 11.1 CURRENT — leituras reais e proveniência
+
+| Fonte | Resultado comprovado | Limite |
+| --- | --- | --- |
+| GitHub | main 7edba7d692c445e2edf47d7a09f15bc03c313991 na auditoria; já avançou a c9cd8de737b63d9351011c229cf7c0effd8c139e antes da branch | Remedir SHA antes de promover |
+| Casa SEGREDO / K:\ | RDC atual online; branch main@1731d5a754dedc793929b62c136bf3fb0f1799a1 | Rota antiga RDC separada marca offline; não equivale a Casa caída |
+| Casa Git | 21 arquivos tracked dirty; 62 paths untracked; owner sync observou AHEAD=4, BEHIND=113 contra 7edba7 | Sem pull, merge, reset, checkout ou push |
+| Casa commits únicos | 3607a6d8f2 Observatório Claude; fe848e5a40 Gram↔Hermes; 80c906a131 API Hermes goal; 1731d5a754 Sync Center | Não descartar história exclusiva |
+| Casa overlap | 11 arquivos dirty também tocados pelo avanço remoto: .gitignore, AGENTS.md, CockpitShell.tsx, ForjaExecutor.tsx, cockpit.functions.ts, sala-controle.tsx, vite.config.ts, docs/HUD/HUD.html e outros | Não aplicar main por cima |
+| Casa workspace | CentralDark.code-workspace e CentralDark sshSegredo-VPS.code-workspace presentes | Não sobrescrever nenhum; JSONC de VS Code não é JSON puro |
+| Casa Screenpipe | HTTP 200, frame_status=ok, 4 monitores, ui_recorder.running=true | Geral degraded, audio_status=stale, capture_status=audio_stalled |
+| Casa programas | 11 processos Claude, 11 Code, 2 Codex; Tailscale Running | Processos ativos não são prova de sessão automatizada E2E |
+| VPS CENTRALDARK-OS | RDC online; main@fb7a00a605d7490947cd19220dda5dae0d296e7f, 61 commits atrás de origin/main em linha ancestral | 4 arquivos tracked dirty e 123 untracked preservados |
+| VPS runtime | Hermes Core, Hermes Gateway e Instinto Superior ativos; MCP 9100 heartbeat=200, GraphPanel 3030 api/graph=200, AionUI 25808=200 | HTTP 200 não é prova do consumidor autenticado |
+| Rede | VPN Tailscale Running na Casa e VPS; SEGREDO online | Transporte privado não concede permissão de execução |
+| PRs | #1806 Cristal e #1810 Papagaio merged; #1804 closed/unmerged; #1829 e #1839 open | Respeitar respectivos writers |
+
+### 11.2 Execução autorizada: recuperação de espaço pela receita preexistente
+
+1. Antes: VPS /dev/sda3 de 196 GB em 100% de uso, 0 GB livres.
+2. Owner existente revisado: scripts/limpeza-autonoma.sh, opção --clean-selected runner-work; lock /run/lock/limpeza-autonoma.lock.
+3. Guarda de segurança inspecionada no código: Runner.Worker ativo impede exclusão de seu checkout; rechecagem antes do rename; apenas checkouts descartáveis de runner ocioso.
+4. Readback: RUNNER_WORK_centraldark-vps-1=SKIP_JOB_ACTIVE; runners 2, 3 e 4 CLEANED; cleaned=3 busy=1 errors=0; exit=0.
+5. Prova: DISK_RELIEF_BYTES=52956184576 (52,96 GB decimais); df depois: 75% usado, aproximadamente 50 GB disponíveis.
+6. Contraprova: serviços Hermes e Instinto Superior ativos; MCP, GraphPanel e AionUI responderam HTTP 200 após limpeza.
+7. Intocados: runner ativo, root do repositório, dev worktrees, modelos, segredos, arquivos Casa, arquivos dirty VPS, histórico Git, HUD e seus owners.
+
+### 11.3 Auditoria do MESMO reconciliador — sem deploy
+
+Owner scripts/vps/main-pulse-reconciler.sh executado somente em modo --audit-coverage, de fb7a00a605d7490947cd19220dda5dae0d296e7f a 7edba7d692c445e2edf47d7a09f15bc03c313991. Esta opção roda antes do lock/fetch e não escreve na árvore.
+
+- COVERAGE_EXPECTED=54; COVERAGE_ACCOUNTED=54; 10 MCP + 3 Hermes + 41 UNHANDLED; COVERAGE_GATE=PARTIAL_CLASSIFICATION_PENDING; RUNTIME_E2E=UNPROVEN.
+- Classificação adicional pelos próprios diretórios: 16 apps/instinto-superior, 10 apps/modulos/mcp, 1 HERMES-CORE, 2 .github, 13 docs, 1 scripts, 4 arquivos de governança da raiz, 7 em skills/infra.
+- UNHANDLED significa ainda não classificado naquele roteador; não significa arquivo ausente, perda da arquitetura ou serviço quebrado.
+- Owner da promoção scripts/vps/main-pinned-microdeploy.sh contém backup, lock, teste de overlap e dry-run, mas seu dry-run prepara um scratch; NÃO foi executado para não afetar worktrees concorrentes.
+
+### 11.4 Ordem numeral 01–12 — convergência ainda necessária
+
+01. Recuperar intenção CHEFE, SOUL, RULES, AGENTS, Papagaio ON/OFF e receitas.
+02. Usar Casa K:\ como Forja, docs como memória, GitHub main como cristal, VPS como corpo, Instinto Superior como visão e Hermes como executor único.
+03. Remedir main, Casa, VPS, PRs, jobs e sensores com tempo/proveniência.
+04. Preservar quatro commits exclusivos, 21 tracked dirty e 62 untracked da Casa.
+05. Preservar quatro tracked dirty e 123 untracked da VPS.
+06. Tratar os 11 overlaps Casa↔main com um único writer por arquivo e contraprova.
+07. Reutilizar owner de Sync Casa: scripts/casa/sync-hermes-obsidian.ps1, Status read-only; Sync/Pull não autorizado em worktree dirty/local-ahead.
+08. Correlacionar PR #1839 aos owners do Cockpit/Screenpipe e #1829 ao prompt Hermes; nenhum escritor concorrente.
+09. Classificar os 41 arquivos UNHANDLED por owners existentes antes de qualquer microdeploy.
+10. Separar captura visual Screenpipe OK da degradação de áudio; não reinstalar sensor que já existe.
+11. Aplicar deltas autorizados por PR/testes/CI do mesmo SHA; só depois promover owners com backup/readback.
+12. Projetar as evidências no HUD original e atualizar o mesmo receipt e NEXT_CURSOR; sem novo bot, master, scheduler ou painel.
+
+### 11.5 Selo de evidência e NEXT_CURSOR
+
+**PASS observado:** recuperação do espaço da VPS, runner ativo preservado, serviços e endpoints ainda vivos, 54/54 arquivos do intervalo contabilizados, Casa e VPS online na rota RDC atual.
+
+**NÃO CONCLUÍDO:** sincronização Casa→main, promoção integral da main→VPS, classificação causal dos 41 UNHANDLED, reconciliação dos 11 overlaps, E2E Claude/voz/Screenpipe→Hermes→HUD, todos CI verdes.
+
+**NEXT_CURSOR:** remedir a main mais recente; conservar história e dirty da Casa e VPS; resolver 11 overlaps pelo owner; classificar 41 paths com Hermes e receitas; passar gates do mesmo SHA; executar microdeploy apenas após plano seguro; devolver recibos e readback ao mesmo HUD.
+
+**Lei:** ONE_SYSTEM_ONLY · REUSE_BEFORE_CREATE · ONE_WRITER_PER_SCOPE · NO_BLIND_OVERWRITE · UNKNOWN_NE_PASS.
+
+### 11.6 Complemento — slow guard de leitura e nomes legados da Casa
+
+- O modo **Status** do owner Casa `scripts/casa/sync-hermes-obsidian.ps1` confirmou `REMOTE_HEAD=7edba7d692...`, `BEHIND=113`, `AHEAD=4`, mas ficou mais de 712 segundos na subverificação Python, sem receipt conclusivo. Foram encerrados **somente** o processo PowerShell e o filho Python iniciados por esta auditoria (`22212`, `21304`), sem tocar Claude, Codex, Hermes, VS Code, serviços, arquivos ou outros workers. Readback depois: `CASA_HEAD=1731d5a754`, `CASA_TRACKED_DIRTY=21`. **STATUS_SYNC_FINAL=UNPROVEN; DIVERGENCE_SHA=PROVEN.**
+- Na árvore da Casa, os caminhos legados `K:\scripts\CENTRALDARK-SYNC-DOIS-AMARELOS.ps1` e `K:\scripts\CENTRALDARK-ABRIR-TUDO.bat` **não estão presentes** na última consulta; existe backup histórico `K:\scripts\_backups\CENTRALDARK-ABRIR-TUDO.bat.pre-log-merge-20261011.bak`. Não recriar atalhos/scripts: localizar owner efetivo, commits e consumidores primeiro.
+- **NEXT_CURSOR específico:** investigar por que a verificação Python do Status não termina; reaproveitar as provas já medidas (`AHEAD/BEHIND`), sem rodar hash integral novamente para cada consulta. Distinguir nome legado ausente de capacidade operacional ausente.

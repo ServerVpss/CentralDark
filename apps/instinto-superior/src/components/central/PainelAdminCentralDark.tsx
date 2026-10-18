@@ -14,6 +14,7 @@ import {
 
 import { CofreAdministrativo, HubSeguranca } from "@/components/central/AdminCofreSeguranca";
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
+import { CatalogoCapacidadesMcp } from "@/components/central/CatalogoCapacidadesMcp";
 import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
 import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ const SETORES_HUB_LEGADO = [
   { setor: "Inventário", destino: "Módulos / Sistema CentralDark", cobertura: "PARCIAL_SOURCE", pendente: "Inventário completo e sync" },
   { setor: "Boot", destino: "Sistema / Boot canônico", cobertura: "GAP_SOURCE", pendente: "Boot Studio com edição e rollback" },
   { setor: "Gateway", destino: "Roteador / Runtime", cobertura: "PARCIAL_SOURCE", pendente: "API keys e telemetria Gateway" },
-  { setor: "Catálogo", destino: "Ferramentas / MCP", cobertura: "GAP_SOURCE", pendente: "Pesquisa, sync e catálogo operacional" },
+  { setor: "Catálogo", destino: "Admin → Catálogo MCP", cobertura: "PARCIAL_SOURCE", pendente: "Busca OpenAPI integrada; runtime/reload de MCP e ações autenticadas exigem readback" },
   { setor: "Políticas", destino: "Segurança / Permissões", cobertura: "PARCIAL_SOURCE", pendente: "CRUD de políticas sob autorização" },
   { setor: "Conectores", destino: "Contas / Conexões", cobertura: "PARCIAL_SOURCE", pendente: "OAuth, multi-conta e broker com health vivo" },
   { setor: "Abacus", destino: "Roteador / Modelos", cobertura: "PARCIAL_SOURCE", pendente: "Ações e observabilidade Abacus" },
@@ -257,6 +258,7 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
           <TabsTrigger value="modulos">Módulos</TabsTrigger>
           <TabsTrigger value="usuarios">Usuários</TabsTrigger>
           <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
+          <TabsTrigger value="catalogo">🧩 Catálogo MCP</TabsTrigger>
           <TabsTrigger value="hub-inventario">Integração HUB (12)</TabsTrigger>
           <TabsTrigger value="observabilidade">Observabilidade</TabsTrigger>
           <TabsTrigger value="notificacoes">🔔 Notificações</TabsTrigger>
@@ -396,6 +398,9 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
         </TabsContent>
         <TabsContent value="conexoes" className="mt-6">
           <ConexoesCentralDark />
+        </TabsContent>
+        <TabsContent value="catalogo" className="mt-6">
+          <CatalogoCapacidadesMcp />
         </TabsContent>
         <TabsContent value="hub-inventario" className="mt-6">
           <div className="panel p-5">
