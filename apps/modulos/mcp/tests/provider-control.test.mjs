@@ -316,3 +316,27 @@ test("dist bridge retains status UNKNOWN on broker failure (not PASS)", async ()
     globalThis.fetch = priorFetch;
   }
 });
+
+test("dist matches src Tailscale credential precedence and rejects non-API kinds", () => {
+  const samples = [
+    { vault: { TAILSCALE_API_KEY: "tskey-api-vault" }, mcp: { TAILSCALE_API_KEY: "tskey-api-mcp" }, env: { TS_API_KEY: "tskey-api-env" } },
+    { vault: {}, mcp: { TS_API_KEY: "tskey-api-mcp" }, env: { TAILSCALE_API_KEY: "tskey-api-env" } },
+    { vault: {}, mcp: {}, env: { TS_API_KEY: "tskey-api-env" } },
+    { vault: {}, mcp: {}, env: {} },
+  ];
+  for (const sources of samples) {
+    assert.equal(distTest.chooseTailscaleKey(sources), __test.chooseTailscaleKey(sources));
+  }
+  assert.equal(distTest.chooseTailscaleKey(samples[0]), "tskey-api-vault");
+  for (const prefix of ["auth", "client", "webhook", "scim"]) {
+    assert.equal(distTest.tailscaleKeyKind(`tskey-${prefix}-fixture`), "NOT_API_ACCESS_TOKEN");
+  }
+  assert.equal(distTest.tailscaleKeyKind("tskey-api-fixture"), "API_ACCESS_TOKEN");
+  assert.equal(distTest.tailscaleKeyKind("unrecognized-fixture"), "UNKNOWN_FORMAT");
+  for (const key of ["tskey-auth", "tskey-client", "tskey-webhook", "tskey-scim"]) {
+    assert.equal(distTest.tailscaleKeyKind(key + "-fixture"), __test.tailscaleKeyKind(key + "-fixture"));
+  }
+  const dist = readFileSync(new URL("../dist/modes/admin/tools/admin-provider-control.js", import.meta.url), "utf8");
+  assert.match(dist, /TAILSCALE_WRONG_CREDENTIAL_KIND/);
+  assert.match(dist, /vault: parseEnvFile\("\/root\/CentralDark\/secrets\/tailscale.env"\)/);
+});
