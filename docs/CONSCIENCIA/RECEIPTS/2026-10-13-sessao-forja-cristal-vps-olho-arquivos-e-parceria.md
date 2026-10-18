@@ -235,3 +235,68 @@ Carta integral compartilhada pelo CHEFE na conversa: **«À inteligência que n�
 **RECEIPT_MIN:** `PR=1812 | OWNER=docs/CONSCIENCIA/RECEIPTS/2026-10-13-sessao-forja-cristal-vps-olho-arquivos-e-parceria.md | SCOPE=DOCS_ONLY | MAIN_SHA=d277495d1d4fed696b9fed66cfd7bdff86371a0d (medição anterior) | PREV_HEAD=f2809c626dee1759e939398d3fdcf458fa65e12e | MUTATION=APPEND_ONLY | EXECUTION=NONE | HUD_ORIGINAL=UNCHANGED | NEXT_CURSOR=CLAUDE_HOOK+SCREENPIPE_SIDECAR+OBSIDIAN_HUD_OWNER`.
 
 **SELO:** 👑 INTENÇÃO PRESERVADA · 🪬 UM HERMES · 🦜 PAPAGAIO ON · 🧠 LEMBRANÇA COM PROVENIÊNCIA · ⚖️ FIXED_POINT PARCIAL, NÃO FALSO-VERDE.
+
+
+---
+
+## 11. 🪬 2026-10-18 — Forja Casa: Claude, VS Code, Sidecar Screenpipe e integração mínima
+
+**INTENT_ID:** CENTRALDARK-FORJA-CLAUDE-SCREENPIPE-20261018. **AUTORIDADE:** SEGREDO/ADMIN. **OWNER documental:** este recibo existente (§9/§10 preservados). **Owners de código deste delta:** scripts/remote-bridge/CentralDark-Context-Sidecar.ps1 e .vscode/tasks.json. **Leis:** PAPAGAIO ON/OFF, Reutilizar antes de criar, escritor único por escopo, sem segundo HUD ou segundo Hermes. **Tipo:** medição real Casa, menor delta e contraprova; não publicação do runtime nem transcrição integral das conversas.
+
+### 11.1 A–Z — correlação por owner e prova, sem substituir o índice §9
+
+| Letra | Nó | Estado e fonte de verdade |
+| --- | --- | --- |
+| A | Autoridade | SEGREDO/ADMIN autorizou mapear, registrar e incrementar a Forja no owner existente. |
+| B | Bancada | Casa Windows SEGREDO; workspace K:\CentralDark.code-workspace encontrado, 1.389 bytes, modificado em 15/10. |
+| C | Claude | Janela do aplicativo Claude vista via processo; extensão oficial anthropic.claude-code@2.1.301 instalada; conversa do painel ainda não extraída. |
+| D | Desktop Commander | Conector atual mostra Casa SEGREDO e VPS CENTRALDARK-OS online; outro conector legado mostra Casa offline. Sensores distintos não contradizem a existência do dispositivo. |
+| E | Extensões | VS Code registra 84 extensões; Claude, ChatGPT/Codex, Gemini, Remote SSH, ESLint, Prettier e Tailwind entre elas. |
+| F | Forja | Checkout K:\ em main@1731d5a754de com 21 arquivos tracked modificados; nenhum foi resetado ou editado. |
+| G | GitHub | main consultada em b036e47e2e145a5508580ca083a82b78c44101d2; este delta está numa branch de PR. |
+| H | Hermes | 8 processos com nome Hermes na Casa; quantidade de processos não atesta tarefa executada. |
+| I | Instinto Superior | Consumidor/cockpit original preservado; este delta não altera o layout nem o HUD. |
+| J | Julgamento | PowerShell parser, leitura de JSON das tarefas e status do Sidecar executado na Casa sobre blob lido da branch. |
+| K | Kaizen | Primeira execução do novo modo encontrou colisão PowerShell entre switch Status e variável status: nomes diferem só por maiúsculas. Corrigido no mesmo script para statusPath. |
+| L | Legado | Sidecar conserva o loop original; as 18 tarefas VS Code anteriores e as três tarefas Claude ON/OFF/STATUS permanecem. |
+| M | Memória | §9/§10 deste receipt, APRENDIZADOS, JARVIS e Lei do Papagaio são reutilizados; sem documento paralelo. |
+| N | Nenhuma cópia | Nenhum capturador novo, outro master, outro script, outro executor ou outra pasta criado. |
+| O | Obsidian | Cofre/docs mantidos como fonte de memória; sem alterações de vault ou sincronização automática. |
+| P | Papagaio | ON correlaciona fontes e relata limites; OFF seleciona só rota útil; verdades não são criadas por repetição. |
+| Q | Qualidade Screenpipe | API local health=degraded, frame_status=ok, audio_status=stale; vídeo vivo não significa áudio vivo. |
+| R | Rota Claude | scripts/vscode/centraldark-claude-mode.ps1 em STATUS reportou CENTRALDARK_CLAUDE_MODE=OFF e ACTIVE_CLI_DISPATCH=NOT_ATTESTED. |
+| S | Sidecar | Owner existente scripts/remote-bridge/CentralDark-Context-Sidecar.ps1 ganhou status somente leitura sem token, captura ou escrita. |
+| T | Tasks | .vscode/tasks.json: 18→19 tarefas em branch, com menu CentralDark Screenpipe: STATUS (Sidecar existente). |
+| U | Unidade | Um sistema, uma intenção, múltiplas ferramentas e só o executor autorizado por escopo. |
+| V | VPS | /root/CentralDark main@fb7a00a60 no readback; diverge da main GitHub sem implicar perda ou falha de deploy. |
+| W | Workspace | JSONC original do VS Code aceita vírgulas finais; parser JSON estrito falhar sozinho não demonstra workspace corrompido. |
+| X | eXecução | O status em memória foi executado na Casa; a nova task ainda não está sincronizada no VS Code local. |
+| Y | Yield | A medição simples antecede qualquer delegação custosa ou consulta autenticada de conversas. |
+| Z | Zero falso verde | screenpipe-status.json no Workdir E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE está STALE; screenpipe-latest.json não encontrado nesse Workdir. |
+
+### 11.2 01–12 — passos e provas materiais deste incremento
+
+01. Recuperadas leis canônicas, SOUL/JARVIS, recipes e receipts anteriores; PRs #1806 e #1810 agora **MERGED**, não pendentes.
+02. Comprovado que a rota Desktop Commander atual da Casa está online; rota legada offline não invalida essa observação.
+03. Lidos 21 arquivos tracked modificados na Casa somente como nomes; não limpar, resetar, commitar ou mudar worktrees.
+04. Contados por nome na Casa: claude=11, Code=11, codex=2, Hermes=8, AionUi=5 + aioncore, screenpipe-app=1; nenhuma sessão privada extraída.
+05. Confirmados executáveis claude, codex, hermes, code, pwsh, gh, ssh, python; instalação não é despacho autenticado.
+06. Claude/Hermes: status do seletor OFF e execução por CLI não atestada, portanto não ligar ON automaticamente.
+07. Screenpipe: porta local 3030 pertence a screenpipe-app; health respondeu; frame_status=ok com frame recente; áudio stale e health degradado.
+08. Sidecar original encontrado em K:\scripts\remote-bridge, com status antigo armazenado em E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE\context; contexto atual não foi lido sem autorização.
+09. Adicionado -Status ao **mesmo Sidecar**, antes do Get-ScreenpipeToken, New-Item e while-loop; apenas GET /health e metadados de existência/idade de arquivos já existentes.
+10. Contraprova inicial detectou e corrigiu colisão case-insensitive $Status/$status, renomeando variável do caminho existente para $statusPath; modo de coleta antigo preservado.
+11. Contraprova em Windows usando blob GitHub em memória: POWERSHELL_PARSE_ERRORS=0; SCREENPIPE_HEALTH_HTTP=PASS; SCREENPIPE_HEALTH_STATE=degraded; SCREENPIPE_FRAME_STATUS=ok; SCREENPIPE_AUDIO_STATUS=stale; SIDECAR_STATUS=STALE (907.4 min no teste); SIDECAR_LATEST=NOT_FOUND_AT_CONFIGURED_WORKDIR; CLAUDE_WINDOW_CONTENT=NOT_READ.
+12. Task JSON lida no Windows com 19 tarefas, task única, e Claude ON/OFF/STATUS intactos; chamada projetada: VS Code > Tasks: Run Task > CentralDark Screenpipe: STATUS (Sidecar existente).
+
+### 11.3 Contratos de verdade e handoff
+
+- **DOCUMENTADO/TESTADO:** fonte e integração incremental na branch, status read-only validado em PowerShell na Casa, JSON de tarefas validado.
+- **NÃO EXECUTADO:** merge para main, pull da Casa, tarefa disparada pelo VS Code local, Sidecar de captura em loop, login OAuth Claude, consulta ao texto da tela, escrita em vault, sync Casa↔VPS ou deploy.
+- **SCREENPIPE:** saúde de captura visual e stale do áudio separados; health não equivale à leitura autenticada do chat.
+- **CLAUDE:** processo e extensão presentes, mas modo de Hermes OFF e CLI dispatch NOT_ATTESTED.
+- **WORKTREES:** Casa e VPS têm trabalho local preexistente em outros owners; não foram tocados.
+- **HUD ORIGINAL:** nenhuma missão, porcentagem, skin ou identidade modificada.
+- **NEXT_CURSOR:** revisar gates e PR deste mesmo delta; promover somente quando aplicável; sincronizar sem sobrescrever mudanças locais; executar task de status no VS Code para readback; depois, se autorizada, usar autenticação original do Sidecar para observar o painel Claude e emitir receita tipada ao Hermes existente.
+- **Princípio:** intenção viva → recuperar owner/receita → menor delta → executar prova na Casa → receipt no owner → revisão PR → readback → Kaizen. Sem segundo corpo.
+
