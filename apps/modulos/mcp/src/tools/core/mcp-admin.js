@@ -7,6 +7,7 @@ import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
 import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
 import { adminMainWriterTools } from "../../modes/admin/tools/admin-main-writer.js";
 import { adminProviderControlTools, tailscaleTools } from "../../modes/admin/tools/admin-provider-control.js";
+import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "../../modes/admin/tools/cloudflare-openapi-catalog.js";
 
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
@@ -263,10 +264,36 @@ export const mcpAdminTools = [
         inputSchema: z.object({
             filter: z.string().optional(),
             includeDestructive: z.boolean().optional(),
+            provider: z.enum(["cloudflare"]).optional(),
+            providerView: z.enum(["openapi"]).optional(),
+            cloudflareMethod: z.enum(["GET", "POST", "PUT", "PATCH", "DELETE"]).optional(),
+            cloudflareTag: z.string().max(160).optional(),
+            cloudflareOffset: z.number().int().min(0).optional(),
+            cloudflareLimit: z.number().int().min(1).max(100).optional(),
         }),
         handler: async (input) => {
             const filter = (input.filter ?? "").toString().toLowerCase().trim();
             const includeDestructive = input.includeDestructive ?? true;
+            // Metabolismo lazy: o snapshot OpenAPI existente fica no mesmo catalogo,
+            // sem anunciar milhares de tools ao cliente nem transferir autoridade.
+            const cloudflareRequested = input.provider === "cloudflare" || input.providerView === "openapi";
+            const cloudflareTag = String(input.cloudflareTag ?? "").trim().toLowerCase();
+            const cloudflareOperations = cloudflareRequested
+                ? CLOUDFLARE_OPENAPI_OPERATIONS.filter((op) =>
+                    (!input.cloudflareMethod || op.method === input.cloudflareMethod) &&
+                    (!cloudflareTag || op.tags.some((tag) => tag.toLowerCase() === cloudflareTag)) &&
+                    (!filter || [op.method, op.path, op.summary, ...op.tags].some((value) => value.toLowerCase().includes(filter)))
+                ) : null;
+            const cloudflareOffset = input.cloudflareOffset ?? 0;
+            const cloudflareLimit = input.cloudflareLimit ?? 40;
+            const cloudflarePage = cloudflareOperations === null ? null : {
+                provider: "cloudflare", status: "INVENTORY_ONLY",
+                totalMatched: cloudflareOperations.length,
+                offset: cloudflareOffset, limit: cloudflareLimit,
+                nextOffset: cloudflareOffset + cloudflareLimit < cloudflareOperations.length
+                    ? cloudflareOffset + cloudflareLimit : null,
+                items: cloudflareOperations.slice(cloudflareOffset, cloudflareOffset + cloudflareLimit),
+            };
             const tools = runtimeTools
                 .map(safeToolInfo)
                 .filter((tool) => includeDestructive || !tool.destructive)
@@ -308,6 +335,21 @@ export const mcpAdminTools = [
                 desktopCommanderEquivalences: remoteEquivalences,
                 desktopCommanderParity: "PARTIAL_ROUTE_CAPABILITIES_ONLY_NO_CASA_REVERSE_EXEC_PROOF",
                 providerBoundary: "CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED",
+                cloudflareOpenApiCatalog: CLOUDFLARE_OPENAPI_META,
+                cloudflareOperations: cloudflarePage,
+                providerDispatch: {
+                    discover: "mcp_admin_catalog",
+                    curatedDiscovery: "mcp_admin_call(tool=provider_capabilities)",
+                    credentialsProbe: "mcp_admin_call(tool=provider_credentials_status)",
+                    authorizedRead: "mcp_admin_call(tool=provider_read)",
+                    authorizedMutation: "mcp_admin_call(tool=provider_mutate)",
+                    conflictResolverEvent: "centraldark_dependabot_reconcile",
+                    resolverOwner: "scripts/dependabot/resolve-conflicts.sh",
+                    executor: "HERMES_SHELL",
+                    privilegedAuthorization: "VERIFIED_OAUTH_OR_HUB_ADMIN_SCOPE_AND_AUDIT",
+                    remoteMcpBridge: "MCP_REMOTE_OAUTH",
+                    executionBoundary: "OPENAPI_INVENTORY_ONLY_UNLESS_ALLOWLISTED_AND_AUTHORIZED",
+                },
                 tools,
             });
         },
