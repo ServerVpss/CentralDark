@@ -302,3 +302,9 @@ Owner scripts/vps/main-pulse-reconciler.sh executado somente em modo --audit-cov
 **NEXT_CURSOR:** remedir a main mais recente; conservar história e dirty da Casa e VPS; resolver 11 overlaps pelo owner; classificar 41 paths com Hermes e receitas; passar gates do mesmo SHA; executar microdeploy apenas após plano seguro; devolver recibos e readback ao mesmo HUD.
 
 **Lei:** ONE_SYSTEM_ONLY · REUSE_BEFORE_CREATE · ONE_WRITER_PER_SCOPE · NO_BLIND_OVERWRITE · UNKNOWN_NE_PASS.
+
+### 11.6 Complemento — slow guard de leitura e nomes legados da Casa
+
+- O modo **Status** do owner Casa `scripts/casa/sync-hermes-obsidian.ps1` confirmou `REMOTE_HEAD=7edba7d692...`, `BEHIND=113`, `AHEAD=4`, mas ficou mais de 712 segundos na subverificação Python, sem receipt conclusivo. Foram encerrados **somente** o processo PowerShell e o filho Python iniciados por esta auditoria (`22212`, `21304`), sem tocar Claude, Codex, Hermes, VS Code, serviços, arquivos ou outros workers. Readback depois: `CASA_HEAD=1731d5a754`, `CASA_TRACKED_DIRTY=21`. **STATUS_SYNC_FINAL=UNPROVEN; DIVERGENCE_SHA=PROVEN.**
+- Na árvore da Casa, os caminhos legados `K:\scripts\CENTRALDARK-SYNC-DOIS-AMARELOS.ps1` e `K:\scripts\CENTRALDARK-ABRIR-TUDO.bat` **não estão presentes** na última consulta; existe backup histórico `K:\scripts\_backups\CENTRALDARK-ABRIR-TUDO.bat.pre-log-merge-20261011.bak`. Não recriar atalhos/scripts: localizar owner efetivo, commits e consumidores primeiro.
+- **NEXT_CURSOR específico:** investigar por que a verificação Python do Status não termina; reaproveitar as provas já medidas (`AHEAD/BEHIND`), sem rodar hash integral novamente para cada consulta. Distinguir nome legado ausente de capacidade operacional ausente.
