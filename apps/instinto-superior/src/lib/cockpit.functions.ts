@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GATEWAY = "https://connector-gateway.lovable.dev/github";
 const GITHUB_API = "https://api.github.com";
@@ -570,3 +571,69 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     };
   },
 );
+
+
+// #OBSERVACOES# @owner=cockpit.functions @doc_ref=docs/CONSCIENCIA/MICRO-DEPLOY/README.md
+// @last_updated=2026-10-18T15:21:44.739Z @escopo=PID_MCP_VPS_AUTH_READ_ONLY
+// @implementado: consulta autorizada de heartbeat operacional, sem declarar conexao TCP por PID.
+// @pendente: deploy e readback de runtime no mesmo SHA.
+export type McpRuntimeAoVivo = {
+  estado: "OBSERVED" | "STALE" | "UNKNOWN";
+  consultaEm: string;
+  observadoEm: string | null;
+  fonte: string;
+  httpStatus: number | null;
+  pid: number | null;
+  processos: { id: string; nome: string; quantidade: number; pids: number[] }[];
+  atividadeMcp: "RECENT" | "STALE" | "UNKNOWN";
+  erro: string | null;
+};
+
+export const lerMcpRuntimeAoVivo = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<McpRuntimeAoVivo> => {
+    const { data: papel, error: erroPapel } = await context.supabase
+      .from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
+    const consultaEm = new Date().toISOString();
+    const fonte = "MCP GET /heartbeat · server-side";
+    const leitura = await medirApi("/heartbeat");
+    const heartbeat = leitura.dados;
+    const operational = objetoJson(heartbeat?.["operational"]) ? heartbeat["operational"] : null;
+    const runtime = objetoJson(operational?.["runtime"]) ? operational["runtime"] : null;
+    const topology = objetoJson(operational?.["executionTopology"]) ? operational["executionTopology"] : null;
+    const atividade = objetoJson(topology?.["mcpActivity"]) ? topology["mcpActivity"] : null;
+    const observadoEm = texto(topology?.["observedAt"]);
+    const idadeMs = observadoEm ? Date.now() - Date.parse(observadoEm) : Number.NaN;
+    const pid = runtime?.["pid"];
+    const assinaturaValida = leitura.estado === "PASS"
+      && heartbeat?.["service"] === "mcp-centraldark"
+      && topology?.["schema"] === "centraldark.execution-topology.v1"
+      && Number.isSafeInteger(pid) && (pid as number) > 0;
+    const recente = assinaturaValida && Number.isFinite(idadeMs) && idadeMs >= -5_000 && idadeMs <= 30_000;
+    const estado: McpRuntimeAoVivo["estado"] = recente ? "OBSERVED"
+      : assinaturaValida ? "STALE" : "UNKNOWN";
+    const idsPermitidos = new Set([
+      "MCP_SERVER", "TELEGRAM_BOT", "HERMES_RUNTIME", "HERMES_CRON",
+      "SELF_EVOLUTION", "GITHUB_RUNNER", "REMOTE_DESKTOP", "GUARDIAO",
+    ]);
+    const lista = Array.isArray(topology?.["lanes"]) ? topology["lanes"] : [];
+    const processos: McpRuntimeAoVivo["processos"] = recente
+      ? lista.filter(objetoJson).filter(item => idsPermitidos.has(String(item["id"])))
+        .map(item => ({
+          id: String(item["id"]),
+          nome: typeof item["label"] === "string" ? item["label"].slice(0, 60) : String(item["id"]),
+          pids: (Array.isArray(item["pids"]) ? item["pids"] : [])
+            .filter((n): n is number => Number.isSafeInteger(n) && n > 0).slice(0, 12),
+          quantidade: typeof item["processCount"] === "number" && Number.isSafeInteger(item["processCount"])
+            ? Math.max(0, item["processCount"]) : 0,
+        }))
+      : [];
+    return {
+      estado, consultaEm, observadoEm: recente ? observadoEm : null, fonte,
+      httpStatus: leitura.httpStatus, pid: recente ? pid as number : null,
+      processos, atividadeMcp: recente && ["RECENT", "STALE"].includes(String(atividade?.["state"]))
+        ? atividade?.["state"] as "RECENT" | "STALE" : "UNKNOWN",
+      erro: recente ? null : leitura.erro ?? (assinaturaValida ? "AMOSTRA_FORA_DA_JANELA_30S" : "SCHEMA_OU_ORIGEM_NAO_COMPROVADA"),
+    };
+  });
