@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
+
+import { __test as distTest, tailscaleTools as distTailscaleTools } from "../dist/modes/admin/tools/admin-provider-control.js";
 
 import {
   PROVIDER_CAPABILITY_MATRIX,
@@ -245,4 +248,95 @@ test("Cloudflare inventory is not an escape hatch for provider_read or provider_
   })).content[0].text);
   assert.equal(mutateDenied.ok, false);
   assert.match(mutateDenied.status, /PROVIDER_CAPABILITY_UNKNOWN/);
+});
+
+
+test("fallback Tailscale local nao promove broker a PASS nem revela identificadores", () => {
+  const source = {
+    Self: { Online: true, HostName: "host-privado", TailscaleIPs: ["100.64.0.7"] },
+    Peer: {
+      a: { Online: true, HostName: "pc-privado" },
+      b: { Online: false, HostName: "celular-privado" },
+    },
+  };
+  const summary = __test.summarizeLocalTailnet(source);
+  assert.deepEqual(summary, {
+    selfOnline: true,
+    peerCount: 2,
+    onlinePeers: 1,
+    privateIpAssigned: true,
+  });
+  const json = JSON.stringify(summary);
+  for (const secret of ["host-privado", "pc-privado", "100.64.0.7"]) {
+    assert.equal(json.includes(secret), false);
+  }
+  assert.deepEqual(__test.summarizeLocalTailnet({}), {
+    selfOnline: false,
+    peerCount: 0,
+    onlinePeers: 0,
+    privateIpAssigned: false,
+  });
+});
+
+test("dist preserves native Tailscale fallback and never leaks peer identity", () => {
+  const content = readFileSync(
+    new URL("../dist/modes/admin/tools/admin-provider-control.js", import.meta.url),
+    "utf8",
+  );
+  assert.match(content, /TAILSCALE_OAUTH_BROKER_UNREACHABLE/);
+  assert.equal((content.match(/localFallback: await localTailnetFallback\(\)/g) || []).length, 2);
+  assert.match(content, /execFileAsync\("tailscale", \["status", "--json"\]/);
+  const sample = {
+    Self: { Online: true, HostName: "private-machine", TailscaleIPs: ["100.100.99.88"] },
+    Peer: { x: { Online: true, HostName: "private-peer" }, y: { Online: false } },
+  };
+  const report = distTest.summarizeLocalTailnet(sample);
+  assert.deepEqual(report, __test.summarizeLocalTailnet(sample));
+  const serialized = JSON.stringify(report);
+  for (const sensitive of ["private-machine", "private-peer", "100.100.99.88"]) {
+    assert.equal(serialized.includes(sensitive), false);
+  }
+  assert.equal(distTailscaleTools.find(t => t.name === "tailscale_bridge_status")?.annotations.readOnlyHint, true);
+});
+
+test("dist bridge retains status UNKNOWN on broker failure (not PASS)", async () => {
+  const bridge = distTailscaleTools.find(t => t.name === "tailscale_bridge_status");
+  assert.ok(bridge);
+  const priorFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("broker_unreachable_fixture"); };
+  try {
+    // CLI fallback reads local tailnet only; host/peers never appear in returned data.
+    const reply = JSON.parse((await bridge.handler({})).content[0].text);
+    assert.equal(reply.ok, false);
+    assert.equal(reply.status, "TAILSCALE_OAUTH_BROKER_UNREACHABLE");
+    assert.equal(reply.localFallback?.source, "tailscale-cli:status-json");
+    assert.equal(typeof reply.localFallback?.observed, "boolean");
+    assert.equal("data" in reply, false);
+  } finally {
+    globalThis.fetch = priorFetch;
+  }
+});
+
+test("dist matches src Tailscale credential precedence and rejects non-API kinds", () => {
+  const samples = [
+    { vault: { TAILSCALE_API_KEY: "tskey-api-vault" }, mcp: { TAILSCALE_API_KEY: "tskey-api-mcp" }, env: { TS_API_KEY: "tskey-api-env" } },
+    { vault: {}, mcp: { TS_API_KEY: "tskey-api-mcp" }, env: { TAILSCALE_API_KEY: "tskey-api-env" } },
+    { vault: {}, mcp: {}, env: { TS_API_KEY: "tskey-api-env" } },
+    { vault: {}, mcp: {}, env: {} },
+  ];
+  for (const sources of samples) {
+    assert.equal(distTest.chooseTailscaleKey(sources), __test.chooseTailscaleKey(sources));
+  }
+  assert.equal(distTest.chooseTailscaleKey(samples[0]), "tskey-api-vault");
+  for (const prefix of ["auth", "client", "webhook", "scim"]) {
+    assert.equal(distTest.tailscaleKeyKind(`tskey-${prefix}-fixture`), "NOT_API_ACCESS_TOKEN");
+  }
+  assert.equal(distTest.tailscaleKeyKind("tskey-api-fixture"), "API_ACCESS_TOKEN");
+  assert.equal(distTest.tailscaleKeyKind("unrecognized-fixture"), "UNKNOWN_FORMAT");
+  for (const key of ["tskey-auth", "tskey-client", "tskey-webhook", "tskey-scim"]) {
+    assert.equal(distTest.tailscaleKeyKind(key + "-fixture"), __test.tailscaleKeyKind(key + "-fixture"));
+  }
+  const dist = readFileSync(new URL("../dist/modes/admin/tools/admin-provider-control.js", import.meta.url), "utf8");
+  assert.match(dist, /TAILSCALE_WRONG_CREDENTIAL_KIND/);
+  assert.match(dist, /vault: parseEnvFile\("\/root\/CentralDark\/secrets\/tailscale.env"\)/);
 });

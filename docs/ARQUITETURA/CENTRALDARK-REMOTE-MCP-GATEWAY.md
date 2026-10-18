@@ -229,3 +229,290 @@ REPLAY_TRIGGER=NEED_TO_RECHECK_CURRENT_REACHABILITY
 INVALIDATION=PEER_IP|ONLINE_STATE|TAILNET_AUTH|TRANSPORT_PATH|DEVICE_STATE_CHANGED
 NEXT_CURSOR=REMEASURE_iphone_route_only_when_needed; keep screen/control as UNKNOWN
 ```
+
+
+## Delta ZENDRIVE / MCP nativo — 2026-10-17
+
+O controle canônico permanece **CentralDark MCP** e a extensão VS Code
+`skills/vs-code-restore` expõe agora:
+`centraldark.probeVpsSsh` (sonda read-only com SSH Tailscale → público)
+e `centraldark.connectVpsSsh` (picker do Remote-SSH já existente).
+O comando de foco `centraldark.zendriveCli` permanece inalterado.
+O alias e a identidade SSH da Casa continuam sob o owner humano original.
+
+No mesmo owner `apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js`,
+`tailscale_bridge_status` agora possui fallback LOCAL `tailscale status --json`
+somente quando o Broker HTTP falha. O fallback retorna disponibilidade
+do Tailscale da VPS, não valida controle administrativo, OAuth,
+API key ou SSH da Casa; as duas falhas seguem evidentes.
+
+**Status nesta etapa:** delta de código em PR isolado;
+instalação da extensão e recarga MCP na Casa/VPS seguem ações distintas.
+Nenhuma publicação automática. Não criar gateway paralelo.
+
+
+
+## 2026-10-17 — Desktop Commander: cascas, tool-call e visualização no Instinto Superior
+
+**Garimpo factual, sem substituir owners:**
+
+| Camada | Artefato canônico | Responsabilidade |
+|---|---|---|
+| Máquina VPS | `/root/CentralDark` | Checkout da CentralDark que contém scripts e unidades declarativas |
+| Entrada de unidade | `/etc/systemd/system/centraldark-desktop-commander*.service` | Destino definido pelo instalador; arquivo instalado efetivo exige inspeção do host |
+| Executável de perfil | `/usr/local/sbin/centraldark-desktop-commander-profile.sh` | Destino de instalação do runner existente |
+| Perfil principal | `/root` | HOME do perfil principal |
+| Perfil segunda conta | `/root/.desktop-commander-profiles/conta2` | HOME isolada, sem compartilhar refresh token |
+| Locks | `/run/centraldark-desktop-commander-<profile>.lock` | Impede múltiplas instâncias no mesmo perfil |
+| Health/watchdog | `infra/systemd/centraldark-desktop-commander-watchdog.sh` | Verifica systemd/PIDs/cgroup/logs; não altera owner do remoto |
+| Logs de watchdog | `/var/log/centraldark-desktop-commander-watchdog.log` | Histórico do watchdog no host |
+| Pacote usado pela VPS | `@wonderwhy-er/desktop-commander@0.2.48 remote` | Processo do pacote público local em modo remoto |
+| Serviço remoto de terceiro | `https://mcp.desktopcommander.app/mcp` | OAuth e encaminhamento ao device agent; implementação hospedada é fechada |
+| Captura das calls da própria CentralDark | `apps/modulos/mcp/src/audit-logger.js` | Evento sanitizado `mcp_tool_execution`, com call/correlation/duration/ok |
+| Admin/MCP NOC existente | `apps/modulos/mcp/src/admin.js` | `/admin/logs/stream`, `/admin/api/logs` e Tool Call Lens no MESMO painel protegido |
+| Projeção no Cockpit | `apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx` | Consome apenas a consulta autenticada /admin/api/logs no owner Admin existente |
+
+**Fonte externa pública** (revisada em 2026-10-17):
+- DesktopCommanderMCP (implementação local): `https://github.com/wonderwhy-er/DesktopCommanderMCP/blob/main/src/server.ts`
+- Remote Desktop Commander (docs e manifests públicos, implementação cloud privada): `https://github.com/desktop-commander/remote-desktop-commander`
+
+### Fluxo de processo que queremos acompanhar
+
+```text
+CLIENTE AUTORIZADO → REMOTE MCP OAuth → DEVICE AGENT
+  ├─ start_process → PID de processo FILHO + leitura inicial
+  ├─ read_process_output(pid) → offset/novas linhas + exit code
+  ├─ interact_with_process → input autenticado sob escopo do dono
+  └─ process completed → encerramento e recibo
+        ↓ (se atravesar MCP CentralDark, fluxo auditado)
+    auditToolExecution → subscribeAuditEvents
+        ↓ metadata whitelisted (nunca input/output bruto)
+    pushAdminLog(mcp_tool_call) → /admin/logs/stream /admin/api/logs
+        ↓ mesma autenticacao do MCP Admin
+    Tool Call Lens · Admin + Observabilidade do Instinto Superior
+```
+
+Na captura CHEFE:
+- `start_process` mostrou PID `16424` para PowerShell local do device conectado;
+- `read_process_output` para PID `16424` devolveu `NODE_MODULES=True`, `LOCAL_GALLERY=True`, `LOCAL_AUTH=True`, `VPS_ONLINE`, `DEPS_YES`, `active`, `exit code 0`, `runtime 3.83s`;
+- `transport=broadcast_v1` e `dispatch_device_status=online` pertencem ao caminho do conector externo, **não** ao protocolo público do MCP CentralDark.
+
+**Limite preciso:** a assinatura `subscribeAuditEvents` registra somente chamadas que atravessam o MCP CentralDark. A call do Remote Desktop Commander feita diretamente pelo ChatGPT/Codex é visível no próprio cliente, mas não cruza automaticamente o MCP CentralDark. Logo, não afirmar que o Tool Call Lens já vê todos os dispositivos ou todas as execuções externas. Para absorção integral, deverá existir adaptador autorizado de eventos do cliente, com `source=REMOTE_DESKTOP_COMMANDER_CLIENT`, `client_call_id`, `device_id` e `receipt_ref` correlacionados. Não extrair stdout completo sem contrato privado/autorização.
+
+**Estado do delta de UI e telemetria:**
+- PR #1842 — `admin.js`: subscrição em audit-logger; metadados permitidos; pausa/revisão visual em SSE/Admin; `index.js`: CORS de **somente GET** para origins autorizadas nos endpoints autenticados de logs/metricas.
+- PR #1838 — `ObservabilidadeCentralDark.tsx`: seção Tool Call Lens reutilizando owner Observabilidade/mesma API Admin. Polling 5s, pausa, revisão, filtro e correlação.
+- `isAdmin(req)` continua exigido; autenticação administrativa não foi substituída por CORS.
+- Código em PR != serviço publicado. Instinto Superior deve recarregar o componente e MCP deve recarregar o código após promoção aprovada.
+
+**NEXT_CURSOR:** CI same HEAD #1842 e #1838 → deployment de cada owner na ordem causal (MCP antes do Cockpit) → cookie/admin readback (401/200) → registrar chamadas em `/admin/api/logs` → observar widget ao vivo → correlação opcional REMOTE_MCP_CLIENT ≠ MCP_NATIVO. Não promover `UI_OBSERVED` a `EXECUTION_PROVEN`.
+
+## 🧬 Contrato autônomo: construir → instalar → conectar → provar → antirregressão
+
+Contrato de entrega do CHEFE — 2026-10-17. Reutilizar owners: ZENDRIVE VS Code, MCP CentralDark, SSE Admin e Observabilidade do Cockpit. Não criar gateway nem executor paralelo.
+
+| Fase | Ação | Evidência para avançar | Falha |
+|---|---|---|---|
+| 01 CONSTRUIR | Fixar HEAD, compilar e testar | build exit=0; artefato identificado pelo SHA | BUILD_BLOCKED |
+| 02 INSTALAR | Instalar artefato validado na Casa autorizada | versão instalada e timestamp do ambiente de destino | INSTALL_BLOCKED |
+| 03 CONECTAR | Reusar SSH/MCP/SSE e sessão existente | handshake autenticado, rota, PID e endpoint real | CONNECT_BLOCKED |
+| 04 PROVAR | Executar diagnóstico inofensivo e colher PID, read_process_output e exit code | recibo correlacionado (CID, fonte, PID e duração), saída sanitizada | PROOF_BLOCKED |
+| 05 ANTIRREGRESSÃO | Testar owners afetados e comparar antes/depois | VS Code aberto, temas, ferramentas, login, HUD, SSE sem regressão | REGRESSION_BLOCKED |
+
+Cada fase avança SOMENTE após readback PASS. Erro para a sequência, registra owner, sha, observed_at e next_cursor. Desconhecido não vira verde.
+
+### Execução autônoma no escopo aprovado
+
+- Inventário read-only, edição incremental em branch isolada, build, testes, empacotamento e validação local de desenvolvimento são automáticos quando a ferramenta de execução estiver disponível.
+- Mudanças em main, VPS de produção, contas, segredos, ACL, publicação e limpeza destrutiva preservam a aprovação explícita de promoção estabelecida pelo CHEFE.
+- Desktop Commander externo e MCP próprio não são equivalentes: o Tool Call Lens atual só vê auditoria do MCP que atravessa esse owner.
+- O Browser conectado ao ChatGPT não é uma ponte automática de execução em Code.exe.
+
+### Receita determinística de aceite
+
+1. Medir o HEAD e a árvore de alterações; um writer por owner; não sobrescrever trabalho de outro agente.
+2. Build/test/empacotamento; guardar sha e recibos.
+3. Instalar a versão do artefato na Casa e reler a versão efetiva, sem abrir outro VS Code.
+4. Conectar por sessão autenticada já existente; provar o handshake e as rotas.
+5. Rodar comando inofensivo; correlacionar start_process, PID, leitura de saída incremental, fim e exit code.
+6. Rodar antirregressão: ZENDRIVE CLI, SSH/PID, Tool Call Lens (ao vivo/pausa/rever), Cockpit, quatro peles, autenticação e HUD.
+7. Persistir recibo detalhado por fase no PR e projetar o resultado no HUD; parar no primeiro bloqueio.
+
+Regra do placar: SOURCE_WIRED, BUILD_PASS, INSTALLED, CONNECTED, RUNTIME_PROVEN e ANTI_REGRESSION_PASS são dimensões distintas. LOCAL_FIXED_POINT somente com provas das fases 1-5; não implica MAIN ou VPS_DEPLOYED.
+
+
+## 🧬 Forja Autônoma — botão e receita (17/10/2026)
+
+**REUSE_BEFORE_CREATE:** botão no Admin MCP existente, aba Auditoria → Tool Call Lens; entrada no Cockpit existente, área Observabilidade; dispatcher existente /admin/api/intent → intent-cycle-adapter.js → fila original HERMES-CORE. Sem segundo executor, segundo gateway ou nova fila.
+
+### Uma intenção → cinco etapas sequenciais
+
+1. ANTIRREGRESSÃO. Antes de editar: coletar HEAD, origin/main, worktree, writer atual, testes do owner; sem reset, clean, force-push, nem sobrescrever trabalho concorrente. Casa: npm run verify:hud, npm run lint em apps/instinto-superior; MCP: node --test apps/modulos/mcp/tests/intent-cycle-adapter.test.mjs e node --test apps/modulos/mcp/tests/tool-call-observability.test.mjs. Exigir exit code, timestamp e fonte.
+2. CONSTRUIR. Sob mesmo writer, npm run build no cockpit e npm run compile em skills/vs-code-restore quando aplicável. Gravar hash do artefato, HEAD e comprovante de build. Build concluído não é instalação.
+3. INSTALAR. Atualizar somente o artefato local autorizado na Casa, preservando a versão anterior, possibilidade de rollback e arquivo de prova. Não instalar nem deployar na VPS apenas por apertar o botão.
+4. CONECTAR. Testar a rota existente VS Code ZENDRIVE → SSH/Remote-SSH → VPS e MCP CentralDark → Hermes, usando identidades atuais. Distinguir HEAD da Casa, identidade SSH, Tailscale CLI, API OAuth e servidor MCP. Gravar readback sem segredos.
+5. PROVAR. Repetir antirregressão após instalar; testar UI e comandos relevantes; comparar hash do instalado e compilado; registrar estado real, exit codes, duração, objetivo/GOAL e Critic do Hermes. UNKNOWN/FAIL = parar; PASS por fase somente com recibo tipado do mesmo SHA.
+
+### Contrato do recibo do Hermes
+
+Na missão concluída original criar o arquivo forja-4x-receipt.json ao lado de missao.md, state.json e finalization-receipt.json. Caminho relativo:
+
+    apps/modulos/HERMES-CORE/missions/concluidas/YYYY-MM-DD/centraldark-intent-<fingerprint24>/forja-4x-receipt.json
+
+Formato de referência (campos entre sinais angulares são EXEMPLOS, não resultados):
+
+~~~json
+{
+  "schema": "centraldark.forja.4x.receipt.v1",
+  "fingerprint": "<fingerprint SHA256 da missão>",
+  "sourceHead": "<HEAD Git de 40 caracteres>",
+  "stages": [
+    {"id":"ANTIRREGRESSAO","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<teste e log>"},
+    {"id":"CONSTRUIR","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<build e hash>"},
+    {"id":"INSTALAR","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<instalação local>"},
+    {"id":"CONECTAR","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<SSH/MCP readback>"},
+    {"id":"PROVAR","status":"PASS","sourceHead":"<HEAD>","exitCode":0,"observedAt":"<ISO UTC>","antiregression":"PASS","receipt":"<teste E2E/Critic>"}
+  ]
+}
+~~~
+
+Cada etapa exige mesmo fingerprint/SHA, timestamp plausível de até 7 dias, exitCode 0, antiregression PASS e recibo. FAIL interrompe, SHA divergente volta a UNKNOWN. É um contrato de evidência; só os hashes e o readback real de cada artefato estabelecem instalação e conexão.
+
+### Runner canônico da Casa (reuso, sem segundo executor)
+
+O script já presente no PR #1842 é:
+
+    skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1
+
+Ele contém gates 01_CONSTRUIR (incluindo testes prebuild), 02_INSTALAR (VSIX local e readback de versão), 03_CONECTAR (SSH + Cockpit local) e 04_PROVAR (E2E autenticado). Grava recibo no TEMP/CentralDark-Forja-Lens; retorna código de saída 3 diante de bloqueio.
+
+O botão agora exige que Hermes use **esse runner**, não um roteiro novo: ler receipt do PS1, complementar a antirregressão pós-instalação, validar E2E autenticado com call_id do Tool Call Lens e produzir o receipt tipado forja-4x-receipt.json na pasta da mesma missão. Quando falta prova E2E, o script bloqueia a conclusão em vez de inventá-la. A publicação main/VPS continua independente.
+
+### Operação do botão existente
+
+No Admin MCP autenticado: Auditoria → 🧬 Construir → Instalar → Conectar → Provar. POST same-origin /admin/api/intent com mode AUTONOMO encaminha um único GOAL, deduplicado por fingerprint. O botão Relê recibo usa GET na mesma rota e exibe as cinco fases via forja4x.stages. Não repete ferramentas ao rever; registra somente observação. O Cockpit aponta para a aba Admin já autenticada; a autenticação, o worker e o Tool Call Lens permanecem os existentes.
+
+Gates globais: SOURCE_CURRENT, MCP_HEALTH, ONE_HEART, CI_SAME_SHA, HERMES_RUNTIME, OBJECTIVE_EFFECT, RECEIPT. O estado ENFILEIRADO não é EXECUTADO; FIXED_POINT exige etapas válidas, Critic, mesmos SHAs e critérios completos. Promoção para main/VPS exige autorização separada do CHEFE, revisão de PR e receipt de deploy. MERGED != DEPLOYED.
+
+Código da missão/receipts: apps/modulos/mcp/src/intent-cycle-adapter.js. UI Admin: apps/modulos/mcp/src/admin.js. UI Cockpit: apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx. Tests: intent-cycle-adapter.test.mjs; tool-call-observability.test.mjs. PR MCP/ZENDRIVE #1842 e PR UI/HUD #1838.
+
+NEXT_CURSOR: instalar a branch no runtime autorizado, clicar uma vez, medir ACK da fila, acompanhar o Hermes original, reler cada etapa, executar testes localizados; somente depois avaliar promoção separada.
+
+## 🪬 INVENTARIO-ZENDRIVE-20261018 — Casa ↔ Tailscale ↔ VPS ↔ MCP
+
+Owner preservado: este documento; catalogo existente em apps/modulos/mcp/src/tools/core/mcp-admin.js;
+extensao existente skills/vs-code-restore; executor original Hermes. Este inventario e um snapshot
+observado em 2026-10-18 UTC, nao um daemon, um novo MCP ou um sensor continuamente atualizado.
+Origem: sessoes remotas autorizadas Windows SEGREDO e VPS, screenshots do CHEFE, extensoes VS Code,
+GitHub e catalogo MCP. Nao promover SOURCE a RUNTIME, HTTP200 a funcao, nem porta a autenticacao.
+
+### Matriz de superficies e limites
+
+| Superficie | Evidencia da rodada | Limite da prova |
+|---|---|---|
+| Casa Windows | SEGREDO online pelo Remote Desktop Commander e Code.exe PID 19800 | Nao prova que o MCP ja controla a GUI |
+| VPN | Tailscale Running; peer privado Casa/VPS observado | VPN por si nao autentica comando admin |
+| Remote SSH | Alias Segredo-VPS por IP privado, retorno CENTRALDARK-OS e exit=0; alias segredo-vpss publico preservado | Prova apenas Casa → VPS autenticado |
+| VS Code | Remote-SSH 0.128.0; extensao CentralDark 0.1.4 instalada localmente e comandos no manifest | VSIX instalada nao prova que seus comandos foram executados |
+| Terminal VS Code | Janela VS Code identificada, paleta acionada pela sessao interativa | Nova aba ou comando de terminal sem receipt tipado continua UNKNOWN |
+| Navegadores | Janela Chrome do Cockpit e Edge observadas na Casa | Conector Browser nao conseguiu listar abas neste contexto (originating browser context ausente) |
+| Screenpipe Casa | localhost:3030/health HTTP200, status=degraded, status_code=503, frame_status=ok | CAPTURE_HEALTH nao e PASS; nao extrair dados de tela sem sensor valido |
+| Forja/discos | C E F J K; K:_WORKER como junction, LAB-DESKTOP em K e E:CentralDark existentes | Nao implica mount nem ACL de Casa disponivel na VPS/MCP |
+| SSH server Casa | sshd no Windows instalado, Stopped/Manual | VPS → Casa shell nao autenticado/provado |
+| MCP central | mcp.centralldark.com/health valido, servidor 153 tools; dispatcher 141 tools e 13 rotas no runtime antes deste patch | Catalogos de escopos diferentes; fonte GitHub com 14 rotas ainda nao publicada |
+| Hermes | Orquestrador existente, receita intent-cycle e logs operacionais | Delegacao deste objetivo requer ACK novo + receipt do Hermes |
+| Remote Desktop Commander | Casa e VPS online, executor capaz de comandos na Casa | Fallback autorizado preservado ate paridade end-to-end |
+
+### Substituicao progressiva sem um segundo agente
+
+| Funcao hoje pelo Desktop Commander | Rota existente alternativa | Gate real para dispensar RDC |
+|---|---|---|
+| Terminal na VPS | VS Code Remote-SSH via Tailscale | Comando + exit code + host + receipt no mesmo SHA |
+| Arquivo na VPS | SFTP/SSH na mesma conexao autenticada | Hash lido de volta e writer unico |
+| PID/processos VPS | ps por SSH | PID medido no alvo certo |
+| Terminal integrado VS Code | Extensao centraldark.focusExistingTerminal/VS Code API | terminal.processId e comando com marcador/resultado sem perturbar Hermes |
+| Arquivos e processos da Casa | Adapter Casa autorizado ou executor Hermes original | Chamada da VPS recebida na Casa com autenticação, ACK e receipt |
+| Abas/DOM/tela Casa | Browser conectado no cliente + Screenpipe com consentimento e assinatura valida | Prova da pagina/aba consultada, nao so titulo de janela |
+| Delegar Hermes | MCP Admin existente e intent-cycle adapter | Fingerprint, ACK, missao unica, receipt verificado |
+| Inventario MCP | mcp_admin_catalog no owner ja existente | CI SHA + source em main + microdeploy autorizado + readback do catalogo vivo |
+
+### Recibo de provas e nao provas
+
+```text
+OBSERVED_AT_UTC=2026-10-18
+SSH_CASA_VPS_PELA_VPN=PASS
+VSCODE_REMOTE_SSH_EXTENSION_INSTALLED=0.128.0
+VSCODE_CENTRALDARK_VSIX_INSTALLED=0.1.4
+CASA_WORKER_JUNCTION_PRESENT=PASS_LOCAL_METADATA
+RDC_FALLBACK_PRESERVADO=true
+SHELL_VPS_CASA=UNKNOWN
+TERMINAL_INTEGRADO_EXEC_RECEIPT=UNKNOWN
+BROWSER_TABS_CONTEXT=BLOCKED_ORIGIN
+SCREENPIPE_CASA=DEGRADED
+HERMES_DELEGATION_ACK=UNKNOWN
+MCP_CATALOG_RUNTIME_UPDATED=NOT_UNTIL_DEPLOY
+```
+
+### Critérios de conclusão e continuidade
+
+1. G1 IDENTIDADE: local, VPS, versões e owner com hora, origem e escopo real.
+2. G2 TRANSPORTE: autenticar SSH pela VPN, preservar chave conhecida e fallback publico.
+3. G3 CONTROLE: executar no terminal correto, correlacionar PID/processId e devolver recibo.
+4. G4 CASA: receber comando na Casa por executor autorizado, com ACK e readback; abrir SSH server Windows so em revisao de seguranca separada.
+5. G5 UI: contexto de aba e Screenpipe somente com sessao/assinatura valida, sem burlar antivirus nem privacidade.
+6. G6 CATALOGO: reutilizar mcp_admin_catalog, manter UNKNOWN quando nao ha prova e testar negativas.
+7. G7 DEPLOY: promover somente codigo de owner aprovado, depois CI same SHA, backup, rollback e health; nao usar checkout dirty e runners pausados como prova.
+8. G8 REMOVER DEPENDENCIA: so apos E2E de shell, arquivos, processos e UI com recibos Casa/VPS, manter fallback ate entao.
+
+FIXED_POINT_PARCIAL=SSH_PRIVADO_CASA_VPS_E_INVENTARIO_EM_PR_1842
+NEXT_CURSOR=CI_DO_HEAD_DESTA_PR -> MERGE_AUTORIZADO_COM_SHA -> MICRODEPLOY_DO_MCP -> READBACK_CATALOGO -> EXECUTOR_CASA_ACK -> UI_RECIBO -> REAVALIAR_RDC
+CURRENT_NE_LEGACY=true; ROUTE_REGISTERED_NE_EXECUTABLE=true; UNKNOWN_NE_PASS=true.
+
+### 31 ferramentas do Desktop Commander: equivalência tipada
+
+A tabela abaixo descreve alternativas somente para o escopo indicado. Ela NAO implica que o
+Windows Casa tenha recebido comandos por essa alternativa. Estados sao fronteiras tecnicas,
+nao badges PASS. A mesma lista e devolvida por mcp_admin_catalog somente depois do deploy.
+
+| RDC original | Rota no MCP existente | Escopo | Prova / limite |
+|---|---|---|---|
+| list_devices | TAILSCALE_PRIVATE_ROUTE | DEVICE_DISCOVERY | PROVED_TAILNET_ONLY |
+| who_am_i | RDC_DESKTOP_COMMANDER | PROVIDER_ACCOUNT | VENDOR_ONLY |
+| get_tool_result | MCP_VPS_NATIVE_HTTP | RECEIPT_READBACK | PENDING_CORRELATION |
+| list_remote_tool_calls | MCP_VPS_NATIVE_HTTP | AUDIT_LOGS | PARTIAL_MCP_ONLY |
+| ping | TAILSCALE_PRIVATE_ROUTE | NETWORK_PROBE | PROVED_CONNECTIVITY_ONLY |
+| shutdown | RDC_DESKTOP_COMMANDER | VENDOR_AGENT | VENDOR_ONLY |
+| get_config | MCP_VPS_NATIVE_HTTP | OWNER_CONFIG | NOT_EQUIVALENT |
+| set_config_value | MCP_VPS_NATIVE_HTTP | OWNER_CONFIG_WRITE | NOT_EQUIVALENT |
+| read_file | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE | TRANSPORT_PROVEN_ACTION_PENDING |
+| read_multiple_files | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILES | TRANSPORT_PROVEN_ACTION_PENDING |
+| write_file | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_WRITE | TRANSPORT_PROVEN_ACTION_PENDING |
+| write_pdf | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_ARTIFACT | RENDERER_AND_READBACK_REQUIRED |
+| create_directory | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_WRITE | TRANSPORT_PROVEN_ACTION_PENDING |
+| list_directory | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILES | TRANSPORT_PROVEN_ACTION_PENDING |
+| move_file | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_WRITE | TRANSPORT_PROVEN_ACTION_PENDING |
+| start_search | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_SEARCH | TRANSPORT_PROVEN_ACTION_PENDING |
+| get_more_search_results | MCP_VPS_NATIVE_HTTP | CURSOR_RESULTS | PENDING_CORRELATION |
+| stop_search | MCP_VPS_NATIVE_HTTP | JOB_CONTROL | PENDING_CORRELATION |
+| list_searches | MCP_VPS_NATIVE_HTTP | JOB_CATALOG | PENDING_CORRELATION |
+| get_file_info | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_METADATA | TRANSPORT_PROVEN_ACTION_PENDING |
+| edit_block | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_WRITE | DIFF_HASH_OWNER_GUARD_REQUIRED |
+| start_process | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_SHELL | PROVED_SSH_EXEC_EXIT_ZERO |
+| read_process_output | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_SHELL_OUTPUT | SINGLE_COMMAND_OUTPUT_ONLY |
+| interact_with_process | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_TTY | TTY_RECEIPT_PENDING |
+| force_terminate | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_PROCESS_KILL | GUARDED_DESTRUCTIVE_UNTESTED |
+| list_sessions | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_SESSION_LIST | TRANSPORT_PROVEN_ACTION_PENDING |
+| list_processes | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_PROCESS_LIST | TRANSPORT_PROVEN_ACTION_PENDING |
+| kill_process | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_PROCESS_KILL | GUARDED_DESTRUCTIVE_UNTESTED |
+| get_usage_stats | MCP_VPS_NATIVE_HTTP | LOCAL_MCP_TELEMETRY | VENDOR_STATS_NOT_MIRRORED |
+| get_recent_tool_calls | MCP_VPS_NATIVE_HTTP | LOCAL_MCP_TELEMETRY | PARTIAL_INSTRUMENTED_ONLY |
+| give_feedback_to_desktop_commander | RDC_DESKTOP_COMMANDER | VENDOR_FEEDBACK | VENDOR_ONLY |
+
+Inventario atual: **31/31 ferramentas de origem mapeadas**, 14 rotas de fonte e 4 novas
+capacidades registradas alem do ZENDRIVE_PID atualizado. O numero de tools do MCP
+nao cresce com estes itens: equivalencia e metadado do catalogo existente, nao endpoint de execucao.
+
+Para qualquer capacidade marcada como VPS, o sentido inverso VPS → Casa continua nao provado.
+Desligar, terminar processo, alterar configuracao, escrever arquivos e executar alteracoes requerem
+gates de autorizacao, idempotencia, dono, backup/rollback quando aplicavel e recibo no destino.
+Erro de autenticacao ou UI equivale a escopo UNKNOWN/BLOCKED, nao a permissao para burlar controle.

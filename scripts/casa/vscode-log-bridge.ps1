@@ -7,9 +7,50 @@ param(
   [string]$TailscaleIP = "100.90.199.124",
   [ValidateRange(1024,262144)][int]$MaxBytes = 65536,
   [switch]$DryRun,
-  [switch]$InstallTask
+  [switch]$InstallTask,
+  [switch]$Bootstrap
 )
 $ErrorActionPreference = "Stop"
+# A unica origem Casa e a raiz Git K:\; E:\CentralDark e C:\CentralDark sao legados.
+# O perfil Windows (e seu cache ms-playwright) permanece independente da raiz Git.
+$repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..')).TrimEnd('\')
+if ($env:OS -eq 'Windows_NT' -and $repoRoot -ine 'K:') {
+  Write-Error 'CASA_ROOT=BLOCKED_LEGACY_OR_NONCANONICAL_PATH; EXPECTED=K:\'
+  exit 20
+}
+# On-demand, four-stage bootstrap of the SAME existing scheduled collector.
+# PowerShell script has no compiled binary: BUILD validates parsing + Git owner.
+if ($Bootstrap) {
+  $tokens = $null; $parseErrors = $null
+  [void][System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$tokens, [ref]$parseErrors)
+  if ($parseErrors.Count -gt 0) { Write-Output 'BUILD=FAIL_POWERSHELL_SYNTAX'; exit 25 }
+  $gitRoot = ((& git -C $repoRoot rev-parse --show-toplevel 2>$null) -join '').TrimEnd('\','/')
+  $gitOrigin = ((& git -C $repoRoot remote get-url origin 2>$null) -join '')
+  if ($gitRoot -ine 'K:' -or $gitOrigin -notmatch 'github\.com[:/]ServerVpss/CentralDark(\.git)?$') {
+    Write-Output 'BUILD=BLOCKED_NONCANONICAL_GIT_OWNER'; exit 26
+  }
+  Write-Output 'BUILD=PASS_SOURCE_PARSE_AND_GIT_ROOT_K'
+  $installReply = @(& $PSCommandPath -InstallTask)
+  $installed = Get-ScheduledTask -TaskName 'CentralDark-VSCode-LogBridge' -ErrorAction SilentlyContinue
+  if (($installReply -join ' ') -notmatch 'TASK_INSTALLED=' -or !$installed -or
+      ($installed.Actions.Arguments -join ' ') -notmatch 'vscode-log-bridge-hidden\.vbs') {
+    Write-Output 'INSTALL=FAIL_TASK_NOT_CONFIRMED'; exit 27
+  }
+  Write-Output 'INSTALL=PASS_EXISTING_SCHEDULED_TASK'
+  $resultLines = @(& pwsh -NoProfile -NonInteractive -File $PSCommandPath 2>&1)
+  $code = $LASTEXITCODE
+  if ($code -ne 0) { Write-Output 'CONNECT=BLOCKED_NO_AUTHORIZED_RECEIPT'; exit 28 }
+  try { $proof = ($resultLines | Select-Object -Last 1 | ConvertFrom-Json -ErrorAction Stop) }
+  catch { Write-Output 'PROVE=FAIL_RECEIPT_UNREADABLE'; exit 29 }
+  if ($proof.ok -ne $true -or !$proof.playwright -or $proof.playwright.revision -eq 'BLOCKED') {
+    Write-Output 'PROVE=FAIL_BROWSER_SENSOR_RECEIPT'; exit 30
+  }
+  Write-Output ('CONNECT=PASS_' + $proof.route)
+  Write-Output ('PROVE=PASS_COLLECTOR_METADATA_' + $proof.playwright.cache_state)
+  Write-Output 'BROWSER_AUTOMATION_E2E=UNPROVEN'
+  Write-Output 'FIXED_POINT=COLLECTOR_ONLY'
+  return
+}
 if ($InstallTask) {
   # A janela antiga piscava porque pwsh.exe era executado em sessao Interactive.
   # wscript.exe chama o mesmo coletor com janela oculta e devolve o exit code.
@@ -80,10 +121,41 @@ if ($size -gt 0) {
     }
   }
 }
+# Same Casa writer, same SSH receipt. Browser cache is only an installed-file signal.
+# No credentials, profile files, command line, or absolute user path leave Windows.
+function Get-PlaywrightProbe {
+  $unknown = @{ cache_state='UNKNOWN'; revision=$null; runtime_state='UNPROVEN'; process_count=0 }
+  $localAppData = [Environment]::GetFolderPath('LocalApplicationData')
+  if ([string]::IsNullOrWhiteSpace($localAppData)) { return $unknown }
+  $cache = Join-Path $localAppData 'ms-playwright'
+  if (!(Test-Path -LiteralPath $cache -PathType Container)) {
+    return @{ cache_state='ABSENT'; revision=$null; runtime_state='NOT_RUNNING'; process_count=0 }
+  }
+  $revisions = @(Get-ChildItem -LiteralPath $cache -Directory -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -match '^chromium(_headless_shell)?-([0-9]+)$' } |
+    ForEach-Object { [int]($_.Name -replace '^chromium(_headless_shell)?-', '') } | Sort-Object -Descending -Unique)
+  foreach ($revision in $revisions) {
+    $headed = Join-Path $cache ("chromium-{0}\chrome-win64\chrome.exe" -f $revision)
+    $headless = Join-Path $cache ("chromium_headless_shell-{0}\chrome-headless-shell-win64\chrome-headless-shell.exe" -f $revision)
+    if ((Test-Path -LiteralPath $headed -PathType Leaf) -or (Test-Path -LiteralPath $headless -PathType Leaf)) {
+      $n = 0
+      try {
+        $n = @(Get-CimInstance Win32_Process -Filter "Name='chrome-headless-shell.exe' OR Name='chrome.exe'" -ErrorAction Stop |
+          Where-Object { $_.ExecutablePath -and (
+            [string]::Equals($_.ExecutablePath, $headless, [StringComparison]::OrdinalIgnoreCase) -or
+            [string]::Equals($_.ExecutablePath, $headed, [StringComparison]::OrdinalIgnoreCase)) }).Count
+      } catch { return @{ cache_state='FILES_PRESENT'; revision=[string]$revision; runtime_state='UNKNOWN'; process_count=0 } }
+      return @{ cache_state='FILES_PRESENT'; revision=[string]$revision; runtime_state=$(if($n -gt 0){'PROCESS_OBSERVED'}else{'NOT_RUNNING'}); process_count=[Math]::Min($n,100) }
+    }
+  }
+  return @{ cache_state='INCOMPLETE'; revision=$null; runtime_state='UNPROVEN'; process_count=0 }
+}
+
 $batch = @{
   source = "LOGS-VS-CODE.log"; epoch = $epoch; from_offset = [long]$offset
   to_offset = [long]$next; source_last_write_utc = $info.LastWriteTimeUtc.ToString("o")
   signals = @($signals)
+  playwright = Get-PlaywrightProbe
 }
 if ($DryRun) {
   Write-Output ("DRY_RUN source=LOGS-VS-CODE.log signals={0} offset={1}->{2} bytes={3}" -f $signals.Count, $offset, $next, $info.Length)
@@ -104,7 +176,12 @@ foreach ($route in $routes) {
     $reply = $json | & ssh @sshArgs 2>$null
     if ($LASTEXITCODE -ne 0) { continue }
     $parsed = ($reply | Select-Object -Last 1 | ConvertFrom-Json -ErrorAction Stop)
-    if ($parsed.ok -eq $true -and [long]$parsed.offset -eq $next) {
+    if ($parsed.ok -eq $true -and [long]$parsed.offset -eq $next -and
+        $null -ne $parsed.playwright -and
+        $parsed.playwright.cache_state -eq $batch.playwright.cache_state -and
+        [string]$parsed.playwright.revision -eq [string]$batch.playwright.revision -and
+        $parsed.playwright.runtime_state -eq $batch.playwright.runtime_state -and
+        [int]$parsed.playwright.process_count -eq [int]$batch.playwright.process_count) {
       $receipt = $parsed
       break
     }
