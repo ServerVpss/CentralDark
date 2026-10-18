@@ -266,6 +266,14 @@ NO_PARALLEL_MAGIC_SPACE=true
 
 **Cristal reutilizável:** `INTENT → SECTOR → OWNER → WOUND_ID → FINGERPRINT → SIGNAL → CAUSE → SAFE_DELTA → BACKOUT → EFFECT → COUNTERPROOF → RECEIPT → NEXT_CURSOR`. Guardar no owner/ledger existente; HUD é projeção, não fonte da cura. Benefício, reparo e saúde global são claims distintos e exigem provas distintas.
 
+<!-- ONE_HOUSE_AUREOLA_20261017_SKILL -->
+## 🪡 WEAKEST_MATERIAL_LINK_FIRST — sub-rotina da mesma skill
+
+Só quando houver evolução material: 1) GOAL e critérios; 2) CURRENT com SHA/host/alvo; 3) separar falha de sensor, execução e método, e selecionar elo por impacto; 4) reutilizar Gênesis/anti-receita/padrões; 5) hipótese falsificável e teste discriminante com uma variável quando possível; 6) menor delta no owner com Writer único e último verde protegido; 7) BUILD → INSTALL → CONNECT → PROVE, backcheck e teste negativo; 8) registrar ganho, refutação ou bloqueio no mesmo receipt e identificar NEXT_CURSOR. Sem informação nova, STOP_BLIND_RETRY; sem efeito provado, DOCUMENTED_ONLY/UNKNOWN, jamais Michelin ⭐⭐⭐.
+
+Preservar fornecedores e seus motores: Claude, GPT/Codex e DeepSeek continuam com pesos, sessão, autenticação e execução originais; não extrair Chromium do produto, copiar cookies ou contornar proteções. A CentralDark expõe seletor e usa transportes autorizados. Ver alfabeto completo em RULES.md e régua Michelin já existente em AGENTS.md; não criar skill, monitor, Gênesis ou executor extra. Commit de documentação não prova consumo por Hermes.
+<!-- /ONE_HOUSE_AUREOLA_20261017_SKILL -->
+
 ## 🔏 Lei do Rastro
 
 ```text

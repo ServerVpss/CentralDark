@@ -1,4 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { existsSync, readFileSync } from "node:fs";
 import { z } from "zod";
 import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "./cloudflare-openapi-catalog.js";
@@ -502,11 +504,29 @@ function loadSecretFromFiles(envKeys, files) {
   return "";
 }
 
+// A fonte canonica do Tailscale e o vault da VPS. Um env antigo no processo
+// nao pode sobrepor silenciosamente a credencial atual desse arquivo.
+function chooseTailscaleKey({ vault = {}, mcp = {}, env = {} } = {}) {
+  for (const source of [vault, mcp, env]) {
+    for (const key of ["TAILSCALE_API_KEY", "TS_API_KEY"]) {
+      const value = source[key];
+      if (typeof value === "string" && value.trim()) return value.trim();
+    }
+  }
+  return "";
+}
+
 function loadTailscaleKey() {
-  return loadSecretFromFiles(
-    ["TAILSCALE_API_KEY", "TS_API_KEY"],
-    ["/root/CentralDark/secrets/tailscale.env", "/root/CentralDark/apps/modulos/mcp/.env"],
-  );
+  return chooseTailscaleKey({
+    vault: parseEnvFile("/root/CentralDark/secrets/tailscale.env"),
+    mcp: parseEnvFile("/root/CentralDark/apps/modulos/mcp/.env"),
+    env: process.env,
+  });
+}
+
+function tailscaleKeyKind(token) {
+  if (/^tskey-(auth|client|webhook|scim)-/i.test(token)) return "NOT_API_ACCESS_TOKEN";
+  return /^tskey-api-/i.test(token) ? "API_ACCESS_TOKEN" : "UNKNOWN_FORMAT";
 }
 
 function loadBuildkiteToken() {
@@ -528,6 +548,10 @@ async function providerHeaders(provider, requestId = randomUUID()) {
   if (provider === "tailscale") {
     const token = loadTailscaleKey();
     if (!token) throw new Error("TAILSCALE_CREDENTIALS_MISSING");
+    if (tailscaleKeyKind(token) === "NOT_API_ACCESS_TOKEN") {
+      throw new Error("TAILSCALE_WRONG_CREDENTIAL_KIND");
+    }
+    // Bearer e suportado oficialmente para API access tokens (tskey-api-*).
     return { Authorization: `Bearer ${token}`, Accept: "application/json" };
   }
   if (provider === "buildkite") {
@@ -687,35 +711,81 @@ export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limi
   };
 }
 
-async function readTailscaleBridgeStatus() {
-  const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
-    headers: { accept: "application/json" },
-    signal: AbortSignal.timeout(7_000),
-  });
-  const text = await response.text();
-  let parsed;
-  try { parsed = text ? JSON.parse(text) : null; } catch { parsed = { text: text.slice(0, 2_000) }; }
-  const data = deepRedact(parsed);
-  if (!response.ok) {
+const execFileAsync = promisify(execFile);
+
+// Reduce o resultado da CLI local a métricas agregadas: não expor peers,
+// endereços, usuário, hostnames, autenticação nem payload JSON inteiro.
+function summarizeLocalTailnet(payload) {
+  const self = payload?.Self && typeof payload.Self === "object" ? payload.Self : {};
+  const peers = payload?.Peer && typeof payload.Peer === "object"
+    ? Object.values(payload.Peer).filter(item => item && typeof item === "object")
+    : [];
+  return {
+    selfOnline: self.Online === true,
+    peerCount: peers.length,
+    onlinePeers: peers.filter(item => item.Online === true).length,
+    privateIpAssigned: Array.isArray(self.TailscaleIPs) && self.TailscaleIPs.length > 0,
+  };
+}
+
+async function localTailnetFallback() {
+  try {
+    const { stdout } = await execFileAsync("tailscale", ["status", "--json"], {
+      timeout: 5500,
+      maxBuffer: 1024 * 1024,
+      windowsHide: true,
+    });
     return {
-      ok: false,
-      status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+      source: "tailscale-cli:status-json",
+      observed: true,
+      ...summarizeLocalTailnet(JSON.parse(stdout)),
+    };
+  } catch {
+    return { source: "tailscale-cli:status-json", observed: false };
+  }
+}
+
+async function readTailscaleBridgeStatus() {
+  try {
+    const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
+      headers: { accept: "application/json" },
+      signal: AbortSignal.timeout(7_000),
+    });
+    const text = await response.text();
+    let parsed;
+    try { parsed = text ? JSON.parse(text) : null; } catch { parsed = { text: text.slice(0, 2_000) }; }
+    const data = deepRedact(parsed);
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+        provider: "tailscale",
+        capability: "bridge.status",
+        httpStatus: response.status,
+        source: "oauth-broker:/api/tailscale/status",
+        data,
+        localFallback: await localTailnetFallback(),
+      };
+    }
+    return {
+      ok: true,
+      status: "PASS",
       provider: "tailscale",
       capability: "bridge.status",
       httpStatus: response.status,
       source: "oauth-broker:/api/tailscale/status",
       data,
     };
+  } catch {
+    return {
+      ok: false,
+      status: "TAILSCALE_OAUTH_BROKER_UNREACHABLE",
+      provider: "tailscale",
+      capability: "bridge.status",
+      source: "oauth-broker:/api/tailscale/status",
+      localFallback: await localTailnetFallback(),
+    };
   }
-  return {
-    ok: true,
-    status: "PASS",
-    provider: "tailscale",
-    capability: "bridge.status",
-    httpStatus: response.status,
-    source: "oauth-broker:/api/tailscale/status",
-    data,
-  };
 }
 
 function operationFingerprint(input) {
@@ -1110,4 +1180,7 @@ export const __test = Object.freeze({
   operationFingerprint,
   actorFingerprint,
   sanitizeError,
+  summarizeLocalTailnet,
+  chooseTailscaleKey,
+  tailscaleKeyKind,
 });

@@ -357,9 +357,10 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           {([
             ["🐙 GitHub / main", estado?.github, estado?.mainSha?.slice(0, 12), "Referência do HEAD medido; CI do mesmo HEAD ainda exige prova."],
             ["🖥️ VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12), "Deploy e alinhamento com main exigem readback próprio."],
-            ["🔌 API CentralDark", estado?.apiHealth, estado?.apiHealthHttp, "Saúde da rota não equivale à saúde de todo o sistema."],
+            ["🔌 API CentralDark", estado?.apiHealth, estado?.apiHealthFonte ?? "Host de origem não medido", "HTTP /health atesta somente essa rota, não integração completa."],
             ["🏠 Site local", estado?.casaSite, estado?.casaSiteHttp, "Disponibilidade HTTP não comprova o deploy visual."],
-            ["👁️ Screenpipe Casa", estado?.screenpipe, estado?.screenpipeHttp, "Sensor de observação; não tem autoridade de escrita."],
+            ["👁️ Screenpipe Casa", estado?.screenpipe, estado?.screenpipeFonte ?? "Sem medida da Casa", "Estado só pode vir do host Windows Casa; conector remoto ≠ serviço."],
+            ["👁️ Screenpipe VPS", estado?.screenpipeVps, estado?.screenpipeVpsFonte ?? "Sem medida da VPS", "A porta 3030 da VPS pode ser o Graph Panel; exige assinatura Screenpipe."],
             ["🧾 Receipts", estado?.receipts, estado?.receiptsHttp, "Endpoint acessível não comprova receipt por artefato."],
           ] as const).map(([nome, situacao, detalhe, limite]) => (
             <div key={nome} className="min-w-0 rounded-lg border border-border bg-muted/20 p-4">
@@ -427,8 +428,10 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             ["GitHub main", estado?.github, estado?.mainSha?.slice(0, 12)],
             ["API CentralDark", estado?.apiHealth, estado?.apiHealthHttp],
             ["VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12)],
-            ["Screenpipe Casa", estado?.screenpipe, estado?.screenpipeHttp],
-            ["Desktop Commander Casa", estado?.desktop, "Conector remoto · não é o Hermes Desktop"],
+            ["Screenpipe Casa", estado?.screenpipe, estado?.screenpipeFonte ?? "Sem prova na Casa"],
+            ["Screenpipe VPS", estado?.screenpipeVps, estado?.screenpipeVpsFonte ?? "Sem prova na VPS"],
+            ["Desktop Commander Casa", estado?.desktop, estado?.desktopFonte ?? "Conector remoto não medido"],
+            ["Desktop Commander VPS", estado?.desktopVps, estado?.desktopVpsFonte ?? "Conector remoto não medido"],
             ["Hermes Desktop", "UNKNOWN", "Sem sensor Hermes nesta consulta; fechado por escolha = NOT_REQUIRED"],
             ["Receipts", estado?.receipts, estado?.receiptsHttp],
           ] as const).map(([nome, resultado, detalhe]) => (
