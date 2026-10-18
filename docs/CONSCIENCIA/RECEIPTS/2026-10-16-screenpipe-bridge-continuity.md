@@ -30,3 +30,19 @@ Fonte `scripts/casa/screenpipe-continuity.ps1`: modo `Status` (somente leitura),
 ## Estado
 
 `CODE_READY_FOR_REVIEW`; `LOCAL_PERSISTENCE=UNKNOWN`; `BROWSER_WS_LIVE=UNKNOWN`; `CAPTURE_STATE=UNKNOWN`; `REMOTE_TOOL_QUOTA=BLOCKED`. Não promover PASS integral até prova no PC.
+
+
+## 17/10/2026 — atribuição correta de saúde no cockpit
+
+**Incidente:** `/sala-controle` exibia `Screenpipe Casa` usando `GET http://127.0.0.1:3030/health` iniciado pelo processo server-side de `apps/instinto-superior`. Em deploy na VPS, `127.0.0.1` é a própria VPS, **não** a Casa. Há documentação do Graph Panel ocupando a mesma porta na VPS; HTTP 200 sem assinatura específica não identifica Screenpipe.
+
+**Delta mínimo no owner existente (sem segundo coletor/painel):**
+- `apps/instinto-superior/src/lib/cockpit.functions.ts` determina origem do loopback por hostname declarado/provado (`SEGREDO`/Windows, `CENTRALDARK-OS`/Linux, ou `CENTRALDARK_COCKPIT_HOST_ROLE` coerente com plataforma). Quando origem não é atribuível, **não executa** a sonda; devolve `UNKNOWN`.
+- `screenpipe` permanece campo compatível de **Casa somente**, `screenpipeVps` passa a campo independente. A assinatura `dependencies.ffmpeg` + `status=healthy` é obrigatória para PASS, impedindo Graph Panel ou HTTP 200 genérico de virar Screenpipe verde.
+- `apiHealthFonte` mostra host de origem e URL de destino; `apiHealthServico`, `apiHealthMedidoEm`, `apiHealthHttp` distinguem serviço declarado, horário da consulta e HTTP. Um 200 confirma apenas a rota `/health`, não a integração.
+- `Desktop Commander Casa` e `Desktop Commander VPS` aparecem separados com `UNKNOWN` sem adapter próprio. Conector `Online`, dispositivo `Offline` ou cota mensal bloqueada **não transferem estado** ao Screenpipe nem provam VPS parada.
+- UI reaproveitada: `ObservabilidadeCentralDark.tsx` e `HudDeterministico.tsx`; regressão adicionada em `apps/instinto-superior/scripts/verify-hud-zone.mjs`.
+
+**Commits source:** `80272a6` (separação inicial), `823c1f5` (cards), `c91954c` (HUD), `b11cb59` (identificação estrita da origem), `3749949` (regressão).
+
+**Contraprova disponível nesta rodada:** leitura canônica pós-write dos quatro arquivos e conferência estrutural de owner, estados, fontes e testes = `STATIC_CONTRACT_CHECK=PASS`. **Não comprovado:** execução do teste `node --test` em runtime com dependências, build, deploy do novo código, UI no domínio e medição atual real de `/health` nos dois hosts. Cota do Remote Desktop Commander, se confirmada pelo próprio conector, bloqueia apenas essa rota. Não concluir Screenpipe falho a partir da ausência de leitura. `CURRENT_RUNTIME_HEALTH=UNKNOWN`; `GITHUB_SOURCE_UPDATED != VPS_DEPLOYED`.

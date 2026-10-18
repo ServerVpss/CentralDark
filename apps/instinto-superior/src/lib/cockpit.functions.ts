@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { hostname } from "node:os";
 
 const GATEWAY = "https://connector-gateway.lovable.dev/github";
 const GITHUB_API = "https://api.github.com";
@@ -42,7 +43,9 @@ export type EstadoCentralDark = {
   omniModels: Estado;
   receipts: Estado;
   casaSite: Estado;
-  screenpipe: Estado;
+  screenpipe: Estado; // Alias legado: exclusivamente Screenpipe Casa.
+  screenpipeVps: Estado;
+  desktopVps: Estado;
   actions: Estado;
   actionsLinuxMinutes: number | null;
   actionsWindowsMinutes: number | null;
@@ -73,6 +76,16 @@ export type EstadoCentralDark = {
   screenpipeDetail: string | null;
   screenpipeFonte: string;
   screenpipeEvents: string[];
+  screenpipeVpsHttp: number | null;
+  screenpipeVpsDetail: string | null;
+  screenpipeVpsFonte: string;
+  screenpipeVpsEvents: string[];
+  screenpipeCasaMedidoEm: string | null;
+  screenpipeVpsMedidoEm: string | null;
+  apiHealthFonte: string;
+  apiHealthServico: string;
+  apiHealthMedidoEm: string | null;
+  desktopVpsFonte: string;
   actionsFonte: string;
   actionsErro: string | null;
   gmailFonte: string;
@@ -404,9 +417,28 @@ async function medirDelta(vpsSha: string | null, mainSha: string | null) {
   }
 }
 
+// O loopback pertence SEMPRE ao processo que executa esta função server-side.
+// Não projetar saúde de um host remoto como saúde da Casa.
+type HostScreenpipe = "CASA" | "VPS" | "UNKNOWN";
+function origemLocalScreenpipe(): HostScreenpipe {
+  const origemDeclarada = process.env["CENTRALDARK_COCKPIT_HOST_ROLE"]?.toUpperCase();
+  if (origemDeclarada === "CASA" && process.platform === "win32") return "CASA";
+  if (origemDeclarada === "VPS" && process.platform !== "win32") return "VPS";
+  const host = hostname().toUpperCase();
+  if (process.platform === "win32" && (host === "SEGREDO" || host === "WINDOWS-CASA")) return "CASA";
+  return process.platform !== "win32" && host === "CENTRALDARK-OS" ? "VPS" : "UNKNOWN";
+}
+
+const SONDA_NAO_EXECUTADA: Probe = {
+  estado: "UNKNOWN", httpStatus: null, erro: "SEM_MEDICAO_NESTE_HOST", dados: null,
+};
+
 // Único owner do HUD vivo: agrega GitHub + API CentralDark e nunca promove ausência de prova.
 export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
+    const hostScreenpipe = origemLocalScreenpipe();
+    const origemHttp = apiBase();
+    const consultaEm = new Date().toISOString();
     const [
       github,
       liveFabric,
@@ -418,6 +450,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       receipts,
       casaSite,
       screenpipe,
+      screenpipeRemotoCasa,
       actions,
     ] = await Promise.all([
       medirGithub(),
@@ -429,10 +462,29 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:4175/", true),
-      medirReachable("http://127.0.0.1:3030/health"),
+      hostScreenpipe !== "UNKNOWN"
+        ? medirReachable("http://127.0.0.1:3030/health")
+        : Promise.resolve(SONDA_NAO_EXECUTADA),
+      hostScreenpipe === "VPS"
+        ? medirReachable(`http://${process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25"}:3030/health`)
+        : Promise.resolve(SONDA_NAO_EXECUTADA),
       medirActions(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
+    const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
+    const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
+    const screenpipeCasaFonte = hostScreenpipe === "CASA"
+      ? "Casa Windows · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória"
+      : hostScreenpipe === "VPS"
+        ? "Casa Windows · Tailscale privado · porta 3030/health · medição remota com assinatura"
+        : "Casa Windows · sem adapter/medição remota neste servidor";
+    const screenpipeVpsFonte = hostScreenpipe === "VPS"
+      ? "VPS CENTRALDARK-OS · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória (porta pode ser Graph Panel)"
+      : "VPS CENTRALDARK-OS · sem adapter/medição remota neste servidor";
+    // API 200 só atesta esta rota. O body pode identificar serviço, não integrações internas.
+    const apiServico = texto(apiHealth.dados?.["service"])
+      ?? texto(apiHealth.dados?.["name"])
+      ?? "Serviço não identificado pelo /health";
     const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
     const heartbeat: Probe =
       heartbeatSelf === "stale"
@@ -467,7 +519,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModels: omniModels.estado,
       receipts: receipts.estado,
       casaSite: casaSite.estado,
-      screenpipe: screenpipeMedido.estado,
+      screenpipe: screenpipeCasa.estado,
+      screenpipeVps: screenpipeVps.estado,
+      desktopVps: "UNKNOWN",
       actions: actions.estado,
       actionsLinuxMinutes: actions.linux,
       actionsWindowsMinutes: actions.windows,
@@ -494,14 +548,24 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
-      screenpipeHttp: screenpipeMedido.httpStatus,
-      screenpipeDetail: texto(screenpipeMedido.dados?.["status"]),
-      screenpipeFonte: process.platform === "win32" ? "host Windows deste servidor · 127.0.0.1:3030" : "host do servidor · 127.0.0.1:3030 (não é prova da Casa)",
-      screenpipeEvents: saidaScreenpipe(screenpipeMedido),
+      screenpipeHttp: screenpipeCasa.httpStatus,
+      screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
+      screenpipeFonte: screenpipeCasaFonte,
+      screenpipeEvents: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
+      screenpipeVpsHttp: screenpipeVps.httpStatus,
+      screenpipeVpsDetail: texto(screenpipeVps.dados?.["status"]),
+      screenpipeVpsFonte,
+      screenpipeVpsEvents: hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeVps) : ["NÃO MEDIDO · exige sensor na VPS"],
+      screenpipeCasaMedidoEm: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? consultaEm : null,
+      screenpipeVpsMedidoEm: hostScreenpipe === "VPS" ? consultaEm : null,
+      apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side`,
+      apiHealthServico: apiServico.slice(0, 100),
+      apiHealthMedidoEm: consultaEm,
+      desktopVpsFonte: "Remote Desktop Commander VPS · sensor externo não consultado neste servidor; offline do conector não prova VPS parada",
       actionsFonte: actions.fonte,
       actionsErro: actions.erro,
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
-      desktopFonte: "Remote Desktop Commander externo · status não inferido pelo app",
+      desktopFonte: "Remote Desktop Commander Casa · sensor externo não consultado pelo app; cota de ferramenta ≠ saúde da Casa",
     };
   },
 );
