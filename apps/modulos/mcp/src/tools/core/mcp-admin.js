@@ -118,6 +118,40 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "AIONUI_MCP_STDIO", transport: "MCP_STDIO", binding: "AionUi->CentralDark", capability: "MCP_CATALOG_AND_NATIVE_BINDINGS", source: "scripts/vps/aionui-native-integrate.py", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "CAS_CLOUD_RELAY", transport: "WEBSOCKET_RELAY", binding: "Casa<->CAS Cloud VPS", capability: "REMOTE_AGENT_ORCHESTRATION", source: "docs/ARQUITETURA/CENTRALDARK-CAS-CLOUD-VPS.md", runtimeState: "MEASURE_AT_RUNTIME" },
 ]);
+const RDC_EQUIVALENCE_MATRIX = Object.freeze([
+    {"tool":"list_devices","route":"TAILSCALE_PRIVATE_ROUTE","scope":"DEVICE_DISCOVERY","proof":"PROVED_TAILNET_ONLY"},
+    {"tool":"who_am_i","route":"RDC_DESKTOP_COMMANDER","scope":"PROVIDER_ACCOUNT","proof":"VENDOR_ONLY"},
+    {"tool":"get_tool_result","route":"MCP_VPS_NATIVE_HTTP","scope":"RECEIPT_READBACK","proof":"PENDING_CORRELATION"},
+    {"tool":"list_remote_tool_calls","route":"MCP_VPS_NATIVE_HTTP","scope":"AUDIT_LOGS","proof":"PARTIAL_MCP_ONLY"},
+    {"tool":"ping","route":"TAILSCALE_PRIVATE_ROUTE","scope":"NETWORK_PROBE","proof":"PROVED_CONNECTIVITY_ONLY"},
+    {"tool":"shutdown","route":"RDC_DESKTOP_COMMANDER","scope":"VENDOR_AGENT","proof":"VENDOR_ONLY"},
+    {"tool":"get_config","route":"MCP_VPS_NATIVE_HTTP","scope":"OWNER_CONFIG","proof":"NOT_EQUIVALENT"},
+    {"tool":"set_config_value","route":"MCP_VPS_NATIVE_HTTP","scope":"OWNER_CONFIG_WRITE","proof":"NOT_EQUIVALENT"},
+    {"tool":"read_file","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"read_multiple_files","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILES","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"write_file","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_WRITE","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"write_pdf","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_ARTIFACT","proof":"RENDERER_AND_READBACK_REQUIRED"},
+    {"tool":"create_directory","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_WRITE","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"list_directory","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILES","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"move_file","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_WRITE","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"start_search","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_SEARCH","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"get_more_search_results","route":"MCP_VPS_NATIVE_HTTP","scope":"CURSOR_RESULTS","proof":"PENDING_CORRELATION"},
+    {"tool":"stop_search","route":"MCP_VPS_NATIVE_HTTP","scope":"JOB_CONTROL","proof":"PENDING_CORRELATION"},
+    {"tool":"list_searches","route":"MCP_VPS_NATIVE_HTTP","scope":"JOB_CATALOG","proof":"PENDING_CORRELATION"},
+    {"tool":"get_file_info","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_METADATA","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"edit_block","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_WRITE","proof":"DIFF_HASH_OWNER_GUARD_REQUIRED"},
+    {"tool":"start_process","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_SHELL","proof":"PROVED_SSH_EXEC_EXIT_ZERO"},
+    {"tool":"read_process_output","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_SHELL_OUTPUT","proof":"SINGLE_COMMAND_OUTPUT_ONLY"},
+    {"tool":"interact_with_process","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_TTY","proof":"TTY_RECEIPT_PENDING"},
+    {"tool":"force_terminate","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_PROCESS_KILL","proof":"GUARDED_DESTRUCTIVE_UNTESTED"},
+    {"tool":"list_sessions","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_SESSION_LIST","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"list_processes","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_PROCESS_LIST","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"kill_process","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_PROCESS_KILL","proof":"GUARDED_DESTRUCTIVE_UNTESTED"},
+    {"tool":"get_usage_stats","route":"MCP_VPS_NATIVE_HTTP","scope":"LOCAL_MCP_TELEMETRY","proof":"VENDOR_STATS_NOT_MIRRORED"},
+    {"tool":"get_recent_tool_calls","route":"MCP_VPS_NATIVE_HTTP","scope":"LOCAL_MCP_TELEMETRY","proof":"PARTIAL_INSTRUMENTED_ONLY"},
+    {"tool":"give_feedback_to_desktop_commander","route":"RDC_DESKTOP_COMMANDER","scope":"VENDOR_FEEDBACK","proof":"VENDOR_ONLY"},
+]);
+// Matriz de possibilidades; nao executa tool remota nem declara paridade com a Casa.
 // Capacidades externas delegáveis do mesmo MCP. Descoberta não é autorização,
 // token importado, rota executável nem prova de disponibilidade da VPS.
 const DELEGATED_PROVIDER_CAPABILITIES = Object.freeze([
@@ -241,6 +275,9 @@ export const mcpAdminTools = [
                 .filter((route) => !filter ||
                     Object.values(route).some((value) => String(value || "").toLowerCase().includes(filter)))
                 .sort((a, b) => a.id.localeCompare(b.id));
+            const remoteEquivalences = RDC_EQUIVALENCE_MATRIX
+                .filter((cap) => !filter || Object.values(cap).some((value) => String(value || "").toLowerCase().includes(filter)))
+                .sort((a, b) => a.tool.localeCompare(b.tool));
             const providerCapabilities = DELEGATED_PROVIDER_CAPABILITIES
                 .filter((cap) => !filter || Object.values(cap).some((value) => String(value || "").toLowerCase().includes(filter)))
                 .sort((a, b) => a.label.localeCompare(b.label));
@@ -263,6 +300,10 @@ export const mcpAdminTools = [
                 providerCapabilities,
                 providerCapabilityCount: DELEGATED_PROVIDER_CAPABILITIES.length,
                 providerCapabilitiesReturned: providerCapabilities.length,
+                desktopCommanderEquivalenceCount: RDC_EQUIVALENCE_MATRIX.length,
+                desktopCommanderEquivalencesReturned: remoteEquivalences.length,
+                desktopCommanderEquivalences: remoteEquivalences,
+                desktopCommanderParity: "PARTIAL_ROUTE_CAPABILITIES_ONLY_NO_CASA_REVERSE_EXEC_PROOF",
                 providerBoundary: "CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED",
                 tools,
             });
