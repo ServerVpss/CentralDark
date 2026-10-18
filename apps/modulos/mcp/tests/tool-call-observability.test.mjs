@@ -181,3 +181,23 @@ test("Inventario ZENDRIVE 20261018 tem provas e limites no documento canonico", 
     "RDC_FALLBACK_PRESERVADO=true"
   ]) assert.ok(doc.includes(marker), "contraprova faltando: " + marker);
 });
+
+
+test("31 ferramentas RDC mapeadas no catalogo sem liberar execucao automatica", () => {
+  const src = fs.readFileSync(new URL("../src/tools/core/mcp-admin.js", import.meta.url), "utf8");
+  const segment = src.split("const RDC_EQUIVALENCE_MATRIX = Object.freeze([")[1]?.split("]);")[0];
+  assert.ok(segment, "matriz canônica ausente");
+  const names = [...segment.matchAll(/"tool":"([a-z_]+)"/g)].map(match => match[1]);
+  assert.equal(names.length, 31, "inventario completo da origem");
+  assert.equal(new Set(names).size, 31, "ferramentas duplicadas");
+  for (const n of ["start_process", "read_file", "kill_process", "list_devices", "get_tool_result", "get_recent_tool_calls", "write_pdf"]) {
+    assert.ok(names.includes(n), "ferramenta faltante: " + n);
+  }
+  assert.match(src, /desktopCommanderEquivalenceCount: RDC_EQUIVALENCE_MATRIX\.length/);
+  assert.match(src, /desktopCommanderEquivalences: remoteEquivalences/);
+  assert.match(src, /desktopCommanderParity: "PARTIAL_ROUTE_CAPABILITIES_ONLY_NO_CASA_REVERSE_EXEC_PROOF"/);
+  assert.match(segment, /"proof":"GUARDED_DESTRUCTIVE_UNTESTED"/);
+  const doc = fs.readFileSync(new URL("../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", import.meta.url), "utf8");
+  assert.ok(doc.includes("31 ferramentas do Desktop Commander: equivalência tipada"));
+  for (const name of names) assert.ok(doc.includes("| " + name + " |"), "linha da matriz ausente: " + name);
+});
