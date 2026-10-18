@@ -692,7 +692,7 @@ test("MCP PID ao vivo exige Supabase admin, heartbeat fresco e fail-closed", () 
   assert.ok(backend.includes("export const lerMcpRuntimeAoVivo = createServerFn"));
   assert.ok(backend.includes(".middleware([requireSupabaseAuth])"));
   assert.ok(backend.includes('.eq("role", "admin")'));
-  assert.ok(backend.includes('medirApi("/heartbeat")'));
+  assert.ok(backend.includes('medirReachable("http://127.0.0.1:9100/heartbeat")'));
   assert.ok(backend.includes('"centraldark.execution-topology.v1"'));
   assert.ok(backend.includes('"mcp-centraldark"'));
   assert.ok(backend.includes('idadeMs <= 30_000'));
