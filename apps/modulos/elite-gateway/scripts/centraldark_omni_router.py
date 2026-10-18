@@ -514,13 +514,20 @@ def zendrive_aliases() -> set[str]:
     return {item.strip().lower() for item in aliases if item.strip()}
 
 
+def zendrive_live_configured() -> bool:
+    """Inference must have an explicitly enabled worker; simulation is never a model."""
+    return env_bool("ZENDRIVE_PROVIDER_LIVE_ENABLED", False) and bool(
+        os.getenv("ZENDRIVE_WORKER_URL", "").strip()
+    )
+
+
 def zendrive_provider_health_payload() -> Dict[str, Any]:
     live_enabled = env_bool("ZENDRIVE_PROVIDER_LIVE_ENABLED", False)
     simulation_enabled = env_bool("ZENDRIVE_PROVIDER_SIMULATION_ENABLED", True)
     worker_url_present = bool(os.getenv("ZENDRIVE_WORKER_URL", "").strip())
     review_file_present = bool(os.getenv("ZENDRIVE_REVIEW_FILE", "").strip())
     local_profile_allowed = env_bool("ZENDRIVE_ALLOW_LOCAL_PROFILE", True)
-    ok = simulation_enabled or (live_enabled and worker_url_present)
+    ok = zendrive_live_configured()
     return {
         "schema": "centraldark.zendrive-provider-health.v1",
         "ok": ok,
@@ -574,7 +581,7 @@ def _zendrive_simulation_payload(messages: List[ChatMessage], requested_model: s
 
 
 def run_zendrive_provider(messages: List[ChatMessage], target_model: str) -> Tuple[str, str]:
-    if env_bool("ZENDRIVE_PROVIDER_LIVE_ENABLED", False):
+    if zendrive_live_configured():
         worker_url = os.getenv("ZENDRIVE_WORKER_URL", "").strip()
         if not worker_url:
             raise HTTPException(status_code=503, detail="zendrive_worker_url_not_configured")
@@ -603,10 +610,8 @@ def run_zendrive_provider(messages: List[ChatMessage], target_model: str) -> Tup
             raise HTTPException(status_code=502, detail="zendrive_worker_empty_output")
         return text, target_model or ZENDRIVE_MODEL_ALIAS
 
-    if not env_bool("ZENDRIVE_PROVIDER_SIMULATION_ENABLED", True):
-        raise HTTPException(status_code=503, detail="zendrive_provider_not_enabled")
-    simulated = _zendrive_simulation_payload(messages, target_model or ZENDRIVE_MODEL_ALIAS)
-    return simulated["response_text"], ZENDRIVE_MODEL_ALIAS
+    # /simulate is still available for explicit tests, but NEVER for real inference.
+    raise HTTPException(status_code=503, detail="zendrive_inference_live_worker_not_configured")
 
 def route_model(model: str) -> Tuple[str, str]:
     raw = (model or "auto").strip()
@@ -756,10 +761,7 @@ def provider_configured(provider: str) -> bool:
     if provider == "abacus":
         return bool(os.getenv("ABACUS_API_KEY", "").strip())
     if provider == ZENDRIVE_MODEL_ALIAS:
-        return env_bool("ZENDRIVE_PROVIDER_SIMULATION_ENABLED", True) or (
-            env_bool("ZENDRIVE_PROVIDER_LIVE_ENABLED", False)
-            and bool(os.getenv("ZENDRIVE_WORKER_URL", "").strip())
-        )
+        return zendrive_live_configured()
     return False
 
 
@@ -892,6 +894,9 @@ def _reorder_hermes_by_health(
 def candidate_routes(model: str) -> List[Tuple[str, str]]:
     primary_provider, primary_target = route_model(model)
     candidates: List[Tuple[str, str]] = [(primary_provider, primary_target)]
+    # Explicitly selected Zendrive must never silently answer through another engine.
+    if primary_provider == ZENDRIVE_MODEL_ALIAS and (model or "").strip().lower() != "auto":
+        return candidates
     if not env_bool("CENTRALDARK_AUTO_FALLBACK", True):
         return candidates
     chain = split_csv(os.getenv("CENTRALDARK_FALLBACK_CHAIN", DEFAULT_FALLBACK_CHAIN))
@@ -1621,6 +1626,8 @@ def self_test() -> int:
         "route_abacus": route_model("abacus/model-x") == ("abacus", "model-x"),
         "route_nous": route_model("nous/tencent/hy3:free") == ("nous", "tencent/hy3:free"),
         "route_zendrive_alias": route_model(ZENDRIVE_MODEL_ALIAS) == (ZENDRIVE_MODEL_ALIAS, ""),
+        "zendrive_selected_no_fallback": candidate_routes("zendrive") == [(ZENDRIVE_MODEL_ALIAS, "")],
+        "zendrive_inference_requires_live_worker": provider_configured(ZENDRIVE_MODEL_ALIAS) == zendrive_live_configured(),
         "responses_input": "oi" in flatten_messages(responses_messages(response_request)),
         "fallback_event": event["context"].get("fallback_used") is True and event["context"].get("attempt") == 2,
         "action_not_proof": event["context"].get("action_is_proof") is False,
