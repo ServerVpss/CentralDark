@@ -37,6 +37,22 @@ def location(mission):
     if root.is_symlink():
         stop("STATE_ROOT_SYMLINK")
     root.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if mission == "latest":
+        candidates = []
+        for item in root.iterdir():
+            if not item.is_dir() or item.is_symlink() or not VALID_NAME.fullmatch(item.name):
+                continue
+            pointer = item / "current.json"
+            if pointer.is_file() and not pointer.is_symlink():
+                try:
+                    record = json.loads(pointer.read_text(encoding="utf-8"))
+                    if record.get("outcome") == "VERIFIED" and record.get("mission") == item.name:
+                        candidates.append((str(record.get("at", "")), item.name))
+                except (ValueError, OSError):
+                    continue
+        if not candidates:
+            stop("NO_VERIFIED_CHECKPOINT", 4)
+        mission = max(candidates)[1]
     folder = root / mission
     if folder.is_symlink():
         stop("MISSION_SYMLINK")
@@ -204,6 +220,8 @@ def main():
         if name == "resume":
             p.add_argument("--format", choices=("prompt", "json"), default="prompt")
     args = cli.parse_args()
+    if args.mission == "latest" and args.action in ("run", "plan"):
+        stop("LATEST_IS_READ_ONLY_USE_NAMED_MISSION")
     folder = location(args.mission)
     with one_writer(folder):
         if args.action == "run":
@@ -228,6 +246,7 @@ def main():
             if current and current.get("plan_sha256") != plan_hash:
                 stop("PLAN_CHANGED_USE_NEW_MISSION_OR_RECONCILE", 3)
             start = current["step_index"] + 1 if current else 0
+            atomic(folder / "active-plan.json", obj)
             if start > len(steps):
                 stop("PLAN_CURSOR_OUT_OF_RANGE", 3)
             for idx in range(start, len(steps)):
@@ -249,7 +268,7 @@ def main():
                 print(json.dumps({"ok": True, "status": "HASH_CHAIN_PASS", "events": count,
                                   "current_sha256": (current or {}).get("sha256")}, ensure_ascii=False))
             elif args.action == "status":
-                print(json.dumps({"ok": True, "mission": args.mission, "verified": passed,
+                print(json.dumps({"ok": True, "mission": folder.name, "verified": passed,
                                   "events": count, "last_step": (current or {}).get("step"),
                                   "next_cursor": (current or {}).get("next_cursor"),
                                   "last_failure": (failed or {}).get("step"),
@@ -262,7 +281,7 @@ def main():
                     print(json.dumps(current, ensure_ascii=False, indent=2))
                 else:
                     print("INTENCAO=" + current.get("intent", ""))
-                    print("MISSAO=" + args.mission)
+                    print("MISSAO=" + folder.name)
                     print("ULTIMO_PASS=" + current["step"])
                     print("NEXT_CURSOR=" + current["next_cursor"])
                     print("PROVA_SHA256=" + current["sha256"])
