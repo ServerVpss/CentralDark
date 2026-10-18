@@ -385,4 +385,20 @@ NEXT_CURSOR=HERMES_CONSUMER_HEALTH_AND_ONE_AUTHORIZED_MISSION_E2E
 \`\`\`
 
 **Estado inicial desta receita:** \`RECIPE_DOCUMENTED\`; consumo Hermes no runtime, transição de missão e E2E permanecem \`UNKNOWN\` até a observação correspondente. O custo de repetir T0 deve ser zero enquanto a identidade causal permanecer igual.
+
+### T1 — 2026-10-18 · Causa discriminada do bloqueio de promoção (não é falha da receita T0)
+
+- **Readback de segurança:** o owner \`apps/modulos/mcp/manifesto-destrutivas.json\` contém 12 ferramentas em \`destrutivasAprovadas\` e 8 em \`destrutivasEmRevisao\`. \`centraldark_deploy_micro_fallback\` e \`centraldark_deploy_apply_learning\` estão especificamente **em revisão**, não aprovadas; não promover essas tools por contagem e não contornar por executor alternativo.
+- **Guard real:** \`apps/modulos/mcp/src/lib/admin-guard.js\` aplica \`DESTRUTIVA_EM_QUARENTENA\` por tool desconhecida/não aprovada e exige confirmação admin no caminho canônico; \`apps/modulos/mcp/src/tools/core/mcp-admin.js\` define \`revisar_manifesto_em_pr\` como cursor do bloqueio.
+- **Tentativa:** microdeploy Hermes em \`dry_run=true\` negado antes de executar: \`DESTRUTIVA_EM_QUARENTENA\`, 12 esperadas/20 observadas. A autorização de trabalho comum não é aprovação independente de capacidade destrutiva em revisão. Nenhuma cópia, restart, limpeza ou missão ocorreu.
+- **Registro:** \`docs/CONSCIENCIA/APRENDIZADOS.md#196\`, commit \`3f3ad4f53d7f2f0250f663de70641ad44918d1f8\` e readback GitHub. PR-mãe #1562 rejeita novos comentários por limite de 2.500; não criar outro PR como expediente narrativo.
+- **Delimitação:** preservar a receita T0 #195; retomar no mesmo owner após **revisão legítima do manifesto + confirmação administrativa aplicável**, então promover somente o fileset Hermes causal e comprovar que o consumidor real carregou a nova regra. O estado permanece \`SOURCE_REGISTERED=PASS\`, \`HERMES_PROMOTION=BLOCKED\`, \`HERMES_CONSUMPTION=UNKNOWN\`.
+
+\`\`\`text
+SECURITY_OWNER=apps/modulos/mcp/manifesto-destrutivas.json
+BLOCKER=TOOL_IN_DESTRUTIVAS_EM_REVISAO
+NO_BYPASS_OR_BLIND_PROMOTION=true
+NEXT_CURSOR=REVIEW_MANIFEST_THROUGH_AUTHORIZED_GATES_THEN_HERMES_RECEIPT_READBACK
+\`\`\`
+
 <!-- /CENTRALDARK_SOL_HERMES_SUPABASE_REPLAY_20261018 -->
