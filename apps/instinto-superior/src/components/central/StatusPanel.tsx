@@ -21,12 +21,14 @@ function etiqueta(estado: Estado) {
   if (estado === "FAIL" || estado === "BLOCKED") return "INDISPONÍVEL";
   return estado === "AUTH_REQUIRED" ? "AUTORIZAÇÃO" : "NÃO COMPROVADO";
 }
-function LuzViva({ estado, nome }: { estado: Estado; nome: string }) {
-  const cor = luz(estado);
+/** O pulso verde significa exclusivamente medição atual PASS, não prova histórica. */
+function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresco: boolean }) {
+  const valido = fresco ? estado : "UNKNOWN";
+  const cor = luz(valido);
   return (
-    <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${etiqueta(estado)}`}>
-      <span className={`size-3 shrink-0 rounded-full animate-pulse motion-reduce:animate-none ${CORES[cor]}`} aria-hidden="true" />
-      <span className="font-mono text-[10px]">{etiqueta(estado)}</span>
+    <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${etiqueta(valido)}`}>
+      <span className={`size-3 shrink-0 rounded-full ${fresco && valido === "PASS" ? "animate-pulse motion-reduce:animate-none" : ""} ${CORES[cor]}`} aria-hidden="true" />
+      <span className="font-mono text-[10px]">{etiqueta(valido)}</span>
     </span>
   );
 }
@@ -113,7 +115,7 @@ export function StatusPanel() {
           return (
             <article key={s.nome} className="rounded-lg border border-border bg-background/40 p-3">
               <div className="flex items-center gap-2"><Icon className="size-4 text-muted-foreground" /><strong className="text-xs">{s.nome}</strong></div>
-              <div className="mt-3"><LuzViva estado={s.estado} nome={s.nome} /></div>
+              <div className="mt-3"><LuzViva estado={s.estado} nome={s.nome} fresco={fresco} /></div>
               <p className="mt-2 break-all font-mono text-[10px] text-muted-foreground">{s.detalhe}</p>
             </article>
           );
@@ -126,7 +128,7 @@ export function StatusPanel() {
             <article key={m.nome} className="rounded-xl border border-border bg-background/60 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2"><Icon className="size-6 text-neon-blue" /><div><h4 className="font-semibold">{m.nome}</h4><p className="text-[11px] text-muted-foreground">{m.subtitulo}</p></div></div>
-                <LuzViva estado={m.estado} nome={m.nome} />
+                <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />
               </div>
               <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">Fonte: {m.origem}</p>
               <div className="mt-3 rounded-md border border-border/70 bg-black/50 p-3" aria-label={`Saída do sensor ${m.nome}`}>
