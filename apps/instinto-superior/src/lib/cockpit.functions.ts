@@ -129,6 +129,11 @@ export function apiBase() {
   return (process.env["CENTRALDARK_API_BASE_URL"] ?? DEFAULT_API_BASE).replace(/\/$/, "");
 }
 
+// O batimento operacional pertence ao MCP, não ao proxy público do Hermes.
+export function mcpBase() {
+  return (process.env["CENTRALDARK_MCP_BASE_URL"] ?? "https://mcp.centralldark.com").replace(/\/$/, "");
+}
+
 function objetoJson(valor: unknown): valor is JsonObject {
   return !!valor && typeof valor === "object" && !Array.isArray(valor);
 }
@@ -137,12 +142,12 @@ function texto(valor: unknown) {
   return typeof valor === "string" && valor.length > 0 ? valor : null;
 }
 
-async function medirApi(path: string): Promise<Probe> {
+async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
-    const resposta = await fetch(`${apiBase()}${path}`, {
+    const resposta = await fetch(`${base}${path}`, {
       headers: { accept: "application/json" },
       cache: "no-store",
       signal: controller.signal,
@@ -534,7 +539,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/live-fabric/graph"),
       medirApi("/api/omni/status"),
       medirApi("/health"),
-      medirApi("/heartbeat"),
+      medirApi("/heartbeat", mcpBase()),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:4175/", true),
@@ -556,13 +561,22 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       : "VPS CENTRALDARK-OS · sem adapter/medição remota neste servidor";
     // API 200 só atesta esta rota. O body pode identificar serviço, não integrações internas.
     const apiServico = texto(apiHealth.dados?.["service"])
+      ?? texto(apiHealth.dados?.["servico"])
       ?? texto(apiHealth.dados?.["name"])
       ?? "Serviço não identificado pelo /health";
-    const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
-    const heartbeat: Probe =
-      heartbeatSelf === "stale"
-        ? { ...heartbeatRaw, estado: "FAIL", erro: "self=stale" }
-        : heartbeatRaw;
+    // HTTP 200 só promove o batimento se vier do MCP e com identidade verificável.
+    const heartbeatIdentificado: Probe =
+      heartbeatRaw.httpStatus === 200 &&
+      texto(heartbeatRaw.dados?.["service"]) === "mcp-centraldark" &&
+      heartbeatRaw.dados?.["ok"] === true
+        ? heartbeatRaw
+        : { ...heartbeatRaw, estado: "UNKNOWN", erro: "HEARTBEAT_SEM_ASSINATURA_MCP" };
+    const heartbeatSelf = texto(heartbeatIdentificado.dados?.["self"]);
+    const heartbeat: Probe = heartbeatSelf === "stale"
+      ? { ...heartbeatIdentificado, estado: "FAIL", erro: "self=stale" }
+      : heartbeatSelf === "alive"
+        ? { ...heartbeatIdentificado, estado: "PASS", erro: null }
+        : { ...heartbeatIdentificado, estado: "UNKNOWN", erro: "HEARTBEAT_SELF_SEM_PROVA" };
 
     const atual = github.commits[0] ?? null;
     const gitLive = objetoJson(liveFabric.dados?.["git"]) ? liveFabric.dados["git"] : null;
@@ -570,7 +584,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const mainSha = atual?.sha ?? null;
     const sincronizado = !!mainSha && !!vpsSha && mainSha === vpsSha;
     const deltaVps = await medirDelta(vpsSha, mainSha);
-    const deploy: Estado = !mainSha || !vpsSha ? "UNKNOWN" : sincronizado ? "PASS" : "FAIL";
+    // SHA desigual mede divergência Git, não prova falha do serviço publicado.
+    // PASS de deploy exige receipt do mesmo SHA + health + efeito no navegador.
+    const deploy: Estado = "UNKNOWN";
 
     return {
       gmail: "AUTH_REQUIRED",
