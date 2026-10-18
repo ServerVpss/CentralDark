@@ -883,3 +883,22 @@ Herdar SOUL-SOL.md → RULES.md → AGENTS.md → PADRAO-RESPOSTA-SEGREDO-CHEFE.
 
 `PAPAGAIO_DETERMINISTICO=true` · `PAPAGAIO_HUD_FIRST_ON_REMEASUREMENT=true` · `PAPAGAIO_TREE_PROVENANCE_REQUIRED=true` · `PAPAGAIO_NO_PARALLEL_RUNTIME=true`.
 <!-- /CENTRALDARK_PAPAGAIO_DETERMINISTICO_FIEL_20261014 -->
+
+
+<!-- SOL_HERMES_RECIPE_CONSUMER_20261018 -->
+## ☀️→☿ Receita SOL → Hermes — consumo da prova sem duplicar diagnóstico
+
+Para missões Supabase/Hub da CentralDark que correspondam ao Circuito da Forja de 2026-10-18, recuperar o owner `docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md`, seção **Receita consumível SOL → Hermes**, `RECIPE_ID=CENTRALDARK_SUPABASE_HUB_SOL_HERMES_20261018`, e o aprendizado canônico `docs/CONSCIENCIA/APRENDIZADOS.md#195` (SHA `51e74377d2a4a69d0c80e64c0fdbe78d1200ae1c`).
+
+```text
+T0_SOL_RECEIPT=REUSE_ONLY_ON_MATCHING_CLAIM_OWNER_SCOPE_CAUSAL_IDENTITY
+DO_NOT_REPEAT_T0_DB_COUNTS_OR_OWNER_DISCOVERY_WITHOUT_MATERIAL_CHANGE=true
+HERMES_EXECUTOR=EXISTING_AUTHORIZED_HUB_BROKER
+T1_MINIMAL_RECEIPT=NEW_EXECUTION_EFFECT_ONLY
+NO_SYNTHETIC_APPROVAL=true
+NO_LEGACY_BACKLOG_FORCE_EXECUTION=true
+RECIPE_DOCUMENTED != RECIPE_CONSUMED
+```
+
+Reaproveitar T0 (diagnóstico), medir apenas as condições voláteis necessárias à próxima ação, executar apenas missão efetivamente autorizada e emitir receipt do efeito novo. Sem ACK do Hermes consumidor, declarar `HERMES_RECIPE_CONSUMPTION=UNKNOWN`; não converter commit em runtime.
+<!-- /SOL_HERMES_RECIPE_CONSUMER_20261018 -->

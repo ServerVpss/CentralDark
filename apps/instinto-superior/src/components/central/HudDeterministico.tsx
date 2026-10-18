@@ -106,6 +106,28 @@ const forgeAliases: readonly ForgeAlias[] = [
   },
 ] as const;
 
+
+// #OBSERVACOES# | CENTRALDARK.INSTINTO.ADMIN_CAPABILITY_REUSE_20261018
+// Origem TelePainel permanece funcional. Este mapa é inventário estático,
+// NÃO prova conexão, autorização, publicação nem disponibilidade para cliente.
+const telepainelAdminCapabilities = [
+  { origem: "Dashboard", destino: "Visão geral", owner: "src/apps/modulos/telepainel/pages/Index.tsx", status: "PARCIAL" },
+  { origem: "Meu Bot", destino: "CentralDark Gram / Admin de Bots", owner: "src/apps/modulos/telepainel/pages/Bots.tsx", status: "PARCIAL" },
+  { origem: "Consultas", destino: "Admin · Consultas", owner: "src/apps/modulos/telepainel/pages/Consultas.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Logs", destino: "Raio-X / Recibos", owner: "src/apps/modulos/telepainel/pages/QueryLogs.tsx", status: "PARCIAL" },
+  { origem: "Usuários do Bot", destino: "Admin · Usuários de bots", owner: "src/apps/modulos/telepainel/pages/TelegramUsers.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Usuários do Painel", destino: "Admin · Identidades e permissões", owner: "src/apps/modulos/telepainel/pages/UsuariosPainel.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Planos", destino: "Admin · Planos e assinaturas", owner: "src/apps/modulos/telepainel/pages/Plans.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Lucros PIX", destino: "Admin · Financeiro", owner: "src/apps/modulos/telepainel/pages/PixTransactions.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Capability Router", destino: "Sistema · Catálogo de capacidades", owner: "src/shared/layout/Sidebar.tsx", status: "PARCIAL" },
+  { origem: "Teste de Módulos", destino: "Forja · Testes", owner: "src/apps/modulos/telepainel/pages/TesteModulos.tsx", status: "PARCIAL" },
+  { origem: "Auditoria", destino: "Recibos / Ledger", owner: "src/shared/layout/Sidebar.tsx", status: "PARCIAL" },
+  { origem: "Segurança", destino: "Admin / Cofre", owner: "src/apps/modulos/telepainel/pages/Security.tsx", status: "PARCIAL" },
+  { origem: "Banco de Dados", destino: "Sistema · Banco de dados", owner: "src/apps/modulos/telepainel/pages/DatabaseInfo.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Dicas Splash", destino: "Design Center · Dicas", owner: "src/apps/modulos/telepainel/pages/MenuTips.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Configurações", destino: "Admin · Preferências / Backup / Limpeza", owner: "src/apps/modulos/telepainel/pages/Settings.tsx", status: "PARCIAL" },
+] as const;
+
 /** Reaproveita o zone do Instinto Superior; não cria outro HUD ou executor. */
 export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentralDark; atualizar?: () => void }) {
   const [cursor, setCursor] = useState(0);
@@ -320,9 +342,10 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           {([
             ["🐙 GitHub / main", estado?.github, estado?.mainSha?.slice(0, 12), "Referência do HEAD medido; CI do mesmo HEAD ainda exige prova."],
             ["🖥️ VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12), "Deploy e alinhamento com main exigem readback próprio."],
-            ["🔌 API CentralDark", estado?.apiHealth, estado?.apiHealthHttp, "Saúde da rota não equivale à saúde de todo o sistema."],
+            ["🔌 API CentralDark", estado?.apiHealth, estado?.apiHealthFonte ?? "Host de origem não medido", "HTTP /health atesta somente essa rota, não integração completa."],
             ["🏠 Site local", estado?.casaSite, estado?.casaSiteHttp, "Disponibilidade HTTP não comprova o deploy visual."],
-            ["👁️ Screenpipe Casa", estado?.screenpipe, estado?.screenpipeHttp, "Sensor de observação; não tem autoridade de escrita."],
+            ["👁️ Screenpipe Casa", estado?.screenpipe, estado?.screenpipeFonte ?? "Sem medida da Casa", "Estado só pode vir do host Windows Casa; conector remoto ≠ serviço."],
+            ["👁️ Screenpipe VPS", estado?.screenpipeVps, estado?.screenpipeVpsFonte ?? "Sem medida da VPS", "A porta 3030 da VPS pode ser o Graph Panel; exige assinatura Screenpipe."],
             ["🧾 Receipts", estado?.receipts, estado?.receiptsHttp, "Endpoint acessível não comprova receipt por artefato."],
           ] as const).map(([nome, situacao, detalhe, limite]) => (
             <div key={nome} className="min-w-0 rounded-lg border border-border bg-muted/20 p-4">
@@ -390,8 +413,10 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             ["GitHub main", estado?.github, estado?.mainSha?.slice(0, 12)],
             ["API CentralDark", estado?.apiHealth, estado?.apiHealthHttp],
             ["VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12)],
-            ["Screenpipe Casa", estado?.screenpipe, estado?.screenpipeHttp],
-            ["Desktop Commander Casa", estado?.desktop, "Conector remoto · não é o Hermes Desktop"],
+            ["Screenpipe Casa", estado?.screenpipe, estado?.screenpipeFonte ?? "Sem prova na Casa"],
+            ["Screenpipe VPS", estado?.screenpipeVps, estado?.screenpipeVpsFonte ?? "Sem prova na VPS"],
+            ["Desktop Commander Casa", estado?.desktop, estado?.desktopFonte ?? "Conector remoto não medido"],
+            ["Desktop Commander VPS", estado?.desktopVps, estado?.desktopVpsFonte ?? "Conector remoto não medido"],
             ["Hermes Desktop", "UNKNOWN", "Sem sensor Hermes nesta consulta; fechado por escolha = NOT_REQUIRED"],
             ["Receipts", estado?.receipts, estado?.receiptsHttp],
           ] as const).map(([nome, resultado, detalhe]) => (
@@ -488,6 +513,69 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             </p>
           </div>
         )}
+      </section>
+
+
+      <section className="panel p-6" aria-labelledby="cd-admin-capabilities">
+        <p className="font-mono text-[10px] text-neon-blue">🪬 REUSO DE CAPACIDADES · TELEPAINEL PRESERVADO</p>
+        <h3 id="cd-admin-capabilities" className="mt-2 text-lg font-semibold">
+          Instinto Superior Administrativo · matriz de extração
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          O TelePainel continua sendo um produto próprio, com seus botões e rotas preservados.
+          Esta matriz documenta candidatos à integração administrativa na CentralDark,
+          sem duplicar serviços ou conceder acesso automático aos futuros clientes.
+        </p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-md border border-border p-3">
+            <p className="text-xs text-muted-foreground">Origem preservada</p>
+            <p className="text-lg font-semibold">TelePainel · 15 destinos</p>
+            <p className="text-xs text-muted-foreground">Não remover seus controles.</p>
+          </div>
+          <div className="rounded-md border border-border p-3">
+            <p className="text-xs text-muted-foreground">Casca atual</p>
+            <p className="text-lg font-semibold">Instinto Admin · em evolução</p>
+            <p className="text-xs text-muted-foreground">Cada handler e permissão exige teste.</p>
+          </div>
+          <div className="rounded-md border border-border p-3">
+            <p className="text-xs text-muted-foreground">Casca de cliente</p>
+            <p className="text-lg font-semibold">Versão estável · NÃO LIBERADA</p>
+            <p className="text-xs text-muted-foreground">Sem herdar credenciais ou privilégios Admin.</p>
+          </div>
+        </div>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[660px] text-left text-xs">
+            <caption className="pb-2 text-left text-xs text-muted-foreground">
+              Inventário estático de origem, destino e dono. PARCIAL não é teste positivo.
+            </caption>
+            <thead><tr className="border-b border-border">
+              <th scope="col" className="p-2">TelePainel · preservado</th>
+              <th scope="col" className="p-2">Instinto Superior · Admin</th>
+              <th scope="col" className="p-2">Owner original</th>
+              <th scope="col" className="p-2">Prova</th>
+            </tr></thead>
+            <tbody>
+              {telepainelAdminCapabilities.map(cap => (
+                <tr key={cap.origem} className="border-b border-border/60">
+                  <td className="p-2 font-medium">{cap.origem}</td>
+                  <td className="p-2">{cap.destino}</td>
+                  <td className="break-all p-2 font-mono text-[10px]">{cap.owner}</td>
+                  <td className="p-2 text-amber-700 dark:text-amber-400">{cap.status} · RUNTIME UNKNOWN</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground" role="status">
+          6 atalhos rápidos e 6 abas de Configurações também permanecem na origem;
+          Backup é stub, a integração e a recuperação não estão comprovadas.
+          SOURCE_IN_CODE != WIRED != TESTED != DEPLOYED. Nenhum serviço é iniciado por esta tabela.
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          NEXT_CURSOR: Backup/Sync seguro → Consultas → Usuários → Banco de dados →
+          Planos/PIX → demais capacidades. Cliente só recebe recursos estáveis
+          após autorização, isolamento de dados e regressão.
+        </p>
       </section>
 
       <section className="panel p-6" aria-labelledby="cd-hud-legacy-owner-inventory">

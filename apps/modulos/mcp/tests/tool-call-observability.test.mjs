@@ -78,3 +78,126 @@ test("audit event crosses existing log layer used by admin SSE", () => {
   assert.equal(live.meta.toolName, "list_tools");
   assert.equal(live.meta.status, "PASS");
 });
+
+test("Tool Call Lens reutiliza SSE admin e exporta so metadados de auditoria", () => {
+  const src = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
+  assert.match(src, /subscribeAuditEvents\(\(evento\) =>/);
+  assert.match(src, /mcp_tool_call/);
+  assert.match(src, /id="toolLensRows"/);
+  assert.match(src, /function toolLensAlternar\(/);
+  assert.match(src, /function toolLensRever\(/);
+  assert.match(src, /toolLensRegistrar\(d\)/);
+  const begin = src.indexOf("subscribeAuditEvents((evento) =>");
+  const end = src.indexOf("function extrairRota(", begin);
+  const observer = src.slice(begin, end);
+  assert.ok(begin >= 0 && end > begin);
+  assert.doesNotMatch(observer, /evento\.(?:input|result|error)/);
+  assert.ok(observer.includes("mcp_host_pid"));
+  assert.ok(observer.includes("durationMs"));
+  assert.ok(observer.includes("correlation_id"));
+});
+
+
+test("CORS admin fica restrito a GET de logs/metricas e origem do cockpit", () => {
+  const src = fs.readFileSync(new URL("../src/index.js", import.meta.url), "utf8");
+  assert.ok(src.includes('https://admin.centralldark.com'));
+  assert.ok(src.includes('CENTRALDARK_COCKPIT_ADMIN_READ_ORIGINS'));
+  assert.ok(src.includes('req.method === "GET"'));
+  assert.ok(src.includes('path === "/admin/api/logs"'));
+  assert.ok(src.includes('path === "/admin/api/metricas"'));
+  assert.ok(src.includes('cockpitAdminReadOrigins.has(origin)'));
+  assert.ok(src.includes('res.setHeader("Access-Control-Allow-Credentials", "true")'));
+  assert.ok(src.includes('res.vary("Origin")'));
+});
+
+
+test("Forja Tool Call Lens preserva quatro gates e nao faz merge/deploy", () => {
+  const script = fs.readFileSync(new URL(
+    "../../../../skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1",
+    import.meta.url,
+  ), "utf8");
+  assert.ok(script.includes("00_ANTIRREGRESSAO"));
+  assert.ok(script.includes("postInstallRegression"));
+  assert.ok(script.includes("DIRTY_WORKTREE_OTHER_WRITER"));
+  for (const phase of ["01_CONSTRUIR", "02_INSTALAR", "03_CONECTAR", "04_PROVAR"]) {
+    assert.ok(script.includes(phase), "fase obrigatoria ausente: " + phase);
+  }
+  assert.ok(script.includes("ExitCode") || script.includes("LASTEXITCODE"));
+  assert.ok(script.includes("CENTRALDARK_SSH_READBACK_OK"));
+  assert.ok(script.includes("VSIX_VERSION_READBACK_MISSING"));
+  assert.ok(script.includes("E2E_TOOL_CALL_NOT_MEASURED"));
+  assert.ok(script.includes("published = $false"));
+  assert.ok(script.includes("exit 3"));
+  assert.doesNotMatch(script, /git\s+(?:reset|merge|push|clean)|systemctl\s+restart|force.push/i);
+});
+
+
+test("Forja 4x chama apenas o intent-cycle do proprio MCP e pede recibos", () => {
+  const src = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
+  assert.match(src, /id="forja4Btn"/);
+  assert.match(src, /function forja4Iniciar\(/);
+  assert.match(src, /function forja4Verificar\(/);
+  assert.match(src, /origin \+ '\/admin\/api\/intent'/);
+  assert.match(src, /mode: 'AUTONOMO'/);
+  assert.match(src, /dispatch: true/);
+  assert.match(src, /NO_MERGE_NO_DEPLOY/);
+  assert.match(src, /forja4x\?\.stages/);
+  assert.ok(src.includes("ANTIRREGRESSAO"));
+  assert.ok(src.includes("INSTALAR"));
+  assert.ok(src.includes("CONECTAR"));
+  assert.ok(src.includes("PROVAR"));
+});
+
+
+test("Inventario ZENDRIVE 20261018 nao transforma rota em falso verde", () => {
+  const source = fs.readFileSync(new URL("../src/tools/core/mcp-admin.js", import.meta.url), "utf8");
+  const routes = source.split("const AUTHORIZED_ROUTE_CATALOG = Object.freeze([")[1]?.split("]);")[0];
+  assert.ok(routes, "owner do catalogo existe");
+  const ids = [...routes.matchAll(/\{\s*id:\s*"([A-Z0-9_]+)"/g)].map(m => m[1]);
+  assert.equal(new Set(ids).size, ids.length, "rotas unicas");
+  for (const id of [
+    "SSH_VPS_DIRECT", "ZENDRIVE_VSCODE_REMOTE_SSH", "TAILSCALE_PRIVATE_ROUTE",
+    "RDC_DESKTOP_COMMANDER", "MCP_VPS_NATIVE_HTTP", "HERMES_SHELL"
+  ]) assert.ok(ids.includes(id), "rota nao catalogada: " + id);
+  const zendrive = routes.split("\n").find(line => line.includes('id: "ZENDRIVE_VSCODE_REMOTE_SSH"'));
+  assert.ok(zendrive);
+  assert.match(zendrive, /runtimeState: "MEASURE_AT_RUNTIME"/);
+  assert.doesNotMatch(zendrive, /runtimeState: "PASS"/);
+  assert.match(routes, /Segredo-VPS\(VPN\)\|segredo-vpss\(fallback-publico\)/);
+  for (const id of [
+    "ZENDRIVE_SSH_VPN", "VSCODE_INTEGRATED_TERMINAL", "CASA_FORJA_DRIVES",
+    "CASA_BROWSER_WINDOWS"
+  ]) assert.ok(source.includes('id: "' + id + '"'), "capacidade ausente: " + id);
+  assert.match(source, /GUI_TERMINAL_RECEIPT_PENDING/);
+  assert.match(source, /WINDOW_TITLE_ONLY_BROWSER_PLUGIN_CONTEXT_UNAVAILABLE/);
+});
+
+test("Inventario ZENDRIVE 20261018 tem provas e limites no documento canonico", () => {
+  const doc = fs.readFileSync(new URL("../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", import.meta.url), "utf8");
+  for (const marker of [
+    "INVENTARIO-ZENDRIVE-20261018", "SSH_CASA_VPS_PELA_VPN=PASS",
+    "SHELL_VPS_CASA=UNKNOWN", "TERMINAL_INTEGRADO_EXEC_RECEIPT=UNKNOWN",
+    "BROWSER_TABS_CONTEXT=BLOCKED_ORIGIN", "SCREENPIPE_CASA=DEGRADED",
+    "RDC_FALLBACK_PRESERVADO=true"
+  ]) assert.ok(doc.includes(marker), "contraprova faltando: " + marker);
+});
+
+
+test("31 ferramentas RDC mapeadas no catalogo sem liberar execucao automatica", () => {
+  const src = fs.readFileSync(new URL("../src/tools/core/mcp-admin.js", import.meta.url), "utf8");
+  const segment = src.split("const RDC_EQUIVALENCE_MATRIX = Object.freeze([")[1]?.split("]);")[0];
+  assert.ok(segment, "matriz canônica ausente");
+  const names = [...segment.matchAll(/"tool":"([a-z_]+)"/g)].map(match => match[1]);
+  assert.equal(names.length, 31, "inventario completo da origem");
+  assert.equal(new Set(names).size, 31, "ferramentas duplicadas");
+  for (const n of ["start_process", "read_file", "kill_process", "list_devices", "get_tool_result", "get_recent_tool_calls", "write_pdf"]) {
+    assert.ok(names.includes(n), "ferramenta faltante: " + n);
+  }
+  assert.match(src, /desktopCommanderEquivalenceCount: RDC_EQUIVALENCE_MATRIX\.length/);
+  assert.match(src, /desktopCommanderEquivalences: remoteEquivalences/);
+  assert.match(src, /desktopCommanderParity: "PARTIAL_ROUTE_CAPABILITIES_ONLY_NO_CASA_REVERSE_EXEC_PROOF"/);
+  assert.match(segment, /"proof":"GUARDED_DESTRUCTIVE_UNTESTED"/);
+  const doc = fs.readFileSync(new URL("../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", import.meta.url), "utf8");
+  assert.ok(doc.includes("31 ferramentas do Desktop Commander: equivalência tipada"));
+  for (const name of names) assert.ok(doc.includes("| " + name + " |"), "linha da matriz ausente: " + name);
+});

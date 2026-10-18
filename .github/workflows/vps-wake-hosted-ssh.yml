@@ -1,8 +1,8 @@
 name: ⚙️ VPS wake via hosted SSH
 
 # Self-hosted NÃO acorda a si mesmo. Este job roda no GitHub hosted
-# (ubuntu-latest) com as chaves VPS_*_LOVABLE já no repo.
-# Autorizado: PERMITO-SEGREDO — restart apenas actions.runner.centraldark.service quando SSH local timeout.
+# (ubuntu-latest) com as chaves VPS_*_LOVABLE já no repo; unidade VPS-1 somente.
+# Autorizado: PERMITO SEGREDO — ativar apenas actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service após identificar unit real.
 # NÃO usa CONTABO_* (ausentes neste repo). Se a porta 22 estiver morta
 # no provedor, este job também timeout — aí só Contabo API resolve.
 
@@ -14,7 +14,8 @@ permissions:
 
 jobs:
   wake:
-    runs-on: [self-hosted, Linux]
+    # O recovery não pode depender da mesma VPS cujos runners estão offline.
+    runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
       - name: 🔹 SSH na VPS e restart runner
@@ -69,7 +70,7 @@ jobs:
               -o ConnectTimeout=15 \
               -i "$KEY" \
               "${VPS_USER_LOVABLE}@${TARGET_HOST}" \
-              'set -euo pipefail; hostname; uptime; printf "RUNNER_BEFORE="; systemctl is-active actions.runner.centraldark.service || true; systemctl restart actions.runner.centraldark.service; printf "RUNNER_AFTER="; systemctl is-active actions.runner.centraldark.service'
+              'set -euo pipefail; hostname; uptime; UNIT=actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service; systemctl show "$UNIT" -p LoadState -p UnitFileState --no-pager; printf "RUNNER_BEFORE="; systemctl is-active "$UNIT" || true; systemctl enable --now "$UNIT"; printf "RUNNER_AFTER="; systemctl is-active "$UNIT"; test "$(systemctl is-active "$UNIT")" = active'
           rc=$?
           rm -f "$KEY"
           if [ "$rc" -ne 0 ]; then

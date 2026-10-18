@@ -215,6 +215,18 @@ terminal(command="tmux new-session -d -s resumed 'hermes --resume 20260225_14305
 - **Profile-safe paths** — `get_hermes_home()` in code, `$HERMES_HOME` when resolving paths in a session.
 - **Never hand-edit `config.yaml` for the user** — use `hermes config set KEY VAL`; a stray indent can corrupt the file and break the live gateway.
 
+
+## CentralDark — delegação tipada, identidade e skills privadas
+
+Para missões da CentralDark que envolvam ChatGPT/Claude/Codex → MCP → Hermes, carregar **sob demanda** `references/centraldark-delegacao-tipado.json` e a receita canônica `skills/centraldark-delegacao/SKILL.md`. O contrato JSON descreve 12 procedimentos reusáveis com condições, input, output e prova; é **referência do owner**, não um novo dispatcher, plugin, vault ou mecanismo de execução.
+
+`AUTH_GITHUB_NE_MCP_CLIENT_SESSION`: o GitHub OAuth do HUB/Instinto e o OAuth próprio do servidor MCP têm sessões diferentes. O GitHub App/OAuth App precisa ser identificado e autorizado no backend para o repositório privado. Conexão `oauth_connections` sem binding real de user_id e permissão específica não autoriza exposição do catálogo. O cliente nunca recebe token GitHub em corpo de skill ou recibo.
+
+`PERSISTENCE`: definição/receita versionada no Git; sessão Hermes em `$HERMES_HOME` e Kanban existentes; grant cifrado sob o OAuthBroker. Estas persistências são independentes. Para declarar a skill efetivamente instalada/carregada no Hermes vivo, provar sincronização ao diretório de skills aplicável + `skills_list` ou equivalente numa sessão nova. **Commit da skill não instala nem inicializa a sessão.**
+
+`NO_NEW_PLUGIN`: reutilizar `mcp_admin_catalog`, `skill_buscar`, Skill Workshop, OAuthBroker e Hermes Kanban. Se faltar bridge entre eles, registrar o delta no owner real da autenticação antes de alterar. `NEEDS_LOGIN`, `REVOKED` ou `UNKNOWN` jamais se tornam `CONNECTED` por simulação.
+
+
 ## CentralDark fixed-point funnel
 
 When Hermes operates CentralDark, apply `software-development/centraldark-evidence-reconciliation/references/fixed-point-funnel.md`: CURRENT → owner/writer/scope → minimum delta → test → counterproof → exact runtime/readback → sanitized receipt → `NEXT_CURSOR`. `UNKNOWN != PASS`; `FIXED_POINT=true` only when the affected plane is read back and no material UNKNOWN remains.

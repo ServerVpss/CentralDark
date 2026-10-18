@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
 import { Card } from "@/components/ui/card";
-import { Play, Pause, RotateCcw, Activity, GitBranch, Database } from "lucide-react";
+import { RefreshCcw, Pause, Activity, GitBranch, Database } from "lucide-react";
 
 const FORJA_MODES = [
   { id: "sync", label: "🔄 Sincronizar", icon: "🔄", desc: "Casa ↔ Forja ↔ GitHub" },
@@ -83,22 +86,24 @@ const OBSIDIAN_CRITERIOS = [
   },
 ] as const;
 
-interface ExecutorStatus {
-  mode: string;
-  setor: string;
-  running: boolean;
-  lastSync: string;
-  uptime: number;
-}
-
 export function ForjaExecutor() {
-  const [status, setStatus] = useState<ExecutorStatus>({
-    mode: "sync",
-    setor: "all",
-    running: true,
-    lastSync: new Date().toLocaleTimeString("pt-BR"),
-    uptime: 0,
+  // Owner ja existente do sensor do Cockpit; heartbeat da API nao prova execucao.
+  const consultarEstado = useServerFn(lerEstadoCentralDark);
+  const leitura = useQuery({
+    queryKey: ["centraldark", "forja-executor", "native-health"],
+    queryFn: () => consultarEstado(),
+    refetchInterval: 15_000,
+    staleTime: 15_000,
+    retry: false,
   });
+  const leituraFresca = leitura.dataUpdatedAt > 0
+    && Date.now() - leitura.dataUpdatedAt <= 45_000
+    && !leitura.isError;
+  const apiEstado = leituraFresca ? (leitura.data?.apiHealth ?? "UNKNOWN") : "UNKNOWN";
+  const apiDisponivel = apiEstado === "PASS";
+  const ultimaLeitura = leituraFresca
+    ? new Date(leitura.dataUpdatedAt).toLocaleTimeString("pt-BR")
+    : "NÃO MEDIDO";
 
   const [selectedMode, setSelectedMode] = useState<"sync" | "deploy" | "monitor">("sync");
   const [selectedSetor, setSelectedSetor] = useState("all");
@@ -108,24 +113,6 @@ export function ForjaExecutor() {
   const [avisoHarness, setAvisoHarness] = useState<string | null>(null);
   const ambienteLocal =
     typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname);
-
-  useEffect(() => {
-    if (!status.running) return;
-
-    const interval = setInterval(() => {
-      setStatus((prev) => ({
-        ...prev,
-        uptime: prev.uptime + 1,
-        lastSync: new Date().toLocaleTimeString("pt-BR"),
-      }));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [status.running]);
-
-  const handleToggle = () => {
-    setStatus((prev) => ({ ...prev, running: !prev.running }));
-  };
 
   return (
     <div className="w-full space-y-6">
@@ -142,66 +129,53 @@ export function ForjaExecutor() {
         </div>
       </div>
 
-      {/* Status ao vivo */}
-      <Card className="p-6 bg-gradient-to-r from-green-50/10 to-blue-50/10 border-green-500/30">
-        <div className="grid grid-cols-4 gap-4">
+      {/* Medição da API nativa; a execução de comandos permanece UNKNOWN sem ACK. */}
+      <Card className="p-6 border-border/60">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="text-center">
-            <div className="text-xs text-muted-foreground mb-1">Status</div>
-            <div
-              className={`text-2xl font-bold ${status.running ? "text-green-600" : "text-gray-500"}`}
-            >
-              {status.running ? "🟢 ONLINE" : "🔴 OFFLINE"}
+            <div className="text-xs text-muted-foreground mb-1">MCP CentralDark · API</div>
+            <div className={`text-lg font-bold ${apiDisponivel ? "text-green-600" : "text-muted-foreground"}`}>
+              {apiDisponivel ? "🟢 API ACESSÍVEL" : apiEstado === "FAIL" ? "🔴 API FALHOU" : "🟡 NÃO COMPROVADA"}
             </div>
           </div>
           <div className="text-center">
-            <div className="text-xs text-muted-foreground mb-1">Última Sincronização</div>
-            <div className="text-lg font-mono text-blue-600">{status.lastSync}</div>
+            <div className="text-xs text-muted-foreground mb-1">Última leitura da API</div>
+            <div className="text-lg font-mono">{ultimaLeitura}</div>
           </div>
           <div className="text-center">
-            <div className="text-xs text-muted-foreground mb-1">Uptime (s)</div>
-            <div className="text-2xl font-bold text-purple-600">{status.uptime}</div>
+            <div className="text-xs text-muted-foreground mb-1">Executor Casa / VPS</div>
+            <div className="text-lg font-bold text-muted-foreground">UNKNOWN · sem ACK</div>
           </div>
           <div className="text-center">
-            <div className="text-xs text-muted-foreground mb-1">Modo</div>
-            <div className="text-lg font-semibold text-orange-600">
-              {selectedMode.toUpperCase()}
-            </div>
+            <div className="text-xs text-muted-foreground mb-1">Modo solicitado</div>
+            <div className="text-lg font-semibold text-orange-600">{selectedMode.toUpperCase()}</div>
           </div>
         </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Fonte: lerEstadoCentralDark /health, leitura atualizada no Cockpit.
+          HTTP acessível não prova sessão SSH, PID remoto, Hermes ou sincronização.
+        </p>
       </Card>
 
-      {/* Controles */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <button
-          onClick={handleToggle}
-          className={`rounded-lg p-4 font-semibold transition ${
-            status.running
-              ? "bg-green-50/40 text-green-700 border border-green-500/30 hover:bg-green-50/60"
-              : "bg-gray-50/40 text-gray-700 border border-gray-500/30 hover:bg-gray-50/60"
-          }`}
-        >
-          {status.running ? (
-            <>
-              <Pause className="inline mr-2 h-4 w-4" />
-              Pausar Executor
-            </>
-          ) : (
-            <>
-              <Play className="inline mr-2 h-4 w-4" />
-              Retomar Executor
-            </>
-          )}
+      {/* Sem endpoint autorizado para pausa/restart de processo neste componente. */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <button type="button" onClick={() => void leitura.refetch()}
+          disabled={leitura.isFetching}
+          className="rounded-lg border border-border/60 bg-muted/20 p-4 font-semibold disabled:opacity-50">
+          <RefreshCcw className="mr-2 inline h-4 w-4" />
+          {leitura.isFetching ? "Medindo API…" : "Atualizar leitura nativa"}
         </button>
-
-        <button className="rounded-lg p-4 font-semibold bg-blue-50/40 text-blue-700 border border-blue-500/30 hover:bg-blue-50/60 transition">
-          <RotateCcw className="inline mr-2 h-4 w-4" />
-          Reiniciar Forja
+        <button type="button" disabled
+          title="Requer comando autenticado no executor nativo e recibo de confirmação"
+          className="rounded-lg border border-border/60 bg-muted/20 p-4 font-semibold opacity-50">
+          <Pause className="mr-2 inline h-4 w-4" />
+          Pausar / reiniciar · não ligado
         </button>
-
-        <button className="rounded-lg p-4 font-semibold bg-purple-50/40 text-purple-700 border border-purple-500/30 hover:bg-purple-50/60 transition">
-          <Activity className="inline mr-2 h-4 w-4" />
-          Ver Logs
-        </button>
+        <a href="https://api.centralldark.com/admin" target="_blank" rel="noopener noreferrer"
+          className="rounded-lg border border-border/60 bg-muted/20 p-4 text-center font-semibold">
+          <Activity className="mr-2 inline h-4 w-4" />
+          Abrir auditoria MCP existente
+        </a>
       </div>
 
       {/* Seleção de Modo */}
@@ -501,21 +475,21 @@ export function ForjaExecutor() {
           <div>VPS (/root/CentralDark) — PM2 Microsserviços</div>
         </div>
         <div className="mt-4 text-xs text-muted-foreground">
-          <strong>Garantias:</strong>
+          <strong>Contrato de prova:</strong>
           <ul className="list-disc list-inside mt-2 space-y-1">
-            <li>Casa nunca fica bloqueada</li>
-            <li>Forja roda em paralelo (job background)</li>
-            <li>Sincronização não-bloqueante (async)</li>
-            <li>GitHub é Fonte da Verdade</li>
-            <li>VPS recebe via git push automático</li>
+            <li>Casa, GitHub e VPS exigem readbacks independentes por SHA e horário.</li>
+            <li>Acesso Tailscale ou resposta HTTP não equivale a execução remota autenticada.</li>
+            <li>Hermes só passa a PASS com tarefa, ACK, saída e receipt correlacionados.</li>
+            <li>Deploy requer gate aprovado e prova no runtime; MERGED não implica DEPLOYED.</li>
+            <li>Desktop Commander é fallback opcional, não pré-requisito do MCP CentralDark.</li>
           </ul>
         </div>
       </Card>
 
       {/* Footer */}
       <div className="text-center text-xs text-muted-foreground py-6">
-        <p>🔧 Forja Executor rodando em PowerShell 7 • Orquestração Hermes • FIXED_POINT 100%</p>
-        <p>Fluxo: Casa ↔ Forja ↔ GitHub ↔ VPS (sincronizado)</p>
+        <p>🪬 CentralDark MCP · controle nativo em evolução · execução requer ACK e receipt</p>
+        <p>Casa ↔ Forja ↔ GitHub ↔ VPS: sincronização e FIXED_POINT ainda não comprovados neste painel.</p>
       </div>
     </div>
   );

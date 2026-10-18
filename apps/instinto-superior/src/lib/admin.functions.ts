@@ -11,7 +11,10 @@ export const verificarAdmin = createServerFn({ method: "GET" })
       .eq("user_id", context.userId)
       .eq("role", "admin")
       .maybeSingle();
-    return { admin: !error && !!data, medidoEm: new Date().toISOString() };
+    // Falha na consulta não significa que o usuário perdeu o papel admin.
+    // Separar API/RLS indisponível (503) de papel realmente ausente (403).
+    if (error) throw new Response("ADMIN_ROLE_CHECK_UNAVAILABLE", { status: 503 });
+    return { admin: !!data, medidoEm: new Date().toISOString() };
   });
 
 
