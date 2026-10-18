@@ -446,13 +446,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <BlocoEstado
                   titulo="One Heart · heartbeat"
-                  estado="UNKNOWN"
-                  codigo={
-                    dado?.atualizadoEm
-                      ? `Consulta: ${new Date(dado.atualizadoEm).toLocaleString("pt-BR")}`
-                      : "Sem consulta"
-                  }
-                  detalhe="Horário da consulta não comprova heartbeat. Sem measured_at do owner One Heart, a pulsação permanece UNKNOWN."
+                  estado={(dado?.heartbeat ?? "UNKNOWN") as EstadoOperacional}
+                  codigo={dado?.heartbeatSelf
+                    ? `MCP self=${dado.heartbeatSelf} · HTTP ${dado.heartbeatHttp ?? "UNKNOWN"}`
+                    : "Heartbeat MCP sem medição"}
+                  detalhe="Estado medido no MCP canônico. Stale permanece FAIL; sem identidade ou leitura, UNKNOWN."
                   icone={<Activity className="size-5" />}
                 />
                 <BlocoEstado
