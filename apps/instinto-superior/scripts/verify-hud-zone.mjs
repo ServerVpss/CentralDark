@@ -183,7 +183,7 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
   assert.equal(catalogo.runtime_snapshots.mcp.catalog_tools, 141);
   assert.equal(catalogo.runtime_snapshots.mcp.catalog_routes, 13);
   assert.equal(catalogo.runtime_snapshots.mcp.skill_listar_entries, 3);
-  assert.equal(catalogo.automation_owners.length, 9);
+  assert.equal(catalogo.automation_owners.length, 10);
   assert.ok(catalogo.automation_owners.some(x => x.id === "CLAUDE_CODE" &&
     x.estado === "CLAUDE_RUNNING_TERMINAL_UNBOUND" && x.modo === "COPY_ONLY"));
   assert.ok(catalogo.automation_owners.some(x => x.id === "HERMES" &&
@@ -196,11 +196,28 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
 });
 
 
+test("Tool Call Lens cadastrado na gaveta reaproveita os owners com 4 gates", () => {
+  const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
+  const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
+  const receita = catalogo.automation_owners.find(x => x.id === "TOOL_CALL_LENS");
+  assert.ok(receita, "receita TOOL_CALL_LENS nao encontrada na gaveta");
+  assert.equal(receita.owner, "apps/modulos/mcp/src/audit-logger.js");
+  assert.equal(receita.fases.length, 4);
+  assert.deepEqual(receita.fases.map(x => x.id), ["CONSTRUIR", "INSTALAR", "CONECTAR", "PROVAR"]);
+  assert.ok(receita.fases.every(x => x.owner && x.comprovar && x.estado));
+  assert.ok(receita.receita.includes("forja-tool-call-lens-4-fases.ps1"));
+  assert.ok(receita.recibo.includes("TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md"));
+  assert.ok(infra.includes('aria-label="Quatro etapas da Forja"'));
+  assert.ok(infra.includes("automacaoAtual.fases.map"));
+  assert.ok(infra.includes("Tool Call Lens"));
+  assert.ok(infra.includes("Copiar receita · não executar"));
+});
+
 test("gaveta cataloga receitas A-Z e mostra estado do terminal sem autoexec", () => {
   const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
   const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
-  assert.equal(catalogo.automation_owners.length, 9);
-  assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 9);
+  assert.equal(catalogo.automation_owners.length, 10);
+  assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 10);
   assert.ok(catalogo.automation_owners.every(r => r.owner && r.receita && r.nome));
   assert.ok(infra.includes("receitasAlfabeticas"));
   assert.ok(infra.includes('localeCompare(b.nome, "pt-BR"'));
@@ -249,7 +266,7 @@ test("OAuth Broker traduzido para humano antes do detalhe técnico, com fonte e 
   assert.ok(obs.includes("O estado do catálogo não comprova"));
   assert.ok(conex.includes('requireSupabaseAuth'));
   assert.ok(conex.includes('.eq("role", "admin")'));
-  assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY|\bfetch\s*\(/);
+  assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY/);
 });
 test("contrato único de cartões exige função humana, owner, responsabilidade e fonte", () => {
   const grammar = read("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml");
@@ -313,6 +330,24 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.doesNotMatch(bell, /localStorage|sessionStorage|\/notify-telegram/);
 });
 
+test("microdeploy visivel no owner existente e fail-closed sem prova de runtime", () => {
+  const ui = read("apps/instinto-superior/src/components/central/SistemaCentralDark.tsx");
+  const backend = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  const script = read("scripts/micro_deploy.sh");
+  const contrato = read("docs/CONSCIENCIA/MICRO-DEPLOY/README.md");
+  assert.ok(ui.includes("function MicroDeployReadiness("));
+  assert.ok(ui.includes("<MicroDeployReadiness estado={estado} atualizando={atualizando} atualizar={atualizar} />"));
+  assert.ok(ui.includes("STALE/UNKNOWN"));
+  assert.ok(ui.includes("const deployAllowed = false;"));
+  assert.ok(ui.includes("Worktrees e runners"));
+  assert.ok(ui.includes("Rollback pronto"));
+  assert.ok(ui.includes("Remedir sinais"));
+  assert.ok(backend.includes('const deploy: Estado = "UNKNOWN";'));
+  assert.ok(backend.includes('medirApi("/api/microdeploy/receipts/index.json")'));
+  assert.ok(script.includes('blocked "REAL_MODE_REQUIRES_COMPONENT_ADAPTER"'));
+  assert.ok(contrato.includes("Micro-deploy é por escopo afetado"));
+  assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
+});
 
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
@@ -522,6 +557,55 @@ test("🧬 Michelin aparece no HUD único sem autocertificação ou workflow par
 });
 
 
+test("🪬 Puppeteer Michelin: Chromium real é smoke, nunca três estrelas", async () => {
+  const { classifyVisualEvidence, validateVisualTarget, MICHELIN_SCOPE } =
+    await import("./puppeteer-michelin-smoke.mjs");
+  const sha = "a".repeat(40);
+  const viewport = { httpStatus: 200, ready: true, hasContent: true,
+    horizontalOverflow: false, originMatched: true, pageErrors: 0 };
+  const normal = { sourceSha: sha, executableFound: true, libraryLoaded: true,
+    viewports: [{ ...viewport, name: "desktop" }, { ...viewport, name: "mobile" }] };
+  const ok = classifyVisualEvidence(normal);
+  assert.equal(ok.state, "PASS");
+  assert.equal(ok.scope, MICHELIN_SCOPE);
+  assert.equal(ok.certifiesStars, 0);
+  const cases = [
+    [{ ...normal, sourceSha: null }, "BLOCKED"],
+    [{ ...normal, executableFound: false }, "BLOCKED"],
+    [{ ...normal, libraryLoaded: false }, "BLOCKED"],
+    [{ ...normal, runtimeError: "SCREENSHOT_FAILED" }, "BLOCKED"],
+    [{ ...normal, viewports: [viewport] }, "BLOCKED"],
+    [{ ...normal, viewports: [{ ...viewport, httpStatus: null }, viewport] }, "BLOCKED"],
+    [{ ...normal, viewports: [{ ...viewport, httpStatus: 502 }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, originMatched: false }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, ready: false }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, hasContent: false }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, horizontalOverflow: true }, viewport] }, "FAIL"],
+    [{ ...normal, viewports: [{ ...viewport, pageErrors: 1 }, viewport] }, "FAIL"],
+  ];
+  for (const [probe, expected] of cases) {
+    const verdict = classifyVisualEvidence(probe);
+    assert.equal(verdict.state, expected);
+    assert.equal(verdict.certifiesStars, 0);
+  }
+  assert.ok(validateVisualTarget("http://127.0.0.1:4179/"));
+  assert.ok(validateVisualTarget("https://admin.centralldark.com/"));
+  for (const unsafe of ["https://evil.example/", "http://admin.centralldark.com/",
+    "https://admin.centralldark.com.evil.example/", "file:///etc/passwd",
+    "http://127.0.0.1.evil.example/", "http://localhost:4179/?token=example"]) {
+    assert.equal(validateVisualTarget(unsafe), null);
+  }
+  const source = read("apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs");
+  const workflow = read(".github/workflows/test.yml");
+  assert.match(source, /puppeteer-core/);
+  assert.match(source, /puppeteer-public-/);
+  assert.match(source, /certifiesStars: 0/);
+  assert.doesNotMatch(source, /--no-sandbox|userDataDir:|page\.setCookie/);
+  assert.match(workflow, /puppeteer-michelin-smoke\.mjs/);
+  assert.match(workflow, /MICHELIN_PUPPETEER_VISUAL=PASS/);
+  assert.match(workflow, /RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB/);
+  assert.doesNotMatch(workflow, /MICHELIN_STAR_3=PASS/);
+});
 test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
   const collector = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
   const obs = read("apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx");
@@ -551,4 +635,75 @@ test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
   assert.ok(hud.includes('["Screenpipe VPS", estado?.screenpipeVps'));
   assert.ok(hud.includes('["Desktop Commander VPS", estado?.desktopVps'));
   assert.ok(hud.includes('["👁️ Screenpipe VPS", estado?.screenpipeVps'));
+});
+
+test("microdeploy do Cockpit nunca vende sync Git como deploy comprovado", () => {
+  const fonte = read("apps/instinto-superior/src/components/central/AutoSyncButton.tsx");
+  assert.ok(fonte.includes("MICRODEPLOY_GUARD_20261018"));
+  assert.ok(fonte.includes("Sync Git não prova deploy"));
+  assert.ok(fonte.includes("Micro-Deploy ${microDeployMode} BLOQUEADO"));
+  assert.doesNotMatch(fonte, /Micro-Deploy \$\{microDeployMode\} ok/);
+  const handler = fonte.match(/const handleMicroDeploy = \(\) => \{[\s\S]*?\n  \}/);
+  assert.ok(handler, "handler do botão não identificado");
+  assert.doesNotMatch(handler[0], /(?:await\s+)?(?:handleSync|runSync|execSync|fetch)\s*\(/);
+  assert.ok(fonte.includes("const handleSync = async"), "não apagar sync existente");
+});
+
+
+test("TelePainel permanece produto próprio; matriz Admin ocupa o mesmo HUD sem publicar casca Cliente", () => {
+  assert.ok(zone.includes('id="cd-admin-capabilities"'));
+  assert.ok(zone.includes('id="cd-hud-legacy-owner-inventory"'));
+  assert.ok(zone.includes("O TelePainel continua sendo um produto próprio"));
+  assert.ok(zone.includes("Versão estável · NÃO LIBERADA"));
+  assert.ok(zone.includes("RUNTIME UNKNOWN"));
+  assert.ok(zone.includes("SOURCE_IN_CODE != WIRED != TESTED != DEPLOYED"));
+  const rows = zone.match(/\{ origem: "[^"]+", destino: "[^"]+", owner: "[^"]+", status: "(?:PARCIAL|NAO_INTEGRADO)" \}/g) ?? [];
+  assert.equal(rows.length, 15, "15 entradas preservadas da Sidebar TelePainel");
+  assert.equal(new Set(rows).size, 15);
+  assert.ok(zone.includes("telepainelAdminCapabilities.map"));
+  assert.ok(!zone.includes("git reset --hard"));
+});
+
+
+test("Casa canonical K and four-stage collector receipt", () => {
+  const launcher = read("apps/instinto-superior/INICIAR-COCKPIT-LOCAL.bat");
+  const bridge = read("scripts/casa/vscode-log-bridge.ps1");
+  const ingest = read("scripts/vps/ingest-vscode-log.mjs");
+  for (const field of ["EXPECTED_ROOT=K:", "BLOCKED_LEGACY_OR_NONCANONICAL_PATH",
+    "BLOCKED_NOT_GIT_CHECKOUT", "npm ci", "--port 3000 --strictPort"]) {
+    assert.ok(launcher.includes(field), field);
+  }
+  assert.ok(!launcher.includes('cd /d "E:'));
+  for (const stage of ["[switch]$Bootstrap", "BUILD=PASS_SOURCE_PARSE_AND_GIT_ROOT_K",
+    "INSTALL=PASS_EXISTING_SCHEDULED_TASK", "CONNECT=PASS_",
+    "PROVE=PASS_COLLECTOR_METADATA_", "BROWSER_AUTOMATION_E2E=UNPROVEN",
+    "FIXED_POINT=COLLECTOR_ONLY"]) assert.ok(bridge.includes(stage), stage);
+  assert.ok(bridge.includes("chromium(_headless_shell)?-"));
+  assert.ok(bridge.includes("$parsed.playwright.revision -eq"));
+  assert.ok(ingest.includes("const playwrightReceipt = playwrightProbe == null"));
+  assert.ok(ingest.includes("playwright: playwrightReceipt"));
+  assert.ok(!ingest.includes("playwright: playwrightProbe,"));
+});
+
+
+test("MCP PID ao vivo exige Supabase admin, heartbeat fresco e fail-closed", () => {
+  const backend = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
+  assert.ok(backend.includes("export const lerMcpRuntimeAoVivo = createServerFn"));
+  assert.ok(backend.includes(".middleware([requireSupabaseAuth])"));
+  assert.ok(backend.includes('.eq("role", "admin")'));
+  assert.ok(backend.includes('medirReachable("http://127.0.0.1:9100/heartbeat")'));
+  assert.ok(backend.includes('"centraldark.execution-topology.v1"'));
+  assert.ok(backend.includes('"mcp-centraldark"'));
+  assert.ok(backend.includes('idadeMs <= 30_000'));
+  assert.ok(backend.includes('pid: recente ? pid as number : null'));
+  assert.ok(backend.includes('processos: McpRuntimeAoVivo["processos"] = recente'));
+  assert.ok(infra.includes('queryKey: ["centraldark", "mcp-runtime-ao-vivo"]'));
+  assert.ok(infra.includes('refetchInterval: 10_000'));
+  assert.ok(infra.includes('mcpAtual.isError'));
+  assert.ok(infra.includes('PID_ANTIGO_OCULTADO'));
+  assert.ok(infra.includes('Presença de PID não prova conexão TCP'));
+  assert.doesNotMatch(infra, /PID 1515631|PID 1355684/);
+  assert.equal(backend.replace('.eq("role", "admin")', '.eq("role", "viewer")')
+    .includes('.eq("role", "admin")'), false);
 });

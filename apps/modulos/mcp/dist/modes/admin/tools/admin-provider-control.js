@@ -1,4 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { existsSync, readFileSync } from "node:fs";
 import { z } from "zod";
 import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "./cloudflare-openapi-catalog.js";
@@ -502,8 +504,28 @@ function loadSecretFromFiles(envKeys, files) {
     }
     return "";
 }
+// O vault da VPS tem precedencia sobre env antigo do processo.
+function chooseTailscaleKey({ vault = {}, mcp = {}, env = {} } = {}) {
+    for (const source of [vault, mcp, env]) {
+        for (const key of ["TAILSCALE_API_KEY", "TS_API_KEY"]) {
+            const value = source[key];
+            if (typeof value === "string" && value.trim())
+                return value.trim();
+        }
+    }
+    return "";
+}
 function loadTailscaleKey() {
-    return loadSecretFromFiles(["TAILSCALE_API_KEY", "TS_API_KEY"], ["/root/CentralDark/secrets/tailscale.env", "/root/CentralDark/apps/modulos/mcp/.env"]);
+    return chooseTailscaleKey({
+        vault: parseEnvFile("/root/CentralDark/secrets/tailscale.env"),
+        mcp: parseEnvFile("/root/CentralDark/apps/modulos/mcp/.env"),
+        env: process.env,
+    });
+}
+function tailscaleKeyKind(token) {
+    if (/^tskey-(auth|client|webhook|scim)-/i.test(token))
+        return "NOT_API_ACCESS_TOKEN";
+    return /^tskey-api-/i.test(token) ? "API_ACCESS_TOKEN" : "UNKNOWN_FORMAT";
 }
 function loadBuildkiteToken() {
     return loadSecretFromFiles(["BUILDKITE_API_TOKEN", "BUILDKITE_TOKEN"], ["/root/CentralDark/secrets/buildkite.env", "/root/CentralDark/apps/modulos/mcp/.env"]);
@@ -519,6 +541,9 @@ async function providerHeaders(provider, requestId = randomUUID()) {
         const token = loadTailscaleKey();
         if (!token)
             throw new Error("TAILSCALE_CREDENTIALS_MISSING");
+        if (tailscaleKeyKind(token) === "NOT_API_ACCESS_TOKEN") {
+            throw new Error("TAILSCALE_WRONG_CREDENTIAL_KIND");
+        }
         return { Authorization: `Bearer ${token}`, Accept: "application/json" };
     }
     if (provider === "buildkite") {
@@ -688,24 +713,67 @@ export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limi
         source: "TAILSCALE_API_LOGGING_NETWORK",
     };
 }
-async function readTailscaleBridgeStatus() {
-    const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
-        headers: { accept: "application/json" },
-        signal: AbortSignal.timeout(7_000),
-    });
-    const text = await response.text();
-    let parsed;
+const execFileAsync = promisify(execFile);
+// Os identificadores da tailnet nao saem do host: somente resumo agregado.
+function summarizeLocalTailnet(payload) {
+    const self = payload?.Self && typeof payload.Self === "object" ? payload.Self : {};
+    const peers = payload?.Peer && typeof payload.Peer === "object"
+        ? Object.values(payload.Peer).filter(item => item && typeof item === "object")
+        : [];
+    return {
+        selfOnline: self.Online === true,
+        peerCount: peers.length,
+        onlinePeers: peers.filter(item => item.Online === true).length,
+        privateIpAssigned: Array.isArray(self.TailscaleIPs) && self.TailscaleIPs.length > 0,
+    };
+}
+async function localTailnetFallback() {
     try {
-        parsed = text ? JSON.parse(text) : null;
+        const { stdout } = await execFileAsync("tailscale", ["status", "--json"], {
+            timeout: 5500,
+            maxBuffer: 1024 * 1024,
+            windowsHide: true,
+        });
+        return {
+            source: "tailscale-cli:status-json",
+            observed: true,
+            ...summarizeLocalTailnet(JSON.parse(stdout)),
+        };
     }
     catch {
-        parsed = { text: text.slice(0, 2_000) };
+        return { source: "tailscale-cli:status-json", observed: false };
     }
-    const data = deepRedact(parsed);
-    if (!response.ok) {
+}
+async function readTailscaleBridgeStatus() {
+    try {
+        const response = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
+            headers: { accept: "application/json" },
+            signal: AbortSignal.timeout(7_000),
+        });
+        const text = await response.text();
+        let parsed;
+        try {
+            parsed = text ? JSON.parse(text) : null;
+        }
+        catch {
+            parsed = { text: text.slice(0, 2_000) };
+        }
+        const data = deepRedact(parsed);
+        if (!response.ok) {
+            return {
+                ok: false,
+                status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+                provider: "tailscale",
+                capability: "bridge.status",
+                httpStatus: response.status,
+                source: "oauth-broker:/api/tailscale/status",
+                data,
+                localFallback: await localTailnetFallback(),
+            };
+        }
         return {
-            ok: false,
-            status: `TAILSCALE_BRIDGE_HTTP_${response.status}`,
+            ok: true,
+            status: "PASS",
             provider: "tailscale",
             capability: "bridge.status",
             httpStatus: response.status,
@@ -713,15 +781,16 @@ async function readTailscaleBridgeStatus() {
             data,
         };
     }
-    return {
-        ok: true,
-        status: "PASS",
-        provider: "tailscale",
-        capability: "bridge.status",
-        httpStatus: response.status,
-        source: "oauth-broker:/api/tailscale/status",
-        data,
-    };
+    catch {
+        return {
+            ok: false,
+            status: "TAILSCALE_OAUTH_BROKER_UNREACHABLE",
+            provider: "tailscale",
+            capability: "bridge.status",
+            source: "oauth-broker:/api/tailscale/status",
+            localFallback: await localTailnetFallback(),
+        };
+    }
 }
 function operationFingerprint(input) {
     return createHash("sha256").update(JSON.stringify(input)).digest("hex");
@@ -1121,5 +1190,8 @@ export const __test = Object.freeze({
     operationFingerprint,
     actorFingerprint,
     sanitizeError,
+    summarizeLocalTailnet,
+    chooseTailscaleKey,
+    tailscaleKeyKind,
 });
 //# sourceMappingURL=admin-provider-control.js.map
