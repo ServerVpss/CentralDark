@@ -70,6 +70,16 @@ export function StatusPanel() {
     { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: `HTTP ${d?.apiHealthHttp ?? "?"} · /health`, icon: Activity },
   ];
 
+  const rotas = [
+    { id: "casa-site", owner: "Casa Windows / Vite", estado: d?.casaSite ?? unknown, fonte: "Casa/Site local · HTTP 4175" },
+    { id: "github-main", owner: "GitHub main", estado: d?.github ?? unknown, fonte: "GitHub API · main SHA" },
+    { id: "vps-sha", owner: "Microdeploy VPS", estado: d?.deploy ?? unknown, fonte: "VPS SHA · comparação com main (não prova serviço)" },
+    { id: "api-health", owner: "API CentralDark", estado: d?.apiHealth ?? unknown, fonte: "API /health · não prova todo o sistema" },
+    { id: "screenpipe-casa", owner: "Screenpipe Casa", estado: d?.screenpipe ?? unknown, fonte: d?.screenpipeFonte ?? "Casa 3030/health" },
+    { id: "screenpipe-vps", owner: "Screenpipe VPS", estado: d?.screenpipeVps ?? unknown, fonte: d?.screenpipeVpsFonte ?? "VPS 3030/health" },
+  ] as const;
+  const rotasComProblema = rotas.filter((rota) => rota.estado !== "PASS");
+
   const modulos = [
     {
       nome: "Screenpipe", estado: screen, icon: Eye, subtitulo: "Saída local do /health do Screenpipe",
@@ -121,6 +131,24 @@ export function StatusPanel() {
           );
         })}
       </div>
+      <details className="rounded-md border border-border p-3 text-xs">
+        <summary className="cursor-pointer font-medium">
+          🧿 Rotas e alertas · {fresco ? rotasComProblema.length : rotas.length} sem PASS atual
+        </summary>
+        <p className="mt-2 text-muted-foreground">
+          Alertas deste painel usam o mesmo sensor da Casa/VPS. Histórico persistente usa a Central de Notificações (Supabase);
+          esta leitura não grava eventos nem cria missões.
+        </p>
+        <ul className="mt-2 space-y-2">
+          {rotas.map((rota) => (
+            <li key={rota.id} className="rounded border border-border/70 p-2">
+              <span className="font-mono">{rota.id}</span> · {fresco ? etiqueta(rota.estado) : "MEDIÇÃO EXPIRADA"}
+              <p className="text-muted-foreground">{rota.fonte} · owner: {rota.owner}</p>
+              <p className="text-muted-foreground">Última consulta: <DataHora iso={medidoEm} /></p>
+            </li>
+          ))}
+        </ul>
+      </details>
       <div className="grid gap-4 md:grid-cols-2">
         {modulos.map((m) => {
           const Icon = m.icon;
