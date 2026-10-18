@@ -215,10 +215,27 @@ class CotReactExecutor:
         
         return record
     
-    def _save_record(self, record: IterationRecord):
-        """Save record to JSONL log."""
-        with open(self.log_file, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(asdict(record), ensure_ascii=False) + '\n')
+    def _save_record(self, record: IterationRecord, summary_only: bool = False):
+        """Use evidence metadata, not raw prompts/commands/output, for goal receipts."""
+        if summary_only:
+            stdout = str(record.observe.get("stdout", ""))
+            event = {
+                "schema": "centraldark.cot-react.goal-iteration.v1",
+                "iter": record.iter,
+                "tool": record.act.get("tool"),
+                "stdout_sha256": hashlib.sha256(stdout.encode("utf-8")).hexdigest() if stdout else None,
+                "exit_code": record.observe.get("exit_code"),
+                "success": record.observe.get("success") is True,
+                "verdict": record.critic.get("verdict"),
+                "verified_clauses": record.critic.get("verified_clauses", []),
+                "pending_clauses": record.critic.get("pending_clauses", []),
+                "decide": record.decide,
+                "timestamp": record.timestamp,
+            }
+        else:
+            event = asdict(record)  # Keep legacy behavior for non-Goal callers.
+        with open(self.log_file, "a", encoding="utf-8") as fp:
+            fp.write(json.dumps(event, ensure_ascii=False) + "\n")
     
     def run_loop(self, brief: Dict[str, Any], steps: List[Dict]) -> List[IterationRecord]:
         """Run bounded steps. In goal mode, never stop at the first green step.
@@ -293,7 +310,7 @@ class CotReactExecutor:
                     record.refine = "NEXT_CURSOR: " + ",".join(pending)
 
             # Record the final decision, not the pre-goal step verdict.
-            self._save_record(record)
+            self._save_record(record, summary_only=bool(expected))
             print(f"OBSERVE: success={record.observe.get('success')}")
             print(f"CRITIC: {record.critic['verdict']}")
             print(f"DECIDE: {record.decide}")
