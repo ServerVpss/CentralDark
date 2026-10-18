@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { hostname } from "node:os";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
@@ -47,7 +48,9 @@ export type EstadoCentralDark = {
   casaPeerOnline: boolean | null;
   casaPeerFonte: string;
   casaPeerMedidoEm: string | null;
-  screenpipe: Estado;
+  screenpipe: Estado; // Alias legado: exclusivamente Screenpipe Casa.
+  screenpipeVps: Estado;
+  desktopVps: Estado;
   actions: Estado;
   actionsLinuxMinutes: number | null;
   actionsWindowsMinutes: number | null;
@@ -78,6 +81,16 @@ export type EstadoCentralDark = {
   screenpipeDetail: string | null;
   screenpipeFonte: string;
   screenpipeEvents: string[];
+  screenpipeVpsHttp: number | null;
+  screenpipeVpsDetail: string | null;
+  screenpipeVpsFonte: string;
+  screenpipeVpsEvents: string[];
+  screenpipeCasaMedidoEm: string | null;
+  screenpipeVpsMedidoEm: string | null;
+  apiHealthFonte: string;
+  apiHealthServico: string;
+  apiHealthMedidoEm: string | null;
+  desktopVpsFonte: string;
   actionsFonte: string;
   actionsErro: string | null;
   gmailFonte: string;
@@ -172,9 +185,6 @@ async function medirApi(path: string): Promise<Probe> {
   }
 }
 
-// O /health do Hermes-Core não usa o campo genérico `ok`; sua assinatura
-// operacional é status=ok + servico=hermes-core. Sem essa identificação,
-// HTTP 200 prova apenas transporte e o HUD mantém UNKNOWN/RUNNING.
 function apiHealthIdentificada(sonda: Probe): Probe {
   if (sonda.estado === "UNKNOWN" || sonda.estado === "FAIL") return sonda;
   const status = texto(sonda.dados?.["status"])?.toLowerCase();
@@ -246,11 +256,13 @@ function screenpipeIdentificado(sonda: Probe): Probe {
     return { ...sonda, estado: "UNKNOWN", erro: "SCREENPIPE_HEALTH_NAO_IDENTIFICADO_NESTE_HOST" };
   }
   const status = texto(sonda.dados?.["status"])?.toLowerCase();
+  const dependencias = objetoJson(sonda.dados?.["dependencies"])
+    ? sonda.dados["dependencies"] : null;
   const assinatura = [
     "frame_status", "audio_status", "capture_status", "last_frame_timestamp",
     "device_status_details", "ui_recorder",
   ].some(campo => sonda.dados?.[campo] != null)
-    || objetoJson(sonda.dados?.["dependencies"]);
+    || (dependencias !== null && objetoJson(dependencias["ffmpeg"]));
   if (!assinatura || !["healthy", "unhealthy", "error"].includes(status ?? "")) {
     return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_SCREENPIPE" };
   }
@@ -443,6 +455,21 @@ async function medirDelta(vpsSha: string | null, mainSha: string | null) {
   }
 }
 
+// O loopback pertence SEMPRE ao processo que executa esta função server-side.
+// Não projetar saúde de um host remoto como saúde da Casa.
+type HostScreenpipe = "CASA" | "VPS" | "UNKNOWN";
+function origemLocalScreenpipe(): HostScreenpipe {
+  const origemDeclarada = process.env["CENTRALDARK_COCKPIT_HOST_ROLE"]?.toUpperCase();
+  if (origemDeclarada === "CASA" && process.platform === "win32") return "CASA";
+  if (origemDeclarada === "VPS" && process.platform !== "win32") return "VPS";
+  const host = hostname().toUpperCase();
+  if (process.platform === "win32" && (host === "SEGREDO" || host === "WINDOWS-CASA")) return "CASA";
+  return process.platform !== "win32" && host === "CENTRALDARK-OS" ? "VPS" : "UNKNOWN";
+}
+
+const SONDA_NAO_EXECUTADA: Probe = {
+  estado: "UNKNOWN", httpStatus: null, erro: "SEM_MEDICAO_NESTE_HOST", dados: null,
+};
 
 // #OBSERVACOES# @owner=apps/instinto-superior/src/lib/cockpit.functions.ts
 // @doc_ref=apps/instinto-superior/README.md
@@ -485,6 +512,9 @@ async function medirPeerCasa(): Promise<{
 // Único owner do HUD vivo: agrega GitHub + API CentralDark e nunca promove ausência de prova.
 export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
+    const hostScreenpipe = origemLocalScreenpipe();
+    const origemHttp = apiBase();
+    const consultaEm = new Date().toISOString();
     const [
       github,
       liveFabric,
@@ -509,12 +539,25 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:4175/", true),
       medirPeerCasa(),
-      // VPS localhost nao representa Casa SEGREDO; somente Windows local.
-      medirReachable("http://127.0.0.1:3030/health", true),
+      hostScreenpipe !== "UNKNOWN"
+        ? medirReachable("http://127.0.0.1:3030/health")
+        : Promise.resolve(SONDA_NAO_EXECUTADA),
       medirActions(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
     const apiHealthMedido = apiHealthIdentificada(apiHealth);
+    const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
+    const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
+    const screenpipeCasaFonte = hostScreenpipe === "CASA"
+      ? "Casa Windows · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória"
+      : "Casa Windows · sem adapter/medição remota neste servidor";
+    const screenpipeVpsFonte = hostScreenpipe === "VPS"
+      ? "VPS CENTRALDARK-OS · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória (porta pode ser Graph Panel)"
+      : "VPS CENTRALDARK-OS · sem adapter/medição remota neste servidor";
+    // API 200 só atesta esta rota. O body pode identificar serviço, não integrações internas.
+    const apiServico = texto(apiHealth.dados?.["service"])
+      ?? texto(apiHealth.dados?.["name"])
+      ?? "Serviço não identificado pelo /health";
     const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
     const heartbeat: Probe =
       heartbeatSelf === "stale"
@@ -552,7 +595,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaPeerOnline: casaPeer.online,
       casaPeerFonte: casaPeer.fonte,
       casaPeerMedidoEm: casaPeer.medidoEm,
-      screenpipe: screenpipeMedido.estado,
+      screenpipe: screenpipeCasa.estado,
+      screenpipeVps: screenpipeVps.estado,
+      desktopVps: "UNKNOWN",
       actions: actions.estado,
       actionsLinuxMinutes: actions.linux,
       actionsWindowsMinutes: actions.windows,
@@ -579,16 +624,24 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
-      screenpipeHttp: screenpipeMedido.httpStatus,
-      screenpipeDetail: texto(screenpipeMedido.dados?.["status"]),
-      screenpipeFonte: process.platform === "win32"
-         ? "host Windows do Cockpit · 127.0.0.1:3030 (medição local)"
-         : "Casa SEGREDO · sensor remoto sem ponte neste runtime; localhost VPS não consultado",
-      screenpipeEvents: saidaScreenpipe(screenpipeMedido),
+      screenpipeHttp: screenpipeCasa.httpStatus,
+      screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
+      screenpipeFonte: screenpipeCasaFonte,
+      screenpipeEvents: hostScreenpipe === "CASA" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
+      screenpipeVpsHttp: screenpipeVps.httpStatus,
+      screenpipeVpsDetail: texto(screenpipeVps.dados?.["status"]),
+      screenpipeVpsFonte,
+      screenpipeVpsEvents: hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeVps) : ["NÃO MEDIDO · exige sensor na VPS"],
+      screenpipeCasaMedidoEm: hostScreenpipe === "CASA" ? consultaEm : null,
+      screenpipeVpsMedidoEm: hostScreenpipe === "VPS" ? consultaEm : null,
+      apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side`,
+      apiHealthServico: apiServico.slice(0, 100),
+      apiHealthMedidoEm: consultaEm,
+      desktopVpsFonte: "Remote Desktop Commander VPS · sensor externo não consultado neste servidor; offline do conector não prova VPS parada",
       actionsFonte: actions.fonte,
       actionsErro: actions.erro,
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
-      desktopFonte: "Remote Desktop Commander externo · status não inferido pelo app",
+      desktopFonte: "Remote Desktop Commander Casa · sensor externo não consultado pelo app; cota de ferramenta ≠ saúde da Casa",
     };
   },
 );
