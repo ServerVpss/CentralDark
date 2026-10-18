@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
+
+import { __test as distTest, tailscaleTools as distTailscaleTools } from "../dist/modes/admin/tools/admin-provider-control.js";
 
 import {
   PROVIDER_CAPABILITY_MATRIX,
@@ -273,4 +276,43 @@ test("fallback Tailscale local nao promove broker a PASS nem revela identificado
     onlinePeers: 0,
     privateIpAssigned: false,
   });
+});
+
+test("dist preserves native Tailscale fallback and never leaks peer identity", () => {
+  const content = readFileSync(
+    new URL("../dist/modes/admin/tools/admin-provider-control.js", import.meta.url),
+    "utf8",
+  );
+  assert.match(content, /TAILSCALE_OAUTH_BROKER_UNREACHABLE/);
+  assert.equal((content.match(/localFallback: await localTailnetFallback\(\)/g) || []).length, 2);
+  assert.match(content, /execFileAsync\("tailscale", \["status", "--json"\]/);
+  const sample = {
+    Self: { Online: true, HostName: "private-machine", TailscaleIPs: ["100.100.99.88"] },
+    Peer: { x: { Online: true, HostName: "private-peer" }, y: { Online: false } },
+  };
+  const report = distTest.summarizeLocalTailnet(sample);
+  assert.deepEqual(report, __test.summarizeLocalTailnet(sample));
+  const serialized = JSON.stringify(report);
+  for (const sensitive of ["private-machine", "private-peer", "100.100.99.88"]) {
+    assert.equal(serialized.includes(sensitive), false);
+  }
+  assert.equal(distTailscaleTools.find(t => t.name === "tailscale_bridge_status")?.annotations.readOnlyHint, true);
+});
+
+test("dist bridge retains status UNKNOWN on broker failure (not PASS)", async () => {
+  const bridge = distTailscaleTools.find(t => t.name === "tailscale_bridge_status");
+  assert.ok(bridge);
+  const priorFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("broker_unreachable_fixture"); };
+  try {
+    // CLI fallback reads local tailnet only; host/peers never appear in returned data.
+    const reply = JSON.parse((await bridge.handler({})).content[0].text);
+    assert.equal(reply.ok, false);
+    assert.equal(reply.status, "TAILSCALE_OAUTH_BROKER_UNREACHABLE");
+    assert.equal(reply.localFallback?.source, "tailscale-cli:status-json");
+    assert.equal(typeof reply.localFallback?.observed, "boolean");
+    assert.equal("data" in reply, false);
+  } finally {
+    globalThis.fetch = priorFetch;
+  }
 });
