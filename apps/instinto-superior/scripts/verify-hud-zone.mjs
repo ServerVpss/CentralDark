@@ -598,3 +598,18 @@ test("microdeploy do Cockpit nunca vende sync Git como deploy comprovado", () =>
   assert.doesNotMatch(handler[0], /(?:await\s+)?(?:handleSync|runSync|execSync|fetch)\s*\(/);
   assert.ok(fonte.includes("const handleSync = async"), "não apagar sync existente");
 });
+
+
+test("TelePainel permanece produto próprio; matriz Admin ocupa o mesmo HUD sem publicar casca Cliente", () => {
+  assert.ok(zone.includes('id="cd-admin-capabilities"'));
+  assert.ok(zone.includes('id="cd-hud-legacy-owner-inventory"'));
+  assert.ok(zone.includes("O TelePainel continua sendo um produto próprio"));
+  assert.ok(zone.includes("Versão estável · NÃO LIBERADA"));
+  assert.ok(zone.includes("RUNTIME UNKNOWN"));
+  assert.ok(zone.includes("SOURCE_IN_CODE != WIRED != TESTED != DEPLOYED"));
+  const rows = zone.match(/\{ origem: "[^"]+", destino: "[^"]+", owner: "[^"]+", status: "(?:PARCIAL|NAO_INTEGRADO)" \}/g) ?? [];
+  assert.equal(rows.length, 15, "15 entradas preservadas da Sidebar TelePainel");
+  assert.equal(new Set(rows).size, 15);
+  assert.ok(zone.includes("telepainelAdminCapabilities.map"));
+  assert.ok(!zone.includes("git reset --hard"));
+});
