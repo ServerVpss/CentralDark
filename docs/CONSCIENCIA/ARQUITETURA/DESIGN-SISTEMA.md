@@ -142,7 +142,7 @@ como `PARTIAL_COVERAGE`, nunca como concluído.
 <!-- #OBSERVACOES# | CENTRALDARK.VISUAL.ESMERALDA
 @owner: docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md
 @code_ref: apps/instinto-superior/src/styles.css
-@last_updated: 2026-10-16T10:23:11.582Z
+@last_updated: 2026-10-18
 @estado: STYLE_PATCH_PREPARED; RUNTIME_PROOF_PENDING
 @next_cursor: CI + comparacao visual do cockpit vivo + recibo.
 -->
@@ -158,6 +158,14 @@ O acabamento em `apps/instinto-superior/src/styles.css` evolui apenas a regra es
 **Gate de promoção:** build no mesmo SHA, seleção em tempo real, persistência após reload, preservação de aba/formulário/sessão, teste de navegação autenticada, capturas desktop/mobile e comparação de regressão das outras peles. `STATIC_CHECK_PASS != BUILD_PASS != LIVE_RUNTIME_PASS`. Aplicação global em Hub, Bolt e Open WebUI continua **não comprovada** até reconciliar os respectivos owners de tema.
 
 
+
+### Microinterações Michelin · 18/10/2026
+
+O léxico cognitivo A–Z e as oito legendas do Modo Michelin não constituem paleta, tema, componente autônomo ou engine. A fonte única fica em `apps/instinto-superior/config/harness-module-registry.json#cognitive_lexicon`; a projeção já existente `InfraestruturaSistema.tsx → Biblioteca()` lê essa fonte sem replicar strings em JSX. A proveniência integral é `apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d005`.
+
+**Acabamento permitido:** somente `styles.css` com CSS escopado por `.cockpit-pele[data-pele-cockpit="esmeralda"]`, deslocamento vertical de 1–2px, escala 1.045–1.06, transição 180ms no hover/foco e sombra esmeralda discreta. Sem animação infinita, sem estado operacional inferido da animação, sem modificar cores/handlers dos outros temas e sem interferir em SVGs `animate-spin` que sinalizam carregamento real. `prefers-reduced-motion: reduce` já desliga transições globais.
+
+**Prova necessária antes de promoção:** JSON parse + unicidade 42/8; parse TypeScript do componente; CSS sintático; captura e testes de interação desktop/mobile, redução de movimento, teclado, quatro peles, contraste, auth e deploy no SHA exato. O hover de ícone não é prova de execução de modelo nem de telemetria. `UNKNOWN != PASS`.
 
 ## Cartazes canônicos e memória visual
 
