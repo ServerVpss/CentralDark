@@ -93,7 +93,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
               🔎 Último checkpoint
             </Button>
             <Button type="button" size="sm" onClick={() => { void retomar(); }}
-              disabled={!disponivel || !checkpoint?.plan_ready || executando}>
+              disabled={!disponivel || !(checkpoint?.plan_ready || checkpoint?.dispatch_ready) || executando}>
               🪬 !CENTRALDARK · Continuar missão
             </Button>
             <Button type="button" size="sm" variant="ghost" aria-expanded={detalhes}
@@ -101,9 +101,14 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
               🧠 Entender CentralDark
             </Button>
           </div>
-          {disponivel && !checkpoint?.plan_ready ? (
+          {disponivel && !checkpoint?.plan_ready && checkpoint?.dispatch_ready ? (
             <p className="mt-2 text-xs text-muted-foreground">
-              O fio foi recuperado, mas ainda não há um plano executável associado. A continuação aguarda a receita comprovada.
+              Sem plano local: continuar envia o próximo cursor ao Kanban original do Hermes, com idempotência. Enviar não significa concluir.
+            </p>
+          ) : null}
+          {disponivel && !checkpoint?.plan_ready && !checkpoint?.dispatch_ready ? (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Checkpoint recuperado. A continuação aguarda uma rota executora disponível.
             </p>
           ) : null}
           {retorno ? <p role="status" className="mt-3 text-sm">{retorno}</p> : null}
@@ -114,7 +119,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
               <p><strong>Executor:</strong> Hermes/CLI usa a mesma missão; a aprovação por etapa exige saída correta e contraprova.</p>
               <p><strong>Continuidade:</strong> uma execução que falha não apaga o último PASS; a próxima tentativa retoma no NEXT_CURSOR.</p>
               <p><strong>Fontes:</strong> VPS → checkpoint owner → servidor autenticado → este cockpit. Código e contratos permanecem na main.</p>
-              <p className="text-xs text-muted-foreground">Botão de continuação usa somente o plano privado previamente validado. Despacho não significa conclusão.</p>
+              <p className="text-xs text-muted-foreground">Com plano comprovado, continua sem repetir verdes. Sem plano, delega o próximo cursor ao Kanban Hermes existente; o Reality Judge valida cada resultado.</p>
             </div>
           ) : null}
         </>
