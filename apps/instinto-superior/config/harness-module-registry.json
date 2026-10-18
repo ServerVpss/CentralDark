@@ -88,11 +88,12 @@
       "id": "notifications-recipe",
       "owner": "apps/instinto-superior/src/components/central/CentralNotificacoes.tsx",
       "transport": "Supabase notifications_log/RLS → Central de Notificações",
-      "runtime_status": "UNKNOWN",
+      "runtime_status": "SOURCE_PROVED_DISPATCH_NOT_CONNECTED",
       "paired_skill": ".agents/skills/skill-workshop/SKILL.md",
-      "execution_owner": "apps/modulos/hub/src/hooks/useMissions.ts",
-      "integration": "aviso curto → receita completa → cópia; despacho direto depende de broker autenticado",
-      "evidence_owner": "apps/instinto-superior/src/hooks/useNotificationsLog.ts"
+      "execution_owner": "apps/modulos/hub/supabase/functions/hub-command/index.ts",
+      "integration": "aviso → expandir receita → copiar; broker hub-command EXISTE no HUB Supabase mas auth de projeto separado não foi provada no cockpit",
+      "evidence_owner": "apps/instinto-superior/src/hooks/useNotificationsLog.ts",
+      "paired_capability": "apps/modulos/hub/src/components/missions/MissionsTab.tsx"
     },
     {
       "id": "voice-semantic",
@@ -163,6 +164,7 @@
     "Família skill/plugin/extensão/conector/owner é catálogo de capacidades reutilizadas; não cria tool nem permissão.",
     "Notificação breve abre a receita; envio direto depende de broker autenticado; voz capturada não comprova transcrição nem áudio healthy.",
     "Prova de 14/10 e screenshots 17/10 é HISTORICAL, não CURRENT. Na última consulta 17/10, dispositivos RDC SEGREDO e CENTRALDARK-OS offline; isso não revoga SSH Tailscale previamente provado.",
-    "Status do sensor só pode piscar verde com timestamp fresco e verificação de sessão/ACK do owner, não com texto estático do catálogo."
+    "Status do sensor só pode piscar verde com timestamp fresco e verificação de sessão/ACK do owner, não com texto estático do catálogo.",
+    "A UI Instinto usa client VITE_SUPABASE_URL e o HUB tem client dedicado lyoigsqluyktoclwdaft. NÃO assumir sessão de autenticação compartilhada entre projetos; hub-command exige JWT de usuário do HUB + has_role admin, registra missão pending e não autoexecuta."
   ]
 }
