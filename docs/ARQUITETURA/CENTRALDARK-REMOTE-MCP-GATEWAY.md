@@ -467,3 +467,52 @@ MCP_CATALOG_RUNTIME_UPDATED=NOT_UNTIL_DEPLOY
 FIXED_POINT_PARCIAL=SSH_PRIVADO_CASA_VPS_E_INVENTARIO_EM_PR_1842
 NEXT_CURSOR=CI_DO_HEAD_DESTA_PR -> MERGE_AUTORIZADO_COM_SHA -> MICRODEPLOY_DO_MCP -> READBACK_CATALOGO -> EXECUTOR_CASA_ACK -> UI_RECIBO -> REAVALIAR_RDC
 CURRENT_NE_LEGACY=true; ROUTE_REGISTERED_NE_EXECUTABLE=true; UNKNOWN_NE_PASS=true.
+
+### 31 ferramentas do Desktop Commander: equivalência tipada
+
+A tabela abaixo descreve alternativas somente para o escopo indicado. Ela NAO implica que o
+Windows Casa tenha recebido comandos por essa alternativa. Estados sao fronteiras tecnicas,
+nao badges PASS. A mesma lista e devolvida por mcp_admin_catalog somente depois do deploy.
+
+| RDC original | Rota no MCP existente | Escopo | Prova / limite |
+|---|---|---|---|
+| list_devices | TAILSCALE_PRIVATE_ROUTE | DEVICE_DISCOVERY | PROVED_TAILNET_ONLY |
+| who_am_i | RDC_DESKTOP_COMMANDER | PROVIDER_ACCOUNT | VENDOR_ONLY |
+| get_tool_result | MCP_VPS_NATIVE_HTTP | RECEIPT_READBACK | PENDING_CORRELATION |
+| list_remote_tool_calls | MCP_VPS_NATIVE_HTTP | AUDIT_LOGS | PARTIAL_MCP_ONLY |
+| ping | TAILSCALE_PRIVATE_ROUTE | NETWORK_PROBE | PROVED_CONNECTIVITY_ONLY |
+| shutdown | RDC_DESKTOP_COMMANDER | VENDOR_AGENT | VENDOR_ONLY |
+| get_config | MCP_VPS_NATIVE_HTTP | OWNER_CONFIG | NOT_EQUIVALENT |
+| set_config_value | MCP_VPS_NATIVE_HTTP | OWNER_CONFIG_WRITE | NOT_EQUIVALENT |
+| read_file | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE | TRANSPORT_PROVEN_ACTION_PENDING |
+| read_multiple_files | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILES | TRANSPORT_PROVEN_ACTION_PENDING |
+| write_file | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_WRITE | TRANSPORT_PROVEN_ACTION_PENDING |
+| write_pdf | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_ARTIFACT | RENDERER_AND_READBACK_REQUIRED |
+| create_directory | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_WRITE | TRANSPORT_PROVEN_ACTION_PENDING |
+| list_directory | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILES | TRANSPORT_PROVEN_ACTION_PENDING |
+| move_file | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_WRITE | TRANSPORT_PROVEN_ACTION_PENDING |
+| start_search | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_SEARCH | TRANSPORT_PROVEN_ACTION_PENDING |
+| get_more_search_results | MCP_VPS_NATIVE_HTTP | CURSOR_RESULTS | PENDING_CORRELATION |
+| stop_search | MCP_VPS_NATIVE_HTTP | JOB_CONTROL | PENDING_CORRELATION |
+| list_searches | MCP_VPS_NATIVE_HTTP | JOB_CATALOG | PENDING_CORRELATION |
+| get_file_info | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_METADATA | TRANSPORT_PROVEN_ACTION_PENDING |
+| edit_block | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_FILE_WRITE | DIFF_HASH_OWNER_GUARD_REQUIRED |
+| start_process | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_SHELL | PROVED_SSH_EXEC_EXIT_ZERO |
+| read_process_output | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_SHELL_OUTPUT | SINGLE_COMMAND_OUTPUT_ONLY |
+| interact_with_process | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_TTY | TTY_RECEIPT_PENDING |
+| force_terminate | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_PROCESS_KILL | GUARDED_DESTRUCTIVE_UNTESTED |
+| list_sessions | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_SESSION_LIST | TRANSPORT_PROVEN_ACTION_PENDING |
+| list_processes | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_PROCESS_LIST | TRANSPORT_PROVEN_ACTION_PENDING |
+| kill_process | ZENDRIVE_VSCODE_REMOTE_SSH | VPS_PROCESS_KILL | GUARDED_DESTRUCTIVE_UNTESTED |
+| get_usage_stats | MCP_VPS_NATIVE_HTTP | LOCAL_MCP_TELEMETRY | VENDOR_STATS_NOT_MIRRORED |
+| get_recent_tool_calls | MCP_VPS_NATIVE_HTTP | LOCAL_MCP_TELEMETRY | PARTIAL_INSTRUMENTED_ONLY |
+| give_feedback_to_desktop_commander | RDC_DESKTOP_COMMANDER | VENDOR_FEEDBACK | VENDOR_ONLY |
+
+Inventario atual: **31/31 ferramentas de origem mapeadas**, 14 rotas de fonte e 4 novas
+capacidades registradas alem do ZENDRIVE_PID atualizado. O numero de tools do MCP
+nao cresce com estes itens: equivalencia e metadado do catalogo existente, nao endpoint de execucao.
+
+Para qualquer capacidade marcada como VPS, o sentido inverso VPS → Casa continua nao provado.
+Desligar, terminar processo, alterar configuracao, escrever arquivos e executar alteracoes requerem
+gates de autorizacao, idempotencia, dono, backup/rollback quando aplicavel e recibo no destino.
+Erro de autenticacao ou UI equivale a escopo UNKNOWN/BLOCKED, nao a permissao para burlar controle.
