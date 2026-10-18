@@ -17,6 +17,7 @@ import { injectPatternAdmin } from "./admin-patterns-ui.js";
 import { getBuildkiteStatus } from "./buildkite-integration.js";
 import { getGrokControlDashboard, setGrokControlSelection } from "./grok-control.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { getHarnessWeeklySummary } from "./agent-observability.js";
 import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
 import { subscribeAuditEvents } from "./audit-logger.js";
@@ -1641,7 +1642,8 @@ export function adminMetricas(req, res) {
         else if (l.level === "warn") warns++;
         if (l.msg === "http_request_start") requests++;
     }
-    res.json({ janelaMin: 5, erros, warns, requests, sseAtivas: subscribers.size });
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ janelaMin: 5, erros, warns, requests, sseAtivas: subscribers.size, harnessWeek: getHarnessWeeklySummary() });
 }
 
 export function adminGrokControlGet(req, res) {

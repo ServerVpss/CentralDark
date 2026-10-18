@@ -58,21 +58,15 @@ export const AutoSyncButton: React.FC = () => {
     }
   }
 
-  const handleMicroDeploy = async () => {
-    setIsSyncing(true)
-    try {
-      const target = microDeployMode === 'main-only' ? 'main' : 'all'
-      await handleSync(target)
-      setSyncStatus(prev => ({
-        ...prev,
-        status: 'success',
-        human_readable: `Micro-Deploy ${microDeployMode} ok`
-      }))
-    } catch (error) {
-      console.error('Micro-deploy failed:', error)
-    } finally {
-      setIsSyncing(false)
-    }
+  // #OBSERVACOES# MICRODEPLOY_GUARD_20261018
+  // Auto Sync não comprova publicação, PID, health nem recibo de deploy.
+  // Até existir um adapter autorizado com readback, não despachar como deploy.
+  const handleMicroDeploy = () => {
+    setSyncStatus(prev => ({
+      ...prev,
+      status: 'failed',
+      human_readable: `Micro-Deploy ${microDeployMode} BLOQUEADO: sem executor autorizado, receipt e health da VPS.`
+    }))
   }
 
   const getStatusIcon = () => {
@@ -131,7 +125,7 @@ export const AutoSyncButton: React.FC = () => {
             <Zap className="w-5 h-5 text-amber-600" />
             <div>
               <p className="text-sm font-semibold">Micro-Deploy: Instinto Superior + Auto Sync</p>
-              <p className="text-xs text-amber-700">Sincroniza + publica ao vivo (sem dev local)</p>
+              <p className="text-xs text-amber-700">Sync Git não prova deploy. Publicação bloqueada até existir recibo do runtime.</p>
             </div>
           </div>
 

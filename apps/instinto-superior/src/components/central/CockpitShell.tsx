@@ -1,3 +1,11 @@
+/* #OBSERVACOES# | CENTRALDARK.COCKPIT.HUD.PAPAGAIO_ON
+ * @owner: apps/instinto-superior/src/components/central/CockpitShell.tsx
+ * @doc_ref: docs/CONSCIENCIA/RECONCILIACAO-ESCOPOS-PR-20261015.md
+ * @last_updated: 2026-10-16T12:19:56.233Z
+ * @escopo: registrar HUD como PROJECAO; um cockpit, um runtime, uma casca.
+ * @pendente: build e readback do layout no alvo vivo; 10 receipts MCP individuais.
+ * @next_cursor: CI, regressao skins, readback VPS/Casa e selo.
+ */
 import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
 import { useState } from "react";
@@ -51,6 +59,7 @@ import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
 import { ForjaExecutor } from "@/components/central/ForjaExecutor";
 import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
 import { RaioXVivo } from "@/components/central/RaioXVivo";
+import { PapagaioHudMcp } from "@/components/central/PapagaioHudMcp";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
@@ -227,6 +236,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     refetchInterval: 60_000,
   });
   const dado = estado.data;
+  // Uma consulta geral não comprova missões: sensores stale/erro ficam UNKNOWN.
+  const hudMedido = dado && !estado.isError && !estado.isPending && Date.now() - estado.dataUpdatedAt < 90_000
+    ? dado : null;
   const queryClient = useQueryClient();
   const navegar = useNavigate();
   const [unigramLaunch, setUnigramLaunch] = useState<UnigramLaunchStatus>("IDLE");
@@ -389,6 +401,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               ATUALIZAÇÃO 60S
             </span>
           </div>
+          <PapagaioHudMcp medicao={hudMedido} />
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <BlocoEstado
               titulo="Main oficial"

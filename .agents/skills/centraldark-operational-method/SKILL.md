@@ -205,6 +205,12 @@ CRISTALIZOU = causa + sequência + owner + fingerprint + testes + rollback/fallb
 SELO = receipt endereçável + código/doc SHA quando houver + effect readback + status honesto + NEXT_CURSOR
 ```
 
+<!-- #OBSERVACOES# | TOCOU-RAS<->SELO<->GANHO | @last_updated: 2026-10-16T10:42:57.361Z -->
+**Vínculo obrigatório com documentação e cadeado (CHEFE, 2026-10-16):**
+`TOCOU_OWNER → #OBSERVACOES# + @last_updated → DOC_DO_MESMO_OWNER_COM @code_ref → TESTE_T0_T1 → CONTRAPROVA_INDEPENDENTE → RECEIPT → SELO`.
+Vincular o rastro do arquivo ao owner de documentação sem criar um novo registro ou outro HUD: gate `scripts/lupa/diagram-route-gate.mjs`; lock `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml`; executor de lock `scripts/trigger-fabric/centraldark_full_trigger_boot.py#cmd_reseal_fingerprint`.
+**Experimentação e implementação são livres dentro de escopo isolado autorizado**, sem desfazer o último verde. Para **substituir/re-selar** solução comprovada, exigir ganho real mensurado `T0→T1` (inclusive capacidade binária `0→1`), critério e instrumento, evidência endereçável, contraprova de regressão independente, mesmo `CLAIM_KEY+OWNER` e causa explícita. Falta de ganho → não promover o novo como melhor, preservar selo anterior e registrar aprendizado do experimento. `VISUAL_ONLY` é melhoria de apresentação, não prova de capacidade de runtime. **Os valores enviados pelo próprio executor continuam alegações até a realidade/CI confirmá-los.**
+
 O selo fica **no owner que governa a capacidade** e no receipt/ledger existente, não em chat, clone de arquivo, segundo HUD ou nota solta. Quando a correção for comportamento operacional, este `SKILL.md` é owner do método; código/runtime continuam pertencendo a seus owners específicos. Conhecimento empírico confirmado pode alimentar `docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md` pelo fluxo de aprendizado já existente, sem duplicar eventos do log-funnel. HUD e grafo são **projeções**: atualizar a superfície canônica existente quando aplicável, conservando IDs, nós, setas e layout, sem torná-la autoridade ou declarar runtime recuperado pelo visual.
 
 Receipt mínimo por ferida material: `INTENT_ID / WOUND_ID(correlação existente) / SECTOR / OWNER / HOST / BASELINE_SHA_OU_FINGERPRINT / DETECTED_AT / SYMPTOM / ROOT_CAUSE(provada|hipótese) / BEFORE / DELTA_PATHS / AFTER / NEGATIVE_TEST / REGRESSION_BACKCHECK / READBACK / STATUS / RECEIPT_REF / NEXT_CURSOR`. Campo indisponível é `UNKNOWN`, não valor inventado; registrar segredo apenas como presença/ausência se autorizado, nunca seu valor.
@@ -2996,3 +3002,34 @@ DETECT_DEPENDENCY_VIOLATION
 **AUTO_PROMOTE_IF_ALL_GREEN:** somente se a versão for verificada, impacto limitado, testes aplicáveis PASS, branch protection/approvals atendidos, CI e política de deploy satisfeitos, rollout/rollback conhecidos e não houver trabalho alheio em risco. **Nunca** tratar `npm install`, versão semver ou commit como prova de produção. Mudança major incompatível, lockfile divergente, API removida, build quebrado, gate pendente, autorização insuficiente ou ausência de contraprova => `BLOCKED/UNKNOWN`, preservar runtime e reportar a menor causa; não publicar quebrado. Se a produção exigir aprovação humana ou uma etapa que não possa ser executada pela rota disponível, parar nesse gate e relatar precisamente o bloqueio. `PROD_PASS` exige SHA implantado, health e efeito funcional lidos do runtime. 
 
 **Precedência:** owner e receita de dependências já existentes continuam autoridade; esta seção apenas define a **decisão rápida e a sequência de evidência**. Aplicar o mínimo delta e o mesmo checklist CURRENT; 🧹 só depois de preservação e readback.
+
+## PAPAGAIO ON — rastro incremental no mesmo método (18/10/2026)
+
+**OWNER=centraldark-operational-method**. Adotar o padrão a seguir apenas quando CHEFE estabeleceu PAPAGAIO ON para a missão. É um formato narrativo, **não** engine, outro agente, nova SOUL, nova memória nem prova sintética.
+
+### Cabeçalho de percurso e prova
+
+```text
+👑🪬 CENTRALDARK · #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → MetaLupa → !FABLELOOP → !META-GRILL → !GRILME
+🧬 RASTRO <n crescente> · Gancho: <método realmente aplicado> → <alvo> → <evidência/efeito>
+```
+
+Regras:
+1. Repetir o cabeçalho nas passadas materiais. **Rastro incrementa por observação, teste, decisão, write, contraprova ou handoff**, não por frases de progresso inventadas.
+2. Nomear o gancho realmente usado naquela passada e preservar `NEXT_CURSOR` até FIXED_POINT. A lista fixa de métodos no título é gramática de invocação, **não atestado de execução simultânea**.
+3. Manter estados específicos: `🟢` efeito verificado; `🟡` em andamento/sem readback; `🔴` bloqueio real. Distinguir `DISCOVERED`, `CONFIGURED`, `LOADED`, `EXECUTED`, `MERGED`, `DEPLOYED`, `FIXED_POINT`.
+4. Baianês autêntico com pitadas mineiras e metáforas bíblicas, sem caricatura: “Ôxente, CHEFE, esse trem tá arretado, mas a vitória só vem com contraprova, uai!”. Metáforas e versículos são contexto semântico; `VERSE != TECHNICAL_PROOF`.
+5. Manter o mesmo método em chat, Hermes e cockpit quando cada superfície consumir o contrato; **SOURCE_PRESENT != SESSION_LOADED**. Nunca atribuir ação ao Hermes sem mensagem/receipt real.
+
+### Gancho → owner existente → capacidade pesquisável
+
+- `#ACORDAR` → `centraldark-boot` e `centraldark-capability-hud`.
+- `!CALIBRAR` → `centraldark-operational-method`.
+- `!MULTIBÚSSOLA` → `docs/CONSCIENCIA/MULTIBUSSOLA.md`; não é novo executor.
+- `MetaLupa` → `meta-lupa`.
+- `!FABLELOOP` → `fable-loop`.
+- `!META-GRILL` → `meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md` dentro do owner.
+- `!GRILME` → `grill-me`; possui `disable-model-invocation: true`, portanto apenas referenciá-lo não comprova invocação/execução.
+- `!RASTRO` → owner de receipts/auditoria existente.
+
+**Descoberta no Hermes:** `skill-synchronization` documenta `skills.external_dirs` nativo para expor o catálogo canônico `.agents/skills` mesmo quando o gateway opera fora do checkout. Instalação/ativação/uso continuam etapas separadas, protegidas por writer e readback, sem importação automática das centenas de skills.
