@@ -8,6 +8,8 @@ type HarnessModule = {
   transport: string;
   status: "PROVEN" | "UNKNOWN";
   runtimeUrl?: string;
+  evidence?: string;
+  current?: "UNKNOWN" | "OFFLINE";
 };
 
 const MODULES: HarnessModule[] = [
@@ -21,6 +23,9 @@ const MODULES: HarnessModule[] = [
   { id: "notifications-recipe", label: "Notificações e receitas", owner: "apps/instinto-superior/src/components/central/CentralNotificacoes.tsx", transport: "Supabase/RLS · comando ao abrir · broker pendente", status: "UNKNOWN" },
   { id: "voice-semantic", label: "Classificador de voz", owner: ".claude/skills/synced/voice-semantic-classifier/SKILL.md", transport: "Fala → intenção → agente autorizado", status: "UNKNOWN" },
   { id: "screenpipe-audio-casa", label: "Screenpipe · áudio da Casa", owner: ".agents/skills/screenpipe-live-observer/SKILL.md", transport: "Tailscale/Screenpipe · áudio degradado na última medição", status: "UNKNOWN" },
+  { id: "casa-vps-ssh", label: "Casa → VPS · Tailscale SSH", owner: "scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1", transport: "100.90.199.124:22 · host key estrita · fallback público existente", status: "PROVEN", current: "OFFLINE", evidence: "docs/receipts/SSH-CASA-VPS-LOCK-20261014.md" },
+  { id: "vscode-restore", label: "CentralDark VS Code Restore 0.1.4", owner: "VS Code · Casa SEGREDO", transport: "Extensão instalada · prova em sessão histórica", status: "PROVEN", current: "OFFLINE", evidence: "Captura de sessão Windows/VS Code fornecida pelo CHEFE em 17/10" },
+  { id: "vscode-remote-ssh", label: "VS Code Remote-SSH 0.128.0", owner: "VS Code · Casa SEGREDO", transport: "Remote-SSH oficial · transporte Casa → VPS", status: "PROVEN", current: "OFFLINE", evidence: "Captura de sessão Windows/VS Code fornecida pelo CHEFE em 17/10" },
 ];
 
 export function HarnessModuleRegistry() {
@@ -31,7 +36,7 @@ export function HarnessModuleRegistry() {
           <h3 id="harness-module-registry" className="font-semibold">🧩 Módulos do Harness</h3>
           <p className="mt-1 text-xs text-muted-foreground">
             O cockpit orquestra; cada motor continua no seu owner e transporte.
-            Registro não é prova de sessão ativa.
+            Verde representa prova documentada; sessão atual é uma camada separada.
           </p>
         </div>
         <span className="font-mono text-[10px] text-muted-foreground">ONE_SYSTEM_ONLY</span>
@@ -42,11 +47,15 @@ export function HarnessModuleRegistry() {
             <div className="flex items-center justify-between gap-2">
               <strong className="text-sm">{modulo.label}</strong>
               <span className={modulo.status === "PROVEN" ? "text-xs text-emerald-500" : "text-xs text-amber-500"}>
-                {modulo.status}
+                {modulo.status === "PROVEN" ? "EVIDÊNCIA PROVADA" : "SEM PROVA DE RUNTIME"}
               </span>
             </div>
             <p className="mt-1 break-all font-mono text-[10px] text-muted-foreground">OWNER · {modulo.owner}</p>
             <p className="mt-1 text-xs text-muted-foreground">TRANSPORTE · {modulo.transport}</p>
+            {modulo.evidence ? <p className="mt-1 break-all text-[10px] text-muted-foreground">RECIBO · {modulo.evidence}</p> : null}
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              SESSÃO AGORA · {modulo.current === "OFFLINE" ? "OFFLINE NO CONECTOR REMOTO" : "NÃO MEDIDA NESTA TELA"}
+            </p>
             {modulo.runtimeUrl ? (
               <Button asChild size="sm" variant="outline" className="mt-2">
                 <a href={modulo.runtimeUrl} target="_blank" rel="noopener noreferrer">
