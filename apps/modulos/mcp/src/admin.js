@@ -20,6 +20,7 @@ import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { getHarnessWeeklySummary } from "./agent-observability.js";
 import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
+import { subscribeAuditEvents } from "./audit-logger.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -108,6 +109,29 @@ export function pushAdminLog(level, msg, meta) {
         try { send(line); } catch { /* silencioso */ }
     }
 }
+
+// Projecao somente dos metadados do proprio MCP CentralDark.
+// Eventos do Desktop Commander remoto (fora deste MCP) nao surgem aqui
+// automaticamente; precisam de adaptador do cliente/recibo com autorizacao.
+subscribeAuditEvents((evento) => {
+    if (evento?.schema !== "centraldark.mcp.tool-call.v1") return;
+    const safe = (value, length = 120) =>
+        typeof value === "string" ? value.slice(0, length) : null;
+    pushAdminLog(evento.ok === true ? "info" : "error", "mcp_tool_call", {
+        source: "MCP_AUDIT",
+        toolName: safe(evento.toolName),
+        call_id: safe(evento.call_id),
+        correlation_id: safe(evento.correlation_id),
+        mission_id: safe(evento.mission_id),
+        // PID do host MCP. PID do processo filho nao foi extraido nem presumido.
+        mcp_host_pid: Number.isSafeInteger(evento.pid) ? evento.pid : null,
+        exitCode: Number.isSafeInteger(evento.exitCode) ? evento.exitCode : null,
+        durationMs: Number.isFinite(evento.durationMs) ? evento.durationMs : null,
+        status: evento.ok === true ? "PASS" : "FAIL",
+        ended_at: safe(evento.ended_at),
+        // Nunca transportar args, stdout, stderr, paths ou credenciais ao painel.
+    });
+});
 
 function extrairRota(linha) {
     const p = linha.meta?.path;
@@ -328,6 +352,29 @@ __PATTERN_ADMIN_STYLE__
   __PATTERN_ADMIN_PANE__
 
   <div class="pane" id="p-audit">
+    <div class="card">
+      <h2>🪬 Tool Call Lens <span class="badge">MCP próprio · mesma sessão Admin</span></h2>
+      <p style="font-size:12px;color:var(--muted)">Chamada → conclusão, duração e correlação. Logs privados e argumentos não aparecem neste placar. O Desktop Commander remoto precisa de adapter próprio se não passar por este MCP.</p>
+      <div class="filters" style="margin-top:10px">
+        <button class="btn" type="button" id="toolLensToggle" onclick="toolLensAlternar()">⏸ Pausar visão</button>
+        <button class="btn ghost" type="button" onclick="toolLensRever()">↩ Rever últimos</button>
+        <label for="toolLensFilter">Resultado</label>
+        <select id="toolLensFilter" onchange="toolLensRender()"><option value="all">Todos</option><option value="PASS">PASS</option><option value="FAIL">FAIL</option></select>
+      </div>
+      <div id="toolLensStatus" style="margin:10px 0;font-size:12px">Aguardando tool calls do MCP CentralDark.</div>
+      <div id="toolLensRows" class="log-box" role="log" aria-label="Tool calls MCP" style="height:210px"></div>
+      <div class="card" style="margin-top:14px;padding:12px">
+        <h3>🧬 Forja Autônoma <span class="badge">Harness existente → Hermes original</span></h3>
+        <p style="font-size:12px;color:var(--muted)">Uma intenção: regressão → construir → instalar na Casa → conectar → provar. Interrompe na primeira falha; publicar na main/VPS exige autorização de promoção independente.</p>
+        <div class="filters" style="margin-top:10px">
+          <button class="btn" type="button" id="forja4Btn" onclick="forja4Iniciar()">🧬 Construir → Instalar → Conectar → Provar</button>
+          <button class="btn ghost" type="button" onclick="forja4Verificar()">🧿 Relê recibo</button>
+        </div>
+        <div id="forja4Status" role="status" aria-live="polite" style="margin:10px 0;font-size:12px">AGUARDANDO · Sem GOAL da Forja nesta sessão</div>
+        <div id="forja4Stages" class="log-box" style="height:140px;white-space:pre-wrap" aria-label="Etapas da Forja Autônoma"></div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
     <div class="card">
       <h2>Buscar logs <span class="badge">/admin/api/logs</span></h2>
       <div class="filters">
@@ -1019,12 +1066,175 @@ async function carregarLinear(){
   }
 }
 
+// Projecao UI do mesmo SSE e do mesmo login administrativo.
+// No replay, apenas reexibe eventos recebidos; NUNCA reexecuta ferramentas.
+const toolLensEventos = [];
+let toolLensAoVivo = true;
+function toolLensAlternar() {
+  toolLensAoVivo = !toolLensAoVivo;
+  const button = $('toolLensToggle');
+  if (button) button.textContent = toolLensAoVivo ? '⏸ Pausar visão' : '▶ Retomar visão';
+  toolLensRender();
+}
+function toolLensRever() {
+  toolLensAoVivo = false;
+  const button = $('toolLensToggle');
+  if (button) button.textContent = '▶ Retomar visão';
+  toolLensRender();
+}
+function toolLensRegistrar(d) {
+  if (!d || d.msg !== 'mcp_tool_call' || d.meta?.source !== 'MCP_AUDIT') return;
+  const m = d.meta;
+  // Somente chaves permitidas no evento sanitizado pelo backend.
+  const item = {
+    t: String(d.t || ''), name: String(m.toolName || 'UNKNOWN'),
+    status: m.status === 'PASS' ? 'PASS' : 'FAIL',
+    duration: typeof m.durationMs === 'number' ? m.durationMs : null,
+    callId: String(m.call_id || ''),
+    correlation: String(m.correlation_id || ''),
+    mission: String(m.mission_id || ''),
+    hostPid: typeof m.mcp_host_pid === 'number' ? m.mcp_host_pid : null,
+    exitCode: typeof m.exitCode === 'number' ? m.exitCode : null
+  };
+  if (item.callId && toolLensEventos.some(x => x.callId === item.callId)) return;
+  toolLensEventos.unshift(item);
+  if (toolLensEventos.length > 200) toolLensEventos.length = 200;
+  if (toolLensAoVivo) toolLensRender();
+}
+function toolLensRender() {
+  const rows = $('toolLensRows');
+  const status = $('toolLensStatus');
+  if (!rows || !status) return;
+  const filtro = $('toolLensFilter')?.value || 'all';
+  const items = toolLensEventos.filter(x => filtro === 'all' || x.status === filtro);
+  rows.replaceChildren();
+  for (const item of items.slice(0, 60)) {
+    const row = document.createElement('div');
+    row.className = item.status === 'PASS' ? 'info' : 'error';
+    row.style.cssText = 'border-bottom:1px solid #263044;padding:7px 2px;white-space:pre-wrap;word-break:break-word';
+    const state = item.status === 'PASS' ? '🟢' : '🔴';
+    row.textContent = state + ' ' + item.name + ' · ' + item.status +
+      ' · ' + (item.duration == null ? 'tempo desconhecido' : item.duration + ' ms') +
+      '\n' + item.t + ' · cid=' + (item.correlation || '-') +
+      ' · toolCall=' + (item.callId || '-') +
+      ' · PID do host MCP=' + (item.hostPid == null ? '-' : item.hostPid) +
+      (item.exitCode == null ? '' : ' · exit=' + item.exitCode);
+    rows.appendChild(row);
+  }
+  if (!items.length) rows.textContent = 'Nenhuma chamada do MCP próprio recebida nesta sessão.';
+  status.textContent = (toolLensAoVivo ? '👁 AO VIVO' : '⏸ PAUSADO / REVISÃO') +
+    ' · ' + toolLensEventos.length + ' calls no buffer · fonte MCP_AUDIT';
+}
+
+
+const forja4Stages = [
+  '01 · ANTIRREGRESSÃO: baseline, testes, tipos, lint, CI SHA',
+  '02 · CONSTRUIR: build local com hash e exit code',
+  '03 · INSTALAR: instalar somente no ambiente Casa autorizado',
+  '04 · CONECTAR: VS Code/ZENDRIVE → MCP/SSH → Hermes, leitura autenticada',
+  '05 · PROVAR: E2E + recibo do mesmo SHA, sem regressão'
+];
+const forja4Intent = [
+  'FORJA_4X_EXISTENTE: executar na Casa sob owner atual, one writer, mesma missão.',
+  'ANTIRREGRESSAO_OBRIGATORIA antes e depois de cada mudança:',
+  '1 inventariar working tree + HEAD + diff e NÃO sobrescrever edições concorrentes;',
+  '2 rodar testes pertinentes, typecheck, lint e build no owner existente;',
+  '3 construir artefato com exit code, hash, hora e recibo;',
+  '4 instalar somente no escopo Casa/local autorizado, preservar app anterior e rollback;',
+  '5 conectar extensão ZENDRIVE e MCP/SSH existentes; testar identidade, latência e heartbeat;',
+  '6 provar botões, fluxo real e regressão pós-instalação no mesmo SHA e salvar receipt;',
+  '7 STOP em FAIL, UNKNOWN, build ruim, conflito, review/CI ausente ou falta de permissão;',
+  '8 main e VPS: NO_MERGE_NO_DEPLOY sem aprovação separada do CHEFE.',
+  'Runner canonico da Casa: skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1; executar uma unica vez no terminal Hermes autorizado, depois ler o JSON gerado em TEMP/CentralDark-Forja-Lens.',
+  'Converter para forja-4x-receipt.json somente com antirregressao/testes reais, artefato e instalacao medidos, SSH autenticado e E2E do Tool Call Lens com call_id.',
+  'Reusar apps/modulos/mcp/src/intent-cycle-adapter.js, tools existentes e CI.',
+  'Devolver para Tool Call Lens: goalId/fingerprint/SHA, stage, source, timestamp, status e nextCursor.',
+  'Nao marcar install/connect/prove PASS por apenas fila, fonte ou documento.'
+].join(' ');
+let forja4Fingerprint = null;
+let forja4Busy = false;
+function forja4Mostrar(status, detail) {
+  const el = $('forja4Status'); if (el) el.textContent = status + (detail ? ' · ' + detail : '');
+}
+function forja4Pintar(resp) {
+  const el = $('forja4Stages'); if (!el) return;
+  const entries = resp?.criteria || [];
+  const lookup = id => entries.find(c => c.id === id)?.status || 'UNKNOWN';
+  const finalProven = resp?.executionProven === true && resp?.fixedPoint === true
+    && resp?.forja4x?.fixedPoint === true;
+  const queued = resp?.queued === true;
+  const provas = Array.isArray(resp?.forja4x?.stages) ? resp.forja4x.stages : [];
+  const fase = id => provas.find(item => item.id === id)?.status || 'UNKNOWN';
+  const stageStates = ['ANTIRREGRESSAO','CONSTRUIR','INSTALAR','CONECTAR','PROVAR']
+    .map(id => fase(id) === 'PASS' ? '🟢 PASS · receipt do mesmo SHA'
+      : fase(id) === 'FAIL' ? '🔴 FAIL · PARADA OBRIGATÓRIA'
+      : '🟡 UNKNOWN · aguardando receipt tipado');
+
+  el.textContent = forja4Stages.map((title,i)=>title + '\\n     ' + stageStates[i]).join('\\n');
+  forja4Mostrar(finalProven ? '🟢 FIXED_POINT' :
+    queued ? '🟡 GOAL ENFILEIRADO NO HERMES' : '🟡 NÃO DESPACHADO / BLOQUEADO',
+    String(resp?.queueReason || resp?.nextCursor || 'aguardando') +
+      (resp?.currentHead ? ' · HEAD=' + String(resp.currentHead).slice(0,12) : ''));
+}
+async function forja4Request(dispatch) {
+  const origin = location.origin;
+  const r = await fetch(origin + '/admin/api/intent', {
+    method: dispatch ? 'POST' : 'GET',
+    credentials: 'same-origin',
+    cache: 'no-store',
+    headers: dispatch ? {'Content-Type':'application/json'} : {},
+    body: dispatch ? JSON.stringify({
+      intent: forja4Intent, owner: 'apps/instinto-superior',
+      mode: 'AUTONOMO', criteria: [
+        'SOURCE_CURRENT','MCP_HEALTH','ONE_HEART','CI_SAME_SHA',
+        'HERMES_RUNTIME','OBJECTIVE_EFFECT','RECEIPT'
+      ], maxIterations: 8, dispatch: true
+    }) : undefined
+  });
+  const result = await r.json();
+  if (!r.ok) throw new Error('HTTP_' + r.status + ' ' + String(result.error||''));
+  return result;
+}
+async function forja4Iniciar() {
+  if (forja4Busy) return;
+  forja4Busy = true;
+  const button = $('forja4Btn'); if (button) button.disabled = true;
+  forja4Mostrar('🟡 ENTREGANDO GOAL', 'aguardando ACK da fila Hermes');
+  try {
+    const receipt = await forja4Request(true);
+    forja4Fingerprint = receipt.fingerprint || null;
+    forja4Pintar(receipt);
+  } catch (error) {
+    forja4Mostrar('🔴 BLOCKED', String(error).slice(0,180));
+  } finally {
+    forja4Busy = false;
+    if (button) button.disabled = false;
+  }
+}
+async function forja4Verificar() {
+  try {
+    const result = await forja4Request(false);
+    if (forja4Fingerprint && result.fingerprint !== forja4Fingerprint) {
+      forja4Mostrar('🟡 RECIBO DE OUTRA MISSÃO', 'Fingerprint do GOAL atual não coincide');
+      return;
+    }
+    if (!forja4Fingerprint && !String(result.intent||'').includes('FORJA_4X_EXISTENTE')) {
+      forja4Mostrar('UNKNOWN', 'Último receipt é de outra intenção');
+      return;
+    }
+    forja4Pintar(result);
+  } catch (error) {
+    forja4Mostrar('🔴 READBACK FALHOU', String(error).slice(0,180));
+  }
+}
+
 function conectarLogs(){
   const es = new EventSource('/admin/logs/stream');
   const box = $('log'); box.innerHTML = '';
   es.onmessage = (ev) => {
     const d = JSON.parse(ev.data);
     registrarDeltaUtil(d);
+    toolLensRegistrar(d);
     const el = document.createElement('div');
     el.className = d.level;
     el.textContent = '['+horaBr(d.t)+'] ['+d.level.toUpperCase()+'] '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');

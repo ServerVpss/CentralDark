@@ -108,7 +108,8 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SCREENPIPE_LOCAL_SENSOR", transport: "SCREENPIPE_HTTP", binding: "SEGREDO:127.0.0.1:3030", capability: "CASA_VISUAL_AUDIO_DESKTOP_SENSOR", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SCREENPIPE_CLI_RECORDER", transport: "SCREENPIPE_CLI", binding: "${SCREENPIPE_CLI:-bun x screenpipe@latest}", capability: "ALWAYS_ON_LOCAL_CAPTURE_STATUS_SEARCH_PIPES", source: "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md", runtimeState: "MEASURE_AT_RUNTIME" },
-    { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "segredo-vpss|VPS_HOST", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "Segredo-VPS(VPN)|segredo-vpss(fallback-publico)", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "ZENDRIVE_VSCODE_REMOTE_SSH", transport: "VSCODE_REMOTE_SSH", binding: "SEGREDO:Segredo-VPS -> Tailscale -> CENTRALDARK-OS", capability: "CASA_TO_VPS_SSH_AUTH_TERMINAL_FILES_PROCESS", source: "skills/vs-code-restore/src/extension.ts", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_CASA_TO_VPS", transport: "MCP", binding: "MCP_CASA", capability: "execute_command|vps_run_once_script", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "HERMES_SHELL", transport: "HERMES", binding: "SHELL", capability: "EXECUTION_BODY", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
@@ -120,6 +121,40 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "FIGMA_CENTRALDARK_FIGJAM", transport: "FIGJAM_MCP", binding: "file:H0xMJXAKrLxvXx3G1BlVYu|node:0:1", capability: "CENTRALDARK_DIAGRAM_READ", source: "Figma FigJam fluxo mestre", runtimeState: "PASS_READ_ONLY_MEASURED" },
     { id: "RDC_VPS_CENTRALDARK_OS", transport: "REMOTE_DESKTOP_COMMANDER", binding: "device:809020f9-c77d-4bef-bb06-da5b467ac9b7", capability: "VPS_SHELL_FILES_PROCESS_CONTROL", source: "Remote Desktop Commander list_devices", runtimeState: "ONLINE_MEASURED" },
 ]);
+const RDC_EQUIVALENCE_MATRIX = Object.freeze([
+    {"tool":"list_devices","route":"TAILSCALE_PRIVATE_ROUTE","scope":"DEVICE_DISCOVERY","proof":"PROVED_TAILNET_ONLY"},
+    {"tool":"who_am_i","route":"RDC_DESKTOP_COMMANDER","scope":"PROVIDER_ACCOUNT","proof":"VENDOR_ONLY"},
+    {"tool":"get_tool_result","route":"MCP_VPS_NATIVE_HTTP","scope":"RECEIPT_READBACK","proof":"PENDING_CORRELATION"},
+    {"tool":"list_remote_tool_calls","route":"MCP_VPS_NATIVE_HTTP","scope":"AUDIT_LOGS","proof":"PARTIAL_MCP_ONLY"},
+    {"tool":"ping","route":"TAILSCALE_PRIVATE_ROUTE","scope":"NETWORK_PROBE","proof":"PROVED_CONNECTIVITY_ONLY"},
+    {"tool":"shutdown","route":"RDC_DESKTOP_COMMANDER","scope":"VENDOR_AGENT","proof":"VENDOR_ONLY"},
+    {"tool":"get_config","route":"MCP_VPS_NATIVE_HTTP","scope":"OWNER_CONFIG","proof":"NOT_EQUIVALENT"},
+    {"tool":"set_config_value","route":"MCP_VPS_NATIVE_HTTP","scope":"OWNER_CONFIG_WRITE","proof":"NOT_EQUIVALENT"},
+    {"tool":"read_file","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"read_multiple_files","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILES","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"write_file","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_WRITE","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"write_pdf","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_ARTIFACT","proof":"RENDERER_AND_READBACK_REQUIRED"},
+    {"tool":"create_directory","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_WRITE","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"list_directory","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILES","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"move_file","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_WRITE","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"start_search","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_SEARCH","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"get_more_search_results","route":"MCP_VPS_NATIVE_HTTP","scope":"CURSOR_RESULTS","proof":"PENDING_CORRELATION"},
+    {"tool":"stop_search","route":"MCP_VPS_NATIVE_HTTP","scope":"JOB_CONTROL","proof":"PENDING_CORRELATION"},
+    {"tool":"list_searches","route":"MCP_VPS_NATIVE_HTTP","scope":"JOB_CATALOG","proof":"PENDING_CORRELATION"},
+    {"tool":"get_file_info","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_METADATA","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"edit_block","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_FILE_WRITE","proof":"DIFF_HASH_OWNER_GUARD_REQUIRED"},
+    {"tool":"start_process","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_SHELL","proof":"PROVED_SSH_EXEC_EXIT_ZERO"},
+    {"tool":"read_process_output","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_SHELL_OUTPUT","proof":"SINGLE_COMMAND_OUTPUT_ONLY"},
+    {"tool":"interact_with_process","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_TTY","proof":"TTY_RECEIPT_PENDING"},
+    {"tool":"force_terminate","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_PROCESS_KILL","proof":"GUARDED_DESTRUCTIVE_UNTESTED"},
+    {"tool":"list_sessions","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_SESSION_LIST","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"list_processes","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_PROCESS_LIST","proof":"TRANSPORT_PROVEN_ACTION_PENDING"},
+    {"tool":"kill_process","route":"ZENDRIVE_VSCODE_REMOTE_SSH","scope":"VPS_PROCESS_KILL","proof":"GUARDED_DESTRUCTIVE_UNTESTED"},
+    {"tool":"get_usage_stats","route":"MCP_VPS_NATIVE_HTTP","scope":"LOCAL_MCP_TELEMETRY","proof":"VENDOR_STATS_NOT_MIRRORED"},
+    {"tool":"get_recent_tool_calls","route":"MCP_VPS_NATIVE_HTTP","scope":"LOCAL_MCP_TELEMETRY","proof":"PARTIAL_INSTRUMENTED_ONLY"},
+    {"tool":"give_feedback_to_desktop_commander","route":"RDC_DESKTOP_COMMANDER","scope":"VENDOR_FEEDBACK","proof":"VENDOR_ONLY"},
+]);
+// Matriz de possibilidades; nao executa tool remota nem declara paridade com a Casa.
 // Capacidades externas delegáveis do mesmo MCP. Descoberta não é autorização,
 // token importado, rota executável nem prova de disponibilidade da VPS.
 const DELEGATED_PROVIDER_CAPABILITIES = Object.freeze([
@@ -132,6 +167,12 @@ const DELEGATED_PROVIDER_CAPABILITIES = Object.freeze([
     { id: "NOTION", label: "Notion", responsibility: "Páginas e bases de conhecimento", provider: "Notion", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
     { id: "POSTHOG", label: "PostHog", responsibility: "Eventos de produto e erros observados", provider: "PostHog", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
     { id: "REMOTE_DESKTOP_COMMANDER", label: "Remote Desktop Commander", responsibility: "Computadores e sessões remotas autorizados", provider: "Remote Desktop Commander", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "CHATGPT_BROWSER_TABS_CONTEXT", label: "ChatGPT Browser — Abas & Contexto", responsibility: "Listar abas acessíveis e ler contexto textual de aba autorizada; não inclui cliques nem shell", provider: "ChatGPT Browser conectado ao cliente", authorization: "CLIENT_CONNECTED_READ_SCOPE", runtimeState: "OBSERVED_CLIENT_SIDE_ONLY", delegation: "CLIENT_PLUGIN_LIST_TABS_GET_TAB_CONTEXT; NOT_AVAILABLE_TO_VPS_MCP" },
+    { id: "ZENDRIVE_VSCODE_PID", label: "ZENDRIVE CLI — Janela VS Code por PID", responsibility: "Correlacionar PID do terminal e janela VS Code; VSIX 0.1.4 instalada na Casa em snapshot de 18/10/2026, comando ainda sem recibo", provider: "VS Code Extension API + Win32 CIM", authorization: "CASA_LOCAL_EXTENSION", runtimeState: "VSIX_INSTALLED_COMMAND_RUNTIME_UNPROVEN", delegation: "centraldark.locateVsCodeByPid" },
+    { id: "ZENDRIVE_SSH_VPN", label: "Remote-SSH Casa pela VPN", responsibility: "Shell e arquivos na VPS com host key estrita e fallback publico; nao prova shell Windows na volta", provider: "VS Code Remote-SSH + OpenSSH + Tailscale", authorization: "EXISTING_SSH_KEY_OWNER", runtimeState: "SSH_AUTH_CASA_TO_VPS_PROVED_SNAPSHOT_REPLAY_REQUIRED", delegation: "centraldark.probeVpsSsh|centraldark.connectVpsSsh" },
+    { id: "VSCODE_INTEGRATED_TERMINAL", label: "Terminal integrado VS Code", responsibility: "Focar terminal existente e correlacionar terminal.processId; execucao comandada nesta GUI precisa de recibo", provider: "VS Code Extension API", authorization: "CASA_LOCAL_EXTENSION", runtimeState: "GUI_TERMINAL_RECEIPT_PENDING", delegation: "centraldark.focusExistingTerminal" },
+    { id: "CASA_FORJA_DRIVES", label: "Discos e Forja da Casa", responsibility: "Junction K _WORKER, laboratorio e volumes E/F observados; sem prometer acesso remoto aos discos pelo MCP", provider: "Windows Casa Filesystem", authorization: "CASA_LOCAL_OWNER", runtimeState: "SNAPSHOT_PRESENCE_REMOTE_RPC_NOT_PROVED", delegation: "EXISTING_CASA_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "CASA_BROWSER_WINDOWS", label: "Chrome e Edge na Casa", responsibility: "Janelas observadas; nao representa DOM, abas ou cliques remotos", provider: "Windows UI + Browser connector", authorization: "CLIENT_BROWSER_SESSION_OR_LOCAL_OWNER", runtimeState: "WINDOW_TITLE_ONLY_BROWSER_PLUGIN_CONTEXT_UNAVAILABLE", delegation: "CLIENT_BROWSER_OR_SCREENPIPE_ADAPTER_REQUIRED" },
     { id: "SUPABASE", label: "Supabase", responsibility: "Banco de dados, auth e serviços Supabase", provider: "Supabase", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
     { id: "WRITING_STYLE", label: "Writing Style", responsibility: "Exemplos autorizados de estilo de escrita", provider: "Writing Style", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
 ]);
@@ -237,6 +278,9 @@ export const mcpAdminTools = [
                 .filter((route) => !filter ||
                     Object.values(route).some((value) => String(value || "").toLowerCase().includes(filter)))
                 .sort((a, b) => a.id.localeCompare(b.id));
+            const remoteEquivalences = RDC_EQUIVALENCE_MATRIX
+                .filter((cap) => !filter || Object.values(cap).some((value) => String(value || "").toLowerCase().includes(filter)))
+                .sort((a, b) => a.tool.localeCompare(b.tool));
             const providerCapabilities = DELEGATED_PROVIDER_CAPABILITIES
                 .filter((cap) => !filter || Object.values(cap).some((value) => String(value || "").toLowerCase().includes(filter)))
                 .sort((a, b) => a.label.localeCompare(b.label));
@@ -259,6 +303,10 @@ export const mcpAdminTools = [
                 providerCapabilities,
                 providerCapabilityCount: DELEGATED_PROVIDER_CAPABILITIES.length,
                 providerCapabilitiesReturned: providerCapabilities.length,
+                desktopCommanderEquivalenceCount: RDC_EQUIVALENCE_MATRIX.length,
+                desktopCommanderEquivalencesReturned: remoteEquivalences.length,
+                desktopCommanderEquivalences: remoteEquivalences,
+                desktopCommanderParity: "PARTIAL_ROUTE_CAPABILITIES_ONLY_NO_CASA_REVERSE_EXEC_PROOF",
                 providerBoundary: "CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED",
                 tools,
             });

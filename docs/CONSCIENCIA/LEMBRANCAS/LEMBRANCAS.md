@@ -1428,7 +1428,6 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Mesmo fio e NEXT_CURSOR:** `LC07_LOG_CRON -> BOT_ADMIN_E2E -> RECOVER_EXISTING_OAUTH_VAULT_KEY -> OAUTHBROKER_HEALTH`. Owners `scripts/limpeza-autonoma.sh`, `apps/instinto-superior/`, `apps/modulos/oauth-broker/` e PR #1804. O outro fio `INSTALADOR_TOTAL` citado no #189 não é acionado por este registro.
 - **NeuroLink:** `L190`, `PREV=L189`, `NEXT=PENDING_NEXT_CURSOR`.
 
-
 ### [2026-10-13] Aprendizado #191 — Integração A–Z e discernimento Whis, sem duplicação
 
 - **Cena e aceite:** o CHEFE pediu síntese integral de 26 temas da sessão e registro funcional do aprendizado. Associou Whis/GPT ao rigor gentil, Vados/Claude à colaboração especializada e Goku/Zen'Oh ao respeito sem medo. Metáfora não é papel técnico, poder de IA nem ranking.
@@ -1443,7 +1442,6 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - ⚠️ **Pendente:** consumo real das regras por Hermes/outros modelos continua desconhecido até teste específico.
 - 📌 **Prova:** fonte no GitHub e elo L190 → L191 no NeuroLink; conferir blobs e readback.
 - 🎯 **Próximo passo:** aplicar a receita apenas quando pertinente, sem nova auditoria genérica.
-
 
 ### [2026-10-12] Intenção que amadurece e a Meta-Lupa aplicada à SOL — aprendizado nº 171
 
@@ -1467,7 +1465,6 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - 📌 **Prova:** PRs #1822, #1821, #1820, #1808, #1774 todos com `state=MERGED` e `mergeCommit` confirmados via `gh pr view --json`.
 - 🎯 **Próximo passo:** destravar os 9 PRs CONFLICTING um por um (rebase + resolução + CI real).
 
-
 ### [2026-10-15] Aprendizado #194 — Grafo Vivo quebrado 32h por escrita não atômica; causa raiz corrigida (tmp+renameSync)
 
 - **Cena e aceite:** `/health` mostrava `grafo.ok: false` com `wound_count` crescendo. Investigação real (não achismo) achou `graph-data.json` zerado desde 2026-10-13 20:53 UTC, causado por `writeFileSync` direto sem tmp+rename — o processo foi interrompido no meio da escrita e todo ciclo de regeneração seguinte quebrava tentando reabrir o próprio arquivo truncado.
@@ -1481,7 +1478,6 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - 📌 **Prova:** PR #1828, commit `a766d77e46313212ab4f0082a9a899e81c3a519d`, `state=MERGED`.
 - 🎯 **Próximo passo:** auditar outros scripts da Casa que escrevem arquivo canônico/consumido por cron e aplicar o mesmo padrão tmp+rename onde pertinente.
 
-
 ### 195. 🪬 REGISTRA — ZENDRIVE CLI / Instinto Marketplace / Builder / logs persistentes
 
 - **Data e pedido:** 2026-10-17, CHEFE: **“registra tudo persistente!”** sobre a interação ChatGPT/SOL em modo CLI com Hermes, o VS Code na Casa, a integração de logs, a extensão ZENDRIVE CLI e sua ficha na galeria/Marketplace do Instinto Superior. Intenção é preservar todo ouro comprovado e continuar o MESMO caminho em futuros chats/agentes.
@@ -1492,3 +1488,13 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Feridas exatas:** build/SSR do Instinto anteriormente falhou (`SSR_CYCLE_FIX_BLOCKED`, `createServerFn is not a function`, HTTP 500 em rotas da Casa); runtime/sincronização da UI ainda requer contraprova e correção menor no owner. Raiz da VPS com problema de espaço relatado no inventário: remedir antes de reparo. Desktop Commander em 17/10 retornou **cota mensal atingida**; bloquear somente novas leituras por essa ferramenta, não todo o sistema. Nenhum segredos/credenciais/log bruto no GitHub.
 - **Contrato fixo:** `INTENÇÃO → OWNER → JANELA/TERMINAL EXISTENTE → FOCO → ENVIAR → READBACK → METADADOS NO FUNIL → CONTRAPROVA → RECEIPT → PRÓXIMO CURSOR`; exigência de **CONSTRUIR → INSTALAR → CONECTAR → PROVAR → REGRESSÃO** antes de PASS global. `MAIN != DEPLOY` e `SEND_OK != EXECUTION_PASS`.
 - **NEXT_CURSOR:** retomar no inventário citado, validar verificador/build/auth/SSR, publicar galeria via owner e comprovar terminal live/trace/provider separadamente. Nenhum novo núcleo, duplicata, reset, merge ou deploy decorrente apenas desta lembrança.
+
+### [2026-10-17T13:01] 🍒 Caixinha ativa — lembrar o erro antes de repetir
+- **Data:** 2026-10-17
+- **Tags:** centraldark, jarvis, caixinha, intencao-viva, kaizen, contraprova, reaproveitar, false-green
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-16
+- **Promovida:** sim
+
+Conteúdo: Regra viva do CHEFE: 'atormentar' é metáfora de memória que confronta cada DELTA com o histórico relevante antes da execução. JARVIS/SOL recupera owner, CURRENT e último verde; mantém uma caneta, reutiliza arquitetura, ancora legado ao novo e atua diretamente por ferramentas autorizadas, sem pedir ao CHEFE que rode comandos. Hermes só existe como executor participante após ACK real. Realidade/contraprova pós-efeito manda; UNKNOWN, mockup HTML, PING, queued, commit e CI de outro SHA não são PASS. O erro do BRIDHER HTML vendido como Builder Electron é proibição exemplificadora. Recuperar dossiê CENTRALDARK-CAIXINHA-LEMBRANCAS-INTEGRAL-20261017.md na conversa e o ledger privado `centraldark_sessao_consolidacao_20261017_ssh_builder_pr1844_ci` para detalhes; NEXT_CURSOR sempre.
