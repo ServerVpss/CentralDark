@@ -41,6 +41,15 @@ export function HarnessModuleRegistry() {
         </div>
         <span className="font-mono text-[10px] text-muted-foreground">ONE_SYSTEM_ONLY</span>
       </div>
+      <div className="mt-3 rounded-md border border-border bg-muted/10 p-2 text-xs" aria-label="Funil canônico de execução">
+        <strong>🪡 Funil Michelin · 3 provas independentes</strong>
+        <p className="mt-1 text-muted-foreground">
+          1. Fonte/skill e owner → 2. Transporte autenticado e sessão → 3. Execução, readback, CI e efeito no runtime.
+        </p>
+        <p className="mt-1 text-muted-foreground">
+          Plugin, extensão, SSH e Tailscale são transportes ou capacidades da mesma família; não substituem o executor Hermes.
+        </p>
+      </div>
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         {MODULES.map((modulo) => (
           <article key={modulo.id} className="rounded-md border border-border bg-muted/10 p-3">
