@@ -586,3 +586,15 @@ test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
   assert.ok(hud.includes('["Desktop Commander VPS", estado?.desktopVps'));
   assert.ok(hud.includes('["👁️ Screenpipe VPS", estado?.screenpipeVps'));
 });
+
+test("microdeploy do Cockpit nunca vende sync Git como deploy comprovado", () => {
+  const fonte = read("apps/instinto-superior/src/components/central/AutoSyncButton.tsx");
+  assert.ok(fonte.includes("MICRODEPLOY_GUARD_20261018"));
+  assert.ok(fonte.includes("Sync Git não prova deploy"));
+  assert.ok(fonte.includes("Micro-Deploy ${microDeployMode} BLOQUEADO"));
+  assert.doesNotMatch(fonte, /Micro-Deploy \$\{microDeployMode\} ok/);
+  const handler = fonte.match(/const handleMicroDeploy = \(\) => \{[\s\S]*?\n  \}/);
+  assert.ok(handler, "handler do botão não identificado");
+  assert.doesNotMatch(handler[0], /(?:await\s+)?(?:handleSync|runSync|execSync|fetch)\s*\(/);
+  assert.ok(fonte.includes("const handleSync = async"), "não apagar sync existente");
+});
