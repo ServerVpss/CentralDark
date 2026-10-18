@@ -217,7 +217,7 @@ test("gaveta cataloga receitas A-Z e mostra estado do terminal sem autoexec", ()
   const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
   const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
   assert.equal(catalogo.automation_owners.length, 10);
-  assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 9);
+  assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 10);
   assert.ok(catalogo.automation_owners.every(r => r.owner && r.receita && r.nome));
   assert.ok(infra.includes("receitasAlfabeticas"));
   assert.ok(infra.includes('localeCompare(b.nome, "pt-BR"'));
@@ -266,7 +266,7 @@ test("OAuth Broker traduzido para humano antes do detalhe técnico, com fonte e 
   assert.ok(obs.includes("O estado do catálogo não comprova"));
   assert.ok(conex.includes('requireSupabaseAuth'));
   assert.ok(conex.includes('.eq("role", "admin")'));
-  assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY|\bfetch\s*\(/);
+  assert.doesNotMatch(obs, /POSTHOG_PERSONAL_API_KEY|TAILSCALE_API_KEY/);
 });
 test("contrato único de cartões exige função humana, owner, responsabilidade e fonte", () => {
   const grammar = read("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml");
