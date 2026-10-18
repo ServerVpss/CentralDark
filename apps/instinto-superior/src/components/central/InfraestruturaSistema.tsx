@@ -324,6 +324,17 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
           </article>
           <article className="rounded-lg border border-border p-3 text-sm">
             <strong>🔌 MCP CentralDark</strong>
+            <div className="mt-3 rounded-md border border-border p-3 text-xs" aria-label="Última prova observada do runtime MCP">
+              <p className="font-semibold">Última prova observada · 18/10/2026 · VPS</p>
+              <p className="mt-2 text-muted-foreground">
+                Node.js PID 1515631 · 127.0.0.1:9100 · health HTTP 200.
+                Caddy PID 1355684 · conexões TCP estabelecidas com o MCP.
+              </p>
+              <p className="mt-2 font-mono text-[10px] text-muted-foreground">
+                SNAPSHOT_OBSERVADO · NÃO É TELEMETRIA AO VIVO · estado atual requer nova medição.
+                Processo, conectividade e disponibilidade de ferramentas são provas distintas.
+              </p>
+            </div>
             <p className="mt-2 text-xs text-muted-foreground">
               {gavetaCatalogo.runtime_snapshots.mcp.catalog_tools} ferramentas no catálogo;
               {" "}{gavetaCatalogo.runtime_snapshots.mcp.catalog_routes} rotas;
