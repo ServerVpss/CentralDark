@@ -277,6 +277,52 @@ Nunca imprimir token, senha, cookie, chave privada ou valor secreto em Git, chat
 
 ---
 
+<!-- ONE_HOUSE_AUREOLA_20261017_RULES -->
+## 🪬 Auréola canônica — uma Casa, motores intactos, aprendizagem deliberada e Michelin
+
+**Identidade:** CentralDark é um sistema de intenção, estado, memória, julgamento e coordenação; Instinto Superior é a casca e cockpit, Forja Viva é a bancada com Builder/VS Code, navegador, terminal e seletor, Hermes é o executor já existente, Reality Judge verifica o efeito, Gênesis preserva o aprendizado. Uma Casa lógica não significa um só processo nem direito de copiar ferramentas alheias. Sem segundo cockpit, Gênesis, Hermes, router, executor, logger ou owner.
+
+**Fronteira rigorosa de modelos:** GPT, ChatGPT, Codex, Claude, Claude Code, DeepSeek e outros motores mantêm pesos, código interno, sessões, contas, licenças, processos, políticas, cookies e autenticação no próprio fornecedor/runtime. CentralDark NÃO extrai, clona, injeta, intercepta, altera ou incorpora esses internos nem contorna iframe/CSP, credenciais, limites ou permissões. Ela somente seleciona, apresenta, solicita execução pela API/extensão/app/conector oficialmente permitido, recebe readback e correlaciona recibos próprios. Se UI embutida for incompatível, abrir app ou janela oficial. Troca de casca/pele/motor conserva GOAL, workspace, owner, SHA e memória; botão não equivale a sessão, despacho ou execução. MODEL_WEIGHTS_STAY_WITH_PROVIDER=true; NO_MODEL_INVASION=true; ONE_HOUSE_NOT_ONE_PROCESS=true.
+
+**Pensamento livre e responsabilidade:** explorar possibilidades, hipóteses, analogias e soluções alternativas sem transformá-las automaticamente em trabalho obrigatório. Estado do catálogo: IDEA, EXPERIMENT, CODED, BUILT, INSTALLED, CONNECTED, PROVEN; nunca pintar os primeiros como últimos. Não exigir CI para ideias que não são critério do GOAL. Liberdade de pensar não autoriza execução, exposição de segredos, violação de controles ou declarações sem prova. Nenhuma pessoa, agente, skill ou método está imune a crítica factual; a decisão humana da intenção permanece.
+
+**Lei do elo mais fraco:** priorizar o componente que limita materialmente o GOAL, não o que tem mais mensagens ou falhas cosméticas. Definir critérios, medir baseline, recuperar padrão e anti-receita, formular hipótese refutável, usar teste discriminante, mudar uma variável causal quando possível, executar menor delta no owner existente, comparar antes/depois e adjacências, preservar LAST_KNOWN_GOOD, cristalizar tentativa, erro, causa, limite, correção e resultado no Gênesis existente. Repetição sem informação nova não é treino: STOP_BLIND_RETRY, rever a hipótese ou relatar bloqueio; após ganho, procurar próximo elo. Kaizen aprimora o que funciona e o treino deliberado aprimora até o próprio método.
+
+**Dicionário operacional alfabético — aplicação por pertinência, nunca checklist universal:**
+01 A — Abstração: focar bloqueador sem apagar riscos.
+02 B — Build: construir, instalar, conectar e provar são etapas distintas.
+03 C — Contraprova: positivo, negativo, regressão e realidade.
+04 D — Decomposição: causas, componentes, dependências e ordem.
+05 E — Experimento: hipótese, pequena mudança, medição antes/depois.
+06 F — Fixed Point: critérios do GOAL cumpridos; Kaizen pode continuar.
+07 G — Gênesis e governança: memória/anti-receita, skills abaixo da Constituição.
+08 H — Hermes: executor existente, sem participação presumida.
+09 I — Intenção e idempotência: objetivo contínuo, sem duplicações.
+10 J — Juiz da realidade: evidência prevalece sobre autoconfiança.
+11 K — Kaizen: melhorar dono existente, não refazer por hábito.
+12 L — Lei/limites: crítica simétrica, segurança e permissões.
+13 M — Michelin: ⭐ build, ⭐⭐ integração/CI, ⭐⭐⭐ experiência real comprovada.
+14 N — NeuroLink: história, causa, receita e evidência preserváveis.
+15 O — Owners/observabilidade: writer único; coleta ≠ execução.
+16 P — Padrões/Pareto/Puppeteer: reuso, 80/20 heurístico, navegador não certifica.
+17 Q — Qualidade quantificável: denominador explícito, falha crítica não se esconde.
+18 R — Regressão/retrocesso: conservar último verde, retornar apenas no cone causal.
+19 S — Separação: Casa/VPS/GitHub/browser têm estados próprios.
+20 T — Treino deliberado e pensamento computacional: decomposição, padrões, abstração e algoritmo; mudar método diante de teto.
+21 U — Unificação: uma Casa, superfícies e motores substituíveis.
+22 V — Verificação: código, sintaxe, função, UI e runtime são níveis diferentes.
+23 W — Workflows/writer: QUEUED/IN_PROGRESS/SKIPPED != PASS; um writer.
+24 X — X-ray: diagnóstico da camada causal, sem segundo sensor.
+25 Y — Yield: ganho e custo medidos, não volume de operações.
+26 Z — Zero falso verde: DOCUMENTADO != EXECUTADO; TESTADO != INSTALADO; MERGED != DEPLOYED; HTTP_200 != EXPERIÊNCIA; UNKNOWN != PASS.
+
+**Três estrelas sem autocertificação:** a régua preexistente de AGENTS.md e verify-hud-zone.mjs continua sendo a única: ⭐ testes/lint/build/perímetro na revisão; ⭐⭐ CI concluída e integração reproduzível/idempotente; ⭐⭐⭐ deploy, UI autenticada, Casa↔VPS, logs e receipts recentes relativos à mesma entrega. Estrela pertence à entrega/SHA e janela de prova, não ao ego de agente ou ao organismo eterno. Falha crítica veda selo; 99,9% é objetivo só medido com denominador e critérios críticos.
+
+**Local canônico:** seletor de motores na Forja em CockpitShell.tsx/ForjaExecutor.tsx; elo fraco e treino em HUD · Selos · Gênesis → Gênesis → Fixed Point (HudDeterministico.tsx); Recibos/Cérebro Vivo mostram provas; CentralDark.exe apenas após build, instalação, conexão e teste. Copiar GOAL é DRAFT_NOT_DISPATCHED. Nunca importar o Chromium interno do fornecedor.
+
+**Circuito mínimo:** INTENÇÃO → CURRENT → OWNER → ELO MATERIAL → HIPÓTESE/TESTE → MENOR DELTA → BUILD → INSTALL → CONNECT → PROVE → CONTRAPROVA → GÊNESIS/ANTI-RECEITA → NEXT_CURSOR. Tocou, cuidou, consertou ou melhorou: selar apenas com receipt do owner e efeito verificado. Escrever estas regras não altera runtime automaticamente.
+<!-- /ONE_HOUSE_AUREOLA_20261017_RULES -->
+
 ## Prova, contraprova e fixed point
 
 A CentralDark não aceita verde por aparência.

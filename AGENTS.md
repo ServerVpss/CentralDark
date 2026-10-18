@@ -2402,3 +2402,39 @@ Ao encontrar ganho verificável, dizer **🍒🎰🎲 Outra melhoria antecipada*
 
 
 **Correção direta de dependências (CHEFE, 2026-10-15):** se uma incompatibilidade estiver comprovada e houver versão corrigida compatível, o **agente principal/owner existente** deve aplicar o delta mínimo no manifesto + lockfile, testar instalação reproduzível, build e regressões, registrar SHA/receipt e promover pela **esteira autorizada** de main e produção sem pedir decisões redundantes. Referência canônica: seção `DEPENDENCY_FIX_FAST_PATH` de `.agents/skills/centraldark-operational-method/SKILL.md`. A promoção **não** contorna checks, aprovações, locks, permissões ou proteção da branch; `UNKNOWN/BLOCKED` preserva produção e requer relato de causa e NEXT_CURSOR. `COMMITTED != MAIN != DEPLOYED != PROD_PASS`; confirmar health e efeito funcional, rollback quando necessário, e 🧹 somente depois de preservação.
+
+
+<!-- ONE_HOUSE_AUREOLA_20261017_AGENTS -->
+## 🎰 Casca única, motores soberanos, agente deliberado
+
+Herdar SOUL → RULES → AGENTS; não criar owner paralelo. Na Forja do Instinto Superior, GPT/Codex, Claude, DeepSeek, Hermes, VS Code e navegador são capacidades de proveniência e autorização distintas. Não copiar pesos, processos, credenciais, cookies ou controles dos produtos. O seletor da Forja em CockpitShell.tsx/ForjaExecutor.tsx não garante iframe compatível; se bloqueado, abrir interface oficial, sem burlar CSP/autenticação. GOAL copiado, processo visível, botão ou catálogo não demonstram despacho; exigir sessão identificada, rota autorizada, ACK, readback e receipt.
+
+Rotina material: recuperar intenção e critérios → medir CURRENT pertinente → identificar gargalo mais limitante → consultar Gênesis, padrões e anti-receitas → hipótese refutável/teste discriminante → delta mínimo no owner com writer único → BUILD/INSTALL/CONNECT/PROVE onde aplicável → contraprova e backcheck → receipt/ganho medido → próximo elo ou ponto suficiente. Repetir mesmo método sem nova informação exige STOP_BLIND_RETRY e mudança de hipótese/bloqueio exato; não forçar 26 verificações A–Z em cada tarefa. Gênesis conserva fracasso e solução, Recibos exibem evidência, Forja opera.
+
+Aplicar régua Michelin **existente logo abaixo**, sem segundo certificador: ⭐ build/testes/lint/perímetro no SHA; ⭐⭐ CI concluída e integração idempotente; ⭐⭐⭐ deploy, UI autenticada, Casa↔VPS e receipts atuais. Falha crítica impede estrela; 99,9% só após numerador/denominador e gates críticos. HYPOTHESIS != PROOF; DOCUMENTED != INSTALLED; SELECTED_ENGINE != CONNECTED_SESSION. Informar OWNER → DELTA → PROVA → NEXT_CURSOR, com linguagem simples; versos ou metáforas não são recibos.
+<!-- /ONE_HOUSE_AUREOLA_20261017_AGENTS -->
+
+## 🧬 Ciclo obrigatório de antirregressão — BUILD → INSTALL → CONNECT → PROVE (17/10/2026)
+
+**Regra para qualquer delta material na CentralDark:** construir a capacidade no owner existente; instalar/promover o artefato correto no alvo autorizado; conectá-la ao consumidor/serviço atual; provar o efeito por readback no mesmo alvo e no mesmo SHA; só então declarar `PASS` e executar testes de regressão dos vizinhos afetados. Repetir autonomamente o menor delta até `FIXED_POINT` ou bloqueio exato. `SOURCE_PASS != BUILD_PASS != INSTALLED != CONNECTED != EFFECT_PROVED` e `MERGED != DEPLOYED`.
+
+**Distinções auditáveis:** `BUILD` exige compilação/lint/teste e SHA; `INSTALL` exige versão/bytes/hash no destino, não somente download; `CONNECT` exige owner, consumidor, autenticação/permissão e rota em funcionamento; `PROVE` exige efeito retornado e contraprova, não `HTTP 200` isolado. `REGRESSION` verifica que o delta não quebrou rotas, segurança, processos, recursos e funcionalidade anterior. Sem evidência marque `UNKNOWN`; `SKIPPED/QUEUED/PENDING != PASS`.
+
+**Automação causal:** no Instinto Superior usar `apps/instinto-superior/scripts/verify-hud-zone.mjs` (testes de Marketplace/ZENDRIVE, ownership e autorização), `npm run verify:hud` automaticamente antes de `npm run build`, `build:dev` e `build:vps`, e o workflow já existente `.github/workflows/test.yml` para prova de regressão de source e build. Teste estático/CI não comprova instalação de VSIX na Casa nem sessão web autenticada. Fazer readback real desses destinos pelo runtime autorizado antes de selar o circuito. **Falha de acesso/quota da Casa bloqueia somente `CASA_INSTALL/CONNECT/PROVE`, nunca inventar status verde ou duplicar coletor.**
+
+**Recibo mínimo:** `OWNER|SOURCE_SHA|BUILD_SHA|INSTALLED_VERSION|CONNECTED_ROUTE|READBACK|REGRESSION_RESULT|OBSERVED_AT|NEXT_CURSOR`. Uma fonte com estado não medido deve permanecer `UNKNOWN` e não virar lançamento, badge verde nem indicador agregado. Integrar ao HUD/log-funnel existentes sem novo sistema de observabilidade.
+
+
+## 🧬 Michelin — três estrelas de qualidade comprovada
+
+**Metáfora de excelência técnica, sem afiliação ou selo oficial do Guia Michelin.** O CHEFE pede a CentralDark para avaliar rigor de qualidade, não distribuir estrelas por aparência. É **camada de critérios** aplicada ao contrato já existente `BUILD → INSTALL → CONNECT → PROVE`, não motor, serviço, workflow, skill ou HUD novo. Owner do teste: `apps/instinto-superior/scripts/verify-hud-zone.mjs`; owner visual: a Central de Integridade do mesmo `HudDeterministico.tsx`; CI: `.github/workflows/test.yml`; provas materiais seguem os owners e o log-funnel existentes.
+
+- **⭐ 1 estrela — construção excelente:** testes, lint, build, perímetro autenticado e owner existentes em `PASS`, todos no SHA exato e em receipt da etapa. `SOURCE_TEST_PASSED` isolado **não** equivale a estrela da instalação.
+- **⭐⭐ 2 estrelas — conexão reproduzível:** primeira estrela + CI da revisão exata `status=completed, conclusion=success`, integração de fato provada, idempotência e não duplicação do executor/coletor. `cancelled`, `queued`, `skipped` e `mergeable` jamais valem sucesso.
+- **⭐⭐⭐ 3 estrelas — experiência comprovada:** duas estrelas + deploy no mesmo SHA, tela autenticada comprovada visualmente, ponte Casa ↔ VPS e logs recebidos no destino com recibos distintos, verificações recentes (janela de referência de até 1 h) e estado `PASS` **em cada escopo**. `HTTP 200`, instalação local histórica e texto de relatório não substituem recibos.
+
+**Previsão conservadora:** sem `MAIN_SHA` ou sem prova de uma etapa, o placar de **estrelas certificadas nessa medição** permanece abaixo da etapa; falha de quota remota bloqueia apenas a dependência da Casa. Nunca exibir três estrelas como obtidas apenas por passar testes unitários sobre cenários simulados. O teste de critérios e sua própria execução são provas diferentes; o projeto não é autorizado a autocertificar o runtime.
+
+**Aplicação automática:** `npm run verify:hud` e `.github/workflows/test.yml` devem reprovar contratos inseguros e emitir recibo `MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=...` **somente após** testes, lint e build reais. O workflow não tem autoridade para emitir estrelas 2/3 sozinho: exigir consulta a CI concluída e readbacks vivos externos. Explicar claramente o estado, o escopo do impedimento e `NEXT_CURSOR` na Central de Integridade.
+
+A contagem de estrelas é **por entrega e janela de evidência**, nunca atributo permanente de todo o organismo CentralDark.

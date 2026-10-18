@@ -246,3 +246,31 @@ test("Cloudflare inventory is not an escape hatch for provider_read or provider_
   assert.equal(mutateDenied.ok, false);
   assert.match(mutateDenied.status, /PROVIDER_CAPABILITY_UNKNOWN/);
 });
+
+
+test("fallback Tailscale local nao promove broker a PASS nem revela identificadores", () => {
+  const source = {
+    Self: { Online: true, HostName: "host-privado", TailscaleIPs: ["100.64.0.7"] },
+    Peer: {
+      a: { Online: true, HostName: "pc-privado" },
+      b: { Online: false, HostName: "celular-privado" },
+    },
+  };
+  const summary = __test.summarizeLocalTailnet(source);
+  assert.deepEqual(summary, {
+    selfOnline: true,
+    peerCount: 2,
+    onlinePeers: 1,
+    privateIpAssigned: true,
+  });
+  const json = JSON.stringify(summary);
+  for (const secret of ["host-privado", "pc-privado", "100.64.0.7"]) {
+    assert.equal(json.includes(secret), false);
+  }
+  assert.deepEqual(__test.summarizeLocalTailnet({}), {
+    selfOnline: false,
+    peerCount: 0,
+    onlinePeers: 0,
+    privateIpAssigned: false,
+  });
+});
