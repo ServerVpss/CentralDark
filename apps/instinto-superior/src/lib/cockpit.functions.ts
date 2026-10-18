@@ -497,7 +497,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const mainSha = atual?.sha ?? null;
     const sincronizado = !!mainSha && !!vpsSha && mainSha === vpsSha;
     const deltaVps = await medirDelta(vpsSha, mainSha);
-    const deploy: Estado = !mainSha || !vpsSha ? "UNKNOWN" : sincronizado ? "PASS" : "FAIL";
+    // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
+    const deploy: Estado = "UNKNOWN";
 
     return {
       gmail: "AUTH_REQUIRED",

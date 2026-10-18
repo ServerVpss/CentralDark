@@ -195,7 +195,7 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
   const [receitaBusca, setReceitaBusca] = useState("");
   const [automacaoCopia, setAutomacaoCopia] = useState<"IDLE" | "COPIED" | "FAILED">("IDLE");
   const automacaoAtual = gavetaCatalogo.automation_owners.find(x => x.id === automacaoAberta);
-  // Catálogo alfabético derivado dos NOVE owners já cadastrados: não cria segunda receita.
+  // Catálogo alfabético dos owners existentes; Tool Call Lens reutiliza auditoria MCP.
   const receitasAlfabeticas = useMemo(
     () => [...gavetaCatalogo.automation_owners].sort((a, b) =>
       a.nome.localeCompare(b.nome, "pt-BR", { sensitivity: "base" })),
@@ -417,7 +417,7 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
             placeholder="MCP, terminal, Hermes, sync, build, gaveta..." />
         </label>
         <p role="status" className="mt-2 text-xs text-muted-foreground">
-          {receitasFiltradas.length} de {receitasAlfabeticas.length} receitas · ordem alfabética (pt-BR) · origem main@{fonteAtual.slice(0, 12)}.
+          {receitasFiltradas.length} de {receitasAlfabeticas.length} receitas · inventário base main@{fonteAtual.slice(0, 12)} + delta dos PRs #1838/#1842.
         </p>
         <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {receitasFiltradas.map(capacidade => {
@@ -449,6 +449,28 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
             <p className="text-xs text-muted-foreground">
               {automacaoAtual.estado} · {automacaoAtual.modo} · sem despacho automático
             </p>
+            {"fases" in automacaoAtual && Array.isArray(automacaoAtual.fases) && (
+              <div className="mt-3 space-y-2" aria-label="Quatro etapas da Forja">
+                <p className="font-semibold text-sm">🧬 Forja incremental · construir → instalar → conectar → provar</p>
+                <ol className="grid gap-2 md:grid-cols-2">
+                  {automacaoAtual.fases.map((fase, indice) => (
+                    <li key={fase.id} className="rounded-md border border-border bg-muted/20 p-3 text-xs">
+                      <p className="font-semibold">{indice + 1}/4 · {fase.icone} {fase.id}</p>
+                      <p className="mt-1 font-mono text-muted-foreground">OWNER: {fase.owner}</p>
+                      <p className="mt-1">{fase.comprovar}</p>
+                      <p className="mt-1 text-amber-500">{fase.estado}</p>
+                    </li>
+                  ))}
+                </ol>
+                <p className="text-xs text-muted-foreground">
+                  Executar a receita na Casa gera recibo fase a fase. Falha em gate interrompe
+                  o avanço; build/VSIX/SSH não substituem o teste E2E do call_id no Cockpit.
+                </p>
+                <a href="https://github.com/ServerVpss/CentralDark/pull/1842"
+                  target="_blank" rel="noopener noreferrer"
+                  className="text-xs text-neon-blue underline">📖 Receita detalhada e testes · PR #1842</a>
+              </div>
+            )}
             <a href={linkFonte(automacaoAtual.owner)}
               className="text-xs text-neon-blue underline" target="_blank"
               rel="noopener noreferrer">Consultar implementação original</a>

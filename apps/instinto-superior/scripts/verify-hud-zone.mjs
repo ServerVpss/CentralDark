@@ -183,7 +183,7 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
   assert.equal(catalogo.runtime_snapshots.mcp.catalog_tools, 141);
   assert.equal(catalogo.runtime_snapshots.mcp.catalog_routes, 13);
   assert.equal(catalogo.runtime_snapshots.mcp.skill_listar_entries, 3);
-  assert.equal(catalogo.automation_owners.length, 9);
+  assert.equal(catalogo.automation_owners.length, 10);
   assert.ok(catalogo.automation_owners.some(x => x.id === "CLAUDE_CODE" &&
     x.estado === "CLAUDE_RUNNING_TERMINAL_UNBOUND" && x.modo === "COPY_ONLY"));
   assert.ok(catalogo.automation_owners.some(x => x.id === "HERMES" &&
@@ -196,10 +196,27 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
 });
 
 
+test("Tool Call Lens cadastrado na gaveta reaproveita os owners com 4 gates", () => {
+  const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
+  const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
+  const receita = catalogo.automation_owners.find(x => x.id === "TOOL_CALL_LENS");
+  assert.ok(receita, "receita TOOL_CALL_LENS nao encontrada na gaveta");
+  assert.equal(receita.owner, "apps/modulos/mcp/src/audit-logger.js");
+  assert.equal(receita.fases.length, 4);
+  assert.deepEqual(receita.fases.map(x => x.id), ["CONSTRUIR", "INSTALAR", "CONECTAR", "PROVAR"]);
+  assert.ok(receita.fases.every(x => x.owner && x.comprovar && x.estado));
+  assert.ok(receita.receita.includes("forja-tool-call-lens-4-fases.ps1"));
+  assert.ok(receita.recibo.includes("TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md"));
+  assert.ok(infra.includes('aria-label="Quatro etapas da Forja"'));
+  assert.ok(infra.includes("automacaoAtual.fases.map"));
+  assert.ok(infra.includes("Tool Call Lens"));
+  assert.ok(infra.includes("Copiar receita · não executar"));
+});
+
 test("gaveta cataloga receitas A-Z e mostra estado do terminal sem autoexec", () => {
   const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
   const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
-  assert.equal(catalogo.automation_owners.length, 9);
+  assert.equal(catalogo.automation_owners.length, 10);
   assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 9);
   assert.ok(catalogo.automation_owners.every(r => r.owner && r.receita && r.nome));
   assert.ok(infra.includes("receitasAlfabeticas"));
@@ -313,6 +330,23 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.doesNotMatch(bell, /localStorage|sessionStorage|\/notify-telegram/);
 });
 
+test("microdeploy visivel no owner existente e fail-closed sem prova de runtime", () => {
+  const ui = read("apps/instinto-superior/src/components/central/SistemaCentralDark.tsx");
+  const backend = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  const script = read("scripts/micro_deploy.sh");
+  const contrato = read("docs/CONSCIENCIA/MICRO-DEPLOY/README.md");
+  assert.ok(ui.includes("function MicroDeployReadiness("));
+  assert.ok(ui.includes("<MicroDeployReadiness estado={estado} atualizando={atualizando} atualizar={atualizar} />"));
+  assert.ok(ui.includes("STALE/UNKNOWN"));
+  assert.ok(ui.includes("const deployAllowed = false;"));
+  assert.ok(ui.includes("Worktrees e runners"));
+  assert.ok(ui.includes("Rollback pronto"));
+  assert.ok(ui.includes("Remedir sinais"));
+  assert.ok(backend.includes('const deploy: Estado = "UNKNOWN";'));
+  assert.ok(backend.includes('medirApi("/api/microdeploy/receipts/index.json")'));
+  assert.ok(script.includes('blocked "REAL_MODE_REQUIRES_COMPONENT_ADAPTER"'));
+  assert.ok(contrato.includes("Micro-deploy é por escopo afetado"));
+  assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
 
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
@@ -551,4 +585,52 @@ test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
   assert.ok(hud.includes('["Screenpipe VPS", estado?.screenpipeVps'));
   assert.ok(hud.includes('["Desktop Commander VPS", estado?.desktopVps'));
   assert.ok(hud.includes('["👁️ Screenpipe VPS", estado?.screenpipeVps'));
+});
+
+test("microdeploy do Cockpit nunca vende sync Git como deploy comprovado", () => {
+  const fonte = read("apps/instinto-superior/src/components/central/AutoSyncButton.tsx");
+  assert.ok(fonte.includes("MICRODEPLOY_GUARD_20261018"));
+  assert.ok(fonte.includes("Sync Git não prova deploy"));
+  assert.ok(fonte.includes("Micro-Deploy ${microDeployMode} BLOQUEADO"));
+  assert.doesNotMatch(fonte, /Micro-Deploy \$\{microDeployMode\} ok/);
+  const handler = fonte.match(/const handleMicroDeploy = \(\) => \{[\s\S]*?\n  \}/);
+  assert.ok(handler, "handler do botão não identificado");
+  assert.doesNotMatch(handler[0], /(?:await\s+)?(?:handleSync|runSync|execSync|fetch)\s*\(/);
+  assert.ok(fonte.includes("const handleSync = async"), "não apagar sync existente");
+});
+
+
+test("TelePainel permanece produto próprio; matriz Admin ocupa o mesmo HUD sem publicar casca Cliente", () => {
+  assert.ok(zone.includes('id="cd-admin-capabilities"'));
+  assert.ok(zone.includes('id="cd-hud-legacy-owner-inventory"'));
+  assert.ok(zone.includes("O TelePainel continua sendo um produto próprio"));
+  assert.ok(zone.includes("Versão estável · NÃO LIBERADA"));
+  assert.ok(zone.includes("RUNTIME UNKNOWN"));
+  assert.ok(zone.includes("SOURCE_IN_CODE != WIRED != TESTED != DEPLOYED"));
+  const rows = zone.match(/\{ origem: "[^"]+", destino: "[^"]+", owner: "[^"]+", status: "(?:PARCIAL|NAO_INTEGRADO)" \}/g) ?? [];
+  assert.equal(rows.length, 15, "15 entradas preservadas da Sidebar TelePainel");
+  assert.equal(new Set(rows).size, 15);
+  assert.ok(zone.includes("telepainelAdminCapabilities.map"));
+  assert.ok(!zone.includes("git reset --hard"));
+});
+
+
+test("Casa canonical K and four-stage collector receipt", () => {
+  const launcher = read("apps/instinto-superior/INICIAR-COCKPIT-LOCAL.bat");
+  const bridge = read("scripts/casa/vscode-log-bridge.ps1");
+  const ingest = read("scripts/vps/ingest-vscode-log.mjs");
+  for (const field of ["EXPECTED_ROOT=K:", "BLOCKED_LEGACY_OR_NONCANONICAL_PATH",
+    "BLOCKED_NOT_GIT_CHECKOUT", "npm ci", "--port 3000 --strictPort"]) {
+    assert.ok(launcher.includes(field), field);
+  }
+  assert.ok(!launcher.includes('cd /d "E:'));
+  for (const stage of ["[switch]$Bootstrap", "BUILD=PASS_SOURCE_PARSE_AND_GIT_ROOT_K",
+    "INSTALL=PASS_EXISTING_SCHEDULED_TASK", "CONNECT=PASS_",
+    "PROVE=PASS_COLLECTOR_METADATA_", "BROWSER_AUTOMATION_E2E=UNPROVEN",
+    "FIXED_POINT=COLLECTOR_ONLY"]) assert.ok(bridge.includes(stage), stage);
+  assert.ok(bridge.includes("chromium(_headless_shell)?-"));
+  assert.ok(bridge.includes("$parsed.playwright.revision -eq"));
+  assert.ok(ingest.includes("const playwrightReceipt = playwrightProbe == null"));
+  assert.ok(ingest.includes("playwright: playwrightReceipt"));
+  assert.ok(!ingest.includes("playwright: playwrightProbe,"));
 });

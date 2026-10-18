@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
+  BarChart3,
   Gauge,
   GitBranch,
   House,
@@ -20,6 +22,273 @@ import {
   CartaoResponsabilidade,
   type ContratoCartaoResponsabilidade,
 } from "@/components/central/CartaoResponsabilidade";
+
+
+type SemanaHarness = {
+  schema: string;
+  window: string;
+  observedAt: string;
+  coverage: "PARTIAL_CAPPED" | "PARTIAL_INSTRUMENTED";
+  capped: boolean;
+  totalObserved: number;
+  traced: number;
+  tracePctOfObserved: number | null;
+  pass: number;
+  fail: number;
+  unknown: number;
+  successPctOfDecided: number | null;
+  failurePctOfDecided: number | null;
+  unknownPctOfObserved: number | null;
+  avgDurationMs: number | null;
+  daily: Array<{ day: string; calls: number; pass: number; fail: number; unknown: number }>;
+  bySource: Array<{ name: string; calls: number; pass: number; fail: number; unknown: number }>;
+  topTools: Array<{ name: string; calls: number; pass: number; fail: number; unknown: number }>;
+};
+
+/**
+ * Projeção de observabilidade, não nova coleta. A autenticação continua com
+ * o MCP Admin; não transportamos tokens nem cookies em estado do cockpit.
+ */
+function RastroSemanalMcp() {
+  const base = "https://api.centralldark.com";
+  const rota = base + "/admin/api/metricas";
+  const q = useQuery({
+    queryKey: ["centraldark", "harness-weekly-admin"],
+    queryFn: async (): Promise<SemanaHarness> => {
+      const response = await fetch(rota, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (response.status === 401 || response.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!response.ok) throw new Error("API_UNAVAILABLE");
+      const json = await response.json() as { harnessWeek?: SemanaHarness };
+      if (json.harnessWeek?.schema !== "centraldark.harness.weekly.v1")
+        throw new Error("WEEKLY_NOT_DEPLOYED");
+      return json.harnessWeek;
+    },
+    refetchInterval: 60_000,
+    retry: false,
+  });
+  const d = q.data;
+  const status = d ? d.coverage : q.isPending ? "PENDING" :
+    q.error instanceof Error ? q.error.message : "UNKNOWN";
+  const pct = (value: number | null | undefined) => value == null ? "UNKNOWN" : value.toFixed(1) + "%";
+  const max = Math.max(1, ...((d?.daily ?? []).map(day => day.calls)));
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-surface-1/80 p-4 sm:p-5"
+      aria-labelledby="harness-weekly-title">
+      <header className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="size-5 text-neon-green" aria-hidden="true" />
+          <h3 id="harness-weekly-title" className="font-semibold">Rastro de ferramentas · últimos 7 dias</h3>
+        </div>
+        <Button size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
+          <RefreshCw className={q.isFetching ? "size-4 animate-spin" : "size-4"} aria-hidden="true" />
+          Atualizar
+        </Button>
+      </header>
+      <p className="mt-2 text-xs text-muted-foreground">
+        API MCP existente /admin/api/metricas · amostra de eventos instrumentados.
+        Não inclui automaticamente chamadas internas do ChatGPT nem todas as ferramentas do desktop.
+      </p>
+      <p className="mt-3 font-mono text-xs" role="status" aria-live="polite">
+        {status}{d?.capped ? " · LIMITE DA AMOSTRA ATINGIDO" : ""}
+        {d ? " · observado " + new Date(d.observedAt).toLocaleString("pt-BR") : ""}
+      </p>
+      {d ? (
+        <>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
+            {[
+              ["Chamadas observadas", String(d.totalObserved), "Eventos deduplicados"],
+              ["Acertos", pct(d.successPctOfDecided), d.pass + " PASS / resultados conhecidos"],
+              ["Erros", pct(d.failurePctOfDecided), d.fail + " FAIL / resultados conhecidos"],
+              ["Sem veredito", pct(d.unknownPctOfObserved), d.unknown + " UNKNOWN / observados"],
+              ["CARACOL · rastreável", pct(d.tracePctOfObserved), d.traced + " IDs de correlação / observados"],
+            ].map(([label, value, detail]) => (
+              <div key={label} className="rounded-lg border border-border bg-background/50 p-3">
+                <p className="text-[11px] text-muted-foreground">{label}</p>
+                <strong className="mt-1 block font-mono text-xl">{value}</strong>
+                <small className="text-[10px] text-muted-foreground">{detail}</small>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Duração média das amostras medidas: {d.avgDurationMs == null ? "UNKNOWN" : d.avgDurationMs + " ms"}.
+            Cobertura: {d.coverage}. ID de correlação não equivale a prova causal. Sem inferir 100% do harness.
+          </p>
+          <div className="mt-4 grid grid-cols-7 gap-1" role="list" aria-label="Chamadas observadas por dia, UTC">
+            {d.daily.map(day => (
+              <div key={day.day} role="listitem" className="min-w-0 text-center">
+                <div className="flex h-20 items-end justify-center rounded border border-border bg-background/30 p-1">
+                  <div className="w-full rounded-sm bg-neon-green/70"
+                    style={{ height: (day.calls ? Math.max(8, (day.calls / max) * 100) : 0) + "%" }} />
+                </div>
+                <span className="mt-1 block font-mono text-[10px]">{day.day.slice(5)}</span>
+                <span className="block font-mono text-[10px] text-muted-foreground">{day.calls}</span>
+              </div>
+            ))}
+          </div>
+          <details className="mt-4 rounded-lg border border-border p-3">
+            <summary className="cursor-pointer font-semibold">Ferramentas e fontes · detalhar</summary>
+            <div className="mt-3 overflow-x-auto">
+              <table className="w-full min-w-[340px] text-left text-xs">
+                <thead><tr><th>Origem / ferramenta</th><th>Chamadas</th><th>PASS</th><th>FAIL</th><th>UNKNOWN</th></tr></thead>
+                <tbody>
+                  {[...d.bySource, ...d.topTools].map((row, i) => (
+                    <tr key={i} className="border-t border-border">
+                      <td className="max-w-56 truncate py-1" title={row.name}>{row.name}</td>
+                      <td>{row.calls}</td><td>{row.pass}</td><td>{row.fail}</td><td>{row.unknown}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </>
+      ) : (
+        <div className="mt-4 rounded-lg border border-dashed border-amber-500/40 p-4 text-sm">
+          Dados semanais indisponíveis nesta sessão. Sem números fictícios e sem marcar PASS.
+          <a className="mt-2 block underline" href={base + "/admin"} target="_blank" rel="noreferrer">
+            Abrir administração MCP e verificar autenticação / rastro
+          </a>
+        </div>
+      )}
+    </section>
+  );
+}
+
+
+type LensEvento = {
+  t: string;
+  level: string;
+  msg: string;
+  meta?: {
+    source?: string;
+    toolName?: string;
+    call_id?: string;
+    correlation_id?: string;
+    mission_id?: string;
+    mcp_host_pid?: number | null;
+    durationMs?: number | null;
+    exitCode?: number | null;
+    status?: "PASS" | "FAIL";
+  };
+};
+
+function ToolCallLensMcp() {
+  const [modo, definirModo] = useState<"ao-vivo" | "pausado">("ao-vivo");
+  const [filtro, definirFiltro] = useState<"todos" | "PASS" | "FAIL">("todos");
+  const [detalhes, definirDetalhes] = useState(true);
+  // A mesma origem autenticada do RastroSemanalMcp, sem tokens no cliente.
+  // Endpoint protegido por cookie do MCP Admin; fetch cross-origin requer
+  // a configuracao CORS/autenticacao existente no ambiente publicado.
+  const url = "https://api.centralldark.com/admin/api/logs?q=mcp_tool_call&limit=100";
+  const q = useQuery({
+    queryKey: ["centraldark", "tool-call-lens", "mcp-audit"],
+    queryFn: async (): Promise<LensEvento[]> => {
+      const response = await fetch(url, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (response.status === 401 || response.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!response.ok) throw new Error("MCP_LOG_STREAM_UNAVAILABLE");
+      const payload = await response.json() as { logs?: LensEvento[] };
+      if (!Array.isArray(payload.logs)) throw new Error("MCP_LOG_SCHEMA_UNKNOWN");
+      return payload.logs.filter(evento => evento.msg === "mcp_tool_call" && evento.meta?.source === "MCP_AUDIT");
+    },
+    refetchInterval: modo === "ao-vivo" ? 5000 : false,
+    retry: false,
+  });
+  const eventos = (q.data ?? []).filter(evento =>
+    filtro === "todos" || evento.meta?.status === filtro,
+  );
+  const erro = q.error instanceof Error ? q.error.message : "SEM FONTE";
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-surface-1/80 p-4 sm:p-5"
+      aria-labelledby="tool-call-lens-title">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 id="tool-call-lens-title" className="font-semibold">🪬 Tool Call Lens · MCP CentralDark</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Chamadas do MCP próprio por auditoria; a origem externa Desktop Commander só aparece após correlação autorizada.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" size="sm" variant="outline"
+            onClick={() => definirModo(modo === "ao-vivo" ? "pausado" : "ao-vivo")}>
+            {modo === "ao-vivo" ? "⏸ Pausar" : "▶ Ao vivo"}
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
+            <RefreshCw className={q.isFetching ? "animate-spin" : ""} aria-hidden="true" /> Rever / Atualizar
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => definirDetalhes(!detalhes)}>
+            {detalhes ? "Recolher" : "Expandir"}
+          </Button>
+          <a
+            className="inline-flex items-center rounded border border-amber-500/50 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/20"
+            href="https://api.centralldark.com/admin?tab=audit"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Abrir o botão de execução autenticada da Forja no mesmo Admin MCP"
+          >
+            🧬 Forja Autônoma · Construir → Instalar → Conectar → Provar
+          </a>
+        </div>
+      </div>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+        <p className="font-mono text-xs" role="status">
+          {q.isError ? erro : q.isPending ? "CONSULTANDO" : modo === "ao-vivo" ? "ATUALIZAÇÃO A CADA 5S" : "PAUSADO"}
+          {" · "} {q.data?.length ?? 0} eventos de tool call no intervalo consultado
+          {q.dataUpdatedAt > 0 ? " · " + new Date(q.dataUpdatedAt).toLocaleTimeString("pt-BR") : ""}
+        </p>
+        <label htmlFor="toolcall-lens-resultado" className="text-xs">
+          Resultado{" "}
+          <select id="toolcall-lens-resultado" className="rounded border border-border bg-background p-1"
+            value={filtro} onChange={event => definirFiltro(event.target.value as typeof filtro)}>
+            <option value="todos">Todos</option>
+            <option value="PASS">PASS</option>
+            <option value="FAIL">FAIL</option>
+          </select>
+        </label>
+      </div>
+      {q.isError ? (
+        <p role="alert" className="mt-3 text-xs text-amber-400">
+          Leitura não autorizada ou indisponível neste navegador. Verifica a sessão do MCP Admin e a configuração da rota, sem copiar tokens.
+        </p>
+      ) : null}
+      {detalhes ? (
+        <div className="mt-4 max-h-80 overflow-y-auto rounded-lg border border-border p-2" role="log"
+          aria-label="Recibos recentes de chamadas MCP">
+          {!eventos.length ? <p className="p-2 text-xs text-muted-foreground">Sem chamadas auditadas disponíveis nesta sessão.</p> : null}
+          {eventos.map((evento, i) => {
+            const m = evento.meta ?? {};
+            return (
+              <div className="border-b border-border/50 p-2 text-xs" key={m.call_id ?? String(i)}>
+                <p className="font-semibold">
+                  {m.status === "PASS" ? "🟢" : "🔴"} {m.toolName ?? "UNKNOWN"} · {m.status ?? "UNKNOWN"}
+                  {" · "}{m.durationMs == null ? "Duração desconhecida" : m.durationMs + " ms"}
+                </p>
+                <p className="mt-1 break-all font-mono text-[10px] text-muted-foreground">
+                  {evento.t} · CID {m.correlation_id ?? "-"} · Call {m.call_id ?? "-"}
+                  {" · "}PID do host MCP {m.mcp_host_pid ?? "-"}
+                  {m.exitCode == null ? "" : " · Exit " + m.exitCode}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+      <p className="mt-2 text-[10px] text-muted-foreground">
+        Fonte: audit-logger.js → Admin /admin/api/logs. Pausar congela a leitura da UI;
+        rever atualiza eventos registrados, sem reexecutar comandos.
+      </p>
+    </section>
+  );
+}
 
 export function ObservabilidadeCentralDark() {
   const ler = useServerFn(lerEstadoCentralDark);
@@ -328,6 +597,8 @@ export function ObservabilidadeCentralDark() {
         </p>
       </div>
 
+      <RastroSemanalMcp />
+      <ToolCallLensMcp />
       <div className="mt-6">
         <CartaoResponsabilidade
           id="oauth-broker-title"
