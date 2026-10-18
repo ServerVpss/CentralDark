@@ -354,3 +354,62 @@ requer adapters autorizados e confirmação de entrega/execução.
 O registro do evento **nunca executa sozinho** uma skill, um modelo ou
 um Harness. Contrato declarativo no arquivo existente
 `MODULES/HUB/controls/notifications-and-sensors.json`.
+
+
+<!-- CENTRALDARK_HERMES_SUPABASE_COCKPIT_REALTIME_20261018 -->
+## Receipt 2026-10-18 — Hermes → Supabase Realtime → Instinto Superior (menor delta)
+
+**Intenção:** usar a central existente como *projeção de prova* no cockpit, distinguindo estado do canal, evento de verdade e execução do Hermes. \`REUSE_BEFORE_CREATE\`: nenhum banco, tabela, WebSocket, worker, HUD, PR-mãe ou executor paralelo foi criado.
+
+### T0 e owner verificados
+
+- Banco Supabase CentralDark \`lyoigsqluyktoclwdaft\`: \`public.notifications_log\` já pertence à publication \`supabase_realtime\`, com \`REPLICA IDENTITY FULL\` e RLS que permite \`SELECT\` somente a \`authenticated\` com papel \`admin\`. Dado de 2026-10-18, leitura do conector oficial Supabase.
+- O feed e o sininho existentes são \`apps/instinto-superior/src/hooks/useNotificationsLog.ts\` e \`apps/instinto-superior/src/components/central/CentralNotificacoes.tsx\`; não substituem \`docs/NOTIFY\`, \`src/lib/notifications-events.ts\` ou as Edge Functions \`notify-event\`/\`notify-telegram\`.
+- Baseline: \`notifications_log\` tinha 574 registros, último em 2026-07-04; \`hub_missions\` tinha 3.610 missões \`queued/pending\`, \`hub_mission_events\` e \`hub_evidence\` tinham 0. Nenhuma execução automática é inferida desses números.
+- Kanban Hermes real \`t_619b0c7a\`, \`run_id=54\`: eventos \`created→claimed→spawned→crashed→gave_up\`; último estado \`blocked\`, código de saída 1, falha do provedor de modelo local. A tentativa não concluiu os cinco gates do microdeploy.
+
+### T1 comprovado no Supabase — evento real, ingestão assistida
+
+\`\`\`text
+TABLE=public.notifications_log
+RECEIPT_ID=17681f3a-4fdf-438e-930a-f1b4dc7ddc55
+PROOF_ID=hermes-kanban:t_619b0c7a:run54:crashed
+TASK_ID=t_619b0c7a
+RUN_ID=54
+PROOF_STATE=FAIL
+EVENT_CREATED_AT=2026-10-18T04:45:32.962228Z
+SOURCE=READBACK_HERMES_NATIVE_KANBAN_VIA_MCP
+PUBLICATION_MODE=MANUAL_MEASURED_PROJECTION
+NEXT_CURSOR=REPAIR_HERMES_LOCAL_MODEL_THEN_RETRY_AUTHORIZED_TASK
+\`\`\`
+
+A gravação do evento foi idempotente por \`metadata.proof_id\` no SQL executado pelo conector oficial; a leitura seguinte do mesmo registro retornou UUID, tipo \`erro\`, source, status, cursor e modo de publicação exatos. **Este recibo prova escrita e readback no banco, não prova canal de WebSocket em navegador, entrega automática do Hermes ou deploy frontend**. Nenhuma mensagem foi inventada como sucesso.
+
+### Reforço incremental na main
+
+- \`914891f679e184a3d952362ad5f32058b11695d3\` — hook existente recupera mensagens perdidas por \`SELECT\` RLS a cada 20 segundos, deduplica UUID, mantém janela temporal móvel e reconsulta ao conectar Realtime.
+- \`f1e8af4ff616952581ad74c4b323086b5ed0ae67\` — UI existente distingue \`proof_state\`, \`publication_mode\` e \`source_surface\`; \`SUBSCRIBED\` é conexão, nunca recibo E2E.
+- Contraprova de sintaxe: arquivos obtidos da \`main\` pelo GitHub autenticado, \`typescript.transpileModule\`, \`TSX_SYNTAX=PASS\` e **zero** erros nos dois filesets (não substitui lint/build E2E).
+- CI observado após o commit: \`test.yml\` (Instinto), \`vps-exec-selfhosted.yml\` (deploy canônico), \`porta-de-entrada\` e CodeQL **PENDING** no SHA \`f1e8af4\`; \`PENDING != PASS\`.
+
+### Lacunas honestas para promoção
+
+1. **PRODUCER:** criar o vínculo faltante no owner de emissão já existente, após autenticação/autoridade e provas de emissão automática do Hermes. Não enviar credenciais à UI e não usar Edge pública sem verificar sua autorização efetiva. Evento gravado manualmente não prova producer automático.
+2. **BROWSER:** autenticado como admin no cockpit, observar o mesmo \`receipt_id\` por leitura RLS, receber \`INSERT\` realmente novo por Realtime, desconectar/reconectar, comprovar dedupe e polling de recuperação. \`CHANNEL_SUBSCRIBED != EVENT_DELIVERED\`.
+3. **DEPLOY:** VPS ainda em checkout \`fb7a00a60\` com alterações de outros escritores; não limpar, resetar, stashear, dar pull cego ou reiniciar serviços não relacionados. Porta local do app \`4175\` não escutava no teste de 2026-10-18; Caddy 80/443 respondia, sem prova do serviço interno. CI/deploy canônico pendentes. Microdeploy \`centraldark_deploy_micro_fallback\` continua sob quarentena por gates de compensação incompletos; não contornar o manifesto com shell alternativo.
+4. **HERMES:** job \`t_619b0c7a\` blocked por modelo local indisponível; reparar binding do provedor e só então retomar o mesmo cartão autorizado, sem alterar as 3.610 missões pendentes.
+
+\`\`\`text
+MAIN_SOURCE=PASS
+SQL_RECEIPT_READBACK=PASS
+TSX_SYNTAX=PASS
+AUTOMATIC_PRODUCER=UNKNOWN
+WEB_SOCKET_BROWSER_E2E=UNKNOWN
+CI_SAME_SHA=PENDING
+COCKPIT_SITE_DEPLOY=BLOCKED
+HERMES_TASK=BLOCKED
+NEXT_CURSOR=REPAIR_AUTHORIZED_HERMES_PRODUCER_AND_DEPLOY_RUNNER_THEN_BROWSER_REALTIME_READBACK
+\`\`\`
+
+**Não mudar estes estados até haver nova contraprova material**. O HUD é projeção, o Supabase preserva o recibo, o executor real é Hermes e a realidade do deploy exige verificação independente.
+<!-- /CENTRALDARK_HERMES_SUPABASE_COCKPIT_REALTIME_20261018 -->
