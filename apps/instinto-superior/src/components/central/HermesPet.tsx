@@ -9,6 +9,7 @@ import folha from "@/lib/hermes-folha.json";
 import instinto from "@/lib/hermes-instinto-superior.json";
 import { useI18n } from "@/lib/i18n";
 import { Reveal, SectionHeading } from "@/components/central/Reveal";
+import { JarvisParticleOrb } from "@/components/central/JarvisParticleOrb";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -75,7 +76,7 @@ const LIMIAR_CURTO = 6;
 
 const MOVIMENTOS_INSTINTO = instinto.movimentos;
 
-type VisualHermes = "instinto" | "ego" | PeleHermes;
+type VisualHermes = "orbe" | "instinto" | "ego" | PeleHermes;
 type ControleHermes = {
   visual: VisualHermes;
   movimento: number;
@@ -87,7 +88,7 @@ type ControleHermes = {
 };
 
 const CONTROLE_INICIAL: ControleHermes = {
-  visual: "instinto",
+  visual: "orbe",
   movimento: 0,
   quadro: 0,
   reproduzindo: true,
@@ -329,7 +330,7 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
   const pele = PELES.find((item) => item.id === (controle.visual === "ego" ? "ascensao" : controle.visual));
   const poseAntiga = POSES[controle.movimento] ?? POSES[0];
   if (!poseAntiga) return null;
-  const maximo = controle.visual === "instinto" ? movimento.quadros : poseAntiga.quadros;
+  const maximo = controle.visual === "orbe" ? 1 : controle.visual === "instinto" ? movimento.quadros : poseAntiga.quadros;
   const movimentosDisponiveis = controle.visual === "instinto" ? MOVIMENTOS_INSTINTO : POSES;
 
   return (
@@ -342,7 +343,9 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
         className={`grid items-center gap-8 ${compacto ? "xl:grid-cols-[220px_1fr]" : "lg:grid-cols-[260px_1fr]"}`}
       >
         <div className="flex min-h-64 items-center justify-center">
-          {controle.visual === "instinto" ? (
+          {controle.visual === "orbe" ? (
+            <JarvisParticleOrb size={236} interactive label="JARVIS" />
+          ) : controle.visual === "instinto" ? (
             <SpriteInstintoSuperior
               largura={216}
               apenasMovimento={controle.movimento}
@@ -374,7 +377,7 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
                   atualizar({
                     visual,
                     movimento:
-                      visual === "instinto"
+                      visual === "orbe" || visual === "instinto"
                         ? controle.movimento
                         : Math.min(controle.movimento, POSES.length - 1),
                     quadro: 0,
@@ -385,6 +388,7 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="orbe">🫧 JARVIS · orbe de partículas</SelectItem>
                   <SelectItem value="instinto">{t("pet.instinto")}</SelectItem>
                    <SelectItem value="ego">{t("pet.ego")}</SelectItem>
                   {PELES.map((item) => (
@@ -414,6 +418,13 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
               </Select>
             </div>
           </div>
+          {controle.visual === "orbe" ? (
+            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
+              Pele JARVIS ativa. A esfera respira sozinha; com permissão do microfone, reage às frequências reais.
+              Movimentos, quadros e velocidade continuam disponíveis nas peles clássicas.
+            </p>
+          ) : (
+            <>
           <div className="mt-6 space-y-3">
             <div className="flex items-center justify-between gap-4">
               <Label htmlFor={`${baseId}-quadro`}>{t("pet.quadro")}</Label>
@@ -474,7 +485,8 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
               onValueChange={([velocidade = 70]) => atualizar({ velocidade })}
               aria-label={t("pet.velocidade")}
             />
-          </div>
+          </div>            </>
+          )}
         </div>
       </div>
     </div>
@@ -699,7 +711,7 @@ export function HermesFlutuante() {
     direcaoRef.current = controle.direcao === "direita" ? 1 : -1;
   }, [controle.direcao]);
   useEffect(() => {
-    if (!controle.passeando || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    if (controle.visual === "orbe" || !controle.passeando || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       return;
     let anterior = performance.now();
     let id = 0;
@@ -739,7 +751,7 @@ export function HermesFlutuante() {
     };
     id = requestAnimationFrame(mover);
     return () => cancelAnimationFrame(id);
-  }, [controle.passeando, controle.velocidade]);
+  }, [controle.visual, controle.passeando, controle.velocidade]);
   if (!montado) return null;
   const peleFlutuante = PELES.find((item) => item.id === (controle.visual === "ego" ? "ascensao" : controle.visual));
   const movimentoFlutuante = controle.passeando
@@ -754,11 +766,13 @@ export function HermesFlutuante() {
     <div
       data-hermes-flutuante
       className="pointer-events-none fixed bottom-2 z-20 flex max-w-16 flex-col items-end gap-1 opacity-75 print:hidden sm:bottom-5 sm:z-40 sm:max-w-none sm:gap-2 sm:opacity-100"
-      style={{ left: `${x}px` }}
+      style={controle.visual === "orbe" ? { right: 12 } : { left: `${x}px` }}
     >
       {visivel && (
         <div className="animate-[flutuar_4.5s_ease-in-out_infinite] motion-reduce:animate-none">
-          {controle.visual === "instinto" ? (
+          {controle.visual === "orbe" ? (
+            <JarvisParticleOrb size={typeof window !== "undefined" && window.innerWidth < 640 ? 96 : 146} label="JARVIS" />
+          ) : controle.visual === "instinto" ? (
             <SpriteInstintoSuperior
               largura={typeof window !== "undefined" && window.innerWidth < 640 ? 48 : 132}
               apenasMovimento={movimentoFlutuante}

@@ -1860,8 +1860,8 @@ PAPEL_SOL=VOZ|TEXTO|COORDENACAO_COGNITIVA_DA_CASA
 PAPEL_HERMES=EXECUTOR_PRESERVACAO_CONTINUIDADE
 PIVETE_ROLE=RETIRED
 
-RAIZ_LOCAL=E:\CentralDark\Pivete\CentralDark
-# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. RAIZ_LOCAL acima descreve checkout legado; NAO usar como destino implicito do Obsidian nem reescrever paths de executores ate smoke test/receipts. C: pessoal intocavel. Movimento ainda nao comprovado concluido.
+RAIZ_LOCAL=K:\
+# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. A referência histórica anterior E:\CentralDark\Pivete\CentralDark permanece somente como histórico; a raiz operacional atual é K:\. Não usar K:\CentralDark como raiz Git nem reescrever paths de executores sem smoke test/receipts. C: pessoal intocável. Movimento ainda não comprovado concluído.
 
 CASA_PRIMEIRO=SIM
 VPS_POR_ULTIMO=SIM
@@ -2142,7 +2142,7 @@ CONNECTOR_DOWN_ONCE
 → SE AINDA FALHAR: BLOCKED COM HOST, CAUSA, ROTAS TENTADAS E PRÓXIMA AÇÃO
 ```
 
-Casa local do CHEFE (`E:\CentralDark`) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
+Casa local do CHEFE (`K:\`) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
 
 ```text
 LOCAL_ONLY_CHANGE_FORBIDDEN=true
