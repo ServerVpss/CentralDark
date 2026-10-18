@@ -347,6 +347,7 @@ test("microdeploy visivel no owner existente e fail-closed sem prova de runtime"
   assert.ok(script.includes('blocked "REAL_MODE_REQUIRES_COMPONENT_ADAPTER"'));
   assert.ok(contrato.includes("Micro-deploy é por escopo afetado"));
   assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
+});
 
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
@@ -604,6 +605,7 @@ test("🪬 Puppeteer Michelin: Chromium real é smoke, nunca três estrelas", as
   assert.match(workflow, /MICHELIN_PUPPETEER_VISUAL=PASS/);
   assert.match(workflow, /RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB/);
   assert.doesNotMatch(workflow, /MICHELIN_STAR_3=PASS/);
+});
 test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
   const collector = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
   const obs = read("apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx");
