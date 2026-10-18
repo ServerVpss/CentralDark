@@ -1,7 +1,7 @@
 {
   "schema": "centraldark.remote-bridge.config.v2",
   "device_label": "SEGREDO",
-  "workdir": "E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE",
+  "workdir": "K:\\_MAPA_CASA\\GARIMPO-CHEFE",
   "package": "@wonderwhy-er/desktop-commander@0.2.48",
   "primary_control_plane": "centraldark_mcp",
   "centraldark_mcp": "https://mcp.centralldark.com/mcp",

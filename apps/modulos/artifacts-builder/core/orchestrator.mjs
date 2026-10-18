@@ -413,7 +413,12 @@ const server = createServer(async (req, res) => {
       res.end(JSON.stringify({ status: 'ok', uptime: process.uptime(), port: PORT }));
       return;
     }
-    if (pathname === '/') pathname = '/index.html';
+    // Índice existente fica na raiz do Builder; os artefatos seguem em public/.
+    if (pathname === '/') {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(await readFile(join(BASE, 'index.html')));
+      return;
+    }
 
     const filePath = join(PUBLIC, pathname);
     // Security: só serve dentro de PUBLIC
@@ -436,7 +441,8 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, '0.0.0.0', () => log(`🏗️ Artifacts Builder server :${PORT}`));
+// Na Casa, BUILDER_HOST=127.0.0.1 mantém a oficina privada; o padrão VPS não muda.
+server.listen(PORT, process.env.BUILDER_HOST || '0.0.0.0', () => log(`🏗️ Artifacts Builder server :${PORT}`));
 
 // ── Loop ──
 async function loop() {

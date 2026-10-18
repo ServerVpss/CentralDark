@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [string]$RepoRoot = 'E:\CentralDark\CentralDark',
+  [string]$RepoRoot = 'K:\',
   [string]$HermesHome = "$env:LOCALAPPDATA\hermes"
 )
 $ErrorActionPreference = 'Stop'
