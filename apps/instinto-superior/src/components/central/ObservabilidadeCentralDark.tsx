@@ -373,6 +373,8 @@ export function ObservabilidadeCentralDark() {
         ))}
       </div>
 
+      <ProcessosMcpPanel />
+
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <article className="panel p-5">
           <div className="flex items-center gap-2">
