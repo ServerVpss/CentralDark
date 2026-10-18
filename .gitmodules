@@ -2,3 +2,8 @@
 	path = skills/pretty-mermaid
 	url = https://github.com/imxv/Pretty-mermaid-skills.git
 	branch = main
+
+[submodule "apps/modulos/deepseek-harness"]
+	path = apps/modulos/deepseek-harness
+	url = https://github.com/deepseek-ai/deepseek-harness.git
+	branch = master

@@ -418,3 +418,71 @@ NEXT_MODEL_CAN_RECOVER_WITHOUT_REDISCOVERING=true
 ## Delta — plano recuperável e prioridade da missão
 
 O CHEFE esclareceu que reparos são consequência; a missão continua inteligência persistente e método herdável. O plano AionUi/AionCore, WebUI primeiro, renderer compartilhado, VPS/forja e Casa/laboratório agora tem expansão recuperável em `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`. As fases permanecem PENDING; aprendizado canônico não é deploy. Proveniência: PR-mãe #1562, comentários 5929369580 e 5929693556, cruzados com esta sessão.
+
+
+<!-- CENTRALDARK_FIO_UNICO_ESCUTA_LOVABLE_BUILDER_20261018 -->
+## 2026-10-18 — Fio único, intenção ainda em formação e trabalho rápido tipo Builder
+
+**Natureza:** intenção, observações trazidas pelo CHEFE e aprendizado de interação. **Não é autorização para migrar, executar, publicar, limpar projetos, importar banco ou criar plano.** Esta seção expande a lembrança existente, sem segundo método, cérebro ou arquitetura. A existência desta seção prova registro documental, não consumo por todos os agentes.
+
+### Correção prioritária da interpretação
+
+- O CHEFE explicou que, por ora, está **alimentando a conversa com prints, vídeos, textos, repositórios e histórico para que a SOL entenda sua intenção**. O objetivo final **ainda não foi integralmente declarado**. O erro da SOL foi converter observações em planos e comandos para Claude antes de o CHEFE terminar a apresentação.
+- **Relato/partilha de contexto:** escutar, indexar fatos relevantes, confrontar quando solicitado e conversar sem antecipar execução. **Pergunta:** responder ao que foi perguntado. **Ordem:** só então executar o escopo autorizado com menor delta. Uma pergunta sobre possibilidades de exportar conhecimento não autoriza iniciar migração.
+- Não usar porcentagem subjetiva (“99% de intenção”, “86% de alinhamento”) como prova. **INTENT_FINALIZED=FALSE** até manifestação do CHEFE; dúvidas não são licença para completar lacunas com suposições.
+- Preservar correções do CHEFE sobre a interpretação, não competir com elas. Nenhum plano extra, roteiro, comando pronto ou segunda camada de governança é entregue sem pedido.
+
+### Fio A — um só fio lógico, recipientes sucessivos
+
+- Os rótulos antigos “Fio A/B/C/D” **não representam missões ou papéis diferentes**. Todos são **continuações do mesmo Fio A**, abertas quando a conversa/branch visual chegou a um limite. Uma nova ramificação continua o fio lógico e recupera o contexto acessível; não deve começar outra missão.
+- O CHEFE quer manter o nome lógico **Fio A** nas continuações, evitar alfabeto infinito e reduzir abas/chats acumulados. Prints do trecho final e contexto herdado são ponteiros para o NEXT_CURSOR; **não afirmar herança automática de todo o histórico nem preservação garantida após exclusão** sem prova.
+- A conversa é uma superfície de voz, descoberta, decisões e comando. **Não exigir criar ZIP, pacote ou arquivo externo só para registrar cada diálogo**. Biblioteca/galeria e repositório têm papéis distintos; necessidade de artefato persistente só nasce quando material e autorizada.
+
+### Distribuição de papéis atual — sem trocar a intenção
+
+- **ChatGPT no navegador**, com voz, funciona hoje como superfície de conversa e coordenação (SOL/general). O aplicativo de desktop pode ficar minimizado se não entregar a voz necessária naquele ambiente.
+- **Claude Code**, no outro lado, é o executor atual no Windows/Casa, com terminal e navegador que podem acessar abas pertinentes (Lovable, GitHub, Supabase, localhost). **Hermes** continua executor/capacidade existente, reutilizável quando ligado e autorizado; não se cria segundo Hermes.
+- SOL também pode medir/executar usando conectores reais quando o pedido autorizar; o nome “general” descreve postura/coordenação, não novo agente ou autoridade. Uma intenção, um organismo, writer único **por escopo**, realidade como juiz.
+
+### Superfícies e dados que o CHEFE ainda está apresentando
+
+- **4174 / CentralDark-current:** referência local do **Cockpit/Instinto Superior administrativo**, de uso interno na Casa nesta fase, com possível publicação futura a critério do CHEFE.
+- **4175 / CentralDark-live:** referência local do **Portal de módulos**, produto que o CHEFE construiu e quer preservar. **TelePainel é um projeto/módulo dentro do ecossistema**, não é sinônimo de todo o Portal nem da inteligência CentralDark. Expressões emocionais como “lixo” se referiam à **mistura de funções administrativas no local errado**, não a ordem para destruir o Portal.
+- **8080:** segunda superfície TelePanel anteriormente reportada e encerrada em uma leitura local; **estado runtime presente deve ser remensurado**, não inferido deste registro.
+- Material administrativo (Mega Painel, Hub Segurança, Cofre ADM, Status e suas dependências) que foi parar em telas do Portal/TelePainel é **candidato de convergência ao admin existente**, preservando funções públicas; o CHEFE ainda está demonstrando as telas e repositórios. **Sem remoção nem migração neste registro.**
+- **Lovable** é fonte de código, histórico e contexto dos projetos/workspaces (“Central Dark Instinct”, “Central Dark - central de módulos” e outros a serem apresentados), não necessariamente executor obrigatório. Recuperar apenas delta útil quando autorizado, sem substituir o ouro oficial de **ServerVpss/CentralDark@main**.
+- **Supabase de Lovable versus Supabase próprio:** identidade de projeto, URL, schemas, auth, RLS e estado vivo **não foram provados equivalentes ou diferentes** aqui. Não ordenar migração nem troca de banco por hipótese.
+- Antes de qualquer decisão de árvore, o CHEFE quer mostrar repositórios reais e eventualmente vídeo; **observação ainda em curso não é GOAL fechado**.
+
+### Modelo rápido de trabalho inspirado no Builder/Lovable
+
+O CHEFE trouxe como **referência de experiência de trabalho**, não como projeto novo, três comportamentos associados à Lovable:
+
+- **CHAT / INVESTIGATE:** conversa, examina projeto e histórico com ferramentas somente de leitura, devolve compreensão e perguntas somente quando indispensáveis; **não altera projeto**.
+- **PLAN / DELIBERATE:** elabora plano **apenas quando expressamente solicitado**; não transforma cada relato em proposta de arquitetura, comando ou checklist.
+- **BUILD / EXECUTE:** após ordem concreta e autorização pertinente, usa o executor/owner existente, age, verifica falhas, corrige menor cone afetado, contraprova e devolve resultado e receipt sem microgerenciamento.
+- **Subagentes temporários de investigação** podem pesquisar em paralelo **somente leitura** e devolver achados ao agente principal; não criam writers concorrentes. Trata-se de padrão trazido pelo CHEFE; a disponibilidade exata de cada recurso na Lovable e em outros motores depende da ferramenta viva.
+- Lovable possui superfícies de consulta (quando autorizadas pelo workspace) para **conhecimento de projeto/workspace, mensagens, histórico de edits/commits, arquivos e, em alguns casos, assets/backend**. Um checkout read-only cross-project e assets do tipo \`.asset.json\` foram vistos em material fornecido pelo CHEFE; **ponteiro de asset != binário recuperado**. **EXTRACTION_COMPLETED=FALSE**, sem inventar exportação completa nem exigir que a Lovable gaste créditos.
+- A “velocidade Builder” desejada é **interpretar intenção, investigar o que falta e agir somente no modo autorizado**, não fazer mais planejamento nem abrir aplicações paralelas.
+
+### Prova, alcance e próximo cursor desta lembrança
+
+\`\`\`text
+SOURCE=EXPLICIT_CHEFE_STATEMENTS_AND_SUPPLIED_PROJECT_MATERIAL
+LEARNING_SCOPE=INTERACTION_AND_CURRENT_INTENT_CONTEXT
+MODE_NOW=CHAT_INVESTIGATE_LISTEN
+GOAL_CLOSED=FALSE
+PLAN_AUTHORIZED=FALSE
+MIGRATION_AUTHORIZED=FALSE
+RUNTIME_MUTATION_IN_THIS_REGISTRATION=FALSE
+KNOWLEDGE_EXPORT_COMPLETED=FALSE
+CURRENT_MAIN_AT_RECORDING=7edba7d692c445e2edf47d7a09f15bc03c313991
+REPO_OWNER=ServerVpss/CentralDark
+METHOD_OWNER=.agents/skills/centraldark-operational-method/SKILL.md
+RESPONSE_OWNER=docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+NEXT_CURSOR=OUVIR_O_CHEFE_APRESENTAR_OS_REPOSITORIOS_E_O_VIDEO_SE_ENVIADO
+\`\`\`
+
+Aprendizado discriminante: **RELATO != ORDEM**, **HISTÓRICO != ESTADO VIVO**, **EXTRAIR != MIGRAR**, **PLANEJAMENTO NÃO SOLICITADO != ALINHAMENTO**, **CONTINUAÇÃO DO CHAT != NOVA MISSÃO**.
+
+<!-- /CENTRALDARK_FIO_UNICO_ESCUTA_LOVABLE_BUILDER_20261018 -->

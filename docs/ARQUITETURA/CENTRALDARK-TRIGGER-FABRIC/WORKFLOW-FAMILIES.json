@@ -504,5 +504,20 @@
         "reason": "RUNTIME_QUEUE_PROVEN_BUT_CAPABILITY_SAME_TARGET_MAPPING_NOT_PROVEN"
       }
     }
+  },
+  "pulse_bindings": {
+    "CASA_VSCODE_FAILURE": {
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "capability": "HERMES_CORE_SIGNAL_WATCH"
+    },
+    "CASA_SCHEDULED_JOB_FAILURE": {
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "capability": "HERMES_CORE_SIGNAL_WATCH"
+    },
+    "CASA_GIT_DRIFT": {
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "capability": "SENTINELA_DIVERGENCIAS"
+    }
   }
+
 }

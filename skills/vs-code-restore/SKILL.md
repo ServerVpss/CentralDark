@@ -1,8 +1,10 @@
 ---
 name: vs-code-restore
 description: Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa salvo, sem depender do Claude. Use ao abrir o workspace CentralDark ou quando quiser reconstruir a bancada.
-version: 0.1.1
-metadata: {"status":"v0.1.1_instalada_comando_ui_pending","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa":true,"comando_nativo_testado":false,"telemetria_probe":true}
+version: 0.1.4
+metadata: {"status":"v0.1.4_source_in_pr_install_pending","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.4","candidate_compilado":false,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
+version: 0.1.3
+metadata: {"status":"v0.1.3_source_main_trace_integrated_runtime_readback_separate","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa_historico":"0.1.3","comando_nativo_testado":true,"telemetria_probe":true}
 ---
 
 # VS Code Restore: CentralDark
@@ -132,10 +134,10 @@ OWNER desta interação: a MESMA skill `skills/vs-code-restore`, extensão exist
 ### Log e recibo: encaixar no funil existente
 
 - Fonte bruta Casa: `K:\\TEMP\\logs\\LOGS-VS-CODE.log` (junção para `F:\\TEMP\\CentralDark`). Coletor existente `scripts/casa/vscode-log-bridge.ps1`, agendador `CentralDark-VSCode-LogBridge`, launcher invisível `scripts/casa/vscode-log-bridge-hidden.vbs`.
-- PR existente **#1820**, branch `feat/vscode-log-funnel-casa-20261014`, skill canônica `.agents/skills/centraldark-vscode-log-bridge/SKILL.md`; ingestão `scripts/vps/ingest-vscode-log.mjs` → owner `apps/modulos/mcp/src/log-funnel.js` → `events`, `sectors/vscode`, `services/vscode` → API admin autenticada.
+- PR **#1820** foi **MERGED em 15/10/2026 03:44:31Z** (merge commit `872b555028914f79748d6be65a1f909d1019fe91`); a skill canônica agora vive na `main` em `.agents/skills/centraldark-vscode-log-bridge/SKILL.md`. Ingestão: `scripts/vps/ingest-vscode-log.mjs` → `apps/modulos/mcp/src/log-funnel.js` → `events`, `sectors/vscode`, `services/vscode` → API admin autenticada.
 - Não assumir que os comandos do terminal já entram automaticamente no `LOGS-VS-CODE.log`: cobertura dessa fonte **UNKNOWN**. Não registrar comandos, chats, tokens, chaves, stdout bruto ou prompts. Registrar somente metadados sanitizados (tipo de ação, resultado, timestamp, owner, fingerprint, origem e próximo cursor), pelo mesmo funil quando a integração estiver comprovada.
 - Prova da Casa em 15/10: log de origem com 3.027.886 bytes, tarefa `Ready`/`LastTaskResult=0`/`wscript.exe`; dry-run `signals=0 offset=3027886->3027886`. Isso prova ausência de novos sinais **nessa fonte**, não captura das ações da sessão.
-- PR #1820 medido `OPEN`, `MERGEABLE`, `isDraft=false` no HEAD `fdb2a1a32c5ea5f656126ff16817228b7d9ee507`; merge/main, CI same-HEAD e implantação são provas separadas. Não mergear automaticamente. A árvore local `K:\\` tinha alterações pré-existentes e divergência de main; não fazer `git pull/reset` nem sobrescrever.
+- Estado CURRENT do PR #1820: `MERGED`, `draft=false`; não existe mais pendência de merge para essa lane. Deploy/runtime continuam provas separadas. A árvore local `K:\\` pode conter alterações pré-existentes; não fazer `git pull/reset` destrutivo nem sobrescrever writer ativo.
 
 ### Fixed point
 
@@ -218,3 +220,207 @@ Depois da leitura imediata do teste Bash, o arquivo Casa recebeu **dois eventos 
 
 
 **Nova contraprova UIA 2026-10-15 13:36 -03:00:** mesma janela VS Code retornou **5** elementos `xterm-helper-textarea`, incluindo `Terminal 6 · claude mcp add screenpipe error`; `AutomationElement.FocusedElement` retornou `ClassName=tiptap ProseMirror ProseMirror-focused, Name=Prompt`. Isto comprova prompt visual **Claude Code** em foco e terminais presentes, mas **não** vincula a sessão `Terminal 6` a um subprocesso/PTY/owner do MCP, nem afirma Claude ocioso. `SEND_ATTEMPTED=false`, `MCP_ACK=UNKNOWN`, `NO_INTERRUPT_OF_OTHER_WRITERS=true`. Reutilizar estes seletores em nova probe com hora e owner; nunca tratar cinco textareas como cinco sessões de execução comprovadas.
+
+
+## 🧩 Script versionado da rota UIAutomation — 15/10/2026
+
+O arquivo `skills/vs-code-restore/tools/focus-vscode-window.ps1` passou a existir na fonte canônica da `main` (commit de criação `68a7ceb011f4b2e06c6624433f4e62b2fada9ca8`). Ele implementa somente `Inventory`, `FocusTerminal` e `SendText`, sempre com readback de foco; `SendText` registra hash/comprimento e exige flag explícita para mutações.
+
+**Contraprova Casa:** ao materializar o mesmo blob em `K:\TEMP\work\focus-vscode-window-main.ps1` e chamar `-Mode Inventory`, o Windows retornou `PSSecurityException / execução de scripts desabilitada`. Portanto `SCRIPT_SOURCE=PASS`, `SCRIPT_RUNTIME=BLOCKED_POLICY`. **Não usar `ExecutionPolicy Bypass`, não alterar política global e não converter esse bloqueio em FAIL do VS Code.**
+
+Fallback dentro do mesmo owner: preferir o comando nativo já instalado `CentralDark: ZENDRIVE CLI (terminal existente)` / `centraldark.zendriveCli`, que usa a API do VS Code e não depende da execução externa de `.ps1`. Se a extensão não estiver ativa, classificar `UNKNOWN` e solicitar/realizar somente o reload autorizado com preservação das sessões. O script permanece útil em máquinas cuja política permita sua execução assinada/confiável.
+
+**Receita atualizada:** `EXTENSION_NATIVE_FIRST → UIAUTOMATION_SCRIPT_IF_POLICY_ALLOWS → FOCUS_READBACK → SEND_ONCE → SEPARATE_EXECUTION_READBACK → RECEIPT_SANITIZADO`. `POLICY_BLOCKED != ROUTE_UNAVAILABLE`.
+
+## MCP CentralDark — sessão interativa vinculada ao VS Code (2026-10-15)
+
+**Objetivo:** reutilizar o Desktop Commander/MCP CentralDark e esta skill como owner da rota visível de foco/digitação, sem criar terminal-bridge concorrente.
+
+```text
+LIST_DEVICES
+→ LIST_SESSIONS(device=SEGREDO)
+→ CLASSIFY_PID_READONLY
+→ READ_PROCESS_OUTPUT(pid)
+→ ONLY_IF_SHELL_OWNER_KNOWN: SEND_HARMLESS_PROBE
+→ READBACK_REQUIRED
+→ SEND_ACCEPTED + NO_OUTPUT = SEND_ACCEPTED_READBACK_UNKNOWN
+→ SEND + MATCHING_OUTPUT = INTERACTIVE_SESSION_PROVEN
+→ THEN typed task may be sent only inside authorized owner/scope
+```
+
+**Cadeados:** não usar PID por posição histórica; não escrever em Vite, builder, watcher ou processo desconhecido; não usar comandos destrutivos, deploy ou segredo como sonda. Antes de mensagem real para Claude/Hermes, provar qual sessão é shell/REPL e capturar readback correspondente. Texto no chat ou `Input executed` sem saída não comprova que o comando foi consumido pelo terminal visível.
+
+**Medição 2026-10-15:** o MCP CentralDark expôs cinco sessões PowerShell na Casa. A sessão `PID 34080` aceitou a entrada inofensiva `Write-Output '__CENTRALDARK_INTERACTIVE_PROBE__'`, porém não produziu saída nem em leitura posterior; portanto `SEND_ACCEPTED_READBACK_UNKNOWN`, não `INTERACTIVE_SESSION_PROVEN`. Outras sessões observadas incluíram Vite/Instinto e Artifacts Builder; não foram reutilizadas como terminal de comando.
+
+**NEXT_CURSOR:** mapear PID ↔ terminal visível do VS Code/Claude/Hermes por evidência não destrutiva; só então usar `interact_with_process` para comando real e registrar `SEND/OUTPUT/EXIT_OR_PROMPT` no receipt existente.
+
+
+## 🪬 ZENDRIVE CLI — acesso SSH Casa → VPS sem Desktop Commander (17/10/2026)
+
+**Mesma extensão/owner:** `skills/vs-code-restore` v0.1.3. Não instala daemon,
+não duplica Hermes, não exige Desktop Commander, não modifica
+`C:\Users\Administrador\.ssh\config` nem transporta chave.
+
+No VS Code (`Ctrl+Shift+P`), a extensão oferece:
+
+- **CentralDark: Testar rota SSH Casa → VPS (Tailscale / pública)**:
+  executa um probe de leitura com o `ssh.exe` já existente, priorizando
+  `100.90.199.124` e usando a rota pública somente como fallback.
+  O comando testa a identidade SSH existente `segredo-vpss`, exige
+  `BatchMode=yes` e `StrictHostKeyChecking=yes`, e registra apenas
+  rota, estado e hostname lido na saída `CentralDark — SSH Casa/VPS`.
+- **CentralDark: Conectar VPS via Remote SSH (mesma identidade)**:
+  realiza o probe e, se responder, abre o **seletor oficial**
+  `remote-ssh.connectToHost` do VS Code, caso instalado. O usuário
+  escolhe ali o alias já configurado. A extensão não cria conexão
+  ou identidade SSH paralela.
+
+**Distinção:** o probe Tailscale aplica um override efêmero de `HostName`
+com `HostKeyAlias` já fixado; o seletor Remote-SSH respeita o **arquivo
+SSH configurado pelo usuário**, normalmente o alias público. O botão NÃO
+muda silenciosamente o `Remote-SSH` para Tailscale, não reescreve host
+config e não assume que a extensão Microsoft Remote-SSH esteja instalada.
+
+**Control plane complementar:** `apps/modulos/mcp` continua sendo o
+MCP oficial da CentralDark. A consulta `tailscale_bridge_status`
+agora pode consultar `tailscale status --json` LOCALMENTE na VPS se
+o OAuth Broker da porta 8098 falhar, expondo somente contagens e booleanos.
+`BROKER_DOWN` e `TAILSCALE_LOCAL_ONLINE` são estados diferentes;
+nenhum deles sozinho prova acesso SSH Casa↔VPS ou Tailscale API autenticada.
+
+**Instalação:** a mudança é código-fonte de branch/PR e precisa ser
+compilada/instalada como atualização da extensão da Casa, preservando o
+VS Code e o workspace existentes. Nunca inferir instalação local pelo
+commit. O runtime MCP precisa carregar o código atualizado para refletir
+o fallback.
+
+**Fronteira:** nenhum push automático, reset, limpeza da Casa, abertura
+pública de porta, edição do cofre, rotação de credenciais, deploy ou
+alteração na `main` por estes comandos. Probe e navegação apenas.
+
+**Teste discriminante na Casa após instalar:** terminal VS Code
+`Ctrl+Shift+P` → `CentralDark: Testar rota SSH Casa → VPS` →
+procurar `[OK] TAILSCALE` ou `[OK] PUBLIC_FALLBACK` na saída;
+`Conectar VPS via Remote SSH` deve abrir o seletor nativo e permitir
+selecionar `segredo-vpss`. Capturar rota e readback do SSH remoto;
+não mudar o alias se o usuário tiver um workspace aberto.
+
+**NEXT_CURSOR:** comparar source/branch com o checkout `K:\` sujo
+antes de atualizar o VSIX; medir `TSC_EXIT`, `REMOTE_SSH_PICKER_OPEN`,
+`SSH_READBACK` e `MCP_LOCAL_FALLBACK` de maneira independente.
+
+
+## 🦀 ZENDRIVE 0.1.4 — navegador conectado + PID → VS Code (17/10/2026)
+
+**Capacidade observada via plugin Browser da sessão ChatGPT:** `list_tabs`
+enumera abas da sessão de navegador conectada e `get_tab_context`
+lê o contexto disponível daquela aba. Esta observação acontece no
+**cliente ChatGPT**; não transfere permissão, login, DOM completo,
+controle de clique nem stdout ao runtime VPS/VS Code. A marca
+`Interacted with Browser` descreve uso de ferramenta do browser,
+não significa acesso universal a todos os botões ou manipulação da página.
+
+**Mesma extensão ZENDRIVE, novos comandos no `Ctrl+Shift+P`:**
+
+- `CentralDark: Localizar VS Code por PID (PowerShell / terminal)`
+  (`centraldark.locateVsCodeByPid`): aceita PID decimal opcional.
+  Sem PID, observa processos `Code.exe` com janela visível; com PID,
+  segue `Win32_Process.ParentProcessId` até 20 níveis ou até
+  `Code.exe`. Cruza terminal nativo `terminal.processId`,
+  `process.pid` do Extension Host, nomes dos workspaces e
+  `vscode.env.remoteName`. Mostra relatório no painel Saída
+  `CentralDark — Rastreio PID/VS Code`. **Não abre outro Code, não
+  altera foco, não escreve arquivo e não lê mensagens.**
+- `CentralDark: Catálogo de abas e capacidades Browser/ZENDRIVE`
+  (`centraldark.browserSurfacesCatalog`): expõe os limites
+  reais da API VS Code e do Browser da sessão ChatGPT na
+  saída `CentralDark — Catalogo Browser/ZENDRIVE`.
+  **Catálogo não equivale a conexão local entre plugins.**
+
+**MCP canônico, owner preservado:** em
+`apps/modulos/mcp/src/tools/core/mcp-admin.js`,
+`DELEGATED_PROVIDER_CAPABILITIES` inclui
+`CHATGPT_BROWSER_TABS_CONTEXT` com estado
+`OBSERVED_CLIENT_SIDE_ONLY` e
+`ZENDRIVE_VSCODE_PID` com
+`SOURCE_ONLY_UNTIL_VSIX_INSTALLED`. O catálogo não oferece
+método de executar comandos no cliente ChatGPT; os plugins têm
+escopos/autorização próprios. Nenhum segundo gateway/MCP criado.
+
+**Exemplo do CHEFE:** PIDs `21172` e `40756` apareceram como
+PowerShell lançado por ferramenta. A correlação com `Code.exe`
+só pode ser afirmada se o PID ainda existir e a cadeia ancestral for
+observada nessa mesma sessão Windows; um PID de processo encerrado
+não constitui vínculo permanente. PID `12268` de VS Code foi um
+snapshot histórico, não assumir atual.
+
+**Readback após compilar/instalar VSIX 0.1.4 na Casa:**
+`Ctrl+Shift+P` → localizador → informar PID atual ou deixar vazio →
+confirmar saída `Processos Code.exe`, `Janela VS Code: PID`,
+`Cadeia: PID=... pai=... exe=...`. Em seguida abrir
+`Catálogo de abas e capacidades Browser/ZENDRIVE`.
+Status compilação/VSIX instalado permanece separado de código em PR.
+
+**Fast Path:** CLI já existente → PID → Code.exe/window →
+workspace atual → terminal existente → Hermes → feedback.
+Sem Remote Desktop Commander; usa API nativa e observação Win32
+somente na Casa com extensão instalada.
+
+**NEXT_CURSOR:** build tsc, VSIX 0.1.4, invoke commands, validar PID
+de shell ativo e terminal; depois medir bridge remoto independente.
+
+
+## 🧿 DOM VIVO — inspeção da própria aba do Cockpit (2026-10-17)
+
+**Goal do CHEFE:** localizar conflitos de DOM da página que está aberta no
+Chromium ZENDRIVE sem exigir outro navegador, serviço, executor, painel paralelo
+ou concessão implícita de acesso às abas.
+
+**Owner de interface:** `apps/instinto-superior/src/components/central/DesignCenter.tsx`
+(aba **Design Center → DOM Vivo**, somente para sessão autenticada).
+
+**Fast Path:**
+1. Abrir o Cockpit atual no Chromium; Design Center → DOM Vivo.
+2. Clicar **Medir agora** ou **Ao vivo · 3s**. A inspeção roda no contexto da
+   página renderizada, sem rede, sem mexer no DOM e sem solicitar credenciais.
+3. Ler métricas de elementos/viewport/documento e a lista de candidatos
+   `ID_DUPLICADO`, `ARIA_ALVO_AUSENTE`, `TRANSBORDO_HORIZONTAL`,
+   `CONTROLE_ENCOBERTO`. Cada linha apresenta o alvo e o motivo;
+   sobreposição por popover/modal pode ser intencional.
+4. **Copiar recibo DOM** para correlacionar com o owner React/CSS,
+   corrigir no mesmo componente e repetir a medição.
+5. A aba mostra leitura **somente do seu próprio `document`**,
+   não inspeciona iframes cross-origin, outras abas nem processos Windows;
+   a amostra limita o processamento aos primeiros 6.000 elementos e
+   180 controles na viewport.
+
+**Fronteira de autorização:** no contexto deste chat, o conector Browser
+`list_tabs` respondeu `Browser access requires the originating browser context`.
+Esse erro **não** significa que o Chromium ZENDRIVE esteja offline:
+significa que esta conversa não herdou acesso à instância de origem.
+O código DOM Vivo resolve a observação **dentro do próprio Cockpit**;
+não promete controle da aba externa por ChatGPT.
+
+**Situação:** código commitado em branch/PR #1842. Build e atualização do
+preview `localhost:3000` dependem da promoção do delta para o checkout
+da Casa pelo único writer autorizado. PR #1838 mantém
+`ObservabilidadeCentralDark.tsx` como owner do Tool Call Lens; não
+mover a auditoria DOM para lá ou criar segundo coletor.
+
+**Readback discriminante:** conferir 4 peles, mobile/desktop,
+duplicidades de ID e referências ARIA, largura scroll e botões cobertos.
+`ZERO_ACHADOS` não significa acessibilidade perfeita nem resolução de todos
+os conflitos de CSS. Nunca marcar reparado sem teste de tela.
+
+## 🧬 Fast Path autônomo — instalar/conectar/provar/antirregressão
+
+A extensão ZENDRIVE não conclui missão quando o código foi commitado. O ciclo do CHEFE é:
+**CONSTRUIR → INSTALAR → CONECTAR → PROVAR → ANTIRREGRESSÃO**, no mesmo owner.
+
+- Construir: TypeScript, lint/testes relevantes, versão e artefato VSIX com SHA.
+- Instalar: no VS Code já aberto e autorizado da Casa, reler versão da extensão instalada; preservar sessão atual.
+- Conectar: usar SSH existente/terminal existente; identidade e handshake medidos, sem importar segredo.
+- Provar: observar a ferramenta nativa, PID e saída/exit de comando diagnóstico; correlacionar recibo com o MCP quando a chamada realmente atravessar o MCP.
+- Antirregressão: repetir comando ZENDRIVE CLI, localizar VS Code por PID, rota SSH, abas e UI existente, erros de console.
+
+Automação de desenvolvimento permitida onde houver execução autorizada; merge em main, produção VPS e modificação de credenciais precisam do gate de promoção do CHEFE. Falhou uma fase: parar e guardar error_code, sha, owner e next_cursor. Documento canônico: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md.

@@ -210,3 +210,12 @@ Se `docs/HUD/HUD.html@PR`, `@main` e arquivo físico divergirem, exibir as três
 
 Quando o PR apontado pelo HUD fechar, for concluído ou esgotar comentários, carregar **o mesmo Goal/linha causal** e somente as pendências ainda não seladas no sucessor autorizado; exibir predecessor/sucessor no **mesmo HUD**, nunca em outro painel. Se nada permanecer pendente, não criar PR por cerimônia. `CURRENT > HISTORY`, `DOCUMENTED != EXECUTED`, `ONE_WRITER_PER_EXACT_PATH=true`.
 <!-- /PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->
+
+<!-- CENTRALDARK_IPHONE_TAILSCALE_MOBILE_T1_20261015 -->
+### 2026-10-15 — iPhone SEGREDO / Tailscale / Cockpit (T1 do aparelho)
+
+- **Selo delimitado:** iPhone `Connected` à Casa por Tailscale e Safari exibindo a página CentralDark Instinto Superior; `C01–C05 = 5/5` dentro do escopo de abertura móvel.
+- **Receipt canônico:** [Circuito iPhone → Tailscale → Casa → Cockpit](../BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md).
+- **Não provado:** role Admin/logon no Safari, sync de vault iOS, persistência após reboot. Nunca inferir autorização pelo IP.
+- **Owners preservados:** Vite `apps/instinto-superior/vite.config.ts`, Tailscale Serve da Casa; Vault visualizador fica loopback 5174, sem exposição do BRAIN.
+<!-- /CENTRALDARK_IPHONE_TAILSCALE_MOBILE_T1_20261015 -->

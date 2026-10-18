@@ -2,6 +2,7 @@
 title: "Metacognição operacional e coevolução humano–sistema"
 status: "CANÔNICO"
 date: "2026-08-14"
+updated_at: "2026-10-16T10:44:52.397Z"
 authority: "SEGREDO/CHEFE"
 scope: "Aprendizado do scaffold operacional; não altera autoridade humana nem prova AGI"
 ---
@@ -74,6 +75,32 @@ GENERAL_IS_NOT_NEW_IDENTITY=true
 GENERAL_IS_NOT_NEW_MEMORY=true
 GENERAL_RETURNS_LEARNING_TO_CENTRALDARK_OS=true
 ```
+
+<!-- #OBSERVACOES# | CENTRALDARK.CODE.DOC.SYNC
+@last_updated: 2026-10-16T10:44:52.397Z
+@code_ref: scripts/lupa/diagram-route-gate.mjs
+@code_ref: scripts/lupa/diagram-route-gate.test.mjs
+@code_ref: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+@code_ref: scripts/trigger-fabric/test_centraldark_full_trigger_boot.py
+@code_ref: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+@owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+@estado: GATE_IMPLEMENTED_IN_BRANCH; CI_PENDING_MAIN
+@next_cursor: teste negativo, same HEAD, branch protection e readback.
+-->
+
+## Documentação viva sincronizada com código — 2026-10-16
+
+**Evolução da antecipação ensinada pelo CHEFE:** todo delta material em código leva junto o rastro inline e a atualização de documentação. Isso impede entregar casca simulada como função viva ou deixar owners descobertos para o agente seguinte. O gate existente de diagrama/rota também confere presença de `#OBSERVACOES#`, `@owner`, `@doc_ref`, `@last_updated` nos arquivos comentáveis e exige alteração substantiva da documentação referida no mesmo diff com `@code_ref` e data/hora novas. JSON é uma exceção sintática: evidência e data residem no Markdown proprietário. O documento pode ser o próprio `SKILL.md` ou `README.md` canônico de um módulo quando já existir; não duplicar a documentação sob `docs/`. Exclusões de código exigem rastro de remoção. O gate também valida que a documentação da exclusão recebeu **novo timestamp** e alteração textual material, não só o campo `@removed: true` reaproveitado de um documento antigo.
+
+A trilha preserva a origem, status honesto (`VISUAL_ONLY`, `IMPLEMENTED`, `UNKNOWN` conforme prova), pendência concreta e `NEXT_CURSOR`. A validação automática verifica **estrutura e delta**, não se os comentários são verdadeiros; a contraprova semântica, o teste funcional e a conferência de runtime continuam indispensáveis. Sem segunda máquina de estados nem branch automática de correção. A regra é incremental; não reescrever retroativamente todo o legado e não alterar timestamp de arquivo só por leitura.
+
+## 🍒 Tocou → rastro → prova → ganho → selo: união no mesmo owner
+
+Reutiliza-se a lei do método `.agents/skills/centraldark-operational-method/SKILL.md` ("tocou, cuidou, consertou, melhorou — tem que selar"), o mesmo gate de rastreabilidade `scripts/lupa/diagram-route-gate.mjs` e o cadeado `PROVEN-DETERMINISTIC-LOCK.yml`. Nenhum substitui o outro; a atualização é conjunta e datada. Depois do toque material: registrar fonte, owner, `@last_updated`, `@doc_ref` e `@code_ref`; comparar resultado anterior e novo, executar teste e contraprova, preservar estado saudável, emitir receipt e só então selar.
+
+**Permissão de evoluir ≠ permissão de promover:** experiências reversíveis e implementações em escopo autorizado estão liberadas; o selo protege o último estado comprovado. Reabrir o mesmo `CLAIM_KEY + OWNER` exige causa, plano de contraprova e objetivo de ganho; o `reseal-fingerprint` só grava nova impressão digital com `--gain-metric`, `--gain-before`, `--gain-after`, `--gain-evidence-ref` e `--regression-evidence-ref`, junto de receipt e contraprova positiva. Métrica superior ou inferior deve corresponder à direção declarada; capacidade nova pode ser medida `0→1`. Valor idêntico ou pior, sem baseline, sem recibo ou sem contraprova independente não troca o selo. **O CLI devolve `declared_comparison_not_independent_verification` e valida estrutura e comparação declaradas: não transforma por si só o número informado pelo agente em medição externa.** Exigir confirmação independente no CI/ambiente correto.
+
+**Visual e funcionalidade:** a casca Esmeralda pode evoluir aparência e demonstrar ganho de legibilidade/fidelidade por testes visuais, sem reivindicar que o runtime ganhou novas capacidades. Código funcional existente permanece no mesmo owner. O último selo segue válido caso um experimento não demonstre ganho.
 
 ## Antecipação de intenção
 

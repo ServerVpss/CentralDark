@@ -14,6 +14,7 @@ export interface NotificationLog {
   tipo: NotifyTipo;
   titulo: string;
   mensagem: string;
+  metadata?: Record<string, unknown> | null;
 }
 
 export type PeriodoFiltro = "1h" | "24h" | "7d";
@@ -25,6 +26,7 @@ const PERIODO_MS: Record<PeriodoFiltro, number> = {
 };
 
 const MAX_FEED = 200;
+export type RealtimeEstado = "CONNECTING" | "LIVE" | "DISCONNECTED";
 
 function extrairMensagemErro(e: unknown): string {
   if (e instanceof Error) return e.message;
@@ -44,39 +46,52 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
   const [items, setItems] = useState<NotificationLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
-  const [lastEventAt, setLastEventAt] = useState<Date | null>(null);
+  const lastEventAt = items[0] ? new Date(items[0].created_at) : null;
+  const [realtimeStatus, setRealtimeStatus] = useState<RealtimeEstado>("CONNECTING");
 
-  const sinceIso = useMemo(
-    () => new Date(Date.now() - PERIODO_MS[periodo]).toISOString(),
-    [periodo],
-  );
-
-  const buscar = useCallback(async () => {
-    setLoading(true);
+  // O recorte de tempo precisa avançar a cada consulta; sessões longas não
+  // podem manter um "sinceIso" congelado desde a montagem do componente.
+  const buscar = useCallback(async (silencioso = false) => {
+    if (!silencioso) setLoading(true);
     setErro(null);
+    const limiteMs = Date.now() - PERIODO_MS[periodo];
+    const sinceIso = new Date(limiteMs).toISOString();
     try {
       // `notifications_log` não está no Database gerado localmente (tabela existe no banco
       // real, mas o types.ts deste projeto não foi regenerado); cast pontual e documentado.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data, error } = await (supabase as unknown as { from: (t: string) => any })
         .from("notifications_log")
-        .select("id, created_at, origem, tipo, titulo, mensagem")
+        .select("id, created_at, origem, tipo, titulo, mensagem, metadata")
         .gte("created_at", sinceIso)
         .order("created_at", { ascending: false })
         .limit(MAX_FEED);
       if (error) throw error;
       const linhas = (data ?? []) as unknown as NotificationLog[];
-      setItems(linhas);
-      if (linhas[0]) setLastEventAt(new Date(linhas[0].created_at));
+      // Um INSERT via WebSocket pode chegar durante o SELECT. Mesclar por UUID
+      // impede perder ou duplicar o receipt que acabou de chegar.
+      setItems((anteriores) => {
+        const porId = new Map<string, NotificationLog>();
+        for (const linha of [...anteriores, ...linhas]) {
+          if (Date.parse(linha.created_at) >= limiteMs) porId.set(linha.id, linha);
+        }
+        return [...porId.values()]
+          .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
+          .slice(0, MAX_FEED);
+      });
     } catch (e) {
       setErro(extrairMensagemErro(e));
     } finally {
       setLoading(false);
     }
-  }, [sinceIso]);
+  }, [periodo]);
 
   useEffect(() => {
-    buscar();
+    void buscar();
+    // Recuperação de eventos após queda/ausência de Realtime. É a mesma
+    // consulta com RLS, não outro ledger, outro WebSocket ou novo executor.
+    const intervalo = window.setInterval(() => void buscar(true), 20_000);
+    return () => window.clearInterval(intervalo);
   }, [buscar]);
 
   useEffect(() => {
@@ -87,15 +102,28 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
         { event: "INSERT", schema: "public", table: "notifications_log" },
         (payload) => {
           const linha = payload.new as NotificationLog;
-          setItems((prev) => [linha, ...prev].slice(0, MAX_FEED));
-          setLastEventAt(new Date(linha.created_at));
+          if (!linha.id || Date.parse(linha.created_at) < Date.now() - PERIODO_MS[periodo]) return;
+          setItems((prev) => [linha, ...prev.filter((item) => item.id !== linha.id)]
+            .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
+            .slice(0, MAX_FEED));
         },
       )
-      .subscribe();
+      .subscribe((status) => {
+        // SUBSCRIBED prova conexão, não entrega E2E. O SELECT de reconciliação
+        // é read-only e recupera eventos emitidos durante a desconexão.
+        if (status === "SUBSCRIBED") void buscar(true);
+        setRealtimeStatus(
+          status === "SUBSCRIBED"
+            ? "LIVE"
+            : status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED"
+              ? "DISCONNECTED"
+              : "CONNECTING",
+        );
+      });
     return () => {
       supabase.removeChannel(canal);
     };
-  }, []);
+  }, [periodo, buscar]);
 
   const stats: StatsNotificacoes = useMemo(() => {
     if (erro) return null;
@@ -115,5 +143,5 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
     return { porTipo, total, sucessoPct: total > 0 ? Math.round((totalOk / total) * 100) : 0 };
   }, [items, erro]);
 
-  return { items, loading, erro, stats, lastEventAt, refresh: buscar };
+  return { items, loading, erro, stats, lastEventAt, realtimeStatus, refresh: buscar };
 }

@@ -14,7 +14,9 @@ import {
 
 import { CofreAdministrativo, HubSeguranca } from "@/components/central/AdminCofreSeguranca";
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
+import { CatalogoCapacidadesMcp } from "@/components/central/CatalogoCapacidadesMcp";
 import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
+import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
@@ -32,7 +34,7 @@ const SETORES_HUB_LEGADO = [
   { setor: "Inventário", destino: "Módulos / Sistema CentralDark", cobertura: "PARCIAL_SOURCE", pendente: "Inventário completo e sync" },
   { setor: "Boot", destino: "Sistema / Boot canônico", cobertura: "GAP_SOURCE", pendente: "Boot Studio com edição e rollback" },
   { setor: "Gateway", destino: "Roteador / Runtime", cobertura: "PARCIAL_SOURCE", pendente: "API keys e telemetria Gateway" },
-  { setor: "Catálogo", destino: "Ferramentas / MCP", cobertura: "GAP_SOURCE", pendente: "Pesquisa, sync e catálogo operacional" },
+  { setor: "Catálogo", destino: "Admin → Catálogo MCP", cobertura: "PARCIAL_SOURCE", pendente: "Busca OpenAPI integrada; runtime/reload de MCP e ações autenticadas exigem readback" },
   { setor: "Políticas", destino: "Segurança / Permissões", cobertura: "PARCIAL_SOURCE", pendente: "CRUD de políticas sob autorização" },
   { setor: "Conectores", destino: "Contas / Conexões", cobertura: "PARCIAL_SOURCE", pendente: "OAuth, multi-conta e broker com health vivo" },
   { setor: "Abacus", destino: "Roteador / Modelos", cobertura: "PARCIAL_SOURCE", pendente: "Ações e observabilidade Abacus" },
@@ -90,7 +92,7 @@ type ProfileLinha = {
   full_name?: unknown;
 };
 
-export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark | undefined }) {
+export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estado?: EstadoCentralDark | undefined; abaInicial?: "visao" | "notificacoes" }) {
   const [modulos, setModulos] = useState<ModuloPortal[]>([]);
   const [usuarios, setUsuarios] = useState<UsuarioLinha[]>([]);
   const [loading, setLoading] = useState(true);
@@ -250,14 +252,16 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         </div>
       ) : null}
 
-      <Tabs defaultValue="visao" className="mt-8">
+      <Tabs key={abaInicial} defaultValue={abaInicial} className="mt-8">
         <TabsList className="h-auto flex-wrap justify-start">
           <TabsTrigger value="visao">Visão geral</TabsTrigger>
           <TabsTrigger value="modulos">Módulos</TabsTrigger>
           <TabsTrigger value="usuarios">Usuários</TabsTrigger>
           <TabsTrigger value="conexoes">Contas / Conexões</TabsTrigger>
+          <TabsTrigger value="catalogo">🧩 Catálogo MCP</TabsTrigger>
           <TabsTrigger value="hub-inventario">Integração HUB (12)</TabsTrigger>
           <TabsTrigger value="observabilidade">Observabilidade</TabsTrigger>
+          <TabsTrigger value="notificacoes">🔔 Notificações</TabsTrigger>
           <TabsTrigger value="cofre">Cofre / Credenciais</TabsTrigger>
           <TabsTrigger value="seguranca">Segurança / Permissões</TabsTrigger>
         </TabsList>
@@ -395,6 +399,9 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         <TabsContent value="conexoes" className="mt-6">
           <ConexoesCentralDark />
         </TabsContent>
+        <TabsContent value="catalogo" className="mt-6">
+          <CatalogoCapacidadesMcp />
+        </TabsContent>
         <TabsContent value="hub-inventario" className="mt-6">
           <div className="panel p-5">
             <h3 className="text-lg font-semibold">Absorção do HUB legado no Instinto Superior</h3>
@@ -426,6 +433,9 @@ export function PainelAdminCentralDark({ estado }: { estado?: EstadoCentralDark 
         </TabsContent>
         <TabsContent value="observabilidade" className="mt-6">
           <ObservabilidadeCentralDark />
+        </TabsContent>
+        <TabsContent value="notificacoes" className="mt-6">
+          <CentralNotificacoes modo="painel" />
         </TabsContent>
         <TabsContent value="cofre" className="mt-6">
           <CofreAdministrativo estado={estado} />

@@ -294,5 +294,41 @@
         "pulse_pr_mae": false
       }
     }
+  },
+  "dispatch": {
+    "owner": "supabase/functions/_shared/notifications-events.ts",
+    "central_ledger": "notifications_log",
+    "cockpit_consumer": "apps/instinto-superior/src/hooks/useNotificationsLog.ts",
+    "delivery_modes": [
+      "single",
+      "parallel"
+    ],
+    "default_target": "cockpit_admin",
+    "routes_owner": "notification_routes",
+    "targets": {
+      "cockpit_admin": {
+        "status": "UI_BRANCH_UNPROVEN",
+        "permission": "RLS_ADMIN"
+      },
+      "telegram": {
+        "status": "EXISTING_ROUTE_RUNTIME_UNPROVEN",
+        "owner": "supabase/functions/notify-telegram/index.ts"
+      },
+      "cockpit_sector": {
+        "status": "ADAPTER_REQUIRED"
+      },
+      "harness_specialist": {
+        "status": "ADAPTER_REQUIRED"
+      },
+      "hermes_executor": {
+        "status": "ADAPTER_REQUIRED"
+      }
+    },
+    "notifications_are_not_execution": true,
+    "agent_dispatch_requires_authorized_adapter": true,
+    "parallel_requires_per_target_receipt": true,
+    "never_notify_chatgpt_thread": true,
+    "no_external_session_token_transfer": true,
+    "dedupe_before_fanout": true
   }
 }

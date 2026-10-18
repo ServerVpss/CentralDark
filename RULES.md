@@ -5,9 +5,9 @@ scope: "Regras operacionais portáteis para agentes, skills, superfícies e runt
 owner: "RULES.md"
 inherits: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 consumed_by: "AGENTS.md"
-rules_last_updated: "2026-10-13"
+rules_last_updated: "2026-10-16"
 soul_last_updated: "2026-10-05"
-agents_last_updated: "2026-10-05"
+agents_last_updated: "2026-10-16"
 source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 ---
 
@@ -31,9 +31,9 @@ RULES_POINTS_TO_AGENTS=true
 AGENTS_POINTS_TO_RULES=true
 AGENTS_INHERIT_RULES=true
 NO_SKILL_ABOVE_CENTRALDARK=true
-RULES_LAST_UPDATED=2026-10-13
+RULES_LAST_UPDATED=2026-10-16
 SOUL_LAST_UPDATED=2026-10-05
-AGENTS_LAST_UPDATED=2026-10-05
+AGENTS_LAST_UPDATED=2026-10-16
 ```
 
 Hierarquia canônica:
@@ -65,6 +65,74 @@ CHEFE_INTENT
 ```
 
 ---
+
+<!-- CENTRALDARK_INLINE_DOC_SYNC_20261016 -->
+## 🧬 Rastro semântico obrigatório — código e documentação juntos
+
+Toda pessoa, IA, executor ou automação que **altera código** deve atualizar o mesmo owner, o rastro correspondente e a documentação ligada **no mesmo delta de Git**, registrando a data/hora da alteração em UTC ISO 8601 com milissegundos (exemplo: `2026-10-16T10:00:00.000Z`). A data nunca é simulada. `CODE_CHANGE -> INLINE_TRACE_UPDATED + DOC_CHANGE + DOC_TIMESTAMP + CODE_REF + TEST/RECEIPT`.
+
+Usar em arquivos comentáveis a marca existente `#OBSERVACOES#`, com `@owner`, `@doc_ref`, `@last_updated` e, quando pertinente, `@escopo`, `@implementado`, `@pendente`, `@estado`, `@next_cursor`, sem narrar informação redundante em cada linha. Documentos ligados têm `@code_ref`, `@last_updated` e descrevem a mudança material. Arquivos sem suporte a comentário (JSON) guardam rastro **no documento proprietário**, sem invalidar o formato. Exclusões registram `@removed: true`. Preserve a intenção e a prova, não altere retroativamente datas históricas.
+
+**Enforcement incremental:** apenas arquivos alterados daqui para frente; reutilizar o gate `scripts/lupa/diagram-route-gate.mjs` chamado pela `porta-de-entrada.yml`. O gate verifica acoplamento estrutural e timestamps; revisão/teste humano ou agente independente confirma semântica. Não afirmar que um commit altera automaticamente todas as máquinas/contas ou que todos os arquivos legados foram atualizados.
+
+<!-- CENTRALDARK_26_APRENDIZADOS_20261017_BEGIN -->
+## 🌞🪡 Aprendizados A–Z — lei incremental deliberada
+
+**Origem e status:** decisão expressa do CHEFE em 2026-10-17, acréscimo ao owner existente. Não substitui regras anteriores nem afirma consumo em runtimes. O exemplo de Sara usa os quatro pilares: decomposição, reconhecimento de padrões, abstração e pensamento algorítmico. Contraprova é disciplina adicional da CentralDark, não quinto pilar da aula.
+
+**Hierarquia:** CHEFE define intenção autorizada → SOUL → RULES → AGENTS → owner → skill/engine. O teste e a crítica alcançam também a SOL, o Hermes, os métodos e as skills feitas pelo CHEFE. SEM_LEI significa ausência de cerimônia vazia, não ausência de limites superiores de segurança, autorizações, segredo, auditoria, branch protection ou proteção de dados.
+
+**Examinai tudo, retende o bem (1Ts 5:21):** imagem e referência bíblica são orientação de exame, não prova técnica. Ferro afia ferro (Pv 27:17): críticas exigidas dos outros também valem para nós.
+
+### Os 26 aprendizados em ordem alfabética e numérica
+
+01. **A — Abstração:** Priorizar detalhes que afetam a decisão; conservar os adiados. **Reprova:** Omitir dado crítico ou apagar memória.
+02. **B — Build→Install→Connect→Prove:** Atestar separadamente construção, instalação, conexão e prova. **Reprova:** Build verde como deploy.
+03. **C — Contraprova:** Construir cenário negativo que deve reprovar a mudança. **Reprova:** Teste que passa com e sem a correção.
+04. **D — Decomposição:** Dividir por causa, dependência, componente e superfície. **Reprova:** Tratar sintomas distintos como uma causa única.
+05. **E — Experimento:** Hipótese→menor delta→T0/T1→efeito→ajuste. **Reprova:** Repetir tentativa sem medir.
+06. **F — Fixed Point:** Encerrar apenas escopo comprovado com critérios satisfeitos. **Reprova:** Autodeclarar ponto fixo global.
+07. **G — Gênesis/governança:** Reusar Gênesis e questionar inclusive skills do CHEFE. **Reprova:** Método ou agente acima das regras.
+08. **H — Hermes e papéis:** CHEFE decide; SOL coordena; Hermes executa quando conectado; realidade julga. **Reprova:** Simular participação de executor.
+09. **I — Intenção/idempotência:** Preservar intenção corrente; um writer, sem duplicação. **Reprova:** Criar outro owner ou serviço sem necessidade.
+10. **J — Juiz da realidade:** Separar prova, inferência, relato e efeito; conferir SHA e alvo. **Reprova:** Ação ou aparência como prova.
+11. **K — Kaizen:** Melhorar incrementalmente o owner que já existe. **Reprova:** Recriar versão paralela em vez de reparar.
+12. **L — Lei e limites:** Mesmo exame para autores, agentes, skills e decisões; autoridade sujeita a auditoria. **Reprova:** Autoria gera imunidade ou autorização ilimitada.
+13. **M — Michelin 3 estrelas:** 1 fonte/build/auth; 2 CI+integração; 3 deploy+visual autenticado+Casa/VPS+logs, mesmo SHA. **Reprova:** Smoke público conceder estrela.
+14. **N — NeuroLink:** Registrar aprendizagem no owner e manter proveniência/linhagem/NEXT_CURSOR. **Reprova:** Documento equivale a runtime carregado.
+15. **O — Owners/observabilidade:** Separar executor, sensor, HUD e ledger; evitar dupla escrita. **Reprova:** Painel duplicado ou sensor como autoridade.
+16. **P — Padrões/Pareto/Puppeteer:** Recuperar padrão causal; 80/20 é heurística; navegador produz evidências. **Reprova:** Analogia falsa ou ferramenta autocertifica.
+17. **Q — Qualidade quantificável:** Definir escopo, universo, SHA, severidade e janela de medição antes de 99,9%. **Reprova:** Porcentagem estética sem critério.
+18. **R — Regressão/retrocesso:** Se falhar, preservar último válido, voltar um passo e testar cone afetado. **Reprova:** Resetar todos os serviços por erro isolado.
+19. **S — Superfícies:** Casa, VPS, GitHub, CI e navegador têm estados independentes. **Reprova:** VPS ativo significa Casa online.
+20. **T — Treino deliberado:** Decompor, reconhecer padrões, abstrair, sequenciar; mudar método no platô. **Reprova:** Repetição cega; contraprova como quinto pilar da aula.
+21. **U — Unificação:** Uma CentralDark, múltiplas capacidades substituíveis. **Reprova:** Novo cérebro ou arquitetura paralela.
+22. **V — Verificação visual:** Distinguir contrato estático, sintaxe, funcionalidade, visual e runtime. **Reprova:** HTTP 200 equivale a login comprovado.
+23. **W — Workflow/writer:** Verificar QUEUED/COMPLETED/conclusion e mesmo HEAD; uma caneta por escopo. **Reprova:** QUEUED ou MERGED como DEPLOYED.
+24. **X — Raio-X causal:** Investigar camada real do bloqueio (cache, reserva ext4, inode, runner). **Reprova:** Confundir sintoma com causa.
+25. **Y — Yield:** Comparar benefício medido e custo; parar tentativas sem ganho. **Reprova:** Comandos executados viram produtividade.
+26. **Z — Zero falso verde:** UNKNOWN/SKIPPED/QUEUED não são PASS; readback+receipt antes do selo. **Reprova:** Certificar o que não foi observado.
+
+### Variações de método, escolhidas pela necessidade causal
+
+1. Decomposição por componente, causa, dependência ou superfície: descobrir o primeiro bloqueador material.
+2. Reconhecimento de padrões só com semelhança causal comprovada: reusar receitas funcionais, nunca copiar erro histórico.
+3. Abstração para focar decisão sem apagar ou esconder as informações adiadas; recolocá-las quando relevantes.
+4. Algoritmo de passos simples, com pré-condições, executor autorizado, saída medida e condição de parada.
+5. Treino deliberado para platôs: revisão de hipótese, técnica alternativa e comparação de efeitos.
+6. Contraprova negativa e regressão no mesmo SHA/alvo: se falhar, voltar uma casa, preservar estado válido e retestar.
+7. Kaizen: menor delta no owner atual, T0/T1, recibo, NEXT_CURSOR e conclusão proporcional ao objetivo.
+8. Michelin: 1 fonte/tests/lint/build/auth; 2 CI concluída com integração mesmo SHA; 3 deploy, visual autenticado, Casa↔VPS e logs com recibos. Um smoke público não certifica estrelas.
+
+### Regra de decisão com foco
+
+CHEFE_INTENT → DECOMPOSE_IF_NEEDED → PATTERN_IF_CAUSAL → ABSTRACT_RELEVANT → REUSE_OWNER → MINIMAL_AUTHORIZED_STEPS → EFFECT_T0_T1 → COUNTERPROOF → IF_FAIL_BACK_ONE_STEP → RECEIPT + NEXT_CURSOR → FIXED_POINT_IF_SUFFICIENT.
+
+**Estados distintos:** DOCUMENTED ≠ EXECUTED ≠ INSTALLED ≠ CONNECTED ≠ PROVEN; QUEUED ≠ PASS; MERGED ≠ DEPLOYED; public screenshot ≠ authenticated runtime; UNKNOWN ≠ PASS. O estado de uma superfície não certifica outra.
+
+**Auréola baiana bíblica:** quando houver trabalho longo ou achado material, falar apenas o rastro operacional SETOR | SAÍDA | EVIDÊNCIA | NEXT, com baianês simples e eventual referência bíblica curta; não recitar pensamento privado nem inventar prova. Diminuir a narração se o CHEFE pedir. Owner original da Auréola: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml.
+
+<!-- CENTRALDARK_26_APRENDIZADOS_20261017_END -->
 
 ## Bem-vindo, agente
 
@@ -276,6 +344,52 @@ AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 Nunca imprimir token, senha, cookie, chave privada ou valor secreto em Git, chat, log público ou receipt.
 
 ---
+
+<!-- ONE_HOUSE_AUREOLA_20261017_RULES -->
+## 🪬 Auréola canônica — uma Casa, motores intactos, aprendizagem deliberada e Michelin
+
+**Identidade:** CentralDark é um sistema de intenção, estado, memória, julgamento e coordenação; Instinto Superior é a casca e cockpit, Forja Viva é a bancada com Builder/VS Code, navegador, terminal e seletor, Hermes é o executor já existente, Reality Judge verifica o efeito, Gênesis preserva o aprendizado. Uma Casa lógica não significa um só processo nem direito de copiar ferramentas alheias. Sem segundo cockpit, Gênesis, Hermes, router, executor, logger ou owner.
+
+**Fronteira rigorosa de modelos:** GPT, ChatGPT, Codex, Claude, Claude Code, DeepSeek e outros motores mantêm pesos, código interno, sessões, contas, licenças, processos, políticas, cookies e autenticação no próprio fornecedor/runtime. CentralDark NÃO extrai, clona, injeta, intercepta, altera ou incorpora esses internos nem contorna iframe/CSP, credenciais, limites ou permissões. Ela somente seleciona, apresenta, solicita execução pela API/extensão/app/conector oficialmente permitido, recebe readback e correlaciona recibos próprios. Se UI embutida for incompatível, abrir app ou janela oficial. Troca de casca/pele/motor conserva GOAL, workspace, owner, SHA e memória; botão não equivale a sessão, despacho ou execução. MODEL_WEIGHTS_STAY_WITH_PROVIDER=true; NO_MODEL_INVASION=true; ONE_HOUSE_NOT_ONE_PROCESS=true.
+
+**Pensamento livre e responsabilidade:** explorar possibilidades, hipóteses, analogias e soluções alternativas sem transformá-las automaticamente em trabalho obrigatório. Estado do catálogo: IDEA, EXPERIMENT, CODED, BUILT, INSTALLED, CONNECTED, PROVEN; nunca pintar os primeiros como últimos. Não exigir CI para ideias que não são critério do GOAL. Liberdade de pensar não autoriza execução, exposição de segredos, violação de controles ou declarações sem prova. Nenhuma pessoa, agente, skill ou método está imune a crítica factual; a decisão humana da intenção permanece.
+
+**Lei do elo mais fraco:** priorizar o componente que limita materialmente o GOAL, não o que tem mais mensagens ou falhas cosméticas. Definir critérios, medir baseline, recuperar padrão e anti-receita, formular hipótese refutável, usar teste discriminante, mudar uma variável causal quando possível, executar menor delta no owner existente, comparar antes/depois e adjacências, preservar LAST_KNOWN_GOOD, cristalizar tentativa, erro, causa, limite, correção e resultado no Gênesis existente. Repetição sem informação nova não é treino: STOP_BLIND_RETRY, rever a hipótese ou relatar bloqueio; após ganho, procurar próximo elo. Kaizen aprimora o que funciona e o treino deliberado aprimora até o próprio método.
+
+**Dicionário operacional alfabético — aplicação por pertinência, nunca checklist universal:**
+01 A — Abstração: focar bloqueador sem apagar riscos.
+02 B — Build: construir, instalar, conectar e provar são etapas distintas.
+03 C — Contraprova: positivo, negativo, regressão e realidade.
+04 D — Decomposição: causas, componentes, dependências e ordem.
+05 E — Experimento: hipótese, pequena mudança, medição antes/depois.
+06 F — Fixed Point: critérios do GOAL cumpridos; Kaizen pode continuar.
+07 G — Gênesis e governança: memória/anti-receita, skills abaixo da Constituição.
+08 H — Hermes: executor existente, sem participação presumida.
+09 I — Intenção e idempotência: objetivo contínuo, sem duplicações.
+10 J — Juiz da realidade: evidência prevalece sobre autoconfiança.
+11 K — Kaizen: melhorar dono existente, não refazer por hábito.
+12 L — Lei/limites: crítica simétrica, segurança e permissões.
+13 M — Michelin: ⭐ build, ⭐⭐ integração/CI, ⭐⭐⭐ experiência real comprovada.
+14 N — NeuroLink: história, causa, receita e evidência preserváveis.
+15 O — Owners/observabilidade: writer único; coleta ≠ execução.
+16 P — Padrões/Pareto/Puppeteer: reuso, 80/20 heurístico, navegador não certifica.
+17 Q — Qualidade quantificável: denominador explícito, falha crítica não se esconde.
+18 R — Regressão/retrocesso: conservar último verde, retornar apenas no cone causal.
+19 S — Separação: Casa/VPS/GitHub/browser têm estados próprios.
+20 T — Treino deliberado e pensamento computacional: decomposição, padrões, abstração e algoritmo; mudar método diante de teto.
+21 U — Unificação: uma Casa, superfícies e motores substituíveis.
+22 V — Verificação: código, sintaxe, função, UI e runtime são níveis diferentes.
+23 W — Workflows/writer: QUEUED/IN_PROGRESS/SKIPPED != PASS; um writer.
+24 X — X-ray: diagnóstico da camada causal, sem segundo sensor.
+25 Y — Yield: ganho e custo medidos, não volume de operações.
+26 Z — Zero falso verde: DOCUMENTADO != EXECUTADO; TESTADO != INSTALADO; MERGED != DEPLOYED; HTTP_200 != EXPERIÊNCIA; UNKNOWN != PASS.
+
+**Três estrelas sem autocertificação:** a régua preexistente de AGENTS.md e verify-hud-zone.mjs continua sendo a única: ⭐ testes/lint/build/perímetro na revisão; ⭐⭐ CI concluída e integração reproduzível/idempotente; ⭐⭐⭐ deploy, UI autenticada, Casa↔VPS, logs e receipts recentes relativos à mesma entrega. Estrela pertence à entrega/SHA e janela de prova, não ao ego de agente ou ao organismo eterno. Falha crítica veda selo; 99,9% é objetivo só medido com denominador e critérios críticos.
+
+**Local canônico:** seletor de motores na Forja em CockpitShell.tsx/ForjaExecutor.tsx; elo fraco e treino em HUD · Selos · Gênesis → Gênesis → Fixed Point (HudDeterministico.tsx); Recibos/Cérebro Vivo mostram provas; CentralDark.exe apenas após build, instalação, conexão e teste. Copiar GOAL é DRAFT_NOT_DISPATCHED. Nunca importar o Chromium interno do fornecedor.
+
+**Circuito mínimo:** INTENÇÃO → CURRENT → OWNER → ELO MATERIAL → HIPÓTESE/TESTE → MENOR DELTA → BUILD → INSTALL → CONNECT → PROVE → CONTRAPROVA → GÊNESIS/ANTI-RECEITA → NEXT_CURSOR. Tocou, cuidou, consertou ou melhorou: selar apenas com receipt do owner e efeito verificado. Escrever estas regras não altera runtime automaticamente.
+<!-- /ONE_HOUSE_AUREOLA_20261017_RULES -->
 
 ## Prova, contraprova e fixed point
 
