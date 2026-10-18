@@ -83,6 +83,34 @@
       "transport": "Vite localhost → Tailscale private serve",
       "runtime_status": "PORT_PROCESS_PROVEN",
       "evidence_owner": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md"
+    },
+    {
+      "id": "notifications-recipe",
+      "owner": "apps/instinto-superior/src/components/central/CentralNotificacoes.tsx",
+      "transport": "Supabase notifications_log/RLS → Central de Notificações",
+      "runtime_status": "UNKNOWN",
+      "paired_skill": ".agents/skills/skill-workshop/SKILL.md",
+      "execution_owner": "apps/modulos/hub/src/hooks/useMissions.ts",
+      "integration": "aviso curto → receita completa → cópia; despacho direto depende de broker autenticado",
+      "evidence_owner": "apps/instinto-superior/src/hooks/useNotificationsLog.ts"
+    },
+    {
+      "id": "voice-semantic",
+      "owner": ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
+      "transport": "voz → texto → intenção → capacidade autorizada",
+      "runtime_status": "UNKNOWN",
+      "paired_capability": "Screenpipe/áudio apenas como sensor quando habilitado",
+      "integration": "classificação semântica de intenção; transcrição nova não comprovada"
+    },
+    {
+      "id": "screenpipe-audio-casa",
+      "owner": ".agents/skills/screenpipe-live-observer/SKILL.md",
+      "transport": "Casa Screenpipe → Tailscale privado → cockpit.functions.ts",
+      "runtime_status": "UNKNOWN",
+      "paired_skill": ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
+      "evidence_owner": "apps/instinto-superior/src/lib/cockpit.functions.ts",
+      "last_evidence_status": "DEGRADED_AUDIO_STALE",
+      "integration": "visão e gravação de UI podem estar ativas mesmo com áudio degradado; somente sondas atuais certificam estado"
     }
   ],
   "loop": [
@@ -106,6 +134,8 @@
     "A registry descreve módulos; não copia credenciais, processos ou motores.",
     "Botão de runtime só pode ser habilitado quando a rota viva for medida.",
     "A integração completa exige readback por arquivo/página e prova de CI; catálogo sozinho não é prova.",
-    "D002 mapeia processos vivos do VS Code; ação interativa continua bloqueada até identidade de sessão + ACK/readback correlacionado."
+    "D002 mapeia processos vivos do VS Code; ação interativa continua bloqueada até identidade de sessão + ACK/readback correlacionado.",
+    "Família skill/plugin/extensão/conector/owner é catálogo de capacidades reutilizadas; não cria tool nem permissão.",
+    "Notificação breve abre a receita; envio direto depende de broker autenticado; voz capturada não comprova transcrição nem áudio healthy."
   ]
 }
