@@ -15,10 +15,14 @@ INDEX = ROOT / "packages/desktop/src/process/index.ts"
 SIDER = ROOT / "packages/desktop/src/renderer/pages/settings/components/SettingsSider.tsx"
 WRAPPER = ROOT / "packages/desktop/src/renderer/pages/settings/components/SettingsPageWrapper.tsx"
 ROUTER = ROOT / "packages/desktop/src/renderer/components/layout/Router.tsx"
+LAYOUT = ROOT / "packages/desktop/src/renderer/components/layout/Layout.tsx"
+TITLEBAR = ROOT / "packages/desktop/src/renderer/components/layout/Titlebar/index.tsx"
+DOCUMENT_TITLE = ROOT / "packages/desktop/src/renderer/components/layout/DocumentTitle.tsx"
+RENDERER_INDEX = ROOT / "packages/desktop/src/renderer/index.html"
 BOTS_PAGE = ROOT / "packages/desktop/src/renderer/pages/settings/CentralDarkBotsSettings/index.tsx"
 MAPS_PAGE = ROOT / "packages/desktop/src/renderer/pages/settings/CentralDarkMapsSettings/index.tsx"
 
-for required in (PACKAGE, BUILDER, INDEX, SIDER, WRAPPER, ROUTER):
+for required in (PACKAGE, BUILDER, INDEX, SIDER, WRAPPER, ROUTER, LAYOUT, TITLEBAR, DOCUMENT_TITLE, RENDERER_INDEX):
     if not required.exists():
         raise SystemExit(f"missing upstream file: {required}")
 
@@ -66,6 +70,34 @@ if seed_extra not in builder:
         raise SystemExit("cannot locate extraResources hub anchor")
     builder = builder.replace(seed_binding, seed_binding + seed_extra, 1)
 BUILDER.write_text(builder, encoding="utf-8")
+
+# Public branding only. Keep AionUi technical identifiers, protocol names,
+# upstream copyright notices and storage keys intact.
+branding_replacements = {
+    LAYOUT: {
+        "                      AionUi": "                      CentralDark — Instinto Superior",
+        "AionUi</div>": "CentralDark — Instinto Superior</div>",
+    },
+    TITLEBAR: {
+        "useMemo(() => 'AionUi', [])": "useMemo(() => 'CentralDark — Instinto Superior', [])",
+    },
+    DOCUMENT_TITLE: {
+        " : 'AionUi';": " : 'CentralDark — Instinto Superior';",
+    },
+    RENDERER_INDEX: {
+        'content="AionUi"': 'content="CentralDark — Instinto Superior"',
+        'apple-mobile-web-app-title" content="AionUi"': 'apple-mobile-web-app-title" content="CentralDark — Instinto Superior"',
+        '>AionUi</title>': '>CentralDark — Instinto Superior</title>',
+    },
+}
+for path, replacements in branding_replacements.items():
+    content = path.read_text(encoding="utf-8")
+    for old, new in replacements.items():
+        if old in content:
+            content = content.replace(old, new, 1)
+        elif new not in content:
+            raise SystemExit(f"branding overlay guard missing in {path}: {old!r}")
+    path.write_text(content, encoding="utf-8")
 
 bootstrap_dst = ROOT / "packages/desktop/src/process/centraldark/bootstrap.ts"
 bootstrap_dst.parent.mkdir(parents=True, exist_ok=True)
