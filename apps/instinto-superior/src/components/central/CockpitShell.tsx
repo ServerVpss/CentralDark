@@ -79,6 +79,7 @@ const HARNESS_DESTINOS = [
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
   { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
   { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
+  { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
   { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
@@ -435,7 +436,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
                 <TabsTrigger value="pr1873">📜 Mapa PR #1873</TabsTrigger>
                 {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
-                <TabsTrigger value="sync">Sync Center</TabsTrigger>
+                <TabsTrigger value="sync">🛠️ Minha Oficina</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
                 {autenticado ? <TabsTrigger value="genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
