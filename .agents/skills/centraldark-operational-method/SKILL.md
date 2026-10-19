@@ -11,6 +11,29 @@ oracle_review_on_change: true
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
 
+## Contrato operacional — VISUAL FIRST / DELTA EXATO (19/10/2026)
+
+**Gatilho:** quando a pessoa pedir um botão, setor, card, menu, navegação ou posicionamento no Cockpit/Builder, cumprir **exatamente o objeto solicitado**, sem ampliar para uma migração, integração de infraestrutura, auditoria, novo agente, novo PR ou outro painel.
+
+```text
+INTENT_FIRST=true
+UI_FIRST=SHOW_SELECT_POSITION_THEN_INTEGRATE
+REQUESTED_SCOPE_IS_CEILING=true
+VISIBLE_BUTTON != CONNECTED_CAPABILITY
+DISCOVERED_INTEGRATION != AUTHORIZED_EXECUTION
+REUSE_EXISTING_COCKPIT=true
+NOTIFICATION_IS_PROPOSAL_NOT_PERMISSION=true
+```
+
+1. **Materializar primeiro:** inserir no owner visual existente os botões, menus e cartões solicitados, mantendo navegação e seleção para revisão imediata. Se não houver ligação comprovada, sinalizar `INTEGRAÇÃO PENDENTE` sem fazer o botão fingir execução. Preservar funções existentes.
+2. **Não antecipar:** não criar/iniciar agentes, scripts, deploy, migração, conexão a provedores, auditoria opcional ou novas telas sem pedido correspondente. Se o usuário pedir só uma mudança visual, fazer só essa mudança, validar o escopo visual e parar.
+3. **Descobrir depois, sem executar:** o sistema pode identificar oportunidades de ligação com owners e rotas já existentes e **avisar** com evidência, impacto e próxima ação proposta. Avisa quando existir oportunidade comprovada; aguarda pedido/autorização antes de integrar ou modificar infraestrutura.
+4. **Segurança sob demanda, proteção de base permanente:** não transformar cada tarefa visual em projeto de segurança, revisão ampla ou bloqueio hipotético sem solicitação. **Não** desabilitar autenticação, isolamento, autorização, tratamento de segredos, RLS, validações e demais controles básicos existentes. Nunca expor credenciais ou representar dados simulados como reais. Qualquer ação de risco exige as autorizações próprias.
+5. **Coordenação:** SOL pode coordenar e delegar para Hermes, Jarvis, Claude/Codex ou outros coordenadores existentes apenas quando a intenção incluir delegação. Coordenadores podem repassar subgoals no Kanban existente com owner e ACK; abrir terminal não inicia agente. Um escritor por escopo.
+6. **Contraprova proporcional:** provar que o item visual foi renderizado/selecionado (quando houver acesso); não exigir teste end-to-end de provedor para afirmar `UI_PRESENT`. Separar `UI_PRESENT`, `INTEGRATION_PENDING`, `RUNTIME_CONNECTED`, `EFFECT_PROVED`; documentação/HTTP 200 isolado não comprovam clique ou integração.
+
+**Sequência:** `PEDIDO EXATO → MOSTRAR → POSICIONAR/REVISAR → DESCOBRIR OPORTUNIDADE → AVISAR → AGUARDAR AUTORIZAÇÃO → INTEGRAR → CONTRAPROVAR`. A primeira entrega deve ser útil antes das etapas futuras. `UNKNOWN != PASS`.
+
 ## 🔒 Main-first lock — obrigatório em toda rodada
 
 Antes de qualquer leitura conclusiva, delegação, edição, teste que possa orientar mutação ou declaração de estado, consultar a `origin/main` atual e registrar o SHA observado. Esta consulta é um preflight persistente; não pode ser substituída por memória, receipt histórico, branch local, PR, comentário de agente ou estado de runtime.
