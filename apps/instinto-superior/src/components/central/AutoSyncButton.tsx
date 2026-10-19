@@ -58,15 +58,25 @@ export const AutoSyncButton: React.FC = () => {
     }
   }
 
-  // #OBSERVACOES# MICRODEPLOY_GUARD_20261018
-  // Auto Sync não comprova publicação, PID, health nem recibo de deploy.
-  // Até existir um adapter autorizado com readback, não despachar como deploy.
-  const handleMicroDeploy = () => {
-    setSyncStatus(prev => ({
-      ...prev,
-      status: 'failed',
-      human_readable: `Micro-Deploy ${microDeployMode} BLOQUEADO: sem executor autorizado, receipt e health da VPS.`
-    }))
+  // Reusa o executor de sync já autorizado; não confunde sync com publicação.
+  // Squash, deploy e recibo exigem gates próprios do owner canônico.
+  const handleMicroDeploy = async () => {
+    if (isSyncing) return
+    setIsSyncing(true)
+    setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Executando sincronização pelo owner existente...' }))
+    try {
+      const target = microDeployMode === 'full' ? 'all' : 'main'
+      const result = await runSync({ data: { target } } as any)
+      if (result.status !== 'success') {
+        setSyncStatus({ ...result, status: 'failed', human_readable: 'Sincronização sem PASS; promoção bloqueada.' })
+      } else {
+        setSyncStatus({ ...result, status: 'conflict', human_readable: 'Sync concluído. Squash/deploy pendentes de gate e recibo do runtime; não publicados por este botão.' })
+      }
+    } catch {
+      setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: 'Falha no executor de sync; nenhuma publicação comprovada.' }))
+    } finally {
+      setIsSyncing(false)
+    }
   }
 
   const getStatusIcon = () => {
@@ -124,8 +134,8 @@ export const AutoSyncButton: React.FC = () => {
           <div className="flex items-center gap-3">
             <Zap className="w-5 h-5 text-amber-600" />
             <div>
-              <p className="text-sm font-semibold">Micro-Deploy: Instinto Superior + Auto Sync</p>
-              <p className="text-xs text-amber-700">Sync Git não prova deploy. Publicação bloqueada até existir recibo do runtime.</p>
+              <p className="text-sm font-semibold">Automação CentralDark · execução segura</p>
+              <p className="text-xs text-amber-700">Executa o Sync existente. Squash e deploy só com gate e recibo comprovados.</p>
             </div>
           </div>
 
@@ -142,7 +152,7 @@ export const AutoSyncButton: React.FC = () => {
 
             <Button onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">
               <Zap className="w-4 h-4" />
-              {isSyncing ? 'Deployando...' : 'Micro-Deploy Agora'}
+              {isSyncing ? 'Executando...' : 'Executar Automação'}
             </Button>
           </div>
         </div>
