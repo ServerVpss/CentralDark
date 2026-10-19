@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Boxes,
   KeyRound,
@@ -92,6 +93,84 @@ export function HubSeguranca({ estado }: { estado: EstadoCentralDark | undefined
   );
 }
 
+
+type CredencialMetadata = { id?: string; name: string; kind?: string; description?: string | null; updated_at?: string | null };
+
+// Fonte existente: Supabase Edge Function "vault". Nunca requisitar "get" nem renderizar valores.
+function CredenciaisCofre() {
+  const [items, setItems] = useState<CredencialMetadata[]>([]);
+  const [status, setStatus] = useState("Carregando metadados do cofre...");
+  const [nome, setNome] = useState("CENTRALDARK_GITHUB_DISPATCH_TOKEN");
+  const [valor, setValor] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  async function carregar() {
+    setStatus("Consultando cofre autorizado...");
+    try {
+      const { data, error } = await supabase.functions.invoke("vault", { body: { action: "list" } });
+      if (error || !Array.isArray(data?.items)) throw new Error("VAULT_UNAVAILABLE");
+      setItems(data.items);
+      setLoaded(true);
+      setStatus(`${data.items.length} credencial(is) catalogada(s); valores sempre ocultos.`);
+    } catch {
+      setLoaded(false);
+      setItems([]);
+      setStatus("AUTH_REQUIRED / UNKNOWN — cofre Supabase não comprovado nesta sessão.");
+    }
+  }
+  useEffect(() => { void carregar(); }, []);
+
+  async function salvar(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!loaded || !nome.trim() || !valor) return;
+    setBusy(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("vault", {
+        body: { action: "put", name: nome.trim(), kind: "token", value: valor },
+      });
+      if (error || data?.ok !== true) throw new Error("VAULT_WRITE_FAILED");
+      setValor("");
+      setStatus("Credencial enviada ao cofre criptografado. Uso pelo executor ainda exige integração e prova.");
+      await carregar();
+    } catch {
+      setStatus("Gravação não confirmada. Não copie o token para Git, logs ou chat.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="space-y-5">
+      <article className="panel space-y-3 p-5">
+        <h4 className="flex items-center gap-2 font-semibold"><LockKeyhole className="size-5" /> Cofre de credenciais</h4>
+        <p className="text-sm text-muted-foreground">Nomes e tipos das credenciais existentes no Vault Supabase. Valores nunca são exibidos ou copiados. Cofre Obsidian é separado.</p>
+        <p role="status" className="text-xs text-muted-foreground">{status}</p>
+        <button type="button" className="rounded border border-border px-3 py-2 text-sm" onClick={() => void carregar()}>Atualizar lista</button>
+        {loaded && (items.length === 0
+          ? <p className="text-sm">Nenhuma credencial cadastrada nesta fonte.</p>
+          : <ul className="grid gap-2 md:grid-cols-2">{items.map((item) =>
+              <li key={item.id ?? item.name} className="rounded-lg border border-border p-3">
+                <div className="break-all font-mono text-sm">{item.name}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{item.kind ?? "generic"} · ••••••••••••</div>
+              </li>
+            )}</ul>
+        )}
+      </article>
+      <form className="panel space-y-3 p-5" onSubmit={(event) => void salvar(event)}>
+        <h4 className="font-semibold">Adicionar ou atualizar credencial</h4>
+        <label className="block text-sm" htmlFor="cofre-secret-name">Nome da credencial</label>
+        <input id="cofre-secret-name" autoComplete="off" spellCheck={false} className="w-full rounded border border-border bg-background p-2 font-mono text-sm" value={nome} onChange={(e) => setNome(e.target.value)} required />
+        <label className="block text-sm" htmlFor="cofre-secret-value">Valor secreto</label>
+        <input id="cofre-secret-value" type="password" autoComplete="new-password" spellCheck={false} className="w-full rounded border border-border bg-background p-2 text-sm" value={valor} onChange={(e) => setValor(e.target.value)} required />
+        <button type="submit" disabled={!loaded || busy || !valor.trim()} className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-50">{busy ? "Salvando..." : "Salvar no Cofre"}</button>
+        <p className="text-xs text-muted-foreground">Somente admin. O token não vai para GitHub nem para recibos. Salvar não configura automaticamente a variável do serviço VPS.</p>
+      </form>
+      <p className="text-xs text-muted-foreground">Fonte adicional VPS (/etc, secrets): inventário ainda não integrado; não afirmar que esta lista representa todos os segredos do servidor.</p>
+    </div>
+  );
+}
+
 export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | undefined }) {
   const notificacoes = useNotificationsLog("24h");
   const bots = useTelegramBotsResumo();
@@ -114,6 +193,7 @@ export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | un
             <TabsTrigger value="bots">Bots</TabsTrigger>
             <TabsTrigger value="rotas">Rotas</TabsTrigger>
             <TabsTrigger value="contas">Contas</TabsTrigger>
+            <TabsTrigger value="credenciais">Credenciais</TabsTrigger>
             <TabsTrigger value="infra">Infra</TabsTrigger>
             <TabsTrigger value="modulos">Módulos</TabsTrigger>
             <TabsTrigger value="instalador">Instalador</TabsTrigger>
@@ -176,6 +256,7 @@ export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | un
           />
           <ItemCofre titulo="Entrega de alertas" detalhe={SEM_FONTE} />
         </TabsContent>
+        <TabsContent value="credenciais" className="mt-6"><CredenciaisCofre /></TabsContent>
         <TabsContent value="contas" className="mt-6 grid gap-4 md:grid-cols-2">
           <ItemCofre
             titulo="Conta administrativa"
