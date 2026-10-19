@@ -68,8 +68,8 @@ const PROVAS_FLUXO: Record<string, ConexaoFluxo> = {
     id: "vps-casa",
     origem: "VPS",
     destino: "Casa",
-    status: "ROTA_FALHOU",
-    detalhe: "tailscale ping da VPS para a Casa: no matching peer. Outras rotas não testadas.",
+    status: "SEM_PROVA",
+    detalhe: "tailscale ping da VPS para a Casa não encontrou peer; isso prova apenas essa tentativa, não uma falha geral da rota.",
   },
   "casa-vps": {
     id: "casa-vps",
@@ -116,13 +116,13 @@ const GOAL_ORIGEM_SNAPSHOT = "15/10/2026 · Casa SEGREDO · sessão Claude b1f36
 const GOAL_ETAPAS = [
   {
     nome: "👑 CHEFE → Claude Code CLI",
-    estado: "PROVADO",
+    estado: "HISTÓRICO",
     detalhe: "Mensagem humana recebida na sessão Claude Code; evento user com isMeta=false.",
     evidencia: "Sessão b1f3689c · linha JSONL 3157 · Claude CLI PID 30564 → PowerShell → VS Code.",
   },
   {
     nome: "🔁 Stop hook → Claude Code",
-    estado: "PROVADO",
+    estado: "HISTÓRICO",
     detalhe:
       "Continuação automática entrou como Stop hook feedback, isMeta=true; o emissor específico desse feedback ainda não foi isolado.",
     evidencia:
@@ -130,7 +130,7 @@ const GOAL_ETAPAS = [
   },
   {
     nome: "🛠️ Claude CLI → Bash / Edit / Write / Agent",
-    estado: "PROVADO",
+    estado: "HISTÓRICO",
     detalhe: "Chamadas reais de ferramentas na sessão, não necessariamente do mesmo GOAL.",
     evidencia:
       "Histórico JSONL contém 116 Bash, 48 Edit, 31 Write e 10 Agent; contagens da sessão inteira.",
@@ -336,7 +336,7 @@ function DominioDoLoop() {
               comprovados.
             </p>
             <p className="mt-2 text-xs text-amber-500">
-              Perda: depende de comprovar GitHub → VPS; retorno VPS → Casa via Tailscale falhou.
+              Perda: depende de comprovar GitHub → VPS; retorno VPS → Casa via Tailscale permanece sem prova.
             </p>
             <p className="mt-3 text-xs text-muted-foreground">
               Trilho recomendado de publicação. Ainda não autorizado a publicar.
