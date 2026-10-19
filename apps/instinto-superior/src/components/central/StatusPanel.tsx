@@ -13,11 +13,13 @@ const CORES: Record<Luz, string> = {
 };
 function luz(estado: Estado): Luz {
   if (estado === "PASS") return "verde";
+  if (estado === "RUNNING") return "amarela";
   if (estado === "FAIL" || estado === "BLOCKED") return "vermelha";
   return "amarela";
 }
-function etiqueta(estado: Estado) {
+function etiqueta(estado: Estado, nome = "") {
   if (estado === "PASS") return "OPERACIONAL";
+  if (estado === "RUNNING") return nome.toLowerCase().includes("screenpipe") ? "DEGRADADO" : "EM EXECUÇÃO";
   if (estado === "FAIL" || estado === "BLOCKED") return "INDISPONÍVEL";
   return estado === "AUTH_REQUIRED" ? "AUTORIZAÇÃO" : "NÃO COMPROVADO";
 }
@@ -26,9 +28,9 @@ function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresc
   const valido = fresco ? estado : "UNKNOWN";
   const cor = luz(valido);
   return (
-    <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${etiqueta(valido)}`}>
+    <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${etiqueta(valido, nome)}`}>
       <span className={`size-3 shrink-0 rounded-full ${fresco && valido === "PASS" ? "animate-pulse motion-reduce:animate-none" : ""} ${CORES[cor]}`} aria-hidden="true" />
-      <span className="font-mono text-[10px]">{etiqueta(valido)}</span>
+      <span className="font-mono text-[10px]">{etiqueta(valido, nome)}</span>
     </span>
   );
 }
@@ -149,7 +151,7 @@ export function StatusPanel() {
         <ul className="mt-2 space-y-2">
           {rotas.map((rota) => (
             <li key={rota.id} className="rounded border border-border/70 p-2">
-              <span className="font-mono">{rota.id}</span> · {fresco ? etiqueta(rota.estado) : "MEDIÇÃO EXPIRADA"}
+              <span className="font-mono">{rota.id}</span> · {fresco ? etiqueta(rota.estado, rota.owner) : "MEDIÇÃO EXPIRADA"}
               <p className="text-muted-foreground">{rota.fonte} · owner: {rota.owner}</p>
               <p className="text-muted-foreground">Última consulta: <DataHora iso={medidoEm} /></p>
             </li>
