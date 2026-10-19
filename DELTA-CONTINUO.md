@@ -183,3 +183,22 @@ ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
 
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+---
+
+<!-- #OBSERVACOES# @owner: DELTA-CONTINUO.md @doc_ref: ROOT-FILE-REGISTRY.md @last_updated: 2026-10-19T16:55:10.000Z @escopo: Casa K:\\ ↔ VPS /root @estado: TRANSICAO_CONTROLADA @next_cursor: validar aliases, dependencias, SHA e consumer antes de mover origem -->
+## 🪬 Lei transitória — migração Casa ↔ VPS por espelhos reversíveis (2026-10-19)
+
+**Status: MIGRACAO_EM_ANDAMENTO, não concluída.** Esta seção **acrescenta** uma regra transitória ao owner de delta contínuo; não redefine a raiz Git nem revoga owners, regras, proteção de secrets ou publicação.
+
+- **Forja da Casa:** checkout ativo na raiz `K:\\`; arquivos brutos e desenvolvimento ficam na Casa.
+- **VPS:** checkout vivo e `.git` permanecem em `/root/CentralDark` até contraprova e autorização específica para qualquer relocação real. A raiz `/root` contém dados privados/sistema e não vira checkout Git.
+- **Espelhos de compatibilidade:** links simbólicos exclusivamente para diretórios do projeto cujos nomes na raiz `/root` estejam desocupados, por exemplo `/root/scripts -> /root/CentralDark/scripts`. Links são *visões*, não cópias, sincronização, migração de dados ou segundo executor.
+- **Nunca espelhar** `.git`, `secrets`, `.env`, `SEGURANCA`, arquivos de credenciais, backups, diretórios de usuário ou runtime privado. Não mover `/root/CentralDark`, não apagar originais.
+- **A cada delta:** medir `K:\\`, `/root`, `/root/CentralDark` e consumidores → determinar owner e caminhos absolutos (systemd, cron, PM2, processos) → criar/verificar **um lote pequeno** de aliases se livre e seguro → executar contraprova de `readlink`/mesmo inode e leitura → registrar efeitos reais neste PR → só então migrar um consumidor identificado.
+- **Consumidores existentes** continuam usando o caminho antigo até o delta específico ser validado, com backup e rollback. `MIGRATED` só depois de teste do mesmo SHA e readback do runtime afetado; `ALIAS_PRESENT != CONSUMER_MIGRATED`.
+- **Rollback de alias:** remover apenas o link simbólico específico após conferir destino e uso; nunca apagar o diretório de destino. Reverter consumidor ao caminho antigo antes de remover alias necessário.
+- **Fonte da verdade:** `ServerVpss/CentralDark@main` para código versionado; VPS é execução, Casa é forja. Sincronização usa fluxo Git/owners existente, não links entre máquinas.
+- **Portões:** `ONE_WRITER_PER_SCOPE`, `CURRENT > HISTORY`, `UNKNOWN != PASS`, `REUSE_BEFORE_CREATE`, `MERGED != DEPLOYED`, sem mudanças fora do PR dedicado.
+- **Observação inicial de 19/10:** leitura da VPS encontrou 9 processos cujo cwd está sob `/root/CentralDark`, 7 linhas de comando com o caminho e 2 referências no cron consultado. São contagens pontuais, não identidades nem dependências já migradas.
+- **NEXT_CURSOR:** confirmar aliases existentes e consumidores, classificar cada referência nominalmente, migrar só o primeiro consumidor com contraprova e manter transição documentada até fixed point.
