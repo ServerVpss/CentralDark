@@ -7,6 +7,11 @@ import {
   ShieldCheck,
   ClipboardCopy,
   LockKeyhole,
+  Database,
+  Server,
+  Cloud,
+  AlertTriangle,
+  ExternalLink,
 } from "lucide-react";
 
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
@@ -45,6 +50,114 @@ export function ItemCofre({
   );
 }
 
+
+type ProvedorInfra = "supabase" | "contabo" | "cloudflare";
+type MetricaInfra = { titulo: string; valor: string; detalhe: string };
+
+function ProvedoresInfraSeguranca({ estado }: { estado: EstadoCentralDark | undefined }) {
+  const [provedor, setProvedor] = useState<ProvedorInfra>("supabase");
+  const medidoEm = estado?.atualizadoEm ? Date.parse(estado.atualizadoEm) : NaN;
+  const fresco = Number.isFinite(medidoEm) && Date.now() - medidoEm >= 0 && Date.now() - medidoEm < 60_000;
+  const valorVivo = (v: string | undefined) => fresco && v ? v : "UNKNOWN";
+
+  const botoes: { id: ProvedorInfra; nome: string; icone: typeof Database }[] = [
+    { id: "supabase", nome: "Supabase", icone: Database },
+    { id: "contabo", nome: "Contabo", icone: Server },
+    { id: "cloudflare", nome: "Cloudflare", icone: Cloud },
+  ];
+  const metricas: Record<ProvedorInfra, MetricaInfra[]> = {
+    supabase: [
+      { titulo: "API Gateway", valor: "—", detalhe: "Requisições: fonte de telemetria ainda não conectada" },
+      { titulo: "Postgres", valor: "—", detalhe: "Erros e requisições do banco: sem medição" },
+      { titulo: "Edge Functions", valor: "—", detalhe: "Execuções e erros: sem medição" },
+      { titulo: "Avisos do Advisor", valor: "—", detalhe: "Consulta de segurança não conectada a este Cockpit" },
+    ],
+    contabo: [
+      { titulo: "API CentralDark", valor: valorVivo(estado?.apiHealth), detalhe: "Medição do estado existente do Cockpit" },
+      { titulo: "Deploy VPS", valor: valorVivo(estado?.deploy), detalhe: "Estado do deploy; não equivale à saúde integral da VPS" },
+      { titulo: "Omni Router", valor: valorVivo(estado?.omniRouter), detalhe: "Medição do roteador existente" },
+      { titulo: "CPU / RAM / Disco", valor: "—", detalhe: "Telemetria Contabo ainda não conectada" },
+    ],
+    cloudflare: [
+      { titulo: "DNS / Zonas", valor: "—", detalhe: "Consulta de zonas ainda não conectada" },
+      { titulo: "Requisições", valor: "—", detalhe: "Série temporal indisponível" },
+      { titulo: "Erros HTTP", valor: "—", detalhe: "Série temporal indisponível" },
+      { titulo: "Proteção / WAF", valor: "—", detalhe: "Métricas de segurança indisponíveis" },
+    ],
+  };
+  const nome = botoes.find((b) => b.id === provedor)?.nome ?? "Supabase";
+  const indicador = provedor === "contabo" && fresco ? "Estado medido no Cockpit" : "Sem telemetria ao vivo";
+
+  return (
+    <section aria-labelledby="infra-provedores-titulo" className="mt-8 rounded-[28px] border border-white/15 bg-[#090909] p-4 text-white sm:p-7">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h4 id="infra-provedores-titulo" className="flex items-center gap-3 text-xl font-semibold sm:text-3xl">
+          <span aria-hidden="true">🪬</span> CentralDark — Infraestrutura
+        </h4>
+        <span className="rounded-full bg-[#242424] px-4 py-2 text-xs text-white/75 sm:text-sm">
+          Painel operacional
+        </span>
+      </div>
+      <div className="grid grid-cols-3 gap-2 sm:gap-4" role="group" aria-label="Selecionar provedor de infraestrutura">
+        {botoes.map(({ id, nome: rotulo, icone: Icone }) => (
+          <button
+            type="button"
+            key={id}
+            aria-pressed={provedor === id}
+            onClick={() => setProvedor(id)}
+            className={`flex min-h-28 flex-col items-center justify-center gap-3 rounded-2xl border p-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:min-h-36 sm:text-xl ${
+              provedor === id ? "border-white/35 bg-[#232323]" : "border-white/15 bg-[#1c1c1c] hover:bg-[#292929]"
+            }`}
+          >
+            <Icone aria-hidden="true" className="size-6 sm:size-8" strokeWidth={1.8} />
+            <span>{rotulo}</span>
+          </button>
+        ))}
+      </div>
+      <div className="mt-5 rounded-3xl bg-[#191919] p-4 sm:p-7">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <h5 className="text-xl font-semibold sm:text-2xl">{nome} — CentralDark</h5>
+          <span className="rounded-full bg-[#282828] px-3 py-1.5 text-xs text-white/75">
+            {indicador}
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          {metricas[provedor].map((m) => (
+            <article key={m.titulo} className="min-h-32 rounded-2xl bg-[#242424] p-4 sm:p-5">
+              <h6 className="text-sm font-normal text-white/70 sm:text-base">{m.titulo}</h6>
+              <div className="mt-2 break-words font-mono text-2xl font-semibold tabular-nums sm:text-3xl">{m.valor}</div>
+              <p className="mt-2 text-xs leading-relaxed text-white/55">{m.detalhe}</p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-5 text-sm leading-relaxed text-white/65">
+          {provedor === "contabo" && fresco && estado?.atualizadoEm
+            ? `Última leitura do estado CentralDark: ${new Date(estado.atualizadoEm).toLocaleString("pt-BR")}. Não é a API de métricas da Contabo.`
+            : "Dados deste provedor ainda não têm fonte de telemetria autorizada no Cockpit. Não são valores zerados."}
+        </p>
+        <div className="mt-5 rounded-2xl bg-[#242424] p-4 sm:p-5">
+          <h6 className="text-lg font-semibold sm:text-xl">Segurança — {provedor === "supabase" ? "Advisor" : "Monitoramento"}</h6>
+          <div className="mt-4 flex items-start gap-3 text-sm text-white/85">
+            <AlertTriangle aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-amber-400" />
+            <p>
+              {provedor === "supabase"
+                ? "Há alertas conhecidos no Supabase, mas a quantidade atual não está sendo consultada nesta tela."
+                : "Dados de segurança do provedor ainda não conectados; estado UNKNOWN."}
+            </p>
+          </div>
+          <p className="mt-3 text-sm text-white/60">Exibir gravidade, objeto afetado, horário da leitura e referência de correção somente após resposta da fonte real.</p>
+          {provedor === "supabase" ? (
+            <a href="https://supabase.com/dashboard/project/lyoigsqluyktoclwdaft/advisors/security" target="_blank" rel="noopener noreferrer"
+               className="mt-4 inline-flex items-center gap-2 text-sm text-white underline underline-offset-4 hover:text-white/80">
+              Abrir Advisor no Supabase <ExternalLink aria-hidden="true" className="size-4" />
+            </a>
+          ) : null}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HubSeguranca({ estado }: { estado: EstadoCentralDark | undefined }) {
   return (
     <section aria-labelledby="hub-seguranca-titulo">
@@ -58,6 +171,7 @@ export function HubSeguranca({ estado }: { estado: EstadoCentralDark | undefined
         Visão central dos controles de acesso, fontes e superfícies críticas. Este espaço não
         concede permissões nem expõe credenciais.
       </p>
+      <ProvedoresInfraSeguranca estado={estado} />
       <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <BlocoEstado
           titulo="Acesso administrativo"
