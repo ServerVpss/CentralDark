@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
+import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
@@ -71,6 +72,7 @@ const HARNESS_DESTINOS = [
   { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
   { id: "portal", titulo: "Portal", icone: "🌐", privado: false },
   { id: "builder-bolt", titulo: "Builder Bolt", icone: "⚡", privado: false },
+  { id: "pr1873", titulo: "Mapa do PR #1873", icone: "📜", privado: false },
   { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
   { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
@@ -428,6 +430,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
                 <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
                 <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
+                <TabsTrigger value="pr1873">📜 Mapa PR #1873</TabsTrigger>
                 {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
                 <TabsTrigger value="sync">Sync Center</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
@@ -451,6 +454,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
               </TabsList>
             </div>
+            <TabsContent value="pr1873" className="mt-8">
+              <PainelPR1873 />
+            </TabsContent>
             <TabsContent value="portal" className="mt-8">
               <MenuVisualCentralDark titulo="🌐 Portal" descricao="Produtos e experiência pública; o TelePainel permanece produto independente." itens={["🏠 Página inicial", "📦 Catálogo", "📟 TelePainel", "💬 WhatsApp / CRM", "💰 Financeiro"]} />
             </TabsContent>
