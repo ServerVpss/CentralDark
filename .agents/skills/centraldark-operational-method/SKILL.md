@@ -11,6 +11,25 @@ oracle_review_on_change: true
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
 
+## Lei persistente — Casa ⇄ main, CHEFE como aprovação viva (2026-10-19)
+
+**Autoridade:** o CHEFE aprova a intenção em tempo real no diálogo; a PR não é requisito universal para alterações cotidianas autorizadas. Abrir PR somente quando solicitado ou quando o componente exigir isolamento/revisão técnica. Não criar PR automaticamente para cada delta.
+
+```text
+CASA_COMMIT_IMPLIES_MAIN_SYNC=true
+MAIN_COMMIT_IMPLIES_CASA_SYNC=true
+PR_BY_EXCEPTION=true
+CHEFE_IS_LIVE_APPROVAL=true
+SYNC_IS_BIDIRECTIONAL_NOT_DESTRUCTIVE=true
+UNKNOWN_IS_NOT_SYNCED=true
+```
+
+**Ciclo obrigatório por delta aprovado:** medir HEAD local e remoto, identificar owner e diferenças, preservar arquivos não relacionados e último verde, aplicar a menor mudança, executar gates proporcionais, fazer commit local de escopo exato, sincronizar com `origin/main` quando autorizado e seguro, confirmar SHA remoto e incorporar o resultado de volta na Casa; conferir identidade dos arquivos/SHAs e registrar recibo. No sentido inverso, ao detectar novo commit em `main`, atualizar a Casa com o mesmo cuidado, sem reset destrutivo ou descarte de mudanças locais. Reusar scripts/owners de sincronização já existentes.
+
+**Exceções que impedem promoção automática:** conflito não resolvido, working tree com alterações de outros writers, segredos, autorização ausente, testes obrigatórios falhos, proteção de branch ou políticas de revisão. Nesses casos preservar os dois lados e declarar `BLOCKED/UNKNOWN` com o menor próximo passo; **não** forçar push, não contornar proteção da main e não dizer `SINCRONIZADO` sem readback. A autorização para um delta não autoriza subir trabalho não relacionado.
+
+**Escopo da lei:** governança operacional, não prova de que um daemon de sincronização já exista ou esteja rodando. `LOCAL_COMMITTED != MAIN_UPDATED` e `MAIN_UPDATED != CASA_UPDATED`.
+
 ## 🔒 Main-first lock — obrigatório em toda rodada
 
 Antes de qualquer leitura conclusiva, delegação, edição, teste que possa orientar mutação ou declaração de estado, consultar a `origin/main` atual e registrar o SHA observado. Esta consulta é um preflight persistente; não pode ser substituída por memória, receipt histórico, branch local, PR, comentário de agente ou estado de runtime.
