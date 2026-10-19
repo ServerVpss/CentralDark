@@ -163,10 +163,15 @@ async function medirApi(path: string): Promise<Probe> {
       };
     }
 
+    // O contrato vivo da API CentralDark usa status="ok" (não exige campo "ok").
+    // A prova se aplica somente à rota GET /health; não promove serviços internos.
+    const status = texto(candidato["status"])?.toLowerCase();
+    const saudavel = candidato["ok"] === true || status === "ok" || status === "healthy";
+    const falhou = candidato["ok"] === false || ["fail", "failed", "error", "unhealthy"].includes(status ?? "");
     return {
-      estado: candidato["ok"] === true ? "PASS" : candidato["ok"] === false ? "FAIL" : "RUNNING",
+      estado: falhou ? "FAIL" : saudavel ? "PASS" : "RUNNING",
       httpStatus: resposta.status,
-      erro: candidato["ok"] === undefined ? "Rota respondeu JSON sem campo ok" : null,
+      erro: !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
       dados: candidato,
     };
   } catch (erro) {
@@ -228,16 +233,16 @@ async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
   }
 }
 
-// Saída operacional do próprio /health, com campos permitidos; não publica captura,
- // caminhos do host, stdout bruto, OCR, áudio ou informações pessoais.
+// Saúde da rota Screenpipe. Status explícito determina a cor; dependências
+// são detalhes opcionais, nunca requisito artificial para a rota responder.
 function screenpipeIdentificado(sonda: Probe): Probe {
   if (sonda.estado === "UNKNOWN") return sonda;
-  const dependencias = objetoJson(sonda.dados?.["dependencies"]) ? sonda.dados["dependencies"] : null;
-  if (!dependencias || !objetoJson(dependencias["ffmpeg"])) {
-    return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_SCREENPIPE" };
-  }
+  if (sonda.httpStatus !== 200) return { ...sonda, estado: "FAIL" };
   const status = texto(sonda.dados?.["status"])?.toLowerCase();
-  return { ...sonda, estado: sonda.httpStatus === 200 && status === "healthy" ? "PASS" : "FAIL" };
+  if (status === "healthy") return { ...sonda, estado: "PASS", erro: null };
+  if (status === "degraded") return { ...sonda, estado: "RUNNING", erro: null };
+  if (["fail", "failed", "error", "unhealthy"].includes(status ?? "")) return { ...sonda, estado: "FAIL" };
+  return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_STATUS_RECONHECIDO" };
 }
 
 function saidaScreenpipe(sonda: Probe): string[] {
@@ -475,15 +480,16 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasaFonte = hostScreenpipe === "CASA"
-      ? "Casa Windows · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória"
+      ? "Casa Windows · Screenpipe 3030/health · HTTP e status real"
       : hostScreenpipe === "VPS"
-        ? "Casa Windows · Tailscale privado · porta 3030/health · medição remota com assinatura"
+        ? "Casa Windows · Tailscale privado · Screenpipe 3030/health · HTTP e status real"
         : "Casa Windows · sem adapter/medição remota neste servidor";
     const screenpipeVpsFonte = hostScreenpipe === "VPS"
-      ? "VPS CENTRALDARK-OS · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória (porta pode ser Graph Panel)"
+      ? "VPS CENTRALDARK-OS · 3030/health · confirmar serviço da rota (pode ser Graph Panel)"
       : "VPS CENTRALDARK-OS · sem adapter/medição remota neste servidor";
     // API 200 só atesta esta rota. O body pode identificar serviço, não integrações internas.
     const apiServico = texto(apiHealth.dados?.["service"])
+      ?? texto(apiHealth.dados?.["servico"])
       ?? texto(apiHealth.dados?.["name"])
       ?? "Serviço não identificado pelo /health";
     const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
