@@ -33,6 +33,24 @@ NOTIFICATION_IS_PROPOSAL_NOT_PERMISSION=true
 6. **Contraprova proporcional:** provar que o item visual foi renderizado/selecionado (quando houver acesso); não exigir teste end-to-end de provedor para afirmar `UI_PRESENT`. Separar `UI_PRESENT`, `INTEGRATION_PENDING`, `RUNTIME_CONNECTED`, `EFFECT_PROVED`; documentação/HTTP 200 isolado não comprovam clique ou integração.
 
 **Sequência:** `PEDIDO EXATO → MOSTRAR → POSICIONAR/REVISAR → DESCOBRIR OPORTUNIDADE → AVISAR → AGUARDAR AUTORIZAÇÃO → INTEGRAR → CONTRAPROVAR`. A primeira entrega deve ser útil antes das etapas futuras. `UNKNOWN != PASS`.
+## Lei persistente — Casa ⇄ main, CHEFE como aprovação viva (2026-10-19)
+
+**Autoridade:** o CHEFE aprova a intenção em tempo real no diálogo; a PR não é requisito universal para alterações cotidianas autorizadas. Abrir PR somente quando solicitado ou quando o componente exigir isolamento/revisão técnica. Não criar PR automaticamente para cada delta.
+
+```text
+CASA_COMMIT_IMPLIES_MAIN_SYNC=true
+MAIN_COMMIT_IMPLIES_CASA_SYNC=true
+PR_BY_EXCEPTION=true
+CHEFE_IS_LIVE_APPROVAL=true
+SYNC_IS_BIDIRECTIONAL_NOT_DESTRUCTIVE=true
+UNKNOWN_IS_NOT_SYNCED=true
+```
+
+**Ciclo obrigatório por delta aprovado:** medir HEAD local e remoto, identificar owner e diferenças, preservar arquivos não relacionados e último verde, aplicar a menor mudança, executar gates proporcionais, fazer commit local de escopo exato, sincronizar com `origin/main` quando autorizado e seguro, confirmar SHA remoto e incorporar o resultado de volta na Casa; conferir identidade dos arquivos/SHAs e registrar recibo. No sentido inverso, ao detectar novo commit em `main`, atualizar a Casa com o mesmo cuidado, sem reset destrutivo ou descarte de mudanças locais. Reusar scripts/owners de sincronização já existentes.
+
+**Exceções que impedem promoção automática:** conflito não resolvido, working tree com alterações de outros writers, segredos, autorização ausente, testes obrigatórios falhos, proteção de branch ou políticas de revisão. Nesses casos preservar os dois lados e declarar `BLOCKED/UNKNOWN` com o menor próximo passo; **não** forçar push, não contornar proteção da main e não dizer `SINCRONIZADO` sem readback. A autorização para um delta não autoriza subir trabalho não relacionado.
+
+**Escopo da lei:** governança operacional, não prova de que um daemon de sincronização já exista ou esteja rodando. `LOCAL_COMMITTED != MAIN_UPDATED` e `MAIN_UPDATED != CASA_UPDATED`.
 
 ## 🔒 Main-first lock — obrigatório em toda rodada
 
@@ -2957,7 +2975,8 @@ Fala direta do CHEFE, baianês/resenha naturais; versículo ou rima opcionais e 
 
 ### VS Code Windows Casa — descoberta Desktop Commander (2026-10-15)
 
-Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
+Reutilizar [
+eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
 
 
 <!-- CENTRALDARK_RECOVERY_COMMANDS_HUD_TO_INSTINTO_20261015 -->
