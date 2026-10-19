@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(vps): install scoped runner post-job cleanup owner",
+    "lastCommit": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,22 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-19T01:12:49.848Z",
+      "titulo": "Push na main · 355ddf944e3a5c4d677d5bdecf61fa62724f50f0",
+      "detalhe": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
+      "area": "Repositório",
+      "sha": "355ddf9",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-18T22:07:11.886Z",
+      "titulo": "Push na main · 009bd1a411c9c98d36f49d88e2ab452078472bc3",
+      "detalhe": "docs(receipt): !CENTRALDARK live cockpit, verified checkpoint, Kanban idempotency and pending E2E",
+      "area": "Repositório",
+      "sha": "009bd1a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-18T18:48:24.428Z",
       "titulo": "Push na main · dfef59900739ce614d5adbb6d143422e38d7f334",
@@ -393,25 +409,23 @@
       "area": "Repositório",
       "sha": "b9ae142",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T15:38:53.061Z",
-      "titulo": "Push na main · 6874a55087c32fd5aac9bd35d1a60ceab19495ec",
-      "detalhe": "docs(forge): 🧹 vassoura aponta para limpeza segura do worktree reutilizavel",
-      "area": "Repositório",
-      "sha": "6874a55",
-      "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T15:24:35.139Z",
-      "titulo": "Push na main · ab134150041c865c58341332e9c768d9f8ccc004",
-      "detalhe": "docs(agents): apontar Forja Viva e aliases para owners existentes",
-      "area": "Repositório",
-      "sha": "ab13415",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-19T01:12:49.848Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 355ddf944e3a5c4d677d5bdecf61fa62724f50f0 (355ddf9)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
+    {
+      "time": "2026-10-18T22:07:11.886Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 009bd1a411c9c98d36f49d88e2ab452078472bc3 (009bd1a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-18T18:48:24.428Z",
       "ia": "@segredounlock",
@@ -747,20 +761,6 @@
       "action": "📌 Push na main · b9ae142aeec967f1a38b23448c842470a83ef483 (b9ae142)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T15:38:53.061Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 6874a55087c32fd5aac9bd35d1a60ceab19495ec (6874a55)",
-      "area": "Repositório",
-      "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T15:24:35.139Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ab134150041c865c58341332e9c768d9f8ccc004 (ab13415)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-18T18:48:24.428Z",
-  "updatedAtBR": "18/10/2026, 15:48:24 BRT"
+  "updatedAt": "2026-10-19T01:12:49.848Z",
+  "updatedAtBR": "18/10/2026, 22:12:49 BRT"
 }

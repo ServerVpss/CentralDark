@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-# GitHub Actions secrets → VPS secrets/ + mcp .env. Nunca echo de valor.
+# GitHub Actions credentials → cofre canônico /etc/centraldark/secrets/. Nunca echo de valor.
+# O legado /root/CentralDark/secrets é link para o mesmo cofre na VPS; não criar cópias.
 set -euo pipefail
 umask 077
 python3 - <<'PY'
 import os
 from pathlib import Path
 
-root = Path("/root/CentralDark/secrets")
+root = Path("/etc/centraldark/secrets")
 root.mkdir(mode=0o700, exist_ok=True)
 mcp_env = Path("/root/CentralDark/apps/modulos/mcp/.env")
 
@@ -55,9 +56,44 @@ def upsert_mcp_env(canonical_key: str, *alts: str) -> None:
     print(f"{canonical_key}_MCP_ENV=OK")
 
 
-write_secret_file("cloudflare.env", "CLOUDFLARE_API_TOKEN", "CF_API_TOKEN")
-write_secret_file("buildkite.env", "BUILDKITE_API_TOKEN")
-upsert_secret_file("buildkite.env", "BUILDKITE_WEBHOOK_SECRET")
+# Idempotente: cada valor recebido preenche apenas o próprio provider; MISSING
+# não limpa credencial anterior. Nenhum arquivo de provider vazio é criado.
+# A migração da fonte .env mista é uma etapa separada, com contraprova.
+provider_variables = {
+    "tailscale.env": ("TAILSCALE_API_KEY",),
+    "cloudflare.env": ("CLOUDFLARE_API_TOKEN",),
+    "contabo.env": ("CONTABO_CLIENT_ID", "CONTABO_CLIENT_SECRET",
+                    "CONTABO_API_USER", "CONTABO_API_PASSWORD"),
+    "github.env": ("GITHUB_CLIENT_ID", "GITHUB_CLIENT_SECRET",
+                   "GITHUB_OAUTH_CALLBACK", "GH_TOKEN", "GITHUB_TOKEN",
+                   "MCP_GITHUB_TOKEN"),
+    "supabase.env": ("SUPABASE_DB_URL", "SUPABASE_SERVICE_KEY",
+                     "SUPABASE_SERVICE_ROLE_KEY", "VITE_SUPABASE_PROJECT_ID",
+                     "VITE_SUPABASE_URL", "VITE_SUPABASE_PUBLISHABLE_KEY",
+                     "HUB_SUPABASE_PROJECT_REF", "HUB_SUPABASE_URL",
+                     "HUB_SUPABASE_DB_URL", "HUB_SUPABASE_SERVICE_KEY",
+                     "HUB_SUPABASE_SERVICE_ROLE_KEY"),
+    "buildkite.env": ("BUILDKITE_API_TOKEN", "BUILDKITE_WEBHOOK_SECRET"),
+    "linear.env": ("LINEAR_API_KEY",),
+    "openai.env": ("OPENAI_API_KEY",),
+    "openrouter.env": ("OPENROUTER_API_KEY", "OPENROUTER_API_KEY_ALT",
+                       "OPENROUTER_WORKSPACE_ID",
+                       "OPENROUTER_VIDEO_WEBHOOK_SECRET"),
+    "groq.env": ("GROQ_API_KEY",),
+    "gemini.env": ("GEMINI_API_KEY",),
+    "mcp.env": ("MCP_SESSION_SECRET", "MCP_CENTRALDARK_TOKEN",
+                "CENTRALDARK_MCP_TOKEN", "MCP_TOKEN",
+                "MCP_ADMIN_PASSWORD", "CENTRALDARK_ADMIN_KEY",
+                "CENTRALDARK_MCP_ADMIN_PASSWORD", "MCP_OWNER_TOOL_TOKEN",
+                "CENTRALDARK_MCP_REMOTE_TOKEN"),
+}
+
+for filename, keys in provider_variables.items():
+    for key in keys:
+        upsert_secret_file(filename, key)
+
+# Compatibilidade temporária: alguns consumidores ainda usam o .env legado
+# do MCP. NÃO remover cópias antes de medir e reconciliar esses consumidores.
 upsert_mcp_env("CLOUDFLARE_API_TOKEN", "CF_API_TOKEN")
 upsert_mcp_env("BUILDKITE_API_TOKEN")
 upsert_mcp_env("BUILDKITE_WEBHOOK_SECRET")
