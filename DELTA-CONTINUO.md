@@ -202,3 +202,29 @@ Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Dis
 - **Portões:** `ONE_WRITER_PER_SCOPE`, `CURRENT > HISTORY`, `UNKNOWN != PASS`, `REUSE_BEFORE_CREATE`, `MERGED != DEPLOYED`, sem mudanças fora do PR dedicado.
 - **Observação inicial de 19/10:** leitura da VPS encontrou 9 processos cujo cwd está sob `/root/CentralDark`, 7 linhas de comando com o caminho e 2 referências no cron consultado. São contagens pontuais, não identidades nem dependências já migradas.
 - **NEXT_CURSOR:** confirmar aliases existentes e consumidores, classificar cada referência nominalmente, migrar só o primeiro consumidor com contraprova e manter transição documentada até fixed point.
+
+
+<!-- #OBSERVACOES# @owner: DELTA-CONTINUO.md @doc_ref: docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md @last_updated: 2026-10-19T17:06:23.000Z @escopo: PR1873 Screenpipe Casa/VPS + Windows runner + K root @estado: DIAGNOSTICO_MEDIDO @next_cursor: identificar owner runner e corrigir causa do STOPPED somente com autorizacao de servico -->
+### 🫁 Contraprova do SPIKE Casa/VPS — 2026-10-19T17:06:23.000Z
+
+**Objetivo:** incorporar as duas investigações ao **mesmo PR #1873**, sem alterar serviços, processos, runner ou material secreto. Medições obtidas via Desktop Commander, sessão autorizada em SEGREDO e CENTRALDARK-OS. `DOCUMENTED != FIXED`.
+
+| Superfície | Medição atual | Veredito delimitado |
+|---|---|---|
+| Casa — raiz Git | `git -C K:\\ rev-parse --show-toplevel` = `K:/`; HEAD `16475832ad` | `K:\\` é checkout ativo; **não** criar `K:\\CentralDark` |
+| Casa — `K:\\CentralDark` | `Test-Path` = False | Caminho não operacional nesta leitura |
+| Casa — `K:\\_WORKER` | `Junction` para `F:\\_WORKER` | Reparse point presente; não copiar nem realocar |
+| Casa — runner | `K:\\_WORKER\\CentralDark-Runners\\CASA-1\\.runner` presente; JSON parse PASS; `agentName=centraldark-casa-1` | Configuração existente, sem conteúdo sensível armazenado neste recibo |
+| Casa — serviço runner | `actions.runner.ServerVpss-CentralDark.centraldark-casa-1` = `Stopped`, `StartMode=Auto`, `ProcessId=0`; nenhuma entrada `Runner.Listener`/ `Runner.Worker` foi retornada | Serviço **parado localmente**. Estado de registro online no GitHub ainda UNKNOWN |
+| Casa — Screenpipe | porta TCP 3030 `Listen` em `0.0.0.0`, PID 21428 `screenpipe-app.exe`; `GET /health` = 200; `GET /api/health` sem auth = 403 | API local **ativa**, endpoint protegido/negando leitura anônima; token expirado **não comprovado** |
+| VPS — Screenpipe | nenhum listener TCP local em 3030; requisições locais a `/health` e `/api/health` retornaram HTTP 000 | `3030` **não disponível localmente na VPS**; não implica falha do Screenpipe na Casa |
+| VPS — raiz do projeto | `/root/CentralDark` ativo, HEAD `5844dde14`; aliases `/root/scripts` e `/root/apps` apontam para subpastas existentes | Espelhos do lote 01 preservados; nenhum consumidor migrado |
+
+**Regras incrementais (um PR, nenhum novo executor):**
+1. Diferenciar `CASA_3030` de `VPS_3030`; `403 != DOWN`, `HTTP_200_HEALTH != AUTH_PROVEN`, `RUNNER_CONFIG_EXISTS != RUNNER_ONLINE`.
+2. `RUNNER_STOPPED` é diagnóstico; não iniciar, reiniciar ou reconfigurar serviço sem delta executável autorizado e contraprova de impacto.
+3. O `K:\\` e o `/root/CentralDark` continuam raízes Git **diferentes** durante migração: não realizar `mv`, `reset --hard`, `git clean`, cópia de secrets ou alteração de caminhos de serviço em lote.
+4. Referências legadas a `K:\\CentralDark` devem ser corrigidas **por owner e consumidor**, sem recriar pasta. Espelhos VPS são compatibilidade, não prova de sincronização remota.
+5. Próximo delta: localizar o owner existente do Windows runner, ler logs sanitizados de causa de parada, e decidir reparo mínimo com aprovação contextual; validar acesso ao Screenpipe protegido sem expor credenciais.
+6. Manter este status no PR #1873; avanço exige mesmos SHAs, timestamp real, readback e prova negativa. Não declarar produção recuperada por documento.
+
