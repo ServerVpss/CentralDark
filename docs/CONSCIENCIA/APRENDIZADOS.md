@@ -3065,3 +3065,9 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 - **Data:** 2026-10-19
 - **Contexto:** MCP github_viewer, github_read e registrar_aprendizado falhavam com TypeError fetch failed; curl na VPS falhava DNS para api.github.com, enquanto resolvectl via ens18 resolvia e MagicDNS Tailscale funcionava.
 - **Aprendizado:** Resolver do host /etc/resolv.conf apontava ao DNS Tailscale sem resolução pública; apontar para o stub gerenciado do systemd-resolved preservou DNS público e MagicDNS, com backup e teste HTTP 200. Provar DNS e leitura antes de gravar; nunca tratar erro de leitura como arquivo vazio. Correção de fail-closed em PR #1868 ainda não publicada.
+
+### 199. MCP fail-closed em produção após PR 1868
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-19
+- **Contexto:** PR #1868 mergeado em main commit 7329afe20; arquivo de aprendizado do runtime VPS atualizado com backup; serviço centraldark-native-mcp-http reiniciado e saúde HTTP 200.
+- **Aprendizado:** A leitura do arquivo de aprendizados agora lança erro se o GitHub falhar, em vez de devolver string vazia e arriscar sobrescrita. DNS da VPS já corrigido. Processo novo PID 834279 iniciou 2026-10-19 12:51:46 UTC. Preservar owner e validar escrita/leitura.
