@@ -237,7 +237,10 @@ function screenpipeIdentificado(sonda: Probe): Probe {
     return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_SCREENPIPE" };
   }
   const status = texto(sonda.dados?.["status"])?.toLowerCase();
-  return { ...sonda, estado: sonda.httpStatus === 200 && status === "healthy" ? "PASS" : "FAIL" };
+  if (sonda.httpStatus !== 200) return { ...sonda, estado: "FAIL" };
+  if (status === "healthy") return { ...sonda, estado: "PASS" };
+  if (status === "degraded") return { ...sonda, estado: "RUNNING" };
+  return { ...sonda, estado: "UNKNOWN", erro: "STATUS_NAO_RECONHECIDO" };
 }
 
 function saidaScreenpipe(sonda: Probe): string[] {
