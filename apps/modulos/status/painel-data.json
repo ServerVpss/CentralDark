@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "docs(vault): selar caminho canonico FHS, aliases e gates da segregacao",
+    "lastCommit": "feat(instinto): agrupar Cloudflare Contabo e Tailscale no Hub de Contas",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-19T07:27:52.074Z",
+      "titulo": "Push na main · 9a6f5aa1c7e730bb6eae06cc93ebc52c471194d6",
+      "detalhe": "feat(instinto): agrupar Cloudflare Contabo e Tailscale no Hub de Contas",
+      "area": "Repositório",
+      "sha": "9a6f5aa",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-19T04:43:20.731Z",
       "titulo": "Push na main · fabbe8ca1aa4cf20465f1e59a71a03acaf15f9bc",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "488a03f",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T15:51:53.489Z",
-      "titulo": "Push na main · ef1fb274abc031dadef5d5d3fe29037b3db73e7a",
-      "detalhe": "docs(operational): 🧹 incluir faxina de worktree no método existente",
-      "area": "Repositório",
-      "sha": "ef1fb27",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-19T07:27:52.074Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 9a6f5aa1c7e730bb6eae06cc93ebc52c471194d6 (9a6f5aa)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-19T04:43:20.731Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 488a03f9343f5ce01f47f964b86e1e72b56ea02f (488a03f)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T15:51:53.489Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ef1fb274abc031dadef5d5d3fe29037b3db73e7a (ef1fb27)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-19T04:43:20.731Z",
-  "updatedAtBR": "19/10/2026, 01:43:20 BRT"
+  "updatedAt": "2026-10-19T07:27:52.074Z",
+  "updatedAtBR": "19/10/2026, 04:27:52 BRT"
 }
