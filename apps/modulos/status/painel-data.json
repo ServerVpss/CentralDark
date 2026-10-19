@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(vps): install scoped runner post-job cleanup owner",
+    "lastCommit": "docs(receipt): !CENTRALDARK live cockpit, verified checkpoint, Kanban idempotency and pending E2E",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-18T22:07:11.886Z",
+      "titulo": "Push na main · 009bd1a411c9c98d36f49d88e2ab452078472bc3",
+      "detalhe": "docs(receipt): !CENTRALDARK live cockpit, verified checkpoint, Kanban idempotency and pending E2E",
+      "area": "Repositório",
+      "sha": "009bd1a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-18T18:48:24.428Z",
       "titulo": "Push na main · dfef59900739ce614d5adbb6d143422e38d7f334",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "6874a55",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T15:24:35.139Z",
-      "titulo": "Push na main · ab134150041c865c58341332e9c768d9f8ccc004",
-      "detalhe": "docs(agents): apontar Forja Viva e aliases para owners existentes",
-      "area": "Repositório",
-      "sha": "ab13415",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-18T22:07:11.886Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 009bd1a411c9c98d36f49d88e2ab452078472bc3 (009bd1a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-18T18:48:24.428Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 6874a55087c32fd5aac9bd35d1a60ceab19495ec (6874a55)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T15:24:35.139Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · ab134150041c865c58341332e9c768d9f8ccc004 (ab13415)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-18T18:48:24.428Z",
-  "updatedAtBR": "18/10/2026, 15:48:24 BRT"
+  "updatedAt": "2026-10-18T22:07:11.886Z",
+  "updatedAtBR": "18/10/2026, 19:07:11 BRT"
 }
