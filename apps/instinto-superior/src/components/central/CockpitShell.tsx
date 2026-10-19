@@ -46,6 +46,8 @@ import { GoalsDashboard } from "@/components/central/GoalsDashboard";
 import { DeliverablesSummary } from "@/components/central/DeliverablesSummary";
 import { ArchitectureVisualization } from "@/components/central/ArchitectureVisualization";
 import { RaioXVivo } from "@/components/central/RaioXVivo";
+import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
+import { ForjaExecutor } from "@/components/central/ForjaExecutor";
 import { ClaudeNotificationsHub } from "@/components/central/ClaudeNotificationsHub";
 import { DreamReviewer } from "@/components/central/DreamReviewer";
 import { GramPermissions } from "@/components/central/GramPermissions";
