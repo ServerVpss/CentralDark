@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
+    "lastCommit": "docs(vault): selar caminho canonico FHS, aliases e gates da segregacao",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-19T04:43:20.731Z",
+      "titulo": "Push na main · fabbe8ca1aa4cf20465f1e59a71a03acaf15f9bc",
+      "detalhe": "docs(vault): selar caminho canonico FHS, aliases e gates da segregacao",
+      "area": "Repositório",
+      "sha": "fabbe8c",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-19T01:12:49.848Z",
       "titulo": "Push na main · 355ddf944e3a5c4d677d5bdecf61fa62724f50f0",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "ef1fb27",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T15:44:33.440Z",
-      "titulo": "Push na main · b9ae142aeec967f1a38b23448c842470a83ef483",
-      "detalhe": "docs(forge): 🧹 costurar faxina segura, checklist e readback ao scratch unico",
-      "area": "Repositório",
-      "sha": "b9ae142",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-19T04:43:20.731Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · fabbe8ca1aa4cf20465f1e59a71a03acaf15f9bc (fabbe8c)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-19T01:12:49.848Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · ef1fb274abc031dadef5d5d3fe29037b3db73e7a (ef1fb27)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T15:44:33.440Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · b9ae142aeec967f1a38b23448c842470a83ef483 (b9ae142)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-19T01:12:49.848Z",
-  "updatedAtBR": "18/10/2026, 22:12:49 BRT"
+  "updatedAt": "2026-10-19T04:43:20.731Z",
+  "updatedAtBR": "19/10/2026, 01:43:20 BRT"
 }
