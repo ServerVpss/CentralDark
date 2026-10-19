@@ -55,5 +55,19 @@
   "terminal.integrated.tabs.enabled": true,
   "terminal.integrated.tabs.location": "left",
   "terminal.integrated.defaultLocation": "view",
-  "python.terminal.useEnvFile": true
+  "python.terminal.useEnvFile": true,
+  "python.analysis.exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "PROGAMAS/**",
+    "_cache/**",
+    "_archive/**",
+    "_worktrees/**",
+    ".pnpm-store/**",
+    "**/dist",
+    "**/build",
+    "**/.venv",
+    "**/venv"
+  ],
+  "python.analysis.typeCheckingMode": "basic"
 }
