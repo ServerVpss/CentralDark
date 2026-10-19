@@ -10,7 +10,7 @@ Atualizado em 2026-10-19. Owner: `apps/instinto-superior`.
 - Tela instalada em `CentralDark.exe` e separada do servidor Vite de desenvolvimento; instalador/deploy exige provas proprias.
 
 ## Inicializacao persistente do Windows
-- Task Scheduler: `\CentralDark-Cockpit-8080` - gatilhos boot + logon, conta SYSTEM, sem abrir janela.
+- Task Scheduler: `\CentralDark-Cockpit-8080` - gatilhos boot + logon + rechecagem a cada 5 minutos (janela de repeticao 3650 dias, renovar ate 2036), conta SYSTEM, sem abrir janela.
 - Script owner reutilizavel: `K:\scripts\casa\instinto-cockpit-autostart.ps1`.
 - Atalho manual existente: `K:\apps\instinto-superior\INICIAR-COCKPIT-LOCAL.bat`, que usa o **mesmo script**.
 - Guard: se Vite do Instinto ja escuta em 8080 e responde HTTP 200, sai sem duplicar; se ha outro processo ou porta saudavel nao comprovada, bloqueia sem matar.
@@ -18,7 +18,7 @@ Atualizado em 2026-10-19. Owner: `apps/instinto-superior`.
 - Logs de stdout/stderr: `F:\temp\centraldark-cockpit-8080-stdout.log` e `F:\temp\centraldark-cockpit-8080-stderr.log`; sem gravar credenciais intencionalmente.
 - Quando Windows desliga o servidor local para; ao boot ou logon, a tarefa tenta recuperar. Falha se o disco K: ou Node ainda nao estiver disponivel; checar historico do agendador/port health.
 
-## Readback e aceitação
+## Readback e aceitaÃ§Ã£o
 ```powershell
 Get-ScheduledTask -TaskName 'CentralDark-Cockpit-8080'
 Get-NetTCPConnection -State Listen -LocalPort 8080
