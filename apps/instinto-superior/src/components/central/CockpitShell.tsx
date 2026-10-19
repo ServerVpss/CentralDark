@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
+import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -75,6 +76,7 @@ const HARNESS_DESTINOS = [
   { id: "pr1873", titulo: "Mapa do PR #1873", icone: "📜", privado: false },
   { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
+  { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
   { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
@@ -435,6 +437,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="sync">Sync Center</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
+                {autenticado ? <TabsTrigger value="genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
                 <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
                 <TabsTrigger value="dream-reviewer">😴 Dream</TabsTrigger>
                 <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
@@ -511,6 +514,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <TabsContent value="design" className="mt-10">
               <DesignCenter pele={pele} selecionarPele={selecionar} autenticado={autenticado} />
             </TabsContent>
+            {autenticado ? (
+              <TabsContent value="genesis" className="mt-10" id="centraldark-genesis-michelin">
+                <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />
+              </TabsContent>
+            ) : null}
             <TabsContent value="goals" className="mt-10">
               <div className="mb-8">
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
