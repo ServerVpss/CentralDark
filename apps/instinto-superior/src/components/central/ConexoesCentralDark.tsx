@@ -1,20 +1,20 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import {
-  CircleAlert,
-  KeyRound,
-  Link2,
-  RefreshCw,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
+import { CircleAlert, KeyRound, Link2, RefreshCw, ShieldCheck, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
 import { supabase } from "@/integrations/supabase/client";
 
-const OAUTH_START_SUPPORTED = new Set(["github", "notion", "gdrive", "gmail", "tailscale", "cloudflare"]);
+const OAUTH_START_SUPPORTED = new Set([
+  "github",
+  "notion",
+  "gdrive",
+  "gmail",
+  "tailscale",
+  "cloudflare",
+]);
 
 function tom(status: string) {
   if (status === "active" || status === "ok")
@@ -55,7 +55,8 @@ export function ConexoesCentralDark() {
     // Transporte OAuth só é acionável quando a consulta viva ao owner retornou PASS.
     if (!dados?.userId || typeof window === "undefined") return;
     if (providerId !== "cloudflare" && dados.estado !== "PASS") return;
-    const base = providerId === "cloudflare" ? window.location.origin : dados.fonte.replace(/\/$/, "");
+    const base =
+      providerId === "cloudflare" ? window.location.origin : dados.fonte.replace(/\/$/, "");
     const params = new URLSearchParams({
       user_id: dados.userId,
       redirect_to: window.location.href,
@@ -64,14 +65,20 @@ export function ConexoesCentralDark() {
       // One click; the current CentralDark session binds the OAuth grant to the right user.
       setOauthError(null);
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
         if (error || !session?.access_token) throw Error("SESSAO_CENTRALDARK_AUSENTE");
         const response = await fetch(`${base}/oauth/cloudflare/start?${params.toString()}`, {
           headers: { Authorization: `Bearer ${session.access_token}`, Accept: "application/json" },
           credentials: "same-origin",
           cache: "no-store",
         });
-        const payload = await response.json().catch(() => ({})) as { status?: string; authorize_url?: string };
+        const payload = (await response.json().catch(() => ({}))) as {
+          status?: string;
+          authorize_url?: string;
+        };
         if (!response.ok) throw Error(payload.status ?? `HTTP_${response.status}`);
         if (!payload.authorize_url?.startsWith("https://dash.cloudflare.com/oauth2/auth?"))
           throw Error("URL_AUTORIZACAO_INVALIDA");
@@ -115,16 +122,78 @@ export function ConexoesCentralDark() {
         </div>
       </div>
 
+      <div className="mt-6 grid gap-4 lg:grid-cols-3" aria-label="Provedores do Hub de Contas">
+        {(
+          [
+            {
+              id: "cloudflare",
+              nome: "Cloudflare",
+              area: "Segurança · DNS e domínios",
+              tipo: "OAuth",
+            },
+            {
+              id: "contabo",
+              nome: "Contabo",
+              area: "Infraestrutura · VPS e faturas",
+              tipo: "Credenciais de API",
+            },
+            {
+              id: "tailscale",
+              nome: "Tailscale",
+              area: "Rede privada · Dispositivos",
+              tipo: "OAuth / API",
+            },
+          ] as const
+        ).map((item) => {
+          const contas = agrupadas.get(item.id) ?? [];
+          const ativasProvider = contas.filter((c) => c.status === "active").length;
+          const oauthDisponivel = OAUTH_START_SUPPORTED.has(item.id);
+          const inicioPermitido = Boolean(
+            dados?.userId && (item.id === "cloudflare" || dados?.estado === "PASS"),
+          );
+          return (
+            <article key={item.id} className="panel p-5">
+              <p className="font-mono text-[10px] uppercase text-neon-blue">{item.area}</p>
+              <h4 className="mt-2 font-semibold">{item.nome}</h4>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {item.tipo} · {contas.length} conta(s) registradas · {ativasProvider} ativa(s)
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {contas.length === 0
+                  ? "Conexão ainda não comprovada no Hub."
+                  : "Estado do registro; testar capacidade antes de usar."}
+              </p>
+              {oauthDisponivel ? (
+                <Button
+                  className="mt-4"
+                  variant="outline"
+                  disabled={!inicioPermitido}
+                  onClick={() => void conectar(item.id)}
+                >
+                  <Link2 /> Autorizar no Hub
+                </Button>
+              ) : (
+                <p className="mt-4 rounded border border-border p-2 text-xs text-muted-foreground">
+                  Cadastro de credenciais pendente de rota autenticada no backend existente. Nenhuma
+                  senha é recebida nesta tela.
+                </p>
+              )}
+            </article>
+          );
+        })}
+      </div>
+
       <div className="mt-6 grid gap-4 lg:grid-cols-2" aria-label="Modos de conexão GitHub">
         <article className="panel p-5">
           <p className="font-mono text-[10px] uppercase text-neon-blue">GitHub · OAuth App</p>
           <h4 className="mt-2 font-semibold">Autorizar conta</h4>
           <p className="mt-2 text-sm text-muted-foreground">
-            Usa Client ID e autorização do usuário. A conexão só será considerada ativa após
-            retorno e validação pelo broker existente.
+            Usa Client ID e autorização do usuário. A conexão só será considerada ativa após retorno
+            e validação pelo broker existente.
           </p>
           <p className="mt-3 text-xs text-muted-foreground">
-            Estado: {dados?.connections.some((c) => c.provider_id === "github" && c.status === "active")
+            Estado:{" "}
+            {dados?.connections.some((c) => c.provider_id === "github" && c.status === "active")
               ? "ATIVA NO REGISTRO DO BROKER · VALIDAR SESSÃO"
               : "NÃO COMPROVADA"}
           </p>
@@ -141,9 +210,9 @@ export function ConexoesCentralDark() {
           <p className="font-mono text-[10px] uppercase text-gold">GitHub App · Instalação</p>
           <h4 className="mt-2 font-semibold">Selecionar repositórios</h4>
           <p className="mt-2 text-sm text-muted-foreground">
-            Usa App ID para identificar a aplicação. A instalação é autorizada pelo GitHub,
-            com seleção de todos ou apenas repositórios específicos e permissões declaradas
-            pela própria aplicação.
+            Usa App ID para identificar a aplicação. A instalação é autorizada pelo GitHub, com
+            seleção de todos ou apenas repositórios específicos e permissões declaradas pela própria
+            aplicação.
           </p>
           <p className="mt-3 text-xs text-gold">
             AGUARDANDO APP ID · instalação não iniciada · permissões não concedidas
@@ -251,7 +320,14 @@ export function ConexoesCentralDark() {
                 ))}
               </div>
               {OAUTH_START_SUPPORTED.has(providerId) ? (
-                <Button className="mt-4" variant="outline" disabled={!dados?.userId || (providerId !== "cloudflare" && dados?.estado !== "PASS")} onClick={() => void conectar(providerId)}>
+                <Button
+                  className="mt-4"
+                  variant="outline"
+                  disabled={
+                    !dados?.userId || (providerId !== "cloudflare" && dados?.estado !== "PASS")
+                  }
+                  onClick={() => void conectar(providerId)}
+                >
                   <Link2 />
                   Conectar outra conta
                 </Button>
