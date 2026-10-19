@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(instinto): agrupar Cloudflare Contabo e Tailscale no Hub de Contas",
+    "lastCommit": "aprendizado(#198): DNS do MCP restaurado sem perder MagicDNS 2026-10-19",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-19T13:52:56.470Z",
+      "titulo": "Push na main · a173a2a293ba746970b331c009d82c589095d572",
+      "detalhe": "aprendizado(#198): DNS do MCP restaurado sem perder MagicDNS 2026-10-19",
+      "area": "Repositório",
+      "sha": "a173a2a",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-19T07:27:52.074Z",
       "titulo": "Push na main · 9a6f5aa1c7e730bb6eae06cc93ebc52c471194d6",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "4c1398e",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-15T15:54:36.503Z",
-      "titulo": "Push na main · 488a03f9343f5ce01f47f964b86e1e72b56ea02f",
-      "detalhe": "docs(operational): fast path de dependencia corrigida com promocao segura",
-      "area": "Repositório",
-      "sha": "488a03f",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-19T13:52:56.470Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · a173a2a293ba746970b331c009d82c589095d572 (a173a2a)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-19T07:27:52.074Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 4c1398eed8d162f2b9d98b1e8c78f35d82fcc797 (4c1398e)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-15T15:54:36.503Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 488a03f9343f5ce01f47f964b86e1e72b56ea02f (488a03f)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-19T07:27:52.074Z",
-  "updatedAtBR": "19/10/2026, 04:27:52 BRT"
+  "updatedAt": "2026-10-19T13:52:56.470Z",
+  "updatedAtBR": "19/10/2026, 10:52:56 BRT"
 }
