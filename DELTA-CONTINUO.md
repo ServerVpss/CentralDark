@@ -228,3 +228,24 @@ Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Dis
 5. Próximo delta: localizar o owner existente do Windows runner, ler logs sanitizados de causa de parada, e decidir reparo mínimo com aprovação contextual; validar acesso ao Screenpipe protegido sem expor credenciais.
 6. Manter este status no PR #1873; avanço exige mesmos SHAs, timestamp real, readback e prova negativa. Não declarar produção recuperada por documento.
 
+
+
+<!-- #OBSERVACOES# @owner: DELTA-CONTINUO.md @code_ref: apps/instinto-superior/src/components/central/MapaOwners.tsx @escopo: memoria visual das tres camadas Claude e pipeline Forja-Apps-Main-VPS @estado: PR_CANDIDATE @next_cursor: validar TS/build e prova visual -->
+### 🧬 Memória do Corpo Único — cristalização e três camadas Claude (19/10/2026)
+
+**Intenção confirmada:** a Casa em \`K:\\\` é a Forja bruta; \`K:\\apps\` concentra os aplicativos cristalizados; GitHub \`main\` preserva o código aprovado; a VPS executa os scripts, serviços e receitas localmente disponíveis, inclusive sem modelo de IA quando a tarefa já tem algoritmo determinístico. \`SCRIPT_BEFORE_MODEL\` e \`DOCUMENTED != DEPLOYED\`.
+
+**Três camadas distintas — não fundir sem análise:**
+1. \`C:\\Users\\Administrador\\.claude\`: perfil global do aplicativo Claude; autenticação, sessões, projetos, estados e plugins. Nunca versionar segredos.
+2. \`K:\\.claude\`: contratos e instruções da Forja; \`agents\`, \`commands\`, \`prompts\`, \`rules\`, \`skills\`. Manter dono existente.
+3. \`K:\\apps\\instinto-superior\\.claude\`: instruções específicas do Cockpit, subordinadas aos contratos superiores; presença de pasta não prova execução de validações nem herança automática de toda configuração.
+
+**Raio-X observado da Casa:** 12 diretórios sob \`C:\\Users\\Administrador\\.claude\\projects\`, 12 diretórios sob \`file-history\`; \`K:\\.claude\` existe, porém \`K:\\.claude\\projects\` não existia na leitura. Contagens de diretórios não são hashes nem comprovação de integridade. Não inspecionar valores de \`.credentials.json\` ou credenciais em arquivos de sessão.
+
+**Prioridade de transferência futura:** \`projects\` → \`file-history\`/\`plans\` → \`sessions\`/\`uploads\`, por grupos separados, backup com hashes e Claude fechado quando necessário. Comparar \`plugins\`/\`skills\` antes de unir. \`cache\`/\`paste-cache\`, \`daemon\`/\`jobs\`/\`ide\`, \`session-env\`, \`state\`, \`shell-snapshots\` e \`chrome\` permanecem até classificação de dependências. Não substituir a pasta \`.claude\` global inteira por junction.
+
+**Destino privado sugerido (ainda NÃO criado):** dados duráveis em pasta privada do disco K, fora do conjunto versionado/sincronizado; verificar exclusões Git e outros scanners antes de qualquer cópia. Junctions só depois de readback, sem apagar originais. \`JUNCTION_PLANNED != JUNCTION_CREATED\`.
+
+**Integração visual:** seção aditiva no owner \`apps/instinto-superior/src/components/central/MapaOwners.tsx\` — 4 cartões do pipeline, 3 camadas Claude, aviso de migração e ligação com este PR. É um **snapshot estático**, não API viva, e ainda exige build TypeScript/CI e contraprova visual no mesmo SHA.
+
+**NEXT_CURSOR:** validar TypeScript, PR checks no HEAD, exibição autenticada da seção existente; depois classificar e executar somente o primeiro lote de transferência privada com rollback.
