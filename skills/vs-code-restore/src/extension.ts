@@ -136,7 +136,7 @@ async function recordClineReceipt(): Promise<void> {
   });
   const line = '[INFO] [terminal] centraldark.goal_receipt_v1 goal=' + goal +
     ' status=' + status + ' tests=' + tests + ' sha=' + sha +
-    ' cursor=' + cursor + ' utc=' + new Date().toISOString() + '\\n';
+    ' cursor=' + cursor + ' utc=' + new Date().toISOString() + '\n';
   try {
     fs.appendFileSync(terminalLogPath, line, { encoding: 'utf8', flag: 'a' });
     emitTrace('shell_end', 'OBSERVED');
