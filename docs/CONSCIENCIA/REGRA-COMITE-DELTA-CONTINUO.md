@@ -323,3 +323,82 @@ A `main` registra o aprendizado; consoles locais devem consumir o receipt em vez
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+
+<!-- CENTRALDARK_SOL_HERMES_SUPABASE_REPLAY_20261018 -->
+## Receita consumível SOL → Hermes: Supabase/Hub, 2026-10-18
+
+**Intenção:** reaproveitar a prova real produzida pelos conectores do ChatGPT/SOL, entregar ao Hermes somente o próximo delta executável e eliminar a repetição do mesmo diagnóstico. Este bloco é um *caso concreto* do contrato \`PROOF_REUSE\` acima, não é novo executor, fila, serviço, modelo, política ou esquema de banco.
+
+\`\`\`text
+RECIPE_ID=CENTRALDARK_SUPABASE_HUB_SOL_HERMES_20261018
+RECIPE_OWNER=docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md
+PROOF_LEDGER=docs/CONSCIENCIA/APRENDIZADOS.md#195
+PROOF_COMMIT=51e74377d2a4a69d0c80e64c0fdbe78d1200ae1c
+PROOF_SOURCE=SUPABASE_MCP_READ_ONLY_2026-10-18
+TARGET_SUPABASE_PROJECT_REF=lyoigsqluyktoclwdaft
+MISSION_OWNER=apps/modulos/mcp/src/hub-mission-consumer.js
+MISSION_UI_OWNER=apps/modulos/hub/src/hooks/useMissions.ts
+NOTIFICATION_OWNER=src/lib/notifications-events.ts
+NOTIFICATION_LEDGER=public.notifications_log
+MISSION_LEDGER=public.hub_missions
+EVENT_LEDGER=public.hub_mission_events
+EVIDENCE_LEDGER=public.hub_evidence
+EXECUTOR=HERMES_EXISTENTE
+HANDOFF_MODE=REUSE_RECEIPT_AND_EXECUTE_MISSING_DELTA
+NO_PARALLEL_QUEUE=true
+NO_REPROVE_UNCHANGED_DISCOVERY=true
+NO_REPLAY_UNAUTHORIZED_MISSIONS=true
+NO_SYNTHETIC_APPROVAL=true
+NO_SECRET_IN_RECEIPT=true
+\`\`\`
+
+### Prova reaproveitável (fotografia T0, não saúde eterna)
+
+Conector Supabase oficial, leitura de SQL/esquema em 2026-10-18:
+- projeto CentralDark: \`ACTIVE_HEALTHY\`; schemas \`public.hub_missions\`, \`public.notifications_log\`, \`public.hub_mission_events\` e \`public.hub_evidence\` existem;
+- \`hub_missions\`: **3.610** linhas, todas \`state=queued\` e \`authorization=pending\`; **0** \`claimed_at\`, **0** \`finished_at\` e **0** missões novas nas últimas 24 horas dessa medição;
+- \`hub_mission_events\`: **0**; \`hub_evidence\`: **0**;
+- \`notifications_log\`: **574** linhas, última \`2026-07-04T06:20:04Z\`; **0** linhas com \`metadata.next_cursor\`, \`metadata.owner\` ou \`metadata.proof_state\`;
+- Edge Functions \`notify-event\`, \`notify-telegram\` e \`hub-command\` constavam \`ACTIVE\` no catálogo de implantação; isso não atesta entrega E2E.
+- o owner \`hub-mission-consumer.js\` da \`main\` já contém \`claimNextMission\`, validação de revisão, eventos, evidência e finalização, mas não há recibo observado que comprove consumo efetivo.
+- na mesma observação \`deploy_status\` reportou checkout principal da VPS 47 commits atrás da \`main\` e erro de parse no sensor PM2. A worktree de scratch também foi medida \`DRIFT/dirty\`. **Não** limpar ou sobrescrever trabalhos de outro escritor.
+
+**Identidade de reuso:** compare separadamente \`claim + owner + scope + schema/contrato + source SHA (quando aplicável) + runtime alvo\` com a evidência acima. Se equivalentes, herde essa descoberta: não repita contagens completas nem investigação de owners; esses números são *baseline histórica*, não declaração de estado corrente. Mudança material invalida apenas a cláusula atingida, nunca todo o receipt.
+
+### Execução pelo Hermes — a mesma receita, apenas o que falta
+
+1. Consuma \`#195\` e este \`RECIPE_ID\` pelo boot/owner já existente; não recrie tabela, Edge Function, fila, skill, bot ou orquestrador.
+2. Verifique apenas a condição volátil necessária à ação: identidade/capability do consumidor real, conexão do serviço, autorização da missão específica, \`writer_scope\`, \`branch_sha\` exigido pelo dispatcher e erro exato do consumidor. Faça leitura segura do health/log pertinente; não exiba secrets.
+3. Trabalhe no \`apps/modulos/mcp/src/hub-mission-consumer.js\` **somente se uma falha causal for observada**; mantenha o consumidor e o broker autorizados, um escritor por escopo, proteção de revisão e a fila \`pending\` intocada.
+4. Para uma missão **realmente autorizada** que corresponda à revisão e ao escopo, execute pelo broker Hermes existente, sem simular autorização. A execução não exige refazer o diagnóstico T0; produza **um novo receipt curto apenas do efeito dessa missão**, usando \`mission_id\`, \`claimed_at\`, \`finished_at\`, evento, evidência e status do mesmo escopo.
+5. Se não houver missão aprovada, se o consumer não estiver ativo ou se faltar capacidade, classifique o bloqueio local e registre \`NEXT_CURSOR\`. Não use \`queued/pending\` como sinal de execução nem force processamento do backlog.
+6. Compare T1 com o GOAL da nova ação: \`T0_RECEIPT_REUSED=true\`, \`T1_MISSION_EFFECT=PASS|FAIL|UNKNOWN|BLOCKED\`. Apenas o segundo campo depende da execução nova; não promover notificação ou commit isolado a \`RUNTIME_PASS\`.
+
+\`\`\`text
+FINGERPRINT_UNCHANGED → REUSE_PROOF → HERMES_EXECUTE_MISSING_DELTA → T1_MINIMAL_RECEIPT
+MATERIAL_FINGERPRINT_CHANGE → REMEASURE_AFFECTED_CONE_ONLY → HERMES_EXECUTE → T1_RECEIPT
+T0_REUSABLE_DISCOVERY != T1_EXECUTION
+DOCUMENTED_RECIPE != HERMES_CONSUMED
+MAIN_COMMIT != VPS_DEPLOYED
+NEXT_CURSOR=HERMES_CONSUMER_HEALTH_AND_ONE_AUTHORIZED_MISSION_E2E
+\`\`\`
+
+**Estado inicial desta receita:** \`RECIPE_DOCUMENTED\`; consumo Hermes no runtime, transição de missão e E2E permanecem \`UNKNOWN\` até a observação correspondente. O custo de repetir T0 deve ser zero enquanto a identidade causal permanecer igual.
+
+### T1 — 2026-10-18 · Causa discriminada do bloqueio de promoção (não é falha da receita T0)
+
+- **Readback de segurança:** o owner \`apps/modulos/mcp/manifesto-destrutivas.json\` contém 12 ferramentas em \`destrutivasAprovadas\` e 8 em \`destrutivasEmRevisao\`. \`centraldark_deploy_micro_fallback\` e \`centraldark_deploy_apply_learning\` estão especificamente **em revisão**, não aprovadas; não promover essas tools por contagem e não contornar por executor alternativo.
+- **Guard real:** \`apps/modulos/mcp/src/lib/admin-guard.js\` aplica \`DESTRUTIVA_EM_QUARENTENA\` por tool desconhecida/não aprovada e exige confirmação admin no caminho canônico; \`apps/modulos/mcp/src/tools/core/mcp-admin.js\` define \`revisar_manifesto_em_pr\` como cursor do bloqueio.
+- **Tentativa:** microdeploy Hermes em \`dry_run=true\` negado antes de executar: \`DESTRUTIVA_EM_QUARENTENA\`, 12 esperadas/20 observadas. A autorização de trabalho comum não é aprovação independente de capacidade destrutiva em revisão. Nenhuma cópia, restart, limpeza ou missão ocorreu.
+- **Registro:** \`docs/CONSCIENCIA/APRENDIZADOS.md#196\`, commit \`3f3ad4f53d7f2f0250f663de70641ad44918d1f8\` e readback GitHub. PR-mãe #1562 rejeita novos comentários por limite de 2.500; não criar outro PR como expediente narrativo.
+- **Delimitação:** preservar a receita T0 #195; retomar no mesmo owner após **revisão legítima do manifesto + confirmação administrativa aplicável**, então promover somente o fileset Hermes causal e comprovar que o consumidor real carregou a nova regra. O estado permanece \`SOURCE_REGISTERED=PASS\`, \`HERMES_PROMOTION=BLOCKED\`, \`HERMES_CONSUMPTION=UNKNOWN\`.
+
+\`\`\`text
+SECURITY_OWNER=apps/modulos/mcp/manifesto-destrutivas.json
+BLOCKER=TOOL_IN_DESTRUTIVAS_EM_REVISAO
+NO_BYPASS_OR_BLIND_PROMOTION=true
+NEXT_CURSOR=REVIEW_MANIFEST_THROUGH_AUTHORIZED_GATES_THEN_HERMES_RECEIPT_READBACK
+\`\`\`
+
+<!-- /CENTRALDARK_SOL_HERMES_SUPABASE_REPLAY_20261018 -->

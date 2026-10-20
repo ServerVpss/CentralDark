@@ -9,5 +9,5 @@ export const HERMES_BASE_URL = global.process.env.CENTRALDARK_HERMES_URL ?? 'htt
 export const SCREENPIPE_BASE_URL = global.process.env.CENTRALDARK_SCREENPIPE_URL ?? 'http://127.0.0.1:3030';
 export const CENTRALDARK_PUBLIC_API_URL = global.process.env.CENTRALDARK_PUBLIC_API_URL ?? 'https://api.centralldark.com/v1';
 export const CENTRALDARK_PUBLIC_URL = global.process.env.CENTRALDARK_PUBLIC_URL ?? 'https://centralldark.com';
-export const DEFAULT_HOUSE_ROOT = 'E:\\CentralDark';
+export const DEFAULT_HOUSE_ROOT = 'K:\\';
 export const SOL_WIDGET_SHORTCUT = 'CommandOrControl+Shift+Space';

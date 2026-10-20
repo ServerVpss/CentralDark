@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GATEWAY = "https://connector-gateway.lovable.dev/github";
 const GITHUB_API = "https://api.github.com";
@@ -276,6 +277,10 @@ function screenpipeIdentificado(sonda: Probe): Probe {
     estado: status === "healthy" ? "PASS" : "FAIL",
     erro: status === "healthy" ? null : "SCREENPIPE_REPORTOU_" + status!.toUpperCase(),
   };
+  if (sonda.httpStatus !== 200) return { ...sonda, estado: "FAIL" };
+  if (status === "healthy") return { ...sonda, estado: "PASS" };
+  if (status === "degraded") return { ...sonda, estado: "RUNNING" };
+  return { ...sonda, estado: "UNKNOWN", erro: "STATUS_NAO_RECONHECIDO" };
 }
 
 function saidaScreenpipe(sonda: Probe): string[] {
@@ -532,6 +537,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaSite,
       casaPeer,
       screenpipe,
+      screenpipeRemotoCasa,
       actions,
     ] = await Promise.all([
       medirGithub(),
@@ -547,15 +553,21 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),
+      hostScreenpipe === "VPS"
+        ? medirReachable(`http://${process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25"}:3030/health`)
+        : Promise.resolve(SONDA_NAO_EXECUTADA),
       medirActions(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
     const apiHealthMedido = apiHealthIdentificada(apiHealth);
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
+    const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasaFonte = hostScreenpipe === "CASA"
       ? "Casa Windows · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória"
-      : "Casa Windows · sem adapter/medição remota neste servidor";
+      : hostScreenpipe === "VPS"
+        ? "Casa Windows · Tailscale privado · porta 3030/health · medição remota com assinatura"
+        : "Casa Windows · sem adapter/medição remota neste servidor";
     const screenpipeVpsFonte = hostScreenpipe === "VPS"
       ? "VPS CENTRALDARK-OS · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória (porta pode ser Graph Panel)"
       : "VPS CENTRALDARK-OS · sem adapter/medição remota neste servidor";
@@ -586,6 +598,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const deltaVps = await medirDelta(vpsSha, mainSha);
     // SHA desigual mede divergência Git, não prova falha do serviço publicado.
     // PASS de deploy exige receipt do mesmo SHA + health + efeito no navegador.
+    // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
     return {
@@ -643,12 +656,12 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
       screenpipeFonte: screenpipeCasaFonte,
-      screenpipeEvents: hostScreenpipe === "CASA" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
+      screenpipeEvents: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
       screenpipeVpsHttp: screenpipeVps.httpStatus,
       screenpipeVpsDetail: texto(screenpipeVps.dados?.["status"]),
       screenpipeVpsFonte,
       screenpipeVpsEvents: hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeVps) : ["NÃO MEDIDO · exige sensor na VPS"],
-      screenpipeCasaMedidoEm: hostScreenpipe === "CASA" ? consultaEm : null,
+      screenpipeCasaMedidoEm: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? consultaEm : null,
       screenpipeVpsMedidoEm: hostScreenpipe === "VPS" ? consultaEm : null,
       apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side`,
       apiHealthServico: apiServico.slice(0, 100),
@@ -661,3 +674,69 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     };
   },
 );
+
+
+// #OBSERVACOES# @owner=cockpit.functions @doc_ref=docs/CONSCIENCIA/MICRO-DEPLOY/README.md
+// @last_updated=2026-10-18T15:21:44.739Z @escopo=PID_MCP_VPS_AUTH_READ_ONLY
+// @implementado: consulta autorizada de heartbeat operacional, sem declarar conexao TCP por PID.
+// @pendente: deploy e readback de runtime no mesmo SHA.
+export type McpRuntimeAoVivo = {
+  estado: "OBSERVED" | "STALE" | "UNKNOWN";
+  consultaEm: string;
+  observadoEm: string | null;
+  fonte: string;
+  httpStatus: number | null;
+  pid: number | null;
+  processos: { id: string; nome: string; quantidade: number; pids: number[] }[];
+  atividadeMcp: "RECENT" | "STALE" | "UNKNOWN";
+  erro: string | null;
+};
+
+export const lerMcpRuntimeAoVivo = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<McpRuntimeAoVivo> => {
+    const { data: papel, error: erroPapel } = await context.supabase
+      .from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
+    const consultaEm = new Date().toISOString();
+    const fonte = "MCP GET http://127.0.0.1:9100/heartbeat · server-side";
+    const leitura = await medirReachable("http://127.0.0.1:9100/heartbeat");
+    const heartbeat = leitura.dados;
+    const operational = objetoJson(heartbeat?.["operational"]) ? heartbeat["operational"] : null;
+    const runtime = objetoJson(operational?.["runtime"]) ? operational["runtime"] : null;
+    const topology = objetoJson(operational?.["executionTopology"]) ? operational["executionTopology"] : null;
+    const atividade = objetoJson(topology?.["mcpActivity"]) ? topology["mcpActivity"] : null;
+    const observadoEm = texto(topology?.["observedAt"]);
+    const idadeMs = observadoEm ? Date.now() - Date.parse(observadoEm) : Number.NaN;
+    const pid = runtime?.["pid"];
+    const assinaturaValida = leitura.estado === "PASS"
+      && heartbeat?.["service"] === "mcp-centraldark"
+      && topology?.["schema"] === "centraldark.execution-topology.v1"
+      && Number.isSafeInteger(pid) && (pid as number) > 0;
+    const recente = assinaturaValida && Number.isFinite(idadeMs) && idadeMs >= -5_000 && idadeMs <= 30_000;
+    const estado: McpRuntimeAoVivo["estado"] = recente ? "OBSERVED"
+      : assinaturaValida ? "STALE" : "UNKNOWN";
+    const idsPermitidos = new Set([
+      "MCP_SERVER", "TELEGRAM_BOT", "HERMES_RUNTIME", "HERMES_CRON",
+      "SELF_EVOLUTION", "GITHUB_RUNNER", "REMOTE_DESKTOP", "GUARDIAO",
+    ]);
+    const lista = Array.isArray(topology?.["lanes"]) ? topology["lanes"] : [];
+    const processos: McpRuntimeAoVivo["processos"] = recente
+      ? lista.filter(objetoJson).filter(item => idsPermitidos.has(String(item["id"])))
+        .map(item => ({
+          id: String(item["id"]),
+          nome: typeof item["label"] === "string" ? item["label"].slice(0, 60) : String(item["id"]),
+          pids: (Array.isArray(item["pids"]) ? item["pids"] : [])
+            .filter((n): n is number => Number.isSafeInteger(n) && n > 0).slice(0, 12),
+          quantidade: typeof item["processCount"] === "number" && Number.isSafeInteger(item["processCount"])
+            ? Math.max(0, item["processCount"]) : 0,
+        }))
+      : [];
+    return {
+      estado, consultaEm, observadoEm: recente ? observadoEm : null, fonte,
+      httpStatus: leitura.httpStatus, pid: recente ? pid as number : null,
+      processos, atividadeMcp: recente && ["RECENT", "STALE"].includes(String(atividade?.["state"]))
+        ? atividade?.["state"] as "RECENT" | "STALE" : "UNKNOWN",
+      erro: recente ? null : leitura.erro ?? (assinaturaValida ? "AMOSTRA_FORA_DA_JANELA_30S" : "SCHEMA_OU_ORIGEM_NAO_COMPROVADA"),
+    };
+  });

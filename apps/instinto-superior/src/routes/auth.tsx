@@ -49,38 +49,67 @@ function PaginaAcesso() {
     return () => data.subscription.unsubscribe();
   }, [navegar]);
 
+  // O GoTrue pode retornar HTTP 400/validation_failed para parâmetros inválidos.
+  // Não confundir validação com indisponibilidade nem revelar existência de contas.
   async function enviar(evento: React.FormEvent) {
     evento.preventDefault();
-    setOcupado(true);
     setErro(null);
     setAviso(null);
 
-    if (modo === "criar") {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password: senha,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-      });
-      setOcupado(false);
-      if (error) {
-        setErro(error.message);
-        return;
-      }
-      if (!data.session) {
-        setAviso(
-          "Conta criada. Confirme o e-mail que acabamos de enviar para você e depois entre.",
-        );
-        setModo("entrar");
-        return;
-      }
+    const emailNormalizado = email.trim();
+    if (emailNormalizado.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) {
+      setErro("Confira o formato do e-mail antes de continuar.");
+      return;
+    }
+    if (senha.length < 6) {
+      setErro("A senha precisa ter pelo menos 6 caracteres.");
       return;
     }
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
-    setOcupado(false);
-    if (error) {
-      setErro("E-mail ou senha incorretos.");
-      return;
+    setOcupado(true);
+    try {
+      if (modo === "criar") {
+        const { data, error } = await supabase.auth.signUp({
+          email: emailNormalizado,
+          password: senha,
+          options: { emailRedirectTo: window.location.origin + "/auth/callback" },
+        });
+        if (error) {
+          setErro(
+            error.code === "validation_failed"
+              ? "Os dados enviados não passaram na validação. Confira e-mail e senha."
+              : "Não foi possível criar a conta. Confira os dados e tente novamente.",
+          );
+          return;
+        }
+        if (!data.session) {
+          setAviso(
+            "Conta criada. Confirme o e-mail que acabamos de enviar para você e depois entre.",
+          );
+          setModo("entrar");
+        }
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email: emailNormalizado,
+        password: senha,
+      });
+      if (error) {
+        if (error.code === "validation_failed") {
+          setErro("Dados de acesso em formato inválido. Confira e-mail e senha.");
+        } else if (error.code === "email_not_confirmed") {
+          setErro("Confirme seu e-mail para continuar.");
+        } else if (error.code === "over_request_rate_limit") {
+          setErro("Muitas tentativas. Aguarde antes de tentar novamente.");
+        } else {
+          setErro("Não foi possível entrar com esses dados. Confira e tente novamente.");
+        }
+      }
+    } catch {
+      setErro("Não foi possível concluir a autenticação. Tente novamente mais tarde.");
+    } finally {
+      setOcupado(false);
     }
   }
 

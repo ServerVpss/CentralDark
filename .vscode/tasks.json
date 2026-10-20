@@ -41,6 +41,13 @@
         "panel": "shared",
         "clear": false,
         "focus": false
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'WINDOWS_ONLY_TASK_NOT_AVAILABLE_ON_SSH_LINUX: CentralDark Claude: Hermes ON\\n' >&2; exit 64"
+        ]
       }
     },
     {
@@ -61,6 +68,13 @@
         "panel": "shared",
         "clear": false,
         "focus": false
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'WINDOWS_ONLY_TASK_NOT_AVAILABLE_ON_SSH_LINUX: CentralDark Claude: Direct OFF\\n' >&2; exit 64"
+        ]
       }
     },
     {
@@ -81,6 +95,13 @@
         "panel": "shared",
         "clear": false,
         "focus": false
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'WINDOWS_ONLY_TASK_NOT_AVAILABLE_ON_SSH_LINUX: CentralDark Claude: Route STATUS\\n' >&2; exit 64"
+        ]
       }
     },
     {
@@ -104,6 +125,13 @@
         "clear": true,
         "focus": false,
         "echo": false
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'WINDOWS_ONLY_TASK_NOT_AVAILABLE_ON_SSH_LINUX: CentralDark Orquestra: PREPARAR\\n' >&2; exit 64"
+        ]
       }
     },
     {
@@ -128,6 +156,13 @@
         "focus": false,
         "echo": true,
         "group": "centraldark-orquestra"
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'WINDOWS_ONLY_TASK_NOT_AVAILABLE_ON_SSH_LINUX: CentralDark Orquestra: 01 FILOSOFIA\\n' >&2; exit 64"
+        ]
       }
     },
     {
@@ -152,6 +187,13 @@
         "focus": false,
         "echo": true,
         "group": "centraldark-orquestra"
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'WINDOWS_ONLY_TASK_NOT_AVAILABLE_ON_SSH_LINUX: CentralDark Orquestra: 02 ENGENHARIA\\n' >&2; exit 64"
+        ]
       }
     },
     {
@@ -176,6 +218,13 @@
         "focus": false,
         "echo": true,
         "group": "centraldark-orquestra"
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'WINDOWS_ONLY_TASK_NOT_AVAILABLE_ON_SSH_LINUX: CentralDark Orquestra: 03 CONTRAPROVA\\n' >&2; exit 64"
+        ]
       }
     },
     {
@@ -200,6 +249,13 @@
         "focus": false,
         "echo": true,
         "group": "centraldark-orquestra"
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'WINDOWS_ONLY_TASK_NOT_AVAILABLE_ON_SSH_LINUX: CentralDark Orquestra: 04 SINTESE\\n' >&2; exit 64"
+        ]
       }
     },
     {
@@ -254,7 +310,14 @@
         "instanceLimit": 1,
         "instancePolicy": "warn"
       },
-      "problemMatcher": []
+      "problemMatcher": [],
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'CENTRALDARK_HERMES_SSH_ROLE=filosofia\\n'; if ! command -v hermes >/dev/null 2>&1; then printf 'HERMES_NOT_FOUND_IN_SSH_PATH\\n' >&2; exit 127; fi; exec hermes chat --cli --source vscode-orq-filosofia"
+        ]
+      }
     },
     {
       "label": "CentralDark Hermes Vivo: 02 ENGENHARIA",
@@ -284,7 +347,14 @@
         "instanceLimit": 1,
         "instancePolicy": "warn"
       },
-      "problemMatcher": []
+      "problemMatcher": [],
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'CENTRALDARK_HERMES_SSH_ROLE=engenharia\\n'; if ! command -v hermes >/dev/null 2>&1; then printf 'HERMES_NOT_FOUND_IN_SSH_PATH\\n' >&2; exit 127; fi; exec hermes chat --cli --source vscode-orq-engenharia"
+        ]
+      }
     },
     {
       "label": "CentralDark Hermes Vivo: 03 CONTRAPROVA",
@@ -314,7 +384,14 @@
         "instanceLimit": 1,
         "instancePolicy": "warn"
       },
-      "problemMatcher": []
+      "problemMatcher": [],
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'CENTRALDARK_HERMES_SSH_ROLE=contraprova\\n'; if ! command -v hermes >/dev/null 2>&1; then printf 'HERMES_NOT_FOUND_IN_SSH_PATH\\n' >&2; exit 127; fi; exec hermes chat --cli --source vscode-orq-contraprova"
+        ]
+      }
     },
     {
       "label": "CentralDark Hermes Vivo: 04 SINTESE",
@@ -344,7 +421,14 @@
         "instanceLimit": 1,
         "instancePolicy": "warn"
       },
-      "problemMatcher": []
+      "problemMatcher": [],
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-lc",
+          "printf 'CENTRALDARK_HERMES_SSH_ROLE=sintese\\n'; if ! command -v hermes >/dev/null 2>&1; then printf 'HERMES_NOT_FOUND_IN_SSH_PATH\\n' >&2; exit 127; fi; exec hermes chat --cli --source vscode-orq-sintese"
+        ]
+      }
     },
     {
       "label": "CentralDark Hermes Vivo: ABRIR 4 TERMINAIS",
@@ -358,7 +442,6 @@
       "dependsOrder": "parallel",
       "problemMatcher": [],
       "runOptions": {
-        "runOn": "folderOpen",
         "instanceLimit": 1,
         "instancePolicy": "warn"
       }

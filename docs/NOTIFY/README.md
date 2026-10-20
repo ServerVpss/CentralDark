@@ -354,3 +354,120 @@ requer adapters autorizados e confirmação de entrega/execução.
 O registro do evento **nunca executa sozinho** uma skill, um modelo ou
 um Harness. Contrato declarativo no arquivo existente
 `MODULES/HUB/controls/notifications-and-sensors.json`.
+
+
+<!-- CENTRALDARK_HERMES_SUPABASE_COCKPIT_REALTIME_20261018 -->
+## Receipt 2026-10-18 — Hermes → Supabase Realtime → Instinto Superior (menor delta)
+
+**Intenção:** usar a central existente como *projeção de prova* no cockpit, distinguindo estado do canal, evento de verdade e execução do Hermes. \`REUSE_BEFORE_CREATE\`: nenhum banco, tabela, WebSocket, worker, HUD, PR-mãe ou executor paralelo foi criado.
+
+### T0 e owner verificados
+
+- Banco Supabase CentralDark \`lyoigsqluyktoclwdaft\`: \`public.notifications_log\` já pertence à publication \`supabase_realtime\`, com \`REPLICA IDENTITY FULL\` e RLS que permite \`SELECT\` somente a \`authenticated\` com papel \`admin\`. Dado de 2026-10-18, leitura do conector oficial Supabase.
+- O feed e o sininho existentes são \`apps/instinto-superior/src/hooks/useNotificationsLog.ts\` e \`apps/instinto-superior/src/components/central/CentralNotificacoes.tsx\`; não substituem \`docs/NOTIFY\`, \`src/lib/notifications-events.ts\` ou as Edge Functions \`notify-event\`/\`notify-telegram\`.
+- Baseline: \`notifications_log\` tinha 574 registros, último em 2026-07-04; \`hub_missions\` tinha 3.610 missões \`queued/pending\`, \`hub_mission_events\` e \`hub_evidence\` tinham 0. Nenhuma execução automática é inferida desses números.
+- Kanban Hermes real \`t_619b0c7a\`, \`run_id=54\`: eventos \`created→claimed→spawned→crashed→gave_up\`; último estado \`blocked\`, código de saída 1, falha do provedor de modelo local. A tentativa não concluiu os cinco gates do microdeploy.
+
+### T1 comprovado no Supabase — evento real, ingestão assistida
+
+\`\`\`text
+TABLE=public.notifications_log
+RECEIPT_ID=17681f3a-4fdf-438e-930a-f1b4dc7ddc55
+PROOF_ID=hermes-kanban:t_619b0c7a:run54:crashed
+TASK_ID=t_619b0c7a
+RUN_ID=54
+PROOF_STATE=FAIL
+EVENT_CREATED_AT=2026-10-18T04:45:32.962228Z
+SOURCE=READBACK_HERMES_NATIVE_KANBAN_VIA_MCP
+PUBLICATION_MODE=MANUAL_MEASURED_PROJECTION
+NEXT_CURSOR=REPAIR_HERMES_LOCAL_MODEL_THEN_RETRY_AUTHORIZED_TASK
+\`\`\`
+
+A gravação do evento foi idempotente por \`metadata.proof_id\` no SQL executado pelo conector oficial; a leitura seguinte do mesmo registro retornou UUID, tipo \`erro\`, source, status, cursor e modo de publicação exatos. **Este recibo prova escrita e readback no banco, não prova canal de WebSocket em navegador, entrega automática do Hermes ou deploy frontend**. Nenhuma mensagem foi inventada como sucesso.
+
+### Reforço incremental na main
+
+- \`914891f679e184a3d952362ad5f32058b11695d3\` — hook existente recupera mensagens perdidas por \`SELECT\` RLS a cada 20 segundos, deduplica UUID, mantém janela temporal móvel e reconsulta ao conectar Realtime.
+- \`f1e8af4ff616952581ad74c4b323086b5ed0ae67\` — UI existente distingue \`proof_state\`, \`publication_mode\` e \`source_surface\`; \`SUBSCRIBED\` é conexão, nunca recibo E2E.
+- Contraprova de sintaxe: arquivos obtidos da \`main\` pelo GitHub autenticado, \`typescript.transpileModule\`, \`TSX_SYNTAX=PASS\` e **zero** erros nos dois filesets (não substitui lint/build E2E).
+- CI observado após o commit: \`test.yml\` (Instinto), \`vps-exec-selfhosted.yml\` (deploy canônico), \`porta-de-entrada\` e CodeQL **PENDING** no SHA \`f1e8af4\`; \`PENDING != PASS\`.
+
+### Lacunas honestas para promoção
+
+1. **PRODUCER:** criar o vínculo faltante no owner de emissão já existente, após autenticação/autoridade e provas de emissão automática do Hermes. Não enviar credenciais à UI e não usar Edge pública sem verificar sua autorização efetiva. Evento gravado manualmente não prova producer automático.
+2. **BROWSER:** autenticado como admin no cockpit, observar o mesmo \`receipt_id\` por leitura RLS, receber \`INSERT\` realmente novo por Realtime, desconectar/reconectar, comprovar dedupe e polling de recuperação. \`CHANNEL_SUBSCRIBED != EVENT_DELIVERED\`.
+3. **DEPLOY:** VPS ainda em checkout \`fb7a00a60\` com alterações de outros escritores; não limpar, resetar, stashear, dar pull cego ou reiniciar serviços não relacionados. Porta local do app \`4175\` não escutava no teste de 2026-10-18; Caddy 80/443 respondia, sem prova do serviço interno. CI/deploy canônico pendentes. Microdeploy \`centraldark_deploy_micro_fallback\` continua sob quarentena por gates de compensação incompletos; não contornar o manifesto com shell alternativo.
+4. **HERMES:** job \`t_619b0c7a\` blocked por modelo local indisponível; reparar binding do provedor e só então retomar o mesmo cartão autorizado, sem alterar as 3.610 missões pendentes.
+
+\`\`\`text
+MAIN_SOURCE=PASS
+SQL_RECEIPT_READBACK=PASS
+TSX_SYNTAX=PASS
+AUTOMATIC_PRODUCER=UNKNOWN
+WEB_SOCKET_BROWSER_E2E=UNKNOWN
+CI_SAME_SHA=PENDING
+COCKPIT_SITE_DEPLOY=BLOCKED
+HERMES_TASK=BLOCKED
+NEXT_CURSOR=REPAIR_AUTHORIZED_HERMES_PRODUCER_AND_DEPLOY_RUNNER_THEN_BROWSER_REALTIME_READBACK
+\`\`\`
+
+**Não mudar estes estados até haver nova contraprova material**. O HUD é projeção, o Supabase preserva o recibo, o executor real é Hermes e a realidade do deploy exige verificação independente.
+<!-- /CENTRALDARK_HERMES_SUPABASE_COCKPIT_REALTIME_20261018 -->
+
+
+<!-- CENTRALDARK_NOTIFY_T2_RUNNER_RECOVERY_20261018 -->
+### T2 · 2026-10-18 — reconciliação física do runner e segunda notificação
+
+- Análise real do GitHub Actions: \`centraldark-vps-1\` a \`centraldark-vps-4\` eram \`offline\`; o \`centraldark-vps-1\` tinha unidade \`actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service\` carregada, \`inactive/dead\` e \`disabled\`, sem processo Runner.Listener.
+- O owner já existente \`.github/workflows/vps-wake-hosted-ssh.yml\` foi corrigido no commit \`0bfc5b95bf0f4b6ec922d7bc86c6859f68d4e4de\` para não exigir runner self-hosted para acordar a VPS e apontar somente à unidade medida. GitHub recebeu o dispatch, mas o run \`39098844493\` encerrou \`FAIL\` **antes da execução de etapas**, sem runner atribuído (runner_name vazio); não afirmar SSH fail nem deploy por ele.
+- **Rota autorizada efetiva:** MCP CentralDark \`mcp_admin_call → execute_command\` operou diretamente no mesmo corpo VPS, \`systemctl start\` **apenas** na unidade \`centraldark-vps-1\`; readback \`inactive → active/running\`, API GitHub \`offline → online/busy\`; depois \`systemctl enable\` apenas nessa unidade, readback \`disabled → enabled\`, serviço permaneceu \`active\`. Nenhum dos outros runners foi alterado.
+- O \`journalctl\` provou \`Listening for Jobs\` e execução concreta de jobs (incluindo sucessos e um job GATE_GRAFO_VIVO_MARKDOWN com falha). Isso é prova do runner real, **não** da aprovação de build/deploy do cockpit.
+- Segunda projeção factual para o Supabase \`notifications_log\`: UUID \`bce44029-e2ad-4c74-8e65-b8d82c3d14c9\`, \`proof_id=github-runner:centraldark-vps-1:restored-20261018\`, \`proof_state=PASS\`, \`publication_mode=MANUAL_MEASURED_PROJECTION\`. A primeira projeção de falha Hermes continua \`17681f3a-4fdf-438e-930a-f1b4dc7ddc55\`; **nenhuma** é falsa execução de pipeline automático.
+- CI no SHA do componente \`f1e8af4ff616952581ad74c4b323086b5ed0ae67\`: \`test.yml run 39098390824=queued\` na última medição; deploy canônico run \`39098832906=pending\` sobre \`0bfc5b95\`; porta local do app \`127.0.0.1:4175\` indisponível (\`HTTP 000\`). Portanto, \`COCKPIT_DEPLOYED=UNKNOWN/BLOCKED\`; não alegar visualização de recibo em navegador.
+- **Importante:** microdeploy \`centraldark_deploy_micro_fallback\` continua em \`destrutivasEmRevisao\`; recuperar o runner oficial **não** aprova essa ferramenta nem pula a matriz dos nove gates. A VPS mantém trabalho local do checkout de produção, preservado.
+
+\`\`\`text
+PROVED=GITHUB_RUNNER_VPS1_SYSTEMD_ACTIVE_AND_ENABLED
+PROVED=GITHUB_RUNNER_VPS1_ONLINE_AFTER_START
+PROVED=SECOND_NOTIFICATIONS_LOG_RECEIPT_INSERTED
+UNPROVEN=AUTOMATIC_HERMES_TO_SUPABASE_PUBLISHER
+UNPROVEN=ADMIN_BROWSER_WS_RECEIPT_DELIVERY
+UNPROVEN=COCKPIT_BUILD_DEPLOY_AND_PORT_4175
+NEXT_CURSOR=WAIT_EXACT_SHA_CI_THEN_DEPLOY_AUTHORIZED_CAUSAL_APP_AND_PROVE_BROWSER_EVENT
+\`\`\`
+
+A projeção e o receipt ficam no owner já existente. Novos fatos materiais devem atualizar o status, sem repetir diagnósticos selados e sem criar outra central.
+<!-- /CENTRALDARK_NOTIFY_T2_RUNNER_RECOVERY_20261018 -->
+
+
+<!-- CENTRALDARK_CROSS_SURFACE_IMAGES_CURRENT_20261018 -->
+### T3 · 2026-10-18 — fotos de operação simultânea cruzadas com realidade Supabase/Cloudflare/MCP
+
+**Entrada observacional:** screenshots do usuário mostram operação paralela de ferramentas, arquivos de configuração MCP no navegador, e outra sessão com Casa/VPS/GitHub divergentes, preservação de alterações locais, investigação de Screenpipe e relato histórico de disco raiz 100%. Capturas não são readback de execução deste turno; revalidar apenas fatos voláteis.
+
+**Readback corrente (mesmo escopo, sem criar arquitetura):**
+
+- VPS \`CENTRALDARK-OS\` via MCP oficial: \`/\` em \`/dev/sda3\` ext4, **75%** uso, **50 GiB** livres aprox., inodes **33%**. Logo, o relato fotográfico de 100% não é CURRENT para este corpo/instante. \`main\` local VPS em \`fb7a00a60\`, com **4 tracked** alterados: não executar checkout/reset/clean/pull/stash para sincronizar por cima de owners concorrentes.
+- GitHub \`ServerVpss/CentralDark@main\` em \`7edba7d692c445e2edf47d7a09f15bc03c313991\` durante a medição, divergente do checkout VPS. Runner \`centraldark-vps-1\` **active**. Interface local de cockpit \`127.0.0.1:4175\` retornou \`000\` (indisponível); não afirmar deploy visual.
+- Supabase \`lyoigsqluyktoclwdaft\`: \`notifications_log\` preserva eventos existentes \`hermes_kanban\` \`FAIL\` (UUID \`17681f3a-4fdf-438e-930a-f1b4dc7ddc55\`) e \`github_actions\` \`PASS\` restrito ao runner (UUID \`bce44029-e2ad-4c74-8e65-b8d82c3d14c9\`); ambos publicados **manualmente** após readback, não por producer Hermes automático. Nada observado neste turno demonstra terceiro evento automático.
+- Supabase advisories SECURITY retornam achados inclusive \`rls_enabled_no_policy\` e \`security_definer_view\`. São itens de **revisão pelo owner de segurança**, não autorização para abrir policies nem mexer em \`SECURITY DEFINER\` por tentativa. [Documentação do linter](https://supabase.com/docs/guides/database/database-linter?lint=0010_security_definer_view).
+- Cloudflare connector do usuário: zona \`centralldark.com\` **active**, não pausada. DNS A proxied para \`centralldark.com\`, \`api.centralldark.com\`, \`mcp.centralldark.com\` e \`www.centralldark.com\`, todos apontando ao IP canônico VPS \`89.117.78.124\`; \`https://centralldark.com/\` e \`https://api.centralldark.com/\` responderam **HTTP 200** no corpo VPS, \`https://mcp.centralldark.com/\` respondeu **HTTP 404** *na raiz apenas*. \`MCP_AUTHENTICATED_ENDPOINT=NOT_MEASURED\`; não interpretar \`/\` 404 como prova de indisponibilidade do MCP.
+- Os arquivos \`mcp-tunnel-edited.json\`, \`mcp-active-edited.json\`, \`mcp-public-oauth-edited.json\` e \`mcp-server-screenpipe.log\` aparecem como nomes no screenshot, mas **conteúdo, owner físico, SHA e validade da rota não foram lidos**. Não afirmar que foram publicados nem substituir configs reais.
+
+\`\`\`text
+CURRENT_ROOT_DISK=75_PERCENT_USED
+CONCURRENT_LOCAL_WORK_PRESERVED=true
+SUPABASE_RECEIPT_LEDGER=PASS_EXISTING_2
+CLOUDFLARE_ZONE_DNS=PASS
+SITE_ROOT_HTTPS_200=PASS
+API_ROOT_HTTPS_200=PASS
+MCP_ROOT_HTTPS_404_NOT_A_PROTOCOL_PROOF
+MCP_AUTH_ROUTE=UNKNOWN
+HERMES_AUTOMATIC_SUPABASE_PRODUCER=UNKNOWN
+COCKPIT_FRONTEND_PORT_4175=UNAVAILABLE
+BROWSER_RECEIPT_E2E=UNKNOWN
+NEXT_CURSOR=RECONCILE_OWNER_FILES_AND_CI_WITHOUT_DIRTY_RESET_THEN_VERIFY_MCP_AUTH_AND_BROWSER_DELIVERY
+\`\`\`
+
+**Regra:** não modificar zonas DNS que já estão corretas; não ativar nenhuma permissão destrutiva em quarentena; não acrescentar custos de modelo quando receipt/recipe determinísticos bastarem. Um status já provado deve ser reutilizado até existir nova mudança causal material.
+<!-- /CENTRALDARK_CROSS_SURFACE_IMAGES_CURRENT_20261018 -->
