@@ -13,6 +13,7 @@ const CORES: Record<Luz, string> = {
 };
 function luz(estado: Estado): Luz {
   if (estado === "PASS") return "verde";
+  if (estado === "RUNNING") return "amarela";
   if (estado === "FAIL" || estado === "BLOCKED") return "vermelha";
   return "amarela";
 }
