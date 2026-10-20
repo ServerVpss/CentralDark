@@ -34,6 +34,20 @@ REFERENCIAS / TRECHOS INDEXADOS QUANDO DISPONIVEIS
 💎 CRISTAL quando houver prova + reuso
 ```
 
+## 💙 Biblioteca de experiências — todas as provocações que realmente ensinarem algo
+
+**Owner preservado:** esta Biblioteca já existe. Não criar biblioteca “SOL”, biblioteca “GPT”, biblioteca “Hermes” ou Dream Brain concorrente. SOL, ChatGPT, Hermes e outros modelos fornecem experiências e referências com proveniência; **a CentralDark mantém uma Biblioteca única e recupera apenas o setor relevante**.
+
+**Caminho canônico:** episódio disponibilizado por fonte autorizada → `session-intelligence-harvester` → `scripts/memory-linker/dream-review-run.mjs` → `pattern-library.mjs` → revisão/contraprova → vínculo aqui por `source_id`, origem, digest/hash quando disponível, `tags`, `owner`, `learning_ref`, data do fato e da observação. Materiais brutos não são copiados por padrão, nem se registra cadeia privada de raciocínio da IA.
+
+**Entrada ampla, cristalização criteriosa:** desafios, correções, objeções e contraprovas do CHEFE **não ficam limitados a duas imagens**. Cada episódio novo pode virar `LEARNING_CANDIDATE` no mesmo funil; repetição, opinião sem novidade, documento sem execução e alegação sem prova continuam fora do aprendizado confirmado. Não inferir acesso a todas as conversas só porque existe memória resumida. O primeiro caso documentado é o par Hermes **com/sem capacete**, guardado no owner de comunicação existente; o próximo episódio não deve recriar esse ensinamento sem critério material novo.
+
+**Quando o Hermes “dorme”:** o review ocioso analisa registros disponibilizados e emite candidatos, **sem escrita direta nas regras**. A execução automática/noturna e o carregamento na voz permanecem `NÃO COMPROVADOS` até prova do scheduler e da resposta real do Hermes. A biblioteca é referência/índice; **não** altera automaticamente pesos de GPT, Claude ou Hermes.
+
+**Estados visíveis em português:** `Material recebido`, `Em análise`, `Aprendizado sugerido`, `Aguardando confirmação`, `Aprendizado registrado`, `Hermes utilizou`. A explicação técnica pode citar `candidate`, `writer`, `receipt` ou `Dream Review` em texto pequeno. Só mostrar “Hermes utilizou” com readback do consumidor.
+
+**NEXT_CURSOR:** `EPISÓDIO_AUTORIZADO → DEDUPE → CRITÉRIO_REVISADO → PROVA → INDEXAÇÃO_EXISTENTE → CONSUMO_MEDIDO`.
+
 ## Uma fonte, várias representações
 
 PDF, EPUB e JWPUB são adaptadores de entrada da mesma obra quando edição/conteúdo puderem ser reconciliados. Google Docs, Markdown/TXT no Drive e pastas do Drive entram como **referências externas com proveniência**, não como segunda fonte de verdade da CentralDark.
