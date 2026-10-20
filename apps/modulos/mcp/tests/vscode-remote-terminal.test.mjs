@@ -69,6 +69,26 @@ test("MCP sends command only to configured device with correlation, returns meas
   assert.equal(data.pid, 31566);
 });
 
+test("fixed echo tool ignores injected commands and keeps local consent", async () => {
+  process.env.CENTRALDARK_VSCODE_DEVICES_JSON = registry;
+  process.env[tokenName] = secret;
+  globalThis.fetch = async (_url, options) => {
+    const body = JSON.parse(options.body);
+    assert.equal(body.command, "echo oi");
+    assert.equal(body.intentId, "CENTRALDARK_FIXED_ECHO");
+    return { status: 200, ok: true, text: async () => JSON.stringify({
+      ok: true, status: "EXECUTED", requestId: body.requestId, deviceId: "segredo",
+      exitCode: 0, output: "oi\n", localConsent: true,
+    }) };
+  };
+  const data = result(await tool("vscode_remote_echo").handler({
+    deviceId: "segredo", pid: 31566, command: "UNTRUSTED_OVERRIDE",
+  }));
+  assert.equal(data.status, "EXECUTED_EXIT_ZERO");
+  assert.equal(data.output, "oi\n");
+  assert.equal(tool("vscode_remote_echo").annotations.destructiveHint, false);
+});
+
 test("denies spoofed device response and never silently repeats a timed-out command", async () => {
   process.env.CENTRALDARK_VSCODE_DEVICES_JSON = registry;
   process.env[tokenName] = secret;
