@@ -342,7 +342,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       <section className="px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
           {/* Auto Sync + Micro-Deploy + Status Lights + Daily Review */}
-          <AutoSyncButton />
+          <AutoSyncButton onNavigate={abrirDestino} />
           <div className="mt-4 space-y-4">
             <StatusPanel />
             <DailyReviewPanel />
