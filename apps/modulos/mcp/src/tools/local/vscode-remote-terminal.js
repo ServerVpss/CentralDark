@@ -137,7 +137,6 @@ export const vscodeRemoteTerminalTools = [
     },
   },
   {
-  {
     name: "vscode_remote_echo",
     description: "Teste fixo e inofensivo 'echo oi' no terminal existente, com aceite local; nao recebe texto arbitrario.",
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "VS Code remoto — teste oi no PID" },
@@ -154,6 +153,6 @@ export const vscodeRemoteTerminalTools = [
       command: z.string().min(1).max(COMMAND_LIMIT).refine(x => !/[\r\n\0]/.test(x), "Single-line command only"),
       intentId: z.string().min(1).max(100).optional(),
     }),
-    handler: dispatchExistingTerminal,,
+    handler: dispatchExistingTerminal,
   },
 ];
