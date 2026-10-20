@@ -1,8 +1,8 @@
 {
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark VS Code Restore",
-  "description": "Restaura bancada e terminal existentes; mede Remote SSH pela VPN e PIDs VS Code sem criar executor paralelo.",
-  "version": "0.1.4",
+  "description": "Restaura bancada e terminais; localiza PID e disponibiliza controle remoto autenticado, opt-in e privado por dispositivo.",
+  "version": "0.1.5",
   "publisher": "centraldark",
   "private": true,
   "engines": {
@@ -50,6 +50,14 @@
         "title": "CentralDark: Localizar VS Code por PID (PowerShell / terminal)"
       },
       {
+        "command": "centraldark.remoteTerminalPair",
+        "title": "CentralDark: Parear terminal remoto (dispositivo autorizado)"
+      },
+      {
+        "command": "centraldark.remoteTerminalStatus",
+        "title": "CentralDark: Status terminal remoto e PIDs (somente leitura)"
+      },
+      {
         "command": "centraldark.browserSurfacesCatalog",
         "title": "CentralDark: Catálogo de abas e capacidades Browser/ZENDRIVE"
       }
@@ -71,6 +79,18 @@
           "type": "boolean",
           "default": true,
           "description": "Registra somente inicio/fim/resultado de shell integrado no LOGS-VS-CODE.log da Casa; nunca grava comandos ou saidas."
+        },
+        "centraldark.restore.remoteTerminalEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Permite receptor local de comandos no terminal VS Code, apenas com pareamento e aprovacao explicita."
+        },
+        "centraldark.restore.remoteTerminalPort": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 65535,
+          "default": 8719,
+          "description": "Porta HTTP em 127.0.0.1 para Tailscale Serve privado; nao abre interface publica."
         }
       }
     }
