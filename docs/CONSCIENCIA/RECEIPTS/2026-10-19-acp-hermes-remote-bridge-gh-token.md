@@ -83,3 +83,29 @@ A conversa anterior registrou alerta HTTP 000 em `:8080`, ausência de listener 
 `PR1867_FIX_P1_SCREENPIPE_AND_DOCS → PR1867_TEST_WINDOWS_SAME_HEAD → ACP_CASA_VPS_CORRELATED_HANDSHAKE → KANBAN_t_2fc279d4_GH_AUTH_READBACK → KANBAN_t_8d152ddf_CONTINUE → ELITE_8080_BOOT_OWNER_CAUSAL_CHECK`
 
 **Não declarar FIXED_POINT antes das contraprovas.** Este receipt é memória versionada na branch da PR #1867; não afirma que entrou na `main`.
+
+
+<!-- CENTRALDARK_CASA_ROTAS_REGRESSIVAS_20261020 -->
+## 🔎 Atualização de 20/10/2026 — rotas alternativas para atualizar a Casa sem Desktop Commander
+
+**Intenção reiterada pelo CHEFE:** localizar as rotas existentes entre conversas, GitHub, VPS e MCP e atualizar **somente o delta** do cartão `Continuidade do Hermes + Auto Sync + Biblioteca` do PR [#1879](https://github.com/ServerVpss/CentralDark/pull/1879) no Windows `K:\`, sem sobrescrever alterações locais. Este registro **não** representa aplicação na Casa.
+
+| Rota recuperada | Evidência e tempo | Capacidade comprovada / limite |
+| --- | --- | --- |
+| Tailscale (VPS ↔ Casa SEGREDO) | `tailscale_bridge_status`, medição em 20/10: `backend_state=Running`, `home.online=true`, `rdp_3389=OPEN`, `ssh_22=CLOSED_OR_FILTERED` | **PASS de rede**, não é prova de autenticação Windows, shell nem escrita em `K:\`. |
+| WinRM / PowerShell Remoting `5985` | `docs/LEMBRANCAS/network-ports-git-routes-20261019.md`, inventário histórico datado | **CANDIDATO** a leitura e patch seletivo. Sem autenticação/remoting atual comprovado. |
+| SMB `445` | Mesmo inventário Windows de 19/10 | **CANDIDATO** a leitura/escrita autenticada; compartilhamento e ACL atuais não medidos. |
+| Hermes ACP (VS Code Casa/VPS) | Este receipt, bridge existente e PR #1867 | **CONTRATO / EVIDÊNCIA HISTÓRICA**. Handshake Casa↔VPS e execução no workspace Windows ainda não provados. Desktop Commander legado é opcional. |
+| GitHub Actions Windows self-hosted | `.github/workflows/centraldark-desktop-windows-installer.yml` e `.github/workflows/node24-lockfile-candidate.yml` usam `[self-hosted,Windows,X64]` | **WORKFLOW DEFINIDO**, não prova runner online na Casa, acesso a `K:\` ou autorização para patch. `inventario-casa.yml` roda em Linux, não é execução na Casa. |
+| CAS Cloud / CodeAgentSwarm | `docs/ARQUITETURA/CENTRALDARK-CAS-CLOUD-VPS.md` | Casa→agentes na VPS documentado; **não** prova VPS→escrita na Casa. |
+| Screenpipe `3030` | PR #1877 documenta `health` Casa via Tailscale em 20/10; `screenpipe_status` não estava disponível no catálogo desta sessão | Sensor/observação, **não** ferramenta de escrita. |
+| GitHub PR #1879 | Branch do código e comentário operacional [#6289332229](https://github.com/ServerVpss/CentralDark/pull/1879#issuecomment-6289332229) | **CÓDIGO PRESERVADO**; branch não equivale a atualização local nem deploy. |
+| CentralDark MCP `execute_command` | Chamada diagnóstica em 20/10 retornou `CONFIRMACAO_ADMIN_NECESSARIA` **sem executar**; reconciliador informou ferramentas destrutivas esperadas 12 / atuais 20 | **BLOCKED por guard**; nenhuma confirmação deve ser sintetizada ou bypassada. Não tratar isso como WinRM acessível. |
+| Desktop Commander remoto | Cota mensal esgotada, reportada anteriormente | **NÃO REUTILIZAR** nessa missão. |
+
+**Prioridade para executar quando a capability existir:** provar sessão **WinRM autenticada e restrita** no peer SEGREDO; caso não esteja disponível, verificar **runner Windows efetivamente vinculado à Casa** ou **ACP Hermes com handshake e filesystem**. Em qualquer rota: `READ K:\ + STATUS GIT / HASH DOS DOIS OWNERS → DIFF MINIMO → PATCH SEM SUBSTITUIR ALTERACOES DE OUTRO WRITER → BUILD → PROVA LOCAL / RECIBO`.
+
+**Owners a preservar:** `apps/instinto-superior/src/components/central/AutoSyncButton.tsx` e `CockpitShell.tsx`. Não usar `git reset --hard`, checkout forçado, sync cego ou novo agente/túnel/daemon. **Estado:** `CASA_NETWORK=PASS`, `WIN_AUTH_SHELL=UNKNOWN`, `CASA_FILES_PATCHED=NO`, `BUILD_CASA=NOT_RUN`, `VISUAL_READBACK=UNKNOWN`. `NEXT_CURSOR=PROVE_AUTHENTICATED_CASA_ROUTE → PRESERVE_LOCAL_DIFF → APPLY_MINIMAL_DELTA → BUILD → PROOF`.
+
+**Observação:** resultados históricos e flags de código não são medições atuais. Esta seção complementa os recibos anteriores sem reescrever sua proveniência.
+<!-- /CENTRALDARK_CASA_ROTAS_REGRESSIVAS_20261020 -->
