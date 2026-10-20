@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap, ChevronDown, Bot, GitBranch, History, BookOpenText, ScrollText, ShieldAlert, Eye, ShieldCheck, Workflow, Activity, Sparkles, Brain } from 'lucide-react'
-import { CheckpointCentralDark } from '@/components/central/CheckpointCentralDark'
+// O componente de checkpoint só é carregado ao abrir a contraprova; não inicializar RPC no topo.
+const CheckpointCentralDark = React.lazy(() => import('@/components/central/CheckpointCentralDark').then(modulo => ({ default: modulo.CheckpointCentralDark })))
 import { useServerFn } from '@tanstack/react-start'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
 
@@ -198,7 +199,7 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
         </summary>
         <div className="border-t border-sky-300/15 p-3">
           <p className="mb-3 text-xs text-slate-300">Leitura real pelo owner já existente, sob autenticação administrativa. O último verde não se perde quando a medição atual falha.</p>
-          {checkpointAberto ? <CheckpointCentralDark autenticado={autenticado} /> : null}
+          {checkpointAberto ? <React.Suspense fallback={<p role="status" className="text-xs text-slate-300">Carregando checkpoint existente…</p>}><CheckpointCentralDark autenticado={autenticado} /></React.Suspense> : null}
         </div>
       </details>
 
