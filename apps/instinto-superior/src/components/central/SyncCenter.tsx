@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { MinhaOficina } from "@/components/central/MinhaOficina";
 import {
   Activity,
   GitCommit,
@@ -711,7 +712,7 @@ export function SyncCenter({ estado }: { estado?: EstadoCentralDark }) {
           <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
             CURRENT &gt; HISTORY
           </p>
-          <h2 className="mt-3 text-3xl font-semibold">Sync Center</h2>
+          <h2 className="mt-3 text-3xl font-semibold">Minha Oficina · Sincronização</h2>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
             Main, servidor e delta com fontes separadas. Sem transformar consulta em prova de
             deploy.
@@ -719,6 +720,7 @@ export function SyncCenter({ estado }: { estado?: EstadoCentralDark }) {
         </div>
         <SeloEstado estado={estado?.deploy ?? "UNKNOWN"} />
       </div>
+      <MinhaOficina />
       <DominioDoLoop />
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         <BlocoEstado
