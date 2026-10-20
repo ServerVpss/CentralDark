@@ -27,7 +27,7 @@ let restoredThisSession = false;
 let traceOutput: vscode.OutputChannel | undefined;
 
 function emitTrace(
-  event: 'activate' | 'cli_focus' | 'shell_start' | 'shell_end' | 'shell_integration' | 'workspace_map' | 'restore' | 'show_trace',
+  event: 'activate' | 'cli_focus' | 'shell_start' | 'shell_end' | 'shell_integration' | 'workspace_map' | 'restore' | 'show_trace' | 'goal_receipt',
   state: 'OBSERVED' | 'PASS' | 'ATTENTION' | 'UNKNOWN' = 'OBSERVED'
 ): void {
   traceOutput?.appendLine(`${new Date().toISOString()} event=${event} state=${state}`);
@@ -139,7 +139,7 @@ async function recordClineReceipt(): Promise<void> {
     ' cursor=' + cursor + ' utc=' + new Date().toISOString() + '\n';
   try {
     fs.appendFileSync(terminalLogPath, line, { encoding: 'utf8', flag: 'a' });
-    emitTrace('shell_end', 'OBSERVED');
+    emitTrace('goal_receipt', 'OBSERVED');
     void vscode.window.showInformationMessage(
       'CentralDark: recibo Cline registrado na Casa. Transporte/ACK ainda precisam de readback.');
   } catch {
