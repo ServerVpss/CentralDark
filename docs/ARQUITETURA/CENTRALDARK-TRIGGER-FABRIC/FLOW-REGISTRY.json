@@ -1467,7 +1467,6 @@
       "to": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + supabase/functions/_shared/evidence-envelope.mjs",
       "owner": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + supabase/functions/_shared/evidence-envelope.mjs",
       "canonical_route": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + supabase/functions/_shared/evidence-envelope.mjs",
-      "status": "ACTIVE_EXISTING_ROUTE",
       "status": "HOOK_IMPLEMENTED_PERSISTENCE_OWNER_EXISTING",
       "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
       "new_route_proof": {
@@ -1488,7 +1487,6 @@
       "to": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + apps/modulos/HERMES-CORE/core/perception-orchestra.mjs + supabase/functions/_shared/evidence-envelope.mjs",
       "owner": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + apps/modulos/HERMES-CORE/core/perception-orchestra.mjs + supabase/functions/_shared/evidence-envelope.mjs",
       "canonical_route": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/trigger-fabric/oracle_evidence_hook.py + apps/modulos/HERMES-CORE/core/perception-orchestra.mjs + supabase/functions/_shared/evidence-envelope.mjs",
-      "status": "ACTIVE_EXISTING_ROUTE",
       "status": "HOOK_IMPLEMENTED_PERSISTENCE_OWNER_EXISTING",
       "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
       "new_route_proof": {
@@ -1509,7 +1507,6 @@
       "to": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md",
       "owner": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md",
       "canonical_route": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md",
-      "status": "ACTIVE_EXISTING_ROUTE",
       "status": "CONTRACT_DECLARED_RUNTIME_UI_PROOF_REQUIRED",
       "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
       "new_route_proof": {
@@ -1530,7 +1527,6 @@
       "to": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/memory-linker/",
       "owner": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/memory-linker/",
       "canonical_route": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md + scripts/memory-linker/",
-      "status": "ACTIVE_EXISTING_ROUTE",
       "status": "CONTRACT_DECLARED_REPLAY_REQUIRED",
       "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
       "new_route_proof": {
@@ -2978,6 +2974,363 @@
       "status": "ACTIVE_EXISTING_ROUTE",
       "evidence_ref": "apps/instinto-superior/src/components/central/StatusPanel.tsx",
       "reuse_of": "instinto.AdminCofreSeguranca.RotuloEstado"
+    },
+    {
+      "id": "instinto.PapagaioHudMcp.PapagaioHudMcp",
+      "kind": "FUNCTION",
+      "capability": "INSTINTO_SUPERIOR_UI",
+      "boundary": "apps/instinto-superior",
+      "source": "apps/instinto-superior/src/components/central/PapagaioHudMcp.tsx",
+      "symbol": "PapagaioHudMcp",
+      "activation": "CALL",
+      "from": "INSTINTO_SUPERIOR_UI",
+      "to": "INSTINTO_SUPERIOR_COCKPIT",
+      "owner": "apps/instinto-superior",
+      "canonical_route": "instinto-superior-cockpit",
+      "status": "ACTIVE_EXISTING_ROUTE",
+      "evidence_ref": "apps/instinto-superior/src/components/central/PapagaioHudMcp.tsx",
+      "reuse_of": "instinto.StatusPanel.StatusPanel"
+    }
+,
+    {
+      "id": "skillworkshop.catalog.20261016.01",
+      "kind": "SKILL",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": ".agents/skills/skill-workshop/SKILL.md",
+      "symbol": "skill-workshop",
+      "activation": "SKILL_DISCOVERY",
+      "from": "SKILL_WORKSHOP_CANONICAL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": ".agents/skills/skill-workshop/SKILL.md",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.02",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/tools/skills/catalog-index.js",
+      "symbol": "indexSkillTree",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.03",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/tools/skills/catalog-index.js",
+      "symbol": "searchSkills",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.04",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/tools/skills/catalog-index.js",
+      "symbol": "resolveSkill",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.05",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "symbol": "readCanonicalTree",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.06",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "symbol": "githubTree",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.07",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "symbol": "readCatalog",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.08",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "symbol": "readExternalSourceMetadata",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.09",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "symbol": "resolveFromCatalog",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.10",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/skills/catalog-index.js",
+      "symbol": "indexSkillTree",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.11",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/skills/catalog-index.js",
+      "symbol": "searchSkills",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.12",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/skills/catalog-index.js",
+      "symbol": "resolveSkill",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.13",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/skills/skill.js",
+      "symbol": "readCanonicalTree",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.14",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/skills/skill.js",
+      "symbol": "githubTree",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.15",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/skills/skill.js",
+      "symbol": "readCatalog",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.16",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/skills/skill.js",
+      "symbol": "readExternalSourceMetadata",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
+    },
+    {
+      "id": "skillworkshop.catalog.20261016.17",
+      "kind": "FUNCTION",
+      "capability": "MCP_SKILL_CATALOG_AUTHENTICATED",
+      "boundary": "apps/modulos/mcp",
+      "source": "apps/modulos/mcp/dist/tools/skills/skill.js",
+      "symbol": "resolveFromCatalog",
+      "activation": "MCP_AUTHORIZED_READ",
+      "from": "MCP_AUTHENTICATED_CALL",
+      "to": "MCP_SKILLS_CANONICAL_CATALOG",
+      "owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "canonical_route": "apps/modulos/mcp/src/tools/skills/skill.js",
+      "status": "SOURCE_COMMITTED_RUNTIME_UNVERIFIED",
+      "evidence_ref": "docs/CONSCIENCIA/RECEIPTS/2026-10-16-skill-workshop-delegacao-catalogo-mcp.md",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
+      }
     }
   ]
 }

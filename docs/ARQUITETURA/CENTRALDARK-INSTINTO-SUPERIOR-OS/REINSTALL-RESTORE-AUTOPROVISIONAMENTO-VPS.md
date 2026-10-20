@@ -655,6 +655,47 @@ Se o workflow escuta `issue_comment`, coloque um marcador:
 
 e ignore entradas que já possuam esse marcador.
 
+## Cofre canônico FHS — 19/10/2026
+
+**Decisão do CHEFE:** credenciais de produção em **um local físico** na VPS, com arquivos separados por domínio/provedor e controle por serviço. Não criar outro OAuth Broker, MCP, Hub ou sistema de credenciais.
+
+```text
+/etc/centraldark/
+  oauth-broker.env                  # unidade systemd ainda usa este caminho; compatibilidade
+  instinto-superior-auth-public.env # atual serviço web usa este caminho
+  telegram-mtproto.env              # integração legada a reconciliar
+  secrets/                          # cofre físico canônico, root:root, modo 0700
+    .env                             # MISTO LEGADO, migrar apenas após prova (0600)
+    tailscale.env                    # já existente
+    cloudflare.env                   # já existente
+    buildkite.env                    # já existente
+    oauth-broker.env                 # já existente, ainda exige prova de cutover
+    centraldark-mcp-remote.env       # já existente
+    hermes-agent.env                 # já existente
+    kylin-bridge.env                 # já existente
+    telegram-mtproto.env            # já existente
+    github.env                       # previsto, exige valores/validação de origem
+    contabo.env                      # previsto, exige valores/validação de origem
+    supabase.env                     # previsto, exige valores/validação de origem
+    ...                              # Linear, OpenAI, OpenRouter, Groq, Gemini, MCP
+```
+
+**Prova de armazenamento único:** `/root/CentralDark/secrets` é **symlink existente** para `/etc/centraldark/secrets`. `readlink -f` e `stat -L` demonstraram o mesmo device/inode. Portanto, os consumers antigos que abrem `/root/CentralDark/secrets/tailscale.env`, `cloudflare.env` e `buildkite.env` já alcançam o MESMO arquivo no cofre físico. Preservar o link até que todas as dependências sejam migradas e testadas; não copiar o diretório nem apagar seu conteúdo.
+
+**Implementado:** diretório 0700; `.env` misto 0600 (antes 0644); 14 templates `*.env.example` com 0600 e sem credenciais; owner `scripts/vps/hydrate-provider-secrets.sh` atualizado para a raiz canônica, com upsert idempotente e somente quando as variáveis de origem estiverem presentes. Os templates **não** significam credenciais instaladas nem autenticadas. Não exibir valores, apenas `CONFIGURED/MISSING/UNKNOWN` com prova por provedor.
+
+**Estado de consumo (CURRENT, 19/10):**
+- MCP HTTP: ativo; unidade aponta para `/root/.hermes/centraldark-mcp-remote.env`, ainda fora da raiz do cofre.
+- OAuth Broker: inativo; unidade lê `/etc/centraldark/oauth-broker.env`; também há `oauth-broker.env` dentro do cofre. Não assumir equivalência sem readback. O erro histórico `ConditionPathExists=no` pode estar defasado.
+- Instinto Superior: ativo; lê `/etc/centraldark/instinto-superior-auth-public.env` (as variáveis públicas Supabase não são automaticamente segredos).
+- Alguns consumers continuam lendo `.env` legado ou variáveis de processo. `DOCUMENTED != EXECUTED`; `UNKNOWN != PASS`.
+
+**Protocolo de migração por owner:** inventariar nomes e referências sem valores → comparar origem/destino localmente sem divulgação → hidratar apenas chaves válidas via owner existente → checar permissões/owner, tipo de credencial e teste mínimo autenticado → alterar **um consumidor por vez** com rollback → readback do processo e rota → só então eliminar chaves duplicadas dos arquivos mistos. Segredos não entram em Git, receipts, trace, Browser ou conteúdo de mensagens.
+
+**Backup:** `scripts/vps/centraldark-vault-bootstrap-inventory.sh` ainda merece revisão: seus ROOTS antigos usam o caminho de symlink e não listam explicitamente `/etc/centraldark/secrets`. Não declarar Vault recuperável sem enumerar o alvo físico e provar backup criptografado fora da VPS; `tar.gz` NÃO criptografa material confidencial.
+
+**Pendências bloqueantes para marcar FULL_PASS:** segregação das chaves reais restantes (GitHub, Contabo, Supabase, LLMs, MCP); comparação sem revelar valores; troca das referências de serviço; teste de auth por provedor; verificação de backup off-host; confirmação da Casa e SHA do runtime. Nenhuma conta/senha foi recriada, invalidada ou movida à força nesta etapa.
+
 ## Vault, segredos e reconstrução segura
 
 O atual `.tar.gz` é útil como recipiente, mas uma propriedade precisa ficar explícita: **gzip é compressão, não criptografia**. Se o Vault realmente carrega material secreto, o artefato off-host deve ser criptografado ou armazenado em storage que forneça criptografia e controle de acesso adequados.

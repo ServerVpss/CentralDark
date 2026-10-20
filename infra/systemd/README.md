@@ -32,3 +32,10 @@ SOURCE_PATCH                 != VPS_DEPLOYED
 SERVICE_ACTIVE               != DEVICE_READY
 UNKNOWN                      != PASS
 ```
+
+
+## Receita e readback — 2026-10-17
+
+O mapeamento integral Desktop Commander → auditoria MCP → Tool Call Lens → Cockpit, com os dois perfis systemd, a matriz de owners, a fronteira entre chamada externa e audit interno, testes, botões, PID/CID, gates e rollback, está registrado em [`2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md`](../../docs/CONSCIENCIA/RECEIPTS/2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md).
+
+SOURCE_COMMITTED nos PRs #1842 e #1838 não é prova de runtime instalado.

@@ -110,7 +110,56 @@ function hermesFinalizedEffect(fingerprint, head) {
   }
   return null;
 }
-export function readIntentState() { return sealed(STATE_PATH); }
+// A Forja 4x herda o mesmo inbox e a conclusao Hermès original.
+// Cada fase so muda de PENDENTE para PASS se existir um recibo local
+// tipado do mesmo fingerprint/SHA, exitCode 0 e antirregressao.
+const FORJA4X_STAGES = Object.freeze(["ANTIRREGRESSAO","CONSTRUIR","INSTALAR","CONECTAR","PROVAR"]);
+function readForja4xEvidence(fingerprint, head) {
+  const unknown = {
+    schema: "centraldark.forja.4x.status.v1",
+    source: "hermes-original/missions/concluidas",
+    stages: FORJA4X_STAGES.map(id => ({ id, status: "UNKNOWN", observedAt: null })),
+    fixedPoint: false,
+  };
+  if (!/^[a-f0-9]{64}$/i.test(fingerprint || "") || !SHA.test(head || "")) return unknown;
+  const base=join(ROOT,"apps/modulos/HERMES-CORE/missions/concluidas");
+  const slug="centraldark-intent-"+fingerprint.slice(0,24);
+  if (!existsSync(base)) return unknown;
+  let days;
+  try { days=readdirSync(base,{withFileTypes:true}).filter(x=>x.isDirectory()).map(x=>x.name).sort().reverse().slice(0,10); }
+  catch { return unknown; }
+  for (const day of days) {
+    const dir=join(base,day,slug);
+    let mission="";
+    try { mission=readFileSync(join(dir,"missao.md"),"utf8"); } catch { continue; }
+    if (!mission.includes("RECEIPT_FINGERPRINT: "+fingerprint) || !mission.includes("SOURCE_LOCAL_SHA: "+head)) continue;
+    const r=sealed(join(dir,"forja-4x-receipt.json"));
+    if (r?.schema !== "centraldark.forja.4x.receipt.v1" ||
+      r?.fingerprint !== fingerprint || r?.sourceHead !== head || !Array.isArray(r.stages)) continue;
+    const stages=FORJA4X_STAGES.map(id => {
+      const entry=r.stages.find(x=>x?.id===id);
+      const timestamp=typeof entry?.observedAt==="string" ? Date.parse(entry.observedAt) : NaN;
+      const sameSha=entry?.sourceHead === head;
+      const recent=Number.isFinite(timestamp) && timestamp<=Date.now()+5000 &&
+        timestamp>=Date.now()-7*24*60*60*1000;
+      const fail=entry?.status==="FAIL" || (entry?.exitCode !== undefined && entry.exitCode!==0);
+      const valid=entry?.status==="PASS" && entry?.exitCode===0 && sameSha && recent &&
+        entry?.antiregression === "PASS" && typeof entry?.receipt==="string" && entry.receipt.length>=8;
+      return { id,status:fail?"FAIL":valid?"PASS":"UNKNOWN",
+        observedAt:recent?entry.observedAt:null,
+        receipt:valid?entry.receipt:null };
+    });
+    return { ...unknown, stages, fixedPoint: stages.every(x=>x.status==="PASS"),
+      source:"hermes-original/concluidas/forja-4x-receipt.json" };
+  }
+  return unknown;
+}
+export function readIntentState() {
+  const saved=sealed(STATE_PATH);
+  if (!saved) return null;
+  if (!String(saved.intent||"").includes("FORJA_4X_EXISTENTE")) return saved;
+  return { ...saved, forja4x: readForja4xEvidence(saved.fingerprint,saved.currentHead) };
+}
 function atomicRecord(data) {
   mkdirSync(join(ROOT,'logs'),{ recursive:true });
   const lockPath = STATE_PATH + '.lock';
@@ -182,7 +231,9 @@ export function runIntentCycle(payload, { dispatch = false } = {}) {
   else if (duplicate) dispatched = {queued:true,reused:true,reason:'REUSED_EXISTING_RECEIPT'};
   else if (dispatch && input.mode !== 'AUTONOMO') dispatched = {queued:false,reason:'MODE_DOES_NOT_AUTHORIZE_DISPATCH'};
   const result = {
-    ...base, queued:dispatched.queued,
+    ...base,
+    ...(input.intent.includes("FORJA_4X_EXISTENTE") ? { forja4x: readForja4xEvidence(fingerprint,measured.headSha) } : {}),
+    queued:dispatched.queued,
     queueReason:dispatched.reason, queueReused:dispatched.reused===true,
     measured:measured.measurement,
     executionProven:concluded !== null, // exige state CONCLUIDA + Critic PASS + fingerprint + SHA
