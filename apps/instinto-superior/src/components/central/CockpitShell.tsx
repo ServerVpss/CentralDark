@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
+import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
@@ -71,7 +72,7 @@ const HARNESS_DESTINOS = [
   { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
   { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
-  { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
+  { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
   { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
@@ -399,7 +400,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <TabsList className="h-auto min-w-max justify-start">
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
                 {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
-                <TabsTrigger value="sync">Sync Center</TabsTrigger>
+                <TabsTrigger value="sync">🛠️ Minha Oficina</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
                 <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
@@ -423,6 +424,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
             {autenticado ? <TabsContent value="gram" className="mt-8"><CentralDarkGram abrirAdmin={() => abrirDestino("admin")} abrirSync={() => abrirDestino("sync")} /></TabsContent> : null}
             <TabsContent value="visao" className="mt-8">
+              <div className="mb-6"><CartaoDiscosForja /></div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <BlocoEstado
                   titulo="Writer material único"
