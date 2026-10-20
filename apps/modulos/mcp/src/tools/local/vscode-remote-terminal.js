@@ -76,6 +76,32 @@ async function request(device, pathname, { method = "GET", payload, timeoutMs = 
 }
 
 const deviceId = z.string().regex(DEVICE_ID);
+
+async function dispatchExistingTerminal(input) {
+  const device = findVsCodeDevice(input.deviceId);
+      if (!device) return errorState("DEVICE_NOT_PAIRED");
+      const requestId = randomUUID();
+      const commandHash = createHash("sha256").update(input.command).digest("hex");
+      const data = await request(device, "/execute", {
+        method: "POST",
+        payload: { requestId, at: new Date().toISOString(), pid: input.pid,
+          command: input.command, commandHash, intentId: input.intentId || null },
+      });
+      if (data.status === "POST_OUTCOME_UNKNOWN") return errorState("POST_OUTCOME_UNKNOWN");
+      if (data.deviceId !== device.id) return errorState("DEVICE_ID_MISMATCH");
+      if (data.requestId !== requestId) return errorState(data.status === "POST_OUTCOME_UNKNOWN" ? "POST_OUTCOME_UNKNOWN" : "CORRELATION_FAILED");
+      const exitCode = Number.isSafeInteger(data.exitCode) ? data.exitCode : null;
+      const proven = data.status === "EXECUTED" && data.ok === true && exitCode !== null;
+      return result({
+        ok: proven && exitCode === 0,
+        status: proven ? (exitCode === 0 ? "EXECUTED_EXIT_ZERO" : "EXECUTED_NONZERO") : String(data.status || "UNKNOWN"),
+        requestId, deviceId: device.id, pid: input.pid, commandSha256: commandHash,
+        exitCode, output: sanitizeOutgoingText(String(data.output || "")).slice(0, RECEIPT_LIMIT),
+        executionProven: proven, proof: proven, localConsent: data.localConsent === true,
+        observedAt: typeof data.observedAt === "string" ? data.observedAt : null,
+      });
+}
+
 export const vscodeRemoteTerminalTools = [
   {
     name: "vscode_remote_devices",
@@ -111,6 +137,14 @@ export const vscodeRemoteTerminalTools = [
     },
   },
   {
+  {
+    name: "vscode_remote_echo",
+    description: "Teste fixo e inofensivo 'echo oi' no terminal existente, com aceite local; nao recebe texto arbitrario.",
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "VS Code remoto — teste oi no PID" },
+    inputSchema: z.object({ deviceId, pid: z.number().int().positive() }),
+    handler: async input => dispatchExistingTerminal({ ...input, command: "echo oi", intentId: "CENTRALDARK_FIXED_ECHO" }),
+  },
+  {
     name: "vscode_remote_execute",
     description: "ADMIN: executa uma unica ordem aprovada localmente em terminal VS Code EXISTENTE, por PID medido; sem novo terminal, sem replay automatico.",
     annotations: { ...WRITE, title: "VS Code remoto — executar em PID existente" },
@@ -120,29 +154,6 @@ export const vscodeRemoteTerminalTools = [
       command: z.string().min(1).max(COMMAND_LIMIT).refine(x => !/[\r\n\0]/.test(x), "Single-line command only"),
       intentId: z.string().min(1).max(100).optional(),
     }),
-    handler: async input => {
-      const device = findVsCodeDevice(input.deviceId);
-      if (!device) return errorState("DEVICE_NOT_PAIRED");
-      const requestId = randomUUID();
-      const commandHash = createHash("sha256").update(input.command).digest("hex");
-      const data = await request(device, "/execute", {
-        method: "POST",
-        payload: { requestId, at: new Date().toISOString(), pid: input.pid,
-          command: input.command, commandHash, intentId: input.intentId || null },
-      });
-      if (data.status === "POST_OUTCOME_UNKNOWN") return errorState("POST_OUTCOME_UNKNOWN");
-      if (data.deviceId !== device.id) return errorState("DEVICE_ID_MISMATCH");
-      if (data.requestId !== requestId) return errorState(data.status === "POST_OUTCOME_UNKNOWN" ? "POST_OUTCOME_UNKNOWN" : "CORRELATION_FAILED");
-      const exitCode = Number.isSafeInteger(data.exitCode) ? data.exitCode : null;
-      const proven = data.status === "EXECUTED" && data.ok === true && exitCode !== null;
-      return result({
-        ok: proven && exitCode === 0,
-        status: proven ? (exitCode === 0 ? "EXECUTED_EXIT_ZERO" : "EXECUTED_NONZERO") : String(data.status || "UNKNOWN"),
-        requestId, deviceId: device.id, pid: input.pid, commandSha256: commandHash,
-        exitCode, output: sanitizeOutgoingText(String(data.output || "")).slice(0, RECEIPT_LIMIT),
-        executionProven: proven, proof: proven, localConsent: data.localConsent === true,
-        observedAt: typeof data.observedAt === "string" ? data.observedAt : null,
-      });
-    },
+    handler: dispatchExistingTerminal,,
   },
 ];
