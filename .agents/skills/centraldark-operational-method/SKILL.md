@@ -89,6 +89,10 @@ python3 scripts/trigger-fabric/main_first_change_guard.py \
 
 O guard consulta `origin/main`, PRs abertos, issues abertas e os commits atuais da main. Ele retorna `BLOCKED_DIRTY_WORKTREE` quando a árvore não está preservada em um worktree limpo. Depois da alteração, a finalização exige o mesmo receipt, commit/PR no mesmo HEAD, testes, dívida explícita e `NEXT_CURSOR`; quando autorizado, `--comment-pr` publica o receipt no PR. Falha no preflight/finalizer bloqueia a promoção; não há bypass silencioso.
 
+## Comunicação mínima — responsabilidade humana ≠ erro técnico (2026-10-19)
+
+Quando só falta uma ação do CHEFE, falar em linguagem natural, com o **local e a ação exata**, sem apresentar como falha nem acionar alerta técnico. Exemplo: **"🟡 Falta o CHEFE abrir Cockpit → Minha Oficina e olhar os seis cartões."** Não mostrar `NÃO COMPROVADO` como cobrança humana ou alerta vermelho. Para erro real, usar **"🔴 Precisa corrigir [causa e local]"**; para funcionalidade provada, **"🟢 Funcionando"**. Preservar estados técnicos `UNKNOWN/FAIL/PASS` nos dados, logs e receipts; mudar somente a mensagem exibida quando a única pendência é conferência humana. Objetivo: comunicação curta, útil e sem ruído.
+
 ## Contrato de precisão de resposta — reutiliza o método existente
 
 ## Anti-fricção CURRENT
