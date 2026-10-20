@@ -340,7 +340,7 @@ test("Dream Reviewer usa biblioteca existente sem simular consumo do Hermes", ()
   assert.ok(cockpit.includes('<TabsTrigger value="dream-reviewer">🌙 Dream Reviewer · Biblioteca</TabsTrigger>'));
   assert.ok(cockpit.includes("<DreamReviewer onNavigate={abrirDestino} />"));
   assert.ok(dream.includes("As 9 peças do aprendizado"));
-  assert.equal((dream.match(/passo: "\\d{2}"/g) ?? []).length, 9);
+  assert.equal((dream.match(/passo: "\d{2}"/g) ?? []).length, 9);
   for (const owner of [
     "scripts/memory-linker/dream-review-run.mjs",
     "scripts/memory-linker/pattern-discovery.mjs",
