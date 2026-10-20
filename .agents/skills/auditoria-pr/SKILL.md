@@ -206,3 +206,43 @@ veredito **não sela** — sai `CORRIGIR`.
 5. Não reivindicar ponto fixo com bloqueio aberto.
 6. Não criar módulo, pasta ou documento paralelo quando o encaixe canônico
    existe (Princípio 11).
+
+
+---
+
+## Passo 7 — 🔎 Revisor de contraprova após merge (mesmo owner)
+
+**Gatilho visual:** `!REVISOR-CONTRAPROVA` — alias sem novo motor, novo cérebro ou segunda autoridade.
+**Executor:** workflow existente `.github/workflows/pr-auto-review.yml`, job `post_merge_counterproof`.
+**Quando:** PR mergeado para a main ou `workflow_dispatch(numero_pr)` para revisão histórica. O evento não reabre, não desfaz merge, não promove nem altera código do PR auditado.
+
+### Evidência obrigatória
+
+1. Fixar `PR_NUMBER`, `PR_HEAD_SHA`, `MERGE_COMMIT_SHA`, `MAIN_SHA_OBSERVED_AT` e instante da leitura.
+2. Ler checks do SHA de HEAD e do SHA de integração, **último run por check/nome**. Separar `success`, `failure/timed_out/action_required`, `pending`, `cancelled`, `skipped/neutral` e ausência de informação.
+3. Confrontar a alegação no PR (por exemplo, "100% verde", "todos os gates passaram") com a evidência efetivamente consultada. Um check `success` **não prova cobertura de todas as exigências**. Gate exigido sem leitura do ruleset/branch protection continua `UNKNOWN`.
+4. Verificar contratos, teste realmente executado, teste que discrimina base vs HEAD, contraprova, receipt e `NEXT_CURSOR`. Ausência de prova do runtime/deploy **não é falha automaticamente**; é `UNKNOWN` no escopo correspondente.
+5. Pesquisar PRs correlatos: mesmo arquivo/owner/contrato ou sucessão documentada. Registrar links `#NNNN`, paths e regra de associação; **compartilhar arquivo não prova causa nem equivalência semântica**.
+6. Comentário idempotente no PR de origem **somente com lacuna observada ou relação relevante**. Um marker por PR, sem spam, sem duplicar ledger. Receipts duráveis pertencem ao repositório, e PR-mãe histórica não recebe nova escrita canônica.
+
+### Classificação sem falso vermelho/verde
+
+```text
+FALHA_COMPROVADA: conclusão failure/timed_out/action_required no check exato (verificar se é required)
+CLAIM_NOT_PROVEN: PR declarou aprovação integral mas snapshot não sustenta a afirmação
+UNKNOWN: API inacessível, check ausente, status pendente/skipped/neutral/cancelled sem escopo exigido
+RELATED_BY_PATH: outro PR tocou o mesmo arquivo; não significa culpado
+PROVEN_IN_SCOPE: check específico success no SHA, sem extrapolar para toda a arquitetura
+```
+
+### Segurança e continuidade
+
+- Separar `MERGED`, `CI_AT_HEAD`, `MAIN_CI`, `RUNTIME`, `DEPLOY` e `FIXED_POINT`. Nenhum implica outro.
+- Usar `pull_request_target.closed` apenas com script confiável na base, **sem checkout e sem executar código de PR externo**.
+- `workflow_dispatch` é rota de backfill por PR, não varredura infinita.
+- Relatar quantidade de PRs correlatos realmente inspecionados; não afirmar "todos" se a paginação for limitada.
+- Nunca mergear, reabrir, fechar, modificar critérios, editar receipts históricos ou pedir reviewer novo por achado.
+- `HERMES=WRITER`, `REVIEWER=SENSOR`, `REALITY_JUDGE=VEREDITO`. O reviewer não se autoaprova.
+- `NEXT_CURSOR` aponta o teste discriminante concreto, o job/annotation e o owner correto.
+
+**Sinal de auditoria:** `MERGED_IS_NOT_PROOF=true · UNKNOWN_IS_NOT_PASS=true · NO_SECOND_REVIEW_ENGINE=true`.

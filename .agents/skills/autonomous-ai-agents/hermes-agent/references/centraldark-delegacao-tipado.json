@@ -1,0 +1,182 @@
+{
+  "schema_version": "1.0.0",
+  "intent_id": "CENTRALDARK-UNIFIED-DELEGATION-CATALOG-20261016",
+  "owner": ".agents/skills/autonomous-ai-agents/hermes-agent/SKILL.md",
+  "portable_skill": "skills/centraldark-delegacao/SKILL.md",
+  "shared_catalog": ".agents/skills/skill-workshop/SKILL.md",
+  "credential_owner": "apps/modulos/oauth-broker/server.mjs",
+  "mcp_owner": "apps/modulos/mcp/src/tools/skills/skill.js",
+  "workspace_authority": "ServerVpss/CentralDark@main",
+  "invariants": [
+    "ONE_INTENT_ONE_ORGANISM",
+    "ONE_WRITER_PER_SCOPE",
+    "REUSE_BEFORE_CREATE",
+    "MCP_OAUTH_NE_GITHUB_OAUTH",
+    "AUTHENTICATED_NE_AUTHORIZED",
+    "TOKEN_NE_SESSION",
+    "GITHUB_APP_INSTALLATION_NE_USER_AUTHORIZATION",
+    "NO_CREDENTIAL_IN_SKILL",
+    "SOURCE_COMMITTED_NE_MAIN_MERGED",
+    "MAIN_MERGED_NE_DEPLOYED",
+    "SKILL_DISCOVERED_NE_LOADED",
+    "HERMES_SPAWNED_NE_COMPLETED",
+    "UNKNOWN_NE_PASS"
+  ],
+  "envelope_required": [
+    "INTENT_ID",
+    "GOAL",
+    "OWNER",
+    "MAIN_SHA",
+    "PR_HEAD",
+    "ACTIVE_WRITER",
+    "STATUS",
+    "RECEIPT",
+    "NEXT_CURSOR"
+  ],
+  "capability_states": [
+    "DISCOVERED",
+    "LOADABLE",
+    "LOADED",
+    "EXECUTABLE",
+    "EXECUTED",
+    "VERIFIED"
+  ],
+  "auth_states": [
+    "UNCONFIGURED",
+    "LOGIN_REQUIRED",
+    "CONSENT_REQUIRED",
+    "CONNECTED",
+    "REFRESH_REQUIRED",
+    "REVOKED",
+    "ERROR"
+  ],
+  "procedures": [
+    {
+      "id": "IDENTIFY_INTENT",
+      "owner": "centraldark-operational-method",
+      "input": "mensagem vigente + receipt",
+      "output": "INTENT_ID + GOAL",
+      "proof": "owner e referencia recuperados",
+      "condition": "sempre"
+    },
+    {
+      "id": "REMEASURE_MAIN",
+      "owner": "git",
+      "input": "repositorio autorizado",
+      "output": "MAIN_SHA + PR_HEAD + dirty + writer",
+      "proof": "readback GitHub/current",
+      "condition": "antes de inferir estado ou gravar"
+    },
+    {
+      "id": "FIND_CAPABILITIES",
+      "owner": "skill-workshop",
+      "input": "termos ou GOAL",
+      "output": "ids, paths, hashes, disponibilidade",
+      "proof": "catálogo autenticado com fonte e SHA",
+      "condition": "na descoberta"
+    },
+    {
+      "id": "RESOLVE_IDENTITY",
+      "owner": "oauth-broker",
+      "input": "sessao admin autenticada + identidade do usuário",
+      "output": "connection_id e grant state, nunca access token",
+      "proof": "JWT e user_id vinculados à conexão",
+      "condition": "se recurso privado requer GitHub"
+    },
+    {
+      "id": "VALIDATE_GITHUB_PERMISSION",
+      "owner": "oauth-broker",
+      "input": "connection_id + repository + permissão mínima",
+      "output": "authorized|denied|unknown",
+      "proof": "GitHub API response no backend, sem vazar token",
+      "condition": "antes de ler skill interna"
+    },
+    {
+      "id": "REFRESH_OR_REAUTHORIZE",
+      "owner": "oauth-broker",
+      "input": "refresh token cifrado se existente",
+      "output": "token atualizado ou login requerido",
+      "proof": "expiração/rotação/readback",
+      "condition": "se sessão expira, revogada ou inválida"
+    },
+    {
+      "id": "RESOLVE_SKILL",
+      "owner": "mcp-skills",
+      "input": "nome ou path + autorização",
+      "output": "SKILL.md consultivo com provenance",
+      "proof": "SHA + path, ambiguidade falha fechado",
+      "condition": "após confirmação de acesso"
+    },
+    {
+      "id": "RESOLVE_ROUTE",
+      "owner": "mcp-admin-catalog",
+      "input": "capacidades requeridas + permissionamento",
+      "output": "rota autorizada e testada",
+      "proof": "probe temporal + escopo",
+      "condition": "antes do dispatch"
+    },
+    {
+      "id": "DEDUP_KANBAN",
+      "owner": "hermes-kanban",
+      "input": "INTENT_ID + GOAL + owner + scope",
+      "output": "TASK_ID existente ou novo",
+      "proof": "kanban show/list, chave idempotente",
+      "condition": "antes de criar"
+    },
+    {
+      "id": "DISPATCH_SAFE",
+      "owner": "hermes-kanban",
+      "input": "TASK_ID + escritor livre",
+      "output": "spawned|guarded|blocked",
+      "proof": "dry-run da mesma tarefa + readback",
+      "condition": "quando objetivo exige execução"
+    },
+    {
+      "id": "OBSERVE_AND_COUNTERPROVE",
+      "owner": "runtime-owner",
+      "input": "run_id + expected effect",
+      "output": "PASS|FAIL|UNKNOWN",
+      "proof": "efeito real, gates mesmo SHA, regressões",
+      "condition": "após tarefa"
+    },
+    {
+      "id": "RECEIPT_AND_REPLAY",
+      "owner": "skill-workshop",
+      "input": "resultado provado + delta novo",
+      "output": "same-owner-recipe + NEXT_CURSOR",
+      "proof": "receipt versionado e verificado",
+      "condition": "ao concluir/observar bloqueio"
+    }
+  ],
+  "authorization_laws": {
+    "github_oauth_broker_is_separate_from_mcp_client_oauth": true,
+    "server_uses_secure_stored_grant": true,
+    "client_receives_token": false,
+    "runtime_install_requires_owner_permission": true,
+    "github_app_and_oauth_app_modes_must_be_identified_before_binding": true,
+    "fixed_point_requires_end_to_end_readback": true
+  },
+  "known_gaps": [
+    {
+      "id": "GITHUB_BROKER_TO_PRIVATE_SKILL_CLIENT",
+      "status": "NOT_PROVEN",
+      "next": "ligar OAuthBroker autenticado ao consumidor MCP/Instinto com user-bound grants e testes"
+    },
+    {
+      "id": "GITHUB_REFRESH_ROTATION",
+      "status": "NOT_PROVEN",
+      "next": "detectar App OAuth vs GitHub App e provar atualização de token no vault"
+    },
+    {
+      "id": "HERMES_RUNTIME_SKILL_LOAD",
+      "status": "NOT_PROVEN",
+      "next": "instalar/sincronizar pelo owner existing e obter ACK pós-merge"
+    },
+    {
+      "id": "MCP_SKILL_CATALOG_LIVE",
+      "status": "NOT_PROVEN",
+      "next": "promover PR 1837 após SAME_SHA CI e testar runtime"
+    }
+  ],
+  "no_secrets": true
+}

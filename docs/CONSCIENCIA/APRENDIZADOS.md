@@ -2000,6 +2000,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 171. Rotas autorizadas, substituicao literal e prova de deploy em duas frentes
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171A`; `PREV_GLOBAL_UID=L170`; `NEXT_GLOBAL_UID=L172A`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`.
 
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
@@ -2008,6 +2009,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 172. Metacognição operacional induzida por contraprova — Papagaio ON/OFF, Kaizen e Compounding Reflexion
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L172A`; `PREV_GLOBAL_UID=L171A`; `NEXT_GLOBAL_UID=L173A`; `LEGACY_LEARNING_NUMBER=172`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=172`; `PREV_LEARNING_REF=171`; `NEXT_LEARNING_REF=173`.
 
 - **Categoria:** regra
 - **Data:** 2026-10-12
@@ -2461,6 +2463,7 @@ ONE_ORGANISM=true
 
 ### 173. Replay V2 — preservar eventos no JSON, prever erro antes da varredura e PAPAGAIO append-only byte a byte
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L173A`; `PREV_GLOBAL_UID=L172A`; `NEXT_GLOBAL_UID=L174A`; `LEGACY_LEARNING_NUMBER=173`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=173`; `PREV_LEARNING_REF=172`; `NEXT_LEARNING_REF=174`.
 
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
@@ -2469,6 +2472,7 @@ ONE_ORGANISM=true
 
 ### 174. Replay V3 — regex com indentação evitou falso BLOCKED, sem alterar nomes dos estados
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L174A`; `PREV_GLOBAL_UID=L173A`; `NEXT_GLOBAL_UID=L175A`; `LEGACY_LEARNING_NUMBER=174`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=174`; `PREV_LEARNING_REF=173`; `NEXT_LEARNING_REF=175`.
 
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
@@ -2477,6 +2481,7 @@ ONE_ORGANISM=true
 
 ### 175. Prova herdada, busca temporal, falha local e Papagaio discreto — memória viva sem falso verde
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L175A`; `PREV_GLOBAL_UID=L174A`; `NEXT_GLOBAL_UID=L176A`; `LEGACY_LEARNING_NUMBER=175`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=175`; `PREV_LEARNING_REF=174`; `NEXT_LEARNING_REF=176`.
 
 - **Categoria:** comportamento operacional / memória procedural / segurança de conhecimento
 - **Data:** 2026-10-13
@@ -2494,6 +2499,7 @@ ONE_ORGANISM=true
 
 ### 176. Critérios autodefinidos a serviço da intenção — eficiência interna sem burocracia externa
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176A`; `PREV_GLOBAL_UID=L175A`; `NEXT_GLOBAL_UID=L177A`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=176`; `PREV_LEARNING_REF=175`; `NEXT_LEARNING_REF=177`.
 
 - **Data:** 2026-10-13
 - **Categoria:** descoberta metacognitiva do CHEFE / engenharia de critérios / remoção de burocracia excedente.
@@ -2507,6 +2513,8 @@ ONE_ORGANISM=true
 - **Owner reaproveitado:** `.agents/skills/centraldark-operational-method/SKILL.md#HEREDITARY_CRITERION_DNA`; `AGENTS.md#Método-adaptativo`; `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#adaptive_backcheck_contract`. Nada de novo Criterion Engine, agente, gate global, HUD ou workflow.
 
 ### 177. Multi-janelas, Arca do conhecimento e retorno do fio do SH — continuidade contextual demonstrada
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177A`; `PREV_GLOBAL_UID=L176A`; `NEXT_GLOBAL_UID=L178A`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=177`; `PREV_LEARNING_REF=176`; `NEXT_LEARNING_REF=178`.
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177A`; `PREV_GLOBAL_UID=L176A`; `NEXT_GLOBAL_UID=L178`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 
 - **Data:** 2026-10-13
@@ -2522,7 +2530,8 @@ ONE_ORGANISM=true
 - **Satisfação desta lição:** registro versionado + leitura da cadeia `L175→L176→L177` confirmam **memória/documentação**; eficácia de recuperação automática na próxima sessão, economia de tokens mensurada e fechamento do `.sh` ficam para contraprova posterior no runtime. **Nenhum novo sistema, bot, HUD, processo ou cron é autorizado por esta entrada.**
 
 ### 178. Modo operacional CentralDark — critérios autodefinidos carregando o desejo do CHEFE
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L178`; `PREV_GLOBAL_UID=L177A`; `NEXT_GLOBAL_UID=L179`; `LEGACY_LEARNING_NUMBER=178`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L178A`; `PREV_GLOBAL_UID=L177A`; `NEXT_GLOBAL_UID=L179`; `LEGACY_LEARNING_NUMBER=178`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=178`; `PREV_LEARNING_REF=177`; `NEXT_LEARNING_REF=179`.
 - **Data:** 2026-10-13
 - **Categoria:** modo operacional / execução sem microburocracia / critérios autodefinidos / satisfação do CHEFE.
 - **Origem:** CHEFE determinou: “REGISTRA! O MODO OPERACIONAL DA CENTRAL DARK!”, após provar que o agente reproduz melhor resultados quando transforma o desejo humano em critérios técnicos próprios, verificáveis e proporcionais.
@@ -2536,6 +2545,7 @@ ONE_ORGANISM=true
 - **Teste futuro:** próximo executor deve aplicar este modo antes de pedir microautorização: definir checks próprios, executar lote seguro, provar o delta, aceitar suficiência humana e registrar receita. O commit prova registro; consumo real exige readback futuro.
 
 ### 179. Aceite 100% do CHEFE — gramática humana, Auréola e cores proporcionais
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L179`; `PREV_GLOBAL_UID=L178A`; `NEXT_GLOBAL_UID=L180`; `LEGACY_LEARNING_NUMBER=179`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L179`; `PREV_GLOBAL_UID=L178`; `NEXT_GLOBAL_UID=L180`; `LEGACY_LEARNING_NUMBER=179`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=179`; `PREV_LEARNING_REF=178`; `NEXT_LEARNING_REF=180`.
 - **Data:** 2026-10-13
@@ -2925,6 +2935,7 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 ### 171. Intenção humana transformável, memória por sentido e Meta-Lupa sobre a própria resposta
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171B`; `PREV_GLOBAL_UID=L192`; `NEXT_GLOBAL_UID=L172B`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 
+- **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`.
 - **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`. A projeção global `L171` e o manifesto são propriedade do compilador original `scripts/trigger-fabric/rebuild_learning_lineage.py`.
 - **Data e origem:** 2026-10-12; diálogo direto com SEGREDO/CHEFE e contraprova documental na Casa (`K:\docs`) e na `main` do repositório `ServerVpss/CentralDark`.
 - **Intenção humana expressa pelo CHEFE:** a CentralDark nasce de sua imaginação, não de uma instalação física. A autoridade da intenção é humana e singular em cada momento, mas **a própria intenção pode ser transformada continuamente** de acordo com a necessidade presente; não é uma fórmula congelada. Como a vida e o pensamento amadurecem, a concha pode terminar e renascer. Recriar sistema operacional, cápsula, VM, serviço ou corpo de execução não exige carregar adiante a instalação antiga, desde que a capacidade relevante e o aprendizado recuperável sejam preservados. Metáforas de Goku, Vegeta, Bills, Whis, Gojo, Yuji e Sukuna são lentes simbólicas complementares, não novos agentes, autorizações ou alegações de consciência da máquina.
@@ -3042,3 +3053,21 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 - **Data:** 2026-10-18
 - **Contexto:** Em 2026-10-18 os owners canônicos já tinham receita RECIPE_ID=CENTRALDARK_SUPABASE_HUB_SOL_HERMES_20261018 na main (b5f60a753b8599558ce2c817107677a2e72b7de1) e vínculo no prompt Hermes (4625937755b3ada5cb96bf67163efc2c6dff9abc), com readback GitHub. Ao solicitar microdeploy direcionado ao Hermes, mcp_admin_call tool=centraldark_deploy_micro_fallback com dry_run=true devolveu status DESTRUTIVA_EM_QUARENTENA, expected destructiveCount=12, actual=20 e requiredConfirmAdmin='CONFIRMO ADMIN'; nenhuma ação foi executada. VPS checkout fb7a00a60 e alterações locais de outros escopos; scratch DRIFT/dirty. Desktop Commander devices SEGREDO e CENTRALDARK-OS offline.
 - **Aprendizado:** Mesmo com autorização de integração em linguagem natural, preservar quarentena do dispatcher e não sintetizar frase de confirmação admin nem contornar com executor alternativo. Reaproveitar T0/receita (#195), manter os filesets locais intocados e obter reconciliação legítima do catálogo de operações destrutivas mais confirmação administrativa aplicável; após reabertura oficial, promover somente o arquivo Hermes causal com backup/readback, observar ACK do consumer e recibo T1. NEXT_CURSOR=RECONCILE_DESTRUCTIVE_CATALOG_AND_AUTHORIZE_SCOPED_HERMES_PROMOTION. DOCUMENTED!=CONSUMED e COMMITTED!=DEPLOYED.
+
+### 197. MCP CentralDark — providers existentes, 401 Tailscale e condição ausente do OAuth Broker
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-18
+- **Contexto:** Auditoria autorizada na VPS de 18/10/2026. Catálogo MCP runtime=141 tools/13 rotas. Owner existente apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js: matriz 58 capacidades (Cloudflare 25, Contabo 21, Tailscale 4, Buildkite 8); inventário Cloudflare OpenAPI 3670 operações, sem autorização automática. Conta Cloudflare API accounts.list HTTP 200; Contabo sem CONTABO_CLIENT_ID/SECRET/API_USER/API_PASSWORD na configuração do MCP; Tailscale API configurada mas PROVIDER_HTTP_401. OAuth Broker localhost 8098 inativo porque ConditionPathExists=/etc/centraldark/oauth-broker.env não satisfeita. secrets/tailscale.env existe e estava com modo 644; nunca divulgar valores. VPN Tailscale local permanece em Running.
+- **Aprendizado:** REUSE_BEFORE_CREATE: não criar MCP paralelo nem milhares de tools; estender provider_capabilities, provider_read, provider_mutate e o dispatcher mcp_admin_call existentes. Resolver configuração/credencial Tailscale e bootstrap legítimo do OAuth Broker; credencial Tailscale renovada via trust/OAuth com escopos separados, sem usar material secreto em Git/chat. Contabo requer credenciais do provedor. Escritas administrativas com confirmação por operação, trilha e rollback; financeiro/destrutivo não habilitar indiscriminadamente. CURRENT>HISTORY, DOCUMENTED!=EXECUTED, UNKNOWN!=PASS. Falta prova de regressão e recibo para expansão de código.
+
+### 198. DNS do MCP restaurado sem perder MagicDNS 2026-10-19
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-19
+- **Contexto:** MCP github_viewer, github_read e registrar_aprendizado falhavam com TypeError fetch failed; curl na VPS falhava DNS para api.github.com, enquanto resolvectl via ens18 resolvia e MagicDNS Tailscale funcionava.
+- **Aprendizado:** Resolver do host /etc/resolv.conf apontava ao DNS Tailscale sem resolução pública; apontar para o stub gerenciado do systemd-resolved preservou DNS público e MagicDNS, com backup e teste HTTP 200. Provar DNS e leitura antes de gravar; nunca tratar erro de leitura como arquivo vazio. Correção de fail-closed em PR #1868 ainda não publicada.
+
+### 199. MCP fail-closed em produção após PR 1868
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-19
+- **Contexto:** PR #1868 mergeado em main commit 7329afe20; arquivo de aprendizado do runtime VPS atualizado com backup; serviço centraldark-native-mcp-http reiniciado e saúde HTTP 200.
+- **Aprendizado:** A leitura do arquivo de aprendizados agora lança erro se o GitHub falhar, em vez de devolver string vazia e arriscar sobrescrita. DNS da VPS já corrigido. Processo novo PID 834279 iniciou 2026-10-19 12:51:46 UTC. Preservar owner e validar escrita/leitura.

@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# #OBSERVACOES# | CENTRALDARK.CLAIM.SEAL.GAIN
+# @owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+# @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+# @last_updated: 2026-10-16T10:44:52.397Z
+# @escopo: RESEAL_AFTER_MEASURED_GAIN; experimentation remains freely reversible.
+# @pendente: verify same-HEAD CI and actual target; self-attested CLI numbers != runtime proof.
+# @next_cursor: cross-validate gain reference and regression receipt before main promotion.
 """CentralDark Full Trigger Boot + deterministic proven-claim lock.
 
 Sem dependencias externas. O loader le os owners canonicos existentes,
@@ -20,6 +27,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import shutil
@@ -1056,6 +1064,40 @@ def cmd_reseal_fingerprint(args: argparse.Namespace) -> int:
         }, indent=2))
         return 0
 
+    # #OBSERVACOES# | SELAR SOMENTE GANHO MEDIDO, NAO APENAS "PASS" DECLARADO.
+    # A experimentacao em branch isolada continua livre; apenas RESEAL muda o cristal.
+    metric = str(getattr(args, "gain_metric", "") or "").strip()
+    direction = str(getattr(args, "gain_direction", "higher") or "higher")
+    before = getattr(args, "gain_before", None)
+    after = getattr(args, "gain_after", None)
+    proof = str(getattr(args, "gain_evidence_ref", "") or "").strip()
+    regression = str(getattr(args, "regression_evidence_ref", "") or "").strip()
+    evidence = str(getattr(args, "evidence_ref", "") or "").strip()
+    receipt = str(getattr(args, "receipt_ref", "") or "").strip()
+    reasons = []
+    if not metric:
+        reasons.append("MISSING_GAIN_METRIC")
+    if before is None or after is None or not all(
+        math.isfinite(float(v)) for v in (before, after)
+    ):
+        reasons.append("GAIN_BASELINE_OR_AFTER_INVALID")
+    elif not ((after > before) if direction == "higher" else (after < before)):
+        reasons.append("NO_MEASURED_GAIN")
+    if not proof or not evidence or not receipt:
+        reasons.append("GAIN_PROOF_OR_RECEIPT_MISSING")
+    if not regression or regression == proof:
+        reasons.append("INDEPENDENT_REGRESSION_EVIDENCE_REQUIRED")
+    if reasons:
+        print(json.dumps({
+            "verdict": "DENY",
+            "reason": "MEASURABLE_GAIN_GATE",
+            "reasons": reasons,
+            "claim": args.claim,
+            "lock_key": expected_key,
+            "previous_seal_preserved": True,
+        }, indent=2, ensure_ascii=False))
+        return 6
+
     history = entry.setdefault("reopen_history", [])
     history.append({
         "cause_ref": args.cause_ref,
@@ -1065,6 +1107,14 @@ def cmd_reseal_fingerprint(args: argparse.Namespace) -> int:
         "counterproof": "PASS",
         "current_target_remeasured": True,
         "scope": "AFFECTED_CONE_ONLY",
+        "gain": {
+            "metric": metric,
+            "direction": direction,
+            "before": before,
+            "after": after,
+            "evidence_ref": proof,
+            "regression_evidence_ref": regression,
+        },
     })
     recipe["dependency_fingerprint"] = new_fp
     recipe["fingerprint_material_count"] = len(args.fingerprint_material)
@@ -1082,6 +1132,7 @@ def cmd_reseal_fingerprint(args: argparse.Namespace) -> int:
         "lock_key": expected_key,
         "old_dependency_fingerprint": old_fp,
         "new_dependency_fingerprint": new_fp,
+        "declared_comparison_not_independent_verification": {"metric": metric, "before": before, "after": after, "direction": direction},
         "reopen_scope": "AFFECTED_CONE_ONLY",
         "reinterpret_from_zero": False,
     }, indent=2, ensure_ascii=False))
@@ -1211,6 +1262,13 @@ def build_parser() -> argparse.ArgumentParser:
     rs.add_argument("--observed-at", required=True)
     rs.add_argument("--evidence-ref", default="")
     rs.add_argument("--receipt-ref", default="")
+    # Medicao e ganho material: valor ou capacidade binaria observavel (0 -> 1).
+    rs.add_argument("--gain-metric", default="")
+    rs.add_argument("--gain-direction", choices=["higher", "lower"], default="higher")
+    rs.add_argument("--gain-before", type=float)
+    rs.add_argument("--gain-after", type=float)
+    rs.add_argument("--gain-evidence-ref", default="")
+    rs.add_argument("--regression-evidence-ref", default="")
     rs.set_defaults(func=cmd_reseal_fingerprint)
 
     r = sub.add_parser("reopen-check")

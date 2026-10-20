@@ -492,3 +492,40 @@ end
 %% CD_FLOW:instinto.PapagaioHudMcp.PapagaioHudMcp
 CD_REG_146_A["INSTINTO_SUPERIOR_UI"] -->|"CALL"| CD_REG_146_B["INSTINTO_SUPERIOR_COCKPIT"]
 %% CD_REGISTRY_PROJECTION_END
+
+%% PR #1837: projecao do fluxo de catalogo autenticado, sem segundo router
+TOOLS --> MCP_SKILLS_CANONICAL_CATALOG["MCP Skill Workshop<br/>skills/ + .agents/skills/<br/>SOURCE ONLY / auth required"]
+%% CD_FLOW:skillworkshop.catalog.20261016.01
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_01["skill-workshop"]
+%% CD_FLOW:skillworkshop.catalog.20261016.02
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_02["indexSkillTree"]
+%% CD_FLOW:skillworkshop.catalog.20261016.03
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_03["searchSkills"]
+%% CD_FLOW:skillworkshop.catalog.20261016.04
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_04["resolveSkill"]
+%% CD_FLOW:skillworkshop.catalog.20261016.05
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_05["readCanonicalTree"]
+%% CD_FLOW:skillworkshop.catalog.20261016.06
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_06["githubTree"]
+%% CD_FLOW:skillworkshop.catalog.20261016.07
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_07["readCatalog"]
+%% CD_FLOW:skillworkshop.catalog.20261016.08
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_08["readExternalSourceMetadata"]
+%% CD_FLOW:skillworkshop.catalog.20261016.09
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_09["resolveFromCatalog"]
+%% CD_FLOW:skillworkshop.catalog.20261016.10
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_10["indexSkillTree"]
+%% CD_FLOW:skillworkshop.catalog.20261016.11
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_11["searchSkills"]
+%% CD_FLOW:skillworkshop.catalog.20261016.12
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_12["resolveSkill"]
+%% CD_FLOW:skillworkshop.catalog.20261016.13
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_13["readCanonicalTree"]
+%% CD_FLOW:skillworkshop.catalog.20261016.14
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_14["githubTree"]
+%% CD_FLOW:skillworkshop.catalog.20261016.15
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_15["readCatalog"]
+%% CD_FLOW:skillworkshop.catalog.20261016.16
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_16["readExternalSourceMetadata"]
+%% CD_FLOW:skillworkshop.catalog.20261016.17
+  MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_17["resolveFromCatalog"]
