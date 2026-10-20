@@ -55,6 +55,7 @@ async function request(device, pathname, { method = "GET", payload, timeoutMs = 
       redirect: "error",
       headers: {
         Authorization: "Bearer " + secret,
+        "X-CentralDark-Device-Id": device.id,
         Accept: "application/json",
         ...(payload ? { "Content-Type": "application/json" } : {}),
       },
@@ -100,6 +101,7 @@ export const vscodeRemoteTerminalTools = [
       if (!device) return errorState("DEVICE_NOT_PAIRED");
       const data = await request(device, "/terminals", { timeoutMs: 5000 });
       if (!data.ok) return errorState(data.status || "DEVICE_UNREACHABLE");
+      if (data.deviceId !== device.id) return errorState("DEVICE_ID_MISMATCH");
       const terminals = Array.isArray(data.terminals) ? data.terminals.slice(0, 50) : [];
       return result({ ok: true, status: "LIVE_TERMINAL_READBACK", deviceId: device.id, terminals: terminals.map(t => ({
         pid: Number.isSafeInteger(t.pid) ? t.pid : null,
@@ -128,6 +130,7 @@ export const vscodeRemoteTerminalTools = [
         payload: { requestId, at: new Date().toISOString(), pid: input.pid,
           command: input.command, commandHash, intentId: input.intentId || null },
       });
+      if (data.deviceId !== device.id) return errorState("DEVICE_ID_MISMATCH");
       if (data.requestId !== requestId) return errorState(data.status === "POST_OUTCOME_UNKNOWN" ? "POST_OUTCOME_UNKNOWN" : "CORRELATION_FAILED");
       const exitCode = Number.isSafeInteger(data.exitCode) ? data.exitCode : null;
       const proven = data.status === "EXECUTED" && data.ok === true && exitCode !== null;
