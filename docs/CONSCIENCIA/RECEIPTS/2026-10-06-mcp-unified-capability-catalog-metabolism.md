@@ -144,3 +144,39 @@ DEPLOY_STATUS=ERRO_PM2_JSON_PARSE
 **NEXT_CURSOR herdável:** `#ACORDAR → REUSE_EXISTING_OWNER → CATALOG_141_VS_PUBLIC_153_VS_LEGACY_86 → RECONCILE_EXPECTATIONS_WITHOUT_DELETING_TOOLS → PM2_READBACK_SEPARATE → PR1877/PR1880_CI_AND_DEPLOY_GATES → REAL_DEVICE_READBACK → !CONTRAPROVA → !FIXED_POINT`.
 
 **Regra temporal:** os valores de `CATALOG_EXPECTED_ROUTES=11` e o fingerprint antigo acima no receipt são históricos de 06/10 e permanecem preservados; **CURRENT em 20/10 tem 13 rotas e fingerprint `80f0...`**.
+
+
+## REVISÃO #ACORDAR — contraprova SOURCE 17 versus RUNTIME 13 (20/10/2026)
+
+**Escopo:** revisão do receipt de 20/10 e mapeamento read-only dos owners já existentes, às 14:20 UTC, sem alterações em processos, regras de rede, autenticação, arquivos de produção ou deploy.
+
+**Provas confrontadas:**
+- `mcp_status` e `mcp_admin_catalog` ao vivo: dispatcher `mcp_admin_call`, 141 tools internas únicas, 20 `destructiveHint=true`, 13 rotas, fingerprint `80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7`, auditoria de inicialização pronta.
+- `apps/modulos/mcp/src/tools/core/mcp-admin.js` da `main`: `AUTHORIZED_ROUTE_CATALOG` declara **17** entradas e fingerprint estático `b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa`.
+- Quatro entradas **SOURCE_ONLY_UNTIL_RUNTIME_READBACK** ausentes das 13 rotas servidas: `ZENDRIVE_VSCODE_REMOTE_SSH`, `FIGMA_MCP_ACCOUNT`, `FIGMA_CENTRALDARK_FIGJAM`, `RDC_VPS_CENTRALDARK_OS`. A presença no fonte não confirma binding vivo.
+- `github/main` e checkout Git da VPS convergiram para `45cd830c18415d0412373dff100869ab2b200272`. **GIT_SYNC_PASS != MCP_PROCESS_CODE_LOADED**; existe árvore de runtime compilado separada documentada; conteúdo efetivamente carregado ainda não foi provado por SHA/readback da árvore executável.
+- `deploy_validate_mcp_catalog`: `/health` público declara 153 tools; `mcp_catalog_diff` usa visão de 86, aponta seis itens ausentes da própria expectativa. Não somar 141+153+86 nem inferir ausência de ferramentas do servidor público sem comparar `/tools.json` e os respectivos escopos.
+- `admin_pm2_list` falhou diretamente com `spawn pm2 ENOENT`; `deploy_status` exibe `vps_pm2: SyntaxError: Unexpected end of JSON input`. Isso é **falha do diagnóstico PM2**, não prova de que serviços estão offline. Necessário reutilizar dono systemd/runtime existente e validar separadamente.
+- `centraldark_operational_snapshot`: MCP PID `834279` em RUNNING; `heartbeat.self=UNKNOWN`; forense `latestReceiptPresent=false` no arquivo forense esperado; não confundir com este receipt GitHub.
+- **Auditoria de classificação**: `admin_commit_main` em `apps/modulos/mcp/src/modes/admin/tools/admin-main-writer.js` efetua commit CAS na `main` com proteções locais, porém `annotations.destructiveHint=false`. Não afirmar bypass; exigir revisão da semântica e dos gates admin na frente específica antes de modificar.
+- PRs [#1876](https://github.com/ServerVpss/CentralDark/pull/1876), [#1877](https://github.com/ServerVpss/CentralDark/pull/1877) e [#1880](https://github.com/ServerVpss/CentralDark/pull/1880) ainda abertos, não merged. Checks HEAD: #1876 (28 queued/30 skipped/15 cancelled), #1877 (27 queued/15 skipped), #1880 (23 queued/22 skipped/5 cancelled). **SKIPPED/CANCELLED/QUEUED != CI_GREEN**.
+
+**Estado e correção temporal do registro anterior:**
+```text
+DOCUMENTED_CATALOG_2026_10_06=11 (HISTORICAL)
+SOURCE_MAIN_ROUTE_COUNT_CURRENT=17
+MCP_RUNTIME_ROUTE_COUNT_CURRENT=13
+SOURCE_FP=b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa
+RUNTIME_FP=80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
+SOURCE_RUNTIME_PARITY=NOT_PROVEN_DRIFT_OBSERVED
+GITHUB_MAIN_VPS_GIT_CHECKOUT_SYNC=PASS
+MCP_PROCESS_RELOAD_AND_MATCHING_SHA=UNKNOWN
+PM2_DIAGNOSTIC=ERROR_PM2_NOT_FOUND
+ADMIN_MAIN_WRITE_CLASSIFICATION_REVIEW=PENDING
+REVIEW_RECEIPT=PASS_AFTER_GITHUB_READBACK
+FULL_MISSION_COMPLETE=false
+```
+
+**FIXED_POINT:** revisão e classificação de evidências concluídas **somente no escopo documental**. Nenhum código compilado carregado, merge, deploy, restart, alteração de ACL ou serviço executado.
+
+**NEXT_CURSOR:** `COMPARE_ACTUAL_MCP_RUNTIME_DIST_SHA_AND_17_SOURCE_ROUTES → RECONCILE_SOURCE_DIST_WITHOUT_RESTART_BLIND → PM2_SYSTEMD_OWNER_DIAGNOSIS → REVIEW_ADMIN_MAIN_WRITE_RISK_CLASSIFICATION → PR1876_1877_1880_CI_GATES → VERIFIED_DEPLOY → MCP_ADMIN_CATALOG_READBACK_AND_COUNTERPROOF → FIXED_POINT`.
