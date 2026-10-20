@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Brain, TrendingUp, AlertCircle, CheckCircle2, Moon, BookOpenText, FolderInput, ScrollText, GitMerge, LibraryBig, Sparkles, ShieldCheck, MessagesSquare, ExternalLink, ArrowRight, FileClock, FileCheck2, SearchCheck } from "lucide-react";
+import { Brain, TrendingUp, AlertCircle, CheckCircle2, Moon, BookOpenText, FolderInput, GitMerge, LibraryBig, Sparkles, ShieldCheck, MessagesSquare, ExternalLink, ArrowRight, FileClock, FileCheck2, SearchCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -103,7 +102,6 @@ const SESSOES_ANALISADAS: SessaoAnalisada[] = [
 ];
 
 export function DreamReviewer({ onNavigate }: { onNavigate?: (aba: string) => void } = {}) {
-  const [expandido, setExpandido] = useState(false);
 
   return (
     <div className="w-full space-y-6">
