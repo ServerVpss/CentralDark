@@ -130,6 +130,7 @@ export const vscodeRemoteTerminalTools = [
         payload: { requestId, at: new Date().toISOString(), pid: input.pid,
           command: input.command, commandHash, intentId: input.intentId || null },
       });
+      if (data.status === "POST_OUTCOME_UNKNOWN") return errorState("POST_OUTCOME_UNKNOWN");
       if (data.deviceId !== device.id) return errorState("DEVICE_ID_MISMATCH");
       if (data.requestId !== requestId) return errorState(data.status === "POST_OUTCOME_UNKNOWN" ? "POST_OUTCOME_UNKNOWN" : "CORRELATION_FAILED");
       const exitCode = Number.isSafeInteger(data.exitCode) ? data.exitCode : null;
