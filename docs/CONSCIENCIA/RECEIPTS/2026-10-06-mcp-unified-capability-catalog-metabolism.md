@@ -93,3 +93,54 @@ LIVE_MCP_CATALOG_NEW_PAYLOAD=UNKNOWN_UNTIL_SERVICE_RELOAD_AND_TOOL_READBACK
 ```
 
 Os arquivos novos foram promovidos cirurgicamente na árvore que o processo realmente executa, preservando os deltas locais já existentes em `mcp-server.js` e `operational-telemetry.js`. O serviço não foi declarado atualizado porque a tentativa de restart foi bloqueada pela camada de execução antes da ação.
+
+
+## #ACORDAR — readback vivo do MCP CentralDark em 20/10/2026
+
+**INTENÇÃO:** herdar a medição do catálogo MCP anterior e registrar estado atual sem substituir nem corrigir retroativamente o receipt histórico de 06/10. Consulta **read-only** feita em 20/10/2026, 12:36–12:37 UTC (09:36–09:37 BRT), pelo conector CentralDark autenticado.
+
+**OWNER REUTILIZADO:** catálogo executável `apps/modulos/mcp/src/tools/core/mcp-admin.js`; dispatcher `mcp_admin_call`. Este registro continua no **receipt canônico existente**. Nenhum segundo MCP, cérebro, HUD, scheduler ou protocolo criado.
+
+```text
+MCP_RUNTIME_STATUS=PASS
+DISPATCHER=mcp_admin_call
+CATALOG_SCOPE=centraldark_unified_capability_catalog
+CATALOG_VERSION=v1-f8ff6720fec3
+CATALOG_FINGERPRINT=80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
+RUNTIME_CATALOG_TOOLS=141
+RUNTIME_DISPATCHABLE_TOOLS=141
+DESTRUCTIVE_CLASSIFIED_TOOLS=20
+NON_DESTRUCTIVE_CLASSIFIED_TOOLS=121
+ROUTES_DOCUMENTED_IN_LIVE_CATALOG=13
+AUDIT_STARTUP_READY=true
+MCP_PROCESS_PID_OBSERVED=834279
+MCP_PROCESS_STATE=RUNNING
+MCP_SELF_HEARTBEAT=UNKNOWN
+FORENSIC_LATEST_RECEIPT=UNKNOWN
+GITHUB_MAIN_SHA=4afb15b5bda9ed6bd852ecb36d53da67fb486310
+VPS_CHECKOUT_SHA=4afb15b5bda9ed6bd852ecb36d53da67fb486310
+VPS_CHECKOUT_UNTRACKED_CONTENT=EXISTS_PRESERVE
+PUBLIC_MCP_HEALTH=PASS
+PUBLIC_MCP_VERSION=0.4.0
+PUBLIC_MCP_TOOLCOUNT=153
+LEGACY_DIFF_SCOPE_TOOLCOUNT=86
+LEGACY_DIFF_STATUS=FALTANDO_TOOLS
+DEPLOY_STATUS=ERRO_PM2_JSON_PARSE
+```
+
+**As 13 rotas do catálogo** (a presença no catálogo **não** é runtime proof individual): `AIONUI_MCP_STDIO`, `CAS_CLOUD_RELAY`, `GITHUB_RUNTIME`, `HERMES_DELEGATED_COMMIT_PATH` (prova histórica PR #1748; replay obrigatório), `HERMES_SHELL`, `MCP_CASA_TO_VPS`, `MCP_REMOTE_OAUTH`, `MCP_VPS_NATIVE_HTTP`, `RDC_DESKTOP_COMMANDER`, `SCREENPIPE_CLI_RECORDER`, `SCREENPIPE_LOCAL_SENSOR`, `SSH_VPS_DIRECT`, `TAILSCALE_PRIVATE_ROUTE`.
+
+**Contraprovas de contagem e alcance:**
+- `141` é escopo do **dispatcher interno**; `153` é o `toolCount` reportado no /health **público**; `86` é o escopo **legado** usado pelos validadores `mcp_catalog_diff` e `deploy_validate_mcp_catalog`. Não somar nem considerar diretamente divergência equivalente a 12 tools duplicadas. Os validadores retornam `ok=false` por contratos de ferramentas faltantes; revisar owner e expectativa sem reduzir o catálogo.
+- `mcp_catalog_diff` apontou `deploy_validate_mcp_catalog`, `mcp_audit_recent_logs`, `mcp_catalog_diff`, `mcp_policy_summary`, `vps_limpar_pasta_projeto`, `vps_listar_pastas_limpaveis` como ausentes do seu escopo legado. Os quatro primeiros existem como chamadas externas mas não como itens do catálogo de 86; os dois últimos exigem avaliação de descontinuação/segurança, não bypass.
+- `deploy_status` marcou erro de parsing PM2 (`SyntaxError: Unexpected end of JSON input`): isso **não** demonstra ausência de processos, nem falha global MCP.
+- `centraldark_operational_snapshot` observou MCP PID `834279`, Desktop Commander Remote VPS com 8 processos (não prova execução na Casa), mas classificou Telegram, Hermes, runner e Guardião como `NOT_OBSERVED` nessa amostra. `SELECTED` de modelo llama.cpp não implica inferência funcionando.
+- Tailscale VPS↔Casa e Screenpipe `SEGREDO:3030/health` tiveram provas reais **nesta sessão anterior**, mas o conteúdo de tela é protegido por HTTP 403 e o áudio apresentou `degraded`. Readback com `screenpipe_status` aceitando Casa está no PR [#1877](https://github.com/ServerVpss/CentralDark/pull/1877), **não em main**.
+- A rota `vscode_remote_*` proposta no PR [#1880](https://github.com/ServerVpss/CentralDark/pull/1880) permanece **não integrada e sem instalação/pareamento na Casa comprovados**.
+- `vps_git_status` encontrou arquivos não rastreados na VPS: preservar; nunca `git reset --hard` ou `clean` durante reconciliação cega.
+
+**FIXED_POINT / escopo fechado:** `LIVE_MCP_ADMIN_CATALOG_READBACK=PASS`, `ROUTE_COUNT_13=PASS`, `RECEIPT_REGISTRATION=PASS_AFTER_GITHUB_READBACK`; `FULL_RUNTIME_E2E=UNKNOWN`, `CATALOG_VALIDATOR_PARITY=BLOCKED_BY_OLD_SCOPE`, `PM2_PROBE=ERROR`, `MISSION_COMPLETE=false`.
+
+**NEXT_CURSOR herdável:** `#ACORDAR → REUSE_EXISTING_OWNER → CATALOG_141_VS_PUBLIC_153_VS_LEGACY_86 → RECONCILE_EXPECTATIONS_WITHOUT_DELETING_TOOLS → PM2_READBACK_SEPARATE → PR1877/PR1880_CI_AND_DEPLOY_GATES → REAL_DEVICE_READBACK → !CONTRAPROVA → !FIXED_POINT`.
+
+**Regra temporal:** os valores de `CATALOG_EXPECTED_ROUTES=11` e o fingerprint antigo acima no receipt são históricos de 06/10 e permanecem preservados; **CURRENT em 20/10 tem 13 rotas e fingerprint `80f0...`**.
