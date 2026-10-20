@@ -489,3 +489,29 @@ PUBLIC_PDF_CONTENT_UPLOAD=NO
 
 **NEXT_CURSOR:** classificar direitos/sensibilidade e selecionar apenas os PDFs realmente pertinentes; então aplicar o leitor/roteador da Biblioteca num ensaio controlado, indexando somente conteúdo autorizado, com readback e contraprova. Integração runtime e replay permanecem `UNKNOWN`.
 
+
+
+## 📚 Biblioteca no Dream Reviewer do Instinto Superior — 20/10/2026
+
+**Intenção do CHEFE:** a Biblioteca tem que aparecer dentro do cockpit existente, com ícones bonitos, acesso pelo menu e ferramentas para conferir quando o Hermes realmente usar um aprendizado. Referências de composição pesquisadas: shadcn/ui `Tabs + Cards`, ícones Lucide com texto legível, grade responsiva, foco visível e divulgação progressiva dos detalhes.
+
+**Owners de UI reutilizados:** `apps/instinto-superior/src/components/central/CockpitShell.tsx` (já tem aba `dream-reviewer`; recebe **somente** destino no Harness, título PT-BR e os callbacks `Abrir Hermes`/`Conferir recibos`) + `apps/instinto-superior/src/components/central/DreamReviewer.tsx` (componente já existe; recebe grade de **nove peças** com origem, finalidade, ícone e estado fiel). A Biblioteca canônica continua aqui; o Dream Reviewer apenas **projetará suas referências**, sem duplicar banco, API ou engine.
+
+**Peças visíveis:** garimpo de sessões; inbox de experiências; Dream Review; descoberta de padrões; biblioteca de padrões; Biblioteca CentralDark; Self-Evolution; prompt Hermes consumidor; gatilho/agendamento. `Ver origem` abre o arquivo real de cada peça no repositório. `Abrir Hermes` e `Conferir recibos` navegam para as **abas existentes** do mesmo cockpit e **não** certificam consumo. Sem acesso às provas reais, a UI informa `Ainda não verificado`; fontes apenas no repositório ficam `Código localizado · uso a verificar`.
+
+**Correção de prova visual:** o componente antigo continha números ilustrativos (94%, sessões e padrões) e dizia que o Hermes dormia/aprendia, sem sensor que sustentasse esses estados. O delta remove o 94% e as contagens fictícias do resumo, recolhe os exemplos antigos atrás de `Ver dados ilustrativos — PRÉVIA, não são medições reais` e proíbe pintar como comprovado. Nenhum comando silencioso, timer paralelo, coleta de conversa, segredo ou scheduler novo foi adicionado.
+
+```text
+SOURCE_UI = apps/instinto-superior/src/components/central/DreamReviewer.tsx
+OWNER_COCKPIT = apps/instinto-superior/src/components/central/CockpitShell.tsx
+TEST_OWNER = apps/instinto-superior/scripts/verify-hud-zone.mjs
+CODE_REFERENCES = NOVE_ORIGENS_ESTRUTURADAS
+NAVEGACAO_HERMES_E_RECIBOS = BOTAO_EXISTENTE
+CONSUMO_REAL_HERMES = AINDA_NAO_VERIFICADO
+DREAM_REVIEW_SCHEDULE = AINDA_NAO_VERIFICADO
+LIVE_RUNTIME_AFTER_MERGE = AINDA_NAO_VERIFICADO
+NEXT_CURSOR = CI_MESMO_SHA -> CASA_RECONCILIAR_OWNER_LOCAL -> TESTE_VISUAL_8080 -> HERMES_CONSUMO_PROVADO -> MAIN_GATES -> VPS_DEPOIS
+```
+
+<!-- #OBSERVACOES# @owner=docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md @code_ref=apps/instinto-superior/src/components/central/DreamReviewer.tsx @code_ref=apps/instinto-superior/src/components/central/CockpitShell.tsx @code_ref=apps/instinto-superior/scripts/verify-hud-zone.mjs @last_updated=2026-10-20 -->
+
