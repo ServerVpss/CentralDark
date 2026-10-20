@@ -52,6 +52,42 @@ ACHADOS
 
 A ordem do filesystem, ordem das chaves e repetição do mesmo achado não podem fabricar aprendizado. Os testes de `delta-core` exigem que reordenação produza o mesmo fingerprint e informação material nova produza fingerprint diferente.
 
+## 🪬 Todos os desafios do CHEFE entram na mesma mineração — sem acumular lixo
+
+**Intenção confirmada em 20/10/2026:** não minerar apenas as duas artes do Hermes. Qualquer provocação, correção, objeção, contraprova, mudança de julgamento, surpresa, comparação ou feedback **efetivamente acessível e autorizado** pode conter aprendizado. O valor é **delta reutilizável comprovado**, não quantidade de palavras arquivadas.
+
+**Fluxo existente, sem segundo motor:**
+```text
+CHEFE + SOL + HERMES + demais fontes autorizadas
+→ session-intelligence-harvester (extrai episódios com origem)
+→ scripts/memory-linker/inbox/ (entrada única de matéria autorizada/sanitizada)
+→ inbox-sentinel.mjs (roteamento idempotente; quando ativo no runtime)
+→ dream-review-run.mjs (revisão isolada + deduplicação)
+→ pattern-discovery.mjs + pattern-library.mjs (mesma biblioteca)
+→ MetaLupa + contraprova + owner/consumidor comprovados
+→ Writer autorizado → PR → testes → Biblioteca/Aprendizados canônicos
+→ Hermes recupera só o conhecimento pertinente à conversa seguinte
+```
+
+**Campos para cada episódio:** `source`, `source_class`, `session_id`, `event_time`, `observed_at`, `head_sha`, `kind`, `target`, `claim` (critério anterior, quando necessário), `learning_delta` (o que a contraprova ensinou), `evidence` (origem/referência verificável). O contrato JSONL acima é **o mesmo**, não acrescentar novo esquema. Para provocar aprendizado, preferir `kind=MEMORY` ou `RULE` conforme significado, não inventar `kind=PROVOCACAO` sem evolução validada do schema.
+
+**Classes semânticas na triagem humana/modelo (não são tipos técnicos novos):**
+- **Provocação / desafio:** informação que questiona um critério usado.
+- **Contraprova:** novo caso que põe à prova a decisão revisada; pode confirmar, refutar ou contextualizar.
+- **Correção legítima:** erro concreto + motivo + revisão observável.
+- **Preferência subjetiva:** pode orientar apresentação, **não** vira regra universal.
+- **Sem novidade:** mesmo fingerprint/critério já aprendido → `NO_NEW_INFORMATION`, não copiar conteúdo de novo.
+
+**As duas artes do Hermes são exemplo, não limite de escopo:** a primeira expôs a ancoragem da SOL no capacete/autoridade; a segunda exibiu qualidade também com capacete e testou a oscilação por aprovação. A lição é **não confundir rigor com aparência nem inverter julgamento para agradar**. Referência canônica de fala: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md#hermes--duas-provocações` (mesmo owner, sem prompt paralelo).
+
+**Massivo sem desperdício:** preservar conteúdo bruto **apenas nas fontes originais autorizadas** e com controles de privacidade; a Biblioteca mantém ponte de origem, fingerprint, resumo verificável e ligação para o owner. Não despejar chats completos, pensamentos privados internos dos modelos, arquivos sigilosos, transcrições de terceiros ou segredos no GitHub. ChatGPT não fornece automaticamente todas as conversas a este motor: uma sessão só entra quando for realmente disponibilizada por conector/exportação autorizada. `DISCOVERED != INGESTED`, `INBOX != APRENDIDO`, `DOCUMENTED != HERMES_CONSUMED`.
+
+**“Quando dorme” significa revisão em janela ociosa de trabalho**, não sono literal nem consciência da IA. O gatilho canônico `DREAM_REVIEW` já aponta para `scripts/memory-linker/dream-review-run.mjs`, mas `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml` o declara `IMPLEMENTED_SCHEDULER_NOT_PROVEN`. Antes de anunciar execução noturna, medir o scheduler existente, a fonte real de sessões, o PID, o recebimento da proposta, o Writer e o consumo pelo Hermes; **não instalar outro cron/daemon por conveniência**.
+
+**Self-Evolution:** depois da mineração e da prova, reutilizar `apps/modulos/proxy/self_evolve.py`, `.agents/skills/meta-lupa/SKILL.md` e `evolution/skills/evolve_skill.py` quando pertinentes; otimizar skill/prompt/scaffold com benchmark e regressão, **não** alegar mudança de pesos do modelo ou aprovação sem gates. A IA responde ao CHEFE naturalmente somente com a lição contextual que o Hermes realmente recuperou.
+
+**NEXT_CURSOR:** `FONTES_DE_SESSAO_AUTORIZADAS → TESTES_EPISODIOS_CONTRAPROVA → SCHEDULER_EXISTENTE_REMEASURADO → PROPOSTA_COM_RECIBO → CONSUMIDOR_HERMES_READBACK`.
+
 ## Consolidação ociosa / Dream Review
 
 `dream-review.mjs` adiciona um **modo de revisão isolada** ao mesmo módulo.
