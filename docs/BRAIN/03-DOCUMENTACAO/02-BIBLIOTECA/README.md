@@ -527,3 +527,18 @@ O CHEFE mostrou a foto do topo do cockpit e pediu menos dispersão e melhor cont
 **Regressão no mesmo dono:** `apps/instinto-superior/scripts/verify-hud-zone.mjs` verifica textos, contrato de não inventar recibos e ligações para as abas. A observação definitiva deve ocorrer no build e no clique real do cockpit com alterações locais da Casa preservadas antes de merge/deploy.
 
 `NEXT_CURSOR=VERIFICAR_CI_SAME_SHA → RECONCILIAR_CASA_SEM_SOBRESCREVER → RENDERIZAR_CARTAO_EXISTENTE → COMPROVAR_LEITURA_HERMES_COM_RECEIPT → PROMOVER_CONFORME_GATES`.
+
+
+## 🧠 Sete funções + checkpoint/Cline no topo do cockpit — 20/10/2026
+
+O CHEFE pediu que **tudo que foi debatido sobre o Harness compacto** apareça nos **cartões do topo do Instinto Superior**, em vez de ficar disperso em chats, terminais ou diagramas. Reaproveitado `AutoSyncButton.tsx` (o cartão na primeira faixa do `CockpitShell.tsx`) e o componente **`CheckpointCentralDark.tsx`**, que já possui leitura RPC com `requireSupabaseAuth` e papel `admin`. Sem novo endpoint, nova memória, status sintético ou backend Cline.
+
+**Frente compacta:** CHEFE → COCKPIT → MCP (Descobrir/PID/Solicitar) → RECIBO, mais sessão/fila/último recibo/Dream Review. **Verso expandido:** as sete capacidades nomeadas `Mente Clara`, `Visão Contraprova`, `Selo da Realidade`, `Trilho de Execução`, `Pulso de Continuidade`, `Guardião Silencioso`, `Memória Viva`. Mantêm Tailscale, autorização no VS Code, PID e recibo sem transformá-los em sete ligações simultâneas.
+
+**Cartão de investigação Cline (histórico, não telemetria):** SSH Casa→VPS observado em registro de 20/10; CRLF PowerShell→Bash; falha `verify_argv` com AssertionError em release esperado; componente checkpoint existente sem montagem detectada no CockpitShell investigado. Os quatro itens estão rotulados como **evidência recebida**, sem declarar falha atual no runtime nem solução executada. Reutilizar logs anteriores; `REPEATED_RESEARCH_FORBIDDEN`.
+
+**Cartão checkpoint raiz real:** um `<details>` aciona **lazy loading** do `CheckpointCentralDark` apenas quando aberto. O mesmo owner no servidor lê `/root/.hermes/centraldark/bin/centraldark-entry.py --status`, expondo missão, último PASS, NEXT_CURSOR e SHA apenas sob autenticação admin. Não importar arquivo privado diretamente para frontend e não tentar recriar `current.json`. Botão de continuar já possui gate de `dispatch_ready/plan_ready`; `DISPATCHED_AWAITING_RECEIPT != PASS`. A localização canônica `/root/.hermes/centraldark/verified-execution/<missão>/current.json` é operada pelo código existente.
+
+**Contraprova de código:** `apps/instinto-superior/scripts/verify-hud-zone.mjs` contém testes estáticos dos sete nomes, do diagnóstico histórico, da passagem do estado `autenticado` e da RPC canônica, sem estabelecer execução do build. Estado: `SOURCE_READBACK=PASS`, `CI_SAME_SHA=QUEUED/PENDING`, `CASA_APPLIED=NO`, `VPS_DEPLOYED=NO`, `AUTH_CLICK_E2E=UNKNOWN`.
+
+**Próximo passo:** CI/build no SHA exato → reconciliar a Casa K:\ sem sobrescrever writer → conferir a UI topo/contraprova → readback de checkpoint com sessão admin real → só então promover.
