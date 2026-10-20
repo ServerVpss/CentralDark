@@ -332,3 +332,21 @@ test("Casa canonical K and four-stage collector receipt", () => {
   assert.ok(ingest.includes("playwright: playwrightReceipt"));
   assert.ok(!ingest.includes("playwright: playwrightProbe,"));
 });
+
+test("StatusPanel 20261020: pulso amarelo e sensores separados sem falso verde", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensores = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  assert.match(painel, /cor === "amarela"/);
+  assert.match(painel, /motion-reduce:animate-none/);
+  for (const nome of ["Tailscale · Casa ↔ VPS", "Screenpipe · Vídeo\/OCR",
+    "Screenpipe · Áudio", "Jarvis · Microfone", "Desktop Commander · Casa",
+    "Desktop Commander · VPS", "Heartbeat", "Omni Router", "Grafo Vivo", "Receipts"]) {
+    assert.ok(painel.includes(nome.replace("\\/", "/")), "card nao encontrado: " + nome);
+  }
+  assert.match(sensores, /execFile\("tailscale", \["status", "--json"\]/);
+  assert.match(sensores, /audio_stalled/);
+  assert.match(sensores, /frame_status/);
+  assert.match(sensores, /estado: "UNKNOWN"/);
+  assert.match(painel, /centraldark:jarvis:audio/);
+  assert.doesNotMatch(painel, /onClick=.*(?:start_process|kill_process)/);
+});

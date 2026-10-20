@@ -88,3 +88,20 @@ mesmo SHA, rollback verificável e recibo de efeito.
 - Provas: npm run verify:hud + npm run build:vps validam fonte; para
   RUNTIME exigir implantação, serviço HTTP autenticado e readback do SHA.
   Git main != deployed.
+
+## 🪬 2026-10-20 — Máquina de estados Casa: sensores independentes e pulso amarelo
+
+@code_ref=apps/instinto-superior/src/components/central/StatusPanel.tsx
+@code_ref=apps/instinto-superior/src/lib/cockpit.functions.ts
+@last_updated=2026-10-20T05:53:31Z
+@owner=Instinto Superior / CentralDark Live Editing Fabric
+@estado=CASA_LOCAL_SOURCE_MODIFIED_MAIN_AND_VPS_NOT_SYNCHRONIZED
+
+- Intenção: preservar os cards existentes, completar a máquina de estados e fazer **todas as luzes amarelas pulsarem**, com `motion-reduce:animate-none`. Estado amarelo continua UNKNOWN/RUNNING/AUTH_REQUIRED, sem falso PASS.
+- Screenpipe Casa: `GET :3030/health` retornou HTTP 200 com `status=degraded`, `frame_status=ok`, `audio_status=stale` e `capture_status=audio_stalled`. Portanto **vídeo/OCR observado como OK**, **captura de áudio Screenpipe em alerta**. Esse resultado **não reprova** o microfone Jarvis via `getUserMedia` no navegador.
+- Jarvis: somente o evento já existente `centraldark:jarvis:audio` pode atestar MediaStream ativo **nesta sessão do navegador**. Sem evento atual → UNKNOWN. Sem nova gravação de áudio.
+- Tailscale: consulta local `tailscale status --json` sob CLI já instalado, sem gravar stdout, IPs, tokens ou chaves; `BackendState=Running`, `Self.Online=true` e peer `centraldark-os Online=true` na medição inicial. Prova apenas a malha; não implica deploy VPS.
+- Os demais cards reutilizam `lerEstadoCentralDark`: Casa, GitHub main, VPS SHA, API, Heartbeat, Omni Router, Grafo Vivo, Receipts e Desktop Commander. O Desktop Commander segue UNKNOWN no **site** sem adapter autenticado, mesmo que um conector externo responda nesta conversa.
+- `git diff --check`: PASS. Testes Tool Call Lens existentes: 3/3 PASS. `tsc` global aponta dezenas de erros fora dos owners desta costura; gate `verify-hud-zone.mjs` também tem falhas, portanto **BUILD/FIXED_POINT NÃO SELADOS**.
+- `localhost:8080/cockpit`: HTTP 200 depois do delta; Edge headless leu o DOM real com Tailscale, Vídeo/OCR, Áudio, Jarvis e Desktop Commander, incluindo peer Tailscale online e áudio em alerta. Renderização DOM comprovada; clique/contraprova visual E2E ainda pendente. `K:\` e suas outras alterações locais permanecem preservados.
+- NEXT_CURSOR: `CASA_STATUS_CARDS_E2E → GATES_DO_CONE → RECEIPT_COM_SHA → PR_MAIN_APROVADO → VPS_DEPOIS`. Não promover main ou VPS até revisão e contraprova. Sem reset, sem duplicar HUD/sensor ou reiniciar o Jarvis.
