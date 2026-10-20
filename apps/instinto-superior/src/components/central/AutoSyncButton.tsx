@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap, ChevronDown, Bot, GitBranch, History, BookOpenText, ScrollText, ShieldAlert } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
@@ -76,16 +75,6 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void }> = 
       case 'failed': return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'conflict': return <AlertCircle className="w-5 h-5 text-yellow-500" />
       default: return <Clock className="w-5 h-5 text-gray-500" />
-    }
-  }
-
-  const getStatusColor = () => {
-    switch (syncStatus.status) {
-      case 'success': return 'bg-green-50 border-green-200'
-      case 'syncing': return 'bg-blue-50 border-blue-200'
-      case 'failed': return 'bg-red-50 border-red-200'
-      case 'conflict': return 'bg-yellow-50 border-yellow-200'
-      default: return 'bg-gray-50 border-gray-200'
     }
   }
 
