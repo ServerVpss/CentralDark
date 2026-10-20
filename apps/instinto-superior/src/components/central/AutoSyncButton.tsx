@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap, ChevronDown, Bot, GitBranch, History, BookOpenText, ScrollText, ShieldAlert } from 'lucide-react'
+import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap, ChevronDown, Bot, GitBranch, History, BookOpenText, ScrollText, ShieldAlert, Eye, ShieldCheck, Workflow, Activity, Sparkles, Brain } from 'lucide-react'
+import { CheckpointCentralDark } from '@/components/central/CheckpointCentralDark'
 import { useServerFn } from '@tanstack/react-start'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
 
@@ -16,7 +17,7 @@ interface SyncStatus {
  * Casa <-> Main <-> VPS (continuous, single-writer Hermes)
  * Rota: sync.functions.ts (createServerFn) -> AUTO-SYNC-MASTER.py -> .auto-sync/status.json
  */
-export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void }> = ({ onNavigate }) => {
+export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; autenticado?: boolean }> = ({ onNavigate, autenticado = false }) => {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({
     timestamp: null,
     status: 'idle',
@@ -24,6 +25,7 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void }> = 
   })
   const [isSyncing, setIsSyncing] = useState(false)
   const [microDeployMode, setMicroDeployMode] = useState<'main-only' | 'full'>('main-only')
+  const [checkpointAberto, setCheckpointAberto] = useState(false)
 
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
@@ -113,6 +115,93 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void }> = 
         <Button type="button" size="sm" variant="outline" onClick={() => onNavigate?.('recibos')} disabled={!onNavigate} className="border-sky-300/30 bg-slate-900/60 text-slate-100 hover:bg-slate-800 hover:text-white">🧾 Recibos</Button>
         <Button type="button" size="sm" variant="outline" onClick={() => onNavigate?.('dream-reviewer')} disabled={!onNavigate} className="border-sky-300/30 bg-slate-900/60 text-slate-100 hover:bg-slate-800 hover:text-white">📚 Biblioteca</Button>
       </div>
+
+      {/* Corpo Único: apresentação compacta na frente, detalhes e prova atrás. */}
+      <div className="mt-4 rounded-2xl border border-sky-200/15 bg-slate-950/20 p-3 sm:p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold text-white">🧠 Harness · mente clara</h3>
+          <span className="rounded-full border border-sky-300/25 px-2 py-1 text-[11px] text-sky-200">Uma intenção · um executor · um recibo</span>
+        </div>
+        <ol className="mt-3 grid grid-cols-2 items-stretch gap-2 text-center text-xs sm:grid-cols-4">
+          {[
+            { rotulo: '👑 CHEFE', detalhe: 'Define a intenção' },
+            { rotulo: '🪬 COCKPIT', detalhe: 'Superfície única' },
+            { rotulo: '🧠 MCP', detalhe: 'Descobrir · PID · solicitar' },
+            { rotulo: '🧾 RECIBO', detalhe: 'Resultado comprovado' },
+          ].map((etapa, indice) => (
+            <li key={etapa.rotulo} className="relative rounded-xl border border-cyan-300/20 bg-slate-950/45 p-3">
+              <span className="text-xs font-semibold text-white">{etapa.rotulo}</span>
+              <p className="mt-1 text-[11px] leading-4 text-slate-300">{etapa.detalhe}</p>
+              {indice < 3 ? <span aria-hidden="true" className="absolute -right-2 top-1/2 z-10 hidden -translate-y-1/2 text-cyan-300 sm:block">→</span> : null}
+            </li>
+          ))}
+        </ol>
+        <p className="mt-3 text-xs text-amber-200">🟡 Integração MCP ↔ VS Code: versão de código em validação; execução no PID da Casa ainda sem recibo confirmado.</p>
+      </div>
+
+      <details className="group mt-3 rounded-xl border border-sky-300/20 bg-slate-950/30">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-cyan-100 [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center gap-2"><Eye className="size-4 text-cyan-300" aria-hidden="true" /> 🔬 Visão Contraprova · 7 funções internas</span>
+          <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <div className="grid gap-2 border-t border-sky-300/15 p-3 sm:grid-cols-2 xl:grid-cols-3">
+          {[
+            { titulo: '🧠 Mente Clara', texto: 'Quatro passos na frente, detalhes internos sob demanda.', Icone: Brain },
+            { titulo: '🔬 Visão Contraprova', texto: 'Expande transporte, dispositivo, terminal e evidências.', Icone: Eye },
+            { titulo: '💎 Selo da Realidade', texto: 'PASS só depois de execução e leitura de confirmação.', Icone: ShieldCheck },
+            { titulo: '🧬 Trilho de Execução', texto: 'Uma correlação: solicitar → autorizar → executar → provar.', Icone: Workflow },
+            { titulo: '🫀 Pulso de Continuidade', texto: 'Último PASS, NEXT_CURSOR e recibo do checkpoint canônico.', Icone: Activity },
+            { titulo: '🛡️ Guardião Silencioso', texto: 'Aprovação local preservada; sem comando remoto por aparência.', Icone: ShieldAlert },
+            { titulo: '🌙 Memória Viva', texto: 'Dream Review e Biblioteca existentes; consumo ainda a medir.', Icone: Sparkles },
+          ].map(({ titulo, texto, Icone }) => (
+            <div key={titulo} className="rounded-xl border border-cyan-300/15 bg-slate-900/45 p-3">
+              <h4 className="flex items-center gap-2 text-sm font-semibold text-white"><Icone aria-hidden="true" className="size-4 shrink-0 text-cyan-300" />{titulo}</h4>
+              <p className="mt-2 text-xs leading-5 text-slate-300">{texto}</p>
+            </div>
+          ))}
+        </div>
+        <div className="border-t border-sky-300/15 px-4 py-3 text-xs leading-5 text-slate-300">
+          Segurança interna preservada: Tailscale privado, identidade do dispositivo, PID, autorização no VS Code, resultado e recibo.
+          A interface é compacta; o caminho técnico não foi removido.
+        </div>
+      </details>
+
+      <details className="group mt-3 rounded-xl border border-amber-300/25 bg-amber-400/5">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-amber-100 [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center gap-2"><History className="size-4 text-amber-200" aria-hidden="true" /> 🧪 Diagnóstico Cline · última evidência recebida</span>
+          <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <div className="grid gap-2 border-t border-amber-200/15 p-3 text-xs sm:grid-cols-2">
+          {[
+            { tipo: 'PROVA HISTÓRICA', rotulo: 'Casa → VPS por SSH', texto: 'Conexão autenticada observada nos registros enviados em 20/10/2026.' },
+            { tipo: 'FALHA LOCAL', rotulo: 'PowerShell → Bash', texto: 'CRLF e redirecionamento quebraram scripts; transferência por stdin com cmd /c foi observada.' },
+            { tipo: 'FALHA DE TESTE', rotulo: 'verify_argv', texto: 'AssertionError na comparação do .output com um release esperado; conferir o release ativo antes de corrigir.' },
+            { tipo: 'GAP DE INTEGRAÇÃO', rotulo: 'Checkpoint no CockpitShell', texto: 'O componente existia, mas a montagem visual não foi localizada na versão investigada.' },
+          ].map(item => (
+            <article key={item.rotulo} className="rounded-lg border border-amber-300/15 bg-slate-950/40 p-3">
+              <span className="text-[10px] font-bold tracking-wider text-amber-200">{item.tipo}</span>
+              <h4 className="mt-1 text-sm font-semibold text-white">{item.rotulo}</h4>
+              <p className="mt-1 leading-5 text-slate-300">{item.texto}</p>
+            </article>
+          ))}
+        </div>
+        <p className="border-t border-amber-300/15 px-4 py-3 text-xs text-amber-100/85">
+          Fonte: capturas e saída do Cline recebidas em 20/10/2026. Não são sensores ao vivo; nenhuma correção ou execução é certificada por este cartão.
+          Sem segunda investigação quando o recibo anterior já serve.
+        </p>
+      </details>
+
+      <details className="group mt-3 rounded-xl border border-emerald-300/20 bg-slate-950/30" onToggle={event => setCheckpointAberto(event.currentTarget.open)}>
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-cyan-100 [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center gap-2"><ScrollText className="size-4 text-cyan-300" aria-hidden="true" /> 🫀 Checkpoint raiz · missão / último PASS / próximo cursor</span>
+          <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <div className="border-t border-sky-300/15 p-3">
+          <p className="mb-3 text-xs text-slate-300">Leitura real pelo owner já existente, sob autenticação administrativa. O último verde não se perde quando a medição atual falha.</p>
+          {checkpointAberto ? <CheckpointCentralDark autenticado={autenticado} /> : null}
+        </div>
+      </details>
+
       <details className="group mt-4 rounded-xl border border-cyan-400/20 bg-slate-950/30">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-cyan-100 [&::-webkit-details-marker]:hidden">
           <span className="flex items-center gap-2"><GitBranch className="size-4" aria-hidden="true" /> Casa ↔ Main ↔ VPS · ferramentas de sincronização</span>
@@ -139,7 +228,7 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void }> = 
           </div>
         </div>
       </details>
-      <p className="mt-3 text-[11px] text-slate-400">ℹ️ Este cartão reutiliza o status do Auto Sync. Não consulta sessões nem inventa progresso do Hermes; a verificação acontece nos setores existentes.</p>
+      <p className="mt-3 text-[11px] text-slate-400">ℹ️ O status do Auto Sync usa sua leitura existente. O checkpoint só é consultado ao expandir, sob login admin. Os diagnósticos Cline são históricos, não telemetria ao vivo.</p>
     </section>
   )
 }
