@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import { execFile } from 'child_process';
 
 interface TerminalSpec {
   name: string;
@@ -23,14 +24,33 @@ interface WorkspaceMap {
 }
 
 let restoredThisSession = false;
+let traceOutput: vscode.OutputChannel | undefined;
+
+function emitTrace(
+  event: 'activate' | 'cli_focus' | 'shell_start' | 'shell_end' | 'shell_integration' | 'workspace_map' | 'restore' | 'show_trace',
+  state: 'OBSERVED' | 'PASS' | 'ATTENTION' | 'UNKNOWN' = 'OBSERVED'
+): void {
+  traceOutput?.appendLine(`${new Date().toISOString()} event=${event} state=${state}`);
+}
 
 export function activate(context: vscode.ExtensionContext): void {
+  traceOutput = vscode.window.createOutputChannel('CentralDark Trace');
+  context.subscriptions.push(traceOutput);
+  emitTrace('activate', 'PASS');
   context.subscriptions.push(
     vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)),
     vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)),
     vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
     // Acessibilidade: rótulo literal VS Code para ditado/ASR; mesma implementação, nenhum novo executor.
-    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal)
+    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal),
+    vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)),
+    vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)),
+    vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
+    vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
+    vscode.commands.registerCommand('centraldark.showTrace', () => {
+      emitTrace('show_trace', 'PASS');
+      traceOutput?.show(true);
+    })
   );
   registerTerminalTelemetry(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
@@ -51,6 +71,7 @@ type TerminalEvent = 'cli_focus' | 'shell_start' | 'shell_end' | 'shell_integrat
 
 function emitTerminalMetadata(event: TerminalEvent, exitCode?: number): void {
   if (process.platform !== 'win32') { return; }
+  emitTrace(event, typeof exitCode === 'number' ? (exitCode === 0 ? 'PASS' : 'ATTENTION') : 'UNKNOWN');
   const enabled = vscode.workspace.getConfiguration('centraldark.restore')
     .get<boolean>('terminalTelemetry', true);
   if (!enabled || !fs.existsSync(terminalLogPath)) { return; }
@@ -90,6 +111,190 @@ function focusExistingCliTerminal(): void {
 }
 
 
+
+/**
+ * Rota propria ZENDRIVE (sem Desktop Commander):
+ * mesma identidade SSH configurada na Casa, Tailscale primeiro e fallback
+ * publico apenas se o privado falhar. Sem escrita, chave copiada ou daemon novo.
+ * "Conectar" usa o picker oficial da extensao VS Code Remote-SSH.
+ */
+const VPS_ROUTES = [
+  { name: 'TAILSCALE', alias: 'Segredo-VPS', options: [] },
+  { name: 'PUBLIC_FALLBACK', alias: 'segredo-vpss', options: [] }
+] as const;
+
+function sshExecutable(): string {
+  if (process.platform === 'win32') {
+    const gitSsh = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Git', 'usr', 'bin', 'ssh.exe');
+    if (fs.existsSync(gitSsh)) { return gitSsh; }
+  }
+  return 'ssh';
+}
+
+function checkSshRoute(binary: string, alias: string, options: readonly string[]): Promise<{ ok: boolean; status: string; host?: string }> {
+  const args = [
+    '-o', 'BatchMode=yes',
+    '-o', 'StrictHostKeyChecking=yes',
+    '-o', 'ConnectTimeout=6',
+    '-o', 'NumberOfPasswordPrompts=0',
+    ...options,
+    alias,
+    "printf 'CENTRALDARK_SSH_PASS\\n'; hostname"
+  ];
+  return new Promise(resolve => {
+    execFile(binary, args, { timeout: 12000, windowsHide: true, maxBuffer: 8192 }, (error, stdout) => {
+      if (error) {
+        const code = (error as NodeJS.ErrnoException).code || 'SSH_FAILED';
+        resolve({ ok: false, status: String(code).slice(0, 50) });
+        return;
+      }
+      const lines = stdout.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+      const marker = lines.indexOf('CENTRALDARK_SSH_PASS');
+      const host = marker >= 0 ? lines[marker + 1] : undefined;
+      if (host && /^[a-zA-Z0-9.-]{1,100}$/.test(host)) {
+        resolve({ ok: true, status: 'SSH_AUTHENTICATED', host });
+      } else {
+        resolve({ ok: false, status: 'SSH_READBACK_MISSING' });
+      }
+    });
+  });
+}
+
+async function probeVpsSsh(connectAfter: boolean): Promise<void> {
+  const output = vscode.window.createOutputChannel('CentralDark — SSH Casa/VPS');
+  output.appendLine('[INFO] ZENDRIVE SSH: teste de leitura, sem Desktop Commander.');
+  output.appendLine('[INFO] Primeiro Segredo-VPS pela VPN; fallback segredo-vpss publico. Host key estrita; config inalterado.');
+  const binary = sshExecutable();
+  let succeeded: string | null = null;
+  for (const route of VPS_ROUTES) {
+    output.appendLine('[TESTE] ' + route.name);
+    const result = await checkSshRoute(binary, route.alias, route.options);
+    output.appendLine(result.ok
+      ? '[OK] ' + route.name + ' | host=' + result.host
+      : '[AVISO] ' + route.name + ' | ' + result.status);
+    if (result.ok) {
+      succeeded = route.name;
+      break;
+    }
+  }
+  output.show(true);
+  if (!succeeded) {
+    void vscode.window.showWarningMessage('CentralDark: SSH indisponivel nas rotas atuais. Veja a saida CentralDark — SSH Casa/VPS.');
+    return;
+  }
+  if (!connectAfter) {
+    void vscode.window.showInformationMessage('CentralDark: teste SSH PASS pela rota ' + succeeded + '.');
+    return;
+  }
+  const commands = await vscode.commands.getCommands(true);
+  if (!commands.includes('remote-ssh.connectToHost')) {
+    void vscode.window.showWarningMessage('CentralDark: instale/ative a extensao oficial Remote - SSH e use o alias segredo-vpss.');
+    return;
+  }
+  // O picker respeita o alias SSH do usuario. O teste Tailscale nao reescreve
+  // o config SSH e nao altera implicitamente a rota usada pelo Remote-SSH.
+  await vscode.commands.executeCommand('remote-ssh.connectToHost',
+    succeeded === 'TAILSCALE' ? 'Segredo-VPS' : 'segredo-vpss');
+}
+
+
+
+/**
+ * Localizacao read-only de VS Code existente a partir de PID de PowerShell,
+ * extension host ou processo do proprio Code.exe. No Windows mostra a arvore
+ * de pais e janelas, nao inicia/focaliza outro VS Code e nao le arquivos.
+ */
+async function locateVsCodeByPid(): Promise<void> {
+  const pidText = await vscode.window.showInputBox({
+    title: 'CentralDark — localizar VS Code por PID',
+    prompt: 'PID opcional (PowerShell/terminal/Code.exe). Deixe vazio para listar janelas abertas.',
+    placeHolder: 'Ex.: 21172',
+    validateInput: value => (!value || /^[1-9][0-9]{0,9}$/.test(value))
+      ? undefined : 'Informe apenas um PID decimal ou deixe vazio.'
+  });
+  if (pidText === undefined) { return; }
+  const output = vscode.window.createOutputChannel('CentralDark — Rastreio PID/VS Code');
+  output.clear();
+  output.appendLine('ZENDRIVE | VS Code observado via Extension API + Windows');
+  output.appendLine('Capturado UTC: ' + new Date().toISOString());
+  output.appendLine('ExtensionHost PID: ' + process.pid);
+  output.appendLine('VS Code remoteName: ' + (vscode.env.remoteName || 'local'));
+  output.appendLine('Workspace(s): ' + (vscode.workspace.workspaceFolders ?? []).map(x => x.name).join(', '));
+  for (const t of vscode.window.terminals) {
+    output.appendLine('Terminal: ' + t.name + ' | PID=' + (await t.processId ?? 'UNKNOWN'));
+  }
+  if (process.platform !== 'win32') {
+    output.appendLine('[SEM CONSULTA WIN32] O inventario nativo acima continua disponivel.');
+    output.show(true);
+    return;
+  }
+  // Codigo literal fixo, sem interpolacao de entrada de shell:
+  // PID decimal segue separado em argumento do PowerShell.
+  const script = [
+    '$ErrorActionPreference="Stop"',
+    '$wanted=' + (pidText ? Number(pidText) : 0),
+    '$all=@(Get-CimInstance Win32_Process -ErrorAction Stop)',
+    '$index=@{}',
+    'foreach($p in $all){$index[[int]$p.ProcessId]=$p}',
+    '$window=@(Get-Process Code -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 } | ForEach-Object { [pscustomobject]@{pid=$_.Id;process="Code.exe";windowPresent=$true} })',
+    '$chain=@()',
+    'if($wanted -gt 0){ $cursor=$wanted; $seen=@{}; for($i=0;$i -lt 20;$i++){',
+    'if($seen.ContainsKey($cursor) -or -not $index.ContainsKey($cursor)){break}',
+    '$seen[$cursor]=$true; $p=$index[$cursor]',
+    '$chain+= [pscustomobject]@{pid=[int]$p.ProcessId;parentPid=[int]$p.ParentProcessId;process=$p.Name}',
+    'if($p.Name -ieq "Code.exe"){break}',
+    '$cursor=[int]$p.ParentProcessId',
+    '}}',
+    '$codeCount=@($all | Where-Object {$_.Name -ieq "Code.exe"}).Count',
+    '[pscustomobject]@{requestedPid=$wanted;codeProcessCount=$codeCount;windows=$window;parentChain=$chain} | ConvertTo-Json -Depth 6 -Compress'
+  ].join('; ');
+  await new Promise<void>(resolve => {
+    execFile('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', script], {
+      timeout: 10000, maxBuffer: 65536, windowsHide: true
+    }, (error, stdout) => {
+      if (error) {
+        output.appendLine('[ERRO] Localizacao Win32 indisponivel: ' + String((error as NodeJS.ErrnoException).code ?? 'QUERY_FAILED'));
+        output.show(true);
+        resolve();
+        return;
+      }
+      try {
+        const data = JSON.parse(stdout);
+        output.appendLine('Processos Code.exe: ' + Number(data.codeProcessCount || 0));
+        for (const w of (Array.isArray(data.windows) ? data.windows : data.windows ? [data.windows] : [])) {
+          output.appendLine('Janela VS Code: PID=' + w.pid + ' | windowPresent=' + Boolean(w.windowPresent));
+        }
+        for (const p of (Array.isArray(data.parentChain) ? data.parentChain : data.parentChain ? [data.parentChain] : [])) {
+          output.appendLine('Cadeia: PID=' + p.pid + ' | pai=' + p.parentPid + ' | exe=' + p.process);
+        }
+        const chain = Array.isArray(data.parentChain) ? data.parentChain : data.parentChain ? [data.parentChain] : [];
+        output.appendLine(chain.some((p: {process: string}) => p.process?.toLowerCase() === 'code.exe')
+          ? '[VINCULO] PID tem ancestral Code.exe.' : '[VINCULO] Sem Code.exe ancestral demonstrado para esse PID.');
+      } catch {
+        output.appendLine('[ERRO] O Windows nao retornou JSON valido. Nenhum PID foi presumido.');
+      }
+      output.show(true);
+      resolve();
+    });
+  });
+}
+
+/** Catalogo da ponte do navegador, sem confundir plugin ChatGPT com API da extensao. */
+function browserSurfacesCatalog(): void {
+  const out = vscode.window.createOutputChannel('CentralDark — Catalogo Browser/ZENDRIVE');
+  out.clear();
+  out.appendLine('CAPACIDADES EXISTENTES, sem criar novo conector');
+  out.appendLine('VS Code API: tabs, terminais, comandos, extension host e workspace (local).');
+  out.appendLine('ZENDRIVE: terminal existente, SSH e localizador PID/VS Code.');
+  out.appendLine('ChatGPT Browser conectado: list_tabs + get_tab_context (leitura no cliente autorizado).');
+  out.appendLine('CONTROLE de aba/clique pelo plugin nesta sessao: NAO EXPOSTO.');
+  out.appendLine('Ponte ChatGPT Browser -> extensao VS Code: AINDA NAO IMPLEMENTADA.');
+  out.appendLine('Owner MCP: apps/modulos/mcp/src/tools/core/mcp-admin.js');
+  out.appendLine('Owner VS Code: skills/vs-code-restore/src/extension.ts');
+  out.show(true);
+}
+
+
 function loadMap(context: vscode.ExtensionContext): WorkspaceMap | undefined {
   const mapPath = path.join(context.extensionPath, 'workspace-map-20261014.json');
   if (!fs.existsSync(mapPath)) {
@@ -100,6 +305,7 @@ function loadMap(context: vscode.ExtensionContext): WorkspaceMap | undefined {
 }
 
 async function restore(context: vscode.ExtensionContext, manual: boolean): Promise<void> {
+  emitTrace('restore', 'OBSERVED');
   if (restoredThisSession && !manual) {
     return;
   }
@@ -151,6 +357,7 @@ async function restore(context: vscode.ExtensionContext, manual: boolean): Promi
   }
 
   const resumo = 'CentralDark: bancada restaurada (mapa ' + map.versao + ').';
+  emitTrace('restore', problems.length > 0 ? 'ATTENTION' : 'PASS');
   if (problems.length > 0) {
     void vscode.window.showWarningMessage(resumo + '\n' + problems.join('\n'));
   } else {
@@ -208,11 +415,13 @@ async function mapNativeWorkspace(context: vscode.ExtensionContext): Promise<voi
     await vscode.workspace.fs.writeFile(target, Buffer.from(JSON.stringify(snapshot, null, 2), 'utf8'));
     const document = await vscode.workspace.openTextDocument(target);
     await vscode.window.showTextDocument(document, { preview: false, preserveFocus: false });
+    emitTrace('workspace_map', 'PASS');
     void vscode.window.showInformationMessage(
       'CentralDark: mapa salvo — ' + commands.length + ' comandos, ' +
       terminals.length + ' terminais, ' + extensions.length + ' extensoes.'
     );
   } catch (error) {
+    emitTrace('workspace_map', 'ATTENTION');
     void vscode.window.showErrorMessage('CentralDark: mapa nao persistido: ' + String(error));
     throw error;
   }

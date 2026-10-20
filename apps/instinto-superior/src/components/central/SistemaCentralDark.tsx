@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -17,7 +17,7 @@ import {
   XCircle,
 } from "lucide-react";
 
-import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { BlocoEstado, SeloEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { useNotificationsLog, type NotifyTipo } from "@/hooks/useNotificationsLog";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { Button } from "@/components/ui/button";
@@ -219,6 +219,127 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
   );
 }
 
+// Microdeploy consulta apenas o HUD vivo; executar continua no owner scripts/micro_deploy.sh.
+// Ausência de leitura autenticada de runners, worktrees e rollback mantém o cadeado fechado.
+function MicroDeployReadiness({ estado, atualizando, atualizar }: SistemaCentralDarkProps) {
+  const [agora, definirAgora] = useState<number | null>(null);
+  useEffect(() => {
+    const atualizarRelogio = () => definirAgora(Date.now());
+    atualizarRelogio();
+    const id = setInterval(atualizarRelogio, 15_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const medidoEm = estado?.atualizadoEm ? Date.parse(estado.atualizadoEm) : Number.NaN;
+  const idadeMs = agora !== null && Number.isFinite(medidoEm) ? agora - medidoEm : null;
+  const fresco = idadeMs !== null && idadeMs >= -5_000 && idadeMs <= 90_000;
+  const medido = fresco ? estado : undefined;
+  const main = medido?.mainSha ?? null;
+  const vps = medido?.vpsSha ?? null;
+  const comparacao: EstadoOperacional =
+    !main || !vps ? "UNKNOWN" : main === vps ? "PASS" : "FAIL";
+  const gateAutorizacao: EstadoOperacional = "BLOCKED";
+  const gateTestes: EstadoOperacional = "UNKNOWN";
+  const gateRollback: EstadoOperacional = "UNKNOWN";
+  const deployAllowed = false; // Sem adapter autorizado, teste do mesmo SHA e rollback provado.
+  const etapas = [
+    ["MEDIR", main ? "GitHub consultado; Casa, worktrees e runners exigem leitura própria." : "GitHub/HEAD ou medição atual indisponível."],
+    ["COMPARAR", !main || !vps ? "Falta SHA para comparar." : main === vps ? "SHA GitHub e VPS coincidem; deploy ainda não provado." : "SHA GitHub e VPS diferem."],
+    ["APLICAR DELTA", "Bloqueado: owner e autorização operacional ainda não comprovados."],
+    ["TESTAR", "Aguardar testes obrigatórios do mesmo SHA."],
+    ["CONTRAPROVA", "Aguardar health, efeito no runtime e receipt causal."],
+    ["SELAR", "Somente após readback com horário, origem e SHA."],
+  ] as const;
+
+  return (
+    <section aria-labelledby="microdeploy-readiness" className="panel mt-6 p-5" data-owner="microdeploy-canonico">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="font-mono text-[10px] uppercase tracking-wider text-neon-blue">
+            Forja · Microdeploy por evidência
+          </p>
+          <h4 id="microdeploy-readiness" className="mt-2 font-semibold">
+            Medir → Comparar → Aplicar delta → Testar → Contraprova → Selar
+          </h4>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Visão de leitura do owner existente. Não executa deploy, não altera worktree e não lê segredos.
+          </p>
+        </div>
+        <SeloEstado estado={deployAllowed ? "PASS" : "BLOCKED"} />
+      </div>
+      <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <BlocoEstado
+          titulo="GitHub / main"
+          estado={medido?.github ?? "UNKNOWN"}
+          codigo={main?.slice(0, 12) ?? "UNKNOWN"}
+          detalhe="SHA observado na consulta do Cockpit."
+          icone={<Server className="size-5" />}
+        />
+        <BlocoEstado
+          titulo="GitHub ↔ VPS"
+          estado={comparacao}
+          codigo={vps?.slice(0, 12) ?? "UNKNOWN"}
+          detalhe="Compara código, não comprova deploy ou health."
+          icone={<CloudCog className="size-5" />}
+        />
+        <BlocoEstado
+          titulo="Serviço /health"
+          estado={medido?.apiHealth ?? "UNKNOWN"}
+          codigo={medido?.apiHealthHttp ? `HTTP ${medido.apiHealthHttp}` : "UNKNOWN"}
+          detalhe="Saúde da API medida; não é prova de todos os componentes."
+          icone={<Activity className="size-5" />}
+        />
+        <BlocoEstado
+          titulo="Índice de recibos"
+          estado={medido?.receipts ?? "UNKNOWN"}
+          codigo={medido?.receiptsHttp ? `HTTP ${medido.receiptsHttp}` : "UNKNOWN"}
+          detalhe="Endpoint acessível não comprova receipt do mesmo SHA."
+          icone={<ListChecks className="size-5" />}
+        />
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {([
+          ["Autorização operacional", gateAutorizacao, "Acesso a medições não autoriza mutação."],
+          ["Worktrees e runners", "UNKNOWN", "Casa/VPS sem sonda autenticada deste owner."],
+          ["Testes do mesmo SHA", gateTestes, "Não inferir por GitHub ou por badge."],
+          ["Rollback pronto", gateRollback, "Receita existente, readiness não medida."],
+        ] as const).map(([nome, estadoGate, descricao]) => (
+          <div key={nome} className="rounded-lg border border-border p-3">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs font-medium">{nome}</span>
+              <SeloEstado estado={estadoGate} />
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">{descricao}</p>
+          </div>
+        ))}
+      </div>
+      <ol className="mt-4 grid gap-2 md:grid-cols-2" aria-label="Etapas obrigatórias do microdeploy">
+        {etapas.map(([nome, descricao]) => (
+          <li key={nome} className="rounded-lg border border-border/70 px-3 py-2">
+            <span className="font-mono text-xs font-semibold">{nome}</span>
+            <p className="mt-1 text-xs text-muted-foreground">{descricao}</p>
+          </li>
+        ))}
+      </ol>
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4 text-xs text-muted-foreground">
+        <span>
+          Medição: {fresco && estado?.atualizadoEm
+            ? new Date(estado.atualizadoEm).toLocaleString("pt-BR")
+            : "STALE/UNKNOWN · manter último recibo histórico"}
+        </span>
+        <Button type="button" variant="outline" size="sm" onClick={atualizar} disabled={atualizando}>
+          {atualizando ? "Medindo…" : "Remedir sinais"}
+        </Button>
+      </div>
+      <p className="mt-2 text-xs text-muted-foreground">
+        Script canônico: scripts/micro_deploy.sh. DEPLOY_ALLOWED=false até
+        AUTHORIZED ∧ OWNER_VERIFIED ∧ TESTS_PASS ∧ ROLLBACK_READY;
+        dados da Casa e disco C: são UNKNOWN nesta superfície.
+      </p>
+    </section>
+  );
+}
+
 function CentralStatus({ estado, atualizando, atualizar }: SistemaCentralDarkProps) {
   const medidoEm = estado?.atualizadoEm
     ? new Date(estado.atualizadoEm).toLocaleString("pt-BR")
@@ -278,6 +399,7 @@ function CentralStatus({ estado, atualizando, atualizar }: SistemaCentralDarkPro
           icone={<Download className="size-5" />}
         />
       </div>
+      <MicroDeployReadiness estado={estado} atualizando={atualizando} atualizar={atualizar} />
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <ItemCofre
           titulo="MCP e serviços"

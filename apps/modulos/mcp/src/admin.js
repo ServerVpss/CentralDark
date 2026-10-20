@@ -6,6 +6,8 @@
 //   • /admin/api/e2e/publico     — versão pública leve (só liveness, sem senha admin)
 //   • activeSseSubscribers()     — exportado pro /health/deep contar conexões SSE
 import crypto from "node:crypto";
+import { execFile } from "node:child_process";
+import { Socket } from "node:net";
 import { performance } from "node:perf_hooks";
 import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { log } from "./log.js";
@@ -15,8 +17,10 @@ import { injectPatternAdmin } from "./admin-patterns-ui.js";
 import { getBuildkiteStatus } from "./buildkite-integration.js";
 import { getGrokControlDashboard, setGrokControlSelection } from "./grok-control.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { getHarnessWeeklySummary } from "./agent-observability.js";
 import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
+import { subscribeAuditEvents } from "./audit-logger.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -105,6 +109,29 @@ export function pushAdminLog(level, msg, meta) {
         try { send(line); } catch { /* silencioso */ }
     }
 }
+
+// Projecao somente dos metadados do proprio MCP CentralDark.
+// Eventos do Desktop Commander remoto (fora deste MCP) nao surgem aqui
+// automaticamente; precisam de adaptador do cliente/recibo com autorizacao.
+subscribeAuditEvents((evento) => {
+    if (evento?.schema !== "centraldark.mcp.tool-call.v1") return;
+    const safe = (value, length = 120) =>
+        typeof value === "string" ? value.slice(0, length) : null;
+    pushAdminLog(evento.ok === true ? "info" : "error", "mcp_tool_call", {
+        source: "MCP_AUDIT",
+        toolName: safe(evento.toolName),
+        call_id: safe(evento.call_id),
+        correlation_id: safe(evento.correlation_id),
+        mission_id: safe(evento.mission_id),
+        // PID do host MCP. PID do processo filho nao foi extraido nem presumido.
+        mcp_host_pid: Number.isSafeInteger(evento.pid) ? evento.pid : null,
+        exitCode: Number.isSafeInteger(evento.exitCode) ? evento.exitCode : null,
+        durationMs: Number.isFinite(evento.durationMs) ? evento.durationMs : null,
+        status: evento.ok === true ? "PASS" : "FAIL",
+        ended_at: safe(evento.ended_at),
+        // Nunca transportar args, stdout, stderr, paths ou credenciais ao painel.
+    });
+});
 
 function extrairRota(linha) {
     const p = linha.meta?.path;
@@ -326,6 +353,29 @@ __PATTERN_ADMIN_STYLE__
 
   <div class="pane" id="p-audit">
     <div class="card">
+      <h2>🪬 Tool Call Lens <span class="badge">MCP próprio · mesma sessão Admin</span></h2>
+      <p style="font-size:12px;color:var(--muted)">Chamada → conclusão, duração e correlação. Logs privados e argumentos não aparecem neste placar. O Desktop Commander remoto precisa de adapter próprio se não passar por este MCP.</p>
+      <div class="filters" style="margin-top:10px">
+        <button class="btn" type="button" id="toolLensToggle" onclick="toolLensAlternar()">⏸ Pausar visão</button>
+        <button class="btn ghost" type="button" onclick="toolLensRever()">↩ Rever últimos</button>
+        <label for="toolLensFilter">Resultado</label>
+        <select id="toolLensFilter" onchange="toolLensRender()"><option value="all">Todos</option><option value="PASS">PASS</option><option value="FAIL">FAIL</option></select>
+      </div>
+      <div id="toolLensStatus" style="margin:10px 0;font-size:12px">Aguardando tool calls do MCP CentralDark.</div>
+      <div id="toolLensRows" class="log-box" role="log" aria-label="Tool calls MCP" style="height:210px"></div>
+      <div class="card" style="margin-top:14px;padding:12px">
+        <h3>🧬 Forja Autônoma <span class="badge">Harness existente → Hermes original</span></h3>
+        <p style="font-size:12px;color:var(--muted)">Uma intenção: regressão → construir → instalar na Casa → conectar → provar. Interrompe na primeira falha; publicar na main/VPS exige autorização de promoção independente.</p>
+        <div class="filters" style="margin-top:10px">
+          <button class="btn" type="button" id="forja4Btn" onclick="forja4Iniciar()">🧬 Construir → Instalar → Conectar → Provar</button>
+          <button class="btn ghost" type="button" onclick="forja4Verificar()">🧿 Relê recibo</button>
+        </div>
+        <div id="forja4Status" role="status" aria-live="polite" style="margin:10px 0;font-size:12px">AGUARDANDO · Sem GOAL da Forja nesta sessão</div>
+        <div id="forja4Stages" class="log-box" style="height:140px;white-space:pre-wrap" aria-label="Etapas da Forja Autônoma"></div>
+      </div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="card">
       <h2>Buscar logs <span class="badge">/admin/api/logs</span></h2>
       <div class="filters">
         <input id="fRota" placeholder="rota (ex: /health)"/>
@@ -533,6 +583,9 @@ auth: bearer &lt;TOKEN&gt;  (opcional)</pre>
     </div>
     <div class="grid">
       <div class="card"><h2>Espinha permanente <span class="badge">VPS ↔ Tailscale ↔ Casa</span></h2><div id="tsMeta"></div><div class="diag-actions" style="margin-top:14px"><button class="btn" onclick="loadTailscalePanel()">🔎 Remedir</button><a class="btn ghost" href="https://hub.centralldark.com/?provider=tailscale" target="_blank" rel="noopener" style="text-decoration:none">🔐 Hub de Contas</a></div></div>
+      <div class="card"><h2>🪬 CentralDark Commander <span class="badge">MIT · Tailscale privado</span></h2>
+        <p style="color:var(--muted);font-size:13px">Motor Desktop Commander original mantido como pacote MIT; o control plane é o MCP CentralDark. Sem relay hospedado para medir a Casa. Nenhum comando é liberado sem sessão autenticada comprovada.</p>
+        <div id="cdCommander" aria-live="polite">Aguardando medição local...</div></div>
       <div class="card"><h2>Login humano <span class="badge">GitHub dentro do Tailscale</span></h2><p style="color:var(--muted);font-size:13px">Se a rota já estiver conectada, o login não reinicia. Se cair, o Hub abre o consentimento oficial do Tailscale.</p><div class="diag-actions"><a class="btn" href="https://hub.centralldark.com/oauth/tailscale/start?redirect_to=https%3A%2F%2Fadmin.centralldark.com%2Fadmin%3Ftab%3Dtailscale" style="text-decoration:none">🌐 Entrar / reconciliar Tailscale</a></div></div>
     </div>
   </div>
@@ -594,6 +647,21 @@ async function loadTailscalePanel(){
     if(home) home.textContent=(j.home?.host||'SEGREDO')+' '+(j.home?.ip||'');
     if(rdp){rdp.textContent=j.home?.rdp_3389||'UNKNOWN'; rdp.className='val '+(j.home?.rdp_3389==='OPEN'?'ok':'warn');}
     if(ssh){ssh.textContent=j.home?.ssh_22||'UNKNOWN'; ssh.className='val '+(j.home?.ssh_22==='OPEN'?'ok':'warn');}
+    let browser={cache_state:'UNKNOWN',revision:null,runtime_state:'UNPROVEN'};
+    try { const br=await fetch('/admin/api/logs/LOGS-VS-CODE.log?limit=1',{cache:'no-store'}); if(br.ok) browser=(await br.json()).playwright||browser; } catch {}
+    const cmd=$('cdCommander');
+    if(cmd) cmd.innerHTML=[
+      ['Motor original',j.commander?.engine||'UNKNOWN'],
+      ['Licença',j.commander?.license||'UNKNOWN'],
+      ['Cockpit Casa :3000',j.home?.cockpit_3000?.httpStatus == null ? 'UNKNOWN' : 'HTTP '+j.home.cockpit_3000.httpStatus],
+      ['Playwright Casa',browser.cache_state+' / '+(browser.revision||'?')],
+      ['Chromium ativo',browser.runtime_state||'UNPROVEN'],
+      ['Automação E2E','UNPROVEN'],
+      ['WinRM Casa',j.home?.winrm_5985||'UNKNOWN'],
+      ['Screenpipe Casa',j.home?.screenpipe_3030||'UNKNOWN'],
+      ['Sessão PowerShell',j.commander?.commandExecution||'UNKNOWN'],
+      ['Origem da prova',j.source||'BROKER/UNKNOWN']
+    ].map(([a,b])=>'<div class="row"><span>'+esc(a)+'</span><span>'+esc(b)+'</span></div>').join('');
     if(meta) meta.innerHTML=[
       ['Backend',j.backend_state||'UNKNOWN'],['Tailnet',j.tailnet||'UNKNOWN'],['MagicDNS',j.magic_dns||'UNKNOWN'],['Rota-base',j.route_base||'TAILSCALE'],['Login necessário',String(Boolean(j.login_required))]
     ].map(([a,b])=>'<div class="row"><span>'+esc(a)+'</span><span>'+esc(b)+'</span></div>').join('');
@@ -998,12 +1066,175 @@ async function carregarLinear(){
   }
 }
 
+// Projecao UI do mesmo SSE e do mesmo login administrativo.
+// No replay, apenas reexibe eventos recebidos; NUNCA reexecuta ferramentas.
+const toolLensEventos = [];
+let toolLensAoVivo = true;
+function toolLensAlternar() {
+  toolLensAoVivo = !toolLensAoVivo;
+  const button = $('toolLensToggle');
+  if (button) button.textContent = toolLensAoVivo ? '⏸ Pausar visão' : '▶ Retomar visão';
+  toolLensRender();
+}
+function toolLensRever() {
+  toolLensAoVivo = false;
+  const button = $('toolLensToggle');
+  if (button) button.textContent = '▶ Retomar visão';
+  toolLensRender();
+}
+function toolLensRegistrar(d) {
+  if (!d || d.msg !== 'mcp_tool_call' || d.meta?.source !== 'MCP_AUDIT') return;
+  const m = d.meta;
+  // Somente chaves permitidas no evento sanitizado pelo backend.
+  const item = {
+    t: String(d.t || ''), name: String(m.toolName || 'UNKNOWN'),
+    status: m.status === 'PASS' ? 'PASS' : 'FAIL',
+    duration: typeof m.durationMs === 'number' ? m.durationMs : null,
+    callId: String(m.call_id || ''),
+    correlation: String(m.correlation_id || ''),
+    mission: String(m.mission_id || ''),
+    hostPid: typeof m.mcp_host_pid === 'number' ? m.mcp_host_pid : null,
+    exitCode: typeof m.exitCode === 'number' ? m.exitCode : null
+  };
+  if (item.callId && toolLensEventos.some(x => x.callId === item.callId)) return;
+  toolLensEventos.unshift(item);
+  if (toolLensEventos.length > 200) toolLensEventos.length = 200;
+  if (toolLensAoVivo) toolLensRender();
+}
+function toolLensRender() {
+  const rows = $('toolLensRows');
+  const status = $('toolLensStatus');
+  if (!rows || !status) return;
+  const filtro = $('toolLensFilter')?.value || 'all';
+  const items = toolLensEventos.filter(x => filtro === 'all' || x.status === filtro);
+  rows.replaceChildren();
+  for (const item of items.slice(0, 60)) {
+    const row = document.createElement('div');
+    row.className = item.status === 'PASS' ? 'info' : 'error';
+    row.style.cssText = 'border-bottom:1px solid #263044;padding:7px 2px;white-space:pre-wrap;word-break:break-word';
+    const state = item.status === 'PASS' ? '🟢' : '🔴';
+    row.textContent = state + ' ' + item.name + ' · ' + item.status +
+      ' · ' + (item.duration == null ? 'tempo desconhecido' : item.duration + ' ms') +
+      '\n' + item.t + ' · cid=' + (item.correlation || '-') +
+      ' · toolCall=' + (item.callId || '-') +
+      ' · PID do host MCP=' + (item.hostPid == null ? '-' : item.hostPid) +
+      (item.exitCode == null ? '' : ' · exit=' + item.exitCode);
+    rows.appendChild(row);
+  }
+  if (!items.length) rows.textContent = 'Nenhuma chamada do MCP próprio recebida nesta sessão.';
+  status.textContent = (toolLensAoVivo ? '👁 AO VIVO' : '⏸ PAUSADO / REVISÃO') +
+    ' · ' + toolLensEventos.length + ' calls no buffer · fonte MCP_AUDIT';
+}
+
+
+const forja4Stages = [
+  '01 · ANTIRREGRESSÃO: baseline, testes, tipos, lint, CI SHA',
+  '02 · CONSTRUIR: build local com hash e exit code',
+  '03 · INSTALAR: instalar somente no ambiente Casa autorizado',
+  '04 · CONECTAR: VS Code/ZENDRIVE → MCP/SSH → Hermes, leitura autenticada',
+  '05 · PROVAR: E2E + recibo do mesmo SHA, sem regressão'
+];
+const forja4Intent = [
+  'FORJA_4X_EXISTENTE: executar na Casa sob owner atual, one writer, mesma missão.',
+  'ANTIRREGRESSAO_OBRIGATORIA antes e depois de cada mudança:',
+  '1 inventariar working tree + HEAD + diff e NÃO sobrescrever edições concorrentes;',
+  '2 rodar testes pertinentes, typecheck, lint e build no owner existente;',
+  '3 construir artefato com exit code, hash, hora e recibo;',
+  '4 instalar somente no escopo Casa/local autorizado, preservar app anterior e rollback;',
+  '5 conectar extensão ZENDRIVE e MCP/SSH existentes; testar identidade, latência e heartbeat;',
+  '6 provar botões, fluxo real e regressão pós-instalação no mesmo SHA e salvar receipt;',
+  '7 STOP em FAIL, UNKNOWN, build ruim, conflito, review/CI ausente ou falta de permissão;',
+  '8 main e VPS: NO_MERGE_NO_DEPLOY sem aprovação separada do CHEFE.',
+  'Runner canonico da Casa: skills/vs-code-restore/tools/forja-tool-call-lens-4-fases.ps1; executar uma unica vez no terminal Hermes autorizado, depois ler o JSON gerado em TEMP/CentralDark-Forja-Lens.',
+  'Converter para forja-4x-receipt.json somente com antirregressao/testes reais, artefato e instalacao medidos, SSH autenticado e E2E do Tool Call Lens com call_id.',
+  'Reusar apps/modulos/mcp/src/intent-cycle-adapter.js, tools existentes e CI.',
+  'Devolver para Tool Call Lens: goalId/fingerprint/SHA, stage, source, timestamp, status e nextCursor.',
+  'Nao marcar install/connect/prove PASS por apenas fila, fonte ou documento.'
+].join(' ');
+let forja4Fingerprint = null;
+let forja4Busy = false;
+function forja4Mostrar(status, detail) {
+  const el = $('forja4Status'); if (el) el.textContent = status + (detail ? ' · ' + detail : '');
+}
+function forja4Pintar(resp) {
+  const el = $('forja4Stages'); if (!el) return;
+  const entries = resp?.criteria || [];
+  const lookup = id => entries.find(c => c.id === id)?.status || 'UNKNOWN';
+  const finalProven = resp?.executionProven === true && resp?.fixedPoint === true
+    && resp?.forja4x?.fixedPoint === true;
+  const queued = resp?.queued === true;
+  const provas = Array.isArray(resp?.forja4x?.stages) ? resp.forja4x.stages : [];
+  const fase = id => provas.find(item => item.id === id)?.status || 'UNKNOWN';
+  const stageStates = ['ANTIRREGRESSAO','CONSTRUIR','INSTALAR','CONECTAR','PROVAR']
+    .map(id => fase(id) === 'PASS' ? '🟢 PASS · receipt do mesmo SHA'
+      : fase(id) === 'FAIL' ? '🔴 FAIL · PARADA OBRIGATÓRIA'
+      : '🟡 UNKNOWN · aguardando receipt tipado');
+
+  el.textContent = forja4Stages.map((title,i)=>title + '\\n     ' + stageStates[i]).join('\\n');
+  forja4Mostrar(finalProven ? '🟢 FIXED_POINT' :
+    queued ? '🟡 GOAL ENFILEIRADO NO HERMES' : '🟡 NÃO DESPACHADO / BLOQUEADO',
+    String(resp?.queueReason || resp?.nextCursor || 'aguardando') +
+      (resp?.currentHead ? ' · HEAD=' + String(resp.currentHead).slice(0,12) : ''));
+}
+async function forja4Request(dispatch) {
+  const origin = location.origin;
+  const r = await fetch(origin + '/admin/api/intent', {
+    method: dispatch ? 'POST' : 'GET',
+    credentials: 'same-origin',
+    cache: 'no-store',
+    headers: dispatch ? {'Content-Type':'application/json'} : {},
+    body: dispatch ? JSON.stringify({
+      intent: forja4Intent, owner: 'apps/instinto-superior',
+      mode: 'AUTONOMO', criteria: [
+        'SOURCE_CURRENT','MCP_HEALTH','ONE_HEART','CI_SAME_SHA',
+        'HERMES_RUNTIME','OBJECTIVE_EFFECT','RECEIPT'
+      ], maxIterations: 8, dispatch: true
+    }) : undefined
+  });
+  const result = await r.json();
+  if (!r.ok) throw new Error('HTTP_' + r.status + ' ' + String(result.error||''));
+  return result;
+}
+async function forja4Iniciar() {
+  if (forja4Busy) return;
+  forja4Busy = true;
+  const button = $('forja4Btn'); if (button) button.disabled = true;
+  forja4Mostrar('🟡 ENTREGANDO GOAL', 'aguardando ACK da fila Hermes');
+  try {
+    const receipt = await forja4Request(true);
+    forja4Fingerprint = receipt.fingerprint || null;
+    forja4Pintar(receipt);
+  } catch (error) {
+    forja4Mostrar('🔴 BLOCKED', String(error).slice(0,180));
+  } finally {
+    forja4Busy = false;
+    if (button) button.disabled = false;
+  }
+}
+async function forja4Verificar() {
+  try {
+    const result = await forja4Request(false);
+    if (forja4Fingerprint && result.fingerprint !== forja4Fingerprint) {
+      forja4Mostrar('🟡 RECIBO DE OUTRA MISSÃO', 'Fingerprint do GOAL atual não coincide');
+      return;
+    }
+    if (!forja4Fingerprint && !String(result.intent||'').includes('FORJA_4X_EXISTENTE')) {
+      forja4Mostrar('UNKNOWN', 'Último receipt é de outra intenção');
+      return;
+    }
+    forja4Pintar(result);
+  } catch (error) {
+    forja4Mostrar('🔴 READBACK FALHOU', String(error).slice(0,180));
+  }
+}
+
 function conectarLogs(){
   const es = new EventSource('/admin/logs/stream');
   const box = $('log'); box.innerHTML = '';
   es.onmessage = (ev) => {
     const d = JSON.parse(ev.data);
     registrarDeltaUtil(d);
+    toolLensRegistrar(d);
     const el = document.createElement('div');
     el.className = d.level;
     el.textContent = '['+horaBr(d.t)+'] ['+d.level.toUpperCase()+'] '+d.msg+(d.meta?' '+JSON.stringify(d.meta):'');
@@ -1296,23 +1527,83 @@ export async function adminLinear(req, res) {
     res.status(snapshot.ok ? 200 : 503).json(snapshot);
 }
 
+// CentralDark Commander: reutiliza o owner administrativo e a tailnet privada.
+// A sondagem NAO executa comando no Windows nem utiliza o relay pago externo.
+function probeCommanderTcp(host, port) {
+    return new Promise((resolve) => {
+        const socket = new Socket();
+        let done = false;
+        const finish = (value) => {
+            if (done) return;
+            done = true;
+            socket.destroy();
+            resolve(value);
+        };
+        socket.setTimeout(1200);
+        socket.once("connect", () => finish("OPEN"));
+        socket.once("timeout", () => finish("TIMEOUT"));
+        socket.once("error", () => finish("CLOSED"));
+        socket.connect(port, host);
+    });
+}
+async function probeCommanderHttp(host) {
+    try {
+        const response = await fetch("http://" + host + ":3000/", {
+            cache: "no-store", redirect: "manual", signal: AbortSignal.timeout(2300),
+        });
+        return { httpStatus: response.status, state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX" };
+    } catch {
+        return { httpStatus: null, state: "NOT_REACHABLE" };
+    }
+}
+export async function measureNativeCommander() {
+    let snapshot;
+    try {
+        const raw = await new Promise((resolve, reject) => {
+            execFile("tailscale", ["status", "--json"], { timeout: 4000, maxBuffer: 1048576 },
+                (error, stdout) => error ? reject(error) : resolve(stdout));
+        });
+        snapshot = JSON.parse(raw);
+    } catch {
+        return { ok: false, backend_state: "UNKNOWN", route_base: "TAILSCALE_NATIVE",
+            commander: { engine: "@wonderwhy-er/desktop-commander@0.2.48", license: "MIT",
+                transport: "TAILSCALE_PRIVATE", commandExecution: "UNPROVEN" } };
+    }
+    const home = Object.values(snapshot.Peer || {}).find(
+        (peer) => ["SEGREDO", "WINDOWS-CASA"].includes(String(peer.HostName || "").trim().toUpperCase()));
+    const ip = home?.TailscaleIPs?.[0] || null;
+    const [ssh, winrm, screenpipe, rdp] = ip && home?.Online
+        ? await Promise.all([22, 5985, 3030, 3389].map((port) => probeCommanderTcp(ip, port)))
+        : ["UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN"];
+    const cockpit = ip && home?.Online ? await probeCommanderHttp(ip) : { httpStatus: null, state: "UNKNOWN" };
+    return {
+        ok: snapshot.BackendState === "Running", backend_state: snapshot.BackendState || "UNKNOWN",
+        route_base: "TAILSCALE_NATIVE", source: "VPS_TAILSCALE_LOCAL",
+        measured_at: new Date().toISOString(),
+        self: { online: snapshot.BackendState === "Running", host: "VPS",
+            ips: snapshot.Self?.TailscaleIPs || [] },
+        home: { host: home?.HostName || "SEGREDO", ip, online: home?.Online === true,
+            ssh_22: ssh, winrm_5985: winrm, screenpipe_3030: screenpipe,
+            cockpit_3000: cockpit, rdp_3389: rdp },
+        commander: { engine: "@wonderwhy-er/desktop-commander@0.2.48", license: "MIT",
+            controlPlane: "MCP_CENTRALDARK", transport: "TAILSCALE_PRIVATE",
+            commandExecution: "UNPROVEN", authenticatedWindowsSession: false,
+            externalRelayRequiredForStatus: false }
+    };
+}
 export async function adminTailscale(req, res) {
     if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
     res.setHeader("Cache-Control", "no-store");
+    const native = await measureNativeCommander();
+    if (native.ok) { res.json(native); return; }
     try {
         const upstream = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
-            headers: { accept: "application/json" },
-            signal: AbortSignal.timeout(7000),
+            headers: { accept: "application/json" }, signal: AbortSignal.timeout(2500),
         });
-        const body = await upstream.text();
-        res.status(upstream.status).type("application/json").send(body);
-    } catch (error) {
-        res.status(503).json({
-            ok: false,
-            backend_state: "UNKNOWN",
-            route_base: "TAILSCALE",
-            error: "tailscale_status_unavailable",
-        });
+        if (!upstream.ok) throw new Error("broker_unavailable");
+        res.status(upstream.status).type("application/json").send(await upstream.text());
+    } catch {
+        res.status(503).json(native);
     }
 }
 
@@ -1351,7 +1642,8 @@ export function adminMetricas(req, res) {
         else if (l.level === "warn") warns++;
         if (l.msg === "http_request_start") requests++;
     }
-    res.json({ janelaMin: 5, erros, warns, requests, sseAtivas: subscribers.size });
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ janelaMin: 5, erros, warns, requests, sseAtivas: subscribers.size, harnessWeek: getHarnessWeeklySummary() });
 }
 
 export function adminGrokControlGet(req, res) {

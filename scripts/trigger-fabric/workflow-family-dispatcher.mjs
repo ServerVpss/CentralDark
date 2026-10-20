@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync, mkdirSync, openSync, closeSync, writeFileSync } from "node:fs";
 import { spawn } from "node:child_process";
 import { resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -328,6 +328,66 @@ export async function dispatchCron(cron, env = process.env, adapters = DEFAULT_A
     throw new Error("CAPABILITY_ROUTING_NOT_GREEN:" + blocked.join(","));
   }
   return results;
+}
+
+
+// CASA_PULSE_ROUTER_V1 — pulso autenticado, roteamento deterministico no dispatcher existente.
+// Evento tipado nunca vira shell, nova familia, relogio, URL ou comando fornecido pela Casa.
+export function selectCasaPulse(input, registry = loadRegistry(), now = Date.now()) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("PULSE_OBJECT_REQUIRED");
+  if (input.source !== "CASA") throw new Error("PULSE_SOURCE_DENIED");
+  const eventType = String(input.event_type || "");
+  const eventId = String(input.event_id || "");
+  if (!/^CASA_[A-Z_]{4,48}$/.test(eventType)) throw new Error("PULSE_EVENT_TYPE_INVALID");
+  if (!/^[A-Za-z0-9_-]{12,96}$/.test(eventId)) throw new Error("PULSE_ID_INVALID");
+  const timestamp = Date.parse(String(input.occurred_at || ""));
+  if (!Number.isFinite(timestamp) || timestamp > now + 30_000 || now - timestamp > 300_000)
+    throw new Error("PULSE_STALE_OR_FUTURE");
+  const declared = registry.pulse_bindings?.[eventType];
+  if (!declared) throw new Error("PULSE_EVENT_UNREGISTERED");
+  const matches = (registry.schedule_bindings || []).filter(
+    (x) => x.family === declared.family && x.capability === declared.capability
+  );
+  if (matches.length !== 1) throw new Error("PULSE_TARGET_AMBIGUOUS_OR_MISSING");
+  return { eventType, eventId, occurredAt: new Date(timestamp).toISOString(), binding: matches[0] };
+}
+
+export async function dispatchCasaPulse(input, env = process.env, adapters = DEFAULT_ADAPTERS, registry = loadRegistry()) {
+  const chosen = selectCasaPulse(input, registry);
+  const identity = createHash("sha256").update(chosen.eventId).digest("hex");
+  const ledgerDir = resolve(env.CENTRALDARK_LOG_ROOT || resolve(ROOT, "logs"), "trigger-fabric", "casa-pulses");
+  mkdirSync(ledgerDir, { recursive: true, mode: 0o700 });
+  const receiptPath = resolve(ledgerDir, identity + ".json");
+  const baseline = {
+    schema: "centraldark.casa-pulse.v1", event_type: chosen.eventType,
+    event_id_hash: identity, family: chosen.binding.family, capability: chosen.binding.capability,
+    fingerprint: targetFingerprint(chosen.binding), observed_at: new Date().toISOString(),
+  };
+  let fd;
+  try {
+    fd = openSync(receiptPath, "wx", 0o600);
+    writeFileSync(fd, JSON.stringify({ ...baseline, state: "PENDING",
+      next_cursor: "AWAIT_DISPATCH_READBACK" }) + "\n");
+    closeSync(fd); fd = undefined;
+  } catch (error) {
+    if (fd !== undefined) try { closeSync(fd); } catch {}
+    if (error?.code !== "EEXIST") throw error;
+    let prev;
+    try { prev = JSON.parse(readFileSync(receiptPath, "utf8")); } catch {}
+    return { ...baseline, state: "DUPLICATE_NO_REEXECUTION",
+      prior_state: prev?.state || "UNKNOWN", next_cursor: "READ_PREVIOUS_RECEIPT" };
+  }
+  let result;
+  try { result = await routeCapability(chosen.binding, env, adapters, registry); }
+  catch (error) {
+    result = { state: "BLOCKED", next_cursor: "RECONCILE_DISPATCH_ROUTE",
+      failure: String(error?.message || error).slice(0, 160) };
+  }
+  const receipt = { ...baseline, state: result.state || "UNKNOWN",
+    route_state: result.route_state || "UNKNOWN", used_arm: result.used_arm || null,
+    next_cursor: result.next_cursor || "VERIFY_EFFECT_ON_TARGET" };
+  writeFileSync(receiptPath, JSON.stringify(receipt) + "\n", { mode: 0o600 });
+  return receipt;
 }
 
 async function main() {

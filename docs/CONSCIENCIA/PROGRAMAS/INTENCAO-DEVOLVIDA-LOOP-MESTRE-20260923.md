@@ -1086,3 +1086,44 @@ O CHEFE autorizou a promoção **documental integral** do PR #1785. A transcriç
 **Exemplo discriminante que motivou o registro:** cadastro repetido no Supabase, Gmail sem confirmação recém-recebida, Casa/GitHub com contexto e VPS com middleware SSR sem variáveis — cinco sinais reconciliados levaram ao **menor ajuste de ambiente** do cockpit, sem alterar autorização administrativa. Registro de execução específico já fica em `apps/instinto-superior/README.md` (12/10/2026). Não promover `ADMIN_LOGIN_E2E` até teste da sessão no navegador.
 
 **PROVA deste item:** somente documentação versionada + readback GitHub do SHA deste registro; aplicação automática a todos os agentes e cinco conectores vivos em execução futura permanece `UNKNOWN` até contraprova. `NEXT_CURSOR=CONSUMIR_O_PREFLIGHT_PERTINENTE_NA_PROXIMA_MISSAO_SEM_REDESCOBRIR_CONTRATOS`.
+
+
+## 🪬 Registro de ponto fixo parcial — ZENDRIVE CLI / Builder / Galeria (16/10/2026)
+
+`CRYSTAL_ID=CRYSTAL_ZENDRIVE_CLI_GALLERY_LOOP_20261016`
+
+**Intenção:** preservar a rota operacional ChatGPT/SOL → VS Code na Casa → terminal autorizado/Hermes → metadados sanitizados → Tailscale → log-funnel VPS e torná-la reutilizável no Builder/Galeria do Instinto Superior. A meta final de continuidade persistente usa o **GOAL canônico existente**, não um segundo loop.
+
+**Owners:** `skills/vs-code-restore` (foco/terminal/trace), `apps/instinto-superior/src/components/central/DesignCenter.tsx` (galeria dentro do cockpit), `CockpitShell.tsx` (autenticação), `.agents/skills/centraldark-vscode-log-bridge` (coleta), `apps/modulos/mcp/src/log-funnel.js` (recepção), Hermes (execução). `PR #1562` é somente ledger; `PR #1820` é a lane dos logs; `PR #1830` é a lane da extensão 0.1.3.
+
+**Evidência de fonte:** os commits `a743b66` e `35165b5` registraram a ficha ZENDRIVE CLI 0.1.1 na aba `Design Center → Galeria de extensões` e passaram a prop `autenticado` para restringir a ficha. Isto prova *fonte versionada*, **não build/deploy/UI servido do mesmo SHA**. Há relatório anterior em `apps/instinto-superior/FIXED_POINT_CONVERGENCIA_REPORT.md` com claim 9/9 de outra convergência; não o reutilizar como contraprova deste delta.
+
+**Evidência operacional já materializada e historicamente observada:** `centraldark.centraldark-vscode-restore@0.1.1` instalada na Casa na medição anterior; `cli_focus`, `shell_start` e `shell_end exit=ok` foram classificados sem conteúdo sensível e cruzaram a ponte Casa → VPS, com último offset então medido `3028322`. Eventos `vscode_log_signal` observados no setor vscode. Isto não comprova provider ChatGPT web como API, leitura automatizada de stdout ou instalação 0.1.3 em toda superfície. O relatório anexado nesta rodada indica versões/offsets posteriores e deve ser remensurado para CURRENT.
+
+**Risco corrente indicado no relatório de 16/10:** PR #1830 HEAD `f9d5260eefc0547ed716a3a8098bc3357404aa18` tinha `mergeable=CONFLICTING`, `mergeStateStatus=DIRTY`, e checks `pending/skipping`. Conflitos observados ao tentar reconciliar `main`: `skills/vs-code-restore/SKILL.md`, `package.json`, `src/extension.ts`, `tools/focus-vscode-window.ps1`. Não forçar merge nem substituir a solução 0.1.1 por 0.1.3 sem integrar capabilities e provar o mesmo SHA.
+
+### Melhoria antecipada: replay causal pelo GOAL canônico
+
+```text
+GOAL_ID + INTENT_FIXED
+→ LOAD CURRENT (HEAD/PR/checks + Casa/VPS pertinentes)
+→ FINGERPRINT(owner, source_SHA, app_build_SHA, runtime, auth_scope, log_cursor, dependencies)
+→ CONTINUE_FROM_LAST_CURSOR=true
+→ DO_NOT_RESTART_MISSION=true
+→ PROVEN_PATH_REPLAY_LOCK (somente passos com prova vigente)
+→ SELECT NEXT_REQUIRED_DELTA
+→ ONE_WRITER / READERS_PARALLEL
+→ EXECUTE minimal delta
+→ SAME_HEAD BUILD + CONTRAPROVA + RUNTIME READBACK
+→ RECEIPT + NEXT_CURSOR
+→ FIXED_POINT apenas se re-run não tiver delta material
+```
+
+**Critérios de promoção:** C01–C12 = owner, main, galeria, auth, extensão, terminal, logs, idempotência, TypeScript, build, runtime e contraprova. `PENDING/SKIPPED/QUEUED/MERGEABLE != PASS`; `MERGED != DEPLOYED`. Na comparação sem novas informações, não repetir tentativa igual; mudança de premissa reabre só o cone afetado. `PROVEN_PATH_REPLAY_LOCK` preserva a receita, **não pula teste que nunca aconteceu**.
+
+**Fingerprint sem ruído:** incluir commit efetivamente testado, alterações locais relevantes, versão da extensão, conexão Casa/VPS, estado de autenticação, último ACK de cursor e owner do builder; excluir timestamp cosmético, PID/HWND antigos e ordenação casual de logs. Mudou o fingerprint → registrar `DIVERGENCE=NEW_DELTA`, não apagar o cristal anterior.
+
+**FIXED_POINT_STATUS=PARTIAL_CRYSTAL_REGISTERED; GLOBAL_FIXED_POINT=NOT_PROVEN.** O selo aprovado aqui cobre a receita/documentação e a contraprova histórica da ponte; publicação da galeria, merge limpo #1830, checks same-HEAD, runtime de builder e continuidade após reinicialização permanecem `UNKNOWN/BLOCKED` conforme aplicabilidade.
+
+**NEXT_CURSOR:** medir o HEAD e checks atuais do #1830; conciliar os quatro conflitos em worktree isolada sem tocar no checkout dirty da Casa, preservando 0.1.1 + avanços 0.1.3; rodar TypeScript/lint/build no SHA a promover; verificar galeria autenticada no cockpit realmente publicado; confrontar log cursor Casa/VPS; retomar o GOAL existente a partir do primeiro critério C01–C12 sem PASS. `ONE_SYSTEM_ONLY=true`.
+

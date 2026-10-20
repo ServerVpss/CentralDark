@@ -35,6 +35,15 @@ npm run dev
 Veja `docs/CONVERGENCIA-CAPACIDADES-2026-09-25.md` para a matriz de reaproveitamento.
 
 
+## Auth canônica — 18/10/2026 · validação de login
+
+- **Projeto Supabase único aprovado:** lyoigsqluyktoclwdaft. Não criar projeto alternativo, não apontar para projeto Hermes histórico e não inserir valores de chaves em Git, logs ou receipts.
+- **Contraprova de ambiente:** o bundle SSR/cliente servido em 18/10 já contém a referência do projeto, com variáveis VITE no build e aliases privados de runtime. Isso é independente do login válido.
+- **Erro medido na API Auth:** POST /auth/v1/token → HTTP 400, grant_type=password, error_code=validation_failed. A documentação Supabase define esse código como parâmetros em formato inesperado. Não confundir com ausência de env, indisponibilidade global ou credenciais comprovadamente incorretas.
+- **Menor delta no owner:** src/routes/auth.tsx normaliza e valida e-mail, mantém senha intacta, preserva autorização e Supabase Auth, traduz erros de validação/rate limit no formulário e captura falhas inesperadas sem derrubar a página. Não adiciona retries automáticos.
+- **Prova pendente:** login E2E com conta autorizada, sessão SSR e RLS/role. Não transportar senha nem sessão do CHEFE para logs e testes. HTTP 200 não comprova login.
+- **Questões separadas:** 21 avisos security_definer_view do Advisor e aviso de cota/grace-period exigem auditoria própria, sem alterar DDL, RLS ou faturamento neste fix.
+
 ## Contraprova de autenticação na VPS — 12/10/2026
 
 - **Causa medida:** o serviço `centraldark-instinto-superior-web.service` estava ativo, mas seu processo Node não recebia `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`; middleware `src/integrations/supabase/auth-middleware.ts` exige ambas e o journal registrou `Missing Supabase environment variable(s)`. A checagem de admin/RLS permanece inalterada.

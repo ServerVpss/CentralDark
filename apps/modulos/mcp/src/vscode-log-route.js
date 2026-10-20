@@ -29,6 +29,15 @@ export function adminVsCodeLog(req, res) {
   const state = last == null ? "UNKNOWN" :
     stale || sourceIdle || last.data?.state !== "OK" ? "ATTENTION" : "OK";
   const color = state === "OK" ? "green" : state === "ATTENTION" ? "yellow" : "gray";
+  const playwrightSample = last?.data?.playwright;
+  const playwright = !stale && playwrightSample && typeof playwrightSample === "object"
+    ? { cache_state: playwrightSample.cache_state || "UNKNOWN",
+        revision: playwrightSample.revision ?? null,
+        runtime_state: playwrightSample.runtime_state || "UNPROVEN",
+        process_count: playwrightSample.process_count || 0,
+        automation_roundtrip: "UNPROVEN", source: "CASA_SSH_METADATA" }
+    : { cache_state: "UNKNOWN", revision: null, runtime_state: "UNPROVEN",
+        process_count: 0, automation_roundtrip: "UNPROVEN", source: "NO_FRESH_CASA_PROOF" };
   const events = rows.filter((row) => row.kind === "vscode_log_signal")
     .filter((row) => !level || row.level === level)
     .filter((row) => !component || row.key === "vscode:" + component)
@@ -37,7 +46,7 @@ export function adminVsCodeLog(req, res) {
     ok: true, source: SOURCE,
     raw_log_location: "CASA_ONLY", raw_log_exposed: false,
     canonical_owner: "apps/modulos/mcp/src/log-funnel.js",
-    state, color, route: last?.data?.route || null,
+    state, color, route: last?.data?.route || null, playwright,
     last_received_at: last?.timestamp || null,
     heartbeat_age_ms: heartbeatAgeMs,
     source_age_ms: sourceAgeMs,
