@@ -515,3 +515,15 @@ NEXT_CURSOR = CI_MESMO_SHA -> CASA_RECONCILIAR_OWNER_LOCAL -> TESTE_VISUAL_8080 
 
 <!-- #OBSERVACOES# @owner=docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md @code_ref=apps/instinto-superior/src/components/central/DreamReviewer.tsx @code_ref=apps/instinto-superior/src/components/central/CockpitShell.tsx @code_ref=apps/instinto-superior/scripts/verify-hud-zone.mjs @last_updated=2026-10-20 -->
 
+
+## 🪬 Continuidade do Hermes no cartão Auto Sync — 20/10/2026
+
+O CHEFE mostrou a foto do topo do cockpit e pediu menos dispersão e melhor contraste. O owner já existente `apps/instinto-superior/src/components/central/AutoSyncButton.tsx` **continua o mesmo**, mas agora apresenta uma superfície compacta azul-escura reunindo Auto Sync, Micro-Deploy protegido e continuidade do Hermes; controles antigos ficam numa gaveta expansível. O `CockpitShell.tsx` apenas repassa a navegação já existente para abas Hermes, Recibos e Dream Reviewer.
+
+**Quatro indicadores visuais da continuidade**: sessão atual, fila/tarefas, último recibo e revisão Dream Review. **Sem sensor integrado para essas medições neste componente**, os indicadores dizem `Aguardando recibo do Hermes`, `Sem leitura da fila`, `Não consultado` e `Consumo não medido`, não uma porcentagem inventada. A leitura do status Auto Sync vem do owner `lerStatusSync`. O botão Micro-Deploy preserva a trava: sincronização Git não autoriza afirmar deploy ou chamar executor indisponível.
+
+**Design**: alto contraste sobre `#0b1426` → `#122743`, cards responsivos com ícones Lucide, tipografia legível, ações secundárias recolhidas sob `<details>`, foco e navegação reais para as abas existentes. Nenhum runtime/processo, scheduler, fila ou memória paralelos. A cor viva mostra agrupamento visual, não saúde medida.
+
+**Regressão no mesmo dono:** `apps/instinto-superior/scripts/verify-hud-zone.mjs` verifica textos, contrato de não inventar recibos e ligações para as abas. A observação definitiva deve ocorrer no build e no clique real do cockpit com alterações locais da Casa preservadas antes de merge/deploy.
+
+`NEXT_CURSOR=VERIFICAR_CI_SAME_SHA → RECONCILIAR_CASA_SEM_SOBRESCREVER → RENDERIZAR_CARTAO_EXISTENTE → COMPROVAR_LEITURA_HERMES_COM_RECEIPT → PROMOVER_CONFORME_GATES`.
