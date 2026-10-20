@@ -332,3 +332,26 @@ test("Casa canonical K and four-stage collector receipt", () => {
   assert.ok(ingest.includes("playwright: playwrightReceipt"));
   assert.ok(!ingest.includes("playwright: playwrightProbe,"));
 });
+
+
+test("Dream Reviewer usa biblioteca existente sem simular consumo do Hermes", () => {
+  const dream = read("apps/instinto-superior/src/components/central/DreamReviewer.tsx");
+  assert.ok(cockpit.includes('id: "dream-reviewer", titulo: "Biblioteca de Aprendizados"'));
+  assert.ok(cockpit.includes('<TabsTrigger value="dream-reviewer">🌙 Dream Reviewer · Biblioteca</TabsTrigger>'));
+  assert.ok(cockpit.includes("<DreamReviewer onNavigate={abrirDestino} />"));
+  assert.ok(dream.includes("As 9 peças do aprendizado"));
+  assert.equal((dream.match(/passo: "\\d{2}"/g) ?? []).length, 9);
+  for (const owner of [
+    "scripts/memory-linker/dream-review-run.mjs",
+    "scripts/memory-linker/pattern-discovery.mjs",
+    "scripts/memory-linker/pattern-library.mjs",
+    "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md",
+    "apps/modulos/HERMES-CORE/prompts/hermes-core.md",
+  ]) assert.ok(dream.includes(owner), "peça ausente: " + owner);
+  assert.ok(dream.includes('onNavigate?.("hermes")'));
+  assert.ok(dream.includes('onNavigate?.("recibos")'));
+  assert.ok(dream.includes("ainda não verificado"));
+  assert.ok(dream.includes("PRÉVIA, não são medições reais"));
+  assert.ok(!dream.includes("94%"));
+  assert.doesNotMatch(dream, /fetch\s*\(|execSync\s*\(|spawn\s*\(/);
+});
