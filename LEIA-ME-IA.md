@@ -29,6 +29,27 @@ Texto legado conflitante perde para o owner canônico.
 
 # LEIA-ME-IA — comece por aqui
 
+<!-- CENTRALDARK_AUTOREHYDRATE_LATEST_CHECKPOINT_20261018 -->
+## 🪬 !CENTRALDARK — entrada automática do último checkpoint (todas as superfícies)
+
+Quando o CHEFE disser **\`!CENTRALDARK\`** (incluindo \`!Centraldark\`, independentemente de maiúsculas/minúsculas), isso é um **gatilho operacional**. A primeira operação do agente que atua neste repositório é localizar o **último checkpoint de execução VERIFICADO** e recuperar \`INTENCAO | MISSAO | ULTIMO_PASS | NEXT_CURSOR | RECEIPT_SHA256\`. Não pedir ao CHEFE para digitar comandos, informar o ID ou copiar o manual; descobrir automaticamente a rota existente.
+
+**Owner único de checkpoint:** \`scripts/hermes/verified-checkpoint.py\` (prova/journal/plan); **adaptador de entrada:** \`scripts/hermes/centraldark-entry.py\` (localiza \`latest\`, verifica cadeia SHA-256 e devolve o fio). Esses adaptadores não criam outro Hermes, memória nem scheduler. O estado operacional persistente mora em \`~/.hermes/centraldark/verified-execution/\` na VPS; a main contém código/contrato, não os arquivos privados de estado.
+
+**Seleção de rota pelo runtime, sem redescoberta:**
+
+1. **VPS \`CENTRALDARK-OS\`**: executar \`python3 /root/.hermes/centraldark/bin/centraldark-entry.py --status\`. O modo sem flags devolve o fio; \`--continue\` avança o plano privado que já foi comprovado. Se o executável instalado não existir, usar a cópia do mesmo owner presente no checkout \`scripts/hermes/\` com \`PYTHONPATH\` apropriado (não inventar checkpoint).
+2. **Casa/VS Code Windows**: usar primeiro a bridge Tailscale/SSH e o alias já autorizados \`Segredo-VPS\` para consultar **o mesmo estado da VPS**, preferencialmente \`scripts/casa/centraldark-entry.ps1\`. Se a Casa estiver offline, tentar outro conector autorizado e devolver \`UNKNOWN\` preciso, não o inventário velho.
+3. **GitHub/Copilot/Claude/Codex/CLI externo**: seguir este mesmo contrato quando a tool realmente puder alcançar a VPS (MCP CentralDark ou SSH privado). A publicação do código ou instrução no GitHub **não** transporta sozinha o estado vivo da VPS.
+4. **Cockpit**: usar a aba Hermes do Instinto Superior → botão \`🪬 !CENTRALDARK · Continuar missão\`; leitura protegida e autenticada é executada no servidor que hospeda o cockpit, com owner VPS. Se o site rodar fora da VPS, apresentar \`UNKNOWN\`, sem fingir sincronização.
+5. **Novo contexto/modelo**: injetar o fio compacto devolvido pela entrada e continuar de \`NEXT_CURSOR\`; não despejar o histórico inteiro nem reexecutar etapas verdes. Para execução realmente automática usar plano validado pelo owner; se não houver plano, o agente resolve o próximo passo conforme o contrato e as ferramentas autorizadas da sua superfície.
+
+**Regra de promoção:** somente exit 0 + critério de prova real ou verificador independente = checkpoint verde. Falha não move \`current.json\`; usar último PASS e replay da etapa falha. Se um plano já terminou, não repetir. O gatilho não remove aprovações que dependem de autorização real, não equivale a execução do CLI em superfícies sem runtime conectado e não autoriza interpretar o status de UI como prova.
+
+**Preferência humana:** CHEFE só diz \`!CENTRALDARK\` ou clica no botão; toda a leitura de arquivos, histórico, documentação, próxima execução e provas pertence aos executores e ao cockpit. Manual técnico fica disponível no próprio cockpit/owner, não é tarefa manual para o CHEFE.
+<!-- /CENTRALDARK_AUTOREHYDRATE_LATEST_CHECKPOINT_20261018 -->
+
+
 <!-- CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
 ### 🪬 Continuidade entre todas as janelas e contas
 

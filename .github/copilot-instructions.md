@@ -1,5 +1,8 @@
 # GitHub Copilot — adaptador fino CentralDark
 
+**Gatilho:** ao receber `!CENTRALDARK` (maiúsculas/minúsculas indiferentes), recuperar o último checkpoint verificado antes de agir, via `LEIA-ME-IA.md` → `scripts/hermes/centraldark-entry.py` no runtime autorizado. Retomar `NEXT_CURSOR`; não inferir conectividade da VPS somente porque o código existe na main.
+
+
 ```text
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md
 ADAPTER_ROLE=ENGINE_DISCOVERY_ONLY

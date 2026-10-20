@@ -29,6 +29,9 @@ ui_identity_rule: "UI_PATTERN != PRODUCT_IDENTITY"
 
 # CLAUDE.md — ponte para o contrato canônico
 
+**Gatilho de missão:** `!CENTRALDARK` (também `!Centraldark`) → resolver imediatamente o último checkpoint verificado pelo owner `scripts/hermes/centraldark-entry.py` conforme `LEIA-ME-IA.md`, continuar do `NEXT_CURSOR` sem repetir êxitos. Esse adaptador não cria outra memória.
+
+
 ## ⚡ PERMISSÃO PERMANENTE — VIGENTE A PARTIR DE 2026-10-15
 
 **AUTO-APPROVAL TOTAL PARA K:\\ WORKSPACE**
