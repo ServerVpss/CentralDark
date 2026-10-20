@@ -74,6 +74,7 @@ const HARNESS_DESTINOS = [
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
+  { id: "dream-reviewer", titulo: "Biblioteca de Aprendizados", icone: "📚", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
   { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
   { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
@@ -404,7 +405,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="design">Design Center</TabsTrigger>
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
                 <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
-                <TabsTrigger value="dream-reviewer">😴 Dream</TabsTrigger>
+                <TabsTrigger value="dream-reviewer">🌙 Dream Reviewer · Biblioteca</TabsTrigger>
                 <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
                 <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
                 <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
@@ -500,12 +501,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
                   Aprendizado Offline
                 </p>
-                <h2 className="mt-3 text-3xl font-semibold">😴 Dream Reviewer</h2>
+                <h2 className="mt-3 text-3xl font-semibold">🌙 Dream Reviewer · Biblioteca</h2>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Hermes aprendendo enquanto você dorme • Padrões detectados • Recomendações • Somente leitura
+                  Biblioteca canônica, peças do Dream Review e caminhos para conferir se Hermes realmente utilizou o aprendizado. Somente leitura.
                 </p>
               </div>
-              <DreamReviewer />
+              <DreamReviewer onNavigate={abrirDestino} />
             </TabsContent>
             <TabsContent value="arquitetura" className="mt-10">
               <div className="mb-8">
