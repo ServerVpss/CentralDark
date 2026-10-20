@@ -2,7 +2,7 @@
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark VS Code Restore",
   "description": "Restaura bancada e terminal existentes; mede Remote SSH pela VPN e PIDs VS Code sem criar executor paralelo.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "publisher": "centraldark",
   "private": true,
   "engines": {
