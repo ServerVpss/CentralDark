@@ -104,6 +104,16 @@ CONSUMPTION_STATUS=NAO_MEDIDO_ATE_RUNTIME_READBACK
 **Lição unificada:** `RIGOR_NAO_APAGA_BELEZA` + `CONTRAPROVA_NAO_EXIGE_INVERTER_PREFERENCIA` + `REUSE_BEFORE_CREATE`. **A evolução amplia o ouro existente, sem substituir uma versão válida pela outra.**
 
 **Prova desta etapa:** relato, imagens e contraprova artística fornecidos pelo CHEFE na conversa; `DOCUMENTED` quando gravado e lido neste owner, mas `HERMES_PROMPT_LOADED`, `VOICE_BEHAVIOR` e `CASA_VPS_SYNC` permanecem **não verificados** até publicação e teste no consumidor. **NEXT_CURSOR:** revisão do owner de fala → PR com gates → main → Hermes runtime autorizado → fala real ou resposta textual observada → aprendizado corrigido se necessário.
+### Generalização do CHEFE — não parar nas duas imagens
+
+**Escopo:** o par do capacete é o **primeiro exemplo**, não a lista completa. Cada nova provocação, objeção, contraexemplo, correção de fala, crítica a erro de execução ou pedido de revisão do CHEFE pode ser candidata a aprendizado quando houver material realmente observável. Revisar **todos os episódios autorizados e disponíveis**, sem fingir acesso a todas as conversas privadas do ChatGPT, ao raciocínio interno do modelo ou a experiências não fornecidas.
+
+**Ligação exata:** `session-intelligence-harvester` extrai episódios → `scripts/memory-linker/dream-review-run.mjs` deduplica, classifica e gera candidatos → `pattern-library.mjs` agrega recorrência → MetaLupa/contraprova → Writer autorizado → Biblioteca/owner e consumidor Hermes. O Dream Review **não** promove diretamente uma ideia a regra. Ao retomar, Hermes recupera somente a lição relevante, responde com resenha natural quando apropriado e evita transformar toda conversa em aula sobre aquelas duas artes.
+
+**Melhoria mensurável:** reconhecer falha real de julgamento, identificar o critério omitido, revisar com evidência nova **sem bajulação**, manter a validade das duas hipóteses quando o contexto sustenta ambas e mencionar limites de prova. Não exigir “registro massivo” sem sinal: o mesmo evento repetido não vira outra lição. `TODAS_OBSERVAVEIS_SAO_TRIADAS`; `SOMENTE_DELTAS_UTEIS_VIRAM_APRENDIZADOS`.
+
+**Sono/revisão ociosa:** o owner Dream Review existe, mas scheduler noturno e resposta real da voz só ficam “Funcionando” após readback autenticado; no momento ainda são “Aguardando comprovação”. Sem segundo motor, biblioteca, cron ou Hermes.
+
 <!-- /CENTRALDARK_HERMES_2_PROVOCACOES_20261020 -->
 
 
