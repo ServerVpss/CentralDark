@@ -341,6 +341,10 @@ test("Dream Reviewer usa biblioteca existente sem simular consumo do Hermes", ()
   assert.ok(cockpit.includes("<DreamReviewer onNavigate={abrirDestino} />"));
   assert.ok(dream.includes("As 9 peças do aprendizado"));
   assert.equal((dream.match(/passo: "\d{2}"/g) ?? []).length, 9);
+  const arquivos = [...dream.matchAll(/arquivo: "([^"]+)"/g)].map(x => x[1]);
+  assert.equal(arquivos.length, 9);
+  assert.equal(new Set(arquivos).size, 9);
+  for (const arquivo of arquivos) assert.ok(read(arquivo).length > 0, "origem nao localizada: " + arquivo);
   for (const owner of [
     "scripts/memory-linker/dream-review-run.mjs",
     "scripts/memory-linker/pattern-discovery.mjs",
