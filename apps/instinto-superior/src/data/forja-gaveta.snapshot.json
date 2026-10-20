@@ -8211,6 +8211,47 @@
       "receita": "CONSULTAR_RECEIPT_E_WORKTREE_STATUS; NAO_EXECUTAR_CLEAN_SEM_LOCK_E_CONTRAPROVA",
       "modo": "SOMENTE_LEITURA",
       "estado": "NENHUMA_LIMPEZA_EXECUTADA"
+    },
+    {
+      "id": "TOOL_CALL_LENS",
+      "icone": "🪬",
+      "nome": "Tool Call Lens · Forja 4 fases",
+      "owner": "apps/modulos/mcp/src/audit-logger.js",
+      "estado": "SOURCE_PR_1842_E_1838",
+      "modo": "CONSTRUIR_INSTALAR_CONECTAR_PROVAR",
+      "fonte": "PR_1842_BACKEND_PR_1838_VISUAL",
+      "recibo": "docs/CONSCIENCIA/RECEIPTS/2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md",
+      "receita": "pwsh -NoProfile -File 'K:\\skills\\vs-code-restore\\tools\\forja-tool-call-lens-4-fases.ps1' # exige o source das PRs #1842 e #1838 já reconciliado na Casa",
+      "fases": [
+        {
+          "id": "CONSTRUIR",
+          "icone": "🛠️",
+          "owner": "skills/vs-code-restore + apps/modulos/mcp + apps/instinto-superior",
+          "comprovar": "TypeScript/VSIX + node --test (MCP) + verify:hud + build do Cockpit",
+          "estado": "SOURCE_PR"
+        },
+        {
+          "id": "INSTALAR",
+          "icone": "📦",
+          "owner": "skills/vs-code-restore",
+          "comprovar": "code --install-extension do VSIX local + code --list-extensions --show-versions 0.1.4",
+          "estado": "AGUARDANDO_CASA"
+        },
+        {
+          "id": "CONECTAR",
+          "icone": "🔌",
+          "owner": "SSH segredo-vpss + preview K:3000",
+          "comprovar": "SSH autenticado com readback e HTTP 200 da interface na Casa",
+          "estado": "AGUARDANDO_READBACK"
+        },
+        {
+          "id": "PROVAR",
+          "icone": "🧿",
+          "owner": "apps/modulos/mcp/src/audit-logger.js + ObservabilidadeCentralDark.tsx",
+          "comprovar": "Mesma chamada autorizada com call_id/CID no MCP Admin e no Cockpit; sem vazamento de argumentos",
+          "estado": "AGUARDANDO_E2E"
+        }
+      ]
     }
   ]
 }

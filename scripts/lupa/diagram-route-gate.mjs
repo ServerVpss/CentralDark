@@ -1,4 +1,13 @@
 #!/usr/bin/env node
+/*
+ * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
+ * @owner: scripts/lupa/diagram-route-gate.mjs
+ * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+ * @last_updated: 2026-10-16T10:26:40.796Z
+ * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
+ * @status: CODE_GATE_IMPLEMENTED; GLOBAL_ENFORCEMENT_PENDING_MAIN_AND_CI
+ * @next_cursor: validar gate e contraprova no HEAD/branch protection.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -336,7 +345,7 @@ export function validateTriggerCoverage(registry, triggerText) {
   return errors;
 }
 
-export function validateDiffCoverage(registry, units) {
+export function validateDiffCoverage(registry, units, codeDocContext = null) {
   const errors = [];
 
   for (const unit of units) {
@@ -366,6 +375,77 @@ export function validateDiffCoverage(registry, units) {
     }
   }
 
+  // #OBSERVACOES# | RASTRO OBRIGATORIO, CODIGO + DOCUMENTACAO NO MESMO DELTA
+  // Escopo incremental: arquivos de codigo/config modificados neste diff.
+  // JSON não aceita comentários: @code_ref + data vivem no documento ligado.
+  if (codeDocContext) {
+    const changes = Array.isArray(codeDocContext.changes) ? codeDocContext.changes : [];
+    const readAt = codeDocContext.readAt;
+    const modified = new Set(changes.filter((item) => !String(item.status).startsWith("D")).map((item) => normalizePath(item.path)));
+    const executable = /\.(?:js|jsx|mjs|cjs|ts|tsx|css|scss|html|py|sh|bash|go|rs|java|sql|yml|yaml|toml|json)$/i;
+    const noInlineComments = /\.json$/i;
+    const canonicalDoc = /^(?:docs\/.*\.md|\.agents\/skills\/[^/]+\/(?:SKILL|README)\.md|(?:apps|src|scripts)\/.*\/README\.md|README\.md)$/i;
+    const stamp = /@last_updated:\s*(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)/;
+    const scopes = /^(?:apps\/|src\/|scripts\/|\.github\/(?:workflows|actions)\/|\.agents\/skills\/|[^/]+\.(?:mjs|js|ts|py|sh|json|yml|yaml)$)/;
+    const generated = /(?:^|\/)(?:node_modules|dist|build|coverage|vendor|\.next|\.turbo|generated)(?:\/|$)/;
+    for (const item of changes) {
+      const source = normalizePath(item.path);
+      if (!executable.test(source) || !scopes.test(source) || generated.test(source)) continue;
+      const head = String(item.status).startsWith("D") ? null : readAt("head", source);
+      const old = readAt("base", normalizePath(item.oldPath || source)) ?? "";
+      if (head === null) {
+        // Arquivo excluido ainda exige documentar a retirada com proveniencia.
+        const docUpdated = changes.some((entry) => {
+          const docPath = normalizePath(entry.path);
+          if (!canonicalDoc.test(docPath) || String(entry.status).startsWith("D")) return false;
+          const currentDoc = String(readAt("head", docPath) || "");
+          const previousDoc = String(readAt("base", docPath) || "");
+          const newStamp = currentDoc.match(stamp)?.[1];
+          const oldStamp = previousDoc.match(stamp)?.[1];
+          return currentDoc.includes("@code_ref: " + source) &&
+            currentDoc.includes("@removed: true") &&
+            Boolean(newStamp) && newStamp !== oldStamp &&
+            currentDoc.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]") !==
+              previousDoc.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]");
+        });
+        if (!docUpdated) errors.push("CODE_DELETED_WITHOUT_DOC_TRACE:" + source);
+        continue;
+      }
+      let docPath = "";
+      if (!noInlineComments.test(source)) {
+        const header = String(head).split(/\r?\n/).slice(0, 65).join("\n");
+        if (!header.includes("#OBSERVACOES#")) errors.push("CODE_TRACE_MISSING:" + source);
+        if (!/@owner:\s*\S+/.test(header)) errors.push("CODE_OWNER_MISSING:" + source);
+        const ref = header.match(/@doc_ref:\s*([^\s*]+)/);
+        docPath = normalizePath(ref?.[1] || "");
+        if (!docPath || !canonicalDoc.test(docPath)) errors.push("CODE_DOC_REF_MISSING:" + source);
+        const currentStamp = header.match(stamp)?.[1];
+        const previousStamp = String(old).slice(0, 5500).match(stamp)?.[1];
+        if (!currentStamp || !Number.isFinite(Date.parse(currentStamp))) errors.push("CODE_TIMESTAMP_INVALID:" + source);
+        else if (currentStamp === previousStamp) errors.push("CODE_TIMESTAMP_NOT_UPDATED:" + source);
+      } else {
+        // Formato JSON sem comentarios: encontrar documento canônico que mapeia o codigo.
+        docPath = [...modified].filter((p) => canonicalDoc.test(p)).find((p) =>
+          String(readAt("head", p) || "").includes("@code_ref: " + source)
+        ) || "";
+        if (!docPath) errors.push("JSON_CODE_TRACE_DOC_MISSING:" + source);
+      }
+      if (!docPath || !modified.has(docPath)) {
+        errors.push("CODE_DOC_NOT_UPDATED_IN_SAME_DIFF:" + source + ":" + (docPath || "MISSING_DOC"));
+        continue;
+      }
+      const currentDoc = String(readAt("head", docPath) || "");
+      const priorDoc = String(readAt("base", docPath) || "");
+      if (!currentDoc.includes("@code_ref: " + source)) errors.push("DOC_CODE_LINK_MISSING:" + docPath + ":" + source);
+      const docStamp = currentDoc.match(stamp)?.[1];
+      if (!docStamp || !Number.isFinite(Date.parse(docStamp))) errors.push("DOC_TIMESTAMP_INVALID:" + docPath);
+      else if (docStamp === priorDoc.match(stamp)?.[1]) errors.push("DOC_TIMESTAMP_NOT_UPDATED:" + docPath);
+      if (currentDoc.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]") ===
+          priorDoc.replace(/@last_updated:\s*\d{4}-[^\s*]+/g, "@last_updated: [timestamp]")) {
+        errors.push("DOC_CONTENT_NOT_UPDATED:" + docPath);
+      }
+    }
+  }
   return errors;
 }
 
@@ -580,11 +660,20 @@ export function runGate({ baseRef, headRef }) {
     detectAddedUnits(source, text),
   );
 
+  const changes = git(["diff", "--name-status", "-M", baseRef, headRef, "--"])
+    .split(/\r?\n/).filter(Boolean)
+    .map((line) => {
+      const [status, first, second] = line.split("\t");
+      return { status, oldPath: second ? first : undefined, path: second || first };
+    });
   const errors = [
     ...validateRegistry(registry, baseRegistry),
     ...validateDiagram(registry, diagram),
     ...validateTriggerCoverage(registry, triggerText),
-    ...validateDiffCoverage(registry, units),
+    ...validateDiffCoverage(registry, units, {
+      changes,
+      readAt: (ref, file) => showAt(ref === "base" ? baseRef : headRef, file),
+    }),
     ...validateMermaidPreservation(baseRef, headRef),
   ];
 

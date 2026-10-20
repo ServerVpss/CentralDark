@@ -46,3 +46,45 @@ Quando o deploy canônico estiver `FAIL` ou `BLOCKED` antes da promoção, usar 
 - hook: `scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh`
 
 Regra: mesmo SHA da main, owner exato, fileset causal, teste aplicável, restart isolado, health/prova runtime e receipt #1562.
+
+## Cockpit — leitura e gates do microdeploy
+
+Owner de interface: `apps/instinto-superior/src/components/central/SistemaCentralDark.tsx`.
+Fonte viva existente: `apps/instinto-superior/src/lib/cockpit.functions.ts`.
+Executor canônico **inalterado**: `scripts/micro_deploy.sh`.
+
+O painel expõe o ciclo `MEDIR → COMPARAR → APLICAR DELTA → TESTAR → CONTRAPROVA → SELAR`,
+reutiliza o botão `Remedir` e mostra a origem e o tempo da evidência (STALE após 90s).
+`mainSha === vpsSha` prova igualdade de código, **não** deploy; campo deploy fica
+`UNKNOWN` enquanto não houver recibo do mesmo SHA, health e efeito no runtime.
+`/api/microdeploy/receipts/index.json` acessível prova somente a leitura do índice,
+não a integridade dos recibos.
+
+Worktrees, runners, disco C: e autorização operacional permanecem `UNKNOWN/BLOCKED`
+até haver sonda autenticada e evidência própria. `DEPLOY_ALLOWED=false` é fail-closed:
+nenhum botão dispara comandos, não existe backend novo ou memória paralela.
+Só conectar um adaptador de escrita mediante aprovação explícita, owner, testes do
+mesmo SHA, rollback verificável e recibo de efeito.
+
+
+## MCP PID ao vivo no HUD autenticado — 2026-10-18T15:23:05.506Z
+
+- @code_ref: apps/instinto-superior/src/lib/cockpit.functions.ts#lerMcpRuntimeAoVivo;
+  apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx#GavetaForja;
+  apps/instinto-superior/scripts/verify-hud-zone.mjs.
+- @last_updated: 2026-10-18T15:23:05.506Z
+- Fonte exclusiva dos PIDs: MCP existente GET /heartbeat, campo
+  operational.executionTopology de apps/modulos/mcp/src/operational-telemetry.js.
+  Sem tabela, coletor ou rota paralelos.
+- Supabase existente: autenticação por requireSupabaseAuth e role admin antes
+  da leitura server-side. Nenhuma escrita ou PID persiste no Supabase.
+  agent_events e module_health_status não são fontes de PID atual.
+- Consulta do HUD a cada 10 segundos. PID exibido somente com assinatura
+  mcp-centraldark, schema centraldark.execution-topology.v1, runtime.pid válido
+  e amostra de até 30 segundos. Indisponibilidade ou expiração = UNKNOWN,
+  com PID antigo oculto.
+- PID presente não demonstra conexão TCP, ferramenta executada ou navegador
+  na Casa. Atividade MCP provada separadamente por mcpActivity.
+- Provas: npm run verify:hud + npm run build:vps validam fonte; para
+  RUNTIME exigir implantação, serviço HTTP autenticado e readback do SHA.
+  Git main != deployed.

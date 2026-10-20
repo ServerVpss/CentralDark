@@ -1,7 +1,7 @@
 ---
 name: centraldark-oracle-surface
 description: "Use when consulting an external browser oracle."
-version: 0.5.4
+version: 0.5.5
 author: SEGREDO/CHEFE, Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -1148,3 +1148,53 @@ ORACLE_OUTPUT_IS_CANDIDATE=true
 6. **Close the same causal cycle:** send the relevant evidence digest and source refs in the existing `oracle_evidence_hook.py` envelope; Hermes/perception performs applicable reads and owner-local actions, independent counterproof tests the real effect, clauses update and an existing writer seals receipt/`NEXT_CURSOR`. If the fingerprint has no material information gain, reuse the proven result instead of consulting Oracle again. `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`, `GOAL_DONE != LOCAL_DONE`.
 
 **Scope resolution:** earlier references to "ask CHAT_GLOBAL each micro-step" and "Oracle-first human response" govern an **active, applicable** Hermes↔Oracle mission, not every unrelated CentralDark response or every master trigger. All phases are *accounted for*, not blindly executed; no mandatory full-body preload on each boot. This follows the newer SOUL/Trigger Fabric `PERTINENCE_FIRST` and `MINIMUM_SUFFICIENT_LOOP` requirements without erasing the previous Oracle continuity contract.
+
+
+## 🪬 ZENDRIVE + Work/ChatGPT + Hermes via VPS SSH — mesmo loop (2026-10-18)
+
+**CHEFE deu o nome das cascas; nomes não mudam autoridade.**
+`SOL/FORJA/ORACULO` são perspectivas da mesma coordenação consultiva,
+não três credenciais, três processos, três escritores ou uma nova IA em execução.
+`CHAT_GLOBAL` continua uma *surface* externa com consentimento e contexto de cliente.
+`Hermes` é o executor tipado preexistente, não uma simulação dentro do ChatGPT.
+
+**Ponto real:** `.vscode/tasks.json` é o owner dos comandos do VS Code.
+Quando aberto por `SSH: Segredo-VPS`, o task runner é **Linux remoto**.
+`powershell.exe` e caminhos `\\scripts\\...` são exclusivos da Casa Windows.
+As quatro tarefas `CentralDark Hermes Vivo: 01..04` têm override Bash no Linux,
+preservando o Windows. Os demais jobs PowerShell fazem fail-closed explícito.
+`ABRIR 4 TERMINAIS` deixa de arrancar ao abrir pasta, para não gastar recursos
+nem disparar agentes sem Goal. Validar por
+`node scripts/vscode/verify-hermes-task-shells.mjs`, depois pela saída real
+de cada terminal; teste estático não é sessão Hermes viva.
+
+**Casca principal:** `apps/instinto-superior` (CockpitShell, observabilidade,
+HUD Papagaio); `apps/modulos` permanece dono de motores e serviços; AionUi,
+VS Code, ChatGPT, Claude, Gemini e Telegram/Gram são *superfícies/adapters*
+e painéis reutilizados onde houver permissão. Não clonar aplicativo proprietário
+nem presumir integração direta de arquivos internos ou controle universal de
+outro desktop. Distinguir UI/preview, API, MCP, SSH e execução como rotas diferentes.
+O Cockpit pode abrir uma superfície permitida numa janela/gaveta por vínculo
+autorizado, mas abrir link/iframe não instala nem autentica app externo.
+
+**Handoff válido pelo Work/ChatGPT:** somente quando uma sessão Work ou app
+conectado tiver controle autorizado. A mera presença de ChatGPT em um Chromium
+ou de `Interacted with Browser` não cria ponte de escrita para o Hermes nem
+acesso ao VS Code; o navegador do ChatGPT pode requerer o contexto de origem.
+Correlacionar `LOOP_ID`, `TURN_ID`, `NEXT_CURSOR`, `RECEIPT_ID` por
+envelopes reais. Se `CHAT_GLOBAL` não puder operar, continuar trabalho
+autorizado pelo MCP/VPS e gravar `SURFACE_NOT_ACTIVE`, sem fabricar diálogo
+nem deixar loops gastando tokens aguardando chat.
+
+**Régua anti-regressão:** `CONSTRUIR -> INSTALAR -> CONECTAR -> TESTAR ->
+CONTRAPROVAR -> REGISTRAR`. Cada fase tem prova individual. HUD no Cockpit
+é projeção das fontes atuais; `read-only` pode paralelizar, mutações preservam
+`ONE_WRITER_PER_SCOPE`. Não avançar checkout dirty da VPS ou reiniciar AionUi
+enquanto outro writer está em rebuild. Revisão sempre pelo cone causal novo.
+
+**Estado medido da rodada 2026-10-18:** MCP com 141 tools; funil de logs
+funcionando; VPS `main` dirty em `fb7a00a60`, remoto visto em `791bafe`;
+Desktop Commander mostra dispositivos offline ao cliente, apesar de processos
+locais VPS; OAuth Broker Tailscale `fetch failed`; Browser ChatGPT só acessível
+no contexto de origem; `.vscode/tasks.json` continha doze `powershell.exe`.
+Não transportar estes estados voláteis como PASS para o próximo dia.

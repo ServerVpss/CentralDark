@@ -90,4 +90,15 @@ const status = appendCentralEvent({
   },
 });
 if (!status.ok) fail("status_append_failed");
-process.stdout.write(JSON.stringify({ ok: true, source, route: batch.route, state: linkState, accepted, duplicate, offset: last }) + "\n");
+// Emit only the sanitized probe fields back over the existing SSH receipt.
+// A successful write alone is not a browser-session proof.
+const playwrightReceipt = playwrightProbe == null ? null : {
+  cache_state: playwrightProbe.cache_state,
+  revision: playwrightProbe.revision == null ? null : String(playwrightProbe.revision),
+  runtime_state: playwrightProbe.runtime_state,
+  process_count: playwrightProbe.process_count,
+};
+process.stdout.write(JSON.stringify({
+  ok: true, source, route: batch.route, state: linkState,
+  accepted, duplicate, offset: last, playwright: playwrightReceipt,
+}) + "\n");

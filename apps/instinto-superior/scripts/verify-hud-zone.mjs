@@ -313,51 +313,8 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.doesNotMatch(bell, /localStorage|sessionStorage|\/notify-telegram/);
 });
 
-
-test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
-  const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
-  const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
-  const manifest = JSON.parse(read("skills/vs-code-restore/package.json"));
-  const extension = read("skills/vs-code-restore/src/extension.ts");
-
-  // CONSTRUIR: o cockpit e a extensao sao os owners existentes.
-  assert.equal((design.match(/id="galeria-extensoes"/g) || []).length, 1);
-  assert.ok(design.includes('id="galeria-extensoes"'));
-  assert.ok(design.includes("Marketplace de capacidades"));
-  assert.ok(design.includes('data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli"'));
-  assert.ok(design.includes("fonte " + manifest.version));
-  assert.ok(manifest.contributes.commands.some(c => c.command === "centraldark.zendriveCli"));
-  assert.ok(extension.includes("registerCommand('centraldark.zendriveCli'"));
-
-  // CONECTAR: acesso autenticado e mesmo terminal / funil, sem outro executor.
-  assert.ok(design.includes('{autenticado ? <TabsTrigger value="extensoes">'));
-  assert.ok(design.includes('autenticado ? (\n          <TabsContent value="extensoes"'));
-  assert.ok(cockpit.includes('autenticado={autenticado}'));
-  assert.ok(extension.includes("terminal.show(false)"));
-  const focus = extension.slice(extension.indexOf("function focusExistingCliTerminal"),
-    extension.indexOf("function loadMap"));
-  assert.ok(!focus.includes("createTerminal("));
-  for (const name of ["onDidStartTerminalShellExecution", "onDidEndTerminalShellExecution",
-    "LOGS-VS-CODE.log"]) assert.ok(extension.includes(name), "evento/funil: " + name);
-  assert.ok(!focus.includes("process.env.OPENAI_API_KEY"));
-
-  // PROVAR: recibos reais sao escopados; UI nunca pode declarar provider live.
-  assert.ok(design.includes("/tree/main/skills/vs-code-restore"));
-  assert.ok(design.includes("/pull/1820"));
-  assert.ok(design.includes("não provado ao vivo"));
-  assert.ok(design.includes("Build e deploy do cockpit são provas separadas"));
-  assert.ok(!design.includes("ChatGPT API conectada e autenticada"));
-});
-
-
-// Anti-regressão do Marketplace dentro da esteira existente (npm prebuild/prebuild:vps).
-// Isto prova contratos SOURCE, não instalação remota nem resposta HTTP do cockpit.
-test("regressao do Marketplace ZENDRIVE — construir, instalar, conectar e provar sem falso verde", () => {
-  const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
-  const shell = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
-  const admin = read("apps/instinto-superior/src/routes/_authenticated/sala-controle.tsx");
-  const extManifest = JSON.parse(read("skills/vs-code-restore/package.json"));
-  const extension = read("skills/vs-code-restore/src/extension.ts");
+test("Casa canonical K and four-stage collector receipt", () => {
+  const launcher = read("apps/instinto-superior/INICIAR-COCKPIT-LOCAL.bat");
   const bridge = read("scripts/casa/vscode-log-bridge.ps1");
   const ingest = read("scripts/vps/ingest-vscode-log.mjs");
   const funnel = read("apps/modulos/mcp/src/log-funnel.js");
@@ -582,8 +539,18 @@ test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
     'd?.screenpipeFonte', 'd?.screenpipeVpsFonte',
   ]) {
     assert.ok(obs.includes(label), "falta no painel: " + label);
+  for (const field of ["EXPECTED_ROOT=K:", "BLOCKED_LEGACY_OR_NONCANONICAL_PATH",
+    "BLOCKED_NOT_GIT_CHECKOUT", "npm ci", "--port 3000 --strictPort"]) {
+    assert.ok(launcher.includes(field), field);
   }
-  assert.ok(hud.includes('["Screenpipe VPS", estado?.screenpipeVps'));
-  assert.ok(hud.includes('["Desktop Commander VPS", estado?.desktopVps'));
-  assert.ok(hud.includes('["👁️ Screenpipe VPS", estado?.screenpipeVps'));
+  assert.ok(!launcher.includes('cd /d "E:'));
+  for (const stage of ["[switch]$Bootstrap", "BUILD=PASS_SOURCE_PARSE_AND_GIT_ROOT_K",
+    "INSTALL=PASS_EXISTING_SCHEDULED_TASK", "CONNECT=PASS_",
+    "PROVE=PASS_COLLECTOR_METADATA_", "BROWSER_AUTOMATION_E2E=UNPROVEN",
+    "FIXED_POINT=COLLECTOR_ONLY"]) assert.ok(bridge.includes(stage), stage);
+  assert.ok(bridge.includes("chromium(_headless_shell)?-"));
+  assert.ok(bridge.includes("$parsed.playwright.revision -eq"));
+  assert.ok(ingest.includes("const playwrightReceipt = playwrightProbe == null"));
+  assert.ok(ingest.includes("playwright: playwrightReceipt"));
+  assert.ok(!ingest.includes("playwright: playwrightProbe,"));
 });

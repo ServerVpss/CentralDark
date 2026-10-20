@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# #OBSERVACOES# | CENTRALDARK.CLAIM.SEAL.GAIN.TESTS
+# @owner: scripts/trigger-fabric/test_centraldark_full_trigger_boot.py
+# @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+# @last_updated: 2026-10-16T10:42:57.361Z
+# @escopo: verify gain rejection / reseal proof; no extra runtime.
+# @next_cursor: run direct negative and positive tests; CI same HEAD pending.
 from __future__ import annotations
 
 import argparse
@@ -439,6 +445,8 @@ def test_reseal_fingerprint_requires_same_lock_and_counterproof():
             current_target_remeasured=True, dependency_fingerprint=None,
             fingerprint_material=["VERSION=2"], observed_at="now",
             evidence_ref="", receipt_ref="",
+            gain_metric="", gain_direction="higher", gain_before=None, gain_after=None,
+            gain_evidence_ref="", regression_evidence_ref="",
         )
         assert mod.cmd_reseal_fingerprint(bad) == 6
         assert mod.load_registry(reg)["claims"]["CLAIM_X"]["proven_path_replay"]["dependency_fingerprint"] == old_fp
@@ -476,6 +484,9 @@ def test_reseal_fingerprint_updates_same_claim_after_counterproof():
             current_target_remeasured=True, dependency_fingerprint=None,
             fingerprint_material=["VERSION=2"], observed_at="now",
             evidence_ref="evidence-new", receipt_ref="receipt-new",
+            gain_metric="capability_success_rate_percent", gain_direction="higher",
+            gain_before=75.0, gain_after=92.0,
+            gain_evidence_ref="receipt:before-after", regression_evidence_ref="test:regression-independent",
         )
         assert mod.cmd_reseal_fingerprint(args) == 0
         claim = mod.load_registry(reg)["claims"]["CLAIM_X"]
@@ -484,6 +495,45 @@ def test_reseal_fingerprint_updates_same_claim_after_counterproof():
         assert claim["reopen_history"][-1]["old_dependency_fingerprint"] == old_fp
         assert claim["reopen_history"][-1]["new_dependency_fingerprint"] == new_fp
         assert claim["reopen_history"][-1]["scope"] == "AFFECTED_CONE_ONLY"
+        assert claim["reopen_history"][-1]["gain"]["before"] == 75.0
+        assert claim["reopen_history"][-1]["gain"]["after"] == 92.0
+        assert claim["reopen_history"][-1]["gain"]["regression_evidence_ref"] == "test:regression-independent"
+
+
+
+def test_reseal_does_not_unlock_without_material_gain_and_independent_counterproof():
+    """A escrita de novo selo deve falhar sem T0/T1 superior e provas independentes."""
+    with tempfile.TemporaryDirectory() as td:
+        reg = Path(td) / "claims.json"
+        old_fp = mod.dependency_fingerprint(["VERSION=1"])
+        lock = mod.lock_key("CLAIM_X", "owner/a")
+        mod.atomic_write_json(reg, {"schema": "centraldark.proven-claims-lock.v1", "claims": {
+            "CLAIM_X": {
+                "claim_key": "CLAIM_X", "owner": "owner/a", "lock_key": lock,
+                "state": "SEALED_PROVEN",
+                "proven_path_replay": {"dependency_fingerprint": old_fp},
+            }
+        }})
+        args = argparse.Namespace(
+            repo=str(REPO), registry=str(reg), claim="CLAIM_X", owner="owner/a",
+            lock_key=lock, cause_ref="receipt:cause", counterproof_result="PASS",
+            current_target_remeasured=True, dependency_fingerprint=None,
+            fingerprint_material=["VERSION=2"], observed_at="2026-10-16T10:00:00Z",
+            evidence_ref="receipt:gain", receipt_ref="receipt:run",
+            gain_metric="success_rate", gain_direction="higher",
+            gain_before=85.0, gain_after=85.0,
+            gain_evidence_ref="receipt:gain", regression_evidence_ref="test:regression",
+        )
+        assert mod.cmd_reseal_fingerprint(args) == 6  # resultado igual nao e ganho
+        assert mod.load_registry(reg)["claims"]["CLAIM_X"]["proven_path_replay"]["dependency_fingerprint"] == old_fp
+        args.gain_after = 90.0
+        args.regression_evidence_ref = args.gain_evidence_ref
+        assert mod.cmd_reseal_fingerprint(args) == 6  # contraprova nao pode ser autocitacao
+        assert mod.load_registry(reg)["claims"]["CLAIM_X"]["proven_path_replay"]["dependency_fingerprint"] == old_fp
+        args.regression_evidence_ref = "test:independent"
+        args.gain_before = None
+        assert mod.cmd_reseal_fingerprint(args) == 6  # sem baseline mensuravel
+        assert mod.load_registry(reg)["claims"]["CLAIM_X"]["proven_path_replay"]["dependency_fingerprint"] == old_fp
 
 
 if __name__ == "__main__":
@@ -515,6 +565,7 @@ if __name__ == "__main__":
         test_proven_path_executable_recipe_contract_is_machine_consumable,
         test_reseal_fingerprint_requires_same_lock_and_counterproof,
         test_reseal_fingerprint_updates_same_claim_after_counterproof,
+        test_reseal_does_not_unlock_without_material_gain_and_independent_counterproof,
         test_canonical_chain_contains_full_core_flow,
     ]
     for test in tests:
