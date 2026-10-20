@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { execFile } from 'child_process';
+import { startRemoteTerminal, configureRemoteTerminal, remoteTerminalStatus } from './remote-terminal';
 
 interface TerminalSpec {
   name: string;
@@ -46,6 +47,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)),
     vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)),
     vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
+    vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => configureRemoteTerminal(context)),
+    vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => remoteTerminalStatus(context)),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
@@ -53,6 +56,7 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
   registerTerminalTelemetry(context);
+  void startRemoteTerminal(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
   if (onOpen) {
     void restore(context, false);
