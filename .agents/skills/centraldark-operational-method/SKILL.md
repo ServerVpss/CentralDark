@@ -8,8 +8,31 @@ oracle_review_on_change: true
 
 # METODO OPERACIONAL CENTRALDARK
 
+## Grafia de fala aprovada pelo CHEFE — teste de áudio (2026-10-19)
+
+Na resenha informal e em falas destinadas ao áudio, preferir **“Ôchente!”** (CH, circunflexo) à grafia “Oxente” ou “Ôxente”, porque o CHEFE testou a voz e aprovou a pronúncia. Usar baianês espontâneo, frases curtas, humor e palavrões leves/contextuais quando combinarem com a conversa, sem agressão dirigida. Exemplo de tom aprovado: **“Ôchente, pivetão! Agora o doce ficou no ponto dessa porra!”**. Preservar grafia convencional em documentação formal, nomes técnicos, citações e histórico. Preferência de comunicação não altera evidência, gates nem execução; não substituir retroativamente textos históricos.
+
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
+
+## Lei persistente — Casa ⇄ main, CHEFE como aprovação viva (2026-10-19)
+
+**Autoridade:** o CHEFE aprova a intenção em tempo real no diálogo; a PR não é requisito universal para alterações cotidianas autorizadas. Abrir PR somente quando solicitado ou quando o componente exigir isolamento/revisão técnica. Não criar PR automaticamente para cada delta.
+
+```text
+CASA_COMMIT_IMPLIES_MAIN_SYNC=true
+MAIN_COMMIT_IMPLIES_CASA_SYNC=true
+PR_BY_EXCEPTION=true
+CHEFE_IS_LIVE_APPROVAL=true
+SYNC_IS_BIDIRECTIONAL_NOT_DESTRUCTIVE=true
+UNKNOWN_IS_NOT_SYNCED=true
+```
+
+**Ciclo obrigatório por delta aprovado:** medir HEAD local e remoto, identificar owner e diferenças, preservar arquivos não relacionados e último verde, aplicar a menor mudança, executar gates proporcionais, fazer commit local de escopo exato, sincronizar com `origin/main` quando autorizado e seguro, confirmar SHA remoto e incorporar o resultado de volta na Casa; conferir identidade dos arquivos/SHAs e registrar recibo. No sentido inverso, ao detectar novo commit em `main`, atualizar a Casa com o mesmo cuidado, sem reset destrutivo ou descarte de mudanças locais. Reusar scripts/owners de sincronização já existentes.
+
+**Exceções que impedem promoção automática:** conflito não resolvido, working tree com alterações de outros writers, segredos, autorização ausente, testes obrigatórios falhos, proteção de branch ou políticas de revisão. Nesses casos preservar os dois lados e declarar `BLOCKED/UNKNOWN` com o menor próximo passo; **não** forçar push, não contornar proteção da main e não dizer `SINCRONIZADO` sem readback. A autorização para um delta não autoriza subir trabalho não relacionado.
+
+**Escopo da lei:** governança operacional, não prova de que um daemon de sincronização já exista ou esteja rodando. `LOCAL_COMMITTED != MAIN_UPDATED` e `MAIN_UPDATED != CASA_UPDATED`.
 
 ## 🔒 Main-first lock — obrigatório em toda rodada
 
@@ -47,6 +70,10 @@ python3 scripts/trigger-fabric/main_first_change_guard.py \
 ```
 
 O guard consulta `origin/main`, PRs abertos, issues abertas e os commits atuais da main. Ele retorna `BLOCKED_DIRTY_WORKTREE` quando a árvore não está preservada em um worktree limpo. Depois da alteração, a finalização exige o mesmo receipt, commit/PR no mesmo HEAD, testes, dívida explícita e `NEXT_CURSOR`; quando autorizado, `--comment-pr` publica o receipt no PR. Falha no preflight/finalizer bloqueia a promoção; não há bypass silencioso.
+
+## Comunicação mínima — responsabilidade humana ≠ erro técnico (2026-10-19)
+
+Quando só falta uma ação do CHEFE, falar em linguagem natural, com o **local e a ação exata**, sem apresentar como falha nem acionar alerta técnico. Exemplo: **"🟡 Falta o CHEFE abrir Cockpit → Minha Oficina e olhar os seis cartões."** Não mostrar `NÃO COMPROVADO` como cobrança humana ou alerta vermelho. Para erro real, usar **"🔴 Precisa corrigir [causa e local]"**; para funcionalidade provada, **"🟢 Funcionando"**. Preservar estados técnicos `UNKNOWN/FAIL/PASS` nos dados, logs e receipts; mudar somente a mensagem exibida quando a única pendência é conferência humana. Objetivo: comunicação curta, útil e sem ruído.
 
 ## Contrato de precisão de resposta — reutiliza o método existente
 
@@ -2934,7 +2961,8 @@ Fala direta do CHEFE, baianês/resenha naturais; versículo ou rima opcionais e 
 
 ### VS Code Windows Casa — descoberta Desktop Commander (2026-10-15)
 
-Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
+Reutilizar [
+eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
 
 
 <!-- CENTRALDARK_RECOVERY_COMMANDS_HUD_TO_INSTINTO_20261015 -->
