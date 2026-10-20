@@ -117,7 +117,99 @@ if ($size -gt 0) {
       elseif ($rawLine -match '(?i)remote.ssh|remote-ssh') { $component = "remote-ssh" }
       $hashBytes = [Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($rawLine))
       $hash = [Convert]::ToHexString($hashBytes).ToLowerInvariant()
-      $signals += @{ end_offset = $next; hash = $hash; level = $level; component = $component }
+      $signal = @{ end_offset = $next; hash = $hash; level = $level; component = $component }
+      # #OBSERVACOES# @owner=scripts/casa/vscode-log-bridge.ps1 @doc_ref=.agents/skills/centraldark-vscode-log-bridge/SKILL.md
+      # @last_updated=2026-10-20T23:29:18.285Z @implementado=Receipt_allowlist_v1 @estado=SOURCE_ONLY
+      # @next_cursor=WINDOWS_PARSER_AND_SSH_READBACK
+      # Somente campos de um recibo emitido pela extensao; nunca copiar linha crua.
+      if ($component -eq 'terminal' -and $rawLine -cmatch '^\\[INFO\\] \\[terminal\\] centraldark\\.goal_receipt_v1 goal=(?<goal>[A-Za-z0-9_-]{1,64}) status=(?<status>COMPLETED_REPORTED|BLOCKED_REPORTED|UNKNOWN) tests=(?<tests>PASS_REPORTED|FAIL_REPORTED|UNKNOWN) sha=(?<sha>[a-f0-9]{40}|UNKNOWN) cursor=(?<cursor>VALIDAR_DIFF|CORRIGIR_TESTES|REVISAR_GOAL|TERMINADO) utc=(?<utc>20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z)
+    }
+  }
+}
+# Same Casa writer, same SSH receipt. Browser cache is only an installed-file signal.
+# No credentials, profile files, command line, or absolute user path leave Windows.
+function Get-PlaywrightProbe {
+  $unknown = @{ cache_state='UNKNOWN'; revision=$null; runtime_state='UNPROVEN'; process_count=0 }
+  $localAppData = [Environment]::GetFolderPath('LocalApplicationData')
+  if ([string]::IsNullOrWhiteSpace($localAppData)) { return $unknown }
+  $cache = Join-Path $localAppData 'ms-playwright'
+  if (!(Test-Path -LiteralPath $cache -PathType Container)) {
+    return @{ cache_state='ABSENT'; revision=$null; runtime_state='NOT_RUNNING'; process_count=0 }
+  }
+  $revisions = @(Get-ChildItem -LiteralPath $cache -Directory -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -match '^chromium(_headless_shell)?-([0-9]+)$' } |
+    ForEach-Object { [int]($_.Name -replace '^chromium(_headless_shell)?-', '') } | Sort-Object -Descending -Unique)
+  foreach ($revision in $revisions) {
+    $headed = Join-Path $cache ("chromium-{0}\chrome-win64\chrome.exe" -f $revision)
+    $headless = Join-Path $cache ("chromium_headless_shell-{0}\chrome-headless-shell-win64\chrome-headless-shell.exe" -f $revision)
+    if ((Test-Path -LiteralPath $headed -PathType Leaf) -or (Test-Path -LiteralPath $headless -PathType Leaf)) {
+      $n = 0
+      try {
+        $n = @(Get-CimInstance Win32_Process -Filter "Name='chrome-headless-shell.exe' OR Name='chrome.exe'" -ErrorAction Stop |
+          Where-Object { $_.ExecutablePath -and (
+            [string]::Equals($_.ExecutablePath, $headless, [StringComparison]::OrdinalIgnoreCase) -or
+            [string]::Equals($_.ExecutablePath, $headed, [StringComparison]::OrdinalIgnoreCase)) }).Count
+      } catch { return @{ cache_state='FILES_PRESENT'; revision=[string]$revision; runtime_state='UNKNOWN'; process_count=0 } }
+      return @{ cache_state='FILES_PRESENT'; revision=[string]$revision; runtime_state=$(if($n -gt 0){'PROCESS_OBSERVED'}else{'NOT_RUNNING'}); process_count=[Math]::Min($n,100) }
+    }
+  }
+  return @{ cache_state='INCOMPLETE'; revision=$null; runtime_state='UNPROVEN'; process_count=0 }
+}
+
+$batch = @{
+  source = "LOGS-VS-CODE.log"; epoch = $epoch; from_offset = [long]$offset
+  to_offset = [long]$next; source_last_write_utc = $info.LastWriteTimeUtc.ToString("o")
+  signals = @($signals)
+  playwright = Get-PlaywrightProbe
+}
+if ($DryRun) {
+  Write-Output ("DRY_RUN source=LOGS-VS-CODE.log signals={0} offset={1}->{2} bytes={3}" -f $signals.Count, $offset, $next, $info.Length)
+  return
+}
+$remoteScript = "/root/CentralDark/scripts/vps/ingest-vscode-log.mjs"
+$sshBase = @("-o", "BatchMode=yes", "-o", "ConnectTimeout=7", "-o", "StrictHostKeyChecking=yes")
+$routes = @(
+  @{ name = "tailscale"; args = @("-o", "HostName=$TailscaleIP", $SshAlias) },
+  @{ name = "ssh-direct"; args = @($SshAlias) }
+)
+$receipt = $null
+foreach ($route in $routes) {
+  $batch.route = $route.name
+  $json = $batch | ConvertTo-Json -Depth 5 -Compress
+  $sshArgs = @($sshBase) + @($route.args) + @("node", $remoteScript)
+  try {
+    $reply = $json | & ssh @sshArgs 2>$null
+    if ($LASTEXITCODE -ne 0) { continue }
+    $parsed = ($reply | Select-Object -Last 1 | ConvertFrom-Json -ErrorAction Stop)
+    if ($parsed.ok -eq $true -and [long]$parsed.offset -eq $next -and
+        $null -ne $parsed.playwright -and
+        $parsed.playwright.cache_state -eq $batch.playwright.cache_state -and
+        [string]$parsed.playwright.revision -eq [string]$batch.playwright.revision -and
+        $parsed.playwright.runtime_state -eq $batch.playwright.runtime_state -and
+        [int]$parsed.playwright.process_count -eq [int]$batch.playwright.process_count) {
+      $receipt = $parsed
+      break
+    }
+  } catch { continue }
+}
+if ($null -eq $receipt) {
+  Write-Output '{"state":"ATTENTION","reason":"routes_unavailable","alternatives":"retry_private_then_ssh_direct","source":"LOGS-VS-CODE.log"}'
+  exit 4
+}
+$dir = Split-Path -Parent $StatePath
+New-Item -ItemType Directory -Force -Path $dir | Out-Null
+$temp = "$StatePath.$PID.tmp"
+@{ epoch = $epoch; generation = $generation; offset = [long]$next; route = $receipt.route; updated_at_utc = [DateTime]::UtcNow.ToString("o") } |
+  ConvertTo-Json -Compress | Set-Content -LiteralPath $temp -Encoding UTF8
+Move-Item -LiteralPath $temp -Destination $StatePath -Force
+Write-Output ($receipt | ConvertTo-Json -Compress)
+) {
+        $signal.goal_receipt = @{
+          goal = $Matches['goal']; status = $Matches['status']; tests = $Matches['tests']
+          sha = $Matches['sha']; cursor = $Matches['cursor']; utc = $Matches['utc']
+        }
+      }
+      $signals += $signal
     }
   }
 }

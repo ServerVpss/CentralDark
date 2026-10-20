@@ -116,3 +116,10 @@ Após `cli_focus`, a extensão 0.1.1 escreveu `shell_start exit=unknown` e `shel
 6. A extensão `skills/vs-code-restore` continua sendo o owner de foco e acessibilidade no VS Code; esta skill é owner **somente do funil**. Novos aliases da paleta devem apontar aos **mesmos comandos existentes**, sem novos executores ou monitores.
 
 **Teste de regressão semântica:** transcrição `“segue pelo 5S e foca o terminal”` com contexto da CentralDark deve resultar em `VS Code → identificar janela → focar terminal`, não metodologia 5S. Transcrição `“salva nos esquilos”` no contexto técnico deve resultar em **skill existente**, nunca criar uma estrutura chamada `esquilos`. `UNKNOWN != PASS` e `INTENT != TRANSCRIPT_LITERAL`.
+
+<!-- #OBSERVACOES# @code_ref=scripts/casa/vscode-log-bridge.ps1,scripts/vps/ingest-vscode-log.mjs @last_updated=2026-10-20T23:29:18.285Z -->
+## Transporte do recibo de meta Cline (v1, SOURCE_ONLY)
+
+O MESMO coletor `vscode-log-bridge.ps1` aceita linha controlada emitida por `centraldark.recordClineReceipt` e extrai apenas `goal,status,tests,sha,cursor,utc`, sem transportar texto bruto. `ingest-vscode-log.mjs` valida valores estritos e anexa `data.goal_receipt` no evento `vscode_log_signal` ja existente (setor `vscode`, fonte `LOGS-VS-CODE.log`). A consulta `centraldark_logs_query` e fachada admin atual podem observar esses metadados, sob autenticacao e as politicas existentes. Estado `SELF_REPORTED_UNVERIFIED`: nao e comprovacao independente de build, tests, entrega nem captura do COMPLETED.
+
+Gates: parse Windows, rejeitar payload malicioso/campos extras, dedupe por epoch/offset, manter log bruto exclusivamente na Casa, instalar extensao no processo correto, medir transporte por SSH e readback no MCP, sem novas tasks, processos, TCP, MCP ou cron. `SOURCE_ONLY != EXECUTED`.

@@ -47,6 +47,30 @@ if (playwrightProbe != null && (
 )) fail("invalid_playwright_probe");
 const allowedComponents = new Set(["vscode", "git", "copilot", "extension-host", "terminal", "mcp", "remote-ssh"]);
 const allowedLevels = new Set(["debug", "info", "warn", "error"]);
+// #OBSERVACOES# @owner=scripts/vps/ingest-vscode-log.mjs
+// @doc_ref=.agents/skills/centraldark-vscode-log-bridge/SKILL.md @last_updated=2026-10-20T23:29:18.285Z
+// @implementado=Recebimento somente de goal_receipt_v1 tipado e sanitizado.
+// @pendente=CI, Windows bridge e E2E da Casa @estado=SOURCE_ONLY
+// @next_cursor=TESTE_NEGATIVO_PRIVACIDADE_IDEMPOTENCIA
+const goalStatuses = new Set(["COMPLETED_REPORTED", "BLOCKED_REPORTED", "UNKNOWN"]);
+const goalTests = new Set(["PASS_REPORTED", "FAIL_REPORTED", "UNKNOWN"]);
+const goalCursors = new Set(["VALIDAR_DIFF", "CORRIGIR_TESTES", "REVISAR_GOAL", "TERMINADO"]);
+function goalReceiptOrNull(item) {
+  if (item.goal_receipt === undefined) return null;
+  const r = item.goal_receipt;
+  if (item.component !== "terminal" || !r || Array.isArray(r) || typeof r !== "object" ||
+      Object.keys(r).sort().join(",") !== "cursor,goal,sha,status,tests,utc" ||
+      typeof r.goal !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(r.goal) ||
+      !goalStatuses.has(r.status) || !goalTests.has(r.tests) ||
+      !goalCursors.has(r.cursor) ||
+      typeof r.sha !== "string" || !/^(?:[a-f0-9]{40}|UNKNOWN)$/.test(r.sha) ||
+      typeof r.utc !== "string" || !/^20[0-9]{2}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z$/.test(r.utc) ||
+      !Number.isFinite(Date.parse(r.utc))
+  ) fail("invalid_goal_receipt");
+  return { goal: r.goal, reported_status: r.status, reported_tests: r.tests,
+    source_sha: r.sha, next_cursor: r.cursor, reported_at: r.utc,
+    evidence: "SELF_REPORTED_UNVERIFIED", provider: "vscode_casa" };
+}
 let state = cursor();
 if (state.epoch !== batch.epoch) state = { epoch: batch.epoch, offset: 0 };
 let accepted = 0, duplicate = 0;
@@ -56,6 +80,7 @@ for (const item of batch.signals) {
   if (!validOffset(end) || end > batch.to_offset ||
       typeof item.hash !== "string" || !/^[a-f0-9]{64}$/.test(item.hash) ||
       !allowedLevels.has(item.level) || !allowedComponents.has(item.component)) fail("invalid_signal");
+  const goalReceipt = goalReceiptOrNull(item);
   if (end <= last) { duplicate++; continue; }
   const eventId = createHash("sha256").update(batch.epoch + ":" + end).digest("hex");
   const result = appendCentralEvent({
@@ -63,7 +88,8 @@ for (const item of batch.signals) {
     kind: "vscode_log_signal", level: item.level, key: "vscode:" + item.component,
     tags: ["vscode", "casa", item.component, item.level],
     message: item.component + " " + item.level + " (texto bruto mantido na Casa)",
-    data: { line_sha256: item.hash, end_offset: end, epoch: batch.epoch },
+    data: { line_sha256: item.hash, end_offset: end, epoch: batch.epoch,
+      ...(goalReceipt ? { goal_receipt: goalReceipt } : {}) },
   });
   if (!result.ok) fail("funnel_append_failed");
   last = end;

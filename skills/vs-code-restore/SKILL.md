@@ -424,3 +424,10 @@ A extensão ZENDRIVE não conclui missão quando o código foi commitado. O cicl
 - Antirregressão: repetir comando ZENDRIVE CLI, localizar VS Code por PID, rota SSH, abas e UI existente, erros de console.
 
 Automação de desenvolvimento permitida onde houver execução autorizada; merge em main, produção VPS e modificação de credenciais precisam do gate de promoção do CHEFE. Falhou uma fase: parar e guardar error_code, sha, owner e next_cursor. Documento canônico: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md.
+
+<!-- #OBSERVACOES# @code_ref=skills/vs-code-restore/src/extension.ts @last_updated=2026-10-20T23:29:18.285Z -->
+## Goal/COMPLETED Cline — recibo controlado (source em branch)
+
+A extensao existente expoe o comando `CentralDark: Registrar recibo Cline (somente metadados)` (`centraldark.recordClineReceipt`). A conclusao e **declarada manualmente** por quem opera a tarefa; a API publica do VS Code **nao le** diretamente o texto COMPLETED de outra extensao. O comando solicita ID da meta, estado declarado, testes declarados e NEXT_CURSOR (somente listas/ID). O SHA e consultado com git read-only no workspace ativo. Nao le chats, comandos, stdout, tokens ou arquivo privado do Cline. A linha vai para o **mesmo** `K:\\TEMP\\logs\\LOGS-VS-CODE.log` existente; nenhum terminal/sessao novo.
+
+`SOURCE_ONLY`: compilar o VSIX, verificar que a Casa recebeu a versao, emitir recibo da tarefa real e provar no funil da VPS antes de afirmar conclusao. `COMPLETED_REPORTED != VERIFIED_PASS`. Nao instalar automaticamente nem publicar a main.

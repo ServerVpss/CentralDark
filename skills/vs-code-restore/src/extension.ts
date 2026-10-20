@@ -47,6 +47,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)),
     vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
+    vscode.commands.registerCommand('centraldark.recordClineReceipt', recordClineReceipt),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
       traceOutput?.show(true);
@@ -81,6 +82,68 @@ function emitTerminalMetadata(event: TerminalEvent, exitCode?: number): void {
     fs.appendFileSync(terminalLogPath, line, { encoding: 'utf8', flag: 'a' });
   } catch {
     // Telemetria opcional nunca bloqueia a bancada nem altera o terminal.
+  }
+}
+
+
+/**
+ * #OBSERVACOES# @owner=skills/vs-code-restore/src/extension.ts
+ * @doc_ref=skills/vs-code-restore/SKILL.md @last_updated=2026-10-20T23:29:18.285Z
+ * @implementado=Comando opt-in para metadado de conclusao Cline, no log e ponte ja existentes.
+ * @pendente=Provar invocacao na Casa, instalacao da extensao e ACK no MCP.
+ * @estado=SOURCE_ONLY @next_cursor=BUILD_VSIX_READBACK_E2E
+ *
+ * A API publica do VS Code nao expoe o COMPLETED de outra extensao.
+ * Nunca consultar armazenamento interno Cline nem capturar prompts/stdout.
+ */
+async function recordClineReceipt(): Promise<void> {
+  if (process.platform !== 'win32' || !fs.existsSync(terminalLogPath)) {
+    void vscode.window.showWarningMessage('CentralDark: fonte de log Casa ausente. Nada foi criado.');
+    return;
+  }
+  const goal = await vscode.window.showInputBox({
+    title: 'CentralDark · ID da meta Cline',
+    prompt: 'Somente identificador, nunca texto da conversa, senha ou prompt.',
+    placeHolder: 'Ex.: DESIGNER_QUATRO_PELES',
+    validateInput: value => /^[A-Za-z0-9_-]{1,64}$/.test(value)
+      ? undefined : 'Use um identificador de 1 a 64 caracteres: letras, numeros, _ ou -.',
+  });
+  if (!goal) return;
+  const status = await vscode.window.showQuickPick(
+    ['COMPLETED_REPORTED', 'BLOCKED_REPORTED', 'UNKNOWN'],
+    { title: 'Cline · estado declarado (nao e prova independente)' }
+  );
+  if (!status) return;
+  const tests = await vscode.window.showQuickPick(
+    ['PASS_REPORTED', 'FAIL_REPORTED', 'UNKNOWN'],
+    { title: 'Testes declarados (SOL ainda verifica)', }
+  );
+  if (!tests) return;
+  const cursor = await vscode.window.showQuickPick(
+    ['VALIDAR_DIFF', 'CORRIGIR_TESTES', 'REVISAR_GOAL', 'TERMINADO'],
+    { title: 'Proximo cursor', }
+  );
+  if (!cursor) return;
+  const gitRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+  const sha = await new Promise<string>(resolve => {
+    if (!gitRoot) { resolve('UNKNOWN'); return; }
+    execFile('git', ['rev-parse', 'HEAD'], {
+      cwd: gitRoot, timeout: 3500, windowsHide: true, maxBuffer: 100
+    }, (err, stdout) => {
+      const value = stdout.trim().toLowerCase();
+      resolve(!err && /^[a-f0-9]{40}$/.test(value) ? value : 'UNKNOWN');
+    });
+  });
+  const line = '[INFO] [terminal] centraldark.goal_receipt_v1 goal=' + goal +
+    ' status=' + status + ' tests=' + tests + ' sha=' + sha +
+    ' cursor=' + cursor + ' utc=' + new Date().toISOString() + '\\n';
+  try {
+    fs.appendFileSync(terminalLogPath, line, { encoding: 'utf8', flag: 'a' });
+    emitTrace('shell_end', 'OBSERVED');
+    void vscode.window.showInformationMessage(
+      'CentralDark: recibo Cline registrado na Casa. Transporte/ACK ainda precisam de readback.');
+  } catch {
+    void vscode.window.showWarningMessage('CentralDark: nao foi possivel gravar na fonte existente.');
   }
 }
 

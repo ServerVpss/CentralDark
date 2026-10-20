@@ -30,6 +30,10 @@
         "title": "CentralDark: ZENDRIVE CLI (terminal existente)"
       },
       {
+        "command": "centraldark.recordClineReceipt",
+        "title": "CentralDark: Registrar recibo Cline (somente metadados)"
+      },
+      {
         "command": "centraldark.showTrace",
         "title": "CentralDark: Mostrar Trace (Saída)"
       },
