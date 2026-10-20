@@ -105,8 +105,10 @@ async function execute(payload: Record<string, unknown>, deviceId: string): Prom
         if (output.length < MAX_OUTPUT) output += chunk.slice(0, MAX_OUTPUT - output.length);
       }
     })();
-    const timeout = new Promise<"TIMEOUT">(resolve => setTimeout(() => resolve("TIMEOUT"), 30_000));
+    let timeoutId: NodeJS.Timeout | undefined;
+    const timeout = new Promise<"TIMEOUT">(resolve => { timeoutId = setTimeout(() => resolve("TIMEOUT"), 30_000); });
     const end = await Promise.race([ended, timeout]);
+    if (timeoutId) clearTimeout(timeoutId);
     if (end === "TIMEOUT") {
       // Command may still be running. Do not release PID lock or automatically retry.
       void stream.catch(() => {});
