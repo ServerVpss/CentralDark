@@ -362,7 +362,7 @@ test("Dream Reviewer usa biblioteca existente sem simular consumo do Hermes", ()
 
 test("Cartão de continuidade consolida Auto Sync e preserva prova do Hermes", () => {
   const sync = read("apps/instinto-superior/src/components/central/AutoSyncButton.tsx");
-  assert.ok(cockpit.includes("<AutoSyncButton onNavigate={abrirDestino} />"));
+  assert.ok(cockpit.includes("<AutoSyncButton onNavigate={abrirDestino} autenticado={autenticado} />"));
   for (const label of ["Continuidade do Hermes", "Sessão atual", "Fila e tarefas", "Último recibo", "Dream Review", "Auto Sync · Casa / Main / VPS", "Micro-Deploy · publicação protegida"]) {
     assert.ok(sync.includes(label), "rótulo faltando: " + label);
   }
@@ -374,4 +374,28 @@ test("Cartão de continuidade consolida Auto Sync e preserva prova do Hermes", (
   assert.ok(sync.includes("desconhecido = 'Aguardando recibo do Hermes'"));
   assert.ok(sync.includes("Sync Git não comprova publicação"));
   assert.doesNotMatch(sync, /94%|process\.env|child_process|execSync/);
+});
+
+
+test("Cockpit mostra cards compactos e abre o checkpoint canônico sem segunda API", () => {
+  const card = read("apps/instinto-superior/src/components/central/AutoSyncButton.tsx");
+  const original = read("apps/instinto-superior/src/components/central/CheckpointCentralDark.tsx");
+  const server = read("apps/instinto-superior/src/lib/checkpoint.functions.ts");
+  for (const name of [
+    "Mente Clara", "Visão Contraprova", "Selo da Realidade",
+    "Trilho de Execução", "Pulso de Continuidade",
+    "Guardião Silencioso", "Memória Viva",
+    "Diagnóstico Cline", "Checkpoint raiz",
+  ]) assert.ok(card.includes(name), name);
+  assert.ok(card.includes("Casa → VPS por SSH"));
+  assert.ok(card.includes("AssertionError"));
+  assert.ok(card.includes("históricos, não telemetria ao vivo"));
+  assert.ok(card.includes("onToggle={event => setCheckpointAberto(event.currentTarget.open)}"));
+  assert.ok(card.includes("<CheckpointCentralDark autenticado={autenticado} />"));
+  assert.ok(original.includes("lerUltimoCheckpointCentralDark"));
+  assert.ok(server.includes('requireSupabaseAuth'));
+  assert.ok(server.includes('.eq("role", "admin")'));
+  assert.ok(server.includes('checkpointCLI(["--status"])'));
+  assert.ok(!card.includes('fetch("http://'));
+  assert.ok(!card.includes("new WebSocket("));
 });
