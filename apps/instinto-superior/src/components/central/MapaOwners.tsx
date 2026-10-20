@@ -115,13 +115,20 @@ export function MapaOwners({
           </div>
           <div>
             <span className="font-mono text-muted-foreground">Abas do Cockpit:</span>
-            <span className="ml-2 text-foreground">7 destinos · UI_TESTED UNKNOWN</span>
+            <span className="ml-2 text-foreground">Sala de Controle: DOM renderizado e lido ✓ · demais abas: UNKNOWN</span>
           </div>
           <div>
             <span className="font-mono text-muted-foreground">Build local:</span>
             <span className="ml-2 text-foreground">UNKNOWN (sem receipt vinculado)</span>
           </div>
         </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Prova delimitada · 19/10/2026: navegador conectado leu o DOM da aba Sala de Controle em
+          http://100.123.93.25:8080/sala-controle, com o botão Minha Oficina e o cartão K:/F:/C:.
+          HTTP 200 e DOM lido comprovam esta superfície, não clique nas outras abas nem funcionamento
+          de todas as capacidades. A navegação e contraprova visual autônomas pertencem ao Harness
+          quando implementadas e medidas; HARNESS_UI_NAVIGATION = UNKNOWN.
+        </p>
       </div>
 
       {/* HUD existente: projeção fiel da contraprova, sem criar segundo motor. */}
