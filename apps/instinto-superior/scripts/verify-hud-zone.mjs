@@ -359,3 +359,19 @@ test("Dream Reviewer usa biblioteca existente sem simular consumo do Hermes", ()
   assert.ok(!dream.includes("94%"));
   assert.doesNotMatch(dream, /fetch\s*\(|execSync\s*\(|spawn\s*\(/);
 });
+
+test("Cartão de continuidade consolida Auto Sync e preserva prova do Hermes", () => {
+  const sync = read("apps/instinto-superior/src/components/central/AutoSyncButton.tsx");
+  assert.ok(cockpit.includes("<AutoSyncButton onNavigate={abrirDestino} />"));
+  for (const label of ["Continuidade do Hermes", "Sessão atual", "Fila e tarefas", "Último recibo", "Dream Review", "Auto Sync · Casa / Main / VPS", "Micro-Deploy · publicação protegida"]) {
+    assert.ok(sync.includes(label), "rótulo faltando: " + label);
+  }
+  assert.ok(sync.includes("<details"));
+  assert.ok(sync.includes("onNavigate?.('hermes')"));
+  assert.ok(sync.includes("onNavigate?.('recibos')"));
+  assert.ok(sync.includes("onNavigate?.('dream-reviewer')"));
+  assert.ok(sync.includes("getStatus()"));
+  assert.ok(sync.includes("desconhecido = 'Aguardando recibo do Hermes'"));
+  assert.ok(sync.includes("Sync Git não comprova publicação"));
+  assert.doesNotMatch(sync, /94%|process\.env|child_process|execSync/);
+});
