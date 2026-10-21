@@ -15,6 +15,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
+import { HudDeterministico } from "@/components/central/HudDeterministico";
+import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -90,8 +92,13 @@ function nativeUnigramBridge(): NativeUnigramBridge | undefined {
 
 const HARNESS_DESTINOS = [
   { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
+  { id: "portal", titulo: "Portal", icone: "🌐", privado: false },
+  { id: "builder-bolt", titulo: "Builder Bolt", icone: "⚡", privado: false },
+  { id: "pr1873", titulo: "Mapa do PR #1873", icone: "📜", privado: false },
   { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
+  { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
+  { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
@@ -100,6 +107,32 @@ const HARNESS_DESTINOS = [
   { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
   { id: "downloads", titulo: "Downloads", icone: "📦", privado: false },
 ] as const;
+
+/** UI-first: catálogo visual selecionável, sem fingir conexões ou criar outro painel. */
+function MenuVisualCentralDark({ titulo, descricao, itens }: { titulo: string; descricao: string; itens: string[] }) {
+  const [selecionado, definirSelecionado] = useState(itens[0] ?? "");
+  return (
+    <section className="rounded-xl border border-neon-blue/30 bg-background/80 p-5" aria-label={titulo}>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-xl font-semibold">{titulo}</h2>
+        <span className="rounded-full border border-amber-500/40 px-3 py-1 text-xs text-amber-500">ESTRUTURA VISUAL</span>
+      </div>
+      <p className="mt-2 text-sm text-muted-foreground">{descricao}</p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {itens.map((item) => (
+          <button key={item} type="button" aria-pressed={selecionado === item} onClick={() => definirSelecionado(item)}
+            className={`min-h-20 rounded-lg border p-4 text-left transition-colors hover:border-neon-blue ${selecionado === item ? "border-neon-blue bg-neon-blue/10" : "border-border bg-muted/20"}`}>
+            <span className="block text-sm font-semibold">{item}</span>
+            <span className="mt-2 block text-[11px] text-amber-500">Integração pendente</span>
+          </button>
+        ))}
+      </div>
+      <div className="mt-4 rounded-lg border border-border bg-muted/20 p-3 text-sm" role="status">
+        <strong>Selecionado:</strong> {selecionado} · Visualização da posição no Cockpit; nenhum serviço foi acionado.
+      </div>
+    </section>
+  );
+}
 
 // Interface do Gram incorporada ao CockpitShell; lê o mesmo owner dos bots
 // do Cofre Administrativo. Não copia Unigram nem simula mensagens entregues.
@@ -438,10 +471,14 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <div className="sticky top-0 z-30 -mx-4 overflow-x-auto border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
               <TabsList className="h-auto min-w-max justify-start">
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
+                <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
+                <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
+                <TabsTrigger value="pr1873">📜 Mapa PR #1873</TabsTrigger>
                 {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
                 <TabsTrigger value="sync">🛠️ Minha Oficina</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
                 <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
+                {autenticado ? <TabsTrigger value="genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
                 <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
                 <TabsTrigger value="dream-reviewer">😴 Dream</TabsTrigger>
                 <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
@@ -462,6 +499,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
               </TabsList>
             </div>
+            <TabsContent value="pr1873" className="mt-8">
+              <PainelPR1873 />
+            </TabsContent>
+            <TabsContent value="portal" className="mt-8">
+              <MenuVisualCentralDark titulo="🌐 Portal" descricao="Produtos e experiência pública; o TelePainel permanece produto independente." itens={["🏠 Página inicial", "📦 Catálogo", "📟 TelePainel", "💬 WhatsApp / CRM", "💰 Financeiro"]} />
+            </TabsContent>
+            <TabsContent value="builder-bolt" className="mt-8">
+              <MenuVisualCentralDark titulo="⚡ Builder Bolt" descricao="Fábrica de sites existente. Esta vitrine não inicia outro editor ou processo." itens={["🏗️ Construção de sites", "🖥️ Editor", "👁️ Preview", "🗂️ Projetos existentes", "🧩 Modelos e componentes", "🔄 Git e versões"]} />
+            </TabsContent>
             {autenticado ? <TabsContent value="gram" className="mt-8"><CentralDarkGram abrirAdmin={() => abrirDestino("admin")} abrirSync={() => abrirDestino("sync")} /></TabsContent> : null}
             <TabsContent value="visao" className="mt-8">
               <div className="mb-6"><CartaoDiscosForja /></div>
@@ -511,6 +557,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <TabsContent value="design" className="mt-10">
               <DesignCenter pele={pele} selecionarPele={selecionar} autenticado={autenticado} />
             </TabsContent>
+            {autenticado ? (
+              <TabsContent value="genesis" className="mt-10" id="centraldark-genesis-michelin">
+                <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />
+              </TabsContent>
+            ) : null}
             <TabsContent value="goals" className="mt-10">
               <div className="mb-8">
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
@@ -594,7 +645,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             ) : null}
             {autenticado ? (
               <TabsContent value="admin" className="mt-10">
-                <PainelAdminCentralDark estado={dado} />
+                <MenuVisualCentralDark titulo="🔐 Admin → Control Plane" descricao="Estrutura visual do HUB Credential Control Plane. Sem exposição de credenciais e sem ligação simulada." itens={["👥 Contas e permissões", "☁️ Cloudflare", "🔌 APIs e MCPs", "🔑 Cofre", "🤖 Bots", "🔗 Providers / OAuth", "📋 Auditoria", "🟡 Estado das conexões"]} />
+                <div className="mt-6"><PainelAdminCentralDark estado={dado} /></div>
               </TabsContent>
             ) : null}
             {autenticado ? (
