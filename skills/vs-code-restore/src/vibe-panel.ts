@@ -12,6 +12,7 @@ const ACTIONS = {
   restaurar: 'centraldark.restoreWorkspace',
   rastreio: 'centraldark.showTrace',
   compilar: 'centraldark.buildExtension',
+  preparar: 'centraldark.prepareAll',
 } as const;
 
 type ActionName = keyof typeof ACTIONS;
@@ -22,6 +23,7 @@ function normalize(text: string): string {
 
 function actionFromNaturalLanguage(text: string): ActionName | undefined {
   const value = normalize(text);
+  if (/prepara.*tudo|atualiza.*tudo|acordar|calibrar.*compil|compil.*conect|one.?click/.test(value)) return 'preparar';
   if (/compil|build|empacot|vsix/.test(value)) return 'compilar';
   if (/pare|dispositivo|autoriza/.test(value)) return 'parear';
   if (/status|estado|pid/.test(value)) return 'status';
@@ -46,7 +48,7 @@ export async function runNaturalCentralDarkCommand(text?: string): Promise<void>
   const action = actionFromNaturalLanguage(value);
   if (!action) {
     void vscode.window.showInformationMessage(
-      'CentralDark: ainda não reconheci essa intenção. Use conectar, testar, parear, status/PIDs, terminal, mapear, restaurar, rastreio ou compilar.'
+      'CentralDark: ainda não reconheci essa intenção. Use preparar tudo, conectar, testar, parear, status/PIDs, terminal, mapear, restaurar, rastreio ou compilar.'
     );
     return;
   }
@@ -94,6 +96,7 @@ small{display:block;margin-top:10px;color:var(--vscode-descriptionForeground)}
 <body>
 <h2>🪬 CentralDark · Vibe Coding</h2>
 <div class="grid">
+<button data-action="preparar">Preparar tudo</button>
 <button data-action="conectar">Conectar ao servidor</button>
 <button data-action="testar">Testar a conexão</button>
 <button data-action="parear">Parear este VS Code</button>
@@ -104,7 +107,7 @@ small{display:block;margin-top:10px;color:var(--vscode-descriptionForeground)}
 <button data-action="restaurar">Restaurar a bancada</button>
 </div>
 <div class="row">
-<input id="natural" placeholder="Ex.: conecta no servidor, mostra os PIDs, compila a extensão">
+<input id="natural" placeholder="Ex.: prepara tudo, conecta no servidor, mostra os PIDs">
 <button id="go">Executar</button>
 </div>
 <small>Linguagem natural dispara os mesmos owners/comandos existentes; não cria segundo executor.</small>
