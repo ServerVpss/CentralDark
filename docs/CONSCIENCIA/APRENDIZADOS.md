@@ -3143,3 +3143,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-21
 - **Contexto:** A reavaliação do padrão K:\_WORKER → F:\_WORKER encontrou a ponte Tailscale viva (Casa e VPS online), mas o inventário híbrido e o status de recursos locais declaram authority=false/proof=false. O horn REUSE_BEFORE_CREATE retornou BLOCKED_UNKNOWN, com owner/capability candidatos presentes, porém evidência e receipt ausentes e regressão desconhecida. O scratch único da VPS está limpo, mas DRIFT: scratch SHA fbb858b1 e origin/main 40f6b7a9.
 - **Aprendizado:** Não criar outro executor nem declarar self-provisioning pronto. Reutilizar a rota/owner Casa já existente; medir capacidade de execução Windows e provar o ciclo lock→provision→worktree→estado/receipt→limpeza segura. K e F devem permanecer destinos separados conforme contrato já documentado; antes de tocar diretórios, inspecionar existência, owner, data, alterações e possibilidade de limpeza. Tailscale HTTP 200 comprova apenas conectividade. Reconciliar o scratch por procedimento canônico depois de entender o drift; não resetar nem limpar automaticamente. KV cache, prompt cache e cápsula de continuidade são mecanismos distintos e só declarar benefício de cache após telemetria real do provedor/runtime.
+
+### 208. VS Code CentralDark deve priorizar linguagem natural e botões
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** CHEFE pediu que o fluxo de vibe coding pare de depender de nomes técnicos/comandos difíceis e seja operado por botões e frases naturais dentro do mesmo owner da extensão.
+- **Aprendizado:** No owner skills/vs-code-restore, expor ações humanas em PT-BR e linguagem natural que apenas roteiam para comandos/capacidades já existentes. Build/SSH/pareamento/status devem ter botões; sem criar segundo executor. Empacotamento da VSIX deve ser não interativo.
