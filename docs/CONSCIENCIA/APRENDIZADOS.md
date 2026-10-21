@@ -3161,3 +3161,22 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-21
 - **Contexto:** CHEFE confirmou o contrato da Casa: K:\ é a raiz Git/harness/cockpit/docs e ambiente de todas as IAs; F:\ guarda peso físico por junctions transparentes; C:\ não deve receber escritas intencionais da Forja. Receipt integral no PR #1873, comentário 6316911838; dono existente DELTA-CONTINUO.md + Lei dos Discos + Garimpo/Knowledge Compiler.
 - **Aprendizado:** Frase canônica literal do CHEFE: 'Tu quer que a CentralDark pense e trabalhe no K:, descarregue o peso no F:, preserve o conhecimento no Obsidian, cristalize código no GitHub e continue funcionando independentemente de qual IA esteja comandando a ferramenta.' K:\ raiz única, não K:\CentralDark. K:\_WORKER -> F:\_WORKER já medido como junction em 19/10; demais links atuais UNKNOWN. Sem novos owners/memórias/schedulers. npm/npx/pip/uv/bun: instalações persistentes próprias em K quando adequadas, caches/scratch em F usando K lógico, sem writes intencionais em C nem alteração TEMP global. Preservar worktrees ativos, bruto único e quarentena; antes de mudar conferir uso/hash/rollback/readback. Git main apenas código comprovado, VPS runtime necessário; F/Garimpo reutiliza Knowledge Compiler, Dream Review e Hermes sob demanda. Especificação e NEXT_CURSOR: https://github.com/ServerVpss/CentralDark/pull/1873#issuecomment-6316911838
+
+
+<!-- CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
+### 211. Linguagem profissional brasileira do Harness — humano na tela, diagnóstico nos detalhes
+- **Categoria:** regra + correção de entendimento da intenção do CHEFE.
+- **Data:** 2026-10-21.
+- **Autoridade:** SEGREDO/CHEFE, após imagem do Mermaid `CHEFE → CentralDark → JARVIS/Hermes/Harness → estado operacional único → português natural/detalhes técnicos`.
+- **Erro aprendido:** exibir `áudio não comprovado`, `UNKNOWN` ou `receipt não consultado` como mensagem principal de um programa transforma linguagem de produto em log; recurso opcional desligado não é falha.
+- **Cristal:** `ESTADO_REAL → (TEXTO_PT_BR_ORIENTADO_A_ACAO, DETALHE_TECNICO_SOB_DEMANDA)`. Mesma realidade operacional, duas apresentações; nenhuma segunda memória, Harness, Hermes ou Cockpit.
+- **Exemplos condicionais:** `MIC_DISABLED → Ativar microfone`; `AUDIO_CAPTURE_ACTIVE → Ouvindo...`; `CONNECTION_FAILED → Conexão perdida · Reconectar`; `QUEUE_EMPTY` após leitura → `Nenhuma tarefa no momento`; fila não lida → `Consultar atividades`; `TASK_SUCCESS` provado → `Concluído`.
+- **Papéis sem renomeação técnica:** CHEFE é autoridade; JARVIS/SOL interpreta e coordena; Harness organiza; Hermes executa; Cockpit oferece superfície humana; Reality Judge e receipts preservam contraprova.
+- **Idioma:** textos estáticos simples, acessíveis e universais em pt-BR; JARVIS pode conversar com baianês espontâneo quando contextual.
+- **Travas:** `OFF != FAILURE`, `UNKNOWN != PASS`, `UI_RENDERED != EXECUTION_PASS` e `MERGED != DEPLOYED`. Não confundir animação da esfera com áudio ativo.
+- **Mermaids e mapa cognitivo:** [[MAPA-DO-CEREBRO]] seção `Linguagem de produto do Harness`; guia [[GUIA-COMUNICACAO-SEGREDO-CHEFE]]; memória de proveniência [[LEMBRANCAS]].
+- **Bibliografia oficial conferida:** GOV.BR linguagem simples; Microsoft Windows escrita e controles. Links no mapa.
+- **Owner/PR equivalente:** [#1895](https://github.com/ServerVpss/CentralDark/pull/1895), mesma superfície visual e mesmo owner de conhecimento. Não há novo app/scheduler/agente.
+- **CURRENT:** regra documentada em branch; mudanças no executável, build, sincronização com Obsidian Casa e deploy permanecem UNKNOWN até readback.
+- **NEXT_CURSOR:** `READBACK_DOCS_1895 → CHECKS_HEAD_EXATO → UI_OWNER_MICROCOPY → TESTES_DE_ESTADO_E_ACESSIBILIDADE → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.
+<!-- /CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
