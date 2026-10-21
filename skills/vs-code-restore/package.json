@@ -60,6 +60,14 @@
       {
         "command": "centraldark.browserSurfacesCatalog",
         "title": "CentralDark: Catálogo de abas e capacidades Browser/ZENDRIVE"
+      },
+      {
+        "command": "centraldark.openVibeCoding",
+        "title": "CentralDark: Abrir Vibe Coding"
+      },
+      {
+        "command": "centraldark.buildExtension",
+        "title": "CentralDark: Compilar a extensão"
       }
     ],
     "configuration": {
@@ -93,6 +101,16 @@
           "description": "Porta HTTP em 127.0.0.1 para Tailscale Serve privado; nao abre interface publica."
         }
       }
+    },
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "centraldark.vibeCoding",
+          "name": "🪬 CentralDark · Vibe Coding",
+          "visibility": "visible"
+        }
+      ]
     }
   },
   "scripts": {
@@ -110,5 +128,10 @@
   ],
   "extensionDependencies": [
     "ms-vscode-remote.remote-ssh"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ServerVpss/CentralDark.git",
+    "directory": "skills/vs-code-restore"
+  }
 }
