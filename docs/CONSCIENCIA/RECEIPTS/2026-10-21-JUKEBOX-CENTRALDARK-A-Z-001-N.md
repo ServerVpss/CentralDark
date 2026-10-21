@@ -2502,3 +2502,25 @@ flowchart LR
 **Fontes mestras:** [[MAPA-DO-CEREBRO]] · [[APRENDIZADOS]] · [[CONSCIENCIA]] · [Biblioteca Cognitiva](../../BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md) · [Hierarquia de Capacidades](../../ARQUITETURA/00-INDICE-HIERARQUIA-CAPACIDADES.md).
 
 **AVISO:** artefato estrutural da sessão; números e rótulos atuais foram observados na consulta ao catálogo, mas devem ser remensurados em cada execução. `UNKNOWN != PASS`; `CATALOGED != EXECUTED`; `COMMITTED != DEPLOYED`.
+
+<!-- CENTRALDARK_JUKEBOX_ORDER_ENFORCEMENT_20261021 -->
+## 6. 🔒 Regra obrigatória de ordem — gate A–Z + J001–JNNN
+
+**Problema corrigido:** a primeira versão tinha **33 posições fora da ordenação alfabética determinística**. Foram reordenadas na branch **sem renumerar J001–J301**. Link funcionar NÃO era prova de ordem correta.
+
+**Validador executável reutilizado:** `scripts/trigger-fabric/verify_jukebox.py` dentro de `scripts/trigger-fabric/verify_repo_contract.py`, que já é chamado pela esteira existente `.github/workflows/porta-de-entrada.yml` em PR/push. Não cria workflow, daemon, memória ou executor.
+
+**Checks fail-closed em cada execução desse contrato:**
+- Índice A–Z e títulos com **ordem determinística** (normalização de acentos, pontuação e case).
+- Relação 1:1 entre índice alfabético e ficha numérica; link `#jNNN` aponta para a âncora de mesmo ID; nenhum título divergente.
+- IDs sequenciais **J001 até JNNN**, sem buracos/duplicatas/reutilização.
+- **Identidade histórica J001–J301 congelada** por fingerprint `FNV64=83f1dfa563d66705` dos pares `ID + título`; mudanças nessa base precisam de migração deliberada e prova, nunca auto-renumeração.
+- Fichas com categoria/estado presentes; `NEXT_CURSOR` e `UNKNOWN != PASS` preservados.
+- `--self-test` injeta cinco mutações adversariais para confirmar reprovação real.
+
+**Uso:** `python3 scripts/trigger-fabric/verify_jukebox.py --check .`, ou `npm run verify:centraldark-contract` (gatilho canônico mais amplo). O validador **somente lê**, não reordena de surpresa e não reescreve IDs. O índice A–Z é vista derivada reordenável; a numeração é identidade estável; adição nova recebe `J302` e entra na posição alfabética correspondente.
+
+**Fronteira de garantia:** o código do guard e seu vínculo com a esteira foram conferidos na branch. Um push/PR aciona a esteira existente conforme configuração do GitHub; **resultado de CI / branch protection ainda depende da execução e da leitura do job no mesmo SHA**. Commit sozinho não prova gate executado na Casa, nem significa publicação no Cockpit.
+
+**NEXT_CURSOR:** `CI_EXACT_HEAD → JUKEBOX_ORDER_PASS → AUTO_FAIL_ON_DRIFT → OWNER_READBACK → CHECKPOINT`.
+<!-- /CENTRALDARK_JUKEBOX_ORDER_ENFORCEMENT_20261021 -->
