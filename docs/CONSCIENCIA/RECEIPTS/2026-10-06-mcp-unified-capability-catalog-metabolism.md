@@ -180,3 +180,26 @@ FULL_MISSION_COMPLETE=false
 **FIXED_POINT:** revisão e classificação de evidências concluídas **somente no escopo documental**. Nenhum código compilado carregado, merge, deploy, restart, alteração de ACL ou serviço executado.
 
 **NEXT_CURSOR:** `COMPARE_ACTUAL_MCP_RUNTIME_DIST_SHA_AND_17_SOURCE_ROUTES → RECONCILE_SOURCE_DIST_WITHOUT_RESTART_BLIND → PM2_SYSTEMD_OWNER_DIAGNOSIS → REVIEW_ADMIN_MAIN_WRITE_RISK_CLASSIFICATION → PR1876_1877_1880_CI_GATES → VERIFIED_DEPLOY → MCP_ADMIN_CATALOG_READBACK_AND_COUNTERPROOF → FIXED_POINT`.
+
+
+## DELTA 21/10/2026 — reconciliação por superfície e canário (candidato)
+
+@code_ref: `apps/modulos/mcp/src/tools/core/mcp-diagnostics.js` + `apps/modulos/mcp/src/tools/core/mcp-admin.js`
+@last_updated: 2026-10-21T20:00:00Z
+
+INTENT_ID=CENTRALDARK-MCP-VALIDATOR-RUNTIME-CANARY-20261021
+OWNER=apps/modulos/mcp/src/tools/core/mcp-diagnostics.js
+SOURCE_BASE_SHA=4c86124f01b7626108faf8f94e91a5cb6e9e5e17
+ACTIVE_WRITER=fix/mcp-catalog-canary-runtime-scope-20261021
+STATUS=SOURCE_CANDIDATE_NOT_DEPLOYED
+
+- Readback na conexão Primary anterior ao delta: dispatcher=141 tools, 13 rotas, fingerprint `80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7`; HTTP público=153; validador legado=86; `ok=false`.
+- GitHub `main` no SHA-base já contém **17 entradas** em `AUTHORIZED_ROUTE_CATALOG`, entre elas `ZENDRIVE_VSCODE_REMOTE_SSH`, `FIGMA_MCP_ACCOUNT`, `FIGMA_CENTRALDARK_FIGJAM`, `RDC_VPS_CENTRALDARK_OS`.
+- O validador candidato consulta o **mesmo `mcp_admin_catalog` interno** para nomes, fingerprint e rotas, exige as quatro rotas adicionais no canário e diferencia **catálogo do dispatcher** de **publicação HTTP**; quatro diagnósticos expostos passam pela mesma comparação.
+- `vps_limpar_pasta_projeto` e `vps_listar_pastas_limpaveis` saem somente da **expectativa obrigatória legada**: continuam reportadas como `legacySafetyReview`. NÃO foram recriadas, habilitadas, nem receberam bypass de autorização.
+- Tailscale OAuth broker `bridge.status`: `centraldark-os.online=true`, `segredo.online=true`, RDP 3389 OPEN; SSH Casa CLOSED_OR_FILTERED. Outra API Tailscale respondeu HTTP 401; isso não invalida o bridge.status do broker.
+- `centraldark_deploy_root_gate` PASS; `centraldark_deploy_recipe_status` disponível. VPS checkout principal `4b0ce5a7d9` com alterações locais: preservar. Scratch do deploy isolado permanece owner separado.
+- **GATE CANÁRIO**: PR/CI no HEAD exato -> resolver diferenças da fonte (não executar `git pull` cego) -> preparar sandbox/backup via owner de deploy -> validar T0/T1 (141/153 contagens por superfície, 17 rotas + 4 adicionais, logs/correlação, health) -> somente então promover o owner MCP isoladamente. O `main-pinned-microdeploy.sh` vigente **rejeita `src/tools/core/mcp-diagnostics.js` e `src/tools/core/mcp-admin.js`**, portanto NÃO utilizar esse fileset sem contrato de promoção específico já autorizado e testado. Nunca forçar o script.
+- Confirmar rollback e recibo correlacionado no mesmo SHA antes de declarar FIXED_POINT. RUNTIME_DEPLOY=UNKNOWN; CASA_REVERSE_EXEC=UNKNOWN; CI=UNKNOWN enquanto não verificados.
+
+NEXT_CURSOR=PR_HEAD_CI → CHECK_CANONICAL_MCP_OWNER_DEPLOY_GATE → ISOLATED_CANARY → ROUTE_READBACK_17 → RECEIPT → FIXED_POINT.
