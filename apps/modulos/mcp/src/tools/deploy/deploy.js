@@ -1,4 +1,10 @@
 // Tool unificada de status do deploy: junta GitHub Actions + último commit + PM2 + commit atual na VPS
+// #OBSERVACOES# @owner apps/modulos/mcp/src/tools/deploy/deploy.js
+// @doc_ref docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md
+// @last_updated 2026-10-21T20:15:38.717Z
+// @implementado explicit PM2 runtime PATH and pipeline exitCode classification
+// @pendente CI T1, exact runtime PID/source identity
+// @estado SOURCE_CANARY @next_cursor PR_HEAD_CI_CANARY_T1
 // num resumo único com veredito OK / ALERTA / ERRO.
 import { z } from "zod";
 import { config } from "../../config.js";
@@ -92,8 +98,17 @@ export const deployTools = [
             try {
                 // Projeta só campos não sensíveis ANTES de runShell sanitizar a saída.
                 // Isso evita corromper o JSON bruto do PM2 (que contém env/secrets) e fixa o daemon canônico.
-                const res = await runShell("PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | python3 -c 'import sys,json; d=json.load(sys.stdin); print(json.dumps([[p.get(\"name\"),p.get(\"pm2_env\",{}).get(\"status\"),p.get(\"pm2_env\",{}).get(\"restart_time\",0),p.get(\"pm2_env\",{}).get(\"pm_uptime\",0)] for p in d]))'", { timeoutMs: 15_000 });
-                const list = JSON.parse(res.stdout.trim());
+                // Não esconder falha PM2 sob JSON truncado: pipefail preserva exitCode.
+                // A projeção Python recebe o JSON inteiro via pipe, nunca expõe env/secrets.
+                const res = await runShell("set -o pipefail; command -v pm2 >/dev/null || exit 127; PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | python3 -c 'import sys,json; d=json.load(sys.stdin); print(json.dumps([[p.get(\"name\"),p.get(\"pm2_env\",{}).get(\"status\"),p.get(\"pm2_env\",{}).get(\"restart_time\",0),p.get(\"pm2_env\",{}).get(\"pm_uptime\",0)] for p in d]))'", { timeoutMs: 15_000 });
+                if (res.exitCode === 127) throw new Error("PM2_NOT_IN_RUNTIME_PATH");
+                if (res.exitCode !== 0) throw new Error(`PM2_PROBE_FAILED_EXIT_${res.exitCode}`);
+                const projected = res.stdout.trim();
+                if (!projected) throw new Error("PM2_PROBE_EMPTY_OUTPUT");
+                let list;
+                try { list = JSON.parse(projected); }
+                catch { throw new Error("PM2_SUMMARY_JSON_INVALID"); }
+                if (!Array.isArray(list)) throw new Error("PM2_SUMMARY_NOT_ARRAY");
                 const now = Date.now();
                 pm2Summary = list.map(([name, status, restarts, pmUptime]) => ({
                     name,
