@@ -1508,3 +1508,16 @@ Conteúdo: Regra viva do CHEFE: 'atormentar' é metáfora de memória que confro
 - **Promovida:** nao
 
 Conteúdo: Integrar ao núcleo existente, sem novo cérebro/skill/ledger: separar conhecimento/resposta, execução de agente e descoberta científica. Exigir critério prévio, SHA/run correlacionado, readback independente, contraprova, auditoria de contaminação/corte histórico, derivação e validação independente; benchmarks não são probabilidade universal. Reutilizar Meta-Lupa, Meta-Grill, Fable, reconciliação e Fixed Point.
+
+
+<!-- CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
+### [2026-10-21] CHEFE externaliza como um Harness brasileiro deve falar
+- **Data:** 2026-10-21; **Tags:** chefe, inteligencia, linguagem-produto, ux-writing, pt-br, mermaid, harness, cockpit, voz.
+- **Fonte do contexto:** CHEFE observou no Cockpit termos de diagnóstico `áudio não comprovado` / `UNKNOWN` e questionou com humor se um aplicativo Windows moderno pediria ao usuário para comprovar o áudio antes de ativar o microfone.
+- **Lição humana:** o CHEFE não pediu para dispensar testes. Pediu comunicação natural: no fluxo principal `Ativar microfone`, `Ouvindo...` somente com captura ativa, `Conectar dispositivo` e `Verificar conexão`; logs, códigos, PIDs e receipts ficam acessíveis em `Detalhes técnicos`.
+- **Papéis que deseja ver no mapa:** CHEFE (intenção) → CentralDark/Sala de Controle → JARVIS assistente / Hermes executor / Harness orquestração → um estado operacional → interface em português natural + detalhes técnicos.
+- **Regra promovida em fonte de conhecimento (branch):** [[MAPA-DO-CEREBRO]] (Mermaid + glossário completo), [[GUIA-COMUNICACAO-SEGREDO-CHEFE]], [[APRENDIZADOS]] #211.
+- **Estado:** proveniência histórica **sem autoridade de runtime**; atualização do Cockpit, sync com Obsidian na Casa, CI e implantação requerem prova posterior.
+- **PR equivalente:** https://github.com/ServerVpss/CentralDark/pull/1895.
+- **NEXT_CURSOR:** PR1895_DOCS_READBACK → CI_MESMO_SHA → RESPONSAVEL_UI → MUDANCA_DE_ROTULOS → VISUAL_READBACK → FIXED_POINT.
+<!-- /CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
