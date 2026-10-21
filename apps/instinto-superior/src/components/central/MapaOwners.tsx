@@ -57,6 +57,68 @@ export function MapaOwners({
   );
   return (
     <div className="mt-8 space-y-6">
+      {/* #OBSERVACOES# @owner: MapaOwners.tsx @doc_ref: DELTA-CONTINUO.md
+          @escopo: memoria visual Casa/Apps/Main/VPS e Claude
+          @estado: snapshot historico; nao afirma migracao ou runtime atual
+          @next_cursor: validar migracao seletiva e readback do cockpit */}
+      <section className="rounded-2xl border border-border/70 bg-black/70 p-4 text-foreground" aria-label="Ciclo da Forja e camadas Claude">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h4 className="font-semibold text-sm">🪬 Corpo Único — Forja, cristalização e memória Claude</h4>
+          <span className="rounded-full border border-amber-500/40 px-2 py-1 text-[11px] text-amber-300">
+            Migração em andamento · PR #1873
+          </span>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Mapa estático da topologia observada em 19/10/2026. Não é medição ao vivo,
+          sincronização efetuada nem prova de deploy.
+        </p>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { numero: "01", titulo: "Casa — Forja", caminho: "K:\\", resumo: "Código bruto, experimentos, aprendizados e testes." },
+            { numero: "02", titulo: "Apps — Cristalização", caminho: "K:\\apps", resumo: "Owners, tipagem, contratos, testes e funcionalidades validadas." },
+            { numero: "03", titulo: "GitHub — main", caminho: "ServerVpss/CentralDark", resumo: "Código aprovado e versionado, sem material privado." },
+            { numero: "04", titulo: "VPS — Execução", caminho: "/root/CentralDark", resumo: "Serviços, scripts e conhecimento local; uso offline conforme capacidades existentes." },
+          ].map((etapa) => (
+            <div key={etapa.numero} className="rounded-xl border border-white/15 bg-zinc-900/70 p-3">
+              <div className="font-mono text-lg text-emerald-400">{etapa.numero}</div>
+              <div className="text-xs font-semibold">{etapa.titulo}</div>
+              <div className="mt-1 break-all font-mono text-[11px] text-muted-foreground">{etapa.caminho}</div>
+              <p className="mt-2 text-xs text-muted-foreground">{etapa.resumo}</p>
+            </div>
+          ))}
+        </div>
+        <h5 className="mt-5 text-sm font-semibold">🧠 Três camadas do Claude — funções diferentes</h5>
+        <div className="mt-2 space-y-2">
+          {[
+            { caminho: "C:\\Users\\Administrador\\.claude", nome: "Claude global", papel: "Sessões, históricos, autenticação e runtime pessoal. Nunca publicar credenciais." },
+            { caminho: "K:\\.claude", nome: "Claude da Forja", papel: "Agents, rules, commands, prompts e skills do projeto CentralDark." },
+            { caminho: "K:\\apps\\instinto-superior\\.claude", nome: "Claude do aplicativo", papel: "Orientação específica do Cockpit, subordinada aos contratos da Forja." },
+          ].map((camada) => (
+            <div key={camada.caminho} className="rounded-lg border border-white/10 bg-zinc-900/50 p-3">
+              <p className="text-xs font-semibold">{camada.nome}</p>
+              <p className="mt-1 break-all font-mono text-[11px] text-emerald-400">{camada.caminho}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{camada.papel}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-xs text-amber-300">
+          Migração privada proposta: projects → file-history/plans → sessions/uploads, após backup,
+          comparação e validação. Junctions Claude ainda NÃO criadas; não sobrescrever K:\\.claude.
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          SCRIPT_BEFORE_MODEL · Sem IA: receitas locais previamente validadas; com IA:
+          interpretação dependente de modelo disponível. UNKNOWN ≠ PASS.
+        </p>
+        <a
+          href="https://github.com/ServerVpss/CentralDark/pull/1873"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-block text-xs text-emerald-400 underline underline-offset-2"
+        >
+          Ver recibos e próximos deltas no PR #1873 ↗
+        </a>
+      </section>
+
       {/* Arquitetura Mental */}
       <div className="rounded-lg border border-border/60 bg-muted/20 p-4">
         <h4 className="font-semibold text-sm">🧠 Mapa Mental — Arquitetura Completa</h4>

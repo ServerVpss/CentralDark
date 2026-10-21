@@ -183,3 +183,69 @@ ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 ```
 
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
+
+---
+
+<!-- #OBSERVACOES# @owner: DELTA-CONTINUO.md @doc_ref: ROOT-FILE-REGISTRY.md @last_updated: 2026-10-19T16:55:10.000Z @escopo: Casa K:\\ ↔ VPS /root @estado: TRANSICAO_CONTROLADA @next_cursor: validar aliases, dependencias, SHA e consumer antes de mover origem -->
+## 🪬 Lei transitória — migração Casa ↔ VPS por espelhos reversíveis (2026-10-19)
+
+**Status: MIGRACAO_EM_ANDAMENTO, não concluída.** Esta seção **acrescenta** uma regra transitória ao owner de delta contínuo; não redefine a raiz Git nem revoga owners, regras, proteção de secrets ou publicação.
+
+- **Forja da Casa:** checkout ativo na raiz `K:\\`; arquivos brutos e desenvolvimento ficam na Casa.
+- **VPS:** checkout vivo e `.git` permanecem em `/root/CentralDark` até contraprova e autorização específica para qualquer relocação real. A raiz `/root` contém dados privados/sistema e não vira checkout Git.
+- **Espelhos de compatibilidade:** links simbólicos exclusivamente para diretórios do projeto cujos nomes na raiz `/root` estejam desocupados, por exemplo `/root/scripts -> /root/CentralDark/scripts`. Links são *visões*, não cópias, sincronização, migração de dados ou segundo executor.
+- **Nunca espelhar** `.git`, `secrets`, `.env`, `SEGURANCA`, arquivos de credenciais, backups, diretórios de usuário ou runtime privado. Não mover `/root/CentralDark`, não apagar originais.
+- **A cada delta:** medir `K:\\`, `/root`, `/root/CentralDark` e consumidores → determinar owner e caminhos absolutos (systemd, cron, PM2, processos) → criar/verificar **um lote pequeno** de aliases se livre e seguro → executar contraprova de `readlink`/mesmo inode e leitura → registrar efeitos reais neste PR → só então migrar um consumidor identificado.
+- **Consumidores existentes** continuam usando o caminho antigo até o delta específico ser validado, com backup e rollback. `MIGRATED` só depois de teste do mesmo SHA e readback do runtime afetado; `ALIAS_PRESENT != CONSUMER_MIGRATED`.
+- **Rollback de alias:** remover apenas o link simbólico específico após conferir destino e uso; nunca apagar o diretório de destino. Reverter consumidor ao caminho antigo antes de remover alias necessário.
+- **Fonte da verdade:** `ServerVpss/CentralDark@main` para código versionado; VPS é execução, Casa é forja. Sincronização usa fluxo Git/owners existente, não links entre máquinas.
+- **Portões:** `ONE_WRITER_PER_SCOPE`, `CURRENT > HISTORY`, `UNKNOWN != PASS`, `REUSE_BEFORE_CREATE`, `MERGED != DEPLOYED`, sem mudanças fora do PR dedicado.
+- **Observação inicial de 19/10:** leitura da VPS encontrou 9 processos cujo cwd está sob `/root/CentralDark`, 7 linhas de comando com o caminho e 2 referências no cron consultado. São contagens pontuais, não identidades nem dependências já migradas.
+- **NEXT_CURSOR:** confirmar aliases existentes e consumidores, classificar cada referência nominalmente, migrar só o primeiro consumidor com contraprova e manter transição documentada até fixed point.
+
+
+<!-- #OBSERVACOES# @owner: DELTA-CONTINUO.md @doc_ref: docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md @last_updated: 2026-10-19T17:06:23.000Z @escopo: PR1873 Screenpipe Casa/VPS + Windows runner + K root @estado: DIAGNOSTICO_MEDIDO @next_cursor: identificar owner runner e corrigir causa do STOPPED somente com autorizacao de servico -->
+### 🫁 Contraprova do SPIKE Casa/VPS — 2026-10-19T17:06:23.000Z
+
+**Objetivo:** incorporar as duas investigações ao **mesmo PR #1873**, sem alterar serviços, processos, runner ou material secreto. Medições obtidas via Desktop Commander, sessão autorizada em SEGREDO e CENTRALDARK-OS. `DOCUMENTED != FIXED`.
+
+| Superfície | Medição atual | Veredito delimitado |
+|---|---|---|
+| Casa — raiz Git | `git -C K:\\ rev-parse --show-toplevel` = `K:/`; HEAD `16475832ad` | `K:\\` é checkout ativo; **não** criar `K:\\CentralDark` |
+| Casa — `K:\\CentralDark` | `Test-Path` = False | Caminho não operacional nesta leitura |
+| Casa — `K:\\_WORKER` | `Junction` para `F:\\_WORKER` | Reparse point presente; não copiar nem realocar |
+| Casa — runner | `K:\\_WORKER\\CentralDark-Runners\\CASA-1\\.runner` presente; JSON parse PASS; `agentName=centraldark-casa-1` | Configuração existente, sem conteúdo sensível armazenado neste recibo |
+| Casa — serviço runner | `actions.runner.ServerVpss-CentralDark.centraldark-casa-1` = `Stopped`, `StartMode=Auto`, `ProcessId=0`; nenhuma entrada `Runner.Listener`/ `Runner.Worker` foi retornada | Serviço **parado localmente**. Estado de registro online no GitHub ainda UNKNOWN |
+| Casa — Screenpipe | porta TCP 3030 `Listen` em `0.0.0.0`, PID 21428 `screenpipe-app.exe`; `GET /health` = 200; `GET /api/health` sem auth = 403 | API local **ativa**, endpoint protegido/negando leitura anônima; token expirado **não comprovado** |
+| VPS — Screenpipe | nenhum listener TCP local em 3030; requisições locais a `/health` e `/api/health` retornaram HTTP 000 | `3030` **não disponível localmente na VPS**; não implica falha do Screenpipe na Casa |
+| VPS — raiz do projeto | `/root/CentralDark` ativo, HEAD `5844dde14`; aliases `/root/scripts` e `/root/apps` apontam para subpastas existentes | Espelhos do lote 01 preservados; nenhum consumidor migrado |
+
+**Regras incrementais (um PR, nenhum novo executor):**
+1. Diferenciar `CASA_3030` de `VPS_3030`; `403 != DOWN`, `HTTP_200_HEALTH != AUTH_PROVEN`, `RUNNER_CONFIG_EXISTS != RUNNER_ONLINE`.
+2. `RUNNER_STOPPED` é diagnóstico; não iniciar, reiniciar ou reconfigurar serviço sem delta executável autorizado e contraprova de impacto.
+3. O `K:\\` e o `/root/CentralDark` continuam raízes Git **diferentes** durante migração: não realizar `mv`, `reset --hard`, `git clean`, cópia de secrets ou alteração de caminhos de serviço em lote.
+4. Referências legadas a `K:\\CentralDark` devem ser corrigidas **por owner e consumidor**, sem recriar pasta. Espelhos VPS são compatibilidade, não prova de sincronização remota.
+5. Próximo delta: localizar o owner existente do Windows runner, ler logs sanitizados de causa de parada, e decidir reparo mínimo com aprovação contextual; validar acesso ao Screenpipe protegido sem expor credenciais.
+6. Manter este status no PR #1873; avanço exige mesmos SHAs, timestamp real, readback e prova negativa. Não declarar produção recuperada por documento.
+
+
+
+<!-- #OBSERVACOES# @owner: DELTA-CONTINUO.md @code_ref: apps/instinto-superior/src/components/central/MapaOwners.tsx @escopo: memoria visual das tres camadas Claude e pipeline Forja-Apps-Main-VPS @estado: PR_CANDIDATE @next_cursor: validar TS/build e prova visual -->
+### 🧬 Memória do Corpo Único — cristalização e três camadas Claude (19/10/2026)
+
+**Intenção confirmada:** a Casa em \`K:\\\` é a Forja bruta; \`K:\\apps\` concentra os aplicativos cristalizados; GitHub \`main\` preserva o código aprovado; a VPS executa os scripts, serviços e receitas localmente disponíveis, inclusive sem modelo de IA quando a tarefa já tem algoritmo determinístico. \`SCRIPT_BEFORE_MODEL\` e \`DOCUMENTED != DEPLOYED\`.
+
+**Três camadas distintas — não fundir sem análise:**
+1. \`C:\\Users\\Administrador\\.claude\`: perfil global do aplicativo Claude; autenticação, sessões, projetos, estados e plugins. Nunca versionar segredos.
+2. \`K:\\.claude\`: contratos e instruções da Forja; \`agents\`, \`commands\`, \`prompts\`, \`rules\`, \`skills\`. Manter dono existente.
+3. \`K:\\apps\\instinto-superior\\.claude\`: instruções específicas do Cockpit, subordinadas aos contratos superiores; presença de pasta não prova execução de validações nem herança automática de toda configuração.
+
+**Raio-X observado da Casa:** 12 diretórios sob \`C:\\Users\\Administrador\\.claude\\projects\`, 12 diretórios sob \`file-history\`; \`K:\\.claude\` existe, porém \`K:\\.claude\\projects\` não existia na leitura. Contagens de diretórios não são hashes nem comprovação de integridade. Não inspecionar valores de \`.credentials.json\` ou credenciais em arquivos de sessão.
+
+**Prioridade de transferência futura:** \`projects\` → \`file-history\`/\`plans\` → \`sessions\`/\`uploads\`, por grupos separados, backup com hashes e Claude fechado quando necessário. Comparar \`plugins\`/\`skills\` antes de unir. \`cache\`/\`paste-cache\`, \`daemon\`/\`jobs\`/\`ide\`, \`session-env\`, \`state\`, \`shell-snapshots\` e \`chrome\` permanecem até classificação de dependências. Não substituir a pasta \`.claude\` global inteira por junction.
+
+**Destino privado sugerido (ainda NÃO criado):** dados duráveis em pasta privada do disco K, fora do conjunto versionado/sincronizado; verificar exclusões Git e outros scanners antes de qualquer cópia. Junctions só depois de readback, sem apagar originais. \`JUNCTION_PLANNED != JUNCTION_CREATED\`.
+
+**Integração visual:** seção aditiva no owner \`apps/instinto-superior/src/components/central/MapaOwners.tsx\` — 4 cartões do pipeline, 3 camadas Claude, aviso de migração e ligação com este PR. É um **snapshot estático**, não API viva, e ainda exige build TypeScript/CI e contraprova visual no mesmo SHA.
+
+**NEXT_CURSOR:** validar TypeScript, PR checks no HEAD, exibição autenticada da seção existente; depois classificar e executar somente o primeiro lote de transferência privada com rollback.

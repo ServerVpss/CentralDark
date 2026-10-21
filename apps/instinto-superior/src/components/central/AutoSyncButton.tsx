@@ -4,6 +4,8 @@ import { Card } from '@/components/ui/card'
 import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
+import { solicitarPromocaoSegura } from '@/lib/admin.functions'
+import { supabase } from '@/integrations/supabase/client'
 
 interface SyncStatus {
   timestamp: string | null
@@ -28,6 +30,7 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
+  const dispatchPromotion = useServerFn(solicitarPromocaoSegura)
 
   // Fetch status on mount + poll every 30s
   useEffect(() => {
@@ -58,15 +61,26 @@ export const AutoSyncButton: React.FC = () => {
     }
   }
 
-  // #OBSERVACOES# MICRODEPLOY_GUARD_20261018
-  // Auto Sync não comprova publicação, PID, health nem recibo de deploy.
-  // Até existir um adapter autorizado com readback, não despachar como deploy.
-  const handleMicroDeploy = () => {
-    setSyncStatus(prev => ({
-      ...prev,
-      status: 'failed',
-      human_readable: `Micro-Deploy ${microDeployMode} BLOQUEADO: sem executor autorizado, receipt e health da VPS.`
-    }))
+  // Aciona o promotor canônico, sem pular autorização ou gates do GitHub.
+  const handleMicroDeploy = async () => {
+    if (isSyncing) return
+    setIsSyncing(true)
+    setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Solicitando promoção segura ao GitHub...' }))
+    try {
+      const { data, error } = await supabase.auth.getSession()
+      const token = data.session?.access_token
+      if (error || !token) throw new Error('SESSION_MISSING')
+      const result = await dispatchPromotion({ headers: { Authorization: `Bearer ${token}` } })
+      if (result.state === 'DISPATCHED') {
+        setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Promotor acionado. Aguardando gates, squash e recibo; deploy ainda não comprovado.' }))
+      } else {
+        setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: `Promoção não confirmada: ${result.reason}` }))
+      }
+    } catch {
+      setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: 'Sessão/autorização indisponível; nenhuma promoção confirmada.' }))
+    } finally {
+      setIsSyncing(false)
+    }
   }
 
   const getStatusIcon = () => {
@@ -124,8 +138,8 @@ export const AutoSyncButton: React.FC = () => {
           <div className="flex items-center gap-3">
             <Zap className="w-5 h-5 text-amber-600" />
             <div>
-              <p className="text-sm font-semibold">Micro-Deploy: Instinto Superior + Auto Sync</p>
-              <p className="text-xs text-amber-700">Sync Git não prova deploy. Publicação bloqueada até existir recibo do runtime.</p>
+              <p className="text-sm font-semibold">Automação CentralDark · execução segura</p>
+              <p className="text-xs text-amber-700">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
             </div>
           </div>
 
@@ -142,7 +156,7 @@ export const AutoSyncButton: React.FC = () => {
 
             <Button onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">
               <Zap className="w-4 h-4" />
-              {isSyncing ? 'Deployando...' : 'Micro-Deploy Agora'}
+              {isSyncing ? 'Solicitando...' : 'Executar Automação'}
             </Button>
           </div>
         </div>
