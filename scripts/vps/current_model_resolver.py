@@ -23,6 +23,57 @@ _KYLIN_SCHEMAS = (
     "com.kylin.aisdk.model.custom",
     "com.kylin.aisdk.model.shared",
 )
+_SESSION_ENV_KEYS = (
+    "DBUS_SESSION_BUS_ADDRESS",
+    "XDG_RUNTIME_DIR",
+    "DISPLAY",
+    "XAUTHORITY",
+)
+
+
+def inherit_kylin_runtime_environment(proc_root: Path = Path("/proc")) -> dict[str, str]:
+    """Recover the session environment from the same-user Kylin runtime.
+
+    A system service does not inherit the graphical/session D-Bus environment.
+    Without it, ``gsettings`` reads an empty binding and the native SDK can fail
+    during session initialization. Only missing, allow-listed variables are
+    copied, and only from a ``kylin-ai-runtime`` process owned by this uid.
+    """
+    if os.environ.get("DBUS_SESSION_BUS_ADDRESS") and os.environ.get("XDG_RUNTIME_DIR"):
+        return {}
+
+    try:
+        entries = sorted((p for p in proc_root.iterdir() if p.name.isdigit()), key=lambda p: int(p.name))
+    except OSError:
+        return {}
+
+    uid = os.getuid()
+    for entry in entries:
+        try:
+            if entry.stat().st_uid != uid:
+                continue
+            command = (entry / "cmdline").read_bytes().replace(b"\0", b" ").decode("utf-8", "replace")
+            if "kylin-ai-runtime" not in command:
+                continue
+            values = {}
+            for item in (entry / "environ").read_bytes().split(b"\0"):
+                if b"=" not in item:
+                    continue
+                key, value = item.split(b"=", 1)
+                name = key.decode("ascii", "ignore")
+                if name in _SESSION_ENV_KEYS and value:
+                    values[name] = value.decode("utf-8", "replace")
+            if not values.get("DBUS_SESSION_BUS_ADDRESS") or not values.get("XDG_RUNTIME_DIR"):
+                continue
+            inherited = {}
+            for name, value in values.items():
+                if not os.environ.get(name):
+                    os.environ[name] = value
+                    inherited[name] = value
+            return inherited
+        except (OSError, ValueError):
+            continue
+    return {}
 
 def _execution_class(source: str) -> str:
     if source.startswith("gsettings:"):
@@ -132,6 +183,7 @@ def _persist(details: dict) -> None:
         pass
 
 def resolve_current_model_details() -> dict:
+    inherit_kylin_runtime_environment()
     model = _env_model()
     if model:
         source = "env:CENTRALDARK_LOCAL_MODEL"

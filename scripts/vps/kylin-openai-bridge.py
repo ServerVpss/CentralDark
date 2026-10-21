@@ -4,7 +4,15 @@ from pathlib import Path
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from current_model_resolver import resolve_current_model, resolve_current_model_details
+from current_model_resolver import (
+    inherit_kylin_runtime_environment,
+    resolve_current_model,
+    resolve_current_model_details,
+)
+
+# systemd services do not inherit the Kylin session bus automatically. Recover
+# the allow-listed environment before loading the native SDK.
+inherit_kylin_runtime_environment()
 
 LIB="/usr/lib/x86_64-linux-gnu/libkysdk-genai-nlp.so.1"
 lib=ctypes.CDLL(LIB)
@@ -39,6 +47,7 @@ lib.chat_result_get_is_end.argtypes=[c_void_p]
 lib.chat_result_get_is_end.restype=c_bool
 
 def ask_native(prompt, timeout=90, thinking=None, max_tokens=None):
+    binding=resolve_current_model_details()
     sess=c_void_p(lib.genai_text_create_session())
     if not sess: raise RuntimeError("SESSION_CREATE_FAILED")
     done=threading.Event()
@@ -59,11 +68,11 @@ def ask_native(prompt, timeout=90, thinking=None, max_tokens=None):
         lib.genai_text_enable_internal_event_loop(sess, True)
         lib.genai_text_result_set_callback(sess, cb, None)
         rc=lib.genai_text_init_session(sess)
-        if rc != 0: raise RuntimeError(f"INIT_FAILED:{rc}")
+        if rc != 0: raise RuntimeError(f"INIT_FAILED:{rc}:model={binding['model']}:source={binding['source']}")
         cfg=c_void_p(lib.chat_model_config_create())
         if not cfg: raise RuntimeError("CONFIG_CREATE_FAILED")
         try:
-            lib.chat_model_config_set_name(cfg, resolve_current_model().encode())
+            lib.chat_model_config_set_name(cfg, binding["model"].encode())
             if thinking is not None:
                 code=c_int(0);lib.chat_model_config_set_thinking_enabled(cfg,bool(thinking),ctypes.byref(code))
                 if code.value:raise RuntimeError("THINKING_CONFIG_UNSUPPORTED:"+str(code.value))
@@ -76,7 +85,7 @@ def ask_native(prompt, timeout=90, thinking=None, max_tokens=None):
         lib.genai_text_chat_async(sess, prompt.encode())
         if not done.wait(timeout): raise RuntimeError("TIMEOUT")
         if err[0]: raise RuntimeError(err[0])
-        return "".join(chunks)
+        return "".join(chunks),binding
     finally:
         lib.genai_text_destroy_session(ctypes.byref(sess))
 
@@ -100,7 +109,7 @@ def ask(prompt, timeout=90, thinking=None, max_tokens=None):
     result=subprocess.run([sys.executable,__file__,"--native-once"],input=json.dumps({"prompt":prompt,"timeout":timeout,"thinking":thinking,"max_tokens":max_tokens}),text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=timeout+5,check=True)
     answer=json.loads(result.stdout.splitlines()[-1])
     if not answer.get("ok"):raise RuntimeError(answer.get("error","NATIVE_CALL_FAILED"))
-    return answer["text"]
+    return answer
 
 def serialize_messages(messages):
     rows=[]
@@ -151,11 +160,12 @@ class IntegratedHandler(H):
         prompt=serialize_messages(data.get("messages") or [])
         if tools and data.get("tool_choice")!="none":prompt=tool_prompt(prompt,tools)
         print(json.dumps({"event":"kylin_bridge_request","prompt_chars":len(prompt),"tool_count":len(tools),"stream":bool(data.get("stream"))}),flush=True)
-        text=ask(prompt,thinking=False if tools else None,max_tokens=min(8192,max(1,int(data.get("max_completion_tokens") or data.get("max_tokens") or 2048))) if tools else None)
+        native=ask(prompt,thinking=False if tools else None,max_tokens=min(8192,max(1,int(data.get("max_completion_tokens") or data.get("max_tokens") or 2048))) if tools else None)
+        text=native["text"]
         calls=decode_tool_calls(text,tools) if tools and data.get("tool_choice")!="none" else []
         message={"role":"assistant","content":None if calls else text}
         if calls:message["tool_calls"]=calls
-        binding=resolve_current_model_details()
+        binding=native["binding"]
         result={"id":"kylin-native-"+uuid.uuid4().hex,"object":"chat.completion","created":int(time.time()),"model":binding["model"],
             "choices":[{"index":0,"message":message,"finish_reason":"tool_calls" if calls else "stop"}],
             "_meta":{"usage_status":"UNAVAILABLE_BY_NATIVE_SDK","binding_source":binding.get("source"),"execution_class":binding.get("execution_class"),"tool_binding":"model_generated_json_adapter" if tools else "native_text"}}
@@ -204,6 +214,6 @@ class IntegratedHandler(H):
 if __name__=="__main__":
     if len(sys.argv)>1 and sys.argv[1]=="--native-once":
         try:
-            data=json.load(sys.stdin);print(json.dumps({"ok":True,"text":ask_native(data["prompt"],data.get("timeout",90),data.get("thinking"),data.get("max_tokens"))},ensure_ascii=False))
+            data=json.load(sys.stdin);text,binding=ask_native(data["prompt"],data.get("timeout",90),data.get("thinking"),data.get("max_tokens"));print(json.dumps({"ok":True,"text":text,"binding":binding},ensure_ascii=False))
         except Exception as e:print(json.dumps({"ok":False,"error":str(e)}))
     else:ThreadingHTTPServer(("127.0.0.1",18435),IntegratedHandler).serve_forever()
