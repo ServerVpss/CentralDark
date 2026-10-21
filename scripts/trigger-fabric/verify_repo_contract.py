@@ -1665,6 +1665,19 @@ if tracked:
       'inheritance':'BY_CONTAINMENT_FROM_CANONICAL_OWNER',
     })
 
+# Derivacao de indice Jukebox pelo MESMO gate canonico de PR/push, sem workflow novo.
+# Reprova desordem A-Z, lacunas J001..JNNN, links, titulo/identidade e duplicatas.
+check_command(
+    'scripts/trigger-fabric/verify_jukebox.py --self-test',
+    ['python3', str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--self-test'],
+    classification='JUKEBOX_VALIDATOR_NEGATIVE_TESTS',
+)
+check_command(
+    'scripts/trigger-fabric/verify_jukebox.py --check',
+    ['python3', str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--check', str(ROOT)],
+    classification='JUKEBOX_ORDER_AZ_NUMERIC_EXECUTABLE_GATE',
+)
+
 failed=[c for c in checks if not c['ok'] and not c.get('exempted', False)]
 print(json.dumps({'checks':checks,'failed':len(failed),'runner_violations':runner_violations},ensure_ascii=False,indent=2))
 if failed:
