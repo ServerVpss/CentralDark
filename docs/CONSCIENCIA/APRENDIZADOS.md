@@ -3071,3 +3071,9 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 - **Data:** 2026-10-19
 - **Contexto:** PR #1868 mergeado em main commit 7329afe20; arquivo de aprendizado do runtime VPS atualizado com backup; serviço centraldark-native-mcp-http reiniciado e saúde HTTP 200.
 - **Aprendizado:** A leitura do arquivo de aprendizados agora lança erro se o GitHub falhar, em vez de devolver string vazia e arriscar sobrescrita. DNS da VPS já corrigido. Processo novo PID 834279 iniciou 2026-10-19 12:51:46 UTC. Preservar owner e validar escrita/leitura.
+
+### 200. Erro de prova: conectividade Casa↔VPS não comprova execução onsite
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-20
+- **Contexto:** No PR #1880, a ponte Tailscale respondeu HTTP 200 e o inventário listou processos remotos na VPS, mas a consulta do catálogo não revelou executor acionável para compilar no Windows da Casa. O deploy_status ainda reportou erro antigo do parser PM2 e os workflows do HEAD estavam queued/pending.
+- **Aprendizado:** Separar sempre quatro provas: código publicado, CI/sintaxe/build, execução onsite com exit code e readback independente do runtime. HTTP 200, rota documentada ou chamada MCP não comprovam build nem fixed point. Se o executor falhar, voltar uma casa e procurar outra rota autorizada; não declarar verde nem reiniciar/deployar sem prova.
