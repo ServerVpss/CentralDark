@@ -1,8 +1,8 @@
 ---
 name: vs-code-restore
 description: Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa salvo, sem depender do Claude. Use ao abrir o workspace CentralDark ou quando quiser reconstruir a bancada.
-version: 0.1.4
-metadata: {"status":"v0.1.4_source_in_pr_install_pending","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.4","candidate_compilado":false,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
+version: 0.1.5
+metadata: {"status":"v0.1.5_source_in_pr_install_pending","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.5","candidate_compilado":false,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
 version: 0.1.3
 metadata: {"status":"v0.1.3_source_main_trace_integrated_runtime_readback_separate","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa_historico":"0.1.3","comando_nativo_testado":true,"telemetria_probe":true}
 ---
@@ -424,3 +424,31 @@ A extensão ZENDRIVE não conclui missão quando o código foi commitado. O cicl
 - Antirregressão: repetir comando ZENDRIVE CLI, localizar VS Code por PID, rota SSH, abas e UI existente, erros de console.
 
 Automação de desenvolvimento permitida onde houver execução autorizada; merge em main, produção VPS e modificação de credenciais precisam do gate de promoção do CHEFE. Falhou uma fase: parar e guardar error_code, sha, owner e next_cursor. Documento canônico: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md.
+
+
+## 🪬 MCP ↔ VS Code 0.1.5 — dispositivo pareado, mesmo PID, catálogo canônico
+
+**OWNER REUTILIZADO:** \`skills/vs-code-restore\` e \`apps/modulos/mcp/src/tools/local/vscode-remote-terminal.js\`; PR #1880. Não criar segundo MCP, extensão, executor ou scheduler. Desktop Commander NÃO é requisito.
+
+**Contrato de fonte (não é prova de instalação):**
+
+- \`vscode_remote_devices\`: leitura de dispositivos explicitamente pareados, com \`status\`, \`online\` e \`authenticated\`; nunca expõe bearer/token. \`CATALOG_ONLY\` não equivale a terminal controlado.
+- \`vscode_remote_terminals\`: lê \`pid\`, nome e disponibilidade de Shell Integration do terminal EXISTENTE no VS Code.
+- \`vscode_remote_echo\`: \`echo oi\` fixo, somente após autorização modal local para o PID revalidado. Não recebe comando arbitrário.
+- \`vscode_remote_execute\`: comando único com consentimento local, correlação por requestId e hash, exitCode e readback limitado; permanece **em quarentena** no manifesto de destrutivas até E2E, compensação e gates aprovados.
+
+**Extensão já existente:** \`centraldark-vscode-restore@0.1.5\`. Comandos \`centraldark.remoteTerminalPair\` e \`centraldark.remoteTerminalStatus\` estão no \`package.json\` e \`src/extension.ts\`. O receptor só sobe após opt-in, pareamento e configuração, em \`127.0.0.1:8719\`; exposição remota somente via Tailscale Serve **privado**, nunca Funnel ou HTTP público. Tokens/segredos ficam no SecretStorage local e cofre autorizado; não versionar, ecoar nem pôr em recibos.
+
+**Registro no MCP:** \`local-compute.js\` inclui \`...vscodeRemoteTerminalTools\`; \`mcp-admin.js\` importa \`localHybridTools\` e publica a rota \`VSCODE_TERMINAL_PAIRED\` no **mesmo** catálogo. O \`mcp_admin_catalog({filter:"vscode_remote_"})\` e o \`mcp_admin_call({tool:"vscode_remote_devices",input:{}})\` devem encontrar a ferramenta somente quando o código estiver efetivamente carregado no runtime. O mesmo nome deve aparecer no catálogo público \`/tools.json\`. \`SOURCE_IN_PR != RUNTIME_LOADED\`; \`TOOL_NAO_ENCONTRADA\` não autoriza ferramenta paralela ou bypass.
+
+**Sequência de validação e prova:**
+1. Confirmar HEAD exato, revisão e CI same-SHA; rodar testes Node MCP e extensão, \`npm run compile\`/build VSIX e gate de catálogo. \`skipped\` ou \`queued\` nunca é PASS.
+2. Promover somente pelo fluxo canônico autorizado; reconciliar \`main\`, deploy MCP e versão VSIX instalada na Casa, sem \`pull/reset\` cego nem reinício fora do owner.
+3. Confirmar registro no \`mcp_admin_catalog\` e \`/tools.json\`, então listar devices pareados sem transmitir segredo.
+4. Validar \`Tailscale Serve\` privado e receptor local, medir o PID **atual** via \`vscode_remote_terminals\`; nunca reutilizar PID histórico.
+5. Aprovar localmente \`vscode_remote_echo\`, correlacionar \`requestId | commandSha256 | pid | exitCode | observedAt\`, obter ACK e readback independente. Um POST com timeout produz UNKNOWN: NÃO repetir.
+6. Registrar recibo no owner/PR #1880 com \`MAIN_SHA | PR_HEAD | ACTIVE_WRITER | TESTS | CATALOG | INSTALLED | PAIRED | EXECUTION | PROOF | NEXT_CURSOR\`. Nunca declarar MISSION_COMPLETE sem prova no mesmo SHA.
+
+**Estado observável em 21/10/2026 (fonte separada):** ferramentas presentes no código da PR #1880; MCP de produção consultado respondeu \`TOOL_NAO_ENCONTRADA\` para \`vscode_remote_devices\`; CI no SHA \`2da1c6e7e847c1290382b8809abdd6d3400acae8\` não estava verde; instalação/pareamento/readback na Casa seguem \`UNKNOWN\`. Este trecho **não** promove runtime, nem altera credenciais ou segurança.
+
+**NEXT_CURSOR:** \`CI_SAME_HEAD → CATALOG_REGRESSION → REVIEW → CANONICAL_PROMOTION → MCP_RELOAD_PROOF → VSIX_INSTALLED → PRIVATE_PAIR → LIVE_PID → ECHO_ACK_READBACK → FIXED_POINT\`.
