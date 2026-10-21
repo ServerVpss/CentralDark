@@ -169,7 +169,7 @@ async function probeVpsSsh(connectAfter: boolean): Promise<void> {
   output.appendLine('[INFO] ZENDRIVE SSH: teste de leitura, sem Desktop Commander.');
   output.appendLine('[INFO] Primeiro Segredo-VPS pela VPN; fallback segredo-vpss publico. Host key estrita; config inalterado.');
   const binary = sshExecutable();
-  let succeeded: string | null = null;
+  let succeeded: (typeof VPS_ROUTES)[number] | null = null;
   for (const route of VPS_ROUTES) {
     output.appendLine('[TESTE] ' + route.name);
     const result = await checkSshRoute(binary, route.alias, route.options);
@@ -177,7 +177,7 @@ async function probeVpsSsh(connectAfter: boolean): Promise<void> {
       ? '[OK] ' + route.name + ' | host=' + result.host
       : '[AVISO] ' + route.name + ' | ' + result.status);
     if (result.ok) {
-      succeeded = route.name;
+      succeeded = route;
       break;
     }
   }
@@ -187,18 +187,34 @@ async function probeVpsSsh(connectAfter: boolean): Promise<void> {
     return;
   }
   if (!connectAfter) {
-    void vscode.window.showInformationMessage('CentralDark: teste SSH PASS pela rota ' + succeeded + '.');
+    void vscode.window.showInformationMessage(
+      'CentralDark: teste SSH PASS pela rota ' + succeeded.name + ' (' + succeeded.alias + ').');
     return;
+  }
+  const remoteSsh = vscode.extensions.getExtension('ms-vscode-remote.remote-ssh');
+  if (!remoteSsh) {
+    void vscode.window.showWarningMessage(
+      'CentralDark: dependencia Remote - SSH ausente (ms-vscode-remote.remote-ssh).');
+    return;
+  }
+  if (!remoteSsh.isActive) {
+    await remoteSsh.activate();
   }
   const commands = await vscode.commands.getCommands(true);
-  if (!commands.includes('remote-ssh.connectToHost')) {
-    void vscode.window.showWarningMessage('CentralDark: instale/ative a extensao oficial Remote - SSH e use o alias segredo-vpss.');
+  const openCommand = commands.includes('opensshremotes.openEmptyWindow')
+    ? 'opensshremotes.openEmptyWindow'
+    : commands.includes('opensshremotes.openEmptyWindowInCurrentWindow')
+      ? 'opensshremotes.openEmptyWindowInCurrentWindow'
+      : null;
+  if (!openCommand) {
+    void vscode.window.showWarningMessage(
+      'CentralDark: Remote - SSH ativo, mas a API de conexao esperada nao foi exposta.');
     return;
   }
-  // O picker respeita o alias SSH do usuario. O teste Tailscale nao reescreve
-  // o config SSH e nao altera implicitamente a rota usada pelo Remote-SSH.
-  await vscode.commands.executeCommand('remote-ssh.connectToHost',
-    succeeded === 'TAILSCALE' ? 'Segredo-VPS' : 'segredo-vpss');
+  // Usa exatamente o alias que acabou de passar no probe. Nao abre picker,
+  // nao corrige nome por heuristica e nao cria Host/IdentityFile paralelo.
+  output.appendLine('[CONECTAR] alias comprovado=' + succeeded.alias + ' | comando=' + openCommand);
+  await vscode.commands.executeCommand(openCommand, { host: succeeded.alias });
 }
 
 
