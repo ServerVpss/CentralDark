@@ -166,11 +166,11 @@ CASA_IS_NOT_SCRATCH
 
 **Decisão do CHEFE:** quando uma missão altera ou valida UI, painel, botões ou integração projetada no Cockpit, o Writer atual (inclusive Cline no VS Code) deve operar a **mesma superfície visível** e conferir o efeito real, não encerrar apenas com arquivo escrito, HTML carregado, curl 200 ou build concluído. É uma extensão do Live Editing Fabric, **não** um novo agente, um segundo cockpit ou uma dependência do Desktop Commander externo.
 
-Ponto de partida local **quando confirmado na Casa**: \`http://127.0.0.1:8080/sala-controle\` (TanStack Start, sessão autenticada). **LOCALHOST_IS_ORIGIN_SCOPED:** \`127.0.0.1\` na VPS não é a Casa; medir host/URL/porta e autenticação antes de inferir equivalência. Usar a aba já aberta no navegador ou preview do VS Code. O endereço é um binding medido, não uma porta universal fixa.
+Ponto de partida local **quando confirmado na Casa**: `http://127.0.0.1:8080/sala-controle` (TanStack Start, sessão autenticada). **LOCALHOST_IS_ORIGIN_SCOPED:** `127.0.0.1` na VPS não é a Casa; medir host/URL/porta e autenticação antes de inferir equivalência. Usar a aba já aberta no navegador ou preview do VS Code. O endereço é um binding medido, não uma porta universal fixa.
 
 ### GOAL → browser → ação → realidade
 
-\`\`\`text
+```text
 INTENT_DELTA + OWNER + WRITER + MAIN_SHA
 → MAPEAR_CONTROLES_DO_CONE_AFETADO (rotas, abas, botões, labels e estado atual)
 → BROWSER_READ_T0 (URL, host, horário, auth, DOM acessível, sensor, screenshot se permitido)
@@ -181,22 +181,22 @@ INTENT_DELTA + OWNER + WRITER + MAIN_SHA
 → BROWSER_READ_T1 (efeito visual + estado funcional, log/API quando aplicável)
 → BACKCHECK_CONTROLES_ADJACENTES_ESSENCIAIS
 → CONTRAPROVA_NEGATIVA + RECEIPT + NEXT_CURSOR
-\`\`\`
+```
 
-**No Cline:** habilitar a capacidade de navegador ou o teste UI já instalado (Playwright, preview ou ferramenta semântica autorizada). Descobrir os controles por \`role\`, nome acessível, \`aria-label\` ou texto visível; confirmar qual página está ativa e qual botão pertence à missão. Se o executor só consegue \`fetch\`, \`curl\` ou ler DOM, marcar \`UI_READ_ONLY\`: isso **não** prova clique, seleção, autenticação ou efeito. Não pedir repetidamente ao CHEFE a URL já identificada; recuperar contexto e bindings existentes.
+**No Cline:** habilitar a capacidade de navegador ou o teste UI já instalado (Playwright, preview ou ferramenta semântica autorizada). Descobrir os controles por `role`, nome acessível, `aria-label` ou texto visível; confirmar qual página está ativa e qual botão pertence à missão. Se o executor só consegue `fetch`, `curl` ou ler DOM, marcar `UI_READ_ONLY`: isso **não** prova clique, seleção, autenticação ou efeito. Não pedir repetidamente ao CHEFE a URL já identificada; recuperar contexto e bindings existentes.
 
-**Escopo proporcional:** não percorrer nem clicar todos os botões em toda missão. Testar o botão/aba/card alvo e as adjacências causais; testar módulo não relacionado apenas se aparecer regressão real. \`Medir agora\` e navegação podem ser probes; \`Executar Automação\`, \`Sincronizar Tudo\`, \`Sair\`, \`deploy\`, alterações de permissões e operações destrutivas **não** devem ser disparadas como teste genérico: exigem intenção, auth e gate específicos. Nunca relaxar autenticação/RLS para fabricar um PASS.
+**Escopo proporcional:** não percorrer nem clicar todos os botões em toda missão. Testar o botão/aba/card alvo e as adjacências causais; testar módulo não relacionado apenas se aparecer regressão real. `Medir agora` e navegação podem ser probes; `Executar Automação`, `Sincronizar Tudo`, `Sair`, `deploy`, alterações de permissões e operações destrutivas **não** devem ser disparadas como teste genérico: exigem intenção, auth e gate específicos. Nunca relaxar autenticação/RLS para fabricar um PASS.
 
 **Árvore de prova independente** (sem falso verde):
-- \`UI_PRESENT\`: DOM renderizado e elemento presente, não prova ação.
-- \`CLICK_ACK\`: clique/ação semântica executada com retorno observável.
-- \`EFFECT_PROVED\`: estado esperado do escopo mudou ou permaneceu correto, confirmado por T0/T1 e fonte independente quando pertinente.
-- \`DEPLOYED\`: somente após SHA do runtime, readiness e receipt; não inferir de CI.
-- \`UNKNOWN\`: navegador só leitura, auth ausente, sensor obsoleto, ação não executada ou retorno incerto; bloquear só a alegação dependente.
-- \`FAIL\`: causa reproduzida e alvo comprovadamente falhou, não mera ausência de observador.
+- `UI_PRESENT`: DOM renderizado e elemento presente, não prova ação.
+- `CLICK_ACK`: clique/ação semântica executada com retorno observável.
+- `EFFECT_PROVED`: estado esperado do escopo mudou ou permaneceu correto, confirmado por T0/T1 e fonte independente quando pertinente.
+- `DEPLOYED`: somente após SHA do runtime, readiness e receipt; não inferir de CI.
+- `UNKNOWN`: navegador só leitura, auth ausente, sensor obsoleto, ação não executada ou retorno incerto; bloquear só a alegação dependente.
+- `FAIL`: causa reproduzida e alvo comprovadamente falhou, não mera ausência de observador.
 
-Cada receipt deve apontar \`OWNER\`, \`SOURCE_SHA\`, \`TARGET_ORIGIN\`, \`PAGE_ROUTE\`, \`CONTROL_ROLE+NAME\`, \`ACTION\`, \`T0/T1\`, \`EXPECTED/OBSERVED\`, \`RUNTIME_SOURCE\`, \`CONTRAPROOF\`, \`RESULT\` e \`NEXT_CURSOR\` com evidências sanitizadas. Um status verde anterior não torna o novo verde automaticamente; discrepância entre cartão e saída do sensor pede investigação de classificação/freshness, não pintura da interface.
+Cada receipt deve apontar `OWNER`, `SOURCE_SHA`, `TARGET_ORIGIN`, `PAGE_ROUTE`, `CONTROL_ROLE+NAME`, `ACTION`, `T0/T1`, `EXPECTED/OBSERVED`, `RUNTIME_SOURCE`, `CONTRAPROOF`, `RESULT` e `NEXT_CURSOR` com evidências sanitizadas. Um status verde anterior não torna o novo verde automaticamente; discrepância entre cartão e saída do sensor pede investigação de classificação/freshness, não pintura da interface.
 
-**Caneta e delegação:** Cline continua Writer da Casa enquanto possuir aquele escopo. JARVIS/SOL consulta o cockpit em leitura, aponta o delta e entrega o mesmo GOAL ao executor disponível; nunca simular envio direto ao Cline ou clique no navegador. Exigir ACK/receipt para declarar delegação ou execução. Manter \`SCREENPIPE\` como sensor, \`MCP_CENTRALDARK\` como control plane e \`TAILSCALE\` como transporte privado. \`DESKTOP_COMMANDER_TERCEIRO_REQUIRED=false\`; não reativar o serviço externo para operar o cockpit.
+**Caneta e delegação:** Cline continua Writer da Casa enquanto possuir aquele escopo. JARVIS/SOL consulta o cockpit em leitura, aponta o delta e entrega o mesmo GOAL ao executor disponível; nunca simular envio direto ao Cline ou clique no navegador. Exigir ACK/receipt para declarar delegação ou execução. Manter `SCREENPIPE` como sensor, `MCP_CENTRALDARK` como control plane e `TAILSCALE` como transporte privado. `DESKTOP_COMMANDER_TERCEIRO_REQUIRED=false`; não reativar o serviço externo para operar o cockpit.
 
-**Critério de conclusão:** código/build verde **e**, quando houver mudança de UI/controle, prova funcional no navegador do escopo alterado + contraprova + receipt. Se o navegador for inacessível, registrar \`UI_E2E_PENDING\` e continuar somente as partes independentes.
+**Critério de conclusão:** código/build verde **e**, quando houver mudança de UI/controle, prova funcional no navegador do escopo alterado + contraprova + receipt. Se o navegador for inacessível, registrar `UI_E2E_PENDING` e continuar somente as partes independentes.
