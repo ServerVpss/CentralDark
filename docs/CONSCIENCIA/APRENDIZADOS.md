@@ -3131,3 +3131,33 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-21
 - **Contexto:** A medição operacional mostrou MCP runtime presente, heartbeat UNKNOWN, forensic/receipt ausentes e veredito UNKNOWN_NOT_PASS; a topologia mostrou runtime presente com execução global desconhecida. Isso exige retomar a frente com CI e evidência de execução, não inferir saúde por PID.
 - **Aprendizado:** Antes de qualquer promoção: medir o SHA exato do PR e os workflows desse SHA; inspecionar os jobs falhos/pendentes; executar validação real no caminho de build autorizado; verificar heartbeat/receipt forense e runtime por readback independente. PID presente, chamada MCP recente ou alignment 100% não substituem receipt. Estado fica BLOCKED até as provas faltantes existirem.
+
+### 206. BOOT fixo append-only e execução com rastro verificável
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** Na retomada do PR #1880, a instrução operacional foi reafirmada: manter o BOOT fixo já estabelecido, acrescentar modos operacionais relevantes sem substituir a sequência canônica, e trabalhar em frentes separadas apenas quando houver fronteiras reais. O snapshot atual segue UNKNOWN_NOT_PASS, heartbeat UNKNOWN e receipt forense ausente; deploy_status continua ERRO por SyntaxError: Unexpected end of JSON input, enquanto workflows recentes estão queued.
+- **Aprendizado:** Regra persistente: o BOOT fixo nunca é removido nem substituído; novos modos e aprendizados são anexados ao redor dele. Ao executar, usar o método de exame integral estilo Michelin três estrelas: reutilizar prova existente, separar fonte/CI/runtime/Casa, aplicar a menor mudança com um único writer por escopo, narrar o progresso enquanto caminha no código e deixar rastro verificável (observação, alteração, teste, readback independente e pendência). Nunca chamar ação MCP concluída de prova do resultado; UNKNOWN != PASS; não afirmar sintaxe/build/execução sem resultado observado. Ao terminar a correção, registrar em aprendizados e lembranças operacionais e comentar o PR equivalente; fixed point somente após contraprova independente.
+
+### 207. K→F self-provisioning Windows: reutilizar owner existente e exigir receipt
+- **Categoria:** armadilha
+- **Data:** 2026-10-21
+- **Contexto:** A reavaliação do padrão K:\_WORKER → F:\_WORKER encontrou a ponte Tailscale viva (Casa e VPS online), mas o inventário híbrido e o status de recursos locais declaram authority=false/proof=false. O horn REUSE_BEFORE_CREATE retornou BLOCKED_UNKNOWN, com owner/capability candidatos presentes, porém evidência e receipt ausentes e regressão desconhecida. O scratch único da VPS está limpo, mas DRIFT: scratch SHA fbb858b1 e origin/main 40f6b7a9.
+- **Aprendizado:** Não criar outro executor nem declarar self-provisioning pronto. Reutilizar a rota/owner Casa já existente; medir capacidade de execução Windows e provar o ciclo lock→provision→worktree→estado/receipt→limpeza segura. K e F devem permanecer destinos separados conforme contrato já documentado; antes de tocar diretórios, inspecionar existência, owner, data, alterações e possibilidade de limpeza. Tailscale HTTP 200 comprova apenas conectividade. Reconciliar o scratch por procedimento canônico depois de entender o drift; não resetar nem limpar automaticamente. KV cache, prompt cache e cápsula de continuidade são mecanismos distintos e só declarar benefício de cache após telemetria real do provedor/runtime.
+
+### 208. VS Code CentralDark deve priorizar linguagem natural e botões
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** CHEFE pediu que o fluxo de vibe coding pare de depender de nomes técnicos/comandos difíceis e seja operado por botões e frases naturais dentro do mesmo owner da extensão.
+- **Aprendizado:** No owner skills/vs-code-restore, expor ações humanas em PT-BR e linguagem natural que apenas roteiam para comandos/capacidades já existentes. Build/SSH/pareamento/status devem ter botões; sem criar segundo executor. Empacotamento da VSIX deve ser não interativo.
+
+### 209. Mapa híbrido Casa–MCP/K:–VPS–GitHub: separar topologia relatada de prova viva
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** Foi discutido um diagrama lógico híbrido usando dados relatados da Casa Windows, unidade K:, MCP, túneis SSH, VPS, GitHub e Obsidian. A leitura do owner obsidian_live_graph_status retornou configured_vault=null, vault_accessible_from_this_runtime=false e bidirectional_sync_proven=false.
+- **Aprendizado:** Registrar o diagrama no PR equivalente como recibo histórico e manter explícita a fronteira de evidência. Não tratar PID/portas informados como medição independente, não inferir três agentes a partir de três túneis, não inferir VPS ociosa pela ausência de PM2 e não afirmar gravação no Obsidian enquanto o vault não estiver acessível. Reutilizar scripts/hermes/centraldark-entry.py e scripts/hermes/verified-checkpoint.py para continuidade; localizar o owner existente da Fábrica de Memórias, deduplicar e só então gravar e fazer readback/hash.
+
+### 210. Cabeça externalizada do CHEFE — K Forja, F armazenamento transparente
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** CHEFE confirmou o contrato da Casa: K:\ é a raiz Git/harness/cockpit/docs e ambiente de todas as IAs; F:\ guarda peso físico por junctions transparentes; C:\ não deve receber escritas intencionais da Forja. Receipt integral no PR #1873, comentário 6316911838; dono existente DELTA-CONTINUO.md + Lei dos Discos + Garimpo/Knowledge Compiler.
+- **Aprendizado:** Frase canônica literal do CHEFE: 'Tu quer que a CentralDark pense e trabalhe no K:, descarregue o peso no F:, preserve o conhecimento no Obsidian, cristalize código no GitHub e continue funcionando independentemente de qual IA esteja comandando a ferramenta.' K:\ raiz única, não K:\CentralDark. K:\_WORKER -> F:\_WORKER já medido como junction em 19/10; demais links atuais UNKNOWN. Sem novos owners/memórias/schedulers. npm/npx/pip/uv/bun: instalações persistentes próprias em K quando adequadas, caches/scratch em F usando K lógico, sem writes intencionais em C nem alteração TEMP global. Preservar worktrees ativos, bruto único e quarentena; antes de mudar conferir uso/hash/rollback/readback. Git main apenas código comprovado, VPS runtime necessário; F/Garimpo reutiliza Knowledge Compiler, Dream Review e Hermes sob demanda. Especificação e NEXT_CURSOR: https://github.com/ServerVpss/CentralDark/pull/1873#issuecomment-6316911838
