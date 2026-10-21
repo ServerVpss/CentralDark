@@ -12,7 +12,7 @@ const DESTINOS: Record<DonoVisual, string> = {
   Design: "design",
 };
 
-// Snapshot de auditoria: fonte histórica C:\\CentralDark (12/10) e comparação SHA-256 Casa (15/10).
+// Snapshot de 12/10 preservado no arquivo reconciliado do K: em 21/10, não leitura viva.
 // Métrica descreve evidência; NÃO converte divergência em falha nem substitui status vivo.
 const METRICAS_DIVERGENCIA = [
   {
@@ -20,7 +20,7 @@ const METRICAS_DIVERGENCIA = [
     nome: "Arquivos com SHA-256 diferente",
     quantidade: 5,
     total: 5,
-    fonte: "C:\\CentralDark × K:\\ · SHA-256 medido em 15/10/2026",
+    fonte: "Arquivo histórico K:\\_archive\\c-centraldark-reconciliado-20261021 × K:\\ · SHA-256 medido em 15/10/2026",
     pendencia: "Comparar comportamento e evolução sem restaurar versões antigas.",
   },
   {
@@ -243,7 +243,7 @@ export function MapaOwners({
               🧿 Divergências · métricas auditáveis
             </h4>
             <p className="mt-1 text-xs text-muted-foreground">
-              Snapshot fixado: pacote C:\\CentralDark (12/10) × Casa K:\\ (15/10). Não representa
+              Snapshot fixado: pacote K:\_archive\c-centraldark-reconciliado-20261021 (origem 12/10) × Casa K:\ (15/10). Não representa
               saúde em tempo real.
             </p>
           </div>
