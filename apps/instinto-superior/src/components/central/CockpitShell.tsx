@@ -94,6 +94,7 @@ type NativeUnigramBridge = {
 function nativeUnigramBridge(): NativeUnigramBridge | undefined {
   if (typeof window === "undefined") return undefined;
   return (window as Window & { centraldark?: NativeUnigramBridge }).centraldark;
+}
 
 const HARNESS_DESTINOS = [
   { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
@@ -341,7 +342,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         <Button type="button" className="fixed bottom-2 right-2 z-40" variant="outline" size="sm" onClick={() => definirHarnessVisivel(true)}>Mostrar Harness</Button>
       )}
       <Sheet open={gaveta !== null} onOpenChange={(aberto) => { if (!aberto) definirGaveta(null); }}>
-        <SheetContent side={gaveta ?? "left"} className={gaveta === "top" || gaveta === "bottom" ? "max-h-[80dvh] overflow-y-auto" : "overflow-y-auto"}>
+        <SheetContent
+          side={gaveta ?? "left"}
+          className={gaveta === "top" || gaveta === "bottom" ? "max-h-[80dvh] overflow-y-auto" : "overflow-y-auto"}
+          onOpenAutoFocus={(event) => {
+            if (gaveta === "top") {
+              event.preventDefault();
+              document.getElementById("busca-harness")?.focus();
+            }
+          }}
+        >
           <SheetHeader><SheetTitle>🧿 CentralDark · Harness</SheetTitle><SheetDescription>Uma casca, múltiplos sistemas. Acesso pela mesma Sala de Controle.</SheetDescription></SheetHeader>
           <div className="mt-6 space-y-4">
             <label htmlFor="busca-harness" className="block text-xs font-semibold">Encontrar ferramenta</label>
@@ -848,6 +858,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   continuam processos independentes, governados pelos contratos existentes.
                 </p>
               </section>
+            </TabsContent>
             <TabsContent value="agent-mode" className="mt-10">
               <div className="mb-8 space-y-6">
                 <div>
