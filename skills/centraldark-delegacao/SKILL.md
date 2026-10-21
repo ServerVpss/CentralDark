@@ -76,3 +76,21 @@ A skill deve funcionar em ChatGPT, Claude, Codex, Hermes e outros agentes **some
 ## Receipt de origem
 `INTENT_ID=CENTRALDARK-UNIFIED-DELEGATION-CATALOG-20261016`.
 A prova de base foi `t_790c940d` na Casa Windows, despacho via Desktop Commander `SEGREDO`, tarefa `RUNNING` em `K:\\`; isso **não** comprova a conclusão daquela missão nem carregamento transversal.
+
+## 🪬 Casa ⇄ VPS por identidade + PID + Kanban — inventário nativo
+
+**Delta do CHEFE (2026-10-21):** reutilizar o catálogo MCP, o PowerShell da Casa, a extensão ZENDRIVE, Tailscale/SSH e o Hermes original para localizar PID/PPID e encaminhar a mesma missão, sem ressuscitar Desktop Commander externo. Não existe "enviar comando para PID remoto" sem uma sessão RPC/SSH/CLI autenticada: PID é um atributo do processo, não um canal de transporte nem autoridade.
+
+**Sensor Casa já existente, ampliado neste mesmo owner** (`scripts/casa/discover-operational-channels.ps1`). Na Casa Windows, após medir o checkout atual e com um terminal já autorizado:
+```powershell
+pwsh -NoProfile -File .\scripts\casa\discover-operational-channels.ps1 -IncludeRuntime -Json
+```
+A resposta `centraldark.casa-process-inventory.v1` inclui `origin_host`, `measured_at_utc`, estado de `sshd`, listener 22, serviço Tailscale, SSHs estabelecidos e candidatos PID/PPID Hermes/VS Code. Não inclui linha de comando nem segredos. `HERMES_CANDIDATE` não prova sessão funcional; `Cline` embutido na extensão do VS Code não tem PID próprio inferível automaticamente. Sem leitura no Windows: `CASA_PID=UNKNOWN`, nunca usar PIDs históricos.
+
+**Sensor VPS disponível agora:** `mcp_admin_call(tool=local_compute_status, input={includeProcesses:true})` no MCP existente, ou consulta read-only `ps` sob sessão autorizada. O `runtime_platform` deve ser `linux`. O PID do Hermes VPS é específico desse host e pode mudar ao reiniciar. Não contaminar o placar da Casa com o PID da VPS.
+
+**Rota catalogada:** `mcp_admin_catalog(filter="CASA_NATIVE_PID_INVENTORY")` deve listar `SOURCE_ONLY_CASA_ACK_REQUIRED` *somente após deploy do código MCP*. Isso é descoberta, não ferramenta RPC para invocar Windows. Usar `CASA_NATIVE_PID_INVENTORY` como recipe/source, e a rota autorizada que já existe (CLI Casa/Cline, executor Hermes local ou ponte autenticada própria) como corpo.
+
+**Handoff bidirecional:** fixar `INTENT_ID | HOST_ID | PROCESS_PID | PARENT_PID | EXECUTOR_SESSION_ID | TRANSPORT | AUTH_SCOPE | OWNER | MAIN_SHA | TASK_ID | ACK | NEXT_CURSOR`. A direção `Casa→VPS` usa SSH/Remote-SSH e MCP que já estiverem autenticados; a direção `VPS→Casa` exige autenticação na conta da Casa e prova de execução, não bastando `home.ssh_22=OPEN`. Para tarefa, usar o **mesmo Hermes Kanban**: `hermes kanban boards list`, `hermes kanban list`, deduplicar por idempotência, `dispatch --dry-run --max 1 --json`, enviar somente se o task correto foi selecionado, confirmar `TASK_ID + ACK + runtime readback`. Não misturar a sessão Hermes Gateway da VPS com processos Hermes candidatos da Casa.
+
+**Critério de fechamento:** `CASA_PID_READBACK` + `SSH_AUTHENTICATED_SESSION` ou `AUTHORIZED_CASA_EXECUTOR_ACK` + `KANBAN_TASK_ID` + `WORKER_ACK` + `EFFECT_READBACK` + `RECEIPT`. Na falta de qualquer elo, devolver `UNKNOWN` ou `BLOCKED` naquele elo e preservar o trabalho corrente; nunca fingir delegação via PID. Respeitar escritor único por escopo e autorização por dispositivo.
