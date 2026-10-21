@@ -21,6 +21,7 @@ test('human actions are exposed in natural PT-BR labels', () => {
     'Parear este VS Code',
     'Ver status e PIDs',
     'Compilar a extensão',
+    'Preparar tudo',
   ]) {
     assert.match(panel, new RegExp(label));
   }
@@ -31,9 +32,17 @@ test('natural language reuses existing commands instead of a second executor', (
   assert.match(panel, /centraldark\.remoteTerminalPair/);
   assert.match(panel, /centraldark\.remoteTerminalStatus/);
   assert.match(panel, /centraldark\.buildExtension/);
+  assert.match(panel, /centraldark\.prepareAll/);
 });
 
 test('VSIX metadata identifies the canonical repository', () => {
   assert.equal(pkg.repository?.url, 'https://github.com/ServerVpss/CentralDark.git');
   assert.equal(pkg.repository?.directory, 'skills/vs-code-restore');
+});
+
+
+test('one-click bootstrap is packaged and natural-language reachable', () => {
+  assert.match(panel, /prepara.*tudo/i);
+  assert.match(extension, /centraldark\.prepareAll/);
+  assert.match(extension, /centraldark-oneclick\.ps1/);
 });
