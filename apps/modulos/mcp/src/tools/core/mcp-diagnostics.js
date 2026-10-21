@@ -41,7 +41,10 @@ const runtimeTools = [
     ...aprendizadoTools, ...conscienciaTools, ...skillTools,
     ...githubReadTools, ...githubWriteTools, ...githubAdminTools, ...githubTools,
     ...vpsRunOnceTools, ...vpsFileTools, ...vpsLazyTools, ...pendenciasTools,
-    ...deployTools, ...supabaseTools, ...mcpAdminTools,
+    ...deployTools, ...supabaseTools,
+    ...adminVaultTools, ...adminFileTools, ...adminPm2Tools, ...adminShellTools,
+    ...adminVaultRwTools, ...adminGitTools, ...adminMainWriterTools, ...adminProviderControlTools,
+    ...mcpAdminTools,
     ...cognitivoTools, ...eliteGatewayTools, ...geminiTools, ...integrationsTools,
     ...painelTools, ...operationalTelemetryTools, ...piveteTools, ...youtubeMediaTools,
 ];
