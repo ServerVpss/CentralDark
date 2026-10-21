@@ -56,6 +56,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => remoteTerminalStatus(context)),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
     vscode.commands.registerCommand('centraldark.buildExtension', buildExtension),
+    vscode.commands.registerCommand('centraldark.prepareAll', () => prepareAll(context)),
     vscode.commands.registerCommand('centraldark.openVibeCoding', openCentralDarkVibe),
     vscode.commands.registerCommand('centraldark.naturalCommand', () => runNaturalCentralDarkCommand()),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
@@ -354,7 +355,8 @@ function runLogged(
   binary: string,
   args: string[],
   cwd: string,
-  output: vscode.OutputChannel
+  output: vscode.OutputChannel,
+  stdin?: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     output.appendLine('> ' + binary + ' ' + args.join(' '));
@@ -371,6 +373,9 @@ function runLogged(
     });
     child.stdout?.on('data', chunk => output.append(String(chunk)));
     child.stderr?.on('data', chunk => output.append(String(chunk)));
+    if (stdin) {
+      child.stdin?.end(stdin);
+    }
   });
 }
 
@@ -403,13 +408,51 @@ async function buildExtension(): Promise<void> {
         '--no-dependencies',
         '--allow-missing-repository',
         '--out', vsix
-      ], owner, output);
+      ], owner, output, 'y\n');
       output.appendLine('\n[OK] VSIX=' + vsix);
       void vscode.window.showInformationMessage('CentralDark: extensão ' + version + ' compilada e empacotada.');
     });
   } catch (error) {
     output.appendLine('\n[ERRO] ' + String(error));
     void vscode.window.showErrorMessage('CentralDark: compilação falhou. Veja “CentralDark — Compilar extensão”.');
+  }
+}
+
+
+async function prepareAll(context: vscode.ExtensionContext): Promise<void> {
+  const script = path.join(context.extensionPath, 'tools', 'centraldark-oneclick.ps1');
+  if (!fs.existsSync(script)) {
+    void vscode.window.showErrorMessage('CentralDark: bootstrap one-click nao encontrado no pacote instalado.');
+    return;
+  }
+  if (process.platform !== 'win32') {
+    void vscode.window.showWarningMessage('CentralDark: Preparar tudo foi definido para a Casa Windows.');
+    return;
+  }
+  const output = vscode.window.createOutputChannel('CentralDark — Preparar tudo');
+  output.clear();
+  output.show(true);
+  try {
+    await vscode.window.withProgress({
+      location: vscode.ProgressLocation.Notification,
+      title: 'CentralDark: calibrando, compilando, instalando e conectando…',
+      cancellable: false
+    }, async () => {
+      await runLogged(
+        'pwsh.exe',
+        ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', script],
+        context.extensionPath,
+        output
+      );
+    });
+    void vscode.window.showInformationMessage(
+      'CentralDark: preparação concluída. Uma janela nova carrega a versão instalada.'
+    );
+  } catch (error) {
+    output.appendLine('\n[ERRO] ' + String(error));
+    void vscode.window.showErrorMessage(
+      'CentralDark: Preparar tudo falhou. Veja “CentralDark — Preparar tudo”.'
+    );
   }
 }
 
