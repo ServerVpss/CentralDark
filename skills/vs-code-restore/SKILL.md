@@ -1,8 +1,8 @@
 ---
 name: vs-code-restore
 description: Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa salvo, sem depender do Claude. Use ao abrir o workspace CentralDark ou quando quiser reconstruir a bancada.
-version: 0.1.4
-metadata: {"status":"v0.1.4_source_in_pr_install_pending","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.4","candidate_compilado":false,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
+version: 0.1.5
+metadata: {"status":"v0.1.5_source_in_pr_remote_ssh_route_fix_pending_runtime_readback","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.4","candidate_compilado":false,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
 version: 0.1.3
 metadata: {"status":"v0.1.3_source_main_trace_integrated_runtime_readback_separate","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa_historico":"0.1.3","comando_nativo_testado":true,"telemetria_probe":true}
 ---
@@ -473,3 +473,23 @@ No Windows: hermes.cmd --tui; depois /model zendrive; depois oi. A seleção env
 5. Separar SOURCE, HERMES_ALIAS_CONFIGURED, WORKER_LIVE, INFERENCE_PASS, HERMES_TOOL_CALLS_PASS e DEPLOY_PASS.
 
 **NEXT_CURSOR:** medir o worker Zendrive autorizado, configurar o alias no Hermes atual, testar a primeira inferência real e só depois promover STATUS=PASS. SOURCE_COMMITTED != RUNTIME_INSTALLED != INFERENCE_PROVEN. Nenhuma instalação, segredo, alteração de perfil ou deploy é realizada por esta skill.
+
+
+## 🔌 Remote-SSH 0.1.5 — alias causal e API real (21/10/2026)
+
+**Sinal do CHEFE:** o Remote-SSH 0.128.0 tentou abrir `ssh-remote+segredo-vps` e o OpenSSH respondeu
+`Could not resolve hostname segredo-vps`. A configuração mostrada pelo CHEFE contém o alias
+`segredo-vpss`; a família CentralDark também reconhece `Segredo-VPS` como rota privada quando ela
+existe e passa no probe. `segredo-vps` sem o `s` final não é promovido por heurística.
+
+**Contraprova do pacote Remote-SSH fornecido pelo CHEFE:** o manifesto 0.128.0 expõe os comandos
+`opensshremotes.openEmptyWindow` e `opensshremotes.openEmptyWindowInCurrentWindow`; não expõe
+`remote-ssh.connectToHost`. O owner `skills/vs-code-restore` foi corrigido para ativar
+`ms-vscode-remote.remote-ssh`, reutilizar o alias que acabou de passar em `checkSshRoute()` e invocar
+a API pública exposta pelo Remote-SSH com `{ host: <alias-provada> }`.
+
+**Contrato:** probe autenticado → preservar exatamente a alias vencedora → abrir Remote-SSH sem picker e
+sem reescrever `~/.ssh/config`. A extensão declara `ms-vscode-remote.remote-ssh` como dependência do
+VSIX. Nenhuma cópia do código/binário Remote-SSH entra no pacote CentralDark.
+
+`SSH_ALIAS_TYPO != VPS_OFFLINE`; `REMOTE_SSH_COMMAND_NOT_EXPOSED != SSH_AUTH_FAILURE`.
