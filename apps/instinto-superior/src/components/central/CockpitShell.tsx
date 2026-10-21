@@ -107,6 +107,7 @@ const HARNESS_DESTINOS = [
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
+  { id: "aionui", titulo: "CentralDark Estúdio", icone: "🧩", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
   { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
   { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
@@ -372,13 +373,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </span>
             <Button
               data-cd-flow="instinto.CockpitShell.botao-01"
-              asChild
+              type="button"
               variant="outline"
               size="sm"
+              onClick={() => abrirDestino("aionui")}
             >
-              <a href="http://89.117.78.124:25808/" target="_blank" rel="noopener noreferrer">
-                <ExternalLink aria-hidden className="size-4" /> Abrir AionUI
-              </a>
+              <Layers3 aria-hidden className="size-4" /> CentralDark Estúdio
             </Button>
             {!autenticado ? (
               <Button data-cd-flow="instinto.CockpitShell.botao-02" asChild size="sm">
@@ -508,6 +508,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 ) : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="obsidian">💎 Obsidian</TabsTrigger>
+                <TabsTrigger value="aionui">🧩 Estúdio</TabsTrigger>
                 <TabsTrigger value="unigram">Unigram</TabsTrigger>
                 <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
                 <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
@@ -742,6 +743,37 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   </a>
                 </Button>
               </div>
+            </TabsContent>
+            <TabsContent value="aionui" className="mt-10">
+              <section className="panel space-y-4 p-6" aria-labelledby="centraldark-estudio-title">
+                <p className="font-mono text-[10px] tracking-[0.18em] text-neon-blue uppercase">
+                  Aplicativo original · protótipo CentralDark já existente
+                </p>
+                <h2 id="centraldark-estudio-title" className="text-3xl font-semibold">🧩 CentralDark Estúdio</h2>
+                <p className="max-w-3xl text-sm text-muted-foreground">
+                  O AionUI completo já tem receita de build com identidade CentralDark, menus nativos,
+                  tarefas, AionCore e Hermes. Esta entrada reutiliza a superfície atual enquanto
+                  a versão Windows com o código completo e os dados no K: é validada.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button type="button" asChild>
+                    <a href="http://89.117.78.124:25808/" target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="size-4" /> Abrir AionUI atual
+                    </a>
+                  </Button>
+                  <Button type="button" variant="outline" asChild>
+                    <a href="https://github.com/ServerVpss/CentralDark/tree/main/experiments/aionui-centraldark-instinto-superior"
+                      target="_blank" rel="noopener noreferrer">
+                      Ver protótipo e receita original
+                    </a>
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  A versão web atual abre separadamente. O build Windows, o rebranding completo,
+                  a instalação no K: e a janela interna do Shell exigem testes próprios.
+                  Botão visível não comprova aplicativo instalado ou incorporado.
+                </p>
+              </section>
             </TabsContent>
             <TabsContent value="obsidian" className="mt-10">
               <section className="panel space-y-5 p-6" aria-labelledby="obsidian-harness-heading">
