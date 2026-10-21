@@ -10,12 +10,10 @@ import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
-import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
@@ -83,6 +81,13 @@ function formatarTamanho(bytes: number) {
 }
 
 type UnigramLaunchStatus = "IDLE" | "PENDING" | "REQUESTED" | "UNAVAILABLE" | "ERROR";
+type NativeObsidianBridge = {
+  openObsidianDesktop?: () => Promise<{ status: "REQUESTED" | "UNAVAILABLE"; capability: "OBSIDIAN" }>;
+};
+function nativeObsidianBridge(): NativeObsidianBridge | undefined {
+  if (typeof window === "undefined") return undefined;
+  return (window as Window & { centraldark?: NativeObsidianBridge }).centraldark;
+}
 type NativeUnigramBridge = {
   openUnigramDesktop?: () => Promise<{ status: "REQUESTED" | "UNAVAILABLE"; capability: "UNIGRAM" }>;
 };
@@ -101,6 +106,7 @@ const HARNESS_DESTINOS = [
   { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
+  { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
   { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
   { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
@@ -273,6 +279,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const queryClient = useQueryClient();
   const navegar = useNavigate();
   const [unigramLaunch, setUnigramLaunch] = useState<UnigramLaunchStatus>("IDLE");
+  const [obsidianLaunch, setObsidianLaunch] = useState<UnigramLaunchStatus>("IDLE");
+  async function abrirObsidian() {
+    const bridge = nativeObsidianBridge();
+    if (!bridge?.openObsidianDesktop) { setObsidianLaunch("UNAVAILABLE"); return; }
+    setObsidianLaunch("PENDING");
+    try {
+      const result = await bridge.openObsidianDesktop();
+      setObsidianLaunch(result.status === "REQUESTED" ? "REQUESTED" : "UNAVAILABLE");
+    } catch { setObsidianLaunch("ERROR"); }
+  }
   async function abrirUnigram() {
     const bridge = nativeUnigramBridge();
     if (!bridge?.openUnigramDesktop) {
@@ -315,12 +331,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
-          <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
-          <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("top")}><Layers3 className="size-4" /></Button>
-        </nav>
-      ) : null}
-      {harnessVisivel ? (
         <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("sync")}><RefreshCcw className="mr-1 size-4" /> Sync</Button>
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("downloads")}><Download className="mr-1 size-4" /> Pacotes</Button>
@@ -346,11 +356,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </SheetContent>
       </Sheet>
-      <header className="border-b border-border bg-surface/85 px-4 py-4 backdrop-blur sm:px-6">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
-          <Link to="/" className="font-mono text-xs tracking-[0.2em] text-gold uppercase">
-            CentralDark
-          </Link>
+      <header className="sticky top-0 z-50 flex min-h-16 items-center border-b border-border bg-surface/95 px-4 py-3 backdrop-blur sm:px-6">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-2">
+            <Link to="/" className="font-mono text-xs tracking-[0.2em] text-gold uppercase">
+              CentralDark
+            </Link>
+            {harnessVisivel ? (
+              <Button size="icon" variant="ghost" title="Buscar ferramentas" aria-label="Buscar ferramentas" onClick={() => definirGaveta("top")}><Search className="size-4" /></Button>
+            ) : null}
+          </div>
           <div className="flex items-center gap-2">
             <span className="hidden font-mono text-[10px] text-muted-foreground sm:block">
               {autenticado ? "COCKPIT AUTENTICADO" : "ENTRADA DO COCKPIT"}
@@ -383,7 +398,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </div>
       </header>
 
-      <section className="relative overflow-hidden border-b border-border px-4 py-20 sm:px-6">
+      <section className="relative overflow-hidden border-b border-border px-4 pb-20 pt-36 sm:px-6">
         <div aria-hidden className="grid-mesh absolute inset-0 opacity-30" />
         <div className="relative mx-auto max-w-6xl">
           <p className="font-mono text-[10px] tracking-[0.22em] text-neon-blue uppercase">
@@ -467,8 +482,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-14" id="centraldark-harness-abas">
-            <div className="sticky top-0 z-30 -mx-4 overflow-x-auto border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
+          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8" id="centraldark-harness-abas">
+            {/* Posicionamento fixo: header primeiro, abas logo abaixo, sem o menu flutuante duplicado. */}
+            <div className="fixed inset-x-0 top-16 z-40 overflow-x-auto border-b border-border bg-background/95 px-4 py-2 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <TabsList className="h-auto min-w-max justify-start">
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
                 <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
@@ -491,6 +507,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
                 <TabsTrigger value="hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="obsidian">💎 Obsidian</TabsTrigger>
                 <TabsTrigger value="unigram">Unigram</TabsTrigger>
                 <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
                 <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
@@ -725,6 +742,42 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   </a>
                 </Button>
               </div>
+            </TabsContent>
+            <TabsContent value="obsidian" className="mt-10">
+              <section className="panel space-y-5 p-6" aria-labelledby="obsidian-harness-heading">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.18em] text-neon-blue uppercase">Aplicativo do Harness · memória da Forja</p>
+                  <h2 id="obsidian-harness-heading" className="mt-2 text-3xl font-semibold">💎 Obsidian</h2>
+                  <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
+                    Teu aplicativo original, com notas, pesquisa, plugins, Mermaid e Grafo Vivo.
+                    A CentralDark utiliza o vault existente em K: — não cria cópia da memória.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  {nativeObsidianBridge()?.openObsidianDesktop ? (
+                    <Button type="button" onClick={() => void abrirObsidian()} disabled={obsidianLaunch === "PENDING"}>
+                      💎 {obsidianLaunch === "PENDING" ? "Abrindo Obsidian..." : "Abrir Obsidian original"}
+                    </Button>
+                  ) : (
+                    <a className="inline-flex min-h-10 items-center rounded-md border border-border px-4 text-sm font-semibold hover:bg-muted"
+                       href="obsidian://open?vault=BRAIN">💎 Abrir Obsidian no computador</a>
+                  )}
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("sistema")} disabled={!autenticado}>
+                    📚 Cofre e biblioteca
+                  </Button>
+                </div>
+                <p role="status" aria-live="polite" className="text-sm text-muted-foreground">
+                  {obsidianLaunch === "REQUESTED" ? "Abertura solicitada ao Windows. A janela original continua independente." :
+                   obsidianLaunch === "ERROR" ? "Não foi possível solicitar a abertura. Verifique o aplicativo instalado." :
+                   obsidianLaunch === "UNAVAILABLE" ? "A abertura nativa requer o aplicativo CentralDark Desktop." :
+                   "No navegador, o botão usa o protocolo nativo do Obsidian. No Desktop, a ponte existente despacha a abertura autorizada."}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Acesso ao aplicativo inteiro ≠ incorporação da janela Win32 no navegador.
+                  Gerenciamento nativo da janela dentro do Shell e localização física do executável no K:
+                  exigem validação independente; nenhuma instalação ou movimentação foi feita por este módulo.
+                </p>
+              </section>
             </TabsContent>
             <TabsContent value="unigram" className="mt-10">
               <section className="panel p-6" aria-label="Unigram original como capacidade da CentralDark">
