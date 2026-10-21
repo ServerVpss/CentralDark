@@ -161,6 +161,45 @@ export function MapaOwners({
             <span className="text-xs">→ VPS (produção)</span>
           </div>
         </div>
+
+        {/* Cristal do CHEFE — intencao documentada, nao telemetria ao vivo. */}
+        <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+          <p className="text-xs font-semibold text-emerald-300">🎯 Cabeça externalizada · intenção do CHEFE · aprendizado #210</p>
+          <p className="mt-2 text-sm text-foreground">
+            A CentralDark pensa e trabalha no K:, descarrega o peso no F:, preserva o conhecimento
+            no Obsidian, cristaliza código no GitHub e continua funcionando independentemente
+            de qual IA esteja comandando a ferramenta.
+          </p>
+        </div>
+
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3" aria-label="Forja, deposito, memoria e cristal">
+          {[
+            { titulo: "🏠 K:\\ · FORJA", corpo: "Raiz Git, Instinto Superior, harness, apps, scripts, skills e trabalho normal de todas as IAs." },
+            { titulo: "🔗 K: → F: · PESO", corpo: "Junctions seletivas preservam caminhos no K:, mas guardam bytes pesados no F:. K:\\_WORKER → F:\\_WORKER: prova histórica." },
+            { titulo: "⛏️ F:\\ · GARIMPO", corpo: "TEMP, caches, worktrees isoladas, testes, bruto único, QUARANTINE e GARIMPO-CHEFE: classes e retenção separadas." },
+            { titulo: "🧠 K:\\docs · OBSIDIAN", corpo: "Memória e owners canônicos; sessões privadas de cada IA não formam um segundo cérebro." },
+            { titulo: "💎 GITHUB MAIN", corpo: "Só código e conhecimento versionáveis após teste, contraprova, aprovação e receipt." },
+            { titulo: "⚙️ VPS · RUNTIME", corpo: "Somente serviços e componentes necessários; merge não comprova implantação." },
+          ].map((nodo) => (
+            <div key={nodo.titulo} className="rounded-lg border border-border/70 bg-background/50 p-3">
+              <p className="font-mono text-xs font-semibold text-foreground">{nodo.titulo}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{nodo.corpo}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 space-y-1 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs text-muted-foreground">
+          <p><span className="font-semibold text-amber-300">C:\\ = sem escritas intencionais da Forja.</span> Não alterar o TEMP global do Windows; bloquear ferramentas que exijam escrita não controlável em C:.</p>
+          <p><span className="font-semibold text-foreground">Worktrees Git ≠ cache.</span> Haiku relatou dois worktrees em C:\\Temp (21/10), mas limpeza, alterações e elegibilidade de migração continuam UNKNOWN até leitura autorizada. Nunca mover worktree ativo como se fosse pasta descartável.</p>
+          <p><span className="font-semibold text-foreground">Prova ≠ intenção.</span> Junction K:\\_WORKER → F:\\_WORKER medida em 19/10; demais links, automação 24h e deploy não foram comprovados por este mapa.</p>
+        </div>
+        <a
+          href="https://github.com/ServerVpss/CentralDark/pull/1873#issuecomment-6316911838"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-block text-xs text-emerald-400 underline underline-offset-2"
+        >
+          Ler a intenção integral do CHEFE e o NEXT_CURSOR no receipt canônico ↗
+        </a>
       </div>
 
       {/* Status de Consolidação */}
