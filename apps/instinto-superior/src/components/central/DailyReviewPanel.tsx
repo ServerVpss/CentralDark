@@ -97,7 +97,7 @@ export const DailyReviewPanel: React.FC = () => {
       case 'RUNTIME_MIRRORED':
         return 'bg-cyan-500/15 text-cyan-300'
       case 'MAIN_SYNCED':
-        return 'bg-amber-500/100/15 text-amber-300'
+        return 'bg-amber-500/15 text-amber-300'
       default:
         return 'bg-muted text-muted-foreground'
     }
@@ -155,7 +155,7 @@ export const DailyReviewPanel: React.FC = () => {
               <p className="text-lg font-bold text-sky-300">{review.skillsLoaded}</p>
               <p className="text-xs text-sky-400">Carregadas</p>
             </div>
-            <div className="p-2 bg-amber-500/100/10 rounded border border-amber-500/40">
+            <div className="p-2 bg-amber-500/10 rounded border border-amber-500/40">
               <p className="text-lg font-bold text-amber-300">{review.deltaPending}</p>
               <p className="text-xs text-amber-400">Deltas</p>
             </div>
