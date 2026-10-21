@@ -48,7 +48,7 @@ const runtimeTools = [
     ...cognitivoTools, ...eliteGatewayTools, ...geminiTools, ...integrationsTools,
     ...painelTools, ...operationalTelemetryTools, ...piveteTools, ...youtubeMediaTools,
 ];
-const EXPECTED_SAFE_FULL_ADMIN = [
+const EXPECTED_PUBLIC_FULL_ADMIN = [
     "mcp_admin_call",
     "mcp_admin_catalog",
     "mcp_admin_status",
@@ -72,10 +72,17 @@ const EXPECTED_SAFE_FULL_ADMIN = [
     "mcp_policy_summary",
     "mcp_audit_recent_logs",
 ];
+const EXPECTED_SAFE_DISPATCHER = EXPECTED_PUBLIC_FULL_ADMIN.filter((name) => ![
+    "mcp_catalog_diff", "deploy_validate_mcp_catalog", "mcp_policy_summary", "mcp_audit_recent_logs",
+].includes(name));
+const PUBLIC_ONLY_SURFACE_TOOLS = new Set([
+    "mcp_catalog_diff", "deploy_validate_mcp_catalog", "mcp_policy_summary", "mcp_audit_recent_logs",
+]);
+
 function nameSet(values) {
     return [...new Set(values.filter((name) => typeof name === "string" && name.length > 0))].sort();
 }
-export function reconcileCatalogNames(runtimeNames, publicNames, expectedNames = EXPECTED_SAFE_FULL_ADMIN) {
+export function reconcileCatalogNames(runtimeNames, publicNames, expectedNames = EXPECTED_PUBLIC_FULL_ADMIN) {
     const runtime = nameSet(runtimeNames);
     const published = nameSet(publicNames);
     const expected = nameSet(expectedNames);
@@ -84,13 +91,15 @@ export function reconcileCatalogNames(runtimeNames, publicNames, expectedNames =
     const dispatcherMissingFromPublic = runtime.filter((name) => !published.includes(name));
     const publicOnly = published.filter((name) => !runtime.includes(name));
     const expectedMissingPublic = expected.filter((name) => !published.includes(name));
+    const classifiedPublicOnly = publicOnly.filter((name) => PUBLIC_ONLY_SURFACE_TOOLS.has(name));
+    const unclassifiedPublicOnly = publicOnly.filter((name) => !PUBLIC_ONLY_SURFACE_TOOLS.has(name));
     const duplicateRuntime = nameSet(runtimeDuplicates);
     const duplicatePublic = nameSet(publicDuplicates);
     const ok = dispatcherMissingFromPublic.length === 0 && expectedMissingPublic.length === 0
-        && duplicateRuntime.length === 0 && duplicatePublic.length === 0;
+        && unclassifiedPublicOnly.length === 0 && duplicateRuntime.length === 0 && duplicatePublic.length === 0;
     return { ok, status: ok ? "OK" : "CATALOG_DIVERGENCE", runtimeToolCount: runtime.length,
         publicToolCount: published.length, expectedCount: expected.length,
-        dispatcherMissingFromPublic, publicOnly, expectedMissingPublic,
+        dispatcherMissingFromPublic, publicOnly, classifiedPublicOnly, unclassifiedPublicOnly, expectedMissingPublic,
         runtimeDuplicates: duplicateRuntime, publicDuplicates: duplicatePublic };
 }
 function runtimeNames() {
@@ -114,7 +123,7 @@ export const mcpDiagnosticsTools = [
         }),
         handler: async (input) => {
             const names = runtimeNames();
-            const expected = nameSet(input.expected && input.expected.length > 0 ? input.expected : EXPECTED_SAFE_FULL_ADMIN);
+            const expected = nameSet(input.expected && input.expected.length > 0 ? input.expected : EXPECTED_SAFE_DISPATCHER);
             const missing = expected.filter((name) => !names.includes(name));
             const presentExpected = expected.filter((name) => names.includes(name));
             const filter = (input.filter ?? "").toLowerCase().trim();
@@ -141,10 +150,10 @@ export const mcpDiagnosticsTools = [
             const publicTools = Array.isArray(toolsJson.toolNames) ? toolsJson.toolNames
                 : Array.isArray(toolsJson.tools) ? toolsJson.tools.map((tool) => typeof tool === "string"
                     ? tool : typeof tool === "object" && tool !== null && "name" in tool ? String(tool.name ?? "") : "").filter(Boolean) : [];
-            const comparison = reconcileCatalogNames(names, publicTools);
+            const comparison = reconcileCatalogNames(names, publicTools, EXPECTED_PUBLIC_FULL_ADMIN);
             return ok({ ...comparison, base, surface: "mcp.centralldark.com", apiDeployRoute: false,
                 health, dispatcherSurface: "mcp_admin_call runtimeTools", publicSurface: "/tools.json",
-                catalogMatchesRuntime: comparison.dispatcherMissingFromPublic.length === 0,
+                catalogMatchesRuntime: comparison.dispatcherMissingFromPublic.length === 0 && comparison.unclassifiedPublicOnly.length === 0,
                 checkedAt: new Date().toISOString(),
                 evidenceBoundary: "CATALOG_DECLARATION != CLIENT_READBACK != EXECUTION_PROOF" });
         },
