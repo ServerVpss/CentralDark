@@ -70,10 +70,10 @@ Deno.serve(async (req) => {
 
         const ids = data.users.map((u) => u.id);
         const [{ data: profiles }, { data: roles }] = await Promise.all([
-          admin.from("profiles").select("user_id, full_name, avatar_url").in("user_id", ids),
+          admin.from("profiles").select("id, full_name, avatar_url").in("id", ids),
           admin.from("user_roles").select("user_id, role").in("user_id", ids),
         ]);
-        const pMap = new Map((profiles ?? []).map((p: any) => [p.user_id, p]));
+        const pMap = new Map((profiles ?? []).map((p: any) => [p.id, p]));
         const rMap = new Map<string, string>();
         (roles ?? []).forEach((r: any) => {
           // se já tem admin, mantém admin (prioridade)
@@ -141,16 +141,25 @@ Deno.serve(async (req) => {
 
       case "set_role": {
         const target = String(body.user_id ?? "");
-        const newRole = body.role === "admin" ? "admin" : "user";
-        if (!target) return json({ error: "invalid_input" }, 400);
-        // Proteção: admin não pode rebaixar a si mesmo
-        if (target === callerId && newRole !== "admin") {
+        const requested = String(body.role ?? "");
+        // support/agent permanecem bloqueados ate contrato PDP/PEP proprio.
+        if (!target || !["admin", "moderator", "user"].includes(requested)) {
+          return json({ error: "unsupported_role" }, 400);
+        }
+        if (target === callerId && requested !== "admin") {
           return json({ error: "cannot_demote_self" }, 400);
         }
-        await admin.from("user_roles").delete().eq("user_id", target);
-        const { error } = await admin.from("user_roles").insert({ user_id: target, role: newRole });
-        if (error) return json({ error: error.message }, 400);
-        await logAudit("role_changed", target, { role: newRole });
+        const { data: current, error: readError } = await admin.from("user_roles")
+          .select("id, role").eq("user_id", target);
+        if (readError) return json({ error: "roles_read_failed" }, 500);
+        if ((current ?? []).length > 1) return json({ error: "multiple_roles_require_manual_reconciliation" }, 409);
+        const original = current?.[0];
+        // Update atomico do papel conhecido. Nunca DELETE seguido de INSERT.
+        const { error } = original
+          ? await admin.from("user_roles").update({ role: requested }).eq("id", original.id)
+          : await admin.from("user_roles").insert({ user_id: target, role: requested });
+        if (error) return json({ error: "role_write_failed" }, 400);
+        await logAudit("role_changed", target, { role: requested });
         return json({ ok: true });
       }
 
@@ -204,14 +213,15 @@ Deno.serve(async (req) => {
         if (uErr || !u?.user) return json({ error: uErr?.message ?? "not_found" }, 404);
 
         const [{ data: profile }, { data: roles }, { data: audit }] = await Promise.all([
-          admin.from("profiles").select("*").eq("user_id", target).maybeSingle(),
+          admin.from("profiles").select("*").eq("id", target).maybeSingle(),
           admin.from("user_roles").select("role").eq("user_id", target),
           admin.from("audit_logs").select("id, action, entity_type, entity_id, details, created_at")
             .or(`user_id.eq.${target},entity_id.eq.${target}`)
             .order("created_at", { ascending: false }).limit(50),
         ]);
 
-        const role = (roles ?? []).some((r: any) => r.role === "admin") ? "admin" : "user";
+        const role = (roles ?? []).some((r: any) => r.role === "admin") ? "admin"
+          : (roles ?? []).some((r: any) => r.role === "moderator") ? "moderator" : "user";
 
         return json({
           user: {

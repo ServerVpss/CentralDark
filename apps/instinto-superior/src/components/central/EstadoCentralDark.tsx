@@ -7,7 +7,7 @@ const tons: Record<EstadoOperacional, string> = {
   PASS: "border-neon-green/45 bg-neon-green/10 text-neon-green",
   RUNNING: "border-neon-blue/45 bg-neon-blue/10 text-neon-blue",
   BLOCKED: "border-ember/45 bg-ember/10 text-ember",
-  AUTH_REQUIRED: "border-gold/45 bg-gold/10 text-gold",
+  AUTH_REQUIRED: "border-gold/45 bg-gold/10 text-gold motion-safe:animate-pulse motion-reduce:animate-none",
   UNKNOWN: "border-muted-foreground/40 bg-muted/50 text-muted-foreground",
   FAIL: "border-destructive/55 bg-destructive/10 text-destructive",
 };
