@@ -878,3 +878,55 @@ ou workflow continua sujeita ao gate Meta-Lupa/AutoLupa existente.
   derivação e validação independente fica NOT_PROVEN.
 - A mudança só é considerada incorporada após revisão, testes aplicáveis e merge;
   merge não equivale a deploy nem comprova comportamento em runtime.
+
+
+## 7. Ciclo de melhoria contínua orientado por experiência e alvo externo
+
+Inspirado em A-Evolve-Training (arXiv:2606.20657), este contrato reaproveita os recibos e o funil existentes. Não cria banco de experiências, executor, orquestrador, worker pool ou serviço paralelo. Reutilizar o armazenamento canônico de execuções/recibos já existente; se não for comprovado, registrar a lacuna.
+
+### 7.1 Registro reutilizável de experiência
+
+Cada tentativa material contribui para o recibo canônico com: objetivo e critério prévio; baseline imutável (SHA/configuração/dados); hipótese e delta mínimo; ferramenta/argumentos sanitizados, run ID e custo quando disponível; logs/artefatos por hash; métricas internas e externas; falha observada versus causa ainda hipotética; decisão de reutilizar/rejeitar/retestar; contraprova e NEXT_CURSOR.
+
+Preservar falhas e sucessos como evidência, não como verdades universais. Reutilizar apenas quando ambiente, versão e objetivo forem comparáveis. Deduplicar pelos mecanismos existentes. Não persistir tokens, credenciais, dados pessoais desnecessários ou logs brutos sem sanitização e retenção definida.
+
+### 7.2 Loop de pesquisa com limites
+
+1. Definir o alvo externo e o critério de sucesso antes de explorar.
+2. Fixar baseline reproduzível e separar desenvolvimento de avaliação.
+3. Explorar candidatos isolados, com limites de tempo, custo, concorrência e permissões.
+4. Capturar execução, falhas e artefatos no recibo existente.
+5. Medir proxy interno e alvo externo/holdout independente quando disponível.
+6. Comparar com baseline e executar regressão/contraprova.
+7. Promover somente o delta que melhora o alvo declarado sem violar invariantes.
+8. Atualizar a política de busca, não sobrescrever o baseline nem autoalterar regras de segurança.
+9. Parar por orçamento, regressão, evidência inconclusiva, falta de autorização ou ausência de avaliação externa confiável.
+
+Autonomia não autoriza alteração de produção, permissões, segredos, orçamento ou critérios de segurança. Deploy, ações irreversíveis e mudança de owner continuam sob as autorizações existentes.
+
+### 7.3 Divergência entre proxy e alvo externo
+
+Registrar métricas internas/externas com versões e amostras comparáveis. Se o proxy melhorar sem melhora externa, ou divergirem além de limiar pré-definido:
+
+- marcar PROXY_DIVERGENCE, nunca PASS;
+- suspender promoção baseada apenas no proxy;
+- investigar contaminação, vazamento entre conjuntos, regressão e mudança de distribuição;
+- testar hipóteses alternativas e procurar contraprova;
+- alterar a política de busca somente sob as regras existentes;
+- retomar promoção apenas após holdout independente ou contraprova adequada confirmar melhoria.
+
+Sem alvo externo, holdout ou poder estatístico suficiente, usar UNKNOWN/NOT_MEASURED. Não inventar limiar depois de observar resultados. Uma pontuação interna crescente pode ser sobreajuste.
+
+### 7.4 Exploração paralela segura
+
+Se worktrees/containers isolados já existirem, delimitar diretório, recursos, timeout, permissões e artefatos por tentativa; manter baseline imutável e recolher resultados por esquema determinístico. Não criar workers/containers automaticamente sem comprovar suporte existente. Sem isolamento, executar serialmente ou bloquear.
+
+### 7.5 Aceite
+
+- Experiência recuperável no owner/recibo canônico existente.
+- Baseline e critério definidos antes da tentativa.
+- Métricas internas e externas separadas.
+- Divergência do proxy detectada como risco, não sucesso.
+- Artefatos, falhas e contraprovas ligados ao mesmo run/SHA.
+- Promoção reproduzível e reversível; sem produção automática sem autorização.
+- PASS somente quando melhoria no alvo externo estiver demonstrada; caso contrário UNKNOWN, BLOCKED, FAIL ou NOT_MEASURED.
