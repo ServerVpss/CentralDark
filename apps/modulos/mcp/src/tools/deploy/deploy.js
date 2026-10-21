@@ -90,30 +90,59 @@ export const deployTools = [
             // 4. PM2 — processos com restart anormal ou parados
             let pm2Summary = [];
             try {
-                // Projeta só campos não sensíveis ANTES de runShell sanitizar a saída.
-                // Isso evita corromper o JSON bruto do PM2 (que contém env/secrets) e fixa o daemon canônico.
-                const res = await runShell("PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | python3 -c 'import sys,json; d=json.load(sys.stdin); print(json.dumps([[p.get(\"name\"),p.get(\"pm2_env\",{}).get(\"status\"),p.get(\"pm2_env\",{}).get(\"restart_time\",0),p.get(\"pm2_env\",{}).get(\"pm_uptime\",0)] for p in d]))'", { timeoutMs: 15_000 });
-                const list = JSON.parse(res.stdout.trim());
-                const now = Date.now();
-                pm2Summary = list.map(([name, status, restarts, pmUptime]) => ({
-                    name,
-                    status,
-                    restarts,
-                    uptime_min: Math.round((now - pmUptime) / 60_000),
-                }));
-                const stopped = pm2Summary.filter((p) => p.status !== "online");
-                if (stopped.length > 0) {
-                    const real = stopped.filter((p) => p.name !== "whatsapp-server");
-                    if (real.length > 0) {
-                        errors.push(`PM2 com status≠online: ${real.map((p) => p.name).join(", ")}`);
-                    }
-                    else {
-                        alerts.push(`PM2 stopped (esperado): ${stopped.map((p) => p.name).join(", ")}`);
-                    }
+                // Projeta só campos não sensíveis antes de devolver qualquer resultado.
+                // O parser sempre emite JSON estruturado, inclusive quando PM2 não existe
+                // no PATH ou devolve saída vazia/inválida; falha nunca vira lista saudável.
+                const command = `if ! command -v pm2 >/dev/null 2>&1; then
+  printf '%s\\n' '{"ok":false,"error":"PM2_BINARY_NOT_FOUND"}'
+else
+  PM2_HOME=/root/.pm2 pm2 jlist 2>/dev/null | python3 -c '
+import json, sys
+raw = sys.stdin.read()
+try:
+    data = json.loads(raw)
+    if not isinstance(data, list):
+        raise ValueError("not a list")
+    processes = [[p.get("name"), p.get("pm2_env", {}).get("status"), p.get("pm2_env", {}).get("restart_time", 0), p.get("pm2_env", {}).get("pm_uptime", 0)] for p in data]
+    result = {"ok": True, "processes": processes}
+except Exception:
+    result = {"ok": False, "error": "PM2_OUTPUT_INVALID", "bytes": len(raw)}
+print(json.dumps(result))
+'
+fi`;
+                const res = await runShell(command, { timeoutMs: 15_000 });
+                const payload = JSON.parse(res.stdout.trim());
+                if (payload.ok !== true || !Array.isArray(payload.processes)) {
+                    const detail = payload.error || "PM2_RESPONSE_INVALID";
+                    const bytes = Number.isFinite(payload.bytes) ? ` (bytes=${payload.bytes})` : "";
+                    errors.push(`vps_pm2: ${detail}${bytes}`);
                 }
-                const looping = pm2Summary.filter((p) => p.status === "online" && p.uptime_min < 2 && p.restarts > 5);
-                if (looping.length > 0) {
-                    errors.push(`PM2 em restart loop: ${looping.map((p) => p.name).join(", ")}`);
+                else {
+                    const list = payload.processes;
+                    if (list.length === 0) {
+                        errors.push("vps_pm2: PM2_EMPTY_PROCESS_LIST");
+                    }
+                    const now = Date.now();
+                    pm2Summary = list.map(([name, status, restarts, pmUptime]) => ({
+                        name,
+                        status,
+                        restarts,
+                        uptime_min: Math.round((now - pmUptime) / 60_000),
+                    }));
+                    const stopped = pm2Summary.filter((p) => p.status !== "online");
+                    if (stopped.length > 0) {
+                        const real = stopped.filter((p) => p.name !== "whatsapp-server");
+                        if (real.length > 0) {
+                            errors.push(`PM2 com status≠online: ${real.map((p) => p.name).join(", ")}`);
+                        }
+                        else {
+                            alerts.push(`PM2 stopped (esperado): ${stopped.map((p) => p.name).join(", ")}`);
+                        }
+                    }
+                    const looping = pm2Summary.filter((p) => p.status === "online" && p.uptime_min < 2 && p.restarts > 5);
+                    if (looping.length > 0) {
+                        errors.push(`PM2 em restart loop: ${looping.map((p) => p.name).join(", ")}`);
+                    }
                 }
             }
             catch (e) {
