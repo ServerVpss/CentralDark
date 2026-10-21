@@ -112,14 +112,7 @@ def validate(content: str, baseline: bool = True) -> list[str]:
     )
     if parsed != canonical:
         issues.append("ALPHABETICAL_ORDER_DRIFT")
-    if (f"`001` a `{len(headings)}`" not in content
-            and f"`001` a `{len(headings):03d}`" not in content):
-        # Não exigir o frontmatter de um snapshot para representar a execução atual.
-        # Faixa documentada é lida como Markdown literal, não HTML.
-        if ("`" not in content) and (
-            ("`" + str(len(headings))) not in content
-        ):
-            pass  # Guard real da faixa vem das headings e links, acima.
+    # A faixa segue as ancoras; nao congelar contagem textual de um snapshot.
     if "NEXT_CURSOR" not in content or "UNKNOWN != PASS" not in content:
         issues.append("PROOF_AND_REPLAY_CONTRACT_MISSING")
     return issues
@@ -134,7 +127,7 @@ def self_test() -> int:
         '### <a id="j001"></a>J001 · Alpha\n'
         '### <a id="j002"></a>J002 · Beta\n'
         "## 3. Painel de cobertura\nNEXT_CURSOR; UNKNOWN != PASS\n"
-    ).replace("`", chr(96))
+    )
     if validate(fixture, baseline=False):
         print("JUKEBOX_SELF_TEST=FAIL_VALID_FIXTURE")
         return 1
@@ -150,7 +143,6 @@ def self_test() -> int:
         "skipped_number": fixture.replace("J002 · Beta", "J003 · Beta").replace('id="j002"', 'id="j003"'),
         "title_drift": fixture.replace("J002 · Beta", "J002 · Gamma"),
     }
-    broken["alphabet"] = broken["alphabet"].replace("`", chr(96))
     failed = [name for name, text in broken.items() if not validate(text, baseline=False)]
     if failed:
         print("JUKEBOX_SELF_TEST=FAIL_UNDETECTED:" + ",".join(failed))
