@@ -1,3 +1,4 @@
+import { BarraNeon } from "@/components/central/BarraNeon";
 import { CheckCircle2, AlertCircle, Clock, BookOpen, BarChart3, Zap, FileJson, Eye, Cpu } from "lucide-react";
 
 const DELIVERABLES = [
@@ -107,12 +108,7 @@ export function DeliverablesSummary() {
         </div>
 
         {/* Barra de progresso */}
-        <div className="h-2 rounded-full bg-muted overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-neon-blue to-neon-green transition-all duration-500"
-            style={{ width: `${percentage}%` }}
-          />
-        </div>
+        <BarraNeon percentual={percentage} rotulo="Progresso dos deliverables" />
 
         {/* Contadores */}
         <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
