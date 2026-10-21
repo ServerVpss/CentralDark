@@ -72,6 +72,10 @@
       {
         "command": "centraldark.naturalCommand",
         "title": "CentralDark: Diga o que você quer fazer"
+      },
+      {
+        "command": "centraldark.prepareAll",
+        "title": "CentralDark: Preparar tudo (calibrar + compilar + instalar + conectar)"
       }
     ],
     "configuration": {
