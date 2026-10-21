@@ -75,3 +75,21 @@ test("paired VS Code tools are surfaced in the existing MCP dispatcher, catalog 
   for (const name of expected) assert.ok(skill.includes(name), "skill must document " + name);
   assert.ok(skill.includes("TOOL_NAO_ENCONTRADA"), "document source != runtime before promotion");
 });
+
+
+test("Hermes 9119 VS Code tunnel is localhost-only and uses the existing workspace", () => {
+  const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..");
+  const settings = JSON.parse(readFileSync(resolve(repoRoot, ".vscode/settings.json"), "utf8"));
+  const port = settings["remote.portsAttributes"]?.["9119"];
+  assert.deepEqual(port, {
+    label: "Hermes Gateway original · privado (VPS)",
+    onAutoForward: "silent",
+    protocol: "http",
+  });
+  assert.equal(settings["remote.localPortHost"], "localhost");
+  assert.equal(settings["remote.restoreForwardedPorts"], true);
+  assert.equal(settings["remote.portsAttributes"]?.["8642"], undefined,
+    "do not silently expose the separate Hermes API service");
+  assert.ok(!JSON.stringify(settings).includes("0.0.0.0"),
+    "workspace must not declare a public listener");
+});
