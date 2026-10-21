@@ -5,7 +5,7 @@ import { Cpu, HardDrive, HeartPulse, MemoryStick, Monitor } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { MapaOwners } from "@/components/central/MapaOwners";
-import { MemoriaAnalyticsCasa } from "@/components/central/MemoriaAnalyticsCasa";
+
 import { lerMaquinaViva } from "@/lib/maquina.functions";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { FERIDA_MCP } from "@/data/painel-unico";
@@ -202,8 +202,6 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
           ESTADO ATUAL: {FERIDA_MCP.estado} · aguardando revalidação do unit e do :9100
         </p>
       </article>
-
-      <MemoriaAnalyticsCasa />
 
       <MapaOwners />
       <p className="mt-6 font-mono text-[10px] text-muted-foreground">

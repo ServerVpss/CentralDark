@@ -17,6 +17,7 @@ import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralD
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { AtividadeAgora } from "@/components/central/AtividadeAgora";
+import { MemoriaAnalyticsCasa } from "@/components/central/MemoriaAnalyticsCasa";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
@@ -115,6 +116,7 @@ const HARNESS_DESTINOS = [
   { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
   { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
   { id: "downloads", titulo: "Downloads", icone: "📦", privado: false },
+  { id: "configuracoes", titulo: "Configurações", icone: "⚙️", privado: true },
 ] as const;
 
 /** UI-first: catálogo visual selecionável, sem fingir conexões ou criar outro painel. */
@@ -526,6 +528,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
                 <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
+                {autenticado ? <TabsTrigger value="configuracoes">⚙️ Configurações</TabsTrigger> : null}
               </TabsList>
             </div>
             <TabsContent value="pr1873" className="mt-8">
@@ -1250,6 +1253,20 @@ REUSE: before_create (sem duplicação)`}
                 </div>
               </section>
             </TabsContent>
+            {autenticado ? (
+              <TabsContent value="configuracoes" className="mt-10">
+                <section>
+                  <p className="font-mono text-[10px] tracking-[0.2em] text-neon-green uppercase">
+                    Painel de ajustes e diagnóstico
+                  </p>
+                  <h2 className="mt-3 text-3xl font-semibold">Configurações</h2>
+                  <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
+                    Analytics do navegador, preferências e diagnóstico local da Casa.
+                  </p>
+                  <MemoriaAnalyticsCasa />
+                </section>
+              </TabsContent>
+            ) : null}
           </Tabs>
         </div>
       </section>
