@@ -398,7 +398,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </div>
       </header>
 
-      <section className="relative overflow-hidden border-b border-border px-4 pb-20 pt-36 sm:px-6">
+      <section className="relative overflow-hidden border-b border-border px-4 py-20 sm:px-6">
         <div aria-hidden className="grid-mesh absolute inset-0 opacity-30" />
         <div className="relative mx-auto max-w-6xl">
           <p className="font-mono text-[10px] tracking-[0.22em] text-neon-blue uppercase">
