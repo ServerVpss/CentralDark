@@ -16,6 +16,20 @@ writer: SOL
 
 # MAPA-DO-CEREBRO — UMA CASA, UMA DIREÇÃO
 
+<!-- CENTRALDARK_JUKEBOX_AZ_NUMERICO_20261021 -->
+## 🎛️ Jukebox do projeto — A–Z e 001–301 (índice derivado)
+
+**Porta de entrada para continuidade desta sessão, sem segundo cérebro:** [🎛️ Jukebox CentralDark · A–Z / J001–J301](RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md).
+
+- **301 fichas com IDs de navegação:** 141 nomes de ferramentas MCP, 13 rotas declaradas, 18 módulos do Harness, 4 skills retornadas por `skill_listar` (**subconjunto `skills/`, NÃO todo `.agents/skills/`**), 27 abas do Cockpit, quatro peles, três prévias de temas globais, botões da moldura e do VS Code, decisões aprendidas e owners.
+- Cada ficha liga **nome alfabético ↔ número fixo ↔ fonte ↔ limite de evidência ↔ estado**, distinguindo `CATALOGADO`, `FONTE`, `DOM`, `BRIDGE_PASS`, `FAIL` e `UNKNOWN`. Os 301 são itens de um índice snapshot, não total de skills instaladas, metas completadas ou catálogo universal já medido.
+- Quando a tarefa for **ler o Cockpit**, escolher primeiro o Browser conectado, `list_tabs → get_tab_context`; não usar Desktop Commander como dependência. Quando for **executar** algo, consultar dono, schema, autorização, efeito e contraprova em instrumento apropriado. O browser DOM NÃO prova execução Windows/PTY/Win32.
+- **Owner principal preservado:** `MAPA-DO-CEREBRO` é MOC; `APRENDIZADOS` guarda lição; `RECEIPTS` guarda este snapshot auditável; `CockpitShell/DesignCenter` não são reescritos pelo índice. A navegação web/Desktop para o Jukebox permanece pendente de decisão e build.
+- **NEXT_CURSOR:** `MOC → JUKEBOX_AZ_001_N → OWNER → MEDIR_CURRENT → CONTRAPROVAR → RECEIPT → REVISAR_INDICE`.
+
+<!-- /CENTRALDARK_JUKEBOX_AZ_NUMERICO_20261021 -->
+
+
 Este MOC é **mapa de navegação**, não um segundo cérebro e não um snapshot eterno de runtime. Números de tools, processos, portas e serviços só valem enquanto a chave material da prova não mudar.
 
 ## Norte CURRENT — direto, sem ritual obrigatório
