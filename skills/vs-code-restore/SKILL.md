@@ -539,3 +539,35 @@ No Windows: hermes.cmd --tui; depois /model zendrive; depois oi. A seleção env
 5. Separar SOURCE, HERMES_ALIAS_CONFIGURED, WORKER_LIVE, INFERENCE_PASS, HERMES_TOOL_CALLS_PASS e DEPLOY_PASS.
 
 **NEXT_CURSOR:** medir o worker Zendrive autorizado, configurar o alias no Hermes atual, testar a primeira inferência real e só depois promover STATUS=PASS. SOURCE_COMMITTED != RUNTIME_INSTALLED != INFERENCE_PROVEN. Nenhuma instalação, segredo, alteração de perfil ou deploy é realizada por esta skill.
+
+
+## 🪬 CentralDark One-Click — linguagem natural e botão único (21/10/2026)
+
+O fluxo que antes exigia vários blocos PowerShell agora tem owner único em
+`tools/centraldark-oneclick.ps1`.
+
+Nome operacional: **CentralDark One-Click Bootstrap**.
+
+O comando executa, na ordem:
+`CALIBRAR → WORKTREE ISOLADO → TESTES → COMPILAR → EMPACOTAR VSIX →
+INSTALAR REMOTE-SSH/VSIX → PROVAR ALIAS SSH → READBACK VPS/API/MCP/HERMES →
+ABRIR JANELA NOVA → RECEIPT`.
+
+Ele preserva a árvore ativa: não faz `pull/reset/checkout` nela, não reescreve
+`~/.ssh/config` e não lê/copia a chave privada. O readback remoto usa script
+codificado em Base64 para evitar quebra de `bash -s` por colagem/CRLF.
+
+A extensão expõe o mesmo owner por:
+- botão **Preparar tudo** no painel `🪬 CentralDark · Vibe Coding`;
+- comando **CentralDark: Preparar tudo (calibrar + compilar + instalar + conectar)**;
+- linguagem natural: `prepara tudo`, `atualiza tudo`, `acordar`,
+  `calibrar e compilar`, `compila e conecta`, `one-click`.
+
+Dois erros observados na sessão anterior foram removidos do fluxo canônico:
+1. validação de extensão em PowerShell usando `-notmatch` sobre array, que gerava
+   falso negativo mesmo com `centraldark...@0.1.6` instalado;
+2. readback bash multiline fragilizado por colagem, substituído por transporte
+   Base64 antes de `bash`.
+
+`SOURCE_UPDATED != RUNTIME_PASS`: após alteração do PR, o One-Click deve rodar
+`npm test` + `npm run compile` + instalação/readback para promover o runtime.
