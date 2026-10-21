@@ -111,8 +111,13 @@ print(json.dumps(result))
 '
 fi`;
                 const res = await runShell(command, { timeoutMs: 15_000 });
-                const payload = JSON.parse(res.stdout.trim());
-                if (payload.ok !== true || !Array.isArray(payload.processes)) {
+                const raw = res.stdout.trim();
+                let payload;
+                try { payload = raw ? JSON.parse(raw) : null; } catch { payload = null; }
+                if (!payload || typeof payload !== "object") {
+                    errors.push(`vps_pm2: ${raw ? "PM2_RESPONSE_INVALID_JSON" : "PM2_PROBE_NO_OUTPUT"} (exit=${res.exitCode})`);
+                }
+                else if (payload.ok !== true || !Array.isArray(payload.processes)) {
                     const detail = payload.error || "PM2_RESPONSE_INVALID";
                     const bytes = Number.isFinite(payload.bytes) ? ` (bytes=${payload.bytes})` : "";
                     errors.push(`vps_pm2: ${detail}${bytes}`);
