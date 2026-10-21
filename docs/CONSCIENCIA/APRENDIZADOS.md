@@ -3180,3 +3180,26 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **CURRENT:** regra documentada em branch; mudanças no executável, build, sincronização com Obsidian Casa e deploy permanecem UNKNOWN até readback.
 - **NEXT_CURSOR:** `READBACK_DOCS_1895 → CHECKS_HEAD_EXATO → UI_OWNER_MICROCOPY → TESTES_DE_ESTADO_E_ACESSIBILIDADE → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.
 <!-- /CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
+
+
+<!-- CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
+### 212. Observabilidade do Cockpit pelo browser conectado sem dependência de Desktop Commander
+- **Categoria:** descoberta de rota / correção de comportamento.
+- **Data:** 2026-10-21.
+- **Erro:** tratar status de um dispositivo Desktop Commander como condição necessária para observar o Cockpit.
+- **Prova:** conexão Browser listou dez abas, incluindo `Cockpit CentralDark — Sala de Controle` (`127.0.0.1:8080/sala-controle`), e `get_tab_context` retornou DOM textual, botões, abas, comandos da moldura, painéis e seus estados. Simultaneamente a ponte Tailscale reportou VPS/Casa online. **Nenhuma chamada Desktop Commander foi necessária para ler a UI aberta**.
+- **Cristal operacional:** `BROWSER_TABS_LISTED=true`; `CONNECTED_COCKPIT_TAB_CONTEXT_READ=true`; `DOM_CONTROLS_OBSERVABLE=true`; `DESKTOP_COMMANDER_PREREQUISITE_FOR_COCKPIT_DOM=false`. Preferir `Browser.list_tabs → Browser.get_tab_context(aba alvo) → comparar com owners do GitHub → receipt`; somente escalar para outra capacidade se o efeito buscado exceder observação de DOM. Listar abas ≠ comprovar execução do Windows; **comparações paralelas completas, captura visual nativa, edição da UI e ações remotas não foram demonstradas por essas duas leituras**.
+- **NEXT_CURSOR:** `BROWSER_CONNECTED_CHECK → TAB_CONTEXT → SOURCE_OWNER → READBACK → OPTIONAL_NATIVE_CHECK`.
+<!-- /CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
+
+<!-- CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
+### 213. Design Center: sete identidades distintas, quatro peles ativas e três prévias comparáveis sem fusão
+- **Categoria:** correção de interpretação + experimento visual controlado.
+- **Data:** 2026-10-21.
+- **Erro:** interpretar violeta/índigo de aplicativo de referência como nova paleta oficial do Cockpit. **Correção do CHEFE:** cores e design continuam os oficiais; referência externa é só ergonomia/funcionalidades.
+- **Prova de source:** `DesignCenter.tsx` contém `PeleCockpit = "default" | "ouro" | "ops" | "esmeralda"`, preferência `centraldark.cockpit.pele`; `apps/modulos/Bolt/source/app/lib/stores/theme.ts` mantém tema `emerald`, `operational`, `forge` no Shell; `app/styles/variables.scss` define seus tokens.
+- **Delta autorizado:** no PR #1895 a aba `Design Center → Temas globais · 3 prévias` mostra cartões lado a lado com tokens oficiais `emerald`, `operational`, `forge`, sem instalar/aplicar tema nem tocar no seletor de quatro peles e sem forçar fusão.
+- **Invariantes:** `FOUR_COCKPIT_SKINS_PRESERVED=true` é critério de código; `THREE_GLOBAL_THEME_PREVIEWS_SEPARATE=true` é critério de código; `APPLIED_TO_LIVE_CASA=UNKNOWN`, `MERGE_DECISION=PENDING_CHEFE`. Token em mockup não significa integração de theme runtime; build, navegador da Casa e persistência exigem medição.
+- **OWNER:** `apps/instinto-superior/src/components/central/DesignCenter.tsx`; regras `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`. Nenhuma mudança em `CockpitShell.tsx`, CSS global, processos ou segredos.
+- **NEXT_CURSOR:** `READBACK_COMMIT → BUILD_SAME_SHA → LIVE_DESIGN_CENTER → FOUR_SKINS_REGRESSION → CHEFE_COMPARE → DECIDE_MERGE_OR_KEEP`.
+<!-- /CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
