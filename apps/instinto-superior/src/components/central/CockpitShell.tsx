@@ -16,6 +16,7 @@ import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
+import { AtividadeAgora } from "@/components/central/AtividadeAgora";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
@@ -538,7 +539,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </TabsContent>
             {autenticado ? <TabsContent value="gram" className="mt-8"><CentralDarkGram abrirAdmin={() => abrirDestino("admin")} abrirSync={() => abrirDestino("sync")} /></TabsContent> : null}
             <TabsContent value="visao" className="mt-8">
-              <div className="mb-6"><CartaoDiscosForja /></div>
+              <div className="mb-6"><AtividadeAgora /></div>
+                          <div className="mb-6"><CartaoDiscosForja /></div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <BlocoEstado
                   titulo="Writer material único"
