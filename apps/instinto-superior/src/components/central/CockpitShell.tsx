@@ -468,8 +468,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           ) : null}
 
           <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-14" id="centraldark-harness-abas">
-            <div className="sticky top-0 z-30 -mx-4 overflow-x-auto border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
-              <TabsList className="h-auto min-w-max justify-start">
+            <div className="sticky top-0 z-30 -mx-4 border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
+              <TabsList className="h-auto flex-wrap justify-start">
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
                 <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
                 <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
