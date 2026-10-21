@@ -947,3 +947,18 @@ Ordem de tentativa para revisão de PR, conforme capacidades realmente disponív
 Cada tentativa deve produzir estado próprio: `PASS`, `FAIL`, `BLOCKED`, `NOT_RUN` ou `UNKNOWN`. Uma chamada MCP concluída só prova que a ferramenta foi invocada; não prova que a revisão foi feita. Só aceitar revisão quando houver conteúdo de parecer ligado ao PR e ao HEAD exato. Não converter fila/runner pendente, saída vazia, erro de provedor ou checklist determinístico em aprovação semântica.
 
 Se uma rota falhar, registrar a causa e continuar automaticamente pelas rotas autorizadas restantes. Só declarar `BLOCKED` quando as alternativas aplicáveis tiverem sido tentadas ou estiverem comprovadamente indisponíveis, ou quando faltar autorização/isolamento necessário. A mensagem de falha deve apontar a próxima rota e o estado dela. Reutilizar os workflows, recibos e funil existentes; não criar novo agente, banco, roteador ou ledger.
+
+
+#### 7.7 Recursão efetiva do aprimorador e autoprovisionamento
+
+Distinguir explicitamente:
+
+- `STRUCTURAL_RECURSION`: o sistema revisa/modifica o método e reutiliza a versão revisada no ciclo seguinte.
+- `EFFECTIVE_RECURSION`: a versão revisada, aplicada em tarefas equivalentes e sob orçamento/tempo/compute comparáveis, supera a baseline em uma métrica-alvo externa previamente definida, sobrevive a contraprova e reproduz o ganho em novas execuções.
+- `SELF_PROVISIONING`: o sistema prepara/atribui recursos para a próxima rodada usando capacidades, limites, owners e provisionadores já existentes; não significa permissão irrestrita para criar infraestrutura ou aumentar custo.
+
+Contrato mínimo do experimento: fixar antes do teste o baseline SHA/método, conjunto de tarefas, alvo externo, direção da métrica, limites de recursos, orçamento, número de tentativas e critério de regressão. Comparar baseline e candidato com o mesmo conjunto ou pares equivalentes, ambiente/controlos comparáveis e contabilidade explícita de tokens/compute, tempo, chamadas e custo. Usar holdout não empregado na otimização; registrar variância e repetições suficientes para distinguir ganho de ruído. Artefatos, medições e contraprovas devem apontar para os mesmos run IDs e SHAs. Se o ganho existir apenas na métrica interna, classificar `PROXY_DIVERGENCE`; se custo/recursos forem incomparáveis, classificar `INCOMPARABLE_BUDGET`; se faltar medição externa independente, manter `UNKNOWN/NOT_MEASURED`. Nenhum desses estados autoriza promoção.
+
+Após ganho externo reproduzido, a versão candidata pode virar o novo método de busca/revisão do próximo ciclo — com versão, receipt, rollback e regressão preservados. Autoprovisionamento pode reservar/reutilizar apenas recursos já autorizados, isolados e limitados, via owner/provisionador existente. A criação de worker, container, credencial, serviço, quota ou gasto novo exige autorização e gates que já regem esse recurso; não contornar limites, não ampliar privilégios e não provisionar a si próprio uma autoridade maior. Sem rota de provisionamento comprovada, não simular: registrar `BLOCKED` e apontar o owner existente. Reutilizar os registros/receipts e funis canônicos; não criar banco de experiências, supervisor ou núcleo paralelo.
+
+`FIXED_POINT` deste ciclo exige: (1) método revisado efetivamente reutilizado; (2) ganho externo contra baseline comprovado sob recursos comparáveis; (3) contraprova/regressão executada; (4) reprodução independente; (5) promoção reversível registrada. Caso contrário, registrar somente `STRUCTURAL_RECURSION` ou o estado exato alcançado — nunca declarar autoaprimoramento efetivo por mera recursão do texto/código.
