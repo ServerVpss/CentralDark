@@ -3179,3 +3179,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-21
 - **Contexto:** Em 21/10/2026 o Cline encontrou no manifesto local de skills dezenas de entradas, enquanto o MCP CentralDark skill_listar() retornou somente 4 skills portáteis. Contraprova independente: MCP retornou 4, mcp_admin_catalog({filter:'skill_buscar'}) retornou 0, e o código da main apps/modulos/mcp/src/tools/skills/skill.js + catalog-index.js implementa pesquisa autenticada paginada nas duas raízes skills/ e .agents/skills/, com origem e SHA. A VPS confirmou ambas as pastas presentes. O manifesto local e o ledger curator não foram auditados por esta ferramenta, e não provam skill carregada.
 - **Aprendizado:** Usar o Skill Workshop e o indexador MCP já existentes, nunca criar catálogo paralelo nem instalar tudo. Resolver roots separadas (K:/skills, projeto skills/, .agents/skills/, Hermes/skills), caminho exato, SHA e estado DISCOVERED_SOURCE_ONLY/LOADED/EXECUTED. Comparar main com runtime por ferramenta disponível e teste real skill_buscar; quando ausente, registrar RUNTIME_NOT_PROMOTED/UNKNOWN e aguardar gates/deploy autorizado. O manifesto .bundled_manifest enumera candidatas, não prova instalação. Recarregar apenas skills necessárias sob demanda; comparar SHA local e remoto antes de atualizar, e nunca executar conteúdo externo durante inventário.
+
+### 214. Skill Buscar Reconciliation
+- **Categoria:** outro
+- **Data:** 2026-10-21
+- **Contexto:** skill_buscar implementada no código MCP mas não exposta nas 4 skills ativas do runtime
+- **Aprendizado:** skill_buscar existe em K:\apps\modulos\mcp\src\tools\skills\skill.js (linha 175) com anotação 'Buscar skill no catálogo', mas não está entre as 4 skills ativas do MCP CentralDark (delegacao, mermaid, pretty-mermaid, vs-code-restore). Isso representa um gap de indexer parity.
