@@ -34,6 +34,25 @@ function actionFromNaturalLanguage(text: string): ActionName | undefined {
   return undefined;
 }
 
+
+
+export async function runNaturalCentralDarkCommand(text?: string): Promise<void> {
+  const value = text ?? await vscode.window.showInputBox({
+    title: 'CentralDark — diga o que você quer fazer',
+    prompt: 'Ex.: conecta no servidor, testa a conexão, mostra os PIDs, pareia este VS Code, compila a extensão.',
+    placeHolder: 'Escreva em linguagem natural…'
+  });
+  if (!value) return;
+  const action = actionFromNaturalLanguage(value);
+  if (!action) {
+    void vscode.window.showInformationMessage(
+      'CentralDark: ainda não reconheci essa intenção. Use conectar, testar, parear, status/PIDs, terminal, mapear, restaurar, rastreio ou compilar.'
+    );
+    return;
+  }
+  await vscode.commands.executeCommand(ACTIONS[action]);
+}
+
 export class CentralDarkVibeProvider implements vscode.WebviewViewProvider {
   constructor(private readonly context: vscode.ExtensionContext) {}
 
@@ -48,14 +67,7 @@ export class CentralDarkVibeProvider implements vscode.WebviewViewProvider {
         return;
       }
       if (data.type === 'natural' && typeof data.text === 'string') {
-        const action = actionFromNaturalLanguage(data.text);
-        if (!action) {
-          void vscode.window.showInformationMessage(
-            'CentralDark: tente “conecta no servidor”, “testa a conexão”, “mostra os PIDs”, “pareia este VS Code” ou “compila a extensão”.'
-          );
-          return;
-        }
-        await vscode.commands.executeCommand(ACTIONS[action]);
+        await runNaturalCentralDarkCommand(data.text);
       }
     });
     this.context.subscriptions.push(disposable);
