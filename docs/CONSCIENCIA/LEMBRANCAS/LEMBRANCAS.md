@@ -1498,3 +1498,13 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Promovida:** sim
 
 Conteúdo: Regra viva do CHEFE: 'atormentar' é metáfora de memória que confronta cada DELTA com o histórico relevante antes da execução. JARVIS/SOL recupera owner, CURRENT e último verde; mantém uma caneta, reutiliza arquitetura, ancora legado ao novo e atua diretamente por ferramentas autorizadas, sem pedir ao CHEFE que rode comandos. Hermes só existe como executor participante após ACK real. Realidade/contraprova pós-efeito manda; UNKNOWN, mockup HTML, PING, queued, commit e CI de outro SHA não são PASS. O erro do BRIDHER HTML vendido como Builder Electron é proibição exemplificadora. Recuperar dossiê CENTRALDARK-CAIXINHA-LEMBRANCAS-INTEGRAL-20261017.md na conversa e o ledger privado `centraldark_sessao_consolidacao_20261017_ssh_builder_pr1844_ci` para detalhes; NEXT_CURSOR sempre.
+
+### [2026-10-20T22:57] Meta-Lupa: medir execução e descoberta por prova independente
+- **Data:** 2026-10-20
+- **Tags:** meta-lupa, contraprova, agentes, pesquisa, fixed-point
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-19
+- **Promovida:** nao
+
+Conteúdo: Integrar ao núcleo existente, sem novo cérebro/skill/ledger: separar conhecimento/resposta, execução de agente e descoberta científica. Exigir critério prévio, SHA/run correlacionado, readback independente, contraprova, auditoria de contaminação/corte histórico, derivação e validação independente; benchmarks não são probabilidade universal. Reutilizar Meta-Lupa, Meta-Grill, Fable, reconciliação e Fixed Point.

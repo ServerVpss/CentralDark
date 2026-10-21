@@ -1,53 +1,9 @@
 import { z } from "zod";
-import { localHybridTools } from "../local/local-compute.js";
-import { codeReviewerToolDefinition } from "../code-reviewer.js";
-import { cognitivoTools } from "../cognitivo/cognitivo.js";
-import { eliteGatewayTools } from "../elite/elite-gateway.js";
-import { geminiTools } from "../gemini/gemini.js";
-import { integrationsTools } from "../integrations.js";
-import { painelTools } from "../painel/painel.js";
-import { operationalTelemetryTools } from "../observability/operational-telemetry.js";
-import { piveteTools } from "../pivete/pivete-tools.js";
-import { youtubeMediaTools } from "../media/youtube-transcript.js";
-import { adminVaultTools } from "../../modes/admin/tools/admin-vault.js";
-import { adminFileTools } from "../../modes/admin/tools/admin-files.js";
-import { adminPm2Tools } from "../../modes/admin/tools/admin-pm2.js";
-import { adminShellTools } from "../../modes/admin/tools/admin-shell.js";
-import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
-import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
-import { adminMainWriterTools } from "../../modes/admin/tools/admin-main-writer.js";
-import { adminProviderControlTools } from "../../modes/admin/tools/admin-provider-control.js";
-import { aprendizadoTools } from "../aprendizado/aprendizado.js";
-import { conscienciaTools } from "../consciencia/consciencia.js";
-import { deployTools } from "../deploy/deploy.js";
-import { githubAdminTools } from "../github/github-admin.js";
-import { githubReadTools } from "../github/github-read.js";
-import { githubTools } from "../github/github-tools.js";
-import { githubWriteTools } from "../github/github-write.js";
-import { mcpAdminTools } from "./mcp-admin.js";
-import { pendenciasTools } from "../pendencias/pendencias.js";
-import { skillTools } from "../skills/skill.js";
-import { supabaseTools } from "../supabase/supabase.js";
-import { vpsFileTools } from "../vps/vps-files.js";
-import { vpsLazyTools } from "../vps/vps-lazy.js";
-import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
 // Espelha os grupos registrados no dispatcher mcp_admin_call.
 // Superfícies distintas são reportadas explicitamente, não ocultadas.
-const runtimeTools = [
-    ...localHybridTools, codeReviewerToolDefinition,
-    ...aprendizadoTools, ...conscienciaTools, ...skillTools,
-    ...githubReadTools, ...githubWriteTools, ...githubAdminTools, ...githubTools,
-    ...vpsRunOnceTools, ...vpsFileTools, ...vpsLazyTools, ...pendenciasTools,
-    ...deployTools, ...supabaseTools,
-    ...adminVaultTools, ...adminFileTools, ...adminPm2Tools, ...adminShellTools,
-    ...adminVaultRwTools, ...adminGitTools, ...adminMainWriterTools, ...adminProviderControlTools,
-    ...mcpAdminTools,
-    ...cognitivoTools, ...eliteGatewayTools, ...geminiTools, ...integrationsTools,
-    ...painelTools, ...operationalTelemetryTools, ...piveteTools, ...youtubeMediaTools,
-];
 const EXPECTED_PUBLIC_FULL_ADMIN = [
     "mcp_admin_call",
     "mcp_admin_catalog",
@@ -72,9 +28,7 @@ const EXPECTED_PUBLIC_FULL_ADMIN = [
     "mcp_policy_summary",
     "mcp_audit_recent_logs",
 ];
-const EXPECTED_SAFE_DISPATCHER = EXPECTED_PUBLIC_FULL_ADMIN.filter((name) => ![
-    "mcp_catalog_diff", "deploy_validate_mcp_catalog", "mcp_policy_summary", "mcp_audit_recent_logs",
-].includes(name));
+const EXPECTED_SAFE_DISPATCHER = EXPECTED_PUBLIC_FULL_ADMIN;
 const PUBLIC_ONLY_SURFACE_TOOLS = new Set([
     "mcp_catalog_diff", "deploy_validate_mcp_catalog", "mcp_policy_summary", "mcp_audit_recent_logs",
 ]);
@@ -102,8 +56,9 @@ export function reconcileCatalogNames(runtimeNames, publicNames, expectedNames =
         dispatcherMissingFromPublic, publicOnly, classifiedPublicOnly, unclassifiedPublicOnly, expectedMissingPublic,
         runtimeDuplicates: duplicateRuntime, publicDuplicates: duplicatePublic };
 }
-function runtimeNames() {
-    return runtimeTools.map((tool) => tool.name);
+async function runtimeNames() {
+    const mod = await import("./mcp-admin.js");
+    return mod.getDispatcherRuntimeTools().map((tool) => tool.name);
 }
 async function fetchJson(url) {
     const res = await fetch(url, { headers: { "User-Agent": "MCP-CentralDark/catalog-validator" } });
@@ -122,7 +77,7 @@ export const mcpDiagnosticsTools = [
             filter: z.string().optional().describe("Filtro opcional para listar tools por nome"),
         }),
         handler: async (input) => {
-            const names = runtimeNames();
+            const names = await runtimeNames();
             const expected = nameSet(input.expected && input.expected.length > 0 ? input.expected : EXPECTED_SAFE_DISPATCHER);
             const missing = expected.filter((name) => !names.includes(name));
             const presentExpected = expected.filter((name) => names.includes(name));
@@ -146,7 +101,7 @@ export const mcpDiagnosticsTools = [
             const base = (input.publicUrl ?? "https://mcp.centralldark.com").replace(/\/+$/, "");
             const health = await fetchJson(`${base}/health`);
             const toolsJson = await fetchJson(`${base}/tools.json`);
-            const names = runtimeNames();
+            const names = await runtimeNames();
             const publicTools = Array.isArray(toolsJson.toolNames) ? toolsJson.toolNames
                 : Array.isArray(toolsJson.tools) ? toolsJson.tools.map((tool) => typeof tool === "string"
                     ? tool : typeof tool === "object" && tool !== null && "name" in tool ? String(tool.name ?? "") : "").filter(Boolean) : [];

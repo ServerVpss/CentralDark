@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { localHybridTools } from "../src/tools/local/local-compute.js";
-import { mcpAdminTools } from "../src/tools/core/mcp-admin.js";
+import { mcpAdminTools, getDispatcherRuntimeTools } from "../src/tools/core/mcp-admin.js";
 import { ALL_TOOLS, CATALOG_PROBLEMS } from "../src/tools/core/tools-catalog.js";
 import { reconcileCatalogNames } from "../src/tools/core/mcp-diagnostics.js";
 
@@ -92,4 +92,21 @@ test("Hermes 9119 VS Code tunnel is localhost-only and uses the existing workspa
     "do not silently expose the separate Hermes API service");
   assert.ok(!JSON.stringify(settings).includes("0.0.0.0"),
     "workspace must not declare a public listener");
+});
+
+test("merged dispatcher retains diagnostic tools and paired VS Code without import cycle", async () => {
+  const runtime = getDispatcherRuntimeTools();
+  const names = runtime.map(tool => tool.name);
+  for (const tool of ["mcp_catalog_diff", "deploy_validate_mcp_catalog",
+    "mcp_policy_summary", "mcp_audit_recent_logs",
+    "vscode_remote_devices", "vscode_remote_terminals"]) {
+    assert.ok(names.includes(tool), "dispatcher missing " + tool);
+  }
+  assert.equal(new Set(names).size, names.length, "dispatcher must have no duplicates");
+  const diff = runtime.find(tool => tool.name === "mcp_catalog_diff");
+  const r = JSON.parse((await diff.handler({ expected: [
+    "mcp_catalog_diff", "mcp_policy_summary", "vscode_remote_devices"
+  ], filter: "vscode_remote" })).content[0].text);
+  assert.equal(r.ok, true, "catalog diagnostic must work after initialization");
+  assert.ok(r.filteredTools.includes("vscode_remote_devices"));
 });

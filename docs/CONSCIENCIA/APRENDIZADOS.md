@@ -3071,3 +3071,63 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 - **Data:** 2026-10-19
 - **Contexto:** PR #1868 mergeado em main commit 7329afe20; arquivo de aprendizado do runtime VPS atualizado com backup; serviço centraldark-native-mcp-http reiniciado e saúde HTTP 200.
 - **Aprendizado:** A leitura do arquivo de aprendizados agora lança erro se o GitHub falhar, em vez de devolver string vazia e arriscar sobrescrita. DNS da VPS já corrigido. Processo novo PID 834279 iniciou 2026-10-19 12:51:46 UTC. Preservar owner e validar escrita/leitura.
+
+### 200. Erro de prova: conectividade Casa↔VPS não comprova execução onsite
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-20
+- **Contexto:** No PR #1880, a ponte Tailscale respondeu HTTP 200 e o inventário listou processos remotos na VPS, mas a consulta do catálogo não revelou executor acionável para compilar no Windows da Casa. O deploy_status ainda reportou erro antigo do parser PM2 e os workflows do HEAD estavam queued/pending.
+- **Aprendizado:** Separar sempre quatro provas: código publicado, CI/sintaxe/build, execução onsite com exit code e readback independente do runtime. HTTP 200, rota documentada ou chamada MCP não comprovam build nem fixed point. Se o executor falhar, voltar uma casa e procurar outra rota autorizada; não declarar verde nem reiniciar/deployar sem prova.
+
+### 201. BOOT fixo acumulativo + método Michelin com rastro e readback
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** A continuidade do PR #1880 mostrou que passos de validação e execução podem ficar separados entre GitHub, VPS e Casa. É necessário persistir o procedimento depois de corrigir cada erro, sem substituir a cadeia canônica.
+- **Aprendizado:** BOOT FIXO CANÔNICO — ACUMULATIVO, NÃO SUBSTITUÍVEL
+
+Sequência fixa:
+!CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT.
+
+Regra de persistência obrigatória após corrigir um erro e antes de encerrar a missão:
+1) registrar o aprendizado em docs/CONSCIENCIA/APRENDIZADOS.md;
+2) registrar lembrança operacional durável no ledger compartilhado;
+3) registrar evidência, estado, pendências e próximo passo no PR equivalente ativo;
+4) verificar o readback de cada registro e anexar IDs/links/SHA quando disponíveis.
+Esse passo é aditivo: não remove nem substitui o BOOT fixo. Modos operacionais adicionais são acrescentados quando necessários, sem apagar a sequência canônica.
+
+Método Michelin três estrelas:
+- examinar o conjunto e o histórico relevante, distinguindo fatos atuais de histórico;
+- separar frentes/camadas quando houver risco de confusão; se a separação criar duplicação, manter uma frente com checkpoints nomeados;
+- reutilizar o owner, ferramenta, rota e artefato canônicos antes de criar algo;
+- fazer a menor alteração que corrige a causa demonstrada;
+- narrar o avanço em checkpoints curtos e deixar rastro útil no código/PR/ledger enquanto trabalha;
+- contraprovar por leitura independente antes de declarar sucesso.
+
+Invariantes:
+CURRENT > HISTORICAL; UNKNOWN != PASS; DOCUMENTED != EXECUTED; ACTION != PROOF; COMMITTED != DEPLOYED.
+Conectividade HTTP 200, rota documentada, chamada de ferramenta ou commit não provam build onsite, runtime saudável ou fixed point. Não marcar FIXED_POINT sem SHA reconciliado, CI/testes conclusivos, runtime/readback independente e contraprova. Se falhar, voltar uma casa, identificar a camada exata, corrigir e repetir; não mascarar erro nem criar arquitetura paralela.
+
+Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6d3400acae8; CI observado queued/pending, deploy_status ainda ERRO por parsing PM2, build na Casa e roundtrip VS Code/Cline sem prova. Estado honesto: BLOCKED_NOT_FIXED_POINT.
+
+### 202. BOOT fixo acumulativo + método Michelin com rastro e readback
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** A continuidade do PR #1880 mostrou que validação e execução podem ficar separadas entre GitHub, VPS e Casa. O procedimento precisa ser persistido após corrigir cada erro, sem substituir a cadeia canônica.
+- **Aprendizado:** BOOT FIXO (acumulativo, não substituível): !CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT. Após corrigir cada erro e antes de encerrar: registrar em docs/CONSCIENCIA/APRENDIZADOS.md; registrar lembrança durável no ledger; registrar estado/evidência/pendências/próximo passo no PR equivalente ativo; fazer readback independente e guardar IDs/links/SHA. Método Michelin ⭐️⭐️⭐️: examinar o conjunto; distinguir atual de histórico; separar camadas quando necessário sem duplicar owners; reutilizar antes de criar; corrigir a menor causa demonstrada; narrar checkpoints e deixar rastro durante o trabalho; contraprovar antes de declarar sucesso. Invariantes: CURRENT > HISTORICAL; UNKNOWN != PASS; DOCUMENTED != EXECUTED; ACTION != PROOF; COMMITTED != DEPLOYED. HTTP 200, rota documentada, chamada de ferramenta ou commit não provam build onsite/runtime/fixed point. Em falha, voltar uma casa, isolar a camada e repetir. Estado PR #1880 HEAD 2da1c6e7e847c1290382b8809abdd6d3400acae8: CI queued/pending, deploy_status ERRO por parsing PM2, build Casa e roundtrip VS Code/Cline sem prova; BLOCKED_NOT_FIXED_POINT.
+
+### 203. BOOT fixo acumulativo e rastro Michelin obrigatório
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** Ao continuar o PR #1880, o erro foi tratar conectividade e publicação como se provassem execução. O CHEFE determinou que o BOOT canônico permaneça fixo e receba apenas acréscimos, e que após corrigir erros o registro seja feito em aprendizados, lembranças e PR equivalente.
+- **Aprendizado:** BOOT fixo: !CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT. Não substituir esta sequência; apenas acrescentar modos necessários. Após cada correção, registrar em APRENDIZADOS.md, ledger privado e PR ativo; fazer readback independente. Método Michelin: examinar o conjunto, separar frentes sem duplicar owners, reutilizar antes de criar, aplicar menor delta, narrar checkpoints enquanto trabalha e só declarar PASS após contraprova. HTTP 200/rota/chamada/commit não provam build onsite, runtime saudável ou fixed point. Se falhar, voltar uma casa e isolar a camada.
+
+### 204. Rota MCP_CASA_TO_VPS documentada não prova executor acionável
+- **Categoria:** armadilha
+- **Data:** 2026-10-21
+- **Contexto:** Na rechecagem do PR #1880, catálogo unificado retornou 141 runtime/dispatchable tools e 13 rotas. Entre elas MCP_CASA_TO_VPS com capability declarada execute_command|vps_run_once_script, CAS_CLOUD_RELAY, RDC_DESKTOP_COMMANDER e SCREENPIPE_LOCAL_SENSOR. O catálogo filtrado não revelou schema de executor correspondente; deploy_status ainda ERRO com SyntaxError de JSON PM2 e a lista de processos veio vazia.
+- **Aprendizado:** Não concluir que a rota está executável apenas por estar no catálogo. Medir o binding pelo dispatcher oficial, obter schema, exit code/ACK e readback antes de operar na Casa. A ausência de um executor no catálogo filtrado é um bloqueio de descoberta, não prova de que toda a ponte está indisponível. Manter o BOOT fixo acumulativo; após cada correção registrar aprendizado, ledger e PR equivalente; fixed point exige CI e runtime contraprova.
+
+### 205. Retomar PR #1880 sem confundir snapshot com fixed point
+- **Categoria:** armadilha
+- **Data:** 2026-10-21
+- **Contexto:** A medição operacional mostrou MCP runtime presente, heartbeat UNKNOWN, forensic/receipt ausentes e veredito UNKNOWN_NOT_PASS; a topologia mostrou runtime presente com execução global desconhecida. Isso exige retomar a frente com CI e evidência de execução, não inferir saúde por PID.
+- **Aprendizado:** Antes de qualquer promoção: medir o SHA exato do PR e os workflows desse SHA; inspecionar os jobs falhos/pendentes; executar validação real no caminho de build autorizado; verificar heartbeat/receipt forense e runtime por readback independente. PID presente, chamada MCP recente ou alignment 100% não substituem receipt. Estado fica BLOCKED até as provas faltantes existirem.

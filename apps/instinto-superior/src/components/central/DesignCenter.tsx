@@ -365,6 +365,38 @@ export function DesignCenter({
                 inventário e contraprova; não foram migradas nem reinstaladas.
               </p>
 
+              <article className="panel mt-6 p-6" data-cd-flow="instinto.DesignCenter.conector-browser-tabs">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-wide text-neon-blue">
+                      Conector existente · ChatGPT Browser
+                    </p>
+                    <h4 className="mt-1 text-lg font-semibold">🌐 Browser Tab Discovery</h4>
+                  </div>
+                  <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
+                    PROVA HISTÓRICA · REVALIDAR AO VIVO
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  A leitura Browser.list_tabs encontrou abas abertas do cockpit CentralDark, GitHub
+                  e Tailscale em 20/10/2026. Browser.get_tab_context também leu o conteúdo
+                  do cockpit local. É descoberta e leitura de abas, não controle de processos.
+                </p>
+                <dl className="mt-4 grid gap-3 border-y border-border py-4 text-xs sm:grid-cols-2">
+                  <div><dt className="text-muted-foreground">Owner</dt><dd className="mt-1">ChatGPT Browser · conector externo</dd></div>
+                  <div><dt className="text-muted-foreground">Capacidade observada</dt><dd className="mt-1">Listar abas e ler páginas HTTP(S)</dd></div>
+                  <div><dt className="text-muted-foreground">PID Chrome / vínculo ACP</dt><dd className="mt-1 font-mono">UNKNOWN</dd></div>
+                  <div><dt className="text-muted-foreground">Zendrive live / worker</dt><dd className="mt-1 font-mono">UNKNOWN</dd></div>
+                  <div><dt className="text-muted-foreground">Restrição comprovada</dt><dd className="mt-1">URL interna chrome:// bloqueada pela política do Browser</dd></div>
+                  <div><dt className="text-muted-foreground">Estado no cockpit</dt><dd className="mt-1 font-mono">SEM SENSOR AO VIVO · NÃO PROMOVER PASS</dd></div>
+                </dl>
+                <Button asChild size="sm" variant="outline" className="mt-4" data-cd-flow="instinto.DesignCenter.browser-tabs-receipt">
+                  <a href="https://github.com/ServerVpss/CentralDark/pull/1861#issuecomment-6283718112" target="_blank" rel="noopener noreferrer">
+                    Ver recibo da capacidade <ExternalLink />
+                  </a>
+                </Button>
+              </article>
+
               <article className="panel mt-6 p-6" data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex items-start gap-3">

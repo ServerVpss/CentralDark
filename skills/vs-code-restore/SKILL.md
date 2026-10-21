@@ -428,41 +428,89 @@ Automação de desenvolvimento permitida onde houver execução autorizada; merg
 
 ## 🪬 MCP ↔ VS Code 0.1.5 — dispositivo pareado, mesmo PID, catálogo canônico
 
-**OWNER REUTILIZADO:** \`skills/vs-code-restore\` e \`apps/modulos/mcp/src/tools/local/vscode-remote-terminal.js\`; PR #1880. Não criar segundo MCP, extensão, executor ou scheduler. Desktop Commander NÃO é requisito.
+**OWNER REUTILIZADO:** `skills/vs-code-restore` e `apps/modulos/mcp/src/tools/local/vscode-remote-terminal.js`; PR #1880. Não criar segundo MCP, extensão, executor ou scheduler. Desktop Commander NÃO é requisito.
 
 **Contrato de fonte (não é prova de instalação):**
 
-- \`vscode_remote_devices\`: leitura de dispositivos explicitamente pareados, com \`status\`, \`online\` e \`authenticated\`; nunca expõe bearer/token. \`CATALOG_ONLY\` não equivale a terminal controlado.
-- \`vscode_remote_terminals\`: lê \`pid\`, nome e disponibilidade de Shell Integration do terminal EXISTENTE no VS Code.
-- \`vscode_remote_echo\`: \`echo oi\` fixo, somente após autorização modal local para o PID revalidado. Não recebe comando arbitrário.
-- \`vscode_remote_execute\`: comando único com consentimento local, correlação por requestId e hash, exitCode e readback limitado; permanece **em quarentena** no manifesto de destrutivas até E2E, compensação e gates aprovados.
+- `vscode_remote_devices`: leitura de dispositivos explicitamente pareados, com `status`, `online` e `authenticated`; nunca expõe bearer/token. `CATALOG_ONLY` não equivale a terminal controlado.
+- `vscode_remote_terminals`: lê `pid`, nome e disponibilidade de Shell Integration do terminal EXISTENTE no VS Code.
+- `vscode_remote_echo`: `echo oi` fixo, somente após autorização modal local para o PID revalidado. Não recebe comando arbitrário.
+- `vscode_remote_execute`: comando único com consentimento local, correlação por requestId e hash, exitCode e readback limitado; permanece **em quarentena** no manifesto de destrutivas até E2E, compensação e gates aprovados.
 
-**Extensão já existente:** \`centraldark-vscode-restore@0.1.5\`. Comandos \`centraldark.remoteTerminalPair\` e \`centraldark.remoteTerminalStatus\` estão no \`package.json\` e \`src/extension.ts\`. O receptor só sobe após opt-in, pareamento e configuração, em \`127.0.0.1:8719\`; exposição remota somente via Tailscale Serve **privado**, nunca Funnel ou HTTP público. Tokens/segredos ficam no SecretStorage local e cofre autorizado; não versionar, ecoar nem pôr em recibos.
+**Extensão já existente:** `centraldark-vscode-restore@0.1.5`. Comandos `centraldark.remoteTerminalPair` e `centraldark.remoteTerminalStatus` estão no `package.json` e `src/extension.ts`. O receptor só sobe após opt-in, pareamento e configuração, em `127.0.0.1:8719`; exposição remota somente via Tailscale Serve **privado**, nunca Funnel ou HTTP público. Tokens/segredos ficam no SecretStorage local e cofre autorizado; não versionar, ecoar nem pôr em recibos.
 
-**Registro no MCP:** \`local-compute.js\` inclui \`...vscodeRemoteTerminalTools\`; \`mcp-admin.js\` importa \`localHybridTools\` e publica a rota \`VSCODE_TERMINAL_PAIRED\` no **mesmo** catálogo. O \`mcp_admin_catalog({filter:"vscode_remote_"})\` e o \`mcp_admin_call({tool:"vscode_remote_devices",input:{}})\` devem encontrar a ferramenta somente quando o código estiver efetivamente carregado no runtime. O mesmo nome deve aparecer no catálogo público \`/tools.json\`. \`SOURCE_IN_PR != RUNTIME_LOADED\`; \`TOOL_NAO_ENCONTRADA\` não autoriza ferramenta paralela ou bypass.
+**Registro no MCP:** `local-compute.js` inclui `...vscodeRemoteTerminalTools`; `mcp-admin.js` importa `localHybridTools` e publica a rota `VSCODE_TERMINAL_PAIRED` no **mesmo** catálogo. O `mcp_admin_catalog({filter:"vscode_remote_"})` e o `mcp_admin_call({tool:"vscode_remote_devices",input:{}})` devem encontrar a ferramenta somente quando o código estiver efetivamente carregado no runtime. O mesmo nome deve aparecer no catálogo público `/tools.json`. `SOURCE_IN_PR != RUNTIME_LOADED`; `TOOL_NAO_ENCONTRADA` não autoriza ferramenta paralela ou bypass.
 
 **Sequência de validação e prova:**
-1. Confirmar HEAD exato, revisão e CI same-SHA; rodar testes Node MCP e extensão, \`npm run compile\`/build VSIX e gate de catálogo. \`skipped\` ou \`queued\` nunca é PASS.
-2. Promover somente pelo fluxo canônico autorizado; reconciliar \`main\`, deploy MCP e versão VSIX instalada na Casa, sem \`pull/reset\` cego nem reinício fora do owner.
-3. Confirmar registro no \`mcp_admin_catalog\` e \`/tools.json\`, então listar devices pareados sem transmitir segredo.
-4. Validar \`Tailscale Serve\` privado e receptor local, medir o PID **atual** via \`vscode_remote_terminals\`; nunca reutilizar PID histórico.
-5. Aprovar localmente \`vscode_remote_echo\`, correlacionar \`requestId | commandSha256 | pid | exitCode | observedAt\`, obter ACK e readback independente. Um POST com timeout produz UNKNOWN: NÃO repetir.
-6. Registrar recibo no owner/PR #1880 com \`MAIN_SHA | PR_HEAD | ACTIVE_WRITER | TESTS | CATALOG | INSTALLED | PAIRED | EXECUTION | PROOF | NEXT_CURSOR\`. Nunca declarar MISSION_COMPLETE sem prova no mesmo SHA.
+1. Confirmar HEAD exato, revisão e CI same-SHA; rodar testes Node MCP e extensão, `npm run compile`/build VSIX e gate de catálogo. `skipped` ou `queued` nunca é PASS.
+2. Promover somente pelo fluxo canônico autorizado; reconciliar `main`, deploy MCP e versão VSIX instalada na Casa, sem `pull/reset` cego nem reinício fora do owner.
+3. Confirmar registro no `mcp_admin_catalog` e `/tools.json`, então listar devices pareados sem transmitir segredo.
+4. Validar `Tailscale Serve` privado e receptor local, medir o PID **atual** via `vscode_remote_terminals`; nunca reutilizar PID histórico.
+5. Aprovar localmente `vscode_remote_echo`, correlacionar `requestId | commandSha256 | pid | exitCode | observedAt`, obter ACK e readback independente. Um POST com timeout produz UNKNOWN: NÃO repetir.
+6. Registrar recibo no owner/PR #1880 com `MAIN_SHA | PR_HEAD | ACTIVE_WRITER | TESTS | CATALOG | INSTALLED | PAIRED | EXECUTION | PROOF | NEXT_CURSOR`. Nunca declarar MISSION_COMPLETE sem prova no mesmo SHA.
 
-**Estado observável em 21/10/2026 (fonte separada):** ferramentas presentes no código da PR #1880; MCP de produção consultado respondeu \`TOOL_NAO_ENCONTRADA\` para \`vscode_remote_devices\`; CI no SHA \`2da1c6e7e847c1290382b8809abdd6d3400acae8\` não estava verde; instalação/pareamento/readback na Casa seguem \`UNKNOWN\`. Este trecho **não** promove runtime, nem altera credenciais ou segurança.
+**Estado observável em 21/10/2026 (fonte separada):** ferramentas presentes no código da PR #1880; MCP de produção consultado respondeu `TOOL_NAO_ENCONTRADA` para `vscode_remote_devices`; CI no SHA `2da1c6e7e847c1290382b8809abdd6d3400acae8` não estava verde; instalação/pareamento/readback na Casa seguem `UNKNOWN`. Este trecho **não** promove runtime, nem altera credenciais ou segurança.
 
-**NEXT_CURSOR:** \`CI_SAME_HEAD → CATALOG_REGRESSION → REVIEW → CANONICAL_PROMOTION → MCP_RELOAD_PROOF → VSIX_INSTALLED → PRIVATE_PAIR → LIVE_PID → ECHO_ACK_READBACK → FIXED_POINT\`.
+**NEXT_CURSOR:** `CI_SAME_HEAD → CATALOG_REGRESSION → REVIEW → CANONICAL_PROMOTION → MCP_RELOAD_PROOF → VSIX_INSTALLED → PRIVATE_PAIR → LIVE_PID → ECHO_ACK_READBACK → FIXED_POINT`.
 
 
 ## 🪬 Porta privada Hermes Gateway original → túnel VS Code Remote-SSH
 
 INTENCAO=Forward temporário/privado para testar o Hermes **original**, usando o Remote-SSH **já existente**, sem publicar no Caddy, Cloudflare, Funnel, Tailscale Serve público ou iniciar outro Hermes.
 
-- **Alvo documental medido anteriormente na VPS:** Hermes \`serve\`/WebUI autenticado na **porta 9119** (não confundir com API Hermes \`gateway run\`, cuja porta padrão separada é 8642 quando API habilitada). O estado vivo da porta 9119 ainda exige readback; PID histórico não basta.
-- **Configuração no MESMO workspace:** \`.vscode/settings.json\` adiciona \`remote.portsAttributes["9119"]\` com label \`Hermes Gateway original · privado (VPS)\`, \`onAutoForward:"silent"\`, \`protocol:"http"\`, \`remote.localPortHost:"localhost"\`, \`remote.restoreForwardedPorts:true\`. Preserva os demais campos e não desliga autenticação. Esses atributos não são prova de túnel ativo; dependem do VS Code detectar ou encaminhar a porta em uma sessão Remote-SSH conectada ao host certo.
-- **Execução canônica no VS Code**: em janela **Remote-SSH: Segredo-VPS** autenticada, usar painel **Ports** → **Forward a Port** → \`9119\`; confirmar o endereço local efetivamente escolhido por VS Code (pode ser diferente) e o escopo **Local/Private**. Nunca mudar Port Visibility para Public. Não selecionar o endpoint de API separado \`8642\` automaticamente.
-- **Prova**: a partir da própria Casa, na URL \`http://127.0.0.1:<porta_local>\`, verificar resposta HTTP do mesmo serviço e redirecionamento/login existente; sem cookies/credenciais no receipt. Resposta \`401\` sem sessão significa autenticação preservada, não gateway quebrado; HTTP 200 da Tailscale isoladamente não prova o túnel. Readback mínimo: \`WINDOW_REMOTE_AUTHORITY | REMOTE_HOST | PORT_REMOTE=9119 | PORT_LOCAL | VISIBILITY_PRIVATE | SERVICE_HTTP_STATUS | AUTH_GATE | OBSERVED_AT\`.
-- **Contraprova**: \`onAutoForward=silent\` não pode gerar conclusão por si só; confirmar no painel Ports. \`WINDOW_LOCAL\`, \`PORT_NOT_LISTENING\`, \`PORT_NOT_FORWARDED\`, \`HOST_MISMATCH\` ou \`AUTH_MISSING\` devem permanecer \`UNKNOWN/BLOCKED\` conforme medidos. Não alterar firewall/ACL, bind, serviço systemd nem reiniciar VS Code/Hermes para este teste.
-- **Releitura de alvos**: gateway original 9119 VPS → janela/host Remote-SSH → túnel VS Code localhost → readback browser Casa; cruzar com \`MCP_ADMIN\`, PR_HEAD, \`main\`, CI e recibo existente. Um PASS de túnel não promove a PR #1880 nem instala a VSIX automaticamente.
+- **Alvo documental medido anteriormente na VPS:** Hermes `serve`/WebUI autenticado na **porta 9119** (não confundir com API Hermes `gateway run`, cuja porta padrão separada é 8642 quando API habilitada). O estado vivo da porta 9119 ainda exige readback; PID histórico não basta.
+- **Configuração no MESMO workspace:** `.vscode/settings.json` adiciona `remote.portsAttributes["9119"]` com label `Hermes Gateway original · privado (VPS)`, `onAutoForward:"silent"`, `protocol:"http"`, `remote.localPortHost:"localhost"`, `remote.restoreForwardedPorts:true`. Preserva os demais campos e não desliga autenticação. Esses atributos não são prova de túnel ativo; dependem do VS Code detectar ou encaminhar a porta em uma sessão Remote-SSH conectada ao host certo.
+- **Execução canônica no VS Code**: em janela **Remote-SSH: Segredo-VPS** autenticada, usar painel **Ports** → **Forward a Port** → `9119`; confirmar o endereço local efetivamente escolhido por VS Code (pode ser diferente) e o escopo **Local/Private**. Nunca mudar Port Visibility para Public. Não selecionar o endpoint de API separado `8642` automaticamente.
+- **Prova**: a partir da própria Casa, na URL `http://127.0.0.1:<porta_local>`, verificar resposta HTTP do mesmo serviço e redirecionamento/login existente; sem cookies/credenciais no receipt. Resposta `401` sem sessão significa autenticação preservada, não gateway quebrado; HTTP 200 da Tailscale isoladamente não prova o túnel. Readback mínimo: `WINDOW_REMOTE_AUTHORITY | REMOTE_HOST | PORT_REMOTE=9119 | PORT_LOCAL | VISIBILITY_PRIVATE | SERVICE_HTTP_STATUS | AUTH_GATE | OBSERVED_AT`.
+- **Contraprova**: `onAutoForward=silent` não pode gerar conclusão por si só; confirmar no painel Ports. `WINDOW_LOCAL`, `PORT_NOT_LISTENING`, `PORT_NOT_FORWARDED`, `HOST_MISMATCH` ou `AUTH_MISSING` devem permanecer `UNKNOWN/BLOCKED` conforme medidos. Não alterar firewall/ACL, bind, serviço systemd nem reiniciar VS Code/Hermes para este teste.
+- **Releitura de alvos**: gateway original 9119 VPS → janela/host Remote-SSH → túnel VS Code localhost → readback browser Casa; cruzar com `MCP_ADMIN`, PR_HEAD, `main`, CI e recibo existente. Um PASS de túnel não promove a PR #1880 nem instala a VSIX automaticamente.
 
 NEXT_CURSOR=SOURCE_SETTINGS_RECHECK → SAME_HEAD_TEST → REMOTE_SSH_WINDOW_READBACK → PORTS_PRIVATE_9119 → AUTHENTICATED_HTTP_READBACK → RECEIPT_OWNER_EXISTENTE.
+
+## 🪬 ZENDRIVE como motor selecionável do Hermes (2026-10-18)
+
+**INTENÇÃO CANÔNICA:** selecionar ZENDRIVE como MOTOR DE INFERÊNCIA do Hermes; não reduzi-lo a uma função de foco, telemetria ou entrega de contexto. SOL coordena; Hermes continua agente executor; ZENDRIVE é a escolha explícita do backend de resposta. Não criar outra skill, runtime, navegador, daemon, gateway ou executor.
+
+**Owners físicos:** o alias de engine ZENDRIVE já existe em apps/modulos/elite-gateway/scripts/centraldark_omni_router.py (modelo zendrive-chatgpt-local, rota /v1/chat/completions); esta skill skills/vs-code-restore documenta a seleção e conserva o comando de foco; o Hermes nativo tem provider custom e aliases em sua própria configuração privada.
+
+### Configuração no Hermes EXISTENTE
+
+No host em que Hermes acessa o Omni Router de forma autenticada e privada, mesclar o seguinte alias com os demais aliases existentes de Hermes (via hermes config edit; nunca sobrescrever a configuração toda):
+
+```yaml
+model_aliases:
+  zendrive:
+    model: zendrive
+    provider: custom
+    base_url: "http://127.0.0.1:8099/v1"
+    key_env: CENTRALDARK_ROUTER_TOKEN
+```
+
+O valor CENTRALDARK_ROUTER_TOKEN fica apenas no armazenamento de credenciais autorizado; não registrar valor no repositório, logs ou chat. 127.0.0.1 é o host do Hermes, NÃO a VPS quando o Hermes é executado na Casa. Fora desse host, usar túnel/SSH/Tailscale autenticado já existente, sem abrir uma API pública. Antes de modificar config, conferir o formato aceito pela versão local com hermes config e as regras em .agents/skills/autonomous-ai-agents/hermes-agent/references/providers-and-models.md.
+
+Na sessão interativa existente:
+
+```text
+hermes --tui
+/model zendrive
+oi
+```
+
+No Windows: hermes.cmd --tui; depois /model zendrive; depois oi. A seleção envia a inferência ao Omni Router, mas só é funcional se existir um worker ZENDRIVE real e autorizado.
+
+### Cadeado contra motor fictício
+
+- ZENDRIVE_PROVIDER_LIVE_ENABLED=true e ZENDRIVE_WORKER_URL configurada são requisitos mínimos de configuração, NÃO prova de inferência. O worker deve ser um backend autorizado; assinatura ChatGPT web não fornece automaticamente API ou créditos.
+- A rota /providers/zendrive-chatgpt-local/simulate fica restrita a testes explícitos; a rota real /v1/chat/completions NÃO deve responder com SIMULATED_PASS.
+- Seleção explícita zendrive NUNCA aceita fallback silencioso para Nous, OpenAI ou outro provider. Sem worker ou com falha, retornar erro identificável, não resposta inventada.
+- A versão do Omni Router atualmente responde HTTP 501 para tool calls; primeiro provar inferência textual e só depois avaliar compatibilidade de ferramentas do Hermes. NUNCA marcar execução de ferramentas como PASS só porque Hermes respondeu oi.
+
+### Prova mínima e NEXT_CURSOR
+
+1. No mesmo SHA: executar python -m py_compile apps/modulos/elite-gateway/scripts/centraldark_omni_router.py e python apps/modulos/elite-gateway/scripts/centraldark_omni_router.py --self-test.
+2. No runtime de destino, consultar /providers/zendrive-chatgpt-local/health (sem exibir segredos) e verificar worker de inferência não simulado.
+3. Executar /model zendrive e a mensagem oi pelo Hermes existente. Exigir resposta real com correlação do engine zendrive-chatgpt-local, sem fallback, receipt e readback.
+4. Desabilitar worker em teste controlado e verificar falha fechada, sem SIMULATED_PASS ou troca silenciosa de engine.
+5. Separar SOURCE, HERMES_ALIAS_CONFIGURED, WORKER_LIVE, INFERENCE_PASS, HERMES_TOOL_CALLS_PASS e DEPLOY_PASS.
+
+**NEXT_CURSOR:** medir o worker Zendrive autorizado, configurar o alias no Hermes atual, testar a primeira inferência real e só depois promover STATUS=PASS. SOURCE_COMMITTED != RUNTIME_INSTALLED != INFERENCE_PROVEN. Nenhuma instalação, segredo, alteração de perfil ou deploy é realizada por esta skill.
