@@ -359,1603 +359,1603 @@ flowchart LR
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Adiciona uma tarefa ao arquivo docs/PENDENCIAS.md na seção de prioridade indicada. O servidor remove credenciais, caminhos in
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j002"></a>J002 · admin_commit_main
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN determinístico: cria UM commit diretamente na main de ServerVpss/CentralDark usando CAS de ref Git. Não cria branch/PR,
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j003"></a>J003 · admin_file_list
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN: lista arquivos e pastas de um caminho absoluto. Bloqueia path traversal e paths sensiveis (secrets, .ssh, shadow).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j004"></a>J004 · admin_file_read
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN: le o conteudo de um arquivo por caminho absoluto (limite 512KB). Bloqueia paths sensiveis.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j005"></a>J005 · admin_git_pull
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN DESTRUTIVO: executa git pull --ff-only no repo <caminho-vps> Exige confirmAdmin=CONFIRMO ADMIN.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j006"></a>J006 · admin_git_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN: mostra git status curto, branch atual e ultimo commit do repo <caminho-vps>
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j007"></a>J007 · admin_pm2_list
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN: lista todos os processos PM2 (name, id, status, cpu, memoria, restarts, uptime).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j008"></a>J008 · admin_pm2_logs
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN: retorna as ultimas N linhas de log (stdout/stderr) de um processo PM2 pelo nome ou id.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j009"></a>J009 · admin_pm2_restart
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN DESTRUTIVO: reinicia um processo PM2 pelo nome ou id. Exige confirmAdmin=CONFIRMO ADMIN no dispatcher.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j010"></a>J010 · admin_shell_exec
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** ADMIN DESTRUTIVO endurecido: allowlist estrita (pm2, git, ls, cat, df, free, systemctl reload caddy). Sem shell/pipes/redirec
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j011"></a>J011 · admin_vault_read
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Capacidade sensível cadastrada; conteúdo e operação não reproduzidos.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j012"></a>J012 · admin_vault_write
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** EXCEÇÃO ADMIN EXPLÍCITA PARA GROK/NAVEGADOR: cria ou atualiza arquivo em <caminho-vps> pelo nome do arquivo. Use via mcp_admi
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j013"></a>J013 · analise_de_estado_cognitivo
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Analisa as últimas Lembranças pra inferir o FOCO e o projeto atual do Pivete, e sugere o nível de detalhe técnico ideal da re
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j014"></a>J014 · atualizar_consciencia
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Substitui uma seção inteira do documento docs/CONSCIENCIA/CONSCIENCIA.md (regras do projeto). Operação que reescreve conteúdo
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j015"></a>J015 · atualizar_painel
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Atualiza o Mega Painel do projeto (status.centralldark.com) editando painel-data.json na VPS e fazendo git commit+push automá
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j016"></a>J016 · centraldark_data_ingest_policy
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra como JSONs/Markdown/PRs/issues/logs/agentics entram no Grafo Vivo sem virar arquitetura paralela e sem remover stream 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j017"></a>J017 · centraldark_deploy_apply_learning
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Aplica aprendizado CURRENT da main na VPS pelo scratch canônico: lock, reset/clean somente do scratch, promoção do fileset co
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j018"></a>J018 · centraldark_deploy_capabilities
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Inventário vivo das capacidades operacionais CentralDark: fallback MAIN-PINNED, scratch único, gate raiz, recipe replay e apl
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j019"></a>J019 · centraldark_deploy_micro_fallback
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Executa microdeploy MAIN-PINNED do fileset causal de um owner aprovado, com scratch único, backup/rollback, restart isolado, 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j020"></a>J020 · centraldark_deploy_recipe_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê a receita machine-consumable MAIN-PINNED e devolve status, bindings, sequência, locks e fingerprint sem redescobrir o cami
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j021"></a>J021 · centraldark_deploy_root_gate
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Executa o gate cruzado das 5 superfícies do ROOT-FILE contract e library-index v1.2.0; somente leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j022"></a>J022 · centraldark_deploy_scratch_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mede o Single Reusable WorkTree: existência, SHA, dirty state e convergência com origin/main. Não limpa nem reseta.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j023"></a>J023 · centraldark_operational_snapshot
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê o mesmo snapshot determinístico de heartbeat/logs/forensic usado pelo painel CentralDark. Nunca expõe conteúdo de secrets 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j024"></a>J024 · code_reviewer
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Motor de Code Review Nível Principal Engineer. Executa análise de Big-O, segurança (OWASP), arquitetura (SOLID) e caça de bug
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j025"></a>J025 · consolidar_pensamento
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Grava um insight/regra/padrão nas Lembranças do Pivete. CHAME ISSO sempre que aprender algo novo sobre como o usuário pensa, 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j026"></a>J026 · consultar_memoria_reserva
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê as Lembranças do Pivete (memória de curto prazo em docs/CONSCIENCIA/LEMBRANCAS). USE ISSO ANTES de responder qualquer pedi
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j027"></a>J027 · deploy_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Resumo unificado do estado do deploy: último commit no GitHub vs commit atual na VPS, status dos últimos workflows, processos
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j028"></a>J028 · elite_gateway_chat
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Envia uma mensagem ao Elite HTTP Gateway (ChatGPT via Zendriver headless) e retorna a resposta. O gateway roda em localhost:8
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j029"></a>J029 · elite_gateway_logs
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê as últimas linhas dos logs PM2 do Elite HTTP Gateway (stdout e stderr). Útil para diagnosticar erros do Zendriver, Cloudfl
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j030"></a>J030 · elite_gateway_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Verifica saúde do Elite HTTP Gateway: PM2 status, latência do endpoint /v1/models e se o processo está online. Fonte: PM2 + H
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j031"></a>J031 · execute_command
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Executa comando bash na VPS com stdout/stderr separados, timeout maximo de 60s, truncamento de output e respeito a MCP_ALLOW_
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j032"></a>J032 · fechar_pendencia
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Marca uma tarefa do arquivo docs/PENDENCIAS.md como concluída. O servidor remove credenciais e caminhos internos da nota fina
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j033"></a>J033 · figma_ler_arquivo
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê metadata/árvore de um arquivo Figma ou board FigJam por URL ou fileKey. Read-only.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j034"></a>J034 · figma_ler_node
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê um node específico de Figma/FigJam. Aceita URL com node-id ou nodeId explícito.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j035"></a>J035 · figma_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mede deterministicamente se o conector Figma/FigJam do HUB está configurado e autenticado. Não expõe token.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j036"></a>J036 · gemini_analisar
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Usa o Google Gemini (leitura rápida e vasta) para analisar, resumir ou responder sobre um texto/pergunta. Cérebro auxiliar: j
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j037"></a>J037 · gemini_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Verifica se a integração com o Google Gemini está funcionando (key presente + API responde). Não expõe a key.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j038"></a>J038 · github_cancel_workflow_run
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cancela um run em andamento do GitHub Actions.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j039"></a>J039 · github_check_token
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Checa o token do GitHub atual: tipo (classic-pat / fine-grained-pat / oauth / github-app), scopes concedidos, expiração, rate
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j040"></a>J040 · github_close_issue
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Fecha uma issue existente no repositório oficial com comentário final opcional. Valida repo alvo, existência da issue e bloqu
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j041"></a>J041 · github_comment_issue
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Adiciona um comentário a uma issue ou pull request existente. Não é destrutivo.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j042"></a>J042 · github_commit
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria um commit GitHub multi-arquivo e atualiza a branch. Bloqueia secrets e paths sensiveis. Default: ServerVpss/CentralDark.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j043"></a>J043 · github_create_branch
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria uma branch nova a partir de outra (padrão: main). Não é destrutivo.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j044"></a>J044 · github_create_issue
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria uma nova issue no repositório. Não é destrutivo (só cria).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j045"></a>J045 · github_create_or_update_file
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria ou atualiza um arquivo no repositório via Contents API. Se o arquivo já existe, faz UPDATE (busca SHA atual); senão, CRE
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j046"></a>J046 · github_create_pull_request
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria um pull request entre duas branches. Não é destrutivo (só abre o PR).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j047"></a>J047 · github_create_release_safe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria release GitHub com confirmação literal.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j048"></a>J048 · github_delete_branch_safe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Deleta branch não principal com confirmação literal.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j049"></a>J049 · github_delete_file_safe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Deleta arquivo do repo com confirmação literal. Bloqueia secrets, sessões, WhatsApp/WuzAPI e backups.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j050"></a>J050 · github_delete_workflow_run
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Deleta um run do histórico de Actions. DESTRUTIVO — apaga registro permanentemente.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j051"></a>J051 · github_dispatch
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Dispara workflow_dispatch no GitHub Actions. Use para vps-ssh-exec.yml, deploys e automacoes com inputs.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j052"></a>J052 · github_dispatch_workflow
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Dispara um workflow via workflow_dispatch (equivalente ao botão 'Run workflow'). Use o nome do arquivo (ex: 'sync-to-segredou
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j053"></a>J053 · github_get_actions_permissions
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra permissões de GitHub Actions do repo.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j054"></a>J054 · github_get_file
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê o conteúdo de um arquivo do repositório (decodificado em texto). Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j055"></a>J055 · github_get_repo
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Retorna metadados de um repositório (descrição, stars, branch padrão, etc). Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j056"></a>J056 · github_list_commits
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista os últimos N commits de uma branch. Útil pra ver o que mudou recentemente. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j057"></a>J057 · github_list_environments
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista environments do repo.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j058"></a>J058 · github_list_issues
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista issues de um repositório. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j059"></a>J059 · github_list_pull_requests
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista pull requests de um repositório. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j060"></a>J060 · github_list_repo_variables
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista GitHub Actions variables.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j061"></a>J061 · github_list_repos
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista repositórios do usuário logado, ordenados por atualização mais recente. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j062"></a>J062 · github_list_secrets_names
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Capacidade sensível cadastrada; conteúdo e operação não reproduzidos.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j063"></a>J063 · github_list_webhooks
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista webhooks sem expor segredo.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j064"></a>J064 · github_list_workflow_runs
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista os últimos runs do GitHub Actions (CI/CD), com status e conclusão. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j065"></a>J065 · github_list_workflows
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista todos os workflows do repo (id + nome do arquivo + estado). Use pra descobrir o nome a passar pro dispatch.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j066"></a>J066 · github_merge_pull_request
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Faz merge de um pull request (padrão: squash). DESTRUTIVO — altera o histórico da branch de destino.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j067"></a>J067 · github_read
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Le arquivo do GitHub via API com limite de bytes. Default: ServerVpss/CentralDark. Nao retorna arquivo sensivel.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j068"></a>J068 · github_rerun_failed_jobs
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Reexecuta APENAS os jobs que falharam de um run. Mais rápido que rerun completo.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j069"></a>J069 · github_rerun_workflow_run
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Reexecuta TODOS os jobs de um run do GitHub Actions (equivalente ao botão 'Re-run all jobs'). Não destrutivo — cria nova exec
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j070"></a>J070 · github_search_code
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Busca por código dentro do(s) repositório(s). Use a sintaxe de busca do GitHub. Exemplo: 'foo repo:dono/repo language:typescr
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j071"></a>J071 · github_set_repo_variable
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria/atualiza Actions variable. Não usar para segredo.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j072"></a>J072 · github_test_webhook
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Envia ping para webhook pelo ID.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j073"></a>J073 · github_upload_base64_file
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria ou atualiza arquivo binário/texto pequeno via Contents API recebendo base64. Serve para PNG/SVG/assets. Bloqueia paths s
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j074"></a>J074 · github_viewer
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra qual usuário GitHub está logado nesta sessão do MCP. Use pra confirmar identidade.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j075"></a>J075 · injetar_consciencia_centraldark
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Retorna as regras de CONDUTA imutáveis da CentralDark (zero enrolação, pragmatismo, execução direta, foco, segurança). Toda I
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j076"></a>J076 · kit_boas_vindas
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** PROFESSOR — chame isso primeiro ao conectar. Retorna apenas TL;DR e indice de caminhos vivos, sem despejar documentos inteiro
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j077"></a>J077 · kylin_audio_synthesize
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Sintetiza WAV no TTS nativo instalado (ZH/EN; PT-BR não comprovado).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j078"></a>J078 · kylin_audio_transcribe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Transcreve mídia autorizada com ASR nativo; até 120 segundos.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j079"></a>J079 · kylin_image_analyze
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Metadados e OCR real com Tesseract instalado; não promete descrição visual generativa.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j080"></a>J080 · kylin_image_embedding
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Embedding CLIP nativo da imagem; carrega somente o modelo instalado allowlisted.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j081"></a>J081 · kylin_native_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Estado vivo do runtime Kylin/Triton existente.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j082"></a>J082 · kylin_text_embedding
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Embedding nativo GTE de texto, mean pooling normalizado.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j083"></a>J083 · kylin_video_analyze
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Analisa vídeo por amostragem OCR e ASR; até 120 segundos, 1 a 6 frames. Não gera vídeo.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j084"></a>J084 · ler_consciencia
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê o documento mestre `docs/CONSCIENCIA/CONSCIENCIA.md` do repo CentralDark. Contém todas as regras invioláveis, tom de voz, 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j085"></a>J085 · ler_instalador
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê o índice `docs/INSTALADOR/README.md` com a lista de todos os arquivos do instalador (arquitetura, dependências, portas, pa
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j086"></a>J086 · ler_pendencias
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê `docs/PENDENCIAS.md` — setor único de pendências do projeto. Use quando o usuário perguntar 'o que tá pendente?' ou 'o que
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j087"></a>J087 · ler_regras_inviolaveis
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Atalho rápido: lê só o `LEIA-ME-IA.md` da raiz do repo. Resumo das regras críticas em 1 página. Use no começo de cada convers
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j088"></a>J088 · linear_atualizar_issue
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Atualiza título, descrição, estado ou prioridade de uma issue.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j089"></a>J089 · linear_criar_issue
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria uma issue no Linear. Precisa do teamId (use linear_listar_equipes pra descobrir).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j090"></a>J090 · linear_listar_ciclos
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista ciclos (sprints) de uma equipe.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j091"></a>J091 · linear_listar_equipes
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista equipes do workspace Linear (id, key, name) — útil pra criar issues.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j092"></a>J092 · linear_listar_issues
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista issues do Linear. Filtros opcionais por equipe (teamKey), estado (stateName) e limite.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j093"></a>J093 · local_bridge_media_policy
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Expõe a política canônica para áudio/vídeo/voz/desktop local no app bridge: escopo explícito, envelopes, logs e recibos sem v
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j094"></a>J094 · local_compute_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Inventaria, de forma read-only, CPU/GPU/RAM local disponível para ponte Casa↔VPS. Não agenda job, não executa GPU e não decla
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j095"></a>J095 · notion_anexar_paragrafo
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Adiciona um parágrafo no final de uma página Notion existente.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j096"></a>J096 · notion_buscar
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Busca páginas/databases no Notion por texto livre.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j097"></a>J097 · notion_criar_pagina
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria uma página no Notion. Passe parentPageId (página) OU parentDatabaseId (database).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j098"></a>J098 · notion_ler_pagina
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê uma página do Notion (propriedades + blocos filhos).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j099"></a>J099 · pendencias_add
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Adiciona um item de tarefa pendente ao arquivo docs/PENDENCIAS.md do projeto. Não envia informações pessoais nem credenciais 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j100"></a>J100 · pendencias_close
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Marca um item do arquivo docs/PENDENCIAS.md como concluído. O servidor remove credenciais e caminhos internos do resumo antes
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j101"></a>J101 · pendencias_list
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê o arquivo docs/PENDENCIAS.md (setor único de pendências do projeto). Retorna o conteúdo cru pra inspeção. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j102"></a>J102 · personal_context_remember
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Registra contexto sanitizado e durável no ledger privado compartilhado entre superfícies do CentralDark. Use para decisões, c
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j103"></a>J103 · personal_context_search
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Busca contexto pessoal relevante em sessões anteriores do CentralDark. Use antes de pedir ao SEGREDO/CHEFE que repita algo, a
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j104"></a>J104 · personal_context_stats
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mede integridade, quantidade de memórias, sessões, conversas e fontes do ledger privado sem retornar o conteúdo armazenado.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j105"></a>J105 · provider_capabilities
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Matriz canônica de capacidades oficiais Contabo/Cloudflare/Tailscale usadas pelo cockpit Admin. Não executa ação externa.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j106"></a>J106 · provider_credentials_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra somente CONFIGURED/MISSING das credenciais dos providers. Nunca devolve valores.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j107"></a>J107 · provider_mutate
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mutação allowlisted de provider. Permanece fail-closed até compensação runtime ser provada; exige confirmação admin no dispat
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j108"></a>J108 · provider_read
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Executa somente capability READ/FINANCIAL_READ/DEPRECATED allowlisted na API oficial do provider e redige campos sensíveis.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j109"></a>J109 · puxar_aprendizados
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Versão enxuta do kit de boas-vindas: lista as fontes vivas de aprendizado e devolve só as escolhidas. Use no meio de uma conv
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j110"></a>J110 · read_file
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Le arquivo local com lazy loading, paginacao por linhas, tail seguro e limite de bytes. Arquivos grandes retornam as ultimas 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j111"></a>J111 · registrar_aprendizado
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Anota um aprendizado novo em `docs/CONSCIENCIA/APRENDIZADOS.md` pra próxima IA conectada herdar. Use sempre que descobrir um 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j112"></a>J112 · search_files
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Busca termos dentro da VPS sem abrir arquivos inteiros. Pula secrets, node_modules, .git, sessoes e arquivos grandes demais.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j113"></a>J113 · sentry_detalhe_issue
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Detalhes de uma issue do Sentry pelo ID (numérico ou shortId).
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j114"></a>J114 · sentry_listar_issues
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista issues do Sentry. Filtros opcionais: project (slug), query (sintaxe Sentry), limit.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j115"></a>J115 · sentry_resolver_issue
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Marca uma issue do Sentry como resolvida.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j116"></a>J116 · sentry_status_credenciais
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Diagnóstico: mostra de onde o MCP vai pegar credencial do Sentry/Linear/Notion (cofre direto ou gateway), sem expor valores.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j117"></a>J117 · skill_atualizar
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Força re-download de uma skill (mesma coisa que `skill_instalar`, mas o nome deixa explícito o intent de atualização). Use qu
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j118"></a>J118 · skill_instalar
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Retorna o conteúdo completo de uma skill CentralDark (SKILL.md + manifesto) pra IA cliente aplicar no próprio ambiente. Use q
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j119"></a>J119 · skill_listar
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista todas as skills CentralDark disponíveis no repo (pasta `skills/`). Retorna nome, descrição, versão e agentes compatívei
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j120"></a>J120 · skill_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra o SHA atual de uma skill no repo. Compare com o SHA que a IA cliente tem instalado pra saber se precisa atualizar. Use
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j121"></a>J121 · supabase_contacts_check
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Verifica especificamente a tabela contacts e conta amostra por workspace. Apenas leitura; não importa contatos.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j122"></a>J122 · supabase_project_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra status sanitizado de um projeto Supabase pelo project_ref. Apenas leitura; não altera banco.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j123"></a>J123 · supabase_projects
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista projetos Supabase via Management API usando token local seguro da VPS. Apenas leitura; nunca retorna token.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j124"></a>J124 · supabase_schema_check
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Consulta OpenAPI REST do Supabase para verificar se tabelas existem no schema exposto. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j125"></a>J125 · tailscale_bridge_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mede a ponte Tailscale viva da VPS para a Casa reutilizando o OAuth Broker existente; retorna estado da tailnet e probes read
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j126"></a>J126 · tailscale_devices_list
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista devices do tailnet pela capability allowlisted existente devices.list. Somente leitura e resposta redigida.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j127"></a>J127 · tailscale_dns_nameservers
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Le os nameservers DNS do tailnet pela capability allowlisted existente dns.nameservers. Somente leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j128"></a>J128 · tailscale_network_logs
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Le Network Flow Logs do Tailscale pela API oficial usando o cofre existente. Janela padrao 15 min, maximo 24h, sem expor cred
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j129"></a>J129 · tailscale_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Prova conectividade read-only com a API Tailscale pelo cofre existente e resume quantidade de devices e capacidades permitida
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j130"></a>J130 · teste_temporario_pivete
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Ferramenta temporária para testes rápidos solicitados por Pivete. Use com responsabilidade.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j131"></a>J131 · vault_list
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Capacidade sensível cadastrada; conteúdo e operação não reproduzidos.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j132"></a>J132 · vault_read
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Capacidade sensível cadastrada; conteúdo e operação não reproduzidos.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j133"></a>J133 · vault_read_all
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Capacidade sensível cadastrada; conteúdo e operação não reproduzidos.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j134"></a>J134 · vps_git_diff_safe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra git diff sanitizado de arquivos do repo. Apenas leitura. Limita tamanho da saída.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j135"></a>J135 · vps_git_status
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra git status curto, branch e último commit do repo da VPS. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j136"></a>J136 · vps_list_dir_safe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lista diretório dentro das raízes permitidas, pulando paths sensíveis. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j137"></a>J137 · vps_read_file_safe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Lê arquivo de texto com limite de bytes e sanitização. Bloqueia .env, secrets, tokens, sessões, WhatsApp/WuzAPI, backups e ba
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j138"></a>J138 · vps_run_once_script
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria e executa um script run-once controlado na VPS, com logs em <caminho-vps> Por padrão é dry-run. Execução real exige CONF
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j139"></a>J139 · vps_tree_safe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Mostra árvore curta de arquivos/pastas, pulando paths sensíveis, node_modules e .git. Apenas leitura.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j140"></a>J140 · vps_write_file_safe
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Cria ou atualiza arquivo comum com backup e dry-run. NÃO use para <caminho-vps> Para secrets existe exceção admin explícita: 
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j141"></a>J141 · youtube_transcript
 
 - **Categoria:** MCP tool. **Estado:** `CATALOGADO_2026-10-21`.
 - **O que há:** Extrai legendas públicas de um vídeo YouTube usando o adaptador local. Não baixa vídeo/áudio, não usa API key própria e retor
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A chamada ao catálogo lista a ferramenta; invocação e efeito NÃO são demonstrados.
 
 ### <a id="j142"></a>J142 · AIONUI_MCP_STDIO
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** MCP_CATALOG_AND_NATIVE_BINDINGS
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j143"></a>J143 · CAS_CLOUD_RELAY
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** REMOTE_AGENT_ORCHESTRATION
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j144"></a>J144 · GITHUB_RUNTIME
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** CANONICAL_RECORD_AND_MICRODEPLOY_ROUTE
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j145"></a>J145 · HERMES_DELEGATED_COMMIT_PATH
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** DELEGATED_TOOL_WRITE_COMMIT_PUSH_RECIPE
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: PASS_ON_PR1748_REPLAY_REQUIRED_FOR_CURRENT
 
 ### <a id="j146"></a>J146 · HERMES_SHELL
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** EXECUTION_BODY
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j147"></a>J147 · MCP_CASA_TO_VPS
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** execute_command / vps_run_once_script
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j148"></a>J148 · MCP_REMOTE_OAUTH
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** REMOTE_MCP_BRIDGE
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j149"></a>J149 · MCP_VPS_NATIVE_HTTP
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** MCP_CENTRALDARK
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j150"></a>J150 · RDC_DESKTOP_COMMANDER
 
 - **Categoria:** Rota. **Estado:** `LEGADO_OPCIONAL`.
 - **O que há:** CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL; NÃO é requisito de leitura das abas nem condição de conectividade.
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j151"></a>J151 · SCREENPIPE_CLI_RECORDER
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** ALWAYS_ON_LOCAL_CAPTURE_STATUS_SEARCH_PIPES
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j152"></a>J152 · SCREENPIPE_LOCAL_SENSOR
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** CASA_VISUAL_AUDIO_DESKTOP_SENSOR
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j153"></a>J153 · SSH_VPS_DIRECT
 
 - **Categoria:** Rota. **Estado:** `ROTA_REGISTRADA_NAO_MEDIDA`.
 - **O que há:** VPS_CONTROL_PLANE
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j154"></a>J154 · TAILSCALE_PRIVATE_ROUTE
 
 - **Categoria:** Rota. **Estado:** `REDE_BROKER_PASS`.
 - **O que há:** PRIVATE_TRANSPORT; ponte OAuth 8098 mediu Casa online/HTTP 200, sem controle de arquivos comprovado.
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** runtimeState do catálogo: MEASURE_AT_RUNTIME
 
 ### <a id="j155"></a>J155 · deepseek
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: apps/modulos/deepseek-harness; status no registro: PROVEN
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j156"></a>J156 · hermes
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: apps/modulos/HERMES-CORE; status no registro: PROVEN
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j157"></a>J157 · claude-code
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: external-vscode-owner; status no registro: PROCESS_SESSION_OBSERVED; evidência registrada: apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j158"></a>J158 · chatgpt-cowork
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: external-work-owner; status no registro: UNKNOWN
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j159"></a>J159 · vscode
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: apps/modulos/HERMES-CORE/extensions/hermes-vscode-router-provider; status no registro: PROVEN
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j160"></a>J160 · figma
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: Figma connector; status no registro: PROVEN
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j161"></a>J161 · obsidian
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: apps/modulos/obsidian-plugin-grafo-vivo; status no registro: UNKNOWN
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j162"></a>J162 · cloud-code
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: VS Code Cloud Code extension; status no registro: PROCESS_OBSERVED; evidência registrada: apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j163"></a>J163 · codex-app-server
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: OpenAI ChatGPT VS Code extension; status no registro: PROCESS_OBSERVED; evidência registrada: apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j164"></a>J164 · antigravity-hub
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: VS Code Antigravity extension; status no registro: PROCESS_OBSERVED; evidência registrada: apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j165"></a>J165 · screenpipe-mcp
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: .agents/skills/screenpipe-live-observer; status no registro: PROCESS_OBSERVED; evidência registrada: apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md#d002
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j166"></a>J166 · instinto-casa-port-3000
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: apps/instinto-superior; status no registro: PORT_PROCESS_PROVEN; evidência registrada: docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j167"></a>J167 · notifications-recipe
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: apps/instinto-superior/src/components/central/CentralNotificacoes.tsx; status no registro: SOURCE_PROVED_DISPATCH_NOT_CONNECTED; evidência registrada: apps/instinto-superior/src/hooks/useNotificationsLog.ts
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j168"></a>J168 · voice-semantic
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: .claude/skills/synced/voice-semantic-classifier/SKILL.md; status no registro: UNKNOWN
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j169"></a>J169 · screenpipe-audio-casa
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: .agents/skills/screenpipe-live-observer/SKILL.md; status no registro: UNKNOWN; evidência registrada: apps/instinto-superior/src/lib/cockpit.functions.ts
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j170"></a>J170 · casa-vps-ssh
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1; status no registro: HISTORICAL_TRANSPORT_PROVEN_CURRENT_UNKNOWN; evidência registrada: docs/receipts/SSH-CASA-VPS-LOCK-20261014.md
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j171"></a>J171 · vscode-restore
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: VS Code extension CentralDark VS Code Restore 0.1.4 (Casa SEGREDO); status no registro: HISTORICAL_INSTALL_PROVEN_CURRENT_UNKNOWN; evidência registrada: capturas da sessão do Windows fornecidas pelo CHEFE 2026-10-17
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j172"></a>J172 · vscode-remote-ssh
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
 - **O que há:** Owner: Microsoft VS Code Remote-SSH 0.128.0 (Casa SEGREDO); status no registro: HISTORICAL_INSTALL_AND_TRANSPORT_PROVEN_CURRENT_UNKNOWN; evidência registrada: docs/receipts/SSH-CASA-VPS-LOCK-20261014.md
-- **Fonte / owner:** [registry do Harness](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
 ### <a id="j173"></a>J173 · centraldark-delegacao
 
 - **Categoria:** Skill MCP. **Estado:** `CATALOGADO_SKILLS_SUBSET`.
 - **O que há:** v1.1.0; Delegar tarefas do Builder com escritor único e prova.; sha f3d4f3b450beedac6fe9d48124ea23ddb2eb964a
-- **Fonte / owner:** [skills/](../../../../skills/).
+- **Fonte / owner:** [skills/](../../../skills/).
 - **Limite de prova:** `skill_listar` lista somente a árvore `skills/`; `.agents/skills/` tem outro universo.
 
 ### <a id="j174"></a>J174 · mermaid-skill
 
 - **Categoria:** Skill MCP. **Estado:** `CATALOGADO_SKILLS_SUBSET`.
 - **O que há:** v1.1.0; Generate Mermaid diagrams (.mmd) and export to PNG/SVG/PDF using mmdc CLI or Kroki API. USE THIS SKILL when user me; sha 11e18adbb2007f1f2ab3945bcd12639491c99c6c
-- **Fonte / owner:** [skills/](../../../../skills/).
+- **Fonte / owner:** [skills/](../../../skills/).
 - **Limite de prova:** `skill_listar` lista somente a árvore `skills/`; `.agents/skills/` tem outro universo.
 
 ### <a id="j175"></a>J175 · pretty-mermaid
 
 - **Categoria:** Skill MCP. **Estado:** `CATALOGADO_SKILLS_SUBSET`.
 - **O que há:** v0.0.0; ／; sha 30b048560ee71e79ed2685ccd7bb77c695481a21
-- **Fonte / owner:** [skills/](../../../../skills/).
+- **Fonte / owner:** [skills/](../../../skills/).
 - **Limite de prova:** `skill_listar` lista somente a árvore `skills/`; `.agents/skills/` tem outro universo.
 
 ### <a id="j176"></a>J176 · vs-code-restore
 
 - **Categoria:** Skill MCP. **Estado:** `CATALOGADO_SKILLS_SUBSET`.
 - **O que há:** v0.1.3; Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa s; sha f742816ce68811120fac0948dc1af11633b7e4d2
-- **Fonte / owner:** [skills/](../../../../skills/).
+- **Fonte / owner:** [skills/](../../../skills/).
 - **Limite de prova:** `skill_listar` lista somente a árvore `skills/`; `.agents/skills/` tem outro universo.
 
 ### <a id="j177"></a>J177 · Visão geral
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `visao`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j178"></a>J178 · Portal
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `portal`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j179"></a>J179 · Builder Bolt
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `builder-bolt`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j180"></a>J180 · Mapa PR #1873
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `pr1873`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j181"></a>J181 · CentralDark Gram
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `gram`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j182"></a>J182 · Minha Oficina
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `sync`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j183"></a>J183 · Design Center
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `design`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j184"></a>J184 · Goals
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `goals`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j185"></a>J185 · Gênesis · Michelin
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `genesis`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j186"></a>J186 · Claude
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `claude-notifications`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j187"></a>J187 · Dream
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `dream-reviewer`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j188"></a>J188 · Estrutura
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `arquitetura`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j189"></a>J189 · Raio-X
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `raioxvivo`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j190"></a>J190 · Recibos
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `recibos`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j191"></a>J191 · Forja
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `forja`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j192"></a>J192 · Permissões Forja
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `gram-permissions`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j193"></a>J193 · Admin CentralDark
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `admin`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j194"></a>J194 · Sistema CentralDark
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `sistema`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j195"></a>J195 · Hermes
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `hermes`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j196"></a>J196 · Obsidian
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `obsidian`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j197"></a>J197 · Estúdio
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `aionui`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j198"></a>J198 · Unigram
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `unigram`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j199"></a>J199 · Regras Forja
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `forja-regras`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j200"></a>J200 · Inventário
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `forja-inventario`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j201"></a>J201 · Agent Mode
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `agent-mode`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j202"></a>J202 · HTML Consolidation
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `html-consolidation`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j203"></a>J203 · Downloads
 
 - **Categoria:** Aba Cockpit. **Estado:** `FONTE_E_DOM_LIDOS`.
 - **O que há:** ID interno `downloads`; renderização observada na aba conectada em 21/10. Handler de ação independente.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Presence != process or deployed binary.
 
 ### <a id="j204"></a>J204 · Instinto Superior · padrão [default]
 
 - **Categoria:** Pele Cockpit. **Estado:** `ATIVA_NO_SELECTOR_FONTE`.
 - **O que há:** Persistência `centraldark.cockpit.pele`; seleção real do usuário não lida agora. Sem quinta pele.
-- **Fonte / owner:** [Design Center](../../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
+- **Fonte / owner:** [Design Center](../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
 - **Limite de prova:** Quatro IDs exatos preservados no DesignCenter.tsx.
 
 ### <a id="j205"></a>J205 · Breu & Ouro [ouro]
 
 - **Categoria:** Pele Cockpit. **Estado:** `ATIVA_NO_SELECTOR_FONTE`.
 - **O que há:** Persistência `centraldark.cockpit.pele`; seleção real do usuário não lida agora. Sem quinta pele.
-- **Fonte / owner:** [Design Center](../../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
+- **Fonte / owner:** [Design Center](../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
 - **Limite de prova:** Quatro IDs exatos preservados no DesignCenter.tsx.
 
 ### <a id="j206"></a>J206 · Ops · Ciano [ops]
 
 - **Categoria:** Pele Cockpit. **Estado:** `ATIVA_NO_SELECTOR_FONTE`.
 - **O que há:** Persistência `centraldark.cockpit.pele`; seleção real do usuário não lida agora. Sem quinta pele.
-- **Fonte / owner:** [Design Center](../../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
+- **Fonte / owner:** [Design Center](../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
 - **Limite de prova:** Quatro IDs exatos preservados no DesignCenter.tsx.
 
 ### <a id="j207"></a>J207 · Esmeralda [esmeralda]
 
 - **Categoria:** Pele Cockpit. **Estado:** `ATIVA_NO_SELECTOR_FONTE`.
 - **O que há:** Persistência `centraldark.cockpit.pele`; seleção real do usuário não lida agora. Sem quinta pele.
-- **Fonte / owner:** [Design Center](../../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
+- **Fonte / owner:** [Design Center](../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
 - **Limite de prova:** Quatro IDs exatos preservados no DesignCenter.tsx.
 
 ### <a id="j208"></a>J208 · Emerald · institucional [emerald]
 
 - **Categoria:** Tema global. **Estado:** `PREVIA_SOURCE_PR`.
 - **O que há:** Tema original do Bolt/Shell; amostra de fundo #f0fdf4; prévia isolada no Design Center PR #1895, não ativa no Cockpit atual.
-- **Fonte / owner:** [tokens do Bolt](../../../../apps/modulos/Bolt/source/app/styles/variables.scss).
+- **Fonte / owner:** [tokens do Bolt](../../../apps/modulos/Bolt/source/app/styles/variables.scss).
 - **Limite de prova:** Não persistir novo tema nem fundir sem decisão do CHEFE.
 
 ### <a id="j209"></a>J209 · Operational · HUD [operational]
 
 - **Categoria:** Tema global. **Estado:** `PREVIA_SOURCE_PR`.
 - **O que há:** Tema original do Bolt/Shell; amostra de fundo #05070d; prévia isolada no Design Center PR #1895, não ativa no Cockpit atual.
-- **Fonte / owner:** [tokens do Bolt](../../../../apps/modulos/Bolt/source/app/styles/variables.scss).
+- **Fonte / owner:** [tokens do Bolt](../../../apps/modulos/Bolt/source/app/styles/variables.scss).
 - **Limite de prova:** Não persistir novo tema nem fundir sem decisão do CHEFE.
 
 ### <a id="j210"></a>J210 · Forge · Forja [forge]
 
 - **Categoria:** Tema global. **Estado:** `PREVIA_SOURCE_PR`.
 - **O que há:** Tema original do Bolt/Shell; amostra de fundo #100d07; prévia isolada no Design Center PR #1895, não ativa no Cockpit atual.
-- **Fonte / owner:** [tokens do Bolt](../../../../apps/modulos/Bolt/source/app/styles/variables.scss).
+- **Fonte / owner:** [tokens do Bolt](../../../apps/modulos/Bolt/source/app/styles/variables.scss).
 - **Limite de prova:** Não persistir novo tema nem fundir sem decisão do CHEFE.
 
 ### <a id="j211"></a>J211 · Conectar ao servidor
 
 - **Categoria:** Ação VS Code. **Estado:** `UI_OBSERVADA_EM_CAPTURA`.
 - **O que há:** Ação do painel CentralDark · Vibe Coding na captura do CHEFE; não prova sucesso do handler.
-- **Fonte / owner:** [extensão VS Code](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [extensão VS Code](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** Extensão pode operar independentemente da aba do Cockpit.
 
 ### <a id="j212"></a>J212 · Testar a conexão
 
 - **Categoria:** Ação VS Code. **Estado:** `UI_OBSERVADA_EM_CAPTURA`.
 - **O que há:** Ação do painel CentralDark · Vibe Coding na captura do CHEFE; não prova sucesso do handler.
-- **Fonte / owner:** [extensão VS Code](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [extensão VS Code](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** Extensão pode operar independentemente da aba do Cockpit.
 
 ### <a id="j213"></a>J213 · Parear este VS Code
 
 - **Categoria:** Ação VS Code. **Estado:** `UI_OBSERVADA_EM_CAPTURA`.
 - **O que há:** Ação do painel CentralDark · Vibe Coding na captura do CHEFE; não prova sucesso do handler.
-- **Fonte / owner:** [extensão VS Code](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [extensão VS Code](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** Extensão pode operar independentemente da aba do Cockpit.
 
 ### <a id="j214"></a>J214 · Ver status e PIDs
 
 - **Categoria:** Ação VS Code. **Estado:** `UI_OBSERVADA_EM_CAPTURA`.
 - **O que há:** Ação do painel CentralDark · Vibe Coding na captura do CHEFE; não prova sucesso do handler.
-- **Fonte / owner:** [extensão VS Code](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [extensão VS Code](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** Extensão pode operar independentemente da aba do Cockpit.
 
 ### <a id="j215"></a>J215 · Abrir terminal existente
 
 - **Categoria:** Ação VS Code. **Estado:** `UI_OBSERVADA_EM_CAPTURA`.
 - **O que há:** Ação do painel CentralDark · Vibe Coding na captura do CHEFE; não prova sucesso do handler.
-- **Fonte / owner:** [extensão VS Code](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [extensão VS Code](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** Extensão pode operar independentemente da aba do Cockpit.
 
 ### <a id="j216"></a>J216 · Compilar a extensão
 
 - **Categoria:** Ação VS Code. **Estado:** `UI_OBSERVADA_EM_CAPTURA`.
 - **O que há:** Ação do painel CentralDark · Vibe Coding na captura do CHEFE; não prova sucesso do handler.
-- **Fonte / owner:** [extensão VS Code](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [extensão VS Code](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** Extensão pode operar independentemente da aba do Cockpit.
 
 ### <a id="j217"></a>J217 · Mapear o VS Code
 
 - **Categoria:** Ação VS Code. **Estado:** `UI_OBSERVADA_EM_CAPTURA`.
 - **O que há:** Ação do painel CentralDark · Vibe Coding na captura do CHEFE; não prova sucesso do handler.
-- **Fonte / owner:** [extensão VS Code](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [extensão VS Code](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** Extensão pode operar independentemente da aba do Cockpit.
 
 ### <a id="j218"></a>J218 · Restaurar a bancada
 
 - **Categoria:** Ação VS Code. **Estado:** `UI_OBSERVADA_EM_CAPTURA`.
 - **O que há:** Ação do painel CentralDark · Vibe Coding na captura do CHEFE; não prova sucesso do handler.
-- **Fonte / owner:** [extensão VS Code](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [extensão VS Code](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** Extensão pode operar independentemente da aba do Cockpit.
 
 ### <a id="j219"></a>J219 · Abrir ferramentas
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: left; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j220"></a>J220 · CentralDark Gram
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: left; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j221"></a>J221 · Goals
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: left; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j222"></a>J222 · Buscar módulos
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: left; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j223"></a>J223 · Sistemas
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: right; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j224"></a>J224 · Hermes — moldura
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: right; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j225"></a>J225 · Configurar Harness
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: right; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j226"></a>J226 · Sync — moldura
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: bottom; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j227"></a>J227 · Pacotes
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: bottom; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j228"></a>J228 · Configurar moldura
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: bottom; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j229"></a>J229 · CentralDark Estúdio — topo
 
 - **Categoria:** Ação Harness. **Estado:** `DOM_E_FONTE_LIDOS`.
 - **O que há:** Posição: top; evento do React existente; apenas presença/DOM comprovados.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Não criar novos handlers sem necessidade.
 
 ### <a id="j230"></a>J230 · !CENTRALDARK / #ACORDAR
@@ -2018,14 +2018,14 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `HISTORICO_E_LOCAL_UNKNOWN`.
 - **O que há:** Quatro layouts UMA/DIVIDIR/3 PAINÉIS e várias abas descritos em docs; diretório F:\\_worktrees\\Nova pasta\\... não lido nesta sessão.
-- **Fonte / owner:** [arquitetura do Harness](../../../../docs/ARQUITETURA/INSTINTO-SUPERIOR-HARNESS-MODULOS.md).
+- **Fonte / owner:** [arquitetura do Harness](../../../docs/ARQUITETURA/INSTINTO-SUPERIOR-HARNESS-MODULOS.md).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j239"></a>J239 · Casa SEGREDO Tailscale
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `BRIDGE_PASS`.
 - **O que há:** Ponte OAuth retornou 200, nó SEGREDO online; RDP 3389 OPEN; SSH 22 CLOSED_OR_FILTERED.
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j240"></a>J240 · Credencial Tailscale admin
@@ -2039,7 +2039,7 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `SOURCE_LOADER`.
 - **O que há:** Prioridade: /root/CentralDark/secrets/tailscale.env → apps/modulos/mcp/.env → processo; nunca mostrar valores.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j242"></a>J242 · Discos K / F / C
@@ -2060,14 +2060,14 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `LINK_OPEN_ONLY`.
 - **O que há:** No Cockpit existe abertura via obsidian://; integração real de janela Win32 dentro do Shell não foi provada.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j245"></a>J245 · Obsidian Grafo Vivo
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `SOURCE_ONLY_RUNTIME_NOT_PROVEN`.
 - **O que há:** Vault acessível=false, bidirecional=false no sensor MCP atual; nunca confundir docs no Git com Obsidian sincronizado.
-- **Fonte / owner:** [grafo vivo](../../../../apps/modulos/obsidian-plugin-grafo-vivo/).
+- **Fonte / owner:** [grafo vivo](../../../apps/modulos/obsidian-plugin-grafo-vivo/).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j246"></a>J246 · Shell CentralDark.exe
@@ -2123,7 +2123,7 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `REGRA_SOURCE`.
 - **O que há:** Capturar árvore atual → localizar por nome/role/aria → focar/rolar → acionar → aguardar → ler efeito → readback.
-- **Fonte / owner:** [live-editing skill](../../../../.agents/skills/centraldark-live-editing-fabric/SKILL.md).
+- **Fonte / owner:** [live-editing skill](../../../.agents/skills/centraldark-live-editing-fabric/SKILL.md).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j254"></a>J254 · FIXED_POINT
@@ -2151,42 +2151,42 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `CODE_IN_PR_NOT_LIVE`.
 - **O que há:** 3 miniaturas emerald, operational, forge em branch; Casa ainda não carregou.
-- **Fonte / owner:** [Design Center](../../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
+- **Fonte / owner:** [Design Center](../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j258"></a>J258 · Cockpit 8080 integrado VS Code
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `CAPTURA_UI`.
 - **O que há:** Captura comprova site renderizado na aba interna do VS Code; não prova binário CentralDark.exe.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j259"></a>J259 · Mapa de abas e ações
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `DOM_E_SOURCE_LIDOS`.
 - **O que há:** CockpitShell com 27 TabsTrigger e molduras laterais/topo/base; IDs precisam conservar handlers.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j260"></a>J260 · MCP Admin único
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `CATALOG_LIDO`.
 - **O que há:** 141 ferramentas/13 rotas na consulta; entrada mcp_admin_call é dispatcher único.
-- **Fonte / owner:** [MCP Admin catalog](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [MCP Admin catalog](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j261"></a>J261 · Skills estendidas
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `CATALOG_SOURCE`.
 - **O que há:** .agents/skills/skill-workshop/CATALOG.md: catálogo externo com referências; fora do subconjunto de quatro skills/.
-- **Fonte / owner:** [skill-workshop](../../../../.agents/skills/skill-workshop/CATALOG.md).
+- **Fonte / owner:** [skill-workshop](../../../.agents/skills/skill-workshop/CATALOG.md).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j262"></a>J262 · Pipeline Main-Pinned
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `CAPABILITY_CATALOG`.
 - **O que há:** Receita+scratch+lock+microdeploy existentes, não inventar segundo sistema.
-- **Fonte / owner:** [microdeploy](../../../../docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json).
+- **Fonte / owner:** [microdeploy](../../../docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j263"></a>J263 · PR #1880 — VS Code
@@ -2214,7 +2214,7 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `NAO_MEDIDO`.
 - **O que há:** Catálogo amplo foi mencionado; não afirmar 900+ instalado nem ativo sem inventário material atual.
-- **Fonte / owner:** [skill workshop](../../../../.agents/skills/skill-workshop/CATALOG.md).
+- **Fonte / owner:** [skill workshop](../../../.agents/skills/skill-workshop/CATALOG.md).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j267"></a>J267 · Rascunho UI ≠ executável
@@ -2235,21 +2235,21 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `UI_ERRO_OBSERVADO`.
 - **O que há:** Badge `1 erro` visível na Sala de Controle; origem do erro ainda desconhecida.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j270"></a>J270 · Auto Sync nunca sincronizado
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `DOM_LIDO`.
 - **O que há:** UI `Nunca sincronizado` não é prova de Git desatualizado; separar UI de Git SHA.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j271"></a>J271 · Screenpipe /health
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `DOM_SENSOR_HISTORICO`.
 - **O que há:** DOM contém saída do sensor GET /health 200 e ffmpeg/ffprobe ok, contexto datado; runtime atual deve ser remedido.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j272"></a>J272 · Casa local processo
@@ -2305,7 +2305,7 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `CONTRAPROVA`.
 - **O que há:** 401 da API de controle não nega 200 da ponte e Casa online.
-- **Fonte / owner:** [rotas MCP](../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
+- **Fonte / owner:** [rotas MCP](../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j280"></a>J280 · BUILD_WINDOWS != WEB_BUILD
@@ -2333,7 +2333,7 @@ flowchart LR
 
 - **Categoria:** Aprendizado/decisão. **Estado:** `DOM_LIDO`.
 - **O que há:** http://127.0.0.1:8080/sala-controle navegável quando servidor Casa ativo.
-- **Fonte / owner:** [CockpitShell](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [CockpitShell](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** Proveniência em fonte/histórico desta sessão; estado não implica execução atual.
 
 ### <a id="j284"></a>J284 · Builder Bolt distinto do Builder Harness
@@ -2347,119 +2347,119 @@ flowchart LR
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../docs/CONSCIENCIA/MAPA-DO-CEREBRO.md).
+- **Fonte / owner:** [arquivo](../../../docs/CONSCIENCIA/MAPA-DO-CEREBRO.md).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j286"></a>J286 · Aprendizados
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../docs/CONSCIENCIA/APRENDIZADOS.md).
+- **Fonte / owner:** [arquivo](../../../docs/CONSCIENCIA/APRENDIZADOS.md).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j287"></a>J287 · Lembranças (histórico)
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md).
+- **Fonte / owner:** [arquivo](../../../docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j288"></a>J288 · Registro de módulos Harness
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../apps/instinto-superior/config/harness-module-registry.json).
+- **Fonte / owner:** [arquivo](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j289"></a>J289 · CockpitShell
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
+- **Fonte / owner:** [arquivo](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j290"></a>J290 · DesignCenter
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
+- **Fonte / owner:** [arquivo](../../../apps/instinto-superior/src/components/central/DesignCenter.tsx).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j291"></a>J291 · Tokens Cockpit
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../apps/instinto-superior/src/styles.css).
+- **Fonte / owner:** [arquivo](../../../apps/instinto-superior/src/styles.css).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j292"></a>J292 · Tema Bolt
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../apps/modulos/Bolt/source/app/lib/stores/theme.ts).
+- **Fonte / owner:** [arquivo](../../../apps/modulos/Bolt/source/app/lib/stores/theme.ts).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j293"></a>J293 · Tokens Bolt
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../apps/modulos/Bolt/source/app/styles/variables.scss).
+- **Fonte / owner:** [arquivo](../../../apps/modulos/Bolt/source/app/styles/variables.scss).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j294"></a>J294 · Extensão VS Code
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../skills/vs-code-restore/src/extension.ts).
+- **Fonte / owner:** [arquivo](../../../skills/vs-code-restore/src/extension.ts).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j295"></a>J295 · Skill workshop
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../.agents/skills/skill-workshop/CATALOG.md).
+- **Fonte / owner:** [arquivo](../../../.agents/skills/skill-workshop/CATALOG.md).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j296"></a>J296 · Biblioteca Cognitiva
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md).
+- **Fonte / owner:** [arquivo](../../../docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j297"></a>J297 · MCP Admin provider
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
+- **Fonte / owner:** [arquivo](../../../apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j298"></a>J298 · Design System
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md).
+- **Fonte / owner:** [arquivo](../../../docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j299"></a>J299 · Índice arquitetural
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../docs/ARQUITETURA/00-INDICE-HIERARQUIA-CAPACIDADES.md).
+- **Fonte / owner:** [arquivo](../../../docs/ARQUITETURA/00-INDICE-HIERARQUIA-CAPACIDADES.md).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j300"></a>J300 · Receipt A–Z preexistente
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../docs/CONSCIENCIA/RECEIPTS/2026-10-18-PR1852-sessao-hermes-casa-vps-rastro-alfabetico-numerico.md).
+- **Fonte / owner:** [arquivo](../../../docs/CONSCIENCIA/RECEIPTS/2026-10-18-PR1852-sessao-hermes-casa-vps-rastro-alfabetico-numerico.md).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 ### <a id="j301"></a>J301 · NeuroLink JSON derivado
 
 - **Categoria:** Owner/artefato. **Estado:** `SOURCE_EXISTS`.
 - **O que há:** Fonte existente, ler em vez de criar autoridade paralela.
-- **Fonte / owner:** [arquivo](../../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json).
+- **Fonte / owner:** [arquivo](../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json).
 - **Limite de prova:** A existência no branch não mede consumo no runtime.
 
 
