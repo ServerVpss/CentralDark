@@ -34,3 +34,12 @@ test("legacy cleanup tools are NOT silently re-enabled", () => {
     assert.ok(diag.includes('"' + tool + '"'), "missing explicit safety review");
   }
 });
+
+test("PM2 diagnostic preserves execution failure before JSON parsing", () => {
+  const deploy = readFileSync(new URL("../src/tools/deploy/deploy.js", import.meta.url), "utf8");
+  assert.match(deploy, /set -o pipefail; command -v pm2/);
+  assert.match(deploy, /res\.exitCode === 127/);
+  assert.match(deploy, /PM2_NOT_IN_RUNTIME_PATH/);
+  assert.match(deploy, /PM2_PROBE_EMPTY_OUTPUT/);
+  assert.match(deploy, /PM2_SUMMARY_NOT_ARRAY/);
+});

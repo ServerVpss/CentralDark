@@ -215,3 +215,13 @@ NEXT_CURSOR=PR_HEAD_CI → CHECK_CANONICAL_MCP_OWNER_DEPLOY_GATE → ISOLATED_CA
 - CI do PR #1896 no HEAD `6303444f4a512188d812d110e22a8b90526104bc` ainda PENDING antes da retificação. Nenhum deploy sem teste no novo HEAD.
 
 NEXT_CURSOR=NEW_SHA_CI → PROCESS_9100_SOURCE_IDENTITY → CANARY_SAFE_DEPLOY_GATE → T1_ROUTES_17 → RECEIPT.
+
+
+### PM2 — causa-raiz diferenciada, correção na branch canário (2026-10-21T20:15:38.720Z)
+
+@code_ref: `apps/modulos/mcp/src/tools/deploy/deploy.js`
+
+- A chamada `admin_pm2_list` retornou `spawn pm2 ENOENT`; o `deploy_status` anterior usava shell pipe sem `pipefail` e `JSON.parse(res.stdout.trim())`, produzindo `Unexpected end of JSON input` quando PM2/Python não retornavam JSON.
+- Patch usa `command -v pm2`, `set -o pipefail`, `res.exitCode` e códigos distinguíveis `PM2_NOT_IN_RUNTIME_PATH`, `PM2_PROBE_FAILED_EXIT_*`, `PM2_PROBE_EMPTY_OUTPUT`, `PM2_SUMMARY_JSON_INVALID`, `PM2_SUMMARY_NOT_ARRAY`.
+- Projeto JSON sanitizado continua sem expor env/token de PM2. Diagnóstico aprimorado **não instala PM2**, não reinicia serviço e não declara os processos parados. A configuração do PATH da unidade/processo ainda precisa de T1.
+- TEST_STATUS=AWAIT_SAME_SHA_CI; RUNTIME_STATUS=UNCHANGED.
