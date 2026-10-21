@@ -2,7 +2,7 @@
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark VS Code Restore",
   "description": "Restaura bancada e terminais; localiza PID e disponibiliza controle remoto autenticado, opt-in e privado por dispositivo.",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "publisher": "centraldark",
   "private": true,
   "engines": {
@@ -97,7 +97,8 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "test": "node --test tests/*.test.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
@@ -106,5 +107,8 @@
   },
   "extensionKind": [
     "ui"
+  ],
+  "extensionDependencies": [
+    "ms-vscode-remote.remote-ssh"
   ]
 }
