@@ -1,37 +1,7 @@
 import { z } from "zod";
-import { aprendizadoTools } from "../aprendizado/aprendizado.js";
-import { conscienciaTools } from "../consciencia/consciencia.js";
-import { deployTools } from "../deploy/deploy.js";
-import { githubAdminTools } from "../github/github-admin.js";
-import { githubReadTools } from "../github/github-read.js";
-import { githubTools } from "../github/github-tools.js";
-import { githubWriteTools } from "../github/github-write.js";
-import { mcpAdminTools } from "./mcp-admin.js";
-import { pendenciasTools } from "../pendencias/pendencias.js";
-import { skillTools } from "../skills/skill.js";
-import { supabaseTools } from "../supabase/supabase.js";
-import { vpsFileTools } from "../vps/vps-files.js";
-import { vpsLazyTools } from "../vps/vps-lazy.js";
-import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
-const runtimeTools = [
-    ...aprendizadoTools,
-    ...conscienciaTools,
-    ...skillTools,
-    ...githubReadTools,
-    ...githubWriteTools,
-    ...githubAdminTools,
-    ...githubTools,
-    ...vpsRunOnceTools,
-    ...vpsFileTools,
-    ...vpsLazyTools,
-    ...pendenciasTools,
-    ...deployTools,
-    ...supabaseTools,
-    ...mcpAdminTools,
-];
 const EXPECTED_SAFE_FULL_ADMIN = [
     "mcp_admin_call",
     "mcp_admin_catalog",
@@ -56,8 +26,10 @@ const EXPECTED_SAFE_FULL_ADMIN = [
     "mcp_policy_summary",
     "mcp_audit_recent_logs",
 ];
-function runtimeNames() {
-    return runtimeTools.map((tool) => tool.name).sort();
+async function runtimeNames() {
+    const mod = await import("./mcp-admin.js");
+    const tools = mod.getDispatcherRuntimeTools();
+    return [...new Set(tools.map((tool) => tool.name))].sort();
 }
 async function fetchJson(url) {
     const res = await fetch(url, { headers: { "User-Agent": "MCP-CentralDark/catalog-validator" } });
@@ -76,7 +48,7 @@ export const mcpDiagnosticsTools = [
             filter: z.string().optional().describe("Filtro opcional para listar tools por nome"),
         }),
         handler: async (input) => {
-            const names = runtimeNames();
+            const names = await runtimeNames();
             const expected = (input.expected && input.expected.length > 0 ? input.expected : EXPECTED_SAFE_FULL_ADMIN).sort();
             const missing = expected.filter((name) => !names.includes(name));
             const presentExpected = expected.filter((name) => names.includes(name));
@@ -90,13 +62,13 @@ export const mcpDiagnosticsTools = [
                 presentExpected,
                 missing,
                 filteredTools,
-                reconnectHint: "Se o /tools.json já mostra uma tool mas o ChatGPT não mostra, reconecte o conector. Depois use mcp_admin_call como porta fixa.",
+                reconnectHint: "Se o /tools.json já mostra uma tool mas o cliente não mostra, reconecte o conector. Depois use mcp_admin_call como porta fixa.",
             });
         },
     },
     {
         name: "deploy_validate_mcp_catalog",
-        description: "Valida /health e /tools.json públicos do MCP e compara com o catálogo runtime local esperado.",
+        description: "Valida /health e /tools.json públicos do MCP (mcp.centralldark.com) e compara com o catálogo do dispatcher. Não cria rota de deploy na API.",
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true, title: "Validar catálogo público MCP" },
         inputSchema: z.object({
             publicUrl: z.string().url().optional().describe("URL pública do MCP. Padrão: https://mcp.centralldark.com"),
@@ -105,7 +77,7 @@ export const mcpDiagnosticsTools = [
             const base = (input.publicUrl ?? "https://mcp.centralldark.com").replace(/\/+$/, "");
             const health = await fetchJson(`${base}/health`);
             const toolsJson = await fetchJson(`${base}/tools.json`);
-            const names = runtimeNames();
+            const names = await runtimeNames();
             const publicTools = Array.isArray(toolsJson.toolNames)
                 ? toolsJson.toolNames
                 : Array.isArray(toolsJson.tools)
@@ -122,6 +94,8 @@ export const mcpDiagnosticsTools = [
             return ok({
                 ok: publicMissingFromRuntime.length === 0 && expectedMissingPublic.length === 0,
                 base,
+                surface: "mcp.centralldark.com",
+                apiDeployRoute: false,
                 health,
                 runtimeToolCount: names.length,
                 publicToolCount: publicTools.length,
@@ -133,4 +107,3 @@ export const mcpDiagnosticsTools = [
         },
     },
 ];
-//# sourceMappingURL=mcp-diagnostics.js.map
