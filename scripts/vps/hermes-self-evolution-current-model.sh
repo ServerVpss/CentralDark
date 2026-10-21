@@ -1,8 +1,64 @@
 #!/usr/bin/env bash
 set -euo pipefail
-DONOR_DIR="${HERMES_SELF_EVOLUTION_DIR:-/root/.hermes/cache/scratch/hermes-agent-self-evolution}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+CENTRALDARK_REPO="${CENTRALDARK_REPO:-$(cd -- "$SCRIPT_DIR/../.." && pwd)}"
+DONOR_DIR="${HERMES_SELF_EVOLUTION_DIR:-${HOME:-/root}/.hermes/cache/scratch/hermes-agent-self-evolution}"
+DONOR_REPO="${HERMES_SELF_EVOLUTION_REPO:-https://github.com/NousResearch/hermes-agent-self-evolution.git}"
+DONOR_REF="${HERMES_SELF_EVOLUTION_REF:-0a929e3aa20e15cf04dc7c28492a7d41a5139125}"
+SELF_PROVISION="${HERMES_SELF_PROVISION:-1}"
+STATE_DIR="${CENTRALDARK_STATE_DIR:-$CENTRALDARK_REPO/logs}"
 BASE_URL="${CENTRALDARK_LOCAL_AI_BASE_URL:-http://127.0.0.1:18435/v1}"
 HEALTH_URL="${BASE_URL%/v1}/health"
+
+fail() {
+  printf '%s\n' "$1" >&2
+  exit "${2:-1}"
+}
+
+provision_donor() {
+  [ "$SELF_PROVISION" = "1" ] || return 0
+  command -v git >/dev/null || fail "SELF_PROVISION_GIT_UNAVAILABLE" 69
+  command -v python3 >/dev/null || fail "SELF_PROVISION_PYTHON_UNAVAILABLE" 69
+
+  cloned=0
+  if [ ! -d "$DONOR_DIR/.git" ]; then
+    [ ! -e "$DONOR_DIR" ] || fail "SELF_PROVISION_REFUSES_UNMANAGED_DONOR:$DONOR_DIR" 73
+    mkdir -p "$(dirname -- "$DONOR_DIR")"
+    git clone --no-checkout --filter=blob:none "$DONOR_REPO" "$DONOR_DIR"
+    cloned=1
+  fi
+
+  if ! git -C "$DONOR_DIR" cat-file -e "$DONOR_REF^{commit}" 2>/dev/null; then
+    git -C "$DONOR_DIR" fetch --no-tags origin "$DONOR_REF"
+  fi
+  resolved_ref="$(git -C "$DONOR_DIR" rev-parse "$DONOR_REF^{commit}")"
+  if [ "$cloned" -eq 0 ]; then
+    [ -z "$(git -C "$DONOR_DIR" status --porcelain --untracked-files=no)" ] || fail "SELF_PROVISION_DONOR_DIRTY:$DONOR_DIR" 73
+  fi
+  if [ "$cloned" -eq 1 ] || [ "$(git -C "$DONOR_DIR" rev-parse HEAD 2>/dev/null || true)" != "$resolved_ref" ]; then
+    git -C "$DONOR_DIR" checkout --detach "$resolved_ref"
+  fi
+
+  if [ ! -x "$DONOR_DIR/.venv/bin/python" ]; then
+    python3 -m venv "$DONOR_DIR/.venv"
+    if [ -f "$DONOR_DIR/requirements.txt" ]; then
+      "$DONOR_DIR/.venv/bin/python" -m pip install -r "$DONOR_DIR/requirements.txt"
+    elif [ -f "$DONOR_DIR/pyproject.toml" ]; then
+      "$DONOR_DIR/.venv/bin/python" -m pip install "$DONOR_DIR"
+    else
+      fail "SELF_PROVISION_DEPENDENCY_MANIFEST_MISSING:$DONOR_DIR" 65
+    fi
+  fi
+
+  (cd "$DONOR_DIR" && .venv/bin/python -c 'import evolution.skills.evolve_skill')
+  printf 'SELF_PROVISIONED donor=%s ref=%s\n' "$DONOR_DIR" "$resolved_ref"
+}
+
+provision_donor
+if [ "${1:-}" = "--self-provision-only" ]; then
+  exit 0
+fi
+
 HEALTH_JSON="$(curl -fsS --max-time 5 "$HEALTH_URL")"
 MODEL="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("model", ""))' <<<"$HEALTH_JSON")"
 [ -n "$MODEL" ] || { echo "CURRENT_LOCAL_MODEL_UNKNOWN" >&2; exit 42; }
@@ -41,13 +97,12 @@ for ((i=0;i<${#ARGS[@]};i++)); do
 done
 [ "$has_optimizer" -eq 1 ] || ARGS+=(--optimizer-model "$MODEL_SPEC")
 [ "$has_eval" -eq 1 ] || ARGS+=(--eval-model "$MODEL_SPEC")
-mkdir -p /root/CentralDark/logs
-python3 - "$MODEL" "$BASE_URL" "$$" <<'PY'
+mkdir -p "$STATE_DIR"
+python3 - "$MODEL" "$BASE_URL" "$$" "$STATE_DIR/self-evolution-binding.json" "$DONOR_REF" "$SELF_PROVISION" <<'PY'
 import json,sys,time,os
-model,base,pid=sys.argv[1:]
-path="/root/CentralDark/logs/self-evolution-binding.json"
+model,base,pid,path,donor_ref,self_provision=sys.argv[1:]
 with open(path,"w") as f:
-    json.dump({"schema":"centraldark.self-evolution-binding.v1","observed_at":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),"model":model,"model_spec":"openai/"+model,"base_url":base,"pid":int(pid),"rules":{"resolved_at_lote_start":True,"mid_lote_swap":False}},f,indent=2)
+    json.dump({"schema":"centraldark.self-evolution-binding.v1","observed_at":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),"model":model,"model_spec":"openai/"+model,"base_url":base,"pid":int(pid),"donor_ref":donor_ref,"rules":{"resolved_at_lote_start":True,"mid_lote_swap":False,"self_provision_enabled":self_provision == "1"}},f,indent=2)
     f.write("\n")
 os.chmod(path,0o600)
 PY
