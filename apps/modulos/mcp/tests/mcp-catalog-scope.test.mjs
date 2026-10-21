@@ -15,8 +15,14 @@ test("17 canonical routes include all four canary bindings", () => {
 });
 test("validator uses same dispatcher registry and read-only catalog handler", () => {
   assert.match(diag, /getDispatcherRuntimeTools\(\)/);
+  assert.match(admin, /export const mcpAdminTools = \[/);
+  assert.match(diag, /mod\.mcpAdminTools/);
+  assert.match(diag, /adminTools\.find\(\(tool\) => tool\.name === "mcp_admin_catalog"\)/);
   assert.match(diag, /catalogTool\.handler\(\{\}\)/);
   assert.match(diag, /routeParity/);
+  assert.match(diag, /expectedRouteCount: 17/);
+  assert.match(diag, /publicRestrictedByPolicy/);
+  assert.match(diag, /publicMissingSafe/);
   assert.match(diag, /missingCanaryRoutes/);
   assert.match(diag, /RUNTIME_SUBSET_OF_PUBLIC_NOT_EQUAL_SCOPE/);
 });

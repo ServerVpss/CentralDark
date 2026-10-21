@@ -47,7 +47,11 @@ async function runtimeSnapshot() {
     const mod = await import("./mcp-admin.js");
     const tools = mod.getDispatcherRuntimeTools();
     const names = [...new Set(tools.map((tool) => tool.name))].sort();
-    const catalogTool = tools.find((tool) => tool.name === "mcp_admin_catalog");
+    const adminTools = mod.mcpAdminTools;
+    // mcp_admin_catalog is exported via mcpAdminTools, not runtimeTools.
+    // Expected admin capabilities are compared against the union without inflating runtimeToolCount.
+    const exposedNames = [...new Set([...names, ...adminTools.map((tool) => tool.name)])].sort();
+    const catalogTool = adminTools.find((tool) => tool.name === "mcp_admin_catalog");
     if (!catalogTool?.handler) throw new Error("MCP_ADMIN_CATALOG_UNAVAILABLE");
     const result = await catalogTool.handler({});
     const catalog = JSON.parse(result?.content?.find((part) => part.type === "text")?.text ?? "{}");
@@ -56,12 +60,13 @@ async function runtimeSnapshot() {
     }
     const routeNames = [...new Set(catalog.routes.map((route) => route.id))].sort();
     return {
-        names, routeNames,
+        names, exposedNames, routeNames,
+        expectedRouteCount: 17,
         catalogScope: catalog.catalogScope,
         catalogFingerprint: catalog.catalogFingerprint,
         advertisedToolCount: catalog.totalRuntimeTools,
         routeCount: catalog.routeCount,
-        routeParity: catalog.routeCount === routeNames.length,
+        routeParity: catalog.routeCount === routeNames.length && catalog.routeCount === 17,
         missingCanaryRoutes: EXPECTED_CANARY_ROUTES.filter((id) => !routeNames.includes(id)),
         legacySafetyReview: LEGACY_REQUIRES_SAFETY_REVIEW.map((name) => ({
             name, present: names.includes(name), reviewRequired: true,
@@ -88,14 +93,16 @@ export const mcpDiagnosticsTools = [
             const snapshot = await runtimeSnapshot();
             const names = snapshot.names;
             const expected = (input.expected && input.expected.length > 0 ? input.expected : EXPECTED_SAFE_FULL_ADMIN).sort();
-            const missing = expected.filter((name) => !names.includes(name));
-            const presentExpected = expected.filter((name) => names.includes(name));
+            const missing = expected.filter((name) => !snapshot.exposedNames.includes(name));
+            const presentExpected = expected.filter((name) => snapshot.exposedNames.includes(name));
             const filter = (input.filter ?? "").toLowerCase().trim();
             const filteredTools = filter ? names.filter((name) => String(name || "").toLowerCase().includes(filter)) : undefined;
             return ok({
                 ok: missing.length === 0 && snapshot.missingCanaryRoutes.length === 0 && snapshot.routeParity,
                 status: missing.length || snapshot.missingCanaryRoutes.length || !snapshot.routeParity ? "DRIFT" : "OK",
                 runtimeToolCount: names.length,
+                exposedToolCount: snapshot.exposedNames.length,
+                expectedRouteCount: snapshot.expectedRouteCount,
                 catalogScope: snapshot.catalogScope,
                 catalogFingerprint: snapshot.catalogFingerprint,
                 routeCount: snapshot.routeCount,
@@ -137,14 +144,19 @@ export const mcpDiagnosticsTools = [
                     : [];
             const publicMissingFromRuntime = names.filter((name) => !publicTools.includes(name));
             const publicOnly = publicTools.filter((name) => !names.includes(name));
+            const publicRestrictedByPolicy = tools.filter((tool) =>
+                tool.annotations?.destructiveHint === true && !publicTools.includes(tool.name)).map((tool) => tool.name);
+            const publicMissingSafe = publicMissingFromRuntime.filter((name) => !publicRestrictedByPolicy.includes(name));
             const expectedMissingPublic = EXPECTED_SAFE_FULL_ADMIN.filter((name) => !publicTools.includes(name));
             return ok({
-                ok: publicMissingFromRuntime.length === 0 && expectedMissingPublic.length === 0 && snapshot.missingCanaryRoutes.length === 0 && snapshot.routeParity,
+                ok: publicMissingSafe.length === 0 && expectedMissingPublic.length === 0 && snapshot.missingCanaryRoutes.length === 0 && snapshot.routeParity,
                 base,
                 surface: "mcp.centralldark.com",
                 apiDeployRoute: false,
                 health,
                 runtimeToolCount: names.length,
+                exposedToolCount: snapshot.exposedNames.length,
+                expectedRouteCount: snapshot.expectedRouteCount,
                 catalogScope: snapshot.catalogScope,
                 catalogFingerprint: snapshot.catalogFingerprint,
                 routeCount: snapshot.routeCount,
@@ -158,6 +170,8 @@ export const mcpDiagnosticsTools = [
                 publicOnlyCount: publicOnly.length,
                 publicOnly,
                 publicMissingFromRuntime,
+                publicRestrictedByPolicy,
+                publicMissingSafe,
                 expectedMissingPublic,
                 checkedAt: new Date().toISOString(),
             });

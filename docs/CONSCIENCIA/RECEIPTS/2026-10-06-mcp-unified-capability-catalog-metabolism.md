@@ -203,3 +203,15 @@ STATUS=SOURCE_CANDIDATE_NOT_DEPLOYED
 - Confirmar rollback e recibo correlacionado no mesmo SHA antes de declarar FIXED_POINT. RUNTIME_DEPLOY=UNKNOWN; CASA_REVERSE_EXEC=UNKNOWN; CI=UNKNOWN enquanto não verificados.
 
 NEXT_CURSOR=PR_HEAD_CI → CHECK_CANONICAL_MCP_OWNER_DEPLOY_GATE → ISOLATED_CANARY → ROUTE_READBACK_17 → RECEIPT → FIXED_POINT.
+
+
+### Retificação técnica no mesmo PR (2026-10-21)
+
+- Contraprova: a primeira implementação procurava `mcp_admin_catalog` em `runtimeTools`. O arquivo `mcp-admin.js` exporta o catálogo na coleção `mcpAdminTools`; sem correção ocorreria `MCP_ADMIN_CATALOG_UNAVAILABLE` no runtime. Patch corrigiu a origem e preservou `runtimeToolCount` sem inflar a contagem por tools externas; compara expectativa administrativa contra união de nomes.
+- `routeParity` exige cardinalidade de **17** e não apenas consistência interna com a própria lista.
+- `publicRestrictedByPolicy` classifica tools destrutivas ausentes do catálogo público sem reexposição; apenas ausências não justificadas entram no gate `publicMissingSafe`.
+- `admin_pm2_list` via dispatcher retornou `spawn pm2 ENOENT`; `deploy_status` ainda retorna `vps_pm2: SyntaxError: Unexpected end of JSON input`. Provável executável PM2 não resolvido no ambiente do MCP, mas processo/ExecStart ainda não aferido. Nenhuma afirmação de PM2 off.
+- Remote Desktop Commander `list_devices` reportou SEGREDO e CENTRALDARK-OS offline pelo fornecedor, apesar de `tailscale_bridge_status` reportar os hosts online. São camadas distintas; ponte Tailscale PASS não prova Desktop Commander online.
+- CI do PR #1896 no HEAD `6303444f4a512188d812d110e22a8b90526104bc` ainda PENDING antes da retificação. Nenhum deploy sem teste no novo HEAD.
+
+NEXT_CURSOR=NEW_SHA_CI → PROCESS_9100_SOURCE_IDENTITY → CANARY_SAFE_DEPLOY_GATE → T1_ROUTES_17 → RECEIPT.
