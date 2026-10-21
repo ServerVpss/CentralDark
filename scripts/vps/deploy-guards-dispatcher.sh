@@ -210,13 +210,42 @@ trap cleanup_gate_tmp EXIT
 git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
   || die "não foi possível materializar SHA alvo para contraprova" 16
 
+prepare_horn_facts() {
+  local report="$GATE_ROOT/horn-caracol-repo-check.json"
+  local facts="$GATE_ROOT/tlc23-deploy-facts.json"
+  (
+    cd "$GATE_TMP"
+    python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py \
+      --repo-check "$GATE_TMP" > "$report"
+  ) || return 16
+  python3 - "$report" "$facts" <<'PY'
+import json
+import sys
+
+report_path, facts_path = sys.argv[1:]
+report = json.loads(open(report_path, encoding="utf-8").read())
+if report.get("accepted") is not True or not isinstance(report.get("facts"), dict):
+    print("HORN_CARACOL_REPO_CHECK_BLOCK", file=sys.stderr)
+    raise SystemExit(16)
+with open(facts_path, "w", encoding="utf-8") as stream:
+    json.dump({"centraldark_gate": report["facts"]}, stream, indent=2)
+    stream.write("\n")
+PY
+}
+
 (
   set -euo pipefail
   cd "$GATE_TMP"
   test "$(git rev-parse HEAD)" = "$ALVO"
   python3 scripts/trigger-fabric/centraldark_master_cycle.py --self-test
-  python3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$CONTRACT_RECEIPT"
-  grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$CONTRACT_RECEIPT"
+  if ! python3 scripts/trigger-fabric/verify_repo_contract.py . | tee "$CONTRACT_RECEIPT"; then
+    echo "REPO_CONTRACT_VERIFY_COMMAND_FAILED"
+    exit 16
+  fi
+  if ! grep -q '^REPO_CONTRACT_VERIFY=PASS$' "$CONTRACT_RECEIPT"; then
+    echo "REPO_CONTRACT_VERIFY=FAIL"
+    exit 16
+  fi
   node apps/modulos/HERMES-CORE/core/universal-method-contract.mjs --self-test
   node --check scripts/agent-call.mjs
   grep -q "CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED" scripts/agent-call.mjs
@@ -237,21 +266,7 @@ git worktree add --detach "$GATE_TMP" "$ALVO" --quiet \
 
 # Gate-only prova o SHA e sai sem tocar checkout/runtime.
 if [[ "$GATE_ONLY" -eq 1 ]]; then
-  cat >"$GATE_ROOT/tlc23-deploy-facts.json" <<'JSON'
-{
-  "centraldark_gate": {
-    "acordar_done": true,
-    "calibrar_done": true,
-    "multibussola_done": true,
-    "meta_lupa_done": true,
-    "menos_e_mais_done": true,
-    "owner_resolved": true,
-    "writer_scope_valid": true,
-    "evidence_bound": true,
-    "no_destructive_bypass": true
-  }
-}
-JSON
+  prepare_horn_facts || die "HORN_CARACOL_REPO_CHECK=BLOCK" 16
   (cd "$GATE_TMP" && python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_ROOT/tlc23-deploy-facts.json") || die "HORN_CARACOL_GATE_ONLY=BLOCK" 16
   log "TLC23_DEPLOY_GATE_ONLY=PASS TARGET_SHA=$ALVO"
   exit 0
@@ -266,21 +281,7 @@ fi
 [[ "$SUJOS_ALL" -eq 0 ]] || die "TLC23 bloqueou worktree suja" 16
 [[ "$AFRENTE" -eq 0 ]] || die "TLC23 bloqueou histórico local à frente; reconciliar antes" 16
 
-cat >"$GATE_ROOT/tlc23-deploy-facts.json" <<'JSON'
-{
-  "centraldark_gate": {
-    "acordar_done": true,
-    "calibrar_done": true,
-    "multibussola_done": true,
-    "meta_lupa_done": true,
-    "menos_e_mais_done": true,
-    "owner_resolved": true,
-    "writer_scope_valid": true,
-    "evidence_bound": true,
-    "no_destructive_bypass": true
-  }
-}
-JSON
+prepare_horn_facts || die "HORN_CARACOL_REPO_CHECK=BLOCK" 16
 (
   cd "$GATE_TMP"
   python3 .agents/skills/meta-lupa/scripts/horn_caracol_gate.py --facts-file "$GATE_ROOT/tlc23-deploy-facts.json"

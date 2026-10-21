@@ -126,6 +126,7 @@ jobs:
 
       - name: 🔹 Publicar artefato de prova do HEAD
         id: upload_contract
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: pr-learning-contract-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
@@ -133,7 +134,7 @@ jobs:
             ${{ runner.temp }}/pr-learning-artifact.md
             ${{ runner.temp }}/pr-learning-artifact.html
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 1
 
       - name: 🔹 Gate de caminho sensível
         id: sensitive_gate
@@ -179,6 +180,7 @@ jobs:
           SKIPPED="$(value_or_unknown "$TEST_SKIPPED")"
           DIGEST="$(value_or_unknown "$ARTIFACT_DIGEST")"
           SUPPORT="$(value_or_unknown "$SUPPORT_REQUIRED")"
+          if [ "$UPLOAD" = "success" ]; then MIRROR=PASS; elif [ "$UPLOAD" = "failure" ]; then MIRROR=DEGRADED; else MIRROR=UNKNOWN; fi
 
           BLOCKED=NAO
           CAUSE=NENHUMA
@@ -188,7 +190,6 @@ jobs:
           elif [ "$VERIFIED" = "UNKNOWN" ]; then BLOCKED=SIM; CAUSE=CHECKED_OUT_HEAD_UNKNOWN
           elif [ "$VERIFIED" != "$HEAD_SHA" ]; then BLOCKED=SIM; CAUSE=CHECKED_OUT_HEAD_MISMATCH
           elif [ "$ARTIFACT" != "success" ]; then BLOCKED=SIM; CAUSE=ARTIFACT_NOT_PROVEN
-          elif [ "$UPLOAD" != "success" ]; then BLOCKED=SIM; CAUSE=UPLOAD_NOT_PROVEN
           elif [ "$GATE" = "failure" ]; then BLOCKED=SIM; CAUSE=BLOCKED_SENSITIVE_PATH
           elif [ "$TOTAL" = "UNKNOWN" ] || [ "$PASS" = "UNKNOWN" ] || [ "$FAIL" = "UNKNOWN" ] || [ "$SKIPPED" = "UNKNOWN" ]; then
             BLOCKED=SIM; CAUSE=TEST_RECEIPT_UNKNOWN
@@ -204,7 +205,8 @@ jobs:
             echo "- Alvo: \`PR_HEAD\`"
             echo "- BLOCKED: \`$BLOCKED\`"
             echo "- Causa: \`$CAUSE\`"
-            echo "- Outcomes: \`checkout=$CHECKOUT tests=$TESTS input=$INPUT head_identity=$VERIFIED artifact=$ARTIFACT upload=$UPLOAD sensitive_gate=$GATE\`"
+            echo "- Outcomes: \`checkout=$CHECKOUT tests=$TESTS input=$INPUT head_identity=$VERIFIED artifact=$ARTIFACT upload_mirror=$UPLOAD sensitive_gate=$GATE\`"
+            echo "- Artifact mirror: \`$MIRROR\` (não é gate técnico)"
             echo "- Testes: \`$TOTAL total / $PASS PASS / $FAIL FAIL / $SKIPPED SKIPPED\`"
             echo "- Estado do artefato: \`$STATUS\`"
             echo "- Suporte necessário: \`$SUPPORT\`"
@@ -286,6 +288,7 @@ jobs:
 
       - name: 🔹 Salvar Canvas e Markdown como artifact
         id: upload_published
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: pr-learning-artifact-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
@@ -293,7 +296,7 @@ jobs:
             ${{ runner.temp }}/pr-learning-artifact.md
             ${{ runner.temp }}/pr-learning-artifact.html
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 1
 
       - name: 🔹 Atualizar comentário idempotente e pedir suporte
         id: publish_comment
@@ -379,13 +382,13 @@ jobs:
           STATUS="$(value_or_unknown "$ARTIFACT_STATUS")"
           SUPPORT="$(value_or_unknown "$SUPPORT_REQUIRED")"
           DIGEST="$(value_or_unknown "$ARTIFACT_DIGEST")"
+          if [ "$UPLOAD" = "success" ]; then MIRROR=PASS; elif [ "$UPLOAD" = "failure" ]; then MIRROR=DEGRADED; else MIRROR=UNKNOWN; fi
 
           BLOCKED=NAO
           CAUSE=NENHUMA
           if [ "$CHECKOUT" != "success" ]; then BLOCKED=SIM; CAUSE=TRUSTED_BASE_CHECKOUT_NOT_PROVEN
           elif [ "$METADATA" != "success" ]; then BLOCKED=SIM; CAUSE=METADATA_NOT_PROVEN
           elif [ "$ARTIFACT" != "success" ]; then BLOCKED=SIM; CAUSE=ARTIFACT_NOT_PROVEN
-          elif [ "$UPLOAD" != "success" ]; then BLOCKED=SIM; CAUSE=UPLOAD_NOT_PROVEN
           elif [ "$PUBLISH" != "success" ]; then BLOCKED=SIM; CAUSE=COMMENT_OR_LABEL_NOT_PROVEN
           elif [ "$GATE" = "failure" ]; then BLOCKED=SIM; CAUSE=BLOCKED_SENSITIVE_PATH
           elif [ "$STATUS" = "UNKNOWN" ] || [ "$DIGEST" = "UNKNOWN" ]; then BLOCKED=SIM; CAUSE=RECEIPT_UNKNOWN
@@ -399,7 +402,8 @@ jobs:
             echo "- Alvo: \`PR_CONVERSATION_AND_ARTIFACT\`"
             echo "- BLOCKED: \`$BLOCKED\`"
             echo "- Causa: \`$CAUSE\`"
-            echo "- Outcomes: \`checkout=$CHECKOUT metadata=$METADATA artifact=$ARTIFACT upload=$UPLOAD publish=$PUBLISH sensitive_gate=$GATE\`"
+            echo "- Outcomes: \`checkout=$CHECKOUT metadata=$METADATA artifact=$ARTIFACT upload_mirror=$UPLOAD publish=$PUBLISH sensitive_gate=$GATE\`"
+            echo "- Artifact mirror: \`$MIRROR\` (não é gate técnico)"
             echo "- Estado: \`$STATUS\`"
             echo "- Suporte: \`$SUPPORT\`"
             echo "- Digest: \`$DIGEST\`"

@@ -28,14 +28,14 @@ jobs:
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     steps:
-      - name: Checkout exact SHA
+      - name: 📥 Checkout exact SHA
         uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Provar BOOT-FORJA-TOTAL no mesmo motor
+      - name: 🚀 Provar BOOT-FORJA-TOTAL no mesmo motor
         shell: bash
         run: |
           set -euo pipefail
@@ -44,14 +44,14 @@ jobs:
           jq -e '.status == "PASS" and .canonical_trigger == "!CENTRALDARK" and (.chain | index("FIXED_POINT") != null) and .creates_second_brain == false' "$RUNNER_TEMP/boot-forja-total.json" >/dev/null
           echo "TRIGGER_ADAPTER_TEST=PASS"
 
-      - name: Contraprovar auto-ingest do Drive sem rede real
+      - name: 🧪 Contraprovar auto-ingest do Drive sem rede real
         shell: bash
         run: |
           set -euo pipefail
           chmod +x scripts/drive-ingest-once.sh scripts/drive-ingest-once.test.sh scripts/sync-loop.sh scripts/installer/install-forja-total-vps.sh
           bash scripts/drive-ingest-once.test.sh
 
-      - name: Testar Fixed Point Fabric
+      - name: 🧵 Testar Fixed Point Fabric
         shell: bash
         run: |
           set -euo pipefail
@@ -59,7 +59,7 @@ jobs:
           python3 -m unittest discover -s tests -v
           echo "FIXED_POINT_PACKAGE_TESTS=PASS"
 
-      - name: Localizar owner PM2 existente da VPS
+      - name: 🔎 Localizar owner PM2 existente da VPS
         id: runtime
         shell: bash
         run: |
@@ -74,7 +74,7 @@ jobs:
           printf 'runtime_root=%s\n' "$runtime_root" >>"$GITHUB_OUTPUT"
           echo "RUNTIME_OWNER=CentralDark-SyncDrive"
 
-      - name: Instalar Forja Total na VPS pelo instalador canônico do componente
+      - name: 🔥 Instalar Forja Total na VPS pelo instalador canônico do componente
         shell: bash
         env:
           CENTRALDARK_SOURCE_ROOT: ${{ github.workspace }}

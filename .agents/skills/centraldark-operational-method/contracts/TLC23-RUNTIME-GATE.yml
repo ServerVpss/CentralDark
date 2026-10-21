@@ -45,6 +45,62 @@ profile_boundary:
   may_override_canonical: false
   may_create_parallel_owner: false
 
+# Hereditary Goal/Criterion DNA. This is an additive projection of the existing
+# TLC23/operational-method owner, not a second criterion engine or scheduler.
+hereditary_criterion_dna:
+  criterion_engine_owner: .agents/skills/centraldark-operational-method
+  inheritance_mode: HEREDITARY_DNA
+  levels:
+    - GOAL
+    - SUBGOAL
+    - LOTE/BATCH
+    - SUBAGENT/SUBSUBGOAL
+  inherited_fields:
+    - intention_objective
+    - inherited_why_intent
+    - success_predicate_terminal_indivisible
+    - current_baseline
+    - owner_scope
+    - proof_destination
+    - reuse_before_create
+    - parallel_perception_lenses
+    - ONE_WRITER_PER_SCOPE
+    - counterproof
+    - reality_judge
+    - remediation_after_state_change
+    - receipt
+    - NEXT_CURSOR
+    - continuation_until_FIXED_POINT_or_HUMAN_ONLY_BLOCKER
+  inheritance_rules:
+    CHILD_CAN_REFINE_CRITERION: true
+    CHILD_CANNOT_WEAKEN_PARENT_CRITERION: true
+    LOCAL_DONE != PARENT_DONE: true
+    parent_intent_and_predicate_are_immutable_bindings: true
+    child_inherits_why_intent_and_proof_destination: true
+    child_may_narrow_scope_without_changing_intent: true
+    child_must_rebind_current_baseline_and_owner_scope: true
+    evidence_returns_to_parent: true
+    intelligence_lives_in_process_and_inheritance: true
+    parallel_perception_is_observation_only: true
+    mutation_is_serialized_per_scope: true
+    steps_are_not_inherited: true
+    children_must_rederive_local_steps: true
+    every_descendant_emits_its_own_receipt_and_NEXT_CURSOR: true
+    state_change_expires_dependent_proof_and_requires_remediation: true
+  terminal_done_states:
+    - FIXED_POINT
+    - HUMAN_ONLY_BLOCKER
+  intermediate_states_are_not_done: true
+  intermediate_states:
+    - STEPS
+    - COMMIT
+    - PUSH
+    - PR
+    - MERGE
+    - QUEUED
+    - GREEN
+    - DEPLOY_TRIGGERED
+
 required_facts:
   - TLC23_SOURCE_IDENTITY_PROVED
   - MAIN_SHA_MEASURED

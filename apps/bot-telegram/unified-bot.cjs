@@ -23,6 +23,7 @@
 const http             = require('http');
 const fs               = require('fs');
 const path             = require('path');
+const crypto            = require('crypto');
 const { execSync, spawn } = require('child_process');
 const {
   DEFAULT_LOCAL_AI_BASE_URL,
@@ -1823,6 +1824,7 @@ async function handleMessage(msg) {
     const response = await callLLMWithTools(sess.history, finalPrompt);
     sess.history.push({ role: 'assistant', content: response });
     resetInactivityTimer(chatId);
+    const progress = await animateProgress(chatId, '🤖 Processando modelo');
 
     const htmlResponse = mdToHtml(response);
     const chunks = [];
@@ -1832,15 +1834,14 @@ async function handleMessage(msg) {
       const label  = cog
         ? `${cog.emoji} ${cog.nome} · ${ag.emoji} ${ag.nome}`
         : `${ag.emoji} ${ag.nome}`;
-      await send(
-        chatId,
-        chunks[i] + (isLast ? `\n\n<i>${label}</i>` : ''),
-        isLast ? [[
-          { text: '🏠 Painel', callback_data: 'hub:main' },
-          { text: '🧹 Limpar', callback_data: 'hub:clear' },
-          { text: '📋 Pendências', callback_data: 'c:pendencias' },
-        ]] : null,
-      );
+      const buttons = isLast ? [[
+            { text: '🏠 Painel', callback_data: 'hub:main' },
+            { text: '🧹 Limpar', callback_data: 'hub:clear' },
+            { text: '📋 Pendências', callback_data: 'c:pendencias' },
+          ]] : null;
+      const rendered = chunks[i] + (isLast ? `\n\n<i>${label}</i>` : '');
+      if (i === 0) await progress.done(rendered, buttons);
+      else await send(chatId, rendered, buttons);
     }
   } else {
     // ── Não-admin: BLOQUEIO TOTAL com escracho ─────────────────────────────
@@ -2012,4 +2013,6 @@ async function main() {
   await pollingLoop();
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = { processUpdate };

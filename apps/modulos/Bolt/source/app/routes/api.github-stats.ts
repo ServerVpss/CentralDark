@@ -3,6 +3,44 @@ import { getApiKeysFromCookie } from '~/lib/api/cookies';
 import { withSecurity } from '~/lib/security';
 import type { GitHubUserResponse, GitHubStats } from '~/types/GitHub';
 
+type CurrentState = 'PASS' | 'FAIL' | 'UNKNOWN' | 'BLOCKED';
+
+type CurrentLane = {
+  number: number;
+  title: string;
+  headSha: string;
+  state: CurrentState;
+  url: string;
+};
+
+async function githubJson<T>(url: string, githubToken: string): Promise<T> {
+  const response = await fetch(url, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${githubToken}`,
+      'User-Agent': 'centraldark-hud-current-projection/1.0',
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  });
+  if (!response.ok) throw new Error(`GitHub API error: ${response.status} ${url}`);
+  return response.json() as Promise<T>;
+}
+
+function classifyChecks(checkRuns: Array<{ status?: string; conclusion?: string | null }>, draft: boolean): CurrentState {
+  if (draft) return 'BLOCKED';
+  if (checkRuns.some((run) => run.conclusion === 'action_required')) return 'BLOCKED';
+  if (checkRuns.some((run) => ['failure', 'timed_out'].includes(String(run.conclusion)))) return 'FAIL';
+  if (checkRuns.length === 0 || checkRuns.some((run) => run.status !== 'completed')) return 'UNKNOWN';
+  if (checkRuns.some((run) => ['cancelled', 'skipped', null].includes(run.conclusion ?? null))) return 'UNKNOWN';
+  return checkRuns.every((run) => ['success', 'neutral'].includes(String(run.conclusion))) ? 'PASS' : 'UNKNOWN';
+}
+
+async function sha256Hex(value: string): Promise<string> {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
 async function githubStatsLoader({ request, context }: { request: Request; context: any }) {
   try {
     // Get API keys from cookies (server-side only)
@@ -136,6 +174,78 @@ async function githubStatsLoader({ request, context }: { request: Request; conte
     const totalStars = allRepos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
     const totalForks = allRepos.reduce((sum, repo) => sum + (repo.forks_count || 0), 0);
 
+    const centralRepo = 'ServerVpss/CentralDark';
+    const [mainBranch, openPulls, receiptCommits] = await Promise.all([
+      githubJson<{ commit: { sha: string } }>(`https://api.github.com/repos/${centralRepo}/branches/main`, githubToken),
+      githubJson<Array<{
+        number: number;
+        title: string;
+        html_url: string;
+        draft: boolean;
+        head: { sha: string };
+      }>>(`https://api.github.com/repos/${centralRepo}/pulls?state=open&per_page=30`, githubToken),
+      githubJson<Array<{ sha: string }>>(
+        `https://api.github.com/repos/${centralRepo}/commits?path=docs/CONSCIENCIA/RECEIPTS&per_page=1`,
+        githubToken,
+      ),
+    ]);
+
+    const activeLanes: CurrentLane[] = await Promise.all(
+      openPulls
+        .filter((pr) => ![1562, 1757].includes(pr.number))
+        .map(async (pr) => {
+          const checks = await githubJson<{ check_runs?: Array<{ status?: string; conclusion?: string | null }> }>(
+            `https://api.github.com/repos/${centralRepo}/commits/${pr.head.sha}/check-runs?per_page=100`,
+            githubToken,
+          ).catch(() => ({ check_runs: [] }));
+          return {
+            number: pr.number,
+            title: pr.title,
+            headSha: pr.head.sha,
+            state: classifyChecks(checks.check_runs ?? [], pr.draft),
+            url: pr.html_url,
+          };
+        }),
+    );
+
+    const checklist = {
+      total: activeLanes.length,
+      pass: activeLanes.filter((lane) => lane.state === 'PASS').length,
+      fail: activeLanes.filter((lane) => lane.state === 'FAIL').length,
+      unknown: activeLanes.filter((lane) => lane.state === 'UNKNOWN').length,
+      blocked: activeLanes.filter((lane) => lane.state === 'BLOCKED').length,
+    };
+    const receiptsFingerprint = receiptCommits[0]?.sha ?? 'UNKNOWN';
+    const sourceMaterial = [
+      mainBranch.commit.sha,
+      receiptsFingerprint,
+      ...activeLanes.map((lane) => `${lane.number}:${lane.headSha}:${lane.state}`),
+    ].join('|');
+    const sourceFingerprint = await sha256Hex(sourceMaterial);
+    const nextLane =
+      activeLanes.find((lane) => lane.state === 'BLOCKED') ??
+      activeLanes.find((lane) => lane.state === 'FAIL') ??
+      activeLanes.find((lane) => lane.state === 'UNKNOWN');
+    const nextCursor = nextLane
+      ? `${nextLane.state === 'BLOCKED' ? 'UNBLOCK' : nextLane.state === 'FAIL' ? 'REPAIR' : 'REMEASURE'}_PR_${nextLane.number}`
+      : 'FIXED_POINT_WAIT_FOR_DELTA';
+
+    const currentProjection = {
+      role: 'HUD_CURRENT_PROJECTION',
+      authority: false,
+      measuredAt: now.toISOString(),
+      mainSha: mainBranch.commit.sha,
+      activeLanes,
+      checklist,
+      receiptsFingerprint,
+      sourceFingerprint,
+      nextCursor,
+      provenance: {
+        retiredPrMothers: [1562, 1757],
+        checklistHistory: 'docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md',
+      },
+    };
+
     // Recent activity (repos updated in last 30 days)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -179,7 +289,7 @@ async function githubStatsLoader({ request, context }: { request: Request; conte
       lastUpdated: now.toISOString(),
     };
 
-    return json(stats);
+    return json({ ...stats, currentProjection });
   } catch (error) {
     console.error('Error fetching GitHub stats:', error);
     return json(

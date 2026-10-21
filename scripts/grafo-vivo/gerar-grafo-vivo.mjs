@@ -5,8 +5,10 @@
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = '/root/CentralDark';
+const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const GRAPH = `${ROOT}/apps/modulos/status/graph-data.json`;
 const GRAPH_PANEL_MIRROR = `${ROOT}/apps/modulos/graph-panel/data/graph.json`;
 const BAND_SCORE = `${ROOT}/docs/BRAIN/01-CONCEITOS/02-BANDA/BANDA_COMPASSO_GLOBAL.json`;
@@ -80,7 +82,9 @@ function bandBreathTotal() {
 }
 
 function main() {
-  const g = JSON.parse(readFileSync(GRAPH, 'utf8'));
+  const g = existsSync(GRAPH)
+    ? JSON.parse(readFileSync(GRAPH, 'utf8'))
+    : { _note: 'Grafo VIVO — bootstrap sem snapshot anterior.', nodes: [], edges: [] };
   const { procs, byNorm } = pm2State();
   const nodesById = new Map(g.nodes.map(n => [n.id, n]));
   const ensureNode = (id, meta) => {

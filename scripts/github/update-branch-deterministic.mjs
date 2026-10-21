@@ -6,8 +6,6 @@ const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
 const repository = process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark';
 const baseBranch = process.env.BASE_BRANCH || 'main';
 const targetPr = Number(process.env.TARGET_PR || process.env.PR_NUMBER || 0) || null;
-const prMotherNumber = Number(process.env.PR_MOTHER_NUMBER || 1757);
-const includeProtected = String(process.env.UPDATE_BRANCH_INCLUDE_PROTECTED || 'false').toLowerCase() === 'true';
 const failOnBlocked = String(process.env.UPDATE_BRANCH_FAIL_ON_BLOCKED || 'true').toLowerCase() === 'true';
 const settleMs = Number(process.env.UPDATE_BRANCH_STITCH_SETTLE_MS || 3000);
 const pollAttempts = Number(process.env.UPDATE_BRANCH_STITCH_POLL_ATTEMPTS || 12);
@@ -17,15 +15,7 @@ const checksPollIntervalMs = Number(process.env.UPDATE_BRANCH_CHECKS_POLL_INTERV
 const workflowRunId = process.env.GITHUB_RUN_ID || '';
 const workflowRunAttempt = process.env.GITHUB_RUN_ATTEMPT || '';
 const triggerActor = process.env.GITHUB_ACTOR || '';
-const protectedPrs = new Set(
-  String(process.env.UPDATE_BRANCH_PROTECTED_PRS || '1562,1757')
-    .split(',')
-    .map(v => Number(v.trim()))
-    .filter(Number.isFinite),
-);
-
 const marker = 'CENTRALDARK_ANY_PR_UPDATE_BRANCH_DETERMINISTIC';
-const motherMarker = 'CENTRALDARK_PR_MOTHER_UPDATE_BRANCH_DETERMINISTIC';
 const stitchMarker = 'CENTRALDARK_STITCH_STABILIZATION';
 
 if (!token) {
@@ -233,7 +223,6 @@ function skipReason(pr) {
   if (pr.base?.ref !== baseBranch) return `BASE_NOT_${baseBranch}`;
   if (!pr.head?.sha) return 'HEAD_SHA_UNKNOWN';
   if (pr.head?.ref === pr.base?.ref) return 'HEAD_IS_BASE';
-  if (!includeProtected && protectedPrs.has(Number(pr.number))) return 'PROTECTED_LEDGER_PR';
   if (pr.head?.repo?.full_name !== repository) return 'HEAD_REPO_NOT_SAME_REPO';
   return null;
 }
@@ -242,8 +231,6 @@ async function processPr(pr) {
   const number = Number(pr.number);
   const receipt = {
     pr: number,
-    is_pr_mother: number === prMotherNumber,
-    pr_mother_merge_forbidden_sync_allowed: number === prMotherNumber,
     base: pr.base?.ref || null,
     head_ref: pr.head?.ref || null,
     head_before: pr.head?.sha || null,
@@ -446,7 +433,7 @@ for (const pr of prs) {
   try {
     const receipt = await processPr(pr);
     receipts.push(receipt);
-    console.log(JSON.stringify({ marker, mother_marker: motherMarker, stitch_marker: stitchMarker, ...receipt }));
+    console.log(JSON.stringify({ marker, stitch_marker: stitchMarker, ...receipt }));
   } catch (error) {
     const receipt = {
       pr: Number(pr?.number || targetPr || 0),
@@ -455,7 +442,7 @@ for (const pr of prs) {
       error: error?.message || String(error),
     };
     receipts.push(receipt);
-    console.log(JSON.stringify({ marker, mother_marker: motherMarker, stitch_marker: stitchMarker, ...receipt }));
+    console.log(JSON.stringify({ marker, stitch_marker: stitchMarker, ...receipt }));
   }
 }
 
@@ -470,10 +457,8 @@ const checksUnknownOrPending = receipts.filter(r => checksObservation(r) === 'UN
 
 const summary = {
   marker,
-  mother_marker: motherMarker,
   stitch_marker: stitchMarker,
   repository,
-  pr_mother_number: prMotherNumber,
   base_branch: baseBranch,
   target_pr: targetPr,
   workflow_run_id: workflowRunId,
@@ -495,7 +480,7 @@ const summary = {
     checks_poll_attempts: checksPollAttempts,
     checks_poll_interval_ms: checksPollIntervalMs,
   },
-  rule: 'PUT /pulls/{PR}/update-branch only when PR is behind main; active PR-MOTHER and legacy #1562 are protected UI/ledger shells and are not update-branch targets; sync verdict is scoped to head/compare and requires behind_by_after == 0; checks remain an independent observation and never become promotion/deploy proof; conflict or sync-unknown does not become PASS.',
+  rule: 'PUT /pulls/{PR}/update-branch only when an open same-repo PR targeting main is behind main; retired/closed provenance PRs are naturally out of the open set and have no operational exception; sync verdict is scoped to head/compare and requires behind_by_after == 0; checks remain an independent observation and never become promotion/deploy proof; conflict or sync-unknown does not become PASS.',
   receipts,
 };
 

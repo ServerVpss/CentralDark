@@ -6,7 +6,7 @@ import { adminShellTools } from "../../modes/admin/tools/admin-shell.js";
 import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
 import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
 import { adminMainWriterTools } from "../../modes/admin/tools/admin-main-writer.js";
-import { adminProviderControlTools } from "../../modes/admin/tools/admin-provider-control.js";
+import { adminProviderControlTools, tailscaleTools } from "../../modes/admin/tools/admin-provider-control.js";
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
 import { cognitivoTools } from "../cognitivo/cognitivo.js";
@@ -93,6 +93,29 @@ const runtimeTools = [
     ...piveteTools,
     ...youtubeMediaTools,
 ];
+const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
+    { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "SCREENPIPE_LOCAL_SENSOR", transport: "SCREENPIPE_HTTP", binding: "SEGREDO:127.0.0.1:3030", capability: "CASA_VISUAL_AUDIO_DESKTOP_SENSOR", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "SCREENPIPE_CLI_RECORDER", transport: "SCREENPIPE_CLI", binding: "${SCREENPIPE_CLI:-bun x screenpipe@latest}", capability: "ALWAYS_ON_LOCAL_CAPTURE_STATUS_SEARCH_PIPES", source: "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "segredo-vpss|VPS_HOST", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "MCP_CASA_TO_VPS", transport: "MCP", binding: "MCP_CASA", capability: "execute_command|vps_run_once_script", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "HERMES_SHELL", transport: "HERMES", binding: "SHELL", capability: "EXECUTION_BODY", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "HERMES_DELEGATED_COMMIT_PATH", transport: "HERMES_AGENT", binding: "PR#1748:c893a949b3051ae8a96cc4bc8b910857534c55e7", capability: "DELEGATED_TOOL_WRITE_COMMIT_PUSH_RECIPE", source: "experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md", runtimeState: "PASS_ON_PR1748_REPLAY_REQUIRED_FOR_CURRENT" },
+    { id: "GITHUB_RUNTIME", transport: "GITHUB", binding: "ServerVpss/CentralDark", capability: "CANONICAL_RECORD_AND_MICRODEPLOY_ROUTE", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "AIONUI_MCP_STDIO", transport: "MCP_STDIO", binding: "AionUi->CentralDark", capability: "MCP_CATALOG_AND_NATIVE_BINDINGS", source: "scripts/vps/aionui-native-integrate.py", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "CAS_CLOUD_RELAY", transport: "WEBSOCKET_RELAY", binding: "Casa<->CAS Cloud VPS", capability: "REMOTE_AGENT_ORCHESTRATION", source: "docs/ARQUITETURA/CENTRALDARK-CAS-CLOUD-VPS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+]);
+const ROUTE_LAWS = Object.freeze({
+    oneRouteFailedIsNotSystemFailed: true,
+    alternateAuthorizedRouteBeforeHumanBlocker: true,
+    nextAuthorizedRouteAutoContinue: true,
+    routeDocumentedIsNotRuntimeProof: true,
+    capabilitySystem: "UNION_OF_MEASURED_AUTHORIZED_ROUTE_CAPABILITIES",
+    realityIsJudge: true,
+});
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
 function safeToolInfo(tool) {
     return {
@@ -115,6 +138,7 @@ async function ensureStartupAuditReady() {
 export const mcpAdminTools = [
     codeReviewerToolDefinition,
     ...adminMainWriterTools,
+    ...tailscaleTools,
     {
         name: "mcp_status",
         description: "Resumo simples do dispatcher MCP e do runtime disponível. Alias de leitura para manter compatibilidade com clientes antigos.",
@@ -125,14 +149,16 @@ export const mcpAdminTools = [
             runtimeTools: runtimeTools.length,
             destructiveTools: runtimeTools.filter((tool) => tool.annotations?.destructiveHint === true).length,
             catalogVersion: CATALOG_VERSION,
+            catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
+            routeCount: AUTHORIZED_ROUTE_CATALOG.length,
             auditStartupReady: startupAuditState?.ready === true,
-            catalogScope: "mcp_admin_dispatcher",
+            catalogScope: "centraldark_unified_capability_catalog",
             time: new Date().toISOString(),
         }),
     },
     {
         name: "mcp_admin_catalog",
-        description: "Lista o catálogo interno do MCP usado pelo dispatcher fixo mcp_admin_call. Use para descobrir ações disponíveis sem reconectar.",
+        description: "Catálogo unificado da CentralDark: tools internas, rotas autorizadas e capacidades externas (incluindo Remote Desktop Commander, Screenpipe, Screenpipe CLI e Hermes delegated commit path) no mesmo mcp_admin_catalog, sem criar MCP paralelo.",
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Catálogo admin MCP" },
         inputSchema: z.object({
             filter: z.string().optional(),
@@ -148,15 +174,25 @@ export const mcpAdminTools = [
                 String(tool.name || "").toLowerCase().includes(filter) ||
                 String(tool.description || "").toLowerCase().includes(filter))
                 .sort((a, b) => a.name.localeCompare(b.name));
+            const routes = AUTHORIZED_ROUTE_CATALOG
+                .filter((route) => !filter ||
+                Object.values(route).some((value) => String(value || "").toLowerCase().includes(filter)))
+                .sort((a, b) => a.id.localeCompare(b.id));
             return ok({
                 ok: true, dispatcher: "mcp_admin_call",
                 totalRuntimeTools: runtimeTools.length,
                 totalDispatchableTools: runtimeTools.length,
                 returned: tools.length,
-                catalogScope: "mcp_admin_dispatcher",
+                catalogScope: "centraldark_unified_capability_catalog",
                 catalogVersion: CATALOG_VERSION,
+                catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
                 confirmForDestructive: ADMIN_CONFIRM,
                 acceptedConfirmations: Object.keys(ADMIN_CONFIRMATIONS),
+                routeCatalogScope: "centraldark_unified_capability_catalog",
+                routeCount: AUTHORIZED_ROUTE_CATALOG.length,
+                routeReturned: routes.length,
+                routeLaws: ROUTE_LAWS,
+                routes,
                 tools,
             });
         },
@@ -171,8 +207,10 @@ export const mcpAdminTools = [
             runtimeTools: runtimeTools.length,
             destructiveTools: runtimeTools.filter((tool) => tool.annotations?.destructiveHint === true).length,
             catalogVersion: CATALOG_VERSION,
+            catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7",
+            routeCount: AUTHORIZED_ROUTE_CATALOG.length,
             auditStartupReady: startupAuditState?.ready === true,
-            catalogScope: "mcp_admin_dispatcher",
+            catalogScope: "centraldark_unified_capability_catalog",
             time: new Date().toISOString(),
         }),
     },

@@ -727,3 +727,28 @@ CURRENT_OVER_HISTORY = true
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-pr-mae-ledger-rollover.md`
 - **Conteúdo:** #1562 é predecessor histórico preservado e não mergeado; #1757 é a casca/rendezvous ativa. Comentários deixam de ser armazenamento primário de receipt; Git versionado guarda a memória durável e o body da PR ativa fica como HUD compacto atualizado no lugar.
 - **Cristal:** `LEGACY_IS_PRESERVED=true`; `SHELL_IS_MUTABLE=true`; `COMMENTS_ARE_NOT_PRIMARY_LEDGER=true`; `RECEIPTS_LIVE_IN_REPOSITORY=true`; `ONE_ACTIVE_RENDEZVOUS=true`.
+
+
+### [2026-10-06] Catálogo MCP unificado — tools + rotas + Screenpipe + Desktop Commander
+- **Tipo:** LEARNING_INDEX / MCP_CAPABILITY_CATALOG / MULTIROUTE_METABOLISM
+- **Learning:** #168
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md`
+- **Owner executável:** `apps/modulos/mcp/src/tools/core/mcp-admin.js#mcp_admin_catalog`
+- **Receita:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json#HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH`
+- **Conteúdo:** o mesmo catálogo MCP descreve tools internas e rotas/capabilities externas. Remote Desktop Commander e Screenpipe compartilham o catálogo, mas preservam estados independentes e exigem remedição no binding.
+- **Cristal:** `ONE_MCP_CATALOG=true`; `RDC_STATE != SCREENPIPE_STATE`; `CATALOG_ENTRY != RUNTIME_HEALTH`; `ONE_ROUTE_FAILED != SYSTEM_FAILED`.
+
+
+### [2026-10-06] Hermes delegado + Screenpipe CLI no metabolismo
+- **Tipo:** LEARNING_INDEX / EXECUTOR_PROOF / SCREENPIPE_CLI / MCP_CATALOG
+- **Learning:** #169
+- **Target:** `docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md`
+- **Conteúdo:** Hermes executor provado em PR #1748 por commit/push/readback externo entra no catálogo metabólico. Screenpipe CLI entra como rota de recorder/search/pipes com regra de status/freshness antes de PASS.
+- **Cristal:** `HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748`; `SCREENPIPE_CLI_RECORDER=CATALOGED_RECIPE`; `SCREENPIPE_RUNTIME_ON_VPS=UNKNOWN_UNTIL_STATUS_JSON`.
+
+
+### [2026-10-06] Hermes Desktop nativo como projeção do One Heart
+- **Target:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-04-METABOLISMO-AUTONOMO-CURRENT-MODEL-ONE-HEART.md`
+- **Conteúdo:** o cockpit CentralDark passa a ser extensão nativa do próprio Hermes Desktop, reutilizando gateway/model/profile/subagents/tool calls/jobs/logs já existentes. Obsidian e Hermes Desktop são duas projeções da mesma telemetria e não criam segundo organismo, daemon, porta, scheduler, banco ou HUD owner.
+- **Cristal:** `HERMES_DESKTOP_NATIVE_EXTENSION=true`; `CENTRALDARK_COCKPIT_IS_PLUGIN_NOT_SECOND_APP=true`; `OBSIDIAN_AND_HERMES_DESKTOP_SHARE_TELEMETRY=true`; `HUD_IS_PROJECTION_NOT_AUTHORITY=true`; `NO_SECOND_HUD_OWNER=true`; `REUSE_EXISTING_HERMES_STATE_AND_LOGS=true`.
+- **Next cursor:** materializar o menor plugin nativo no Hermes Desktop e provar hot-load/readback visual sem criar runtime paralelo.

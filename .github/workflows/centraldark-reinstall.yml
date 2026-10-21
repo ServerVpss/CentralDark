@@ -52,10 +52,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: Run preflight
+      - name: 🧪 Run preflight
         id: preflight
         env:
           CENTRALDARK_INSTANCE_ID: ${{ inputs.instance_id }}
@@ -67,7 +67,7 @@ jobs:
           bash scripts/vps/centraldark-preformat-go-no-go.sh 2>&1 | tee /tmp/preflight-result.txt
           echo "result=$(tail -1 /tmp/preflight-result.txt)" >> "$GITHUB_OUTPUT"
 
-      - name: Post receipt to PR-mãe
+      - name: 🧾 Post receipt to PR-mãe
         if: always()
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
@@ -111,10 +111,10 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: Run firstboot
+      - name: 🚀 Run firstboot
         env:
           CENTRALDARK_PINNED_SHA: ${{ inputs.pinned_sha || '' }}
           CENTRALDARK_VAULT_PATH: ${{ inputs.vault_path }}
@@ -122,7 +122,7 @@ jobs:
           chmod +x scripts/vps/centraldark-firstboot.sh
           bash scripts/vps/centraldark-firstboot.sh 2>&1 | tee /tmp/firstboot-result.txt
 
-      - name: Post receipt to PR-mãe
+      - name: 🧾 Post receipt to PR-mãe
         if: always()
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
@@ -162,10 +162,10 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: Health check
+      - name: 🏥 Health check
         run: |
           echo "=== POST-REBOOT HEALTH ==="
           echo "HOSTNAME=$(hostname)"
@@ -192,7 +192,7 @@ jobs:
 
           echo "HEALTH_CHECK=DONE"
 
-      - name: Post health to PR-mãe
+      - name: 🏥 Post health to PR-mãe
         if: always()
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:

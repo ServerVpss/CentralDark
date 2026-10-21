@@ -624,8 +624,15 @@ hybrid_multiroute_capability_replay_2026_10_02:
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
   state: SEALED_PROVEN
   learning_ref: 146
-  dependency_fingerprint: a21be5a59753d3b68e59c6429b20772399099a05b9a043dc0ab39827af0e6069
-  lock_key: f78920ff5e179b8f66f4276a41bd96847f3c5b2b37e1aa9933097ccb2250fb0b
+  dependency_fingerprint: 80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
+  lock_key: 3318ec585173c84b5ad374b80bfade8180f1e9b11b013120baec55f46f5ab781
+  evolved_learning_ref: 168
+  catalog_owner: apps/modulos/mcp/src/tools/core/mcp-admin.js
+  catalog_consumer: mcp_admin_catalog
+  catalog_scope: centraldark_unified_capability_catalog
+  catalog_expected_routes: 11
+  catalog_fingerprint: 80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
+  external_capabilities: [RDC_DESKTOP_COMMANDER, SCREENPIPE_LOCAL_SENSOR]
   objective: >-
     Reusar o mesmo capability bus por rotas autorizadas alternativas sem
     promover falha local de transporte para falha global do organismo.
@@ -664,13 +671,21 @@ hybrid_multiroute_capability_replay_2026_10_02:
     effect: SAME_LOGICAL_SYSTEM_REUSES_EXISTING_CAPABILITY_BUS_ACROSS_AUTHORIZED_ROUTES
   evidence:
     - docs/CONSCIENCIA/APRENDIZADOS.md#146
+    - docs/CONSCIENCIA/APRENDIZADOS.md#168
     - docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md
+    - docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md
+    - docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md
   replay_laws:
     ONE_ROUTE_FAILED_IS_NOT_SYSTEM_FAILED: true
     LOCAL_ROUTE_OFFLINE_IS_NOT_GLOBAL_CAPABILITY_OFFLINE: true
     ALTERNATE_AUTHORIZED_ROUTE_BEFORE_HUMAN_BLOCKER: true
     ROUTE_HEALTH_MUST_BE_REMEASURED_PER_BINDING: true
     TRANSVERSAL_ROUTE_REUSES_SAME_OWNER_AND_PROOF_LAW: true
+    NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE: true
+    SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG: true
+    DOCUMENTED_ROUTE_IS_NOT_RUNTIME_PROOF: true
+    SOURCE_DIST_PARITY_REQUIRED: true
+    MEASURE_EXEC_PATH_BEFORE_DEPLOY: true
   hook_bindings:
     triggers: [CAPABILITY_GAP, TERRITORY_ROUTE_CHANGE]
     sentinel_signature: ROUTE_FAILURE
@@ -714,4 +729,24 @@ hybrid_multiroute_capability_replay_2026_10_02:
     non_applicable_layer_must_be_explicit: true
     unrelated_global_red_does_not_invalidate_proven_cone: true
     cone_pass_does_not_imply_global_pass: true
-  next_cursor: REPLAY_MULTIROUTE_BEFORE_HUMAN_BLOCKER
+  current_pr_mother: 1757
+  legacy_pr_mother: 1562
+  runtime_catalog_reload: UNKNOWN_UNTIL_LIVE_READBACK
+  next_cursor: LIVE_MCP_CATALOG_READBACK_THEN_REPLAY_MULTIROUTE_BEFORE_HUMAN_BLOCKER
+
+
+hermes_delegated_commit_path_2026_10_06:
+  claim_key: HERMES_DELEGATED_COMMIT_PATH
+  state: SEALED_PROVEN_ON_PR1748
+  commit: c893a949b3051ae8a96cc4bc8b910857534c55e7
+  recipe_file: experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md
+  engine_used: copilot/gpt-4.1
+  model_is_engine_not_owner: true
+  kylin_current_pass_claimed: false
+
+screenpipe_cli_recorder_path_2026_10_06:
+  claim_key: SCREENPIPE_CLI_RECORDER_PATH
+  state: CATALOGED_RECIPE_RUNTIME_UNKNOWN
+  command_form: 'cd "$(mktemp -d)" && ${SCREENPIPE_CLI:-bun x screenpipe@latest} <command>'
+  recorder_default: service_install
+  runtime_pass_requires_status_json: true

@@ -34,13 +34,21 @@ Esta skill faz parte da família `centraldark-ops`. Quando a reconciliação toc
 
 ## Owners tocados
 
-- Owner Git canônico do checklist: `docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md`
-  (repo `ServerVpss/CentralDark`).
-- Espelho Obsidian (CASA-VAULT, read/write local):
-  `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`.
-- Regra do próprio arquivo: `CASA-VAULT != SECOND_OWNER` — o Git manda; o vault é
-  espelho operacional. Se os dois divergirem, registrar a divergência, não
-  silenciar.
+- Owner CURRENT do CHECK-LIST/Rendezvous: `apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx`.
+- Agregador já existente consumido pelo HUD: `apps/modulos/Bolt/source/app/routes/api.github-stats.ts`.
+- Histórico/provenance do checklist: `docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md`.
+- Receipts duráveis continuam no repositório; HUD é projeção e nunca autoridade.
+- Espelhos Obsidian podem continuar como mirrors locais, mas não são owner nem gatilho para PR diária.
+
+```text
+HUD_IS_CURRENT_PROJECTION=true
+HUD_IS_NOT_AUTHORITY=true
+CHECKLIST_DAILY_OWNER=HUD
+RECEIPTS_OWNER=repository
+PR_MOTHER_ROLE=RETIRED
+NO_NEW_PR_MOTHER=true
+NO_DAILY_PR=true
+```
 
 ## Como rodar
 
@@ -61,57 +69,46 @@ Esta skill faz parte da família `centraldark-ops`. Quando a reconciliação toc
    - `UNKNOWN` (ex: PM2 não respondeu, JSON corrompido) → registra como
      UNKNOWN, nunca como PASS.
 
-3. **Escrever a entrada nova NO GIT PRIMEIRO, SEMPRE — nunca só no vault.**
-   `LOCAL_EDIT != COMMIT`. Incidente real de 2026-09-23: uma sessão inteira
-   de reconciliação foi feita só no vault Obsidian local (CASA-VAULT) e no
-   AppData do Hermes, sem nenhum commit/push — `main` ficou sem histórico
-   do dia até o Chefe perguntar direto "já fez o commit ou tá conversando
-   bobeira?". Passo obrigatório, nesta ordem:
-   a. `github_get_file` no `docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md` (ou
-      owner Git equivalente) pra pegar o conteúdo REAL atual — nunca supor
-      que o vault local e o Git têm o mesmo conteúdo; eles podem já estar
-      divergentes (aconteceu: vault tinha 620+ linhas, Git tinha 60).
-   b. `github_create_branch` a partir de `main`, nome no padrão
-      `cristal/<assunto>-<data>`.
-   c. `github_create_or_update_file` no branch novo, com o resumo do delta
-      (não precisa duplicar um log verboso inteiro do vault — resumir é
-      aceitável, sumir não é).
-   d. `github_create_pull_request` ligado ao PR-mãe #1562 (citar no título
-      e no corpo).
-   e. Só DEPOIS disso, atualizar o espelho no vault Obsidian local — o
-      vault é espelho, nunca o primeiro a receber o registro.
-   f. Se algo impedir o commit/push (sem token, sem rede, MCP fora do ar),
-      REGISTRAR ISSO EXPLICITAMENTE pro Chefe — nunca deixar implícito que
-      "editei local" já resolveu o histórico.
+3. **Projetar CURRENT no HUD existente — nunca abrir PR diária.**
+   O estado vivo é derivado no owner já existente `/api/github-stats` e
+   renderizado em `CentralDarkUnifiedHud.client.tsx`. A reconciliação mede,
+   classifica e deixa o HUD refletir o estado atual sem criar branch,
+   `cristal/<data>`, PR de checklist ou nova PR-MÃE.
+   - PASS/FAIL/UNKNOWN/BLOCKED vêm da mesma medição do HUD.
+   - filhos/lanes ativos vêm dos PRs abertos, excluindo #1562/#1757 aposentadas.
+   - receipt fingerprint vem do owner versionado de receipts.
+   - `NEXT_CURSOR` aponta para o primeiro BLOCKED, FAIL ou UNKNOWN; sem ferida,
+     vira `FIXED_POINT_WAIT_FOR_DELTA`.
+   - delta material que precise memória durável entra em receipt/owner existente
+     no repositório; a projeção diária em si não exige commit diário.
 
-4. **Bumpar `updated:` do frontmatter** pra data/hora real da medição — nunca
-   deixar o frontmatter mentir sobre quando foi a última atualização real.
+4. **Preservar histórico sem fazê-lo virar CURRENT.**
+   `docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md` permanece como provenance
+   histórica e índice de aprendizados. Não bumpar data só para satisfazer gate.
+   `HISTORY != CURRENT`; CURRENT vem do HUD medido.
 
-5. **Checar wikilinks do `related:`** — se algum `[[Nome]]` não resolve pra
-   nenhum arquivo do vault, é link morto. Não inventar conteúdo; criar um
-   stub explícito (`status: seedling`, frontmatter dizendo que é stub) ou
-   avisar o Chefe, nunca deixar quebrado em silêncio.
+5. **Espelhos locais são opcionais e derivados.**
+   Obsidian/vault podem espelhar a projeção, mas não criam owner, scheduler,
+   branch ou PR. Divergência do espelho é delta local; não altera o CURRENT
+   canônico sem readback da fonte viva.
 
 ## Toda pendência nova → HUD + Pendências.md (regra travada, sem pedir autorização de novo)
 
-Regra gravada em 2026-09-23 a pedido explícito do Chefe: "tudo que for fazer
-agora passa por ali... tem que ser autônomo." Qualquer pendência criada por
-qualquer motor/skill/sessão rodando sob o contrato SOL — não só esta skill —
-tem que refletir nos DOIS lugares abaixo, sem esperar o Chefe pedir:
+Regra atual: qualquer pendência material aparece na projeção CURRENT do HUD pela
+mesma fonte viva que alimenta as lanes. `Pendências.md` e HUDs Obsidian antigos
+podem sobreviver como espelhos/histórico, mas não recebem escrita obrigatória e
+não criam segunda projeção.
 
-1. `C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬\HUD.html`
-   — adicionar 1 item no array `missions` (perto da linha 929), padrão
-   `{tag:'chefe'|'agente', label:'...', text:'...'}`, e bumpar o número em
-   `<span class="section-count">N abertas</span>` (seção "Missões").
-2. `C:\Users\Administrador\Documents\Obsidian Vault\🪬Centraldark -HUD🪬\Pendências.md`
-   — mesma pendência, mesma frase, na seção certa (`🧍 Do Chefe` = decisão
-   humana; `🤖 Do agente` = o próprio agente resolve sozinho).
+O HUD oficial é o `CentralDarkUnifiedHud` já montado no cockpit. Ele combina:
+- estado GitHub/current pela rota existente `/api/github-stats`;
+- runtime/health já medido pelo bridge e `/heartbeat` quando aplicável;
+- PASS/FAIL/UNKNOWN/BLOCKED sem inferir verde;
+- receipts fingerprint + source fingerprint + NEXT_CURSOR.
 
-Importante: desde 2026-10-04 o CHEFE autorizou a evolução deste owner para monitoramento vivo sem criar segundo coração. O `HUD.html` continua arquivo local/Obsidian, mas dados mutáveis devem vir do owner existente `https://api.centralldark.com/heartbeat`, com refresh periódico e fail-closed: fetch falhou = `UNKNOWN`, nunca PASS.
-
-O HUD deve renderizar, quando presentes, `operational.modelBinding.orchestrator`, `operational.modelBinding.localWorker`, `operational.modelBinding.selfEvolution`, `operational.executionTopology` e o timestamp da medição. O arquivo é projeção; `/heartbeat` é o agregador vivo; nenhum dos dois vira autoridade.
-
-Contrato: `ONE_HEART=true`; `HUD_LIVE_SOURCE=/heartbeat`; `MODEL_BINDING_VISIBLE=true`; `ORCHESTRATOR_CURRENT_VISIBLE=true`; `LOCAL_WORKER_CURRENT_VISIBLE=true`; `SELF_EVOLUTION_VISIBLE=true`; `UNKNOWN_ON_FETCH_FAILURE=true`; `NO_SECOND_HEALTH_AGGREGATOR=true`.
+Contrato: `ONE_HEART=true`; `HUD_CURRENT_OWNER=CentralDarkUnifiedHud`;
+`HUD_IS_CURRENT_PROJECTION=true`; `HUD_IS_NOT_AUTHORITY=true`;
+`CHECKLIST_DAILY_OWNER=HUD`; `UNKNOWN_ON_FETCH_FAILURE=true`;
+`NO_SECOND_HEALTH_AGGREGATOR=true`; `NO_DAILY_PR=true`.
 
 ## Regras que não podem ser violadas
 
@@ -120,9 +117,11 @@ Contrato: `ONE_HEART=true`; `HUD_LIVE_SOURCE=/heartbeat`; `MODEL_BINDING_VISIBLE
   remedição.
 - `CASA-VAULT != AUTO_UPDATE` — isso é sempre uma ação deliberada de quem
   está rodando a skill, nunca assumir que outro processo já fez.
-- `LOCAL_EDIT != COMMIT` — editar o vault Obsidian ou qualquer arquivo em
-  AppData NÃO é registrar histórico. Só commit+push em `main` (via PR)
-  conta como registrado pro resto da Casa/VPS enxergar.
+- `LOCAL_EDIT != COMMIT` — espelho local não é memória durável. Delta
+  material reutilizável vira receipt/owner versionado quando necessário;
+  a remedição diária sem delta material é somente projeção HUD e `NO_CHANGE`.
+- `NO_DAILY_PR=true`; `NO_NEW_PR_MOTHER=true`; PR só nasce por necessidade
+  material independente do checklist, nunca por passagem do calendário.
 - Nunca prometer automação (cron, webhook) que não foi de fato registrada e
   provada rodando.
 

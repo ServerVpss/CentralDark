@@ -118,7 +118,7 @@ OWNER=AGENTS.md
 RESPONSE_WITHOUT_TRACE=INVALID
 EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
 EVERY_MEMORY_CLAIM_NAMES_WHERE=true
-ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
+HUD_CURRENT_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 APPLIES_TO_ALL_ENGINES=true
 ```
 
@@ -2236,8 +2236,8 @@ REGISTRA
 → menor MVP útil
 → teste aplicável + contraprova
 → commit
-→ push em branch filha
-→ abrir PR filha vinculada à #1757
+→ push em branch filha somente quando PR for materialmente necessária
+→ abrir/reusar PR filha por OWNER+SCOPE+CAPABILITY sem vínculo obrigatório com PR-MÃE
 → remeasure live
 → blocker técnico recuperável: continuar até HUMAN_FRONTIER real
 → conflito: usar git-conflict-resolve-house-standard
@@ -2246,12 +2246,13 @@ REGISTRA
 → readback da main + novo CURRENT_MAIN_SHA
 → DEPLOY_CAUSAL somente se o delta exigir runtime
 → T1 quando houver deploy causal
-→ receipt no PR filho e na PR-mãe
+→ receipt no repositório e no PR filho quando aplicável
+→ HUD_CURRENT_READBACK
 → fixed point do delta
-→ voltar ao #1757
 ```
 
-A `#1757` permanece aberta como PR-MÃE ativa, rendezvous/ledger e `DO_NOT_MERGE`. Ela não é veículo de código para main; os filhos passam por ela e registram o que foi absorvido.
+`#1562` e `#1757` são provenance histórica preservada. A superfície operacional
+CURRENT é o HUD existente; nenhuma nova PR-MÃE nasce para rendezvous/checklist.
 
 ### Lapidação progressiva
 
@@ -2365,6 +2366,57 @@ OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
 ```
 
 Se a observação contradiz o comando, medir sensor/cache/cone/timestamp, corrigir o menor gate causal e continuar. Não transformar prudência em bloqueio.
+
+## HEREDITARY_CRITERION_DNA — Goal/intent fractal no owner existente
+
+O mesmo Criterion/intent nasce no `GOAL` e é herdado, sem virar lista rígida de passos,
+por toda a árvore `GOAL → SUBGOAL → LOTE/BATCH → SUBAGENT/SUBSUBGOAL`. Este é o
+contrato aditivo do owner operacional/TLC23 existente; não cria segundo criterion
+engine, scheduler, goal system, memory engine ou arquitetura.
+
+```text
+HEREDITARY_CRITERION_DNA=true
+CRITERION_ENGINE_OWNER=.agents/skills/centraldark-operational-method
+GOAL → SUBGOAL → LOTE/BATCH → SUBAGENT/SUBSUBGOAL
+
+INHERIT:
+  WHY/INTENTION/OBJECTIVE + SUCCESS_PREDICATE_TERMINAL_INDIVISIBLE
+  CURRENT/BASELINE + OWNER/SCOPE + PROOF_DESTINATION
+  REUSE_BEFORE_CREATE
+  PARALLEL_PERCEPTION_AS_LENSES_OR_CAPABILITIES
+  ONE_WRITER_PER_SCOPE
+  COUNTERPROOF + REALITY_JUDGE
+  REMEDIATION_AFTER_STATE_CHANGE
+  RECEIPT + NEXT_CURSOR
+
+REFINE_WITHOUT_WEAKENING:
+  CHILD_CAN_REFINE_CRITERION=true
+  CHILD_CANNOT_WEAKEN_PARENT_CRITERION=true
+  LOCAL_DONE != PARENT_DONE
+  EVIDENCE_RETURNS_TO_PARENT=true
+  INTELLIGENCE_LIVES_IN_PROCESS_AND_INHERITANCE=true
+
+DO_NOT_INHERIT_AS_RIGID_SCRIPT:
+  STEPS
+  COMMIT/PUSH/PR/MERGE/QUEUED/GREEN/DEPLOY_TRIGGERED
+
+DONE_ONLY:
+  FIXED_POINT | HUMAN_ONLY_BLOCKER
+```
+
+Regras de composição: o descendente preserva intenção e predicate terminal, pode
+estreitar o escopo, mas mede novamente `CURRENT/BASELINE` e reatacha `OWNER/SCOPE`.
+Lentes só observam; toda mutação é serializada no escopo. Mudança de estado expira
+a prova dependente e exige remediação, nova contraprova, readback e receipt próprio.
+Cada nó continua até `FIXED_POINT` ou até um `HUMAN_ONLY_BLOCKER` exato; etapas de
+entrega e deploy são intermediários, nunca `DONE`.
+
+### Teste e proveniência
+
+A formulação executável vive em `contracts/TLC23-RUNTIME-GATE.yml` sob
+`hereditary_criterion_dna`, ligada à PR-mãe `#1562` pelo contrato TLC23 existente.
+O teste `scripts/test_goal_criterion_inheritance.py` verifica as quatro escalas,
+o DNA herdado, a ausência de lista de passos herdada e a fronteira terminal.
 
 ## Padrão aprendido do CHEFE — transformação de sistemas por invariantes
 
@@ -2539,3 +2591,31 @@ DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
 LEGACY_PR_MOTHER_1562_PROTECTED=true
 SHELL_IS_MUTABLE=true
 LEGACY_IS_PRESERVED=true
+
+
+### 26. WORKTREE TEARDOWN — bancada temporária, rastro permanente
+
+Regra operacional para agentes/subagentes que usam worktree isolado:
+
+```text
+MISSION_DONE
+→ CLASSIFY_WORKTREE
+→ UNIQUE_DELTA? PRESERVE/PROMOTE_FIRST
+→ RECEIPT
+→ REMOVE_WORKTREE
+→ PRUNE_IF_APPLICABLE
+```
+
+Invariantes:
+
+`WORKTREE_IS_DISPOSABLE=true`
+`UNIQUE_DELTA_MUST_SURVIVE_BEFORE_TEARDOWN=true`
+`CLEAN_OR_PROMOTED_BEFORE_REMOVE=true`
+`TEARDOWN_REQUIRES_RECEIPT=true`
+`GIT_WORKTREE_PRUNE_AFTER_SAFE_REMOVE=true`
+`TEMPORARY_BENCH_IS_NOT_MEMORY=true`
+`GIT_RECEIPT_CRYSTAL_IS_MEMORY=true`
+
+Não remover worktree quando existir commit apenas local, arquivo modificado/untracked com delta único, receipt pendente, prova ainda não promovida ou classificação UNKNOWN. Worktree pode ser deletado após o delta útil estar promovido/preservado e a trilha de proveniência estar registrada. A limpeza deve deixar rastro suficiente para responder: qual missão criou a bancada, qual HEAD/base usou, qual delta sobreviveu, onde foi promovido e quando a bancada foi removida.
+
+Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode compartilhar leitura; mutação paralela usa isolamento quando necessário; cada escopo mantém um único writer.

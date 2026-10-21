@@ -149,7 +149,13 @@ test('HUD unificado reusa o cockpit, move, redimensiona e nao inventa quota', ()
   assert.match(hud, /pointermove/);
   assert.match(hud, /snapshot operacional mudou/);
   assert.match(hud, /Limites, plano, reset e tempo só ficam verdes/);
+  assert.match(hud, /HUD_IS_CURRENT_PROJECTION/);
+  assert.match(hud, /CHECKLIST_DAILY_OWNER/);
+  assert.match(hud, /activeLanes/);
+  assert.match(hud, /receiptsFingerprint/);
+  assert.match(hud, /nextCursor/);
   assert.match(styles, /resize: both/);
+  assert.match(styles, /cd-uhud-current-grid/);
   assert.match(inventory, /Dependabot/);
   assert.match(inventory, /CodeRabbit/);
   assert.match(inventory, /POSTHOG/);

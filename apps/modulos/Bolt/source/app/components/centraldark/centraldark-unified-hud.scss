@@ -243,6 +243,44 @@
 .cd-uhud-foot span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cd-uhud-foot span:last-child { white-space: nowrap; }
 
+.cd-uhud-current-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+.cd-uhud-current-grid > div {
+  padding: 8px;
+  border: 1px solid var(--bolt-elements-borderColor);
+  border-radius: 8px;
+  background: var(--bolt-elements-bg-depth-2);
+}
+.cd-uhud-current-grid span { display: block; color: var(--bolt-elements-textTertiary); font-size: 8px; }
+.cd-uhud-current-grid strong { font: 700 14px/1.2 "Geist Mono", monospace; }
+
+.cd-uhud-current-meta { display: grid; gap: 4px; padding: 8px; }
+.cd-uhud-current-meta code { overflow-wrap: anywhere; color: var(--bolt-elements-textSecondary); font-size: 8px; }
+.cd-uhud-current-meta small { color: var(--bolt-elements-textTertiary); font-size: 8px; }
+
+.cd-uhud-current-lane {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 7px;
+  padding: 8px;
+  border: 1px solid var(--bolt-elements-borderColor);
+  border-radius: 8px;
+  background: var(--bolt-elements-bg-depth-2);
+  color: inherit;
+  text-decoration: none;
+}
+.cd-uhud-current-lane strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 9px; }
+.cd-uhud-current-lane code { color: var(--bolt-elements-textTertiary); font-size: 8px; }
+.cd-uhud-state { font: 700 8px/1 "Geist Mono", monospace; font-style: normal; }
+.cd-uhud-state--pass { color: var(--bolt-elements-icon-success); }
+.cd-uhud-state--fail { color: var(--bolt-elements-icon-error); }
+.cd-uhud-state--unknown { color: var(--bolt-elements-textTertiary); }
+.cd-uhud-state--blocked { color: #fbbf24; }
+
 @media (max-width: 760px) {
   .cd-uhud {
     left: 8px !important;
