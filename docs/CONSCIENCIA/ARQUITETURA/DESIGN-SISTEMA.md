@@ -214,19 +214,21 @@ grafos são projeções reconstruíveis.
 
 **Ações da moldura que já existem:** lateral esquerda `Abrir ferramentas`, Gram, Goals, `Buscar módulos`; lateral direita `Sistemas`, Hermes, `Configurar Harness`; rodapé `Sync`, `Pacotes`, `Configurar moldura`; topo `CentralDark Estúdio`. Preservar atalhos, teclado e ícones, não reproduzir botões decorativos sem handler.
 
-### Cores — amostra das capturas, não um tema oficial novo
+### Correção de design — somente as peles já existentes no Cockpit
 
-Amostras **aproximadas** do screenshot, não extraídas do CSS original do aplicativo de referência:
+**Correção expressa do CHEFE em 2026-10-21:** o aplicativo usado como exemplo (Alethe) demonstra *funções, comandos, ergonomia, navegação e gerenciamento de janelas*, **não** define a aparência da CentralDark. A tabela anterior com cores violeta/índigo era uma inferência indevida do observador; foi retirada deste contrato e está **revogada como sugestão de design**. Não aplicar a paleta da referência visual ao Builder, Shell ou Cockpit.
 
-| Papel | Valor observado aproximado |
-| --- | --- |
-| Fundo profundo | `#080810` |
-| Superfície/painel | `#14141F` |
-| Seleção/camada índigo | `#23213F` |
-| Acento ativo/CTA violeta | `#7D72FF` |
-| Texto auxiliar lavanda | `#C3BFE6` |
+**Owner real das quatro peles do Cockpit:** `apps/instinto-superior/src/components/central/DesignCenter.tsx`, `PeleCockpit` e `usePeleCockpit`:
+- `default` — **Instinto Superior · padrão** (**fallback**, inclusive quando não houver preferência salva);
+- `ouro` — **Breu & Ouro**;
+- `ops` — **Ops · Ciano**;
+- `esmeralda` — **Esmeralda**.
 
-**Regra:** referência de acabamento para o Builder dentro do Harness; **não** criar `ThemeId` nem trocar o Esmeralda/global sem prova de regressão e consentimento explícito. Aplicar, se aprovado, por CSS **escopado ao módulo** e pelos tokens semânticos existentes em `apps/instinto-superior/src/styles.css` (e no design owner deste documento). `prefers-reduced-motion`, contraste e foco acessível permanecem obrigatórios.
+**Persistência já existente:** `centraldark.cockpit.pele`. `CockpitShell.tsx` aplica `data-pele-cockpit={pele}`. O Builder hospedado pelo Harness deve **herdar essa escolha**, aplicar tokens/estilos do owner existente e conservar a mesma navegação; **nenhuma pele ou quinta paleta será criada**. Não forçar a pele ativa para outra cor; `default` continua o comportamento padrão definido no código.
+
+**Não confundir categorias:** o registro histórico de **três temas globais** `emerald`/`operational`/`forge` é outro contrato, de cobertura entre aplicações; **não é a lista dos quatro IDs `default`/`ouro`/`ops`/`esmeralda`** do Cockpit. Preservar ambos os contratos e reconciliar por owner, não inventar equivalência sem prova.
+
+**NEXT_CURSOR corrigido:** `REUSE_EXISTING_FOUR_SKINS → BUILDER_USES_CURRENT_PELE → VERIFY_TAB_NAVIGATION → BUILD_SAME_SHA → VISUAL_REGRESSION_FOUR_PELES → RECEIPT`. Até teste: `UI_DESIGN_INHERITANCE=NOT_PROVEN`.
 
 **Divergências concretas medidas no source da PR #1895 (HEAD no início desta leitura: `b3427c9da167cdc41aaf5814bcb1db12c61c4d50`):** `builder-bolt` usa `MenuVisualCentralDark` com “ESTRUTURA VISUAL” e “Integração pendente”; `aionui` hoje dá link para aplicativo externo/protótipo; `obsidian` despacha `obsidian://open?vault=BRAIN` ou ponte desktop e informa janela independente. **Não declarar completo.**
 
