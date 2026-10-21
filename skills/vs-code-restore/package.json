@@ -68,6 +68,10 @@
       {
         "command": "centraldark.buildExtension",
         "title": "CentralDark: Compilar a extensão"
+      },
+      {
+        "command": "centraldark.naturalCommand",
+        "title": "CentralDark: Diga o que você quer fazer"
       }
     ],
     "configuration": {
@@ -107,8 +111,7 @@
         {
           "type": "webview",
           "id": "centraldark.vibeCoding",
-          "name": "🪬 CentralDark · Vibe Coding",
-          "visibility": "visible"
+          "name": "🪬 CentralDark · Vibe Coding"
         }
       ]
     }
