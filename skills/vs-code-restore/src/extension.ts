@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { execFile } from 'child_process';
 import { startRemoteTerminal, configureRemoteTerminal, remoteTerminalStatus } from './remote-terminal';
-import { CentralDarkVibeProvider, openCentralDarkVibe } from './vibe-panel';
+import { CentralDarkVibeProvider, openCentralDarkVibe, runNaturalCentralDarkCommand } from './vibe-panel';
 
 interface TerminalSpec {
   name: string;
@@ -57,11 +57,18 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
     vscode.commands.registerCommand('centraldark.buildExtension', buildExtension),
     vscode.commands.registerCommand('centraldark.openVibeCoding', openCentralDarkVibe),
+    vscode.commands.registerCommand('centraldark.naturalCommand', () => runNaturalCentralDarkCommand()),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
       traceOutput?.show(true);
     })
   );
+  const vibeStatus = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+  vibeStatus.text = '$(sparkle) CentralDark';
+  vibeStatus.tooltip = 'Abrir CentralDark · Vibe Coding';
+  vibeStatus.command = 'centraldark.openVibeCoding';
+  vibeStatus.show();
+  context.subscriptions.push(vibeStatus);
   registerTerminalTelemetry(context);
   void startRemoteTerminal(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
