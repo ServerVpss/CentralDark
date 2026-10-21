@@ -424,3 +424,52 @@ A extensão ZENDRIVE não conclui missão quando o código foi commitado. O cicl
 - Antirregressão: repetir comando ZENDRIVE CLI, localizar VS Code por PID, rota SSH, abas e UI existente, erros de console.
 
 Automação de desenvolvimento permitida onde houver execução autorizada; merge em main, produção VPS e modificação de credenciais precisam do gate de promoção do CHEFE. Falhou uma fase: parar e guardar error_code, sha, owner e next_cursor. Documento canônico: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md.
+
+
+## 🪬 ZENDRIVE como motor selecionável do Hermes (2026-10-18)
+
+**INTENÇÃO CANÔNICA:** selecionar ZENDRIVE como MOTOR DE INFERÊNCIA do Hermes; não reduzi-lo a uma função de foco, telemetria ou entrega de contexto. SOL coordena; Hermes continua agente executor; ZENDRIVE é a escolha explícita do backend de resposta. Não criar outra skill, runtime, navegador, daemon, gateway ou executor.
+
+**Owners físicos:** o alias de engine ZENDRIVE já existe em apps/modulos/elite-gateway/scripts/centraldark_omni_router.py (modelo zendrive-chatgpt-local, rota /v1/chat/completions); esta skill skills/vs-code-restore documenta a seleção e conserva o comando de foco; o Hermes nativo tem provider custom e aliases em sua própria configuração privada.
+
+### Configuração no Hermes EXISTENTE
+
+No host em que Hermes acessa o Omni Router de forma autenticada e privada, mesclar o seguinte alias com os demais aliases existentes de Hermes (via hermes config edit; nunca sobrescrever a configuração toda):
+
+```yaml
+model_aliases:
+  zendrive:
+    model: zendrive
+    provider: custom
+    base_url: "http://127.0.0.1:8099/v1"
+    key_env: CENTRALDARK_ROUTER_TOKEN
+```
+
+O valor CENTRALDARK_ROUTER_TOKEN fica apenas no armazenamento de credenciais autorizado; não registrar valor no repositório, logs ou chat. 127.0.0.1 é o host do Hermes, NÃO a VPS quando o Hermes é executado na Casa. Fora desse host, usar túnel/SSH/Tailscale autenticado já existente, sem abrir uma API pública. Antes de modificar config, conferir o formato aceito pela versão local com hermes config e as regras em .agents/skills/autonomous-ai-agents/hermes-agent/references/providers-and-models.md.
+
+Na sessão interativa existente:
+
+```text
+hermes --tui
+/model zendrive
+oi
+```
+
+No Windows: hermes.cmd --tui; depois /model zendrive; depois oi. A seleção envia a inferência ao Omni Router, mas só é funcional se existir um worker ZENDRIVE real e autorizado.
+
+### Cadeado contra motor fictício
+
+- ZENDRIVE_PROVIDER_LIVE_ENABLED=true e ZENDRIVE_WORKER_URL configurada são requisitos mínimos de configuração, NÃO prova de inferência. O worker deve ser um backend autorizado; assinatura ChatGPT web não fornece automaticamente API ou créditos.
+- A rota /providers/zendrive-chatgpt-local/simulate fica restrita a testes explícitos; a rota real /v1/chat/completions NÃO deve responder com SIMULATED_PASS.
+- Seleção explícita zendrive NUNCA aceita fallback silencioso para Nous, OpenAI ou outro provider. Sem worker ou com falha, retornar erro identificável, não resposta inventada.
+- A versão do Omni Router atualmente responde HTTP 501 para tool calls; primeiro provar inferência textual e só depois avaliar compatibilidade de ferramentas do Hermes. NUNCA marcar execução de ferramentas como PASS só porque Hermes respondeu oi.
+
+### Prova mínima e NEXT_CURSOR
+
+1. No mesmo SHA: executar python -m py_compile apps/modulos/elite-gateway/scripts/centraldark_omni_router.py e python apps/modulos/elite-gateway/scripts/centraldark_omni_router.py --self-test.
+2. No runtime de destino, consultar /providers/zendrive-chatgpt-local/health (sem exibir segredos) e verificar worker de inferência não simulado.
+3. Executar /model zendrive e a mensagem oi pelo Hermes existente. Exigir resposta real com correlação do engine zendrive-chatgpt-local, sem fallback, receipt e readback.
+4. Desabilitar worker em teste controlado e verificar falha fechada, sem SIMULATED_PASS ou troca silenciosa de engine.
+5. Separar SOURCE, HERMES_ALIAS_CONFIGURED, WORKER_LIVE, INFERENCE_PASS, HERMES_TOOL_CALLS_PASS e DEPLOY_PASS.
+
+**NEXT_CURSOR:** medir o worker Zendrive autorizado, configurar o alias no Hermes atual, testar a primeira inferência real e só depois promover STATUS=PASS. SOURCE_COMMITTED != RUNTIME_INSTALLED != INFERENCE_PROVEN. Nenhuma instalação, segredo, alteração de perfil ou deploy é realizada por esta skill.
