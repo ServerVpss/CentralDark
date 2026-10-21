@@ -3125,3 +3125,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-21
 - **Contexto:** Na rechecagem do PR #1880, catálogo unificado retornou 141 runtime/dispatchable tools e 13 rotas. Entre elas MCP_CASA_TO_VPS com capability declarada execute_command|vps_run_once_script, CAS_CLOUD_RELAY, RDC_DESKTOP_COMMANDER e SCREENPIPE_LOCAL_SENSOR. O catálogo filtrado não revelou schema de executor correspondente; deploy_status ainda ERRO com SyntaxError de JSON PM2 e a lista de processos veio vazia.
 - **Aprendizado:** Não concluir que a rota está executável apenas por estar no catálogo. Medir o binding pelo dispatcher oficial, obter schema, exit code/ACK e readback antes de operar na Casa. A ausência de um executor no catálogo filtrado é um bloqueio de descoberta, não prova de que toda a ponte está indisponível. Manter o BOOT fixo acumulativo; após cada correção registrar aprendizado, ledger e PR equivalente; fixed point exige CI e runtime contraprova.
+
+### 205. Retomar PR #1880 sem confundir snapshot com fixed point
+- **Categoria:** armadilha
+- **Data:** 2026-10-21
+- **Contexto:** A medição operacional mostrou MCP runtime presente, heartbeat UNKNOWN, forensic/receipt ausentes e veredito UNKNOWN_NOT_PASS; a topologia mostrou runtime presente com execução global desconhecida. Isso exige retomar a frente com CI e evidência de execução, não inferir saúde por PID.
+- **Aprendizado:** Antes de qualquer promoção: medir o SHA exato do PR e os workflows desse SHA; inspecionar os jobs falhos/pendentes; executar validação real no caminho de build autorizado; verificar heartbeat/receipt forense e runtime por readback independente. PID presente, chamada MCP recente ou alignment 100% não substituem receipt. Estado fica BLOCKED até as provas faltantes existirem.
