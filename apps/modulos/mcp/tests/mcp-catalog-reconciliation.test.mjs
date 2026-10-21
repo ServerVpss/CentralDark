@@ -5,6 +5,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { localHybridTools } from "../src/tools/local/local-compute.js";
 import { mcpAdminTools } from "../src/tools/core/mcp-admin.js";
+import { ALL_TOOLS, CATALOG_PROBLEMS } from "../src/tools/core/tools-catalog.js";
 import { reconcileCatalogNames } from "../src/tools/core/mcp-diagnostics.js";
 
 test("catalog reconciliation catches dispatcher tools missing from public surface", () => {
@@ -41,6 +42,12 @@ test("paired VS Code tools are surfaced in the existing MCP dispatcher, catalog 
     "vscode_remote_execute", "vscode_remote_terminals",
   ];
   const present = localHybridTools.filter(tool => tool.name.startsWith("vscode_remote_"));
+  const advertised = ALL_TOOLS.filter(tool => tool.name.startsWith("vscode_remote_"));
+  assert.deepEqual(advertised.map(tool => tool.name).sort(), expected,
+    "the real public tools-catalog consumed by mcp-server must publish all four tools");
+  assert.deepEqual(CATALOG_PROBLEMS.duplicateNames.filter(name => name.startsWith("vscode_remote_")), []);
+  assert.deepEqual(CATALOG_PROBLEMS.invalidNames.filter(name => name.startsWith("vscode_remote_")), []);
+
   assert.deepEqual(present.map(tool => tool.name).sort(), expected);
   assert.equal(present.find(tool => tool.name === "vscode_remote_devices").annotations.readOnlyHint, true);
   assert.equal(present.find(tool => tool.name === "vscode_remote_execute").annotations.destructiveHint, true);
