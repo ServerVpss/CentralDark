@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { execFile } from 'child_process';
 import { startRemoteTerminal, configureRemoteTerminal, remoteTerminalStatus } from './remote-terminal';
+import { CentralDarkVibeProvider, openCentralDarkVibe } from './vibe-panel';
 
 interface TerminalSpec {
   name: string;
@@ -38,6 +39,10 @@ export function activate(context: vscode.ExtensionContext): void {
   traceOutput = vscode.window.createOutputChannel('CentralDark Trace');
   context.subscriptions.push(traceOutput);
   emitTrace('activate', 'PASS');
+  const vibeProvider = new CentralDarkVibeProvider(context);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider('centraldark.vibeCoding', vibeProvider)
+  );
   context.subscriptions.push(
     vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)),
     vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)),
@@ -50,6 +55,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => configureRemoteTerminal(context)),
     vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => remoteTerminalStatus(context)),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
+    vscode.commands.registerCommand('centraldark.buildExtension', buildExtension),
+    vscode.commands.registerCommand('centraldark.openVibeCoding', openCentralDarkVibe),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
       traceOutput?.show(true);
@@ -312,6 +319,91 @@ function browserSurfacesCatalog(): void {
   out.appendLine('Owner MCP: apps/modulos/mcp/src/tools/core/mcp-admin.js');
   out.appendLine('Owner VS Code: skills/vs-code-restore/src/extension.ts');
   out.show(true);
+}
+
+
+function extensionOwnerPath(): string | undefined {
+  for (const folder of vscode.workspace.workspaceFolders ?? []) {
+    const root = folder.uri.fsPath;
+    const direct = path.join(root, 'package.json');
+    if (path.basename(root).toLowerCase() === 'vs-code-restore' && fs.existsSync(direct)) {
+      return root;
+    }
+    const nested = path.join(root, 'skills', 'vs-code-restore');
+    if (fs.existsSync(path.join(nested, 'package.json'))) {
+      return nested;
+    }
+  }
+  if (process.platform === 'win32') {
+    const canonical = 'K:\\skills\\vs-code-restore';
+    if (fs.existsSync(path.join(canonical, 'package.json'))) {
+      return canonical;
+    }
+  }
+  return undefined;
+}
+
+function runLogged(
+  binary: string,
+  args: string[],
+  cwd: string,
+  output: vscode.OutputChannel
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    output.appendLine('> ' + binary + ' ' + args.join(' '));
+    const child = execFile(binary, args, {
+      cwd, windowsHide: true, maxBuffer: 1024 * 1024 * 8
+    }, (error, stdout, stderr) => {
+      if (stdout) output.append(stdout);
+      if (stderr) output.append(stderr);
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+    child.stdout?.on('data', chunk => output.append(String(chunk)));
+    child.stderr?.on('data', chunk => output.append(String(chunk)));
+  });
+}
+
+async function buildExtension(): Promise<void> {
+  const owner = extensionOwnerPath();
+  if (!owner) {
+    void vscode.window.showWarningMessage(
+      'CentralDark: abra o repositório que contém skills/vs-code-restore para compilar.'
+    );
+    return;
+  }
+  const output = vscode.window.createOutputChannel('CentralDark — Compilar extensão');
+  output.clear();
+  output.show(true);
+  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  try {
+    await vscode.window.withProgress({
+      location: vscode.ProgressLocation.Notification,
+      title: 'CentralDark: testando e compilando a extensão…',
+      cancellable: false
+    }, async () => {
+      await runLogged(npm, ['test'], owner, output);
+      await runLogged(npm, ['run', 'compile'], owner, output);
+      const pkg = JSON.parse(fs.readFileSync(path.join(owner, 'package.json'), 'utf8')) as { version?: string };
+      const version = String(pkg.version || 'unknown');
+      const vsix = path.join(owner, 'centraldark-vscode-restore-' + version + '.vsix');
+      await runLogged(npx, [
+        '--yes', '@vscode/vsce', 'package',
+        '--no-dependencies',
+        '--allow-missing-repository',
+        '--out', vsix
+      ], owner, output);
+      output.appendLine('\n[OK] VSIX=' + vsix);
+      void vscode.window.showInformationMessage('CentralDark: extensão ' + version + ' compilada e empacotada.');
+    });
+  } catch (error) {
+    output.appendLine('\n[ERRO] ' + String(error));
+    void vscode.window.showErrorMessage('CentralDark: compilação falhou. Veja “CentralDark — Compilar extensão”.');
+  }
 }
 
 
