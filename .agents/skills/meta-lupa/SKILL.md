@@ -930,3 +930,20 @@ Se worktrees/containers isolados já existirem, delimitar diretório, recursos, 
 - Artefatos, falhas e contraprovas ligados ao mesmo run/SHA.
 - Promoção reproduzível e reversível; sem produção automática sem autorização.
 - PASS somente quando melhoria no alvo externo estiver demonstrada; caso contrário UNKNOWN, BLOCKED, FAIL ou NOT_MEASURED.
+
+
+#### 7.6 Roteamento de revisão com fallback
+
+Nenhum provedor de revisão externo (incluindo Codex) é dependência obrigatória do fluxo. Falha, quota, timeout, indisponibilidade ou resposta inválida de um provedor deve gerar um evento/recibo com rota, causa, alvo/SHA e horário; exibir a falha de forma legível; e seguir para a próxima rota autorizada já existente.
+
+Ordem de tentativa para revisão de PR, conforme capacidades realmente disponíveis:
+
+1. Revisor inicialmente escolhido, se disponível.
+2. Modelo local CURRENT pela workflow existente `.github/workflows/pr-agent.yml` (workflow `PR Review — IA local CentralDark`), registrando modelo/fonte/classe de execução que o próprio health endpoint reportar.
+3. Checklist determinístico existente `.github/workflows/pr-auto-review.yml` para scanner de segredos, diff e classificação de escopo; ele complementa, mas não finge ser parecer semântico de IA.
+4. Sentinela/workflow canônico existente quando o problema for divergência de estado, rota ou execução; não usar a Sentinela de drift como se fosse revisora de código se ela não executou análise do diff.
+5. Outra rota local/autorizada descoberta no catálogo unificado, sem inventar nomes nem criar um novo dispatcher.
+
+Cada tentativa deve produzir estado próprio: `PASS`, `FAIL`, `BLOCKED`, `NOT_RUN` ou `UNKNOWN`. Uma chamada MCP concluída só prova que a ferramenta foi invocada; não prova que a revisão foi feita. Só aceitar revisão quando houver conteúdo de parecer ligado ao PR e ao HEAD exato. Não converter fila/runner pendente, saída vazia, erro de provedor ou checklist determinístico em aprovação semântica.
+
+Se uma rota falhar, registrar a causa e continuar automaticamente pelas rotas autorizadas restantes. Só declarar `BLOCKED` quando as alternativas aplicáveis tiverem sido tentadas ou estiverem comprovadamente indisponíveis, ou quando faltar autorização/isolamento necessário. A mensagem de falha deve apontar a próxima rota e o estado dela. Reutilizar os workflows, recibos e funil existentes; não criar novo agente, banco, roteador ou ledger.
