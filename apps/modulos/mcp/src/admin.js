@@ -17,7 +17,7 @@ import { injectPatternAdmin } from "./admin-patterns-ui.js";
 import { getBuildkiteStatus } from "./buildkite-integration.js";
 import { getGrokControlDashboard, setGrokControlSelection } from "./grok-control.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
-import { getHarnessWeeklySummary } from "./agent-observability.js";
+import { getHarnessWeeklySummary, queryCentralLogs } from "./agent-observability.js";
 import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
 import { subscribeAuditEvents } from "./audit-logger.js";
@@ -1610,6 +1610,33 @@ export async function adminTailscale(req, res) {
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────
 export function adminBuscarLogs(req, res) {
     if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    // Consulta do funil setorizado dentro da mesma API Admin. O modo sem setor fica intacto.
+    if (req.query?.sector != null) {
+        const sector = String(req.query.sector || "").trim().toLowerCase();
+        const allowed = new Set(["all", "mcp", "agents", "hermes", "vscode", "system", "control", "consciencia"]);
+        if (!allowed.has(sector)) { res.status(400).json({ error: "sector_not_allowed" }); return; }
+        const since = Math.max(1, Math.min(10080, Number(req.query.since_minutes) || 60));
+        const limit = Math.max(1, Math.min(200, Number(req.query.limit) || 100));
+        const rows = queryCentralLogs({ sector: sector === "all" ? undefined : sector, since_minutes: since, limit });
+        const q = String(req.query.q || "").toLowerCase().slice(0,80);
+        const logs = rows.filter(row => !q ||
+            [row.kind, row.source, row.actor, row.key].some(v => String(v || "").toLowerCase().includes(q)))
+            .map(row => ({
+                event_id: String(row.event_id || "").slice(0,120),
+                timestamp: String(row.timestamp || "").slice(0,64),
+                sector: String(row.sector || "").slice(0,80),
+                source: String(row.source || "").slice(0,160),
+                actor: String(row.actor || "").slice(0,160),
+                kind: String(row.kind || "").slice(0,120),
+                level: String(row.level || "").slice(0,32),
+                badge: String(row.badge || "").slice(0,8),
+                key: String(row.key || "").slice(0,160),
+                // Sem args, dados brutos, stdout, paths, cookies ou tokens.
+            }));
+        res.setHeader("Cache-Control", "no-store");
+        res.json({ schema: "centraldark.central-logs.sanitized.v1", sector, count: logs.length, logs });
+        return;
+    }
     const rota = String(req.query.rota || "").toLowerCase();
     const cid = String(req.query.cid || "").toLowerCase();
     const level = String(req.query.level || "").toLowerCase();
