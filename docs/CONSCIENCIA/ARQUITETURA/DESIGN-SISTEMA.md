@@ -188,6 +188,53 @@ grafos são projeções reconstruíveis.
 
 ---
 
+
+<!-- CENTRALDARK_HARNESS_COCKPIT_BUILDER_ALTHE_REFERENCIA_20261021 -->
+
+## Cristal de interface — Builder dentro do Harness, sem duplicar Cockpit (2026-10-21)
+
+**Intenção expressa pelo CHEFE (capturas da Casa):** “cristaliza esses cores e esses botões aí pra eu saber lá onde tem o cockpit; veja as abas”. A referência é a bancada Alethe/estilo workspace mostrada em capturas (modal “Olá, CENTRALDARK”; Conta, Recursos, Controle remoto, Aparência, Integrações, homepage Builder, agente selecionável e terminais). **Não** aprova substituir os owners da CentralDark, clonar serviços nem tornar Alethe o segundo Harness principal.
+
+**Leitura da aba real:** Browser conectado `http://127.0.0.1:8080/sala-controle`, título “Cockpit CentralDark — Sala de Controle”, consulta nesta sessão em 21/10/2026. A aba expôs as entradas de navegação abaixo. Essa leitura prova **DOM/controles renderizados**, não clique funcional, integração física Win32, sessão privada, build Windows ou execução de agente.
+
+### Mapa de encaixe no Cockpit existente
+
+| Referência visual mostrada | Entrada/owner CentralDark a REUTILIZAR | Estado atual / menor delta |
+| --- | --- | --- |
+| Tela inicial “O que você quer construir?”, seletor agente, pasta K:, modo e envio | `CockpitShell.tsx` → `CentralDark Estúdio` (`aionui`) e Builder do Shell `apps/modulos/Bolt/source` | **A compor dentro do Harness**; escolha de Claude/Codex/Copilot/Cursor/Antigravity/OpenCode é UI até autenticação e PID/ACK medidos. Não sobrescrever `Builder Bolt` (fábrica de sites distinta). |
+| Barra esquerda projetos/agentes e dock persistente | Harness lateral esquerdo já existente (`Abrir ferramentas`, Gram, Goals, Buscar módulos) | Preservar moldura lateral, foco, restauração, perfis e instâncias nativas; evolução incremental da casca, sem segunda sidebar. |
+| Editor/Cockpit multiabas + painel direito Markdown | `centraldark-harness-abas`, `Sistema CentralDark`, `💎 Obsidian`, Grafo Vivo | Mesmas abas internas; Obsidian **original** com vault e plugins; janela Win32 incorporada requer teste separado. Links `obsidian://` não provam docking. |
+| Terminais inferiores e “novo terminal/projeto” | `skills/vs-code-restore` PR #1880 + desktop Bolt / Harness + MCP oficial | Conectar aos mesmos PIDs/sessões, jamais criar pseudo-shell ou reexecutar CLIs sem consentimento. |
+| Configurações Conta, Organização, Aparência, Controle remoto | `Configurar Harness`, `Admin CentralDark`, `Design Center`, auth existente | Um painel de configurações reutilizando perfis e políticas; controle remoto **desligado por padrão**. |
+| Recursos: Navegador, Graphify, MCP & Skills, Playwright, Orquestração, GSD Sync, AI Memory | `Sistema CentralDark` / `Inventário`, `Raio-X`, `Goals`, `Hermes`, `Minha Oficina`, `Obsidian` | Mapear disponibilidade com proprietário e prova por capacidade. “Ativado” no protótipo de referência **não atesta** recurso instalado na CentralDark. |
+| Integrações (9router, Spotify, Discord, CLI) / Plugins | `Admin CentralDark`, `Sistema CentralDark`, catálogo MCP e cofre existente | Não reinstalar providers nem duplicar vault. Nunca copiar segredos das imagens. |
+| Home com atividade, progresso, recibos | `Visão geral`, `Recibos`, `Gênesis · Michelin`, `Dream` | Fontes atuais e idempotentes; números do protótipo de referência não são métricas da Casa. |
+
+**Abas renderizadas e existentes na leitura:** Visão geral; Portal; Builder Bolt; Mapa PR #1873; CentralDark Gram; Minha Oficina; Design Center; Goals; Gênesis · Michelin; Claude; Dream; Estrutura; Raio-X; Recibos; Forja; Permissões Forja; Admin CentralDark; Sistema CentralDark; Hermes; Obsidian; Estúdio; Unigram; Regras Forja; Inventário; Agent Mode; HTML Consolidation; Downloads. A origem primária é `apps/instinto-superior/src/components/central/CockpitShell.tsx`, `TabsList` + `HARNESS_DESTINOS`, sem criar menu paralelo.
+
+**Ações da moldura que já existem:** lateral esquerda `Abrir ferramentas`, Gram, Goals, `Buscar módulos`; lateral direita `Sistemas`, Hermes, `Configurar Harness`; rodapé `Sync`, `Pacotes`, `Configurar moldura`; topo `CentralDark Estúdio`. Preservar atalhos, teclado e ícones, não reproduzir botões decorativos sem handler.
+
+### Cores — amostra das capturas, não um tema oficial novo
+
+Amostras **aproximadas** do screenshot, não extraídas do CSS original do aplicativo de referência:
+
+| Papel | Valor observado aproximado |
+| --- | --- |
+| Fundo profundo | `#080810` |
+| Superfície/painel | `#14141F` |
+| Seleção/camada índigo | `#23213F` |
+| Acento ativo/CTA violeta | `#7D72FF` |
+| Texto auxiliar lavanda | `#C3BFE6` |
+
+**Regra:** referência de acabamento para o Builder dentro do Harness; **não** criar `ThemeId` nem trocar o Esmeralda/global sem prova de regressão e consentimento explícito. Aplicar, se aprovado, por CSS **escopado ao módulo** e pelos tokens semânticos existentes em `apps/instinto-superior/src/styles.css` (e no design owner deste documento). `prefers-reduced-motion`, contraste e foco acessível permanecem obrigatórios.
+
+**Divergências concretas medidas no source da PR #1895 (HEAD no início desta leitura: `b3427c9da167cdc41aaf5814bcb1db12c61c4d50`):** `builder-bolt` usa `MenuVisualCentralDark` com “ESTRUTURA VISUAL” e “Integração pendente”; `aionui` hoje dá link para aplicativo externo/protótipo; `obsidian` despacha `obsidian://open?vault=BRAIN` ou ponte desktop e informa janela independente. **Não declarar completo.**
+
+**OWNER/WRI​​TER:** este cristal é **apenas documentação** em `DESIGN-SISTEMA.md` na PR #1895. `CockpitShell.tsx` e Shell mantêm o integrador da Casa como **único escritor**. Sem alterar CSS, handlers, processos, autenticação, drives ou runtime nesta rodada.
+
+**NEXT_CURSOR:** `MAPA_TAB_ID → ESCOPAR_ESTILO_BUILDER → CONECTAR_HANDLERS_ORIGINAIS → MANTER_BOLT_DISTINTO → OBSIDIAN_NATIVE_TEST → BUILD_SHELL_K_F → VISUAL_BEFORE_AFTER → RECEIPT`. `DOCUMENTED != IMPLEMENTED != LIVE_TESTED`.
+
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
