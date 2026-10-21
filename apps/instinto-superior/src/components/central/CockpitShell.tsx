@@ -362,7 +362,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               size="sm"
             >
               <a href="http://89.117.78.124:25808/" target="_blank" rel="noopener noreferrer">
-                <ExternalLink aria-hidden className="size-4" /> Abrir AionUI
+                <ExternalLink aria-hidden className="size-4" /> CentralDark UI
               </a>
             </Button>
             {!autenticado ? (
