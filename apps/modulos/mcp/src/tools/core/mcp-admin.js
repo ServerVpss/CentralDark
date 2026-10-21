@@ -32,6 +32,8 @@ import { vpsFileTools } from "../vps/vps-files.js";
 import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
+import { mcpDiagnosticsTools } from "./mcp-diagnostics.js";
+import { mcpPolicyTools } from "./mcp-policy.js";
 import {
     ADMIN_CONFIRMATIONS,
     CATALOG_VERSION,
@@ -84,16 +86,12 @@ const runtimeTools = [
     ...adminGitTools,
     ...adminMainWriterTools,
     ...adminProviderControlTools,
-    // MOTIVO  > estes 6 grupos existem no catalogo mas nao entravam em
-    //           runtimeTools, entao 24 tools ficavam INALCANCAVEIS pelo
-    //           dispatcher mcp_admin_call, entre elas as integracoes.
-    // ONDE    > apps/modulos/mcp/src/tools/core/mcp-admin.js, runtimeTools.
-    // RESOLVE > incluidos aqui. NAO incluir mcpDiagnosticsTools nem
-    //           mcpPolicyTools: os dois importam mcpAdminTools de volta deste
-    //           arquivo e formam ciclo — tentativa anterior derrubou o
-    //           servico com 'Cannot access mcpAdminTools before
-    //           initialization'. Nao ha perda: as 4 tools desses grupos ja
-    //           sao expostas direto no catalogo.
+    // Ciclo quebrado: mcp-diagnostics.js nao importa mcp-admin no topo.
+    // Dispatcher alcanca mcp_catalog_diff, deploy_validate_mcp_catalog,
+    // mcp_policy_summary e mcp_audit_recent_logs.
+    // Deploy continua tool MCP. Nao cria rota HTTP em api.centralldark.com.
+    ...mcpDiagnosticsTools,
+    ...mcpPolicyTools,
     ...cognitivoTools,
     ...eliteGatewayTools,
     ...geminiTools,
@@ -217,6 +215,9 @@ export function diagnoseMcpBlock(status) {
 }
 
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
+export function getDispatcherRuntimeTools() {
+    return runtimeTools;
+}
 function safeToolInfo(tool) {
     return {
         name: tool.name,
