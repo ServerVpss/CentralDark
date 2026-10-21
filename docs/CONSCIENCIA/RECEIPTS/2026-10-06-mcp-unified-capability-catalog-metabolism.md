@@ -225,3 +225,49 @@ NEXT_CURSOR=NEW_SHA_CI → PROCESS_9100_SOURCE_IDENTITY → CANARY_SAFE_DEPLOY_G
 - Patch usa `command -v pm2`, `set -o pipefail`, `res.exitCode` e códigos distinguíveis `PM2_NOT_IN_RUNTIME_PATH`, `PM2_PROBE_FAILED_EXIT_*`, `PM2_PROBE_EMPTY_OUTPUT`, `PM2_SUMMARY_JSON_INVALID`, `PM2_SUMMARY_NOT_ARRAY`.
 - Projeto JSON sanitizado continua sem expor env/token de PM2. Diagnóstico aprimorado **não instala PM2**, não reinicia serviço e não declara os processos parados. A configuração do PATH da unidade/processo ainda precisa de T1.
 - TEST_STATUS=AWAIT_SAME_SHA_CI; RUNTIME_STATUS=UNCHANGED.
+
+
+## Fechamento canário T0 — execução direta 2026-10-21
+
+```text
+INTENT_ID=CENTRALDARK-MCP-VALIDATOR-RUNTIME-CANARY-20261021
+OWNER=apps/modulos/mcp/src/tools/core/mcp-diagnostics.js
+OWNER_ASSOCIATED=apps/modulos/mcp/src/tools/core/mcp-admin.js
+PM2_FIX_OWNER=apps/modulos/mcp/src/tools/deploy/deploy.js
+MAIN_BASE_SHA=4c86124f01b7626108faf8f94e91a5cb6e9e5e17
+PATCH_SHA_PRE_RECEIPT=a159fb57208c205286f96faa10900956237335a2
+ACTIVE_WRITER=fix/mcp-catalog-canary-runtime-scope-20261021
+ACTIVE_DISPATCHER_FINGERPRINT_BEFORE=80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7
+SOURCE_MAIN_FINGERPRINT=b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa
+PUBLIC_HEALTH_CATALOG_VERSION=153-54e72b14201d
+LIVE_CATALOG_INTERNAL=141
+LIVE_CATALOG_PUBLIC=153
+LIVE_VALIDATOR_LEGACY=86
+LIVE_ROUTES=13
+MAIN_SOURCE_ROUTES=17
+VPS_CHECKOUT_SHA=4b0ce5a7d93cd821c9b10231aa74d438b33bc926
+VPS_CHECKOUT_DIRTY=true
+RUNTIME_PROCESS_SOURCE_SHA=UNKNOWN
+RUNTIME_PID_9100_BINDING=UNKNOWN
+NODE_TEST=NOT_EXECUTED_CI_PENDING
+SOURCE_STATIC_ASSERTIONS=PASS_8_OF_8_CODEMODE_GITHUB_READBACK
+CI_EXACT_SHA=PENDING
+CANARY_DEPLOY=NOT_STARTED_BLOCKED_BY_GATE
+PRODUCTION_PROMOTION=NO
+ROLLBACK_EXECUTED=NO_NO_PROMOTION_OCCURRED
+FIXED_POINT=NO
+```
+
+**Testes efetivamente rodados nesta leitura (escopo restrito):** oito asserts JS de fonte remota: `CI_SRC_FETCH`, `ROUTES_17`, `DISPATCHER_OWNER`, `SURFACES_POLICY`, `LEGACY_GUARD`, `PM2_PARSER`, `CI_GATE_INTEGRATED`, `REGRESSION_TEST_PRESENT` — 8/8 PASS no commit `a159fb57208c205286f96faa10900956237335a2`. Esses checks NÃO compilam JS, não executam `node --test`, não substituem serviço vivo nem CI.
+
+**Bloqueios reais observados:** CI GitHub Actions da PR #1896 permanece `pending/queued` (nenhuma `conclusion=success`); MCP Admin do serviço ativo reportou 141/13 enquanto main declara 17; a ferramenta `admin_pm2_list` retornou `spawn pm2 ENOENT` no ambiente administrativo, e `deploy_status` ainda executa código velho com `SyntaxError: Unexpected end of JSON input`. O microdeploy já existente recusa intencionalmente promover `src/tools/core/mcp-admin.js` e `src/tools/core/mcp-diagnostics.js` (`MCP_NATIVE_FILESET_NOT_APPROVED`), portanto não utilizar `--file` com esses caminhos sem gate canônico aprovado. `/root/CentralDark` possui mudanças locais; `git pull --ff-only` no checkout principal e `reset --hard` não autorizados por esta missão.
+
+**Canário/rollback:** Não foi implantado canário físico na VPS, pois faltam CI no HEAD e rota de implantação isolada comprovada para este fileset. O plano de rollback canônico a reutilizar após liberação consta em `scripts/vps/main-pinned-microdeploy.sh`: lock, scratch único, backup por arquivo, promoção causal do owner, health/readback, restauração do backup se falhar, receipt, limpeza **só** do scratch. Como não houve promoção, o rollback não foi acionado; `ROLLBACK_TESTED_THIS_SHA=NO`.
+
+**Contraprovas independentes:** `tailscale_bridge_status` PASS mostra VPS e Casa online mas o provedor Remote Desktop Commander `list_devices` informou ambos dispositivos offline. Isso não prova execução reversa Casa↔VPS. `centraldark_deploy_root_gate` PASS é somente contrato raiz. Leitura segura do arquivo de unidade e runtime via `admin_file_read` devolveu apenas envelope de chamada, sem bytes de conteúdo; SHA físico do PID 9100 não demonstrado. Nenhum processo reiniciado nem segredo lido.
+
+**Diff do patch:** `apps/modulos/mcp/src/tools/core/mcp-diagnostics.js`, `apps/modulos/mcp/src/tools/deploy/deploy.js`, `apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs`, `.github/workflows/centraldark-validate.yml` + este recibo. `mcp-admin.js` foi inspecionado e reutilizado sem reescrita (não introduzir owner paralelo).
+
+**Decisão:** `NO-GO` para promoção enquanto `CI_EXACT_SHA != PASS`, `RUNTIME_PID_9100_SOURCE_SHA=UNKNOWN` ou `CANARY_T1=NOT_PROVEN`. Manter PR aberta com writer único; recuperar gate no SHA final, materializar canário em scratch com runtime/port isolados e credenciais de teste, comparar endpoint e fingerprints, atestar backup/rollback e só então autorizar promoção. 
+
+NEXT_CURSOR=`CI_EXACT_SHA_PASS → PID_9100_SERVICE_EXEC_SHA → ISOLATED_CANARY_TEST → PORT_HEALTH_17_ROUTES → ROLLBACK_PROOF → PROMOTION_GO_NO_GO → RECEIPT_FINAL`.
