@@ -880,17 +880,17 @@ ou workflow continua sujeita ao gate Meta-Lupa/AutoLupa existente.
   merge não equivale a deploy nem comprova comportamento em runtime.
 
 
-## 7. Ciclo de melhoria contínua orientado por experiência e alvo externo
+### 7. Ciclo de melhoria contínua orientado por experiência e alvo externo
 
 Inspirado em A-Evolve-Training (arXiv:2606.20657), este contrato reaproveita os recibos e o funil existentes. Não cria banco de experiências, executor, orquestrador, worker pool ou serviço paralelo. Reutilizar o armazenamento canônico de execuções/recibos já existente; se não for comprovado, registrar a lacuna.
 
-### 7.1 Registro reutilizável de experiência
+#### 7.1 Registro reutilizável de experiência
 
 Cada tentativa material contribui para o recibo canônico com: objetivo e critério prévio; baseline imutável (SHA/configuração/dados); hipótese e delta mínimo; ferramenta/argumentos sanitizados, run ID e custo quando disponível; logs/artefatos por hash; métricas internas e externas; falha observada versus causa ainda hipotética; decisão de reutilizar/rejeitar/retestar; contraprova e NEXT_CURSOR.
 
 Preservar falhas e sucessos como evidência, não como verdades universais. Reutilizar apenas quando ambiente, versão e objetivo forem comparáveis. Deduplicar pelos mecanismos existentes. Não persistir tokens, credenciais, dados pessoais desnecessários ou logs brutos sem sanitização e retenção definida.
 
-### 7.2 Loop de pesquisa com limites
+#### 7.2 Loop de pesquisa com limites
 
 1. Definir o alvo externo e o critério de sucesso antes de explorar.
 2. Fixar baseline reproduzível e separar desenvolvimento de avaliação.
@@ -904,7 +904,7 @@ Preservar falhas e sucessos como evidência, não como verdades universais. Reut
 
 Autonomia não autoriza alteração de produção, permissões, segredos, orçamento ou critérios de segurança. Deploy, ações irreversíveis e mudança de owner continuam sob as autorizações existentes.
 
-### 7.3 Divergência entre proxy e alvo externo
+#### 7.3 Divergência entre proxy e alvo externo
 
 Registrar métricas internas/externas com versões e amostras comparáveis. Se o proxy melhorar sem melhora externa, ou divergirem além de limiar pré-definido:
 
@@ -917,11 +917,11 @@ Registrar métricas internas/externas com versões e amostras comparáveis. Se o
 
 Sem alvo externo, holdout ou poder estatístico suficiente, usar UNKNOWN/NOT_MEASURED. Não inventar limiar depois de observar resultados. Uma pontuação interna crescente pode ser sobreajuste.
 
-### 7.4 Exploração paralela segura
+#### 7.4 Exploração paralela segura
 
 Se worktrees/containers isolados já existirem, delimitar diretório, recursos, timeout, permissões e artefatos por tentativa; manter baseline imutável e recolher resultados por esquema determinístico. Não criar workers/containers automaticamente sem comprovar suporte existente. Sem isolamento, executar serialmente ou bloquear.
 
-### 7.5 Aceite
+#### 7.5 Aceite
 
 - Experiência recuperável no owner/recibo canônico existente.
 - Baseline e critério definidos antes da tentativa.
