@@ -159,5 +159,84 @@
     "formula": "REUSE_BEFORE_CREATE + UNKNOWN != PASS + DOCUMENTED != EXECUTED + REALITY = JUDGE",
     "applies_to": "ALL_CURRENT_AND_FUTURE_SKILLS_OWNERS_ROUTERS_WORKFLOWS_SURFACES",
     "new_owner_created": false
+  },
+  "creative_on_demand": {
+    "status": "SOURCE_ONLY_RUNTIME_LOAD_UNVERIFIED",
+    "canonical_skill": "centraldark-vibe-coding",
+    "root_preserved": "🔗 !># INTERLIGADOS",
+    "trigger": "#VIBECODING",
+    "aliases": [
+      "!VIBECODING",
+      "!CENTRALDARK #VIBECODING"
+    ],
+    "tags": [
+      "🎨 VIBE_CODING",
+      "🧠 BRAINSTORMING",
+      "🪡 MUTACAO_SELETIVA",
+      "🧬 CASCA_MUTAVEL",
+      "💠 CRISTAL",
+      "🍒 OURO_UTIL",
+      "🧪 CONTRAPROVA"
+    ],
+    "on_demand": true,
+    "auto_load_all_skills": false,
+    "edges": [
+      {
+        "from": "centraldark-vibe-coding",
+        "to": "brainstorming",
+        "condition": "IDEIA_SEM_DESIGN",
+        "kind": "SELECT_ON_DEMAND"
+      },
+      {
+        "from": "brainstorming",
+        "to": "centraldark-vibe-coding",
+        "condition": "DESIGN_APROVADO",
+        "kind": "RETURN_TO_SAME_MISSION"
+      },
+      {
+        "from": "centraldark-vibe-coding",
+        "to": "capability-contract-router",
+        "condition": "ESCOLHER_MENOR_CAPACIDADE",
+        "kind": "SELECT_ON_DEMAND"
+      },
+      {
+        "from": "capability-contract-router",
+        "to": "centraldark-vibe-coding",
+        "condition": "CAPACIDADE_ESCOLHIDA",
+        "kind": "RETURN_RESULT"
+      },
+      {
+        "from": "centraldark-vibe-coding",
+        "to": "git-conflict-resolve-house-standard",
+        "condition": "CONFLITO_GIT",
+        "kind": "DELEGATE_CANONICAL"
+      },
+      {
+        "from": "centraldark-vibe-coding",
+        "to": "meta-lupa",
+        "condition": "PROVA_OU_CRISTAL",
+        "kind": "VALIDATE_ON_DEMAND"
+      },
+      {
+        "from": "meta-lupa",
+        "to": "centraldark-vibe-coding",
+        "condition": "CONTRAPROVA_RECEBIDA",
+        "kind": "REVISION_LOOP"
+      },
+      {
+        "from": "centraldark-vibe-coding",
+        "to": "skill-workshop",
+        "condition": "GAP_REAL_DE_SKILL",
+        "kind": "REUSE_OR_STITCH"
+      },
+      {
+        "from": "centraldark-vibe-coding",
+        "to": "centraldark-operational-method",
+        "condition": "FIXED_POINT",
+        "kind": "RETURN_RECEIPT"
+      }
+    ],
+    "never_auto_execute": true,
+    "command_dispatch_source": ".agents/skills/centraldark-vibe-coding/scripts/vibe-router.mjs"
   }
 }
