@@ -777,3 +777,188 @@ Antes de resposta operacional material ou mutação, usar o gancho **já existen
 `META_GRILL != AUTHORIZATION`; `DOCS_HISTORICAL != CURRENT_AUTHORITY`; `GREEN_STATE_MUST_BE_PRESERVED`; `REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION`; `GOAL_CLAUSE_STATUS != UI_COLOR`.
 
 Contrato completo e G01..G12: `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#21-cristal-2026-10-08--goal-clause--meta-grill--oracle--obsidian`.
+
+## Avaliação de agentes e descoberta científica baseada em evidência (2026-10-20)
+
+Esta seção integra resultados de pesquisa ao **Meta-Lupa existente**. Não cria skill,
+agente, roteador, ledger ou núcleo paralelo. Aplicar o contrato às missões de
+execução e investigação que já passam por Meta-Lupa, Meta-Grill, Fable,
+reconciliação e Fixed Point.
+
+### 1. Separar três capacidades que não são equivalentes
+
+- **Resposta/conhecimento:** produzir uma afirmação plausível ou correta.
+- **Execução de agente:** usar ferramentas e estado externo para concluir uma tarefa.
+- **Descoberta científica:** propor um modelo/teoria, derivá-lo e produzir previsões
+  que resistam a verificação independente.
+
+Sucesso numa categoria não implica sucesso nas outras. Uma resposta bem escrita,
+um plano coerente, uma tarefa COMPLETED, um processo vivo, HTTP 200 ou um
+painel verde não demonstram, isoladamente, que a ação ou a descoberta ocorreu.
+
+### 2. Contrato mínimo de evidência para agentes
+
+Para cada alegação material de execução, correlacionar no recibo canônico existente:
+
+- MISSION_ID, OWNER, SOURCE_SHA e MODEL_ACTUAL quando observável;
+- TOOL/ARGS_SANI, RUN_ID, EXIT_CODE quando aplicável;
+- ARTIFACT_SHA, EFFECT_READBACK, COUNTERPROOF, RESULT e NEXT_CURSOR.
+
+Regras:
+
+1. Definir o critério de sucesso antes da execução.
+2. Separar intenção, chamada da ferramenta, saída, efeito externo e confirmação.
+3. Reconsultar o efeito por um canal independente da afirmação do executor sempre
+   que isso for tecnicamente possível.
+4. Incluir pelo menos um teste negativo ou hipótese contrária para missões materiais.
+5. Usar PASS somente com evidência ligada ao mesmo alvo/SHA e critério; caso
+   contrário usar UNKNOWN, BLOCKED, FAIL ou NOT_RUN corretamente.
+6. Preservar rastros originais; sanitizar segredos antes da ingestão; deduplicar
+   pelo fingerprint existente. Não promover similaridade, telemetria ou relato a fato.
+7. Medir apenas o escopo declarado. Não converter uma pontuação de benchmark em
+   probabilidade universal de sucesso ou em autorização para agir.
+
+### 3. Contrato para avaliar descoberta científica
+
+Para experiências que afirmem redescobrir um resultado histórico, registar antes
+da execução:
+
+- data de corte do corpus e proveniência dos dados;
+- corpus, tokenizer, modelo/base e treino efetivamente usados;
+- prompts, contexto fornecido, orçamento, seeds e saídas integrais;
+- auditoria de contaminação e informação posterior ao corte;
+- critério de pontuação pré-registado e avaliadores independentes.
+
+Pontuar etapas separadamente: (a) identificar anomalias; (b) escolher quais hipóteses
+manter ou abandonar; (c) propor princípios novos; (d) derivar matematicamente o
+resultado; (e) produzir previsões testáveis; (f) passar verificações simbólicas,
+numéricas, casos-limite e revisão de especialistas independentes. Uma analogia
+interessante ou a equação final isolada não equivale a uma teoria redescoberta.
+Se a anomalia ou o caminho para a solução foi explicitamente entregue no prompt,
+registrar essa ajuda: resolver o prompt não prova descoberta espontânea.
+
+### 4. Contrato para benchmarks de agentes
+
+Ao importar números de benchmarks, preservar URL/fonte primária, data, versão,
+tarefa, modelo realmente avaliado, orçamento, ambiente, denominador, métrica,
+intervalo/incerteza quando publicado e limitações. Não combinar pontuações
+incompatíveis sem a normalização documentada; não tratar resultados de fornecedores
+ou resumos secundários como prova primária.
+
+Separar pelo menos: engenharia de software; busca/terminal; uso de ferramentas/GUI;
+recuperação após erro; segurança; e descoberta científica. Relatar tanto o resultado
+final quanto a qualidade da verificação e a taxa de falsos positivos/falsos verdes.
+Comparações válidas exigem tarefas e condições equivalentes, ambiente reproduzível,
+casos de teste reservados e baseline explícito.
+
+### 5. Fontes de pesquisa incorporadas como referências, não como autoridade automática
+
+- Philip Ball, Nature, The Einstein test: what happens when AI tries to rediscover
+  relativity? (09 Sep 2026): https://www.nature.com/articles/d41586-026-02804-x
+- Brian Keating, The Artificial Einstein Test — discussão de GPT-1900/Machina
+  Mirabilis e limites de interpretação: https://keating.ai/einstein-test/
+- IDE-Bench, avaliação de agentes de IDE em repositórios/tarefas não publicados:
+  https://arxiv.org/abs/2601.20886
+- OpenHands Index, avaliação de agentes de engenharia em várias famílias de tarefas:
+  https://www.openhands.dev/blog/introducing-the-openhands-index
+- AgentSWE, tarefas de criação, edição e otimização com casos reservados:
+  https://github.com/VectorSpaceLab/AgentSWE
+
+As fontes sustentam o desenho dos critérios, não provam que uma implementação da
+CentralDark já os cumpre. Antes de declarar cobertura do núcleo, validar a mudança
+por teste no mesmo SHA e por contraprova. A promoção de qualquer score, nova regra
+ou workflow continua sujeita ao gate Meta-Lupa/AutoLupa existente.
+
+### 6. Aceite operacional
+
+- Nenhum núcleo, skill, executor ou ledger paralelo criado.
+- O mesmo owner e recibo canônico permanecem responsáveis.
+- Uma afirmação de conclusão sem efeito observado falha fechado.
+- Uma alegação de descoberta sem corte de dados, auditoria de contaminação,
+  derivação e validação independente fica NOT_PROVEN.
+- A mudança só é considerada incorporada após revisão, testes aplicáveis e merge;
+  merge não equivale a deploy nem comprova comportamento em runtime.
+
+
+### 7. Ciclo de melhoria contínua orientado por experiência e alvo externo
+
+Inspirado em A-Evolve-Training (arXiv:2606.20657), este contrato reaproveita os recibos e o funil existentes. Não cria banco de experiências, executor, orquestrador, worker pool ou serviço paralelo. Reutilizar o armazenamento canônico de execuções/recibos já existente; se não for comprovado, registrar a lacuna.
+
+#### 7.1 Registro reutilizável de experiência
+
+Cada tentativa material contribui para o recibo canônico com: objetivo e critério prévio; baseline imutável (SHA/configuração/dados); hipótese e delta mínimo; ferramenta/argumentos sanitizados, run ID e custo quando disponível; logs/artefatos por hash; métricas internas e externas; falha observada versus causa ainda hipotética; decisão de reutilizar/rejeitar/retestar; contraprova e NEXT_CURSOR.
+
+Preservar falhas e sucessos como evidência, não como verdades universais. Reutilizar apenas quando ambiente, versão e objetivo forem comparáveis. Deduplicar pelos mecanismos existentes. Não persistir tokens, credenciais, dados pessoais desnecessários ou logs brutos sem sanitização e retenção definida.
+
+#### 7.2 Loop de pesquisa com limites
+
+1. Definir o alvo externo e o critério de sucesso antes de explorar.
+2. Fixar baseline reproduzível e separar desenvolvimento de avaliação.
+3. Explorar candidatos isolados, com limites de tempo, custo, concorrência e permissões.
+4. Capturar execução, falhas e artefatos no recibo existente.
+5. Medir proxy interno e alvo externo/holdout independente quando disponível.
+6. Comparar com baseline e executar regressão/contraprova.
+7. Promover somente o delta que melhora o alvo declarado sem violar invariantes.
+8. Atualizar a política de busca, não sobrescrever o baseline nem autoalterar regras de segurança.
+9. Parar por orçamento, regressão, evidência inconclusiva, falta de autorização ou ausência de avaliação externa confiável.
+
+Autonomia não autoriza alteração de produção, permissões, segredos, orçamento ou critérios de segurança. Deploy, ações irreversíveis e mudança de owner continuam sob as autorizações existentes.
+
+#### 7.3 Divergência entre proxy e alvo externo
+
+Registrar métricas internas/externas com versões e amostras comparáveis. Se o proxy melhorar sem melhora externa, ou divergirem além de limiar pré-definido:
+
+- marcar PROXY_DIVERGENCE, nunca PASS;
+- suspender promoção baseada apenas no proxy;
+- investigar contaminação, vazamento entre conjuntos, regressão e mudança de distribuição;
+- testar hipóteses alternativas e procurar contraprova;
+- alterar a política de busca somente sob as regras existentes;
+- retomar promoção apenas após holdout independente ou contraprova adequada confirmar melhoria.
+
+Sem alvo externo, holdout ou poder estatístico suficiente, usar UNKNOWN/NOT_MEASURED. Não inventar limiar depois de observar resultados. Uma pontuação interna crescente pode ser sobreajuste.
+
+#### 7.4 Exploração paralela segura
+
+Se worktrees/containers isolados já existirem, delimitar diretório, recursos, timeout, permissões e artefatos por tentativa; manter baseline imutável e recolher resultados por esquema determinístico. Não criar workers/containers automaticamente sem comprovar suporte existente. Sem isolamento, executar serialmente ou bloquear.
+
+#### 7.5 Aceite
+
+- Experiência recuperável no owner/recibo canônico existente.
+- Baseline e critério definidos antes da tentativa.
+- Métricas internas e externas separadas.
+- Divergência do proxy detectada como risco, não sucesso.
+- Artefatos, falhas e contraprovas ligados ao mesmo run/SHA.
+- Promoção reproduzível e reversível; sem produção automática sem autorização.
+- PASS somente quando melhoria no alvo externo estiver demonstrada; caso contrário UNKNOWN, BLOCKED, FAIL ou NOT_MEASURED.
+
+
+#### 7.6 Roteamento de revisão com fallback
+
+Nenhum provedor de revisão externo (incluindo Codex) é dependência obrigatória do fluxo. Falha, quota, timeout, indisponibilidade ou resposta inválida de um provedor deve gerar um evento/recibo com rota, causa, alvo/SHA e horário; exibir a falha de forma legível; e seguir para a próxima rota autorizada já existente.
+
+Ordem de tentativa para revisão de PR, conforme capacidades realmente disponíveis:
+
+1. Revisor inicialmente escolhido, se disponível.
+2. Modelo local CURRENT pela workflow existente `.github/workflows/pr-agent.yml` (workflow `PR Review — IA local CentralDark`), registrando modelo/fonte/classe de execução que o próprio health endpoint reportar.
+3. Checklist determinístico existente `.github/workflows/pr-auto-review.yml` para scanner de segredos, diff e classificação de escopo; ele complementa, mas não finge ser parecer semântico de IA.
+4. Sentinela/workflow canônico existente quando o problema for divergência de estado, rota ou execução; não usar a Sentinela de drift como se fosse revisora de código se ela não executou análise do diff.
+5. Outra rota local/autorizada descoberta no catálogo unificado, sem inventar nomes nem criar um novo dispatcher.
+
+Cada tentativa deve produzir estado próprio: `PASS`, `FAIL`, `BLOCKED`, `NOT_RUN` ou `UNKNOWN`. Uma chamada MCP concluída só prova que a ferramenta foi invocada; não prova que a revisão foi feita. Só aceitar revisão quando houver conteúdo de parecer ligado ao PR e ao HEAD exato. Não converter fila/runner pendente, saída vazia, erro de provedor ou checklist determinístico em aprovação semântica.
+
+Se uma rota falhar, registrar a causa e continuar automaticamente pelas rotas autorizadas restantes. Só declarar `BLOCKED` quando as alternativas aplicáveis tiverem sido tentadas ou estiverem comprovadamente indisponíveis, ou quando faltar autorização/isolamento necessário. A mensagem de falha deve apontar a próxima rota e o estado dela. Reutilizar os workflows, recibos e funil existentes; não criar novo agente, banco, roteador ou ledger.
+
+
+#### 7.7 Recursão efetiva do aprimorador e autoprovisionamento
+
+Distinguir explicitamente:
+
+- `STRUCTURAL_RECURSION`: o sistema revisa/modifica o método e reutiliza a versão revisada no ciclo seguinte.
+- `EFFECTIVE_RECURSION`: a versão revisada, aplicada em tarefas equivalentes e sob orçamento/tempo/compute comparáveis, supera a baseline em uma métrica-alvo externa previamente definida, sobrevive a contraprova e reproduz o ganho em novas execuções.
+- `SELF_PROVISIONING`: o sistema prepara/atribui recursos para a próxima rodada usando capacidades, limites, owners e provisionadores já existentes; não significa permissão irrestrita para criar infraestrutura ou aumentar custo.
+
+Contrato mínimo do experimento: fixar antes do teste o baseline SHA/método, conjunto de tarefas, alvo externo, direção da métrica, limites de recursos, orçamento, número de tentativas e critério de regressão. Comparar baseline e candidato com o mesmo conjunto ou pares equivalentes, ambiente/controlos comparáveis e contabilidade explícita de tokens/compute, tempo, chamadas e custo. Usar holdout não empregado na otimização; registrar variância e repetições suficientes para distinguir ganho de ruído. Artefatos, medições e contraprovas devem apontar para os mesmos run IDs e SHAs. Se o ganho existir apenas na métrica interna, classificar `PROXY_DIVERGENCE`; se custo/recursos forem incomparáveis, classificar `INCOMPARABLE_BUDGET`; se faltar medição externa independente, manter `UNKNOWN/NOT_MEASURED`. Nenhum desses estados autoriza promoção.
+
+Após ganho externo reproduzido, a versão candidata pode virar o novo método de busca/revisão do próximo ciclo — com versão, receipt, rollback e regressão preservados. Autoprovisionamento pode reservar/reutilizar apenas recursos já autorizados, isolados e limitados, via owner/provisionador existente. A criação de worker, container, credencial, serviço, quota ou gasto novo exige autorização e gates que já regem esse recurso; não contornar limites, não ampliar privilégios e não provisionar a si próprio uma autoridade maior. Sem rota de provisionamento comprovada, não simular: registrar `BLOCKED` e apontar o owner existente. Reutilizar os registros/receipts e funis canônicos; não criar banco de experiências, supervisor ou núcleo paralelo.
+
+`FIXED_POINT` deste ciclo exige: (1) método revisado efetivamente reutilizado; (2) ganho externo contra baseline comprovado sob recursos comparáveis; (3) contraprova/regressão executada; (4) reprodução independente; (5) promoção reversível registrada. Caso contrário, registrar somente `STRUCTURAL_RECURSION` ou o estado exato alcançado — nunca declarar autoaprimoramento efetivo por mera recursão do texto/código.
