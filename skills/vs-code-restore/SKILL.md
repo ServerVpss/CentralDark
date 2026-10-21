@@ -452,3 +452,17 @@ Automação de desenvolvimento permitida onde houver execução autorizada; merg
 **Estado observável em 21/10/2026 (fonte separada):** ferramentas presentes no código da PR #1880; MCP de produção consultado respondeu \`TOOL_NAO_ENCONTRADA\` para \`vscode_remote_devices\`; CI no SHA \`2da1c6e7e847c1290382b8809abdd6d3400acae8\` não estava verde; instalação/pareamento/readback na Casa seguem \`UNKNOWN\`. Este trecho **não** promove runtime, nem altera credenciais ou segurança.
 
 **NEXT_CURSOR:** \`CI_SAME_HEAD → CATALOG_REGRESSION → REVIEW → CANONICAL_PROMOTION → MCP_RELOAD_PROOF → VSIX_INSTALLED → PRIVATE_PAIR → LIVE_PID → ECHO_ACK_READBACK → FIXED_POINT\`.
+
+
+## 🪬 Porta privada Hermes Gateway original → túnel VS Code Remote-SSH
+
+INTENCAO=Forward temporário/privado para testar o Hermes **original**, usando o Remote-SSH **já existente**, sem publicar no Caddy, Cloudflare, Funnel, Tailscale Serve público ou iniciar outro Hermes.
+
+- **Alvo documental medido anteriormente na VPS:** Hermes \`serve\`/WebUI autenticado na **porta 9119** (não confundir com API Hermes \`gateway run\`, cuja porta padrão separada é 8642 quando API habilitada). O estado vivo da porta 9119 ainda exige readback; PID histórico não basta.
+- **Configuração no MESMO workspace:** \`.vscode/settings.json\` adiciona \`remote.portsAttributes["9119"]\` com label \`Hermes Gateway original · privado (VPS)\`, \`onAutoForward:"silent"\`, \`protocol:"http"\`, \`remote.localPortHost:"localhost"\`, \`remote.restoreForwardedPorts:true\`. Preserva os demais campos e não desliga autenticação. Esses atributos não são prova de túnel ativo; dependem do VS Code detectar ou encaminhar a porta em uma sessão Remote-SSH conectada ao host certo.
+- **Execução canônica no VS Code**: em janela **Remote-SSH: Segredo-VPS** autenticada, usar painel **Ports** → **Forward a Port** → \`9119\`; confirmar o endereço local efetivamente escolhido por VS Code (pode ser diferente) e o escopo **Local/Private**. Nunca mudar Port Visibility para Public. Não selecionar o endpoint de API separado \`8642\` automaticamente.
+- **Prova**: a partir da própria Casa, na URL \`http://127.0.0.1:<porta_local>\`, verificar resposta HTTP do mesmo serviço e redirecionamento/login existente; sem cookies/credenciais no receipt. Resposta \`401\` sem sessão significa autenticação preservada, não gateway quebrado; HTTP 200 da Tailscale isoladamente não prova o túnel. Readback mínimo: \`WINDOW_REMOTE_AUTHORITY | REMOTE_HOST | PORT_REMOTE=9119 | PORT_LOCAL | VISIBILITY_PRIVATE | SERVICE_HTTP_STATUS | AUTH_GATE | OBSERVED_AT\`.
+- **Contraprova**: \`onAutoForward=silent\` não pode gerar conclusão por si só; confirmar no painel Ports. \`WINDOW_LOCAL\`, \`PORT_NOT_LISTENING\`, \`PORT_NOT_FORWARDED\`, \`HOST_MISMATCH\` ou \`AUTH_MISSING\` devem permanecer \`UNKNOWN/BLOCKED\` conforme medidos. Não alterar firewall/ACL, bind, serviço systemd nem reiniciar VS Code/Hermes para este teste.
+- **Releitura de alvos**: gateway original 9119 VPS → janela/host Remote-SSH → túnel VS Code localhost → readback browser Casa; cruzar com \`MCP_ADMIN\`, PR_HEAD, \`main\`, CI e recibo existente. Um PASS de túnel não promove a PR #1880 nem instala a VSIX automaticamente.
+
+NEXT_CURSOR=SOURCE_SETTINGS_RECHECK → SAME_HEAD_TEST → REMOTE_SSH_WINDOW_READBACK → PORTS_PRIVATE_9119 → AUTHENTICATED_HTTP_READBACK → RECEIPT_OWNER_EXISTENTE.
