@@ -237,6 +237,27 @@ grafos são projeções reconstruíveis.
 **NEXT_CURSOR:** `MAPA_TAB_ID → ESCOPAR_ESTILO_BUILDER → CONECTAR_HANDLERS_ORIGINAIS → MANTER_BOLT_DISTINTO → OBSIDIAN_NATIVE_TEST → BUILD_SHELL_K_F → VISUAL_BEFORE_AFTER → RECEIPT`. `DOCUMENTED != IMPLEMENTED != LIVE_TESTED`.
 
 
+
+<!-- CENTRALDARK_GLOBAL_THEME_TRIALS_SEPARATE_20261021 -->
+### Experimento comparativo autorizado: três temas globais em prévias isoladas (2026-10-21)
+
+**DECISÃO DO CHEFE:** trazer `emerald`, `operational` e `forge` para o **Design Center → Temas globais · 3 prévias**; exibir as cores reais dos owners existentes e a composição do Cockpit para comparar antes de decidir se deve fundir temas. Os três permanecem **independentes**, **não** viram mais três peles do Cockpit, **não** entram no seletor atual e **não** modificam `bolt_theme` nem `centraldark.cockpit.pele`.
+
+**Fonte auditável dos tokens:** `apps/modulos/Bolt/source/app/styles/variables.scss` (`[data-theme='emerald']`, `[data-theme='operational']`, `[data-theme='forge']`) + `apps/modulos/Bolt/source/app/lib/stores/theme.ts` (identificadores do Shell). O menu/paleta de quatro peles é `apps/instinto-superior/src/components/central/DesignCenter.tsx` e `styles.css`. Os valores abaixo são amostras reais do código atual, **apenas fixtures de miniatura** e não uma engine de tema duplicada.
+
+| Tema global independente | Fundo dos tokens do Bolt | Painel | Cor de ação |
+| --- | --- | --- | --- |
+| `emerald` | `#f0fdf4` | `#ffffff` | `hsl(152 65% 32%)` |
+| `operational` | `#05070d` | `#0b1420` | `#4fc3ff` |
+| `forge` | `#100d07` | `#1d1709` | `#c0902b` |
+
+**Implementação no PR #1895:** `DesignCenter.tsx` adiciona `TabsTrigger value="temas-globais"` e `TabsContent` com três cartões não executáveis, `data-cd-theme-preview` por identidade e painel simulado (topo, navegação, botões, artefato, estados). O modo Forge exibe painel-pergaminho `#ecdbae` conforme token real. Somente prévias independentes, sem writes de storage, downloads, serviços, processos ou modificação da identidade atual.
+
+**Invariantes e próximos gates:** quatro peles permanecem `default` / `ouro` / `ops` / `esmeralda`; equivalência dos três temas globais com quatro peles **NÃO PRESUMIDA**. Após leitura do PR e teste de build do mesmo SHA, conferir no Cockpit local menu de aparências, as sete identidades distintas, foco/legibilidade, responsividade e preferência inalterada mesmo após reload. Somente o CHEFE decide `MANTER_SEPARADOS`, `FUNDIR` ou `DESCARTAR_PREVIAS` depois da comparação. `SOURCE_COMMITTED != LIVE_CASA_VERIFIED`.
+
+**NEXT_CURSOR:** `READBACK_3_PREVIEWS → BUILD_SAME_SHA → CASA_PULL_AUTHORIZED → LIVE_RENDER_DESIGN_CENTER → FOUR_SKINS_PRESERVED → CHEFE_DECIDES_IF_MERGE`.
+
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
