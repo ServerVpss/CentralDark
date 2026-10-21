@@ -84,9 +84,9 @@ flowchart LR
 | B | Biblioteca Cognitiva | [296](#j296) | Owner/artefato | `SOURCE_EXISTS` |
 | B | Breu & Ouro [ouro] | [205](#j205) | Pele Cockpit | `ATIVA_NO_SELECTOR_FONTE` |
 | B | Bridher Builder | [238](#j238) | Aprendizado/decisão | `HISTORICO_E_LOCAL_UNKNOWN` |
-| B | Browser ↔ GitHub: contraprova | [237](#j237) | Aprendizado/decisão | `APLICADO` |
 | B | Browser conectado: ler contexto | [236](#j236) | Aprendizado/decisão | `OBSERVADO` |
 | B | Browser conectado: listar abas | [235](#j235) | Aprendizado/decisão | `OBSERVADO` |
+| B | Browser ↔ GitHub: contraprova | [237](#j237) | Aprendizado/decisão | `APLICADO` |
 | B | BUILD_WINDOWS != WEB_BUILD | [280](#j280) | Aprendizado/decisão | `REGRA` |
 | B | Builder Bolt | [179](#j179) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
 | B | Builder Bolt distinto do Builder Harness | [284](#j284) | Aprendizado/decisão | `REGRA` |
@@ -98,18 +98,18 @@ flowchart LR
 | C | Casa local processo | [272](#j272) | Aprendizado/decisão | `FRONTEIRA` |
 | C | Casa SEGREDO Tailscale | [239](#j239) | Aprendizado/decisão | `BRIDGE_PASS` |
 | C | casa-vps-ssh | [170](#j170) | Módulo | `REGISTRO_HISTORICO` |
-| C | CentralDark Estúdio — topo | [229](#j229) | Ação Harness | `DOM_E_FONTE_LIDOS` |
-| C | CentralDark Gram | [181](#j181) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
-| C | CentralDark Gram | [220](#j220) | Ação Harness | `DOM_E_FONTE_LIDOS` |
 | C | centraldark_data_ingest_policy | [016](#j016) | MCP tool | `CATALOGADO_2026-10-21` |
+| C | centraldark-delegacao | [173](#j173) | Skill MCP | `CATALOGADO_SKILLS_SUBSET` |
 | C | centraldark_deploy_apply_learning | [017](#j017) | MCP tool | `CATALOGADO_2026-10-21` |
 | C | centraldark_deploy_capabilities | [018](#j018) | MCP tool | `CATALOGADO_2026-10-21` |
 | C | centraldark_deploy_micro_fallback | [019](#j019) | MCP tool | `CATALOGADO_2026-10-21` |
 | C | centraldark_deploy_recipe_status | [020](#j020) | MCP tool | `CATALOGADO_2026-10-21` |
 | C | centraldark_deploy_root_gate | [021](#j021) | MCP tool | `CATALOGADO_2026-10-21` |
 | C | centraldark_deploy_scratch_status | [022](#j022) | MCP tool | `CATALOGADO_2026-10-21` |
+| C | CentralDark Estúdio — topo | [229](#j229) | Ação Harness | `DOM_E_FONTE_LIDOS` |
+| C | CentralDark Gram | [181](#j181) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
+| C | CentralDark Gram | [220](#j220) | Ação Harness | `DOM_E_FONTE_LIDOS` |
 | C | centraldark_operational_snapshot | [023](#j023) | MCP tool | `CATALOGADO_2026-10-21` |
-| C | centraldark-delegacao | [173](#j173) | Skill MCP | `CATALOGADO_SKILLS_SUBSET` |
 | C | chatgpt-cowork | [158](#j158) | Módulo | `REGISTRO_HISTORICO` |
 | C | Claude | [186](#j186) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
 | C | claude-code | [157](#j157) | Módulo | `REGISTRO_HISTORICO` |
@@ -201,14 +201,14 @@ flowchart LR
 | G | Goals | [221](#j221) | Ação Harness | `DOM_E_FONTE_LIDOS` |
 | H | hermes | [156](#j156) | Módulo | `REGISTRO_HISTORICO` |
 | H | Hermes | [195](#j195) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
-| H | Hermes — moldura | [224](#j224) | Ação Harness | `DOM_E_FONTE_LIDOS` |
 | H | HERMES_DELEGATED_COMMIT_PATH | [145](#j145) | Rota | `ROTA_REGISTRADA_NAO_MEDIDA` |
+| H | Hermes — moldura | [224](#j224) | Ação Harness | `DOM_E_FONTE_LIDOS` |
 | H | HERMES_SHELL | [146](#j146) | Rota | `ROTA_REGISTRADA_NAO_MEDIDA` |
 | H | HTML Consolidation | [202](#j202) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
 | I | Índice arquitetural | [299](#j299) | Owner/artefato | `SOURCE_EXISTS` |
 | I | injetar_consciencia_centraldark | [075](#j075) | MCP tool | `CATALOGADO_2026-10-21` |
-| I | Instinto Superior · padrão [default] | [204](#j204) | Pele Cockpit | `ATIVA_NO_SELECTOR_FONTE` |
 | I | instinto-casa-port-3000 | [166](#j166) | Módulo | `REGISTRO_HISTORICO` |
+| I | Instinto Superior · padrão [default] | [204](#j204) | Pele Cockpit | `ATIVA_NO_SELECTOR_FONTE` |
 | I | Inventário | [200](#j200) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
 | J | Jukebox da sessão | [274](#j274) | Aprendizado/decisão | `CRIADO_EM_PR` |
 | K | kit_boas_vindas | [076](#j076) | MCP tool | `CATALOGADO_2026-10-21` |
@@ -291,10 +291,10 @@ flowchart LR
 | R | Registro de módulos Harness | [288](#j288) | Owner/artefato | `SOURCE_EXISTS` |
 | R | Regras Forja | [199](#j199) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
 | R | Restaurar a bancada | [218](#j218) | Ação VS Code | `UI_OBSERVADA_EM_CAPTURA` |
-| S | Screenpipe /health | [271](#j271) | Aprendizado/decisão | `DOM_SENSOR_HISTORICO` |
-| S | SCREENPIPE_CLI_RECORDER | [151](#j151) | Rota | `ROTA_REGISTRADA_NAO_MEDIDA` |
-| S | SCREENPIPE_LOCAL_SENSOR | [152](#j152) | Rota | `ROTA_REGISTRADA_NAO_MEDIDA` |
 | S | screenpipe-audio-casa | [169](#j169) | Módulo | `REGISTRO_HISTORICO` |
+| S | SCREENPIPE_CLI_RECORDER | [151](#j151) | Rota | `ROTA_REGISTRADA_NAO_MEDIDA` |
+| S | Screenpipe /health | [271](#j271) | Aprendizado/decisão | `DOM_SENSOR_HISTORICO` |
+| S | SCREENPIPE_LOCAL_SENSOR | [152](#j152) | Rota | `ROTA_REGISTRADA_NAO_MEDIDA` |
 | S | screenpipe-mcp | [165](#j165) | Módulo | `REGISTRO_HISTORICO` |
 | S | search_files | [112](#j112) | MCP tool | `CATALOGADO_2026-10-21` |
 | S | sentry_detalhe_issue | [113](#j113) | MCP tool | `CATALOGADO_2026-10-21` |
@@ -304,11 +304,11 @@ flowchart LR
 | S | Shell CentralDark.exe | [246](#j246) | Aprendizado/decisão | `ALVO_NAO_PROVADO` |
 | S | Sistema CentralDark | [194](#j194) | Aba Cockpit | `FONTE_E_DOM_LIDOS` |
 | S | Sistemas | [223](#j223) | Ação Harness | `DOM_E_FONTE_LIDOS` |
-| S | Skill workshop | [295](#j295) | Owner/artefato | `SOURCE_EXISTS` |
 | S | skill_atualizar | [117](#j117) | MCP tool | `CATALOGADO_2026-10-21` |
 | S | skill_instalar | [118](#j118) | MCP tool | `CATALOGADO_2026-10-21` |
 | S | skill_listar | [119](#j119) | MCP tool | `CATALOGADO_2026-10-21` |
 | S | skill_status | [120](#j120) | MCP tool | `CATALOGADO_2026-10-21` |
+| S | Skill workshop | [295](#j295) | Owner/artefato | `SOURCE_EXISTS` |
 | S | Skills 900+ referência | [266](#j266) | Aprendizado/decisão | `NAO_MEDIDO` |
 | S | Skills estendidas | [261](#j261) | Aprendizado/decisão | `CATALOG_SOURCE` |
 | S | SSH_VPS_DIRECT | [153](#j153) | Rota | `ROTA_REGISTRADA_NAO_MEDIDA` |
@@ -319,12 +319,12 @@ flowchart LR
 | S | supabase_schema_check | [124](#j124) | MCP tool | `CATALOGADO_2026-10-21` |
 | S | Swarm Writer único | [255](#j255) | Aprendizado/decisão | `REGRA` |
 | S | Sync — moldura | [226](#j226) | Ação Harness | `DOM_E_FONTE_LIDOS` |
-| T | Tailscale provider ≠ Tailscale bridge | [279](#j279) | Aprendizado/decisão | `CONTRAPROVA` |
 | T | tailscale_bridge_status | [125](#j125) | MCP tool | `CATALOGADO_2026-10-21` |
 | T | tailscale_devices_list | [126](#j126) | MCP tool | `CATALOGADO_2026-10-21` |
 | T | tailscale_dns_nameservers | [127](#j127) | MCP tool | `CATALOGADO_2026-10-21` |
 | T | tailscale_network_logs | [128](#j128) | MCP tool | `CATALOGADO_2026-10-21` |
 | T | TAILSCALE_PRIVATE_ROUTE | [154](#j154) | Rota | `REDE_BROKER_PASS` |
+| T | Tailscale provider ≠ Tailscale bridge | [279](#j279) | Aprendizado/decisão | `CONTRAPROVA` |
 | T | tailscale_status | [129](#j129) | MCP tool | `CATALOGADO_2026-10-21` |
 | T | Tela PTY existente no Alethe | [268](#j268) | Aprendizado/decisão | `CAPTURA_UI` |
 | T | Tema Bolt | [292](#j292) | Owner/artefato | `SOURCE_EXISTS` |
