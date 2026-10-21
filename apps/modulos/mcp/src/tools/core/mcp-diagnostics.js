@@ -1,4 +1,14 @@
 import { z } from "zod";
+import { localHybridTools } from "../local/local-compute.js";
+import { codeReviewerToolDefinition } from "../code-reviewer.js";
+import { cognitivoTools } from "../cognitivo/cognitivo.js";
+import { eliteGatewayTools } from "../elite/elite-gateway.js";
+import { geminiTools } from "../gemini/gemini.js";
+import { integrationsTools } from "../integrations.js";
+import { painelTools } from "../painel/painel.js";
+import { operationalTelemetryTools } from "../observability/operational-telemetry.js";
+import { piveteTools } from "../pivete/pivete-tools.js";
+import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { aprendizadoTools } from "../aprendizado/aprendizado.js";
 import { conscienciaTools } from "../consciencia/consciencia.js";
 import { deployTools } from "../deploy/deploy.js";
@@ -16,21 +26,16 @@ import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
+// Espelha os grupos registrados no dispatcher mcp_admin_call.
+// Superfícies distintas são reportadas explicitamente, não ocultadas.
 const runtimeTools = [
-    ...aprendizadoTools,
-    ...conscienciaTools,
-    ...skillTools,
-    ...githubReadTools,
-    ...githubWriteTools,
-    ...githubAdminTools,
-    ...githubTools,
-    ...vpsRunOnceTools,
-    ...vpsFileTools,
-    ...vpsLazyTools,
-    ...pendenciasTools,
-    ...deployTools,
-    ...supabaseTools,
-    ...mcpAdminTools,
+    ...localHybridTools, codeReviewerToolDefinition,
+    ...aprendizadoTools, ...conscienciaTools, ...skillTools,
+    ...githubReadTools, ...githubWriteTools, ...githubAdminTools, ...githubTools,
+    ...vpsRunOnceTools, ...vpsFileTools, ...vpsLazyTools, ...pendenciasTools,
+    ...deployTools, ...supabaseTools, ...mcpAdminTools,
+    ...cognitivoTools, ...eliteGatewayTools, ...geminiTools, ...integrationsTools,
+    ...painelTools, ...operationalTelemetryTools, ...piveteTools, ...youtubeMediaTools,
 ];
 const EXPECTED_SAFE_FULL_ADMIN = [
     "mcp_admin_call",
@@ -56,8 +61,29 @@ const EXPECTED_SAFE_FULL_ADMIN = [
     "mcp_policy_summary",
     "mcp_audit_recent_logs",
 ];
+function nameSet(values) {
+    return [...new Set(values.filter((name) => typeof name === "string" && name.length > 0))].sort();
+}
+export function reconcileCatalogNames(runtimeNames, publicNames, expectedNames = EXPECTED_SAFE_FULL_ADMIN) {
+    const runtime = nameSet(runtimeNames);
+    const published = nameSet(publicNames);
+    const expected = nameSet(expectedNames);
+    const runtimeDuplicates = runtimeNames.filter((name, index) => runtimeNames.indexOf(name) !== index);
+    const publicDuplicates = publicNames.filter((name, index) => publicNames.indexOf(name) !== index);
+    const dispatcherMissingFromPublic = runtime.filter((name) => !published.includes(name));
+    const publicOnly = published.filter((name) => !runtime.includes(name));
+    const expectedMissingPublic = expected.filter((name) => !published.includes(name));
+    const duplicateRuntime = nameSet(runtimeDuplicates);
+    const duplicatePublic = nameSet(publicDuplicates);
+    const ok = dispatcherMissingFromPublic.length === 0 && expectedMissingPublic.length === 0
+        && duplicateRuntime.length === 0 && duplicatePublic.length === 0;
+    return { ok, status: ok ? "OK" : "CATALOG_DIVERGENCE", runtimeToolCount: runtime.length,
+        publicToolCount: published.length, expectedCount: expected.length,
+        dispatcherMissingFromPublic, publicOnly, expectedMissingPublic,
+        runtimeDuplicates: duplicateRuntime, publicDuplicates: duplicatePublic };
+}
 function runtimeNames() {
-    return runtimeTools.map((tool) => tool.name).sort();
+    return runtimeTools.map((tool) => tool.name);
 }
 async function fetchJson(url) {
     const res = await fetch(url, { headers: { "User-Agent": "MCP-CentralDark/catalog-validator" } });
@@ -77,21 +103,16 @@ export const mcpDiagnosticsTools = [
         }),
         handler: async (input) => {
             const names = runtimeNames();
-            const expected = (input.expected && input.expected.length > 0 ? input.expected : EXPECTED_SAFE_FULL_ADMIN).sort();
+            const expected = nameSet(input.expected && input.expected.length > 0 ? input.expected : EXPECTED_SAFE_FULL_ADMIN);
             const missing = expected.filter((name) => !names.includes(name));
             const presentExpected = expected.filter((name) => names.includes(name));
             const filter = (input.filter ?? "").toLowerCase().trim();
-            const filteredTools = filter ? names.filter((name) => String(name || "").toLowerCase().includes(filter)) : undefined;
-            return ok({
-                ok: missing.length === 0,
-                status: missing.length === 0 ? "OK" : "FALTANDO_TOOLS",
-                runtimeToolCount: names.length,
-                expectedCount: expected.length,
-                presentExpected,
-                missing,
-                filteredTools,
-                reconnectHint: "Se o /tools.json já mostra uma tool mas o ChatGPT não mostra, reconecte o conector. Depois use mcp_admin_call como porta fixa.",
-            });
+            const filteredTools = filter ? nameSet(names).filter((name) => name.toLowerCase().includes(filter)) : undefined;
+            return ok({ ok: missing.length === 0, status: missing.length === 0 ? "OK" : "FALTANDO_TOOLS",
+                runtimeToolCount: nameSet(names).length,
+                runtimeDuplicates: nameSet(names.filter((name, index) => names.indexOf(name) !== index)),
+                expectedCount: expected.length, presentExpected, missing, filteredTools,
+                reconnectHint: "Se o /tools.json já mostra uma tool mas o cliente não mostra, reconecte o conector. Depois use mcp_admin_call como porta fixa." });
         },
     },
     {
@@ -106,30 +127,15 @@ export const mcpDiagnosticsTools = [
             const health = await fetchJson(`${base}/health`);
             const toolsJson = await fetchJson(`${base}/tools.json`);
             const names = runtimeNames();
-            const publicTools = Array.isArray(toolsJson.toolNames)
-                ? toolsJson.toolNames
-                : Array.isArray(toolsJson.tools)
-                    ? toolsJson.tools
-                        .map((tool) => typeof tool === "string"
-                        ? tool
-                        : typeof tool === "object" && tool !== null && "name" in tool
-                            ? String(tool.name ?? "")
-                            : "")
-                        .filter(Boolean)
-                    : [];
-            const publicMissingFromRuntime = names.filter((name) => !publicTools.includes(name));
-            const expectedMissingPublic = EXPECTED_SAFE_FULL_ADMIN.filter((name) => !publicTools.includes(name));
-            return ok({
-                ok: publicMissingFromRuntime.length === 0 && expectedMissingPublic.length === 0,
-                base,
-                health,
-                runtimeToolCount: names.length,
-                publicToolCount: publicTools.length,
-                catalogMatchesRuntime: publicMissingFromRuntime.length === 0,
-                publicMissingFromRuntime,
-                expectedMissingPublic,
+            const publicTools = Array.isArray(toolsJson.toolNames) ? toolsJson.toolNames
+                : Array.isArray(toolsJson.tools) ? toolsJson.tools.map((tool) => typeof tool === "string"
+                    ? tool : typeof tool === "object" && tool !== null && "name" in tool ? String(tool.name ?? "") : "").filter(Boolean) : [];
+            const comparison = reconcileCatalogNames(names, publicTools);
+            return ok({ ...comparison, base, surface: "mcp.centralldark.com", apiDeployRoute: false,
+                health, dispatcherSurface: "mcp_admin_call runtimeTools", publicSurface: "/tools.json",
+                catalogMatchesRuntime: comparison.dispatcherMissingFromPublic.length === 0,
                 checkedAt: new Date().toISOString(),
-            });
+                evidenceBoundary: "CATALOG_DECLARATION != CLIENT_READBACK != EXECUTION_PROOF" });
         },
     },
 ];
