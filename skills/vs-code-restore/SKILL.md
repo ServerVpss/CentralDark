@@ -1,8 +1,8 @@
 ---
 name: vs-code-restore
 description: Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa salvo, sem depender do Claude. Use ao abrir o workspace CentralDark ou quando quiser reconstruir a bancada.
-version: 0.1.5
-metadata: {"status":"v0.1.5_source_in_pr_install_pending","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.5","candidate_compilado":false,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
+version: 0.1.6
+metadata: {"status":"v0.1.6_source_in_pr_vibe_ui_and_remote_terminal_pending_runtime_readback","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.6","candidate_compilado":true,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
 ---
 
 > Histórico preservado: na versão `0.1.3`, a fonte havia sido integrada à main, compilada e historicamente instalada na Casa; esse registro **não** comprova que a versão `0.1.5` esteja instalada hoje.
@@ -55,6 +55,31 @@ Para instalar localmente, gerar o pacote com `npx @vscode/vsce package` e depois
 - UIAutomation: 3 janelas e 319 controles acessiveis deduplicados catalogados. Sao observacoes, nao 319 cliques comprovados.
 - GitHub: publicacao no MESMO owner em main `9aca9ff8a651b73d196e9931305a86b950d4e09a`; `.vscodeignore` em `01d4f00618dce97ef2b5d9e773f64c4b43efac5f`. Readback da fonte PASS.
 - Casa K: o diretorio local continua sem tracking do Git; ha 6 arquivos de OUTRO escopo preparados no indice. Nao realizar pull/reset/commit sobre esse trabalho ate reconciliar as arvores com o SHA remoto.
+
+
+## 🪬 Vibe Coding em linguagem natural — 0.1.6
+
+O mesmo owner `skills/vs-code-restore` expõe agora uma superfície humana simples, sem novo executor:
+- painel `🪬 CentralDark · Vibe Coding` dentro do Explorer;
+- botão fixo `CentralDark` na barra de status;
+- botões: **Conectar ao servidor**, **Testar a conexão**, **Parear este VS Code**, **Ver status e PIDs**, **Abrir terminal existente**, **Compilar a extensão**, **Mapear o VS Code**, **Restaurar a bancada**;
+- comando da paleta `CentralDark: Diga o que você quer fazer`;
+- entrada natural local para frases como “conecta no servidor”, “testa a conexão”, “mostra os PIDs”, “pareia este VS Code” e “compila a extensão”.
+
+A linguagem natural apenas resolve intenção para comandos já existentes. Ela **não** cria segundo Hermes, segundo MCP ou execução arbitrária escondida.
+
+### Compilação da 0.1.6
+
+```powershell
+cd K:\skills\vs-code-restore
+npm install --ignore-scripts
+npm test
+npm run compile
+npx --yes '@vscode/vsce' package --no-dependencies --allow-missing-repository --out .\centraldark-vscode-restore-0.1.6.vsix
+code --install-extension .\centraldark-vscode-restore-0.1.6.vsix --force
+```
+
+O `package.json` também declara o repositório canônico, portanto o aviso interativo “repository field is missing” deixa de ser parte do caminho normal.
 
 ## Manutencao
 
