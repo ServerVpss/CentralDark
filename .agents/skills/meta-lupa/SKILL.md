@@ -777,3 +777,104 @@ Antes de resposta operacional material ou mutação, usar o gancho **já existen
 `META_GRILL != AUTHORIZATION`; `DOCS_HISTORICAL != CURRENT_AUTHORITY`; `GREEN_STATE_MUST_BE_PRESERVED`; `REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION`; `GOAL_CLAUSE_STATUS != UI_COLOR`.
 
 Contrato completo e G01..G12: `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md#21-cristal-2026-10-08--goal-clause--meta-grill--oracle--obsidian`.
+
+## Avaliação de agentes e descoberta científica baseada em evidência (2026-10-20)
+
+Esta seção integra resultados de pesquisa ao **Meta-Lupa existente**. Não cria skill,
+agente, roteador, ledger ou núcleo paralelo. Aplicar o contrato às missões de
+execução e investigação que já passam por Meta-Lupa, Meta-Grill, Fable,
+reconciliação e Fixed Point.
+
+### 1. Separar três capacidades que não são equivalentes
+
+- **Resposta/conhecimento:** produzir uma afirmação plausível ou correta.
+- **Execução de agente:** usar ferramentas e estado externo para concluir uma tarefa.
+- **Descoberta científica:** propor um modelo/teoria, derivá-lo e produzir previsões
+  que resistam a verificação independente.
+
+Sucesso numa categoria não implica sucesso nas outras. Uma resposta bem escrita,
+um plano coerente, uma tarefa COMPLETED, um processo vivo, HTTP 200 ou um
+painel verde não demonstram, isoladamente, que a ação ou a descoberta ocorreu.
+
+### 2. Contrato mínimo de evidência para agentes
+
+Para cada alegação material de execução, correlacionar no recibo canônico existente:
+
+- MISSION_ID, OWNER, SOURCE_SHA e MODEL_ACTUAL quando observável;
+- TOOL/ARGS_SANI, RUN_ID, EXIT_CODE quando aplicável;
+- ARTIFACT_SHA, EFFECT_READBACK, COUNTERPROOF, RESULT e NEXT_CURSOR.
+
+Regras:
+
+1. Definir o critério de sucesso antes da execução.
+2. Separar intenção, chamada da ferramenta, saída, efeito externo e confirmação.
+3. Reconsultar o efeito por um canal independente da afirmação do executor sempre
+   que isso for tecnicamente possível.
+4. Incluir pelo menos um teste negativo ou hipótese contrária para missões materiais.
+5. Usar PASS somente com evidência ligada ao mesmo alvo/SHA e critério; caso
+   contrário usar UNKNOWN, BLOCKED, FAIL ou NOT_RUN corretamente.
+6. Preservar rastros originais; sanitizar segredos antes da ingestão; deduplicar
+   pelo fingerprint existente. Não promover similaridade, telemetria ou relato a fato.
+7. Medir apenas o escopo declarado. Não converter uma pontuação de benchmark em
+   probabilidade universal de sucesso ou em autorização para agir.
+
+### 3. Contrato para avaliar descoberta científica
+
+Para experiências que afirmem redescobrir um resultado histórico, registar antes
+da execução:
+
+- data de corte do corpus e proveniência dos dados;
+- corpus, tokenizer, modelo/base e treino efetivamente usados;
+- prompts, contexto fornecido, orçamento, seeds e saídas integrais;
+- auditoria de contaminação e informação posterior ao corte;
+- critério de pontuação pré-registado e avaliadores independentes.
+
+Pontuar etapas separadamente: (a) identificar anomalias; (b) escolher quais hipóteses
+manter ou abandonar; (c) propor princípios novos; (d) derivar matematicamente o
+resultado; (e) produzir previsões testáveis; (f) passar verificações simbólicas,
+numéricas, casos-limite e revisão de especialistas independentes. Uma analogia
+interessante ou a equação final isolada não equivale a uma teoria redescoberta.
+Se a anomalia ou o caminho para a solução foi explicitamente entregue no prompt,
+registrar essa ajuda: resolver o prompt não prova descoberta espontânea.
+
+### 4. Contrato para benchmarks de agentes
+
+Ao importar números de benchmarks, preservar URL/fonte primária, data, versão,
+tarefa, modelo realmente avaliado, orçamento, ambiente, denominador, métrica,
+intervalo/incerteza quando publicado e limitações. Não combinar pontuações
+incompatíveis sem a normalização documentada; não tratar resultados de fornecedores
+ou resumos secundários como prova primária.
+
+Separar pelo menos: engenharia de software; busca/terminal; uso de ferramentas/GUI;
+recuperação após erro; segurança; e descoberta científica. Relatar tanto o resultado
+final quanto a qualidade da verificação e a taxa de falsos positivos/falsos verdes.
+Comparações válidas exigem tarefas e condições equivalentes, ambiente reproduzível,
+casos de teste reservados e baseline explícito.
+
+### 5. Fontes de pesquisa incorporadas como referências, não como autoridade automática
+
+- Philip Ball, Nature, The Einstein test: what happens when AI tries to rediscover
+  relativity? (09 Sep 2026): https://www.nature.com/articles/d41586-026-02804-x
+- Brian Keating, The Artificial Einstein Test — discussão de GPT-1900/Machina
+  Mirabilis e limites de interpretação: https://keating.ai/einstein-test/
+- IDE-Bench, avaliação de agentes de IDE em repositórios/tarefas não publicados:
+  https://arxiv.org/abs/2601.20886
+- OpenHands Index, avaliação de agentes de engenharia em várias famílias de tarefas:
+  https://www.openhands.dev/blog/introducing-the-openhands-index
+- AgentSWE, tarefas de criação, edição e otimização com casos reservados:
+  https://github.com/VectorSpaceLab/AgentSWE
+
+As fontes sustentam o desenho dos critérios, não provam que uma implementação da
+CentralDark já os cumpre. Antes de declarar cobertura do núcleo, validar a mudança
+por teste no mesmo SHA e por contraprova. A promoção de qualquer score, nova regra
+ou workflow continua sujeita ao gate Meta-Lupa/AutoLupa existente.
+
+### 6. Aceite operacional
+
+- Nenhum núcleo, skill, executor ou ledger paralelo criado.
+- O mesmo owner e recibo canônico permanecem responsáveis.
+- Uma afirmação de conclusão sem efeito observado falha fechado.
+- Uma alegação de descoberta sem corte de dados, auditoria de contaminação,
+  derivação e validação independente fica NOT_PROVEN.
+- A mudança só é considerada incorporada após revisão, testes aplicáveis e merge;
+  merge não equivale a deploy nem comprova comportamento em runtime.
