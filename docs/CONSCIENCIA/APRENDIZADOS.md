@@ -3149,3 +3149,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-21
 - **Contexto:** CHEFE pediu que o fluxo de vibe coding pare de depender de nomes técnicos/comandos difíceis e seja operado por botões e frases naturais dentro do mesmo owner da extensão.
 - **Aprendizado:** No owner skills/vs-code-restore, expor ações humanas em PT-BR e linguagem natural que apenas roteiam para comandos/capacidades já existentes. Build/SSH/pareamento/status devem ter botões; sem criar segundo executor. Empacotamento da VSIX deve ser não interativo.
+
+### 209. Mapa híbrido Casa–MCP/K:–VPS–GitHub: separar topologia relatada de prova viva
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** Foi discutido um diagrama lógico híbrido usando dados relatados da Casa Windows, unidade K:, MCP, túneis SSH, VPS, GitHub e Obsidian. A leitura do owner obsidian_live_graph_status retornou configured_vault=null, vault_accessible_from_this_runtime=false e bidirectional_sync_proven=false.
+- **Aprendizado:** Registrar o diagrama no PR equivalente como recibo histórico e manter explícita a fronteira de evidência. Não tratar PID/portas informados como medição independente, não inferir três agentes a partir de três túneis, não inferir VPS ociosa pela ausência de PM2 e não afirmar gravação no Obsidian enquanto o vault não estiver acessível. Reutilizar scripts/hermes/centraldark-entry.py e scripts/hermes/verified-checkpoint.py para continuidade; localizar o owner existente da Fábrica de Memórias, deduplicar e só então gravar e fazer readback/hash.
