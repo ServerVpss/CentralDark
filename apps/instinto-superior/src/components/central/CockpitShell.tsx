@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
+import { AtividadeNeon } from "@/components/central/AtividadeNeon";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
 import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
@@ -346,6 +347,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </SheetContent>
       </Sheet>
+      <AtividadeNeon />
       <header className="border-b border-border bg-surface/85 px-4 py-4 backdrop-blur sm:px-6">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2.5">

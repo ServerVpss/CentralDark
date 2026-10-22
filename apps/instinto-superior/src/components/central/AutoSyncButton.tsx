@@ -108,7 +108,7 @@ export const AutoSyncButton: React.FC = () => {
       <Card className={`p-4 border ${getStatusColor()}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {getStatusIcon()}
+            <span className="cd-neon-logo inline-flex">{getStatusIcon()}</span>
             <div>
               <p className="text-sm font-semibold">Auto Sync: Casa / Main / VPS</p>
               <p className="text-xs text-gray-600">{syncStatus.human_readable}</p>
@@ -136,7 +136,7 @@ export const AutoSyncButton: React.FC = () => {
       <Card className="p-4 border border-amber-200 bg-amber-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Zap className="w-5 h-5 text-amber-600" />
+            <Zap className="cd-neon-logo w-5 h-5 text-amber-600" />
             <div>
               <p className="text-sm font-semibold">Automação CentralDark · execução segura</p>
               <p className="text-xs text-amber-700">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>

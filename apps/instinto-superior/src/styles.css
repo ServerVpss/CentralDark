@@ -795,3 +795,14 @@
     transition: none;
   }
 }
+
+/* Neon discreto: pulsa so quando o mouse se mexe ou a pagina rola */
+.cd-neon-logo { transition: filter 300ms ease; }
+html[data-activity="on"] .cd-neon-logo { animation: cd-neon-logo-pulse 1400ms ease-in-out 1; }
+@keyframes cd-neon-logo-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0 currentColor); }
+  50% { filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 7px currentColor); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-activity="on"] .cd-neon-logo { animation: none; }
+}
