@@ -200,3 +200,21 @@ Cada receipt deve apontar `OWNER`, `SOURCE_SHA`, `TARGET_ORIGIN`, `PAGE_ROUTE`, 
 **Caneta e delegação:** Cline continua Writer da Casa enquanto possuir aquele escopo. JARVIS/SOL consulta o cockpit em leitura, aponta o delta e entrega o mesmo GOAL ao executor disponível; nunca simular envio direto ao Cline ou clique no navegador. Exigir ACK/receipt para declarar delegação ou execução. Manter `SCREENPIPE` como sensor, `MCP_CENTRALDARK` como control plane e `TAILSCALE` como transporte privado. `DESKTOP_COMMANDER_TERCEIRO_REQUIRED=false`; não reativar o serviço externo para operar o cockpit.
 
 **Critério de conclusão:** código/build verde **e**, quando houver mudança de UI/controle, prova funcional no navegador do escopo alterado + contraprova + receipt. Se o navegador for inacessível, registrar `UI_E2E_PENDING` e continuar somente as partes independentes.
+## 🔴 Red Loop — Tool Calling do Cline, independente do modelo (2026-10-22)
+
+**CHEFE autorizou um PR cumulativo** chamado **🧠 PR DOS RED 🔴**. Ao receber novo RED, recuperar o PR atual e o receipt `docs/CONSCIENCIA/RECEIPTS/2026-10-22-pr-dos-red-cline-tool-routing.md`; deduplicar por fingerprint, observar se é uma causa nova ou só recorrência, anexar prova e evolução com commit no mesmo PR; não criar PR por print. Nunca fechar o GOAL de 50 micro-passos porque houve uma falha de ferramenta.
+
+**Duas falhas distintas foram observadas no Cline**: (001) `ask_ou_bot`/`read_arch` inexistentes; (002) `read_files`/`run_commands` aparecem no `Available tools` da mensagem, mas também são rejeitados `AI_NoSuchToolError` **antes da execução**. A segunda é possível `TOOL_REGISTRY_PARITY_BLOCKED`, não apenas erro de digitação. A lista apresentada pelo erro e a lista de ferramentas efetivamente despacháveis podem divergir. Nunca inferir que duas ferramentas com nomes parecidos são aliases.
+
+### Resolver concreto do mesmo harness
+
+1. **CAPTURE:** salvar só metadados sanitizados de `error`, `requested_tool`, `advertised_tools`, `model/session quando observados`, `executor/host`, `timestamp` e `fingerprint`.
+2. **RESOLVE:** inspecionar inventário de ferramentas **da sessão ativa do Cline**; separar tool nativa do Cline, MCP, Composio e CLI. Nome, namespace, caixa e schema devem bater literalmente. Não traduzir `read_files` para `read_file`, `comando_shel` ou `run_commands` para `comando_shell`. Não executar aliases inventados.
+3. **GUARD:** reutilizar `scripts/ci/centraldark-toolcall-red-guard.mjs` (guarda pura). `NOT_ADVERTISED` rejeita nome desconhecido. `ADVERTISED_BUT_REJECTED`/ `TOOL_REGISTRY_PARITY_BLOCKED` pede inspeção real do dispatcher, sem um festival de tentativas; `UNKNOWN_RESOLVER` não concede execução; `RETRY_LOOP_BLOCKED` impede a mesma falha consecutiva. A guarda não é um hook instalado no Cline enquanto não houver integração e teste autorizados no owner do cliente.
+4. **ACTION:** se a rota estiver autenticada e o schema correto, executar **um probe não destrutivo** do recurso pertinente e coletar exit/ACK/readback. Quando a lista e o resolver discordarem, não insistir com tool names sugeridos pelo modelo: examinar adaptação/configuração/estado da conexão; recuperar sessão canônica do Cline sem apagar contexto ou trabalho.
+5. **RECOVERY:** salvar RED no mesmo PR com tentativa, causa demonstrada, menor delta, teste negativo/positivo, owner, versão e `NEXT_CURSOR`. **Falha antes da ferramenta** não prova falha do MCP, Casa, SSH, VPS nem do arquivo-alvo.
+6. **MICHELIN:** `CONSTRUIR + INTEGRAR + PROVAR` com três provas separadas. `SOURCE_GUARD_TEST_PASS != CLINE_ADAPTER_HOOK_INSTALLED != CLINE_TOOL_CALL_E2E_PASS`. Quando a falha for apenas documentada, manter `FIX_CANDIDATE`/ `UNKNOWN`, nunca declarar consertado.
+
+**Regra de compatibilidade universal:** o modelo (GPT, Claude, Gemini, outro) propõe intenção; o catálogo atual **e** o resolver real da superfície decidem a ferramenta. O roteador bloqueia names/schemas não resolvidos sem pedir ao CHEFE para escolher uma ferramenta. O Cline continua Writer único da Casa; Hermes coordena pelo Kanban existente, não reescreve a sessão do Cline.
+
+**NEXT_CURSOR inicial:** `PR_DOS_RED_TEST → CLINE_SESSION_REAL_TOOL_SCHEMA → SAFE_TOOL_ACK → MICHELIN_STEP_01_REPLAY → CHECKPOINT_50`.
