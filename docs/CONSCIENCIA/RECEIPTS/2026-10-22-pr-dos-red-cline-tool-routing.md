@@ -62,3 +62,23 @@ flowchart LR
 
 **FIXED_POINT:** NÃO. **MVP de fonte:** módulo + testes + skill + política + workflow no PR.  
 **NEXT_CURSOR:** `CI_SAME_HEAD → CLINE_TOOL_SCHEMA_LIVE → AUTH_SAFE_CALL_READBACK → RED_001_002_CLOSURE → MICHELIN_01_50`.
+
+## 🔴 RED Realtime — Supabase/GitHub source bridge
+
+**Provas materiais no Supabase CentralDark, banco EXISTENTE (sem alterar policy):**
+- Evento catalogado: `public.notification_events.event_key=centraldark.red.toolcall.v1`, ID `851ff008-86f5-46bc-92c5-de0b0ac63deb`.
+- `public.notifications_log` contém RED #001 `c1f609ff-a814-4871-a864-261174b468c2` e RED #002 `1e5589a2-1da7-491d-b813-cdd4d768097b`, resultado de `INSERT ... RETURNING` da sessão administrativa.
+- Tipo `erro`, `proof_state=FAIL_OBSERVED`, `publication_mode=MANUAL_OBSERVED_PROJECTION`, origem `cline_toolcall_red`, link PR #1903; **não** foram eventos de um watcher já em operação.
+- RLS na tabela: `SELECT` só `authenticated` com `has_role(auth.uid(),'admin')`; tabela já incluída em `supabase_realtime`. Sem alteração de schema nem política.
+
+**Implementação candidata versionada neste PR:**
+- `apps/instinto-superior/src/components/central/CentralNotificacoes.tsx`: filtro RED, contador, link validado do PR, sem segundo feed. Consumidor atual `useNotificationsLog` já reconcilia por SELECT RLS + subscription Realtime.
+- `scripts/ci/centraldark-red-intake.mjs` normaliza eventos modelo-agnósticos, fingerprint sha256, IDs e campos sanitizados.
+- `scripts/ci/centraldark-red-dispatch.mjs` envia `repository_dispatch` via GitHub API quando um executor autorizado observar erro e existir token no secret store do host.
+- `scripts/ci/centraldark-red-publish.mjs` valida repo/PR/branch, de-duplica por fingerprint, comenta no PR, faz commit CAS apenas no receipt e então projeta em `notifications_log` via chave no job; não imprime logs ou secrets.
+- `.github/workflows/centraldark-pr-dos-red.yml`: `repository_dispatch`/`workflow_dispatch` via GitHub Actions *default branch*, com `contents: write`, `issues: write` e Supabase secret server-only. Source em PR draft **não ativa o evento** até promoção segura à main.
+- `scripts/ci/centraldark-red-intake.test.mjs` + `centraldark-validate.yml`: testes deterministas condicionados ao CI do SHA exato, sem declarar E2E.
+
+**Importante:** `https://api.centralldark.com` continua API oficial do control plane, mas nenhuma rota `POST /reds` foi comprovada no gateway. Não inventar HTTP 200, nem declarar que o tráfego do RED atravessa essa API: atual transporte de publicação proposto é `GitHub API → Supabase REST/Realtime`, com fingerprints correlacionados no PR. Precisa de owner/canonical gateway antes de alterar rota pública.
+
+**Gates pendentes:** `CI_SAME_SHA`, secret/vars do Actions sem exibição, merge autorizado, hook de origem Cline que realmente dispare evento (PostToolUse pode não observar rejeição antes da execução), GitHub comment automático, Supabase row automático, browser/admin realtime e contraprova. `FIXED_POINT=NOT_ACHIEVED`.
