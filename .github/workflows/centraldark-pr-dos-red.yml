@@ -1,0 +1,89 @@
+name: 🧠 PR DOS RED — GitHub + Supabase Realtime
+# Só fica operacional após promoção segura à branch default.
+on:
+  repository_dispatch:
+    types: [centraldark_red_v1]
+  workflow_dispatch:
+    inputs:
+      surface:
+        description: Origem autorizada do RED
+        required: true
+        type: choice
+        options: [CLINE, ZENDRIVE, HERMES, MCP, COCKPIT, GITHUB_ACTIONS]
+      category:
+        description: Categoria do erro, nunca log bruto
+        required: true
+        type: choice
+        options:
+          - NOT_ADVERTISED
+          - ADVERTISED_BUT_REJECTED
+          - TOOL_REGISTRY_PARITY_BLOCKED
+          - RETRY_LOOP_BLOCKED
+          - SHELL_CONTEXT_ERROR
+          - COMMAND_EXECUTION_ERROR
+          - BUILD_TEST_FAIL
+          - RUNTIME_PROOF_FAIL
+          - OTHER_REPRODUCED_ERROR
+      error_code:
+        description: Codigo resumido
+        required: true
+        type: choice
+        options: [AI_NoSuchToolError, INVALID_ARGUMENTS, COMMAND_FAILED, TIMEOUT, CI_FAILED, RUNTIME_FAILED, UNKNOWN_ERROR]
+      tool_name:
+        description: Nome exato da ferramenta; sem parametros nem caminhos
+        required: true
+        type: string
+      host:
+        description: Alias de host sem endereco privado
+        required: false
+        type: string
+      model:
+        description: Identificador opcional do modelo
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: centraldark-pr-dos-red-1903
+  cancel-in-progress: false
+
+jobs:
+  red-intake:
+    if: github.repository == 'ServerVpss/CentralDark'
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 5
+    steps:
+      - name: Checkout da fonte confiavel, nunca do payload
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Provar repositorio e fonte
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = "ServerVpss/CentralDark"
+          git rev-parse --verify HEAD
+          node --check scripts/ci/centraldark-red-intake.mjs
+          node --check scripts/ci/centraldark-red-publish.mjs
+          node --test scripts/ci/centraldark-red-intake.test.mjs
+      - name: Persistir RED no mesmo PR e projetar no Supabase
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }
+          CENTRALDARK_SUPABASE_URL: ${{ vars.CENTRALDARK_SUPABASE_URL }
+          CENTRALDARK_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CENTRALDARK_SUPABASE_SERVICE_ROLE_KEY }
+        run: |
+          set -euo pipefail
+          node scripts/ci/centraldark-red-publish.mjs
+      - name: Receipt de falha sem falso verde
+        if: failure()
+        shell: bash
+        run: |
+          echo "RED_PUBLISH=BLOCKED"
+          echo "Github comment, ledger and Supabase are distinct gates; inspect job without printing secrets"
