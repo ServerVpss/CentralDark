@@ -54,6 +54,7 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
   registerTerminalTelemetry(context);
+  registerDeviceHeartbeat(context);
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
   if (onOpen) {
     void restore(context, false);
@@ -339,6 +340,21 @@ async function deviceHeartbeat(context: vscode.ExtensionContext, base: string): 
     }, token);
     return Boolean(result.ok && result.pong);
   } catch { return false; }
+}
+/** Mantém heartbeat sem iniciar outro serviço; 30s cabe na janela stale de 45s. */
+function registerDeviceHeartbeat(context: vscode.ExtensionContext): void {
+  if (process.platform !== 'win32') return;
+  let running = false;
+  const beat = async () => {
+    if (running) return;
+    running = true;
+    try { await deviceHeartbeat(context, pairingBase()); }
+    catch { /* O estado permanece UNKNOWN ate ACK, nunca falso verde. */ }
+    finally { running = false; }
+  };
+  const timer = setInterval(() => { void beat(); }, 30_000);
+  context.subscriptions.push({dispose: () => clearInterval(timer)});
+  void beat();
 }
 async function pairDeviceWithMcp(context: vscode.ExtensionContext): Promise<void> {
   if (process.platform !== 'win32') {
