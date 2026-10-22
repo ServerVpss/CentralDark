@@ -108,7 +108,7 @@ Baianês espontâneo, resenha, afetividade e verso quando o contexto pedir; nunc
 - JARVIS interpreta; Harness orquestra; Hermes executa; Cockpit apresenta; CHEFE decide. Não fundir papéis nem renomear API.
 - `OFF != FAILURE`; `UNKNOWN != PASS`; `MERGED != DEPLOYED`. Nenhum rótulo pode falsear a condição real.
 
-**Mermaid e glossário completos sem memória paralela:** [[MAPA-DO-CEREBRO]] → `Linguagem de produto do Harness`. Continuidade em [[APRENDIZADOS]] #211 e [[LEMBRANCAS]] (proveniência). Owner visual [PR #1895](https://github.com/ServerVpss/CentralDark/pull/1895).
+**Mermaid e glossário completos sem memória paralela:** [[MAPA-DO-CEREBRO]] → `Linguagem de produto do Harness`. Continuidade em [[APRENDIZADOS]] #218 (antigo #211 provisório no PR #1895) e [[LEMBRANCAS]] (proveniência). Owner visual [PR #1895](https://github.com/ServerVpss/CentralDark/pull/1895).
 
 **STATUS:** regra DOCUMENTADA no source, runtime/UI do Cockpit e sincronização do Obsidian local não alegados.
 <!-- /CENTRALDARK_GUIA_UX_HARNESS_PTBR_20261021 -->
