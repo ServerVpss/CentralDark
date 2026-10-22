@@ -84,3 +84,17 @@ test("Publicador não cria arquitetura paralela nem client secret frontend", () 
   assert.doesNotMatch(code, /reset --hard|git clean -fdx|force.push/);
   assert.doesNotMatch(code, /process\.stdout\.write\(JSON\.stringify\(input\)/);
 });
+
+test("RED #003: comando executado no shell errado difere de NoSuchToolError", () => {
+  const previous = normalizeRedReport({
+    surface: "CLINE", host: "CASA", category: "ADVERTISED_BUT_REJECTED",
+    error_code: "AI_NoSuchToolError", tool_name: "read_files",
+  });
+  const shell = normalizeRedReport({
+    surface: "CLINE", host: "CASA", category: "SHELL_CONTEXT_ERROR",
+    error_code: "COMMAND_FAILED", tool_name: "run_commands",
+  });
+  assert.notEqual(shell.fingerprint, previous.fingerprint);
+  assert.equal(shell.proof_state, "FAIL_OBSERVED");
+  assert.match(receiptComment(shell, 3), /RED #003/);
+});
