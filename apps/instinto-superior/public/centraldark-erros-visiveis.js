@@ -135,6 +135,7 @@
     try {
       msg = seguro(msg || 'erro sem mensagem');
       onde = seguro(onde);
+      if (onde.indexOf('?') !== -1 || onde.indexOf('#') !== -1) onde = limparUrl(onde);
       var chave = tipo + '|' + msg + '|' + onde;
       var ja = lista.find(function (x) { return x.chave === chave; });
       if (ja) { ja.vezes++; ja.hora = new Date(); }
