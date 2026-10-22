@@ -238,6 +238,25 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [estudioAberto, definirEstudioAberto] = useState(false);
+  const [estadoEstudio, definirEstadoEstudio] = useState("NÃO MEDIDO NESTE NAVEGADOR");
+  async function conferirEstudio() {
+    definirEstadoEstudio("CONSULTANDO");
+    try {
+      const resposta = await fetch("https://ui.centralldark.com/api/settings/client", {
+        credentials: "omit", cache: "no-store", signal: AbortSignal.timeout(7000),
+      });
+      definirEstadoEstudio(resposta.ok ? "API HTTP_ACK" : "API HTTP_" + resposta.status);
+    } catch {
+      // Bloqueio CORS e falta de rede são inconclusivos, não equivalem a OFFLINE.
+      definirEstadoEstudio("UNKNOWN · rede ou CORS");
+    }
+  }
+  function abrirEstudio() {
+    definirEstudioAberto(true);
+    void conferirEstudio();
+    window.requestAnimationFrame(() => document.getElementById("centraldark-estudio")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
   const tituloAbaAtiva = COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
@@ -341,13 +360,14 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </span>
             <Button
               data-cd-flow="instinto.CockpitShell.botao-01"
-              asChild
+              type="button"
               variant="outline"
               size="sm"
+              aria-expanded={estudioAberto}
+              aria-controls="centraldark-estudio"
+              onClick={abrirEstudio}
             >
-              <a href="http://89.117.78.124:25808/" target="_blank" rel="noopener noreferrer">
-                <ExternalLink aria-hidden className="size-4" /> Abrir AionUI
-              </a>
+              <Layers3 aria-hidden className="size-4" /> CentralDark Estúdio
             </Button>
             {!autenticado ? (
               <Button data-cd-flow="instinto.CockpitShell.botao-02" asChild size="sm">
@@ -366,6 +386,64 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </div>
       </header>
+
+      {estudioAberto ? (
+        <section id="centraldark-estudio" aria-label="CentralDark Estúdio" className="scroll-mt-20 border-b border-border bg-surface/60 px-4 py-6 sm:px-6">
+          <div className="mx-auto max-w-6xl space-y-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-neon-blue">Instinto Superior · aplicação existente</p>
+                <h2 className="mt-1 text-2xl font-semibold">🧩 CentralDark Estúdio</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Uma entrada no cockpit para o AionUI já instalado na VPS. Não inicia outra instância nem transfere sessões da Casa.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" size="sm" variant="outline" data-cd-flow="instinto.CockpitShell.estudio-verificar" onClick={() => void conferirEstudio()}>
+                  <RefreshCcw className="size-4" /> Verificar API
+                </Button>
+                <Button asChild type="button" size="sm" variant="outline" data-cd-flow="instinto.CockpitShell.estudio-externo">
+                  <a href="https://ui.centralldark.com/" target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="size-4" /> Abrir em janela
+                  </a>
+                </Button>
+                <Button type="button" size="sm" variant="ghost" onClick={() => definirEstudioAberto(false)}>Fechar</Button>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-background/70 p-3">
+              <span role="status" className="mr-2 font-mono text-xs text-muted-foreground">Estúdio: {estadoEstudio}</span>
+              <span className="text-xs text-muted-foreground">Pele da moldura:</span>
+              {([["default", "Padrão"], ["ouro", "Breu & Ouro"], ["ops", "Ops · Ciano"], ["esmeralda", "Esmeralda"]] as const).map(([id, nome]) => (
+                <Button type="button" key={id} size="sm" variant={pele === id ? "default" : "outline"} aria-pressed={pele === id}
+                  onClick={() => selecionar(id)} data-cd-flow={"instinto.CockpitShell.estudio-pele-" + id}>{nome}</Button>
+              ))}
+              <span className="text-xs text-muted-foreground">O interior do AionUI mantém o tema nativo nesta etapa.</span>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-border bg-background">
+              <iframe title="CentralDark Estúdio — AionUI original" src="https://ui.centralldark.com/"
+                className="h-[72vh] min-h-[360px] w-full border-0" loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin" allow="clipboard-read; clipboard-write" />
+            </div>
+            <details className="rounded-lg border border-border p-3 text-sm">
+              <summary className="cursor-pointer font-semibold">Conexões e portas existentes · última medição 22/10/2026</summary>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {([
+                  ["Estúdio · AionUI", "https://ui.centralldark.com/", "VPS 25808 · HTTP 200"],
+                  ["Cockpit · Instinto Superior", "https://admin.centralldark.com/sala-controle", "VPS 25812 · HTTP 200"],
+                  ["MCP · CentralDark", "https://mcp.centralldark.com/health", "VPS 9100 · HTTP 200"],
+                  ["API · Hermes Core", "https://api.centralldark.com/health", "VPS 8899 · HTTP 200"],
+                ] as const).map(([nome, url, prova]) => (
+                  <a key={url} data-cd-flow={"instinto.CockpitShell.estudio-rota-" + nome} href={url}
+                    target="_blank" rel="noopener noreferrer" className="rounded-lg border border-border p-3 hover:border-neon-blue">
+                    <span className="flex items-center gap-2 text-sm font-semibold">{nome}<ExternalLink className="size-3" /></span>
+                    <span className="mt-1 block break-all font-mono text-[11px] text-muted-foreground">{url}</span>
+                    <span className="mt-1 block text-xs text-muted-foreground">Última medição: {prova}. Revalidar antes de concluir.</span>
+                  </a>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">Rotas locais adicionais na VPS (não são links do navegador): AionCore 46573, OAuth Broker 8098, Telegram MTProto 8790 e Hermes 8644/9900. Porta aberta não comprova autenticação ou ação.</p>
+            </details>
+          </div>
+        </section>
+      ) : null}
 
       <section className="relative overflow-hidden border-b border-border px-4 py-20 sm:px-6">
         <div aria-hidden className="grid-mesh absolute inset-0 opacity-30" />
