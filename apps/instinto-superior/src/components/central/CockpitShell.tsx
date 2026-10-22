@@ -8,7 +8,7 @@
  */
 import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,6 +19,7 @@ import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
+  Bell,
   Download,
   ExternalLink,
   Github,
@@ -263,6 +264,21 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const tabsScrollRef = useRef<HTMLDivElement>(null);
+  // A barra fixa pode rolar horizontalmente com a rodinha, sem prender a pagina
+  // quando nao existe conteudo para deslocar. Nao intercepta zoom nem Shift.
+  useEffect(() => {
+    const barra = tabsScrollRef.current;
+    if (!barra) return;
+    const rolarAbas = (evento: WheelEvent) => {
+      if (evento.ctrlKey || evento.shiftKey || Math.abs(evento.deltaY) <= Math.abs(evento.deltaX)) return;
+      if (barra.scrollWidth <= barra.clientWidth) return;
+      evento.preventDefault();
+      barra.scrollLeft += evento.deltaY;
+    };
+    barra.addEventListener("wheel", rolarAbas, { passive: false });
+    return () => barra.removeEventListener("wheel", rolarAbas);
+  }, []);
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
   const [harnessVisivel, definirHarnessVisivel] = useState(true);
@@ -317,6 +333,18 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       data-pele-cockpit={pele}
       className={`min-h-dvh pb-52 ${pele === "default" ? "" : "cockpit-pele"}`}
     >
+      {harnessVisivel && gaveta === null ? (
+        <nav
+          aria-label="Harness flutuante superior"
+          data-cd-harness="top-floating"
+          className="fixed left-1/2 top-1 z-[60] hidden -translate-x-1/2 items-center gap-1 rounded-2xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur sm:flex"
+        >
+          <Button size="sm" variant="ghost" title="CentralDark" aria-label="CentralDark · visão geral" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
+          <Button size="icon" variant="ghost" title="Lupa · buscar ferramentas" aria-label="Lupa · buscar ferramentas" onClick={() => definirGaveta("top")}><Search className="size-4" /></Button>
+          <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("right")}><Layers3 className="size-4" /></Button>
+          <Button size="icon" variant="ghost" title="Notificações" aria-label="Notificações" onClick={() => abrirDestino("claude-notifications")}><Bell className="size-4" /></Button>
+        </nav>
+      ) : null}
       {harnessVisivel ? (
         <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 flex -translate-y-1/2 flex-col gap-2 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
@@ -494,7 +522,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
 
           <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8" id="centraldark-harness-abas">
             {/* Posicionamento fixo: header primeiro, abas logo abaixo, sem o menu flutuante duplicado. */}
-            <div className="fixed inset-x-0 top-16 z-40 overflow-x-auto border-b border-border bg-background/95 px-4 py-2 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div ref={tabsScrollRef} className="fixed inset-x-0 top-16 z-40 overflow-x-auto border-b border-border bg-background/95 px-4 py-2 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <TabsList className="h-auto min-w-max justify-start">
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
                 <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
