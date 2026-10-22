@@ -473,3 +473,15 @@ No Windows: hermes.cmd --tui; depois /model zendrive; depois oi. A seleção env
 5. Separar SOURCE, HERMES_ALIAS_CONFIGURED, WORKER_LIVE, INFERENCE_PASS, HERMES_TOOL_CALLS_PASS e DEPLOY_PASS.
 
 **NEXT_CURSOR:** medir o worker Zendrive autorizado, configurar o alias no Hermes atual, testar a primeira inferência real e só depois promover STATUS=PASS. SOURCE_COMMITTED != RUNTIME_INSTALLED != INFERENCE_PROVEN. Nenhuma instalação, segredo, alteração de perfil ou deploy é realizada por esta skill.
+
+## Pareamento MCP por código (candidato 2026-10-22)
+
+- Owner reutilizado: a mesma extensão vs-code-restore e apps/modulos/mcp/src/device-pairing.js.
+- Comando na mesma extensão: CentralDark: Parear este VS Code com o MCP por código (centraldark.pairDevice).
+- Rota do MCP: /device. Geração: POST /device/pair/start; leitura segura: POST /device/pair/status; aprovação: POST /device/pair/approve; painel: GET /device/admin; heartbeat: POST /device/heartbeat; revogação: POST /device/devices/revoke.
+- Autorização em código: sessão administrativa cd_admin existente do MCP, checagem de Origin e aprovação de uso único. A validação da sessão Supabase e da tabela user_roles ainda NÃO foi integrada ao runtime deste candidato e deve ser gate antes de publicação pública.
+- Token do dispositivo: retornado apenas uma vez e salvo em VS Code SecretStorage; não se publica no webview, no log ou no recibo. Heartbeat periódico a cada 30 s após ativação da extensão no Windows.
+- Contraprova: testes do armazenamento 6/6 PASS; 8 verificações HTTP (incluindo 401, 403, replay e revogação) PASS; npm ci e npm run compile da extensão em scratch Linux PASS.
+- Não provados: instalação na Casa Windows, sessão Supabase administrativa integrada, heartbeat no dispositivo real, PIDs da Casa via MCP, sincronização com cockpit 8080.
+- Não criar segundo MCP/Hermes, não mexer no runtime atual, não alterar K:, F:, portas, barra fixa ou controles flutuantes.
+- NEXT_CURSOR: CI_PR → ROLE_SUPABASE_BACKEND → VSIX_WINDOWS → ADMIN_APPROVAL → ACK → PID → COCKPIT_READBACK → RECEIPT.
