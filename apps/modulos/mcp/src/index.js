@@ -18,9 +18,10 @@ import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
 import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
-import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
+import { createDevicePairingRouter } from "./device-pairing.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
@@ -295,6 +296,10 @@ const somentePost = (rota) => (_req, res) => {
 };
 app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
+
+// Pareamento do VS Code: reutiliza a implementação existente com a mesma sessão admin.
+// A montagem é isolada; não cria segundo MCP ou processo.
+app.use("/device", createDevicePairingRouter({ isAdmin }));
 
 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
 app.use("/admin/grafo", adminGraphProxy);
