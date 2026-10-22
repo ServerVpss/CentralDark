@@ -132,7 +132,7 @@ mcp_tool_count() {
   curl -fsS --max-time 3 "$TOOLS" | python3 -c 'import json,sys; x=json.load(sys.stdin); print(len(x.get("tools",x) if isinstance(x,dict) else x))'
 }
 mcp_tool_names() {
-  curl -fsS --max-time 3 "$TOOLS" | python3 -c 'import json,sys; x=json.load(sys.stdin); items=x.get("tools",[]) if isinstance(x,dict) else x; print("\\n".join(sorted(z["name"] for z in items if isinstance(z,dict) and isinstance(z.get("name"),str))))'
+  curl -fsS --max-time 3 "$TOOLS" | python3 -c 'import json,sys; x=json.load(sys.stdin); items=x.get("tools",[]) if isinstance(x,dict) else x; print(chr(10).join(sorted(z["name"] for z in items if isinstance(z,dict) and isinstance(z.get("name"),str))))'
 }
 require_mcp_runtime_owner() {
   [[ -d "$RUNTIME_DIR" ]] || { echo "MCP_NATIVE_RUNTIME_MISSING"; exit 31; }
