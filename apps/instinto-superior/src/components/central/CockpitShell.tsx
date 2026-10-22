@@ -4,6 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
+import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
+import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -29,9 +31,7 @@ import {
   Wrench,
   Zap,
 } from "lucide-react";
-
 import { PainelHermes } from "@/components/central/HermesPet";
-import { MapaMetabolicoCristal } from "@/components/central/MapaMetabolicoCristal";
 import { DesignCenter, usePeleCockpit } from "@/components/central/DesignCenter";
 import { Ledger } from "@/components/central/Ledger";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
@@ -47,9 +47,11 @@ import { ArchitectureVisualization } from "@/components/central/ArchitectureVisu
 import { RaioXVivo } from "@/components/central/RaioXVivo";
 import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
 import { ForjaExecutor } from "@/components/central/ForjaExecutor";
+import { MapaMetabolicoCristal } from "@/components/central/MapaMetabolicoCristal";
 import { ClaudeNotificationsHub } from "@/components/central/ClaudeNotificationsHub";
 import { DreamReviewer } from "@/components/central/DreamReviewer";
 import { GramPermissions } from "@/components/central/GramPermissions";
+import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
@@ -70,16 +72,46 @@ function formatarTamanho(bytes: number) {
 
 const HARNESS_DESTINOS = [
   { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
+  { id: "portal", titulo: "Portal", icone: "🌐", privado: false },
+  { id: "builder-bolt", titulo: "Builder Bolt", icone: "⚡", privado: false },
+  { id: "pr1873", titulo: "Mapa do PR #1873", icone: "📜", privado: false },
   { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
-  { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
+  { id: "sync", titulo: "Minha Oficina", icone: "🛠️", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
   { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
   { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
   { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
   { id: "downloads", titulo: "Downloads", icone: "📦", privado: false },
+  { id: "config-harness", titulo: "Configurações do Harness", icone: "⚙️", privado: false },
 ] as const;
+
+/** UI-first: catálogo visual selecionável, sem fingir conexões ou criar outro painel. */
+function MenuVisualCentralDark({ titulo, descricao, itens }: { titulo: string; descricao: string; itens: string[] }) {
+  const [selecionado, definirSelecionado] = useState(itens[0] ?? "");
+  return (
+    <section className="rounded-xl border border-neon-blue/30 bg-background/80 p-5" aria-label={titulo}>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-xl font-semibold">{titulo}</h2>
+        <span className="rounded-full border border-amber-500/40 px-3 py-1 text-xs text-amber-500">ESTRUTURA VISUAL</span>
+      </div>
+      <p className="mt-2 text-sm text-muted-foreground">{descricao}</p>
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {itens.map((item) => (
+          <button key={item} type="button" aria-pressed={selecionado === item} onClick={() => definirSelecionado(item)}
+            className={`min-h-20 rounded-lg border p-4 text-left transition-colors hover:border-neon-blue ${selecionado === item ? "border-neon-blue bg-neon-blue/10" : "border-border bg-muted/20"}`}>
+            <span className="block text-sm font-semibold">{item}</span>
+            <span className="mt-2 block text-[11px] text-amber-500">Integração pendente</span>
+          </button>
+        ))}
+      </div>
+      <div className="mt-4 rounded-lg border border-border bg-muted/20 p-3 text-sm" role="status">
+        <strong>Selecionado:</strong> {selecionado} · Visualização da posição no Cockpit; nenhum serviço foi acionado.
+      </div>
+    </section>
+  );
+}
 
 // Interface do Gram incorporada ao CockpitShell; lê o mesmo owner dos bots
 // do Cofre Administrativo. Não copia Unigram nem simula mensagens entregues.
@@ -202,6 +234,7 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [abaAdminInicial, definirAbaAdminInicial] = useState<"visao" | "notificacoes">("visao");
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
   const [harnessVisivel, definirHarnessVisivel] = useState(true);
@@ -246,7 +279,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       {harnessVisivel ? (
         <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
+          <Button size="icon" variant="ghost" title="Buscar no cockpit" aria-label="Buscar no cockpit" onClick={() => { definirGaveta("top"); window.setTimeout(() => document.getElementById("busca-harness")?.focus(), 150); }}><Search className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("top")}><Layers3 className="size-4" /></Button>
+          {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => { definirAbaAdminInicial("notificacoes"); abrirDestino("admin"); }} /> : null}
         </nav>
       ) : null}
       {harnessVisivel ? (
@@ -277,8 +312,18 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       </Sheet>
       <header className="border-b border-border bg-surface/85 px-4 py-4 backdrop-blur sm:px-6">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
-          <Link to="/" className="font-mono text-xs tracking-[0.2em] text-gold uppercase">
-            CentralDark
+          <Link to="/" className="flex items-center gap-2.5">
+            <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
+              <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
+            </span>
+            <span className="flex flex-col leading-none">
+              <span className="text-gold-gradient text-sm font-semibold tracking-wide">
+                CentralDark
+              </span>
+              <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+                Instinto Superior
+              </span>
+            </span>
           </Link>
           <div className="flex items-center gap-2">
             <span className="hidden font-mono text-[10px] text-muted-foreground sm:block">
@@ -291,7 +336,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               size="sm"
             >
               <a href="http://89.117.78.124:25808/" target="_blank" rel="noopener noreferrer">
-                <ExternalLink aria-hidden className="size-4" /> Abrir AionUI
+                <ExternalLink aria-hidden className="size-4" /> CentralDark UI
               </a>
             </Button>
             {!autenticado ? (
@@ -341,7 +386,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       <section className="px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
           {/* Auto Sync + Micro-Deploy + Status Lights + Daily Review */}
-          <AutoSyncButton />
+          <AutoSyncButton onNavigate={abrirDestino} autenticado={autenticado} />
           <div className="mt-4 space-y-4">
             <StatusPanel />
             <DailyReviewPanel />
@@ -399,6 +444,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <div className="sticky top-0 z-30 -mx-4 overflow-x-auto border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
               <TabsList className="h-auto min-w-max justify-start">
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
+                <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
+                <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
+                <TabsTrigger value="pr1873">📜 Mapa PR #1873</TabsTrigger>
                 {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
                 <TabsTrigger value="sync">🛠️ Minha Oficina</TabsTrigger>
                 <TabsTrigger value="design">Design Center</TabsTrigger>
@@ -420,12 +468,23 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
                 <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
+                <TabsTrigger value="config-harness">⚙️ Configurações do Harness</TabsTrigger>
               </TabsList>
             </div>
+            <TabsContent value="pr1873" className="mt-8">
+              <PainelPR1873 />
+            </TabsContent>
+            <TabsContent value="portal" className="mt-8">
+              <MenuVisualCentralDark titulo="🌐 Portal" descricao="Produtos e experiência pública; o TelePainel permanece produto independente." itens={["🏠 Página inicial", "📦 Catálogo", "📟 TelePainel", "💬 WhatsApp / CRM", "💰 Financeiro"]} />
+            </TabsContent>
+            <TabsContent value="builder-bolt" className="mt-8">
+              <MenuVisualCentralDark titulo="⚡ Builder Bolt" descricao="Fábrica de sites existente. Esta vitrine não inicia outro editor ou processo." itens={["🏗️ Construção de sites", "🖥️ Editor", "👁️ Preview", "🗂️ Projetos existentes", "🧩 Modelos e componentes", "🔄 Git e versões"]} />
+            </TabsContent>
             {autenticado ? <TabsContent value="gram" className="mt-8"><CentralDarkGram abrirAdmin={() => abrirDestino("admin")} abrirSync={() => abrirDestino("sync")} /></TabsContent> : null}
             <TabsContent value="visao" className="mt-8">
-              <div className="mb-6"><CartaoDiscosForja /></div>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                          <div className="mb-6"><CartaoDiscosForja /></div>
+                          <EstudoPorCriterios contexto="visao" />
+                          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <BlocoEstado
                   titulo="Writer material único"
                   estado="UNKNOWN"
@@ -536,17 +595,18 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <ReceiptsDashboard />
             </TabsContent>
             <TabsContent value="forja" className="mt-10">
-              <div className="mb-8">
-                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
-                  Executor Paralelo
-                </p>
-                <h2 className="mt-3 text-3xl font-semibold">Forja em PowerShell 7</h2>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Orquestração não-bloqueante: Casa ↔ Forja ↔ GitHub ↔ VPS sincronizados em tempo real.
-                </p>
-              </div>
-              <ForjaExecutor />
-            </TabsContent>
+                          <div className="mb-8">
+                            <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
+                              Executor Paralelo
+                            </p>
+                            <h2 className="mt-3 text-3xl font-semibold">Forja em PowerShell 7</h2>
+                            <p className="mt-3 text-sm text-muted-foreground">
+                              Orquestração não-bloqueante: Casa ↔ Forja ↔ GitHub ↔ VPS sincronizados em tempo real.
+                            </p>
+                          </div>
+                          <EstudoPorCriterios contexto="forja" />
+                          <ForjaExecutor />
+                        </TabsContent>
             {autenticado ? (
               <TabsContent value="gram-permissions" className="mt-10">
                 <GramPermissions />
@@ -554,7 +614,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             ) : null}
             {autenticado ? (
               <TabsContent value="admin" className="mt-10">
-                <PainelAdminCentralDark estado={dado} />
+                <MenuVisualCentralDark titulo="🔐 Admin → Control Plane" descricao="Estrutura visual do HUB Credential Control Plane. Sem exposição de credenciais e sem ligação simulada." itens={["👥 Contas e permissões", "☁️ Cloudflare", "🔌 APIs e MCPs", "🔑 Cofre", "🤖 Bots", "🔗 Providers / OAuth", "📋 Auditoria", "🟡 Estado das conexões"]} />
+                <div className="mt-6"><PainelAdminCentralDark estado={dado} abaInicial={abaAdminInicial} /></div>
               </TabsContent>
             ) : null}
             {autenticado ? (
@@ -943,6 +1004,28 @@ REUSE: before_create (sem duplicação)`}
                   </ul>
                 </div>
               </div>
+            </TabsContent>
+            <TabsContent value="config-harness" className="mt-8">
+              <section aria-labelledby="settings-harness-heading" className="rounded-xl border border-border bg-background/80 p-5 [--harness-config-text:#d0e8f5] text-[color:var(--harness-config-text)]">
+                <h2 id="settings-harness-heading" className="text-xl font-semibold">⚙️ Configurações do Harness</h2>
+                <p className="mt-2 text-sm text-[color:var(--harness-config-text)]">Uma casca, os owners existentes. Cada opcao abre sua area real.</p>
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {[{ nome: "Modelos e motores", detalhe: "Abrir biblioteca. Alterar motor precisa de binding comprovado.", destino: "design", privado: false },
+                    { nome: "Voz, microfone e multimodal", detalhe: "Hermes e Jarvis. Microfone apenas com permissao do usuario.", destino: "hermes", privado: false },
+                    { nome: "MCP e integracoes", detalhe: "Abrir Admin; comandos e credenciais exigem autenticacao.", destino: "admin", privado: true },
+                    { nome: "Hardware e sistema", detalhe: "Abrir diagnostico, sem modificar GPU ou drivers.", destino: "sistema", privado: true },
+                    { nome: "Aparencia e extensoes", detalhe: "Abrir Design Center, com galeria existente.", destino: "design", privado: false },
+                    { nome: "Sincronizacao e versoes", detalhe: "Abrir Minha Oficina, sem executar sincronizacao.", destino: "sync", privado: false }].filter(item => !item.privado || autenticado).map(item => (
+                    <Button type="button" variant="outline" key={item.nome} onClick={() => abrirDestino(item.destino)} className="h-auto min-h-20 flex-col items-start justify-center gap-1 whitespace-normal text-left">
+                      <span className="font-semibold">{item.nome}</span>
+                      <span className="text-xs font-normal text-[color:var(--harness-config-text)]">{item.detalhe}</span>
+                    </Button>
+                  ))}
+                </div>
+                <p className="mt-4 rounded-lg border border-amber-500/30 p-3 text-xs text-[color:var(--harness-config-text)]">
+                  Navegacao ativa. Alterar parametros de modelos, MCP e multimodal requer binding e readback; esta aba nao grava valores.
+                </p>
+              </section>
             </TabsContent>
             <TabsContent value="downloads" className="mt-10">
               <section id="download-center" className="scroll-mt-24">

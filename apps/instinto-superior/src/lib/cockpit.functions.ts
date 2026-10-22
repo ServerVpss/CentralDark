@@ -25,6 +25,60 @@ type CommitCentralDark = {
   data: string;
 };
 
+// === Types for harness weekly (RastroSemanalMcp) ===
+export type SemanaHarness = {
+  schema: string;
+  window: string;
+  observedAt: string;
+  coverage: "PARTIAL_CAPPED" | "PARTIAL_INSTRUMENTED";
+  capped: boolean;
+  totalObserved: number;
+  traced: number;
+  tracePctOfObserved: number | null;
+  pass: number;
+  fail: number;
+  unknown: number;
+  successPctOfDecided: number | null;
+  failurePctOfDecided: number | null;
+  unknownPctOfObserved: number | null;
+  avgDurationMs: number | null;
+  daily: Array<{ day: string; calls: number; pass: number; fail: number; unknown: number }>;
+  bySource: Array<{ name: string; calls: number; pass: number; fail: number; unknown: number }>;
+  topTools: Array<{ name: string; calls: number; pass: number; fail: number; unknown: number }>;
+};
+
+// === Types for tool call lens (ToolCallLensMcp) ===
+export type LensEvento = {
+  t: string;
+  level: string;
+  msg: string;
+  meta?: {
+    source?: string;
+    toolName?: string;
+    call_id?: string;
+    correlation_id?: string;
+    mission_id?: string;
+    mcp_host_pid?: number | null;
+    durationMs?: number | null;
+    exitCode?: number | null;
+    status?: "PASS" | "FAIL";
+  };
+};
+
+// === Types for sectorized logs (CentralDeLogsSetorizados) ===
+export type LogSetor = "all" | "mcp" | "agents" | "hermes" | "vscode" | "system" | "control" | "consciencia";
+export type EventoSetorizado = {
+  event_id: string;
+  timestamp: string;
+  sector: string;
+  source: string;
+  actor: string;
+  kind: string;
+  level: string;
+  badge: string;
+  key: string;
+};
+
 export type EstadoCentralDark = {
   gmail: Estado;
   githubLovable: Estado;
@@ -480,6 +534,131 @@ async function medirTailscaleCasa(): Promise<{ estado: Estado; fonte: string }> 
     });
   });
 }
+
+// === Server functions for ObservabilidadeCentralDark (replacing client-side fetch) ===
+
+export const lerHarnessSemanalMcp = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<SemanaHarness> => {
+    const { data: papel, error: erroPapel } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+
+    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+    try {
+      const base = apiBase();
+      const resposta = await fetch(`${base}/admin/api/metricas`, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: controller.signal,
+      });
+
+      if (resposta.status === 401 || resposta.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!resposta.ok) throw new Error("API_UNAVAILABLE");
+
+      const json = (await resposta.json()) as { harnessWeek?: SemanaHarness };
+      if (json.harnessWeek?.schema !== "centraldark.harness.weekly.v1") throw new Error("WEEKLY_NOT_DEPLOYED");
+      return json.harnessWeek;
+    } catch (erro) {
+      if (erro instanceof Error && (erro.message === "AUTH_REQUIRED" || erro.message === "API_UNAVAILABLE" || erro.message === "WEEKLY_NOT_DEPLOYED")) throw erro;
+      throw new Error("UNKNOWN");
+    } finally {
+      clearTimeout(timeout);
+    }
+  });
+
+export const lerToolCallLensMcp = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<LensEvento[]> => {
+    const { data: papel, error: erroPapel } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+
+    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+    try {
+      const base = apiBase();
+      const resposta = await fetch(`${base}/admin/api/logs?q=mcp_tool_call&limit=100`, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: controller.signal,
+      });
+
+      if (resposta.status === 401 || resposta.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!resposta.ok) throw new Error("MCP_LOG_STREAM_UNAVAILABLE");
+
+      const payload = (await resposta.json()) as { logs?: LensEvento[] };
+      if (!Array.isArray(payload.logs)) throw new Error("MCP_LOG_SCHEMA_UNKNOWN");
+      return payload.logs.filter(evento => evento.msg === "mcp_tool_call" && evento.meta?.source === "MCP_AUDIT");
+    } catch (erro) {
+      if (erro instanceof Error && ["AUTH_REQUIRED", "MCP_LOG_STREAM_UNAVAILABLE", "MCP_LOG_SCHEMA_UNKNOWN"].includes(erro.message)) throw erro;
+      throw new Error("UNKNOWN");
+    } finally {
+      clearTimeout(timeout);
+    }
+  });
+
+export const lerLogsSetorizados = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .validator((searchParams: URLSearchParams) => {
+    const sector = searchParams.get("sector") ?? "all";
+    const limit = searchParams.get("limit") ?? "100";
+    const since_minutes = searchParams.get("since_minutes") ?? "1440";
+    return { sector, limit, since_minutes };
+  })
+  .handler(async ({ context, data }): Promise<EventoSetorizado[]> => {
+    const { data: papel, error: erroPapel } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+
+    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+    try {
+      const base = apiBase();
+      const params = new URLSearchParams({ sector: data.sector, limit: data.limit, since_minutes: data.since_minutes });
+      const resposta = await fetch(`${base}/admin/api/logs?${params}`, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: controller.signal,
+      });
+
+      if (resposta.status === 401 || resposta.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!resposta.ok) throw new Error("CENTRAL_LOGS_HTTP_" + resposta.status);
+
+      const dados = (await resposta.json()) as { schema?: string; logs?: EventoSetorizado[] };
+      if (dados.schema !== "centraldark.central-logs.sanitized.v1" || !Array.isArray(dados.logs)) {
+        throw new Error("CENTRAL_LOGS_SECTOR_API_NOT_DEPLOYED");
+      }
+      return dados.logs;
+    } catch (erro) {
+      if (erro instanceof Error && ["AUTH_REQUIRED", "CENTRAL_LOGS_SECTOR_API_NOT_DEPLOYED"].includes(erro.message) || erro.message.startsWith("CENTRAL_LOGS_HTTP_")) throw erro;
+      throw new Error("UNKNOWN");
+    } finally {
+      clearTimeout(timeout);
+    }
+  });
 
 function estadoVideoScreenpipe(sonda: Probe): Estado {
   if (sonda.httpStatus !== 200) return sonda.estado;

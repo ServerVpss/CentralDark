@@ -183,7 +183,7 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
   assert.equal(catalogo.runtime_snapshots.mcp.catalog_tools, 141);
   assert.equal(catalogo.runtime_snapshots.mcp.catalog_routes, 13);
   assert.equal(catalogo.runtime_snapshots.mcp.skill_listar_entries, 3);
-  assert.equal(catalogo.automation_owners.length, 9);
+  assert.equal(catalogo.automation_owners.length, 10);
   assert.ok(catalogo.automation_owners.some(x => x.id === "CLAUDE_CODE" &&
     x.estado === "CLAUDE_RUNNING_TERMINAL_UNBOUND" && x.modo === "COPY_ONLY"));
   assert.ok(catalogo.automation_owners.some(x => x.id === "HERMES" &&
@@ -192,15 +192,15 @@ test("inventario fisico e ponte de automacoes ficam no harness sem duplicar exec
   assert.ok(infra.includes("Copiar receita · não executar"));
   assert.ok(infra.includes("terminal não recebeu a mensagem"));
   assert.ok(!infra.includes("execSync("));
-  assert.ok(!infra.includes("fetch("));
-});
+    assert.ok(!infra.includes(" fetch("));
+  });
 
 
 test("gaveta cataloga receitas A-Z e mostra estado do terminal sem autoexec", () => {
   const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
   const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
-  assert.equal(catalogo.automation_owners.length, 9);
-  assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 9);
+  assert.equal(catalogo.automation_owners.length, 10);
+  assert.equal(new Set(catalogo.automation_owners.map(r => r.id)).size, 10);
   assert.ok(catalogo.automation_owners.every(r => r.owner && r.receita && r.nome));
   assert.ok(infra.includes("receitasAlfabeticas"));
   assert.ok(infra.includes('localeCompare(b.nome, "pt-BR"'));

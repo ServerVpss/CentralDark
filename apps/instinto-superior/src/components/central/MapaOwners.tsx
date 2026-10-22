@@ -142,7 +142,7 @@ export function MapaOwners({
               🧿 Divergências · métricas auditáveis
             </h4>
             <p className="mt-1 text-xs text-muted-foreground">
-              Snapshot fixado: pacote C:\\CentralDark (12/10) × Casa K:\\ (15/10). Não representa
+              Snapshot fixado: pacote K:\\_archive\\c-centraldark-reconciliado-20261021 (12/10) × Casa K:\\ (15/10). Não representa
               saúde em tempo real.
             </p>
           </div>

@@ -450,6 +450,7 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
               Leitura combinada de <code>profiles</code> e <code>user_roles</code>.
             </p>
           </div>
+          <AdministracaoUsuariosCentralDark usuariosLocais={usuarios} carregandoLocal={loading} />
 
           <div className="panel mt-5 overflow-x-auto">
             <table className="w-full min-w-[620px] text-sm">
@@ -488,6 +489,184 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
         </TabsContent>
       </Tabs>
     </section>
+  );
+}
+
+type UsuarioAdminSeguro = { id: string; email?: string | null; full_name?: string | null; role?: string; plan_name?: string | null };
+type PapelEditavel = "user" | "admin";
+
+function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
+  usuariosLocais: UsuarioLinha[];
+  carregandoLocal: boolean;
+}) {
+  const [usuariosAdmin, definirUsuariosAdmin] = useState<UsuarioAdminSeguro[]>([]);
+  const [status, definirStatus] = useState("CONSULTANDO_ADMIN_USERS");
+  const [processando, definirProcessando] = useState(false);
+  const [selecionado, definirSelecionado] = useState("");
+  const [papel, definirPapel] = useState<PapelEditavel>("user");
+  const [nome, definirNome] = useState("");
+  const [email, definirEmail] = useState("");
+  const [senha, definirSenha] = useState("");
+  const [planos, definirPlanos] = useState<string[] | null>(null);
+
+  async function chamarAdmin(action: string, payload: Record<string, unknown> = {}) {
+    // O cliente identifica a sessão; a função admin-users valida JWT + has_role(admin) no servidor.
+    const { data: sessao, error: erroSessao } = await supabase.auth.getSession();
+    if (erroSessao || !sessao.session) throw new Error("AUTH_REQUIRED");
+    const { data, error } = await supabase.functions.invoke("admin-users", {
+      body: { action, ...payload },
+    });
+    if (error || data?.error) throw new Error(data?.error || error?.message || "ADMIN_USERS_UNAVAILABLE");
+    return data;
+  }
+
+  const carregarAdmin = useCallback(async () => {
+    try {
+      const { data: sessao } = await supabase.auth.getSession();
+      if (!sessao.session) { definirStatus("AUTH_REQUIRED"); return; }
+      const { data, error } = await supabase.functions.invoke("admin-users", {
+        body: { action: "list" },
+      });
+      if (error || data?.error || !Array.isArray(data?.users)) {
+        throw new Error(data?.error || error?.message || "ADMIN_USERS_UNAVAILABLE");
+      }
+      definirUsuariosAdmin(data.users as UsuarioAdminSeguro[]);
+      definirStatus("FONTE_ADMIN_AUTORIZADA");
+    } catch (erro) {
+      definirStatus("ADMIN_USERS_INDISPONIVEL: " + mensagemErro(erro));
+    }
+  }, []);
+
+  useEffect(() => { void carregarAdmin(); }, [carregarAdmin]);
+
+  const fonteAdmin = status === "FONTE_ADMIN_AUTORIZADA";
+  const usuarioSelecionado = usuariosAdmin.find(usuario => usuario.id === selecionado);
+  const contaSelecionavel = usuarioSelecionado?.role === "admin" || usuarioSelecionado?.role === "user";
+  const roleWriteReleased = false; // liberar somente após deploy + contraprova da Edge corrigida
+
+  async function criarUsuario(evento: React.FormEvent<HTMLFormElement>) {
+    evento.preventDefault();
+    if (!fonteAdmin || senha.length < 12 || !email.includes("@")) {
+      definirStatus("VALIDACAO_PENDENTE: e-mail e senha inicial de ao menos 12 caracteres");
+      return;
+    }
+    if (!window.confirm("Criar um novo usuário COMUM no Supabase CentralDark?")) return;
+    definirProcessando(true);
+    try {
+      await chamarAdmin("create", { email: email.trim(), password: senha, full_name: nome.trim(), role: "user" });
+      definirEmail(""); definirNome("");
+      definirStatus("USER_CREATED: aguarda readback do cadastro");
+      await carregarAdmin();
+    } catch (erro) { definirStatus("CREATE_FAILED: " + mensagemErro(erro)); }
+    finally { definirSenha(""); definirProcessando(false); }
+  }
+
+  async function aplicarPapel() {
+    if (!fonteAdmin || !roleWriteReleased || !usuarioSelecionado || !contaSelecionavel) return;
+    if (!window.confirm("Alterar o papel desta conta para " + papel + "? O servidor validará a autorização.")) return;
+    definirProcessando(true);
+    try {
+      await chamarAdmin("set_role", { user_id: usuarioSelecionado.id, role: papel });
+      definirStatus("ROLE_UPDATED: aguardando readback");
+      await carregarAdmin();
+    } catch (erro) { definirStatus("ROLE_FAILED: " + mensagemErro(erro)); }
+    finally { definirProcessando(false); }
+  }
+
+  async function enviarReset() {
+    if (!fonteAdmin || !usuarioSelecionado?.email || !window.confirm("Solicitar redefinição de senha para esta conta?")) return;
+    definirProcessando(true);
+    try {
+      await chamarAdmin("send_reset", { email: usuarioSelecionado.email });
+      definirStatus("RESET_REQUESTED");
+    } catch (erro) { definirStatus("RESET_FAILED: " + mensagemErro(erro)); }
+    finally { definirProcessando(false); }
+  }
+
+  async function lerPlanos() {
+    const { data, error } = await banco.from("plans").select("name, slug, is_active").order("display_order");
+    if (error) { definirStatus("PLANS_READ_FAILED: " + mensagemErro(error)); return; }
+    definirPlanos((data ?? []).map((plano: { name: string; slug: string; is_active: boolean }) =>
+      plano.name + " (" + plano.slug + ") · " + (plano.is_active ? "ativo" : "inativo")));
+  }
+
+  return (
+    <div className="panel mt-5 space-y-4 p-4" data-cd-owner="instinto.admin.users">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <strong className="text-sm">Gestão autenticada · Supabase existente</strong>
+        <Button type="button" size="sm" variant="outline" onClick={() => void carregarAdmin()}
+          disabled={processando || carregandoLocal}>Atualizar usuários</Button>
+      </div>
+      <p className="font-mono text-xs text-muted-foreground" role="status">
+        {status} · {fonteAdmin ? usuariosAdmin.length + " contas lidas via Edge Admin" : usuariosLocais.length + " perfis da listagem local (não equivalente a Admin API)"}
+      </p>
+      <form className="grid gap-3 sm:grid-cols-4" onSubmit={evento => void criarUsuario(evento)}>
+        <label className="text-xs">Nome
+          <input className="mt-1 w-full rounded border border-border bg-background p-2" value={nome}
+            onChange={evento => definirNome(evento.target.value)} autoComplete="name" maxLength={120} />
+        </label>
+        <label className="text-xs">E-mail
+          <input type="email" required className="mt-1 w-full rounded border border-border bg-background p-2"
+            value={email} onChange={evento => definirEmail(evento.target.value)}
+            autoComplete="off" maxLength={254} />
+        </label>
+        <label className="text-xs">Senha inicial
+          <input type="password" required minLength={12} autoComplete="new-password"
+            className="mt-1 w-full rounded border border-border bg-background p-2"
+            value={senha} onChange={evento => definirSenha(evento.target.value)} />
+        </label>
+        <Button type="submit" className="self-end" disabled={!fonteAdmin || processando}>
+          <Plus className="size-4" /> Adicionar usuário comum
+        </Button>
+      </form>
+      <div className="grid gap-3 sm:grid-cols-4">
+        <label className="text-xs">Conta para editar
+          <select aria-label="Selecionar conta" className="mt-1 w-full rounded border border-border bg-background p-2"
+            value={selecionado} onChange={evento => {
+              const id = evento.target.value;
+              definirSelecionado(id);
+              definirPapel(usuariosAdmin.find(u => u.id === id)?.role === "admin" ? "admin" : "user");
+            }} disabled={!fonteAdmin}>
+            <option value="">Selecionar...</option>
+            {usuariosAdmin.map(usuario => <option key={usuario.id} value={usuario.id}>
+              {usuario.full_name || usuario.email || usuario.id.slice(0, 8)} · {usuario.role || "UNKNOWN"}
+            </option>)}
+          </select>
+        </label>
+        <label className="text-xs">Papel autorizado
+          <select className="mt-1 w-full rounded border border-border bg-background p-2"
+            value={papel} disabled={!fonteAdmin || !contaSelecionavel || processando}
+            onChange={evento => definirPapel(evento.target.value as PapelEditavel)}>
+            <option value="user">Usuário</option>
+            <option value="admin">Administrador</option>
+            <option value="moderator" disabled>Moderador · backend pendente</option>
+            <option value="support" disabled>Suporte · RBAC pendente</option>
+            <option value="agent" disabled>Agente · RBAC pendente</option>
+          </select>
+        </label>
+        <Button type="button" className="self-end" variant="outline" disabled={!fonteAdmin || !roleWriteReleased || !contaSelecionavel || processando}
+          onClick={() => void aplicarPapel()}><ShieldCheck className="size-4" /> Alterar papel</Button>
+        <Button type="button" className="self-end" variant="outline" disabled={!fonteAdmin || !usuarioSelecionado?.email || processando}
+          onClick={() => void enviarReset()}>Solicitar redefinição</Button>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+        <p className="text-xs text-muted-foreground">
+          Conta selecionada: {usuarioSelecionado?.role ?? "nenhuma"} · plano: {usuarioSelecionado?.plan_name || "ASSOCIAÇÃO NÃO MEDIDA"}.
+          Troca de papel aguarda backend seguro publicado; suporte/agente e concessões por plano exigem PDP/PEP e RLS comprovados.
+        </p>
+        <Button type="button" variant="outline" size="sm" onClick={() => void lerPlanos()}>
+          Ver catálogo de planos
+        </Button>
+      </div>
+      {planos !== null ? <p className="text-xs text-muted-foreground">
+        {planos.length ? planos.join(" · ") : "Nenhum plano retornado."}
+      </p> : null}
+      <p className="text-[11px] text-muted-foreground">
+        Autoridade: Edge admin-users → JWT + has_role(admin). Histórico: audit_logs.
+        A listagem simples abaixo permanece disponível se a Edge estiver indisponível.
+        Ligar o botão não concede privilégios no cliente.
+      </p>
+    </div>
   );
 }
 

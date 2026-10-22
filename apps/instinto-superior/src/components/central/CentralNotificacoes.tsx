@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Bell, Copy, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { lerEstadoCentralDark, type EstadoCentralDark } from "@/lib/cockpit.functions";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -77,6 +80,9 @@ function Eventos({ items, limite }: { items: NotificationLog[]; limite: number }
             </p>
           </details>
           <p className="mt-2 text-[11px] text-muted-foreground">
+            Owner: {typeof evento.metadata?.["owner"] === "string" ? evento.metadata["owner"] : "não informado"}
+          </p>
+          <p className="mt-2 text-[11px] text-muted-foreground">
             Origem: {evento.origem} · {new Date(evento.created_at).toLocaleString("pt-BR")}
           </p>
         </li>
@@ -86,9 +92,18 @@ function Eventos({ items, limite }: { items: NotificationLog[]; limite: number }
 }
 
 type Props =
-  { modo: "sininho"; abrirCentral: () => void } | { modo: "painel"; abrirCentral?: never };
-export function CentralNotificacoes(props: Props) {
-  const [periodo, setPeriodo] = useState<PeriodoFiltro>("24h");
+  | { modo: "sininho"; abrirCentral: () => void; estadoLocal?: EstadoCentralDark }
+  | { modo: "painel"; abrirCentral?: never; estadoLocal?: EstadoCentralDark };
+export function CentralNotificacoes(entrada: Props) {
+  // Compartilha a consulta já utilizada pelo Cockpit (mesmo queryKey, sem segundo coletor).
+  const lerEstado = useServerFn(lerEstadoCentralDark);
+  const { data: estadoDoCockpit } = useQuery({
+    queryKey: ["centraldark", "estado-vivo"],
+    queryFn: () => lerEstado(),
+    refetchInterval: 60_000,
+  });
+  const props = { ...entrada, estadoLocal: entrada.estadoLocal ?? estadoDoCockpit };
+  const [periodo, setPeriodo] = useState<PeriodoFiltro>(props.modo === "sininho" ? "7d" : "24h");
   const [vistoAte, setVistoAte] = useState<number | null>(null);
   const { items, loading, erro, lastEventAt, realtimeStatus, refresh } =
     useNotificationsLog(periodo);
@@ -131,7 +146,7 @@ export function CentralNotificacoes(props: Props) {
             aria-label={`Central de Notificações: ${novos} eventos novos nesta sessão`}
             className="relative"
           >
-            <Bell className="size-4" />
+            <Bell className={"size-4 " + (novos > 0 ? "motion-safe:animate-pulse" : "")} />
             {novos > 0 ? (
               <span className="absolute -right-1 -top-1 rounded-full bg-destructive px-1 text-[10px] text-white">
                 {novos > 9 ? "9+" : novos}
@@ -144,7 +159,37 @@ export function CentralNotificacoes(props: Props) {
           <p className="text-xs text-muted-foreground">
             {estado} · Último evento: {prova}
           </p>
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <label htmlFor="notify-sino-periodo" className="text-muted-foreground">Histórico</label>
+            <select
+              id="notify-sino-periodo"
+              className="rounded-md border border-border bg-background p-1 text-xs"
+              value={periodo}
+              onChange={(e) => setPeriodo(e.target.value as PeriodoFiltro)}
+            >
+              <option value="1h">1 hora</option>
+              <option value="24h">24 horas</option>
+              <option value="7d">7 dias</option>
+            </select>
+            <Button type="button" size="sm" variant="outline" disabled={loading} onClick={() => void refresh()}>
+              <RefreshCw className="mr-1 size-3" /> Atualizar
+            </Button>
+          </div>
           {lista}
+          {props.estadoLocal ? (
+            <section aria-label="Estado da Forja nesta Casa" className="rounded-md border border-border/80 bg-muted/20 p-2 text-xs">
+              <p className="font-semibold">🏠 Casa · estado do Workspace</p>
+              <p className="mt-1">
+                Sala de Controle: {props.estadoLocal.casaSiteHttp === 200 && props.estadoLocal.casaSite === "PASS"
+                  ? "HTTP 200 · operacional nesta medição"
+                  : props.estadoLocal.casaSiteHttp === null
+                    ? "sem medição neste host"
+                    : "HTTP " + props.estadoLocal.casaSiteHttp + " · " + props.estadoLocal.casaSite}
+              </p>
+              <p className="mt-1 text-muted-foreground">Atualizado em: {props.estadoLocal.atualizadoEm}</p>
+              <p className="mt-1 text-muted-foreground">Leitura de estado pelo Cockpit; não é notificação gravada no ledger.</p>
+            </section>
+          ) : null}
           <Button
             type="button"
             size="sm"

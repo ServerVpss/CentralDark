@@ -674,6 +674,7 @@ export function postToken(req, res) {
             oauth_scope: ac.oauth_scope || "mcp admin",
         });
         log.info("oauth_token_issued", { cid: req.cid, client_id, gh_login: ac.gh_login, oauth_scope: ac.oauth_scope });
+
         res.json({
             access_token: pair.access.token,
             token_type: "Bearer",
@@ -706,6 +707,7 @@ export function postToken(req, res) {
             oauth_scope: rt.oauth_scope || "mcp",
         });
         log.info("oauth_token_refreshed", { cid: req.cid, client_id: rt.client_id, gh_login: rt.gh_login, oauth_scope: rt.oauth_scope });
+
         res.json({
             access_token: pair.access.token,
             token_type: "Bearer",

@@ -1,20 +1,33 @@
 ---
 name: centraldark-delegacao
-description: Delegar missões autorizadas de qualquer chat/agente conectado ao Hermes Kanban existente, reutilizando tarefa, owner, rota, receipt e contraprova, sem criar dispatcher paralelo.
+description: Delegar missões do Builder e chats autorizados pelo Hermes Kanban existente, com terminais conectados, escritor único, deduplicação e contraprova.
 version: 1.0.0
 owner: .agents/skills/centraldark-operational-method/SKILL.md
 catalog_owner: .agents/skills/skill-workshop/SKILL.md
 execution_owner: .agents/skills/autonomous-ai-agents/hermes-agent/SKILL.md
-tags: [centraldark, hermes, delegacao, kanban, mcp, chatgpt]
+tags: [centraldark, hermes, delegacao, kanban, mcp, chatgpt, builder, claude, codex]
 ---
 
 # CENTRALDARK — Delegação transversal e verificável
 
 ## Acionamento
-Use quando o CHEFE pedir **delegue ao Hermes**, quando um chat conectado precisar entregar execução local a um agente autorizado, ou quando houver uma missão já em andamento no Kanban. Não acione para conversa, resposta informativa ou trabalho sem intenção de delegação.
+Use quando o CHEFE pedir **delegue ao Hermes** ou **delegue tarefas do Builder a Hermes, Claude e Codex**, quando um chat conectado precisar entregar execução local a um agente autorizado, ou quando houver uma missão já em andamento no Kanban. Não acione para conversa, resposta informativa ou trabalho sem intenção de delegação.
 
 ## Identidade e autoridade
 A skill é uma receita portátil, **não** um novo executor, agente, scheduler, fila, servidor, autoridade ou credencial. O chat raciocina e encaminha; Hermes Kanban existente despacha; owner/escritor autorizado executa; realidade e receipts julgam. Uma conexão MCP ou um texto de skill **não** eleva permissões do cliente nem substitui instruções de sistema ou controles de segurança.
+
+## Builder e terminais — mesma delegação
+
+O Builder/Cockpit existente em apps/instinto-superior e a bancada VS Code da Casa (K:\ no Windows) são superfícies do mesmo organismo; não são uma segunda fila, dispatcher ou executor. Reutilizar Hermes Kanban, o contrato tipado e o envelope existentes.
+
+1. Dividir o Goal em escopos não sobrepostos (interface/preview, código, testes, runtime); conferir owner, dependências e evidência esperada de cada escopo.
+2. Consultar disponibilidade e autorização atuais de Hermes, Claude, Codex e Builder. Selecionar pela capacidade medida, não por papéis fixos: nome de terminal não prova CLI, CI, credencial ou acesso.
+3. Para cada escopo mutável, resolver ACTIVE_WRITER e tarefa no Kanban antes do dispatch. Leitura/testes podem ocorrer em paralelo; dois terminais não alteram o mesmo owner simultaneamente. Preservar TASK_ID e chave idempotente quando já existir.
+4. Usar apenas a rota de dispatch comprovada pelo owner. Não pressupor novos parâmetros --terminal nem campo ASSIGNED_TERMINAL no Kanban. Sem rota verificada, registrar NOT_PROVEN e NEXT_CURSOR; não simular despacho.
+5. Exigir ACK/readback do terminal e efeito observado: Builder (preview e alteração efetiva), Claude/Codex (diff, testes e SHA), Hermes (execução e estado do serviço quando aplicável). O autor da mutação não é sua própria contraprova independente.
+6. Encerrar somente escopos contraprovados. PREVIEW != DEPLOY, CI_GREEN != DEPLOYED, SPAWNED != COMPLETED, UNKNOWN != PASS.
+
+Não criar cópias da skill/contrato com sufixos de versão, novas filas, painéis ou scripts de quadrantes para representar capacidade já existente. Evoluir o mesmo owner; histórico fica no Git.
 
 ## Procedimento determinístico
 

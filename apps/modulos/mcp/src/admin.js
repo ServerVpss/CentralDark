@@ -17,7 +17,7 @@ import { injectPatternAdmin } from "./admin-patterns-ui.js";
 import { getBuildkiteStatus } from "./buildkite-integration.js";
 import { getGrokControlDashboard, setGrokControlSelection } from "./grok-control.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
-import { getHarnessWeeklySummary } from "./agent-observability.js";
+import { getHarnessWeeklySummary, queryCentralLogs } from "./agent-observability.js";
 import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
 import { subscribeAuditEvents } from "./audit-logger.js";
@@ -1610,6 +1610,34 @@ export async function adminTailscale(req, res) {
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────
 export function adminBuscarLogs(req, res) {
     if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    // Projecao do funil setorizado JA existente. Sem alterar a resposta legacy
+    // de /admin/api/logs quando sector nao foi solicitado.
+    if (req.query?.sector != null) {
+        const sector = String(req.query.sector || "").trim().toLowerCase();
+        const allowed = new Set(["all", "mcp", "agents", "hermes", "vscode", "system", "control", "consciencia"]);
+        if (!allowed.has(sector)) { res.status(400).json({ error: "sector_not_allowed" }); return; }
+        const since = Math.max(1, Math.min(10080, Number(req.query.since_minutes) || 60));
+        const limit = Math.max(1, Math.min(200, Number(req.query.limit) || 100));
+        const sourceRows = queryCentralLogs({ sector: sector === "all" ? undefined : sector, since_minutes: since, limit });
+        const q = String(req.query.q || "").toLowerCase().slice(0,80);
+        const logs = sourceRows.filter(row => !q ||
+            [row.kind, row.source, row.actor, row.key].some(value => String(value || "").toLowerCase().includes(q)))
+            .map(row => ({
+                event_id: String(row.event_id || "").slice(0,120),
+                timestamp: String(row.timestamp || "").slice(0,64),
+                sector: String(row.sector || "").slice(0,80),
+                source: String(row.source || "").slice(0,160),
+                actor: String(row.actor || "").slice(0,160),
+                kind: String(row.kind || "").slice(0,120),
+                level: String(row.level || "").slice(0,32),
+                badge: String(row.badge || "").slice(0,8),
+                key: String(row.key || "").slice(0,160),
+                // Nunca transportar data bruta, comandos, stdout, paths, secrets ou cookies.
+            }));
+        res.setHeader("Cache-Control", "no-store");
+        res.json({ schema: "centraldark.central-logs.sanitized.v1", sector, count: logs.length, logs });
+        return;
+    }
     const rota = String(req.query.rota || "").toLowerCase();
     const cid = String(req.query.cid || "").toLowerCase();
     const level = String(req.query.level || "").toLowerCase();
@@ -1951,6 +1979,91 @@ export function adminTestarSse(req, res) {
     res.json({ ok: true, cid: req.cid, ts: new Date().toISOString() });
 }
 
+// ─── getAdminCatalog ──────────────────────────────────────────────────────
+// Endpoint: GET /admin/catalog
+// Descrição: Retorna o inventário de tools MCP com filtros, busca e paginação.
+// Segue a especificação em cockpit-inventario-especificacao.md
+// Integra ao registry toolCorrespondence do receipt MCP-RECEIPT-ALIASING-JSONRPC.md
+export async function getAdminCatalog(req) {
+    const { provider, search, page = 1, limit = 20 } = req.query || {};
+
+    // Input validation
+    if (typeof limit !== 'number' || limit < 1 || limit > 100) {
+        limit = 20;
+    }
+    if (typeof page !== 'number' || page < 1) {
+        page = 1;
+    }
+
+    // Start with all declared tools
+    let tools = ALL_TOOLS.slice();
+
+    // 1. Filtro por Provider (quando especificado)
+    if (provider) {
+        tools = tools.filter((tool) => tool.provider === provider);
+    }
+
+    // 2. Termo de Busca (match em alias, original ou description)
+    if (search) {
+        const searchLower = String(search).toLowerCase();
+        tools = tools.filter((tool) => {
+            const aliasMatch = (tool.alias || '').toLowerCase().includes(searchLower);
+            const originalMatch = (tool.original || '').toLowerCase().includes(searchLower);
+            const descMatch = (tool.description || '').toLowerCase().includes(searchLower);
+            return aliasMatch || originalMatch || descMatch;
+        });
+    }
+
+    // 3. Total reflete o conjunto filtrado
+    const total = tools.length;
+    const pages = Math.ceil(total / limit);
+
+    // 4. Paginação (1-indexed)
+    const currentPage = page;
+    const startIndex = (currentPage - 1) * limit;
+    const endIndex = Math.min(currentPage * limit, total);
+    const pageTools = tools.slice(startIndex, endIndex);
+
+    // 5. Ordem Determinística baseada no registry de alias (hash-based)
+    // Tools são sempre retornadas na mesma ordem para o mesmo conjunto
+    // A ordem já vem definida pelo catálogo - hash-based ordering garante consistência
+
+// 6. Estrutura do retorno com alias e original
+    // Padrão do receipt: names > 64 chars recebem alias hash-based (~32 chars)
+    // Para o catálogo, usamos o name como original e geramos o alias quando > 64 chars
+    const resultTools = pageTools.map((tool) => {
+        const originalName = tool.name;
+        // Alias: hash-based truncation se name > 64 chars, senão usado como-is
+        const aliasName = originalName.length > 64
+            ? `${originalName.substring(0, 32)}...${Math.abs(hash(originalName)) % 100000}`
+            : originalName;
+        return {
+            alias: aliasName,
+            original: originalName,
+            provider: tool.provider || 'unknown',
+            description: tool.description || '',
+            category: tool.group || 'uncategorized',
+        };
+    });
+
+    // Helper: hash simples para suffix de alias
+    function hash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return Math.abs(hash).toString(36);
+    }
+    return {
+    total: total,
+    pages: pages,
+    currentPage: currentPage,
+    limit: limit,
+    tools: resultTools,
+};
+}
 export function bootstrapAdminLogCapture() {
     for (const level of ["debug", "info", "warn", "error"]) {
         const orig = log[level].bind(log);
