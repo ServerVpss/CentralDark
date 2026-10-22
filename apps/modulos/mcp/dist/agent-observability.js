@@ -1,3 +1,5 @@
+import { summarizeHarnessWeekRows } from "./harness-weekly-stats.js";
+export { summarizeHarnessWeekRows } from "./harness-weekly-stats.js";
 import fs from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -960,5 +962,12 @@ export function getAgentObservabilityStatus() {
             remote_house_pc: "ONLY_WHEN_BRIDGE_ONLINE",
         },
     };
+}
+export function getHarnessWeeklySummary() {
+    const limit = 2000;
+    const mcp = queryCentralLogs({ since_minutes: 10080, limit, sector: "mcp", kind: "mcp_tool_call" });
+    const agentEvents = queryCentralLogs({ since_minutes: 10080, limit, sector: "agents" })
+        .filter(x => ["agent_tool_call", "grok_tool_started"].includes(x.kind));
+    return summarizeHarnessWeekRows([...mcp, ...agentEvents], { capped: mcp.length >= limit || agentEvents.length >= limit });
 }
 //# sourceMappingURL=agent-observability.js.map
