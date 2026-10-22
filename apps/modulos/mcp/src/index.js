@@ -23,6 +23,7 @@ import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 import { createDevicePairingRouter } from "./device-pairing.js";
+import { isAdmin as isCockpitAdmin } from "./admin.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
 process.on("uncaughtException", (err) => {
@@ -113,7 +114,64 @@ app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 // V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
 // Owner existente: pareamento de dispositivos com aprovacao admin e token one-shot.
-app.use("/device", createDevicePairingRouter());
+app.use("/device", createDevicePairingRouter({ cookieAdmin: isCockpitAdmin }));
+
+app.get("/admin/pairing", (req, res) => {
+  if (!isCockpitAdmin(req)) { res.redirect(302, "/admin"); return; }
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.type("text/html").send(\`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CentralDark | Pareamento</title><style>
+body{font:16px/1.5 system-ui;background:#0a1719;color:#f1f5f9;max-width:720px;margin:5vh auto;padding:20px}
+button,input{font:inherit;padding:10px;margin:5px 0;border-radius:7px}button{cursor:pointer;margin-right:8px}
+input{width:95%;background:#122629;color:white;border:1px solid #49716e}section{border:1px solid #315756;padding:20px;margin:15px 0;border-radius:12px}
+small{color:#b8c8cc}#status{white-space:pre-wrap}li{margin:8px 0}
+</style></head><body><h1>CentralDark · dispositivos</h1>
+<p>Mesmo MCP e mesma identidade administrativa. O código temporário nasce no dispositivo e expira em dois minutos.</p>
+<section><h2>Aprovar dispositivo</h2>
+<label>ID do pareamento</label><input id="pairid" autocomplete="off" placeholder="Cole o ID exibido pela extensão">
+<label>Código temporário</label><input id="paircode" autocomplete="off" placeholder="XXXXXXXX-XXXXXXXX">
+<button id="approve">Aprovar</button><small>Nunca copie chave administrativa para a extensão.</small></section>
+<section><h2>Dispositivos</h2><button id="reload">Atualizar lista</button><ul id="devices"></ul></section>
+<p id="status" role="status" aria-live="polite"></p>
+<p><a href="/admin" style="color:#91e0d2">Voltar ao Admin</a></p>
+<script>
+const headers={'Content-Type':'application/json','X-CentralDark-Intent':'pairing-admin'};
+const status=document.getElementById('status');
+async function api(path,options={}) {
+ const response=await fetch('/device'+path,{credentials:'same-origin',headers,...options});
+ const data=await response.json();if(!response.ok||data.ok===false)throw Error(data.error||('HTTP '+response.status));return data;
+}
+async function reload(){
+ const ul=document.getElementById('devices');ul.replaceChildren();
+ try{
+  const data=await api('/devices');
+  for(const d of data.devices){
+   const li=document.createElement('li');
+   const label=document.createElement('span');
+   label.textContent=(d.device_name||'dispositivo')+' · '+d.status+' · ID '+d.device_id;
+   li.append(label,document.createTextNode(' '));
+   const revoke=document.createElement('button');revoke.textContent='Revogar';
+   revoke.addEventListener('click',async()=>{
+    if(!confirm('Revogar acesso de '+(d.device_name||'dispositivo')+'?'))return;
+    try{await api('/devices/revoke',{method:'POST',body:JSON.stringify({device_id:d.device_id})});status.textContent='Acesso revogado';await reload()}catch(e){status.textContent=String(e.message)}
+   });li.append(revoke);ul.append(li);
+  }if(!data.devices.length)ul.textContent='Nenhum dispositivo pareado';
+ }catch(e){status.textContent=String(e.message)}
+}
+document.getElementById('reload').addEventListener('click',reload);
+document.getElementById('approve').addEventListener('click',async()=>{
+ const id=document.getElementById('pairid').value.trim();
+ const code=document.getElementById('paircode').value.trim().toUpperCase();
+ if(!id||!code){status.textContent='Informe ID e código';return}
+ try{const result=await api('/pair/approve',{method:'POST',body:JSON.stringify({id,code})});status.textContent='Aprovação confirmada para ID '+result.deviceId;await reload()}
+ catch(e){status.textContent=String(e.message)}
+});
+reload();
+</script></body></html>\`);
+});
+
 
 app.post("/integrations/buildkite/webhook", (req, res) => {
     const result = handleBuildkiteWebhook(req, res);
