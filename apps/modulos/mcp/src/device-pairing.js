@@ -75,6 +75,7 @@ export function createDevicePairingStore(options = {}) {
     prune();
     const item = pending.get(String(pairId));
     if (!item || item.expiresAt <= now()) return { ok: false, error: "pair_expired_or_missing" };
+    if (item.deviceId) return { ok: false, error: "pair_already_approved" };
     if (!safeEqual(item.code, String(code || "").toUpperCase())) return { ok: false, error: "pair_code_mismatch" };
     const token = randomBytes(32).toString("base64url");
     const refreshToken = randomBytes(40).toString("base64url");
@@ -136,6 +137,14 @@ export function createDevicePairingStore(options = {}) {
     writeRegistry(registry);
     return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };
   }
+  function revoke({ deviceId }) {
+    const registry = readRegistry();
+    const index = registry.devices.findIndex((device) => device.device_id === String(deviceId));
+    if (index === -1) return { ok: false, error: "device_not_found" };
+    registry.devices.splice(index, 1);
+    writeRegistry(registry);
+    return { ok: true, revoked: true };
+  }
   function listDevices() {
     const registry = readRegistry();
     const t = now();
@@ -144,13 +153,25 @@ export function createDevicePairingStore(options = {}) {
       status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
     }));
   }
-  return { start, approve, status, heartbeat, refresh, listDevices, registryPath };
+  return { start, approve, status, heartbeat, refresh, listDevices, revoke, registryPath };
 }
 
 export function createDevicePairingRouter(options = {}) {
   const router = express.Router();
   const store = options.store || createDevicePairingStore(options);
   const isAdmin = options.isAdmin || ((req) => safeEqual(bearerFrom(req), process.env.CENTRALDARK_ADMIN_KEY || "__missing__"));
+  const sameOrigin = (req) => {
+    const origin = String(req.headers.origin || "");
+    if (!origin) return true; // Clientes nativos sem Origin precisam continuar aceitos.
+    try { return new URL(origin).host === String(req.headers.host || ""); }
+    catch { return false; }
+  };
+  const requireAdmin = (req, res) => {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false, error: "admin_auth_required" }); return false; }
+    if (!sameOrigin(req)) { res.status(403).json({ ok: false, error: "origin_mismatch" }); return false; }
+    return true;
+  };
+  const escapeHtml = (text) => String(text).replace(/[&<>"\']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]));
 
   router.post("/pair/start", (req, res) => {
     const pair = store.start({ deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
@@ -161,7 +182,7 @@ export function createDevicePairingRouter(options = {}) {
     res.status(result.status === "denied" ? 403 : 200).json(result);
   });
   router.post("/pair/approve", (req, res) => {
-    if (!isAdmin(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    if (!requireAdmin(req, res)) return;
     const result = store.approve({ pairId: req.body?.id, code: req.body?.code, deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
     res.status(result.ok ? 200 : 400).json(result);
   });
@@ -174,8 +195,21 @@ export function createDevicePairingRouter(options = {}) {
     res.status(result.ok ? 200 : 401).json(result);
   });
   router.get("/devices", (req, res) => {
-    if (!isAdmin(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    if (!requireAdmin(req, res)) return;
     res.json({ ok: true, devices: store.listDevices() });
+  });
+  router.post("/devices/revoke", (req, res) => {
+    if (!requireAdmin(req, res)) return;
+    const result = store.revoke({ deviceId: req.body?.device_id });
+    res.status(result.ok ? 200 : 404).json(result);
+  });
+  // Aprovação na própria superfície MCP, usando o login admin já existente.
+  // Nunca envia pair_secret, token ou chave administrativa para o HTML.
+  router.get("/admin", (req, res) => {
+    if (!requireAdmin(req, res)) return;
+    res.set("Cache-Control", "no-store");
+    res.set("Referrer-Policy", "no-referrer");
+    res.type("html").send(`<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>CentralDark · Parear dispositivo</title><style>body{font:16px system-ui;background:#080f1e;color:#eef6ff;padding:3rem;max-width:720px;margin:auto}section{border:1px solid #345174;border-radius:16px;padding:22px}label{display:block;margin:12px 0}input{padding:12px;width:95%;max-width:460px}button{padding:12px 18px;background:#ecc443;color:#141414;border:0;border-radius:8px;font-weight:bold}small{color:#a7bad4}</style><section><h1>🪬 CentralDark · Pareamento MCP</h1><p>Autorize apenas códigos exibidos em um dispositivo que você reconhece.</p><form action="/device/pair/approve" method="post"><label>ID do pareamento<input name="id" required maxlength="80" autocomplete="off"></label><label>Código temporário<input name="code" required pattern="[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}" maxlength="9" autocomplete="off"></label><button type="submit">Aprovar dispositivo</button></form><p><small>Código expira em 2 minutos. Apenas o administrador autenticado aprova. O dispositivo recebe seu token por canal separado.</small></p><a href="/admin">Voltar ao MCP Admin</a></section></html>`);
   });
   return router;
 }
