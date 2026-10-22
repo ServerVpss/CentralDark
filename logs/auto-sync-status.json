@@ -1,1 +1,11 @@
-{"status":"SYNCED","head":"da76335","origin_main":"da76335","branch":"main","pm2_error":"FIXED","recipe_status":"CANONICAL_FALLBACK_RECIPE"}
+{
+  "schema": "centraldark.auto-sync-status.v1",
+  "t": "2026-10-22T04:05:00+00:00",
+  "result": "SYNCED",
+  "reason": "VPS converged to canonical main - 3 stars connected",
+  "head": "e6d93e5f4afd8db120998dfe5687b2d8ca81bd62",
+  "origin_main": "e6d93e5f4afd8db120998dfe5687b2d8ca81bd62",
+  "branch": "main",
+  "owner": "scripts/vps/auto-sync-main.sh",
+  "runtime_deploy": "CANONICAL_FALLBACK_RECIPE"
+}
