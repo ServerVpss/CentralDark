@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 const admin = readFileSync(new URL("../src/tools/core/mcp-admin.js", import.meta.url), "utf8");
 const diag = readFileSync(new URL("../src/tools/core/mcp-diagnostics.js", import.meta.url), "utf8");
-test("18 canonical routes include all four canary bindings", () => {
+test("18 canonical routes include all five canary bindings", () => {
   const routes = admin.match(/const AUTHORIZED_ROUTE_CATALOG = Object.freeze\(\[([\s\S]*?)\]\);/)?.[1] ?? "";
   assert.equal([...routes.matchAll(/\bid: "/g)].length, 18, "unexpected route cardinality");
   for (const id of ["CASA_NATIVE_PID_INVENTORY", "ZENDRIVE_VSCODE_REMOTE_SSH", "FIGMA_MCP_ACCOUNT", "FIGMA_CENTRALDARK_FIGJAM", "RDC_VPS_CENTRALDARK_OS"]) {
