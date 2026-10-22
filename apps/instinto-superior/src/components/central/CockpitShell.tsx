@@ -88,6 +88,7 @@ type NativeUnigramBridge = {
 function nativeUnigramBridge(): NativeUnigramBridge | undefined {
   if (typeof window === "undefined") return undefined;
   return (window as Window & { centraldark?: NativeUnigramBridge }).centraldark;
+}
 
 const HARNESS_DESTINOS = COCKPIT_ABAS;
 
