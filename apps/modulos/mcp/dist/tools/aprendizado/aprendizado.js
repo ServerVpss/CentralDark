@@ -50,8 +50,9 @@ async function lerArquivo(token, path) {
             return Buffer.from(f.content, "base64").toString("utf-8");
         return "";
     }
-    catch {
-        return "";
+    catch (error) {
+        // Falha de leitura não significa arquivo vazio: impedir sobrescrita do histórico.
+        throw new Error(`Falha ao ler ${path} no GitHub; gravação bloqueada para preservar aprendizados`, { cause: error });
     }
 }
 async function escreverArquivo(token, path, conteudo, mensagem) {
