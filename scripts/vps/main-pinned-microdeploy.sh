@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# #OBSERVACOES# | MAIN_PINNED_MCP_SKILL_CATALOG_ONLY
+# @owner: scripts/vps/main-pinned-microdeploy.sh
+# @doc_ref: docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.md
+# @last_updated: 2026-10-22T04:25:00.000Z
+# @scope: allowlisted full skill-catalog quartet; no broad native MCP promotion.
 set -Eeuo pipefail
 
 REPO="${CENTRALDARK_REPO:-/root/CentralDark}"
@@ -8,6 +13,7 @@ OWNER=""
 SOURCE=""
 DRY_RUN=0
 FILES=()
+MCP_SKILL_CATALOG_DELTA=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -69,8 +75,26 @@ if [[ "$OWNER" == "mcp" ]]; then
       apps/modulos/mcp/src/index.js|apps/modulos/mcp/dist/index.js) ;;
       # Promovido 2026-10-08: F1_GIT do One Heart (teste tests/operational-telemetry.test.mjs).
       apps/modulos/mcp/src/operational-telemetry.js|apps/modulos/mcp/dist/operational-telemetry.js) ;;
+      # Mesma skill existente: os dois módulos e seus dist devem viajar juntos.
+      apps/modulos/mcp/src/tools/skills/skill.js|apps/modulos/mcp/dist/tools/skills/skill.js|apps/modulos/mcp/src/tools/skills/catalog-index.js|apps/modulos/mcp/dist/tools/skills/catalog-index.js)
+        MCP_SKILL_CATALOG_DELTA=1 ;;
       *) echo "MCP_NATIVE_FILESET_NOT_APPROVED=$rel"; exit 6 ;;
     esac
+  done
+fi
+
+# Skill imports catalog-index; never promote a partial src/dist dependency graph.
+if [[ "$OWNER" == "mcp" && "$MCP_SKILL_CATALOG_DELTA" == 1 ]]; then
+  for required in \
+    apps/modulos/mcp/src/tools/skills/skill.js \
+    apps/modulos/mcp/dist/tools/skills/skill.js \
+    apps/modulos/mcp/src/tools/skills/catalog-index.js \
+    apps/modulos/mcp/dist/tools/skills/catalog-index.js; do
+    found=0
+    for candidate in "${FILES[@]}"; do
+      if [[ "$candidate" == "$required" ]]; then found=1; break; fi
+    done
+    [[ "$found" == 1 ]] || { echo "MCP_SKILL_FILESET_INCOMPLETE=$required"; exit 7; }
   done
 fi
 
@@ -94,8 +118,21 @@ fi
 git -C "$SCRATCH" reset --hard "$SOURCE" >/dev/null
 git -C "$SCRATCH" clean -fdx >/dev/null
 
+# Gate isolated in the canonical scratch, before touching the live native runtime.
+if [[ "$MCP_SKILL_CATALOG_DELTA" == 1 ]]; then
+  command -v node >/dev/null 2>&1 || { echo "MCP_SKILL_NODE_MISSING"; exit 8; }
+  for rel in "${FILES[@]}"; do node --check "$SCRATCH/$rel" || { echo "MCP_SKILL_SYNTAX_FAIL=$rel"; exit 8; }; done
+  node --test "$SCRATCH/apps/modulos/mcp/tests/skill-catalog-unificado.test.mjs" \
+    "$SCRATCH/apps/modulos/mcp/tests/centraldark-hermes-delegacao-contract.test.mjs" \
+    || { echo "MCP_SKILL_TESTS_FAIL"; exit 8; }
+  echo "MCP_SKILL_CATALOG_PRETEST=PASS"
+fi
+
 mcp_tool_count() {
   curl -fsS --max-time 3 "$TOOLS" | python3 -c 'import json,sys; x=json.load(sys.stdin); print(len(x.get("tools",x) if isinstance(x,dict) else x))'
+}
+mcp_tool_names() {
+  curl -fsS --max-time 3 "$TOOLS" | python3 -c 'import json,sys; x=json.load(sys.stdin); items=x.get("tools",[]) if isinstance(x,dict) else x; print("\\n".join(sorted(z["name"] for z in items if isinstance(z,dict) and isinstance(z.get("name"),str))))'
 }
 require_mcp_runtime_owner() {
   [[ -d "$RUNTIME_DIR" ]] || { echo "MCP_NATIVE_RUNTIME_MISSING"; exit 31; }
@@ -137,6 +174,8 @@ if [[ "$OWNER" == "mcp" ]]; then
   require_mcp_runtime_owner
   PRE_PID="$(systemctl show "$SYSTEMD_SERVICE" --no-pager -p MainPID --value)"
   PRE_TOOLS="$(mcp_tool_count)"
+  PRE_TOOL_NAMES=""
+  if [[ "$MCP_SKILL_CATALOG_DELTA" == 1 ]]; then PRE_TOOL_NAMES="$(mcp_tool_names)"; fi
 else
   PRE_PID=""
   PRE_TOOLS=""
@@ -229,7 +268,26 @@ if [[ "$OWNER" == "mcp" ]]; then
   POST_PID="$(systemctl show "$SYSTEMD_SERVICE" --no-pager -p MainPID --value)"
   curl -fsS --max-time 3 "$HEARTBEAT" | python3 -c 'import json,sys; x=json.load(sys.stdin); assert x.get("ok") is True and "operational" in x' || { echo "MCP_NATIVE_HEARTBEAT_FAILED"; exit 43; }
   POST_TOOLS="$(mcp_tool_count)"
-  [[ "$POST_TOOLS" == "$PRE_TOOLS" ]] || { echo "MCP_NATIVE_TOOL_COUNT_CHANGED=$PRE_TOOLS:$POST_TOOLS"; exit 44; }
+  if [[ "$MCP_SKILL_CATALOG_DELTA" == 1 ]]; then
+    POST_TOOL_NAMES="$(mcp_tool_names)"
+    python3 - "$PRE_TOOL_NAMES" "$POST_TOOL_NAMES" <<'PY'
+import sys
+previous, current = (set(value.splitlines()) for value in sys.argv[1:])
+required = {"skill_listar", "skill_buscar", "skill_instalar", "skill_status", "skill_atualizar"}
+if not required.issubset(current):
+    print("MCP_SKILL_CATALOG_REQUIRED_TOOLS_MISSING=" + ",".join(sorted(required - current)))
+    raise SystemExit(44)
+if not previous.issubset(current):
+    print("MCP_SKILL_CATALOG_REGRESSION=" + ",".join(sorted(previous - current)))
+    raise SystemExit(44)
+if current - previous - {"skill_buscar"}:
+    print("MCP_SKILL_CATALOG_UNRELATED_TOOL_ADDED=" + ",".join(sorted(current - previous - {"skill_buscar"})))
+    raise SystemExit(44)
+print("MCP_SKILL_CATALOG_TOOL_REGISTRY=PASS")
+PY
+  else
+    [[ "$POST_TOOLS" == "$PRE_TOOLS" ]] || { echo "MCP_NATIVE_TOOL_COUNT_CHANGED=$PRE_TOOLS:$POST_TOOLS"; exit 44; }
+  fi
 fi
 
 SOURCE="$SOURCE" MAIN_SHA="$MAIN_SHA" OWNER="$OWNER" BACKUP="$BACKUP" RECEIPT="$RECEIPT" TARGET_ROOT="$TARGET_ROOT" PRE_PID="$PRE_PID" POST_PID="$POST_PID" PRE_TOOLS="$PRE_TOOLS" POST_TOOLS="$POST_TOOLS" python3 - <<'PY'
