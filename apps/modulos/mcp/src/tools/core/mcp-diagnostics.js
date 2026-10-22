@@ -36,6 +36,7 @@ const LEGACY_REQUIRES_SAFETY_REVIEW = Object.freeze([
     "vps_limpar_pasta_projeto",
 ]);
 const EXPECTED_CANARY_ROUTES = Object.freeze([
+    "CASA_NATIVE_PID_INVENTORY",
     "ZENDRIVE_VSCODE_REMOTE_SSH",
     "FIGMA_MCP_ACCOUNT",
     "FIGMA_CENTRALDARK_FIGJAM",
