@@ -181,6 +181,12 @@ export function createDevicePairingRouter(options = {}) {
     const result = store.status({ pairId: req.query.id, pairSecret: req.query.secret });
     res.status(result.status === "denied" ? 403 : 200).json(result);
   });
+  // Alternativa ao GET: segredo nunca vai para query string, histórico ou referrer.
+  router.post("/pair/status", (req, res) => {
+    res.set("Cache-Control", "no-store");
+    const result = store.status({ pairId: req.body?.id, pairSecret: req.body?.secret });
+    res.status(result.status === "denied" ? 403 : 200).json(result);
+  });
   router.post("/pair/approve", (req, res) => {
     if (!requireAdmin(req, res)) return;
     const result = store.approve({ pairId: req.body?.id, code: req.body?.code, deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
