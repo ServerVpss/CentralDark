@@ -3162,9 +3162,51 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Contexto:** CHEFE confirmou o contrato da Casa: K:\ é a raiz Git/harness/cockpit/docs e ambiente de todas as IAs; F:\ guarda peso físico por junctions transparentes; C:\ não deve receber escritas intencionais da Forja. Receipt integral no PR #1873, comentário 6316911838; dono existente DELTA-CONTINUO.md + Lei dos Discos + Garimpo/Knowledge Compiler.
 - **Aprendizado:** Frase canônica literal do CHEFE: 'Tu quer que a CentralDark pense e trabalhe no K:, descarregue o peso no F:, preserve o conhecimento no Obsidian, cristalize código no GitHub e continue funcionando independentemente de qual IA esteja comandando a ferramenta.' K:\ raiz única, não K:\CentralDark. K:\_WORKER -> F:\_WORKER já medido como junction em 19/10; demais links atuais UNKNOWN. Sem novos owners/memórias/schedulers. npm/npx/pip/uv/bun: instalações persistentes próprias em K quando adequadas, caches/scratch em F usando K lógico, sem writes intencionais em C nem alteração TEMP global. Preservar worktrees ativos, bruto único e quarentena; antes de mudar conferir uso/hash/rollback/readback. Git main apenas código comprovado, VPS runtime necessário; F/Garimpo reutiliza Knowledge Compiler, Dream Review e Hermes sob demanda. Especificação e NEXT_CURSOR: https://github.com/ServerVpss/CentralDark/pull/1873#issuecomment-6316911838
 
+### 211. Catálogo runtime CentralDark — 13 rotas e validação contínua
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** Medição 2026-10-21: mcp_admin_status indica 141 tools, 20 destrutivas, 13 rotas, fingerprint 80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7. mcp_catalog_diff indica runtimeToolCount 86, expectedCount 22, 6 ferramentas esperadas faltando. CAS_CLOUD_RELAY, HERMES_SHELL e TAILSCALE_PRIVATE_ROUTE estão documentadas; serviço e execução Casa não comprovados. Casa Tailscale online com RDP 3389 aberto e SSH 22 fechado/filtrado.
+- **Aprendizado:** Reutilizar centraldark_unified_capability_catalog e mcp_admin_call como owners. Persistir identidade de todas as 13 rotas e fingerprints no owner existente; validar em cada startup e periodicamente contagens, catálogo, saúde real dos bindings, permissões, endpoint Casa↔VPS, prova de execução e receipts. Não marcar rota documentada como PASS runtime. Reconciliar divergência 141 vs 86 e seis tools missing antes de declarar Full Admin. Preferir CAS_CLOUD_RELAY/Tailscale/HERMES_SHELL existentes, não instalar outro executor nem usar Desktop Commander como rota primária. Ações sensíveis continuam com autorização canônica.
 
+### 212. Cline MCP: nome qualificado, PowerShell nativo e HTTP 401 esperado
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-21
+- **Contexto:** Na sessão de integração Cline↔MCP CentralDark (21/10/2026), o cliente tentou chamar vps_list_dir_safe sem o namespace, causando AI_NoSuchToolError antes da execução; o catálogo anunciava CentralDark__vps_list_dir_safe. No terminal PowerShell, usou switches CMD /b e /s em Get-ChildItem/dir, gerando ParserError ou ParameterBindingException. Web fetch anônimo de /admin/api/tools, /admin/api/metricas e /admin/api/logs retornou 401; /health/deep respondeu 200.
+- **Aprendizado:** Separar falha do CLIENTE (tool name sem namespace) de falha do MCP/VPS. Antes da tool call resolver nome EXATAMENTE como anunciado pelo catálogo atual: CentralDark__vps_list_dir_safe; usar mcp_admin_call autorizado se necessário sem simular ferramentas. No PowerShell usar Get-ChildItem -LiteralPath 'caminho' -Recurse para listar, nunca flags CMD /b ou /s nem string de array JSON. HTTP 401 sem cookie cd_admin em rotas /admin/api/* é proteção esperada, não erro do serviço; verificar endpoint admin/catalog separadamente com sessão legítima sem vazar segredo. Não tratar retorno MCP_TOOL_CALL_COMPLETED com status de payload UNKNOWN/false como sucesso do provedor. Testar antes/depois, registrar prova/contraprova e evitar mudanças desnecessárias no OAuth ou restart.
+
+### 213. Sacola de skills: distinguir manifestos locais do catálogo MCP em execução
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-21
+- **Contexto:** Em 21/10/2026 o Cline encontrou no manifesto local de skills dezenas de entradas, enquanto o MCP CentralDark skill_listar() retornou somente 4 skills portáteis. Contraprova independente: MCP retornou 4, mcp_admin_catalog({filter:'skill_buscar'}) retornou 0, e o código da main apps/modulos/mcp/src/tools/skills/skill.js + catalog-index.js implementa pesquisa autenticada paginada nas duas raízes skills/ e .agents/skills/, com origem e SHA. A VPS confirmou ambas as pastas presentes. O manifesto local e o ledger curator não foram auditados por esta ferramenta, e não provam skill carregada.
+- **Aprendizado:** Usar o Skill Workshop e o indexador MCP já existentes, nunca criar catálogo paralelo nem instalar tudo. Resolver roots separadas (K:/skills, projeto skills/, .agents/skills/, Hermes/skills), caminho exato, SHA e estado DISCOVERED_SOURCE_ONLY/LOADED/EXECUTED. Comparar main com runtime por ferramenta disponível e teste real skill_buscar; quando ausente, registrar RUNTIME_NOT_PROMOTED/UNKNOWN e aguardar gates/deploy autorizado. O manifesto .bundled_manifest enumera candidatas, não prova instalação. Recarregar apenas skills necessárias sob demanda; comparar SHA local e remoto antes de atualizar, e nunca executar conteúdo externo durante inventário.
+
+### 214. Skill Buscar Reconciliation
+- **Categoria:** outro
+- **Data:** 2026-10-21
+- **Contexto:** skill_buscar implementada no código MCP mas não exposta nas 4 skills ativas do runtime
+- **Aprendizado:** skill_buscar existe em K:\apps\modulos\mcp\src\tools\skills\skill.js (linha 175) com anotação 'Buscar skill no catálogo', mas não está entre as 4 skills ativas do MCP CentralDark (delegacao, mermaid, pretty-mermaid, vs-code-restore). Isso representa um gap de indexer parity.
+
+### 215. Checkpoint comprovado SSH Casa Windows e VPS Linux — preservar serviços existentes
+- **Categoria:** atalho
+- **Data:** 2026-10-21
+- **Contexto:** Em 21/10/2026, captura fornecida pelo CHEFE mostrou na Casa Windows PowerShell 7.6.6: Get-Service sshd inicialmente Stopped, seguido de Start-Service sshd e novo Get-Service sshd = Running (OpenSSH SSH Server). Na VPS, consulta operacional REAL pela ferramenta MCP mcp_admin_call/execute_command com confirmação autorizada executou `systemctl is-active ssh`: stdout active, exitCode 0. Contraprova `systemctl status ssh --no-pager`: Loaded enabled; Active active (running) desde 2026-10-19 10:02:05 UTC; Main PID 1208; ExecStartPre /usr/sbin/sshd -t status=0/SUCCESS; exitCode 0. Relatório anterior do Cline informou SSH Casa→VPS funcional por host público e host Tailscale; ponte Tailscale reportou PASS. VPS→Casa por SSH NÃO testado end-to-end; leitura anterior da porta 22 da Casa via bridge era CLOSED_OR_FILTERED, anterior à ativação local do serviço.
+- **Aprendizado:** Checkpoint: SSH na Casa = Running após start do serviço, conforme captura do CHEFE; SSH VPS = active+enabled comprovado pela leitura MCP e configuração válida; não foi necessário iniciar/reiniciar/alterar serviço na VPS. Preservar ambas as rotas Casa→VPS existentes (SSH e MCP) e não recriar chaves, liberar firewall ou iniciar sshd na VPS sem necessidade. Não confundir serviço ativo com conectividade bidirecional: próximo delta é testar VPS→Casa através do Tailscale com validação de rede, firewall e autenticação sem mexer em produção, se a missão requerer. Logs de tentativas SSH não autenticadas exigem observação de segurança mas não provam comprometimento. Guardar como receita reutilizável; serviço ativo != rota remota provada. Em caso de nova medição registrar readback atual e evidence boundary.
+
+### 216. Desktop Commander terceiro removido da dependência; CentralDark nativo é rota primária Casa↔VPS
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** CHEFE em 21/10/2026 decidiu eliminar totalmente a dependência operacional do Desktop Commander de terceiros e pediu recuperar CentralDark Desktop Commander nativo. Busca real na main encontrou docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md (PRIMARY_CONTROL_PLANE=CENTRALDARK_MCP; REMOTE_DESKTOP_COMMANDER=OPTIONAL_FALLBACK; LEGACY_REMOTE_ENABLED_BY_DEFAULT=false), scripts/remote-bridge/CentralDark-Remote-Bridge.ps1 (declara explicitamente 'CentralDark MCP e Hermes ACP operam sem Desktop Commander' e ignora o legado quando não habilitado) e owner docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md ainda com gate house_access_primary='Remote Desktop Commander' e exemplos legados. MCP CentralDark está operacional, Tailscale VPS→Casa identificou windows-casa online com tráfego, SSH Casa e VPS ativos. Acesso a processos Windows pelo novo executor nativo não foi comprovado nesta sessão.
+- **Aprendizado:** Regra vigente: DESKTOP_COMMANDER_THIRD_PARTY_REQUIRED=false; não chamar nem recomendar o conector mcp.desktopcommander.app; preservar como histórico sem apagá-lo ou reiniciá-lo. Control plane único MCP CentralDark OAuth; transporte privado Tailscale + SSH; execução Casa pelo CentralDark Desktop Commander/executor nativo ou Hermes ACP quando houver rota autorizada e prova. Reutilizar owners existentes: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md, scripts/remote-bridge/CentralDark-Remote-Bridge.ps1, docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md. Delta necessário: reconciliar o gate legado que ainda cita Remote Desktop Commander primário, mapear implementação real do executor nativo, testar comando read-only na Casa e obter ACK, registrar receipt. Tailscale home SSH OPEN != sessão shell Windows autenticada; UNKNOWN != PASS. Não criar MCP paralelo, não reativar legado, não presumir equivalência de nome como prova de capacidade.
+
+### 217. Regra Cockpit-in-the-Loop
+- **Categoria:** regra
+- **Data:** 2026-10-21
+- **Contexto:** Cline tenda marcar tarefa concluída apenas por código compilar; nova regra exige contraprova visual e funcional na interface de operação
+- **Aprendizado:** Não basta o código funcionar; a experiência do usuário precisa funcionar na mesma interface em que ele vai operar. Mudanças que afetam o cockpit exigem contraprova visual/funcional dos controles relacionados ao escopo alterado.
+
+<!-- CANARY_RECONCILIATION_PR1895_20261022: provisional branch lessons 211-214 remapped to canonical 218-221, while main 211-217 and original marker IDs are preserved. -->
 <!-- CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
-### 211. Linguagem profissional brasileira do Harness — humano na tela, diagnóstico nos detalhes
+### 218. Linguagem profissional brasileira do Harness — humano na tela, diagnóstico nos detalhes
 - **Categoria:** regra + correção de entendimento da intenção do CHEFE.
 - **Data:** 2026-10-21.
 - **Autoridade:** SEGREDO/CHEFE, após imagem do Mermaid `CHEFE → CentralDark → JARVIS/Hermes/Harness → estado operacional único → português natural/detalhes técnicos`.
@@ -3183,7 +3225,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 <!-- CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
-### 212. Observabilidade do Cockpit pelo browser conectado sem dependência de Desktop Commander
+### 219. Observabilidade do Cockpit pelo browser conectado sem dependência de Desktop Commander
 - **Categoria:** descoberta de rota / correção de comportamento.
 - **Data:** 2026-10-21.
 - **Erro:** tratar status de um dispositivo Desktop Commander como condição necessária para observar o Cockpit.
@@ -3193,7 +3235,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 <!-- /CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
 
 <!-- CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
-### 213. Design Center: sete identidades distintas, quatro peles ativas e três prévias comparáveis sem fusão
+### 220. Design Center: sete identidades distintas, quatro peles ativas e três prévias comparáveis sem fusão
 - **Categoria:** correção de interpretação + experimento visual controlado.
 - **Data:** 2026-10-21.
 - **Erro:** interpretar violeta/índigo de aplicativo de referência como nova paleta oficial do Cockpit. **Correção do CHEFE:** cores e design continuam os oficiais; referência externa é só ergonomia/funcionalidades.
@@ -3206,7 +3248,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 <!-- CENTRALDARK_LEARNING_214_JUKEBOX_20261021 -->
-### 214. Jukebox A–Z / J001–J301 — capacidade indexada, consumível por fonte, sem segunda arquitetura
+### 221. Jukebox A–Z / J001–J301 — capacidade indexada, consumível por fonte, sem segunda arquitetura
 - **Categoria:** descoberta ampliada / continuidade da sessão / roteamento de ferramentas.
 - **Data:** 2026-10-21.
 - **Intenção do CHEFE:** registro anterior #212 era curto, faltavam rotas alternativas, owners, fonte dos dados, distinções de prova, ferramentas existentes e um índice navegável completo por ordem alfabética **e** numérica. Criar uma Jukebox de navegação com reuso integral do cérebro existente, não outra IA/Hermes/MCP.
