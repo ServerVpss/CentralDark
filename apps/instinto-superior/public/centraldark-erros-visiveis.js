@@ -213,6 +213,7 @@
       'O que aconteceu: ' + x.simples + '\n' +
       'Mensagem técnica: ' + x.msg + '\n' +
       (x.onde ? 'Onde: ' + x.onde + '\n' : '') +
+      (x.controle ? 'Botão relacionado: ' + x.controle + '\n' : '') +
       (x.pilha ? 'Pilha:\n' + x.pilha + '\n' : '') +
       'Intenção: corrigir só esta parte, preservar o que funciona, testar de novo. UNKNOWN não é PASS.';
   }
@@ -289,7 +290,8 @@
       (lista.length ? lista.length + ' tipos · ' + total + ' ocorrências. Copie e mande pro Instinto corrigir só aquela parte.' : 'Nenhum erro visto até agora. Silêncio aqui não é prova de que está tudo certo: é só o que esta tela enxergou.') + '</div>' +
       lista.map(function (x) {
         return '<div class="it"><div class="s">' + esc(x.simples) + (x.vezes > 1 ? ' ×' + x.vezes : '') + '</div>' +
-          '<div class="m">' + esc(x.hora.toLocaleTimeString('pt-BR')) + ' · ' + esc(x.tipo) + '</div>' +
+          '<div class="m">' + esc(x.hora.toLocaleTimeString('pt-BR')) + ' · ' + esc(x.tipo) +
+          (x.controle ? ' · botão: ' + esc(x.controle) : '') + '</div>' +
           '<details><summary>detalhe técnico</summary><pre>' + esc(x.msg + (x.onde ? '\n' + x.onde : '') + (x.pilha ? '\n\n' + x.pilha : '')) + '</pre></details>' +
           '<div class="row"><button class="a p" data-acao="copiar" data-id="' + x.id + '">Copiar pro Instinto</button>' +
           (cfg.coracao ? '<button class="a" data-acao="enviar" data-id="' + x.id + '">Enviar ao coração</button>' : '') + '</div></div>';
