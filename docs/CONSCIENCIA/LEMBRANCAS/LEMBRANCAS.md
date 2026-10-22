@@ -1498,3 +1498,51 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Promovida:** sim
 
 Conteúdo: Regra viva do CHEFE: 'atormentar' é metáfora de memória que confronta cada DELTA com o histórico relevante antes da execução. JARVIS/SOL recupera owner, CURRENT e último verde; mantém uma caneta, reutiliza arquitetura, ancora legado ao novo e atua diretamente por ferramentas autorizadas, sem pedir ao CHEFE que rode comandos. Hermes só existe como executor participante após ACK real. Realidade/contraprova pós-efeito manda; UNKNOWN, mockup HTML, PING, queued, commit e CI de outro SHA não são PASS. O erro do BRIDHER HTML vendido como Builder Electron é proibição exemplificadora. Recuperar dossiê CENTRALDARK-CAIXINHA-LEMBRANCAS-INTEGRAL-20261017.md na conversa e o ledger privado `centraldark_sessao_consolidacao_20261017_ssh_builder_pr1844_ci` para detalhes; NEXT_CURSOR sempre.
+
+### [2026-10-20T22:57] Meta-Lupa: medir execução e descoberta por prova independente
+- **Data:** 2026-10-20
+- **Tags:** meta-lupa, contraprova, agentes, pesquisa, fixed-point
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-19
+- **Promovida:** nao
+
+Conteúdo: Integrar ao núcleo existente, sem novo cérebro/skill/ledger: separar conhecimento/resposta, execução de agente e descoberta científica. Exigir critério prévio, SHA/run correlacionado, readback independente, contraprova, auditoria de contaminação/corte histórico, derivação e validação independente; benchmarks não são probabilidade universal. Reutilizar Meta-Lupa, Meta-Grill, Fable, reconciliação e Fixed Point.
+
+### [2026-10-21T19:59] Missao CentralDark - Status VPS e Catalogos
+- **Data:** 2026-10-21
+- **Tags:** missao, vps, catalog, auth, receipt
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-20
+- **Promovida:** nao
+
+Conteúdo: Resumo das evidências coletidas durante a missão:
+
+1. ACESSO MCP: CONFIRMADO - Conexão Cline↔MCP operacional, 141 tools disponíveis, catalog v1-f8ff6720fec3
+
+2. ACESSO VPS DIRETO: BLOQUEADO - 
+   - VPS kernel delta: fetch failed, status UNKNOWN
+   - Tailscale: 401 provider error (auth issue)
+   - PM2: SyntaxError: Unexpected end of JSON input
+   - VPS 3 commits atrás da main branch (0fda697 vs 4b0ce5a7d9)
+
+3. ROTAS E AUTENTICAÇÃO:
+   - /health/deep: PUBLICO (200 sem auth) - retorna status VPS
+   - /admin/api/*: PROTEGIDO (401 anônimo) - tools, metricas, logs, linear, tailscale, etc.
+   - MCP published em https://mcp.centralldark.com/mcp com 13 rotas
+   - Catalog v1-f8ff6720fec3 (MCP) vs 153-54e72b14201d (VPS local)
+
+4. CATÁLOGO:
+   - getCatalogSummary em tools-catalog.js importado em admin.js line 12
+   - /admin/api/tools retorna summary do catálogo (requer cookie cd_admin)
+   - 153 tools no VPS local vs 141 no MCP published
+   - 6 tools esperados faltando no runtime (vps_kernel_delta_status, screenpipe_status, etc.)
+
+5. RECEIPT/F10_STATUS: UNKNOWN - receipt + next_cursor, precisa de fixo point ou resolução de bloqueios
+
+6. PRÓXIMOS PASSOS BLOQUEIOS:
+   - Resolver Tailscale auth (401 provider error)
+   - Sincronizar VPS com main branch (3 commits atrás)
+   - Corrigir PM2 SyntaxError
+   - Testar /admin/api/tools com sessão admin válida

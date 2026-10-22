@@ -109,3 +109,43 @@ export const lerConsumoPrivado = createServerFn({ method: "GET" })
       medidoEm: null as string | null,
     };
   });
+
+
+// Despacha somente o workflow canônico; o próprio workflow decide gates e squash.
+// A UI nunca recebe o token GitHub e o despacho não é prova de merge/deploy.
+export const solicitarPromocaoSegura = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("user_roles").select("role")
+      .eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (error) throw new Response("ADMIN_ROLE_CHECK_UNAVAILABLE", { status: 503 });
+    if (!data) throw new Response("FORBIDDEN", { status: 403 });
+
+    const token = process.env.CENTRALDARK_GITHUB_DISPATCH_TOKEN;
+    if (!token) return { state: "BLOCKED" as const, reason: "DISPATCH_TOKEN_NOT_CONFIGURED" };
+    try {
+      const response = await fetch(
+        "https://api.github.com/repos/ServerVpss/CentralDark/actions/workflows/autonomia-promocao.yml/dispatches",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ref: "main" }),
+          cache: "no-store",
+          redirect: "error",
+          signal: AbortSignal.timeout(10000),
+        },
+      );
+      if (response.status !== 204) {
+        return { state: "BLOCKED" as const, reason: `GITHUB_DISPATCH_HTTP_${response.status}` };
+      }
+      return { state: "DISPATCHED" as const, reason: "WORKFLOW_QUEUED_NOT_MERGED_OR_DEPLOYED" };
+    } catch {
+      return { state: "UNKNOWN" as const, reason: "DISPATCH_RESULT_UNCONFIRMED" };
+    }
+  });
