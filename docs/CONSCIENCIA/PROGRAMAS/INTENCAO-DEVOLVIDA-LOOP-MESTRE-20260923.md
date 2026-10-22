@@ -1127,3 +1127,6 @@ GOAL_ID + INTENT_FIXED
 
 **NEXT_CURSOR:** medir o HEAD e checks atuais do #1830; conciliar os quatro conflitos em worktree isolada sem tocar no checkout dirty da Casa, preservando 0.1.1 + avanços 0.1.3; rodar TypeScript/lint/build no SHA a promover; verificar galeria autenticada no cockpit realmente publicado; confrontar log cursor Casa/VPS; retomar o GOAL existente a partir do primeiro critério C01–C12 sem PASS. `ONE_SYSTEM_ONLY=true`.
 
+### 🌟 !MICHELIN — seta de qualidade do Loop Mestre (2026-10-21)
+
+A intenção do CHEFE acrescenta `🌟 !MICHELIN` ao **mesmo** `!CENTRALDARK` entre contraprova/remedição/Reality Judge e `!FIXED_POINT`; todos os gatilhos visíveis usam `!` ou `#`. O Michelin não é motor separado: `RULES.md` continua sendo a regra de três níveis. A estrela somente pode ser atribuída com provas materiais do mesmo SHA. Sem CI, deploy autenticado, Casa/VPS/logs, o estado é `UNKNOWN`. Owner do fluxo `MASTER-CYCLE.yml`, resolver `centraldark_master_cycle.py`, inventário `ADM-GATILHOS-OPERACIONAIS.json` e diagrama `FLOW-REGISTRY.json` permanecem existentes. `DOCUMENTED != EXECUTED`; `NEXT_CURSOR=MICHELIN_TRIGGER_CI_SAME_HEAD`.
