@@ -10,12 +10,10 @@ import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
-import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
@@ -52,6 +50,7 @@ import { BlocoEstado, type EstadoOperacional } from "@/components/central/Estado
 import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
 import { MapaOwners } from "@/components/central/MapaOwners";
+import { COCKPIT_ABAS } from "@/data/painel-unico";
 import { AutoSyncButton } from "@/components/central/AutoSyncButton";
 import { StatusPanel } from "@/components/central/StatusPanel";
 import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
@@ -90,23 +89,7 @@ function nativeUnigramBridge(): NativeUnigramBridge | undefined {
   if (typeof window === "undefined") return undefined;
   return (window as Window & { centraldark?: NativeUnigramBridge }).centraldark;
 
-const HARNESS_DESTINOS = [
-  { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
-  { id: "portal", titulo: "Portal", icone: "🌐", privado: false },
-  { id: "builder-bolt", titulo: "Builder Bolt", icone: "⚡", privado: false },
-  { id: "pr1873", titulo: "Mapa do PR #1873", icone: "📜", privado: false },
-  { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
-  { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
-  { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
-  { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
-  { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
-  { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
-  { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
-  { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
-  { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
-  { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
-  { id: "downloads", titulo: "Downloads", icone: "📦", privado: false },
-] as const;
+const HARNESS_DESTINOS = COCKPIT_ABAS;
 
 /** UI-first: catálogo visual selecionável, sem fingir conexões ou criar outro painel. */
 function MenuVisualCentralDark({ titulo, descricao, itens }: { titulo: string; descricao: string; itens: string[] }) {
@@ -255,6 +238,7 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const tituloAbaAtiva = COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
   const [harnessVisivel, definirHarnessVisivel] = useState(true);
@@ -297,10 +281,10 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   return (
     <main
       data-pele-cockpit={pele}
-      className={`min-h-dvh pb-52 ${pele === "default" ? "" : "cockpit-pele"}`}
+      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${pele === "default" ? "" : "cockpit-pele"}`}
     >
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 flex -translate-y-1/2 flex-col gap-2 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="CentralDark Gram" aria-label="CentralDark Gram" onClick={() => autenticado ? abrirDestino("gram") : abrirDestino("visao")}><MessagesSquare className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Goals" aria-label="Goals" onClick={() => abrirDestino("goals")}><Zap className="size-4" /></Button>
@@ -308,7 +292,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral direito" className="fixed right-1 top-1/2 z-40 flex -translate-y-1/2 flex-col gap-2 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral direito" className="fixed right-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Sistemas" aria-label="Sistemas" onClick={() => definirGaveta("right")}><PanelRight className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Hermes" aria-label="Hermes" onClick={() => abrirDestino("hermes")}><Terminal className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Configurar Harness" aria-label="Configurar Harness" onClick={() => definirGaveta("bottom")}><Settings2 className="size-4" /></Button>
@@ -321,7 +305,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("sync")}><RefreshCcw className="mr-1 size-4" /> Sync</Button>
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("downloads")}><Download className="mr-1 size-4" /> Pacotes</Button>
           <Button size="icon" variant="ghost" title="Configurar moldura" aria-label="Configurar moldura" onClick={() => definirGaveta("bottom")}><Wrench className="size-4" /></Button>
@@ -467,9 +451,19 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-14" id="centraldark-harness-abas">
-            <div className="sticky top-0 z-30 -mx-4 overflow-x-auto border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
-              <TabsList className="h-auto min-w-max justify-start">
+          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8 min-w-0" id="centraldark-harness-abas">
+            <div className="sticky top-0 z-30 -mx-4 min-w-0 border-y border-border bg-background/95 px-3 py-2 backdrop-blur sm:mx-0 sm:rounded-md sm:border" aria-label="Navegação do cockpit">
+              <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
+                <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                  <span className="max-w-36 truncate font-mono text-xs text-muted-foreground sm:max-w-60" title={tituloAbaAtiva}>{tituloAbaAtiva}</span>
+                  <Button type="button" size="sm" variant={abaAtiva === "visao" ? "default" : "ghost"} onClick={() => abrirDestino("visao")}>Visão</Button>
+                  <Button type="button" size="sm" variant={abaAtiva === "sync" ? "default" : "ghost"} onClick={() => abrirDestino("sync")}>Oficina</Button>
+                  <Button type="button" size="sm" variant={abaAtiva === "hermes" ? "default" : "ghost"} onClick={() => abrirDestino("hermes")}>Hermes</Button>
+                </div>
+                <details className="w-full min-w-0 rounded-md border border-border/70 bg-muted/20 p-1 sm:w-auto sm:flex-1" id="centraldark-todas-as-abas">
+                  <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as 25 áreas ▾</summary>
+                  <div className="mt-2 max-h-[min(60dvh,34rem)] overflow-y-auto p-1">
+                    <TabsList className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
                 <TabsTrigger value="visao">Visão geral</TabsTrigger>
                 <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
                 <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
@@ -498,6 +492,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
                 <TabsTrigger value="downloads">Downloads</TabsTrigger>
               </TabsList>
+                  </div>
+                </details>
+              </div>
             </div>
             <TabsContent value="pr1873" className="mt-8">
               <PainelPR1873 />
@@ -605,7 +602,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold">Arquitetura Viva do Cockpit</h2>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Visualização completa da estrutura: 9 deliverables, 7 abas, 5 sistemas, correlação total e FIXED_POINT 100%.
+                  Inventário histórico de 9 entregas e 5 sistemas. As 25 áreas estão no Mapa de Owners; runtime exige medição.
                 </p>
               </div>
               <ArchitectureVisualization />
@@ -763,6 +760,28 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   continuam processos independentes, governados pelos contratos existentes.
                 </p>
               </section>
+            </TabsContent>
+            <TabsContent value="forja-regras" className="mt-6">
+              <section className="rounded-xl border border-border bg-surface/50 p-4 sm:p-6">
+                <h2 className="text-xl font-semibold">📜 Regras da Forja</h2>
+                <p className="mt-2 text-sm text-muted-foreground">RULES.md e AGENTS.md são os owners. Abrir documentos não executa comandos.</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Button asChild variant="outline" size="sm"><a href="https://github.com/ServerVpss/CentralDark/blob/main/RULES.md" target="_blank" rel="noopener noreferrer">RULES.md ↗</a></Button>
+                  <Button asChild variant="outline" size="sm"><a href="https://github.com/ServerVpss/CentralDark/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md ↗</a></Button>
+                  <Button type="button" onClick={() => abrirDestino("forja")}>Abrir Forja</Button>
+                </div>
+              </section>
+            </TabsContent>
+            <TabsContent value="forja-inventario" className="mt-6">
+              <section className="rounded-xl border border-border bg-surface/50 p-4 sm:p-6">
+                <h2 className="text-xl font-semibold">🗂️ Inventário da Forja</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Reutiliza o Sistema e o Mapa de Owners já existentes; nenhuma ligação remota é presumida.</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Button type="button" onClick={() => abrirDestino(autenticado ? "sistema" : "visao")}>Abrir owner do inventário</Button>
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("raioxvivo")}>Conferir Raio-X</Button>
+                </div>
+              </section>
+            </TabsContent>
             <TabsContent value="agent-mode" className="mt-10">
               <div className="mb-8 space-y-6">
                 <div>
@@ -903,11 +922,11 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-border bg-surface/50 p-6">
-                  <h3 className="font-semibold">Status Atual da Forja</h3>
+                  <h3 className="font-semibold">Modelo da Forja — runtime não verificado</h3>
                   <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
                     <div>
                       <dt className="text-muted-foreground">HEAD</dt>
-                      <dd className="mt-1 font-mono">567d885fe8</dd>
+                      <dd className="mt-1 break-all font-mono">{dado?.mainSha ?? "UNKNOWN"}</dd>
                     </div>
                     <div>
                       <dt className="text-muted-foreground">Mode Ativo</dt>
@@ -921,7 +940,7 @@ REUSE: before_create (sem duplicação)`}
                     </div>
                     <div>
                       <dt className="text-muted-foreground">Terminal Condition</dt>
-                      <dd className="mt-1 font-mono">99.9% Fixed Point + Aguardando Agentes 2,7</dd>
+                      <dd className="mt-1 font-mono">UNKNOWN · exige contraprova</dd>
                     </div>
                   </dl>
                 </div>
@@ -933,7 +952,7 @@ REUSE: before_create (sem duplicação)`}
                   <p className="font-mono text-[10px] tracking-[0.2em] text-neon-purple uppercase">
                     Consolidação de artefatos
                   </p>
-                  <h2 className="mt-3 text-3xl font-semibold">HTML Consolidation 100%</h2>
+                  <h2 className="mt-3 text-3xl font-semibold">HTML Consolidation · histórico</h2>
                   <p className="mt-3 text-sm text-muted-foreground">
                     Mapeamento completo de K:\ para cockpit-unified/. 16 pastas consolidadas, 4
                     archived, 0 duplicações.
@@ -941,7 +960,7 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-border bg-surface/50 p-6">
-                  <h3 className="font-semibold mb-4">📊 Status Final</h3>
+                  <h3 className="font-semibold mb-4">📊 Snapshot histórico — sem readback atual</h3>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <dt className="text-xs text-muted-foreground">DISCOVERY</dt>
@@ -1060,7 +1079,7 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-emerald-700/50 bg-emerald-950/20 p-6">
-                  <p className="text-sm font-semibold text-emerald-400">🟢 RESULTADO FINAL</p>
+                  <p className="text-sm font-semibold text-emerald-400">🟡 RESULTADO HISTÓRICO · RUNTIME UNKNOWN</p>
                   <ul className="mt-3 space-y-1 text-xs text-emerald-400">
                     <li>✅ Consolidação 100% bem-sucedida</li>
                     <li>✅ Zero perda de dados</li>
@@ -1068,7 +1087,7 @@ REUSE: before_create (sem duplicação)`}
                     <li>✅ Estrutura FLAT em cockpit-unified/</li>
                     <li>✅ Histórico preservado em _archive/</li>
                     <li>✅ Documentação completa</li>
-                    <li>✅ Pronto para produção 🚀</li>
+                    <li>⚠️ Produção depende de build e prova do SHA atual</li>
                   </ul>
                 </div>
               </div>
