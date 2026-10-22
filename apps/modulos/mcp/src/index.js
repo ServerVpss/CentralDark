@@ -22,6 +22,7 @@ import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTo
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
+import { createDevicePairingRouter } from "./device-pairing.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
 process.on("uncaughtException", (err) => {
@@ -111,6 +112,8 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 // V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
+// Owner existente: pareamento de dispositivos com aprovacao admin e token one-shot.
+app.use("/device", createDevicePairingRouter());
 
 app.post("/integrations/buildkite/webhook", (req, res) => {
     const result = handleBuildkiteWebhook(req, res);

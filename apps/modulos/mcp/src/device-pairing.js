@@ -150,7 +150,10 @@ export function createDevicePairingStore(options = {}) {
 export function createDevicePairingRouter(options = {}) {
   const router = express.Router();
   const store = options.store || createDevicePairingStore(options);
-  const isAdmin = options.isAdmin || ((req) => safeEqual(bearerFrom(req), process.env.CENTRALDARK_ADMIN_KEY || "__missing__"));
+  const isAdmin = options.isAdmin || ((req) => {
+    const expected = String(process.env.CENTRALDARK_ADMIN_KEY || "");
+    return expected.length > 0 && safeEqual(bearerFrom(req), expected);
+  });
 
   router.post("/pair/start", (req, res) => {
     const pair = store.start({ deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });

@@ -55,6 +55,51 @@ test("heartbeat autentica device e lista sem expor token hash", () => {
   } finally { f.cleanup(); }
 });
 
+test("router exige chave administrativa configurada para aprovar pareamento", async () => {
+  const { default: express } = await import("express");
+  const { createDevicePairingRouter } = await import("../src/device-pairing.js");
+  const f = fixture();
+  const oldKey = process.env.CENTRALDARK_ADMIN_KEY;
+  let server;
+  try {
+    delete process.env.CENTRALDARK_ADMIN_KEY;
+    const app = express();
+    app.use(express.json());
+    app.use("/device", createDevicePairingRouter({ store: f.store }));
+    server = app.listen(0, "127.0.0.1");
+    await new Promise((resolve) => server.once("listening", resolve));
+    const base = "http://127.0.0.1:" + server.address().port;
+    const start = await fetch(base + "/device/pair/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ device_name: "windows-casa" }),
+    });
+    assert.equal(start.status, 201);
+    const pair = await start.json();
+    const reject = await fetch(base + "/device/pair/approve", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer __missing__" },
+      body: JSON.stringify({ id: pair.pair_id, code: pair.code }),
+    });
+    assert.equal(reject.status, 401);
+    process.env.CENTRALDARK_ADMIN_KEY = "test-admin-secret";
+    const approve = await fetch(base + "/device/pair/approve", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: "Bearer test-admin-secret" },
+      body: JSON.stringify({ id: pair.pair_id, code: pair.code }),
+    });
+    assert.equal(approve.status, 200);
+    const status = await fetch(base + "/device/pair/status?id=" + encodeURIComponent(pair.pair_id) +
+      "&secret=" + encodeURIComponent(pair.pair_secret));
+    assert.equal((await status.json()).status, "approved");
+  } finally {
+    if (server) await new Promise((resolve) => server.close(resolve));
+    if (oldKey === undefined) delete process.env.CENTRALDARK_ADMIN_KEY;
+    else process.env.CENTRALDARK_ADMIN_KEY = oldKey;
+    f.cleanup();
+  }
+});
+
 test("pairing expira sem falso verde", () => {
   const f = fixture();
   try {
