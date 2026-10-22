@@ -1,1 +1,159 @@
-eyJyZWNvbnRJZCI6ICJtYWluIiwgInBhc3N3b3JkIjogIm1hbmlmZXQgLUlNIl0sICJwdXNoQ29tbWl0IjogImFwcmVuZGl6YWRvKCMyMDcpOiBL4oaSRiBzZWxmLXByb3Zpc2lvbmluZyBXaW5kb3dzOiByZXV0aWxpemFyIG93bmVyIGV4aXN0ZW50ZSBlIGV4aWdpciByZWNlaXB0IiwgInBhY2soOiAiVTktOT1dOIOKAlCBuw6NvIG1lZGlkbyBuZXN0ZSBwdXNoIiwgInJhdGFuYyI6ICJtYWluIiwgInBhY2tQb3J0IjogU2FtcGxlLAogICJpZCI6ICI5NjU5OTE4MDk5OTk0MTkzODcyIiwgInR5cGUiOiAiYXBwZW5kIiwgInN0YXRlIjogImluZm9yZWN0aW9uIiwgInN0YXRlTWVhc3VyZWRBdCI6IG51bGwKfSwgYXRtZW50aWNzIjogW10sICJldmVudHMiOiBbLAogICJ0aW1lIjogIi0yMDI2LTEwLTIxVDEwOjMxOjQ0LjQ3NloiLAogICJ0aXR1bG8iOiAiUHVzaCBuYSBtYWluIMK3IGZhYmJlOGNhMWFhNGNmMjA0NjVmMWU1OWE3MWEwM2FjYWYxNWY5YmMiLAogICJkZXRhbGgiOiAiZG9jcyhyZWNlaXB0KTogI0FDT1JEQVIgcmVnaXN0cmFyIHZpdm8gTUNQIDE0MSB0b29scyAxMyByb3V0ZXMgY29tIGNvbnRyYXByb3ZhcyIsCiAgICAiYXJlYSI6ICJSZXBvc2l0IiwgICAgInNoYTI1NiI6ICIxYjRjNWRkIiwgICAgImFjdG9yIjogInNlZ3JlZG91bmxvY2siLAogICJjb250YWN0Q29uZiI6IFsic3RhdGtvdXRwdXkiLCAiZ26vdXRwdXRwb2xpYXJpcyJdLAogICJ0aW1lIjogIi0yMDI2LTEwLTIxVDEwOjMxOjQ0LjM2XSwgICAgInRpdHVsbyI6ICJQdXNoIG5hIG1haW4g sK3NmYmJlOGNhMWFhNGNmMjA0NjVmMWU1OWE3MWEwM2FjYWYxNWY5YmMiLAogICJkZXRhbGgiOiAiZG9jcyhyZWNlaXB0KTogc2VsYXIgY2FtaW5ubyBjYW5vbmljbyBGSFMsIGFsaWFzZXMgZSBnYXRlcyBkYSBzZWdyZWdhY2FvIiwgICAgImFyZWEiOiAiUmVwb3NpdCBTs3JpbyIsCiAgICAic2hhIjogIjlhNmY1YWEiLAogICAiYWN0b3IiOiAic2VncmVkb3VubG9jayIKfSwgYXR0bGVpbnRlZ2VyIjogbmV3LCJzdGF0ZVRyYWNrIjogZmFsc2UsICJ0aW1lc3RhbXAiOiAiMjAyNi0wNS0wMCIKfQ==
+{
+  "project": {
+    "branch": "main",
+    "lastCommit": "a15fd76",
+    "phase": "Sync VPS status - three stars connected to canonical flow via native MCP / systemd",
+    "currentTask": "Corrigir telemetria PM2 e completar convergência VPS para main branch",
+    "overallProgress": 70,
+    "stateSource": "git-push-only",
+    "stateMeasuredAt": null
+  },
+  "milestones": [],
+  "events": [
+    {
+      "time": "2026-10-22T04:58:39.444Z",
+      "title": "{\"commit\": \"F10\", \"id\": \"F10\", \"status\": \"concluido\", \"titulo\": \"Sync VPS status - three stars connected\"}",
+      "area": "deploy",
+      "status": "feito"
+    },
+    {
+      "time": "2026-10-22T04:48:44.529Z",
+      "title": "convergencia",
+      "area": "deploy",
+      "status": "feito"
+    },
+    {
+      "time": "2026-10-22T03:49:13.741Z",
+      "title": "status_vps_check",
+      "area": "monitoramento",
+      "status": "feito"
+    },
+    {
+      "time": "2026-10-21T23:46:38.599Z",
+      "title": "Cockpit-in-the-Loop - Ciclo T0 iniciado",
+      "area": "interface",
+      "status": "feito"
+    },
+    {
+      "time": "2026-10-21T23:18:24.180Z",
+      "title": "mission_complete",
+      "area": "skill-catalog",
+      "status": "feito"
+    },
+    {
+      "time": "2026-10-21T23:18:08.326Z",
+      "title": "skills_reconciliation_complete",
+      "area": "skill-catalog",
+      "status": "feito"
+    },
+    {
+      "time": "2026-10-21T23:17:58.804Z",
+      "title": "skills_reconciliation",
+      "area": "skill-catalog",
+      "status": "feito"
+    },
+    {
+      "time": "2026-10-21T10:37:31.262Z",
+      "title": "Vibe Coding natural + botão compilar aplicado no owner skills/vs-code-restore",
+      "area": "VS Code",
+      "status": "feito"
+    },
+    {
+      "time": "2026-10-21T10:31:44.476Z",
+      "titulo": "Push na main · 45cd830c18415d0412373dff100869ab2b200272",
+      "detalhe": "docs(receipt): #ACORDAR registrar readback vivo MCP 141 tools 13 routes com contraprovas",
+      "area": "Repositório",
+      "sha": "45cd830",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-19T13:52:56.470Z",
+      "titulo": "Push na main · a173a2a293ba746970b331c009d82c589095d572",
+      "detalhe": "aprendizado(#198): DNS do MCP restaurado sem perder MagicDNS 2026-10-19",
+      "area": "Repositório",
+      "sha": "a173a2a",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-19T07:27:52.074Z",
+      "titulo": "Push na main · 9a6f5aa1c7e730bb6eae06cc93ebc52c471194d6",
+      "detalhe": "feat(instinto): agrupar Cloudflare Contabo e Tailscale no Hub de Contas",
+      "area": "Repositório",
+      "sha": "9a6f5aa",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-19T04:43:20.731Z",
+      "titulo": "Push na main · fabbe8ca1aa4cf20465f1e59a71a03acaf15f9bc",
+      "detalhe": "docs(vault): selar caminho canonico FHS, aliases e gates da segregacao",
+      "area": "Repositório",
+      "sha": "fabbe8c",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-19T01:12:49.848Z",
+      "titulo": "Push na main · 355ddf944e3a5c4d677d5bdecf61fa62724f50f0",
+      "detalhe": "Merge branch 'main' of https://github.com/ServerVpss/CentralDark",
+      "area": "Repositório",
+      "sha": "355ddf9",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-18T22:07:11.886Z",
+      "titulo": "Push na main · 009bd1a411c9c98d36f49d88e2ab452078472bc3",
+      "detalhe": "docs(receipt): !CENTRALDARK live cockpit, verified checkpoint, Kanban idempotency and pending E2E",
+      "area": "Repositório",
+      "sha": "009bd1a",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-18T18:48:24.428Z",
+      "titulo": "Push na main · dfef59900739ce614d5adbb6d143422e38d7f334",
+      "detalhe": "feat(vps): install scoped runner post-job cleanup owner",
+      "area": "Repositório",
+      "sha": "dfef599",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-18T16:36:48.394Z",
+      "titulo": "Push na main · b55172537c2f3d46267fbaa1ad29468186452d64",
+      "detalhe": "feat(instinto): integrar prova MCP no cockpit existente",
+      "area": "Repositório",
+      "sha": "b551725",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-18T14:00:55.413Z",
+      "titulo": "Push na main · 446dea149d89c7f5b1df6ebb3e1ddf84ae258021",
+      "detalhe": "🔎 AUDITORIA: REVISOR PÓS-MERGE DOS GATES E CORRELAÇÃO ENTRE PRS (#1833)",
+      "area": "Repositório",
+      "sha": "446dea1",
+      "actor": "segredounlock"
+    },
+    {
+      "time": "2026-10-18T11:16:08.215Z",
+      "titulo": "Push na main · 34715244a4e79a8d00a90efcd4ef3c6dedb55a5e",
+      "detalhe": "fix(mcp): reconciliar bloco de provedores delegado no dist com source canonico",
+      "area": "Repositório",
+      "sha": "3471524",
+      "actor": "segredounlock"
+    },
+    {
+      "updatedAt": "2026-10-22T04:58:39.443Z",
+      "updatedAtBR": "22/10/2026, 01:58:39 BRT",
+      "nextIA": "manter_mcp_nativo",
+      "fases": [
+        {
+          "id": "F10",
+          "titulo": "Sync VPS status - three stars connected",
+          "status": "concluido",
+          "commit": "a15fd76"
+        },
+        {
+          "id": "F11",
+          "titulo": "Primeiro Ciclo Cockpit-in-the-Loop",
+          "status": "em_andamento",
+          "commit": "a15fd76"
+        }
+      ]
+}
