@@ -78,6 +78,7 @@ jobs:
       - name: 🔹 Test deterministic map and provider guards
         run: |
           set -euo pipefail
+          node --test scripts/ci/centraldark-toolcall-red-guard.test.mjs
           node --test apps/modulos/mapeamento/tests/validar-mapa.test.mjs
           node --test apps/modulos/HERMES-CORE/agents/Log-Verificador/provider-health.test.mjs
           bash -n scripts/vps/deploy-operational-guards.sh
