@@ -464,33 +464,33 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as 25 áreas ▾</summary>
                   <div className="mt-2 max-h-[min(60dvh,34rem)] overflow-y-auto p-1">
                     <TabsList className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
-                <TabsTrigger value="visao">Visão geral</TabsTrigger>
-                <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
-                <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
-                <TabsTrigger value="pr1873">📜 Mapa PR #1873</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
-                <TabsTrigger value="sync">🛠️ Minha Oficina</TabsTrigger>
-                <TabsTrigger value="design">Design Center</TabsTrigger>
-                <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
-                {autenticado ? <TabsTrigger value="genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
-                <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
-                <TabsTrigger value="dream-reviewer">😴 Dream</TabsTrigger>
-                <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
-                <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
-                <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
-                <TabsTrigger value="forja">🔧 Forja</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
-                {autenticado ? <TabsTrigger value="admin">Admin CentralDark</TabsTrigger> : null}
+                <TabsTrigger value="visao" data-cd-flow="instinto.CockpitShell.aba.visao">Visão geral</TabsTrigger>
+                <TabsTrigger value="portal" data-cd-flow="instinto.CockpitShell.aba.portal">🌐 Portal</TabsTrigger>
+                <TabsTrigger value="builder-bolt" data-cd-flow="instinto.CockpitShell.aba.builder-bolt">⚡ Builder Bolt</TabsTrigger>
+                <TabsTrigger value="pr1873" data-cd-flow="instinto.CockpitShell.aba.pr1873">📜 Mapa PR #1873</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram" data-cd-flow="instinto.CockpitShell.aba.gram">✉️ CentralDark Gram</TabsTrigger> : null}
+                <TabsTrigger value="sync" data-cd-flow="instinto.CockpitShell.aba.sync">🛠️ Minha Oficina</TabsTrigger>
+                <TabsTrigger value="design" data-cd-flow="instinto.CockpitShell.aba.design">Design Center</TabsTrigger>
+                <TabsTrigger value="goals" data-cd-flow="instinto.CockpitShell.aba.goals">🎯 Goals</TabsTrigger>
+                {autenticado ? <TabsTrigger value="genesis" data-cd-flow="instinto.CockpitShell.aba.genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
+                <TabsTrigger value="claude-notifications" data-cd-flow="instinto.CockpitShell.aba.claude-notifications">🔔 Claude</TabsTrigger>
+                <TabsTrigger value="dream-reviewer" data-cd-flow="instinto.CockpitShell.aba.dream-reviewer">😴 Dream</TabsTrigger>
+                <TabsTrigger value="arquitetura" data-cd-flow="instinto.CockpitShell.aba.arquitetura">📐 Estrutura</TabsTrigger>
+                <TabsTrigger value="raioxvivo" data-cd-flow="instinto.CockpitShell.aba.raioxvivo">🪬 Raio-X</TabsTrigger>
+                <TabsTrigger value="recibos" data-cd-flow="instinto.CockpitShell.aba.recibos">📊 Recibos</TabsTrigger>
+                <TabsTrigger value="forja" data-cd-flow="instinto.CockpitShell.aba.forja">🔧 Forja</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram-permissions" data-cd-flow="instinto.CockpitShell.aba.gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
+                {autenticado ? <TabsTrigger value="admin" data-cd-flow="instinto.CockpitShell.aba.admin">Admin CentralDark</TabsTrigger> : null}
                 {autenticado ? (
-                  <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
+                  <TabsTrigger value="sistema" data-cd-flow="instinto.CockpitShell.aba.sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
-                <TabsTrigger value="hermes">Hermes</TabsTrigger>
-                <TabsTrigger value="unigram">Unigram</TabsTrigger>
-                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
-                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
-                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
-                <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
-                <TabsTrigger value="downloads">Downloads</TabsTrigger>
+                <TabsTrigger value="hermes" data-cd-flow="instinto.CockpitShell.aba.hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="unigram" data-cd-flow="instinto.CockpitShell.aba.unigram">Unigram</TabsTrigger>
+                <TabsTrigger value="forja-regras" data-cd-flow="instinto.CockpitShell.aba.forja-regras">Regras Forja</TabsTrigger>
+                <TabsTrigger value="forja-inventario" data-cd-flow="instinto.CockpitShell.aba.forja-inventario">Inventário</TabsTrigger>
+                <TabsTrigger value="agent-mode" data-cd-flow="instinto.CockpitShell.aba.agent-mode">Agent Mode</TabsTrigger>
+                <TabsTrigger value="html-consolidation" data-cd-flow="instinto.CockpitShell.aba.html-consolidation">HTML Consolidation</TabsTrigger>
+                <TabsTrigger value="downloads" data-cd-flow="instinto.CockpitShell.aba.downloads">Downloads</TabsTrigger>
               </TabsList>
                   </div>
                 </details>
