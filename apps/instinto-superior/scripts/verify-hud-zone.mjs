@@ -305,10 +305,6 @@ test("contrato único de cartões exige função humana, owner, responsabilidade
   assert.ok(obs.includes("CATALOG_PASS") === false);
   assert.doesNotMatch(card, /fetch\s*\(|localStorage|sessionStorage|process\.env/);
 });
-test.todo("cockpit abre o Painel Admin direto na aba notificações (abaInicial={abaAdminInicial}) — fio removido do CockpitShell; PainelAdminCentralDark ainda aceita abaInicial; religar e provar");
-
-test.todo("sininho de notificações no cockpit — encanamento removido; reinstalar e provar antes de voltar a exigir");
-
 test("catálogo único de provedores e sininho mantêm limites de prova", () => {
   const src = read("apps/modulos/mcp/src/tools/core/mcp-admin.js");
   const dist = read("apps/modulos/mcp/dist/tools/core/mcp-admin.js");
@@ -327,6 +323,10 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.equal(block(src), block(dist));
   assert.ok(src.includes("providerCapabilitiesReturned"));
   assert.ok(src.includes("CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED"));
+  assert.ok(cockpit.includes('autenticado ? <CentralNotificacoes modo="sininho"'));
+  assert.ok(cockpit.includes('definirAbaAdminInicial("notificacoes")'));
+  assert.ok(cockpit.includes('abaInicial={abaAdminInicial}'));
+  assert.ok(cockpit.includes('key={versaoAdmin}'), "segundo clique precisa remontar o painel");
   assert.ok(admin.includes('<TabsTrigger value="notificacoes">'));
   assert.ok(admin.includes('<CentralNotificacoes modo="painel" />'));
   assert.ok(admin.includes('defaultValue={abaInicial}'));
