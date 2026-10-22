@@ -348,8 +348,18 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       </Sheet>
       <header className="border-b border-border bg-surface/85 px-4 py-4 backdrop-blur sm:px-6">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
-          <Link to="/" className="font-mono text-xs tracking-[0.2em] text-gold uppercase">
-            CentralDark
+          <Link to="/" className="flex items-center gap-2.5">
+            <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
+              <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
+            </span>
+            <span className="flex flex-col leading-none">
+              <span className="text-gold-gradient text-sm font-semibold tracking-wide">
+                CentralDark
+              </span>
+              <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+                Instinto Superior
+              </span>
+            </span>
           </Link>
           <div className="flex items-center gap-2">
             <span className="hidden font-mono text-[10px] text-muted-foreground sm:block">
