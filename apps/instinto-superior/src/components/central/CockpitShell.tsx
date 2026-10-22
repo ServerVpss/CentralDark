@@ -236,6 +236,22 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
   );
 }
 
+// Casca Electron AionUi: o host abre o cockpit com ?shell=aionui. O marcador fica na sessão da aba para
+// sobreviver à navegação interna. Fora da casca (navegador comum) nada muda.
+const CASCA_AIONUI_CHAVE = "centraldark.shell";
+function dentroDaCascaAionUI(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    if (new URLSearchParams(window.location.search).get("shell") === "aionui") {
+      window.sessionStorage.setItem(CASCA_AIONUI_CHAVE, "aionui");
+      return true;
+    }
+    return window.sessionStorage.getItem(CASCA_AIONUI_CHAVE) === "aionui";
+  } catch {
+    return false;
+  }
+}
+
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
@@ -254,6 +270,14 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     }
   }
   function abrirEstudio() {
+    if (dentroDaCascaAionUI()) {
+      // Dentro da casca, o Estúdio é a própria casca: pede ao host as funções originais (/guid) em vez de
+      // abrir outro AionUI (iframe) dentro do cockpit, que fecharia o espelho. O host lê este parâmetro.
+      const alvo = new URL(window.location.href);
+      alvo.searchParams.set("aionui-host", "guid");
+      window.location.assign(alvo.toString());
+      return;
+    }
     definirEstudioAberto(true);
     void conferirEstudio();
     window.requestAnimationFrame(() => document.getElementById("centraldark-estudio")?.scrollIntoView({ behavior: "smooth", block: "start" }));
