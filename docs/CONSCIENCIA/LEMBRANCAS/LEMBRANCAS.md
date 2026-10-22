@@ -1509,6 +1509,43 @@ Conteúdo: Regra viva do CHEFE: 'atormentar' é metáfora de memória que confro
 
 Conteúdo: Integrar ao núcleo existente, sem novo cérebro/skill/ledger: separar conhecimento/resposta, execução de agente e descoberta científica. Exigir critério prévio, SHA/run correlacionado, readback independente, contraprova, auditoria de contaminação/corte histórico, derivação e validação independente; benchmarks não são probabilidade universal. Reutilizar Meta-Lupa, Meta-Grill, Fable, reconciliação e Fixed Point.
 
+### [2026-10-21T19:59] Missao CentralDark - Status VPS e Catalogos
+- **Data:** 2026-10-21
+- **Tags:** missao, vps, catalog, auth, receipt
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-20
+- **Promovida:** nao
+
+Conteúdo: Resumo das evidências coletidas durante a missão:
+
+1. ACESSO MCP: CONFIRMADO - Conexão Cline↔MCP operacional, 141 tools disponíveis, catalog v1-f8ff6720fec3
+
+2. ACESSO VPS DIRETO: BLOQUEADO - 
+   - VPS kernel delta: fetch failed, status UNKNOWN
+   - Tailscale: 401 provider error (auth issue)
+   - PM2: SyntaxError: Unexpected end of JSON input
+   - VPS 3 commits atrás da main branch (0fda697 vs 4b0ce5a7d9)
+
+3. ROTAS E AUTENTICAÇÃO:
+   - /health/deep: PUBLICO (200 sem auth) - retorna status VPS
+   - /admin/api/*: PROTEGIDO (401 anônimo) - tools, metricas, logs, linear, tailscale, etc.
+   - MCP published em https://mcp.centralldark.com/mcp com 13 rotas
+   - Catalog v1-f8ff6720fec3 (MCP) vs 153-54e72b14201d (VPS local)
+
+4. CATÁLOGO:
+   - getCatalogSummary em tools-catalog.js importado em admin.js line 12
+   - /admin/api/tools retorna summary do catálogo (requer cookie cd_admin)
+   - 153 tools no VPS local vs 141 no MCP published
+   - 6 tools esperados faltando no runtime (vps_kernel_delta_status, screenpipe_status, etc.)
+
+5. RECEIPT/F10_STATUS: UNKNOWN - receipt + next_cursor, precisa de fixo point ou resolução de bloqueios
+
+6. PRÓXIMOS PASSOS BLOQUEIOS:
+   - Resolver Tailscale auth (401 provider error)
+   - Sincronizar VPS com main branch (3 commits atrás)
+   - Corrigir PM2 SyntaxError
+   - Testar /admin/api/tools com sessão admin válida
 
 <!-- CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
 ### [2026-10-21] CHEFE externaliza como um Harness brasileiro deve falar
@@ -1516,7 +1553,7 @@ Conteúdo: Integrar ao núcleo existente, sem novo cérebro/skill/ledger: separa
 - **Fonte do contexto:** CHEFE observou no Cockpit termos de diagnóstico `áudio não comprovado` / `UNKNOWN` e questionou com humor se um aplicativo Windows moderno pediria ao usuário para comprovar o áudio antes de ativar o microfone.
 - **Lição humana:** o CHEFE não pediu para dispensar testes. Pediu comunicação natural: no fluxo principal `Ativar microfone`, `Ouvindo...` somente com captura ativa, `Conectar dispositivo` e `Verificar conexão`; logs, códigos, PIDs e receipts ficam acessíveis em `Detalhes técnicos`.
 - **Papéis que deseja ver no mapa:** CHEFE (intenção) → CentralDark/Sala de Controle → JARVIS assistente / Hermes executor / Harness orquestração → um estado operacional → interface em português natural + detalhes técnicos.
-- **Regra promovida em fonte de conhecimento (branch):** [[MAPA-DO-CEREBRO]] (Mermaid + glossário completo), [[GUIA-COMUNICACAO-SEGREDO-CHEFE]], [[APRENDIZADOS]] #211.
+- **Regra promovida em fonte de conhecimento (branch):** [[MAPA-DO-CEREBRO]] (Mermaid + glossário completo), [[GUIA-COMUNICACAO-SEGREDO-CHEFE]], [[APRENDIZADOS]] #218 (ID canônico após convergência; referência provisória anterior #211 preservada como histórico).
 - **Estado:** proveniência histórica **sem autoridade de runtime**; atualização do Cockpit, sync com Obsidian na Casa, CI e implantação requerem prova posterior.
 - **PR equivalente:** https://github.com/ServerVpss/CentralDark/pull/1895.
 - **NEXT_CURSOR:** PR1895_DOCS_READBACK → CI_MESMO_SHA → RESPONSAVEL_UI → MUDANCA_DE_ROTULOS → VISUAL_READBACK → FIXED_POINT.
