@@ -356,6 +356,26 @@
       "bootstrap": true
     },
     {
+      "id": "trigger.human.MICHELIN",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:MICHELIN",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "MICHELIN",
+      "activation": "!MICHELIN",
+      "from": "CHEFE",
+      "to": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#phase_contracts.MICHELIN",
+      "owner": "RULES.md",
+      "canonical_route": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#phase_contracts.MICHELIN",
+      "status": "CANDIDATE_UNTIL_SAME_HEAD_CI",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      }
+    },
+    {
       "id": "trigger.human.FIXED_POINT",
       "kind": "TRIGGER",
       "capability": "TRIGGER:FIXED_POINT",

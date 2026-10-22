@@ -3203,3 +3203,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-21
 - **Contexto:** Cline tenda marcar tarefa concluída apenas por código compilar; nova regra exige contraprova visual e funcional na interface de operação
 - **Aprendizado:** Não basta o código funcionar; a experiência do usuário precisa funcionar na mesma interface em que ele vai operar. Mudanças que afetam o cockpit exigem contraprova visual/funcional dos controles relacionados ao escopo alterado.
+
+### 218. RED #003: PowerShell corrigido, workspace Casa sem checkout Git
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-22
+- **Contexto:** A verificação na sessão Casa/VS Code executou um comando PowerShell mínimo com exit 0, mas C:\root\CentralDark não continha .git e git rev-parse falhou com not a git repository. Não foram encontrados marcadores de checkout até profundidade 4.
+- **Aprendizado:** Separar a prova em duas condições: PowerShell pode estar PASS isoladamente, mas VERIFY_GIT_WORKTREE_AND_POWERSHELL_COMMAND_EXIT_0 só pode ser PASS quando o caminho resolvido for um checkout Git válido. Não criar, mover, resetar ou limpar um repositório para mascarar a ausência do checkout; emitir FAIL_OBSERVED/UNKNOWN e pedir a bridge ou workspace autorizado.
