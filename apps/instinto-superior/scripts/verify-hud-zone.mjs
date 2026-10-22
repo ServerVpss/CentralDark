@@ -213,12 +213,13 @@ test("Tool Call Lens cadastrado na gaveta reaproveita os owners com 4 gates", ()
   assert.ok(infra.includes("Copiar receita · não executar"));
 });
 
-test.todo("gaveta: 10 receitas com 9 ids unicos — duas receitas dividem o mesmo id; decidir se e dupla intencional ou erro do snapshot");
-
 test("gaveta cataloga receitas A-Z e mostra estado do terminal sem autoexec", () => {
   const catalogo = JSON.parse(read("apps/instinto-superior/src/data/forja-gaveta.snapshot.json"));
   const infra = read("apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx");
   assert.equal(catalogo.automation_owners.length, 10);
+  // prova de SOURCE (snapshot), não execução das receitas: identidade única por receita
+  const idsGaveta = catalogo.automation_owners.map(r => r.id);
+  assert.equal(new Set(idsGaveta).size, idsGaveta.length, "ids de receita duplicados na gaveta");
   assert.ok(catalogo.automation_owners.every(r => r.owner && r.receita && r.nome));
   assert.ok(infra.includes("receitasAlfabeticas"));
   assert.ok(infra.includes('localeCompare(b.nome, "pt-BR"'));
