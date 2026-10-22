@@ -120,7 +120,7 @@ app.get("/admin/pairing", (req, res) => {
   if (!isCockpitAdmin(req)) { res.redirect(302, "/admin"); return; }
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("X-Content-Type-Options", "nosniff");
-  res.type("text/html").send(\`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+  res.type("text/html").send(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CentralDark | Pareamento</title><style>
 body{font:16px/1.5 system-ui;background:#0a1719;color:#f1f5f9;max-width:720px;margin:5vh auto;padding:20px}
@@ -169,7 +169,7 @@ document.getElementById('approve').addEventListener('click',async()=>{
  catch(e){status.textContent=String(e.message)}
 });
 reload();
-</script></body></html>\`);
+</script></body></html>`);
 });
 
 
