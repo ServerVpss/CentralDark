@@ -13,7 +13,7 @@ truth_rule: REALIDADE_IS_JUDGE
 
 Esta arquitetura cristaliza um fluxo unico para o CHEFE iniciar, observar e continuar execucoes reais da CentralDark pelo painel admin, pelo Hermes Desktop/CASA ou por qualquer agente autorizado.
 
-O objetivo nao e criar um segundo painel, segundo router ou segundo MCP. O objetivo e ligar o painel existente `admin.centraldark.com/omni` a uma rota viva: API CentralDark -> MCP -> alvos reais -> receipts -> grafo vivo -> consumidores de inteligencia.
+O objetivo nao e criar um segundo painel, segundo router ou segundo MCP. O objetivo e ligar o painel existente `admin.centralldark.com/omni` a uma rota viva: API CentralDark -> MCP -> alvos reais -> receipts -> grafo vivo -> consumidores de inteligencia.
 
 ## Regra curta
 
@@ -59,7 +59,7 @@ O botao principal nao dispara prompt solto. Ele cria um job deterministico com e
 ```mermaid
 flowchart LR
     CHEFE["👑 CHEFE / Admin"]
-    ADMIN["📊 admin.centraldark.com/omni"]
+    ADMIN["📊 admin.centralldark.com/omni"]
     API["🧠 CentralDark API / Omni Router"]
     MCP["🔌 MCP CentralDark"]
     HERMES["🤖 Hermes / SOL"]
