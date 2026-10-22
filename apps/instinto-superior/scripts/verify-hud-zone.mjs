@@ -347,6 +347,7 @@ test("microdeploy visivel no owner existente e fail-closed sem prova de runtime"
   assert.ok(script.includes('blocked "REAL_MODE_REQUIRES_COMPONENT_ADAPTER"'));
   assert.ok(contrato.includes("Micro-deploy é por escopo afetado"));
   assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
+});
 
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
@@ -386,12 +387,11 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
 
 // Anti-regressão do Marketplace dentro da esteira existente (npm prebuild/prebuild:vps).
 // Isto prova contratos SOURCE, não instalação remota nem resposta HTTP do cockpit.
-test("regressao do Marketplace ZENDRIVE — construir, instalar, conectar e provar sem falso verde", () => {
-  const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
-  const shell = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
-  const admin = read("apps/instinto-superior/src/routes/_authenticated/sala-controle.tsx");
-  const extManifest = JSON.parse(read("skills/vs-code-restore/package.json"));
-  const extension = read("skills/vs-code-restore/src/extension.ts");
+// O corpo deste teste foi inserido truncado pelo commit dc97c321d (só as leituras de arquivo, nenhuma asserção) e
+// deixava o script sem fechar. Não existe versão completa no histórico. Marcado como pendente em vez de
+// fechar um teste vazio, que passaria sem provar nada.
+test.todo("regressao do Marketplace ZENDRIVE — construir, instalar, conectar e provar sem falso verde (corpo a reescrever)");
+
 test("Casa canonical K and four-stage collector receipt", () => {
   const launcher = read("apps/instinto-superior/INICIAR-COCKPIT-LOCAL.bat");
   const bridge = read("scripts/casa/vscode-log-bridge.ps1");
