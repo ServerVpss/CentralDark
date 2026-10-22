@@ -826,6 +826,7 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 
 ### [2026-10-12T21:22] Papagaio ON/OFF + metacognição operacional por contraprova (2026-10-12/13)
 
+### [2026-10-12T21:22] Papagaio ON/OFF + metacognição operacional por contraprova (2026-10-12/13)
 - **Data:** 2026-10-12
 - **Tags:** centraldark, metacognicao, kaizen, papagaio-on-off, contraprova, memoria-procedural, experience-distillation, compounding-reflexion, replay, aprendizado-172
 - **Relevância:** alta
@@ -838,6 +839,9 @@ Conteúdo: CHEFE ordenou: registrar INTEGRALMENTE e NA MESMA ORDEM o caminho viv
 
 <!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
 
+Conteúdo: CHEFE ordenou: registrar INTEGRALMENTE e NA MESMA ORDEM o caminho vivido na sessão em APRENDIZADOS e LEMBRANÇAS, não ficar só em chat/terminal; mudar o comportamento dos agentes. Regras: PAPAGAIO ON sob pedido explícito de ensino, reprodução fiel e arquivo completo da experiência; PAPAGAIO OFF durante execução operacional (delta curto, sem repetição inútil). O ciclo é HUMAN-GUIDED COMPOUNDING REFLEXION / metacognição operacional induzida por contraprova com Kaizen e memória procedural: CHEFE → CURRENT+owner → executar por rotas autorizadas → prova → receita completa → aprendizado → reuso validado. Um organismo, menor delta, sem duplicar motor, HAKAI só com teste real. Nomes em inglês são termos descritivos e referências conceituais, não contrato oficial dos fabricantes. Sessão: 2 frentes MCP+Rebuilder (patch main, runtime NÃO comprovado, bloqueio MCP_NATIVE_FILESET_NOT_APPROVED) e inventário+pulso (sha VPS/main b56706f..., --scan exit 0 parcial 4224 arquivos/1375 grupos SHA; --pulse real e HAKAI pendentes). Error JS String.replace $' / $$, erro Python indentação e fonte parcial ensinaram teste funcional, sem falso PASS. ZIP de replay 12 arquivos e ZIP fontes main commit 42bf15d...; anúncio de rodar no VS Code gerou validação por executabilidade/efeito de responsabilização, não prova de execução. Fonte original de 374 linhas fornecida pelo CHEFE deve ficar intacta como proveniência nos owners, mais continuação cronológica. APRENDIZADO #172 registrado na main commit 2a03fb9a8030aad1287010d7d899196430a70efe. REGISTRADO!=CONSUMIDO, documento não prova deploy. Aprender para futuros turnos/execuções e nunca alegar atualização dos pesos do modelo.
+
+<!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
 ## 🦜 CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013 — metacognição operacional + replay fiel (registro histórico completo)
 
 ### Fonte histórica literal fornecida pelo CHEFE — 374 linhas, ordem e conteúdo preservados
@@ -1019,6 +1023,10 @@ O pacote registra que o agente:
 ✅ Identificou diferenças entre erro e restrição de segurança.
 ✅ Atualizou o código do MCP na `main`.
 ✅ Registrou o aprendizado #171.
+✅ Investigou os bloqueios.  
+✅ Identificou diferenças entre erro e restrição de segurança.  
+✅ Atualizou o código do MCP na `main`.  
+✅ Registrou o aprendizado #171.  
 ✅ Preservou as proteções existentes.
 
 **O limite registrado:** a nova versão do MCP ainda não havia sido comprovada funcionando no servidor.
@@ -1031,6 +1039,10 @@ O pacote registra que o agente:
 ✅ Conferiu o código por SHA.
 ✅ Executou a varredura.
 ✅ Validou o JSON único.
+✅ Reuniu inventário e pulso no mesmo script.  
+✅ Conferiu o código por SHA.  
+✅ Executou a varredura.  
+✅ Validou o JSON único.  
 ✅ Preservou o script antigo enquanto verificava seus consumidores.
 
 O recibo do pacote traz o mesmo SHA-256 do reconciliador na VPS e no GitHub:
@@ -1427,6 +1439,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Limites:** `ADMIN_AUTH_BOT_E2E=UNKNOWN`; `OAUTHBROKER_RUNTIME=INACTIVE`; `VAULT_MASTER_KEY_HISTORICA=NAO_LOCALIZADA`; `NPM_CACHE_AUTOCLEAN=SKIPPED_INSTALLER_ACTIVE`; `PR1804=OPEN` na medição, não merged.
 - **Mesmo fio e NEXT_CURSOR:** `LC07_LOG_CRON -> BOT_ADMIN_E2E -> RECOVER_EXISTING_OAUTH_VAULT_KEY -> OAUTHBROKER_HEALTH`. Owners `scripts/limpeza-autonoma.sh`, `apps/instinto-superior/`, `apps/modulos/oauth-broker/` e PR #1804. O outro fio `INSTALADOR_TOTAL` citado no #189 não é acionado por este registro.
 - **NeuroLink:** `L190`, `PREV=L189`, `NEXT=PENDING_NEXT_CURSOR`.
+
 
 ### [2026-10-13] Aprendizado #191 — Integração A–Z e discernimento Whis, sem duplicação
 
