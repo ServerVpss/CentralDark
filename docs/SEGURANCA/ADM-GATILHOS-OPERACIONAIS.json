@@ -57,6 +57,7 @@
     "⚖️ !CONTRAPROVA",
     "🔁 !VERTEX_INVERSO",
     "🐚 !CARACOL",
+    "🌟 !MICHELIN",
     "💠 !FIXED_POINT",
     "🧾 !REGISTRA",
     "🔏 !RASTRO",
@@ -506,6 +507,7 @@
           "🔎 !META_LUPA",
           "🔄 !RECONCILIAR",
           "⚖️ !CONTRAPROVA",
+          "🌟 !MICHELIN",
           "🧾 !REGISTRA",
           "⚖️ REALIDADE"
         ]
@@ -792,6 +794,29 @@
         "autonomous_within_scope": true,
         "requires_runtime_measurement": true,
         "unknown_is_not_pass": true
+      }
+    },
+    {
+      "id": "MICHELIN",
+      "emoji": "🌟",
+      "canonical_trigger": "!MICHELIN",
+      "canonical_display": "🌟 !MICHELIN",
+      "aliases": ["#MICHELIN"],
+      "match_policy": {
+        "case_insensitive": true,
+        "prefix_optional": false,
+        "accent_tolerant": true,
+        "separator_equivalent": true,
+        "emoji_optional_for_match": true,
+        "emit_canonical_display": true
+      },
+      "activation": {
+        "intent": "entrar no mesmo ciclo CentralDark e avaliar as três estrelas somente com prova do mesmo SHA",
+        "autonomous_within_scope": true,
+        "requires_runtime_measurement": true,
+        "unknown_is_not_pass": true,
+        "star_award_requires_evidence": true,
+        "owner": "RULES.md"
       }
     },
     {
