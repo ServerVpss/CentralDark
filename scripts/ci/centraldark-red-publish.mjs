@@ -38,7 +38,7 @@ async function projection(red, number, githubCommentUrl) {
   // Key only used in a GitHub Actions server job. Never render into frontend.
   const headers = {
     apikey: SECRET_KEY,
-    Authorization: "Bearer " + SECRET_KEY,
+    ...(SECRET_KEY.startsWith("sb_secret_") ? {} : { Authorization: "Bearer " + SECRET_KEY }),
     "Content-Type": "application/json",
   };
   const id = "centraldark:red:" + red.fingerprint;
@@ -94,7 +94,7 @@ async function main() {
   guard(input && typeof input === "object", "RED_PAYLOAD_MISSING");
   const red = normalizeRedReport(input);
   const pr = await github("/pulls/" + RED_PR_NUMBER);
-  guard(pr.state === "open" && pr.merged === false, "RED_PR_NOT_OPEN");
+  guard(pr.state === "open" && pr.merged !== true, "RED_PR_NOT_OPEN");
   guard(pr.head?.ref === RED_PR_BRANCH && pr.head?.repo?.full_name === REPOSITORY, "RED_PR_BRANCH_MISMATCH");
 
   const path = "/contents/" + RED_RECEIPT_PATH.split("/").map(encodeURIComponent).join("/");
