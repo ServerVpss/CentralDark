@@ -304,6 +304,8 @@ test("contrato único de cartões exige função humana, owner, responsabilidade
   assert.ok(obs.includes("CATALOG_PASS") === false);
   assert.doesNotMatch(card, /fetch\s*\(|localStorage|sessionStorage|process\.env/);
 });
+test.todo("cockpit abre o Painel Admin direto na aba notificações (abaInicial={abaAdminInicial}) — fio removido do CockpitShell; PainelAdminCentralDark ainda aceita abaInicial; religar e provar");
+
 test.todo("sininho de notificações no cockpit — encanamento removido; reinstalar e provar antes de voltar a exigir");
 
 test("catálogo único de provedores e sininho mantêm limites de prova", () => {
