@@ -96,6 +96,7 @@ if [[ "$OWNER" == "mcp" && "$MCP_SKILL_CATALOG_DELTA" == 1 ]]; then
     done
     [[ "$found" == 1 ]] || { echo "MCP_SKILL_FILESET_INCOMPLETE=$required"; exit 7; }
   done
+  [[ "${#FILES[@]}" == 4 ]] || { echo "MCP_SKILL_FILESET_MUST_BE_EXACT_QUARTET"; exit 7; }
 fi
 
 exec 9>"$LOCK"

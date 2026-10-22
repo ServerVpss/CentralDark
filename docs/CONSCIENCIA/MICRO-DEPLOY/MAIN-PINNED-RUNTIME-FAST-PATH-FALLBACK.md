@@ -247,7 +247,7 @@ Owner: `docs/CONSCIENCIA/LEDGER-SURFACE-ANCHOR.md` (`PR_MOTHER_ROLE=RETIRED`). #
 - `apps/modulos/mcp/src/tools/skills/catalog-index.js`;
 - `apps/modulos/mcp/dist/tools/skills/catalog-index.js`.
 
-**Guards adicionais:** recusar arquivo fora da allowlist, recusar quarteto incompleto, executar `node --check` e os dois testes `skill-catalog-unificado`/`centraldark-hermes-delegacao-contract` no scratch antes de alterar o runtime. Após reinício **isolado** do owner nativo, conferir `skill_buscar` mais quatro operações existentes em `/tools.json` e reprovar se qualquer ferramenta anterior desaparecer. Preservar merge-file, backup, rollback, lock, SHA e receipt anteriores.
+**Guards adicionais:** recusar arquivo fora da allowlist, recusar quarteto incompleto ou qualquer quinto arquivo, executar `node --check` e os dois testes `skill-catalog-unificado`/`centraldark-hermes-delegacao-contract` no scratch antes de alterar o runtime. Após reinício **isolado** do owner nativo, conferir `skill_buscar` mais quatro operações existentes em `/tools.json` e reprovar se qualquer ferramenta anterior desaparecer. Preservar merge-file, backup, rollback, lock, SHA e receipt anteriores.
 
 **Contraprova de fonte:** `bash scripts/vps/tests/main-pinned-microdeploy-skill-catalog.test.sh`; casos negativos: arquivo não autorizado e quarteto parcial. **Prova final requerida:** `mcp_admin_call(skill_buscar,{busca:"centraldark-delegacao"})` com resultados reais, `skill_listar` incluindo os dois roots, e Hermes Kanban ACK separado. Nenhuma estrela de runtime por mera documentação.
 

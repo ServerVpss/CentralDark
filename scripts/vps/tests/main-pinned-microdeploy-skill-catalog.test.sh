@@ -22,7 +22,15 @@ rejected="$(bash "$SCRIPT" --owner mcp --file apps/modulos/mcp/src/tools/skills/
 reject_code=$?
 partial="$(bash "$SCRIPT" --owner mcp --file apps/modulos/mcp/src/tools/skills/skill.js 2>&1)"
 partial_code=$?
+extra="$(bash "$SCRIPT" --owner mcp \
+  --file apps/modulos/mcp/src/tools/skills/skill.js \
+  --file apps/modulos/mcp/dist/tools/skills/skill.js \
+  --file apps/modulos/mcp/src/tools/skills/catalog-index.js \
+  --file apps/modulos/mcp/dist/tools/skills/catalog-index.js \
+  --file apps/modulos/mcp/src/index.js 2>&1)"
+extra_code=$?
 set -e
+[[ "$extra_code" == 7 && "$extra" == *'MCP_SKILL_FILESET_MUST_BE_EXACT_QUARTET'* ]] || { echo "EXTRA_OWNER_FILE_ALLOWED"; exit 13; }
 [[ "$reject_code" == 6 && "$rejected" == *'MCP_NATIVE_FILESET_NOT_APPROVED'* ]] || { echo "UNAPPROVED_FILE_ALLOWED"; exit 11; }
 [[ "$partial_code" == 7 && "$partial" == *'MCP_SKILL_FILESET_INCOMPLETE'* ]] || { echo "PARTIAL_FILESET_ALLOWED"; exit 12; }
 printf '%s\n' 'MCP_SKILL_CATALOG_ALLOWLIST_AND_COUNTERPROOF=PASS'
