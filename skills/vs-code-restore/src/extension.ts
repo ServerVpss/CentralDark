@@ -47,6 +47,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)),
     vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
+    vscode.commands.registerCommand('centraldark.pairDevice', () => pairDeviceWithMcp(context)),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
       traceOutput?.show(true);
@@ -294,6 +295,133 @@ function browserSurfacesCatalog(): void {
   out.show(true);
 }
 
+
+
+/** Pareamento CentralDark pela implementacao ja existente do MCP. */
+function pairingBase(): string {
+  const raw = vscode.workspace.getConfiguration('centraldark.restore')
+    .get<string>('mcpBaseUrl', 'https://mcp.centralldark.com');
+  const url = new URL(raw);
+  if (url.origin !== 'https://mcp.centralldark.com' || url.pathname !== '/' ||
+      url.username || url.password || url.search || url.hash) {
+    throw new Error('MCP_BASE_URL_INVALID');
+  }
+  return url.origin;
+}
+interface PairResult {
+  ok?: boolean;
+  code?: string; pair_id?: string; pair_secret?: string; expires_at?: string;
+  status?: string; device_id?: string; token?: string; refresh_token?: string;
+  pong?: string; error?: string;
+}
+async function deviceRequest(base: string, route: string, body: object, token?: string): Promise<PairResult> {
+  const response = await fetch(base + route, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...(token ? {Authorization: 'Bearer ' + token} : {}) },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(9000)
+  });
+  const data = await response.json() as PairResult;
+  if (!response.ok) throw new Error('PAIR_HTTP_' + response.status + '_' + (data.error || 'ERROR'));
+  return data;
+}
+async function deviceHeartbeat(context: vscode.ExtensionContext, base: string): Promise<boolean> {
+  const token = await context.secrets.get('centraldark.mcp.device.token');
+  if (!token) return false;
+  try {
+    const result = await deviceRequest(base, '/device/heartbeat', {
+      capabilities: {
+        host: process.env.COMPUTERNAME || 'unknown',
+        surface: 'vscode-ui',
+        extension_host_pid: process.pid,
+        terminal_count: vscode.window.terminals.length
+      }
+    }, token);
+    return Boolean(result.ok && result.pong);
+  } catch { return false; }
+}
+async function pairDeviceWithMcp(context: vscode.ExtensionContext): Promise<void> {
+  if (process.platform !== 'win32') {
+    void vscode.window.showWarningMessage('Pareamento da Casa requer VS Code Windows (extensionKind: ui).');
+    return;
+  }
+  let base: string;
+  try { base = pairingBase(); }
+  catch (error) { void vscode.window.showErrorMessage(String(error)); return; }
+  const panel = vscode.window.createWebviewPanel('centraldarkMcpPair',
+    '🪬 CentralDark · Pareamento MCP', vscode.ViewColumn.Active, {enableScripts: true});
+  let closed = false, busy = false;
+  let polling: ReturnType<typeof setInterval> | undefined;
+  panel.onDidDispose(() => { closed = true; if (polling) clearInterval(polling); });
+  const escape = (text: string): string => text.replace(/[&<>"']/g, ch =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch] || ch));
+  const draw = (title: string, message: string, id = '', code = '') => {
+    if (closed) return;
+    const info = code ? '<p>Código temporário:</p><h2>' + escape(code) +
+      '</h2><p>ID: <code>' + escape(id) + '</code></p>' +
+      '<p>Abra a página administrativa para informar este ID e código.</p>' +
+      '<button id="open">🔑 Abrir aprovação no MCP</button>' : '';
+    panel.webview.html = '<!doctype html><html lang="pt-BR"><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width">' +
+      '<style>body{font:16px system-ui;background:#090f20;color:#edf7ff;padding:28px}' +
+      'main{max-width:680px;border:1px solid #324e70;border-radius:18px;padding:24px}' +
+      'h1{color:#efd067}h2{font:700 32px monospace;color:#63d6f0;letter-spacing:3px}' +
+      'button{background:#f0c64a;border:0;border-radius:8px;padding:12px 20px;cursor:pointer}' +
+      'small{color:#9db2c8}</style><main><h1>' + escape(title) + '</h1><p>' +
+      escape(message) + '</p>' + info +
+      '<p><small>O servidor exige aprovação administrativa. Nenhum token aparece nesta tela.</small></p></main>' +
+      '<script nonce="pair">' +
+      'const b=document.getElementById("open");if(b)b.addEventListener("click",()=>' +
+      'acquireVsCodeApi().postMessage({type:"open_admin"}));' +
+      '</script></html>';
+  };
+  panel.webview.onDidReceiveMessage(async (value: unknown) => {
+    if (value && typeof value === 'object' && (value as {type?: string}).type === 'open_admin') {
+      await vscode.env.openExternal(vscode.Uri.parse(base + '/device/admin'));
+    }
+  });
+  draw('Parear VS Code', 'Solicitando código temporário ao MCP CentralDark…');
+  let pair: PairResult;
+  try {
+    pair = await deviceRequest(base, '/device/pair/start', {
+      device_name: process.env.COMPUTERNAME || 'CentralDark-Casa',
+      executor: 'vs-code-restore', surface: 'vscode-ui'
+    });
+    if (!pair.pair_id || !pair.pair_secret || !/^[A-F0-9]{4}-[A-F0-9]{4}$/.test(pair.code || '')) {
+      throw new Error('INVALID_PAIRING_RESPONSE');
+    }
+  } catch (e) { draw('MCP indisponível', String(e)); return; }
+  const pairId = pair.pair_id, pairSecret = pair.pair_secret;
+  const expiration = Date.parse(pair.expires_at || '');
+  draw('Aguardando aprovação 🔐', 'O código expira em dois minutos.', pairId, pair.code);
+  polling = setInterval(async () => {
+    if (closed || busy) return;
+    busy = true;
+    try {
+      if (!Number.isFinite(expiration) || Date.now() > expiration) {
+        clearInterval(polling);
+        draw('Código expirado', 'Acione Parear este VS Code novamente.');
+        return;
+      }
+      const status = await deviceRequest(base, '/device/pair/status', {id: pairId, secret: pairSecret});
+      if (status.status === 'approved' && status.token && status.device_id) {
+        clearInterval(polling);
+        await context.secrets.store('centraldark.mcp.device.token', status.token);
+        if (status.refresh_token) await context.secrets.store('centraldark.mcp.device.refresh', status.refresh_token);
+        await context.secrets.store('centraldark.mcp.device.id', status.device_id);
+        const ack = await deviceHeartbeat(context, base);
+        draw(ack ? 'Dispositivo conectado ✅' : 'Dispositivo aprovado 🟡',
+          ack ? 'Heartbeat autenticado confirmado. Ver status e PIDs pode medir a Casa.' :
+            'Aprovado, mas heartbeat não comprovado. Não declarar o dispositivo online.');
+      } else if (status.status === 'expired' || status.status === 'denied') {
+        clearInterval(polling);
+        draw('Pareamento encerrado', 'O código expirou ou foi recusado.');
+      }
+    } catch {
+      emitTrace('workspace_map', 'ATTENTION');
+    } finally { busy = false; }
+  }, 3000);
+}
 
 function loadMap(context: vscode.ExtensionContext): WorkspaceMap | undefined {
   const mapPath = path.join(context.extensionPath, 'workspace-map-20261014.json');
