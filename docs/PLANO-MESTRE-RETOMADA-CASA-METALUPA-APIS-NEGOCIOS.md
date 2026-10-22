@@ -346,7 +346,7 @@ apps/modulos/Bolt/
 docker-compose.yml
 executor.mjs
 Elite Gateway
-api.centraldark.com
+api.centralldark.com
 proxy Anthropic
 integração OpenAI-compatible
 suporte a containers
