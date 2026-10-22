@@ -82,3 +82,17 @@ flowchart LR
 **Importante:** `https://api.centralldark.com` continua API oficial do control plane, mas nenhuma rota `POST /reds` foi comprovada no gateway. Não inventar HTTP 200, nem declarar que o tráfego do RED atravessa essa API: atual transporte de publicação proposto é `GitHub API → Supabase REST/Realtime`, com fingerprints correlacionados no PR. Precisa de owner/canonical gateway antes de alterar rota pública.
 
 **Gates pendentes:** `CI_SAME_SHA`, secret/vars do Actions sem exibição, merge autorizado, hook de origem Cline que realmente dispare evento (PostToolUse pode não observar rejeição antes da execução), GitHub comment automático, Supabase row automático, browser/admin realtime e contraprova. `FIXED_POINT=NOT_ACHIEVED`.
+
+## 🔴 RED #003 — Shell/Working Directory da Casa fora do checkout
+
+- **Evidência:** captura do CHEFE com execução real de `run_commands` no Cline.
+- **Sintoma A:** `fatal: not a git repository (or any of the parent directories): .git` ao iniciar em `C:\\root\\CentralDark`.
+- **Sintoma B:** comandos PowerShell com quoting/escape falham `Unexpected token 'c' in expression or statement`. O mesmo Cline recorreu posteriormente a comandos de leitura em `K:`, onde encontrou arquivos canônicos.
+- **Classe nova:** `SHELL_CONTEXT_ERROR` / `COMMAND_FAILED`, independente do RED #001 (tool alucinada) e #002 (anunciada/rejeitada).
+- **Camada:** Cline `run_commands` realmente despachou; falha ocorre **dentro do shell** e contexto de workspace, não é `AI_NoSuchToolError`.
+- **Fingerprint causal:** `CLINE|CASA|SHELL_CONTEXT_ERROR|COMMAND_FAILED|run_commands`.
+- **Causa material:** diretório atual divergente do repositório versionado e command-line construída com quoting incorreto.
+- **Guarda corretiva:** antes de `git status`, medir `Get-Location`, `git -C 'K:\\' rev-parse --show-toplevel` e o owner; não presumir que `C:\\root\\CentralDark` ou `K:\\docs` sejam repositório Git. Para PowerShell, usar parâmetros nativos e `-LiteralPath`, sem construir comandos com aspas aninhadas no JSON. Distinguir erros de shell de falhas MCP.
+- **Contraprova pendente:** `git -C <checkout real> rev-parse --show-toplevel` + `git status --short --branch` com exit 0 no mesmo checkout, depois retomar Michelin passo 01/50.
+- **Status:** 🔴 CAPTURED → 🟠 TRIAGED, `FIX_PROVEN=UNKNOWN`.
+- **Origem:** screenshot da Casa (Cline com `run_commands` concluído, comando Git falhou por cwd); sem leitura de secrets.
