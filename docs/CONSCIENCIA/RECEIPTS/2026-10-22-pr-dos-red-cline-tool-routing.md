@@ -52,3 +52,13 @@ flowchart LR
 
 **CURRENT:** 2 fingerprints capturados; runtime corrigido **UNKNOWN**, `50_MICROSTEPS_COMPLETED=0` até readback.  
 **NEXT_CURSOR:** `PR_DOS_RED_STATIC_TEST → SESSION_TOOL_REGISTRY_READBACK → ONE_SAFE_CALL → REPLAY_STEP_01 → RECEIPT → CONTINUE_02_TO_50`.
+## 🧪 Contraprovas discriminantes desta revisão
+- `scripts/ci/centraldark-toolcall-red-guard.mjs`: módulo puro, independente de provedor; nenhum comando shell, secret, HTTP request, restart, bypass ou integração não autorizada.
+- `scripts/ci/centraldark-toolcall-red-guard.test.mjs`: **9 testes Node definidos**, incluindo `NOT_ADVERTISED`, `ADVERTISED_BUT_REJECTED`, `TOOL_REGISTRY_PARITY_BLOCKED`, `RETRY_LOOP_BLOCKED`, identidade da recorrência, `NO_FAKE_PROOF`.
+- **READBACK ISOLADO V8:** código da branch recuperado pelo GitHub, 10/10 asserts manuais PASS no módulo puro (blob `ef2b2cf8a73f8af20c6b5d2f2bb23e32923092a5`). Esse teste não equivale a `node --test` no CI.
+- **CI OWNERSHIP:** workflow existente `.github/workflows/centraldark-validate.yml` agora inclui `node --test scripts/ci/centraldark-toolcall-red-guard.test.mjs` no job de validação canônica. Job precisa passar no SHA final para selo.
+- **Cline runtime:** esquema carregado na sessão do Cline e correção efetiva do resolver permanecem `UNKNOWN`; precisa de chamada real por uma ferramenta autorizada com resultado não vazio e prova do arquivo-alvo. Não presumir que ler `AGENTS.md` alterou a lista de ferramentas.
+- **DEDUP:** capturas adicionais de `AI_NoSuchToolError` com os mesmos nomes e a mesma superfície são recorrências de #001/#002, não novo ID sem fingerprint/camada diferente.
+
+**FIXED_POINT:** NÃO. **MVP de fonte:** módulo + testes + skill + política + workflow no PR.  
+**NEXT_CURSOR:** `CI_SAME_HEAD → CLINE_TOOL_SCHEMA_LIVE → AUTH_SAFE_CALL_READBACK → RED_001_002_CLOSURE → MICHELIN_01_50`.
