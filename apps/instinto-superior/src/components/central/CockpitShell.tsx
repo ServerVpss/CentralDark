@@ -10,12 +10,11 @@ import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
-import { HudDeterministico } from "@/components/central/HudDeterministico";
+import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
@@ -52,6 +51,7 @@ import { BlocoEstado, type EstadoOperacional } from "@/components/central/Estado
 import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
 import { MapaOwners } from "@/components/central/MapaOwners";
+import { COCKPIT_ABAS } from "@/data/painel-unico";
 import { AutoSyncButton } from "@/components/central/AutoSyncButton";
 import { StatusPanel } from "@/components/central/StatusPanel";
 import { DailyReviewPanel } from "@/components/central/DailyReviewPanel";
@@ -89,24 +89,9 @@ type NativeUnigramBridge = {
 function nativeUnigramBridge(): NativeUnigramBridge | undefined {
   if (typeof window === "undefined") return undefined;
   return (window as Window & { centraldark?: NativeUnigramBridge }).centraldark;
+}
 
-const HARNESS_DESTINOS = [
-  { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
-  { id: "portal", titulo: "Portal", icone: "🌐", privado: false },
-  { id: "builder-bolt", titulo: "Builder Bolt", icone: "⚡", privado: false },
-  { id: "pr1873", titulo: "Mapa do PR #1873", icone: "📜", privado: false },
-  { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
-  { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
-  { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
-  { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
-  { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
-  { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
-  { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
-  { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
-  { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
-  { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
-  { id: "downloads", titulo: "Downloads", icone: "📦", privado: false },
-] as const;
+const HARNESS_DESTINOS = COCKPIT_ABAS;
 
 /** UI-first: catálogo visual selecionável, sem fingir conexões ou criar outro painel. */
 function MenuVisualCentralDark({ titulo, descricao, itens }: { titulo: string; descricao: string; itens: string[] }) {
@@ -252,9 +237,55 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
   );
 }
 
+// Casca Electron AionUi: o host abre o cockpit com ?shell=aionui. O marcador fica na sessão da aba para
+// sobreviver à navegação interna. Fora da casca (navegador comum) nada muda.
+const CASCA_AIONUI_CHAVE = "centraldark.shell";
+function dentroDaCascaAionUI(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    if (new URLSearchParams(window.location.search).get("shell") === "aionui") {
+      window.sessionStorage.setItem(CASCA_AIONUI_CHAVE, "aionui");
+      return true;
+    }
+    return window.sessionStorage.getItem(CASCA_AIONUI_CHAVE) === "aionui";
+  } catch {
+    return false;
+  }
+}
+
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [abaAdminInicial, definirAbaAdminInicial] = useState<"visao" | "notificacoes">("visao");
+  const [versaoAdmin, definirVersaoAdmin] = useState(0);
+  const [estudioAberto, definirEstudioAberto] = useState(false);
+  const [estadoEstudio, definirEstadoEstudio] = useState("NÃO MEDIDO NESTE NAVEGADOR");
+  async function conferirEstudio() {
+    definirEstadoEstudio("CONSULTANDO");
+    try {
+      const resposta = await fetch("https://ui.centralldark.com/api/settings/client", {
+        credentials: "omit", cache: "no-store", signal: AbortSignal.timeout(7000),
+      });
+      definirEstadoEstudio(resposta.ok ? "API HTTP_ACK" : "API HTTP_" + resposta.status);
+    } catch {
+      // Bloqueio CORS e falta de rede são inconclusivos, não equivalem a OFFLINE.
+      definirEstadoEstudio("UNKNOWN · rede ou CORS");
+    }
+  }
+  function abrirEstudio() {
+    if (dentroDaCascaAionUI()) {
+      // Dentro da casca, o Estúdio é a própria casca: pede ao host as funções originais (/guid) em vez de
+      // abrir outro AionUI (iframe) dentro do cockpit, que fecharia o espelho. O host lê este parâmetro.
+      const alvo = new URL(window.location.href);
+      alvo.searchParams.set("aionui-host", "guid");
+      window.location.assign(alvo.toString());
+      return;
+    }
+    definirEstudioAberto(true);
+    void conferirEstudio();
+    window.requestAnimationFrame(() => document.getElementById("centraldark-estudio")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+  const tituloAbaAtiva = COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
   const [harnessVisivel, definirHarnessVisivel] = useState(true);
@@ -297,10 +328,10 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   return (
     <main
       data-pele-cockpit={pele}
-      className={`min-h-dvh pb-52 ${pele === "default" ? "" : "cockpit-pele"}`}
+      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${pele === "default" ? "" : "cockpit-pele"}`}
     >
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 flex -translate-y-1/2 flex-col gap-2 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="CentralDark Gram" aria-label="CentralDark Gram" onClick={() => autenticado ? abrirDestino("gram") : abrirDestino("visao")}><MessagesSquare className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Goals" aria-label="Goals" onClick={() => abrirDestino("goals")}><Zap className="size-4" /></Button>
@@ -308,7 +339,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral direito" className="fixed right-1 top-1/2 z-40 flex -translate-y-1/2 flex-col gap-2 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral direito" className="fixed right-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Sistemas" aria-label="Sistemas" onClick={() => definirGaveta("right")}><PanelRight className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Hermes" aria-label="Hermes" onClick={() => abrirDestino("hermes")}><Terminal className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Configurar Harness" aria-label="Configurar Harness" onClick={() => definirGaveta("bottom")}><Settings2 className="size-4" /></Button>
@@ -317,11 +348,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       {harnessVisivel ? (
         <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
+          {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
+            definirAbaAdminInicial("notificacoes");
+            definirVersaoAdmin((n) => n + 1);
+            abrirDestino("admin");
+          }} /> : null}
           <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("top")}><Layers3 className="size-4" /></Button>
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("sync")}><RefreshCcw className="mr-1 size-4" /> Sync</Button>
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("downloads")}><Download className="mr-1 size-4" /> Pacotes</Button>
           <Button size="icon" variant="ghost" title="Configurar moldura" aria-label="Configurar moldura" onClick={() => definirGaveta("bottom")}><Wrench className="size-4" /></Button>
@@ -357,13 +393,14 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </span>
             <Button
               data-cd-flow="instinto.CockpitShell.botao-01"
-              asChild
+              type="button"
               variant="outline"
               size="sm"
+              aria-expanded={estudioAberto}
+              aria-controls="centraldark-estudio"
+              onClick={abrirEstudio}
             >
-              <a href="http://89.117.78.124:25808/" target="_blank" rel="noopener noreferrer">
-                <ExternalLink aria-hidden className="size-4" /> Abrir AionUI
-              </a>
+              <Layers3 aria-hidden className="size-4" /> CentralDark Estúdio
             </Button>
             {!autenticado ? (
               <Button data-cd-flow="instinto.CockpitShell.botao-02" asChild size="sm">
@@ -382,6 +419,64 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </div>
       </header>
+
+      {estudioAberto ? (
+        <section id="centraldark-estudio" aria-label="CentralDark Estúdio" className="scroll-mt-20 border-b border-border bg-surface/60 px-4 py-6 sm:px-6">
+          <div className="mx-auto max-w-6xl space-y-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-neon-blue">Instinto Superior · aplicação existente</p>
+                <h2 className="mt-1 text-2xl font-semibold">🧩 CentralDark Estúdio</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Uma entrada no cockpit para o AionUI já instalado na VPS. Não inicia outra instância nem transfere sessões da Casa.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" size="sm" variant="outline" data-cd-flow="instinto.CockpitShell.estudio-verificar" onClick={() => void conferirEstudio()}>
+                  <RefreshCcw className="size-4" /> Verificar API
+                </Button>
+                <Button asChild type="button" size="sm" variant="outline" data-cd-flow="instinto.CockpitShell.estudio-externo">
+                  <a href="https://ui.centralldark.com/" target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="size-4" /> Abrir em janela
+                  </a>
+                </Button>
+                <Button type="button" size="sm" variant="ghost" onClick={() => definirEstudioAberto(false)}>Fechar</Button>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-background/70 p-3">
+              <span role="status" className="mr-2 font-mono text-xs text-muted-foreground">Estúdio: {estadoEstudio}</span>
+              <span className="text-xs text-muted-foreground">Pele da moldura:</span>
+              {([["default", "Padrão"], ["ouro", "Breu & Ouro"], ["ops", "Ops · Ciano"], ["esmeralda", "Esmeralda"]] as const).map(([id, nome]) => (
+                <Button type="button" key={id} size="sm" variant={pele === id ? "default" : "outline"} aria-pressed={pele === id}
+                  onClick={() => selecionar(id)} data-cd-flow={"instinto.CockpitShell.estudio-pele-" + id}>{nome}</Button>
+              ))}
+              <span className="text-xs text-muted-foreground">O interior do AionUI mantém o tema nativo nesta etapa.</span>
+            </div>
+            <div className="overflow-hidden rounded-xl border border-border bg-background">
+              <iframe title="CentralDark Estúdio — AionUI original" src="https://ui.centralldark.com/"
+                className="h-[72vh] min-h-[360px] w-full border-0" loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin" allow="clipboard-read; clipboard-write" />
+            </div>
+            <details className="rounded-lg border border-border p-3 text-sm">
+              <summary className="cursor-pointer font-semibold">Conexões e portas existentes · última medição 22/10/2026</summary>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {([
+                  ["Estúdio · AionUI", "https://ui.centralldark.com/", "VPS 25808 · HTTP 200"],
+                  ["Cockpit · Instinto Superior", "https://admin.centralldark.com/sala-controle", "VPS 25812 · HTTP 200"],
+                  ["MCP · CentralDark", "https://mcp.centralldark.com/health", "VPS 9100 · HTTP 200"],
+                  ["API · Hermes Core", "https://api.centralldark.com/health", "VPS 8899 · HTTP 200"],
+                ] as const).map(([nome, url, prova]) => (
+                  <a key={url} data-cd-flow={"instinto.CockpitShell.estudio-rota-" + nome} href={url}
+                    target="_blank" rel="noopener noreferrer" className="rounded-lg border border-border p-3 hover:border-neon-blue">
+                    <span className="flex items-center gap-2 text-sm font-semibold">{nome}<ExternalLink className="size-3" /></span>
+                    <span className="mt-1 block break-all font-mono text-[11px] text-muted-foreground">{url}</span>
+                    <span className="mt-1 block text-xs text-muted-foreground">Última medição: {prova}. Revalidar antes de concluir.</span>
+                  </a>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">Rotas locais adicionais na VPS (não são links do navegador): AionCore 46573, OAuth Broker 8098, Telegram MTProto 8790 e Hermes 8644/9900. Porta aberta não comprova autenticação ou ação.</p>
+            </details>
+          </div>
+        </section>
+      ) : null}
 
       <section className="relative overflow-hidden border-b border-border px-4 py-20 sm:px-6">
         <div aria-hidden className="grid-mesh absolute inset-0 opacity-30" />
@@ -467,37 +562,50 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-14" id="centraldark-harness-abas">
-            <div className="sticky top-0 z-30 -mx-4 overflow-x-auto border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
-              <TabsList className="h-auto min-w-max justify-start">
-                <TabsTrigger value="visao">Visão geral</TabsTrigger>
-                <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
-                <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
-                <TabsTrigger value="pr1873">📜 Mapa PR #1873</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
-                <TabsTrigger value="sync">🛠️ Minha Oficina</TabsTrigger>
-                <TabsTrigger value="design">Design Center</TabsTrigger>
-                <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
-                {autenticado ? <TabsTrigger value="genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
-                <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
-                <TabsTrigger value="dream-reviewer">😴 Dream</TabsTrigger>
-                <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
-                <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
-                <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
-                <TabsTrigger value="forja">🔧 Forja</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
-                {autenticado ? <TabsTrigger value="admin">Admin CentralDark</TabsTrigger> : null}
+          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8 min-w-0" id="centraldark-harness-abas">
+            <div className="sticky top-0 z-30 -mx-4 min-w-0 border-y border-border bg-background/95 px-3 py-2 backdrop-blur sm:mx-0 sm:rounded-md sm:border" aria-label="Navegação do cockpit">
+              <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
+                <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                  <span className="max-w-36 truncate font-mono text-xs text-muted-foreground sm:max-w-60" title={tituloAbaAtiva}>{tituloAbaAtiva}</span>
+                  <Button type="button" size="sm" variant={abaAtiva === "visao" ? "default" : "ghost"} onClick={() => abrirDestino("visao")}>Visão</Button>
+                  <Button type="button" size="sm" variant={abaAtiva === "sync" ? "default" : "ghost"} onClick={() => abrirDestino("sync")}>Oficina</Button>
+                  <Button type="button" size="sm" variant={abaAtiva === "hermes" ? "default" : "ghost"} onClick={() => abrirDestino("hermes")}>Hermes</Button>
+                </div>
+                <details className="w-full min-w-0 rounded-md border border-border/70 bg-muted/20 p-1 sm:w-auto sm:flex-1" id="centraldark-todas-as-abas">
+                  <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as 25 áreas ▾</summary>
+                  <div className="mt-2 max-h-[min(60dvh,34rem)] overflow-y-auto p-1">
+                    <TabsList className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
+                <TabsTrigger value="visao" data-cd-flow="instinto.CockpitShell.aba.visao">Visão geral</TabsTrigger>
+                <TabsTrigger value="portal" data-cd-flow="instinto.CockpitShell.aba.portal">🌐 Portal</TabsTrigger>
+                <TabsTrigger value="builder-bolt" data-cd-flow="instinto.CockpitShell.aba.builder-bolt">⚡ Builder Bolt</TabsTrigger>
+                <TabsTrigger value="pr1873" data-cd-flow="instinto.CockpitShell.aba.pr1873">📜 Mapa PR #1873</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram" data-cd-flow="instinto.CockpitShell.aba.gram">✉️ CentralDark Gram</TabsTrigger> : null}
+                <TabsTrigger value="sync" data-cd-flow="instinto.CockpitShell.aba.sync">🛠️ Minha Oficina</TabsTrigger>
+                <TabsTrigger value="design" data-cd-flow="instinto.CockpitShell.aba.design">Design Center</TabsTrigger>
+                <TabsTrigger value="goals" data-cd-flow="instinto.CockpitShell.aba.goals">🎯 Goals</TabsTrigger>
+                {autenticado ? <TabsTrigger value="genesis" data-cd-flow="instinto.CockpitShell.aba.genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
+                <TabsTrigger value="claude-notifications" data-cd-flow="instinto.CockpitShell.aba.claude-notifications">🔔 Claude</TabsTrigger>
+                <TabsTrigger value="dream-reviewer" data-cd-flow="instinto.CockpitShell.aba.dream-reviewer">😴 Dream</TabsTrigger>
+                <TabsTrigger value="arquitetura" data-cd-flow="instinto.CockpitShell.aba.arquitetura">📐 Estrutura</TabsTrigger>
+                <TabsTrigger value="raioxvivo" data-cd-flow="instinto.CockpitShell.aba.raioxvivo">🪬 Raio-X</TabsTrigger>
+                <TabsTrigger value="recibos" data-cd-flow="instinto.CockpitShell.aba.recibos">📊 Recibos</TabsTrigger>
+                <TabsTrigger value="forja" data-cd-flow="instinto.CockpitShell.aba.forja">🔧 Forja</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram-permissions" data-cd-flow="instinto.CockpitShell.aba.gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
+                {autenticado ? <TabsTrigger value="admin" data-cd-flow="instinto.CockpitShell.aba.admin">Admin CentralDark</TabsTrigger> : null}
                 {autenticado ? (
-                  <TabsTrigger value="sistema">Sistema CentralDark</TabsTrigger>
+                  <TabsTrigger value="sistema" data-cd-flow="instinto.CockpitShell.aba.sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
-                <TabsTrigger value="hermes">Hermes</TabsTrigger>
-                <TabsTrigger value="unigram">Unigram</TabsTrigger>
-                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
-                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
-                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
-                <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
-                <TabsTrigger value="downloads">Downloads</TabsTrigger>
+                <TabsTrigger value="hermes" data-cd-flow="instinto.CockpitShell.aba.hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="unigram" data-cd-flow="instinto.CockpitShell.aba.unigram">Unigram</TabsTrigger>
+                <TabsTrigger value="forja-regras" data-cd-flow="instinto.CockpitShell.aba.forja-regras">Regras Forja</TabsTrigger>
+                <TabsTrigger value="forja-inventario" data-cd-flow="instinto.CockpitShell.aba.forja-inventario">Inventário</TabsTrigger>
+                <TabsTrigger value="agent-mode" data-cd-flow="instinto.CockpitShell.aba.agent-mode">Agent Mode</TabsTrigger>
+                <TabsTrigger value="html-consolidation" data-cd-flow="instinto.CockpitShell.aba.html-consolidation">HTML Consolidation</TabsTrigger>
+                <TabsTrigger value="downloads" data-cd-flow="instinto.CockpitShell.aba.downloads">Downloads</TabsTrigger>
               </TabsList>
+                  </div>
+                </details>
+              </div>
             </div>
             <TabsContent value="pr1873" className="mt-8">
               <PainelPR1873 />
@@ -550,6 +658,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <MapaMetabolicoCristal compacto />
               </div>
               <Ledger compacto />
+              <EstudoPorCriterios contexto="visao" />
             </TabsContent>
             <TabsContent value="sync" className="mt-10">
               {dado ? <SyncCenter estado={dado} /> : <SyncCenter />}
@@ -605,7 +714,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </p>
                 <h2 className="mt-3 text-3xl font-semibold">Arquitetura Viva do Cockpit</h2>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Visualização completa da estrutura: 9 deliverables, 7 abas, 5 sistemas, correlação total e FIXED_POINT 100%.
+                  Inventário histórico de 9 entregas e 5 sistemas. As 25 áreas estão no Mapa de Owners; runtime exige medição.
                 </p>
               </div>
               <ArchitectureVisualization />
@@ -637,6 +746,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </p>
               </div>
               <ForjaExecutor />
+              <EstudoPorCriterios contexto="forja" />
             </TabsContent>
             {autenticado ? (
               <TabsContent value="gram-permissions" className="mt-10">
@@ -646,7 +756,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             {autenticado ? (
               <TabsContent value="admin" className="mt-10">
                 <MenuVisualCentralDark titulo="🔐 Admin → Control Plane" descricao="Estrutura visual do HUB Credential Control Plane. Sem exposição de credenciais e sem ligação simulada." itens={["👥 Contas e permissões", "☁️ Cloudflare", "🔌 APIs e MCPs", "🔑 Cofre", "🤖 Bots", "🔗 Providers / OAuth", "📋 Auditoria", "🟡 Estado das conexões"]} />
-                <div className="mt-6"><PainelAdminCentralDark estado={dado} /></div>
+                <div className="mt-6"><PainelAdminCentralDark key={versaoAdmin} estado={dado} abaInicial={abaAdminInicial} /></div>
               </TabsContent>
             ) : null}
             {autenticado ? (
@@ -763,6 +873,28 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   continuam processos independentes, governados pelos contratos existentes.
                 </p>
               </section>
+            </TabsContent>
+            <TabsContent value="forja-regras" className="mt-6">
+              <section className="rounded-xl border border-border bg-surface/50 p-4 sm:p-6">
+                <h2 className="text-xl font-semibold">📜 Regras da Forja</h2>
+                <p className="mt-2 text-sm text-muted-foreground">RULES.md e AGENTS.md são os owners. Abrir documentos não executa comandos.</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Button asChild variant="outline" size="sm"><a href="https://github.com/ServerVpss/CentralDark/blob/main/RULES.md" target="_blank" rel="noopener noreferrer">RULES.md ↗</a></Button>
+                  <Button asChild variant="outline" size="sm"><a href="https://github.com/ServerVpss/CentralDark/blob/main/AGENTS.md" target="_blank" rel="noopener noreferrer">AGENTS.md ↗</a></Button>
+                  <Button type="button" onClick={() => abrirDestino("forja")}>Abrir Forja</Button>
+                </div>
+              </section>
+            </TabsContent>
+            <TabsContent value="forja-inventario" className="mt-6">
+              <section className="rounded-xl border border-border bg-surface/50 p-4 sm:p-6">
+                <h2 className="text-xl font-semibold">🗂️ Inventário da Forja</h2>
+                <p className="mt-2 text-sm text-muted-foreground">Reutiliza o Sistema e o Mapa de Owners já existentes; nenhuma ligação remota é presumida.</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Button type="button" onClick={() => abrirDestino(autenticado ? "sistema" : "visao")}>Abrir owner do inventário</Button>
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("raioxvivo")}>Conferir Raio-X</Button>
+                </div>
+              </section>
+            </TabsContent>
             <TabsContent value="agent-mode" className="mt-10">
               <div className="mb-8 space-y-6">
                 <div>
@@ -903,11 +1035,11 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-border bg-surface/50 p-6">
-                  <h3 className="font-semibold">Status Atual da Forja</h3>
+                  <h3 className="font-semibold">Modelo da Forja — runtime não verificado</h3>
                   <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
                     <div>
                       <dt className="text-muted-foreground">HEAD</dt>
-                      <dd className="mt-1 font-mono">567d885fe8</dd>
+                      <dd className="mt-1 break-all font-mono">{dado?.mainSha ?? "UNKNOWN"}</dd>
                     </div>
                     <div>
                       <dt className="text-muted-foreground">Mode Ativo</dt>
@@ -921,7 +1053,7 @@ REUSE: before_create (sem duplicação)`}
                     </div>
                     <div>
                       <dt className="text-muted-foreground">Terminal Condition</dt>
-                      <dd className="mt-1 font-mono">99.9% Fixed Point + Aguardando Agentes 2,7</dd>
+                      <dd className="mt-1 font-mono">UNKNOWN · exige contraprova</dd>
                     </div>
                   </dl>
                 </div>
@@ -933,7 +1065,7 @@ REUSE: before_create (sem duplicação)`}
                   <p className="font-mono text-[10px] tracking-[0.2em] text-neon-purple uppercase">
                     Consolidação de artefatos
                   </p>
-                  <h2 className="mt-3 text-3xl font-semibold">HTML Consolidation 100%</h2>
+                  <h2 className="mt-3 text-3xl font-semibold">HTML Consolidation · histórico</h2>
                   <p className="mt-3 text-sm text-muted-foreground">
                     Mapeamento completo de K:\ para cockpit-unified/. 16 pastas consolidadas, 4
                     archived, 0 duplicações.
@@ -941,7 +1073,7 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-border bg-surface/50 p-6">
-                  <h3 className="font-semibold mb-4">📊 Status Final</h3>
+                  <h3 className="font-semibold mb-4">📊 Snapshot histórico — sem readback atual</h3>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <dt className="text-xs text-muted-foreground">DISCOVERY</dt>
@@ -1060,7 +1192,7 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-emerald-700/50 bg-emerald-950/20 p-6">
-                  <p className="text-sm font-semibold text-emerald-400">🟢 RESULTADO FINAL</p>
+                  <p className="text-sm font-semibold text-emerald-400">🟡 RESULTADO HISTÓRICO · RUNTIME UNKNOWN</p>
                   <ul className="mt-3 space-y-1 text-xs text-emerald-400">
                     <li>✅ Consolidação 100% bem-sucedida</li>
                     <li>✅ Zero perda de dados</li>
@@ -1068,7 +1200,7 @@ REUSE: before_create (sem duplicação)`}
                     <li>✅ Estrutura FLAT em cockpit-unified/</li>
                     <li>✅ Histórico preservado em _archive/</li>
                     <li>✅ Documentação completa</li>
-                    <li>✅ Pronto para produção 🚀</li>
+                    <li>⚠️ Produção depende de build e prova do SHA atual</li>
                   </ul>
                 </div>
               </div>

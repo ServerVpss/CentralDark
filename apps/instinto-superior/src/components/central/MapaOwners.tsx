@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
-import { MAPA_OWNERS, type DonoVisual, CRISTAL } from "@/data/painel-unico";
+import { COCKPIT_ABAS, MAPA_OWNERS, type DonoVisual, CRISTAL } from "@/data/painel-unico";
 import { ChevronRight, Layers, CornerDownRight } from "lucide-react";
 
 const ORDEM: DonoVisual[] = ["Admin", "Sistema", "Hermes", "Downloads", "Design"];
@@ -305,6 +305,25 @@ export function MapaOwners({
         ) : null}
       </section>
 
+      {/* #OBSERVACOES# @owner: MapaOwners @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md */}
+      <section aria-label="Mapa de áreas do cockpit" className="rounded-xl border border-border bg-surface/40 p-4">
+        <h4 className="text-base font-semibold">🧭 Áreas do cockpit → owners existentes</h4>
+        <p className="mt-2 text-xs text-muted-foreground">25 áreas do código. Clique de navegação não comprova a execução na API; efeito remoto exige readback.</p>
+        <div className="mt-4 grid min-w-0 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {COCKPIT_ABAS.filter(a => !a.privado || autenticado).map(a => (
+            <article key={a.id} className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-border/70 bg-background/60 p-3">
+              <div className="min-w-0">
+                <h5 className="text-sm font-semibold">{a.titulo}</h5>
+                <p className="mt-1 break-words font-mono text-[11px] text-muted-foreground">{a.owner}</p>
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[10px] font-mono text-amber-500">{a.estado} · runtime UNKNOWN</span>
+                <button type="button" className="min-h-9 rounded border border-border px-3 py-1 text-xs font-semibold text-neon-blue hover:bg-muted disabled:opacity-50" disabled={!onNavigate} onClick={() => onNavigate?.(a.id)} aria-label={`Abrir ${a.titulo}`}>Abrir área →</button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
       {/* Tabela de Capacidades (original) */}
       <div>
         <h4 className="font-semibold text-sm mb-2">📋 Mapa de Capacidades por Dono</h4>
