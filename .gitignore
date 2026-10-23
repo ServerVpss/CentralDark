@@ -178,3 +178,18 @@ $RECYCLE.BIN/
 **/_work/
 # Hermes Core mission inbox/outbox are mutable runtime state, not code or receipts.
 /apps/modulos/HERMES-CORE/missions/
+
+# Chaves SSH privadas nunca entram no repo (a Casa tem K:\.ssh dentro da arvore).
+# .pub fica livre fora de .ssh/: os padroes abaixo nao casam *.pub.
+.ssh/
+*_ed25519
+*_rsa
+*_ecdsa
+*_dsa
+id_rsa
+id_ed25519
+id_ecdsa
+id_dsa
+# Status runtime do auto-sync (scripts/vps/auto-sync-main.sh); reescrito a cada ciclo.
+# Versionado ele sujava /root/CentralDark e o proprio auto-sync ficava BLOCKED.
+logs/auto-sync-status.json
