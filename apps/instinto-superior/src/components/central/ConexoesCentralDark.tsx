@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { CircleAlert, KeyRound, Link2, RefreshCw, ShieldCheck, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
+import { lerConexoesCentralDark, lerSaudeInfraCentralDark } from "@/lib/conexoes.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 const OAUTH_START_SUPPORTED = new Set([
@@ -34,6 +34,8 @@ export function ConexoesCentralDark() {
     retry: false,
   });
 
+  const saudeFn = useServerFn(lerSaudeInfraCentralDark);
+  const saude = useQuery({ queryKey: ["centraldark", "saude-hub-mcp"], queryFn: () => saudeFn(), refetchInterval: 60_000, retry: false });
   const dados = q.data;
   const [oauthError, setOauthError] = useState<string | null>(null);
   const agrupadas = useMemo(() => {
@@ -198,8 +200,8 @@ export function ConexoesCentralDark() {
           </a>
           <div className="rounded-lg border border-border bg-muted/20 p-4">
             <strong className="block text-sm">VPS CentralDark</strong>
-            <span className="mt-2 block text-xs text-muted-foreground">MCP administrativo · leitura comprovada em 23/10</span>
-            <span className="mt-2 block text-[11px] text-gold">Estado atual: verificar no runtime</span>
+            <span className="mt-2 block text-xs text-muted-foreground">MCP: {saude.data?.mcp ?? "UNKNOWN"} · Hub: {saude.data?.hub ?? "UNKNOWN"}</span>
+            <span className="mt-2 block text-[11px] text-gold"><button type="button" className="underline" onClick={() => void saude.refetch()} disabled={saude.isFetching}>Verificar agora</button></span>
           </div>
           <a className="rounded-lg border border-border bg-muted/20 p-4 hover:border-neon-blue" href="https://drive.google.com/drive/folders/1eVFHzLZxsDmfjy1yL5-rbD4gO85B-7Uw" target="_blank" rel="noopener noreferrer">
             <strong className="block text-sm">Google Drive</strong>
