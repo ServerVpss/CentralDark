@@ -62,7 +62,7 @@ BRANCH=main
 SOURCE_SHA=<sha_exato_da_main>
 OWNER=<owner_causal>
 WORKTREE=<worktree_limpa>
-RUNTIME_ROOT=/root/CentralDark
+RUNTIME_ROOT=<caminho-vps>
 FILESET_CAUSAL=<lista_exata>
 TEST_COMMAND=<teste_aplicavel>
 BUILD_COMMAND=<build_ou_NA>
@@ -88,7 +88,7 @@ Sequência:
 - node --check
 - typecheck
 - testes direcionados
-- copiar 4 arquivos para /root/CentralDark/apps/modulos/mcp/
+- copiar 4 arquivos para <caminho-vps>
 - restart CentralDark-MCP
 - provar 127.0.0.1:9100/health = 200
 - confirmar dist vivo com o delta esperado
@@ -192,6 +192,87 @@ CHANGED_FINGERPRINT
 
 **NEXT_CURSOR material:** executar `--dry-run` no SHA exato com scratch protegida; provar tsc e `node --test` na VPS; só promover MCP quando for seguro e permitido; conferir `mcp_admin_catalog(filter=admin_ssh_microdeploy)`, `mcp_policy_summary`, health, restart isolado e receipt. Falha financeira no hosted não se resolve disparando CI pesado repetidamente.
 
+## Sem runner pago — rota MCP direta (2026-10-23)
+
+Diretriz expressa: não depender de GitHub-hosted runner pago. Workflow `.github/workflows/vps-ssh-exec.yml` transformado em legado inerte (`if: false`), com zero jobs de deploy e sem runner hospedado. O run #39912949599 é histórico; não é requisito de pagamento nem bloqueio arquitetural do deploy nativo.
+
+**Fluxo normal:** `JARVIS → MCP_CENTRALDARK → centraldark_deploy_micro_fallback → scripts/vps/main-pinned-microdeploy.sh → scratch segura → build/teste na VPS → promoção causal → health → receipt/rollback`. GitHub serve somente para fonte `main/SHA` e versionamento, sem CI obrigatorio. SSH privado Casa/Tailscale continua transporte opcional.
+
+O alias admin legado `admin_ssh_microdeploy` deixa de disparar Actions e somente orienta status/plano da rota nativa. A execução real permanece sob o `mcp_admin_call` e a tool `centraldark_deploy_micro_fallback`, com autorização/auditoria independentes. Nao executar uma ferramenta destrutiva por chamada interna de alias.
+
+**Prova atual:** as leituras MCP/VPS e GitHub são operacionais; dry-run via ferramenta nativa foi bloqueado pela segurança da plataforma, logo `DEPLOY=UNKNOWN`. Não contornar isso por outro caminho. NEXT_CURSOR: validar alterações do commit, instalar pela rotina permitida e medir health/catálogo/receipt sem sobrescrever checkout da VPS.
+
+## Prioridade global de receita — prova de fonte 2026-10-23
+
+**Lei P0 GLOBAL RECIPE FIRST.** Não é opção do agente e não depende de mensagem na conversa. **Antes de qualquer feito operacional:** recuperar intenção vigente, owner, receita e checkpoint; comparar a validade da prova pelo mesmo SHA, fileset, fingerprint, escopo, efeito e frescor; reutilizar se realmente equivalente; se divergente, alterar **a própria receita/script/skill** existente; executar delta mínimo permitido; medir efeito, rollback se necessário, escrever receipt e NEXT_CURSOR. Se não houver receita pertinente, consultar o catálogo existente primeiro, não criar estrutura paralela.
+
+**Pontos reais de execução versionados na main:**
+- `apps/modulos/mcp/src/tools/core/mcp-admin.js`: `mcp_admin_call` chama `canonicalRecipeFirstPreflight` antes do handler. Portanto cobre as missões Hermes/Hub que usam o dispatcher e bridge OAuth/Hub. A autorização/auditoria posterior permanece, sem synthesize/ignorar consentimentos.
+- `apps/modulos/mcp/src/mcp-server.js`: entrada direta HTTP/stdio consulta a mesma preflight, antes do handler. Prova de código não representa servidor já recarregado.
+- `apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js`: função reaproveitável faz seleção da receita e bloqueio de escopo; diagnósticos read-only continuam possíveis para reparar fontes ausentes. Em migração, o executor MCP nativo admite receita legada **apenas** no caminho nativo e com SHA explícito em promoção.
+- `apps/modulos/mcp/src/tools/github/github.js`, `github-tools.js` e `github-write.js`: `vps-ssh-exec.yml` e ID `301288932` são rejeitados em `ServerVpss/CentralDark`; outros workflows fora do alvo continuam com seus controles.
+- `apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml` e `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`: portadores da mesma prioridade 0 para consumidores/agentes; sem segundo dispatcher, cron, agent ou recipe.
+
+**Hermes — delta recebido:** o CHEFE relatou commit local `2d3972c827ce2786de6da24cbd9e75de589d834c` no mesmo `scripts/vps/hermes-self-evolution-current-model.sh`, com donor pinado `0a929e3aa20e15cf04dc7c28492a7d41a5139125`, provisionamento de `.venv`, import do executor e opção `--self-provision-only`. Testes reportados: `12 passed, 2 subtests passed`, `bash -n`, `py_compile`, `git diff --check`. **Limite de prova:** não foi possível buscar esse commit remoto; a main consultada ainda continha versão anterior. Não atribuir `DEPLOYED`, `PR_CREATED` ou `LIVE` à informação local sem readback de branch e runtime.
+
+**Commits da prioridade e cadeado:** `6153b75555101d8f31189ce1daf973a1d7ffc16c` (dispatcher + entrada MCP + contratos), `d0289679973c88f059bfac1321779f523e31aebf` (duplo dispatch guard), `06ee5679dcccd07dbbd60d2648f8157201e35b0c` (bootstrap resiliente), `a4634a0cc44edfb314539a57c77c1226ca37066e` (read-only sem deadlock). Testes de sintaxe de `mcp-admin.js`, `centraldark-capabilities.js`, `github.js`, `github-tools.js`, `github-write.js` e `admin-ssh-microdeploy.test.mjs` observados PASS; `mcp-server.js` e parsers adicionais não tiveram PASS de shell por restrição de ferramenta. Teste funcional de node e deploy real permanecem pendentes.
+
+**Contraprova runtime:** o MCP ativo ainda retornou `runtimeTools=141`, `admin_ssh_microdeploy=0` e receita `primaryPath=github_actions_canonical_deploy`. Isso confirma **SOURCE_COMMITTED != RUNTIME_DEPLOYED**. Nenhum deploy/restart foi realizado nesta atualização.
+
+**NEXT_CURSOR:** ao retomar, buscar esta receita P0 antes de investigação; confirmar commit/PR Hermes publicado; implantar deltas MCP pela rota nativa autorizada com snapshot de scratch segura, SHA exato, build/teste e health; ler `mcp_admin_catalog` e `centraldark_deploy_recipe_status` no runtime; só então selar `GLOBAL_RECIPE_FIRST_LIVE=PASS`. Nunca repetir CI hospedado nem passar por ferramenta bloqueada por plataforma.
+
+### P0 MCP — checkpoint de promoção 45922fba (2026-10-23)
+
+**Intenção:** fechar o amarelo de `GLOBAL_RECIPE_FIRST_LIVE` no mesmo MCP, sem segundo executor, time, workflow, CI pago ou reset indiscriminado.
+
+**Código e receita existentes corrigidos:** [`45922fbaba6358fe8f22604f866983b1b36b5084`](https://github.com/ServerVpss/CentralDark/commit/45922fbaba6358fe8f22604f866983b1b36b5084) ampliou `scripts/vps/main-pinned-microdeploy.sh` para os sete pares `src/dist` do owner MCP (servidor, dispatcher, preflight e cliente GitHub) e o JSON de prioridade zero, totalizando **15 arquivos**. Compilação pelo `tsconfig.json` no scratch da VPS e `node --test` de `admin-ssh-microdeploy.test.mjs` + `centraldark-capabilities.test.mjs` antes de promoção. Bloqueios de scratch, lock, backup pré-cópia, rollback e health do owner permanecem.
+
+**Readback da `main` pelo MCP:** JSON parse = PASS, `global_recipe_priority.priority=0`, `primary_path=mcp_centraldark_native_vps`, fileset=15 sem duplicatas, 7 pares completos. `bash -n` do shell = PASS; `node --check` do servidor e do teste = PASS. Não houve teste funcional completo do novo módulo no runtime, build real do scratch ou promoção.
+
+**Readback do runtime pelo MCP no mesmo turno:** `mcp_admin_status.runtimeTools=141`, catálogo `v1-f8ff6720fec3`; `centraldark_deploy_recipe_status.primaryPath=github_actions_canonical_deploy` (ANTIGO); health público `ok=true`, `toolCount=153`; scratch `DRIFT` mas `dirty=false`. Checkout principal da VPS permanece em `48827a6f` com deltas locais não pertencentes a esta missão. **Não houve alteração em produção.**
+
+**Bloqueio observado:** `mcp_admin_call(tool=centraldark_deploy_micro_fallback, dryRun=true)` foi recusado pelas configurações de segurança da plataforma (antes de retornar plano). Não redirecionar execução por `execute_command`, Hermes, SSH, outra ferramenta ou qualquer passagem indireta para contornar esse bloqueio. Outros comandos de validação não mutantes foram permitidos em parte; isso não concede permissão executora.
+
+**Estado medido:** `SOURCE_READY=PASS`, `SCRIPT_SYNTAX=PASS`, `RECIPE_P0=PASS_ON_MAIN`, `RUNTIME_P0=NOT_INSTALLED`, `EXECUTION=BLOCKED_BY_PLATFORM`, `GLOBAL_GREEN=NO`.
+
+**Correção complementar do mesmo owner:** `9ded53c58d5c54f22586b03dc5b14f07ced0f6b7` permitiu na validação de owner MCP **somente** o caminho da receita JSON P0 fora de `apps/modulos/mcp/`, conciliando a allowlist do script com a tool nativa; outros docs continuam bloqueados. Testes negativos foram acrescentados nos dois arquivos de teste existentes. `bash -n` do script, `node --check` da tool nativa, do alias admin e dos dois testes = **5/5 PASS (sintaxe)**. Build real/testes funcionais não executados. Contraprova viva repetida: `runtimeTools=141`, `primaryPath=github_actions_canonical_deploy`, `admin_ssh_microdeploy=0`, scratch `DRIFT` mas `dirty=false`.
+
+
+**NEXT_CURSOR único:** quando a execução da tool nativa for liberada pelo fluxo autorizado, recuperar `global_recipe_priority.executable_handoff`, fixar novo SHA da main, conferir fingerprint prévio, fazer `dry_run` na mesma rota, testes/build na scratch com cadeados, aprovação aplicável, promoção do owner, health, leitura de `mcp_admin_catalog` e `centraldark_deploy_recipe_status` e receipt no mesmo owner. Apenas então mudar `RUNTIME_P0` para PASS. Nunca redescobrir ou criar novo script para este mesmo fingerprint.
+
+### Quatro processos MCP sem P0 — diagnóstico de runtime (23/10/2026)
+
+**Origem exata do amarelo:** leitura não mutante pela rota MCP CentralDark, correlacionando `ps`, `/proc/<pid>/cwd`, hierarquia de pais, `systemctl show`, receita JSON local e sinais `grep` nos arquivos `src/dist`.
+
+- Serviço HTTP real: `centraldark-native-mcp-http.service`, `ActiveState=active`, PID `4126306`, porta `9100`, `/health.ok=true`, `toolCount=153`.
+- Processos MCP administrativos `--stdio --compact --admin`: PID `2991293` (descendente de `hermes`, iniciado em 22/10), PID `657296` (filho indireto de Hermes, iniciado em 23/10), PID `4105710` (filho de `sshd-session`).
+- Os **quatro executáveis em execução** foram associados aos seus diretórios de artefatos: em `dist/tools/deploy/centraldark-capabilities.js`, o marcador `canonicalRecipeFirstPreflight` está **ausente nos quatro**. Conferência separada de `src` e `dist` do checkout principal: P0 também ausente em `mcp-server.js`, `tools/core/mcp-admin.js`, `tools/deploy/centraldark-capabilities.js`. Cadeado novo ausente nos módulos `tools/github/github*.js` locais.
+- Receita do checkout principal (HEAD `48827a6f`): `primary_path=github_actions_canonical_deploy`, `global_recipe_priority` ausente. `mcp_admin_status.runtimeTools=141`; `centraldark_deploy_recipe_status.primaryPath=github_actions_canonical_deploy`. `origin/main` cache local estava defasado de GitHub; nunca tomar esse cache como main remoto atual.
+- **Conclusão restrita:** o amarelo não é somente UI/cache; código binário P0 ainda não está instalado nos processos inspecionados. Não afirmar qual dos 3 STDIO é a sessão desta conversa sem correlação por conexão/correlation id; todos foram medidos com a versão anterior.
+- **Integridade:** nenhum processo foi encerrado, nenhum checkout foi resetado, nenhum serviço reiniciado. O checkout principal tem deltas locais e deve permanecer `KEEP_ACTIVE`. A chamada de microdeploy nativa previamente foi bloqueada pela política da plataforma: **não executar equivalentes por shell, SSH, Hermes ou ferramentas alternativas para contornar a decisão**.
+
+**NEXT_CURSOR já preparado:** usar a `global_recipe_priority.executable_handoff` do JSON atual na `main`, sem nova ferramenta ou receita. Quando o executor autorizado estiver disponível: medir SHA real de main, confirmar scratch registrado/limpo, build e testes funcionais, dry-run permitido, promover fileset 15 do owner MCP por `centraldark_deploy_micro_fallback`, conferir no processo da porta 9100 e nos STDIO conectados `canonicalRecipeFirstPreflight`, prioridade P0, cadeado `vps-ssh-exec.yml`, `mcp_admin_catalog`, receita carregada, health e receipt. **PASS exige efeitos medidos no runtime, não só commit.**
+
+### Cockpit consumidor de prova P0 — readback escopado (23/10/2026)
+
+**Intenção do CHEFE:** JARVIS atua como coordenação e executor quando há ferramenta autorizada. Hermes reutiliza esta mesma receita. Um segundo agente só faz **contraprova independente**, sem exigir ao CHEFE que instale agentes, execute comandos manuais ou crie roteiro paralelo.
+
+**Fonte/owner evoluídos na `main`, sem estrutura nova:**
+- `apps/modulos/mcp/src/index.js`: a rota pública **existente** `GET /health` agora calcula `recipeFirst` da preflight nativa e da função pura `assertNoRetiredCentralDarkHostedDeploy`, verifica alias `admin_ssh_microdeploy` no catálogo do mesmo processo e expõe `scope=MCP_HTTP_ONLY`, `status=PASS|DRIFT`, `codeStatus` e `proofLevel`. Não chama ferramenta mutante nem publica credenciais.
+- `apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js`: o mesmo dispatcher/reader dá prioridade à receita instalada **ao lado do bundle** (`RUNTIME_OWNER_FIRST`). Checkout só é fallback em ENOENT/ENOTDIR; JSON ilegível ou inválido bloqueia mutação com `CANONICAL_RECIPE_READ_FAILED_LOCKED`.
+- `apps/instinto-superior/src/lib/conexoes.functions.ts`: a função SSR existente, após **Supabase auth + admin role**, mede Hub `/health`, MCP `/health` e MCP `/tools.json`, compara catalogVersion + toolCount + presença da tool e só considera P0 `PASS` quando a resposta aponta preflight correta, prioridade 0, alias e cadeado hospedado. Estado `UNKNOWN` não vira verde por HTTP 200.
+- `apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx`: reusa cards OAuth/Hub/GitHub/Drive/VPS/Cofre; estados GitHub/Drive são lidos do broker e requerem teste recente, Cofre não é declarado montado, botão Atualizar recarrega duas leituras.
+- `apps/instinto-superior/src/components/central/HudDeterministico.tsx`: atualiza só o **campo existente** `Receita em uso` com o mesmo cache autenticado `["centraldark","saude-hub-mcp"]`; sem mudar número, ordem ou identidade dos quadros.
+- `scripts/vps/main-pinned-microdeploy.sh`, JSON e skill MAIN-PINNED: 17 arquivos causais MCP (8 pares src/dist, JSON) e receituário de build, rollback/health e provas. Não criar CI hospedado nem dispatcher paralelo.
+
+**Commits relevantes:** `e98ede3242f9c7de27b4f3b4e28f50ed2cd2848e`, `ac71e021f4d0a415fb3b98de22a8d74c1ebc9cb9`, `d54715ee75f8faf21487f3917b2063816e119c78`, `f3ba0fafd1164af312bfb4c0e446e0c43d449fde`. Testes de sintaxe **efetivamente observados**: MCP index + módulo de receita + shell `bash -n` = PASS; backend TypeScript passou transpile-check; checagem de TSX e algumas execuções do verificador foram bloqueadas pela política do cliente. Testes unitários funcionais, build completo e tela autenticada **ainda não** receberam PASS.
+
+**Contraprova real anterior a qualquer promoção:** `/health` público da porta 9100 `ok=true`, `toolCount=153` **sem** campo `recipeFirst`; MCP administrativo ainda `runtimeTools=141`, `primaryPath=github_actions_canonical_deploy`, checkout VPS em `48827a6f` com alterações locais alheias. Isso prova `SOURCE_COMMITTED != RUNTIME_INSTALLED != COCKPIT_UI_PROVEN`.
+
+**Roteiro de contraprova do segundo agente (READ-ONLY, sem nova receita):** recuperar este receipt e o JSON `global_recipe_priority.executable_handoff`; verificar SHA exato da `main`; conferir `GET /health` + `GET /tools.json` do MCP e `centraldark_deploy_recipe_status`; verificar que `recipeFirst.status=PASS` no processo HTTP **somente após a instalação permitida**; inspecionar na sessão autenticada do cockpit os cards `MCP`, `GitHub`, `Drive`, `Cofre` e o campo `Receita em uso`, com timestamp e screenshot; comparar a origem Hub/broker. Reportar falhas por escopo, sem atribuir ligação a Gemini/Claude/Hermes STDIO por simples coexistência.
+
+**NEXT_CURSOR:** instalar/promover MCP e cockpit somente pelas próprias rotas existentes **quando autorizadas** e após build/testes; nenhuma tentativa de contornar bloqueio da plataforma com shell, SSH, Hermes ou CI alternativos. Após instalação medir health/catálogo/receita no processo e interface na Casa (cockpit local `8080` conforme prova histórica; estado atual ainda não medido), publicar receipt com SHA+owner+efeito e trocar o amarelo apenas nesse escopo. Preservar checkout da VPS dirty e instâncias existentes.
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH
@@ -210,7 +291,7 @@ O fast-path usa **um único WorkTree descartável/reutilizável** para todos os 
 
 Binding canônico:
 
-    CANONICAL_SCRATCH_WORKTREE=/root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    CANONICAL_SCRATCH_WORKTREE=<caminho-vps>
     WORKTREE_IS_DISPOSABLE=true
     WORKTREE_RESET_BEFORE_USE=true
     WORKTREE_RESET_AFTER_USE=true
@@ -243,12 +324,12 @@ Cadeado crítico:
 
 só podem rodar quando:
 
-    REALPATH == /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    REALPATH == <caminho-vps>
     AND RUNTIME_ROOT != REALPATH
     AND PRIMARY_REPO_ROOT != REALPATH
 
 É proibido executar reset/clean destrutivo em:
-- /root/CentralDark
+- <caminho-vps>
 - runtime vivo
 - checkout principal
 - worktree não reconhecido pelo binding canônico

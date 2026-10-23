@@ -1,122 +1,100 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { githubTools } from "../src/tools/github/github-tools.js";
+import { githubWriteTools } from "../src/tools/github/github-write.js";
+import { assertNoRetiredCentralDarkHostedDeploy } from "../src/tools/github/github.js";
 
-const tool = githubTools.find((x) => x.name === "admin_ssh_microdeploy");
+const tool = githubTools.find(x => x.name === "admin_ssh_microdeploy");
+const sha = "0985a9468a8144f2b27e23bc0513b258d1e0fa00";
 const admin = Object.freeze({
-  admin: true,
-  oauthScope: "openid admin",
-  callerUser: "verified-test-admin",
-  correlationId: "test-admin-ssh-microdeploy",
-  authProvenance: "verified_oauth_admin",
-  token: "fake-local-test-token",
+  admin: true, oauthScope: "openid admin", callerUser: "verified-test-admin",
+  correlationId: "test-native-microdeploy", authProvenance: "verified_oauth_admin",
 });
-function unpack(result) {
-  return JSON.parse(result.content[0].text);
-}
-test("admin_ssh_microdeploy exists and never exposes apply", () => {
+function unpack(result) { return JSON.parse(result.content[0].text); }
+
+test("alias legado existe e nao libera apply", () => {
   assert.ok(tool);
-  assert.equal(tool.inputSchema.safeParse({mode: "apply"}).success, false);
-  assert.equal(tool.inputSchema.safeParse({mode: "probe"}).success, true);
+  assert.equal(tool.annotations.destructiveHint, false);
+  assert.equal(tool.inputSchema.safeParse({mode:"apply"}).success,false);
+  assert.equal(tool.inputSchema.safeParse({mode:"dry_run",sourceSha:sha}).success,true);
 });
-test("unverified and nonadmin requests fail without network", async () => {
-  const before = globalThis.fetch;
-  globalThis.fetch = () => { throw new Error("network must not be touched"); };
+test("sessao sem admin verificado nao ganha autorizacao", async () => {
+  const previous = globalThis.fetch;
+  globalThis.fetch = () => { throw new Error("GitHub API nunca deve ser chamada"); };
   try {
     for (const ctx of [
-      {...admin, admin: false},
-      {...admin, oauthScope: "openid"},
-      {...admin, authProvenance: null},
-      {...admin, callerUser: null},
-      {...admin, correlationId: null},
+      {...admin, admin:false}, {...admin, oauthScope:"openid"},
+      {...admin, authProvenance:null}, {...admin, callerUser:null},
+      {...admin, correlationId:null},
     ]) {
-      const result = unpack(await tool.handler({mode: "probe", owner: "mcp"}, ctx));
-      assert.equal(result.status, "AUTHENTICATED_ADMIN_SESSION_REQUIRED");
+      const res=unpack(await tool.handler({mode:"probe",owner:"mcp"},ctx));
+      assert.equal(res.status,"AUTHENTICATED_ADMIN_SESSION_REQUIRED");
     }
-  } finally {
-    globalThis.fetch = before;
-  }
+  } finally { globalThis.fetch=previous; }
 });
-test("dry_run fails outside causal scope without dispatch", async () => {
-  const before = globalThis.fetch;
-  globalThis.fetch = () => { throw new Error("network must not be touched"); };
+test("status e probe so descrevem rota MCP VPS, sem job pago", async () => {
+  const previous = globalThis.fetch;
+  globalThis.fetch = () => { throw new Error("GitHub API nunca deve ser chamada"); };
   try {
-    for (const file of ["../a", "/etc/passwd", "apps/modulos/oauth-broker/server.mjs", ""]) {
-      const res = unpack(await tool.handler({mode: "dry_run", owner: "mcp", file}, admin));
-      assert.equal(res.status, "INVALID_CAUSAL_FILESET");
+    for (const mode of ["status","probe"]) {
+      const result=unpack(await tool.handler({mode,owner:"mcp"},admin));
+      assert.equal(result.status,"NATIVE_ROUTE_CONFIGURED_NOT_EXECUTION_PROOF");
+      assert.equal(result.nativeExecutor,"centraldark_deploy_micro_fallback");
+      assert.equal(result.githubActionsRequired,false);
+      assert.equal(result.hostedRunnerRequired,false);
+      assert.equal(result.runtimeDeployProven,false);
     }
-  } finally {
-    globalThis.fetch = before;
-  }
+  } finally { globalThis.fetch=previous; }
 });
-test("verified admin probe dispatches existing workflow, never apply", async () => {
-  const before = globalThis.fetch;
-  const requests = [];
-  globalThis.fetch = async (url, init) => {
-    requests.push({url: String(url), method: init?.method, body: JSON.parse(init.body)});
-    return {ok: true, status: 204};
-  };
+test("dry_run prepara somente inputs, sem bypass do executor destrutivo", async () => {
+  const previous = globalThis.fetch;
+  globalThis.fetch = () => { throw new Error("GitHub API nunca deve ser chamada"); };
   try {
-    const result = unpack(await tool.handler({mode: "probe", owner: "mcp"}, admin));
-    assert.equal(result.status, "DISPATCHED_NOT_EXECUTION_PROOF");
-    assert.equal(result.runtimeProof, false);
-    assert.equal(requests.length, 1);
-    assert.match(requests[0].url, /ServerVpss\/CentralDark\/actions\/workflows\/vps-ssh-exec\.yml\/dispatches$/);
-    assert.equal(requests[0].method, "POST");
-    assert.equal(requests[0].body.ref, "main");
-    assert.equal(requests[0].body.inputs.mode, "probe");
-    assert.equal(requests[0].body.inputs.confirm_apply, "");
-  } finally {
-    globalThis.fetch = before;
-  }
-});
-test("verified admin status reports GitHub outcome without runtime PASS", async () => {
-  const before = globalThis.fetch;
-  globalThis.fetch = async () => ({
-    ok: true, status: 200,
-    text: async () => JSON.stringify({workflow_runs:[{
-      id: 39912949599, status:"completed", conclusion:"failure",
-      head_sha:"9dc4750d70f4c9a244e034bb1281383cebec71bf",
-      html_url:"https://github.com/ServerVpss/CentralDark/actions/runs/39912949599",
-    }]}),
-  });
-  try {
-    const result = unpack(await tool.handler({mode:"status", owner:"mcp"}, admin));
-    assert.equal(result.ok, true);
-    assert.equal(result.runtimeProof, false);
-    assert.equal(result.lastRun.conclusion, "failure");
-  } finally {
-    globalThis.fetch = before;
-  }
+    const src="apps/modulos/mcp/src/tools/github/github-tools.js";
+    const dist="apps/modulos/mcp/dist/tools/github/github-tools.js";
+    const invalid=unpack(await tool.handler({mode:"dry_run",owner:"mcp",sourceSha:sha,file:"../etc/passwd"},admin));
+    assert.equal(invalid.status,"INVALID_CAUSAL_FILESET_OR_SOURCE_SHA");
+    const missingSha=unpack(await tool.handler({mode:"dry_run",owner:"mcp",file:src+","+dist},admin));
+    assert.equal(missingSha.status,"INVALID_CAUSAL_FILESET_OR_SOURCE_SHA");
+    const incomplete=unpack(await tool.handler({mode:"dry_run",owner:"mcp",sourceSha:sha,file:src},admin));
+    assert.equal(incomplete.status,"MCP_SOURCE_DIST_PAIR_REQUIRED");
+    const plan=unpack(await tool.handler({mode:"dry_run",owner:"mcp",sourceSha:sha,file:src+","+dist},admin));
+    const withRecipe=unpack(await tool.handler({mode:"dry_run",owner:"mcp",sourceSha:sha,file:src+","+dist+",docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json"},admin));
+    assert.equal(withRecipe.status,"NATIVE_PLAN_PREPARED_NOT_EXECUTED");
+    assert.equal(plan.status,"NATIVE_PLAN_PREPARED_NOT_EXECUTED");
+    assert.equal(plan.tool,"centraldark_deploy_micro_fallback");
+    assert.deepEqual(plan.input,{owner:"mcp",sourceSha:sha,files:[src,dist],dryRun:true});
+    assert.equal(plan.runtimeDeployProven,false);
+  } finally { globalThis.fetch=previous; }
 });
 
-test("multi-file causal dry_run requires exact source/dist pairs", async () => {
-  const before = globalThis.fetch;
-  const requests = [];
-  globalThis.fetch = async (url, init) => {
-    requests.push({ url: String(url), body: JSON.parse(init.body) });
-    return {ok: true, status: 204};
-  };
+test("rota aposentada é bloqueada em todas as entradas, sem acessar GitHub", async () => {
+  const prior=globalThis.fetch;
+  globalThis.fetch=()=>{throw new Error("NETWORK_MUST_NOT_BE_USED");};
   try {
-    const src = "apps/modulos/mcp/src/tools/github/github-tools.js";
-    const dist = "apps/modulos/mcp/dist/tools/github/github-tools.js";
-    const incomplete = unpack(await tool.handler({
-      mode:"dry_run", owner:"mcp", file:src,
-    }, admin));
-    assert.equal(incomplete.status, "MCP_SOURCE_DIST_PAIR_REQUIRED");
-    assert.equal(requests.length, 0);
-    const complete = unpack(await tool.handler({
-      mode:"dry_run", owner:"mcp", file:src+","+dist,
-    }, admin));
-    assert.equal(complete.status, "DISPATCHED_NOT_EXECUTION_PROOF");
-    assert.equal(requests.length, 1);
-    assert.equal(requests[0].body.inputs.file, src+","+dist);
-    const duplicate = unpack(await tool.handler({
-      mode:"dry_run", owner:"mcp", file:src+","+src,
-    }, admin));
-    assert.equal(duplicate.status, "INVALID_CAUSAL_FILESET");
-    assert.equal(requests.length, 1);
-  } finally {
-    globalThis.fetch = before;
-  }
+    const old=githubTools.find(x=>x.name==="github_dispatch");
+    const other=githubWriteTools.find(x=>x.name==="github_dispatch_workflow");
+    assert.ok(old);
+    assert.ok(other);
+    for (const wf of [
+      "vps-ssh-exec.yml",
+      ".github/workflows/vps-ssh-exec.yml",
+      "301288932",
+    ]) {
+      assert.throws(
+        ()=>assertNoRetiredCentralDarkHostedDeploy("ServerVpss","CentralDark",wf),
+        /CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED/
+      );
+      await assert.rejects(
+        old.handler({workflow:wf, owner:"ServerVpss", repo:"CentralDark"}, {token:"test"}),
+        /CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED/
+      );
+      await assert.rejects(
+        other.handler({workflow:wf, owner:"ServerVpss", repo:"CentralDark"}, {token:"test"}),
+        /CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED/
+      );
+    }
+    assert.doesNotThrow(()=>assertNoRetiredCentralDarkHostedDeploy("ServerVpss","CentralDark","vps-healthcheck.yml"));
+    assert.doesNotThrow(()=>assertNoRetiredCentralDarkHostedDeploy("ServerVpss","clone-deck","vps-ssh-exec.yml"));
+  } finally {globalThis.fetch=prior;}
 });
