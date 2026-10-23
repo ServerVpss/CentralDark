@@ -173,14 +173,20 @@ export function getAccessToken(token) {
     }
     return t;
 }
-export function consumeRefreshToken(token) {
+export function consumeRefreshToken(token, clientId = "") {
     const t = refreshTokens.get(token);
     if (!t)
         return undefined;
+    // A mismatch must never burn the owner's single-use refresh token.
+    if (Date.now() > t.expiresAt) {
+        refreshTokens.delete(token);
+        scheduleSave();
+        return undefined;
+    }
+    if (clientId && t.client_id !== clientId)
+        return undefined;
     refreshTokens.delete(token);
     scheduleSave();
-    if (Date.now() > t.expiresAt)
-        return undefined;
     return t;
 }
 const sessions = new Map();

@@ -182,6 +182,16 @@ jobs:
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$HEAD_SHA"
 
+      - name: 🧪 Canary MCP — reconciliar catálogo e 17 rotas (sem alterar runtime)
+        shell: bash
+        working-directory: .ci-centraldark-validate
+        run: |
+          set -Eeuo pipefail
+          node --check apps/modulos/mcp/src/tools/core/mcp-admin.js
+          node --check apps/modulos/mcp/src/tools/core/mcp-diagnostics.js
+          node --test apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs
+          echo "MCP_CANARY_SOURCE_CONTRACT=PASS SAME_SHA=$GITHUB_SHA"
+
       - name: 🔹 Validar boot canônico CentralDark
         shell: bash
         working-directory: .ci-centraldark-validate

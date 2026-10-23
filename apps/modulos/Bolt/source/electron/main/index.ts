@@ -2,6 +2,7 @@
 import { createRequestHandler } from '@remix-run/node';
 import electron, { app, BrowserWindow, globalShortcut, ipcMain, protocol, session } from 'electron';
 import log from 'electron-log';
+import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import * as pkg from '../../package.json';
@@ -53,6 +54,32 @@ declare global {
 let mainWindow: BrowserWindow | null = null;
 let solWidget: BrowserWindow | null = null;
 let rendererURL = '';
+
+// Unigram remains an external Windows app, not a copied frontend or second runtime.
+// AUMID was observed via Get-StartApps and Get-AppxPackage on SEGREDO.
+const UNIGRAM_WINDOWS_APP_ID = '38833FF26BA1D.UnigramPreview_g9c9v27vpyspw!App';
+type UnigramActivation = { status: 'REQUESTED' | 'UNAVAILABLE'; capability: 'UNIGRAM'; reason?: string };
+
+function activateExistingUnigram(): Promise<UnigramActivation> {
+  if (process.platform !== 'win32') {
+    return Promise.resolve({ status: 'UNAVAILABLE', capability: 'UNIGRAM', reason: 'WINDOWS_ONLY' });
+  }
+
+  return new Promise((resolve, reject) => {
+    // No shell: true, caller-controlled args, downloads, account access or new agent.
+    // Packaged-app activation normally reuses an existing app instance.
+    const explorer = path.join(process.env.WINDIR || 'C:\\Windows', 'explorer.exe');
+    const child = spawn(explorer, [`shell:AppsFolder\\${UNIGRAM_WINDOWS_APP_ID}`], {
+      shell: false, detached: true, windowsHide: true, stdio: 'ignore',
+    });
+    child.once('error', reject);
+    child.once('spawn', () => {
+      child.unref();
+      // DISPATCHED != WINDOW_VISIBLE != ACCOUNT_AUTHENTICATED
+      resolve({ status: 'REQUESTED', capability: 'UNIGRAM' });
+    });
+  });
+}
 
 function liveMainWindow() {
   return mainWindow && !mainWindow.isDestroyed() ? mainWindow : null;
@@ -147,6 +174,19 @@ function registerBridge() {
   register('centraldark:widget:hide', async () => {
     liveWidget()?.hide();
     return { ok: true };
+  });
+
+  register('centraldark:unigram:open', async (event) => {
+    // Fixed capability with origin and native-window caller verification.
+    const current = liveMainWindow();
+    const sourceUrl = event.senderFrame?.url ?? '';
+    let sameOrigin = false;
+    try { sameOrigin = new URL(sourceUrl).origin === new URL(rendererURL).origin; }
+    catch { /* invalid origin is rejected */ }
+    if (!current || event.sender.id !== current.webContents.id || !sameOrigin) {
+      throw new Error('CENTRALDARK_UNIGRAM_UNTRUSTED_RENDERER');
+    }
+    return activateExistingUnigram();
   });
 
   register('centraldark:intent:open', async (_event, rawIntent: unknown) => {

@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+# #OBSERVACOES# | CENTRALDARK.MICHELIN.TRIGGER_REUSE
+# @owner: scripts/trigger-fabric/centraldark_master_cycle.py
+# @doc_ref: docs/LEMBRANCAS/metodo-chefe-conformidade-michelin-20261019.md
+# @last_updated: 2026-10-22T00:31:00.000Z
+# @escopo: !MICHELIN entra no master e marca qualidade sem atribuir estrelas automaticamente.
 import argparse
 import json
 import re
@@ -17,6 +22,7 @@ TRIGGER_EMOJIS = {
     "DELTA_UTIL": "💎",
     "CONTRAPROVA": "🧪",
     "REMEDICAO": "📏",
+    "MICHELIN": "🌟",
     "FIXED_POINT": "📍",
     "REGISTRA": "🧾",
     "RASTRO": "🔏",
@@ -33,6 +39,7 @@ CHAIN = [
     "DELTA_UTIL",
     "CONTRAPROVA",
     "REMEDICAO",
+    "MICHELIN",
     "FIXED_POINT",
     "REGISTRA",
     "RASTRO",
@@ -59,6 +66,7 @@ EXPANDED_CHAIN = [
     "CONTRAPROVA",
     "REMEDICAO",
     "REALITY_JUDGE",
+    "MICHELIN",
     "FIXED_POINT",
     "TLC23_CLOSE",
     "REGISTRA",
@@ -79,6 +87,7 @@ GUIDED_TELEMETRY_PHASES = [
     ("META_LUPA", "META LUPA"),
     ("TEST", "TESTE"),
     ("CI_SAME_HEAD", "CI MESMO HEAD"),
+    ("MICHELIN", "🌟 !MICHELIN"),
     ("REALITY_JUDGE", "REALITY JUDGE"),
     ("FIXED_POINT", "FIXED POINT"),
     ("LOCK", "CADEADO"),
@@ -167,6 +176,7 @@ MASTER_INGRESS_ALIASES = {
     "DELTA_UTIL": ("!delta utils", "!deltautils", "!delta util", "!deltautil", "!delta útil", "!centralutil"),
     "CONTRAPROVA": ("!contraprova",),
     "REMEDICAO": ("!remedição", "!remedicao"),
+    "MICHELIN": ("!michelin", "#michelin"),
     "TIK_TAK": ("!tik-tak", "!tik_tak", "#tik-tak", "#tik_tak"),
     "FIXED_POINT": ("!fixed_point",),
     "REGISTRA": ("!registra",),
@@ -612,9 +622,25 @@ def resolve(
             " → ".join([
                 "⭕ !AURÉOLA CANÔNICA",
                 f"{TRIGGER_EMOJIS['CENTRALDARK']} !CENTRALDARK",
-                *[f"{TRIGGER_EMOJIS[x]} {x}" for x in CHAIN],
+                *[f"{TRIGGER_EMOJIS[x]} {'!MICHELIN' if x == 'MICHELIN' else x}" for x in CHAIN],
             ]) if master_cycle_active else ""
         ),
+        "michelin": {
+            "trigger": "!MICHELIN",
+            "emoji": "🌟",
+            "owner": "RULES.md",
+            "role": "EVIDENCE_GRADED_QUALITY_CHECK_IN_EXISTING_MASTER",
+            "criteria": {
+                "STAR_1": "SOURCE_TESTS_LINT_BUILD_AUTH_SAME_SHA",
+                "STAR_2": "CI_COMPLETED_INTEGRATION_SAME_SHA",
+                "STAR_3": "DEPLOY_AUTHENTICATED_VISUAL_CASA_VPS_LOGS_SAME_SHA",
+            },
+            "status": "UNKNOWN",
+            "stars_awarded": 0,
+            "star_award_from_trigger": False,
+            "public_smoke_is_certificate": False,
+            "same_head_proof_required": True,
+        },
         "aureola": {
             "role": "VISIBLE_ROUTE_DEBUGGER",
             "contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml",
@@ -896,6 +922,7 @@ def self_test():
         ("!CENTRALUTIL", "DELTA_UTIL"),
         ("!CONTRAPROVA", "CONTRAPROVA"),
         ("!REMEDICAO", "REMEDICAO"),
+        ("!MICHELIN", "MICHELIN"),
         ("!TIK-TAK", "TIK_TAK"),
         ("!FIXED_POINT", "FIXED_POINT"),
         ("!REGISTRA", "REGISTRA"),
