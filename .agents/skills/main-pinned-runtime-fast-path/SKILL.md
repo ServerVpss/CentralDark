@@ -33,6 +33,10 @@ O painel existente `ConexoesCentralDark.tsx` lê o Hub OAuth e o MCP HTTP via `l
 
 Handoff P0 existente amplia para **17 arquivos** do MCP: 8 pares `src/dist` e receita JSON. Os dois arquivos do cockpit permanecem no owner **instinto-superior**; precisam de build/instalação própria e prova de UI autenticada. `SOURCE_PASS != RUNTIME_PASS != COCKPIT_UI_PASS`; sem deploy nativo autorizado, registrar amarelo e não contornar a plataforma.
 
+## Correção de fonte de receita no runtime
+
+`canonicalRecipeFirstPreflight` e `centraldark_deploy_recipe_status` agora devem carregar primeiro a receita JSON do **mesmo root do bundle instalado** (`RUNTIME_OWNER_FIRST`). O checkout central do projeto é fallback `CHECKOUT_FALLBACK_ONLY_ON_MISSING` quando a receita instalada não existe; um erro de JSON/permissão no runtime é falha, **não** permissão para disfarçar leitura por outro arquivo. O snapshot HTTP do cockpit informa status apenas do processo HTTP e não falsifica o estado de Hermes STDIO.
+
 ## Quando usar
 
 Use quando:

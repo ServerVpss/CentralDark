@@ -108,3 +108,13 @@ test("diagnostico de receita nao fica bloqueado pelo proprio cadeado", () => {
     assert.equal(v.status,"CANONICAL_RECIPE_PRIORITY_NOT_LOADED");
   }
 });
+
+test("receita instalada precede checkout no owner MCP sem aceitar erro silencioso", async () => {
+  const src = await import("node:fs/promises").then(fs => fs.readFile(
+    new URL("../src/tools/deploy/centraldark-capabilities.js", import.meta.url), "utf8"
+  ));
+  assert.ok(src.includes("RUNTIME_OWNER_FIRST"));
+  assert.ok(src.includes("CHECKOUT_FALLBACK_ONLY_ON_MISSING"));
+  assert.ok(src.includes('["ENOENT", "ENOTDIR"]'));
+  assert.ok(src.includes("classifyCanonicalRecipeFirst(recipe, toolName, input)"));
+});

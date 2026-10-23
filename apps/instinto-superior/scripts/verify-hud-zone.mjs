@@ -478,3 +478,11 @@ test("contas e integracoes provam MCP HTTP P0 sem converter historico em acesso 
   assert.ok(runtime.includes('proofLevel: recipeReady'));
   assert.doesNotMatch(ui, /acesso verificado em 23\/10/);
 });
+
+test("runtime owner wins over stale checkout na leitura P0", () => {
+  const source = read("apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js");
+  assert.ok(source.includes("function installedRuntimeRoot()"));
+  assert.ok(source.includes("RUNTIME_OWNER_FIRST"));
+  assert.ok(source.includes("CHECKOUT_FALLBACK_ONLY_ON_MISSING"));
+  assert.ok(source.includes("recipeSource: selected.source"));
+});
