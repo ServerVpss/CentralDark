@@ -349,3 +349,33 @@ export const PAINEL_CENTRALDARK_FOTOS: Array<{
     ],
   },
 ];
+
+// #OBSERVACOES# @owner: painel-unico.ts @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
+// Contrato de navegação; não prova execução. Owners reutilizados, sem conector paralelo.
+export const COCKPIT_ABAS = [
+  { id: "visao", titulo: "Visão geral", owner: "CockpitShell / MapaOwners", privado: false, estado: "READ_ONLY" },
+  { id: "portal", titulo: "Portal", owner: "MenuVisualCentralDark", privado: false, estado: "UI_ONLY" },
+  { id: "builder-bolt", titulo: "Builder Bolt", owner: "MenuVisualCentralDark", privado: false, estado: "UI_ONLY" },
+  { id: "pr1873", titulo: "Mapa PR #1873", owner: "PainelPR1873", privado: false, estado: "READ_ONLY" },
+  { id: "gram", titulo: "CentralDark Gram", owner: "CentralDarkGram / MTProto", privado: true, estado: "PARTIAL" },
+  { id: "sync", titulo: "Minha Oficina", owner: "SyncCenter / MinhaOficina", privado: false, estado: "PARTIAL" },
+  { id: "design", titulo: "Design Center", owner: "DesignCenter", privado: false, estado: "NAVIGATION" },
+  { id: "goals", titulo: "Goals", owner: "GoalsDashboard", privado: false, estado: "READ_ONLY" },
+  { id: "genesis", titulo: "Gênesis · Michelin", owner: "HudDeterministico", privado: true, estado: "READ_ONLY" },
+  { id: "claude-notifications", titulo: "Claude", owner: "ClaudeNotificationsHub", privado: false, estado: "READ_ONLY" },
+  { id: "dream-reviewer", titulo: "Dream", owner: "DreamReviewer", privado: false, estado: "READ_ONLY" },
+  { id: "arquitetura", titulo: "Estrutura", owner: "ArchitectureVisualization", privado: false, estado: "HISTORICAL" },
+  { id: "raioxvivo", titulo: "Raio-X", owner: "RaioXVivo", privado: false, estado: "PARTIAL" },
+  { id: "recibos", titulo: "Recibos", owner: "ReceiptsDashboard", privado: false, estado: "READ_ONLY" },
+  { id: "forja", titulo: "Forja", owner: "ForjaExecutor", privado: false, estado: "PARTIAL" },
+  { id: "gram-permissions", titulo: "Permissões Forja", owner: "GramPermissions", privado: true, estado: "PARTIAL" },
+  { id: "admin", titulo: "Admin CentralDark", owner: "PainelAdminCentralDark / Supabase", privado: true, estado: "PARTIAL" },
+  { id: "sistema", titulo: "Sistema CentralDark", owner: "SistemaCentralDark", privado: true, estado: "PARTIAL" },
+  { id: "hermes", titulo: "Hermes", owner: "PainelHermes / HermesPet", privado: false, estado: "PARTIAL" },
+  { id: "unigram", titulo: "Unigram", owner: "CentralDark Desktop bridge", privado: false, estado: "PARTIAL" },
+  { id: "forja-regras", titulo: "Regras Forja", owner: "RULES.md / AGENTS.md", privado: false, estado: "READ_ONLY" },
+  { id: "forja-inventario", titulo: "Inventário", owner: "MapaOwners / SistemaCentralDark", privado: false, estado: "NAVIGATION" },
+  { id: "agent-mode", titulo: "Agent Mode", owner: "Agent Mode documentado", privado: false, estado: "HISTORICAL" },
+  { id: "html-consolidation", titulo: "HTML Consolidation", owner: "cockpit-unified / receipts", privado: false, estado: "HISTORICAL" },
+  { id: "downloads", titulo: "Downloads", owner: "Download Center", privado: false, estado: "PARTIAL" },
+] as const;
