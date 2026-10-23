@@ -42,3 +42,50 @@ test("missing correlation is explicit UNKNOWN, never fake PASS", () => {
   assert.equal(result.structuredContent.centraldark.correlation_id, "UNKNOWN");
   assert.equal(result.structuredContent.centraldark.action_is_proof, false);
 });
+
+
+test("delegation carries capability and a grounded diagnostic cursor without claiming proof", () => {
+  const result = decorateToolResult({
+    content: [{ type: "text", text: JSON.stringify({
+      ok: false, status: "CONFIRMACAO_ADMIN_NECESSARIA",
+      diagnostico: { nextCursor: "exigir_confirmacao_literal_do_usuario" },
+    }) }],
+    structuredContent: { centraldark_delegation: { tool: "admin_git_pull" } },
+  }, { toolName: "mcp_admin_call", correlationId: "cid-delegated" });
+  const trace = result.structuredContent.centraldark.continuity;
+  assert.equal(trace.capability, "admin_git_pull");
+  assert.equal(trace.next_cursor, "exigir_confirmacao_literal_do_usuario");
+  assert.equal(trace.proof_verification, "NOT_VERIFIED_AT_ENVELOPE");
+  assert.equal(trace.receipt_ref, "UNKNOWN");
+});
+
+test("explicit SHA/owner/receipt references are only reported, never certified", () => {
+  const sha = "a".repeat(40);
+  const result = decorateToolResult({
+    structuredContent: { owner: "apps/modulos/mcp", source_sha: sha,
+      intent_id: "mcp-lineage", receipt_ref: "receipt-125",
+      recipe_fingerprint: "sha256:abc", proof_ref: "proof-01",
+      next_cursor: "VALIDATE_RUNTIME" },
+  }, { toolName: "deploy_status" });
+  const trace = result.structuredContent.centraldark.continuity;
+  assert.equal(trace.owner, "apps/modulos/mcp");
+  assert.equal(trace.source_sha, sha);
+  assert.equal(trace.receipt_ref, "receipt-125");
+  assert.equal(trace.next_cursor, "VALIDATE_RUNTIME");
+  assert.equal(trace.proof_verification, "NOT_VERIFIED_AT_ENVELOPE");
+});
+
+test("credentials and unproven absent metadata never enter the causal envelope", () => {
+  const result = decorateToolResult({
+    content: [{ type: "text", text: JSON.stringify({
+      source_sha: "123", owner: "Bearer leak", next_cursor: "token=secret-value",
+      receipt_ref: "-----BEGIN SECRET",
+    }) }],
+  }, { toolName: "unknown" });
+  const trace = result.structuredContent.centraldark.continuity;
+  assert.equal(trace.source_sha, "UNKNOWN");
+  assert.equal(trace.owner, "UNKNOWN");
+  assert.equal(trace.next_cursor, "UNKNOWN");
+  assert.equal(trace.receipt_ref, "UNKNOWN");
+  assert.equal(trace.proof_verification, "NOT_VERIFIED_AT_ENVELOPE");
+});
