@@ -235,6 +235,9 @@ O alias admin legado `admin_ssh_microdeploy` deixa de disparar Actions e somente
 
 **Estado medido:** `SOURCE_READY=PASS`, `SCRIPT_SYNTAX=PASS`, `RECIPE_P0=PASS_ON_MAIN`, `RUNTIME_P0=NOT_INSTALLED`, `EXECUTION=BLOCKED_BY_PLATFORM`, `GLOBAL_GREEN=NO`.
 
+**Correção complementar do mesmo owner:** `9ded53c58d5c54f22586b03dc5b14f07ced0f6b7` permitiu na validação de owner MCP **somente** o caminho da receita JSON P0 fora de `apps/modulos/mcp/`, conciliando a allowlist do script com a tool nativa; outros docs continuam bloqueados. Testes negativos foram acrescentados nos dois arquivos de teste existentes. `bash -n` do script, `node --check` da tool nativa, do alias admin e dos dois testes = **5/5 PASS (sintaxe)**. Build real/testes funcionais não executados. Contraprova viva repetida: `runtimeTools=141`, `primaryPath=github_actions_canonical_deploy`, `admin_ssh_microdeploy=0`, scratch `DRIFT` mas `dirty=false`.
+
+
 **NEXT_CURSOR único:** quando a execução da tool nativa for liberada pelo fluxo autorizado, recuperar `global_recipe_priority.executable_handoff`, fixar novo SHA da main, conferir fingerprint prévio, fazer `dry_run` na mesma rota, testes/build na scratch com cadeados, aprovação aplicável, promoção do owner, health, leitura de `mcp_admin_catalog` e `centraldark_deploy_recipe_status` e receipt no mesmo owner. Apenas então mudar `RUNTIME_P0` para PASS. Nunca redescobrir ou criar novo script para este mesmo fingerprint.
 
 ## Nome canônico
