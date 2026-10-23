@@ -1,48 +1,8 @@
 name: 🧠 Trigger Fabric Full Package — pacote e contraprova
 
+# CI pesado sob demanda: pausado automatico por ordem do CHEFE (2026-10-23).
+# Preserva jobs, verificacoes de seguranca e acionamento manual.
 on:
-  pull_request:
-    branches: [main]
-  push:
-    branches: [main]
-    paths:
-      - 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/**'
-      - 'scripts/trigger-fabric/**'
-      - 'central-horario/**'
-      - 'scripts/lupa/validar-horario-centraldark.mjs'
-      - '.github/workflows/trigger-fabric-package.yml'
-      - 'scripts/trigger-fabric/workflow-family-dispatcher.test.mjs'
-      - 'scripts/trigger-fabric/workflow-family-dispatcher.mjs'
-      - 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/WORKFLOW-FAMILIES.json'
-      - 'CENTRALDARK_AI_BOOT.yaml'
-      - 'docs/CONSCIENCIA/RANDOLF-CONTINUIDADE.md'
-      - 'docs/NOTIFY/**'
-      - 'src/lib/notifications-events.ts'
-      - 'supabase/functions/_shared/notifications-events.ts'
-      - 'apps/modulos/elite-gateway/test-local/zendrive_gateway_bridge.py'
-      - 'apps/modulos/elite-gateway/test-local/run_zendrive_segredo.ps1'
-      - 'apps/modulos/memoria-api/**'
-      - 'apps/modulos/obsidian-plugin-grafo-vivo/**'
-      - 'apps/modulos/HERMES-CORE/**'
-      - 'apps/modulos/fixed-point-fabric/**'
-  schedule:
-    - cron: '17 9 * * 1'
-    - cron: '17 6 * * *'
-    - cron: '23 6 * * *'
-    - cron: '0 12 * * *'
-    - cron: '15 8 * * *'
-    - cron: '17 9 * * *'
-    - cron: '23 3 * * *'
-    - cron: '23 */6 * * *'
-    - cron: '0 */6 * * *'
-    - cron: '17 * * * *'
-    - cron: '47 */12 * * *'
-    - cron: '*/30 * * * *'
-    - cron: '0 6 1 * *'
-    - cron: '0 9 * * 1'
-    - cron: '17,47 * * * *'
-    - cron: '17 7 * * *'
-    - cron: '11,41 * * * *'
   workflow_dispatch:
 
 permissions:
