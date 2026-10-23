@@ -57,6 +57,22 @@ function continuityFromPayload(payload, toolName) {
   };
 }
 
+// Clientes MCP que preferem structuredContent mostram só ele e descartam content.
+// Espelha o resultado original ali para a leitura não chegar vazia; content segue intacto.
+const MIRROR_MAX_CHARS = 65536;
+function mirrorContent(payload) {
+  const parts = Array.isArray(payload.content)
+    ? payload.content.filter(c => c && c.type === "text" && typeof c.text === "string").map(c => c.text)
+    : [];
+  if (parts.length === 0) return {};
+  const text = parts.join("\n");
+  if (text.length > MIRROR_MAX_CHARS) return { result_truncated: true, result_chars: text.length };
+  if (parts.length === 1 && text.trimStart().startsWith("{")) {
+    try { return { result: JSON.parse(text) }; } catch { /* texto simples abaixo */ }
+  }
+  return { result: text };
+}
+
 export function decorateToolResult(raw, {
   toolName = "UNKNOWN",
   correlationId = "UNKNOWN",
@@ -89,6 +105,7 @@ export function decorateToolResult(raw, {
     ...payload,
     isError,
     structuredContent: {
+      ...(Object.keys(asObject(payload.structuredContent)).length ? {} : mirrorContent(payload)),
       ...asObject(payload.structuredContent),
       centraldark,
     },
