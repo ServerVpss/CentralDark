@@ -5,35 +5,73 @@ on:
     paths:
       - "skills/vs-code-restore/package.json"
   workflow_dispatch:
+
 permissions:
   contents: write
+
 concurrency:
   group: centraldark-vscode-release
   cancel-in-progress: false
+
 jobs:
-  publish:
+  verify-and-publish:
     if: github.repository == 'ServerVpss/CentralDark'
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Build, SHA-256 and release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
         working-directory: skills/vs-code-restore
+
+    steps:
+      - name: Checkout exact source commit
+        uses: actions/checkout@v4
+
+      - name: Prepare pinned Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: skills/vs-code-restore/package-lock.json
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Compile
+        run: npm run compile
+
+      - name: Run extension regression tests
+        run: node --test test/*.test.cjs
+
+      - name: Package exact extension version
+        id: package
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p 'require("./package.json").version')"
+          test -n "$VERSION"
+          FILE="centraldark-vscode-restore-$VERSION.vsix"
+          TAG="centraldark-vscode-v$VERSION"
+          npx --yes @vscode/vsce@4.0.0 package --no-dependencies --allow-missing-repository --out "$FILE"
+          test -s "$FILE"
+          unzip -t "$FILE" >/dev/null
+          unzip -p "$FILE" extension/package.json | node -e 'const fs=require("node:fs");const p=JSON.parse(fs.readFileSync(0,"utf8"));if(p.publisher!=="centraldark"||p.name!=="centraldark-vscode-restore"||p.version!==process.argv[1])process.exit(2)' "$VERSION"
+          sha256sum "$FILE"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "asset=$FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Publish only new version to existing GitHub Releases channel
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          VERSION="$(node -p 'require("./package.json").version')"
-          TAG="centraldark-vscode-v$VERSION"
+          TAG="${{ steps.package.outputs.tag }}"
+          FILE="${{ steps.package.outputs.asset }}"
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "Release ja existe: $TAG"; exit 0
+            echo "Release $TAG already exists. No overwrite; tests PASS."
+            exit 0
           fi
-          npm ci --ignore-scripts --no-audit --no-fund
-          npm run compile
-          npx --yes @vscode/vsce@4.0.0 package --no-dependencies --allow-missing-repository --out "centraldark-vscode-restore-$VERSION.vsix"
-          sha256sum "centraldark-vscode-restore-$VERSION.vsix"
-          gh release create "$TAG" "centraldark-vscode-restore-$VERSION.vsix" \
-            --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
-            --title "CentralDark VS Code $VERSION" \
-            --notes "Atualizacao assinada por GitHub release asset SHA-256 e confirmada no VS Code."
+          gh release create "$TAG" "$FILE" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "CentralDark VS Code ${TAG#centraldark-vscode-v}" \
+            --notes "CentralDark VS Code: VSIX verificado em CI. Integridade SHA-256 publicada no digest oficial do asset. Instalacao no mesmo gerenciador de extensoes do VS Code."
