@@ -56,6 +56,21 @@ Quando o CHEFE disser **\`!CENTRALDARK\`** (incluindo \`!Centraldark\`, independ
 Ao abrir ChatGPT (qualquer conta), Codex, Hermes, VS Code, Casa, VPS ou Instinto Superior para uma missão CentralDark: recuperar a intenção vigente e o ponto de continuidade pelo owner já existente `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0, LOOP ÚNICO). Compartilhar `INTENT_ID | GOAL | OWNER | MAIN_SHA | PR_HEAD | ACTIVE_WRITER | STATUS | RECEIPT | NEXT_CURSOR`. As contas não compartilham memória automaticamente; conferir CURRENT e ferramentas da superfície. Uma única caneta por escopo, sem recomeçar a tarefa nem simular PASS. NOVA ARTE: acervo `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; apenas arte com binário, hash, manifesto, teste e readback recebe selo canônico.
 <!-- /CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
 
+<!-- CENTRALDARK_ZENDRIVE_INVENTORY_CANONICAL_RECALL_20261022 -->
+### 🍒 Recuperação ZENDRIVE / Remote-SSH / inventário MCP por todos os executores
+
+**Decisão do CHEFE em 22/10/2026, sem novo sistema de memória.** Ao retomar missão de Casa ↔ VPS, MCP CentralDark, VS Code, terminal integrado, ZENDRIVE, Browser, Screenpipe ou substituição do Desktop Commander, o agente que usa esta porta de entrada **recupera primeiro o aprendizado pertinente do owner canônico**, depois mede o estado CURRENT. Não despejar o inventário em todo boot: carregar sob demanda quando o escopo tocar essas capacidades.
+
+- **Inventário completo já integrado em `main` via PR #1842**: `docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md`, seção `INVENTARIO-ZENDRIVE-20261018` e matriz das **31 ferramentas**. Fonte de catálogo e matriz: `apps/modulos/mcp/src/tools/core/mcp-admin.js` (`AUTHORIZED_ROUTE_CATALOG`, `RDC_EQUIVALENCE_MATRIX`). Extensão proprietária: `skills/vs-code-restore/SKILL.md` e `src/extension.ts`.
+- **Evidência histórica rastreável**: PR `#1842` e recibo `#issuecomment-6245057178`; atestam registro/merge, **não** consumo automático dos outros modelos nem microdeploy. Fonte `main`, runtime MCP e serviço na Casa exigem readback de versão/SHA e `mcp_admin_catalog`.
+- **Regra CURRENT superior, datada de 21/10/2026**: `DESKTOP_COMMANDER_THIRD_PARTY_REQUIRED=false`. O controle primário é MCP CentralDark, Tailscale/SSH e executor nativo/Hermes autorizado. Tratar as 31 equivalências RDC como **inventário de migração histórica**, não como motivo para ativar ou exigir o conector de terceiro. Owner da decisão: `docs/CONSCIENCIA/APRENDIZADOS.md`, item 216, e contrato de bridge remoto.
+- **Verificar fronteiras sem falsos verdes**: `SSH_CASA_TO_VPS_PASS != SHELL_VPS_TO_CASA_PASS`; `VSIX_INSTALLED != COMMAND_EXECUTED`; `BROWSER_WINDOW != DOM_CONTROL`; `HTTP200 != SCREENPIPE_HEALTHY`; `MCP_CATALOG_IN_MAIN != MCP_RUNTIME_PROVED`; `QUEUED != CI_PASS`. Registrar owner, SHA, host, timestamp, resultado, contraprova e `NEXT_CURSOR`, com um escritor por escopo.
+- **Handoff**: JARVIS/SOL, Hermes, Claude, Codex, Cline, GitHub e Cockpit seguem esta referência **quando seus respectivos loaders de fato carregarem `LEIA-ME-IA.md`**; o registro não fornece acesso de rede ou memória entre contas por si só. Quem não conseguir ler marca `CONSUMPTION_UNKNOWN` e não afirma adesão.
+
+`ZENDRIVE_INVENTORY_SOURCE=MAIN` · `BOOT_REFERENCE_REGISTERED=true` · `AGENT_CONSUMPTION_REQUIRES_READBACK=true` · `NEXT_CURSOR=VERIFY_RUNTIME_OWNER_AND_RECEIPT_WHEN_MISSION_TOUCHES_ROUTE`.
+<!-- /CENTRALDARK_ZENDRIVE_INVENTORY_CANONICAL_RECALL_20261022 -->
+
+
 
 ## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
 
