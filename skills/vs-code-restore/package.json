@@ -2,7 +2,7 @@
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark · Vibe Coding",
   "description": "Corpo unico VS Code: bancada, SSH Casa/VPS e pareamento no registro MCP ja existente.",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "publisher": "centraldark",
   "private": true,
   "engines": {
@@ -68,6 +68,10 @@
       {
         "command": "centraldark.remoteTerminalStatus",
         "title": "CentralDark: Status receptor remoto e PIDs (somente leitura)"
+      },
+      {
+        "command": "centraldark.checkUpdates",
+        "title": "CentralDark: Checar atualizacao via API GitHub"
       }
     ],
     "configuration": {
@@ -99,6 +103,18 @@
           "maximum": 65535,
           "default": 8719,
           "description": "Porta HTTP em 127.0.0.1 para uso privado; nao expoe diretamente na rede."
+        },
+        "centraldark.restore.autoUpdate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ativa verificacao de releases a cada 10 minutos, com prompt antes de instalar."
+        },
+        "centraldark.restore.autoUpdateIntervalMinutes": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 5,
+          "maximum": 1440,
+          "description": "Intervalo de checagem, em minutos."
         }
       }
     },

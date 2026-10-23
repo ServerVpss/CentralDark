@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { execFile, spawn } from 'child_process';
 import { randomBytes } from 'crypto';
+import { registerVsCodeAutoUpdate, checkVsCodeUpdates } from './autoUpdater';
 import { startRemoteTerminal, configureRemoteTerminal, remoteTerminalStatus } from './remote-terminal';
 
 interface TerminalSpec {
@@ -50,6 +51,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
     vscode.commands.registerCommand('centraldark.pairVsCode', () => pairVsCode(context)),
     vscode.commands.registerCommand('centraldark.verifyVsCodePairing', () => verifyVsCodePairing(context)),
+    vscode.commands.registerCommand('centraldark.checkUpdates', () => checkVsCodeUpdates(context, sshExecutable, VPS_ROUTES, true)),
     vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => configureRemoteTerminal(context)),
     vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => remoteTerminalStatus(context)),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
@@ -60,6 +62,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
   registerTerminalTelemetry(context);
   void startRemoteTerminal(context);
+  registerVsCodeAutoUpdate(context, sshExecutable, VPS_ROUTES);
   context.subscriptions.push(vscode.window.registerWebviewViewProvider('centraldarkVibeCoding', new CentralDarkVibeViewProvider(context)));
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
   if (onOpen) {
@@ -573,7 +576,7 @@ class CentralDarkVibeViewProvider implements vscode.WebviewViewProvider {
     view.webview.html = fs.readFileSync(filename, 'utf8').replaceAll('__CSP_NONCE__', nonce);
     const allowed = new Set([
       'centraldark.connectVpsSsh', 'centraldark.probeVpsSsh',
-      'centraldark.pairVsCode', 'centraldark.verifyVsCodePairing',
+      'centraldark.pairVsCode', 'centraldark.verifyVsCodePairing', 'centraldark.checkUpdates',
       'centraldark.focusExistingTerminal', 'centraldark.locateVsCodeByPid',
       'centraldark.mapWorkspace', 'centraldark.restoreWorkspace'
     ]);
