@@ -182,6 +182,16 @@ CHANGED_FINGERPRINT
 
 **NEXT_CURSOR:** testar sintaxe, validar testes do código no SHA exato, dry-run do executor na worktree segura, promover somente owner `mcp` quando a rota permitir, verificar `mcp_admin_catalog(filter=admin_ssh_microdeploy)`, `mcp_policy_summary`, health, efeito e receipt. Se não houver prova de runtime, classificar `PARTIAL`; não apagar worktrees de terceiros nem reexecutar descobertas para mesmo fingerprint.
 
+### Contraprova da evolução in-place — 23/10/2026
+
+- Commit `04febfa3b0de5e4479efd9b1abe3a2a732105f69`: **seis owners existentes** ajustados (script de microdeploy, workflow SSH, JSON/YAML, esta receita humana e skill); nenhum script/skill/runner paralelo criado. Guard de scratch e rollback de cópia parcial incorporados.
+- Commit `3a70583233ce8e6d07ebe3a0d25ad734ab2a8ce8`: tool admin e **o arquivo de testes existente** ampliados para CSV com escopo e par source/dist; fonte e teste apenas versionados, não implantados.
+- Contraprovas automáticas via **MCP CentralDark**: `bash -n` no script de microdeploy = PASS; `yaml.safe_load` + `bash -n` no workflow = PASS; `json.load` na receita JSON = PASS; `yaml.safe_load` no binding = PASS; `node --check` na ferramenta e no arquivo de testes = PASS. Readback da `main`: sete arquivos têm os deltas esperados.
+- Limite de prova: teste `node --test` na scratch de deploy = **PENDING**; build `tsc` na scratch = **PENDING**; SSH fim a fim = **BLOCKED_GITHUB_HOSTED_BILLING**; tool `admin_ssh_microdeploy` no runtime MCP = **UNKNOWN/NOT_SEEN**; produção não foi reiniciada. Sintaxe verde **não** é runtime verde.
+- Reaproveitamento obrigatório: `REPLAY_BEFORE_REDISCOVERY`, revalidar só cone causal se fingerprint mudar, registrar falha pontual no mesmo owner; não repetir a migração inteira quando houver apenas um teste pendente.
+
+**NEXT_CURSOR material:** executar `--dry-run` no SHA exato com scratch protegida; provar tsc e `node --test` na VPS; só promover MCP quando for seguro e permitido; conferir `mcp_admin_catalog(filter=admin_ssh_microdeploy)`, `mcp_policy_summary`, health, restart isolado e receipt. Falha financeira no hosted não se resolve disparando CI pesado repetidamente.
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH
