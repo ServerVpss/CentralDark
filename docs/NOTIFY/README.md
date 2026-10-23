@@ -471,3 +471,31 @@ NEXT_CURSOR=RECONCILE_OWNER_FILES_AND_CI_WITHOUT_DIRTY_RESET_THEN_VERIFY_MCP_AUT
 
 **Regra:** não modificar zonas DNS que já estão corretas; não ativar nenhuma permissão destrutiva em quarentena; não acrescentar custos de modelo quando receipt/recipe determinísticos bastarem. Um status já provado deve ser reutilizado até existir nova mudança causal material.
 <!-- /CENTRALDARK_CROSS_SURFACE_IMAGES_CURRENT_20261018 -->
+
+## 🔴 PR DOS RED — projeção sobre a Central de Notificações (CHEFE, 2026-10-22)
+
+**Owner do erro/receita:** PR [#1903](https://github.com/ServerVpss/CentralDark/pull/1903) e receipt `docs/CONSCIENCIA/RECEIPTS/2026-10-22-pr-dos-red-cline-tool-routing.md`. **Owner do feed:** `public.notifications_log` + `apps/instinto-superior/src/hooks/useNotificationsLog.ts` + `CentralNotificacoes.tsx`. Nenhuma tabela adicional, segundo WebSocket, segundo agente, dashboard paralelo ou plugin Desktop Commander externo.
+
+```text
+Cline/ZENDRIVE/Hermes ou outro executor autorizado (erro OBSERVADO)
+→ normalização/sanitização + fingerprint (scripts/ci/centraldark-red-intake.mjs)
+→ GitHub repository_dispatch via token privado ou workflow_dispatch
+→ GitHub Actions na branch default (após CI/merge/ativação)
+→ PR #1903: comment + CAS commit SOMENTE no receipt existente
+→ Supabase CentralDark / public.notifications_log (service role SOMENTE no Actions)
+→ Supabase Realtime + SELECT RLS / polling existente
+→ Cockpit autenticado → Central de Notificações → filtro 🔴 PR DOS RED
+→ validação técnica por outro modelo/Hermes → contraprova → retorno ao CHECKPOINT
+```
+
+**API oficial:** `https://api.centralldark.com` é o plano de controle público já mapeado. A API GitHub (`https://api.github.com`) e Supabase estão causalmente vinculados por `fingerprint`, `pr_number`, `source_sha`, `github_receipt` e `next_cursor`. **Não** declarar que `api.centralldark.com` já oferece endpoint de POST para RED: tal rota autenticada não foi comprovada nesta alteração. Até a reconciliação do owner do gateway, a emissão oficial é via GitHub repository_dispatch autorizado e a projeção via REST Supabase; a API CentralDark permanece control plane, não proxy fictício.
+
+**Gates de segurança:** nenhuma credencial no browser/PR; eventos contêm apenas tipo de erro, identificador de ferramenta, superfície, host-alias, modelo declarado e SHA; proibir logs brutos, prompts, cookies, command-lines, IPs privados e tokens. GitHub job valida branch do PR, faz CAS no SHA de blob antes de acrescentar linha e mantém fingerprints recorrentes sem gerar PRs duplicados. Supabase já mantém RLS somente para admin e publicação `supabase_realtime`; emissão é server-side. Não relaxar policy nem criar tabela nova. O workflow requer `CENTRALDARK_SUPABASE_SERVICE_ROLE_KEY` em GitHub Actions secrets e `CENTRALDARK_SUPABASE_URL` em Repository Variables; segredo não deve ser criado via commit.
+
+**Próximo cursor para operação automática:** `CI_EXACT_HEAD_PASS → PROMOTE_ONCE_MAIN → SECRETS_BOUND_READBACK → REPOSITORY_DISPATCH_REAL → GITHUB_COMMENT_SHA → SUPABASE_INSERT → AUTHENTICATED_BROWSER_REALTIME_RECEIPT → CLINE_SOURCE_OBSERVER_ACK`. Fluxo marcado `SOURCE_READY` até a emissão automática e entrega end-to-end serem comprovadas.
+
+**Prova manual inicial (não confundir com automação):** projeto Supabase CentralDark `lyoigsqluyktoclwdaft` recebeu dois eventos factuais na tabela existente baseados nas capturas do CHEFE:
+- RED #001: `c1f609ff-a814-4871-a864-261174b468c2`
+- RED #002: `1e5589a2-1da7-491d-b813-cdd4d768097b`
+- `publication_mode=MANUAL_OBSERVED_PROJECTION`, `proof_state=FAIL_OBSERVED`.
+Inserção comprovada por SQL `INSERT ... RETURNING`; browser visual `UNKNOWN`, watcher do Cline `UNKNOWN`.
