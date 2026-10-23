@@ -89,3 +89,21 @@ test("credentials and unproven absent metadata never enter the causal envelope",
   assert.equal(trace.receipt_ref, "UNKNOWN");
   assert.equal(trace.proof_verification, "NOT_VERIFIED_AT_ENVELOPE");
 });
+
+test("espelha o resultado em structuredContent quando só há content (clientes que preferem structuredContent)", () => {
+  const json = decorateToolResult({ content: [{ type: "text", text: JSON.stringify({ branch: "main", sha: "abc" }) }] }, { toolName: "vps_git_status" });
+  assert.deepEqual(json.structuredContent.result, { branch: "main", sha: "abc" });
+  assert.equal(json.structuredContent.centraldark.state, "SUCCESS");
+  assert.equal(json.content[0].type, "text");
+  const texto = decorateToolResult({ content: [{ type: "text", text: "olá" }] }, { toolName: "x" });
+  assert.equal(texto.structuredContent.result, "olá");
+});
+
+test("não sobrescreve structuredContent que já existe e limita o tamanho espelhado", () => {
+  const proprio = decorateToolResult({ content: [{ type: "text", text: "{\"a\":1}" }], structuredContent: { item: 1 } }, { toolName: "x" });
+  assert.equal(proprio.structuredContent.item, 1);
+  assert.equal("result" in proprio.structuredContent, false);
+  const grande = decorateToolResult({ content: [{ type: "text", text: "x".repeat(70000) }] }, { toolName: "x" });
+  assert.equal(grande.structuredContent.result_truncated, true);
+  assert.equal("result" in grande.structuredContent, false);
+});
