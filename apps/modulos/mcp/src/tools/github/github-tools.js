@@ -239,6 +239,56 @@ export const githubTools = [
         },
     },
     {
+        name: "admin_ssh_microdeploy",
+        description: "ADMIN CentralDark: consulta o ultimo run ou dispara probe/dry_run do deploy SSH leve existente; apply permanece no workflow protegido. Sessao OAuth/Hub admin verificada sem frases repetitivas.",
+        annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false, title: "Admin SSH microdeploy (status/probe/dry_run)" },
+        inputSchema: z.object({
+            mode: z.enum(["status", "probe", "dry_run"]).default("status"),
+            owner: z.enum(["mcp", "hub_bot", "hermes", "oauth_broker"]).default("mcp"),
+            file: z.string().max(500).optional(),
+        }),
+        handler: async (input, ctx) => {
+            const scope = new Set(String(ctx?.oauthScope || "").split(/\s+/).filter(Boolean));
+            const verified = ctx?.authProvenance === "verified_oauth_admin" || ctx?.authProvenance === "verified_hub_admin";
+            if (ctx?.admin !== true || !scope.has("admin") || !verified || !ctx?.callerUser || !ctx?.correlationId) {
+                return ok({ ok: false, status: "AUTHENTICATED_ADMIN_SESSION_REQUIRED", nextAction: "Entrar por /admin/mcp OAuth ou Hub admin verificado; nao forjar confirmacao." });
+            }
+            const token = effectiveToken(ctx);
+            const endpoint = "/repos/ServerVpss/CentralDark/actions/workflows/vps-ssh-exec.yml";
+            if (input.mode === "status") {
+                const runList = await gh(token, endpoint + "/runs?per_page=1");
+                const last = Array.isArray(runList?.workflow_runs) ? runList.workflow_runs[0] : null;
+                return ok({
+                    ok: true, tool: "admin_ssh_microdeploy", mode: "status",
+                    runtimeProof: false,
+                    lastRun: last ? { id: last.id, status: last.status, conclusion: last.conclusion, head_sha: last.head_sha, html_url: last.html_url } : null,
+                });
+            }
+            if (input.mode === "dry_run") {
+                const file = input.file ?? "";
+                const prefixes = {
+                    mcp: ["apps/modulos/mcp/"],
+                    hub_bot: ["apps/bot-telegram/"],
+                    hermes: ["apps/modulos/HERMES-CORE/", "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/", ".agents/skills/centraldark-operational-method/"],
+                    oauth_broker: ["apps/modulos/oauth-broker/"],
+                };
+                const allowed = file.length > 0 && /^[A-Za-z0-9_./-]+$/.test(file) && !file.includes("..")
+                    && !file.startsWith("/") && prefixes[input.owner].some(p => file.startsWith(p));
+                if (!allowed) return ok({ ok: false, status: "INVALID_CAUSAL_FILESET", owner: input.owner });
+            }
+            await ghJson(token, "POST", endpoint + "/dispatches", {
+                ref: "main",
+                inputs: { mode: input.mode, owner: input.owner, file: input.file ?? "", confirm_apply: "" },
+            });
+            return ok({
+                ok: true, status: "DISPATCHED_NOT_EXECUTION_PROOF",
+                mode: input.mode, owner: input.owner, workflow: "vps-ssh-exec.yml",
+                runtimeProof: false, billingMayBlockHostedRunner: true,
+                nextAction: "Checar run e runtime; dispatch nao e SSH PASS nem deploy.",
+            });
+        },
+    },
+    {
         name: "github_dispatch",
         description: "Dispara workflow_dispatch no GitHub Actions. Use para vps-ssh-exec.yml, deploys e automacoes com inputs.",
         annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true, title: "GitHub dispatch" },

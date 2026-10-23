@@ -1,18 +1,121 @@
-name: ⚙️ VPS SSH Exec [DESATIVADO — duplicata de vps-exec-selfhosted.yml]
-# TRAVA: Este workflow é duplicata exata de vps-exec-selfhosted.yml (ambos rodam bash -lc local).
-# Use vps-exec-selfhosted.yml. Este não será executado (if:false).
-# Mesmo desativado, respeita a política global de executor da Casa para não reintroduzir hosted runner por cópia futura.
+name: ⚡ CentralDark — Microdeploy leve via SSH
+# Transforma o workflow SSH legado inerte em transporte manual, sem segundo executor.
+# O unico executor de deploy e scripts/vps/main-pinned-microdeploy.sh rodando na VPS.
 on:
   workflow_dispatch:
     inputs:
-      _disabled:
-        description: 'DESATIVADO. Use vps-exec-selfhosted.yml'
+      mode:
+        description: "probe somente SSH; dry_run plano; apply promocao explicita"
+        type: choice
         required: true
+        default: probe
+        options:
+          - probe
+          - dry_run
+          - apply
+      owner:
+        description: "Owner causal"
+        type: choice
+        required: true
+        default: mcp
+        options:
+          - mcp
+          - hub_bot
+          - hermes
+          - oauth_broker
+      file:
+        description: "Arquivo do owner, necessario em dry_run ou apply"
         type: string
-
+        required: false
+      confirm_apply:
+        description: "Somente apply: CONFIRMO_MICRODEPLOY"
+        type: string
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: centraldark-ssh-microdeploy
+  cancel-in-progress: false
 jobs:
-  noop:
-    runs-on: [self-hosted, Linux]
-    if: false
+  ssh-microdeploy:
+    if: github.repository == 'ServerVpss/CentralDark' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - run: echo "desativado"
+      - name: "Checkout SHA canônico"
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: "SSH com fingerprint fixado -> executor VPS"
+        shell: bash
+        env:
+          VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
+          VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
+          VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+          CD_MODE: ${{ inputs.mode }}
+          CD_OWNER: ${{ inputs.owner }}
+          CD_FILE: ${{ inputs.file }}
+          CD_CONFIRM: ${{ inputs.confirm_apply }}
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          MODE="${CD_MODE}"
+          OWNER="${CD_OWNER}"
+          FILE="${CD_FILE}"
+          CONFIRM="${CD_CONFIRM}"
+          SSH_HOST="${VPS_HOST_LOVABLE:-}"
+          SSH_USER="${VPS_USER_LOVABLE:-}"
+          [[ "$MODE" == probe || "$MODE" == dry_run || "$MODE" == apply ]] || { echo "INVALID_MODE"; exit 64; }
+          [[ "$OWNER" == mcp || "$OWNER" == hub_bot || "$OWNER" == hermes || "$OWNER" == oauth_broker ]] || { echo "INVALID_OWNER"; exit 64; }
+          [[ "$GITHUB_REF" == refs/heads/main && "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "INVALID_SOURCE_REF"; exit 65; }
+          [[ "$SSH_HOST" =~ ^[A-Za-z0-9][A-Za-z0-9.-]*$ && "$SSH_USER" =~ ^[a-z_][a-z0-9_-]*$ ]] || { echo "INVALID_SSH_TARGET"; exit 66; }
+          [[ -n "${VPS_SSH_KEY_LOVABLE:-}" ]] || { echo "SSH_KEY_MISSING"; exit 66; }
+          if [[ "$MODE" != probe ]]; then
+            [[ "$FILE" =~ ^[A-Za-z0-9_./-]+$ && "$FILE" != *..* && "$FILE" != /* ]] || { echo "INVALID_FILE"; exit 67; }
+            case "$OWNER" in
+              mcp) [[ "$FILE" == apps/modulos/mcp/* ]] ;;
+              hub_bot) [[ "$FILE" == apps/bot-telegram/* ]] ;;
+              hermes) [[ "$FILE" == apps/modulos/HERMES-CORE/* || "$FILE" == docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/* || "$FILE" == .agents/skills/centraldark-operational-method/* ]] ;;
+              oauth_broker) [[ "$FILE" == apps/modulos/oauth-broker/* ]] ;;
+            esac || { echo "OUT_OF_OWNER_SCOPE"; exit 67; }
+            [[ -f scripts/vps/main-pinned-microdeploy.sh ]] || { echo "CANONICAL_EXECUTOR_MISSING"; exit 67; }
+          fi
+          if [[ "$MODE" == apply ]]; then
+            [[ "$CONFIRM" == CONFIRMO_MICRODEPLOY ]] || { echo "EXPLICIT_APPLY_CONFIRMATION_REQUIRED"; exit 68; }
+          fi
+          KEY_FILE="$(mktemp)"
+          KNOWN_HOSTS="$(mktemp)"
+          trap 'rm -f "$KEY_FILE" "$KNOWN_HOSTS"' EXIT
+          python3 - "$KEY_FILE" <<'PYKEY'
+          import os,re,sys
+          raw=os.environ["VPS_SSH_KEY_LOVABLE"].strip()
+          m=re.search(r"-----BEGIN ([A-Z0-9 ]+?) PRIVATE KEY-----(.*?)-----END \1 PRIVATE KEY-----",raw,re.S)
+          if m is None:
+              sys.exit("SSH_PRIVATE_KEY_FORMAT_INVALID")
+          typ=m.group(1)
+          b64=re.sub(r"\s+","",m.group(2))
+          if not re.fullmatch(r"[A-Za-z0-9+/=]+",b64):
+              sys.exit("SSH_PRIVATE_KEY_FORMAT_INVALID")
+          with open(sys.argv[1],"w",encoding="utf-8") as f:
+              f.write(f"-----BEGIN {typ} PRIVATE KEY-----\n")
+              f.write("\n".join(b64[i:i+70] for i in range(0,len(b64),70)))
+              f.write(f"\n-----END {typ} PRIVATE KEY-----\n")
+          os.chmod(sys.argv[1],0o600)
+          PYKEY
+          ssh-keyscan -T 10 -t ed25519 "$SSH_HOST" > "$KNOWN_HOSTS" 2>/dev/null || { echo "SSH_HOST_UNREACHABLE"; exit 70; }
+          HOST_FINGERPRINT="$(ssh-keygen -lf "$KNOWN_HOSTS" -E sha256 | awk 'NR==1{print $2}')"
+          [[ "$HOST_FINGERPRINT" == "SHA256:KkbBd5sOR1boP8ldlWh45eWN2DY8RPjOHtXX+4FQhIE" ]] || { echo "SSH_HOST_IDENTITY_MISMATCH"; exit 71; }
+          SSH_OPTS=(-T -o BatchMode=yes -o ConnectTimeout=15 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$KNOWN_HOSTS" -o GlobalKnownHostsFile=/dev/null -o HostKeyAlgorithms=ssh-ed25519 -i "$KEY_FILE")
+          SSH_TARGET="$SSH_USER@$SSH_HOST"
+          if [[ "$MODE" == probe ]]; then
+              ssh "${SSH_OPTS[@]}" "$SSH_TARGET" 'set -euo pipefail; git -C /root/CentralDark rev-parse --is-inside-work-tree; git -C /root/CentralDark rev-parse --verify HEAD; test -f /root/CentralDark/scripts/vps/main-pinned-microdeploy.sh; echo SSH_LIGHT_TRANSPORT_PASS'
+              echo "SSH_LIGHT_PROBE=PASS"
+              exit 0
+          fi
+          printf -v REMOTE_COMMAND 'bash -s -- --owner %q --source %q --file %q' "$OWNER" "$GITHUB_SHA" "$FILE"
+          if [[ "$MODE" == dry_run ]]; then
+              REMOTE_COMMAND="$REMOTE_COMMAND --dry-run"
+          fi
+          ssh "${SSH_OPTS[@]}" "$SSH_TARGET" "$REMOTE_COMMAND" < scripts/vps/main-pinned-microdeploy.sh
+          echo "SSH_LIGHT_${MODE}=PASS"
