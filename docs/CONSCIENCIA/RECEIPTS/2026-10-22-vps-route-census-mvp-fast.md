@@ -34,3 +34,10 @@
 
 ## Recorded evidence boundary
 This is a **route census / forensic receipt** prepared from tool returns, not a proof that deployment or synchronization occurred. Tool responses are the measurement layer, not user assertions. No VPS files, PM2 services or Tailscale configuration were altered by this receipt.
+
+## Addendum — Remote Desktop Commander, tentativa real
+- Device target: `CENTRALDARK-OS` (ID `ca0cc3ad-3435-428f-87ee-ee102c2cf3b8`), remote `start_process` with **read-only** `git -C /root/CentralDark rev-parse --short HEAD`.
+- Actual provider response: `You've reached this month's Desktop Commander usage, so tool calls are paused. Your device remains connected and paired — do not retry or reconnect.`
+- Outcome: **PROVIDER_MONTHLY_USAGE_EXHAUSTED**. No remote command execution; not a Git error, and not proof that the local Desktop Commander application is closed.
+- Provider instruction honored: no more retries or reconnect calls on this provider in this session.
+- Next cursor: reuse native CentralDark authorized MCP execution or restore the self-hosted deployment runner; do not confuse a working remote read or Tailscale tunnel with authorized VPS writes.
