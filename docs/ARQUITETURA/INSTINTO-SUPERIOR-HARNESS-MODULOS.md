@@ -83,3 +83,42 @@ A integração página por página/arquivo por arquivo só pode ser marcada 100%
 **CONVERGÊNCIA:** P01–P08 são facetas de UMA INTENÇÃO. Não abrir nova PR, skill, HUD, gerenciador ou orquestrador concorrente só para registrar a história.
 **FIXED_POINT:** registro documental com proveniência no owner existente, sem alterar binários, instaladores, processos, VPS ou hardware.
 **NEXT_CURSOR:** identificar o owner efetivo do dock/gestão de instâncias no Electron e comparar com catálogo; escolher a menor lacuna implementável com contraprova; registrar receipt e promover por owner/escritor único.
+
+<a id="rota-casa-jea-winrm"></a>
+## Rota Casa JEA via Tailscale (WinRM 5985) — Hermes skill devops/centraldark-casa-jea
+
+<!--
+#OBSERVACOES# | CENTRALDARK.HARNESS.CASA_JEA
+@code_ref: apps/instinto-superior/config/harness-module-registry.json
+@code_ref: apps/instinto-superior/src/components/central/HarnessModuleRegistry.tsx
+@code_ref: scripts/lupa/validar-harness-casa-jea.mjs
+@code_ref: scripts/lupa/validar-harness-casa-jea.test.mjs
+@last_updated: 2026-10-23T03:05:00.000Z
+-->
+
+**Dado estruturado (fonte única):** `apps/instinto-superior/config/harness-module-registry.json` → módulo `casa-jea-winrm`. O card do Cockpit (`HarnessModuleRegistry.tsx`) só projeta esse registro. Este documento não duplica valores.
+
+| Capacidade | Estado | Prova (22/10/2026, BRT) |
+|---|---|---|
+| VER | 🟢🔒 PROVEN | T1 `ps` 438 processos · T2 `tcp` 79 portas em escuta |
+| PEDIR / negação | 🟢🔒 PROVEN | T4–T6 "is not recognized" · T7 PID 4 e T8 Spooler → `NEGADO_ALLOWLIST` |
+| MEXER | 🟢🔒 PROVEN | stop PID 17056 (Cockpit 8080) ok=True às 23:37:33 · porta caiu em menos de 1 s · religado pela receita oficial com HTTP 200 às 23:37:53 |
+| allow | 🟢🔒 PROVEN | T3 devolve o JSON da allowlist (antes respondia `None`) |
+
+- **Auditoria:** `/var/log/centraldark/casa-jea.jsonl` (VPS) e `C:\CentralDark\audit\jea\` (Casa, 25 transcrições no fechamento). Vazamento medido: 0.
+- **Allowlist:** `C:\CentralDark\harness\allowlist.json`. O CHEFE edita; vale na próxima chamada.
+- **Credencial:** só o caminho `/etc/centraldark/secrets/casa-jea.env`. O conteúdo nunca entra em repositório, log ou chat.
+- **Receita oficial para religar o Cockpit 8080:** `Start-ScheduledTask -TaskName 'CentralDark-Cockpit-8080'`. A tarefa roda como SYSTEM o `K:\scripts\casa\instinto-cockpit-autostart.ps1`, que sobe o Vite em `K:\apps\instinto-superior` na porta 8080. A tarefa também é watchdog de 1 minuto.
+- **Sensor:** `node scripts/lupa/validar-harness-casa-jea.mjs` valida o PROVEN. Com `--live <json>`, classifica a sessão ao vivo: rota desligada vira ⚠️ com a causa, e o PROVEN continua 🔒.
+- **Rollback:** está no campo `rollback` do registro.
+- **Rotas medidas e descartadas:** estão no campo `measured_routes` do registro (Serve 9100/3000 sem destino, "SSH reverso" que na verdade é SOCKS, 8080 é Vite dev, RDC na direção errada, RDP só tela).
+
+<a id="rota-terminal-visivel-sol-casa"></a>
+## Rota Terminal visível SOL → Casa (Desktop Commander + conhost)
+
+**Dado estruturado:** `harness-module-registry.json` → módulo `terminal-visivel-sol-casa`. Provado em 22/10/2026 23:47 BRT, só leitura, visível e executando (🟢🔒). O pedido do CHEFE pelo celular (Dispatch) virou uma tarefa Cowork; o Desktop Commander abriu um PowerShell **visível** na sessão 1 com título "SOL -> Casa", e a saída foi `hostname = SEGREDO` e `whoami = segredo\administrador`.
+
+- **Receita oficial:** `Start-Process conhost.exe "powershell.exe -NoExit -Command <script>"`.
+- **Anti-receita:** `Start-Process powershell`. No Windows 11 vira aba do Windows Terminal já aberto, em vez de janela própria.
+- **Limite:** o computer-use não digita em terminais nem IDEs (tier click). A rota é Desktop Commander + conhost, não teclado.
+- **Evidência:** foto confirmada pelo CHEFE; o screenshot fica na sessão Cowork e não é versionado. Escrita por essa rota: UNKNOWN.
