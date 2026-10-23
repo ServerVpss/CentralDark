@@ -158,11 +158,18 @@ export function classifyCanonicalRecipeFirst(recipe, toolName, input = {}) {
   };
   if (retired) return { ...base, ok: false, status: "CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED" };
   if (!recipe?.global_recipe_priority?.enabled) {
+    // Bootstrap resiliente: o runtime antigo ainda pode carregar a receita
+    // github_actions_canonical_deploy. Ler aquela receita NAO autoriza voltar
+    // ao hosted: so a tool MCP nativa pode continuar, com SHA fixado na promocao.
+    const nativeCompat = name === "centraldark_deploy_micro_fallback"
+      && (input?.dryRun !== false || /^[0-9a-f]{40}$/i.test(String(input?.sourceSha || "")));
     return {
       ...base,
-      ok: !deploy,
-      status: "CANONICAL_RECIPE_PRIORITY_NOT_LOADED",
-      nextCursor: "RESTORE_EXISTING_RECIPE_OWNER_NO_PARALLEL_EXECUTOR",
+      ok: !deploy || nativeCompat,
+      status: nativeCompat ? "NATIVE_MCP_RECIPE_LEGACY_COMPAT_NO_HOSTED"
+        : "CANONICAL_RECIPE_PRIORITY_NOT_LOADED",
+      nextCursor: nativeCompat ? "RECONCILE_EXISTING_RECIPE_WITH_MAIN_BEFORE_RUNTIME_PASS"
+        : "RESTORE_EXISTING_RECIPE_OWNER_NO_PARALLEL_EXECUTOR",
     };
   }
   if (deploy && (recipe.primary_path !== "mcp_centraldark_native_vps"

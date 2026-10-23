@@ -240,6 +240,15 @@
       "checked_remote_state": "COMMIT_NOT_FOUND_MAIN_OR_REMOTE_AT_CHECK",
       "promotion_state": "LOCAL_REPORT_PENDING_GITHUB_AND_VPS_PROOF",
       "restart_and_deploy_are_not_implied": true
+    },
+    "bootstrap_compat": {
+      "legacy_recipe_primary": "github_actions_canonical_deploy",
+      "only_executor": "centraldark_deploy_micro_fallback",
+      "preview_allowed": true,
+      "apply_requires_sha_40_hex": true,
+      "hosted_runner_still_denied": true,
+      "temporary_until_runtime_recipe_readback": "mcp_centraldark_native_vps",
+      "no_false_runtime_pass": true
     }
   }
 }

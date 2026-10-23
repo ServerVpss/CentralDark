@@ -74,3 +74,24 @@ test("microdeploy nativo não converte plano ou commit em implantação", async 
     assert.equal(out.status,"CANONICAL_RECIPE_PRIORITY_NOT_LOADED");
   }
 });
+
+test("bootstrap resiliente não reabre runner hosted quando recipe na VPS é antiga", () => {
+  const stale={
+    primary_path:"github_actions_canonical_deploy",
+    execution_route:{},
+  };
+  const preview=classifyCanonicalRecipeFirst(stale,"centraldark_deploy_micro_fallback",
+    {owner:"mcp",dryRun:true});
+  assert.equal(preview.ok,true);
+  assert.equal(preview.status,"NATIVE_MCP_RECIPE_LEGACY_COMPAT_NO_HOSTED");
+  const applyWithoutSha=classifyCanonicalRecipeFirst(stale,"centraldark_deploy_micro_fallback",
+    {owner:"mcp",dryRun:false});
+  assert.equal(applyWithoutSha.ok,false);
+  const applyPinned=classifyCanonicalRecipeFirst(stale,"centraldark_deploy_micro_fallback",
+    {owner:"mcp",dryRun:false,sourceSha:"f".repeat(40)});
+  assert.equal(applyPinned.ok,true);
+  const hosted=classifyCanonicalRecipeFirst(stale,"github_dispatch",
+    {owner:"ServerVpss",repo:"CentralDark",workflow:"301288932"});
+  assert.equal(hosted.ok,false);
+  assert.equal(hosted.status,"CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED");
+});
