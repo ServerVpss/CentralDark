@@ -1,7 +1,10 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { execFile } from 'child_process';
+import { execFile, spawn } from 'child_process';
+import { randomBytes } from 'crypto';
+import { registerVsCodeAutoUpdate, checkVsCodeUpdates } from './autoUpdater';
+import { startRemoteTerminal, configureRemoteTerminal, remoteTerminalStatus } from './remote-terminal';
 
 interface TerminalSpec {
   name: string;
@@ -46,6 +49,11 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)),
     vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)),
     vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
+    vscode.commands.registerCommand('centraldark.pairVsCode', () => pairVsCode(context)),
+    vscode.commands.registerCommand('centraldark.verifyVsCodePairing', () => verifyVsCodePairing(context)),
+    vscode.commands.registerCommand('centraldark.checkUpdates', () => checkVsCodeUpdates(context, sshExecutable, VPS_ROUTES, true)),
+    vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => configureRemoteTerminal(context)),
+    vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => remoteTerminalStatus(context)),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
@@ -53,6 +61,9 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
   registerTerminalTelemetry(context);
+  void startRemoteTerminal(context);
+  registerVsCodeAutoUpdate(context, sshExecutable, VPS_ROUTES);
+  context.subscriptions.push(vscode.window.registerWebviewViewProvider('centraldarkVibeCoding', new CentralDarkVibeViewProvider(context)));
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
   if (onOpen) {
     void restore(context, false);
@@ -124,11 +135,24 @@ const VPS_ROUTES = [
 ] as const;
 
 function sshExecutable(): string {
+  // Usar preferencialmente o MESMO ssh.exe selecionado pelo Remote-SSH
+  // que já está conectado à VPS, em vez de forçar Git SSH primeiro.
+  const preferred = vscode.workspace.getConfiguration('remote.SSH').get<string>('path');
+  if (preferred && fs.existsSync(preferred)) { return preferred; }
   if (process.platform === 'win32') {
+    const winSsh = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'OpenSSH', 'ssh.exe');
+    if (fs.existsSync(winSsh)) { return winSsh; }
     const gitSsh = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Git', 'usr', 'bin', 'ssh.exe');
     if (fs.existsSync(gitSsh)) { return gitSsh; }
   }
   return 'ssh';
+}
+
+function remoteSshConfigOptions(): string[] {
+  // Remote-SSH pode usar um ~/.ssh/config personalizado. Respeitar o
+  // mesmo arquivo ja aprovado pelo usuario, sem criar segunda identidade.
+  const configured = vscode.workspace.getConfiguration('remote.SSH').get<string>('configFile');
+  return configured && fs.existsSync(configured) ? ['-F', configured] : [];
 }
 
 function checkSshRoute(binary: string, alias: string, options: readonly string[]): Promise<{ ok: boolean; status: string; host?: string }> {
@@ -137,6 +161,7 @@ function checkSshRoute(binary: string, alias: string, options: readonly string[]
     '-o', 'StrictHostKeyChecking=yes',
     '-o', 'ConnectTimeout=6',
     '-o', 'NumberOfPasswordPrompts=0',
+    ...remoteSshConfigOptions(),
     ...options,
     alias,
     "printf 'CENTRALDARK_SSH_PASS\\n'; hostname"
@@ -325,11 +350,30 @@ async function restore(context: vscode.ExtensionContext, manual: boolean): Promi
   }
 
   for (const t of map.terminais) {
+    // O mapa de 14/10 foi capturado na Casa Windows (cwd K:\\).
+    // Nunca restaurar cwd/shell Windows dentro de um workspace SSH Linux.
+    // Não criar sessões duplicadas quando o terminal já estiver aberto.
+    if (vscode.window.terminals.some(current => current.name === t.name)) { continue; }
+    const remoteWorkspace = Boolean(vscode.env.remoteName);
+    const windowsMapped = /^[a-zA-Z]:[\\\\/]/.test(t.cwd || '') ||
+      /^[a-zA-Z]:[\\\\/]/.test(t.shell || '');
+    if (remoteWorkspace && windowsMapped) {
+      problems.push('Terminal ' + t.name + ' preservado: mapa da Casa nao pode abrir em SSH remoto.');
+      continue;
+    }
+    if (t.cwd && !fs.existsSync(t.cwd)) {
+      problems.push('Terminal ' + t.name + ' ignorado: cwd nao existe neste ambiente.');
+      continue;
+    }
+    if (t.shell && !fs.existsSync(t.shell)) {
+      problems.push('Terminal ' + t.name + ' ignorado: executavel shell nao existe neste ambiente.');
+      continue;
+    }
     try {
       const terminal = vscode.window.createTerminal({
         name: t.name,
-        shellPath: t.shell,
-        cwd: t.cwd
+        ...(t.shell ? { shellPath: t.shell } : {}),
+        ...(t.cwd ? { cwd: t.cwd } : {})
       });
       if (startAgents && t.command) {
         terminal.sendText(t.command, true);
@@ -424,5 +468,188 @@ async function mapNativeWorkspace(context: vscode.ExtensionContext): Promise<voi
     emitTrace('workspace_map', 'ATTENTION');
     void vscode.window.showErrorMessage('CentralDark: mapa nao persistido: ' + String(error));
     throw error;
+  }
+}
+
+/**
+ * Pareamento com o registro EXISTENTE da VPS. A sessao SSH autenticada
+ * autoriza a operacao. Tokens no SecretStorage da extensao, nunca no Git,
+ * em logs, arquivos do workspace ou na linha de comando.
+ */
+const DEVICE_TOKEN_KEY = 'centraldark.device.token';
+const DEVICE_REFRESH_KEY = 'centraldark.device.refreshToken';
+const DEVICE_ID_KEY = 'centraldark.device.id';
+const PAIRING_MODULE = 'file://<caminho-vps>';
+
+type PairingResult = {
+  ok?: boolean; verified?: boolean; device_id?: string;
+  token?: string; refresh_token?: string; error?: string;
+};
+
+function deviceProgram(mode: 'enroll' | 'verify', token?: string): string {
+  const lines = [
+    'import { createDevicePairingStore } from ' + JSON.stringify(PAIRING_MODULE) + ';',
+    'const store = createDevicePairingStore();'
+  ];
+  if (mode === 'verify') {
+    lines.push('const result = store.heartbeat({token:' + JSON.stringify(token || '') +
+      ',capabilities:{vscode:true,source:"centraldark-vscode-restore"}});');
+    lines.push('process.stdout.write(JSON.stringify({ok:result.ok===true,device_id:result.device_id,error:result.error}));');
+  } else {
+    lines.push('const pair = store.start({deviceName:"SEGREDO-VSCODE",executor:"vscode",surface:"casa"});');
+    lines.push('const approval = store.approve({pairId:pair.pairId,code:pair.code});');
+    lines.push('if(!approval.ok){throw Error("PAIR_APPROVAL_FAILED")}');
+    lines.push('const auth = store.status({pairId:pair.pairId,pairSecret:pair.pairSecret});');
+    lines.push('if(auth.status!=="approved"||!auth.token||!auth.refresh_token){throw Error("PAIR_TOKEN_UNAVAILABLE")}');
+    lines.push('const verified = store.heartbeat({token:auth.token,capabilities:{vscode:true,source:"centraldark-vscode-restore"}});');
+    lines.push('process.stdout.write(JSON.stringify({ok:verified.ok===true,verified:verified.ok===true,device_id:verified.device_id,token:auth.token,refresh_token:auth.refresh_token}));');
+  }
+  return lines.join('\n');
+}
+
+function pairingFailureCode(stderr: string, code: number | null): string {
+  // Mensagens sao codigos fixos, SEM propagar stderr/saida/sessao/token.
+  if (/permission denied.*publickey|permission denied.*password/i.test(stderr)) return 'SSH_AUTH_DENIED';
+  if (/host key verification failed|remote host identification has changed/i.test(stderr)) return 'SSH_HOST_KEY_REJECTED';
+  if (/could not resolve hostname|name or service not known/i.test(stderr)) return 'SSH_HOST_NOT_FOUND';
+  if (/connection refused|connection timed out|no route to host/i.test(stderr)) return 'SSH_TRANSPORT_DOWN';
+  if (/ERR_MODULE_NOT_FOUND|cannot find module/i.test(stderr)) return 'VPS_PAIRING_MODULE_NOT_FOUND';
+  if (/EACCES|EPERM|permission denied/i.test(stderr)) return 'VPS_PAIRING_REGISTRY_PERMISSION_DENIED';
+  if (/ENOENT|no such file or directory/i.test(stderr)) return 'VPS_PAIRING_REGISTRY_MISSING_PATH';
+  if (/SyntaxError|ReferenceError|TypeError/i.test(stderr)) return 'VPS_PAIRING_RUNTIME_EXCEPTION';
+  return 'VPS_PAIRING_PROGRAM_EXIT_' + String(code ?? 'UNKNOWN');
+}
+
+async function executeTrustedVpsProgram(program: string): Promise<{ route: string; result: PairingResult }> {
+  if (process.platform !== 'win32') {
+    throw Error('CASA_WINDOWS_UI_HOST_REQUIRED');
+  }
+  const binary = sshExecutable();
+  const attempted: string[] = [];
+  for (const route of VPS_ROUTES) {
+    const probe = await checkSshRoute(binary, route.alias, route.options);
+    if (!probe.ok) {
+      attempted.push(route.name + ':SSH_PREFLIGHT_' + probe.status);
+      continue;
+    }
+    try {
+      const result = await new Promise<PairingResult>((resolve, reject) => {
+        const args = [
+          '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes',
+          '-o', 'ConnectTimeout=7', '-o', 'NumberOfPasswordPrompts=0',
+          ...remoteSshConfigOptions(),
+          ...route.options,
+          route.alias, 'node --input-type=module -'
+        ];
+        const child = spawn(binary, args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
+        let stdout = '';
+        let stderr = '';
+        const timeout = setTimeout(() => { child.kill(); }, 25000);
+        child.stdout.on('data', (buf: Buffer) => {
+          stdout += buf.toString('utf8');
+          if (stdout.length > 16000) child.kill();
+        });
+        child.stderr.on('data', (buf: Buffer) => {
+          stderr = (stderr + buf.toString('utf8')).slice(-3000);
+        });
+        // stderr pode conter segredos. Nao mostrar seu conteudo, so codigos fixos.
+        child.stdin.on('error', () => {});
+        child.on('error', () => { clearTimeout(timeout); reject(new Error('SSH_PROCESS_START_FAILED')); });
+        child.on('close', code => {
+          clearTimeout(timeout);
+          if (code !== 0 || stdout.length > 16000) {
+            reject(new Error(pairingFailureCode(stderr, code)));
+            return;
+          }
+          try {
+            const decoded: unknown = JSON.parse(stdout.trim());
+            if (!decoded || typeof decoded !== 'object') throw Error('INVALID_RESPONSE');
+            resolve(decoded as PairingResult);
+          } catch { reject(new Error('VPS_PAIRING_RESULT_NOT_JSON')); }
+        });
+        child.stdin.end(program, 'utf8');
+      });
+      return { route: route.name, result };
+    } catch (error) {
+      const code = error instanceof Error ? error.message : 'UNKNOWN';
+      attempted.push(route.name + ':' + code);
+    }
+  }
+  // Apenas nomes de rota + categorias: nunca token, saida ou stderr.
+  throw Error(attempted.join(' | ').slice(0, 200) || 'SSH_UNAVAILABLE');
+}
+
+async function pairVsCode(context: vscode.ExtensionContext): Promise<void> {
+  const old = await context.secrets.get(DEVICE_TOKEN_KEY);
+  if (old) {
+    try {
+      const current = await executeTrustedVpsProgram(deviceProgram('verify', old));
+      if (current.result.ok && current.result.device_id) {
+        await context.globalState.update(DEVICE_ID_KEY, current.result.device_id);
+        void vscode.window.showInformationMessage('CentralDark: ja autenticado na VPS. ID: ' + current.result.device_id);
+        return;
+      }
+    } catch { /* Nao assumir PASS. */ }
+  }
+  const approval = await vscode.window.showInformationMessage(
+    'CentralDark: ' + (old ? 'refazer' : 'iniciar') +
+    ' pareamento via SSH autorizado da Casa e registro MCP da VPS?',
+    { modal: true }, 'Parear');
+  if (approval !== 'Parear') return;
+  try {
+    const { route, result } = await executeTrustedVpsProgram(deviceProgram('enroll'));
+    if (!result.ok || !result.verified || !result.device_id ||
+      typeof result.token !== 'string' || result.token.length < 32 ||
+      typeof result.refresh_token !== 'string' || result.refresh_token.length < 32) {
+      throw Error('PAIRING_NOT_VERIFIED');
+    }
+    await context.secrets.store(DEVICE_TOKEN_KEY, result.token);
+    await context.secrets.store(DEVICE_REFRESH_KEY, result.refresh_token);
+    await context.globalState.update(DEVICE_ID_KEY, result.device_id);
+    void vscode.window.showInformationMessage(
+      'CentralDark: pareamento PASS via ' + route + '. Dispositivo: ' + result.device_id);
+  } catch (error) {
+    void vscode.window.showErrorMessage('CentralDark: pareamento NAO confirmado (' +
+      (error instanceof Error ? error.message : 'UNKNOWN') + ').');
+  }
+}
+
+async function verifyVsCodePairing(context: vscode.ExtensionContext): Promise<void> {
+  const token = await context.secrets.get(DEVICE_TOKEN_KEY);
+  if (!token) {
+    void vscode.window.showWarningMessage('CentralDark: sem credencial local. Clique em Parear este VS Code.');
+    return;
+  }
+  try {
+    const { route, result } = await executeTrustedVpsProgram(deviceProgram('verify', token));
+    if (!result.ok || !result.device_id) throw Error(result.error || 'DEVICE_NOT_AUTHENTICATED');
+    await context.globalState.update(DEVICE_ID_KEY, result.device_id);
+    void vscode.window.showInformationMessage(
+      'CentralDark: heartbeat confirmado via ' + route + '. ID: ' + result.device_id);
+  } catch (error) {
+    void vscode.window.showWarningMessage('CentralDark: autenticacao nao comprovada (' +
+      (error instanceof Error ? error.message : 'UNKNOWN') + ').');
+  }
+}
+
+class CentralDarkVibeViewProvider implements vscode.WebviewViewProvider {
+  constructor(private readonly context: vscode.ExtensionContext) {}
+  resolveWebviewView(view: vscode.WebviewView): void {
+    const nonce = randomBytes(16).toString('base64');
+    view.webview.options = { enableScripts: true };
+    const filename = path.join(this.context.extensionPath, 'media', 'vibe.html');
+    view.webview.html = fs.readFileSync(filename, 'utf8').replaceAll('__CSP_NONCE__', nonce);
+    const allowed = new Set([
+      'centraldark.connectVpsSsh', 'centraldark.probeVpsSsh',
+      'centraldark.pairVsCode', 'centraldark.verifyVsCodePairing', 'centraldark.checkUpdates',
+      'centraldark.focusExistingTerminal', 'centraldark.locateVsCodeByPid',
+      'centraldark.mapWorkspace', 'centraldark.restoreWorkspace'
+    ]);
+    view.webview.onDidReceiveMessage((msg: unknown) => {
+      if (!msg || typeof msg !== 'object') return;
+      const cmd = (msg as { command?: unknown }).command;
+      if (typeof cmd === 'string' && allowed.has(cmd))
+        void vscode.commands.executeCommand(cmd);
+    });
   }
 }
