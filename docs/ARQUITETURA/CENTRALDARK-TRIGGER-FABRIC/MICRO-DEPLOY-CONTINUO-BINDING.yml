@@ -1,5 +1,5 @@
 schema: centraldark.micro-deploy-continuo-binding.v1
-updated: 2026-09-25
+updated: 2026-10-23
 status: CANONICAL_TRIGGER_FABRIC_BINDING
 authority: SEGREDO/CHEFE
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
@@ -96,6 +96,44 @@ non_goals:
 - promover UNKNOWN para PASS
 - tratar merge como deploy
 - tratar documento como runtime executado
+light_deploy_ssh_law:
+  canonical: true
+  authority: SEGREDO/CHEFE
+  source_rule: docs/CONSCIENCIA/03-FLUXO-DEPLOY.md
+  default_ci: MVP_FAST_LOOP
+  deep_ci: ON_DEMAND_OR_MATERIAL_SECURITY_RISK
+  material_security_gates_required: true
+  control_plane: MCP_CENTRALDARK
+  transport_target: EXISTING_AUTHORIZED_SSH
+  transport_runtime_status: PENDING_PROOF
+  github_actions_auto_deploy: PAUSED
+  source_ref: main
+  required_inputs:
+    - SOURCE_SHA
+    - OWNER
+    - FILESET_CAUSAL
+  execution:
+    build_location: VPS
+    tests: SCOPE_APPLICABLE
+    scratch: SINGLE_REUSABLE_WORKTREE
+    writer: SINGLE_PER_SCOPE
+    promotion: CAUSAL_FILESET_ONLY
+    restart: OWNER_ONLY
+    health: REQUIRED
+    receipt: REQUIRED
+    rollback: REQUIRED_ON_FAILURE
+  locks:
+    NO_NEW_PARALLEL_EXECUTOR: true
+    NO_ARBITRARY_SHELL_FROM_EVENT: true
+    VERIFY_SSH_HOST_IDENTITY: true
+    NO_SECRET_ECHO: true
+    NO_BLIND_PULL_OVER_DIRTY_RUNTIME: true
+    NO_RUNNER_DELETION_BY_FILE_COMMIT: true
+    UNKNOWN_IS_NOT_PASS: true
+  reused_assets:
+    runner_wake_only: .github/workflows/vps-wake-hosted-ssh.yml
+    microdeploy_runtime: scripts/vps/main-pinned-microdeploy.sh
+    receipt_owner: docs/CONSCIENCIA/MICRO-DEPLOY/
 live_editing_default:
   official: true
   mode: CENTRALDARK_LIVE_EDITING_FABRIC
@@ -115,7 +153,7 @@ live_editing_default:
     NO_SECRET_RECEIPT_VALUE: true
     SCRUB_CONTROLLED_LOGS_AFTER_USE: true
   scratch_worktree:
-    canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    canonical_path: <caminho-vps>
     single_reusable: true
     lock_required: true
     reset_before_use: true
@@ -138,7 +176,7 @@ fallback:
     CAUSAL_FILESET_ONLY: true
     PRIMARY_PIPELINE_FAILS_DO_NOT_BECOME_FIXED_BY_FALLBACK: true
   scratch_worktree:
-    canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    canonical_path: <caminho-vps>
     single_reusable: true
     lock_required: true
     reset_before_use: true

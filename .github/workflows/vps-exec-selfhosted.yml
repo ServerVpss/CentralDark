@@ -1,8 +1,8 @@
 name: ⚙️ VPS Deploy canônico (self-hosted)
 
+# Pausa de deploy automatico autorizada pelo CHEFE em 2026-10-23.
+# Migracao para acionamento leve via SSH/VPS; manter health, rollback e manual.
 on:
-  push:
-    branches: [main]
   workflow_dispatch: {}
 
 permissions:

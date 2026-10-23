@@ -101,3 +101,34 @@ export const lerConexoesCentralDark = createServerFn({ method: "GET" })
       clearTimeout(timeout);
     }
   });
+
+/** Sonda administrativa de saúde; não lê credenciais ou conteúdo do cofre. */
+export const lerSaudeInfraCentralDark = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: papel, error } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (error || !papel) throw new Response("Proibido", { status: 403 });
+
+    async function medir(url: string): Promise<"ONLINE" | "OFFLINE" | "UNKNOWN"> {
+      const abort = new AbortController();
+      const timeout = setTimeout(() => abort.abort(), 3500);
+      try {
+        const resposta = await fetch(url, { signal: abort.signal, cache: "no-store" });
+        return resposta.ok ? "ONLINE" : "OFFLINE";
+      } catch {
+        return "UNKNOWN";
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+    const [hub, mcp] = await Promise.all([
+      medir(`${hubBase()}/health`),
+      medir("https://mcp.centralldark.com/health"),
+    ]);
+    return { hub, mcp, medidoEm: new Date().toISOString() };
+  });
