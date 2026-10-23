@@ -62,7 +62,7 @@ BRANCH=main
 SOURCE_SHA=<sha_exato_da_main>
 OWNER=<owner_causal>
 WORKTREE=<worktree_limpa>
-RUNTIME_ROOT=/root/CentralDark
+RUNTIME_ROOT=<caminho-vps>
 FILESET_CAUSAL=<lista_exata>
 TEST_COMMAND=<teste_aplicavel>
 BUILD_COMMAND=<build_ou_NA>
@@ -88,7 +88,7 @@ Sequência:
 - node --check
 - typecheck
 - testes direcionados
-- copiar 4 arquivos para /root/CentralDark/apps/modulos/mcp/
+- copiar 4 arquivos para <caminho-vps>
 - restart CentralDark-MCP
 - provar 127.0.0.1:9100/health = 200
 - confirmar dist vivo com o delta esperado
@@ -202,6 +202,25 @@ O alias admin legado `admin_ssh_microdeploy` deixa de disparar Actions e somente
 
 **Prova atual:** as leituras MCP/VPS e GitHub são operacionais; dry-run via ferramenta nativa foi bloqueado pela segurança da plataforma, logo `DEPLOY=UNKNOWN`. Não contornar isso por outro caminho. NEXT_CURSOR: validar alterações do commit, instalar pela rotina permitida e medir health/catálogo/receipt sem sobrescrever checkout da VPS.
 
+## Prioridade global de receita — prova de fonte 2026-10-23
+
+**Lei P0 GLOBAL RECIPE FIRST.** Não é opção do agente e não depende de mensagem na conversa. **Antes de qualquer feito operacional:** recuperar intenção vigente, owner, receita e checkpoint; comparar a validade da prova pelo mesmo SHA, fileset, fingerprint, escopo, efeito e frescor; reutilizar se realmente equivalente; se divergente, alterar **a própria receita/script/skill** existente; executar delta mínimo permitido; medir efeito, rollback se necessário, escrever receipt e NEXT_CURSOR. Se não houver receita pertinente, consultar o catálogo existente primeiro, não criar estrutura paralela.
+
+**Pontos reais de execução versionados na main:**
+- `apps/modulos/mcp/src/tools/core/mcp-admin.js`: `mcp_admin_call` chama `canonicalRecipeFirstPreflight` antes do handler. Portanto cobre as missões Hermes/Hub que usam o dispatcher e bridge OAuth/Hub. A autorização/auditoria posterior permanece, sem synthesize/ignorar consentimentos.
+- `apps/modulos/mcp/src/mcp-server.js`: entrada direta HTTP/stdio consulta a mesma preflight, antes do handler. Prova de código não representa servidor já recarregado.
+- `apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js`: função reaproveitável faz seleção da receita e bloqueio de escopo; diagnósticos read-only continuam possíveis para reparar fontes ausentes. Em migração, o executor MCP nativo admite receita legada **apenas** no caminho nativo e com SHA explícito em promoção.
+- `apps/modulos/mcp/src/tools/github/github.js`, `github-tools.js` e `github-write.js`: `vps-ssh-exec.yml` e ID `301288932` são rejeitados em `ServerVpss/CentralDark`; outros workflows fora do alvo continuam com seus controles.
+- `apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml` e `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`: portadores da mesma prioridade 0 para consumidores/agentes; sem segundo dispatcher, cron, agent ou recipe.
+
+**Hermes — delta recebido:** o CHEFE relatou commit local `2d3972c827ce2786de6da24cbd9e75de589d834c` no mesmo `scripts/vps/hermes-self-evolution-current-model.sh`, com donor pinado `0a929e3aa20e15cf04dc7c28492a7d41a5139125`, provisionamento de `.venv`, import do executor e opção `--self-provision-only`. Testes reportados: `12 passed, 2 subtests passed`, `bash -n`, `py_compile`, `git diff --check`. **Limite de prova:** não foi possível buscar esse commit remoto; a main consultada ainda continha versão anterior. Não atribuir `DEPLOYED`, `PR_CREATED` ou `LIVE` à informação local sem readback de branch e runtime.
+
+**Commits da prioridade e cadeado:** `6153b75555101d8f31189ce1daf973a1d7ffc16c` (dispatcher + entrada MCP + contratos), `d0289679973c88f059bfac1321779f523e31aebf` (duplo dispatch guard), `06ee5679dcccd07dbbd60d2648f8157201e35b0c` (bootstrap resiliente), `a4634a0cc44edfb314539a57c77c1226ca37066e` (read-only sem deadlock). Testes de sintaxe de `mcp-admin.js`, `centraldark-capabilities.js`, `github.js`, `github-tools.js`, `github-write.js` e `admin-ssh-microdeploy.test.mjs` observados PASS; `mcp-server.js` e parsers adicionais não tiveram PASS de shell por restrição de ferramenta. Teste funcional de node e deploy real permanecem pendentes.
+
+**Contraprova runtime:** o MCP ativo ainda retornou `runtimeTools=141`, `admin_ssh_microdeploy=0` e receita `primaryPath=github_actions_canonical_deploy`. Isso confirma **SOURCE_COMMITTED != RUNTIME_DEPLOYED**. Nenhum deploy/restart foi realizado nesta atualização.
+
+**NEXT_CURSOR:** ao retomar, buscar esta receita P0 antes de investigação; confirmar commit/PR Hermes publicado; implantar deltas MCP pela rota nativa autorizada com snapshot de scratch segura, SHA exato, build/teste e health; ler `mcp_admin_catalog` e `centraldark_deploy_recipe_status` no runtime; só então selar `GLOBAL_RECIPE_FIRST_LIVE=PASS`. Nunca repetir CI hospedado nem passar por ferramenta bloqueada por plataforma.
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH
@@ -220,7 +239,7 @@ O fast-path usa **um único WorkTree descartável/reutilizável** para todos os 
 
 Binding canônico:
 
-    CANONICAL_SCRATCH_WORKTREE=/root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    CANONICAL_SCRATCH_WORKTREE=<caminho-vps>
     WORKTREE_IS_DISPOSABLE=true
     WORKTREE_RESET_BEFORE_USE=true
     WORKTREE_RESET_AFTER_USE=true
@@ -253,12 +272,12 @@ Cadeado crítico:
 
 só podem rodar quando:
 
-    REALPATH == /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    REALPATH == <caminho-vps>
     AND RUNTIME_ROOT != REALPATH
     AND PRIMARY_REPO_ROOT != REALPATH
 
 É proibido executar reset/clean destrutivo em:
-- /root/CentralDark
+- <caminho-vps>
 - runtime vivo
 - checkout principal
 - worktree não reconhecido pelo binding canônico
