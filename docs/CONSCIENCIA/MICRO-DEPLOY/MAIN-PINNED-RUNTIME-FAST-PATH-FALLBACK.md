@@ -221,6 +221,22 @@ O alias admin legado `admin_ssh_microdeploy` deixa de disparar Actions e somente
 
 **NEXT_CURSOR:** ao retomar, buscar esta receita P0 antes de investigação; confirmar commit/PR Hermes publicado; implantar deltas MCP pela rota nativa autorizada com snapshot de scratch segura, SHA exato, build/teste e health; ler `mcp_admin_catalog` e `centraldark_deploy_recipe_status` no runtime; só então selar `GLOBAL_RECIPE_FIRST_LIVE=PASS`. Nunca repetir CI hospedado nem passar por ferramenta bloqueada por plataforma.
 
+### P0 MCP — checkpoint de promoção 45922fba (2026-10-23)
+
+**Intenção:** fechar o amarelo de `GLOBAL_RECIPE_FIRST_LIVE` no mesmo MCP, sem segundo executor, time, workflow, CI pago ou reset indiscriminado.
+
+**Código e receita existentes corrigidos:** [`45922fbaba6358fe8f22604f866983b1b36b5084`](https://github.com/ServerVpss/CentralDark/commit/45922fbaba6358fe8f22604f866983b1b36b5084) ampliou `scripts/vps/main-pinned-microdeploy.sh` para os sete pares `src/dist` do owner MCP (servidor, dispatcher, preflight e cliente GitHub) e o JSON de prioridade zero, totalizando **15 arquivos**. Compilação pelo `tsconfig.json` no scratch da VPS e `node --test` de `admin-ssh-microdeploy.test.mjs` + `centraldark-capabilities.test.mjs` antes de promoção. Bloqueios de scratch, lock, backup pré-cópia, rollback e health do owner permanecem.
+
+**Readback da `main` pelo MCP:** JSON parse = PASS, `global_recipe_priority.priority=0`, `primary_path=mcp_centraldark_native_vps`, fileset=15 sem duplicatas, 7 pares completos. `bash -n` do shell = PASS; `node --check` do servidor e do teste = PASS. Não houve teste funcional completo do novo módulo no runtime, build real do scratch ou promoção.
+
+**Readback do runtime pelo MCP no mesmo turno:** `mcp_admin_status.runtimeTools=141`, catálogo `v1-f8ff6720fec3`; `centraldark_deploy_recipe_status.primaryPath=github_actions_canonical_deploy` (ANTIGO); health público `ok=true`, `toolCount=153`; scratch `DRIFT` mas `dirty=false`. Checkout principal da VPS permanece em `48827a6f` com deltas locais não pertencentes a esta missão. **Não houve alteração em produção.**
+
+**Bloqueio observado:** `mcp_admin_call(tool=centraldark_deploy_micro_fallback, dryRun=true)` foi recusado pelas configurações de segurança da plataforma (antes de retornar plano). Não redirecionar execução por `execute_command`, Hermes, SSH, outra ferramenta ou qualquer passagem indireta para contornar esse bloqueio. Outros comandos de validação não mutantes foram permitidos em parte; isso não concede permissão executora.
+
+**Estado medido:** `SOURCE_READY=PASS`, `SCRIPT_SYNTAX=PASS`, `RECIPE_P0=PASS_ON_MAIN`, `RUNTIME_P0=NOT_INSTALLED`, `EXECUTION=BLOCKED_BY_PLATFORM`, `GLOBAL_GREEN=NO`.
+
+**NEXT_CURSOR único:** quando a execução da tool nativa for liberada pelo fluxo autorizado, recuperar `global_recipe_priority.executable_handoff`, fixar novo SHA da main, conferir fingerprint prévio, fazer `dry_run` na mesma rota, testes/build na scratch com cadeados, aprovação aplicável, promoção do owner, health, leitura de `mcp_admin_catalog` e `centraldark_deploy_recipe_status` e receipt no mesmo owner. Apenas então mudar `RUNTIME_P0` para PASS. Nunca redescobrir ou criar novo script para este mesmo fingerprint.
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH
