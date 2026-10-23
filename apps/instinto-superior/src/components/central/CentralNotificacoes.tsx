@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { Bell, Copy, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { lerEstadoCentralDark, type EstadoCentralDark } from "@/lib/cockpit.functions";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +11,21 @@ import {
   type NotificationLog,
   type PeriodoFiltro,
 } from "@/hooks/useNotificationsLog";
+
+/** O RED é uma projeção do ledger existente, nunca uma fila paralela. */
+function isRedCentralDark(evento: NotificationLog): boolean {
+  return evento.origem === "cline_toolcall_red"
+    || (evento.metadata?.["pr_number"] === "1903"
+      && typeof evento.metadata?.["red_id"] === "string");
+}
+
+function linkRedValido(evento: NotificationLog): string | null {
+  const value = evento.metadata?.["pr_url"];
+  if (typeof value !== "string") return null;
+  // URL fixa por repositório e PR; não usar href arbitrário de telemetria.
+  return /^https:\/\/github\.com\/ServerVpss\/CentralDark\/pull\/1903$/.test(value)
+    ? value : null;
+}
 
 /** Notificação é ponte para a próxima intenção, nunca execução automática. */
 function receitaCompleta(evento: NotificationLog): string {
@@ -53,6 +65,22 @@ function Eventos({ items, limite }: { items: NotificationLog[]; limite: number }
                 : "🧿"}{" "}
             {evento.titulo}
           </p>
+          {isRedCentralDark(evento) ? (
+            <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+              <span className="font-mono text-destructive">
+                RED #{String(evento.metadata?.["red_id"] ?? "UNKNOWN").slice(0, 8)}
+              </span>
+              <span className="font-mono text-muted-foreground">
+                {String(evento.metadata?.["error_code"] ?? "ERROR").slice(0, 60)}
+              </span>
+              {linkRedValido(evento) ? (
+                <a href={linkRedValido(evento) ?? undefined} target="_blank"
+                  rel="noopener noreferrer" className="text-gold underline">
+                  🧠 PR DOS RED #1903
+                </a>
+              ) : null}
+            </div>
+          ) : null}
           {typeof evento.metadata?.["proof_state"] === "string" ? (
             <p className="mt-1 text-xs text-muted-foreground">
               PROVA: {String(evento.metadata["proof_state"]).slice(0, 24)}
@@ -80,9 +108,6 @@ function Eventos({ items, limite }: { items: NotificationLog[]; limite: number }
             </p>
           </details>
           <p className="mt-2 text-[11px] text-muted-foreground">
-            Owner: {typeof evento.metadata?.["owner"] === "string" ? evento.metadata["owner"] : "não informado"}
-          </p>
-          <p className="mt-2 text-[11px] text-muted-foreground">
             Origem: {evento.origem} · {new Date(evento.created_at).toLocaleString("pt-BR")}
           </p>
         </li>
@@ -92,26 +117,21 @@ function Eventos({ items, limite }: { items: NotificationLog[]; limite: number }
 }
 
 type Props =
-  | { modo: "sininho"; abrirCentral: () => void; estadoLocal?: EstadoCentralDark }
-  | { modo: "painel"; abrirCentral?: never; estadoLocal?: EstadoCentralDark };
-export function CentralNotificacoes(entrada: Props) {
-  // Compartilha a consulta já utilizada pelo Cockpit (mesmo queryKey, sem segundo coletor).
-  const lerEstado = useServerFn(lerEstadoCentralDark);
-  const { data: estadoDoCockpit } = useQuery({
-    queryKey: ["centraldark", "estado-vivo"],
-    queryFn: () => lerEstado(),
-    refetchInterval: 60_000,
-  });
-  const props = { ...entrada, estadoLocal: entrada.estadoLocal ?? estadoDoCockpit };
-  const [periodo, setPeriodo] = useState<PeriodoFiltro>(props.modo === "sininho" ? "7d" : "24h");
+  { modo: "sininho"; abrirCentral: () => void } | { modo: "painel"; abrirCentral?: never };
+export function CentralNotificacoes(props: Props) {
+  const [periodo, setPeriodo] = useState<PeriodoFiltro>("24h");
+  const [soReds, definirSoReds] = useState(false);
   const [vistoAte, setVistoAte] = useState<number | null>(null);
   const { items, loading, erro, lastEventAt, realtimeStatus, refresh } =
     useNotificationsLog(periodo);
   useEffect(() => {
     if (!loading && vistoAte === null) setVistoAte(Date.now());
   }, [loading, vistoAte]);
+  const reds = items.filter(isRedCentralDark);
   const novos =
     vistoAte === null ? 0 : items.filter((item) => Date.parse(item.created_at) > vistoAte).length;
+  const novosReds =
+    vistoAte === null ? 0 : reds.filter((item) => Date.parse(item.created_at) > vistoAte).length;
   const estado = erro
     ? "FALHA DE LEITURA"
     : loading
@@ -127,7 +147,8 @@ export function CentralNotificacoes(entrada: Props) {
       Leitura indisponível. UNKNOWN; não presumir lista vazia.
     </p>
   ) : (
-    <Eventos items={items} limite={props.modo === "sininho" ? 5 : 100} />
+    <Eventos items={props.modo === "painel" && soReds ? reds : items}
+      limite={props.modo === "sininho" ? 5 : 100} />
   );
 
   if (props.modo === "sininho")
@@ -146,10 +167,10 @@ export function CentralNotificacoes(entrada: Props) {
             aria-label={`Central de Notificações: ${novos} eventos novos nesta sessão`}
             className="relative"
           >
-            <Bell className={"size-4 " + (novos > 0 ? "motion-safe:animate-pulse" : "")} />
+            <Bell className="size-4" />
             {novos > 0 ? (
               <span className="absolute -right-1 -top-1 rounded-full bg-destructive px-1 text-[10px] text-white">
-                {novos > 9 ? "9+" : novos}
+                {novosReds > 0 ? "🔴" : novos > 9 ? "9+" : novos}
               </span>
             ) : null}
           </Button>
@@ -159,37 +180,7 @@ export function CentralNotificacoes(entrada: Props) {
           <p className="text-xs text-muted-foreground">
             {estado} · Último evento: {prova}
           </p>
-          <div className="flex flex-wrap items-center gap-2 text-xs">
-            <label htmlFor="notify-sino-periodo" className="text-muted-foreground">Histórico</label>
-            <select
-              id="notify-sino-periodo"
-              className="rounded-md border border-border bg-background p-1 text-xs"
-              value={periodo}
-              onChange={(e) => setPeriodo(e.target.value as PeriodoFiltro)}
-            >
-              <option value="1h">1 hora</option>
-              <option value="24h">24 horas</option>
-              <option value="7d">7 dias</option>
-            </select>
-            <Button type="button" size="sm" variant="outline" disabled={loading} onClick={() => void refresh()}>
-              <RefreshCw className="mr-1 size-3" /> Atualizar
-            </Button>
-          </div>
           {lista}
-          {props.estadoLocal ? (
-            <section aria-label="Estado da Forja nesta Casa" className="rounded-md border border-border/80 bg-muted/20 p-2 text-xs">
-              <p className="font-semibold">🏠 Casa · estado do Workspace</p>
-              <p className="mt-1">
-                Sala de Controle: {props.estadoLocal.casaSiteHttp === 200 && props.estadoLocal.casaSite === "PASS"
-                  ? "HTTP 200 · operacional nesta medição"
-                  : props.estadoLocal.casaSiteHttp === null
-                    ? "sem medição neste host"
-                    : "HTTP " + props.estadoLocal.casaSiteHttp + " · " + props.estadoLocal.casaSite}
-              </p>
-              <p className="mt-1 text-muted-foreground">Atualizado em: {props.estadoLocal.atualizadoEm}</p>
-              <p className="mt-1 text-muted-foreground">Leitura de estado pelo Cockpit; não é notificação gravada no ledger.</p>
-            </section>
-          ) : null}
           <Button
             type="button"
             size="sm"
@@ -237,6 +228,15 @@ export function CentralNotificacoes(entrada: Props) {
       <p className="text-xs text-muted-foreground">
         {estado} · Último evento: {prova}
       </p>
+      <div className="flex flex-wrap items-center gap-2" aria-label="Filtro do PR dos RED">
+        <Button size="sm" type="button" variant={soReds ? "default" : "outline"}
+          aria-pressed={soReds} onClick={() => definirSoReds(!soReds)}>
+          🔴 PR DOS RED · {erro ? "UNKNOWN" : reds.length}
+        </Button>
+        <span className="text-[11px] text-muted-foreground">
+          Origem: Supabase / notifications_log · PR #1903 · somente leitura
+        </span>
+      </div>
       {lista}
       <div className="border-t border-border pt-3 text-xs text-muted-foreground">
         <p>Responsabilidade: receber e mostrar avisos autorizados; não executar comandos.</p>

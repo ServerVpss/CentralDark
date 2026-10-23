@@ -688,7 +688,7 @@ export function postToken(req, res) {
     if (grant_type === "refresh_token") {
         const refresh_token = String(body.refresh_token ?? "");
         const client_id = tokenClientId(req, body);
-        const rt = consumeRefreshToken(refresh_token);
+        const rt = consumeRefreshToken(refresh_token, client_id);
         if (!rt) {
             log.warn("oauth_refresh_invalid", { cid: req.cid, client_id_present: Boolean(client_id) });
             res.status(400).json({ error: "invalid_grant", error_description: "refresh_token inválido ou expirado" });

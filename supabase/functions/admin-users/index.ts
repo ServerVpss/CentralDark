@@ -142,8 +142,7 @@ Deno.serve(async (req) => {
       case "set_role": {
         const target = String(body.user_id ?? "");
         const requested = String(body.role ?? "");
-        // O enum real do projeto aceita somente admin, moderator e user.
-        // support/agent ainda precisam de contrato PDP/PEP próprio; nunca degradar silenciosamente para user.
+        // support/agent permanecem bloqueados ate contrato PDP/PEP proprio.
         if (!target || !["admin", "moderator", "user"].includes(requested)) {
           return json({ error: "unsupported_role" }, 400);
         }
@@ -153,12 +152,9 @@ Deno.serve(async (req) => {
         const { data: current, error: readError } = await admin.from("user_roles")
           .select("id, role").eq("user_id", target);
         if (readError) return json({ error: "roles_read_failed" }, 500);
-        if ((current ?? []).length > 1) {
-          return json({ error: "multiple_roles_require_manual_reconciliation" }, 409);
-        }
+        if ((current ?? []).length > 1) return json({ error: "multiple_roles_require_manual_reconciliation" }, 409);
         const original = current?.[0];
-        // Atualizar uma linha evita a janela sem papel causada por DELETE + INSERT.
-        // Sem papel existente, INSERT unitário. Nunca remover o único admin por falha parcial.
+        // Update atomico do papel conhecido. Nunca DELETE seguido de INSERT.
         const { error } = original
           ? await admin.from("user_roles").update({ role: requested }).eq("id", original.id)
           : await admin.from("user_roles").insert({ user_id: target, role: requested });

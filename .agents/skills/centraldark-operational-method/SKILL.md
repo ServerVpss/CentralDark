@@ -15,6 +15,28 @@ Na resenha informal e em falas destinadas ao áudio, preferir **“Ôchente!”*
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
 
+## Contrato operacional — VISUAL FIRST / DELTA EXATO (19/10/2026)
+
+**Gatilho:** quando a pessoa pedir um botão, setor, card, menu, navegação ou posicionamento no Cockpit/Builder, cumprir **exatamente o objeto solicitado**, sem ampliar para uma migração, integração de infraestrutura, auditoria, novo agente, novo PR ou outro painel.
+
+```text
+INTENT_FIRST=true
+UI_FIRST=SHOW_SELECT_POSITION_THEN_INTEGRATE
+REQUESTED_SCOPE_IS_CEILING=true
+VISIBLE_BUTTON != CONNECTED_CAPABILITY
+DISCOVERED_INTEGRATION != AUTHORIZED_EXECUTION
+REUSE_EXISTING_COCKPIT=true
+NOTIFICATION_IS_PROPOSAL_NOT_PERMISSION=true
+```
+
+1. **Materializar primeiro:** inserir no owner visual existente os botões, menus e cartões solicitados, mantendo navegação e seleção para revisão imediata. Se não houver ligação comprovada, sinalizar `INTEGRAÇÃO PENDENTE` sem fazer o botão fingir execução. Preservar funções existentes.
+2. **Não antecipar:** não criar/iniciar agentes, scripts, deploy, migração, conexão a provedores, auditoria opcional ou novas telas sem pedido correspondente. Se o usuário pedir só uma mudança visual, fazer só essa mudança, validar o escopo visual e parar.
+3. **Descobrir depois, sem executar:** o sistema pode identificar oportunidades de ligação com owners e rotas já existentes e **avisar** com evidência, impacto e próxima ação proposta. Avisa quando existir oportunidade comprovada; aguarda pedido/autorização antes de integrar ou modificar infraestrutura.
+4. **Segurança sob demanda, proteção de base permanente:** não transformar cada tarefa visual em projeto de segurança, revisão ampla ou bloqueio hipotético sem solicitação. **Não** desabilitar autenticação, isolamento, autorização, tratamento de segredos, RLS, validações e demais controles básicos existentes. Nunca expor credenciais ou representar dados simulados como reais. Qualquer ação de risco exige as autorizações próprias.
+5. **Coordenação:** SOL pode coordenar e delegar para Hermes, Jarvis, Claude/Codex ou outros coordenadores existentes apenas quando a intenção incluir delegação. Coordenadores podem repassar subgoals no Kanban existente com owner e ACK; abrir terminal não inicia agente. Um escritor por escopo.
+6. **Contraprova proporcional:** provar que o item visual foi renderizado/selecionado (quando houver acesso); não exigir teste end-to-end de provedor para afirmar `UI_PRESENT`. Separar `UI_PRESENT`, `INTEGRATION_PENDING`, `RUNTIME_CONNECTED`, `EFFECT_PROVED`; documentação/HTTP 200 isolado não comprovam clique ou integração.
+
+**Sequência:** `PEDIDO EXATO → MOSTRAR → POSICIONAR/REVISAR → DESCOBRIR OPORTUNIDADE → AVISAR → AGUARDAR AUTORIZAÇÃO → INTEGRAR → CONTRAPROVAR`. A primeira entrega deve ser útil antes das etapas futuras. `UNKNOWN != PASS`.
 ## Lei persistente — Casa ⇄ main, CHEFE como aprovação viva (2026-10-19)
 
 **Autoridade:** o CHEFE aprova a intenção em tempo real no diálogo; a PR não é requisito universal para alterações cotidianas autorizadas. Abrir PR somente quando solicitado ou quando o componente exigir isolamento/revisão técnica. Não criar PR automaticamente para cada delta.
@@ -2961,7 +2983,8 @@ Fala direta do CHEFE, baianês/resenha naturais; versículo ou rima opcionais e 
 
 ### VS Code Windows Casa — descoberta Desktop Commander (2026-10-15)
 
-Reutilizar [eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
+Reutilizar [
+eferences/remote-desktop-commander-vscode-casa.md](references/remote-desktop-commander-vscode-casa.md): descobrir contas/dispositivos remotos; confirmar Windows e processos VS Code/PowerShell; PID não prova controle de STDIN. /status requer resposta fresca do Hermes original.
 
 
 <!-- CENTRALDARK_RECOVERY_COMMANDS_HUD_TO_INSTINTO_20261015 -->

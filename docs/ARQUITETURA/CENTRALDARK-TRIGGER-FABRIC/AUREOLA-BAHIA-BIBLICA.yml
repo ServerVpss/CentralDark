@@ -112,6 +112,7 @@ full_display_chain:
   - REALITY_JUDGE
   - SEMANTIC_GREEN
   - CI_SAME_HEAD
+  - "!MICHELIN"
   - FIXED_POINT
   - POST_GREEN_LOCK
   - "!tlc23"

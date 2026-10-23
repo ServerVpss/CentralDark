@@ -1,26 +1,33 @@
-# Aprendizado e lembrança — método aprovado pelo CHEFE (2026-10-19)
+# Aprendizado operacional aprovado — 2026-10-19
 
-**Natureza:** registro de preferência operacional e de conformidade declarada pelo CHEFE; não é certificação de conclusão da migração.
+O CHEFE aprovou o método de trabalho iterativo da CentralDark: intenção exata → medir → reutilizar owner → menor edição → testar → corrigir → contraprovar → registrar → sincronizar Casa e main. Dentro do escopo autorizado, os agentes não devem interromper o CHEFE a cada microcorreção. Alterações de escopo ou destrutivas exigem autorização própria.
 
-## Lembrança confirmada
-O CHEFE declarou **100% de conformidade com sua intenção na etapa de cooperação e apresentação do mapeamento**. Ele aprovou explicitamente o modo de trabalho inspirado na edição iterativa da Lovable: agentes atuam no escopo aprovado, medem, editam, corrigem, testam, repetem até satisfazer os critérios, registram e mostram o resultado quando o CHEFE quiser. Evitar pedir nova autorização a cada microcorreção **dentro da intenção já aprovada**. Decisões novas, ampliação de escopo, credenciais e mudanças destrutivas não estão automaticamente autorizadas.
+## Critérios de entrega
+- **COMMIT LOCAL CONFIRMADO** somente com commit e readback na Casa.
+- **COMMIT NA MAIN CONFIRMADO** somente com commit publicado e readback no GitHub.
+- Se a alteração afetar o design, abrir o setor modificado e conferir a interface ao vivo; HTTP 200 sozinho não comprova renderização.
+- Se qualquer prova faltar, apresentar pendência real; não inventar verde.
+- Preservar trabalho de outros agentes e sincronizar sem force push ou reset destrutivo.
+- Usar PR somente por decisão do CHEFE ou exigência técnica de revisão.
+- Michelin: construir, integrar, provar. K: patrimônio; F: transitório; C: compatibilidade.
+- Um Claude oficial, um Hermes original, uma CentralDark.
 
-## Aprendizado operacional reutilizável
-1. **INTENT_FIRST:** seguir as palavras, os owners e o limite do pedido do CHEFE, sem inventar arquitetura, PR, painel ou trabalho paralelo.
-2. **SCRIPT_BEFORE_MODEL / REUSE_BEFORE_CREATE:** recuperar o que já funciona, fazer o menor delta, proteger o último verde e não duplicar o executor.
-3. **MICHELIN_3_ESTRELAS:** construir → integrar → provar. Interface visível não prova integração; HTTP 200 não prova experiência E2E.
-4. **AUTONOMIA_NO_ESCOPO:** medir → editar → testar → corrigir → testar novamente → registrar. CHEFE acompanha quando quiser; não interromper por ajustes ordinários já autorizados.
-5. **CASA_MAIN_BIDIRECIONAL:** para delta aprovado, commit local em Casa K: e sincronização com main, e vice-versa, **com gates, preservação do trabalho alheio, readback e sem force push**. PR somente por decisão do CHEFE ou necessidade técnica de isolamento/revisão.
-6. **FORJA_DISCOS:** K: patrimônio, owners, código e dados persistentes; F: temporários, caches e logs transitórios; C: Windows e exceções necessárias. Perfis privados, sessões e credenciais não entram no GitHub.
-7. **AGENTES:** um Claude oficial, um Hermes original, uma CentralDark. Herança das regras por owners existentes; não reescrever executáveis oficiais.
-8. **REALIDADE_JUIZ:** estados PROVADO, PARCIAL, FAIL, UNKNOWN/BLOCKED com denominador, SHA, janela e contraprova. Não confundir aprovação de método com conformidade técnica total.
+## Conformidade
+O CHEFE declarou 100% de conformidade com sua intenção na experiência de colaboração e mapeamento de 19/10/2026. Isso não comprova 100% de conformidade técnica global. A melhoria observada foi a facilidade de acompanhar resultados sem supervisionar cada microedição. Esse princípio pode beneficiar outras pessoas que prefiram fluxos simples, sem pressupor adequação universal.
 
-## Conformidade desta etapa
-- **CONFORMIDADE_COM_A_INTENÇÃO_DECLARADA_PELO_CHEFE = 100%** para a experiência de mapeamento e cooperação exibida em 19/10/2026.
-- **CONFORMIDADE_TÉCNICA_GLOBAL = UNKNOWN**, pois migração de perfil Claude, sessão, caches, regras carregadas e sincronização completa Casa ⇄ main exigem provas próprias.
-- **Lição:** o método facilita a vida de quem prefere indicar o objetivo e acompanhar o resultado, sem supervisionar cada microedição. É uma preferência de trabalho replicável, não afirmação de adequação universal para toda a humanidade.
+## 🌟 !MICHELIN — integração no mesmo Loop Mestre (2026-10-21)
 
-## Próximo ciclo
-CHEFE aponta → agentes medem → owner existente → menor delta → testes e contraprova → registro → Casa ⇄ main → visualização sob demanda.
+@last_updated: 2026-10-22T00:31:00.000Z
+@code_ref: scripts/trigger-fabric/centraldark_master_cycle.py
+@code_ref: scripts/trigger-fabric/test_centraldark_master_cycle.py
+@code_ref: docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json
 
-**Fonte da aprovação:** declaração explícita do CHEFE na conversa em 2026-10-19; não inferir prova de deploy ou migração a partir dessa declaração.
+**CHEFE:** usar o gatilho `🌟 !MICHELIN` nas próximas etapas da `⭕ !AURÉOLA CANÔNICA`, ligando-o ao `!CENTRALDARK` já existente e mostrando somente setas com `!` ou `#`. O novo gatilho não cria scheduler, executor, workflow, segundo router nem três estrelas automáticas.
+
+**Owner de qualidade já existente:** `RULES.md` (M — Michelin). **Owner do caminho:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`. **Resolver:** `scripts/trigger-fabric/centraldark_master_cycle.py`.
+
+**Rota:** `!CENTRALDARK → #ACORDAR → !CALIBRAR → !CONTRAPROVA → 🌟 !MICHELIN → !FIXED_POINT → !REGISTRA → !RASTRO`. Os gatilhos executados são selecionados por pertinência; a linha indica vínculo, não claim de execução efetiva em todos os ambientes.
+
+**Estrelas:** 🌟 fonte/testes/lint/build/auth; 🌟🌟 CI concluída + integração no mesmo SHA; 🌟🌟🌟 deploy + visual autenticado + Casa/VPS + logs com recibos no mesmo SHA. `QUEUED/SKIPPED/SMOKE_PUBLIC/SCREENSHOT != PROOF`. O mero acionamento de `!MICHELIN` retorna `UNKNOWN` e zero estrelas atribuídas até observação/contraprova concreta.
+
+**Fronteira:** somente candidato de código e contrato em PR até `CI_SAME_HEAD`, sem deploy ou promoção silenciosa.

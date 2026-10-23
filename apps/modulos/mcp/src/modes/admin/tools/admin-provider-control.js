@@ -728,6 +728,54 @@ function summarizeLocalTailnet(payload) {
   };
 }
 
+
+/** IDs de nos Tailscale observados pela CLI da VPS; nunca equivalem aos IDs Remote Desktop. */
+export function summarizeTailnetDeviceIdentity(payload, homeHost = "segredo", homeIp = "") {
+  const validId = (value) => {
+    const id = typeof value === "number" && Number.isSafeInteger(value) ? String(value)
+      : typeof value === "string" ? value.trim() : "";
+    return /^[A-Za-z0-9_-]{1,80}$/.test(id) ? id : null;
+  };
+  const self = payload?.Self && typeof payload.Self === "object" ? payload.Self : {};
+  const peers = payload?.Peer && typeof payload.Peer === "object"
+    ? Object.values(payload.Peer).filter((item) => item && typeof item === "object") : [];
+  const host = String(homeHost || "").trim().toLowerCase();
+  const ip = String(homeIp || "").trim();
+  const casa = peers.find((item) =>
+    (host && String(item.HostName || "").toLowerCase() === host) ||
+    (ip && Array.isArray(item.TailscaleIPs) && item.TailscaleIPs.includes(ip))
+  );
+  const vpsId = validId(self.ID), casaId = validId(casa?.ID);
+  return {
+    namespace: "tailscale_node_id",
+    source: "tailscale-cli:status-json",
+    vps: { id: vpsId, online: self.Online === true, status: vpsId ? "OBSERVED" : "UNKNOWN" },
+    casa: { id: casaId, online: casa?.Online === true, status: casaId ? "OBSERVED" : "UNKNOWN" },
+    remoteDesktopCommanderDeviceId: "NOT_MEASURED",
+    complete: Boolean(vpsId && casaId),
+  };
+}
+
+async function readLocalTailnetDeviceIdentity() {
+  try {
+    const { stdout } = await execFileAsync("tailscale", ["status", "--json"], {
+      timeout: 5500, maxBuffer: 1024 * 1024, windowsHide: true,
+    });
+    return summarizeTailnetDeviceIdentity(
+      JSON.parse(stdout),
+      process.env.TAILSCALE_HOME_HOST || "segredo",
+      process.env.TAILSCALE_HOME_IP || "100.123.93.25",
+    );
+  } catch {
+    return {
+      namespace: "tailscale_node_id", source: "tailscale-cli:status-json",
+      vps: { id: null, online: false, status: "UNKNOWN" },
+      casa: { id: null, online: false, status: "UNKNOWN" },
+      remoteDesktopCommanderDeviceId: "NOT_MEASURED", complete: false,
+    };
+  }
+}
+
 async function localTailnetFallback() {
   try {
     const { stdout } = await execFileAsync("tailscale", ["status", "--json"], {
@@ -775,6 +823,7 @@ async function readTailscaleBridgeStatus() {
       httpStatus: response.status,
       source: "oauth-broker:/api/tailscale/status",
       data,
+      deviceIdentity: await readLocalTailnetDeviceIdentity(),
     };
   } catch {
     return {
@@ -1181,6 +1230,7 @@ export const __test = Object.freeze({
   actorFingerprint,
   sanitizeError,
   summarizeLocalTailnet,
+  summarizeTailnetDeviceIdentity,
   chooseTailscaleKey,
   tailscaleKeyKind,
 });

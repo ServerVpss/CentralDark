@@ -340,3 +340,32 @@ test("dist matches src Tailscale credential precedence and rejects non-API kinds
   assert.match(dist, /TAILSCALE_WRONG_CREDENTIAL_KIND/);
   assert.match(dist, /vault: parseEnvFile\("\/root\/CentralDark\/secrets\/tailscale.env"\)/);
 });
+
+test("Casa e VPS possuem node IDs medidos, separados de Remote Desktop", () => {
+  const identity = __test.summarizeTailnetDeviceIdentity({
+    Self: { ID: "nodeVps123", HostName: "centraldark-os", Online: true },
+    Peer: {
+      casa: { ID: "nodeCasa456", HostName: "segredo", TailscaleIPs: ["100.123.93.25"], Online: true },
+      other: { ID: "nodeOther", HostName: "outro", Online: true },
+    },
+  }, "segredo", "100.123.93.25");
+  assert.equal(identity.namespace, "tailscale_node_id");
+  assert.equal(identity.vps.id, "nodeVps123");
+  assert.equal(identity.casa.id, "nodeCasa456");
+  assert.equal(identity.complete, true);
+  assert.equal(identity.remoteDesktopCommanderDeviceId, "NOT_MEASURED");
+  assert.equal(JSON.stringify(identity).includes("nodeOther"), false);
+});
+
+test("ID de Casa invalido ou peer ausente permanece UNKNOWN", () => {
+  const identity = __test.summarizeTailnetDeviceIdentity({
+    Self: { ID: "nodeVps", Online: true },
+    Peer: { casa: { ID: "token=SECRET", HostName: "segredo", Online: true } },
+  }, "segredo");
+  assert.equal(identity.casa.id, null);
+  assert.equal(identity.casa.status, "UNKNOWN");
+  assert.equal(identity.complete, false);
+  assert.equal(JSON.stringify(identity).includes("SECRET"), false);
+  const missing = __test.summarizeTailnetDeviceIdentity({ Self: { ID: "nodeVps" }, Peer: {} }, "segredo");
+  assert.equal(missing.casa.status, "UNKNOWN");
+});

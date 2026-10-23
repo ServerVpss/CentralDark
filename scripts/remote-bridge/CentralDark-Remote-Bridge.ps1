@@ -1,6 +1,7 @@
 param(
   [string]$Workdir = 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE',
-  [int]$RetrySec = 5
+  [int]$RetrySec = 5,
+  [switch]$EnableLegacyRemote
 )
 
 $ErrorActionPreference = 'Continue'
@@ -18,14 +19,17 @@ try {
     throw "REMOTE_BRIDGE_CONFIG_MISSING:$configPath"
   }
   $config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
-  $desktopPackage = [string]$config.package
-  if ([string]::IsNullOrWhiteSpace($desktopPackage)) {
-    throw 'DESKTOP_COMMANDER_PACKAGE_PIN_MISSING'
+  $legacyRemoteEnabled = ($config.legacy_remote_enabled_by_default -eq $true) -or $EnableLegacyRemote.IsPresent
+  if ($legacyRemoteEnabled) {
+    $desktopPackage = [string]$config.package
+    if ([string]::IsNullOrWhiteSpace($desktopPackage)) {
+      throw 'DESKTOP_COMMANDER_PACKAGE_PIN_MISSING'
+    }
+    if ($desktopPackage -match '@latest$') {
+      throw "DESKTOP_COMMANDER_PACKAGE_MUST_BE_PINNED:$desktopPackage"
+    }
+    Add-Content $log ("[{0}] DESKTOP_COMMANDER_PACKAGE={1}" -f (Get-Date -Format o), $desktopPackage)
   }
-  if ($desktopPackage -match '@latest$') {
-    throw "DESKTOP_COMMANDER_PACKAGE_MUST_BE_PINNED:$desktopPackage"
-  }
-  Add-Content $log ("[{0}] DESKTOP_COMMANDER_PACKAGE={1}" -f (Get-Date -Format o), $desktopPackage)
 } catch {
   Add-Content $log ("[{0}] REMOTE_BRIDGE_CONFIG_ERROR={1}" -f (Get-Date -Format o), $_.Exception.Message)
   throw
@@ -110,6 +114,14 @@ function Test-GitHubLocalAuth {
 
 Start-TailscaleServeFromConfig
 Test-GitHubLocalAuth
+
+# CentralDark MCP e Hermes ACP operam sem Desktop Commander.
+# O processo legado so inicia quando explicitamente habilitado.
+if (-not $legacyRemoteEnabled) {
+  Write-HumanStatus 'DESKTOP_COMMANDER_LEGACY' '🟡' 'Fallback opcional desabilitado; MCP, Tailscale e Hermes ACP independentes.'
+  Add-Content $log ("[{0}] LEGACY_REMOTE_SKIPPED=true" -f (Get-Date -Format o))
+  return
+}
 
 $sidecarProc = $null
 if (Test-Path $sidecar) {

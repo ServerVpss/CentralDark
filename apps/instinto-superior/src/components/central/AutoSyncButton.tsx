@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap, ChevronDown, Bot, GitBranch, History, BookOpenText, ScrollText, ShieldAlert, Eye, ShieldCheck, Workflow, Activity, Sparkles, Brain } from 'lucide-react'
-// O componente de checkpoint só é carregado ao abrir a contraprova; não inicializar RPC no topo.
-const CheckpointCentralDark = React.lazy(() => import('@/components/central/CheckpointCentralDark').then(modulo => ({ default: modulo.CheckpointCentralDark })))
+import { Card } from '@/components/ui/card'
+import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
+import { solicitarPromocaoSegura } from '@/lib/admin.functions'
+import { supabase } from '@/integrations/supabase/client'
 
 interface SyncStatus {
   timestamp: string | null
@@ -18,7 +19,7 @@ interface SyncStatus {
  * Casa <-> Main <-> VPS (continuous, single-writer Hermes)
  * Rota: sync.functions.ts (createServerFn) -> AUTO-SYNC-MASTER.py -> .auto-sync/status.json
  */
-export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; autenticado?: boolean }> = ({ onNavigate, autenticado = false }) => {
+export const AutoSyncButton: React.FC = () => {
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({
     timestamp: null,
     status: 'idle',
@@ -26,10 +27,10 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
   })
   const [isSyncing, setIsSyncing] = useState(false)
   const [microDeployMode, setMicroDeployMode] = useState<'main-only' | 'full'>('main-only')
-  const [checkpointAberto, setCheckpointAberto] = useState(false)
 
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
+  const dispatchPromotion = useServerFn(solicitarPromocaoSegura)
 
   // Fetch status on mount + poll every 30s
   useEffect(() => {
@@ -60,15 +61,26 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
     }
   }
 
-  // #OBSERVACOES# MICRODEPLOY_GUARD_20261018
-  // Auto Sync não comprova publicação, PID, health nem recibo de deploy.
-  // Até existir um adapter autorizado com readback, não despachar como deploy.
-  const handleMicroDeploy = () => {
-    setSyncStatus(prev => ({
-      ...prev,
-      status: 'failed',
-      human_readable: `Micro-Deploy ${microDeployMode} BLOQUEADO: sem executor autorizado, receipt e health da VPS.`
-    }))
+  // Aciona o promotor canônico, sem pular autorização ou gates do GitHub.
+  const handleMicroDeploy = async () => {
+    if (isSyncing) return
+    setIsSyncing(true)
+    setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Solicitando promoção segura ao GitHub...' }))
+    try {
+      const { data, error } = await supabase.auth.getSession()
+      const token = data.session?.access_token
+      if (error || !token) throw new Error('SESSION_MISSING')
+      const result = await dispatchPromotion({ headers: { Authorization: `Bearer ${token}` } })
+      if (result.state === 'DISPATCHED') {
+        setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Promotor acionado. Aguardando gates, squash e recibo; deploy ainda não comprovado.' }))
+      } else {
+        setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: `Promoção não confirmada: ${result.reason}` }))
+      }
+    } catch {
+      setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: 'Sessão/autorização indisponível; nenhuma promoção confirmada.' }))
+    } finally {
+      setIsSyncing(false)
+    }
   }
 
   const getStatusIcon = () => {
@@ -81,156 +93,75 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
     }
   }
 
-  // Um painel, três funções. O status da sincronização é o único sinal lido aqui.
-  // Sem recibo de sessão do Hermes, fila, revisão e recuperação são DESCONHECIDOS.
-  const desconhecido = 'Aguardando recibo do Hermes'
+  const getStatusColor = () => {
+    switch (syncStatus.status) {
+      case 'success': return 'bg-green-50 border-green-200'
+      case 'syncing': return 'bg-blue-50 border-blue-200'
+      case 'failed': return 'bg-red-50 border-red-200'
+      case 'conflict': return 'bg-yellow-50 border-yellow-200'
+      default: return 'bg-gray-50 border-gray-200'
+    }
+  }
 
   return (
-    <section aria-label="Continuidade da CentralDark" className="overflow-hidden rounded-2xl border border-slate-700/70 bg-gradient-to-br from-[#0b1426] via-[#111d35] to-[#122743] p-4 text-slate-100 shadow-[0_12px_40px_-18px_rgba(14,165,233,0.25)] sm:p-5">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-500/25 pb-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="grid size-11 shrink-0 place-items-center rounded-xl border border-cyan-400/35 bg-cyan-400/10 text-cyan-300"><Bot className="size-6" aria-hidden="true" /></div>
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-200/85">Corpo único · CentralDark</p>
-            <h2 className="text-base font-semibold text-white sm:text-lg">🪬 Continuidade do Hermes</h2>
-            <p className="text-xs text-slate-300">Sessão, sincronização e publicação no mesmo cartão.</p>
-          </div>
-        </div>
-        <span className="rounded-full border border-amber-300/40 bg-amber-400/10 px-3 py-1 text-xs font-semibold text-amber-200">Sessão: não medida</span>
-      </div>
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {[
-          { label: 'Sessão atual', valor: desconhecido, Icone: Bot },
-          { label: 'Fila e tarefas', valor: 'Sem leitura da fila', Icone: History },
-          { label: 'Último recibo', valor: 'Não consultado', Icone: ScrollText },
-          { label: 'Dream Review', valor: 'Consumo não medido', Icone: BookOpenText },
-        ].map(({ label, valor, Icone }) => (
-          <div key={label} className="min-w-0 rounded-xl border border-sky-200/15 bg-slate-950/35 p-3">
-            <div className="flex items-center gap-2 text-cyan-200"><Icone className="size-4 shrink-0" aria-hidden="true" /><span className="text-[11px] font-semibold">{label}</span></div>
-            <p className="mt-2 text-xs leading-5 text-amber-200">{valor}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-3 flex flex-wrap gap-2">
-        <Button type="button" size="sm" variant="outline" onClick={() => onNavigate?.('hermes')} disabled={!onNavigate} className="border-sky-300/30 bg-slate-900/60 text-slate-100 hover:bg-slate-800 hover:text-white">🪬 Abrir Hermes</Button>
-        <Button type="button" size="sm" variant="outline" onClick={() => onNavigate?.('recibos')} disabled={!onNavigate} className="border-sky-300/30 bg-slate-900/60 text-slate-100 hover:bg-slate-800 hover:text-white">🧾 Recibos</Button>
-        <Button type="button" size="sm" variant="outline" onClick={() => onNavigate?.('dream-reviewer')} disabled={!onNavigate} className="border-sky-300/30 bg-slate-900/60 text-slate-100 hover:bg-slate-800 hover:text-white">📚 Biblioteca</Button>
-      </div>
-
-      {/* Corpo Único: apresentação compacta na frente, detalhes e prova atrás. */}
-      <div className="mt-4 rounded-2xl border border-sky-200/15 bg-slate-950/20 p-3 sm:p-4">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-sm font-semibold text-white">🧠 Harness · mente clara</h3>
-          <span className="rounded-full border border-sky-300/25 px-2 py-1 text-[11px] text-sky-200">Uma intenção · um executor · um recibo</span>
-        </div>
-        <ol className="mt-3 grid grid-cols-2 items-stretch gap-2 text-center text-xs sm:grid-cols-4">
-          {[
-            { rotulo: '👑 CHEFE', detalhe: 'Define a intenção' },
-            { rotulo: '🪬 COCKPIT', detalhe: 'Superfície única' },
-            { rotulo: '🧠 MCP', detalhe: 'Descobrir · PID · solicitar' },
-            { rotulo: '🧾 RECIBO', detalhe: 'Resultado comprovado' },
-          ].map((etapa, indice) => (
-            <li key={etapa.rotulo} className="relative rounded-xl border border-cyan-300/20 bg-slate-950/45 p-3">
-              <span className="text-xs font-semibold text-white">{etapa.rotulo}</span>
-              <p className="mt-1 text-[11px] leading-4 text-slate-300">{etapa.detalhe}</p>
-              {indice < 3 ? <span aria-hidden="true" className="absolute -right-2 top-1/2 z-10 hidden -translate-y-1/2 text-cyan-300 sm:block">→</span> : null}
-            </li>
-          ))}
-        </ol>
-        <p className="mt-3 text-xs text-amber-200">🟡 Integração MCP ↔ VS Code: versão de código em validação; execução no PID da Casa ainda sem recibo confirmado.</p>
-      </div>
-
-      <details className="group mt-3 rounded-xl border border-sky-300/20 bg-slate-950/30">
-        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-cyan-100 [&::-webkit-details-marker]:hidden">
-          <span className="flex items-center gap-2"><Eye className="size-4 text-cyan-300" aria-hidden="true" /> 🔬 Visão Contraprova · 7 funções internas</span>
-          <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
-        </summary>
-        <div className="grid gap-2 border-t border-sky-300/15 p-3 sm:grid-cols-2 xl:grid-cols-3">
-          {[
-            { titulo: '🧠 Mente Clara', texto: 'Quatro passos na frente, detalhes internos sob demanda.', Icone: Brain },
-            { titulo: '🔬 Visão Contraprova', texto: 'Expande transporte, dispositivo, terminal e evidências.', Icone: Eye },
-            { titulo: '💎 Selo da Realidade', texto: 'PASS só depois de execução e leitura de confirmação.', Icone: ShieldCheck },
-            { titulo: '🧬 Trilho de Execução', texto: 'Uma correlação: solicitar → autorizar → executar → provar.', Icone: Workflow },
-            { titulo: '🫀 Pulso de Continuidade', texto: 'Último PASS, NEXT_CURSOR e recibo do checkpoint canônico.', Icone: Activity },
-            { titulo: '🛡️ Guardião Silencioso', texto: 'Aprovação local preservada; sem comando remoto por aparência.', Icone: ShieldAlert },
-            { titulo: '🌙 Memória Viva', texto: 'Dream Review e Biblioteca existentes; consumo ainda a medir.', Icone: Sparkles },
-          ].map(({ titulo, texto, Icone }) => (
-            <div key={titulo} className="rounded-xl border border-cyan-300/15 bg-slate-900/45 p-3">
-              <h4 className="flex items-center gap-2 text-sm font-semibold text-white"><Icone aria-hidden="true" className="size-4 shrink-0 text-cyan-300" />{titulo}</h4>
-              <p className="mt-2 text-xs leading-5 text-slate-300">{texto}</p>
-            </div>
-          ))}
-        </div>
-        <div className="border-t border-sky-300/15 px-4 py-3 text-xs leading-5 text-slate-300">
-          Segurança interna preservada: Tailscale privado, identidade do dispositivo, PID, autorização no VS Code, resultado e recibo.
-          A interface é compacta; o caminho técnico não foi removido.
-        </div>
-      </details>
-
-      <details className="group mt-3 rounded-xl border border-amber-300/25 bg-amber-400/5">
-        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-amber-100 [&::-webkit-details-marker]:hidden">
-          <span className="flex items-center gap-2"><History className="size-4 text-amber-200" aria-hidden="true" /> 🧪 Diagnóstico Cline · última evidência recebida</span>
-          <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
-        </summary>
-        <div className="grid gap-2 border-t border-amber-200/15 p-3 text-xs sm:grid-cols-2">
-          {[
-            { tipo: 'PROVA HISTÓRICA', rotulo: 'Casa → VPS por SSH', texto: 'Conexão autenticada observada nos registros enviados em 20/10/2026.' },
-            { tipo: 'FALHA LOCAL', rotulo: 'PowerShell → Bash', texto: 'CRLF e redirecionamento quebraram scripts; transferência por stdin com cmd /c foi observada.' },
-            { tipo: 'FALHA DE TESTE', rotulo: 'verify_argv', texto: 'AssertionError na comparação do .output com um release esperado; conferir o release ativo antes de corrigir.' },
-            { tipo: 'GAP DE INTEGRAÇÃO', rotulo: 'Checkpoint no CockpitShell', texto: 'O componente existia, mas a montagem visual não foi localizada na versão investigada.' },
-          ].map(item => (
-            <article key={item.rotulo} className="rounded-lg border border-amber-300/15 bg-slate-950/40 p-3">
-              <span className="text-[10px] font-bold tracking-wider text-amber-200">{item.tipo}</span>
-              <h4 className="mt-1 text-sm font-semibold text-white">{item.rotulo}</h4>
-              <p className="mt-1 leading-5 text-slate-300">{item.texto}</p>
-            </article>
-          ))}
-        </div>
-        <p className="border-t border-amber-300/15 px-4 py-3 text-xs text-amber-100/85">
-          Fonte: capturas e saída do Cline recebidas em 20/10/2026. Não são sensores ao vivo; nenhuma correção ou execução é certificada por este cartão.
-          Sem segunda investigação quando o recibo anterior já serve.
-        </p>
-      </details>
-
-      <details className="group mt-3 rounded-xl border border-emerald-300/20 bg-slate-950/30" onToggle={event => setCheckpointAberto(event.currentTarget.open)}>
-        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 text-sm font-semibold text-cyan-100 [&::-webkit-details-marker]:hidden">
-          <span className="flex items-center gap-2"><ScrollText className="size-4 text-cyan-300" aria-hidden="true" /> 🫀 Checkpoint raiz · missão / último PASS / próximo cursor</span>
-          <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
-        </summary>
-        <div className="border-t border-sky-300/15 p-3">
-          <p className="mb-3 text-xs text-slate-300">Leitura real pelo owner já existente, sob autenticação administrativa. O último verde não se perde quando a medição atual falha.</p>
-          {checkpointAberto ? <React.Suspense fallback={<p role="status" className="text-xs text-slate-300">Carregando checkpoint existente…</p>}><CheckpointCentralDark autenticado={autenticado} /></React.Suspense> : null}
-        </div>
-      </details>
-
-      <details className="group mt-4 rounded-xl border border-cyan-400/20 bg-slate-950/30">
-        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-cyan-100 [&::-webkit-details-marker]:hidden">
-          <span className="flex items-center gap-2"><GitBranch className="size-4" aria-hidden="true" /> Casa ↔ Main ↔ VPS · ferramentas de sincronização</span>
-          <span className="flex items-center gap-2 text-xs text-slate-300">Abrir controles <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" /></span>
-        </summary>
-        <div className="space-y-3 border-t border-slate-500/20 px-3 py-4">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-sky-400/25 bg-sky-300/5 p-3">
-            <div className="flex min-w-0 items-center gap-2">
-              {getStatusIcon()}
-              <div><p className="text-sm font-semibold text-white">Auto Sync · Casa / Main / VPS</p><p className="break-words text-xs text-slate-300">{syncStatus.human_readable}</p></div>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              {(['windows','main','vps'] as const).map(target => <Button key={target} type="button" size="sm" variant="outline" disabled={isSyncing} onClick={() => handleSync(target)} className="border-slate-500/60 bg-slate-950/50 text-slate-100 hover:bg-slate-800 hover:text-white">{target === 'windows' ? 'Windows' : target === 'main' ? 'Main' : 'VPS'}</Button>)}
-              <Button type="button" size="sm" disabled={isSyncing} onClick={() => handleSync('all')} className="gap-2 bg-cyan-600 text-white hover:bg-cyan-500"><RefreshCw className={`size-4 ${isSyncing ? 'animate-spin' : ''}`} />{isSyncing ? 'Sincronizando...' : 'Sincronizar Tudo'}</Button>
+    <div className="space-y-3">
+      <Card className={`p-4 border ${getStatusColor()}`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {getStatusIcon()}
+            <div>
+              <p className="text-sm font-semibold">Auto Sync: Casa / Main / VPS</p>
+              <p className="text-xs text-gray-600">{syncStatus.human_readable}</p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-400/25 bg-amber-300/5 p-3">
-            <div className="flex min-w-0 items-center gap-2"><ShieldAlert className="size-5 shrink-0 text-amber-300" aria-hidden="true" /><div><p className="text-sm font-semibold text-white">Micro-Deploy · publicação protegida</p><p className="text-xs text-amber-100/85">Sync Git não comprova publicação. Sem recibo real, deploy bloqueado.</p></div></div>
-            <div className="flex flex-wrap items-center gap-2">
-              <label className="sr-only" htmlFor="centraldark-microdeploy-mode">Modo de micro-deploy</label>
-              <select id="centraldark-microdeploy-mode" value={microDeployMode} onChange={e => setMicroDeployMode(e.target.value as 'main-only' | 'full')} disabled={isSyncing} className="min-h-9 rounded-md border border-amber-300/40 bg-slate-950 px-3 text-xs text-slate-100"><option value="main-only">Somente Main</option><option value="full">Completo (Casa/VPS/Main)</option></select>
-              <Button type="button" size="sm" disabled={isSyncing} onClick={handleMicroDeploy} className="gap-2 bg-amber-600 text-white hover:bg-amber-500"><Zap className="size-4" aria-hidden="true" />Micro-Deploy Agora</Button>
-            </div>
+
+          <div className="flex gap-2">
+            <Button onClick={() => handleSync('windows')} disabled={isSyncing} size="sm" variant="outline">
+              Windows
+            </Button>
+            <Button onClick={() => handleSync('main')} disabled={isSyncing} size="sm" variant="outline">
+              Main
+            </Button>
+            <Button onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
+              VPS
+            </Button>
+            <Button onClick={() => handleSync('all')} disabled={isSyncing} size="sm" className="gap-2">
+              <RefreshCw className="w-4 h-4" />
+              {isSyncing ? 'Sincronizando...' : 'Sincronizar Tudo'}
+            </Button>
           </div>
         </div>
-      </details>
-      <p className="mt-3 text-[11px] text-slate-400">ℹ️ O status do Auto Sync usa sua leitura existente. O checkpoint só é consultado ao expandir, sob login admin. Os diagnósticos Cline são históricos, não telemetria ao vivo.</p>
-    </section>
+      </Card>
+
+      <Card className="p-4 border border-amber-200 bg-amber-50">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Zap className="w-5 h-5 text-amber-600" />
+            <div>
+              <p className="text-sm font-semibold">Automação CentralDark · execução segura</p>
+              <p className="text-xs text-amber-700">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <select
+              value={microDeployMode}
+              onChange={(e) => setMicroDeployMode(e.target.value as 'main-only' | 'full')}
+              disabled={isSyncing}
+              className="px-2 py-1 text-xs border border-amber-300 rounded bg-white"
+            >
+              <option value="main-only">Main Only (rapido)</option>
+              <option value="full">Full (Casa/VPS/Main)</option>
+            </select>
+
+            <Button onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">
+              <Zap className="w-4 h-4" />
+              {isSyncing ? 'Solicitando...' : 'Executar Automação'}
+            </Button>
+          </div>
+        </div>
+      </Card>
+    </div>
   )
 }
 

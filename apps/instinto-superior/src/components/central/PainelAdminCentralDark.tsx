@@ -510,12 +510,9 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
   const [planos, definirPlanos] = useState<string[] | null>(null);
 
   async function chamarAdmin(action: string, payload: Record<string, unknown> = {}) {
-    // O cliente identifica a sessão; a função admin-users valida JWT + has_role(admin) no servidor.
     const { data: sessao, error: erroSessao } = await supabase.auth.getSession();
     if (erroSessao || !sessao.session) throw new Error("AUTH_REQUIRED");
-    const { data, error } = await supabase.functions.invoke("admin-users", {
-      body: { action, ...payload },
-    });
+    const { data, error } = await supabase.functions.invoke("admin-users", { body: { action, ...payload } });
     if (error || data?.error) throw new Error(data?.error || error?.message || "ADMIN_USERS_UNAVAILABLE");
     return data;
   }
@@ -524,25 +521,20 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
     try {
       const { data: sessao } = await supabase.auth.getSession();
       if (!sessao.session) { definirStatus("AUTH_REQUIRED"); return; }
-      const { data, error } = await supabase.functions.invoke("admin-users", {
-        body: { action: "list" },
-      });
+      const { data, error } = await supabase.functions.invoke("admin-users", { body: { action: "list" } });
       if (error || data?.error || !Array.isArray(data?.users)) {
         throw new Error(data?.error || error?.message || "ADMIN_USERS_UNAVAILABLE");
       }
       definirUsuariosAdmin(data.users as UsuarioAdminSeguro[]);
       definirStatus("FONTE_ADMIN_AUTORIZADA");
-    } catch (erro) {
-      definirStatus("ADMIN_USERS_INDISPONIVEL: " + mensagemErro(erro));
-    }
+    } catch (erro) { definirStatus("ADMIN_USERS_INDISPONIVEL: " + mensagemErro(erro)); }
   }, []);
-
   useEffect(() => { void carregarAdmin(); }, [carregarAdmin]);
 
   const fonteAdmin = status === "FONTE_ADMIN_AUTORIZADA";
   const usuarioSelecionado = usuariosAdmin.find(usuario => usuario.id === selecionado);
   const contaSelecionavel = usuarioSelecionado?.role === "admin" || usuarioSelecionado?.role === "user";
-  const roleWriteReleased = false; // liberar somente após deploy + contraprova da Edge corrigida
+  const roleWriteReleased = false; // Gate: publicar e provar a Edge corrigida antes de habilitar esta acao.
 
   async function criarUsuario(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -598,7 +590,8 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
           disabled={processando || carregandoLocal}>Atualizar usuários</Button>
       </div>
       <p className="font-mono text-xs text-muted-foreground" role="status">
-        {status} · {fonteAdmin ? usuariosAdmin.length + " contas lidas via Edge Admin" : usuariosLocais.length + " perfis da listagem local (não equivalente a Admin API)"}
+        {status} · {fonteAdmin ? usuariosAdmin.length + " contas lidas via Edge Admin" :
+          usuariosLocais.length + " perfis da listagem local (não equivalente a Admin API)"}
       </p>
       <form className="grid gap-3 sm:grid-cols-4" onSubmit={evento => void criarUsuario(evento)}>
         <label className="text-xs">Nome
@@ -607,8 +600,7 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
         </label>
         <label className="text-xs">E-mail
           <input type="email" required className="mt-1 w-full rounded border border-border bg-background p-2"
-            value={email} onChange={evento => definirEmail(evento.target.value)}
-            autoComplete="off" maxLength={254} />
+            value={email} onChange={evento => definirEmail(evento.target.value)} autoComplete="off" maxLength={254} />
         </label>
         <label className="text-xs">Senha inicial
           <input type="password" required minLength={12} autoComplete="new-password"

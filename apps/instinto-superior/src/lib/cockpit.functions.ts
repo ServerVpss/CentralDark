@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
-import { execFile } from "node:child_process";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GATEWAY = "https://connector-gateway.lovable.dev/github";
@@ -25,60 +24,6 @@ type CommitCentralDark = {
   data: string;
 };
 
-// === Types for harness weekly (RastroSemanalMcp) ===
-export type SemanaHarness = {
-  schema: string;
-  window: string;
-  observedAt: string;
-  coverage: "PARTIAL_CAPPED" | "PARTIAL_INSTRUMENTED";
-  capped: boolean;
-  totalObserved: number;
-  traced: number;
-  tracePctOfObserved: number | null;
-  pass: number;
-  fail: number;
-  unknown: number;
-  successPctOfDecided: number | null;
-  failurePctOfDecided: number | null;
-  unknownPctOfObserved: number | null;
-  avgDurationMs: number | null;
-  daily: Array<{ day: string; calls: number; pass: number; fail: number; unknown: number }>;
-  bySource: Array<{ name: string; calls: number; pass: number; fail: number; unknown: number }>;
-  topTools: Array<{ name: string; calls: number; pass: number; fail: number; unknown: number }>;
-};
-
-// === Types for tool call lens (ToolCallLensMcp) ===
-export type LensEvento = {
-  t: string;
-  level: string;
-  msg: string;
-  meta?: {
-    source?: string;
-    toolName?: string;
-    call_id?: string;
-    correlation_id?: string;
-    mission_id?: string;
-    mcp_host_pid?: number | null;
-    durationMs?: number | null;
-    exitCode?: number | null;
-    status?: "PASS" | "FAIL";
-  };
-};
-
-// === Types for sectorized logs (CentralDeLogsSetorizados) ===
-export type LogSetor = "all" | "mcp" | "agents" | "hermes" | "vscode" | "system" | "control" | "consciencia";
-export type EventoSetorizado = {
-  event_id: string;
-  timestamp: string;
-  sector: string;
-  source: string;
-  actor: string;
-  kind: string;
-  level: string;
-  badge: string;
-  key: string;
-};
-
 export type EstadoCentralDark = {
   gmail: Estado;
   githubLovable: Estado;
@@ -101,10 +46,6 @@ export type EstadoCentralDark = {
   casaSite: Estado;
   screenpipe: Estado; // Alias legado: exclusivamente Screenpipe Casa.
   screenpipeVps: Estado;
-  screenpipeVideo: Estado;
-  screenpipeAudio: Estado;
-  tailscaleCasa: Estado;
-  tailscaleCasaFonte: string;
   desktopVps: Estado;
   actions: Estado;
   actionsLinuxMinutes: number | null;
@@ -302,6 +243,10 @@ function screenpipeIdentificado(sonda: Probe): Probe {
   if (status === "degraded") return { ...sonda, estado: "RUNNING", erro: null };
   if (["fail", "failed", "error", "unhealthy"].includes(status ?? "")) return { ...sonda, estado: "FAIL" };
   return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_STATUS_RECONHECIDO" };
+  if (sonda.httpStatus !== 200) return { ...sonda, estado: "FAIL" };
+  if (status === "healthy") return { ...sonda, estado: "PASS" };
+  if (status === "degraded") return { ...sonda, estado: "RUNNING" };
+  return { ...sonda, estado: "UNKNOWN", erro: "STATUS_NAO_RECONHECIDO" };
 }
 
 function saidaScreenpipe(sonda: Probe): string[] {
@@ -313,12 +258,6 @@ function saidaScreenpipe(sonda: Probe): string[] {
     const estado = texto(valor["status"]);
     if (estado && /^[a-zA-Z0-9 _-]{1,32}$/.test(estado)) saida.push(`${nome}: ${estado}`);
   }
-  const frameStatus = texto(sonda.dados?.["frame_status"]);
-  const audioStatus = texto(sonda.dados?.["audio_status"]);
-  const capture = objetoJson(sonda.dados?.["capture_status"]) ? sonda.dados["capture_status"] : null;
-  if (frameStatus) saida.push("VIDEO/OCR: " + frameStatus.slice(0, 24));
-  if (audioStatus) saida.push("AUDIO SCREENPIPE: " + audioStatus.slice(0, 24));
-  if (capture?.["status"] === "audio_stalled") saida.push("CAPTURA DE AUDIO: sem fluxo ate gravador · independente do Jarvis");
   return saida;
 }
 
@@ -500,179 +439,6 @@ function origemLocalScreenpipe(): HostScreenpipe {
   return process.platform !== "win32" && host === "CENTRALDARK-OS" ? "VPS" : "UNKNOWN";
 }
 
-/** #OBSERVACOES# @owner=cockpit.functions.ts @doc_ref=docs/CONSCIENCIA/MICRO-DEPLOY/README.md
- * @last_updated=2026-10-20T05:53:31Z @implementado=TAILSCALE_CASA_SENSOR_VIDEO_AUDIO_SCREENPIPE
- * Tailscale CLI consulta somente status na Casa; sem credenciais e sem comandos mutantes.
- * Peer ONLINE comprova malha, nao prova deploy ou servico.
- */
-async function medirTailscaleCasa(): Promise<{ estado: Estado; fonte: string }> {
-  if (origemLocalScreenpipe() !== "CASA") {
-    return { estado: "UNKNOWN", fonte: "Tailscale Casa · sem sensor neste host" };
-  }
-  return await new Promise(resolve => {
-    execFile("tailscale", ["status", "--json"], {
-      windowsHide: true, timeout: 3000, maxBuffer: 512 * 1024,
-    }, (erro, stdout) => {
-      if (erro) return resolve({ estado: "UNKNOWN", fonte: "Tailscale Casa · CLI indisponivel" });
-      try {
-        const leitura = JSON.parse(stdout) as JsonObject;
-        const peers = objetoJson(leitura["Peer"]) ? Object.values(leitura["Peer"]) : [];
-        const peerVps = peers.find(peer =>
-          objetoJson(peer) && texto(peer["HostName"])?.toLowerCase() === "centraldark-os",
-        ) as JsonObject | undefined;
-        const self = objetoJson(leitura["Self"]) ? leitura["Self"] : null;
-        if (leitura["BackendState"] !== "Running" || self?.["Online"] !== true) {
-          return resolve({ estado: "RUNNING", fonte: "Tailscale Casa · nao confirmado online" });
-        }
-        if (!peerVps) return resolve({ estado: "UNKNOWN", fonte: "Tailscale Casa · peer VPS nao identificado" });
-        return resolve(peerVps["Online"] === true
-          ? { estado: "PASS", fonte: "Tailscale CLI Casa · peer centraldark-os ONLINE; nao prova servicos" }
-          : { estado: "RUNNING", fonte: "Tailscale CLI Casa · peer centraldark-os OFFLINE na malha" });
-      } catch {
-        return resolve({ estado: "UNKNOWN", fonte: "Tailscale Casa · JSON invalido" });
-      }
-    });
-  });
-}
-
-// === Server functions for ObservabilidadeCentralDark (replacing client-side fetch) ===
-
-export const lerHarnessSemanalMcp = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<SemanaHarness> => {
-    const { data: papel, error: erroPapel } = await context.supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", context.userId)
-      .eq("role", "admin")
-      .maybeSingle();
-
-    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-    try {
-      const base = apiBase();
-      const resposta = await fetch(`${base}/admin/api/metricas`, {
-        credentials: "include",
-        cache: "no-store",
-        headers: { Accept: "application/json" },
-        signal: controller.signal,
-      });
-
-      if (resposta.status === 401 || resposta.status === 403) throw new Error("AUTH_REQUIRED");
-      if (!resposta.ok) throw new Error("API_UNAVAILABLE");
-
-      const json = (await resposta.json()) as { harnessWeek?: SemanaHarness };
-      if (json.harnessWeek?.schema !== "centraldark.harness.weekly.v1") throw new Error("WEEKLY_NOT_DEPLOYED");
-      return json.harnessWeek;
-    } catch (erro) {
-      if (erro instanceof Error && (erro.message === "AUTH_REQUIRED" || erro.message === "API_UNAVAILABLE" || erro.message === "WEEKLY_NOT_DEPLOYED")) throw erro;
-      throw new Error("UNKNOWN");
-    } finally {
-      clearTimeout(timeout);
-    }
-  });
-
-export const lerToolCallLensMcp = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<LensEvento[]> => {
-    const { data: papel, error: erroPapel } = await context.supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", context.userId)
-      .eq("role", "admin")
-      .maybeSingle();
-
-    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-    try {
-      const base = apiBase();
-      const resposta = await fetch(`${base}/admin/api/logs?q=mcp_tool_call&limit=100`, {
-        credentials: "include",
-        cache: "no-store",
-        headers: { Accept: "application/json" },
-        signal: controller.signal,
-      });
-
-      if (resposta.status === 401 || resposta.status === 403) throw new Error("AUTH_REQUIRED");
-      if (!resposta.ok) throw new Error("MCP_LOG_STREAM_UNAVAILABLE");
-
-      const payload = (await resposta.json()) as { logs?: LensEvento[] };
-      if (!Array.isArray(payload.logs)) throw new Error("MCP_LOG_SCHEMA_UNKNOWN");
-      return payload.logs.filter(evento => evento.msg === "mcp_tool_call" && evento.meta?.source === "MCP_AUDIT");
-    } catch (erro) {
-      if (erro instanceof Error && ["AUTH_REQUIRED", "MCP_LOG_STREAM_UNAVAILABLE", "MCP_LOG_SCHEMA_UNKNOWN"].includes(erro.message)) throw erro;
-      throw new Error("UNKNOWN");
-    } finally {
-      clearTimeout(timeout);
-    }
-  });
-
-export const lerLogsSetorizados = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .validator((searchParams: URLSearchParams) => {
-    const sector = searchParams.get("sector") ?? "all";
-    const limit = searchParams.get("limit") ?? "100";
-    const since_minutes = searchParams.get("since_minutes") ?? "1440";
-    return { sector, limit, since_minutes };
-  })
-  .handler(async ({ context, data }): Promise<EventoSetorizado[]> => {
-    const { data: papel, error: erroPapel } = await context.supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", context.userId)
-      .eq("role", "admin")
-      .maybeSingle();
-
-    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-    try {
-      const base = apiBase();
-      const params = new URLSearchParams({ sector: data.sector, limit: data.limit, since_minutes: data.since_minutes });
-      const resposta = await fetch(`${base}/admin/api/logs?${params}`, {
-        credentials: "include",
-        cache: "no-store",
-        headers: { Accept: "application/json" },
-        signal: controller.signal,
-      });
-
-      if (resposta.status === 401 || resposta.status === 403) throw new Error("AUTH_REQUIRED");
-      if (!resposta.ok) throw new Error("CENTRAL_LOGS_HTTP_" + resposta.status);
-
-      const dados = (await resposta.json()) as { schema?: string; logs?: EventoSetorizado[] };
-      if (dados.schema !== "centraldark.central-logs.sanitized.v1" || !Array.isArray(dados.logs)) {
-        throw new Error("CENTRAL_LOGS_SECTOR_API_NOT_DEPLOYED");
-      }
-      return dados.logs;
-    } catch (erro) {
-      if (erro instanceof Error && ["AUTH_REQUIRED", "CENTRAL_LOGS_SECTOR_API_NOT_DEPLOYED"].includes(erro.message) || erro.message.startsWith("CENTRAL_LOGS_HTTP_")) throw erro;
-      throw new Error("UNKNOWN");
-    } finally {
-      clearTimeout(timeout);
-    }
-  });
-
-function estadoVideoScreenpipe(sonda: Probe): Estado {
-  if (sonda.httpStatus !== 200) return sonda.estado;
-  return texto(sonda.dados?.["frame_status"])?.toLowerCase() === "ok" ? "PASS" : "UNKNOWN";
-}
-function estadoAudioScreenpipe(sonda: Probe): Estado {
-  if (sonda.httpStatus !== 200) return sonda.estado;
-  const status = texto(sonda.dados?.["audio_status"])?.toLowerCase();
-  const capture = objetoJson(sonda.dados?.["capture_status"]) ? sonda.dados["capture_status"] : null;
-  if (status === "ok" || status === "active") return "PASS";
-  if (status === "stale" || capture?.["status"] === "audio_stalled") return "RUNNING";
-  return "UNKNOWN";
-}
-
 const SONDA_NAO_EXECUTADA: Probe = {
   estado: "UNKNOWN", httpStatus: null, erro: "SEM_MEDICAO_NESTE_HOST", dados: null,
 };
@@ -696,7 +462,6 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipe,
       screenpipeRemotoCasa,
       actions,
-      tailscaleCasa,
     ] = await Promise.all([
       medirGithub(),
       medirApi("/api/live-fabric/status"),
@@ -706,7 +471,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/heartbeat"),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
-      medirReachable("http://127.0.0.1:8080/sala-controle", true),
+      medirReachable("http://127.0.0.1:4175/", true),
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),
@@ -714,7 +479,6 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
         ? medirReachable(`http://${process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25"}:3030/health`)
         : Promise.resolve(SONDA_NAO_EXECUTADA),
       medirActions(),
-      medirTailscaleCasa(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
@@ -769,10 +533,6 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaSite: casaSite.estado,
       screenpipe: screenpipeCasa.estado,
       screenpipeVps: screenpipeVps.estado,
-      screenpipeVideo: estadoVideoScreenpipe(screenpipeCasa),
-      screenpipeAudio: estadoAudioScreenpipe(screenpipeCasa),
-      tailscaleCasa: tailscaleCasa.estado,
-      tailscaleCasaFonte: tailscaleCasa.fonte,
       desktopVps: "UNKNOWN",
       actions: actions.estado,
       actionsLinuxMinutes: actions.linux,

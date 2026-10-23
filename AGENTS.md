@@ -143,6 +143,10 @@ CHEFE_INTENT / DELTA
 → FIXED_POINT_IF_GOAL_SUFFICIENT
 ```
 
+**🔴 PR DOS RED — Tool Call independente de modelo (2026-10-22).** Toda sessão Cline/ZENDRIVE/Codex/Claude/Gemini que executa o Goal Michelin deve recuperar a secao `Red Loop` de `.agents/skills/centraldark-live-editing-fabric/SKILL.md` quando receber `AI_NoSuchToolError` ou rejeicao `before execution`. Os REDs sao registrados cumulativamente no **mesmo** PR `🧠 PR DOS RED 🔴`, com fingerprints e readback; so criar novo ID se existir causa distinta. Nome de ferramenta deve vir EXATAMENTE do esquema da sessao ativa **e** do seu resolver; nao traduzir `read_files` para `read_file` nem alucinar aliases. Se a ferramenta aparece em `Available tools` mas o dispatcher a rejeita, classificar `ADVERTISED_BUT_REJECTED` e parar o loop, investigar adapter/registry/sessao — nao repetir com 8 variacoes. Regra pura + testes: `scripts/ci/centraldark-toolcall-red-guard.{mjs,test.mjs}`; **script commitado ainda nao e hook instalado no Cline**. Prova: call real autorizada, schema valido e resultado independente; sem isso `UNKNOWN`, nunca tres estrelas. Preservar o GOAL 50 passos, writer unico Casa e checkpoints comprovados.
+
+**🍒 Cockpit-in-the-Loop — obrigação proporcional para Cline/VS Code e demais Writers UI (CHEFE, 2026-10-21).** Quando a missão alterar controles, tela, navegação, integração visível ou estados do Cockpit, antes de declarar conclusão **carregar** `.agents/skills/centraldark-live-editing-fabric/SKILL.md`, seção `Cockpit-in-the-Loop`. O Cline na Casa usa o navegador/preview autenticado já aberto (URL medida nesta missão: `http://127.0.0.1:8080/sala-controle`) ou automação UI autorizada para mapear somente os botões/abas do escopo e medir T0. Após o delta e testes/build pertinentes, atualizar a página, operar os controles **seguros e autorizados** do escopo, medir T1 e contraprovar resultado, registrando `OWNER+SHA+URL/HOST+CONTROLE+AÇÃO+T0/T1+RESULTADO+RECEIPT`. Ações mutantes (`Sincronizar Tudo`, `Executar Automação`, deploy, sair, permissões) não são testes genéricos; exigem intenção/gates próprios. `HTTP_200 != UI_CLICK_PASS`; `UI_PRESENT != CLICK_ACK != EFFECT_PROVED`; browser read-only/sem sessão executora ⇒ `UI_E2E_PENDING`, jamais verde simulado. Não varrer todos os botões a cada tarefa; aplicar apenas o cone afetado. `127.0.0.1` da VPS não é o da Casa. O Desktop Commander externo não é pré-requisito. A presença desta instrução na `main` **não comprova** consumo na sessão local do Cline; verificar a sincronização e o ACK antes de afirmar aplicação física.
+
 **Execução.** Quando houver ferramenta e autorização válidas, execute e capture erro, saída e estado; não troque ação por plano, documentação ou comando para o CHEFE copiar. Use Hermes original quando esse for o alvo e houver rota comprovada; não simule resposta bruta, sessão, continuidade entre contas ou shell. Sem ferramenta executora, classifique a limitação da superfície e entregue o handoff mínimo ao mesmo owner, sem declarar que agiu no runtime.
 
 **Erro local:** `CLASSIFY_EXACT → VOLTA_UMA_CASA → PRESERVE_VALID_STATE → FIX_CAUSAL_DELTA → RETEST_AFFECTED_CONE → CONTINUE`. Não reinicie a missão inteira nem abandone o objetivo porque um sensor falhou. Uma rota bloqueada pede inventário e tentativa das demais rotas **já autorizadas**, sem contornar autenticação, aprovações, firewalls, controle de acesso ou escopo. Se o impedimento exigir pessoa, reporte a ação humana específica e continue as partes independentes.
@@ -2510,3 +2514,20 @@ Aplicar régua Michelin **existente logo abaixo**, sem segundo certificador: ⭐
 **Aplicação automática:** `npm run verify:hud` e `.github/workflows/test.yml` devem reprovar contratos inseguros e emitir recibo `MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=...` **somente após** testes, lint e build reais. O workflow não tem autoridade para emitir estrelas 2/3 sozinho: exigir consulta a CI concluída e readbacks vivos externos. Explicar claramente o estado, o escopo do impedimento e `NEXT_CURSOR` na Central de Integridade.
 
 A contagem de estrelas é **por entrega e janela de evidência**, nunca atributo permanente de todo o organismo CentralDark.
+
+ 
+ <!-- CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
+ ## Comunicação natural obrigatória para todos os agentes
+
+ Fale com o usuário em português brasileiro cotidiano, com clareza e sem tom robótico. Esta regra se aplica às respostas escritas e faladas sempre que este arquivo fizer parte do contexto do agente.
+
+ 1. Diga a resposta principal primeiro; explique depois só o necessário.
+ 2. Não repita o pedido como introdução nem anuncie etapas internas sem necessidade.
+ 3. Troque jargão por palavras comuns. Se o termo técnico for inevitável, traduza-o logo.
+ 4. Não use siglas, tabelas, estados internos ou rodapés operacionais em conversa simples, a menos que ajudem diretamente.
+ 5. Use frases curtas e ritmo natural em áudio; não leia caminhos, variáveis ou tabelas em voz alta, salvo se o usuário pedir.
+ 6. Relate falhas e limites com honestidade. Não esconda o que faltou nem declare sucesso sem conferir.
+ 7. A regra escrita não prova que o agente a carregou. Teste as superfícies disponíveis e registre quais ainda não foram verificadas.
+
+ Exemplo de resposta: “Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
+ <!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->

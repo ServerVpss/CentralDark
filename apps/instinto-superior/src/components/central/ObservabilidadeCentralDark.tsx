@@ -17,17 +17,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { ProcessosMcpPanel } from "@/components/central/ProcessosMcpPanel";
-import { lerEstadoCentralDark, type Estado, type EstadoCentralDark } from "@/lib/cockpit.functions";
+import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
 import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
-import {
-  lerHarnessSemanalMcp,
-  type SemanaHarness,
-  lerToolCallLensMcp,
-  type LensEvento,
-  lerLogsSetorizados,
-  type EventoSetorizado,
-  type LogSetor,
-} from "@/lib/cockpit.functions";
 import {
   CartaoResponsabilidade,
   type ContratoCartaoResponsabilidade,
@@ -60,9 +51,24 @@ type SemanaHarness = {
  * o MCP Admin; não transportamos tokens nem cookies em estado do cockpit.
  */
 function RastroSemanalMcp() {
+  const base = "https://api.centralldark.com";
+  const rota = base + "/admin/api/metricas";
   const q = useQuery({
     queryKey: ["centraldark", "harness-weekly-admin"],
-    queryFn: () => useServerFn(lerHarnessSemanalMcp)(),
+    queryFn: async (): Promise<SemanaHarness> => {
+      const response = await fetch(rota, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (response.status === 401 || response.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!response.ok) throw new Error("API_UNAVAILABLE");
+      const json = await response.json() as { harnessWeek?: SemanaHarness };
+      if (json.harnessWeek?.schema !== "centraldark.harness.weekly.v1")
+        throw new Error("WEEKLY_NOT_DEPLOYED");
+      return json.harnessWeek;
+    },
     refetchInterval: 60_000,
     retry: false,
   });
@@ -145,7 +151,7 @@ function RastroSemanalMcp() {
       ) : (
         <div className="mt-4 rounded-lg border border-dashed border-amber-500/40 p-4 text-sm">
           Dados semanais indisponíveis nesta sessão. Sem números fictícios e sem marcar PASS.
-          <a className="mt-2 block underline" href="https://api.centralldark.com/admin" target="_blank" rel="noreferrer">
+          <a className="mt-2 block underline" href={base + "/admin"} target="_blank" rel="noreferrer">
             Abrir administração MCP e verificar autenticação / rastro
           </a>
         </div>
@@ -176,9 +182,25 @@ function ToolCallLensMcp() {
   const [modo, definirModo] = useState<"ao-vivo" | "pausado">("ao-vivo");
   const [filtro, definirFiltro] = useState<"todos" | "PASS" | "FAIL">("todos");
   const [detalhes, definirDetalhes] = useState(true);
+  // A mesma origem autenticada do RastroSemanalMcp, sem tokens no cliente.
+  // Endpoint protegido por cookie do MCP Admin; fetch cross-origin requer
+  // a configuracao CORS/autenticacao existente no ambiente publicado.
+  const url = "https://api.centralldark.com/admin/api/logs?q=mcp_tool_call&limit=100";
   const q = useQuery({
     queryKey: ["centraldark", "tool-call-lens", "mcp-audit"],
-    queryFn: () => useServerFn(lerToolCallLensMcp)(),
+    queryFn: async (): Promise<LensEvento[]> => {
+      const response = await fetch(url, {
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (response.status === 401 || response.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!response.ok) throw new Error("MCP_LOG_STREAM_UNAVAILABLE");
+      const payload = await response.json() as { logs?: LensEvento[] };
+      if (!Array.isArray(payload.logs)) throw new Error("MCP_LOG_SCHEMA_UNKNOWN");
+      return payload.logs.filter(evento => evento.msg === "mcp_tool_call" && evento.meta?.source === "MCP_AUDIT");
+    },
     refetchInterval: modo === "ao-vivo" ? 5000 : false,
     retry: false,
   });
@@ -271,15 +293,8 @@ function ToolCallLensMcp() {
 
 type LogSetor = "all" | "mcp" | "agents" | "hermes" | "vscode" | "system" | "control" | "consciencia";
 type EventoSetorizado = {
-  event_id: string;
-  timestamp: string;
-  sector: string;
-  source: string;
-  actor: string;
-  kind: string;
-  level: string;
-  badge: string;
-  key: string;
+  event_id: string; timestamp: string; sector: string; source: string;
+  actor: string; kind: string; level: string; badge: string; key: string;
 };
 const SETORES_LOG = [
   ["all", "Todos"], ["mcp", "MCP"], ["agents", "Agentes"], ["hermes", "Hermes"],
@@ -290,9 +305,23 @@ function CentralDeLogsSetorizados() {
   const [setor, definirSetor] = useState<LogSetor>("all");
   const [aoVivo, definirAoVivo] = useState(true);
   const [busca, definirBusca] = useState("");
+  // Mesmo Admin MCP autenticado e mesmo funil; nenhum novo coletor/serviço.
   const q = useQuery({
     queryKey: ["centraldark", "logs-setorizados", setor],
-    queryFn: () => useServerFn(lerLogsSetorizados)({ sector: setor }),
+    queryFn: async (): Promise<EventoSetorizado[]> => {
+      const params = new URLSearchParams({ sector: setor, limit: "100", since_minutes: "1440" });
+      const resposta = await fetch("https://api.centralldark.com/admin/api/logs?" + params, {
+        credentials: "include", cache: "no-store", headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (resposta.status === 401 || resposta.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!resposta.ok) throw new Error("CENTRAL_LOGS_HTTP_" + resposta.status);
+      const dados = await resposta.json() as { schema?: string; logs?: EventoSetorizado[] };
+      if (dados.schema !== "centraldark.central-logs.sanitized.v1" || !Array.isArray(dados.logs)) {
+        throw new Error("CENTRAL_LOGS_SECTOR_API_NOT_DEPLOYED");
+      }
+      return dados.logs;
+    },
     refetchInterval: aoVivo ? 15_000 : false,
     retry: false,
   });
@@ -306,7 +335,7 @@ function CentralDeLogsSetorizados() {
         <div>
           <h3 id="central-logs-setores-title" className="font-semibold">📜 Central de Logs · setores existentes</h3>
           <p className="mt-1 text-xs text-muted-foreground">
-            Consulta sanitizada do funil MCP. A fonte histórica continua única; permissões administrativas obrigatórias.
+            Consulta sanitizada do funil MCP. Fonte histórica única; autenticação administrativa obrigatória.
           </p>
         </div>
         <div className="flex gap-2">
@@ -339,7 +368,7 @@ function CentralDeLogsSetorizados() {
       <details className="mt-3 rounded-lg border border-border p-3">
         <summary className="cursor-pointer text-sm font-semibold">Expandir rastro por setor</summary>
         {q.isError ? <p className="mt-3 text-xs text-amber-500 motion-safe:animate-pulse motion-reduce:animate-none">
-          Fonte ainda não disponível nesta sessão. Sem transformar AUTH_REQUIRED ou runtime antigo em PASS.
+          Fonte ainda não disponível nesta sessão; nenhum PASS sem prova.
         </p> : null}
         <div className="mt-3 max-h-80 space-y-2 overflow-y-auto" role="log" aria-label="Eventos sanitizados por setor">
           {!linhas.length ? <p className="text-xs text-muted-foreground">Nenhum evento comprovado para este filtro.</p> : null}

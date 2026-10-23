@@ -1,17 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Check,
-  ExternalLink,
-  Eye,
-  Monitor,
-  Moon,
-  Puzzle,
-  RotateCcw,
-  Smartphone,
-  TerminalSquare,
-  TriangleAlert,
-  WandSparkles,
-} from "lucide-react";
+import { Check, ExternalLink, Eye, Monitor, Puzzle, RotateCcw, Smartphone, TerminalSquare, TriangleAlert } from "lucide-react";
 
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
 import { Button } from "@/components/ui/button";
@@ -24,80 +12,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-/* #OBSERVACOES#
- * @owner apps/instinto-superior/src/components/central/DesignCenter.tsx
- * @doc_ref apps/instinto-superior/docs/CentralDark-Instinto-Superior-Design-4K.md
- * @last_updated 2026-10-20T22:58:54Z
- * @implementado quatro peles visuais no Designer, com persistência e compatibilidade dos temas legados
- * @pendente render publicado, instalação e ACP E2E
- * @estado source alterado; runtime e integração permanecem UNKNOWN
- * @next_cursor validar typecheck, lint, build e render responsivo no mesmo SHA
- */
-
 export type PeleCockpit = "default" | "ouro" | "ops" | "esmeralda";
-export type PeleVisual = "default" | "monkpup" | "operator" | "dream-reviewer";
 const CHAVE_PELE = "centraldark.cockpit.pele";
 const peles = [
-  ["default", "DEFAULT · Instinto Superior"],
-  ["monkpup", "MONKPUP · Breu & Ouro"],
-  ["operator", "OPERATOR · Ops Ciano"],
-  ["dream-reviewer", "DREAM REVIEWER · Esmeralda"],
+  ["default", "Instinto Superior · padrão"],
+  ["ouro", "Breu & Ouro"],
+  ["ops", "Ops · Ciano"],
+  ["esmeralda", "Esmeralda"],
 ] as const;
 
-const PELE_PARA_TEMA: Record<PeleVisual, PeleCockpit> = {
-  default: "default",
-  monkpup: "ouro",
-  operator: "ops",
-  "dream-reviewer": "esmeralda",
-};
-
-const VISUAIS: Record<
-  PeleVisual,
-  {
-    eyebrow: string;
-    descricao: string;
-    foco: string;
-    icone: "default" | "monkpup" | "operator" | "dream-reviewer";
-    superfices: string[];
-  }
-> = {
-  default: {
-    eyebrow: "Base canônica",
-    descricao: "A pele de entrada do Instinto Superior: equilíbrio entre aura, leitura e operação.",
-    foco: "Orientação geral",
-    icone: "default",
-    superfices: ["Visão geral", "Design Center", "Hermes"],
-  },
-  monkpup: {
-    eyebrow: "Forja silenciosa",
-    descricao: "Breu & Ouro para leitura concentrada, memória e trabalho de oficina sem ruído.",
-    foco: "Memória e precisão",
-    icone: "monkpup",
-    superfices: ["Minha Oficina", "Ledger", "Mapa de owners"],
-  },
-  operator: {
-    eyebrow: "Sala operacional",
-    descricao: "Ops Ciano para acompanhar rotas, estado, integrações e sinais de execução.",
-    foco: "Estado e rotas",
-    icone: "operator",
-    superfices: ["Sincronização", "Raio-X Vivo", "Receipts"],
-  },
-  "dream-reviewer": {
-    eyebrow: "Revisão em baixa luz",
-    descricao:
-      "Esmeralda para revisar padrões, sessões e aprendizados sem confundir memória com execução.",
-    foco: "Aprendizado e revisão",
-    icone: "dream-reviewer",
-    superfices: ["Dream Reviewer", "Goals", "Auditoria"],
-  },
-};
-
-function visualValido(valor: string | null): valor is PeleVisual {
-  return peles.some(([id]) => id === valor);
-}
-
 function peleValida(valor: string | null): valor is PeleCockpit {
-  return Object.values(PELE_PARA_TEMA).includes(valor as PeleCockpit);
+  return peles.some(([id]) => id === valor);
 }
 
 export function usePeleCockpit() {
@@ -117,20 +42,16 @@ export function usePeleCockpit() {
     return () => window.removeEventListener("storage", sincronizar);
   }, []);
   function selecionar(valor: string) {
-    const visual = visualValido(valor) ? valor : undefined;
-    const tema = peleValida(valor) ? valor : visual ? PELE_PARA_TEMA[visual] : undefined;
-    if (!tema) return;
-    definirPele(tema);
+    if (!peleValida(valor)) return;
+    definirPele(valor);
     try {
-      if (tema === "default") localStorage.removeItem(CHAVE_PELE);
-      else localStorage.setItem(CHAVE_PELE, tema);
+      if (valor === "default") localStorage.removeItem(CHAVE_PELE);
+      else localStorage.setItem(CHAVE_PELE, valor);
     } catch {
       // A seleção continua funcionando nesta sessão sem armazenamento.
     }
   }
-  const visual = (Object.entries(PELE_PARA_TEMA).find(([, tema]) => tema === pele)?.[0] ??
-    "default") as PeleVisual;
-  return { pele, visual, selecionar };
+  return { pele, selecionar };
 }
 
 const cores = [
@@ -146,19 +67,11 @@ const cores = [
 
 const estados = ["PASS", "RUNNING", "BLOCKED", "AUTH_REQUIRED", "UNKNOWN", "FAIL"] as const;
 
-type AchadoDom = {
-  tipo: "ID_DUPLICADO" | "ARIA_ALVO_AUSENTE" | "TRANSBORDO_HORIZONTAL" | "CONTROLE_ENCOBERTO";
-  alvo: string;
-  detalhe: string;
-};
+
+type AchadoDom = { tipo: "ID_DUPLICADO" | "ARIA_ALVO_AUSENTE" | "TRANSBORDO_HORIZONTAL" | "CONTROLE_ENCOBERTO"; alvo: string; detalhe: string };
 type LeituraDom = {
-  url: string;
-  em: string;
-  elementos: number;
-  amostraLimitada: boolean;
-  larguraViewport: number;
-  larguraDocumento: number;
-  achados: AchadoDom[];
+  url: string; em: string; elementos: number; amostraLimitada: boolean;
+  larguraViewport: number; larguraDocumento: number; achados: AchadoDom[];
 };
 
 /** Apenas o DOM da aba que renderiza este Design Center; sem coleta externa. */
@@ -171,12 +84,7 @@ function inspecionarDomAtual(): LeituraDom {
     if (el.id) nomes.set(el.id, (nomes.get(el.id) ?? 0) + 1);
   }
   for (const [id, count] of nomes) {
-    if (count > 1)
-      achados.push({
-        tipo: "ID_DUPLICADO",
-        alvo: "#" + id,
-        detalhe: String(count) + " elementos com o mesmo ID.",
-      });
+    if (count > 1) achados.push({ tipo: "ID_DUPLICADO", alvo: "#" + id, detalhe: String(count) + " elementos com o mesmo ID." });
   }
   for (const el of sample) {
     for (const attribute of ["aria-labelledby", "aria-describedby", "aria-controls"]) {
@@ -204,37 +112,17 @@ function inspecionarDomAtual(): LeituraDom {
   }
   // Sondar APENAS controles visíveis. Elemento sobreposto é uma suspeita,
   // porque popovers/modais podem obstruir intencionalmente outros botões.
-  const controles = sample.filter((el) =>
-    el.matches("button, a[href], input, select, textarea, [role='button']"),
-  );
+  const controles = sample.filter(el => el.matches("button, a[href], input, select, textarea, [role='button']"));
   let vistos = 0;
   for (const el of controles) {
     if (vistos >= 180) break;
     const r = el.getBoundingClientRect();
-    if (
-      r.width < 5 ||
-      r.height < 5 ||
-      r.bottom <= 0 ||
-      r.right <= 0 ||
-      r.top >= window.innerHeight ||
-      r.left >= window.innerWidth
-    )
-      continue;
+    if (r.width < 5 || r.height < 5 || r.bottom <= 0 || r.right <= 0 ||
+        r.top >= window.innerHeight || r.left >= window.innerWidth) continue;
     const style = window.getComputedStyle(el);
-    if (
-      style.visibility !== "visible" ||
-      style.display === "none" ||
-      style.pointerEvents === "none"
-    )
-      continue;
-    const x = Math.max(
-      1,
-      Math.min(window.innerWidth - 2, r.left + Math.min(r.width / 2, r.width - 2)),
-    );
-    const y = Math.max(
-      1,
-      Math.min(window.innerHeight - 2, r.top + Math.min(r.height / 2, r.height - 2)),
-    );
+    if (style.visibility !== "visible" || style.display === "none" || style.pointerEvents === "none") continue;
+    const x = Math.max(1, Math.min(window.innerWidth - 2, r.left + Math.min(r.width / 2, r.width - 2)));
+    const y = Math.max(1, Math.min(window.innerHeight - 2, r.top + Math.min(r.height / 2, r.height - 2)));
     if (x < r.left || x >= r.right || y < r.top || y >= r.bottom) continue;
     vistos++;
     const sobreposto = document.elementFromPoint(x, y);
@@ -243,8 +131,7 @@ function inspecionarDomAtual(): LeituraDom {
       achados.push({
         tipo: "CONTROLE_ENCOBERTO",
         alvo: tag + (el.id ? "#" + el.id : ""),
-        detalhe:
-          "Possível sobreposição no centro do controle. Inspecionar visualmente; modais podem ser intencionais.",
+        detalhe: "Possível sobreposição no centro do controle. Inspecionar visualmente; modais podem ser intencionais.",
       });
     }
     if (achados.length >= 75) break;
@@ -259,6 +146,7 @@ function inspecionarDomAtual(): LeituraDom {
     achados: achados.slice(0, 75),
   };
 }
+
 
 function MiniSuperficie({ tipo }: { tipo: "publica" | "entrada" | "controle" }) {
   const titulos = {
@@ -290,87 +178,6 @@ function MiniSuperficie({ tipo }: { tipo: "publica" | "entrada" | "controle" }) 
   );
 }
 
-function PeleVisualPreview({
-  visual,
-  selecionar,
-}: {
-  visual: PeleVisual;
-  selecionar?: ((valor: string) => void) | undefined;
-}) {
-  const meta = VISUAIS[visual];
-  const tema = PELE_PARA_TEMA[visual];
-  return (
-    <article
-      className="cockpit-pele panel relative overflow-hidden p-5"
-      data-pele-preview={visual}
-      data-pele-cockpit={tema}
-    >
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-gold to-neon-green" />
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="font-mono text-[10px] tracking-[0.18em] text-neon-blue uppercase">
-            {meta.eyebrow}
-          </p>
-          <h3 className="mt-2 text-xl font-semibold">{peles.find(([id]) => id === visual)?.[1]}</h3>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            {meta.descricao}
-          </p>
-        </div>
-        <span
-          className="grid size-12 shrink-0 place-items-center rounded-2xl border border-primary/40 bg-primary/10 text-2xl"
-          aria-hidden="true"
-        >
-          {meta.icone === "dream-reviewer" ? (
-            <Moon className="size-6 text-primary" />
-          ) : meta.icone === "operator" ? (
-            <TerminalSquare className="size-6 text-primary" />
-          ) : meta.icone === "monkpup" ? (
-            "🐕‍🦺"
-          ) : (
-            "🪬"
-          )}
-        </span>
-      </div>
-      <div className="mt-5 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-lg border border-border bg-background/45 p-3">
-          <p className="font-mono text-[10px] text-muted-foreground uppercase">Foco</p>
-          <p className="mt-2 text-sm font-semibold">{meta.foco}</p>
-        </div>
-        <div className="rounded-lg border border-border bg-background/45 p-3 sm:col-span-2">
-          <p className="font-mono text-[10px] text-muted-foreground uppercase">
-            Superfícies compostas
-          </p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {meta.superfices.map((superficie) => (
-              <span
-                key={superficie}
-                className="rounded-full border border-border px-2.5 py-1 text-xs text-muted-foreground"
-              >
-                {superficie}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-        <span className="font-mono text-[10px] text-muted-foreground">
-          VISUAL · PERSISTENTE · SEM RUNTIME NOVO
-        </span>
-        {selecionar ? (
-          <Button
-            type="button"
-            size="sm"
-            variant={visual === "default" ? "secondary" : "outline"}
-            onClick={() => selecionar(visual)}
-          >
-            <WandSparkles /> Usar esta pele
-          </Button>
-        ) : null}
-      </div>
-    </article>
-  );
-}
-
 export function DesignCenter({
   pele = "default",
   selecionarPele,
@@ -388,16 +195,11 @@ export function DesignCenter({
   const [copiaDom, definirCopiaDom] = useState<"idle" | "ok" | "fail">("idle");
   useEffect(() => {
     if (!autenticado || !domAtivo) return;
-    const medir = () => {
-      if (!document.hidden) definirDomMedido(inspecionarDomAtual());
-    };
+    const medir = () => { if (!document.hidden) definirDomMedido(inspecionarDomAtual()); };
     medir();
     const timer = window.setInterval(medir, 3000);
     window.addEventListener("resize", medir);
-    return () => {
-      window.clearInterval(timer);
-      window.removeEventListener("resize", medir);
-    };
+    return () => { window.clearInterval(timer); window.removeEventListener("resize", medir); };
   }, [autenticado, domAtivo]);
 
   return (
@@ -428,12 +230,7 @@ export function DesignCenter({
           <label id="pele-cockpit-label" className="text-sm font-medium">
             Aparência do cockpit
           </label>
-          <Select
-            value={
-              Object.entries(PELE_PARA_TEMA).find(([, tema]) => tema === pele)?.[0] ?? "default"
-            }
-            onValueChange={selecionarPele}
-          >
+          <Select value={pele} onValueChange={selecionarPele}>
             <SelectTrigger aria-labelledby="pele-cockpit-label" className="w-full sm:w-64">
               <SelectValue />
             </SelectTrigger>
@@ -456,12 +253,6 @@ export function DesignCenter({
           </Button>
         </div>
       ) : null}
-
-      <div className="mt-8 grid gap-4 xl:grid-cols-2" aria-label="Peles visuais do cockpit">
-        {(Object.keys(VISUAIS) as PeleVisual[]).map((visual) => (
-          <PeleVisualPreview key={visual} visual={visual} selecionar={selecionarPele} />
-        ))}
-      </div>
 
       <Tabs defaultValue={autenticado ? abaInicial : "tokens"} className="mt-8">
         <TabsList className="h-auto max-w-full flex-wrap justify-start">
@@ -554,35 +345,59 @@ export function DesignCenter({
                     Marketplace de capacidades
                   </h3>
                   <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-                    Um catálogo para extensões, skills, agentes, ferramentas MCP e conectores. Cada
-                    capacidade mantém seu próprio owner e suas permissões. Estados registrados não
-                    substituem medições ao vivo.
+                    Um catálogo para extensões, skills, agentes, ferramentas MCP e conectores.
+                    Cada capacidade mantém seu próprio owner e suas permissões. Estados
+                    registrados não substituem medições ao vivo.
                   </p>
                 </div>
                 <SeloEstado estado="UNKNOWN" />
               </div>
 
               <div className="mt-5 flex flex-wrap gap-2" aria-label="Tipos de capacidade">
-                {(["Extensões", "Skills", "Agentes", "Ferramentas MCP", "Conectores"] as const).map(
-                  (tipo) => (
-                    <span
-                      key={tipo}
-                      className="rounded-md border border-border px-3 py-2 text-xs text-muted-foreground"
-                    >
-                      {tipo}
-                    </span>
-                  ),
-                )}
+                {(["Extensões", "Skills", "Agentes", "Ferramentas MCP", "Conectores"] as const).map((tipo) => (
+                  <span key={tipo} className="rounded-md border border-border px-3 py-2 text-xs text-muted-foreground">
+                    {tipo}
+                  </span>
+                ))}
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
-                Inventário inicial: ZENDRIVE CLI. Demais capacidades ainda exigem inventário e
-                contraprova; não foram migradas nem reinstaladas.
+                Inventário inicial: ZENDRIVE CLI. Demais capacidades ainda exigem
+                inventário e contraprova; não foram migradas nem reinstaladas.
               </p>
 
-              <article
-                className="panel mt-6 p-6"
-                data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli"
-              >
+              <article className="panel mt-6 p-6" data-cd-flow="instinto.DesignCenter.conector-browser-tabs">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-wide text-neon-blue">
+                      Conector existente · ChatGPT Browser
+                    </p>
+                    <h4 className="mt-1 text-lg font-semibold">🌐 Browser Tab Discovery</h4>
+                  </div>
+                  <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
+                    PROVA HISTÓRICA · REVALIDAR AO VIVO
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  A leitura Browser.list_tabs encontrou abas abertas do cockpit CentralDark, GitHub
+                  e Tailscale em 20/10/2026. Browser.get_tab_context também leu o conteúdo
+                  do cockpit local. É descoberta e leitura de abas, não controle de processos.
+                </p>
+                <dl className="mt-4 grid gap-3 border-y border-border py-4 text-xs sm:grid-cols-2">
+                  <div><dt className="text-muted-foreground">Owner</dt><dd className="mt-1">ChatGPT Browser · conector externo</dd></div>
+                  <div><dt className="text-muted-foreground">Capacidade observada</dt><dd className="mt-1">Listar abas e ler páginas HTTP(S)</dd></div>
+                  <div><dt className="text-muted-foreground">PID Chrome / vínculo ACP</dt><dd className="mt-1 font-mono">UNKNOWN</dd></div>
+                  <div><dt className="text-muted-foreground">Zendrive live / worker</dt><dd className="mt-1 font-mono">UNKNOWN</dd></div>
+                  <div><dt className="text-muted-foreground">Restrição comprovada</dt><dd className="mt-1">URL interna chrome:// bloqueada pela política do Browser</dd></div>
+                  <div><dt className="text-muted-foreground">Estado no cockpit</dt><dd className="mt-1 font-mono">SEM SENSOR AO VIVO · NÃO PROMOVER PASS</dd></div>
+                </dl>
+                <Button asChild size="sm" variant="outline" className="mt-4" data-cd-flow="instinto.DesignCenter.browser-tabs-receipt">
+                  <a href="https://github.com/ServerVpss/CentralDark/pull/1861#issuecomment-6283718112" target="_blank" rel="noopener noreferrer">
+                    Ver recibo da capacidade <ExternalLink />
+                  </a>
+                </Button>
+              </article>
+
+              <article className="panel mt-6 p-6" data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
                     <span className="rounded-md border border-neon-blue/40 p-2 text-neon-blue">
@@ -605,23 +420,19 @@ export function DesignCenter({
                   </span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  Volta ao terminal já aberto no VS Code sem criar outra sessão Hermes. Registra
-                  apenas foco, início e fim de execuções no mesmo funil de logs: Casa → Tailscale →
-                  MCP CentralDark.
+                  Volta ao terminal já aberto no VS Code sem criar outra sessão Hermes.
+                  Registra apenas foco, início e fim de execuções no mesmo funil de logs:
+                  Casa → Tailscale → MCP CentralDark.
                 </p>
 
                 <dl className="mt-5 grid gap-4 border-y border-border py-4 text-xs sm:grid-cols-2">
                   <div>
                     <dt className="text-muted-foreground">Comando da extensão</dt>
-                    <dd className="mt-1 font-mono">
-                      CentralDark: ZENDRIVE CLI (terminal existente)
-                    </dd>
+                    <dd className="mt-1 font-mono">CentralDark: ZENDRIVE CLI (terminal existente)</dd>
                   </div>
                   <div>
                     <dt className="text-muted-foreground">Última prova de telemetria</dt>
-                    <dd className="mt-1 font-mono">
-                      3 eventos na VPS · offset 3028322 · 15/10/2026
-                    </dd>
+                    <dd className="mt-1 font-mono">3 eventos na VPS · offset 3028322 · 15/10/2026</dd>
                   </div>
                   <div>
                     <dt className="text-muted-foreground">Integração de logs</dt>
@@ -632,75 +443,36 @@ export function DesignCenter({
                   <div>
                     <dt className="text-muted-foreground">Limite atual</dt>
                     <dd className="mt-1">
-                      Provider ChatGPT/Zendrive não provado ao vivo; ativação neste cockpit não
-                      medida. Build e deploy do cockpit são provas separadas.
+                      Provider ChatGPT/Zendrive não provado ao vivo; ativação neste cockpit não medida. Build e deploy do cockpit são provas separadas.
                     </dd>
                   </div>
                 </dl>
 
                 <div className="mt-5 flex flex-wrap gap-3">
-                  <Button
-                    asChild
-                    size="sm"
-                    variant="outline"
-                    data-cd-flow="instinto.DesignCenter.extensao-zendrive-fonte"
-                  >
-                    <a
-                      href="https://github.com/ServerVpss/CentralDark/tree/main/skills/vs-code-restore"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                  <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-fonte">
+                    <a href="https://github.com/ServerVpss/CentralDark/tree/main/skills/vs-code-restore" target="_blank" rel="noopener noreferrer">
                       <Puzzle /> Código e receita <ExternalLink />
                     </a>
                   </Button>
-                  <Button
-                    asChild
-                    size="sm"
-                    variant="outline"
-                    data-cd-flow="instinto.DesignCenter.extensao-zendrive-pr"
-                  >
-                    <a
-                      href="https://github.com/ServerVpss/CentralDark/pull/1842"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                  <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-pr">
+                    <a href="https://github.com/ServerVpss/CentralDark/pull/1842" target="_blank" rel="noopener noreferrer">
                       Versão 0.1.4 · PR / atualizar <ExternalLink />
                     </a>
                   </Button>
-                  <Button
-                    asChild
-                    size="sm"
-                    variant="outline"
-                    data-cd-flow="instinto.DesignCenter.extensao-zendrive-vsix-instructions"
-                  >
-                    <a
-                      href="https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_install-from-a-vsix"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                  <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-vsix-instructions">
+                    <a href="https://code.visualstudio.com/docs/configure/extensions/extension-marketplace#_install-from-a-vsix" target="_blank" rel="noopener noreferrer">
                       Instalar VSIX no VS Code <ExternalLink />
                     </a>
                   </Button>
-                  <Button
-                    asChild
-                    size="sm"
-                    variant="outline"
-                    data-cd-flow="instinto.DesignCenter.extensao-zendrive-logs"
-                  >
-                    <a
-                      href="https://github.com/ServerVpss/CentralDark/pull/1820"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                  <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-logs">
+                    <a href="https://github.com/ServerVpss/CentralDark/pull/1820" target="_blank" rel="noopener noreferrer">
                       Ver integração de logs <ExternalLink />
                     </a>
                   </Button>
                 </div>
                 <p className="mt-4 text-xs text-muted-foreground">
-                  Atualização nativa do VS Code não distribui versões novas de uma extensão privada
-                  instalada por VSIX. Use o pacote VSIX da versão publicada ou gere o VSIX a partir
-                  da fonte; a ficha do Marketplace não atualiza o PC remotamente. Não inicia Hermes
-                  nem concede acesso remoto.
+                  Atualização nativa do VS Code não distribui versões novas de uma extensão privada instalada por VSIX. Use o pacote VSIX da versão publicada ou gere o VSIX a partir da fonte; a ficha do Marketplace não atualiza o PC remotamente.
+                  Não inicia Hermes nem concede acesso remoto.
                 </p>
               </article>
             </section>
@@ -750,108 +522,68 @@ export function DesignCenter({
                 <div>
                   <h3 className="font-semibold">🧿 Escavador DOM · aba do Cockpit</h3>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Inspeciona o DOM renderizado nesta aba (ID, referências ARIA, transbordo e
-                    controles encobertos). Não abre outro navegador, não envia dados e não modifica
-                    componentes.
+                    Inspeciona o DOM renderizado nesta aba (ID, referências ARIA, transbordo e controles encobertos).
+                    Não abre outro navegador, não envia dados e não modifica componentes.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => definirDomMedido(inspecionarDomAtual())}
-                  >
+                  <Button type="button" variant="outline" size="sm" onClick={() => definirDomMedido(inspecionarDomAtual())}>
                     <RotateCcw /> Medir agora
                   </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant={domAtivo ? "default" : "outline"}
-                    aria-pressed={domAtivo}
-                    onClick={() => definirDomAtivo(!domAtivo)}
-                  >
+                  <Button type="button" size="sm" variant={domAtivo ? "default" : "outline"}
+                    aria-pressed={domAtivo} onClick={() => definirDomAtivo(!domAtivo)}>
                     {domAtivo ? "⏸ Pausar" : "▶ Ao vivo · 3s"}
                   </Button>
                 </div>
               </div>
               <p className="font-mono text-xs" role="status">
                 {domMedido
-                  ? "LIDO " +
-                    new Date(domMedido.em).toLocaleString("pt-BR") +
-                    " · elementos " +
-                    domMedido.elementos +
-                    " · achados " +
-                    domMedido.achados.length +
+                  ? "LIDO " + new Date(domMedido.em).toLocaleString("pt-BR") +
+                    " · elementos " + domMedido.elementos +
+                    " · achados " + domMedido.achados.length +
                     (domMedido.amostraLimitada ? " · AMOSTRA LIMITADA" : "")
                   : "AGUARDANDO LEITURA NESTA ABA"}
               </p>
               {domMedido ? (
                 <>
                   <div className="grid gap-2 sm:grid-cols-3">
-                    <p className="rounded border border-border bg-background/40 p-3 text-xs">
-                      Viewport <b>{domMedido.larguraViewport}px</b>
-                    </p>
-                    <p className="rounded border border-border bg-background/40 p-3 text-xs">
-                      Documento <b>{domMedido.larguraDocumento}px</b>
-                    </p>
+                    <p className="rounded border border-border bg-background/40 p-3 text-xs">Viewport <b>{domMedido.larguraViewport}px</b></p>
+                    <p className="rounded border border-border bg-background/40 p-3 text-xs">Documento <b>{domMedido.larguraDocumento}px</b></p>
                     <p className="rounded border border-border bg-background/40 p-3 text-xs">
                       Conflitos candidatos <b>{domMedido.achados.length}</b>
                     </p>
                   </div>
-                  <div
-                    className="max-h-80 space-y-2 overflow-auto"
-                    role="log"
-                    aria-label="Divergências DOM medidas"
-                  >
-                    {domMedido.achados.length ? (
-                      domMedido.achados.map((item, i) => (
-                        <div
-                          className="rounded border border-amber-500/40 p-3 text-xs"
-                          key={item.tipo + item.alvo + i}
-                        >
-                          <strong className="font-mono">
-                            {item.tipo} · {item.alvo}
-                          </strong>
-                          <p className="mt-1 text-muted-foreground">{item.detalhe}</p>
-                        </div>
-                      ))
-                    ) : (
+                  <div className="max-h-80 space-y-2 overflow-auto" role="log" aria-label="Divergências DOM medidas">
+                    {domMedido.achados.length ? domMedido.achados.map((item, i) => (
+                      <div className="rounded border border-amber-500/40 p-3 text-xs" key={item.tipo + item.alvo + i}>
+                        <strong className="font-mono">{item.tipo} · {item.alvo}</strong>
+                        <p className="mt-1 text-muted-foreground">{item.detalhe}</p>
+                      </div>
+                    )) : (
                       <p className="rounded border border-border p-3 text-xs text-muted-foreground">
                         Nenhuma divergência encontrada nas verificações implementadas nesta amostra.
                         Isso não substitui inspeção de estilos, eventos e árvore de acessibilidade.
                       </p>
                     )}
                   </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      if (!navigator.clipboard?.writeText) {
-                        definirCopiaDom("fail");
-                        return;
-                      }
-                      void navigator.clipboard
-                        .writeText(JSON.stringify(domMedido, null, 2))
-                        .then(() => definirCopiaDom("ok"))
-                        .catch(() => definirCopiaDom("fail"));
-                    }}
-                  >
-                    Copiar recibo DOM
-                  </Button>
+                  <Button type="button" variant="outline" size="sm" onClick={() => {
+                    if (!navigator.clipboard?.writeText) {
+                      definirCopiaDom("fail");
+                      return;
+                    }
+                    void navigator.clipboard.writeText(JSON.stringify(domMedido, null, 2))
+                      .then(() => definirCopiaDom("ok"))
+                      .catch(() => definirCopiaDom("fail"));
+                  }}>Copiar recibo DOM</Button>
                   <span className="text-xs" role="status">
-                    {copiaDom === "ok"
-                      ? "Recibo copiado"
-                      : copiaDom === "fail"
-                        ? "Falha ao copiar: use ambiente seguro (HTTPS/localhost)"
-                        : ""}
+                    {copiaDom === "ok" ? "Recibo copiado" :
+                      copiaDom === "fail" ? "Falha ao copiar: use ambiente seguro (HTTPS/localhost)" : ""}
                   </span>
                 </>
               ) : null}
               <p className="text-[10px] text-muted-foreground">
-                Sem acesso ao DOM de iframes cross-origin nem abas de outros aplicativos. Conflito
-                candidato não é falha até ser confirmado; nenhum ajuste é aplicado automaticamente.
+                Sem acesso ao DOM de iframes cross-origin nem abas de outros aplicativos.
+                Conflito candidato não é falha até ser confirmado; nenhum ajuste é aplicado automaticamente.
               </p>
             </div>
           </TabsContent>

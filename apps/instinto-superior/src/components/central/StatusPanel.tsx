@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Activity, Eye, Github, House, Monitor, RefreshCw, Server, Radio, Mic, Cpu, Database, GitBranch } from "lucide-react";
+import { Activity, Eye, Github, House, Monitor, RefreshCw, Server } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
 
@@ -19,17 +19,17 @@ function luz(estado: Estado): Luz {
 }
 function etiqueta(estado: Estado, nome = "") {
   if (estado === "PASS") return "OPERACIONAL";
-  if (estado === "RUNNING") return nome.toLowerCase().includes("áudio") ? "ÁUDIO EM ALERTA" : nome.toLowerCase().includes("screenpipe") ? "CAPTURA PARCIAL" : "EM EXECUÇÃO";
+  if (estado === "RUNNING") return nome.toLowerCase().includes("screenpipe") ? "DEGRADADO" : "EM EXECUÇÃO";
   if (estado === "FAIL" || estado === "BLOCKED") return "INDISPONÍVEL";
   return estado === "AUTH_REQUIRED" ? "AUTORIZAÇÃO" : "NÃO COMPROVADO";
 }
-/** Verde e amarelo pulsam; amarelo significa pendência/degradação e nunca PASS. */
+/** O pulso verde significa exclusivamente medição atual PASS, não prova histórica. */
 function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresco: boolean }) {
   const valido = fresco ? estado : "UNKNOWN";
   const cor = luz(valido);
   return (
     <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${etiqueta(valido, nome)}`}>
-      <span className={`size-3 shrink-0 rounded-full ${(cor === "amarela" || (fresco && valido === "PASS")) ? "animate-pulse motion-reduce:animate-none" : ""} ${CORES[cor]}`} aria-hidden="true" />
+      <span className={`size-3 shrink-0 rounded-full ${fresco && valido === "PASS" ? "animate-pulse motion-reduce:animate-none" : ""} ${CORES[cor]}`} aria-hidden="true" />
       <span className="font-mono text-[10px]">{etiqueta(valido, nome)}</span>
     </span>
   );
@@ -50,19 +50,7 @@ export function StatusPanel() {
   // influence the server render vs the browser's first hydration render.
   // This is an incremental, fail-closed fix; post-mount reads stay measured.
   const [hidratado, definirHidratado] = useState(false);
-  const [jarvisMic, definirJarvisMic] = useState<Estado>("UNKNOWN");
   useEffect(() => { definirHidratado(true); }, []);
-  // #OBSERVACOES# @owner=StatusPanel.tsx @doc_ref=docs/CONSCIENCIA/MICRO-DEPLOY/README.md
-  // @last_updated=2026-10-20T05:53:31Z @implementado=CARDS_LIVE_AMBER_PULSE_AUDIO_SPLIT
-  // O microfone do Jarvis usa MediaStream local, independente do audio Screenpipe.
-  useEffect(() => {
-    const onAudio = (evento: Event) => {
-      const detalhe = (evento as CustomEvent<{ mode?: string; stream?: MediaStream | null }>).detail;
-      definirJarvisMic(detalhe?.mode === "listening" && detalhe.stream?.active ? "PASS" : "UNKNOWN");
-    };
-    window.addEventListener("centraldark:jarvis:audio", onAudio);
-    return () => window.removeEventListener("centraldark:jarvis:audio", onAudio);
-  }, []);
   const ler = useServerFn(lerEstadoCentralDark);
   const q = useQuery({
     queryKey: ["centraldark", "estado-vivo"],
@@ -82,30 +70,15 @@ export function StatusPanel() {
     { nome: "Main GitHub", estado: d?.github ?? unknown, detalhe: d?.mainSha?.slice(0, 12) ?? "SHA não medido", icon: Github },
     { nome: "VPS · comparação SHA", estado: d?.deploy ?? unknown, detalhe: `SHA ${d?.vpsSha?.slice(0, 12) ?? "?"} · não prova serviço`, icon: Server },
     { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: `HTTP ${d?.apiHealthHttp ?? "?"} · /health`, icon: Activity },
-    { nome: "Tailscale · Casa ↔ VPS", estado: d?.tailscaleCasa ?? unknown, detalhe: d?.tailscaleCasaFonte ?? "CLI Casa ainda não medido", icon: Radio },
-    { nome: "Screenpipe · Vídeo/OCR", estado: d?.screenpipeVideo ?? unknown, detalhe: "HTTP " + (d?.screenpipeHttp ?? "?") + " · " + (d?.screenpipeEvents?.find(x => x.startsWith("VIDEO/OCR:")) ?? "frame não medido"), icon: Eye },
-    { nome: "Screenpipe · Áudio", estado: d?.screenpipeAudio ?? unknown, detalhe: (d?.screenpipeEvents?.find(x => x.startsWith("AUDIO SCREENPIPE:")) ?? "Captura não medida") + " · independente do Jarvis", icon: Mic },
-    { nome: "Jarvis · Microfone", estado: jarvisMic, detalhe: "Evento do navegador · sem stream ativo: NÃO MEDIDO", icon: Mic },
-    { nome: "Desktop Commander · Casa", estado: d?.desktop ?? unknown, detalhe: d?.desktopFonte ?? "Sem sensor autenticado no site", icon: Monitor },
-    { nome: "Desktop Commander · VPS", estado: d?.desktopVps ?? unknown, detalhe: d?.desktopVpsFonte ?? "Sem sensor autenticado no site", icon: Server },
-    { nome: "Heartbeat", estado: d?.heartbeat ?? unknown, detalhe: "HTTP " + (d?.heartbeatHttp ?? "?") + " · self=" + (d?.heartbeatSelf ?? "?"), icon: Activity },
-    { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: "API /api/omni/status · somente rota medida", icon: Cpu },
-    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: "API /api/live-fabric/graph · somente rota medida", icon: GitBranch },
-    { nome: "Receipts", estado: d?.receipts ?? unknown, detalhe: "API /api/microdeploy/receipts/index.json", icon: Database },
   ];
 
   const rotas = [
-    { id: "casa-site", owner: "Casa Windows / Vite", estado: d?.casaSite ?? unknown, fonte: "Casa/Site local · HTTP 8080" },
+    { id: "casa-site", owner: "Casa Windows / Vite", estado: d?.casaSite ?? unknown, fonte: "Casa/Site local · HTTP 4175" },
     { id: "github-main", owner: "GitHub main", estado: d?.github ?? unknown, fonte: "GitHub API · main SHA" },
     { id: "vps-sha", owner: "Microdeploy VPS", estado: d?.deploy ?? unknown, fonte: "VPS SHA · comparação com main (não prova serviço)" },
     { id: "api-health", owner: "API CentralDark", estado: d?.apiHealth ?? unknown, fonte: "API /health · não prova todo o sistema" },
     { id: "screenpipe-casa", owner: "Screenpipe Casa", estado: d?.screenpipe ?? unknown, fonte: d?.screenpipeFonte ?? "Casa 3030/health" },
     { id: "screenpipe-vps", owner: "Screenpipe VPS", estado: d?.screenpipeVps ?? unknown, fonte: d?.screenpipeVpsFonte ?? "VPS 3030/health" },
-    { id: "tailscale-casa-vps", owner: "Tailscale Casa/VPS", estado: d?.tailscaleCasa ?? unknown, fonte: d?.tailscaleCasaFonte ?? "CLI da Casa" },
-    { id: "screenpipe-video", owner: "Screenpipe Video/OCR", estado: d?.screenpipeVideo ?? unknown, fonte: "Casa 3030/health · frame_status" },
-    { id: "screenpipe-audio", owner: "Screenpipe Audio", estado: d?.screenpipeAudio ?? unknown, fonte: "Casa 3030/health · audio_status · independente do Jarvis" },
-    { id: "jarvis-mic", owner: "Jarvis Browser MediaStream", estado: jarvisMic, fonte: "Evento centraldark:jarvis:audio · sem evento atual = UNKNOWN" },
-    { id: "desktop-vps", owner: "Desktop Commander VPS", estado: d?.desktopVps ?? unknown, fonte: d?.desktopVpsFonte ?? "Sem adapter" },
   ] as const;
   const rotasComProblema = rotas.filter((rota) => rota.estado !== "PASS");
 
@@ -114,7 +87,7 @@ export function StatusPanel() {
       nome: "Screenpipe", estado: screen, icon: Eye, subtitulo: "Saída local do /health do Screenpipe",
       origem: d?.screenpipeFonte ?? "Sensor não carregado",
       linhas: d?.screenpipeEvents ?? ["Aguardando leitura real do servidor"],
-      nota: "Vídeo/OCR e áudio têm sensores separados. audio_stalled do Screenpipe não significa microfone Jarvis quebrado. Capturas/OCR e stream bruto não são publicados.",
+      nota: "Linhas sanitizadas de saúde e dependências. Capturas/OCR e stream bruto não são publicados.",
     },
     {
       nome: "Desktop Commander", estado: remote, icon: Monitor, subtitulo: "Ponte remota · Casa SEGREDO / VPS",
@@ -161,7 +134,7 @@ export function StatusPanel() {
           return (
             <article key={s.nome} className="rounded-lg border border-border bg-background/40 p-3">
               <div className="flex items-center gap-2"><Icon className="size-4 text-muted-foreground" /><strong className="text-xs">{s.nome}</strong></div>
-              <div className="mt-3"><LuzViva estado={s.estado} nome={s.nome} fresco={s.nome === "Jarvis · Microfone" ? hidratado : fresco} /></div>
+              <div className="mt-3"><LuzViva estado={s.estado} nome={s.nome} fresco={fresco} /></div>
               <p className="mt-2 break-all font-mono text-[10px] text-muted-foreground">{s.detalhe}</p>
             </article>
           );
