@@ -63,6 +63,10 @@ UNKNOWN != PASS
 
 **Consumidor operacional atual:** `scripts/vps/main-pinned-microdeploy.sh` e contratos em `docs/CONSCIENCIA/MICRO-DEPLOY/`. **Transporte SSH existente:** `.github/workflows/vps-wake-hosted-ssh.yml` (somente recuperação de runner; não confundir com deploy). Ativação SSH de deploy exige implementação e teste dedicados no owner já existente, sem duplicar executor.
 
+### Ferramenta administrativa e sessão reutilizável
+
+`admin_ssh_microdeploy` é entrada admin para consultar ou disparar prova/dry-run do **mesmo** workflow `vps-ssh-exec.yml`; o executor permanece na VPS e a promoção `apply` continua protegida. Sessão OAuth/Hub admin verificada evita frases repetidas no MCP; não dispensa identidade, auditoria, escopo, proteção contra ações críticas ou consentimentos externos ao MCP. Ferramenta versionada não é ferramenta já implantada: a leitura do catálogo vivo decide.
+
 ## Micro-commits + micro-deploys — padrão oficial da Casa
 
 A Casa promove deltas pequenos e causais sempre que a topologia permitir. O objetivo é reduzir ruído, blast radius e tempo entre observação → correção → prova.
