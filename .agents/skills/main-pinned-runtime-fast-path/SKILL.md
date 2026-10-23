@@ -3,7 +3,7 @@ name: main-pinned-runtime-fast-path
 description: Mecanismo determinístico de microdeploy runtime da CentralDark. Use no Live Editing Fabric quando o CHEFE quiser ver delta vivo no runtime com SHA rastreável, owner exato, scratch único, teste mínimo, prova e receipt. Também serve como fallback quando o deploy canônico FAIL/BLOCKED.
 metadata:
   type: operational
-  version: "1.1"
+  version: "1.2"
   owner: SEGREDO/CHEFE
 ---
 
@@ -68,6 +68,19 @@ Leia primeiro:
 
 SAME_FINGERPRINT → REPLAY_BEFORE_REDISCOVERY.
 CHANGED_FINGERPRINT → REVALIDATE_AFFECTED_CONE_ONLY.
+
+## Reusar esta receita — CI leve, SSH, compilação e rollback (2026-10-23)
+
+Não criar script, skill, MCP, writer ou recipe paralelos. O caminho normal é:
+`MCP CentralDark → centraldark_deploy_micro_fallback → scripts/vps/main-pinned-microdeploy.sh na VPS → scratch única → build/teste → fileset owner → health + receipt + readback`. GitHub Actions nao participa. SSH Casa/Tailscale e transporte privado opcional.
+
+Aplique a **mesma receita** antes de redescobrir: use os campos adicionados ao JSON/YAML existente (`build_on_vps` e `replay_improvements`) e ajuste apenas os bindings de SOURCE_SHA/OWNER/FILESET. O alias administrativo existente aceita CSV de ate 8 arquivos apenas como plano. A tool nativa `centraldark_deploy_micro_fallback` e unica entrada executora autorizada; o workflow hospedado foi desativado.
+
+Melhorias materiais: `KEEP_ACTIVE` para scratch existente não registrado; realpath pré-reset; par `src/dist` para ferramentas MCP; tsc e teste da tool na scratch usando dependências já presentes, backup total antes da cópia, rollback armado antes da primeira mutação. `DRY_RUN` pode preparar/limpar **somente** scratch previamente verificada, nunca mudar produção.
+
+**Prova:** build e commit não declaram ferramenta viva. Nova `admin_ssh_microdeploy` = `COMMITTED_NOT_DEPLOYED` até readback `mcp_admin_catalog`; probe SSH 39912949599 = `BLOCKED_BY_HOSTED_BILLING`, não login falho. Autorização OAuth/Hub admin comprovada reaproveita sessão no MCP, mas operação crítica continua auditada, autoMission não fabrica aprovação e controles externos não são alterados.
+
+**NEXT_CURSOR:** testes da versão exata → deploy causal MCP permitido → catálogo runtime da ferramenta → health + receipt → memória no mesmo owner. Não clonar framework.
 
 ## 🧹 Forja Viva — limpeza com receipt e reutilização do scratch
 
