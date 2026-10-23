@@ -63,6 +63,10 @@ No modo normal, executar somente teste aplicável ao owner. CodeQL completo, Tri
 
 - NEXT_CURSOR: testes de schema e permissão no commit exato; promover MCP com método canônico sem reset de checkout com drift; medir catálogo real pelo `mcp_admin_catalog(filter=admin_ssh_microdeploy)`; validar `status/probe` depois de resolver bloqueio financeiro ou medir transporte pela rota direta autorizada. Não declarar LIVE apenas por commit.
 
+## Rota MCP sem runner hospedado (23/10/2026)
+
+O workflow `.github/workflows/vps-ssh-exec.yml` está inerte por decisão do CHEFE, sem runner GitHub-hosted pago. O caminho de execução é o **MCP CentralDark nativo na VPS** pela tool `centraldark_deploy_micro_fallback` e pelo script existente `scripts/vps/main-pinned-microdeploy.sh`; `main` fornece apenas SHA e recibo versionado. `admin_ssh_microdeploy` fica como alias ADMIN de leitura/planejamento e não dispara Actions nem executa por conta própria uma ferramenta destrutiva. SSH privado da Casa é opcional. Teste real de deploy permanece pendente e as regras de autorização/auditoria da plataforma permanecem vigentes.
+
 ## Fallback oficial — MAIN-PINNED RUNTIME FAST-PATH
 
 Quando o deploy canônico estiver `FAIL` ou `BLOCKED` antes da promoção, usar a receita já provada:
