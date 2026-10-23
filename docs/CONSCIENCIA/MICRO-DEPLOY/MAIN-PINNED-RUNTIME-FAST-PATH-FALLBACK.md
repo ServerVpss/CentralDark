@@ -240,6 +240,19 @@ O alias admin legado `admin_ssh_microdeploy` deixa de disparar Actions e somente
 
 **NEXT_CURSOR único:** quando a execução da tool nativa for liberada pelo fluxo autorizado, recuperar `global_recipe_priority.executable_handoff`, fixar novo SHA da main, conferir fingerprint prévio, fazer `dry_run` na mesma rota, testes/build na scratch com cadeados, aprovação aplicável, promoção do owner, health, leitura de `mcp_admin_catalog` e `centraldark_deploy_recipe_status` e receipt no mesmo owner. Apenas então mudar `RUNTIME_P0` para PASS. Nunca redescobrir ou criar novo script para este mesmo fingerprint.
 
+### Quatro processos MCP sem P0 — diagnóstico de runtime (23/10/2026)
+
+**Origem exata do amarelo:** leitura não mutante pela rota MCP CentralDark, correlacionando `ps`, `/proc/<pid>/cwd`, hierarquia de pais, `systemctl show`, receita JSON local e sinais `grep` nos arquivos `src/dist`.
+
+- Serviço HTTP real: `centraldark-native-mcp-http.service`, `ActiveState=active`, PID `4126306`, porta `9100`, `/health.ok=true`, `toolCount=153`.
+- Processos MCP administrativos `--stdio --compact --admin`: PID `2991293` (descendente de `hermes`, iniciado em 22/10), PID `657296` (filho indireto de Hermes, iniciado em 23/10), PID `4105710` (filho de `sshd-session`).
+- Os **quatro executáveis em execução** foram associados aos seus diretórios de artefatos: em `dist/tools/deploy/centraldark-capabilities.js`, o marcador `canonicalRecipeFirstPreflight` está **ausente nos quatro**. Conferência separada de `src` e `dist` do checkout principal: P0 também ausente em `mcp-server.js`, `tools/core/mcp-admin.js`, `tools/deploy/centraldark-capabilities.js`. Cadeado novo ausente nos módulos `tools/github/github*.js` locais.
+- Receita do checkout principal (HEAD `48827a6f`): `primary_path=github_actions_canonical_deploy`, `global_recipe_priority` ausente. `mcp_admin_status.runtimeTools=141`; `centraldark_deploy_recipe_status.primaryPath=github_actions_canonical_deploy`. `origin/main` cache local estava defasado de GitHub; nunca tomar esse cache como main remoto atual.
+- **Conclusão restrita:** o amarelo não é somente UI/cache; código binário P0 ainda não está instalado nos processos inspecionados. Não afirmar qual dos 3 STDIO é a sessão desta conversa sem correlação por conexão/correlation id; todos foram medidos com a versão anterior.
+- **Integridade:** nenhum processo foi encerrado, nenhum checkout foi resetado, nenhum serviço reiniciado. O checkout principal tem deltas locais e deve permanecer `KEEP_ACTIVE`. A chamada de microdeploy nativa previamente foi bloqueada pela política da plataforma: **não executar equivalentes por shell, SSH, Hermes ou ferramentas alternativas para contornar a decisão**.
+
+**NEXT_CURSOR já preparado:** usar a `global_recipe_priority.executable_handoff` do JSON atual na `main`, sem nova ferramenta ou receita. Quando o executor autorizado estiver disponível: medir SHA real de main, confirmar scratch registrado/limpo, build e testes funcionais, dry-run permitido, promover fileset 15 do owner MCP por `centraldark_deploy_micro_fallback`, conferir no processo da porta 9100 e nos STDIO conectados `canonicalRecipeFirstPreflight`, prioridade P0, cadeado `vps-ssh-exec.yml`, `mcp_admin_catalog`, receita carregada, health e receipt. **PASS exige efeitos medidos no runtime, não só commit.**
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH
