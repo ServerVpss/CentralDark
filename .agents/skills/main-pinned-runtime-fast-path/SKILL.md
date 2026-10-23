@@ -9,6 +9,42 @@ metadata:
 
 # MAIN-PINNED RUNTIME FAST-PATH
 
+## Precedência GLOBAL obrigatória — prioridade 0
+
+**ANTES DE QUALQUER FEITO:** consultar o owner e a receita preexistentes, o último receipt, a identidade causal `SOURCE_SHA + OWNER + FILESET + FINGERPRINT + EFEITO`, e só então reutilizar ou estender o script existente. Vale para JARVIS, Hermes, agentes, Hub, CLI, cockpit e consumidores MCP conectados. Se a receita pertinente faltar, procurar o owner; não presumir que não existe, nem inventar nova skill, agent ou gateway.
+
+No dispatcher MCP, `canonicalRecipeFirstPreflight` deve ser executada antes dos handlers, com prioridade 0. Falha de receita no deploy bloqueia somente esse escopo; leitura de diagnóstico permanece aberta. Prova com fingerprint igual só se reaproveita se o resultado e o SHA/efeito também forem verificáveis. Ações de segurança continuam exigindo seus gates e consentimentos da plataforma.
+
+A melhoria relatada do Hermes em `scripts/vps/hermes-self-evolution-current-model.sh` é evolução **do mesmo script**, com donor fixado, `.venv` e receipt por VPS; o commit local `2d3972c` ainda exige readback GitHub/PR, teste no alvo e validação runtime antes de receber PASS global.
+
+## Handoff executável para Hermes — promoção P0 (23/10/2026)
+
+Um **mesmo** executor: `centraldark_deploy_micro_fallback` pelo dispatcher MCP CentralDark. Receita antes do feito: `docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json`, propriedade `global_recipe_priority.executable_handoff`. Esta propriedade define owner, fileset exato, build na VPS, testes, travas e sinais de PASS; não introduz outra skill nem runner.
+
+O script atual `scripts/vps/main-pinned-microdeploy.sh` foi ampliado **no mesmo arquivo**: aprova apenas os 7 pares `src/dist` dos módulos efetivamente alterados, mais a receita JSON; exige pares completos, compilação na scratch usando node_modules já existente, teste da tool e do dispatcher antes de promover. Preserva lock, checkout com deltas de terceiros, health, rollback e receipt.
+
+**Operação em sequência, somente se autorização/tool permitir:** recuperar SHA da `main` → conferir o fingerprint/receipt do mesmo owner → executar dry-run do MCP nativo (não workflow hospedado) → conferir output e risco → aplicar pelo mesmo executor autorizado → medir catálogo e receita carregados → registrar receipt na mesma receita e NEXT_CURSOR. Se a plataforma bloquear o microdeploy, **não** contornar via execute_command, Hermes ou SSH alternativo: sinalizar BLOCKED e preservar a produção.
+
+**Prova exigida para verde:** `mcp_admin_catalog` enxerga a ferramenta admin; `centraldark_deploy_recipe_status.primaryPath=mcp_centraldark_native_vps`; gates Recipe-First P0 observados; health e SHA do runtime provados. Commit/main/dry-run isolados não bastam.
+
+## Consumidor real do cockpit — sem falso PASS
+
+O painel existente `ConexoesCentralDark.tsx` lê o Hub OAuth e o MCP HTTP via `lerSaudeInfraCentralDark`. O endpoint **já existente** `GET /health` do MCP passa a enviar `recipeFirst` de modo read-only, calculado pela mesma `canonicalRecipeFirstPreflight` usada no dispatcher e pela função pura de bloqueio do dispatch GitHub hospedado. Não publicar tokens nem criar listener. O cockpit cruza `/health` e `/tools.json`, apresenta `PASS` só se versão, contagem, alias admin, P0 e cadeado coincidirem. Prova apenas o **processo HTTP**, não deduz o estado das instâncias STDIO/Hermes. GitHub/Drive dependem de testes recentes do broker; Cofre permanece inventário, sem leitura de segredos.
+
+Handoff P0 existente amplia para **17 arquivos** do MCP: 8 pares `src/dist` e receita JSON. Os dois arquivos do cockpit permanecem no owner **instinto-superior**; precisam de build/instalação própria e prova de UI autenticada. `SOURCE_PASS != RUNTIME_PASS != COCKPIT_UI_PASS`; sem deploy nativo autorizado, registrar amarelo e não contornar a plataforma.
+
+## Correção de fonte de receita no runtime
+
+`canonicalRecipeFirstPreflight` e `centraldark_deploy_recipe_status` agora devem carregar primeiro a receita JSON do **mesmo root do bundle instalado** (`RUNTIME_OWNER_FIRST`). O checkout central do projeto é fallback `CHECKOUT_FALLBACK_ONLY_ON_MISSING` quando a receita instalada não existe; um erro de JSON/permissão no runtime é falha, **não** permissão para disfarçar leitura por outro arquivo. O snapshot HTTP do cockpit informa status apenas do processo HTTP e não falsifica o estado de Hermes STDIO.
+
+### Cadeado adicional de falha de leitura
+
+A compatibilidade com receita legada exige um JSON antigo **válido**. Se a leitura da receita instalada ou do fallback falhar, `canonicalRecipeFirstPreflight` devolve `CANONICAL_RECIPE_READ_FAILED_LOCKED` para execução mutante; apenas diagnóstico read-only continua. Nenhuma fonte ausente ou inválida concede autorização executora.
+
+## HUD consumindo a mesma prova do cockpit
+
+O campo existente `Receita em uso` no `HudDeterministico.tsx` consulta a mesma `lerSaudeInfraCentralDark` e a chave `["centraldark","saude-hub-mcp"]` de Contas / Conexões. Não acrescentar nova seção ou novo HUD. Valor `PASS` apenas para escopo `MCP_HTTP_ONLY` quando o backend confirmar receita, cadeia e catálogo; STDIO/Hermes exigem readback próprio. A tela estática ou versão em `main` nunca equivale a UI instalada.
+
 ## Quando usar
 
 Use quando:
@@ -72,9 +108,9 @@ CHANGED_FINGERPRINT → REVALIDATE_AFFECTED_CONE_ONLY.
 ## Reusar esta receita — CI leve, SSH, compilação e rollback (2026-10-23)
 
 Não criar script, skill, MCP, writer ou recipe paralelos. O caminho normal é:
-`MCP CentralDark → .github/workflows/vps-ssh-exec.yml (transporte, quando disponível) → scripts/vps/main-pinned-microdeploy.sh → scratch única → build/teste na VPS → fileset owner → health + receipt + readback`.
+`MCP CentralDark → centraldark_deploy_micro_fallback → scripts/vps/main-pinned-microdeploy.sh na VPS → scratch única → build/teste → fileset owner → health + receipt + readback`. GitHub Actions nao participa. SSH Casa/Tailscale e transporte privado opcional.
 
-Aplique a **mesma receita** antes de redescobrir: use os campos adicionados ao JSON/YAML existente (`build_on_vps` e `replay_improvements`) e ajuste apenas os bindings de SOURCE_SHA/OWNER/FILESET. CSV de até 8 paths no workflow é traduzido para múltiplos `--file` do script, não comando shell livre.
+Aplique a **mesma receita** antes de redescobrir: use os campos adicionados ao JSON/YAML existente (`build_on_vps` e `replay_improvements`) e ajuste apenas os bindings de SOURCE_SHA/OWNER/FILESET. O alias administrativo existente aceita CSV de ate 8 arquivos apenas como plano. A tool nativa `centraldark_deploy_micro_fallback` e unica entrada executora autorizada; o workflow hospedado foi desativado.
 
 Melhorias materiais: `KEEP_ACTIVE` para scratch existente não registrado; realpath pré-reset; par `src/dist` para ferramentas MCP; tsc e teste da tool na scratch usando dependências já presentes, backup total antes da cópia, rollback armado antes da primeira mutação. `DRY_RUN` pode preparar/limpar **somente** scratch previamente verificada, nunca mudar produção.
 
@@ -111,7 +147,7 @@ OWNER + CURRENT_SHA + WORKTREE_LIST + NEXT_CURSOR
 
 **Limites de sincronização:** `SOURCE_COMMITTED != MAIN_PROMOTED != DEPLOYED != UI_PROVEN`. Um CI verde e receipt não autorizam substituir trabalho local alheio; se a publicação na `main` conflitar, registrar e aguardar reconciliação no mesmo owner. Caso o CHEFE peça para **ver o build**, usar a Casa/VS Code já abertos, sem declarar imagem visual se não houve screenshot/readback real; quando não pedir, não inventar requisito de UI para descarte de scratch puramente documental. Teste visual só se aplica à capacidade com interface e ao runtime escolhido.
 
-**Leitura medida nesta atualização (instantânea, não configuração):** Casa `K:\` = 33 alterações tracked e pelo menos 95 entradas untracked; VPS `/root/CentralDark` = 6 arquivos tracked modificados; VPS scratch `/root/CentralDark/_worktrees/main-pinned-runtime-fastpath` = 0 entradas `git status --porcelain`. Portanto **CASA_MAIN=KEEP_ACTIVE**, **VPS_MAIN=KEEP_ACTIVE**, **VPS_SCRATCH=READONLY_SAFE_CANDIDATE**, não houve reset, prune, deploy nem exclusão.
+**Leitura medida nesta atualização (instantânea, não configuração):** Casa `K:\` = 33 alterações tracked e pelo menos 95 entradas untracked; VPS `<caminho-vps>` = 6 arquivos tracked modificados; VPS scratch `<caminho-vps>` = 0 entradas `git status --porcelain`. Portanto **CASA_MAIN=KEEP_ACTIVE**, **VPS_MAIN=KEEP_ACTIVE**, **VPS_SCRATCH=READONLY_SAFE_CANDIDATE**, não houve reset, prune, deploy nem exclusão.
 
 **Checklist diário:** `docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md` é histórico/proveniência; o **CURRENT** é a projeção existente do HUD, sem PR ou arquivo diário novo. Marcar concluído somente com source SHA, teste/contraprova, receipt e efeito aplicável; limpezas propostas mas não executadas ficam `PENDING`/ `UNKNOWN`. Se necessário, o receipt vive no owner já existente da missão.
 
@@ -124,7 +160,7 @@ Registrar SOURCE_SHA/delta, OWNER, FILESET_CAUSAL, testes, restart/reload se hou
 Use sempre:
 
 ```text
-/root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+<caminho-vps>
 ```
 
 Lei:
@@ -140,7 +176,7 @@ DIRTY_WORKTREE_FORBIDDEN_AT_HANDOFF=true
 
 Antes de qualquer reset/clean destrutivo, compare o realpath com o path canônico. Se divergir, STOP_AND_RECONCILE.
 
-Nunca execute `git reset --hard` ou `git clean -fdx` em `/root/CentralDark`, runtime vivo, Casa `E:\CentralDark` ou checkout principal.
+Nunca execute `git reset --hard` ou `git clean -fdx` em `<caminho-vps>`, runtime vivo, Casa `E:\CentralDark` ou checkout principal.
 
 Sequência final:
 

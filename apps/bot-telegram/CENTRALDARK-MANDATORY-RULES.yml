@@ -1,5 +1,5 @@
 schema: centraldark.bot-mandatory-rules.v1
-updated: 2026-09-25
+updated: 2026-10-23
 owner: apps/bot-telegram/
 authority: SEGREDO/CHEFE
 runtime_consumer: apps/bot-telegram/unified-bot.cjs
@@ -14,6 +14,21 @@ anti_friction_current:
   unknown_blocks_only_affected_claim: true
   route_failure_is_local: true
 mandatory_rules:
+  canonical_recipe_first_global:
+    required: true
+    priority: 0
+    inherited_by: [SOL, HERMES, CODEX, CLAUDE, GEMINI, TELEGRAM, MCP, VPS, CASA]
+    source: docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json
+    lookup: EXISTING_OWNER_RECIPE_BEFORE_ACTION
+    replay_only_if: SAME_SCOPE_SOURCE_SHA_FINGERPRINT_EFFECT_AND_FRESHNESS
+    if_missing: DISCOVER_EXISTING_OWNER_NO_INVENTED_SUCCESS
+    if_changed: EXTEND_SAME_RECIPE_MINIMUM_DELTA
+    if_security_blocked: DO_NOT_BYPASS_PLATFORM_OR_ADMIN_GATES
+    no_parallel_scripts_agents_or_owners: true
+    git_hosted_deploy_runner: FORBIDDEN
+    approved_deploy_route: MCP_CENTRALDARK_VPS_DIRECT
+    self_provision_hermes_owner: scripts/vps/hermes-self-evolution-current-model.sh
+    hermes_self_provision_local_commit_state: REPORTED_NOT_PROMOTED
   executor_centraldark_house_mode:
     required: true
     trigger: "!EXECUTOR_CENTRALDARK"
@@ -196,7 +211,7 @@ mandatory_rules:
       NO_SECRET_LEAK: true
       PRIMARY_PIPELINE_FAILS_DO_NOT_BECOME_FIXED_BY_FALLBACK: true
     scratch_worktree:
-      canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+      canonical_path: <caminho-vps>
       single_reusable: true
       lock_required: true
       reset_before_use: true
@@ -235,3 +250,31 @@ mandatory_rules:
 runtime_note: Este arquivo amarra a regra no escopo do bot CentralDark sem criar arquitetura
   paralela. O bot continua consumidor do contrato canônico; ele não vira autoridade,
   juiz ou owner novo.
+
+
+# CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023
+communication_contract:
+  required: true
+  source: RULES.md#CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023
+  scope: BOT_RUNTIME_SYSTEM_PROMPT
+  language: pt-BR
+  style: natural_direct_conversational
+  rules:
+    - RESPOND_TO_THE_QUESTION_FIRST
+    - DO_NOT_REPEAT_THE_USER_REQUEST_AS_AN_INTRODUCTION
+    - USE_COMMON_WORDS_AND_EXPLAIN_NECESSARY_TECHNICAL_TERMS
+    - KEEP_SIMPLE_ANSWERS_SHORT
+    - DO_NOT_DUMP_INTERNAL_STAGES_ACRONYMS_OR_STATUS_TABLES_IN_NORMAL_CHAT
+    - KEEP_TECHNICAL_RECEIPTS_AVAILABLE_BUT_SHOW_ONLY_WHEN_RELEVANT
+    - NEVER_CLAIM_ACTION_OR_SUCCESS_WITHOUT_RUNTIME_EVIDENCE
+    - STATE_FAILURES_AND_REMAINING_WORK_PLAINLY
+    - TEXT_AND_AUDIO_MUST_SHARE_THE_SAME_CONVERSATIONAL_STYLE
+    - SPOKEN_OUTPUT_USES_SHORT_SENTENCES_AND_DOES_NOT_READ_PATHS_OR_TABLES_UNLESS_REQUESTED
+    - PRESERVE_USER_INTENT_AND_RECENT_CORRECTIONS
+    - ASK_ONLY_FOR_INFORMATION_NEEDED_TO_CONTINUE
+  rollout:
+    github_rule_is_not_runtime_adoption_proof: true
+    runtime_consumer: apps/bot-telegram/unified-bot.cjs
+    injection_owner: withMandatoryRules
+    text_and_audio_test_required: true
+    status_until_tested: CONFIGURED_NOT_RUNTIME_VERIFIED
