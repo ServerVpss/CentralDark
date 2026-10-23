@@ -3,11 +3,19 @@ name: main-pinned-runtime-fast-path
 description: Mecanismo determinístico de microdeploy runtime da CentralDark. Use no Live Editing Fabric quando o CHEFE quiser ver delta vivo no runtime com SHA rastreável, owner exato, scratch único, teste mínimo, prova e receipt. Também serve como fallback quando o deploy canônico FAIL/BLOCKED.
 metadata:
   type: operational
-  version: "1.1"
+  version: "1.2"
   owner: SEGREDO/CHEFE
 ---
 
 # MAIN-PINNED RUNTIME FAST-PATH
+
+## Precedência GLOBAL obrigatória — prioridade 0
+
+**ANTES DE QUALQUER FEITO:** consultar o owner e a receita preexistentes, o último receipt, a identidade causal `SOURCE_SHA + OWNER + FILESET + FINGERPRINT + EFEITO`, e só então reutilizar ou estender o script existente. Vale para JARVIS, Hermes, agentes, Hub, CLI, cockpit e consumidores MCP conectados. Se a receita pertinente faltar, procurar o owner; não presumir que não existe, nem inventar nova skill, agent ou gateway.
+
+No dispatcher MCP, `canonicalRecipeFirstPreflight` deve ser executada antes dos handlers, com prioridade 0. Falha de receita no deploy bloqueia somente esse escopo; leitura de diagnóstico permanece aberta. Prova com fingerprint igual só se reaproveita se o resultado e o SHA/efeito também forem verificáveis. Ações de segurança continuam exigindo seus gates e consentimentos da plataforma.
+
+A melhoria relatada do Hermes em `scripts/vps/hermes-self-evolution-current-model.sh` é evolução **do mesmo script**, com donor fixado, `.venv` e receipt por VPS; o commit local `2d3972c` ainda exige readback GitHub/PR, teste no alvo e validação runtime antes de receber PASS global.
 
 ## Quando usar
 
@@ -69,6 +77,19 @@ Leia primeiro:
 SAME_FINGERPRINT → REPLAY_BEFORE_REDISCOVERY.
 CHANGED_FINGERPRINT → REVALIDATE_AFFECTED_CONE_ONLY.
 
+## Reusar esta receita — CI leve, SSH, compilação e rollback (2026-10-23)
+
+Não criar script, skill, MCP, writer ou recipe paralelos. O caminho normal é:
+`MCP CentralDark → centraldark_deploy_micro_fallback → scripts/vps/main-pinned-microdeploy.sh na VPS → scratch única → build/teste → fileset owner → health + receipt + readback`. GitHub Actions nao participa. SSH Casa/Tailscale e transporte privado opcional.
+
+Aplique a **mesma receita** antes de redescobrir: use os campos adicionados ao JSON/YAML existente (`build_on_vps` e `replay_improvements`) e ajuste apenas os bindings de SOURCE_SHA/OWNER/FILESET. O alias administrativo existente aceita CSV de ate 8 arquivos apenas como plano. A tool nativa `centraldark_deploy_micro_fallback` e unica entrada executora autorizada; o workflow hospedado foi desativado.
+
+Melhorias materiais: `KEEP_ACTIVE` para scratch existente não registrado; realpath pré-reset; par `src/dist` para ferramentas MCP; tsc e teste da tool na scratch usando dependências já presentes, backup total antes da cópia, rollback armado antes da primeira mutação. `DRY_RUN` pode preparar/limpar **somente** scratch previamente verificada, nunca mudar produção.
+
+**Prova:** build e commit não declaram ferramenta viva. Nova `admin_ssh_microdeploy` = `COMMITTED_NOT_DEPLOYED` até readback `mcp_admin_catalog`; probe SSH 39912949599 = `BLOCKED_BY_HOSTED_BILLING`, não login falho. Autorização OAuth/Hub admin comprovada reaproveita sessão no MCP, mas operação crítica continua auditada, autoMission não fabrica aprovação e controles externos não são alterados.
+
+**NEXT_CURSOR:** testes da versão exata → deploy causal MCP permitido → catálogo runtime da ferramenta → health + receipt → memória no mesmo owner. Não clonar framework.
+
 ## 🧹 Forja Viva — limpeza com receipt e reutilização do scratch
 
 **CHEFE_INTENT 2026-10-15:** vincular **🧹** à faxina de worktrees na máquina viva, usando **esta skill**, o `WORKTREE TEARDOWN` já existente na skill operacional e o checklist CURRENT do HUD. Não instalar outra faxina, monitor, runner ou segunda receita.
@@ -98,7 +119,7 @@ OWNER + CURRENT_SHA + WORKTREE_LIST + NEXT_CURSOR
 
 **Limites de sincronização:** `SOURCE_COMMITTED != MAIN_PROMOTED != DEPLOYED != UI_PROVEN`. Um CI verde e receipt não autorizam substituir trabalho local alheio; se a publicação na `main` conflitar, registrar e aguardar reconciliação no mesmo owner. Caso o CHEFE peça para **ver o build**, usar a Casa/VS Code já abertos, sem declarar imagem visual se não houve screenshot/readback real; quando não pedir, não inventar requisito de UI para descarte de scratch puramente documental. Teste visual só se aplica à capacidade com interface e ao runtime escolhido.
 
-**Leitura medida nesta atualização (instantânea, não configuração):** Casa `K:\` = 33 alterações tracked e pelo menos 95 entradas untracked; VPS `/root/CentralDark` = 6 arquivos tracked modificados; VPS scratch `/root/CentralDark/_worktrees/main-pinned-runtime-fastpath` = 0 entradas `git status --porcelain`. Portanto **CASA_MAIN=KEEP_ACTIVE**, **VPS_MAIN=KEEP_ACTIVE**, **VPS_SCRATCH=READONLY_SAFE_CANDIDATE**, não houve reset, prune, deploy nem exclusão.
+**Leitura medida nesta atualização (instantânea, não configuração):** Casa `K:\` = 33 alterações tracked e pelo menos 95 entradas untracked; VPS `<caminho-vps>` = 6 arquivos tracked modificados; VPS scratch `<caminho-vps>` = 0 entradas `git status --porcelain`. Portanto **CASA_MAIN=KEEP_ACTIVE**, **VPS_MAIN=KEEP_ACTIVE**, **VPS_SCRATCH=READONLY_SAFE_CANDIDATE**, não houve reset, prune, deploy nem exclusão.
 
 **Checklist diário:** `docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md` é histórico/proveniência; o **CURRENT** é a projeção existente do HUD, sem PR ou arquivo diário novo. Marcar concluído somente com source SHA, teste/contraprova, receipt e efeito aplicável; limpezas propostas mas não executadas ficam `PENDING`/ `UNKNOWN`. Se necessário, o receipt vive no owner já existente da missão.
 
@@ -111,7 +132,7 @@ Registrar SOURCE_SHA/delta, OWNER, FILESET_CAUSAL, testes, restart/reload se hou
 Use sempre:
 
 ```text
-/root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+<caminho-vps>
 ```
 
 Lei:
@@ -127,7 +148,7 @@ DIRTY_WORKTREE_FORBIDDEN_AT_HANDOFF=true
 
 Antes de qualquer reset/clean destrutivo, compare o realpath com o path canônico. Se divergir, STOP_AND_RECONCILE.
 
-Nunca execute `git reset --hard` ou `git clean -fdx` em `/root/CentralDark`, runtime vivo, Casa `E:\CentralDark` ou checkout principal.
+Nunca execute `git reset --hard` ou `git clean -fdx` em `<caminho-vps>`, runtime vivo, Casa `E:\CentralDark` ou checkout principal.
 
 Sequência final:
 

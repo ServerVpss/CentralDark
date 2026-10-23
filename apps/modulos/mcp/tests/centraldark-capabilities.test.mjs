@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { centraldarkCapabilityTools, __centraldarkCapabilityTest } from "../src/tools/deploy/centraldark-capabilities.js";
+import { centraldarkCapabilityTools, __centraldarkCapabilityTest, classifyCanonicalRecipeFirst } from "../src/tools/deploy/centraldark-capabilities.js";
 
 test("expõe as 6 capacidades CentralDark", () => {
   const names = centraldarkCapabilityTools.map((tool) => tool.name).sort();
@@ -31,4 +31,46 @@ test("fileset não escapa do owner", () => {
 test("confirmações executoras são explícitas", () => {
   assert.equal(__centraldarkCapabilityTest.APPLY_CONFIRM, "APLICAR APRENDIZADO VPS");
   assert.equal(__centraldarkCapabilityTest.MICRO_CONFIRM, "EXECUTAR MICRODEPLOY");
+});
+
+test("prioridade zero global consulta receita antes de qualquer execucao e escolhe owner", () => {
+  const doc = {
+    global_recipe_priority:{enabled:true},
+    primary_path:"mcp_centraldark_native_vps",
+    execution_route:{
+      executor_tool:"centraldark_deploy_micro_fallback",
+      paid_github_hosted_runner_required:false,
+    },
+  };
+  const deploy = classifyCanonicalRecipeFirst(doc, "centraldark_deploy_micro_fallback",
+    {owner:"mcp",sourceSha:"a".repeat(40),files:["apps/modulos/mcp/dist/index.js"]});
+  assert.equal(deploy.ok,true);
+  assert.equal(deploy.priority,0);
+  assert.equal(deploy.source,"docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json");
+  assert.ok(deploy.fingerprint);
+  assert.equal(classifyCanonicalRecipeFirst(doc,"hermes_self_evolution",{}).source,
+    "scripts/vps/hermes-self-evolution-current-model.sh");
+  assert.equal(classifyCanonicalRecipeFirst(doc,"github_read",{}).status,
+    "RECIPE_FIRST_GLOBAL_ENTRYPOINT");
+  for (const wf of ["vps-ssh-exec.yml",".github/workflows/vps-ssh-exec.yml","301288932"]) {
+    const out = classifyCanonicalRecipeFirst(doc,"github_dispatch_workflow",
+      {owner:"ServerVpss",repo:"CentralDark",workflow:wf});
+    assert.equal(out.ok,false);
+    assert.equal(out.status,"CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED");
+  }
+  const missing = classifyCanonicalRecipeFirst(null,"centraldark_deploy_micro_fallback",{});
+  assert.equal(missing.ok,false);
+  assert.equal(missing.status,"CANONICAL_RECIPE_PRIORITY_NOT_LOADED");
+});
+test("microdeploy nativo não converte plano ou commit em implantação", async () => {
+  const target = centraldarkCapabilityTools.find(t=>t.name==="centraldark_deploy_micro_fallback");
+  const x = await target.handler({owner:"mcp",files:["apps/modulos/mcp/dist/index.js"],dryRun:true});
+  const out=JSON.parse(x.content[0].text);
+  if (out.status==="DRY_RUN") {
+    assert.equal(out.plan.route,"MCP_CENTRALDARK_VPS_DIRECT");
+    assert.equal(out.plan.hostedRunnerRequired,false);
+    assert.equal(out.plan.recipeFirst,"RECIPE_FIRST_MATCHED");
+  } else {
+    assert.equal(out.status,"CANONICAL_RECIPE_PRIORITY_NOT_LOADED");
+  }
 });

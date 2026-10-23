@@ -104,8 +104,17 @@ light_deploy_ssh_law:
   deep_ci: ON_DEMAND_OR_MATERIAL_SECURITY_RISK
   material_security_gates_required: true
   control_plane: MCP_CENTRALDARK
-  transport_target: EXISTING_AUTHORIZED_SSH
-  transport_runtime_status: PENDING_PROOF
+  transport_target: MCP_CENTRALDARK_VPS_DIRECT
+  transport_runtime_status: MCP_NATIVE_READ_VERIFIED_DEPLOY_PENDING
+  hosted_billing_blocked: true # historico: workflow hospedado aposentado
+  github_actions_required: false
+  github_hosted_runner_required: false
+  native_executor_tool: centraldark_deploy_micro_fallback
+  native_executor_script: scripts/vps/main-pinned-microdeploy.sh
+  legacy_ssh_workflow: DISABLED
+  attempted_probe_run_id: 39912949599
+  ssh_probe_runtime_pass: false
+  no_production_mutation: true
   github_actions_auto_deploy: PAUSED
   source_ref: main
   required_inputs:
@@ -132,6 +141,7 @@ light_deploy_ssh_law:
     UNKNOWN_IS_NOT_PASS: true
   reused_assets:
     runner_wake_only: .github/workflows/vps-wake-hosted-ssh.yml
+    retired_ssh_workflow: .github/workflows/vps-ssh-exec.yml
     microdeploy_runtime: scripts/vps/main-pinned-microdeploy.sh
     receipt_owner: docs/CONSCIENCIA/MICRO-DEPLOY/
 live_editing_default:

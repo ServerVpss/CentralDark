@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { assertNoRetiredCentralDarkHostedDeploy } from "./github.js";
 const API = "https://api.github.com";
 const ALLOWED_REPOS = new Set(["ServerVpss/CentralDark", "ServerVpss/clone-deck", "segredounlock/clone-deck"]);
 const CO_AUTHOR = "SegredoiDev <<conta-bot>>";
@@ -239,8 +240,77 @@ export const githubTools = [
         },
     },
     {
+        // Compatibilidade com o nome antigo. Esta tool e APENAS de leitura/plano:
+        // nao dispara GitHub Actions e nao chama handler destrutivo indiretamente.
+        name: "admin_ssh_microdeploy",
+        description: "Alias admin sem runner pago: status/probe informam a rota nativa; dry_run prepara um fileset causal validado para centraldark_deploy_micro_fallback, que continua o unico executor autorizado.",
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Plano de microdeploy MCP/VPS sem Actions" },
+        inputSchema: z.object({
+            mode: z.enum(["status", "probe", "dry_run"]).default("status"),
+            owner: z.enum(["mcp", "hub_bot", "hermes", "oauth_broker"]).default("mcp"),
+            file: z.string().max(1200).optional(),
+            sourceSha: z.string().regex(/^[0-9a-f]{40}$/i).optional(),
+        }),
+        handler: async (input, ctx) => {
+            const scopes = new Set(String(ctx?.oauthScope || "").split(/\s+/).filter(Boolean));
+            const proven = ctx?.authProvenance === "verified_oauth_admin"
+                || ctx?.authProvenance === "verified_hub_admin";
+            if (ctx?.admin !== true || !scopes.has("admin") || !proven
+                || !ctx?.callerUser || !ctx?.correlationId) {
+                return ok({ ok: false, status: "AUTHENTICATED_ADMIN_SESSION_REQUIRED" });
+            }
+            const route = {
+                controlPlane: "MCP_CENTRALDARK_VPS_DIRECT",
+                nativeExecutor: "centraldark_deploy_micro_fallback",
+                existingScript: "scripts/vps/main-pinned-microdeploy.sh",
+                githubActionsRequired: false,
+                hostedRunnerRequired: false,
+                legacyWorkflow: "DISABLED",
+                runtimeDeployProven: false,
+            };
+            if (input.mode !== "dry_run") {
+                return ok({
+                    ok: true,
+                    status: "NATIVE_ROUTE_CONFIGURED_NOT_EXECUTION_PROOF",
+                    mode: input.mode, ...route,
+                    note: "Consulta de rota, nao e prova de SSH ou deploy.",
+                });
+            }
+            const files = String(input.file ?? "").split(",").map(x => x.trim());
+            const allowedPrefixes = {
+                mcp: ["apps/modulos/mcp/"],
+                hub_bot: ["apps/bot-telegram/"],
+                hermes: ["apps/modulos/HERMES-CORE/", "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/", ".agents/skills/centraldark-operational-method/"],
+                oauth_broker: ["apps/modulos/oauth-broker/"],
+            };
+            const valid = Boolean(input.sourceSha)
+                && files.length > 0 && files.length <= 8
+                && files.length === new Set(files).size
+                && files.every(file => file.length > 0 && /^[A-Za-z0-9_./-]+$/.test(file)
+                    && !file.includes("..") && !file.startsWith("/")
+                    && allowedPrefixes[input.owner].some(prefix => file.startsWith(prefix)));
+            if (!valid) return ok({ ok: false, status: "INVALID_CAUSAL_FILESET_OR_SOURCE_SHA" });
+            if (input.owner === "mcp") {
+                for (const unit of ["tools/github/github-tools", "tools/core/mcp-policy"]) {
+                    const src = "apps/modulos/mcp/src/" + unit + ".js";
+                    const dist = "apps/modulos/mcp/dist/" + unit + ".js";
+                    if ((files.includes(src) || files.includes(dist))
+                        && !(files.includes(src) && files.includes(dist))) {
+                        return ok({ ok: false, status: "MCP_SOURCE_DIST_PAIR_REQUIRED", unit });
+                    }
+                }
+            }
+            return ok({
+                ok: true, status: "NATIVE_PLAN_PREPARED_NOT_EXECUTED", ...route,
+                tool: "centraldark_deploy_micro_fallback",
+                input: { owner: input.owner, sourceSha: input.sourceSha, files, dryRun: true },
+                nextAction: "Somente o dispatcher MCP autorizado pode chamar o executor nativo; nao existe chamada GitHub Actions.",
+            });
+        },
+    },
+    {
         name: "github_dispatch",
-        description: "Dispara workflow_dispatch no GitHub Actions. Use para vps-ssh-exec.yml, deploys e automacoes com inputs.",
+        description: "Dispara workflow_dispatch genérico. Nao usar workflow SSH legado para deploy CentralDark: o executor e centraldark_deploy_micro_fallback via MCP.",
         annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true, title: "GitHub dispatch" },
         inputSchema: z.object({
             workflow: z.string().min(1),
@@ -252,6 +322,7 @@ export const githubTools = [
         handler: async (input, ctx) => {
             const token = effectiveToken(ctx);
             const { owner, repo } = pick(input.owner, input.repo);
+            assertNoRetiredCentralDarkHostedDeploy(owner, repo, input.workflow);
             const inputs = input.inputs
                 ? Object.fromEntries(Object.entries(input.inputs).map(([key, value]) => [key, String(value)]))
                 : undefined;

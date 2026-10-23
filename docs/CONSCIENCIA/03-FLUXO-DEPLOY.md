@@ -25,32 +25,38 @@ SUBIR
 
 `PRODUCTION_FIRST` não significa falso verde. Significa usar o runtime real como fonte de observação sem exigir perfeição global antes da primeira visualização.
 
-## Lei canônica — CI proporcional e microdeploy leve via MCP/SSH (2026-10-23)
+## Lei canônica — CI proporcional e microdeploy nativo MCP/VPS (2026-10-23)
 
 **Autoridade:** SEGREDO/CHEFE. Esta lei estende o owner existente; não cria outro executor, segundo cérebro ou sistema de receipts.
 
 ```text
 ROTINA = MVP_FAST_LOOP + TESTE_MINIMO_DO_ESCOPO
 CI_PROFUNDO = SOB_DEMANDA_OU_RISCO_CRITICO
-DEPLOY_INTENT = MCP_CENTRALDARK -> SSH_AUTORIZADO -> BUILD_NA_VPS
-               -> MICRODEPLOY_MAIN_PINNED -> HEALTH -> RECEIPT -> ROLLBACK_SE_FALHAR
-GITHUB_MAIN = FONTE_DO_SHA; GITHUB_ACTIONS = GATILHO_OPCIONAL, NAO_EXECUTOR_OBRIGATORIO
+DEPLOY_INTENT = MCP_CENTRALDARK -> centraldark_deploy_micro_fallback
+              -> MAIN_PINNED_SCRIPT_NA_VPS -> BUILD/TESTE -> HEALTH -> RECEIPT
+              -> ROLLBACK_SE_FALHAR
+GITHUB_MAIN = SOMENTE_FONTE_DO_SHA_E_RECEIPTS
+GITHUB_ACTIONS_NECESSARIO=false
+GITHUB_HOSTED_RUNNER_PAGO=false
+SSH_PRIVADO_CASA_VPS=OPCIONAL_NAO_DEPENDENCIA
 ```
 
 1. **Padrão:** um delta, um owner, teste mínimo aplicável e feedback curto. Sem executar suíte global, análise pesada ou vários runners automaticamente a cada push, PR ou edição documental.
 2. **Segurança proporcional:** alterações críticas de segurança, autenticação, permissões, secrets, cadeia de deploy ou contrato global exigem os gates correspondentes antes da promoção. Auditoria completa também ocorre por ordem explícita do CHEFE. Nenhuma proteção obrigatória do repositório é contornada.
-3. **Rota de controle:** usar primeiro o **MCP CentralDark** e suas capacidades existentes. O SSH é somente transporte autenticado para a VPS, não uma autoridade paralela. Reusar rota autorizada; não criar novo listener/webhook legado, runner ou scheduler para simular deploy.
-4. **Gatilho leve:** dispatch intencional com `SOURCE_SHA`, `OWNER` e `FILESET_CAUSAL` exatos. A entrada nunca aceita comando shell arbitrário vindo de evento, PR ou payload externo. Não usar chave em commit, log, receipt ou chat; validar host/identidade SSH por chave conhecida confiável, nunca aceitar host desconhecido silenciosamente.
+3. **Rota de controle:** o **MCP CentralDark** já alcança a VPS e oferece `centraldark_deploy_micro_fallback` como executor existente. SSH da Casa/Tailscale é transporte privado opcional para manutenção, jamais requisito de GitHub Actions. Não criar executor, listener, webhook, runner ou scheduler paralelo.
+4. **Gatilho leve:** chamar a ferramenta NATIVA do MCP com `SOURCE_SHA`, `OWNER`, `FILESET_CAUSAL` e gates administrativos; não disparar workflow GitHub para deploy. Nenhuma entrada aceita shell arbitrário de evento/PR. Se houver SSH privado opcional, exigir identidade de host confiável e nenhum segredo em commit/log/receipt.
 5. **Execução:** build/teste do owner **na própria VPS** sobre worktree isolada, MAIN-PINNED ao SHA autorizado. Proibido `git pull`/reset/clean cegos sobre checkout ou runtime com deltas de terceiros. Um escritor por escopo e lock já existente.
 6. **Promoção:** copiar só artefatos/fileset autorizados; backup; reiniciar apenas serviço do owner; medir readiness, rota, SHA e efeito funcional. Falhou: rollback do mesmo owner e recibo `FAILED/ROLLED_BACK`, sem falso verde.
 7. **Runners:** `centraldark-vps-1` e `centraldark-casa-1` não são alvos de remoção desta lei. Registros `centraldark-vps-2/3/4` são candidatos a retirada administrativa, **não** se excluem via commit, e não se apagam os dados de instalação/disco da Casa por inferência.
-8. **Transição mensurada:** gatilho automático do deploy canônico foi pausado; CodeQL, Trigger Fabric Full Package e Run All ficaram manuais. **Isso não prova** que outros workflows automáticos tenham sido desativados, nem que o deploy leve SSH esteja instalado/operante. Manter o caminho manual existente até health+receipt de um deploy SSH real; não desligar produção por padrão.
+8. **Transição mensurada:** gatilho automático canônico pausado; CodeQL, Trigger Fabric Full Package e Run All manuais. Workflow `vps-ssh-exec.yml` agora é legado inerte, sem runner hospedado. Isso **não prova** que outros workflows tenham sido desativados ou que microdeploy MCP nativo já passou em runtime. Permanecem necessários build/teste, health e receipt; não desligar produção por padrão.
 
 ```text
 CI_LIGHT_POLICY=CANONICAL
 DEEP_CI_DEFAULT=ON_DEMAND_OR_MATERIAL_SECURITY_RISK
 CONTROL_PLANE=MCP_CENTRALDARK
-SSH_MICRODEPLOY_RUNTIME_STATE=PENDING_PROOF
+MCP_NATIVE_MICRODEPLOY_RUNTIME_STATE=PENDING_PROOF
+NO_GITHUB_HOSTED_RUNNER_FOR_DEPLOY=true
+GITHUB_ACTIONS_DEPLOY_DISABLED=true
 NO_PARALLEL_DEPLOY_WRITERS=true
 SOURCE_SHA_EXACT=true
 BUILD_ON_VPS=true
@@ -61,7 +67,11 @@ PRODUCTION_PAUSE_MEANS_AUTO_DEPLOY_PAUSE_NOT_SERVICE_SHUTDOWN=true
 UNKNOWN != PASS
 ```
 
-**Consumidor operacional atual:** `scripts/vps/main-pinned-microdeploy.sh` e contratos em `docs/CONSCIENCIA/MICRO-DEPLOY/`. **Transporte SSH existente:** `.github/workflows/vps-wake-hosted-ssh.yml` (somente recuperação de runner; não confundir com deploy). Ativação SSH de deploy exige implementação e teste dedicados no owner já existente, sem duplicar executor.
+**Consumidor operacional atual:** `centraldark_deploy_micro_fallback` → `scripts/vps/main-pinned-microdeploy.sh`, com contratos em `docs/CONSCIENCIA/MICRO-DEPLOY/`. O workflow `.github/workflows/vps-ssh-exec.yml` está desativado, e `.github/workflows/vps-wake-hosted-ssh.yml` é legado de recuperação de runner, não parte do deploy. SSH privado Casa/VPS é opcional.
+
+### Ferramenta administrativa e sessão reutilizável
+
+`admin_ssh_microdeploy` foi preservado como alias de compatibilidade **somente para status/plano**; não dispara workflows, nem invoca indiretamente ferramenta destrutiva. Apenas `centraldark_deploy_micro_fallback` via dispatcher executa microdeploy. Sessão OAuth/Hub admin verificada pode dispensar frase repetida no MCP, mas não identidade, auditoria, gates nem controles externos. Ferramenta versionada não é ferramenta implantada: o catálogo vivo decide.
 
 ## Micro-commits + micro-deploys — padrão oficial da Casa
 
