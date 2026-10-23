@@ -14,6 +14,21 @@ anti_friction_current:
   unknown_blocks_only_affected_claim: true
   route_failure_is_local: true
 mandatory_rules:
+  canonical_recipe_first_global:
+    required: true
+    priority: 0
+    inherited_by: [SOL, HERMES, CODEX, CLAUDE, GEMINI, TELEGRAM, MCP, VPS, CASA]
+    source: docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json
+    lookup: EXISTING_OWNER_RECIPE_BEFORE_ACTION
+    replay_only_if: SAME_SCOPE_SOURCE_SHA_FINGERPRINT_EFFECT_AND_FRESHNESS
+    if_missing: DISCOVER_EXISTING_OWNER_NO_INVENTED_SUCCESS
+    if_changed: EXTEND_SAME_RECIPE_MINIMUM_DELTA
+    if_security_blocked: DO_NOT_BYPASS_PLATFORM_OR_ADMIN_GATES
+    no_parallel_scripts_agents_or_owners: true
+    git_hosted_deploy_runner: FORBIDDEN
+    approved_deploy_route: MCP_CENTRALDARK_VPS_DIRECT
+    self_provision_hermes_owner: scripts/vps/hermes-self-evolution-current-model.sh
+    hermes_self_provision_local_commit_state: REPORTED_NOT_PROMOTED
   executor_centraldark_house_mode:
     required: true
     trigger: "!EXECUTOR_CENTRALDARK"
@@ -196,7 +211,7 @@ mandatory_rules:
       NO_SECRET_LEAK: true
       PRIMARY_PIPELINE_FAILS_DO_NOT_BECOME_FIXED_BY_FALLBACK: true
     scratch_worktree:
-      canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+      canonical_path: <caminho-vps>
       single_reusable: true
       lock_required: true
       reset_before_use: true
