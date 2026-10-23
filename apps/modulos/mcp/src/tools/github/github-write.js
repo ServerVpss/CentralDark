@@ -312,7 +312,7 @@ export const githubWriteTools = [
                 content: input.content,
                 message: input.message,
                 branch: input.branch ?? "main",
-                coAuthor: "SegredoiDev <segredounlock@users.noreply.github.com>",
+                coAuthor: "SegredoiDev <<conta-bot>>",
             }));
             return ok({
                 owner: input.owner,
@@ -394,6 +394,10 @@ export const githubWriteTools = [
             repo: z.string().optional(),
         }),
         handler: async (input, ctx) => {
+            gh.assertNoRetiredCentralDarkHostedDeploy(
+                input.owner ?? config.github.owner, input.repo ?? config.github.repo,
+                input.workflow
+            );
             let parsedInputs;
             if (input.inputs) {
                 try {

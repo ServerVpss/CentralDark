@@ -15,6 +15,7 @@ import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
 import { decorateToolResult } from "./tool-result-envelope.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
 function zodTypeToJsonSchema(schema) {
     if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
         return zodTypeToJsonSchema(schema._def.innerType);
@@ -86,7 +87,7 @@ Você está conectado ao MCP do **Pivete** (CentralDark). Assuma AGORA esta post
 Toda alteração precisa refletir nos 4 pontos:
 1. **Lovable** (editor/preview, fonte das mudanças assistidas por IA)
 2. **GitHub** (repositório, Fonte da Verdade, sync bidirecional com Lovable)
-3. **VPS** (\`/root/CentralDark/\`, PM2 + microsserviços)
+3. **VPS** (\`<caminho-vps>\`, PM2 + microsserviços)
 4. **Cérebro Vivo** (\`docs/CONSCIENCIA/\` + \`.claude/\`, contexto persistente)
 
 Fluxo obrigatório: **Lovable → GitHub → VPS**. Nunca edite código direto na VPS (só emergência documentada).
@@ -97,7 +98,7 @@ Fluxo obrigatório: **Lovable → GitHub → VPS**. Nunca edite código direto n
 
 ## 🛑 REGRAS INVIOLÁVEIS
 - Nunca expor secrets, token, ou service_role_key.
-- Nunca \`pm2 restart all\`. Nunca mexer em \`/root/whatsapp-server\` (id 1 fica STOPPED).
+- Nunca \`pm2 restart all\`. Nunca mexer em \`<caminho-vps>\` (id 1 fica STOPPED).
 - Nunca alterar áreas 🔒 sem "PERMITO PIVETE" explícito.
 
 ## 🧭 SE PRECISAR DE MAIS CONTEXTO
@@ -126,6 +127,19 @@ Antes da primeira resposta operacional CentralDark:
 Se também houver contexto do repositório ServerVpss/CentralDark, use-o como segundo sensor e reconcilie — não crie outro HUD.
 
 H01 Public Edge/DNS · H02 Live Execution Fabric · H03 MCP/Lovable · H04 Emergent Mind · H05 Runners Linux · H06 Micro-deploy autônomo · H07 VPN/Tailscale · H08 Windows CASA/RDC · H09 Windows Runner · H10 VPS↔GitHub · H11 frescor HUD/telemetria · H12 PR #1690 MCP · H13 Actions/capacidade · H14 dependências HIGH · H15 TLS/Caddy · H16 FIXED_POINT_GLOBAL.
+
+## PRIORIDADE GLOBAL ZERO — RECEITA PRIMEIRO
+Antes de qualquer acao operacional: localizar receita e owner existentes,
+recuperar o ultimo checkpoint/receipt compativel, validar fingerprint e
+reaproveitar prova vigente. Somente depois executar delta minimo autorizado.
+Sem receita especifica, resolver pelo catalogo/skill existente; nao criar
+novo script, motor, ferramenta, agente ou owner por padrao. Falha de leitura
+nao prova inexistencia. Leitura diagnostica continua permitida para recuperar
+receita; deploy mutante sem receita confiavel fica bloqueado.
+Hermes self-evolution: reutilizar scripts/vps/hermes-self-evolution-current-model.sh;
+commit local relatado nao equivale a main nem a instalacao VPS.
+MCP -> VPS nativo e rota de deploy; GitHub Actions hosted SSH foi aposentado.
+Nunca contornar gates de autenticacao, autorizacao, auditoria e seguranca.
 
 ## ✅ PRIMEIRA RESPOSTA
 Em contexto operacional CentralDark, comece pelo HUD/RUDY re-medido; não substitua por saudação genérica. Fora de contexto operacional, mantenha a saudação curta.
@@ -298,6 +312,12 @@ export function buildServer(options) {
                 authProvenance: options.authProvenance === "verified_oauth_admin"
                     ? "verified_oauth_admin" : null,
             });
+            // Mesma preflight do dispatcher; evita clientes diretos furarem a prioridade.
+            const targetTool = tool.name === "mcp_admin_call" ? parsed.data.tool : tool.name;
+            const recipeFirst = await canonicalRecipeFirstPreflight(targetTool, tool.name === "mcp_admin_call"
+                ? (parsed.data.input ?? {}) : parsed.data, tool.annotations?.readOnlyHint === true);
+            if (!recipeFirst.ok)
+                throw new Error(recipeFirst.status);
             const raw = await tool.handler(parsed.data, toolContext);
             const result = decorateToolResult(sanitizeOutgoingDeep(raw), {
                 toolName: tool.name,
