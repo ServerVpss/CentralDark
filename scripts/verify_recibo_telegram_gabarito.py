@@ -24,6 +24,16 @@ PROOF_WORDS = re.compile(r"\b(commit|blob|arquivo|file|message_id|endpoint|rota|
 PERCENT_RE = re.compile(r"(?<![A-Za-z0-9])\d{1,3}\s*%")
 FORBIDDEN_FALSE_GREEN = re.compile(r"UNKNOWN\s*=\s*PASS|ACTION\s*=\s*PROOF|DOCUMENTED\s*=\s*EXECUTED", re.I)
 
+ABSENCE_CLAIM = re.compile(r"\\b(?:não\\s+(?:achei|encontrei|localizei|consta|há\\s+evidência)|nenhum\\s+resultado|zero\\s+resultados|não\\s+localizado|not\\s+found|no\\s+results|não\\s+existe\\s+(?:no|na|em|neste|nesta)\\s+(?:repositório|repo|branch|arquivo|código|sistema))\\b", re.I)
+PRESENCE_CLAIM = re.compile(r"\\b(?:achei|encontrei|localizei|foi\\s+encontrado|foi\\s+localizado|está\\s+presente|existe\\s+(?:no|na|em)\\s+(?:repositório|repo|branch|arquivo|código|sistema)|implementado\\s+em|confirmed\\s+in|found\\s+in)\\b", re.I)
+REPOSITORY = re.compile(r"(?:\\b[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\\b|\\brepositório\\s*:\\s*\\S+)", re.I)
+BRANCH = re.compile(r"\\b(?:branch|ramo)\\s*[:=]?\\s*[\\x27\\\"]?[A-Za-z0-9._/-]+", re.I)
+FILE_PATH = re.compile(r"(?:\\b(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+\\b|\\b[A-Za-z0-9_.-]+\\.(?:py|md|yml|yaml|json|ts|tsx|js|cjs|ps1)\\b)", re.I)
+LINE_OR_SNIPPET = re.compile(r"(?:\\b(?:linha|line|linhas|lines)\\s*[:#]?\\s*\\d+\\b|\\bL\\d+(?:-L?\\d+)?\\b|\\btrecho\\s*:\\s*|\\bsnippet\\s*:\\s*)", re.I)
+SHA_OR_COMMIT = re.compile(r"\\b(?:sha(?:\\s*[:=])?|commit\\s*[:=#]?)\\s*[\\x27\\\"]?[0-9a-f]{7,40}\\b", re.I)
+SEARCH_SCOPE = re.compile(r"\\b(?:busca|procurei|pesquisa|escopo|consulta|search)\\s*[:=]", re.I)
+ZERO_RESULT = re.compile(r"\\b(?:zero|nenhum|nenhuma|0)\\s+(?:resultado|resultados|ocorrência|ocorrências|matches)\\b|\\bresultado\\s*[:=]\\s*0\\b|\\bdeu\\s+zero\\b", re.I)
+
 def load_text(arg: str) -> str:
     if arg == "-":
         return sys.stdin.read()
@@ -52,6 +62,29 @@ def main(argv: list[str]) -> int:
 
     if FORBIDDEN_FALSE_GREEN.search(text):
         failures.append("false-green invariant violated")
+
+    # Discovery claims must be reproducible from an explicit repository address.
+    if ABSENCE_CLAIM.search(text):
+        if not REPOSITORY.search(text):
+            failures.append("absence claim missing repository address (owner/repo)")
+        if not BRANCH.search(text):
+            failures.append("absence claim missing branch address")
+        if not (FILE_PATH.search(text) or SEARCH_SCOPE.search(text)):
+            failures.append("absence claim missing file path or explicit search scope")
+        if SEARCH_SCOPE.search(text) and not ZERO_RESULT.search(text):
+            failures.append("absence search missing explicit result count/outcome")
+
+    if PRESENCE_CLAIM.search(text):
+        if not REPOSITORY.search(text):
+            failures.append("presence claim missing repository address (owner/repo)")
+        if not BRANCH.search(text):
+            failures.append("presence claim missing branch address")
+        if not FILE_PATH.search(text):
+            failures.append("presence claim missing file path")
+        if not LINE_OR_SNIPPET.search(text):
+            failures.append("presence claim missing line number or snippet reference")
+        if not SHA_OR_COMMIT.search(text):
+            failures.append("presence claim missing commit/SHA (or explicit SHA field)")
 
     if failures:
         print("RECIBO_INVALIDO")
