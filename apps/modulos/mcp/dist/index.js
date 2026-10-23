@@ -8,8 +8,8 @@ import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
 import { getAccessToken, getSession, getStateStats } from "./sessions.js";
-import { createDevicePairingRouter } from "./device-pairing.js";
-import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
+import { createDevicePairingRouter, createDevicePairingStore } from "./device-pairing.js";
+import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, configureDevicePairingForOAuth, } from "./oauth.js";
 import { getStatusHtml, getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
@@ -543,10 +543,9 @@ app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMet
 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 // Reutiliza a sessão administrativa assinada e o processo OAuth existente.
-app.use("/device", createDevicePairingRouter({
-    isBrowserAdmin: isAdmin,
-    publicOrigin: new URL(config.publicUrl).origin
-}));
+const oauthDeviceStore = createDevicePairingStore();
+configureDevicePairingForOAuth(oauthDeviceStore);
+app.use("/device", createDevicePairingRouter({store: oauthDeviceStore}));
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
 app.post("/authorize", handleAuthorize);
