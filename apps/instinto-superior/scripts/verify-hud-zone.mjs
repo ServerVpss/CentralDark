@@ -486,3 +486,17 @@ test("runtime owner wins over stale checkout na leitura P0", () => {
   assert.ok(source.includes("CHECKOUT_FALLBACK_ONLY_ON_MISSING"));
   assert.ok(source.includes("recipeSource: selected.source"));
 });
+
+test("HUD mostra receita P0 a partir do mesmo sensor autentico, sem nova secao", () => {
+  const fn = read("apps/instinto-superior/src/lib/conexoes.functions.ts");
+  const hud = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+  const conexoes = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  assert.ok(hud.includes("lerSaudeInfraCentralDark"));
+  assert.ok(hud.includes('["Receita em uso", provaMcp.data?.mcpRecipe ?? "UNKNOWN"'));
+  assert.ok(hud.includes("STDIO/Hermes exigem contraprova separada"));
+  assert.ok(hud.includes('queryKey: ["centraldark", "saude-hub-mcp"]'));
+  assert.ok(conexoes.includes('queryKey: ["centraldark", "saude-hub-mcp"]'));
+  assert.ok(fn.includes(".middleware([requireSupabaseAuth])"));
+  assert.ok(fn.includes('mcpRecipeEscopo: "MCP_HTTP_ONLY"'));
+  assert.equal((hud.match(/\["Receita em uso",/g) || []).length,1);
+});

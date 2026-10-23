@@ -41,6 +41,10 @@ Handoff P0 existente amplia para **17 arquivos** do MCP: 8 pares `src/dist` e re
 
 A compatibilidade com receita legada exige um JSON antigo **válido**. Se a leitura da receita instalada ou do fallback falhar, `canonicalRecipeFirstPreflight` devolve `CANONICAL_RECIPE_READ_FAILED_LOCKED` para execução mutante; apenas diagnóstico read-only continua. Nenhuma fonte ausente ou inválida concede autorização executora.
 
+## HUD consumindo a mesma prova do cockpit
+
+O campo existente `Receita em uso` no `HudDeterministico.tsx` consulta a mesma `lerSaudeInfraCentralDark` e a chave `["centraldark","saude-hub-mcp"]` de Contas / Conexões. Não acrescentar nova seção ou novo HUD. Valor `PASS` apenas para escopo `MCP_HTTP_ONLY` quando o backend confirmar receita, cadeia e catálogo; STDIO/Hermes exigem readback próprio. A tela estática ou versão em `main` nunca equivale a UI instalada.
+
 ## Quando usar
 
 Use quando:
