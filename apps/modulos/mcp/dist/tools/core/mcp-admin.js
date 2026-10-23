@@ -33,6 +33,7 @@ import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { mcpDiagnosticsTools } from "./mcp-diagnostics.js";
 import { mcpPolicyTools } from "./mcp-policy.js";
+import { canonicalRecipeFirstPreflight, GLOBAL_RECIPE_FIRST_CONTRACT } from "../deploy/centraldark-capabilities.js";
 import { ADMIN_CONFIRMATIONS, CATALOG_VERSION, guardDestructive, auditStartupSnapshot, getCanonicalExpectation, } from "../../lib/admin-guard.js";
 const ADMIN_CONFIRM = "CONFIRMO ADMIN"; // apenas compatibilidade com chamadas legadas sem sessão admin autenticada
 function ok(data) {
@@ -184,6 +185,11 @@ const ROUTE_LAWS = Object.freeze({
     clientSafetyGateIsOutsideMcp: true,
     repeatBlockedCallWithoutNewEvidence: false,
     ownerRebuilderOnlyAfterMeasuredFailure: true,
+    recipeFirstIsGlobal: true,
+    recipePriority: 0,
+    existingRecipeBeforeAnyAction: true,
+    reuseSameReceiptOnlyWhenFingerprintAndEffectMatch: true,
+    canonicalRecipeOwner: GLOBAL_RECIPE_FIRST_CONTRACT.canonical,
 });
 // Aprendizado das tentativas reais: erro de politica != falha da VPS.
 // A fronteira OpenAI/cliente nao e visivel por este MCP: nao simular observacao.
@@ -222,6 +228,31 @@ function safeToolInfo(tool) {
         readOnly: tool.annotations?.readOnlyHint === true,
         destructive: tool.annotations?.destructiveHint === true,
         title: tool.annotations?.title ?? null,
+    };
+}
+function withDelegatedCapability(raw, tool, recipeFirst = null) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw))
+        return raw;
+    const existing = raw.structuredContent && typeof raw.structuredContent === "object"
+        && !Array.isArray(raw.structuredContent) ? raw.structuredContent : {};
+    return {
+        ...raw,
+        structuredContent: {
+            ...existing,
+            centraldark_recipe_first: recipeFirst ? {
+                priority: recipeFirst.priority,
+                status: recipeFirst.status,
+                source: recipeFirst.source,
+                fingerprint: recipeFirst.fingerprint ?? null,
+                proof: "NOT_EXECUTION_PROOF",
+            } : null,
+            centraldark_delegation: {
+                tool: tool.name,
+                // A dispatcher does not infer the owning component or validate
+                // receipts merely because it successfully invoked the handler.
+                evidence_boundary: "DISPATCHED_TOOL_RESULT_NOT_RUNTIME_PROOF",
+            },
+        },
     };
 }
 // Snapshot de startup é aguardado. Leituras continuam disponíveis em falha,
@@ -321,6 +352,7 @@ export const mcpAdminTools = [
                 routeCount: AUTHORIZED_ROUTE_CATALOG.length,
                 routeReturned: routes.length,
                 routeLaws: ROUTE_LAWS,
+                recipeFirst: GLOBAL_RECIPE_FIRST_CONTRACT,
                 routes,
                 providerCapabilities,
                 providerCapabilityCount: DELEGATED_PROVIDER_CAPABILITIES.length,
@@ -413,6 +445,15 @@ export const mcpAdminTools = [
             const parsed = parseToolInput(tool, input.input);
             if (!parsed.success)
                 return invalidInputResponse(input, parsed, destructive);
+            // Mesmo dispatcher atende ChatGPT, Hermes, Hub e bridge OAuth:
+            // consulta a receita no owner ANTES de qualquer handler.
+            const recipeFirst = await canonicalRecipeFirstPreflight(input.tool, parsed.data, tool.annotations?.readOnlyHint === true);
+            if (!recipeFirst.ok)
+                return ok({
+                    ok: false, status: recipeFirst.status,
+                    tool: input.tool, recipeFirst,
+                    executionStatus: "blocked",
+                });
             // Missão automática pode executar capacidade não destrutiva, mas não
             // fabrica aprovação humana para uma tool destructiveHint=true.
             if (destructive && ctx?.autoMission === true) {
@@ -427,7 +468,7 @@ export const mcpAdminTools = [
                 });
             }
             if (!destructive) {
-                return tool.handler(parsed.data, ctx);
+                return withDelegatedCapability(await tool.handler(parsed.data, ctx), tool, recipeFirst);
             }
             // Destrutiva: startup auditável + guarda canônica versionada.
             const startup = await ensureStartupAuditReady();
@@ -473,7 +514,7 @@ export const mcpAdminTools = [
                             : "Nada foi executado. Passe a confirmação admin exigida pelo caminho interativo canônico."),
                 });
             }
-            return tool.handler(parsed.data, ctx);
+            return withDelegatedCapability(await tool.handler(parsed.data, ctx), tool, recipeFirst);
         },
     },
 ];

@@ -82,7 +82,7 @@ receipt_policy:
 # Evolucao por DELTA (2026-10-23): mesma receita e mesmo script, sem paralelos.
 replay_improvements:
   executor: scripts/vps/main-pinned-microdeploy.sh
-  transport: .github/workflows/vps-ssh-exec.yml
+  transport: MCP_CENTRALDARK_VPS_DIRECT
   input: SOURCE_SHA_OWNER_FILESET_CAUSAL
   multi_file_input: comma_separated_up_to_8
   mcp_source_dist_pair_required: true
@@ -93,7 +93,17 @@ replay_improvements:
   backup_all_before_first_copy: true
   rollback_armed_before_first_copy: true
   one_tool_count_growth_requires_runtime_catalog_readback: true
-  github_hosted_billing_run_39912949599: BLOCKED_BEFORE_RUNNER
+  github_hosted_billing_run_39912949599: HISTORICAL_RETIRED_PATH
   admin_session_reuse_only_if_verified_oauth_or_hub: true
   admin_tool_runtime_state: COMMITTED_NOT_DEPLOYED
   no_parallel_executor: true
+execution_route:
+  primary: MCP_CENTRALDARK_VPS_DIRECT
+  native_tool: centraldark_deploy_micro_fallback
+  executor_script: scripts/vps/main-pinned-microdeploy.sh
+  github_actions_required: false
+  paid_github_hosted_runner_required: false
+  legacy_workflow: .github/workflows/vps-ssh-exec.yml
+  legacy_workflow_state: DISABLED
+  ssh_private_casa_vps: OPTIONAL_TRANSPORT
+  deploy_runtime_state: PENDING_PROOF
