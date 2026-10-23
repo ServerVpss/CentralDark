@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { assertNoRetiredCentralDarkHostedDeploy } from "./github.js";
 const API = "https://api.github.com";
 const ALLOWED_REPOS = new Set(["ServerVpss/CentralDark", "ServerVpss/clone-deck", "segredounlock/clone-deck"]);
 const CO_AUTHOR = "SegredoiDev <<conta-bot>>";
@@ -287,7 +288,9 @@ export const githubTools = [
                 && files.length === new Set(files).size
                 && files.every(file => file.length > 0 && /^[A-Za-z0-9_./-]+$/.test(file)
                     && !file.includes("..") && !file.startsWith("/")
-                    && allowedPrefixes[input.owner].some(prefix => file.startsWith(prefix)));
+                    && (allowedPrefixes[input.owner].some(prefix => file.startsWith(prefix))
+                        || (input.owner === "mcp"
+                            && file === "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json")));
             if (!valid) return ok({ ok: false, status: "INVALID_CAUSAL_FILESET_OR_SOURCE_SHA" });
             if (input.owner === "mcp") {
                 for (const unit of ["tools/github/github-tools", "tools/core/mcp-policy"]) {
@@ -321,6 +324,7 @@ export const githubTools = [
         handler: async (input, ctx) => {
             const token = effectiveToken(ctx);
             const { owner, repo } = pick(input.owner, input.repo);
+            assertNoRetiredCentralDarkHostedDeploy(owner, repo, input.workflow);
             const inputs = input.inputs
                 ? Object.fromEntries(Object.entries(input.inputs).map(([key, value]) => [key, String(value)]))
                 : undefined;

@@ -23,7 +23,12 @@
     "causal_scope_only": true,
     "no_unregistered_scratch_deletion": true,
     "partial_copy_rollback_required": true,
-    "no_false_runtime_pass_from_commit": true
+    "no_false_runtime_pass_from_commit": true,
+    "github_hosted_dispatch_blocked": true,
+    "github_hosted_workflow_id": 301288932,
+    "native_mcp_executor_required": true,
+    "explicit_source_sha_for_promotion": true,
+    "reuse_existing_receipt_for_same_fingerprint": true
   },
   "sequence": [
     "measure_main_head",
@@ -86,7 +91,7 @@
     "bot_contract": "apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml"
   },
   "scratch_worktree": {
-    "canonical_path": "/root/CentralDark/_worktrees/main-pinned-runtime-fastpath",
+    "canonical_path": "<caminho-vps>",
     "single_reusable": true,
     "disposable": true,
     "lock_required": true,
@@ -103,9 +108,9 @@
       "git clean -fdx"
     ],
     "destructive_guard": {
-      "realpath_must_equal": "/root/CentralDark/_worktrees/main-pinned-runtime-fastpath",
+      "realpath_must_equal": "<caminho-vps>",
       "must_not_equal": [
-        "/root/CentralDark",
+        "<caminho-vps>",
         "RUNTIME_ROOT",
         "PRIMARY_REPO_ROOT"
       ]
@@ -153,7 +158,10 @@
     "no_dependency_install_on_runtime": true,
     "conditional_tool_count_growth_max": 1,
     "runtime_admin_catalog_readback_required": true,
-    "deploy_runtime_state": "PENDING_PROOF"
+    "deploy_runtime_state": "PENDING_PROOF",
+    "full_mcp_p0_allowlist_ready_in_main": true,
+    "pair_count": 8,
+    "recipe_json_causal_promotion": true
   },
   "replay_improvements": {
     "same_fingerprint": "reuse existing recipe and executor",
@@ -191,5 +199,138 @@
     "ssh_private_casa_vps": "OPTIONAL_TRANSPORT_ONLY",
     "retired_workflow": ".github/workflows/vps-ssh-exec.yml",
     "runtime_deploy_state": "PENDING_PROOF"
+  },
+  "global_recipe_priority": {
+    "enabled": true,
+    "priority": 0,
+    "authority": "SEGREDO/CHEFE",
+    "mode": "GLOBAL_RECIPE_FIRST_BEFORE_ANY_OPERATION",
+    "applies_to": [
+      "MCP_HTTP",
+      "MCP_STDIO",
+      "MCP_ADMIN_DISPATCHER",
+      "HERMES_HUB_MISSIONS",
+      "AI_SURFACES_USING_CENTRALDARK_BOOT",
+      "TELEGRAM_CONSUMERS"
+    ],
+    "selection_order": [
+      "RECOVER_INTENT",
+      "LOOKUP_EXISTING_OWNER_RECIPE",
+      "LOAD_LAST_RECEIPT",
+      "COMPARE_SCOPE_SOURCE_SHA_FINGERPRINT_EFFECT",
+      "REPLAY_WHEN_VALID",
+      "EXTEND_EXISTING_RECIPE_IF_CHANGED",
+      "EXECUTE_MINIMUM_AUTHORIZED_DELTA",
+      "BACKCHECK",
+      "RECEIPT_SAME_OWNER"
+    ],
+    "default_action": "EXISTING_OWNER_RECIPE_DISCOVERY",
+    "scope": "ALL_CENTRALDARK_TASKS",
+    "recipe_source": "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json",
+    "executor_for_deploy": "centraldark_deploy_micro_fallback",
+    "strict_hosted_route_lock": true,
+    "read_only_discovery_on_unavailable": true,
+    "fail_closed_only_for_affected_unsafe_scope": true,
+    "independent_approvals_remain": true,
+    "proof_reuse": "SAME_SHA_OWNER_FILESET_FINGERPRINT_EFFECT_AND_FRESHNESS",
+    "proof_not_assumed_from_source": true,
+    "no_second_agent_engine_script_skill_or_catalog": true,
+    "hermes_self_evolution": {
+      "owner": "scripts/vps/hermes-self-evolution-current-model.sh",
+      "reported_local_commit": "2d3972c827ce2786de6da24cbd9e75de589d834c",
+      "reported_donor_sha": "0a929e3aa20e15cf04dc7c28492a7d41a5139125",
+      "reported_test_result": "12 passed, 2 subtests passed",
+      "checked_remote_state": "COMMIT_NOT_FOUND_MAIN_OR_REMOTE_AT_CHECK",
+      "promotion_state": "LOCAL_REPORT_PENDING_GITHUB_AND_VPS_PROOF",
+      "restart_and_deploy_are_not_implied": true
+    },
+    "bootstrap_compat": {
+      "legacy_recipe_primary": "github_actions_canonical_deploy",
+      "only_executor": "centraldark_deploy_micro_fallback",
+      "preview_allowed": true,
+      "apply_requires_sha_40_hex": true,
+      "hosted_runner_still_denied": true,
+      "temporary_until_runtime_recipe_readback": "mcp_centraldark_native_vps",
+      "no_false_runtime_pass": true
+    },
+    "executable_handoff": {
+      "owner": "mcp",
+      "recipe_replayed_first": true,
+      "desired_action": "PROMOTE_CURRENT_MAIN_EXACT_SHA",
+      "tool": "centraldark_deploy_micro_fallback",
+      "mode": "DRY_RUN_THEN_APPROVED_APPLY",
+      "source_sha": "RESOLVE_MAIN_AT_EXECUTION_AND_PIN",
+      "shell_script": "scripts/vps/main-pinned-microdeploy.sh",
+      "fileset": [
+        "apps/modulos/mcp/src/index.js",
+        "apps/modulos/mcp/dist/index.js",
+        "apps/modulos/mcp/src/mcp-server.js",
+        "apps/modulos/mcp/dist/mcp-server.js",
+        "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+        "apps/modulos/mcp/dist/tools/core/mcp-admin.js",
+        "apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js",
+        "apps/modulos/mcp/dist/tools/deploy/centraldark-capabilities.js",
+        "apps/modulos/mcp/src/tools/core/mcp-policy.js",
+        "apps/modulos/mcp/dist/tools/core/mcp-policy.js",
+        "apps/modulos/mcp/src/tools/github/github.js",
+        "apps/modulos/mcp/dist/tools/github/github.js",
+        "apps/modulos/mcp/src/tools/github/github-tools.js",
+        "apps/modulos/mcp/dist/tools/github/github-tools.js",
+        "apps/modulos/mcp/src/tools/github/github-write.js",
+        "apps/modulos/mcp/dist/tools/github/github-write.js",
+        "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json"
+      ],
+      "source_dist_causal_pair_required": true,
+      "checkout_with_uncommitted_changes": "KEEP_ACTIVE",
+      "scratch": "REUSE_EXISTING_ONLY_WITH_REALPATH_AND_LOCK",
+      "preflight": [
+        "SOURCE_SHA_VERIFIED_IN_MAIN",
+        "SCRATCH_REALPATH_AND_CLEAN",
+        "MCP_BUILD_DEPS_PRESENT",
+        "SYSTEMD_MCP_OWNER_ACTIVE",
+        "EXISTING_RECEIPT_FINGERPRINT_CHECK"
+      ],
+      "build_on_vps": "tsc --project apps/modulos/mcp/tsconfig.json",
+      "tests": [
+        "admin-ssh-microdeploy.test.mjs",
+        "centraldark-capabilities.test.mjs"
+      ],
+      "success_evidence": [
+        "HEALTH_OK",
+        "MCP_ADMIN_CATALOG_CONTAINS_new_tool",
+        "RECIPE_PRIMARY=mcp_centraldark_native_vps",
+        "GLOBAL_RECIPE_FIRST_ENFORCED",
+        "NO_HOSTED_DEPLOY_DISPATCH",
+        "RECEIPT_PINNED_SHA_AND_RUNTIME_READBACK",
+        "MCP_HTTP_HEALTH_RECIPE_FIRST_SCOPE_PASS",
+        "COCKPIT_READS_LIVE_MCP_HTTP_AND_CATALOG"
+      ],
+      "unknown_is_pass": false,
+      "blocked_action": "RECORD_SAME_RECIPE_NEXT_CURSOR_NO_BYPASS",
+      "mutation_allowed_only_through_authorized_native_dispatcher": true,
+      "current_runtime_status": "PENDING_EXECUTION"
+    },
+    "cockpit_proof_consumer": {
+      "component": "apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx",
+      "backend": "apps/instinto-superior/src/lib/conexoes.functions.ts",
+      "existing_sources": [
+        "https://mcp.centralldark.com/health",
+        "https://mcp.centralldark.com/tools.json",
+        "hub.centralldark.com/health",
+        "oauth-broker/api/welcome-kit"
+      ],
+      "scope": "MCP_HTTP_ONLY",
+      "mcp_p0_pass_requires": [
+        "recipeFirst.status=PASS",
+        "recipeFirst.codeStatus=RECIPE_FIRST_MATCHED",
+        "recipeFirst.priority=0",
+        "recipeFirst.hostedDispatchLocked=true",
+        "recipeFirst.adminAliasLoaded=true",
+        "catalogVersion AND toolCount MATCH"
+      ],
+      "source_committed_is_not_runtime_proven": true,
+      "independent_agent_counterproof": "CHECK_HEALTH_BODY_CATALOG_AND_COCKPIT_ADMIN_RENDER_IN_SAME_SESSION",
+      "runtime_state": "PENDING_INSTALL_AND_AUTH_UI_READBACK"
+    }
   }
 }
