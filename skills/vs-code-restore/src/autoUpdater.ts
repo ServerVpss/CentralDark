@@ -111,7 +111,7 @@ export async function checkVsCodeUpdates(context:vscode.ExtensionContext,
       const file=path.join(storage,found.filename);
       const required=found.asset.digest.slice(7).toLowerCase();
       const cached=fs.existsSync(file)?fs.readFileSync(file):null;
-      let buffer=cached&&cached.length===found.asset.size&&
+      let buffer: Buffer | null=cached&&cached.length===found.asset.size&&
         createHash('sha256').update(cached).digest('hex')===required?cached:null;
       if(!buffer){
         buffer=await sshRead(ssh,route,['gh','release','download',
