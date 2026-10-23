@@ -118,3 +118,13 @@ test("receita instalada precede checkout no owner MCP sem aceitar erro silencios
   assert.ok(src.includes('["ENOENT", "ENOTDIR"]'));
   assert.ok(src.includes("classifyCanonicalRecipeFirst(recipe, toolName, input)"));
 });
+
+test("fallback de receita inválida não libera execução por compatibilidade antiga", async () => {
+  const source = await import("node:fs/promises").then(fs => fs.readFile(
+    new URL("../src/tools/deploy/centraldark-capabilities.js", import.meta.url), "utf8"
+  ));
+  assert.ok(source.includes("CANONICAL_RECIPE_READ_FAILED_LOCKED"));
+  assert.ok(source.includes("executeMutation: false"));
+  assert.ok(source.includes('ok: safeRead'));
+  assert.ok(source.includes("RUNTIME_OWNER_FIRST"));
+});

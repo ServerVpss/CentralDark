@@ -228,12 +228,16 @@ export async function canonicalRecipeFirstPreflight(toolName, input = {}, readOn
           status: "READ_ONLY_RECIPE_DISCOVERY_ALLOWED" }
       : decision;
   } catch (err) {
+    // A migracao legada vale apenas para receita antiga VALIDA. Ausencia de
+    // qualquer receita ou JSON corrompido nao autoriza microdeploy destrutivo.
     const fallback = classifyCanonicalRecipeFirst(null, toolName, input);
+    const safeRead = readOnly === true || /^centraldark_deploy_(recipe_status|capabilities|scratch_status|root_gate)$/.test(toolName);
     return {
       ...fallback,
-      ok: readOnly === true || fallback.ok,
-      status: readOnly === true ? "RECIPE_READ_PENDING_DISCOVERY" : fallback.status,
+      ok: safeRead,
+      status: safeRead ? "RECIPE_READ_PENDING_DISCOVERY" : "CANONICAL_RECIPE_READ_FAILED_LOCKED",
       errorClass: "CANONICAL_RECIPE_UNAVAILABLE",
+      executeMutation: false,
     };
   }
 }

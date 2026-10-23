@@ -37,6 +37,10 @@ Handoff P0 existente amplia para **17 arquivos** do MCP: 8 pares `src/dist` e re
 
 `canonicalRecipeFirstPreflight` e `centraldark_deploy_recipe_status` agora devem carregar primeiro a receita JSON do **mesmo root do bundle instalado** (`RUNTIME_OWNER_FIRST`). O checkout central do projeto é fallback `CHECKOUT_FALLBACK_ONLY_ON_MISSING` quando a receita instalada não existe; um erro de JSON/permissão no runtime é falha, **não** permissão para disfarçar leitura por outro arquivo. O snapshot HTTP do cockpit informa status apenas do processo HTTP e não falsifica o estado de Hermes STDIO.
 
+### Cadeado adicional de falha de leitura
+
+A compatibilidade com receita legada exige um JSON antigo **válido**. Se a leitura da receita instalada ou do fallback falhar, `canonicalRecipeFirstPreflight` devolve `CANONICAL_RECIPE_READ_FAILED_LOCKED` para execução mutante; apenas diagnóstico read-only continua. Nenhuma fonte ausente ou inválida concede autorização executora.
+
 ## Quando usar
 
 Use quando:
