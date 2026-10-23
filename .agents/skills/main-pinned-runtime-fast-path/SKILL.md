@@ -9,6 +9,14 @@ metadata:
 
 # MAIN-PINNED RUNTIME FAST-PATH
 
+## Precedência GLOBAL obrigatória — prioridade 0
+
+**ANTES DE QUALQUER FEITO:** consultar o owner e a receita preexistentes, o último receipt, a identidade causal `SOURCE_SHA + OWNER + FILESET + FINGERPRINT + EFEITO`, e só então reutilizar ou estender o script existente. Vale para JARVIS, Hermes, agentes, Hub, CLI, cockpit e consumidores MCP conectados. Se a receita pertinente faltar, procurar o owner; não presumir que não existe, nem inventar nova skill, agent ou gateway.
+
+No dispatcher MCP, `canonicalRecipeFirstPreflight` deve ser executada antes dos handlers, com prioridade 0. Falha de receita no deploy bloqueia somente esse escopo; leitura de diagnóstico permanece aberta. Prova com fingerprint igual só se reaproveita se o resultado e o SHA/efeito também forem verificáveis. Ações de segurança continuam exigindo seus gates e consentimentos da plataforma.
+
+A melhoria relatada do Hermes em `scripts/vps/hermes-self-evolution-current-model.sh` é evolução **do mesmo script**, com donor fixado, `.venv` e receipt por VPS; o commit local `2d3972c` ainda exige readback GitHub/PR, teste no alvo e validação runtime antes de receber PASS global.
+
 ## Quando usar
 
 Use quando:
@@ -111,7 +119,7 @@ OWNER + CURRENT_SHA + WORKTREE_LIST + NEXT_CURSOR
 
 **Limites de sincronização:** `SOURCE_COMMITTED != MAIN_PROMOTED != DEPLOYED != UI_PROVEN`. Um CI verde e receipt não autorizam substituir trabalho local alheio; se a publicação na `main` conflitar, registrar e aguardar reconciliação no mesmo owner. Caso o CHEFE peça para **ver o build**, usar a Casa/VS Code já abertos, sem declarar imagem visual se não houve screenshot/readback real; quando não pedir, não inventar requisito de UI para descarte de scratch puramente documental. Teste visual só se aplica à capacidade com interface e ao runtime escolhido.
 
-**Leitura medida nesta atualização (instantânea, não configuração):** Casa `K:\` = 33 alterações tracked e pelo menos 95 entradas untracked; VPS `/root/CentralDark` = 6 arquivos tracked modificados; VPS scratch `/root/CentralDark/_worktrees/main-pinned-runtime-fastpath` = 0 entradas `git status --porcelain`. Portanto **CASA_MAIN=KEEP_ACTIVE**, **VPS_MAIN=KEEP_ACTIVE**, **VPS_SCRATCH=READONLY_SAFE_CANDIDATE**, não houve reset, prune, deploy nem exclusão.
+**Leitura medida nesta atualização (instantânea, não configuração):** Casa `K:\` = 33 alterações tracked e pelo menos 95 entradas untracked; VPS `<caminho-vps>` = 6 arquivos tracked modificados; VPS scratch `<caminho-vps>` = 0 entradas `git status --porcelain`. Portanto **CASA_MAIN=KEEP_ACTIVE**, **VPS_MAIN=KEEP_ACTIVE**, **VPS_SCRATCH=READONLY_SAFE_CANDIDATE**, não houve reset, prune, deploy nem exclusão.
 
 **Checklist diário:** `docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md` é histórico/proveniência; o **CURRENT** é a projeção existente do HUD, sem PR ou arquivo diário novo. Marcar concluído somente com source SHA, teste/contraprova, receipt e efeito aplicável; limpezas propostas mas não executadas ficam `PENDING`/ `UNKNOWN`. Se necessário, o receipt vive no owner já existente da missão.
 
@@ -124,7 +132,7 @@ Registrar SOURCE_SHA/delta, OWNER, FILESET_CAUSAL, testes, restart/reload se hou
 Use sempre:
 
 ```text
-/root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+<caminho-vps>
 ```
 
 Lei:
@@ -140,7 +148,7 @@ DIRTY_WORKTREE_FORBIDDEN_AT_HANDOFF=true
 
 Antes de qualquer reset/clean destrutivo, compare o realpath com o path canônico. Se divergir, STOP_AND_RECONCILE.
 
-Nunca execute `git reset --hard` ou `git clean -fdx` em `/root/CentralDark`, runtime vivo, Casa `E:\CentralDark` ou checkout principal.
+Nunca execute `git reset --hard` ou `git clean -fdx` em `<caminho-vps>`, runtime vivo, Casa `E:\CentralDark` ou checkout principal.
 
 Sequência final:
 

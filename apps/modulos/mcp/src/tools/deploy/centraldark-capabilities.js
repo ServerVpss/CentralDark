@@ -120,6 +120,82 @@ async function rootGate() {
   };
 }
 
+
+// Receita antes de qualquer feito: ponto unico ja usado pelo dispatcher MCP,
+// clientes HTTP/stdio e executor nativo. Nunca fabrica recibo nem aprovacoes.
+export const GLOBAL_RECIPE_FIRST_CONTRACT = Object.freeze({
+  priority: 0,
+  canonical: RECIPE_REL,
+  route: "MCP_CENTRALDARK_VPS_DIRECT",
+  executor: "centraldark_deploy_micro_fallback",
+  hostedWorkflow: "vps-ssh-exec.yml",
+  hostedWorkflowId: "301288932",
+  unknownIsPass: false,
+});
+export function classifyCanonicalRecipeFirst(recipe, toolName, input = {}) {
+  const name = String(toolName || "");
+  const workflow = String(input?.workflow ?? "").trim().replaceAll("\\", "/");
+  const wfName = workflow.split("/").at(-1)?.toLowerCase() ?? "";
+  const slug = String(input?.owner ?? "ServerVpss") + "/" + String(input?.repo ?? "CentralDark");
+  const retired = (name === "github_dispatch" || name === "github_dispatch_workflow")
+    && slug === "ServerVpss/CentralDark"
+    && (wfName === GLOBAL_RECIPE_FIRST_CONTRACT.hostedWorkflow
+        || workflow === GLOBAL_RECIPE_FIRST_CONTRACT.hostedWorkflowId);
+  const deploy = /(^centraldark_deploy_|microdeploy|^admin_ssh_microdeploy$)/i.test(name) || retired;
+  const hermes = !deploy && /(hermes|self.evol|evolve_skill)/i.test(name);
+  const source = deploy
+    ? RECIPE_REL
+    : hermes ? "scripts/vps/hermes-self-evolution-current-model.sh"
+      : "CANONICAL_OWNER_RECIPE_DISCOVERY";
+  const base = {
+    priority: 0,
+    order: "RECIPE_BEFORE_OPERATION",
+    source,
+    owner: input?.owner ?? null,
+    route: deploy ? "MCP_CENTRALDARK_VPS_DIRECT" : "EXISTING_OWNER",
+    receiptReuse: "ONLY_IF_SCOPE_SOURCE_FINGERPRINT_AND_EFFECT_MATCH",
+    proof: "NOT_EXECUTION_PROOF",
+  };
+  if (retired) return { ...base, ok: false, status: "CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED" };
+  if (!recipe?.global_recipe_priority?.enabled) {
+    return {
+      ...base,
+      ok: !deploy,
+      status: "CANONICAL_RECIPE_PRIORITY_NOT_LOADED",
+      nextCursor: "RESTORE_EXISTING_RECIPE_OWNER_NO_PARALLEL_EXECUTOR",
+    };
+  }
+  if (deploy && (recipe.primary_path !== "mcp_centraldark_native_vps"
+    || recipe.execution_route?.executor_tool !== "centraldark_deploy_micro_fallback"
+    || recipe.execution_route?.paid_github_hosted_runner_required !== false)) {
+    return { ...base, ok: false, status: "CANONICAL_RECIPE_ROUTE_DRIFT" };
+  }
+  return {
+    ...base,
+    ok: true,
+    status: deploy ? "RECIPE_FIRST_MATCHED"
+      : hermes ? "OWNER_RECIPE_FIRST_LOCAL_COMMIT_UNVERIFIED"
+        : "RECIPE_FIRST_GLOBAL_ENTRYPOINT",
+    fingerprint: typeof input?.sourceSha === "string" && /^[a-f0-9]{40}$/i.test(input.sourceSha)
+      ? [name, String(input.owner || ""), input.sourceSha.toLowerCase(),
+          ...(Array.isArray(input.files) ? [...input.files].sort() : [])].join("|")
+      : null,
+  };
+}
+export async function canonicalRecipeFirstPreflight(toolName, input = {}, readOnly = false) {
+  try {
+    return classifyCanonicalRecipeFirst(await readJson(RECIPE_REL), toolName, input);
+  } catch (err) {
+    const fallback = classifyCanonicalRecipeFirst(null, toolName, input);
+    return {
+      ...fallback,
+      ok: readOnly === true || fallback.ok,
+      status: readOnly === true ? "RECIPE_READ_PENDING_DISCOVERY" : fallback.status,
+      errorClass: "CANONICAL_RECIPE_UNAVAILABLE",
+    };
+  }
+}
+
 export const centraldarkCapabilityTools = [
   {
     name: "centraldark_deploy_capabilities",
@@ -140,6 +216,7 @@ export const centraldarkCapabilityTools = [
       return ok({
         ok: Object.values(presence).every(Boolean),
         status: Object.values(presence).every(Boolean) ? "PASS" : "INCOMPLETE",
+        globalRecipeFirst: GLOBAL_RECIPE_FIRST_CONTRACT,
         capabilities: centraldarkCapabilityTools.map((tool) => ({
           name: tool.name,
           destructive: tool.annotations?.destructiveHint === true,
@@ -210,6 +287,7 @@ export const centraldarkCapabilityTools = [
           bindings: recipe.bindings || [],
           fingerprint: recipe.fingerprint || recipe.scratch_worktree || null,
           consumers: recipe.consumers || null,
+          globalRecipePriority: recipe.global_recipe_priority || null,
         });
       } catch (error) {
         return ok({ ok: false, status: "RECIPE_INVALID", error: String(error?.message || error) });
@@ -260,6 +338,8 @@ export const centraldarkCapabilityTools = [
       confirm: z.string().optional().describe(`Execução real exige: ${MICRO_CONFIRM}`),
     }),
     handler: async (input) => {
+      const recipeFirst = await canonicalRecipeFirstPreflight("centraldark_deploy_micro_fallback", input);
+      if (!recipeFirst.ok) return ok({ ok: false, status: recipeFirst.status, recipeFirst });
       let files;
       try {
         files = [...new Set(input.files.map((file) => validateOwnerFile(input.owner, file)))];
@@ -274,10 +354,14 @@ export const centraldarkCapabilityTools = [
         apps: profile.apps,
         health: profile.health,
         scratch: scratchRoot(),
+        recipeFirst: recipeFirst.status,
+        route: "MCP_CENTRALDARK_VPS_DIRECT",
+        hostedRunnerRequired: false,
       };
       if ((input.dryRun ?? true) || input.confirm !== MICRO_CONFIRM) {
         return ok({ ok: true, status: "DRY_RUN", plan, requiredConfirm: MICRO_CONFIRM });
       }
+      if (!input.sourceSha) return ok({ ok: false, status: "SOURCE_SHA_REQUIRED_FOR_NATIVE_DEPLOY", plan });
       if (!(await exists(MICRO_SCRIPT_REL))) return ok({ ok: false, status: "MICRODEPLOY_SCRIPT_MISSING", plan });
       const args = [
         "bash",
