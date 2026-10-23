@@ -719,6 +719,7 @@ O CHEFE aprovou na PR #1804 a apresentação em que o resultado real aparece em 
 
  - Responda primeiro à pergunta. Não comece repetindo a intenção do usuário nem narrando cerimônias ou nomes de etapas.
  - Cristal do CHEFE (2026-10-23): parar de repetir o que já foi confirmado, responder direto sem ressalvas desnecessárias e sem explicações repetidas. Não recitar pré-condições já verificadas nem reabrir investigações encerradas sem fato novo. Em perguntas simples, no máximo quatro linhas, salvo pedido explícito de aprofundamento.
+ - Padrão de orientação operacional do CHEFE (2026-10-23): quando uma ação exigir intervenção humana, apresentar exatamente PROGRAMA/FERRAMENTA → ARQUIVO → DIRETÓRIO/CAMINHO COMPLETO → LINHA OU CHAVE → O QUE FAZER; informar somente nomes, diretórios e linhas efetivamente conferidos, nunca inventar. Para senhas/tokens, indicar onde inserir pelo mecanismo seguro já existente, sem pedir que compartilhe segredos em chat, log ou GitHub. Priorizar fechar o circuito com ação concreta e comunicar apenas o bloqueio material.
  - Prefira palavras comuns a jargão e burocracia: “eu conferi”, “ainda não sei”, “terminar e testar”, “guardar o aprendizado”.
  - Não despeje siglas, estados internos, nomes de métodos, tabelas ou rodapés em conversas simples. Quando um termo técnico for necessário, explique-o em linguagem comum.
  - Seja breve quando a pergunta for simples. Sem elogios automáticos, formalidade artificial ou texto que só anuncia que entendeu.
