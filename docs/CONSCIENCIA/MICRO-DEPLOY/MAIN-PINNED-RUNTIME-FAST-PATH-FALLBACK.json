@@ -3,7 +3,7 @@
   "status": "CANONICAL_FALLBACK_RECIPE",
   "authority": "SEGREDO/CHEFE",
   "owner": "docs/CONSCIENCIA/MICRO-DEPLOY/",
-  "primary_path": "github_actions_canonical_deploy",
+  "primary_path": "mcp_centraldark_native_vps",
   "activation": {
     "primary_states": [
       "FAIL",
@@ -166,7 +166,7 @@
       "main_sha_and_causal_fileset",
       "receipt_source_build_health_and_runtime_readback"
     ],
-    "ssh_runner": "reuse .github/workflows/vps-ssh-exec.yml hosted manual transport; billing BLOCKED does not mean SSH failure",
+    "ssh_runner": "RETIRED_GITHUB_HOSTED_NO_PAID_RUNNER",
     "ssh_hosted_billing_run_id": 39912949599,
     "offline_runners_deleted_confirmed_from_inventory": [
       "centraldark-vps-2",
@@ -174,9 +174,22 @@
       "centraldark-vps-4"
     ],
     "verified_admin_sessions": "reused without repeated generic phrase only on verified oauth/hub admin request",
-    "admin_tool": "admin_ssh_microdeploy",
+    "admin_tool": "admin_ssh_microdeploy (legacy alias read only; use native tool for execution)",
     "admin_tool_state": "COMMITTED_NOT_DEPLOYED",
     "preserve_old_receipts": true,
-    "no_parallel_executor": true
+    "no_parallel_executor": true,
+    "no_paid_runner_dependency": true
+  },
+  "legacy_primary_path": "github_actions_canonical_deploy",
+  "execution_route": {
+    "primary": "MCP_CENTRALDARK_VPS_DIRECT",
+    "executor_tool": "centraldark_deploy_micro_fallback",
+    "executor_script": "scripts/vps/main-pinned-microdeploy.sh",
+    "source": "ServerVpss/CentralDark@main",
+    "github_actions_required": false,
+    "paid_github_hosted_runner_required": false,
+    "ssh_private_casa_vps": "OPTIONAL_TRANSPORT_ONLY",
+    "retired_workflow": ".github/workflows/vps-ssh-exec.yml",
+    "runtime_deploy_state": "PENDING_PROOF"
   }
 }

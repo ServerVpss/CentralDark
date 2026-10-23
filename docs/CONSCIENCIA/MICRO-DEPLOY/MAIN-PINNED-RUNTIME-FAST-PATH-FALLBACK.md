@@ -192,6 +192,16 @@ CHANGED_FINGERPRINT
 
 **NEXT_CURSOR material:** executar `--dry-run` no SHA exato com scratch protegida; provar tsc e `node --test` na VPS; só promover MCP quando for seguro e permitido; conferir `mcp_admin_catalog(filter=admin_ssh_microdeploy)`, `mcp_policy_summary`, health, restart isolado e receipt. Falha financeira no hosted não se resolve disparando CI pesado repetidamente.
 
+## Sem runner pago — rota MCP direta (2026-10-23)
+
+Diretriz expressa: não depender de GitHub-hosted runner pago. Workflow `.github/workflows/vps-ssh-exec.yml` transformado em legado inerte (`if: false`), com zero jobs de deploy e sem runner hospedado. O run #39912949599 é histórico; não é requisito de pagamento nem bloqueio arquitetural do deploy nativo.
+
+**Fluxo normal:** `JARVIS → MCP_CENTRALDARK → centraldark_deploy_micro_fallback → scripts/vps/main-pinned-microdeploy.sh → scratch segura → build/teste na VPS → promoção causal → health → receipt/rollback`. GitHub serve somente para fonte `main/SHA` e versionamento, sem CI obrigatorio. SSH privado Casa/Tailscale continua transporte opcional.
+
+O alias admin legado `admin_ssh_microdeploy` deixa de disparar Actions e somente orienta status/plano da rota nativa. A execução real permanece sob o `mcp_admin_call` e a tool `centraldark_deploy_micro_fallback`, com autorização/auditoria independentes. Nao executar uma ferramenta destrutiva por chamada interna de alias.
+
+**Prova atual:** as leituras MCP/VPS e GitHub são operacionais; dry-run via ferramenta nativa foi bloqueado pela segurança da plataforma, logo `DEPLOY=UNKNOWN`. Não contornar isso por outro caminho. NEXT_CURSOR: validar alterações do commit, instalar pela rotina permitida e medir health/catálogo/receipt sem sobrescrever checkout da VPS.
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH
