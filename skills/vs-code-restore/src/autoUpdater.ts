@@ -69,7 +69,7 @@ function pick(all:Release[],current:string) {
 async function installVsix(file:string):Promise<void>{
   // Workbench command officially supports a VSIX file URI; it installs
   // into the currently running VS Code, including the correct profile.
-  // Do not guess Code.exe / code.cmd paths or create a second installation.
+  // Do not guess the editor CLI path or create another installation.
   if (!fs.existsSync(file) || !fs.statSync(file).isFile()) {
     throw Error('VERIFIED_VSIX_NOT_FOUND');
   }
