@@ -607,7 +607,7 @@ async function verifyVsCodePairing(context: vscode.ExtensionContext): Promise<vo
   }
 }
 
-entralDarkVibeViewProvider implements vscode.WebviewViewProvider {
+class CentralDarkVibeViewProvider implements vscode.WebviewViewProvider {
   constructor(private readonly context: vscode.ExtensionContext) {}
   resolveWebviewView(view: vscode.WebviewView): void {
     const nonce = randomBytes(16).toString('base64');
