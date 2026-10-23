@@ -234,7 +234,7 @@ export const VAULT = {
     ordemEndpoints: [
       "?api",
       "localStorage",
-      "http://89.117.78.124:9100",
+      "http://<servidor-publico>:9100",
       "https://api.centralldark.com",
     ],
     frescorSeg: 15,
@@ -351,6 +351,16 @@ export const PAINEL_CENTRALDARK_FOTOS: Array<{
 ];
 
 // #OBSERVACOES# @owner: painel-unico.ts @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
+// Camada de linguagem humana. Os 25 IDs de COCKPIT_ABAS permanecem intactos.
+// Este atalho NAVEGA ou ABRE owner existente: nunca confundir com despacho concluido.
+export const CAMINHOS_SIMPLES_INSTINTO = [
+  { id: "inicio", rotulo: "🏠 Início", aba: "visao", owner: "CockpitShell", modo: "NAVEGAR", privado: false, detalhe: "Veja onde estamos." },
+  { id: "criar", rotulo: "✨ Criar", aba: "forja", owner: "ForjaExecutor", modo: "RASCUNHO_SEM_DESPACHO", privado: false, detalhe: "Conte sua ideia na Forja. Envio automático ainda não comprovado." },
+  { id: "ao-vivo", rotulo: "👁️ Ao vivo", aba: "visao", owner: "StatusPanel/PapagaioHudMcp/cockpit.functions", modo: "SENSORES_DA_VISAO", privado: false, detalhe: "Consulte as medições atuais na Visão geral." },
+  { id: "conexoes", rotulo: "🔗 Conexões", aba: "admin", owner: "PainelAdminCentralDark/ConexoesCentralDark", modo: "ABRIR_OWNER_AUTENTICADO", privado: true, detalhe: "Veja as contas pelo painel existente, sem expor credenciais." },
+  { id: "historico", rotulo: "📖 Histórico", aba: "recibos", owner: "ReceiptsDashboard", modo: "LER_EVIDENCIAS", privado: false, detalhe: "Consulte o que foi comprovado." },
+] as const;
+
 // Contrato de navegação; não prova execução. Owners reutilizados, sem conector paralelo.
 export const COCKPIT_ABAS = [
   { id: "visao", titulo: "Visão geral", owner: "CockpitShell / MapaOwners", privado: false, estado: "READ_ONLY" },
