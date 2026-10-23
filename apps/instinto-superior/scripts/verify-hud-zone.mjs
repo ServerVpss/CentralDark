@@ -385,7 +385,7 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
   assert.ok(!focus.includes("createTerminal("));
   for (const name of ["onDidStartTerminalShellExecution", "onDidEndTerminalShellExecution",
     "LOGS-VS-CODE.log"]) assert.ok(extension.includes(name), "evento/funil: " + name);
-  assert.ok(!focus.includes("process.env.OPENAI_API_KEY"));
+  assert.ok(!focus.includes("process.env.<nome-de-segredo>"));
 
   // PROVAR: recibos reais sao escopados; UI nunca pode declarar provider live.
   assert.ok(design.includes("/tree/main/skills/vs-code-restore"));
@@ -456,3 +456,47 @@ test("TelePainel permanece produto próprio; matriz Admin ocupa o mesmo HUD sem 
 });
 
 
+
+test("contas e integracoes provam MCP HTTP P0 sem converter historico em acesso vivo", () => {
+  const ui = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  const fn = read("apps/instinto-superior/src/lib/conexoes.functions.ts");
+  const runtime = read("apps/modulos/mcp/src/index.js");
+  for (const name of ["lerSaudeInfraCentralDark", "mcpRecipe", "mcpCatalogo", "statusBroker"]) {
+    assert.ok(ui.includes(name), `cockpit sem leitura real: ${name}`);
+  }
+  assert.ok(ui.includes("REGISTRO ATIVO · TESTE PENDENTE"));
+  assert.ok(ui.includes("instâncias STDIO do Hermes"));
+  assert.ok(fn.includes("requireSupabaseAuth"));
+  assert.ok(fn.includes(".eq(\"role\", \"admin\")"));
+  assert.ok(fn.includes('mcpTools.statusHttp === 200'));
+  assert.ok(fn.includes('recipe?.["hostedDispatchLocked"] === true'));
+  assert.ok(fn.includes('recipe?.["adminAliasLoaded"] === true'));
+  assert.ok(fn.includes('recipe?.["codeStatus"] === "RECIPE_FIRST_MATCHED"'));
+  assert.ok(runtime.includes('app.get("/health", async'));
+  assert.ok(runtime.includes('canonicalRecipeFirstPreflight('));
+  assert.ok(runtime.includes('assertNoRetiredCentralDarkHostedDeploy('));
+  assert.ok(runtime.includes('proofLevel: recipeReady'));
+  assert.doesNotMatch(ui, /acesso verificado em 23\/10/);
+});
+
+test("runtime owner wins over stale checkout na leitura P0", () => {
+  const source = read("apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js");
+  assert.ok(source.includes("function installedRuntimeRoot()"));
+  assert.ok(source.includes("RUNTIME_OWNER_FIRST"));
+  assert.ok(source.includes("CHECKOUT_FALLBACK_ONLY_ON_MISSING"));
+  assert.ok(source.includes("recipeSource: selected.source"));
+});
+
+test("HUD mostra receita P0 a partir do mesmo sensor autentico, sem nova secao", () => {
+  const fn = read("apps/instinto-superior/src/lib/conexoes.functions.ts");
+  const hud = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+  const conexoes = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  assert.ok(hud.includes("lerSaudeInfraCentralDark"));
+  assert.ok(hud.includes('["Receita em uso", provaMcp.data?.mcpRecipe ?? "UNKNOWN"'));
+  assert.ok(hud.includes("STDIO/Hermes exigem contraprova separada"));
+  assert.ok(hud.includes('queryKey: ["centraldark", "saude-hub-mcp"]'));
+  assert.ok(conexoes.includes('queryKey: ["centraldark", "saude-hub-mcp"]'));
+  assert.ok(fn.includes(".middleware([requireSupabaseAuth])"));
+  assert.ok(fn.includes('mcpRecipeEscopo: "MCP_HTTP_ONLY"'));
+  assert.equal((hud.match(/\["Receita em uso",/g) || []).length,1);
+});
