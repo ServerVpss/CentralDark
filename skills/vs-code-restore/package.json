@@ -1,8 +1,8 @@
 {
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark · Vibe Coding",
-  "description": "Corpo unico VS Code: bancada, SSH Casa/VPS e pareamento no registro MCP ja existente.",
-  "version": "0.1.9",
+  "description": "CentralDark VS Code: bancada, MCP OAuth 2.1 e pareamento por codigo confirmado pelo administrador.",
+  "version": "0.2.0",
   "publisher": "centraldark",
   "private": true,
   "engines": {
