@@ -108,3 +108,23 @@ test("diagnostico de receita nao fica bloqueado pelo proprio cadeado", () => {
     assert.equal(v.status,"CANONICAL_RECIPE_PRIORITY_NOT_LOADED");
   }
 });
+
+test("receita instalada precede checkout no owner MCP sem aceitar erro silencioso", async () => {
+  const src = await import("node:fs/promises").then(fs => fs.readFile(
+    new URL("../src/tools/deploy/centraldark-capabilities.js", import.meta.url), "utf8"
+  ));
+  assert.ok(src.includes("RUNTIME_OWNER_FIRST"));
+  assert.ok(src.includes("CHECKOUT_FALLBACK_ONLY_ON_MISSING"));
+  assert.ok(src.includes('["ENOENT", "ENOTDIR"]'));
+  assert.ok(src.includes("classifyCanonicalRecipeFirst(recipe, toolName, input)"));
+});
+
+test("fallback de receita inválida não libera execução por compatibilidade antiga", async () => {
+  const source = await import("node:fs/promises").then(fs => fs.readFile(
+    new URL("../src/tools/deploy/centraldark-capabilities.js", import.meta.url), "utf8"
+  ));
+  assert.ok(source.includes("CANONICAL_RECIPE_READ_FAILED_LOCKED"));
+  assert.ok(source.includes("executeMutation: false"));
+  assert.ok(source.includes('ok: safeRead'));
+  assert.ok(source.includes("RUNTIME_OWNER_FIRST"));
+});

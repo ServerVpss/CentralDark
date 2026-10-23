@@ -253,6 +253,26 @@ O alias admin legado `admin_ssh_microdeploy` deixa de disparar Actions e somente
 
 **NEXT_CURSOR já preparado:** usar a `global_recipe_priority.executable_handoff` do JSON atual na `main`, sem nova ferramenta ou receita. Quando o executor autorizado estiver disponível: medir SHA real de main, confirmar scratch registrado/limpo, build e testes funcionais, dry-run permitido, promover fileset 15 do owner MCP por `centraldark_deploy_micro_fallback`, conferir no processo da porta 9100 e nos STDIO conectados `canonicalRecipeFirstPreflight`, prioridade P0, cadeado `vps-ssh-exec.yml`, `mcp_admin_catalog`, receita carregada, health e receipt. **PASS exige efeitos medidos no runtime, não só commit.**
 
+### Cockpit consumidor de prova P0 — readback escopado (23/10/2026)
+
+**Intenção do CHEFE:** JARVIS atua como coordenação e executor quando há ferramenta autorizada. Hermes reutiliza esta mesma receita. Um segundo agente só faz **contraprova independente**, sem exigir ao CHEFE que instale agentes, execute comandos manuais ou crie roteiro paralelo.
+
+**Fonte/owner evoluídos na `main`, sem estrutura nova:**
+- `apps/modulos/mcp/src/index.js`: a rota pública **existente** `GET /health` agora calcula `recipeFirst` da preflight nativa e da função pura `assertNoRetiredCentralDarkHostedDeploy`, verifica alias `admin_ssh_microdeploy` no catálogo do mesmo processo e expõe `scope=MCP_HTTP_ONLY`, `status=PASS|DRIFT`, `codeStatus` e `proofLevel`. Não chama ferramenta mutante nem publica credenciais.
+- `apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js`: o mesmo dispatcher/reader dá prioridade à receita instalada **ao lado do bundle** (`RUNTIME_OWNER_FIRST`). Checkout só é fallback em ENOENT/ENOTDIR; JSON ilegível ou inválido bloqueia mutação com `CANONICAL_RECIPE_READ_FAILED_LOCKED`.
+- `apps/instinto-superior/src/lib/conexoes.functions.ts`: a função SSR existente, após **Supabase auth + admin role**, mede Hub `/health`, MCP `/health` e MCP `/tools.json`, compara catalogVersion + toolCount + presença da tool e só considera P0 `PASS` quando a resposta aponta preflight correta, prioridade 0, alias e cadeado hospedado. Estado `UNKNOWN` não vira verde por HTTP 200.
+- `apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx`: reusa cards OAuth/Hub/GitHub/Drive/VPS/Cofre; estados GitHub/Drive são lidos do broker e requerem teste recente, Cofre não é declarado montado, botão Atualizar recarrega duas leituras.
+- `apps/instinto-superior/src/components/central/HudDeterministico.tsx`: atualiza só o **campo existente** `Receita em uso` com o mesmo cache autenticado `["centraldark","saude-hub-mcp"]`; sem mudar número, ordem ou identidade dos quadros.
+- `scripts/vps/main-pinned-microdeploy.sh`, JSON e skill MAIN-PINNED: 17 arquivos causais MCP (8 pares src/dist, JSON) e receituário de build, rollback/health e provas. Não criar CI hospedado nem dispatcher paralelo.
+
+**Commits relevantes:** `e98ede3242f9c7de27b4f3b4e28f50ed2cd2848e`, `ac71e021f4d0a415fb3b98de22a8d74c1ebc9cb9`, `d54715ee75f8faf21487f3917b2063816e119c78`, `f3ba0fafd1164af312bfb4c0e446e0c43d449fde`. Testes de sintaxe **efetivamente observados**: MCP index + módulo de receita + shell `bash -n` = PASS; backend TypeScript passou transpile-check; checagem de TSX e algumas execuções do verificador foram bloqueadas pela política do cliente. Testes unitários funcionais, build completo e tela autenticada **ainda não** receberam PASS.
+
+**Contraprova real anterior a qualquer promoção:** `/health` público da porta 9100 `ok=true`, `toolCount=153` **sem** campo `recipeFirst`; MCP administrativo ainda `runtimeTools=141`, `primaryPath=github_actions_canonical_deploy`, checkout VPS em `48827a6f` com alterações locais alheias. Isso prova `SOURCE_COMMITTED != RUNTIME_INSTALLED != COCKPIT_UI_PROVEN`.
+
+**Roteiro de contraprova do segundo agente (READ-ONLY, sem nova receita):** recuperar este receipt e o JSON `global_recipe_priority.executable_handoff`; verificar SHA exato da `main`; conferir `GET /health` + `GET /tools.json` do MCP e `centraldark_deploy_recipe_status`; verificar que `recipeFirst.status=PASS` no processo HTTP **somente após a instalação permitida**; inspecionar na sessão autenticada do cockpit os cards `MCP`, `GitHub`, `Drive`, `Cofre` e o campo `Receita em uso`, com timestamp e screenshot; comparar a origem Hub/broker. Reportar falhas por escopo, sem atribuir ligação a Gemini/Claude/Hermes STDIO por simples coexistência.
+
+**NEXT_CURSOR:** instalar/promover MCP e cockpit somente pelas próprias rotas existentes **quando autorizadas** e após build/testes; nenhuma tentativa de contornar bloqueio da plataforma com shell, SSH, Hermes ou CI alternativos. Após instalação medir health/catálogo/receita no processo e interface na Casa (cockpit local `8080` conforme prova histórica; estado atual ainda não medido), publicar receipt com SHA+owner+efeito e trocar o amarelo apenas nesse escopo. Preservar checkout da VPS dirty e instâncias existentes.
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH

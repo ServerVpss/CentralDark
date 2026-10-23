@@ -160,7 +160,7 @@
     "runtime_admin_catalog_readback_required": true,
     "deploy_runtime_state": "PENDING_PROOF",
     "full_mcp_p0_allowlist_ready_in_main": true,
-    "pair_count": 7,
+    "pair_count": 8,
     "recipe_json_causal_promotion": true
   },
   "replay_improvements": {
@@ -262,6 +262,8 @@
       "source_sha": "RESOLVE_MAIN_AT_EXECUTION_AND_PIN",
       "shell_script": "scripts/vps/main-pinned-microdeploy.sh",
       "fileset": [
+        "apps/modulos/mcp/src/index.js",
+        "apps/modulos/mcp/dist/index.js",
         "apps/modulos/mcp/src/mcp-server.js",
         "apps/modulos/mcp/dist/mcp-server.js",
         "apps/modulos/mcp/src/tools/core/mcp-admin.js",
@@ -299,12 +301,36 @@
         "RECIPE_PRIMARY=mcp_centraldark_native_vps",
         "GLOBAL_RECIPE_FIRST_ENFORCED",
         "NO_HOSTED_DEPLOY_DISPATCH",
-        "RECEIPT_PINNED_SHA_AND_RUNTIME_READBACK"
+        "RECEIPT_PINNED_SHA_AND_RUNTIME_READBACK",
+        "MCP_HTTP_HEALTH_RECIPE_FIRST_SCOPE_PASS",
+        "COCKPIT_READS_LIVE_MCP_HTTP_AND_CATALOG"
       ],
       "unknown_is_pass": false,
       "blocked_action": "RECORD_SAME_RECIPE_NEXT_CURSOR_NO_BYPASS",
       "mutation_allowed_only_through_authorized_native_dispatcher": true,
       "current_runtime_status": "PENDING_EXECUTION"
+    },
+    "cockpit_proof_consumer": {
+      "component": "apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx",
+      "backend": "apps/instinto-superior/src/lib/conexoes.functions.ts",
+      "existing_sources": [
+        "https://mcp.centralldark.com/health",
+        "https://mcp.centralldark.com/tools.json",
+        "hub.centralldark.com/health",
+        "oauth-broker/api/welcome-kit"
+      ],
+      "scope": "MCP_HTTP_ONLY",
+      "mcp_p0_pass_requires": [
+        "recipeFirst.status=PASS",
+        "recipeFirst.codeStatus=RECIPE_FIRST_MATCHED",
+        "recipeFirst.priority=0",
+        "recipeFirst.hostedDispatchLocked=true",
+        "recipeFirst.adminAliasLoaded=true",
+        "catalogVersion AND toolCount MATCH"
+      ],
+      "source_committed_is_not_runtime_proven": true,
+      "independent_agent_counterproof": "CHECK_HEALTH_BODY_CATALOG_AND_COCKPIT_ADMIN_RENDER_IN_SAME_SESSION",
+      "runtime_state": "PENDING_INSTALL_AND_AUTH_UI_READBACK"
     }
   }
 }
