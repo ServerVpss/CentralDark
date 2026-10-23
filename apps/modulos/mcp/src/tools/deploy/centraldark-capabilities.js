@@ -141,7 +141,10 @@ export function classifyCanonicalRecipeFirst(recipe, toolName, input = {}) {
     && slug === "ServerVpss/CentralDark"
     && (wfName === GLOBAL_RECIPE_FIRST_CONTRACT.hostedWorkflow
         || workflow === GLOBAL_RECIPE_FIRST_CONTRACT.hostedWorkflowId);
-  const deploy = /(^centraldark_deploy_|microdeploy|^admin_ssh_microdeploy$)/i.test(name) || retired;
+  const recipeDiagnostic = /^centraldark_deploy_(capabilities|root_gate|scratch_status|recipe_status)$/i.test(name)
+    || name === "admin_ssh_microdeploy";
+  const deploy = !recipeDiagnostic
+    && (/(^centraldark_deploy_|microdeploy)/i.test(name) || retired);
   const hermes = !deploy && /(hermes|self.evol|evolve_skill)/i.test(name);
   const source = deploy
     ? RECIPE_REL
@@ -191,7 +194,13 @@ export function classifyCanonicalRecipeFirst(recipe, toolName, input = {}) {
 }
 export async function canonicalRecipeFirstPreflight(toolName, input = {}, readOnly = false) {
   try {
-    return classifyCanonicalRecipeFirst(await readJson(RECIPE_REL), toolName, input);
+    const decision = classifyCanonicalRecipeFirst(await readJson(RECIPE_REL), toolName, input);
+    // Nunca bloquear a leitura usada para recuperar a própria receita.
+    // A exceção não vale para despachos/mutações, apenas tools readOnly.
+    return readOnly === true && !decision.ok
+      ? { ...decision, ok: true, blockedMutationStatus: decision.status,
+          status: "READ_ONLY_RECIPE_DISCOVERY_ALLOWED" }
+      : decision;
   } catch (err) {
     const fallback = classifyCanonicalRecipeFirst(null, toolName, input);
     return {

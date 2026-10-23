@@ -95,3 +95,14 @@ test("bootstrap resiliente não reabre runner hosted quando recipe na VPS é ant
   assert.equal(hosted.ok,false);
   assert.equal(hosted.status,"CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED");
 });
+
+test("diagnostico de receita nao fica bloqueado pelo proprio cadeado", () => {
+  const stale={primary_path:"github_actions_canonical_deploy"};
+  for (const name of ["centraldark_deploy_recipe_status","centraldark_deploy_capabilities",
+    "centraldark_deploy_root_gate","centraldark_deploy_scratch_status",
+    "admin_ssh_microdeploy"]) {
+    const v=classifyCanonicalRecipeFirst(stale,name,{});
+    assert.equal(v.ok,true);
+    assert.equal(v.status,"CANONICAL_RECIPE_PRIORITY_NOT_LOADED");
+  }
+});
