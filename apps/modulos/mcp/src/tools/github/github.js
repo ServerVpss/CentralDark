@@ -311,7 +311,19 @@ export async function deleteWorkflowRun(token, owner, repo, runId) {
     return ghJson(token, "DELETE", `${repoBase(owner, repo)}/actions/runs/${runId}`);
 }
 // Dispara workflow_dispatch num workflow (por id numérico ou nome do arquivo, ex: deploy.yml).
+// Cadeado GLOBAL de rota: o workflow hospedado legado não integra o deploy.
+export function assertNoRetiredCentralDarkHostedDeploy(owner, repo, workflowIdOrFile) {
+    if (`${owner}/${repo}` !== "ServerVpss/CentralDark") return;
+    const raw = String(workflowIdOrFile ?? "").trim();
+    const basename = raw.replaceAll("\\", "/").split("/").at(-1)?.toLowerCase() ?? "";
+    if (basename === "vps-ssh-exec.yml" || raw === "301288932") {
+        throw new Error("CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED: " +
+            "receita prioridade 0 exige MCP CentralDark → " +
+            "centraldark_deploy_micro_fallback → VPS; não disparar runner hospedado.");
+    }
+}
 export async function dispatchWorkflow(token, owner, repo, workflowIdOrFile, input) {
+    assertNoRetiredCentralDarkHostedDeploy(owner, repo, workflowIdOrFile);
     return ghJson(token, "POST", `${repoBase(owner, repo)}/actions/workflows/${encodeURIComponent(String(workflowIdOrFile))}/dispatches`, { ref: input.ref, inputs: input.inputs });
 }
 // Lista workflows do repo (id + nome do arquivo).

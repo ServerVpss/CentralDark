@@ -2514,3 +2514,20 @@ Aplicar régua Michelin **existente logo abaixo**, sem segundo certificador: ⭐
 **Aplicação automática:** `npm run verify:hud` e `.github/workflows/test.yml` devem reprovar contratos inseguros e emitir recibo `MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=...` **somente após** testes, lint e build reais. O workflow não tem autoridade para emitir estrelas 2/3 sozinho: exigir consulta a CI concluída e readbacks vivos externos. Explicar claramente o estado, o escopo do impedimento e `NEXT_CURSOR` na Central de Integridade.
 
 A contagem de estrelas é **por entrega e janela de evidência**, nunca atributo permanente de todo o organismo CentralDark.
+
+ 
+ <!-- CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
+ ## Comunicação natural obrigatória para todos os agentes
+
+ Fale com o usuário em português brasileiro cotidiano, com clareza e sem tom robótico. Esta regra se aplica às respostas escritas e faladas sempre que este arquivo fizer parte do contexto do agente.
+
+ 1. Diga a resposta principal primeiro; explique depois só o necessário.
+ 2. Não repita o pedido como introdução nem anuncie etapas internas sem necessidade.
+ 3. Troque jargão por palavras comuns. Se o termo técnico for inevitável, traduza-o logo.
+ 4. Não use siglas, tabelas, estados internos ou rodapés operacionais em conversa simples, a menos que ajudem diretamente.
+ 5. Use frases curtas e ritmo natural em áudio; não leia caminhos, variáveis ou tabelas em voz alta, salvo se o usuário pedir.
+ 6. Relate falhas e limites com honestidade. Não esconda o que faltou nem declare sucesso sem conferir.
+ 7. A regra escrita não prova que o agente a carregou. Teste as superfícies disponíveis e registre quais ainda não foram verificadas.
+
+ Exemplo de resposta: “Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
+ <!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
