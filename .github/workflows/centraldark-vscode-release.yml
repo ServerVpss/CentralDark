@@ -16,7 +16,7 @@ concurrency:
 jobs:
   verify-and-publish:
     if: github.repository == 'ServerVpss/CentralDark'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 15
     defaults:
       run:
