@@ -86,7 +86,10 @@ function validateOwnerFile(owner, raw) {
   const rel = normalizeRel(raw);
   const profile = OWNER_PROFILES[owner];
   if (!profile) throw new Error("OWNER_PROFILE_UNKNOWN");
-  if (!profile.prefixes.some((prefix) => rel.startsWith(prefix))) {
+  // Exceção mínima P0: a receita machine-consumable acompanha o MESMO
+  // owner MCP como um arquivo causal; outros docs continuam bloqueados.
+  const exactMcpRecipe = owner === "mcp" && rel === RECIPE_REL;
+  if (!exactMcpRecipe && !profile.prefixes.some((prefix) => rel.startsWith(prefix))) {
     throw new Error(`FILE_OUTSIDE_OWNER_SCOPE:${rel}`);
   }
   return rel;

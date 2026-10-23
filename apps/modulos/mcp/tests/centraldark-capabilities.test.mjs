@@ -23,6 +23,8 @@ test("mutação fica marcada como destrutiva", () => {
 
 test("fileset não escapa do owner", () => {
   assert.equal(__centraldarkCapabilityTest.validateOwnerFile("mcp", "apps/modulos/mcp/dist/index.js"), "apps/modulos/mcp/dist/index.js");
+  assert.equal(__centraldarkCapabilityTest.validateOwnerFile("mcp", "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json"), "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json");
+  assert.throws(() => __centraldarkCapabilityTest.validateOwnerFile("mcp", "docs/CONSCIENCIA/MICRO-DEPLOY/OTHER.json"), /FILE_OUTSIDE_OWNER_SCOPE/);
   assert.throws(() => __centraldarkCapabilityTest.validateOwnerFile("mcp", "apps/bot-telegram/unified-bot.cjs"), /FILE_OUTSIDE_OWNER_SCOPE/);
   assert.throws(() => __centraldarkCapabilityTest.validateOwnerFile("mcp", "../etc/passwd"), /FILESET_PATH_INVALID/);
   assert.throws(() => __centraldarkCapabilityTest.validateOwnerFile("mcp", "apps/modulos/mcp/.env"), /FILESET_SENSITIVE_PATH_BLOCKED/);

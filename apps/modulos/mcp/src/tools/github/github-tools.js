@@ -288,7 +288,9 @@ export const githubTools = [
                 && files.length === new Set(files).size
                 && files.every(file => file.length > 0 && /^[A-Za-z0-9_./-]+$/.test(file)
                     && !file.includes("..") && !file.startsWith("/")
-                    && allowedPrefixes[input.owner].some(prefix => file.startsWith(prefix)));
+                    && (allowedPrefixes[input.owner].some(prefix => file.startsWith(prefix))
+                        || (input.owner === "mcp"
+                            && file === "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json")));
             if (!valid) return ok({ ok: false, status: "INVALID_CAUSAL_FILESET_OR_SOURCE_SHA" });
             if (input.owner === "mcp") {
                 for (const unit of ["tools/github/github-tools", "tools/core/mcp-policy"]) {
