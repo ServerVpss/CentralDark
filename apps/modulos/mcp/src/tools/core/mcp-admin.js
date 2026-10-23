@@ -235,6 +235,25 @@ function safeToolInfo(tool) {
     };
 }
 
+
+function withDelegatedCapability(raw, tool) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return raw;
+    const existing = raw.structuredContent && typeof raw.structuredContent === "object"
+        && !Array.isArray(raw.structuredContent) ? raw.structuredContent : {};
+    return {
+        ...raw,
+        structuredContent: {
+            ...existing,
+            centraldark_delegation: {
+                tool: tool.name,
+                // A dispatcher does not infer the owning component or validate
+                // receipts merely because it successfully invoked the handler.
+                evidence_boundary: "DISPATCHED_TOOL_RESULT_NOT_RUNTIME_PROOF",
+            },
+        },
+    };
+}
+
 // Snapshot de startup é aguardado. Leituras continuam disponíveis em falha,
 // porém toda destrutiva permanece fail-closed e tenta reconciliar novamente.
 let startupAuditState = await auditStartupSnapshot(runtimeTools);
@@ -441,7 +460,7 @@ export const mcpAdminTools = [
             }
 
             if (!destructive) {
-                return tool.handler(parsed.data, ctx);
+                return withDelegatedCapability(await tool.handler(parsed.data, ctx), tool);
             }
             // Destrutiva: startup auditável + guarda canônica versionada.
             const startup = await ensureStartupAuditReady();
@@ -487,7 +506,7 @@ export const mcpAdminTools = [
                             : "Nada foi executado. Passe a confirmação admin exigida pelo caminho interativo canônico."),
                 });
             }
-            return tool.handler(parsed.data, ctx);
+            return withDelegatedCapability(await tool.handler(parsed.data, ctx), tool);
         },
     },
 ];
