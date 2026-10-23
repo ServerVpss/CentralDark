@@ -132,6 +132,7 @@ light_deploy_ssh_law:
     UNKNOWN_IS_NOT_PASS: true
   reused_assets:
     runner_wake_only: .github/workflows/vps-wake-hosted-ssh.yml
+    manual_ssh_transport: .github/workflows/vps-ssh-exec.yml
     microdeploy_runtime: scripts/vps/main-pinned-microdeploy.sh
     receipt_owner: docs/CONSCIENCIA/MICRO-DEPLOY/
 live_editing_default:
