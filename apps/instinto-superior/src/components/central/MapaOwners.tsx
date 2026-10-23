@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
-import { COCKPIT_ABAS, MAPA_OWNERS, type DonoVisual, CRISTAL } from "@/data/painel-unico";
+import { COCKPIT_ABAS, CAMINHOS_SIMPLES_INSTINTO, MAPA_OWNERS, type DonoVisual, CRISTAL } from "@/data/painel-unico";
+import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ChevronRight, Layers, CornerDownRight } from "lucide-react";
 
 const ORDEM: DonoVisual[] = ["Admin", "Sistema", "Hermes", "Downloads", "Design"];
@@ -55,8 +57,57 @@ export function MapaOwners({
   const [nivelDiagnostico, definirNivelDiagnostico] = useState<"resumo" | "detalhe" | "prova">(
     "resumo",
   );
+  const [conexoesAbertas, definirConexoesAbertas] = useState(false);
+  function abrirCaminhoSimples(item: (typeof CAMINHOS_SIMPLES_INSTINTO)[number]) {
+    if (item.privado && !autenticado) return;
+    if (item.id === "conexoes") {
+      // Reutiliza o componente do Admin com a mesma checagem RBAC do backend.
+      definirConexoesAbertas(true);
+      return;
+    }
+    onNavigate?.(item.aba);
+    if (item.id === "ao-vivo" && typeof window !== "undefined") {
+      // Sensores reais ficam acima das abas; RaioXVivo legado tem registros estaticos.
+      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+    }
+  }
   return (
     <div className="mt-8 space-y-6">
+      <section className="panel p-5" aria-labelledby="instinto-fazer-acontecer">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-neon-blue">Instinto Superior · Fazer acontecer</p>
+        <h3 id="instinto-fazer-acontecer" className="mt-2 text-xl font-semibold">O que você quer fazer hoje?</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Escolha uma área. Aproveitamos o que já existe; nenhuma ação é enviada só porque você abriu o menu.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          {CAMINHOS_SIMPLES_INSTINTO.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-label={item.rotulo.replace(/^[^ ]+ /, "")}
+              className="rounded-xl border border-border bg-background p-4 text-left transition-colors hover:border-neon-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-neon-blue disabled:opacity-50"
+              disabled={(item.privado && !autenticado) || (!onNavigate && item.id !== "conexoes")}
+              onClick={() => abrirCaminhoSimples(item)}
+            >
+              <strong className="block text-sm">{item.rotulo}</strong>
+              <span className="mt-2 block text-xs text-muted-foreground">{item.detalhe}</span>
+            </button>
+          ))}
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Criar abre a Forja em modo de rascunho. Ao vivo mostra as sondas da Visão geral.
+          Conexões utiliza o painel administrativo existente. Histórico não inventa resultados.
+        </p>
+      </section>
+      <Dialog open={conexoesAbertas} onOpenChange={definirConexoesAbertas}>
+        <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-5xl">
+          <DialogHeader>
+            <DialogTitle>🔗 Minhas conexões</DialogTitle>
+            <DialogDescription>Mesmas contas e autorizações do Admin CentralDark.</DialogDescription>
+          </DialogHeader>
+          {autenticado && conexoesAbertas ? <ConexoesCentralDark /> : null}
+        </DialogContent>
+      </Dialog>
       {/* #OBSERVACOES# @owner: MapaOwners.tsx @doc_ref: DELTA-CONTINUO.md
           @escopo: memoria visual Casa/Apps/Main/VPS e Claude
           @estado: snapshot historico; nao afirma migracao ou runtime atual
@@ -77,7 +128,7 @@ export function MapaOwners({
             { numero: "01", titulo: "Casa — Forja", caminho: "K:\\", resumo: "Código bruto, experimentos, aprendizados e testes." },
             { numero: "02", titulo: "Apps — Cristalização", caminho: "K:\\apps", resumo: "Owners, tipagem, contratos, testes e funcionalidades validadas." },
             { numero: "03", titulo: "GitHub — main", caminho: "ServerVpss/CentralDark", resumo: "Código aprovado e versionado, sem material privado." },
-            { numero: "04", titulo: "VPS — Execução", caminho: "/root/CentralDark", resumo: "Serviços, scripts e conhecimento local; uso offline conforme capacidades existentes." },
+            { numero: "04", titulo: "VPS — Execução", caminho: "<caminho-vps>", resumo: "Serviços, scripts e conhecimento local; uso offline conforme capacidades existentes." },
           ].map((etapa) => (
             <div key={etapa.numero} className="rounded-xl border border-white/15 bg-zinc-900/70 p-3">
               <div className="font-mono text-lg text-emerald-400">{etapa.numero}</div>
@@ -186,7 +237,7 @@ export function MapaOwners({
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
           Prova delimitada · 19/10/2026: navegador conectado leu o DOM da aba Sala de Controle em
-          http://100.123.93.25:8080/sala-controle, com o botão Minha Oficina e o cartão K:/F:/C:.
+          http://<servidor-publico>:8080/sala-controle, com o botão Minha Oficina e o cartão K:/F:/C:.
           HTTP 200 e DOM lido comprovam esta superfície, não clique nas outras abas nem funcionamento
           de todas as capacidades. A navegação e contraprova visual autônomas pertencem ao Harness
           quando implementadas e medidas; HARNESS_UI_NAVIGATION = UNKNOWN.
