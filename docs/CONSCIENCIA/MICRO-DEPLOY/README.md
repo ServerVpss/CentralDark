@@ -35,6 +35,12 @@ O modo normal da CentralDark é editar, colocar vivo, medir, refinar, comprimir 
 
 Regra: `MVP_FAST_LOOP` é padrão de trabalho. CI profundo é prensa/contraprova prolongada quando o CHEFE mandar, não freio padrão para colocar delta vivo.
 
+## Política atual — CI leve e SSH sob demanda (23/10/2026)
+
+Lei canônica: `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md`, seção `CI proporcional e microdeploy leve via MCP/SSH`; contrato consumível: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml`.
+
+No modo normal, executar somente teste aplicável ao owner. CodeQL completo, Trigger Fabric Full Package e Run All estão configurados como acionamento manual; mudanças críticas de segurança continuam exigindo gates pertinentes. O controle é do MCP CentralDark. O destino é microdeploy via SSH autenticado, com build na VPS, SHA exato, backup, health, receipt e rollback. **O SSH deploy não está comprovado em runtime**: o workflow hosted SSH existente apenas acorda o runner; não o executar como deploy. O runner não é excluído apagando arquivo do GitHub.
+
 ## Fallback oficial — MAIN-PINNED RUNTIME FAST-PATH
 
 Quando o deploy canônico estiver `FAIL` ou `BLOCKED` antes da promoção, usar a receita já provada:
