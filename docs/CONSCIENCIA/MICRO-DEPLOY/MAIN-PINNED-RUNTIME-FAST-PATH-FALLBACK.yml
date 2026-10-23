@@ -78,3 +78,22 @@ receipt_policy:
   - '#1562'
   - '#1757'
   no_new_pr_mother: true
+
+# Evolucao por DELTA (2026-10-23): mesma receita e mesmo script, sem paralelos.
+replay_improvements:
+  executor: scripts/vps/main-pinned-microdeploy.sh
+  transport: .github/workflows/vps-ssh-exec.yml
+  input: SOURCE_SHA_OWNER_FILESET_CAUSAL
+  multi_file_input: comma_separated_up_to_8
+  mcp_source_dist_pair_required: true
+  mcp_build_on_vps_scratch: true
+  mcp_test_in_scratch: apps/modulos/mcp/tests/admin-ssh-microdeploy.test.mjs
+  scratch_existing_unregistered: BLOCK_KEEP_ACTIVE
+  pre_reset_realpath_guard: true
+  backup_all_before_first_copy: true
+  rollback_armed_before_first_copy: true
+  one_tool_count_growth_requires_runtime_catalog_readback: true
+  github_hosted_billing_run_39912949599: BLOCKED_BEFORE_RUNNER
+  admin_session_reuse_only_if_verified_oauth_or_hub: true
+  admin_tool_runtime_state: COMMITTED_NOT_DEPLOYED
+  no_parallel_executor: true
