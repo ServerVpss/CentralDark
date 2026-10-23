@@ -89,3 +89,34 @@ test("verified admin status reports GitHub outcome without runtime PASS", async 
     globalThis.fetch = before;
   }
 });
+
+test("multi-file causal dry_run requires exact source/dist pairs", async () => {
+  const before = globalThis.fetch;
+  const requests = [];
+  globalThis.fetch = async (url, init) => {
+    requests.push({ url: String(url), body: JSON.parse(init.body) });
+    return {ok: true, status: 204};
+  };
+  try {
+    const src = "apps/modulos/mcp/src/tools/github/github-tools.js";
+    const dist = "apps/modulos/mcp/dist/tools/github/github-tools.js";
+    const incomplete = unpack(await tool.handler({
+      mode:"dry_run", owner:"mcp", file:src,
+    }, admin));
+    assert.equal(incomplete.status, "MCP_SOURCE_DIST_PAIR_REQUIRED");
+    assert.equal(requests.length, 0);
+    const complete = unpack(await tool.handler({
+      mode:"dry_run", owner:"mcp", file:src+","+dist,
+    }, admin));
+    assert.equal(complete.status, "DISPATCHED_NOT_EXECUTION_PROOF");
+    assert.equal(requests.length, 1);
+    assert.equal(requests[0].body.inputs.file, src+","+dist);
+    const duplicate = unpack(await tool.handler({
+      mode:"dry_run", owner:"mcp", file:src+","+src,
+    }, admin));
+    assert.equal(duplicate.status, "INVALID_CAUSAL_FILESET");
+    assert.equal(requests.length, 1);
+  } finally {
+    globalThis.fetch = before;
+  }
+});

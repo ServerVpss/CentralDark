@@ -178,6 +178,8 @@ CHANGED_FINGERPRINT
 
 **Reuso/receipts:** commit `43baf2b03c1ea9fd8fc01b25652a175f48b2f22a` registra `admin_ssh_microdeploy` na fonte; commit `715be9c7826612580a902f041d1b15264701c6c7` cobre regressões; run `39912949599` foi bloqueado por faturamento **antes** de executar SSH. O runtime ainda expôs 141 tools e não a nova, logo `DEPLOY_STATE=PENDING`. Os três runners offline removidos continuam apenas como inventário histórico. Não reconstruir CI pesado.
 
+**Consumo coerente da receita:** a entrada `admin_ssh_microdeploy` agora valida lista CSV de até 8 arquivos, owner exato, ausência de duplicatas e par MCP `src/dist`, repassando a mesma entrada ao workflow existente. Casos negativos e dry-run positivo foram incorporados ao arquivo de testes já existente, sem arquivos novos. O status continua `COMMITTED_NOT_DEPLOYED` até contraprova.
+
 **NEXT_CURSOR:** testar sintaxe, validar testes do código no SHA exato, dry-run do executor na worktree segura, promover somente owner `mcp` quando a rota permitir, verificar `mcp_admin_catalog(filter=admin_ssh_microdeploy)`, `mcp_policy_summary`, health, efeito e receipt. Se não houver prova de runtime, classificar `PARTIAL`; não apagar worktrees de terceiros nem reexecutar descobertas para mesmo fingerprint.
 
 ## Nome canônico

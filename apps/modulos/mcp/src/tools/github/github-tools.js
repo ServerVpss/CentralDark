@@ -265,16 +265,29 @@ export const githubTools = [
                 });
             }
             if (input.mode === "dry_run") {
-                const file = input.file ?? "";
+                const files = String(input.file ?? "").split(",").map(p => p.trim());
                 const prefixes = {
                     mcp: ["apps/modulos/mcp/"],
                     hub_bot: ["apps/bot-telegram/"],
                     hermes: ["apps/modulos/HERMES-CORE/", "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/", ".agents/skills/centraldark-operational-method/"],
                     oauth_broker: ["apps/modulos/oauth-broker/"],
                 };
-                const allowed = file.length > 0 && /^[A-Za-z0-9_./-]+$/.test(file) && !file.includes("..")
-                    && !file.startsWith("/") && prefixes[input.owner].some(p => file.startsWith(p));
+                const allowed = files.length > 0 && files.length <= 8
+                    && new Set(files).size === files.length
+                    && files.every(file => file.length > 0 && /^[A-Za-z0-9_./-]+$/.test(file)
+                        && !file.includes("..") && !file.startsWith("/")
+                        && prefixes[input.owner].some(p => file.startsWith(p)));
                 if (!allowed) return ok({ ok: false, status: "INVALID_CAUSAL_FILESET", owner: input.owner });
+                if (input.owner === "mcp") {
+                    for (const unit of ["tools/github/github-tools", "tools/core/mcp-policy"]) {
+                        const src = "apps/modulos/mcp/src/" + unit + ".js";
+                        const dist = "apps/modulos/mcp/dist/" + unit + ".js";
+                        if ((files.includes(src) || files.includes(dist))
+                            && !(files.includes(src) && files.includes(dist))) {
+                            return ok({ ok: false, status: "MCP_SOURCE_DIST_PAIR_REQUIRED", unit });
+                        }
+                    }
+                }
             }
             await ghJson(token, "POST", endpoint + "/dispatches", {
                 ref: "main",
