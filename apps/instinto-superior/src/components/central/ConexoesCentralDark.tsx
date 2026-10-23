@@ -53,6 +53,21 @@ export function ConexoesCentralDark() {
   const ativas = (dados?.connections ?? []).filter((c) => c.status === "active").length;
   const multi = [...agrupadas.values()].filter((lista) => lista.length > 1).length;
 
+  function statusBroker(providerId: string) {
+    if (dados?.estado !== "PASS") return "BROKER NÃO MEDIDO";
+    const contas = agrupadas.get(providerId) ?? [];
+    const testeRecente = contas.some((conta) => {
+      const teste = (conta.last_test_status ?? "").toLowerCase();
+      const em = Date.parse(conta.last_test_at ?? "");
+      return conta.status === "active"
+        && ["pass", "ok", "success"].includes(teste)
+        && Number.isFinite(em) && em <= Date.now() && Date.now() - em < 86_400_000;
+    });
+    if (testeRecente) return "TESTE RECENTE NO BROKER";
+    return contas.some((conta) => conta.status === "active")
+      ? "REGISTRO ATIVO · TESTE PENDENTE" : "SEM CONEXÃO COMPROVADA";
+  }
+
   async function conectar(providerId: string) {
     // Transporte OAuth só é acionável quando a consulta viva ao owner retornou PASS.
     if (!dados?.userId || typeof window === "undefined") return;
@@ -110,8 +125,11 @@ export function ConexoesCentralDark() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-            <RefreshCw className={q.isFetching ? "animate-spin" : ""} />
+          <Button variant="outline" onClick={() => {
+            void q.refetch();
+            void saude.refetch();
+          }} disabled={q.isFetching || saude.isFetching}>
+            <RefreshCw className={q.isFetching || saude.isFetching ? "animate-spin" : ""} />
             Atualizar
           </Button>
           <Button onClick={() => void conectar("cloudflare")} disabled={!dados?.userId}>
@@ -186,38 +204,52 @@ export function ConexoesCentralDark() {
       </div>
 
       <section className="panel mt-6 p-5" aria-label="Integrações GitHub VPS Google Drive e Cofre">
-        <p className="font-mono text-[10px] uppercase text-neon-blue">Inventário seguro · 23/10/2026</p>
+        <p className="font-mono text-[10px] uppercase text-neon-blue">Inventário + contraprova ao vivo</p>
         <h4 className="mt-2 font-semibold">GitHub · VPS · Google Drive · Cofre</h4>
         <p className="mt-2 text-xs text-muted-foreground">
-          Acessos verificados pelos conectores; o registro não equivale a sincronização automática.
-          Cofre permanece na VPS, sem exibir credenciais, baixar ou publicar arquivos.
+          O registro do Hub e os links históricos não provam sessão ou capacidade. A saúde da VPS
+          e a receita P0 são medidas separadamente, sem ler segredos.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <a className="rounded-lg border border-border bg-muted/20 p-4 hover:border-neon-blue" href="https://github.com/ServerVpss/CentralDark" target="_blank" rel="noopener noreferrer">
             <strong className="block text-sm">GitHub</strong>
-            <span className="mt-2 block text-xs text-muted-foreground">Conta segredounlock · acesso verificado em 23/10</span>
+            <span className="mt-2 block text-xs text-muted-foreground">Broker: {statusBroker("github")}</span>
             <span className="mt-2 block text-[11px] text-neon-blue">Abrir repositório ↗</span>
           </a>
           <div className="rounded-lg border border-border bg-muted/20 p-4">
             <strong className="block text-sm">VPS CentralDark</strong>
             <span className="mt-2 block text-xs text-muted-foreground">MCP: {saude.data?.mcp ?? "UNKNOWN"} · Hub: {saude.data?.hub ?? "UNKNOWN"}</span>
-            <span className="mt-2 block text-[11px] text-gold"><button type="button" className="underline" onClick={() => void saude.refetch()} disabled={saude.isFetching}>Verificar agora</button></span>
+            <span className="mt-2 block text-xs text-muted-foreground">
+              Catálogo: {saude.data?.mcpCatalogo ?? "UNKNOWN"} · {saude.data?.mcpToolCount ?? "?"} ferramentas
+            </span>
+            <span className="mt-2 block text-xs text-muted-foreground">
+              Receita P0 (HTTP): {saude.data?.mcpRecipe ?? "UNKNOWN"} · {saude.data?.mcpRecipeStatus ?? "SEM_READBACK"}
+            </span>
+            <span className="mt-2 block text-[11px] text-gold">
+              <button type="button" className="underline" onClick={() => void saude.refetch()} disabled={saude.isFetching}>Verificar agora</button>
+            </span>
           </div>
           <a className="rounded-lg border border-border bg-muted/20 p-4 hover:border-neon-blue" href="https://drive.google.com/drive/folders/1eVFHzLZxsDmfjy1yL5-rbD4gO85B-7Uw" target="_blank" rel="noopener noreferrer">
             <strong className="block text-sm">Google Drive</strong>
-            <span className="mt-2 block text-xs text-muted-foreground">Pasta CENTRALDARK · acesso verificado em 23/10</span>
+            <span className="mt-2 block text-xs text-muted-foreground">Broker: {statusBroker("gdrive")}</span>
             <span className="mt-2 block text-[11px] text-neon-blue">Abrir pasta ↗</span>
           </a>
           <div className="rounded-lg border border-border bg-muted/20 p-4">
             <strong className="block text-sm">Cofre da VPS</strong>
             <span className="mt-2 block break-words text-xs text-muted-foreground">Vault-Cofre-CentralDark-20260930T105330Z.tar.gz</span>
-            <span className="mt-2 block text-[11px] text-gold">Localizado · não montado · segredos protegidos</span>
+            <span className="mt-2 block text-[11px] text-gold">Referência de inventário · disponibilidade atual UNKNOWN</span>
           </div>
         </div>
         <p className="mt-3 text-[11px] text-muted-foreground">
-          Fonte: <a className="underline" href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/04-MCP-E-CONECTORES/VAULT-VPS-GITHUB-DRIVE-20261023.md" target="_blank" rel="noopener noreferrer">catálogo canônico na main</a> · snapshot 23/10/2026 · UNKNOWN_IS_NOT_PASS
+          Fonte: <a className="underline" href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/04-MCP-E-CONECTORES/VAULT-VPS-GITHUB-DRIVE-20261023.md" target="_blank" rel="noopener noreferrer">catálogo canônico na main</a> · MCP medido: {saude.data?.medidoEm ?? "UNKNOWN"} · catálogo: {saude.data?.mcpCatalogVersion ?? "UNKNOWN"} · UNKNOWN_IS_NOT_PASS
         </p>
       </section>
+
+      <p className="mt-3 text-xs text-muted-foreground" role="status">
+        A receita P0 só recebe PASS com readback do processo HTTP, catálogo coerente e
+        cadeado hospedado ativo. Esse resultado não prova as instâncias STDIO do Hermes,
+        OAuth ou sincronização com Google Drive.
+      </p>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2" aria-label="Modos de conexão GitHub">
         <article className="panel p-5">
