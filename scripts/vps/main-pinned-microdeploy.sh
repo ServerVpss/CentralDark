@@ -69,6 +69,9 @@ if [[ "$OWNER" == "mcp" ]]; then
       apps/modulos/mcp/src/index.js|apps/modulos/mcp/dist/index.js) ;;
       # Promovido 2026-10-08: F1_GIT do One Heart (teste tests/operational-telemetry.test.mjs).
       apps/modulos/mcp/src/operational-telemetry.js|apps/modulos/mcp/dist/operational-telemetry.js) ;;
+      # Promovido 2026-10-23: espelha o resultado da tool em structuredContent (leitura não chega vazia).
+      # Módulo puro, sem imports; contrato medido em tests/tool-result-envelope.test.mjs (8/8).
+      apps/modulos/mcp/src/tool-result-envelope.js|apps/modulos/mcp/dist/tool-result-envelope.js) ;;
       *) echo "MCP_NATIVE_FILESET_NOT_APPROVED=$rel"; exit 6 ;;
     esac
   done
