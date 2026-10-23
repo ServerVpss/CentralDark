@@ -163,6 +163,35 @@ CHANGED_FINGERPRINT
 → REVALIDATE_AFFECTED_CONE_ONLY
 → DELTA_NOVO
 
+## Evolução da receita sem novas estruturas — 2026-10-23
+
+**Delta do CHEFE:** corrigir a receita e o script atuais antes de pensar em criar ferramenta, runner, processo ou arquivo paralelo. Canonical owners preservados: `scripts/vps/main-pinned-microdeploy.sh`, este JSON/YAML, `.agents/skills/main-pinned-runtime-fast-path/SKILL.md` e o transporte existente `.github/workflows/vps-ssh-exec.yml`.
+
+**Aprendizados comprovados no código anterior:** havia `rm -rf "$SCRATCH"` antes de validar realpath/registro; em cópia parcial, `promoted=1` só era ativado após copiar todos os arquivos; fonte `src/tools/github/github-tools.js` avançou, mas `dist` ainda estava antigo. Estes são gaps materiais, não motivos para um novo executor.
+
+**Correção no mesmo script:**
+1. Validar realpaths e roots de produção **antes** do primeiro reset/clean; scratch existente não registrado → `KEEP_ACTIVE`, não apagar.
+2. Para ferramentas MCP, exigir par `src + dist` no fileset e compilar `tsc` em worktree limpa, usando dependências **já presentes na VPS**, sem `npm install` no runtime. Testar em scratch antes de qualquer cópia.
+3. Fazer backup integral de todos os arquivos antes de qualquer promoção e ligar rollback **antes** da primeira cópia. Restarts somente no owner causal.
+4. Preservar count/catálogo: crescimento de uma ferramenta exige readback posterior por `mcp_admin_catalog`; **commit, teste e contagem não equivalem à prova runtime**. Rollback para redução/incompatibilidade.
+5. SSH apenas como transporte autorizado: workflow existente aceita vários `--file` via string separada por vírgulas, sem comando shell arbitrário e com fingerprint de host verificado.
+
+**Reuso/receipts:** commit `43baf2b03c1ea9fd8fc01b25652a175f48b2f22a` registra `admin_ssh_microdeploy` na fonte; commit `715be9c7826612580a902f041d1b15264701c6c7` cobre regressões; run `39912949599` foi bloqueado por faturamento **antes** de executar SSH. O runtime ainda expôs 141 tools e não a nova, logo `DEPLOY_STATE=PENDING`. Os três runners offline removidos continuam apenas como inventário histórico. Não reconstruir CI pesado.
+
+**Consumo coerente da receita:** a entrada `admin_ssh_microdeploy` agora valida lista CSV de até 8 arquivos, owner exato, ausência de duplicatas e par MCP `src/dist`, repassando a mesma entrada ao workflow existente. Casos negativos e dry-run positivo foram incorporados ao arquivo de testes já existente, sem arquivos novos. O status continua `COMMITTED_NOT_DEPLOYED` até contraprova.
+
+**NEXT_CURSOR:** testar sintaxe, validar testes do código no SHA exato, dry-run do executor na worktree segura, promover somente owner `mcp` quando a rota permitir, verificar `mcp_admin_catalog(filter=admin_ssh_microdeploy)`, `mcp_policy_summary`, health, efeito e receipt. Se não houver prova de runtime, classificar `PARTIAL`; não apagar worktrees de terceiros nem reexecutar descobertas para mesmo fingerprint.
+
+### Contraprova da evolução in-place — 23/10/2026
+
+- Commit `04febfa3b0de5e4479efd9b1abe3a2a732105f69`: **seis owners existentes** ajustados (script de microdeploy, workflow SSH, JSON/YAML, esta receita humana e skill); nenhum script/skill/runner paralelo criado. Guard de scratch e rollback de cópia parcial incorporados.
+- Commit `3a70583233ce8e6d07ebe3a0d25ad734ab2a8ce8`: tool admin e **o arquivo de testes existente** ampliados para CSV com escopo e par source/dist; fonte e teste apenas versionados, não implantados.
+- Contraprovas automáticas via **MCP CentralDark**: `bash -n` no script de microdeploy = PASS; `yaml.safe_load` + `bash -n` no workflow = PASS; `json.load` na receita JSON = PASS; `yaml.safe_load` no binding = PASS; `node --check` na ferramenta e no arquivo de testes = PASS. Readback da `main`: sete arquivos têm os deltas esperados.
+- Limite de prova: teste `node --test` na scratch de deploy = **PENDING**; build `tsc` na scratch = **PENDING**; SSH fim a fim = **BLOCKED_GITHUB_HOSTED_BILLING**; tool `admin_ssh_microdeploy` no runtime MCP = **UNKNOWN/NOT_SEEN**; produção não foi reiniciada. Sintaxe verde **não** é runtime verde.
+- Reaproveitamento obrigatório: `REPLAY_BEFORE_REDISCOVERY`, revalidar só cone causal se fingerprint mudar, registrar falha pontual no mesmo owner; não repetir a migração inteira quando houver apenas um teste pendente.
+
+**NEXT_CURSOR material:** executar `--dry-run` no SHA exato com scratch protegida; provar tsc e `node --test` na VPS; só promover MCP quando for seguro e permitido; conferir `mcp_admin_catalog(filter=admin_ssh_microdeploy)`, `mcp_policy_summary`, health, restart isolado e receipt. Falha financeira no hosted não se resolve disparando CI pesado repetidamente.
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH
