@@ -18,6 +18,46 @@ async function pm2Jlist() {
     const { stdout } = await pexec("pm2", ["jlist"], { timeout: 15000, maxBuffer: 8 * 1024 * 1024 });
     return JSON.parse(stdout);
 }
+const LIVENESS_PRESETS = {
+    vscode: ["code", "code-oss", "codium"],
+    cline: ["cline"],
+    terminal: ["bash", "zsh", "fish", "pwsh", "powershell", "cmd.exe", "windowsterminal"],
+};
+function safeNeedle(raw) {
+    const s = String(raw);
+    if (!/^[A-Za-z0-9_.:-]{1,64}$/.test(s))
+        throw new Error("match invalido");
+    return s.toLowerCase();
+}
+function parsePsIdentity(stdout) {
+    const rows = [];
+    for (const line of stdout.split("\n")) {
+        const trimmed = line.trim();
+        if (!trimmed)
+            continue;
+        const parts = trimmed.split(/\s+/);
+        if (parts.length < 4)
+            continue;
+        const [pid, ppid, user, comm] = parts;
+        if (!/^\d+$/.test(pid))
+            continue;
+        rows.push({ pid, ppid, user, comm });
+    }
+    return rows;
+}
+async function argMatchPids(needles) {
+    const { stdout } = await pexec("ps", ["-eo", "pid=,args="], { timeout: 8000, maxBuffer: 4 * 1024 * 1024 });
+    const hits = new Set();
+    for (const line of stdout.split("\n")) {
+        const match = line.trim().match(/^(\d+)\s+(.*)$/);
+        if (!match)
+            continue;
+        const args = match[2].toLowerCase();
+        if (needles.some((needle) => args.includes(needle)))
+            hits.add(match[1]);
+    }
+    return hits;
+}
 export const adminPm2Tools = [
     {
         name: "admin_pm2_list",
@@ -88,6 +128,51 @@ export const adminPm2Tools = [
             const target = safeTarget(input.target);
             const { stdout, stderr } = await pexec("pm2", ["restart", target, "--update-env"], { timeout: 30000, maxBuffer: 4 * 1024 * 1024 });
             return ok({ ok: true, target, stdout: stdout.slice(-4000), stderr: stderr.slice(-2000) });
+        },
+    },
+    {
+        name: "admin_process_liveness",
+        description: "ADMIN read-only no host do MCP: liveness generalizada por PID. Um preset (vscode, cline, terminal) ou um match cobre VS Code, Cline, varios terminais e qualquer outro processo. Nao imprime args, nao abre porta, nao reinicia. Ausencia medida = NAO_ENCONTRADO. Nao prova Casa, openKylin nem PC :8080.",
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Process liveness" },
+        inputSchema: z.object({
+            preset: z.enum(["vscode", "cline", "terminal"]).optional().describe("Atalho. vscode, cline ou terminal."),
+            match: z.string().min(1).max(64).optional().describe("Trecho seguro do nome do processo, ou um pid."),
+            limit: z.number().int().positive().max(50).optional().describe("Maximo de linhas. Default 30."),
+        }),
+        handler: async (input) => {
+            const needles = [];
+            if (input.preset)
+                needles.push(...LIVENESS_PRESETS[input.preset]);
+            if (input.match)
+                needles.push(safeNeedle(input.match));
+            if (!needles.length)
+                return ok({ ok: false, status: "MATCH_OBRIGATORIO" });
+            const unique = [...new Set(needles)];
+            const { stdout } = await pexec("ps", ["-eo", "pid=,ppid=,user=,comm="], { timeout: 8000, maxBuffer: 4 * 1024 * 1024 });
+            const identity = parsePsIdentity(stdout);
+            const byArgs = await argMatchPids(unique);
+            const limit = input.limit ?? 30;
+            const procs = [];
+            for (const row of identity) {
+                const commHit = unique.some((needle) => row.comm.toLowerCase().includes(needle) || row.pid === needle);
+                const argsHit = byArgs.has(row.pid);
+                if (!commHit && !argsHit)
+                    continue;
+                procs.push({ ...row, matchedOn: commHit ? "comm" : "args" });
+                if (procs.length >= limit)
+                    break;
+            }
+            return ok({
+                ok: true,
+                status: procs.length ? "ONLINE" : "NAO_ENCONTRADO",
+                scope: "MCP_HOST_ONLY",
+                doesNotProve: ["CASA", "OPENKYLIN", "PC_LOCAL_8080"],
+                preset: input.preset ?? null,
+                needles: unique,
+                count: procs.length,
+                truncated: procs.length >= limit,
+                procs,
+            });
         },
     },
 ];

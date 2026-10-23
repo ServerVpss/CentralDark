@@ -504,7 +504,8 @@ function loadSecretFromFiles(envKeys, files) {
     }
     return "";
 }
-// O vault da VPS tem precedencia sobre env antigo do processo.
+// A fonte canonica do Tailscale e o vault da VPS. Um env antigo no processo
+// nao pode sobrepor silenciosamente a credencial atual desse arquivo.
 function chooseTailscaleKey({ vault = {}, mcp = {}, env = {} } = {}) {
     for (const source of [vault, mcp, env]) {
         for (const key of ["TAILSCALE_API_KEY", "TS_API_KEY"]) {
@@ -544,6 +545,7 @@ async function providerHeaders(provider, requestId = randomUUID()) {
         if (tailscaleKeyKind(token) === "NOT_API_ACCESS_TOKEN") {
             throw new Error("TAILSCALE_WRONG_CREDENTIAL_KIND");
         }
+        // Bearer e suportado oficialmente para API access tokens (tskey-api-*).
         return { Authorization: `Bearer ${token}`, Accept: "application/json" };
     }
     if (provider === "buildkite") {
@@ -714,7 +716,8 @@ export async function readTailscaleNetworkLogs({ start, end, tailnet = "-", limi
     };
 }
 const execFileAsync = promisify(execFile);
-// Os identificadores da tailnet nao saem do host: somente resumo agregado.
+// Reduce o resultado da CLI local a métricas agregadas: não expor peers,
+// endereços, usuário, hostnames, autenticação nem payload JSON inteiro.
 function summarizeLocalTailnet(payload) {
     const self = payload?.Self && typeof payload.Self === "object" ? payload.Self : {};
     const peers = payload?.Peer && typeof payload.Peer === "object"
@@ -726,6 +729,46 @@ function summarizeLocalTailnet(payload) {
         onlinePeers: peers.filter(item => item.Online === true).length,
         privateIpAssigned: Array.isArray(self.TailscaleIPs) && self.TailscaleIPs.length > 0,
     };
+}
+/** IDs de nos Tailscale observados pela CLI da VPS; nunca equivalem aos IDs Remote Desktop. */
+export function summarizeTailnetDeviceIdentity(payload, homeHost = "segredo", homeIp = "") {
+    const validId = (value) => {
+        const id = typeof value === "number" && Number.isSafeInteger(value) ? String(value)
+            : typeof value === "string" ? value.trim() : "";
+        return /^[A-Za-z0-9_-]{1,80}$/.test(id) ? id : null;
+    };
+    const self = payload?.Self && typeof payload.Self === "object" ? payload.Self : {};
+    const peers = payload?.Peer && typeof payload.Peer === "object"
+        ? Object.values(payload.Peer).filter((item) => item && typeof item === "object") : [];
+    const host = String(homeHost || "").trim().toLowerCase();
+    const ip = String(homeIp || "").trim();
+    const casa = peers.find((item) => (host && String(item.HostName || "").toLowerCase() === host) ||
+        (ip && Array.isArray(item.TailscaleIPs) && item.TailscaleIPs.includes(ip)));
+    const vpsId = validId(self.ID), casaId = validId(casa?.ID);
+    return {
+        namespace: "tailscale_node_id",
+        source: "tailscale-cli:status-json",
+        vps: { id: vpsId, online: self.Online === true, status: vpsId ? "OBSERVED" : "UNKNOWN" },
+        casa: { id: casaId, online: casa?.Online === true, status: casaId ? "OBSERVED" : "UNKNOWN" },
+        remoteDesktopCommanderDeviceId: "NOT_MEASURED",
+        complete: Boolean(vpsId && casaId),
+    };
+}
+async function readLocalTailnetDeviceIdentity() {
+    try {
+        const { stdout } = await execFileAsync("tailscale", ["status", "--json"], {
+            timeout: 5500, maxBuffer: 1024 * 1024, windowsHide: true,
+        });
+        return summarizeTailnetDeviceIdentity(JSON.parse(stdout), process.env.TAILSCALE_HOME_HOST || "segredo", process.env.TAILSCALE_HOME_IP || "100.123.93.25");
+    }
+    catch {
+        return {
+            namespace: "tailscale_node_id", source: "tailscale-cli:status-json",
+            vps: { id: null, online: false, status: "UNKNOWN" },
+            casa: { id: null, online: false, status: "UNKNOWN" },
+            remoteDesktopCommanderDeviceId: "NOT_MEASURED", complete: false,
+        };
+    }
 }
 async function localTailnetFallback() {
     try {
@@ -779,6 +822,7 @@ async function readTailscaleBridgeStatus() {
             httpStatus: response.status,
             source: "oauth-broker:/api/tailscale/status",
             data,
+            deviceIdentity: await readLocalTailnetDeviceIdentity(),
         };
     }
     catch {
@@ -1191,6 +1235,7 @@ export const __test = Object.freeze({
     actorFingerprint,
     sanitizeError,
     summarizeLocalTailnet,
+    summarizeTailnetDeviceIdentity,
     chooseTailscaleKey,
     tailscaleKeyKind,
 });

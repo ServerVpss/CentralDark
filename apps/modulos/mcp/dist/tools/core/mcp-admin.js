@@ -7,6 +7,7 @@ import { adminVaultRwTools } from "../../modes/admin/tools/admin-vault-rw.js";
 import { adminGitTools } from "../../modes/admin/tools/admin-git.js";
 import { adminMainWriterTools } from "../../modes/admin/tools/admin-main-writer.js";
 import { adminProviderControlTools, tailscaleTools } from "../../modes/admin/tools/admin-provider-control.js";
+import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "../../modes/admin/tools/cloudflare-openapi-catalog.js";
 import { codeReviewerToolDefinition } from "../code-reviewer.js";
 import { z } from "zod";
 import { cognitivoTools } from "../cognitivo/cognitivo.js";
@@ -30,6 +31,8 @@ import { vpsFileTools } from "../vps/vps-files.js";
 import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
+import { mcpDiagnosticsTools } from "./mcp-diagnostics.js";
+import { mcpPolicyTools } from "./mcp-policy.js";
 import { ADMIN_CONFIRMATIONS, CATALOG_VERSION, guardDestructive, auditStartupSnapshot, getCanonicalExpectation, } from "../../lib/admin-guard.js";
 const ADMIN_CONFIRM = "CONFIRMO ADMIN"; // apenas compatibilidade com chamadas legadas sem sessão admin autenticada
 function ok(data) {
@@ -75,16 +78,12 @@ const runtimeTools = [
     ...adminGitTools,
     ...adminMainWriterTools,
     ...adminProviderControlTools,
-    // MOTIVO  > estes 6 grupos existem no catalogo mas nao entravam em
-    //           runtimeTools, entao 24 tools ficavam INALCANCAVEIS pelo
-    //           dispatcher mcp_admin_call, entre elas as integracoes.
-    // ONDE    > apps/modulos/mcp/src/tools/core/mcp-admin.js, runtimeTools.
-    // RESOLVE > incluidos aqui. NAO incluir mcpDiagnosticsTools nem
-    //           mcpPolicyTools: os dois importam mcpAdminTools de volta deste
-    //           arquivo e formam ciclo — tentativa anterior derrubou o
-    //           servico com 'Cannot access mcpAdminTools before
-    //           initialization'. Nao ha perda: as 4 tools desses grupos ja
-    //           sao expostas direto no catalogo.
+    // Ciclo quebrado: mcp-diagnostics.js nao importa mcp-admin no topo.
+    // Dispatcher alcanca mcp_catalog_diff, deploy_validate_mcp_catalog,
+    // mcp_policy_summary e mcp_audit_recent_logs.
+    // Deploy continua tool MCP. Nao cria rota HTTP em api.centralldark.com.
+    ...mcpDiagnosticsTools,
+    ...mcpPolicyTools,
     ...cognitivoTools,
     ...eliteGatewayTools,
     ...geminiTools,
@@ -97,11 +96,13 @@ const runtimeTools = [
 const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
-    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    // Casa route order: private Tailscale transport + native CentralDark MCP/Hermes; RDC remains fallback, not a dependency.
+    { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME", priority: "FALLBACK_ONLY", fallbackRequires: "PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE" },
     { id: "SCREENPIPE_LOCAL_SENSOR", transport: "SCREENPIPE_HTTP", binding: "SEGREDO:127.0.0.1:3030", capability: "CASA_VISUAL_AUDIO_DESKTOP_SENSOR", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SCREENPIPE_CLI_RECORDER", transport: "SCREENPIPE_CLI", binding: "${SCREENPIPE_CLI:-bun x screenpipe@latest}", capability: "ALWAYS_ON_LOCAL_CAPTURE_STATUS_SEARCH_PIPES", source: "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md", runtimeState: "MEASURE_AT_RUNTIME" },
-    { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "segredo-vpss|VPS_HOST", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
-    { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "Segredo-VPS(VPN)|segredo-vpss(fallback-publico)", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "ZENDRIVE_VSCODE_REMOTE_SSH", transport: "VSCODE_REMOTE_SSH", binding: "SEGREDO:Segredo-VPS -> Tailscale -> CENTRALDARK-OS", capability: "CASA_TO_VPS_SSH_AUTH_TERMINAL_FILES_PROCESS", source: "skills/vs-code-restore/src/extension.ts", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_CASA_TO_VPS", transport: "MCP", binding: "MCP_CASA", capability: "execute_command|vps_run_once_script", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "HERMES_SHELL", transport: "HERMES", binding: "SHELL", capability: "EXECUTION_BODY", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "HERMES_DELEGATED_COMMIT_PATH", transport: "HERMES_AGENT", binding: "PR#1748:c893a949b3051ae8a96cc4bc8b910857534c55e7", capability: "DELEGATED_TOOL_WRITE_COMMIT_PUSH_RECIPE", source: "experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md", runtimeState: "PASS_ON_PR1748_REPLAY_REQUIRED_FOR_CURRENT" },
@@ -112,6 +113,40 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "FIGMA_CENTRALDARK_FIGJAM", transport: "FIGJAM_MCP", binding: "file:H0xMJXAKrLxvXx3G1BlVYu|node:0:1", capability: "CENTRALDARK_DIAGRAM_READ", source: "Figma FigJam fluxo mestre", runtimeState: "PASS_READ_ONLY_MEASURED" },
     { id: "RDC_VPS_CENTRALDARK_OS", transport: "REMOTE_DESKTOP_COMMANDER", binding: "device:809020f9-c77d-4bef-bb06-da5b467ac9b7", capability: "VPS_SHELL_FILES_PROCESS_CONTROL", source: "Remote Desktop Commander list_devices", runtimeState: "ONLINE_MEASURED" },
 ]);
+const RDC_EQUIVALENCE_MATRIX = Object.freeze([
+    { "tool": "list_devices", "route": "TAILSCALE_PRIVATE_ROUTE", "scope": "DEVICE_DISCOVERY", "proof": "PROVED_TAILNET_ONLY" },
+    { "tool": "who_am_i", "route": "RDC_DESKTOP_COMMANDER", "scope": "PROVIDER_ACCOUNT", "proof": "VENDOR_ONLY" },
+    { "tool": "get_tool_result", "route": "MCP_VPS_NATIVE_HTTP", "scope": "RECEIPT_READBACK", "proof": "PENDING_CORRELATION" },
+    { "tool": "list_remote_tool_calls", "route": "MCP_VPS_NATIVE_HTTP", "scope": "AUDIT_LOGS", "proof": "PARTIAL_MCP_ONLY" },
+    { "tool": "ping", "route": "TAILSCALE_PRIVATE_ROUTE", "scope": "NETWORK_PROBE", "proof": "PROVED_CONNECTIVITY_ONLY" },
+    { "tool": "shutdown", "route": "RDC_DESKTOP_COMMANDER", "scope": "VENDOR_AGENT", "proof": "VENDOR_ONLY" },
+    { "tool": "get_config", "route": "MCP_VPS_NATIVE_HTTP", "scope": "OWNER_CONFIG", "proof": "NOT_EQUIVALENT" },
+    { "tool": "set_config_value", "route": "MCP_VPS_NATIVE_HTTP", "scope": "OWNER_CONFIG_WRITE", "proof": "NOT_EQUIVALENT" },
+    { "tool": "read_file", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_FILE", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "read_multiple_files", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_FILES", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "write_file", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_FILE_WRITE", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "write_pdf", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_ARTIFACT", "proof": "RENDERER_AND_READBACK_REQUIRED" },
+    { "tool": "create_directory", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_FILE_WRITE", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "list_directory", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_FILES", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "move_file", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_FILE_WRITE", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "start_search", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_SEARCH", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "get_more_search_results", "route": "MCP_VPS_NATIVE_HTTP", "scope": "CURSOR_RESULTS", "proof": "PENDING_CORRELATION" },
+    { "tool": "stop_search", "route": "MCP_VPS_NATIVE_HTTP", "scope": "JOB_CONTROL", "proof": "PENDING_CORRELATION" },
+    { "tool": "list_searches", "route": "MCP_VPS_NATIVE_HTTP", "scope": "JOB_CATALOG", "proof": "PENDING_CORRELATION" },
+    { "tool": "get_file_info", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_FILE_METADATA", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "edit_block", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_FILE_WRITE", "proof": "DIFF_HASH_OWNER_GUARD_REQUIRED" },
+    { "tool": "start_process", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_SHELL", "proof": "PROVED_SSH_EXEC_EXIT_ZERO" },
+    { "tool": "read_process_output", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_SHELL_OUTPUT", "proof": "SINGLE_COMMAND_OUTPUT_ONLY" },
+    { "tool": "interact_with_process", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_TTY", "proof": "TTY_RECEIPT_PENDING" },
+    { "tool": "force_terminate", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_PROCESS_KILL", "proof": "GUARDED_DESTRUCTIVE_UNTESTED" },
+    { "tool": "list_sessions", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_SESSION_LIST", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "list_processes", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_PROCESS_LIST", "proof": "TRANSPORT_PROVEN_ACTION_PENDING" },
+    { "tool": "kill_process", "route": "ZENDRIVE_VSCODE_REMOTE_SSH", "scope": "VPS_PROCESS_KILL", "proof": "GUARDED_DESTRUCTIVE_UNTESTED" },
+    { "tool": "get_usage_stats", "route": "MCP_VPS_NATIVE_HTTP", "scope": "LOCAL_MCP_TELEMETRY", "proof": "VENDOR_STATS_NOT_MIRRORED" },
+    { "tool": "get_recent_tool_calls", "route": "MCP_VPS_NATIVE_HTTP", "scope": "LOCAL_MCP_TELEMETRY", "proof": "PARTIAL_INSTRUMENTED_ONLY" },
+    { "tool": "give_feedback_to_desktop_commander", "route": "RDC_DESKTOP_COMMANDER", "scope": "VENDOR_FEEDBACK", "proof": "VENDOR_ONLY" },
+]);
+// Matriz de possibilidades; nao executa tool remota nem declara paridade com a Casa.
 // Capacidades externas delegáveis do mesmo MCP. Descoberta não é autorização,
 // token importado, rota executável nem prova de disponibilidade da VPS.
 const DELEGATED_PROVIDER_CAPABILITIES = Object.freeze([
@@ -177,6 +212,9 @@ export function diagnoseMcpBlock(status) {
     };
 }
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
+export function getDispatcherRuntimeTools() {
+    return runtimeTools;
+}
 function safeToolInfo(tool) {
     return {
         name: tool.name,
@@ -223,10 +261,34 @@ export const mcpAdminTools = [
         inputSchema: z.object({
             filter: z.string().optional(),
             includeDestructive: z.boolean().optional(),
+            provider: z.enum(["cloudflare"]).optional(),
+            providerView: z.enum(["openapi"]).optional(),
+            cloudflareMethod: z.enum(["GET", "POST", "PUT", "PATCH", "DELETE"]).optional(),
+            cloudflareTag: z.string().max(160).optional(),
+            cloudflareOffset: z.number().int().min(0).optional(),
+            cloudflareLimit: z.number().int().min(1).max(100).optional(),
         }),
         handler: async (input) => {
             const filter = (input.filter ?? "").toString().toLowerCase().trim();
             const includeDestructive = input.includeDestructive ?? true;
+            // Metabolismo lazy: o snapshot OpenAPI existente fica no mesmo catalogo,
+            // sem anunciar milhares de tools ao cliente nem transferir autoridade.
+            const cloudflareRequested = input.provider === "cloudflare" || input.providerView === "openapi";
+            const cloudflareTag = String(input.cloudflareTag ?? "").trim().toLowerCase();
+            const cloudflareOperations = cloudflareRequested
+                ? CLOUDFLARE_OPENAPI_OPERATIONS.filter((op) => (!input.cloudflareMethod || op.method === input.cloudflareMethod) &&
+                    (!cloudflareTag || op.tags.some((tag) => tag.toLowerCase() === cloudflareTag)) &&
+                    (!filter || [op.method, op.path, op.summary, ...op.tags].some((value) => value.toLowerCase().includes(filter)))) : null;
+            const cloudflareOffset = input.cloudflareOffset ?? 0;
+            const cloudflareLimit = input.cloudflareLimit ?? 40;
+            const cloudflarePage = cloudflareOperations === null ? null : {
+                provider: "cloudflare", status: "INVENTORY_ONLY",
+                totalMatched: cloudflareOperations.length,
+                offset: cloudflareOffset, limit: cloudflareLimit,
+                nextOffset: cloudflareOffset + cloudflareLimit < cloudflareOperations.length
+                    ? cloudflareOffset + cloudflareLimit : null,
+                items: cloudflareOperations.slice(cloudflareOffset, cloudflareOffset + cloudflareLimit),
+            };
             const tools = runtimeTools
                 .map(safeToolInfo)
                 .filter((tool) => includeDestructive || !tool.destructive)
@@ -238,6 +300,9 @@ export const mcpAdminTools = [
                 .filter((route) => !filter ||
                 Object.values(route).some((value) => String(value || "").toLowerCase().includes(filter)))
                 .sort((a, b) => a.id.localeCompare(b.id));
+            const remoteEquivalences = RDC_EQUIVALENCE_MATRIX
+                .filter((cap) => !filter || Object.values(cap).some((value) => String(value || "").toLowerCase().includes(filter)))
+                .sort((a, b) => a.tool.localeCompare(b.tool));
             const providerCapabilities = DELEGATED_PROVIDER_CAPABILITIES
                 .filter((cap) => !filter || Object.values(cap).some((value) => String(value || "").toLowerCase().includes(filter)))
                 .sort((a, b) => a.label.localeCompare(b.label));
@@ -260,7 +325,26 @@ export const mcpAdminTools = [
                 providerCapabilities,
                 providerCapabilityCount: DELEGATED_PROVIDER_CAPABILITIES.length,
                 providerCapabilitiesReturned: providerCapabilities.length,
+                desktopCommanderEquivalenceCount: RDC_EQUIVALENCE_MATRIX.length,
+                desktopCommanderEquivalencesReturned: remoteEquivalences.length,
+                desktopCommanderEquivalences: remoteEquivalences,
+                desktopCommanderParity: "PARTIAL_ROUTE_CAPABILITIES_ONLY_NO_CASA_REVERSE_EXEC_PROOF",
                 providerBoundary: "CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED",
+                cloudflareOpenApiCatalog: CLOUDFLARE_OPENAPI_META,
+                cloudflareOperations: cloudflarePage,
+                providerDispatch: {
+                    discover: "mcp_admin_catalog",
+                    curatedDiscovery: "mcp_admin_call(tool=provider_capabilities)",
+                    credentialsProbe: "mcp_admin_call(tool=provider_credentials_status)",
+                    authorizedRead: "mcp_admin_call(tool=provider_read)",
+                    authorizedMutation: "mcp_admin_call(tool=provider_mutate)",
+                    conflictResolverEvent: "centraldark_dependabot_reconcile",
+                    resolverOwner: "scripts/dependabot/resolve-conflicts.sh",
+                    executor: "HERMES_SHELL",
+                    privilegedAuthorization: "VERIFIED_OAUTH_OR_HUB_ADMIN_SCOPE_AND_AUDIT",
+                    remoteMcpBridge: "MCP_REMOTE_OAUTH",
+                    executionBoundary: "OPENAPI_INVENTORY_ONLY_UNLESS_ALLOWLISTED_AND_AUTHORIZED",
+                },
                 tools,
             });
         },
