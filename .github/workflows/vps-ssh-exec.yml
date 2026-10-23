@@ -24,7 +24,7 @@ on:
           - hermes
           - oauth_broker
       file:
-        description: "Arquivo do owner, necessario em dry_run ou apply"
+        description: "Arquivo(s) do owner separados por virgula; par source/dist no MCP"
         type: string
         required: false
       confirm_apply:
@@ -62,8 +62,10 @@ jobs:
           umask 077
           MODE="${CD_MODE}"
           OWNER="${CD_OWNER}"
-          FILE="${CD_FILE}"
+          FILE_INPUT="${CD_FILE}"
           CONFIRM="${CD_CONFIRM}"
+          IFS=',' read -r -a FILES <<< "$FILE_INPUT"
+          [[ "${#FILES[@]}" -le 8 ]] || { echo "FILESET_TOO_LARGE"; exit 67; }
           SSH_HOST="${VPS_HOST_LOVABLE:-}"
           SSH_USER="${VPS_USER_LOVABLE:-}"
           [[ "$MODE" == probe || "$MODE" == dry_run || "$MODE" == apply ]] || { echo "INVALID_MODE"; exit 64; }
@@ -72,13 +74,16 @@ jobs:
           [[ "$SSH_HOST" =~ ^[A-Za-z0-9][A-Za-z0-9.-]*$ && "$SSH_USER" =~ ^[a-z_][a-z0-9_-]*$ ]] || { echo "INVALID_SSH_TARGET"; exit 66; }
           [[ -n "${VPS_SSH_KEY_LOVABLE:-}" ]] || { echo "SSH_KEY_MISSING"; exit 66; }
           if [[ "$MODE" != probe ]]; then
-            [[ "$FILE" =~ ^[A-Za-z0-9_./-]+$ && "$FILE" != *..* && "$FILE" != /* ]] || { echo "INVALID_FILE"; exit 67; }
-            case "$OWNER" in
-              mcp) [[ "$FILE" == apps/modulos/mcp/* ]] ;;
-              hub_bot) [[ "$FILE" == apps/bot-telegram/* ]] ;;
-              hermes) [[ "$FILE" == apps/modulos/HERMES-CORE/* || "$FILE" == docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/* || "$FILE" == .agents/skills/centraldark-operational-method/* ]] ;;
-              oauth_broker) [[ "$FILE" == apps/modulos/oauth-broker/* ]] ;;
-            esac || { echo "OUT_OF_OWNER_SCOPE"; exit 67; }
+            [[ "${#FILES[@]}" -ge 1 ]] || { echo "FILESET_EMPTY"; exit 67; }
+            for FILE in "${FILES[@]}"; do
+              [[ "$FILE" =~ ^[A-Za-z0-9_./-]+$ && "$FILE" != *..* && "$FILE" != /* ]] || { echo "INVALID_FILE"; exit 67; }
+              case "$OWNER" in
+                mcp) [[ "$FILE" == apps/modulos/mcp/* ]] ;;
+                hub_bot) [[ "$FILE" == apps/bot-telegram/* ]] ;;
+                hermes) [[ "$FILE" == apps/modulos/HERMES-CORE/* || "$FILE" == docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/* || "$FILE" == .agents/skills/centraldark-operational-method/* ]] ;;
+                oauth_broker) [[ "$FILE" == apps/modulos/oauth-broker/* ]] ;;
+              esac || { echo "OUT_OF_OWNER_SCOPE"; exit 67; }
+            done
             [[ -f scripts/vps/main-pinned-microdeploy.sh ]] || { echo "CANONICAL_EXECUTOR_MISSING"; exit 67; }
           fi
           if [[ "$MODE" == apply ]]; then
@@ -113,7 +118,13 @@ jobs:
               echo "SSH_LIGHT_PROBE=PASS"
               exit 0
           fi
-          printf -v REMOTE_COMMAND 'bash -s -- --owner %q --source %q --file %q' "$OWNER" "$GITHUB_SHA" "$FILE"
+          printf -v REMOTE_COMMAND 'bash -s -- --owner %q --source %q' "$OWNER" "$GITHUB_SHA"
+          for FILE in "${FILES[@]}"; do
+            printf -v ESCAPED_FILE ' --file %q' "$FILE"
+            REMOTE_COMMAND+="$ESCAPED_FILE"
+            # Compor argumento explicito por arquivo, preservando as fronteiras do owner.
+          done
+          # REMOTE_COMMAND agora inclui todos os filesets validados.
           if [[ "$MODE" == dry_run ]]; then
               REMOTE_COMMAND="$REMOTE_COMMAND --dry-run"
           fi
