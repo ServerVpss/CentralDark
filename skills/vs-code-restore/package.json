@@ -1,8 +1,8 @@
 {
   "name": "centraldark-vscode-restore",
-  "displayName": "CentralDark VS Code Restore",
-  "description": "Restaura bancada e terminal existentes; mede Remote SSH pela VPN e PIDs VS Code sem criar executor paralelo.",
-  "version": "0.1.4",
+  "displayName": "CentralDark · Vibe Coding",
+  "description": "Corpo unico VS Code: bancada, SSH Casa/VPS e pareamento no registro MCP ja existente.",
+  "version": "0.1.8",
   "publisher": "centraldark",
   "private": true,
   "engines": {
@@ -52,6 +52,26 @@
       {
         "command": "centraldark.browserSurfacesCatalog",
         "title": "CentralDark: Catálogo de abas e capacidades Browser/ZENDRIVE"
+      },
+      {
+        "command": "centraldark.pairVsCode",
+        "title": "CentralDark: Parear este VS Code (SSH + MCP)"
+      },
+      {
+        "command": "centraldark.verifyVsCodePairing",
+        "title": "CentralDark: Verificar pareamento MCP"
+      },
+      {
+        "command": "centraldark.remoteTerminalPair",
+        "title": "CentralDark: Parear receptor de terminal remoto (opt-in)"
+      },
+      {
+        "command": "centraldark.remoteTerminalStatus",
+        "title": "CentralDark: Status receptor remoto e PIDs (somente leitura)"
+      },
+      {
+        "command": "centraldark.checkUpdates",
+        "title": "CentralDark: Checar atualizacao via API GitHub"
       }
     ],
     "configuration": {
@@ -71,8 +91,41 @@
           "type": "boolean",
           "default": true,
           "description": "Registra somente inicio/fim/resultado de shell integrado no LOGS-VS-CODE.log da Casa; nunca grava comandos ou saidas."
+        },
+        "centraldark.restore.remoteTerminalEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Habilita receptor privado em localhost somente apos pareamento e consentimento local."
+        },
+        "centraldark.restore.remoteTerminalPort": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 65535,
+          "default": 8719,
+          "description": "Porta HTTP em 127.0.0.1 para uso privado; nao expoe diretamente na rede."
+        },
+        "centraldark.restore.autoUpdate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ativa verificacao de releases a cada 10 minutos, com prompt antes de instalar."
+        },
+        "centraldark.restore.autoUpdateIntervalMinutes": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 5,
+          "maximum": 1440,
+          "description": "Intervalo de checagem, em minutos."
         }
       }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "centraldarkVibeCoding",
+          "name": "CentralDark · Vibe Coding",
+          "type": "webview"
+        }
+      ]
     }
   },
   "scripts": {
