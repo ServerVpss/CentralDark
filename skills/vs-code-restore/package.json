@@ -2,7 +2,7 @@
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark · Vibe Coding",
   "description": "Corpo unico VS Code: bancada, SSH Casa/VPS e pareamento no registro MCP ja existente.",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "publisher": "centraldark",
   "private": true,
   "engines": {
@@ -60,6 +60,14 @@
       {
         "command": "centraldark.verifyVsCodePairing",
         "title": "CentralDark: Verificar pareamento MCP"
+      },
+      {
+        "command": "centraldark.remoteTerminalPair",
+        "title": "CentralDark: Parear receptor de terminal remoto (opt-in)"
+      },
+      {
+        "command": "centraldark.remoteTerminalStatus",
+        "title": "CentralDark: Status receptor remoto e PIDs (somente leitura)"
       }
     ],
     "configuration": {
@@ -79,6 +87,18 @@
           "type": "boolean",
           "default": true,
           "description": "Registra somente inicio/fim/resultado de shell integrado no LOGS-VS-CODE.log da Casa; nunca grava comandos ou saidas."
+        },
+        "centraldark.restore.remoteTerminalEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Habilita receptor privado em localhost somente apos pareamento e consentimento local."
+        },
+        "centraldark.restore.remoteTerminalPort": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 65535,
+          "default": 8719,
+          "description": "Porta HTTP em 127.0.0.1 para uso privado; nao expoe diretamente na rede."
         }
       }
     },

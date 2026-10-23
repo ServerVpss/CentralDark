@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { execFile, spawn } from 'child_process';
 import { randomBytes } from 'crypto';
+import { startRemoteTerminal, configureRemoteTerminal, remoteTerminalStatus } from './remote-terminal';
 
 interface TerminalSpec {
   name: string;
@@ -49,6 +50,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid),
     vscode.commands.registerCommand('centraldark.pairVsCode', () => pairVsCode(context)),
     vscode.commands.registerCommand('centraldark.verifyVsCodePairing', () => verifyVsCodePairing(context)),
+    vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => configureRemoteTerminal(context)),
+    vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => remoteTerminalStatus(context)),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
@@ -56,6 +59,7 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
   registerTerminalTelemetry(context);
+  void startRemoteTerminal(context);
   context.subscriptions.push(vscode.window.registerWebviewViewProvider('centraldarkVibeCoding', new CentralDarkVibeViewProvider(context)));
   const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get<boolean>('onOpen', false);
   if (onOpen) {
@@ -439,7 +443,7 @@ async function mapNativeWorkspace(context: vscode.ExtensionContext): Promise<voi
 const DEVICE_TOKEN_KEY = 'centraldark.device.token';
 const DEVICE_REFRESH_KEY = 'centraldark.device.refreshToken';
 const DEVICE_ID_KEY = 'centraldark.device.id';
-const PAIRING_MODULE = 'file:///root/CentralDark/apps/modulos/mcp/src/device-pairing.js';
+const PAIRING_MODULE = 'file://<caminho-vps>';
 
 type PairingResult = {
   ok?: boolean; verified?: boolean; device_id?: string;
