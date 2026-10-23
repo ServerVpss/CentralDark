@@ -1,13 +1,23 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-REPO="${CENTRALDARK_REPO:-/root/CentralDark}"
+REPO="${CENTRALDARK_REPO:-<caminho-vps>}"
 SCRATCH="${CENTRALDARK_SCRATCH:-$REPO/_worktrees/main-pinned-runtime-fastpath}"
 LOCK="${CENTRALDARK_FASTPATH_LOCK:-/tmp/centraldark-main-pinned-fastpath.lock}"
 OWNER=""
 SOURCE=""
 DRY_RUN=0
 MCP_NEEDS_BUILD=0
+# Atualizacao coerente src+dist do mesmo MCP; sem segundo executor.
+MCP_BUILD_UNITS=(
+  "mcp-server"
+  "tools/core/mcp-admin"
+  "tools/deploy/centraldark-capabilities"
+  "tools/core/mcp-policy"
+  "tools/github/github"
+  "tools/github/github-tools"
+  "tools/github/github-write"
+)
 FILES=()
 
 while [[ $# -gt 0 ]]; do
@@ -34,7 +44,7 @@ PREFIXES=()
 case "$OWNER" in
   mcp)
     PREFIXES=("apps/modulos/mcp/")
-    TARGET_ROOT="/root/CentralDark_MCP_RUNTIME"
+    TARGET_ROOT="<caminho-vps>"
     RUNTIME_DIR="$TARGET_ROOT/apps/modulos/mcp"
     SYSTEMD_SERVICE="centraldark-native-mcp-http.service"
     EXPECTED_EXEC="$RUNTIME_DIR/dist/index.js"
@@ -56,6 +66,8 @@ esac
 allowed_file() {
   local rel="$1" p
   [[ "$rel" != /* && "$rel" != *".."* && -n "$rel" ]] || return 1
+  # Receita do MCP atualizada na MESMA transacao de codigo; nao abrir docs inteiros.
+  if [[ "$OWNER" == mcp && "$rel" == "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json" ]]; then return 0; fi
   [[ ! "$rel" =~ (^|/)(\.env|secrets?|credentials?|tokens?|sessions?)(/|$) ]] || return 1
   for p in "${PREFIXES[@]}"; do [[ "$rel" == "$p"* ]] && return 0; done
   return 1
@@ -76,6 +88,12 @@ if [[ "$OWNER" == "mcp" ]]; then
       # Novas capacidades reutilizam o mesmo executor e compilam em worktree isolada na VPS.
       apps/modulos/mcp/src/tools/github/github-tools.js|apps/modulos/mcp/dist/tools/github/github-tools.js) MCP_NEEDS_BUILD=1 ;;
       apps/modulos/mcp/src/tools/core/mcp-policy.js|apps/modulos/mcp/dist/tools/core/mcp-policy.js) MCP_NEEDS_BUILD=1 ;;
+      apps/modulos/mcp/src/mcp-server.js|apps/modulos/mcp/dist/mcp-server.js) MCP_NEEDS_BUILD=1 ;;
+      apps/modulos/mcp/src/tools/core/mcp-admin.js|apps/modulos/mcp/dist/tools/core/mcp-admin.js) MCP_NEEDS_BUILD=1 ;;
+      apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js|apps/modulos/mcp/dist/tools/deploy/centraldark-capabilities.js) MCP_NEEDS_BUILD=1 ;;
+      apps/modulos/mcp/src/tools/github/github.js|apps/modulos/mcp/dist/tools/github/github.js) MCP_NEEDS_BUILD=1 ;;
+      apps/modulos/mcp/src/tools/github/github-write.js|apps/modulos/mcp/dist/tools/github/github-write.js) MCP_NEEDS_BUILD=1 ;;
+      docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json) ;;
       *) echo "MCP_NATIVE_FILESET_NOT_APPROVED=$rel"; exit 6 ;;
     esac
   done
@@ -90,7 +108,7 @@ has_file() {
 }
 # Para atualizacao MCP, source e artefato devem ser promovidos juntos.
 if [[ "$MCP_NEEDS_BUILD" == 1 ]]; then
-  for pair in tools/github/github-tools tools/core/mcp-policy; do
+  for pair in "${MCP_BUILD_UNITS[@]}"; do
     if has_file "apps/modulos/mcp/src/$pair.js" || has_file "apps/modulos/mcp/dist/$pair.js"; then
       has_file "apps/modulos/mcp/src/$pair.js" && has_file "apps/modulos/mcp/dist/$pair.js" || {
         echo "MCP_SOURCE_DIST_PAIR_REQUIRED=$pair"; exit 8;
@@ -141,13 +159,17 @@ if [[ "$MCP_NEEDS_BUILD" == 1 ]]; then
   [[ -d "$MCP_MODULES" && -x "$MCP_TSC" ]] || { echo "MCP_BUILD_DEPS_MISSING"; exit 28; }
   [[ ! -e "$SCRATCH/apps/modulos/mcp/node_modules" ]] || { echo "SCRATCH_BUILD_DEPS_COLLISION"; exit 28; }
   ln -s "$MCP_MODULES" "$SCRATCH/apps/modulos/mcp/node_modules"
-  node --check "$SCRATCH/apps/modulos/mcp/src/tools/github/github-tools.js"
-  node --check "$SCRATCH/apps/modulos/mcp/src/tools/core/mcp-policy.js"
-  "$MCP_TSC" -p "$SCRATCH/apps/modulos/mcp/tsconfig.json" --noResolve
-  for unit in tools/github/github-tools tools/core/mcp-policy; do
+  # Compila todas as dependencias no scratch; --noResolve deixava imports sem prova.
+  for unit in "${MCP_BUILD_UNITS[@]}"; do
+    node --check "$SCRATCH/apps/modulos/mcp/src/$unit.js"
+  done
+  "$MCP_TSC" --project "$SCRATCH/apps/modulos/mcp/tsconfig.json"
+  for unit in "${MCP_BUILD_UNITS[@]}"; do
     node --check "$SCRATCH/apps/modulos/mcp/dist/$unit.js"
   done
-  node --test "$SCRATCH/apps/modulos/mcp/tests/admin-ssh-microdeploy.test.mjs"
+  node --test \
+    "$SCRATCH/apps/modulos/mcp/tests/admin-ssh-microdeploy.test.mjs" \
+    "$SCRATCH/apps/modulos/mcp/tests/centraldark-capabilities.test.mjs"
   echo "MCP_BUILD_VPS_TEST=PASS"
 fi
 
@@ -170,7 +192,7 @@ restart_runtime() {
     systemctl is-active --quiet "$SYSTEMD_SERVICE"
   else
     local app
-    for app in "${APPS[@]}"; do PM2_HOME=/root/.pm2 pm2 restart "$app" --update-env >/dev/null; done
+    for app in "${APPS[@]}"; do PM2_HOME=<caminho-vps> pm2 restart "$app" --update-env >/dev/null; done
   fi
 }
 wait_runtime() {
@@ -181,7 +203,7 @@ wait_runtime() {
     else
       state=1
       for app in "${APPS[@]}"; do
-        PM2_HOME=/root/.pm2 pm2 jlist | python3 -c 'import json,sys; a=sys.argv[1]; x=json.load(sys.stdin); sys.exit(0 if any(i.get("name")==a and i.get("pm2_env",{}).get("status")=="online" for i in x) else 1)' "$app" || state=0
+        PM2_HOME=<caminho-vps> pm2 jlist | python3 -c 'import json,sys; a=sys.argv[1]; x=json.load(sys.stdin); sys.exit(0 if any(i.get("name")==a and i.get("pm2_env",{}).get("status")=="online" for i in x) else 1)' "$app" || state=0
       done
       [[ "$state" == 1 ]] && { [[ -z "$HEALTH" ]] || curl -fsS --max-time 3 "$HEALTH" >/dev/null 2>&1; } && return 0
     fi
@@ -200,10 +222,10 @@ else
 fi
 
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
-BACKUP="/root/CentralDark-Recovery/main-pinned/$OWNER/$STAMP"
+BACKUP="<caminho-vps>$OWNER/$STAMP"
 RECEIPT="$REPO/logs/receipts/main-pinned-$OWNER-$STAMP.json"
 mkdir -p "$(dirname "$RECEIPT")"
-TMP_MERGE="$(mktemp -d "${TMPDIR:-/root/.hermes/cache/scratch}/main-pinned-merge.XXXXXX")"
+TMP_MERGE="$(mktemp -d "${TMPDIR:-<caminho-vps>}/main-pinned-merge.XXXXXX")"
 promoted=0
 
 rollback() {

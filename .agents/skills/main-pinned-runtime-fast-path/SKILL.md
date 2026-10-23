@@ -17,6 +17,16 @@ No dispatcher MCP, `canonicalRecipeFirstPreflight` deve ser executada antes dos 
 
 A melhoria relatada do Hermes em `scripts/vps/hermes-self-evolution-current-model.sh` é evolução **do mesmo script**, com donor fixado, `.venv` e receipt por VPS; o commit local `2d3972c` ainda exige readback GitHub/PR, teste no alvo e validação runtime antes de receber PASS global.
 
+## Handoff executável para Hermes — promoção P0 (23/10/2026)
+
+Um **mesmo** executor: `centraldark_deploy_micro_fallback` pelo dispatcher MCP CentralDark. Receita antes do feito: `docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json`, propriedade `global_recipe_priority.executable_handoff`. Esta propriedade define owner, fileset exato, build na VPS, testes, travas e sinais de PASS; não introduz outra skill nem runner.
+
+O script atual `scripts/vps/main-pinned-microdeploy.sh` foi ampliado **no mesmo arquivo**: aprova apenas os 7 pares `src/dist` dos módulos efetivamente alterados, mais a receita JSON; exige pares completos, compilação na scratch usando node_modules já existente, teste da tool e do dispatcher antes de promover. Preserva lock, checkout com deltas de terceiros, health, rollback e receipt.
+
+**Operação em sequência, somente se autorização/tool permitir:** recuperar SHA da `main` → conferir o fingerprint/receipt do mesmo owner → executar dry-run do MCP nativo (não workflow hospedado) → conferir output e risco → aplicar pelo mesmo executor autorizado → medir catálogo e receita carregados → registrar receipt na mesma receita e NEXT_CURSOR. Se a plataforma bloquear o microdeploy, **não** contornar via execute_command, Hermes ou SSH alternativo: sinalizar BLOCKED e preservar a produção.
+
+**Prova exigida para verde:** `mcp_admin_catalog` enxerga a ferramenta admin; `centraldark_deploy_recipe_status.primaryPath=mcp_centraldark_native_vps`; gates Recipe-First P0 observados; health e SHA do runtime provados. Commit/main/dry-run isolados não bastam.
+
 ## Quando usar
 
 Use quando:
