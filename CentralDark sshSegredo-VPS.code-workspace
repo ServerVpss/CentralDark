@@ -52,6 +52,9 @@
     "remote.restoreForwardedPorts": false,
     "chat.byokUtilityModelDefault": "mainAgent",
     "powershell.cwd": "CentralDark (raiz)",
+    "files.readonlyInclude": {
+      "{**/.c4z/.extsrcs/*.PROTSYM.cbl,**/.c4z/.extsrcs/*.PROTSYM.listing}": true,
+    },
   },
   "extensions": {
     "recommendations": [
