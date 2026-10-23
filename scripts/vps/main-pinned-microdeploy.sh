@@ -7,6 +7,7 @@ LOCK="${CENTRALDARK_FASTPATH_LOCK:-/tmp/centraldark-main-pinned-fastpath.lock}"
 OWNER=""
 SOURCE=""
 DRY_RUN=0
+MCP_NEEDS_BUILD=0
 FILES=()
 
 while [[ $# -gt 0 ]]; do
@@ -72,8 +73,29 @@ if [[ "$OWNER" == "mcp" ]]; then
       # Promovido 2026-10-23: espelha o resultado da tool em structuredContent (leitura não chega vazia).
       # Módulo puro, sem imports; contrato medido em tests/tool-result-envelope.test.mjs (8/8).
       apps/modulos/mcp/src/tool-result-envelope.js|apps/modulos/mcp/dist/tool-result-envelope.js) ;;
+      # Novas capacidades reutilizam o mesmo executor e compilam em worktree isolada na VPS.
+      apps/modulos/mcp/src/tools/github/github-tools.js|apps/modulos/mcp/dist/tools/github/github-tools.js) MCP_NEEDS_BUILD=1 ;;
+      apps/modulos/mcp/src/tools/core/mcp-policy.js|apps/modulos/mcp/dist/tools/core/mcp-policy.js) MCP_NEEDS_BUILD=1 ;;
       *) echo "MCP_NATIVE_FILESET_NOT_APPROVED=$rel"; exit 6 ;;
     esac
+  done
+fi
+
+has_file() {
+  local match="$1" rel
+  for rel in "${FILES[@]}"; do
+    [[ "$rel" == "$match" ]] && return 0
+  done
+  return 1
+}
+# Para atualizacao MCP, source e artefato devem ser promovidos juntos.
+if [[ "$MCP_NEEDS_BUILD" == 1 ]]; then
+  for pair in tools/github/github-tools tools/core/mcp-policy; do
+    if has_file "apps/modulos/mcp/src/$pair.js" || has_file "apps/modulos/mcp/dist/$pair.js"; then
+      has_file "apps/modulos/mcp/src/$pair.js" && has_file "apps/modulos/mcp/dist/$pair.js" || {
+        echo "MCP_SOURCE_DIST_PAIR_REQUIRED=$pair"; exit 8;
+      }
+    fi
   done
 fi
 
@@ -87,15 +109,47 @@ SOURCE="${SOURCE:-$MAIN_SHA}"
 [[ "$SOURCE" =~ ^[0-9a-f]{40}$ ]] || { echo "SOURCE_SHA_INVALID"; exit 22; }
 git merge-base --is-ancestor "$SOURCE" "$MAIN_SHA" || { echo "SOURCE_NOT_IN_MAIN"; exit 23; }
 
+# Trava ANTES de qualquer reset/clean. Nao apagar paths nao registrados como worktree.
+[[ "$SCRATCH" == /* && "$REPO" == /* && "$TARGET_ROOT" == /* ]] || { echo "SCRATCH_ABSOLUTE_PATH_REQUIRED"; exit 24; }
+[[ ! -L "$SCRATCH" ]] || { echo "SCRATCH_SYMLINK_BLOCKED"; exit 24; }
+REPO_REAL="$(readlink -f "$REPO")"
+TARGET_REAL="$(readlink -f "$TARGET_ROOT")"
+SCRATCH_REAL="$(readlink -m "$SCRATCH")"
+[[ -n "$REPO_REAL" && -n "$TARGET_REAL" && "$SCRATCH_REAL" != "/" ]] || { echo "SCRATCH_REALPATH_INVALID"; exit 24; }
+[[ "$SCRATCH_REAL" == "$SCRATCH" ]] || { echo "SCRATCH_PATH_MISMATCH"; exit 24; }
+for protected in "$REPO_REAL" "$TARGET_REAL"; do
+  [[ "$SCRATCH_REAL" != "$protected" && "$protected" != "$SCRATCH_REAL"/* ]] || {
+    echo "SCRATCH_TOUCHES_PROTECTED_ROOT"; exit 25;
+  }
+done
 mkdir -p "$(dirname "$SCRATCH")"
-if ! git worktree list --porcelain | grep -F "worktree $SCRATCH" >/dev/null 2>&1; then
-  rm -rf "$SCRATCH"
+if git worktree list --porcelain | grep -Fx "worktree $SCRATCH" >/dev/null 2>&1; then
+  [[ -d "$SCRATCH" ]] || { echo "REGISTERED_SCRATCH_MISSING"; exit 26; }
+else
+  # Diretório nao registrado pode conter dados de outro owner: nunca rm -rf.
+  [[ ! -e "$SCRATCH" ]] || { echo "UNREGISTERED_SCRATCH_KEEP_ACTIVE"; exit 26; }
   git worktree add --detach "$SCRATCH" "$SOURCE" >/dev/null
 fi
-[[ "$(readlink -f "$SCRATCH")" == "$SCRATCH" ]] || { echo "SCRATCH_PATH_MISMATCH"; exit 24; }
-[[ "$(readlink -f "$SCRATCH")" != "$(readlink -f "$REPO")" ]] || { echo "RUNTIME_IS_SCRATCH"; exit 25; }
+[[ "$(readlink -f "$SCRATCH")" == "$SCRATCH_REAL" ]] || { echo "SCRATCH_REALPATH_CHANGED"; exit 27; }
 git -C "$SCRATCH" reset --hard "$SOURCE" >/dev/null
 git -C "$SCRATCH" clean -fdx >/dev/null
+
+# BUILD NA VPS: somente worktree versionada. Nunca npm install ou build no runtime dirty.
+if [[ "$MCP_NEEDS_BUILD" == 1 ]]; then
+  MCP_MODULES="$REPO/apps/modulos/mcp/node_modules"
+  MCP_TSC="$MCP_MODULES/.bin/tsc"
+  [[ -d "$MCP_MODULES" && -x "$MCP_TSC" ]] || { echo "MCP_BUILD_DEPS_MISSING"; exit 28; }
+  [[ ! -e "$SCRATCH/apps/modulos/mcp/node_modules" ]] || { echo "SCRATCH_BUILD_DEPS_COLLISION"; exit 28; }
+  ln -s "$MCP_MODULES" "$SCRATCH/apps/modulos/mcp/node_modules"
+  node --check "$SCRATCH/apps/modulos/mcp/src/tools/github/github-tools.js"
+  node --check "$SCRATCH/apps/modulos/mcp/src/tools/core/mcp-policy.js"
+  "$MCP_TSC" -p "$SCRATCH/apps/modulos/mcp/tsconfig.json" --noResolve
+  for unit in tools/github/github-tools tools/core/mcp-policy; do
+    node --check "$SCRATCH/apps/modulos/mcp/dist/$unit.js"
+  done
+  node --test "$SCRATCH/apps/modulos/mcp/tests/admin-ssh-microdeploy.test.mjs"
+  echo "MCP_BUILD_VPS_TEST=PASS"
+fi
 
 mcp_tool_count() {
   curl -fsS --max-time 3 "$TOOLS" | python3 -c 'import json,sys; x=json.load(sys.stdin); print(len(x.get("tools",x) if isinstance(x,dict) else x))'
@@ -214,15 +268,19 @@ if [[ "$DRY_RUN" == 1 ]]; then
   exit 0
 fi
 
+# Fase 1: snapshot COMPLETO. Nenhum arquivo do runtime foi mutado ainda.
 mkdir -p "$BACKUP"
 for rel in "${FILES[@]}"; do
-  TARGET_FILE="$TARGET_ROOT/$rel"
   mkdir -p "$BACKUP/$(dirname "$rel")"
-  cp -a "$TARGET_FILE" "$BACKUP/$rel"
+  cp -a "$TARGET_ROOT/$rel" "$BACKUP/$rel"
+done
+# Fase 2: ativar rollback ANTES da primeira cópia; falha parcial restaura todos.
+promoted=1
+for rel in "${FILES[@]}"; do
+  TARGET_FILE="$TARGET_ROOT/$rel"
   cp -a "$SCRATCH/$rel" "$TARGET_FILE"
   cmp -s "$SCRATCH/$rel" "$TARGET_FILE" || { echo "PROMOTION_HASH_MISMATCH=$rel"; exit 41; }
 done
-promoted=1
 restart_runtime
 wait_runtime || { echo "RUNTIME_NOT_HEALTHY_AFTER_RESTART"; exit 42; }
 
@@ -232,10 +290,17 @@ if [[ "$OWNER" == "mcp" ]]; then
   POST_PID="$(systemctl show "$SYSTEMD_SERVICE" --no-pager -p MainPID --value)"
   curl -fsS --max-time 3 "$HEARTBEAT" | python3 -c 'import json,sys; x=json.load(sys.stdin); assert x.get("ok") is True and "operational" in x' || { echo "MCP_NATIVE_HEARTBEAT_FAILED"; exit 43; }
   POST_TOOLS="$(mcp_tool_count)"
-  [[ "$POST_TOOLS" == "$PRE_TOOLS" ]] || { echo "MCP_NATIVE_TOOL_COUNT_CHANGED=$PRE_TOOLS:$POST_TOOLS"; exit 44; }
+  if [[ "$POST_TOOLS" != "$PRE_TOOLS" ]]; then
+    # Nova tool aprovada pode acrescentar UM item; queda ou salto fora do escopo = rollback.
+    if [[ "$MCP_NEEDS_BUILD" == 1 ]] && (( POST_TOOLS == PRE_TOOLS + 1 )); then
+      echo "MCP_TOOL_COUNT_EXTENDED_BY_ONE_REQUIRES_ADMIN_CATALOG_READBACK"
+    else
+      echo "MCP_NATIVE_TOOL_COUNT_CHANGED=$PRE_TOOLS:$POST_TOOLS"; exit 44
+    fi
+  fi
 fi
 
-SOURCE="$SOURCE" MAIN_SHA="$MAIN_SHA" OWNER="$OWNER" BACKUP="$BACKUP" RECEIPT="$RECEIPT" TARGET_ROOT="$TARGET_ROOT" PRE_PID="$PRE_PID" POST_PID="$POST_PID" PRE_TOOLS="$PRE_TOOLS" POST_TOOLS="$POST_TOOLS" python3 - <<'PY'
+SOURCE="$SOURCE" MAIN_SHA="$MAIN_SHA" OWNER="$OWNER" BACKUP="$BACKUP" RECEIPT="$RECEIPT" TARGET_ROOT="$TARGET_ROOT" PRE_PID="$PRE_PID" POST_PID="$POST_PID" PRE_TOOLS="$PRE_TOOLS" POST_TOOLS="$POST_TOOLS" MCP_NEEDS_BUILD="$MCP_NEEDS_BUILD" python3 - <<'PY'
 import json, os
 payload = {
   "schema": "centraldark.main-pinned-runtime-fast-path.receipt.v2",
@@ -243,7 +308,9 @@ payload = {
   "owner": os.environ["OWNER"], "target_root": os.environ["TARGET_ROOT"],
   "backup": os.environ["BACKUP"], "pid_before": os.environ["PRE_PID"] or None,
   "pid_after": os.environ["POST_PID"] or None, "tool_count_before": os.environ["PRE_TOOLS"] or None,
-  "tool_count_after": os.environ["POST_TOOLS"] or None, "result": "PASS", "secrets_exposed": False,
+  "tool_count_after": os.environ["POST_TOOLS"] or None,
+  "build_vps": os.environ.get("MCP_NEEDS_BUILD") == "1",
+  "result": "PASS", "secrets_exposed": False,
 }
 with open(os.environ["RECEIPT"], "w", encoding="utf-8") as f: json.dump(payload, f, sort_keys=True); f.write("\n")
 PY

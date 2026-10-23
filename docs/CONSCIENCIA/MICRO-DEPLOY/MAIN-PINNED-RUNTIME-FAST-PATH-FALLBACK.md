@@ -163,6 +163,23 @@ CHANGED_FINGERPRINT
 → REVALIDATE_AFFECTED_CONE_ONLY
 → DELTA_NOVO
 
+## Evolução da receita sem novas estruturas — 2026-10-23
+
+**Delta do CHEFE:** corrigir a receita e o script atuais antes de pensar em criar ferramenta, runner, processo ou arquivo paralelo. Canonical owners preservados: `scripts/vps/main-pinned-microdeploy.sh`, este JSON/YAML, `.agents/skills/main-pinned-runtime-fast-path/SKILL.md` e o transporte existente `.github/workflows/vps-ssh-exec.yml`.
+
+**Aprendizados comprovados no código anterior:** havia `rm -rf "$SCRATCH"` antes de validar realpath/registro; em cópia parcial, `promoted=1` só era ativado após copiar todos os arquivos; fonte `src/tools/github/github-tools.js` avançou, mas `dist` ainda estava antigo. Estes são gaps materiais, não motivos para um novo executor.
+
+**Correção no mesmo script:**
+1. Validar realpaths e roots de produção **antes** do primeiro reset/clean; scratch existente não registrado → `KEEP_ACTIVE`, não apagar.
+2. Para ferramentas MCP, exigir par `src + dist` no fileset e compilar `tsc` em worktree limpa, usando dependências **já presentes na VPS**, sem `npm install` no runtime. Testar em scratch antes de qualquer cópia.
+3. Fazer backup integral de todos os arquivos antes de qualquer promoção e ligar rollback **antes** da primeira cópia. Restarts somente no owner causal.
+4. Preservar count/catálogo: crescimento de uma ferramenta exige readback posterior por `mcp_admin_catalog`; **commit, teste e contagem não equivalem à prova runtime**. Rollback para redução/incompatibilidade.
+5. SSH apenas como transporte autorizado: workflow existente aceita vários `--file` via string separada por vírgulas, sem comando shell arbitrário e com fingerprint de host verificado.
+
+**Reuso/receipts:** commit `43baf2b03c1ea9fd8fc01b25652a175f48b2f22a` registra `admin_ssh_microdeploy` na fonte; commit `715be9c7826612580a902f041d1b15264701c6c7` cobre regressões; run `39912949599` foi bloqueado por faturamento **antes** de executar SSH. O runtime ainda expôs 141 tools e não a nova, logo `DEPLOY_STATE=PENDING`. Os três runners offline removidos continuam apenas como inventário histórico. Não reconstruir CI pesado.
+
+**NEXT_CURSOR:** testar sintaxe, validar testes do código no SHA exato, dry-run do executor na worktree segura, promover somente owner `mcp` quando a rota permitir, verificar `mcp_admin_catalog(filter=admin_ssh_microdeploy)`, `mcp_policy_summary`, health, efeito e receipt. Se não houver prova de runtime, classificar `PARTIAL`; não apagar worktrees de terceiros nem reexecutar descobertas para mesmo fingerprint.
+
 ## Nome canônico
 
 MAIN-PINNED RUNTIME FAST-PATH
