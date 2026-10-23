@@ -1,11 +1,9 @@
 name: 🧨 CentralDark Run All — botão único VPS
 
+# CI pesado sob demanda: pausado automatico por ordem do CHEFE (2026-10-23).
+# Preserva jobs, verificacoes de seguranca e acionamento manual.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - .github/workflows/centraldark-run-all.yml
 
 permissions:
   actions: write
