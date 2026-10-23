@@ -51,6 +51,15 @@ No modo normal, executar somente teste aplicável ao owner. CodeQL completo, Tri
 - `SSH_TRANSPORT_PASS=UNKNOWN`, `DEPLOY_PASS=UNKNOWN`, `PRODUCTION_MUTATION=NONE`.
 - NEXT_CURSOR: recuperar habilitação de GitHub-hosted billing **ou** executar pela rota direta autorizada do MCP CentralDark, sem runner duplicado; realizar `probe` e `dry_run` reais antes de permitir `apply`.
 
+## Controle administrativo do microdeploy SSH — 2026-10-23
+
+- Capacidade versionada: `admin_ssh_microdeploy` integrada ao catálogo MCP CentralDark pela coleção já existente `githubTools`; modos `status`, `probe`, `dry_run`. A promoção real por `apply` não é liberada nessa entrada de baixa fricção; continua sujeita ao fluxo explícito do workflow SSH.
+- Sessão: `admin` + OAuth/Hub verificado + ator/correlation ID permitem reutilização de autorização no dispatcher `mcp_admin_call`. Já existe lógica desse contrato em `src/lib/admin-guard.js`; atualizou-se `mcp-policy.js` para não anunciar confirmações desnecessárias. Chamada legada sem proveniência verificada continua exigindo confirmação. Auditoria e proibição de aprovações sintetizadas por agentes permanecem.
+- Runners: a consulta GitHub de 23/10/2026 listou somente `centraldark-vps-1` online e `centraldark-casa-1` offline. `vps-2/vps-3/vps-4` não estavam mais cadastrados. Não inferir remoção de instalação local nem atribuir essa exclusão a commit.
+- SSH: workflow `.github/workflows/vps-ssh-exec.yml` publicado no SHA `9dc4750d70f4c9a244e034bb1281383cebec71bf`. O disparo `probe` do run `39912949599` foi bloqueado **antes de entrar no runner** por cobrança/limite GitHub-hosted (`runner_id=0`, `steps=[]`); YAML e bash syntax PASS; daemon SSH VPS ativo; SSH fim a fim e deploy real seguem `UNKNOWN`.
+- Estado: `ADMIN_TOOL_COMMITTED_NOT_DEPLOYED`; `SSH_LIVE_PROOF=UNKNOWN`; `PRODUCTION_MUTATION=NONE`.
+- NEXT_CURSOR: testes de schema e permissão no commit exato; promover MCP com método canônico sem reset de checkout com drift; medir catálogo real pelo `mcp_admin_catalog(filter=admin_ssh_microdeploy)`; validar `status/probe` depois de resolver bloqueio financeiro ou medir transporte pela rota direta autorizada. Não declarar LIVE apenas por commit.
+
 ## Fallback oficial — MAIN-PINNED RUNTIME FAST-PATH
 
 Quando o deploy canônico estiver `FAIL` ou `BLOCKED` antes da promoção, usar a receita já provada:
