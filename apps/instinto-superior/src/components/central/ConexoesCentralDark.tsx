@@ -183,6 +183,40 @@ export function ConexoesCentralDark() {
         })}
       </div>
 
+      <section className="panel mt-6 p-5" aria-label="Integrações GitHub VPS Google Drive e Cofre">
+        <p className="font-mono text-[10px] uppercase text-neon-blue">Inventário seguro · 23/10/2026</p>
+        <h4 className="mt-2 font-semibold">GitHub · VPS · Google Drive · Cofre</h4>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Acessos verificados pelos conectores; o registro não equivale a sincronização automática.
+          Cofre permanece na VPS, sem exibir credenciais, baixar ou publicar arquivos.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <a className="rounded-lg border border-border bg-muted/20 p-4 hover:border-neon-blue" href="https://github.com/ServerVpss/CentralDark" target="_blank" rel="noopener noreferrer">
+            <strong className="block text-sm">GitHub</strong>
+            <span className="mt-2 block text-xs text-muted-foreground">Conta segredounlock · acesso verificado em 23/10</span>
+            <span className="mt-2 block text-[11px] text-neon-blue">Abrir repositório ↗</span>
+          </a>
+          <div className="rounded-lg border border-border bg-muted/20 p-4">
+            <strong className="block text-sm">VPS CentralDark</strong>
+            <span className="mt-2 block text-xs text-muted-foreground">MCP administrativo · leitura comprovada em 23/10</span>
+            <span className="mt-2 block text-[11px] text-gold">Estado atual: verificar no runtime</span>
+          </div>
+          <a className="rounded-lg border border-border bg-muted/20 p-4 hover:border-neon-blue" href="https://drive.google.com/drive/folders/1eVFHzLZxsDmfjy1yL5-rbD4gO85B-7Uw" target="_blank" rel="noopener noreferrer">
+            <strong className="block text-sm">Google Drive</strong>
+            <span className="mt-2 block text-xs text-muted-foreground">Pasta CENTRALDARK · acesso verificado em 23/10</span>
+            <span className="mt-2 block text-[11px] text-neon-blue">Abrir pasta ↗</span>
+          </a>
+          <div className="rounded-lg border border-border bg-muted/20 p-4">
+            <strong className="block text-sm">Cofre da VPS</strong>
+            <span className="mt-2 block break-words text-xs text-muted-foreground">Vault-Cofre-CentralDark-20260930T105330Z.tar.gz</span>
+            <span className="mt-2 block text-[11px] text-gold">Localizado · não montado · segredos protegidos</span>
+          </div>
+        </div>
+        <p className="mt-3 text-[11px] text-muted-foreground">
+          Fonte: <a className="underline" href="https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/04-MCP-E-CONECTORES/VAULT-VPS-GITHUB-DRIVE-20261023.md" target="_blank" rel="noopener noreferrer">catálogo canônico na main</a> · snapshot 23/10/2026 · UNKNOWN_IS_NOT_PASS
+        </p>
+      </section>
+
       <div className="mt-6 grid gap-4 lg:grid-cols-2" aria-label="Modos de conexão GitHub">
         <article className="panel p-5">
           <p className="font-mono text-[10px] uppercase text-neon-blue">GitHub · OAuth App</p>
