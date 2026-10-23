@@ -22,7 +22,7 @@ function safeTraceValue(value, maxLength = 180) {
   const text = value.trim();
   if (!text || text.length > maxLength || /[\u0000-\u001f\u007f]/.test(text)) return "UNKNOWN";
   // Trace identifiers are never a channel for credentials or private keys.
-  if (/bearer\\s+|-----BEGIN|api[_-]?key\\s*[=:]|token\\s*[=:]|password\\s*[=:]/i.test(text)) return "UNKNOWN";
+  if (/bearer\s+|-----BEGIN|api[_-]?key\s*[=:]|token\s*[=:]|password\s*[=:]/i.test(text)) return "UNKNOWN";
   return text;
 }
 
