@@ -1546,3 +1546,13 @@ Conteúdo: Resumo das evidências coletidas durante a missão:
    - Sincronizar VPS com main branch (3 commits atrás)
    - Corrigir PM2 SyntaxError
    - Testar /admin/api/tools com sessão admin válida
+
+### [2026-10-22T21:44] 🍒 ZENDRIVE para todos — recuperar owner, não inventar memória
+- **Data:** 2026-10-22
+- **Tags:** centraldark, zendrive, todos-agentes, memoria, circuito, owner, pr1842, no-falso-verde
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-21
+- **Promovida:** sim
+
+Conteúdo: REGRA DO CHEFE 22/10/2026: em missão pertinente sobre Casa↔VPS/VS Code Remote-SSH/Tailscale/MCP, todo agente consulta LEIA-ME-IA.md e docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md (inventário 31 RDC, PR #1842 já merged), confirma o runtime e registra ACK+receipt. docs/CONSCIENCIA/APRENDIZADOS.md item 219 guarda a lição. Não confundir fonte main com instalação/consumo; consumer sem readback = UNKNOWN. Decisão atual: sem dependência de Desktop Commander de terceiros (item 216); priorizar MCP CentralDark nativo, SSH/Tailscale e Hermes/executor autorizado. Um owner, sem novos sistemas e sem falso verde.

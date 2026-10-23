@@ -17,22 +17,22 @@ const ARCHITECTURE_STRUCTURE = {
     ],
   },
   deliverables: [
-    { id: 1, icon: "📖", title: "RULES.md", status: "✅ COMPLETO", file: "K:\\docs\\CONSCIENCIA\\" },
-    { id: 2, icon: "📐", title: "Diagrama", status: "✅ COMPLETO", file: "7 camadas + 20 módulos" },
-    { id: 3, icon: "📦", title: "Inventário", status: "✅ COMPLETO", file: "175 capacidades" },
-    { id: 4, icon: "🪟", title: "Windows", status: "✅ COMPLETO", file: "42% mapeado" },
-    { id: 5, icon: "📁", title: "HTMLs", status: "✅ COMPLETO", file: "2.4 MB" },
-    { id: 6, icon: "💻", title: "VS Code", status: "✅ COMPLETO", file: "Rules wired" },
-    { id: 7, icon: "🔗", title: "Cockpit", status: "✅ COMPLETO", file: "7 abas" },
-    { id: 8, icon: "🔀", title: "Correlação", status: "✅ COMPLETO", file: "3 REGRAS" },
-    { id: 9, icon: "🎯", title: "FIXED_POINT", status: "✅ ATINGIDO", file: "μ(k)==μ(k+1)" },
+    { id: 1, icon: "📖", title: "RULES.md", status: "📋 HISTÓRICO", file: "K:\\docs\\CONSCIENCIA\\" },
+    { id: 2, icon: "📐", title: "Diagrama", status: "📋 HISTÓRICO", file: "7 camadas + 20 módulos" },
+    { id: 3, icon: "📦", title: "Inventário", status: "📋 HISTÓRICO", file: "175 capacidades" },
+    { id: 4, icon: "🪟", title: "Windows", status: "📋 HISTÓRICO", file: "42% mapeado" },
+    { id: 5, icon: "📁", title: "HTMLs", status: "📋 HISTÓRICO", file: "2.4 MB" },
+    { id: 6, icon: "💻", title: "VS Code", status: "📋 HISTÓRICO", file: "Rules wired" },
+    { id: 7, icon: "🔗", title: "Cockpit", status: "📋 HISTÓRICO", file: "7 abas" },
+    { id: 8, icon: "🔀", title: "Correlação", status: "📋 HISTÓRICO", file: "3 REGRAS" },
+    { id: 9, icon: "🎯", title: "FIXED_POINT", status: "📋 HISTÓRICO", file: "μ(k)==μ(k+1)" },
   ],
   systems: [
-    { name: "CASA", icon: "🏠", status: "✅ Operacional", details: "K:\\apps\\instinto-superior" },
-    { name: "FORJA", icon: "🔧", status: "✅ Mapeada", details: "20 módulos + 175 capacidades" },
-    { name: "HERMES", icon: "🧠", status: "✅ Orquestrador", details: "SOL_EXECUTORA ativo" },
-    { name: "RULES", icon: "📜", status: "✅ Integradas", details: "3/3 canônicas" },
-    { name: "VPS", icon: "🖥️", status: "✅ Sinc. 4-POINT", details: "Lovable ↔ GitHub ↔ VPS ↔ Cérebro" },
+    { name: "CASA", icon: "🏠", status: "🟡 NÃO REMEDIDO", details: "K:\\apps\\instinto-superior" },
+    { name: "FORJA", icon: "🔧", status: "📋 INVENTÁRIO", details: "20 módulos + 175 capacidades" },
+    { name: "HERMES", icon: "🧠", status: "🟡 NÃO REMEDIDO", details: "SOL_EXECUTORA ativo" },
+    { name: "RULES", icon: "📜", status: "📋 FONTE", details: "3/3 canônicas" },
+    { name: "VPS", icon: "🖥️", status: "🟡 NÃO REMEDIDO", details: "Lovable ↔ GitHub ↔ VPS ↔ Cérebro" },
   ],
 };
 
@@ -47,7 +47,7 @@ export function ArchitectureVisualization() {
           <span className="text-4xl">🪬</span>
           <div>
             <h1 className="text-2xl font-bold">COCKPIT CENTRAL — ARQUITETURA VIVA</h1>
-            <p className="text-sm text-muted-foreground">Estrutura completa integrada • 100% FIXED_POINT</p>
+            <p className="text-sm text-muted-foreground">Topologia histórica • FIXED_POINT atual não medido</p>
           </div>
         </div>
       </div>
@@ -70,20 +70,20 @@ export function ArchitectureVisualization() {
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
           <Layers className="w-5 h-5" />
-          <h2 className="font-semibold text-lg">9️⃣ Deliverables — FIXED_POINT (9/9 = 100%)</h2>
+          <h2 className="font-semibold text-lg">9️⃣ Deliverables — inventário histórico</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {ARCHITECTURE_STRUCTURE.deliverables.map((d) => (
             <div
               key={d.id}
               onClick={() => setExpandedDeliverable(expandedDeliverable === d.id ? null : d.id)}
-              className="rounded-lg border border-green-500/30 bg-green-50/5 p-4 cursor-pointer hover:bg-green-50/10 transition"
+              className="rounded-lg border border-border/60 bg-background/40 p-4 cursor-pointer hover:bg-muted/30 transition"
             >
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-2xl">{d.icon}</span>
                 <div className="flex-1">
                   <div className="font-semibold text-sm">#{d.id} {d.title}</div>
-                  <div className="text-xs text-green-600">{d.status}</div>
+                  <div className="text-xs text-amber-500">{d.status}</div>
                 </div>
               </div>
               {expandedDeliverable === d.id && (
@@ -96,7 +96,7 @@ export function ArchitectureVisualization() {
         </div>
         <div className="mt-4 text-center">
           <span className="inline-flex items-center rounded-full px-4 py-2 bg-green-600/10 text-green-700 text-sm font-semibold">
-            ✅ Convergência: 9/9 COMPLETOS = 100%
+            🟡 Histórico: 9 itens · estado atual UNKNOWN
           </span>
         </div>
       </Card>
@@ -118,7 +118,7 @@ export function ArchitectureVisualization() {
                     <div className="text-sm text-muted-foreground">{sys.details}</div>
                   </div>
                 </div>
-                <div className="text-sm font-semibold text-green-600">{sys.status}</div>
+                <div className="text-sm font-semibold text-amber-500">{sys.status}</div>
               </div>
             </div>
           ))}
@@ -158,7 +158,7 @@ export function ArchitectureVisualization() {
           ].map((item) => (
             <div key={item.label} className="text-center">
               <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
-              <div className="font-mono text-sm font-semibold text-green-600">{item.value}</div>
+              <div className="font-mono text-sm font-semibold text-amber-500">{item.value}</div>
             </div>
           ))}
         </div>
@@ -169,7 +169,7 @@ export function ArchitectureVisualization() {
         <h2 className="font-semibold text-lg mb-4">📈 Métricas Finais</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
           {[
-            { metric: "Deliverables", value: "9/9", color: "text-green-600" },
+            { metric: "Deliverables", value: "9/9", color: "text-amber-500" },
             { metric: "Build", value: "1.34s", color: "text-blue-600" },
             { metric: "REGRAS", value: "3/3", color: "text-purple-600" },
             { metric: "Capacidades", value: "175/175", color: "text-orange-600" },
