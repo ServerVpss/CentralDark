@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m unittest tests.test_verify_recibo_telegram_gabarito -v
+          python3 -m unittest discover -s tests -p 'test_verify_recibo_telegram_gabarito.py' -v
 
       - name: 🔍 Select changed receipt-like markdown files
         id: changed
