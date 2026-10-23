@@ -15,8 +15,10 @@ const TAG = 'centraldark-vscode-v';
 let inProgress = false;
 
 function args(route: Route) {
+  const file = vscode.workspace.getConfiguration('remote.SSH').get<string>('configFile');
+  const configArgs = file && fs.existsSync(file) ? ['-F', file] : [];
   return ['-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=8',
-    '-o','NumberOfPasswordPrompts=0',...route.options,route.alias];
+    '-o','NumberOfPasswordPrompts=0',...configArgs,...route.options,route.alias];
 }
 function semver(a:string,b:string):number {
   const aa=a.split('.').map(Number),bb=b.split('.').map(Number);
@@ -111,7 +113,7 @@ export async function checkVsCodeUpdates(context:vscode.ExtensionContext,
       const file=path.join(storage,found.filename);
       const required=found.asset.digest.slice(7).toLowerCase();
       const cached=fs.existsSync(file)?fs.readFileSync(file):null;
-      let buffer=cached&&cached.length===found.asset.size&&
+      let buffer: Buffer | null=cached&&cached.length===found.asset.size&&
         createHash('sha256').update(cached).digest('hex')===required?cached:null;
       if(!buffer){
         buffer=await sshRead(ssh,route,['gh','release','download',

@@ -135,11 +135,24 @@ const VPS_ROUTES = [
 ] as const;
 
 function sshExecutable(): string {
+  // Usar preferencialmente o MESMO ssh.exe selecionado pelo Remote-SSH
+  // que já está conectado à VPS, em vez de forçar Git SSH primeiro.
+  const preferred = vscode.workspace.getConfiguration('remote.SSH').get<string>('path');
+  if (preferred && fs.existsSync(preferred)) { return preferred; }
   if (process.platform === 'win32') {
+    const winSsh = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'OpenSSH', 'ssh.exe');
+    if (fs.existsSync(winSsh)) { return winSsh; }
     const gitSsh = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Git', 'usr', 'bin', 'ssh.exe');
     if (fs.existsSync(gitSsh)) { return gitSsh; }
   }
   return 'ssh';
+}
+
+function remoteSshConfigOptions(): string[] {
+  // Remote-SSH pode usar um ~/.ssh/config personalizado. Respeitar o
+  // mesmo arquivo ja aprovado pelo usuario, sem criar segunda identidade.
+  const configured = vscode.workspace.getConfiguration('remote.SSH').get<string>('configFile');
+  return configured && fs.existsSync(configured) ? ['-F', configured] : [];
 }
 
 function checkSshRoute(binary: string, alias: string, options: readonly string[]): Promise<{ ok: boolean; status: string; host?: string }> {
@@ -148,6 +161,7 @@ function checkSshRoute(binary: string, alias: string, options: readonly string[]
     '-o', 'StrictHostKeyChecking=yes',
     '-o', 'ConnectTimeout=6',
     '-o', 'NumberOfPasswordPrompts=0',
+    ...remoteSshConfigOptions(),
     ...options,
     alias,
     "printf 'CENTRALDARK_SSH_PASS\\n'; hostname"
@@ -336,11 +350,30 @@ async function restore(context: vscode.ExtensionContext, manual: boolean): Promi
   }
 
   for (const t of map.terminais) {
+    // O mapa de 14/10 foi capturado na Casa Windows (cwd K:\\).
+    // Nunca restaurar cwd/shell Windows dentro de um workspace SSH Linux.
+    // Não criar sessões duplicadas quando o terminal já estiver aberto.
+    if (vscode.window.terminals.some(current => current.name === t.name)) { continue; }
+    const remoteWorkspace = Boolean(vscode.env.remoteName);
+    const windowsMapped = /^[a-zA-Z]:[\\\\/]/.test(t.cwd || '') ||
+      /^[a-zA-Z]:[\\\\/]/.test(t.shell || '');
+    if (remoteWorkspace && windowsMapped) {
+      problems.push('Terminal ' + t.name + ' preservado: mapa da Casa nao pode abrir em SSH remoto.');
+      continue;
+    }
+    if (t.cwd && !fs.existsSync(t.cwd)) {
+      problems.push('Terminal ' + t.name + ' ignorado: cwd nao existe neste ambiente.');
+      continue;
+    }
+    if (t.shell && !fs.existsSync(t.shell)) {
+      problems.push('Terminal ' + t.name + ' ignorado: executavel shell nao existe neste ambiente.');
+      continue;
+    }
     try {
       const terminal = vscode.window.createTerminal({
         name: t.name,
-        shellPath: t.shell,
-        cwd: t.cwd
+        ...(t.shell ? { shellPath: t.shell } : {}),
+        ...(t.cwd ? { cwd: t.cwd } : {})
       });
       if (startAgents && t.command) {
         terminal.sendText(t.command, true);
@@ -474,44 +507,76 @@ function deviceProgram(mode: 'enroll' | 'verify', token?: string): string {
   return lines.join('\n');
 }
 
+function pairingFailureCode(stderr: string, code: number | null): string {
+  // Mensagens sao codigos fixos, SEM propagar stderr/saida/sessao/token.
+  if (/permission denied.*publickey|permission denied.*password/i.test(stderr)) return 'SSH_AUTH_DENIED';
+  if (/host key verification failed|remote host identification has changed/i.test(stderr)) return 'SSH_HOST_KEY_REJECTED';
+  if (/could not resolve hostname|name or service not known/i.test(stderr)) return 'SSH_HOST_NOT_FOUND';
+  if (/connection refused|connection timed out|no route to host/i.test(stderr)) return 'SSH_TRANSPORT_DOWN';
+  if (/ERR_MODULE_NOT_FOUND|cannot find module/i.test(stderr)) return 'VPS_PAIRING_MODULE_NOT_FOUND';
+  if (/EACCES|EPERM|permission denied/i.test(stderr)) return 'VPS_PAIRING_REGISTRY_PERMISSION_DENIED';
+  if (/ENOENT|no such file or directory/i.test(stderr)) return 'VPS_PAIRING_REGISTRY_MISSING_PATH';
+  if (/SyntaxError|ReferenceError|TypeError/i.test(stderr)) return 'VPS_PAIRING_RUNTIME_EXCEPTION';
+  return 'VPS_PAIRING_PROGRAM_EXIT_' + String(code ?? 'UNKNOWN');
+}
+
 async function executeTrustedVpsProgram(program: string): Promise<{ route: string; result: PairingResult }> {
+  if (process.platform !== 'win32') {
+    throw Error('CASA_WINDOWS_UI_HOST_REQUIRED');
+  }
   const binary = sshExecutable();
-  let lastError = 'SSH_UNAVAILABLE';
+  const attempted: string[] = [];
   for (const route of VPS_ROUTES) {
+    const probe = await checkSshRoute(binary, route.alias, route.options);
+    if (!probe.ok) {
+      attempted.push(route.name + ':SSH_PREFLIGHT_' + probe.status);
+      continue;
+    }
     try {
       const result = await new Promise<PairingResult>((resolve, reject) => {
         const args = [
           '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes',
           '-o', 'ConnectTimeout=7', '-o', 'NumberOfPasswordPrompts=0',
+          ...remoteSshConfigOptions(),
+          ...route.options,
           route.alias, 'node --input-type=module -'
         ];
         const child = spawn(binary, args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
         let stdout = '';
+        let stderr = '';
         const timeout = setTimeout(() => { child.kill(); }, 25000);
         child.stdout.on('data', (buf: Buffer) => {
           stdout += buf.toString('utf8');
           if (stdout.length > 16000) child.kill();
         });
-        // Nao encaminhar stderr nem stdout contendo token para logs.
+        child.stderr.on('data', (buf: Buffer) => {
+          stderr = (stderr + buf.toString('utf8')).slice(-3000);
+        });
+        // stderr pode conter segredos. Nao mostrar seu conteudo, so codigos fixos.
         child.stdin.on('error', () => {});
-        child.on('error', () => { clearTimeout(timeout); reject(new Error('SSH_START_FAILED')); });
+        child.on('error', () => { clearTimeout(timeout); reject(new Error('SSH_PROCESS_START_FAILED')); });
         child.on('close', code => {
           clearTimeout(timeout);
-          if (code !== 0 || stdout.length > 16000) { reject(new Error('SSH_REMOTE_FAILED')); return; }
+          if (code !== 0 || stdout.length > 16000) {
+            reject(new Error(pairingFailureCode(stderr, code)));
+            return;
+          }
           try {
             const decoded: unknown = JSON.parse(stdout.trim());
             if (!decoded || typeof decoded !== 'object') throw Error('INVALID_RESPONSE');
             resolve(decoded as PairingResult);
-          } catch { reject(new Error('SSH_READBACK_INVALID')); }
+          } catch { reject(new Error('VPS_PAIRING_RESULT_NOT_JSON')); }
         });
         child.stdin.end(program, 'utf8');
       });
       return { route: route.name, result };
     } catch (error) {
-      lastError = error instanceof Error ? error.message : 'SSH_FAILED';
+      const code = error instanceof Error ? error.message : 'UNKNOWN';
+      attempted.push(route.name + ':' + code);
     }
   }
-  throw Error(lastError);
+  // Apenas nomes de rota + categorias: nunca token, saida ou stderr.
+  throw Error(attempted.join(' | ').slice(0, 200) || 'SSH_UNAVAILABLE');
 }
 
 async function pairVsCode(context: vscode.ExtensionContext): Promise<void> {
