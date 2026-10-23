@@ -27,6 +27,24 @@ O script atual `scripts/vps/main-pinned-microdeploy.sh` foi ampliado **no mesmo 
 
 **Prova exigida para verde:** `mcp_admin_catalog` enxerga a ferramenta admin; `centraldark_deploy_recipe_status.primaryPath=mcp_centraldark_native_vps`; gates Recipe-First P0 observados; health e SHA do runtime provados. Commit/main/dry-run isolados não bastam.
 
+## Consumidor real do cockpit — sem falso PASS
+
+O painel existente `ConexoesCentralDark.tsx` lê o Hub OAuth e o MCP HTTP via `lerSaudeInfraCentralDark`. O endpoint **já existente** `GET /health` do MCP passa a enviar `recipeFirst` de modo read-only, calculado pela mesma `canonicalRecipeFirstPreflight` usada no dispatcher e pela função pura de bloqueio do dispatch GitHub hospedado. Não publicar tokens nem criar listener. O cockpit cruza `/health` e `/tools.json`, apresenta `PASS` só se versão, contagem, alias admin, P0 e cadeado coincidirem. Prova apenas o **processo HTTP**, não deduz o estado das instâncias STDIO/Hermes. GitHub/Drive dependem de testes recentes do broker; Cofre permanece inventário, sem leitura de segredos.
+
+Handoff P0 existente amplia para **17 arquivos** do MCP: 8 pares `src/dist` e receita JSON. Os dois arquivos do cockpit permanecem no owner **instinto-superior**; precisam de build/instalação própria e prova de UI autenticada. `SOURCE_PASS != RUNTIME_PASS != COCKPIT_UI_PASS`; sem deploy nativo autorizado, registrar amarelo e não contornar a plataforma.
+
+## Correção de fonte de receita no runtime
+
+`canonicalRecipeFirstPreflight` e `centraldark_deploy_recipe_status` agora devem carregar primeiro a receita JSON do **mesmo root do bundle instalado** (`RUNTIME_OWNER_FIRST`). O checkout central do projeto é fallback `CHECKOUT_FALLBACK_ONLY_ON_MISSING` quando a receita instalada não existe; um erro de JSON/permissão no runtime é falha, **não** permissão para disfarçar leitura por outro arquivo. O snapshot HTTP do cockpit informa status apenas do processo HTTP e não falsifica o estado de Hermes STDIO.
+
+### Cadeado adicional de falha de leitura
+
+A compatibilidade com receita legada exige um JSON antigo **válido**. Se a leitura da receita instalada ou do fallback falhar, `canonicalRecipeFirstPreflight` devolve `CANONICAL_RECIPE_READ_FAILED_LOCKED` para execução mutante; apenas diagnóstico read-only continua. Nenhuma fonte ausente ou inválida concede autorização executora.
+
+## HUD consumindo a mesma prova do cockpit
+
+O campo existente `Receita em uso` no `HudDeterministico.tsx` consulta a mesma `lerSaudeInfraCentralDark` e a chave `["centraldark","saude-hub-mcp"]` de Contas / Conexões. Não acrescentar nova seção ou novo HUD. Valor `PASS` apenas para escopo `MCP_HTTP_ONLY` quando o backend confirmar receita, cadeia e catálogo; STDIO/Hermes exigem readback próprio. A tela estática ou versão em `main` nunca equivale a UI instalada.
+
 ## Quando usar
 
 Use quando:

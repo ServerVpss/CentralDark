@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { config } from "../../config.js";
 import { runShell } from "../vps/vps.js";
@@ -69,6 +70,27 @@ async function exists(rel) {
 
 async function readJson(rel) {
   return JSON.parse(await fs.readFile(abs(rel), "utf8"));
+}
+
+// A receita instalada ao lado do bundle executado tem precedencia sobre o
+// checkout principal. O checkout e fallback SOMENTE se o arquivo nao existir.
+// Isso evita que /health ou o dispatcher anunciem a receita velha após deploy.
+function installedRuntimeRoot() {
+  return path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../../../..");
+}
+async function readCurrentRecipe() {
+  const installed = path.join(installedRuntimeRoot(), RECIPE_REL);
+  try {
+    return { recipe: JSON.parse(await fs.readFile(installed, "utf8")),
+      source: "RUNTIME_OWNER_FIRST" };
+  } catch (error) {
+    if (installed === abs(RECIPE_REL)
+        || !["ENOENT", "ENOTDIR"].includes(String(error?.code || ""))) {
+      throw error;
+    }
+    return { recipe: await readJson(RECIPE_REL),
+      source: "CHECKOUT_FALLBACK_ONLY_ON_MISSING" };
+  }
 }
 
 function normalizeRel(raw) {
@@ -197,7 +219,8 @@ export function classifyCanonicalRecipeFirst(recipe, toolName, input = {}) {
 }
 export async function canonicalRecipeFirstPreflight(toolName, input = {}, readOnly = false) {
   try {
-    const decision = classifyCanonicalRecipeFirst(await readJson(RECIPE_REL), toolName, input);
+    const { recipe } = await readCurrentRecipe();
+    const decision = classifyCanonicalRecipeFirst(recipe, toolName, input);
     // Nunca bloquear a leitura usada para recuperar a própria receita.
     // A exceção não vale para despachos/mutações, apenas tools readOnly.
     return readOnly === true && !decision.ok
@@ -205,12 +228,16 @@ export async function canonicalRecipeFirstPreflight(toolName, input = {}, readOn
           status: "READ_ONLY_RECIPE_DISCOVERY_ALLOWED" }
       : decision;
   } catch (err) {
+    // A migracao legada vale apenas para receita antiga VALIDA. Ausencia de
+    // qualquer receita ou JSON corrompido nao autoriza microdeploy destrutivo.
     const fallback = classifyCanonicalRecipeFirst(null, toolName, input);
+    const safeRead = readOnly === true || /^centraldark_deploy_(recipe_status|capabilities|scratch_status|root_gate)$/.test(toolName);
     return {
       ...fallback,
-      ok: readOnly === true || fallback.ok,
-      status: readOnly === true ? "RECIPE_READ_PENDING_DISCOVERY" : fallback.status,
+      ok: safeRead,
+      status: safeRead ? "RECIPE_READ_PENDING_DISCOVERY" : "CANONICAL_RECIPE_READ_FAILED_LOCKED",
       errorClass: "CANONICAL_RECIPE_UNAVAILABLE",
+      executeMutation: false,
     };
   }
 }
@@ -293,9 +320,11 @@ export const centraldarkCapabilityTools = [
     inputSchema: z.object({}),
     handler: async () => {
       try {
-        const recipe = await readJson(RECIPE_REL);
+        const selected = await readCurrentRecipe();
+        const recipe = selected.recipe;
         return ok({
           ok: true,
+          recipeSource: selected.source,
           status: recipe.status || "LOADED",
           schema: recipe.schema || null,
           owner: recipe.owner || null,

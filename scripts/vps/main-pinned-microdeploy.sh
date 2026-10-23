@@ -11,6 +11,7 @@ MCP_NEEDS_BUILD=0
 # Atualizacao coerente src+dist do mesmo MCP; sem segundo executor.
 MCP_BUILD_UNITS=(
   "mcp-server"
+  "index"
   "tools/core/mcp-admin"
   "tools/deploy/centraldark-capabilities"
   "tools/core/mcp-policy"
