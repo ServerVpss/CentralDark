@@ -148,12 +148,20 @@ function sshExecutable(): string {
   return 'ssh';
 }
 
+function remoteSshConfigOptions(): string[] {
+  // Remote-SSH pode usar um ~/.ssh/config personalizado. Respeitar o
+  // mesmo arquivo ja aprovado pelo usuario, sem criar segunda identidade.
+  const configured = vscode.workspace.getConfiguration('remote.SSH').get<string>('configFile');
+  return configured && fs.existsSync(configured) ? ['-F', configured] : [];
+}
+
 function checkSshRoute(binary: string, alias: string, options: readonly string[]): Promise<{ ok: boolean; status: string; host?: string }> {
   const args = [
     '-o', 'BatchMode=yes',
     '-o', 'StrictHostKeyChecking=yes',
     '-o', 'ConnectTimeout=6',
     '-o', 'NumberOfPasswordPrompts=0',
+    ...remoteSshConfigOptions(),
     ...options,
     alias,
     "printf 'CENTRALDARK_SSH_PASS\\n'; hostname"
@@ -529,6 +537,7 @@ async function executeTrustedVpsProgram(program: string): Promise<{ route: strin
         const args = [
           '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes',
           '-o', 'ConnectTimeout=7', '-o', 'NumberOfPasswordPrompts=0',
+          ...remoteSshConfigOptions(),
           ...route.options,
           route.alias, 'node --input-type=module -'
         ];
