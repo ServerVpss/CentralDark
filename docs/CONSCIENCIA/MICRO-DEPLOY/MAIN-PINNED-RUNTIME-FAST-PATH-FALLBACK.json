@@ -158,7 +158,10 @@
     "no_dependency_install_on_runtime": true,
     "conditional_tool_count_growth_max": 1,
     "runtime_admin_catalog_readback_required": true,
-    "deploy_runtime_state": "PENDING_PROOF"
+    "deploy_runtime_state": "PENDING_PROOF",
+    "full_mcp_p0_allowlist_ready_in_main": true,
+    "pair_count": 8,
+    "recipe_json_causal_promotion": true
   },
   "replay_improvements": {
     "same_fingerprint": "reuse existing recipe and executor",
@@ -240,6 +243,94 @@
       "checked_remote_state": "COMMIT_NOT_FOUND_MAIN_OR_REMOTE_AT_CHECK",
       "promotion_state": "LOCAL_REPORT_PENDING_GITHUB_AND_VPS_PROOF",
       "restart_and_deploy_are_not_implied": true
+    },
+    "bootstrap_compat": {
+      "legacy_recipe_primary": "github_actions_canonical_deploy",
+      "only_executor": "centraldark_deploy_micro_fallback",
+      "preview_allowed": true,
+      "apply_requires_sha_40_hex": true,
+      "hosted_runner_still_denied": true,
+      "temporary_until_runtime_recipe_readback": "mcp_centraldark_native_vps",
+      "no_false_runtime_pass": true
+    },
+    "executable_handoff": {
+      "owner": "mcp",
+      "recipe_replayed_first": true,
+      "desired_action": "PROMOTE_CURRENT_MAIN_EXACT_SHA",
+      "tool": "centraldark_deploy_micro_fallback",
+      "mode": "DRY_RUN_THEN_APPROVED_APPLY",
+      "source_sha": "RESOLVE_MAIN_AT_EXECUTION_AND_PIN",
+      "shell_script": "scripts/vps/main-pinned-microdeploy.sh",
+      "fileset": [
+        "apps/modulos/mcp/src/index.js",
+        "apps/modulos/mcp/dist/index.js",
+        "apps/modulos/mcp/src/mcp-server.js",
+        "apps/modulos/mcp/dist/mcp-server.js",
+        "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+        "apps/modulos/mcp/dist/tools/core/mcp-admin.js",
+        "apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js",
+        "apps/modulos/mcp/dist/tools/deploy/centraldark-capabilities.js",
+        "apps/modulos/mcp/src/tools/core/mcp-policy.js",
+        "apps/modulos/mcp/dist/tools/core/mcp-policy.js",
+        "apps/modulos/mcp/src/tools/github/github.js",
+        "apps/modulos/mcp/dist/tools/github/github.js",
+        "apps/modulos/mcp/src/tools/github/github-tools.js",
+        "apps/modulos/mcp/dist/tools/github/github-tools.js",
+        "apps/modulos/mcp/src/tools/github/github-write.js",
+        "apps/modulos/mcp/dist/tools/github/github-write.js",
+        "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json"
+      ],
+      "source_dist_causal_pair_required": true,
+      "checkout_with_uncommitted_changes": "KEEP_ACTIVE",
+      "scratch": "REUSE_EXISTING_ONLY_WITH_REALPATH_AND_LOCK",
+      "preflight": [
+        "SOURCE_SHA_VERIFIED_IN_MAIN",
+        "SCRATCH_REALPATH_AND_CLEAN",
+        "MCP_BUILD_DEPS_PRESENT",
+        "SYSTEMD_MCP_OWNER_ACTIVE",
+        "EXISTING_RECEIPT_FINGERPRINT_CHECK"
+      ],
+      "build_on_vps": "tsc --project apps/modulos/mcp/tsconfig.json",
+      "tests": [
+        "admin-ssh-microdeploy.test.mjs",
+        "centraldark-capabilities.test.mjs"
+      ],
+      "success_evidence": [
+        "HEALTH_OK",
+        "MCP_ADMIN_CATALOG_CONTAINS_new_tool",
+        "RECIPE_PRIMARY=mcp_centraldark_native_vps",
+        "GLOBAL_RECIPE_FIRST_ENFORCED",
+        "NO_HOSTED_DEPLOY_DISPATCH",
+        "RECEIPT_PINNED_SHA_AND_RUNTIME_READBACK",
+        "MCP_HTTP_HEALTH_RECIPE_FIRST_SCOPE_PASS",
+        "COCKPIT_READS_LIVE_MCP_HTTP_AND_CATALOG"
+      ],
+      "unknown_is_pass": false,
+      "blocked_action": "RECORD_SAME_RECIPE_NEXT_CURSOR_NO_BYPASS",
+      "mutation_allowed_only_through_authorized_native_dispatcher": true,
+      "current_runtime_status": "PENDING_EXECUTION"
+    },
+    "cockpit_proof_consumer": {
+      "component": "apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx",
+      "backend": "apps/instinto-superior/src/lib/conexoes.functions.ts",
+      "existing_sources": [
+        "https://mcp.centralldark.com/health",
+        "https://mcp.centralldark.com/tools.json",
+        "hub.centralldark.com/health",
+        "oauth-broker/api/welcome-kit"
+      ],
+      "scope": "MCP_HTTP_ONLY",
+      "mcp_p0_pass_requires": [
+        "recipeFirst.status=PASS",
+        "recipeFirst.codeStatus=RECIPE_FIRST_MATCHED",
+        "recipeFirst.priority=0",
+        "recipeFirst.hostedDispatchLocked=true",
+        "recipeFirst.adminAliasLoaded=true",
+        "catalogVersion AND toolCount MATCH"
+      ],
+      "source_committed_is_not_runtime_proven": true,
+      "independent_agent_counterproof": "CHECK_HEALTH_BODY_CATALOG_AND_COCKPIT_ADMIN_RENDER_IN_SAME_SESSION",
+      "runtime_state": "PENDING_INSTALL_AND_AUTH_UI_READBACK"
     }
   }
 }

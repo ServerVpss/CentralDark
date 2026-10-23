@@ -23,6 +23,8 @@ test("mutação fica marcada como destrutiva", () => {
 
 test("fileset não escapa do owner", () => {
   assert.equal(__centraldarkCapabilityTest.validateOwnerFile("mcp", "apps/modulos/mcp/dist/index.js"), "apps/modulos/mcp/dist/index.js");
+  assert.equal(__centraldarkCapabilityTest.validateOwnerFile("mcp", "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json"), "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json");
+  assert.throws(() => __centraldarkCapabilityTest.validateOwnerFile("mcp", "docs/CONSCIENCIA/MICRO-DEPLOY/OTHER.json"), /FILE_OUTSIDE_OWNER_SCOPE/);
   assert.throws(() => __centraldarkCapabilityTest.validateOwnerFile("mcp", "apps/bot-telegram/unified-bot.cjs"), /FILE_OUTSIDE_OWNER_SCOPE/);
   assert.throws(() => __centraldarkCapabilityTest.validateOwnerFile("mcp", "../etc/passwd"), /FILESET_PATH_INVALID/);
   assert.throws(() => __centraldarkCapabilityTest.validateOwnerFile("mcp", "apps/modulos/mcp/.env"), /FILESET_SENSITIVE_PATH_BLOCKED/);
@@ -73,4 +75,56 @@ test("microdeploy nativo não converte plano ou commit em implantação", async 
   } else {
     assert.equal(out.status,"CANONICAL_RECIPE_PRIORITY_NOT_LOADED");
   }
+});
+
+test("bootstrap resiliente não reabre runner hosted quando recipe na VPS é antiga", () => {
+  const stale={
+    primary_path:"github_actions_canonical_deploy",
+    execution_route:{},
+  };
+  const preview=classifyCanonicalRecipeFirst(stale,"centraldark_deploy_micro_fallback",
+    {owner:"mcp",dryRun:true});
+  assert.equal(preview.ok,true);
+  assert.equal(preview.status,"NATIVE_MCP_RECIPE_LEGACY_COMPAT_NO_HOSTED");
+  const applyWithoutSha=classifyCanonicalRecipeFirst(stale,"centraldark_deploy_micro_fallback",
+    {owner:"mcp",dryRun:false});
+  assert.equal(applyWithoutSha.ok,false);
+  const applyPinned=classifyCanonicalRecipeFirst(stale,"centraldark_deploy_micro_fallback",
+    {owner:"mcp",dryRun:false,sourceSha:"f".repeat(40)});
+  assert.equal(applyPinned.ok,true);
+  const hosted=classifyCanonicalRecipeFirst(stale,"github_dispatch",
+    {owner:"ServerVpss",repo:"CentralDark",workflow:"301288932"});
+  assert.equal(hosted.ok,false);
+  assert.equal(hosted.status,"CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED");
+});
+
+test("diagnostico de receita nao fica bloqueado pelo proprio cadeado", () => {
+  const stale={primary_path:"github_actions_canonical_deploy"};
+  for (const name of ["centraldark_deploy_recipe_status","centraldark_deploy_capabilities",
+    "centraldark_deploy_root_gate","centraldark_deploy_scratch_status",
+    "admin_ssh_microdeploy"]) {
+    const v=classifyCanonicalRecipeFirst(stale,name,{});
+    assert.equal(v.ok,true);
+    assert.equal(v.status,"CANONICAL_RECIPE_PRIORITY_NOT_LOADED");
+  }
+});
+
+test("receita instalada precede checkout no owner MCP sem aceitar erro silencioso", async () => {
+  const src = await import("node:fs/promises").then(fs => fs.readFile(
+    new URL("../src/tools/deploy/centraldark-capabilities.js", import.meta.url), "utf8"
+  ));
+  assert.ok(src.includes("RUNTIME_OWNER_FIRST"));
+  assert.ok(src.includes("CHECKOUT_FALLBACK_ONLY_ON_MISSING"));
+  assert.ok(src.includes('["ENOENT", "ENOTDIR"]'));
+  assert.ok(src.includes("classifyCanonicalRecipeFirst(recipe, toolName, input)"));
+});
+
+test("fallback de receita inválida não libera execução por compatibilidade antiga", async () => {
+  const source = await import("node:fs/promises").then(fs => fs.readFile(
+    new URL("../src/tools/deploy/centraldark-capabilities.js", import.meta.url), "utf8"
+  ));
+  assert.ok(source.includes("CANONICAL_RECIPE_READ_FAILED_LOCKED"));
+  assert.ok(source.includes("executeMutation: false"));
+  assert.ok(source.includes('ok: safeRead'));
+  assert.ok(source.includes("RUNTIME_OWNER_FIRST"));
 });

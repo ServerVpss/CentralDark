@@ -59,6 +59,8 @@ test("dry_run prepara somente inputs, sem bypass do executor destrutivo", async 
     const incomplete=unpack(await tool.handler({mode:"dry_run",owner:"mcp",sourceSha:sha,file:src},admin));
     assert.equal(incomplete.status,"MCP_SOURCE_DIST_PAIR_REQUIRED");
     const plan=unpack(await tool.handler({mode:"dry_run",owner:"mcp",sourceSha:sha,file:src+","+dist},admin));
+    const withRecipe=unpack(await tool.handler({mode:"dry_run",owner:"mcp",sourceSha:sha,file:src+","+dist+",docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json"},admin));
+    assert.equal(withRecipe.status,"NATIVE_PLAN_PREPARED_NOT_EXECUTED");
     assert.equal(plan.status,"NATIVE_PLAN_PREPARED_NOT_EXECUTED");
     assert.equal(plan.tool,"centraldark_deploy_micro_fallback");
     assert.deepEqual(plan.input,{owner:"mcp",sourceSha:sha,files:[src,dist],dryRun:true});

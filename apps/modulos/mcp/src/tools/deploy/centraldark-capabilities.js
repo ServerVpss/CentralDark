@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { config } from "../../config.js";
 import { runShell } from "../vps/vps.js";
@@ -71,6 +72,27 @@ async function readJson(rel) {
   return JSON.parse(await fs.readFile(abs(rel), "utf8"));
 }
 
+// A receita instalada ao lado do bundle executado tem precedencia sobre o
+// checkout principal. O checkout e fallback SOMENTE se o arquivo nao existir.
+// Isso evita que /health ou o dispatcher anunciem a receita velha após deploy.
+function installedRuntimeRoot() {
+  return path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../../../..");
+}
+async function readCurrentRecipe() {
+  const installed = path.join(installedRuntimeRoot(), RECIPE_REL);
+  try {
+    return { recipe: JSON.parse(await fs.readFile(installed, "utf8")),
+      source: "RUNTIME_OWNER_FIRST" };
+  } catch (error) {
+    if (installed === abs(RECIPE_REL)
+        || !["ENOENT", "ENOTDIR"].includes(String(error?.code || ""))) {
+      throw error;
+    }
+    return { recipe: await readJson(RECIPE_REL),
+      source: "CHECKOUT_FALLBACK_ONLY_ON_MISSING" };
+  }
+}
+
 function normalizeRel(raw) {
   const rel = String(raw || "").replaceAll("\\", "/").replace(/^\/+/, "").trim();
   if (!rel || rel.includes("\0")) throw new Error("FILESET_PATH_INVALID");
@@ -86,7 +108,10 @@ function validateOwnerFile(owner, raw) {
   const rel = normalizeRel(raw);
   const profile = OWNER_PROFILES[owner];
   if (!profile) throw new Error("OWNER_PROFILE_UNKNOWN");
-  if (!profile.prefixes.some((prefix) => rel.startsWith(prefix))) {
+  // Exceção mínima P0: a receita machine-consumable acompanha o MESMO
+  // owner MCP como um arquivo causal; outros docs continuam bloqueados.
+  const exactMcpRecipe = owner === "mcp" && rel === RECIPE_REL;
+  if (!exactMcpRecipe && !profile.prefixes.some((prefix) => rel.startsWith(prefix))) {
     throw new Error(`FILE_OUTSIDE_OWNER_SCOPE:${rel}`);
   }
   return rel;
@@ -141,7 +166,10 @@ export function classifyCanonicalRecipeFirst(recipe, toolName, input = {}) {
     && slug === "ServerVpss/CentralDark"
     && (wfName === GLOBAL_RECIPE_FIRST_CONTRACT.hostedWorkflow
         || workflow === GLOBAL_RECIPE_FIRST_CONTRACT.hostedWorkflowId);
-  const deploy = /(^centraldark_deploy_|microdeploy|^admin_ssh_microdeploy$)/i.test(name) || retired;
+  const recipeDiagnostic = /^centraldark_deploy_(capabilities|root_gate|scratch_status|recipe_status)$/i.test(name)
+    || name === "admin_ssh_microdeploy";
+  const deploy = !recipeDiagnostic
+    && (/(^centraldark_deploy_|microdeploy)/i.test(name) || retired);
   const hermes = !deploy && /(hermes|self.evol|evolve_skill)/i.test(name);
   const source = deploy
     ? RECIPE_REL
@@ -158,11 +186,18 @@ export function classifyCanonicalRecipeFirst(recipe, toolName, input = {}) {
   };
   if (retired) return { ...base, ok: false, status: "CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED" };
   if (!recipe?.global_recipe_priority?.enabled) {
+    // Bootstrap resiliente: o runtime antigo ainda pode carregar a receita
+    // github_actions_canonical_deploy. Ler aquela receita NAO autoriza voltar
+    // ao hosted: so a tool MCP nativa pode continuar, com SHA fixado na promocao.
+    const nativeCompat = name === "centraldark_deploy_micro_fallback"
+      && (input?.dryRun !== false || /^[0-9a-f]{40}$/i.test(String(input?.sourceSha || "")));
     return {
       ...base,
-      ok: !deploy,
-      status: "CANONICAL_RECIPE_PRIORITY_NOT_LOADED",
-      nextCursor: "RESTORE_EXISTING_RECIPE_OWNER_NO_PARALLEL_EXECUTOR",
+      ok: !deploy || nativeCompat,
+      status: nativeCompat ? "NATIVE_MCP_RECIPE_LEGACY_COMPAT_NO_HOSTED"
+        : "CANONICAL_RECIPE_PRIORITY_NOT_LOADED",
+      nextCursor: nativeCompat ? "RECONCILE_EXISTING_RECIPE_WITH_MAIN_BEFORE_RUNTIME_PASS"
+        : "RESTORE_EXISTING_RECIPE_OWNER_NO_PARALLEL_EXECUTOR",
     };
   }
   if (deploy && (recipe.primary_path !== "mcp_centraldark_native_vps"
@@ -184,14 +219,25 @@ export function classifyCanonicalRecipeFirst(recipe, toolName, input = {}) {
 }
 export async function canonicalRecipeFirstPreflight(toolName, input = {}, readOnly = false) {
   try {
-    return classifyCanonicalRecipeFirst(await readJson(RECIPE_REL), toolName, input);
+    const { recipe } = await readCurrentRecipe();
+    const decision = classifyCanonicalRecipeFirst(recipe, toolName, input);
+    // Nunca bloquear a leitura usada para recuperar a própria receita.
+    // A exceção não vale para despachos/mutações, apenas tools readOnly.
+    return readOnly === true && !decision.ok
+      ? { ...decision, ok: true, blockedMutationStatus: decision.status,
+          status: "READ_ONLY_RECIPE_DISCOVERY_ALLOWED" }
+      : decision;
   } catch (err) {
+    // A migracao legada vale apenas para receita antiga VALIDA. Ausencia de
+    // qualquer receita ou JSON corrompido nao autoriza microdeploy destrutivo.
     const fallback = classifyCanonicalRecipeFirst(null, toolName, input);
+    const safeRead = readOnly === true || /^centraldark_deploy_(recipe_status|capabilities|scratch_status|root_gate)$/.test(toolName);
     return {
       ...fallback,
-      ok: readOnly === true || fallback.ok,
-      status: readOnly === true ? "RECIPE_READ_PENDING_DISCOVERY" : fallback.status,
+      ok: safeRead,
+      status: safeRead ? "RECIPE_READ_PENDING_DISCOVERY" : "CANONICAL_RECIPE_READ_FAILED_LOCKED",
       errorClass: "CANONICAL_RECIPE_UNAVAILABLE",
+      executeMutation: false,
     };
   }
 }
@@ -274,9 +320,11 @@ export const centraldarkCapabilityTools = [
     inputSchema: z.object({}),
     handler: async () => {
       try {
-        const recipe = await readJson(RECIPE_REL);
+        const selected = await readCurrentRecipe();
+        const recipe = selected.recipe;
         return ok({
           ok: true,
+          recipeSource: selected.source,
           status: recipe.status || "LOADED",
           schema: recipe.schema || null,
           owner: recipe.owner || null,
