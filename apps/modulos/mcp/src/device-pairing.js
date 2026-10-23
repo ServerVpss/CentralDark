@@ -6,7 +6,7 @@ import express from "express";
 const DEFAULT_TTL_MS = 2 * 60_000;
 const DEFAULT_STALE_MS = 45_000;
 const DEFAULT_DEVICE_TOKEN_TTL_MS = Number(process.env.CENTRALDARK_DEVICE_TOKEN_TTL_MS || 30 * 24 * 60 * 60_000);
-const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || "/root/CentralDark/data/mcp-device-registry.json";
+const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || "<caminho-vps>";
 
 const sha256 = (value) => createHash("sha256").update(String(value)).digest("hex");
 const safeEqual = (a, b) => {
@@ -52,9 +52,11 @@ export function createDevicePairingStore(options = {}) {
     prune();
     const pairId = randomUUID();
     const pairSecret = randomBytes(24).toString("base64url");
+    const consentNonce = randomBytes(24).toString("base64url");
     const item = {
       pairId,
       pairSecretHash: sha256(pairSecret),
+      consentNonce,
       code: makeCode(),
       createdAt: now(),
       expiresAt: now() + ttlMs,
@@ -70,6 +72,23 @@ export function createDevicePairingStore(options = {}) {
     };
     pending.set(pairId, item);
     return { pairId, pairSecret, code: item.code, expiresAt: item.expiresAt };
+  }
+  function pendingConsent(pairId) {
+    prune();
+    const item = pending.get(String(pairId || ""));
+    if (!item) return null;
+    return {
+      pairId: item.pairId, code: item.code, expiresAt: item.expiresAt,
+      deviceName: item.meta.deviceName, executor: item.meta.executor,
+      surface: item.meta.surface, nonce: item.consentNonce,
+      approved: Boolean(item.deviceId),
+    };
+  }
+  function approveWeb({ pairId, code, nonce }) {
+    const item = pendingConsent(pairId);
+    if (!item || item.approved) return { ok: false, error: "pair_expired_or_completed" };
+    if (!safeEqual(item.nonce, nonce)) return { ok: false, error: "pair_consent_invalid" };
+    return approve({ pairId, code });
   }
   function approve({ pairId, code, deviceName, executor, surface }) {
     prune();
@@ -144,21 +163,84 @@ export function createDevicePairingStore(options = {}) {
       status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
     }));
   }
-  return { start, approve, status, heartbeat, refresh, listDevices, registryPath };
+  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, listDevices, registryPath };
 }
 
 export function createDevicePairingRouter(options = {}) {
   const router = express.Router();
   const store = options.store || createDevicePairingStore(options);
   const isAdmin = options.isAdmin || ((req) => safeEqual(bearerFrom(req), process.env.CENTRALDARK_ADMIN_KEY || "__missing__"));
+  const isBrowserAdmin = options.isBrowserAdmin || (() => false);
+  const publicOrigin = String(options.publicOrigin || "").replace(/\/$/, "");
+  const escape = (value) => String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  const limiter = new Map();
+  const allowStart = (req) => {
+    const key = String(req.ip || req.socket?.remoteAddress || "unknown");
+    const now = Date.now();
+    for (const [ip, entry] of limiter) if (entry.until < now) limiter.delete(ip);
+    const entry = limiter.get(key);
+    if (!entry || entry.until < now) { limiter.set(key, {count: 1, until: now + 60_000}); return true; }
+    if (entry.count >= 20) return false;
+    entry.count++;
+    return true;
+  };
 
   router.post("/pair/start", (req, res) => {
+    if (!allowStart(req)) return res.status(429).json({ok:false,error:"pair_rate_limited"});
     const pair = store.start({ deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
     res.status(201).json({ ok: true, pair_id: pair.pairId, pair_secret: pair.pairSecret, code: pair.code, expires_at: new Date(pair.expiresAt).toISOString() });
   });
   router.get("/pair/status", (req, res) => {
     const result = store.status({ pairId: req.query.id, pairSecret: req.query.secret });
     res.status(result.status === "denied" ? 403 : 200).json(result);
+  });
+  // Use POST para que o segredo de posse nao apareca em URL, referrer e access logs.
+  router.post("/pair/status", (req, res) => {
+    const result = store.status({ pairId: req.body?.id, pairSecret: req.body?.secret });
+    res.status(result.status === "denied" ? 403 : 200).json(result);
+  });
+  router.get("/pair/consent", (req, res) => {
+    const item = store.pendingConsent(req.query?.id);
+    if (!item) return res.status(404).type("text/plain").send("Pareamento expirado ou nao encontrado.");
+    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("Referrer-Policy", "no-referrer");
+    res.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'");
+    const authorized = Boolean(isBrowserAdmin(req));
+    const code = escape(item.code);
+    const safeName = escape(item.deviceName);
+    const ownerFlow = authorized && !item.approved
+      ? `<form method="POST" action="/device/pair/confirm">
+          <input type="hidden" name="id" value="${escape(item.pairId)}">
+          <input type="hidden" name="code" value="${code}">
+          <input type="hidden" name="nonce" value="${escape(item.nonce)}">
+          <button type="submit">Confirmar pareamento</button>
+        </form>`
+      : item.approved
+        ? '<p>Autorizado. Volte ao VS Code para concluir.</p>'
+        : '<p>Sessao administrativa necessaria. Entre no painel CentralDark existente em outra aba e atualize esta pagina.</p><a href="/admin" target="_blank" rel="noopener noreferrer">Abrir administracao CentralDark</a>';
+    res.type("html").send(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1"><title>CentralDark - Pareamento VS Code</title>
+      <style>body{background:#f5f7f6;font-family:Segoe UI,Arial,sans-serif;display:grid;place-items:center;min-height:100vh}
+      main{max-width:430px;background:#fff;border:1px solid #ddd;border-radius:16px;padding:30px}
+      .code{font:800 29px Consolas,monospace;letter-spacing:.09em;text-align:center;padding:14px;border:1px solid #ddd;border-radius:9px}
+      button{border:0;border-radius:9px;padding:13px 20px;background:#10b981;color:white;font-weight:700;cursor:pointer}
+      p{color:#4b5563;line-height:1.5}</style></head><body><main>
+      <h1>Autorizar dispositivo</h1><p>O VS Code <strong>${safeName}</strong> solicitou acesso ao MCP existente.</p>
+      <div class="code">${code}</div><p>Confira este mesmo codigo no VS Code. Nunca confirme um pedido desconhecido.</p>
+      ${ownerFlow}<p>O codigo expira em 2 minutos. Aprovacao exige a sessao administrativa existente.</p>
+      </main></body></html>`);
+  });
+  router.post("/pair/confirm", (req, res) => {
+    if (!isBrowserAdmin(req)) return res.status(401).type("text/plain").send("Sessao administrativa necessaria.");
+    if (publicOrigin && req.headers.origin && String(req.headers.origin) !== publicOrigin)
+      return res.status(403).type("text/plain").send("Origem invalida.");
+    const result = store.approveWeb({
+      pairId: req.body?.id, code: req.body?.code, nonce: req.body?.nonce
+    });
+    if (!result.ok) return res.status(403).type("text/plain").send("Codigo/confirmacao invalidos ou expirados.");
+    res.setHeader("Cache-Control", "no-store");
+    res.type("html").send('<!doctype html><meta charset="utf-8"><title>CentralDark - Dispositivo autorizado</title><h1>Dispositivo autorizado</h1><p>Volte ao VS Code. O pareamento sera concluido automaticamente.</p>');
   });
   router.post("/pair/approve", (req, res) => {
     if (!isAdmin(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
