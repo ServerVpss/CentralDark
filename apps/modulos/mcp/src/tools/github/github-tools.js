@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { assertNoRetiredCentralDarkHostedDeploy } from "./github.js";
 const API = "https://api.github.com";
 const ALLOWED_REPOS = new Set(["ServerVpss/CentralDark", "ServerVpss/clone-deck", "segredounlock/clone-deck"]);
 const CO_AUTHOR = "SegredoiDev <<conta-bot>>";
@@ -321,6 +322,7 @@ export const githubTools = [
         handler: async (input, ctx) => {
             const token = effectiveToken(ctx);
             const { owner, repo } = pick(input.owner, input.repo);
+            assertNoRetiredCentralDarkHostedDeploy(owner, repo, input.workflow);
             const inputs = input.inputs
                 ? Object.fromEntries(Object.entries(input.inputs).map(([key, value]) => [key, String(value)]))
                 : undefined;

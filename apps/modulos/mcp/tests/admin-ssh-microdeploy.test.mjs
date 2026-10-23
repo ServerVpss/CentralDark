@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { githubTools } from "../src/tools/github/github-tools.js";
+import { githubWriteTools } from "../src/tools/github/github-write.js";
+import { assertNoRetiredCentralDarkHostedDeploy } from "../src/tools/github/github.js";
 
 const tool = githubTools.find(x => x.name === "admin_ssh_microdeploy");
 const sha = "0985a9468a8144f2b27e23bc0513b258d1e0fa00";
@@ -62,4 +64,35 @@ test("dry_run prepara somente inputs, sem bypass do executor destrutivo", async 
     assert.deepEqual(plan.input,{owner:"mcp",sourceSha:sha,files:[src,dist],dryRun:true});
     assert.equal(plan.runtimeDeployProven,false);
   } finally { globalThis.fetch=previous; }
+});
+
+test("rota aposentada é bloqueada em todas as entradas, sem acessar GitHub", async () => {
+  const prior=globalThis.fetch;
+  globalThis.fetch=()=>{throw new Error("NETWORK_MUST_NOT_BE_USED");};
+  try {
+    const old=githubTools.find(x=>x.name==="github_dispatch");
+    const other=githubWriteTools.find(x=>x.name==="github_dispatch_workflow");
+    assert.ok(old);
+    assert.ok(other);
+    for (const wf of [
+      "vps-ssh-exec.yml",
+      ".github/workflows/vps-ssh-exec.yml",
+      "301288932",
+    ]) {
+      assert.throws(
+        ()=>assertNoRetiredCentralDarkHostedDeploy("ServerVpss","CentralDark",wf),
+        /CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED/
+      );
+      await assert.rejects(
+        old.handler({workflow:wf, owner:"ServerVpss", repo:"CentralDark"}, {token:"test"}),
+        /CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED/
+      );
+      await assert.rejects(
+        other.handler({workflow:wf, owner:"ServerVpss", repo:"CentralDark"}, {token:"test"}),
+        /CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED/
+      );
+    }
+    assert.doesNotThrow(()=>assertNoRetiredCentralDarkHostedDeploy("ServerVpss","CentralDark","vps-healthcheck.yml"));
+    assert.doesNotThrow(()=>assertNoRetiredCentralDarkHostedDeploy("ServerVpss","clone-deck","vps-ssh-exec.yml"));
+  } finally {globalThis.fetch=prior;}
 });
