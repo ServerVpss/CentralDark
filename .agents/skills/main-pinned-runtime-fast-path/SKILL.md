@@ -27,6 +27,12 @@ O script atual `scripts/vps/main-pinned-microdeploy.sh` foi ampliado **no mesmo 
 
 **Prova exigida para verde:** `mcp_admin_catalog` enxerga a ferramenta admin; `centraldark_deploy_recipe_status.primaryPath=mcp_centraldark_native_vps`; gates Recipe-First P0 observados; health e SHA do runtime provados. Commit/main/dry-run isolados não bastam.
 
+## Consumidor real do cockpit — sem falso PASS
+
+O painel existente `ConexoesCentralDark.tsx` lê o Hub OAuth e o MCP HTTP via `lerSaudeInfraCentralDark`. O endpoint **já existente** `GET /health` do MCP passa a enviar `recipeFirst` de modo read-only, calculado pela mesma `canonicalRecipeFirstPreflight` usada no dispatcher e pela função pura de bloqueio do dispatch GitHub hospedado. Não publicar tokens nem criar listener. O cockpit cruza `/health` e `/tools.json`, apresenta `PASS` só se versão, contagem, alias admin, P0 e cadeado coincidirem. Prova apenas o **processo HTTP**, não deduz o estado das instâncias STDIO/Hermes. GitHub/Drive dependem de testes recentes do broker; Cofre permanece inventário, sem leitura de segredos.
+
+Handoff P0 existente amplia para **17 arquivos** do MCP: 8 pares `src/dist` e receita JSON. Os dois arquivos do cockpit permanecem no owner **instinto-superior**; precisam de build/instalação própria e prova de UI autenticada. `SOURCE_PASS != RUNTIME_PASS != COCKPIT_UI_PASS`; sem deploy nativo autorizado, registrar amarelo e não contornar a plataforma.
+
 ## Quando usar
 
 Use quando:

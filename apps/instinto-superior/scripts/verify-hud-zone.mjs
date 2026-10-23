@@ -385,7 +385,7 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
   assert.ok(!focus.includes("createTerminal("));
   for (const name of ["onDidStartTerminalShellExecution", "onDidEndTerminalShellExecution",
     "LOGS-VS-CODE.log"]) assert.ok(extension.includes(name), "evento/funil: " + name);
-  assert.ok(!focus.includes("process.env.OPENAI_API_KEY"));
+  assert.ok(!focus.includes("process.env.<nome-de-segredo>"));
 
   // PROVAR: recibos reais sao escopados; UI nunca pode declarar provider live.
   assert.ok(design.includes("/tree/main/skills/vs-code-restore"));
@@ -456,3 +456,25 @@ test("TelePainel permanece produto próprio; matriz Admin ocupa o mesmo HUD sem 
 });
 
 
+
+test("contas e integracoes provam MCP HTTP P0 sem converter historico em acesso vivo", () => {
+  const ui = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  const fn = read("apps/instinto-superior/src/lib/conexoes.functions.ts");
+  const runtime = read("apps/modulos/mcp/src/index.js");
+  for (const name of ["lerSaudeInfraCentralDark", "mcpRecipe", "mcpCatalogo", "statusBroker"]) {
+    assert.ok(ui.includes(name), `cockpit sem leitura real: ${name}`);
+  }
+  assert.ok(ui.includes("REGISTRO ATIVO · TESTE PENDENTE"));
+  assert.ok(ui.includes("instâncias STDIO do Hermes"));
+  assert.ok(fn.includes("requireSupabaseAuth"));
+  assert.ok(fn.includes(".eq(\"role\", \"admin\")"));
+  assert.ok(fn.includes('mcpTools.statusHttp === 200'));
+  assert.ok(fn.includes('recipe?.["hostedDispatchLocked"] === true'));
+  assert.ok(fn.includes('recipe?.["adminAliasLoaded"] === true'));
+  assert.ok(fn.includes('recipe?.["codeStatus"] === "RECIPE_FIRST_MATCHED"'));
+  assert.ok(runtime.includes('app.get("/health", async'));
+  assert.ok(runtime.includes('canonicalRecipeFirstPreflight('));
+  assert.ok(runtime.includes('assertNoRetiredCentralDarkHostedDeploy('));
+  assert.ok(runtime.includes('proofLevel: recipeReady'));
+  assert.doesNotMatch(ui, /acesso verificado em 23\/10/);
+});

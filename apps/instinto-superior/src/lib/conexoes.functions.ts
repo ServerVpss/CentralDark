@@ -102,7 +102,9 @@ export const lerConexoesCentralDark = createServerFn({ method: "GET" })
     }
   });
 
-/** Sonda administrativa de saúde; não lê credenciais ou conteúdo do cofre. */
+/** Sonda ADMIN read-only: provas do Hub e MCP, jamais credenciais.
+ * HTTP 200 isolado nao equivale a integracao funcional nem a receita P0 ativa.
+ */
 export const lerSaudeInfraCentralDark = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -114,21 +116,83 @@ export const lerSaudeInfraCentralDark = createServerFn({ method: "GET" })
       .maybeSingle();
     if (error || !papel) throw new Response("Proibido", { status: 403 });
 
-    async function medir(url: string): Promise<"ONLINE" | "OFFLINE" | "UNKNOWN"> {
+    type Readback = {
+      estado: "ONLINE" | "OFFLINE" | "UNKNOWN";
+      statusHttp: number | null;
+      body: Record<string, unknown> | null;
+    };
+    const ler = async (url: string): Promise<Readback> => {
       const abort = new AbortController();
       const timeout = setTimeout(() => abort.abort(), 3500);
       try {
-        const resposta = await fetch(url, { signal: abort.signal, cache: "no-store" });
-        return resposta.ok ? "ONLINE" : "OFFLINE";
+        const resposta = await fetch(url, {
+          signal: abort.signal,
+          cache: "no-store",
+          headers: { Accept: "application/json" },
+        });
+        if (!resposta.ok)
+          return { estado: "OFFLINE", statusHttp: resposta.status, body: null };
+        const raw: unknown = await resposta.json().catch(() => null);
+        const body = raw && typeof raw === "object" && !Array.isArray(raw)
+          ? raw as Record<string, unknown> : null;
+        const estado = body?.["ok"] === true || body?.["status"] === "ok"
+          || body?.["status"] === "healthy" ? "ONLINE" : "UNKNOWN";
+        return { estado, statusHttp: resposta.status, body };
       } catch {
-        return "UNKNOWN";
+        return { estado: "UNKNOWN", statusHttp: null, body: null };
       } finally {
         clearTimeout(timeout);
       }
-    }
-    const [hub, mcp] = await Promise.all([
-      medir(`${hubBase()}/health`),
-      medir("https://mcp.centralldark.com/health"),
+    };
+
+    const mcpBase = "https://mcp.centralldark.com";
+    const [hubHealth, mcpHealth, mcpTools] = await Promise.all([
+      ler(`${hubBase()}/health`),
+      ler(`${mcpBase}/health`),
+      ler(`${mcpBase}/tools.json`),
     ]);
-    return { hub, mcp, medidoEm: new Date().toISOString() };
+
+    const health = mcpHealth.body;
+    const catalog = mcpTools.body;
+    const catalogCount = catalog?.["toolCount"];
+    const healthCount = health?.["toolCount"];
+    const catalogVersion = catalog?.["catalogVersion"];
+    const healthVersion = health?.["catalogVersion"];
+    const names = Array.isArray(catalog?.["toolNames"])
+      ? (catalog["toolNames"] as unknown[]) : [];
+    const catalogo = mcpHealth.estado === "ONLINE" && mcpTools.statusHttp === 200
+      && typeof catalogCount === "number" && catalogCount > 0
+      && healthCount === catalogCount
+      && typeof catalogVersion === "string" && catalogVersion === healthVersion
+      && names.includes("centraldark_deploy_micro_fallback")
+        ? "PASS" as const : "UNKNOWN" as const;
+
+    const recipeRaw = health?.["recipeFirst"];
+    const recipe = recipeRaw && typeof recipeRaw === "object" && !Array.isArray(recipeRaw)
+      ? recipeRaw as Record<string, unknown> : null;
+    // So a resposta de runtime COM guarda, receita P0 e alias da mesma build
+    // autoriza verde. tool no catálogo ou arquivo em GitHub nao bastam.
+    const recipePass = catalogo === "PASS" && recipe?.["scope"] === "MCP_HTTP_ONLY"
+      && recipe?.["status"] === "PASS"
+      && recipe?.["codeStatus"] === "RECIPE_FIRST_MATCHED"
+      && recipe?.["priority"] === 0
+      && recipe?.["hostedDispatchLocked"] === true
+      && recipe?.["adminAliasLoaded"] === true;
+    const mcpRecipe = !recipe ? "UNKNOWN" as const
+      : recipePass ? "PASS" as const : "DRIFT" as const;
+
+    return {
+      hub: hubHealth.estado,
+      mcp: mcpHealth.estado,
+      hubHttp: hubHealth.statusHttp,
+      mcpHttp: mcpHealth.statusHttp,
+      mcpCatalogo: catalogo,
+      mcpCatalogVersion: typeof healthVersion === "string" ? healthVersion : null,
+      mcpToolCount: typeof healthCount === "number" ? healthCount : null,
+      mcpRecipe,
+      mcpRecipeStatus: typeof recipe?.["codeStatus"] === "string"
+        ? recipe["codeStatus"] : "SEM_READBACK_P0",
+      mcpRecipeEscopo: "MCP_HTTP_ONLY" as const,
+      medidoEm: new Date().toISOString(),
+    };
   });
