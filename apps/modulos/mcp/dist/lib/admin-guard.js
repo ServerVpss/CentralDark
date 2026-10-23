@@ -15,7 +15,7 @@ import path from "node:path";
 import os from "node:os";
 import { createHash, randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
-const AUDIT_DIR = process.env.MCP_AUDIT_DIR || "/root/CentralDark/logs";
+const AUDIT_DIR = process.env.MCP_AUDIT_DIR || "<caminho-vps>";
 const CHAIN_STATE = process.env.MCP_ADMIN_CHAIN_STATE
     || path.join(AUDIT_DIR, ".mcp-admin-chain.json");
 const STARTUP_LOCK = process.env.MCP_ADMIN_STARTUP_LOCK
@@ -47,7 +47,7 @@ function lerManifesto() {
         bruto = fs.readFileSync(MANIFESTO_PATH, "utf8");
     }
     catch (erro) {
-        throw new Error(`admin-guard: manifesto de destrutivas ilegivel em ${MANIFESTO_PATH}. `
+        throw new Error(`admin-guard: manifesto de destrutivas ilegivel em <variavel-segredo>. `
             + `O servico NAO sobe sem a politica de seguranca. Causa: ${erro?.code ?? erro?.message}`);
     }
     let cru;
@@ -55,7 +55,7 @@ function lerManifesto() {
         cru = JSON.parse(bruto);
     }
     catch (erro) {
-        throw new Error(`admin-guard: manifesto de destrutivas com JSON invalido em ${MANIFESTO_PATH}. `
+        throw new Error(`admin-guard: manifesto de destrutivas com JSON invalido em <variavel-segredo>. `
             + `O servico NAO sobe com politica corrompida. Causa: ${erro?.message}`);
     }
     // SO destrutivasAprovadas entra. destrutivasEmRevisao existe no arquivo de
@@ -121,11 +121,17 @@ export const ADMIN_CONFIRMATIONS = Object.freeze({
 // Fonte unica da verdade: o manifesto aprovado. Este modulo nao guarda
 // copia propria da lista — le de manifesto-destrutivas.json (ver acima).
 export const CANONICAL_DESTRUCTIVE_TOOLS = Object.freeze(MANIFESTO.nomes);
+// Inventario CONHECIDO inclui aprovadas e em revisao. Conhecer nao autoriza.
+export const CANONICAL_KNOWN_DESTRUCTIVE_TOOLS = Object.freeze(
+  [...new Set([...CANONICAL_DESTRUCTIVE_TOOLS,
+    ...DESTRUTIVAS_EM_REVISAO.map((item) => item.nome)])].sort()
+);
 export function getCanonicalExpectation() {
     return {
         expectedDestructiveCount: CANONICAL_DESTRUCTIVE_TOOLS.length,
-        expectedDestructiveNames: CANONICAL_DESTRUCTIVE_TOOLS,
-        version: CATALOG_VERSION,
+        $1
+    expectedKnownDestructiveNames: CANONICAL_KNOWN_DESTRUCTIVE_TOOLS,
+    expectedKnownDestructiveCount: CANONICAL_KNOWN_DESTRUCTIVE_TOOLS.length,$2
     };
 }
 const SENSITIVE_KEY_RE = /(authorization|cookie|password|senha|secret|token|api[_-]?key|private[_-]?key|refresh[_-]?token|access[_-]?token|credential|credencial)/i;
@@ -172,17 +178,19 @@ export function reconcileCatalog(runtimeTools, expectation = {}) {
         .map((t) => t.name)
         .sort();
     const destructiveCount = destructiveTools.length;
+  const approvedInRuntimeCount = Array.isArray(expectation.expectedDestructiveNames)
+    ? expectation.expectedDestructiveNames.filter((name) => destructiveTools.includes(name)).length
+    : destructiveCount;
     const catalogHash = createHash("sha256")
         .update(JSON.stringify({ total, destructiveTools }))
         .digest("hex")
         .slice(0, 12);
     const divergences = [];
     if (typeof expectation.expectedDestructiveCount === "number"
-        && expectation.expectedDestructiveCount !== destructiveCount) {
+        && expectation.expectedDestructiveCount !== approvedInRuntimeCount) {
         divergences.push({
             kind: "count_mismatch",
-            expected: expectation.expectedDestructiveCount,
-            actual: destructiveCount,
+            $1 approvedInRuntimeCount,
         });
     }
     // MOTIVO  > antes qualquer divergencia deixava recon.ok = false, e o
@@ -201,15 +209,25 @@ export function reconcileCatalog(runtimeTools, expectation = {}) {
         const expected = [...expectation.expectedDestructiveNames].sort();
         missing = expected.filter((n) => !destructiveTools.includes(n));
         quarantined = destructiveTools.filter((n) => !expected.includes(n));
-        if (missing.length)
-            divergences.push({ kind: "missing_destructive", names: missing });
-        if (quarantined.length)
-            divergences.push({ kind: "extra_destructive", names: quarantined });
-    }
-    return {
-        ok: divergences.length === 0,
-        totalRuntimeTools: total,
-        destructiveCount,
+        if (missing.length) divergences.push({ kind: "missing_destructive", names: missing });
+    // Em revisao e conhecida pelo manifesto, mas segue BLOQUEADA pela guardDestructive.
+    // Somente nomes ausentes das DUAS listas configuram extra desconhecida.
+    const known = Array.isArray(expectation.expectedKnownDestructiveNames)
+      ? expectation.expectedKnownDestructiveNames : expected;
+    const unknown = quarantined.filter((name) => !known.includes(name));
+    if (unknown.length) divergences.push({ kind: "extra_destructive", names: unknown });
+    }$1
+    approvedInRuntimeCount,
+    knownDestructiveExpected: expectation.expectedKnownDestructiveCount ?? null,
+    knownInRuntimeCount: Array.isArray(expectation.expectedKnownDestructiveNames)
+      ? destructiveTools.filter((name) => expectation.expectedKnownDestructiveNames.includes(name)).length
+      : null,
+    registeredReview: quarantined.filter((name) =>
+      Array.isArray(expectation.expectedKnownDestructiveNames)
+      && expectation.expectedKnownDestructiveNames.includes(name)),
+    unknownDestructive: quarantined.filter((name) =>
+      !Array.isArray(expectation.expectedKnownDestructiveNames)
+      || !expectation.expectedKnownDestructiveNames.includes(name)),
         destructiveTools,
         catalogHash,
         catalogVersion: expectation.version ?? null,
