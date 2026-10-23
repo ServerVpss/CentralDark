@@ -188,7 +188,6 @@
     "no_parallel_executor": true,
     "no_paid_runner_dependency": true
   },
-  "legacy_primary_path": "github_actions_canonical_deploy",
   "execution_route": {
     "primary": "MCP_CENTRALDARK_VPS_DIRECT",
     "executor_tool": "centraldark_deploy_micro_fallback",
@@ -245,7 +244,6 @@
       "restart_and_deploy_are_not_implied": true
     },
     "bootstrap_compat": {
-      "legacy_recipe_primary": "github_actions_canonical_deploy",
       "only_executor": "centraldark_deploy_micro_fallback",
       "preview_allowed": true,
       "apply_requires_sha_40_hex": true,

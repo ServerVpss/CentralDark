@@ -2,11 +2,21 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 import { config } from "../../config.js";
+import { CANONICAL_DESTRUCTIVE_TOOLS, CANONICAL_KNOWN_DESTRUCTIVE_TOOLS, DESTRUTIVAS_EM_REVISAO } from "../../lib/admin-guard.js";
 const LOG_BASE = path.join(config.vps.repoPath, "revisoes");
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
 const policy = {
+    destructiveCatalog: {
+        known: CANONICAL_KNOWN_DESTRUCTIVE_TOOLS.length,
+        approved: CANONICAL_DESTRUCTIVE_TOOLS.length,
+        registeredReview: DESTRUTIVAS_EM_REVISAO.length,
+        reviewedToolNames: DESTRUTIVAS_EM_REVISAO.map((item) => item.nome).sort(),
+        rule: "Registra aprovadas + em revisao; apenas aprovadas podem executar. Desconhecidas bloqueadas.",
+        registeredDoesNotGrantPermission: true,
+        individualAdminConfirmationRequired: true,
+    },
     mode: {
         autoSafe: true,
         sensitiveConfirmed: true,
