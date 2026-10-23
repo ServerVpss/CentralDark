@@ -129,9 +129,10 @@ export const CANONICAL_KNOWN_DESTRUCTIVE_TOOLS = Object.freeze(
 export function getCanonicalExpectation() {
     return {
         expectedDestructiveCount: CANONICAL_DESTRUCTIVE_TOOLS.length,
-        $1
+        expectedDestructiveNames: CANONICAL_DESTRUCTIVE_TOOLS,
     expectedKnownDestructiveNames: CANONICAL_KNOWN_DESTRUCTIVE_TOOLS,
-    expectedKnownDestructiveCount: CANONICAL_KNOWN_DESTRUCTIVE_TOOLS.length,$2
+    expectedKnownDestructiveCount: CANONICAL_KNOWN_DESTRUCTIVE_TOOLS.length,
+    version: CATALOG_VERSION,
     };
 }
 const SENSITIVE_KEY_RE = /(authorization|cookie|password|senha|secret|token|api[_-]?key|private[_-]?key|refresh[_-]?token|access[_-]?token|credential|credencial)/i;
@@ -190,7 +191,8 @@ export function reconcileCatalog(runtimeTools, expectation = {}) {
         && expectation.expectedDestructiveCount !== approvedInRuntimeCount) {
         divergences.push({
             kind: "count_mismatch",
-            $1 approvedInRuntimeCount,
+            expected: expectation.expectedDestructiveCount,
+      actual: approvedInRuntimeCount,
         });
     }
     // MOTIVO  > antes qualquer divergencia deixava recon.ok = false, e o
@@ -216,7 +218,12 @@ export function reconcileCatalog(runtimeTools, expectation = {}) {
       ? expectation.expectedKnownDestructiveNames : expected;
     const unknown = quarantined.filter((name) => !known.includes(name));
     if (unknown.length) divergences.push({ kind: "extra_destructive", names: unknown });
-    }$1
+    }
+
+  return {
+    ok: divergences.length === 0,
+    totalRuntimeTools: total,
+    destructiveCount,
     approvedInRuntimeCount,
     knownDestructiveExpected: expectation.expectedKnownDestructiveCount ?? null,
     knownInRuntimeCount: Array.isArray(expectation.expectedKnownDestructiveNames)
