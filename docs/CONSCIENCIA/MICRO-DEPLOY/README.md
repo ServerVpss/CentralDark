@@ -41,6 +41,16 @@ Lei canônica: `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md`, seção `CI proporcional e
 
 No modo normal, executar somente teste aplicável ao owner. CodeQL completo, Trigger Fabric Full Package e Run All estão configurados como acionamento manual; mudanças críticas de segurança continuam exigindo gates pertinentes. O controle é do MCP CentralDark. O destino é microdeploy via SSH autenticado, com build na VPS, SHA exato, backup, health, receipt e rollback. **O SSH deploy não está comprovado em runtime**: o workflow hosted SSH existente apenas acorda o runner; não o executar como deploy. O runner não é excluído apagando arquivo do GitHub.
 
+## Contraprova do transporte SSH leve — 2026-10-23
+
+- Fonte: commit `9dc4750d70f4c9a244e034bb1281383cebec71bf` na `main`; entrada manual existente reaproveitada em `.github/workflows/vps-ssh-exec.yml`.
+- Configuração: YAML parse e `bash -n` do corpo `run` = PASS pela rota MCP CentralDark (sem publicar secrets).
+- Run GitHub `39912949599`: `workflow_dispatch` aceito, `completed/failure`, `runner_id=0`, `steps=[]`. Anotação do GitHub: job não iniciou por pagamentos recentes falhos ou limite de gastos da conta. **Nenhum SSH remoto foi executado nesse run**.
+- VPS: serviço `ssh` observado `active`; isso é prova do daemon, **não** do login via GitHub. Tentativa separada de `--dry-run` nativo via MCP foi bloqueada pela segurança da ferramenta; nenhum teste de promoção passou.
+- Cadastro de runners do GitHub relido depois da remoção feita pelo CHEFE: apenas `centraldark-vps-1` e `centraldark-casa-1`. Não executar nova exclusão.
+- `SSH_TRANSPORT_PASS=UNKNOWN`, `DEPLOY_PASS=UNKNOWN`, `PRODUCTION_MUTATION=NONE`.
+- NEXT_CURSOR: recuperar habilitação de GitHub-hosted billing **ou** executar pela rota direta autorizada do MCP CentralDark, sem runner duplicado; realizar `probe` e `dry_run` reais antes de permitir `apply`.
+
 ## Fallback oficial — MAIN-PINNED RUNTIME FAST-PATH
 
 Quando o deploy canônico estiver `FAIL` ou `BLOCKED` antes da promoção, usar a receita já provada:

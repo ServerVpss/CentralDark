@@ -105,7 +105,11 @@ light_deploy_ssh_law:
   material_security_gates_required: true
   control_plane: MCP_CENTRALDARK
   transport_target: EXISTING_AUTHORIZED_SSH
-  transport_runtime_status: PENDING_PROOF
+  transport_runtime_status: BLOCKED_GITHUB_HOSTED_BILLING
+  hosted_billing_blocked: true
+  attempted_probe_run_id: 39912949599
+  ssh_probe_runtime_pass: false
+  no_production_mutation: true
   github_actions_auto_deploy: PAUSED
   source_ref: main
   required_inputs:
