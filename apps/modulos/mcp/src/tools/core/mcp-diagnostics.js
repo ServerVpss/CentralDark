@@ -1,37 +1,7 @@
 import { z } from "zod";
-import { aprendizadoTools } from "../aprendizado/aprendizado.js";
-import { conscienciaTools } from "../consciencia/consciencia.js";
-import { deployTools } from "../deploy/deploy.js";
-import { githubAdminTools } from "../github/github-admin.js";
-import { githubReadTools } from "../github/github-read.js";
-import { githubTools } from "../github/github-tools.js";
-import { githubWriteTools } from "../github/github-write.js";
-import { mcpAdminTools } from "./mcp-admin.js";
-import { pendenciasTools } from "../pendencias/pendencias.js";
-import { skillTools } from "../skills/skill.js";
-import { supabaseTools } from "../supabase/supabase.js";
-import { vpsFileTools } from "../vps/vps-files.js";
-import { vpsLazyTools } from "../vps/vps-lazy.js";
-import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
-const runtimeTools = [
-    ...aprendizadoTools,
-    ...conscienciaTools,
-    ...skillTools,
-    ...githubReadTools,
-    ...githubWriteTools,
-    ...githubAdminTools,
-    ...githubTools,
-    ...vpsRunOnceTools,
-    ...vpsFileTools,
-    ...vpsLazyTools,
-    ...pendenciasTools,
-    ...deployTools,
-    ...supabaseTools,
-    ...mcpAdminTools,
-];
 const EXPECTED_SAFE_FULL_ADMIN = [
     "mcp_admin_call",
     "mcp_admin_catalog",
@@ -47,8 +17,6 @@ const EXPECTED_SAFE_FULL_ADMIN = [
     "vps_git_status",
     "vps_git_diff_safe",
     "vps_run_once_script",
-    "vps_listar_pastas_limpaveis",
-    "vps_limpar_pasta_projeto",
     "vps_read_file_safe",
     "vps_write_file_safe",
     "vps_list_dir_safe",
@@ -56,8 +24,54 @@ const EXPECTED_SAFE_FULL_ADMIN = [
     "mcp_policy_summary",
     "mcp_audit_recent_logs",
 ];
-function runtimeNames() {
-    return runtimeTools.map((tool) => tool.name).sort();
+// #OBSERVACOES# @owner apps/modulos/mcp/src/tools/core/mcp-admin.js
+// @doc_ref docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md
+// @last_updated 2026-10-21T20:00:00Z
+// @implementado comparison of dispatcher/HTTP scopes and the 17-route canary gate
+// @pendente CI exact SHA, runtime promotion, route readback and rollback receipt
+// @estado SOURCE_ONLY @next_cursor CANARY_PR_CI_THEN_RUNTIME_READBACK
+// Retired legacy destructive capabilities stay visible in diagnostics, NEVER implicitly re-enabled.
+const LEGACY_REQUIRES_SAFETY_REVIEW = Object.freeze([
+    "vps_listar_pastas_limpaveis",
+    "vps_limpar_pasta_projeto",
+]);
+const EXPECTED_CANARY_ROUTES = Object.freeze([
+    "ZENDRIVE_VSCODE_REMOTE_SSH",
+    "FIGMA_MCP_ACCOUNT",
+    "FIGMA_CENTRALDARK_FIGJAM",
+    "RDC_VPS_CENTRALDARK_OS",
+]);
+async function runtimeSnapshot() {
+    // Read the SAME live dispatcher registry and its canonical catalog handler.
+    // A public /tools.json list and a 86-tool legacy registry are NOT equal scopes.
+    const mod = await import("./mcp-admin.js");
+    const tools = mod.getDispatcherRuntimeTools();
+    const names = [...new Set(tools.map((tool) => tool.name))].sort();
+    const adminTools = mod.mcpAdminTools;
+    // mcp_admin_catalog is exported via mcpAdminTools, not runtimeTools.
+    // Expected admin capabilities are compared against the union without inflating runtimeToolCount.
+    const exposedNames = [...new Set([...names, ...adminTools.map((tool) => tool.name)])].sort();
+    const catalogTool = adminTools.find((tool) => tool.name === "mcp_admin_catalog");
+    if (!catalogTool?.handler) throw new Error("MCP_ADMIN_CATALOG_UNAVAILABLE");
+    const result = await catalogTool.handler({});
+    const catalog = JSON.parse(result?.content?.find((part) => part.type === "text")?.text ?? "{}");
+    if (catalog.ok !== true || !Array.isArray(catalog.routes)) {
+        throw new Error("MCP_ADMIN_CATALOG_INVALID");
+    }
+    const routeNames = [...new Set(catalog.routes.map((route) => route.id))].sort();
+    return {
+        names, exposedNames, routeNames,
+        expectedRouteCount: 17,
+        catalogScope: catalog.catalogScope,
+        catalogFingerprint: catalog.catalogFingerprint,
+        advertisedToolCount: catalog.totalRuntimeTools,
+        routeCount: catalog.routeCount,
+        routeParity: catalog.routeCount === routeNames.length && catalog.routeCount === 17,
+        missingCanaryRoutes: EXPECTED_CANARY_ROUTES.filter((id) => !routeNames.includes(id)),
+        legacySafetyReview: LEGACY_REQUIRES_SAFETY_REVIEW.map((name) => ({
+            name, present: names.includes(name), reviewRequired: true,
+        })),
+    };
 }
 async function fetchJson(url) {
     const res = await fetch(url, { headers: { "User-Agent": "MCP-CentralDark/catalog-validator" } });
@@ -76,27 +90,37 @@ export const mcpDiagnosticsTools = [
             filter: z.string().optional().describe("Filtro opcional para listar tools por nome"),
         }),
         handler: async (input) => {
-            const names = runtimeNames();
+            const snapshot = await runtimeSnapshot();
+            const names = snapshot.names;
             const expected = (input.expected && input.expected.length > 0 ? input.expected : EXPECTED_SAFE_FULL_ADMIN).sort();
-            const missing = expected.filter((name) => !names.includes(name));
-            const presentExpected = expected.filter((name) => names.includes(name));
+            const missing = expected.filter((name) => !snapshot.exposedNames.includes(name));
+            const presentExpected = expected.filter((name) => snapshot.exposedNames.includes(name));
             const filter = (input.filter ?? "").toLowerCase().trim();
             const filteredTools = filter ? names.filter((name) => String(name || "").toLowerCase().includes(filter)) : undefined;
             return ok({
-                ok: missing.length === 0,
-                status: missing.length === 0 ? "OK" : "FALTANDO_TOOLS",
+                ok: missing.length === 0 && snapshot.missingCanaryRoutes.length === 0 && snapshot.routeParity,
+                status: missing.length || snapshot.missingCanaryRoutes.length || !snapshot.routeParity ? "DRIFT" : "OK",
                 runtimeToolCount: names.length,
+                exposedToolCount: snapshot.exposedNames.length,
+                expectedRouteCount: snapshot.expectedRouteCount,
+                catalogScope: snapshot.catalogScope,
+                catalogFingerprint: snapshot.catalogFingerprint,
+                routeCount: snapshot.routeCount,
+                routeIds: snapshot.routeNames,
+                routeParity: snapshot.routeParity,
+                missingCanaryRoutes: snapshot.missingCanaryRoutes,
+                legacySafetyReview: snapshot.legacySafetyReview,
                 expectedCount: expected.length,
                 presentExpected,
                 missing,
                 filteredTools,
-                reconnectHint: "Se o /tools.json já mostra uma tool mas o ChatGPT não mostra, reconecte o conector. Depois use mcp_admin_call como porta fixa.",
+                reconnectHint: "Se o /tools.json já mostra uma tool mas o cliente não mostra, reconecte o conector. Depois use mcp_admin_call como porta fixa.",
             });
         },
     },
     {
         name: "deploy_validate_mcp_catalog",
-        description: "Valida /health e /tools.json públicos do MCP e compara com o catálogo runtime local esperado.",
+        description: "Valida /health e /tools.json públicos do MCP (mcp.centralldark.com) e compara com o catálogo do dispatcher. Não cria rota de deploy na API.",
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true, title: "Validar catálogo público MCP" },
         inputSchema: z.object({
             publicUrl: z.string().url().optional().describe("URL pública do MCP. Padrão: https://mcp.centralldark.com"),
@@ -105,7 +129,8 @@ export const mcpDiagnosticsTools = [
             const base = (input.publicUrl ?? "https://mcp.centralldark.com").replace(/\/+$/, "");
             const health = await fetchJson(`${base}/health`);
             const toolsJson = await fetchJson(`${base}/tools.json`);
-            const names = runtimeNames();
+            const snapshot = await runtimeSnapshot();
+            const names = snapshot.names;
             const publicTools = Array.isArray(toolsJson.toolNames)
                 ? toolsJson.toolNames
                 : Array.isArray(toolsJson.tools)
@@ -118,19 +143,38 @@ export const mcpDiagnosticsTools = [
                         .filter(Boolean)
                     : [];
             const publicMissingFromRuntime = names.filter((name) => !publicTools.includes(name));
+            const publicOnly = publicTools.filter((name) => !names.includes(name));
+            const publicRestrictedByPolicy = tools.filter((tool) =>
+                tool.annotations?.destructiveHint === true && !publicTools.includes(tool.name)).map((tool) => tool.name);
+            const publicMissingSafe = publicMissingFromRuntime.filter((name) => !publicRestrictedByPolicy.includes(name));
             const expectedMissingPublic = EXPECTED_SAFE_FULL_ADMIN.filter((name) => !publicTools.includes(name));
             return ok({
-                ok: publicMissingFromRuntime.length === 0 && expectedMissingPublic.length === 0,
+                ok: publicMissingSafe.length === 0 && expectedMissingPublic.length === 0 && snapshot.missingCanaryRoutes.length === 0 && snapshot.routeParity,
                 base,
+                surface: "mcp.centralldark.com",
+                apiDeployRoute: false,
                 health,
                 runtimeToolCount: names.length,
+                exposedToolCount: snapshot.exposedNames.length,
+                expectedRouteCount: snapshot.expectedRouteCount,
+                catalogScope: snapshot.catalogScope,
+                catalogFingerprint: snapshot.catalogFingerprint,
+                routeCount: snapshot.routeCount,
+                routeIds: snapshot.routeNames,
+                routeParity: snapshot.routeParity,
+                missingCanaryRoutes: snapshot.missingCanaryRoutes,
+                legacySafetyReview: snapshot.legacySafetyReview,
                 publicToolCount: publicTools.length,
                 catalogMatchesRuntime: publicMissingFromRuntime.length === 0,
+                comparisonSemantics: "RUNTIME_SUBSET_OF_PUBLIC_NOT_EQUAL_SCOPE",
+                publicOnlyCount: publicOnly.length,
+                publicOnly,
                 publicMissingFromRuntime,
+                publicRestrictedByPolicy,
+                publicMissingSafe,
                 expectedMissingPublic,
                 checkedAt: new Date().toISOString(),
             });
         },
     },
 ];
-//# sourceMappingURL=mcp-diagnostics.js.map

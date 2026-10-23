@@ -32,6 +32,8 @@ import { vpsFileTools } from "../vps/vps-files.js";
 import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
+import { mcpDiagnosticsTools } from "./mcp-diagnostics.js";
+import { mcpPolicyTools } from "./mcp-policy.js";
 import {
     ADMIN_CONFIRMATIONS,
     CATALOG_VERSION,
@@ -84,16 +86,12 @@ const runtimeTools = [
     ...adminGitTools,
     ...adminMainWriterTools,
     ...adminProviderControlTools,
-    // MOTIVO  > estes 6 grupos existem no catalogo mas nao entravam em
-    //           runtimeTools, entao 24 tools ficavam INALCANCAVEIS pelo
-    //           dispatcher mcp_admin_call, entre elas as integracoes.
-    // ONDE    > apps/modulos/mcp/src/tools/core/mcp-admin.js, runtimeTools.
-    // RESOLVE > incluidos aqui. NAO incluir mcpDiagnosticsTools nem
-    //           mcpPolicyTools: os dois importam mcpAdminTools de volta deste
-    //           arquivo e formam ciclo — tentativa anterior derrubou o
-    //           servico com 'Cannot access mcpAdminTools before
-    //           initialization'. Nao ha perda: as 4 tools desses grupos ja
-    //           sao expostas direto no catalogo.
+    // Ciclo quebrado: mcp-diagnostics.js nao importa mcp-admin no topo.
+    // Dispatcher alcanca mcp_catalog_diff, deploy_validate_mcp_catalog,
+    // mcp_policy_summary e mcp_audit_recent_logs.
+    // Deploy continua tool MCP. Nao cria rota HTTP em api.centralldark.com.
+    ...mcpDiagnosticsTools,
+    ...mcpPolicyTools,
     ...cognitivoTools,
     ...eliteGatewayTools,
     ...geminiTools,
@@ -106,12 +104,13 @@ const runtimeTools = [
 const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
-    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    // Casa route order: private Tailscale transport + native CentralDark MCP/Hermes; RDC remains fallback, not a dependency.
+    { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME", priority: "FALLBACK_ONLY", fallbackRequires: "PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE" },
     { id: "SCREENPIPE_LOCAL_SENSOR", transport: "SCREENPIPE_HTTP", binding: "SEGREDO:127.0.0.1:3030", capability: "CASA_VISUAL_AUDIO_DESKTOP_SENSOR", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SCREENPIPE_CLI_RECORDER", transport: "SCREENPIPE_CLI", binding: "${SCREENPIPE_CLI:-bun x screenpipe@latest}", capability: "ALWAYS_ON_LOCAL_CAPTURE_STATUS_SEARCH_PIPES", source: "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "Segredo-VPS(VPN)|segredo-vpss(fallback-publico)", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "ZENDRIVE_VSCODE_REMOTE_SSH", transport: "VSCODE_REMOTE_SSH", binding: "SEGREDO:Segredo-VPS -> Tailscale -> CENTRALDARK-OS", capability: "CASA_TO_VPS_SSH_AUTH_TERMINAL_FILES_PROCESS", source: "skills/vs-code-restore/src/extension.ts", runtimeState: "MEASURE_AT_RUNTIME" },
-    { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_CASA_TO_VPS", transport: "MCP", binding: "MCP_CASA", capability: "execute_command|vps_run_once_script", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "HERMES_SHELL", transport: "HERMES", binding: "SHELL", capability: "EXECUTION_BODY", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "HERMES_DELEGATED_COMMIT_PATH", transport: "HERMES_AGENT", binding: "PR#1748:c893a949b3051ae8a96cc4bc8b910857534c55e7", capability: "DELEGATED_TOOL_WRITE_COMMIT_PUSH_RECIPE", source: "experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md", runtimeState: "PASS_ON_PR1748_REPLAY_REQUIRED_FOR_CURRENT" },
@@ -176,6 +175,12 @@ const DELEGATED_PROVIDER_CAPABILITIES = Object.freeze([
     { id: "CASA_BROWSER_WINDOWS", label: "Chrome e Edge na Casa", responsibility: "Janelas observadas; nao representa DOM, abas ou cliques remotos", provider: "Windows UI + Browser connector", authorization: "CLIENT_BROWSER_SESSION_OR_LOCAL_OWNER", runtimeState: "WINDOW_TITLE_ONLY_BROWSER_PLUGIN_CONTEXT_UNAVAILABLE", delegation: "CLIENT_BROWSER_OR_SCREENPIPE_ADAPTER_REQUIRED" },
     { id: "SUPABASE", label: "Supabase", responsibility: "Banco de dados, auth e serviços Supabase", provider: "Supabase", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
     { id: "WRITING_STYLE", label: "Writing Style", responsibility: "Exemplos autorizados de estilo de escrita", provider: "Writing Style", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "MCP_REGISTRY_DISCOVERY", label: "MCP Registry — descoberta", responsibility: "Descobrir servidores MCP publicados; fonte de inventário, não instalador", provider: "modelcontextprotocol/registry", sourceRepo: "https://github.com/modelcontextprotocol/registry", authorization: "DISCOVERY_ONLY_NOT_CONNECTED", runtimeState: "INVENTORY_ONLY_NOT_INSTALLED", delegation: "NO_AUTO_EXECUTION_REUSE_EXISTING_AUTHORIZED_ADAPTER" },
+    { id: "MCP_REFERENCE_SERVERS", label: "MCP Reference Servers", responsibility: "Referências de implementação MCP para reaproveitar contratos; não são serviços de produção", provider: "modelcontextprotocol/servers", sourceRepo: "https://github.com/modelcontextprotocol/servers", authorization: "DISCOVERY_ONLY_NOT_CONNECTED", runtimeState: "INVENTORY_ONLY_NOT_INSTALLED", delegation: "NO_AUTO_EXECUTION_REUSE_EXISTING_AUTHORIZED_ADAPTER" },
+    { id: "PLAYWRIGHT_MCP_BROWSER", label: "Playwright MCP — navegador", responsibility: "Automação web por snapshots de acessibilidade; comparar com Zendrive e browser existentes antes de incorporar", provider: "microsoft/playwright-mcp", sourceRepo: "https://github.com/microsoft/playwright-mcp", authorization: "DISCOVERY_ONLY_NOT_CONNECTED", runtimeState: "INVENTORY_ONLY_NOT_INSTALLED", delegation: "NO_AUTO_EXECUTION_REUSE_EXISTING_AUTHORIZED_ADAPTER" },
+    { id: "PLAYWRIGHT_CLI_FASTPATH", label: "Playwright CLI — fast-path", responsibility: "Automação browser por CLI/skills para jobs com menor overhead de schemas; alternativa a medir, não substituição automática", provider: "microsoft/playwright-cli", sourceRepo: "https://github.com/microsoft/playwright-cli", authorization: "DISCOVERY_ONLY_NOT_CONNECTED", runtimeState: "INVENTORY_ONLY_NOT_INSTALLED", delegation: "NO_AUTO_EXECUTION_REUSE_EXISTING_AUTHORIZED_ADAPTER" },
+    { id: "CONTEXT7_DOCS_MCP", label: "Context7 — documentação CURRENT", responsibility: "Consulta de documentação de bibliotecas por MCP/CLI; conexão e autorização próprias ainda não medidas", provider: "upstash/context7", sourceRepo: "https://github.com/upstash/context7", authorization: "DISCOVERY_ONLY_NOT_CONNECTED", runtimeState: "INVENTORY_ONLY_NOT_INSTALLED", delegation: "NO_AUTO_EXECUTION_REUSE_EXISTING_AUTHORIZED_ADAPTER" },
+    { id: "MARKITDOWN_MCP", label: "MarkItDown MCP — conversão documental", responsibility: "Converter documentos e arquivos para Markdown; validar fronteira de arquivos/URLs antes de executar", provider: "microsoft/markitdown", sourceRepo: "https://github.com/microsoft/markitdown", authorization: "DISCOVERY_ONLY_NOT_CONNECTED", runtimeState: "INVENTORY_ONLY_NOT_INSTALLED", delegation: "NO_AUTO_EXECUTION_REUSE_EXISTING_AUTHORIZED_ADAPTER" },
 ]);
 const ROUTE_LAWS = Object.freeze({
     oneRouteFailedIsNotSystemFailed: true,
@@ -217,6 +222,9 @@ export function diagnoseMcpBlock(status) {
 }
 
 const registry = new Map(runtimeTools.map((tool) => [tool.name, tool]));
+export function getDispatcherRuntimeTools() {
+    return runtimeTools;
+}
 function safeToolInfo(tool) {
     return {
         name: tool.name,
@@ -224,6 +232,25 @@ function safeToolInfo(tool) {
         readOnly: tool.annotations?.readOnlyHint === true,
         destructive: tool.annotations?.destructiveHint === true,
         title: tool.annotations?.title ?? null,
+    };
+}
+
+
+function withDelegatedCapability(raw, tool) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return raw;
+    const existing = raw.structuredContent && typeof raw.structuredContent === "object"
+        && !Array.isArray(raw.structuredContent) ? raw.structuredContent : {};
+    return {
+        ...raw,
+        structuredContent: {
+            ...existing,
+            centraldark_delegation: {
+                tool: tool.name,
+                // A dispatcher does not infer the owning component or validate
+                // receipts merely because it successfully invoked the handler.
+                evidence_boundary: "DISPATCHED_TOOL_RESULT_NOT_RUNTIME_PROOF",
+            },
+        },
     };
 }
 
@@ -433,7 +460,7 @@ export const mcpAdminTools = [
             }
 
             if (!destructive) {
-                return tool.handler(parsed.data, ctx);
+                return withDelegatedCapability(await tool.handler(parsed.data, ctx), tool);
             }
             // Destrutiva: startup auditável + guarda canônica versionada.
             const startup = await ensureStartupAuditReady();
@@ -479,7 +506,7 @@ export const mcpAdminTools = [
                             : "Nada foi executado. Passe a confirmação admin exigida pelo caminho interativo canônico."),
                 });
             }
-            return tool.handler(parsed.data, ctx);
+            return withDelegatedCapability(await tool.handler(parsed.data, ctx), tool);
         },
     },
 ];

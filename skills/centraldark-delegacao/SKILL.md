@@ -1,11 +1,11 @@
 ---
 name: centraldark-delegacao
-description: Delegar missões autorizadas de qualquer chat/agente conectado ao Hermes Kanban existente, reutilizando tarefa, owner, rota, receipt e contraprova, sem criar dispatcher paralelo.
-version: 1.0.0
+description: Delegar tarefas do Builder com escritor único e prova.
+version: 1.1.0
 owner: .agents/skills/centraldark-operational-method/SKILL.md
 catalog_owner: .agents/skills/skill-workshop/SKILL.md
 execution_owner: .agents/skills/autonomous-ai-agents/hermes-agent/SKILL.md
-tags: [centraldark, hermes, delegacao, kanban, mcp, chatgpt]
+tags: [centraldark, hermes, claude, codex, builder, delegacao, kanban, mcp, chatgpt]
 ---
 
 # CENTRALDARK — Delegação transversal e verificável
@@ -37,6 +37,23 @@ Quando o CHEFE autenticar o GitHub App/OAuth App existente, o backend deverá va
 
 **Contrato tipado do Hermes:** `.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json`. Os procedimentos `IDENTIFY_INTENT`, `REMEASURE_MAIN`, `FIND_CAPABILITIES`, `RESOLVE_IDENTITY`, `VALIDATE_GITHUB_PERMISSION`, `REFRESH_OR_REAUTHORIZE`, `RESOLVE_SKILL`, `RESOLVE_ROUTE`, `DEDUP_KANBAN`, `DISPATCH_SAFE`, `OBSERVE_AND_COUNTERPROVE` e `RECEIPT_AND_REPLAY` devem ser reutilizados no mesmo owner, sem fabricar 12 skills independentes.
 
+
+## Builder — terminais Hermes, Claude e Codex
+
+**Quando usar:** missão do CHEFE recebida no Builder/Instinto Superior que exige uma ou mais tarefas nos terminais já existentes. O Builder **coordena e mostra resultado**, não é executor novo, fila nova ou substituto do Kanban Hermes. Esta seção especializa o procedimento acima; não cria outro dispatcher.
+
+1. **Localizar antes de abrir:** resolver sessão do Builder, `INTENT_ID`, `GOAL`, owner do projeto, `MAIN_SHA` e `NEXT_CURSOR`. Procurar tarefa Kanban, terminal, sessão e workspace existentes. Reutilizar a sessão autorizada em vez de abrir terminal ou janela duplicada.
+2. **Medir braços reais:** verificar para Hermes, Claude e Codex a identidade da sessão, processo/CLI ou endpoint, disponibilidade, ferramentas, permissão, diretório/branch/worktree e último ACK. Um botão visível, CLI instalado ou aba aberta **não** prova canal operacional; ausente, offline ou sem permissão é `UNAVAILABLE/UNKNOWN` no braço afetado.
+3. **Quebrar por escopo material:** produzir tarefas com `TASK_ID`, `INTENT_ID`, `OWNER_PATHS`, dependências e critério de aceitação. Deduplicar pelo Kanban/receipt já existente. Dois terminais nunca recebem mutação simultânea no mesmo caminho, worktree, branch compartilhada ou recurso transacional; leitura e contraprova podem coexistir.
+4. **Escolher executor por capacidade, não por rótulo:** Hermes opera as rotas autorizadas e continua o Kanban; Claude ou Codex podem editar, compilar, testar ou revisar conforme ferramentas e escopos efetivamente disponíveis. A distribuição é dinâmica. Cada tarefa recebe **um único `ACTIVE_WRITER`**; outro terminal no mesmo escopo fica `READ_ONLY` até handoff registrado.
+5. **Handoff real:** transmitir ao terminal autorizado `INTENT_ID | TASK_ID | GOAL | OWNER_PATHS | MAIN_SHA | PR_HEAD | ACTIVE_WRITER | DEPENDS_ON | ACCEPTANCE | NEXT_CURSOR` e obter `ACK` correlacionado à sessão/rota. Não interpretar texto exibido no chat do Builder como entrega ao CLI. Se o adapter não despachar, preservar a tarefa e registrar `DISPATCH_NOT_PROVEN`.
+6. **Executar e observar:** usar o Kanban, comando ou ponte já contratados; distinguir `ASSIGNED → ACKED → RUNNING → COMPLETED → VERIFIED`. Readback do arquivo/commit, código de saída, build e efeito real no alvo são provas diferentes. Nunca confundir compilação com instalação/conexão.
+7. **Contraprova independente:** um terminal/revisor sem writer lease naquele escopo confronta o delta com o Goal, tenta reproduzir falha, verifica testes relevantes e regressão nos consumidores; anexar SHA, alvo, resultado e receipt ao mesmo Kanban/PR. O executor não aprova sozinho sua mutação. Se falhar, devolver **somente o cone afetado** ao writer corrente.
+8. **Convergência:** o Builder exibe a mesma tarefa e receipt, com estado por terminal e `NEXT_CURSOR`; não mantém outra fila, status fabricado, segundo banco ou logs paralelos. `UNKNOWN != PASS`, `ACKED != COMPLETED`, `COMPLETED != VERIFIED`.
+
+**Casos negativos obrigatórios:** (a) mesma intenção duas vezes ⇒ uma tarefa; (b) Hermes e Claude disputam o mesmo arquivo ⇒ segundo writer bloqueado; (c) Claude e Codex em owners independentes ⇒ execução paralela permitida; (d) terminal offline ou ponte sem ACK ⇒ sem alegação de despacho; (e) build verde, mas botão do cockpit sem efeito ⇒ `EFFECT_NOT_PROVEN`.
+
+**Critério de aceitação:** ao clicar/delegar no Builder, o mesmo `TASK_ID` reaparece no Kanban existente com terminal/escopo corretos, ACK real, único writer, readback da saída e contraprova ligada ao mesmo `INTENT_ID`; ausência de ponte real permanece `BLOCKED`, sem simulação.
 
 ## Rotas e limites
 A skill deve funcionar em ChatGPT, Claude, Codex, Hermes e outros agentes **somente quando a respectiva superfície possuir ferramentas e autorizações reais**. Chat sem shell pode usar MCP autorizado ou GitHub para handoff, mas não afirma ter executado na Casa. Instalar `SKILL.md` fornece instruções consultivas e não garante que o cliente carregou a skill; isso exige medição separada. Em qualquer superfície, pedidos de instalação dependem das regras desse cliente.
