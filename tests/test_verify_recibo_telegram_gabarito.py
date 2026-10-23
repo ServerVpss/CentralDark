@@ -6,7 +6,7 @@ BASE = """📣 Recibo · auditoria
 🟢 Conferência realizada
 ⚠️ Pendência: nenhuma
 🎯 Próximo passo: revisar
-📌 commit: abcdef1234567890
+📌 arquivo: recibo.md
 🟡 UNKNOWN ≠ 🟢 PASS · ⚖️ REALIDADE = 👑 JUIZ · 🦜🚫 PAPAGAIO_OFF
 """
 

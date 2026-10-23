@@ -12,6 +12,7 @@ on:
     paths:
       - 'docs/**/*.md'
       - 'scripts/verify_recibo_telegram_gabarito.py'
+      - 'tests/test_verify_recibo_telegram_gabarito.py'
       - '.github/workflows/recibo-telegram-gabarito.yml'
 
 jobs:
