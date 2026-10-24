@@ -247,7 +247,7 @@ test("HUD, telemetria e HORN compartilham exatamente os mesmos dez IDs de Fixed 
   }
   assert.match(telemetry, /fixedPointTenEvidence/);
   assert.ok(hud.includes("window.CENTRALDARK_OPERATIONAL_CURRENT"));
-  assert.ok(hud.includes("fp.fixedPoint === true"));
+  assert.ok(hud.includes("fp.fixedPoint===true"));
 });
 
 test("META-GRILL, oracle, HUD and goal evaluator refer to the same canonical owner", () => {
