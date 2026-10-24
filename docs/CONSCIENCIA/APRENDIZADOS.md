@@ -3328,6 +3328,19 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Owner reaproveitado:** `LEIA-ME-IA.md` (entrada universal), este `APRENDIZADOS.md` (ouro do método), `CENTRALDARK-REMOTE-MCP-GATEWAY.md` (detalhe técnico), `mcp-admin.js` (inventário). Sem novo boot, serviço, memória ou conector.
 - **NEXT_CURSOR:** ler de volta main e ledger; em futuras operações do Hermes/VS Code/Cockpit verificar carregamento do entrypoint e consumo por ACK no executor, comparar live MCP e registro antes de promover o estado.
 
+### 22/10/2026 — ROTA_CASA_JEA_WINRM: Harness VPS → Casa fechado com JEA
+
+- **O que funcionou:** reusar o WinRM 5985, que já estava vivo, fora da LAN (regra só nos perfis Domain e Private) e com autenticação Negotiate. Em vez de criar um executor novo, foi acrescentado um endpoint JEA (allowlist e transcrição) e uma skill no Hermes existente.
+- **Armadilhas medidas:**
+  - Funções definidas no JEA não carregam módulo sozinhas (faltava o `CimCmdlets` em `ModulesToImport`).
+  - O `Select-Object` do JEA é um proxy restrito.
+  - String com propriedades extras do PowerShell chega como `None` no pypsrp: é preciso converter para `[string]`.
+  - O `hermes` da VPS é um wrapper shell, então o Python certo vem do runtime em `/root/.hermes/tools`.
+  - Uma função de shell chamada `cut` sobrescreve o comando do sistema e gera prova falsa.
+- **Antes de mexer num processo, procure quem o ressuscita:** o Cockpit 8080 é mantido pela tarefa `CentralDark-Cockpit-8080`, um watchdog de 1 minuto. Religar "do mesmo jeito" é chamar essa tarefa, não subir o node à mão.
+- **Gates:** `PROVEN 🔒` e sessão ao vivo são camadas separadas, e falha do sensor não apaga fato provado. `UNKNOWN != PASS` e `MERGED != DEPLOYED`. Credencial entra só como caminho.
+- **NEXT_CURSOR:** ver a seção 22 do owner `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`.
+
 ### 220. GitHub-first sem runner obrigatório
 - **Categoria:** atalho
 - **Data:** 2026-10-24
