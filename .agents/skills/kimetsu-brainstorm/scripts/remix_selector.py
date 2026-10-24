@@ -56,6 +56,7 @@ def plan(state: dict[str, Any]) -> dict[str, Any]:
         "unknown_state", "ambiguous", "cause_unknown", "cause_isolated",
         "multi_system", "needs_calculation", "needs_alternatives",
         "long_output", "requires_monitoring", "contradiction", "proof_missing",
+        "evidence_complete", "new_design", "phase_transition", "change_detected",
     )}
     if flags["unknown_state"] or flags["ambiguous"]:
         style, why, breaths = "ÁGUA", "Ambiguidade/estado não medido", [1, 10]
@@ -93,15 +94,35 @@ def plan(state: dict[str, Any]) -> dict[str, Any]:
     decision = ("PLAN_ONLY" if not authorized or flags["ambiguous"] or
                 (category != "SPIKE" and not state.get("design_approved", False))
                 else "EXECUTION_ELIGIBLE")
-    selected = [{"id": x, "name": CATALOG[x - 1][1],
-                 "status": "HISTORICAL_CANDIDATE" if 7 <= x <= 17 else "HISTORICAL_MAPPING"}
-                for x in breaths]
+    signals_by_breath = {
+        1: ("unknown_state", "ambiguous", "cause_unknown"),
+        2: ("cause_unknown",), 3: ("cause_isolated", "needs_calculation"),
+        4: ("requires_monitoring", "multi_system"),
+        5: ("long_output",), 6: ("proof_missing", "contradiction"),
+        7: ("evidence_complete",), 8: ("evidence_complete",),
+        9: ("new_design",), 10: ("unknown_state", "long_output"),
+        11: ("multi_system",), 12: ("phase_transition",),
+        13: ("change_detected",), 14: ("needs_alternatives",),
+        15: ("cause_unknown",), 16: ("cause_isolated",),
+        17: ("evidence_complete",),
+    }
+    # Score ALL 17: ranking is a suggestion, not proof of historical techniques.
+    catalog_scores = []
+    for idx, name, role in CATALOG:
+        matching = [signal for signal in signals_by_breath[idx] if flags[signal]]
+        base = 2 if idx in breaths else 0
+        score = base + len(matching)
+        catalog_scores.append({"id": idx, "name": name, "role": role,
+                               "score": score, "signals": matching,
+                               "status": "HISTORICAL_CANDIDATE" if idx >= 7 else "HISTORICAL_MAPPING"})
+    selected = sorted((x for x in catalog_scores if x["score"] > 0),
+                      key=lambda x: (-x["score"], x["id"]))[:4]
     return {
         "owner": ".agents/skills/kimetsu-brainstorm/SKILL.md",
         "intent": intent, "category": category, "decision": decision,
         "breathing": style, "reason": why,
         "catalog_evaluated": 17, "catalog_origin": "historical_dependabot_not_runtime_homologation",
-        "selected_breaths": selected, "methods": methods,
+        "catalog_scores": catalog_scores, "selected_breaths": selected, "methods": methods,
         "fable_loop": "CALIBRATE_READ_ONLY" if need_fable else "SKIP_NO_MATERIAL_GAP",
         "cot_react_loop": "ELIGIBLE_REAL_TOOLS" if need_react else "SKIP_NO_AUTHORIZED_MULTI_STEP_TOOLS",
         "delegation": {"mode": "INDEPENDENT_READ_ONLY" if delegate else "NONE",
