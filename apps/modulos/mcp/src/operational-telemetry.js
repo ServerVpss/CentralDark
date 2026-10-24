@@ -51,6 +51,7 @@ function latestForensic(root) {
     status: stale ? "STALE" : "OBSERVED",
     latestReceiptPresent: true,
     observedAt: observedAt || null,
+    observedAtIso: Number.isFinite(Date.parse(iso || "")) ? new Date(Date.parse(iso)).toISOString() : null,
     ageMs: Number.isFinite(ageMs) ? Math.max(0, ageMs) : null,
     sha256: latest.sha256 || null,
     reportPresent: typeof latest.report === "string" && exists(latest.report),
@@ -564,8 +565,8 @@ function fixedPointTenEvidence({ root, heartbeat, diagnostics, nowMs }) {
     proof_ref: "_DIAGNOSTICS/FORENSIC-LATEST.json#sha256=" + String(diagnostics.sha256 || "UNKNOWN"),
     counterproof_ref: "timestamp-within-15m+report+archive+secret-boundary",
     counterproof_verdict: forensicStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
-    measured_at: Number.isFinite(Date.parse(String(diagnostics.observedAt || "")))
-      ? new Date(Date.parse(String(diagnostics.observedAt))).toISOString() : measuredAt,
+    measured_at: Number.isFinite(Date.parse(String(diagnostics.observedAtIso || diagnostics.observedAt || "")))
+      ? new Date(Date.parse(String(diagnostics.observedAtIso || diagnostics.observedAt))).toISOString() : measuredAt,
     max_age_ms: 15 * 60 * 1000,
   } : { id: "FORENSIC_FRESHNESS", status: "UNKNOWN", source: "_DIAGNOSTICS/FORENSIC-LATEST.json", measured_at: measuredAt };
 
