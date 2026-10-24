@@ -1095,6 +1095,31 @@ export function validateUniversalMethod() {
   ], 'HERMES_KNOWLEDGE_COLLECTOR_RUNTIME');
 
 
+    requireTokens(master, [
+    'fixed_point_execution_header:',
+    'marker: FIXED_POINT_EXECUTION_HEADER_REQUIRED',
+    'applies_to: ALL_CURRENT_AND_FUTURE_AGENTS',
+    'owner: scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader',
+    'exactly_ten_ids_required: true',
+    'ten_current_attempts_with_gaps: HEADER_USED_WITH_GAPS',
+    'ten_pass_plus_current_goal_receipt_same_head: HEADER_USED_AND_FIXED_POINT',
+  ], 'FIXED_POINT_EXECUTION_HEADER_MASTER');
+
+  requireTokens(hermesPrompt, [
+    'FIXED_POINT_EXECUTION_HEADER_REQUIRED=true',
+    'FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader',
+    'FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
+    'FIXED_POINT_HEADER_REQUIRED_CRITERIA=OWNER_UNIQUE|LOCKS_PRESERVED|MCP_PUBLIC_HEALTH|ONE_HEART_FRESH|SCREENPIPE_CURRENT|AIONUI_STDIO_CURRENT|LOG_PRIVACY_CURRENT|CHECKOUT_MAIN_SYNC|FORENSIC_FRESHNESS|RECEIPT_PRESENT',
+    'HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true',
+  ], 'FIXED_POINT_EXECUTION_HEADER_HERMES');
+
+  requireTokens(agentsGuide, [
+    'FIXED_POINT_EXECUTION_HEADER_REQUIRED=true',
+    'FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader',
+    'FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
+    'HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true',
+  ], 'FIXED_POINT_EXECUTION_HEADER_AGENTS');
+
   const engines = parseEngineNames(engine);
   return {
     schema: 'centraldark.universal-engine-method.self-test.v1',
