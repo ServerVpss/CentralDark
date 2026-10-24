@@ -42,6 +42,21 @@ class TestRemix(unittest.TestCase):
         self.assertEqual(r["evidence"], "NOT_PROVEN_BY_PLANNER")
         self.assertEqual(r["xp_gained"], 0)
 
+    def test_all_seventeen_scored(self):
+        r = plan({"intent": "transição multi-sistema",
+                  "observed": {"multi_system": True, "phase_transition": True,
+                               "needs_alternatives": True}})
+        self.assertEqual(len(r["catalog_scores"]), 17)
+        self.assertEqual([x["id"] for x in r["catalog_scores"]], list(range(1, 18)))
+        self.assertGreater(next(x for x in r["catalog_scores"] if x["id"] == 12)["score"], 0)
+        self.assertGreater(next(x for x in r["catalog_scores"] if x["id"] == 14)["score"], 0)
+
+    def test_verdict_is_not_vote(self):
+        r = plan({"intent": "comparar hipóteses",
+                  "observed": {"needs_alternatives": True, "contradiction": True}})
+        self.assertIn("CoT-SC", r["methods"])
+        self.assertEqual(r["evidence"], "NOT_PROVEN_BY_PLANNER")
+
     def test_design_gate(self):
         r = plan({"intent": "arquitetar", "category": "ARCHITECTURAL",
                   "authorized": True, "tools_available": True, "steps": 5})
