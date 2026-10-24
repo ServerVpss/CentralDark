@@ -939,7 +939,7 @@ export function validateAgentCall(call, state, now = Date.now()) {
 
   const fixedPointHeader = validateFixedPointExecutionHeader(
     call.fixed_point_execution_header,
-    { expectedMissionId: call.mission_id, expectedHead: call.observed_head },
+    { expectedMissionId: call.mission_id, expectedHead: call.observed_head, expectedAgentId: call.from },
   );
   if (fixedPointHeader.accepted !== true) {
     return fail(fixedPointHeader.status || "BLOCKED_FIXED_POINT_EXECUTION_HEADER_NOT_USED", call, {
