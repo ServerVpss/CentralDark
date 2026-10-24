@@ -2638,6 +2638,7 @@ O cabeçalho FIX POINT serve para detectar **uso real por agente**. Repetir os d
 ```text
 FIXED_POINT_EXECUTION_HEADER_REQUIRED=true
 FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader
 HEADER_MISSING=INVALID
 TEN_IDS_WITHOUT_TEN_CURRENT_ATTEMPT_REFS=NOT_USED
 TEN_CURRENT_ATTEMPTS_WITH_UNKNOWN_GAPS=USED_WITH_GAPS
