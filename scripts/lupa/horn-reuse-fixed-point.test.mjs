@@ -3,7 +3,7 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 
-import { decideReuse, deriveFixedPoint, evaluateGoalClauses } from "./horn-reuse-fixed-point.mjs";
+import { decideReuse, deriveFixedPoint, evaluateGoalClauses, evaluateFixedPointTen, FIXED_POINT_TEN_CRITERIA } from "./horn-reuse-fixed-point.mjs";
 
 const CONTRACT_PATH = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const CONTINUITY_OWNER_PATH = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json";
@@ -144,6 +144,91 @@ test("Hermes can evaluate clauses over stdin without exposing JSON in argv", () 
   assert.equal(child.status, 0, child.stderr);
   assert.equal(JSON.parse(child.stdout).verdict, "FIXED_POINT");
 });
+
+
+const fixedPointTenCriteria = (overrides = {}) => FIXED_POINT_TEN_CRITERIA.map(({ id }) => ({
+  id,
+  status: "PASS",
+  source: "runtime:" + id,
+  source_sha: "a".repeat(40),
+  proof_ref: "proof:" + id,
+  counterproof_ref: "counterproof:" + id,
+  counterproof_verdict: "NOT_REFUTED",
+  measured_at: goalTime,
+  ...overrides[id],
+}));
+const fixedPointTenGoalReceipt = (overrides = {}) => ({
+  ...provenGoal(),
+  evaluator: "scripts/lupa/horn-reuse-fixed-point.mjs",
+  measured_at: goalTime,
+  max_age_ms: 5000,
+  ...overrides,
+});
+
+test("global Fixed Point exige os mesmos dez critérios nomeados pelo HUD e Goal receipt canônico", () => {
+  assert.equal(FIXED_POINT_TEN_CRITERIA.length, 10);
+  const result = evaluateFixedPointTen({
+    criteria: fixedPointTenCriteria(),
+    goalReceipt: fixedPointTenGoalReceipt(),
+  }, { nowMs: fixedNow, maxAgeMs: 5000 });
+  assert.equal(result.total, 10);
+  assert.equal(result.required_pass, 10);
+  assert.equal(result.verdict, "FIXED_POINT");
+  assert.equal(result.fixedPoint, true);
+  assert.equal(result.next_cursor, "FIXED_POINT");
+  assert.deepEqual(result.criteria.map((row) => row.id), FIXED_POINT_TEN_CRITERIA.map((row) => row.id));
+});
+
+test("os dois avaliadores restantes são critérios obrigatórios e não viram PASS só por existir um caminho", () => {
+  const rows = fixedPointTenCriteria({
+    FORENSIC_FRESHNESS: { status: "UNKNOWN", source_sha: undefined, proof_ref: undefined, counterproof_ref: undefined, counterproof_verdict: "UNKNOWN" },
+    RECEIPT_PRESENT: { status: "UNKNOWN", source_sha: undefined, proof_ref: undefined, counterproof_ref: undefined, counterproof_verdict: "UNKNOWN" },
+  });
+  const result = evaluateFixedPointTen({
+    criteria: rows,
+    goalReceipt: fixedPointTenGoalReceipt(),
+  }, { nowMs: fixedNow, maxAgeMs: 5000 });
+  assert.equal(result.required_pass, 8);
+  assert.equal(result.criteria.find((row) => row.id === "FORENSIC_FRESHNESS").status, "UNKNOWN");
+  assert.equal(result.criteria.find((row) => row.id === "RECEIPT_PRESENT").status, "UNKNOWN");
+  assert.equal(result.fixedPoint, false);
+  assert.equal(result.next_cursor, "VERIFY_FORENSIC_FRESHNESS");
+});
+
+test("Fixed Point de dez não fecha sem receipt de Goal mesmo quando os dez critérios passam", () => {
+  const result = evaluateFixedPointTen({ criteria: fixedPointTenCriteria() }, {
+    nowMs: fixedNow, maxAgeMs: 5000,
+  });
+  assert.equal(result.required_pass, 10);
+  assert.equal(result.goal_receipt_status, "UNKNOWN");
+  assert.equal(result.fixedPoint, false);
+  assert.equal(result.next_cursor, "GOAL_RECEIPT_REQUIRED");
+});
+
+test("critério sem contraprova, receipt repetido ou medição vencida nunca sela os dez", () => {
+  const missingCounterproof = fixedPointTenCriteria({
+    RECEIPT_PRESENT: { counterproof_ref: "", counterproof_verdict: "UNKNOWN" },
+  });
+  const partial = evaluateFixedPointTen({
+    criteria: missingCounterproof,
+    goalReceipt: fixedPointTenGoalReceipt(),
+  }, { nowMs: fixedNow, maxAgeMs: 5000 });
+  assert.equal(partial.criteria.find((row) => row.id === "RECEIPT_PRESENT").status, "UNKNOWN");
+  assert.equal(partial.fixedPoint, false);
+
+  assert.throws(() => evaluateFixedPointTen({
+    criteria: [...fixedPointTenCriteria(), fixedPointTenCriteria()[0]],
+    goalReceipt: fixedPointTenGoalReceipt(),
+  }, { nowMs: fixedNow, maxAgeMs: 5000 }), /FIXED_POINT_TEN_DUPLICATE_CRITERION/);
+
+  const stale = evaluateFixedPointTen({
+    criteria: fixedPointTenCriteria(),
+    goalReceipt: fixedPointTenGoalReceipt(),
+  }, { nowMs: fixedNow + 6000, maxAgeMs: 5000 });
+  assert.equal(stale.criteria[0].status, "STALE");
+  assert.equal(stale.fixedPoint, false);
+});
+
 
 test("META-GRILL, oracle, HUD and goal evaluator refer to the same canonical owner", () => {
   const hook = readFileSync(".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md", "utf8");
