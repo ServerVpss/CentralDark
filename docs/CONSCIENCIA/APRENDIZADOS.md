@@ -3220,3 +3220,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Gates permanentes:** `SOURCE != RUNTIME`; `MERGED != DEPLOYED`; `SSH_CASA_VPS != SHELL_VPS_CASA`; `VSIX_INSTALLED != VSCODE_TERMINAL_EXEC_ACK`; `HTTP200 != HEALTH_PASS`; `UNKNOWN != PASS`. Para afirmar lembrança compartilhada, cada consumer deve carregar a referência e devolver ACK/identidade/versão/receipt; memória não autoriza operações nem acesso por si só.
 - **Owner reaproveitado:** `LEIA-ME-IA.md` (entrada universal), este `APRENDIZADOS.md` (ouro do método), `CENTRALDARK-REMOTE-MCP-GATEWAY.md` (detalhe técnico), `mcp-admin.js` (inventário). Sem novo boot, serviço, memória ou conector.
 - **NEXT_CURSOR:** ler de volta main e ledger; em futuras operações do Hermes/VS Code/Cockpit verificar carregamento do entrypoint e consumo por ACK no executor, comparar live MCP e registro antes de promover o estado.
+
+### 220. GitHub-first sem runner obrigatório
+- **Categoria:** atalho
+- **Data:** 2026-10-24
+- **Contexto:** A tentativa inicial de criar branch pelo atalho que também tenta abrir PR retornou HTTP 422 no endpoint /pulls. O caminho de commit multi-arquivo da CentralDark conseguiu criar a branch, publicar o commit e, separadamente, abrir o PR.
+- **Aprendizado:** Para mudanças documentais isoladas, reutilizar o owner canônico e usar github_commit com branch + createBranchFrom=main; fazer readback antes de abrir PR separadamente. GitHub Contents API permite edição/commit sem runner. Não tratar PR aberto como merge ou deploy. Para SSH, exigir validação de host e nunca desabilitar StrictHostKeyChecking.
