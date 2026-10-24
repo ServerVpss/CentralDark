@@ -18,7 +18,7 @@ const ARQUIVOS = [
   { area: "Cockpit e Casa", caminho: "apps/instinto-superior/src/components/central/PainelPR1873.tsx", resumo: "Mapa visual selecionável deste próprio PR" },
   { area: "Cockpit e Casa", caminho: "apps/instinto-superior/src/components/central/MapaOwners.tsx", resumo: "Mapa de owners existente" },
   { area: "Aprendizados", caminho: "docs/CONSCIENCIA/APRENDIZADOS/2026-10-19-cockpit-casa-8080-boot-persistente.md", resumo: "Aprendizado persistente do boot e porta" },
-  { area: "Aprendizados", caminho: "docs/LEMBRANCAS/instinto-superior-dev-server-3000.md", resumo: "Histórico 3000/8081; contrato atual 8080" },
+  { area: "Aprendizados", caminho: "docs/CONSCIENCIA/LEMBRANCAS/instinto-superior-dev-server-3000.md", resumo: "Histórico 3000/8081; contrato atual 8080" },
   { area: "Provas", caminho: "docs/PROVAS/2026-10-19-CASA-COCKPIT-REBOOT-CORRECAO-DE-PROVA.md", resumo: "Reboot ainda sem contraprova após configuração" },
   { area: "Cockpit e Casa", caminho: "scripts/casa/instinto-cockpit-autostart.ps1", resumo: "Tarefa idempotente para a porta 8080" },
 ] as const;
