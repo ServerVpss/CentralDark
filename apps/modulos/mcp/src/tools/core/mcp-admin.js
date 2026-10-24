@@ -455,9 +455,17 @@ export const mcpAdminTools = [
                     sugestao: "Use mcp_admin_catalog para listar as tools disponíveis.",
                 });
             }
-            const destructive = tool.annotations?.destructiveHint === true;
+            const declaredDestructive = tool.annotations?.destructiveHint === true;
             const parsed = parseToolInput(tool, input.input);
-            if (!parsed.success) return invalidInputResponse(input, parsed, destructive);
+            if (!parsed.success) return invalidInputResponse(input, parsed, declaredDestructive);
+            // Tool destrutiva pode declarar classifyInvocation(input): somente uma invocacao
+            // PROVADA somente-leitura deixa de ser tratada como destrutiva. Erro => destrutiva.
+            let readOnlyInvocation = false;
+            if (declaredDestructive && typeof tool.classifyInvocation === "function") {
+                try { readOnlyInvocation = tool.classifyInvocation(parsed.data)?.readOnly === true; }
+                catch { readOnlyInvocation = false; }
+            }
+            const destructive = declaredDestructive && !readOnlyInvocation;
 
             // Mesmo dispatcher atende ChatGPT, Hermes, Hub e bridge OAuth:
             // consulta a receita no owner ANTES de qualquer handler.
