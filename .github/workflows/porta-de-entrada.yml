@@ -68,6 +68,31 @@ jobs:
       - name: 🔹 Setup Node 24 (fast path self-hosted)
         uses: ./.github/actions/setup-node24-selfhosted
 
+      - name: 🔹 MCP admin confirmation regression (only for MCP deltas)
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          base="${BASE_SHA:-}"
+          if [ -z "${base}" ] || ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
+            base="$(git merge-base origin/main "${HEAD_SHA}")"
+          fi
+          changed="$(git diff --name-only "${base}" "${HEAD_SHA}")"
+          if ! grep -q '^apps/modulos/mcp/' <<< "${changed}"; then
+            echo "MCP_ADMIN_REGRESSION=SKIP_NO_MCP_PATH_CHANGED"
+            exit 0
+          fi
+          npm ci --ignore-scripts --no-audit --no-fund --prefix apps/modulos/mcp
+          npm run test:admin-confirmation --prefix apps/modulos/mcp
+          node --check apps/modulos/mcp/src/mcp-server.js
+          node --check apps/modulos/mcp/src/tools/core/mcp-admin.js
+          node --check apps/modulos/mcp/src/tools/vps/vps-lazy.js
+          node --check apps/modulos/mcp/src/tool-result-envelope.js
+          node --check apps/modulos/mcp/src/audit-logger.js
+          echo "MCP_ADMIN_REGRESSION=PASS"
+
       - name: 🔹 Testar fonte autenticada de autorização
         run: node --test scripts/lupa/authority-approval.test.mjs
 
