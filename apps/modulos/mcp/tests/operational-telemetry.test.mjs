@@ -20,6 +20,9 @@ test("snapshot é fail-closed sem receipt", () => {
   assert.equal(snap.fixedPointTen.schema, "centraldark.fixed-point.ten.v1");
   assert.equal(snap.fixedPointTen.total, 10);
   assert.equal(snap.fixedPointTen.criteria.length, 10);
+  assert.equal(snap.fixedPointTen.criteria_attempts_required, 10);
+  assert.equal(snap.fixedPointTen.criteria_attempts_current, 5);
+  assert.equal(snap.fixedPointTen.header_usage, "NOT_USED");
   assert.equal(snap.fixedPointTen.fixedPoint, false);
   assert.equal(snap.fixedPointTen.verdict, "NEXT_DELTA");
   assert.equal(snap.fixedPointTen.next_cursor, "VERIFY_OWNER_UNIQUE");
