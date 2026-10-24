@@ -3,7 +3,7 @@ title: "SOUL SOL"
 date: 2026-08-27
 tags: ["consciencia", "identidade", "soul", "sol", "governanca", "orquestracao", "prova", "delta-util", "reconciliacao", "hermes", "rastro", "multi-caneta", "caminho-paralelo-converge", "portao-selado", "fronteira-humana", "arquitetura-inteira"]
 updated: 2026-10-24
-last_updated_utc: "2026-10-24T16:49:52.406Z"
+last_updated_utc: "2026-10-24T17:02:31.232Z"
 ---
 
 # 🧠 SOUL — SOL / JARVIS DO SEGREDO/CHEFE
@@ -2568,3 +2568,64 @@ PROVEN_INDEPENDENT_GAINS_REMAIN_REUSABLE=true
 **Leitura viva usada para orientar este aditivo:** `2026-10-24T16:48:26.242Z`, snapshot `centraldark.operational_snapshot.v1`: cinco dos sete eixos pontuáveis estavam `PASS`; `FORENSIC_FRESHNESS` e `RECEIPT_PRESENT` estavam `UNKNOWN`. Esses valores são apenas o T observado, não defaults permanentes.
 
 **Proveniência do aditivo:** 2026-10-24T16:49:52.406Z. Alteração no mesmo owner SOUL e no branch da PR #1941; o arquivo é contrato canônico proposto até integração, e não prova isolada de que cada consumidor já o executa.
+
+
+### 17.2 🔒 FIXED_POINT GLOBAL — dez critérios efetivos, um único avaliador (2026-10-24)
+
+A intenção do CHEFE é inequívoca: **se o HUD mostra dez critérios, o owner FIXED_POINT deve avaliar exatamente esses dez — nem nove, nem dez incluindo o próprio veredito.** O card “Fixed Point final” não ocupa uma das dez posições: ele é a saída calculada depois dos dez critérios e da prova final do Goal.
+
+**Owner de decisão:** \`scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen\`.
+**Owner de telemetria:** \`apps/modulos/mcp/src/operational-telemetry.js#fixedPointTenEvidence\`.
+**HUD existente:** \`docs/HUD/HUD.html#cd-fixed-point-ten\`, apenas projeção do resultado canônico.
+**Testes:** \`scripts/lupa/horn-reuse-fixed-point.test.mjs\` e \`apps/modulos/mcp/tests/operational-telemetry.test.mjs\`.
+
+| # | ID canônico | Critério obrigatório |
+|---:|---|---|
+| 01 | \`OWNER_UNIQUE\` | HUD tem um único owner e dez IDs únicos, sem segundo avaliador. |
+| 02 | \`LOCKS_PRESERVED\` | Cadeados e selos têm leitura atual; histórico é preservado, não promovido como estado vivo. |
+| 03 | \`MCP_PUBLIC_HEALTH\` | Health MCP público medido pela rota atual; processo presente não substitui resposta validada. |
+| 04 | \`ONE_HEART_FRESH\` | Heartbeat fresco, \`self=alive\` e dentro da janela temporal. |
+| 05 | \`SCREENPIPE_CURRENT\` | Rota/health atual do Screenpipe; health não prova captura, leitura ou áudio. |
+| 06 | \`AIONUI_STDIO_CURRENT\` | Sessão MCP stdio AionUi e \`tools/list\` provados no estado atual. |
+| 07 | \`LOG_PRIVACY_CURRENT\` | Leitura sanitizada/autorizada do funil e contraprova da fronteira de segredo. |
+| 08 | \`CHECKOUT_MAIN_SYNC\` | Receipt recente de sincronização e SHA de checkout/main compatíveis; Casa requer prova própria para alegar Casa↔main. |
+| 09 | \`FORENSIC_FRESHNESS\` | \`FORENSIC-LATEST.json\` recente (até 15 min), hash válido, report/archive presentes e \`secrets_content_collected=false\`; timestamp futuro é STALE. |
+| 10 | \`RECEIPT_PRESENT\` | Receipt forense observável, íntegro e com os artefatos apontados presentes; presença não substitui o critério de frescor. |
+
+\`\`\`text
+FIXED_POINT_TEN_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen
+FIXED_POINT_TEN_IDS=OWNER_UNIQUE,LOCKS_PRESERVED,MCP_PUBLIC_HEALTH,ONE_HEART_FRESH,SCREENPIPE_CURRENT,AIONUI_STDIO_CURRENT,LOG_PRIVACY_CURRENT,CHECKOUT_MAIN_SYNC,FORENSIC_FRESHNESS,RECEIPT_PRESENT
+FIXED_POINT_TEN_REQUIRED_COUNT=10
+HUD_FINAL_VERDICT_IS_A_RESULT_NOT_A_CRITERION=true
+HUD_IS_PROJECTION_NOT_JUDGE=true
+\`\`\`
+
+### Lei de fechamento do mesmo owner
+
+Cada critério é obrigatório e só passa com \`source\`, SHA da origem, \`proof_ref\`, \`counterproof_ref\`, \`counterproof_verdict=NOT_REFUTED\` e timestamp com timezone dentro da janela de frescor. Ausência ou referência estrutural sem evidência real não fabrica PASS. O próximo cursor aponta para o primeiro critério não PASS.
+
+Mesmo com dez PASS, o **FIXED_POINT GLOBAL** exige ainda um Goal receipt CURRENT emitido pelo avaliador HORN canônico, com:
+- \`evaluator=scripts/lupa/horn-reuse-fixed-point.mjs\`;
+- \`intent_id\`, \`goal_fingerprint\` e \`main_sha\` coerentes com o alvo medido;
+- todas as cláusulas obrigatórias com prova, contraprova não refutada, owner e medição válida;
+- \`receipt_ref\`, \`measured_at\`, \`max_age_ms\` e \`next_cursor=FIXED_POINT\`.
+
+\`\`\`text
+FIXED_POINT_GLOBAL = ALL_TEN_REQUIRED_PASS
+                  + CURRENT_HORN_GOAL_RECEIPT
+                  + SAME_TARGET_AND_SHA
+                  + FRESH_PROOF_AND_COUNTERPROOF
+                  + NEXT_CURSOR_FIXED_POINT
+
+MISSING_CRITERION=UNKNOWN
+STALE_PROOF=STALE
+COUNTERPROOF_REFUTED=FAIL
+MISSING_GOAL_RECEIPT=NEXT_DELTA
+ANY_NON_PASS=NO_GLOBAL_FIXED_POINT
+\`\`\`
+
+Os dois avaliadores que faltavam — \`FORENSIC_FRESHNESS\` e \`RECEIPT_PRESENT\` — agora têm IDs explícitos, critérios de prova e slots próprios no mesmo placar de dez. Não são requisitos decorativos nem um bloco fora do denominador. A dimensão de frescor não é fundida à presença: receipt pode existir e estar vencido; cada alegação recebe seu próprio veredito.
+
+Os sete eixos pontuáveis de \`patternAlignment\` continuam sendo um avaliador de alinhamento separado (sete de dez dimensões de alinhamento elegíveis). Eles **não** substituem estes dez critérios de FIXED_POINT e não podem ser somados ao denominador. O HUD de dez, o HORN e o snapshot operacional agora compartilham o conjunto de IDs; o consumidor continua a exibir UNKNOWN se não receber um snapshot compatível ou a prova CURRENT ausente.
+
+**Proveniência da mudança:** 2026-10-24T17:02:31.232Z. Mudança versionada no branch da PR #1941. A confirmação de consumo/deploy permanece dependente do readback e dos checks do HEAD atual.
