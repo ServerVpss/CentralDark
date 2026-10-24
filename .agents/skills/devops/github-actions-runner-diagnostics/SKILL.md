@@ -160,3 +160,11 @@ start until infra changes.
 
 - `references/centraldark-runner-layout.md` — CentralDark-specific runner
   layout and known busy/offline pattern.
+
+## Caminho normal de recuperação SSH — 2026-10-24
+
+O owner existente `.github/workflows/vps-wake-hosted-ssh.yml` acompanha os eventos `pull_request` e `push` usados pela porta canônica, mantendo `workflow_dispatch` como recuperação manual. Ele apenas ativa a unit existente `actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service`; o trabalho da PR continua em `porta-de-entrada.yml` usando `self-hosted, Linux`.
+
+A conexão SSH verifica o fingerprint ED25519 documentado antes de autenticar. A chave é temporária no runner e removida no encerramento. PRs de fork não recebem a etapa que consome os segredos.
+
+**Limite material:** o job de wake também precisa iniciar em `ubuntu-latest`. Se GitHub Actions estiver bloqueado por billing/quota, o workflow não chega ao SSH; então a causa continua `BLOCKED_HOSTED_BILLING`, não falha de código. Não criar outro workflow nem mudar o gate principal para hosted.

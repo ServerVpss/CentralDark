@@ -820,7 +820,7 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'metric_scope: OBSERVED_MEASURABLE_DIMENSIONS_ONLY',
  'global_behavior_claim_from_partial_telemetry: FORBIDDEN',
  'refresh_source: /admin/api/operational-snapshot',
- 'github_hosted_runner: FORBIDDEN',
+ 'github_hosted_runner: FORBIDDEN_BY_DEFAULT_EXCEPT_VPS_WAKE_RECOVERY',
  'scope: ALL_ACTIVE_ROOT_GITHUB_WORKFLOWS',
  'scope: ALL_PR_COMMIT_AND_RUNTIME_ELIGIBLE_FAILURES',
  'operational_rule_learning:',
@@ -916,7 +916,8 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
  'event: USER_REPORTED_ERROR','event: NEW_DISCOVERY',
  'report_is_proof: false','no_material_delta: NO_CHANGE',
  'BYTE_IDENTICAL -> PROCESS_ONCE_KEEP_PROVENANCE',
- 'GITHUB_HOSTED_RUNNER -> FAIL_CLOSED',
+ 'GITHUB_HOSTED_RUNNER_DEFAULT -> FAIL_CLOSED',
+  'GITHUB_HOSTED_RUNNER_VPS_WAKE -> NARROW_RECOVERY_EXCEPTION',
  'SAME_FAILURE_NO_NEW_INFO -> REUSE_CRYSTAL',
  'explicit_triggers: ["!CENTRALDARK", "#CENTRALDARK"]',
 ])
@@ -1076,7 +1077,8 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
 ], classification='UNIVERSAL_EVOLUTION_CARACOL_CONTRACT')
 check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
  'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml','OUTPUT_GUARD','LAST_GOOD_STATE','WORKING/FORJA != PASS',
- 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false',
+ 'Self-healing operacional universal','SAME_FAILURE_REUSES_CRYSTAL=true','GITHUB_HOSTED_RUNNER_ALLOWED=false_BY_DEFAULT',
+ 'AUTHORIZED_HOSTED_RECOVERY=.github/workflows/vps-wake-hosted-ssh.yml',
  'DISCOVER_EXISTING_CHANNELS_BEFORE_BLOCKED=true','USER_REPORTED_ERROR_IS_SIGNAL_NOT_PROOF=true',
  'EPHEMERAL_HELPER_IS_CANONICAL_ASSET=false','SAFE_TEMP_CLEANUP_AFTER_PROOF=true',
  'MEANINGFUL_DISCOVERY_COMPARE_CANONICAL_OWNER=true'
@@ -1191,12 +1193,12 @@ check('docs/CONSCIENCIA/APRENDIZADOS/2026-08-24-pombo-correio-com-checksum.md',[
 
 workflow_dir=ROOT/'.github'/'workflows'
 forbidden_runner_labels=('ubuntu-latest','windows-latest','macos-latest')
-# Exceções legítimas à GLOBAL_RUNNER_POLICY (self-hosted-only):
-# estes dois são workflow_dispatch manuais R4 que PRECISAM de runner hosted
-# por desenho — não são CI automático. vps-wake-hosted-ssh acorda o próprio
-# runner self-hosted quando ele cai (self-hosted não acorda a si mesmo);
-# vps-reboot-forensic precisa de saída pra API Contabo/Cloudflare. Autorizado
-# por PERMITO-SEGREDO no cabeçalho de cada arquivo. Isentar, não remover.
+# Exceções autorizadas, estreitas e em owners existentes:
+# vps-wake-hosted-ssh pode rodar automaticamente em PR/push para habilitar
+# somente a unit self-hosted canônica via SSH com hostkey pinada. Não executa
+# workload, testes da PR ou deploy. Hosted billing/quota ainda é pré-requisito.
+# vps-reboot-forensic precisa de saída para APIs externas; selo-fabric é API-only.
+# Manter somente os owners expressamente listados abaixo.
 runner_policy_exempt=frozenset({
     # PR Update Branch deixou de ser excecao: VPS self-hosted foi provado em 2026-10-04.
     # HUD/ledger GitHub-API-only: intentionally hosted so PR-mother freshness
