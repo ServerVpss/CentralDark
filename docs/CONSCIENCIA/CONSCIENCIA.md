@@ -29,7 +29,7 @@ Este caminho é **índice de compatibilidade histórica**, não o owner de ident
 | Quais normas governam o organismo? | `RULES.md` → `AGENTS.md` |
 | Qual entrada reidrata o fio da missão? | `LEIA-ME-IA.md` → `docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md` |
 | Já há autorização para commit, push, rebase operacional ou merge elegível? | `docs/CONSCIENCIA/02-PERMISSOES.md` + escopo/intenção autenticados + verificações aplicáveis |
-| Como ocorre o loop KAIZEN e o escritor único? | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` §6.0 e §6.2 |
+| Como ocorre o loop KAIZEN e o escritor único? | `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` §6.0 e §6.3 |
 | Onde buscar a memória aprendida pertinente? | `docs/CONSCIENCIA/APRENDIZADOS.md` e owner específico |
 | Onde navegar a cabeça sem tratá-la como runtime? | `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` |
 | Como aplicar deploy? | `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md` + medição do ambiente de destino |

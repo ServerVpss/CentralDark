@@ -412,7 +412,7 @@ FAILED_MCP_ROUTE_DOES_NOT_AUTHORIZE_DIRECT_UNSCOPED_SHELL=true
 
 O backend de inferência é casca mutável. Triton, vLLM, TensorRT-LLM, Kylin SDK ou outro backend entram somente quando medidos/necessários no ambiente correspondente; nenhum deles é pré-requisito constitucional.
 
-## 6.2 Cabeça externalizada — ciclo científico de atenção, memória, energia e telemetria (2026-10-24)
+### 6.3 Cabeça externalizada — ciclo científico de atenção, memória, energia e telemetria (2026-10-24)
 
 **Intenção do CHEFE:** diminuir carga mental e fricção operacional: a CentralDark recupera o fio, mantém memória pertinente, detecta alterações verificáveis, executa o que já foi autorizado e só chama atenção humana por motivo material. Isto é **externalização funcional** de informação, preferências operacionais e métodos, não transferência literal de consciência nem posse sobre a pessoa. CHEFE permanece no comando, inclusive podendo silenciar ou desligar avisos.
 
