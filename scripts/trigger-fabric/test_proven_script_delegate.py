@@ -27,7 +27,7 @@ class ScriptOnly(unittest.TestCase):
     def test_proven_task_uses_script_without_agent(self):
         with patch.object(m, 'call', return_value=(0, {'verdict': 'PASS'})) as c:
             code, out = m.delegate(self.args)
-        self.assertEqual((code, out['verdict'], out['subagent_calls']), (0, 'SCRIPT_ONLY_READY', 0))
+        self.assertEqual((code, out['verdict'], out['subagent_calls']), (0, 'SCRIPT_REPLAY_ELIGIBLE', 0))
         self.assertEqual(c.call_count, 1)
         self.assertIn('replay', c.call_args.args[0])
 
@@ -48,6 +48,14 @@ class ScriptOnly(unittest.TestCase):
         self.assertEqual((code, out['verdict'], out['subagent_calls']), (0, 'REUSE_CRYSTAL', 0))
         self.assertIn('replay-run', c.call_args.args[0])
         self.assertNotIn('--allow-mutation', c.call_args.args[0])
+
+    def test_owner_replay_denied_never_claims_execution(self):
+        self.args.execute = True
+        with patch.object(m, 'call', side_effect=[(0, {'verdict': 'PASS'}),
+                (7, {'verdict': 'DENY', 'reason': 'COMMANDS_NOT_EXECUTABLE'})]):
+            code, out = m.delegate(self.args)
+        self.assertEqual((code, out['verdict']), (7, 'REPLAY_FAILED'))
+        self.assertIsNone(out['script_executed'])
 
     def test_missing_fingerprint_denied_without_call(self):
         self.args.fingerprint = ''

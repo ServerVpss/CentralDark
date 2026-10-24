@@ -55,7 +55,7 @@ def delegate(args: argparse.Namespace) -> tuple[int, dict]:
                    'next_cursor': 'EXISTING_OWNER_AFFECTED_CONE_ONLY', 'model_calls': 0,
                    'subagent_calls': 0, 'script_executed': False}
     if not args.execute:
-        return 0, {'verdict': 'SCRIPT_ONLY_READY', 'action': 'REPLAY_PROVEN_RECIPE',
+        return 0, {'verdict': 'SCRIPT_REPLAY_ELIGIBLE', 'action': 'REPLAY_PROVEN_RECIPE',
                    'claim': args.claim, 'owner': args.owner,
                    'model_calls': 0, 'subagent_calls': 0, 'script_executed': False}
 
@@ -79,7 +79,8 @@ def delegate(args: argparse.Namespace) -> tuple[int, dict]:
         'reason': None if ok else result.get('reason', 'OWNER_REPLAY_FAILED'),
         'receipt_out': result.get('receipt_out'),
         'model_calls': 0, 'subagent_calls': 0,
-        'script_executed': True,
+        'script_executed': True if ok else None,
+        'execution_attempted': True,
         'next_cursor': 'FIXED_POINT' if ok else 'AFFECTED_CONE_COUNTERPROOF',
     }
 
