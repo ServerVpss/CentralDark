@@ -146,7 +146,7 @@ A existência deste desenho não prova subagentes reais numa determinada sessão
 ## Regras fixas
 
 - GitHub remoto é a fonte da verdade técnica.
-- `E:\CentralDark\` é Casa/fonte de trabalho local.
+- `K:\` é Casa/fonte de trabalho local.
 - OmniRoute é chassis, não módulo periférico.
 - CentralDark entra no OmniRoute e o resultado final continua CentralDark.
 - Pacotão 01–36 é a gramática do organismo; não criar pacote 37/38/39.

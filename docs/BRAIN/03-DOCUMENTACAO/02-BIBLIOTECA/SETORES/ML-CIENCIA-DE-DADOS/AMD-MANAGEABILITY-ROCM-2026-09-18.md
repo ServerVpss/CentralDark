@@ -42,7 +42,7 @@ Aplicação CentralDark: reutilizar owner/interface existente antes de criar art
 ## Garimpo local
 
 ```text
-E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE\AMD\cuda-to-rocm-migration-paths-infographic.pdf
+K:\_MAPA_CASA\GARIMPO-CHEFE\AMD\cuda-to-rocm-migration-paths-infographic.pdf
 SHA256=fe44dea00056ae845c89d7892197aaa2ea8de65fc3d9ce9710ea35156c219cb7
 SIZE=5334785
 ```

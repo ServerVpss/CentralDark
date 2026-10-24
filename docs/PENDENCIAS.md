@@ -778,7 +778,7 @@ Estabilidade: Plugin externo exige re-instalação manual pós-update. Ação: M
 - **Critério pra fechar:** Rota /v1/audio/speech na API central responde 200 fazendo proxy real pro bridge de TTS, e o SOL Config aponta pra ela em vez de falar direto com o bridge.
 ### 56. Commit 41f1f7e85 é falso verde — ✅ CONCLUÍDO em 2026-08-29
 - **Resumo do fechamento:** Remediado no commit 328dfb027: os 3 canvas vazios foram destrackeados do PR #1369 (git rm --cached, arquivos preservados no disco conforme DETECT != DELETE). A mensagem enganosa do 41f1f7e85 fica no histórico como registro do erro, com o commit corretivo explicando a divergência. Aprendizado #33 registra a lei extraída: mensagem de commit não é prova, conteúdo de commit é prova — rodar git diff --cached --stat antes de declarar recibo, nunca git add -A cego.
-- **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of E:\CentralDark — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
+- **Sintoma:** O commit 41f1f7e85 na branch reconciliacao/casa-20260829-consolidacao tem mensagem "docs(reconciliation): inventory of K:\ — SOBRA_BRAIN classification, proof of mirrors" mas contém apenas 3 arquivos canvas vazios (docs/BRAIN/Sem título*.canvas, 1 linha cada), pegos por um git add -A cego. O relatório de inventário citado na mensagem nunca entrou no repositório.
 - **Onde mexer:** PR #1369, branch reconciliacao/casa-20260829-consolidacao, commit 41f1f7e85, arquivos docs/BRAIN/Sem título*.canvas
 - **Critério pra fechar:** Os 3 canvas vazios removidos do PR #1369 (não pertencem ao escopo), e o commit reescrito ou seguido de commit corretivo cuja mensagem descreva o que realmente contém. Nenhum commit do PR anuncia prova que não esteja no diff.
 
@@ -838,7 +838,7 @@ REALITY = JUDGE
 **Guardrail:** modelo, letra de unidade ou path candidato **não viram decisão arquitetural sem benchmark/medição CURRENT + consumidores + rollback**. A futura migração deve fazer path virar configuração, não espalhar hardcode novo.
 
 **Não fazer neste PR / agora:**
-- não mover `E:\CentralDark`;
+- não mover `K:\`;
 - não promover `D:` a workspace;
 - não alterar `Pivete`/perfil/pastas por causa desta pendência;
 - não criar Docker/containers;
