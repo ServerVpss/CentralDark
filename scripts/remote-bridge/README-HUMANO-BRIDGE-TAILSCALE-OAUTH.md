@@ -26,7 +26,7 @@ Este é o fio único do bridge Casa/VPS. Ele não cria outro sistema.
 PowerShell:
 
 ```powershell
-cd E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE\CentralDark-OneShot-Integrated-GIGANTE\CentralDark-OneShot-Integrated\vendor\desktop-commander-dist
+cd K:\_MAPA_CASA\GARIMPO-CHEFE\CentralDark-OneShot-Integrated-GIGANTE\CentralDark-OneShot-Integrated\vendor\desktop-commander-dist
 npx @wonderwhy-er/desktop-commander@latest remote
 ```
 
