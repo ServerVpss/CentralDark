@@ -30,7 +30,7 @@
     "canonical_map": "docs/CONSCIENCIA/MAPA-DO-CEREBRO.md"
   },
   "projections": {
-    "obsidian": "E:\\CentralDark\\Pivete\\CASA-VAULT\\00-CANONICO",
+    "obsidian": "K:\\CASA-VAULT\\00-CANONICO",
     "vector_memory": ".agents/skills/vector-memory/SKILL.md",
     "knowledge_compiler": ".agents/skills/knowledge-compiler/contract.json",
     "graph_runtime": "scripts/grafo-vivo/gerar-grafo-vivo.mjs",

@@ -1060,7 +1060,7 @@ O perfil reescreve invariantes com linguagem própria (`SINGLE_WRITER_PER_SCOPE=
 **DNA comum:** medir → normalizar nome → cruzar contra fonte canônica → marcar `DONO_CANONICO` → só escreve quem tem `GAP_PROVADO`. Mesmo método, 3 alvos.
 
 **PITFALL DE PERFORMANCE — `os.walk` no clone = timeout:**
-Mapear repo por `os.walk` em `E:\CentralDark\Pivete\CentralDark` estourou 180s (`.cache.zip` 1.5GB, node_modules, BACKUPS). **Corrigido:** `git -C <repo> ls-files` (working-tree) ou `git ls-tree -r origin/main` (remoto, sem rede se ref local presente). Substitui walk por índice git → O(1) barato.
+Mapear repo por `os.walk` em `K:\` estourou 180s (`.cache.zip` 1.5GB, node_modules, BACKUPS). **Corrigido:** `git -C <repo> ls-files` (working-tree) ou `git ls-tree -r origin/main` (remoto, sem rede se ref local presente). Substitui walk por índice git → O(1) barato.
 
 **Ordem obrigatória de absorção (CHEFE confirmou):** REMOTO PRIMEIRO. Clone local estava 78 commits atrás; só `origin/main` (ref local fast-forward) dá a verdade pra REUSE_BEFORE_CREATE em escala. Mapear remoto ANTES de abrir ZIP.
 
@@ -1075,7 +1075,7 @@ Mapear repo por `os.walk` em `E:\CentralDark\Pivete\CentralDark` estourou 180s (
 
 ### 15. SOUL DIVERGENCE DOCUMENTATION — Runtime Block Pattern
 **Cenário:** Mesmo arquivo (SOUL.md, config.yaml) existe em dois caminhos:
-- **Canônico:** `E:\\CentralDark\\Pivete\\` (versão atual, HERMES-CASA)
+- **Canônico:** `K:\\` (versão atual, HERMES-CASA)
 - **Runtime Ativo:** `C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\` (versão antiga, HERMES legacy)
 
 **Regra:** Se o **runtime Hermes lê ativamente** do caminho UserProfile (AppData\\Local\\hermes\\profiles\\pivete):
@@ -1254,7 +1254,7 @@ PARE SOMENTE SE (bloqueios materiais):
 
 ### 12. SOUL DIVERGENCE DOCUMENTATION — Runtime Block Pattern
 **Cenário:** Mesmo arquivo (SOUL.md, config.yaml) existe em dois caminhos:
-- **Canônico:** `E:\\CentralDark\\Pivete\\` (versão atual, HERMES-CASA)
+- **Canônico:** `K:\\` (versão atual, HERMES-CASA)
 - **Runtime Ativo:** `C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\` (versão antiga, HERMES legacy)
 
 **Regra:** Se o **runtime Hermes lê ativamente** do caminho UserProfile (AppData\\Local\\hermes\\profiles\\pivete):
@@ -1350,12 +1350,12 @@ curl http://localhost:9100/status.json # catálogo completo + conectores
 | Raiz | Papel | Autoridade |
 |------|-------|------------|
 | `C:\CentralDark` | Canonical Repo | Git, workflows, agents, docs, apps/modulos |
-| `E:\CentralDark\Pivete` | Operational Home | SOUL, config.yaml, NUCLEO, skills, cron, quarantine |
+| `K:\` | Operational Home | SOUL, config.yaml, NUCLEO, skills, cron, quarantine |
 | `C:\Users\danda` | Tool State | .codex, .claude, .hermes (runtime), .config, etc. |
 
 **Duplicatas resolvidas:**
-- `E:\CentralDark\.claude` → quarentena (não no git, sem consumidores)
-- `E:\CentralDark\_MAPA_CASA` → não existia (índice mestre em C:)
+- `K:\.claude` → quarentena (não no git, sem consumidores)
+- `K:\_MAPA_CASA` → não existia (índice mestre em C:)
 - SOUL.md + config.yaml → **DOCUMENTED_DIVERGENCE** (runtime lê UserProfile)
 
 **Legado congelado:**
@@ -1396,7 +1396,7 @@ WebUI/Telegram → hermes-webui (BFF) → RuntimeAdapter → Hermes Kanban → E
 
 ### 12. SOUL DIVERGENCE DOCUMENTATION — Runtime Block Pattern
 **Cenário:** Mesmo arquivo (SOUL.md, config.yaml) existe em dois caminhos:
-- **Canônico:** `E:\\CentralDark\\Pivete\\` (versão atual, HERMES-CASA)
+- **Canônico:** `K:\\` (versão atual, HERMES-CASA)
 - **Runtime Ativo:** `C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\` (versão antiga, HERMES legacy)
 
 **Regra:** Se o **runtime Hermes lê ativamente** do caminho UserProfile (AppData\\Local\\hermes\\profiles\\pivete):
@@ -1492,12 +1492,12 @@ curl http://localhost:9100/status.json # catálogo completo + conectores
 | Raiz | Papel | Autoridade |
 |------|-------|------------|
 | `C:\CentralDark` | Canonical Repo | Git, workflows, agents, docs, apps/modulos |
-| `E:\CentralDark\Pivete` | Operational Home | SOUL, config.yaml, NUCLEO, skills, cron, quarantine |
+| `K:\` | Operational Home | SOUL, config.yaml, NUCLEO, skills, cron, quarantine |
 | `C:\Users\danda` | Tool State | .codex, .claude, .hermes (runtime), .config, etc. |
 
 **Duplicatas resolvidas:**
-- `E:\CentralDark\.claude` → quarentena (não no git, sem consumidores)
-- `E:\CentralDark\_MAPA_CASA` → não existia (índice mestre em C:)
+- `K:\.claude` → quarentena (não no git, sem consumidores)
+- `K:\_MAPA_CASA` → não existia (índice mestre em C:)
 - SOUL.md + config.yaml → **DOCUMENTED_DIVERGENCE** (runtime lê UserProfile)
 
 **Legado congelado:**
@@ -1546,7 +1546,7 @@ WebUI/Telegram → hermes-webui (BFF) → RuntimeAdapter → Hermes Kanban → E
 // Detectar runtime e definir root apropriado
 const isWindows = process.platform === 'win32';
 const WORKTREE_ROOT = isWindows 
-  ? 'C:/CentralDark/worktrees'  // ou E:/CentralDark/Pivete/worktrees
+  ? 'C:/CentralDark/worktrees'  // ou K:/worktrees
   : '/root/CentralDark/worktrees';
 ```
 
@@ -1554,7 +1554,7 @@ const WORKTREE_ROOT = isWindows
 
 **Worktree dirs já existem:**
 - `C:\CentralDark\.worktrees\` (repo canonico)
-- `E:\CentralDark\Pivete\worktrees\` (casa)
+- `K:\worktrees\` (casa)
 
 ---
 
@@ -1670,13 +1670,13 @@ PATCH /api/kanban/tasks/{id}?board=default {"status":"done"}
 ```javascript
 const isWindows = process.platform === 'win32';
 const WORKTREE_ROOT = isWindows 
-  ? 'C:/CentralDark/worktrees'  // ou E:/CentralDark/Pivete/worktrees
+  ? 'C:/CentralDark/worktrees'  // ou K:/worktrees
   : '/root/CentralDark/worktrees';
 ```
 
 **Dirs já prontos:**
 - `C:\CentralDark\.worktrees\` (repo canonico)
-- `E:\CentralDark\Pivete\worktrees\` (casa)
+- `K:\worktrees\` (casa)
 
 **Teste local:** `git worktree list --porcelain` funciona no Windows Git Bash.
 
@@ -2027,7 +2027,7 @@ RUNTIME_GRAVA_AUTOMATICO=SIM
 ---
 
 ### 25. AUTO-DESTILADOR PATTERN — Watchdog + Cristalização Automática
-**Descoberta:** Sistema autônomo que monitora pastas de entrada (`E:\\CentralDark\\_MAPA_CASA\\Nova pasta*`), destila conteúdo, sintetiza, cristaliza e escreve **direto no NUCLEO/motor runtime** sem intervenção manual.
+**Descoberta:** Sistema autônomo que monitora pastas de entrada (`K:\\_MAPA_CASA\\Nova pasta*`), destila conteúdo, sintetiza, cristaliza e escreve **direto no NUCLEO/motor runtime** sem intervenção manual.
 
 **Fluxo completo validado (3/3 testes PASS):**
 ```
@@ -2160,14 +2160,14 @@ filepath = os.path.join(destino_abs, base_name)
 **Pedido do Chefe (2026-08-23):** localizar o "aplicativo CCROMIUM da CentralDark" com cockpit, conexão GitHub e workspace, em `C:\CentralDark` e `E:\`.
 
 **Descoberta:** é o diretório **`MOTOR-TESTE`** (package `omniroute` — AI router Electron/Chromium/PWA), espelhado em:
-- `E:\CentralDark\MOTOR-TESTE`  (primário)
+- `K:\MOTOR-TESTE`  (primário)
 - `C:\CentralDark\MOTOR-TESTE`  (mirror do repo canônico)
 
 **Provas:** `src/app/(dashboard)/dashboard/compression/studio/CompressionCockpit.tsx` (cockpit), `src/app/api/github-skills` (GitHub), `docker/vnc-browser/chromium`, `apps/modulos/Bolt/source/` (Electron).
 
 **Falsos positivos descartados:** `obsidian-app/` (Obsidian), `Pivete/MARKDOWN/APPCENTRALDARK EVOLUIR/` (Overclock IDE), `hermes-webui/` (BFF), `node_modules/chrome-launcher` (lib).
 
-**Técnica de busca validada (Windows multi-root, sem timeout):** `search_files` falha em paths com letra de drive (`E:\CentralDark` → IO error); `grep -r`/`find` no volume `E:\` inteiro estoura o timeout (180s+). Usar terminal Git Bash: `ls -la` para orientar, depois `cd /e/CentralDark && find . -path ./node_modules -prune -o \( -iname "*chromium*" -o -iname "*cockpit*" \) -print`. Nunca varrer `E:\` cru. Detalhe em `references/centraldark-app-inventory-search.md`.
+**Técnica de busca validada (Windows multi-root, sem timeout):** `search_files` falha em paths com letra de drive (`K:\` → IO error); `grep -r`/`find` no volume `E:\` inteiro estoura o timeout (180s+). Usar terminal Git Bash: `ls -la` para orientar, depois `cd /e/CentralDark && find . -path ./node_modules -prune -o \( -iname "*chromium*" -o -iname "*cockpit*" \) -print`. Nunca varrer `E:\` cru. Detalhe em `references/centraldark-app-inventory-search.md`.
 
 **Regra:** pedido de "Chromium/cockpit/GitHub app" da Casa → suspeitar de `MOTOR-TESTE`, não Obsidian/hermes-webui.
 
@@ -2182,18 +2182,18 @@ filepath = os.path.join(destino_abs, base_name)
 
 ## Skills absorvidas via Kimetsu/17 Respirações (2026-09-22)
 
-Esta seção registra o delta de absorção de skills locais (`E:\CentralDark\Pivete\skills\`) na biblioteca canônica via `regenerative-self-refinement-engine.md` / método Kimetsu/17 Respirações. Regra de ouro: NÃO copiar pasta inteira por nome — comparar, absorver somente o delta útil, manter owner canônico existente.
+Esta seção registra o delta de absorção de skills locais (`K:\skills\`) na biblioteca canônica via `regenerative-self-refinement-engine.md` / método Kimetsu/17 Respirações. Regra de ouro: NÃO copiar pasta inteira por nome — comparar, absorver somente o delta útil, manter owner canônico existente.
 
 ### `screenpipe-hermes-integration` → `screenpipe-live-observer` (status: ABSORVIDO)
 - Classe: UNIQUE_DELTA (canônico cobre sensor/OCR/handoff; local traz procedimento prático de integração Screenpipe+Hermes via Omni Router não coberto pelo canônico)
 - O que foi absorvido: gatilhos de ativação, pré-requisitos, 6 passos de configuração do Omni Router + Screenpipe Provider, pitfalls, monitoração in-the-job, investigação forense (READ_ONLY/zero-mutation), status codes, leis não-negociáveis, o que não prova, Hermes Screenpipe Tool Gap
 - Onde: nova seção "Integração prática com Screenpipe + Hermes via Omni Router" inserida antes de "# Screenpipe Live Observer — sensor global da Casa" no presente arquivo
-- Proveniência preservada: skill local permanece em `E:\CentralDark\Pivete\skills\screenpipe-hermes-integration\` como registro histórico; não deletado, não promovido a owner separado
+- Proveniência preservada: skill local permanece em `K:\skills\screenpipe-hermes-integration\` como registro histórico; não deletado, não promovido a owner separado
 - Regra aplicada: ZERO_BLIND_COPY=true; SAME_NAME != SAME_ENTITY; delta checado antes de absorver
 
 ### `fable-loop` → `fable-loop` canônico (status: NÃO_ABSORVIDO — deixar local)
 - Classe: DUPLICATE_DIVERGED (same name + same archetype, conteúdo paralelo não-overlapping: local = contract de autoload SKILL.md coreano/inglês; canônico = método centraldark de calibração contínua PT-BR, experimental, READ_ONLY)
-- Decisão: NÃO fundir. Manter ambos. Canônico mantém owner SEGREDO/CHEFE e status experimental-read-only. Local permanece em `E:\CentralDark\Pivete\skills\fable-loop\` como referência de autoload alternativo. Documentar divergência, não criar espaço paralelo.
+- Decisão: NÃO fundir. Manter ambos. Canônico mantém owner SEGREDO/CHEFE e status experimental-read-only. Local permanece em `K:\skills\fable-loop\` como referência de autoload alternativo. Documentar divergência, não criar espaço paralelo.
 
 ### `brain-vault-watcher` → `brain-memory` canônico (status: NÃO_ABSORVIDO — GAP_NAO_PROVADO)
 - Classe: NOVEL + GAP_A_PROVEAR (local = watcher de sync de MOCs/indexes do Obsidian vault, com triggers, deduplicação, cron; canônico = layer de prefs via `brain_feedback` + `apply-evidence`, read-only, owner SEGREDO/CHEFE)

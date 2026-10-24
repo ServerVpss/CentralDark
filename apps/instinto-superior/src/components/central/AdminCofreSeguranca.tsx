@@ -576,7 +576,7 @@ const CAPACIDADES_FORJA = [
 function PreparadorPermissoesForja() {
   const [executor, setExecutor] = useState("Hermes");
   const [capacidade, setCapacidade] = useState<string>("repo_read");
-  const [ambiente, setAmbiente] = useState("Casa · K:/CentralDark");
+  const [ambiente, setAmbiente] = useState("Casa · K:/");
   const [validade, setValidade] = useState("session");
   const [feedback, setFeedback] = useState<string | null>(null);
   const selecionada = CAPACIDADES_FORJA.find((c) => c.id === capacidade) ?? CAPACIDADES_FORJA[0];
@@ -663,7 +663,7 @@ function PreparadorPermissoesForja() {
             value={ambiente}
             onChange={(e) => setAmbiente(e.target.value)}
           >
-            <option>Casa · K:/CentralDark</option>
+            <option>Casa · K:/</option>
             <option>VPS · /root/CentralDark</option>
             <option>GitHub · ServerVpss/CentralDark</option>
           </select>

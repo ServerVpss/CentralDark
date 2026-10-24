@@ -2,7 +2,7 @@
 
 Resumo inicial (F2 - Meta-Lupa / Multibússola)
 
-- Inventário: troquei para o repositório E:\CentralDark\Pivete\CentralDark e listei o status Git.
+- Inventário: troquei para o repositório K:\ e listei o status Git.
 - Últimos commits (head): 7ce83ece3 docs(brain): reorganizar documentação em hierarquia temática — squash PR #1393; b5f821359 fix(health): get_proc_mem soma KB e retorna int; ... (5 últimos commits ver git log).
 - Arquivos relevantes encontrados:
   - .agents/skills/meta-lupa/SKILL.md
