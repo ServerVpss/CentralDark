@@ -3233,3 +3233,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Antes de mexer num processo, procure quem o ressuscita:** o Cockpit 8080 é mantido pela tarefa `CentralDark-Cockpit-8080`, um watchdog de 1 minuto. Religar "do mesmo jeito" é chamar essa tarefa, não subir o node à mão.
 - **Gates:** `PROVEN 🔒` e sessão ao vivo são camadas separadas, e falha do sensor não apaga fato provado. `UNKNOWN != PASS` e `MERGED != DEPLOYED`. Credencial entra só como caminho.
 - **NEXT_CURSOR:** ver a seção 22 do owner `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`.
+
+### 220. GitHub-first sem runner obrigatório
+- **Categoria:** atalho
+- **Data:** 2026-10-24
+- **Contexto:** A tentativa inicial de criar branch pelo atalho que também tenta abrir PR retornou HTTP 422 no endpoint /pulls. O caminho de commit multi-arquivo da CentralDark conseguiu criar a branch, publicar o commit e, separadamente, abrir o PR.
+- **Aprendizado:** Para mudanças documentais isoladas, reutilizar o owner canônico e usar github_commit com branch + createBranchFrom=main; fazer readback antes de abrir PR separadamente. GitHub Contents API permite edição/commit sem runner. Não tratar PR aberto como merge ou deploy. Para SSH, exigir validação de host e nunca desabilitar StrictHostKeyChecking.
