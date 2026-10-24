@@ -365,6 +365,7 @@ Antes de qualquer ação material e novamente após cada delta material, o agent
 ```text
 FIXED_POINT_EXECUTION_HEADER_REQUIRED=true
 FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader
 FIXED_POINT_TEN_EVALUATOR=scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen
 FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS
 FIXED_POINT_HEADER_PHASES=ENTRY|MATERIAL_DELTA|EXIT
