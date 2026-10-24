@@ -219,6 +219,12 @@ export function validateFixedPointExecutionHeader(header, options = {}) {
       observed_mission_id: header.mission_id,
     });
   }
+  if (options.expectedAgentId && header.agent_id !== options.expectedAgentId) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_AGENT_MISMATCH", {
+      expected_agent_id: options.expectedAgentId,
+      observed_agent_id: header.agent_id,
+    });
+  }
   if (options.expectedHead && header.observed_head !== options.expectedHead) {
     return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_HEAD_MISMATCH", {
       expected_head: options.expectedHead,
@@ -278,6 +284,15 @@ export function validateFixedPointExecutionHeader(header, options = {}) {
 
   const goalReceipt = header.goal_receipt && typeof header.goal_receipt === "object"
     ? header.goal_receipt : null;
+  if (goalReceipt && (goalReceipt.intent_id !== header.intent_id
+    || goalReceipt.goal_fingerprint !== header.goal_fingerprint)) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_GOAL_MISMATCH", {
+      header_intent_id: header.intent_id,
+      goal_intent_id: goalReceipt.intent_id || null,
+      header_goal_fingerprint: header.goal_fingerprint,
+      goal_fingerprint: goalReceipt.goal_fingerprint || null,
+    });
+  }
   const evaluated = evaluateFixedPointTen({
     criteria: header.criteria,
     goalReceipt,
