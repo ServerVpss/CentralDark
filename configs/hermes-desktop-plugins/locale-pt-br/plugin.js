@@ -1,4 +1,8 @@
-import { jsx } from 'react/jsx-runtime'
+/**
+ * Hermes Desktop — pacote de idioma pt-BR.
+ * Preserva o ID e o registro oficiais; não altera memória, aprovações ou gateway.
+ * Verificação sem efeitos colaterais: falha com erro claro se o SDK/catalogo for inválido.
+ */
 
 const ID = 'locale-pt-br'
 const T = {
@@ -254,7 +258,7 @@ const T = {
  "sidebar.row.finishedUnread": "Concluída — não lida",
  "sidebar.row.backgroundRunning": "Tarefa em segundo plano em execução",
  "sidebar.row.draftSession": "Rascunho — nada enviado ainda",
- "sidebar.row.continuationOrigin": "Continuação automática — esta conversa foi comprimida e continuada",
+ "sidebar.row.continuationOrigin": "Continuação automática — esta conversa foi compactada e retomada",
  "sidebar.row.renamed": "Renomeada",
  "sidebar.row.renameFailed": "Falha ao renomear",
  "sidebar.row.renameTitle": "Renomear sessão",
@@ -386,7 +390,7 @@ const T = {
  "composer.commandDescs./skin": "Trocar o tema do desktop ou passar para o próximo",
  "composer.commandDescs./wake": "Controlar a escuta da palavra de ativação do desktop [on|off|status]",
  "composer.commandDescs./tools": "Gerenciar ferramentas: /tools [list|disable|enable] [nome...]",
- "composer.commandDescs./memory": "Revisar gravações de memória pendentes / alternar a trava de aprovação",
+ "composer.commandDescs./memory": "Ver memórias pendentes; aprovar ou rejeitar gravações; configurar a exigência de aprovação",
  "composer.commandDescs./bundles": "Listar pacotes de skills (aliases /<nome> para várias skills)",
  "composer.commandDescs./pet": "Alternar ou adotar um mascote petdex (/pet, /pet list, /pet boba)",
  "composer.commandDescs./hatch": "Gerar um novo pet (abre o gerador de pets)",
@@ -528,7 +532,7 @@ const T = {
  "shell.approvalMode.manual": "Manual",
  "shell.approvalMode.manualDescription": "Perguntar antes de ações que exigem aprovação",
  "shell.approvalMode.smart": "Inteligente",
- "shell.approvalMode.smartDescription": "Avaliar as ações automaticamente e perguntar quando necessário",
+ "shell.approvalMode.smartDescription": "Avaliar cada ação e solicitar aprovação quando necessário",
  "shell.approvalMode.off": "Desligado",
  "shell.approvalMode.offDescription": "Executar sem pedidos de aprovação",
  "shell.statusbar.unknown": "desconhecido",
@@ -685,13 +689,34 @@ const T = {
  "ui.sidebar.description": "Exibe a barra lateral móvel."
 }
 
+// Uma tradução inválida deve falhar no carregamento, não virar falso-verde na UI.
+function validateCatalog(entries) {
+  for (const [key, value] of Object.entries(entries)) {
+    if (!key || typeof value !== 'string' || !value.trim()) {
+      throw new TypeError(`locale-pt-br: tradução inválida em ${key}`)
+    }
+    // Placeholders numéricos fazem parte da API de interpolação do Hermes.
+    // Chaves duplicadas são verificadas pelo teste estático distribuído junto.
+    const open = (value.match(/\{/g) || []).length
+    const close = (value.match(/\}/g) || []).length
+    if (open !== close) {
+      throw new TypeError(`locale-pt-br: placeholder desbalanceado em ${key}`)
+    }
+  }
+}
+
 export default {
   id: ID,
   name: 'Português (Brasil)',
   register(ctx) {
+    if (typeof ctx?.i18n?.registerAppLocale !== 'function') {
+      throw new TypeError('locale-pt-br: Hermes Desktop sem ctx.i18n.registerAppLocale')
+    }
+    validateCatalog(T)
     ctx.i18n.registerAppLocale('pt-br', {
       endonym: 'Português (Brasil)',
       englishName: 'Brazilian Portuguese',
+      rtl: false,
       translations: T
     })
   }
