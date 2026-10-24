@@ -25,7 +25,7 @@ const (
 	appVersion     = "2026.09.15-tailscale-oauth1"
 	oldEndpoint    = "https://mcp.desktopcommander.app/mcp"
 	centraldarkMCP = "https://mcp.centralldark.com/mcp"
-	defaultWorkdir = `E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE`
+	defaultWorkdir = `K:\_MAPA_CASA\GARIMPO-CHEFE`
 	desktopPkg     = "@wonderwhy-er/desktop-commander@0.2.48"
 )
 

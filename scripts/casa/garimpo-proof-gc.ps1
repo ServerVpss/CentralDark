@@ -1,5 +1,5 @@
 param(
-  [string]$Root = 'E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE',
+  [string]$Root = 'K:\\_MAPA_CASA\\GARIMPO-CHEFE',
   [switch]$Apply,
   [switch]$SelfTest
 )
