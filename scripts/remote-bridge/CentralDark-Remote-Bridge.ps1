@@ -72,7 +72,7 @@ function Start-TailscaleServeFromConfig {
           Write-HumanStatus ("TAILSCALE_{0}" -f $route.name) '🟡' 'rota opcional sem porta/alvo configurado; pulando.'
           continue
         }
-        & $tailscale.Source serve --tcp $publicPort tcp://$target *>> $log
+        & $tailscale.Source serve --bg --tcp $publicPort tcp://$target *>> $log
         if ($LASTEXITCODE -ne 0) { throw "TAILSCALE_SERVE_TCP_EXIT:$LASTEXITCODE" }
         Write-HumanStatus ("TAILSCALE_{0}" -f $route.name) '🟢' ("tunel tcp://tailnet:{0} -> {1}. Serve para: {2}" -f $publicPort, $target, $route.human_purpose)
       } elseif ($route.protocol -eq 'http') {
