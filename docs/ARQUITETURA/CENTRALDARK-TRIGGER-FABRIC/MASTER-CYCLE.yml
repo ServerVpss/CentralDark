@@ -71,6 +71,48 @@ canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -
 canonical_machine_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> HANDOFF -> BOOT"
 canonical_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> HANDOFF -> BOOT"
 canonical_visual_chain: "⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 🌟 !MICHELIN → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🔏 !RASTRO → 🚀 !BOOT"
+fixed_point_execution_header:
+  marker: FIXED_POINT_EXECUTION_HEADER_REQUIRED
+  required: true
+  applies_to: ALL_CURRENT_AND_FUTURE_AGENTS
+  owner: scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+  canonical_criteria_owner: scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen
+  entry: BEFORE_FIRST_MATERIAL_ACTION_AND_EACH_MATERIAL_DELTA
+  exit: BEFORE_AGENT_RETURNS_RESULT_OR_CLAIMS_FIXED_POINT
+  ten_criteria_ids:
+    - OWNER_UNIQUE
+    - LOCKS_PRESERVED
+    - MCP_PUBLIC_HEALTH
+    - ONE_HEART_FRESH
+    - SCREENPIPE_CURRENT
+    - AIONUI_STDIO_CURRENT
+    - LOG_PRIVACY_CURRENT
+    - CHECKOUT_MAIN_SYNC
+    - FORENSIC_FRESHNESS
+    - RECEIPT_PRESENT
+  required_fields: [agent_id, mission_id, intent_id, goal_fingerprint, observed_head, measured_at, evaluator, evaluation_ref, criteria, verdict, next_cursor]
+  each_criterion_requires: [id, evaluated, status, source, attempt_ref, evaluated_at]
+  pass_requires: [source_sha, proof_ref, counterproof_ref, counterproof_verdict_NOT_REFUTED]
+  unknown_requires: [reason, attempt_ref]
+  statuses: [PASS, FAIL, UNKNOWN, STALE, BLOCKED]
+  usage_detection:
+    header_missing: HEADER_MISSING
+    criteria_missing_or_duplicate: HEADER_NOT_USED
+    stale_or_untraceable_attempt: HEADER_NOT_USED
+    ten_current_attempts_with_gaps: HEADER_USED_WITH_GAPS
+    ten_pass_plus_current_goal_receipt_same_head: HEADER_USED_AND_FIXED_POINT
+  invariants:
+    header_is_execution_receipt_not_decoration: true
+    exactly_ten_ids_required: true
+    every_agent_reports_criteria_considered: true
+    unknown_is_a_valid_measured_result_not_a_pass: true
+    no_probe_attempt_ref_means_not_evaluated: true
+    fixed_point_claim_requires_all_ten_pass: true
+    goal_receipt_and_next_cursor_required_for_fixed_point: true
+    header_missing_blocks_agent_call: true
+    preserve_same_intent_and_next_cursor: true
+    no_new_owner_or_evaluator: true
+
 aureola_visible_route_debugger:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
   visible_fields: [CURRENT_PHASE, MULTIBUSSOLA_AXIS, DESTINATION_OWNER, NEXT_GATE]
