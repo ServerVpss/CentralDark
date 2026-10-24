@@ -158,6 +158,144 @@ export function evaluateGoalClauses(goal = {}, options = {}) {
   };
 }
 
+
+export const FIXED_POINT_TEN_CRITERIA = Object.freeze([
+  { id: "OWNER_UNIQUE", label: "Owner único da HUD" },
+  { id: "LOCKS_PRESERVED", label: "Cadeados e selos preservados" },
+  { id: "MCP_PUBLIC_HEALTH", label: "Saúde MCP público" },
+  { id: "ONE_HEART_FRESH", label: "One Heart fresco" },
+  { id: "SCREENPIPE_CURRENT", label: "Screenpipe atual" },
+  { id: "AIONUI_STDIO_CURRENT", label: "AionUi MCP stdio atual" },
+  { id: "LOG_PRIVACY_CURRENT", label: "Privacidade dos logs" },
+  { id: "CHECKOUT_MAIN_SYNC", label: "Checkout sincronizado com main" },
+  { id: "FORENSIC_FRESHNESS", label: "Prova forense fresca" },
+  { id: "RECEIPT_PRESENT", label: "Receipt observável presente" },
+]);
+
+const FIXED_POINT_TEN_MAX_AGE_MS = 15 * 60 * 1000;
+const SOURCE_HASH = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
+
+/**
+ * Avalia os dez critérios globais usados pelo HUD.
+ * O HUD é projeção; este owner HORN decide o fechamento.
+ * Um FIXED_POINT global também exige receipt de Goal canônico e recente.
+ */
+export function evaluateFixedPointTen(input = {}, options = {}) {
+  const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+  const defaultMaxAgeMs = Number.isFinite(options.maxAgeMs) && options.maxAgeMs >= 0
+    ? options.maxAgeMs : FIXED_POINT_TEN_MAX_AGE_MS;
+  const supplied = Array.isArray(input.criteria) ? input.criteria : [];
+  const byId = new Map();
+  const ids = new Set(FIXED_POINT_TEN_CRITERIA.map((item) => item.id));
+
+  for (const item of supplied) {
+    if (!item || typeof item !== "object" || !ids.has(item.id)) {
+      throw new Error("FIXED_POINT_TEN_UNKNOWN_CRITERION");
+    }
+    if (byId.has(item.id)) throw new Error("FIXED_POINT_TEN_DUPLICATE_CRITERION");
+    byId.set(item.id, item);
+  }
+
+  const hasText = (value) => typeof value === "string" && value.trim().length > 0;
+  const rows = FIXED_POINT_TEN_CRITERIA.map(({ id, label }) => {
+    const item = byId.get(id);
+    if (!item) return {
+      id, label, required: true, status: "UNKNOWN", source: null,
+      proof_ref: null, counterproof_ref: null, measured_at: null,
+      next_cursor: "VERIFY_" + id,
+    };
+
+    const raw = String(item.status || "UNKNOWN").trim().toUpperCase();
+    const observedAt = Date.parse(item.measured_at || "");
+    const timestampValid = Number.isFinite(observedAt) &&
+      /(?:Z|[+-]\d\d:\d\d)$/.test(item.measured_at || "");
+    const maxAgeMs = Number.isFinite(item.max_age_ms) && item.max_age_ms >= 0
+      ? item.max_age_ms : defaultMaxAgeMs;
+    const tooFuture = timestampValid && observedAt > nowMs + 5000;
+    const stale = !timestampValid || tooFuture || nowMs - observedAt > maxAgeMs;
+    const traceable = hasText(item.source) && hasText(item.proof_ref) &&
+      hasText(item.counterproof_ref) && SOURCE_HASH.test(String(item.source_sha || "")) &&
+      timestampValid;
+    let status = "UNKNOWN";
+
+    if (raw === "FAIL" && traceable && item.counterproof_verdict === "REFUTED" && !stale) {
+      status = "FAIL";
+    } else if (raw === "BLOCKED" && traceable && !stale) {
+      status = "BLOCKED";
+    } else if (raw === "STALE" || (stale && raw !== "UNKNOWN")) {
+      status = "STALE";
+    } else if (raw === "PASS" && traceable && !stale &&
+      item.counterproof_verdict === "NOT_REFUTED") {
+      status = "PASS";
+    } else if (raw === "UNKNOWN" || !traceable || stale) {
+      status = stale && raw !== "UNKNOWN" ? "STALE" : "UNKNOWN";
+    }
+
+    return {
+      id, label, required: true, status,
+      source: hasText(item.source) ? item.source : null,
+      source_sha: SOURCE_HASH.test(String(item.source_sha || "")) ? item.source_sha : null,
+      proof_ref: hasText(item.proof_ref) ? item.proof_ref : null,
+      counterproof_ref: hasText(item.counterproof_ref) ? item.counterproof_ref : null,
+      counterproof_verdict: item.counterproof_verdict || "UNKNOWN",
+      measured_at: timestampValid ? item.measured_at : null,
+      next_cursor: status === "PASS" ? "CONTINUE" : "VERIFY_" + id,
+    };
+  });
+
+  const counts = { PASS: 0, FAIL: 0, UNKNOWN: 0, STALE: 0, BLOCKED: 0 };
+  for (const row of rows) counts[row.status] += 1;
+  const requiredPass = rows.filter((row) => row.required && row.status === "PASS").length;
+  const firstGap = rows.find((row) => row.status !== "PASS");
+
+  const goal = input.goalReceipt && typeof input.goalReceipt === "object"
+    ? input.goalReceipt : null;
+  let goalReceiptValid = false;
+  let goalReceiptState = "UNKNOWN";
+  if (goal) {
+    const receiptStamp = Date.parse(goal.measured_at || "");
+    const receiptMaxAgeMs = Number(goal.max_age_ms);
+    const receiptFresh = Number.isFinite(receiptStamp) &&
+      /(?:Z|[+-]\d\d:\d\d)$/.test(goal.measured_at || "") &&
+      receiptStamp <= nowMs + 5000 && nowMs - receiptStamp >= -5000 &&
+      Number.isFinite(receiptMaxAgeMs) && receiptMaxAgeMs > 0 &&
+      nowMs - receiptStamp <= receiptMaxAgeMs;
+    const sameHead = !hasText(input.currentHead) ||
+      (hasText(goal.main_sha) && goal.main_sha === input.currentHead);
+    const evaluated = evaluateGoalClauses(goal, {
+      nowMs,
+      maxAgeMs: Number.isFinite(receiptMaxAgeMs) && receiptMaxAgeMs > 0
+        ? receiptMaxAgeMs : defaultMaxAgeMs,
+    });
+    goalReceiptValid = goal.evaluator === "scripts/lupa/horn-reuse-fixed-point.mjs" &&
+      receiptFresh && sameHead && evaluated.fixedPoint === true &&
+      hasText(goal.receipt_ref) && goal.next_cursor === "FIXED_POINT";
+    goalReceiptState = goalReceiptValid ? "PASS" : (!receiptFresh ? "STALE" : "UNKNOWN");
+  }
+
+  const fixedPoint = rows.length === FIXED_POINT_TEN_CRITERIA.length &&
+    requiredPass === FIXED_POINT_TEN_CRITERIA.length && goalReceiptValid;
+  const nextCursor = firstGap ? "VERIFY_" + firstGap.id
+    : (!goalReceiptValid ? "GOAL_RECEIPT_REQUIRED" : "FIXED_POINT");
+
+  return {
+    schema: "centraldark.fixed-point.ten.v1",
+    owner: "scripts/lupa/horn-reuse-fixed-point.mjs",
+    observedAt: new Date(nowMs).toISOString(),
+    total: FIXED_POINT_TEN_CRITERIA.length,
+    required_total: FIXED_POINT_TEN_CRITERIA.length,
+    required_pass: requiredPass,
+    counts,
+    criteria: rows,
+    goal_receipt_status: goalReceiptState,
+    current_head: hasText(input.currentHead) ? input.currentHead : null,
+    fixedPoint,
+    verdict: fixedPoint ? "FIXED_POINT" : "NEXT_DELTA",
+    next_cursor: nextCursor,
+    proof_boundary: "HUD_IS_PROJECTION; ALL_TEN_CRITERIA_AND_CURRENT_GOAL_RECEIPT_REQUIRED; UNKNOWN_IS_NOT_PASS",
+  };
+}
+
 export function selfTest() {
   const reuse = decideReuse({ existingOwner: true, sameIntent: true, fullFit: true });
   if (reuse.decision !== "REUSE") throw new Error("SELF_TEST_REUSE_FAIL");
@@ -180,6 +318,12 @@ if (isMain) {
     console.log("HORN_REUSE_FIXED_POINT=PASS");
     console.log("REUSE_BEFORE_CREATE=ENFORCED_BY_RULE_SET");
     console.log("LEARN_AFTER_PROVED_ERROR=PASS");
+  } else if (process.argv.includes("--fixed-point-ten-stdin")) {
+    const input = JSON.parse(readFileSync(0, "utf8"));
+    const ageArg = process.argv.find((arg) => arg.startsWith("--max-age-ms="));
+    const age = ageArg ? Number(ageArg.slice("--max-age-ms=".length)) : null;
+    const options = ageArg && Number.isFinite(age) && age >= 0 ? { maxAgeMs: age } : {};
+    console.log(JSON.stringify(evaluateFixedPointTen(input, options), null, 2));
   } else if (process.argv.includes("--goal-stdin")) {
     // Read sanitized receipts via stdin, not process arguments; never mutate source.
     const goal = JSON.parse(readFileSync(0, "utf8"));
@@ -190,7 +334,7 @@ if (isMain) {
   } else {
     const raw = process.argv.find((arg) => arg.startsWith("--input-json="));
     if (!raw) {
-      console.error("usage: horn-reuse-fixed-point.mjs --self-test | --goal-stdin [--max-age-ms=N] | --input-json='{...}'");
+      console.error("usage: horn-reuse-fixed-point.mjs --self-test | --goal-stdin [--max-age-ms=N] | --fixed-point-ten-stdin [--max-age-ms=N] | --input-json='{...}'");
       process.exit(2);
     }
     const input = JSON.parse(raw.slice("--input-json=".length));
