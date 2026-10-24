@@ -130,7 +130,8 @@ CRYSTAL_TRUTH_GATE=PDF_GATE_TLC23_HORN
 RUNTIME_PROMOTION_AXES=CASA+GITHUB+VPS
 THREE_AXIS_SAME_SOURCE_REQUIRED=true
 PARTIAL_AXIS_PASS_IS_GLOBAL_PASS=false
-MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true
+MICRO_DEPLOY_REQUIRES_AUTHORIZED_TARGET_SCOPE=true
+MICRO_DEPLOY_DOES_NOT_REASK_IF_PERSISTENT_SCOPE_AUTHORIZED=true
 DAILY_CHECKLIST_GATE_REQUIRED=true
 DAILY_CHECKLIST_OWNER=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 DAILY_CHECKLIST_CONSUMER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md
@@ -626,8 +627,22 @@ Regras:
 
 Não conte respostas correlacionadas como provas independentes. Conflito não é votação: use teste discriminante. Dedupe não pode apagar hipótese/UNKNOWN e liberar Writer. A percepção nunca usa `git commit_push`, `escrever_arquivo`, deploy, restart, delete ou qualquer mutação. Só o Writer, depois da arbitragem, executa a menor mudança autorizada. O Critic continua sendo contraprova operacional após mutação e antes de cristalização.
 
-## CI/PR/commits/labels
+## Semântica de mutações Git — herdar autorização, não re-perguntar
 
+A autorização pertence ao owner docs/CONSCIENCIA/02-PERMISSOES.md; este prompt só normaliza linguagem para execução. Dentro da mesma intenção, repositório, branch/PR e escopo, commit/commits/committed/committing/git commit, push/pushed/pushing/git push, publicar/enviar commits, atualizar/sincronizar branch, atualizar o HEAD do PR e abrir/atualizar PR são variantes operacionais cobertas pela autorização persistente. Não perguntar “posso fazer push/commit?” se a missão já autoriza essa mutação.
+
+Squash/merge é executado pelo owner canônico quando a mesma intenção está autorizada, o HEAD remoto foi revalidado, não há conflito e todos os gates obrigatórios estão PASS no mesmo HEAD. Não fazer commit/push direto à main protegida, force-push, bypass de branch protection, publicar secrets ou ampliar escopo. Se o remoto mudou, remedir/reconciliar e seguir; não converter diferença mecânica em pergunta humana repetida.
+
+GIT_SEMANTIC_ACTION_FAMILY=INHERIT_FROM_02_PERMISSOES
+NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
+NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true
+MICRO_DEPLOY_REQUIRES_AUTHORIZED_TARGET_SCOPE=true
+MICRO_DEPLOY_DOES_NOT_REASK_IF_PERSISTENT_SCOPE_AUTHORIZED=true
+DIRECT_MAIN_COMMIT=BLOCKED_BY_BRANCH_POLICY
+FORCE_PUSH_REQUIRES_EXPLICIT_CHEFE_AUTH=true
+BRANCH_PROTECTION_NEVER_BYPASSED=true
+
+## CI/PR/commits/labels
 Não crie workflow/promotor/label paralelos. Reutilize os owners existentes:
 
 - `.github/workflows/porta-de-entrada.yml`
