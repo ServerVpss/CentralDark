@@ -2,8 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "36af15d7c1218c73924e0d9021fe32b8905f1f2f",
-  "source_blob_sha": "cc02236038d1baedafa9b8465d67276a6d09453b",
+  "source_blob_sha": "4ff05feec20e56485db9d29f67c06133d41f9f8d",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -21,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 201,
-    "highest_legacy_learning_number": 194,
+    "learning_sections": 226,
+    "highest_legacy_learning_number": 219,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -133,7 +132,6 @@
         "count": 2,
         "uids": [
           "L178A",
-          "L178",
           "L178B"
         ]
       }
@@ -149,7 +147,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 194
+      "end": 219
     }
   },
   "nodes": [
@@ -2362,6 +2360,281 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L193",
+      "next_uid": "L195"
+    },
+    {
+      "uid": "L195",
+      "legacy_learning_number": 195,
+      "legacy_occurrence": 1,
+      "title": "Supabase CentralDark 18-10-2026 — projeto saudável não prova consumo Hermes",
+      "document_order": 202,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L194",
+      "next_uid": "L196"
+    },
+    {
+      "uid": "L196",
+      "legacy_learning_number": 196,
+      "legacy_occurrence": 1,
+      "title": "Receita SOL→Hermes #195: bloqueio de implantação por catálogo destrutivo em quarentena",
+      "document_order": 203,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L195",
+      "next_uid": "L197"
+    },
+    {
+      "uid": "L197",
+      "legacy_learning_number": 197,
+      "legacy_occurrence": 1,
+      "title": "MCP CentralDark — providers existentes, 401 Tailscale e condição ausente do OAuth Broker",
+      "document_order": 204,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L196",
+      "next_uid": "L198"
+    },
+    {
+      "uid": "L198",
+      "legacy_learning_number": 198,
+      "legacy_occurrence": 1,
+      "title": "DNS do MCP restaurado sem perder MagicDNS 2026-10-19",
+      "document_order": 205,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L197",
+      "next_uid": "L199"
+    },
+    {
+      "uid": "L199",
+      "legacy_learning_number": 199,
+      "legacy_occurrence": 1,
+      "title": "MCP fail-closed em produção após PR 1868",
+      "document_order": 206,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L198",
+      "next_uid": "L200"
+    },
+    {
+      "uid": "L200",
+      "legacy_learning_number": 200,
+      "legacy_occurrence": 1,
+      "title": "Erro de prova: conectividade Casa↔VPS não comprova execução onsite",
+      "document_order": 207,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L199",
+      "next_uid": "L201"
+    },
+    {
+      "uid": "L201",
+      "legacy_learning_number": 201,
+      "legacy_occurrence": 1,
+      "title": "BOOT fixo acumulativo + método Michelin com rastro e readback",
+      "document_order": 208,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L200",
+      "next_uid": "L202"
+    },
+    {
+      "uid": "L202",
+      "legacy_learning_number": 202,
+      "legacy_occurrence": 1,
+      "title": "BOOT fixo acumulativo + método Michelin com rastro e readback",
+      "document_order": 209,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L201",
+      "next_uid": "L203"
+    },
+    {
+      "uid": "L203",
+      "legacy_learning_number": 203,
+      "legacy_occurrence": 1,
+      "title": "BOOT fixo acumulativo e rastro Michelin obrigatório",
+      "document_order": 210,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L202",
+      "next_uid": "L204"
+    },
+    {
+      "uid": "L204",
+      "legacy_learning_number": 204,
+      "legacy_occurrence": 1,
+      "title": "Rota MCP_CASA_TO_VPS documentada não prova executor acionável",
+      "document_order": 211,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L203",
+      "next_uid": "L205"
+    },
+    {
+      "uid": "L205",
+      "legacy_learning_number": 205,
+      "legacy_occurrence": 1,
+      "title": "Retomar PR #1880 sem confundir snapshot com fixed point",
+      "document_order": 212,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L204",
+      "next_uid": "L206"
+    },
+    {
+      "uid": "L206",
+      "legacy_learning_number": 206,
+      "legacy_occurrence": 1,
+      "title": "BOOT fixo append-only e execução com rastro verificável",
+      "document_order": 213,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L205",
+      "next_uid": "L207"
+    },
+    {
+      "uid": "L207",
+      "legacy_learning_number": 207,
+      "legacy_occurrence": 1,
+      "title": "K→F self-provisioning Windows: reutilizar owner existente e exigir receipt",
+      "document_order": 214,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L206",
+      "next_uid": "L208"
+    },
+    {
+      "uid": "L208",
+      "legacy_learning_number": 208,
+      "legacy_occurrence": 1,
+      "title": "VS Code CentralDark deve priorizar linguagem natural e botões",
+      "document_order": 215,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L207",
+      "next_uid": "L209"
+    },
+    {
+      "uid": "L209",
+      "legacy_learning_number": 209,
+      "legacy_occurrence": 1,
+      "title": "Mapa híbrido Casa–MCP/K:–VPS–GitHub: separar topologia relatada de prova viva",
+      "document_order": 216,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L208",
+      "next_uid": "L210"
+    },
+    {
+      "uid": "L210",
+      "legacy_learning_number": 210,
+      "legacy_occurrence": 1,
+      "title": "Cabeça externalizada do CHEFE — K Forja, F armazenamento transparente",
+      "document_order": 217,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L209",
+      "next_uid": "L211"
+    },
+    {
+      "uid": "L211",
+      "legacy_learning_number": 211,
+      "legacy_occurrence": 1,
+      "title": "Catálogo runtime CentralDark — 13 rotas e validação contínua",
+      "document_order": 218,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L210",
+      "next_uid": "L212"
+    },
+    {
+      "uid": "L212",
+      "legacy_learning_number": 212,
+      "legacy_occurrence": 1,
+      "title": "Cline MCP: nome qualificado, PowerShell nativo e HTTP 401 esperado",
+      "document_order": 219,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L211",
+      "next_uid": "L213"
+    },
+    {
+      "uid": "L213",
+      "legacy_learning_number": 213,
+      "legacy_occurrence": 1,
+      "title": "Sacola de skills: distinguir manifestos locais do catálogo MCP em execução",
+      "document_order": 220,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L212",
+      "next_uid": "L214"
+    },
+    {
+      "uid": "L214",
+      "legacy_learning_number": 214,
+      "legacy_occurrence": 1,
+      "title": "Skill Buscar Reconciliation",
+      "document_order": 221,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L213",
+      "next_uid": "L215"
+    },
+    {
+      "uid": "L215",
+      "legacy_learning_number": 215,
+      "legacy_occurrence": 1,
+      "title": "Checkpoint comprovado SSH Casa Windows e VPS Linux — preservar serviços existentes",
+      "document_order": 222,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L214",
+      "next_uid": "L216"
+    },
+    {
+      "uid": "L216",
+      "legacy_learning_number": 216,
+      "legacy_occurrence": 1,
+      "title": "Desktop Commander terceiro removido da dependência; CentralDark nativo é rota primária Casa↔VPS",
+      "document_order": 223,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L215",
+      "next_uid": "L217"
+    },
+    {
+      "uid": "L217",
+      "legacy_learning_number": 217,
+      "legacy_occurrence": 1,
+      "title": "Regra Cockpit-in-the-Loop",
+      "document_order": 224,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L216",
+      "next_uid": "L218"
+    },
+    {
+      "uid": "L218",
+      "legacy_learning_number": 218,
+      "legacy_occurrence": 1,
+      "title": "RED #003: PowerShell corrigido, workspace Casa sem checkout Git",
+      "document_order": 225,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L217",
+      "next_uid": "L219"
+    },
+    {
+      "uid": "L219",
+      "legacy_learning_number": 219,
+      "legacy_occurrence": 1,
+      "title": "Lembrança operacional ZENDRIVE — recuperar PR #1842 antes de agir",
+      "document_order": 226,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L218",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
