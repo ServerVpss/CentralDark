@@ -446,8 +446,10 @@ export function evaluateFixedPointTen(input = {}, options = {}) {
   const rows = FIXED_POINT_TEN_CRITERIA.map(({ id, label }) => {
     const item = byId.get(id);
     if (!item) return {
-      id, label, required: true, status: "UNKNOWN", source: null,
+      id, label, required: true, status: "UNKNOWN", evaluated: false,
+      source: null, attempt_ref: null, evaluated_at: null,
       proof_ref: null, counterproof_ref: null, measured_at: null,
+      reason: "NO_CURRENT_ATTEMPT_RECEIPT",
       next_cursor: "VERIFY_" + id,
     };
 
