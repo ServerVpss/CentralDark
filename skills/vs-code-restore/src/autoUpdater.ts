@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { createHash } from 'node:crypto';
-import { execFile, spawn } from 'node:child_process';
+import { execFile } from 'node:child_process';
 
 type Route = { readonly alias: string; readonly options: readonly string[] };
 type Asset = { name: string; size: number; digest: string };
@@ -67,20 +67,17 @@ function pick(all:Release[],current:string) {
   return null;
 }
 async function installVsix(file:string):Promise<void>{
-  const bin=path.resolve(vscode.env.appRoot,'..','..','bin');
-  const cli=['code.cmd','code-insiders.cmd'].map(f=>path.join(bin,f)).find(fs.existsSync);
-  if(!cli)throw Error('VSCODE_CLI_NOT_FOUND');
-  if(/[<>\r\n"%!&|^]/.test(cli+file))throw Error('UNSAFE_INSTALL_PATH');
-  // Windows .cmd exige cmd.exe. Caminhos sao locais e validados.
-  const command='""'+cli+'" --install-extension "'+file+'" --force"';
-  await new Promise<void>((resolve,reject)=>{
-    const child=spawn(process.env.ComSpec||'cmd.exe',['/d','/s','/c',command],
-      {windowsHide:true,stdio:'ignore'});
-    const timeout=setTimeout(()=>child.kill(),120000);
-    child.on('error',()=>{clearTimeout(timeout);reject(Error('CODE_CLI_UNAVAILABLE'))});
-    child.on('close',code=>{clearTimeout(timeout);
-      if(code===0)resolve();else reject(Error('CODE_INSTALL_FAILED'))});
-  });
+  // Workbench command officially supports a VSIX file URI; it installs
+  // into the currently running VS Code, including the correct profile.
+  // Do not guess the editor CLI path or create another installation.
+  if (!fs.existsSync(file) || !fs.statSync(file).isFile()) {
+    throw Error('VERIFIED_VSIX_NOT_FOUND');
+  }
+  const commands = await vscode.commands.getCommands(true);
+  if (!commands.includes('workbench.extensions.installExtension')) {
+    throw Error('VSCODE_NATIVE_INSTALL_UNAVAILABLE');
+  }
+  await vscode.commands.executeCommand('workbench.extensions.installExtension', vscode.Uri.file(file));
 }
 export async function checkVsCodeUpdates(context:vscode.ExtensionContext,
     ssh:()=>string,routes:readonly Route[],manual=false):Promise<void>{
