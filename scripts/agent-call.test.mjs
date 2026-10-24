@@ -133,7 +133,16 @@ function check(actual, expected) {
   pass += 1;
 }
 
-check(validateAgentCall(base, state).status, "ACCEPTED");
+const acceptedBaseReceipt = validateAgentCall(base, state);
+check(acceptedBaseReceipt.status, "ACCEPTED");
+check(acceptedBaseReceipt.fixed_point_header_usage, "USED_WITH_GAPS");
+check(acceptedBaseReceipt.fixed_point_execution_header.criteria_count, 10);
+check(validateAgentCall({ ...base, fixed_point_execution_header: undefined }, state).status,
+  "BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSING");
+const noAttemptHeader = makeExecutionHeader();
+noAttemptHeader.criteria[7].attempt_ref = "";
+check(validateAgentCall({ ...base, fixed_point_execution_header: noAttemptHeader }, state).status,
+  "BLOCKED_FIXED_POINT_EXECUTION_HEADER_CRITERION_NOT_ACTUALLY_MEASURED");
 const logIncident = {
   source_endpoint: "/admin/api/logs",
   material: true,
