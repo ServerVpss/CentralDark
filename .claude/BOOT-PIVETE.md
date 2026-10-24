@@ -176,7 +176,7 @@ RUNTIME_IS_NOT_SCRATCH=true
 CASA_IS_NOT_SCRATCH=true
 ```
 
-`git reset --hard` e `git clean -fdx` só podem operar no realpath exato do scratch canônico. `/root/CentralDark`, runtime vivo e `E:\CentralDark` nunca são scratch.
+`git reset --hard` e `git clean -fdx` só podem operar no realpath exato do scratch canônico. `/root/CentralDark`, runtime vivo e `K:\` nunca são scratch.
 
 ## HUB Credential Control Plane
 

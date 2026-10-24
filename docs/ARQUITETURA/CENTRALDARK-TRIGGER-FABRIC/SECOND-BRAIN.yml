@@ -42,7 +42,7 @@ second_brain:
     direct_canonical_mutation: false
     is_second_authority: false
     garimpo:
-      local_workspace_example: 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE'
+      local_workspace_example: 'K:\_MAPA_CASA\GARIMPO-CHEFE'
       role: RAW_MATERIAL_RESERVOIR_NOT_AUTHORITY
       always_evaluate_for_crystallization: true
       blind_crystallize_everything: false

@@ -18,7 +18,7 @@ HOME = os.path.expanduser("~")
 PASTA = os.path.join(HOME, "OneDrive", "Área de Trabalho", "🔒PASTA TRANCADA APELO CHEFE🔒")
 INVENTARIO = os.path.join(PASTA, "INVENTARIO.json")
 REMOTE_MAP = os.path.join(PASTA, "REMOTE_MAP.json")
-REPO = r"E:\CentralDark\Pivete\CentralDark"
+REPO = r"K:/"
 
 
 def norm(s):

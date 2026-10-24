@@ -392,7 +392,7 @@ RUNTIME_IS_NOT_SCRATCH=true
 CASA_IS_NOT_SCRATCH=true
 ```
 
-`git reset --hard` e `git clean -fdx` só podem operar no realpath exato do scratch canônico. `/root/CentralDark`, runtime vivo e `E:\CentralDark` nunca são scratch.
+`git reset --hard` e `git clean -fdx` só podem operar no realpath exato do scratch canônico. `/root/CentralDark`, runtime vivo e `K:\` nunca são scratch.
 
 ```text
 LOCK
@@ -592,7 +592,7 @@ Seleção automática por complexidade/risco/ambiguidade/custo/latência. Pode m
 - **Não** force-push sem aprovação SEGREDO/CHEFE
 - **Não** crie V2/V3 quando original existe
 - **Não** apague; mova para `_QUARANTINE` com manifest
-- **Não** use `/root/CentralDark` ou `E:\CentralDark` como scratch descartável
+- **Não** use `/root/CentralDark` ou `K:\` como scratch descartável
 - **Não** grave segredo/token em Git, receipt, memória ou log controlado
 
 ## Contribuição & Sincronização (Todos os Agentes)

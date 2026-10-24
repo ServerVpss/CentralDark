@@ -188,6 +188,76 @@ grafos são projeções reconstruíveis.
 
 ---
 
+
+<!-- CENTRALDARK_HARNESS_COCKPIT_BUILDER_ALTHE_REFERENCIA_20261021 -->
+
+## Cristal de interface — Builder dentro do Harness, sem duplicar Cockpit (2026-10-21)
+
+**Intenção expressa pelo CHEFE (capturas da Casa):** “cristaliza esses cores e esses botões aí pra eu saber lá onde tem o cockpit; veja as abas”. A referência é a bancada Alethe/estilo workspace mostrada em capturas (modal “Olá, CENTRALDARK”; Conta, Recursos, Controle remoto, Aparência, Integrações, homepage Builder, agente selecionável e terminais). **Não** aprova substituir os owners da CentralDark, clonar serviços nem tornar Alethe o segundo Harness principal.
+
+**Leitura da aba real:** Browser conectado `http://127.0.0.1:8080/sala-controle`, título “Cockpit CentralDark — Sala de Controle”, consulta nesta sessão em 21/10/2026. A aba expôs as entradas de navegação abaixo. Essa leitura prova **DOM/controles renderizados**, não clique funcional, integração física Win32, sessão privada, build Windows ou execução de agente.
+
+### Mapa de encaixe no Cockpit existente
+
+| Referência visual mostrada | Entrada/owner CentralDark a REUTILIZAR | Estado atual / menor delta |
+| --- | --- | --- |
+| Tela inicial “O que você quer construir?”, seletor agente, pasta K:, modo e envio | `CockpitShell.tsx` → `CentralDark Estúdio` (`aionui`) e Builder do Shell `apps/modulos/Bolt/source` | **A compor dentro do Harness**; escolha de Claude/Codex/Copilot/Cursor/Antigravity/OpenCode é UI até autenticação e PID/ACK medidos. Não sobrescrever `Builder Bolt` (fábrica de sites distinta). |
+| Barra esquerda projetos/agentes e dock persistente | Harness lateral esquerdo já existente (`Abrir ferramentas`, Gram, Goals, Buscar módulos) | Preservar moldura lateral, foco, restauração, perfis e instâncias nativas; evolução incremental da casca, sem segunda sidebar. |
+| Editor/Cockpit multiabas + painel direito Markdown | `centraldark-harness-abas`, `Sistema CentralDark`, `💎 Obsidian`, Grafo Vivo | Mesmas abas internas; Obsidian **original** com vault e plugins; janela Win32 incorporada requer teste separado. Links `obsidian://` não provam docking. |
+| Terminais inferiores e “novo terminal/projeto” | `skills/vs-code-restore` PR #1880 + desktop Bolt / Harness + MCP oficial | Conectar aos mesmos PIDs/sessões, jamais criar pseudo-shell ou reexecutar CLIs sem consentimento. |
+| Configurações Conta, Organização, Aparência, Controle remoto | `Configurar Harness`, `Admin CentralDark`, `Design Center`, auth existente | Um painel de configurações reutilizando perfis e políticas; controle remoto **desligado por padrão**. |
+| Recursos: Navegador, Graphify, MCP & Skills, Playwright, Orquestração, GSD Sync, AI Memory | `Sistema CentralDark` / `Inventário`, `Raio-X`, `Goals`, `Hermes`, `Minha Oficina`, `Obsidian` | Mapear disponibilidade com proprietário e prova por capacidade. “Ativado” no protótipo de referência **não atesta** recurso instalado na CentralDark. |
+| Integrações (9router, Spotify, Discord, CLI) / Plugins | `Admin CentralDark`, `Sistema CentralDark`, catálogo MCP e cofre existente | Não reinstalar providers nem duplicar vault. Nunca copiar segredos das imagens. |
+| Home com atividade, progresso, recibos | `Visão geral`, `Recibos`, `Gênesis · Michelin`, `Dream` | Fontes atuais e idempotentes; números do protótipo de referência não são métricas da Casa. |
+
+**Abas renderizadas e existentes na leitura:** Visão geral; Portal; Builder Bolt; Mapa PR #1873; CentralDark Gram; Minha Oficina; Design Center; Goals; Gênesis · Michelin; Claude; Dream; Estrutura; Raio-X; Recibos; Forja; Permissões Forja; Admin CentralDark; Sistema CentralDark; Hermes; Obsidian; Estúdio; Unigram; Regras Forja; Inventário; Agent Mode; HTML Consolidation; Downloads. A origem primária é `apps/instinto-superior/src/components/central/CockpitShell.tsx`, `TabsList` + `HARNESS_DESTINOS`, sem criar menu paralelo.
+
+**Ações da moldura que já existem:** lateral esquerda `Abrir ferramentas`, Gram, Goals, `Buscar módulos`; lateral direita `Sistemas`, Hermes, `Configurar Harness`; rodapé `Sync`, `Pacotes`, `Configurar moldura`; topo `CentralDark Estúdio`. Preservar atalhos, teclado e ícones, não reproduzir botões decorativos sem handler.
+
+### Correção de design — somente as peles já existentes no Cockpit
+
+**Correção expressa do CHEFE em 2026-10-21:** o aplicativo usado como exemplo (Alethe) demonstra *funções, comandos, ergonomia, navegação e gerenciamento de janelas*, **não** define a aparência da CentralDark. A tabela anterior com cores violeta/índigo era uma inferência indevida do observador; foi retirada deste contrato e está **revogada como sugestão de design**. Não aplicar a paleta da referência visual ao Builder, Shell ou Cockpit.
+
+**Owner real das quatro peles do Cockpit:** `apps/instinto-superior/src/components/central/DesignCenter.tsx`, `PeleCockpit` e `usePeleCockpit`:
+- `default` — **Instinto Superior · padrão** (**fallback**, inclusive quando não houver preferência salva);
+- `ouro` — **Breu & Ouro**;
+- `ops` — **Ops · Ciano**;
+- `esmeralda` — **Esmeralda**.
+
+**Persistência já existente:** `centraldark.cockpit.pele`. `CockpitShell.tsx` aplica `data-pele-cockpit={pele}`. O Builder hospedado pelo Harness deve **herdar essa escolha**, aplicar tokens/estilos do owner existente e conservar a mesma navegação; **nenhuma pele ou quinta paleta será criada**. Não forçar a pele ativa para outra cor; `default` continua o comportamento padrão definido no código.
+
+**Não confundir categorias:** o registro histórico de **três temas globais** `emerald`/`operational`/`forge` é outro contrato, de cobertura entre aplicações; **não é a lista dos quatro IDs `default`/`ouro`/`ops`/`esmeralda`** do Cockpit. Preservar ambos os contratos e reconciliar por owner, não inventar equivalência sem prova.
+
+**NEXT_CURSOR corrigido:** `REUSE_EXISTING_FOUR_SKINS → BUILDER_USES_CURRENT_PELE → VERIFY_TAB_NAVIGATION → BUILD_SAME_SHA → VISUAL_REGRESSION_FOUR_PELES → RECEIPT`. Até teste: `UI_DESIGN_INHERITANCE=NOT_PROVEN`.
+
+**Divergências concretas medidas no source da PR #1895 (HEAD no início desta leitura: `b3427c9da167cdc41aaf5814bcb1db12c61c4d50`):** `builder-bolt` usa `MenuVisualCentralDark` com “ESTRUTURA VISUAL” e “Integração pendente”; `aionui` hoje dá link para aplicativo externo/protótipo; `obsidian` despacha `obsidian://open?vault=BRAIN` ou ponte desktop e informa janela independente. **Não declarar completo.**
+
+**OWNER/WRI​​TER:** este cristal é **apenas documentação** em `DESIGN-SISTEMA.md` na PR #1895. `CockpitShell.tsx` e Shell mantêm o integrador da Casa como **único escritor**. Sem alterar CSS, handlers, processos, autenticação, drives ou runtime nesta rodada.
+
+**NEXT_CURSOR:** `MAPA_TAB_ID → ESCOPAR_ESTILO_BUILDER → CONECTAR_HANDLERS_ORIGINAIS → MANTER_BOLT_DISTINTO → OBSIDIAN_NATIVE_TEST → BUILD_SHELL_K_F → VISUAL_BEFORE_AFTER → RECEIPT`. `DOCUMENTED != IMPLEMENTED != LIVE_TESTED`.
+
+
+
+<!-- CENTRALDARK_GLOBAL_THEME_TRIALS_SEPARATE_20261021 -->
+### Experimento comparativo autorizado: três temas globais em prévias isoladas (2026-10-21)
+
+**DECISÃO DO CHEFE:** trazer `emerald`, `operational` e `forge` para o **Design Center → Temas globais · 3 prévias**; exibir as cores reais dos owners existentes e a composição do Cockpit para comparar antes de decidir se deve fundir temas. Os três permanecem **independentes**, **não** viram mais três peles do Cockpit, **não** entram no seletor atual e **não** modificam `bolt_theme` nem `centraldark.cockpit.pele`.
+
+**Fonte auditável dos tokens:** `apps/modulos/Bolt/source/app/styles/variables.scss` (`[data-theme='emerald']`, `[data-theme='operational']`, `[data-theme='forge']`) + `apps/modulos/Bolt/source/app/lib/stores/theme.ts` (identificadores do Shell). O menu/paleta de quatro peles é `apps/instinto-superior/src/components/central/DesignCenter.tsx` e `styles.css`. Os valores abaixo são amostras reais do código atual, **apenas fixtures de miniatura** e não uma engine de tema duplicada.
+
+| Tema global independente | Fundo dos tokens do Bolt | Painel | Cor de ação |
+| --- | --- | --- | --- |
+| `emerald` | `#f0fdf4` | `#ffffff` | `hsl(152 65% 32%)` |
+| `operational` | `#05070d` | `#0b1420` | `#4fc3ff` |
+| `forge` | `#100d07` | `#1d1709` | `#c0902b` |
+
+**Implementação no PR #1895:** `DesignCenter.tsx` adiciona `TabsTrigger value="temas-globais"` e `TabsContent` com três cartões não executáveis, `data-cd-theme-preview` por identidade e painel simulado (topo, navegação, botões, artefato, estados). O modo Forge exibe painel-pergaminho `#ecdbae` conforme token real. Somente prévias independentes, sem writes de storage, downloads, serviços, processos ou modificação da identidade atual.
+
+**Invariantes e próximos gates:** quatro peles permanecem `default` / `ouro` / `ops` / `esmeralda`; equivalência dos três temas globais com quatro peles **NÃO PRESUMIDA**. Após leitura do PR e teste de build do mesmo SHA, conferir no Cockpit local menu de aparências, as sete identidades distintas, foco/legibilidade, responsividade e preferência inalterada mesmo após reload. Somente o CHEFE decide `MANTER_SEPARADOS`, `FUNDIR` ou `DESCARTAR_PREVIAS` depois da comparação. `SOURCE_COMMITTED != LIVE_CASA_VERIFIED`.
+
+**NEXT_CURSOR:** `READBACK_3_PREVIEWS → BUILD_SAME_SHA → CASA_PULL_AUTHORIZED → LIVE_RENDER_DESIGN_CENTER → FOUR_SKINS_PRESERVED → CHEFE_DECIDES_IF_MERGE`.
+
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada

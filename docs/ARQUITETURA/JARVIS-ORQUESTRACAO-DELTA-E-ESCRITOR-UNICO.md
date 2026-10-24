@@ -187,6 +187,14 @@ CHEFE (INTENT_ID / GOAL / AUTORIZAÇÃO)
 
 **Critério de saída:** FIXED_POINT só com objetivo cumprido e gates requeridos provados; se ainda há trabalho, registrar o próximo discriminante no NEXT_CURSOR e prosseguir quando houver executor disponível. Se nada mudou: NOOP. Não prometer loop em segundo plano sem job/schedule real.
 
+### Delegação do Builder na Forja existente — sem versões paralelas
+
+**Owner de skill:** skills/centraldark-delegacao/SKILL.md. **Contrato tipado:** .agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json. **Superfície:** apps/instinto-superior. **Bancada da Casa:** K:\ (repositório raiz, não K:\CentralDark).
+
+Delegar a Hermes/Claude/Codex pelo fluxo existente: INTENT_ID → escopos não sobrepostos → capacidade/autorização medida → tarefa Hermes Kanban → um Writer por escopo → ACK → efeito → contraprova → receipt/NEXT_CURSOR. Builder coordena e apresenta; não cria fila, CLI ou agente. Papeis de terminal são candidatos adaptáveis, não grants fixos. Não presumir suporte do CLI Hermes a novos argumentos, equivalência Codex/GitHub Actions nem webhooks ativos do Lovable.
+
+**Demonstração não é prova:** exemplos com IDs de PR, hashes, métricas ou sucessos fictícios não validam deploy/integração. PREVIEW != DEPLOYED, BUILT != INSTALLED, RUNNING != COMPLETED. Ao encontrar nomes com sufixos de versão, absorver o conteúdo exclusivo nos mesmos owners e eliminar duplicatas somente após readback e contraprova; a evolução é histórico Git.
+
 ## 6. Fluxo padrão — intenção curta, organismo desdobra
 
 ```text
@@ -403,6 +411,40 @@ FAILED_MCP_ROUTE_DOES_NOT_AUTHORIZE_DIRECT_UNSCOPED_SHELL=true
 ```
 
 O backend de inferência é casca mutável. Triton, vLLM, TensorRT-LLM, Kylin SDK ou outro backend entram somente quando medidos/necessários no ambiente correspondente; nenhum deles é pré-requisito constitucional.
+
+### 6.3 Cabeça externalizada — ciclo científico de atenção, memória, energia e telemetria (2026-10-24)
+
+**Intenção do CHEFE:** diminuir carga mental e fricção operacional: a CentralDark recupera o fio, mantém memória pertinente, detecta alterações verificáveis, executa o que já foi autorizado e só chama atenção humana por motivo material. Isto é **externalização funcional** de informação, preferências operacionais e métodos, não transferência literal de consciência nem posse sobre a pessoa. CHEFE permanece no comando, inclusive podendo silenciar ou desligar avisos.
+
+**Owners reutilizados, sem segundo cérebro ou scheduler:** `LEIA-ME-IA.md` (entrada/checkpoint), `docs/CONSCIENCIA/APRENDIZADOS.md` (lições), `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` (navegação), este §6.0 (continuidade), `docs/CONSCIENCIA/02-PERMISSOES.md` (escopo), os observadores/HUD já existentes e o runtime Hermes quando realmente conectado. O registro desta intenção no Git **não prova** captura contínua, notificação ativa, leitura por outros agentes nem sensores instalados.
+
+### Funções separadas por evidência
+
+1. **Memória operacional:** guardar `INTENT_ID | GOAL | REASON | AUTH_SCOPE | OWNER | DECISION | EVIDENCE_REF | PROOF_KEY | NEXT_CURSOR`; recuperar por pertinência e validade temporal, sem pedir ao CHEFE para transportar histórico. Não presumir sentimentos ou pensamentos não expressos.
+2. **Telemetria da obra:** acompanhar indicadores técnicos permitidos (CI, SHA, regressão, disponibilidade, trabalho bloqueado, dívida de provas, divergência main/runtime), com origem/horário/escopo. O sensor registra fatos, não cria autorização.
+3. **Atenção seletiva:** gerar aviso só quando há decisão humana irredutível, falha crítica observada, deadline consentido, alteração material de intenção ou situação previamente escolhida pelo CHEFE. Deduplicar eventos correlacionados e oferecer resumo em vez de interrupções repetidas.
+4. **Energia como experiência, não choque:** usar intensidade visual/sonora ajustável e consentida, pausas e janelas de silêncio. **Nunca** coerção, estímulo elétrico, privação de sono ou pontuação de valor pessoal. Não inferir saúde ou energia física por telemetria técnica.
+5. **Ação autônoma proporcional:** dentro de escopo delegado, o writer único faz o menor delta, testa, contraprova e registra. Sem escritor/capacidade comprovada, registrar `UNKNOWN` específico e continuar o restante por rota autorizada.
+
+### Política de atenção: evento → valor → canal
+
+```text
+EVENTO_COM_PROVENIENCIA
+→ DEDUPE + PROOF_KEY + FRESCOR
+→ CLASSIFICAR IMPACTO(0..3) + URGENCIA(0..3) + CONFIANCA(0..3)
+→ PERTINENCIA_A_INTENCAO_VIGENTE
+→ ESCOLHER CANAL: SILENCIOSO | RESUMO | AVISO | INTERVENCAO_HUMANA
+→ RATE_LIMIT + QUIET_HOURS + MUTE/SNOOZE
+→ RECEIPT_DE_ENTREGA_SE_HOUVER_CANAL_REAL
+→ FEEDBACK_EXPLICITO_DO_CHEFE (UTIL|RUIDO|TARDE|CEDO)
+→ AJUSTAR APENAS O CONE AFETADO
+```
+
+**Hipótese testável (não resultado):** filtragem por materialidade pode reduzir interrupções sem aumentar incidentes perdidos. Avaliar em janela combinada: avisos emitidos/dia, taxa de alertas úteis confirmados, duplicatas, tempo até perceber evento crítico, falsos negativos auditados, decisões retomadas com contexto correto e percentual de ações com receipt. Comparar baseline T0 com T1 no mesmo escopo. Não alegar melhoria de produtividade ou bem-estar sem dados e aceitação do CHEFE.
+
+**Restrições:** mínimo de dados, retenção limitada ao necessário, controle de acesso, redação de segredos, revisão de fontes conectadas, opt-in separado para dado pessoal sensível, exportação/apagamento quando tecnicamente disponível, nunca notificar continuamente para forçar engajamento. Não capturar microfone, tela, mensagens privadas ou biometria de modo permanente por inferência desta intenção; autorização e capability precisam ser específicas. `NOTIFICATION_CONFIGURED != NOTIFICATION_DELIVERED`; `MEMORY_WRITTEN != AGENT_CONSUMED`.
+
+**Critério de FIXED_POINT:** ligação do owner correto + funcionalidade ativada no componente existente quando necessária + evento de teste + contraprova de deduplicação/silêncio + entrega no canal real + recibo e próximo cursor. Antes disso, marcar `DESIGN_REGISTERED`, nunca `LIVE`.
 
 ## 7. Generalização sistêmica por composição
 
