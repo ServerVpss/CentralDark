@@ -1114,6 +1114,7 @@ export function validateUniversalMethod() {
   requireTokens(hermesPrompt, [
     'FIXED_POINT_EXECUTION_HEADER_REQUIRED=true',
     'FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader',
+    'FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
     'FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
     'FIXED_POINT_HEADER_REQUIRED_CRITERIA=OWNER_UNIQUE|LOCKS_PRESERVED|MCP_PUBLIC_HEALTH|ONE_HEART_FRESH|SCREENPIPE_CURRENT|AIONUI_STDIO_CURRENT|LOG_PRIVACY_CURRENT|CHECKOUT_MAIN_SYNC|FORENSIC_FRESHNESS|RECEIPT_PRESENT',
     'HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true',
@@ -1123,6 +1124,9 @@ export function validateUniversalMethod() {
     'export const FIXED_POINT_TEN_CRITERIA',
     'export function evaluateFixedPointTen',
     'export function validateFixedPointExecutionHeader',
+    'export function buildFixedPointExecutionHeader',
+    '--build-execution-header-stdin',
+    '--validate-execution-header-stdin',
     'FIXED_POINT_EXECUTION_HEADER_CRITERION_NOT_ACTUALLY_MEASURED',
     'USED_WITH_GAPS',
     'USED_AND_FIXED_POINT',
@@ -1152,6 +1156,7 @@ export function validateUniversalMethod() {
   requireTokens(agentsGuide, [
     'FIXED_POINT_EXECUTION_HEADER_REQUIRED=true',
     'FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader',
+    'FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
     'FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
     'HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true',
   ], 'FIXED_POINT_EXECUTION_HEADER_AGENTS');
