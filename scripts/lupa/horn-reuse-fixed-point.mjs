@@ -359,6 +359,73 @@ const SOURCE_HASH = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
  * O HUD é projeção; este owner HORN decide o fechamento.
  * Um FIXED_POINT global também exige receipt de Goal canônico e recente.
  */
+/**
+ * Builds an agent execution header from current observations and immediately
+ * validates it with the same canonical HORN owner. This function does not probe
+ * the environment: callers must provide real attempts and source receipts.
+ */
+export function buildFixedPointExecutionHeader(input = {}, options = {}) {
+  const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+  const requiredContext = [
+    "agent_id", "mission_id", "intent_id", "goal_fingerprint",
+    "observed_head", "evaluation_ref", "execution_ref",
+  ];
+  const missing = requiredContext.filter((key) =>
+    typeof input[key] !== "string" || input[key].trim().length === 0
+  );
+  if (missing.length) {
+    return {
+      schema: EXECUTION_HEADER_SCHEMA,
+      accepted: false,
+      status: "BLOCKED_FIXED_POINT_EXECUTION_HEADER_FIELDS_MISSING",
+      header_usage: "NOT_USED",
+      missing,
+    };
+  }
+
+  const criteria = Array.isArray(input.criteria) ? input.criteria : [];
+  const goalReceipt = input.goal_receipt && typeof input.goal_receipt === "object"
+    ? input.goal_receipt
+    : (input.goalReceipt && typeof input.goalReceipt === "object" ? input.goalReceipt : null);
+  const evaluated = evaluateFixedPointTen({
+    criteria,
+    goalReceipt,
+    currentHead: input.observed_head,
+  }, options);
+  const header = {
+    schema: EXECUTION_HEADER_SCHEMA,
+    evaluator: "scripts/lupa/horn-reuse-fixed-point.mjs",
+    agent_id: input.agent_id,
+    mission_id: input.mission_id,
+    intent_id: input.intent_id,
+    goal_fingerprint: input.goal_fingerprint,
+    observed_head: input.observed_head,
+    measured_at: input.measured_at || new Date(nowMs).toISOString(),
+    evaluation_ref: input.evaluation_ref,
+    execution_ref: input.execution_ref,
+    criteria: evaluated.criteria,
+    goal_receipt: goalReceipt,
+    goal_receipt_ref: goalReceipt?.receipt_ref || null,
+    verdict: evaluated.verdict,
+    next_cursor: evaluated.next_cursor,
+  };
+  const validation = validateFixedPointExecutionHeader(header, {
+    ...options,
+    nowMs,
+    expectedMissionId: input.mission_id,
+    expectedHead: input.observed_head,
+    expectedAgentId: input.agent_id,
+  });
+  return {
+    ...validation,
+    header,
+    criteria: header.criteria,
+    fixedPoint: evaluated.fixedPoint,
+    verdict: evaluated.verdict,
+    next_cursor: evaluated.next_cursor,
+  };
+}
+
 export function evaluateFixedPointTen(input = {}, options = {}) {
   const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
   const defaultMaxAgeMs = Number.isFinite(options.maxAgeMs) && options.maxAgeMs >= 0
@@ -504,6 +571,14 @@ if (isMain) {
     console.log("HORN_REUSE_FIXED_POINT=PASS");
     console.log("REUSE_BEFORE_CREATE=ENFORCED_BY_RULE_SET");
     console.log("LEARN_AFTER_PROVED_ERROR=PASS");
+  } else if (process.argv.includes("--build-execution-header-stdin")) {
+    const input = JSON.parse(readFileSync(0, "utf8"));
+    const ageArg = process.argv.find((arg) => arg.startsWith("--max-age-ms="));
+    const age = ageArg ? Number(ageArg.slice("--max-age-ms=".length)) : null;
+    const options = ageArg && Number.isFinite(age) && age > 0 ? { maxAgeMs: age } : {};
+    const result = buildFixedPointExecutionHeader(input, options);
+    console.log(JSON.stringify(result, null, 2));
+    if (!result.accepted) process.exitCode = 13;
   } else if (process.argv.includes("--validate-execution-header-stdin")) {
     const header = JSON.parse(readFileSync(0, "utf8"));
     const result = validateFixedPointExecutionHeader(header);
@@ -525,7 +600,7 @@ if (isMain) {
   } else {
     const raw = process.argv.find((arg) => arg.startsWith("--input-json="));
     if (!raw) {
-      console.error("usage: horn-reuse-fixed-point.mjs --self-test | --goal-stdin [--max-age-ms=N] | --fixed-point-ten-stdin [--max-age-ms=N] | --validate-execution-header-stdin | --input-json='{...}'");
+      console.error("usage: horn-reuse-fixed-point.mjs --self-test | --goal-stdin [--max-age-ms=N] | --fixed-point-ten-stdin [--max-age-ms=N] | --build-execution-header-stdin | --validate-execution-header-stdin | --input-json='{...}'");
       process.exit(2);
     }
     const input = JSON.parse(raw.slice("--input-json=".length));
