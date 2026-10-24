@@ -12,6 +12,7 @@ ROOT = Path(sys.argv[1]).resolve()
 PACKAGE = ROOT / "package.json"
 BUILDER = ROOT / "packages/desktop/electron-builder.yml"
 INDEX = ROOT / "packages/desktop/src/process/index.ts"
+TRAY = ROOT / "packages/desktop/src/process/utils/tray.ts"
 SIDER = ROOT / "packages/desktop/src/renderer/pages/settings/components/SettingsSider.tsx"
 WRAPPER = ROOT / "packages/desktop/src/renderer/pages/settings/components/SettingsPageWrapper.tsx"
 ROUTER = ROOT / "packages/desktop/src/renderer/components/layout/Router.tsx"
@@ -24,7 +25,7 @@ MAPS_PAGE = ROOT / "packages/desktop/src/renderer/pages/settings/CentralDarkMaps
 COCKPIT_PAGE = ROOT / "packages/desktop/src/renderer/pages/CentralDarkCockpit/index.tsx"
 WEBVIEW_HOST = ROOT / "packages/desktop/src/renderer/components/media/WebviewHost.tsx"
 
-for required in (PACKAGE, BUILDER, INDEX, SIDER, WRAPPER, ROUTER, LAYOUT, TITLEBAR, DOCUMENT_TITLE, RENDERER_INDEX):
+for required in (PACKAGE, BUILDER, INDEX, TRAY, SIDER, WRAPPER, ROUTER, LAYOUT, TITLEBAR, DOCUMENT_TITLE, RENDERER_INDEX):
     if not required.exists():
         raise SystemExit(f"missing upstream file: {required}")
 
@@ -100,6 +101,21 @@ for path, replacements in branding_replacements.items():
         elif new not in content:
             raise SystemExit(f"branding overlay guard missing in {path}: {old!r}")
     path.write_text(content, encoding="utf-8")
+
+# Keep the original native tray and all its actions; change only the public
+# brand of the pinned AionUi v2.2.2 source. Apache notices remain intact.
+tray_source = TRAY.read_text(encoding="utf-8")
+tray_branding = {
+    "tray.setToolTip('AionUi')": "tray.setToolTip('CentralDark — Instinto Superior')",
+    "label: i18n.t('common.tray.showWindow')": "label: 'Mostrar CentralDark'",
+    "label: i18n.t('common.tray.about')": "label: 'Sobre a CentralDark'",
+}
+for old, new in tray_branding.items():
+    if old in tray_source:
+        tray_source = tray_source.replace(old, new, 1)
+    elif new not in tray_source:
+        raise SystemExit(f"tray overlay guard missing: {old!r}")
+TRAY.write_text(tray_source, encoding="utf-8")
 
 bootstrap_dst = ROOT / "packages/desktop/src/process/centraldark/bootstrap.ts"
 bootstrap_dst.parent.mkdir(parents=True, exist_ok=True)
@@ -291,5 +307,6 @@ print("AIONUI_UPSTREAM_VERSION=2.2.2")
 print("CENTRALDARK_OVERLAY=APPLIED")
 print("CENTRALDARK_BOTS_RAKAZO=WIRED")
 print("CENTRALDARK_CELESTIAL_MAPS=WIRED")
+print("CENTRALDARK_NATIVE_TRAY_BRANDING=WIRED")
 print("BUNX_BUILD_COMPAT=PATCHED")
 print("PRODUCT=CentralDark — Instinto Superior")

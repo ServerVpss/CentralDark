@@ -24,7 +24,7 @@ Lições:
 ESCOPO=SO_CENTRALDARK (varredura que puxou GsmHub/proxy/configs de outros agentes foi corrigida)
 CHAVE=DESCARTAVEL → mapear onde mora + nome; re-derivar após reset
 SESSAO_DE_LOGIN != OURO (2 mcp-admin-session.json excluídas)
-VAULT_OBSIDIAN != COFRE_DE_CHAVE (E:\CentralDark\vault guardava ideia não salva)
+VAULT_OBSIDIAN != COFRE_DE_CHAVE (K:\vault guardava ideia não salva)
 ```
 
 ## 2. Lei do Rastro (🔏 !RASTRO)
