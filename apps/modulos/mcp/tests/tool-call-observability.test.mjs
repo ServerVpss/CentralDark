@@ -1,4 +1,4 @@
-import test from "node:test";
+import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
@@ -6,6 +6,7 @@ import path from "node:path";
 
 const logDir = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-toolcall-"));
 process.env.MCP_LOG_DIR = logDir;
+after(() => fs.rmSync(logDir, { recursive: true, force: true }));
 
 const audit = await import("../src/audit-logger.js");
 const { log } = await import("../src/log.js");
@@ -45,6 +46,24 @@ test("tool-call envelope carries request trace through async work", async () => 
   assert.ok(envelope.ended_at);
 });
 
+test("inner application block remains BLOCKED in the audit envelope, never PASS", () => {
+  const blocked = audit.buildAuditEnvelope({
+    method: "tools/call",
+    toolName: "mcp_admin_call",
+    ok: false,
+    status: "BLOCKED",
+    result: { executionStatus: "blocked", status: "CONFIRMACAO_ADMIN_NECESSARIA" },
+  });
+  assert.equal(blocked.ok, false);
+  assert.equal(blocked.status, "BLOCKED");
+
+  const contradictory = audit.buildAuditEnvelope({
+    method: "tools/call", toolName: "mcp_admin_call", ok: false, status: "PASS",
+  });
+  assert.equal(contradictory.ok, false);
+  assert.equal(contradictory.status, "FAIL");
+});
+
 test("tool-call envelope redacts sensitive fields before observers see them", () => {
   let observed;
   const unsubscribe = audit.subscribeAuditEvents((event) => { observed = event; });
@@ -53,7 +72,7 @@ test("tool-call envelope redacts sensitive fields before observers see them", ()
     method: "tools/call",
     toolName: "safe_probe",
     input: { authorization: authFixture, password: "segredo" },
-    result: { email: "pessoa@example.com", ok: false },
+    result: { email: "<contato>", ok: false },
     durationMs: 1,
     ok: false,
   });

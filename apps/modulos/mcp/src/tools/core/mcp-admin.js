@@ -461,7 +461,7 @@ export const mcpAdminTools = [
             if (!parsed.success) return invalidInputResponse(input, parsed, declaredDestructive);
 
             // Classificação por alvo: uma chamada de leitura não deve herdar a hint destrutiva do dispatcher.
-            const readOnlyOperation = tool.annotations?.readOnlyHint === true
+            const readOnlyOperation = (tool.annotations?.readOnlyHint === true && !declaredDestructive)
                 || (input.tool === "execute_command" && isSafeReadOnlyExecuteCommand(parsed.data?.command));
             const destructive = declaredDestructive && !readOnlyOperation;
 

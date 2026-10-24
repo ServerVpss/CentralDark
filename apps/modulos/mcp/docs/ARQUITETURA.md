@@ -110,7 +110,7 @@ rodar testes, e então passar a editar o `src/`. O `package.json` já aponta `bu
 ## 7. Segurança (resumo)
 
 - `.env`, `node_modules`, `logs`, `*.map`, `*.bak*` fora do Git.
-- Saída sanitizada (IPs, chaves, tokens, paths `/root/...`).
+- Saída sanitizada (IPs, chaves, tokens, paths `<caminho-vps>`).
 - Log auditado por chamada em `audit-logger.js` (perms 0600, redação de segredos).
 - Ações sensíveis (PM2, deploy, escrita) exigem autorização explícita.
 
@@ -203,3 +203,29 @@ autorização e a regra de que representação visual não substitui realidade m
 O mapeamento integral Desktop Commander → auditoria MCP → Tool Call Lens → Cockpit, com os dois perfis systemd, a matriz de owners, a fronteira entre chamada externa e audit interno, testes, botões, PID/CID, gates e rollback, está registrado em [`2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md`](../../../../docs/CONSCIENCIA/RECEIPTS/2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md).
 
 SOURCE_COMMITTED nos PRs #1842 e #1838 não é prova de runtime instalado.
+
+
+---
+
+## 9. Dispatcher admin: classificação interna e resultado bloqueado
+
+**Contrato vigente (2026-10-24):** a anotação MCP `destructiveHint` é uma dica estática apresentada ao cliente, não é o guard de autorização. `mcp_admin_call` permanece não-read-only (`readOnlyHint=false`), mas sua dica externa `destructiveHint=false` evita que toda chamada — inclusive leituras — seja tratada como destrutiva pela interface. O dispatcher continua resolvendo a ferramenta interna, validando os argumentos e passando cada operação destrutiva pelo guard canônico; isso não concede permissão às ferramentas internas por si só.
+
+`execute_command` continua marcado como destrutivo no catálogo público e não é exposto como capacidade read-only. Apenas dentro do dispatcher, um classificador de allowlist exata aceita os seguintes comandos semânticos de leitura: `hostname`, `pwd`, `git status`, `git status --short`, `git log --oneline`, `git log --oneline -n 1..50`, `ls`, `ls -l` e `echo` com literal simples limitado. Shell composto, expansão, redirecionamento, glob, comando com caminho/argumentos fora da lista e qualquer entrada não reconhecida permanecem destrutivos e seguem o guard. A classificação também é usada na preflight do dispatcher; um `readOnlyHint` conflitante com `destructiveHint=true` não libera a operação.
+
+A proveniência aceita em contexto é uma lista fechada: `verified_oauth_admin` ou `verified_hub_admin`, somente quando fornecida pelo servidor/rota autenticada. Qualquer valor diferente vira `null`; argumentos do cliente não podem fabricar essa procedência.
+
+O envelope causal lê o resultado interno dentro do `content` JSON legado. Quando o handler declara `executionStatus=blocked`, `decision=blocked` ou um status explícito de bloqueio, o envelope externo registra `state=BLOCKED`, `ok=false` e `error_state=BLOCKED`. O logger preserva `status=BLOCKED` em vez de converter um bloqueio funcional em `PASS`; falhas de aplicação não classificadas como bloqueio resultam em `ERROR/FAIL`. A semântica MCP de `isError` continua separada do resultado da operação.
+
+**Owner / rastro**
+
+```text
+@owner=apps/modulos/mcp
+@code_ref=apps/modulos/mcp/src/tools/core/mcp-admin.js, apps/modulos/mcp/src/tools/vps/vps-lazy.js, apps/modulos/mcp/src/mcp-server.js, apps/modulos/mcp/src/tool-result-envelope.js, apps/modulos/mcp/src/audit-logger.js
+@last_updated=2026-10-24T07:49:48.830Z
+@estado=IMPLEMENTADO_NA_BRANCH_FIX_MCP_ADMIN_CONFIRMATION_LOOP
+@pendente=TARGETED_CI_AND_PR_READBACK
+@next_cursor=VERIFY_TESTS_SAME_HEAD_THEN_RECONCILE_RUNTIME_SEPARATELY
+```
+
+O teste direcionado é `npm run test:admin-confirmation` dentro de `apps/modulos/mcp`. A mudança é apenas fonte/contrato em branch de PR: não reinstala nem reinicia o serviço, não altera a VPS suja e não afirma que o runtime já consome o novo SHA.

@@ -309,6 +309,7 @@ export function buildServer(options) {
                 callerUser: options.callerUser ?? null,
                 oauthScope: String(options.oauthScope || ""),
                 correlationId: options.cid ?? null,
+                // #OBSERVACOES# @owner=apps/modulos/mcp/src/mcp-server.js @doc_ref=apps/modulos/mcp/docs/ARQUITETURA.md @last_updated=2026-10-24T07:49:48.830Z @estado=BRANCH_IMPLEMENTADO @pendente=TESTE_CI_E_READBACK @next_cursor=PR_CI_READBACK
                 // Only server-authenticated routes can supply a provenance; unknown values fail closed.
                 authProvenance: options.authProvenance === "verified_oauth_admin"
                     || options.authProvenance === "verified_hub_admin" ? options.authProvenance : null,
@@ -318,7 +319,8 @@ export function buildServer(options) {
             const targetInput = tool.name === "mcp_admin_call" ? (parsed.data.input ?? {}) : parsed.data;
             const targetDefinition = tool.name === "mcp_admin_call"
                 ? ALL_TOOLS.find((candidate) => candidate.name === targetTool) : tool;
-            const targetReadOnly = targetDefinition?.annotations?.readOnlyHint === true
+            const targetReadOnly = (targetDefinition?.annotations?.readOnlyHint === true
+                    && targetDefinition?.annotations?.destructiveHint !== true)
                 || new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_status"]).has(targetTool)
                 || (targetTool === "execute_command" && isSafeReadOnlyExecuteCommand(targetInput?.command));
             const recipeFirst = await canonicalRecipeFirstPreflight(targetTool, targetInput, targetReadOnly);

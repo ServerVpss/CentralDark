@@ -9,7 +9,8 @@
     "build": "tsc -p tsconfig.json --noResolve",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:admin-confirmation": "node --test tests/execute-command-classifier.test.mjs tests/mcp-admin-confirmation-flow.test.mjs tests/tool-result-envelope.test.mjs tests/tool-call-observability.test.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
