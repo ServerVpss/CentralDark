@@ -5,7 +5,11 @@ Uso: verified-checkpoint.py --help. Só PASS + contraprova gera estado corrente.
 import argparse
 from contextlib import contextmanager
 from datetime import datetime, timezone
-import fcntl
+try:
+    import fcntl
+except ImportError:  # Windows
+    fcntl = None
+    import msvcrt
 import hashlib
 import json
 import os
@@ -65,8 +69,22 @@ def one_writer(folder):
     path = folder / ".lock"
     with path.open("a+") as handle:
         os.chmod(path, 0o600)
-        fcntl.flock(handle, fcntl.LOCK_EX)
-        yield
+        if fcntl is not None:
+            fcntl.flock(handle, fcntl.LOCK_EX)
+        else:
+            handle.seek(0)
+            while True:  # msvcrt trava 1 byte e tenta de novo ate obter o lock exclusivo
+                try:
+                    msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+                    break
+                except OSError:
+                    continue
+        try:
+            yield
+        finally:
+            if fcntl is None:
+                handle.seek(0)
+                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
 
 def atomic(path, payload):
     fd, tmp = tempfile.mkstemp(prefix=".current-", dir=path.parent)
@@ -77,11 +95,12 @@ def atomic(path, payload):
             os.fsync(h.fileno())
         os.chmod(tmp, 0o600)
         os.replace(tmp, path)
-        dirfd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
-        try:
-            os.fsync(dirfd)
-        finally:
-            os.close(dirfd)
+        if hasattr(os, "O_DIRECTORY"):  # fsync de diretorio so existe em POSIX
+            dirfd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                os.fsync(dirfd)
+            finally:
+                os.close(dirfd)
     finally:
         if os.path.exists(tmp):
             os.unlink(tmp)

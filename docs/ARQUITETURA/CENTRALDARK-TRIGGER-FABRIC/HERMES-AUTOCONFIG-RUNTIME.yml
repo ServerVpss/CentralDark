@@ -223,7 +223,7 @@ doctor_event_bridge:
   same_fingerprint_no_new_info: NO_RERUN
   wmi_5858: SIGNAL_NOT_COMMAND
 garimpo:
-  path_example: 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE'
+  path_example: 'K:\_MAPA_CASA\GARIMPO-CHEFE'
   architecture:
     watcher: ONE
     event_fields: [path, hash, mtime, type]
