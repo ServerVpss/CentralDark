@@ -520,3 +520,23 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
   assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,25);
 });
+
+test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
+  // Regressao do Corpo Unico: o PR #1895 conserva o header fixo e recebe de
+  // volta a capsula flutuante superior (sem criar segundo shell/executor).
+  assert.match(cockpit, /aria-label="Harness flutuante superior"/);
+  assert.match(cockpit, /data-cd-harness="top-floating"/);
+  for (const control of [
+    'aria-label="CentralDark · visão geral"',
+    'aria-label="Lupa · buscar ferramentas"',
+    'aria-label="Mapa dos sistemas"',
+    'aria-label="Notificações"',
+  ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
+  assert.match(cockpit, /className="sticky top-0 z-50/);
+  assert.match(cockpit, /className="fixed inset-x-0 top-16/);
+  assert.match(cockpit, /ref=\{tabsScrollRef\}/);
+  assert.match(cockpit, /barra\.addEventListener\("wheel", rolarAbas, \{ passive: false \}\)/);
+  assert.match(cockpit, /barra\.removeEventListener\("wheel", rolarAbas\)/);
+  assert.match(cockpit, /onClick=\{\(\) => abrirDestino\("claude-notifications"\)\}/);
+  assert.match(cockpit, /harnessVisivel && gaveta === null/);
+});

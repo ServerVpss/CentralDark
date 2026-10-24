@@ -16,6 +16,20 @@ writer: SOL
 
 # MAPA-DO-CEREBRO — UMA CASA, UMA DIREÇÃO
 
+<!-- CENTRALDARK_JUKEBOX_AZ_NUMERICO_20261021 -->
+## 🎛️ Jukebox do projeto — A–Z e 001–301 (índice derivado)
+
+**Porta de entrada para continuidade desta sessão, sem segundo cérebro:** [🎛️ Jukebox CentralDark · A–Z / J001–J301](RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md).
+
+- **301 fichas com IDs de navegação:** 141 nomes de ferramentas MCP, 13 rotas declaradas, 18 módulos do Harness, 4 skills retornadas por `skill_listar` (**subconjunto `skills/`, NÃO todo `.agents/skills/`**), 27 abas do Cockpit, quatro peles, três prévias de temas globais, botões da moldura e do VS Code, decisões aprendidas e owners.
+- Cada ficha liga **nome alfabético ↔ número fixo ↔ fonte ↔ limite de evidência ↔ estado**, distinguindo `CATALOGADO`, `FONTE`, `DOM`, `BRIDGE_PASS`, `FAIL` e `UNKNOWN`. Os 301 são itens de um índice snapshot, não total de skills instaladas, metas completadas ou catálogo universal já medido.
+- Quando a tarefa for **ler o Cockpit**, escolher primeiro o Browser conectado, `list_tabs → get_tab_context`; não usar Desktop Commander como dependência. Quando for **executar** algo, consultar dono, schema, autorização, efeito e contraprova em instrumento apropriado. O browser DOM NÃO prova execução Windows/PTY/Win32.
+- **Owner principal preservado:** `MAPA-DO-CEREBRO` é MOC; `APRENDIZADOS` guarda lição; `RECEIPTS` guarda este snapshot auditável; `CockpitShell/DesignCenter` não são reescritos pelo índice. A navegação web/Desktop para o Jukebox permanece pendente de decisão e build.
+- **NEXT_CURSOR:** `MOC → JUKEBOX_AZ_001_N → OWNER → MEDIR_CURRENT → CONTRAPROVAR → RECEIPT → REVISAR_INDICE`.
+
+<!-- /CENTRALDARK_JUKEBOX_AZ_NUMERICO_20261021 -->
+
+
 Este MOC é **mapa de navegação**, não um segundo cérebro e não um snapshot eterno de runtime. Números de tools, processos, portas e serviços só valem enquanto a chave material da prova não mudar.
 
 ## Norte CURRENT — direto, sem ritual obrigatório
@@ -851,3 +865,130 @@ IDEIA_DO_CHEFE → SOL_GOAL_INCREMENTAL → AGENTS/SOUL/RULES → OWNER_PERTINEN
 **Aceite incremental:** SOURCE_LINK_PROVEN + STABLE_SYMBOL_ID + LEGEND_AVAILABLE + F12_POSITION_PROVEN + EVENT_TRACE_DEDUPED + UI_AUTHORIZED + LIVE_HEARTBEAT_PROVEN + FAILURE_NEGATIVE_TEST + SHA_READBACK. Critérios sem prova permanecem UNKNOWN, sem paralisar outros cones. Sem gravação no runtime/VS Code, este registro é somente `DOCUMENTED`.
 
 **NEXT_CURSOR:** na PR/owner `skills/vs-code-restore`, conferir writer/HEAD, implementar anotação por função/linha + link para `MAPA-DO-CEREBRO.md`; build da extensão e readback de uma linha demonstrativa no VS Code; na PR visual `#1832`, integrar estados reais ao Cockpit, sem converter mock em sensor.
+
+
+<!-- CENTRALDARK_UX_PTBR_HARNESS_CHEFE_20261021 -->
+## 🎮 Linguagem de produto do Harness — cabeça externalizada do CHEFE (21/10/2026)
+
+> **Intenção do CHEFE:** a CentralDark precisa conversar como um programa brasileiro moderno, não como um terminal de auditoria. A máquina fala técnico por dentro; a CentralDark fala português brasileiro por fora.
+
+**Estado da informação:** contrato de linguagem e mapa mental solicitado pelo CHEFE; DOCUMENTADO, não implementação/instalação/deploy comprovados. Mesma CentralDark, mesmo Harness, mesmo Hermes, mesmo estado, sem segunda UI, segundo cérebro ou novo owner.
+
+### 🏛️ 1. Arquitetura de linguagem — Mermaid baseado na imagem do CHEFE
+
+```mermaid
+flowchart TD
+    A["👑 CHEFE — Intenção"] --> B["🪬 CentralDark — Sala de Controle"]
+    B --> C["🧠 JARVIS — Assistente"]
+    B --> D["🦾 Hermes — Executor"]
+    B --> E["⚙️ Harness — Orquestração"]
+    C --> F["Estado operacional único"]
+    D --> F
+    E --> F
+    F --> G["🎮 Interface em português natural"]
+    F --> H["🔬 Detalhes técnicos e recibos"]
+```
+
+**Papéis:** o CHEFE decide; JARVIS/SOL interpreta e coordena; o Harness orquestra ferramentas e fluxos; Hermes executa; Cockpit apresenta ações e resultados; Reality Judge/contraprova avalia o resultado; receipts preservam rastro. **Hermes não precisa ser renomeado para Harness.** Claude/Codex e outros participantes utilizam as capacidades autorizadas do mesmo sistema, sem presumir memória privada compartilhada.
+
+### 🧠 2. Uma verdade, duas apresentações
+
+```mermaid
+flowchart TD
+    REAL["⚖️ Estado real — medido ou não medido"]
+    REAL --> NORMAL["🎮 Linguagem do produto pt-BR"]
+    REAL --> TECNICO["🔬 Detalhes técnicos sob demanda"]
+    NORMAL --> ACOES["Botões, progresso, próximos passos"]
+    TECNICO --> PROVA["Códigos, PIDs, SHAs, logs, fonte, horário e receipt"]
+    PROVA -. "mesma identidade causal" .-> REAL
+```
+
+O estado interno é a **única fonte de verdade**. A apresentação natural não transforma `UNKNOWN` em sucesso, nem esconde falhas reais; a auditoria não invade a tela principal. Estados opcionais desligados não devem virar alertas. A camada técnica fica acessível por `Detalhes técnicos`, apropriada a administradores, depuração e contraprova.
+
+### 🎮 3. Linguagem de produto — tabela de tradução
+
+| Interno / jargão | Texto principal pt-BR, somente se o estado sustentar | Critério |
+| --- | --- | --- |
+| `AUDIO_NOT_REQUESTED` / `MIC_DISABLED` | 🎤 Ativar microfone | Desligado por escolha não é falha. |
+| `MIC_PERMISSION_DENIED` | 🎤 Permitir acesso ao microfone | Negativa efetivamente recebida. |
+| `AUDIO_CAPTURE_ACTIVE` | 🎧 Ouvindo... | Captura iniciada, não mera permissão. |
+| `ASR_PROCESSING` | 🧠 Entendendo... | Processamento de fala iniciado. |
+| `TTS_GENERATING` | 🗣️ Preparando resposta... | Geração não prova saída de áudio. |
+| `VOICE_PLAYBACK_ACTIVE` | 🔊 Falando... | Reprodução efetiva iniciada. |
+| `VOICE_UNAVAILABLE` | 🔊 Voz indisponível | Erro real, não ausência de acionamento. |
+| `EXECUTOR_IDLE` | 🦾 Hermes disponível | Executor realmente disponível. |
+| `EXECUTION_RUNNING` | ⚙️ Executando tarefa... | Execução identificada/correlacionada. |
+| `TASK_SUCCESS` | ✅ Concluído | Resultado e receipt/contraprova. |
+| `PENDING_APPROVAL` | 👑 Aguardando aprovação | Precisa decisão humana. |
+| `QUEUE_EMPTY` | 📋 Nenhuma tarefa no momento | Fila consultada; não inferir de falta de leitura. |
+| `MAIN_SYNCED` | ✅ Atualizado | SHA sincronizado, sem inferir deploy. |
+| `CONNECTION_FAILED` | 🔌 Conexão perdida · Reconectar | Falha observada e ação de recuperação. |
+| `CONNECTING` | 🔄 Conectando... | Estado transitório, sem alarme falso. |
+| `STATUS_UNKNOWN` | 🔍 Verificar conexão | Não anunciar PASS. |
+| `RECEIPT_NOT_READ` | 📋 Consultar atividades | Não equivale a nenhum histórico. |
+| `DEPLOY_PENDING` | 🔄 Aguardando atualização | Publicação pendente, sem verde. |
+| `MCP_DEVICES_NOT_PAIRED` | 🔗 Conectar dispositivo | Pareamento é escolha/ação, não erro universal. |
+
+### 🎤 4. Máquina de estados de voz — recurso opcional
+
+```mermaid
+stateDiagram-v2
+    [*] --> Repouso
+    Repouso --> Permissao: Ativar microfone
+    Permissao --> Ouvindo: permissão e captura iniciada
+    Permissao --> Indisponivel: erro ou negativa real
+    Ouvindo --> Entendendo: fala recebida
+    Entendendo --> Preparando: resposta em preparo
+    Preparando --> Falando: áudio reproduzido
+    Falando --> Repouso: reprodução encerrada
+    Ouvindo --> Repouso: desativar
+    Indisponivel --> Permissao: tentar novamente
+```
+
+A esfera do JARVIS pode estar animada em repouso. **Animação não comprova áudio, ASR, TTS, Screenpipe nem Hermes.** Se o CHEFE não ativou o microfone, exibir simplesmente `Ativar microfone`; não `áudio não comprovado` como se fosse erro. Mensagens de captura/voz exigem eventos reais.
+
+### 🕹️ 5. Linguagem, componentes e nomenclatura
+
+- **Botões:** curtos, em voz ativa e orientados a ação, por exemplo `Ativar microfone`, `Abrir trabalhos`, `Conectar dispositivo`, `Verificar conexão` e `Consultar histórico`.
+- **Feedback:** progresso e conclusão separados. Quando houver problema, explicar em linguagem humana e apresentar o que fazer; código e stack só em detalhes.
+- **Sem alertas inventados:** opção desligada fica neutra; vermelho é falha medida; amarelo apenas se realmente requer atenção ou está em andamento; verde exige efeito comprovado.
+- **Acessibilidade:** ícone não substitui texto, foco e estado devem ser acessíveis, avisos repetidos não podem inundar leitor de tela, versão mobile e desktop precisam manter significado.
+- **Português brasileiro:** labels fixos universais e simples; a personalidade do JARVIS pode usar baianês espontâneo na conversa contextual sem caricatura nem jargão obrigatório.
+- **API / código:** não renomear ferramentas e identificadores internos só porque mudou o título visível da função.
+
+| Nome interno | Nome principal no aplicativo |
+| --- | --- |
+| CentralDark Harness | CentralDark |
+| Harness Orchestrator | Central de operações |
+| Hermes Executor | Hermes |
+| JARVIS/SOL | JARVIS |
+| Reality Judge | Verificações |
+| Receipt Ledger | Histórico de atividades |
+| Checkpoint | Ponto de retomada |
+| Skills Registry | Biblioteca |
+| MCP Connections | Conexões |
+| Deploy | Publicar atualização |
+
+**Exemplo ilustrativo, não leitura viva:** `Hermes: Aguardando tarefas`; `Conexões: Verificar conexão`; `Atividades: Consultar histórico`; `JARVIS: Ativar microfone`; `Trabalhos: Abrir trabalhos`.
+
+### 📚 6. Referências oficiais verificadas
+
+- [GOV.BR — linguagem simples](https://www.gov.br/pt-br/guia-de-edicao-de-servicos-do-gov.br/escrevendo-para-o-seu-usuario): escrita que facilita a tarefa do usuário.
+- [Microsoft — estilo de escrita Windows](https://learn.microsoft.com/pt-br/windows/apps/design/style/writing-style): clareza, concisão, vocabulário familiar, ajuda e ação.
+- [Microsoft — controles e padrões Windows](https://learn.microsoft.com/pt-br/windows/apps/develop/ui/controls/): uso consistente dos controles e padrões.
+- [Padrão Digital de Governo — componentes](https://next-ds.estaleiro.serpro.gov.br/componentes/header): referência de design; a página depende de JavaScript, não comprova regras textuais específicas nesta leitura.
+
+### ⚖️ 7. Critérios e continuidade
+
+1. Mapear textos atuais no owner UI existente (Cockpit, Hermes, JARVIS, voz, MCP, Screenpipe), preservando os IDs e papéis.
+2. Associar cada texto natural ao evento e origem técnica medidos; quando indisponível, manter ação de consulta, não verde.
+3. Validar voz em repouso, permissão negada, captura, geração e reprodução; tarefas Hermes disponíveis, em execução e falhadas; fila não consultada e vazia; conexão e deploy separados.
+4. Testar fluxo de navegação, acessibilidade e responsividade no mesmo SHA. O detalhe técnico permanece disponível e íntegro.
+5. Mesmo owner, escritor único, testes, receipt e readback. `UNKNOWN != PASS`; `OFF != FAILURE`; `UI_RENDERED != E2E`; `MERGED != DEPLOYED`.
+
+**Links Obsidian (sem duplicar memória):** [[GUIA-COMUNICACAO-SEGREDO-CHEFE]] · [[PADRAO-RESPOSTA-SEGREDO-CHEFE]] · [[APRENDIZADOS]] · [[LEMBRANCAS]]. Interface visual: PR [#1895](https://github.com/ServerVpss/CentralDark/pull/1895); os textos de tela pertencem a seus componentes já existentes.
+
+**CURRENT:** regra de linguagem documentada na branch; efeito no Cockpit, build, merge, deploy e sincronização do vault local = `UNKNOWN` até prova independente.
+
+**NEXT_CURSOR:** `GLOSSARIO_PTBR → INVENTARIO_UI_OWNER → TEXTOS_POR_ESTADO → TESTES → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.
+<!-- /CENTRALDARK_UX_PTBR_HARNESS_CHEFE_20261021 -->

@@ -1,0 +1,71 @@
+{
+  "schema": "centraldark.route-evidence.v1",
+  "note": "Rotas DOCUMENTADAS no catálogo. Situação observada somente onde houve chamada real, nunca inferir disponibilidade das demais.",
+  "routes": [
+    {
+      "id": "MCP_VPS_NATIVE_HTTP",
+      "observed": "MCP_STATUS_PASS",
+      "capability": "141 tools catalogued; 13 routes"
+    },
+    {
+      "id": "RDC_DESKTOP_COMMANDER",
+      "observed": "PASS_CASA_SEGREDO",
+      "capability": "PowerShell shell and SSH alias"
+    },
+    {
+      "id": "SSH_VPS_DIRECT",
+      "observed": "PASS_VIA_CASA",
+      "capability": "Readback, SHA, shell checks and guarded copy"
+    },
+    {
+      "id": "GITHUB_RUNTIME",
+      "observed": "PASS",
+      "capability": "fetch_file, create_file, update_file, main readback"
+    },
+    {
+      "id": "TAILSCALE_PRIVATE_ROUTE",
+      "observed": "STATUS_FETCH_FAILED",
+      "capability": "Not used to claim current pass"
+    },
+    {
+      "id": "MCP_CASA_TO_VPS",
+      "observed": "PARTIAL",
+      "capability": "execute_command sometimes passed; some calls externally blocked"
+    },
+    {
+      "id": "HERMES_SHELL",
+      "observed": "NOT_TESTED_THIS_MISSION"
+    },
+    {
+      "id": "HERMES_DELEGATED_COMMIT_PATH",
+      "observed": "HISTORICAL_PR_REPLAY_REQUIRED"
+    },
+    {
+      "id": "MCP_REMOTE_OAUTH",
+      "observed": "NOT_TESTED_THIS_MISSION"
+    },
+    {
+      "id": "AIONUI_MCP_STDIO",
+      "observed": "NOT_TESTED_THIS_MISSION"
+    },
+    {
+      "id": "SCREENPIPE_LOCAL_SENSOR",
+      "observed": "NOT_TESTED_THIS_MISSION"
+    },
+    {
+      "id": "SCREENPIPE_CLI_RECORDER",
+      "observed": "NOT_TESTED_THIS_MISSION"
+    },
+    {
+      "id": "CAS_CLOUD_RELAY",
+      "observed": "NOT_TESTED_THIS_MISSION"
+    }
+  ],
+  "laws": {
+    "oneRouteFailedIsNotSystemFailed": true,
+    "alternateAuthorizedRouteBeforeHumanBlocker": true,
+    "nextAuthorizedRouteAutoContinue": true,
+    "routeDocumentedIsNotRuntimeProof": true,
+    "clientPolicyGateIsNotBypassable": true
+  }
+}

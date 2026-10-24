@@ -2515,7 +2515,6 @@ ONE_ORGANISM=true
 ### 177. Multi-janelas, Arca do conhecimento e retorno do fio do SH — continuidade contextual demonstrada
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177A`; `PREV_GLOBAL_UID=L176A`; `NEXT_GLOBAL_UID=L178A`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=177`; `PREV_LEARNING_REF=176`; `NEXT_LEARNING_REF=178`.
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177A`; `PREV_GLOBAL_UID=L176A`; `NEXT_GLOBAL_UID=L178`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 
 - **Data:** 2026-10-13
 - **Categoria:** continuidade de intenção / orquestração multimodal humana / memória procedural / gestão de conhecimento / economia operacional.
@@ -2546,7 +2545,6 @@ ONE_ORGANISM=true
 
 ### 179. Aceite 100% do CHEFE — gramática humana, Auréola e cores proporcionais
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L179`; `PREV_GLOBAL_UID=L178A`; `NEXT_GLOBAL_UID=L180`; `LEGACY_LEARNING_NUMBER=179`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L179`; `PREV_GLOBAL_UID=L178`; `NEXT_GLOBAL_UID=L180`; `LEGACY_LEARNING_NUMBER=179`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=179`; `PREV_LEARNING_REF=178`; `NEXT_LEARNING_REF=180`.
 - **Data:** 2026-10-13
 - **Cena concreta:** Na sessão de 13/10, o CHEFE declarou 100% de satisfação com a gramática e a reconciliação de duas janelas (commit 5974510). Conquista comprovada aparece primeiro; amarelo comunica qual ação falta; vermelho, apenas falha medida e localizada; cinza, item fora da missão. Baianês, humor e imagem bíblica são recursos expressivos contextuais: escolher significado antes do emoji, não vestir formulário genérico.
@@ -3035,50 +3033,64 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 
 
 ### 194. Grafo Vivo quebrado 32h por escrita não atômica — causa raiz corrigida com tmp+renameSync
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L194`; `PREV_GLOBAL_UID=L193`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=194`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=194`; `PREV_LEARNING_REF=193`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L194`; `PREV_GLOBAL_UID=L193`; `NEXT_GLOBAL_UID=L195`; `LEGACY_LEARNING_NUMBER=194`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=194`; `PREV_LEARNING_REF=193`; `NEXT_LEARNING_REF=195`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-15
 - **Contexto:** `/health` mostrava `grafo.ok: false` com `wound_count` crescendo. Investigação (não achismo) confirmou que `apps/modulos/status/graph-data.json` — owner do Grafo Vivo, SOUL §2.5 — zerou para 0 bytes em 2026-10-13 20:53 UTC. A causa era `writeFileSync(GRAPH, payload)` direto em `scripts/grafo-vivo/gerar-grafo-vivo.mjs`: o processo foi interrompido no meio dessa escrita (crash/kill/restart da VPS), deixando o arquivo truncado. Desde então toda regeneração do cron de 30min quebrava com `SyntaxError: Unexpected end of JSON input` em `main()` ao tentar reabrir o próprio arquivo zerado, travando o Grafo Vivo por ~32h.
 - **Aprendizado:** Hotfix de runtime aplicado primeiro — restaurado `graph-data.json` a partir do espelho íntegro `apps/modulos/graph-panel/data/graph.json` (gravado minutos antes do zero), regeneração manual confirmada com `exit 0`. Causa raiz corrigida no código em PR #1828 (branch `fix/grafo-vivo-atomic-write`, merge squash em `a766d77e46313212ab4f0082a9a899e81c3a519d`): nova função `writeAtomic(path, data)` escreve em `<path>.tmp.<pid>.<timestamp>` no mesmo diretório/filesystem e só substitui o destino via `renameSync` depois do payload 100% escrito; falha antes do rename nunca toca o arquivo oficial e remove o `.tmp` órfão no catch. Aplicado às duas escritas existentes (`GRAPH` e `GRAPH_PANEL_MIRROR`); owner, schema e comportamento preservados, zero refatoração fora do escopo pedido pelo CHEFE. Limite assumido e documentado: `renameSync` protege contra leitura de estado parcial pelos consumidores, não contra perda de energia/crash de SO durante a escrita do próprio temporário. Testado antes do merge: `node --check` (sintaxe), `--dry` (10 nós/14 arestas sem write), execução real (grava os dois arquivos válidos, sem `.tmp` residual) e um teste isolado da função `writeAtomic` simulando falha propositalmente antes do `renameSync` — 4/4 critérios OK (sucesso troca conteúdo ponta a ponta; falha lança erro, preserva o último conteúdo válido e remove o tmp). Autoaprovação de PR é bloqueada pelo GitHub (`Can not approve your own pull request`); review registrado como comentário formal no PR em vez de review approval, sem bloquear o merge quando a mudança já estava pré-aprovada pelo CHEFE em linguagem natural ("essa é a mudança que eu aprovaria"). Regra geral: escrita de arquivo canônico consumido por processo periódico/concorrente deve ser sempre tmp+rename no mesmo filesystem, nunca `writeFileSync` direto no caminho final.
 
 ### 195. Supabase CentralDark 18-10-2026 — projeto saudável não prova consumo Hermes
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L195`; `PREV_GLOBAL_UID=L194`; `NEXT_GLOBAL_UID=L196`; `LEGACY_LEARNING_NUMBER=195`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=195`; `PREV_LEARNING_REF=194`; `NEXT_LEARNING_REF=196`.
 - **Categoria:** armadilha
 - **Data:** 2026-10-18
 - **Contexto:** Medição read-only via conector oficial Supabase no projeto CentralDark: public.hub_missions possui 3.610 linhas, todas state=queued e authorization=pending; 0 claimed_at, 0 finished_at, 0 criadas nas últimas 24h, última criação 2026-09-14. public.notifications_log possui 574 linhas, última 2026-07-04 e 0 metadata.next_cursor/owner/proof_state. Deploy_status: VPS 47 commits atrás da main e PM2 com SyntaxError. Nenhuma escrita ou execução E2E feita na fila.
 - **Aprendizado:** ACTIVE_HEALTHY do projeto e existência de filas e código não significam E2E. Reutilizar public.hub_missions, notifications_log e owners atuais; corrigir via broker/consumidor autorizado, observar transição queued→claimed→finished, anexar receipt real; only then mark PASS. Notificação não é autorização. BodhiKit pode guiar prática e reflexão sem virar segundo executor ou segunda tabela.
 
 ### 196. Receita SOL→Hermes #195: bloqueio de implantação por catálogo destrutivo em quarentena
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L196`; `PREV_GLOBAL_UID=L195`; `NEXT_GLOBAL_UID=L197`; `LEGACY_LEARNING_NUMBER=196`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=196`; `PREV_LEARNING_REF=195`; `NEXT_LEARNING_REF=197`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-18
 - **Contexto:** Em 2026-10-18 os owners canônicos já tinham receita RECIPE_ID=CENTRALDARK_SUPABASE_HUB_SOL_HERMES_20261018 na main (b5f60a753b8599558ce2c817107677a2e72b7de1) e vínculo no prompt Hermes (4625937755b3ada5cb96bf67163efc2c6dff9abc), com readback GitHub. Ao solicitar microdeploy direcionado ao Hermes, mcp_admin_call tool=centraldark_deploy_micro_fallback com dry_run=true devolveu status DESTRUTIVA_EM_QUARENTENA, expected destructiveCount=12, actual=20 e requiredConfirmAdmin='CONFIRMO ADMIN'; nenhuma ação foi executada. VPS checkout fb7a00a60 e alterações locais de outros escopos; scratch DRIFT/dirty. Desktop Commander devices SEGREDO e CENTRALDARK-OS offline.
 - **Aprendizado:** Mesmo com autorização de integração em linguagem natural, preservar quarentena do dispatcher e não sintetizar frase de confirmação admin nem contornar com executor alternativo. Reaproveitar T0/receita (#195), manter os filesets locais intocados e obter reconciliação legítima do catálogo de operações destrutivas mais confirmação administrativa aplicável; após reabertura oficial, promover somente o arquivo Hermes causal com backup/readback, observar ACK do consumer e recibo T1. NEXT_CURSOR=RECONCILE_DESTRUCTIVE_CATALOG_AND_AUTHORIZE_SCOPED_HERMES_PROMOTION. DOCUMENTED!=CONSUMED e COMMITTED!=DEPLOYED.
 
 ### 197. MCP CentralDark — providers existentes, 401 Tailscale e condição ausente do OAuth Broker
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L197`; `PREV_GLOBAL_UID=L196`; `NEXT_GLOBAL_UID=L198`; `LEGACY_LEARNING_NUMBER=197`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=197`; `PREV_LEARNING_REF=196`; `NEXT_LEARNING_REF=198`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-18
 - **Contexto:** Auditoria autorizada na VPS de 18/10/2026. Catálogo MCP runtime=141 tools/13 rotas. Owner existente apps/modulos/mcp/src/modes/admin/tools/admin-provider-control.js: matriz 58 capacidades (Cloudflare 25, Contabo 21, Tailscale 4, Buildkite 8); inventário Cloudflare OpenAPI 3670 operações, sem autorização automática. Conta Cloudflare API accounts.list HTTP 200; Contabo sem CONTABO_CLIENT_ID/SECRET/API_USER/API_PASSWORD na configuração do MCP; Tailscale API configurada mas PROVIDER_HTTP_401. OAuth Broker localhost 8098 inativo porque ConditionPathExists=/etc/centraldark/oauth-broker.env não satisfeita. secrets/tailscale.env existe e estava com modo 644; nunca divulgar valores. VPN Tailscale local permanece em Running.
 - **Aprendizado:** REUSE_BEFORE_CREATE: não criar MCP paralelo nem milhares de tools; estender provider_capabilities, provider_read, provider_mutate e o dispatcher mcp_admin_call existentes. Resolver configuração/credencial Tailscale e bootstrap legítimo do OAuth Broker; credencial Tailscale renovada via trust/OAuth com escopos separados, sem usar material secreto em Git/chat. Contabo requer credenciais do provedor. Escritas administrativas com confirmação por operação, trilha e rollback; financeiro/destrutivo não habilitar indiscriminadamente. CURRENT>HISTORY, DOCUMENTED!=EXECUTED, UNKNOWN!=PASS. Falta prova de regressão e recibo para expansão de código.
 
 ### 198. DNS do MCP restaurado sem perder MagicDNS 2026-10-19
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L198`; `PREV_GLOBAL_UID=L197`; `NEXT_GLOBAL_UID=L199`; `LEGACY_LEARNING_NUMBER=198`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=198`; `PREV_LEARNING_REF=197`; `NEXT_LEARNING_REF=199`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-19
 - **Contexto:** MCP github_viewer, github_read e registrar_aprendizado falhavam com TypeError fetch failed; curl na VPS falhava DNS para api.github.com, enquanto resolvectl via ens18 resolvia e MagicDNS Tailscale funcionava.
 - **Aprendizado:** Resolver do host /etc/resolv.conf apontava ao DNS Tailscale sem resolução pública; apontar para o stub gerenciado do systemd-resolved preservou DNS público e MagicDNS, com backup e teste HTTP 200. Provar DNS e leitura antes de gravar; nunca tratar erro de leitura como arquivo vazio. Correção de fail-closed em PR #1868 ainda não publicada.
 
 ### 199. MCP fail-closed em produção após PR 1868
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L199`; `PREV_GLOBAL_UID=L198`; `NEXT_GLOBAL_UID=L200`; `LEGACY_LEARNING_NUMBER=199`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=199`; `PREV_LEARNING_REF=198`; `NEXT_LEARNING_REF=200`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-19
 - **Contexto:** PR #1868 mergeado em main commit 7329afe20; arquivo de aprendizado do runtime VPS atualizado com backup; serviço centraldark-native-mcp-http reiniciado e saúde HTTP 200.
 - **Aprendizado:** A leitura do arquivo de aprendizados agora lança erro se o GitHub falhar, em vez de devolver string vazia e arriscar sobrescrita. DNS da VPS já corrigido. Processo novo PID 834279 iniciou 2026-10-19 12:51:46 UTC. Preservar owner e validar escrita/leitura.
 
 ### 200. Erro de prova: conectividade Casa↔VPS não comprova execução onsite
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L200`; `PREV_GLOBAL_UID=L199`; `NEXT_GLOBAL_UID=L201`; `LEGACY_LEARNING_NUMBER=200`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=200`; `PREV_LEARNING_REF=199`; `NEXT_LEARNING_REF=201`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-20
 - **Contexto:** No PR #1880, a ponte Tailscale respondeu HTTP 200 e o inventário listou processos remotos na VPS, mas a consulta do catálogo não revelou executor acionável para compilar no Windows da Casa. O deploy_status ainda reportou erro antigo do parser PM2 e os workflows do HEAD estavam queued/pending.
 - **Aprendizado:** Separar sempre quatro provas: código publicado, CI/sintaxe/build, execução onsite com exit code e readback independente do runtime. HTTP 200, rota documentada ou chamada MCP não comprovam build nem fixed point. Se o executor falhar, voltar uma casa e procurar outra rota autorizada; não declarar verde nem reiniciar/deployar sem prova.
 
 ### 201. BOOT fixo acumulativo + método Michelin com rastro e readback
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L201`; `PREV_GLOBAL_UID=L200`; `NEXT_GLOBAL_UID=L202`; `LEGACY_LEARNING_NUMBER=201`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=201`; `PREV_LEARNING_REF=200`; `NEXT_LEARNING_REF=202`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** A continuidade do PR #1880 mostrou que passos de validação e execução podem ficar separados entre GitHub, VPS e Casa. É necessário persistir o procedimento depois de corrigir cada erro, sem substituir a cadeia canônica.
@@ -3109,102 +3121,195 @@ Conectividade HTTP 200, rota documentada, chamada de ferramenta ou commit não p
 Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6d3400acae8; CI observado queued/pending, deploy_status ainda ERRO por parsing PM2, build na Casa e roundtrip VS Code/Cline sem prova. Estado honesto: BLOCKED_NOT_FIXED_POINT.
 
 ### 202. BOOT fixo acumulativo + método Michelin com rastro e readback
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L202`; `PREV_GLOBAL_UID=L201`; `NEXT_GLOBAL_UID=L203`; `LEGACY_LEARNING_NUMBER=202`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=202`; `PREV_LEARNING_REF=201`; `NEXT_LEARNING_REF=203`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** A continuidade do PR #1880 mostrou que validação e execução podem ficar separadas entre GitHub, VPS e Casa. O procedimento precisa ser persistido após corrigir cada erro, sem substituir a cadeia canônica.
 - **Aprendizado:** BOOT FIXO (acumulativo, não substituível): !CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT. Após corrigir cada erro e antes de encerrar: registrar em docs/CONSCIENCIA/APRENDIZADOS.md; registrar lembrança durável no ledger; registrar estado/evidência/pendências/próximo passo no PR equivalente ativo; fazer readback independente e guardar IDs/links/SHA. Método Michelin ⭐️⭐️⭐️: examinar o conjunto; distinguir atual de histórico; separar camadas quando necessário sem duplicar owners; reutilizar antes de criar; corrigir a menor causa demonstrada; narrar checkpoints e deixar rastro durante o trabalho; contraprovar antes de declarar sucesso. Invariantes: CURRENT > HISTORICAL; UNKNOWN != PASS; DOCUMENTED != EXECUTED; ACTION != PROOF; COMMITTED != DEPLOYED. HTTP 200, rota documentada, chamada de ferramenta ou commit não provam build onsite/runtime/fixed point. Em falha, voltar uma casa, isolar a camada e repetir. Estado PR #1880 HEAD 2da1c6e7e847c1290382b8809abdd6d3400acae8: CI queued/pending, deploy_status ERRO por parsing PM2, build Casa e roundtrip VS Code/Cline sem prova; BLOCKED_NOT_FIXED_POINT.
 
 ### 203. BOOT fixo acumulativo e rastro Michelin obrigatório
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L203`; `PREV_GLOBAL_UID=L202`; `NEXT_GLOBAL_UID=L204`; `LEGACY_LEARNING_NUMBER=203`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=203`; `PREV_LEARNING_REF=202`; `NEXT_LEARNING_REF=204`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** Ao continuar o PR #1880, o erro foi tratar conectividade e publicação como se provassem execução. O CHEFE determinou que o BOOT canônico permaneça fixo e receba apenas acréscimos, e que após corrigir erros o registro seja feito em aprendizados, lembranças e PR equivalente.
 - **Aprendizado:** BOOT fixo: !CENTRALDARK → #ACORDAR → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !BOOT. Não substituir esta sequência; apenas acrescentar modos necessários. Após cada correção, registrar em APRENDIZADOS.md, ledger privado e PR ativo; fazer readback independente. Método Michelin: examinar o conjunto, separar frentes sem duplicar owners, reutilizar antes de criar, aplicar menor delta, narrar checkpoints enquanto trabalha e só declarar PASS após contraprova. HTTP 200/rota/chamada/commit não provam build onsite, runtime saudável ou fixed point. Se falhar, voltar uma casa e isolar a camada.
 
 ### 204. Rota MCP_CASA_TO_VPS documentada não prova executor acionável
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L204`; `PREV_GLOBAL_UID=L203`; `NEXT_GLOBAL_UID=L205`; `LEGACY_LEARNING_NUMBER=204`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=204`; `PREV_LEARNING_REF=203`; `NEXT_LEARNING_REF=205`.
 - **Categoria:** armadilha
 - **Data:** 2026-10-21
 - **Contexto:** Na rechecagem do PR #1880, catálogo unificado retornou 141 runtime/dispatchable tools e 13 rotas. Entre elas MCP_CASA_TO_VPS com capability declarada execute_command|vps_run_once_script, CAS_CLOUD_RELAY, RDC_DESKTOP_COMMANDER e SCREENPIPE_LOCAL_SENSOR. O catálogo filtrado não revelou schema de executor correspondente; deploy_status ainda ERRO com SyntaxError de JSON PM2 e a lista de processos veio vazia.
 - **Aprendizado:** Não concluir que a rota está executável apenas por estar no catálogo. Medir o binding pelo dispatcher oficial, obter schema, exit code/ACK e readback antes de operar na Casa. A ausência de um executor no catálogo filtrado é um bloqueio de descoberta, não prova de que toda a ponte está indisponível. Manter o BOOT fixo acumulativo; após cada correção registrar aprendizado, ledger e PR equivalente; fixed point exige CI e runtime contraprova.
 
 ### 205. Retomar PR #1880 sem confundir snapshot com fixed point
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L205`; `PREV_GLOBAL_UID=L204`; `NEXT_GLOBAL_UID=L206`; `LEGACY_LEARNING_NUMBER=205`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=205`; `PREV_LEARNING_REF=204`; `NEXT_LEARNING_REF=206`.
 - **Categoria:** armadilha
 - **Data:** 2026-10-21
 - **Contexto:** A medição operacional mostrou MCP runtime presente, heartbeat UNKNOWN, forensic/receipt ausentes e veredito UNKNOWN_NOT_PASS; a topologia mostrou runtime presente com execução global desconhecida. Isso exige retomar a frente com CI e evidência de execução, não inferir saúde por PID.
 - **Aprendizado:** Antes de qualquer promoção: medir o SHA exato do PR e os workflows desse SHA; inspecionar os jobs falhos/pendentes; executar validação real no caminho de build autorizado; verificar heartbeat/receipt forense e runtime por readback independente. PID presente, chamada MCP recente ou alignment 100% não substituem receipt. Estado fica BLOCKED até as provas faltantes existirem.
 
 ### 206. BOOT fixo append-only e execução com rastro verificável
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L206`; `PREV_GLOBAL_UID=L205`; `NEXT_GLOBAL_UID=L207`; `LEGACY_LEARNING_NUMBER=206`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=206`; `PREV_LEARNING_REF=205`; `NEXT_LEARNING_REF=207`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** Na retomada do PR #1880, a instrução operacional foi reafirmada: manter o BOOT fixo já estabelecido, acrescentar modos operacionais relevantes sem substituir a sequência canônica, e trabalhar em frentes separadas apenas quando houver fronteiras reais. O snapshot atual segue UNKNOWN_NOT_PASS, heartbeat UNKNOWN e receipt forense ausente; deploy_status continua ERRO por SyntaxError: Unexpected end of JSON input, enquanto workflows recentes estão queued.
 - **Aprendizado:** Regra persistente: o BOOT fixo nunca é removido nem substituído; novos modos e aprendizados são anexados ao redor dele. Ao executar, usar o método de exame integral estilo Michelin três estrelas: reutilizar prova existente, separar fonte/CI/runtime/Casa, aplicar a menor mudança com um único writer por escopo, narrar o progresso enquanto caminha no código e deixar rastro verificável (observação, alteração, teste, readback independente e pendência). Nunca chamar ação MCP concluída de prova do resultado; UNKNOWN != PASS; não afirmar sintaxe/build/execução sem resultado observado. Ao terminar a correção, registrar em aprendizados e lembranças operacionais e comentar o PR equivalente; fixed point somente após contraprova independente.
 
 ### 207. K→F self-provisioning Windows: reutilizar owner existente e exigir receipt
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L207`; `PREV_GLOBAL_UID=L206`; `NEXT_GLOBAL_UID=L208`; `LEGACY_LEARNING_NUMBER=207`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=207`; `PREV_LEARNING_REF=206`; `NEXT_LEARNING_REF=208`.
 - **Categoria:** armadilha
 - **Data:** 2026-10-21
 - **Contexto:** A reavaliação do padrão K:\_WORKER → F:\_WORKER encontrou a ponte Tailscale viva (Casa e VPS online), mas o inventário híbrido e o status de recursos locais declaram authority=false/proof=false. O horn REUSE_BEFORE_CREATE retornou BLOCKED_UNKNOWN, com owner/capability candidatos presentes, porém evidência e receipt ausentes e regressão desconhecida. O scratch único da VPS está limpo, mas DRIFT: scratch SHA fbb858b1 e origin/main 40f6b7a9.
 - **Aprendizado:** Não criar outro executor nem declarar self-provisioning pronto. Reutilizar a rota/owner Casa já existente; medir capacidade de execução Windows e provar o ciclo lock→provision→worktree→estado/receipt→limpeza segura. K e F devem permanecer destinos separados conforme contrato já documentado; antes de tocar diretórios, inspecionar existência, owner, data, alterações e possibilidade de limpeza. Tailscale HTTP 200 comprova apenas conectividade. Reconciliar o scratch por procedimento canônico depois de entender o drift; não resetar nem limpar automaticamente. KV cache, prompt cache e cápsula de continuidade são mecanismos distintos e só declarar benefício de cache após telemetria real do provedor/runtime.
 
 ### 208. VS Code CentralDark deve priorizar linguagem natural e botões
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L208`; `PREV_GLOBAL_UID=L207`; `NEXT_GLOBAL_UID=L209`; `LEGACY_LEARNING_NUMBER=208`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=208`; `PREV_LEARNING_REF=207`; `NEXT_LEARNING_REF=209`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** CHEFE pediu que o fluxo de vibe coding pare de depender de nomes técnicos/comandos difíceis e seja operado por botões e frases naturais dentro do mesmo owner da extensão.
 - **Aprendizado:** No owner skills/vs-code-restore, expor ações humanas em PT-BR e linguagem natural que apenas roteiam para comandos/capacidades já existentes. Build/SSH/pareamento/status devem ter botões; sem criar segundo executor. Empacotamento da VSIX deve ser não interativo.
 
 ### 209. Mapa híbrido Casa–MCP/K:–VPS–GitHub: separar topologia relatada de prova viva
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L209`; `PREV_GLOBAL_UID=L208`; `NEXT_GLOBAL_UID=L210`; `LEGACY_LEARNING_NUMBER=209`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=209`; `PREV_LEARNING_REF=208`; `NEXT_LEARNING_REF=210`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** Foi discutido um diagrama lógico híbrido usando dados relatados da Casa Windows, unidade K:, MCP, túneis SSH, VPS, GitHub e Obsidian. A leitura do owner obsidian_live_graph_status retornou configured_vault=null, vault_accessible_from_this_runtime=false e bidirectional_sync_proven=false.
 - **Aprendizado:** Registrar o diagrama no PR equivalente como recibo histórico e manter explícita a fronteira de evidência. Não tratar PID/portas informados como medição independente, não inferir três agentes a partir de três túneis, não inferir VPS ociosa pela ausência de PM2 e não afirmar gravação no Obsidian enquanto o vault não estiver acessível. Reutilizar scripts/hermes/centraldark-entry.py e scripts/hermes/verified-checkpoint.py para continuidade; localizar o owner existente da Fábrica de Memórias, deduplicar e só então gravar e fazer readback/hash.
 
 ### 210. Cabeça externalizada do CHEFE — K Forja, F armazenamento transparente
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L210`; `PREV_GLOBAL_UID=L209`; `NEXT_GLOBAL_UID=L211`; `LEGACY_LEARNING_NUMBER=210`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=210`; `PREV_LEARNING_REF=209`; `NEXT_LEARNING_REF=211`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** CHEFE confirmou o contrato da Casa: K:\ é a raiz Git/harness/cockpit/docs e ambiente de todas as IAs; F:\ guarda peso físico por junctions transparentes; C:\ não deve receber escritas intencionais da Forja. Receipt integral no PR #1873, comentário 6316911838; dono existente DELTA-CONTINUO.md + Lei dos Discos + Garimpo/Knowledge Compiler.
 - **Aprendizado:** Frase canônica literal do CHEFE: 'Tu quer que a CentralDark pense e trabalhe no K:, descarregue o peso no F:, preserve o conhecimento no Obsidian, cristalize código no GitHub e continue funcionando independentemente de qual IA esteja comandando a ferramenta.' K:\ raiz única, não K:\CentralDark. K:\_WORKER -> F:\_WORKER já medido como junction em 19/10; demais links atuais UNKNOWN. Sem novos owners/memórias/schedulers. npm/npx/pip/uv/bun: instalações persistentes próprias em K quando adequadas, caches/scratch em F usando K lógico, sem writes intencionais em C nem alteração TEMP global. Preservar worktrees ativos, bruto único e quarentena; antes de mudar conferir uso/hash/rollback/readback. Git main apenas código comprovado, VPS runtime necessário; F/Garimpo reutiliza Knowledge Compiler, Dream Review e Hermes sob demanda. Especificação e NEXT_CURSOR: https://github.com/ServerVpss/CentralDark/pull/1873#issuecomment-6316911838
 
 ### 211. Catálogo runtime CentralDark — 13 rotas e validação contínua
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L211`; `PREV_GLOBAL_UID=L210`; `NEXT_GLOBAL_UID=L212`; `LEGACY_LEARNING_NUMBER=211`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=211`; `PREV_LEARNING_REF=210`; `NEXT_LEARNING_REF=212`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** Medição 2026-10-21: mcp_admin_status indica 141 tools, 20 destrutivas, 13 rotas, fingerprint 80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7. mcp_catalog_diff indica runtimeToolCount 86, expectedCount 22, 6 ferramentas esperadas faltando. CAS_CLOUD_RELAY, HERMES_SHELL e TAILSCALE_PRIVATE_ROUTE estão documentadas; serviço e execução Casa não comprovados. Casa Tailscale online com RDP 3389 aberto e SSH 22 fechado/filtrado.
 - **Aprendizado:** Reutilizar centraldark_unified_capability_catalog e mcp_admin_call como owners. Persistir identidade de todas as 13 rotas e fingerprints no owner existente; validar em cada startup e periodicamente contagens, catálogo, saúde real dos bindings, permissões, endpoint Casa↔VPS, prova de execução e receipts. Não marcar rota documentada como PASS runtime. Reconciliar divergência 141 vs 86 e seis tools missing antes de declarar Full Admin. Preferir CAS_CLOUD_RELAY/Tailscale/HERMES_SHELL existentes, não instalar outro executor nem usar Desktop Commander como rota primária. Ações sensíveis continuam com autorização canônica.
 
 ### 212. Cline MCP: nome qualificado, PowerShell nativo e HTTP 401 esperado
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L212`; `PREV_GLOBAL_UID=L211`; `NEXT_GLOBAL_UID=L213`; `LEGACY_LEARNING_NUMBER=212`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=212`; `PREV_LEARNING_REF=211`; `NEXT_LEARNING_REF=213`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-21
 - **Contexto:** Na sessão de integração Cline↔MCP CentralDark (21/10/2026), o cliente tentou chamar vps_list_dir_safe sem o namespace, causando AI_NoSuchToolError antes da execução; o catálogo anunciava CentralDark__vps_list_dir_safe. No terminal PowerShell, usou switches CMD /b e /s em Get-ChildItem/dir, gerando ParserError ou ParameterBindingException. Web fetch anônimo de /admin/api/tools, /admin/api/metricas e /admin/api/logs retornou 401; /health/deep respondeu 200.
 - **Aprendizado:** Separar falha do CLIENTE (tool name sem namespace) de falha do MCP/VPS. Antes da tool call resolver nome EXATAMENTE como anunciado pelo catálogo atual: CentralDark__vps_list_dir_safe; usar mcp_admin_call autorizado se necessário sem simular ferramentas. No PowerShell usar Get-ChildItem -LiteralPath 'caminho' -Recurse para listar, nunca flags CMD /b ou /s nem string de array JSON. HTTP 401 sem cookie cd_admin em rotas /admin/api/* é proteção esperada, não erro do serviço; verificar endpoint admin/catalog separadamente com sessão legítima sem vazar segredo. Não tratar retorno MCP_TOOL_CALL_COMPLETED com status de payload UNKNOWN/false como sucesso do provedor. Testar antes/depois, registrar prova/contraprova e evitar mudanças desnecessárias no OAuth ou restart.
 
 ### 213. Sacola de skills: distinguir manifestos locais do catálogo MCP em execução
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L213`; `PREV_GLOBAL_UID=L212`; `NEXT_GLOBAL_UID=L214`; `LEGACY_LEARNING_NUMBER=213`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=213`; `PREV_LEARNING_REF=212`; `NEXT_LEARNING_REF=214`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-21
 - **Contexto:** Em 21/10/2026 o Cline encontrou no manifesto local de skills dezenas de entradas, enquanto o MCP CentralDark skill_listar() retornou somente 4 skills portáteis. Contraprova independente: MCP retornou 4, mcp_admin_catalog({filter:'skill_buscar'}) retornou 0, e o código da main apps/modulos/mcp/src/tools/skills/skill.js + catalog-index.js implementa pesquisa autenticada paginada nas duas raízes skills/ e .agents/skills/, com origem e SHA. A VPS confirmou ambas as pastas presentes. O manifesto local e o ledger curator não foram auditados por esta ferramenta, e não provam skill carregada.
 - **Aprendizado:** Usar o Skill Workshop e o indexador MCP já existentes, nunca criar catálogo paralelo nem instalar tudo. Resolver roots separadas (K:/skills, projeto skills/, .agents/skills/, Hermes/skills), caminho exato, SHA e estado DISCOVERED_SOURCE_ONLY/LOADED/EXECUTED. Comparar main com runtime por ferramenta disponível e teste real skill_buscar; quando ausente, registrar RUNTIME_NOT_PROMOTED/UNKNOWN e aguardar gates/deploy autorizado. O manifesto .bundled_manifest enumera candidatas, não prova instalação. Recarregar apenas skills necessárias sob demanda; comparar SHA local e remoto antes de atualizar, e nunca executar conteúdo externo durante inventário.
 
 ### 214. Skill Buscar Reconciliation
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L214`; `PREV_GLOBAL_UID=L213`; `NEXT_GLOBAL_UID=L215`; `LEGACY_LEARNING_NUMBER=214`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=214`; `PREV_LEARNING_REF=213`; `NEXT_LEARNING_REF=215`.
 - **Categoria:** outro
 - **Data:** 2026-10-21
 - **Contexto:** skill_buscar implementada no código MCP mas não exposta nas 4 skills ativas do runtime
 - **Aprendizado:** skill_buscar existe em K:\apps\modulos\mcp\src\tools\skills\skill.js (linha 175) com anotação 'Buscar skill no catálogo', mas não está entre as 4 skills ativas do MCP CentralDark (delegacao, mermaid, pretty-mermaid, vs-code-restore). Isso representa um gap de indexer parity.
 
 ### 215. Checkpoint comprovado SSH Casa Windows e VPS Linux — preservar serviços existentes
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L215`; `PREV_GLOBAL_UID=L214`; `NEXT_GLOBAL_UID=L216`; `LEGACY_LEARNING_NUMBER=215`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=215`; `PREV_LEARNING_REF=214`; `NEXT_LEARNING_REF=216`.
 - **Categoria:** atalho
 - **Data:** 2026-10-21
 - **Contexto:** Em 21/10/2026, captura fornecida pelo CHEFE mostrou na Casa Windows PowerShell 7.6.6: Get-Service sshd inicialmente Stopped, seguido de Start-Service sshd e novo Get-Service sshd = Running (OpenSSH SSH Server). Na VPS, consulta operacional REAL pela ferramenta MCP mcp_admin_call/execute_command com confirmação autorizada executou `systemctl is-active ssh`: stdout active, exitCode 0. Contraprova `systemctl status ssh --no-pager`: Loaded enabled; Active active (running) desde 2026-10-19 10:02:05 UTC; Main PID 1208; ExecStartPre /usr/sbin/sshd -t status=0/SUCCESS; exitCode 0. Relatório anterior do Cline informou SSH Casa→VPS funcional por host público e host Tailscale; ponte Tailscale reportou PASS. VPS→Casa por SSH NÃO testado end-to-end; leitura anterior da porta 22 da Casa via bridge era CLOSED_OR_FILTERED, anterior à ativação local do serviço.
 - **Aprendizado:** Checkpoint: SSH na Casa = Running após start do serviço, conforme captura do CHEFE; SSH VPS = active+enabled comprovado pela leitura MCP e configuração válida; não foi necessário iniciar/reiniciar/alterar serviço na VPS. Preservar ambas as rotas Casa→VPS existentes (SSH e MCP) e não recriar chaves, liberar firewall ou iniciar sshd na VPS sem necessidade. Não confundir serviço ativo com conectividade bidirecional: próximo delta é testar VPS→Casa através do Tailscale com validação de rede, firewall e autenticação sem mexer em produção, se a missão requerer. Logs de tentativas SSH não autenticadas exigem observação de segurança mas não provam comprometimento. Guardar como receita reutilizável; serviço ativo != rota remota provada. Em caso de nova medição registrar readback atual e evidence boundary.
 
 ### 216. Desktop Commander terceiro removido da dependência; CentralDark nativo é rota primária Casa↔VPS
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L216`; `PREV_GLOBAL_UID=L215`; `NEXT_GLOBAL_UID=L217`; `LEGACY_LEARNING_NUMBER=216`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=216`; `PREV_LEARNING_REF=215`; `NEXT_LEARNING_REF=217`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** CHEFE em 21/10/2026 decidiu eliminar totalmente a dependência operacional do Desktop Commander de terceiros e pediu recuperar CentralDark Desktop Commander nativo. Busca real na main encontrou docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md (PRIMARY_CONTROL_PLANE=CENTRALDARK_MCP; REMOTE_DESKTOP_COMMANDER=OPTIONAL_FALLBACK; LEGACY_REMOTE_ENABLED_BY_DEFAULT=false), scripts/remote-bridge/CentralDark-Remote-Bridge.ps1 (declara explicitamente 'CentralDark MCP e Hermes ACP operam sem Desktop Commander' e ignora o legado quando não habilitado) e owner docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md ainda com gate house_access_primary='Remote Desktop Commander' e exemplos legados. MCP CentralDark está operacional, Tailscale VPS→Casa identificou windows-casa online com tráfego, SSH Casa e VPS ativos. Acesso a processos Windows pelo novo executor nativo não foi comprovado nesta sessão.
 - **Aprendizado:** Regra vigente: DESKTOP_COMMANDER_THIRD_PARTY_REQUIRED=false; não chamar nem recomendar o conector mcp.desktopcommander.app; preservar como histórico sem apagá-lo ou reiniciá-lo. Control plane único MCP CentralDark OAuth; transporte privado Tailscale + SSH; execução Casa pelo CentralDark Desktop Commander/executor nativo ou Hermes ACP quando houver rota autorizada e prova. Reutilizar owners existentes: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md, scripts/remote-bridge/CentralDark-Remote-Bridge.ps1, docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md. Delta necessário: reconciliar o gate legado que ainda cita Remote Desktop Commander primário, mapear implementação real do executor nativo, testar comando read-only na Casa e obter ACK, registrar receipt. Tailscale home SSH OPEN != sessão shell Windows autenticada; UNKNOWN != PASS. Não criar MCP paralelo, não reativar legado, não presumir equivalência de nome como prova de capacidade.
 
 ### 217. Regra Cockpit-in-the-Loop
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L217`; `PREV_GLOBAL_UID=L216`; `NEXT_GLOBAL_UID=L218`; `LEGACY_LEARNING_NUMBER=217`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=217`; `PREV_LEARNING_REF=216`; `NEXT_LEARNING_REF=218`.
 - **Categoria:** regra
 - **Data:** 2026-10-21
 - **Contexto:** Cline tenda marcar tarefa concluída apenas por código compilar; nova regra exige contraprova visual e funcional na interface de operação
 - **Aprendizado:** Não basta o código funcionar; a experiência do usuário precisa funcionar na mesma interface em que ele vai operar. Mudanças que afetam o cockpit exigem contraprova visual/funcional dos controles relacionados ao escopo alterado.
 
+<!-- CANARY_RECONCILIATION_PR1895_20261022: provisional branch lessons 211-214 remapped to canonical 218-221, while main 211-217 and original marker IDs are preserved. -->
+<!-- CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
+### 218. Linguagem profissional brasileira do Harness — humano na tela, diagnóstico nos detalhes
+- **Categoria:** regra + correção de entendimento da intenção do CHEFE.
+- **Data:** 2026-10-21.
+- **Autoridade:** SEGREDO/CHEFE, após imagem do Mermaid `CHEFE → CentralDark → JARVIS/Hermes/Harness → estado operacional único → português natural/detalhes técnicos`.
+- **Erro aprendido:** exibir `áudio não comprovado`, `UNKNOWN` ou `receipt não consultado` como mensagem principal de um programa transforma linguagem de produto em log; recurso opcional desligado não é falha.
+- **Cristal:** `ESTADO_REAL → (TEXTO_PT_BR_ORIENTADO_A_ACAO, DETALHE_TECNICO_SOB_DEMANDA)`. Mesma realidade operacional, duas apresentações; nenhuma segunda memória, Harness, Hermes ou Cockpit.
+- **Exemplos condicionais:** `MIC_DISABLED → Ativar microfone`; `AUDIO_CAPTURE_ACTIVE → Ouvindo...`; `CONNECTION_FAILED → Conexão perdida · Reconectar`; `QUEUE_EMPTY` após leitura → `Nenhuma tarefa no momento`; fila não lida → `Consultar atividades`; `TASK_SUCCESS` provado → `Concluído`.
+- **Papéis sem renomeação técnica:** CHEFE é autoridade; JARVIS/SOL interpreta e coordena; Harness organiza; Hermes executa; Cockpit oferece superfície humana; Reality Judge e receipts preservam contraprova.
+- **Idioma:** textos estáticos simples, acessíveis e universais em pt-BR; JARVIS pode conversar com baianês espontâneo quando contextual.
+- **Travas:** `OFF != FAILURE`, `UNKNOWN != PASS`, `UI_RENDERED != EXECUTION_PASS` e `MERGED != DEPLOYED`. Não confundir animação da esfera com áudio ativo.
+- **Mermaids e mapa cognitivo:** [[MAPA-DO-CEREBRO]] seção `Linguagem de produto do Harness`; guia [[GUIA-COMUNICACAO-SEGREDO-CHEFE]]; memória de proveniência [[LEMBRANCAS]].
+- **Bibliografia oficial conferida:** GOV.BR linguagem simples; Microsoft Windows escrita e controles. Links no mapa.
+- **Owner/PR equivalente:** [#1895](https://github.com/ServerVpss/CentralDark/pull/1895), mesma superfície visual e mesmo owner de conhecimento. Não há novo app/scheduler/agente.
+- **CURRENT:** regra documentada em branch; mudanças no executável, build, sincronização com Obsidian Casa e deploy permanecem UNKNOWN até readback.
+- **NEXT_CURSOR:** `READBACK_DOCS_1895 → CHECKS_HEAD_EXATO → UI_OWNER_MICROCOPY → TESTES_DE_ESTADO_E_ACESSIBILIDADE → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.
+<!-- /CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
+
+
+<!-- CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
+### 219. Observabilidade do Cockpit pelo browser conectado sem dependência de Desktop Commander
+- **Categoria:** descoberta de rota / correção de comportamento.
+- **Data:** 2026-10-21.
+- **Erro:** tratar status de um dispositivo Desktop Commander como condição necessária para observar o Cockpit.
+- **Prova:** conexão Browser listou dez abas, incluindo `Cockpit CentralDark — Sala de Controle` (`127.0.0.1:8080/sala-controle`), e `get_tab_context` retornou DOM textual, botões, abas, comandos da moldura, painéis e seus estados. Simultaneamente a ponte Tailscale reportou VPS/Casa online. **Nenhuma chamada Desktop Commander foi necessária para ler a UI aberta**.
+- **Cristal operacional:** `BROWSER_TABS_LISTED=true`; `CONNECTED_COCKPIT_TAB_CONTEXT_READ=true`; `DOM_CONTROLS_OBSERVABLE=true`; `DESKTOP_COMMANDER_PREREQUISITE_FOR_COCKPIT_DOM=false`. Preferir `Browser.list_tabs → Browser.get_tab_context(aba alvo) → comparar com owners do GitHub → receipt`; somente escalar para outra capacidade se o efeito buscado exceder observação de DOM. Listar abas ≠ comprovar execução do Windows; **comparações paralelas completas, captura visual nativa, edição da UI e ações remotas não foram demonstradas por essas duas leituras**.
+- **NEXT_CURSOR:** `BROWSER_CONNECTED_CHECK → TAB_CONTEXT → SOURCE_OWNER → READBACK → OPTIONAL_NATIVE_CHECK`.
+<!-- /CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
+
+<!-- CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
+### 220. Design Center: sete identidades distintas, quatro peles ativas e três prévias comparáveis sem fusão
+- **Categoria:** correção de interpretação + experimento visual controlado.
+- **Data:** 2026-10-21.
+- **Erro:** interpretar violeta/índigo de aplicativo de referência como nova paleta oficial do Cockpit. **Correção do CHEFE:** cores e design continuam os oficiais; referência externa é só ergonomia/funcionalidades.
+- **Prova de source:** `DesignCenter.tsx` contém `PeleCockpit = "default" | "ouro" | "ops" | "esmeralda"`, preferência `centraldark.cockpit.pele`; `apps/modulos/Bolt/source/app/lib/stores/theme.ts` mantém tema `emerald`, `operational`, `forge` no Shell; `app/styles/variables.scss` define seus tokens.
+- **Delta autorizado:** no PR #1895 a aba `Design Center → Temas globais · 3 prévias` mostra cartões lado a lado com tokens oficiais `emerald`, `operational`, `forge`, sem instalar/aplicar tema nem tocar no seletor de quatro peles e sem forçar fusão.
+- **Invariantes:** `FOUR_COCKPIT_SKINS_PRESERVED=true` é critério de código; `THREE_GLOBAL_THEME_PREVIEWS_SEPARATE=true` é critério de código; `APPLIED_TO_LIVE_CASA=UNKNOWN`, `MERGE_DECISION=PENDING_CHEFE`. Token em mockup não significa integração de theme runtime; build, navegador da Casa e persistência exigem medição.
+- **OWNER:** `apps/instinto-superior/src/components/central/DesignCenter.tsx`; regras `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`. Nenhuma mudança em `CockpitShell.tsx`, CSS global, processos ou segredos.
+- **NEXT_CURSOR:** `READBACK_COMMIT → BUILD_SAME_SHA → LIVE_DESIGN_CENTER → FOUR_SKINS_REGRESSION → CHEFE_COMPARE → DECIDE_MERGE_OR_KEEP`.
+<!-- /CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
+
+
+<!-- CENTRALDARK_LEARNING_214_JUKEBOX_20261021 -->
+### 221. Jukebox A–Z / J001–J301 — capacidade indexada, consumível por fonte, sem segunda arquitetura
+- **Categoria:** descoberta ampliada / continuidade da sessão / roteamento de ferramentas.
+- **Data:** 2026-10-21.
+- **Intenção do CHEFE:** registro anterior #212 era curto, faltavam rotas alternativas, owners, fonte dos dados, distinções de prova, ferramentas existentes e um índice navegável completo por ordem alfabética **e** numérica. Criar uma Jukebox de navegação com reuso integral do cérebro existente, não outra IA/Hermes/MCP.
+- **Owner:** `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` (porta de entrada) e `docs/CONSCIENCIA/RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md` (snapshot derivado de 301 fichas). Reusar `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`, `apps/instinto-superior/src/components/central/CockpitShell.tsx`, `DesignCenter.tsx`, `apps/instinto-superior/config/harness-module-registry.json`, e fonte única do dispatcher `mcp_admin_catalog`. Não tocar no runtime para criar índice.
+- **Medição de catálogo nesta sessão:** `mcp_admin_catalog` retornou **141 nomes de ferramentas e 13 rotas**; `harness-module-registry.json` enumerou **18 módulos**; `CockpitShell.tsx` **27 abas**; `skill_listar` expôs **4 skills de `skills/`** — não representa inventário completo `.agents/skills/` nem 995 skills carregadas na sessão atual. As 301 fichas misturam **classes diferentes** (incluindo os botões e decisões); não somar como 301 ferramentas executáveis.
+- **Leitura real das abas:** `Browser.list_tabs` mostrou a aba `127.0.0.1:8080/sala-controle`; `Browser.get_tab_context` retornou árvore textual do DOM (menus, botões, abas, estados). Procedimento `BROWSER_TAB → GET_CONTEXT → SOURCE_OWNER → COMPARE → RECEIPT` elimina Desktop Commander como **pré-requisito da inspeção da UI**. A falta de Desktop Commander não impede a leitura da aba conectada. Captura visual ou interações que precisem de comando no Windows exigem prova distinta.
+- **Descoberta vs execução:** nome no MCP (`CATALOGED`) != schema invocado (`CALLED`) != alteração confirmada (`EFFECT_READBACK`). `RDC_DESKTOP_COMMANDER` pode continuar no catálogo legado; não deve ser pressuposto necessário. `TAILSCALE_PRIVATE_ROUTE` e ponte OAuth deram HTTP 200 com Casa online, enquanto `tailscale_status` da API administrativa permaneceu HTTP 401 — dois planos separados.
+- **Identidade visual mantida:** quatro peles do Cockpit (`default`, `ouro`, `ops`, `esmeralda`) e três prévias globais independentes (`emerald`, `operational`, `forge`) permanecem separadas até decisão explícita do CHEFE. Paleta violeta inferida da imagem Alethe está revogada.
+- **Fronteiras:** `SOURCE != LOADED`, `CATALOGED != EXECUTED`, `DOM != WIN32`, `BRIDGE_ONLINE != FILES_ACCESSIBLE`, `WEB_BUILD != WINDOWS_APP_BUILD`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`. As ferramentas de cofre são apenas identificadas por nome no inventário, sem ler ou registrar conteúdo.
+- **Critério de replay:** recuperar a ficha `JNNN`; identificar owner atual, descobrir rota permitida por capacidade e obter schema; avaliar evidência temporal, autorização, mínimo delta, ação e contraprova; registrar receipt **no mesmo owner**; atualizar snapshot derivado sem inventar duplicatas, números de missão ou arquivos secret.
+- **Proof:** Jukebox numerada 001–301 e índice A–Z criados e relidos na branch da PR #1895; todas as entradas possuem link de navegação. A integração visual na Casa/Obsidian, a execução de qualquer uma das 141 ferramentas e a cobertura completa do catálogo de skills permanecem `UNKNOWN` até testes causais.
+- **Gate obrigatório (21/10):** `scripts/trigger-fabric/verify_jukebox.py` foi ligado ao verificador canônico `scripts/trigger-fabric/verify_repo_contract.py`, já consumido por `.github/workflows/porta-de-entrada.yml`. Corrigidas **33 posições alfabéticas** da primeira versão; os IDs J001–J301 e seus títulos permanecem congelados pelo fingerprint `83f1dfa563d66705`. Conferir em PR/push: ordem A–Z, sequência J001–JNNN, duplicatas, links e títulos; se falhar, gate fail-closed. Adição válida inicia em J302 sem mudar antigos. `GATE_WIRED_IN_SOURCE=PASS`; `CI_SAME_HEAD=QUEUED` na verificação do commit `e158808fc45397cc7fccbb2efb71a4115f5bfca1`; `PRODUCTION=UNKNOWN`. Sem autopush, renumeração ou workflow novo.
+- **NEXT_CURSOR:** `JUKEBOX_AZ → JNNN → OWNER_CURRENT → CAPABILITY_SCHEMA → RUNTIME_PROOF → RECIPE_REUSE → DELTA → CONTRAPROVA → RECEIPT → ATUALIZAR_JUKEBOX`.
+<!-- /CENTRALDARK_LEARNING_214_JUKEBOX_20261021 -->
 ### 218. RED #003: PowerShell corrigido, workspace Casa sem checkout Git
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L218`; `PREV_GLOBAL_UID=L217`; `NEXT_GLOBAL_UID=L219`; `LEGACY_LEARNING_NUMBER=218`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=218`; `PREV_LEARNING_REF=217`; `NEXT_LEARNING_REF=219`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-22
 - **Contexto:** A verificação na sessão Casa/VS Code executou um comando PowerShell mínimo com exit 0, mas C:\root\CentralDark não continha .git e git rev-parse falhou com not a git repository. Não foram encontrados marcadores de checkout até profundidade 4.
@@ -3212,6 +3317,8 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 ### 219. Lembrança operacional ZENDRIVE — recuperar PR #1842 antes de agir
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L219`; `PREV_GLOBAL_UID=L218`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=219`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=219`; `PREV_LEARNING_REF=218`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
 - **Categoria:** continuidade, inventário, memória entre agentes, contraprova
 - **Data:** 2026-10-22
 - **Contexto:** CHEFE confirmou intenção: "Tu registrou? Pra não ficar esquecido todos têm que lembrar." A PR #1842 foi **MERGED** em 18/10/2026, e a `main` contém `docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md` (inventário ZENDRIVE e tabela completa de 31 ferramentas RDC) e `apps/modulos/mcp/src/tools/core/mcp-admin.js` (14 rotas no SOURCE e `RDC_EQUIVALENCE_MATRIX`). O recibo histórico é `https://github.com/ServerVpss/CentralDark/pull/1842#issuecomment-6245057178`. Na época do primeiro teste a VPS anunciava 13 rotas; a informação é snapshot, não verdade permanente.
@@ -3220,3 +3327,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Gates permanentes:** `SOURCE != RUNTIME`; `MERGED != DEPLOYED`; `SSH_CASA_VPS != SHELL_VPS_CASA`; `VSIX_INSTALLED != VSCODE_TERMINAL_EXEC_ACK`; `HTTP200 != HEALTH_PASS`; `UNKNOWN != PASS`. Para afirmar lembrança compartilhada, cada consumer deve carregar a referência e devolver ACK/identidade/versão/receipt; memória não autoriza operações nem acesso por si só.
 - **Owner reaproveitado:** `LEIA-ME-IA.md` (entrada universal), este `APRENDIZADOS.md` (ouro do método), `CENTRALDARK-REMOTE-MCP-GATEWAY.md` (detalhe técnico), `mcp-admin.js` (inventário). Sem novo boot, serviço, memória ou conector.
 - **NEXT_CURSOR:** ler de volta main e ledger; em futuras operações do Hermes/VS Code/Cockpit verificar carregamento do entrypoint e consumo por ACK no executor, comparar live MCP e registro antes de promover o estado.
+
+### 220. GitHub-first sem runner obrigatório
+- **Categoria:** atalho
+- **Data:** 2026-10-24
+- **Contexto:** A tentativa inicial de criar branch pelo atalho que também tenta abrir PR retornou HTTP 422 no endpoint /pulls. O caminho de commit multi-arquivo da CentralDark conseguiu criar a branch, publicar o commit e, separadamente, abrir o PR.
+- **Aprendizado:** Para mudanças documentais isoladas, reutilizar o owner canônico e usar github_commit com branch + createBranchFrom=main; fazer readback antes de abrir PR separadamente. GitHub Contents API permite edição/commit sem runner. Não tratar PR aberto como merge ou deploy. Para SSH, exigir validação de host e nunca desabilitar StrictHostKeyChecking.

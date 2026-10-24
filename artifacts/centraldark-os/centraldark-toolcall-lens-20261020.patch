@@ -1,0 +1,246 @@
+diff --git a/packages/desktop/src/renderer/pages/conversation/Messages/acp/MessageAcpToolCall.tsx b/packages/desktop/src/renderer/pages/conversation/Messages/acp/MessageAcpToolCall.tsx
+index bef8060..2f6db20 100644
+--- a/packages/desktop/src/renderer/pages/conversation/Messages/acp/MessageAcpToolCall.tsx
++++ b/packages/desktop/src/renderer/pages/conversation/Messages/acp/MessageAcpToolCall.tsx
+@@ -129,11 +129,12 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
+ 
+   if (hasOnlyDiffs) {
+     return (
+-      <div className='w-full mb-2 flex flex-col gap-8px'>
++      <details className='w-full mb-2 rounded border p-2'>
++        <summary className='cursor-pointer text-sm'>🛠️ {title || getKindDisplayName(kind)} · abrir alterações</summary>
+         {diffContent.map((contentItem, index) => (
+           <ContentView key={`${contentItem.path || 'diff'}-${index}`} content={contentItem} />
+         ))}
+-      </div>
++      </details>
+     );
+   }
+ 
+@@ -147,16 +148,18 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
+             <StatusTag status={status} />
+           </div>
+           {rawInput && (
+-            <div className='text-sm'>
++            <details className='text-sm rounded border p-2'>
++              <summary className='cursor-pointer'>📤 Solicitar · abrir conteúdo bruto</summary>
+               {typeof rawInput === 'string' ? (
+                 <MarkdownView>{`\`\`\`\n${rawInput}\n\`\`\``}</MarkdownView>
+               ) : (
+                 <pre className='bg-1 p-2 rounded text-xs overflow-x-auto'>{JSON.stringify(rawInput, null, 2)}</pre>
+               )}
+-            </div>
++            </details>
+           )}
+           {imagePath && (
+-            <div className='group relative mt-3 overflow-hidden rounded border bg-1 p-2'>
++            <details className='group relative mt-3 overflow-hidden rounded border bg-1 p-2'>
++              <summary className='cursor-pointer text-sm'>📥 Resposta · abrir imagem</summary>
+               <LocalImageView
+                 src={imagePath}
+                 alt={imageAlt}
+@@ -173,14 +176,15 @@ const MessageAcpToolCall: React.FC<{ message: IMessageAcpToolCall }> = ({ messag
+                   onClick={() => void handleDownloadImage(imagePath)}
+                 />
+               </Tooltip>
+-            </div>
++            </details>
+           )}
+           {diffContent && diffContent.length > 0 && (
+-            <div>
++            <details className='rounded border p-2'>
++              <summary className='cursor-pointer'>📥 Resposta · abrir alterações</summary>
+               {diffContent.map((item, index) => (
+                 <ContentView key={index} content={item} />
+               ))}
+-            </div>
++            </details>
+           )}
+           <div className='text-xs text-t-secondary mt-2'>Tool Call ID: {tool_call_id}</div>
+         </div>
+diff --git a/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolCall.tsx b/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolCall.tsx
+index 702c558..18a3ec6 100644
+--- a/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolCall.tsx
++++ b/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolCall.tsx
+@@ -59,7 +59,7 @@ const MessageToolCall: React.FC<{ message: IMessageToolCall }> = ({ message }) =
+   const [expanded, setExpanded] = useState(false);
+ 
+   if (name === 'replace' || name === 'Edit') {
+-    return <ReplacePreview message={message} />;
++    return <details className='tool-detail-panel m-t-4px'><summary className='cursor-pointer text-13px'>🛠️ {name} · abrir alteração</summary><ReplacePreview message={message} /></details>;
+   }
+ 
+   const normalized = normalizeToolCall(message);
+@@ -85,7 +85,7 @@ const MessageToolCall: React.FC<{ message: IMessageToolCall }> = ({ message }) =
+           onClick={hasDetail ? () => setExpanded(!expanded) : undefined}
+         >
+           <span className='font-medium text-13px'>{normalized.name}</span>
+-          {normalized.description && <span className='m-l-4px opacity-80 text-13px'>{normalized.description}</span>}
++          {/* #OBSERVACOES# Tool Call Lens: parâmetros nunca aparecem no resumo. */}
+         </span>
+         {hasDetail && (
+           <span
+@@ -98,6 +98,7 @@ const MessageToolCall: React.FC<{ message: IMessageToolCall }> = ({ message }) =
+       </div>
+       {expanded && hasDetail && (
+         <div className='tool-detail-panel m-l-20px m-t-4px'>
++          {normalized.description && <div className='tool-detail-label'>{normalized.description}</div>}
+           {normalized.input && (
+             <div className='tool-detail-section'>
+               <div className='tool-detail-label'>Input</div>
+diff --git a/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolGroup.tsx b/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolGroup.tsx
+index 98b116b..86a0e20 100644
+--- a/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolGroup.tsx
++++ b/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolGroup.tsx
+@@ -565,21 +565,18 @@ const MessageToolGroup: React.FC<IMessageToolGroupProps> = ({ message }) => {
+             />
+ 
+             {(description || result_display || status === 'Error') && (
+-              <div className='mt-8px'>
++              <div className='mt-8px space-y-2'>
+                 {description && (
+-                  <div
+-                    className={`text-12px text-t-secondary mb-2 ${status === 'Error' ? 'whitespace-pre-wrap break-words' : 'truncate'}`}
+-                  >
+-                    {description}
+-                  </div>
++                  <details className='rounded border p-2'>
++                    <summary className='cursor-pointer text-12px text-t-secondary'>📤 Solicitar · abrir conteúdo bruto</summary>
++                    <pre className='mt-2 whitespace-pre-wrap break-words text-12px'>{description}</pre>
++                  </details>
+                 )}
+                 {result_display && (
+-                  <div>
+-                    {/* 在 Alert 外展示完整结果 Display full result outside Alert */}
+-                    {/* ToolResultDisplay 内部已包含 CollapsibleContent，避免嵌套 */}
+-                    {/* ToolResultDisplay already contains CollapsibleContent internally, avoid nesting */}
++                  <details className='rounded border p-2'>
++                    <summary className='cursor-pointer text-12px text-t-secondary'>📥 Resposta · abrir conteúdo bruto</summary>
+                     <ToolResultDisplay content={content} />
+-                  </div>
++                  </details>
+                 )}
+                 {status === 'Error' && (
+                   <div className='mt-4px flex justify-end'>
+diff --git a/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolGroupSummary.tsx b/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolGroupSummary.tsx
+index 613b124..3021164 100644
+--- a/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolGroupSummary.tsx
++++ b/packages/desktop/src/renderer/pages/conversation/Messages/components/MessageToolGroupSummary.tsx
+@@ -2,7 +2,7 @@ import type { BadgeProps } from '@arco-design/web-react';
+ import { Badge, Button, Message, Spin, Tooltip } from '@arco-design/web-react';
+ import { IconDown, IconRight } from '@arco-design/web-react/icon';
+ import { Checklist, Download, Right } from '@icon-park/react';
+-import React, { useCallback, useEffect, useMemo, useState } from 'react';
++import React, { useCallback, useMemo, useState } from 'react';
+ import { useTranslation } from 'react-i18next';
+ import { ipcBridge } from '@/common';
+ import { getAcpImageFileName } from '@/common/chat/acpToolCallOutput';
+@@ -88,9 +88,7 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
+           onClick={hasDetail ? toggleExpanded : undefined}
+         >
+           <span className='font-medium text-13px'>{displayItem.name}</span>
+-          {displayItem.description && displayItem.description !== displayItem.name && (
+-            <span className='m-l-4px opacity-80 text-13px'>{displayItem.description}</span>
+-          )}
++          {/* Resumo compacto: entradas/saídas só após expansão explícita. */}
+         </span>
+         {hasDetail && (
+           <span className='flex-shrink-0 cursor-pointer hover:color-#4E5969 transition-colors' onClick={toggleExpanded}>
+@@ -116,7 +114,7 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
+           )}
+         </div>
+       )}
+-      {item.imagePath && (
++      {expanded && item.imagePath && (
+         <div className='group relative m-l-20px m-t-8px overflow-hidden rounded border bg-1 p-2 max-w-280px'>
+           <LocalImageView
+             src={item.imagePath}
+@@ -142,11 +140,7 @@ const ToolItemDetail: React.FC<{ item: NormalizedToolCall }> = ({ item }) => {
+ 
+ const MessageToolGroupSummary: React.FC<{ messages: ToolMessage[] }> = ({ messages }) => {
+   const hasRunning = hasRunningToolMessages(messages);
+-  const [showMore, setShowMore] = useState(hasRunning);
+-
+-  useEffect(() => {
+-    if (hasRunning) setShowMore(true);
+-  }, [hasRunning]);
++  const [showMore, setShowMore] = useState(false);
+ 
+   const tools = useMemo(() => normalizeToolMessages(messages), [messages]);
+ 
+@@ -156,7 +150,7 @@ const MessageToolGroupSummary: React.FC<{ messages: ToolMessage[] }> = ({ messag
+         <span className='tool-group-summary__icon'>
+           {hasRunning ? <Spin size={12} /> : <Checklist theme='outline' size='14' />}
+         </span>
+-        <span className='tool-group-summary__label'>View Steps {tools.length > 0 ? `· ${tools.length}` : ''}</span>
++        <span className='tool-group-summary__label'>🪬 Rastro de execução {tools.length > 0 ? `· ${tools.length} chamadas` : ''}</span>
+         <span className={`tool-group-summary__arrow${showMore ? ' tool-group-summary__arrow--open' : ''}`}>
+           <Right theme='outline' size='12' />
+         </span>
+diff --git a/tests/unit/chat/MessageToolGroupSummary.dom.test.tsx b/tests/unit/chat/MessageToolGroupSummary.dom.test.tsx
+index 8af7783..0bdf8ee 100644
+--- a/tests/unit/chat/MessageToolGroupSummary.dom.test.tsx
++++ b/tests/unit/chat/MessageToolGroupSummary.dom.test.tsx
+@@ -82,7 +82,8 @@ describe('MessageToolGroupSummary ACP image output', () => {
+     };
+ 
+     render(<MessageToolGroupSummary messages={[message]} />);
+-    fireEvent.click(screen.getByText('View Steps · 1'));
++    fireEvent.click(screen.getByText('🪬 Rastro de execução · 1 chamadas'));
++    fireEvent.click(screen.getByText('Image generation'));
+ 
+     const image = screen.getByTestId('local-image');
+     expect(image).toHaveAttribute('src', '/Users/test/.codex/generated_images/session/ig_test_image.png');
+@@ -113,7 +114,8 @@ describe('MessageToolGroupSummary ACP image output', () => {
+     };
+ 
+     render(<MessageToolGroupSummary messages={[message]} />);
+-    fireEvent.click(screen.getByText('View Steps · 1'));
++    fireEvent.click(screen.getByText('🪬 Rastro de execução · 1 chamadas'));
++    fireEvent.click(screen.getByText('Image generation'));
+     fireEvent.click(screen.getByLabelText('acp.image.download_aria'));
+ 
+     expect(mockDownloadFileFromPath).toHaveBeenCalledWith(imagePath, 'ig_test_image.png');
+@@ -145,7 +147,8 @@ describe('MessageToolGroupSummary ACP image output', () => {
+     };
+ 
+     render(<MessageToolGroupSummary messages={[message]} />);
+-    fireEvent.click(screen.getByText('View Steps · 1'));
++    fireEvent.click(screen.getByText('🪬 Rastro de execução · 1 chamadas'));
++    fireEvent.click(screen.getByText('Image generation'));
+     fireEvent.click(screen.getByLabelText('acp.image.download_aria'));
+ 
+     await waitFor(() => {
+@@ -179,7 +182,8 @@ describe('MessageToolGroupSummary ACP image output', () => {
+     };
+ 
+     render(<MessageToolGroupSummary messages={[message]} />);
+-    fireEvent.click(screen.getByText('View Steps · 1'));
++    fireEvent.click(screen.getByText('🪬 Rastro de execução · 1 chamadas'));
++    fireEvent.click(screen.getByText('Image generation'));
+ 
+     expect(screen.getByLabelText('acp.image.download_aria')).toBeInTheDocument();
+   });
+@@ -198,7 +202,8 @@ describe('MessageToolGroupSummary ACP image output', () => {
+     };
+ 
+     render(<MessageToolGroupSummary messages={[message]} />);
+-    fireEvent.click(screen.getByText('View Steps · 1'));
++    fireEvent.click(screen.getByText('🪬 Rastro de execução · 1 chamadas'));
++    fireEvent.click(screen.getByText('Shell Command'));
+ 
+     expect(screen.queryByTestId('local-image')).not.toBeInTheDocument();
+     expect(screen.queryByLabelText('acp.image.download_aria')).not.toBeInTheDocument();
+diff --git a/tests/unit/renderer/messageToolGroupSummary.dom.test.tsx b/tests/unit/renderer/messageToolGroupSummary.dom.test.tsx
+index b4d8343..02a6fac 100644
+--- a/tests/unit/renderer/messageToolGroupSummary.dom.test.tsx
++++ b/tests/unit/renderer/messageToolGroupSummary.dom.test.tsx
+@@ -64,7 +64,7 @@ describe('MessageToolGroupSummary', () => {
+       />
+     );
+ 
+-    fireEvent.click(screen.getByText('View Steps · 1'));
++    fireEvent.click(screen.getByText('🪬 Rastro de execução · 1 chamadas'));
+     fireEvent.click(screen.getByText('rg'));
+ 
+     await waitFor(() => {
