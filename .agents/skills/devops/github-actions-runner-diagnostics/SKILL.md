@@ -163,7 +163,7 @@ start until infra changes.
 
 ## Caminho normal de recuperação SSH — 2026-10-24
 
-O owner existente `.github/workflows/vps-wake-hosted-ssh.yml` acompanha os eventos `pull_request` e `push` usados pela porta canônica, mantendo `workflow_dispatch` como recuperação manual. Ele apenas ativa a unit existente `actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service`; o trabalho da PR continua em `porta-de-entrada.yml` usando `self-hosted, Linux`.
+O owner existente `.github/workflows/vps-wake-hosted-ssh.yml` acompanha `pull_request_target` e `push` em `main`, mantendo `workflow_dispatch` como recuperação manual. O evento privilegiado usa YAML da branch-base e nunca faz checkout do conteúdo da PR. Ele apenas ativa a unit existente `actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service`; o trabalho da PR continua em `porta-de-entrada.yml` usando `self-hosted, Linux`.
 
 A conexão SSH verifica o fingerprint ED25519 documentado antes de autenticar. A chave é temporária no runner e removida no encerramento. PRs de fork não recebem a etapa que consome os segredos.
 

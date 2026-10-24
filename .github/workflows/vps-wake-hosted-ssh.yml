@@ -2,17 +2,19 @@ name: ⚙️ VPS wake via hosted SSH
 
 # Self-hosted NÃO acorda a si mesmo. Este job roda no GitHub hosted
 # (ubuntu-latest) com as chaves VPS_*_LOVABLE já no repo; unidade VPS-1 somente.
+# PR recovery usa pull_request_target: este YAML vem da branch-base e nunca faz
+# checkout/execução do conteúdo da PR, protegendo os segredos SSH.
 # Autorizado: PERMITO SEGREDO — ativar apenas actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service após identificar unit real.
 # NÃO usa CONTABO_* (ausentes neste repo). Se a porta 22 estiver morta
 # no provedor, este job também timeout — aí só Contabo API resolve.
 
 on:
   workflow_dispatch:
-  pull_request:
+  pull_request_target:
     branches: [main, program/centraldark-convergencia-omniroute-722]
     types: [opened, reopened, synchronize, ready_for_review, edited, labeled, unlabeled]
   push:
-    branches: ['**']
+    branches: [main]
 
 permissions:
   contents: read
@@ -20,8 +22,8 @@ permissions:
 jobs:
   wake:
     # O recovery não pode depender da mesma VPS cujos runners estão offline.
-    # PRs de fork não recebem acesso aos segredos SSH.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    # PRs de fork não podem usar esta rota privilegiada.
+    if: ${{ github.event_name != 'pull_request_target' || github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:

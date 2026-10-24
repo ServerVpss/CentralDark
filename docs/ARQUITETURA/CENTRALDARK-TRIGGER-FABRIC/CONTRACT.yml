@@ -514,7 +514,7 @@ ci_binding:
     forbidden_labels: [ubuntu-latest, windows-latest, macos-latest]
     scoped_exception:
       workflow: .github/workflows/vps-wake-hosted-ssh.yml
-      triggers: [PULL_REQUEST, PUSH_COMMIT, WORKFLOW_DISPATCH]
+      triggers: [PULL_REQUEST_TARGET, PUSH_MAIN, WORKFLOW_DISPATCH]
       authority: EXISTING_PERMITO_SEGREDO_PLUS_CHEFE_DELTA_2026_10_24
       purpose: WAKE_CANONICAL_VPS_SELF_HOSTED_RUNNER_OVER_SSH
       pinned_hostkey_sha256: "SHA256:KkbBd5sOR1boP8ldlWh45eWN2DY8RPjOHtXX+4FQhIE"

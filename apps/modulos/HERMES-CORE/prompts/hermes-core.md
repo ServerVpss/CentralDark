@@ -509,12 +509,12 @@ Artefato auxiliar temporário não vira patrimônio canônico por ter sido usado
 Cristal obrigatório desta classe de incidente CI:
 
 ```text
-SIGNATURE=GITHUB_HOSTED_RUNNER_SELECTED_WHILE_HOUSE_IS_SELF_HOSTED
+SIGNATURE=GITHUB_HOSTED_RUNNER_SELECTED_OUTSIDE_AUTHORIZED_VPS_WAKE_RECOVERY
 CAUSE_CLASS=EXECUTOR_ROUTE_POLICY_VIOLATION
-DEFAULT_REMEDIATION=BIND_EXISTING_WORKFLOW_TO_[self-hosted,Linux]
-PLATFORM_EXCEPTION=SELF_HOSTED_ONLY_WITH_CAPABILITY_PROOF
+DEFAULT_REMEDIATION=KEEP_WORKLOAD_SELF_HOSTED_AND_USE_EXISTING_WAKE_OWNER
+PLATFORM_EXCEPTION=VPS_WAKE_ONLY_WITH_PINNED_SSH_AND_HOSTED_RUNNER_REQUIRED
 NEW_EQUIVALENT_WORKFLOW=FORBIDDEN
-NEXT_OCCURRENCE=BLOCK_BEFORE_MERGE_AND_REUSE_CRYSTAL
+NEXT_OCCURRENCE=BLOCK_UNSCOPED_HOSTED_WORKLOAD_AND_REUSE_CRYSTAL
 ```
 
 A política vale para qualquer workflow raiz ativo e qualquer PR/commit que atravesse a Casa. Linux self-hosted é o default; necessidade real de Windows/macOS não autoriza GitHub-hosted — exige runner self-hosted da plataforma e prova da capacidade específica. Se esse runner não existir/estiver indisponível, preserve `BLOCKED/UNKNOWN`; não maquie de verde.

@@ -370,7 +370,7 @@ jobs:
           echo "RUNNER_RECOVERY_TRANSPORT=SSH_PINNED_VPS_HOSTKEY"
           echo "ANY_BRANCH_PUSH_GATED=1"
           echo "ROTA_PRIMARIA=self-hosted-linux"
-          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED_EXECUTION"
+          echo "ROTA_FALLBACK=BLOCKED_NO_HOSTED"
           echo "CENTRALDARK_ROOT_ONLY=1"
           echo "WORKFLOW_REUSE_REQUIRED=1"
           echo "AI_DETERMINISTIC_FALLBACK_REQUIRED=1"
