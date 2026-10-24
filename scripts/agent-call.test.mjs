@@ -77,6 +77,42 @@ const state = {
     fixed_point: false,
   },
 };
+const FIXED_POINT_HEADER_IDS = [
+  "OWNER_UNIQUE", "LOCKS_PRESERVED", "MCP_PUBLIC_HEALTH", "ONE_HEART_FRESH",
+  "SCREENPIPE_CURRENT", "AIONUI_STDIO_CURRENT", "LOG_PRIVACY_CURRENT",
+  "CHECKOUT_MAIN_SYNC", "FORENSIC_FRESHNESS", "RECEIPT_PRESENT",
+];
+
+function makeExecutionHeader() {
+  const measuredAt = new Date().toISOString();
+  return {
+    schema: "centraldark.fixed-point.execution-header.v1",
+    evaluator: "scripts/lupa/horn-reuse-fixed-point.mjs",
+    agent_id: "sol",
+    mission_id: "M-1",
+    intent_id: "intent-test-1",
+    goal_fingerprint: "fingerprint-test-1",
+    observed_head: "abc123",
+    measured_at: measuredAt,
+    evaluation_ref: "test:fixed-point-evaluation",
+    execution_ref: "test:agent-call",
+    criteria: FIXED_POINT_HEADER_IDS.map((id) => ({
+      id,
+      evaluated: true,
+      status: "UNKNOWN",
+      source: "test-source:" + id,
+      attempt_ref: "test-attempt:" + id,
+      evaluated_at: measuredAt,
+      measured_at: measuredAt,
+      reason: "sensor not asserted in this unit fixture",
+      next_cursor: "VERIFY_" + id,
+    })),
+    verdict: "NEXT_DELTA",
+    next_cursor: "VERIFY_OWNER_UNIQUE",
+    goal_receipt: null,
+  };
+}
+
 const base = {
   call_id: "C-1",
   mission_id: "M-1",
@@ -88,6 +124,7 @@ const base = {
   scope: ["repo:read"],
   requested_action: "prove X",
   write_requested: false,
+  fixed_point_execution_header: makeExecutionHeader(),
 };
 
 let pass = 0;
