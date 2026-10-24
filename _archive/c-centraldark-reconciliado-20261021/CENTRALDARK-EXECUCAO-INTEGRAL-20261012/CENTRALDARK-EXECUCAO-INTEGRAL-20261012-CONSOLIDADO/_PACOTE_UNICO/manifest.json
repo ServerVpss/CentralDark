@@ -1,0 +1,59 @@
+{
+  "schema": "centraldark.bundle.local.consolidated.v1",
+  "date_utc": "2026-10-13T09:01:48.167717+00:00",
+  "main_operational_package": "CENTRALDARK-EXECUCAO-INTEGRAL-20261012-V4-LOG-UNICO.zip",
+  "v4_members_exact": {
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/PACOTE-SHA256.json": "f88c90b03c9981bc6ed33dc3104aada2abd214fdca45a495077f43417bece20a",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/README.md": "2bebd7f6e65029a99631abe6549665198f62ad65abf38e3adbb9019305a45c4a",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/executar-tudo.sh": "6391f69fafc3443e6a14175fa48796ee1b8c8c377f71c3f4c36e5859fcd4afa4",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/executar-casa.ps1": "50e979386444c02dac5a796d2390ccaa86d9b002ce5935c53f024d0a2d2dec5f",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/tools/testar-pacote.py": "999114f3e667bbeba90a13f1ce58baedb2010627cba9b0f0ccd09207298681c5",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/tools/exportar-codigo-fixado.sh": "675095443f556ec8bc3795c9513c9858dba2acbcf0fbb290fdd1203e500b6d39",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/tools/verificar-integridade.py": "b461f17411516e09a1171c0ffd3fccb0e8137b8709dfcd0384df955fc472f474",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/EVIDENCIAS/RECEIPTS-20261012.json": "55a10d5f83ed220b1a388a12a06a622be29a7df6b3ddedb32f652db2b1887bcb",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/EVIDENCIAS/PLANO-HAKAI-E-REBUILDER.md": "ddfeb404506ef7cf8519af1e87875a6069814c9993ce064dbde2445946d3b34d",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/EVIDENCIAS/ROTAS-20261012.json": "e9a15e3434d48ba65551b2b7a2b55b0a2b8cdfa6eac2b3afd6f8cb9c7e8f9223",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/EVIDENCIAS/10-MELHORIAS-MCP.md": "8e7292f309e3692b0f3aff47774e774ed1ff6183ba29a5d81abb41687b6bb03e",
+    "CENTRALDARK_EXECUCAO_INTEGRAL_20261012/EVIDENCIAS/EXECUCAO-PASSO-A-PASSO.md": "f007009879e122cf6272e8e37945dcd1354d9c6a848b3f97df0d846b0d963b71"
+  },
+  "sources_main_archived": {
+    "_FONTES_MAIN_20261012/apps/modulos/mcp/src/lib/admin-guard.js": "50874e1b233cb1947c518a6a22af3b4102931885fcc2571698d33cc50d7e2e1d",
+    "_FONTES_MAIN_20261012/apps/modulos/mcp/src/tools/core/mcp-admin.js": "62eb7514732fdda1ba9824b12aacc456368d5c6391e75aed387fe6161ed9d7f9",
+    "_FONTES_MAIN_20261012/apps/modulos/mcp/tests/admin-guard-core.test.mjs": "ef75ee3564d321d6acb68298f663ff7e465a59a0b50cb0ae75eb92732e6416fa",
+    "_FONTES_MAIN_20261012/scripts/centraldark-inventory-reconcile.sh": "b56706f65fd045acc60dc88d11643362faded88ae9f0a504a7ec17bf2a906830",
+    "_FONTES_MAIN_20261012/scripts/vps/main-pulse-reconciler.sh": "c932a1202ee7dd5497debc5ab27f2fe52459739871487380053c6c704ca6bcac"
+  },
+  "original_zips": {
+    "CENTRALDARK-EXECUCAO-FONTES-MAIN-20261012.zip": {
+      "sha256": "102b1881882d761ce19eaa8106ffdfe6baf35ee93eb58e2058279da3f33e01c6",
+      "bytes": 36734,
+      "embedded_as": "_HISTORICO_ORIGINAL_ZIPS/CENTRALDARK-EXECUCAO-FONTES-MAIN-20261012.zip"
+    },
+    "CENTRALDARK-EXECUCAO-INTEGRAL-20261012-V2.zip": {
+      "sha256": "a6f7d19774f57ca310ddf64931459583462cead22ecce759798ada6d23271129",
+      "bytes": 32739,
+      "embedded_as": "_HISTORICO_ORIGINAL_ZIPS/CENTRALDARK-EXECUCAO-INTEGRAL-20261012-V2.zip"
+    },
+    "CENTRALDARK-EXECUCAO-INTEGRAL-20261012-V3.zip": {
+      "sha256": "e9b4a22ee0b7b15ed7ac2d0bad7cff573d4709fd248cd0287c22ce2c548fcb19",
+      "bytes": 36784,
+      "embedded_as": "_HISTORICO_ORIGINAL_ZIPS/CENTRALDARK-EXECUCAO-INTEGRAL-20261012-V3.zip"
+    },
+    "CENTRALDARK-EXECUCAO-INTEGRAL-20261012-V4-LOG-UNICO.zip": {
+      "sha256": "3791780bba3cc4a30eaa3243ab5c7b93def4ec347afee83e5fbb3c96c1ae8ecf",
+      "bytes": 39775,
+      "embedded_as": "_HISTORICO_ORIGINAL_ZIPS/CENTRALDARK-EXECUCAO-INTEGRAL-20261012-V4-LOG-UNICO.zip"
+    },
+    "CENTRALDARK-EXECUCAO-INTEGRAL-20261012.zip": {
+      "sha256": "12f5f21bf4724ce1b6e11961fd5eccad0177b424c9da42eba9d10fb9b0721811",
+      "bytes": 22571,
+      "embedded_as": "_HISTORICO_ORIGINAL_ZIPS/CENTRALDARK-EXECUCAO-INTEGRAL-20261012.zip"
+    }
+  },
+  "notes": [
+    "Apenas consolidação local; nenhum script executado, nenhuma sincronizacao main/Casa/VPS.",
+    "Textos TXT e accountchooser.htm ficam fora do pacote, preservados na pasta de origem.",
+    "_FONTES_MAIN e _HISTORICO sao referencias, nao fontes de deploy automatico.",
+    "Pacote V4 mantém todos os 12 membros internos com bytes originais; seu PACOTE-SHA256.json permanece valido."
+  ]
+}

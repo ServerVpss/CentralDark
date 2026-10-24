@@ -16,12 +16,12 @@ Memória expandida da sessão. Não substitui CURRENT nem os owners atômicos. R
 ## 2. Organização física observada na Casa
 
 Snapshot desta sessão:
-- E:\CentralDark funcionava como raiz de organização/orquestração, não como checkout monolítico.
-- E:\CentralDark\w-skills foi observado como worktree Git real de ServerVpss/CentralDark, com 11.333 tracked files na medição.
-- E:\CentralDark\CentralDark agrupava workspaces por data.
+- K:\ funcionava como raiz de organização/orquestração, não como checkout monolítico.
+- K:\w-skills foi observado como worktree Git real de ServerVpss/CentralDark, com 11.333 tracked files na medição.
+- K:\ agrupava workspaces por data.
 - _IMPORTS segregava donors/imports.
 - _MAPA_CASA carregava receipts.
-- E:\CentralDark\Pivete foi medido ausente naquele momento, embora referências históricas ainda existissem.
+- K:\ foi medido ausente naquele momento, embora referências históricas ainda existissem.
 
 Regra: snapshot local não é invariante. Revalidar paths/HEADs antes de chamar de CURRENT.
 

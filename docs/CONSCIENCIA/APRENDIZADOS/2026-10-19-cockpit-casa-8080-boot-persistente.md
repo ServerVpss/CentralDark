@@ -17,7 +17,7 @@ A porta não pode ser inferida do nome de um arquivo BAT, de texto histórico ou
 
 - `apps/instinto-superior/INICIAR-COCKPIT-LOCAL.bat` (launcher manual existente; agora chama a receita única).
 - `scripts/casa/instinto-cockpit-autostart.ps1` (receita de boot idempotente: `node.exe node_modules/vite/bin/vite.js --host 0.0.0.0 --port 8080 --strictPort` a partir de `K:\apps\instinto-superior`).
-- `docs/LEMBRANCAS/instinto-superior-dev-server-3000.md` (contrato operacional atualizado, preservando o histórico em vez de reescrevê-lo).
+- `docs/CONSCIENCIA/LEMBRANCAS/instinto-superior-dev-server-3000.md` (contrato operacional atualizado, preservando o histórico em vez de reescrevê-lo).
 - Agendador de Tarefas Windows local: **`CentralDark-Cockpit-8080`**, executada por `SYSTEM`, três gatilhos — ao iniciar Windows, ao logon, rechecagem a cada **5 minutos**; período de repetição configurado para **3650 dias** a partir de 2026, a renovar antes do vencimento. `MultipleInstances=IgnoreNew`. A tarefa pertence ao computador Casa e **não é versionada no GitHub**: o script é versionado, a instalação/recriação da tarefa noutra máquina exige execução e contraprova próprias.
 
 A receita reutiliza o processo existente se ele pertence ao Instinto Vite e responde HTTP 200; não cria cópia, não encerra outro dono da porta, não reinicia Hermes, não executa `npm ci` ou `git reset`. Quando a 8080 está ocupada por outro processo ou com serviço Vite não saudável, retorna bloqueio local em vez de declarar verde. Logs stdout/stderr ficam em `F:\temp\centraldark-cockpit-8080-*.log`; sem escrever credenciais deliberadamente. O disco `K:\`, a instalação Node e dependências do Cockpit precisam estar disponíveis após o boot.

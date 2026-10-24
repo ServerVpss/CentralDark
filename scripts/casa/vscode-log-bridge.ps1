@@ -11,7 +11,7 @@ param(
   [switch]$Bootstrap
 )
 $ErrorActionPreference = "Stop"
-# A unica origem Casa e a raiz Git K:\; E:\CentralDark e C:\CentralDark sao legados.
+# A unica origem Casa e a raiz Git K:\; K:\ e C:\CentralDark sao legados.
 # O perfil Windows (e seu cache ms-playwright) permanece independente da raiz Git.
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..')).TrimEnd('\')
 if ($env:OS -eq 'Windows_NT' -and $repoRoot -ine 'K:') {
