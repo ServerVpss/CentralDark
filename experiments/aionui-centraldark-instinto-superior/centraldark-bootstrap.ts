@@ -32,11 +32,15 @@ function copyDirIfMissing(source: string, target: string): boolean {
 }
 
 function candidateRepoRoots(): string[] {
-  return [
-    process.env.CENTRALDARK_REPO_ROOT?.trim() || '',
-    path.join(os.homedir(), 'CentralDark'),
-    path.join(app.getPath('userData'), 'CentralDark'),
-  ].filter(Boolean);
+  const explicitRoot = process.env.CENTRALDARK_REPO_ROOT?.trim() || '';
+  if (process.platform === 'win32') {
+    // Casa: K: is the Git/Forja root; never use C: userData as a fallback checkout.
+    return [explicitRoot, 'K:/'].filter(
+      (candidate) => candidate && path.win32.parse(candidate).root.slice(0, 2).toUpperCase() === 'K:',
+    );
+  }
+  return [explicitRoot, path.join(os.homedir(), 'CentralDark'), path.join(app.getPath('userData'), 'CentralDark')]
+    .filter(Boolean);
 }
 
 function isCentralDarkRepo(root: string): boolean {
@@ -69,6 +73,12 @@ function resolveRepoRoot(): string | null {
     if (isCentralDarkRepo(candidate)) return candidate;
   }
 
+  // Missing K: is a real block, never permission to copy/clone into Windows C:.
+  if (process.platform === 'win32') {
+    console.warn('[CentralDark] BLOCKED_FORJA_K_UNAVAILABLE: no copy or clone performed');
+    return null;
+  }
+
   const target = path.join(app.getPath('userData'), 'CentralDark');
   const seed = resolveSeedRoot();
   if (seed && copyDirIfMissing(seed, target) && isCentralDarkRepo(target)) {
@@ -81,7 +91,23 @@ function resolveRepoRoot(): string | null {
 }
 
 function startHermes(repoRoot: string): void {
-  const runtimeDir = path.join(app.getPath('userData'), 'centraldark-runtime');
+  let runtimeDir = path.join(app.getPath('userData'), 'centraldark-runtime');
+  if (process.platform === 'win32') {
+    // Address the existing K:_WORKER junction; the runtime bytes must live on F:.
+    const workerLink = path.join(repoRoot, '_WORKER');
+    try {
+      const physical = fs.realpathSync.native(workerLink);
+      const physicalDrive = physical.toUpperCase().match(/[A-Z]:/)?.[0];
+      if (physicalDrive !== 'F:') {
+        console.warn('[CentralDark] BLOCKED_WORKER_NOT_ON_F:', physical);
+        return;
+      }
+    } catch (error) {
+      console.warn('[CentralDark] BLOCKED_WORKER_JUNCTION_UNAVAILABLE:', error);
+      return;
+    }
+    runtimeDir = path.join(workerLink, 'centraldark-runtime');
+  }
   fs.mkdirSync(runtimeDir, { recursive: true });
   const pidFile = path.join(runtimeDir, 'hermes-core.pid');
 

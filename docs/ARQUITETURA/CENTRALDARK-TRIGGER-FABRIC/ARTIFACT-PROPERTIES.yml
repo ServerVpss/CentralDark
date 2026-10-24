@@ -155,8 +155,8 @@ rules:
   npm_npx_cache_node_modules_is_source_code: false
   package_manager_cache_must_not_be_copied_into_apps_modulos: true
   source_dependency_promotion_requires_existing_owner_or_manifest: true
-  casa_tmp_owner: E:\CentralDark\_tmp
-  casa_cache_owner: E:\CentralDark\cache
+  casa_tmp_owner: K:\_tmp
+  casa_cache_owner: K:\cache
   casa_site_build_preview_owner: C:\CentralDark
   same_taxonomy_does_not_mean_same_environment_state: true
 

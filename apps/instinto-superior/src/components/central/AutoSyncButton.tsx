@@ -95,27 +95,27 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatusColor = () => {
     switch (syncStatus.status) {
-      case 'success': return 'bg-green-50 border-green-200'
-      case 'syncing': return 'bg-blue-50 border-blue-200'
-      case 'failed': return 'bg-red-50 border-red-200'
-      case 'conflict': return 'bg-yellow-50 border-yellow-200'
-      default: return 'bg-gray-50 border-gray-200'
+      case 'success': return 'bg-emerald-500/10 border-emerald-500/40'
+      case 'syncing': return 'bg-sky-500/10 border-sky-500/40'
+      case 'failed': return 'bg-red-500/10 border-red-500/40'
+      case 'conflict': return 'bg-amber-500/10 border-amber-500/40'
+      default: return 'bg-muted/30 border-border'
     }
   }
 
   return (
     <div className="space-y-3">
       <Card className={`p-4 border ${getStatusColor()}`}>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             {getStatusIcon()}
             <div>
-              <p className="text-sm font-semibold">Auto Sync: Casa / Main / VPS</p>
-              <p className="text-xs text-gray-600">{syncStatus.human_readable}</p>
+              <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main / VPS</p>
+              <p className="text-xs text-muted-foreground">{syncStatus.human_readable}</p>
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button onClick={() => handleSync('windows')} disabled={isSyncing} size="sm" variant="outline">
               Windows
             </Button>
@@ -133,22 +133,22 @@ export const AutoSyncButton: React.FC = () => {
         </div>
       </Card>
 
-      <Card className="p-4 border border-amber-200 bg-amber-50">
-        <div className="flex items-center justify-between">
+      <Card className="p-4 border border-amber-500/40 bg-amber-500/10">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Zap className="w-5 h-5 text-amber-600" />
+            <Zap className="w-5 h-5 text-amber-400" />
             <div>
-              <p className="text-sm font-semibold">Automação CentralDark · execução segura</p>
-              <p className="text-xs text-amber-700">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
+              <p className="text-sm font-semibold text-foreground">Automação CentralDark · execução segura</p>
+              <p className="text-xs text-amber-200/80">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <select
               value={microDeployMode}
               onChange={(e) => setMicroDeployMode(e.target.value as 'main-only' | 'full')}
               disabled={isSyncing}
-              className="px-2 py-1 text-xs border border-amber-300 rounded bg-white"
+              className="px-2 py-1 text-xs border border-amber-500/40 rounded bg-background text-foreground"
             >
               <option value="main-only">Main Only (rapido)</option>
               <option value="full">Full (Casa/VPS/Main)</option>
