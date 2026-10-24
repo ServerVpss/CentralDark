@@ -403,6 +403,19 @@ export function validateGlobalContractGate(gate, state = null, expectedPhase = "
   if (state?.head?.sha && gate.observed_head !== state.head.sha) {
     return status("BLOCKED_STALE_HEAD", { expected_head: state.head.sha });
   }
+  const fixedPointHeader = validateFixedPointExecutionHeader(
+    gate.fixed_point_execution_header,
+    {
+      expectedMissionId: gate.mission_id || state?.mission_id,
+      expectedHead: gate.observed_head,
+    },
+  );
+  if (fixedPointHeader.accepted !== true) {
+    return status(fixedPointHeader.status || "BLOCKED_FIXED_POINT_EXECUTION_HEADER_NOT_USED", {
+      fixed_point_execution_header: fixedPointHeader,
+      next_cursor: "EMIT_CURRENT_TEN_CRITERION_HEADER",
+    });
+  }
   if (!nonEmpty(gate.trace_id)) return status("BLOCKED_GLOBAL_CONTRACT_TRACE_MISSING");
   if (!nonEmpty(gate.next_cursor) && gate.fixed_point !== true) return status("BLOCKED_GLOBAL_CONTRACT_NEXT_CURSOR_MISSING");
 
@@ -432,6 +445,11 @@ export function validateGlobalContractGate(gate, state = null, expectedPhase = "
       return status("BLOCKED_GLOBAL_CONTRACT_SAME_HEAD_CI");
     }
     if (gate.fixed_point === true && gate.aggregate_fixed_point_pass !== true) return status("BLOCKED_GLOBAL_CONTRACT_FALSE_FIXED_POINT");
+    if (gate.fixed_point === true && fixedPointHeader.header_usage !== "USED_AND_FIXED_POINT") {
+      return status("BLOCKED_GLOBAL_CONTRACT_FIXED_POINT_HEADER_NOT_SEALED", {
+        fixed_point_execution_header: fixedPointHeader,
+      });
+    }
   }
   return {
     protocol: PROTOCOL,
@@ -446,6 +464,8 @@ export function validateGlobalContractGate(gate, state = null, expectedPhase = "
     trace_id: gate.trace_id,
     next_cursor: gate.next_cursor || null,
     fixed_point: gate.fixed_point === true,
+    fixed_point_execution_header_status: fixedPointHeader.status,
+    fixed_point_header_usage: fixedPointHeader.header_usage,
   };
 }
 
