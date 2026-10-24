@@ -292,6 +292,8 @@ test("global Fixed Point exige os mesmos dez critérios nomeados pelo HUD e Goal
   assert.equal(result.required_pass, 10);
   assert.equal(result.verdict, "FIXED_POINT");
   assert.equal(result.fixedPoint, true);
+  assert.equal(result.header_usage, "USED_AND_FIXED_POINT");
+  assert.equal(result.criteria_attempts_current, 10);
   assert.equal(result.next_cursor, "FIXED_POINT");
   assert.deepEqual(result.criteria.map((row) => row.id), FIXED_POINT_TEN_CRITERIA.map((row) => row.id));
 });
@@ -306,6 +308,8 @@ test("os dois avaliadores restantes são critérios obrigatórios e não viram P
     goalReceipt: fixedPointTenGoalReceipt(),
   }, { nowMs: fixedNow, maxAgeMs: 5000 });
   assert.equal(result.required_pass, 8);
+  assert.equal(result.header_usage, "USED_WITH_GAPS");
+  assert.equal(result.criteria_attempts_current, 10);
   assert.equal(result.criteria.find((row) => row.id === "FORENSIC_FRESHNESS").status, "UNKNOWN");
   assert.equal(result.criteria.find((row) => row.id === "RECEIPT_PRESENT").status, "UNKNOWN");
   assert.equal(result.fixedPoint, false);
@@ -318,6 +322,8 @@ test("Fixed Point de dez não fecha sem receipt de Goal mesmo quando os dez crit
   });
   assert.equal(result.required_pass, 10);
   assert.equal(result.goal_receipt_status, "UNKNOWN");
+  assert.equal(result.header_usage, "USED_WITH_GAPS");
+  assert.equal(result.criteria_attempts_current, 10);
   assert.equal(result.fixedPoint, false);
   assert.equal(result.next_cursor, "GOAL_RECEIPT_REQUIRED");
 });
