@@ -15,7 +15,8 @@ process.env.MCP_ADMIN_STARTUP_LOCK = path.join(TMP, ".startup.json");
 const {
   evaluateAdminConfirmation, reconcileCatalog, writeAuditEvent, verifyChain, verifyAuditDirectory,
   guardDestructive, auditStartupSnapshot, getCanonicalExpectation,
-  CANONICAL_DESTRUCTIVE_TOOLS, CATALOG_VERSION, MANIFEST_HASH,
+  CANONICAL_DESTRUCTIVE_TOOLS, CANONICAL_KNOWN_DESTRUCTIVE_TOOLS,
+  DESTRUTIVAS_EM_REVISAO, CATALOG_VERSION, MANIFEST_HASH,
 } = await import("../src/lib/admin-guard.js");
 
 // O manifesto aprovado e lido do MESMO arquivo que o guard le. Nenhuma
@@ -88,6 +89,37 @@ test("getCanonicalExpectation devolve versão e lista congelada", () => {
   assert.deepEqual([...exp.expectedDestructiveNames].sort(), [...CANONICAL_DESTRUCTIVE_TOOLS].sort());
 });
 
+test("politica expandida: 20 conhecidos, 12 aprovados e 8 em revisao sem falso count_mismatch", async () => {
+  const exp = getCanonicalExpectation();
+  const reviews = DESTRUTIVAS_EM_REVISAO.map((e) => ({name:e.nome, annotations:{destructiveHint:true}}));
+  const tools = [...makeRuntime().tools, ...reviews];
+  assert.equal(CANONICAL_KNOWN_DESTRUCTIVE_TOOLS.length, 20);
+  assert.equal(exp.expectedDestructiveCount, 12);
+  assert.equal(exp.expectedKnownDestructiveCount, 20);
+  assert.deepEqual([...exp.expectedKnownDestructiveNames], [...CANONICAL_KNOWN_DESTRUCTIVE_TOOLS]);
+  const rec = reconcileCatalog(tools, exp);
+  assert.equal(rec.destructiveCount, 20);
+  assert.equal(rec.approvedInRuntimeCount, 12);
+  assert.equal(rec.knownInRuntimeCount, 20);
+  assert.equal(rec.ok, true, "catalogo conhecido nao e desvio");
+  assert.deepEqual(rec.registeredReview.sort(), DESTRUTIVAS_EM_REVISAO.map((e) => e.nome).sort());
+  assert.deepEqual(rec.unknownDestructive, []);
+  assert.deepEqual(rec.quarantined.sort(), rec.registeredReview.sort(), "revisao continua quarentena pontual");
+  const approved = await guardDestructive({
+    toolName: CANONICAL_DESTRUCTIVE_TOOLS[0], adminAuthorized:true,
+    confirmAdmin:"CONFIRMO ADMIN", runtimeTools:tools
+  });
+  assert.equal(approved.allow,true);
+  const reviewed = await guardDestructive({
+    toolName: reviews[0].name, adminAuthorized:true,
+    confirmAdmin:"CONFIRMO ADMIN", runtimeTools:tools
+  });
+  assert.equal(reviewed.allow,false);
+  assert.equal(reviewed.status,"DESTRUTIVA_EM_QUARENTENA");
+  const newcomer = reconcileCatalog([...tools, {name:"intrusa_teste",annotations:{destructiveHint:true}}],exp);
+  assert.equal(newcomer.ok,false);
+  assert.deepEqual(newcomer.unknownDestructive,["intrusa_teste"]);
+});
 test("reconcileCatalog: runtime = baseline → ok", () => {
   const rec = reconcileCatalog(makeRuntime().tools, getCanonicalExpectation());
   assert.equal(rec.ok, true);
