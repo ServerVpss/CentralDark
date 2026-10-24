@@ -283,6 +283,15 @@ export function validateFixedPointExecutionHeader(header, options = {}) {
     goalReceipt,
     currentHead: header.observed_head,
   }, { nowMs, maxAgeMs });
+  const suppliedRows = new Map(header.criteria.map((row) => [row.id, row]));
+  const statusMismatch = evaluated.criteria.find((row) => suppliedRows.get(row.id)?.status !== row.status);
+  if (statusMismatch) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_STATUS_MISMATCH", {
+      criterion_id: statusMismatch.id,
+      declared_status: suppliedRows.get(statusMismatch.id)?.status || null,
+      evaluated_status: statusMismatch.status,
+    });
+  }
   const declaredVerdict = header.verdict;
   const declaredCursor = header.next_cursor;
   if (declaredVerdict !== evaluated.verdict || declaredCursor !== evaluated.next_cursor) {
