@@ -1547,6 +1547,17 @@ Conteúdo: Resumo das evidências coletidas durante a missão:
    - Corrigir PM2 SyntaxError
    - Testar /admin/api/tools com sessão admin válida
 
+<!-- CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
+### [2026-10-21] CHEFE externaliza como um Harness brasileiro deve falar
+- **Data:** 2026-10-21; **Tags:** chefe, inteligencia, linguagem-produto, ux-writing, pt-br, mermaid, harness, cockpit, voz.
+- **Fonte do contexto:** CHEFE observou no Cockpit termos de diagnóstico `áudio não comprovado` / `UNKNOWN` e questionou com humor se um aplicativo Windows moderno pediria ao usuário para comprovar o áudio antes de ativar o microfone.
+- **Lição humana:** o CHEFE não pediu para dispensar testes. Pediu comunicação natural: no fluxo principal `Ativar microfone`, `Ouvindo...` somente com captura ativa, `Conectar dispositivo` e `Verificar conexão`; logs, códigos, PIDs e receipts ficam acessíveis em `Detalhes técnicos`.
+- **Papéis que deseja ver no mapa:** CHEFE (intenção) → CentralDark/Sala de Controle → JARVIS assistente / Hermes executor / Harness orquestração → um estado operacional → interface em português natural + detalhes técnicos.
+- **Regra promovida em fonte de conhecimento (branch):** [[MAPA-DO-CEREBRO]] (Mermaid + glossário completo), [[GUIA-COMUNICACAO-SEGREDO-CHEFE]], [[APRENDIZADOS]] #218 (ID canônico após convergência; referência provisória anterior #211 preservada como histórico).
+- **Estado:** proveniência histórica **sem autoridade de runtime**; atualização do Cockpit, sync com Obsidian na Casa, CI e implantação requerem prova posterior.
+- **PR equivalente:** https://github.com/ServerVpss/CentralDark/pull/1895.
+- **NEXT_CURSOR:** PR1895_DOCS_READBACK → CI_MESMO_SHA → RESPONSAVEL_UI → MUDANCA_DE_ROTULOS → VISUAL_READBACK → FIXED_POINT.
+<!-- /CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
 ### [2026-10-22T21:44] 🍒 ZENDRIVE para todos — recuperar owner, não inventar memória
 - **Data:** 2026-10-22
 - **Tags:** centraldark, zendrive, todos-agentes, memoria, circuito, owner, pr1842, no-falso-verde

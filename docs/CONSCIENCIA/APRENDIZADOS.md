@@ -3248,6 +3248,65 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Contexto:** Cline tenda marcar tarefa concluída apenas por código compilar; nova regra exige contraprova visual e funcional na interface de operação
 - **Aprendizado:** Não basta o código funcionar; a experiência do usuário precisa funcionar na mesma interface em que ele vai operar. Mudanças que afetam o cockpit exigem contraprova visual/funcional dos controles relacionados ao escopo alterado.
 
+<!-- CANARY_RECONCILIATION_PR1895_20261022: provisional branch lessons 211-214 remapped to canonical 218-221, while main 211-217 and original marker IDs are preserved. -->
+<!-- CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
+### 218. Linguagem profissional brasileira do Harness — humano na tela, diagnóstico nos detalhes
+- **Categoria:** regra + correção de entendimento da intenção do CHEFE.
+- **Data:** 2026-10-21.
+- **Autoridade:** SEGREDO/CHEFE, após imagem do Mermaid `CHEFE → CentralDark → JARVIS/Hermes/Harness → estado operacional único → português natural/detalhes técnicos`.
+- **Erro aprendido:** exibir `áudio não comprovado`, `UNKNOWN` ou `receipt não consultado` como mensagem principal de um programa transforma linguagem de produto em log; recurso opcional desligado não é falha.
+- **Cristal:** `ESTADO_REAL → (TEXTO_PT_BR_ORIENTADO_A_ACAO, DETALHE_TECNICO_SOB_DEMANDA)`. Mesma realidade operacional, duas apresentações; nenhuma segunda memória, Harness, Hermes ou Cockpit.
+- **Exemplos condicionais:** `MIC_DISABLED → Ativar microfone`; `AUDIO_CAPTURE_ACTIVE → Ouvindo...`; `CONNECTION_FAILED → Conexão perdida · Reconectar`; `QUEUE_EMPTY` após leitura → `Nenhuma tarefa no momento`; fila não lida → `Consultar atividades`; `TASK_SUCCESS` provado → `Concluído`.
+- **Papéis sem renomeação técnica:** CHEFE é autoridade; JARVIS/SOL interpreta e coordena; Harness organiza; Hermes executa; Cockpit oferece superfície humana; Reality Judge e receipts preservam contraprova.
+- **Idioma:** textos estáticos simples, acessíveis e universais em pt-BR; JARVIS pode conversar com baianês espontâneo quando contextual.
+- **Travas:** `OFF != FAILURE`, `UNKNOWN != PASS`, `UI_RENDERED != EXECUTION_PASS` e `MERGED != DEPLOYED`. Não confundir animação da esfera com áudio ativo.
+- **Mermaids e mapa cognitivo:** [[MAPA-DO-CEREBRO]] seção `Linguagem de produto do Harness`; guia [[GUIA-COMUNICACAO-SEGREDO-CHEFE]]; memória de proveniência [[LEMBRANCAS]].
+- **Bibliografia oficial conferida:** GOV.BR linguagem simples; Microsoft Windows escrita e controles. Links no mapa.
+- **Owner/PR equivalente:** [#1895](https://github.com/ServerVpss/CentralDark/pull/1895), mesma superfície visual e mesmo owner de conhecimento. Não há novo app/scheduler/agente.
+- **CURRENT:** regra documentada em branch; mudanças no executável, build, sincronização com Obsidian Casa e deploy permanecem UNKNOWN até readback.
+- **NEXT_CURSOR:** `READBACK_DOCS_1895 → CHECKS_HEAD_EXATO → UI_OWNER_MICROCOPY → TESTES_DE_ESTADO_E_ACESSIBILIDADE → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.
+<!-- /CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
+
+
+<!-- CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
+### 219. Observabilidade do Cockpit pelo browser conectado sem dependência de Desktop Commander
+- **Categoria:** descoberta de rota / correção de comportamento.
+- **Data:** 2026-10-21.
+- **Erro:** tratar status de um dispositivo Desktop Commander como condição necessária para observar o Cockpit.
+- **Prova:** conexão Browser listou dez abas, incluindo `Cockpit CentralDark — Sala de Controle` (`127.0.0.1:8080/sala-controle`), e `get_tab_context` retornou DOM textual, botões, abas, comandos da moldura, painéis e seus estados. Simultaneamente a ponte Tailscale reportou VPS/Casa online. **Nenhuma chamada Desktop Commander foi necessária para ler a UI aberta**.
+- **Cristal operacional:** `BROWSER_TABS_LISTED=true`; `CONNECTED_COCKPIT_TAB_CONTEXT_READ=true`; `DOM_CONTROLS_OBSERVABLE=true`; `DESKTOP_COMMANDER_PREREQUISITE_FOR_COCKPIT_DOM=false`. Preferir `Browser.list_tabs → Browser.get_tab_context(aba alvo) → comparar com owners do GitHub → receipt`; somente escalar para outra capacidade se o efeito buscado exceder observação de DOM. Listar abas ≠ comprovar execução do Windows; **comparações paralelas completas, captura visual nativa, edição da UI e ações remotas não foram demonstradas por essas duas leituras**.
+- **NEXT_CURSOR:** `BROWSER_CONNECTED_CHECK → TAB_CONTEXT → SOURCE_OWNER → READBACK → OPTIONAL_NATIVE_CHECK`.
+<!-- /CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
+
+<!-- CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
+### 220. Design Center: sete identidades distintas, quatro peles ativas e três prévias comparáveis sem fusão
+- **Categoria:** correção de interpretação + experimento visual controlado.
+- **Data:** 2026-10-21.
+- **Erro:** interpretar violeta/índigo de aplicativo de referência como nova paleta oficial do Cockpit. **Correção do CHEFE:** cores e design continuam os oficiais; referência externa é só ergonomia/funcionalidades.
+- **Prova de source:** `DesignCenter.tsx` contém `PeleCockpit = "default" | "ouro" | "ops" | "esmeralda"`, preferência `centraldark.cockpit.pele`; `apps/modulos/Bolt/source/app/lib/stores/theme.ts` mantém tema `emerald`, `operational`, `forge` no Shell; `app/styles/variables.scss` define seus tokens.
+- **Delta autorizado:** no PR #1895 a aba `Design Center → Temas globais · 3 prévias` mostra cartões lado a lado com tokens oficiais `emerald`, `operational`, `forge`, sem instalar/aplicar tema nem tocar no seletor de quatro peles e sem forçar fusão.
+- **Invariantes:** `FOUR_COCKPIT_SKINS_PRESERVED=true` é critério de código; `THREE_GLOBAL_THEME_PREVIEWS_SEPARATE=true` é critério de código; `APPLIED_TO_LIVE_CASA=UNKNOWN`, `MERGE_DECISION=PENDING_CHEFE`. Token em mockup não significa integração de theme runtime; build, navegador da Casa e persistência exigem medição.
+- **OWNER:** `apps/instinto-superior/src/components/central/DesignCenter.tsx`; regras `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`. Nenhuma mudança em `CockpitShell.tsx`, CSS global, processos ou segredos.
+- **NEXT_CURSOR:** `READBACK_COMMIT → BUILD_SAME_SHA → LIVE_DESIGN_CENTER → FOUR_SKINS_REGRESSION → CHEFE_COMPARE → DECIDE_MERGE_OR_KEEP`.
+<!-- /CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
+
+
+<!-- CENTRALDARK_LEARNING_214_JUKEBOX_20261021 -->
+### 221. Jukebox A–Z / J001–J301 — capacidade indexada, consumível por fonte, sem segunda arquitetura
+- **Categoria:** descoberta ampliada / continuidade da sessão / roteamento de ferramentas.
+- **Data:** 2026-10-21.
+- **Intenção do CHEFE:** registro anterior #212 era curto, faltavam rotas alternativas, owners, fonte dos dados, distinções de prova, ferramentas existentes e um índice navegável completo por ordem alfabética **e** numérica. Criar uma Jukebox de navegação com reuso integral do cérebro existente, não outra IA/Hermes/MCP.
+- **Owner:** `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` (porta de entrada) e `docs/CONSCIENCIA/RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md` (snapshot derivado de 301 fichas). Reusar `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`, `apps/instinto-superior/src/components/central/CockpitShell.tsx`, `DesignCenter.tsx`, `apps/instinto-superior/config/harness-module-registry.json`, e fonte única do dispatcher `mcp_admin_catalog`. Não tocar no runtime para criar índice.
+- **Medição de catálogo nesta sessão:** `mcp_admin_catalog` retornou **141 nomes de ferramentas e 13 rotas**; `harness-module-registry.json` enumerou **18 módulos**; `CockpitShell.tsx` **27 abas**; `skill_listar` expôs **4 skills de `skills/`** — não representa inventário completo `.agents/skills/` nem 995 skills carregadas na sessão atual. As 301 fichas misturam **classes diferentes** (incluindo os botões e decisões); não somar como 301 ferramentas executáveis.
+- **Leitura real das abas:** `Browser.list_tabs` mostrou a aba `127.0.0.1:8080/sala-controle`; `Browser.get_tab_context` retornou árvore textual do DOM (menus, botões, abas, estados). Procedimento `BROWSER_TAB → GET_CONTEXT → SOURCE_OWNER → COMPARE → RECEIPT` elimina Desktop Commander como **pré-requisito da inspeção da UI**. A falta de Desktop Commander não impede a leitura da aba conectada. Captura visual ou interações que precisem de comando no Windows exigem prova distinta.
+- **Descoberta vs execução:** nome no MCP (`CATALOGED`) != schema invocado (`CALLED`) != alteração confirmada (`EFFECT_READBACK`). `RDC_DESKTOP_COMMANDER` pode continuar no catálogo legado; não deve ser pressuposto necessário. `TAILSCALE_PRIVATE_ROUTE` e ponte OAuth deram HTTP 200 com Casa online, enquanto `tailscale_status` da API administrativa permaneceu HTTP 401 — dois planos separados.
+- **Identidade visual mantida:** quatro peles do Cockpit (`default`, `ouro`, `ops`, `esmeralda`) e três prévias globais independentes (`emerald`, `operational`, `forge`) permanecem separadas até decisão explícita do CHEFE. Paleta violeta inferida da imagem Alethe está revogada.
+- **Fronteiras:** `SOURCE != LOADED`, `CATALOGED != EXECUTED`, `DOM != WIN32`, `BRIDGE_ONLINE != FILES_ACCESSIBLE`, `WEB_BUILD != WINDOWS_APP_BUILD`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`. As ferramentas de cofre são apenas identificadas por nome no inventário, sem ler ou registrar conteúdo.
+- **Critério de replay:** recuperar a ficha `JNNN`; identificar owner atual, descobrir rota permitida por capacidade e obter schema; avaliar evidência temporal, autorização, mínimo delta, ação e contraprova; registrar receipt **no mesmo owner**; atualizar snapshot derivado sem inventar duplicatas, números de missão ou arquivos secret.
+- **Proof:** Jukebox numerada 001–301 e índice A–Z criados e relidos na branch da PR #1895; todas as entradas possuem link de navegação. A integração visual na Casa/Obsidian, a execução de qualquer uma das 141 ferramentas e a cobertura completa do catálogo de skills permanecem `UNKNOWN` até testes causais.
+- **Gate obrigatório (21/10):** `scripts/trigger-fabric/verify_jukebox.py` foi ligado ao verificador canônico `scripts/trigger-fabric/verify_repo_contract.py`, já consumido por `.github/workflows/porta-de-entrada.yml`. Corrigidas **33 posições alfabéticas** da primeira versão; os IDs J001–J301 e seus títulos permanecem congelados pelo fingerprint `83f1dfa563d66705`. Conferir em PR/push: ordem A–Z, sequência J001–JNNN, duplicatas, links e títulos; se falhar, gate fail-closed. Adição válida inicia em J302 sem mudar antigos. `GATE_WIRED_IN_SOURCE=PASS`; `CI_SAME_HEAD=QUEUED` na verificação do commit `e158808fc45397cc7fccbb2efb71a4115f5bfca1`; `PRODUCTION=UNKNOWN`. Sem autopush, renumeração ou workflow novo.
+- **NEXT_CURSOR:** `JUKEBOX_AZ → JNNN → OWNER_CURRENT → CAPABILITY_SCHEMA → RUNTIME_PROOF → RECIPE_REUSE → DELTA → CONTRAPROVA → RECEIPT → ATUALIZAR_JUKEBOX`.
+<!-- /CENTRALDARK_LEARNING_214_JUKEBOX_20261021 -->
 ### 218. RED #003: PowerShell corrigido, workspace Casa sem checkout Git
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L218`; `PREV_GLOBAL_UID=L217`; `NEXT_GLOBAL_UID=L219`; `LEGACY_LEARNING_NUMBER=218`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=218`; `PREV_LEARNING_REF=217`; `NEXT_LEARNING_REF=219`.
