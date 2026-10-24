@@ -3,7 +3,7 @@ title: "SOUL SOL"
 date: 2026-08-27
 tags: ["consciencia", "identidade", "soul", "sol", "governanca", "orquestracao", "prova", "delta-util", "reconciliacao", "hermes", "rastro", "multi-caneta", "caminho-paralelo-converge", "portao-selado", "fronteira-humana", "arquitetura-inteira"]
 updated: 2026-10-24
-last_updated_utc: "2026-10-24T17:02:31.232Z"
+last_updated_utc: "2026-10-24T17:06:37.411Z"
 ---
 
 # 🧠 SOUL — SOL / JARVIS DO SEGREDO/CHEFE
