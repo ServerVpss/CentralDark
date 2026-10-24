@@ -178,6 +178,27 @@ function blockedCommand(command) {
         .filter((pattern) => pattern.test(command))
         .map((pattern) => String(pattern));
 }
+
+// #OBSERVACOES# @owner=apps/modulos/mcp/src/tools/vps/vps-lazy.js @doc_ref=apps/modulos/mcp/docs/ARQUITETURA.md @last_updated=2026-10-24T07:48:08.723Z @estado=BRANCH_IMPLEMENTADO @pendente=TESTE_CI_E_READBACK @next_cursor=PR_CI_READBACK
+// This is an exact-string allowlist for the admin dispatcher only. It does not change
+// execute_command's public destructive annotation or make arbitrary shell input read-only.
+const SAFE_READ_ONLY_EXECUTE_COMMANDS = new Set([
+    "hostname",
+    "pwd",
+    "git status",
+    "git status --short",
+    "git log --oneline",
+    "ls",
+    "ls -l",
+]);
+
+export function isSafeReadOnlyExecuteCommand(command) {
+    if (typeof command !== "string" || command.length > 160 || command.trim() !== command) return false;
+    if (SAFE_READ_ONLY_EXECUTE_COMMANDS.has(command)) return true;
+    if (/^git log --oneline -n (?:[1-9]|[1-4][0-9]|50)$/.test(command)) return true;
+    // echo accepts plain literal characters only: no quotes, substitutions, operators, globs or redirection.
+    return /^echo [A-Za-z0-9][A-Za-z0-9 .,\/:@+_-]{0,119}$/.test(command);
+}
 function appendLimited(chunks, chunk, maxBytes) {
     chunks.push(chunk);
     let total = chunks.reduce((sum, item) => sum + item.length, 0);
@@ -425,7 +446,7 @@ export const vpsLazyTools = [
     },
     {
         name: "execute_command",
-        description: "Executa comando bash na VPS com stdout/stderr separados, timeout maximo de 60s, truncamento de output e respeito a MCP_ALLOW_VPS_COMMANDS=true.",
+        description: "Executa comando bash na VPS com stdout/stderr separados e timeout. O dispatcher admin só classifica comandos literais de uma allowlist restrita como leitura; todo o resto continua destrutivo.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Execute command" },
         inputSchema: z.object({
             command: z.string().min(1).max(8_000),
