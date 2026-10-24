@@ -2,11 +2,14 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import express from "express";
 import { config } from "./config.js";
+import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
+import { assertNoRetiredCentralDarkHostedDeploy } from "./tools/github/github.js";
 import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
 import { getAccessToken, getSession, getStateStats } from "./sessions.js";
-import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
+import { createDevicePairingRouter, createDevicePairingStore } from "./device-pairing.js";
+import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, configureDevicePairingForOAuth, } from "./oauth.js";
 import { getStatusHtml, getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
@@ -18,7 +21,7 @@ import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
 import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
-import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
@@ -27,7 +30,7 @@ import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-con
 process.on("uncaughtException", (err) => {
     console.error("[FATAL] uncaughtException:", err?.stack || err);
     try {
-        writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] uncaughtException\n${err?.stack || String(err)}\n\n`, { flag: "a" });
+        writeFileSync("<caminho-vps>", `[${new Date().toISOString()}] uncaughtException\n${err?.stack || String(err)}\n\n`, { flag: "a" });
     }
     catch { }
     process.exit(1);
@@ -35,7 +38,7 @@ process.on("uncaughtException", (err) => {
 process.on("unhandledRejection", (reason) => {
     console.error("[FATAL] unhandledRejection:", reason?.stack || reason);
     try {
-        writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] unhandledRejection\n${reason?.stack || String(reason)}\n\n`, { flag: "a" });
+        writeFileSync("<caminho-vps>", `[${new Date().toISOString()}] unhandledRejection\n${reason?.stack || String(reason)}\n\n`, { flag: "a" });
     }
     catch { }
     process.exit(1);
@@ -54,7 +57,7 @@ function validarEnvsObrigatorias() {
         const msg = `[BOOT] MCP não pode iniciar. Variáveis de ambiente ausentes: ${faltando.join(", ")}. Configure no ecosystem.config.cjs ou export antes de subir o PM2.`;
         console.error(msg);
         try {
-            writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] BOOT ABORTADO — envs faltando: ${faltando.join(", ")}\n\n`, { flag: "a" });
+            writeFileSync("<caminho-vps>", `[${new Date().toISOString()}] BOOT ABORTADO — envs faltando: ${faltando.join(", ")}\n\n`, { flag: "a" });
         }
         catch { }
         process.exit(2);
@@ -134,7 +137,29 @@ app.get("/intent/manifesto", (_req, res) => {
     res.setHeader("Cache-Control", "public, max-age=60");
     res.json({ schema: "centraldark.intent.public.v1", produto: "CentralDark - Instinto Superior", visibilidade: "PUBLICO_SOMENTE_LEITURA", intencao: "Reunir ferramentas, agentes e conhecimento em um unico cockpit, com aprendizagem a partir de evidencias.", controle_remoto: "NAO_EXPOSTO" });
 });
-app.get("/health", (_req, res) => {
+// A mesma receita consumida pelo dispatcher é medida no /health existente.
+// A prova é escopada ao HTTP: não deduz implantação dos processos STDIO do Hermes.
+app.get("/health", async (_req, res) => {
+    let preflight = null;
+    try {
+        preflight = await canonicalRecipeFirstPreflight(
+            "centraldark_deploy_micro_fallback", { owner: "mcp", dryRun: true },
+        );
+    } catch {
+        // /health continua disponível como sensor mesmo se a receita estiver ausente.
+    }
+    let hostedDispatchLocked = false;
+    try {
+        assertNoRetiredCentralDarkHostedDeploy("ServerVpss", "CentralDark", "vps-ssh-exec.yml");
+    } catch (error) {
+        hostedDispatchLocked = String(error?.message || error)
+            .includes("CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED");
+    }
+    const adminAliasLoaded = ALL_TOOLS.some((tool) => tool.name === "admin_ssh_microdeploy");
+    const recipeMatched = preflight?.status === "RECIPE_FIRST_MATCHED"
+        && preflight?.priority === 0 && preflight?.ok === true;
+    const recipeReady = recipeMatched && hostedDispatchLocked && adminAliasLoaded;
+    res.setHeader("Cache-Control", "no-store");
     res.json({
         ok: true,
         service: "mcp-centraldark",
@@ -142,6 +167,18 @@ app.get("/health", (_req, res) => {
         catalogVersion: CATALOG_VERSION,
         toolCount: getCatalogSummary().toolCount,
         time: new Date().toISOString(),
+        recipeFirst: {
+            scope: "MCP_HTTP_ONLY",
+            status: recipeReady ? "PASS" : "DRIFT",
+            codeStatus: preflight?.status ?? "UNKNOWN",
+            priority: preflight?.priority === 0 ? 0 : null,
+            canonicalRoute: "MCP_CENTRALDARK_VPS_DIRECT",
+            hostedDispatchLocked,
+            adminAliasLoaded,
+            proofLevel: recipeReady
+                ? "HTTP_CODE_AND_RUNTIME_RECIPE_READBACK"
+                : "NOT_PROVEN",
+        },
     });
 });
 // Projecao unica de rotas locais para HUD/API. Leitura limitada, sem varredura,
@@ -186,7 +223,7 @@ app.get("/figma/status", async (_req, res) => {
     res.status(status.ok ? 200 : 503).json(status);
 });
 // Um coração: heartbeat que monitora o próprio monitor. Público via api.centralldark.com.
-const HEART_FILE = "/root/CentralDark/logs/heartbeat-api.json";
+const HEART_FILE = "<caminho-vps>";
 app.get("/heartbeat", (_req, res) => {
     const nowIso = new Date().toISOString();
     const nowMs = Date.now();
@@ -508,6 +545,10 @@ app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadat
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
+// Uma store de registro, consumida pelo mesmo /authorize e pela API de dispositivo.
+const oauthDeviceStore = createDevicePairingStore();
+configureDevicePairingForOAuth(oauthDeviceStore);
+app.use("/device", createDevicePairingRouter({ store: oauthDeviceStore }));
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
@@ -743,6 +784,15 @@ app.post("/admin/mcp", (req, res) => {
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
 });
+app.get("/admin/catalog", authAdmin, async (req, res) => {
+    try {
+        const result = await getAdminCatalog(req);
+        res.json(result);
+    } catch (err) {
+        log.error("admin_catalog_error", { error: String(err) });
+        res.status(500).json({ ok: false, error: "erro ao obter catálogo administrativo", cid: req.cid });
+    }
+});
 // Alias de compatibilidade: /mcp/admin converge para o MESMO handler /admin/mcp.
 // Mantemos o método e o corpo (sem redirect HTTP) porque clientes MCP/OAuth podem
 // não preservar POST/Authorization em redirects. O resource canônico continua /admin/mcp.
@@ -781,7 +831,7 @@ app.get("/mcp/admin", (req, res) => {
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
 // ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────
-const PAINEL_DATA_PATH = "/root/CentralDark/apps/modulos/status/painel-data.json";
+const PAINEL_DATA_PATH = "<caminho-vps>";
 const ADMIN_KEY = process.env.CENTRALDARK_ADMIN_KEY;
 app.post("/api/telemetry-ingest", (req, res) => {
     const auth = req.headers["authorization"] ?? "";

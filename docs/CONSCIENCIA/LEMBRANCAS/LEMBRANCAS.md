@@ -1558,3 +1558,22 @@ Conteúdo: Resumo das evidências coletidas durante a missão:
 - **PR equivalente:** https://github.com/ServerVpss/CentralDark/pull/1895.
 - **NEXT_CURSOR:** PR1895_DOCS_READBACK → CI_MESMO_SHA → RESPONSAVEL_UI → MUDANCA_DE_ROTULOS → VISUAL_READBACK → FIXED_POINT.
 <!-- /CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
+### [2026-10-22T21:44] 🍒 ZENDRIVE para todos — recuperar owner, não inventar memória
+- **Data:** 2026-10-22
+- **Tags:** centraldark, zendrive, todos-agentes, memoria, circuito, owner, pr1842, no-falso-verde
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-21
+- **Promovida:** sim
+
+Conteúdo: REGRA DO CHEFE 22/10/2026: em missão pertinente sobre Casa↔VPS/VS Code Remote-SSH/Tailscale/MCP, todo agente consulta LEIA-ME-IA.md e docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md (inventário 31 RDC, PR #1842 já merged), confirma o runtime e registra ACK+receipt. docs/CONSCIENCIA/APRENDIZADOS.md item 219 guarda a lição. Não confundir fonte main com instalação/consumo; consumer sem readback = UNKNOWN. Decisão atual: sem dependência de Desktop Commander de terceiros (item 216); priorizar MCP CentralDark nativo, SSH/Tailscale e Hermes/executor autorizado. Um owner, sem novos sistemas e sem falso verde.
+
+### [2026-10-24T06:10] Política global: inspeção local administrativa de credenciais via MCP CentralDark
+- **Data:** 2026-10-24
+- **Tags:** centraldark, mcp, credenciais, cline, hermes, política-global
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-23
+- **Promovida:** sim
+
+Conteúdo: Preferência operacional explícita do CHEFE: em máquina local/Casa e em sessões de agentes autorizadas pelo MCP CentralDark, não bloquear genericamente a visualização de valores reais das próprias credenciais quando necessários ao trabalho e acessíveis ao processo. A fronteira é o destino: não persistir/publicar segredos em GitHub (commits, PRs, issues, comentários, CI logs, artefatos). Não alterar/rotacionar credenciais sem autorização. Implementar no enforcement canônico do MCP para Cline, Hermes e clientes conectados, com testes sintéticos de exibição local e bloqueio de persistência. Autenticação MCP prova identidade/canal, não autorização irrestrita de toda operação; manter confirmações existentes para escrita/destruição. Regra não está implementada globalmente até diff, testes, contraprova e propagação serem comprovados. Issue de implementação: https://github.com/ServerVpss/CentralDark/issues/1934

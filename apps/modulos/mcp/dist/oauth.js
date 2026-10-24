@@ -1,6 +1,17 @@
 // OAuth 2.1 do MCP CentralDark.
 import crypto from "node:crypto";
 import { config } from "./config.js";
+import { isAdmin } from "./admin.js";
+
+// Mesmo /authorize: o client_id canônico seleciona o modo de dispositivo.
+// Os demais clientes seguem OAuth 2.1+PKCE original, sem segunda tela.
+export const VSCODE_DEVICE_CLIENT_ID = "centraldark.centraldark-vscode-restore";
+let devicePairingStore = null;
+export function configureDevicePairingForOAuth(store) {
+    if (!store || typeof store.pendingConsent !== "function" || typeof store.approveWeb !== "function")
+        throw new Error("DEVICE_PAIRING_STORE_INVALID");
+    devicePairingStore = store;
+}
 import { log } from "./log.js";
 import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { consumeAuthCode, consumeRefreshToken, createAuthRequest, getClient, issueAuthCode, issueTokenPair, registerClient, } from "./sessions.js";
@@ -485,6 +496,10 @@ h1{margin:0 0 4px;font-size:19px;font-weight:700}
 .perm-desc{color:var(--muted);font-size:12px;margin-top:2px}
 input[type=password]{width:100%;padding:12px 14px;background:#fff;border:1px solid var(--line);color:var(--text);border-radius:10px;font-size:15px;margin:0 0 14px;outline:none}
 input[type=password]:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(16,185,129,.15)}
+.pair-code{font-family:Consolas,monospace;text-align:center;font-size:26px;font-weight:800;letter-spacing:.08em;border:1px solid var(--line);border-radius:10px;padding:12px;margin:0 0 10px}
+.pair-help{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.5}
+.admin-login{display:block;color:#059669;margin:0 0 14px;font-size:13px}
+button:disabled{opacity:.5;cursor:not-allowed}
 .actions{display:flex;gap:10px}
 button{flex:1;padding:12px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid var(--line)}
 .btn-allow{background:var(--brand);color:#fff;border-color:var(--brand)}
@@ -499,6 +514,21 @@ button{flex:1;padding:12px;border-radius:10px;font-weight:700;font-size:14px;cur
 <p class="sub">Um cliente quer se conectar ao MCP CentralDark.</p>
 <div class="client-row"><b>${escapeHtml(input.client_name || input.client_id)}</b> quer acessar sua conta.</div>
 <div class="perms">${scopeChecklistHtml(input.scope)}</div>
+${input.device ? `
+<input type="hidden" name="client_id" value="${VSCODE_DEVICE_CLIENT_ID}">
+${input.success ? '<p class="pair-help">Pareamento confirmado. Volte ao VS Code para concluir a conexão.</p>' : `
+<div class="pair-code">${escapeHtml(input.device.code)}</div>
+<p class="pair-help">Confira o mesmo código no VS Code antes de confirmar.</p>
+<input type="hidden" name="pair_id" value="${escapeHtml(input.device.pairId)}">
+<input type="hidden" name="pair_code" value="${escapeHtml(input.device.code)}">
+<input type="hidden" name="pair_nonce" value="${escapeHtml(input.device.nonce)}">
+${input.isAdmin ? "" : '<p class="err">Sessão administrativa necessária. Entre no painel existente e abra novamente o pareamento.</p><a class="admin-login" href="/admin" target="_blank" rel="noopener noreferrer">Abrir painel CentralDark</a>'}
+<div class="actions">
+<button type="button" class="btn-deny" onclick="history.back()">Deny</button>
+<button type="submit" class="btn-allow" ${input.isAdmin ? "" : "disabled"}>Confirmar pareamento</button>
+</div>
+`}
+` : `
 <input type="hidden" name="client_id" value="${escapeHtml(input.client_id)}">
 <input type="hidden" name="redirect_uri" value="${escapeHtml(input.redirect_uri)}">
 <input type="hidden" name="response_type" value="${escapeHtml(input.response_type)}">
@@ -512,6 +542,7 @@ ${input.error ? `<p class="err">${escapeHtml(input.error)}</p>` : ""}
 <button type="button" class="btn-deny" onclick="history.back()">Deny</button>
 <button type="submit" class="btn-allow">Allow</button>
 </div>
+`}
 <div class="foot">CentralDark MCP · conexão segura via OAuth 2.1</div>
 </form></body></html>`);
 }
@@ -550,6 +581,35 @@ export function postRegister(req, res) {
 }
 export async function handleAuthorize(req, res) {
     try {
+        // Cliente VS Code usa o MESMO /authorize, sem callback paralelo.
+        if (param(req, "client_id") === VSCODE_DEVICE_CLIENT_ID) {
+            if (!devicePairingStore)
+                return oauthError(res, 503, "server_error", "Registro de dispositivos indisponível.");
+            const pairId = param(req, "pair_id");
+            const pair = devicePairingStore.pendingConsent(pairId);
+            if (!pair || pair.executor !== "vscode" || pair.approved)
+                return oauthError(res, 404, "invalid_request", "Pareamento expirado ou já concluído.");
+            const details = {
+                client_id: VSCODE_DEVICE_CLIENT_ID,
+                client_name: "CentralDark · Vibe Coding",
+                scope: "mcp",
+                isAdmin: isAdmin(req),
+                device: {pairId: pair.pairId, code: pair.code, nonce: pair.nonce}
+            };
+            if (req.method !== "POST") {
+                sendOwnerConsentPage(res, details);
+                return;
+            }
+            // Token de dispositivo só é entregue via /device/pair/status
+            // ao solicitante que possui o segredo de posse, nunca ao navegador.
+            if (!isAdmin(req)) return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
+            const result = devicePairingStore.approveWeb({
+                pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce")
+            });
+            if (!result.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
+            sendOwnerConsentPage(res, {...details, success: true});
+            return;
+        }
         const client_id = param(req, "client_id");
         const redirect_uri = param(req, "redirect_uri");
         const response_type = param(req, "response_type");
@@ -687,7 +747,7 @@ export function postToken(req, res) {
     if (grant_type === "refresh_token") {
         const refresh_token = String(body.refresh_token ?? "");
         const client_id = tokenClientId(req, body);
-        const rt = consumeRefreshToken(refresh_token);
+        const rt = consumeRefreshToken(refresh_token, client_id);
         if (!rt) {
             log.warn("oauth_refresh_invalid", { cid: req.cid, client_id_present: Boolean(client_id) });
             res.status(400).json({ error: "invalid_grant", error_description: "refresh_token inválido ou expirado" });
@@ -756,5 +816,4 @@ export function handleIssueKey(req, res) {
         agent_name: agentName,
     });
 }
-//# sourceMappingURL=oauth.js.map
 //# sourceMappingURL=oauth.js.map

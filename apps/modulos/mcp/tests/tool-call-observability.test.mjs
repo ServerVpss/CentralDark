@@ -183,6 +183,15 @@ test("Inventario ZENDRIVE 20261018 tem provas e limites no documento canonico", 
 });
 
 
+test("Casa prioriza Tailscale, preserva RDC apenas como fallback", () => {
+  const source = fs.readFileSync(new URL("../src/tools/core/mcp-admin.js", import.meta.url), "utf8");
+  const catalog = source.split("const AUTHORIZED_ROUTE_CATALOG = Object.freeze([")[1]?.split("]);")[0] ?? "";
+  assert.ok(catalog.indexOf('id: "TAILSCALE_PRIVATE_ROUTE"') < catalog.indexOf('id: "RDC_DESKTOP_COMMANDER"'));
+  assert.match(catalog, /priority: "FALLBACK_ONLY"/);
+  assert.match(catalog, /fallbackRequires: "PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE"/);
+  assert.match(catalog, /id: "MCP_REMOTE_OAUTH"/);
+});
+
 test("31 ferramentas RDC mapeadas no catalogo sem liberar execucao automatica", () => {
   const src = fs.readFileSync(new URL("../src/tools/core/mcp-admin.js", import.meta.url), "utf8");
   const segment = src.split("const RDC_EQUIVALENCE_MATRIX = Object.freeze([")[1]?.split("]);")[0];
