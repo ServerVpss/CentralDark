@@ -3,7 +3,7 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 
-import { decideReuse, deriveFixedPoint, evaluateGoalClauses, evaluateFixedPointTen, FIXED_POINT_TEN_CRITERIA } from "./horn-reuse-fixed-point.mjs";
+import { decideReuse, deriveFixedPoint, evaluateGoalClauses, evaluateFixedPointTen, validateFixedPointExecutionHeader, FIXED_POINT_TEN_CRITERIA } from "./horn-reuse-fixed-point.mjs";
 
 const CONTRACT_PATH = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const CONTINUITY_OWNER_PATH = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json";
@@ -148,21 +148,110 @@ test("Hermes can evaluate clauses over stdin without exposing JSON in argv", () 
 
 const fixedPointTenCriteria = (overrides = {}) => FIXED_POINT_TEN_CRITERIA.map(({ id }) => ({
   id,
+  evaluated: true,
   status: "PASS",
   source: "runtime:" + id,
   source_sha: "a".repeat(40),
   proof_ref: "proof:" + id,
   counterproof_ref: "counterproof:" + id,
   counterproof_verdict: "NOT_REFUTED",
+  attempt_ref: "attempt:" + id,
+  evaluated_at: goalTime,
   measured_at: goalTime,
   ...overrides[id],
 }));
 const fixedPointTenGoalReceipt = (overrides = {}) => ({
   ...provenGoal(),
   evaluator: "scripts/lupa/horn-reuse-fixed-point.mjs",
+  contract_version: 1,
+  main_sha: "a".repeat(40),
+  fixedPoint: true,
   measured_at: goalTime,
   max_age_ms: 5000,
   ...overrides,
+});
+const makeFixedPointExecutionHeader = (overrides = {}) => {
+  const criteria = overrides.criteria || fixedPointTenCriteria();
+  const goalReceipt = Object.hasOwn(overrides, "goal_receipt")
+    ? overrides.goal_receipt : fixedPointTenGoalReceipt();
+  const input = { criteria, goalReceipt, currentHead: "a".repeat(40) };
+  const evaluated = evaluateFixedPointTen(input, { nowMs: fixedNow, maxAgeMs: 5000 });
+  return {
+    schema: "centraldark.fixed-point.execution-header.v1",
+    evaluator: "scripts/lupa/horn-reuse-fixed-point.mjs",
+    agent_id: "hermes",
+    mission_id: "mission-1",
+    intent_id: "intent-1",
+    goal_fingerprint: "fingerprint-1",
+    observed_head: "a".repeat(40),
+    measured_at: goalTime,
+    evaluation_ref: "receipt:execution-header",
+    execution_ref: "execution:hermes:1",
+    criteria,
+    goal_receipt: goalReceipt,
+    goal_receipt_ref: goalReceipt?.receipt_ref || null,
+    verdict: evaluated.verdict,
+    next_cursor: evaluated.next_cursor,
+    ...overrides.header,
+  };
+};
+
+
+test("cabeçalho de execução valida dez tentativas reais e inclui o receipt de uso", () => {
+  const header = makeFixedPointExecutionHeader();
+  const result = validateFixedPointExecutionHeader(header, {
+    nowMs: fixedNow, maxAgeMs: 5000,
+    expectedMissionId: "mission-1", expectedHead: "a".repeat(40),
+  });
+  assert.equal(result.accepted, true);
+  assert.equal(result.status, "PASS_FIXED_POINT_EXECUTION_HEADER");
+  assert.equal(result.header_usage, "USED_AND_FIXED_POINT");
+  assert.equal(result.criteria_count, 10);
+  assert.equal(result.criteria_pass, 10);
+  assert.equal(result.verdict, "FIXED_POINT");
+  assert.equal(result.next_cursor, "FIXED_POINT");
+});
+
+test("cabeçalho com dez tentativas documentadas e uma lacuna é USED_WITH_GAPS, não FIXED_POINT", () => {
+  const criteria = fixedPointTenCriteria({
+    LOCKS_PRESERVED: {
+      status: "UNKNOWN", source_sha: undefined, proof_ref: undefined,
+      counterproof_ref: undefined, counterproof_verdict: "UNKNOWN",
+      reason: "A sonda executou, mas não retornou receipt atual do inventário.",
+    },
+  });
+  const header = makeFixedPointExecutionHeader({ criteria });
+  const result = validateFixedPointExecutionHeader(header, {
+    nowMs: fixedNow, maxAgeMs: 5000,
+    expectedMissionId: "mission-1", expectedHead: "a".repeat(40),
+  });
+  assert.equal(result.accepted, true);
+  assert.equal(result.header_usage, "USED_WITH_GAPS");
+  assert.equal(result.criteria_count, 10);
+  assert.equal(result.criteria_unknown, 1);
+  assert.equal(result.verdict, "NEXT_DELTA");
+  assert.equal(result.next_cursor, "VERIFY_LOCKS_PRESERVED");
+});
+
+test("dez nomes sem tentativa atual são HEADER_NOT_USED", () => {
+  const header = makeFixedPointExecutionHeader();
+  header.criteria[4].attempt_ref = "";
+  const result = validateFixedPointExecutionHeader(header, {
+    nowMs: fixedNow, maxAgeMs: 5000,
+  });
+  assert.equal(result.accepted, false);
+  assert.equal(result.status, "BLOCKED_FIXED_POINT_EXECUTION_HEADER_CRITERION_NOT_ACTUALLY_MEASURED");
+  assert.equal(result.header_usage, "NOT_USED");
+});
+
+test("cabeçalho não pode declarar PASS sem prova nem declarar FIXED_POINT com status divergente", () => {
+  const header = makeFixedPointExecutionHeader();
+  header.criteria[0].proof_ref = "";
+  const result = validateFixedPointExecutionHeader(header, {
+    nowMs: fixedNow, maxAgeMs: 5000,
+  });
+  assert.equal(result.accepted, false);
+  assert.equal(result.status, "BLOCKED_FIXED_POINT_EXECUTION_HEADER_CLAIM_UNPROVEN");
 });
 
 test("global Fixed Point exige os mesmos dez critérios nomeados pelo HUD e Goal receipt canônico", () => {
