@@ -83,12 +83,12 @@ const FIXED_POINT_HEADER_IDS = [
   "CHECKOUT_MAIN_SYNC", "FORENSIC_FRESHNESS", "RECEIPT_PRESENT",
 ];
 
-function makeExecutionHeader() {
+function makeExecutionHeader(agentId = "sol") {
   const measuredAt = new Date().toISOString();
   return {
     schema: "centraldark.fixed-point.execution-header.v1",
     evaluator: "scripts/lupa/horn-reuse-fixed-point.mjs",
-    agent_id: "sol",
+    agent_id: agentId,
     mission_id: "M-1",
     intent_id: "intent-test-1",
     goal_fingerprint: "fingerprint-test-1",
@@ -292,7 +292,7 @@ check(validateAgentCall({ ...nested, depth: 0 }, state).status, "BLOCKED_INVALID
 check(validateAgentCall({ ...nested, to: "sol" }, state).status, "BLOCKED_SELF_DELEGATION");
 check(validateAgentCall({ ...nested, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, state).status, "BLOCKED_NESTED_WRITE_WITHOUT_HANDOFF");
 check(validateAgentCall(nested, state).status, "ACCEPTED");
-check(validateAgentCall({ ...nested, call_id: "C-3", parent_call_id: "C-2", depth: 2, from: "debugger", to: "reviewer" }, state).status, "ACCEPTED");
+check(validateAgentCall({ ...nested, call_id: "C-3", parent_call_id: "C-2", depth: 2, from: "debugger", to: "reviewer", fixed_point_execution_header: makeExecutionHeader("debugger") }, state).status, "ACCEPTED");
 
 check(validateDelegationGate(state).status, "NOT_APPLICABLE_NO_DELEGABLE_FRONTIER");
 const frontierState = {
@@ -342,6 +342,7 @@ const subSubCall = validateAgentCall({
   from: "debugger",
   to: "reviewer",
   requested_role: "REVIEWER",
+  fixed_point_execution_header: makeExecutionHeader("debugger"),
 }, state);
 const subSubResult = validateDelegationResult({
   call_id: subSubCall.call_id,
