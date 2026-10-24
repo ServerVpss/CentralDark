@@ -7,6 +7,23 @@
   "credential_owner": "apps/modulos/oauth-broker/server.mjs",
   "mcp_owner": "apps/modulos/mcp/src/tools/skills/skill.js",
   "workspace_authority": "ServerVpss/CentralDark@main",
+  "builder_terminal_delegation": {
+    "surface_owner": "apps/instinto-superior",
+    "existing_dispatch": "Hermes Kanban",
+    "workspace_on_casa": "K:\\",
+    "deduplicate_by": ["INTENT_ID", "GOAL", "OWNER", "SCOPE"],
+    "executor_choice": "measured_capability_and_authorization",
+    "candidate_terminals": ["HERMES", "CLAUDE", "CODEX"],
+    "one_writer_per_scope": true,
+    "parallel_read_only_observation": true,
+    "terminal_specific_dispatch_support": "NOT_PROVEN",
+    "proof_by_effect": {
+      "builder": "preview_and_ui_effect_readback",
+      "code": "same_sha_diff_and_tests",
+      "runtime": "target_runtime_health_and_behavior"
+    },
+    "no_parallel_dispatcher": true
+  },
   "invariants": [
     "ONE_INTENT_ONE_ORGANISM",
     "ONE_WRITER_PER_SCOPE",
@@ -157,6 +174,26 @@
     "fixed_point_requires_end_to_end_readback": true
   },
   "known_gaps": [
+    {
+      "id": "TERMINAL_HANDOFF_IDEMPOTENCY",
+      "status": "NOT_PROVEN",
+      "next": "reusar TASK_ID no Kanban e comprovar ausencia de segundo escritor no mesmo escopo"
+    },
+    {
+      "id": "BUILDER_SYNC_AND_PREVIEW",
+      "status": "NOT_PROVEN",
+      "next": "verificar preview/webhook e readback da alteracao; nao confundir sync declarado com deploy"
+    },
+    {
+      "id": "TERMINAL_DEPENDENCY_ORDERING",
+      "status": "NOT_PROVEN",
+      "next": "comprovar dependencias reais dos escopos antes de liberar cada terminal"
+    },
+    {
+      "id": "BUILDER_TERMINAL_DELEGATION",
+      "status": "NOT_PROVEN",
+      "next": "comprovar dispatch, ACK e efeito de cada terminal usando o Kanban e rotas existentes, sem pressupor novos parametros ou schema"
+    },
     {
       "id": "GITHUB_BROKER_TO_PRIVATE_SKILL_CLIENT",
       "status": "NOT_PROVEN",
