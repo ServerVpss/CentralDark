@@ -10,6 +10,7 @@
  */
 import { readFile } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
+import { validateFixedPointExecutionHeader } from "./lupa/horn-reuse-fixed-point.mjs";
 
 const PROTOCOL = "CENTRALDARK_AGENT_CALL_V1";
 const GLOBAL_CONTRACT_SCOPE_ID = "canon/centraldark-universal-contract-20260919";
@@ -916,6 +917,17 @@ export function validateAgentCall(call, state, now = Date.now()) {
     return fail("BLOCKED_STALE_HEAD", call, { expected_head: liveHead || "UNKNOWN" });
   }
 
+  const fixedPointHeader = validateFixedPointExecutionHeader(
+    call.fixed_point_execution_header,
+    { expectedMissionId: call.mission_id, expectedHead: call.observed_head },
+  );
+  if (fixedPointHeader.accepted !== true) {
+    return fail(fixedPointHeader.status || "BLOCKED_FIXED_POINT_EXECUTION_HEADER_NOT_USED", call, {
+      fixed_point_execution_header: fixedPointHeader,
+      next_cursor: "EMIT_CURRENT_TEN_CRITERION_HEADER",
+    });
+  }
+
   const routeId = state?.trail?.route_id || null;
   if (routeId) {
     if (!call.trail_id) return fail("BLOCKED_MISSING_TRAIL", call, { expected_trail: routeId });
@@ -1006,6 +1018,8 @@ export function validateAgentCall(call, state, now = Date.now()) {
     meta_lupa: true,
     breaths_total: 17,
     delta_minimum: true,
+    fixed_point_execution_header: fixedPointHeader,
+    fixed_point_header_usage: fixedPointHeader.header_usage,
     return_mode: "DELTA_MESSAGE",
     radio_mode: "DELTA_ONLY",
   };
