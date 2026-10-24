@@ -178,7 +178,7 @@ test("autorização persistente não atravessa fork nem autor não confiável", 
   assert.equal(intruso.viaPersistent, false);
 });
 
-// #OBSERVACOES# @owner=scripts/lupa/authority-approval.test.mjs @doc_ref=docs/CONSCIENCIA/02-PERMISSOES.md @last_updated=2026-10-24T12:10:17.921Z @estado=CONTRATO_SEMANTICO_ADICIONADO @pendente=CI_SAME_HEAD @next_cursor=VERIFY_NO_REASK_GIT_ACTIONS
+// #OBSERVACOES# @owner=scripts/lupa/authority-approval.test.mjs @doc_ref=docs/CONSCIENCIA/02-PERMISSOES.md @last_updated=2026-10-24T12:20:43.652Z @estado=CONTRATO_SEMANTICO_ADICIONADO @pendente=CI_SAME_HEAD @next_cursor=VERIFY_NO_REASK_GIT_ACTIONS
 test("push/commit aliases inherit persistent permission without repetitive confirmation", () => {
   const readOwner = (path) => readFileSync(new URL(path, new URL("../../", import.meta.url)), "utf8");
   const permissions = readOwner("docs/CONSCIENCIA/02-PERMISSOES.md");
@@ -190,6 +190,7 @@ test("push/commit aliases inherit persistent permission without repetitive confi
   const hermes = readOwner("apps/modulos/HERMES-CORE/prompts/hermes-core.md");
   const vault = readOwner("docs/COFRE/README.md");
   const communication = readOwner("docs/COFRE/COMO-FALAR-COM-O-PIVETE.md");
+  const operationalMethod = readOwner(".agents/skills/centraldark-operational-method/SKILL.md");
 
   assert.ok(permissions.includes("GIT_SEMANTIC_ACTION_FAMILY=COMMIT|COMMITS|COMMITTED|COMMITTING|GIT_COMMIT|PUSH|PUSHED|PUSHING|GIT_PUSH"));
   assert.ok(permissions.includes("NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true"));
@@ -212,4 +213,9 @@ test("push/commit aliases inherit persistent permission without repetitive confi
   assert.equal(hermes.includes("MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true"), false);
   assert.ok(vault.includes("AUTO_SQUASH_IF_CLEAN"));
   assert.ok(communication.includes("não pedir a autorização novamente"));
+  assert.ok(operationalMethod.includes("AUTHORIZATION_OWNER=docs/CONSCIENCIA/02-PERMISSOES.md"));
+  assert.ok(operationalMethod.includes("NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true"));
+  assert.equal(operationalMethod.includes("CHEFE_IS_LIVE_APPROVAL=true"), false);
+  assert.ok(operationalMethod.includes("Se a intenção era somente visual e a integração é um escopo novo, aguardar pedido/autorização."));
+  assert.equal(operationalMethod.includes("aguarda pedido/autorização antes de integrar ou modificar infraestrutura."), false);
 });
