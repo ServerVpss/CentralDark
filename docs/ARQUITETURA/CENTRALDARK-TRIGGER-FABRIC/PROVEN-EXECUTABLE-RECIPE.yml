@@ -521,3 +521,13 @@ script_only_subagent_delegation:
   status:
     repository_preflight: TESTABLE_WITH_UNITTTEST
     hermes_or_nemotron_live_hook: UNKNOWN_UNTIL_CONSUMER_PROVEN
+
+  mermaid_source_note:
+    path: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-SCRIPT-DELEGATION.md
+    format: OBSIDIAN_MARKDOWN_MERMAID
+    source_commit: c132b8ce261b07efccbc1f0c09ca09ae29f935e2
+    equivalent_recipe_pr: 1681
+    ledger_mother_pr: 1562
+    creates_new_owner: false
+    sync_to_physical_vault: UNKNOWN_UNTIL_VAULT_ACCESSIBLE
+    proof_boundary: REPOSITORY_FILE_IS_NOT_OBSIDIAN_VAULT_READBACK
