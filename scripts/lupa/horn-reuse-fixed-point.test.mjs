@@ -3,7 +3,7 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 
-import { decideReuse, deriveFixedPoint, evaluateGoalClauses, evaluateFixedPointTen, validateFixedPointExecutionHeader, FIXED_POINT_TEN_CRITERIA } from "./horn-reuse-fixed-point.mjs";
+import { decideReuse, deriveFixedPoint, evaluateGoalClauses, evaluateFixedPointTen, buildFixedPointExecutionHeader, validateFixedPointExecutionHeader, FIXED_POINT_TEN_CRITERIA } from "./horn-reuse-fixed-point.mjs";
 
 const CONTRACT_PATH = "docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json";
 const CONTINUITY_OWNER_PATH = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-CONNECTOR.json";
@@ -196,6 +196,34 @@ const makeFixedPointExecutionHeader = (overrides = {}) => {
   };
 };
 
+
+test("builder do HORN emite um cabeçalho de dez critérios já validado", () => {
+  const goalReceipt = fixedPointTenGoalReceipt();
+  const result = buildFixedPointExecutionHeader({
+    agent_id: "hermes",
+    mission_id: "mission-1",
+    intent_id: "intent-1",
+    goal_fingerprint: "fingerprint-1",
+    observed_head: "a".repeat(40),
+    evaluation_ref: "receipt:builder-test",
+    execution_ref: "execution:builder-test",
+    criteria: fixedPointTenCriteria(),
+    goal_receipt: goalReceipt,
+  }, { nowMs: fixedNow, maxAgeMs: 5000 });
+  assert.equal(result.accepted, true);
+  assert.equal(result.header_usage, "USED_AND_FIXED_POINT");
+  assert.equal(result.header.criteria.length, 10);
+  assert.equal(result.header.verdict, "FIXED_POINT");
+});
+
+test("builder sem contexto de agente não pode fabricar cabeçalho", () => {
+  const result = buildFixedPointExecutionHeader({ criteria: fixedPointTenCriteria() }, {
+    nowMs: fixedNow, maxAgeMs: 5000,
+  });
+  assert.equal(result.accepted, false);
+  assert.equal(result.header_usage, "NOT_USED");
+  assert.equal(result.status, "BLOCKED_FIXED_POINT_EXECUTION_HEADER_FIELDS_MISSING");
+});
 
 test("cabeçalho de execução valida dez tentativas reais e inclui o receipt de uso", () => {
   const header = makeFixedPointExecutionHeader();
