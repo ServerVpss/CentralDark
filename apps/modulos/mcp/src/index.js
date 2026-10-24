@@ -25,7 +25,6 @@ import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
-import { createDevicePairingRouter } from "./device-pairing.js";
 import { isAdmin as isCockpitAdmin } from "./admin.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
@@ -844,9 +843,11 @@ app.post("/admin/mcp", (req, res) => {
 });
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
-});
-app.get("/admin/catalog", authAdmin, async (req, res) => {
-    try {
+    });
+    app.get("/admin/catalog", async (req, res) => {
+        const auth = requireAdminScope(req, res);
+        if (!auth) return;
+        try {
         const result = await getAdminCatalog(req);
         res.json(result);
     } catch (err) {

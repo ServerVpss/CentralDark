@@ -165,15 +165,14 @@ export function createDevicePairingStore(options = {}) {
     return { ok: true, device_id: deviceId };
   }
   function listDevices() {
-    const registry = readRegistry();
-    const t = now();
-    return registry.devices.map(({ token_hash: _secret, refresh_token_hash: _refreshSecret, ...device }) => ({
-      ...device,
-      status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
-    }));
-  }
-  return { start, approve, status, heartbeat, refresh, revoke, listDevices, registryPath };
-  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, listDevices, registryPath };
+          const registry = readRegistry();
+          const t = now();
+          return registry.devices.map(({ token_hash: _secret, refresh_token_hash: _refreshSecret, ...device }) => ({
+              ...device,
+              status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
+          }));
+      }
+      return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, listDevices, registryPath };
 }
 
 export function createDevicePairingRouter(options = {}) {
@@ -185,11 +184,10 @@ export function createDevicePairingRouter(options = {}) {
   });
 
   const isCookieAdmin = options.cookieAdmin || (() => false);
-  const authorized = (req) => isAdmin(req) || (
-    req.get("X-CentralDark-Intent") === "pairing-admin" && isCookieAdmin(req)
-  );
-  const isAdmin = options.isAdmin || ((req) => safeEqual(bearerFrom(req), process.env.CENTRALDARK_ADMIN_KEY || "__missing__"));
-  const limiter = new Map();
+    const authorized = (req) => isAdmin(req) || (
+      req.get("X-CentralDark-Intent") === "pairing-admin" && isCookieAdmin(req)
+    );
+    const limiter = new Map();
   const allowStart = (req) => {
     const key = String(req.ip || req.socket?.remoteAddress || "unknown");
     const now = Date.now();
