@@ -3333,3 +3333,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-24
 - **Contexto:** A tentativa inicial de criar branch pelo atalho que também tenta abrir PR retornou HTTP 422 no endpoint /pulls. O caminho de commit multi-arquivo da CentralDark conseguiu criar a branch, publicar o commit e, separadamente, abrir o PR.
 - **Aprendizado:** Para mudanças documentais isoladas, reutilizar o owner canônico e usar github_commit com branch + createBranchFrom=main; fazer readback antes de abrir PR separadamente. GitHub Contents API permite edição/commit sem runner. Não tratar PR aberto como merge ou deploy. Para SSH, exigir validação de host e nunca desabilitar StrictHostKeyChecking.
+
+### 222. KAIZEN/LOOP ÚNICO — autorização persistente já registrada; verificar PRs e CURRENT sem re-perguntar
+- **Categoria:** regra
+- **Data:** 2026-10-24
+- **Contexto:** Em 2026-10-24 CHEFE pediu verificar PR #1932/#1933 e fluxo mestre KAIZEN, recuperar cabeça externalizada e persistir regra já canônica. MCP GitHub mostrou ambos PRs abertos: #1932 head 25046d30 (docs GitHub-first sem runner); #1933 head f985712a (classificação somente-leitura e auditoria semântica). LEIA-ME-IA.md, docs/CONSCIENCIA/02-PERMISSOES.md e docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md §6.0 já registram intenção/autorização e loop único.
+- **Aprendizado:** Não criar nova lei ou memória paralela. Recuperar INTENT_ID/GOAL/OWNER/MAIN_SHA/PR_HEAD/ACTIVE_WRITER/STATUS/RECEIPT/NEXT_CURSOR do owner e medir CURRENT; executar ações dentro da intenção e delegação autenticada sem pedir permissão repetida. Um escritor por escopo; TESTE→CONTRAPROVA→CI mesmo SHA→merge somente elegível→readback main→runtime→receipt→NEXT_CURSOR. PR aberto não prova merge/deploy; testes declarados no PR não substituem readback. Ações sensíveis continuam submetidas aos gates reais aplicáveis.
