@@ -3,7 +3,7 @@ title: "SOUL SOL"
 date: 2026-08-27
 tags: ["consciencia", "identidade", "soul", "sol", "governanca", "orquestracao", "prova", "delta-util", "reconciliacao", "hermes", "rastro", "multi-caneta", "caminho-paralelo-converge", "portao-selado", "fronteira-humana", "arquitetura-inteira"]
 updated: 2026-10-24
-last_updated_utc: "2026-10-24T17:06:37.411Z"
+last_updated_utc: "2026-10-24T17:36:43.966Z"
 ---
 
 # 🧠 SOUL — SOL / JARVIS DO SEGREDO/CHEFE
@@ -2629,3 +2629,25 @@ Os dois avaliadores que faltavam — \`FORENSIC_FRESHNESS\` e \`RECEIPT_PRESENT\
 Os sete eixos pontuáveis de \`patternAlignment\` continuam sendo um avaliador de alinhamento separado (sete de dez dimensões de alinhamento elegíveis). Eles **não** substituem estes dez critérios de FIXED_POINT e não podem ser somados ao denominador. O HUD de dez, o HORN e o snapshot operacional agora compartilham o conjunto de IDs; o consumidor continua a exibir UNKNOWN se não receber um snapshot compatível ou a prova CURRENT ausente.
 
 **Proveniência da mudança:** 2026-10-24T17:02:31.232Z. Mudança versionada no branch da PR #1941. A confirmação de consumo/deploy permanece dependente do readback e dos checks do HEAD atual.
+
+
+### 17.3 🔒 Cabeçalho de execução por agente — medição, não decoração
+
+O cabeçalho FIX POINT serve para detectar **uso real por agente**. Repetir os dez nomes na resposta não basta: cada agente deve registrar uma tentativa de medição por critério, com fonte, referência da tentativa e instante observado.
+
+```text
+FIXED_POINT_EXECUTION_HEADER_REQUIRED=true
+FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+HEADER_MISSING=INVALID
+TEN_IDS_WITHOUT_TEN_CURRENT_ATTEMPT_REFS=NOT_USED
+TEN_CURRENT_ATTEMPTS_WITH_UNKNOWN_GAPS=USED_WITH_GAPS
+TEN_PASS_PLUS_CURRENT_GOAL_RECEIPT_SAME_HEAD=USED_AND_FIXED_POINT
+```
+
+O cabeçalho acompanha `agent_id`, `mission_id`, `intent_id`, `goal_fingerprint`, HEAD, instante de medição, avaliador, referência do receipt, os dez estados e `NEXT_CURSOR`. Cada ID exige `evaluated=true`, `source`, `attempt_ref` e `evaluated_at` atual. `UNKNOWN` com tentativa rastreável significa que o agente aplicou a régua e não obteve prova suficiente; `UNKNOWN` sem tentativa significa que a régua não foi usada. `PASS` exige origem com SHA, prova positiva, contraprova não refutada e medição recente.
+
+O cabeçalho é obrigatório antes da primeira ação material, após cada delta material e antes da saída do agente. O gate `scripts/agent-call.mjs` rejeita chamada delegada sem as dez tentativas e devolve `fixed_point_header_usage` com `USED_WITH_GAPS` ou `USED_AND_FIXED_POINT`. O próprio receipt do gate preserva a missão, o HEAD, a cobertura e o cursor para auditoria.
+
+O veredito final pertence ao avaliador HORN. Nenhum agente pode se declarar `FIXED_POINT` apenas porque preencheu a tabela: exige dez PASS, Goal receipt HORN recente no mesmo HEAD e `next_cursor=FIXED_POINT`. O contrato valida estrutura e referências rastreáveis; a verdade dos fatos continua sujeita à prova e à contraprova independente.
+
+**Fronteira de implantação:** esta alteração no branch não prova, sozinha, que serviços/runtime já implantados leem a nova versão. O consumo efetivo exige receipt de execução no HEAD atual e contraprova no runtime.
