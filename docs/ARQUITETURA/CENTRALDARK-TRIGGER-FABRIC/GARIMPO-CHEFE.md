@@ -1,6 +1,6 @@
 # GARIMPO-CHEFE — contrato operacional
 
-Papel: reservatório físico de minério bruto do Chefe. **Destino novo medido na Casa em 19/10/2026:** `F:\GARIMPO-CHEFE` (diretório criado, inicialmente vazio; ingestão ainda não executada). **Origem histórica:** `E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE` — preservar até inventário, hashes, cópia segura e contraprova; não inferir que arquivos já foram migrados.
+Papel: reservatório físico de minério bruto do Chefe. **Destino novo medido na Casa em 19/10/2026:** `F:\GARIMPO-CHEFE` (diretório criado, inicialmente vazio; ingestão ainda não executada). **Origem histórica:** `K:\_MAPA_CASA\GARIMPO-CHEFE` — preservar até inventário, hashes, cópia segura e contraprova; não inferir que arquivos já foram migrados.
 
 **Atalho físico:** `F:\GARIMPO-CHEFE` · link `file:///F:/GARIMPO-CHEFE` (navegador pode bloquear URLs `file:` em páginas HTTP; o Cockpit oferece também botão de copiar caminho para abrir no Explorador).
 

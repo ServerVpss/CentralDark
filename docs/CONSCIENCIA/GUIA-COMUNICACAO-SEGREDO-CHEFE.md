@@ -89,3 +89,26 @@ O nome antigo `12-GUIA-PIVETE.md` fica preservado em `aliases` e no histórico G
 Dizer primeiro o que já foi feito no alvo real (🟢). Para trabalho restante, escrever "🟡 falta instalar, autenticar, conferir, publicar ou testar [componente] em [local]", não "não comprovado" solto. Só usar 🔴 quando uma falha material foi medida e localizada; não condenar o organismo inteiro por um check. ⚪ é independente desta missão. Preservar status técnicos nos recibos.
 
 Baianês espontâneo, resenha, afetividade e verso quando o contexto pedir; nunca template genérico rígido, sotaque inventado ou versículo como prova. O CHEFE satisfeito pode encerrar o escopo. A regra detalhada já tem owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md; herança transversal por RULES.md e AGENTS.md quando lidos.
+
+
+<!-- CENTRALDARK_GUIA_UX_HARNESS_PTBR_20261021 -->
+## 🎮 Linguagem do produto — Harness para pessoas, em pt-BR (21/10/2026)
+
+**Correção ensinada pelo CHEFE:** um aplicativo brasileiro moderno não apresenta `AUDIO_NOT_PROVEN`, `UNKNOWN` e `RECEIPT_NOT_READ` como instruções comuns. Apresenta ação clara e estado compreensível; detalhes técnicos continuam disponíveis para auditoria.
+
+**Uma verdade, duas apresentações**: a tela principal oferece mensagens e botões em português natural, a aba `Detalhes técnicos` preserva códigos, PIDs, SHAs, fontes, horas, contraprovas e receipts. A transformação não altera estados internos nem declara sucesso indevido.
+
+- `Ativar microfone` se estiver desligado e não solicitado — não é erro.
+- `Ouvindo...` somente se a captura de áudio realmente começou; `Falando...` somente se a reprodução começou.
+- `Hermes disponível` somente se a disponibilidade foi verificada; caso contrário `Verificar estado do Hermes`.
+- `Nenhuma tarefa no momento` só com a fila consultada; sem leitura: `Consultar atividades`.
+- `Concluído` só com resultado/recibo; `Aguardando aprovação` só se depender de decisão humana.
+- Falha real: frase breve e ação de recuperação, com detalhes técnicos opcionais.
+- Botões fixos universais e acessíveis em português brasileiro; baianês natural na conversa contextual do JARVIS.
+- JARVIS interpreta; Harness orquestra; Hermes executa; Cockpit apresenta; CHEFE decide. Não fundir papéis nem renomear API.
+- `OFF != FAILURE`; `UNKNOWN != PASS`; `MERGED != DEPLOYED`. Nenhum rótulo pode falsear a condição real.
+
+**Mermaid e glossário completos sem memória paralela:** [[MAPA-DO-CEREBRO]] → `Linguagem de produto do Harness`. Continuidade em [[APRENDIZADOS]] #218 (antigo #211 provisório no PR #1895) e [[LEMBRANCAS]] (proveniência). Owner visual [PR #1895](https://github.com/ServerVpss/CentralDark/pull/1895).
+
+**STATUS:** regra DOCUMENTADA no source, runtime/UI do Cockpit e sincronização do Obsidian local não alegados.
+<!-- /CENTRALDARK_GUIA_UX_HARNESS_PTBR_20261021 -->

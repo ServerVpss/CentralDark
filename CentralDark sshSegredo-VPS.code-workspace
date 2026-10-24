@@ -1,0 +1,67 @@
+{
+  "folders": [
+    {
+      "name": "CentralDark (raiz)",
+      "uri": "vscode-remote://ssh-remote+segredo-vps/root/CentralDark",
+    },
+    {
+      "name": "Scripts",
+      "uri": "vscode-remote://ssh-remote+segredo-vps/root/CentralDark/scripts",
+    },
+    {
+      "name": "Apps",
+      "uri": "vscode-remote://ssh-remote+segredo-vps/root/CentralDark/apps",
+    },
+    {
+      "name": "Docs / Consciência",
+      "uri": "vscode-remote://ssh-remote+segredo-vps/root/CentralDark/docs",
+    },
+    {
+      "name": "Infra",
+      "uri": "vscode-remote://ssh-remote+segredo-vps/root/CentralDark/infra",
+    },
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/actions-runner/**": true,
+      "**/revisoes/**": true,
+      "**/.git/**": true,
+      "**/apps/modulos/WebUI/**": true,
+      "**/dist/**": true,
+      "**/.backups/**": true,
+      "**/quarantine/**": true,
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/actions-runner": true,
+      "**/revisoes": true,
+      "**/apps/modulos/WebUI": true,
+      "**/dist": true,
+      "**/.backups": true,
+      "**/quarantine": true,
+    },
+    "files.exclude": {
+      "**/node_modules": true,
+    },
+    "editor.formatOnSave": true,
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "remote.autoForwardPorts": false,
+    "remote.restoreForwardedPorts": false,
+    "chat.byokUtilityModelDefault": "mainAgent",
+    "powershell.cwd": "CentralDark (raiz)",
+    "files.readonlyInclude": {
+      "{**/.c4z/.extsrcs/*.PROTSYM.cbl,**/.c4z/.extsrcs/*.PROTSYM.listing}": true,
+    },
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "ms-python.python",
+    ],
+  },
+}

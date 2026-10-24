@@ -43,6 +43,139 @@ export function createDevicePairingStore(options = {}) {
     for (const [id, item] of pending.entries()) {
       if (item.expiresAt <= t || (item.tokenDelivered && t - item.approvedAt > ttlMs)) pending.delete(id);
     }
+    function writeRegistry(registry) {
+        mkdirSync(dirname(registryPath), { recursive: true, mode: 0o700 });
+        const temp = `${registryPath}.${process.pid}.${Date.now()}.tmp`;
+        writeFileSync(temp, `${JSON.stringify(registry, null, 2)}\n`, { encoding: "utf8", mode: 0o600 });
+        renameSync(temp, registryPath);
+        chmodSync(registryPath, 0o600);
+    }
+    function prune() {
+        const t = now();
+        for (const [id, item] of pending.entries()) {
+            if (item.expiresAt <= t || (item.tokenDelivered && t - item.approvedAt > ttlMs))
+                pending.delete(id);
+        }
+    }
+    function makeCode() {
+        const raw = randomBytes(4).toString("hex").toUpperCase();
+        return `${raw.slice(0, 4)}-${raw.slice(4, 8)}`;
+    }
+    function start(meta = {}) {
+        prune();
+        const pairId = randomUUID();
+        const pairSecret = randomBytes(24).toString("base64url");
+        const item = {
+            pairId,
+            pairSecretHash: sha256(pairSecret),
+            code: makeCode(),
+            createdAt: now(),
+            expiresAt: now() + ttlMs,
+            approvedAt: 0,
+            tokenDelivered: false,
+            token: "",
+            refreshToken: "",
+            meta: {
+                deviceName: cleanText(meta.deviceName, "unknown-device"),
+                executor: cleanText(meta.executor, "unknown"),
+                surface: cleanText(meta.surface, "unknown"),
+            },
+        };
+        pending.set(pairId, item);
+        return { pairId, pairSecret, code: item.code, expiresAt: item.expiresAt };
+    }
+    function approve({ pairId, code, deviceName, executor, surface }) {
+        prune();
+        const item = pending.get(String(pairId));
+        if (!item || item.expiresAt <= now())
+            return { ok: false, error: "pair_expired_or_missing" };
+        if (!safeEqual(item.code, String(code || "").toUpperCase()))
+            return { ok: false, error: "pair_code_mismatch" };
+        const token = randomBytes(32).toString("base64url");
+        const refreshToken = randomBytes(40).toString("base64url");
+        const deviceId = randomUUID();
+        const registry = readRegistry();
+        registry.devices.push({
+            device_id: deviceId,
+            device_name: cleanText(deviceName, item.meta.deviceName),
+            executor: cleanText(executor, item.meta.executor),
+            surface: cleanText(surface, item.meta.surface),
+            token_hash: sha256(token),
+            refresh_token_hash: sha256(refreshToken),
+            token_expires_at: new Date(now() + deviceTokenTtlMs).toISOString(),
+            paired_at: new Date(now()).toISOString(),
+            last_heartbeat: null,
+            capabilities: {},
+        });
+        writeRegistry(registry);
+        item.deviceId = deviceId;
+        item.token = token;
+        item.refreshToken = refreshToken;
+        item.tokenExpiresAt = now() + deviceTokenTtlMs;
+        item.approvedAt = now();
+        return { ok: true, deviceId };
+    }
+    function status({ pairId, pairSecret }) {
+        prune();
+        const item = pending.get(String(pairId));
+        if (!item || item.expiresAt <= now())
+            return { status: "expired" };
+        if (!safeEqual(item.pairSecretHash, sha256(pairSecret || "")))
+            return { status: "denied" };
+        if (!item.deviceId)
+            return { status: "pending" };
+        if (item.tokenDelivered)
+            return { status: "approved", device_id: item.deviceId };
+        item.tokenDelivered = true;
+        const token = item.token;
+        const refreshToken = item.refreshToken;
+        item.token = "";
+        item.refreshToken = "";
+        return { status: "approved", device_id: item.deviceId, token, refresh_token: refreshToken, token_expires_at: new Date(item.tokenExpiresAt).toISOString() };
+    }
+    function heartbeat({ token, capabilities = {} }) {
+        const tokenHash = sha256(token || "");
+        const registry = readRegistry();
+        const device = registry.devices.find((entry) => safeEqual(entry.token_hash || "", tokenHash));
+        if (!device)
+            return { ok: false, error: "invalid_device_token" };
+        if (device.token_expires_at && Date.parse(device.token_expires_at) <= now())
+            return { ok: false, error: "device_token_expired" };
+        device.last_heartbeat = new Date(now()).toISOString();
+        device.capabilities = capabilities && typeof capabilities === "object" ? capabilities : {};
+        writeRegistry(registry);
+        return { ok: true, device_id: device.device_id, pong: new Date(now()).toISOString() };
+    }
+    function refresh({ refreshToken }) {
+        const refreshHash = sha256(refreshToken || "");
+        const registry = readRegistry();
+        const device = registry.devices.find((entry) => safeEqual(entry.refresh_token_hash || "", refreshHash));
+        if (!device)
+            return { ok: false, error: "invalid_refresh_token" };
+        const token = randomBytes(32).toString("base64url");
+        device.token_hash = sha256(token);
+        device.token_expires_at = new Date(now() + deviceTokenTtlMs).toISOString();
+        writeRegistry(registry);
+        return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };
+    }
+    function revoke({ deviceId }) {
+    if (!deviceId || typeof deviceId !== "string") return { ok: false, error: "device_id_required" };
+    const registry = readRegistry();
+    const before = registry.devices.length;
+    registry.devices = registry.devices.filter(entry => entry.device_id !== deviceId);
+    if (registry.devices.length === before) return { ok: false, error: "device_not_found" };
+    writeRegistry(registry);
+    return { ok: true, device_id: deviceId };
+  }
+  function listDevices() {
+        const registry = readRegistry();
+        const t = now();
+        return registry.devices.map(({ token_hash: _secret, refresh_token_hash: _refreshSecret, ...device }) => ({
+            ...device,
+            status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
+        }));
+    }
+    return { start, approve, status, heartbeat, refresh, revoke, listDevices, registryPath };
   }
   function makeCode() {
     const raw = randomBytes(4).toString("hex").toUpperCase();
@@ -167,6 +300,50 @@ export function createDevicePairingStore(options = {}) {
 }
 
 export function createDevicePairingRouter(options = {}) {
+    const router = express.Router();
+    const store = options.store || createDevicePairingStore(options);
+    const isAdmin = options.isAdmin || ((req) => {
+    const expected = String(process.env.CENTRALDARK_ADMIN_KEY || "");
+    return expected.length > 0 && safeEqual(bearerFrom(req), expected);
+  });
+    const isCookieAdmin = options.cookieAdmin || (() => false);
+  const authorized = (req) => isAdmin(req) || (
+    req.get("X-CentralDark-Intent") === "pairing-admin" && isCookieAdmin(req)
+  );
+
+  router.post("/pair/start", (req, res) => {
+        const pair = store.start({ deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
+        res.status(201).json({ ok: true, pair_id: pair.pairId, pair_secret: pair.pairSecret, code: pair.code, expires_at: new Date(pair.expiresAt).toISOString() });
+    });
+    router.get("/pair/status", (req, res) => {
+        const result = store.status({ pairId: req.query.id, pairSecret: req.query.secret });
+        res.status(result.status === "denied" ? 403 : 200).json(result);
+    });
+    router.post("/pair/approve", (req, res) => {
+        if (!isAdmin(req))
+            return res.status(401).json({ ok: false, error: "admin_auth_required" });
+        const result = store.approve({ pairId: req.body?.id, code: req.body?.code, deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
+        res.status(result.ok ? 200 : 400).json(result);
+    });
+    router.post("/token/refresh", (req, res) => {
+        const result = store.refresh({ refreshToken: bearerFrom(req) });
+        res.status(result.ok ? 200 : 401).json(result);
+    });
+    router.post("/heartbeat", (req, res) => {
+        const result = store.heartbeat({ token: bearerFrom(req), capabilities: req.body?.capabilities });
+        res.status(result.ok ? 200 : 401).json(result);
+    });
+    router.post("/devices/revoke", (req, res) => {
+    if (!authorized(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    const result = store.revoke({ deviceId: req.body?.device_id });
+    res.status(result.ok ? 200 : 404).json(result);
+  });
+  router.get("/devices", (req, res) => {
+        if (!isAdmin(req))
+            return res.status(401).json({ ok: false, error: "admin_auth_required" });
+        res.json({ ok: true, devices: store.listDevices() });
+    });
+    return router;
   const router = express.Router();
   const store = options.store || createDevicePairingStore(options);
   const isAdmin = options.isAdmin || ((req) => safeEqual(bearerFrom(req), process.env.CENTRALDARK_ADMIN_KEY || "__missing__"));

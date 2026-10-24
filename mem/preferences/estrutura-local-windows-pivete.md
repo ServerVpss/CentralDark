@@ -24,7 +24,7 @@ O nome deste arquivo é legado e permanece por compatibilidade/proveniência. El
 O desenho abaixo foi registrado como fotografia operacional naquela data. É evidência histórica; **não prova a topologia física atual**.
 
 ```text
-E:\CentralDark\
+K:\
 ├─ repo\           ← clone do GitHub CentralDark naquele snapshot
 ├─ obsidian-app\   ← programa Obsidian
 ├─ vault\          ← junction para repo\docs\BRAIN naquele snapshot
@@ -59,10 +59,10 @@ CURRENT_CONSUMERS_AND_JUNCTIONS=UNKNOWN_UNTIL_LOCAL_INSPECTION
 Não assumir automaticamente:
 
 ```text
-E:\CentralDark\repo = atual
-E:\CentralDark\CentralDark = atual
-E:\CentralDark\Pivete = atual
-E:\CentralDark\Sol = atual
+K:\repo = atual
+K:\ = atual
+K:\ = atual
+K:\Sol = atual
 %LOCALAPPDATA%\hermes\profiles\pivete = HERMES_HOME atual
 ```
 
