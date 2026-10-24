@@ -1132,6 +1132,24 @@ export function validateUniversalMethod() {
     'USED_AND_FIXED_POINT',
   ], 'FIXED_POINT_EXECUTION_HEADER_HORN_OWNER');
 
+  requireTokens(master, [
+    'builder: scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
+    'header_is_execution_receipt_not_decoration: true',
+    'exactly_ten_ids_required: true',
+  ], 'FIXED_POINT_EXECUTION_HEADER_MASTER');
+
+  requireTokens(hermesPrompt, [
+    'FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
+    'FIXED_POINT_HEADER_WITHOUT_TEN_CURRENT_ATTEMPTS=NOT_USED',
+    'FIXED_POINT_HEADER_UNKNOWN_WITH_ATTEMPT_REF=USED_WITH_GAPS',
+  ], 'FIXED_POINT_EXECUTION_HEADER_HERMES_BUILDER');
+
+  requireTokens(agentsGuide, [
+    'FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
+    'FIXED_POINT_HEADER_WITHOUT_TEN_CURRENT_ATTEMPTS=NOT_USED',
+    'FIXED_POINT_HEADER_UNKNOWN_WITH_ATTEMPT_REF=USED_WITH_GAPS',
+  ], 'FIXED_POINT_EXECUTION_HEADER_AGENTS_BUILDER');
+
   requireTokens(agentCall, [
     'validateFixedPointExecutionHeader',
     'BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSING',
