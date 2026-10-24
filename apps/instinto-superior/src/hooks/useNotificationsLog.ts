@@ -25,6 +25,9 @@ const PERIODO_MS: Record<PeriodoFiltro, number> = {
   "7d": 7 * 24 * 60 * 60 * 1000,
 };
 
+// Um tópico exclusivo por montagem evita reassinar canal já inscrito no StrictMode.
+// Todos continuam no MESMO client Supabase e ledger notifications_log.
+let notificacoesCanalSequencia = 0;
 const MAX_FEED = 200;
 export type RealtimeEstado = "CONNECTING" | "LIVE" | "DISCONNECTED";
 
@@ -96,7 +99,7 @@ export function useNotificationsLog(periodo: PeriodoFiltro = "24h") {
 
   useEffect(() => {
     const canal = supabase
-      .channel("cockpit-notifications-log")
+      .channel(`cockpit-notifications-log-${++notificacoesCanalSequencia}`)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notifications_log" },
