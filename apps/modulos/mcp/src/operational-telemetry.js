@@ -486,12 +486,16 @@ function fixedPointTenEvidence({ root, heartbeat, diagnostics, nowMs }) {
   const ownerEvidence = {
     id: "OWNER_UNIQUE",
     status: ownerStatus,
+    evaluated: true,
     source: "docs/HUD/HUD.html",
     source_sha: hudSha,
     proof_ref: "docs/HUD/HUD.html#cd-fixed-point-ten",
     counterproof_ref: "scan:canonical-owner-and-ten-unique-data-fp-ids",
     counterproof_verdict: uiIdsUnique ? "NOT_REFUTED" : "REFUTED",
+    attempt_ref: "readback:docs/HUD/HUD.html@" + measuredAt,
+    evaluated_at: measuredAt,
     measured_at: measuredAt,
+    reason: ownerStatus === "PASS" ? null : "HUD file or ten unique IDs not proven by this readback",
   };
 
   const supplied = heartbeat?.fixedPointTenEvidence && typeof heartbeat.fixedPointTenEvidence === "object"
@@ -499,7 +503,11 @@ function fixedPointTenEvidence({ root, heartbeat, diagnostics, nowMs }) {
   const suppliedRow = (id, fallbackSource) => {
     const row = supplied[id];
     if (!row || typeof row !== "object") {
-      return { id, status: "UNKNOWN", source: fallbackSource, measured_at: measuredAt };
+      return {
+        id, status: "UNKNOWN", evaluated: false, source: fallbackSource,
+        attempt_ref: null, evaluated_at: null, measured_at: measuredAt,
+        reason: "CURRENT_SENSOR_ATTEMPT_RECEIPT_NOT_SUPPLIED",
+      };
     }
     return { ...row, id };
   };
@@ -515,14 +523,23 @@ function fixedPointTenEvidence({ root, heartbeat, diagnostics, nowMs }) {
   const heartEvidence = beat ? {
     id: "ONE_HEART_FRESH",
     status: beatStatus,
+    evaluated: true,
     source: "logs/heartbeat-api.json",
     source_sha: sha256(beat),
     proof_ref: "logs/heartbeat-api.json#t=" + String(beat.t || "UNKNOWN"),
     counterproof_ref: "heartbeat-self-alive-and-age-within-30s",
     counterproof_verdict: beatStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
+    attempt_ref: "readback:logs/heartbeat-api.json@" + measuredAt,
+    evaluated_at: measuredAt,
     measured_at: Number.isFinite(beatTime) ? new Date(beatTime).toISOString() : measuredAt,
     max_age_ms: 30000,
-  } : { id: "ONE_HEART_FRESH", status: "UNKNOWN", source: "logs/heartbeat-api.json", measured_at: measuredAt };
+    reason: beatStatus === "PASS" ? null : "Heartbeat is absent, unknown, stale, or not alive",
+  } : {
+    id: "ONE_HEART_FRESH", status: "UNKNOWN", evaluated: true,
+    source: "logs/heartbeat-api.json", attempt_ref: "readback:logs/heartbeat-api.json@" + measuredAt,
+    evaluated_at: measuredAt, measured_at: measuredAt,
+    reason: "No current heartbeat file was readable",
+  };
 
   const syncPath = path.join(root, "logs/auto-sync-status.json");
   const sync = readJsonSafe(syncPath);
@@ -540,14 +557,23 @@ function fixedPointTenEvidence({ root, heartbeat, diagnostics, nowMs }) {
   const syncEvidence = sync ? {
     id: "CHECKOUT_MAIN_SYNC",
     status: syncStatus,
+    evaluated: true,
     source: "logs/auto-sync-status.json",
     source_sha: validSha(sync.head) ? sync.head : (validSha(sync.origin_main) ? sync.origin_main : sha256(sync)),
     proof_ref: "logs/auto-sync-status.json#head=" + String(sync.head || "UNKNOWN"),
     counterproof_ref: "head-equals-origin_main-and-fresh-auto-sync-receipt",
     counterproof_verdict: syncStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
+    attempt_ref: "readback:logs/auto-sync-status.json@" + measuredAt,
+    evaluated_at: measuredAt,
     measured_at: Number.isFinite(syncTime) ? new Date(syncTime).toISOString() : measuredAt,
     max_age_ms: AUTO_SYNC_STATUS_MAX_AGE_MS,
-  } : { id: "CHECKOUT_MAIN_SYNC", status: "UNKNOWN", source: syncPath, measured_at: measuredAt };
+    reason: syncStatus === "PASS" ? null : "Sync receipt missing, stale, blocked, or HEADs differ",
+  } : {
+    id: "CHECKOUT_MAIN_SYNC", status: "UNKNOWN", evaluated: true, source: syncPath,
+    attempt_ref: "readback:" + syncPath + "@" + measuredAt,
+    evaluated_at: measuredAt, measured_at: measuredAt,
+    reason: "No current auto-sync receipt was readable",
+  };
 
   const forensicHashValid = /^[a-f0-9]{64}$/i.test(String(diagnostics?.sha256 || ""));
   const forensicShapeValid = diagnostics?.latestReceiptPresent === true &&
@@ -560,28 +586,48 @@ function fixedPointTenEvidence({ root, heartbeat, diagnostics, nowMs }) {
   const forensicEvidence = diagnostics?.latestReceiptPresent ? {
     id: "FORENSIC_FRESHNESS",
     status: forensicStatus,
+    evaluated: true,
     source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
     source_sha: forensicHashValid ? diagnostics.sha256 : sha256(diagnostics),
     proof_ref: "_DIAGNOSTICS/FORENSIC-LATEST.json#sha256=" + String(diagnostics.sha256 || "UNKNOWN"),
     counterproof_ref: "timestamp-within-15m+report+archive+secret-boundary",
     counterproof_verdict: forensicStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
+    attempt_ref: "readback:_DIAGNOSTICS/FORENSIC-LATEST.json@" + measuredAt,
+    evaluated_at: measuredAt,
     measured_at: Number.isFinite(Date.parse(String(diagnostics.observedAtIso || diagnostics.observedAt || "")))
       ? new Date(Date.parse(String(diagnostics.observedAtIso || diagnostics.observedAt))).toISOString() : measuredAt,
     max_age_ms: 15 * 60 * 1000,
-  } : { id: "FORENSIC_FRESHNESS", status: "UNKNOWN", source: "_DIAGNOSTICS/FORENSIC-LATEST.json", measured_at: measuredAt };
+    reason: forensicStatus === "PASS" ? null : "Receipt exists but freshness/shape/integrity is not proven",
+  } : {
+    id: "FORENSIC_FRESHNESS", status: "UNKNOWN", evaluated: true,
+    source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+    attempt_ref: "readback:_DIAGNOSTICS/FORENSIC-LATEST.json@" + measuredAt,
+    evaluated_at: measuredAt, measured_at: measuredAt,
+    reason: "No current forensic receipt was found at the canonical pointer",
+  };
 
   const receiptStatus = !diagnostics?.latestReceiptPresent ? "UNKNOWN"
     : forensicShapeValid ? "PASS" : "FAIL";
   const receiptEvidence = diagnostics?.latestReceiptPresent ? {
     id: "RECEIPT_PRESENT",
     status: receiptStatus,
+    evaluated: true,
     source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
     source_sha: forensicHashValid ? diagnostics.sha256 : sha256(diagnostics),
     proof_ref: "_DIAGNOSTICS/FORENSIC-LATEST.json#receipt",
     counterproof_ref: "receipt-hash+report+archive+secret-boundary-readback",
     counterproof_verdict: receiptStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
+    attempt_ref: "readback:_DIAGNOSTICS/FORENSIC-LATEST.json@" + measuredAt,
+    evaluated_at: measuredAt,
     measured_at: measuredAt,
-  } : { id: "RECEIPT_PRESENT", status: "UNKNOWN", source: "_DIAGNOSTICS/FORENSIC-LATEST.json", measured_at: measuredAt };
+    reason: receiptStatus === "PASS" ? null : "Receipt is present but integrity/required artifacts are not proven",
+  } : {
+    id: "RECEIPT_PRESENT", status: "UNKNOWN", evaluated: true,
+    source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+    attempt_ref: "readback:_DIAGNOSTICS/FORENSIC-LATEST.json@" + measuredAt,
+    evaluated_at: measuredAt, measured_at: measuredAt,
+    reason: "No current receipt was found at the canonical pointer",
+  };
 
   const criteria = [
     ownerEvidence,
