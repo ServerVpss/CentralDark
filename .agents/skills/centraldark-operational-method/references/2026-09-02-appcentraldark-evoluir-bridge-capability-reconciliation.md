@@ -178,8 +178,8 @@ Logo `APPCENTRALDARK EVOLUIR` deve reutilizar esse probe para qualquer claim de 
 ### Observado visualmente
 
 ```text
-E:\CentralDark\sol-desktop-poc = pasta presente
-E:\CentralDark = raiz com múltiplas superfícies/pastas históricas e atuais
+K:\sol-desktop-poc = pasta presente
+K:\ = raiz com múltiplas superfícies/pastas históricas e atuais
 Gmail = notificações de avanço/bloqueio do PR #1381 visíveis
 APPCENTRALDARK/arquivos locais = material candidato a reconciliação
 ```

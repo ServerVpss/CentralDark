@@ -1,6 +1,6 @@
 ---
 name: kimetsu-brainstorm
-description: "REMIX: KIMETSU_LEGACY + brainstorming. Classifica complexidade, descobre intenção real, propõe abordagens com trade-offs, gateia aprovação humana antes de implementar. Use antes de qualquer trabalho criativo ou de implementação."
+description: "KIMETSU REMIX: classifica intenção, seleciona contextual e deliberadamente 17 respirações históricas e técnicas ToT/CoT/ReAct/GoT/AoT/SoT/PoT/CoT-SC; avalia delegação Hermes, fable-loop e cot-react-loop por rodada com evidência, sem arquitetura paralela. Use quando o CHEFE invocar Kimetsu, REMIX ou brainstorming operacional."
 centraldark_autosync: true
 centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
@@ -504,3 +504,101 @@ CLASSIFICAÇÃO define se é spike, bounded ou architectural — e qual gate apl
 
 🟢 Estado: skill definida e pronta para carregar como SKILL.md.
 🔎 Próximo: testar o selector automático em task real e exigir seção 12 antes de considerar homologada.
+
+
+---
+
+## 15. REMIX ADAPTATIVO — 17 RESPIRAÇÕES + TÉCNICAS + LOOPS (2026-10-24)
+
+**Gatilho contextual:** quando o CHEFE invocar `kimetsu-brainstorm`, `Kimetsu`, `REMIX Kimetsu` ou pedir sua delegação/respiração, esta skill existente é o **único owner** da seleção. Não substitui a cadeia mestra `!CENTRALDARK`, não instala serviços, não cria roteadores/skills adicionais e não dispara todas as etapas por padrão.
+
+**Código de seleção no mesmo owner:** `.agents/skills/kimetsu-brainstorm/scripts/remix_selector.py`. A execução do script é um **plano**, não prova de subagente executado, tool chamada ou runtime ativado. Só afirmar ativa no Hermes após invocação real + tool call + receipt.
+
+### Fonte e status das 17 respirações
+
+Catálogo: `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/kimetsu-17-tecnicas-dependabot.md`.
+É **registro histórico de uma missão Dependabot**, não homologação universal. A rodada considera todas as 17 posições, mas aplica somente as relevantes: 1 Ucchuha (percepção), 2 Hinoko (causa), 3 Mafu (precisão), 4 Susamaru (monitoramento), 5 Kyojuro (síntese), 6 Gyomei (verificação), 7 Sangue, 8 Inferno, 9 Sol, 10 Linha, 11 Eclipse, 12 Amanhecer, 13 Flor, 14 Serpente, 15 Gato, 16 PekOpenedki, 17 Suprema. Formas 7–17 são **candidatas históricas**, não capacidades automaticamente comprovadas. Os estilos operacionais existentes **ÁGUA, TROVÃO, FERA, INSETO, CHAMAS** permanecem válidos.
+
+### Técnica computacional selecionada pelo motivo, não pelo enfeite
+
+| Método | Selecionar quando | Fronteira verificável |
+| --- | --- | --- |
+| ToT | alternativas reais, bifurcações | comparar opções e rejeições; não gerar árvores vazias |
+| CoT | tarefa sequencial simples | apresentar resumo de etapas/decisões, não raciocínio interno privado |
+| ReAct | tools reais + autorização + várias etapas | invocar o owner `hermes/cot-react-loop`; tool-call + observação |
+| GoT | dependências entre sistemas | grafo de dependências com IDs e fonte; sem grafo paralelo |
+| AoT | busca longa com causa desconhecida | orçamento e poda explícitos; não inventar economia de tokens |
+| SoT | resposta/relatório longo modular | esqueleto e blocos sem sobreposição de writer |
+| PoT | conta ou algoritmo verificável | executar cálculo em ferramenta real, validar entrada/tipo/limites; não prometer precisão absoluta |
+| CoT-SC | hipóteses independentes conflitantes | concordância é sinal, não evidência; contraprova decide |
+
+Estas técnicas são **métodos selecionáveis**, não oito modelos, oito processos nem trilhas internas obrigatórias. O algoritmo propõe combinação mínima por estado observado; o Hermes decide a execução sob autoridade do CHEFE. Sem fatos novos, não trocar de respiração só para mostrar movimento.
+
+### Acoplamento sem owner duplicado
+
+```text
+CHEFE / !CENTRALDARK / Kimetsu REMIX
+→ classificação SPIKE | BOUNDED | ARCHITECTURAL
+→ registrar estado OBSERVADO (UNKNOWN explícito)
+→ remix_selector.py (sem efeitos colaterais)
+→ HERMES aplica técnica(s) selecionada(s)
+→ independent_tasks >= 2 + tools expostas + autorização?
+   SIM: delegação opcional de leituras independentes com orçamento (até 5 por rodada)
+   NÃO: execução serial normal; nada de agentes fictícios
+→ contradição / prova faltante / estado desconhecido?
+   SIM: .agents/skills/fable-loop/SKILL.md = READ_ONLY_CALIBRATION
+→ >=3 etapas + tools reais + autorização?
+   SIM: .agents/skills/hermes/cot-react-loop/SKILL.md = EXECUTION_WITH_TOOLS
+→ Meta-Lupa e avaliador externo → receipt → estado novamente medido
+→ próxima rodada: manter ou trocar por delta material observado
+```
+
+**Separar papéis:** `fable-loop` é calibração/contraprova **sem escrita**; `cot-react-loop` é o executor iterativo **quando acionável**; Kimetsu seleciona método/respiração. Nunca criar um quarto loop ou três roteadores concorrentes. **PARALLELIZE_PERCEPTION; SERIALIZE_MUTATION_BY_SCOPE.** Delegar investigação independente, não a mesma alteração para cinco writers. Sem dispatcher real exposto: `DELEGATION=PLANNED_NOT_EXECUTED`, sem fingir 10 agentes ativos. Um pedido por observação não se converte sozinho em mutação.
+
+### Contrato mínimo de chamada
+
+```bash
+python .agents/skills/kimetsu-brainstorm/scripts/remix_selector.py --state '{"intent":"investigar erro de integração","category":"BOUNDED","authorized":false,"tools_available":false,"steps":4,"independent_tasks":3,"observed":{"cause_unknown":true,"multi_system":true}}'
+python -m unittest discover -s .agents/skills/kimetsu-brainstorm/scripts -p 'test_remix_selector.py' -v
+```
+
+Entrada de estado é **fato medido pelo executor**, não flag preenchida para fabricar PASS. O seletor retorna `PLAN_ONLY` sem autorização, preserva o gate de design já existente, indica candidatos, métodos, loops necessários e limite de delegação. `EXECUTION_ELIGIBLE` significa **elegível**, jamais `EXECUTED`. O mapa histórico não substitui prova de runtime.
+
+### Rodadas, XP e histórico reutilizável
+
+O registro por rodada deve ficar no **receipt/ledger e owner existentes**; não abrir banco/histórico paralelo. Forma lógica do evento sanitizado:
+
+```yaml
+event: KIMETSU_REMIX_ROUND
+recorded_at_utc: RUNTIME_CLOCK
+intent_id: MEASURE
+owner: .agents/skills/kimetsu-brainstorm/SKILL.md
+head_sha: MEASURE_CURRENT
+round_id: MEASURE
+previous_breath: MEASURE_OR_NONE
+selected_breath: MEASURE
+candidate_techniques: [ToT, GoT]
+selected_techniques: [MEASURE]
+selection_reason: OBSERVED_DELTA
+loops: {fable: CONDITIONALLY_USED_OR_SKIPPED, cot_react: CONDITIONALLY_USED_OR_SKIPPED}
+delegation: {planned: 0, dispatched: 0, returned: 0, counterproved: 0}
+evidence_before: ID_OR_UNKNOWN
+evidence_after: ID_OR_UNKNOWN
+metric_name: MEASURE_OR_NONE
+metric_before: MEASURE_OR_NONE
+metric_after: MEASURE_OR_NONE
+gain: DELTA_MEASURED_OR_UNKNOWN
+xp_awarded: 0_UNLESS_META_LUPA_LEDGER_ACCEPTS
+change_reason: WHY_RETAINED_OR_SWITCHED
+verdict: PASS_OR_FAIL_OR_UNKNOWN_OR_BLOCKED
+receipt_ref: MEASURE
+next_cursor: MEASURE
+```
+
+**XP não nasce por quantidade de tokens, modelos, subagentes ou votos.** Reutilizar `scripts/meta_lupa.py` e `references/uso-ledger.jsonl` da Meta-Lupa; somente ganho de qualidade mensurável, prova nova e antirrepetição no mesmo escopo podem render XP. Sem baseline/teste/contraprova, `GAIN=UNKNOWN; XP=0`. Cada rodada precisa de **data UTC, motivo da escolha/troca, mudança observada, evidência e histórico**. Mudança sem ganho provado é aprendizado candidato, não promoção.
+
+### Compatibilidade e prova
+
+Invariantes herdadas das seções 0–14: `REUSE_BEFORE_CREATE`, `ONE_OWNER_PER_CAPABILITY`, `ONE_WRITER_PER_SCOPE`, `UNKNOWN != PASS`, `ACTION != PROOF`, `EXPLICIT_ORDER = EXECUTION_REQUEST`. O script é determinístico e não faz I/O de ferramentas; testes unitários provam **lógica de seleção**, não execução Hermes, delegação real ou ativação na Casa. O Hermes deve medir seu loader e invocar os owners existentes para provar isso ao vivo.
+
+**Changelog (2026-10-24):** evoluído o mesmo `kimetsu-brainstorm` com catálogo 17/REMIX, oito métodos como técnicas condicionais, planejamento de subagentes, hooks de `fable-loop` e `cot-react-loop`, histórico/XP condicionado a prova; razão: CHEFE quer técnicas recombinadas por rodada com melhora demonstrável. **NEXT_CURSOR:** em runtime Hermes, invocar o REMIX sobre missão real, capturar seleção + tool calls + workers que retornaram + contraprova e comparar métricas antes/depois.

@@ -43,8 +43,8 @@ Isso evita baixar tudo de novo toda hora e evita transformar a `main` em depósi
 ## Caminho local recomendado
 
 ```text
-E:\CentralDark\_BIBLIOTECA_OFFLINE\entrada
-E:\CentralDark\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS
+K:\_BIBLIOTECA_OFFLINE\entrada
+K:\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS
 ```
 
 Coloque em `entrada` tudo que deve entrar no corpus local:
@@ -65,8 +65,8 @@ Depois rode:
 
 ```powershell
 pwsh -ExecutionPolicy Bypass -File scripts/library/CentralDark-LocalOffline-Library-Ingest.ps1 `
-  -SourceRoot "E:\CentralDark\_BIBLIOTECA_OFFLINE\entrada" `
-  -OutputRoot "E:\CentralDark\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" `
+  -SourceRoot "K:\_BIBLIOTECA_OFFLINE\entrada" `
+  -OutputRoot "K:\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" `
   -Recreate
 ```
 
@@ -74,8 +74,8 @@ Para baixar `ml-journey` uma vez e deixar offline:
 
 ```powershell
 pwsh -ExecutionPolicy Bypass -File scripts/library/CentralDark-LocalOffline-Library-Ingest.ps1 `
-  -SourceRoot "E:\CentralDark\_BIBLIOTECA_OFFLINE\entrada" `
-  -OutputRoot "E:\CentralDark\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" `
+  -SourceRoot "K:\_BIBLIOTECA_OFFLINE\entrada" `
+  -OutputRoot "K:\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" `
   -CloneMlJourney
 ```
 

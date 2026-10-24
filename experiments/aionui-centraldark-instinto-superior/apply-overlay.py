@@ -22,6 +22,8 @@ DOCUMENT_TITLE = ROOT / "packages/desktop/src/renderer/components/layout/Documen
 RENDERER_INDEX = ROOT / "packages/desktop/src/renderer/index.html"
 BOTS_PAGE = ROOT / "packages/desktop/src/renderer/pages/settings/CentralDarkBotsSettings/index.tsx"
 MAPS_PAGE = ROOT / "packages/desktop/src/renderer/pages/settings/CentralDarkMapsSettings/index.tsx"
+COCKPIT_PAGE = ROOT / "packages/desktop/src/renderer/pages/CentralDarkCockpit/index.tsx"
+WEBVIEW_HOST = ROOT / "packages/desktop/src/renderer/components/media/WebviewHost.tsx"
 
 for required in (PACKAGE, BUILDER, INDEX, TRAY, SIDER, WRAPPER, ROUTER, LAYOUT, TITLEBAR, DOCUMENT_TITLE, RENDERER_INDEX):
     if not required.exists():
@@ -147,6 +149,12 @@ shutil.copy2(HERE / "centraldark-bots-page.tsx", BOTS_PAGE)
 MAPS_PAGE.parent.mkdir(parents=True, exist_ok=True)
 shutil.copy2(HERE / "centraldark-maps-page.tsx", MAPS_PAGE)
 
+# CentralDark Cockpit como página inicial: reaproveita o WebviewHost existente, sem segundo cockpit.
+if not WEBVIEW_HOST.exists():
+    raise SystemExit(f"missing upstream file: {WEBVIEW_HOST}")
+COCKPIT_PAGE.parent.mkdir(parents=True, exist_ok=True)
+shutil.copy2(HERE / "centraldark-cockpit-page.tsx", COCKPIT_PAGE)
+
 sider = SIDER.read_text(encoding="utf-8")
 if "  'bots',\n" not in sider:
     anchor = "  'agent',\n"
@@ -254,6 +262,29 @@ if maps_route not in router:
     if bots_route not in router:
         raise SystemExit("router bots route anchor missing")
     router = router.replace(bots_route, bots_route + "\n" + maps_route, 1)
+
+# Cockpit como entrada: /cockpit passa a ser a página inicial; as funções originais continuam em /guid.
+if "CentralDarkCockpit" not in router:
+    lazy_anchor = "const AgentSettings = React.lazy(() => import('@renderer/pages/settings/AgentSettings'));"
+    if lazy_anchor not in router:
+        raise SystemExit("router cockpit lazy import anchor missing")
+    router = router.replace(
+        lazy_anchor,
+        lazy_anchor + "\nconst CentralDarkCockpit = React.lazy(() => import('@renderer/pages/CentralDarkCockpit'));",
+        1,
+    )
+guid_route = "          <Route path='/guid' element={withRouteFallback(Guid)} />"
+cockpit_route = "          <Route path='/cockpit' element={withRouteFallback(CentralDarkCockpit)} />"
+if cockpit_route not in router:
+    if guid_route not in router:
+        raise SystemExit("router guid route anchor missing")
+    router = router.replace(guid_route, guid_route + "\n" + cockpit_route, 1)
+index_to_guid = "          <Route index element={<Navigate to='/guid' replace />} />"
+index_to_cockpit = "          <Route index element={<Navigate to='/cockpit' replace />} />"
+if index_to_cockpit not in router:
+    if index_to_guid not in router:
+        raise SystemExit("router index route anchor missing")
+    router = router.replace(index_to_guid, index_to_cockpit, 1)
 ROUTER.write_text(router, encoding="utf-8")
 
 # AionUi 2.2.2 assumes a separate bunx binary. Current Bun exposes the same

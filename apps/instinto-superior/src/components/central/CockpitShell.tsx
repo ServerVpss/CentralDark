@@ -14,6 +14,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
+import { McpConsoleCentralDark } from "@/components/central/McpConsoleCentralDark";
 import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
@@ -410,7 +411,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
         <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
           {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
@@ -642,27 +642,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8" id="centraldark-harness-abas">
-            {/* Posicionamento fixo: header primeiro, abas logo abaixo, sem o menu flutuante duplicado. */}
-            <div ref={tabsScrollRef} className="fixed inset-x-0 top-16 z-40 overflow-x-auto border-b border-border bg-background/95 px-4 py-2 backdrop-blur [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <TabsList className="h-auto min-w-max justify-start">
-                <TabsTrigger value="visao">Visão geral</TabsTrigger>
-                <TabsTrigger value="portal">🌐 Portal</TabsTrigger>
-                <TabsTrigger value="builder-bolt">⚡ Builder Bolt</TabsTrigger>
-                <TabsTrigger value="pr1873">📜 Mapa PR #1873</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
-                <TabsTrigger value="sync">🛠️ Minha Oficina</TabsTrigger>
-                <TabsTrigger value="design">Design Center</TabsTrigger>
-                <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
-                {autenticado ? <TabsTrigger value="genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
-                <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
-                <TabsTrigger value="dream-reviewer">😴 Dream</TabsTrigger>
-                <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
-                <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
-                <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
-                <TabsTrigger value="forja">🔧 Forja</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
-                {autenticado ? <TabsTrigger value="admin">Admin CentralDark</TabsTrigger> : null}
           <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8 min-w-0" id="centraldark-harness-abas">
             <div className="sticky top-0 z-30 -mx-4 min-w-0 border-y border-border bg-background/95 px-3 py-2 backdrop-blur sm:mx-0 sm:rounded-md sm:border" aria-label="Navegação do cockpit">
               <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
@@ -867,6 +846,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <TabsContent value="admin" className="mt-10">
                 <MenuVisualCentralDark titulo="🔐 Admin → Control Plane" descricao="Estrutura visual do HUB Credential Control Plane. Sem exposição de credenciais e sem ligação simulada." itens={["👥 Contas e permissões", "☁️ Cloudflare", "🔌 APIs e MCPs", "🔑 Cofre", "🤖 Bots", "🔗 Providers / OAuth", "📋 Auditoria", "🟡 Estado das conexões"]} />
                 <div className="mt-6"><PainelAdminCentralDark key={versaoAdmin} estado={dado} abaInicial={abaAdminInicial} /></div>
+                <McpConsoleCentralDark />
               </TabsContent>
             ) : null}
             {autenticado ? (
