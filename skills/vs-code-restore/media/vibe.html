@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'nonce-__CSP_NONCE__';">
+<style>
+body { font-family: var(--vscode-font-family); padding: 10px 12px; }
+h2 { font-size: 18px; margin: 10px 0 14px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+button { background:var(--vscode-button-background); color:var(--vscode-button-foreground); border:0; padding:11px 4px; cursor:pointer; border-radius:3px; }
+button:hover { background:var(--vscode-button-hoverBackground); }
+small { display:block; margin-top:14px; opacity:0.8; line-height:1.5; }
+</style></head><body>
+<h2>🪬 CentralDark · Vibe Coding</h2>
+<div class="grid">
+<button data-cmd="centraldark.connectVpsSsh">Conectar ao servidor</button>
+<button data-cmd="centraldark.probeVpsSsh">Testar a conexão</button>
+<button data-cmd="centraldark.pairVsCode">Parear este VS Code</button>
+<button data-cmd="centraldark.verifyVsCodePairing">Verificar pareamento</button>
+<button data-cmd="centraldark.checkUpdates">Checar atualização</button>
+<button data-cmd="centraldark.focusExistingTerminal">Abrir terminal existente</button>
+<button data-cmd="centraldark.locateVsCodeByPid">Ver status e PIDs</button>
+<button data-cmd="centraldark.mapWorkspace">Mapear o VS Code</button>
+<button data-cmd="centraldark.restoreWorkspace">Restaurar a bancada</button>
+</div>
+<small>Pareamento no MCP pela identidade SSH da Casa. Token guardado no cofre protegido do VS Code.</small>
+<script nonce="__CSP_NONCE__">
+const vscode = acquireVsCodeApi();
+document.querySelectorAll('button[data-cmd]').forEach(b =>
+  b.addEventListener('click', () => vscode.postMessage({command:b.getAttribute('data-cmd')})));
+</script></body></html>
