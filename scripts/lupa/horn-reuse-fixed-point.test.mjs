@@ -230,6 +230,26 @@ test("critério sem contraprova, receipt repetido ou medição vencida nunca sel
 });
 
 
+
+test("HUD, telemetria e HORN compartilham exatamente os mesmos dez IDs de Fixed Point", () => {
+  const telemetry = readFileSync("apps/modulos/mcp/src/operational-telemetry.js", "utf8");
+  const hud = readFileSync("docs/HUD/HUD.html", "utf8");
+  const expected = FIXED_POINT_TEN_CRITERIA.map((criterion) => criterion.id);
+  const expectedHudKeys = [
+    "OWNER_UNIQUE", "LOCKS_PRESERVED", "MCP_PUBLIC_HEALTH", "ONE_HEART_FRESH",
+    "SCREENPIPE_CURRENT", "AIONUI_STDIO_CURRENT", "LOG_PRIVACY_CURRENT",
+    "CHECKOUT_MAIN_SYNC", "FORENSIC_FRESHNESS", "RECEIPT_PRESENT",
+  ];
+  assert.deepEqual(expected, expectedHudKeys);
+  for (const id of expected) {
+    assert.ok(telemetry.includes('"' + id + '"'), 'telemetry owner missing ' + id);
+    assert.ok(hud.includes(id), 'HUD projection missing ' + id);
+  }
+  assert.match(telemetry, /fixedPointTenEvidence/);
+  assert.match(hud, /window\\.CENTRALDARK_OPERATIONAL_CURRENT/);
+  assert.match(hud, /fp\\.fixedPoint === true/);
+});
+
 test("META-GRILL, oracle, HUD and goal evaluator refer to the same canonical owner", () => {
   const hook = readFileSync(".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md", "utf8");
   const oracle = readFileSync(".agents/skills/software-development/centraldark-oracle-surface/SKILL.md", "utf8");
