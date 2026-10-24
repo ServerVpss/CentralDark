@@ -528,6 +528,12 @@ export function evaluateFixedPointTen(input = {}, options = {}) {
 
   const fixedPoint = rows.length === FIXED_POINT_TEN_CRITERIA.length &&
     requiredPass === FIXED_POINT_TEN_CRITERIA.length && goalReceiptValid;
+  const attemptsCurrent = rows.filter((row) => row.evaluated === true
+    && hasText(row.attempt_ref)
+    && validFreshTimestamp(row.evaluated_at, nowMs, defaultMaxAgeMs)).length;
+  const headerUsage = attemptsCurrent === FIXED_POINT_TEN_CRITERIA.length
+    ? (fixedPoint ? "USED_AND_FIXED_POINT" : "USED_WITH_GAPS")
+    : "NOT_USED";
   const nextCursor = firstGap ? "VERIFY_" + firstGap.id
     : (!goalReceiptValid ? "GOAL_RECEIPT_REQUIRED" : "FIXED_POINT");
 
@@ -538,6 +544,9 @@ export function evaluateFixedPointTen(input = {}, options = {}) {
     total: FIXED_POINT_TEN_CRITERIA.length,
     required_total: FIXED_POINT_TEN_CRITERIA.length,
     required_pass: requiredPass,
+    criteria_attempts_current: attemptsCurrent,
+    criteria_attempts_required: FIXED_POINT_TEN_CRITERIA.length,
+    header_usage: headerUsage,
     counts,
     criteria: rows,
     goal_receipt_status: goalReceiptState,
