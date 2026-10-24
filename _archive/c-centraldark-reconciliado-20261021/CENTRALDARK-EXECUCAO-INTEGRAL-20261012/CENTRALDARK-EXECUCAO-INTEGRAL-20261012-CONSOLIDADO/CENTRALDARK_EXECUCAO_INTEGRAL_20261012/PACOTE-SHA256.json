@@ -1,0 +1,94 @@
+{
+  "schema": "centraldark.bundle.integrity.v1",
+  "version": "4",
+  "legacyZipSha256": "12f5f21bf4724ce1b6e11961fd5eccad0177b424c9da42eba9d10fb9b0721811",
+  "mainOwnerReplayPatch": {
+    "commit": "eaab55ffdf6cd928947a2967b8fd449c89bf7910",
+    "sha256": "ead45fcfae0417038542f1bc7a7d4f93651bfd5e0dd0d730db29053e82d46a10"
+  },
+  "files": {
+    "EVIDENCIAS/10-MELHORIAS-MCP.md": {
+      "bytes": 2030,
+      "sha256": "8e7292f309e3692b0f3aff47774e774ed1ff6183ba29a5d81abb41687b6bb03e"
+    },
+    "EVIDENCIAS/EXECUCAO-PASSO-A-PASSO.md": {
+      "bytes": 10165,
+      "sha256": "f007009879e122cf6272e8e37945dcd1354d9c6a848b3f97df0d846b0d963b71"
+    },
+    "EVIDENCIAS/PLANO-HAKAI-E-REBUILDER.md": {
+      "bytes": 2232,
+      "sha256": "ddfeb404506ef7cf8519af1e87875a6069814c9993ce064dbde2445946d3b34d"
+    },
+    "EVIDENCIAS/RECEIPTS-20261012.json": {
+      "bytes": 4325,
+      "sha256": "55a10d5f83ed220b1a388a12a06a622be29a7df6b3ddedb32f652db2b1887bcb"
+    },
+    "EVIDENCIAS/ROTAS-20261012.json": {
+      "bytes": 1985,
+      "sha256": "e9a15e3434d48ba65551b2b7a2b55b0a2b8cdfa6eac2b3afd6f8cb9c7e8f9223"
+    },
+    "README.md": {
+      "bytes": 14582,
+      "sha256": "2bebd7f6e65029a99631abe6549665198f62ad65abf38e3adbb9019305a45c4a"
+    },
+    "executar-casa.ps1": {
+      "bytes": 3381,
+      "sha256": "50e979386444c02dac5a796d2390ccaa86d9b002ce5935c53f024d0a2d2dec5f"
+    },
+    "executar-tudo.sh": {
+      "bytes": 19782,
+      "sha256": "6391f69fafc3443e6a14175fa48796ee1b8c8c377f71c3f4c36e5859fcd4afa4"
+    },
+    "tools/exportar-codigo-fixado.sh": {
+      "bytes": 1799,
+      "sha256": "675095443f556ec8bc3795c9513c9858dba2acbcf0fbb290fdd1203e500b6d39"
+    },
+    "tools/testar-pacote.py": {
+      "bytes": 12134,
+      "sha256": "999114f3e667bbeba90a13f1ce58baedb2010627cba9b0f0ccd09207298681c5"
+    },
+    "tools/verificar-integridade.py": {
+      "bytes": 11862,
+      "sha256": "b461f17411516e09a1171c0ffd3fccb0e8137b8709dfcd0384df955fc472f474"
+    }
+  },
+  "v3Fix": {
+    "root_cause": "V2 grep anchored ^v; main reconciler uses one leading space before v[replay]",
+    "safety": "validate owner guard, never bypass on unknown scanner; no HAKAI; no MCP runtime promotion",
+    "resume": "skip only with EXECUTE PASS, matching scan fingerprint, same script sha256, same origin/main",
+    "status_labels_unchanged": [
+      "PASS",
+      "PARTIAL",
+      "UNKNOWN",
+      "BLOCKED",
+      "NOT_ACTIVE",
+      "NOOP",
+      "DOCUMENTED"
+    ],
+    "visuals": [
+      "🟢",
+      "🟡",
+      "🔴"
+    ],
+    "regression_offline_tests": 47,
+    "vps_runtime_replay": "NOT_TESTED_WITH_V3_YET"
+  },
+  "v4Logging": {
+    "policy": "one log overwritten per execution, same old visual statuses",
+    "path": "/var/log/centraldark/centraldark-inventory-reconcile.log",
+    "mode": "OVERWRITE; no per-run log files",
+    "receipt": "/var/lib/centraldark/inventory-reconcile/centraldark-inventory-reconcile.json",
+    "preserveReceiptEvents": true,
+    "diskGate": "min 16384 KiB; no logging/mutation if 0 free; no cleanup",
+    "visualLabelsUnchanged": [
+      "PASS",
+      "PARTIAL",
+      "UNKNOWN",
+      "BLOCKED",
+      "NOT_ACTIVE",
+      "NOOP",
+      "DOCUMENTED"
+    ],
+    "vpsDeployment": "NOT_ATTEMPTED_WHILE_DISK_FULL"
+  }
+}

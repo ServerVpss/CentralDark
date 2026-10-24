@@ -1,0 +1,168 @@
+{
+  "measured_at_utc": "2026-10-17T02:16:49Z",
+  "repo": "ServerVpss/CentralDark",
+  "main_head": "6b1105bce899a90841d5a76f3c4eb6ae2a3c35fa",
+  "vps_head": "6b1105bce899a90841d5a76f3c4eb6ae2a3c35fa",
+  "deploy_status_error": "vps_pm2: SyntaxError: Unexpected end of JSON input",
+  "prs": [
+    {
+      "number": 1842,
+      "draft": true,
+      "head": "79fc1240e2131a76076623306a5fc0961d55ac87",
+      "runs": 16,
+      "pending": 14,
+      "skipped": 2,
+      "action_required": 0
+    },
+    {
+      "number": 1841,
+      "draft": true,
+      "head": "cf6b2652591fef35b41a35fa6fc1598df70bf14d",
+      "runs": 16,
+      "pending": 14,
+      "skipped": 2,
+      "action_required": 0
+    },
+    {
+      "number": 1840,
+      "draft": false,
+      "head": "db465a7f8bc4ee6417b0115aebaa9831ff676ea8",
+      "runs": 14,
+      "pending": 14,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1839,
+      "draft": false,
+      "head": "c007529e8a1cb577aa33bf943df42dcac85e3b51",
+      "runs": 14,
+      "pending": 14,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1838,
+      "draft": false,
+      "head": "5c51a3a39fcb3265ceb7273510bb57824cd31328",
+      "runs": 16,
+      "pending": 16,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1837,
+      "draft": false,
+      "head": "b970da94d01f7ecbcafd2a0e4185dcb26bc215cd",
+      "runs": 16,
+      "pending": 16,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1836,
+      "draft": false,
+      "head": "1d27363b20f0a43357df058a14faa2535f1f7fbe",
+      "runs": 16,
+      "pending": 16,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1835,
+      "draft": false,
+      "head": "6388d2dcf5cef79b4eca5bccb22e3c7aaf4b4e49",
+      "runs": 16,
+      "pending": 16,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1834,
+      "draft": false,
+      "head": "986ae430ee7c56deea53a9d0a70226ca25507fde",
+      "runs": 16,
+      "pending": 0,
+      "skipped": 0,
+      "action_required": 16
+    },
+    {
+      "number": 1833,
+      "draft": false,
+      "head": "fecad3de199127e05488e1ad459489986a77c795",
+      "runs": 15,
+      "pending": 15,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1831,
+      "draft": false,
+      "head": "c53d5bce2ab9dcff1700dec27c92f50b3308a098",
+      "runs": 14,
+      "pending": 14,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1830,
+      "draft": false,
+      "head": "d4b1bbc8f29d2488ce375fb60ea3850d5675d10d",
+      "runs": 14,
+      "pending": 14,
+      "skipped": 0,
+      "action_required": 0
+    },
+    {
+      "number": 1829,
+      "draft": false,
+      "head": "394f86e5baeef4195df51fd2442faefebb53ba6a",
+      "runs": 15,
+      "pending": 15,
+      "skipped": 0,
+      "action_required": 0
+    }
+  ],
+  "path_overlap": [
+    {
+      "prs": [
+        1830,
+        1842
+      ],
+      "paths": [
+        "skills/vs-code-restore/SKILL.md",
+        "skills/vs-code-restore/package.json",
+        "skills/vs-code-restore/src/extension.ts"
+      ]
+    },
+    {
+      "prs": [
+        1831,
+        1838
+      ],
+      "paths": [
+        "apps/instinto-superior/src/components/central/CockpitShell.tsx"
+      ]
+    },
+    {
+      "prs": [
+        1837,
+        1838
+      ],
+      "paths": [
+        "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.mmd",
+        "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/FLOW-REGISTRY.json"
+      ]
+    },
+    {
+      "prs": [
+        1839,
+        1840
+      ],
+      "paths": [
+        "apps/instinto-superior/scripts/verify-hud-zone.mjs"
+      ]
+    }
+  ],
+  "important": "This is a historical audit snapshot; running the included PowerShell script rechecks live GitHub state."
+}
