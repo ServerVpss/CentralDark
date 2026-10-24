@@ -23,6 +23,7 @@ const centraldark = Object.freeze({
   showMain: () => ipcRenderer.invoke('centraldark:main:show'),
   toggleWidget: () => ipcRenderer.invoke('centraldark:widget:toggle'),
   openUnigramDesktop: () => ipcRenderer.invoke('centraldark:unigram:open'),
+  openObsidianDesktop: () => ipcRenderer.invoke('centraldark:obsidian:open'),
   hideWidget: () => ipcRenderer.invoke('centraldark:widget:hide'),
 });
 

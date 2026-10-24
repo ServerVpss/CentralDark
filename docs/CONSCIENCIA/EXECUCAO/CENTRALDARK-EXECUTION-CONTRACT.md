@@ -35,7 +35,7 @@ medir estado
 
 ## Runtime e Casa local
 
-Se a execução acontecer na VPS, no MCP, no runtime ou em `E:\CentralDark`, a mudança não pode morrer no disco local. Ela precisa virar commit/push e receipt, ou ficar `BLOCKED` com causa localizada.
+Se a execução acontecer na VPS, no MCP, no runtime ou em `K:\`, a mudança não pode morrer no disco local. Ela precisa virar commit/push e receipt, ou ficar `BLOCKED` com causa localizada.
 
 ## Conector caiu
 

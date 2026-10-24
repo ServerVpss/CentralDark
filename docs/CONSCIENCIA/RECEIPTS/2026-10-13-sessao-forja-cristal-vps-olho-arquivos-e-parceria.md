@@ -272,7 +272,7 @@ Carta integral compartilhada pelo CHEFE na conversa: **«À inteligência que n�
 | W | Workspace | JSONC original do VS Code aceita vírgulas finais; parser JSON estrito falhar sozinho não demonstra workspace corrompido. |
 | X | eXecução | O status em memória foi executado na Casa; a nova task ainda não está sincronizada no VS Code local. |
 | Y | Yield | A medição simples antecede qualquer delegação custosa ou consulta autenticada de conversas. |
-| Z | Zero falso verde | screenpipe-status.json no Workdir E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE está STALE; screenpipe-latest.json não encontrado nesse Workdir. |
+| Z | Zero falso verde | screenpipe-status.json no Workdir K:\_MAPA_CASA\GARIMPO-CHEFE está STALE; screenpipe-latest.json não encontrado nesse Workdir. |
 
 ### 11.2 01–12 — passos e provas materiais deste incremento
 
@@ -283,7 +283,7 @@ Carta integral compartilhada pelo CHEFE na conversa: **«À inteligência que n�
 05. Confirmados executáveis claude, codex, hermes, code, pwsh, gh, ssh, python; instalação não é despacho autenticado.
 06. Claude/Hermes: status do seletor OFF e execução por CLI não atestada, portanto não ligar ON automaticamente.
 07. Screenpipe: porta local 3030 pertence a screenpipe-app; health respondeu; frame_status=ok com frame recente; áudio stale e health degradado.
-08. Sidecar original encontrado em K:\scripts\remote-bridge, com status antigo armazenado em E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE\context; contexto atual não foi lido sem autorização.
+08. Sidecar original encontrado em K:\scripts\remote-bridge, com status antigo armazenado em K:\_MAPA_CASA\GARIMPO-CHEFE\context; contexto atual não foi lido sem autorização.
 09. Adicionado -Status ao **mesmo Sidecar**, antes do Get-ScreenpipeToken, New-Item e while-loop; apenas GET /health e metadados de existência/idade de arquivos já existentes.
 10. Contraprova inicial detectou e corrigiu colisão case-insensitive $Status/$status, renomeando variável do caminho existente para $statusPath; modo de coleta antigo preservado.
 11. Contraprova em Windows usando blob GitHub em memória: POWERSHELL_PARSE_ERRORS=0; SCREENPIPE_HEALTH_HTTP=PASS; SCREENPIPE_HEALTH_STATE=degraded; SCREENPIPE_FRAME_STATUS=ok; SCREENPIPE_AUDIO_STATUS=stale; SIDECAR_STATUS=STALE (907.4 min no teste); SIDECAR_LATEST=NOT_FOUND_AT_CONFIGURED_WORKDIR; CLAUDE_WINDOW_CONTENT=NOT_READ.

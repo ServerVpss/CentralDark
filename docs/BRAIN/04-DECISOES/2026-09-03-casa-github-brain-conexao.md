@@ -8,7 +8,7 @@ status: ATIVO
 
 > [!IMPORTANT] 🔴 Três corpos, uma verdade
 > Obsidian = olho no disco.
-> CASA = clone `E:\CentralDark\Pivete\CentralDark`
+> CASA = clone `K:\`
 > GitHub = `origin` ServerVpss/CentralDark
 > Drive = referência (catalog.json 2026-08-22), NÃO prova, NÃO cópia.
 

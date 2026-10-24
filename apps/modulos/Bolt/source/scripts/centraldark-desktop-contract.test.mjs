@@ -48,6 +48,17 @@ test('a ponte Electron é estreita e o renderer não ganha Node', () => {
   assert.doesNotMatch(preload, /process\.env/);
 });
 
+test('Obsidian original tem launch fixo e bloqueia renderer não autorizado', () => {
+  const main = read(`${root}/electron/main/index.ts`);
+  const preload = read(`${root}/electron/preload/index.ts`);
+  assert.match(main, /centraldark:obsidian:open/);
+  assert.match(main, /CENTRALDARK_OBSIDIAN_UNTRUSTED_RENDERER/);
+  assert.match(main, /event\.sender\.id !== current\.webContents\.id/);
+  assert.match(main, /shell\.openExternal\('obsidian:\/\/open\?vault=BRAIN'\)/);
+  assert.match(preload, /openObsidianDesktop/);
+  assert.doesNotMatch(preload, /process\.env|readFileSync|spawn\(/);
+});
+
 test('cockpit projeta Linear pela rota segura do MCP sem secret no renderer', () => {
   const cockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
 

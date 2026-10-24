@@ -26,7 +26,7 @@ Pacote plug-and-play que faz Casa, VPS, GitHub e Screenpipe **baterem o mesmo po
 
 ```powershell
 Copy-Item config/centraldark.fixed-point.example.json config/centraldark.fixed-point.json
-$env:CENTRALDARK_HOME = 'E:\CentralDark\Pivete\CentralDark'
+$env:CENTRALDARK_HOME = 'K:\'
 $env:CENTRALDARK_VPS_HEARTBEAT_URL = 'http://127.0.0.1:9119/health'
 $env:CENTRALDARK_HEARTBEAT_SECRET = '<secret-store>'
 $env:GITHUB_TOKEN = '<secret-store>'

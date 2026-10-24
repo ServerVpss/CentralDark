@@ -339,7 +339,7 @@ session_crystallization_2026_09_25:
         public_graph: /api/live-fabric/graph
         admin_panel: https://admin.centralldark.com/omni
         runtime_root: /root/CentralDark
-        local_workspace: "E:\\CentralDark"
+        local_workspace: "K:\\"
       execution_sequence:
         - ADMIN_OR_HERMES_STARTS_JOB
         - CENTRALDARK_API_CREATES_JOB

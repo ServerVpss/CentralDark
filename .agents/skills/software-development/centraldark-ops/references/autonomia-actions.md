@@ -31,8 +31,8 @@ Intent-authorized PRs still need workflow runs of **this HEAD**. Skipping `fetch
 ## Dirty Casa
 
 ```bash
-git -C E:/CentralDark/CentralDark/CentralDark fetch origin main
-git -C E:/CentralDark/CentralDark/CentralDark worktree add E:/CentralDark/worktrees/<slug> -b <branch> origin/main
+git -C K:/ fetch origin main
+git -C K:/ worktree add K:/worktrees/<slug> -b <branch> origin/main
 ```
 
 Commit only owner files there. Do not reset the nested dirty tree.

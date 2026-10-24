@@ -339,7 +339,7 @@ O objetivo continua sendo guardar o verde, aprender com o vermelho e impedir que
 Os logs e telas desta sessão acrescentam um delta de diagnóstico que deve permanecer separado por território. O objetivo é transformar ruído de IDE/runtime em assinaturas úteis sem declarar falha global por associação.
 
 ```text
-VS_CODE_REPO_PATH=e:\CentralDark\Pivete\CentralDark
+VS_CODE_REPO_PATH=K:\
 VS_CODE_REPO_PATH_STATE=OBSERVED
 
 CENTRALDARK_ROUTER_PROVIDER_EXTENSION=centraldark-local.hermes-vscode-router-provider

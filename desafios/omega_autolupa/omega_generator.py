@@ -104,7 +104,7 @@ def make_bundle(seed: int) -> tuple[dict, dict]:
         },
         {
             "domain": "filesystem", "kind": "path", "key": "skill",
-            "value": r"E:\CentralDark\Pivete\CentralDark\.agents\skills\meta-lupa\SKILL.md",
+            "value": r"K:\.agents\skills\meta-lupa\SKILL.md",
             "timestamp": base.isoformat(), "correlation_id": "path-skill", "source_id": "fs-win",
         },
     ])
@@ -113,7 +113,7 @@ def make_bundle(seed: int) -> tuple[dict, dict]:
 
     bundle = {
         "schema": "omega-input-v1",
-        "repo_root": r"E:\CentralDark\Pivete\CentralDark",
+        "repo_root": r"K:/",
         "observations": observations,
         "permits": ["PERMITO PIVETE SEM AÇÃO DESTRUTIVA"],
         "requested_actions": ["comment_issue", "merge", "restart", "deploy"],
