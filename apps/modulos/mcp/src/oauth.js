@@ -2,7 +2,16 @@
 import crypto from "node:crypto";
 import { config } from "./config.js";
 import { isAdmin } from "./admin.js";
-import { beginOAuthPairing, consumeOAuthPairing } from "./oauth-pairing-consent.js";
+
+// Mesmo /authorize: o client_id canônico seleciona o modo de dispositivo.
+// Os demais clientes seguem OAuth 2.1+PKCE original, sem segunda tela.
+export const VSCODE_DEVICE_CLIENT_ID = "centraldark.centraldark-vscode-restore";
+let devicePairingStore = null;
+export function configureDevicePairingForOAuth(store) {
+    if (!store || typeof store.pendingConsent !== "function" || typeof store.approveWeb !== "function")
+        throw new Error("DEVICE_PAIRING_STORE_INVALID");
+    devicePairingStore = store;
+}
 import { log } from "./log.js";
 import { getCatalogSummary } from "./tools/core/tools-catalog.js";
 import { consumeAuthCode, consumeRefreshToken, createAuthRequest, getClient, issueAuthCode, issueTokenPair, registerClient, } from "./sessions.js";
@@ -485,10 +494,12 @@ h1{margin:0 0 4px;font-size:19px;font-weight:700}
 .check{color:var(--brand);font-weight:800;flex-shrink:0}
 .perm-title{font-weight:600;font-size:14px}
 .perm-desc{color:var(--muted);font-size:12px;margin-top:2px}
-.pair-code{font-family:ui-monospace,Consolas,monospace;text-align:center;font-size:27px;letter-spacing:.08em;font-weight:800;border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px}
-.pair-help{color:var(--muted);font-size:12px;margin:0 0 16px;line-height:1.55}
-.admin-login{display:block;margin:14px 0;color:#067a55;text-decoration:underline}
-button:disabled{background:#9ca3af;cursor:not-allowed}
+input[type=password]{width:100%;padding:12px 14px;background:#fff;border:1px solid var(--line);color:var(--text);border-radius:10px;font-size:15px;margin:0 0 14px;outline:none}
+input[type=password]:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(16,185,129,.15)}
+.pair-code{font-family:Consolas,monospace;text-align:center;font-size:26px;font-weight:800;letter-spacing:.08em;border:1px solid var(--line);border-radius:10px;padding:12px;margin:0 0 10px}
+.pair-help{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.5}
+.admin-login{display:block;color:#059669;margin:0 0 14px;font-size:13px}
+button:disabled{opacity:.5;cursor:not-allowed}
 .actions{display:flex;gap:10px}
 button{flex:1;padding:12px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid var(--line)}
 .btn-allow{background:var(--brand);color:#fff;border-color:var(--brand)}
@@ -503,19 +514,36 @@ button{flex:1;padding:12px;border-radius:10px;font-weight:700;font-size:14px;cur
 <p class="sub">Um cliente quer se conectar ao MCP CentralDark.</p>
 <div class="client-row"><b>${escapeHtml(input.client_name || input.client_id)}</b> quer acessar sua conta.</div>
 <div class="perms">${scopeChecklistHtml(input.scope)}</div>
-<div class="pair-code" aria-label="Código de pareamento">${escapeHtml(input.pair_code ?? "")}</div>
-<p class="pair-help">Confirme que este código corresponde ao pedido do conector. Expira em 5 minutos.
-O código sozinho não dá acesso: a aprovação exige sessão administrativa autorizada.</p>
-<input type="hidden" name="pair_id" value="${escapeHtml(input.pair_id ?? "")}">
-<input type="hidden" name="pair_code" value="${escapeHtml(input.pair_code ?? "")}">
-<input type="hidden" name="pair_nonce" value="${escapeHtml(input.pair_nonce ?? "")}">
-${input.error ? `<p class="err">${escapeHtml(input.error)}</p>` : ""}
-${input.isAdmin ? "" : '<p class="err">Sessão administrativa não encontrada. Entre no painel existente em outra aba e atualize esta tela.</p><a class="admin-login" href="/admin" target="_blank" rel="noopener noreferrer">Abrir administração CentralDark</a>'}
+${input.device ? `
+<input type="hidden" name="client_id" value="${VSCODE_DEVICE_CLIENT_ID}">
+${input.success ? '<p class="pair-help">Pareamento confirmado. Volte ao VS Code para concluir a conexão.</p>' : `
+<div class="pair-code">${escapeHtml(input.device.code)}</div>
+<p class="pair-help">Confira o mesmo código no VS Code antes de confirmar.</p>
+<input type="hidden" name="pair_id" value="${escapeHtml(input.device.pairId)}">
+<input type="hidden" name="pair_code" value="${escapeHtml(input.device.code)}">
+<input type="hidden" name="pair_nonce" value="${escapeHtml(input.device.nonce)}">
+${input.isAdmin ? "" : '<p class="err">Sessão administrativa necessária. Entre no painel existente e abra novamente o pareamento.</p><a class="admin-login" href="/admin" target="_blank" rel="noopener noreferrer">Abrir painel CentralDark</a>'}
 <div class="actions">
-<button type="button" class="btn-deny" onclick="history.back()">Negar</button>
+<button type="button" class="btn-deny" onclick="history.back()">Deny</button>
 <button type="submit" class="btn-allow" ${input.isAdmin ? "" : "disabled"}>Confirmar pareamento</button>
 </div>
-<div class="foot">CentralDark MCP · OAuth 2.1 + PKCE · aprovação vinculada à sessão administrativa</div>
+`}
+` : `
+<input type="hidden" name="client_id" value="${escapeHtml(input.client_id)}">
+<input type="hidden" name="redirect_uri" value="${escapeHtml(input.redirect_uri)}">
+<input type="hidden" name="response_type" value="${escapeHtml(input.response_type)}">
+<input type="hidden" name="code_challenge" value="${escapeHtml(input.code_challenge)}">
+<input type="hidden" name="code_challenge_method" value="${escapeHtml(input.code_challenge_method)}">
+<input type="hidden" name="state" value="${escapeHtml(input.client_state ?? "")}">
+<input type="hidden" name="scope" value="${escapeHtml(input.scope ?? "mcp")}">
+${input.error ? `<p class="err">${escapeHtml(input.error)}</p>` : ""}
+<input type="password" name="password" placeholder="Senha do admin" autofocus required>
+<div class="actions">
+<button type="button" class="btn-deny" onclick="history.back()">Deny</button>
+<button type="submit" class="btn-allow">Allow</button>
+</div>
+`}
+<div class="foot">CentralDark MCP · conexão segura via OAuth 2.1</div>
 </form></body></html>`);
 }
 export function postRegister(req, res) {
@@ -553,37 +581,47 @@ export function postRegister(req, res) {
 }
 export async function handleAuthorize(req, res) {
     try {
-        // POST nunca confia em redirect/PKCE enviados pelo navegador: eles
-        // são recuperados do pedido pendente criado no GET /authorize.
-        let approved = undefined;
-        if (req.method === "POST") {
-            if (!isAdmin(req)) {
-                res.status(403).type("text/plain").send("Sessao administrativa necessaria. Autentique-se em /admin e reabra o consentimento.");
+        // Cliente VS Code usa o MESMO /authorize, sem callback paralelo.
+        if (param(req, "client_id") === VSCODE_DEVICE_CLIENT_ID) {
+            if (!devicePairingStore)
+                return oauthError(res, 503, "server_error", "Registro de dispositivos indisponível.");
+            const pairId = param(req, "pair_id");
+            const pair = devicePairingStore.pendingConsent(pairId);
+            if (!pair || pair.executor !== "vscode" || pair.approved)
+                return oauthError(res, 404, "invalid_request", "Pareamento expirado ou já concluído.");
+            const details = {
+                client_id: VSCODE_DEVICE_CLIENT_ID,
+                client_name: "CentralDark · Vibe Coding",
+                scope: "mcp",
+                isAdmin: isAdmin(req),
+                device: {pairId: pair.pairId, code: pair.code, nonce: pair.nonce}
+            };
+            if (req.method !== "POST") {
+                sendOwnerConsentPage(res, details);
                 return;
             }
-            const origin = String(req.headers.origin || "");
-            if (origin && origin !== new URL(config.publicUrl).origin) {
-                oauthError(res, 403, "access_denied", "Origem do consentimento invalida.");
-                return;
-            }
-            approved = consumeOAuthPairing(param(req, "pair_id"), param(req, "pair_code"), param(req, "pair_nonce"));
-            if (!approved) {
-                oauthError(res, 403, "access_denied", "Pareamento expirado ou invalido. Reinicie a conexao OAuth.");
-                return;
-            }
+            // Token de dispositivo só é entregue via /device/pair/status
+            // ao solicitante que possui o segredo de posse, nunca ao navegador.
+            if (!isAdmin(req)) return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
+            const result = devicePairingStore.approveWeb({
+                pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce")
+            });
+            if (!result.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
+            sendOwnerConsentPage(res, {...details, success: true});
+            return;
         }
-        const client_id = approved?.client_id ?? param(req, "client_id");
-        const redirect_uri = approved?.redirect_uri ?? param(req, "redirect_uri");
-        const response_type = approved?.response_type ?? param(req, "response_type");
-        const code_challenge = approved?.code_challenge ?? param(req, "code_challenge");
-        const code_challenge_method = approved?.code_challenge_method ?? param(req, "code_challenge_method");
-        const client_state = approved?.client_state ?? (param(req, "state") || undefined);
+        const client_id = param(req, "client_id");
+        const redirect_uri = param(req, "redirect_uri");
+        const response_type = param(req, "response_type");
+        const code_challenge = param(req, "code_challenge");
+        const code_challenge_method = param(req, "code_challenge_method");
+        const client_state = param(req, "state") || undefined;
         const resource = param(req, "resource");
         const requestedScope = param(req, "scope");
         const isAdminResource = /\/admin\/mcp(?:$|[?#])/.test(resource);
-        const scope = approved?.scope ?? (isAdminResource
+        const scope = isAdminResource
             ? (requestedScope && /\badmin\b/.test(requestedScope) ? requestedScope : "mcp admin")
-            : (requestedScope || "mcp"));
+            : (requestedScope || "mcp");
         const client = await resolveClientRegistration(client_id, redirect_uri);
         if (!client) {
             oauthError(res, 400, "invalid_client", "client_id desconhecido. Faça /register antes ou use Client ID Metadata Document compatível.");
@@ -603,11 +641,19 @@ export async function handleAuthorize(req, res) {
         }
         const payload = { client_id, redirect_uri, response_type, code_challenge, code_challenge_method, client_state, scope, client_name: client.client_name };
         if (req.method !== "POST") {
-            const pair = beginOAuthPairing(payload);
-            sendOwnerConsentPage(res, {
-                ...payload, pair_id: pair.id, pair_code: pair.code,
-                pair_nonce: pair.nonce, isAdmin: isAdmin(req)
-            });
+            sendOwnerConsentPage(res, payload);
+            return;
+        }
+        const configuredPassword = getAdminPassword();
+        const submittedPassword = param(req, "password");
+        if (!configuredPassword) {
+            log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
+            sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+            return;
+        }
+        if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
+            log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
+            sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
             return;
         }
         const ownerToken = getOwnerToolToken();
@@ -636,7 +682,7 @@ export async function handleAuthorize(req, res) {
             cid: req.cid,
             client_id: client.client_id,
             redirect_uri,
-            mode: "owner_cookie_pair_code",
+            mode: "owner_password",
         });
         res.redirect(302, back.toString());
     }

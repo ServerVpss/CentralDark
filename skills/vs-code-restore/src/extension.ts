@@ -472,7 +472,6 @@ async function mapNativeWorkspace(context: vscode.ExtensionContext): Promise<voi
 }
 
 /**
- * /**
  * Pareamento por codigo confirmado no MESMO MCP OAuth 2.1.
  * Nao gera admin key e NAO auto-aprova o proprio dispositivo. A aprovacao
  * precisa vir do navegador autenticado do dono (cookie cd_admin existente).
@@ -563,7 +562,9 @@ async function pairVsCode(context: vscode.ExtensionContext): Promise<void> {
       {modal: true}, 'Abrir confirmação');
     if (go !== 'Abrir confirmação') return;
     const approvedUri = vscode.Uri.parse(
-      MCP_DEVICE_BASE + '/pair/consent?id=' + encodeURIComponent(request.pair_id));
+      'https://mcp.centralldark.com/authorize?client_id=' +
+      encodeURIComponent('centraldark.centraldark-vscode-restore') +
+      '&pair_id=' + encodeURIComponent(request.pair_id));
     const opened = await vscode.env.openExternal(approvedUri);
     if (!opened) throw Error('PAIRING_BROWSER_NOT_OPENED');
     const result = await vscode.window.withProgress({

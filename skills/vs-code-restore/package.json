@@ -1,8 +1,8 @@
 {
   "name": "centraldark-vscode-restore",
   "displayName": "CentralDark · Vibe Coding",
-  "description": "CentralDark VS Code: bancada, MCP OAuth 2.1 e pareamento por codigo confirmado pelo administrador.",
-  "version": "0.2.0",
+  "description": "CentralDark VS Code: OAuth CentralDark compartilhado, bancada e pareamento por codigo.",
+  "version": "0.2.1",
   "publisher": "centraldark",
   "private": true,
   "engines": {

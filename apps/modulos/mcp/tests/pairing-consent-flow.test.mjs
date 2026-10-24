@@ -18,7 +18,7 @@ process.env.MCP_PUBLIC_URL = 'http://127.0.0.1';
 process.on('exit', () => { try { rmSync(tmp,{recursive:true,force:true}); } catch {} });
 
 const { adminLogin, isAdmin } = await import('../src/admin.js');
-const { handleAuthorize } = await import('../src/oauth.js');
+const { handleAuthorize, configureDevicePairingForOAuth } = await import('../src/oauth.js');
 const { registerClient } = await import('../src/sessions.js');
 const { createDevicePairingRouter, createDevicePairingStore } = await import('../src/device-pairing.js');
 
@@ -29,8 +29,9 @@ app.post('/admin/login',adminLogin);
 app.get('/authorize',handleAuthorize);
 app.post('/authorize',handleAuthorize);
 const store=createDevicePairingStore({registryPath:join(tmp,'devices.json')});
+configureDevicePairingForOAuth(store);
 app.use('/device',createDevicePairingRouter({
-  store,isBrowserAdmin:isAdmin,publicOrigin:'http://127.0.0.1'
+  store
 }));
 const server=await new Promise(resolve=>{
   const live=app.listen(0,'127.0.0.1',()=>resolve(live));
@@ -63,73 +64,87 @@ const getHidden=(html,key)=>{
   return match[1];
 };
 
-test('OAuth consent: no password; existing admin session + code + nonce required; replay blocked',async()=>{
+test('Hermes: o MESMO /authorize conserva formulário original OAuth 2.1 e PKCE',async()=>{
   const client=registerClient({
-    client_name:'Hermes Test Client',redirect_uris:[base+'/callback'],
+    client_name:'Hermes Agent',redirect_uris:[base+'/callback'],
     token_endpoint_auth_method:'none'
   });
   const params=new URLSearchParams({
+    client_id:client.client_id,redirect_uri:base+'/callback',response_type:'code',
+    code_challenge:'TEST_ONLY_PKCE_CHALLENGE',
+    code_challenge_method:'S256',scope:'mcp',state:'TEST_ONLY_HERMES_STATE'
+  });
+  const page=await request('/authorize?'+params);
+  assert.equal(page.status,200);
+  const html=await page.text();
+  assert.match(html,/Hermes Agent/);
+  assert.match(html,/name="password" placeholder="Senha do admin"/);
+  assert.match(html,/>Allow<\/button>/);
+  assert.doesNotMatch(html,/class="pair-code"/);
+
+  const inputs={
     client_id:client.client_id,redirect_uri:base+'/callback',
     response_type:'code',code_challenge:'TEST_ONLY_PKCE_CHALLENGE',
     code_challenge_method:'S256',scope:'mcp',
-    state:'TEST_ONLY_OAUTH_STATE'
-  });
-  const page=await request('/authorize?'+params.toString());
-  assert.equal(page.status,200);
-  const html=await page.text();
-  assert.match(html,/Confirmar pareamento/);
-  assert.doesNotMatch(html,/name="password"/);
-  const data={
-    pair_id:getHidden(html,'pair_id'),
-    pair_code:getHidden(html,'pair_code'),
-    pair_nonce:getHidden(html,'pair_nonce')
+    state:'TEST_ONLY_HERMES_STATE',password:process.env.MCP_ADMIN_PASSWORD
   };
-  assert.match(data.pair_code,/^[A-F0-9]{5}-[A-F0-9]{5}$/);
-  const denied=await request('/authorize',urlEncoded(data));
-  assert.equal(denied.status,403);
-  const cookie=await adminCookie();
-  const crossSite=await request('/authorize',urlEncoded(data,cookie,'https://external.example'));
-  assert.equal(crossSite.status,403);
-  const authorized=await request('/authorize',urlEncoded(data,cookie));
-  assert.equal(authorized.status,302);
-  const target=new URL(authorized.headers.get('location'));
+  const denied=await request('/authorize',urlEncoded({...inputs,password:'incorrect'}));
+  assert.equal(denied.status,200);
+  assert.match(await denied.text(),/Senha inv/);
+  const approved=await request('/authorize',urlEncoded(inputs));
+  assert.equal(approved.status,302);
+  const target=new URL(approved.headers.get('location'));
   assert.equal(target.origin,new URL(base).origin);
   assert.ok(target.searchParams.get('code'));
-  assert.equal(target.searchParams.get('state'),'TEST_ONLY_OAUTH_STATE');
-  const replay=await request('/authorize',urlEncoded(data,cookie));
-  assert.equal(replay.status,403);
+  assert.equal(target.searchParams.get('state'),'TEST_ONLY_HERMES_STATE');
 });
 
-test('VS Code device: code displayed, real owner confirms, token delivered once',async()=>{
+test('VS Code: mesmo OAuth /authorize, identificação pelo client_id e código sem senha',async()=>{
   const created=await request('/device/pair/start',json({
     device_name:'SEGREDO-VSCODE-TEST',executor:'vscode',surface:'test'
   }));
   assert.equal(created.status,201);
   const pair=await created.json();
   assert.match(pair.code,/^[A-F0-9]{4}-[A-F0-9]{4}$/);
-  const pendingPage=await request('/device/pair/consent?id='+encodeURIComponent(pair.pair_id));
-  assert.equal(pendingPage.status,200);
-  const plain=await pendingPage.text();
-  assert.ok(plain.includes(pair.code));
-  assert.doesNotMatch(plain,/type="submit"/);
-  const pending=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
-  assert.equal((await pending.json()).status,'pending');
+  // Página paralela removida: tudo usa o MESMO /authorize do Hermes.
+  const oldRoute=await request('/device/pair/consent?id='+encodeURIComponent(pair.pair_id));
+  assert.equal(oldRoute.status,404);
+  const url='/authorize?'+new URLSearchParams({
+    client_id:'centraldark.centraldark-vscode-restore',pair_id:pair.pair_id
+  });
+  const consent=await request(url);
+  assert.equal(consent.status,200);
+  const noOwner=await consent.text();
+  assert.match(noOwner,/CentralDark · Vibe Coding/);
+  assert.match(noOwner,/Confirmar pareamento/);
+  assert.ok(noOwner.includes(pair.code));
+  assert.doesNotMatch(noOwner,/name="password"/);
   const cookie=await adminCookie();
-  const withAdmin=await request('/device/pair/consent?id='+encodeURIComponent(pair.pair_id),{headers:{Cookie:cookie}});
-  const html=await withAdmin.text();
+  const page=await request(url,{headers:{Cookie:cookie}});
+  assert.equal(page.status,200);
+  const html=await page.text();
+  assert.match(html,/Confirmar pareamento/);
+  assert.ok(html.includes(pair.code));
+  assert.doesNotMatch(html,/name="password"/);
   const body={
-    id:getHidden(html,'id'),
-    code:getHidden(html,'code'),
-    nonce:getHidden(html,'nonce')
+    client_id:'centraldark.centraldark-vscode-restore',
+    pair_id:getHidden(html,'pair_id'),
+    pair_code:getHidden(html,'pair_code'),
+    pair_nonce:getHidden(html,'pair_nonce')
   };
-  const denied=await request('/device/pair/confirm',urlEncoded(body));
-  assert.equal(denied.status,401);
-  const deniedNonce=await request('/device/pair/confirm',urlEncoded({...body,nonce:'wrong'},cookie));
-  assert.equal(deniedNonce.status,403);
-  const wrongOrigin=await request('/device/pair/confirm',urlEncoded(body,cookie,'https://evil.example'));
-  assert.equal(wrongOrigin.status,403);
-  const confirmed=await request('/device/pair/confirm',urlEncoded(body,cookie));
+  const before=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+  assert.equal((await before.json()).status,'pending');
+  const anonymous=await request('/authorize',urlEncoded(body));
+  assert.equal(anonymous.status,403);
+  const invalidNonce=await request('/authorize',urlEncoded({...body,pair_nonce:'wrong'},cookie));
+  assert.equal(invalidNonce.status,403);
+  const invalidCode=await request('/authorize',urlEncoded({...body,pair_code:'FFFF-FFFF'},cookie));
+  assert.equal(invalidCode.status,403);
+  const confirmed=await request('/authorize',urlEncoded(body,cookie));
   assert.equal(confirmed.status,200);
+  assert.match(await confirmed.text(),/Pareamento confirmado/);
+  const replay=await request('/authorize',urlEncoded(body,cookie));
+  assert.equal(replay.status,404);
   const completed=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
   const auth=await completed.json();
   assert.equal(auth.status,'approved');
