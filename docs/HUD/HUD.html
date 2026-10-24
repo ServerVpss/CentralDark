@@ -3414,6 +3414,8 @@ setInterval(refreshCentralDarkMcpCatalog, 15000);
     if(proof)proof.textContent=valid
       ?'HORN: '+String(fp.owner||'scripts/lupa/horn-reuse-fixed-point.mjs')+
         ' | ' +proven+'/10 critérios PASS'+
+        ' | HEADER_USAGE: '+String(fp.header_usage||'NOT_USED')+
+        ' ('+String(fp.criteria_attempts_current||0)+'/10 tentativas atuais)'+
         ' | Goal receipt: '+String(fp.goal_receipt_status||'UNKNOWN')+
         ' | FIXED_POINT GLOBAL: '+(fixed?'PASS':'NÃO COMPROVADO')+
         ' | NEXT_CURSOR: '+String(fp.next_cursor||'REMEASURE_REQUIRED')+
