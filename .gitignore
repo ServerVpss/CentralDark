@@ -48,6 +48,10 @@ actions-runner/
 revisoes/
 quarantine/
 
+# Excalidraw drawings (CHEFE: por enquanto não estou usando, calibrado 100% ainda não)
+# Quando usar esse diagramas removemos daqui
+docs/BRAIN/Excalidraw/*.excalidraw.md
+
 # Backups e temporários
 # Regra da Casa: IDENTIDADE FICA; CONTEUDO EVOLUI; HISTORICO = GIT.
 # Backup local é efêmero/rollback pontual, nunca árvore genealógica nem versão canônica.

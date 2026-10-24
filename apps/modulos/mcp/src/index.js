@@ -784,6 +784,15 @@ app.post("/admin/mcp", (req, res) => {
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
 });
+app.get("/admin/catalog", authAdmin, async (req, res) => {
+    try {
+        const result = await getAdminCatalog(req);
+        res.json(result);
+    } catch (err) {
+        log.error("admin_catalog_error", { error: String(err) });
+        res.status(500).json({ ok: false, error: "erro ao obter catálogo administrativo", cid: req.cid });
+    }
+});
 // Alias de compatibilidade: /mcp/admin converge para o MESMO handler /admin/mcp.
 // Mantemos o método e o corpo (sem redirect HTTP) porque clientes MCP/OAuth podem
 // não preservar POST/Authorization em redirects. O resource canônico continua /admin/mcp.
