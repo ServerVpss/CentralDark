@@ -1,0 +1,58 @@
+🔴 RECUPERAR PORTA 8081 — COPIAR E COLAR NA VPS
+
+════════════════════════════════════════════════════════════════
+
+COMANDO 1: Verificar status PM2
+────────────────────────────────
+cd /root/CentralDark && pm2 list
+
+
+COMANDO 2: Reiniciar todos os serviços
+────────────────────────────────────────
+cd /root/CentralDark && pm2 restart all
+
+
+COMANDO 3: Iniciar sala-controle especificamente na porta 8081
+──────────────────────────────────────────────────────────────
+cd /root/CentralDark && PORT=8081 pm2 start apps/instinto-superior/server.js --name "sala-controle"
+
+
+COMANDO 4: Verificar se porta 8081 está listening
+────────────────────────────────────────────────
+lsof -i :8081
+
+
+COMANDO 5: Ver logs de sala-controle
+──────────────────────────────────────
+pm2 logs sala-controle
+
+
+════════════════════════════════════════════════════════════════
+
+⚡ SOLUÇÃO RÁPIDA (execute em sequência):
+
+ssh root@100.123.93.25
+cd /root/CentralDark
+pm2 kill
+pm2 start all
+sleep 5
+pm2 list
+lsof -i :8081
+
+════════════════════════════════════════════════════════════════
+
+TESTE DEPOIS (na máquina local):
+
+curl http://100.123.93.25:8081/health
+curl http://100.123.93.25:8081/sala-controle
+
+════════════════════════════════════════════════════════════════
+
+Se nada funcionar, destrua e recrie:
+
+pm2 delete sala-controle
+pm2 start /root/CentralDark/apps/instinto-superior/server.js --name "sala-controle" --port 8081
+pm2 save
+pm2 startup
+
+════════════════════════════════════════════════════════════════

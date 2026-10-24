@@ -187,6 +187,14 @@ CHEFE (INTENT_ID / GOAL / AUTORIZAÇÃO)
 
 **Critério de saída:** FIXED_POINT só com objetivo cumprido e gates requeridos provados; se ainda há trabalho, registrar o próximo discriminante no NEXT_CURSOR e prosseguir quando houver executor disponível. Se nada mudou: NOOP. Não prometer loop em segundo plano sem job/schedule real.
 
+### Delegação do Builder na Forja existente — sem versões paralelas
+
+**Owner de skill:** skills/centraldark-delegacao/SKILL.md. **Contrato tipado:** .agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json. **Superfície:** apps/instinto-superior. **Bancada da Casa:** K:\ (repositório raiz, não K:\CentralDark).
+
+Delegar a Hermes/Claude/Codex pelo fluxo existente: INTENT_ID → escopos não sobrepostos → capacidade/autorização medida → tarefa Hermes Kanban → um Writer por escopo → ACK → efeito → contraprova → receipt/NEXT_CURSOR. Builder coordena e apresenta; não cria fila, CLI ou agente. Papeis de terminal são candidatos adaptáveis, não grants fixos. Não presumir suporte do CLI Hermes a novos argumentos, equivalência Codex/GitHub Actions nem webhooks ativos do Lovable.
+
+**Demonstração não é prova:** exemplos com IDs de PR, hashes, métricas ou sucessos fictícios não validam deploy/integração. PREVIEW != DEPLOYED, BUILT != INSTALLED, RUNNING != COMPLETED. Ao encontrar nomes com sufixos de versão, absorver o conteúdo exclusivo nos mesmos owners e eliminar duplicatas somente após readback e contraprova; a evolução é histórico Git.
+
 ## 6. Fluxo padrão — intenção curta, organismo desdobra
 
 ```text
