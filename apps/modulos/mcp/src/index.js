@@ -8,7 +8,8 @@ import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
 import { getAccessToken, getSession, getStateStats } from "./sessions.js";
-import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
+import { createDevicePairingRouter, createDevicePairingStore } from "./device-pairing.js";
+import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, configureDevicePairingForOAuth, } from "./oauth.js";
 import { getStatusHtml, getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
@@ -20,7 +21,7 @@ import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
 import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
-import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
@@ -605,6 +606,10 @@ app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadat
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
+// Uma store de registro, consumida pelo mesmo /authorize e pela API de dispositivo.
+const oauthDeviceStore = createDevicePairingStore();
+configureDevicePairingForOAuth(oauthDeviceStore);
+app.use("/device", createDevicePairingRouter({ store: oauthDeviceStore }));
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
@@ -839,6 +844,15 @@ app.post("/admin/mcp", (req, res) => {
 });
 app.get("/admin/mcp", (req, res) => {
     unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
+});
+app.get("/admin/catalog", authAdmin, async (req, res) => {
+    try {
+        const result = await getAdminCatalog(req);
+        res.json(result);
+    } catch (err) {
+        log.error("admin_catalog_error", { error: String(err) });
+        res.status(500).json({ ok: false, error: "erro ao obter catálogo administrativo", cid: req.cid });
+    }
 });
 // Alias de compatibilidade: /mcp/admin converge para o MESMO handler /admin/mcp.
 // Mantemos o método e o corpo (sem redirect HTTP) porque clientes MCP/OAuth podem

@@ -500,3 +500,43 @@ test("HUD mostra receita P0 a partir do mesmo sensor autentico, sem nova secao",
   assert.ok(fn.includes('mcpRecipeEscopo: "MCP_HTTP_ONLY"'));
   assert.equal((hud.match(/\["Receita em uso",/g) || []).length,1);
 });
+
+test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => {
+  const data = read("apps/instinto-superior/src/data/painel-unico.ts");
+  const ui = read("apps/instinto-superior/src/components/central/MapaOwners.tsx");
+  const shell = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
+  const names = ["🏠 Início", "✨ Criar", "👁️ Ao vivo", "🔗 Conexões", "📖 Histórico"];
+  for (const n of names) assert.ok(data.includes(n), "caminho simples ausente: " + n);
+  assert.equal((data.match(/rotulo: "/g) || []).length,5);
+  assert.ok(data.includes('id: "ao-vivo", rotulo: "👁️ Ao vivo", aba: "visao"'));
+  assert.ok(data.includes("StatusPanel/PapagaioHudMcp/cockpit.functions"));
+  assert.ok(data.includes("RASCUNHO_SEM_DESPACHO"));
+  assert.ok(data.includes("ABRIR_OWNER_AUTENTICADO"));
+  assert.ok(ui.includes("O que você quer fazer hoje?"));
+  assert.ok(ui.includes("onNavigate?.(item.aba)"));
+  assert.ok(ui.includes("ConexoesCentralDark"));
+  assert.ok(ui.includes("item.privado && !autenticado"));
+  assert.ok(ui.includes("conexoesAbertas"));
+  assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
+  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,25);
+});
+
+test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
+  // Regressao do Corpo Unico: o PR #1895 conserva o header fixo e recebe de
+  // volta a capsula flutuante superior (sem criar segundo shell/executor).
+  assert.match(cockpit, /aria-label="Harness flutuante superior"/);
+  assert.match(cockpit, /data-cd-harness="top-floating"/);
+  for (const control of [
+    'aria-label="CentralDark · visão geral"',
+    'aria-label="Lupa · buscar ferramentas"',
+    'aria-label="Mapa dos sistemas"',
+    'aria-label="Notificações"',
+  ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
+  assert.match(cockpit, /className="sticky top-0 z-50/);
+  assert.match(cockpit, /className="fixed inset-x-0 top-16/);
+  assert.match(cockpit, /ref=\{tabsScrollRef\}/);
+  assert.match(cockpit, /barra\.addEventListener\("wheel", rolarAbas, \{ passive: false \}\)/);
+  assert.match(cockpit, /barra\.removeEventListener\("wheel", rolarAbas\)/);
+  assert.match(cockpit, /onClick=\{\(\) => abrirDestino\("claude-notifications"\)\}/);
+  assert.match(cockpit, /harnessVisivel && gaveta === null/);
+});

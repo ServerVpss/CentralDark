@@ -15,6 +15,7 @@ import {
 import { CofreAdministrativo, HubSeguranca } from "@/components/central/AdminCofreSeguranca";
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
 import { CatalogoCapacidadesMcp } from "@/components/central/CatalogoCapacidadesMcp";
+import { McpAdminIntegrado } from "@/components/central/McpAdminIntegrado";
 import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
 import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { Button } from "@/components/ui/button";
@@ -400,6 +401,7 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
           <ConexoesCentralDark />
         </TabsContent>
         <TabsContent value="catalogo" className="mt-6">
+          <McpAdminIntegrado />
           <CatalogoCapacidadesMcp />
         </TabsContent>
         <TabsContent value="hub-inventario" className="mt-6">
