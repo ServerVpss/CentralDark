@@ -14,6 +14,25 @@ Na resenha informal e em falas destinadas ao áudio, preferir **“Ôchente!”*
 
 ## Gatilho
 Qualquer tarefa no repositorio ServerVpss/CentralDark ou missao derivada (VPS, GitHub, MCP, workflows, issues, deploy). O método é uma caixa de ferramentas: não é permissão, lei nem bloqueio. A intenção vigente escolhe o mínimo útil.
+## Permissão persistente — normalização semântica (owner único)
+
+Este método não é owner de autorização. Resolver a autoridade no owner canônico `docs/CONSCIENCIA/02-PERMISSOES.md` e executar o que já está coberto pela intenção/repositório/escopo/destino. O nome ou a flexão da ação não cria uma nova solicitação de autorização.
+
+Equivalentes Git no mesmo alvo autorizado: commit/commits/committed/committing/git commit/criar ou registrar commit; push/pushed/pushing/git push/enviar ou publicar commits/publicar branch/atualizar ou sincronizar branch remota/atualizar o HEAD do PR existente. Abrir/atualizar PR e squash/merge seguem seus owners canônicos e gates próprios.
+
+Quando o mesmo escopo já está autorizado, não perguntar “posso fazer push?”, “posso commitar?”, “posso publicar os commits?” ou equivalentes. Medir HEAD/estado remoto, usar a rota existente e executar. Falha de runner ou uma rota indisponível é um problema técnico local a investigar, não uma re-pergunta de autorização.
+
+Essa regra não muda o alvo: commit/push direto na `main` protegida continua bloqueado; force-push, reescrita destrutiva de histórico, bypass de branch protection/checks, publicação de segredo e mudança material de escopo continuam proibidos sem o owner/autorização específica aplicável.
+
+GIT_SEMANTIC_ACTION_FAMILY=INHERIT_FROM_02_PERMISSOES
+AUTHORIZATION_OWNER=docs/CONSCIENCIA/02-PERMISSOES.md
+NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
+NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true
+DIRECT_MAIN_COMMIT=BLOCKED_BY_BRANCH_POLICY
+DIRECT_PUSH_TO_PROTECTED_MAIN=BLOCKED_BY_BRANCH_POLICY
+FORCE_PUSH_REQUIRES_EXPLICIT_CHEFE_AUTH=true
+BRANCH_PROTECTION_NEVER_BYPASSED=true
+
 
 ## Contrato operacional — VISUAL FIRST / DELTA EXATO (19/10/2026)
 
@@ -31,21 +50,25 @@ NOTIFICATION_IS_PROPOSAL_NOT_PERMISSION=true
 
 1. **Materializar primeiro:** inserir no owner visual existente os botões, menus e cartões solicitados, mantendo navegação e seleção para revisão imediata. Se não houver ligação comprovada, sinalizar `INTEGRAÇÃO PENDENTE` sem fazer o botão fingir execução. Preservar funções existentes.
 2. **Não antecipar:** não criar/iniciar agentes, scripts, deploy, migração, conexão a provedores, auditoria opcional ou novas telas sem pedido correspondente. Se o usuário pedir só uma mudança visual, fazer só essa mudança, validar o escopo visual e parar.
-3. **Descobrir depois, sem executar:** o sistema pode identificar oportunidades de ligação com owners e rotas já existentes e **avisar** com evidência, impacto e próxima ação proposta. Avisa quando existir oportunidade comprovada; aguarda pedido/autorização antes de integrar ou modificar infraestrutura.
+3. **Descobrir depois, sem ampliar uma tarefa visual:** o sistema pode identificar oportunidades de ligação com owners e rotas já existentes e **avisar** com evidência, impacto e próxima ação proposta. Se a intenção era somente visual e a integração é um escopo novo, aguardar pedido/autorização. Se a intenção vigente já inclui a integração e o owner persistente cobre o alvo, integrar sem pedir a mesma autorização novamente.
 4. **Segurança sob demanda, proteção de base permanente:** não transformar cada tarefa visual em projeto de segurança, revisão ampla ou bloqueio hipotético sem solicitação. **Não** desabilitar autenticação, isolamento, autorização, tratamento de segredos, RLS, validações e demais controles básicos existentes. Nunca expor credenciais ou representar dados simulados como reais. Qualquer ação de risco exige as autorizações próprias.
 5. **Coordenação:** SOL pode coordenar e delegar para Hermes, Jarvis, Claude/Codex ou outros coordenadores existentes apenas quando a intenção incluir delegação. Coordenadores podem repassar subgoals no Kanban existente com owner e ACK; abrir terminal não inicia agente. Um escritor por escopo.
 6. **Contraprova proporcional:** provar que o item visual foi renderizado/selecionado (quando houver acesso); não exigir teste end-to-end de provedor para afirmar `UI_PRESENT`. Separar `UI_PRESENT`, `INTEGRATION_PENDING`, `RUNTIME_CONNECTED`, `EFFECT_PROVED`; documentação/HTTP 200 isolado não comprovam clique ou integração.
 
-**Sequência:** `PEDIDO EXATO → MOSTRAR → POSICIONAR/REVISAR → DESCOBRIR OPORTUNIDADE → AVISAR → AGUARDAR AUTORIZAÇÃO → INTEGRAR → CONTRAPROVAR`. A primeira entrega deve ser útil antes das etapas futuras. `UNKNOWN != PASS`.
+**Sequência visual-first:** `PEDIDO EXATO → MOSTRAR → POSICIONAR/REVISAR → DESCOBRIR OPORTUNIDADE → AVISAR → (ESCOPO NOVO/SEM AUTORIZAÇÃO: PEDIR; ESCOPO JÁ AUTORIZADO: INTEGRAR) → CONTRAPROVAR`. Não expandir um pedido somente visual. Também não re-pedir autorização para integração já incluída na intenção autorizada. A primeira entrega deve ser útil antes das etapas futuras. `UNKNOWN != PASS`.
 ## Lei persistente — Casa ⇄ main, CHEFE como aprovação viva (2026-10-19)
 
-**Autoridade:** o CHEFE aprova a intenção em tempo real no diálogo; a PR não é requisito universal para alterações cotidianas autorizadas. Abrir PR somente quando solicitado ou quando o componente exigir isolamento/revisão técnica. Não criar PR automaticamente para cada delta.
+**Autoridade:** o CHEFE define a intenção; a autorização pode persistir segundo `docs/CONSCIENCIA/02-PERMISSOES.md`. A PR não é requisito universal para alterações cotidianas autorizadas. Abrir PR somente quando solicitado ou quando o componente exigir isolamento/revisão técnica. Não criar PR automaticamente para cada delta. Não transformar uma autorização já vigente em pergunta de confirmação para commit/push ou operação equivalente dentro do mesmo escopo.
 
 ```text
 CASA_COMMIT_IMPLIES_MAIN_SYNC=true
 MAIN_COMMIT_IMPLIES_CASA_SYNC=true
 PR_BY_EXCEPTION=true
-CHEFE_IS_LIVE_APPROVAL=true
+CHEFE_IS_INTENT_AUTHORITY=true
+PERSISTENT_PERMISSION_OWNER=docs/CONSCIENCIA/02-PERMISSOES.md
+NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
+NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true
+GIT_SEMANTIC_ACTION_FAMILY=INHERIT_FROM_02_PERMISSOES
 SYNC_IS_BIDIRECTIONAL_NOT_DESTRUCTIVE=true
 UNKNOWN_IS_NOT_SYNCED=true
 ```
