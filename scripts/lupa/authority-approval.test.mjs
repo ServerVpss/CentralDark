@@ -206,7 +206,7 @@ test("push/commit aliases inherit persistent permission without repetitive confi
   assert.equal(flow.includes("3. não façam merge para `main`;"), false);
   assert.equal(flow.includes("- Merge somente com gates verdes e autorização explícita."), false);
   assert.ok(claude.includes("SUSPENDED_ONLY_FOR_VISUAL_CONVERGENCE_SCOPE"));
-  assert.ok(claude.includes("não pedir aprovação repetida"));
+  assert.ok(claude.includes("sem re-pergunta quando a mesma intenção/escopo já está autorizado"));
   assert.ok(hermes.includes("GIT_SEMANTIC_ACTION_FAMILY=INHERIT_FROM_02_PERMISSOES"));
   assert.ok(hermes.includes("NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true"));
   assert.equal(hermes.includes("MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true"), false);
