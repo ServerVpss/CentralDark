@@ -127,6 +127,9 @@ const base = {
   fixed_point_execution_header: makeExecutionHeader(),
 };
 
+// Both write ENTRY and deploy EXIT gates must carry the same measurable header.
+state.global_contract_entry.fixed_point_execution_header = makeExecutionHeader();
+
 let pass = 0;
 function check(actual, expected) {
   assert.equal(actual, expected);
@@ -192,6 +195,8 @@ check(deriveSelfGoal({ ...derivedSpec, material_delta: false }, state).status, "
 check(deriveSelfGoal({ ...derivedSpec, scope: ["prod"] }, state).status, "BLOCKED_CHILD_SCOPE_EXPANSION");
 
 check(validateGlobalContractGate(state.global_contract_entry, state, "ENTRY").status, "PASS_GLOBAL_CONTRACT_GATE");
+check(validateGlobalContractGate({ ...state.global_contract_entry, fixed_point_execution_header: undefined }, state, "ENTRY").status,
+  "BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSING");
 
 check(validateGlobalContractGate({ ...state.global_contract_entry, child_contract: { ...childContract, root_goal_id: "RG-X" } }, state, "ENTRY").status, "BLOCKED_CHILD_ROOT_GOAL_CHANGE");
 check(validateGlobalContractGate({ ...state.global_contract_entry, tlc23_horn_gate: { ...tlc23HornPass, status: "UNKNOWN" } }, state, "ENTRY").status, "BLOCKED_GLOBAL_CONTRACT_TLC23_HORN_GATE");
@@ -213,6 +218,7 @@ const exitGate = {
   promotion_requested: false,
   fixed_point: false,
   next_cursor: "SAME_HEAD_CI",
+  fixed_point_execution_header: makeExecutionHeader(),
 };
 check(validateGlobalContractGate(exitGate, state, "EXIT").status, "PASS_GLOBAL_CONTRACT_GATE");
 check(validateGlobalContractGate({ ...exitGate, fixed_point: true, aggregate_fixed_point_pass: false }, state, "EXIT").status, "BLOCKED_GLOBAL_CONTRACT_FALSE_FIXED_POINT");
