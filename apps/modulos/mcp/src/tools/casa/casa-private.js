@@ -5,7 +5,7 @@ import { auditStartupSnapshot } from "../../lib/admin-guard.js";
 import { getDispatcherRuntimeTools } from "../core/mcp-admin.js";
 const json = (value) => ({content:[{type:"text",text:JSON.stringify(value,null,2)}]});
 function url(path) {
-  const host=process.env.CENTRALDARK_CASA_TAILSCALE_HOST||"segredo";
+  const host=process.env.CENTRALDARK_CASA_TAILSCALE_HOST||"windows-casa.tail6d7aa4.ts.net";
   if(!/^[a-zA-Z0-9.-]{1,100}$/.test(host)) throw Error("CASA_TAILSCALE_HOST_INVALID");
   return "http://"+host+":9100"+path;
 }
