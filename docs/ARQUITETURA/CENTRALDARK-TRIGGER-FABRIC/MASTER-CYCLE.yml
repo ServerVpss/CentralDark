@@ -76,6 +76,7 @@ fixed_point_execution_header:
   required: true
   applies_to: ALL_CURRENT_AND_FUTURE_AGENTS
   owner: scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+  builder: scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader
   canonical_criteria_owner: scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen
   entry: BEFORE_FIRST_MATERIAL_ACTION_AND_EACH_MATERIAL_DELTA
   exit: BEFORE_AGENT_RETURNS_RESULT_OR_CLAIMS_FIXED_POINT
