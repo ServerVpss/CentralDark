@@ -1,0 +1,18 @@
+﻿{
+    "schema":  "centraldark.scheduled-sector-receipt.v1",
+    "sector":  "UNIFIED_BUILD",
+    "surface":  "CASA",
+    "started_at":  "2026-10-24T07:12:52.6430169-03:00",
+    "ended_at":  "2026-10-24T07:12:52.6520530-03:00",
+    "duration_seconds":  0.009,
+    "command":  "CentralDark-Unified-OneShot BUILD.ps1",
+    "exit_code":  91,
+    "probe_result":  "PROBE_FAIL_OR_UNKNOWN",
+    "final_pass_claimed":  false,
+    "pdf_gate_promoted":  false,
+    "current_gt_historical":  true,
+    "unknown_is_not_pass":  true,
+    "action_is_not_proof":  true,
+    "reality_is_judge":  true,
+    "log":  "K:\\runtime\\scheduled-jobs\\logs\\UNIFIED_BUILD-20261024-071252.log"
+}

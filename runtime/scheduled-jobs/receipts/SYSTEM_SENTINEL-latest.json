@@ -1,0 +1,18 @@
+﻿{
+    "schema":  "centraldark.scheduled-sector-receipt.v1",
+    "sector":  "SYSTEM_SENTINEL",
+    "surface":  "CASA",
+    "started_at":  "2026-10-24T07:11:56.0078596-03:00",
+    "ended_at":  "2026-10-24T07:12:52.0712427-03:00",
+    "duration_seconds":  56.063,
+    "command":  "system_sentinel.py --scan-notes",
+    "exit_code":  0,
+    "probe_result":  "PROBE_PASS",
+    "final_pass_claimed":  false,
+    "pdf_gate_promoted":  false,
+    "current_gt_historical":  true,
+    "unknown_is_not_pass":  true,
+    "action_is_not_proof":  true,
+    "reality_is_judge":  true,
+    "log":  "K:\\runtime\\scheduled-jobs\\logs\\SYSTEM_SENTINEL-20261024-071156.log"
+}
