@@ -172,6 +172,161 @@ export const FIXED_POINT_TEN_CRITERIA = Object.freeze([
   { id: "RECEIPT_PRESENT", label: "Receipt observável presente" },
 ]);
 
+const EXECUTION_HEADER_SCHEMA = "centraldark.fixed-point.execution-header.v1";
+const EXECUTION_HEADER_STATUS = new Set(["PASS", "FAIL", "UNKNOWN", "STALE", "BLOCKED"]);
+
+function validFreshTimestamp(value, nowMs, maxAgeMs) {
+  const parsed = Date.parse(String(value || ""));
+  return Number.isFinite(parsed)
+    && /(?:Z|[+-]\d\d:\d\d)$/.test(String(value || ""))
+    && parsed <= nowMs + 5000
+    && nowMs - parsed >= -5000
+    && nowMs - parsed <= maxAgeMs;
+}
+
+/**
+ * Validates an agent's actual ten-criterion execution header against the canonical
+ * HORN evaluator. Listing ten names is not use: every row needs a fresh attempt_ref.
+ */
+export function validateFixedPointExecutionHeader(header, options = {}) {
+  const nowMs = Number.isFinite(options.nowMs) ? options.nowMs : Date.now();
+  const maxAgeMs = Number.isFinite(options.maxAgeMs) && options.maxAgeMs > 0
+    ? options.maxAgeMs : 15 * 60 * 1000;
+  const hasText = (value) => typeof value === "string" && value.trim().length > 0;
+  const blocked = (status, extra = {}) => ({
+    schema: EXECUTION_HEADER_SCHEMA,
+    accepted: false,
+    status,
+    header_usage: "NOT_USED",
+    criteria_count: 0,
+    ...extra,
+  });
+
+  if (!header || typeof header !== "object" || Array.isArray(header)) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSING");
+  }
+  if (header.schema !== EXECUTION_HEADER_SCHEMA
+    || header.evaluator !== "scripts/lupa/horn-reuse-fixed-point.mjs") {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_SCHEMA_OR_OWNER");
+  }
+  for (const key of ["agent_id", "mission_id", "intent_id", "goal_fingerprint",
+    "observed_head", "evaluation_ref", "execution_ref", "measured_at"]) {
+    if (!hasText(header[key])) return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_FIELDS_MISSING", { missing: key });
+  }
+  if (options.expectedMissionId && header.mission_id !== options.expectedMissionId) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSION_MISMATCH", {
+      expected_mission_id: options.expectedMissionId,
+      observed_mission_id: header.mission_id,
+    });
+  }
+  if (options.expectedHead && header.observed_head !== options.expectedHead) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_HEAD_MISMATCH", {
+      expected_head: options.expectedHead,
+      observed_head: header.observed_head,
+    });
+  }
+  if (!validFreshTimestamp(header.measured_at, nowMs, maxAgeMs)) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_STALE", { measured_at: header.measured_at });
+  }
+
+  if (!Array.isArray(header.criteria) || header.criteria.length !== FIXED_POINT_TEN_CRITERIA.length) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_NOT_TEN", {
+      expected_count: FIXED_POINT_TEN_CRITERIA.length,
+      observed_count: Array.isArray(header.criteria) ? header.criteria.length : 0,
+    });
+  }
+
+  const expectedIds = FIXED_POINT_TEN_CRITERIA.map((item) => item.id);
+  const seen = new Set();
+  for (const row of header.criteria) {
+    if (!row || typeof row !== "object" || !expectedIds.includes(row.id) || seen.has(row.id)) {
+      return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_INVALID_OR_DUPLICATE_ID");
+    }
+    seen.add(row.id);
+    if (row.evaluated !== true || !hasText(row.source) || !hasText(row.attempt_ref)
+      || !validFreshTimestamp(row.evaluated_at, nowMs, maxAgeMs)) {
+      return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_CRITERION_NOT_ACTUALLY_MEASURED", {
+        criterion_id: row.id,
+        missing_attempt: row.evaluated !== true || !hasText(row.attempt_ref),
+        evaluated_at: row.evaluated_at || null,
+      });
+    }
+    if (!EXECUTION_HEADER_STATUS.has(row.status)) {
+      return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_CRITERION_STATUS_INVALID", {
+        criterion_id: row.id,
+        status: row.status || null,
+      });
+    }
+    if (row.status === "UNKNOWN" || row.status === "STALE" || row.status === "BLOCKED") {
+      if (!hasText(row.reason)) {
+        return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_GAP_WITHOUT_REASON", { criterion_id: row.id });
+      }
+    }
+    if (row.status === "PASS" || row.status === "FAIL") {
+      const expectedCounterproof = row.status === "PASS" ? "NOT_REFUTED" : "REFUTED";
+      if (!hasText(row.source_sha) || !SOURCE_HASH.test(String(row.source_sha))
+        || !hasText(row.proof_ref) || !hasText(row.counterproof_ref)
+        || row.counterproof_verdict !== expectedCounterproof
+        || !validFreshTimestamp(row.measured_at, nowMs, maxAgeMs)) {
+        return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_CLAIM_UNPROVEN", { criterion_id: row.id });
+      }
+    }
+  }
+  if (seen.size !== expectedIds.length || expectedIds.some((id) => !seen.has(id))) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_CRITERIA_MISSING");
+  }
+
+  const goalReceipt = header.goal_receipt && typeof header.goal_receipt === "object"
+    ? header.goal_receipt : null;
+  const evaluated = evaluateFixedPointTen({
+    criteria: header.criteria,
+    goalReceipt,
+    currentHead: header.observed_head,
+  }, { nowMs, maxAgeMs });
+  const declaredVerdict = header.verdict;
+  const declaredCursor = header.next_cursor;
+  if (declaredVerdict !== evaluated.verdict || declaredCursor !== evaluated.next_cursor) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_VERDICT_MISMATCH", {
+      evaluated_verdict: evaluated.verdict,
+      declared_verdict: declaredVerdict || null,
+      evaluated_next_cursor: evaluated.next_cursor,
+      declared_next_cursor: declaredCursor || null,
+    });
+  }
+  if (declaredVerdict === "FIXED_POINT"
+    && (!evaluated.fixedPoint || declaredCursor !== "FIXED_POINT"
+      || !goalReceipt || header.goal_receipt_ref !== goalReceipt.receipt_ref)) {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_FALSE_FIXED_POINT");
+  }
+  if (declaredVerdict !== "FIXED_POINT" && declaredCursor === "FIXED_POINT") {
+    return blocked("BLOCKED_FIXED_POINT_EXECUTION_HEADER_FALSE_TERMINAL_CURSOR");
+  }
+
+  return {
+    schema: EXECUTION_HEADER_SCHEMA,
+    accepted: true,
+    status: "PASS_FIXED_POINT_EXECUTION_HEADER",
+    header_usage: evaluated.fixedPoint ? "USED_AND_FIXED_POINT" : "USED_WITH_GAPS",
+    agent_id: header.agent_id,
+    mission_id: header.mission_id,
+    intent_id: header.intent_id,
+    goal_fingerprint: header.goal_fingerprint,
+    observed_head: header.observed_head,
+    measured_at: header.measured_at,
+    evaluator: header.evaluator,
+    evaluation_ref: header.evaluation_ref,
+    criteria_count: evaluated.total,
+    criteria_pass: evaluated.counts.PASS,
+    criteria_fail: evaluated.counts.FAIL,
+    criteria_unknown: evaluated.counts.UNKNOWN,
+    criteria_stale: evaluated.counts.STALE,
+    criteria_blocked: evaluated.counts.BLOCKED,
+    verdict: evaluated.verdict,
+    next_cursor: evaluated.next_cursor,
+    goal_receipt_status: evaluated.goal_receipt_status,
+  };
+}
+
 const FIXED_POINT_TEN_MAX_AGE_MS = 15 * 60 * 1000;
 const SOURCE_HASH = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
 
@@ -213,9 +368,12 @@ export function evaluateFixedPointTen(input = {}, options = {}) {
       ? item.max_age_ms : defaultMaxAgeMs;
     const tooFuture = timestampValid && observedAt > nowMs + 5000;
     const stale = !timestampValid || tooFuture || nowMs - observedAt > maxAgeMs;
+    const evaluatedAt = Date.parse(item.evaluated_at || "");
+    const attemptFresh = item.evaluated === true && hasText(item.attempt_ref)
+      && validFreshTimestamp(item.evaluated_at, nowMs, maxAgeMs);
     const traceable = hasText(item.source) && hasText(item.proof_ref) &&
       hasText(item.counterproof_ref) && SOURCE_HASH.test(String(item.source_sha || "")) &&
-      timestampValid;
+      timestampValid && attemptFresh;
     let status = "UNKNOWN";
 
     if (raw === "FAIL" && traceable && item.counterproof_verdict === "REFUTED" && !stale) {
@@ -238,6 +396,10 @@ export function evaluateFixedPointTen(input = {}, options = {}) {
       proof_ref: hasText(item.proof_ref) ? item.proof_ref : null,
       counterproof_ref: hasText(item.counterproof_ref) ? item.counterproof_ref : null,
       counterproof_verdict: item.counterproof_verdict || "UNKNOWN",
+      evaluated: item.evaluated === true && hasText(item.attempt_ref) && Number.isFinite(evaluatedAt),
+      attempt_ref: hasText(item.attempt_ref) ? item.attempt_ref : null,
+      evaluated_at: Number.isFinite(evaluatedAt) ? item.evaluated_at : null,
+      reason: hasText(item.reason) ? item.reason : null,
       measured_at: timestampValid ? item.measured_at : null,
       next_cursor: status === "PASS" ? "CONTINUE" : "VERIFY_" + id,
     };
@@ -318,6 +480,11 @@ if (isMain) {
     console.log("HORN_REUSE_FIXED_POINT=PASS");
     console.log("REUSE_BEFORE_CREATE=ENFORCED_BY_RULE_SET");
     console.log("LEARN_AFTER_PROVED_ERROR=PASS");
+  } else if (process.argv.includes("--validate-execution-header-stdin")) {
+    const header = JSON.parse(readFileSync(0, "utf8"));
+    const result = validateFixedPointExecutionHeader(header);
+    console.log(JSON.stringify(result, null, 2));
+    if (!result.accepted) process.exitCode = 13;
   } else if (process.argv.includes("--fixed-point-ten-stdin")) {
     const input = JSON.parse(readFileSync(0, "utf8"));
     const ageArg = process.argv.find((arg) => arg.startsWith("--max-age-ms="));
@@ -334,7 +501,7 @@ if (isMain) {
   } else {
     const raw = process.argv.find((arg) => arg.startsWith("--input-json="));
     if (!raw) {
-      console.error("usage: horn-reuse-fixed-point.mjs --self-test | --goal-stdin [--max-age-ms=N] | --fixed-point-ten-stdin [--max-age-ms=N] | --input-json='{...}'");
+      console.error("usage: horn-reuse-fixed-point.mjs --self-test | --goal-stdin [--max-age-ms=N] | --fixed-point-ten-stdin [--max-age-ms=N] | --validate-execution-header-stdin | --input-json='{...}'");
       process.exit(2);
     }
     const input = JSON.parse(raw.slice("--input-json=".length));
