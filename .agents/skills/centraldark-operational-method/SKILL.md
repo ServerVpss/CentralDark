@@ -8,6 +8,13 @@ oracle_review_on_change: true
 
 # METODO OPERACIONAL CENTRALDARK
 
+## Consulta oficial PowerShell sob demanda (2026-10-25)
+
+**Gatilho acionável ao agente observar erro PowerShell:** `Get-FileHash`, `CommandNotFoundException`, `ParserError`, `.ps1`, `powershell.exe`, `pwsh`, cmdlets, utility modules, PSScriptAnalyzer, SecretManagement, Crescendo, PlatyPS, DSC, Gallery, instalação/edições, SDK, VS Code, Windows management, Azure PowerShell/runbooks e remoting. Consultar PRIMEIRO [Microsoft Learn — PowerShell](https://learn.microsoft.com/en-us/powershell/) e rotear pelo [mapa oficial de gatilhos](references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md). Consultor acionável sob demanda: `scripts/Consultar-PowerShellDocs.ps1 -Mensagem "ERRO"`; `-SomenteRota` não acessa a rede. `NO_MATCH => NO_SEARCH`.
+
+**Fluxo:** `PS_ERROR_MATCH → OFFICIAL_WEB_LOOKUP → HOST_VERSION_AND_EDITION → LOCAL_CAUSE → MIN_DELTA → TEST → READBACK`. Diagnóstico somente leitura; a correção é mutação distinta, sujeita à intenção, Kimetsu e owner único. `DOCS_FOUND != HOST_SUPPORTED != FIX_PROVED`. Não instalar módulos, atualizar runtime, mudar política ou alterar infra só por consultar. Contraprova: `Get-FileHash` ausente na Casa requer consultar `Microsoft.PowerShell.Utility` e verificar módulos/versão; `RemoteSigned` foi ajustado para CurrentUser com autorização explícita e não implica que o cmdlet esteja instalado. Se a web falhar, `DOC_FETCH_STATUS=UNAVAILABLE`. Ativação quando um agente carregado observa o erro, NÃO monitoramento global de processos.
+
+
 ## Regra canônica de identidade do Remote (2026-10-24)
 
 O nome público do produto, owner e capacidade é **CentralDark-Remote**. Não validar integração, saúde, pareamento, catálogo, tarefa ou cockpit pelo nome do antigo fornecedor. O pacote npm do motor open source pode aparecer apenas como dependência técnica interna/atribuição de origem, nunca como nome do produto ou rota de controle. Reutilizar OAuth2 PKCE, autenticação, catálogo, bridge e installer CentralDark existentes. A URL de controle é `https://mcp.centralldark.com/mcp`; referências históricas permanecem históricas e nunca são prova de estado atual. Estado exige tool-call real + readback + contraprova. Ver [regra e aceitação de nomenclatura](references/CENTRALDARK-REMOTE-NOMENCLATURA.md).
