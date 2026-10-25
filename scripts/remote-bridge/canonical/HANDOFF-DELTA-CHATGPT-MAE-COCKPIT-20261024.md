@@ -81,3 +81,12 @@ Economia operacional alvo: de pelo menos 7 decisões manuais por intenção (loc
 **NEXT_CURSOR para owner MCP VPS:** reconciliar diff contra `oauth.js` dirty na VPS (pareamento VS Code precisa ser preservado); portar apenas import, funcao pura e duas chamadas, manter test; rodar regressao DCR/CIMD/VSCode + consentimento; promover via receita MAIN-PINNED com source SHA e gates de auditoria; confirmar Cline em Remote-SSH recebe redirect no mesmo host em que listener callback esta ativo (ou forwarding SSH autorizado); `/authorize` + usuario confirma + `/token` + `initialize` + `tools/list`; registrar receipt. Nao limpar Cline nem transmitir `code_verifier`/token.
 
 **VEREDITO:** CODIGO_CASA=IMPLEMENTADO; LOOPBACK_TESTES=PASS_8_8; VPS_PUBLICADO=NAO; CLINE_E2E=NAO_COMPROVADO.
+
+## Auditoria de publicacao SSH 25/10/2026 — sem aplicacao remota
+- CHEFE autorizou administracao e escolheu SSH DIRETO, sem CI/CD/GitHub Actions.
+- SSH Casa -> VPS `root@centraldark-os`: hostname `CENTRALDARK-OS` verificado por BatchMode, HostKey checking, sem senha interativa.
+- Runtime efetivo MCP: `/root/CentralDark_MCP_RUNTIME/apps/modulos/mcp/dist/index.js` via `centraldark-native-mcp-http.service`. Repo principal VPS `/root/CentralDark` e runtime sao arvores distintas e dirty. O OneShot Casa em `K:\OneShot` foi preservado; nenhum artefato OneShot modificado.
+- Baseline runtime `node --test tests/pairing-consent-flow.test.mjs tests/oauth-refresh-client-binding.test.mjs`: 5 PASS/0 FAIL. HTTP local /health 200; discovery publica /register, /authorize, /token, S256.
+- Delta OAuth Casa: `apps/modulos/mcp/src/oauth.js` + `oauth-redirect-match.js` + `tests/oauth-loopback-port.test.mjs`; 8 PASS/0 FAIL. Destino VPS nao alterado; hashes baseline dos quatro oauth.js VPS medidos para reconciliacao.
+- Bloqueio: tentativa de criar recipe de gravacao/backup/copia atomica para SSH na Casa foi bloqueada pela ferramenta com erro de seguranca; nao houve contorno. MCP admin reportou `auditStartupReady=false` e scratch status DRIFT; raiz do contrato root gate=PASS mas nao autoriza promoçao por si.
+- Nenhum rebuild, restart, push, deploy ou commit efetuado nesta tentativa. NEXT_CURSOR: obter liberacao pela rota aprovada existente, reconciliar arvores dirty de forma atomica, testar baseline+delta, reiniciar somente `centraldark-native-mcp-http.service` e provar autorizacao Cline/VS Code real com receipt. Nao anunciar 99% ou E2E sem verificacao.
