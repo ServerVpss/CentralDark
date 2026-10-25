@@ -195,4 +195,15 @@ test('Cockpit mostra o codigo da tentativa e exige clique humano',async()=>{
   assert.match(page,/Confirmar pareamento/);
   assert.match(page,/type="submit"/);
 });
+test('extensao distribuida contem o pareamento e dependencias compiladas',async()=>{
+  const {readFileSync,existsSync}=await import('node:fs');
+  const entry=new URL('../../../../skills/vs-code-restore/out/extension.js',import.meta.url);
+  const compiled=readFileSync(entry,'utf8');
+  assert.match(compiled,/async function pairVsCode/);
+  assert.match(compiled,/vscode\.env\.openExternal\(approvedUri\)/);
+  assert.match(compiled,/centraldark\.pairVsCode/);
+  assert.doesNotMatch(compiled,/modal:\s*true/);
+  assert.ok(existsSync(new URL('../../../../skills/vs-code-restore/out/autoUpdater.js',import.meta.url)));
+  assert.ok(existsSync(new URL('../../../../skills/vs-code-restore/out/remote-terminal.js',import.meta.url)));
+});
 test.after(()=>server.close());

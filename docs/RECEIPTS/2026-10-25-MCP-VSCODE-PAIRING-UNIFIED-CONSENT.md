@@ -20,7 +20,8 @@ O mesmo codigo mostrado pela extensao VS Code deve aparecer na pagina do Cockpit
 - node --check JS afetados: PASS.
 - Sintaxe React TSX e extensao por esbuild: PASS.
 - tsc --noEmit da extensao VS Code: PASS.
-- pairing-consent-flow.test.mjs + device-pairing.test.mjs: 11/11 PASS.
+- Runtime do VS Code usa skills/vs-code-restore/out/extension.js; o artefato existente estava obsoleto e nao continha pairVsCode. Regenerados e incluidos out/extension.js, autoUpdater.js e remote-terminal.js (+ sourcemaps) via npm run compile. Teste de contrato valida a distribuicao compilada.
+- pairing-consent-flow.test.mjs + device-pairing.test.mjs: 12/12 PASS.
 - Cobertura inclui anonimo negado, nonce incorreto, codigo incorreto, replay, expiracao, token one-shot e heartbeat.
 - git diff --check: PASS.
 - Dados de teste sao ficticios; nenhum codigo real dos screenshots ou segredo de posse foi registrado.
