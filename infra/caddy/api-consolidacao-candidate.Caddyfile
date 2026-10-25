@@ -1,0 +1,16 @@
+# CANDIDATO / NÃO IMPORTAR DIRETAMENTE
+# Adicionar SOMENTE dentro do bloco existente api.centralldark.com,
+# após medir o Caddy real e confirmar listeners, auth e consumidores.
+# Preserve /webhook e /deploy/health originais.
+#
+# handle_path /gateway/* {
+#     reverse_proxy 127.0.0.1:8090
+# }
+#
+# handle_path /hub/* {
+#     reverse_proxy 127.0.0.1:8098
+# }
+#
+# IMPORTANTE: callback OAuth PUBLIC_BASE ainda aponta a outro host.
+# A migração OAuth exige ajustar BASE, consent screen e testes.
+# /webhook NÃO é reproduzido aqui; handler HMAC canônico já existe no MCP.

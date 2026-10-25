@@ -1,5 +1,5 @@
 param(
-  [string]$Workdir = 'E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE',
+  [string]$Workdir = 'K:\_MAPA_CASA\GARIMPO-CHEFE',
   [int]$IntervalSec = 15,
   [int]$WindowMinutes = 15,
   [switch]$Status

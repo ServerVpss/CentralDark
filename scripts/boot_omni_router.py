@@ -9,5 +9,5 @@ if requested_engine == "hermes":
     requested_engine = "nous"
 os.environ["CENTRALDARK_DEFAULT_ENGINE"] = requested_engine
 
-script = r"e:/CentralDark/Pivete/CentralDark/apps/modulos/elite-gateway/scripts/centraldark_omni_router.py"
+script = r"K:/apps/modulos/elite-gateway/scripts/centraldark_omni_router.py"
 sys.exit(subprocess.run([sys.executable, script], env=os.environ).returncode)

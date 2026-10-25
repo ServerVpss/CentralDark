@@ -11,12 +11,12 @@ metadata:
 
 # CentralDark Forja path reconciliation
 
-Use this class-level workflow whenever a CentralDark path, worktree, migration plan, VPS receipt, or runtime binding must be checked. The user's current Forja is the root of `K:\\` (bash `/k/`), not a nested `K:\\CentralDark` checkout and not `E:\\CentralDark`.
+Use this class-level workflow whenever a CentralDark path, worktree, migration plan, VPS receipt, or runtime binding must be checked. The user's current Forja is the root of `K:\\` (bash `/k/`), not a nested `K:\\CentralDark` checkout and not `K:\\`.
 
 ## Always-on rules
 
 - Resolve the current Forja to `K:\\` before reading, searching, patching, or claiming state.
-- Treat `E:\\CentralDark`, `K:\\CentralDark`, and other checkouts as historical or stale unless a fresh owner-specific measurement proves a different scope; never silently use them as CURRENT.
+- Treat `K:\\`, `K:\\CentralDark`, and other checkouts as historical or stale unless a fresh owner-specific measurement proves a different scope; never silently use them as CURRENT.
 - Preserve historical receipts and provenance, but correct current operational consumers autonomously with `READ_CURRENT → DIFF → TARGETED_PATCH → VERIFY`.
 - A VPS document or receipt about a Windows migration proves only recorded intent/evidence. It does not prove Casa disk state, active process redirection, Git bindings, or runtime execution.
 - Separate `UNKNOWN` claims instead of turning a plan into PASS. Report exact owner files and conflicting path forms.

@@ -53,7 +53,7 @@ export function knownSearchRoots() {
   ];
 
   if (process.platform === 'win32') {
-    roots.push('E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE');
+    roots.push('K:\\_MAPA_CASA\\GARIMPO-CHEFE');
   } else {
     roots.push('/root/CentralDark/docs/CONSCIENCIA/04-MCP-E-CONECTORES');
   }
