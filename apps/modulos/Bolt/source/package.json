@@ -43,7 +43,9 @@
     "electron:build:dist": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --mwl",
     "test:centraldark-desktop": "node --test scripts/centraldark-desktop-contract.test.mjs",
     "centraldark:dev": "node scripts/electron-dev.mjs",
-    "centraldark:build:win": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --win"
+    "centraldark:build:win": "node scripts/clean-electron-output.mjs && pnpm electron:build:renderer && pnpm electron:build:deps && electron-builder --win",
+    "centraldark:rebuild:win": "node scripts/centraldark-rebuild.mjs --execute",
+    "centraldark:builders:verify": "node scripts/centraldark-rebuild.mjs --verify"
   },
   "engines": {
     "node": ">=18.18.0"

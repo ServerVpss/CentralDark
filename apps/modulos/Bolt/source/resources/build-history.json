@@ -1,0 +1,49 @@
+{
+  "schema": "centraldark.desktop-builder-ledger/v1",
+  "owner": "apps/modulos/Bolt/source",
+  "recipe": "scripts/centraldark-rebuild.mjs",
+  "policy": {
+    "count_only_successful_builds": true,
+    "version_on_success": "semver-patch",
+    "one_writer_per_workspace": true,
+    "require_artifact_hash": true,
+    "merge_is_not_deploy": true
+  },
+  "entries": [
+    {
+      "id": "builder-1.0.0-9051151",
+      "builder_version": "1.0.0",
+      "app_version": "1.0.0",
+      "built_at": "2026-10-25T10:37:09.579Z",
+      "validated_at": "2026-10-25T10:47:07Z",
+      "source_commit": "90511519b60a6a566a7d3fe8e86170c1a5027cb8",
+      "source_pr": "https://github.com/ServerVpss/CentralDark/pull/1954",
+      "platform": "win32-x64",
+      "build_status": "PASS",
+      "runtime_status": "LOCAL_SMOKE_PASS",
+      "deploy_status": "NOT_PROVEN",
+      "artifacts": {
+        "installer": {
+          "file": "CentralDark-Setup-1.0.0-x64.exe",
+          "bytes": 141506702,
+          "sha256": "ad5af9fd50714e76bcc6bb07ab893ec58f9c74dc9ca6ff77a903dfd220bc4be3"
+        },
+        "executable": {
+          "file": "win-unpacked/CentralDark.exe",
+          "bytes": 211032064,
+          "sha256": "81838d3d501f9070bcec318846c63e9a96a84c6947fb62fe81db0f1fe07ed615"
+        }
+      },
+      "proof": {
+        "build": "build-retry.log: BUILD_RC=0",
+        "runtime": "exe-check-report.txt: Server build loaded successfully; exe-stderr: no fatal matches",
+        "evidence_workspace": "F:\\_worktrees\\bolt-ai-fix-20261025\\build-logs"
+      },
+      "caveats": [
+        "Instalador produzido e exe testado nesta Casa; instalacao em outra maquina nao comprovada.",
+        "Logs reportaram warnings de assets/provedores externos, sem falha fatal do renderer.",
+        "Registro inicial do novo catalogo; nao declara ser o primeiro build absoluto da historia."
+      ]
+    }
+  ]
+}
