@@ -21,7 +21,7 @@ entrypoints:
     route_graph: GET /api/live-fabric/graph
     route_receipts: GET /api/microdeploy/receipts/index.json
   hermes_desktop_casa:
-    canonical_workspace: "E:\\CentralDark"
+    canonical_workspace: "K:\\"
     role: LOCAL_CLONE_AND_OPERATOR_SURFACE
   vps_runtime:
     canonical_workspace: /root/CentralDark
