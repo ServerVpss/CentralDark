@@ -8,9 +8,29 @@ oracle_review_on_change: true
 
 # METODO OPERACIONAL CENTRALDARK
 
+## Gatilho operacional — SSH reverso Casa ↔ VPS e PIDs (2026-10-25)
+
+**ATIVAR POR INTENÇÃO**, quando o pedido disser `VPS → Casa`, `SSH reverso`, `PIDs/processos da Casa`, `sem Desktop Commander`, `Tailscale Casa/VPS` ou erros `Host key verification failed` / `Permission denied` nessa ponte. **Owner único já provado:** [one-shot da Casa](../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1). Antes de investigar do zero, recuperar a [lição causal](../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md), a [lembrança verificável](../../../docs/CONSCIENCIA/LEMBRANCAS/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md) e o [receipt original](../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md).
+
+**Executar sob demanda:** na Casa Windows, `powershell.exe -NoProfile -File K:\scripts\casa\CentralDark-VPS-Casa-PID-OneShot.ps1`. A receita conserva `segredo-vpss` → VPS e seleciona a chave **já existente** `/root/.ssh/segredo_vps_ed25519` no retorno; exigir `IdentitiesOnly=yes`, `BatchMode=yes`, `StrictHostKeyChecking=yes`, fingerprint e `whoami` antes de `Get-Process`. **Não instalar, criar chaves, expor senhas ou afrouxar SSH para fazer passar.** Host key não confiável exige pin verificado fora do canal; `Permission denied` após host pin exige conferir seleção da identidade antes de culpar firewall/Tailscale.
+
+**Evidência histórica, não garantia permanente:** na contraprova de 25/10/2026, `VPS_TO_CASA_SSH_AUTH=PASS`, `VPS_TO_CASA_PID=PASS COUNT=545` e `EXIT=0`; script/receipt foram lidos na Casa e na `main` com blob idêntico. Para nova rodada, exigir **saída atual** (Id e ProcessName), identidade correta, código 0, receipt e readback. `READ_PID_PASS != PROCESS_MUTATION_AUTHORIZED`; `SSH_CASA_VPS_PASS != SYNC_OBSIDIAN_GITHUB_VPS_PASS`. O resultado não autoriza encerrar/iniciar processos ou declarar automação remota irrestrita. Aplicar Kimetsu e `ONE_WRITER_PER_SCOPE` em cada ação material.
+
+
+## Consulta oficial PowerShell sob demanda (2026-10-25)
+
+**Gatilho acionável ao agente observar erro PowerShell:** `Get-FileHash`, `CommandNotFoundException`, `ParserError`, `.ps1`, `powershell.exe`, `pwsh`, cmdlets, utility modules, PSScriptAnalyzer, SecretManagement, Crescendo, PlatyPS, DSC, Gallery, instalação/edições, SDK, VS Code, Windows management, Azure PowerShell/runbooks e remoting. Consultar PRIMEIRO [Microsoft Learn — PowerShell](https://learn.microsoft.com/en-us/powershell/) e rotear pelo [mapa oficial de gatilhos](references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md). Consultor acionável sob demanda: `scripts/Consultar-PowerShellDocs.ps1 -Mensagem "ERRO"`; `-SomenteRota` não acessa a rede. `NO_MATCH => NO_SEARCH`.
+
+**Fluxo:** `PS_ERROR_MATCH → OFFICIAL_WEB_LOOKUP → HOST_VERSION_AND_EDITION → LOCAL_CAUSE → MIN_DELTA → TEST → READBACK`. Diagnóstico somente leitura; a correção é mutação distinta, sujeita à intenção, Kimetsu e owner único. `DOCS_FOUND != HOST_SUPPORTED != FIX_PROVED`. Não instalar módulos, atualizar runtime, mudar política ou alterar infra só por consultar. Contraprova: `Get-FileHash` ausente na Casa requer consultar `Microsoft.PowerShell.Utility` e verificar módulos/versão; `RemoteSigned` foi ajustado para CurrentUser com autorização explícita e não implica que o cmdlet esteja instalado. Se a web falhar, `DOC_FETCH_STATUS=UNAVAILABLE`. Ativação quando um agente carregado observa o erro, NÃO monitoramento global de processos.
+
+
 ## Regra canônica de identidade do Remote (2026-10-24)
 
 O nome público do produto, owner e capacidade é **CentralDark-Remote**. Não validar integração, saúde, pareamento, catálogo, tarefa ou cockpit pelo nome do antigo fornecedor. O pacote npm do motor open source pode aparecer apenas como dependência técnica interna/atribuição de origem, nunca como nome do produto ou rota de controle. Reutilizar OAuth2 PKCE, autenticação, catálogo, bridge e installer CentralDark existentes. A URL de controle é `https://mcp.centralldark.com/mcp`; referências históricas permanecem históricas e nunca são prova de estado atual. Estado exige tool-call real + readback + contraprova. Ver [regra e aceitação de nomenclatura](references/CENTRALDARK-REMOTE-NOMENCLATURA.md).
+
+## Foco / delegação / telemetria de latência (2026-10-25)
+
+- **Protocolo canônico aditivo:** [references/FOCUS-DELEGACAO-TELEMETRIA.md](references/FOCUS-DELEGACAO-TELEMETRIA.md). Reusa Edge UIAutomation + MCP Remote Desktop Commander, mede transições/foco/oi-apagar sem enviar, aceita envio real apenas com autorização e lê ACK por Browser. A Sala de Controle/Gaveta da Forja mostra somente eventos com readback e distingue ações UIA, cliques físicos não medidos e conexões MCP não comprovadas. Servidor fora da Casa exibe NO_LOCAL_SOURCE. Não criar gateway ou skill paralelos.
 
 ## Entrada canonica do catalogo integrado (2026-10-24)
 

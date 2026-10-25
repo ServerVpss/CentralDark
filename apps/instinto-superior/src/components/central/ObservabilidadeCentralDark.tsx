@@ -11,11 +11,11 @@ import {
   Mail,
   Monitor,
   Radio,
-  RefreshCw,
   Server,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
 import { ProcessosMcpPanel } from "@/components/central/ProcessosMcpPanel";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
 import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
@@ -85,10 +85,7 @@ function RastroSemanalMcp() {
           <BarChart3 className="size-5 text-neon-green" aria-hidden="true" />
           <h3 id="harness-weekly-title" className="font-semibold">Rastro de ferramentas · últimos 7 dias</h3>
         </div>
-        <Button size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-          <RefreshCw className={q.isFetching ? "size-4 animate-spin" : "size-4"} aria-hidden="true" />
-          Atualizar
-        </Button>
+        <SyncActionButton label="Atualizar" onClick={() => void q.refetch()} isFetching={q.isFetching} />
       </header>
       <p className="mt-2 text-xs text-muted-foreground">
         API MCP existente /admin/api/metricas · amostra de eventos instrumentados.
@@ -223,9 +220,7 @@ function ToolCallLensMcp() {
             onClick={() => definirModo(modo === "ao-vivo" ? "pausado" : "ao-vivo")}>
             {modo === "ao-vivo" ? "⏸ Pausar" : "▶ Ao vivo"}
           </Button>
-          <Button type="button" size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-            <RefreshCw className={q.isFetching ? "animate-spin" : ""} aria-hidden="true" /> Rever / Atualizar
-          </Button>
+          <SyncActionButton label="Rever / Atualizar" onClick={() => void q.refetch()} isFetching={q.isFetching} />
           <Button type="button" size="sm" variant="outline" onClick={() => definirDetalhes(!detalhes)}>
             {detalhes ? "Recolher" : "Expandir"}
           </Button>
@@ -342,9 +337,7 @@ function CentralDeLogsSetorizados() {
           <Button type="button" size="sm" variant="outline" onClick={() => definirAoVivo(!aoVivo)}>
             {aoVivo ? "⏸ Pausar visão" : "▶ Ao vivo"}
           </Button>
-          <Button type="button" size="sm" variant="outline" disabled={q.isFetching} onClick={() => void q.refetch()}>
-            <RefreshCw className={q.isFetching ? "size-4 animate-spin motion-reduce:animate-none" : "size-4"} /> Atualizar
-          </Button>
+          <SyncActionButton label="Atualizar" onClick={() => void q.refetch()} isFetching={q.isFetching} />
         </div>
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar logs por setor">
@@ -673,9 +666,7 @@ export function ObservabilidadeCentralDark() {
             UNKNOWN permanecem visíveis.
           </p>
         </div>
-        <Button variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-          <RefreshCw className={q.isFetching ? "animate-spin" : ""} /> Atualizar
-        </Button>
+        <SyncActionButton label="Atualizar" onClick={() => void q.refetch()} isFetching={q.isFetching} />
       </div>
 
       <div
