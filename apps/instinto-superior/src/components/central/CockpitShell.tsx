@@ -108,7 +108,6 @@ const HARNESS_DESTINOS = [
   { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
   { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
-  { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
@@ -119,7 +118,6 @@ const HARNESS_DESTINOS = [
   { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
   { id: "downloads", titulo: "Downloads", icone: "📦", privado: false },
 ] as const;
-const HARNESS_DESTINOS = COCKPIT_ABAS;
 
 /** UI-first: catálogo visual selecionável, sem fingir conexões ou criar outro painel. */
 function MenuVisualCentralDark({ titulo, descricao, itens }: { titulo: string; descricao: string; itens: string[] }) {
@@ -395,6 +393,18 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           <Button size="icon" variant="ghost" title="Notificações" aria-label="Notificações" onClick={() => abrirDestino("claude-notifications")}><Bell className="size-4" /></Button>
         </nav>
       ) : null}
+      {/* Header Visual da Sala de Controle - marca CentralDark */}
+      <div className="relative border-b border-border bg-background/50 px-4 py-4 sm:px-6">
+        <div className="flex items-center gap-2.5">
+          <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
+            <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
+          </span>
+          <span className="flex flex-col leading-none">
+            <span className="text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
+            <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
+          </span>
+        </div>
+      </div>
       {harnessVisivel ? (
         <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
@@ -475,7 +485,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => abrirDestino("aionui")}
               aria-expanded={estudioAberto}
               aria-controls="centraldark-estudio"
               onClick={abrirEstudio}
@@ -757,7 +766,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </TabsContent>
             {autenticado ? (
               <TabsContent value="genesis" className="mt-10" id="centraldark-genesis-michelin">
-                <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />
+                {dado ? <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} /> : <HudDeterministico atualizar={() => void estado.refetch()} />}
               </TabsContent>
             ) : null}
             <TabsContent value="goals" className="mt-10">
