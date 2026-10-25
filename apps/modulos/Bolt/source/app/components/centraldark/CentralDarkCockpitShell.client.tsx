@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { canonicalIcon } from './centraldark-hub-inventory';
+import { CentralDarkBuilderHistory, type BuilderBridge } from './CentralDarkBuilderHistory.client';
 import './centraldark-cockpit.scss';
 
 type HouseMode = 'OPERAR' | 'PLANEJAR' | 'TAREFA' | 'DELEGAR';
@@ -28,7 +29,7 @@ type LinearStatusSnapshot = {
   checkedAt?: string;
 };
 
-type CentralDarkBridge = {
+type CentralDarkBridge = BuilderBridge & {
   getRuntime?: () => Promise<RuntimeSnapshot>;
   getHermesHealth?: () => Promise<HealthSnapshot>;
   getScreenpipeHealth?: () => Promise<HealthSnapshot>;
@@ -379,6 +380,8 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           <ProgressBar value={readiness.pct} />
           <small>{readiness.closed}/{readiness.denominator} sinais observáveis. Não é percentual global do projeto.</small>
         </section>
+
+        <CentralDarkBuilderHistory bridge={getBridge()} />
 
         <section className="cd-status-card cd-status-card--list">
           <div className="cd-evidence"><span className="i-ph:desktop" /><div><strong>Desktop</strong><small>{runtime ? 'DETECTADO' : 'UNKNOWN'}</small></div></div>
