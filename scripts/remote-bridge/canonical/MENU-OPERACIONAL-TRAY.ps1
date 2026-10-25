@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$RuntimeRoot = "$env:LOCALAPPDATA\CentralDark\Remote-Tray"
 )
 

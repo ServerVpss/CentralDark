@@ -13,7 +13,7 @@ import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/semantic.js";
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
-import { decorateToolResult } from "./tool-result-envelope.js";
+import { decorateToolResult, semanticOutcome } from "./tool-result-envelope.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
 function zodTypeToJsonSchema(schema) {
@@ -336,7 +336,7 @@ export function buildServer(options) {
                 ok: !(typeof result === "object" &&
                     result !== null &&
                     "isError" in result &&
-                    result.isError === true),
+                    result.isError === true) && semanticOutcome(result).ok,
             });
             return result;
         }
