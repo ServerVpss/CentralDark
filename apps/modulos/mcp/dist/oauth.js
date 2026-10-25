@@ -209,6 +209,8 @@ function sendOwnerConsentPage(res, input) {
         state: input.client_state,
         scope: input.scope,
         pair_id: input.device?.pairId,
+        pair_code: input.device?.code,
+        pair_nonce: input.device?.nonce,
         error: input.error,
         success: input.success === true ? "1" : undefined,
     };
@@ -277,7 +279,7 @@ export async function handleAuthorize(req, res) {
             // ao solicitante que possui o segredo de posse, nunca ao navegador.
             if (!isAdmin(req)) return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
             const result = devicePairingStore.approveWeb({
-                pairId, code: param(req, "pair_code"), nonce: pair.nonce
+                pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce")
             });
             if (!result.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
             sendOwnerConsentPage(res, {...details, success: true});
