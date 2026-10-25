@@ -10,7 +10,7 @@
 6. "Create new labels for Trigger Fabric" → **REJECTED**: canonical labels already distinguish human authority (`👑 PERMITO-SEGREDO`) from derived result (`✅ PR CONFIRMADO`).
 7. "Vector Memory is operational" → **NOT_PROVEN**: contract exists; runtime implementation/callsite not demonstrated.
 8. "Session Harvester already runs automatically" → **NOT_PROVEN**: automation is declared in the skill; physical hook not demonstrated.
-9. "The same Hermes Core loop is active on Windows `E:\\CentralDark`" → **NOT_PROVEN**: repository implementation uses Linux `/root/CentralDark` paths.
+9. "The same Hermes Core loop is active on Windows `K:\\`" → **NOT_PROVEN**: repository implementation uses Linux `/root/CentralDark` paths.
 10. "All automatic maintenance is safe" → **REJECTED** as blanket claim: legacy GC performs real deletion and must be reconciled against current safety rules.
 11. "Package PASS means runtime PASS" → **FALSE**.
 12. "ENGINE_BINDING.yml means the motor already loaded the rule" → **FALSE**: runtime inheritance requires an observed consumer/test.

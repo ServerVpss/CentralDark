@@ -37,7 +37,7 @@ const EXPECTED_RELATIONS = {
 };
 
 const EXPECTED_WINDOWS_PROJECTIONS = {
-  obsidian: 'E:\\CentralDark\\Pivete\\CASA-VAULT\\00-CANONICO',
+  obsidian: 'K:\\CASA-VAULT\\00-CANONICO',
 };
 
 function assert(condition, message) {

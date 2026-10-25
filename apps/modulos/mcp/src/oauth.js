@@ -1,5 +1,6 @@
 // OAuth 2.1 do MCP CentralDark.
 import crypto from "node:crypto";
+import { redirectUriRegistered } from "./oauth-redirect-match.js";
 import { config } from "./config.js";
 import { isAdmin } from "./admin.js";
 
@@ -154,285 +155,21 @@ async function resolveClientRegistration(client_id, redirect_uri) {
     if (!metadata) {
         return undefined;
     }
-    if (!metadata.redirect_uris.includes(redirect_uri)) {
+    if (!redirectUriRegistered(metadata, redirect_uri)) {
         log.warn("oauth_client_metadata_redirect_rejected", { client_id, redirect_uri });
         return undefined;
     }
     return metadata;
 }
-function escapeHtml(value) {
-    return value
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-}
-function jsonForInlineScript(value) {
-    return JSON.stringify(value).replace(/</g, "\\u003c").replace(/>/g, "\\u003e");
-}
-function sendOAuthSuccessPage(res, input) {
-    const catalog = getCatalogSummary();
-    const readOnlyTools = catalog.tools.filter((tool) => tool.readOnly).length;
-    const writeTools = Math.max(catalog.toolCount - readOnlyTools, 0);
-    const safeLogin = escapeHtml(input.login || "usuario autorizado");
-    const hasRedirect = Boolean(input.redirectUrl);
-    const safeRedirect = input.redirectUrl ? escapeHtml(input.redirectUrl) : "";
-    const redirectScript = input.redirectUrl
-        ? `<script>setTimeout(function(){ window.location.replace(${jsonForInlineScript(input.redirectUrl)}); }, 1800);</script>`
-        : "";
-    const redirectMeta = input.redirectUrl
-        ? `<meta http-equiv="refresh" content="3;url=${safeRedirect}">`
-        : "";
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("Cache-Control", "no-store");
-    res.setHeader("Referrer-Policy", "no-referrer");
-    res.setHeader("X-Content-Type-Options", "nosniff");
-    res.send(`<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  ${redirectMeta}
-  <title>CENTRAL DARK - Conector autorizado</title>
-  <style>
-    :root {
-      --bg: #070b16;
-      --panel: rgba(12, 19, 36, 0.78);
-      --panel-line: rgba(148, 163, 184, 0.18);
-      --text: #f8fafc;
-      --muted: #9aa8bd;
-      --cyan: #32d3ff;
-      --green: #1ed49a;
-      --amber: #f5c451;
-      --ink: #0b1020;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      min-height: 100vh;
-      margin: 0;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 50% 44%, rgba(30, 212, 154, 0.18), transparent 18rem),
-        radial-gradient(circle at 72% 22%, rgba(50, 211, 255, 0.12), transparent 20rem),
-        linear-gradient(135deg, #080d1b 0%, #111a30 46%, #07101e 100%);
-      font-family: "Aptos", "Segoe UI", sans-serif;
-      overflow: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 56px 56px;
-      mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 78%, transparent);
-    }
-
-    main {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 28px;
-    }
-
-    .shell {
-      width: min(760px, 100%);
-      text-align: center;
-      position: relative;
-      animation: rise 560ms cubic-bezier(.2,.8,.2,1) both;
-    }
-
-    .logo {
-      width: 98px;
-      height: 98px;
-      margin: 0 auto 26px;
-      border-radius: 28px;
-      display: grid;
-      place-items: center;
-      position: relative;
-      background: linear-gradient(145deg, #111827, #07111f);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45), 0 0 0 8px rgba(50, 211, 255, 0.05);
-    }
-
-    .logo::before {
-      content: "";
-      position: absolute;
-      inset: 12px;
-      border-radius: 22px;
-      background: conic-gradient(from 210deg, var(--cyan), var(--green), #ffffff, var(--cyan));
-      opacity: .92;
-      filter: saturate(1.08);
-    }
-
-    .logo span {
-      position: relative;
-      width: 62px;
-      height: 62px;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      color: var(--ink);
-      background: #f8fafc;
-      font-family: Georgia, "Times New Roman", serif;
-      font-weight: 800;
-      font-size: 24px;
-      letter-spacing: 0;
-    }
-
-    .eyebrow {
-      margin: 0 0 12px;
-      color: var(--green);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(40px, 7vw, 76px);
-      letter-spacing: 0;
-      line-height: .9;
-    }
-
-    .subtitle {
-      max-width: 610px;
-      margin: 22px auto 0;
-      color: #dbeafe;
-      font-size: clamp(17px, 2vw, 21px);
-      line-height: 1.55;
-    }
-
-    .panel {
-      margin: 34px auto 0;
-      width: min(620px, 100%);
-      padding: 18px;
-      border-radius: 8px;
-      background: var(--panel);
-      border: 1px solid var(--panel-line);
-      box-shadow: 0 28px 110px rgba(0, 0, 0, .34);
-      backdrop-filter: blur(18px);
-    }
-
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-
-    .metric {
-      min-height: 92px;
-      padding: 16px 12px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, .045);
-      border: 1px solid rgba(255, 255, 255, .08);
-    }
-
-    .metric strong {
-      display: block;
-      font-size: 28px;
-      line-height: 1;
-      color: var(--text);
-    }
-
-    .metric span {
-      display: block;
-      margin-top: 9px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.25;
-    }
-
-    .status {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .pulse {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 0 0 rgba(30, 212, 154, .55);
-      animation: pulse 1.4s infinite;
-      flex: none;
-    }
-
-    .foot {
-      margin-top: 22px;
-      color: rgba(203, 213, 225, .72);
-      font-size: 13px;
-    }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(18px) scale(.985); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @keyframes pulse {
-      70% { box-shadow: 0 0 0 14px rgba(30, 212, 154, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(30, 212, 154, 0); }
-    }
-
-    @media (max-width: 620px) {
-      body { overflow: auto; }
-      main { padding: 22px; }
-      .metrics { grid-template-columns: 1fr; }
-      .metric { min-height: 78px; }
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <section class="shell" aria-label="Central Dark OAuth autorizado">
-      <div class="logo" aria-hidden="true"><span>CD</span></div>
-      <p class="eyebrow">Conector autorizado</p>
-      <h1>CENTRAL DARK</h1>
-      <p class="subtitle">
-        Login confirmado para <strong>${safeLogin}</strong>. O MCP CentralDark esta pronto para operar com as ferramentas autorizadas neste conector.
-      </p>
-
-      <div class="panel">
-        <div class="metrics" aria-label="Resumo do conector">
-          <div class="metric"><strong>${catalog.toolCount}</strong><span>ferramentas MCP</span></div>
-          <div class="metric"><strong>${readOnlyTools}</strong><span>somente leitura</span></div>
-          <div class="metric"><strong>${writeTools}</strong><span>acoes controladas</span></div>
-        </div>
-        <div class="status">
-          <span class="pulse" aria-hidden="true"></span>
-          <span>${hasRedirect ? "Retornando ao seu app para finalizar a conexao..." : "Sessao criada. Pode fechar esta aba."}</span>
-        </div>
-      </div>
-
-      <p class="foot">OAuth MCP ativo - catalogo ${escapeHtml(catalog.catalogVersion)}${input.legacySessionCreated ? " - modo legado" : ""}</p>
-    </section>
-  </main>
-  ${redirectScript}
-</body>
-</html>`);
-}
 export function getProtectedResourceMetadata(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     const isAdmin = String((req && (req.path || req.url)) || "").includes("/admin");
     res.json({
-        resource: `${config.publicUrl}${isAdmin ? "/admin/mcp" : "/mcp"}`,
+        resource: config.publicUrl + "/api/mcp",
         authorization_servers: [config.publicUrl],
         bearer_methods_supported: ["header"],
         scopes_supported: isAdmin ? ["mcp", "admin"] : ["mcp"],
-        resource_documentation: `${config.publicUrl}/status`,
+        resource_documentation: "https://admin.centralldark.com/sala-controle",
     });
 }
 export function getAuthorizationServerMetadata(_req, res) {
@@ -461,90 +198,27 @@ function redirectWithOAuthError(res, redirect_uri, error, state, description) {
     back.searchParams.set("iss", config.publicUrl);
     res.redirect(302, back.toString());
 }
-const SCOPE_LABELS = {
-    mcp: { title: "Usar as ferramentas do MCP", desc: "Chamar as tools disponíveis (github, vps, docs, skills etc)." },
-    admin: { title: "Acesso administrativo completo", desc: "Painel /admin, PM2, git, vault, shell — controle total do CentralDark." },
-};
-function scopeChecklistHtml(scope) {
-    const scopes = String(scope || "mcp").split(/\s+/).filter(Boolean);
-    return scopes
-        .map((s) => {
-        const label = SCOPE_LABELS[s] || { title: s, desc: "" };
-        return `<div class="perm"><span class="check">✓</span><div><div class="perm-title">${escapeHtml(label.title)}</div>${label.desc ? `<div class="perm-desc">${escapeHtml(label.desc)}</div>` : ""}</div></div>`;
-    })
-        .join("");
-}
 function sendOwnerConsentPage(res, input) {
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    const url = new URL("https://admin.centralldark.com/mcp-autorizar");
+    const values = {
+        client_id: input.client_id,
+        client_name: input.client_name,
+        redirect_uri: input.redirect_uri,
+        response_type: input.response_type,
+        code_challenge: input.code_challenge,
+        code_challenge_method: input.code_challenge_method,
+        state: input.client_state,
+        scope: input.scope,
+        pair_id: input.device?.pairId,
+        error: input.error,
+        success: input.success === true ? "1" : undefined,
+    };
+    for (const [key, value] of Object.entries(values)) {
+        if (value !== undefined && value !== null) url.searchParams.set(key, String(value));
+    }
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("Referrer-Policy", "no-referrer");
-    res.setHeader("X-Content-Type-Options", "nosniff");
-    res.send(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CentralDark - Autorizar conector</title><style>
-:root{--bg:#f4f6f5;--panel:#ffffff;--line:#e3e8e6;--text:#111827;--muted:#6b7280;--brand:#10b981;--brand-deep:#059669;--brand-soft:#ecfdf5}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:32px 28px;max-width:440px;width:calc(100% - 32px);box-shadow:0 10px 40px rgba(16,24,40,.06)}
-.badge{width:44px;height:44px;border-radius:12px;background:var(--brand-soft);color:var(--brand-deep);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;margin-bottom:16px}
-h1{margin:0 0 4px;font-size:19px;font-weight:700}
-.sub{color:var(--muted);font-size:14px;margin:0 0 20px}
-.client-row{background:var(--brand-soft);border:1px solid rgba(16,185,129,.18);padding:10px 14px;border-radius:10px;font-size:13px;margin:0 0 18px}
-.client-row b{color:var(--brand-deep)}
-.perms{margin:0 0 20px}
-.perm{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
-.check{color:var(--brand);font-weight:800;flex-shrink:0}
-.perm-title{font-weight:600;font-size:14px}
-.perm-desc{color:var(--muted);font-size:12px;margin-top:2px}
-input[type=password]{width:100%;padding:12px 14px;background:#fff;border:1px solid var(--line);color:var(--text);border-radius:10px;font-size:15px;margin:0 0 14px;outline:none}
-input[type=password]:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(16,185,129,.15)}
-.pair-code{font-family:Consolas,monospace;text-align:center;font-size:26px;font-weight:800;letter-spacing:.08em;border:1px solid var(--line);border-radius:10px;padding:12px;margin:0 0 10px}
-.pair-help{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.5}
-.admin-login{display:block;color:#059669;margin:0 0 14px;font-size:13px}
-button:disabled{opacity:.5;cursor:not-allowed}
-.actions{display:flex;gap:10px}
-button{flex:1;padding:12px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid var(--line)}
-.btn-allow{background:var(--brand);color:#fff;border-color:var(--brand)}
-.btn-allow:hover{background:var(--brand-deep)}
-.btn-deny{background:#fff;color:var(--text)}
-.foot{text-align:center;margin-top:18px;font-size:11px;color:var(--muted)}
-.err{margin:0 0 14px;color:#b91c1c;font-size:13px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:8px 12px}
-</style></head><body>
-<form class="card" method="POST" action="/authorize">
-<div class="badge">CD</div>
-<h1>Autorizar conector</h1>
-<p class="sub">Um cliente quer se conectar ao MCP CentralDark.</p>
-<div class="client-row"><b>${escapeHtml(input.client_name || input.client_id)}</b> quer acessar sua conta.</div>
-<div class="perms">${scopeChecklistHtml(input.scope)}</div>
-${input.device ? `
-<input type="hidden" name="client_id" value="${VSCODE_DEVICE_CLIENT_ID}">
-${input.success ? '<p class="pair-help">Pareamento confirmado. Volte ao VS Code para concluir a conexão.</p>' : `
-<div class="pair-code">${escapeHtml(input.device.code)}</div>
-<p class="pair-help">Confira o mesmo código no VS Code antes de confirmar.</p>
-<input type="hidden" name="pair_id" value="${escapeHtml(input.device.pairId)}">
-<input type="hidden" name="pair_code" value="${escapeHtml(input.device.code)}">
-<input type="hidden" name="pair_nonce" value="${escapeHtml(input.device.nonce)}">
-${input.isAdmin ? "" : '<p class="err">Sessão administrativa necessária. Entre no painel existente e abra novamente o pareamento.</p><a class="admin-login" href="/admin" target="_blank" rel="noopener noreferrer">Abrir painel CentralDark</a>'}
-<div class="actions">
-<button type="button" class="btn-deny" onclick="history.back()">Deny</button>
-<button type="submit" class="btn-allow" ${input.isAdmin ? "" : "disabled"}>Confirmar pareamento</button>
-</div>
-`}
-` : `
-<input type="hidden" name="client_id" value="${escapeHtml(input.client_id)}">
-<input type="hidden" name="redirect_uri" value="${escapeHtml(input.redirect_uri)}">
-<input type="hidden" name="response_type" value="${escapeHtml(input.response_type)}">
-<input type="hidden" name="code_challenge" value="${escapeHtml(input.code_challenge)}">
-<input type="hidden" name="code_challenge_method" value="${escapeHtml(input.code_challenge_method)}">
-<input type="hidden" name="state" value="${escapeHtml(input.client_state ?? "")}">
-<input type="hidden" name="scope" value="${escapeHtml(input.scope ?? "mcp")}">
-${input.error ? `<p class="err">${escapeHtml(input.error)}</p>` : ""}
-<input type="password" name="password" placeholder="Senha do admin" autofocus required>
-<div class="actions">
-<button type="button" class="btn-deny" onclick="history.back()">Deny</button>
-<button type="submit" class="btn-allow">Allow</button>
-</div>
-`}
-<div class="foot">CentralDark MCP · conexão segura via OAuth 2.1</div>
-</form></body></html>`);
+    res.redirect(302, url.toString());
 }
 export function postRegister(req, res) {
     const body = (req.body ?? {});
@@ -604,7 +278,7 @@ export async function handleAuthorize(req, res) {
             // ao solicitante que possui o segredo de posse, nunca ao navegador.
             if (!isAdmin(req)) return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
             const result = devicePairingStore.approveWeb({
-                pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce")
+                pairId, code: param(req, "pair_code"), nonce: pair.nonce
             });
             if (!result.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
             sendOwnerConsentPage(res, {...details, success: true});
@@ -618,7 +292,8 @@ export async function handleAuthorize(req, res) {
         const client_state = param(req, "state") || undefined;
         const resource = param(req, "resource");
         const requestedScope = param(req, "scope");
-        const isAdminResource = /\/admin\/mcp(?:$|[?#])/.test(resource);
+        const isAdminResource = /(?:^|\s)admin(?:\s|$)/.test(requestedScope)
+            || /\/admin\/mcp(?:$|[?#])/.test(resource);
         const scope = isAdminResource
             ? (requestedScope && /\badmin\b/.test(requestedScope) ? requestedScope : "mcp admin")
             : (requestedScope || "mcp");
@@ -627,7 +302,7 @@ export async function handleAuthorize(req, res) {
             oauthError(res, 400, "invalid_client", "client_id desconhecido. Faça /register antes ou use Client ID Metadata Document compatível.");
             return;
         }
-        if (!client.redirect_uris.includes(redirect_uri)) {
+        if (!redirectUriRegistered(client, redirect_uri)) {
             oauthError(res, 400, "invalid_request", "redirect_uri não registrado pra esse client.");
             return;
         }

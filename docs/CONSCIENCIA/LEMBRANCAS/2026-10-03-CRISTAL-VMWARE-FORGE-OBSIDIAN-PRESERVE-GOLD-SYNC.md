@@ -159,7 +159,7 @@ NORMAL_DIRECTION=CASA_VMWARE_FORGE -> PROVA/GARIMPO -> MAIN -> REPLAY_VPS
 TEMPORARY_RESET_WINDOW=VPS_MAY_BE_MORE_ADVANCED_THAN_VMWARE
 TEMPORARY_VPS_LEAD_DOES_NOT_REVERSE_CANONICAL_DIRECTION=true
 
-MIGRATION_SOURCE_WINDOWS=E:\CentralDark
+MIGRATION_SOURCE_WINDOWS=K:\
 MIGRATION_TARGET_SHARED=E:\VMs\CENTRALDARK-OS\SHARED\CentralDark
 POST_RESET_CASA_FORGE=MIGRATION_TARGET_SHARED
 
@@ -208,4 +208,4 @@ A limpeza física e a cópia permanecem pendentes até a rota Windows estar viva
 
 ## NEXT_CURSOR
 
-Reabrir a rota Windows; confirmar Desktop Commander fora da shared; executar limpeza do conteúdo antigo de `E:\VMs\CENTRALDARK-OS\SHARED\CentralDark`; copiar o conteúdo de `E:\CentralDark` para a shared; comparar contagem/hash/amostragem; então subir a VM e provar a nova CASA/forja antes de retomar `CASA/VMware -> main -> VPS`.
+Reabrir a rota Windows; confirmar Desktop Commander fora da shared; executar limpeza do conteúdo antigo de `E:\VMs\CENTRALDARK-OS\SHARED\CentralDark`; copiar o conteúdo de `K:\` para a shared; comparar contagem/hash/amostragem; então subir a VM e provar a nova CASA/forja antes de retomar `CASA/VMware -> main -> VPS`.

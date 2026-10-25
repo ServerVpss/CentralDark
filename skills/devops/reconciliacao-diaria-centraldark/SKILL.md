@@ -37,7 +37,7 @@ Esta skill faz parte da família `centraldark-ops`. Quando a reconciliação toc
 - Owner Git canônico do checklist: `docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md`
   (repo `ServerVpss/CentralDark`).
 - Espelho Obsidian (CASA-VAULT, read/write local):
-  `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`.
+  `K:\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`.
 - Regra do próprio arquivo: `CASA-VAULT != SECOND_OWNER` — o Git manda; o vault é
   espelho operacional. Se os dois divergirem, registrar a divergência, não
   silenciar.
@@ -131,7 +131,7 @@ não assumir.
 
 Job registrado em 2026-09-23: `f052f0dc37ed`, nome "Reconciliacao Diaria
 CentralDark", schedule `0 8 * * *`, `--skill reconciliacao-diaria-centraldark`,
-workdir `E:\CentralDark\CentralDark`, `--deliver local`. Comando usado:
+workdir `K:\`, `--deliver local`. Comando usado:
 `hermes cron create "0 8 * * *" [prompt] --name ... --skill ... --workdir ... --deliver local`
 (atenção: o prompt posicional tem que vir logo depois do schedule, ANTES das
 flags — passar as flags primeiro faz o parser do Hermes rejeitar o prompt

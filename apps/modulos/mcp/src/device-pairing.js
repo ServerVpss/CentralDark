@@ -155,6 +155,15 @@ export function createDevicePairingStore(options = {}) {
     writeRegistry(registry);
     return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };
   }
+  function revoke({ deviceId }) {
+    if (!deviceId || typeof deviceId !== "string") return { ok: false, error: "device_id_required" };
+    const registry = readRegistry();
+    const before = registry.devices.length;
+    registry.devices = registry.devices.filter(entry => entry.device_id !== deviceId);
+    if (registry.devices.length === before) return { ok: false, error: "device_not_found" };
+    writeRegistry(registry);
+    return { ok: true, device_id: deviceId };
+  }
   function listDevices() {
     const registry = readRegistry();
     const t = now();
@@ -163,13 +172,21 @@ export function createDevicePairingStore(options = {}) {
       status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
     }));
   }
-  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, listDevices, registryPath };
+  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, revoke, listDevices, registryPath };
 }
 
 export function createDevicePairingRouter(options = {}) {
   const router = express.Router();
   const store = options.store || createDevicePairingStore(options);
-  const isAdmin = options.isAdmin || ((req) => safeEqual(bearerFrom(req), process.env.CENTRALDARK_ADMIN_KEY || "__missing__"));
+  const isAdmin = options.isAdmin || ((req) => {
+    const expected = String(process.env.CENTRALDARK_ADMIN_KEY || "");
+    return expected.length > 0 && safeEqual(bearerFrom(req), expected);
+  });
+
+  const isCookieAdmin = options.cookieAdmin || (() => false);
+  const authorized = (req) => isAdmin(req) || (
+    req.get("X-CentralDark-Intent") === "pairing-admin" && isCookieAdmin(req)
+  );
   const limiter = new Map();
   const allowStart = (req) => {
     const key = String(req.ip || req.socket?.remoteAddress || "unknown");
@@ -197,7 +214,7 @@ export function createDevicePairingRouter(options = {}) {
     res.status(result.status === "denied" ? 403 : 200).json(result);
   });
   router.post("/pair/approve", (req, res) => {
-    if (!isAdmin(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    if (!authorized(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
     const result = store.approve({ pairId: req.body?.id, code: req.body?.code, deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
     res.status(result.ok ? 200 : 400).json(result);
   });
@@ -209,8 +226,13 @@ export function createDevicePairingRouter(options = {}) {
     const result = store.heartbeat({ token: bearerFrom(req), capabilities: req.body?.capabilities });
     res.status(result.ok ? 200 : 401).json(result);
   });
+  router.post("/devices/revoke", (req, res) => {
+    if (!authorized(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    const result = store.revoke({ deviceId: req.body?.device_id });
+    res.status(result.ok ? 200 : 404).json(result);
+  });
   router.get("/devices", (req, res) => {
-    if (!isAdmin(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    if (!authorized(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
     res.json({ ok: true, devices: store.listDevices() });
   });
   return router;

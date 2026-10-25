@@ -1,0 +1,155 @@
+═══════════════════════════════════════════════════════════════════════════════
+  📦 INVENTÁRIO COMPLETO: F:\_worktrees (67 arquivos, ~105 MB)
+═══════════════════════════════════════════════════════════════════════════════
+
+RESUMO POR CATEGORIA:
+─────────────────────────────────────────────────────────────────────────────
+
+│ Categoria           │ Qtd │ Tamanho      │ Prioridade │ Ação Recomendada │
+├─────────────────────┼─────┼──────────────┼────────────┼──────────────────┤
+│ Instaladores (MSI)  │  1  │ 64 MB        │ ⚠️ PESADO  │ Copiar OR DELETE │
+│ Logs (*.log)        │ 36+ │ ~43 MB       │ 📝 AUDIT   │ COPIAR (opcional)│
+│ Scripts (.cmd/.ps1) │  8  │ ~13 KB       │ ✅ CRÍTICO │ COPIAR SEMPRE    │
+│ Python (.py)        │  3  │ ~5 KB        │ ✅ CRÍTICO │ COPIAR SEMPRE    │
+│ Patches (.patch)    │  2  │ ~13 KB       │ ✅ CRÍTICO │ COPIAR SEMPRE    │
+│ TSX/Components      │  2  │ ~17 KB       │ ✅ CRÍTICO │ COPIAR SEMPRE    │
+│ Texto/Metadados     │ 15+ │ ~150 KB      │ 📝 INFO    │ COPIAR (opcional)│
+└─────────────────────┴─────┴──────────────┴────────────┴──────────────────┘
+
+TAMANHO CRÍTICO vs. INFORMAÇÃO:
+──────────────────────────────────────────────────────────────────────────────
+
+  ⚠️ PESADO (95% do tamanho):
+     go-setup.msi (64 MB)      ← Pode deletar se Go já em C:\Program Files\Go\
+     cd-go-msi.log (38 MB)     ← Log do MSI, pode deletar após cópia
+     cd-preview.log (2.5 MB)   ← Log de preview, pode regenerar
+
+  ✅ CRÍTICO (5% do tamanho, 100% da utilidade):
+     cd-*.cmd                  ← Scripts reutilizáveis
+     cd-*.ps1                  ← Automação PowerShell
+     cd-*.py                   ← Testes Python
+     *.patch                   ← Patches de mudanças
+     *.tsx                     ← Backup de componentes
+
+
+INSTRUÇÕES:
+─────────────────────────────────────────────────────────────────────────────
+
+OPÇÃO A: CÓPIA COMPLETA (preserva TUDO - 105 MB)
+  
+  mkdir K:\_worktrees
+  robocopy "F:\_worktrees" "K:\_worktrees" /E /COPY:DAT /R:3 /W:5
+
+OPÇÃO B: CÓPIA SEM MSI (economiza 64 MB - 40 MB)
+
+  mkdir K:\_worktrees
+  robocopy "F:\_worktrees" "K:\_worktrees" /E /COPY:DAT /XF "go-setup.msi" /R:3 /W:5
+
+OPÇÃO C: APENAS SCRIPTS ESSENCIAIS (economiza 100 MB - ~100 KB)
+
+  mkdir K:\_worktrees
+  copy "F:\_worktrees\*.cmd" "K:\_worktrees\"
+  copy "F:\_worktrees\*.ps1" "K:\_worktrees\"
+  copy "F:\_worktrees\*.py" "K:\_worktrees\"
+  copy "F:\_worktrees\*.patch" "K:\_worktrees\"
+  copy "F:\_worktrees\*.tsx" "K:\_worktrees\"
+
+
+VERIFICAÇÃO PÓS-MIGRAÇÃO:
+─────────────────────────────────────────────────────────────────────────────
+
+✅ Contar arquivos:
+   dir K:\_worktrees | find /c /v ""
+
+✅ Ver tamanho:
+   dir K:\_worktrees /-s
+
+✅ Validar scripts:
+   cd K:\_worktrees
+   cd-go-dl.cmd
+   python cd-fcntl-patch.py
+
+
+O QUE CADA ARQUIVO FAZ:
+─────────────────────────────────────────────────────────────────────────────
+
+INSTALADORES:
+  go-setup.msi (64 MB)
+    └─ Golang 1.27.3 installer para Windows
+    └─ APÓS INSTALADO: pode deletar (já em C:\Program Files\Go\)
+
+SCRIPTS BATCH (.cmd):
+  cd-go-dl.cmd (314 B)
+    └─ Baixa versão atual do Go de https://go.dev/VERSION
+  cd-go-dl2.cmd (355 B)
+    └─ Alternativo - mesmo com sintaxe melhor
+  cd-reconcile.cmd (445 B)
+    └─ Script de reconciliação de mudanças
+
+SCRIPTS POWERSHELL (.ps1):
+  cd-commit.ps1 (1.7K)
+    └─ Automação de git commit
+  cd-scan.ps1 (1.6K)
+    └─ Scan de arquivos/status
+  cd-neon.ps1 (3.8K)
+    └─ Operações Neon DB
+  pr1919-jobs.ps1 (1.1K)
+    └─ Automação para PR #1919
+
+SCRIPTS PYTHON (.py):
+  cd-fcntl-patch.py (1.8K)
+    └─ Patch aplicação file control
+  cd-lock-test.py (1.6K)
+    └─ Teste de locks
+  cd-lock-test2.py (1.4K)
+    └─ Teste de locks v2
+
+PATCHES (.patch):
+  pr-1895-dailyreview-contraste.patch (9.8K)
+    └─ Mudanças no componente DailyReviewPanel
+  pr-1895-autosync-contraste.patch (3.8K)
+    └─ Mudanças no AutoSync
+
+COMPONENTES BACKUP (.tsx):
+  DailyReviewPanel.antes.tsx (9.3K)
+    └─ Backup do componente antes de edição
+  ClaudeNotificationsHub.pr-mock.tsx (7.9K)
+    └─ Mock para testes
+
+LOGS (auditoria):
+  cd-preview.log (2.5M)
+    └─ Output de preview build
+  cd-go-msi.log (38M)
+    └─ Log do download do MSI
+  pr-1895-*.log (vários)
+    └─ Logs das builds de PR #1895
+  pr1919-watch.log (35K)
+    └─ Watch mode logs
+  cd-build*.log / cd-dev.log / cd-vite.log
+    └─ Build and dev server outputs
+
+
+RESUMO:
+─────────────────────────────────────────────────────────────────────────────
+
+Total: 67 arquivos, ~105 MB
+
+Crítico (COPIAR SEMPRE): ~100 KB
+  - Scripts (*.cmd, *.ps1, *.py)
+  - Patches (*.patch)
+  - Componentes backup (*.tsx)
+
+Grande (COPIAR SE AUDITORIA): ~43 MB
+  - Logs (*.log)
+
+Pesado (COPIAR OU DELETE): 64 MB
+  - go-setup.msi
+
+Recomendação: OPÇÃO B (sem MSI) = 40 MB em K:
+  └─ Mantém tudo essencial, libera 64 MB em F:
+
+
+═══════════════════════════════════════════════════════════════════════════════
+Gerado: 2026-10-24
+Pronto para executar!
+═══════════════════════════════════════════════════════════════════════════════
